@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 namespace stoc_sec
 {
 
-//--------------------------------------------------------------------------------------------------
+
 static inline sal_Int32 makeMask(
     OUString const & items, char const * const * strings ) SAL_THROW(())
 {
@@ -78,10 +78,10 @@ static inline sal_Int32 makeMask(
         }
 #endif
     }
-    while (n >= 0); // all items
+    while (n >= 0); 
     return mask;
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline OUString makeStrings(
     sal_Int32 mask, char const * const * strings ) SAL_THROW(())
 {
@@ -91,7 +91,7 @@ static inline OUString makeStrings(
         if (0x80000000 & mask)
         {
             buf.appendAscii( *strings );
-            if (mask << 1) // more items following
+            if (mask << 1) 
                 buf.append( ',' );
         }
         mask = (mask << 1);
@@ -100,9 +100,9 @@ static inline OUString makeStrings(
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class SocketPermission : public Permission
 {
     static char const * s_actions [];
@@ -126,9 +126,9 @@ public:
     virtual bool implies( Permission const & perm ) const SAL_THROW(());
     virtual OUString toString() const SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", 0 };
-//__________________________________________________________________________________________________
+
 SocketPermission::SocketPermission(
     connection::SocketPermission const & perm,
     ::rtl::Reference< Permission > const & next )
@@ -142,27 +142,27 @@ SocketPermission::SocketPermission(
     , m_resolvedHost( false )
     , m_wildCardHost( !perm.Host.isEmpty() && '*' == perm.Host.pData->buffer[ 0 ] )
 {
-    if (0xe0000000 & m_actions) // if any (except resolve) is given => resolve implied
+    if (0xe0000000 & m_actions) 
         m_actions |= 0x10000000;
 
-    // separate host from portrange
+    
     sal_Int32 colon = m_host.indexOf( ':' );
-    if (colon >= 0) // port [range] given
+    if (colon >= 0) 
     {
         sal_Int32 minus = m_host.indexOf( '-', colon +1 );
         if (minus < 0)
         {
             m_lowerPort = m_upperPort = m_host.copy( colon +1 ).toInt32();
         }
-        else if (minus == (colon +1)) // -N
+        else if (minus == (colon +1)) 
         {
             m_upperPort = m_host.copy( minus +1 ).toInt32();
         }
-        else if (minus == (m_host.getLength() -1)) // N-
+        else if (minus == (m_host.getLength() -1)) 
         {
             m_lowerPort = m_host.copy( colon +1, m_host.getLength() -1 -colon -1 ).toInt32();
         }
-        else // A-B
+        else 
         {
             m_lowerPort = m_host.copy( colon +1, minus - colon -1 ).toInt32();
             m_upperPort = m_host.copy( minus +1, m_host.getLength() -minus -1 ).toInt32();
@@ -170,7 +170,7 @@ SocketPermission::SocketPermission(
         m_host = m_host.copy( 0, colon );
     }
 }
-//__________________________________________________________________________________________________
+
 inline bool SocketPermission::resolveHost() const SAL_THROW(())
 {
     if (m_resolveErr)
@@ -178,7 +178,7 @@ inline bool SocketPermission::resolveHost() const SAL_THROW(())
 
     if (! m_resolvedHost)
     {
-        // dns lookup
+        
         SocketAddr addr;
         SocketAddr::resolveHostname( m_host, addr );
         OUString ip;
@@ -196,34 +196,34 @@ inline bool SocketPermission::resolveHost() const SAL_THROW(())
     }
     return m_resolvedHost;
 }
-//__________________________________________________________________________________________________
+
 bool SocketPermission::implies( Permission const & perm ) const SAL_THROW(())
 {
-    // check type
+    
     if (SOCKET != perm.m_type)
         return false;
     SocketPermission const & demanded = static_cast< SocketPermission const & >( perm );
 
-    // check actions
+    
     if ((m_actions & demanded.m_actions) != demanded.m_actions)
         return false;
 
-    // check ports
+    
     if (demanded.m_lowerPort < m_lowerPort)
         return false;
     if (demanded.m_upperPort > m_upperPort)
         return false;
 
-    // quick check host (DNS names: RFC 1034/1035)
+    
     if (m_host.equalsIgnoreAsciiCase( demanded.m_host ))
         return true;
-    // check for host wildcards
+    
     if (m_wildCardHost)
     {
         OUString const & demanded_host = demanded.m_host;
         if (demanded_host.getLength() <= m_host.getLength())
             return false;
-        sal_Int32 len = m_host.getLength() -1; // skip star
+        sal_Int32 len = m_host.getLength() -1; 
         return (0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
             demanded_host.getStr() + demanded_host.getLength() - len, len,
             m_host.pData->buffer + 1, len ));
@@ -231,18 +231,18 @@ bool SocketPermission::implies( Permission const & perm ) const SAL_THROW(())
     if (demanded.m_wildCardHost)
         return false;
 
-    // compare IP addresses
+    
     if (! resolveHost())
         return false;
     if (! demanded.resolveHost())
         return false;
     return m_ip.equals( demanded.m_ip );
 }
-//__________________________________________________________________________________________________
+
 OUString SocketPermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
-    // host
+    
     buf.append( "com.sun.star.connection.SocketPermission (host=\"" );
     buf.append( m_host );
     if (m_resolvedHost)
@@ -251,7 +251,7 @@ OUString SocketPermission::toString() const SAL_THROW(())
         buf.append( m_ip );
         buf.append( ']' );
     }
-    // port
+    
     if (0 != m_lowerPort || 65535 != m_upperPort)
     {
         buf.append( ':' );
@@ -264,16 +264,16 @@ OUString SocketPermission::toString() const SAL_THROW(())
                 buf.append( m_upperPort );
         }
     }
-    // actions
+    
     buf.append( "\", actions=\"" );
     buf.append( makeStrings( m_actions, s_actions ) );
     buf.append( "\")" );
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class FilePermission : public Permission
 {
     static char const * s_actions [];
@@ -290,9 +290,9 @@ public:
     virtual bool implies( Permission const & perm ) const SAL_THROW(());
     virtual OUString toString() const SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", 0 };
-//--------------------------------------------------------------------------------------------------
+
 static OUString const & getWorkingDir() SAL_THROW(())
 {
     static OUString * s_workingDir = 0;
@@ -310,7 +310,7 @@ static OUString const & getWorkingDir() SAL_THROW(())
     }
     return *s_workingDir;
 }
-//__________________________________________________________________________________________________
+
 FilePermission::FilePermission(
     io::FilePermission const & perm,
     ::rtl::Reference< Permission > const & next )
@@ -336,38 +336,38 @@ FilePermission::FilePermission(
             buf.append( "/-" );
             m_url = buf.makeStringAndClear();
         }
-        else if (!m_url.startsWith("file:///"))
+        else if (!m_url.startsWith("file:
         {
-            // relative path
+            
             OUString out;
             oslFileError rc = ::osl_getAbsoluteFileURL(
                 getWorkingDir().pData, perm.URL.pData, &out.pData );
-            m_url = (osl_File_E_None == rc ? out : perm.URL); // fallback
+            m_url = (osl_File_E_None == rc ? out : perm.URL); 
         }
 #ifdef SAL_W32
-        // correct win drive letters
-        if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
+        
+        if (9 < m_url.getLength() && '|' == m_url[ 9 ]) 
         {
             static OUString s_colon = ":";
-            // common case in API is a ':' (sal), so convert '|' to ':'
+            
             m_url = m_url.replaceAt( 9, 1, s_colon );
         }
 #endif
     }
 }
-//__________________________________________________________________________________________________
+
 bool FilePermission::implies( Permission const & perm ) const SAL_THROW(())
 {
-    // check type
+    
     if (FILE != perm.m_type)
         return false;
     FilePermission const & demanded = static_cast< FilePermission const & >( perm );
 
-    // check actions
+    
     if ((m_actions & demanded.m_actions) != demanded.m_actions)
         return false;
 
-    // check url
+    
     if (m_allFiles)
         return true;
     if (demanded.m_allFiles)
@@ -382,11 +382,11 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW(())
 #endif
     if (m_url.getLength() > demanded.m_url.getLength())
         return false;
-    // check /- wildcard: all files and recursive in that path
+    
     if (1 < m_url.getLength() &&
         0 == ::rtl_ustr_ascii_compare_WithLength( m_url.getStr() + m_url.getLength() - 2, 2, "/-" ))
     {
-        // demanded url must start with granted path (including path trailing path sep)
+        
         sal_Int32 len = m_url.getLength() -1;
 #ifdef SAL_W32
         return (0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
@@ -396,41 +396,41 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW(())
                     demanded.m_url.pData->buffer, len, m_url.pData->buffer, len ));
 #endif
     }
-    // check /* wildcard: all files in that path (not recursive!)
+    
     if (1 < m_url.getLength() &&
         0 == ::rtl_ustr_ascii_compare_WithLength( m_url.getStr() + m_url.getLength() - 2, 2, "/*" ))
     {
-        // demanded url must start with granted path (including path trailing path sep)
+        
         sal_Int32 len = m_url.getLength() -1;
 #ifdef SAL_W32
         return ((0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
                      demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
-                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper paths
+                (0 > demanded.m_url.indexOf( '/', len ))); 
 #else
         return ((0 == ::rtl_ustr_reverseCompare_WithLength(
                      demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
-                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper paths
+                (0 > demanded.m_url.indexOf( '/', len ))); 
 #endif
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 OUString FilePermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
-    // url
+    
     buf.append( "com.sun.star.io.FilePermission (url=\"" );
     buf.append( m_url );
-    // actions
+    
     buf.append( "\", actions=\"" );
     buf.append( makeStrings( m_actions, s_actions ) );
     buf.append( "\")" );
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class RuntimePermission : public Permission
 {
     OUString m_name;
@@ -446,18 +446,18 @@ public:
     virtual bool implies( Permission const & perm ) const SAL_THROW(());
     virtual OUString toString() const SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 bool RuntimePermission::implies( Permission const & perm ) const SAL_THROW(())
 {
-    // check type
+    
     if (RUNTIME != perm.m_type)
         return false;
     RuntimePermission const & demanded = static_cast< RuntimePermission const & >( perm );
 
-    // check name
+    
     return m_name.equals( demanded.m_name );
 }
-//__________________________________________________________________________________________________
+
 OUString RuntimePermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
@@ -467,22 +467,22 @@ OUString RuntimePermission::toString() const SAL_THROW(())
     return buf.makeStringAndClear();
 }
 
-//##################################################################################################
 
-//__________________________________________________________________________________________________
+
+
 bool AllPermission::implies( Permission const & ) const SAL_THROW(())
 {
     return true;
 }
-//__________________________________________________________________________________________________
+
 OUString AllPermission::toString() const SAL_THROW(())
 {
     return OUString("com.sun.star.security.AllPermission");
 }
 
-//##################################################################################################
 
-//__________________________________________________________________________________________________
+
+
 PermissionCollection::PermissionCollection(
     Sequence< Any > const & permissions, PermissionCollection const & addition )
     SAL_THROW( (RuntimeException) )
@@ -494,7 +494,7 @@ PermissionCollection::PermissionCollection(
         Any const & perm = perms[ nPos ];
         Type const & perm_type = perm.getValueType();
 
-        // supported permission types
+        
         if (perm_type.equals( ::getCppuType( (io::FilePermission const *)0 ) ))
         {
             m_head = new FilePermission(
@@ -525,7 +525,7 @@ PermissionCollection::PermissionCollection(
     }
 }
 #ifdef __DIAGNOSE
-//__________________________________________________________________________________________________
+
 Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW(())
 {
     vector< OUString > strings;
@@ -538,7 +538,7 @@ Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW(())
         strings.empty() ? 0 : &strings[ 0 ], strings.size() );
 }
 #endif
-//__________________________________________________________________________________________________
+
 inline static bool __implies(
     ::rtl::Reference< Permission > const & head, Permission const & demanded ) SAL_THROW(())
 {
@@ -551,7 +551,7 @@ inline static bool __implies(
 }
 
 #ifdef __DIAGNOSE
-//--------------------------------------------------------------------------------------------------
+
 static void demanded_diag(
     Permission const & perm )
     SAL_THROW(())
@@ -565,7 +565,7 @@ static void demanded_diag(
     OSL_TRACE( "%s", str.getStr() );
 }
 #endif
-//--------------------------------------------------------------------------------------------------
+
 static void throwAccessControlException(
     Permission const & perm, Any const & demanded_perm )
     SAL_THROW( (security::AccessControlException) )
@@ -576,15 +576,15 @@ static void throwAccessControlException(
     throw security::AccessControlException(
         buf.makeStringAndClear(), Reference< XInterface >(), demanded_perm );
 }
-//==================================================================================================
+
 void PermissionCollection::checkPermission( Any const & perm ) const
     SAL_THROW( (RuntimeException) )
 {
     Type const & demanded_type = perm.getValueType();
 
-    // supported permission types
-    // stack object of SimpleReferenceObject are ok, as long as they are not
-    // assigned to a ::rtl::Reference<> (=> delete this)
+    
+    
+    
     if (demanded_type.equals( ::getCppuType( (io::FilePermission const *)0 ) ))
     {
         FilePermission demanded(

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "embeddoc.hxx"
@@ -28,8 +28,8 @@ using namespace ::com::sun::star;
 
 extern OUString  getFilterNameFromGUID_Impl( GUID* );
 
-//-------------------------------------------------------------------------------
-// IOleObject
+
+
 
 
 STDMETHODIMP EmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
@@ -46,7 +46,7 @@ STDMETHODIMP EmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 
 STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
-    // the code should be ignored for links
+    
     if ( !m_aFileName.getLength() )
     {
         m_pDocHolder->setTitle(
@@ -68,7 +68,7 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
     {
         if ( dwSaveOption == 2 && m_aFileName.getLength() )
         {
-            // ask the user about saving
+            
             if ( m_pDocHolder->ExecuteSuspendCloseFrame() )
             {
                 m_pDocHolder->CloseDocument();
@@ -79,7 +79,7 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
         }
 
         if ( dwSaveOption != 1 )
-            hr = SaveObject(); // ADVF_DATAONSTOP);
+            hr = SaveObject(); 
 
         m_pDocHolder->CloseFrame();
         OLENotifyDeactivation();
@@ -144,11 +144,11 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
     HWND,
     LPCRECT )
 {
-    // no locking is used since the OLE must use the same thread always
+    
     if ( m_bIsInVerbHandling )
         return OLEOBJ_S_CANNOT_DOVERB_NOW;
 
-    // an object can not handle any Verbs in Hands off mode
+    
     if ( m_pMasterStorage == NULL || m_pOwnStream == NULL )
         return OLE_E_CANT_BINDTOSOURCE;
 
@@ -159,7 +159,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
     {
         if ( m_aFileName.getLength() )
         {
-            // that should be a link
+            
             iVerb = OLEIVERB_OPEN;
         }
         else
@@ -170,7 +170,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
     {
         switch(iVerb) {
             case OLEIVERB_DISCARDUNDOSTATE:
-                // free any undostate?
+                
                 break;
             case OLEIVERB_INPLACEACTIVATE:
                 OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
@@ -185,23 +185,23 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
                 OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
                 if(m_pDocHolder->isActive())
-                    return NOERROR; //Already active
+                    return NOERROR; 
 
                 if(SUCCEEDED(
                     m_pDocHolder->InPlaceActivate(
                         pActiveSite,TRUE)))
                     return NOERROR;
 
-                // intended fall trough
+                
             case OLEIVERB_OPEN:
                 OSL_ENSURE(m_pDocHolder,"no document to open");
 
-                // the commented code could be useful in case
-                // outer window would be resized depending from inner one
-                // RECTL aEmbArea;
-                // m_pDocHolder->GetVisArea( &aEmbArea );
-                // m_pDocHolder->show();
-                // m_pDocHolder->SetVisArea( &aEmbArea );
+                
+                
+                
+                
+                
+                
 
                 if(m_pDocHolder->isActive())
                 {
@@ -253,8 +253,8 @@ STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
 STDMETHODIMP EmbedDocument_Impl::Update()
 {
     return S_OK;
-//    HRESULT hr = CACHE_E_NOCACHE_UPDATED;
-//    return hr;
+
+
 }
 
 STDMETHODIMP EmbedDocument_Impl::IsUpToDate()
@@ -289,7 +289,7 @@ STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD /*dwDrawAspect*/, SIZEL * psiz
 
     if ( FAILED( m_pDocHolder->GetExtent( psizel ) ) )
     {
-        // return default values
+        
         psizel->cx = 500;
         psizel->cy = 500;
     }
@@ -338,8 +338,8 @@ STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE * /*pLogpal*/ )
     return E_NOTIMPL;
 }
 
-//-------------------------------------------------------------------------------
-// IDispatch
+
+
 
 STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
 {
@@ -354,7 +354,7 @@ STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int iTInfo, LCID lcid, IT
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->GetTypeInfo( iTInfo, lcid, ppTInfo );
 
-    return DISP_E_BADINDEX; // the only error that can be returned
+    return DISP_E_BADINDEX; 
 }
 
 STDMETHODIMP EmbedDocument_Impl::GetIDsOfNames( REFIID riid,
@@ -394,8 +394,8 @@ STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMember,
     return DISP_E_MEMBERNOTFOUND;
 }
 
-//-------------------------------------------------------------------------------
-// IExternalConnection
+
+
 
 DWORD STDMETHODCALLTYPE EmbedDocument_Impl::AddConnection( DWORD , DWORD )
 {
@@ -407,7 +407,7 @@ DWORD STDMETHODCALLTYPE EmbedDocument_Impl::ReleaseConnection( DWORD , DWORD , B
     return Release();
 }
 
-// C++ - methods
+
 
 HRESULT EmbedDocument_Impl::SaveObject()
 {
@@ -427,8 +427,8 @@ HRESULT EmbedDocument_Impl::SaveObject()
     {
         OUString aPreservFileName = m_aFileName;
 
-        // in case of links the containers does not provide client site sometimes
-        hr = Save( (LPCOLESTR)NULL, FALSE ); // triggers saving to the link location
+        
+        hr = Save( (LPCOLESTR)NULL, FALSE ); 
         SaveCompleted( (LPCOLESTR)aPreservFileName.getStr() );
     }
 
@@ -485,9 +485,9 @@ HRESULT EmbedDocument_Impl::OLENotifyDeactivation()
 
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
+
+
+
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif

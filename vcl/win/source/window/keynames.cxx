@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -23,8 +23,8 @@
 
 #include <windows.h>
 
-// Use unique ;) names to avoid clashes with the KEY_* (especially
-// KEY_SHIFT) from <rsc/rsc-vcl-shared-types.hxx>
+
+
 
 #define PAPUGA_KEY_ESC         0x10000
 #define PAPUGA_KEY_BACK        0xE0000
@@ -60,13 +60,13 @@ namespace vcl_sal {
         int                             nReplacements;
     };
 
-    // ====================================================================
+    
     //
-    // CAUTION CAUTION CAUTION
-    // Every string value in the replacements tables must be in UTF-8
-    // but with the UTF-8 bytes encoded, not as such! Be careful!
+    
+    
+    
     //
-    // ====================================================================
+    
 
     static const struct KeysNameReplacement aImplReplacements_Asturian[] =
     {
@@ -196,7 +196,7 @@ namespace vcl_sal {
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
     };
 
-    // translate keycodes, used within the displayed menu shortcuts
+    
     OUString getKeysReplacementName( OUString pLang, LONG nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )

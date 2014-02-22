@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLTableShapeImportHelper.hxx"
@@ -65,8 +65,8 @@ void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape
     }
 }
 
-// Attempt to find the topmost parent of the group, this is the one we apply
-// offsets to
+
+
 static uno::Reference< drawing::XShape > lcl_getTopLevelParent( const uno::Reference< drawing::XShape >& rShape )
 {
     uno::Reference< container::XChild > xChild( rShape, uno::UNO_QUERY );
@@ -156,9 +156,9 @@ void XMLTableShapeImportHelper::finishShape(
 
             if (pRangeList)
             {
-                // #i78086# If there are notification ranges, the ChartListener must be created
-                // also when anchored to the sheet
-                // -> call AddOLE with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
+                
+                
+                
 
                 if (rTables.IsOLE(rShape))
                     rTables.AddOLE(rShape, *pRangeList);
@@ -166,9 +166,9 @@ void XMLTableShapeImportHelper::finishShape(
 
             delete pRangeList;
         }
-        else // shape is annotation
+        else 
         {
-            // get the style names for stream copying
+            
             OUString aStyleName;
             OUString aTextStyle;
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -190,15 +190,15 @@ void XMLTableShapeImportHelper::finishShape(
             bNote = true;
         }
     }
-    else //this are grouped shapes which should also get the layerid
+    else 
     {
         uno::Reference< drawing::XShapes > xGroup( rShape, uno::UNO_QUERY );
-        // ignore the group ( within group ) object it it exists
+        
         if ( !bOnTable && !xGroup.is() )
         {
-            // For cell anchored grouped shape we need to set the start
-            // position from the most top and left positioned shape(s) within
-            // the group
+            
+            
+            
             Point aStartPoint( rShape->getPosition().X,rShape->getPosition().Y );
             uno::Reference< drawing::XShape > xChild( rShapes, uno::UNO_QUERY );
             if (SvxShape* pGroupShapeImp = SvxShape::getImplementation( lcl_getTopLevelParent( xChild ) ))
@@ -238,7 +238,7 @@ void XMLTableShapeImportHelper::finishShape(
 
     if (!bNote)
     {
-        // any shape other than a note prevents copying the sheet
+        
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(mrImporter.GetModel())->GetSheetSaveData();
         pSheetData->BlockSheet( rTables.GetCurrentSheet() );
     }

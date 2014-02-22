@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -55,25 +55,25 @@ OUString getOfficePath( enum whichOfficePath ePath )
         aBootstrap.getFrom( "UserInstallation", aUserPath );
         OUString aUPath = aUserPath;
 
-        if( aConfigPath.startsWith( "file://" ) )
+        if( aConfigPath.startsWith( "file:
         {
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aConfigPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aConfigPath = aSysPath;
         }
-        if( aInstallationRootPath.startsWith( "file://" ) )
+        if( aInstallationRootPath.startsWith( "file:
         {
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aInstallationRootPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aInstallationRootPath = aSysPath;
         }
-        if( aUserPath.startsWith( "file://" ) )
+        if( aUserPath.startsWith( "file:
         {
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aUserPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aUserPath = aSysPath;
         }
-        // ensure user path exists
+        
         aUPath += "/user/psprint";
         #if OSL_DEBUG_LEVEL > 1
         oslFileError eErr =
@@ -105,7 +105,7 @@ static OString getEnvironmentPath( const char* pKey )
     return aPath;
 }
 
-} // namespace psp
+} 
 
 void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir )
 {
@@ -114,7 +114,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
 
     OUStringBuffer aPathBuffer( 256 );
 
-    // append net path
+    
     aPathBuffer.append( getOfficePath( psp::InstallationRootPath ) );
     if( !aPathBuffer.isEmpty() )
     {
@@ -126,7 +126,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
         }
         rPathList.push_back( aPathBuffer.makeStringAndClear() );
     }
-    // append user path
+    
     aPathBuffer.append( getOfficePath( psp::UserPath ) );
     if( !aPathBuffer.isEmpty() )
     {
@@ -168,7 +168,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
 
     if( rPathList.empty() )
     {
-        // last resort: next to program file (mainly for setup)
+        
         OUString aExe;
         if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
         {
@@ -197,11 +197,11 @@ OUString psp::getFontPath()
         OUString aUserPath( getOfficePath( psp::UserPath ) );
         if( !aConfigPath.isEmpty() )
         {
-            // #i53530# Path from CustomDataUrl will completely
-            // replace net and user paths if the path exists
+            
+            
             aPathBuffer.append(aConfigPath);
             aPathBuffer.appendAscii("/" LIBO_SHARE_FOLDER "/fonts");
-            // check existance of config path
+            
             struct stat aStat;
             if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
                 || ! S_ISDIR( aStat.st_mode ) )
@@ -253,15 +253,15 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
 
     while( bSuccess && ! bEof )
     {
-        // read leading bytes
+        
         bEof = ((0 != rInFile.read( buffer, 6, nRead)) || (nRead != 6));
         if( bEof )
             break;
         unsigned int nType = buffer[ 1 ];
         unsigned int nBytesToRead = buffer[2] | buffer[3] << 8 | buffer[4] << 16 | buffer[5] << 24;
-        if( buffer[0] != 0x80 ) // test for pfb magic number
+        if( buffer[0] != 0x80 ) 
         {
-            // this migt be a pfa font already
+            
             if( ! rInFile.read( buffer+6, 9, nRead ) && nRead == 9 &&
                 ( ! std::strncmp( (char*)buffer, "%!FontType1-", 12 ) ||
                   ! std::strncmp( (char*)buffer, "%!PS-AdobeFont-", 15 ) ) )
@@ -290,8 +290,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
             {
                 if( nType == 1 )
                 {
-                    // ascii data, convert dos lineends( \r\n ) and
-                    // m_ac lineends( \r ) to \n
+                    
+                    
                     unsigned char * pWriteBuffer = new unsigned char[ nBytesToRead ];
                     unsigned int nBytesToWrite = 0;
                     for( unsigned int i = 0; i < nBytesToRead; i++ )
@@ -313,7 +313,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
                 }
                 else
                 {
-                    // binary data
+                    
                     unsigned int nBuffer = 0;
                     for( unsigned int i = 0; i < nBytesToRead && bSuccess; i++ )
                     {
@@ -353,10 +353,10 @@ void psp::normPath( OString& rPath )
 {
     char buf[PATH_MAX];
 
-    // double slashes and slash at end are probably
-    // removed by realpath anyway, but since this runs
-    // on many different platforms let's play it safe
-    OString aPath = rPath.replaceAll("//", "/");
+    
+    
+    
+    OString aPath = rPath.replaceAll("
 
     if( aPath.endsWith("/") )
         aPath = aPath.copy(0, aPath.getLength()-1);
@@ -379,7 +379,7 @@ void psp::splitPath( OString& rPath, OString& rDir, OString& rBase )
     sal_Int32 nIndex = rPath.lastIndexOf( '/' );
     if( nIndex > 0 )
         rDir = rPath.copy( 0, nIndex );
-    else if( nIndex == 0 ) // root dir
+    else if( nIndex == 0 ) 
         rDir = rPath.copy( 0, 1 );
     if( rPath.getLength() > nIndex+1 )
         rBase = rPath.copy( nIndex+1 );

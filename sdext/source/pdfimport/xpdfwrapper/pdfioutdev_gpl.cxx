@@ -31,9 +31,9 @@
 #pragma warning(push, 1)
 #endif
 
-// sigh, UTF8.h was removed in poppler-0.21.0 and put back in 0.21.1
-// FIXME: we can't use #if POPPLER_CHECK_VERSION(0, 21, 0) && !POPPLER_CHECK_VERSION(0, 21, 1)
-//        because the internal poppler does not provide poppler-version.h and the macro always returns 0
+
+
+
 #if POPPLER_CHECK_VERSION(0, 21, 1)
 #include "UTF8.h"
 #elif POPPLER_CHECK_VERSION(0, 21, 0)
@@ -71,7 +71,7 @@
 namespace pdfi
 {
 
-/// cut off very small numbers & clamp value to zero
+/
 inline double normalize( double val )
 {
     return fabs(val) < 0.0000001 ? 0.0 : val;
@@ -117,10 +117,10 @@ boost::shared_array<char> lcl_escapeLineFeeds(const char* const i_pStr)
 
 }
 
-/// for the temp char buffer the header gets snprintfed in
+/
 #define WRITE_BUFFER_SIZE 1024
 
-/// for the initial std::vector capacity when copying stream from xpdf
+/
 #define WRITE_BUFFER_INITIAL_CAPACITY (1024*100)
 
 void initBuf(OutputBuffer& io_rBuffer)
@@ -130,22 +130,22 @@ void initBuf(OutputBuffer& io_rBuffer)
 
 void writeBinaryBuffer( const OutputBuffer& rBuffer )
 {
-    // ---sync point--- see SYNC STREAMS above
+    
     fflush(stdout);
 
-    // put buffer to stderr
+    
     if( !rBuffer.empty() )
         if( fwrite(&rBuffer[0], sizeof(char),
                    rBuffer.size(), g_binary_out) != (size_t)rBuffer.size() )
-            exit(1); // error
+            exit(1); 
 
-    // ---sync point--- see SYNC STREAMS above
+    
     fflush(g_binary_out);
 }
 
 void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
 {
-    // dump JPEG file as-is
+    
 #if POPPLER_CHECK_VERSION(0, 17, 3)
     str = str->getBaseStream();
 #else
@@ -167,7 +167,7 @@ void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
 
 void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bWithLinefeed, bool bInvert )
 {
-    // write as PBM (char by char, to avoid stdlib lineend messing)
+    
     o_rOutputBuf.clear();
     o_rOutputBuf.resize(WRITE_BUFFER_SIZE);
     o_rOutputBuf[0] = 'P';
@@ -187,13 +187,13 @@ void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, b
     if( bWithLinefeed )
         printf("\n");
 
-    // trim buffer to exact header length
+    
     o_rOutputBuf.resize(header_size);
 
-    // initialize stream
+    
     str->reset();
 
-    // copy the raw stream
+    
     if( bInvert )
     {
         for( int i=0; i<size; ++i)
@@ -215,7 +215,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
                 GfxImageColorMap* colorMap,
                 bool              bWithLinefeed )
 {
-    // write as PPM (char by char, to avoid stdlib lineend messing)
+    
     o_rOutputBuf.clear();
     o_rOutputBuf.resize(WRITE_BUFFER_SIZE);
     o_rOutputBuf[0] = 'P';
@@ -239,10 +239,10 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
     if( bWithLinefeed )
         printf("\n");
 
-    // trim buffer to exact header size
+    
     o_rOutputBuf.resize(header_size);
 
-    // initialize stream
+    
     Guchar *p;
     GfxRGB rgb;
     ImageStream* imgStr =
@@ -270,7 +270,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
 
 }
 
-// call this only for 1 bit image streams !
+
 void writePng_( OutputBuffer&     o_rOutputBuf,
                 Stream*           str,
                 int               width,
@@ -282,7 +282,7 @@ void writePng_( OutputBuffer&     o_rOutputBuf,
 {
     o_rOutputBuf.clear();
 
-    // get png image
+    
     PngHelper::createPng( o_rOutputBuf, str, width, height, zeroColor, oneColor, bIsMask );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
@@ -299,7 +299,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
 {
     o_rOutputBuf.clear();
 
-    // get png image
+    
     PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
@@ -316,7 +316,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
 {
     o_rOutputBuf.clear();
 
-    // get png image
+    
     PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
@@ -324,7 +324,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
         printf("\n");
 }
 
-// stolen from ImageOutputDev.cc
+
 void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bWithLinefeed, bool bInvert )
 {
     if( str->getKind() == strDCT )
@@ -340,7 +340,7 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
                   GfxImageColorMap* colorMap,
                   bool              bWithLinefeed )
 {
-    // dump JPEG file
+    
     if( str->getKind() == strDCT &&
         (colorMap->getNumPixelComps() == 1 ||
          colorMap->getNumPixelComps() == 3) )
@@ -350,8 +350,8 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
     else if (colorMap->getNumPixelComps() == 1 &&
              colorMap->getBits() == 1)
     {
-        // this is a two color bitmap, write a png
-        // provide default colors
+        
+        
         GfxRGB zeroColor = { 0, 0, 0 },
                 oneColor = { byteToCol( 0xff ), byteToCol( 0xff ), byteToCol( 0xff ) };
         if( colorMap->getColorSpace()->getMode() == csIndexed || colorMap->getColorSpace()->getMode() == csDeviceGray )
@@ -367,8 +367,8 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
         writePpm_( o_rOutputBuf, str, width, height, colorMap, bWithLinefeed );
 }
 
-// forwarders
-// ------------------------------------------------------------------
+
+
 
 inline void writeImage( OutputBuffer&     o_rOutputBuf,
                         Stream*           str,
@@ -391,7 +391,7 @@ inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          int               height,
                          bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,true,bInvert); }
 
-// ------------------------------------------------------------------
+
 
 
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) const
@@ -418,8 +418,8 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
 
     if( gfxFont->getType() == fontTrueType || gfxFont->getType() == fontType1 )
     {
-        // TODO(P3): Unfortunately, need to read stream twice, since
-        // we must write byte count to stdout before
+        
+        
         char* pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef(), &nSize );
         if( pBuf )
         {
@@ -442,15 +442,15 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     if( !pBuf )
         return;
 
-    // ---sync point--- see SYNC STREAMS above
+    
     fflush(stdout);
 
     if( fwrite(pBuf, sizeof(char), nSize, g_binary_out) != (size_t)nSize )
     {
         gfree(pBuf);
-        exit(1); // error
+        exit(1); 
     }
-    // ---sync point--- see SYNC STREAMS above
+    
     fflush(g_binary_out);
     gfree(pBuf);
 }
@@ -676,7 +676,7 @@ void PDFOutDev::updateFont(GfxState *state)
         int nEmbedSize=0;
 
         Ref* pID = gfxFont->getID();
-        // TODO(Q3): Portability problem
+        
         long long fontID = (long long)pID->gen << 32 | (long long)pID->num;
         boost::unordered_map< long long, FontAttributes >::const_iterator it =
             m_aFontMap.find( fontID );
@@ -689,7 +689,7 @@ void PDFOutDev::updateFont(GfxState *state)
         printf( "updateFont" );
         if( it != m_aFontMap.end() )
         {
-            // conflating this with printf below crashes under Windoze
+            
             printf( " %lld", fontID );
 
             aFont = it->second;
@@ -792,8 +792,8 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     if( u == NULL )
         return;
 
-    // normalize coordinates: correct from baseline-relative to upper
-    // left corner of glyphs
+    
+    
     double x2(0.0), y2(0.0);
     state->textTransformDelta( 0.0,
                                state->getFont()->getAscent(),
@@ -804,7 +804,7 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 
     const double aPositionX(x-originX);
     const double aPositionY(y-originY);
-    // TODO(F2): use leading here, when set
+    
     const double nWidth(dx != 0.0 ? dx : fFontSize);
     const double nHeight(dy != 0.0 ? dy : fFontSize);
 
@@ -819,7 +819,7 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
             normalize(pTextMat[1]),
             normalize(pTextMat[3]) );
 
-    // silence spurious warning
+    
     (void)&mapUCS2;
 
     char buf[9];
@@ -835,7 +835,7 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 
 void PDFOutDev::drawString(GfxState*, GooString* /*s*/)
 {
-    // TODO(F3): NYI
+    
 }
 
 void PDFOutDev::endTextObject(GfxState*)
@@ -886,8 +886,8 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
 
     if( maskColors )
     {
-        // write mask colors. nBytes must be even - first half is
-        // lower bound values, second half upper bound values
+        
+        
         if( colorMap->getColorSpace()->getMode() == csIndexed )
         {
             aMaskBuf.push_back( (char)maskColors[0] );
@@ -962,7 +962,7 @@ void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
 
 void PDFOutDev::setPageNum( int nNumPages )
 {
-    // TODO(F3): printf might format int locale-dependent!
+    
     printf("setPageNum %d\n", nNumPages);
 }
 

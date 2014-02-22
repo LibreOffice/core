@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -56,7 +56,7 @@ using ::com::sun::star::frame::XModel;
 namespace swf {
 
 typedef ::cppu::WeakImplHelper1<com::sun::star::io::XOutputStream> OslOutputStreamWrapper_Base;
-    // needed for some compilers
+    
 class OslOutputStreamWrapper : public OslOutputStreamWrapper_Base
 {
     osl::File   mrFile;
@@ -68,7 +68,7 @@ public:
         mrFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write );
     }
 
-    // stario::XOutputStream
+    
     virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL flush(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL closeOutput(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -87,19 +87,19 @@ void SAL_CALL OslOutputStreamWrapper::writeBytes( const ::com::sun::star::uno::S
 
         switch( eRC )
         {
-        case osl::File::E_INVAL:    // the format of the parameters was not valid
-        case osl::File::E_FBIG:        // File too large
+        case osl::File::E_INVAL:    
+        case osl::File::E_FBIG:        
 
-        case osl::File::E_AGAIN:    // Operation would block
-        case osl::File::E_BADF:        // Bad file
-        case osl::File::E_FAULT:    // Bad address
-        case osl::File::E_INTR:        // function call was interrupted
-        case osl::File::E_IO:        // I/O error
-        case osl::File::E_NOLCK:    // No record locks available
-        case osl::File::E_NOLINK:    // Link has been severed
-        case osl::File::E_NOSPC:    // No space left on device
-        case osl::File::E_NXIO:        // No such device or address
-            throw com::sun::star::io::IOException();    // TODO: Better error handling
+        case osl::File::E_AGAIN:    
+        case osl::File::E_BADF:        
+        case osl::File::E_FAULT:    
+        case osl::File::E_INTR:        
+        case osl::File::E_IO:        
+        case osl::File::E_NOLCK:    
+        case osl::File::E_NOLINK:    
+        case osl::File::E_NOSPC:    
+        case osl::File::E_NXIO:        
+            throw com::sun::star::io::IOException();    
         default: break;
         }
 
@@ -118,19 +118,19 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
 
     switch( eRC )
     {
-    case osl::File::E_INVAL:    // the format of the parameters was not valid
+    case osl::File::E_INVAL:    
 
-    case osl::File::E_BADF:        // Bad file
-    case osl::File::E_INTR:        // function call was interrupted
-    case osl::File::E_NOLINK:    // Link has been severed
-    case osl::File::E_NOSPC:    // No space left on device
-    case osl::File::E_IO:        // I/O error
-        throw com::sun::star::io::IOException();    // TODO: Better error handling
+    case osl::File::E_BADF:        
+    case osl::File::E_INTR:        
+    case osl::File::E_NOLINK:    
+    case osl::File::E_NOSPC:    
+    case osl::File::E_IO:        
+        throw com::sun::star::io::IOException();    
     default: break;
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 class FlashExportFilter : public cppu::WeakImplHelper4
 <
@@ -147,7 +147,7 @@ class FlashExportFilter : public cppu::WeakImplHelper4
 public:
     FlashExportFilter( const Reference< XComponentContext > &rxContext);
 
-    // XFilter
+    
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException);
 
     sal_Bool ExportAsMultipleFiles( const Sequence< PropertyValue >& aDescriptor );
@@ -155,19 +155,19 @@ public:
 
     virtual void SAL_CALL cancel( ) throw (RuntimeException);
 
-    // XExporter
+    
     virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
 };
 
-// -----------------------------------------------------------------------------
+
 
 FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxContext)
 :   mxContext( rxContext )
@@ -175,14 +175,14 @@ FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxCon
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > xDrawPage, OUString sPath, sal_uInt32 nPage, const char* suffix)
 {
     OUString filename = STR("slide") + VAL(nPage+1) + STR(suffix) + STR(".swf");
     OUString fullpath = sPath + STR("/") + filename;
 
-    // AS: If suffix is "o" then the last paramter is true (for exporting objects).
+    
     Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
     sal_uInt16 nCached = aFlashExporter.exportBackgrounds( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ), *suffix == 'o' );
     aFlashExporter.Flush();
@@ -244,15 +244,15 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequen
 }
 
 
-// AS: When exporting as multiple files, each background, object layer, and slide gets its own
-//  file.  Additionally, a file called BackgroundConfig.txt is generated, indicating which
-//  background and objects (if any) go with each slide.  The files are named slideNb.swf,
-//  slideNo.swf, and slideNp.swf, where N is the slide number, and b=background, o=objects, and
-//  p=slide contents.  Note that under normal circumstances, there will be very few b and o files.
 
-// AS: HACK!  Right now, I create a directory as a sibling to the swf file selected in the Export
-//  dialog.  This directory is called presentation.sxi-swf-files.  The name of the swf file selected
-//  in the Export dialog has no impact on this.  All files created are placed in this directory.
+
+
+
+
+
+
+
+
 sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& aDescriptor)
 {
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(mxDoc, UNO_QUERY);
@@ -280,12 +280,12 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     aFilterData = findPropertyValue<Sequence< PropertyValue > >(aDescriptor, "FilterData", aFilterData);
 
-    //AS: Do a bunch of path mangling to figure out where to put the files.
+    
 
     OUString sOriginalPath = findPropertyValue<OUString>(aDescriptor, "URL", OUString());
 
-    // AS: sPath is the parent directory, where everything else exists (like the sxi,
-    //  the -swf-files folder, the -audio files, etc.
+    
+    
     sal_Int32 lastslash = sOriginalPath.lastIndexOf('/');
     OUString sPath( sOriginalPath.copy(0, lastslash) );
 
@@ -294,9 +294,9 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     lastslash = sPresentation.lastIndexOf('/') + 1;
     sal_Int32 lastdot = sPresentation.lastIndexOf('.');
 
-    // AS: The name of the presentation, without 3 character extension.
+    
     OUString sPresentationName;
-    if (lastdot < 0)  // fdo#71309 in case file has no name
+    if (lastdot < 0)  
         sPresentationName = sPresentation.copy(lastslash);
     else
         sPresentationName = sPresentation.copy(lastslash, lastdot - lastslash);
@@ -312,8 +312,8 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     oslFileHandle xBackgroundConfig( 0 );
 
-    // AS: Only export the background config if we're exporting all of the pages, otherwise we'll
-    //  screw it up.
+    
+    
     sal_Bool bExportAll = findPropertyValue<sal_Bool>(aFilterData, "ExportAll", true);
     if (bExportAll)
     {
@@ -324,7 +324,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
         err = osl_writeFile(xBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
     }
 
-    // TODO: check for errors
+    
     (void) err;
 
     FlashExporter aFlashExporter( mxContext, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
@@ -340,11 +340,11 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
             mxStatusIndicator->setValue( nPage );
         xDrawPages->getByIndex(nPage) >>= xDrawPage;
 
-        // AS: If we're only exporting the current page, then skip the rest.
+        
         if (!bExportAll && xDrawPage != rCurrentPage)
             continue;
 
-        // AS: Export the background, the background objects, and then the slide contents.
+        
         if (bExportAll || findPropertyValue<sal_Bool>(aFilterData, "ExportBackgrounds", true))
         {
             backgroundfilename = exportBackground(aFlashExporter, xDrawPage, swfdirpath, nPage, "b");
@@ -368,8 +368,8 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
                 osl_removeFile(fullpath.pData);
         }
 
-        // AS: Write out to the background config what backgrounds and objects this
-        //  slide used.
+        
+        
         if (bExportAll)
         {
             OUString temp = backgroundfilename + STR("|") + objectsfilename;
@@ -399,7 +399,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
             if (!ret)
                 osl_removeFile(fullpath.pData);
         }
-#endif // defined AUGUSTUS
+#endif 
     }
 
     if (bExportAll)
@@ -425,25 +425,25 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
     return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FlashExportFilter::cancel(  )
     throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
 
-// XExporter
+
+
 void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
 
-// XInitialization
+
+
 void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
     throw (Exception, RuntimeException)
 {
@@ -470,7 +470,7 @@ Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Referen
     return (cppu::OWeakObject*) new FlashExportFilter( comphelper::getComponentContext(rSMgr) );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL FlashExportFilter::getImplementationName(  )
     throw (RuntimeException)
 {

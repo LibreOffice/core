@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/e3dundo.hxx>
@@ -32,7 +32,7 @@ E3dUndoAction::~E3dUndoAction ()
 {
 }
 
-// Repeat does not exist
+
 
 bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
@@ -49,13 +49,13 @@ TYPEINIT1(E3dRotateUndoAction, E3dUndoAction);
 
 ************************************************************************/
 
-// Undo destructor for 3D-Rotation
+
 
 E3dRotateUndoAction::~E3dRotateUndoAction ()
 {
 }
 
-// Undo for 3D-Rotation on the Rotation matrix
+
 
 void E3dRotateUndoAction::Undo ()
 {
@@ -63,7 +63,7 @@ void E3dRotateUndoAction::Undo ()
     pMy3DObj->SetTransform(aMyOldRotation);
 }
 
-// Redo for 3D-Rotation on the Rotation matrix
+
 
 void E3dRotateUndoAction::Redo ()
 {
@@ -88,8 +88,8 @@ E3dAttributesUndoAction::~E3dAttributesUndoAction()
 {
 }
 
-// Undo() implemented through Set3DAttributes() to only maintain the attributes
-// in one place
+
+
 
 void E3dAttributesUndoAction::Undo()
 {
@@ -103,14 +103,14 @@ void E3dAttributesUndoAction::Redo()
     pObject->SetMergedItemSetAndBroadcast(aNewSet);
 }
 
-// Multiple Undo is not possible
+
 
 bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
     return false;
 }
 
-// Multiple Undo is not possible
+
 
 void E3dAttributesUndoAction::Repeat()
 {

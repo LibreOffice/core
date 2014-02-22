@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -54,7 +54,7 @@ Size GraphicPreviewWindow::GetOptimalSize() const
     return LogicToPixel(Size(81, 73), MAP_APPFONT);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void GraphicPreviewWindow::Paint( const Rectangle& rRect )
 {
@@ -78,7 +78,7 @@ void GraphicPreviewWindow::Paint( const Rectangle& rRect )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void GraphicPreviewWindow::SetPreview( const Graphic& rGraphic )
 {
@@ -154,7 +154,7 @@ GraphicFilterDialog::GraphicFilterDialog(Window* pParent,
     mpPreview->init(&rGraphic, maModifyHdl);
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
 {
@@ -165,7 +165,7 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
 {
@@ -178,9 +178,9 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
     return 0;
 }
 
-// ----------------
-// - FilterMosaic -
-// ----------------
+
+
+
 
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges )
@@ -205,7 +205,7 @@ GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraph
     mpMtrWidth->GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
@@ -243,9 +243,9 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     return aRet;
 }
 
-// ------------------
-// - GraphicFilterSmooth -
-// ------------------
+
+
+
 
 GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius)
     : GraphicFilterDialog(pParent, "SmoothDialog",
@@ -258,7 +258,7 @@ GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraph
     mpMtrRadius->GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double /*fScaleX*/, double /*fScaleY*/ )
 {
@@ -287,9 +287,9 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     return aRet;
 }
 
-// ------------------
-// - GraphicFilterSolarize -
-// ------------------
+
+
+
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
                                               sal_uInt8 cGreyThreshold, sal_Bool bInvert )
@@ -306,7 +306,7 @@ GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rG
     mpCbxInvert->SetToggleHdl( GetModifyHdl() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
                                                    double /*fScaleX*/, double /*fScaleY*/ )
@@ -342,9 +342,9 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
     return aRet;
 }
 
-// ----------------------
-// - GraphicFilterSepia -
-// ----------------------
+
+
+
 
 GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
                                         sal_uInt16 nSepiaPercent )
@@ -357,7 +357,7 @@ GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic
     mpMtrSepia->SetModifyHdl( GetModifyHdl() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
                                                 double /*fScaleX*/, double /*fScaleY*/ )
@@ -383,9 +383,9 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
     return aRet;
 }
 
-// -----------------------
-// - GraphicFilterPoster -
-// -----------------------
+
+
+
 
 GraphicFilterPoster::GraphicFilterPoster(Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nPosterCount)
@@ -400,7 +400,7 @@ GraphicFilterPoster::GraphicFilterPoster(Window* pParent, const Graphic& rGraphi
     mpNumPoster->SetModifyHdl( GetModifyHdl() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double /*fScaleX*/, double /*fScaleY*/ )
@@ -426,9 +426,9 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
     return aRet;
 }
 
-// -----------------------
-// - GraphicFilterEmboss -
-// -----------------------
+
+
+
 
 void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -450,7 +450,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeEmbossControl(Window *pPare
     return new EmbossControl(pParent);
 }
 
-// -----------------------------------------------------------------------------
+
 
 GraphicFilterEmboss::GraphicFilterEmboss(Window* pParent,
     const Graphic& rGraphic, RECT_POINT eLightSource)
@@ -463,7 +463,7 @@ GraphicFilterEmboss::GraphicFilterEmboss(Window* pParent,
     mpCtlLight->GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double /*fScaleX*/, double /*fScaleY*/ )

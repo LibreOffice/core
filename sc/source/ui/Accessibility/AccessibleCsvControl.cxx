@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleCsvControl.hxx"
@@ -46,7 +46,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-// ause
+
 #include "editutil.hxx"
 
 using ::utl::AccessibleRelationSetHelper;
@@ -64,7 +64,7 @@ using ::com::sun::star::beans::PropertyValue;
 using namespace ::com::sun::star::accessibility;
 
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
 const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
@@ -81,7 +81,7 @@ const sal_Int32 CSV_LINE_HEADER     = CSV_POS_INVALID;
 const sal_uInt32 CSV_COLUMN_HEADER  = CSV_COLUMN_INVALID;
 
 
-// CSV base control ===========================================================
+
 
 DBG_NAME( ScAccessibleCsvControl )
 
@@ -109,7 +109,7 @@ void SAL_CALL ScAccessibleCsvControl::disposing()
 }
 
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const AwtPoint& /* rPoint */ )
         throw( RuntimeException )
@@ -133,7 +133,7 @@ void SAL_CALL ScAccessibleCsvControl::grabFocus() throw( RuntimeException )
 }
 
 
-// events ---------------------------------------------------------------------
+
 
 void ScAccessibleCsvControl::SendFocusEvent( bool bFocused )
 {
@@ -180,7 +180,7 @@ void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn *
 }
 
 
-// helpers --------------------------------------------------------------------
+
 
 Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const throw( RuntimeException )
 {
@@ -259,7 +259,7 @@ void ScAccessibleCsvControl::implDispose()
 {
     if( implIsAlive() )
     {
-        // prevent multiple call of dtor
+        
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -271,7 +271,7 @@ Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
 }
 
 
-// Ruler ======================================================================
+
 
 /** Converts a ruler cursor position to API text index. */
 static sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
@@ -341,7 +341,7 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font&
 
 
 
-// ----------------------------------------------------------------------------
+
 
 DBG_NAME( ScAccessibleCsvRuler )
 
@@ -358,7 +358,7 @@ ScAccessibleCsvRuler::~ScAccessibleCsvRuler()
     implDispose();
 }
 
-// XAccessibleComponent -----------------------------------------------------
+
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
     throw (RuntimeException)
@@ -376,7 +376,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
     return implGetRuler().GetSettings().GetStyleSettings().GetFaceColor().GetColor();
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getAccessibleChildCount() throw( RuntimeException )
 {
@@ -423,7 +423,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleSta
 }
 
 
-// XAccessibleText ------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCaretPosition() throw( RuntimeException )
 {
@@ -474,7 +474,7 @@ ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBo
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
     AwtRectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
-    // do not return rectangle out of window
+    
     sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
     if( aRect.X >= nWidth )
         throw IndexOutOfBoundsException();
@@ -496,7 +496,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint
     SolarMutexGuard aGuard;
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
-    // use object's coordinate system, convert to API position
+    
     return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
 }
 
@@ -556,12 +556,12 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
 
     ensureValidIndex( nIndex );
 
-    OUStringBuffer aResultText;     // will be assigned to aResult.SegmentText below
+    OUStringBuffer aResultText;     
     sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
 
     switch( nTextType )
     {
-        // single character
+        
         case AccessibleTextType::CHARACTER:
         {
             aResult.SegmentStart = nIndex;
@@ -569,17 +569,17 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
         }
         break;
 
-        // entire number or single dot/line
+        
         case AccessibleTextType::WORD:
         case AccessibleTextType::GLYPH:
             aResult.SegmentStart = nIndex;
             if( nRulerPos % 10 )
                 aResultText.append(maBuffer[nIndex]);
             else
-                aResultText.append( nRulerPos );    // string representation of sal_Int32!!!
+                aResultText.append( nRulerPos );    
         break;
 
-        // entire text
+        
         case AccessibleTextType::SENTENCE:
         case AccessibleTextType::PARAGRAPH:
         case AccessibleTextType::LINE:
@@ -587,7 +587,7 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
             aResultText.append( maBuffer.getStr(), implGetTextLength() );
         break;
 
-        // equal-formatted text
+        
         case AccessibleTextType::ATTRIBUTE_RUN:
         {
             sal_Int32 nFirstIndex = implGetFirstEqualFormatted( nIndex );
@@ -621,35 +621,35 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex,
 
     switch( nTextType )
     {
-        // single character
+        
         case AccessibleTextType::CHARACTER:
             if( nIndex > 0 )
                 aResult = getTextAtIndex( nIndex - 1, nTextType );
-            // else empty
+            
         break;
 
-        // entire number or single dot/line
+        
         case AccessibleTextType::WORD:
         case AccessibleTextType::GLYPH:
             if( nRulerPos > 0 )
                 aResult = getTextAtIndex( lcl_GetApiPos( nRulerPos - 1 ), nTextType );
-            // else empty
+            
         break;
 
-        // entire text
+        
         case AccessibleTextType::SENTENCE:
         case AccessibleTextType::PARAGRAPH:
         case AccessibleTextType::LINE:
-            // empty
+            
         break;
 
-        // equal-formatted text
+        
         case AccessibleTextType::ATTRIBUTE_RUN:
         {
             sal_Int32 nFirstIndex = implGetFirstEqualFormatted( nIndex );
             if( nFirstIndex > 0 )
                 aResult = getTextAtIndex( nFirstIndex - 1, nTextType );
-            // else empty
+            
         }
         break;
 
@@ -675,35 +675,35 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex,
 
     switch( nTextType )
     {
-        // single character
+        
         case AccessibleTextType::CHARACTER:
             if( nIndex < nLastValid )
                 aResult = getTextAtIndex( nIndex + 1, nTextType );
-            // else empty
+            
         break;
 
-        // entire number or single dot/line
+        
         case AccessibleTextType::WORD:
         case AccessibleTextType::GLYPH:
             if( nRulerPos < implGetRuler().GetPosCount() )
                 aResult = getTextAtIndex( lcl_GetApiPos( nRulerPos + 1 ), nTextType );
-            // else empty
+            
         break;
 
-        // entire text
+        
         case AccessibleTextType::SENTENCE:
         case AccessibleTextType::PARAGRAPH:
         case AccessibleTextType::LINE:
-            // empty
+            
         break;
 
-        // equal-formatted text
+        
         case AccessibleTextType::ATTRIBUTE_RUN:
         {
             sal_Int32 nLastIndex = implGetLastEqualFormatted( nIndex );
             if( nLastIndex < nLastValid )
                 aResult = getTextAtIndex( nLastIndex + 1, nTextType );
-            // else empty
+            
         }
         break;
 
@@ -721,7 +721,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
 }
 
 
-// XInterface -----------------------------------------------------------------
+
 
 Any SAL_CALL ScAccessibleCsvRuler::queryInterface( const ::com::sun::star::uno::Type& rType )
         throw( RuntimeException )
@@ -741,7 +741,7 @@ void SAL_CALL ScAccessibleCsvRuler::release() throw ()
 }
 
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName() throw( RuntimeException )
 {
@@ -749,7 +749,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName() throw( RuntimeEx
 }
 
 
-// XTypeProvider --------------------------------------------------------------
+
 
 Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes() throw( RuntimeException )
 {
@@ -769,7 +769,7 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId() throw(
 }
 
 
-// events ---------------------------------------------------------------------
+
 
 void ScAccessibleCsvRuler::SendCaretEvent()
 {
@@ -785,7 +785,7 @@ void ScAccessibleCsvRuler::SendCaretEvent()
 }
 
 
-// helpers --------------------------------------------------------------------
+
 
 OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleName() throw( RuntimeException )
 {
@@ -829,10 +829,10 @@ void ScAccessibleCsvRuler::constructStringBuffer() throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    // extend existing string buffer to new ruler size
+    
     sal_Int32 nRulerCount = implGetRuler().GetPosCount();
     sal_Int32 nRulerPos = lcl_GetRulerPos( maBuffer.getLength() );
-    for( ; nRulerPos <= nRulerCount; ++nRulerPos ) // include last position
+    for( ; nRulerPos <= nRulerCount; ++nRulerPos ) 
     {
         switch( nRulerPos % 10 )
         {
@@ -872,7 +872,7 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
 }
 
 
-// Grid =======================================================================
+
 
 /** Converts a grid columnm index to an API column index. */
 static inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
@@ -887,7 +887,7 @@ static inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 DBG_NAME( ScAccessibleCsvGrid )
 
@@ -904,7 +904,7 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 }
 
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( const AwtPoint& rPoint )
         throw( RuntimeException )
@@ -916,7 +916,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( con
         ensureAlive();
 
         const ScCsvGrid& rGrid = implGetGrid();
-        // #102679#; use <= instead of <, because the offset is the size and not the point
+        
         sal_Int32 nColumn = ((rGrid.GetFirstX() <= rPoint.X) && (rPoint.X <= rGrid.GetLastX())) ?
             lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
         sal_Int32 nRow = (rPoint.Y >= rGrid.GetHdrHeight()) ?
@@ -942,7 +942,7 @@ throw (RuntimeException)
     return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount() throw( RuntimeException )
 {
@@ -995,7 +995,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStat
 }
 
 
-// XAccessibleTable -----------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRowCount() throw( RuntimeException )
 {
@@ -1157,7 +1157,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildInd
 }
 
 
-// XAccessibleSelection -------------------------------------------------------
+
 
 void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int32 nChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
@@ -1231,7 +1231,7 @@ void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int32 nSelectedC
 }
 
 
-// XInterface -----------------------------------------------------------------
+
 
 Any SAL_CALL ScAccessibleCsvGrid::queryInterface( const ::com::sun::star::uno::Type& rType )
         throw( RuntimeException )
@@ -1251,7 +1251,7 @@ void SAL_CALL ScAccessibleCsvGrid::release() throw ()
 }
 
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName() throw( RuntimeException )
 {
@@ -1259,7 +1259,7 @@ OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName() throw( RuntimeExc
 }
 
 
-// XTypeProvider --------------------------------------------------------------
+
 
 Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes() throw( RuntimeException )
 {
@@ -1280,7 +1280,7 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId() throw( 
 }
 
 
-// events ---------------------------------------------------------------------
+
 
 void ScAccessibleCsvGrid::SendFocusEvent( bool bFocused )
 {
@@ -1340,7 +1340,7 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
 }
 
 
-// helpers --------------------------------------------------------------------
+
 
 OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleName() throw( RuntimeException )
 {
@@ -1435,7 +1435,7 @@ ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, 
 }
 
 
-// ============================================================================
+
 
 DBG_NAME( ScAccessibleCsvCell )
 
@@ -1467,7 +1467,7 @@ void SAL_CALL ScAccessibleCsvCell::disposing()
 }
 
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 void SAL_CALL ScAccessibleCsvCell::grabFocus() throw( RuntimeException )
 {
@@ -1493,7 +1493,7 @@ throw (RuntimeException)
     return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
-// XAccessibleContext -----------------------------------------------------
+
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleChildCount() throw( RuntimeException )
 {
@@ -1540,22 +1540,22 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvCell::getAccessibleStat
     return pStateSet;
 }
 
-// XInterface -----------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( ScAccessibleCsvCell, ScAccessibleCsvControl, AccessibleStaticTextBase )
 
-// XTypeProvider --------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCsvCell, ScAccessibleCsvControl, AccessibleStaticTextBase )
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 OUString SAL_CALL ScAccessibleCsvCell::getImplementationName() throw( RuntimeException )
 {
     return OUString( CELL_IMPL_NAME );
 }
 
-// helpers --------------------------------------------------------------------
+
 
 Rectangle ScAccessibleCsvCell::GetBoundingBoxOnScreen() const throw( RuntimeException )
 {
@@ -1644,6 +1644,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

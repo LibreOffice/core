@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlgsize.hxx"
@@ -72,7 +72,7 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
         if (m_pCB_STANDARD->IsChecked())
         {
             m_nPrevValue = static_cast<sal_Int32>(m_pMF_VALUE->GetValue(FUNIT_CM));
-                // don't use getValue as this will use m_pCB_STANDARD->to determine if we're standard
+                
             m_pMF_VALUE->SetEmptyFieldValue();
         }
         else
@@ -83,6 +83,6 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
     return 0;
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

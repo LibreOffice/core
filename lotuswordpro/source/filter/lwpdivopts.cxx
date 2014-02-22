@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -96,23 +96,23 @@ void LwpTextLanguage::Read(LwpObjectStream *pStrm)
 
 sal_uInt16 LwpTextLanguage::ConvertFrom96(sal_uInt16 orgLang)
 {
-    // Reading a Word Pro 96 into Word Pro 97
+    
     switch (orgLang)
     {
-        case 0x2809U:                       // AMI_MEDICAL 96
-            orgLang = 0x8409U;              //0x8409U       97
+        case 0x2809U:                       
+            orgLang = 0x8409U;              
             break;
-        case 0x2C09U:                       // AMI_BRMEDICAL 96
-            orgLang = 0x8809U;              // 0x8809U       97
+        case 0x2C09U:                       
+            orgLang = 0x8809U;              
             break;
-        case 0x3409U:                       // AMI_BRITISHMEDIZE 96
-            orgLang = 0x8C09U;                  // 0x8C09U           97
+        case 0x3409U:                       
+            orgLang = 0x8C09U;                  
             break;
-        case 0x3009U:                       // AMI_BRITISHIZE 96
-            orgLang = 0x1009U;              // 0x1009U        97
+        case 0x3009U:                       
+            orgLang = 0x1009U;              
             break;
-        case 0x819U:                        // AMI_RUSSIANIO  96
-            orgLang = 0x8419U;              // 0x8419U        97
+        case 0x819U:                        
+            orgLang = 0x8419U;              
             break;
     }
     return orgLang;

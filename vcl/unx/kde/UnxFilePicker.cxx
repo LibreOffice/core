@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -60,9 +60,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
-//////////////////////////////////////////////////////////////////////////
-// helper functions
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 namespace
 {
@@ -73,16 +73,16 @@ namespace
         aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
 #if ENABLE_TDE
         aRet[2] = "com.sun.star.ui.dialogs.TDEFilePicker";
-#else // ENABLE_TDE
+#else 
         aRet[2] = "com.sun.star.ui.dialogs.KDEFilePicker";
-#endif // ENABLE_TDE
+#endif 
         return aRet;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// UnxFilePicker
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 UnxFilePicker::UnxFilePicker( const uno::Reference<uno::XComponentContext>& )
     : UnxFilePicker_Base( m_rbHelperMtx ),
@@ -165,7 +165,7 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
 {
     checkFilePicker();
 
-    // this is _not_ an osl::Condition, see i#93366
+    
     m_pCommandThread->execCondition().reset();
 
     sendCommand( OUString( "exec" ));
@@ -379,11 +379,11 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
                     break;
 
                 default:
-                    // nothing
+                    
                     break;
             }
         }
-        // TODO else if push button...
+        
 
         sendCommand( aBuffer.makeStringAndClear() );
     }
@@ -449,11 +449,11 @@ void SAL_CALL UnxFilePicker::setLabel( sal_Int16 nControlId, const OUString &rLa
 OUString SAL_CALL UnxFilePicker::getLabel(sal_Int16 /*nControlId*/)
     throw ( uno::RuntimeException )
 {
-    // FIXME getLabel() is not yet implemented
+    
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // TODO return m_pImpl->getLabel(nControlId);
+    
     return OUString();
 }
 
@@ -527,7 +527,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 {
     initFilePicker();
 
-    // parameter checking
+    
     uno::Any aAny;
     if ( 0 == rArguments.getLength( ) )
         throw lang::IllegalArgumentException(
@@ -631,11 +631,11 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 void SAL_CALL UnxFilePicker::cancel()
     throw ( uno::RuntimeException )
 {
-    // FIXME cancel() is not implemented
+    
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // TODO m_pImpl->cancel();
+    
 }
 
 void SAL_CALL UnxFilePicker::disposing( const lang::EventObject &rEvent )
@@ -677,12 +677,12 @@ void UnxFilePicker::initFilePicker()
 
     if ( m_nFilePickerPid == 0 )
     {
-        // Child...
-        close( aFiledesStdin[1] ); // write end of the pipe
+        
+        close( aFiledesStdin[1] ); 
         dup2(  aFiledesStdin[0], 0 );
         close( aFiledesStdin[0] );
 
-        close( aFiledesStdout[0] ); // read end of the pipe
+        close( aFiledesStdout[0] ); 
         dup2(  aFiledesStdout[1], 1 );
         close( aFiledesStdout[1] );
 
@@ -694,58 +694,58 @@ void UnxFilePicker::initFilePicker()
         }
 #endif
 
-        // The executable name
+        
 #if ENABLE_TDE
         OUString helperurl("${ORIGIN}/tdefilepicker");
-#else // ENABLE_TDE
+#else 
         OUString helperurl("${ORIGIN}/kdefilepicker");
-#endif // ENABLE_TDE
+#endif 
         rtl::Bootstrap::expandMacros( helperurl );
         OUString helperpath;
         osl::FileBase::getSystemPathFromFileURL( helperurl, helperpath );
         OString helper( OUStringToOString( helperpath, osl_getThreadTextEncoding()));
 
-        // ID of the main window
+        
         const int nIdLen = 20;
         char pWinId[nIdLen] = "0";
 
-        // TODO pass here the real parent (not possible for system dialogs
-        // yet), and default to GetDefDialogParent() only when the real parent
-        // is NULL
+        
+        
+        
         Window *pParentWin = Application::GetDefDialogParent();
         if ( pParentWin )
         {
             const SystemEnvData* pSysData = ((SystemWindow *)pParentWin)->GetSystemData();
             if ( pSysData )
             {
-                snprintf( pWinId, nIdLen, "%ld", pSysData->aWindow ); // unx only
+                snprintf( pWinId, nIdLen, "%ld", pSysData->aWindow ); 
                 pWinId[nIdLen-1] = 0;
             }
         }
 
-        // Execute the fpicker implementation
+        
         execlp( helper.getStr(), helper.getStr(), "--winid", pWinId, NULL );
 
-        // Error, finish the child
+        
         exit( -1 );
     }
 
-    // Parent continues
+    
     close( aFiledesStdin[0] );
     m_nFilePickerWrite = aFiledesStdin[1];
 
     close( aFiledesStdout[1] );
     m_nFilePickerRead = aFiledesStdout[0];
 
-    // Create the notify thread
+    
     if ( !m_pNotifyThread )
         m_pNotifyThread = new UnxFilePickerNotifyThread( this );
 
-    // Create the command thread
+    
     if ( !m_pCommandThread )
         m_pCommandThread = new UnxFilePickerCommandThread( m_pNotifyThread, m_nFilePickerRead );
 
-    // Start the threads
+    
     m_pNotifyThread->create();
     m_pCommandThread->create();
 
@@ -756,7 +756,7 @@ void UnxFilePicker::checkFilePicker() throw( ::com::sun::star::uno::RuntimeExcep
 {
     if ( m_nFilePickerPid > 0 )
     {
-        // TODO check if external file picker is runnning
+        
     }
     else
     {

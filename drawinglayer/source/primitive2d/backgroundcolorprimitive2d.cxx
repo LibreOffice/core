@@ -71,7 +71,7 @@ namespace drawinglayer
 
         basegfx::B2DRange BackgroundColorPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // always as big as the view
+            
             return rViewInformation.getViewport();
         }
 
@@ -81,24 +81,24 @@ namespace drawinglayer
 
             if(getBuffered2DDecomposition().hasElements() && (maLastViewport != rViewInformation.getViewport()))
             {
-                // conditions of last local decomposition have changed, delete
+                
                 const_cast< BackgroundColorPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
             if(!getBuffered2DDecomposition().hasElements())
             {
-                // remember ViewRange
+                
                 const_cast< BackgroundColorPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
             }
 
-            // use parent implementation
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(BackgroundColorPrimitive2D, PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -60,7 +60,7 @@
 #include <scriptinfo.hxx>
 
 #ifdef DBG_UTIL
-// global Variable
+
 SvStatistics g_SvStat;
 #endif
 
@@ -367,7 +367,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
     return nSpace;
 }
 
-// maps directions for vertical layout
+
 sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
     if ( bVertFormat )
@@ -393,8 +393,8 @@ sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
     return nDir;
 }
 
-// maps the absolute direction set at the font to its logical conterpart
-// in the rotated environment
+
+
 sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
     if ( bVertFormat )
@@ -427,7 +427,7 @@ sal_uInt16 SwFont::GetOrientation( const sal_Bool bVertFormat ) const
 
 void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
-    // map direction if frame has vertical layout
+    
     nDir = MapDirection( nDir, bVertFormat );
 
     if( nDir != aSub[0].GetOrientation() )
@@ -467,7 +467,7 @@ void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
 
 *************************************************************************/
 
-// nEsc ist der Prozentwert
+
 sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 {
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&
@@ -706,7 +706,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
-// SwFont
+
 
 SwFont::SwFont( const SwFont &rFont )
 {
@@ -767,7 +767,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[SW_LATIN].SetStyleName( rFont.GetStyleName() );
         aSub[SW_LATIN].SetPitch( rFont.GetPitch() );
         aSub[SW_LATIN].SetCharSet( rFont.GetCharSet() );
-        aSub[SW_LATIN].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        aSub[SW_LATIN].SvxFont::SetPropr( 100 );   
         Size aTmpSize = aSub[SW_LATIN].aSize;
         aTmpSize.Height() = pAttrSet->GetSize().GetHeight();
         aSub[SW_LATIN].SetSize( aTmpSize );
@@ -783,7 +783,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[SW_CJK].SetStyleName( rFont.GetStyleName() );
         aSub[SW_CJK].SetPitch( rFont.GetPitch() );
         aSub[SW_CJK].SetCharSet( rFont.GetCharSet() );
-        aSub[SW_CJK].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        aSub[SW_CJK].SvxFont::SetPropr( 100 );   
         Size aTmpSize = aSub[SW_CJK].aSize;
         aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
         aSub[SW_CJK].SetSize( aTmpSize );
@@ -803,7 +803,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[SW_CTL].SetStyleName( rFont.GetStyleName() );
         aSub[SW_CTL].SetPitch( rFont.GetPitch() );
         aSub[SW_CTL].SetCharSet( rFont.GetCharSet() );
-        aSub[SW_CTL].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        aSub[SW_CTL].SvxFont::SetPropr( 100 );   
         Size aTmpSize = aSub[SW_CTL].aSize;
         aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
         aSub[SW_CTL].SetSize( aTmpSize );
@@ -1067,15 +1067,15 @@ sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
     if ( GetEscapement() )
     {
         const sal_uInt16 nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
-        return CalcEscHeight( nHeight, nAscent ); // + nLeading;
+        return CalcEscHeight( nHeight, nAscent ); 
     }
-    return nHeight; // + nLeading;
+    return nHeight; 
 }
 
 Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 {
-    // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
-    // sicher ist sicher ...
+    
+    
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic ||
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
@@ -1104,10 +1104,10 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
-                // #108203#
-                // If the length of the original string and the CaseMapped one
-                // are different, it is necessary to handle the given text part as
-                // a single snippet since its size may differ, too.
+                
+                
+                
+                
                 sal_Int32 nOldIdx(rInf.GetIdx());
                 sal_Int32 nOldLen(rInf.GetLen());
                 const OUString aSnippet(oldStr.copy(nOldIdx, nOldLen));
@@ -1132,8 +1132,8 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         }
         rInf.SetKern( nOldKern );
         rInf.SetText(oldTxt);
-        // 15142: Ein Wort laenger als eine Zeile, beim Zeilenumbruch
-        //        hochgestellt, muss seine effektive Hoehe melden.
+        
+        
         if( GetEscapement() )
         {
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
@@ -1219,10 +1219,10 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
-                // #108203#
-                // If the length of the original string and the CaseMapped one
-                // are different, it is necessary to handle the given text part as
-                // a single snippet since its size may differ, too.
+                
+                
+                
+                
                 sal_Int32 nOldIdx(rInf.GetIdx());
                 sal_Int32 nOldLen(rInf.GetLen());
                 const OUString aSnippet(oldStr.copy(nOldIdx, nOldLen));
@@ -1274,8 +1274,8 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
                     ++nSpace;
             }
 
-            // if next portion if a hole portion we do not consider any
-            // extra space added because the last character was ASIAN
+            
+            
             if ( nSpace && rInf.IsSpaceStop() && bAsianFont )
                  --nSpace;
 
@@ -1289,7 +1289,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( 0 );
 
-        // set position for underline font
+        
         rInf.SetPos( pUnderFnt->GetPos() );
 
         pUnderFnt->GetFont()._DrawStretchText( rInf );
@@ -1371,7 +1371,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( 0 );
 
-        // set position for underline font
+        
         rInf.SetPos( pUnderFnt->GetPos() );
 
         pUnderFnt->GetFont()._DrawStretchText( rInf );
@@ -1483,7 +1483,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     }
 }
 
-// used during painting of small capitals
+
 void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 {
 #ifdef DBG_UTIL
@@ -1529,7 +1529,7 @@ SwUnderlineFont::~SwUnderlineFont()
      delete pFnt;
 }
 
-/// Helper for filters to find true lineheight of a font
+
 long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
                           const OutputDevice &rOut, sal_Int16 nScript)

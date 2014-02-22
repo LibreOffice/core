@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -70,7 +70,7 @@ enum ItemType {
     ITEM_FONT, ITEM_FONTHEIGHT, ITEM_FONTWIDTH, ITEM_FIELD
 };
 
-// - ImpItemListRow -
+
 
 class ImpItemListRow
 {
@@ -156,7 +156,7 @@ bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
         && nMax==rEntry.nMax);
 }
 
-// - ImpItemEdit -
+
 
 class ImpItemEdit: public Edit
 {
@@ -202,7 +202,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
         Edit::KeyInput(rKEvt);
 }
 
-// - _SdrItemBrowserControl -
+
 
 #define MYBROWSEMODE (BROWSER_THUMBDRAGGING|BROWSER_KEEPHIGHLIGHT|BROWSER_NO_HSCROLL|BROWSER_HIDECURSOR)
 
@@ -228,15 +228,15 @@ void _SdrItemBrowserControl::ImpCtor()
     pAktChangeEntry = NULL;
     nLastWhichOfs = 0;
     nLastWhich = 0;
-    nLastWhichOben = 0;  // not implemented yet
-    nLastWhichUnten = 0; // not implemented yet
+    nLastWhichOben = 0;  
+    nLastWhichUnten = 0; 
     bWhichesButNames = false;
     bDontHideIneffectiveItems = false;
     bDontSortItems = false;
     bShowWhichIds = false;
     bShowRealValues = false;
-    bShowWhichIds = true;   // not implemented yet
-    bShowRealValues = true; // not implemented yet
+    bShowWhichIds = true;   
+    bShowRealValues = true; 
 
     InsertDataColumn(
         ITEMBROWSER_WHICHCOL_ID,
@@ -323,12 +323,12 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
                             case SFX_ITEM_DONTCARE: sRet = "DontCare"; break;
                             case SFX_ITEM_SET     : sRet = "Set";      break;
                             case SFX_ITEM_DEFAULT : sRet = "Default";  break;
-                        } // switch
+                        } 
                     } break;
                     case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;
                     case ITEMBROWSER_NAMECOL_ID: sRet = pEntry->aName; break;
                     case ITEMBROWSER_VALUECOL_ID: sRet = pEntry->aValue; break;
-                } // switch
+                } 
             }
         }
     }
@@ -400,8 +400,8 @@ void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
         if (nKeyCode==KEY_RETURN) {
             if (BegChangeEntry(nPos)) bAusgewertet = true;
         } else if (nKeyCode==KEY_ESCAPE) {
-            // ...
-        } else if (rKEvt.GetKeyCode().GetModifier()==KEY_SHIFT+KEY_MOD1+KEY_MOD2) { // Ctrl
+            
+        } else if (rKEvt.GetKeyCode().GetModifier()==KEY_SHIFT+KEY_MOD1+KEY_MOD2) { 
             if (nKeyCode==KEY_SHIFT+KEY_MOD1+KEY_MOD2+KEY_W) {
                 bWhichesButNames=!bWhichesButNames;
                 SetDirty();
@@ -426,13 +426,13 @@ void _SdrItemBrowserControl::SetDirty()
 
 Rectangle _SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,sal_Int32 /*nIndex*/)
 {
-    // no accessibility implementation required
+    
     return Rectangle();
 }
 
 sal_Int32 _SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,const Point& /*_rPoint*/)
 {
-    // no accessibility implementation required
+    
     return -1;
 }
 
@@ -492,7 +492,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
         pEditControl=new ImpItemEdit(&GetDataWindow(),this,0);
         Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,sal_False));
-        aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
+        aRect.Left()+=2; 
         aRect.Right()--;
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
         pEditControl->SetText(pEntry->aValue);
@@ -566,7 +566,7 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
             bool bValueDiff=!rEntry.aValue.equals(pAktEntry->aValue);
             bool bAllDiff = true;
             if (bStateDiff || bValueDiff) {
-                // check whether only state and/or value have changed
+                
                 ImpItemListRow aTest(rEntry);
                 aTest.eState=pAktEntry->eState;
                 aTest.aValue=pAktEntry->aValue;
@@ -641,7 +641,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
                 if (eFillStyle==XFILL_NONE) return true;
-                // transparency currently only for SolidFill
+                
                 if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return true;
                 if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return true;
                 if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return true;
@@ -664,7 +664,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 if (eFillStyle!=XFILL_BITMAP) return true;
             }
             if (nWhich==XATTR_FILLBITMAP || nWhich==XATTR_FILLBMP_TILE) {
-                return false; // always selectable
+                return false; 
             }
             bool bTileTRUE = false;
             bool bTileFALSE = false;
@@ -676,21 +676,21 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             if (ImpGetItem(*pSet,XATTR_FILLBMP_STRETCH,pItem)) {
                 bStretchTRUE=((const XFillBmpStretchItem*)pItem)->GetValue();
             }
-            // Stretch not selectable if Tile=TRUE
+            
             if (nWhich==XATTR_FILLBMP_STRETCH) return bTileTRUE;
-            // and 7+1 items (sub-attributes) remain
+            
             rIndent=2;
-            // Pos (enum) not selectable if Tile=FALSE
+            
             if (nWhich==XATTR_FILLBMP_POS) return bTileFALSE;
-            // SizeXY not selectable if Stretch=TRUE
+            
             if (nWhich==XATTR_FILLBMP_SIZEX || nWhich==XATTR_FILLBMP_SIZEY) {
                 return bTileFALSE && bStretchTRUE;
             }
-            // 2 items specially for Tile
+            
             if (nWhich==XATTR_FILLBMP_POSOFFSETX  || nWhich==XATTR_FILLBMP_POSOFFSETY) {
                 return bTileFALSE;
             }
-            // another 2 items specially for Tile -- however, these exclude each other
+            
             if (nWhich==XATTR_FILLBMP_TILEOFFSETX || nWhich==XATTR_FILLBMP_TILEOFFSETY) {
                 if (bTileFALSE) return true;
                 sal_uInt16 nX=0,nY=0;
@@ -711,10 +711,10 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                     if (nX!=0) return true;
                 }
             }
-            // SizeLog not selectable if Stretch=TRUE and/or
-            // if SizeLog=sal_False.
-            // -> apparently still in use
-            // (sal_True is the static PoolDefault)
+            
+            
+            
+            
             if (nWhich==XATTR_FILLBMP_SIZELOG) {
                 if (bTileFALSE && bStretchTRUE) return true;
             }
@@ -849,14 +849,14 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 if (eKind==SDRCIRC_FULL) return true;
             }
         } break;
-    } // switch
+    } 
     return bRet;
 }
 
 sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
 {
     switch (nWhich) {
-        // Line
+        
         case XATTR_LINESTART            : nWhich=XATTR_LINETRANSPARENCE     ; break;
         case XATTR_LINEEND              : nWhich=XATTR_LINESTARTWIDTH       ; break;
         case XATTR_LINESTARTWIDTH       : nWhich=XATTR_LINESTART            ; break;
@@ -865,7 +865,7 @@ sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
         case XATTR_LINEENDCENTER        : nWhich=XATTR_LINEEND              ; break;
         case XATTR_LINETRANSPARENCE     : nWhich=XATTR_LINEENDCENTER        ; break;
 
-        // Fill
+        
         case XATTR_FILLBMP_POS          : nWhich=XATTR_FILLBMP_STRETCH      ; break;
         case XATTR_FILLBMP_SIZEX        : nWhich=XATTR_FILLBMP_POS          ; break;
         case XATTR_FILLBMP_SIZEY        : nWhich=XATTR_FILLBMP_SIZEX        ; break;
@@ -874,14 +874,14 @@ sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
         case XATTR_FILLBMP_TILEOFFSETY  : nWhich=XATTR_FILLBMP_TILEOFFSETX  ; break;
         case XATTR_FILLBMP_STRETCH      : nWhich=XATTR_FILLBMP_TILEOFFSETY  ; break;
 
-        // Fontwork
+        
         case XATTR_FORMTXTSHADOW        : nWhich=XATTR_FORMTXTSHDWXVAL      ; break;
         case XATTR_FORMTXTSHDWCOLOR     : nWhich=XATTR_FORMTXTHIDEFORM      ; break;
         case XATTR_FORMTXTSHDWXVAL      : nWhich=XATTR_FORMTXTSHADOW        ; break;
         case XATTR_FORMTXTSHDWYVAL      : nWhich=XATTR_FORMTXTSHDWCOLOR     ; break;
         case XATTR_FORMTXTHIDEFORM      : nWhich=XATTR_FORMTXTSHDWYVAL      ; break;
 
-        // Misc
+        
         case SDRATTR_TEXT_MINFRAMEHEIGHT: nWhich=SDRATTR_TEXT_FITTOSIZE     ; break;
         case SDRATTR_TEXT_AUTOGROWHEIGHT: nWhich=SDRATTR_TEXT_LEFTDIST      ; break;
         case SDRATTR_TEXT_FITTOSIZE     : nWhich=SDRATTR_TEXT_RIGHTDIST     ; break;
@@ -895,7 +895,7 @@ sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
         case SDRATTR_TEXT_MAXFRAMEWIDTH : nWhich=SDRATTR_TEXT_MAXFRAMEHEIGHT; break;
         case SDRATTR_TEXT_AUTOGROWWIDTH : nWhich=SDRATTR_TEXT_HORZADJUST    ; break;
         case SDRATTR_TEXT_HORZADJUST    : nWhich=SDRATTR_TEXT_VERTADJUST    ; break;
-    } // switch
+    } 
     return nWhich;
 }
 
@@ -912,9 +912,9 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
         sal_uInt16 nWhich0=0;
         sal_uInt16 nWhich=aIter.FirstWhich();
         while (nWhich!=0) {
-            // Now sort this a little bit differently.
-            // Only works as long as there are no InvalidItems, i. e. no gaps
-            // at this position in the Set.
+            
+            
+            
             if (!bDontSortItems) nWhich=ImpSortWhich(nWhich);
             SfxItemState eState=pSet->GetItemState(nWhich);
             if (p2ndSet!=NULL) {
@@ -1002,7 +1002,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             case ITEM_FONTHEIGHT: aEntry.bCanNum = true; aEntry.nVal=((SvxFontHeightItem&)rItem).GetHeight(); aEntry.nMin=0;                    break;
                             case ITEM_FONTWIDTH : aEntry.bCanNum = true; aEntry.nVal=((SvxCharScaleWidthItem&)rItem).GetValue();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;
                             default: break;
-                        } // switch
+                        } 
                         if (aEntry.bIsNum) aEntry.bCanNum = true;
 
                         rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
@@ -1022,9 +1022,9 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                 }
             }
             nWhich=aIter.NextWhich();
-        } // while
+        } 
 
-        if (aList.size()>nEntryNum) { // maybe still too many entries
+        if (aList.size()>nEntryNum) { 
             size_t const nTooMuch = aList.size() - nEntryNum;
             for (size_t n = nEntryNum; n < aList.size(); ++n) {
                 delete aList[n];
@@ -1033,13 +1033,13 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             RowRemoved(nEntryNum,nTooMuch);
         }
     } else {
-        Clear(); // if pSet==NULL
+        Clear(); 
     }
     ImpRestoreWhich();
     SetMode(MYBROWSEMODE);
 }
 
-// - _SdrItemBrowserWindow -
+
 
 _SdrItemBrowserWindow::_SdrItemBrowserWindow(Window* pParent, WinBits nBits):
     FloatingWindow(pParent,nBits),
@@ -1064,7 +1064,7 @@ void _SdrItemBrowserWindow::GetFocus()
     aBrowse.GrabFocus();
 }
 
-// - SdrItemBrowser -
+
 
 SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     _SdrItemBrowserWindow(ImpGetViewWin(rView)),
@@ -1242,7 +1242,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 } break;
                 case ITEM_FIELD: break;
                 default: break;
-            } // switch
+            } 
             aNewSet.Put(*pNewItem);
             delete pNewItem;
         }

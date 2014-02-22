@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbfindex.hxx"
@@ -125,7 +125,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
             _rList.erase(aSearch);
             _rDisplay.RemoveEntry( _rName );
 
-            // adjust selection if necessary
+            
             if ((sal_uInt32)nPos == _rList.size())
                 _rDisplay.SelectEntryPos((sal_uInt16)nPos-1);
             else
@@ -151,7 +151,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
 {
     OTableIndex aReturn;
 
-    // does the table exist ?
+    
     TableInfoList::iterator aTablePos;
     if (!GetTable(_rTableName, aTablePos))
         return aReturn;
@@ -170,7 +170,7 @@ void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTa
 
 IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 {
-    // let all tables write their INF file
+    
 
     for (   TableInfoList::const_iterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
@@ -236,12 +236,12 @@ IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, /*NOTINTERESTEDIN*/
 
 IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 {
-    // search the table
+    
     TableInfoList::iterator aTablePos;
     if (!GetTable(pComboBox->GetText(), aTablePos))
         return 0L;
 
-    // fill the listbox for the indexes
+    
     m_pLB_TableIndexes->Clear();
     for (   TableIndexList::const_iterator aLoop = aTablePos->aIndexList.begin();
             aLoop != aTablePos->aIndexList.end();
@@ -261,12 +261,12 @@ void ODbaseIndexDialog::Init()
     m_pPB_OK->Disable();
     m_pIndexes->Disable();
 
-    // All indices are first added to a list of free indices.
-    // Afterwards, check the index of each table in the Inf-file.
-    // These indices are removed from the list of free indices and
-    // entered in the indexlist of the table.
+    
+    
+    
+    
 
-    // if the string does not contain a path, cut the string
+    
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     {
@@ -275,7 +275,7 @@ void ODbaseIndexDialog::Init()
     }
     aURL.SetSmartURL(m_aDSN);
 
-    //  String aFileName = aURL.PathToFileName();
+    
     m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
     ::ucbhelper::Content aFile;
     sal_Bool bFolder=sal_True;
@@ -289,7 +289,7 @@ void ODbaseIndexDialog::Init()
         return;
     }
 
-    // first assume for all indexes they're free
+    
 
     Sequence< OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
@@ -316,13 +316,13 @@ void ODbaseIndexDialog::Init()
             m_aTableInfoList.push_back( OTableInfo(aURL.getName()) );
             OTableInfo& rTabInfo = m_aTableInfoList.back();
 
-            // open the INF file
+            
             aURL.setExtension("inf");
             OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
             Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
             aInfFile.SetGroup( aGroupIdent );
 
-            // fill the indexes list
+            
             OString aNDX;
             sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
             OString aKeyName;
@@ -330,20 +330,20 @@ void ODbaseIndexDialog::Init()
 
             for( sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++ )
             {
-                // does the key point to an index file ?
+                
                 aKeyName = aInfFile.GetKeyName( nKey );
                 aNDX = aKeyName.copy(0,3);
 
-                // yes -> add to the tables index list
+                
                 if (aNDX == "NDX")
                 {
                     aEntry = OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
 
-                    // and remove it from the free index list
+                    
                     aUsedIndexes.push_back(aEntry);
-                        // do this later below. We may not have encountered the index file, yet, thus we may not
-                        // know the index as beeing free, yet
+                        
+                        
                 }
             }
         }
@@ -366,20 +366,20 @@ void ODbaseIndexDialog::Init()
 
 void ODbaseIndexDialog::SetCtrls()
 {
-    // ComboBox tables
+    
     for (   TableInfoList::const_iterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
             ++aLoop
         )
         m_pCB_Tables->InsertEntry( aLoop->aTableName );
 
-    // put the first dataset into Edit
+    
     if( m_aTableInfoList.size() )
     {
         const OTableInfo& rTabInfo = m_aTableInfoList.front();
         m_pCB_Tables->SetText( rTabInfo.aTableName );
 
-        // build ListBox of the table indices
+        
         for (   TableIndexList::const_iterator aIndex = rTabInfo.aIndexList.begin();
                 aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
@@ -390,7 +390,7 @@ void ODbaseIndexDialog::SetCtrls()
             m_pLB_TableIndexes->SelectEntryPos( 0 );
     }
 
-    // ListBox of the free indices
+    
     for (   TableIndexList::const_iterator aFree = m_aFreeIndexList.begin();
             aFree != m_aFreeIndexList.end();
             ++aFree
@@ -406,7 +406,7 @@ void ODbaseIndexDialog::SetCtrls()
 
 void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 {
-    // open INF file
+    
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     OUString aDsn = rDSN;
@@ -422,18 +422,18 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
     aInfFile.SetGroup( aGroupIdent );
 
-    // first, delete all table indices
+    
     OString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     sal_uInt16 nKey = 0;
 
     while( nKey < nKeyCnt )
     {
-        // Does the key point to an index file?...
+        
         OString aKeyName = aInfFile.GetKeyName( nKey );
         aNDX = aKeyName.copy(0,3);
 
-        //...if yes, delete index file, nKey is at subsequent key
+        
         if (aNDX == "NDX")
         {
             aInfFile.DeleteKey(aKeyName);
@@ -444,7 +444,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 
     }
 
-    // now add all saved indices
+    
     sal_uInt16 nPos = 0;
     for (   TableIndexList::const_iterator aIndex = aIndexList.begin();
             aIndex != aIndexList.end();
@@ -452,7 +452,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
         )
     {
         OStringBuffer aKeyName("NDX");
-        if( nPos > 0 )  // first index contains no number
+        if( nPos > 0 )  
             aKeyName.append(static_cast<sal_Int32>(nPos));
         aInfFile.WriteKey(
             aKeyName.makeStringAndClear(),
@@ -462,7 +462,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 
     aInfFile.Flush();
 
-    // if only [dbase] is left in INF-file, delete file
+    
     if(!nPos)
     {
         try
@@ -472,15 +472,15 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
         }
         catch (const Exception& e )
         {
-            (void)e;  // make compiler happy
-            // simply silent this. The strange algorithm here does a lot of
-            // things even if no files at all were created or accessed, so it's
-            // possible that the file we're trying to delete does not even
-            // exist, and this is a valid condition.
+            (void)e;  
+            
+            
+            
+            
         }
     }
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

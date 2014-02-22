@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,7 +54,7 @@ struct MutexHolder
 };
 typedef WeakComponentImplHelper2< security::XPolicy, lang::XServiceInfo > t_helper;
 
-//==================================================================================================
+
 class FilePolicy
     : public MutexHolder
     , public t_helper
@@ -76,7 +76,7 @@ public:
     virtual ~FilePolicy()
         SAL_THROW(());
 
-    // XPolicy impl
+    
     virtual Sequence< Any > SAL_CALL getPermissions(
         OUString const & userId )
         throw (RuntimeException);
@@ -85,7 +85,7 @@ public:
     virtual void SAL_CALL refresh()
         throw (RuntimeException);
 
-    // XServiceInfo impl
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
@@ -93,7 +93,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext )
     SAL_THROW(())
     : t_helper( m_mutex )
@@ -101,11 +101,11 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
     , m_ac( xComponentContext )
     , m_init( false )
 {}
-//__________________________________________________________________________________________________
+
 FilePolicy::~FilePolicy()
     SAL_THROW(())
 {}
-//__________________________________________________________________________________________________
+
 void FilePolicy::disposing()
 {
     m_userPermissions.clear();
@@ -113,7 +113,7 @@ void FilePolicy::disposing()
     m_xComponentContext.clear();
 }
 
-//__________________________________________________________________________________________________
+
 Sequence< Any > FilePolicy::getPermissions(
     OUString const & userId )
     throw (RuntimeException)
@@ -135,7 +135,7 @@ Sequence< Any > FilePolicy::getPermissions(
         return iFind->second;
     }
 }
-//__________________________________________________________________________________________________
+
 Sequence< Any > FilePolicy::getDefaultPermissions()
     throw (RuntimeException)
 {
@@ -149,7 +149,7 @@ Sequence< Any > FilePolicy::getDefaultPermissions()
     return m_defaultPermissions;
 }
 
-//==================================================================================================
+
 class PolicyReader
 {
     OUString m_fileName;
@@ -193,7 +193,7 @@ public:
     void assureToken( sal_Unicode token )
         SAL_THROW( (RuntimeException) );
 };
-//__________________________________________________________________________________________________
+
 void PolicyReader::assureToken( sal_Unicode token )
     SAL_THROW( (RuntimeException) )
 {
@@ -207,7 +207,7 @@ void PolicyReader::assureToken( sal_Unicode token )
     buf.append( "<!" );
     error( buf.makeStringAndClear() );
 }
-//__________________________________________________________________________________________________
+
 OUString PolicyReader::assureQuotedToken()
     SAL_THROW( (RuntimeException) )
 {
@@ -216,7 +216,7 @@ OUString PolicyReader::assureQuotedToken()
         error( "unexpected end of file!" );
     return token;
 }
-//__________________________________________________________________________________________________
+
 OUString PolicyReader::getQuotedToken()
     SAL_THROW( (RuntimeException) )
 {
@@ -233,7 +233,7 @@ OUString PolicyReader::getQuotedToken()
     }
     return buf.makeStringAndClear();
 }
-//__________________________________________________________________________________________________
+
 OUString PolicyReader::assureToken()
     SAL_THROW( (RuntimeException) )
 {
@@ -242,7 +242,7 @@ OUString PolicyReader::assureToken()
         error( "unexpected end of file!" );
     return token;
 }
-//__________________________________________________________________________________________________
+
 OUString PolicyReader::getToken()
     SAL_THROW( (RuntimeException) )
 {
@@ -259,7 +259,7 @@ OUString PolicyReader::getToken()
     back( c );
     return buf.makeStringAndClear();
 }
-//__________________________________________________________________________________________________
+
 void PolicyReader::skipWhiteSpace()
     SAL_THROW( (RuntimeException) )
 {
@@ -268,21 +268,21 @@ void PolicyReader::skipWhiteSpace()
     {
         c = get();
     }
-    while (isWhiteSpace( c )); // seeking next non-whitespace char
+    while (isWhiteSpace( c )); 
 
-    if ('/' == c) // C/C++ like comment
+    if ('/' == c) 
     {
         c = get();
-        if ('/' == c) // C++ like comment
+        if ('/' == c) 
         {
             do
             {
                 c = get();
             }
-            while ('\n' != c && '\0' != c); // seek eol/eof
-            skipWhiteSpace(); // cont skip on next line
+            while ('\n' != c && '\0' != c); 
+            skipWhiteSpace(); 
         }
-        else if ('*' == c) // C like comment
+        else if ('*' == c) 
         {
             bool fini = true;
             do
@@ -299,44 +299,44 @@ void PolicyReader::skipWhiteSpace()
                 }
             }
             while (! fini);
-            skipWhiteSpace(); // cont skip on next line
+            skipWhiteSpace(); 
         }
         else
         {
             error( "expected C/C++ like comment!" );
         }
     }
-    else if ('#' == c) // script like comment
+    else if ('#' == c) 
     {
         do
         {
             c = get();
         }
-        while ('\n' != c && '\0' != c); // seek eol/eof
-        skipWhiteSpace(); // cont skip on next line
+        while ('\n' != c && '\0' != c); 
+        skipWhiteSpace(); 
     }
 
-    else // is token char
+    else 
     {
         back( c );
     }
 }
-//__________________________________________________________________________________________________
+
 sal_Unicode PolicyReader::get()
     SAL_THROW( (RuntimeException) )
 {
-    if ('\0' != m_back) // one char push back possible
+    if ('\0' != m_back) 
     {
         sal_Unicode c = m_back;
         m_back = '\0';
         return c;
     }
-    else if (m_pos == m_line.getLength()) // provide newline as whitespace
+    else if (m_pos == m_line.getLength()) 
     {
         ++m_pos;
         return '\n';
     }
-    else if (m_pos > m_line.getLength()) // read new line
+    else if (m_pos > m_line.getLength()) 
     {
         sal_Bool eof;
         oslFileError rc = ::osl_isEndOfFile( m_file, &eof );
@@ -349,16 +349,16 @@ sal_Unicode PolicyReader::get()
         if (osl_File_E_None != rc)
             error( "read line failed!" );
         ++m_linepos;
-        if (! m_line.getLength()) // empty line read
+        if (! m_line.getLength()) 
         {
-            m_pos = 1; // read new line next time
+            m_pos = 1; 
             return '\n';
         }
         m_pos = 0;
     }
     return (m_line.getConstArray()[ m_pos++ ]);
 }
-//__________________________________________________________________________________________________
+
 void PolicyReader::error( OUString const & msg )
     SAL_THROW( (RuntimeException) )
 {
@@ -373,12 +373,12 @@ void PolicyReader::error( OUString const & msg )
     buf.append( msg );
     throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
 }
-//__________________________________________________________________________________________________
+
 PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
     SAL_THROW( (RuntimeException) )
     : m_fileName( fileName )
     , m_linepos( 0 )
-    , m_pos( 1 ) // force readline
+    , m_pos( 1 ) 
     , m_back( '\0' )
 {
     ac.checkFilePermission( m_fileName, "read" );
@@ -391,7 +391,7 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 }
-//__________________________________________________________________________________________________
+
 PolicyReader::~PolicyReader()
     SAL_THROW(())
 {
@@ -411,14 +411,14 @@ PolicyReader::~PolicyReader()
 #define s_runtimePermission "com.sun.star.security.RuntimePermission"
 #define s_allPermission "com.sun.star.security.AllPermission"
 
-//__________________________________________________________________________________________________
+
 void FilePolicy::refresh()
     throw (RuntimeException)
 {
-    // read out file (the .../file-name value had originally been set in
-    // cppu::add_access_control_entries (cppuhelper/source/servicefactory.cxx)
-    // depending on various UNO_AC* bootstrap variables that are no longer
-    // supported, so this is effectively dead code):
+    
+    
+    
+    
     OUString fileName;
     m_xComponentContext->getValueByName(
         "/implementations/" IMPL_NAME "/file-name" ) >>= fileName;
@@ -431,7 +431,7 @@ void FilePolicy::refresh()
 
     PolicyReader reader( fileName, m_ac );
 
-    // fill these two
+    
     Sequence< Any > defaultPermissions;
     t_permissions userPermissions;
 
@@ -442,7 +442,7 @@ void FilePolicy::refresh()
             reader.error( "expected >grant< token!" );
         OUString userId;
         token = reader.assureToken();
-        if ( token == s_user ) // next token is user-id
+        if ( token == s_user ) 
         {
             userId = reader.assureQuotedToken();
             token = reader.assureToken();
@@ -450,34 +450,34 @@ void FilePolicy::refresh()
         if ( token != s_openBrace )
             reader.error( "expected opening brace >{<!" );
         token = reader.assureToken();
-        // permissions list
+        
         while ( token != s_closingBrace )
         {
             if ( token != s_permission )
                 reader.error( "expected >permission< or closing brace >}<!" );
 
-            token = reader.assureToken(); // permission type
+            token = reader.assureToken(); 
             Any perm;
-            if ( token == s_filePermission ) // FilePermission
+            if ( token == s_filePermission ) 
             {
                 OUString url( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= io::FilePermission( url, actions );
             }
-            else if ( token == s_socketPermission ) // SocketPermission
+            else if ( token == s_socketPermission ) 
             {
                 OUString host( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= connection::SocketPermission( host, actions );
             }
-            else if ( token == s_runtimePermission ) // RuntimePermission
+            else if ( token == s_runtimePermission ) 
             {
                 OUString name( reader.assureQuotedToken() );
                 perm <<= security::RuntimePermission( name );
             }
-            else if ( token == s_allPermission ) // AllPermission
+            else if ( token == s_allPermission ) 
             {
                 perm <<= security::AllPermission();
             }
@@ -488,7 +488,7 @@ void FilePolicy::refresh()
 
             reader.assureToken( ';' );
 
-            // insert
+            
             if (!userId.isEmpty())
             {
                 Sequence< Any > perms( userPermissions[ userId ] );
@@ -504,32 +504,32 @@ void FilePolicy::refresh()
                 defaultPermissions[ len ] = perm;
             }
 
-            token = reader.assureToken(); // next permissions token
+            token = reader.assureToken(); 
         }
 
-        reader.assureToken( ';' ); // semi
-        token = reader.getToken(); // next grant token
+        reader.assureToken( ';' ); 
+        token = reader.getToken(); 
     }
 
-    // assign new ones
+    
     MutexGuard guard( m_mutex );
     m_defaultPermissions = defaultPermissions;
     m_userPermissions = userPermissions;
 }
 
-//__________________________________________________________________________________________________
+
 OUString FilePolicy::getImplementationName()
     throw (RuntimeException)
 {
     return OUString(IMPL_NAME);
 }
-//__________________________________________________________________________________________________
+
 sal_Bool FilePolicy::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, serviceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -538,7 +538,7 @@ Sequence< OUString > FilePolicy::getSupportedServiceNames()
     return aSNS;
 }
 
-} // namespace
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_security_comp_stoc_FilePolicy_get_implementation(

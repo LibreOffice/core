@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -199,12 +199,12 @@ void DomExport::addNamespace( const OUString& sPrefix, const OUString& sURI )
     SvXMLNamespaceMap& rMap = maNamespaces.back();
     sal_uInt16 nKey = rMap.GetKeyByPrefix( sPrefix );
 
-    // we need to register the namespace, if either the prefix isn't known or
-    // is used for a different namespace
+    
+    
     if( nKey == XML_NAMESPACE_UNKNOWN  ||
         rMap.GetNameByKey( nKey ) != sURI )
     {
-        // add prefix to map, and add declaration
+        
         rMap.Add( sPrefix, sURI );
         mrExport.AddAttribute( "xmlns:" + sPrefix, sURI );
     }
@@ -247,7 +247,7 @@ void DomExport::element( const Reference<XElement>& xElement )
 {
     pushNamespace();
 
-    // write attributes
+    
     Reference<XNamedNodeMap> xAttributes = xElement->getAttributes();
     sal_Int32 nLength = xAttributes.is() ? xAttributes->getLength() : 0;
     for( sal_Int32 n = 0; n < nLength; n++ )
@@ -255,7 +255,7 @@ void DomExport::element( const Reference<XElement>& xElement )
         addAttribute( Reference<XAttr>( xAttributes->item( n ), UNO_QUERY_THROW ) );
     }
 
-    // write name
+    
     mrExport.StartElement( qualifiedName( xElement ), sal_False );
 }
 

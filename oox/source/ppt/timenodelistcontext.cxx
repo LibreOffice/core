@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/timenodelistcontext.hxx"
@@ -138,11 +138,11 @@ namespace oox { namespace ppt {
                 sal_Int32 aElement = getCurrentElement();
                 if( aElement == PPT_TOKEN( audio ) )
                 {
-                    // TODO deal with mbIsNarration
+                    
                 }
                 else if( aElement == PPT_TOKEN( video ) )
                 {
-                    // TODO deal with mbFullScrn
+                    
                 }
             }
 
@@ -183,8 +183,8 @@ namespace oox { namespace ppt {
             {
                 if( maTo.hasValue() )
                 {
-                    // TODO
-                    // HACK !!! discard and refactor
+                    
+                    
                     OUString aString;
                     if( maTo >>= aString )
                     {
@@ -205,7 +205,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( cBhvr ):
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
-                    // CT_TLAnimVariant
+                    
                     return new AnimVariantContext( *this, aElementToken, maTo );
                 default:
                     break;
@@ -249,10 +249,10 @@ namespace oox { namespace ppt {
                 if( isCurrentElement( PPT_TOKEN( cmd ) ) )
                 {
                     try {
-                        // see sd/source/filter/ppt/pptinanimations.cxx
-                        // in AnimationImporter::importCommandContainer()
-                        // REFACTOR?
-                        // a good chunk of this code has been copied verbatim *sigh*
+                        
+                        
+                        
+                        
                         sal_Int16 nCommand = EffectCommands::CUSTOM;
                         NamedValue aParamValue;
 
@@ -260,7 +260,7 @@ namespace oox { namespace ppt {
                         {
                         case XML_verb:
                             aParamValue.Name = "Verb";
-                            // TODO make sure msCommand has what we want
+                            
                             aParamValue.Value <<= msCommand.toInt32();
                             nCommand = EffectCommands::VERB;
                             break;
@@ -437,7 +437,7 @@ namespace oox { namespace ppt {
 
         virtual void onEndElement()
             {
-                //xParentNode
+                
                 if( isCurrentElement( mnElement ) )
                 {
                     NodePropertyMap & pProps(mpNode->getNodeProperties());
@@ -459,7 +459,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( hsl ):
-                    // CT_TLByHslColorTransform
+                    
                 {
                     if( mbHasByColor )
                     {
@@ -474,7 +474,7 @@ namespace oox { namespace ppt {
                 {
                     if( mbHasByColor )
                     {
-                        // CT_TLByRgbColorTransform
+                        
                         m_byColor.colorSpace = AnimationColorSpace::RGB;
                         m_byColor.one = rAttribs.getInteger( XML_r, 0 );
                         m_byColor.two = rAttribs.getInteger( XML_g, 0 );
@@ -483,16 +483,16 @@ namespace oox { namespace ppt {
                     return this;
                 }
                 case PPT_TOKEN( by ):
-                    // CT_TLByAnimateColorTransform
+                    
                     mbHasByColor = true;
                     return this;
                 case PPT_TOKEN( cBhvr ):
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
-                    // CT_Color
+                    
                     return new ColorContext( *this, maToClr );
                 case PPT_TOKEN( from ):
-                    // CT_Color
+                    
                     return new ColorContext( *this, maFromClr );
 
                 default:
@@ -538,7 +538,7 @@ namespace oox { namespace ppt {
                         break;
                     case XML_fmla:
                     default:
-                        // TODO what value is good ?
+                        
                         nEnum = AnimationCalcMode::DISCRETE;
                         break;
                     }
@@ -578,7 +578,7 @@ namespace oox { namespace ppt {
                     end = maTavList.end();
                     for(iter = maTavList.begin(), i=0; iter != end; ++iter,++i)
                     {
-                        // TODO what to do if it is Timing_INFINITE ?
+                        
                         Any aTime = GetTimeAnimateValueTime( iter->msTime );
                         aTime >>= aKeyTimes[i];
                         aValues[i] = iter->maValue;
@@ -632,7 +632,7 @@ namespace oox { namespace ppt {
                 , mbZoomContents( false )
             {
                 AttributeList attribs( xAttribs );
-                // TODO what to do with mbZoomContents
+                
                 mbZoomContents = attribs.getBool( XML_zoomContents, false );
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
                     = makeAny((sal_Int16)AnimationTransformType::SCALE);
@@ -669,7 +669,7 @@ namespace oox { namespace ppt {
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maTo <<= p.X;
                     maTo <<= p.Y;
@@ -677,7 +677,7 @@ namespace oox { namespace ppt {
                 }
                 case PPT_TOKEN( from ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maFrom <<= p.X;
                     maFrom <<= p.Y;
@@ -685,7 +685,7 @@ namespace oox { namespace ppt {
                 }
                 case PPT_TOKEN( by ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maBy <<= p.X;
                     maBy <<= p.Y;
@@ -719,8 +719,8 @@ namespace oox { namespace ppt {
 
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
                     = makeAny((sal_Int16)AnimationTransformType::ROTATE);
-                // see also DFF_msofbtAnimateRotationData in
-                // sd/source/filter/ppt/pptinanimations.cxx
+                
+                
                 if(attribs.hasAttribute( XML_by ) )
                 {
                     sal_Int32 nBy = attribs.getInteger( XML_by, 0 );
@@ -781,11 +781,11 @@ namespace oox { namespace ppt {
                     case XML_parent:
                         break;
                     }
-                    // TODO
+                    
                 }
 
                 OUString aStr = xAttribs->getOptionalValue( XML_path );
-                // E can appear inside a number, so we only check for its presence at the end
+                
                 aStr = aStr.trim();
                 if (aStr.endsWith("E"))
                     aStr = aStr.copy(0, aStr.getLength() - 1);
@@ -794,7 +794,7 @@ namespace oox { namespace ppt {
                 mnPathEditMode = xAttribs->getOptionalValueToken( XML_pathEditMode, 0 );
                 msPtsTypes = xAttribs->getOptionalValue( XML_ptsTypes );
                 mnAngle = attribs.getInteger( XML_rAng, 0 );
-                // TODO make sure the units are right. Likely not.
+                
             }
 
         ~AnimMotionContext( ) throw()
@@ -810,7 +810,7 @@ namespace oox { namespace ppt {
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
@@ -820,7 +820,7 @@ namespace oox { namespace ppt {
                 }
                 case PPT_TOKEN( from ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
@@ -830,7 +830,7 @@ namespace oox { namespace ppt {
                 }
                 case PPT_TOKEN( by ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
@@ -840,9 +840,9 @@ namespace oox { namespace ppt {
                 }
                 case PPT_TOKEN( rCtr ):
                 {
-                    // CT_TLPoint
+                    
                     awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
-                    // TODO push
+                    
                     (void)p;
                     return this;
                 }
@@ -871,8 +871,8 @@ namespace oox { namespace ppt {
             {
                 sal_Int32 nDir = xAttribs->getOptionalValueToken( XML_transition, 0 );
                 OUString sFilter = xAttribs->getOptionalValue( XML_filter );
-                // TODO
-//              OUString sPrList = xAttribs->getOptionalValue( XML_prLst );
+                
+
 
                 if( !sFilter.isEmpty() )
                 {
@@ -896,7 +896,7 @@ namespace oox { namespace ppt {
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( progress ):
                     return new AnimVariantContext( *this, aElementToken, maProgress );
-                    // TODO handle it.
+                    
                 default:
                     break;
                 }
@@ -1005,8 +1005,8 @@ namespace oox { namespace ppt {
             nNodeType = AnimationNodeType::SEQ;
             break;
         case PPT_TOKEN( excl ):
-            // TODO pick the right type. We choose parallel for now as
-            // there does not seem to be an "Exclusive"
+            
+            
             nNodeType = AnimationNodeType::PAR;
             break;
         case PPT_TOKEN( anim ):

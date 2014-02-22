@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <classes/actiontriggercontainer.hxx>
@@ -41,7 +41,7 @@ ActionTriggerContainer::~ActionTriggerContainer()
 {
 }
 
-// XInterface
+
 Any SAL_CALL ActionTriggerContainer::queryInterface( const Type& aType )
 throw ( RuntimeException )
 {
@@ -69,7 +69,7 @@ void ActionTriggerContainer::release() throw()
     PropertySetContainer::release();
 }
 
-// XMultiServiceFactory
+
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 throw ( ::com::sun::star::uno::Exception, RuntimeException)
 {
@@ -101,7 +101,7 @@ throw ( RuntimeException )
     return aSeq;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL ActionTriggerContainer::getImplementationName()
 throw ( RuntimeException )
 {
@@ -123,30 +123,30 @@ throw ( RuntimeException )
     return seqServiceNames;
 }
 
-// XTypeProvider
+
 Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeException )
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
+    
+    
+    
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
     if ( pTypeCollection == NULL )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pTypeCollection == NULL )
         {
-            // Create a static typecollection ...
+            
             static ::cppu::OTypeCollection aTypeCollection(
                         ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
                         ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
                         ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
 
-            // ... and set his address to static pointer!
+            
             pTypeCollection = &aTypeCollection ;
         }
     }
@@ -156,25 +156,25 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerContainer::getImplementationId() throw ( RuntimeException )
 {
-    // Create one Id for all instances of this class.
-    // Use ethernet address to do this! (sal_True)
+    
+    
 
-    // Optimize this method
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pID is NULL - for the second call pID is different from NULL!
+    
+    
+    
     static ::cppu::OImplementationId* pID = NULL ;
 
     if ( pID == NULL )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pID == NULL )
         {
-            // Create a new static ID ...
+            
             static ::cppu::OImplementationId aID( false ) ;
-            // ... and set his address to static pointer!
+            
             pID = &aID ;
         }
     }

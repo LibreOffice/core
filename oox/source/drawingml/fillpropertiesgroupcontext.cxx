@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
@@ -56,7 +56,7 @@ ContextHandlerRef GradientFillContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( gsLst ):
-            return this;    // for gs elements
+            return this;    
 
         case A_TOKEN( gs ):
             if( rAttribs.hasAttribute( XML_pos ) )
@@ -72,9 +72,9 @@ ContextHandlerRef GradientFillContext::onCreateContext(
         break;
 
         case A_TOKEN( path ):
-            // always set a path type, this disables linear gradient in conversion
+            
             mrGradientProps.moGradientPath = rAttribs.getToken( XML_path, XML_rect );
-            return this;    // for fillToRect element
+            return this;    
 
         case A_TOKEN( fillToRect ):
             mrGradientProps.moFillToRect = GetRelativeRect( rAttribs.getFastAttributeList() );
@@ -144,18 +144,18 @@ BlipContext::BlipContext( ContextHandler2Helper& rParent,
 {
     if( rAttribs.hasAttribute( R_TOKEN( embed ) ) )
     {
-        // internal picture URL
+        
         OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
         if( !aFragmentPath.isEmpty() )
             mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
     else if( rAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
-        // external URL
+        
 
-        // we will embed this link, this is better than just doing nothing..
-        // TODO: import this graphic as real link, but this requires some
-        // code rework.
+        
+        
+        
         OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
         SfxMedium xMed( aTargetLink, STREAM_STD_READ );
@@ -244,7 +244,7 @@ ContextHandlerRef BlipFillContext::onCreateContext(
 
         case A_TOKEN( stretch ):
             mrBlipProps.moBitmapMode = getBaseToken( nElement );
-            return this;    // for fillRect element
+            return this;    
 
         case A_TOKEN( fillRect ):
             mrBlipProps.moFillRect = GetRelativeRect( rAttribs.getFastAttributeList() );
@@ -276,7 +276,7 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
         case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rAttribs, rFillProps.maGradientProps ); };
         case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps ); };
         case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps ); };
-        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return 0; };    // TODO
+        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return 0; };    
     }
     return 0;
 }
@@ -292,7 +292,7 @@ SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
     mrColor = getBestSolidColor();
 }
 
-} // namespace drawingml
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

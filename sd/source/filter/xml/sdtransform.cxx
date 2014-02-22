@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -206,21 +206,21 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                 const sal_Int16 nDepth = mrOutliner.GetDepth( nPara );
                 if( (nDepth != -1) && (!getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) || !bState) )
                 {
-                    // disable bullet if text::enable-bullet="false" is found
+                    
                     if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
                     {
-                        // for outline object and level > 0 burn in the style sheet because it will be changed to "outline 1"
+                        
                         SfxStyleSheet* pStyleSheet = mrOutliner.GetStyleSheet( nPara );
 
                         if( pStyleSheet )
                         {
-                            // optimize me: only put items hard into paragraph that are not equal to "outline 1" style!
+                            
                             SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
 
                             SfxWhichIter aIter(aParaSet);
                             sal_uInt16 nWhich(aIter.FirstWhich());
 
-                            // now set all none hard attributes from the style
+                            
                             while(nWhich)
                             {
                                 if(SFX_ITEM_SET != aParaSet.GetItemState(nWhich, true))

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Cli_environment.h"
@@ -58,7 +58,7 @@ System::Object^ Cli_environment::registerInterface(
     System::Object^ obj, System::String^ oid)
 {
 #if OSL_DEBUG_LEVEL >= 1
-    //obj must be a transparent proxy
+    
     OSL_ASSERT(RemotingServices::IsTransparentProxy(obj));
     _numRegisteredObjects ++;
 #endif
@@ -70,12 +70,12 @@ System::Object^ Cli_environment::registerInterface      (
     System::Object^ obj, System::String^ oid, System::Type^ type)
 {
 #if OSL_DEBUG_LEVEL >= 1
-    //obj must be a real cli object
+    
     OSL_ASSERT( ! RemotingServices::IsTransparentProxy(obj));
     _numRegisteredObjects ++;
 #endif
     System::String^ key = createKey(oid, type);
-    //see synchronization in map_uno2cli in cli_data.cxx
+    
     OSL_ASSERT( ! m_objects->ContainsKey(key));
     m_objects->Add(key, gcnew WeakReference(obj));
     return obj;
@@ -110,12 +110,12 @@ inline void Cli_environment::revokeInterface(System::String^ oid)
 System::Object^ Cli_environment::getRegisteredInterface(System::String^ oid,
                                                         System::Type^ type)
 {
-    //try if it is a UNO interface
+    
     System::Object^ ret = nullptr;
     ret = m_objects[oid];
     if (! ret)
     {
-        //try if if it is a proxy for a cli object
+        
         oid = createKey(oid, type);
         ret = m_objects[ oid ];
     }
@@ -158,6 +158,6 @@ System::String^ Cli_environment::getObjectIdentifier(System::Object^ obj)
     }
     return oId;
 }
-} //namespace cli_uno
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

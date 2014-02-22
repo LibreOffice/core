@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -99,7 +99,7 @@
 #include "lwpnotes.hxx"
 #include "lwpverdocument.hxx"
 
-//LwpObjectFactory* LwpObjectFactory::m_pMgr = NULL;
+
 
 LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
     : m_nNumObjs(0), m_pSvStream(pSvStream)
@@ -255,7 +255,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpLayoutShadow(objHdr, m_pSvStream);
             break;
         }
-        // 01/12/2005
+        
         case VO_PARASTYLE:
         {
             newObj = new LwpParaStyle(objHdr, m_pSvStream);
@@ -296,7 +296,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpAmikakePiece(objHdr, m_pSvStream);
             break;
         }
-        // end
+        
 
         case VO_HEADHOLDER:
         {
@@ -304,7 +304,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             break;
         }
 
-        // start
+        
         case VO_PARABORDERPIECE:
         {
             newObj = new LwpParaBorderPiece(objHdr, m_pSvStream);
@@ -330,12 +330,12 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpTabPiece(objHdr, m_pSvStream);
             break;
         }
-        case VO_PARABACKGROUNDPIECE:    //perhaps wrong.
+        case VO_PARABACKGROUNDPIECE:    
         {
             newObj = new LwpBackgroundPiece(objHdr, m_pSvStream);
             break;
         }
-        // end.
+        
         case VO_SECTION:
         {
             newObj = new LwpSection(objHdr, m_pSvStream);
@@ -383,7 +383,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpLayoutRelativity(objHdr, m_pSvStream);
             break;
         }
-        //  for table
+        
         case VO_TABLE:
         {
             newObj = new LwpTable(objHdr, m_pSvStream);
@@ -519,7 +519,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpObjectHolder(objHdr, m_pSvStream);
             break;
         }
-        case VO_VERGTR: //fall through
+        case VO_VERGTR: 
         case VO_VERQTR:
         {
             newObj = new LwpVersionedPointer(objHdr, m_pSvStream);
@@ -672,7 +672,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
         }
         default:
         {
-            //Unknown object type
+            
             assert(false);
             newObj = NULL;
             break;
@@ -695,9 +695,9 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
     LwpObject* obj = FindObject( objID );
     if(!obj)
     {
-        //Read the object from file
+        
         sal_uInt32 nStreamOffset = m_IndexMgr.GetObjOffset(objID);
-        if(nStreamOffset == BAD_OFFSET) //does not find the offset in index manager
+        if(nStreamOffset == BAD_OFFSET) 
             return NULL;
 
         sal_Int64 nDesiredPos = nStreamOffset + LwpSvStream::LWP_STREAM_BASE;

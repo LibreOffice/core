@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "internal/config.hxx"
@@ -29,9 +29,9 @@
 #include <string>
 #include <shlobj.h>
 
-//---------------------------
-// Module global
-//---------------------------
+
+
+
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
 
@@ -53,10 +53,10 @@ namespace /* private */
 
     const char* SHELL_EXTENSION_APPROVED_KEY_NAME   = "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved";
 
-    //---------------------------
-    // "String Placeholder" ->
-    // "String Replacement"
-    //---------------------------
+    
+    
+    
+    
     void SubstitutePlaceholder(std::string& String, const std::string& Placeholder, const std::string& Replacement)
     {
         std::string::size_type idx = String.find(Placeholder);
@@ -155,8 +155,8 @@ namespace /* private */
 
             DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
 
-            // if there are no further subkey below .ext\\shellex
-            // delete the whole subkey
+            
+            
             tmp = SHELLEX_ENTRY;
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
 
@@ -249,8 +249,8 @@ namespace /* private */
 
             DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
 
-            // if there are no further subkey below .ext\\shellex
-            // delete the whole subkey
+            
+            
             tmp = SHELLEX_ENTRY;
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
 
@@ -295,12 +295,12 @@ namespace /* private */
         return rc == ERROR_SUCCESS ? S_OK : E_FAIL;
     }
 
-} // namespace /* private */
+} 
 
 
-//---------------------
-// COM exports
-//---------------------
+
+
+
 
 extern "C" STDAPI DllRegisterServer()
 {
@@ -334,7 +334,7 @@ extern "C" STDAPI DllRegisterServer()
     else
         hr = E_FAIL;
 
-    // notify the Shell that something has changed
+    
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 
     return hr;
@@ -364,7 +364,7 @@ extern "C" STDAPI DllUnregisterServer()
 
     UnapproveShellExtension(CLSID_THUMBVIEWER_HANDLER);
 
-    // notify the Shell that something has changed
+    
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 
     return hr;

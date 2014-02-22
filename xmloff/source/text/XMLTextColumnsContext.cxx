@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -351,7 +351,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
             new XMLTextColumnContext_Impl( GetImport(), nPrefix, rLocalName,
                                            xAttrList, *pColumnAttrTokenMap );
 
-        // add new tabstop to array of tabstops
+        
         if( !pColumns )
             pColumns = new XMLTextColumnsArray_Impl;
 
@@ -391,14 +391,14 @@ void XMLTextColumnsContext::EndElement( )
     Reference< XTextColumns > xColumns( xIfc, UNO_QUERY );
     if ( 0 == nCount )
     {
-        // zero columns = no columns -> 1 column
+        
         xColumns->setColumnCount( 1 );
     }
     else if( !bAutomatic && pColumns &&
              pColumns->size() == (sal_uInt16)nCount )
     {
-        // if we have column descriptions, one per column, and we don't use
-        // automatic width, then set the column widths
+        
+        
 
         sal_Int32 nRelWidth = 0;
         sal_uInt16 nColumnsWithWidth = 0;
@@ -443,8 +443,8 @@ void XMLTextColumnsContext::EndElement( )
     }
     else
     {
-        // only set column count (and let the columns be distributed
-        // automatically)
+        
+        
 
         xColumns->setColumnCount( nCount );
     }
@@ -484,7 +484,7 @@ void XMLTextColumnsContext::EndElement( )
             xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, aAny );
         }
 
-        // handle 'automatic columns': column distance
+        
         if( bAutomatic )
         {
             aAny <<= nAutomaticDistance;

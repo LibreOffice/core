@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TKey.hxx"
@@ -30,13 +30,13 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::OKey(sal_True)
     ,m_pTable(_pTable)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
             ,const OUString& _Name
             ,const sdbcx::TKeyProperties& _rProps
@@ -46,7 +46,7 @@ OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
     construct();
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 void OTableKeyHelper::refreshColumns()
 {
     if ( !m_pTable )
@@ -63,7 +63,7 @@ void OTableKeyHelper::refreshColumns()
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
-            if ( !m_Name.isEmpty() ) // foreign key
+            if ( !m_Name.isEmpty() ) 
             {
 
                 Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
@@ -91,7 +91,7 @@ void OTableKeyHelper::refreshColumns()
                     const Reference< XRow > xRow(xResult,UNO_QUERY);
                     while( xResult->next() )
                         aVector.push_back(xRow->getString(4));
-                } // if ( xResult.is() )
+                } 
             }
         }
     }
@@ -102,6 +102,6 @@ void OTableKeyHelper::refreshColumns()
     else
         m_pColumns  = new OKeyColumnsHelper(this,m_aMutex,aVector);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

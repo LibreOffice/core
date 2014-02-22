@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef AIX
@@ -53,8 +53,8 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
     INetURLObject aURL(sURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
-        // all the URLs are handled by office in UTF-8
-        // so the Gnome FP related URLs should be converted accordingly
+        
+        
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
         if ( pEncodedFileName )
         {
@@ -77,8 +77,8 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
 
 OString SalGtkPicker::unicodetouri(const OUString &rURL)
 {
-    // all the URLs are handled by office in UTF-8 ( and encoded with "%xx" codes based on UTF-8 )
-    // so the Gnome FP related URLs should be converted accordingly
+    
+    
     OString sURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
     INetURLObject aURL(rURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
@@ -87,7 +87,7 @@ OString SalGtkPicker::unicodetouri(const OUString &rURL)
 
         if( !aNewURL.isEmpty() )
         {
-            // At this point the URL should contain ascii characters only actually
+            
             sURL = OUStringToOString( aNewURL, osl_getThreadTextEncoding() );
         }
     }
@@ -166,7 +166,7 @@ gint RunDialog::run()
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);
 
-    if (nStatus != 1)   //PLAY
+    if (nStatus != 1)   
         gtk_widget_hide( mpDialog );
 
     return nStatus;
@@ -194,7 +194,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
 
     OString aTxt = unicodetouri(aDirectory);
     if( aTxt.isEmpty() ){
-      aTxt = unicodetouri(OUString("file:///."));
+      aTxt = unicodetouri(OUString("file:
     }
 
     if( aTxt.endsWith("/") )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "zipexcptn.hxx"
@@ -102,8 +102,8 @@ struct CentralDirectoryEnd
 #define LOC_FILE_HEADER_SIG 0x04034b50
 #define CDIR_END_SIG 0x06054b50
 
-// This little lot performs in a truly appalling way without
-// buffering eg. on an IStream.
+
+
 
 static unsigned char readByte(StreamInterface *stream)
 {
@@ -269,7 +269,7 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
 
 static bool findSignatureAtOffset(StreamInterface *stream, unsigned long nOffset)
 {
-    // read in reasonably sized chunk, and read more, to get overlapping sigs
+    
     unsigned char aBuffer[ BLOCK_SIZE + 4 ];
 
     stream->sseek(nOffset, SEEK_SET);
@@ -282,7 +282,7 @@ static bool findSignatureAtOffset(StreamInterface *stream, unsigned long nOffset
     {
         if (aBuffer[n  ] == 0x50 && aBuffer[n+1] == 0x4b &&
             aBuffer[n+2] == 0x05 && aBuffer[n+3] == 0x06)
-        { // a palpable hit ...
+        { 
             stream->sseek(nOffset + n, SEEK_SET);
             return true;
         }
@@ -338,7 +338,7 @@ static bool isZipStream(StreamInterface *stream)
     return true;
 }
 
-} // anonymous namespace
+} 
 
 namespace internal
 {
@@ -355,7 +355,7 @@ struct stricmp : public std::unary_function<std::string, bool>
 
     std::string str_;
 };
-} // namespace internal
+} 
 
 /** Checks whether a file is a zip file or not
 
@@ -550,9 +550,9 @@ ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
     GetDirectory */
 bool ZipFile::HasContent(const std::string &ContentName) const
 {
-    //#i34314# we need to compare package content names
-    //case in-sensitive as it is not defined that such
-    //names must be handled case sensitive
+    
+    
+    
     DirectoryPtr_t dir = GetDirectory();
     Directory_t::iterator iter =
         std::find_if(dir->begin(), dir->end(), internal::stricmp(ContentName));

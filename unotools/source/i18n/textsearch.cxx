@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <i18nlangtag/languagetag.hxx>
@@ -32,10 +32,10 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-// ............................................................................
+
 namespace utl
 {
-// ............................................................................
+
 
 SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
@@ -52,7 +52,7 @@ SearchParam::SearchParam( const OUString &rText,
 
     nTransliterationFlags = 0;
 
-    // Parameters for weighted Levenshtein distance
+    
     bLEV_Relaxed    = true;
     nLEV_OtherX     = 2;
     nLEV_ShorterY   = 1;
@@ -146,7 +146,7 @@ TextSearch::TextSearch( const SearchOptions& rPara )
 void TextSearch::Init( const SearchParam & rParam,
                         const ::com::sun::star::lang::Locale& rLocale )
 {
-    // convert SearchParam to the UNO SearchOptions
+    
     SearchOptions aSOpt;
 
     switch( rParam.GetSrchType() )
@@ -167,7 +167,7 @@ void TextSearch::Init( const SearchParam & rParam,
             aSOpt.searchFlag |= SearchFlags::LEV_RELAXED;
         break;
 
-//  case SearchParam::SRCH_NORMAL:
+
     default:
         aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
         if( rParam.IsSrchWordOnly() )
@@ -190,7 +190,7 @@ void TextSearch::Init( const SearchParam & rParam,
 void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOptions,
                             const ::com::sun::star::lang::Locale& rLocale )
 {
-    // convert SearchParam to the UNO SearchOptions
+    
     SearchOptions aSOpt( rOptions );
     aSOpt.Locale = rLocale;
 
@@ -220,10 +220,10 @@ bool TextSearch::SearchForward( const OUString &rStr,
             if( aRet.subRegExpressions > 0 )
             {
                 nRet = true;
-                // the XTextsearch returns in startOffset the higher position
-                // and the endposition is always exclusive.
-                // The caller of this function will have in startPos the
-                // lower pos. and end
+                
+                
+                
+                
                 *pStart = aRet.startOffset[ 0 ];
                 *pEnd = aRet.endOffset[ 0 ];
                 if( pRes )
@@ -251,10 +251,10 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
             if( aRet.subRegExpressions )
             {
                 nRet = true;
-                // the XTextsearch returns in startOffset the higher position
-                // and the endposition is always exclusive.
-                // The caller of this function will have in startPos the
-                // lower pos. and end
+                
+                
+                
+                
                 *pEnde = aRet.startOffset[ 0 ];
                 *pStart = aRet.endOffset[ 0 ];
                 if( pRes )
@@ -288,7 +288,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
             {
                 sFndChar = rReplaceStr[ i + 1 ];
                 switch(sFndChar)
-                {   // placeholder for a backward reference?
+                {   
                 case '0':
                 case '1':
                 case '2':
@@ -300,7 +300,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
                 case '8':
                 case '9':
                     {
-                        int j = sFndChar - '0'; // index
+                        int j = sFndChar - '0'; 
                         if(j < rResult.subRegExpressions)
                         {
                             sal_Int32 nSttReg = rResult.startOffset[j];
@@ -314,7 +314,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
                                 nRegLen = nSttReg - nRegLen;
                                 nSttReg = rResult.endOffset[j];
                             }
-                            // Copy reference from found string
+                            
                             sBuff.append(rStr.getStr() + nSttReg, nRegLen);
                         }
                         i += 1;
@@ -358,8 +358,8 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
     }
 }
 
-// ............................................................................
-}   // namespace utl
-// ............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

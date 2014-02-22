@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/bindings.hxx>
@@ -31,9 +31,9 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-//========================================================================
-// class ScScenarioWindow ------------------------------------------------
-//========================================================================
+
+
+
 
 ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
@@ -57,18 +57,18 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
     switch( aNewEntryList.size() )
     {
         case 0:
-            // no scenarios in current sheet
+            
             mrParent.SetComment( EMPTY_OUSTRING );
         break;
 
         case 1:
-            // sheet is a scenario container, comment only
+            
             mrParent.SetComment( aNewEntryList[0] );
         break;
 
         default:
         {
-            // sheet contains scenarios
+            
             OSL_ENSURE( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
             SetUpdateMode( false );
 
@@ -77,14 +77,14 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
             {
                 ScenarioEntry aEntry;
 
-                // first entry of a triple is the scenario name
+                
                 aEntry.maName = *iter;
 
-                // second entry of a triple is the scenario comment
+                
                 ++iter;
                 aEntry.maComment = *iter;
 
-                // third entry of a triple is the protection ("0" = not protected, "1" = protected)
+                
                 ++iter;
                 aEntry.mbProtected = !(*iter).isEmpty() && (*iter)[0] != '0';
 
@@ -194,9 +194,9 @@ void ScScenarioListBox::DeleteScenario( bool bQueryBox )
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );
 }
 
-//========================================================================
-// class ScScenarioWindow ------------------------------------------------
-//========================================================================
+
+
+
 
 ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
                                     const OUString& aQH_Comment)
@@ -228,7 +228,7 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScScenarioWindow::~ScScenarioWindow()
 {
@@ -244,7 +244,7 @@ void ScScenarioWindow::Paint( const Rectangle& rRect )
     Window::Paint( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 {
@@ -273,7 +273,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "durationhdl.hxx"
@@ -35,9 +35,9 @@ bool XMLDurationMS16PropHdl_Impl::importXML(
     if (!::sax::Converter::convertDuration( aDuration,  rStrImpValue ))
         return false;
 
-    // TODO FIXME why is this in centiseconds? Should it be nanoseconds?
-    // This overflows... 24h == 8640000cs >> 0x7FFF cs == 32767
-    // 32767cs = approx 5 minutes and 27.67s
+    
+    
+    
     const sal_Int16 nMS = ((aDuration.Hours * 60 + aDuration.Minutes) * 60
                            + aDuration.Seconds) * 100 + (aDuration.NanoSeconds / (10*1000*1000));
     rValue <<= nMS;

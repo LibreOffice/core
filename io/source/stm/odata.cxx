@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/unordered_map.hpp>
@@ -64,7 +64,7 @@ public:
         }
 
     ~ODataInputStream();
-public: // XInputStream
+public: 
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                                                             throw ( NotConnectedException,
                                                                         BufferSizeExceededException,
@@ -81,7 +81,7 @@ public: // XInputStream
     virtual void SAL_CALL closeInput(void)                          throw ( NotConnectedException,
                                                                         RuntimeException);
 
-public: // XDataInputStream
+public: 
     virtual sal_Int8 SAL_CALL readBoolean(void) throw (IOException, RuntimeException);
     virtual sal_Int8 SAL_CALL readByte(void) throw (IOException, RuntimeException);
     virtual sal_Unicode SAL_CALL readChar(void) throw (IOException, RuntimeException);
@@ -94,19 +94,19 @@ public: // XDataInputStream
 
 
 
-public: // XActiveDataSink
+public: 
     virtual void SAL_CALL setInputStream(const Reference< XInputStream > & aStream)
         throw (RuntimeException);
     virtual Reference< XInputStream > SAL_CALL getInputStream(void) throw (RuntimeException);
 
-public: // XConnectable
+public: 
     virtual void SAL_CALL setPredecessor(const Reference < XConnectable >& aPredecessor) throw (RuntimeException);
     virtual Reference < XConnectable > SAL_CALL getPredecessor(void) throw (RuntimeException);
     virtual void SAL_CALL setSuccessor(const Reference < XConnectable >& aSuccessor) throw (RuntimeException);
     virtual Reference < XConnectable > SAL_CALL getSuccessor(void) throw (RuntimeException) ;
 
 
-public: // XServiceInfo
+public: 
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw ();
@@ -123,7 +123,7 @@ ODataInputStream::~ODataInputStream()
 {
 }
 
-// XInputStream
+
 sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw ( NotConnectedException,
             BufferSizeExceededException,
@@ -210,9 +210,9 @@ void ODataInputStream::closeInput(void )
 
 
 
-//== XDataInputStream ===========================================
 
-// XDataInputStream
+
+
 sal_Int8 ODataInputStream::readBoolean(void) throw (IOException, RuntimeException)
 {
     return readByte();
@@ -299,13 +299,13 @@ double ODataInputStream::readDouble(void) throw (IOException, RuntimeException)
     union { double d; struct { sal_uInt32 n1; sal_uInt32 n2; } ad; } a;
     if( *(sal_uInt8 *)&n == 1 )
     {
-        // little endian
+        
         a.ad.n2 = readLong();
         a.ad.n1 = readLong();
     }
     else
     {
-        // big endian
+        
         a.ad.n1 = readLong();
         a.ad.n2 = readLong();
     }
@@ -319,8 +319,8 @@ OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
 
     if( ((sal_uInt16)0xffff) == nShortLen )
     {
-        // is interpreted as a sign, that string is longer than 64k
-        // incompatible to older XDataInputStream-routines, when strings are exactly 64k
+        
+        
         nUTFLen = readLong();
     }
     else
@@ -340,13 +340,13 @@ OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
         switch( c >> 4 )
         {
             case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-                // 0xxxxxxx
+                
                 nCount++;
                 pStr[nStrLen++] = c;
                 break;
 
             case 12: case 13:
-                // 110x xxxx   10xx xxxx
+                
                 nCount += 2;
                 if( ! ( nCount <= nUTFLen ) )
                 {
@@ -363,7 +363,7 @@ OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
                 break;
 
             case 14:
-            // 1110 xxxx  10xx xxxx  10xx xxxx
+            
                 nCount += 3;
                 if( !( nCount <= nUTFLen) )
                 {
@@ -382,9 +382,9 @@ OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
                 break;
 
             default:
-                // 10xx xxxx,  1111 xxxx
+                
                 throw WrongFormatException();
-                //throw new UTFDataFormatException();
+                
         }
     }
     return OUString( pStr, nStrLen );
@@ -392,7 +392,7 @@ OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
 
 
 
-// XActiveDataSource
+
 void ODataInputStream::setInputStream(const Reference< XInputStream > & aStream)
     throw (RuntimeException)
 {
@@ -414,16 +414,16 @@ Reference< XInputStream > ODataInputStream::getInputStream(void) throw (RuntimeE
 
 
 
-// XDataSink
+
 void ODataInputStream::setSuccessor( const Reference < XConnectable > &r ) throw (RuntimeException)
 {
-     /// if the references match, nothing needs to be done
+     
      if( m_succ != r ) {
-         /// store the reference for later use
+         
          m_succ = r;
 
          if( m_succ.is() ) {
-              /// set this instance as the sink !
+              
               m_succ->setPredecessor( Reference< XConnectable > (
                   (static_cast< XConnectable *  >(this)) ) );
          }
@@ -436,7 +436,7 @@ Reference < XConnectable > ODataInputStream::getSuccessor() throw (RuntimeExcept
 }
 
 
-// XDataSource
+
 void ODataInputStream::setPredecessor( const Reference < XConnectable > &r )
     throw (RuntimeException)
 {
@@ -453,19 +453,19 @@ Reference < XConnectable > ODataInputStream::getPredecessor() throw (RuntimeExce
     return m_pred;
 }
 
-// XServiceInfo
+
 OUString ODataInputStream::getImplementationName() throw ()
 {
     return ODataInputStream_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool ODataInputStream::supportsService(const OUString& ServiceName) throw ()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > ODataInputStream::getSupportedServiceNames(void) throw ()
 {
     return ODataInputStream_getSupportedServiceNames();
@@ -515,7 +515,7 @@ public:
         }
     ~ODataOutputStream();
 
-public: // XOutputStream
+public: 
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
@@ -529,7 +529,7 @@ public: // XOutputStream
                 BufferSizeExceededException,
                 RuntimeException);
 
-public: // XDataOutputStream
+public: 
     virtual void SAL_CALL writeBoolean(sal_Bool Value) throw (IOException, RuntimeException);
     virtual void SAL_CALL writeByte(sal_Int8 Value) throw (IOException, RuntimeException);
     virtual void SAL_CALL writeChar(sal_Unicode Value) throw (IOException, RuntimeException);
@@ -540,12 +540,12 @@ public: // XDataOutputStream
     virtual void SAL_CALL writeDouble(double Value) throw (IOException, RuntimeException);
     virtual void SAL_CALL writeUTF(const OUString& Value) throw (IOException, RuntimeException);
 
-public: // XActiveDataSource
+public: 
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
         throw (RuntimeException);
     virtual Reference < XOutputStream > SAL_CALL getOutputStream(void) throw (RuntimeException);
 
-public: // XConnectable
+public: 
     virtual void SAL_CALL setPredecessor(const Reference < XConnectable >& aPredecessor)
         throw (RuntimeException);
     virtual Reference < XConnectable > SAL_CALL getPredecessor(void)
@@ -555,7 +555,7 @@ public: // XConnectable
     virtual Reference < XConnectable > SAL_CALL getSuccessor(void)
         throw (RuntimeException);
 
-public: // XServiceInfo
+public: 
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
@@ -572,7 +572,7 @@ ODataOutputStream::~ODataOutputStream()
 }
 
 
-// XOutputStream
+
 void ODataOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
     throw ( NotConnectedException,
             BufferSizeExceededException,
@@ -622,7 +622,7 @@ void ODataOutputStream::closeOutput(void)
     }
 }
 
-// XDataOutputStream
+
 void ODataOutputStream::writeBoolean(sal_Bool Value)
     throw ( IOException,
             RuntimeException)
@@ -719,13 +719,13 @@ void ODataOutputStream::writeDouble(double Value)
     a.d = Value;
     if( *(sal_Int8 *)&n == 1 )
     {
-        // little endian
+        
         writeLong( a.ad.n2 );
         writeLong( a.ad.n1 );
     }
     else
     {
-        // big endian
+        
         writeLong( a.ad.n1 );
         writeLong( a.ad.n2 );
     }
@@ -758,10 +758,10 @@ void ODataOutputStream::writeUTF(const OUString& Value)
     }
 
 
-    // compatibility mode for older implementations, where it was not possible
-    // to write blocks bigger than 64 k. Note that there is a tradeoff. Blocks,
-    // that are exactly 64k long can not be read by older routines when written
-    // with these routines and the other way round !!!!!
+    
+    
+    
+    
     if( nUTFLen >= 0xFFFF ) {
         writeShort( (sal_Int16)-1 );
         writeLong( nUTFLen );
@@ -790,7 +790,7 @@ void ODataOutputStream::writeUTF(const OUString& Value)
     }
 }
 
-// XActiveDataSource
+
 void ODataOutputStream::setOutputStream(const Reference< XOutputStream > & aStream)
     throw (RuntimeException)
 {
@@ -812,19 +812,19 @@ Reference< XOutputStream > ODataOutputStream::getOutputStream(void)
 
 
 
-// XDataSink
+
 void ODataOutputStream::setSuccessor( const Reference < XConnectable > &r )
     throw (RuntimeException)
 {
-     /// if the references match, nothing needs to be done
+     
      if( m_succ != r )
      {
-         /// store the reference for later use
+         
          m_succ = r;
 
          if( m_succ.is() )
          {
-              /// set this instance as the sink !
+              
               m_succ->setPredecessor( Reference < XConnectable > (
                   (static_cast< XConnectable *  >(this)) ));
          }
@@ -836,7 +836,7 @@ Reference < XConnectable > ODataOutputStream::getSuccessor()    throw (RuntimeEx
 }
 
 
-// XDataSource
+
 void ODataOutputStream::setPredecessor( const Reference < XConnectable > &r )   throw (RuntimeException)
 {
     if( r != m_pred ) {
@@ -854,19 +854,19 @@ Reference < XConnectable > ODataOutputStream::getPredecessor()  throw (RuntimeEx
 
 
 
-// XServiceInfo
+
 OUString ODataOutputStream::getImplementationName() throw ()
 {
     return ODataOutputStream_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool ODataOutputStream::supportsService(const OUString& ServiceName) throw ()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > ODataOutputStream::getSupportedServiceNames(void) throw ()
 {
     return ODataOutputStream_getSupportedServiceNames();
@@ -894,7 +894,7 @@ Sequence<OUString> ODataOutputStream_getSupportedServiceNames(void)
     return aRet;
 }
 
-//--------------------------------------
+
 struct equalObjectContainer_Impl
 {
     bool operator()(const Reference< XInterface > & s1,
@@ -904,7 +904,7 @@ struct equalObjectContainer_Impl
     }
 };
 
-//-----------------------------------------------------------------------------
+
 struct hashObjectContainer_Impl
 {
     size_t operator()(const Reference< XInterface > & xRef) const
@@ -936,7 +936,7 @@ public:
     ~OObjectOutputStream();
 
 public:
-    // XOutputStream
+    
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
@@ -956,7 +956,7 @@ public:
         { ODataOutputStream::closeOutput(); }
 
 public:
-    // XDataOutputStream
+    
     virtual void SAL_CALL writeBoolean(sal_Bool Value) throw (IOException, RuntimeException)
                 { ODataOutputStream::writeBoolean( Value ); }
     virtual void SAL_CALL writeByte(sal_Int8 Value) throw (IOException, RuntimeException)
@@ -976,10 +976,10 @@ public:
     virtual void SAL_CALL writeUTF(const OUString& Value) throw (IOException, RuntimeException)
                 { ODataOutputStream::writeUTF( Value );}
 
-    // XObjectOutputStream
+    
         virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-public: // XMarkableStream
+public: 
     virtual sal_Int32 SAL_CALL createMark(void)                 throw (IOException, RuntimeException);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)            throw (IOException, IllegalArgumentException, RuntimeException);
     virtual void SAL_CALL jumpToMark(sal_Int32 nMark)       throw (IOException, IllegalArgumentException, RuntimeException);
@@ -987,7 +987,7 @@ public: // XMarkableStream
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
 
-public: // XServiceInfo
+public: 
     OUString                   SAL_CALL   getImplementationName() throw ();
     Sequence< OUString >       SAL_CALL   getSupportedServiceNames(void) throw ();
     sal_Bool                   SAL_CALL   supportsService(const OUString& ServiceName) throw ();
@@ -1010,13 +1010,13 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 
     connectToMarkable();
     sal_Bool bWriteObj = sal_False;
-    // create Mark to write length of info
+    
     sal_uInt32 nInfoLenMark = m_rMarkable->createMark();
 
-    // length of the info data (is later rewritten)
+    
     OObjectOutputStream::writeShort( 0 );
 
-    // write the object identifier
+    
     if( xPObj.is() )
     {
         Reference< XInterface > rX( xPObj , UNO_QUERY );
@@ -1025,7 +1025,7 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
             = m_mapObject.find( rX );
         if( aIt == m_mapObject.end() )
         {
-            // insert new object in hash table
+            
             m_mapObject[ rX ] = ++m_nMaxId;
             ODataOutputStream::writeLong( m_nMaxId );
             ODataOutputStream::writeUTF( xPObj->getServiceName() );
@@ -1050,9 +1050,9 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 
     sal_Int32 nInfoLen = m_rMarkable->offsetToMark( nInfoLenMark );
     m_rMarkable->jumpToMark( nInfoLenMark );
-    // write length of the info data
+    
     ODataOutputStream::writeShort( (sal_Int16)nInfoLen );
-    // jump to the end of the stream
+    
     m_rMarkable->jumpToFurthest();
 
     if( bWriteObj )
@@ -1061,9 +1061,9 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 
     sal_Int32 nObjLen = m_rMarkable->offsetToMark( nObjLenMark ) -4;
     m_rMarkable->jumpToMark( nObjLenMark );
-    // write length of the info data
+    
     ODataOutputStream::writeLong( nObjLen );
-    // jump to the end of the stream
+    
     m_rMarkable->jumpToFurthest();
 
     m_rMarkable->deleteMark( nObjLenMark );
@@ -1080,7 +1080,7 @@ void OObjectOutputStream::connectToMarkable(void)
             throw NotConnectedException();
         }
 
-        // find the markable stream !
+        
         Reference< XInterface > rTry(m_output);
         while( true ) {
             if( ! rTry.is() )
@@ -1104,7 +1104,7 @@ void OObjectOutputStream::connectToMarkable(void)
 sal_Int32 OObjectOutputStream::createMark(void)
     throw (IOException, RuntimeException)
 {
-    connectToMarkable();    // throws an exception, if a markable is not connected !
+    connectToMarkable();    
 
     return m_rMarkable->createMark();
 }
@@ -1170,19 +1170,19 @@ Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void)
     return aRet;
 }
 
-// XServiceInfo
+
 OUString OObjectOutputStream::getImplementationName() throw ()
 {
     return ODataInputStream_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool OObjectOutputStream::supportsService(const OUString& ServiceName) throw ()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > OObjectOutputStream::getSupportedServiceNames(void) throw ()
 {
     return OObjectOutputStream_getSupportedServiceNames();
@@ -1202,7 +1202,7 @@ public:
         }
     ~OObjectInputStream();
 
-public: // XInputStream
+public: 
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
@@ -1231,7 +1231,7 @@ public: // XInputStream
                 RuntimeException)
         { ODataInputStream::closeInput(); }
 
-public: // XDataInputStream
+public: 
     virtual sal_Int8 SAL_CALL readBoolean(void) throw (IOException, RuntimeException)
                 { return ODataInputStream::readBoolean(); }
     virtual sal_Int8 SAL_CALL readByte(void) throw (IOException, RuntimeException)
@@ -1251,10 +1251,10 @@ public: // XDataInputStream
     virtual OUString SAL_CALL readUTF(void) throw (IOException, RuntimeException)
                 { return ODataInputStream::readUTF(); }
 
-public: // XObjectInputStream
+public: 
         virtual Reference< XPersistObject > SAL_CALL readObject( ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-public: // XMarkableStream
+public: 
     virtual sal_Int32 SAL_CALL createMark(void)
         throw (IOException, RuntimeException);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)            throw (IOException, IllegalArgumentException, RuntimeException);
@@ -1263,7 +1263,7 @@ public: // XMarkableStream
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
 
-public: // XServiceInfo
+public: 
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
@@ -1285,35 +1285,35 @@ OObjectInputStream::~OObjectInputStream()
 
 Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    // check if chain contains a XMarkableStream
+    
     connectToMarkable();
 
     Reference< XPersistObject > xLoadedObj;
 
-    // create Mark to skip newer versions
+    
     sal_uInt32 nMark = m_rMarkable->createMark();
-    // length of the data
+    
     sal_Int32 nLen = (sal_uInt16) ODataInputStream::readShort();
     if( nLen < 0xc )
     {
         throw WrongFormatException();
     }
 
-    // read the object identifier
+    
     sal_uInt32 nId = readLong();
 
-    // the name of the persist model
-    // MM ???
+    
+    
     OUString aName = readUTF();
 
-    // Read the length of the object
+    
     sal_Int32 nObjLen = readLong();
     if( ( 0 == nId && 0 != nObjLen ) )
     {
         throw WrongFormatException();
     }
 
-    // skip data of new version
+    
     skipBytes( nLen - m_rMarkable->offsetToMark( nMark ) );
 
     sal_Bool bLoadSuccesfull = sal_True;
@@ -1321,7 +1321,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun:
     {
         if( !aName.isEmpty() )
         {
-            // load the object
+            
             Reference< XInterface > x = m_rSMgr->createInstanceWithContext( aName, m_rCxt );
             xLoadedObj = Reference< XPersistObject >( x, UNO_QUERY );
             if( xLoadedObj.is() )
@@ -1329,7 +1329,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun:
                 sal_uInt32 nSize = m_aPersistVector.size();
                 if( nSize <= nId )
                 {
-                    // grow to the right size
+                    
                     Reference< XPersistObject > xEmpty;
                     m_aPersistVector.insert( m_aPersistVector.end(), (long)(nId - nSize + 1), xEmpty );
                 }
@@ -1340,25 +1340,25 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun:
             }
             else
             {
-                // no service with this name could be instantiated
+                
                 bLoadSuccesfull = sal_False;
             }
         }
         else {
             if( m_aPersistVector.size() < nId )
             {
-                // id unknown, load failure !
+                
                 bLoadSuccesfull = sal_False;
             }
             else
             {
-                // Object has alread been read,
+                
                 xLoadedObj = m_aPersistVector[nId];
             }
         }
     }
 
-    // skip to the position behind the object
+    
     skipBytes( nObjLen + nLen - m_rMarkable->offsetToMark( nMark ) );
     m_rMarkable->deleteMark( nMark );
 
@@ -1378,7 +1378,7 @@ void OObjectInputStream::connectToMarkable()
             throw NotConnectedException( );
         }
 
-        // find the markable stream !
+        
         Reference< XInterface > rTry(m_input);
         while( true ) {
             if( ! rTry.is() )
@@ -1400,7 +1400,7 @@ void OObjectInputStream::connectToMarkable()
 
 sal_Int32 OObjectInputStream::createMark(void)              throw (IOException, RuntimeException)
 {
-    connectToMarkable();    // throws an exception, if a markable is not connected !
+    connectToMarkable();    
 
     return m_rMarkable->createMark();
 }
@@ -1438,19 +1438,19 @@ sal_Int32 OObjectInputStream::offsetToMark(sal_Int32 nMark)
     return m_rMarkable->offsetToMark( nMark );
 }
 
-// XServiceInfo
+
 OUString OObjectInputStream::getImplementationName() throw ()
 {
     return OObjectInputStream_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool OObjectInputStream::supportsService(const OUString& ServiceName) throw ()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > OObjectInputStream::getSupportedServiceNames(void) throw ()
 {
     return OObjectInputStream_getSupportedServiceNames();

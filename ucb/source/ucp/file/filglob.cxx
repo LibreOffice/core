@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -73,9 +73,9 @@ namespace {
             == osl::FileBase::E_None)
             bResourceName = true;
 
-        // The resource types "folder" (i.e., directory) and
-        // "volume" seem to be
-        // the most interesting when producing meaningful error messages:
+        
+        
+        
         osl::DirectoryItem aItem;
         if (osl::DirectoryItem::get(rPhysicalUrl, aItem) ==
             osl::FileBase::E_None)
@@ -110,7 +110,7 @@ namespace {
                     case osl::FileStatus::Link:
                     case osl::FileStatus::Special:
                     case osl::FileStatus::Unknown:
-                        // do nothing for now
+                        
                         break;
                 }
         }
@@ -157,7 +157,7 @@ namespace fileaccess {
                       const OUString& dstUnqPath )
     {
         static sal_Unicode slash = '/';
-        // Simple lexical comparison
+        
         sal_Int32 srcL = srcUnqPath.getLength();
         sal_Int32 dstL = dstUnqPath.getLength();
 
@@ -202,8 +202,8 @@ namespace fileaccess {
         if( aParent.endsWith(":") && aParent.getLength() == 6 )
             aParent += "/";
 
-        if ( aParent == "file://" )
-            aParent = "file:///";
+        if ( aParent == "file:
+            aParent = "file:
 
         return aParent;
     }
@@ -280,85 +280,85 @@ namespace fileaccess {
                 errorCode == TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND ||
                 errorCode == TASKHANDLING_NOFRESHINSERT_IN_INSERT_COMMAND )
         {
-            // What to do here?
+            
         }
         else if(
-            // error in opening file
+            
             errorCode == TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE ||
-            // error in opening file
+            
             errorCode == TASKHANDLING_NO_OPEN_FILE_FOR_WRITE     ||
-            // error in opening file
+            
             errorCode == TASKHANDLING_OPEN_FOR_STREAM            ||
-            // error in opening file
+            
             errorCode == TASKHANDLING_OPEN_FOR_INPUTSTREAM       ||
-            // error in opening file
+            
             errorCode == TASKHANDLING_OPEN_FILE_FOR_PAGING )
         {
             switch( minorCode )
             {
                 case FileBase::E_NAMETOOLONG:
-                    // pathname was too long
+                    
                     ioErrorCode = IOErrorCode_NAME_TOO_LONG;
                     break;
                 case FileBase::E_NXIO:
-                    // No such device or address
+                    
                 case FileBase::E_NODEV:
-                    // No such device
+                    
                     ioErrorCode = IOErrorCode_INVALID_DEVICE;
                     break;
                 case FileBase::E_NOTDIR:
                     ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
                     break;
                 case FileBase::E_NOENT:
-                    // No such file or directory
+                    
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
                 case FileBase::E_ROFS:
-                    // #i4735# handle ROFS transparently as ACCESS_DENIED
+                    
                 case FileBase::E_ACCES:
-                    // permission denied<P>
+                    
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
                 case FileBase::E_ISDIR:
-                    // Is a directory<p>
+                    
                     ioErrorCode = IOErrorCode_NO_FILE;
                     break;
                 case FileBase::E_NOTREADY:
                     ioErrorCode = IOErrorCode_DEVICE_NOT_READY;
                     break;
                 case FileBase::E_MFILE:
-                    // too many open files used by the process
+                    
                 case FileBase::E_NFILE:
-                    // too many open files in the system
+                    
                     ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
                     break;
                 case FileBase::E_INVAL:
-                    // the format of the parameters was not valid
+                    
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
                 case FileBase::E_NOMEM:
-                    // not enough memory for allocating structures
+                    
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
                 case FileBase::E_BUSY:
-                    // Text file busy
+                    
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
                 case FileBase::E_AGAIN:
-                    // Operation would block
+                    
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
-                case FileBase::E_NOLCK:  // No record locks available
+                case FileBase::E_NOLCK:  
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
 
-                case FileBase::E_FAULT: // Bad address
-                case FileBase::E_LOOP:  // Too many symbolic links encountered
-                case FileBase::E_NOSPC: // No space left on device
-                case FileBase::E_INTR:  // function call was interrupted
-                case FileBase::E_IO:    // I/O error
-                case FileBase::E_MULTIHOP:      // Multihop attempted
-                case FileBase::E_NOLINK:        // Link has been severed
+                case FileBase::E_FAULT: 
+                case FileBase::E_LOOP:  
+                case FileBase::E_NOSPC: 
+                case FileBase::E_INTR:  
+                case FileBase::E_IO:    
+                case FileBase::E_MULTIHOP:      
+                case FileBase::E_NOLINK:        
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
                     break;
@@ -377,41 +377,41 @@ namespace fileaccess {
             switch( minorCode )
             {
                 case FileBase::E_INVAL:
-                    // the format of the parameters was not valid
+                    
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
                 case FileBase::E_NOENT:
-                    // the specified path doesn't exist
+                    
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
                 case FileBase::E_NOTDIR:
-                    // the specified path is not an directory
+                    
                     ioErrorCode = IOErrorCode_NO_DIRECTORY;
                     break;
                 case FileBase::E_NOMEM:
-                    // not enough memory for allocating structures
+                    
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
                 case FileBase::E_ROFS:
-                    // #i4735# handle ROFS transparently as ACCESS_DENIED
-                case FileBase::E_ACCES:          // permission denied
+                    
+                case FileBase::E_ACCES:          
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
                 case FileBase::E_NOTREADY:
                     ioErrorCode = IOErrorCode_DEVICE_NOT_READY;
                     break;
                 case FileBase::E_MFILE:
-                    // too many open files used by the process
+                    
                 case FileBase::E_NFILE:
-                    // too many open files in the system
+                    
                     ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
                     break;
                 case FileBase::E_NAMETOOLONG:
-                    // File name too long
+                    
                     ioErrorCode = IOErrorCode_NAME_TOO_LONG;
                     break;
                 case FileBase::E_LOOP:
-                    // Too many symbolic links encountered<p>
+                    
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
                     break;
@@ -455,41 +455,41 @@ namespace fileaccess {
             switch( minorCode )
             {
                 case FileBase::E_INVAL:
-                    // the format of the parameters was not valid
+                    
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
                 case FileBase::E_FBIG:
-                    // File too large
+                    
                     ioErrorCode = IOErrorCode_CANT_WRITE;
                     break;
                 case FileBase::E_NOSPC:
-                    // No space left on device
+                    
                     ioErrorCode = IOErrorCode_OUT_OF_DISK_SPACE;
                     break;
                 case FileBase::E_NXIO:
-                    // No such device or address
+                    
                     ioErrorCode = IOErrorCode_INVALID_DEVICE;
                     break;
                 case FileBase::E_NOLINK:
-                    // Link has been severed
+                    
                 case FileBase::E_ISDIR:
-                    // Is a directory
+                    
                     ioErrorCode = IOErrorCode_NO_FILE;
                     break;
                 case FileBase::E_AGAIN:
-                    // Operation would block
+                    
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
                 case FileBase::E_TIMEDOUT:
                     ioErrorCode = IOErrorCode_DEVICE_NOT_READY;
                     break;
-                case FileBase::E_NOLCK:  // No record locks available
+                case FileBase::E_NOLCK:  
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
-                case FileBase::E_IO:     // I/O error
-                case FileBase::E_BADF:   // Bad file
-                case FileBase::E_FAULT:  // Bad address
-                case FileBase::E_INTR:   // function call was interrupted
+                case FileBase::E_IO:     
+                case FileBase::E_BADF:   
+                case FileBase::E_FAULT:  
+                case FileBase::E_INTR:   
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
                     break;
@@ -522,10 +522,10 @@ namespace fileaccess {
             switch( minorCode )
             {
                 case FileBase::E_INVAL:
-                    // the format of the parameters was not valid
+                    
                 case FileBase::E_OVERFLOW:
-                    // The resulting file offset would be a value which cannot
-                    // be represented correctly for regular files
+                    
+                    
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
                 default:
@@ -549,7 +549,7 @@ namespace fileaccess {
             cancelCommandExecution(aAny,xEnv);
         }
         else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )
-            // Overwrite = false and file exists
+            
         {
             NameClashException excep;
             excep.Name = getTitle(aUncPath);
@@ -584,13 +584,13 @@ namespace fileaccess {
                 aAny <<= excep;
                 cancelCommandExecution( aAny,xEnv );
             }
-//              ioErrorCode = IOErrorCode_INVALID_CHARACTER;
-//              cancelCommandExecution(
-//                  ioErrorCode,
-//                  generateErrorArguments(aUncPath),
-//                  xEnv,
-//                  OUString( "the name contained invalid characters"),
-//                  xComProc );
+
+
+
+
+
+
+
         }
         else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
         {
@@ -605,13 +605,13 @@ namespace fileaccess {
                 aAny <<= excep;
                 cancelCommandExecution( aAny,xEnv );
             }
-//              ioErrorCode = IOErrorCode_ALREADY_EXISTING;
-//              cancelCommandExecution(
-//                  ioErrorCode,
-//                  generateErrorArguments(aUncPath),
-//                  xEnv,
-//                  OUString( "the folder exists"),
-//                  xComProc );
+
+
+
+
+
+
+
         }
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
@@ -634,7 +634,7 @@ namespace fileaccess {
             cancelCommandExecution(
                 ioErrorCode,
                 generateErrorArguments(getParentName(aUncPath)),
-                //TODO! ok to supply physical URL to getParentName()?
+                
                 xEnv,
                 OUString( "a folder could not be created"),
                 xComProc  );
@@ -645,40 +645,40 @@ namespace fileaccess {
         {
             switch( minorCode )
             {
-                case FileBase::E_INVAL:         // the format of the parameters was not valid
+                case FileBase::E_INVAL:         
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
-                case FileBase::E_NOMEM:         // not enough memory for allocating structures
+                case FileBase::E_NOMEM:         
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
-                case FileBase::E_ROFS: // #i4735# handle ROFS transparently as ACCESS_DENIED
-                case FileBase::E_ACCES:         // permission denied
+                case FileBase::E_ROFS: 
+                case FileBase::E_ACCES:         
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
-                case FileBase::E_MFILE:         // too many open files used by the process
-                case FileBase::E_NFILE:         // too many open files in the system
+                case FileBase::E_MFILE:         
+                case FileBase::E_NFILE:         
                     ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
                     break;
-                case FileBase::E_NOLINK:        // Link has been severed
-                case FileBase::E_NOENT:         // No such file or directory
+                case FileBase::E_NOLINK:        
+                case FileBase::E_NOENT:         
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
-                case FileBase::E_NAMETOOLONG:   // File name too long
+                case FileBase::E_NAMETOOLONG:   
                     ioErrorCode = IOErrorCode_NAME_TOO_LONG;
                     break;
-                case FileBase::E_NOTDIR:     // A component of the path prefix of path is not a directory
+                case FileBase::E_NOTDIR:     
                     ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
                     break;
-                case FileBase::E_LOOP:          // Too many symbolic links encountered
-                case FileBase::E_IO:            // I/O error
-                case FileBase::E_MULTIHOP:      // Multihop attempted
-                case FileBase::E_FAULT:         // Bad address
-                case FileBase::E_INTR:          // function call was interrupted
-                case FileBase::E_NOSYS:         // Function not implemented
-                case FileBase::E_NOSPC:         // No space left on device
-                case FileBase::E_NXIO:          // No such device or address
-                case FileBase::E_OVERFLOW:      // Value too large for defined data type
-                case FileBase::E_BADF:          // Invalid oslDirectoryItem parameter
+                case FileBase::E_LOOP:          
+                case FileBase::E_IO:            
+                case FileBase::E_MULTIHOP:      
+                case FileBase::E_FAULT:         
+                case FileBase::E_INTR:          
+                case FileBase::E_NOSYS:         
+                case FileBase::E_NOSPC:         
+                case FileBase::E_NXIO:          
+                case FileBase::E_OVERFLOW:      
+                case FileBase::E_BADF:          
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
                     break;
@@ -695,37 +695,37 @@ namespace fileaccess {
         {
             switch( minorCode )
             {
-                case FileBase::E_INVAL:         // the format of the parameters was not valid
+                case FileBase::E_INVAL:         
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
-                case FileBase::E_NOMEM:         // not enough memory for allocating structures
+                case FileBase::E_NOMEM:         
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
-                case FileBase::E_ACCES:         // Permission denied
+                case FileBase::E_ACCES:         
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
-                case FileBase::E_PERM:          // Operation not permitted
+                case FileBase::E_PERM:          
                     ioErrorCode = IOErrorCode_NOT_SUPPORTED;
                     break;
-                case FileBase::E_NAMETOOLONG:   // File name too long
+                case FileBase::E_NAMETOOLONG:   
                     ioErrorCode = IOErrorCode_NAME_TOO_LONG;
                     break;
-                case FileBase::E_NOLINK:        // Link has been severed
-                case FileBase::E_NOENT:         // No such file or directory
+                case FileBase::E_NOLINK:        
+                case FileBase::E_NOENT:         
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
-                case FileBase::E_ISDIR:         // Is a directory
-                case FileBase::E_ROFS:          // Read-only file system
+                case FileBase::E_ISDIR:         
+                case FileBase::E_ROFS:          
                     ioErrorCode = IOErrorCode_NOT_SUPPORTED;
                     break;
-                case FileBase::E_BUSY:          // Device or resource busy
+                case FileBase::E_BUSY:          
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
-                case FileBase::E_FAULT:         // Bad address
-                case FileBase::E_LOOP:          // Too many symbolic links encountered
-                case FileBase::E_IO:            // I/O error
-                case FileBase::E_INTR:          // function call was interrupted
-                case FileBase::E_MULTIHOP:      // Multihop attempted
+                case FileBase::E_FAULT:         
+                case FileBase::E_LOOP:          
+                case FileBase::E_IO:            
+                case FileBase::E_INTR:          
+                case FileBase::E_MULTIHOP:      
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
                     break;
@@ -749,7 +749,7 @@ namespace fileaccess {
             OUString aMsg;
             switch( minorCode )
             {
-                case FileBase::E_NOENT:         // No such file or directory
+                case FileBase::E_NOENT:         
                     if ( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
                          errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT     ||
                          errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCE         ||
@@ -814,26 +814,26 @@ namespace fileaccess {
                 case FileBase::E_EXIST:
                     ioErrorCode = IOErrorCode_ALREADY_EXISTING;
                     break;
-                case FileBase::E_INVAL:         // the format of the parameters was not valid
+                case FileBase::E_INVAL:         
                     ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                     break;
-                case FileBase::E_NOMEM:         // not enough memory for allocating structures
+                case FileBase::E_NOMEM:         
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
-                case FileBase::E_ACCES:         // Permission denied
+                case FileBase::E_ACCES:         
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
-                case FileBase::E_PERM:          // Operation not permitted
+                case FileBase::E_PERM:          
                     ioErrorCode = IOErrorCode_NOT_SUPPORTED;
                     break;
-                case FileBase::E_NAMETOOLONG:   // File name too long
+                case FileBase::E_NAMETOOLONG:   
                     ioErrorCode = IOErrorCode_NAME_TOO_LONG;
                     break;
-                case FileBase::E_NOENT:         // No such file or directory
+                case FileBase::E_NOENT:         
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     aMsg = "file/folder does not exist";
                     break;
-                case FileBase::E_ROFS:          // Read-only file system<p>
+                case FileBase::E_ROFS:          
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
                 default:
@@ -872,12 +872,12 @@ namespace fileaccess {
         }
         else
         {
-            // case TASKHANDLER_NO_ERROR:
+            
             return;
         }
     }
 
 
-}   // end namespace fileaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

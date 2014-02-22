@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -145,7 +145,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
                                            bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
-    // get BoundRect of rotated rectangle
+    
     Rectangle aRect;
     Point     aCenter;
     sal_uInt16    nAngle = rGradient.GetAngle() % 3600;
@@ -158,14 +158,14 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     {
         fBorder /= 2.0;
     }
-    Rectangle aMirrorRect = aRect; // used in style axial
+    Rectangle aMirrorRect = aRect; 
     aMirrorRect.Top() = ( aRect.Top() + aRect.Bottom() ) / 2;
     if ( !bLinear )
     {
         aRect.Bottom() = aMirrorRect.Top();
     }
 
-    // colour-intensities of start- and finish; change if needed
+    
     long    nFactor;
     Color   aStartCol   = rGradient.GetStartColor();
     Color   aEndCol     = rGradient.GetEndColor();
@@ -184,7 +184,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
             nEndGreen   = (nEndGreen * nFactor) / 100;
             nEndBlue    = (nEndBlue  * nFactor) / 100;
 
-    // gradient style axial has exchanged start and end colors
+    
     if ( !bLinear)
     {
         long nTempColor = nStartRed;
@@ -202,7 +202,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     sal_uInt8   nGreen;
     sal_uInt8   nBlue;
 
-    // Create border
+    
     Rectangle aBorderRect = aRect;
     Polygon     aPoly( 4 );
     if (fBorder > 0.0)
@@ -243,9 +243,9 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         }
     }
 
-    // calculate step count
+    
     long    nStepCount  = rGradient.GetSteps();
-    // generate nStepCount, if not passed
+    
     long nMinRect = aRect.GetHeight();
     if ( !nStepCount )
     {
@@ -256,13 +256,13 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         }
         else
         {
-            // Use display-equivalent step size calculation
+            
             nInc = (nMinRect < 800) ? 10 : 20;
         }
         nStepCount = nMinRect / nInc;
     }
 
-    // minimal three steps and maximal as max color steps
+    
     long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
     long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
     long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
@@ -283,11 +283,11 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     double fTempColor;
     if ( !bLinear)
     {
-        nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
+        nSteps -= 1; 
     }
     for ( long i = 0; i < nSteps; i++ )
     {
-        // linear interpolation of color
+        
         fAlpha = ((double)i) / fStepsMinus1;
         fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
         nRed = ImplGetGradientColorValue((long)fTempColor);
@@ -300,7 +300,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
-        // Polygon for this color step
+        
         aRect.Top() = (long)( fGradientLine + ((double) i) * fScanInc );
         aRect.Bottom() = (long)( fGradientLine + ( ((double) i) + 1.0 ) * fScanInc + fScanInc*.1 );
         aPoly[0] = aRect.TopLeft();
@@ -329,7 +329,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     }
     if ( !bLinear)
     {
-        // draw middle polygon with end color
+        
         nRed = ImplGetGradientColorValue(nEndRed);
         nGreen = ImplGetGradientColorValue(nEndGreen);
         nBlue = ImplGetGradientColorValue(nEndBlue);
@@ -356,12 +356,12 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
                                             bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
-    // Determine if we output via Polygon or PolyPolygon
-    // For all rasteroperations other then Overpaint always use PolyPolygon,
-    // as we will get wrong results if we output multiple times on top of each other.
-    // Also for printers always use PolyPolygon, as not all printers
-    // can print polygons on top of each other.
-    // Also virtual devices are excluded, as some drivers are too slow.
+    
+    
+    
+    
+    
+    
     //
     PolyPolygon*    pPolyPoly;
     Rectangle       aRect;
@@ -389,7 +389,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
     long nMinRect = std::min( aRect.GetWidth(), aRect.GetHeight() );
 
-    // calculate number of steps, if this was not passed
+    
     if( !nStepCount )
     {
         long nInc;
@@ -400,14 +400,14 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         }
         else
         {
-            // #105998# Use display-equivalent step size calculation
+            
             nInc = (nMinRect < 800) ? 10 : 20;
         }
 
         nStepCount = nMinRect / nInc;
     }
 
-    // at least three steps and at most the number of colour differences
+    
     long nSteps = std::max( nStepCount, 2L );
     long nCalcSteps  = std::abs( nRedSteps );
     long nTempSteps = std::abs( nGreenSteps );
@@ -421,7 +421,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     if ( !nSteps )
         nSteps = 1;
 
-    // determine output limits and stepsizes for all directions
+    
     Polygon aPoly;
     double  fScanLeft = aRect.Left();
     double  fScanTop = aRect.Top();
@@ -430,16 +430,16 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     double fScanIncX = (double) aRect.GetWidth() / (double) nSteps * 0.5;
     double fScanIncY = (double) aRect.GetHeight() / (double) nSteps * 0.5;
 
-    // all gradients are rendered as nested rectangles which shrink
-    // equally in each dimension - except for 'square' gradients
-    // which shrink to a central vertex but are not per-se square.
+    
+    
+    
     if( rGradient.GetStyle() != GradientStyle_SQUARE )
     {
         fScanIncY = std::min( fScanIncY, fScanIncX );
         fScanIncX = fScanIncY;
     }
     sal_uInt8   nRed = (sal_uInt8) nStartRed, nGreen = (sal_uInt8) nStartGreen, nBlue = (sal_uInt8) nStartBlue;
-    bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
+    bool    bPaintLastPolygon( false ); 
 
     if( bMtf )
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
@@ -453,7 +453,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     }
     else
     {
-        // extend rect, to avoid missing bounding line
+        
         Rectangle aExtRect( rRect );
 
         aExtRect.Left() -= 1;
@@ -464,10 +464,10 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         ImplDrawPolygon( aPoly = aExtRect, pClipPolyPoly );
     }
 
-    // loop to output Polygone/PolyPolygone sequentially
+    
     for( long i = 1; i < nSteps; i++ )
     {
-        // calculate new Polygon
+        
         aRect.Left() = (long)( fScanLeft += fScanIncX );
         aRect.Top() = (long)( fScanTop += fScanIncY );
         aRect.Right() = (long)( fScanRight -= fScanIncX );
@@ -483,16 +483,16 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
         aPoly.Rotate( aCenter, nAngle );
 
-        // adapt colour accordingly
+        
         const long nStepIndex = ( ( pPolyPoly != NULL ) ? i : ( i + 1 ) );
         nRed = ImplGetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = ImplGetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = ImplGetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
-        // either slow PolyPolygon output or fast Polygon-Paiting
+        
         if( pPolyPoly )
         {
-            bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
+            bPaintLastPolygon = true; 
 
             pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
             pPolyPoly->Replace( aPoly, 1 );
@@ -502,13 +502,13 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             else
                 ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
 
-            // #107349# Set fill color _after_ geometry painting:
-            // pPolyPoly's geometry is the band from last iteration's
-            // aPoly to current iteration's aPoly. The window outdev
-            // path (see else below), on the other hand, paints the
-            // full aPoly. Thus, here, we're painting the band before
-            // the one painted in the window outdev path below. To get
-            // matching colors, have to delay color setting here.
+            
+            
+            
+            
+            
+            
+            
             if( bMtf )
                 mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
             else
@@ -516,7 +516,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         }
         else
         {
-            // #107349# Set fill color _before_ geometry painting
+            
             if( bMtf )
                 mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
             else
@@ -526,16 +526,16 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         }
     }
 
-    // we should draw last inner Polygon if we output PolyPolygon
+    
     if( pPolyPoly )
     {
         const Polygon& rPoly = pPolyPoly->GetObject( 1 );
 
         if( !rPoly.GetBoundRect().IsEmpty() )
         {
-            // #107349# Paint last polygon with end color only if loop
-            // has generated output. Otherwise, the current
-            // (i.e. start) color is taken, to generate _any_ output.
+            
+            
+            
             if( bPaintLastPolygon )
             {
                 nRed = ImplGetGradientColorValue( nEndRed );
@@ -626,25 +626,25 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    // convert rectangle to pixels
+    
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
     aRect.Justify();
 
-    // do nothing if the rectangle is empty
+    
     if ( !aRect.IsEmpty() )
     {
-        // Clip Region sichern
+        
         Push( PUSH_CLIPREGION );
         IntersectClipRegion( rRect );
 
-        // because we draw with no border line, we have to expand gradient
-        // rect to avoid missing lines on the right and bottom edge
+        
+        
         aRect.Left()--;
         aRect.Top()--;
         aRect.Right()++;
         aRect.Bottom()++;
 
-        // we need a graphics
+        
         if ( !mpGraphics )
         {
             if ( !ImplGetGraphics() )
@@ -656,7 +656,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
         if ( !mbOutputClipped )
         {
-            // gradients are drawn without border
+            
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
@@ -665,7 +665,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
             mbInitFillColor = true;
 
-            // calculate step count if necessary
+            
             if ( !aGradient.GetSteps() )
                 aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
@@ -680,7 +680,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
     if( mpAlphaVDev )
     {
-        // #i32109#: Make gradient area opaque
+        
         mpAlphaVDev->ImplFillOpaqueRectangle( rRect );
     }
 }
@@ -799,11 +799,11 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
             if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
             {
-                // convert rectangle to pixels
+                
                 Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
                 aRect.Justify();
 
-                // do nothing if the rectangle is empty
+                
                 if ( !aRect.IsEmpty() )
                 {
                     if( !mpGraphics && !ImplGetGraphics() )
@@ -816,7 +816,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                     {
                         PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
 
-                        // draw gradients without border
+                        
                         if( mbLineColor || mbInitLineColor )
                         {
                             mpGraphics->SetLineColor();
@@ -825,7 +825,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                         mbInitFillColor = true;
 
-                        // calculate step count if necessary
+                        
                         if ( !aGradient.GetSteps() )
                             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
@@ -861,13 +861,13 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                 if( HasAlpha() )
                 {
-                    // #110958# Pay attention to alpha VDevs here, otherwise,
-                    // background will be wrong: Temp VDev has to have alpha, too.
+                    
+                    
                     pVDev = new VirtualDevice( *this, 0, GetAlphaBitCount() > 1 ? 0 : 1 );
                 }
                 else
                 {
-                    // nothing special here. Plain VDev
+                    
                     pVDev = new VirtualDevice();
                 }
 
@@ -912,7 +912,7 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
 
     aRect.Justify();
 
-    // do nothing if the rectangle is empty
+    
     if ( !aRect.IsEmpty() )
     {
         Gradient        aGradient( rGradient );
@@ -923,14 +923,14 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
         mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
 
-        // because we draw with no border line, we have to expand gradient
-        // rect to avoid missing lines on the right and bottom edge
+        
+        
         aRect.Left()--;
         aRect.Top()--;
         aRect.Right()++;
         aRect.Bottom()++;
 
-        // calculate step count if necessary
+        
         if ( !aGradient.GetSteps() )
             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
@@ -1042,7 +1042,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 {
     if(rPolyPoly.Count())
     {
-        // #i115630# ImplDrawHatch does not work with beziers included in the polypolygon, take care of that
+        
         bool bIsCurve(false);
 
         for(sal_uInt16 a(0); !bIsCurve && a < rPolyPoly.Count(); a++)
@@ -1070,7 +1070,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
             Point       aPt1, aPt2, aEndPt1;
             Size        aInc;
 
-            // Single hatch
+            
             aRect.Left() -= nLogPixelWidth; aRect.Top() -= nLogPixelWidth; aRect.Right() += nLogPixelWidth; aRect.Bottom() += nLogPixelWidth;
             ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
             do
@@ -1083,7 +1083,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 
             if( ( rHatch.GetStyle() == HATCH_DOUBLE ) || ( rHatch.GetStyle() == HATCH_TRIPLE ) )
             {
-                // Double hatch
+                
                 ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
                 do
                 {
@@ -1095,7 +1095,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 
                 if( rHatch.GetStyle() == HATCH_TRIPLE )
                 {
-                    // Triple hatch
+                    
                     ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
                     do
                     {

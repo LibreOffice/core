@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,12 +74,12 @@ namespace sd
         DocumentSettings( SdXImpressDocument* pModel );
         virtual ~DocumentSettings() throw();
 
-        // XInterface
+        
         virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
         virtual void SAL_CALL acquire(  ) throw ();
         virtual void SAL_CALL release(  ) throw ();
 
-        // XPropertySet
+        
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -88,19 +88,19 @@ namespace sd
         virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-        // XMultiPropertySet
+        
         virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
-        // DocumentSettingsSerializer cf. xmloff
+        
         virtual uno::Sequence<beans::PropertyValue>
                 filterStreamsFromStorage(OUString const & referer,
                                          const uno::Reference< embed::XStorage > &xStorage,
@@ -138,7 +138,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
-    // #i33095#
+    
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL, HANDLE_EMBED_FONTS
 };
@@ -198,7 +198,7 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          ::getBooleanCppuType(),                0,  0 },
             { OUString("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  ::getBooleanCppuType(),                0,  0 },
             { OUString("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,::getCppuType((const sal_Int16*)0), 0,  0 },
-            // --> #i33095#
+            
             { OUString("LoadReadonly"),          HANDLE_LOAD_READONLY,       ::getBooleanCppuType(),                0,  0 },
             { OUString("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        ::getBooleanCppuType(),                0,  0 },
             { OUString("EmbedFonts"),            HANDLE_EMBED_FONTS,         ::getBooleanCppuType(),                0,  0 },
@@ -338,14 +338,14 @@ uno::Sequence<beans::PropertyValue>
         return aConfigProps;
 
     try {
-        // create Settings/ sub storage.
+        
         uno::Reference< embed::XStorage > xSubStorage;
         xSubStorage = xStorage->openStorageElement( "Settings" ,
             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
         if( !xSubStorage.is() )
             return aRet;
 
-        // now populate it
+        
         for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
         {
             XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
@@ -353,10 +353,10 @@ uno::Sequence<beans::PropertyValue>
             if (t >= 0) {
                 XPropertyListRef pList = pDoc->GetPropertyList( t );
                 if( !pList.is() || !pList->IsEmbedInDocument() )
-                    continue; // no change ...
+                    continue; 
                 else
                 {
-                    // Such specific path construction is grim.
+                    
                     OUString aValue;
                     aRet[i].Value >>= aValue;
 
@@ -372,7 +372,7 @@ uno::Sequence<beans::PropertyValue>
             }
         }
 
-        // surprisingly difficult to make it really exist
+        
         uno::Reference< embed::XTransactedObject > xTrans( xSubStorage, UNO_QUERY );
         if( xTrans.is() )
             xTrans->commit();
@@ -381,8 +381,8 @@ uno::Sequence<beans::PropertyValue>
             xSubStorage->dispose();
     } catch (const uno::Exception &e) {
         (void)e;
-//        fprintf (stderr, "saving etc. exception '%s'\n",
-//                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+
+
     }
 
     return aRet;
@@ -870,9 +870,9 @@ throw (UnknownPropertyException, PropertyVetoException,
 
             case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
             {
-                // Just propagate the new printer independent layout mode to
-                // the document and determine it really differs from the old
-                // one.
+                
+                
+                
                 sal_Int16 nOldValue =
                     (sal_Int16)pDoc->GetPrinterIndependentLayout ();
                 sal_Int16 nValue = 0;
@@ -885,7 +885,7 @@ throw (UnknownPropertyException, PropertyVetoException,
             }
             break;
 
-            // --> #i33095#
+            
             case HANDLE_LOAD_READONLY:
             {
                 sal_Bool bNewValue = sal_False;
@@ -1142,7 +1142,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
             }
             break;
 
-            // --> #i33095#
+            
             case HANDLE_LOAD_READONLY:
             {
                 *pValue <<= pDocSh->IsLoadReadonly();
@@ -1167,7 +1167,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     }
 }
 
-// XInterface
+
 Any SAL_CALL DocumentSettings::queryInterface( const Type& aType ) throw (RuntimeException)
 {
     return WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >::queryInterface( aType );
@@ -1184,7 +1184,7 @@ void SAL_CALL DocumentSettings::release(  ) throw ()
 }
 
 
-// XPropertySet
+
 Reference< XPropertySetInfo > SAL_CALL DocumentSettings::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return PropertySetHelper::getPropertySetInfo();
@@ -1220,7 +1220,7 @@ void SAL_CALL DocumentSettings::removeVetoableChangeListener( const OUString& Pr
     PropertySetHelper::removeVetoableChangeListener( PropertyName, aListener );
 }
 
-// XMultiPropertySet
+
 void SAL_CALL DocumentSettings::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     PropertySetHelper::setPropertyValues( aPropertyNames, aValues );
@@ -1246,7 +1246,7 @@ void SAL_CALL DocumentSettings::firePropertiesChangeEvent( const Sequence< OUStr
     PropertySetHelper::firePropertiesChangeEvent( aPropertyNames, xListener );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL DocumentSettings::getImplementationName(  )
     throw(RuntimeException)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
@@ -37,7 +37,7 @@ namespace slideshow
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
         int& debugGetCurrentOffset()
         {
-            static int lcl_nOffset = 0; // to make each tree output distinct
+            static int lcl_nOffset = 0; 
 
             return lcl_nOffset;
         }
@@ -65,9 +65,9 @@ namespace slideshow
             AttributableShapeSharedPtr pRes(
                 ::boost::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
-            // TODO(E3): Cannot throw here, people might set animation info
-            // for non-animatable shapes from the API. AnimationNodes must catch
-            // the exception and handle that differently
+            
+            
+            
             ENSURE_OR_THROW( pRes,
                               "lookupAttributableShape(): shape found does not implement AttributableShape interface" );
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cassert>
@@ -63,8 +63,8 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 namespace {
 
-// This class only implements that subset of functionality of a proper
-// css::ucb::Content that is known to be needed here:
+
+
 class Content:
     public cppu::WeakImplHelper2<
         css::ucb::XContent, css::ucb::XCommandProcessor >
@@ -141,10 +141,10 @@ css::uno::Any Content::execute(
     {
         throw css::uno::RuntimeException();
     }
-    // If any non-empty segment starts with anything but '0', '1', or '2', fail;
-    // otherwise, if the last non-empty segment starts with '1', add a final
-    // slash, and if the last non-empty segment starts with '2', remove a final
-    // slash (if any); also, turn the given uri into all-lowercase:
+    
+    
+    
+    
     OUString uri(m_identifier->getContentIdentifier());
     sal_Unicode c = '0';
     for (sal_Int32 i = RTL_CONSTASCII_LENGTH(m_prefix); i != -1;) {
@@ -210,10 +210,10 @@ private:
 };
 
 void Test::setUp() {
-    // For whatever reason, on W32 it does not work to create/destroy a fresh
-    // component context for each test in Test::setUp/tearDown; therefore, a
-    // single component context is used for all tests and destroyed in the last
-    // pseudo-test "finish":
+    
+    
+    
+    
     if (!m_context.is()) {
         m_context = cppu::defaultBootstrap_InitialComponentContext();
     }
@@ -241,17 +241,17 @@ void Test::testNormalizedMakeRelative() {
         { "hierarchical:/a/", "hierarchical:/a/b/c?d#e", "b/c?d#e" },
         { "test:/0/0/a", "test:/0/b", "../b" },
         { "test:/1/1/a", "test:/1/b", "../b" },
-        { "test:/2/2//a", "test:/2/b", "../../b" },
+        { "test:/2/2
         { "test:/0a/b", "test:/0A/c#f", "c#f" },
-        { "file:///usr/bin/nonex1/nonex2",
-          "file:///usr/bin/nonex1/nonex3/nonex4", "nonex3/nonex4" },
-        { "file:///usr/bin/nonex1/nonex2#fragmentA",
-          "file:///usr/bin/nonex1/nonex3/nonex4#fragmentB",
+        { "file:
+          "file:
+        { "file:
+          "file:
           "nonex3/nonex4#fragmentB" },
-        { "file:///usr/nonex1/nonex2", "file:///usr/nonex3", "../nonex3" },
-        { "file:///c:/windows/nonex1", "file:///c:/nonex2", "../nonex2" },
+        { "file:
+        { "file:
 #if defined WNT
-        { "file:///c:/nonex1/nonex2", "file:///C:/nonex1/nonex3/nonex4",
+        { "file:
           "nonex3/nonex4" }
 #endif
     };
@@ -302,42 +302,42 @@ void Test::testFindFirstURLInText() {
         sal_Int32 end;
     };
     static Data const tests[] = {
-        { "...ftp://bla.bla.bla/blubber/...",
-          "ftp://bla.bla.bla/blubber/", 3, 29 },
-        { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
+        { "...ftp:
+          "ftp:
+        { "..\\ftp:
         { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
-//Sync with tools/source/fsys/urlobj.cxx and changeScheme
+
 #ifdef LINUX
-          "smb://bla.bla.bla/blubber%2F", 7, 29 },
+          "smb:
 #else
-          "file://bla.bla.bla/blubber%2F", 7, 29 },
+          "file:
 #endif
-        { "http://sun.com", "http://sun.com/", 0, 14 },
-        { "http://sun.com/", "http://sun.com/", 0, 15 },
-        { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 0, 0 },
-        { "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm",
-          "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 50 },
+        { "http:
+        { "http:
+        { "http:
+        { "ftp:
+          "ftp:
         { "Version.1.2.3", 0, 0, 0 },
         { "Version:1.2.3", 0, 0, 0 },
         { "a.b.c", 0, 0, 0 },
-        { "file:///a|...", "file:///a:", 0, 10 },
-        { "file:///a||...", "file:///a%7C%7C", 0, 11 },
-        { "file:///a|/bc#...", "file:///a:/bc", 0, 13 },
-        { "file:///a|/bc#de...", "file:///a:/bc#de", 0, 16 },
-        { "abc.def.ghi,ftp.xxx.yyy/zzz...", "ftp://ftp.xxx.yyy/zzz", 12, 27 },
-        { "abc.def.ghi,Ftp.xxx.yyy/zzz...", "ftp://Ftp.xxx.yyy/zzz", 12, 27 },
-        { "abc.def.ghi,www.xxx.yyy...", "http://www.xxx.yyy/", 12, 23 },
+        { "file:
+        { "file:
+        { "file:
+        { "file:
+        { "abc.def.ghi,ftp.xxx.yyy/zzz...", "ftp:
+        { "abc.def.ghi,Ftp.xxx.yyy/zzz...", "ftp:
+        { "abc.def.ghi,www.xxx.yyy...", "http:
         { "abc.def.ghi,wwww.xxx.yyy...", 0, 0, 0 },
-        { "abc.def.ghi,wWW.xxx.yyy...", "http://wWW.xxx.yyy/", 12, 23 },
+        { "abc.def.ghi,wWW.xxx.yyy...", "http:
         { "Bla {mailto.me@abc.def.g.h.i}...",
           "mailto:%7Bmailto.me@abc.def.g.h.i", 4, 28 },
         { "abc@def@ghi", 0, 0, 0 },
         { "lala@sun.com", "mailto:lala@sun.com", 0, 12 },
         { "1lala@sun.com", "mailto:1lala@sun.com", 0, 13 },
         { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
-        { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
-        { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
-        { "a:/", "file:///a:/", 0, 3 },
+        { "{a:\\bla/bla/bla...}", "file:
+        { "#b:/c/d#e#f#", "file:
+        { "a:/", "file:
         { ".component:", 0, 0, 0 },
         { ".uno:", 0, 0, 0 },
         { "cid:", 0, 0, 0 },

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -67,7 +67,7 @@
 #include "lwptblcell.hxx"
 #include "lwppara.hxx"
 
-//////////////////////////////////////////////////////////////////
+
  LwpCellList::LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
@@ -76,7 +76,7 @@ LwpCellList::~LwpCellList()
 
 void LwpCellList::Read()
 {
-    // CDLFVList read construction
+    
     LwpDLVList::Read();
 
     LwpDLVListHeadTail cChild;
@@ -92,9 +92,9 @@ void LwpCellList::Read()
     LwpObjectID cDependent;
     cDependent.ReadIndexed(m_pObjStrm);
 
-    cColumn = (sal_uInt8) m_pObjStrm->QuickReaduInt16();        // written as a sal_uInt16
-//  sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();   // written as a sal_uInt16
-    m_pObjStrm->SeekRel(2);//CellFlags
+    cColumn = (sal_uInt8) m_pObjStrm->QuickReaduInt16();        
+
+    m_pObjStrm->SeekRel(2);
     m_pObjStrm->SkipExtra();
 
 }
@@ -113,7 +113,7 @@ void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
     }
 }
 
-//////////////////////////////////////////////////////////////////
+
  LwpNumericValue::LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
 
@@ -129,7 +129,7 @@ void LwpNumericValue::Read()
  void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
 {
 }
-//////////////////////////////////////////////////////////////////
+
  LwpRowList::LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
@@ -138,7 +138,7 @@ LwpRowList::~LwpRowList()
 
 void LwpRowList::Read()
 {
-    // CDLFVList read construction
+    
     LwpDLVList::Read();
 
     cChild.Read(m_pObjStrm);
@@ -155,7 +155,7 @@ void LwpRowList::Read()
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
 LwpTableRange::LwpTableRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     :LwpDLVList(objHdr, pStrm)
 {}
@@ -176,7 +176,7 @@ void  LwpTableRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
  LwpCellRange::LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
 
@@ -193,7 +193,7 @@ void  LwpCellRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
 
  LwpFolder::LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
@@ -203,7 +203,7 @@ LwpFolder::~LwpFolder()
 
 void LwpFolder::Read()
 {
-    // CDLFVList read construction
+    
     LwpDLVList::Read();
 
     cChild.Read(m_pObjStrm);
@@ -220,7 +220,7 @@ void  LwpFolder::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
 
 LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
@@ -234,7 +234,7 @@ void LwpDependent::Read()
 
     cFormulaInfo.ReadIndexed(m_pObjStrm);
     cReferenceOffset = m_pObjStrm->QuickReaduInt16();
-    cFlags = (sal_uInt8)m_pObjStrm->QuickReaduInt16();  // Written as lushort.
+    cFlags = (sal_uInt8)m_pObjStrm->QuickReaduInt16();  
 
     m_pObjStrm->SkipExtra();
 }
@@ -242,7 +242,7 @@ void LwpDependent::Read()
 void  LwpDependent::Parse(IXFStream* /*pOutputStream*/)
 {
 }
-//////////////////////////////////////////////////////////////////
+
 
 void LwpRowSpecifier::QuickRead(LwpObjectStream *pStrm)
 {
@@ -257,7 +257,7 @@ void LwpColumnSpecifier::QuickRead(LwpObjectStream *pStrm)
 
 void LwpRowColumnQualifier::QuickRead(LwpObjectStream *pStrm)
 {
-    // written as lushort for future flags
+    
     cFlags = (sal_uInt8)pStrm->QuickReaduInt16();
 }
 

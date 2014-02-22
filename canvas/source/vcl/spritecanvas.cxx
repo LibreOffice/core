@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,13 +55,13 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // #i64742# Only call initialize when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
         OSL_TRACE( "SpriteCanvas created" );
 
-        // add our own property to GraphicDevice
+        
         maPropHelper.addProperties(
             ::canvas::PropertySetHelper::MakeMap
             ("UnsafeScrolling",
@@ -100,14 +100,14 @@ namespace vclcanvas
 
         OutDevProviderSharedPtr pOutDev( new WindowOutDevHolder(xParentWindow) );
 
-        // setup helper
+        
         maDeviceHelper.init( pOutDev );
         setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
         maCanvasHelper.init( maDeviceHelper.getBackBuffer(),
                              *this,
                              maRedrawManager,
-                             false,   // no OutDev state preservation
-                             false ); // no alpha on surface
+                             false,   
+                             false ); 
 
         maArguments.realloc(0);
     }
@@ -124,7 +124,7 @@ namespace vclcanvas
 
         mxComponentContext.clear();
 
-        // forward to parent
+        
         SpriteCanvasBaseT::disposeThis();
     }
 
@@ -142,9 +142,9 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : maCanvasHelper.updateScreen(bUpdateAll,
                                                                   mbSurfaceDirty);
     }

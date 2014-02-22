@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,9 +25,9 @@
 namespace canvas
 {
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // SurfaceProxyManager
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     class SurfaceProxyManager : public ISurfaceProxyManager
     {
@@ -53,9 +53,9 @@ namespace canvas
         */
         virtual ISurfaceProxySharedPtr createSurfaceProxy( const IColorBufferSharedPtr& pBuffer ) const
         {
-            // not much to do for now, simply allocate a new surface
-            // proxy from our internal pool and initialize this thing
-            // properly. we *don't* create a hardware surface for now.
+            
+            
+            
             return SurfaceProxySharedPtr(new SurfaceProxy(pBuffer,mpPageManager));
         }
 
@@ -63,9 +63,9 @@ namespace canvas
         PageManagerSharedPtr mpPageManager;
     };
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // createSurfaceProxyManager
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     ISurfaceProxyManagerSharedPtr createSurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule )
     {

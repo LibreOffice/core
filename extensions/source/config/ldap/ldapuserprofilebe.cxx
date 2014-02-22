@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 
-//==============================================================================
+
 namespace extensions { namespace config { namespace ldap {
 
 LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContext>& xContext)
@@ -43,14 +43,14 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     LdapDefinition aDefinition;
     OUString loggedOnUser;
 
-    // This whole rigmarole is to prevent an infinite recursion where reading
-    // the configuration for the backend would create another instance of the
-    // backend, which would try and read the configuration which would...
+    
+    
+    
     {
         osl::Mutex & aInitMutex = rtl::Static< osl::Mutex, LdapUserProfileBe >::get();
         osl::MutexGuard aInitGuard(aInitMutex);
 
-        static bool bReentrantCall; // = false
+        static bool bReentrantCall; 
         OSL_ENSURE(!bReentrantCall, "configuration: Ldap Backend constructor called reentrantly - probably a registration error.");
 
         if (!bReentrantCall)
@@ -80,11 +80,11 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     connection.connectSimple(aDefinition);
     connection.getUserProfile(loggedOnUser, &data_);
 }
-//------------------------------------------------------------------------------
+
 LdapUserProfileBe::~LdapUserProfileBe()
 {
 }
-//------------------------------------------------------------------------------
+
 
 bool LdapUserProfileBe::readLdapConfiguration(
     css::uno::Reference< css::uno::XComponentContext > const & context,
@@ -153,13 +153,13 @@ bool LdapUserProfileBe::readLdapConfiguration(
     if (nIndex > 0)
         *loggedOnUser = loggedOnUser->copy(nIndex+1);
 
-    //Remember to remove
+    
     OSL_TRACE("Logged on user is %s", OUStringToOString(*loggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
 
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool LdapUserProfileBe::getLdapStringParam(
     uno::Reference<container::XNameAccess>& xAccess,
     const OUString& aLdapSetting,
@@ -169,7 +169,7 @@ bool LdapUserProfileBe::getLdapStringParam(
 
     return !aServerParameter.isEmpty();
 }
-//------------------------------------------------------------------------------
+
 void LdapUserProfileBe::setPropertyValue(
     OUString const &, css::uno::Any const &)
     throw (
@@ -211,18 +211,18 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
     return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
     return OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
 }
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return getLdapUserProfileBeName() ;
 }
-//------------------------------------------------------------------------------
+
 
 uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
@@ -243,8 +243,8 @@ SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
 {
     return getLdapUserProfileBeServiceNames() ;
 }
-// ---------------------------------------------------------------------------------------
+
 }}}
-// ---------------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

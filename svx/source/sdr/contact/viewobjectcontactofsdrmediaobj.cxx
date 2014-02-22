@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,13 +31,13 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr { namespace contact {
 
-// ----------------------------------
-// - ViewObjectContactOfSdrMediaObj -
-// ----------------------------------
+
+
+
 
 ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                                                 ViewContact& rViewContact,
@@ -55,7 +55,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 {
@@ -63,7 +63,7 @@ ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
     mpMediaWindow = NULL;
 }
 
-// ------------------------------------------------------------------------------
+
 
 Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
@@ -78,9 +78,9 @@ Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 
         if(rPageWindow.GetOriginalPaintWindow())
         {
-            // #i83183# prefer OriginalPaintWindow if set; this is
-            // the real target device. GetPaintWindow() may return
-            // the current buffer device instead
+            
+            
+            
             pPaintWindow = rPageWindow.GetOriginalPaintWindow();
         }
 
@@ -95,7 +95,7 @@ Window* ViewObjectContactOfSdrMediaObj::getWindow() const
     return pRetval;
 }
 
-// ------------------------------------------------------------------------------
+
 
 Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 {
@@ -107,7 +107,7 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
@@ -115,7 +115,7 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
     {
         mpMediaWindow->updateMediaItem( rItem );
 
-        // show/hide is now dependent of play state
+        
         if(avmedia::MEDIASTATE_STOP == rItem.getState())
         {
             mpMediaWindow->hide();
@@ -135,7 +135,7 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
@@ -145,14 +145,14 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
 
         mpMediaWindow->executeMediaItem( rItem );
 
-        // query new properties after trying to set the new properties
+        
         updateMediaItem( aUpdatedItem );
         static_cast< ViewContactOfSdrMediaObj& >( GetViewContact() ).mediaPropertiesChanged( aUpdatedItem );
     }
 }
 
-// ------------------------------------------------------------------------------
 
-}} // end of namespace sdr::contact
+
+}} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

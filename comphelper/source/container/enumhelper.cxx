@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,21 +14,21 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-//==================================================================
-//= OEnumerationByName
-//==================================================================
-//------------------------------------------------------------------------------
+
+
+
+
+
 OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess)
     :m_aNames(_rxAccess->getElementNames())
     ,m_nPos(0)
@@ -38,7 +38,7 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     impl_startDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess,
                                        const staruno::Sequence< OUString >&           _aNames  )
     :m_aNames(_aNames)
@@ -49,13 +49,13 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     impl_startDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 OEnumerationByName::~OEnumerationByName()
 {
     impl_stopDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -72,7 +72,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::Runtime
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
 {
@@ -88,13 +88,13 @@ staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
         m_xAccess.clear();
     }
 
-    if (!aRes.hasValue())       //There are no more elements
+    if (!aRes.hasValue())       
         throw starcontainer::NoSuchElementException();
 
     return aRes;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
         throw(staruno::RuntimeException)
 {
@@ -104,7 +104,7 @@ void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
         m_xAccess.clear();
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByName::impl_startDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -122,7 +122,7 @@ void OEnumerationByName::impl_startDisposeListening()
     --m_refCount;
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByName::impl_stopDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -140,10 +140,10 @@ void OEnumerationByName::impl_stopDisposeListening()
     --m_refCount;
 }
 
-//==================================================================
-//= OEnumerationByIndex
-//==================================================================
-//------------------------------------------------------------------------------
+
+
+
+
 OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess)
     :m_nPos(0)
     ,m_xAccess(_rxAccess)
@@ -152,13 +152,13 @@ OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer
     impl_startDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 OEnumerationByIndex::~OEnumerationByIndex()
 {
     impl_stopDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -175,7 +175,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::Runtim
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
 {
@@ -197,7 +197,7 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
     return aRes;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent)
         throw(staruno::RuntimeException)
 {
@@ -207,7 +207,7 @@ void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent
         m_xAccess.clear();
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByIndex::impl_startDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -225,7 +225,7 @@ void OEnumerationByIndex::impl_startDisposeListening()
     --m_refCount;
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByIndex::impl_stopDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -243,23 +243,23 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     --m_refCount;
 }
 
-//==================================================================
-//= OAnyEnumeration
-//==================================================================
 
-//------------------------------------------------------------------------------
+
+
+
+
 OAnyEnumeration::OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems)
     :m_nPos(0)
     ,m_lItems(lItems)
 {
 }
 
-//------------------------------------------------------------------------------
+
 OAnyEnumeration::~OAnyEnumeration()
 {
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -267,7 +267,7 @@ sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeExc
     return (m_lItems.getLength() > m_nPos);
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
 {
@@ -280,9 +280,9 @@ staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
     return m_lItems[nPos];
 }
 
-//.........................................................................
-}   // namespace comphelper
-//.........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

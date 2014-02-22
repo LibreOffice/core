@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//-----------------------------------------------
-// include own files
+
+
 
 #include "acccfg.hxx"
 #include "cfgutil.hxx"
@@ -39,8 +39,8 @@
 
 #include <svx/svxids.hrc>
 
-//-----------------------------------------------
-// include interface declarations
+
+
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -60,8 +60,8 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-//-----------------------------------------------
-// include other projects
+
+
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/svlbitm.hxx>
@@ -70,13 +70,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//-----------------------------------------------
-// namespaces
+
+
 
 using namespace com::sun::star;
 
 
-//-----------------------------------------------
+
 
 static OUString MODULEPROP_SHORTNAME             ("ooSetupFactoryShortName"                 );
 static OUString MODULEPROP_UINAME                ("ooSetupFactoryUIName"                    );
@@ -87,7 +87,7 @@ static OUString FOLDERNAME_UICONFIG              ("Configurations2"             
 static OUString MEDIATYPE_PROPNAME               ("MediaType"                               );
 static OUString MEDIATYPE_UICONFIG               ("application/vnd.sun.xml.ui.configuration");
 
-//-----------------------------------------------
+
 static const sal_uInt16 KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
@@ -602,17 +602,17 @@ static const sal_uInt16 KEYCODE_ARRAY[] =
 
 static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
-//-----------------------------------------------
-// seems to be needed to layout the list box, which shows all
-// assignable shortcuts
+
+
+
 static long AccCfgTabs[] =
 {
-    2,  // Number of Tabs
+    2,  
     0,
-    120 // Function
+    120 
 };
 
-//-----------------------------------------------
+
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
     public:
@@ -626,7 +626,7 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
         const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
-//-----------------------------------------------
+
 SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
                                                          sal_uInt16       nFlags,
                                                    const OUString&      sText )
@@ -634,7 +634,7 @@ SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry
 {
 }
 
-//-----------------------------------------------
+
 SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 {
 }
@@ -656,7 +656,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
 
 }
 
-//-----------------------------------------------
+
 void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
                                          const OUString& rText,
                                          const Image& rImage1,
@@ -666,7 +666,7 @@ void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
     SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
 }
 
-//-----------------------------------------------
+
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.
   */
@@ -676,7 +676,7 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
     sal_uInt16  nCode1 = aCode1.GetCode();
     sal_uInt16  nMod1  = aCode1.GetModifier();
 
-    // is it related to our list box ?
+    
     if (
         (nCode1 != KEY_DOWN    ) &&
         (nCode1 != KEY_UP      ) &&
@@ -708,11 +708,11 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
         }
     }
 
-    // no - handle it as normal dialog input
+    
     SvTabListBox::KeyInput(aKey);
 }
 
-//-----------------------------------------------
+
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
     : SfxTabPage              (pParent, CUI_RES(RID_SVXPAGE_KEYBOARD), aSet)
     , m_pMacroInfoItem        ()
@@ -747,7 +747,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
 
     aFilterAllStr = SfxResId( STR_SFX_FILTERNAME_ALL );
 
-// install handler functions
+
     aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
     aRemoveButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RemoveHdl ));
     aEntriesBox.SetSelectHdl ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
@@ -760,15 +760,15 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aOfficeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
     aModuleButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
 
-    // initialize Entriesbox
+    
     aEntriesBox.SetStyle(aEntriesBox.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aEntriesBox.SetSelectionMode(SINGLE_SELECTION);
     aEntriesBox.SetTabs(&AccCfgTabs[0], MAP_APPFONT);
-    aEntriesBox.Resize(); // OS: Hack for right selection
+    aEntriesBox.Resize(); 
     aEntriesBox.SetSpaceBetweenEntries(0);
     aEntriesBox.SetDragDropMode(0);
 
-    // detect max keyname width
+    
     long nMaxWidth  = 0;
     for ( sal_uInt16 i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
     {
@@ -776,22 +776,22 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
         if ( nTmp > nMaxWidth )
             nMaxWidth = nTmp;
     }
-    // recalc second tab
+    
     long nNewTab = PixelToLogic( Size( nMaxWidth, 0 ), MAP_APPFONT ).Width();
-    nNewTab = nNewTab + 5; // additional space
+    nNewTab = nNewTab + 5; 
     aEntriesBox.SetTab( 1, nNewTab );
 
-    // initialize GroupBox
+    
     pGroupLBox->SetFunctionListBox(pFunctionBox);
 
-    // initialize KeyBox
+    
     aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
-//-----------------------------------------------
+
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
-    // free memory - remove all dynamic user data
+    
     SvTreeListEntry* pEntry = aEntriesBox.First();
     while (pEntry)
     {
@@ -818,22 +818,22 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     delete pFunctionBox;
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::InitAccCfg()
 {
-    // already initialized ?
+    
     if (m_xContext.is())
-        return; // yes -> do nothing
+        return; 
 
     try
     {
-        // no - initialize this instance
+        
         m_xContext = ::comphelper::getProcessComponentContext();
 
         m_xUICmdDescription = css::frame::theUICommandDescription::get(m_xContext);
 
-        // get the current active frame, which should be our "parent"
-        // for this session
+        
+        
         m_xFrame = GetFrame();
         if ( !m_xFrame.is() )
         {
@@ -841,7 +841,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
             m_xFrame = xDesktop->getActiveFrame();
         }
 
-        // identify module
+        
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
                  css::frame::ModuleManager::create(m_xContext);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
@@ -849,10 +849,10 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, OUString());
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , OUString());
 
-        // get global accelerator configuration
+        
         m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(m_xContext);
 
-        // get module accelerator configuration
+        
 
         css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier( css::ui::theModuleUIConfigurationManagerSupplier::get(m_xContext) );
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
@@ -864,7 +864,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         { m_xContext.clear(); }
 }
 
-//-----------------------------------------------
+
 /** Initialize text columns with own class to enable custom painting
     This is needed as we have to paint disabled entries by ourself. No support for that in the
     original SvTabListBox!
@@ -880,7 +880,7 @@ void SfxAcceleratorConfigPage::CreateCustomItems(      SvTreeListEntry* pEntry,
     pEntry->ReplaceItem(pStringItem, 2);
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
 {
     if (!xAccMgr.is())
@@ -901,9 +901,9 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         m_bStylesInfoInitialized = sal_True;
     }
 
-    // Insert all editable accelerators into list box. It is possible
-    // that some accelerators are not mapped on the current system/keyboard
-    // but we don't want to lose these mappings.
+    
+    
+    
     sal_uInt16 c1       = KEYCODE_ARRAY_SIZE;
     sal_uInt16 i1       = 0;
     sal_uInt16 nListPos = 0;
@@ -918,7 +918,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         pLBEntry->SetUserData(pEntry);
     }
 
-    // Assign all commands to its shortcuts - reading the accelerator config.
+    
     css::uno::Sequence< css::awt::KeyEvent > lKeys = xAccMgr->getAllKeyEvents();
     sal_Int32                                c2    = lKeys.getLength();
     sal_Int32                                i2    = 0;
@@ -945,7 +945,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         CreateCustomItems(pLBEntry, aEntriesBox.GetEntryText(pLBEntry, 0), sLabel);
     }
 
-    // Map the VCL hardcoded key codes and mark them as not changeable
+    
     sal_uLong c3 = Application::GetReservedKeyCodeCount();
     sal_uLong i3 = 0;
     for (i3=0; i3<c3; ++i3)
@@ -956,7 +956,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         if (nPos == LISTBOX_ENTRY_NOTFOUND)
             continue;
 
-        // Hardcoded function mapped so no ID possible and mark entry as not changeable
+        
         SvTreeListEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
@@ -965,15 +965,15 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     }
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
 {
     if (!xAccMgr.is())
         return;
 
-    // Go through the list from the bottom to the top ...
-    // because logical accelerator must be preferred instead of
-    // physical ones!
+    
+    
+    
     SvTreeListEntry* pEntry = aEntriesBox.First();
     while (pEntry)
     {
@@ -1003,28 +1003,28 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     }
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::ResetConfig()
 {
     aEntriesBox.Clear();
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
 {
-    // ask for filename, where we should load the new config data from
+    
     StartFileDialog( 0, aLoadAccelConfigStr );
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save)
 {
     StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 {
     css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
@@ -1041,7 +1041,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
     sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
@@ -1059,14 +1059,14 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
-    // get selected entry
+    
     sal_uInt16    nPos   = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
 
-    // remove function name from selected entry
+    
     sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( OUString(), nPos, nCol );
     pEntry->m_sCommand = OUString();
@@ -1075,10 +1075,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 {
-    // disable help
+    
     Help::ShowBalloon( this, Point(), OUString() );
     if ( pListBox == &aEntriesBox )
     {
@@ -1107,7 +1107,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         aRemoveButton.Enable( false );
         aChangeButton.Enable( false );
 
-        // #i36994 First selected can return zero!
+        
         SvTreeListEntry*    pLBEntry = aEntriesBox.FirstSelected();
         if ( pLBEntry != 0 )
         {
@@ -1122,7 +1122,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
             }
 
-            // update key box
+            
             aKeyBox.Clear();
             SvTreeListEntry* pIt = aEntriesBox.First();
             while ( pIt )
@@ -1141,7 +1141,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     }
     else
     {
-        // goto selected "key" entry of the key box
+        
         SvTreeListEntry* pE2 = 0;
         TAccInfo*    pU2 = 0;
         sal_uInt16       nP2 = LISTBOX_ENTRY_NOTFOUND;
@@ -1164,7 +1164,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
@@ -1174,7 +1174,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     else if (aModuleButton.IsChecked())
         m_xAct = m_xModule;
 
-    // nothing changed? => do nothing!
+    
     if ( m_xAct.is() && ( xOld == m_xAct ) )
         return 0;
 
@@ -1186,7 +1186,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 
     pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName, true);
 
-    // pb: #133213# do not select NULL entries
+    
     SvTreeListEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
     if ( pEntry )
         aEntriesBox.Select( pEntry );
@@ -1198,7 +1198,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     return 1L;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 {
     assert(m_pFileDlg);
@@ -1214,22 +1214,22 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 
     css::uno::Reference< css::frame::XModel >                xDoc        ;
     css::uno::Reference< css::ui::XUIConfigurationManager >  xCfgMgr     ;
-    css::uno::Reference< css::embed::XStorage >              xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
+    css::uno::Reference< css::embed::XStorage >              xRootStorage; 
 
     try
     {
-        // first check if URL points to a document already loaded
+        
         xDoc = SearchForAlreadyLoadedDoc(sCfgName);
         if (xDoc.is())
         {
-            // Get ui config manager. There should always be one at the model.
+            
             css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
             xCfgMgr = xCfgSupplier->getUIConfigurationManager();
         }
         else
         {
-            // URL doesn't point to a loaded document, try to access it as a single storage
-            // dont forget to release the storage afterwards!
+            
+            
             css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( m_xContext ) );
             css::uno::Sequence< css::uno::Any >                     lArgs(2);
             lArgs[0] <<= sCfgName;
@@ -1247,7 +1247,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 
         if (xCfgMgr.is())
         {
-            // open the configuration and update our UI
+            
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
             aEntriesBox.SetUpdateMode(sal_False);
@@ -1259,8 +1259,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 
         }
 
-        // dont forget to close the new opened storage!
-        // We are the owner of it.
+        
+        
         if (xRootStorage.is())
         {
             css::uno::Reference< css::lang::XComponent > xComponent;
@@ -1282,7 +1282,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 {
     assert(m_pFileDlg);
@@ -1302,17 +1302,17 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 
     try
     {
-        // first check if URL points to a document already loaded
+        
         xDoc = SearchForAlreadyLoadedDoc(sCfgName);
         if (xDoc.is())
         {
-            // get config manager, force creation if there was none before
+            
             css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
             xCfgMgr = xCfgSupplier->getUIConfigurationManager();
         }
         else
         {
-            // URL doesn't point to a loaded document, try to access it as a single storage
+            
             css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( m_xContext ) );
             css::uno::Sequence< css::uno::Any >                     lArgs(2);
             lArgs[0] <<= sCfgName;
@@ -1329,7 +1329,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
                                 xUIConfig,
                                 css::uno::UNO_QUERY_THROW);
 
-            // set the correct media type if the storage was new created
+            
             OUString sMediaType;
             xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
             if (sMediaType.isEmpty())
@@ -1342,14 +1342,14 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 
         if (xCfgMgr.is())
         {
-            // get the target configuration access and update with all shortcuts
-            // which are set currently at the UI !
-            // Dont copy the m_xAct content to it ... because m_xAct will be updated
-            // from the UI on pressing the button "OK" only. And inbetween it's not up to date !
+            
+            
+            
+            
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTargetAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
             Apply(xTargetAccMgr);
 
-            // commit (order is important!)
+            
             css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit1(xTargetAccMgr, css::uno::UNO_QUERY_THROW);
             css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit2(xCfgMgr      , css::uno::UNO_QUERY_THROW);
             xCommit1->store();
@@ -1357,7 +1357,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 
             if (xRootStorage.is())
             {
-                // Commit root storage
+                
                 css::uno::Reference< css::embed::XTransactedObject > xCommit3(xRootStorage, css::uno::UNO_QUERY_THROW);
                 xCommit3->commit();
             }
@@ -1383,7 +1383,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& rTitle )
 {
     bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
@@ -1403,7 +1403,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
     m_pFileDlg->StartExecuteModal( aDlgClosedLink );
 }
 
-//-----------------------------------------------
+
 sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     Apply(m_xAct);
@@ -1419,16 +1419,16 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     return sal_True;
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 {
-    // open accelerator configs
-    // Note: It initialize some other members too, which are needed here ...
-    // e.g. m_sModuleUIName!
+    
+    
+    
     InitAccCfg();
 
-    // change te description of the radio button, which switch to the module
-    // dependend accelerator configuration
+    
+    
     OUString sButtonText = aModuleButton.GetText();
     sButtonText = sButtonText.replaceFirst("$(MODULE)", m_sModuleUIName);
     aModuleButton.SetText(sButtonText);
@@ -1461,7 +1461,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-//-----------------------------------------------
+
 sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 {
     sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
@@ -1484,12 +1484,12 @@ sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-//-----------------------------------------------
+
 OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 {
     try
     {
-        // check global command configuration first
+        
         css::uno::Reference< css::container::XNameAccess > xModuleConf;
         m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
         if (xModuleConf.is())
@@ -1505,7 +1505,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     catch(const css::uno::Exception&)
         {}
 
-    // may be it's a style URL .. they must be handled special
+    
     SfxStyleInfo_Impl aStyle;
     aStyle.sCommand = sCommand;
     if (m_aStylesInfo.parseStyleCommand(aStyle))
@@ -1522,7 +1522,7 @@ SfxTabPage* SfxAcceleratorConfigPage::Create( Window* pParent, const SfxItemSet&
     return new SfxAcceleratorConfigPage( pParent, rAttrSet );
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
 {
     return css::uno::Reference< css::frame::XModel >();

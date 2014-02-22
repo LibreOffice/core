@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sfxhelp.hxx>
@@ -88,24 +88,24 @@ NoHelpErrorBox::NoHelpErrorBox( Window* _pParent ) :
 
     ErrorBox( _pParent, WB_OK, SfxResId( RID_STR_HLPFILENOTEXIST ).toString() )
 {
-    // Error message: "No help available"
+    
 }
 
 void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 {
-    // do nothing, because no help available
+    
 }
 
 static bool impl_hasHelpInstalled( const OUString &rLang );
 
-/// Return the locale we prefer for displaying help
+
 static OUString HelpLocaleString()
 {
     static OUString aLocaleStr;
     if (aLocaleStr.isEmpty())
     {
         const OUString aEnglish( "en"  );
-        // detect installed locale
+        
         aLocaleStr = utl::ConfigManager::getLocale();
         bool bOk = !aLocaleStr.isEmpty();
         if ( !bOk )
@@ -136,8 +136,8 @@ static OUString HelpLocaleString()
                 }
             }
         }
-        // if not OK, and not even English installed, we use online help, and
-        // have to preserve the full locale name
+        
+        
         if ( !bOk && impl_hasHelpInstalled( aEnglish ) )
             aLocaleStr = aEnglish;
     }
@@ -150,15 +150,15 @@ void AppendConfigToken( OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUSt
     if ( aLocaleStr.isEmpty() )
         aLocaleStr = HelpLocaleString();
 
-    // query part exists?
+    
     if ( bQuestionMark )
-        // no, so start with '?'
+        
         rURL.append('?');
     else
-        // yes, so only append with '&'
+        
         rURL.append('&');
 
-    // set parameters
+    
     rURL.append("Language=");
     rURL.append(aLocaleStr);
     rURL.append("&System=");
@@ -206,14 +206,14 @@ public:
 
 OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
 {
-    // create help url
+    
     OUStringBuffer aHelpURL( SfxHelp::CreateHelpURL( aCommandURL, rModule ) );
-    // added 'active' parameter
+    
     sal_Int32 nIndex = aHelpURL.lastIndexOf( '#' );
     if ( nIndex < 0 )
         nIndex = aHelpURL.getLength();
     aHelpURL.insert( nIndex, "&Active=true" );
-    // load help string
+    
     return SfxContentHelper::GetActiveHelpString( aHelpURL.makeStringAndClear() );
 }
 
@@ -221,8 +221,8 @@ SfxHelp::SfxHelp() :
     bIsDebug( sal_False ),
     pImp    ( NULL )
 {
-    // read the environment variable "HELP_DEBUG"
-    // if it's set, you will see debug output on active help
+    
+    
     {
         OUString sHelpDebug;
         OUString sEnvVarName( "HELP_DEBUG"  );
@@ -323,7 +323,7 @@ OUString SfxHelp::GetHelpModuleName_Impl()
     OUString sDefaultModule = getDefaultModule_Impl();
     if ( !aFactoryShortName.isEmpty() )
     {
-        // Map some module identifiers to their "real" help module string.
+        
         if ( aFactoryShortName == "chart2" )
             aFactoryShortName = "schart" ;
         else if ( aFactoryShortName == "BasicIDE" )
@@ -353,8 +353,8 @@ OUString SfxHelp::GetHelpModuleName_Impl()
 
 OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName )
 {
-    // build up the help URL
-    OUStringBuffer aHelpURL("vnd.sun.star.help://");
+    
+    OUStringBuffer aHelpURL("vnd.sun.star.help:
     sal_Bool bHasAnchor = sal_False;
     OUString aAnchor;
 
@@ -395,14 +395,14 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 {
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
-    // otherwise - create new help task
+    
     Reference< XFrame2 > xHelpTask(
         xDesktop->findFrame(  "OFFICE_HELP_TASK", FrameSearchFlag::TASKS | FrameSearchFlag::CREATE),
         UNO_QUERY);
     if (!xHelpTask.is())
         return 0;
 
-    // create all internal windows and sub frames ...
+    
     Reference< ::com::sun::star::awt::XWindow > xParentWindow = xHelpTask->getContainerWindow();
     Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
     SfxHelpWindow_Impl*                         pHelpWindow   = new SfxHelpWindow_Impl( xHelpTask, pParentWindow, WB_DOCKBORDER );
@@ -411,7 +411,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     Reference< XFrame > xHelpContent;
     if (xHelpTask->setComponent( xHelpWindow, Reference< XController >() ))
     {
-        // Customize UI ...
+        
         xHelpTask->setName("OFFICE_HELP_TASK");
 
         Reference< XPropertySet > xProps(xHelpTask, UNO_QUERY);
@@ -424,8 +424,8 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         xParentWindow->setVisible(sal_True);
         xHelpWindow->setVisible(sal_True);
 
-        // This sub frame is created internally (if we called new SfxHelpWindow_Impl() ...)
-        // It should exist :-)
+        
+        
         xHelpContent = xHelpTask->findFrame(OUString("OFFICE_HELP"), FrameSearchFlag::CHILDREN);
     }
 
@@ -451,7 +451,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
 
     if (pWindow && sHelpText.isEmpty())
     {
-        // no help text found -> try with parent help id.
+        
         Window* pParent = pWindow->GetParent();
         while ( pParent )
         {
@@ -467,7 +467,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
             aNewHelpId = OString();
     }
 
-    // add some debug information?
+    
     if ( bIsDebug )
     {
         sHelpText += "\n-------------\n";
@@ -484,10 +484,10 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
     return sHelpText;
 }
 
-/// Check for built-in help
+
 static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
 {
-    OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
+    OUStringBuffer aHelpRootURL("vnd.sun.star.help:
     AppendConfigToken(aHelpRootURL, sal_True, rLang);
     std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
@@ -504,14 +504,14 @@ bool SfxHelp::Start( const OUString& rURL, const Window* pWindow )
     return Start_Impl( rURL, pWindow, OUString() );
 }
 
-/// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
+
 static bool impl_showOnlineHelp( const OUString& rURL )
 {
-    OUString aInternal( "vnd.sun.star.help://"  );
+    OUString aInternal( "vnd.sun.star.help:
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink( "http://help.libreoffice.org/"  );
+    OUString aHelpLink( "http:
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/");
     try
@@ -530,7 +530,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
 sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUString& rKeyword)
 {
-    OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
+    OUStringBuffer aHelpRootURL("vnd.sun.star.help:
     AppendConfigToken(aHelpRootURL, sal_True);
     SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
@@ -552,18 +552,18 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     switch ( nProtocol )
     {
         case INET_PROT_VND_SUN_STAR_HELP:
-            // already a vnd.sun.star.help URL -> nothing to do
+            
             aHelpURL = rURL;
             break;
         default:
         {
             OUString aHelpModuleName( GetHelpModuleName_Impl() );
-            // no URL, just a HelpID (maybe empty in case of keyword search)
+            
             aHelpURL = CreateHelpURL_Impl( rURL, aHelpModuleName );
 
             if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {
-                // no help found -> try with parent help id.
+                
                 Window* pParent = pWindow->GetParent();
                 bool bTriedTabPage = false;
                 while ( pParent )
@@ -579,14 +579,14 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
                         pParent = pParent->GetParent();
                         if (!pParent)
                         {
-                            // create help url of start page ( helpid == 0 -> start page)
+                            
                             aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
                         }
                         else if (pParent->IsDialog() && !bTriedTabPage)
                         {
-                            //During help fallback, before we ask a dialog for its help
-                            //see if it has a TabControl and ask the active tab of
-                            //that for help
+                            
+                            
+                            
                             bTriedTabPage = true;
                             Dialog *pDialog = ((Dialog*)pParent);
                             TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : NULL;
@@ -616,9 +616,9 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
 
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
-    // check if help window is still open
-    // If not, create a new one and return access directly to the internal sub frame showing the help content
-    // search must be done here; search one desktop level could return an arbitraty frame
+    
+    
+    
     Reference< XFrame2 > xHelp(
         xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
         UNO_QUERY);

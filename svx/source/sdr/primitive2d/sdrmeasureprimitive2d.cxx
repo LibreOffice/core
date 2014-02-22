@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
@@ -29,11 +29,11 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -96,8 +96,8 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix aObjectMatrix(
                 basegfx::tools::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
 
-            // preapare text, but do not add yet; it needs to be aligned to
-            // the line geometry
+            
+            
             if(!rTextAttribute.isDefault())
             {
                 basegfx::B2DHomMatrix aTextMatrix;
@@ -122,7 +122,7 @@ namespace drawinglayer
                     }
                 }
 
-                // create primitive and get text range
+                
                 pBlockText = new SdrBlockTextPrimitive2D(
                     &rTextAttribute.getSdrText(),
                     rTextAttribute.getOutlinerParaObject(),
@@ -138,7 +138,7 @@ namespace drawinglayer
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
 
-            // prepare line attribute and result
+            
             {
                 const attribute::SdrLineAttribute rLineAttribute(getSdrLSTAttribute().getLine());
                 bool bArrowsOutside(false);
@@ -232,7 +232,7 @@ namespace drawinglayer
                     bArrowsOutside = true;
                 }
 
-                // switch text above/below?
+                
                 if(getBelow() || (bAutoUpsideDown && !getTextRotation()))
                 {
                     if(MEASURETEXTPOSITION_NEGATIVE == eVertical)
@@ -249,7 +249,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint aMainLeft(0.0, fMainLineOffset);
                 const basegfx::B2DPoint aMainRight(fDistance, fMainLineOffset);
 
-                // main line
+                
                 if(bArrowsOutside)
                 {
                     double fLenLeft(fArrowsOutsideLen);
@@ -295,27 +295,27 @@ namespace drawinglayer
                     }
                 }
 
-                // left/right help line value preparation
+                
                 const double fTopEdge(getBelow() ? getUpper() + getDistance() : -getUpper() - getDistance());
                 const double fBottomLeft(getBelow() ? getLower() - getLeftDelta() : getLeftDelta() - getLower());
                 const double fBottomRight(getBelow() ? getLower() - getRightDelta() : getRightDelta() - getLower());
 
-                // left help line
+                
                 const basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
                 const basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
 
-                // right help line
+                
                 const basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
                 const basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
 
-                // text horizontal position
+                
                 if(MEASURETEXTPOSITION_NEGATIVE == eHorizontal)
                 {
-                    // left
+                    
                     const double fSmall(fArrowsOutsideLen * 0.18);
                     fTextX = aMainLeft.getX() - (fStartArrowH + aTextRange.getWidth() + fSmall + fHalfLineWidth);
 
@@ -331,7 +331,7 @@ namespace drawinglayer
                 }
                 else if(MEASURETEXTPOSITION_POSITIVE == eHorizontal)
                 {
-                    // right
+                    
                     const double fSmall(fArrowsOutsideLen * 0.18);
                     fTextX = aMainRight.getX() + (fEndArrowH + fSmall + fHalfLineWidth);
 
@@ -345,9 +345,9 @@ namespace drawinglayer
                         fTextX += rTextAttribute.getTextLeftDistance();
                     }
                 }
-                else // MEASURETEXTPOSITION_CENTERED
+                else 
                 {
-                    // centered
+                    
                     fTextX = aMainLeft.getX() + ((fDistance - aTextRange.getWidth()) * 0.5);
 
                     if(!rTextAttribute.isDefault())
@@ -356,10 +356,10 @@ namespace drawinglayer
                     }
                 }
 
-                // text vertical position
+                
                 if(MEASURETEXTPOSITION_NEGATIVE == eVertical)
                 {
-                    // top
+                    
                     const double fSmall(fArrowsOutsideLen * 0.10);
                     fTextY = aMainLeft.getY() - (aTextRange.getHeight() + fSmall + fHalfLineWidth);
 
@@ -370,7 +370,7 @@ namespace drawinglayer
                 }
                 else if(MEASURETEXTPOSITION_POSITIVE == eVertical)
                 {
-                    // bottom
+                    
                     const double fSmall(fArrowsOutsideLen * 0.10);
                     fTextY = aMainLeft.getY() + (fSmall + fHalfLineWidth);
 
@@ -379,9 +379,9 @@ namespace drawinglayer
                         fTextY += rTextAttribute.getTextUpperDistance();
                     }
                 }
-                else // MEASURETEXTPOSITION_CENTERED
+                else 
                 {
-                    // centered
+                    
                     fTextY = aMainLeft.getY() - (aTextRange.getHeight() * 0.5);
 
                     if(!rTextAttribute.isDefault())
@@ -393,7 +393,7 @@ namespace drawinglayer
 
             if(getSdrLSTAttribute().getLine().isDefault())
             {
-                // embed line geometry to invisible (100% transparent) line group for HitTest
+                
                 const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(aRetval));
 
                 aRetval = Primitive2DSequence(&xHiddenLines, 1);
@@ -401,31 +401,31 @@ namespace drawinglayer
 
             if(pBlockText)
             {
-                // create transformation to text primitive end position
+                
                 basegfx::B2DHomMatrix aChange;
 
-                // handle auto text rotation
+                
                 if(bAutoUpsideDown)
                 {
                     aChange.rotate(F_PI);
                 }
 
-                // move from aTextRange.TopLeft to fTextX, fTextY
+                
                 aChange.translate(fTextX - aTextRange.getMinX(), fTextY - aTextRange.getMinY());
 
-                // apply object matrix
+                
                 aChange *= aObjectMatrix;
 
-                // apply to existing text primitive
+                
                 SdrTextPrimitive2D* pNewBlockText = pBlockText->createTransformedClone(aChange);
                 OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
                 delete pBlockText;
 
-                // add to local primitives
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(pNewBlockText));
             }
 
-            // add shadow
+            
             if(!getSdrLSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
@@ -491,10 +491,10 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrMeasurePrimitive2D, PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

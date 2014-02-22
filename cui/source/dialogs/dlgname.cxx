@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -53,10 +53,10 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// #i68101#
-// Dialog for editing Object Name
-// plus uniqueness-callback-linkHandler
+
+
+
+
 
 SvxObjectNameDialog::SvxObjectNameDialog(
     Window* pWindow,
@@ -65,10 +65,10 @@ SvxObjectNameDialog::SvxObjectNameDialog(
 {
     get(pBtnOK, "ok");
     get(pEdtName, "object_name_entry");
-    // set name
+    
     pEdtName->SetText(rName);
 
-    // activate name
+    
     pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
     ModifyHdl(&pEdtName);
     pEdtName->SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
@@ -84,9 +84,9 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// #i68101#
-// Dialog for editing Object Title and Description
+
+
+
 
 SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     Window* pWindow,
@@ -96,17 +96,17 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 {
     get(pEdtTitle, "object_title_entry");
     get(pEdtDescription, "desc_entry");
-    //lock height to initial height
+    
     pEdtDescription->set_height_request(pEdtDescription->get_preferred_size().Height());
-    // set title & desc
+    
     pEdtTitle->SetText(rTitle);
     pEdtDescription->SetText(rDescription);
 
-    // activate title
+    
     pEdtTitle->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /*************************************************************************
 |*

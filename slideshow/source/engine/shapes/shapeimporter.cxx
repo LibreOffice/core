@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
@@ -71,7 +71,7 @@ bool importShapeGraphic(
     if( !getPropertyValue( aURL, xPropSet, "GraphicURL") ||
         aURL.isEmpty() )
     {
-        // no or empty property - cannot import shape graphic
+        
         return false;
     }
 
@@ -81,7 +81,7 @@ bool importShapeGraphic(
 
     if(nIndex != -1)
     {
-        // skip past the end of the "vnd..." prefix
+        
         nIndex += aVndUrl.getLength();
 
         if(nIndex >= aURL.getLength())
@@ -91,16 +91,16 @@ bool importShapeGraphic(
             return false;
         }
 
-        // unique ID string found in URL, extract
-        // to separate string
+        
+        
         OUString const aUniqueId(
             aURL.copy( nIndex, aURL.getLength() - nIndex ) );
 
-        // TODO(T2): Creating a GraphicObject is not
-        // thread safe (internally calls VCL, and has
-        // unguarded internal singleton mpGlobalMgr)
+        
+        
+        
 
-        // fetch already loaded graphic from graphic manager.
+        
         OString const aOldString(OUStringToOString(aUniqueId,
             RTL_TEXTENCODING_UTF8));
         o_rGraphic = GraphicObject( aOldString );
@@ -109,14 +109,14 @@ bool importShapeGraphic(
         if( GRAPHIC_DEFAULT == o_rGraphic.GetType()
             || GRAPHIC_NONE == o_rGraphic.GetType() )
         {
-            // even the GrfMgr does not seem to know this graphic
+            
             return false;
         }
     }
     else
     {
-        // no special string found, graphic must be
-        // external. Load via GraphicIm porter
+        
+        
         INetURLObject aTmp( aURL );
         boost::scoped_ptr<SvStream> pGraphicStream(
             utl::UcbStreamHelper::CreateStream(
@@ -154,7 +154,7 @@ public:
                   uno::Reference<beans::XPropertySet> const& xPropSet,
                   double                                     nPrio );
 
-    // Shape:
+    
     virtual uno::Reference<drawing::XShape> getXShape() const;
     virtual void addViewLayer( ViewLayerSharedPtr const& pNewLayer,
                                bool                      bRedrawLayer );
@@ -187,7 +187,7 @@ ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupSha
     mxShape(xShape),
     mnPrio(nPrio)
 {
-    // read bound rect
+    
     uno::Any const aTmpRect_( xPropSet->getPropertyValue( "BoundRect" ));
     awt::Rectangle const aTmpRect( aTmpRect_.get<awt::Rectangle>() );
     basegfx::B2DRectangle const groupPosSize( pGroupShape->getBounds() );
@@ -265,7 +265,7 @@ bool ShapeOfGroup::isBackgroundDetached() const
     return false;
 }
 
-} // anon namespace
+} 
 
 ShapeSharedPtr ShapeImporter::createShape(
     uno::Reference<drawing::XShape> const& xCurrShape,
@@ -274,14 +274,14 @@ ShapeSharedPtr ShapeImporter::createShape(
 {
     if( shapeType == "com.sun.star.drawing.MediaShape" || shapeType == "com.sun.star.presentation.MediaShape" )
     {
-        // Media shape (video etc.). This is a special object
+        
         return createMediaShape(xCurrShape,
                                 mnAscendingPrio,
                                 mrContext);
     }
     else if( shapeType == "com.sun.star.drawing.PluginShape" )
     {
-        // PropertyValues to copy from XShape to plugin
+        
         static const char* aPropertyValues[] =
             {
                 "PluginURL",
@@ -289,7 +289,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                 "PluginCommands"
             };
 
-        // (Netscape)Plugin shape. This is a special object
+        
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
                                   OUString( "com.sun.star.comp.sfx2.PluginObject" ),
@@ -299,7 +299,7 @@ ShapeSharedPtr ShapeImporter::createShape(
     }
     else if( shapeType == "com.sun.star.drawing.AppletShape" )
     {
-        // PropertyValues to copy from XShape to applet
+        
         static const char* aPropertyValues[] =
             {
                 "AppletCodeBase",
@@ -309,7 +309,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                 "AppletIsScript"
             };
 
-        // (Java)Applet shape. This is a special object
+        
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
                                   OUString( "com.sun.star.comp.sfx2.AppletObject" ),
@@ -319,8 +319,8 @@ ShapeSharedPtr ShapeImporter::createShape(
     }
     else if( shapeType == "com.sun.star.drawing.OLE2Shape" || shapeType == "com.sun.star.presentation.OLE2Shape" )
     {
-        // #i46224# Mark OLE shapes as foreign content - scan them for
-        // unsupported actions, and fallback to bitmap, if necessary
+        
+        
         return DrawShape::create( xCurrShape,
                                   mxPage,
                                   mnAscendingPrio,
@@ -331,22 +331,22 @@ ShapeSharedPtr ShapeImporter::createShape(
     {
         GraphicObject aGraphicObject;
 
-        // to get hold of GIF animations, inspect Graphic
-        // objects more thoroughly (the plain-jane shape
-        // metafile of course would only contain the first
-        // animation frame)
+        
+        
+        
+        
         if( !importShapeGraphic( aGraphicObject, xPropSet ) )
-            return ShapeSharedPtr(); // error loading graphic -
-                                     // no placeholders in
-                                     // slideshow
+            return ShapeSharedPtr(); 
+                                     
+                                     
 
         if( !aGraphicObject.IsAnimated() )
         {
-            // no animation - simply utilize plain draw shape import
+            
 
-            // import shape as bitmap - either it's a bitmap
-            // anyway, or it's a metafile, which currently the
-            // metafile renderer might not display correctly.
+            
+            
+            
             return DrawShape::create( xCurrShape,
                                       mxPage,
                                       mnAscendingPrio,
@@ -355,8 +355,8 @@ ShapeSharedPtr ShapeImporter::createShape(
         }
 
 
-        // now extract relevant shape attributes via API
-        // ---------------------------------------------
+        
+        
 
         drawing::ColorMode eColorMode( drawing::ColorMode_STANDARD );
         sal_Int16 nLuminance(0);
@@ -398,9 +398,9 @@ ShapeSharedPtr ShapeImporter::createShape(
                                  aGraphCrop.Bottom );
         }
 
-        // fetch readily transformed and color-modified
-        // graphic
-        // ---------------------------------------------
+        
+        
+        
 
         Graphic aGraphic(
             aGraphicObject.GetTransformedGraphic(
@@ -429,7 +429,7 @@ bool ShapeImporter::isSkip(
     OUString const& shapeType,
     uno::Reference< drawing::XLayer> const& xLayer )
 {
-    // skip empty presentation objects:
+    
     bool bEmpty = false;
     if( getPropertyValue( bEmpty,
                           xPropSet,
@@ -439,7 +439,7 @@ bool ShapeImporter::isSkip(
         return true;
     }
 
-    //skip shapes which corresponds to annotations
+    
     if(xLayer.is())
     {
         OUString layerName;
@@ -451,7 +451,7 @@ bool ShapeImporter::isSkip(
         {
             if( layerName == "DrawnInSlideshow" )
             {
-                //Transform shapes into PolyPolygons
+                
                 importPolygons(xPropSet);
 
                 return true;
@@ -459,8 +459,8 @@ bool ShapeImporter::isSkip(
         }
     }
 
-    // don't export presentation placeholders on masterpage
-    // they can be non empty when user edits the default texts
+    
+    
     if(mbConvertingMasterPage)
     {
         if( shapeType == "com.sun.star.presentation.TitleTextShape" || shapeType == "com.sun.star.presentation.OutlinerShape" )
@@ -510,7 +510,7 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     }
 }
 
-ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedException)
+ShapeSharedPtr ShapeImporter::importBackgroundShape() 
 {
     if( maShapesStack.empty() )
         throw ShapeLoadFailedException();
@@ -527,7 +527,7 @@ ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedE
     return pBgShape;
 }
 
-ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
+ShapeSharedPtr ShapeImporter::importShape() 
 {
     ShapeSharedPtr pRet;
     bool bIsGroupShape = false;
@@ -544,14 +544,14 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
                 xCurrShape, uno::UNO_QUERY );
             if( !xPropSet.is() )
             {
-                // we definitely need the properties of
-                // the shape here. This will also fail,
-                // if getByIndex did not return a valid
-                // shape
+                
+                
+                
+                
                 throw ShapeLoadFailedException();
             }
 
-            //Retrieve the layer for the current shape
+            
             uno::Reference< drawing::XLayer > xDrawnInSlideshow;
 
             uno::Reference< drawing::XLayerSupplier > xLayerSupplier(mxPagesSupplier, uno::UNO_QUERY);
@@ -566,12 +566,12 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
 
             OUString const shapeType( xCurrShape->getShapeType());
 
-            // is this shape presentation-invisible?
+            
             if( !isSkip(xPropSet, shapeType, xDrawnInSlideshow) )
             {
                 bIsGroupShape = shapeType == "com.sun.star.drawing.GroupShape";
 
-                if( rTop.mpGroupShape ) // in group particle mode?
+                if( rTop.mpGroupShape ) 
                 {
                     pRet.reset( new ShapeOfGroup(
                                     rTop.mpGroupShape /* container shape */,
@@ -587,12 +587,12 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
         }
         if( rTop.mnPos >= rTop.mnCount )
         {
-            // group or top-level shapes finished:
+            
             maShapesStack.pop();
         }
         if( bIsGroupShape && pRet )
         {
-            // push new group on the stack: group traversal
+            
             maShapesStack.push( XShapesEntry( pRet ) );
         }
     }
@@ -629,7 +629,7 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
     maShapesStack.push( XShapesEntry(xShapes) );
 }
 
-} // namespace internal
-} // namespace presentation
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

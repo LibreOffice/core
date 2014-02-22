@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -46,43 +46,43 @@ TokenStack::~TokenStack()
 
 
 
-//------------------------------------------------------------------------
 
-// !ACHTUNG!: nach Aussen hin beginnt die Nummerierung mit 1!
-// !ACHTUNG!: SC-Token werden mit einem Offset nScTokenOff abgelegt
-//              -> Unterscheidung von anderen Token
+
+
+
+
 
 
 TokenPool::TokenPool( void )
 {
     sal_uInt16  nLauf = nScTokenOff;
 
-    // Sammelstelle fuer Id-Folgen
+    
     nP_Id = 256;
     pP_Id = new sal_uInt16[ nP_Id ];
 
-    // Sammelstelle fuer Ids
+    
     nElement = 32;
     pElement = new sal_uInt16[ nElement ];
     pType = new E_TYPE[ nElement ];
     pSize = new sal_uInt16[ nElement ];
     nP_IdLast = 0;
 
-    // Sammelstelle fuer Strings
+    
     nP_Str = 4;
     ppP_Str = new OUString *[ nP_Str ];
     for( nLauf = 0 ; nLauf < nP_Str ; nLauf++ )
         ppP_Str[ nLauf ] = NULL;
 
-    // Sammelstelle fuer double
+    
     nP_Dbl = 8;
     pP_Dbl = new double[ nP_Dbl ];
 
-    // Sammelstelle fuer error codes
+    
     nP_Err = 8;
     pP_Err = new sal_uInt16[ nP_Err ];
 
-    // Sammelstellen fuer Referenzen
+    
     nP_RefTr = 32;
     ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
     for( nLauf = 0 ; nLauf < nP_RefTr ; nLauf++ )
@@ -584,7 +584,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
     for( ; nAnz > 0 ; nAnz--, pAkt++ )
     {
         if( *pAkt < nScTokenOff )
-        {// Rekursion oder nicht?
+        {
             if (*pAkt >= nElementAkt)
             {
                 DBG_ERRORFILE( "TokenPool::GetElementRek: *pAkt >= nElementAkt");
@@ -598,7 +598,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
                     bRet = GetElement( *pAkt );
             }
         }
-        else    // elementarer SC_Token
+        else    
             pScToken->AddOpCode( ( DefTokenId ) ( *pAkt - nScTokenOff ) );
     }
 
@@ -618,12 +618,12 @@ void TokenPool::operator >>( TokenId& rId )
         if (!GrowElement())
             return;
 
-    pElement[ nElementAkt ] = nP_IdLast;    // Start der Token-Folge
-    pType[ nElementAkt ] = T_Id;            // Typinfo eintragen
+    pElement[ nElementAkt ] = nP_IdLast;    
+    pType[ nElementAkt ] = T_Id;            
     pSize[ nElementAkt ] = nP_IdAkt - nP_IdLast;
-        // von nP_IdLast bis nP_IdAkt-1 geschrieben -> Laenge der Folge
+        
 
-    nElementAkt++;          // Startwerte fuer naechste Folge
+    nElementAkt++;          
     nP_IdLast = nP_IdAkt;
 }
 
@@ -638,17 +638,17 @@ const TokenId TokenPool::Store( const double& rDouble )
         if (!GrowDouble())
             return (const TokenId) nElementAkt+1;
 
-    pElement[ nElementAkt ] = nP_DblAkt;    // Index in Double-Array
-    pType[ nElementAkt ] = T_D;             // Typinfo Double eintragen
+    pElement[ nElementAkt ] = nP_DblAkt;    
+    pType[ nElementAkt ] = T_D;             
 
     pP_Dbl[ nP_DblAkt ] = rDouble;
 
-    pSize[ nElementAkt ] = 1;           // eigentlich Banane
+    pSize[ nElementAkt ] = 1;           
 
     nElementAkt++;
     nP_DblAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; 
 }
 
 
@@ -660,8 +660,8 @@ const TokenId TokenPool::Store( const sal_uInt16 nIndex )
 
 const TokenId TokenPool::Store( const OUString& rString )
 {
-    // weitgehend nach Store( const sal_Char* ) kopiert, zur Vermeidung
-    //  eines temporaeren Strings in "
+    
+    
     if( nElementAkt >= nElement )
         if (!GrowElement())
             return (const TokenId) nElementAkt+1;
@@ -672,15 +672,15 @@ const TokenId TokenPool::Store( const OUString& rString )
             return (const TokenId) nElementAkt+1;
 
 
-    pElement[ nElementAkt ] = nP_StrAkt;    // Index in String-Array
-    pType[ nElementAkt ] = T_Str;           // Typinfo String eintragen
+    pElement[ nElementAkt ] = nP_StrAkt;    
+    pType[ nElementAkt ] = T_Str;           
 
-    // String anlegen
+    
     if( !ppP_Str[ nP_StrAkt ] )
-        //...aber nur, wenn noch nicht vorhanden
+        
         ppP_Str[ nP_StrAkt ] = new (::std::nothrow) OUString( rString );
     else
-        //...ansonsten nur kopieren
+        
         *ppP_Str[ nP_StrAkt ] = rString;
 
     if (ppP_Str[ nP_StrAkt ])
@@ -692,7 +692,7 @@ const TokenId TokenPool::Store( const OUString& rString )
     nElementAkt++;
     nP_StrAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; 
 }
 
 
@@ -707,7 +707,7 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
-    pType[ nElementAkt ] = T_RefC;          // Typinfo Cell-Reff eintragen
+    pType[ nElementAkt ] = T_RefC;          
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
         ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr );
@@ -717,7 +717,7 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
     nElementAkt++;
     nP_RefTrAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; 
 }
 
 
@@ -732,7 +732,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
-    pType[ nElementAkt ] = T_RefA;          // Typinfo Area-Reff eintragen
+    pType[ nElementAkt ] = T_RefA;          
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
         ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref1 );
@@ -748,7 +748,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 
     nElementAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; 
 }
 
 
@@ -763,7 +763,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_ExtAkt;
-    pType[ nElementAkt ] = T_Ext;           // Typinfo String eintragen
+    pType[ nElementAkt ] = T_Ext;           
 
     if( ppP_Ext[ nP_ExtAkt ] )
     {
@@ -776,7 +776,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
     nElementAkt++;
     nP_ExtAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; 
 }
 
 
@@ -923,19 +923,19 @@ bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 {
     sal_uInt16 nId = (sal_uInt16) rId;
     if( nId && nId <= nElementAkt )
-    {// existent?
+    {
         nId--;
         if( T_Id == pType[ nId ] )
-        {// Tokenfolge?
+        {
             if( pSize[ nId ] == 1 )
-            {// GENAU 1 Token
+            {
                 sal_uInt16 nPid = pElement[ nId ];
                 if (nPid < nP_Id)
                 {
                     sal_uInt16 nSecId = pP_Id[ nPid ];
                     if( nSecId >= nScTokenOff )
-                    {// Default-Token?
-                        return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;  // Gesuchter?
+                    {
+                        return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;  
                     }
                 }
             }

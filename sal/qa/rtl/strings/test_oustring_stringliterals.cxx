@@ -4,10 +4,10 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
-// activate the extra needed ctor
+
 #define RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;
 extern bool rtl_string_unittest_invalid_conversion;
@@ -43,8 +43,8 @@ CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST_SUITE_END();
 };
 
-// reset the flag, evaluate the expression and return
-// whether the string literal ctor was used (i.e. whether the conversion was valid)
+
+
 #define VALID_CONVERSION( expression ) \
     ( \
     rtl_string_unittest_invalid_conversion = false, \
@@ -69,19 +69,19 @@ void test::oustring::StringLiterals::checkCtors()
     CPPUNIT_ASSERT( !VALID_CONVERSION( bad4[ 0 ] ));
     testcall( good1 );
 
-// This one is technically broken, since the first element is 6 characters test\0\0,
-// but there does not appear a way to detect this by compile time (runtime will assert()).
-// RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
+
+
+
     const char bad5[][ 6 ] = { "test", "test2" };
-//    CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 0 ] ));
+
     CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 1 ] ));
 
-// Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
+
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "" ), rtl::OUString( "" ));
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "ab" ), rtl::OUString( "ab" ));
 #if 0
-// Also check that embedded \0 is included.
-// In fact, allowing this is probably just trouble, so this now asserts.
+
+
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "\0" ), rtl::OUString( "\0" ));
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "a\0b" ), rtl::OUString( "a\0b" ));
 #endif
@@ -94,8 +94,8 @@ void test::oustring::StringLiterals::testcall( const char str[] )
 
 void test::oustring::StringLiterals::checkUsage()
 {
-// simply check that all string literal based calls work as expected
-// also check that they really use string literal overload and do not convert to OUString
+
+
     rtl::OUString foo( "foo" );
     rtl::OUString FoO( "FoO" );
     rtl::OUString foobarfoo( "foobarfoo" );
@@ -105,7 +105,7 @@ void test::oustring::StringLiterals::checkUsage()
     rtl::OUString bar( "bar" );
     rtl::OUString test( "test" );
 
-    rtl_string_unittest_const_literal = false; // start checking for OUString conversions
+    rtl_string_unittest_const_literal = false; 
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OUString() = "foo" );
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( foobarfoo.match( "bar", 3 ));
@@ -127,24 +127,24 @@ void test::oustring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", test ) == "testbartest" );
     CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", "test" ) == "testbartest" );
     CPPUNIT_ASSERT( foo.reverseCompareTo( "foo" ) == 0 );
-    // if this is not true, some of the calls above converted to OUString
+    
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
 }
 
 void test::oustring::StringLiterals::checkExtraIntArgument()
 {
-    // This makes sure that using by mistake RTL_CONSTASCII_STRINGPARAM does not trigger a different
-    // overload, i.e. the second argument to match() in this case is the indexFrom argument,
-    // but with the macro it would contain the length of the string. Therefore
-    // match( RTL_CONSTASCII_STRINGPARAM( "bar" )) would be match( "bar", 3 ), which would be
-    // true when called for OUString( "foobar" ). But this should not happen because of the
-    // &foo[0] trick in the RTL_CONSTASCII_STRINGPARAM macro.
+    
+    
+    
+    
+    
+    
     CPPUNIT_ASSERT( !rtl::OUString("foobar").match( "bar" ));
     CPPUNIT_ASSERT( !rtl::OUString("foobar").match( RTL_CONSTASCII_STRINGPARAM( "bar" )));
 }
 
 void test::oustring::StringLiterals::checkNonconstChar()
-{ // check that non-const char[] data do not trigger string literal overloads
+{ 
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), rtl::OUString( "footest" ).replaceAll( "test", "bar" ));
     char test[] = "test";
     char bar[] = "bar";
@@ -170,7 +170,7 @@ void test::oustring::StringLiterals::checkBuffer()
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUStringBuffer( d ))));
 }
 
-}} // namespace
+}} 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StringLiterals);
 

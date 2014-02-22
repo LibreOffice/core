@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -103,11 +103,11 @@ using namespace ::com::sun::star::beans;
 
 namespace sd {
 
-// Permanent Functions
+
 
 void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 {
-    // evtl. feed characters to activated textedit
+    
     const SfxItemSet* pSet = rReq.GetArgs();
 
     if(pSet)
@@ -129,7 +129,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
                     KeyCode aKeyCode;
                     KeyEvent aKeyEvent(aChar, aKeyCode);
 
-                    // add actual character
+                    
                     pOLV->PostKeyEvent(aKeyEvent);
                 }
             }
@@ -139,7 +139,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 
 void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
-    // We do not execute a thing during a native slide show
+    
 
     if (SlideShow::IsRunning(GetViewShellBase()))
         return;
@@ -165,7 +165,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             Invalidate();
 
-            // evtl. feed characters to activated textedit
+            
             if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
                 ImpAddPrintableCharactersToTextEdit(rReq, GetView());
 
@@ -185,7 +185,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     {
         if( (nSId == SID_FORMATPAINTBRUSH) && (GetCurrentFunction()->GetSlotID() == SID_TEXTEDIT) )
         {
-            // save text edit mode for format paintbrush!
+            
             SetOldFunction( GetCurrentFunction() );
         }
         else
@@ -227,12 +227,12 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         rBind.Update(nOldSId);
     }
 
-    // map Slot (ToolboxImages/-Slots)
+    
     MapSlot( nSId );
 
     switch ( nSId )
     {
-        case SID_TEXTEDIT:  // BASIC ???
+        case SID_TEXTEDIT:  
         case SID_ATTR_CHAR:
         case SID_ATTR_CHAR_VERTICAL:
         case SID_TEXT_FITTOSIZE:
@@ -247,7 +247,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             rBindings.Invalidate( SID_TEXT_FITTOSIZE );
             rBindings.Invalidate( SID_TEXT_FITTOSIZE_VERTICAL );
 
-            // evtl. feed characters to activated textedit
+            
             if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
                 ImpAddPrintableCharactersToTextEdit(rReq, GetView());
 
@@ -269,7 +269,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             if(pDescriptorItem)
             {
-                // get the form view
+                
                 FmFormView* pFormView = PTR_CAST(FmFormView, mpDrawView);
                 SdrPageView* pPageView = pFormView ? pFormView->GetSdrPageView() : NULL;
 
@@ -313,7 +313,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             if( nSlotId == SID_OBJECT_ROTATE )
             {
-                // toggle rotation
+                
                 if( nOldSId == nSlotId )
                 {
                     nSlotId = SID_OBJECT_SELECT;
@@ -337,7 +337,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                                       SD_RESSTR(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       ).Execute() == RET_YES )
                     {
-                        // implicit transformation into bezier
+                        
                         WaitObject aWait( (Window*)GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPathObj(sal_False);
                     }
@@ -374,7 +374,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                                       SD_RESSTR(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       ).Execute() == RET_YES )
                     {
-                        // implicit transformation into bezier
+                        
                         WaitObject aWait( (Window*)GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPathObj(sal_False);
                     }
@@ -451,8 +451,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_XPOLYGON_NOFILL:
         case SID_DRAW_FREELINE:
         case SID_DRAW_FREELINE_NOFILL:
-        case SID_DRAW_BEZIER_FILL:          // BASIC
-        case SID_DRAW_BEZIER_NOFILL:        // BASIC
+        case SID_DRAW_BEZIER_FILL:          
+        case SID_DRAW_BEZIER_NOFILL:        
         {
             SetCurrentFunction( FuConstructBezierPolygon::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq, bPermanent) );
             rReq.Done();
@@ -558,34 +558,34 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         SetHelpId( GetCurrentFunction()->GetSlotID() );
     }
 
-    // invalidate shell, is faster than every individually (says MI)
-    // now explicit the last slot incl. Update()
+    
+    
     Invalidate();
 
-    // CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
+    
     if(SID_OBJECT_SELECT == nSId && HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
         if(!GetView()->AreObjectsMarked())
         {
-            // select first object
+            
             GetView()->UnmarkAllObj();
             GetView()->MarkNextObj(sal_True);
 
-            // ...and make it visible
+            
             if(GetView()->AreObjectsMarked())
                 GetView()->MakeVisible(GetView()->GetAllMarkedRect(), *GetActiveWindow());
         }
     }
 
-    // with qualifier construct directly
+    
     if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
-        // get SdOptions
+        
         SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
         sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
         sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
 
-        // calc position and size
+        
         Rectangle aVisArea = GetActiveWindow()->PixelToLogic(Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
         Point aPagePos = aVisArea.Center();
         aPagePos.X() -= nDefaultObjectSizeWidth / 2;
@@ -595,27 +595,27 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         if(pPageView)
         {
-            // create the default object
+            
             SdrObject* pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
 
             if(pObj)
             {
-                // insert into page
+                
                 GetView()->InsertObjectAtView(pObj, *pPageView);
 
-                // Now that pFuActual has done what it was created for we
-                // can switch on the edit mode for callout objects.
+                
+                
                 switch (nSId)
                 {
                     case SID_DRAW_CAPTION:
                     case SID_DRAW_CAPTION_VERTICAL:
                     {
-                        // Make FuText the current function.
+                        
                         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
                         GetViewFrame()->GetDispatcher()->
                             Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
                                 SFX_CALLMODE_RECORD, &aItem, 0L);
-                        // Put text object into edit mode.
+                        
                         GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObj), pPageView);
                         break;
                     }
@@ -630,7 +630,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
         GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
-    // We do not execute a thing during a native slide show
+    
     if(SlideShow::IsRunning(GetViewShellBase()) &&
         (rReq.GetSlot() != SID_PRESENTATION_END &&
          rReq.GetSlot() != SID_SIZE_PAGE))
@@ -643,7 +643,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // maybe we map the slot (ToolboxImages/-Slots)
+    
     MapSlot( nSId );
 
     switch ( nSId )
@@ -655,7 +655,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // execute slots of ToolboxController mapped
+        
         case SID_OBJECT_CHOOSE_MODE:
         case SID_POSITION:
         case SID_OBJECT_ALIGN:
@@ -704,7 +704,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             ******************************************************************/
             if( dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) || dynamic_cast< FuConstructBezierPolygon* >( GetCurrentFunction().get() ) )
             {
-                // Tell the tool bar manager about the context change.
+                
                 GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this,*mpDrawView);
             }
 
@@ -897,27 +897,27 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
-            // AutoLayouts have to be ready.
+            
             GetDoc()->StopWorkStartupDelay();
-            // Fall through to following case statements.
+            
 
         case SID_DRAWINGMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
-            // Let the sub-shell manager handle the slot handling.
+            
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSId,
                 rReq);
             rReq.Ignore ();
             break;
 
-        case SID_MASTERPAGE:          // BASIC
-        case SID_SLIDE_MASTERPAGE:    // BASIC
-        case SID_TITLE_MASTERPAGE:    // BASIC
-        case SID_NOTES_MASTERPAGE:    // BASIC
-        case SID_HANDOUT_MASTERPAGE:  // BASIC
+        case SID_MASTERPAGE:          
+        case SID_SLIDE_MASTERPAGE:    
+        case SID_TITLE_MASTERPAGE:    
+        case SID_NOTES_MASTERPAGE:    
+        case SID_HANDOUT_MASTERPAGE:  
         {
-            // AutoLayouts needs to be finished
+            
             GetDoc()->StopWorkStartupDelay();
 
             const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -940,7 +940,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 if (nSId == SID_TITLE_MASTERPAGE ||
                     nSId == SID_SLIDE_MASTERPAGE)
                 {
-                    // Is there a page with the AutoLayout "Title"?
+                    
                     sal_Bool bFound = sal_False;
                     sal_uInt16 i = 0;
                     sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
@@ -964,7 +964,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     }
                 }
 
-                // turn on default layer of MasterPage
+                
                 mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
 
                 ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
@@ -974,7 +974,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
-                // Switch to requested ViewShell.
+                
                 ::OUString sRequestedView;
                 PageKind ePageKind;
                 switch (nSId)
@@ -1019,9 +1019,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
-            // Switch page back to the first one.  Not doing so leads to a
-            // crash.  This seems to be some bug in the edit mode switching
-            // and page switching methods.
+            
+            
+            
             SwitchPage (0);
             ChangeEditMode(EM_PAGE, IsLayerModeActive());
             Broadcast (
@@ -1044,7 +1044,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-            // Remember old ruler state
+            
             sal_Bool bOldHasRuler(HasRuler());
 
             if ( pReqArgs )
@@ -1054,7 +1054,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else SetRuler (!HasRuler());
 
-            // Did ruler state change? Tell that to SdOptions, too.
+            
             sal_Bool bHasRuler(HasRuler());
 
             if(bOldHasRuler != bHasRuler)
@@ -1074,7 +1074,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         break;
 
         case SID_SIZE_PAGE:
-        case SID_SIZE_PAGE_WIDTH:  // BASIC
+        case SID_SIZE_PAGE_WIDTH:  
         {
             mbZoomOnPage = ( rReq.GetSlot() == SID_SIZE_PAGE );
 
@@ -1082,7 +1082,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ( pPageView )
             {
-                Point aPagePos(0, 0); // = pPageView->GetOffset();
+                Point aPagePos(0, 0); 
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
                 aPagePos.X() += aPageSize.Width()  / 2;
@@ -1117,7 +1117,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        case SID_SIZE_REAL:  // BASIC
+        case SID_SIZE_REAL:  
         {
             mbZoomOnPage = sal_False;
             SetZoom( 100 );
@@ -1132,7 +1132,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        case SID_ZOOM_IN:  // BASIC
+        case SID_ZOOM_IN:  
         {
             mbZoomOnPage = sal_False;
             SetZoom( std::max( (long) ( GetActiveWindow()->GetZoom() / 2 ), (long) GetActiveWindow()->GetMinZoom() ) );
@@ -1165,9 +1165,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // name confusion: SID_SIZE_OPTIMAL -> Zoom onto selected objects
-        // --> Is offered as object zoom in program
-        case SID_SIZE_OPTIMAL:  // BASIC
+        
+        
+        case SID_SIZE_OPTIMAL:  
         {
             mbZoomOnPage = sal_False;
             if ( mpDrawView->AreObjectsMarked() )
@@ -1195,9 +1195,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // name confusion: SID_SIZE_ALL -> Zoom onto all objects
-        // --> Is offered as optimal in program
-        case SID_SIZE_ALL:  // BASIC
+        
+        
+        case SID_SIZE_ALL:  
         {
             mbZoomOnPage = sal_False;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
@@ -1238,7 +1238,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (mpZoomList->IsPreviousPossible())
             {
-                // set previous ZoomRect
+                
                 SetZoomRect(mpZoomList->GetPreviousZoomRect());
             }
             rReq.Done ();
@@ -1255,7 +1255,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (mpZoomList->IsNextPossible())
             {
-                // set next ZoomRect
+                
                 SetZoomRect(mpZoomList->GetNextZoomRect());
             }
             rReq.Done ();
@@ -1456,16 +1456,16 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // #UndoRedo#
+        
         case SID_UNDO :
         {
-            // moved implementation to BaseClass
+            
             ImpSidUndo(sal_True, rReq);
         }
         break;
         case SID_REDO :
         {
-            // moved implementation to BaseClass
+            
             ImpSidRedo(sal_True, rReq);
         }
         break;
@@ -1566,7 +1566,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         if( pMarkedObj ) try
         {
-            // change first marked object
+            
             if( (FmFormInventor == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON) )
             {
                 bNewObj = sal_False;
@@ -1590,7 +1590,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
             }
             else
             {
-                // add url as interaction for first selected shape
+                
                 bNewObj = sal_False;
 
                 SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj, true);
@@ -1658,10 +1658,10 @@ void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);
 
-    //AF: The LayerDialogChildWindow is not used anymore (I hope).
-    //    GetViewFrame()->SetChildWindow(
-    //        LayerDialogChildWindow::GetChildWindowId(),
-    //        IsLayerModeActive() && bVisible);
+    
+    
+    
+    
     maTabControl.Show (bVisible);
 }
 
@@ -1676,21 +1676,21 @@ namespace slideshowhelp
                 xPresentation->rehearseTimings();
             else if (rDoc.getPresentationSettings().mbCustomShow)
             {
-                //fdo#69975 if a custom show has been set, then
-                //use it whether or not we've been asked to
-                //start from the current or first slide
+                
+                
+                
                 xPresentation->start();
             }
             else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
             {
-                //If there is no custom show set, start will automatically
-                //start at the current page
+                
+                
                 xPresentation->start();
             }
             else
             {
-                //Start at page 0, this would blow away any custom
-                //show settings if any were set
+                
+                
                 Sequence< PropertyValue > aArguments(1);
                 PropertyValue aPage;
                 OUString sValue("0");
@@ -1723,6 +1723,6 @@ void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

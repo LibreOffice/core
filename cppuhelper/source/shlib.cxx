@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -45,7 +45,7 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
         rtl::OString imps(log);
         for (sal_Int32 i = 0; i != -1;) {
             rtl::OString imp(imps.getToken(0, ';', i));
-            //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
+            
             if (implementation.equalsAsciiL(imp.getStr(), imp.getLength())) {
                 n += ":log";
                 break;
@@ -85,7 +85,7 @@ css::uno::Environment getEnvironmentFromModule(
         if (fp2 != 0) {
             (*fp2)(&name, reinterpret_cast<uno_Environment **>(&env));
         } else {
-            name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; //TODO: fail
+            name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; 
         }
     }
     if (!env.is() && name != 0) {
@@ -183,7 +183,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
                 css::uno::Reference<css::uno::XInterface>());
         }
         if (curEnv.get() != env.get()) {
-            std::abort();//TODO
+            std::abort();
         }
         rtl::OUString name(prefix == "direct" ? implementation : uri);
         SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);

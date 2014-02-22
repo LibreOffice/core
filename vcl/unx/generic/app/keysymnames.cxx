@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unx/saldisp.hxx>
@@ -22,10 +22,10 @@
 #include <sal/macros.h>
 
 #if !defined (SunXK_Undo)
-#define SunXK_Undo      0x0000FF65  // XK_Undo
-#define SunXK_Again     0x0000FF66  // XK_Redo
-#define SunXK_Find      0x0000FF68  // XK_Find
-#define SunXK_Stop      0x0000FF69  // XK_Cancel
+#define SunXK_Undo      0x0000FF65  
+#define SunXK_Again     0x0000FF66  
+#define SunXK_Find      0x0000FF68  
+#define SunXK_Stop      0x0000FF69  
 #define SunXK_Props     0x1005FF70
 #define SunXK_Front     0x1005FF71
 #define SunXK_Copy      0x1005FF72
@@ -52,13 +52,13 @@ namespace vcl_sal {
         int                             nReplacements;
     };
 
-    // ====================================================================
+    
     //
-    // CAUTION CAUTION CAUTION
-    // every string value in the replacements tables must be in UTF8
-    // be careful with your editor !
+    
+    
+    
     //
-    // ====================================================================
+    
 
     static const struct KeysymNameReplacement aImplReplacements_English[] =
     {
@@ -473,7 +473,7 @@ namespace vcl_sal {
         { "tr", aImplReplacements_Turkish, SAL_N_ELEMENTS(aImplReplacements_Turkish) },
     };
 
-    // translate keycodes, used within the displayed menu shortcuts
+    
     OUString getKeysymReplacementName( OUString pLang, KeySym nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
@@ -489,7 +489,7 @@ namespace vcl_sal {
             }
         }
 
-        // try english fallbacks
+        
         const struct KeysymNameReplacement* pRepl = aImplReplacements_English;
         for( int m = SAL_N_ELEMENTS(aImplReplacements_English); m ; )
         {

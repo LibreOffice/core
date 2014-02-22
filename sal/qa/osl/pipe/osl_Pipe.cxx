@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
@@ -47,9 +47,9 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 /** print Boolean value.
  */
@@ -118,9 +118,9 @@ inline void printPipeError( ::osl::Pipe aPipe )
 
 
 
-//------------------------------------------------------------------------
-// pipe name and transfer contents
-//------------------------------------------------------------------------
+
+
+
 const rtl::OUString aTestPipeName("testpipe2");
 const rtl::OUString aTestPipe1("testpipe1");
 const rtl::OUString aTestString("Sun Microsystems");
@@ -128,16 +128,16 @@ const rtl::OUString aTestString("Sun Microsystems");
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");
 
-//------------------------------------------------------------------------
-// test code start here
-//------------------------------------------------------------------------
+
+
+
 
 namespace osl_Pipe
 {
 
-//------------------------------------------------------------------------
-// most return value -1 denote a fail of operation.
-//------------------------------------------------------------------------
+
+
+
 #define OSL_PIPE_FAIL   -1
 
     /** testing the methods:
@@ -172,7 +172,7 @@ namespace osl_Pipe
 
         void ctors_name_option( )
             {
-                /// create a named pipe.
+                
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 ::osl::Pipe aAssignPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
 
@@ -184,7 +184,7 @@ namespace osl_Pipe
 
         void ctors_name_option_security( )
             {
-                /// create a security pipe.
+                
                 const ::osl::Security rSecurity;
                 ::osl::Pipe aSecurityPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSecurity );
 
@@ -196,9 +196,9 @@ namespace osl_Pipe
 
         void ctors_copy( )
             {
-                /// create a pipe.
+                
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                /// create a pipe using copy constructor.
+                
                 ::osl::Pipe aCopyPipe( aPipe );
 
                 bRes = aCopyPipe.is( ) && aCopyPipe == aPipe;
@@ -219,14 +219,14 @@ namespace osl_Pipe
 
         void ctors_no_acquire( )
             {
-                /// create a pipe.
+                
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                /// constructs a pipe reference without acquiring the handle.
+                
                 ::osl::Pipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
 
                 bRes = aNoAcquirePipe.is( );
-                ///aPipe.clear( );
-                ///bRes1 = aNoAcquirePipe.is( );
+                
+                
 
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle, only validation test, do not know how to test no acquire.",
@@ -235,9 +235,9 @@ namespace osl_Pipe
 
         void ctors_acquire( )
             {
-                /// create a base pipe.
+                
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                /// constructs two pipes without acquiring the handle on the base pipe.
+                
                 ::osl::Pipe aAcquirePipe( aPipe.getHandle( ) );
                 ::osl::Pipe aAcquirePipe1( NULL );
 
@@ -256,7 +256,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( ctors_no_acquire );
         CPPUNIT_TEST( ctors_acquire );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    }; 
 
 
     /** testing the method:
@@ -300,7 +300,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( is_003 );
         CPPUNIT_TEST( is_004 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class is
+    }; 
 
 
     /** testing the methods:
@@ -383,7 +383,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( create_named_002 );
         CPPUNIT_TEST( create_named_003 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class create
+    }; 
 
 
     /** testing the method:
@@ -408,7 +408,7 @@ namespace osl_Pipe
         CPPUNIT_TEST_SUITE( clear );
         CPPUNIT_TEST( clear_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class clear
+    }; 
 
 
     /** testing the methods:
@@ -452,7 +452,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( assign_ref );
         CPPUNIT_TEST( assign_handle );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class assign
+    }; 
 
 
     /** testing the method:
@@ -501,7 +501,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( isEqual_001 );
         CPPUNIT_TEST( isEqual_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class isEqual
+    }; 
 
 
     /** testing the method:
@@ -539,7 +539,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class close
+    }; 
 
 
     /** testing the method:
@@ -583,7 +583,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( getError_001 );
         CPPUNIT_TEST( getError_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getError
+    }; 
 
 
     /** testing the method:
@@ -620,10 +620,10 @@ namespace osl_Pipe
         CPPUNIT_TEST( getHandle_001 );
         CPPUNIT_TEST( getHandle_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getHandle
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::is);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::create);
@@ -633,9 +633,9 @@ namespace osl_Pipe
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::close);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getError);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getHandle);
-// -----------------------------------------------------------------------------
 
-} // namespace osl_Pipe
+
+} 
 
 
 namespace osl_StreamPipe
@@ -656,13 +656,13 @@ namespace osl_StreamPipe
 
         void ctors_none( )
             {
-                // create a pipe.
+                
                 ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                // create an unattached pipe.
+                
                 ::osl::StreamPipe aStreamPipe1;
                 bRes  = aStreamPipe1.is( );
 
-                // assign it and check.
+                
                 aStreamPipe1 = aStreamPipe;
                 bRes1 = aStreamPipe1.is( );
                 aStreamPipe.clear( );
@@ -674,9 +674,9 @@ namespace osl_StreamPipe
 
         void ctors_handle( )
             {
-                // create a pipe.
+                
                 ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                // create a pipe with last handle.
+                
                 ::osl::StreamPipe aStreamPipe1( aStreamPipe.getHandle( ) );
                 bRes  = aStreamPipe1.is( ) && aStreamPipe == aStreamPipe1;
                 aStreamPipe.clear( );
@@ -688,9 +688,9 @@ namespace osl_StreamPipe
 
         void ctors_copy( )
             {
-                // create a pipe.
+                
                 ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                // create an unattached pipe.
+                
                 ::osl::StreamPipe aStreamPipe1( aStreamPipe );
                 bRes  = aStreamPipe1.is( ) && aStreamPipe == aStreamPipe1;
                 aStreamPipe.clear( );
@@ -702,9 +702,9 @@ namespace osl_StreamPipe
 
         void ctors_name_option( )
             {
-                // create a pipe.
+                
                 ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                // create an unattached pipe.
+                
                 ::osl::StreamPipe aStreamPipe1( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 bRes  = aStreamPipe1.is( ) && aStreamPipe.is( );
                 aStreamPipe.clear( );
@@ -716,7 +716,7 @@ namespace osl_StreamPipe
 
         void ctors_name_option_security( )
             {
-                /// create a security pipe.
+                
                 const ::osl::Security rSecurity;
                 ::osl::StreamPipe aSecurityPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSecurity );
 
@@ -739,9 +739,9 @@ namespace osl_StreamPipe
 
         void ctors_no_acquire( )
             {
-                // create a pipe.
+                
                 ::osl::StreamPipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                // constructs a pipe reference without acquiring the handle.
+                
                 ::osl::StreamPipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
 
                 bRes = aNoAcquirePipe.is( );
@@ -759,7 +759,7 @@ namespace osl_StreamPipe
         CPPUNIT_TEST( ctors_name_option_security );
         CPPUNIT_TEST( ctors_no_acquire );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    }; 
 
 
     /** testing the methods:
@@ -772,7 +772,7 @@ namespace osl_StreamPipe
      */
     void thread_sleep( sal_uInt32 _nSec )
     {
-        /// print statement in thread process must use fflush() to force display.
+        
         fflush(stdout);
 
         TimeValue nTV;
@@ -780,8 +780,8 @@ namespace osl_StreamPipe
         nTV.Nanosec = 0;
         osl_waitThread(&nTV);
     }
-    // test read/write & send/recv data to pipe
-    // -----------------------------------------------------------------------------
+    
+    
 
     class Pipe_DataSink_Thread : public Thread
     {
@@ -796,7 +796,7 @@ namespace osl_StreamPipe
         void SAL_CALL run( )
             {
                 printf("open pipe\n");
-                ::osl::StreamPipe aSenderPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );  // test::uniquePipeName(aTestPipeName) is a string = "TestPipe"
+                ::osl::StreamPipe aSenderPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );  
                 if ( aSenderPipe.is() == sal_False )
                 {
                     printf("pipe open failed! \n");
@@ -841,7 +841,7 @@ namespace osl_StreamPipe
     protected:
         void SAL_CALL run( )
             {
-                //create pipe.
+                
                 sal_Int32 nChars;
                 printf("listen\n");
                 if ( aListenPipe.is() == sal_False )
@@ -850,7 +850,7 @@ namespace osl_StreamPipe
                 }
                 else
                 {
-                    //start server and wait for connection.
+                    
                     printf("accept\n");
                     if ( osl_Pipe_E_None != aListenPipe.accept( aConnectionPipe ) )
                     {
@@ -858,7 +858,7 @@ namespace osl_StreamPipe
                         return;
                     }
                     printf("write\n");
-                    // write to pipe
+                    
                     nChars = aConnectionPipe.write( m_pTestString1.getStr(), m_pTestString1.getLength() + 1 );
                     if ( nChars < 0)
                     {
@@ -887,14 +887,14 @@ namespace osl_StreamPipe
 
         void recv_001( )
             {
-                //launch threads.
+                
                 Pipe_DataSource_Thread myDataSourceThread;
                 Pipe_DataSink_Thread myDataSinkThread;
                 myDataSourceThread.create( );
                 thread_sleep( 1 );
                 myDataSinkThread.create( );
 
-                //wait until the thread terminate
+                
                 myDataSinkThread.join( );
                 myDataSourceThread.join( );
 
@@ -902,7 +902,7 @@ namespace osl_StreamPipe
                 int nCompare2 = strcmp( myDataSourceThread.buf, m_pTestString2.getStr() );
                 CPPUNIT_ASSERT_MESSAGE( "test send/recv/write/read.", nCompare1 == 0 && nCompare2 == 0 );
             }
-        //close pipe when accept
+        
         void recv_002()
             {
                 thread_sleep( 1 );
@@ -913,22 +913,22 @@ namespace osl_StreamPipe
                 thread_sleep( 1 );
                 myDataSourceThread.aListenPipe.close();
                 myDataSourceThread.join( );
-                //no condition judgement here, if the case could finish excuting within 1 or 2 seconds, it passes.
+                
             }
 
         CPPUNIT_TEST_SUITE( recv );
         CPPUNIT_TEST( recv_001 );
         CPPUNIT_TEST( recv_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class recv
+    }; 
 
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::ctors);
-//CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::assign);
-    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::recv);
-// -----------------------------------------------------------------------------
 
-} // namespace osl_StreamPipe
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::recv);
+
+
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

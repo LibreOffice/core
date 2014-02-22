@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "condformatbuffer.hxx"
@@ -55,7 +55,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -65,7 +65,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -120,7 +120,7 @@ const sal_uInt16 BIFF12_CFRULE_ABOVEAVERAGE         = 0x0004;
 const sal_uInt16 BIFF12_CFRULE_BOTTOM               = 0x0008;
 const sal_uInt16 BIFF12_CFRULE_PERCENT              = 0x0010;
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString& rPropName, const Type& rValue )
@@ -130,7 +130,7 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
     orProps.back().Value <<= rValue;
 }
 
-//------------------------------------------------------------------------------
+
 
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
 {
@@ -140,7 +140,7 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
     pEntry->mnVal = nVal;
     if (aType == "num")
     {
-        // nothing to do
+        
     }
     else if( aType == "min" )
     {
@@ -256,7 +256,7 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
     }
 }
 
-// ============================================================================
+
 
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
@@ -313,7 +313,7 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetDataBarData(mpFormat);
 }
 
-// ============================================================================
+
 
 IconSetRule::IconSetRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
@@ -358,7 +358,7 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetIconSetData(mpFormatData);
 }
 
-// ============================================================================
+
 
 CondFormatRuleModel::CondFormatRuleModel() :
     mnPriority( -1 ),
@@ -386,14 +386,14 @@ void CondFormatRuleModel::setBiffOperator( sal_Int32 nOperator )
 
 void CondFormatRuleModel::setBiff12TextType( sal_Int32 nOperator )
 {
-    // note: type XML_notContainsText vs. operator XML_notContains
+    
     static const sal_Int32 spnTypes[] = { XML_containsText, XML_notContainsText, XML_beginsWith, XML_endsWith };
     mnType = STATIC_ARRAY_SELECT( spnTypes, nOperator, XML_TOKEN_INVALID );
     static const sal_Int32 spnOperators[] = { XML_containsText, XML_notContains, XML_beginsWith, XML_endsWith };
     mnOperator = STATIC_ARRAY_SELECT( spnOperators, nOperator, XML_TOKEN_INVALID );
 }
 
-// ============================================================================
+
 
 CondFormatRule::CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat ) :
     WorksheetHelper( rCondFormat ),
@@ -420,7 +420,7 @@ void CondFormatRule::importCfRule( const AttributeList& rAttribs )
 
     if(maModel.mnType == XML_colorScale)
     {
-        //import the remaining values
+        
 
     }
 }
@@ -444,7 +444,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
         are already stored before. Nevertheless the following formulas contain
         their own sizes. */
 
-    // first formula
+    
     OSL_ENSURE( (nFmla1Size >= 0) || ((nFmla2Size == 0) && (nFmla3Size == 0)), "CondFormatRule::importCfRule - missing first formula" );
     OSL_ENSURE( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
     if( rStrm.getRemaining() >= 8 )
@@ -453,7 +453,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
         ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
         maModel.maFormulas.push_back( aTokens );
 
-        // second formula
+        
         OSL_ENSURE( (nFmla2Size >= 0) || (nFmla3Size == 0), "CondFormatRule::importCfRule - missing second formula" );
         OSL_ENSURE( (nFmla2Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
         if( rStrm.getRemaining() >= 8 )
@@ -461,7 +461,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
             aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
             maModel.maFormulas.push_back( aTokens );
 
-            // third formula
+            
             OSL_ENSURE( (nFmla3Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
             if( rStrm.getRemaining() >= 8 )
             {
@@ -471,14 +471,14 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
         }
     }
 
-    // flags
+    
     maModel.mbStopIfTrue   = getFlag( nFlags, BIFF12_CFRULE_STOPIFTRUE );
     maModel.mbBottom       = getFlag( nFlags, BIFF12_CFRULE_BOTTOM );
     maModel.mbPercent      = getFlag( nFlags, BIFF12_CFRULE_PERCENT );
     maModel.mbAboveAverage = getFlag( nFlags, BIFF12_CFRULE_ABOVEAVERAGE );
-    // no flag for equalAverage, must be determined from subtype below...
+    
 
-    // Convert the type/operator settings. This is a real mess...
+    
     switch( nType )
     {
         case BIFF12_CFRULE_TYPE_CELLIS:
@@ -490,7 +490,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
             OSL_ENSURE( maModel.mnOperator != XML_TOKEN_INVALID, "CondFormatRule::importCfRule - unknown operator" );
         break;
         case BIFF12_CFRULE_TYPE_EXPRESSION:
-            // here we have to look at the subtype to find the real type...
+            
             switch( nSubType )
             {
                 case BIFF12_CFRULE_SUB_EXPRESSION:
@@ -599,16 +599,16 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
                 case BIFF12_CFRULE_SUB_ABOVEAVERAGE:
                     OSL_ENSURE( maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
                     maModel.mnType = XML_aboveAverage;
-                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mnStdDev = nOperator;     
                     maModel.mbAboveAverage = true;
-                    maModel.mbEqualAverage = false;   // does not exist as real flag...
+                    maModel.mbEqualAverage = false;   
                 break;
                 case BIFF12_CFRULE_SUB_BELOWAVERAGE:
                     OSL_ENSURE( !maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
                     maModel.mnType = XML_aboveAverage;
-                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mnStdDev = nOperator;     
                     maModel.mbAboveAverage = false;
-                    maModel.mbEqualAverage = false;   // does not exist as real flag...
+                    maModel.mbEqualAverage = false;   
                 break;
                 case BIFF12_CFRULE_SUB_DUPLICATE:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
@@ -617,16 +617,16 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
                 case BIFF12_CFRULE_SUB_EQABOVEAVERAGE:
                     OSL_ENSURE( maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
                     maModel.mnType = XML_aboveAverage;
-                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mnStdDev = nOperator;     
                     maModel.mbAboveAverage = true;
-                    maModel.mbEqualAverage = true;    // does not exist as real flag...
+                    maModel.mbEqualAverage = true;    
                 break;
                 case BIFF12_CFRULE_SUB_EQBELOWAVERAGE:
                     OSL_ENSURE( !maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
                     maModel.mnType = XML_aboveAverage;
-                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mnStdDev = nOperator;     
                     maModel.mbAboveAverage = false;
-                    maModel.mbEqualAverage = true;    // does not exist as real flag...
+                    maModel.mbEqualAverage = true;    
                 break;
             }
         break;
@@ -649,7 +649,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
                 nSubType != BIFF12_CFRULE_SUB_TOPTEN, "sc.filter",
                 "CondFormatRule::importCfRule - rule type/subtype mismatch");
             maModel.mnType = XML_top10;
-            maModel.mnRank = nOperator;   // operator field used for rank value
+            maModel.mnRank = nOperator;   
         break;
         case BIFF12_CFRULE_TYPE_ICONSET:
             SAL_WARN_IF(
@@ -705,7 +705,7 @@ void CondFormatRule::finalizeImport()
             eOperator = SC_COND_CONTAINS_TEXT;
         break;
         case XML_notContainsText:
-            // note: type XML_notContainsText vs. operator XML_notContains
+            
             OSL_ENSURE( maModel.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
             eOperator = SC_COND_NOT_CONTAINS_TEXT;
         break;
@@ -775,7 +775,7 @@ void CondFormatRule::finalizeImport()
         {
             switch( aReplaceFormula[ nStrPos + 1 ] )
             {
-                case 'B':       // current base address
+                case 'B':       
                     if( aAddress.isEmpty() )
                         aAddress = FormulaProcessorBase::generateAddress2dString( mrCondFormat.getRanges().getBaseAddress(), false );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aAddress );
@@ -785,7 +785,7 @@ void CondFormatRule::finalizeImport()
             }
         }
 
-        // set the replacement formula
+        
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
         eOperator = SC_COND_DIRECT;
@@ -843,7 +843,7 @@ void CondFormatRule::finalizeImport()
             eOperator == SC_COND_ABOVE_EQUAL_AVERAGE || eOperator == SC_COND_BELOW_EQUAL_AVERAGE )
     {
         ScDocument& rDoc = getScDocument();
-        // actually that is still unsupported
+        
         ScTokenArray aTokenArrayDev;
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
@@ -956,14 +956,14 @@ IconSetRule* CondFormatRule::getIconSet()
     return mpIconSet.get();
 }
 
-// ============================================================================
+
 
 CondFormatModel::CondFormatModel() :
     mbPivot( false )
 {
 }
 
-// ============================================================================
+
 
 CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -1005,7 +1005,7 @@ void CondFormat::importCfRule( SequenceInputStream& rStrm )
 
 void CondFormat::finalizeImport()
 {
-    // probably some error in the xml if we are not ready
+    
     if ( !mbReadyForFinalize )
         return;
     ScDocument& rDoc = getScDocument();
@@ -1038,7 +1038,7 @@ void CondFormat::insertRule( CondFormatRuleRef xRule )
     }
 }
 
-// ============================================================================
+
 
 CondFormatBuffer::CondFormatBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -1119,7 +1119,7 @@ sal_Int32 CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
     return ConditionOperator2::NONE;
 }
 
-// private --------------------------------------------------------------------
+
 
 CondFormatRef CondFormatBuffer::createCondFormat()
 {
@@ -1181,7 +1181,7 @@ void ExtCfRule::finalizeImport()
                 pEntry->SetType(COLORSCALE_FORMULA);
             break;
         }
-        case UNKNOWN: // nothing to do
+        case UNKNOWN: 
         default:
             break;
     };
@@ -1211,9 +1211,9 @@ void ExtCfRule::importCfvo( const AttributeList& rAttribs )
     mnRuleType = CFVO;
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
 }
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

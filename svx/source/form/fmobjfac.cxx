@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/diagnose_ex.h>
@@ -63,8 +63,8 @@ FmFormObjFactory::FmFormObjFactory()
     {
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
 
-        //////////////////////////////////////////////////////////////////////
-        // Konfigurations-::com::sun::star::frame::Controller und NavigationBar registrieren
+        
+        
         SvxFmTbxCtlConfig::RegisterControl( SID_FM_CONFIG );
         SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
         SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
@@ -74,15 +74,15 @@ FmFormObjFactory::FmFormObjFactory()
         SvxFmTbxNextRec::RegisterControl( SID_FM_RECORD_NEXT );
         ControlConversionMenuController::RegisterControl(SID_FM_CHANGECONTROLTYPE);
 
-        // Registrieung von globalen fenstern
+        
         FmFieldWinMgr::RegisterChildWindow();
         FmPropBrwMgr::RegisterChildWindow();
         NavigatorFrameManager::RegisterChildWindow();
         DataNavigatorManager::RegisterChildWindow();
         FmFilterNavigatorWinMgr::RegisterChildWindow();
 
-        //////////////////////////////////////////////////////////////////////
-        // Interface fuer die Formshell registrieren
+        
+        
         FmFormShell::RegisterInterface(0);
 
         ImplSmartRegisterUnoServices();
@@ -227,13 +227,13 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
                 break;
         }
 
-        // create the actual object
+        
         if ( !sServiceSpecifier.isEmpty() )
             pObjFactory->pNewObj = new FmFormObj(sServiceSpecifier);
         else
             pObjFactory->pNewObj = new FmFormObj();
 
-        // initialize some properties which we want to differ from the defaults
+        
         for (   PropertyValueArray::const_iterator aInitProp = aInitialProperties.begin();
                 aInitProp != aInitialProperties.end();
                 ++aInitProp

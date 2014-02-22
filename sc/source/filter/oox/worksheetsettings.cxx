@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "worksheetsettings.hxx"
@@ -32,7 +32,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -40,7 +40,7 @@ using namespace ::com::sun::star::util;
 
 using ::oox::core::CodecHelper;
 
-// ============================================================================
+
 
 namespace {
 
@@ -51,9 +51,9 @@ const sal_uInt16 BIFF_SHEETPR_SYMBOLSBELOW      = 0x0040;
 const sal_uInt16 BIFF_SHEETPR_SYMBOLSRIGHT      = 0x0080;
 const sal_uInt16 BIFF_SHEETPR_FITTOPAGES        = 0x0100;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 SheetSettingsModel::SheetSettingsModel() :
     mbFilterMode( false ),
@@ -63,7 +63,7 @@ SheetSettingsModel::SheetSettingsModel() :
 {
 }
 
-// ============================================================================
+
 
 SheetProtectionModel::SheetProtectionModel() :
     mnPasswordHash( 0 ),
@@ -86,7 +86,7 @@ SheetProtectionModel::SheetProtectionModel() :
 {
 }
 
-// ============================================================================
+
 
 WorksheetSettings::WorksheetSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -155,11 +155,11 @@ void WorksheetSettings::importSheetPr( SequenceInputStream& rStrm )
     sal_uInt16 nFlags1;
     sal_uInt8 nFlags2;
     rStrm >> nFlags1 >> nFlags2 >> maSheetSettings.maTabColor;
-    rStrm.skip( 8 );    // sync anchor cell
+    rStrm.skip( 8 );    
     rStrm >> maSheetSettings.maCodeName;
-    // sheet settings
+    
     maSheetSettings.mbFilterMode = getFlag( nFlags2, BIFF12_SHEETPR_FILTERMODE );
-    // outline settings, equal flags in all BIFFs
+    
     maSheetSettings.mbApplyStyles  = getFlag( nFlags1, BIFF_SHEETPR_APPLYSTYLES );
     maSheetSettings.mbSummaryRight = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSRIGHT );
     maSheetSettings.mbSummaryBelow = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSBELOW );
@@ -170,14 +170,14 @@ void WorksheetSettings::importSheetPr( SequenceInputStream& rStrm )
 
 void WorksheetSettings::importChartSheetPr( SequenceInputStream& rStrm )
 {
-    rStrm.skip( 2 );    // flags, contains only the 'published' flag
+    rStrm.skip( 2 );    
     rStrm >> maSheetSettings.maTabColor >> maSheetSettings.maCodeName;
 }
 
 void WorksheetSettings::importSheetProtection( SequenceInputStream& rStrm )
 {
     rStrm >> maSheetProt.mnPasswordHash;
-    // no flags field for all these boolean flags?!?
+    
     maSheetProt.mbSheet            = rStrm.readInt32() != 0;
     maSheetProt.mbObjects          = rStrm.readInt32() != 0;
     maSheetProt.mbScenarios        = rStrm.readInt32() != 0;
@@ -199,7 +199,7 @@ void WorksheetSettings::importSheetProtection( SequenceInputStream& rStrm )
 void WorksheetSettings::importChartProtection( SequenceInputStream& rStrm )
 {
     rStrm >> maSheetProt.mnPasswordHash;
-    // no flags field for all these boolean flags?!?
+    
     maSheetProt.mbSheet            = rStrm.readInt32() != 0;
     maSheetProt.mbObjects          = rStrm.readInt32() != 0;
 }
@@ -211,7 +211,7 @@ void WorksheetSettings::importPhoneticPr( SequenceInputStream& rStrm )
 
 void WorksheetSettings::finalizeImport()
 {
-    // sheet protection
+    
     if( maSheetProt.mbSheet )
     {
         ScTableProtection aProtect;
@@ -242,11 +242,11 @@ void WorksheetSettings::finalizeImport()
         getScDocument().SetTabProtection( getSheetIndex(), &aProtect );
     }
 
-    // VBA code name
+    
     PropertySet aPropSet( getSheet() );
     aPropSet.setProperty( PROP_CodeName, maSheetSettings.maCodeName );
 
-    // sheet tab color
+    
     if( !maSheetSettings.maTabColor.isAuto() )
     {
         sal_Int32 nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
@@ -254,9 +254,9 @@ void WorksheetSettings::finalizeImport()
     }
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

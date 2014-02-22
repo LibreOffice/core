@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -95,8 +95,8 @@ namespace sd {
  */
 void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 {
-    // except a page switch and jumps to bookmarks, nothing is executed during
-    // a slide show
+    
+    
     if( HasCurrentFunction(SID_PRESENTATION) &&
         rReq.GetSlot() != SID_SWITCHPAGE &&
         rReq.GetSlot() != SID_JUMPTOMARK)
@@ -104,7 +104,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
     CheckLineTo (rReq);
 
-    // End text edit mode for some requests.
+    
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
@@ -112,7 +112,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OUTPUT_QUALITY_GRAYSCALE:
         case SID_OUTPUT_QUALITY_BLACKWHITE:
         case SID_OUTPUT_QUALITY_CONTRAST:
-            // Do nothing.
+            
             break;
         default:
             if ( mpDrawView->IsTextEdit() )
@@ -121,12 +121,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
     }
 
-    //  sal_uInt16 nSlot = rReq.GetSlot();
+    
     switch (nSlot)
     {
-        case SID_SWITCHPAGE:  // BASIC
+        case SID_SWITCHPAGE:  
         {
-            // switch page in running slide show
+            
             if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
                 SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, false);
@@ -196,7 +196,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             break;
         }
 
-        case SID_SWITCHLAYER:  // BASIC
+        case SID_SWITCHLAYER:  
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
             sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId ();
@@ -215,7 +215,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             break;
         }
 
-        case SID_PAGEMODE:  // BASIC
+        case SID_PAGEMODE:  
         {
 
             const SfxItemSet *pArgs = rReq.GetArgs ();
@@ -233,7 +233,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
             }
 
-            // turn on default layer of page
+            
             mpDrawView->SetActiveLayer(SD_RESSTR(STR_LAYER_LAYOUT));
 
             ChangeEditMode(EM_PAGE, mbIsLayerModeActive);
@@ -244,7 +244,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             break;
         }
 
-        case SID_LAYERMODE:  // BASIC
+        case SID_LAYERMODE:  
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
 
@@ -294,7 +294,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             SdPage* pPage = GetActualPage();
             if (meEditMode == EM_MASTERPAGE)
-                // Use the master page of the current page.
+                
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -310,7 +310,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         }
         case SID_OBJECTRESIZE:
         {
-            // The server likes to change the client size
+            
             OSL_ASSERT (GetViewShell()!=NULL);
             SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
 
@@ -353,7 +353,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 Reference< XFrame > xFrame( pFrame->GetFrame().GetFrameInterface(), UNO_SET_THROW );
 
-                // Save the current configuration of panes and views.
+                
                 Reference<XControllerManager> xControllerManager (
                     GetViewShellBase().GetController(), UNO_QUERY_THROW);
                 Reference<XConfigurationController> xConfigurationController (
@@ -369,14 +369,14 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         p3DWin->DocumentReload();
                 }
 
-                // normal forwarding to ViewFrame for execution
+                
                 GetViewFrame()->ExecuteSlot(rReq);
 
-                // From here on we must cope with this object and the frame already being
-                // deleted.  Do not call any methods or use data members.
+                
+                
                 Reference<XController> xController( xFrame->getController(), UNO_SET_THROW );
 
-                // Restore the configuration.
+                
                 xControllerManager = Reference<XControllerManager>( xController, UNO_QUERY_THROW);
                 xConfigurationController = Reference<XConfigurationController>(
                     xControllerManager->getConfigurationController());
@@ -389,7 +389,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 DBG_UNHANDLED_EXCEPTION();
             }
 
-            // We have to return immediately to avoid accessing this object.
+            
             return;
         }
 
@@ -464,7 +464,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
 void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
+    
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -771,21 +771,21 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
                     SvxNumberFormat aFormat(rFormat);
 
-                    // left margin gets distributed onto LRSpace item
-                    // and number format AbsLSpace - this fixes
-                    // n#707779 (previously, LRSpace left indent could
-                    // become negative - EditEngine really does not
-                    // like that.
+                    
+                    
+                    
+                    
+                    
                     const short nAbsLSpace=aFormat.GetAbsLSpace();
                     const long  nTxtLeft=rItem.GetTxtLeft();
                     const long  nLeftIndent=std::max(0L,nTxtLeft - nAbsLSpace);
                     aLRSpaceItem.SetTxtLeft(nLeftIndent);
-                    // control for clipped left indent - remainder
-                    // reduces number format first line indent
+                    
+                    
                     aFormat.SetAbsLSpace(nTxtLeft - nLeftIndent);
 
-                    // negative first line indent goes to the number
-                    // format, positive to the lrSpace item
+                    
+                    
                     if( rItem.GetTxtFirstLineOfst() < 0 )
                     {
                         aFormat.SetFirstLineOffset(
@@ -805,7 +805,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                     if( rFormat != aFormat )
                     {
-                        // put all items
+                        
                         SvxNumBulletItem aNumBulletItem(rNumBulletItem);
                         aNumBulletItem.GetNumRule()->SetLevel(nOutlineLevel,aFormat);
                         aEditAttr.Put( aNumBulletItem );
@@ -817,7 +817,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     }
                 }
 
-                // only put lrSpace item
+                
                 SfxItemSet aEditAttrReduced( GetDoc()->GetPool(),
                                              EE_PARA_LRSPACE, EE_PARA_LRSPACE );
                 aEditAttrReduced.Put( aLRSpaceItem );
@@ -829,7 +829,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         }
     }
     if ( pUndoGroup )
-        // give the undo group to the undo manager
+        
         GetViewFrame()->GetObjectShell()->GetUndoManager()->
                                             AddUndoAction(pUndoGroup);
 }
@@ -943,7 +943,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     rSet.DisableItem( SID_RULER_OBJECT );
 
-                    // lock page margins
+                    
                     aProtect.SetSizeProtect( sal_True );
                     aProtect.SetPosProtect( sal_True );
                 }
@@ -992,7 +992,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
 void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
+    
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -1056,6 +1056,6 @@ void DrawViewShell::RemoveWindow(::sd::Window* pWin)
     mpDrawView->DeleteWindowFromPaintView(pWin);
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

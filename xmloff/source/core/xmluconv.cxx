@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -236,7 +236,7 @@ sal_Bool SvXMLUnitConverter::convertEnum(
         ++pMap;
     }
 
-    // the map may have contained XML_TOKEN_INVALID
+    
     if( eTok == XML_TOKEN_INVALID )
         eTok = eDefault;
 
@@ -415,7 +415,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
             if ( a100th.getLength() > 2 )
             {
                 rBuffer.append( '.');
-                rBuffer.append( a100th.copy( 2 ) );     // strip 0.
+                rBuffer.append( a100th.copy( 2 ) );     
             }
         }
     }
@@ -465,8 +465,8 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
                                      nTokenEndPos - mnNextTokenPos );
         mnNextTokenPos = nTokenEndPos + 1;
 
-        // if the mnNextTokenPos is at the end of the string, we have
-        // to deliver an empty token
+        
+        
         if( mnNextTokenPos > maTokenString.getLength() )
             mnNextTokenPos = -1;
     }
@@ -795,18 +795,18 @@ OUString SvXMLUnitConverter::encodeStyleName(
 
                 switch( nType )
                 {
-                case UnicodeType::UPPERCASE_LETTER:     // Lu
-                case UnicodeType::LOWERCASE_LETTER:     // Ll
-                case UnicodeType::TITLECASE_LETTER:     // Lt
-                case UnicodeType::OTHER_LETTER:         // Lo
-                case UnicodeType::LETTER_NUMBER:        // Nl
+                case UnicodeType::UPPERCASE_LETTER:     
+                case UnicodeType::LOWERCASE_LETTER:     
+                case UnicodeType::TITLECASE_LETTER:     
+                case UnicodeType::OTHER_LETTER:         
+                case UnicodeType::LETTER_NUMBER:        
                     bValidChar = true;
                     break;
-                case UnicodeType::NON_SPACING_MARK:     // Ms
-                case UnicodeType::ENCLOSING_MARK:       // Me
-                case UnicodeType::COMBINING_SPACING_MARK:   //Mc
-                case UnicodeType::MODIFIER_LETTER:      // Lm
-                case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                case UnicodeType::NON_SPACING_MARK:     
+                case UnicodeType::ENCLOSING_MARK:       
+                case UnicodeType::COMBINING_SPACING_MARK:   
+                case UnicodeType::MODIFIER_LETTER:      
+                case UnicodeType::DECIMAL_DIGIT_NUMBER: 
                     bValidChar = i > 0;
                     break;
                 }
@@ -836,7 +836,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
         }
     }
 
-    // check for length
+    
     if( aBuffer.getLength() > ((1<<15)-1) )
     {
         aBuffer = rName;

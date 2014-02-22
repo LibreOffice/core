@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLStarBasicContextFactory.hxx"
@@ -71,9 +71,9 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);
             }
-            // else: ingore
+            
         }
-        // else: ignore
+        
     }
 
     const OUString& rApp = GetXMLToken( XML_APPLICATION );
@@ -95,22 +95,22 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
     Sequence<PropertyValue> aValues(3);
 
-    // EventType
+    
     aValues[0].Name = sEventType;
     aValues[0].Value <<= sStarBasic;
 
-    // library name
+    
     aValues[1].Name = sLibrary;
     aValues[1].Value <<= sLibraryVal;
 
-    // macro name
+    
     aValues[2].Name = sMacroName;
     aValues[2].Value <<= sMacroNameVal;
 
-    // add values for event now
+    
     rEvents->AddEventValues(rApiEventName, aValues);
 
-    // return dummy context
+    
     return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);
 }
 

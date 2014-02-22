@@ -4,14 +4,14 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "bigrange.hxx"
 #include "document.hxx"
 
 bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
-{   // min/max interval bounds define whole col/row/tab
+{   
     return
         ((0 <= nCol && nCol <= MAXCOL)
             || nCol == nInt32Min || nCol == nInt32Max) &&

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cuires.hrc>
@@ -129,7 +129,7 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         m_pMtrFldLine3->SetSpinSize( 50 );
     }
 
-    // disable 3D border
+    
     m_pCtlPreview->SetBorderStyle(WINDOW_BORDER_MONO);
 
     Link aLink( LINK( this, SvxConnectionPage, ChangeAttrHdl_Impl ) );
@@ -164,7 +164,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_EDGENODE1HORZDIST );
     const SfxItemPool* pPool = rAttrs.GetPool();
 
-    // SdrEdgeNode1HorzDistItem
+    
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1HORZDIST );
     if( pItem )
@@ -177,7 +177,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldHorz1->SaveValue();
 
-    // SdrEdgeNode2HorzDistItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGENODE2HORZDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2HORZDIST );
@@ -191,7 +191,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldHorz2->SaveValue();
 
-    // SdrEdgeNode1VertDistItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGENODE1VERTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1VERTDIST );
@@ -205,7 +205,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldVert1->SaveValue();
 
-    // SdrEdgeNode2VertDistItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGENODE2VERTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2VERTDIST );
@@ -219,7 +219,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldVert2->SaveValue();
 
-    // SdrEdgeLine1DeltaItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGELINE1DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE1DELTA );
@@ -233,7 +233,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldLine1->SaveValue();
 
-    // SdrEdgeLine2DeltaItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGELINE2DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE2DELTA );
@@ -247,7 +247,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldLine2->SaveValue();
 
-    // SdrEdgeLine3DeltaItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGELINE3DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE3DELTA );
@@ -261,7 +261,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     m_pMtrFldLine3->SaveValue();
 
-    // SdrEdgeLineDeltaAnzItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGELINEDELTAANZ );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTAANZ );
@@ -288,7 +288,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         }
     }
 
-    // SdrEdgeKindItem
+    
     pItem = GetItem( rAttrs, SDRATTR_EDGEKIND );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
@@ -459,7 +459,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 
     if( p == m_pLbType )
     {
-        // get the number of line displacements
+        
         sal_uInt16 nCount = m_pCtlPreview->GetLineDeltaAnz();
 
         m_pFtLine3->Enable( nCount > 2 );
@@ -490,7 +490,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 
 void SvxConnectionPage::FillTypeLB()
 {
-    // fill ListBox with connector names
+    
     const SfxPoolItem* pItem = GetItem( rOutAttrs, SDRATTR_EDGEKIND );
     const SfxItemPool* pPool = rOutAttrs.GetPool();
 

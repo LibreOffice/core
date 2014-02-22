@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -79,10 +79,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             produce("", typeMgr, generated, options);
         }
         if (!options.isValid("-nD")) {
-            // C++ header files generated for the following UNO types are
-            // included in header files in cppu/inc/com/sun/star/uno (Any.hxx,
-            // Reference.hxx, Type.h), so it seems best to always generate those
-            // C++ header files:
+            
+            
+            
+            
             produce(
                 "com.sun.star.uno.RuntimeException", typeMgr, generated,
                 options);

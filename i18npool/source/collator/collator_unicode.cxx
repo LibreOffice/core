@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// generated list of languages
+
 #include "lrl_include.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -59,10 +59,10 @@ Collator_Unicode::~Collator_Unicode()
 
 extern "C" {
 
-// For DISABLE_DYNLOADING the generated functions have names that
-// start with get_collator_data_ to avoid clashing with a few
-// functions in the generated libindex_data that are called just
-// get_zh_pinyin for instance.
+
+
+
+
 
 const sal_uInt8* get_collator_data_ca_charset();
 const sal_uInt8* get_collator_data_dz_charset();
@@ -93,13 +93,13 @@ sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(RuntimeException)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2); // UChar != sal_Unicode in MinGW
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2); 
 }
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2) throw(RuntimeException)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   // UChar != sal_Unicode in MinGW
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   
 }
 
 #ifndef DISABLE_DYNLOADING
@@ -116,7 +116,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         UErrorCode status = U_ZERO_ERROR;
         OUString rule = LocaleDataImpl().getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (!rule.isEmpty()) {
-            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);   // UChar != sal_Unicode in MinGW
+            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);   
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString::createFromAscii(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
@@ -140,7 +140,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, OUString(func_base + rAlgorithm).pData);
                 } else {
                     if ( rLocale.Language == "ja" ) {
-                        // replace algorithm name to implementation name.
+                        
                         if (rAlgorithm == "phonetic (alphanumeric first)")
                             aBuf.appendAscii("phonetic_alphanumeric_first");
                         else if (rAlgorithm == "phonetic (alphanumeric last)")
@@ -158,7 +158,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ca_charset;
             } else if ( rLocale.Language == "dz" || rLocale.Language == "bo" ) {
-                // 'bo' Tibetan uses the same collation rules as 'dz' Dzongkha
+                
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_dz_charset;
             } else if ( rLocale.Language == "hu" ) {
@@ -225,7 +225,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 uppercase itself, so we don't have to bother with that.
             */
             icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), rAlgorithm));
-            // load ICU collator
+            
             collator = (RuleBasedCollator*) icu::Collator::createInstance(icuLocale, status);
             if (! U_SUCCESS(status)) throw RuntimeException();
         }

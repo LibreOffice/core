@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/thread.h>
@@ -23,9 +23,9 @@
 
 const static sal_uInt32 UP_LIMIT=0xFFFFFF00L;
 
-// The SbiBuffer will be expanded in increments of at least 16 Bytes.
-// This is necessary, because many classes emanate from a buffer length
-// of x*16 Bytes.
+
+
+
 
 SbiBuffer::SbiBuffer( SbiParser* p, short n )
 {
@@ -44,8 +44,8 @@ SbiBuffer::~SbiBuffer()
     delete[] pBuf;
 }
 
-// Reach out the buffer
-// This lead to the deletion of the buffer!
+
+
 
 char* SbiBuffer::GetBuffer()
 {
@@ -55,8 +55,8 @@ char* SbiBuffer::GetBuffer()
     return p;
 }
 
-// Test, if the buffer can contain n Bytes.
-// In case of doubt it will be enlarged
+
+
 
 bool SbiBuffer::Check( sal_Int32 n )
 {
@@ -104,7 +104,7 @@ bool SbiBuffer::Check( sal_Int32 n )
     return true;
 }
 
-// Patch of a Location
+
 
 void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 {
@@ -120,9 +120,9 @@ void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
     }
 }
 
-// Forward References upon label und procedures
-// establish a linkage. The beginning of the linkage is at the passed parameter,
-// the end of the linkage is 0.
+
+
+
 
 void SbiBuffer::Chain( sal_uInt32 off )
 {

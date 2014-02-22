@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -120,11 +120,11 @@ static bool lcl_IsPasswordCorrect( const OUString &rPassword )
     uno::Sequence< sal_Int8 >   aPasswordHash;
     pCurDocShell->GetProtectionHash( aPasswordHash );
 
-    // check if supplied password was correct
+    
     uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
     SvPasswordHelper::GetHashPassword( aNewPasswd, rPassword );
     if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
-        bRes = true;    // password was correct
+        bRes = true;    
     else
         InfoBox( NULL, SFX2_RESSTR(RID_SVXSTR_INCORRECT_PASSWORD) ).Execute();
 
@@ -137,10 +137,10 @@ struct SfxSecurityPage_Impl
     SfxSecurityPage &   m_rMyTabPage;
 
     CheckBox*           m_pOpenReadonlyCB;
-    CheckBox*           m_pRecordChangesCB;         // for record changes
-    PushButton*         m_pProtectPB;               // for record changes
-    PushButton*         m_pUnProtectPB;             // for record changes
-    RedliningMode       m_eRedlingMode;             // for record changes
+    CheckBox*           m_pRecordChangesCB;         
+    PushButton*         m_pProtectPB;               
+    PushButton*         m_pUnProtectPB;             
+    RedliningMode       m_eRedlingMode;             
 
     bool                m_bOrigPasswordIsConfirmed;
     bool                m_bNewPasswordIsValid;
@@ -175,7 +175,7 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     m_pProtectPB->Show();
     m_pUnProtectPB->Hide();
 
-    // force toggle hdl called before visual change of checkbox
+    
     m_pRecordChangesCB->SetStyle( m_pRecordChangesCB->GetStyle() | WB_EARLYTOGGLE );
     m_pRecordChangesCB->SetToggleHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl ) );
     m_pProtectPB->SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
@@ -200,20 +200,20 @@ sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
             const bool bDoRecordChanges     = m_pRecordChangesCB->IsChecked();
             const bool bDoChangeProtection  = m_pUnProtectPB->IsVisible();
 
-            // sanity checks
+            
             DBG_ASSERT( bDoRecordChanges || !bDoChangeProtection, "no change recording should imply no change protection" );
             DBG_ASSERT( bDoChangeProtection || !bDoRecordChanges, "no change protection should imply no change recording" );
             DBG_ASSERT( !bDoChangeProtection || !m_aNewPassword.isEmpty(), "change protection should imply password length is > 0" );
             DBG_ASSERT( bDoChangeProtection || m_aNewPassword.isEmpty(), "no change protection should imply password length is 0" );
 
-            // change recording
+            
             if (bDoRecordChanges != pCurDocShell->IsChangeRecording())
             {
                 pCurDocShell->SetChangeRecording( bDoRecordChanges );
                 bModified = true;
             }
 
-            // change record protection
+            
             if (m_bNewPasswordIsValid &&
                 bDoChangeProtection != pCurDocShell->HasChangeRecordProtection())
             {
@@ -224,7 +224,7 @@ sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
             }
         }
 
-        // open read-only?
+        
         const sal_Bool bDoOpenReadonly = m_pOpenReadonlyCB->IsChecked();
         if (pCurDocShell->HasSecurityOptOpenReadOnly() &&
             bDoOpenReadonly != pCurDocShell->IsSecurityOptOpenReadOnly())
@@ -244,7 +244,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 
     if (!pCurDocShell)
     {
-        // no doc -> hide document settings
+        
         m_pOpenReadonlyCB->Disable();
         m_pRecordChangesCB->Disable();
         m_pProtectPB->Show();
@@ -292,7 +292,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 
             m_pProtectPB->Enable( !bIsReadonly );
             m_pUnProtectPB->Enable( !bIsReadonly );
-            // set the right text
+            
             if (bProtection)
             {
                 bProtect = false;
@@ -302,18 +302,18 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             m_pRecordChangesCB->Check( bRecordChanges );
             m_pRecordChangesCB->Enable( /*!bProtection && */!bIsReadonly );
 
-            m_bOrigPasswordIsConfirmed = true;   // default case if no password is set
+            m_bOrigPasswordIsConfirmed = true;   
             uno::Sequence< sal_Int8 > aPasswordHash;
-            // check if password is available
+            
             if (pCurDocShell->GetProtectionHash( aPasswordHash ) &&
                 aPasswordHash.getLength() > 0)
-                m_bOrigPasswordIsConfirmed = false;  // password found, needs to be confirmed later on
+                m_bOrigPasswordIsConfirmed = false;  
         }
         else
         {
-            // A Calc document that is shared will have 'm_eRedlingMode == RL_NONE'
-            // In shared documents change recording and protection must be disabled,
-            // similar to documents that do not support change recording at all.
+            
+            
+            
             m_pRecordChangesCB->Check( false );
             m_pRecordChangesCB->Disable();
             m_pProtectPB->Check( false );
@@ -330,8 +330,8 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 
 IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
 {
-    // when change recording gets disabled protection must be disabled as well
-    if (!m_pRecordChangesCB->IsChecked())    // the new check state is already present, thus the '!'
+    
+    if (!m_pRecordChangesCB->IsChecked())    
     {
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
@@ -350,11 +350,11 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         {
             OUString aPasswordText;
 
-            // dialog canceled or no password provided
+            
             if (!lcl_GetPassword( m_rMyTabPage.GetParent(), false, aPasswordText ))
                 bAlreadyDone = true;
 
-            // ask for password and if dialog is canceled or no password provided return
+            
             if (lcl_IsPasswordCorrect( aPasswordText ))
                 m_bOrigPasswordIsConfirmed = true;
             else
@@ -362,11 +362,11 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         }
 
         if (bAlreadyDone)
-            m_pRecordChangesCB->Check( true );     // restore original state
+            m_pRecordChangesCB->Check( true );     
         else
         {
-            // remember required values to change protection and change recording in
-            // FillItemSet_Impl later on if password was correct.
+            
+            
             m_bNewPasswordIsValid = true;
             m_aNewPassword = "";
             m_pProtectPB->Show();
@@ -383,20 +383,20 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     if (m_eRedlingMode == RL_NONE)
         return 0;
 
-    // the push button text is always the opposite of the current state. Thus:
+    
     const bool bCurrentProtection = m_pUnProtectPB->IsVisible();
 
-    // ask user for password (if still necessary)
+    
     OUString aPasswordText;
     bool bNewProtection = !bCurrentProtection;
     const bool bNeedPassword = bNewProtection || !m_bOrigPasswordIsConfirmed;
     if (bNeedPassword)
     {
-        // ask for password and if dialog is canceled or no password provided return
+        
         if (!lcl_GetPassword( m_rMyTabPage.GetParent(), bNewProtection, aPasswordText ))
             return 0;
 
-        // provided password still needs to be checked?
+        
         if (!bNewProtection && !m_bOrigPasswordIsConfirmed)
         {
             if (lcl_IsPasswordCorrect( aPasswordText ))
@@ -407,8 +407,8 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     }
     DBG_ASSERT( m_bOrigPasswordIsConfirmed, "ooops... this should not have happened!" );
 
-    // remember required values to change protection and change recording in
-    // FillItemSet_Impl later on if password was correct.
+    
+    
     m_bNewPasswordIsValid = true;
     m_aNewPassword = bNewProtection? aPasswordText : OUString();
 

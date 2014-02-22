@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -39,8 +39,8 @@ void UIPreviewApp::Init()
         uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
 
-    // Create UCB (for backwards compatibility, in case some code still uses
-    // plain createInstance w/o args directly to obtain an instance):
+    
+    
     ::ucb::UniversalContentBroker::create(
         comphelper::getProcessComponentContext() );
 }
@@ -61,7 +61,7 @@ int UIPreviewApp::Main()
         return EXIT_FAILURE;
     }
 
-    // turn on tooltips
+    
     Help::EnableQuickHelp();
 
     try

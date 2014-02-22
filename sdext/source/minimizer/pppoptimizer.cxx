@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,9 +29,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-// ----------------
-// - PPPOptimizer -
-// ----------------
+
+
+
 
 PPPOptimizer::PPPOptimizer(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
@@ -41,15 +41,15 @@ PPPOptimizer::PPPOptimizer(
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PPPOptimizer::~PPPOptimizer()
 {
 }
 
-// -----------------------------------------------------------------------------
-// XDispatchProvider
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
@@ -57,13 +57,13 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispat
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) )
     {
-//      if ( aURL.Path.equalsAscii( "Function1" ) )
+
         xRet = this;
     }
     return xRet;
 }
 
-//------------------------------------------------------------------------------
+
 
 Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer::queryDispatches(
     const Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException )
@@ -78,9 +78,9 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer:
     return aReturn;
 }
 
-// -----------------------------------------------------------------------------
-// XDispatch
-// -----------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyValue >& lArguments )
     throw( RuntimeException )
@@ -105,24 +105,24 @@ void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyV
     }
 }
 
-//===============================================
+
 void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
-    // TODO
+    
     OSL_FAIL( "PPPOptimizer::addStatusListener()\nNot implemented yet!" );
 }
 
-//===============================================
+
 void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
-    // TODO
+    
     OSL_FAIL( "PPPOptimizer::removeStatusListener()\nNot implemented yet!" );
 }
 
-// -----------------------------------------------------------------------------
-// returning filesize, on error zero is returned
+
+
 sal_Int64 PPPOptimizer::GetFileSize( const OUString& rURL )
 {
     sal_Int64 nFileSize = 0;

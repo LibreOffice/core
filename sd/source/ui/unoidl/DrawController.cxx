@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -96,19 +96,19 @@ DrawController::~DrawController (void) throw()
 void DrawController::SetSubController (
     const Reference<drawing::XDrawSubController>& rxSubController)
 {
-    // Update the internal state.
+    
     mxSubController = rxSubController;
     mpPropertyArrayHelper.reset();
     maLastVisArea = Rectangle();
 
-    // Inform listeners about the changed state.
+    
     FireSelectionChangeListener();
 }
 
 
 
 
-// XInterface
+
 
 IMPLEMENT_FORWARD_XINTERFACE2(
     DrawController,
@@ -116,14 +116,14 @@ IMPLEMENT_FORWARD_XINTERFACE2(
     OPropertySetHelper);
 
 
-// XTypeProvider
+
 
 Sequence<Type> SAL_CALL DrawController::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // OPropertySetHelper does not provide getTypes, so we have to
-    // implement this method manually and list its three interfaces.
+    
+    
     OTypeCollection aTypeCollection (
         ::getCppuType (( const Reference<beans::XMultiPropertySet>*)NULL),
         ::getCppuType (( const Reference<beans::XFastPropertySet>*)NULL),
@@ -139,7 +139,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(DrawController);
 
 
 
-// XComponent
+
 
 
 void SAL_CALL DrawController::dispose (void)
@@ -165,9 +165,9 @@ void SAL_CALL DrawController::dispose (void)
             }
             pViewShell.reset();
 
-            // When the controller has not been detached from its view
-            // shell, i.e. mpViewShell is not NULL, then tell PaneManager
-            // and ViewShellManager to clear the shell stack.
+            
+            
+            
             if (mxSubController.is() && mpBase!=NULL)
             {
                 mpBase->DisconnectAllClients();
@@ -205,7 +205,7 @@ void SAL_CALL DrawController::removeEventListener (
         SfxBaseController::removeEventListener( aListener );
 }
 
-// XController
+
 ::sal_Bool SAL_CALL DrawController::suspend( ::sal_Bool Suspend ) throw (::com::sun::star::uno::RuntimeException)
 {
     if( Suspend )
@@ -213,7 +213,7 @@ void SAL_CALL DrawController::removeEventListener (
         ViewShellBase* pViewShellBase = GetViewShellBase();
         if( pViewShellBase )
         {
-            // do not allow suspend if a slideshow needs this controller!
+            
             rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pViewShellBase ) );
             if( xSlideShow.is() && xSlideShow->dependsOn(pViewShellBase) )
                 return sal_False;
@@ -223,12 +223,12 @@ void SAL_CALL DrawController::removeEventListener (
     return SfxBaseController::suspend( Suspend );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeException)
 {
-    // Do not throw an excepetion at the moment.  This leads to a crash
-    // under Solaris on relead.  See issue i70929 for details.
-    //    ThrowIfDisposed();
+    
+    
+    
     return OUString("DrawController") ;
 }
 
@@ -250,7 +250,7 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
     return aSupportedServices;
 }
 
-//------ XSelectionSupplier --------------------------------------------
+
 sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
     throw(lang::IllegalArgumentException, RuntimeException)
 {
@@ -308,7 +308,7 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
 
 
 
-//=====  lang::XEventListener  ================================================
+
 
 void SAL_CALL
     DrawController::disposing (const lang::EventObject& )
@@ -319,19 +319,19 @@ void SAL_CALL
 
 
 
-//=====  view::XSelectionChangeListener  ======================================
+
 
 void  SAL_CALL
     DrawController::selectionChanged (const lang::EventObject& rEvent)
         throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // Have to forward the event to our selection change listeners.
+    
     OInterfaceContainerHelper* pListeners = BroadcastHelperOwner::maBroadcastHelper.getContainer(
         ::getCppuType((Reference<view::XSelectionChangeListener>*)0));
     if (pListeners)
     {
-        // Re-send the event to all of our listeners.
+        
         OInterfaceIteratorHelper aIterator (*pListeners);
         while (aIterator.hasMoreElements())
         {
@@ -353,7 +353,7 @@ void  SAL_CALL
 
 
 
-// XDrawView
+
 
 void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPage >& xPage )
     throw(RuntimeException)
@@ -375,12 +375,12 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
     SolarMutexGuard aGuard;
     Reference<drawing::XDrawPage> xPage;
 
-    // Get current page from sub controller.
+    
     if (mxSubController.is())
         xPage = mxSubController->getCurrentPage();
 
-    // When there is not yet a sub controller (during initialization) then fall back
-    // to the current page in mpCurrentPage.
+    
+    
     if ( ! xPage.is() && mpCurrentPage.is())
         xPage = Reference<drawing::XDrawPage>(mpCurrentPage->getUnoPage(), UNO_QUERY);
 
@@ -426,7 +426,7 @@ void DrawController::FireSelectionChangeListener() throw()
         Reference< XInterface > xSource( (XWeak*)this );
         const lang::EventObject aEvent( xSource );
 
-        // iterate over all listeners and send events
+        
         OInterfaceIteratorHelper aIt( *pLC);
         while( aIt.hasMoreElements() )
         {
@@ -534,17 +534,17 @@ void DrawController::fireChangeLayer( ::com::sun::star::uno::Reference< ::com::s
     }
 }
 
-// This method is only called in slide show and outline view
-//void DrawController::fireSwitchCurrentPage(String pageName ) throw()
+
+
 void DrawController::fireSwitchCurrentPage(sal_Int32 pageIndex ) throw()
 {
         Any aNewValue;
         Any aOldValue;
-        //OUString aPageName(  pageName );
-        //aNewValue <<= aPageName ;
+        
+        
         aNewValue <<= pageIndex;
 
-        // Use new property to handle page change event
+        
         sal_Int32 nHandles = PROPERTY_PAGE_CHANGE;
         fire( &nHandles, &aNewValue, &aOldValue, 1, sal_False );
 }
@@ -560,10 +560,10 @@ void DrawController::FirePropertyChange (
     }
     catch (const RuntimeException&)
     {
-        // Ignore this exception.  Exceptions should be handled in the
-        // fire() function so that all listeners are called.  This is
-        // not the case at the moment, so we simply ignore the
-        // exception.
+        
+        
+        
+        
     }
 
 }
@@ -634,7 +634,7 @@ void DrawController::ReleaseViewShellBase (void)
 
 
 
-//===== XControllerManager ==============================================================
+
 
 Reference<XConfigurationController> SAL_CALL
     DrawController::getConfigurationController (void)
@@ -660,7 +660,7 @@ Reference<XModuleController> SAL_CALL
 
 
 
-//===== XUnoTunnel ============================================================
+
 
 namespace
 {
@@ -692,7 +692,7 @@ sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
 
 
 
-//===== Properties ============================================================
+
 
 void DrawController::FillPropertyTable (
     ::std::vector<beans::Property>& rProperties)
@@ -749,7 +749,7 @@ void DrawController::FillPropertyTable (
             PROPERTY_DRAWVIEWMODE,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
-    // add new property to update current page's acc information
+    
     rProperties.push_back(
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("UpdateAcc") ),
             PROPERTY_UPDATEACC,
@@ -875,7 +875,7 @@ sal_Bool DrawController::convertFastPropertyValue (
         }
         catch (const beans::UnknownPropertyException&)
         {
-            // The property is unknown and thus an illegal argument to this method.
+            
             throw com::sun::star::lang::IllegalArgumentException();
         }
     }
@@ -931,7 +931,7 @@ void DrawController::getFastPropertyValue (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void DrawController::ProvideFrameworkControllers (void)
 {
@@ -988,7 +988,7 @@ void DrawController::ThrowIfDisposed (void) const
 
 
 
-} // end of namespace sd
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

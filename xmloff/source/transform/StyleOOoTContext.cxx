@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -62,29 +62,29 @@ const sal_uInt16 MAX_PROP_TYPES = 4;
 
 static const XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
 {
-    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_GRAPHIC,
-    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_PRESENTATION,
-    ENTRY1( DRAWING_PAGE ),                     // XML_FAMILY_TYPE_DRAWING_PAGE,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_MASTER_PAGE
-    ENTRY1( PAGE_LAYOUT ),                      // XML_FAMILY_TYPE_PAGE_LAYOUT,
-    ENTRY1( HEADER_FOOTER ),                    // XML_FAMILY_TYPE_HEADER_FOOTER
-    ENTRY1( TEXT ),                             // XML_FAMILY_TYPE_TEXT,
-    ENTRY2( PARAGRAPH, TEXT ),                  // XML_FAMILY_TYPE_PARAGRAPH,
-    ENTRY1( RUBY ),                             //XML_FAMILY_TYPE_RUBY,
-    ENTRY1( SECTION ),                          // XML_FAMILY_TYPE_SECTION,
-    ENTRY1( TABLE ),                            // XML_FAMILY_TYPE_TABLE,
-    ENTRY1( TABLE_COLUMN ),                     // XML_FAMILY_TYPE_TABLE_COLUMN,
-    ENTRY1( TABLE_ROW ),                        // XML_FAMILY_TYPE_TABLE_ROW,
-    ENTRY3( TABLE_CELL, PARAGRAPH, TEXT ),      // XML_FAMILY_TYPE_TABLE_CELL,
-    ENTRY1( LIST_LEVEL ),                       // XML_FAMILY_TYPE_LIST,
-    ENTRY4( CHART, GRAPHIC, PARAGRAPH, TEXT ),  // XML_FAMILY_TYPE_CHART,
-    ENTRY1( TEXT ),                             // XML_FAMILY_TYPE_DATA,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_GRADIENT,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_HATCH,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_FILL_IMAGE,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_STROKE_DASH,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_MARKER,
-    ENTRY1( END )                               // XML_FAMILY_TYPE_PRESENTATION_PAGE_LAYOUT,
+    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         
+    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         
+    ENTRY1( DRAWING_PAGE ),                     
+    ENTRY1( END ),                              
+    ENTRY1( PAGE_LAYOUT ),                      
+    ENTRY1( HEADER_FOOTER ),                    
+    ENTRY1( TEXT ),                             
+    ENTRY2( PARAGRAPH, TEXT ),                  
+    ENTRY1( RUBY ),                             
+    ENTRY1( SECTION ),                          
+    ENTRY1( TABLE ),                            
+    ENTRY1( TABLE_COLUMN ),                     
+    ENTRY1( TABLE_ROW ),                        
+    ENTRY3( TABLE_CELL, PARAGRAPH, TEXT ),      
+    ENTRY1( LIST_LEVEL ),                       
+    ENTRY4( CHART, GRAPHIC, PARAGRAPH, TEXT ),  
+    ENTRY1( TEXT ),                             
+    ENTRY1( END ),                              
+    ENTRY1( END ),                              
+    ENTRY1( END ),                              
+    ENTRY1( END ),                              
+    ENTRY1( END ),                              
+    ENTRY1( END )                               
 };
 
 static const XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
@@ -108,12 +108,12 @@ static const XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
 static const sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OOO_GRAPHIC_ATTR_ACTIONS,
-    PROP_OOO_DRAWING_PAGE_ATTR_ACTIONS,     // DRAWING_PAGE
+    PROP_OOO_DRAWING_PAGE_ATTR_ACTIONS,     
     PROP_OOO_PAGE_LAYOUT_ATTR_ACTIONS,
     PROP_OOO_HEADER_FOOTER_ATTR_ACTIONS,
     PROP_OOO_TEXT_ATTR_ACTIONS,
     PROP_OOO_PARAGRAPH_ATTR_ACTIONS,
-    MAX_OOO_PROP_ACTIONS,       // RUBY
+    MAX_OOO_PROP_ACTIONS,       
     PROP_OOO_SECTION_ATTR_ACTIONS,
     PROP_OOO_TABLE_ATTR_ACTIONS,
     PROP_OOO_TABLE_COLUMN_ATTR_ACTIONS,
@@ -202,7 +202,7 @@ void XMLTypedPropertiesOOoTContext_Impl::AddAttribute(
 void XMLTypedPropertiesOOoTContext_Impl::StartElement(
         const Reference< XAttributeList >& )
 {
-    // empty, ignore even the attribute list
+    
 }
 
 void XMLTypedPropertiesOOoTContext_Impl::Export()
@@ -379,7 +379,7 @@ XMLPropertiesOOoTContext_Impl::XMLPropertiesOOoTContext_Impl(
 {
     for( sal_uInt16 i=0; i < MAX_PROP_TYPES; ++i )
     {
-        // remember the types that belong to the attribute and element lists
+        
         m_aPropTypes[i] = rTypes[i];
     }
 }
@@ -678,17 +678,17 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
 
                 switch( nSplineType )
                 {
-                    // straight lines
+                    
                     case 0:
                         pContext->AddAttribute(
                             aNewAttrName, GetXMLToken( XML_NONE ));
                         break;
-                    // cubic spline
+                    
                     case 1:
                         pContext->AddAttribute(
                             aNewAttrName, GetXMLToken( XML_CUBIC_SPLINE ));
                         break;
-                    // B-spline
+                    
                     case 2:
                         pContext->AddAttribute(
                             aNewAttrName, GetXMLToken( XML_B_SPLINE ));
@@ -722,36 +722,36 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     enum XMLTokenEnum eToken = XML_TOKEN_INVALID;
                     switch( nSymbolType )
                     {
-                        // SYMBOL0
+                        
                         case 0:
-                            // "square" has an awkward token name
+                            
                             eToken = XML_GRADIENTSTYLE_SQUARE;
                             break;
-                        // SYMBOL1
+                        
                         case 1:
                             eToken = XML_DIAMOND;
                             break;
-                        // SYMBOL2
+                        
                         case 2:
                             eToken = XML_ARROW_DOWN;
                             break;
-                        // SYMBOL3
+                        
                         case 3:
                             eToken = XML_ARROW_UP;
                             break;
-                        // SYMBOL4
+                        
                         case 4:
                             eToken = XML_ARROW_RIGHT;
                             break;
-                        // SYMBOL5
+                        
                         case 5:
                             eToken = XML_ARROW_LEFT;
                             break;
-                        // SYMBOL6
+                        
                         case 6:
                             eToken = XML_BOW_TIE;
                             break;
-                        // SYMBOL7
+                        
                         case 7:
                             eToken = XML_HOURGLASS;
                             break;
@@ -792,17 +792,17 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     switch( nSymbolType )
                     {
-                        // NONE
+                        
                         case -3:
                             pContext->AddAttribute(
                                 aNewAttrName, GetXMLToken( XML_NONE ));
                             break;
-                            // AUTO
+                            
                         case -2:
                             pContext->AddAttribute(
                                 aNewAttrName, GetXMLToken( XML_AUTOMATIC ));
                             break;
-                            // BITMAPURL
+                            
                         case -1:
                             pContext->AddAttribute(
                                 aNewAttrName, GetXMLToken( XML_IMAGE ));
@@ -818,7 +818,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_PTACTION_SYMBOL_IMAGE_NAME:
             {
-                // create an xlink:href element for URI attribute
+                
                 XMLPersAttrListTContext *pSymbolImageContext = new XMLPersAttrListTContext(
                     GetTransformer(), GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_IMAGE )));
@@ -832,7 +832,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             }
             break;
 
-        // #i25616#
+        
         case XML_PTACTION_TRANSPARENCY :
             {
                 OUString aAttrValue( sAttrValue );
@@ -891,9 +891,9 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             aProtectAttrValue = sAttrValue;
             pProtectContext = pContext;
             break;
-        case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
+        case XML_ATACTION_DRAW_MIRROR_OOO:   
             {
-                // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+                
                 aDrawMirrorAttrValue =
                                 GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE )
                                              ? XML_HORIZONTAL : XML_NONE );
@@ -901,8 +901,8 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 pMirrorContext = pContext;
             }
             break;
-        // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
-        case XML_ATACTION_STYLE_MIRROR_OOO:   // adapts style:mirror values
+        
+        case XML_ATACTION_STYLE_MIRROR_OOO:   
             {
                 SvXMLTokenEnumerator aTokenEnum( sAttrValue );
                 OUString aToken;
@@ -930,7 +930,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 pMirrorContext = pContext;
             }
             break;
-        case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
+        case XML_ATACTION_GAMMA_OOO:        
             {
                 double fValue = sAttrValue.toDouble();
                 sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
@@ -965,7 +965,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         }
     }
 
-    // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+    
     if ( bExistStyleMirror )
     {
         pMirrorContext->AddAttribute(
@@ -1031,7 +1031,7 @@ void XMLPropertiesOOoTContext_Impl::EndElement()
 
 void XMLPropertiesOOoTContext_Impl::Characters( const OUString& )
 {
-    // ignore them
+    
 }
 
 void XMLPropertiesOOoTContext_Impl::Export()
@@ -1293,7 +1293,7 @@ void XMLStyleOOoTContext::EndElement()
 
 void XMLStyleOOoTContext::Characters( const OUString& )
 {
-    // element content only:
+    
 }
 
 sal_Bool XMLStyleOOoTContext::IsPersistent() const

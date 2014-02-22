@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "imp_share.hxx"
@@ -46,14 +46,14 @@ Reference< xml::input::XElement > Frame::startChildElement(
 {
     if ( !m_xContainer.is() )
         m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else if ( rLocalName == "bulletinboard" )
     {
-        // Create new DialogImport for this container
+        
         DialogImport* pFrameImport = new DialogImport( *_pImport );
         pFrameImport->_xDialogModel = m_xContainer;
         return new BulletinBoardElement( rLocalName, xAttributes, this,  pFrameImport );
@@ -77,7 +77,7 @@ void Frame::endElement()
         if ( !m_xContainer.is() )
             m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
         Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
-        // _pImport is what we need to add to ( e.g. the dialog in this case )
+        
     ControlImportContext ctx( _pImport, xProps,   getControlId( _xAttributes ) );
 
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
@@ -91,7 +91,7 @@ void Frame::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+    ctx.importDefaults( 0, 0, _xAttributes ); 
     if (!_label.isEmpty())
     {
         xControlModel->setPropertyValue( "Label" , makeAny( _label ) );
@@ -100,18 +100,18 @@ void Frame::endElement()
     ctx.importScollableSettings( _xAttributes );
 #endif
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-//===
+
 Reference< xml::input::XElement > MultiPage::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement(
@@ -119,7 +119,7 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
     }
     else if ( rLocalName == "bulletinboard" )
     {
-        // Create new DialogImport for this container
+        
 
         DialogImport* pMultiPageImport = new DialogImport( *_pImport );
                 pMultiPageImport->_xDialogModel = m_xContainer;
@@ -136,7 +136,7 @@ void MultiPage::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
         Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
-        // _pImport is what we need to add to ( e.g. the dialog in this case )
+        
     ControlImportContext ctx( _pImport, xProps, getControlId( _xAttributes ));
 
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
@@ -151,12 +151,12 @@ void MultiPage::endElement()
         pStyle->importBackgroundColorStyle( xControlModel );
     }
 
-    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+    ctx.importDefaults( 0, 0, _xAttributes ); 
     ctx.importLongProperty("MultiPageValue" , "value",  _xAttributes );
         ctx.importBooleanProperty( "Decoration", "withtabs",  _xAttributes) ;
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
@@ -165,7 +165,7 @@ Reference< xml::input::XElement > Page::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement(
@@ -204,21 +204,21 @@ void Page::endElement()
         pStyle->importBackgroundColorStyle( xControlModel );
     }
 
-    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+    ctx.importDefaults( 0, 0, _xAttributes ); 
     ctx.importStringProperty( OUString( "Title" ), OUString( "title" ), _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// progessmeter
+
 Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement(
@@ -251,18 +251,18 @@ void ProgressBarElement::endElement()
     ctx.importLongProperty( "ProgressValueMin", "value-min", _xAttributes );
     ctx.importLongProperty( "ProgressValueMax", "value-max", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// scrollbar
+
 Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -301,18 +301,18 @@ void ScrollBarElement::endElement()
 
     ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// spinbutton
+
 Reference< xml::input::XElement > SpinButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -349,18 +349,18 @@ void SpinButtonElement::endElement()
     ctx.importHexLongProperty( "SymbolColor", "symbol-color" , _xAttributes );
     ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// fixedline
+
 Reference< xml::input::XElement > FixedLineElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -389,18 +389,18 @@ void FixedLineElement::endElement()
     ctx.importStringProperty( "Label", "value", _xAttributes );
     ctx.importOrientationProperty( "Orientation", "align", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// patternfield
+
 Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -437,18 +437,18 @@ void PatternFieldElement::endElement()
     ctx.importStringProperty( "EditMask", "edit-mask", _xAttributes );
     ctx.importStringProperty( "LiteralMask", "literal-mask", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// formattedfield
+
 Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -499,13 +499,13 @@ void FormattedFieldElement::endElement()
         {
             ctx.getControlModel()->setPropertyValue( "EffectiveDefault", makeAny( d ) );
         }
-        else // treat as string
+        else 
         {
             ctx.getControlModel()->setPropertyValue( "EffectiveDefault", makeAny( sDefault ) );
         }
     }
 
-    // format spec
+    
     ctx.getControlModel()->setPropertyValue("FormatsSupplier", makeAny( _pImport->getNumberFormatsSupplier() ) );
 
     OUString sFormat( _xAttributes->getValueByUidName(_pImport->XMLNS_DIALOGS_UID, "format-code" ) );
@@ -516,25 +516,25 @@ void FormattedFieldElement::endElement()
         OUString sLocale( _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "format-locale" ) );
         if (!sLocale.isEmpty())
         {
-            // split locale
-            // Don't know what may have written what we read here, so parse all
-            // old style including the trailing ";Variant" if present.
+            
+            
+            
             sal_Int32 semi0 = sLocale.indexOf( ';' );
-            if (semi0 < 0) // no semi at all, try new BCP47 or just language
+            if (semi0 < 0) 
             {
                 locale = LanguageTag::convertToLocale( sLocale, false);
             }
             else
             {
                 sal_Int32 semi1 = sLocale.indexOf( ';', semi0 +1 );
-                if (semi1 > semi0) // language;country;variant
+                if (semi1 > semi0) 
                 {
                     SAL_WARN( "xmlscript.xmldlg", "format-locale with variant that is ignored: " << sLocale);
                     locale.Language = sLocale.copy( 0, semi0 );
                     locale.Country = sLocale.copy( semi0 +1, semi1 - semi0 -1 );
-                    // Ignore Variant that no one knows what it would be.
+                    
                 }
-                else // language;country
+                else 
                 {
                     locale.Language = sLocale.copy( 0, semi0 );
                     locale.Country = sLocale.copy( semi0 +1 );
@@ -556,7 +556,7 @@ void FormattedFieldElement::endElement()
         catch (const util::MalformedNumberFormatException & exc)
         {
            SAL_WARN( "xmlscript.xmldlg", "### util::MalformedNumberFormatException occurred!" );
-            // rethrow
+            
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
         }
     }
@@ -565,18 +565,18 @@ void FormattedFieldElement::endElement()
 
     ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// timefield
+
 Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -619,18 +619,18 @@ void TimeFieldElement::endElement()
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format" , _xAttributes );
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// numericfield
+
 Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -673,18 +673,18 @@ void NumericFieldElement::endElement()
         ctx.getControlModel()->setPropertyValue("Repeat", makeAny(true) );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// datefield
+
 Reference< xml::input::XElement > DateFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -728,18 +728,18 @@ void DateFieldElement::endElement()
     ctx.importStringProperty( "Text", "text", _xAttributes );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// currencyfield
+
 Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -784,18 +784,18 @@ void CurrencyFieldElement::endElement()
     ctx.importBooleanProperty( "PrependCurrencySymbol", "prepend-symbol", _xAttributes );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// filecontrol
+
 Reference< xml::input::XElement > FileControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -828,18 +828,18 @@ void FileControlElement::endElement()
     ctx.importStringProperty( "Text", "value", _xAttributes );
     ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// treecontrol
+
 Reference< xml::input::XElement > TreeControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -874,18 +874,18 @@ void TreeControlElement::endElement()
     ctx.importBooleanProperty( "InvokesStopNodeEditing", "invokesstopnodeediting", _xAttributes );
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// imagecontrol
+
 Reference< xml::input::XElement > ImageControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -917,18 +917,18 @@ void ImageControlElement::endElement()
     ctx.importImageURLProperty( "ImageURL" , "src" , _xAttributes );
     ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// textfield
+
 Reference< xml::input::XElement > TextElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -964,18 +964,18 @@ void TextElement::endElement()
     ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
     ctx.importBooleanProperty( "NoLabel", "nolabel", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// FixedHyperLink
+
 Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1013,18 +1013,18 @@ void FixedHyperLinkElement::endElement()
     ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
     ctx.importBooleanProperty( "NoLabel", "nolabel", _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// edit
+
 Reference< xml::input::XElement > TextFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1072,18 +1072,18 @@ void TextFieldElement::endElement()
     }
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// titledbox
+
 Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1092,24 +1092,24 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // title
+    
     else if ( rLocalName == "title" )
     {
         getStringAttr( &_label, "value", xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
         return new ElementBase( _pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
     }
-    // radio
+    
     else if ( rLocalName == "radio" )
     {
-        // dont create radios here, => titledbox must be inserted first due to radio grouping,
-        // possible predecessors!
+        
+        
         Reference< xml::input::XElement > xRet(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
         _radios.push_back( xRet );
         return xRet;
     }
-    // event
+    
     else if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1136,7 +1136,7 @@ void TitledBoxElement::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+    ctx.importDefaults( 0, 0, _xAttributes ); 
 
     if (!_label.isEmpty())
     {
@@ -1144,12 +1144,12 @@ void TitledBoxElement::endElement()
     }
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
     }
 
-    // create radios AFTER group box!
+    
     for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
     {
         Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
@@ -1190,22 +1190,22 @@ void TitledBoxElement::endElement()
         ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
-        // avoid ring-reference:
-        // vector< event elements > holding event elements holding this (via _pParent)
+        
+        
         radioEvents->clear();
     }
-    // avoid ring-reference:
-    // vector< radio elements > holding radio elements holding this (via _pParent)
+    
+    
     _radios.clear();
 }
 
-// radio
+
 Reference< xml::input::XElement > RadioElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1216,7 +1216,7 @@ Reference< xml::input::XElement > RadioElement::startChildElement(
     }
 }
 
-// radiogroup
+
 Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1226,11 +1226,11 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // radio
+    
     else if ( rLocalName == "radio" )
     {
-        // dont create radios here, => titledbox must be inserted first due to radio grouping,
-        // possible predecessors!
+        
+        
         Reference< xml::input::XElement > xRet(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
         _radios.push_back( xRet );
@@ -1286,16 +1286,16 @@ void RadioGroupElement::endElement()
         ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
-        // avoid ring-reference:
-        // vector< event elements > holding event elements holding this (via _pParent)
+        
+        
         radioEvents->clear();
     }
-    // avoid ring-reference:
-    // vector< radio elements > holding radio elements holding this (via _pParent)
+    
+    
     _radios.clear();
 }
 
-// menupopup
+
 Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1305,7 +1305,7 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // menuitem
+    
     else if ( rLocalName == "menuitem" )
     {
         OUString aValue( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,"value" ) );
@@ -1348,13 +1348,13 @@ Sequence< sal_Int16 > MenuPopupElement::getSelectedItems()
     return aRet;
 }
 
-// menulist
+
 Reference< xml::input::XElement > MenuListElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1363,7 +1363,7 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // menupopup
+    
     else if ( rLocalName == "menupopup" )
     {
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
@@ -1411,18 +1411,18 @@ void MenuListElement::endElement()
 
     }
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// combobox
+
 Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1431,7 +1431,7 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // menupopup
+    
     else if ( rLocalName == "menupopup" )
     {
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
@@ -1478,18 +1478,18 @@ void ComboBoxElement::endElement()
     }
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// checkbox
+
 Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1533,29 +1533,29 @@ void CheckBoxElement::endElement()
     sal_Bool bChecked = sal_False;
     if (getBoolAttr( &bChecked, "checked", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        // has "checked" attribute
+        
         sal_Int16 nVal = (bChecked ? 1 : 0);
         xControlModel->setPropertyValue( "State", makeAny( nVal ) );
     }
     else
     {
-        sal_Int16 nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
+        sal_Int16 nVal = (bTriState ? 2 : 0); 
         xControlModel->setPropertyValue( "State", makeAny( nVal ) );
     }
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// button
+
 Reference< xml::input::XElement > ButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1599,7 +1599,7 @@ void ButtonElement::endElement()
         ctx.getControlModel()->setPropertyValue( "Toggle" , makeAny(true));
     ctx.importBooleanProperty( "FocusOnClick", "grab-focus", _xAttributes );
     ctx.importBooleanProperty( "MultiLine", "multiline", _xAttributes );
-    // State
+    
     sal_Bool bChecked = sal_False;
     if (getBoolAttr( &bChecked, "checked", _xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bChecked)
     {
@@ -1608,12 +1608,12 @@ void ButtonElement::endElement()
     }
 
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 
-// bulletinboard
+
 Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1623,37 +1623,37 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     {
         throw xml::sax::SAXException("illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // button
+    
     else if ( rLocalName == "button" )
     {
         return new ButtonElement( rLocalName, xAttributes, this, _pImport );
     }
-    // checkbox
+    
     else if ( rLocalName == "checkbox" )
     {
         return new CheckBoxElement( rLocalName, xAttributes, this, _pImport );
     }
-    // combobox
+    
     else if ( rLocalName == "combobox" )
     {
         return new ComboBoxElement( rLocalName, xAttributes, this, _pImport );
     }
-    // listbox
+    
     else if ( rLocalName == "menulist" )
     {
         return new MenuListElement( rLocalName, xAttributes, this, _pImport );
     }
-    // radiogroup
+    
     else if ( rLocalName == "radiogroup" )
     {
         return new RadioGroupElement( rLocalName, xAttributes, this, _pImport );
     }
-    // titledbox
+    
     else if ( rLocalName == "titledbox" )
     {
         return new TitledBoxElement( rLocalName, xAttributes, this, _pImport );
     }
-    // text
+    
     else if ( rLocalName == "text" )
     {
         return new TextElement( rLocalName, xAttributes, this, _pImport );
@@ -1662,72 +1662,72 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     {
         return new FixedHyperLinkElement( rLocalName, xAttributes, this, _pImport );
     }
-    // textfield
+    
     else if ( rLocalName == "textfield" )
     {
         return new TextFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // img
+    
     else if ( rLocalName == "img" )
     {
         return new ImageControlElement( rLocalName, xAttributes, this, _pImport );
     }
-    // filecontrol
+    
     else if ( rLocalName == "filecontrol" )
     {
         return new FileControlElement( rLocalName, xAttributes, this, _pImport );
     }
-    // treecontrol
+    
     else if ( rLocalName == "treecontrol" )
     {
         return new TreeControlElement( rLocalName, xAttributes, this, _pImport );
     }
-    // currencyfield
+    
     else if ( rLocalName == "currencyfield" )
     {
         return new CurrencyFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // datefield
+    
     else if ( rLocalName == "datefield" )
     {
         return new DateFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // datefield
+    
     else if ( rLocalName == "numericfield" )
     {
         return new NumericFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // timefield
+    
     else if ( rLocalName == "timefield" )
     {
         return new TimeFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // patternfield
+    
     else if ( rLocalName == "patternfield" )
     {
         return new PatternFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // formattedfield
+    
     else if ( rLocalName == "formattedfield" )
     {
         return new FormattedFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // fixedline
+    
     else if ( rLocalName == "fixedline" )
     {
         return new FixedLineElement( rLocalName, xAttributes, this, _pImport );
     }
-    // scrollbar
+    
     else if ( rLocalName == "scrollbar" )
     {
         return new ScrollBarElement( rLocalName, xAttributes, this, _pImport );
     }
-    // spinbutton
+    
     else if ( rLocalName == "spinbutton" )
     {
         return new SpinButtonElement( rLocalName, xAttributes, this, _pImport );
     }
-    // progressmeter
+    
     else if ( rLocalName == "progressmeter" )
     {
         return new ProgressBarElement( rLocalName, xAttributes, this, _pImport );
@@ -1744,7 +1744,7 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     {
         return new Page( rLocalName, xAttributes, this, _pImport );
     }
-    // bulletinboard
+    
     else if ( rLocalName == "bulletinboard" )
     {
         return new BulletinBoardElement( rLocalName, xAttributes, this, _pImport );
@@ -1774,7 +1774,7 @@ BulletinBoardElement::BulletinBoardElement(
     }
 }
 
-// style
+
 Reference< xml::input::XElement > StyleElement::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
@@ -1798,7 +1798,7 @@ void StyleElement::endElement()
     }
 }
 
-// styles
+
 Reference< xml::input::XElement > StylesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1808,7 +1808,7 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // style
+    
     else if ( rLocalName == "style" )
     {
         return new StyleElement( rLocalName, xAttributes, this, _pImport );
@@ -1819,13 +1819,13 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
     }
 }
 
-// window
+
 Reference< xml::input::XElement > WindowElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // event
+    
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
@@ -1834,12 +1834,12 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // styles
+    
     else if ( rLocalName == "styles" )
     {
         return new StylesElement( rLocalName, xAttributes, this, _pImport );
     }
-    // bulletinboard
+    
     else if ( rLocalName == "bulletinboard" )
     {
         return new BulletinBoardElement( rLocalName, xAttributes, this, _pImport );
@@ -1876,8 +1876,8 @@ void WindowElement::endElement()
         ctx.importImageURLProperty( "ImageURL" , "image-src" , _xAttributes );
     ctx.importScollableSettings( _xAttributes );
     ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
+    
+    
     _events.clear();
 }
 

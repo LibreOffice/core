@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "themebuffer.hxx"
@@ -24,11 +24,11 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using ::oox::drawingml::ClrScheme;
 
-// ============================================================================
+
 
 ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -37,12 +37,12 @@ ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     switch( getFilterType() )
     {
         case FILTER_OOXML:
-            //! TODO: locale dependent font name
+            
             mxDefFontModel->maName = "Cambria";
             mxDefFontModel->mfHeight = 11.0;
         break;
         case FILTER_BIFF:
-            //! TODO: BIFF dependent font name
+            
             mxDefFontModel->maName = "Arial";
             mxDefFontModel->mfHeight = 10.0;
         break;
@@ -60,9 +60,9 @@ sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
     return getClrScheme().getColor( nToken, nColor ) ? nColor : API_RGB_TRANSPARENT;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

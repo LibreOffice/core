@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -77,7 +77,7 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
 {
     if( XML_NAMESPACE_UNKNOWN == nKey )
     {
-        // create a new unique key with UNKNOWN flag set
+        
         nKey = XML_NAMESPACE_UNKNOWN_FLAG;
         do
         {
@@ -178,7 +178,7 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
     {
         sAttrName.append( sXMLNS  );
         const OUString & prefix( (*aIter).second->sPrefix );
-        if (!prefix.isEmpty()) // not default namespace
+        if (!prefix.isEmpty()) 
         {
             sAttrName.append( ':' );
             sAttrName.append( prefix );
@@ -191,23 +191,23 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                             const OUString& rLocalName,
                             sal_Bool bCache) const
 {
-    // We always want to return at least the rLocalName...
+    
 
     switch ( nKey )
     {
         case XML_NAMESPACE_UNKNOWN:
-            // ...if it's a completely unknown namespace, assert and return the local name
+            
             DBG_ASSERT( false, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
         case XML_NAMESPACE_NONE:
-            // ...if there isn't one, return the local name
+            
             return rLocalName;
         case XML_NAMESPACE_XMLNS:
         {
-            // ...if it's in the xmlns namespace, make the prefix
-            // don't bother caching this, it rarely happens
+            
+            
             OUStringBuffer sQName;
             sQName.append ( sXMLNS );
-            if (!rLocalName.isEmpty()) // not default namespace
+            if (!rLocalName.isEmpty()) 
             {
                 sQName.append ( ':' );
                 sQName.append ( rLocalName );
@@ -216,7 +216,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         }
         case XML_NAMESPACE_XML:
         {
-            // this namespace is reserved, and needs not to be declared
+            
             OUStringBuffer sQName;
             sQName.append ( GetXMLToken(XML_XML) );
             sQName.append ( ':' );
@@ -238,9 +238,9 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 if ( aIter != aNameMap.end() )
                 {
                     OUStringBuffer sQName;
-                    // ...if it's in our map, make the prefix
+                    
                     const OUString & prefix( (*aIter).second->sPrefix );
-                    if (!prefix.isEmpty()) // not default namespace
+                    if (!prefix.isEmpty()) 
                     {
                         sQName.append( prefix );
                         sQName.append( ':' );
@@ -259,7 +259,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 }
                 else
                 {
-                    // ... if it isn't, this is a Bad Thing, assert and return the local name
+                    
                     DBG_ASSERT( false, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
                     return rLocalName;
                 }
@@ -310,13 +310,13 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
         sal_Int32 nColonPos = rAttrName.indexOf( ':' );
         if( -1L == nColonPos )
         {
-            // case: no ':' found -> default namespace
+            
             xEntry->sPrefix = OUString();
             xEntry->sName = rAttrName;
         }
         else
         {
-            // normal case: ':' found -> get prefix/suffix
+            
             xEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
             xEntry->sName = rAttrName.copy( nColonPos + 1L );
         }
@@ -329,16 +329,16 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
         NameSpaceHash::const_iterator aIter = aNameHash.find( xEntry->sPrefix );
         if ( aIter != aNameHash.end() )
         {
-            // found: retrieve namespace key
+            
             nKey = xEntry->nKey = (*aIter).second->nKey;
             if ( pNamespace )
                 *pNamespace = (*aIter).second->sName;
         }
         else if ( xEntry->sPrefix == sXMLNS )
-            // not found, but xmlns prefix: return xmlns 'namespace'
+            
             nKey = xEntry->nKey = XML_NAMESPACE_XMLNS;
         else if( nColonPos == -1L )
-            // not found, and no namespace: 'namespace' none
+            
             nKey = xEntry->nKey = XML_NAMESPACE_NONE;
 
         if (bCache)
@@ -362,7 +362,7 @@ sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
 }
 
 
-// All methods after this are deprecated...
+
 
 sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey ) const
 {
@@ -444,7 +444,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
 
 sal_Bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )
 {
-    // try OASIS + W3 URI normalization
+    
     sal_Bool bSuccess = NormalizeOasisURN( rName );
     if( ! bSuccess )
         bSuccess = NormalizeW3URI( rName );
@@ -453,11 +453,11 @@ sal_Bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )
 
 sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
 {
-    // check if URI matches:
-    // http://www.w3.org/[0-9]*/[:letter:]*
-    //                   (year)/(WG name)
-    // For the following WG/standards names:
-    // - xforms
+    
+    
+    
+    
+    
 
     sal_Bool bSuccess = sal_False;
     const OUString sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
@@ -467,7 +467,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
         if( rName.copy( nCompareFrom ).equals( sURISuffix ) )
         {
-            // found W3 prefix, and xforms suffix
+            
             rName = GetXMLToken( XML_N_XFORMS_1_0 );
             bSuccess = sal_True;
         }
@@ -477,9 +477,9 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
 
 sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
 {
-    // #i38644#
-    // we exported the wrong namespace for smil, so we correct this here on load
-    // for older documents
+    
+    
+    
     if( IsXMLToken( rName, ::xmloff::token::XML_N_SVG ) )
     {
         rName = GetXMLToken( ::xmloff::token::XML_N_SVG_COMPAT );
@@ -498,56 +498,56 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
     }
 
     //
-    // Check if URN matches
-    // :urn:oasis:names:tc:[^:]*:xmlns:[^:]*:1.[^:]*
-    //                     |---|       |---| |-----|
-    //                     TC-Id      Sub-Id Version
+    
+    
+    
+    
 
     sal_Int32 nNameLen = rName.getLength();
-    // :urn:oasis:names:tc.*
+    
     const OUString& rOasisURN = GetXMLToken( XML_URN_OASIS_NAMES_TC );
     if( !rName.startsWith( rOasisURN ) )
         return sal_False;
 
-    // :urn:oasis:names:tc:.*
+    
     sal_Int32 nPos = rOasisURN.getLength();
     if( nPos >= nNameLen || rName[nPos] != ':' )
         return sal_False;
 
-    // :urn:oasis:names:tc:[^:]:.*
+    
     sal_Int32 nTCIdStart = nPos+1;
     sal_Int32 nTCIdEnd = rName.indexOf( ':', nTCIdStart );
     if( -1 == nTCIdEnd )
         return sal_False;
 
-    // :urn:oasis:names:tc:[^:]:xmlns.*
+    
     nPos = nTCIdEnd + 1;
     OUString sTmp( rName.copy( nPos ) );
     const OUString& rXMLNS = GetXMLToken( XML_XMLNS );
     if( !sTmp.startsWith( rXMLNS ) )
         return sal_False;
 
-    // :urn:oasis:names:tc:[^:]:xmlns:.*
+    
     nPos += rXMLNS.getLength();
     if( nPos >= nNameLen || rName[nPos] != ':' )
         return sal_False;
 
-    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:.*
+    
     nPos = rName.indexOf( ':', nPos+1 );
     if( -1 == nPos )
         return sal_False;
 
-    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:[^:][^:][^:][^:]*
+    
     sal_Int32 nVersionStart = nPos+1;
     if( nVersionStart+2 >= nNameLen ||
         -1 != rName.indexOf( ':', nVersionStart ) )
         return sal_False;
 
-    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:1\.[^:][^:]*
+    
     if( rName[nVersionStart] != '1' || rName[nVersionStart+1] != '.' )
         return sal_False;
 
-    // replace [tcid] with current TCID and version with current version.
+    
 
     rName = rName.copy( 0, nTCIdStart ) +
             GetXMLToken( XML_OPENDOCUMENT ) +

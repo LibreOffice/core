@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "doc.hxx"
@@ -34,9 +34,9 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
         pTmpRoot->StartAllAction();
-        // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
-        // is only (onny may only be) called by the formatting routines
-        //pTmpRoot->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
+        
+        
+        
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_LINENUM | INV_SIZE));
          pTmpRoot->EndAllAction();
     }
@@ -139,7 +139,7 @@ void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         pRoot->StartAllAction();
         std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllAddPaintRect));
-        //pRoot->GetCurrShell()->AddPaintRect( pRoot->Frm() );
+        
         pRoot->EndAllAction();
     }
 }

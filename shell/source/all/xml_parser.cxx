@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,14 +40,14 @@ namespace /* private */
     {
         const XML_Char* p = rawname;
 
-        // go to the end
+        
         while (*p) p++;
 
-        // go back until the first ':'
+        
         while (*p != COLON && p > rawname)
             p--;
 
-        // if we are on a colon one step forward
+        
         if (*p == COLON)
             p++;
 
@@ -103,7 +103,7 @@ static void xml_start_element_handler(void* UserData, const XML_Char* name, cons
         while(atts[i])
         {
             attributes[UTF8ToWString(reinterpret_cast<const char*>(get_local_name(atts[i])))] = UTF8ToWString(reinterpret_cast<const char*>(atts[i+1]));
-            i += 2; // skip to next pair
+            i += 2; 
         }
 
         pDocHdl->start_element(
@@ -146,16 +146,16 @@ static void xml_comment_handler(void* UserData, const XML_Char* Data)
         pDocHdl->comment(UTF8ToWString(reinterpret_cast<const char*>(Data)));
 }
 
-} // extern "C"
+} 
 
 void xml_parser::init()
 {
     XML_SetUserData(xml_parser_, this);
 
-    // we use the parser as handler argument,
-    // so we could use it if necessary, the
-    // UserData are usable anyway using
-    // XML_GetUserData(...)
+    
+    
+    
+    
     XML_UseParserAsHandlerArg(xml_parser_);
 
     XML_SetElementHandler(

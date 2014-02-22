@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -48,7 +48,7 @@ class heap_ptr_test : public CppUnit::TestFixture
   public:
     void global()
     {
-        // Construction
+        
         heap_ptr<Help>
             t_empty;
         const heap_ptr<Help>
@@ -77,21 +77,21 @@ class heap_ptr_test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("ctor13",   Help::InstanceCount_() == nHelpCount);
 
 
-        // Operator safe_bool() / bool()
+        
         CPPUNIT_ASSERT_MESSAGE("bool1", ! t_empty);
         CPPUNIT_ASSERT_MESSAGE("bool2", t0);
         CPPUNIT_ASSERT_MESSAGE("bool3", t1.is() == static_cast<bool>(t1));
 
 
-        // Assignment, reset() and release()
-            // Release
+        
+            
         Help * hp = t1.release();
         CPPUNIT_ASSERT_MESSAGE("release1", ! t1.is() );
         CPPUNIT_ASSERT_MESSAGE("release2", t1.get() == 0 );
         CPPUNIT_ASSERT_MESSAGE("release3", t1.operator->() == 0 );
         CPPUNIT_ASSERT_MESSAGE("release4", Help::InstanceCount_() == nHelpCount);
 
-            // operator=()
+            
         t_empty = hp;
         CPPUNIT_ASSERT_MESSAGE("assign1", t_empty.is() );
         CPPUNIT_ASSERT_MESSAGE("assign2", Help::InstanceCount_() == nHelpCount);
@@ -101,7 +101,7 @@ class heap_ptr_test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("assign4",   ! t_empty.is() );
         CPPUNIT_ASSERT_MESSAGE("assign5",   Help::InstanceCount_() == nHelpCount);
 
-            // reset()
+            
         hp = new Help(30);
         ++nHelpCount;
 
@@ -110,7 +110,7 @@ class heap_ptr_test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("reset2",  t_empty.is() );
         CPPUNIT_ASSERT_MESSAGE("reset3",  t_empty.get() == hp );
 
-            // Ignore second assignment
+            
         t_empty = hp;
         CPPUNIT_ASSERT_MESSAGE("selfassign1",  Help::InstanceCount_() == nHelpCount);
         CPPUNIT_ASSERT_MESSAGE("selfassign2",  t_empty.is() );
@@ -123,7 +123,7 @@ class heap_ptr_test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("reset5",   Help::InstanceCount_() == nHelpCount);
 
 
-        // swap
+        
         t1.swap(t2);
         CPPUNIT_ASSERT_MESSAGE("swap1",   t1->Value() == 20 );
         CPPUNIT_ASSERT_MESSAGE("swap2",   t2->Value() == 10 );
@@ -134,7 +134,7 @@ class heap_ptr_test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("swap5",   t2->Value() == 20 );
         CPPUNIT_ASSERT_MESSAGE("swap6",   Help::InstanceCount_() == nHelpCount);
 
-        // RAII
+        
         {
             heap_ptr<Help>
                 t_raii( new Help(55) );
@@ -144,13 +144,13 @@ class heap_ptr_test : public CppUnit::TestFixture
     }
 
 
-    // These macros are needed by auto register mechanism.
+    
     CPPUNIT_TEST_SUITE(heap_ptr_test);
     CPPUNIT_TEST(global);
     CPPUNIT_TEST_SUITE_END();
-}; // class heap_ptr_test
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(heap_ptr_test);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "DataProviderHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -51,10 +51,10 @@
 #include "helpids.hrc"
 #include "RptResId.hrc"
 #include "PropertyForward.hxx"
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 using namespace ::com::sun::star;
 
 DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext > const & context)
@@ -103,10 +103,10 @@ uno::Reference< uno::XInterface > SAL_CALL DataProviderHandler::create( const un
 {
     return *(new DataProviderHandler( _rxContext ));
 }
-// overload WeakComponentImplHelperBase::disposing()
-// This function is called upon disposing the component,
-// if your component needs special work when it becomes
-// disposed, do it here.
+
+
+
+
 void SAL_CALL DataProviderHandler::disposing()
 {
     ::comphelper::disposeComponent(m_xFormComponentHandler);
@@ -123,7 +123,7 @@ void SAL_CALL DataProviderHandler::removeEventListener(const uno::Reference< lan
     m_xFormComponentHandler->removeEventListener(aListener);
 }
 
-// inspection::XPropertyHandler:
+
 
 /********************************************************************************/
 void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface > & Component) throw (uno::RuntimeException, lang::NullPointerException)
@@ -173,32 +173,32 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
-            // TODO: We need a possiblity to get the UI of the selected chart type
-            //if( m_xChartModel.is() )
-            //{
-            //    uno::Reference< chart2::XDiagram > xDiagram( m_xChartModel->getFirstDiagram() );
-            //    if( xDiagram.is() )
-            //    {
-            //        OUString sChartTypes;
-            //        uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-            //        const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-            //        const uno::Reference< chart2::XCoordinateSystem >* pIter = aCooSysSeq.getConstArray();
-            //        const uno::Reference< chart2::XCoordinateSystem >* pEnd     = pIter + aCooSysSeq.getLength();
-            //        for(;pIter != pEnd;++pIter)
-            //        {
-            //            const uno::Reference< chart2::XChartTypeContainer > xCTCnt( *pIter, uno::UNO_QUERY_THROW );
-            //            const uno::Sequence< uno::Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
-            //            const uno::Reference< chart2::XChartType >* pChartTypeIter = aCTSeq.getConstArray();
-            //            const uno::Reference< chart2::XChartType >* pChartTypeEnd  = pChartTypeIter + aCTSeq.getLength();
-            //            for(;pChartTypeIter != pChartTypeEnd;++pChartTypeIter)
-            //            {
-            //                sChartTypes += (*pChartTypeIter)->getChartType();
-            //                sChartTypes += ";";
-            //            }
-            //        }
-            //        aPropertyValue;// <<= sChartTypes;
-            //    }
-            //}
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             break;
         case PROPERTY_ID_PREVIEW_COUNT:
             aPropertyValue <<= m_xDataProvider->getRowLimit();
@@ -226,7 +226,7 @@ void SAL_CALL DataProviderHandler::setPropertyValue(const OUString & PropertyNam
             break;
     }
 }
-// -----------------------------------------------------------------------------
+
 void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
 {
     uno::Reference<chart2::XTitled> xTitled(m_xChartModel,uno::UNO_QUERY);
@@ -323,7 +323,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToControlValue(const OUString & _r
 {
     uno::Any aControlValue( _rPropertyValue );
     if ( !aControlValue.hasValue() )
-        // NULL is converted to NULL
+        
         return aControlValue;
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -387,7 +387,7 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
 uno::Sequence< OUString > SAL_CALL DataProviderHandler::getSupersededProperties() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
-    aRet[0] = PROPERTY_TITLE; // have a look at OPropertyInfoService::getExcludeProperties
+    aRet[0] = PROPERTY_TITLE; 
     return aRet;
 }
 
@@ -446,7 +446,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
             InspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
 
             sal_Bool bModified = xReport->isModified();
-            // this fills the chart again
+            
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );
             aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
@@ -516,7 +516,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
 }
-// -----------------------------------------------------------------------------
+
 bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
 {
     uno::Sequence<uno::Any> aSeq(2);
@@ -536,8 +536,8 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
 }
-//........................................................................
-} // namespace rptui
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

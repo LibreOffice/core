@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbastyles.hxx"
 #include "vbastyle.hxx"
@@ -168,15 +168,15 @@ private:
 public:
     StyleCollectionHelper( const uno::Reference< frame::XModel >& _xModel ) : mxModel( _xModel )
     {
-        // we only concern about the Paragraph styles
+        
         uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStyleSupplier->getStyleFamilies();
         mxParaStyles.set( xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW  );
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<style::XStyle>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0; }
-    // XNameAcess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -189,12 +189,12 @@ public:
     }
     virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
-        // search in the MSOStyleName table first
+        
         for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != NULL; pTable++ )
         {
             if( aName.equalsIgnoreAsciiCaseAscii( pTable->pMSOStyleName ) )
             {
-                //Found it
+                
                 OUString sStyleName = OUString::createFromAscii( pTable->pOOoStyleName );
                 if( mxParaStyles->hasByName( sStyleName ) )
                 {
@@ -226,7 +226,7 @@ public:
         return sal_False;
     }
 
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
@@ -240,7 +240,7 @@ public:
         uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
         return xIndexAccess->getByIndex( Index );
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
@@ -293,7 +293,7 @@ SwVbaStyles::createEnumeration() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::RuntimeException)
 {
-    //handle WdBuiltinStyle
+    
     sal_Int32 nIndex = 0;
     if( ( Index1 >>= nIndex ) && ( nIndex < 0 ) )
     {
@@ -320,7 +320,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                         }
                         case word::WdStyleType::wdStyleTypeList:
                         {
-                            // should use Paragraph style and set the property "NumberingStyleName"
+                            
                             aStyleType = "ParagraphStyles";
                             break;
                         }
@@ -330,7 +330,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW);
                     uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
                     uno::Reference< beans::XPropertySet > xStyleProps( xStylesAccess->getByName( aStyleName ), uno::UNO_QUERY_THROW );
-                    // set the property "NumberingStyleName" if it is a listbullet
+                    
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {
                         xStyleProps->setPropertyValue("NumberingStyleName", uno::makeAny( aStyleName ) );

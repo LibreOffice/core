@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdpage.hxx>
@@ -43,7 +43,7 @@ E3dObjFactory::~E3dObjFactory()
 {
 }
 
-// Generate chart internal objects
+
 
 IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 {
@@ -61,11 +61,11 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
                 pObjFactory->pNewObj = new E3dCubeObj();
                 break;
             case E3D_SPHEREOBJ_ID:
-                // Gets the dummy constructor, as this is only called when
-                // loading documents. The actual number of segments is however
-                // determined only after loading the members. This will result
-                // in that the first sphere will be immediately destroyed,
-                // although it was never used.
+                
+                
+                
+                
+                
                 pObjFactory->pNewObj = new E3dSphereObj(123);
                 break;
             case E3D_EXTRUDEOBJ_ID:

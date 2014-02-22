@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
@@ -22,8 +22,8 @@
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// helper methods
+
+
 
 namespace drawinglayer
 {
@@ -39,10 +39,10 @@ namespace drawinglayer
 
             if(!aRetVal.get() || rBColor != aColor)
             {
-                // copy values
+                
                 aColor = rBColor;
 
-                // create bitmap
+                
                 Bitmap aContent(Size(3, 3), 24);
                 Bitmap aMask(Size(3, 3), 1);
                 BitmapWriteAccess* pWContent = aContent.AcquireWriteAccess();
@@ -52,7 +52,7 @@ namespace drawinglayer
                 const BitmapColor aPixColor(aVCLColor);
                 const BitmapColor aMaskColor(0x01);
 
-                // Y,X unusual order (!)
+                
                 pWContent->SetPixel(0, 1, aPixColor);
                 pWContent->SetPixel(1, 0, aPixColor);
                 pWContent->SetPixel(1, 1, aPixColor);
@@ -67,13 +67,13 @@ namespace drawinglayer
                 aContent.ReleaseAccess(pWContent);
                 aMask.ReleaseAccess(pWMask);
 
-                // create and exchange at aRetVal
+                
                 delete aRetVal.set(new BitmapEx(aContent, aMask));
             }
 
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

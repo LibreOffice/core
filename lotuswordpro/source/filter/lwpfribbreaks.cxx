@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -71,28 +71,28 @@
 
 void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 {
-//    XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(pFoundry->GetStyleManager()->GetStyle(styleID));
+
     XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
     if (pBaseStyle == NULL) return;
-//    m_StyleName = pBaseStyle->GetStyleName();
+
 
     XFParaStyle* pOverStyle = new XFParaStyle;
     *pOverStyle = *pBaseStyle;
     pOverStyle->SetStyleName(A2OUSTR(""));
 
-    //Old code
-    //if (static_cast<LwpStory*>(pPara->GetStoryID()->obj())
-    //  ->GetCurrentLayout()->GetNumCols() == 1)
-    //New code
+    
+    
+    
+    
     LwpStory* pStory = static_cast<LwpStory*>(pPara->GetStoryID()->obj());
     LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : NULL;
     if( pCurLayout && (pCurLayout->GetNumCols() == 1) )
 
     {
-//      if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
+
             pOverStyle->SetBreaks(enumXFBreakBefPage);
-//      else
-//          pOverStyle->SetBreaks(enumXFBreakBefPage);
+
+
     }
     else
     {

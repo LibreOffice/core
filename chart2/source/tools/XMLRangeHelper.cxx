@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLRangeHelper.hxx"
@@ -81,7 +81,7 @@ void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, OUStr
     if( ! rCell.bRelativeColumn )
         output->append( '$' );
 
-    // get A, B, C, ..., AA, AB, ... representation of column number
+    
     if( nCol < 26 )
         output->append( (sal_Unicode)('A' + nCol) );
     else if( nCol < 702 )
@@ -89,14 +89,14 @@ void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, OUStr
         output->append( (sal_Unicode)('A' + nCol / 26 - 1 ));
         output->append( (sal_Unicode)('A' + nCol % 26) );
     }
-    else    // works for nCol <= 18,278
+    else    
     {
         output->append( (sal_Unicode)('A' + nCol / 702 - 1 ));
         output->append( (sal_Unicode)('A' + (nCol % 702) / 26 ));
         output->append( (sal_Unicode)('A' + nCol % 26) );
     }
 
-    // write row number as number
+    
     if( ! rCell.bRelativeRow )
         output->append( '$' );
     output->append( rCell.nRow + (sal_Int32)1 );
@@ -107,7 +107,7 @@ void lcl_getSingleCellAddressFromXMLString(
     sal_Int32 nStartPos, sal_Int32 nEndPos,
     ::chart::XMLRangeHelper::Cell & rOutCell )
 {
-    // expect "\$?[a-zA-Z]+\$?[1-9][0-9]*"
+    
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aLetterA( 'A' );
 
@@ -116,11 +116,11 @@ void lcl_getSingleCellAddressFromXMLString(
     sal_Int32 nLength = aCellStr.getLength();
     sal_Int32 i = nLength - 1, nColumn = 0;
 
-    // parse number for row
+    
     while( rtl::isAsciiDigit( pStrArray[ i ] ) && i >= 0 )
         i--;
     rOutCell.nRow = (aCellStr.copy( i + 1 )).toInt32() - 1;
-    // a dollar in XML means absolute (whereas in UI it means relative)
+    
     if( pStrArray[ i ] == aDollar )
     {
         i--;
@@ -129,7 +129,7 @@ void lcl_getSingleCellAddressFromXMLString(
     else
         rOutCell.bRelativeRow = true;
 
-    // parse rest for column
+    
     sal_Int32 nPower = 1;
     while( rtl::isAsciiAlpha( pStrArray[ i ] ))
     {
@@ -160,14 +160,14 @@ bool lcl_getCellAddressFromXMLString(
 
     sal_Int32 nDelimiterPos = nStartPos;
     bool bInQuotation = false;
-    // parse table name
+    
     while( nDelimiterPos < nEndPos &&
            ( bInQuotation || rXMLString[ nDelimiterPos ] != aDot ))
     {
-        // skip escaped characters (with backslash)
+        
         if( rXMLString[ nDelimiterPos ] == aBackslash )
             ++nDelimiterPos;
-        // toggle quotation mode when finding single quotes
+        
         else if( rXMLString[ nDelimiterPos ] == aQuote )
             bInQuotation = ! bInQuotation;
 
@@ -179,17 +179,17 @@ bool lcl_getCellAddressFromXMLString(
 
     if( nDelimiterPos > nStartPos && nDelimiterPos < nEndPos )
     {
-        // there is a table name before the address
+        
 
         OUStringBuffer aTableNameBuffer;
         const sal_Unicode * pTableName = rXMLString.getStr();
 
-        // remove escapes from table name
+        
         ::std::for_each( pTableName + nStartPos,
                          pTableName + nDelimiterPos,
                          lcl_UnEscape( aTableNameBuffer ));
 
-        // unquote quoted table name
+        
         const sal_Unicode * pBuf = aTableNameBuffer.getStr();
         if( pBuf[ 0 ] == aQuote &&
             pBuf[ aTableNameBuffer.getLength() - 1 ] == aQuote )
@@ -213,7 +213,7 @@ bool lcl_getCellAddressFromXMLString(
             nNextDelimiterPos = nEndPos + 1;
 
         if( i==0 )
-            // only take first cell
+            
             lcl_getSingleCellAddressFromXMLString(
                 rXMLString, nDelimiterPos + 1, nNextDelimiterPos - 1, rOutCell );
     }
@@ -233,14 +233,14 @@ bool lcl_getCellRangeAddressFromXMLString(
 
     sal_Int32 nDelimiterPos = nStartPos;
     bool bInQuotation = false;
-    // parse table name
+    
     while( nDelimiterPos < nEndPos &&
            ( bInQuotation || rXMLString[ nDelimiterPos ] != aColon ))
     {
-        // skip escaped characters (with backslash)
+        
         if( rXMLString[ nDelimiterPos ] == aBackslash )
             ++nDelimiterPos;
-        // toggle quotation mode when finding single quotes
+        
         else if( rXMLString[ nDelimiterPos ] == aQuote )
             bInQuotation = ! bInQuotation;
 
@@ -249,7 +249,7 @@ bool lcl_getCellRangeAddressFromXMLString(
 
     if( nDelimiterPos == nEndPos )
     {
-        // only one cell
+        
         bResult = lcl_getCellAddressFromXMLString( rXMLString, nStartPos, nEndPos,
                                                    rOutRange.aUpperLeft,
                                                    rOutRange.aTableName );
@@ -258,7 +258,7 @@ bool lcl_getCellRangeAddressFromXMLString(
     }
     else
     {
-        // range (separated by a colon)
+        
         bResult = lcl_getCellAddressFromXMLString( rXMLString, nStartPos, nDelimiterPos - 1,
                                                    rOutRange.aUpperLeft,
                                                    rOutRange.aTableName );
@@ -281,7 +281,7 @@ bool lcl_getCellRangeAddressFromXMLString(
     return bResult;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -292,7 +292,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
 {
     static const sal_Unicode aSpace( ' ' );
     static const sal_Unicode aQuote( '\'' );
-//     static const sal_Unicode aDoubleQuote( '\"' );
+
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aBackslash( '\\' );
 
@@ -300,29 +300,29 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
     sal_Int32 nEndPos = nStartPos;
     const sal_Int32 nLength = rXMLString.getLength();
 
-    // reset
+    
     CellRange aResult;
 
-    // iterate over different ranges
+    
     for( sal_Int32 i = 0;
          nEndPos < nLength;
          nStartPos = ++nEndPos, i++ )
     {
-        // find start point of next range
+        
 
-        // ignore leading '$'
+        
         if( rXMLString[ nEndPos ] == aDollar)
             nEndPos++;
 
         bool bInQuotation = false;
-        // parse range
+        
         while( nEndPos < nLength &&
                ( bInQuotation || rXMLString[ nEndPos ] != aSpace ))
         {
-            // skip escaped characters (with backslash)
+            
             if( rXMLString[ nEndPos ] == aBackslash )
                 ++nEndPos;
-            // toggle quotation mode when finding single quotes
+            
             else if( rXMLString[ nEndPos ] == aQuote )
                 bInQuotation = ! bInQuotation;
 
@@ -334,7 +334,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
                 nStartPos, nEndPos - 1,
                 aResult ))
         {
-            // if an error occurred, bail out
+            
             return CellRange();
         }
     }
@@ -354,18 +354,18 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
         bool bNeedsEscaping = ( rRange.aTableName.indexOf( aQuote ) > -1 );
         bool bNeedsQuoting = bNeedsEscaping || ( rRange.aTableName.indexOf( aSpace ) > -1 );
 
-        // quote table name if it contains spaces or quotes
+        
         if( bNeedsQuoting )
         {
-            // leading quote
+            
             aBuffer.append( aQuote );
 
-            // escape existing quotes
+            
             if( bNeedsEscaping )
             {
                 const sal_Unicode * pTableNameBeg = rRange.aTableName.getStr();
 
-                // append the quoted string at the buffer
+                
                 ::std::for_each( pTableNameBeg,
                                  pTableNameBeg + rRange.aTableName.getLength(),
                                  lcl_Escape( aBuffer ) );
@@ -373,7 +373,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
             else
                 aBuffer.append( rRange.aTableName );
 
-            // final quote
+            
             aBuffer.append( aQuote );
         }
         else
@@ -383,7 +383,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
 
     if( ! rRange.aLowerRight.empty())
     {
-        // we have a range (not a single cell)
+        
         aBuffer.append( sal_Unicode( ':' ));
         lcl_getXMLStringForCell( rRange.aLowerRight, &aBuffer );
     }
@@ -391,7 +391,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
     return aBuffer.makeStringAndClear();
 }
 
-} //  namespace XMLRangeHelper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -60,14 +60,14 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    //void testStarBasic();
+    
     void testVba();
     void testFdo55289();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
 #if !defined(MACOSX) && !defined(WNT)
-    //enable this test if you want to play with star basic macros in unit tests
-    //works but does nothing useful yet
-    //CPPUNIT_TEST(testStarBasic);
+    
+    
+    
     CPPUNIT_TEST(testVba);
 #endif
     CPPUNIT_TEST(testFdo55289);
@@ -148,7 +148,7 @@ void SwMacrosTest::testVba()
         OUString aStringRes;
         aRet >>= aStringRes;
         std::cout << "value of Ret " << OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
-        //CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
+        
         pFoundShell->DoClose();
     }
 }
@@ -157,8 +157,8 @@ void SwMacrosTest::testFdo55289()
 {
     SwDoc *const pDoc = new SwDoc;
     SwDocShellRef pDocShell = new SwDocShell(pDoc, SFX_CREATE_MODE_EMBEDDED);
-    // this needs to run with no layout to tickle the bugs in the special
-    // cases in SwXShape re-anchoring
+    
+    
     assert(!pDoc->GetCurrentLayout());
 
     uno::Reference<frame::XModel> const xModel(pDocShell->GetModel());
@@ -195,8 +195,8 @@ void SwMacrosTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    // This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
-    // which is a private symbol to us, gets called
+    
+    
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance(OUString(
         "com.sun.star.comp.Writer.TextDocument"));

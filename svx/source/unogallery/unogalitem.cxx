@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,9 +47,9 @@ using namespace ::com::sun::star;
 
 namespace unogallery {
 
-// -----------------
-// - GalleryItem -
-// -----------------
+
+
+
 
 GalleryItem::GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject ) :
     ::comphelper::PropertySetHelper( createPropertySetInfo() ),
@@ -59,7 +59,7 @@ GalleryItem::GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObjec
     mpTheme->implRegisterGalleryItem( *this );
 }
 
-// ------------------------------------------------------------------------------
+
 
 GalleryItem::~GalleryItem()
     throw()
@@ -68,14 +68,14 @@ GalleryItem::~GalleryItem()
         mpTheme->implDeregisterGalleryItem( *this );
 }
 
-// ------------------------------------------------------------------------------
+
 
 bool GalleryItem::isValid() const
 {
     return( mpTheme != NULL );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GalleryItem::queryAggregation( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -100,7 +100,7 @@ uno::Any SAL_CALL GalleryItem::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -108,7 +108,7 @@ uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface( rType );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryItem::acquire()
     throw()
@@ -116,7 +116,7 @@ void SAL_CALL GalleryItem::acquire()
     OWeakAggObject::acquire();
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryItem::release()
     throw()
@@ -124,7 +124,7 @@ void SAL_CALL GalleryItem::release()
     OWeakAggObject::release();
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString GalleryItem::getImplementationName_Static()
     throw()
@@ -132,7 +132,7 @@ OUString GalleryItem::getImplementationName_Static()
     return OUString( "com.sun.star.comp.gallery.GalleryItem" );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > GalleryItem::getSupportedServiceNames_Static()
     throw()
@@ -189,7 +189,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
     return theGalleryItemImplementationId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Int8 SAL_CALL GalleryItem::getType()
     throw (uno::RuntimeException)
@@ -219,7 +219,7 @@ sal_Int8 SAL_CALL GalleryItem::getType()
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::comphelper::PropertySetInfo* GalleryItem::createPropertySetInfo()
 {
@@ -255,7 +255,7 @@ sal_Int8 SAL_CALL GalleryItem::getType()
     return pRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
     throw( beans::UnknownPropertyException,
@@ -302,7 +302,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValue )
     throw( beans::UnknownPropertyException,
@@ -408,14 +408,14 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 const ::GalleryObject* GalleryItem::implGetObject() const
 {
     return mpGalleryObject;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryItem::implSetInvalid()
 {
@@ -426,9 +426,9 @@ void GalleryItem::implSetInvalid()
     }
 }
 
-// -----------------------
-// - GalleryDrawingModel -
-// -----------------------
+
+
+
 
 GalleryDrawingModel::GalleryDrawingModel( SdrModel* pDoc )
     throw() :
@@ -436,7 +436,7 @@ GalleryDrawingModel::GalleryDrawingModel( SdrModel* pDoc )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 GalleryDrawingModel::~GalleryDrawingModel()
     throw()
@@ -444,7 +444,7 @@ GalleryDrawingModel::~GalleryDrawingModel()
     delete GetDoc();
 }
 
-// -----------------------------------------------------------------------------
+
 
 UNO3_GETIMPLEMENTATION_IMPL( GalleryDrawingModel );
 

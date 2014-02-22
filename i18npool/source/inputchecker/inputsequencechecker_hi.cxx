@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,19 +40,19 @@ InputSequenceChecker_hi::~InputSequenceChecker_hi()
 /*
  * Devanagari character type definitions
  */
-#define __UP  1  // ChandraBindu & Anuswar
-#define __NP  2  // Visarg
-#define __IV    3  // Independent Vowels
-#define __CN    4  // Consonants except _CK & _RC
-#define __CK    5  // Consonants that can be followed by Nukta
-#define __RC    6  // Ra
-#define __NM    7  // Matra
-#define __RM    8  // Ra + HAL
-#define __IM    9  // Choti I Matra
-#define __HL    10 // HAL
-#define __NK    11 // Nukta
-#define __VD    12 // Vedic
-#define __HD    13 // Hindu Numerals
+#define __UP  1  
+#define __NP  2  
+#define __IV    3  
+#define __CN    4  
+#define __CK    5  
+#define __RC    6  
+#define __NM    7  
+#define __RM    8  
+#define __IM    9  
+#define __HL    10 
+#define __NK    11 
+#define __VD    12 
+#define __HD    13 
 
 /*
  * Devanagari character type table
@@ -100,8 +100,8 @@ static const sal_uInt16 dev_cell_check[14][14] = {
 };
 
 sal_Bool _DEV_Composible[2][2] = {
-/* Mode 0 */    {sal_True, sal_True }, // PASSTHROUGH = 0
-/* Mode 1 */    {sal_False, sal_True}  // STRICT = 1
+/* Mode 0 */    {sal_True, sal_True }, 
+/* Mode 1 */    {sal_False, sal_True}  
 };
 
 #define getCharType(x) \

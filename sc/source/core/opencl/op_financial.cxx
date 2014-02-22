@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "op_financial.hxx"
@@ -21,7 +21,7 @@
 using namespace formula;
 
 namespace sc { namespace opencl {
-// Definitions of inline functions
+
 #include "opinlinefun_finacial.cxx"
 
 void RRI::GenSlidingWindowFunction(
@@ -2604,7 +2604,7 @@ void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"    double tmp3=0,tmp4=0;\n";
     size_t i = vSubArguments.size();
     ss <<"\n    ";
-    //while (i-- > 1)
+    
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -2680,7 +2680,7 @@ void OpNPV::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double arg0=";
     ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
-    //while (i-- > 1)
+    
     for (size_t i = 1; i < vSubArguments.size(); i++)
     {
       FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -3363,7 +3363,7 @@ void OpPPMT::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"    double tmp3=0;\n";
     ss<<"    double tmp4=0,tmp5=0;\n";
     ss <<"\n    ";
-    //while (i-- > 1)
+    
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();

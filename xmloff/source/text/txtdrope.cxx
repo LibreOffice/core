@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -54,12 +54,12 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
     {
         SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
 
-        // style:lines
+        
         ::sax::Converter::convertNumber( sBuffer, (sal_Int32)aFormat.Lines );
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LINES,
                               sBuffer.makeStringAndClear() );
 
-        // style:length
+        
         if( bWholeWord )
         {
             sValue = GetXMLToken(XML_WORD);
@@ -72,7 +72,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         if( !sValue.isEmpty() )
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LENGTH, sValue );
 
-        // style:distance
+        
         if( aFormat.Distance > 0 )
         {
             rUnitConv.convertMeasureToXML( sBuffer, aFormat.Distance );
@@ -80,7 +80,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
                                   sBuffer.makeStringAndClear() );
         }
 
-        // style:style-name
+        
         if( !rStyleName.isEmpty() )
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
                                   rExport.EncodeStyleName( rStyleName ) );

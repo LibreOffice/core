@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedAxisAndGridExistenceProperties.hxx"
@@ -49,7 +49,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     bool        m_bAxis;
     bool        m_bMain;
@@ -59,19 +59,19 @@ private: //member
 void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 0, spChart2ModelContact ) );//x axis
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, false, 0, spChart2ModelContact ) );//x secondary axis
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, true, 0, spChart2ModelContact ) );//x grid
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, false, 0, spChart2ModelContact ) );//x help grid
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 0, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, false, 0, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, true, 0, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, false, 0, spChart2ModelContact ) );
 
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 1, spChart2ModelContact ) );//y axis
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, false, 1, spChart2ModelContact ) );//y secondary axis
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, true, 1, spChart2ModelContact ) );//y grid
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, false, 1, spChart2ModelContact ) );//y help grid
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 1, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, false, 1, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, true, 1, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, false, 1, spChart2ModelContact ) );
 
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 2, spChart2ModelContact ) );//z axis
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, true, 2, spChart2ModelContact ) );//z grid
-    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, false, 2, spChart2ModelContact ) );//z help grid
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 2, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, true, 2, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisAndGridExistenceProperty( false, false, 2, spChart2ModelContact ) );
 }
 
 WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool bAxis, bool bMain, sal_Int32 nDimensionIndex
@@ -216,7 +216,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     TitleHelper::eTitleType             m_eTitleType;
 };
@@ -224,11 +224,11 @@ private: //member
 void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    rList.push_back( new WrappedAxisTitleExistenceProperty( 0, spChart2ModelContact ) );//x axis title
-    rList.push_back( new WrappedAxisTitleExistenceProperty( 1, spChart2ModelContact ) );//y axis title
-    rList.push_back( new WrappedAxisTitleExistenceProperty( 2, spChart2ModelContact ) );//z axis title
-    rList.push_back( new WrappedAxisTitleExistenceProperty( 3, spChart2ModelContact ) );//secondary x axis title
-    rList.push_back( new WrappedAxisTitleExistenceProperty( 4, spChart2ModelContact ) );//secondary y axis title
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 0, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 1, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 2, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 3, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 4, spChart2ModelContact ) );
 }
 
 WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
@@ -330,7 +330,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     bool        m_bMain;
     sal_Int32   m_nDimensionIndex;
@@ -339,11 +339,11 @@ private: //member
 void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    rList.push_back( new WrappedAxisLabelExistenceProperty( true, 0, spChart2ModelContact ) );//x axis
-    rList.push_back( new WrappedAxisLabelExistenceProperty( true, 1, spChart2ModelContact ) );//y axis
-    rList.push_back( new WrappedAxisLabelExistenceProperty( true, 2, spChart2ModelContact ) );//z axis
-    rList.push_back( new WrappedAxisLabelExistenceProperty( false, 0, spChart2ModelContact ) );//secondary x axis
-    rList.push_back( new WrappedAxisLabelExistenceProperty( false, 1, spChart2ModelContact ) );//secondary y axis
+    rList.push_back( new WrappedAxisLabelExistenceProperty( true, 0, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisLabelExistenceProperty( true, 1, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisLabelExistenceProperty( true, 2, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisLabelExistenceProperty( false, 0, spChart2ModelContact ) );
+    rList.push_back( new WrappedAxisLabelExistenceProperty( false, 1, spChart2ModelContact ) );
 }
 
 WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
@@ -389,7 +389,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
     Reference< beans::XPropertySet > xProp( AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram ), uno::UNO_QUERY );
     if( !xProp.is() && bNewValue )
     {
-        //create axis if needed
+        
         xProp.set( AxisHelper::createAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext ), uno::UNO_QUERY );
         if( xProp.is() )
             xProp->setPropertyValue( "Show", uno::makeAny( sal_False ) );
@@ -419,7 +419,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< bean
     return aRet;
 }
 
-} //namespace wrapper
-} //namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

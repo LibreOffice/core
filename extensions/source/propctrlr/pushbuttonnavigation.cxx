@@ -35,7 +35,7 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
 
-    //------------------------------------------------------------------------
+    
     namespace
     {
         static const sal_Int32 s_nFirstVirtualButtonType = 1 + (sal_Int32)FormButtonType_URL;
@@ -76,10 +76,10 @@ namespace pcr
         }
     }
 
-    //========================================================================
+    
     //= PushButtonNavigation
-    //========================================================================
-    //------------------------------------------------------------------------
+    
+    
     PushButtonNavigation::PushButtonNavigation( const Reference< XPropertySet >& _rxControlModel )
         :m_xControlModel( _rxControlModel )
         ,m_bIsPushButton( sal_False )
@@ -96,7 +96,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int32 PushButtonNavigation::implGetCurrentButtonType() const SAL_THROW((Exception))
     {
         sal_Int32 nButtonType = FormButtonType_PUSH;
@@ -106,20 +106,20 @@ namespace pcr
 
         if ( nButtonType == FormButtonType_URL )
         {
-            // there's a chance that this is a "virtual" button type
-            // (which are realized by special URLs)
+            
+            
             OUString sTargetURL;
             m_xControlModel->getPropertyValue( PROPERTY_TARGET_URL ) >>= sTargetURL;
 
             sal_Int32 nNavigationURLIndex = lcl_getNavigationURLIndex( sTargetURL );
             if ( nNavigationURLIndex >= 0)
-                // it actually *is* a virtual button type
+                
                 nButtonType = s_nFirstVirtualButtonType + nNavigationURLIndex;
         }
         return nButtonType;
     }
 
-    //------------------------------------------------------------------------
+    
     Any PushButtonNavigation::getCurrentButtonType() const SAL_THROW(())
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::getCurrentButtonType: not expected to be called for forms!" );
@@ -136,7 +136,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+    
     void PushButtonNavigation::setCurrentButtonType( const Any& _rValue ) const SAL_THROW(())
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::setCurrentButtonType: not expected to be called for forms!" );
@@ -167,7 +167,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     PropertyState PushButtonNavigation::getCurrentButtonTypeState( ) const SAL_THROW(())
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::getCurrentButtonTypeState: not expected to be called for forms!" );
@@ -178,16 +178,16 @@ namespace pcr
             Reference< XPropertyState > xStateAccess( m_xControlModel, UNO_QUERY );
             if ( xStateAccess.is() )
             {
-                // let's see what the model says about the ButtonType property
+                
                 eState = xStateAccess->getPropertyState( PROPERTY_BUTTONTYPE );
                 if ( eState == PropertyState_DIRECT_VALUE )
                 {
                     sal_Int32 nRealButtonType = FormButtonType_PUSH;
                     OSL_VERIFY( ::cppu::enum2int( nRealButtonType, m_xControlModel->getPropertyValue( PROPERTY_BUTTONTYPE ) ) );
-                    // perhaps it's one of the virtual button types?
+                    
                     if ( FormButtonType_URL == nRealButtonType )
                     {
-                        // yes, it is -> rely on the state of the URL property
+                        
                         eState = xStateAccess->getPropertyState( PROPERTY_TARGET_URL );
                     }
                 }
@@ -201,7 +201,7 @@ namespace pcr
         return eState;
     }
 
-    //------------------------------------------------------------------------
+    
     Any PushButtonNavigation::getCurrentTargetURL() const SAL_THROW(())
     {
         Any aReturn;
@@ -217,9 +217,9 @@ namespace pcr
                 bool bIsVirtualButtonType = nCurrentButtonType >= s_nFirstVirtualButtonType;
                 if ( bIsVirtualButtonType )
                 {
-                    // pretend (to the user) that there's no URL set - since
-                    // virtual button types imply a special (technical) URL which
-                    // the user should not see
+                    
+                    
+                    
                     aReturn <<= OUString();
                 }
             }
@@ -231,7 +231,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+    
     void PushButtonNavigation::setCurrentTargetURL( const Any& _rValue ) const SAL_THROW(())
     {
         if ( !m_xControlModel.is() )
@@ -247,7 +247,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     PropertyState PushButtonNavigation::getCurrentTargetURLState( ) const SAL_THROW(())
     {
         PropertyState eState = PropertyState_DIRECT_VALUE;
@@ -268,7 +268,7 @@ namespace pcr
         return eState;
     }
 
-    //------------------------------------------------------------------------
+    
     bool PushButtonNavigation::currentButtonTypeIsOpenURL() const
     {
         sal_Int32 nButtonType( FormButtonType_PUSH );
@@ -283,7 +283,7 @@ namespace pcr
         return nButtonType == FormButtonType_URL;
     }
 
-    //------------------------------------------------------------------------
+    
     bool PushButtonNavigation::hasNonEmptyCurrentTargetURL() const
     {
         OUString sTargetURL;
@@ -292,7 +292,7 @@ namespace pcr
     }
 
 //............................................................................
-}   // namespace pcr
+}   
 //............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

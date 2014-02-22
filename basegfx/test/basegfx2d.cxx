@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppunit/TestAssert.h>
@@ -63,18 +63,18 @@ private:
     OUString aPath3;
 
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // simple rectangle
+        
         aPath0 = "M 10 10-10 10-10-10 10-10Z";
 
-        // simple bezier polygon
+        
         aPath1 = "m11430 0c-8890 3810 5715 6985 5715 6985 "
             "0 0-17145-1905-17145-1905 0 0 22860-10160 "
             "16510 6350-6350 16510-3810-11430-3810-11430z";
 
-        // '@' as a bezier polygon
+        
         aPath2 = "m1917 1114c-89-189-233-284-430-284-167 "
             "0-306 91-419 273-113 182-170 370-170 564 "
             "0 145 33 259 98 342 65 84 150 126 257 126 "
@@ -99,7 +99,7 @@ public:
             "357 900 237 216 557 324 958 325 189-1 389-27 "
             "600-77 211-52 378-110 503-174 27 70 54 140 81 210z";
 
-        // first part of 'Hello World' as a line polygon
+        
         aPath3 = "m1598 125h306v2334h-306v-1105h-1293v1105h-305v"
             "-2334h305v973h1293zm2159 1015 78-44 85 235-91 "
             "47-91 40-90 34-90 29-89 21-88 16-88 10-88 3-102"
@@ -159,30 +159,30 @@ public:
                                tools::importFromSvgD( aPoly, aPath1, false, 0 ));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
 
-        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        
         //
-        // The import/export of aPath1 does not reproduce aExport again. This is
-        // correct since aPath1 contains a segment with non-used control points
-        // which gets exported now correctly as 'l' and also a point (#4, index 3)
-        // with C2 continuity which produces a 's' staement now.
+        
+        
+        
+        
         //
-        // The old SVGexport identified nun-used ControlVectors erraneously as bezier segments
-        // because the 2nd vector at the start point was used, even when added
-        // with start point was identical to end point. Exactly for that reason
-        // i reworked the B2DPolygon to use prev, next control points.
+        
+        
+        
+        
         //
-        // so for correct unit test i add the new exported string here as sExportStringSimpleBezier
-        // and compare to it.
+        
+        
         const char* sExportStringSimpleBezier =
             "m11430 0c-8890 3810 5715 6985 5715 6985"
             "l-17145-1905c0 0 22860-10160 16510 6350"
             "s-3810-11430-3810-11430z";
         CPPUNIT_ASSERT_MESSAGE("exporting bezier polygon to SVG-D", aExport.equalsAscii(sExportStringSimpleBezier));
 
-        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        
         //
-        // a 2nd good test is that re-importing of aExport has to create the same
-        // B2DPolPolygon again:
+        
+        
         B2DPolyPolygon aReImport;
         CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D", tools::importFromSvgD( aReImport, aExport, false, 0));
         CPPUNIT_ASSERT_MESSAGE("re-imported polygon needs to be identical", aReImport == aPoly);
@@ -190,10 +190,10 @@ public:
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", tools::importFromSvgD( aPoly, aPath2, false, NULL));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
 
-        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        
         //
-        // same here, the corrected export with the corrected B2DPolygon is simply more efficient,
-        // so i needed to change the compare string. Also adding the re-import comparison below.
+        
+        
         const char* sExportString1 =
             "m1917 1114c-89-189-233-284-430-284-167 0-306 91-419 273s-170 370-17"
             "0 564c0 145 33 259 98 342 65 84 150 126 257 126q115.5 0 231-57s147-97 210-176 99-143 109-190c38-199 76-398 114"
@@ -256,14 +256,14 @@ public:
                                aExport.equalsAscii(sExportStringRect));
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dsvgdimpex);
     CPPUNIT_TEST(impex);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dsvgdimpex
+}; 
 
 class b2drange : public CppUnit::TestFixture
 {
@@ -275,9 +275,9 @@ public:
                                fround(B2DRange(1.2, 2.3, 3.5, 4.8)) == B2IRange(1, 2, 4, 5));
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2drange);
     CPPUNIT_TEST(check);
@@ -301,16 +301,16 @@ public:
         CPPUNIT_ASSERT_MESSAGE("simple poly range - second element",
                                aRange.getElement(1).head == B2DRange(2,2,3,3));
 
-        // B2DPolyRange relies on correctly orientated rects
+        
         const B2DRange aRect(0,0,1,1);
         CPPUNIT_ASSERT_MESSAGE("createPolygonFromRect - correct orientation",
                                tools::getOrientation(
                                    tools::createPolygonFromRect(aRect)) == ORIENTATION_POSITIVE );
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dpolyrange);
     CPPUNIT_TEST(check);
@@ -328,11 +328,11 @@ private:
     B2DHomMatrix    maPerspective;
 
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // setup some test matrices
-        maIdentity.identity(); // force compact layout
+        
+        maIdentity.identity(); 
         maIdentity.set(0,0, 1.0);
         maIdentity.set(0,1, 0.0);
         maIdentity.set(0,2, 0.0);
@@ -340,20 +340,20 @@ public:
         maIdentity.set(1,1, 1.0);
         maIdentity.set(1,2, 0.0);
 
-        maScale.identity(); // force compact layout
+        maScale.identity(); 
         maScale.set(0,0, 2.0);
         maScale.set(1,1, 20.0);
 
-        maTranslate.identity(); // force compact layout
+        maTranslate.identity(); 
         maTranslate.set(0,2, 20.0);
         maTranslate.set(1,2, 2.0);
 
-        maShear.identity(); // force compact layout
+        maShear.identity(); 
         maShear.set(0,1, 3.0);
         maShear.set(1,0, 7.0);
         maShear.set(1,1, 22.0);
 
-        maAffine.identity(); // force compact layout
+        maAffine.identity(); 
         maAffine.set(0,0, 1.0);
         maAffine.set(0,1, 2.0);
         maAffine.set(0,2, 3.0);
@@ -385,8 +385,8 @@ public:
         B2DHomMatrix    aAffine;
         B2DHomMatrix    aPerspective;
 
-        // setup some test matrices
-        aIdentity.identity(); // force compact layout
+        
+        aIdentity.identity(); 
         aIdentity.set(0,0, 1.0);
         aIdentity.set(0,1, 0.0);
         aIdentity.set(0,2, 0.0);
@@ -394,20 +394,20 @@ public:
         aIdentity.set(1,1, 1.0);
         aIdentity.set(1,2, 0.0);
 
-        aScale.identity(); // force compact layout
+        aScale.identity(); 
         aScale.set(0,0, 2.0);
         aScale.set(1,1, 20.0);
 
-        aTranslate.identity(); // force compact layout
+        aTranslate.identity(); 
         aTranslate.set(0,2, 20.0);
         aTranslate.set(1,2, 2.0);
 
-        aShear.identity(); // force compact layout
+        aShear.identity(); 
         aShear.set(0,1, 3.0);
         aShear.set(1,0, 7.0);
         aShear.set(1,1, 22.0);
 
-        aAffine.identity(); // force compact layout
+        aAffine.identity(); 
         aAffine.set(0,0, 1.0);
         aAffine.set(0,1, 2.0);
         aAffine.set(0,2, 3.0);
@@ -567,7 +567,7 @@ public:
 
     void impFillMatrix(B2DHomMatrix& rSource, double fScaleX, double fScaleY, double fShearX, double fRotate)
     {
-        // fill rSource with a linear combination of scale, shear and rotate
+        
         rSource.identity();
         rSource.scale(fScaleX, fScaleY);
         rSource.shearX(fShearX);
@@ -576,97 +576,97 @@ public:
 
     bool impDecomposeComposeTest(double fScaleX, double fScaleY, double fShearX, double fRotate)
     {
-        // linear combine matrix with given values
+        
         B2DHomMatrix aSource;
         impFillMatrix(aSource, fScaleX, fScaleY, fShearX, fRotate);
 
-        // decompose that matrix
+        
         B2DTuple aDScale;
         B2DTuple aDTrans;
         double fDRot;
         double fDShX;
         bool bWorked = aSource.decompose(aDScale, aDTrans, fDRot, fDShX);
 
-        // linear combine another matrix with decomposition results
+        
         B2DHomMatrix aRecombined;
         impFillMatrix(aRecombined, aDScale.getX(), aDScale.getY(), fDShX, fDRot);
 
-        // if decomposition worked, matrices need to be the same
+        
         return bWorked && aSource == aRecombined;
     }
 
     void decompose()
     {
-        // test matrix decompositions. Each matrix decomposed and rebuilt
-        // using the decompose result should be the same as before. Test
-        // with all ranges of values. Translations are not tested since these
-        // are just the two rightmost values and uncritical
+        
+        
+        
+        
         static double fSX(10.0);
         static double fSY(12.0);
         static double fR(45.0 * F_PI180);
         static double fS(15.0 * F_PI180);
 
-        // check all possible scaling combinations
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test A1", impDecomposeComposeTest(fSX, fSY, 0.0, 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test A2", impDecomposeComposeTest(-fSX, fSY, 0.0, 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test A3", impDecomposeComposeTest(fSX, -fSY, 0.0, 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test A4", impDecomposeComposeTest(-fSX, -fSY, 0.0, 0.0));
 
-        // check all possible scaling combinations with positive rotation
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test B1", impDecomposeComposeTest(fSX, fSY, 0.0, fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test B2", impDecomposeComposeTest(-fSX, fSY, 0.0, fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test B3", impDecomposeComposeTest(fSX, -fSY, 0.0, fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test B4", impDecomposeComposeTest(-fSX, -fSY, 0.0, fR));
 
-        // check all possible scaling combinations with negative rotation
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test C1", impDecomposeComposeTest(fSX, fSY, 0.0, -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test C2", impDecomposeComposeTest(-fSX, fSY, 0.0, -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test C3", impDecomposeComposeTest(fSX, -fSY, 0.0, -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test C4", impDecomposeComposeTest(-fSX, -fSY, 0.0, -fR));
 
-        // check all possible scaling combinations with positive shear
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test D1", impDecomposeComposeTest(fSX, fSY, tan(fS), 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test D2", impDecomposeComposeTest(-fSX, fSY, tan(fS), 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test D3", impDecomposeComposeTest(fSX, -fSY, tan(fS), 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test D4", impDecomposeComposeTest(-fSX, -fSY, tan(fS), 0.0));
 
-        // check all possible scaling combinations with negative shear
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test E1", impDecomposeComposeTest(fSX, fSY, tan(-fS), 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test E2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test E3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), 0.0));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test E4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), 0.0));
 
-        // check all possible scaling combinations with positive rotate and positive shear
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test F1", impDecomposeComposeTest(fSX, fSY, tan(fS), fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test F2", impDecomposeComposeTest(-fSX, fSY, tan(fS), fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test F3", impDecomposeComposeTest(fSX, -fSY, tan(fS), fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test F4", impDecomposeComposeTest(-fSX, -fSY, tan(fS), fR));
 
-        // check all possible scaling combinations with negative rotate and positive shear
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test G1", impDecomposeComposeTest(fSX, fSY, tan(fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test G2", impDecomposeComposeTest(-fSX, fSY, tan(fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test G3", impDecomposeComposeTest(fSX, -fSY, tan(fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test G4", impDecomposeComposeTest(-fSX, -fSY, tan(fS), -fR));
 
-        // check all possible scaling combinations with positive rotate and negative shear
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test H1", impDecomposeComposeTest(fSX, fSY, tan(-fS), fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test H2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test H3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test H4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), fR));
 
-        // check all possible scaling combinations with negative rotate and negative shear
+        
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I1", impDecomposeComposeTest(fSX, fSY, tan(-fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), -fR));
 
-        // cover special case of 180 degree rotation
+        
         B2DHomMatrix aTest=tools::createScaleShearXRotateTranslateB2DHomMatrix(
             6425,3938,
             0,
             180*F_PI180,
             10482,4921);
-        // decompose that matrix
+        
         B2DTuple aDScale;
         B2DTuple aDTrans;
         double fDRot;
@@ -677,9 +677,9 @@ public:
         CPPUNIT_ASSERT_MESSAGE("decompose: error test J1", fDRot == 180*F_PI180);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dhommatrix);
     CPPUNIT_TEST(equal);
@@ -692,33 +692,33 @@ public:
     CPPUNIT_TEST(decompose);
     CPPUNIT_TEST_SUITE_END();
 
-}; // class b2dhommatrix
+}; 
 
 
 class b2dpoint : public CppUnit::TestFixture
 {
 public:
-    // insert your test code here.
-    // this is only demonstration code
+    
+    
     void EmptyMethod()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+          
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dpoint);
     CPPUNIT_TEST(EmptyMethod);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dpoint
+}; 
 
 
 class b2dpolygon : public CppUnit::TestFixture
 {
 public:
-    // insert your test code here.
+    
     void testBasics()
     {
         B2DPolygon aPoly;
@@ -771,21 +771,21 @@ public:
         CPPUNIT_ASSERT_MESSAGE("#2 second polygon point wrong",
                                aPoly.getB2DPoint(1) == B2DPoint(3,3));
     }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dpolygon);
     CPPUNIT_TEST(testBasics);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dpolygon
+}; 
 
 
 class b2dpolygontools : public CppUnit::TestFixture
 {
 public:
-    // insert your test code here.
-    // this is only demonstration code
+    
+    
     void testIsRectangle()
     {
         B2DPolygon aRect1(
@@ -851,36 +851,36 @@ public:
                                !tools::isRectangle( aNonRect5 ));
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dpolygontools);
     CPPUNIT_TEST(testIsRectangle);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dpolygontools
+}; 
 
 class b2dpolypolygon : public CppUnit::TestFixture
 {
 public:
-    // insert your test code here.
+    
     void testTrapezoidHelper()
     {
         B2DPolygon aPolygon;
-        // provoke the PointBlockAllocator to exercise the freeIfLast path
+        
         for(int i = 0; i < 16 * 10; i++)
         {
             B2DPoint aPoint(getRandomOrdinal(1000), getRandomOrdinal(1000));
             aPolygon.append(aPoint);
         }
-        // scatter some duplicate points in to stress things more.
+        
         for(int i = 0; i < 16 * 10; i++)
         {
             aPolygon.insert(getRandomOrdinal(aPolygon.count() - 1),
                             aPolygon.getB2DPoint(getRandomOrdinal(aPolygon.count() - 1)));
         }
         B2DPolygon aPolygonOffset;
-        // duplicate the polygon and offset it slightly.
+        
         for(size_t i = 0; i < aPolygon.count(); i++)
         {
             B2DPoint aPoint(aPolygon.getB2DPoint(i));
@@ -895,44 +895,44 @@ public:
                                aVector.size() > 0);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dpolypolygon);
     CPPUNIT_TEST(testTrapezoidHelper);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dpolypolygon
+}; 
 
 class b1Xrange : public CppUnit::TestFixture
 {
 public:
     template<class Type> void implCheck()
     {
-        // test interval axioms
-        // (http://en.wikipedia.org/wiki/Interval_%28mathematics%29)
+        
+        
         Type aRange;
         CPPUNIT_ASSERT_MESSAGE("default ctor - empty range", aRange.isEmpty());
         CPPUNIT_ASSERT_MESSAGE("center - get cop-out value since range is empty", aRange.getCenter()==0);
 
-        // degenerate interval
+        
         aRange.expand(1);
         CPPUNIT_ASSERT_MESSAGE("degenerate range - still, not empty!", !aRange.isEmpty());
         CPPUNIT_ASSERT_MESSAGE("degenerate range - size of 0", aRange.getRange() == 0);
         CPPUNIT_ASSERT_MESSAGE("same value as degenerate range - is inside range", aRange.isInside(1));
         CPPUNIT_ASSERT_MESSAGE("center - must be the single range value", aRange.getCenter()==1);
 
-        // proper interval
+        
         aRange.expand(2);
         CPPUNIT_ASSERT_MESSAGE("proper range - size of 1", aRange.getRange() == 1);
         CPPUNIT_ASSERT_MESSAGE("smaller value of range - is inside *closed* range", aRange.isInside(1));
         CPPUNIT_ASSERT_MESSAGE("larger value of range - is inside *closed* range", aRange.isInside(2));
 
-        // center for proper interval that works for ints, too
+        
         aRange.expand(3);
         CPPUNIT_ASSERT_MESSAGE("center - must be half of the range", aRange.getCenter()==2);
 
-        // check overlap
+        
         Type aRange2(0,1);
         CPPUNIT_ASSERT_MESSAGE("range overlapping *includes* upper bound", aRange.overlaps(aRange2));
         CPPUNIT_ASSERT_MESSAGE("range overlapping *includes* upper bound, but only barely", !aRange.overlapsMore(aRange2));
@@ -940,7 +940,7 @@ public:
         Type aRange3(0,2);
         CPPUNIT_ASSERT_MESSAGE("range overlapping is fully overlapping now", aRange.overlapsMore(aRange3));
 
-        // check intersect
+        
         Type aRange4(3,4);
         aRange.intersect(aRange4);
         CPPUNIT_ASSERT_MESSAGE("range intersection is yielding empty range!", !aRange.isEmpty());
@@ -949,7 +949,7 @@ public:
         aRange.intersect(aRange5);
         CPPUNIT_ASSERT_MESSAGE("range intersection is yielding nonempty range!", aRange.isEmpty());
 
-        // just so that this compiles -
+        
         Type aRange6( aRange );
         (void)aRange6;
     }
@@ -960,14 +960,14 @@ public:
         implCheck<B1IRange>();
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b1Xrange);
     CPPUNIT_TEST(check);
     CPPUNIT_TEST_SUITE_END();
-}; // class b1Xrange
+}; 
 
 
 class b1ibox : public CppUnit::TestFixture
@@ -975,37 +975,37 @@ class b1ibox : public CppUnit::TestFixture
 public:
     void TestBox()
     {
-        // test axioms - markedly different from proper mathematical
-        // intervals (behaviour modelled after how polygon fill
-        // algorithms fill pixels)
+        
+        
+        
         B1IBox aBox;
         CPPUNIT_ASSERT_MESSAGE("default ctor - empty range", aBox.isEmpty());
 
-        // degenerate box
+        
         aBox.expand(1);
         CPPUNIT_ASSERT_MESSAGE("degenerate box - still empty!", aBox.isEmpty());
         CPPUNIT_ASSERT_MESSAGE("degenerate box - size of 0", aBox.getRange() == 0);
         CPPUNIT_ASSERT_MESSAGE("same value as degenerate box - is outside (since empty)", !aBox.isInside(1));
         CPPUNIT_ASSERT_MESSAGE("center - get cop-out value since box is empty", aBox.getCenter()==0);
 
-        // proper box
+        
         aBox.expand(2);
         CPPUNIT_ASSERT_MESSAGE("proper box - size of 1", aBox.getRange() == 1);
         CPPUNIT_ASSERT_MESSAGE("smaller value of box", aBox.isInside(1));
         CPPUNIT_ASSERT_MESSAGE("larger value of box - must be outside", !aBox.isInside(2));
 
-        // center for proper box that works for ints, too
+        
         aBox.expand(4);
         CPPUNIT_ASSERT_MESSAGE("center - must be center pixel of the box", aBox.getCenter()==2);
 
-        // check overlap, which is markedly different from Range
+        
         B1IBox aBox2(0,1);
         CPPUNIT_ASSERT_MESSAGE("box overlapping *excludes* upper bound", !aBox.overlaps(aBox2));
 
         B1IBox aBox3(0,2);
         CPPUNIT_ASSERT_MESSAGE("box overlapping then includes upper bound-1", aBox.overlaps(aBox3));
 
-        // check intersect
+        
         B1IBox aBox4(4,5);
         aBox.intersect(aBox4);
         CPPUNIT_ASSERT_MESSAGE("box intersection is yielding nonempty box!", aBox.isEmpty());
@@ -1014,19 +1014,19 @@ public:
         aBox5.intersect(aBox4);
         CPPUNIT_ASSERT_MESSAGE("box intersection is yielding empty box!", !aBox5.isEmpty());
 
-        // just so that this compiles -
+        
         B1IBox aBox6( aBox );
         (void)aBox6;
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b1ibox);
     CPPUNIT_TEST(TestBox);
     CPPUNIT_TEST_SUITE_END();
-}; // class b1ibox
+}; 
 
 
 class b2Xrange : public CppUnit::TestFixture
@@ -1034,7 +1034,7 @@ class b2Xrange : public CppUnit::TestFixture
 public:
     template<class Type> void implCheck()
     {
-        // cohen sutherland clipping
+        
         Type aRange(0,0,10,10);
 
         CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
@@ -1048,7 +1048,7 @@ public:
                                tools::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange) ==
                                (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
 
-        // just so that this compiles -
+        
         Type aRange1( aRange );
         (void)aRange1;
     }
@@ -1059,14 +1059,14 @@ public:
         implCheck<B2IRange>();
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2Xrange);
     CPPUNIT_TEST(check);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2Xrange
+}; 
 
 
 class b2ibox : public CppUnit::TestFixture
@@ -1074,7 +1074,7 @@ class b2ibox : public CppUnit::TestFixture
 public:
     void TestBox()
     {
-        // cohen sutherland clipping
+        
         B2IBox aBox(0,0,10,10);
 
         CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
@@ -1088,38 +1088,38 @@ public:
                                tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox) ==
                                (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
 
-        // just so that this compiles -
+        
         B2IBox aBox1( aBox );
         (void)aBox1;
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
     CPPUNIT_TEST_SUITE(b2ibox);
     CPPUNIT_TEST(TestBox);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2ibox
+}; 
 
 
 class b2dtuple : public CppUnit::TestFixture
 {
 public:
-    // insert your test code here.
-    // this is only demonstration code
+    
+    
     void EmptyMethod()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+          
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b2dtuple);
     CPPUNIT_TEST(EmptyMethod);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dtuple
+}; 
 
 class bcolor : public CppUnit::TestFixture
 {
@@ -1144,7 +1144,7 @@ public:
         maCyan(0,1,1)
     {}
 
-    // insert your test code here.
+    
     void hslTest()
     {
         CPPUNIT_ASSERT_MESSAGE("white",
@@ -1204,7 +1204,7 @@ public:
                                tools::rgb2hsl(BColor(.75,.25,.25)) == BColor(0,.5,.5));
     }
 
-    // insert your test code here.
+    
     void hsvTest()
     {
         CPPUNIT_ASSERT_MESSAGE("white",
@@ -1274,18 +1274,18 @@ public:
         tools::rgb2ciexyz(maCyan);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(bcolor);
     CPPUNIT_TEST(hslTest);
     CPPUNIT_TEST(hsvTest);
     CPPUNIT_TEST(ciexyzTest);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dvector
+}; 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dsvgdimpex);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2drange);
@@ -1301,13 +1301,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2Xrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);
-} // namespace basegfx2d
+} 
 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-// NOADDITIONAL;
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

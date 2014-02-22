@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -206,7 +206,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    //sub table shouldn't use table name.
+    
     if( !m_bSubTable )
         pAttrList->AddAttribute( A2OUSTR("table:name"), m_strName);
 
@@ -218,7 +218,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
     else
         pStrm->StartElement( A2OUSTR("table:table") );
 
-    //output columns:
+    
     {
         int lastCol = 0;
         std::map<sal_Int32,OUString>::iterator it;
@@ -227,7 +227,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
             sal_Int32   col = (*it).first;
             OUString   style = m_aColumns[col];
 
-            //default col repeated:
+            
             if( col >lastCol+1 )
             {
                 if( col > lastCol + 2 )
@@ -258,7 +258,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
         m_aHeaderRows.ToXml(pStrm);
         pStrm->EndElement( A2OUSTR("table:table-header-rows") );
     }
-    //output rows:
+    
     {
         int     lastRow = 0;
         pAttrList = pStrm->GetAttrList();
@@ -269,7 +269,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
             int row = (*it).first;
             XFRow *pRow = (*it).second;
 
-            //null row repeated:
+            
             if( row>lastRow+1 )
             {
                 XFRow *pNullRow = new XFRow();

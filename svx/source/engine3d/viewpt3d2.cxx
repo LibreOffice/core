@@ -40,7 +40,7 @@ Viewport3D::Viewport3D() :
     aViewWin.W =  2; aViewWin.H = 2;
 }
 
-// Set ViewWindow (in View coordinates)
+
 
 void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
@@ -55,7 +55,7 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
     fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
 }
 
-// Returns observer position (PRP) in world coordinates
+
 
 const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 {
@@ -64,7 +64,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
     return aViewPoint;
 }
 
-// Calculate View transformations matrix
+
 
 void Viewport3D::MakeTransform(void)
 {
@@ -73,13 +73,13 @@ void Viewport3D::MakeTransform(void)
         double fV, fXupVp, fYupVp;
         aViewPoint = aVRP + aVPN * aPRP.getZ();
 
-        // Reset to Identity matrix
+        
         aViewTf.identity();
 
-        // shift in the origin
+        
         aViewTf.translate(-aVRP.getX(), -aVRP.getY(), -aVRP.getZ());
 
-        // fV = Length of the projection of aVPN on the yz plane:
+        
         fV = aVPN.getYZLength();
 
         if ( fV != 0 )
@@ -105,8 +105,8 @@ void Viewport3D::MakeTransform(void)
             aViewTf *= aTemp;
         }
 
-        // Convert X- and Y- coordinates of the view up vector to the
-        // (preliminary) view coordinate system.
+        
+        
         fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY() + aViewTf.get(0, 2) * aVUV.getZ();
         fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY() + aViewTf.get(1, 2) * aVUV.getZ();
         fV = sqrt(fXupVp * fXupVp + fYupVp * fYupVp);
@@ -138,11 +138,11 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
     {
         double  fRatio, fTmp;
 
-        // Mapping, without changing the real size of the objects in the
-        // Device Window
+        
+        
         case AS_HOLD_SIZE:
-            // When the Device is invalid (w, h = -1), adapt the  View
-            // with AsHoldX
+            
+            
             if ( nOldW > 0 && nOldH > 0 )
             {
                 fRatio = (double) nNewW / nOldW;
@@ -154,7 +154,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
                 break;
             }
         case AS_HOLD_X:
-            // Adapt view height to view width
+            
             fRatio = (double) nNewH / nNewW;
             fTmp = aViewWin.H;
             aViewWin.H = aViewWin.W * fRatio;
@@ -162,7 +162,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
             break;
 
         case AS_HOLD_Y:
-            // Adapt view width to view height
+            
             fRatio = (double) nNewW / nNewH;
             fTmp = aViewWin.W;
             aViewWin.W = aViewWin.H * fRatio;
@@ -176,7 +176,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
     aDeviceRect = rRect;
 }
 
-// Set View Reference Point
+
 
 void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
 {
@@ -184,7 +184,7 @@ void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
     bTfValid = sal_False;
 }
 
-// Set View Plane Normal
+
 
 void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 {
@@ -193,7 +193,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
     bTfValid = sal_False;
 }
 
-// Set View Up Vector
+
 
 void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
@@ -201,7 +201,7 @@ void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
     bTfValid = sal_False;
 }
 
-// Set Center Of Projection
+
 
 void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
 {
@@ -211,7 +211,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
     bTfValid = sal_False;
 }
 
-// Set View Plane Distance
+
 
 void Viewport3D::SetVPD(double fNewVPD)
 {

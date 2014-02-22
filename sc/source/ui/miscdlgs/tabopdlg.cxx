@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -31,9 +31,9 @@
 #include "tabopdlg.hxx"
 
 
-//============================================================================
-//  class ScTabOpDlg
-//----------------------------------------------------------------------------
+
+
+
 
 ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         ScDocument*         pDocument,
@@ -77,14 +77,14 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     Init();
 }
 
-//----------------------------------------------------------------------------
+
 
 ScTabOpDlg::~ScTabOpDlg()
 {
     Hide();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::Init()
 {
@@ -110,18 +110,18 @@ void ScTabOpDlg::Init()
     m_pEdFormulaRange->GrabFocus();
     pEdActive = m_pEdFormulaRange;
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
+    
+    
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::SetActive()
 {
@@ -137,7 +137,7 @@ void ScTabOpDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -174,7 +174,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
@@ -223,7 +223,7 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
     pEd->GrabFocus();
 }
 
-//----------------------------------------------------------------------------
+
 
 static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
@@ -240,8 +240,8 @@ static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCur
     return bRet;
 }
 
-//----------------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 {
@@ -250,11 +250,11 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
         ScTabOpParam::Mode eMode = ScTabOpParam::Column;
         sal_uInt16 nError = 0;
 
-        // Zu ueberpruefen:
-        // 1. enthalten die Strings korrekte Tabellenkoordinaten/def.Namen?
-        // 2. IstFormelRang Zeile bei leerer Zeile bzw. Spalte bei leerer Spalte
-        //    bzw. Einfachreferenz bei beidem?
-        // 3. Ist mindestens Zeile oder Spalte und Formel voll?
+        
+        
+        
+        
+        
 
         if (m_pEdFormulaRange->GetText().isEmpty())
             nError = TABOPERR_NOFORMULA;
@@ -288,7 +288,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                     nError = TABOPERR_WRONGCOL;
                 else
                 {
-                    if (eMode == ScTabOpParam::Row)                         // beides
+                    if (eMode == ScTabOpParam::Row)                         
                     {
                         eMode = ScTabOpParam::Both;
                         ConvertSingleRef( pDoc, m_pEdFormulaRange->GetText(), nCurTab,
@@ -323,7 +323,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 {
@@ -342,7 +342,7 @@ IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl)
 {

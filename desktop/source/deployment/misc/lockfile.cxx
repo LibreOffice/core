@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -77,12 +77,12 @@ namespace desktop {
     ,m_bRemove(sal_False)
     ,m_bIsLocked(sal_False)
     {
-        // build the file-url to use for the lock
+        
         OUString aUserPath;
         utl::Bootstrap::locateUserInstallation( aUserPath );
         m_aLockname = aUserPath + LOCKFILE_SUFFIX;
 
-        // generate ID
+        
         const int nIdBytes = 16;
         char tmpId[nIdBytes*2+1];
         time_t t;
@@ -95,7 +95,7 @@ namespace desktop {
         tmpId[nIdBytes*2]=0x00;
         m_aId = OUString::createFromAscii( tmpId );
 
-        // generate date string
+        
         char *tmpTime = ctime( &t );
         if (tmpTime != NULL) {
             m_aDate = OUString::createFromAscii( tmpTime );
@@ -105,12 +105,12 @@ namespace desktop {
         }
 
 
-        // try to create file
+        
         File aFile(m_aLockname);
         if (aFile.open( osl_File_OpenFlag_Create ) == File::E_EXIST) {
             m_bIsLocked = sal_True;
         } else {
-            // new lock created
+            
             aFile.close( );
             syncToFile( );
             m_bRemove = sal_True;
@@ -121,10 +121,10 @@ namespace desktop {
     {
 
         if (m_bIsLocked) {
-            // lock existed, ask user what to do
+            
             if (isStale() ||
                 (execWarning != 0 && (*execWarning)( this ))) {
-                // remove file and create new
+                
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);
                 aFile.open( osl_File_OpenFlag_Create );
@@ -133,21 +133,21 @@ namespace desktop {
                 m_bRemove = sal_True;
                 return sal_True;
             } else {
-                //leave alone and return false
+                
                 m_bRemove = sal_False;
                 return sal_False;
             }
         } else {
-            // lock was created by us
+            
             return sal_True;
         }
     }
 
     sal_Bool Lockfile::isStale( void ) const
     {
-        // this checks whether the lockfile was created on the same
-        // host by the same user. Should this be the case it is safe
-        // to assume that it is a stale lockfile which can be overwritten
+        
+        
+        
         OUString aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
@@ -158,10 +158,10 @@ namespace desktop {
         OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY );
         OString aUser = aConfig.ReadKey( LOCKFILE_USERKEY );
 
-        // lockfile from same host?
+        
         OString myHost( impl_getHostname() );
         if (aHost == myHost) {
-            // lockfile by same UID
+            
             OUString myUserName;
             Security aSecurity;
             aSecurity.getUserName( myUserName );
@@ -178,7 +178,7 @@ namespace desktop {
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
 
-        // get information
+        
         OString aHost( impl_getHostname() );
         OUString aUserName;
         Security aSecurity;
@@ -187,7 +187,7 @@ namespace desktop {
         OString aTime  = OUStringToOString( m_aDate, RTL_TEXTENCODING_ASCII_US );
         OString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 
-        // write information
+        
         aConfig.WriteKey( LOCKFILE_USERKEY,  aUser );
         aConfig.WriteKey( LOCKFILE_HOSTKEY,  aHost );
         aConfig.WriteKey( LOCKFILE_STAMPKEY, aStamp );
@@ -200,7 +200,7 @@ namespace desktop {
 
     Lockfile::~Lockfile( void )
     {
-        // unlock userdata by removing file
+        
         if ( m_bRemove )
             File::remove( m_aLockname );
     }

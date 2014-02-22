@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -56,7 +56,7 @@
 
 using namespace osl;
 
-// for thread safety
+
 static osl::Mutex* pResMgrMutex = NULL;
 
 static osl::Mutex& getResMgrMutex()
@@ -180,11 +180,11 @@ void ResMgrContainer::init()
 {
     assert( m_aResFiles.empty() );
 
-    // get resource path
+    
     OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_RESOURCE_FOLDER "/");
-    rtl::Bootstrap::expandMacros(uri); //TODO: detect failure
+    rtl::Bootstrap::expandMacros(uri); 
 
-    // collect all possible resource files
+    
     Directory aDir( uri );
     if( aDir.open() == FileBase::E_None )
     {
@@ -212,7 +212,7 @@ void ResMgrContainer::init()
     else
         SAL_WARN( "tools.rc", "opening dir " << uri << " failed" );
 
-    // set default language
+    
     LanguageType nLang = MsLangId::getSystemUILanguage();
     m_aDefLocale.reset( nLang);
 }
@@ -235,7 +235,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 
     ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings( true));
     if (!isAlreadyPureenUS( aLocale))
-        aFallbacks.push_back( "en-US");     // last resort if all fallbacks fail
+        aFallbacks.push_back( "en-US");     
 
     for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
@@ -243,7 +243,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
         it = m_aResFiles.find( aSearch );
         if( it != m_aResFiles.end() )
         {
-            // ensure InternalResMgr existance
+            
             if( ! it->second.pResMgr )
             {
                 InternalResMgr* pImp =
@@ -258,7 +258,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             break;
         }
     }
-    // try if there is anything with this prefix at all
+    
     if( it == m_aResFiles.end() )
     {
         aLocale.reset( LANGUAGE_SYSTEM);
@@ -269,7 +269,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             {
                 if( it->first.matchIgnoreAsciiCase( rPrefix ) )
                 {
-                    // ensure InternalResMgr existance
+                    
                     if( ! it->second.pResMgr )
                     {
                         InternalResMgr* pImp =
@@ -284,7 +284,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                         }
                         it->second.pResMgr = pImp;
                     }
-                    // try to guess locale
+                    
                     sal_Int32 nIndex = rPrefix.getLength();
                     if (nIndex < it->first.getLength())
                         aLocale.reset( it->first.copy( nIndex));
@@ -298,7 +298,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             }
         }
     }
-    // give up
+    
     if( it == m_aResFiles.end() )
     {
         OUString sURL = rPrefix + rLocale.getBcp47() + ".res";
@@ -306,25 +306,25 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
         {
             m_aResFiles[ sURL ].aFileURL = sURL;
             return getResMgr(rPrefix,rLocale,bForceNewInstance);
-        } // if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
+        } 
         return NULL;
     }
 
     rLocale = aLocale;
-    // at this point it->second.pResMgr must be filled either by creating a new one
-    // (then the refcount is still 0) or because we already had one
+    
+    
     InternalResMgr* pImp = it->second.pResMgr;
 
     if( it->second.nRefCount == 0 )
         it->second.nLoadCount++;
 
-    // for SimpleResMgr
+    
     if( bForceNewInstance )
     {
         if( it->second.nRefCount == 0 )
         {
-            // shortcut: the match algorithm already created the InternalResMgr
-            // take it instead of creating yet another one
+            
+            
             it->second.pResMgr = NULL;
             pImp->bSingular = true;
         }
@@ -357,12 +357,12 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
      * */
 
     ::std::vector< OUString > aFallbacks( pMgr->aLocale.getFallbackStrings( true));
-    // The first is the locale itself, use next fallback or en-US.
+    
     /* TODO: what happens if the chain is "en-US", "en" -> "en-US", ...
      * This was already an issue with the previous code. */
     LanguageTag aLocale( ((aFallbacks.size() > 1) ? aFallbacks[1] : OUString( "en-US")));
     InternalResMgr* pNext = getResMgr( pMgr->aPrefix, aLocale, pMgr->bSingular );
-    // prevent recursion
+    
     if( pNext == pMgr || ( pNext && pNext->aResName.equals( pMgr->aResName ) ) )
     {
         if( pNext->bSingular )
@@ -489,15 +489,15 @@ bool InternalResMgr::Create()
                                                         */
         pStm->SeekRel( - (int)sizeof( lContLen ) );
         pStm->Read( &lContLen, sizeof( lContLen ) );
-        // is bigendian, swab to the right endian
+        
         lContLen = ResMgr::GetLong( &lContLen );
         pStm->SeekRel( -lContLen );
-        // allocate stored ImpContent data (12 bytes per unit)
+        
         sal_uInt8* pContentBuf = (sal_uInt8*)rtl_allocateMemory( lContLen );
         pStm->Read( pContentBuf, lContLen );
-        // allocate ImpContent space (sizeof(ImpContent) per unit, not necessarily 12)
+        
         pContent = (ImpContent *)rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 );
-        // Shorten to number of ImpContent
+        
         nEntries = (sal_uInt32)lContLen / 12;
         bEqual2Content = true;
         bool bSorted = true;
@@ -512,13 +512,13 @@ bool InternalResMgr::Create()
                     (*pResUseDump)[pContent[i].nTypeAndId] = 1;
             }
 #endif
-            // swap the content to the right endian
+            
             pContent[0].nTypeAndId = ResMgr::GetUInt64( pContentBuf );
             pContent[0].nOffset = ResMgr::GetLong( pContentBuf+8 );
             sal_uInt32 nCount = nEntries - 1;
             for( sal_uInt32 i = 0,j=1; i < nCount; ++i,++j )
             {
-                // swap the content to the right endian
+                
                 pContent[j].nTypeAndId = ResMgr::GetUInt64( pContentBuf + (12*j) );
                 pContent[j].nOffset = ResMgr::GetLong( pContentBuf + (12*j+8) );
                 if( pContent[i].nTypeAndId >= pContent[j].nTypeAndId )
@@ -533,7 +533,7 @@ bool InternalResMgr::Create()
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
-            //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
+            
 
         bDone = true;
     }
@@ -544,7 +544,7 @@ bool InternalResMgr::Create()
 
 bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
-    // Anfang der Strings suchen
+    
     ImpContent aValue;
     aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent * pFind = ::std::lower_bound(pContent,
@@ -562,7 +562,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     if( pResUseDump )
         pResUseDump->erase( (sal_uInt64(nRT) << 32) | nId );
 #endif
-    // search beginning of string
+    
     ImpContent aValue;
     aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
@@ -574,10 +574,10 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     {
         if( nRT == RSC_STRING && bEqual2Content )
         {
-            // string optimization
+            
             if( !pStringBlock )
             {
-                // search beginning of string
+                
                 ImpContent * pFirst = pFind;
                 ImpContent * pLast = pFirst;
                 while( pFirst > pContent && ((pFirst -1)->nTypeAndId >> 32) == RSC_STRING )
@@ -597,7 +597,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
             }
             *pResHandle = pStringBlock;
             return (sal_uInt8*)pStringBlock + pFind->nOffset - nOffCorrection;
-        } // if( nRT == RSC_STRING && bEqual2Content )
+        } 
         else
         {
             *pResHandle = 0;
@@ -610,7 +610,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                         aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
             return pRes;
         }
-    } // if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
+    } 
     *pResHandle = 0;
     return NULL;
 }
@@ -618,7 +618,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
 void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 {
     if ( !pResHandle )
-        // Free allocated resource
+        
         rtl_freeMemory(pResource);
 }
 
@@ -626,7 +626,7 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 
 OUString GetTypeRes_Impl( const ResId& rTypeId )
 {
-    // Return on resource errors
+    
     static bool bInUse = false;
     OUString aTypStr(OUString::number(rTypeId.GetId()));
 
@@ -643,7 +643,7 @@ OUString GetTypeRes_Impl( const ResId& rTypeId )
             if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
             {
                 aTypStr = rTypeId.toString();
-                // Set class pointer to the end
+                
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }
         }
@@ -657,8 +657,8 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
                             RESOURCE_TYPE nRT, sal_uInt32 nId,
                             std::vector< ImpRCStack >& rResStack, int nDepth )
 {
-    // create a separate ResMgr with its own stack
-    // first get a second reference of the InternalResMgr
+    
+    
     InternalResMgr* pImp =
         ResMgrContainer::get().getResMgr( pResMgr->pImpRes->aPrefix,
                                           pResMgr->pImpRes->aLocale,
@@ -693,7 +693,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
         nDepth--;
     }
 
-    // clean up
+    
     delete pNewResMgr;
 
     OSL_FAIL(aStr.getStr());
@@ -727,7 +727,7 @@ void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
     Flags           = RC_NOTYPE;
     aResHandle      = NULL;
     pResObj         = pObj;
-    nId             = Id & ~RSC_DONTRELEASE; //TLX: Besser Init aendern
+    nId             = Id & ~RSC_DONTRELEASE; 
     pResMgr         = pMgr;
     if ( !(Id & RSC_DONTRELEASE) )
         Flags      |= RC_AUTORELEASE;
@@ -748,9 +748,9 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
                                      RESOURCE_TYPE nRTType,
                                      sal_uInt32 nId )
 {
-    // Returns position of the resource if found or NULL otherwise
-    RSHEADER_TYPE*  pTmp;   // Pointer to child resource
-    RSHEADER_TYPE*  pEnd;   // Pointer to the end of this resource
+    
+    RSHEADER_TYPE*  pTmp;   
+    RSHEADER_TYPE*  pEnd;   
 
     if ( pStack->pResource && pStack->pClassRes )
     {
@@ -795,7 +795,7 @@ void ResMgr::DestroyAllResMgr()
 
 void ResMgr::Init( const OUString& rFileName )
 {
-    (void) rFileName; // avoid warning about unused parameter
+    (void) rFileName; 
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if ( !pImpRes )
@@ -810,8 +810,8 @@ void ResMgr::Init( const OUString& rFileName )
 #ifdef DBG_UTIL
     else
     {
-        void* aResHandle = 0;     // Helper variable for resource handles
-        void* pVoid;              // Pointer on the resource
+        void* aResHandle = 0;     
+        void* pVoid;              
 
         pVoid = pImpRes->LoadGlobalRes( RSC_VERSIONCONTROL, RSCVERSION_ID,
                                         &aResHandle );
@@ -841,7 +841,7 @@ ResMgr::~ResMgr()
 
     ResMgrContainer::get().freeResMgr( pImpRes );
 
-    // clean up possible left rc stack frames
+    
     while( nCurStack > 0 )
     {
         if( ( aStack[nCurStack].Flags & (RC_GLOBAL | RC_NOTFOUND) ) == RC_GLOBAL )
@@ -867,7 +867,7 @@ void ResMgr::decStack()
     if( (aStack[nCurStack].Flags & RC_FALLBACK_UP) )
     {
         nCurStack--;
-        // warning: this will delete *this, see below
+        
         pOriginalResMgr->decStack();
     }
     else
@@ -990,8 +990,8 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     if ( pMgr && (this != pMgr) )
         return pMgr->GetResource( rId, pResObj );
 
-    // normally Increment will pop the context; this is
-    // not possible in RC_NOTFOUND case, so pop a frame here
+    
+    
     ImpRCStack* pTop = &aStack[nCurStack];
     if( (pTop->Flags & RC_NOTFOUND) )
     {
@@ -1030,7 +1030,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     }
 
     if ( pTop->pClassRes )
-        // lokale Resource, nicht system Resource
+        
         pTop->pResource = (RSHEADER_TYPE *)pTop->pClassRes;
     else
     {
@@ -1042,7 +1042,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
         }
         else
         {
-            // try to get a fallback resource
+            
             pFallbackResMgr = CreateFallbackResMgr( rId, pResObj );
             if( pFallbackResMgr )
             {
@@ -1131,9 +1131,9 @@ void ResMgr::PopContext( const Resource* pResObj )
         }
 #endif
 
-        // free resource
+        
         if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
-            // free global resource if resource is foreign
+            
             InternalResMgr::FreeGlobalRes( pTop->aResHandle, pTop->pResource );
         decStack();
     }
@@ -1153,14 +1153,14 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     RSHEADER_TYPE* pHeader = NULL;
     if ( GetResource( rId ) )
     {
-        // Pointer is at the beginning of the resource, thus
-        // class pointer points to the header, and the remaining size
-        // equals to total size of allocated memory
+        
+        
+        
         pHeader = (RSHEADER_TYPE*)rtl_allocateMemory( GetRemainSize() );
         memcpy( pHeader, GetClass(), GetRemainSize() );
-        Increment( pHeader->GetLocalOff() ); //ans Ende setzen
+        Increment( pHeader->GetLocalOff() ); 
         if ( pHeader->GetLocalOff() != pHeader->GetGlobOff() )
-            // Has sub-resources, thus release them as well
+            
             PopContext();
     }
 
@@ -1276,12 +1276,12 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
     ResMgr *pFallback = NULL;
     if( nCurStack > 0 )
     {
-        // get the next fallback level in resource file scope
+        
         InternalResMgr* pRes = ResMgrContainer::get().getNextFallback( pImpRes );
         if( pRes )
         {
-            // check that the fallback locale is not already in the chain of
-            // fallbacks - prevent fallback loops
+            
+            
             ResMgr* pResMgr = this;
             while( pResMgr && (pResMgr->pImpRes->aLocale != pRes->aLocale))
             {
@@ -1289,14 +1289,14 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             }
             if( pResMgr )
             {
-                // found a recursion, no fallback possible
+                
                 ResMgrContainer::get().freeResMgr( pRes );
                 return NULL;
             }
             OSL_TRACE( "trying fallback: %s", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
-            // try to recreate the resource stack
+            
             bool bHaveStack = true;
             for( int i = 1; i < nCurStack; i++ )
             {
@@ -1448,18 +1448,18 @@ OString ResMgr::GetAutoHelpId()
     if( nCurStack < 1 || nCurStack > 2 )
         return OString();
 
-    // prepare HID, start with resource prefix
+    
     OStringBuffer aHID( 32 );
     aHID.append( OUStringToOString( pImpRes->aPrefix, RTL_TEXTENCODING_UTF8 ) );
     aHID.append( '.' );
 
-    // append type
+    
     const ImpRCStack *pRC = StackTop();
     OSL_ENSURE( pRC, "missing resource stack level" );
 
     if ( nCurStack == 1 )
     {
-        // auto help ids for top level windows
+        
         switch( pRC->pResource->GetRT() ) {
             case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
             case RSC_WORKWIN:           aHID.append( "WorkWindow" );       break;
@@ -1472,7 +1472,7 @@ OString ResMgr::GetAutoHelpId()
     }
     else
     {
-        // only controls with the following parents get auto help ids
+        
         const ImpRCStack *pRC1 = StackTop(1);
         switch( pRC1->pResource->GetRT() ) {
             case RSC_DOCKINGWINDOW:
@@ -1481,8 +1481,8 @@ OString ResMgr::GetAutoHelpId()
             case RSC_FLOATINGWINDOW:
             case RSC_MODALDIALOG:
             case RSC_TABPAGE:
-                // intentionally no breaks!
-                // auto help ids for controls
+                
+                
                 switch( pRC->pResource->GetRT() ) {
                     case RSC_TABCONTROL:        aHID.append( "TabControl" );       break;
                     case RSC_RADIOBUTTON:       aHID.append( "RadioButton" );      break;
@@ -1510,7 +1510,7 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_MENUBUTTON:        aHID.append( "MenuButton" );       break;
                     case RSC_MOREBUTTON:        aHID.append( "MoreButton" );       break;
                     default:
-                        // no type, no auto HID
+                        
                         return OString();
                 }
                 break;
@@ -1519,7 +1519,7 @@ OString ResMgr::GetAutoHelpId()
         }
     }
 
-    // append resource id hierarchy
+    
     for( int nOff = nCurStack-1; nOff >= 0; nOff-- )
     {
         aHID.append( '.' );
@@ -1595,7 +1595,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadString : have no impl class !" );
-    // perhaps constructed with an invalid filename ?
+    
 
     OUString sReturn;
     if ( !m_pResImpl )
@@ -1608,7 +1608,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     {
         osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
 
-        // try fallback
+        
         while( ! pResHandle && pFallback )
         {
             InternalResMgr* pOldFallback = pFallback;
@@ -1617,7 +1617,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
                 ResMgrContainer::get().freeResMgr( pOldFallback );
             if( pFallback )
             {
-                // handle possible recursion
+                
                 if( pFallback->aLocale != m_pResImpl->aLocale )
                 {
                     pResHeader = (RSHEADER_TYPE*)pFallback->LoadGlobalRes( RSC_STRING, nId, &pResHandle );
@@ -1630,15 +1630,15 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
             }
         }
         if( ! pResHandle )
-            // no such resource
+            
             return sReturn;
     }
 
-    // sal_uIntPtr nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
+    
     ResMgr::GetString( sReturn, (const sal_uInt8*)(pResHeader+1) );
 
-    // not necessary with te current implementation which holds the string table permanently, but to be sure ....
-    // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
+    
+    
     InternalResMgr::FreeGlobalRes( pResHeader, pResHandle );
     if( m_pResImpl != pFallback )
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/errcode.hxx>
@@ -34,13 +34,13 @@ static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
     return p;
 }
 
-// Scanning of a symbol. The symbol were inserted in rSym, the return value
-// is the new scan position. The symbol is at errors empty.
+
+
 
 static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
 {
     sal_uInt16 nLen = 0;
-    // Did we have a nonstandard symbol?
+    
     if( *p == '[' )
     {
         rSym = ++p;
@@ -52,7 +52,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
     }
     else
     {
-        // A symbol had to begin with a alphabetic character or an underline
+        
         if( !rtl::isAsciiAlpha( *p ) && *p != '_' )
         {
             SbxBase::SetError( SbxERR_SYNTAX );
@@ -60,12 +60,12 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
         else
         {
             rSym = p;
-            // The it can contain alphabetic characters, numbers or underlines
+            
             while( *p && (rtl::isAsciiAlphanumeric( *p ) || *p == '_') )
             {
                 p++, nLen++;
             }
-            // BASIC-Standard-Suffixes were ignored
+            
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
             {
                 p++;
@@ -76,7 +76,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
     return p;
 }
 
-// Qualified name. Element.Element....
+
 
 static SbxVariable* QualifiedName
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t )
@@ -86,21 +86,21 @@ static SbxVariable* QualifiedName
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
     if( rtl::isAsciiAlpha( *p ) || *p == '_' || *p == '[' )
     {
-        // Read in the element
+        
         refVar = Element( pObj, pGbl, &p, t );
         while( refVar.Is() && (*p == '.' || *p == '!') )
         {
-            // It follows still an objectelement. The current element
-            // had to be a SBX-Object or had to deliver such an object!
+            
+            
             pObj = PTR_CAST(SbxObject,(SbxVariable*) refVar);
             if( !pObj )
-                // Then it had to deliver an object
+                
                 pObj = PTR_CAST(SbxObject,refVar->GetObject());
             refVar.Clear();
             if( !pObj )
                 break;
             p++;
-            // And the next element please
+            
             refVar = Element( pObj, pGbl, &p, t );
         }
     }
@@ -112,8 +112,8 @@ static SbxVariable* QualifiedName
     return refVar;
 }
 
-// Read in of an operand. This could be a number, a string or
-// a function (with optional parameters).
+
+
 
 static SbxVariable* Operand
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bVar )
@@ -125,7 +125,7 @@ static SbxVariable* Operand
                    || *p == '-'
                    || *p == '&' ) )
     {
-        // A number could be scanned in directly!
+        
         sal_uInt16 nLen;
         if( !refVar->Scan( OUString( p ), &nLen ) )
         {
@@ -138,17 +138,17 @@ static SbxVariable* Operand
     }
     else if( !bVar && *p == '"' )
     {
-        // A string
+        
         OUString aString;
         p++;
         for( ;; )
         {
-            // This is perhaps an error
+            
             if( !*p )
             {
                 return NULL;
             }
-            // Double quotes are OK
+            
             if( *p == '"' )
             {
                 if( *++p != '"' )
@@ -170,8 +170,8 @@ static SbxVariable* Operand
     return refVar;
 }
 
-// Read in of a simple term. The operands +, -, * and /
-// are supported.
+
+
 
 static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
@@ -184,7 +184,7 @@ static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
         SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
         if( refVar2.Is() )
         {
-            // temporary variable!
+            
             SbxVariable* pVar = refVar;
             pVar = new SbxVariable( *pVar );
             refVar = pVar;
@@ -216,7 +216,7 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unico
         SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
         if( refVar2.Is() )
         {
-            // temporaere Variable!
+            
             SbxVariable* pVar = refVar;
             pVar = new SbxVariable( *pVar );
             refVar = pVar;
@@ -246,7 +246,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
     {
         if( *p == '=' )
         {
-            // Assign only onto properties!
+            
             if( refVar->GetClass() != SbxCLASS_PROPERTY )
             {
                 SbxBase::SetError( SbxERR_BAD_ACTION );
@@ -266,7 +266,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
             }
         }
         else
-            // Simple call: once activating
+            
             refVar->Broadcast( SBX_HINT_DATAWANTED );
     }
     *ppBuf = p;
@@ -275,9 +275,9 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
     return refVar;
 }
 
-// Read in of an element. This is a symbol, optional followed
-// by a parameter list. The symbol will be searched in the
-// specified object and the parameter list will be attached if necessary.
+
+
+
 
 static SbxVariable* Element
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
@@ -298,29 +298,29 @@ static SbxVariable* Element
         if( refVar.Is() )
         {
             refVar->SetParameters( NULL );
-            // Follow still parameter?
+            
             p = SkipWhitespace( p );
             if( *p == '(' )
             {
                 p++;
                 SbxArrayRef refPar = new SbxArray;
                 sal_uInt16 nArg = 0;
-                // We are once relaxed and accept as well
-                // the line- or commandend as delimiter
-                // Search parameter always global!
+                
+                
+                
                 while( *p && *p != ')' && *p != ']' )
                 {
                     SbxVariableRef refArg = PlusMinus( pGbl, pGbl, &p );
                     if( !refArg )
                     {
-                        // Error during the parsing
+                        
                         refVar.Clear(); break;
                     }
                     else
                     {
-                        // One copies the parameter, so that
-                        // one have the current status (triggers also
-                        // the call per access)
+                        
+                        
+                        
                         SbxVariable* pArg = refArg;
                         refPar->Put( new SbxVariable( *pArg ), ++nArg );
                     }
@@ -343,7 +343,7 @@ static SbxVariable* Element
     return refVar;
 }
 
-// Mainroutine
+
 
 SbxVariable* SbxObject::Execute( const OUString& rTxt )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -41,37 +41,37 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-// hmm. No support for regular expression. Well, I always (not really :) wanted to write a finite automat
-// so here comes a finite automat ...
+
+
 
 namespace validation
 {
-    // the states of our automat.
+    
     enum State
     {
-        START,              // at the very start of the string
-        NUM_START,          // the very start of the number
+        START,              
+        NUM_START,          
 
-        DIGIT_PRE_COMMA,    // some pre-comma digits are read, perhaps including some thousand separators
+        DIGIT_PRE_COMMA,    
 
-        DIGIT_POST_COMMA,   // reading digits after the comma
-        EXPONENT_START,     // at the very start of the exponent value
-                            //    (means: not including the "e" which denotes the exponent)
-        EXPONENT_DIGIT,     // currently reading the digits of the exponent
+        DIGIT_POST_COMMA,   
+        EXPONENT_START,     
+                            
+        EXPONENT_DIGIT,     
 
-        END                 // reached the end of the string
+        END                 
     };
 
-    // a row in the transition table (means the set of states to be reached from a given state)
+    
     typedef ::std::map< sal_Unicode, State >        StateTransitions;
 
-    // a single transition
+    
     typedef StateTransitions::value_type            Transition;
 
-    // the complete transition table
+    
     typedef ::std::map< State, StateTransitions >   TransitionTable;
 
-    // the validator class
+    
     class NumberValidator
     {
     private:
@@ -112,13 +112,13 @@ namespace validation
 
     static void lcl_insertCommonPreCommaTransitions( StateTransitions& _rRow, const sal_Unicode _cThSep, const sal_Unicode _cDecSep )
     {
-        // digits are allowed
+        
         lcl_insertDigitTransitions( _rRow, DIGIT_PRE_COMMA );
 
-        // the thousand separator is allowed
+        
         _rRow.insert( Transition( _cThSep, DIGIT_PRE_COMMA ) );
 
-        // a comma is allowed
+        
         _rRow.insert( Transition( _cDecSep, DIGIT_POST_COMMA ) );
     }
 
@@ -126,89 +126,89 @@ namespace validation
         :m_cThSep( _cThSep )
         ,m_cDecSep( _cDecSep )
     {
-        // build up our transition table
+        
 
-        // how to procede from START
+        
         {
             StateTransitions& rRow = m_aTransitions[ START ];
             rRow.insert( Transition( '_', NUM_START ) );
-                // if we encounter the normalizing character, we want to procede with the number
+                
         }
 
-        // how to procede from NUM_START
+        
         {
             StateTransitions& rRow = m_aTransitions[ NUM_START ];
 
-            // a sign is allowed
+            
             lcl_insertSignTransitions( rRow, DIGIT_PRE_COMMA );
 
-            // common transitions for the two pre-comma states
+            
             lcl_insertCommonPreCommaTransitions( rRow, m_cThSep, m_cDecSep );
 
-            // the exponent may start here
-            // (this would mean string like "_+e10_", but this is a valid fragment, though no valid number)
+            
+            
             lcl_insertStartExponentTransition( rRow );
         }
 
-        // how to procede from DIGIT_PRE_COMMA
+        
         {
             StateTransitions& rRow = m_aTransitions[ DIGIT_PRE_COMMA ];
 
-            // common transitions for the two pre-comma states
+            
             lcl_insertCommonPreCommaTransitions( rRow, m_cThSep, m_cDecSep );
 
-            // the exponent may start here
+            
             lcl_insertStartExponentTransition( rRow );
 
-            // the final transition indicating the end of the string
-            // (if there is no comma and no post-comma, then the string may end here)
+            
+            
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from DIGIT_POST_COMMA
+        
         {
             StateTransitions& rRow = m_aTransitions[ DIGIT_POST_COMMA ];
 
-            // there might be digits, which would keep the state at DIGIT_POST_COMMA
+            
             lcl_insertDigitTransitions( rRow, DIGIT_POST_COMMA );
 
-            // the exponent may start here
+            
             lcl_insertStartExponentTransition( rRow );
 
-            // the string may end here
+            
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from EXPONENT_START
+        
         {
             StateTransitions& rRow = m_aTransitions[ EXPONENT_START ];
 
-            // there may be a sign
+            
             lcl_insertSignTransitions( rRow, EXPONENT_DIGIT );
 
-            // there may be digits
+            
             lcl_insertDigitTransitions( rRow, EXPONENT_DIGIT );
 
-            // the string may end here
+            
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from EXPONENT_DIGIT
+        
         {
             StateTransitions& rRow = m_aTransitions[ EXPONENT_DIGIT ];
 
-            // there may be digits
+            
             lcl_insertDigitTransitions( rRow, EXPONENT_DIGIT );
 
-            // the string may end here
+            
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from END
+        
         {
             /*StateTransitions& rRow =*/ m_aTransitions[ EXPONENT_DIGIT ];
-            // no valid transition to leave this state
-            // (note that we, for consistency, nevertheless want to have a row in the table)
+            
+            
         }
     }
 
@@ -219,45 +219,45 @@ namespace validation
 
         while ( END != eCurrentState )
         {
-            // look up the transition row for the current state
+            
             TransitionTable::const_iterator aRow = m_aTransitions.find( eCurrentState );
             DBG_ASSERT( m_aTransitions.end() != aRow,
                 "NumberValidator::implValidateNormalized: invalid transition table (row not found)!" );
 
             if ( m_aTransitions.end() != aRow )
             {
-                // look up the current character in this row
+                
                 StateTransitions::const_iterator aTransition = aRow->second.find( *pCheckPos );
                 if ( aRow->second.end() != aTransition )
                 {
-                    // there is a valid transition for this character
+                    
                     eCurrentState = aTransition->second;
                     ++pCheckPos;
                     continue;
                 }
             }
 
-            // if we're here, there is no valid transition
+            
             break;
         }
 
         DBG_ASSERT( ( END != eCurrentState ) || ( 0 == *pCheckPos ),
             "NumberValidator::implValidateNormalized: inconsistency!" );
-            // if we're at END, then the string should be done, too - the string should be normalized, means ending
-            // a "_" and not containing any other "_" (except at the start), and "_" is the only possibility
-            // to reach the END state
+            
+            
+            
 
-        // the string is valid if and only if we reached the final state
+        
         return ( END == eCurrentState );
     }
 
     sal_Bool NumberValidator::isValidNumericFragment( const OUString& _rText )
     {
         if ( _rText.isEmpty() )
-            // empty strings are always allowed
+            
             return sal_True;
 
-        // normalize the string
+        
         OUString sNormalized( "_" );
         sNormalized += _rText;
         sNormalized += "_";
@@ -273,7 +273,7 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
 {
     if (!s_cFormatter)
     {
-        // get the Office's locale and translate
+        
         LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
         s_cFormatter = new SvNumberFormatter(
             ::comphelper::getProcessComponentContext(),
@@ -373,7 +373,7 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
 
     OUString sFormatted;
     double dNumber = 0.0;
-    // IsNumberFormat changes the format key parameter
+    
     sal_uInt32 nTempFormatKey = static_cast< sal_uInt32 >( m_nFormatKey );
     if( IsUsingInputStringForFormatting() &&
         ImplGetFormatter()->IsNumberFormat(m_sCurrentTextValue, nTempFormatKey, dNumber) )
@@ -389,29 +389,29 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
         sFormatted = sTempOut;
     }
 
-    // calculate the new selection
+    
     Selection aSel(GetSelection());
     Selection aNewSel(aSel);
     aNewSel.Justify();
     sal_Int32 nNewLen = sFormatted.getLength();
     sal_Int32 nCurrentLen = GetText().getLength();
     if ((nNewLen > nCurrentLen) && (aNewSel.Max() == nCurrentLen))
-    {   // the new text is longer and the cursor was behind the last char (of the old text)
+    {   
         if (aNewSel.Min() == 0)
-        {   // the whole text was selected -> select the new text on the whole, too
+        {   
             aNewSel.Max() = nNewLen;
             if (!nCurrentLen)
-            {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
+            {   
                 sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                 if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
-                {   // selection should be from right to left -> swap min and max
+                {   
                     aNewSel.Min() = aNewSel.Max();
                     aNewSel.Max() = 0;
                 }
             }
         }
         else if (aNewSel.Max() == aNewSel.Min())
-        {   // there was no selection -> set the cursor behind the new last char
+        {   
             aNewSel.Max() = nNewLen;
             aNewSel.Min() = nNewLen;
         }
@@ -419,7 +419,7 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     else if (aNewSel.Max() > nNewLen)
         aNewSel.Max() = nNewLen;
     else
-        aNewSel = aSel; // don't use the justified version
+        aNewSel = aSel; 
     SpinField::SetText(sFormatted, aNewSel);
     m_bValueDirty = sal_False;
 }
@@ -449,7 +449,7 @@ void FormattedField::SetAutoColor(sal_Bool _bAutomatic)
 
     m_bAutoColor = _bAutomatic;
     if (m_bAutoColor)
-    {   // if auto color is switched on, adjust the current text color, too
+    {   
         if (m_pLastOutputColor)
             SetControlForeground(*m_pLastOutputColor);
         else
@@ -515,22 +515,22 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
         sal_Int32 nCurrentLen = GetText().getLength();
 
         if ((nNewLen > nCurrentLen) && (aSel.Max() == nCurrentLen))
-        {   // new new text is longer and the cursor is behind the last char
+        {   
             if (aSel.Min() == 0)
-            {   // the whole text was selected -> select the new text on the whole, too
+            {   
                 aSel.Max() = nNewLen;
                 if (!nCurrentLen)
-                {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
+                {   
                     sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                     if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
-                    {   // selection should be from right to left -> swap min and max
+                    {   
                         aSel.Min() = aSel.Max();
                         aSel.Max() = 0;
                     }
                 }
             }
             else if (aSel.Max() == aSel.Min())
-            {   // there was no selection -> set the cursor behind the new last char
+            {   
                 aSel.Max() = nNewLen;
                 aSel.Min() = nNewLen;
             }
@@ -540,7 +540,7 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
         SpinField::SetText(rNew, aSel);
     }
 
-    m_bValueDirty = sal_True; // not always necessary, but better re-evaluate for safety reasons
+    m_bValueDirty = sal_True; 
 }
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
@@ -559,14 +559,14 @@ void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
     sal_Bool bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
     if (bNeedFormatter)
     {
-        ImplGetFormatter(); // this creates a standard formatter
+        ImplGetFormatter(); 
 
-        // It might happen that the standard formatter makes no sense here, but it takes a default
-        // format. Thus, it is possible to set one of the other standard keys (which are spanning
-        // across multiple formatters).
+        
+        
+        
         m_nFormatKey = nFormatKey;
-        // When calling SetFormatKey without a formatter, the key must be one of the standard values
-        // that is available for all formatters (and, thus, also in this new one).
+        
+        
         DBG_ASSERT(m_pFormatter->GetEntry(nFormatKey) != NULL, "FormattedField::ImplSetFormatKey : invalid format key !");
     }
 }
@@ -587,12 +587,12 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
     {
         m_pFormatter = pFormatter;
 
-        // calc the default format key from the Office's UI locale
+        
         if ( m_pFormatter )
         {
-            // get the Office's locale and translate
+            
             LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
-            // get the standard numeric format for this language
+            
             m_nFormatKey = m_pFormatter->GetStandardFormat( NUMBERFORMAT_NUMBER, eSysLanguage );
         }
         else
@@ -606,11 +606,11 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
         sal_uInt32 nDestKey = pFormatter->TestNewString(sOldFormat);
         if (nDestKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            // language of the new formatter
+            
             const SvNumberformat* pDefaultEntry = pFormatter->GetEntry(0);
             LanguageType aNewLang = pDefaultEntry ? pDefaultEntry->GetLanguage() : LANGUAGE_DONTKNOW;
 
-            // convert the old format string into the new language
+            
             sal_Int32 nCheckPos;
             short nType;
             pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang);
@@ -669,26 +669,26 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::SetThousandsSep : Are you sure what you are doing when setting the precision of a text format?");
 
-    // get the current settings
+    
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
     if (bThousand == (bool)_bUseSeparator)
         return;
 
-    // we need the language for the following
+    
     LanguageType eLang;
     GetFormat(eLang);
 
-    // generate a new format ...
+    
     OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
-    // ... and introduce it to the formatter
+    
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
-    // set the new key
+    
     ImplSetFormatKey(nNewKey);
     FormatChanged(FCT_THOUSANDSSEP);
 }
@@ -710,26 +710,26 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::SetDecimalDigits : Are you sure what you are doing when setting the precision of a text format?");
 
-    // get the current settings
+    
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
     if (nPrecision == _nPrecision)
         return;
 
-    // we need the language for the following
+    
     LanguageType eLang;
     GetFormat(eLang);
 
-    // generate a new format ...
+    
     OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
-    // ... and introduce it to the formatter
+    
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
-    // set the new key
+    
     ImplSetFormatKey(nNewKey);
     FormatChanged(FCT_PRECISION);
 }
@@ -747,19 +747,19 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 
 void FormattedField::Commit()
 {
-    // remember the old text
+    
     OUString sOld( GetText() );
 
-    // do the reformat
+    
     ReFormat();
 
-    // did the text change?
+    
     if ( GetText() != sOld )
-    {   // consider the field as modified,
-        // but we already have the most recent value;
-        // don't reparse it from the text
-        // (can lead to data loss when the format is lossy,
-        //  as is e.g. our default date format: 2-digit year!)
+    {   
+        
+        
+        
+        
         impl_Modify(false);
     }
 }
@@ -796,8 +796,8 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
             case KEY_PAGEDOWN:
                 if (!nMod && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
                 {
-                    // the base class would translate this into calls to Up/Down/First/Last,
-                    // but we don't want this if we are text-formatted
+                    
+                    
                     return true;
                 }
         }
@@ -811,9 +811,9 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             if ((pData->GetMode() == COMMAND_WHEEL_SCROLL) && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
             {
-                // same as above : prevent the base class from doing Up/Down-calls
-                // (normally I should put this test into the Up/Down methods itself, shouldn't I ?)
-                // FS - 71553 - 19.01.00
+                
+                
+                
                 return true;
             }
         }
@@ -821,7 +821,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
 
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)
     {
-        // Sonderbehandlung fuer leere Texte
+        
         if (GetText().isEmpty())
         {
             if (!IsEmptyFieldEnabled())
@@ -858,7 +858,7 @@ void FormattedField::SetMinValue(double dMin)
 
     m_dMinValue = dMin;
     m_bHasMin = sal_True;
-    // for checking the current value at the new border -> ImplSetValue
+    
     ReFormat();
 }
 
@@ -869,7 +869,7 @@ void FormattedField::SetMaxValue(double dMax)
 
     m_dMaxValue = dMax;
     m_bHasMax = sal_True;
-    // for checking the current value at the new border -> ImplSetValue
+    
     ReFormat();
 }
 
@@ -910,10 +910,10 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
     OUString sNewText;
     if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
     {
-        // first convert the number as string in standard format
+        
         OUString sTemp;
         ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
-        // than encode the string in the corresponding text format
+        
         {
             ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
         }
@@ -950,29 +950,29 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
-    sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
+    sal_uInt32 nFormatKey = m_nFormatKey; 
 
     if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
-        // for detection of values like "1,1" in fields that are formated as text
+        
         nFormatKey = 0;
 
-    // special treatment for percentage formatting
+    
     if (ImplGetFormatter()->GetType(m_nFormatKey) == NUMBERFORMAT_PERCENT)
     {
-        // the language of our format
+        
         LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
-        // the default number format for this language
+        
         sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
 
         sal_uInt32 nTempFormat = nStandardNumericFormat;
         double dTemp;
         if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
             NUMBERFORMAT_NUMBER == m_pFormatter->GetType(nTempFormat))
-            // the string is equivalent to a number formatted one (has no % sign) -> append it
+            
             sText += "%";
-        // (with this, a input of '3' becomes '3%', which then by the formatter is translated
-        // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
-        // which equals 300 percent.
+        
+        
+        
     }
     if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
         return sal_False;
@@ -1009,7 +1009,7 @@ double FormattedField::GetValue()
 void FormattedField::Up()
 {
     DBG_CHKTHIS(FormattedField, NULL);
-    // setValue handles under- and overflows (min/max) automatically
+    
     SetValue(GetValue() + m_dSpinSize);
     SetModifyFlag();
     Modify();
@@ -1076,15 +1076,15 @@ void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 
 sal_Bool DoubleNumericField::CheckText(const OUString& sText) const
 {
-    // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
-    // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
-    // Thus, the roundabout way via a regular expression
+    
+    
+    
     return m_pNumberValidator->isValidNumericFragment( sText );
 }
 
 void DoubleNumericField::ResetConformanceTester()
 {
-    // the thousands and the decimal separator are language dependent
+    
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
 
     sal_Unicode cSeparatorThousand = ',';
@@ -1112,7 +1112,7 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
 {
     m_bPrependCurrSym = sal_False;
 
-    // initialize with a system currency format
+    
     m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
     UpdateCurrencyFormat();
 }
@@ -1130,14 +1130,14 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
         case FCT_FORMATTER:
         case FCT_PRECISION:
         case FCT_THOUSANDSSEP:
-            // the aspects which changed don't take our currency settings into account (in fact, they most probably
-            // destroyed them)
+            
+            
             UpdateCurrencyFormat();
             break;
         case FCT_KEYONLY:
             OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
-            // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
-            // Nobody but ourself should modifiy the format key directly !
+            
+            
             break;
     }
 
@@ -1166,13 +1166,13 @@ void DoubleCurrencyField::setPrependCurrSym(sal_Bool _bPrepend)
 
 void DoubleCurrencyField::UpdateCurrencyFormat()
 {
-    // the old settings
+    
     LanguageType eLanguage;
     GetFormat(eLanguage);
     sal_Bool bThSep = GetThousandsSep();
     sal_uInt16 nDigits = GetDecimalDigits();
 
-    // build a new format string with the base class' and my own settings
+    
 
     /* Strangely with gcc 4.6.3 this needs a temporary LanguageTag, otherwise
      * there's
@@ -1211,10 +1211,10 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         sTemp.append("] ");
         sTemp.append(sNewFormat);
 
-        // for negative values : $ -0.00, not -$ 0.00 ...
-        // (the real solution would be a possibility to choose a "positive currency format" and a "negative currency format" ...
-        // But not now ... (and hey, you could take a formatted field for this ....))
-        // FS - 31.03.00 74642
+        
+        
+        
+        
         sTemp.append(";[$");
         sTemp.append(sSymbol);
         sTemp.append("] -");
@@ -1233,7 +1233,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         sNewFormat.append(']');
     }
 
-    // set this new basic format
+    
     m_bChangingFormat = sal_True;
     SetFormat(sNewFormat.makeStringAndClear(), eLanguage);
     m_bChangingFormat = sal_False;

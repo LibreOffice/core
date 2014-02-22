@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,24 +45,24 @@ SwContourCache *pContourCache = 0;
 SwDropCapCache *pDropCapCache = 0;
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) // Paragraphs
-IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) // Lines
-IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) // e.g. Blanks at the line end
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) // Attribute change
+IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) 
+IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) 
+IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) 
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) 
 
 /*************************************************************************
  *                  _TextInit(), _TextFinit()
  *************************************************************************/
 
-// Are ONLY used in init.cxx.
-// There we have extern void _TextFinit()
-// and extern void _TextInit(...)
+
+
+
 
 void _TextInit()
 {
-    pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
-    pSwFontCache = new SwFontCache; // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
-    SwCache *pTxtCache = new SwCache( 250 // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
+    pFntCache = new SwFntCache; 
+    pSwFontCache = new SwFontCache; 
+    SwCache *pTxtCache = new SwCache( 250 
 #ifdef DBG_UTIL
     , "static SwTxtFrm::pTxtCache"
 #endif

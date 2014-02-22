@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "xltoolbar.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -38,13 +38,13 @@ public:
 MSOExcelCommandConvertor::MSOExcelCommandConvertor()
 {
 /*
-    // mso command id to ooo command string
-    // #FIXME and *HUNDREDS* of id's to added here
+    
+    
     msoToOOcmd[ 0x20b ] = ".uno:CloseDoc";
     msoToOOcmd[ 0x50 ] = ".uno:Open";
 
-   // mso tcid to ooo command string
-    // #FIXME and *HUNDREDS* of id's to added here
+   
+    
    tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 */
 }
@@ -150,14 +150,14 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
     try
     {
         if ( !tb.IsEnabled() )
-            return true;  // didn't fail, just ignoring
+            return true;  
 
-        // Create default setting
+        
         uno::Reference< container::XIndexContainer > xIndexContainer( helper.getCfgManager()->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xIndexAccess( xIndexContainer, uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
         WString& name = tb.getName();
-        // set UI name for toolbar
+        
         xProps->setPropertyValue("UIName", uno::makeAny( name.getString() ) );
 
         OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
@@ -254,8 +254,8 @@ ScTBC::Print(FILE* fp)
 
 bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuToolbar )
 {
-    // how to identify built-in-command ?
-//    bool bBuiltin = false;
+    
+
     if ( tbcd.get() )
     {
         std::vector< css::beans::PropertyValue > props;
@@ -265,10 +265,10 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
         TBCMenuSpecific* pMenu = tbcd->getMenuSpecific();
         if ( pMenu )
         {
-            // search for ScCTB with the appropriate name ( it contains the
-            // menu items, although we cannot import ( or create ) a menu on
-            // a custom toolbar we can import the menu items in a separate
-            // toolbar ( better than nothing )
+            
+            
+            
+            
             ScCTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
             if ( pCustTB )
             {
@@ -292,7 +292,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
 
         if ( bBeginGroup )
         {
-            // insert spacer
+            
             uno::Sequence< beans::PropertyValue > sProps( 1 );
             sProps[ 0 ].Name = "Type";
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
@@ -402,13 +402,13 @@ bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     std::vector<ScCTB>::iterator it_end = rCTB.end();
     for ( std::vector<ScCTB>::iterator it = rCTB.begin(); it != it_end; ++it )
     {
-        // for each customtoolbar
+        
         CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( OUString("com.sun.star.sheet.SpreadsheetDocument" ) ) );
         helper.setMSOCommandMap( new  MSOExcelCommandConvertor() );
-        // Ignore menu toolbars, excel doesn't ( afaics ) store
-        // menu customizations ( but you can have menus in a customtoolbar
-        // such menus will be dealt with when they are encountered
-        // as part of importing the appropriate MenuSpecific toolbar control )
+        
+        
+        
+        
 
 
         if ( !(*it).IsMenuToolbar() )

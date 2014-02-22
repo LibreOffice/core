@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -33,8 +33,8 @@ UnoInterfaceToUniqueIdentifierMapper::UnoInterfaceToUniqueIdentifierMapper()
 
 const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const Reference< XInterface >& rInterface )
 {
-    // Be certain that the references we store in our table are to the
-    // leading / primary XInterface - cf. findReference
+    
+    
     uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
     IdMap_t::const_iterator aIter;
@@ -54,8 +54,8 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
 {
     IdMap_t::const_iterator aIter;
 
-    // Be certain that the references we store in our table are to the
-    // leading / primary XInterface - cf. findReference
+    
+    
     uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
     if( findReference( xRef, aIter ) )
@@ -76,8 +76,8 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
 
 void UnoInterfaceToUniqueIdentifierMapper::registerReferenceAlways( const OUString& rIdentifier, const Reference< XInterface >& rInterface )
 {
-    // Be certain that the references we store in our table are to the
-    // leading / primary XInterface - cf. findReference
+    
+    
     uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
     insertReference( rIdentifier, xRef );
@@ -120,10 +120,10 @@ bool UnoInterfaceToUniqueIdentifierMapper::findReference( const Reference< XInte
     const IdMap_t::const_iterator aEnd( maEntries.end() );
     while( rIter != aEnd )
     {
-        // The Reference == operator, does a repeated queryInterface on
-        // this to ensure we got the right XInterface base-class. However,
-        // we can be sure that this has been done already by the time we
-        // get to here.
+        
+        
+        
+        
         if( (*rIter).second.get() == xRef.get() )
             return true;
 
@@ -143,11 +143,11 @@ void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIde
 {
     maEntries[rIdentifier] = rInterface;
 
-    // see if this is a reference like something we would generate in the future
+    
     const sal_Unicode *p = rIdentifier.getStr();
     sal_Int32 nLength = rIdentifier.getLength();
 
-    // see if the identifier is 'id' followed by a pure integer value
+    
     if( nLength < 2 || p[0] != 'i' || p[1] != 'd' )
         return;
 
@@ -157,14 +157,14 @@ void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIde
     while(nLength--)
     {
         if( (*p < '0') || (*p > '9') )
-            return; // a custom id, that will never conflict with genereated id's
+            return; 
 
         p++;
     }
 
-    // the identifier is a pure integer value
-    // so we make sure we will never generate
-    // an integer value like this one
+    
+    
+    
     sal_Int32 nId = rIdentifier.copy(2).toInt32();
     if( mnNextId <= nId )
         mnNextId = nId + 1;

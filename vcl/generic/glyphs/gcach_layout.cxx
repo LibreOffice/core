@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <gcach_ftyp.hxx>
@@ -38,9 +38,9 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <comphelper/processfactory.hxx>
 
-// =======================================================================
-// layout implementation for ServerFont
-// =======================================================================
+
+
+
 
 ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 :   mrServerFont( rFont )
@@ -51,25 +51,25 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
     rSalGraphics.DrawServerFontLayout( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     return mrServerFont.GetLayoutEngine()->layout(*this, rArgs);
 }
 
-// -----------------------------------------------------------------------
+
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     GenericSalLayout::AdjustLayout( rArgs );
 
-    // apply asian kerning if the glyphs are not already formatted
+    
     if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
     && !(rArgs.mnFlags & SAL_LAYOUT_VERTICAL) )
         if( (rArgs.mpDXArray != NULL) || (rArgs.mnLayoutWidth != 0) )
             ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
 
-    // insert kashidas where requested by the formatting array
+    
     if( (rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON) && rArgs.mpDXArray )
     {
         int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
@@ -77,7 +77,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         {
             const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nKashidaIndex );
             KashidaJustify( nKashidaIndex, rGM.GetCharWidth() );
-            // TODO: kashida-GSUB/GPOS
+            
         }
     }
 }
@@ -100,9 +100,9 @@ void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
 
     lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
 
-    //if position nCharPos is missing in the font, grab the entire grapheme and
-    //mark all glyphs as missing so the whole thing is rendered with the same
-    //font
+    
+    
+    
     OUString aRun(rArgs.mpStr);
     sal_Int32 nDone;
     sal_Int32 nGraphemeStartPos =
@@ -115,7 +115,7 @@ void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
-// =======================================================================
+
 
 std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
 {
@@ -179,7 +179,7 @@ static hb_position_t getGlyphAdvanceV(hb_font_t* /*font*/, void* /*pFontData*/,
         hb_codepoint_t /*nGlyphIndex*/,
         void* /*pUserData*/)
 {
-    // XXX: vertical metrics
+    
     return 0;
 }
 
@@ -188,7 +188,7 @@ static hb_bool_t getGlyphOriginH(hb_font_t* /*font*/, void* /*pFontData*/,
         hb_position_t* /*x*/, hb_position_t* /*y*/,
         void* /*pUserData*/)
 {
-    // the horizontal origin is always (0, 0)
+    
     return true;
 }
 
@@ -197,7 +197,7 @@ static hb_bool_t getGlyphOriginV(hb_font_t* /*font*/, void* /*pFontData*/,
         hb_position_t* /*x*/, hb_position_t* /*y*/,
         void* /*pUserData*/)
 {
-    // XXX: vertical origin
+    
     return true;
 }
 
@@ -205,7 +205,7 @@ static hb_position_t getGlyphKerningH(hb_font_t* /*font*/, void* pFontData,
         hb_codepoint_t nGlyphIndex1, hb_codepoint_t nGlyphIndex2,
         void* /*pUserData*/)
 {
-    // This callback is for old style 'kern' table, GPOS kerning is handled by HarfBuzz directly
+    
 
     ServerFont* pFont = (ServerFont*) pFontData;
     FT_Face aFace = pFont->GetFtFace();
@@ -229,7 +229,7 @@ static hb_position_t getGlyphKerningV(hb_font_t* /*font*/, void* /*pFontData*/,
         hb_codepoint_t /*nGlyphIndex1*/, hb_codepoint_t /*nGlyphIndex2*/,
         void* /*pUserData*/)
 {
-    // XXX vertical kerning
+    
     return 0;
 }
 
@@ -302,7 +302,7 @@ static hb_font_funcs_t* getFontFuncs(void)
     return funcs;
 }
 
-// Disabled Unicode compatibility decomposition, see fdo#66715
+
 static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/,
                                                   hb_codepoint_t      /*u*/,
                                                   hb_codepoint_t*     /*decomposed*/,
@@ -380,7 +380,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) mnUnitsPerEM) >> 16);
     hb_font_set_ppem(pHbFont, aFtFace->size->metrics.x_ppem, aFtFace->size->metrics.y_ppem);
 
-    // allocate temporary arrays, note: round to even
+    
     int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) | 15) + 1;
 
     rLayout.Reserve(nGlyphCapacity);
@@ -395,7 +395,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         if (!rArgs.GetNextRun(&nBidiMinRunPos, &nBidiEndRunPos, &bRightToLeft))
             break;
 
-        // Find script subruns.
+        
         int nCurrentPos = nBidiMinRunPos;
         HbScriptRuns aScriptSubRuns;
         while (aScriptRun.next())
@@ -415,8 +415,8 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             aScriptRun.next();
         }
 
-        // RTL subruns should be reversed to ensure that final glyph order is
-        // correct.
+        
+        
         if (bRightToLeft)
             std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
 
@@ -456,7 +456,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
 
-                // if needed request glyph fallback by updating LayoutArgs
+                
                 if (!nGlyphIndex)
                 {
                     rLayout.setNeedFallback(rArgs, nCharPos, bRightToLeft);
@@ -464,9 +464,9 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                         continue;
                 }
 
-                // apply vertical flags and glyph substitution
-                // XXX: Use HB_DIRECTION_TTB above and apply whatever flags magic
-                // FixupGlyphIndex() is doing, minus the GSUB part.
+                
+                
+                
                 if (nCharPos >= 0)
                 {
                     sal_UCS4 aChar = rArgs.mpStr[nCharPos];
@@ -484,36 +484,36 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 if (bInCluster)
                     nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
-                // The whole IS_DIACRITIC concept is a stupid hack that was
-                // introduced ages ago to work around the utter brokenness of the
-                // way justification adjustments are applied (the DXArray fiasco).
-                // Since it is such a stupid hack, there is no sane way to directly
-                // map to concepts of the "outside" world, so we do some rather
-                // ugly hacks:
-                // * If the font has a GDEF table, we check for glyphs with mark
-                //   glyph class which is sensible, except that some fonts
-                //   (fdo#70968) assign mark class to spacing marks (which is wrong
-                //   but usually harmless), so we try to sniff what HarfBuzz thinks
-                //   about this glyph by checking if it gives it a zero advance
-                //   width.
-                // * If the font has no GDEF table, we just check if the glyph has
-                //   zero advance width, but this is stupid and can be wrong. A
-                //   better way would to check the character's Unicode combining
-                //   class, but unfortunately glyph gives combining marks the
-                //   cluster value of its base character, so nCharPos will be
-                //   pointing to the wrong character (but HarfBuzz might change
-                //   this in the future).
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 bool bDiacritic = false;
                 if (hb_ot_layout_has_glyph_classes(mpHbFace))
                 {
-                    // the font has GDEF table
+                    
                     bool bMark = hb_ot_layout_get_glyph_class(mpHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
                     if (bMark && pHbPositions[i].x_advance == 0)
                         bDiacritic = true;
                 }
                 else
                 {
-                    // the font lacks GDEF table
+                    
                     if (pHbPositions[i].x_advance == 0)
                         bDiacritic = true;
                 }
@@ -540,12 +540,12 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     hb_font_destroy(pHbFont);
 
-    // sort glyphs in visual order
-    // and then in logical order (e.g. diacritics after cluster start)
-    // XXX: why?
+    
+    
+    
     rLayout.SortGlyphItems();
 
-    // determine need for kashida justification
+    
     if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
     && ((maHbScript == HB_SCRIPT_ARABIC) || (maHbScript == HB_SCRIPT_SYRIAC)))
         rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
@@ -553,17 +553,17 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     return true;
 }
 
-// =======================================================================
+
 
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
-    // find best layout engine for font, platform, script and language
+    
     if (!mpLayoutEngine) {
         mpLayoutEngine = new HbLayoutEngine(*this);
     }
     return mpLayoutEngine;
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

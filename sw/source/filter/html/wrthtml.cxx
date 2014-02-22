@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -132,10 +132,10 @@ SwHTMLWriter::~SwHTMLWriter()
 
 sal_uLong SwHTMLWriter::WriteStream()
 {
-    // neue Konfiguration setzen
+    
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
 
-    // die Fontgroessen 1-7
+    
     aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
     aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
     aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
@@ -144,8 +144,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     aFontHeights[5] = rHtmlOptions.GetFontSize( 5 ) * 20;
     aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
 
-    // ueberhaupt Styles ausgeben
-    // (dann auch obere und untere Absatz-Abstaende)
+    
+    
     nExportMode = rHtmlOptions.GetExportMode();
     nHTMLMode = GetHtmlMode(0);
     if( HTML_CFG_WRITER==nExportMode ||
@@ -197,7 +197,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
-    // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
+    
     bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
 
     bCfgStarBasic = rHtmlOptions.IsStarBasic();
@@ -205,7 +205,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     bCfgFormFeed = !IsHTMLMode(HTMLMODE_PRINT_EXT);
     bCfgCpyLinkedGrfs = rHtmlOptions.IsSaveGraphicsLocal();
 
-    // die HTML-Vorlage holen
+    
     sal_Bool bOldHTMLMode = sal_False;
     sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
 
@@ -275,19 +275,19 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     OString aStartTags;
 
-    // Tabellen und Bereiche am Doc.-Anfang beachten
+    
     {
         SwTableNode * pTNd = pCurPam->GetNode()->FindTableNode();
         if( pTNd && bWriteAll )
         {
-            // mit dem Tabellen-Node anfangen !!
+            
             pCurPam->GetPoint()->nNode = *pTNd;
 
             if( bWriteOnlyFirstTable )
                 pCurPam->GetMark()->nNode = *pTNd->EndOfSectionNode();
         }
 
-        // erster Node (der einen Seitenumbruch enthalten darf)
+        
         pStartNdIdx = new SwNodeIndex( pCurPam->GetPoint()->nNode );
 
         SwSectionNode * pSNd = pCurPam->GetNode()->FindSectionNode();
@@ -295,7 +295,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         {
             if( bWriteAll )
             {
-                // mit dem Section-Node anfangen !!
+                
                 pCurPam->GetPoint()->nNode = *pSNd;
             }
             else
@@ -303,7 +303,7 @@ sal_uLong SwHTMLWriter::WriteStream()
                 OSL_ENSURE( FILE_LINK_SECTION != pSNd->GetSection().GetType(),
                         "Export gelinkter Bereiche am Dok-Anfang ist nicht implemntiert" );
 
-                // nur das Tag fuer die Section merken
+                
                 OString aName = HTMLOutFuncs::ConvertStringToHTML(
                     pSNd->GetSection().GetSectionName(), eDestEnc,
                     &aNonConvertableCharacters );
@@ -315,14 +315,14 @@ sal_uLong SwHTMLWriter::WriteStream()
                     .append(aStartTags);
                 aStartTags = sOut.makeStringAndClear();
             }
-            // FindSectionNode() an einem SectionNode liefert den selben!
+            
             pSNd = pSNd->StartOfSectionNode()->FindSectionNode();
         }
     }
 
 
-    // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
-    // das gesamte Dokument geschrieben wird
+    
+    
     pHTMLPosFlyFrms = 0;
     CollectFlyFrms();
     nLastParaToken = 0;
@@ -334,7 +334,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     bLFPossible = sal_True;
 
-    // Formulare, die nur HiddenControls enthalten ausgeben.
+    
     OutHiddenForms();
 
     if( !aStartTags.isEmpty() )
@@ -379,7 +379,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html, sal_False );
 
-    // loesche die Tabelle mit den freifliegenden Rahmen
+    
     sal_uInt16 i;
     OSL_ENSURE( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
     if( pHTMLPosFlyFrms )
@@ -437,8 +437,8 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     if( pTemplate )
     {
-        // Waehrend des Exports angelegte Zeichen- und Abastzvorlagen
-        // loeschen
+        
+        
         sal_uInt16 nTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->size();
         while( nTxtFmtCollCnt > nOldTxtFmtCollCnt )
             pTemplate->DelTxtFmtColl( --nTxtFmtCollCnt );
@@ -451,7 +451,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         OSL_ENSURE( pTemplate->GetCharFmts()->size() == nOldCharFmtCnt,
                 "falsche Anzahl CharFmts geloescht" );
 
-        // HTML-Modus wieder restaurieren
+        
         pTemplate->set(IDocumentSettingAccess::HTML_MODE, bOldHTMLMode);
 
         if( 0 == pTemplate->release() )
@@ -582,7 +582,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     }
     else if( pCol )
     {
-        // minumum gutter width
+        
         sal_uInt16 nGutter = pCol->GetGutterWidth( sal_True );
         if( nGutter!=USHRT_MAX )
         {
@@ -623,8 +623,8 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // End <PRE> and any <DL>, because a definition list's level may
-    // change inside the section.
+    
+    
     rHTMLWrt.ChangeParaToken( 0 );
     rHTMLWrt.OutAndSetDefList( 0 );
 
@@ -644,16 +644,16 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     const SwFmtCol *pCol = lcl_html_GetFmtCol( rSection, *pFmt );
     if( pCol )
     {
-        // If the next node is a columned section node, too, don't export
-        // an empty section.
+        
+        
         if( lcl_html_IsMultiColStart( rHTMLWrt, nSectSttIdx+1 ) )
             bStartTag = false;
 
-        // The same applies if the section end with another columned section.
+        
         if( lcl_html_IsMultiColEnd( rHTMLWrt, nSectEndIdx-1 ) )
             bEndTag = false;
 
-        //.is there a columned section arround this one?
+        
         const SwStartNode *pSttNd = rSectNd.StartOfSectionNode();
         if( pSttNd )
         {
@@ -674,9 +674,9 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         }
     }
 
-    // The surrounding section must be closed before the current one is
-    // opended, except that it start immediately before the current one or
-    // another end immediately before the current one
+    
+    
+    
     if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > 1 &&
         !lcl_html_IsMultiColEnd( rHTMLWrt, nSectSttIdx-1 ) )
         lcl_html_OutSectionEndTag( rHTMLWrt );
@@ -697,8 +697,8 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     if( bEndTag )
         lcl_html_OutSectionEndTag( rHTMLWrt );
 
-    // The surrounding section must be started again, except that it ends
-    // immeditaly behind the current one.
+    
+    
     if( pSurrCol &&
         pSurrSectNd->EndOfSectionIndex() - nSectEndIdx > 1 &&
         !lcl_html_IsMultiColStart( rHTMLWrt, nSectEndIdx+1 ) )
@@ -710,18 +710,18 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
 void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 {
-    sal_Bool bSaveWriteAll = bWriteAll;     // sichern
+    sal_Bool bSaveWriteAll = bWriteAll;     
 
-    // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
+    
     nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
 
-    // gebe alle Bereiche des Pams in das HTML-File aus.
+    
     do {
         bWriteAll = bSaveWriteAll;
         bFirstLine = sal_True;
 
-        // suche den ersten am Pam-auszugebenen FlyFrame
-        // fehlt noch:
+        
+        
 
         while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
               (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
@@ -753,11 +753,11 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
 
-            pCurPam->GetPoint()->nNode++;   // Bewegen
+            pCurPam->GetPoint()->nNode++;   
             sal_uInt32 nPos = pCurPam->GetPoint()->nNode.GetIndex();
 
             if( bShowProgress )
-                ::SetProgressState( nPos, pDoc->GetDocShell() );   // Wie weit ?
+                ::SetProgressState( nPos, pDoc->GetDocShell() );   
 
             /* sollen nur die Selectierten Bereiche gesichert werden, so
              * duerfen nur die vollstaendigen Nodes gespeichert werde,
@@ -767,20 +767,20 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             bWriteAll = bSaveWriteAll ||
                         nPos != pCurPam->GetMark()->nNode.GetIndex();
             bFirstLine = sal_False;
-            bOutFooter = sal_False; // Nach einem Node keine Fusszeile mehr
+            bOutFooter = sal_False; 
         }
 
-        ChangeParaToken( 0 ); // MIB 8.7.97: Machen wir jetzt hier und nicht
-                              // beim Aufrufer
+        ChangeParaToken( 0 ); 
+                              
         OutAndSetDefList( 0 );
 
-    } while( CopyNextPam( &pPam ) );        // bis alle PaM's bearbeitet
+    } while( CopyNextPam( &pPam ) );        
 
-    bWriteAll = bSaveWriteAll;          // wieder auf alten Wert zurueck
+    bWriteAll = bSaveWriteAll;          
 }
 
 
-// schreibe die StyleTabelle, algemeine Angaben,Header/Footer/Footnotes
+
 static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
                           SwHTMLWriter& rHWrt )
 {
@@ -801,9 +801,9 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
                                                             true, &pRefItem);
     if( bItemSet )
     {
-        // wenn das Item nur in der Vorlage des aktuellen Doks gesetzt
-        // ist oder einen anderen Wert hat, als in der HTML-Vorlage,
-        // wird es gesetzt
+        
+        
+        
         const SvxColorItem *pCItem = (const SvxColorItem*)pItem;
 
         if( !bRefItemSet )
@@ -826,8 +826,8 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
     }
     else if( bRefItemSet )
     {
-        // Das Item war in der HTML-Vorlage noch gesetzt, also geben wir
-        // das Default aus
+        
+        
         pColorItem = (const SvxColorItem*)&rItemSet.GetPool()
                                         ->GetDefaultItem( RES_CHRATR_COLOR );
     }
@@ -897,16 +897,16 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         .append(OOO_STRING_SVTOOLS_HTML_doctype40);
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
-    // baue den Vorspann
+    
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html );
 
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head );
 
-    IncIndentLevel();   // Inhalt von <HEAD> einruecken
+    IncIndentLevel();   
 
-    // DokumentInfo
+    
     OString sIndent = GetIndentString();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
@@ -918,20 +918,20 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         xDocProps.set(xDPS->getDocumentProperties());
     }
 
-    // xDocProps may be null here (when copying)
+    
     SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
                                      sIndent.getStr(), eDestEnc,
                                      &aNonConvertableCharacters );
 
-    // Kommentare und Meta-Tags des ersten Absatzes
+    
     rHeaderAttrs = OutHeaderAttrs();
 
     OutFootEndNoteInfo();
 
     const SwPageDesc *pPageDesc = 0;
 
-    // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
-    // exportiert und wenn keine gesetzt ist die Standard-Vorlage
+    
+    
     sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
 
     while( nNodeIdx < pDoc->GetNodes().Count() )
@@ -956,35 +956,35 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     if( !pPageDesc )
         pPageDesc = &pDoc->GetPageDesc( 0 );
 
-    // und nun ... das Style-Sheet!!!
+    
     if( bCfgOutStyles )
     {
         OutStyleSheet( *pPageDesc );
     }
 
-    // und nun ... das BASIC und JavaScript!
-    if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
+    
+    if( pDoc->GetDocShell() )   
         OutBasic();
 
-    DecIndentLevel();   // Inhalt von <HEAD> einruecken
+    DecIndentLevel();   
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, sal_False );
 
-    // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
+    
     OutNewLine();
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_body);
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    // language
+    
     OutLanguage( eLang );
 
-    // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
-    // und sich geaendert hat.
+    
+    
     OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
                   pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
                   *this );
 
-    // Farben fuer (un)besuchte Links
+    
     OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
                   pDoc->GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
                   *this );
@@ -1002,8 +1002,8 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     if( bCfgOutStyles )
         OutCSS1_BodyTagStyleOpt( *this, rItemSet );
 
-    // Events anhaengen
-    if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
+    
+    if( pDoc->GetDocShell() )   
         OutBasicBodyEvents();
 
     Strm().WriteChar( '>' );
@@ -1023,21 +1023,21 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
 
 void SwHTMLWriter::OutBookmarks()
 {
-    // hole das aktuelle Bookmark
+    
     const ::sw::mark::IMark* pBookmark = NULL;
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     if(nBkmkTabPos != -1)
         pBookmark = (pMarkAccess->getAllMarksBegin() + nBkmkTabPos)->get();
-    // Ausgabe aller Bookmarks in diesem Absatz. Die Content-Position
-    // wird vorerst nicht beruecksichtigt!
+    
+    
     sal_uInt32 nNode = pCurPam->GetPoint()->nNode.GetIndex();
     while( nBkmkTabPos != -1
            && pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
     {
-        // Der Bereich derBookmark wird erstam ignoriert, da er von uns
-        // auch nicht eingelesen wird.
+        
+        
 
-        // erst die SWG spezifischen Daten:
+        
         if ( dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && !pBookmark->GetName().isEmpty() )
         {
             OutAnchor( pBookmark->GetName() );
@@ -1057,7 +1057,7 @@ void SwHTMLWriter::OutBookmarks()
     while( nPos < aOutlineMarkPoss.size() && aOutlineMarkPoss[nPos] == nNode )
     {
         OUString sMark( aOutlineMarks[nPos] );
-        OutAnchor( sMark.replace('?', '_') ); // '?' causes problems in IE/Netscape 5
+        OutAnchor( sMark.replace('?', '_') ); 
         aOutlineMarkPoss.erase( aOutlineMarkPoss.begin()+nPos );
         aOutlineMarks.erase( aOutlineMarks.begin() + nPos );
     }
@@ -1072,7 +1072,7 @@ void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
         sMark + OUString(cMarkSeparator) + OUString::createFromAscii(pMarkType);
         if( 0 != aImplicitMarks.erase( sMark ) )
         {
-            OutAnchor(sMark.replace('?', '_')); // '?' causes problems in IE/Netscape 5
+            OutAnchor(sMark.replace('?', '_')); 
         }
     }
 }
@@ -1095,7 +1095,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
                 sCmp == "outline" ||
                 sCmp == "text" )
             {
-                sURL = sURL.replace( '?', '_' );   // '?' causes problems in IE/Netscape 5
+                sURL = sURL.replace( '?', '_' );   
             }
         }
     }
@@ -1108,8 +1108,8 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
 void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
-    /// check, if background color is not "no fill"/"auto fill", instead of
-    /// only checking, if transparency is not set.
+    
+    
     if( rBackColor.GetColor() != COL_TRANSPARENT )
     {
         OStringBuffer sOut;
@@ -1228,7 +1228,7 @@ OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)
 {
     OString sRet;
 
-    // etwas umstaendlich, aber wir haben nur einen Indent-String!
+    
     sal_uInt16 nLevel = nIndentLvl + nIncLvl;
 
     if( nLevel && nLevel <= MAX_INDENT_LEVEL)
@@ -1272,8 +1272,8 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
     return nSize;
 }
 
-// Struktur speichert die aktuellen Daten des Writers zwischen, um
-// einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
+
+
 HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
                             sal_uLong nEnd, sal_Bool bSaveNum,
                                 const SwFrmFmt *pFrmFmt ) :
@@ -1292,7 +1292,7 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
 
     rWrt.pCurPam = rWrt.NewSwPaM( *rWrt.pDoc, nStt, nEnd );
 
-    // Tabelle in Sonderbereichen erkennen
+    
     if( nStt != rWrt.pCurPam->GetMark()->nNode.GetIndex() )
     {
         const SwNode *pNd = rWrt.pDoc->GetNodes()[ nStt ];
@@ -1306,9 +1306,9 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
     rWrt.nDefListLvl = 0;
     rWrt.bOutHeader = rWrt.bOutFooter = sal_False;
 
-    // Ggf. die aktuelle Numerierungs-Info merken, damit sie wieder
-    // neu aufgenommen werden kann. Nur dann belibt auch die Numerierungs-
-    // Info des nachsten Absatz gueltig.
+    
+    
+    
     if( bSaveNum )
     {
         pOldNumRuleInfo = new SwHTMLNumRuleInfo( rWrt.GetNumInfo() );
@@ -1320,7 +1320,7 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
         rWrt.ClearNextNumInfo();
     }
 
-    // Die Numerierung wird in jedem Fall unterbrochen.
+    
     rWrt.GetNumInfo().Clear();
 
     if( pFrmFmt )
@@ -1330,7 +1330,7 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
 
 HTMLSaveData::~HTMLSaveData()
 {
-    delete rWrt.pCurPam;                    // Pam wieder loeschen
+    delete rWrt.pCurPam;                    
 
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );
@@ -1343,8 +1343,8 @@ HTMLSaveData::~HTMLSaveData()
     rWrt.bOutFooter = bOldOutFooter;
     rWrt.bOutFlyFrame = bOldOutFlyFrame;
 
-    // Ggf. die Numerierung von vor der Section fortsetzen. Die Numerierung
-    // des naecshten Absatz wird in jedem Fall ungueltig.
+    
+    
     if( pOldNumRuleInfo )
     {
         rWrt.GetNumInfo().Set( *pOldNumRuleInfo );

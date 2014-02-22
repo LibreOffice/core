@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SelectionHelper.hxx"
@@ -23,11 +23,11 @@
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
 
-// header for class SdrObjList
+
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include "svx/obj3d.hxx"
-// header for class SdrPathObj
+
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -62,7 +62,7 @@ void impl_selectObject( SdrObject* pObjectToSelect, DrawViewWrapper& rDrawViewWr
     }
 }
 
-}//anonymous namespace
+}
 
 bool Selection::hasSelection()
 {
@@ -169,26 +169,26 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
 {
     if( pDrawViewWrapper )
     {
-        //do not toggel multiclick selection if right clicked on the selected object or waiting for double click
+        
         bool bAllowMultiClickSelectionChange = !bIsRightMouse && !bWaitingForDoubleClick;
 
         ObjectIdentifier aLastSelectedObject( m_aSelectedOID );
 
         SolarMutexGuard aSolarGuard;
 
-        //bAllowMultiClickSelectionChange==true -> a second click on the same object can lead to a changed selection (e.g. series -> single data point)
+        
 
-        //get object to select:
+        
         SdrObject* pNewObj = 0;
         {
             m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
 
-            //the search for the object to select starts with the hit object deepest in the grouping hierarchy (a leaf in the tree)
-            //further we travel along the grouping hierarchy from child to parent
+            
+            
             pNewObj = pDrawViewWrapper->getHitObject(rMousePos);
-            m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );//name of pNewObj
+            m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );
 
-            //ignore handle only objects for hit test
+            
             while( pNewObj && m_aSelectedOID.getObjectCID().match( "HandlesOnly" ) )
             {
                 pNewObj->SetMarkProtect(true);
@@ -196,33 +196,33 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                 m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );
             }
 
-            //accept only named objects while searching for the object to select
-            //this call may change m_aSelectedOID
+            
+            
             if ( SelectionHelper::findNamedParent( pNewObj, m_aSelectedOID, true ) )
             {
-                //if the so far found object is a multi click object further steps are necessary
+                
                 while( ObjectIdentifier::isMultiClickObject( m_aSelectedOID.getObjectCID() ) )
                 {
                     bool bSameObjectAsLastSelected = ( aLastSelectedObject == m_aSelectedOID );
                     if( bSameObjectAsLastSelected )
                     {
-                        //if the same child is clicked again don't go up further
+                        
                         break;
                     }
                     if ( ObjectIdentifier::areSiblings( aLastSelectedObject.getObjectCID(), m_aSelectedOID.getObjectCID() ) )
                     {
-                        //if a sibling of the last selected object is clicked don't go up further
+                        
                         break;
                     }
                     SdrObject*    pLastChild     = pNewObj;
                     ObjectIdentifier aLastChild = m_aSelectedOID;
                     if ( !SelectionHelper::findNamedParent( pNewObj, m_aSelectedOID, false ) )
                     {
-                        //take the one found so far
+                        
                         break;
                     }
-                    //if the last selected object is found don't go up further
-                    //but take the last child if selection change is allowed
+                    
+                    
                     if ( aLastSelectedObject == m_aSelectedOID )
                     {
                         if( bAllowMultiClickSelectionChange )
@@ -241,7 +241,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
             }
             else
             {
-                //maybe an additional shape was hit
+                
                 if ( pNewObj )
                 {
                     m_aSelectedOID = ObjectIdentifier( uno::Reference< drawing::XShape >( pNewObj->getUnoShape(), uno::UNO_QUERY ) );
@@ -254,20 +254,20 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
 
             if ( !m_aSelectedOID.isAdditionalShape() )
             {
-                OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );//@todo read CID from model
+                OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
 
                 if ( !m_aSelectedOID.isAutoGeneratedObject() )
                 {
                     m_aSelectedOID = ObjectIdentifier( aPageCID );
                 }
 
-                //check whether the diagram was hit but not selected (e.g. because it has no filling):
+                
                 OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) );
-                OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
+                OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );
                 bool bBackGroundHit = m_aSelectedOID.getObjectCID().equals( aPageCID ) || m_aSelectedOID.getObjectCID().equals( aWallCID ) || !m_aSelectedOID.isAutoGeneratedObject();
                 if( bBackGroundHit )
                 {
-                    //todo: if more than one diagram is available in future do chack the list of all diagrams here
+                    
                     SdrObject* pDiagram = pDrawViewWrapper->getNamedSdrObject( aDiagramCID );
                     if( pDiagram )
                     {
@@ -278,10 +278,10 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                         }
                     }
                 }
-                //check whether the legend was hit but not selected (e.g. because it has no filling):
+                
                 if( bBackGroundHit || m_aSelectedOID.getObjectCID().equals( aDiagramCID ) )
                 {
-                    OUString aLegendCID( ObjectIdentifier::createClassifiedIdentifierForParticle( ObjectIdentifier::createParticleForLegend(0,0) ) );//@todo read CID from model
+                    OUString aLegendCID( ObjectIdentifier::createClassifiedIdentifierForParticle( ObjectIdentifier::createParticleForLegend(0,0) ) );
                     SdrObject* pLegend = pDrawViewWrapper->getNamedSdrObject( aLegendCID );
                     if( pLegend )
                     {
@@ -337,7 +337,7 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
                                       , bool bGivenObjectMayBeResult )
 {
     SolarMutexGuard aSolarGuard;
-    //find the deepest named group
+    
     SdrObject* pObj = pInOutObject;
     OUString aName;
     if( bGivenObjectMayBeResult )
@@ -398,14 +398,14 @@ OUString SelectionHelper::getHitObjectCID(
     DrawViewWrapper& rDrawViewWrapper,
     bool bGetDiagramInsteadOf_Wall )
 {
-    // //- solar mutex
+    
     SolarMutexGuard aSolarGuard;
     OUString aRet;
 
     SdrObject* pNewObj = rDrawViewWrapper.getHitObject(rMPos);
-    aRet = lcl_getObjectName( pNewObj );//name of pNewObj
+    aRet = lcl_getObjectName( pNewObj );
 
-    //ignore handle only objects for hit test
+    
     while( pNewObj && aRet.match("HandlesOnly") )
     {
         pNewObj->SetMarkProtect(true);
@@ -413,26 +413,26 @@ OUString SelectionHelper::getHitObjectCID(
         aRet = lcl_getObjectName( pNewObj );
     }
 
-    //accept only named objects while searching for the object to select
+    
     if( !findNamedParent( pNewObj, aRet, true ) )
     {
         aRet = OUString();
     }
 
-    OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );//@todo read CID from model
-    //get page when nothing was hit
+    OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
+    
     if( aRet.isEmpty() && !pNewObj )
     {
         aRet = aPageCID;
     }
 
-    //get diagram instead wall or page if hit inside diagram
+    
     if( !aRet.isEmpty() )
     {
         if( aRet.equals( aPageCID ) )
         {
             OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) );
-            //todo: if more than one diagram is available in future do chack the list of all diagrams here
+            
             SdrObject* pDiagram = rDrawViewWrapper.getNamedSdrObject( aDiagramCID );
             if( pDiagram )
             {
@@ -444,7 +444,7 @@ OUString SelectionHelper::getHitObjectCID(
         }
         else if( bGetDiagramInsteadOf_Wall )
         {
-            OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
+            OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );
 
             if( aRet.equals( aWallCID ) )
             {
@@ -455,7 +455,7 @@ OUString SelectionHelper::getHitObjectCID(
     }
 
     return aRet;
-    // \\- solar mutex
+    
 }
 
 bool SelectionHelper::isRotateableObject( const OUString& rCID
@@ -482,7 +482,7 @@ SelectionHelper::~SelectionHelper()
 
 bool SelectionHelper::getFrameDragSingles()
 {
-    bool bFrameDragSingles = true;//true == green == surrounding handles
+    bool bFrameDragSingles = true;
     if( m_pSelectedObj && m_pSelectedObj->ISA(E3dObject) )
         bFrameDragSingles = false;
     return bFrameDragSingles;
@@ -495,10 +495,10 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
     OUString aName( lcl_getObjectName( pObj ) );
     if( aName.match("MarkHandles") || aName.match("HandlesOnly") )
         return pObj;
-    if( !aName.isEmpty() )//dont't get the markhandles of a different object
+    if( !aName.isEmpty() )
         return 0;
 
-    //search for a child with name "MarkHandles" or "HandlesOnly"
+    
     SolarMutexGuard aSolarGuard;
     SdrObjList* pSubList = pObj->GetSubList();
     if(pSubList)
@@ -516,12 +516,12 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
 
 SdrObject* SelectionHelper::getObjectToMark()
 {
-    //return the selected object itself
-    //or a specific other object if that exsists
+    
+    
     SdrObject* pObj = m_pSelectedObj;
     m_pMarkObj = pObj;
 
-    //search for a child with name "MarkHandles" or "HandlesOnly"
+    
     if(pObj)
     {
         SolarMutexGuard aSolarGuard;
@@ -545,8 +545,8 @@ SdrObject* SelectionHelper::getObjectToMark()
 
 E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
 {
-    //search whether the object or one of its children is a 3D object
-    //if so, return the accessory 3DScene
+    
+    
 
     E3dObject* pRotateable = 0;
 
@@ -583,32 +583,32 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
 {
     SolarMutexGuard aSolarGuard;
 
-    //@todo -> more flexible handle creation
-    //2 scenarios possible:
-    //1. add an additional invisible shape as a child to the selected object
-    //this child needs to be named somehow and handles need to be generated therefrom ...
-    //or 2. offer a central service per view where renderer and so can register for handle creation for a special shape
-    //.. or 3. feature from drawinglayer to create handles for each shape ... (bad performance ... ?) ?
+    
+    
+    
+    
+    
+    
 
-    //scenario 1 is now used:
-    //if a child with name MarkHandles exsists
-    //this child is marked instead of the logical selected object
+    
+    
+    
 
 /*
-    //if a special mark object was found
-    //that object should be used for marking only
+    
+    
     if( m_pMarkObj != m_pSelectedObj)
         return false;
 */
-    //if a special mark object was found
-    //that object should be used to create handles from
+    
+    
     if( m_pMarkObj && m_pMarkObj != m_pSelectedObj)
     {
         rHdlList.Clear();
         if( m_pMarkObj->ISA(SdrPathObj) )
         {
-            //if th object is a polygon
-            //from each point a handle is generated
+            
+            
             const ::basegfx::B2DPolyPolygon& rPolyPolygon = ((SdrPathObj*)m_pMarkObj)->GetPathPoly();
             for( sal_uInt32 nN = 0L; nN < rPolyPolygon.count(); nN++)
             {
@@ -623,11 +623,11 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
             return true;
         }
         else
-            return false; //use the special MarkObject for marking
+            return false; 
     }
 
-    //@todo:
-    //add and document good marking defaults ...
+    
+    
 
     rHdlList.Clear();
 
@@ -635,7 +635,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     if(!pObj)
         return false;
     SdrObjList* pSubList = pObj->GetSubList();
-    if( !pSubList )//no group object !pObj->IsGroupObject()
+    if( !pSubList )
         return false;
 
     OUString aName( lcl_getObjectName( pObj ) );
@@ -668,6 +668,6 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     return true;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Legend.hxx"
@@ -178,7 +178,7 @@ struct StaticLegendInfo : public rtl::StaticAggregate< uno::Reference< beans::XP
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -201,14 +201,14 @@ Legend::~Legend()
 {
 }
 
-// ____ XCloneable ____
+
 Reference< util::XCloneable > SAL_CALL Legend::createClone()
     throw (uno::RuntimeException)
 {
     return Reference< util::XCloneable >( new Legend( *this ));
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL Legend::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -237,21 +237,21 @@ void SAL_CALL Legend::removeModifyListener( const Reference< util::XModifyListen
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL Legend::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL Legend::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void Legend::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -277,7 +277,7 @@ Sequence< OUString > Legend::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// ____ OPropertySet ____
+
 Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -293,22 +293,22 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticLegendInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticLegendInfo::get();
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( Legend, lcl_aServiceName );
 
-// needed by MSC compiler
+
 using impl::Legend_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( Legend, Legend_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Legend, Legend_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

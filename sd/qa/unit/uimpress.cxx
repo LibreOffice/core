@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -56,9 +56,9 @@ Test::Test()
     uno::Reference<lang::XMultiComponentFactory> xFactory(m_xContext->getServiceManager());
     uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
 
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
+    
+    
+    
     comphelper::setProcessServiceFactory(xSM);
 
     InitVCL();

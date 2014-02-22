@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**  test coder preface:
@@ -43,9 +43,9 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -63,11 +63,11 @@ using ::rtl::OUString;
 #define IP_PORT_MYPORT4 8885
 #define IP_PORT_MYPORT3 8884
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-// just used to test socket::close() when accepting
+
+
+
+
 class AcceptorThread : public Thread
 {
     ::osl::AcceptorSocket asAcceptorSocket;
@@ -79,7 +79,7 @@ protected:
         ::osl::SocketAddr saLocalSocketAddr( aHostIP, IP_PORT_MYPORT9 );
         ::osl::StreamSocket ssStreamConnection;
 
-        asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //integer not sal_Bool : sal_True);
+        asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
         sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
         if  ( sal_True != bOK1 )
         {
@@ -136,7 +136,7 @@ namespace osl_AcceptorSocket
 
         void ctors_001()
         {
-            /// Socket constructor.
+            
             ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
 
             CPPUNIT_ASSERT_MESSAGE( "test for ctors_001 constructor function: check if the acceptor socket was created successfully.",
@@ -147,7 +147,7 @@ namespace osl_AcceptorSocket
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class ctors
+    }; 
 
     /** testing the method:
         inline sal_Bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
@@ -163,20 +163,20 @@ namespace osl_AcceptorSocket
         ::osl::ConnectorSocket csConnectorSocket;
 
 
-        // initialization
+        
         void setUp( )
         {
             pTimeout  = ( TimeValue* )malloc( sizeof( TimeValue ) );
             pTimeout->Seconds = 3;
             pTimeout->Nanosec = 0;
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1);
-        //  sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
+        
         }
 
         void tearDown( )
         {
             free( pTimeout );
-        //  sHandle = NULL;
+        
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
@@ -188,17 +188,17 @@ namespace osl_AcceptorSocket
             ::osl::SocketAddr saTargetSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT3 );
             ::osl::StreamSocket ssConnection;
 
-            /// launch server socket
+            
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
 
-            /// launch client socket
-            csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+            
+            csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   
 
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); 
 
             CPPUNIT_ASSERT_MESSAGE( "test for listen_accept function: try to create a connection with remote host, using listen and accept.",
                 ( osl_Socket_Ok == eResult ) );
@@ -211,17 +211,17 @@ namespace osl_AcceptorSocket
             ::osl::SocketAddr saPeerSocketAddr( rtl::OUString("129.158.217.202"), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
 
-            /// launch server socket
+            
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
 
-            /// launch client socket
-            csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+            
+            csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   
 
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection, saPeerSocketAddr); /// waiting for incoming connection...
+            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection, saPeerSocketAddr); 
 
             CPPUNIT_ASSERT_MESSAGE( "test for listen_accept function: try to create a connection with remote host, using listen and accept, accept with peer address.",
                                     ( sal_True == bOK2 ) &&
@@ -235,21 +235,21 @@ namespace osl_AcceptorSocket
         CPPUNIT_TEST( listen_accept_002 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class listen_accept
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::ctors);
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::listen_accept);
 
-} // namespace osl_AcceptorSocket
+} 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -123,7 +123,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
 
     if( eTopic == T_DATA )
-    {   // Ab hier kommen die Daten
+    {   
         SCCOL               nBaseCol = rInsPos.Col();
 
         SCCOL               nColCnt = SCCOL_MAX;
@@ -132,7 +132,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
         DATASET             eAkt = D_UNKNOWN;
 
-        ScSetStringParam aStrParam; // used to set string value without number detection.
+        ScSetStringParam aStrParam; 
         aStrParam.setTextInput();
 
         while( eAkt != D_EOD )
@@ -151,7 +151,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                     break;
                 case D_EOD:
                     break;
-                case D_NUMERIC:                 // Numbercell
+                case D_NUMERIC:                 
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
@@ -190,7 +190,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
                     nColCnt++;
                     break;
-                case D_STRING:                  // Textcell
+                case D_STRING:                  
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
@@ -222,10 +222,10 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         return eERR_FORMAT;
 
     if( bSyntErrWarn )
-        //###############################################
-        // ACHTUNG: Hier fehlt noch die richtige Warnung!
+        
+        
         return eERR_RNGOVRFLW;
-        //###############################################
+        
     else if( bOverflowWarn )
         return eERR_RNGOVRFLW;
     else
@@ -270,38 +270,38 @@ TOPIC DifParser::GetNextTopic( void )
 
     static const sal_Unicode*   ppKeys[] =
     {
-        pKeyTABLE,              // 0
+        pKeyTABLE,              
         pKeyVECTORS,
         pKeyTUPLES,
         pKeyDATA,
         pKeyLABEL,
-        pKeyCOMMENT,            // 5
+        pKeyCOMMENT,            
         pKeySIZE,
         pKeyPERIODICITY,
         pKeyMAJORSTART,
         pKeyMINORSTART,
-        pKeyTRUELENGTH,         // 10
+        pKeyTRUELENGTH,         
         pKeyUINITS,
         pKeyDISPLAYUNITS,
-        pKeyUNKNOWN             // 13
+        pKeyUNKNOWN             
     };
 
     static const TOPIC      pTopics[] =
     {
-        T_TABLE,                // 0
+        T_TABLE,                
         T_VECTORS,
         T_TUPLES,
         T_DATA,
         T_LABEL,
-        T_COMMENT,              // 5
+        T_COMMENT,              
         T_SIZE,
         T_PERIODICITY,
         T_MAJORSTART,
         T_MINORSTART,
-        T_TRUELENGTH,           // 10
+        T_TRUELENGTH,           
         T_UINITS,
         T_DISPLAYUNITS,
-        T_UNKNOWN               // 13
+        T_UNKNOWN               
     };
 
     STATE                   eS = S_START;
@@ -380,10 +380,10 @@ TOPIC DifParser::GetNextTopic( void )
                 OSL_FAIL( "DifParser::GetNextTopic - unexpected state" );
                 break;
             case S_UNKNOWN:
-                // 2 Zeilen ueberlesen
+                
                 ReadNextLine( aLine );
-            case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
-                // eine Zeile ueberlesen
+            case S_ERROR_L2:                
+                
                 ReadNextLine( aLine );
                 eS = S_END;
                 break;
@@ -398,15 +398,15 @@ TOPIC DifParser::GetNextTopic( void )
 
 static void lcl_DeEscapeQuotesDif( OUString& rString )
 {
-    //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
-    //  Single quote characters are left in place because older versions didn't
-    //  escape quotes in strings (and Excel doesn't when using the clipboard).
-    //  The quotes around the string are removed before this function is called.
+    
+    
+    
+    
 
     rString = rString.replaceAll("\"\"", "\"");
 }
 
-// Determine if passed in string is numeric data and set fVal/nNumFormat if so
+
 DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
 {
     DATASET eRet = D_SYNT_ERROR;
@@ -418,7 +418,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
             eRet = D_SYNT_ERROR;
     }
     else
-    {   // ...und zur Strafe mit'm Numberformatter...
+    {   
         OSL_ENSURE( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
         OUString aTestVal( pPossibleNumericData );
         sal_uInt32 nFormat = 0;
@@ -449,8 +449,8 @@ bool DifParser::ReadNextLine( OUString& rStr )
     }
 }
 
-// Look ahead in the stream to determine if the next line is the first line of
-// a valid data record structure
+
+
 bool DifParser::LookAhead()
 {
     const sal_Unicode* pAktBuffer;
@@ -463,7 +463,7 @@ bool DifParser::LookAhead()
 
     switch( *pAktBuffer )
     {
-        case '-':                   // Special Datatype
+        case '-':                   
             pAktBuffer++;
 
             if( Is1_0( pAktBuffer ) )
@@ -471,7 +471,7 @@ bool DifParser::LookAhead()
                 bValidStructure = true;
             }
             break;
-        case '0':                   // Numeric Data
+        case '0':                   
             pAktBuffer++;
             if( *pAktBuffer == ',' )
             {
@@ -479,7 +479,7 @@ bool DifParser::LookAhead()
                 bValidStructure = ( GetNumberDataset(pAktBuffer) != D_SYNT_ERROR );
             }
             break;
-        case '1':                   // String Data
+        case '1':                   
             if( Is1_0( aLookAheadLine.getStr() ) )
             {
                 bValidStructure = true;
@@ -501,7 +501,7 @@ DATASET DifParser::GetNextDataset( void )
 
     switch( *pAktBuffer )
     {
-        case '-':                   // Special Datatype
+        case '-':                   
             pAktBuffer++;
 
             if( Is1_0( pAktBuffer ) )
@@ -513,8 +513,8 @@ DATASET DifParser::GetNextDataset( void )
                     eRet = D_EOD;
             }
             break;
-        case '0':                   // Numeric Data
-            pAktBuffer++;           // Wert in fVal, 2. Zeile in aData
+        case '0':                   
+            pAktBuffer++;           
             if( *pAktBuffer == ',' )
             {
                 pAktBuffer++;
@@ -522,7 +522,7 @@ DATASET DifParser::GetNextDataset( void )
                 OUString aTmpLine;
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
-                {   // for broken records write "#ERR: data" to cell
+                {   
                     OUStringBuffer aTmp("#ERR: ");
                     aTmp.append(pAktBuffer).append(" (");
                     aTmp.append(aTmpLine).append(')');
@@ -535,7 +535,7 @@ DATASET DifParser::GetNextDataset( void )
                 }
             }
             break;
-        case '1':                   // String Data
+        case '1':                   
             if( Is1_0( aLine.getStr() ) )
             {
                 ReadNextLine( aLine );
@@ -544,12 +544,12 @@ DATASET DifParser::GetNextDataset( void )
 
                 if( nLineLength >= 1 && *pLine == '"' )
                 {
-                    // Quotes are not always escaped (duplicated), see lcl_DeEscapeQuotesDif
-                    // A look ahead into the next line is needed in order to deal with
-                    // multiline strings containing quotes
+                    
+                    
+                    
                     if( LookAhead() )
                     {
-                        // Single line string
+                        
                         if( nLineLength >= 2 && pLine[nLineLength - 1] == '"' )
                         {
                             aData = aLine.copy( 1, nLineLength - 2 );
@@ -559,7 +559,7 @@ DATASET DifParser::GetNextDataset( void )
                     }
                     else
                     {
-                        // Multiline string
+                        
                         aData = aLine.copy( 1 );
                         bool bContinue = true;
                         while ( bContinue )
@@ -604,7 +604,7 @@ DATASET DifParser::GetNextDataset( void )
 
 const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet )
 {
-    // eat leading whitespace, not specified, but seen in the wild
+    
     while (*pStart == ' ' || *pStart == '\t')
         ++pStart;
 
@@ -638,7 +638,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
     sal_Int32                   nExp = 0;
     sal_Bool                    bExpNeg = false;
     sal_Bool                    bExpOverflow = false;
-    static const sal_uInt16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
+    static const sal_uInt16     nExpLimit = 4096;   
 
     sal_Unicode             cAkt;
     bool                    bRet = false;
@@ -673,7 +673,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             bNeg = !bNeg;
                             break;
                         case '.':
-                        case ',':                   //!
+                        case ',':                   
                             eS = S_POST;
                             fFracPos = 0.1;
                             break;
@@ -693,7 +693,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     switch( cAkt )
                     {
                         case '.':
-                        case ',':                   //!
+                        case ',':                   
                             eS = S_POST;
                             fFracPos = 0.1;
                             break;
@@ -701,9 +701,9 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                         case 'E':
                             eS = S_EXP;
                             break;
-                        case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = true;        // no
-                        default:                // break!
+                        case 0x00:              
+                            bRet = true;        
+                        default:                
                             eS = S_END;
                     }
                 }
@@ -722,9 +722,9 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                         case 'E':
                             eS = S_EXP_FIRST;
                             break;
-                        case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = true;        // no
-                        default:                // break!
+                        case 0x00:              
+                            bRet = true;        
+                        default:                
                             eS = S_END;
                     }
                 }
@@ -776,7 +776,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
             case S_FINDEND:
                 if( IsNumberEnding( cAkt ) )
                 {
-                    bRet = true;        // damit sinnvoll weitergeparst werden kann
+                    bRet = true;        
                     eS = S_END;
                 }
                 break;
@@ -792,7 +792,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
     if( bRet )
     {
         if( bExpOverflow )
-            return false;       // ACHTUNG: hier muss noch differenziert werden
+            return false;       
 
         if( bNeg )
             fNewVal *= 1.0;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbarange.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -99,7 +99,7 @@ SwVbaRange::getText() throw ( uno::RuntimeException )
     OUString aText = mxTextCursor->getString();
     sal_Int32 nLen = aText.getLength();
 
-    // FIXME: should add a line separator if the range includes the last paragraph
+    
     if( nLen == 0 )
     {
         if( mxTextCursor->isCollapsed() )
@@ -125,8 +125,8 @@ SwVbaRange::getText() throw ( uno::RuntimeException )
 void SAL_CALL
 SwVbaRange::setText( const OUString& rText ) throw ( uno::RuntimeException )
 {
-    // Emulate the MSWord behavior, Don't delete the bookmark
-    // which contains no text string in current inserting position,
+    
+    
     OUString sName;
     uno::Reference< text::XTextRange > xRange( mxTextCursor, uno::UNO_QUERY_THROW );
     try
@@ -140,13 +140,13 @@ SwVbaRange::setText( const OUString& rText ) throw ( uno::RuntimeException )
     }
     catch (const uno::Exception&)
     {
-        // do nothing
+        
     }
 
     if( rText.indexOf( '\n' )  != -1 )
     {
         mxTextCursor->setString( OUString() );
-        // process CR in strings
+        
         SwVbaRangeHelper::insertString( xRange, mxText, rText, sal_True );
     }
     else
@@ -154,7 +154,7 @@ SwVbaRange::setText( const OUString& rText ) throw ( uno::RuntimeException )
         mxTextCursor->setString( rText );
     }
 
-    // insert the bookmark if the bookmark is deleted during setting text string
+    
     if( !sName.isEmpty() )
     {
         uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
@@ -167,10 +167,10 @@ SwVbaRange::setText( const OUString& rText ) throw ( uno::RuntimeException )
     }
 }
 
-// FIXME: test is not pass
+
 void SAL_CALL SwVbaRange::InsertBreak( const uno::Any& _breakType ) throw (uno::RuntimeException)
 {
-    // default type is wdPageBreak;
+    
     sal_Int32 nBreakType = word::WdBreakType::wdPageBreak;
     if( _breakType.hasValue() )
         _breakType >>= nBreakType;
@@ -399,7 +399,7 @@ SwVbaRange::Sections( const uno::Any& index ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwVbaRange::Fields( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    //FIXME: should be get the field in current range
+    
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, xModel ) );
     if ( index.hasValue() )

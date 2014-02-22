@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -94,11 +94,11 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                 {
                     if(bConvertToText)
                     {
-                        //remove object -> results in destruction of this!
+                        
                         SwView& rTempView = GetView();
                         rTempView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SFX_CALLMODE_SYNCHRON );
                         rTempView.StopShellTimer();
-                        //issue a new command to insert the link
+                        
                         rTempView.GetViewFrame()->GetDispatcher()->Execute(
                                 SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0);
                     }
@@ -112,7 +112,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
 
                         uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-                        // Can we set an URL to the object?
+                        
                         OUString sTargetURL( "TargetURL" );
                         uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
                         if( xPropInfoSet->hasPropertyByName( sTargetURL ))
@@ -121,7 +121,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                             if( !aProp.Name.isEmpty() )
                             {
                                 uno::Any aTmp;
-                                // Yes!
+                                
                                 OUString sLabel("Label");
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
                                 {
@@ -197,7 +197,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                             aTmp = xPropSet->getPropertyValue( "ButtonType" );
                             if( aTmp >>= eButtonType )
                             {
-                                // Label
+                                
                                 if(xInfo->hasPropertyByName( "Label" ))
                                 {
                                     aTmp = xPropSet->getPropertyValue( "Label" );
@@ -208,7 +208,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                     }
                                 }
 
-                                // URL
+                                
                                 if(xInfo->hasPropertyByName( "TargetURL" ))
                                 {
                                     aTmp = xPropSet->getPropertyValue( "TargetURL" );
@@ -219,7 +219,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                     }
                                 }
 
-                                // Target
+                                
                                 if(xInfo->hasPropertyByName( "TargetFrame" ))
                                 {
                                     aTmp = xPropSet->getPropertyValue( "TargetFrame" );

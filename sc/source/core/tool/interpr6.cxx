@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,9 +32,9 @@ using namespace formula;
 
 double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
 
-// The idea how this group of gamma functions is calculated, is
-// based on the Cephes library
-// online http://www.moshier.net/#Cephes [called 2008-02]
+
+
+
 
 /** You must ensure fA>0.0 && fX>0.0
     valid results only if fX > fA+1.0
@@ -45,18 +45,18 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
     double const fBigInv = ::std::numeric_limits<double>::epsilon();
     double const fBig = 1.0/fBigInv;
     double fCount = 0.0;
-    double fNum = 0.0;  // dummy value
+    double fNum = 0.0;  
     double fY = 1.0 - fA;
     double fDenom = fX + 2.0-fA;
-    double fPk = 0.0;   // dummy value
+    double fPk = 0.0;   
     double fPkm1 = fX + 1.0;
     double fPkm2 = 1.0;
-    double fQk = 1.0;   // dummy value
+    double fQk = 1.0;   
     double fQkm1 = fDenom * fX;
     double fQkm2 = fX;
     double fApprox = fPkm1/fQkm1;
     bool bFinished = false;
-    double fR = 0.0;    // dummy value
+    double fR = 0.0;    
     do
     {
         fCount = fCount +1.0;
@@ -77,14 +77,14 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
         fQkm1 = fQk;
         if (fabs(fPk) > fBig)
         {
-            // reduce a fraction does not change the value
+            
             fPkm2 = fPkm2 * fBigInv;
             fPkm1 = fPkm1 * fBigInv;
             fQkm2 = fQkm2 * fBigInv;
             fQkm1 = fQkm1 * fBigInv;
         }
     } while (!bFinished && fCount<10000);
-    // most iterations, if fX==fAlpha+1.0; approx sqrt(fAlpha) iterations then
+    
     if (!bFinished)
     {
         SetError(errNoConvergence);
@@ -108,8 +108,8 @@ double ScInterpreter::GetGammaSeries( double fA, double fX )
         fSum = fSum + fSummand;
         nCount = nCount+1;
     } while ( fSummand/fSum > fHalfMachEps && nCount<=10000);
-    // large amount of iterations will be carried out for huge fAlpha, even
-    // if fX <= fAlpha+1.0
+    
+    
     if (nCount>10000)
     {
         SetError(errNoConvergence);
@@ -121,10 +121,10 @@ double ScInterpreter::GetGammaSeries( double fA, double fX )
 double ScInterpreter::GetLowRegIGamma( double fA, double fX )
 {
     double fLnFactor = fA * log(fX) - fX - GetLogGamma(fA);
-    double fFactor = exp(fLnFactor);    // Do we need more accuracy than exp(ln()) has?
-    if (fX>fA+1.0)  // includes fX>1.0; 1-GetUpRegIGamma, continued fraction
+    double fFactor = exp(fLnFactor);    
+    if (fX>fA+1.0)  
         return 1.0 - fFactor * GetGammaContFraction(fA,fX);
-    else            // fX<=1.0 || fX<=fA+1.0, series
+    else            
         return fFactor * GetGammaSeries(fA,fX);
 }
 
@@ -133,10 +133,10 @@ double ScInterpreter::GetUpRegIGamma( double fA, double fX )
 {
 
     double fLnFactor= fA*log(fX)-fX-GetLogGamma(fA);
-    double fFactor = exp(fLnFactor); //Do I need more accuracy than exp(ln()) has?;
-    if (fX>fA+1.0) // includes fX>1.0
+    double fFactor = exp(fLnFactor); 
+    if (fX>fA+1.0) 
             return fFactor * GetGammaContFraction(fA,fX);
-    else //fX<=1 || fX<=fA+1, 1-GetLowRegIGamma, series
+    else 
             return 1.0 -fFactor * GetGammaSeries(fA,fX);
 }
 
@@ -146,13 +146,13 @@ double ScInterpreter::GetUpRegIGamma( double fA, double fX )
 double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda )
 {
     if (fX < 0.0)
-        return 0.0;     // see ODFF
+        return 0.0;     
     else if (fX == 0)
-        // in this case 0^0 isn't zero
+        
     {
         if (fAlpha < 1.0)
         {
-            SetError(errDivisionByZero);  // should be #DIV/0
+            SetError(errDivisionByZero);  
             return HUGE_VAL;
         }
         else if (fAlpha == 1)
@@ -167,7 +167,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
     else
     {
         double fXr = fX / fLambda;
-        // use exp(ln()) only for large arguments because of less accuracy
+        
         if (fXr > 1.0)
         {
             const double fLogDblMax = log( ::std::numeric_limits<double>::max());
@@ -180,7 +180,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
                 return exp( (fAlpha-1.0) * log(fXr) - fXr - log(fLambda) - GetLogGamma(fAlpha));
             }
         }
-        else    // fXr near to zero
+        else    
         {
             if (fAlpha<fMaxGammaArgument)
             {
@@ -382,7 +382,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     short nParamCount = GetByte();
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;
-    double fMem = 0.0; // first numeric value.
+    double fMem = 0.0; 
     bool bNull = true;
     sal_uLong nCount = 0;
     ScAddress aAdr;
@@ -399,7 +399,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 if( eFunc == ifCOUNT )
                 {
                     OUString aStr = PopString().getString();
-                    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+                    sal_uInt32 nFIndex = 0;                 
                     if ( bTextAsZero || pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
                         nCount++;
                 }
@@ -451,7 +451,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         break;
                     case ifSUMSQ:   fRes += fVal * fVal; break;
                     case ifPRODUCT: fRes *= fVal; break;
-                    default: ; // nothing
+                    default: ; 
                 }
                 nFuncFmtType = NUMBERFORMAT_NUMBER;
                 break;
@@ -509,7 +509,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                                 nCount--;
                             }
                             break;
-                        default: ; // nothing
+                        default: ; 
                     }
                 }
                 else if (bTextAsZero && eType == formula::svString)
@@ -572,7 +572,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                                     nCount--;
                                 }
                                 break;
-                            default: ; // nothing
+                            default: ; 
                         }
                     }
                     else if (bTextAsZero && aCell.hasString())
@@ -613,7 +613,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     sal_uInt16 nErr = 0;
                     if (aValIter.GetFirst(fVal, nErr))
                     {
-                        // placed the loop on the inside for performance reasons:
+                        
                         aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
                         switch( eFunc )
                         {
@@ -659,7 +659,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                                     }
                                     while (aValIter.GetNext(fVal, nErr));
                                     break;
-                            default: ;  // nothing
+                            default: ;  
                         }
                         SetError( nErr );
                     }
@@ -709,10 +709,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
         case ifCOUNT2:
         case ifCOUNT:   fRes  = nCount; break;
         case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
-        default: ; // nothing
+        default: ; 
     }
-    // Bei Summen etc. macht ein bool-Ergebnis keinen Sinn
-    // und Anzahl ist immer Number (#38345#)
+    
+    
     if( eFunc == ifCOUNT || nFuncFmtType == NUMBERFORMAT_LOGICAL )
         nFuncFmtType = NUMBERFORMAT_NUMBER;
     return fRes;
@@ -801,14 +801,14 @@ void ScInterpreter::ScSum()
                 sc::ColumnSpanSet aSet(false);
                 aSet.set(aRange, true);
                 if (glSubTotal)
-                    // Skip all filtered rows and subtotal formula cells.
+                    
                     pDok->MarkSubTotalCells(aSet, aRange, false);
 
                 FuncSum aAction;
                 aSet.executeColumnAction(*pDok, aAction);
                 fRes += aAction.getSum();
 
-                // Get the number format of the last iterated cell.
+                
                 nFuncFmtIndex = aAction.getNumberFormat();
                 nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
             }
@@ -885,7 +885,7 @@ void ScInterpreter::ScCount()
             case svString:
             {
                 OUString aStr = PopString().getString();
-                sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+                sal_uInt32 nFIndex = 0;                 
                 if (pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
                     nCount++;
             }
@@ -969,14 +969,14 @@ void ScInterpreter::ScCount()
                 sc::ColumnSpanSet aSet(false);
                 aSet.set(aRange, true);
                 if (glSubTotal)
-                    // Skip all filtered rows and subtotal formula cells.
+                    
                     pDok->MarkSubTotalCells(aSet, aRange, false);
 
                 FuncCount aAction;
                 aSet.executeColumnAction(*pDok, aAction);
                 nCount += aAction.getCount();
 
-                // Get the number format of the last iterated cell.
+                
                 nFuncFmtIndex = aAction.getNumberFormat();
                 nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
             }

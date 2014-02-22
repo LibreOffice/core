@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -44,7 +44,7 @@
 namespace target = slideshow::internal;
 using namespace ::com::sun::star;
 
-// our test view subject
+
 typedef ::cppu::WeakComponentImplHelper1< presentation::XSlideShowView > ViewBase;
 class ImplTestView : public TestView,
                      private cppu::BaseMutex,
@@ -78,7 +78,7 @@ public:
     {
     }
 
-    // XSlideShowView
+    
     virtual uno::Reference< rendering::XSpriteCanvas > SAL_CALL getCanvas(  ) throw (uno::RuntimeException)
     {
         return uno::Reference< rendering::XSpriteCanvas >();
@@ -134,7 +134,7 @@ public:
         return awt::Rectangle(0,0,100,100);
     }
 
-    // TestView
+    
     virtual bool isClearCalled() const
     {
         return mbIsClearCalled;
@@ -165,7 +165,7 @@ public:
         return maViewLayers;
     }
 
-    // ViewLayer
+    
     virtual bool isOnView(target::ViewSharedPtr const& /*rView*/) const
     {
         return true;
@@ -218,7 +218,7 @@ public:
         }
         else
         {
-            // unexpected call
+            
             throw std::exception();
         }
     }
@@ -241,13 +241,13 @@ public:
 
     virtual bool updateScreen() const
     {
-        // misusing updateScreen for state reporting
+        
         return !mbDisposed;
     }
 
     virtual bool paintScreen() const
     {
-        // misusing updateScreen for state reporting
+        
         return !mbDisposed;
     }
 

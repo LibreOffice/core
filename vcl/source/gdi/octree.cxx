@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits.h>
@@ -25,15 +25,15 @@
 
 #include "octree.hxx"
 
-// ---------
-// - pMask -
-// ---------
+
+
+
 
 static const sal_uInt8 pImplMask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 
-// -------------
-// - NodeCache -
-// -------------
+
+
+
 
 ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
             pActNode( NULL )
@@ -49,7 +49,7 @@ ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ImpNodeCache::~ImpNodeCache()
 {
@@ -62,9 +62,9 @@ ImpNodeCache::~ImpNodeCache()
     }
 }
 
-// ----------
-// - Octree -
-// ----------
+
+
+
 
 Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
             nMax        ( nColors ),
@@ -77,7 +77,7 @@ Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
     ImplCreateOctree();
 }
 
-// ------------------------------------------------------------------------
+
 
 Octree::~Octree()
 {
@@ -85,7 +85,7 @@ Octree::~Octree()
     delete pNodeCache;
 }
 
-// ------------------------------------------------------------------------
+
 
 void Octree::ImplCreateOctree()
 {
@@ -131,7 +131,7 @@ void Octree::ImplCreateOctree()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void Octree::ImplDeleteOctree( PPNODE ppNode )
 {
@@ -145,11 +145,11 @@ void Octree::ImplDeleteOctree( PPNODE ppNode )
     *ppNode = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 void Octree::ImplAdd( PPNODE ppNode )
 {
-    // ggf. neuen Knoten erzeugen
+    
     if( !*ppNode )
     {
         *ppNode = pNodeCache->ImplGetFreeNode();
@@ -184,7 +184,7 @@ void Octree::ImplAdd( PPNODE ppNode )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void Octree::ImplReduce()
 {
@@ -224,7 +224,7 @@ void Octree::ImplReduce()
     nLeafCount -= --nChildren;
 }
 
-// ------------------------------------------------------------------------
+
 
 void Octree::CreatePalette( PNODE pNode )
 {
@@ -241,7 +241,7 @@ void Octree::CreatePalette( PNODE pNode )
 
 }
 
-// ------------------------------------------------------------------------
+
 
 void Octree::GetPalIndex( PNODE pNode )
 {
@@ -259,9 +259,9 @@ void Octree::GetPalIndex( PNODE pNode )
     }
 }
 
-// -------------------
-// - InverseColorMap -
-// -------------------
+
+
+
 
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
@@ -315,7 +315,7 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 InverseColorMap::~InverseColorMap()
 {
@@ -323,7 +323,7 @@ InverseColorMap::~InverseColorMap()
     rtl_freeMemory( pMap );
 }
 
-// ------------------------------------------------------------------------
+
 
 void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
 {

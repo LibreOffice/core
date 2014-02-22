@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/window.hxx>
@@ -24,7 +24,7 @@
 #include "virtoutp.hxx"
 #include "viewopt.hxx"
 #include "rootfrm.hxx"
-// OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
+
 #include "setmapvirtdev.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -102,19 +102,19 @@ sal_Bool SwRootFrm::HasSameRect( const SwRect& rRect )
     input parameter - constant instance of the origin, which will be used in
     the virtual output device
 */
-// define to control, if old or new solution for setting the mapping for
-// an virtual output device is used.
+
+
 void SetMappingForVirtDev(  const Point&    _rNewOrigin,
                             MapMode*        ,
                             const OutputDevice* _pOrgOutDev,
                             VirtualDevice*  _pVirDev )
 {
-        // new solution: set pixel offset at virtual output device
+        
         Point aPixelOffset = _pOrgOutDev->LogicToPixel( _rNewOrigin );
         _pVirDev->SetPixelOffset( Size( -aPixelOffset.X(), -aPixelOffset.Y() ) );
 }
 
-// rSize must be pixel coordinates!
+
 sal_Bool SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
@@ -148,11 +148,11 @@ sal_Bool SwLayVout::DoesFit( const Size &rNew )
     return sal_True;
 }
 
-/// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
-///     in order to return value of class member variable <aRect>, if virtual
-///     output is used.
-///     <aRect> contains the rectangle that represents the area the virtual
-///     output device is used for and that is flushed at the end.
+
+
+
+
+
 void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
 {
     Flush();
@@ -172,7 +172,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
         pSh = pShell;
         pOut = NULL;
         OutputDevice *pO = pSh->GetOut();
-// We don't cheat on printers or virtual output devices...
+
         if( OUTDEV_WINDOW != pO->GetOutDevType() )
             return;
 
@@ -186,7 +186,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
         OSL_ENSURE( !pSh->GetWin()->IsReallyVisible() ||
                 aTmpRect.GetWidth() <= pSh->GetWin()->GetOutputSizePixel().Width() + 2,
                 "Paintwidth bigger than visarea?" );
-        // Does the rectangle fit in our buffer?
+        
         if( !DoesFit( aTmpRect.GetSize() ) )
         {
             pOut = NULL;
@@ -201,14 +201,14 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
             pVirDev->SetFillColor( pOut->GetFillColor() );
 
         MapMode aMapMode( pOut->GetMapMode() );
-        // OD 12.11.2002 #96272# - use method to set mapping
-        //aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
+        
+        
         ::SetMappingForVirtDev( aRect.Pos(), &aMapMode, pOut, pVirDev );
 
         if( aMapMode != pVirDev->GetMapMode() )
             pVirDev->SetMapMode( aMapMode );
 
-        /// OD 27.09.2002 #103636# - set value of parameter <rRect>
+        
         rRect = aRect;
     }
 }

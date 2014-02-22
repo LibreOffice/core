@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <rtfcontrolwords.hxx>
@@ -15,7 +15,7 @@ namespace writerfilter {
 namespace rtftok {
 
 RTFSymbol aRTFControlWords[] = {
-    // sKeyword nControlType nIndex
+    
     {"'", CONTROL_SYMBOL, RTF_HEXCHAR},
     {"-", CONTROL_SYMBOL, RTF_OPTHYPH},
     {"*", CONTROL_SYMBOL, RTF_IGNORE},
@@ -1849,7 +1849,7 @@ bool RTFSymbol::operator<(const RTFSymbol& rOther) const
     return strcmp(sKeyword, rOther.sKeyword) < 0;
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "FieldDescControl.hxx"
@@ -63,11 +63,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 
-// For the Controls on the OFieldDescGenPage
-#define CONTROL_SPACING_X   18  // 6
+
+#define CONTROL_SPACING_X   18  
 #define CONTROL_SPACING_Y   4
-#define CONTROL_WIDTH_1     160 // 100
-#define CONTROL_WIDTH_2     100 // 60
+#define CONTROL_WIDTH_1     160 
+#define CONTROL_WIDTH_2     100 
 #define CONTROL_WIDTH_3     250
 #define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - 20 - 5)
 
@@ -92,7 +92,7 @@ namespace
 
 }
 
-// class OFieldDescControl
+
 
 
 OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar)
@@ -223,7 +223,7 @@ OFieldDescControl::~OFieldDescControl()
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     pLastFocusWindow = NULL;
 
-    // Destroy children
+    
     DeactivateAggregate( tpDefault );
     DeactivateAggregate( tpRequired );
     DeactivateAggregate( tpTextLen );
@@ -249,7 +249,7 @@ OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) cons
 
 OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) const
 {
-    // Older versions may store a language dependend string as a default
+    
     if (rPersistentString == aYes || rPersistentString == aNo)
         return rPersistentString;
 
@@ -287,7 +287,7 @@ namespace
 
 void OFieldDescControl::CheckScrollBars()
 {
-    // Calculate the ScrollBars' new position
+    
     Size szOverallSize = GetSizePixel();
     long nHScrollHeight = m_pHorzScroll->GetSizePixel().Height();
     long nVScrollWidth = m_pVertScroll->GetSizePixel().Width();
@@ -297,9 +297,9 @@ void OFieldDescControl::CheckScrollBars()
 
     sal_Bool bNeedHScrollBar(sal_False), bNeedVScrollBar(sal_False);
 
-    // Adjust the areas
-    // Do I actually need ScrollBars?
-    // horizontal :
+    
+    
+    
     long lMaxXPosition = 0;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
     for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
@@ -310,12 +310,12 @@ void OFieldDescControl::CheckScrollBars()
 
     long lMaxXAvailable = szOverallSize.Width();
     bNeedHScrollBar = lMaxXPosition > lMaxXAvailable;
-        // Might change
+        
 
-    // Vertical
-    // How many Controls do I have?
+    
+    
     sal_uInt16 nActive = CountActiveAggregates();
-    // Which one is the last one that fits?
+    
     sal_uInt16 nLastVisible;
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
@@ -327,19 +327,19 @@ void OFieldDescControl::CheckScrollBars()
 
     if (bNeedVScrollBar)
     {
-        // When originally calculating lMaxXAvailable we did not take into account that we have a VScrollBar, so we need to do that now
+        
         lMaxXAvailable -= nVScrollWidth;
         if (!bNeedHScrollBar && (lMaxXPosition > lMaxXAvailable))
         {
-            // The vertical one now necessitates a horizontal one
+            
             bNeedHScrollBar = sal_True;
-            // Adjust nLastVisible
+            
             nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
-                // bNeedVScrollBar does NOT change: it's already set to sal_True and nLastVisible will only decrease
+                
         }
     }
 
-    // Now we can really position them and set their parameters
+    
     if (bNeedVScrollBar)
     {
         m_pVertScroll->Show();
@@ -452,7 +452,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 
 void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 {
-    // Enable/disable Controls
+    
     Control* ppAggregates[]     = {   pRequired, pNumType
                                         , pAutoIncrement, pDefault
                                         , pTextLen, pLength
@@ -479,7 +479,7 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 
 OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 {
-    // Read out the Controls' texts
+    
     switch( nControlId )
     {
         case FIELD_PROPERTY_BOOL_DEFAULT:
@@ -536,7 +536,7 @@ OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 
 void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
-    // Set the Controls' texts
+    
     switch( nControlId )
     {
         case FIELD_PROPERTY_BOOL_DEFAULT:
@@ -612,7 +612,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
 
 IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 {
-    // Create temporary Column, which is used for data exchange with Dialog
+    
     if( !pActFieldDescr )
         return 0;
 
@@ -657,17 +657,17 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
         SetModified(sal_True);
 
-    // Special treatment for Boold fields
+    
     if(pListBox == pRequired && pBoolDefault )
     {
-        // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
+        
         OUString sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
 
-        if(pRequired->GetSelectEntryPos() == 0) // Yes
+        if(pRequired->GetSelectEntryPos() == 0) 
         {
             pBoolDefault->RemoveEntry(OUString(ModuleRes(STR_VALUE_NONE)));
             if (sDef != aYes && sDef != aNo)
-                pBoolDefault->SelectEntryPos(1);  // No as a default
+                pBoolDefault->SelectEntryPos(1);  
             else
                 pBoolDefault->SelectEntry(sDef);
         }
@@ -678,11 +678,11 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
         }
     }
 
-    // A special treatment only for AutoIncrement
+    
     if (pListBox == pAutoIncrement)
     {
         if(pListBox->GetSelectEntryPos() == 1)
-        { // no
+        { 
             DeactivateAggregate( tpAutoIncrementValue );
             if(pActFieldDescr->IsPrimaryKey())
                 DeactivateAggregate( tpRequired );
@@ -692,9 +692,9 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
                 if(pRequired)
                 {
                     if( pActFieldDescr->IsNullable() )
-                        pRequired->SelectEntryPos( 1 ); // no
+                        pRequired->SelectEntryPos( 1 ); 
                     else
-                        pRequired->SelectEntryPos( 0 ); // yes
+                        pRequired->SelectEntryPos( 0 ); 
                 }
             }
             ActivateAggregate( tpDefault );
@@ -705,14 +705,14 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
             DeactivateAggregate( tpDefault );
             ActivateAggregate( tpAutoIncrementValue );
         }
-        // Move all up
+        
         ArrangeAggregates();
     }
 
     if(pListBox == m_pType)
     {
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
-        pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); // SetType(pTypeInfo);
+        pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); 
 
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
@@ -721,16 +721,16 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     return 0;
 }
 
-// Rearrange all Controls, such that they are in fixed order and really on top
-// of the DescriptionPage
+
+
 void OFieldDescControl::ArrangeAggregates()
 {
-    // A Control's description
+    
     struct AGGREGATE_DESCRIPTION
     {
-        Control*    pctrlInputControl;  // The actual Control for input
-        Control*    pctrlTextControl;   // The corresponding Label
-        sal_uInt16      nPosSizeArgument;   // The second argument for SetPosSize
+        Control*    pctrlInputControl;  
+        Control*    pctrlTextControl;   
+        sal_uInt16      nPosSizeArgument;   
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
         { m_pColumnName, m_pColumnNameText, 1},
@@ -758,7 +758,7 @@ void OFieldDescControl::ArrangeAggregates()
 
     OSL_ENSURE(nMaxWidth != 0,"Invalid width!");
 
-    // And go ...
+    
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = NULL;
     for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
@@ -768,7 +768,7 @@ void OFieldDescControl::ArrangeAggregates()
             SetPosSize(&adAggregates[i].pctrlTextControl, nCurrentControlPos, 0);
             SetPosSize(&adAggregates[i].pctrlInputControl, nCurrentControlPos, adAggregates[i].nPosSizeArgument);
 
-            // Set the z-order in a way such that the Controls can be traversed in the same sequence in which they have been arranged here
+            
             adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? WINDOW_ZORDER_BEHIND : WINDOW_ZORDER_FIRST);
             adAggregates[i].pctrlInputControl->SetZOrder(adAggregates[i].pctrlTextControl, WINDOW_ZORDER_BEHIND );
             pZOrderPredecessor = adAggregates[i].pctrlInputControl;
@@ -783,7 +783,7 @@ void OFieldDescControl::ArrangeAggregates()
         }
     }
 
-    // Special treatment for the Format Controls
+    
     if (pFormat)
     {
         Point ptSamplePos(pFormatSample->GetPosPixel());
@@ -791,14 +791,14 @@ void OFieldDescControl::ArrangeAggregates()
         pFormat->SetPosPixel(Point(ptSamplePos.X() + szSampleSize.Width() + 5, ptSamplePos.Y()));
     }
 
-    // Finally, put the ScrollBars at the top of the z-order
+    
     m_pVertScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
     m_pHorzScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
 }
 
 void OFieldDescControl::ActivateAggregate( EControlType eType )
 {
-    // Create Controls
+    
     switch( eType )
     {
     case tpDefault:
@@ -1004,7 +1004,7 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpS
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
-    pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed
+    pControl->SetMax(0x7FFFFFFF);   
     pControl->SetStrictFormat(true);
 
     InitializeControl(pControl,_sHelpId,false);
@@ -1015,7 +1015,7 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpS
 void OFieldDescControl::DeactivateAggregate( EControlType eType )
 {
     pLastFocusWindow = NULL;
-    // Destroy Controls
+    
     switch( eType )
     {
     case tpDefault:
@@ -1059,7 +1059,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         break;
 
     case tpFormat:
-        // TODO: we have to check if we have to increment m_nPos again
+        
         lcl_HideAndDeleteControl(m_nPos,&pFormat,&pFormatText);
         if ( pFormatSample )
         {
@@ -1077,7 +1077,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
 void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
 {
 
-    // Calculate size
+    
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     Size aSize(0,nControlHeight);
     if ( isRightAligned() && nCol )
@@ -1102,7 +1102,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         }
     }
 
-    // Calculate Position
+    
     Point aPosition;
     switch( nCol )
     {
@@ -1132,7 +1132,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight);
 
-    // Display Control
+    
     (*ppControl)->SetPosSizePixel( aPosition, aSize );
     aSize = (*ppControl)->GetSizePixel();
 
@@ -1157,7 +1157,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpType );
         DeactivateAggregate( tpAutoIncrementValue );
         m_pPreviousType = TOTypeInfoSP();
-        // Reset the saved focus' pointer
+        
         pLastFocusWindow = NULL;
         if ( m_bAdded )
         {
@@ -1181,24 +1181,24 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     ActivateAggregate( tpType );
 
     OSL_ENSURE(pFieldType.get(),"We need a type information here!");
-    // If the type has changed, subsitute Controls
+    
     if( m_pPreviousType != pFieldType )
     {
-        // Reset the saved focus' pointer
+        
         pLastFocusWindow = NULL;
 
-        // Controls, which must NOT be displayed again
+        
         DeactivateAggregate( tpNumType );
 
-        // determine which controls we should show and which not
+        
 
-        // 1. the required control
+        
         if ( pFieldType->bNullable )
             ActivateAggregate( tpRequired );
         else
             DeactivateAggregate( tpRequired );
 
-        // 2. the autoincrement
+        
         if ( pFieldType->bAutoIncrement )
         {
             DeactivateAggregate( tpRequired );
@@ -1216,7 +1216,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 DeactivateAggregate( tpRequired );
             ActivateAggregate( tpDefault );
         }
-        // 3. the scale and precision
+        
         if (pFieldType->nPrecision)
         {
             ActivateAggregate( tpLength );
@@ -1237,7 +1237,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         else
             DeactivateAggregate( tpScale );
 
-        // and now look for type specific things
+        
         switch( pFieldType->nType )
         {
             case DataType::CHAR:
@@ -1260,7 +1260,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             case DataType::DATE:
             case DataType::TIME:
             case DataType::TIMESTAMP:
-                DeactivateAggregate( tpLength ); // we don't need a length for date types
+                DeactivateAggregate( tpLength ); 
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpBoolDefault );
 
@@ -1275,7 +1275,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                     DeactivateAggregate( tpBoolDefault );
                     break;
                 }
-                // run through
+                
             case DataType::BOOLEAN:
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpFormat );
@@ -1340,12 +1340,12 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 DeactivateAggregate( tpRequired );
         }
     }
-    // Initialize Controls
+    
     if( pAutoIncrement )
     {
         if ( pFieldDescr->IsAutoIncrement() )
         {
-            pAutoIncrement->SelectEntryPos( 0 ); // yes
+            pAutoIncrement->SelectEntryPos( 0 ); 
             ActivateAggregate( tpAutoIncrementValue );
             if ( m_pAutoIncrementValue )
                 m_pAutoIncrementValue->SetText(pFieldDescr->GetAutoIncrementValue());
@@ -1354,11 +1354,11 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         }
         else
         {
-            // disable autoincrement value because it should only be visible when autoincrement is to true
+            
             DeactivateAggregate( tpAutoIncrementValue );
-            pAutoIncrement->SelectEntryPos( 1 );        // no
+            pAutoIncrement->SelectEntryPos( 1 );        
             ActivateAggregate( tpDefault );
-            // Affects pRequired
+            
             if(!pFieldDescr->IsPrimaryKey())
                 ActivateAggregate( tpRequired );
         }
@@ -1372,19 +1372,19 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pBoolDefault )
     {
-        // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
+        
         OUString sValue;
         pFieldDescr->GetControlDefault() >>= sValue;
         OUString sDef = BoolStringUI(sValue);
 
-        // Make sure that <<none>> is only present if the field can be NULL
+        
         if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
         {
-            pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // The type says so
+            pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); 
 
             pBoolDefault->RemoveEntry(OUString(ModuleRes(STR_VALUE_NONE)));
             if ( sDef != aYes && sDef != aNo )
-                pBoolDefault->SelectEntryPos(1);  // No as a default
+                pBoolDefault->SelectEntryPos(1);  
             else
                 pBoolDefault->SelectEntry(sDef);
 
@@ -1402,9 +1402,9 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( pRequired )
     {
         if( pFieldDescr->IsNullable() )
-            pRequired->SelectEntryPos( 1 ); // no
+            pRequired->SelectEntryPos( 1 ); 
         else
-            pRequired->SelectEntryPos( 0 ); // yes
+            pRequired->SelectEntryPos( 0 ); 
     }
 
     if( pTextLen )
@@ -1457,7 +1457,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         m_pType->SelectEntry(pFieldDescr->getTypeInfo()->aUIName);
     }
 
-    // Enable/disable Controls
+    
     sal_Bool bRead(IsReadOnly());
 
     ArrangeAggregates();
@@ -1549,7 +1549,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     if( !pFieldDescr )
         return;
 
-    // Read out Controls
+    
     OUString sDefault;
     if (pDefault)
     {
@@ -1565,7 +1565,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     else
         pFieldDescr->SetControlDefault(Any());
 
-    if((pRequired && pRequired->GetSelectEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  // yes
+    if((pRequired && pRequired->GetSelectEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  
         pFieldDescr->SetIsNullable( ColumnValue::NO_NULLS );
     else
         pFieldDescr->SetIsNullable( ColumnValue::NULLABLE );
@@ -1595,7 +1595,7 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
 
 void OFieldDescControl::GetFocus()
 {
-    // Set the Focus to the Control that has been active last
+    
     TabPage::GetFocus();
     if( pLastFocusWindow )
     {
@@ -1608,11 +1608,11 @@ void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
     OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
-    // Remember the active Control
+    
     if (!pLastFocusWindow)
         pLastFocusWindow = _pWhich;
 
-    // Reset HelpText
+    
     if (pHelp && !pHelp->HasChildPathFocus())
         pHelp->SetHelpText( OUString() );
 }
@@ -1671,13 +1671,13 @@ void OFieldDescControl::cut()
 
 void OFieldDescControl::copy()
 {
-    if(isCopyAllowed()) // this only checks if the focus window is valid
+    if(isCopyAllowed()) 
         static_cast<Edit*>(m_pActFocusWindow)->Copy();
 }
 
 void OFieldDescControl::paste()
 {
-    if(m_pActFocusWindow) // this only checks if the focus window is valid
+    if(m_pActFocusWindow) 
         static_cast<Edit*>(m_pActFocusWindow)->Paste();
 }
 
@@ -1735,7 +1735,7 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
                         }
                         catch(const Exception&)
                         {
-                            return OUString(); // return empty string for format example
+                            return OUString(); 
                         }
                     }
                 }

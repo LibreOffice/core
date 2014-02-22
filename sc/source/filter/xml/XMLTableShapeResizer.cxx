@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLTableShapeResizer.hxx"
@@ -58,7 +58,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     const OUString& rName,
     const OUString& rRangeList)
 {
-    // This is the minimum required.
+    
     if (!pDoc)
         return;
 
@@ -92,15 +92,15 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     {
         ScChartListener* pCL(new ScChartListener(rName, pDoc, pRefTokens.release()));
 
-        //for loading binary files e.g.
-        //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
-        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completely and is incorect therefor
+        
+        
+        
         if( (rImport.getImportFlags() & IMPORT_ALL) == IMPORT_ALL )
             pCL->SetDirty( true );
         else
         {
-            // #i104899# If a formula cell is already dirty, further changes aren't propagated.
-            // This can happen easily now that row heights aren't updated for all sheets.
+            
+            
             pDoc->InterpretDirtyCells( *pCL->GetRangeList() );
         }
 
@@ -131,7 +131,7 @@ void ScMyOLEFixer::FixupOLEs()
 
         while (aItr != aEndItr)
         {
-            // #i78086# also call CreateChartListener for invalid position (anchored to sheet)
+            
             if (!IsOLE(aItr->xShape))
                 OSL_FAIL("Only OLEs should be in here now");
 

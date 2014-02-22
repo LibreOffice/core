@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -123,7 +123,7 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
         StartListening( *mpObjectShell );
     }
 
-    // initialize extra ui options
+    
     if( mxRenderable.is() )
     {
         for (sal_Int32 nProp=0; nProp < rProps.getLength(); ++nProp)
@@ -155,12 +155,12 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
         }
         catch( lang::IllegalArgumentException& )
         {
-            // the first renderer should always be available for the UI options,
-            // but catch the exception to be safe
+            
+            
         }
     }
 
-    // set some job parameters
+    
     setValue( OUString( "IsApi"  ), makeAny( i_bApi ) );
     setValue( OUString( "IsDirect"  ), makeAny( i_bDirect ) );
     setValue( OUString( "IsPrinter"  ), makeAny( sal_True ) );
@@ -279,8 +279,8 @@ void SfxPrinterController::printPage( int i_nPage ) const
         }
         catch( lang::IllegalArgumentException& )
         {
-            // don't care enough about nonexistant page here
-            // to provoke a crash
+            
+            
         }
         catch (lang::DisposedException &)
         {
@@ -297,14 +297,14 @@ void SfxPrinterController::jobStarted()
     {
         m_bOrigStatus = mpObjectShell->IsEnableSetModified();
 
-        // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+        
         if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
         {
             mpObjectShell->EnableSetModified( sal_False );
             m_bNeedsChange = sal_True;
         }
 
-        // refresh document info
+        
         uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
         m_aLastPrintedBy = xDocProps->getPrintedBy();
         m_aLastPrinted = xDocProps->getPrintDate();
@@ -342,15 +342,15 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
             case view::PrintableState_JOB_SPOOLING_FAILED :
             case view::PrintableState_JOB_FAILED :
             {
-                // "real" problem (not simply printing cancelled by user)
+                
                 OUString aMsg( SfxResId(STR_NOSTARTPRINTER).toString() );
                 if ( !m_bApi )
                     ErrorBox( mpViewShell->GetWindow(), WB_OK | WB_DEF_OK,  aMsg ).Execute();
-                // intentionally no break
+                
             }
             case view::PrintableState_JOB_ABORTED :
             {
-                // printing not successful, reset DocInfo
+                
                 uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
                 xDocProps->setPrintedBy(m_aLastPrintedBy);
                 xDocProps->setPrintDate(m_aLastPrinted);
@@ -374,11 +374,11 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
         if( bCopyJobSetup && mpViewShell )
         {
-            // #i114306#
-            // Note: this possibly creates a printer that gets immediately replaced
-            // by a new one. The reason for this is that otherwise we would not get
-            // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
-            // other way here to get the item set.
+            
+            
+            
+            
+            
             SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_True);
             if( pDocPrt )
             {
@@ -440,7 +440,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 
 IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
 {
-    // Options noted locally
+    
     if ( !_pOptions )
     {
         DBG_ASSERT( _pSetupParent, "no dialog parent" );
@@ -448,7 +448,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
             _pOptions = ( (SfxPrinter*)_pSetupParent->GetPrinter() )->GetOptions().Clone();
     }
 
-    // Create Dialog
+    
     SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( static_cast<Window*>(_pSetupParent),
                                                              _pViewSh, _pOptions );
     if ( _bHelpDisabled )
@@ -470,10 +470,10 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
 */
 SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 {
-    // get current Printer
+    
     SfxPrinter *pDocPrinter = GetPrinter();
 
-    // Evaluate Printer Options
+    
     bool bOriToDoc = false;
     bool bSizeToDoc = false;
     if ( &pDocPrinter->GetOptions() )
@@ -485,15 +485,15 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         bSizeToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE) : sal_False;
     }
 
-    // Determine the previous format and size
+    
     Orientation eOldOri = pDocPrinter->GetOrientation();
     Size aOldPgSz = pDocPrinter->GetPaperSizePixel();
 
-    // Determine the new format and size
+    
     Orientation eNewOri = pNewPrinter->GetOrientation();
     Size aNewPgSz = pNewPrinter->GetPaperSizePixel();
 
-    // Determine the changes in page format
+    
     sal_Bool bOriChg = (eOldOri != eNewOri) && bOriToDoc;
     sal_Bool bPgSzChg = ( aOldPgSz.Height() !=
             ( bOriChg ? aNewPgSz.Width() : aNewPgSz.Height() ) ||
@@ -501,7 +501,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
             ( bOriChg ? aNewPgSz.Height() : aNewPgSz.Width() ) ) &&
             bSizeToDoc;
 
-    // Message and Flags for page format, summaries changes
+    
     OUString aMsg;
     sal_uInt16 nNewOpt=0;
     if( bOriChg && bPgSzChg )
@@ -520,23 +520,23 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         nNewOpt = SFX_PRINTER_CHG_SIZE;
     }
 
-    // Summaries in this variable what has been changed.
+    
     sal_uInt16 nChangedFlags = 0;
 
-    // Ask if possible, if page format should be taken over from printer.
+    
     if ( ( bOriChg  || bPgSzChg ) &&
         RET_YES == QueryBox(0, WB_YES_NO | WB_DEF_OK, aMsg).Execute() )
     {
-        // Flags with changes for  <SetPrinter(SfxPrinter*)> are maintained
+        
         nChangedFlags |= nNewOpt;
     }
 
-    // For the MAC to have its "temporary of class String" in next if()
+    
     OUString aTempPrtName = pNewPrinter->GetName();
     OUString aDocPrtName = pDocPrinter->GetName();
 
-    // Was the printer selection changed from Default to Specific
-    // or the other way around?
+    
+    
     if ( (aTempPrtName != aDocPrtName) || (pDocPrinter->IsDefPrinter() != pNewPrinter->IsDefPrinter()) )
     {
         nChangedFlags |= SFX_PRINTER_PRINTER|SFX_PRINTER_JOBSETUP;
@@ -544,15 +544,15 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     }
     else
     {
-        // Compare extra options
+        
         if ( ! (pNewPrinter->GetOptions() == pDocPrinter->GetOptions()) )
         {
-            // Option have changed
+            
             pDocPrinter->SetOptions( pNewPrinter->GetOptions() );
             nChangedFlags |= SFX_PRINTER_OPTIONS;
         }
 
-        // Compare JobSetups
+        
         JobSetup aNewJobSetup = pNewPrinter->GetJobSetup();
         JobSetup aOldJobSetup = pDocPrinter->GetJobSetup();
         if ( aNewJobSetup != aOldJobSetup )
@@ -560,20 +560,20 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
             nChangedFlags |= SFX_PRINTER_JOBSETUP;
         }
 
-        // Keep old changed Printer.
+        
         pDocPrinter->SetPrinterProps( pNewPrinter );
         delete pNewPrinter;
     }
 
     if ( 0 != nChangedFlags )
-        // SetPrinter will delete the old printer if it changes
+        
         SetPrinter( pDocPrinter, nChangedFlags );
     return pDocPrinter;
 }
 
 void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, sal_Bool bIsAPI, sal_Bool bIsDirect )
 {
-    // get the current selection; our controller should know it
+    
     Reference< frame::XController > xController( GetController() );
     Reference< view::XSelectionSupplier > xSupplier( xController, UNO_QUERY );
 
@@ -615,7 +615,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     pController->setValue( OUString( "JobName"  ),
                         makeAny( OUString( pObjShell->GetTitle(0) ) ) );
 
-    // FIXME: job setup
+    
     SfxPrinter* pDocPrt = GetPrinter(sal_False);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     if( bIsDirect )
@@ -638,21 +638,21 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     SfxDialogExecutor_Impl* pExecutor = 0;
     bool                    bSilent = false;
 
-    // does the function have been called by the user interface or by an API call
+    
     sal_Bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
     if ( bIsAPI )
     {
-        // the function have been called by the API
+        
 
-        // Should it be visible on the user interface,
-        // should it launch popup dialogue ?
+        
+        
         SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, false);
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
 
-    // no help button in dialogs if called from the help window
-    // (pressing help button would exchange the current page inside the help
-    // document that is going to be printed!)
+    
+    
+    
     OUString aHelpFilterName( "writer_web_HTML_help" );
     SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
     const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
@@ -661,12 +661,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     const sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
-        case SID_PRINTDOC: // display the printer selection and properties dialogue : File > Print...
-        case SID_PRINTDOCDIRECT: // Print the document directly, without displaying the dialogue
+        case SID_PRINTDOC: 
+        case SID_PRINTDOCDIRECT: 
         {
             SfxObjectShell* pDoc = GetObjectShell();
 
-            // derived class may decide to abort this
+            
             if( pDoc == NULL || !pDoc->QuerySlotExecutable( nId ) )
             {
                 rReq.SetReturnValue( SfxBoolItem( 0, false ) );
@@ -676,29 +676,29 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( !bSilent && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 return;
 
-            // should we print only the selection or the whole document
+            
             SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, false);
             sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
-            // detect non api call from writer ( that adds SID_SELECTION ) and reset bIsAPI
+            
             if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
                 bIsAPI = sal_False;
 
             uno::Sequence < beans::PropertyValue > aProps;
             if ( bIsAPI )
             {
-                // supported properties:
-                // String PrinterName
-                // String FileName
-                // Int16 From
-                // Int16 To
-                // In16 Copies
-                // String RangeText
-                // bool Selection
-                // bool Asynchron
-                // bool Collate
-                // bool Silent
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
-                // the TransformItems function overwrite aProps
+                
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
 
                 for ( sal_Int32 nProp=0; nProp < aProps.getLength(); ++nProp )
@@ -728,69 +728,69 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
             }
 
-            // we will add the "PrintSelectionOnly" or "HideHelpButton" properties
-            // we have to increase the capacity of aProps
+            
+            
             sal_Int32 nLen = aProps.getLength();
             aProps.realloc( nLen + 1 );
 
-            // HACK: writer sets the SID_SELECTION item when printing directly and expects
-            // to get only the selection document in that case (see getSelectionObject)
-            // however it also reacts to the PrintContent property. We need this distinction here, too,
-            // else one of the combinations print / print direct and selection / all will not work.
-            // it would be better if writer handled this internally
+            
+            
+            
+            
+            
             if( nId == SID_PRINTDOCDIRECT )
             {
                 aProps[nLen].Name = "PrintSelectionOnly";
                 aProps[nLen].Value = makeAny( bSelection );
             }
-            else // if nId == SID_PRINTDOC ; nothing to do with the previous HACK
+            else 
             {
-                // should the printer selection and properties dialogue display an help button
+                
                 aProps[nLen].Name = "HideHelpButton";
                 aProps[nLen].Value = makeAny( bPrintOnHelp );
             }
 
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
 
-            // FIXME: Recording
+            
             rReq.Done();
             break;
         }
 
-        case SID_SETUPPRINTER : // display the printer settings dialogue : File > Printer Settings...
-        case SID_PRINTER_NAME : // only for recorded macros
+        case SID_SETUPPRINTER : 
+        case SID_PRINTER_NAME : 
         {
-            // get printer and printer settings from the document
+            
             SfxPrinter *pDocPrinter = GetPrinter(sal_True);
 
-            // look for printer in parameters
+            
             SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, false );
             if ( pPrinterItem )
             {
-                // use PrinterName parameter to create a printer
+                
                 pPrinter = new SfxPrinter( pDocPrinter->GetOptions().Clone(), ((const SfxStringItem*) pPrinterItem)->GetValue() );
 
-                // if printer is unknown, it can't be used - now printer from document will be used
+                
                 if ( !pPrinter->IsKnown() )
                     DELETEZ(pPrinter);
             }
 
             if ( SID_PRINTER_NAME == nId )
             {
-                // just set a recorded printer name
+                
                 if ( pPrinter )
                     SetPrinter( pPrinter, SFX_PRINTER_PRINTER  );
                 return;
             }
 
-            // no PrinterName parameter in ItemSet or the PrinterName points to an unknown printer
+            
             if ( !pPrinter )
-                // use default printer from document
+                
                 pPrinter = pDocPrinter;
 
             if( !pPrinter || !pPrinter->IsValid() )
             {
-                // no valid printer either in ItemSet or at the document
+                
                 if ( !bSilent )
                     ErrorBox( NULL, WB_OK | WB_DEF_OK, SfxResId(STR_NODEFPRINTER).toString() ).Execute();
 
@@ -799,10 +799,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 break;
             }
 
-            // FIXME: printer isn't used for printing anymore!
+            
             if( pPrinter->IsPrinting() )
             {
-                // if printer is busy, abort configuration
+                
                 if ( !bSilent )
                     InfoBox( NULL, SfxResId(STR_ERROR_PRINTER_BUSY).toString() ).Execute();
                 rReq.SetReturnValue(SfxBoolItem(0,false));
@@ -810,19 +810,19 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 return;
             }
 
-            // if no arguments are given, retrieve them from a dialog
+            
             if ( !bIsAPI )
             {
-                // PrinterDialog needs a temporary printer
+                
                 SfxPrinter* pDlgPrinter = pPrinter->Clone();
                 nDialogRet = 0;
 
-                // execute PrinterSetupDialog
+                
                 PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
 
                 if (pImp->m_bHasPrintOptions && HasPrintOptionsPage())
                 {
-                    // additional controls for dialog
+                    
                     pExecutor = new SfxDialogExecutor_Impl( this, pPrintSetupDlg );
                     if ( bPrintOnHelp )
                         pExecutor->DisableHelp();
@@ -835,7 +835,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 if ( pExecutor && pExecutor->GetOptions() )
                 {
                     if ( nDialogRet == RET_OK )
-                        // remark: have to be recorded if possible!
+                        
                         pDlgPrinter->SetOptions( *pExecutor->GetOptions() );
                     else
                     {
@@ -846,30 +846,30 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                 DELETEZ( pPrintSetupDlg );
 
-                // no recording of PrinterSetup except printer name (is printer dependent)
+                
                 rReq.Ignore();
 
                 if ( nDialogRet == RET_OK )
                 {
                     if ( pPrinter->GetName() != pDlgPrinter->GetName() )
                     {
-                        // user has changed the printer -> macro recording
+                        
                         SfxRequest aReq( GetViewFrame(), SID_PRINTER_NAME );
                         aReq.AppendItem( SfxStringItem( SID_PRINTER_NAME, pDlgPrinter->GetName() ) );
                         aReq.Done();
                     }
 
-                    // take the changes made in the dialog
+                    
                     SetPrinter_Impl( pDlgPrinter );
 
-                    // forget new printer, it was taken over (as pPrinter) or deleted
+                    
                     pDlgPrinter = NULL;
 
                 }
                 else
                 {
-                    // PrinterDialog is used to transfer information on printing,
-                    // so it will only be deleted here if dialog was cancelled
+                    
+                    
                     DELETEZ( pDlgPrinter );
                     rReq.Ignore();
                 }

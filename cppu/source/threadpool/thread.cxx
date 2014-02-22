@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -35,7 +35,7 @@ using namespace osl;
 
 namespace cppu_threadpool {
 
-// ----------------------------------------------------------------------------------
+
     ThreadAdmin::ThreadAdmin(): m_disposed(false) {}
 
     ThreadAdmin::~ThreadAdmin()
@@ -99,7 +99,7 @@ namespace cppu_threadpool {
         }
     }
 
-// ----------------------------------------------------------------------------------
+
     ORequestThread::ORequestThread( ThreadPoolHolder const &aThreadPool,
                                     JobQueue *pQueue,
                                     const ByteSequence &aThreadId,
@@ -123,8 +123,8 @@ namespace cppu_threadpool {
 
     void ORequestThread::launch()
     {
-        // Assumption is that osl::Thread::create returns normally with a true
-        // return value iff it causes osl::Thread::run to start executing:
+        
+        
         acquire();
         ThreadAdmin & rThreadAdmin = m_aThreadPool->getThreadAdmin();
         osl::ClearableMutexGuard g(rThreadAdmin.m_mutex);
@@ -163,9 +163,9 @@ namespace cppu_threadpool {
 
                 while( ! m_pQueue->isEmpty() )
                 {
-                    // Note : Oneways should not get a disposable disposeid,
-                    //        It does not make sense to dispose a call in this state.
-                    //        That's way we put it an disposeid, that can't be used otherwise.
+                    
+                    
+                    
                     m_pQueue->enter(
                         sal::static_int_cast< sal_Int64 >(
                             reinterpret_cast< sal_IntPtr >(this)),
@@ -174,8 +174,8 @@ namespace cppu_threadpool {
                     if( m_pQueue->isEmpty() )
                     {
                         m_aThreadPool->revokeQueue( m_aThreadId , m_bAsynchron );
-                        // Note : revokeQueue might have failed because m_pQueue.isEmpty()
-                        //        may be false (race).
+                        
+                        
                     }
                 }
 
@@ -192,8 +192,8 @@ namespace cppu_threadpool {
         }
         catch (...)
         {
-            // Work around the problem that onTerminated is not called if run
-            // throws an exception:
+            
+            
             onTerminated();
             throw;
         }

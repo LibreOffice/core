@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,9 +30,9 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 
-// -------------------
-// - OPTIMIZERDIALOG -
-// -------------------
+
+
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::io;
@@ -48,11 +48,11 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InitDialog()
 {
-   // setting the dialog properties
+   
     OUString pNames[] = {
         OUString("Closeable"),
         OUString("Height"),
@@ -79,7 +79,7 @@ void OptimizerDialog::InitDialog()
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InitRoadmap()
 {
@@ -118,9 +118,9 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, sal_True, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        // Well, that's messy, but the
-        // BMP_PRESENTATION_MINIMIZER from sd module cannot be used here directly
-        // that UNO wizard dialog should be converted to ui
+        
+        
+        
         OUString sURL( "private:graphicrepository/sd/res/minimize_presi_80.png" );
 
         xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
@@ -134,7 +134,7 @@ void OptimizerDialog::InitRoadmap()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
 {
@@ -155,7 +155,7 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateConfiguration()
 {
@@ -165,7 +165,7 @@ void OptimizerDialog::UpdateConfiguration()
     Sequence< sal_Int16 > aSelectedItems;
     Sequence< OUString > aStringItemList;
 
-    // page0
+    
     aAny = getControlProperty( "ListBox0Pg0", "SelectedItems" );
     if ( aAny >>= aSelectedItems )
     {
@@ -204,7 +204,7 @@ void OptimizerDialog::UpdateConfiguration()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
     UnoDialog( rxContext, rxFrame ),
@@ -240,28 +240,28 @@ OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContex
     UpdateStatus( aStatusSequence );
 }
 
-// -----------------------------------------------------------------------------
+
 
 OptimizerDialog::~OptimizerDialog()
 {
-    // not saving configuration if the dialog has been finished via cancel or close window
+    
     if ( mbStatus )
         SaveConfiguration();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OptimizerDialog::execute()
 {
     Reference< XItemEventBroadcaster > maRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
     maRoadmapBroadcaster->addItemListener( mxItemListener );
     UnoDialog::execute();
-    UpdateConfiguration();          // taking actual control settings for the configuration
+    UpdateConfiguration();          
     maRoadmapBroadcaster->removeItemListener( mxItemListener );
     return mbStatus;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
 {
@@ -308,7 +308,7 @@ void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString OptimizerDialog::GetSelectedString( OUString const & token )
 {
@@ -329,7 +329,7 @@ OUString OptimizerDialog::GetSelectedString( OUString const & token )
     return aSelectedItem;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus )
 {
@@ -361,7 +361,7 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ItemListener::itemStateChanged( const ItemEvent& Event )
     throw ( RuntimeException )
@@ -496,7 +496,7 @@ void ItemListener::disposing( const ::com::sun::star::lang::EventObject& /* Sour
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
@@ -517,7 +517,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( sal_False ) );
             mrOptimizerDialog.setControlProperty( "FixedText0Pg4", "Enabled", Any( sal_True ) );
 
-            // check if we have to open the FileDialog
+            
             sal_Bool    bSuccessfullyExecuted = sal_True;
             sal_Int16   nInt16 = 0;
             mrOptimizerDialog.getControlProperty( "RadioButton1Pg4", "State" ) >>= nInt16;
@@ -526,7 +526,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 OUString aSaveAsURL;
                 FileOpenDialog aFileOpenDialog( mrOptimizerDialog.GetComponentContext() );
 
-                // generating default file name
+                
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
@@ -539,12 +539,12 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                             if ( nIndex < aLocation.getLength() - 1 )
                                 aLocation = aLocation.copy( nIndex + 1 );
 
-                            // remove extension
+                            
                             nIndex = aLocation.lastIndexOf( '.', aLocation.getLength() - 1 );
                             if ( nIndex >= 0 )
                                 aLocation = aLocation.copy( 0, nIndex );
 
-                            // adding .mini
+                            
                             aLocation = aLocation.concat( OUString(".mini") );
                             aFileOpenDialog.setDefaultName( aLocation );
                         }
@@ -559,11 +559,11 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 }
                 if ( aSaveAsURL.isEmpty() )
                 {
-                    // something goes wrong...
+                    
                     bSuccessfullyExecuted = sal_False;
                 }
 
-                // waiting for 500ms
+                
                 if ( mrOptimizerDialog.mxReschedule.is() )
                 {
                     mrOptimizerDialog.mxReschedule->reschedule();
@@ -572,7 +572,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 }
             }
             if ( bSuccessfullyExecuted )
-            {   // now check if we have to store a session template
+            {   
                 nInt16 = 0;
                 OUString aSettingsName;
                 mrOptimizerDialog.getControlProperty( "CheckBox1Pg4", "State" ) >>= nInt16;
@@ -623,7 +623,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
         }
         break;
         case TK_btnNavCancel :  mrOptimizerDialog.endExecute( sal_False ); break;
-        case TK_Button0Pg0 :    // delete configuration
+        case TK_Button0Pg0 :    
         {
             OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( "ListBox0Pg0" ) );
             if ( !aSelectedItem.isEmpty() )
@@ -646,7 +646,7 @@ void ActionListener::disposing( const ::com::sun::star::lang::EventObject& /* So
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
@@ -665,7 +665,7 @@ void ActionListenerListBox0Pg0::disposing( const ::com::sun::star::lang::EventOb
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
@@ -680,7 +680,7 @@ void TextListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::Ev
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
@@ -709,7 +709,7 @@ void TextListenerComboBox0Pg1::disposing( const ::com::sun::star::lang::EventObj
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
@@ -756,7 +756,7 @@ void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::Ev
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void HelpCloseListener::addCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
 {

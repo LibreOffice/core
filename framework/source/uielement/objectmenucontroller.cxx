@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <threadhelp/resetableguard.hxx>
@@ -60,7 +60,7 @@ public:
     ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~ObjectMenuController();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     {
@@ -81,10 +81,10 @@ public:
         return aSeq;
     }
 
-    // XStatusListener
+    
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException );
 
 private:
@@ -103,7 +103,7 @@ ObjectMenuController::~ObjectMenuController()
 {
 }
 
-// private function
+
 void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     const com::sun::star::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
@@ -125,17 +125,17 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
             if ( rVerb.VerbAttributes & com::sun::star::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
             {
                 m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
-                // use VCL popup menu pointer to set vital information that are not part of the awt implementation
+                
 
                 OUString aCommand( aVerbCommand );
                 aCommand += OUString::number( rVerb.VerbID );
-                pVCLPopupMenu->SetItemCommand( i+1, aCommand ); // Store verb command
+                pVCLPopupMenu->SetItemCommand( i+1, aCommand ); 
             }
         }
     }
 }
 
-// XEventListener
+
 void SAL_CALL ObjectMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -150,7 +150,7 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& ) throw ( Runt
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     Sequence < com::sun::star::embed::VerbDescriptor > aVerbCommandSeq;
@@ -162,7 +162,7 @@ void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Even
     }
 }
 
-// XMenuListener
+
 void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;

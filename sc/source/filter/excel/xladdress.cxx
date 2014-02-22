@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xladdress.hxx"
@@ -22,7 +22,7 @@
 #include "xltracer.hxx"
 #include "xistream.hxx"
 
-// ============================================================================
+
 
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
@@ -42,7 +42,7 @@ void XclAddress::Write( XclExpStream& rStrm, bool bCol16Bit ) const
         rStrm << static_cast< sal_uInt8 >( mnCol );
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclRange::Contains( const XclAddress& rPos ) const
 {
@@ -73,7 +73,7 @@ void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
         rStrm << static_cast< sal_uInt8 >( maFirst.mnCol ) << static_cast< sal_uInt8 >( maLast.mnCol );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclRange XclRangeList::GetEnclosingRange() const
 {
@@ -119,7 +119,7 @@ void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCou
         aIt->Write( rStrm, bCol16Bit );
 }
 
-// ============================================================================
+
 
 XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAddress& rMaxPos ) :
     mrTracer( rTracer ),
@@ -143,12 +143,12 @@ bool XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
     bool bValid = (0 <= nScTab) && (nScTab <= maMaxPos.Tab());
     if( !bValid && bWarn )
     {
-        mbTabTrunc |= (nScTab > maMaxPos.Tab());  // do not warn for deleted refs
+        mbTabTrunc |= (nScTab > maMaxPos.Tab());  
         mrTracer.TraceInvalidTab( nScTab, maMaxPos.Tab() );
     }
     return bValid;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuscale.hxx"
@@ -75,7 +75,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
         nValue = (sal_Int16) mpWindow->GetZoom();
 
-        // zoom on page size?
+        
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) &&
             static_cast<DrawViewShell*>(mpViewShell)->IsZoomOnPage() )
         {
@@ -86,14 +86,14 @@ void FuScale::DoExecute( SfxRequest& rReq )
             pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nValue );
         }
 
-        // limit range
+        
         if( mpViewShell )
         {
             if( mpViewShell->ISA( DrawViewShell ) )
             {
                 SdrPageView* pPageView = mpView->GetSdrPageView();
                 if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                    // || ( mpView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+                    
                 {
                     nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
                 }
@@ -127,7 +127,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
                     delete pDlg;
                     delete pZoomItem;
                     rReq.Ignore ();
-                    return; // Cancel
+                    return; 
                 }
                 default:
                 {
@@ -159,8 +159,8 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 {
                     if( mpViewShell->ISA( DrawViewShell ) )
                     {
-                        // name confusion: SID_SIZE_ALL -> zoom onto all objects
-                        // --> the program offers it as optimal
+                        
+                        
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                     }
                 }
@@ -190,6 +190,6 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

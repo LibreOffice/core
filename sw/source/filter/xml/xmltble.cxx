@@ -212,11 +212,11 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         pBrush = (const SvxBrushItem *)pItem;
 
-    // empty styles have not to be exported
+    
     if( !pFrmSize && !pBrush && !pRowSplit )
         return false;
 
-    // order is: -/brush, size/-, size/brush
+    
     bool bInsert = true;
     SwXMLFrmFmts_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
@@ -280,7 +280,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         if( pRowSplit && (!pRowSplit->GetValue() != !pTestRowSplit->GetValue()) )
             continue;
 
-        // found!
+        
         rFrmFmt.SetName( pTestFmt->GetName() );
         bInsert = false;
         break;
@@ -346,16 +346,16 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
                                                 false, &pItem ) )
         pFrameDir = (const SvxFrameDirectionItem *)pItem;
 
-    // empty styles have not to be exported
+    
     if( !pVertOrient && !pBrush && !pBox && !pNumFmt && !pFrameDir )
         return false;
 
-    // order is: -/-/-/num,
-    //           -/-/box/-, --/-/box/num,
-    //           -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
-    //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
-    //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
-    //           vert/brush/box/num
+    
+    
+    
+    
+    
+    
     bool bInsert = true;
     SwXMLFrmFmts_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
@@ -454,7 +454,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         if( pFrameDir && pFrameDir->GetValue() != pTestFrameDir->GetValue() )
             continue;
 
-        // found!
+        
         rFrmFmt.SetName( pTestFmt->GetName() );
         bInsert = false;
         break;
@@ -471,7 +471,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     return bInsert;
 }
-// ---------------------------------------------------------------------
+
 
 class SwXMLTableInfo_Impl
 {
@@ -504,22 +504,22 @@ inline void SwXMLTableInfo_Impl::SetBaseSection(
     bBaseSectionValid = true;
 }
 
-// ---------------------------------------------------------------------
+
 
 
 void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
 {
-    // <style:style ...>
+    
     CheckAttrList();
 
-    // style:name="..."
+    
     sal_Bool bEncoded = sal_False;
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                     EncodeStyleName( rCol.GetStyleName(), &bEncoded ) );
     if( bEncoded )
         AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rCol.GetStyleName() );
 
-    // style:family="table-column"
+    
     AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE_COLUMN );
 
     {
@@ -558,7 +558,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
                                     sal_Bool bTop )
 {
-    // pass 1: calculate columns
+    
     SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
     if( !pTableLines )
         pTableLines = new SwXMLTableLinesCache_Impl();
@@ -567,7 +567,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
 
     OUStringBuffer sBuffer( rNamePrefix.getLength() + 8L );
 
-    // pass 2: export column styles
+    
     {
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
         sal_uInt32 nCPos = 0U;
@@ -581,18 +581,18 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
 
             sal_uInt32 nWidth = nCPos - nOldCPos;
 
-            // If a base width is given, the table has either an automatic
-            // or margin alignment, or an percentage width. In either case,
-            // relative widths should be exported.
+            
+            
+            
             if( nBaseWidth )
             {
                 pColumn->SetRelWidth( nWidth );
             }
 
-            // If an absolute width is given, the table either has a fixed
-            // width, or the current width is known from the layout. In the
-            // later case, a base width is set in addition and must be used
-            // to "absoultize" the relative column width.
+            
+            
+            
+            
             if( nAbsWidth )
             {
                 sal_uInt32 nColAbsWidth = nWidth;
@@ -632,7 +632,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         }
     }
 
-    // pass 3: export line/rows
+    
     sal_uInt16 nLines = rLines.size();
     for( sal_uInt16 nLine=0U; nLine<nLines; nLine++ )
     {
@@ -657,7 +657,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 nCPos = pLines->GetWidth();
 
 
-            // Und ihren Index
+            
             sal_uInt16 nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
             SwXMLTableColumns_Impl::const_iterator it = pLines->GetColumns().find( &aCol );
@@ -693,7 +693,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     const bool bExportContent = (getExportFlags() & EXPORT_CONTENT ) != 0;
                     if ( !bExportContent )
                     {
-                        // AUTOSTYLES - not needed anymore if we are currently exporting content.xml
+                        
                         GetTextParagraphExport()->collectTextAutoStyles(
                             xText, rTblInfo.GetBaseSection(), IsShowProgress() );
                     }
@@ -741,7 +741,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
             nAbsWidth = pTblFmt->FindLayoutRect(sal_True).Width();
             if( !nAbsWidth )
             {
-                // TODO?
+                
             }
         }
         ExportTableFmt( *pTblFmt, nAbsWidth );
@@ -795,8 +795,8 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
     {
         if( pBoxSttNd )
         {
-            // start node -> normal cell
-            // get cell range for table
+            
+            
             Reference<XCell> xCell = SwXCell::CreateXCell( (SwFrmFmt *)rTblInfo.GetTblFmt(),
                                                             (SwTableBox *)&rBox,
                                                             (SwTable *)rTblInfo.GetTable() );
@@ -805,21 +805,21 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
             {
                 Reference<XText> xText( xCell, UNO_QUERY );
 
-                // get formula (and protection)
+                
                 OUString sCellFormula = xCell->getFormula();
 
-                // if this cell has a formula, export it
-                //     (with value and number format)
+                
+                
                 if (!sCellFormula.isEmpty())
                 {
                     OUString sQValue =
                         GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_OOOW, sCellFormula, sal_False );
-                    // formula
+                    
                     AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue );
                 }
 
-                // value and format (if NumberFormat != -1)
+                
                 Reference<XPropertySet> xCellPropertySet(xCell,
                                                         UNO_QUERY);
                 if (xCellPropertySet.is())
@@ -830,22 +830,22 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                     if (NUMBERFORMAT_TEXT == nNumberFormat)
                     {
-                        // text format
+                        
                         AddAttribute( XML_NAMESPACE_OFFICE,
                                     XML_VALUE_TYPE, XML_STRING );
                     }
                     else if ( (-1 != nNumberFormat) && !xText->getString().isEmpty() )
                     {
-                        // number format key:
-                        // (export values only if cell contains text;)
+                        
+                        
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
                                  sal_True );
                     }
-                    // else: invalid key; ignore
+                    
 
-                    // cell protection
+                    
                     aAny = xCellPropertySet->getPropertyValue(sIsProtected);
                     if (*(sal_Bool*)aAny.getValue())
                     {
@@ -863,11 +863,11 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                     }
                 }
 
-                // export cell element
+                
                 SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
                                         XML_TABLE_CELL, sal_True, sal_True );
 
-                // export cell content
+                
                 GetTextParagraphExport()->exportText( xText,
                                                     rTblInfo.GetBaseSection(),
                                                     IsShowProgress() );
@@ -880,7 +880,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         }
         else
         {
-            // no start node -> merged cells: export subtable in cell
+            
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
                                       XML_TABLE_CELL, sal_True, sal_True );
             {
@@ -926,7 +926,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
-            // NEW TABLES
+            
             const long nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
@@ -940,19 +940,19 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             else
                 nCPos = rLines.GetWidth();
 
-            // Und ihren Index
+            
             const sal_uInt16 nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
             SwXMLTableColumns_Impl::const_iterator it = rLines.GetColumns().find( &aCol );
             OSL_ENSURE( it != rLines.GetColumns().end(), "couldn't find column" );
             nCol = it - rLines.GetColumns().begin();
 
-            // #i95726# - Some fault tolerance, if table is somehow corrupted.
+            
             if ( nCol < nOldCol )
             {
                 OSL_FAIL( "table and/or table information seems to be corrupted." );
-                // NOTE: nOldCol is not necessarily a valid index into
-                // GetColumns(), but that doesn't matter here
+                
+                
                 nCol = nOldCol;
             }
 
@@ -1009,7 +1009,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         pTableLines = NULL;
     }
 
-    // pass 2: export columns
+    
     const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
     sal_uInt16 nColumn = 0U;
     sal_uInt16 nColumns = rCols.size();
@@ -1048,9 +1048,9 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         pColumn = pNextColumn;
     }
 
-    // pass 3: export line/rows
+    
     sal_uInt16 nLines = rLines.size();
-    // export header rows, if present
+    
     if( nHeaderRows > 0 )
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
@@ -1060,7 +1060,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         for( sal_uInt16 nLine = 0U; nLine < nHeaderRows; nLine++ )
             ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
     }
-    // export remaining rows
+    
     for( sal_uInt16 nLine = nHeaderRows; nLine < nLines; nLine++ )
     {
         ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
@@ -1107,18 +1107,18 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_TABLE,
                                   sal_True, sal_True );
 
-        // export DDE source (if this is a DDE table)
+        
         if ( rTbl.ISA(SwDDETable) )
         {
-            // get DDE Field Type (contains the DDE connection)
+            
             const SwDDEFieldType* pDDEFldType =
                 ((SwDDETable&)rTbl).GetDDEFldType();
 
-            // connection name
+            
             AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
                           pDDEFldType->GetName() );
 
-            // DDE command
+            
             const OUString sCmd = pDDEFldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
                           sCmd.getToken(0, sfx2::cTokenSeparator) );
@@ -1127,14 +1127,14 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
                           sCmd.getToken(2, sfx2::cTokenSeparator) );
 
-            // auto update
+            
             if (pDDEFldType->GetType() == sfx2::LINKUPDATE_ALWAYS)
             {
                 AddAttribute( XML_NAMESPACE_OFFICE,
                               XML_AUTOMATIC_UPDATE, XML_TRUE );
             }
 
-            // DDE source element (always empty)
+            
             SvXMLElementExport aSource(*this, XML_NAMESPACE_OFFICE,
                                        XML_DDE_SOURCE, sal_True, sal_False);
         }
@@ -1177,11 +1177,11 @@ void SwXMLTextParagraphExport::exportTable(
             if( bAutoStyles )
             {
                 SwNodeIndex aIdx( *pTblNd );
-                // AUTOSTYLES: Optimization: Do not export table autostyle if
-                // we are currently exporting the content.xml stuff and
-                // the table is located in header/footer:
-                // During the flat XML export (used e.g. by .sdw-export)
-                // ALL flags are set at the same time.
+                
+                
+                
+                
+                
                 const bool bExportStyles = ( GetExport().getExportFlags() & EXPORT_STYLES ) != 0;
                 if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
                     ((SwXMLExport&)GetExport()).ExportTableAutoStyles( *pTblNd );

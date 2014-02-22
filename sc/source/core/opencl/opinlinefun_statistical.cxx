@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #ifndef SC_OPENCL_OPINLINFUN_statistical
@@ -439,7 +439,7 @@ std::string lcl_IterateInverseBetaInv =
 "    double fXEps = fMachEps;\n"
 "   if(!(fAx < fBx))\n"
 "   {\n"
-"       //print error\n"
+"       
 "   }\n"
 "   double fAy = fp - GetBetaDist(fAx, fAlpha, fBeta);\n"
 "   double fBy = fp - GetBetaDist(fBx, fAlpha, fBeta);\n"
@@ -537,7 +537,7 @@ std::string lcl_IterateInverseChiInv =
 "    double fXEps = fMachEps;\n"
 "   if(!(fAx < fBx))\n"
 "   {\n"
-"       //print error\n"
+"       
 "   }"
 "   double fAy = fp - GetChiDist(fAx, fdf);\n"
 "   double fBy = fp - GetChiDist(fBx, fdf);\n"
@@ -635,7 +635,7 @@ std::string lcl_IterateInverseChiSQInv =
 
 "    if(!(fAx < fBx))\n"
 "    {\n"
-"        //print error\n"
+"        
 "    }\n"
 "    double fAy = fp - GetChiSqDistCDF(fAx, fdf);\n"
 "    double fBy = fp - GetChiSqDistCDF(fBx, fdf);\n"

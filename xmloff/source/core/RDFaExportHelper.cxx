@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RDFaExportHelper.hxx"
@@ -40,10 +40,10 @@
 
 #include <boost/bind.hpp>
 #include <boost/iterator_adaptors.hpp>
-#ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_ // from iterator_adaptors.hpp
-// N.B.: the check for the header guard _of a specific version of boost_
-//       is here so this may work on different versions of boost,
-//       which sadly put the goods in different header files
+#ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_ 
+
+
+
 #include <boost/iterator/transform_iterator.hpp>
 #endif
 
@@ -65,13 +65,13 @@ makeCURIE(SvXMLExport * i_pExport,
     OSL_ENSURE(!Namespace.isEmpty(), "makeCURIE: no namespace");
     if (Namespace.isEmpty()) throw uno::RuntimeException();
 
-    // N.B.: empty LocalName is valid!
+    
     return i_pExport->EnsureNamespace(Namespace) + ":" + i_xURI->getLocalName();
 }
 
-// #i112473# SvXMLExport::GetRelativeReference() not right for RDF on SaveAs
-// because the URIs in the repository are not rewritten on SaveAs, the
-// URI of the loaded document has to be used, not the URI of the target doc.
+
+
+
 static OUString
 getRelativeReference(SvXMLExport const& rExport, OUString const& rURI)
 {
@@ -133,10 +133,10 @@ RDFaExportHelper::AddRDFa(
 
         if (0 == rStatements.getLength())
         {
-            return; // no RDFa
+            return; 
         }
 
-        // all stmts have the same subject, so we only handle first one
+        
         const uno::Reference<rdf::XURI> xSubjectURI(rStatements[0].Subject,
             uno::UNO_QUERY);
         const uno::Reference<rdf::XBlankNode> xSubjectBNode(
@@ -160,7 +160,7 @@ RDFaExportHelper::AddRDFa(
             m_rExport.AddAttribute(XML_NAMESPACE_XHTML,
                 token::XML_DATATYPE, datatype);
         }
-        if (RDFaResult.Second) // there is xhtml:content
+        if (RDFaResult.Second) 
         {
             m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_CONTENT,
                 xContent->getValue());
@@ -171,7 +171,7 @@ RDFaExportHelper::AddRDFa(
             ::boost::make_transform_iterator(rStatements.begin(),
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
-            // argh, this must be the same type :(
+            
             ::boost::make_transform_iterator(
                 rStatements.end(),
                 ::boost::bind(&makeCURIE, &m_rExport,
@@ -190,6 +190,6 @@ RDFaExportHelper::AddRDFa(
     }
 }
 
-} // namespace xmloff
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

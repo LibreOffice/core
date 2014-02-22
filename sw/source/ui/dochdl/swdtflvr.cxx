@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -172,7 +172,7 @@ public:
     void Disconnect( sal_Bool bRemoveDataAdvise );
 };
 
-// helper class for Action and Undo enclosing
+
 class SwTrnsfrActionAndUndo
 {
     SwWrtShell *pSh;
@@ -229,7 +229,7 @@ SwTransferable::~SwTransferable()
 {
     Application::GetSolarMutex().acquire();
 
-    // the DDELink still needs the WrtShell!
+    
     if( refDdeLink.Is() )
     {
         ((SwTrnsfrDdeLink*)&refDdeLink)->Disconnect( sal_True );
@@ -238,13 +238,13 @@ SwTransferable::~SwTransferable()
 
     pWrtShell = 0;
 
-    // release reference to the document so that aDocShellRef will delete
-    // it (if aDocShellRef is set). Otherwise, the OLE nodes keep references
-    // to their sub-storage when the storage is already dead.
+    
+    
+    
     delete pClpDocFac;
 
-    // first close, then the Ref. can be cleared as well, so that
-    // the DocShell really gets deleted!
+    
+    
     if( aDocShellRef.Is() )
     {
         SfxObjectShell * pObj = aDocShellRef;
@@ -296,7 +296,7 @@ void SwTransferable::ObjectReleased()
 
 void SwTransferable::AddSupportedFormats()
 {
-    // only need if we are the current XSelection Object
+    
     SwModule *pMod = SW_MOD();
     if( this == pMod->pXSelection )
     {
@@ -306,8 +306,8 @@ void SwTransferable::AddSupportedFormats()
 
 void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
 {
-    //set OleVisArea. Upper left corner of the page and size of
-    //RealSize in Twips.
+    
+    
     const Size aSz( OLESIZE );
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
@@ -354,11 +354,11 @@ void SwTransferable::RemoveDDELinkFormat( const Window& rWin )
 
 namespace
 {
-    //Resolves: fdo#40717 surely when we create a clipboard document we should
-    //overwrite the clipboard documents styles and settings with that of the
-    //source, so that we can WYSIWYG paste. If we want that the destinations
-    //styles are used over the source styles, that's a matter of the
-    //destination paste code to handle, not the source paste code.
+    
+    
+    
+    
+    
     void lclOverWriteDoc(SwWrtShell &rSrcWrtShell, SwDoc &rDest)
     {
         const SwDoc &rSrc = *rSrcWrtShell.GetDoc();
@@ -366,8 +366,8 @@ namespace
         rDest.ReplaceCompatabilityOptions(rSrc);
         rDest.ReplaceDefaults(rSrc);
 
-        //It would probably make most sense here to only insert the styles used
-        //by the selection, e.g. apply SwDoc::IsUsed on styles ?
+        
+        
         rDest.ReplaceStyles(rSrc, false);
 
         rSrcWrtShell.Copy(&rDest);
@@ -396,10 +396,10 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
-    // we can only fullfil the request if
-    // 1) we have data for this format
-    // 2) we have either a clipboard document (pClpDocFac), or
-    //    we have a SwWrtShell (so we can generate a new clipboard document)
+    
+    
+    
+    
     if( !HasFormat( nFormat ) || ( pClpDocFac == NULL && pWrtShell == NULL ) )
         return sal_False;
 
@@ -407,12 +407,12 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
     {
         SelectionType nSelectionType = pWrtShell->GetSelectionType();
 
-        // when pending we will not get the correct type, but nsSelectionType::SEL_TXT
-        // as fallback. This *happens* durning D&D, so we need to check if we are in
-        // the fallback and just try to get a graphic
+        
+        
+        
         const bool bPending(pWrtShell->BasicActionPend());
 
-        // SEL_GRF kommt vom ContentType der editsh
+        
         if(bPending || ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_DRW_FORM) & nSelectionType))
         {
             pClpGraphic = new Graphic;
@@ -422,7 +422,7 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
             if( !pWrtShell->GetDrawObjGraphic( FORMAT_BITMAP, *pClpBitmap ))
                 pOrigGrf = pClpBitmap;
 
-            // is it an URL-Button ?
+            
             OUString sURL;
             OUString sDesc;
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
@@ -435,10 +435,10 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
         pClpDocFac = new SwDocFac;
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->LockExpFlds();     // never update fields - leave text as it is
+        pTmpDoc->LockExpFlds();     
         lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
-        // in CORE a new one was created (OLE-Objekte copied!)
+        
         aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
@@ -480,9 +480,9 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
     sal_Bool    bOK = sal_False;
     if( TRNSFR_OLE == eBufferType )
     {
-        //TODO/MBA: testing - is this the "single OLE object" case?!
-        // get OLE-Object from ClipDoc and get the data from that.
-        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT; // will be set in the next statement
+        
+        
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT; 
         uno::Reference < embed::XEmbeddedObject > xObj = FindOLEObj( nAspect );
         const Graphic* pOLEGraph = FindOLEReplacementGraphic();
         if( xObj.is() )
@@ -493,8 +493,8 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
                 bOK = SetAny( aAny, rFlavor );
         }
 
-        // the following solution will be used in the case when the object can not generate the image
-        // TODO/LATER: in future the transferhelper must probably be created based on object and the replacement stream
+        
+        
         if ( nFormat == SOT_FORMAT_GDIMETAFILE )
         {
             pOLEGraph = FindOLEReplacementGraphic();
@@ -556,7 +556,7 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
             break;
         case SOT_FORMAT_BITMAP:
         case SOT_FORMATSTR_ID_PNG:
-            // Neither pClpBitmap nor pClpGraphic are necessarily set
+            
             if( (eBufferType & TRNSFR_GRAPHIC) && (pClpBitmap != 0 || pClpGraphic != 0))
                 bOK = SetBitmapEx( (pClpBitmap ? pClpBitmap : pClpGraphic)->GetBitmapEx(), rFlavor );
             break;
@@ -610,16 +610,16 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     {
     case SWTRANSFER_OBJECTTYPE_DRAWMODEL:
         {
-            // don't change the sequence of commands
+            
             SdrModel *pModel = (SdrModel*)pObject;
             xStream->SetBufferSize( 16348 );
 
-            // for the changed pool defaults from drawing layer pool set those
-            // attributes as hard attributes to preserve them for saving
+            
+            
             const SfxItemPool& rItemPool = pModel->GetItemPool();
             const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
 
-            // SW should have no MasterPages
+            
             OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
             for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
@@ -659,9 +659,9 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 uno::Reference< embed::XStorage > xWorkStore =
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-                // write document storage
+                
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
-                // mba: no BaseURL for clipboard
+                
                 SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, sal_False );
                 pEmbObj->DoSaveCompleted();
@@ -721,7 +721,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             aAOpt.SetCharSet( RTL_TEXTENCODING_UTF8 );
             xWrt->SetAsciiOptions( aAOpt );
 
-            // no start char for clipboard
+            
             xWrt->bUCS2_WithStartChar = sal_False;
         }
         break;
@@ -744,7 +744,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         SwWriter aWrt( *xStream, *pDoc );
         if( !IsError( aWrt.Write( xWrt )) )
         {
-            xStream->WriteChar( '\0' );               // terminate with a zero
+            xStream->WriteChar( '\0' );               
             xStream->Commit();
             bRet = sal_True;
         }
@@ -765,7 +765,7 @@ void SwTransferable::DeleteSelection()
 {
     if(!pWrtShell)
         return;
-    // ask for type of selection before action-bracketing
+    
     const int nSelection = pWrtShell->GetSelectionType();
     pWrtShell->StartUndo( UNDO_DELETE );
     if( ( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL ) & nSelection )
@@ -821,17 +821,17 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
 
-        // --> OD #i98753#
-        // set size of embedded object at the object description structure
+        
+        
         aObjDesc.maSize = OutputDevice::LogicToLogic( pWrtShell->GetObjSize(), MAP_TWIP, MAP_100TH_MM );
-        // <--
+        
         PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
     }
-    // Is there anything to provide anyway?
+    
     else if ( pWrtShell->IsSelection() || pWrtShell->IsFrmSelected() ||
               pWrtShell->IsObjSelected() )
     {
@@ -841,22 +841,22 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 
         pClpDocFac = new SwDocFac;
 
-        // create additional cursor so that equal treatment of keyboard
-        // and mouse selection is possible.
-        // In AddMode with keyboard selection, the new cursor is not created
-        // before the cursor is moved after end of selection.
+        
+        
+        
+        
         if( pWrtShell->IsAddMode() && pWrtShell->SwCrsrShell::HasSelection() )
             pWrtShell->CreateCrsr();
 
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->LockExpFlds();     // Never update fields - leave text as is
+        pTmpDoc->LockExpFlds();     
         lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
         {
             IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
             ::std::vector< ::sw::mark::IMark* > vDdeMarks;
-            // find all DDE-Bookmarks
+            
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
@@ -864,14 +864,14 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
                 if(IDocumentMarkAccess::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
                     vDdeMarks.push_back(ppMark->get());
             }
-            // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
+            
             for(::std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
                 ppMark != vDdeMarks.end();
                 ++ppMark)
                 pMarkAccess->deleteMark(*ppMark);
         }
 
-        // a new one was created in CORE (OLE objects copied!)
+        
         aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
@@ -893,10 +893,10 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             bDDELink = pWrtShell->HasWholeTabSelection();
         }
 
-        //When someone needs it, we 'OLE' him something
+        
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
 
-        //put RTF ahead of  the OLE's Metafile to have less loss
+        
         if( !pWrtShell->IsObjSelected() )
         {
             AddFormat( FORMAT_RTF );
@@ -923,7 +923,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             if( !pWrtShell->GetDrawObjGraphic( FORMAT_BITMAP, *pClpBitmap ))
                 pOrigGrf = pClpBitmap;
 
-            // is it an URL-Button ?
+            
             OUString sURL;
             OUString sDesc;
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
@@ -939,7 +939,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             }
         }
 
-        // at Cut, DDE-Link doesn't make sense!!
+        
         SwDocShell* pDShell;
         if( !bIsCut && bDDELink &&
             0 != ( pDShell = pWrtShell->GetDoc()->GetDocShell()) &&
@@ -949,9 +949,9 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             refDdeLink = new SwTrnsfrDdeLink( *this, *pWrtShell );
         }
 
-        //ObjectDescriptor was already filly from the old DocShell.
-        //Now adjust it. Thus in GetData the first query can still
-        //be answered with delayed rendering.
+        
+        
+        
         aObjDesc.mbCanLink = sal_False;
         Size aSz( OLESIZE );
         aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
@@ -1025,14 +1025,14 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
 
     SwNodes& rNds = pCDoc->GetNodes();
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
-    SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to 1st ContentNode
+    SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); 
     SwPaM aPam( *pCNd );
 
-    pCDoc->LockExpFlds();   // never update fields - leave text as it is
+    pCDoc->LockExpFlds();   
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
 
-    // a new one was created in CORE (OLE-Objects copied!)
+    
     aDocShellRef = pCDoc->GetTmpDocShell();
     if( aDocShellRef.Is() )
         SwTransferable::InitOle( aDocShellRef, *pCDoc );
@@ -1040,15 +1040,15 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
 
     eBufferType = TRNSFR_DOCUMENT;
 
-    //When someone needs it, we 'OLE' her something.
+    
     AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
     AddFormat( FORMAT_RTF );
     AddFormat( SOT_FORMATSTR_ID_HTML );
     AddFormat( FORMAT_STRING );
 
-    //ObjectDescriptor was already filled from the old DocShell.
-    //Now adjust it. Thus in GetData the first query can still
-    //be answered with delayed rendering.
+    
+    
+    
     aObjDesc.mbCanLink = sal_False;
     Size aSz( OLESIZE );
     aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
@@ -1069,16 +1069,16 @@ static inline uno::Reference < XTransferable > * lcl_getTransferPointer ( uno::R
 sal_Bool SwTransferable::IsPaste( const SwWrtShell& rSh,
                               const TransferableDataHelper& rData )
 {
-    // Check the common case first: We can always paste our own data!
-    // If _only_ the internal format can be pasted, this check will
-    // yield 'true', while the one below would give a (wrong) result 'false'.
+    
+    
+    
 
     bool bIsPaste = ( GetSwTransferable( rData ) != NULL );
 
-    // if it's not our own data, we need to have a closer look:
+    
     if( ! bIsPaste )
     {
-        // determine the proper paste action, and return true if we find one
+        
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
 
         sal_uInt16 nDestination = SwTransferable::GetSotDestination( rSh );
@@ -1090,8 +1090,8 @@ sal_Bool SwTransferable::IsPaste( const SwWrtShell& rSh,
                                     ? EXCHG_IN_ACTION_COPY
                      : EXCHG_IN_ACTION_MOVE);
 
-        sal_uLong nFormat;          // output param for GetExchangeAction
-        sal_uInt16 nEventAction;    // output param for GetExchangeAction
+        sal_uLong nFormat;          
+        sal_uInt16 nEventAction;    
         sal_uInt16 nAction = SotExchange::GetExchangeAction(
                                 rData.GetDataFlavorExVector(),
                                 nDestination,
@@ -1100,7 +1100,7 @@ sal_Bool SwTransferable::IsPaste( const SwWrtShell& rSh,
                                 nFormat, nEventAction, 0,
                                 lcl_getTransferPointer ( xTransferable ) );
 
-        // if we find a suitable action, we can paste!
+        
         bIsPaste = (EXCHG_INOUT_ACTION_NONE != nAction);
     }
 
@@ -1136,7 +1136,7 @@ bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
                                     lcl_getTransferPointer ( xTransferable ) );
     }
 
-    // special case for tables from draw application
+    
     if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == (nAction & EXCHG_ACTION_MASK) )
     {
         if( rData.HasFormat( SOT_FORMAT_RTF ) )
@@ -1167,7 +1167,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
     if( pPt )
     {
-        // external Drop
+        
         if( bPasteSelection ? !pMod->pXSelection : !pMod->pDragDrop )
         {
             switch( nDestination )
@@ -1180,7 +1180,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case EXCHG_DEST_DOC_DRAWOBJ:
             case EXCHG_DEST_DOC_URLBUTTON:
             case EXCHG_DEST_DOC_GROUPOBJ:
-                // select frames/objects
+                
                 SwTransferable::SetSelInShell( rSh, sal_True, pPt );
                 break;
 
@@ -1193,13 +1193,13 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     else if( ( !GetSwTransferable( rData ) || bIsPasteFmt ) &&
             !rSh.IsTableMode() && rSh.HasSelection() )
     {
-        // then delete the selections
+        
 
-        //don't delete selected content
-        // - at table-selection
-        // - at ReRead of a graphic/DDEData
-        // - at D&D, for the right selection was taken care of
-        //      in Drop-Handler
+        
+        
+        
+        
+        
         sal_Bool bDelSel = sal_False;
         switch( nDestination )
         {
@@ -1212,28 +1212,28 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         }
 
         if( bDelSel )
-            // #i34830#
+            
             pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, NULL,
                                                      sal_True ));
     }
 
     SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
 
-    // check for private drop
+    
     bool bPrivateDrop(pPt && (bPasteSelection ? 0 != (pTrans = pMod->pXSelection) : 0 != (pTrans = pMod->pDragDrop)));
     bool bNeedToSelectBeforePaste(false);
 
     if(bPrivateDrop && DND_ACTION_LINK == nDropAction)
     {
-        // internal drop on object, suppress bPrivateDrop to change internal fill
+        
         bPrivateDrop = false;
         bNeedToSelectBeforePaste = true;
     }
 
     if(bPrivateDrop && pPt && DND_ACTION_MOVE == nDropAction)
     {
-        // check if dragged over a useful target. If yes, use as content exchange
-        // drop as if from external
+        
+        
         const SwFrmFmt* pSwFrmFmt = rSh.GetFmtFromObj(*pPt);
 
         if(pSwFrmFmt && 0 != dynamic_cast< const SwDrawFrmFmt* >(pSwFrmFmt))
@@ -1245,14 +1245,14 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
     if(bPrivateDrop)
     {
-        // then internal Drag & Drop or XSelection
+        
         nRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
                                     bPasteSelection );
     }
     else if( !pPt && pTunneledTrans &&
             EXCHG_OUT_ACTION_INSERT_PRIVATE == nAction )
     {
-        // then internal paste
+        
         nRet = pTunneledTrans->PrivatePaste( rSh );
     }
     else if( EXCHG_INOUT_ACTION_NONE != nAction )
@@ -1262,12 +1262,12 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD));
         }
 
-        // in Drag&Drop MessageBoxes must not be showed
+        
         sal_Bool bMsg = 0 == pPt;
         sal_uInt8 nActionFlags = static_cast< sal_uInt8 >(( nAction >> 8 ) & 0xFF);
 
         sal_uInt16 nClearedAction = ( nAction & EXCHG_ACTION_MASK );
-        // delete selections
+        
 
         switch( nClearedAction )
         {
@@ -1288,7 +1288,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_IMAGEMAP:
         case EXCHG_OUT_ACTION_REPLACE_IMAGEMAP:
 
-            // then we have to use the format
+            
             switch( nFormat )
             {
             case SOT_FORMATSTR_ID_DRAWING:
@@ -1356,7 +1356,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                 break;
 
             case SOT_FORMAT_FILE_LIST:
-                // then insert as graphics only
+                
                 nRet = SwTransferable::_PasteFileList( rData, rSh,
                                     EXCHG_IN_ACTION_LINK == nClearedAction,
                                     pPt, bMsg );
@@ -1518,7 +1518,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     if( !bPasteSelection && rSh.IsFrmSelected() )
     {
         rSh.EnterSelFrmMode();
-        //force ::SelectShell
+        
         rSh.GetView().StopShellTimer();
     }
 
@@ -1586,7 +1586,7 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
     case OBJCNT_URLBUTTON:  nRet = EXCHG_DEST_DOC_URLBUTTON;    break;
     case OBJCNT_GROUPOBJ:   nRet = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
-    // what do we do at multiple selections???
+    
     default:
         {
             if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
@@ -1633,7 +1633,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                 break;
             }
         }
-        // no break - because then test if we get a stream
+        
 
     default:
         if( rData.GetSotStorageStream( nFmt, xStrm ) )
@@ -1684,7 +1684,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     else
         nResId = MSG_CLPBRD_FORMAT_ERROR;
 
-    // Exist a SvMemoryStream? (data in the OUString and xStrm is empty)
+    
     if( pStream && !xStrm.Is() )
         delete pStream;
 
@@ -1704,7 +1704,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     uno::Reference < embed::XStorage > xStore;
     Reader* pRead = 0;
 
-    // Get the preferred format
+    
     SotFormatStringId nId;
     if( rData.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) )
         nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ;
@@ -1716,8 +1716,8 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     if( nId && rData.GetInputStream( nId, xStrm ) && xStrm.is() )
     {
-        // if there is an embedded object, first try if it's a writer object
-        // this will be inserted into the document by using a Reader
+        
+        
         try
         {
             xStore = comphelper::OStorageHelper::GetStorageFromInputStream( xStrm );
@@ -1747,7 +1747,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         }
         catch (const uno::Exception&)
         {
-            // it wasn't a storage, but maybe it's a useful stream
+            
         }
 
         nFmt = nId;
@@ -1764,7 +1764,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     }
     else
     {
-        // temporary storage until the object is inserted
+        
         uno::Reference< embed::XStorage > xTmpStor;
         uno::Reference < embed::XEmbeddedObject > xObj;
         OUString aName;
@@ -1786,7 +1786,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
                 if ( !xStrm.is() )
                 {
-                    // This is MSOLE object that should be created by direct using of system clipboard
+                    
                     try
                     {
                         xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
@@ -1798,8 +1798,8 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                                                             OUString( "DummyName" ),
                                                             uno::Sequence< beans::PropertyValue >() );
 
-                        // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
-                        // for example whether the object should be an iconified one
+                        
+                        
                         xObj = aInfo.Object;
                     }
                     catch (const uno::Exception&)
@@ -1816,11 +1816,11 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             svt::EmbeddedObjectRef xObjRef( xObj, aObjDesc.mnViewAspect );
 
-            // try to get the replacement image from the clipboard
+            
             Graphic aGraphic;
             sal_uLong nGrFormat = 0;
 
-            // insert replacement image ( if there is one ) into the object helper
+            
             if ( nGrFormat )
             {
                 DataFlavor aDataFlavor;
@@ -1829,9 +1829,9 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             else if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
             {
-                // it is important to have an icon, let an empty graphic be used
-                // if no other graphic is provided
-                // TODO/LATER: in future a default bitmap could be used
+                
+                
+                
                 OUString aMimeType;
                 MapMode aMapMode( MAP_100TH_MM );
                 aGraphic.SetPrefSize( Size( 2500, 2500 ) );
@@ -1839,8 +1839,8 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                    xObjRef.SetGraphic( aGraphic, aMimeType );
             }
 
-            //set size. This is a hack because of handing over, size should be
-            //passed to the InsertOle!!!!!!!!!!
+            
+            
             Size aSize;
             if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
             {
@@ -1854,7 +1854,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             else if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
             {
-                aSize = Size( aObjDesc.maSize );    //always 100TH_MM
+                aSize = Size( aObjDesc.maSize );    
                 MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
                 aSize = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
                 awt::Size aSz;
@@ -1864,7 +1864,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 }
                 catch (const embed::NoVisualAreaSizeException&)
                 {
-                    // in this case the provided size is used
+                    
                 }
 
                 if ( aSz.Width != aSize.Width() || aSz.Height != aSize.Height() )
@@ -1876,9 +1876,9 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             else
             {
-                // the descriptor contains the wrong object size
-                // the following call will let the MSOLE objects cache the size if it is possible
-                // it should be done while the object is running
+                
+                
+                
                 try
                 {
                     xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
@@ -1887,7 +1887,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 {
                 }
             }
-            //End of Hack!
+            
 
             rSh.InsertOleObject( xObjRef );
             nRet = true;
@@ -1896,7 +1896,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
                 SwTransferable::_PasteTargetURL( rData, rSh, 0, 0, sal_False );
 
-            // let the object be unloaded if possible
+            
             SwOLEObj::UnloadObject( xObj, rSh.GetDoc(), embed::Aspects::MSOLE_CONTENT );
         }
     }
@@ -1919,14 +1919,14 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             OUString sURL( aINetImg.GetImageURL() );
             SwTransferable::_CheckForURLOrLNKFile( rData, sURL );
 
-            //!!! check at FileSystem - only then it make sense to test graphics !!!
+            
             Graphic aGraphic;
             GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
             nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyOUStr, aGraphic, &rFlt );
 
             if( nRet )
             {
-                //Check and Perform rotation if needed
+                
                 lclCheckAndPerformRotation(aGraphic);
 
                 switch( nAction )
@@ -1990,7 +1990,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, sal_Bool bSelectFrm,
 {
     if( bSelectFrm )
     {
-        // select frames/objects
+        
         if( pPt && !rSh.GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
         {
             rSh.GetView().NoRotate();
@@ -2024,7 +2024,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                                 SwWrtShell& rWrtShell, sal_Bool bReReadGrf,
                                 sal_Bool bMsg )
 {
-    // data from Clipboardformat
+    
     OUString aApp, aTopic, aItem;
 
     {
@@ -2033,7 +2033,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         {
             OSL_ENSURE( !&rWrtShell, "DDE Data not found." );
             return false;
-        }   // report useful error!!
+        }   
 
         rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
         aApp = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
@@ -2044,7 +2044,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     OUString aCmd;
     sfx2::MakeLnkName( aCmd, &aApp, aTopic, aItem );
 
-    // do we want to read in a graphic now?
+    
     sal_uLong nFormat;
     if( !rData.HasFormat( FORMAT_RTF ) &&
         !rData.HasFormat( SOT_FORMATSTR_ID_HTML ) &&
@@ -2114,9 +2114,9 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     OUString aExpand;
     if( rData.GetString( FORMAT_STRING, aExpand ))
     {
-        do {            // middle checked loop
+        do {            
 
-            // When data comes from a spreadsheet, we add a DDE-table
+            
             if( ( rData.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
                   rData.HasFormat( SOT_FORMATSTR_ID_SYLK_BIGCAPS ) ) &&
                 !aExpand.isEmpty() &&
@@ -2130,7 +2130,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 sTmp = sTmp.getToken( 0, '\n' );
                 sal_Int32 nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
-                // at least one column & row must be there
+                
                 if( !nRows || !nCols )
                 {
                     if( bMsg )
@@ -2140,12 +2140,12 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 }
 
                 rWrtShell.InsertDDETable(
-                    SwInsertTableOptions( tabopts::SPLIT_LAYOUT, 1 ), // TODO MULTIHEADER
+                    SwInsertTableOptions( tabopts::SPLIT_LAYOUT, 1 ), 
                     pDDETyp, nRows, nCols );
             }
             else if( 1 < comphelper::string::getTokenCount(aExpand, '\n') )
             {
-                // multiple paragraphs -> insert a protected section
+                
                 if( rWrtShell.HasSelection() )
                     rWrtShell.DelRight();
 
@@ -2154,11 +2154,11 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 aSect.SetProtectFlag(true);
                 rWrtShell.InsertSection( aSect );
 
-                pDDETyp = 0;                // remove FieldTypes again
+                pDDETyp = 0;                
             }
             else
             {
-                // Einfuegen
+                
                 SwDDEField aSwDDEField( pDDETyp );
                 rWrtShell.Insert( aSwDDEField );
             }
@@ -2166,11 +2166,11 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         } while( false );
     }
     else
-        pDDETyp = 0;                        // remove FieldTypes again
+        pDDETyp = 0;                        
 
     if( !pDDETyp && !bDoublePaste )
     {
-        // remove FieldType again - error occurred!
+        
         for( j = nSize; j >= INIT_FLDTYPES; --j )
             if( pTyp == rWrtShell.GetFldType( j ) )
             {
@@ -2194,8 +2194,8 @@ bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
         if(bNeedToSelectBeforePaste && pPt)
         {
-            // if this is an internal drag, need to set the target right (select it), else
-            // still the source will be selected
+            
+            
             SwTransferable::SetSelInShell( rSh, sal_True, pPt );
         }
 
@@ -2276,17 +2276,17 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     if( bCheckForGrf )
     {
-        //!!! check at FileSystem - only then it makes sense to test the graphics !!!
+        
         GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
         nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
                                             aGraphic, &rFlt );
 
         if( !nRet && SW_PASTESDR_SETATTR == nAction &&
             SOT_FORMAT_FILE == nFmt &&
-            // only at frame selection
+            
             rSh.IsFrmSelected() )
         {
-            // then set as hyperlink after the graphic
+            
             nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
             nRet = true;
         }
@@ -2294,21 +2294,21 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     if(pPt && bNeedToSelectBeforePaste)
     {
-        // when using internal D&Ds, still the source object is selected and
-        // this is necessary to get the correct source data which is also
-        // dependent from selection. After receiving the drag data it is
-        // now tiime to select the correct target object
+        
+        
+        
+        
         SwTransferable::SetSelInShell( rSh, sal_True, pPt );
     }
 
     if( nRet )
     {
-        //Check and Perform rotation if needed
+        
         lclCheckAndPerformRotation(aGraphic);
 
         OUString sURL;
         if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
-            // #i123922# if link action is noted, also take URL
+            
             || DND_ACTION_LINK == nDropAction)
         {
             sURL = aBkmk.GetURL();
@@ -2327,19 +2327,19 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             {
                 if( rSh.IsObjSelected() )
                 {
-                    // #i123922# for D&D on draw objects, do for now the same for
-                    // SW_PASTESDR_REPLACE (D&D) as for SW_PASTESDR_SETATTR (D&D and
-                    // CTRL+SHIFT). The code below replaces the draw object with
-                    // a writer graphic; maybe this is an option later again if wanted
+                    
+                    
+                    
+                    
                     rSh.Paste( aGraphic, sURL );
 
-                    // rSh.ReplaceSdrObj( sURL, aEmptyOUStr, &aGraphic );
-                    // Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
-                    // SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
+                    
+                    
+                    
                 }
                 else
                 {
-                    // set graphic at writer graphic without link
+                    
                     rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
                 }
 
@@ -2362,12 +2362,12 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 }
                 else if( rSh.IsObjSelected() )
                 {
-                    // set as attribute at DrawObject
+                    
                     rSh.Paste( aGraphic, sURL );
                 }
                 else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
                 {
-                    // set as linked graphic at writer graphic frame
+                    
                     rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
                 }
                 else
@@ -2399,14 +2399,14 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     }
     else if( bCheckForImageMap )
     {
-        // or should the file be an ImageMap-File?
+        
         ImageMap aMap;
         SfxMedium aMed( INetURLObject(aBkmk.GetURL()).GetFull(),
                             STREAM_STD_READ );
         SvStream* pStream = aMed.GetInStream();
         if( pStream != NULL  &&
             !pStream->GetError()  &&
-            // mba: no BaseURL for clipboard functionality
+            
             aMap.Read( *pStream, IMAP_FORMAT_DETECT, OUString() ) == IMAP_ERR_OK &&
             aMap.GetIMapObjectCount() )
         {
@@ -2434,7 +2434,7 @@ bool SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
         SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
         const ImageMap* pOld = aURL.GetMap();
 
-        // set or replace, that is the question
+        
         ImageMap aImageMap;
         if( rData.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) &&
             ( !pOld || aImageMap != *pOld ))
@@ -2458,7 +2458,7 @@ bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
         OUString sDesc;
         SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
-        // first, make the URL absolute
+        
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( sFile );
@@ -2524,14 +2524,14 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
             {
                 sal_Bool bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
-                //Own FileFormat? --> insert, not for StarWriter/Web
+                
                 OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link(), false );
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
                         ? 0 : SwIoSystem::GetFileFilter(
                         sFileURL, aEmptyOUStr );
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 {
-                // and then pull up the insert-region-dialog by PostUser event
+                
                     SwSectionData * pSect = new SwSectionData(
                                     FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
@@ -2545,9 +2545,9 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 else if( SW_PASTESDR_SETATTR == nAction ||
                         ( bIsURLFile && SW_PASTESDR_INSERT == nAction ))
                 {
-                    //we can insert foreign files as links after all
+                    
 
-                    // first, make the URL absolute
+                    
                     INetURLObject aURL;
                     aURL.SetSmartProtocol( INET_PROT_FILE );
                     aURL.SetSmartURL( sFile );
@@ -2649,7 +2649,7 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             }
 
             SwView& rView = rSh.GetView();
-            //force ::SelectShell
+            
             rView.StopShellTimer();
 
             SfxStringItem aDataDesc( nWh, sTxt );
@@ -2698,7 +2698,7 @@ bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
     {
         sal_uInt16 nAct = bLink ? SW_PASTESDR_SETATTR : SW_PASTESDR_INSERT;
         OUString sFlyNm;
-        // iterate over the filelist
+        
         for( sal_uLong n = 0, nEnd = aFileList.Count(); n < nEnd; ++n )
         {
             TransferDataContainer* pHlp = new TransferDataContainer;
@@ -2756,7 +2756,7 @@ sal_Bool SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
 sal_Bool SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
                                      const TransferableDataHelper& rData )
 {
-    // we can paste-special if there's an entry in the paste-special-format list
+    
     SvxClipboardFmtItem aClipboardFmtItem(0);
     FillClipFmtItem( rWrtShell, rData, aClipboardFmtItem);
     return aClipboardFmtItem.Count() > 0;
@@ -2844,7 +2844,7 @@ static sal_uInt16 aPasteSpecialIds[] =
 
 bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
 {
-    // Plain text == unformatted
+    
     return SwTransferable::PasteFormat( rSh, rData, SOT_FORMAT_STRING );
 }
 
@@ -2877,8 +2877,8 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
         {
             if( STR_PRIVATEOLE == nResId || STR_PRIVATEGRAPHIC == nResId )
             {
-                // add SOT_FORMATSTR_ID_EMBED_SOURCE to the formats. This
-                // format display then the private format name.
+                
+                
                 DataFlavorEx aFlavorEx;
                 aFlavorEx.mnSotId = SOT_FORMATSTR_ID_EMBED_SOURCE;
                 aFormats.insert( aFormats.begin(), aFlavorEx );
@@ -2998,7 +2998,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
     }
-    //Is there anything to provide anyway?
+    
     else if ( pWrtShell->IsSelection() || pWrtShell->IsFrmSelected() ||
               pWrtShell->IsObjSelected() )
     {
@@ -3018,7 +3018,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
 
-        //put RTF ahead of the OLE's Metafile for less loss
+        
         if( !pWrtShell->IsObjSelected() )
         {
             AddFormat( FORMAT_RTF );
@@ -3045,7 +3045,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             if( !pWrtShell->GetDrawObjGraphic( FORMAT_BITMAP, *pClpBitmap ))
                 pOrigGrf = pClpBitmap;
 
-            // is it an URL-Button ?
+            
             OUString sURL;
             OUString sDesc;
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
@@ -3060,9 +3060,9 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             }
         }
 
-        //ObjectDescriptor was already filled from the old DocShell.
-        //Now adjust it. Thus in GetData the first query can still
-        //be answered with delayed rendering.
+        
+        
+        
         aObjDesc.mbCanLink = sal_False;
         aObjDesc.maDragStartPos = rSttPos;
         aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
@@ -3072,7 +3072,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     }
     else if( nSelection & nsSelectionType::SEL_TXT && !pWrtShell->HasMark() )
     {
-        // is only one field - selected?
+        
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
         Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
 
@@ -3134,13 +3134,13 @@ void SwTransferable::StartDrag( Window* pWin, const Point& rPos )
 
 void SwTransferable::DragFinished( sal_Int8 nAction )
 {
-    //And the last finishing work so that all statuses are right
+    
     if( DND_ACTION_MOVE == nAction  )
     {
         if( bCleanUp )
         {
-            //It was dropped outside of Writer. We still have to
-            //delete.
+            
+            
 
             pWrtShell->StartAllAction();
             pWrtShell->StartUndo( UNDO_UI_DRAG_AND_MOVE );
@@ -3149,7 +3149,7 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
             else
             {
                 if ( !(pWrtShell->IsSelFrmMode() || pWrtShell->IsObjSelected()) )
-                    //SmartCut, take one of the blanks along
+                    
                     pWrtShell->IntelligentCut( pWrtShell->GetSelectionType(), sal_True );
                 pWrtShell->DelRight();
             }
@@ -3178,11 +3178,11 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
 
 bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 {
-    // first, ask for the SelectionType, then action-bracketing !!!!
-    // (otherwise it's not pasted into a TableSelection!!!)
+    
+    
     OSL_ENSURE( !rShell.ActionPend(), "Paste must never have an ActionPend" );
     if ( !pClpDocFac )
-        return false; // the return value of the SwFEShell::Paste also is sal_Bool!
+        return false; 
 
     const int nSelection = rShell.GetSelectionType();
 
@@ -3192,19 +3192,19 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     bool bKillPaMs = false;
 
-    //Delete selected content, not at table-selection and table in Clipboard
+    
     if( rShell.HasSelection() && !( nSelection & nsSelectionType::SEL_TBL_CELLS))
     {
         bKillPaMs = true;
         rShell.SetRetainSelection( true );
         rShell.DelRight();
-        // when a Fly was selected, a valid cursor position has to be found now
-        // (parked Cursor!)
+        
+        
         if( ( nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF |
             nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW |
             nsSelectionType::SEL_DRW_FORM ) & nSelection )
         {
-            // position the cursor again
+            
             Point aPt( rShell.GetCharRect().Pos() );
             rShell.SwCrsrShell::SetCrsr( aPt, sal_True );
         }
@@ -3215,9 +3215,9 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
          bSmart = 0 != (TRNSFR_DOCUMENT_WORD & eBufferType);
     if( bSmart )
     {
-            // Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have a word
-            // in the buffer, word in this context means 'something with spaces at beginning
-            // and end'. In this case we definitely want these spaces to be inserted here.
+            
+            
+            
             bInWrd = rShell.IsInWrd();
             bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;
@@ -3234,7 +3234,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
     if( bKillPaMs )
         rShell.KillPams();
 
-    // If Smart Paste then insert blank
+    
     if( nRet && bSmart && ((bInWrd && !bEndWrd )|| bSttWrd) )
         rShell.SwEditShell::Insert(' ');
 
@@ -3264,7 +3264,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             if( (TRNSFR_INETFLD & eBufferType) && pBkmk )
                 aTmp = *pBkmk;
 
-            // select target graphic
+            
             if( rSh.SelectObj( rDragPt ) )
             {
                 rSh.HideCrsr();
@@ -3274,7 +3274,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
             const int nSelection = rSh.GetSelectionType();
 
-            // not yet consider Draw objects
+            
             if( nsSelectionType::SEL_GRF & nSelection )
             {
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -3299,7 +3299,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     if( &rSh != &rSrcSh && (nsSelectionType::SEL_GRF & rSh.GetSelectionType()) &&
         TRNSFR_GRAPHIC == eBufferType )
     {
-        // ReRead the graphic
+        
         OUString sGrfNm;
         OUString sFltNm;
         rSrcSh.GetGrfNms( &sGrfNm, &sFltNm );
@@ -3307,7 +3307,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         return true;
     }
 
-    //not in selections or selected frames
+    
     if( rSh.ChgCurrPam( rDragPt ) ||
         ( rSh.IsSelFrmMode() && rSh.IsInsideSelectedObj( rDragPt )) )
         return false;
@@ -3316,7 +3316,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         bTblSel = sal_True;
     else if( rSrcSh.IsSelFrmMode() || rSrcSh.IsObjSelected() )
     {
-        // don't move position-protected objects!
+        
         if( bMove && rSrcSh.IsSelObjProtected( FLYPROTECT_POS ) )
             return false;
 
@@ -3348,10 +3348,10 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     {
         if( !rSh.IsAddMode() )
         {
-            // #i87233#
+            
             if ( rSh.IsBlockMode() )
             {
-                // preserve order of cursors for block mode
+                
                 rSh.GoPrevCrsr();
             }
 
@@ -3370,7 +3370,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     Point aSttPt( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY() );
 
-    // at first, select INetFelder!
+    
     if( TRNSFR_INETFLD == eBufferType )
     {
         if( &rSrcSh == &rSh )
@@ -3380,7 +3380,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSh.SelectTxtAttr( RES_TXTATR_INETFMT );
             if( rSh.ChgCurrPam( rDragPt ) )
             {
-                // don't copy/move inside of yourself
+                
                 rSh.DestroyCrsr();
                 rSh.EndUndo();
                 rSh.EndAction();
@@ -3395,15 +3395,15 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSrcSh.SelectTxtAttr( RES_TXTATR_INETFMT );
         }
 
-        // is there an URL attribute at the insert point? Then replace that,
-        // so simply put up a selection?
+        
+        
         rSh.DelINetAttrWithText();
         bDDINetAttr = true;
     }
 
     if ( rSrcSh.IsSelFrmMode() )
     {
-        //Hack: fool the special treatment
+        
         aSttPt -= aSttPt - rSrcSh.GetObjRect().Pos();
     }
 
@@ -3422,7 +3422,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             }
             else
             {
-                //SmartCut, take one of the blanks along.
+                
                 rSh.SwCrsrShell::DestroyCrsr();
                 if ( cWord == SwWrtShell::WORD_SPACE_BEFORE )
                     rSh.ExtendSelection( sal_False );
@@ -3479,7 +3479,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.SwCrsrShell::CreateCrsr();
             else
             {
-                // turn on selection mode
+                
                 rSh.SttSelect();
                 rSh.EndSelect();
             }
@@ -3493,7 +3493,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         rSrcSh.EndUndo();
     rSh.EndUndo();
 
-        // put the shell in the right state
+        
     if( &rSrcSh != &rSh && ( rSh.IsFrmSelected() || rSh.IsObjSelected() ))
         rSh.EnterSelFrmMode();
 
@@ -3502,7 +3502,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     return true;
 }
 
-// Interfaces for Selection
+
 void SwTransferable::CreateSelection( SwWrtShell& rSh,
                                       const SwViewShell * _pCreatorView )
 {
@@ -3571,7 +3571,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     : rTrnsfr( rTrans ), pDocShell( 0 ),
     bDelBookmrk( sal_False ), bInDisconnect( sal_False )
 {
-    // we only end up here with table- or text selection
+    
     if( nsSelectionType::SEL_TBL_CELLS & rSh.GetSelectionType() )
     {
         SwFrmFmt* pFmt = rSh.GetTableFmt();
@@ -3580,7 +3580,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     }
     else
     {
-        // creating a temp. bookmark without undo
+        
         sal_Bool bUndo = rSh.DoesUndo();
         rSh.DoUndo( sal_False );
         sal_Bool bIsModified = rSh.IsModified();
@@ -3605,7 +3605,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     if( !sName.isEmpty() &&
         0 != ( pDocShell = rSh.GetDoc()->GetDocShell() ) )
     {
-        // then we create our "server" and connect to it
+        
         refObj = pDocShell->DdeCreateLinkSource( sName );
         if( refObj.Is() )
         {
@@ -3628,7 +3628,7 @@ SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
 ::sfx2::SvBaseLink::UpdateResult SwTrnsfrDdeLink::DataChanged( const OUString& ,
                                     const uno::Any& )
 {
-    // well, that's it with the link
+    
     if( !bInDisconnect )
     {
         if( FindDocShell() && pDocShell->GetView() )
@@ -3671,12 +3671,12 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     if(ppMark != pMarkAccess->getAllMarksEnd()
         && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::BOOKMARK)
     {
-        // the mark is still a DdeBookmark
-        // we replace it with a Bookmark, so it will get saved etc.
+        
+        
         ::sw::mark::IMark* const pMark = ppMark->get();
         SwServerObject* const pServerObject = dynamic_cast<SwServerObject *>(&refObj);
 
-        // collecting state of old mark
+        
         SwPaM aPaM(pMark->GetMarkStart());
         *aPaM.GetPoint() = pMark->GetMarkStart();
         if(pMark->IsExpanded())
@@ -3686,12 +3686,12 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         }
         OUString sMarkName = pMark->GetName();
 
-        // remove mark
-        pServerObject->SetNoServer(); // this removes the connection between SwServerObject and mark
-        // N.B. ppMark was not loaded from file and cannot have xml:id
+        
+        pServerObject->SetNoServer(); 
+        
         pMarkAccess->deleteMark(ppMark);
 
-        // recreate as Bookmark
+        
         ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
             aPaM,
             sMarkName,
@@ -3705,18 +3705,18 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
 void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
 {
-    //  don't accept DataChanged anymore, when already in Disconnect!
-    //  (DTOR from Bookmark sends a DataChanged!)
+    
+    
     sal_Bool bOldDisconnect = bInDisconnect;
     bInDisconnect = sal_True;
 
-    // destroy the unused bookmark again (without Undo!)?
+    
     if( bDelBookmrk && refObj.Is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-        // #i58448#
+        
         Link aSavedOle2Link( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
@@ -3727,7 +3727,7 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
 
         if( !bIsModified )
             pDoc->ResetModified();
-        // #i58448#
+        
         pDoc->SetOle2Link( aSavedOle2Link );
 
         bDelBookmrk = sal_False;
@@ -3738,10 +3738,10 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
         refObj->SetUpdateTimeout( nOldTimeOut );
         refObj->RemoveConnectAdvise( this );
         if( bRemoveDataAdvise )
-            // in a DataChanged the SelectionObject must NEVER be deleted
-            // is already handled by the base class
-            // (ADVISEMODE_ONLYONCE!!!!)
-            // but always in normal Disconnect!
+            
+            
+            
+            
             refObj->RemoveAllDataAdvise( this );
         refObj.Clear();
     }
@@ -3754,11 +3754,11 @@ sal_Bool SwTrnsfrDdeLink::FindDocShell()
     SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( &aType );
     while( pTmpSh )
     {
-        if( pTmpSh == pDocShell )       // that's what we want to have
+        if( pTmpSh == pDocShell )       
         {
             if( pDocShell->GetDoc() )
                 return sal_True;
-            break;      // the Doc is not there anymore, so leave!
+            break;      
         }
         pTmpSh = SfxObjectShell::GetNext( *pTmpSh, &aType );
     }

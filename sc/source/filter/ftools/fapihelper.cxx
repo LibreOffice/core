@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fapihelper.hxx"
@@ -54,7 +54,7 @@ using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
 
 using namespace ::com::sun::star;
 
-// Static helper functions ====================================================
+
 
 OUString ScfApiHelper::GetServiceName( const Reference< XInterface >& xInt )
 {
@@ -130,13 +130,13 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
     return aEncryptionData;
 }
 
-// Property sets ==============================================================
+
 
 ScfPropertySet::~ScfPropertySet()
 {
     Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
     if (xPropSetOpt.is())
-        // Turn the property value change notification back on when finished.
+        
         xPropSetOpt->enableChangeListenerNotification(true);
 }
 
@@ -146,8 +146,8 @@ void ScfPropertySet::Set( Reference< XPropertySet > xPropSet )
     mxMultiPropSet.set( mxPropSet, UNO_QUERY );
     Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
     if (xPropSetOpt.is())
-        // We don't want to broadcast property value changes during import to
-        // improve performance.
+        
+        
         xPropSetOpt->enableChangeListenerNotification(false);
 }
 
@@ -156,7 +156,7 @@ OUString ScfPropertySet::GetServiceName() const
     return ScfApiHelper::GetServiceName( mxPropSet );
 }
 
-// Get properties -------------------------------------------------------------
+
 
 bool ScfPropertySet::HasProperty( const OUString& rPropName ) const
 {
@@ -215,7 +215,7 @@ void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OU
     try
     {
         OSL_ENSURE( mxMultiPropSet.is(), "ScfPropertySet::GetProperties - multi property set not available" );
-        if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+        if( mxMultiPropSet.is() )   
         {
             rValues = mxMultiPropSet->getPropertyValues( rPropNames );
         }
@@ -235,7 +235,7 @@ void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OU
     }
 }
 
-// Set properties -------------------------------------------------------------
+
 
 void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValue )
 {
@@ -258,7 +258,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     OSL_ENSURE( rPropNames.getLength() == rValues.getLength(), "ScfPropertySet::SetProperties - length of sequences different" );
     try
     {
-        if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+        if( mxMultiPropSet.is() )   
         {
             mxMultiPropSet->setPropertyValues( rPropNames, rValues );
         }
@@ -278,14 +278,14 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     }
 }
 
-// ============================================================================
+
 
 ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     mnNextIdx( 0 )
 {
     OSL_ENSURE( ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
 
-    // create OUStrings from ASCII property names
+    
     typedef ::std::pair< OUString, size_t >     IndexedOUString;
     typedef ::std::vector< IndexedOUString >    IndexedOUStringVec;
     IndexedOUStringVec aPropNameVec;
@@ -295,16 +295,16 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
         aPropNameVec.push_back( IndexedOUString( aPropName, nVecIdx ) );
     }
 
-    // sorts the pairs, which will be sorted by first component (the property name)
+    
     ::std::sort( aPropNameVec.begin(), aPropNameVec.end() );
 
-    // resize member sequences
+    
     size_t nSize = aPropNameVec.size();
     maNameSeq.realloc( static_cast< sal_Int32 >( nSize ) );
     maValueSeq.realloc( static_cast< sal_Int32 >( nSize ) );
     maNameOrder.resize( nSize );
 
-    // fill the property name sequence and store original sort order
+    
     sal_Int32 nSeqIdx = 0;
     for( IndexedOUStringVec::const_iterator aIt = aPropNameVec.begin(),
             aEnd = aPropNameVec.end(); aIt != aEnd; ++aIt, ++nSeqIdx )
@@ -314,7 +314,7 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     }
 }
 
-// read properties ------------------------------------------------------------
+
 
 void ScfPropSetHelper::ReadFromPropertySet( const ScfPropertySet& rPropSet )
 {
@@ -346,7 +346,7 @@ bool ScfPropSetHelper::ReadValue( bool& rbValue )
     return bRet;
 }
 
-// write properties -----------------------------------------------------------
+
 
 void ScfPropSetHelper::InitializeWrite( bool bClearAllAnys )
 {
@@ -373,7 +373,7 @@ void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperties( maNameSeq, maValueSeq );
 }
 
-// private --------------------------------------------------------------------
+
 
 Any* ScfPropSetHelper::GetNextAny()
 {
@@ -384,6 +384,6 @@ Any* ScfPropSetHelper::GetNextAny()
     return pAny;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

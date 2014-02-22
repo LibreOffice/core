@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swmodule.hxx>
@@ -282,7 +282,7 @@ void SwTestAccountSettingsDialog::Test()
                         mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
             if(m_bStop)
                 return;
-            //authenticate at the POP or IMAP server first
+            
             uno::Reference<XAuthenticator> xAuthenticator =
                 new SwAuthenticator(
                     m_pParent->m_pConfigItem->GetInServerUserName(),
@@ -290,7 +290,7 @@ void SwTestAccountSettingsDialog::Test()
                     this);
 
             xInMailService->addConnectionListener(xConnectionListener);
-            //check connection
+            
             uno::Reference< uno::XCurrentContext> xConnectionContext =
                     new SwConnectionContext(
                         m_pParent->m_pConfigItem->GetInServerName(),
@@ -315,12 +315,12 @@ void SwTestAccountSettingsDialog::Test()
         xMailService->addConnectionListener(xConnectionListener);
         if(m_bStop)
             return;
-        //just to check if the server exists
+        
         xMailService->getSupportedConnectionTypes();
         if(m_bStop)
             return;
         bIsServer = true;
-        //check connection
+        
         uno::Reference< uno::XCurrentContext> xConnectionContext =
                 new SwConnectionContext(
                     m_pParent->m_pServerED->GetText(),
@@ -356,7 +356,7 @@ void SwTestAccountSettingsDialog::Test()
 SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 {
-    // create TabPage
+    
     SetTabPage(SwMailConfigPage::Create(get_content_area(), rSet));
 }
 

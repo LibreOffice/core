@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/customshapeproperties.hxx>
@@ -26,7 +26,7 @@
 #include <svl/whiter.hxx>
 #include <svl/smplhint.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -47,24 +47,24 @@ namespace sdr
         {
             return *(new SfxItemSet(rPool,
 
-                // ranges from SdrAttrObj
+                
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // Graphic Attributes
+                
                 SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
 
-                // 3d Properties
+                
                 SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
 
-                // CustomShape properties
+                
                 SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
 
-                // range from SdrTextObj
+                
                 EE_ITEMS_START, EE_ITEMS_END,
 
-                // end
+                
                 0, 0));
         }
         sal_Bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const
@@ -120,22 +120,22 @@ namespace sdr
                 rObj.bTextFrame = ((SdrTextAutoGrowHeightItem&)rSet.Get( SDRATTR_TEXT_AUTOGROWHEIGHT )).GetValue();
             }
 
-            // call parent
+            
             TextProperties::ItemSetChanged(rSet);
 
-            // local changes, removing cached objects
+            
             rObj.InvalidateRenderGeometry();
         }
         void CustomShapeProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
         {
             SdrObjCustomShape& rObj = (SdrObjCustomShape&)GetSdrObject();
-            //OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
+            
 
             if( pNewItem && ( SDRATTR_TEXT_AUTOGROWHEIGHT == nWhich ) )
             {
                 rObj.bTextFrame = ((SdrTextAutoGrowHeightItem*)pNewItem)->GetValue();
             }
-            // call parent
+            
             TextProperties::ItemChange( nWhich, pNewItem );
 
             rObj.InvalidateRenderGeometry();
@@ -154,7 +154,7 @@ namespace sdr
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             sal_Bool bTextFrame(rObj.IsTextFrame());
 
-            // force ItemSet
+            
             GetObjectItemSet();
 
             if(bTextFrame)
@@ -215,13 +215,13 @@ namespace sdr
             {
                 UpdateTextFrameStatus();
 
-                // local changes, removing cached objects
+                
                 SdrObjCustomShape& rObj = (SdrObjCustomShape&)GetSdrObject();
                 rObj.InvalidateRenderGeometry();
             }
 
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

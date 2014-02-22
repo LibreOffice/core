@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,9 +35,9 @@ using namespace ::com::sun::star;
 
 
 static const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
-static const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
-static const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
-static const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
+static const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";
+static const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";
+static const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";
 static const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged";
 
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
@@ -49,8 +49,8 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     {
         m_refCount++;
         m_xIntercepted->registerDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
-        // this should make us the top-level dispatch-provider for the component, via a call to our
-        // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
+        
+        
         uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
             xInterceptedComponent->addEventListener((lang::XEventListener*)this);
@@ -68,7 +68,7 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
 {
     DispatchMutexLock_Impl aLock(*this);
     uno::Reference< frame::XDispatch> xResult;
-    // create some dispatch ...
+    
     if(m_pView && aURL.Complete.startsWith(".uno:DataSourceBrowser/"))
     {
         if(aURL.Complete.equalsAscii(cURLFormLetter) ||
@@ -82,7 +82,7 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
         }
     }
 
-    // ask our slave provider
+    
     if (!xResult.is() && m_xSlaveDispatcher.is())
         xResult = m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 
@@ -279,7 +279,7 @@ void SwXDispatch::addStatusListener(
     aEvent.Source = *(cppu::OWeakObject*)this;
     aEvent.FeatureURL = aURL;
 
-    // one of the URLs requires a special state ....
+    
     if (aURL.Complete.equalsAscii(cURLDocumentDataSource))
     {
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
@@ -353,7 +353,7 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::Runti
             StatusStruct_Impl aStatus = *aListIter;
             aEvent.FeatureURL = aStatus.aURL;
             if (!aStatus.aURL.Complete.equalsAscii(cURLDocumentDataSource))
-                // the document's data source does not depend on the selection, so it's state does not change here
+                
                 aStatus.xListener->statusChanged( aEvent );
         }
     }

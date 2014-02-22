@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/AttributeData.hpp>
@@ -36,7 +36,7 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/contextid.hxx>
 
-// STL includes
+
 #include <algorithm>
 #include <functional>
 #include <utility>
@@ -72,12 +72,12 @@ SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 void SvXMLImportPropertyMapper::ChainImportMapper(
         const UniReference< SvXMLImportPropertyMapper>& rMapper )
 {
-    // add map entries from rMapper to current map
+    
     maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
-    // rMapper uses the same map as 'this'
+    
     rMapper->maPropMapper = maPropMapper;
 
-    // set rMapper as last mapper in current chain
+    
     UniReference< SvXMLImportPropertyMapper > xNext = mxNextMapper;
     if( xNext.is())
     {
@@ -88,8 +88,8 @@ void SvXMLImportPropertyMapper::ChainImportMapper(
     else
         mxNextMapper = rMapper;
 
-    // if rMapper was already chained, correct
-    // map pointer of successors
+    
+    
     xNext = rMapper;
 
     while( xNext->mxNextMapper.is())
@@ -129,29 +129,29 @@ void SvXMLImportPropertyMapper::importXML(
 
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
-        // index of actual property map entry
-        // This looks very strange, but it works well:
-        // If the start index is 0, the new value will become -1, and
-        // GetEntryIndex will start searching with position 0.
-        // Otherwise GetEntryIndex will start with the next position specified.
+        
+        
+        
+        
+        
         sal_Int32 nIndex =  nStartIdx - 1;
-        sal_uInt32 nFlags = 0;  // flags of actual property map entry
+        sal_uInt32 nFlags = 0;  
         sal_Bool bFound = sal_False;
 
-        // for better error reporting: this should be set true if no
-        // warning is needed
+        
+        
         bool bNoWarning = false;
         bool bAlienImport = false;
 
         do
         {
-            // find an entry for this attribute
+            
             nIndex = maPropMapper->GetEntryIndex( nPrefix, aLocalName,
                                                   nPropType, nIndex );
 
             if( nIndex > -1 && nIndex < nEndIdx  )
             {
-                // create a XMLPropertyState with an empty value
+                
 
                 nFlags = maPropMapper->GetEntryFlags( nIndex );
                 if( (( nFlags & MID_FLAG_NO_PROPERTY ) == MID_FLAG_NO_PROPERTY) && (maPropMapper->GetEntryContextId( nIndex ) == CTF_ALIEN_ATTRIBUTE_IMPORT) )
@@ -166,8 +166,8 @@ void SvXMLImportPropertyMapper::importXML(
                         XMLPropertyState aNewProperty( nIndex );
                         sal_Int32 nReference = -1;
 
-                        // if this is a multi attribute check if another attribute already set
-                        // this any. If so use this as a initial value
+                        
+                        
                         if( ( nFlags & MID_FLAG_MERGE_PROPERTY ) != 0 )
                         {
                             const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );
@@ -191,7 +191,7 @@ void SvXMLImportPropertyMapper::importXML(
                         bool bSet = false;
                         if( ( nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) == 0 )
                         {
-                            // let the XMLPropertySetMapper decide how to import the value
+                            
                             bSet = maPropMapper->importXML( rValue, aNewProperty,
                                                      rUnitConverter );
                         }
@@ -203,15 +203,15 @@ void SvXMLImportPropertyMapper::importXML(
                                                       rValue, rUnitConverter,
                                                          rNamespaceMap );
 
-                            // no warning if handleSpecialItem added properties
+                            
                             bNoWarning |= ( nOldSize != rProperties.size() );
                         }
 
-                        // no warning if we found could set the item. This
-                        // 'remembers' bSet across multi properties.
+                        
+                        
                         bNoWarning |= bSet;
 
-                        // store the property in the given vector
+                        
                         if( bSet )
                         {
                             if( nReference == -1 )
@@ -221,9 +221,9 @@ void SvXMLImportPropertyMapper::importXML(
                         }
                         else
                         {
-                            // warn about unknown value. Unless it's a
-                            // multi property: Then we get another chance
-                            // to set the value.
+                            
+                            
+                            
                             if( !bNoWarning &&
                                 ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
                             {
@@ -251,11 +251,11 @@ void SvXMLImportPropertyMapper::importXML(
                 {
                     if( !xAttrContainer.is() )
                     {
-                        // add an unknown attribute container to the properties
+                        
                         Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
                         xAttrContainer = xNew;
 
-                        // find map entry and create new property state
+                        
                         if( -1 == nIndex )
                         {
                             switch( nPropType )
@@ -272,19 +272,19 @@ void SvXMLImportPropertyMapper::importXML(
                                 default:
                                     break;
                             }
-                            // other property type or property not found
+                            
                             if( -1 == nIndex )
                                 nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
                         }
 
-                        // #106963#; use userdefined attribute only if it is in the specified property range
+                        
                         if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
                         {
                             Any aAny;
                             aAny <<= xAttrContainer;
                             XMLPropertyState aNewProperty( nIndex, aAny );
 
-                            // push it on our stack so we export it later
+                            
                             rProperties.push_back( aNewProperty );
                         }
                     }
@@ -377,29 +377,29 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
         const XMLPropertyState& rProp = aProperties[i];
         sal_Int32 nIdx = rProp.mnIndex;
 
-        // disregard property state if it has an invalid index
+        
         if( -1 == nIdx )
             continue;
 
         const sal_Int32 nPropFlags = maPropMapper->GetEntryFlags( nIdx );
 
-        // handle no-property and special items
+        
         if( ( pSpecialContextIds != NULL ) &&
             ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
               ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
-            // maybe it's one of our special context ids?
+            
             sal_Int16 nContextId = maPropMapper->GetEntryContextId(nIdx);
 
             for ( sal_Int32 n = 0;
                   pSpecialContextIds[n].nContextID != -1;
                   n++ )
             {
-                // found: set index in pSpecialContextIds array
+                
                 if ( pSpecialContextIds[n].nContextID == nContextId )
                 {
                     pSpecialContextIds[n].nIndex = i;
-                    break; // early out
+                    break; 
                 }
             }
         }
@@ -421,14 +421,14 @@ sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
 
     if (!bSet)
     {
-        // get property set info
+        
         Reference< XPropertySetInfo > xInfo(rPropSet->getPropertySetInfo());
 
-        // check for multi-property set
+        
         Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
         if ( xMultiPropSet.is() )
         {
-            // Try XMultiPropertySet. If that fails, try the regular route.
+            
             bSet = _FillMultiPropertySet( aProperties, xMultiPropSet,
                                         xInfo, maPropMapper,
                                         pSpecialContextIds );
@@ -457,17 +457,17 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
     OSL_ENSURE( rPropSetInfo.is(), "need an XPropertySetInfo" );
 
-    // preliminaries
+    
     sal_Bool bSet = sal_False;
     sal_Int32 nCount = rProperties.size();
 
-    // iterate over property states that we want to set
+    
     for( sal_Int32 i=0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = rProperties[i];
         sal_Int32 nIdx = rProp.mnIndex;
 
-        // disregard property state if it has an invalid index
+        
         if( -1 == nIdx )
             continue;
 
@@ -478,7 +478,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
              ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) ||
                rPropSetInfo->hasPropertyByName( rPropName ) )    )
         {
-            // try setting the property
+            
             try
             {
                 rPropSet->setPropertyValue( rPropName, rProp.maValue );
@@ -486,8 +486,8 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
             }
             catch ( const IllegalArgumentException& e )
             {
-                // illegal value: check whether this property is
-                // allowed to throw this exception
+                
+                
                 if ( 0 == ( nPropFlags & MID_FLAG_PROPERTY_MAY_EXCEPT ) )
                 {
                     Sequence<OUString> aSeq(1);
@@ -499,7 +499,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
             }
             catch ( const UnknownPropertyException& e )
             {
-                // unknown property: This is always an error!
+                
                 Sequence<OUString> aSeq(1);
                 aSeq[0] = rPropName;
                 rImport.SetError(
@@ -508,7 +508,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
             }
             catch ( const PropertyVetoException& e )
             {
-                // property veto: this shouldn't happen
+                
                 Sequence<OUString> aSeq(1);
                 aSeq[0] = rPropName;
                 rImport.SetError(
@@ -517,7 +517,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
             }
             catch ( const WrappedTargetException& e )
             {
-                // wrapped target: this shouldn't happen either
+                
                 Sequence<OUString> aSeq(1);
                 aSeq[0] = rPropName;
                 rImport.SetError(
@@ -526,23 +526,23 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
             }
         }
 
-        // handle no-property and special items
+        
         if( ( pSpecialContextIds != NULL ) &&
             ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
               ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
-            // maybe it's one of our special context ids?
+            
             sal_Int16 nContextId = rPropMapper->GetEntryContextId(nIdx);
 
             for ( sal_Int32 n = 0;
                   pSpecialContextIds[n].nContextID != -1;
                   n++ )
             {
-                // found: set index in pSpecialContextIds array
+                
                 if ( pSpecialContextIds[n].nContextID == nContextId )
                 {
                     pSpecialContextIds[n].nIndex = i;
-                    break; // early out
+                    break; 
                 }
             }
         }
@@ -575,18 +575,18 @@ void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
 {
     sal_Int32 nCount = rProperties.size();
 
-    // property pairs structure stores names + values of properties to be set.
+    
     PropertyPairs aPropertyPairs;
     aPropertyPairs.reserve( nCount );
 
-    // iterate over property states that we want to set
+    
     sal_Int32 i;
     for( i = 0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = rProperties[i];
         sal_Int32 nIdx = rProp.mnIndex;
 
-        // disregard property state if it has an invalid index
+        
         if( -1 == nIdx )
             continue;
 
@@ -598,45 +598,45 @@ void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
                !rPropSetInfo.is() ||
                (rPropSetInfo.is() && rPropSetInfo->hasPropertyByName( rPropName )) ) )
         {
-            // save property into property pair structure
+            
             aPropertyPairs.push_back( PropertyPair( &rPropName, &rProp.maValue ) );
         }
 
-        // handle no-property and special items
+        
         if( ( pSpecialContextIds != NULL ) &&
             ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
               ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
-            // maybe it's one of our special context ids?
+            
             sal_Int16 nContextId = rPropMapper->GetEntryContextId(nIdx);
             for ( sal_Int32 n = 0;
                   pSpecialContextIds[n].nContextID != -1;
                   n++ )
             {
-                // found: set index in pSpecialContextIds array
+                
                 if ( pSpecialContextIds[n].nContextID == nContextId )
                 {
                     pSpecialContextIds[n].nIndex = i;
-                    break; // early out
+                    break; 
                 }
             }
         }
     }
 
-    // We now need to construct the sequences and actually the set
-    // values.
+    
+    
 
-    // sort the property pairs
+    
     sort( aPropertyPairs.begin(), aPropertyPairs.end(),
           PropertyPairLessFunctor());
 
-    // create sequences
+    
     rNames.realloc( aPropertyPairs.size() );
     OUString* pNamesArray = rNames.getArray();
     rValues.realloc( aPropertyPairs.size() );
     Any* pValuesArray = rValues.getArray();
 
-    // copy values into sequences
+    
     i = 0;
     for( PropertyPairs::iterator aIter = aPropertyPairs.begin();
          aIter != aPropertyPairs.end();
@@ -665,7 +665,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     _PrepareForMultiPropertySet(rProperties, rPropSetInfo, rPropMapper, pSpecialContextIds,
         aNames, aValues);
 
-    // and, finally, try to set the values
+    
     try
     {
         rMultiPropSet->setPropertyValues( aNames, aValues );
@@ -696,7 +696,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
     _PrepareForMultiPropertySet(rProperties, Reference<XPropertySetInfo>(NULL), rPropMapper, pSpecialContextIds,
         aNames, aValues);
 
-    // and, finally, try to set the values
+    
     try
     {
         Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
@@ -743,7 +743,7 @@ void SvXMLImportPropertyMapper::finished(
         vector< XMLPropertyState >& rProperties,
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
-    // nothing to do here
+    
     if( mxNextMapper.is() )
         mxNextMapper->finished( rProperties, nStartIndex, nEndIndex );
 }

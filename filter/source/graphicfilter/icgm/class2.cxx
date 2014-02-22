@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <main.hxx>
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass2()
 {
@@ -29,7 +29,7 @@ void CGM::ImplDoClass2()
     {
         case 0x01 : /*Scaling Mode*/
         {
-            if ( mnElementSize )    // HACK (NASA.CGM)
+            if ( mnElementSize )    
             {
                 switch( ImplGetUI16() )
                 {
@@ -194,10 +194,10 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aEdgeList, aTempEdgeBundle );
         }
         break;
-        case 0x10 : /*Interior Style Specification Mode */break;    // NS
+        case 0x10 : /*Interior Style Specification Mode */break;    
         case 0x11 : /*Line and Edge Type Definition */break;
-        case 0x12 : /*Hatch Style Definition */break;               // NS
-        case 0x13 : /*Geometric Pattern Definition */break;         // NS
+        case 0x12 : /*Hatch Style Definition */break;               
+        case 0x13 : /*Geometric Pattern Definition */break;         
         case 0xff : /*inquire VDC EXTENT */break;
         case 0xfe : /*inquire Background Color */break;
         case 0xfd : /*inquire Device Viewport */break;
@@ -206,7 +206,7 @@ void CGM::ImplDoClass2()
         case 0xfa : /*inquire Font Selection Mode */break;
         case 0xf9 : /*set Char Height Spec Mode*/
         {
-            ImplGetUI16(); // -Wall is this really needed?
+            ImplGetUI16(); 
         }
         break;
         case 0xf8 : /*set Background Style */break;

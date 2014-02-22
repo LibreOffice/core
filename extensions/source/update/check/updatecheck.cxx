@@ -71,7 +71,7 @@ namespace uno = com::sun::star::uno ;
 #define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
 
 extern "C" bool SAL_CALL WNT_hasInternetConnection();
-//------------------------------------------------------------------------------
+
 
 // Returns the URL of the release note for the given position
 OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)
@@ -93,7 +93,7 @@ OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloa
     return OUString();
 }
 
-//------------------------------------------------------------------------------
+
 
 namespace
 {
@@ -105,7 +105,7 @@ static inline OUString getBuildId()
     return aPathVal;
 }
 
-//------------------------------------------------------------------------------
+
 #if defined LINUX || defined SOLARIS
 static inline OUString getBaseInstallation()
 {
@@ -115,7 +115,7 @@ static inline OUString getBaseInstallation()
 }
 #endif
 
-//------------------------------------------------------------------------------
+
 
 inline bool isObsoleteUpdateInfo(const OUString& rBuildId)
 {
@@ -123,7 +123,7 @@ inline bool isObsoleteUpdateInfo(const OUString& rBuildId)
 }
 
 
-//------------------------------------------------------------------------------
+
 
 OUString getImageFromFileName(const OUString& aFile)
 {
@@ -199,7 +199,7 @@ OUString getImageFromFileName(const OUString& aFile)
 }
 
 
-//------------------------------------------------------------------------------
+
 
 static uno::Reference< beans::XPropertySet > createMenuBarUI(
     const uno::Reference< uno::XComponentContext >& xContext,
@@ -224,7 +224,7 @@ static uno::Reference< beans::XPropertySet > createMenuBarUI(
     return xMenuBarUI;
 }
 
-//------------------------------------------------------------------------------
+
 
 
 
@@ -337,7 +337,7 @@ private:
     Download m_aDownload;
 };
 
-//------------------------------------------------------------------------------
+
 class ShutdownThread :  public osl::Thread
 {
 public:
@@ -354,7 +354,7 @@ private:
     const uno::Reference<uno::XComponentContext> m_xContext;
 };
 
-//------------------------------------------------------------------------------
+
 
 UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
                                       const uno::Reference<uno::XComponentContext>& xContext ) :
@@ -367,13 +367,13 @@ UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
     resume();
 }
 
-//------------------------------------------------------------------------------
+
 
 UpdateCheckThread::~UpdateCheckThread()
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 
 void SAL_CALL
@@ -385,7 +385,7 @@ UpdateCheckThread::terminate()
     osl::Thread::terminate();
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 UpdateCheckThread::join()
@@ -399,7 +399,7 @@ UpdateCheckThread::join()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 UpdateCheckThread::cancel()
@@ -410,7 +410,7 @@ UpdateCheckThread::cancel()
         xProvider->cancel();
 }
 
-//------------------------------------------------------------------------------
+
 
 bool
 UpdateCheckThread::runCheck( bool & rbExtensionsChecked )
@@ -449,7 +449,7 @@ UpdateCheckThread::runCheck( bool & rbExtensionsChecked )
     return ret;
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 UpdateCheckThread::onTerminated()
@@ -457,7 +457,7 @@ UpdateCheckThread::onTerminated()
     delete this;
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 UpdateCheckThread::run()
@@ -561,7 +561,7 @@ UpdateCheckThread::run()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 ManualUpdateCheckThread::run()
@@ -579,14 +579,14 @@ ManualUpdateCheckThread::run()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 MenuBarButtonJob::MenuBarButtonJob(const rtl::Reference< UpdateCheck >& rUpdateCheck) :
     m_aUpdateCheck(rUpdateCheck)
 {
 };
 
-//------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL
 MenuBarButtonJob::execute(const uno::Sequence<beans::NamedValue>& )
@@ -600,7 +600,7 @@ MenuBarButtonJob::execute(const uno::Sequence<beans::NamedValue>& )
     return uno::Any();
 }
 
-//------------------------------------------------------------------------------
+
 
 DownloadThread::DownloadThread(osl::Condition& rCondition,
                                const uno::Reference<uno::XComponentContext>& xContext,
@@ -614,13 +614,13 @@ DownloadThread::DownloadThread(osl::Condition& rCondition,
     createSuspended();
 }
 
-//------------------------------------------------------------------------------
+
 
 DownloadThread::~DownloadThread()
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 DownloadThread::run()
@@ -667,7 +667,7 @@ DownloadThread::run()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL DownloadThread::cancel()
 {
@@ -678,7 +678,7 @@ void SAL_CALL DownloadThread::cancel()
     aController->cancelDownload();
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL DownloadThread::suspend()
 {
@@ -686,26 +686,26 @@ void SAL_CALL DownloadThread::suspend()
     m_aDownload.stop();
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL DownloadThread::onTerminated()
 {
     delete this;
 }
 
-//------------------------------------------------------------------------------
+
 ShutdownThread::ShutdownThread( const uno::Reference<uno::XComponentContext>& xContext) :
     m_xContext( xContext )
 {
     create();
 }
 
-//------------------------------------------------------------------------------
+
 ShutdownThread::~ShutdownThread()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL
 ShutdownThread::run()
 {
@@ -724,18 +724,18 @@ ShutdownThread::run()
     xDesktop->terminate();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL ShutdownThread::onTerminated()
 {
     delete this;
 }
 
-//------------------------------------------------------------------------------
+
 
 } // anonymous namespace
 
 
-//------------------------------------------------------------------------------
+
 
 UpdateCheck::UpdateCheck():
     m_eState(NOT_INITIALIZED), m_eUpdateState(UPDATESTATES_COUNT),
@@ -842,7 +842,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::cancel()
@@ -860,7 +860,7 @@ UpdateCheck::cancel()
     setUIState(eUIState);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::download()
@@ -889,7 +889,7 @@ UpdateCheck::download()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::install()
@@ -933,7 +933,7 @@ UpdateCheck::install()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::pause()
@@ -950,7 +950,7 @@ UpdateCheck::pause()
     setUIState(UPDATESTATE_DOWNLOAD_PAUSED);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::resume()
@@ -967,7 +967,7 @@ UpdateCheck::resume()
     setUIState(UPDATESTATE_DOWNLOADING);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::closeAfterFailure()
@@ -982,7 +982,7 @@ UpdateCheck::closeAfterFailure()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::shutdownThread(bool join)
@@ -1006,7 +1006,7 @@ UpdateCheck::shutdownThread(bool join)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::enableAutoCheck(bool enable)
@@ -1017,7 +1017,7 @@ UpdateCheck::enableAutoCheck(bool enable)
     m_eState = enable ? CHECK_SCHEDULED : DISABLED;
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::enableDownload(bool enable, bool paused)
@@ -1044,7 +1044,7 @@ UpdateCheck::enableDownload(bool enable, bool paused)
 
 }
 
-//------------------------------------------------------------------------------
+
 
 bool
 UpdateCheck::downloadTargetExists(const OUString& rFileName)
@@ -1088,7 +1088,7 @@ UpdateCheck::downloadTargetExists(const OUString& rFileName)
     return cont;
 }
 
-//------------------------------------------------------------------------------
+
 bool UpdateCheck::checkDownloadDestination( const OUString& rFileName )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1105,7 +1105,7 @@ bool UpdateCheck::checkDownloadDestination( const OUString& rFileName )
     return bReload;
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::downloadStalled(const OUString& rErrorMessage)
@@ -1118,7 +1118,7 @@ UpdateCheck::downloadStalled(const OUString& rErrorMessage)
     setUIState(UPDATESTATE_ERROR_DOWNLOADING);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
@@ -1131,7 +1131,7 @@ UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
     setUIState(UPDATESTATE_DOWNLOADING);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize)
@@ -1150,7 +1150,7 @@ UpdateCheck::downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::downloadFinished(const OUString& rLocalFileName)
@@ -1173,7 +1173,7 @@ UpdateCheck::downloadFinished(const OUString& rLocalFileName)
         showReleaseNote(aURL);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::cancelDownload()
@@ -1200,7 +1200,7 @@ UpdateCheck::cancelDownload()
 
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::showDialog(bool forceCheck)
@@ -1262,7 +1262,7 @@ UpdateCheck::showDialog(bool forceCheck)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
@@ -1343,7 +1343,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     setUIState(eUIState, bSuppressBubble);
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::setCheckFailedState()
@@ -1351,7 +1351,7 @@ UpdateCheck::setCheckFailedState()
     setUIState(UPDATESTATE_ERROR_CHECKING);
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateCheck::handleMenuBarUI( rtl::Reference< UpdateHandler > rUpdateHandler,
                                    UpdateState& eState,
                                    bool suppressBubble )
@@ -1386,7 +1386,7 @@ void UpdateCheck::handleMenuBarUI( rtl::Reference< UpdateHandler > rUpdateHandle
     }
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1440,7 +1440,7 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     aUpdateHandler->setState(eState);
 }
 
-//------------------------------------------------------------------------------
+
 
 UpdateState
 UpdateCheck::getUIState(const UpdateInfo& rInfo)
@@ -1458,7 +1458,7 @@ UpdateCheck::getUIState(const UpdateInfo& rInfo)
     return eUIState;
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::showReleaseNote(const OUString& rURL) const
@@ -1472,7 +1472,7 @@ UpdateCheck::showReleaseNote(const OUString& rURL) const
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 bool
 UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
@@ -1518,7 +1518,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateCheck::showExtensionDialog()
 {
     OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
@@ -1540,7 +1540,7 @@ void UpdateCheck::showExtensionDialog()
         xExecuteable->trigger( sArguments );
 }
 
-//------------------------------------------------------------------------------
+
 
 rtl::Reference<UpdateHandler>
 UpdateCheck::getUpdateHandler()
@@ -1553,7 +1553,7 @@ UpdateCheck::getUpdateHandler()
     return m_aUpdateHandler;
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Reference< task::XInteractionHandler >
 UpdateCheck::getInteractionHandler() const
@@ -1568,7 +1568,7 @@ UpdateCheck::getInteractionHandler() const
     return xHandler;
 }
 
-//------------------------------------------------------------------------------
+
 
 bool
 UpdateCheck::isDialogShowing() const
@@ -1577,7 +1577,7 @@ UpdateCheck::isDialogShowing() const
     return m_aUpdateHandler.is() && m_aUpdateHandler->isVisible();
 };
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::autoCheckStatusChanged(bool enabled)
@@ -1596,7 +1596,7 @@ UpdateCheck::autoCheckStatusChanged(bool enabled)
     }
 };
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateCheck::autoCheckIntervalChanged()
@@ -1605,7 +1605,7 @@ UpdateCheck::autoCheckIntervalChanged()
     m_aCondition.set();
 };
 
-//------------------------------------------------------------------------------
+
 
 oslInterlockedCount SAL_CALL
 UpdateCheck::acquire() SAL_THROW(())
@@ -1613,7 +1613,7 @@ UpdateCheck::acquire() SAL_THROW(())
     return ReferenceObject::acquire();
 }
 
-//------------------------------------------------------------------------------
+
 
 oslInterlockedCount SAL_CALL
 UpdateCheck::release() SAL_THROW(())

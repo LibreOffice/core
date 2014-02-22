@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,9 +26,9 @@
 
 namespace extensions { namespace config { namespace ldap {
 
-//------------------------------------------------------------------------------
+
 typedef int LdapErrCode;
-//------------------------------------------------------------------------------
+
 struct LdapMessageHolder
 {
     LdapMessageHolder() : msg(0) {}
@@ -44,12 +44,12 @@ private:
     LdapMessageHolder(LdapMessageHolder const&);
     void operator=(LdapMessageHolder const&);
 };
-//------------------------------------------------------------------------------
+
 LdapConnection::~LdapConnection()
 {
     if (isValid()) disconnect();
 }
-//------------------------------------------------------------------------------
+
 
 void LdapConnection::disconnect()
 {
@@ -59,7 +59,7 @@ void LdapConnection::disconnect()
         mConnection = NULL;
     }
 }
-//------------------------------------------------------------------------------
+
 
 static void checkLdapReturnCode(const sal_Char *aOperation,
                                 LdapErrCode aRetCode,
@@ -77,25 +77,25 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
     message.appendAscii(ldap_err2string(aRetCode)).appendAscii(" (") ;
     sal_Char *stub = NULL ;
 
-#ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
+#ifndef LDAP_OPT_SIZELIMIT 
     ldap_get_lderrno(aConnection, NULL, &stub) ;
 #endif
     if (stub != NULL)
     {
         message.appendAscii(stub) ;
-        // It would seem the message returned is actually
-        // not a copy of a string but rather some static
-        // string itself. At any rate freeing it seems to
-        // cause some undue problems at least on Windows.
-        // This call is thus disabled for the moment.
-        //ldap_memfree(stub) ;
+        
+        
+        
+        
+        
+        
     }
     else { message.appendAscii(kNoSpecificMessage) ; }
     message.appendAscii(")") ;
     throw ldap::LdapGenericException(message.makeStringAndClear(),
                                      NULL, aRetCode) ;
 }
-//------------------------------------------------------------------------------
+
 void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
@@ -105,21 +105,21 @@ void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
     mLdapDefinition = aDefinition;
     connectSimple();
 }
-//------------------------------------------------------------------------------
+
 void  LdapConnection::connectSimple()
    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
     if (!isValid())
     {
-        // Connect to the server
+        
         initConnection() ;
-        // Set Protocol V3
+        
         int version = LDAP_VERSION3;
         ldap_set_option(mConnection,
                         LDAP_OPT_PROTOCOL_VERSION,
                         &version);
 
-#ifdef LDAP_X_OPT_CONNECT_TIMEOUT // OpenLDAP doesn't support this and the func
+#ifdef LDAP_X_OPT_CONNECT_TIMEOUT 
         /* timeout is specified in milliseconds -> 4 seconds*/
         int timeout = 4000;
 #ifdef WNT
@@ -133,7 +133,7 @@ void  LdapConnection::connectSimple()
 #endif
 #endif
 
-        // Do the bind
+        
 #ifdef WNT
         LdapErrCode retCode = ldap_simple_bind_sW(mConnection,
                                                (PWCHAR) mLdapDefinition.mAnonUser.getStr(),
@@ -147,7 +147,7 @@ void  LdapConnection::connectSimple()
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
 }
-//------------------------------------------------------------------------------
+
 void LdapConnection::initConnection()
     throw (ldap::LdapConnectionException)
 {
@@ -180,7 +180,7 @@ void LdapConnection::initConnection()
                                             NULL) ;
     }
 }
-//------------------------------------------------------------------------------
+
  void LdapConnection::getUserProfile(
      const OUString& aUser, LdapData * data)
     throw (lang::IllegalArgumentException,
@@ -198,7 +198,7 @@ void LdapConnection::initConnection()
                                       LDAP_SCOPE_BASE,
                                       const_cast<PWCHAR>( L"(objectclass=*)" ),
                                       0,
-                                      0, // Attributes + values
+                                      0, 
                                       &result.msg) ;
 #else
     LdapErrCode retCode = ldap_search_s(mConnection,
@@ -206,7 +206,7 @@ void LdapConnection::initConnection()
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       0,
-                                      0, // Attributes + values
+                                      0, 
                                       &result.msg) ;
 #endif
     checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
@@ -239,7 +239,7 @@ void LdapConnection::initConnection()
 #endif
     }
 }
-//------------------------------------------------------------------------------
+
  OUString LdapConnection::findUserDn(const OUString& aUser)
     throw (lang::IllegalArgumentException,
             ldap::LdapConnectionException, ldap::LdapGenericException)
@@ -300,8 +300,8 @@ void LdapConnection::initConnection()
     return userDn ;
 }
 
-//------------------------------------------------------------------------------
 
-} } } // extensions.config.ldap
+
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

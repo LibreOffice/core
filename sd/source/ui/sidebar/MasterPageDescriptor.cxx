@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPageDescriptor.hxx"
@@ -26,7 +26,7 @@
 namespace sd { namespace sidebar {
 
 
-//===== MasterPageDescriptor ==================================================
+
 
 MasterPageDescriptor::MasterPageDescriptor (
     MasterPageContainer::Origin eOrigin,
@@ -157,7 +157,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
          bIndexChanged = true;
      }
 
-     // Prepare the list of event types that will be returned.
+     
      ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pResult;
      if (bDataChanged || bIndexChanged || bPreviewChanged)
      {
@@ -182,12 +182,12 @@ int MasterPageDescriptor::UpdatePageObject (
 {
     int nModified = 0;
 
-    // Update the page object when that is not yet known.
+    
     if (mpMasterPage == NULL
         && mpPageObjectProvider.get()!=NULL
         && (nCostThreshold<0 || mpPageObjectProvider->GetCostIndex()<=nCostThreshold))
     {
-        // Note that pDocument may be NULL.
+        
 
         SdPage* pPage = (*mpPageObjectProvider)(pDocument);
         if (meOrigin == MasterPageContainer::MASTERPAGE)
@@ -198,7 +198,7 @@ int MasterPageDescriptor::UpdatePageObject (
         }
         else
         {
-            // Master pages from templates are copied into the local document.
+            
             if (pDocument != NULL)
                 mpMasterPage = DocumentHelper::CopyMasterPageToLocalDocument(*pDocument,pPage);
             mpSlide = DocumentHelper::GetSlideForMasterPage(mpMasterPage);
@@ -206,13 +206,13 @@ int MasterPageDescriptor::UpdatePageObject (
 
         if (mpMasterPage != NULL)
         {
-            // Update page name and style name.
+            
             if (msPageName.isEmpty())
                 msPageName = mpMasterPage->GetName();
             msStyleName = mpMasterPage->GetName();
 
-            // Delete an existing substitution. The next request for a preview
-            // will create the real one.
+            
+            
             maSmallPreview = Image();
             maLargePreview = Image();
             mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider());
@@ -240,7 +240,7 @@ bool MasterPageDescriptor::UpdatePreview (
 {
     bool bModified (false);
 
-    // Update the preview when that is not yet known.
+    
     if (maLargePreview.GetSizePixel().Width()==0
         && mpPreviewProvider.get()!=NULL
         && (nCostThreshold<0 || mpPreviewProvider->GetCostIndex()<=nCostThreshold))
@@ -256,12 +256,12 @@ bool MasterPageDescriptor::UpdatePreview (
             rRenderer);
         if (maLargePreview.GetSizePixel().Width() > 0)
         {
-            // Create the small preview by scaling the large one down.
+            
             maSmallPreview = rRenderer.ScaleBitmap(
                 maLargePreview.GetBitmapEx(),
                 rSmallSize.Width());
-            // The large preview may not have the desired width.  Scale it
-            // accrodingly.
+            
+            
             if (maLargePreview.GetSizePixel().Width() != rLargeSize.Width())
                 maLargePreview = rRenderer.ScaleBitmap(
                     maLargePreview.GetBitmapEx(),
@@ -305,7 +305,7 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
 
 
 
-//===== URLComparator =========================================================
+
 
 MasterPageDescriptor::URLComparator::URLComparator (const OUString& sURL)
     : msURL(sURL)
@@ -327,7 +327,7 @@ bool MasterPageDescriptor::URLComparator::operator() (
 
 
 
-// ===== StyleNameComparator ==================================================
+
 
 MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const OUString& sStyleName)
     : msStyleName(sStyleName)
@@ -349,7 +349,7 @@ bool MasterPageDescriptor::StyleNameComparator::operator() (
 
 
 
-//===== PageObjectComparator ==================================================
+
 
 MasterPageDescriptor::PageObjectComparator::PageObjectComparator (const SdPage* pPageObject)
     : mpMasterPage(pPageObject)
@@ -371,7 +371,7 @@ bool MasterPageDescriptor::PageObjectComparator::operator() (
 
 
 
-//===== AllComparator =========================================================
+
 
 MasterPageDescriptor::AllComparator::AllComparator(const SharedMasterPageDescriptor& rDescriptor)
     : mpDescriptor(rDescriptor)
@@ -387,11 +387,11 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
         return false;
     else
     {
-        // Take URL, page name, style name, and page object into account
-        // when comparing two descriptors.  When two descriptors are
-        // identical in any of these values then there are thought of as
-        // equivalent.  Only the Origin has to be the same in both
-        // descriptors.
+        
+        
+        
+        
+        
         return
             mpDescriptor->meOrigin == rDescriptor->meOrigin
             && (
@@ -410,6 +410,6 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
 }
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

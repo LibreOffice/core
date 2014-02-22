@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/templatefoldercache.hxx>
@@ -41,10 +41,10 @@
 #include <functional>
 #include <algorithm>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star;
@@ -52,10 +52,10 @@ namespace svt
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::uno;
 
-    //=====================================================================
-    //= helpers
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     SvStream& WriteDateTime( SvStream& _rStorage, const util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / Time::nanoPerCenti );
@@ -71,7 +71,7 @@ namespace svt
         return _rStorage;
     }
 
-    //---------------------------------------------------------------------
+    
     SvStream& operator >> ( SvStream& _rStorage, util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds;
@@ -88,7 +88,7 @@ namespace svt
         return _rStorage;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
         return  _rLHS.NanoSeconds == _rRHS.NanoSeconds
@@ -101,15 +101,15 @@ namespace svt
             &&  _rLHS.IsUTC     == _rRHS.IsUTC;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool operator != ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
         return !( _rLHS == _rRHS );
     }
 
-    //=====================================================================
-    //= TemplateContent
-    //=====================================================================
+    
+    
+    
     struct TemplateContent;
     typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
     typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
@@ -123,9 +123,9 @@ namespace svt
 
     private:
         INetURLObject           m_aURL;
-        OUString                m_sLocalName;       // redundant - last segment of m_aURL
-        util::DateTime          m_aLastModified;    // date of last modification as reported by UCP
-        TemplateFolderContent   m_aSubContents;     // sorted (by name) list of the children
+        OUString                m_sLocalName;       
+        util::DateTime          m_aLastModified;    
+        TemplateFolderContent   m_aSubContents;     
 
     private:
         inline  void    implResetDate( )
@@ -140,7 +140,7 @@ namespace svt
     public:
         TemplateContent( const INetURLObject& _rURL );
 
-        // attribute access
+        
         inline OUString                 getName( ) const                            { return m_sLocalName; }
         inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ); }
         inline void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
@@ -158,10 +158,10 @@ namespace svt
                                                         { m_aSubContents.push_back( _rxNewElement ); }
     };
 
-    //---------------------------------------------------------------------
+    
     DBG_NAME( TemplateContent )
 
-    //---------------------------------------------------------------------
+    
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
     {
@@ -171,17 +171,17 @@ namespace svt
         implResetDate();
     }
 
-    //---------------------------------------------------------------------
+    
     TemplateContent::~TemplateContent()
     {
         DBG_DTOR( TemplateContent, NULL );
     }
 
-    //=====================================================================
-    //= stl helpers
-    //=====================================================================
-    //---------------------------------------------------------------------
-    /// compares two TemplateContent by URL
+    
+    
+    
+    
+    
     struct TemplateContentURLLess
         :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
                                         ,   ::rtl::Reference< TemplateContent >
@@ -196,20 +196,20 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
-    /// sorts the sib contents of a TemplateFolderContent
+    
+    
     struct SubContentSort : public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
     {
         void operator() ( TemplateFolderContent& _rFolder ) const
         {
-            // sort the directory by name
+            
             ::std::sort(
                 _rFolder.begin(),
                 _rFolder.end(),
                 TemplateContentURLLess()
             );
 
-            // sort the sub directories by name
+            
             ::std::for_each(
                 _rFolder.begin(),
                 _rFolder.end(),
@@ -225,7 +225,7 @@ namespace svt
             }
         }
     };
-    //---------------------------------------------------------------------
+    
     /** does a deep compare of two template contents
     */
     struct TemplateContentEqual
@@ -234,14 +234,14 @@ namespace svt
                                         ,   bool
                                         >
     {
-        //.................................................................
+        
         bool operator() (const ::rtl::Reference< TemplateContent >& _rLHS, const ::rtl::Reference< TemplateContent >& _rRHS )
         {
             if ( !_rLHS.is() || !_rRHS.is() )
             {
                 OSL_FAIL( "TemplateContentEqual::operator(): invalid contents!" );
                 return true;
-                    // this is not strictly true, in case only one is invalid - but this is a heavy error anyway
+                    
             }
 
             if ( _rLHS->getURL() != _rRHS->getURL() )
@@ -254,8 +254,8 @@ namespace svt
                 return false;
 
             if ( _rLHS->getSubContents().size() )
-            {   // there are children
-                // -> compare them
+            {   
+                
                 ::std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
                     _rLHS->getSubContents().begin(),
                     _rLHS->getSubContents().end(),
@@ -263,15 +263,15 @@ namespace svt
                     *this
                 );
                 if ( aFirstDifferent.first != _rLHS->getSubContents().end() )
-                    return false;// the sub contents differ
+                    return false;
             }
 
             return true;
         }
     };
 
-    //---------------------------------------------------------------------
-    /// base class for functors which act an an SvStream
+    
+    
     struct StorageHelper
     {
     protected:
@@ -279,8 +279,8 @@ namespace svt
         StorageHelper( SvStream& _rStorage ) : m_rStorage( _rStorage ) { }
     };
 
-    //---------------------------------------------------------------------
-    /// functor which allows storing a string
+    
+    
     struct StoreString
             :public ::std::unary_function< OUString, void >
             ,public StorageHelper
@@ -293,8 +293,8 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
-    /// functor which stores the local name of a TemplateContent
+    
+    
     struct StoreLocalContentName
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StoreString
@@ -305,12 +305,12 @@ namespace svt
         {
             SAL_WARN( "svtools.misc", "This method must not be used, the whole URL must be stored!" );
 
-            // use the base class operator with the local name of the content
+            
             StoreString::operator() ( _rxContent->getName() );
         }
     };
 
-    //---------------------------------------------------------------------
+    
     struct StoreContentURL
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StoreString
@@ -325,17 +325,17 @@ namespace svt
 
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
-            // use the base class operator with the local name of the content
+            
             OUString sURL = _rxContent->getURL();
-            // #116281# Keep office installtion relocatable. Never store
-            // any direct references to office installation directory.
+            
+            
             sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
             StoreString::operator() ( sURL );
         }
     };
 
-    //---------------------------------------------------------------------
-    /// functor which stores the complete content of a TemplateContent
+    
+    
     struct StoreFolderContent
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
@@ -349,22 +349,22 @@ namespace svt
                                 xOfficeInstDirs )
         : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
-        //.................................................................
+        
         void operator() ( const TemplateContent& _rContent ) const
         {
-            // store the info about this content
+            
             WriteDateTime( m_rStorage, _rContent.getModDate() );
 
-            // store the info about the children
-            // the number
+            
+            
             m_rStorage.WriteInt32( (sal_Int32)_rContent.size() );
-            // their URLs ( the local name is not enough, since URL might be not a hierarchical one, "expand:" for example )
+            
             ::std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
                 StoreContentURL( m_rStorage, m_xOfficeInstDirs )
             );
-            // their content
+            
             ::std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
@@ -372,7 +372,7 @@ namespace svt
             );
         }
 
-        //.................................................................
+        
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             if ( _rxContent.is() )
@@ -382,8 +382,8 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
-    /// functor which reads a complete TemplateContent instance
+    
+    
     struct ReadFolderContent
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
@@ -396,22 +396,22 @@ namespace svt
                                 xOfficeInstDirs )
         : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
-        //.................................................................
+        
         void operator() ( TemplateContent& _rContent ) const
         {
-            // store the info about this content
+            
             util::DateTime aModDate;
             m_rStorage >> aModDate;
             _rContent.setModDate( aModDate );
 
-            // store the info about the children
-            // the number
+            
+            
             sal_Int32 nChildren = 0;
             m_rStorage.ReadInt32( nChildren );
             TemplateFolderContent& rChildren = _rContent.getSubContents();
             rChildren.resize( 0 );
             rChildren.reserve( nChildren );
-            // initialize them with their (local) names
+            
             while ( nChildren-- )
             {
                 OUString sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamCharSet());
@@ -420,7 +420,7 @@ namespace svt
                 rChildren.push_back( new TemplateContent( aChildURL ) );
             }
 
-            // their content
+            
             ::std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
@@ -428,7 +428,7 @@ namespace svt
             );
         }
 
-        //.................................................................
+        
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             if ( _rxContent.is() )
@@ -438,17 +438,17 @@ namespace svt
         }
     };
 
-    //=====================================================================
-    //= TemplateFolderCacheImpl
-    //=====================================================================
+    
+    
+    
     class TemplateFolderCacheImpl
     {
     private:
-        TemplateFolderContent           m_aPreviousState;   // the current state of the template dirs (as found on the HD)
-        TemplateFolderContent           m_aCurrentState;    // the previous state of the template dirs (as found in the cache file)
+        TemplateFolderContent           m_aPreviousState;   
+        TemplateFolderContent           m_aCurrentState;    
 
         osl::Mutex                      m_aMutex;
-        // will be lazy inited; never access directly; use getOfficeInstDirs().
+        
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
         SvStream*                       m_pCacheStream;
@@ -468,9 +468,9 @@ namespace svt
         sal_Bool    openCacheStream( sal_Bool _bForRead );
         void        closeCacheStream( );
 
-        /// read the state of the dirs from the cache file
+        
         sal_Bool    readPreviousState();
-        /// read the current state of the dirs
+        
         sal_Bool    readCurrentState();
 
         OUString    implParseSmart( const OUString& _rPath );
@@ -481,14 +481,14 @@ namespace svt
         static  sal_Int32   getMagicNumber();
         static  void        normalize( TemplateFolderContent& _rState );
 
-        // @return <TRUE/> if the states equal
+        
         static  sal_Bool    equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS );
 
-        // late initialize m_xOfficeInstDirs
+        
         uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
     };
 
-    //---------------------------------------------------------------------
+    
     TemplateFolderCacheImpl::TemplateFolderCacheImpl( sal_Bool _bAutoStoreState )
         :m_pCacheStream         ( NULL )
         ,m_bNeedsUpdate         ( sal_True )
@@ -498,17 +498,17 @@ namespace svt
     {
     }
 
-    //---------------------------------------------------------------------
+    
     TemplateFolderCacheImpl::~TemplateFolderCacheImpl( )
     {
-        // store the current state if possible and required
+        
         if ( m_bValidCurrentState && m_bAutoStoreState )
             storeState( sal_False );
 
         closeCacheStream( );
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int32 TemplateFolderCacheImpl::getMagicNumber()
     {
         sal_Int32 nMagic = 0;
@@ -519,27 +519,27 @@ namespace svt
         return nMagic;
     }
 
-    //---------------------------------------------------------------------
+    
     OUString TemplateFolderCacheImpl::getCacheFileName()
     {
         return OUString(".templdir.cache");
     }
 
 
-    //---------------------------------------------------------------------
+    
     void TemplateFolderCacheImpl::normalize( TemplateFolderContent& _rState )
     {
         SubContentSort()( _rState );
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCacheImpl::equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS )
     {
         if ( _rLHS.size() != _rRHS.size() )
             return sal_False;
 
-        // as both arrays are sorted (by definition - this is a precondition of this method)
-        // we can simply go from the front to the back and compare the single elements
+        
+        
 
         ::std::pair< ConstFolderIterator, ConstFolderIterator > aFirstDifferent = ::std::mismatch(
             _rLHS.begin(),
@@ -551,7 +551,7 @@ namespace svt
         return aFirstDifferent.first == _rLHS.end();
     }
 
-    //---------------------------------------------------------------------
+    
     void TemplateFolderCacheImpl::storeState( sal_Bool _bForceRetrieval )
     {
         if ( !m_bValidCurrentState || _bForceRetrieval )
@@ -561,17 +561,17 @@ namespace svt
         {
             m_pCacheStream->WriteInt32( getMagicNumber() );
 
-            // store the template root folders
-            // the size
+            
+            
             m_pCacheStream->WriteInt32( (sal_Int32)m_aCurrentState.size() );
-            // the complete URLs
+            
             ::std::for_each(
                 m_aCurrentState.begin(),
                 m_aCurrentState.end(),
                 StoreContentURL( *m_pCacheStream, getOfficeInstDirs() )
             );
 
-            // the contents
+            
             ::std::for_each(
                 m_aCurrentState.begin(),
                 m_aCurrentState.end(),
@@ -580,7 +580,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     OUString TemplateFolderCacheImpl::implParseSmart( const OUString& _rPath )
     {
         INetURLObject aParser;
@@ -595,18 +595,18 @@ namespace svt
         return aParser.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
 
-    //---------------------------------------------------------------------
+    
     void TemplateFolderCacheImpl::closeCacheStream( )
     {
         DELETEZ( m_pCacheStream );
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCacheImpl::implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot )
     {
         try
         {
-            // create a content for the current folder root
+            
             Reference< XResultSet > xResultSet;
             Sequence< OUString > aContentProperties( 4);
             aContentProperties[0] = "Title";
@@ -614,7 +614,7 @@ namespace svt
             aContentProperties[2] = "DateCreated";
             aContentProperties[3] = "IsFolder";
 
-            // get the set of sub contents in the folder
+            
             try
             {
                 Reference< XDynamicResultSet > xDynResultSet;
@@ -633,7 +633,7 @@ namespace svt
             {
             }
 
-            // collect the infos about the sub contents
+            
             if ( xResultSet.is() )
             {
                 Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
@@ -643,20 +643,20 @@ namespace svt
                 {
                     INetURLObject aSubContentURL( xContentAccess->queryContentIdentifierString() );
 
-                    // a new content instance
+                    
                     ::rtl::Reference< TemplateContent > xChild = new TemplateContent( aSubContentURL );
 
-                    // the modified date
-                    xChild->setModDate( xRow->getTimestamp( 2 ) );  // date modified
+                    
+                    xChild->setModDate( xRow->getTimestamp( 2 ) );  
                     if ( xRow->wasNull() )
-                        xChild->setModDate( xRow->getTimestamp( 3 ) );  // fallback: date created
+                        xChild->setModDate( xRow->getTimestamp( 3 ) );  
 
-                    // push back this content
+                    
                     _rxRoot->push_back( xChild );
 
-                    // is it a folder?
+                    
                     if ( xRow->getBoolean( 4 ) && !xRow->wasNull() )
-                    {   // yes -> step down
+                    {   
                                                 ConstFolderIterator aNextLevelRoot = _rxRoot->end();
                         --aNextLevelRoot;
                         implReadFolder( *aNextLevelRoot );
@@ -672,36 +672,36 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCacheImpl::readCurrentState()
     {
-        // reset
+        
         m_bValidCurrentState = sal_False;
         TemplateFolderContent aTemplateFolderContent;
         m_aCurrentState.swap( aTemplateFolderContent );
 
-        // the template directories from the config
+        
         const SvtPathOptions aPathOptions;
         OUString aDirs = aPathOptions.GetTemplatePath();
 
-        // loop through all the root-level template folders
+        
         sal_Int32 nIndex = 0;
         do
         {
             OUString sTemplatePath( aDirs.getToken(0, ';', nIndex) );
             sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
 
-            // Make sure excess ".." path segments (from expanding bootstrap
-            // variables in paths) are normalized in the same way they are
-            // normalized for paths read from the .templdir.cache file (where
-            // paths have gone through makeRelocatable URL on writing out and
-            // then through makeAbsoluteURL when reading back in), as otherwise
-            // equalStates() in needsUpdate() could erroneously consider
-            // m_aCurrentState and m_aPreviousState as different:
+            
+            
+            
+            
+            
+            
+            
             sTemplatePath = getOfficeInstDirs()->makeAbsoluteURL(
                 getOfficeInstDirs()->makeRelocatableURL(sTemplatePath));
 
-            // create a new entry
+            
             m_aCurrentState.push_back( new TemplateContent( INetURLObject( sTemplatePath ) ) );
             TemplateFolderContent::iterator aCurrentRoot = m_aCurrentState.end();
             --aCurrentRoot;
@@ -711,46 +711,46 @@ namespace svt
         }
         while ( nIndex >= 0 );
 
-        // normalize the array (which basically means "sort it")
+        
         normalize( m_aCurrentState );
 
         m_bValidCurrentState = sal_True;
         return m_bValidCurrentState;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCacheImpl::readPreviousState()
     {
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::readPreviousState: not to be called without stream!" );
 
-        // reset
+        
         TemplateFolderContent aTemplateFolderContent;
         m_aPreviousState.swap( aTemplateFolderContent );
 
-        // check the magic number
+        
         sal_Int32 nMagic = 0;
         m_pCacheStream->ReadInt32( nMagic );
         DBG_ASSERT( getMagicNumber() == nMagic, "TemplateFolderCacheImpl::readPreviousState: invalid cache file!" );
         if ( getMagicNumber() != nMagic )
             return sal_False;
 
-        // the root directories
-        // their number
+        
+        
         sal_Int32 nRootDirectories = 0;
         m_pCacheStream->ReadInt32( nRootDirectories );
-        // init empty TemplateContens with the URLs
+        
         m_aPreviousState.reserve( nRootDirectories );
         while ( nRootDirectories-- )
         {
             OUString sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamCharSet());
-            // #116281# Keep office installtion relocatable. Never store
-            // any direct references to office installation directory.
+            
+            
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );
             m_aPreviousState.push_back(
                 new TemplateContent( INetURLObject(sURL) ) );
         }
 
-        // read the contents of the root folders
+        
         ::std::for_each(
             m_aPreviousState.begin(),
             m_aPreviousState.end(),
@@ -759,19 +759,19 @@ namespace svt
 
         DBG_ASSERT( !m_pCacheStream->GetErrorCode(), "TemplateFolderCacheImpl::readPreviousState: unknown error during reading the state cache!" );
 
-        // normalize the array (which basically means "sort it")
+        
         normalize( m_aPreviousState );
 
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCacheImpl::openCacheStream( sal_Bool _bForRead )
     {
-        // close any old stream instance
+        
         closeCacheStream( );
 
-        // get the storage directory
+        
         OUString sStorageURL = implParseSmart( SvtPathOptions().GetStoragePath() );
         INetURLObject aStorageURL( sStorageURL );
         if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
@@ -780,10 +780,10 @@ namespace svt
             return sal_False;
         }
 
-        // append our name
+        
         aStorageURL.Append( getCacheFileName() );
 
-        // open the stream
+        
         m_pCacheStream = UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DECODE_TO_IURI ),
             _bForRead ? STREAM_READ | STREAM_NOCREATE : STREAM_WRITE | STREAM_TRUNC );
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::openCacheStream: could not open/create the cache stream!" );
@@ -798,7 +798,7 @@ namespace svt
         return NULL != m_pCacheStream;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCacheImpl::needsUpdate( sal_Bool _bForceCheck )
     {
         if ( m_bKnowState && !_bForceCheck )
@@ -809,9 +809,9 @@ namespace svt
 
         if ( readCurrentState() )
         {
-            // open the stream which contains the cached state of the directories
+            
             if ( openCacheStream( sal_True ) )
-            {   // opening the stream succeeded
+            {   
                 if ( readPreviousState() )
                 {
                     m_bNeedsUpdate = !equalStates( m_aPreviousState, m_aCurrentState );
@@ -825,7 +825,7 @@ namespace svt
         return m_bNeedsUpdate;
     }
 
-    //---------------------------------------------------------------------
+    
     uno::Reference< util::XOfficeInstallationDirectories >
     TemplateFolderCacheImpl::getOfficeInstDirs()
     {
@@ -842,35 +842,35 @@ namespace svt
         return m_xOfficeInstDirs;
     }
 
-    //=====================================================================
-    //= TemplateFolderCache
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     TemplateFolderCache::TemplateFolderCache( sal_Bool _bAutoStoreState )
         :m_pImpl( new TemplateFolderCacheImpl( _bAutoStoreState ) )
     {
     }
 
-    //---------------------------------------------------------------------
+    
     TemplateFolderCache::~TemplateFolderCache( )
     {
         DELETEZ( m_pImpl );
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TemplateFolderCache::needsUpdate( sal_Bool _bForceCheck )
     {
         return m_pImpl->needsUpdate( _bForceCheck );
     }
 
-    //---------------------------------------------------------------------
+    
     void TemplateFolderCache::storeState( sal_Bool _bForceRetrieval )
     {
         m_pImpl->storeState( _bForceRetrieval );
     }
 
-//.........................................................................
-}   // namespace sfx2
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

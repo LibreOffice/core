@@ -73,7 +73,7 @@ SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
     mrMapEntries = rMapEntries;
 }
 
-// fills the given itemset with the attributes in the given list
+
 void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                       uno::Reference< xml::sax::XAttributeList > xAttrList,
                                       const SvXMLUnitConverter& rUnitConverter,
@@ -94,25 +94,25 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
-        // find a map entry for this attribute
+        
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByName( nPrefix, aLocalName );
 
         if( pEntry )
         {
-            // we have a valid map entry here, so lets use it...
+            
             if( 0 == (pEntry->nMemberId & (MID_SW_FLAG_NO_ITEM_IMPORT|
                                        MID_SW_FLAG_ELEMENT_ITEM_IMPORT)) )
             {
-                // first get item from itemset
+                
                 const SfxPoolItem* pItem = 0;
                 SfxItemState eState = rSet.GetItemState( pEntry->nWhichId, true,
                                                          &pItem );
 
-                // if its not set, try the pool
+                
                 if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > pEntry->nWhichId )
                     pItem = &rSet.GetPool()->GetDefaultItem(pEntry->nWhichId);
 
-                // do we have an item?
+                
                 if(eState >= SFX_ITEM_DEFAULT && pItem)
                 {
                     SfxPoolItem *pNewItem = pItem->Clone();
@@ -217,7 +217,7 @@ bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
 void
 SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
 {
-    // nothing to do here
+    
 }
 
 struct BoxHolder : private boost::noncopyable
@@ -250,7 +250,7 @@ struct BoxHolder : private boost::noncopyable
 
 
 
-// put an XML-string value into an item
+
 bool SvXMLImportItemMapper::PutXMLValue(
     SfxPoolItem& rItem,
     const OUString& rValue,
@@ -437,7 +437,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
             OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
-            // copy SvxBorderLines
+            
             BoxHolder aBoxes(pBox);
 
             sal_Int32 nTemp;
@@ -545,7 +545,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     if (!rUnitConverter.convertMeasureToCore(nOutWidth, aToken))
                         return false;
 
-                    // #i61946: accept line style even it's not part of our "normal" set of line styles
+                    
                     sal_uInt16 nWidth = 0;
 
                     if( TOP_BORDER_LINE_WIDTH == nMemberId ||
@@ -729,7 +729,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                             }
                             else
                             {
-                                // wrong percentage
+                                
                                 bOk = false;
                             }
                         }

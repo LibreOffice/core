@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
@@ -58,8 +58,8 @@ void OfficeConnection::setUp() {
         OUString nofirstArg("--nofirststartwizard");
         OUString norestoreArg("--norestore");
         OUString nologoArg("--nologo");
-            // disable use of the unix standalone splash screen app for the
-            // tests (probably not needed in combination with --headless?)
+            
+            
         OUString headlessArg("--headless");
         OUString acceptArg("--accept=" + desc + ";urp");
         OUString argUser;
@@ -107,7 +107,7 @@ void OfficeConnection::setUp() {
             break;
         } catch (css::connection::NoConnectException &) {}
         if (process_ != 0) {
-            TimeValue delay = { 1, 0 }; // 1 sec
+            TimeValue delay = { 1, 0 }; 
             CPPUNIT_ASSERT_EQUAL(
                 osl_Process_E_TimedOut,
                 osl_joinProcessWithTimeout(process_, &delay));
@@ -124,8 +124,8 @@ void OfficeConnection::tearDown() {
                 CPPUNIT_ASSERT(desktop->terminate());
                 desktop.clear();
             } catch (css::lang::DisposedException &) {}
-                // it appears that DisposedExceptions can already happen while
-                // receiving the response of the terminate call
+                
+                
         }
         CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
         oslProcessInfo info;
@@ -135,7 +135,7 @@ void OfficeConnection::tearDown() {
             osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
         CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
         osl_freeProcessHandle(process_);
-        process_ = 0; // guard against subsequent calls to isStillAlive
+        process_ = 0; 
     }
 }
 
@@ -146,12 +146,12 @@ OfficeConnection::getComponentContext() const {
 
 bool OfficeConnection::isStillAlive() const {
     if (process_ == 0) {
-        // In case "soffice" argument starts with "connect:" we have no direct
-        // control over the liveness of the soffice.bin process (would need to
-        // directly monitor the bridge) so can only assume the best here:
+        
+        
+        
         return true;
     }
-    TimeValue delay = { 0, 0 }; // 0 sec
+    TimeValue delay = { 0, 0 }; 
     oslProcessError e = osl_joinProcessWithTimeout(process_, &delay);
     CPPUNIT_ASSERT(e == osl_Process_E_None || e == osl_Process_E_TimedOut);
     return e == osl_Process_E_TimedOut;

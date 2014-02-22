@@ -55,7 +55,7 @@ ODataColumn::~ODataColumn()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< Type > ODataColumn::getTypes() throw (RuntimeException)
 {
     OTypeCollection aTypes(::getCppuType( (const Reference< XColumn > *)0 ),
@@ -90,7 +90,7 @@ Any SAL_CALL ODataColumn::queryInterface( const Type & _rType ) throw (RuntimeEx
     return aReturn;
 }
 
-// XServiceInfo
+
 OUString ODataColumn::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdb.ODataColumn");
@@ -105,7 +105,7 @@ Sequence< OUString > ODataColumn::getSupportedServiceNames(  ) throw (RuntimeExc
     return aSNS;
 }
 
-// OComponentHelper
+
 void ODataColumn::disposing()
 {
     OResultColumn::disposing();
@@ -114,7 +114,7 @@ void ODataColumn::disposing()
     m_xRowUpdate = NULL;
 }
 
-// ::com::sun::star::sdb::XColumn
+
 sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -275,7 +275,7 @@ Reference< XArray >  ODataColumn::getArray(void) throw( SQLException, RuntimeExc
     return m_xRow->getArray(m_nPos);
 }
 
-// ::com::sun::star::sdb::XColumnUpdate
+
 void ODataColumn::updateNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );

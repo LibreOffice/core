@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SwXFilterOptions.hxx"
@@ -29,12 +29,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 
 
-// module
+
 extern uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwUnoModule_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
 
-// writer documents
+
 extern uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwTextDocument_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr, const sal_uInt64 _nCreationFlags ) throw( uno::Exception );
@@ -45,7 +45,7 @@ extern uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNa
 extern OUString SAL_CALL SwGlobalDocument_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
 
-// xml import
+
 extern uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLImport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
@@ -64,7 +64,7 @@ extern uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServic
 extern OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
-// xml export (OOo)
+
 extern uno::Sequence< OUString > SAL_CALL SwXMLExportOOO_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
@@ -81,7 +81,7 @@ extern uno::Sequence< OUString > SAL_CALL SwXMLExportSettingsOOO_getSupportedSer
 extern OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
 
-// xml export (OASIS)
+
 extern uno::Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
@@ -98,7 +98,7 @@ extern uno::Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServic
 extern OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
-//API objects
+
 extern uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
@@ -115,16 +115,16 @@ extern uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames(
 extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
-// Layout dump filter
+
 extern uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw();
 extern OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL LayoutDumpFilter_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
 
-// #i73788#
+
 #include "cppuhelper/implementationentry.hxx"
 namespace comp_FinalThreadManager {
 
-// component and service helper functions:
+
 OUString SAL_CALL _getImplementationName();
 com::sun::star::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _create(

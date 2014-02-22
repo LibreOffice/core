@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <unx/gtk/gtksalmenu.hxx>
@@ -22,9 +22,9 @@
 
 #include <sal/log.hxx>
 
-// FIXME Copied from framework/inc/framework/menuconfiguration.hxx to
-// avoid circular dependency between modules. It should be in a common
-// header (probably in vcl).
+
+
+
 const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
 const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
 
@@ -41,7 +41,7 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
     sal_uInt16 nId = pSalMenuItem->mnId;
     Menu* pMenu = pSalMenuItem->mpVCLMenu;
 
-    // If item belongs to window list, generate a command with "window-(id)" format.
+    
     if ( ( nId >= START_ITEMID_WINDOWLIST ) && ( nId <= END_ITEMID_WINDOWLIST ) )
         aCommand = g_strdup_printf( "window-%d", nId );
     else
@@ -53,7 +53,7 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
         gchar* aCommandStr = g_strdup( OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
         aCommand = g_strdup( aCommandStr );
 
-        // Some items could have duplicated commands. A new one should be generated.
+        
         for ( sal_uInt16 i = 2; ; i++ )
         {
             if ( !g_action_group_has_action( pActionGroup, aCommand )
@@ -75,7 +75,7 @@ static void KeyCodeToGdkKey ( const KeyCode& rKeyCode, guint* pGdkKeyCode, GdkMo
     if ( pGdkKeyCode == NULL || pGdkModifiers == NULL )
         return;
 
-    // Get GDK key modifiers
+    
     GdkModifierType nModifiers = (GdkModifierType) 0;
 
     if ( rKeyCode.IsShift() )
@@ -89,7 +89,7 @@ static void KeyCodeToGdkKey ( const KeyCode& rKeyCode, guint* pGdkKeyCode, GdkMo
 
     *pGdkModifiers = nModifiers;
 
-    // Get GDK keycode.
+    
     guint nKeyCode = 0;
 
     guint nCode = rKeyCode.GetCode();
@@ -140,7 +140,7 @@ static void KeyCodeToGdkKey ( const KeyCode& rKeyCode, guint* pGdkKeyCode, GdkMo
         case KEY_BRACKETRIGHT:  nKeyCode = GDK_bracketright;    break;
         case KEY_SEMICOLON:     nKeyCode = GDK_semicolon;       break;
 
-        // Special cases
+        
         case KEY_COPY:          nKeyCode = GDK_Copy;            break;
         case KEY_CUT:           nKeyCode = GDK_Cut;             break;
         case KEY_PASTE:         nKeyCode = GDK_Paste;           break;
@@ -279,7 +279,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
         {
-            // Delete extra items from current section.
+            
             RemoveSpareItemsFromNativeMenu( pLOMenu, &pOldCommandList, nSection, validItems );
 
             nSection++;
@@ -298,23 +298,23 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         if ( nItemPos >= g_lo_menu_get_n_items_from_section( pLOMenu, nSection ) )
             g_lo_menu_insert_in_section( pLOMenu, nSection, nItemPos, "EMPTY STRING" );
 
-        // Get internal menu item values.
+        
         OUString aText = pVCLMenu->GetItemText( nId );
         bool bEnabled = pVCLMenu->IsItemEnabled( nId );
         KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
         bool bChecked = pVCLMenu->IsItemChecked( nId );
         MenuItemBits itemBits = pVCLMenu->GetItemBits( nId );
 
-        // Store current item command in command list.
+        
         gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );
 
         if ( aCurrentCommand != NULL )
             pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
 
-        // Get the new command for the item.
+        
         gchar* aNativeCommand = GetCommandForItem( pSalMenuItem, aCurrentCommand, mpActionGroup );
 
-        // Force updating of native menu labels.
+        
         NativeSetItemText( nSection, nItemPos, aText );
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
 
@@ -359,13 +359,13 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         ++validItems;
     }
 
-    // Delete extra items in last section.
+    
     RemoveSpareItemsFromNativeMenu( pLOMenu, &pOldCommandList, nSection, validItems );
 
-    // Delete extra sections.
+    
     RemoveSpareSectionsFromNativeMenu( pLOMenu, &pOldCommandList, nSection );
 
-    // Delete unused commands.
+    
     RemoveUnusedCommands( pActionGroup, pOldCommandList, pNewCommandList );
 }
 
@@ -403,7 +403,7 @@ GtkSalMenu::~GtkSalMenu()
     {
         if ( mpMenuModel )
         {
-//            g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
+
             g_object_unref( mpMenuModel );
         }
     }
@@ -457,14 +457,14 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
     GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(mpFrame);
 
-    // if we had a menu on the GtkSalMenu we have to free it as we generate a
-    // full menu anyway and we might need to reuse an existing model and
-    // actiongroup
+    
+    
+    
     mpOldSalMenu = static_cast< GtkSalMenu* >( pFrameNonConst->GetMenu() );
     pFrameNonConst->SetMenu( this );
     pFrameNonConst->EnsureAppMenuWatch();
 
-    // Clean menu model and action group if needed.
+    
     GtkWidget* pWidget = pFrameNonConst->getWindow();
     GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
 
@@ -486,7 +486,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         mpActionGroup = G_ACTION_GROUP( pActionGroup );
     }
 
-    // Generate the main menu structure.
+    
     if (bMenuVisibility)
         UpdateFull();
 
@@ -520,7 +520,7 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
             pCheckValue = bCheck ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
         else
         {
-            // By default, all checked items are checkmark buttons.
+            
             if ( bCheck || ( !bCheck && pCurrentState != NULL ) )
                 pCheckValue = g_variant_new_boolean( bCheck );
         }
@@ -548,11 +548,11 @@ void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText )
 {
     SolarMutexGuard aGuard;
-    // Replace the '~' character with '_'.
+    
     OUString aText = rText.replace( '~', '_' );
     OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
 
-    // Update item text only when necessary.
+    
     gchar* aLabel = g_lo_menu_get_label_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
     if ( aLabel == NULL || g_strcmp0( aLabel, aConvertedText.getStr() ) != 0 )
@@ -600,7 +600,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     if ( g_action_group_has_action( mpActionGroup, aCommand ) == FALSE ) {
         if ( ( nBits & MIB_CHECKABLE ) || bIsSubmenu )
         {
-            // Item is a checkmark button.
+            
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
             GVariant* pState = g_variant_new_boolean( bChecked );
 
@@ -608,7 +608,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
         }
         else if ( nBits & MIB_RADIOCHECK )
         {
-            // Item is a radio button.
+            
             GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
             GVariant* pState = g_variant_new_string( "" );
@@ -618,14 +618,14 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
         }
         else
         {
-            // Item is not special, so insert a stateless action.
+            
             g_lo_action_group_insert( pActionGroup, aCommand, nId, FALSE );
         }
     }
 
     GLOMenu* pMenu = G_LO_MENU( mpMenuModel );
 
-    // Menu item is not updated unless it's necessary.
+    
     gchar* aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pMenu, nSection, nItemPos );
 
     if ( aCurrentCommand == NULL || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
@@ -678,7 +678,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
 void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 {
     SolarMutexGuard aGuard;
-    // Only the menubar is allowed to dispatch commands.
+    
     if ( !mbMenuBar )
         return;
 
@@ -780,7 +780,7 @@ void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
 
-// =======================================================================
+
 
 /*
  * GtkSalMenuItem

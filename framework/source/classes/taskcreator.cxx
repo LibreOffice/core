@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <classes/taskcreator.hxx>
@@ -34,32 +34,32 @@
 
 namespace framework{
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      initialize instance with necessary information
     @descr      We need a valid uno service manager to create or instanciate new services.
                 All other information to create frames or tasks come in on right interface methods.
 
     @param      xContext
                     points to the valid uno service manager
-*//*-*****************************************************************************************************/
+*
 TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase(       )
     , m_xContext    ( xContext )
 {
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     @short      deinitialize instance
     @descr      We should release all used resource which are not needed any longer.
-*//*-*****************************************************************************************************/
+*
 TaskCreator::~TaskCreator()
 {
     m_xContext.clear();
 }
 
-/*-****************************************************************************************************//**
+/*-****************************************************************************************************
     TODO document me
-*//*-*****************************************************************************************************/
+*
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
@@ -90,10 +90,10 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     catch(const css::uno::Exception&)
     {}
 
-    // no catch here ... without an task creator service we cant open ANY document window within the office.
-    // Thats IMHO not a good idea. Then we should accept the stacktrace showing us the real problem.
-    // BTW: The used fallback creator service (IMPLEMENTATIONNAME_FWK_TASKCREATOR) is implemented in the same
-    // library then these class here ... Why we should not be able to create it ?
+    
+    
+    
+    
     if ( ! xCreator.is())
         xCreator = css::frame::TaskCreator::create(xContext);
 
@@ -124,6 +124,6 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     return xTask;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

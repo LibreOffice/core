@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@ void Client::RequestNewObjectArea( Rectangle& aObjRect )
         SdrMark* pMark = rMarkList.GetMark(0);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-        // no need to check for changes, this method is called only if the area really changed
+        
         bSizeProtect = pObj->IsResizeProtect();
         bPosProtect = pObj->IsMoveProtect();
     }
@@ -87,7 +87,7 @@ void Client::RequestNewObjectArea( Rectangle& aObjRect )
     Rectangle aWorkArea( pView->GetWorkArea() );
     if ( !aWorkArea.IsInside(aObjRect) && !bPosProtect && aObjRect != aOldRect )
     {
-        // correct position
+        
         Point aPos = aObjRect.TopLeft();
         Size  aSize = aObjRect.GetSize();
         Point aWorkAreaTL = aWorkArea.TopLeft();
@@ -113,10 +113,10 @@ void Client::ObjectAreaChanged()
 
         if(pObj)
         {
-            // no need to check for changes, this method is called only if the area really changed
+            
             Rectangle aNewRectangle(GetScaledObjArea());
 
-            // #i118524# if sheared/rotated, center to non-rotated LogicRect
+            
             pObj->setSuppressSetVisAreaSize(true);
 
             if(pObj->GetGeoStat().nDrehWink || pObj->GetGeoStat().nShearWink)
@@ -139,16 +139,16 @@ void Client::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
-        // the iconified object seems not to need such a scaling handling
-        // since the replacement image and the size a completely controlled by the container
-        // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
+        
+        
+        
 
-        pSdrOle2Obj->ActionChanged(); // draw needs it to remove lines in slide preview
+        pSdrOle2Obj->ActionChanged(); 
         return;
     }
 
-    //TODO/LATER: should we try to avoid the recalculation of the visareasize
-    //if we know that it didn't change?
+    
+    
     if (mpViewShell->GetActiveWindow())
     {
         ::sd::View* pView = mpViewShell->GetView();
@@ -159,14 +159,14 @@ void Client::ViewChanged()
 
             if( pSdrOle2Obj->IsChart() )
             {
-                //charts never should be stretched see #i84323# for example
+                
                 pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
                 pSdrOle2Obj->BroadcastObjectChange();
                 return;
             }
 
-            // TODO/LEAN: maybe we can do this without requesting the VisualArea?
-            // working with the visual area might need running state, so the object may switch itself to this state
+            
+            
             MapMode             aMap100( MAP_100TH_MM );
             Rectangle           aVisArea;
             Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
@@ -175,7 +175,7 @@ void Client::ViewChanged()
             Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
                                                 static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
 
-            // react to the change if the difference is bigger than one pixel
+            
             Size aPixelDiff =
                 Application::GetDefaultDevice()->LogicToPixel(
                     Size( aLogicRect.GetWidth() - aScaledSize.Width(),
@@ -206,6 +206,6 @@ void Client::MakeVisible()
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

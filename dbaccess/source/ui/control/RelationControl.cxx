@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RelationControl.hxx"
@@ -122,7 +122,7 @@ namespace dbaui
 
     };
 
-    // class ORelationControl
+    
     ORelationControl::ORelationControl( OTableListBoxControl* pParent )
         : EditBrowseBox(pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
         , m_pBoxControl(pParent)
@@ -155,11 +155,11 @@ namespace dbaui
         {
             InsertDataColumn( SOURCE_COLUMN, m_pConnData->getReferencingTable()->GetWinName(), 100);
             InsertDataColumn( DEST_COLUMN, m_pConnData->getReferencedTable()->GetWinName(), 100);
-            // If the Defs do not yet exits, we need to set them with SetSource-/-DestDef
+            
 
             m_pListCell.reset( new ListBoxControl( &GetDataWindow() ) );
 
-            // set browse mode
+            
             SetMode(    BROWSER_COLUMNSELECTION |
                         BROWSER_HLINESFULL      |
                         BROWSER_VLINESFULL      |
@@ -169,10 +169,10 @@ namespace dbaui
                         BROWSER_AUTO_VSCROLL);
         }
         else
-            // not the first call
+            
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, sal_True); // add one extra row
+        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, sal_True); 
     }
     void ORelationControl::Resize()
     {
@@ -226,7 +226,7 @@ namespace dbaui
             {
                 pLines->push_back(new OConnectionLineData());
                 nRow = pLines->size() - 1;
-                // add new past-pLines row
+                
                 m_ops.push_back(make_pair(INSERT, make_pair(nRow+1, nRow+2)));
             }
 
@@ -241,9 +241,9 @@ namespace dbaui
                 pConnLineData->SetDestFieldName( sFieldName );
                 break;
             }
-            // the modification we just did does *not* need to be registered in m_ops;
-            // it is already taken into account (by the codepath that called us)
-            //m_ops.push_back(make_pair(MODIFY, make_pair(nRow, nRow+1)));
+            
+            
+            
         }
 
         const OConnectionLineDataVec::size_type oldSize = m_pConnData->GetConnLineDataList()->size();
@@ -299,7 +299,7 @@ namespace dbaui
                 sHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
                 break;
             default:
-                //  ?????????
+                
                 break;
         }
 
@@ -354,7 +354,7 @@ namespace dbaui
         {
             if ( _xDest.is() )
             {
-                //sal_Int32 nRows = GetRowCount();
+                
                 Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
                 Reference<XNameAccess> xColumns = xSup->getColumns();
                 Sequence< OUString> aNames = xColumns->getElementNames();
@@ -374,7 +374,7 @@ namespace dbaui
     }
     void ORelationControl::setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest)
     {
-        // If I edit here, hide
+        
         sal_Bool bWasEditing = IsEditing();
         if ( bWasEditing )
             DeactivateCell();
@@ -396,7 +396,7 @@ namespace dbaui
             }
             else
             {
-                // no connection found so we clear our data
+                
                 OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
                 ::std::for_each(pLines->begin(),
                                 pLines->end(),
@@ -409,7 +409,7 @@ namespace dbaui
             m_pConnData->normalizeLines();
 
         }
-        // Repaint
+        
         Invalidate();
 
         if ( bWasEditing )
@@ -430,7 +430,7 @@ namespace dbaui
         assert(parent);
         parent->NotifyCellChange();
     }
-    // class OTableListBoxControl
+    
 
 OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                                             ,const ResId& _rResId
@@ -469,7 +469,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         OTableWindow* pInitialLeft = NULL;
         OTableWindow* pInitialRight = NULL;
 
-        // Collect the names of all TabWins
+        
         OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
         OJoinTableView::OTableWindowMap::const_iterator aEnd = m_pTableMap->end();
         for(;aIter != aEnd;++aIter)
@@ -495,10 +495,10 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             m_strCurrentRight = m_strCurrentLeft;
         }
 
-        // The corresponding Defs for my Controls
+        
         m_pRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
-        // The table selected in a ComboBox must not be available in the other
+        
 
         if ( m_pTableMap->size() > 2 )
         {
@@ -506,8 +506,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             m_lmbRightTable.RemoveEntry(m_strCurrentLeft);
         }
 
-        // Select the first one on the left side and on the right side,
-        // select the second one
+        
+        
         m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
         m_lmbRightTable.SelectEntry(m_strCurrentRight);
 
@@ -519,7 +519,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         OTableWindow* pLeft     = NULL;
         OTableWindow* pRight    = NULL;
 
-        // Special treatment: If there are only two tables, we need to switch the other one too when changing in a LB
+        
         if ( m_pTableMap->size() == 2 )
         {
             ListBox* pOther;
@@ -547,18 +547,18 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         }
         else
         {
-            // First we need the TableDef to the Table and with it the TabWin
+            
             OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(strSelected);
             OTableWindow* pLoop = NULL;
             if( aFind != m_pTableMap->end() )
                 pLoop = aFind->second;
             OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
-                // We need to find strSelect, because we filled the ListBoxes with the table names with which we compare now
+                
             if (pListBox == &m_lmbLeftTable)
             {
-                // Insert the previously selected Entry on the left side on the right side
+                
                 m_lmbRightTable.InsertEntry(m_strCurrentLeft);
-                // Remove the currently selected Entry
+                
                 m_lmbRightTable.RemoveEntry(strSelected);
                 m_strCurrentLeft    = strSelected;
 
@@ -573,9 +573,9 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             }
             else
             {
-                // Insert the previously selected Entry on the right side on the left side
+                
                 m_lmbLeftTable.InsertEntry(m_strCurrentRight);
-                // Remove the currently selected Entry
+                
                 m_lmbLeftTable.RemoveEntry(strSelected);
                 m_strCurrentRight = strSelected;
 
@@ -596,7 +596,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     }
     void OTableListBoxControl::NotifyCellChange()
     {
-        // Enable/disable the OK button, depending on having a valid situation
+        
         TTableConnectionData::value_type pConnData = m_pRC_Tables->getData();
         const OConnectionLineDataVec* pLines = pConnData->GetConnLineDataList();
         bool bValid = !pLines->empty();
@@ -662,7 +662,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             m_aFL_InvolvedFields.SetPosPixel(Point(m_aFL_InvolvedFields.GetPosPixel().X(),aDlgPoint.Y()));
             aDlgPoint.Y() += nDiff + m_aFL_InvolvedFields.GetSizePixel().Height();
         }
-        // positing BrowseBox control
+        
         const Size aCurrentSize = GetSizePixel();
         Size aDlgSize = LogicToPixel( Size(24,0), MAP_APPFONT );
         aDlgSize.Width() = aCurrentSize.Width() - aDlgSize.Width();

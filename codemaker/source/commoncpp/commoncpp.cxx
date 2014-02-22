@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -57,7 +57,7 @@ OString scopedCppName(OString const & type, bool ns_alias)
     OString s(tmpBuf.makeStringAndClear());
     if (ns_alias && s.startsWith("::com::sun::star::", &s))
     {
-        s = "::css::" + s; // nicer shorthand
+        s = "::css::" + s; 
     }
 
     return s;
@@ -81,7 +81,7 @@ OString translateUnoToCppType(
         {
             buf.append("::css::uno::XInterface");
         } else {
-            //TODO: check that nucleus is a valid (UTF-8) identifier
+            
             buf.append(u2b(nucleus));
         }
     }
@@ -92,7 +92,7 @@ OString translateUnoToCppIdentifier(
     OString const & unoIdentifier, OString const & prefix,
     IdentifierTranslationMode transmode, OString const * forbidden)
 {
-    if (// Keywords:
+    if (
         unoIdentifier == "asm"
         || unoIdentifier == "auto"
         || unoIdentifier == "bool"
@@ -156,7 +156,7 @@ OString translateUnoToCppIdentifier(
         || unoIdentifier == "volatile"
         /* unoIdentifier == "wchar_t" */
         || unoIdentifier == "while"
-        // Alternative representations:
+        
         || unoIdentifier == "and"
         /* unoIdentifier == "and_eq" */
         || unoIdentifier == "bitand"
@@ -168,7 +168,7 @@ OString translateUnoToCppIdentifier(
         /* unoIdentifier == "or_eq" */
         || unoIdentifier == "xor"
         /* unoIdentifier == "xor_eq" */
-        // Standard macros:
+        
         || (transmode != ITM_KEYWORDSONLY
             && (unoIdentifier == "BUFSIZ"
                 || unoIdentifier == "CLOCKS_PER_SEC"
@@ -219,7 +219,7 @@ OString translateUnoToCppIdentifier(
                 /* unoIdentifier == "va_arg" */
                 /* unoIdentifier == "va_end" */
                 /* unoIdentifier == "va_start" */
-                // Standard values:
+                
                 || unoIdentifier == "CHAR_BIT"
                 || unoIdentifier == "CHAR_MAX"
                 || unoIdentifier == "CHAR_MIN"
@@ -266,7 +266,7 @@ OString translateUnoToCppIdentifier(
                 || unoIdentifier == "ULONG_MAX"
                 || unoIdentifier == "USHRT_MAX"))
             || (transmode == ITM_GLOBAL
-                && (// Standard types:
+                && (
                     /* unoIdentifier == "clock_t" */
                     /* unoIdentifier == "div_t" */
                     unoIdentifier == "FILE"
@@ -284,9 +284,9 @@ OString translateUnoToCppIdentifier(
                     /* unoIdentifier == "wctrans_t" */
                     /* unoIdentifier == "wctype_t" */
                     /* unoIdentifier == "wint_t" */
-                    // Standard namespaces:
+                    
                     || unoIdentifier == "std"))
-            // Others:
+            
             || unoIdentifier == "NDEBUG"
             || (forbidden != 0 && unoIdentifier == *forbidden) )
     {

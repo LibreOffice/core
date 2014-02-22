@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 #include "cppu/EnvDcp.hxx"
 
 
-//#define LOG_LIFECYCLE_Proxy
+
 #ifdef LOG_LIFECYCLE_Proxy
 #  include <iostream>
 #  define LOG_LIFECYCLE_Proxy_emit(x) x
@@ -45,13 +45,13 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
 {
     switch (pTypeDescr->eTypeClass)
     {
-//      case typelib_TypeClass_TYPEDEF:
+
     case typelib_TypeClass_SEQUENCE:
     {
         switch (((typelib_IndirectTypeDescription *)pTypeDescr)->pType->eTypeClass)
         {
         case typelib_TypeClass_INTERFACE:
-        case typelib_TypeClass_ANY: // might relate to interface
+        case typelib_TypeClass_ANY: 
             return true;
         case typelib_TypeClass_SEQUENCE:
         case typelib_TypeClass_STRUCT:
@@ -71,7 +71,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        // ...optimized... to avoid getDescription() calls!
+        
         typelib_CompoundTypeDescription * pComp    = (typelib_CompoundTypeDescription *)pTypeDescr;
         typelib_TypeDescriptionReference ** pTypes = pComp->ppTypeRefs;
         for ( sal_Int32 nPos = pComp->nMembers; nPos--; )
@@ -79,9 +79,9 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             switch (pTypes[nPos]->eTypeClass)
             {
             case typelib_TypeClass_INTERFACE:
-            case typelib_TypeClass_ANY: // might relate to interface
+            case typelib_TypeClass_ANY: 
                 return true;
-//              case typelib_TypeClass_TYPEDEF:
+
             case typelib_TypeClass_SEQUENCE:
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
@@ -101,7 +101,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             return relatesToInterface( (typelib_TypeDescription *)pComp->pBaseTypeDescription );
         break;
     }
-    case typelib_TypeClass_ANY: // might relate to interface
+    case typelib_TypeClass_ANY: 
     case typelib_TypeClass_INTERFACE:
         return true;
 
@@ -125,7 +125,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
     sal_Int32                          nParams = 0;
     typelib_MethodParameter          * pParams = 0;
     typelib_TypeDescriptionReference * pReturnTypeRef = 0;
-    // sal_Int32                          nOutParams = 0;
+    
 
     switch (pMemberType->eTypeClass)
     {
@@ -233,7 +233,7 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
 
     uno_Environment_invoke(m_to.get(), s_acquireAndRegister_v, m_pUnoI, rOId.pData, pTypeDescr, m_to.get());
 
-    // uno_Interface
+    
     uno_Interface::acquire     = s_Proxy_acquire;
     uno_Interface::release     = s_Proxy_release;
     uno_Interface::pDispatcher = s_Proxy_dispatch;
@@ -306,7 +306,7 @@ void Proxy::acquire(void)
 
     if (osl_atomic_increment(&m_nRef) == 1)
     {
-        // rebirth of proxy zombie
+        
         void * pThis = this;
         m_from.get()->pExtEnv->registerProxyInterface(m_from.get()->pExtEnv,
                                                       &pThis,
@@ -443,7 +443,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
     uno_Any exc_data;
     uno_Any * exc = &exc_data;
 
-    // do the UNO call...
+    
     uno_Environment_invoke(m_to.get(), s_dispatcher_v, m_pUnoI, pMemberType, ret, args, &exc);
 
     if (exc == 0)
@@ -455,7 +455,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
                 typelib_MethodParameter const & param = pParams[nPos];
                 if (param.bOut)
                 {
-                    if (param.bIn) // is inout
+                    if (param.bIn) 
                     {
                         uno_type_destructData(pArgs[nPos], param.pTypeRef, 0);
                     }
@@ -479,7 +479,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
 
         *ppException = 0;
     }
-    else // exception occurred
+    else 
     {
         for (sal_Int32 nPos = 0; nPos < nParams; ++ nPos)
         {
@@ -498,7 +498,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
                                          exc->pType,
                                          m_to_from.get());
 
-        // FIXME: need to destruct in m_to
+        
         uno_any_destruct(exc, 0);
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svxids.hrc>
@@ -30,11 +30,11 @@ TYPEINIT1_FACTORY( SvxBitmapListItem, SfxPoolItem , new  SvxBitmapListItem );
 TYPEINIT1_FACTORY( SvxDashListItem, SfxPoolItem , new  SvxDashListItem );
 TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem );
 
-//==================================================================
+
 //
-//  SvxColorListItem
+
 //
-//==================================================================
+
 
 SvxColorListItem::SvxColorListItem()
 {
@@ -78,7 +78,7 @@ SfxPoolItem* SvxColorListItem::Clone( SfxItemPool * ) const
 }
 
 
-// Should be a template class but ...
+
 #define QUERY_PUT_IMPL(svtype, xtype) \
 bool svtype::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const \
 { \
@@ -98,11 +98,11 @@ bool svtype::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 ) \
 
 QUERY_PUT_IMPL( SvxColorListItem, ColorList )
 
-//==================================================================
+
 //
-//  SvxGradientListItem
+
 //
-//==================================================================
+
 
 SvxGradientListItem::SvxGradientListItem()
 {
@@ -121,7 +121,7 @@ SvxGradientListItem::SvxGradientListItem( const SvxGradientListItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxGradientListItem::GetPresentation
 (
@@ -151,11 +151,11 @@ SfxPoolItem* SvxGradientListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxGradientListItem, GradientList )
 
-//==================================================================
+
 //
-//  SvxHatchListItem
+
 //
-//==================================================================
+
 
 SvxHatchListItem::SvxHatchListItem()
 {
@@ -175,7 +175,7 @@ SvxHatchListItem::SvxHatchListItem( const SvxHatchListItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxHatchListItem::GetPresentation
 (
@@ -205,11 +205,11 @@ SfxPoolItem* SvxHatchListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxHatchListItem, HatchList )
 
 
-//==================================================================
+
 //
-//  SvxBitmapListItem
+
 //
-//==================================================================
+
 
 SvxBitmapListItem::SvxBitmapListItem()
 {
@@ -252,11 +252,11 @@ SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
 
-//==================================================================
+
 //
-//  SvxDashListItem
+
 //
-//==================================================================
+
 
 SvxDashListItem::SvxDashListItem() :
     pDashList( 0 )
@@ -300,11 +300,11 @@ SfxPoolItem* SvxDashListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxDashListItem, DashList )
 
-//==================================================================
+
 //
-//  SvxLineEndListItem
+
 //
-//==================================================================
+
 
 SvxLineEndListItem::SvxLineEndListItem()
 {

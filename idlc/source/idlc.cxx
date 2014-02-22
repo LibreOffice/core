@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <idlc/idlc.hxx>
@@ -100,7 +100,7 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
 
 static void SAL_CALL predefineXInterface(AstModule* pRoot)
 {
-    // define the modules  com::sun::star::uno
+    
     AstModule* pParentScope = pRoot;
     AstModule* pModule = new AstModule(OString("com"), pParentScope);
     pModule->setPredefined(true);
@@ -119,14 +119,14 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
 
-    // define XInterface
+    
     AstInterface* pInterface = new AstInterface(OString("XInterface"), NULL, pParentScope);
     pInterface->setDefined();
     pInterface->setPredefined(true);
     pInterface->setPublished();
     pParentScope->addDeclaration(pInterface);
 
-    // define XInterface::queryInterface
+    
     AstOperation* pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_any)),
                                          OString("queryInterface"), pInterface);
     AstParameter* pParam = new AstParameter(DIR_IN, false,
@@ -135,12 +135,12 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pOp->addDeclaration(pParam);
     pInterface->addMember(pOp);
 
-    // define XInterface::acquire
+    
     pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_void)),
                            OString("acquire"), pInterface);
     pInterface->addMember(pOp);
 
-    // define XInterface::release
+    
     pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_void)),
                            OString("release"), pInterface);
     pInterface->addMember(pOp);
@@ -210,7 +210,7 @@ Idlc::Idlc(Options* pOptions)
     , m_parseState(PS_NoState)
 {
     m_pScopes = new AstStack();
-    // init root object after construction
+    
     m_pRoot = NULL;
     m_pErrorHandler = new ErrorHandler();
     m_bGenerateDoc = m_pOptions->isValid("-C");
@@ -233,7 +233,7 @@ void Idlc::init()
 
     m_pRoot = new AstModule(NT_root, OString(), NULL);
 
-    // push the root node on the stack
+    
     m_pScopes->push(m_pRoot);
     initializePredefinedTypes(m_pRoot);
     predefineXInterface(m_pRoot);
@@ -261,7 +261,7 @@ void Idlc::reset()
 
     m_pRoot = new AstModule(NT_root, OString(), NULL);
 
-    // push the root node on the stack
+    
     m_pScopes->push(m_pRoot);
     initializePredefinedTypes(m_pRoot);
 
@@ -276,7 +276,7 @@ OUString Idlc::processDocumentation()
         if (m_bGenerateDoc) {
             doc = OStringToOUString(raw, RTL_TEXTENCODING_UTF8);
         } else if (raw.indexOf("@deprecated") != -1) {
-            //TODO: this check is somewhat crude
+            
             doc = "@deprecated";
         }
     }
@@ -290,7 +290,7 @@ static void lcl_writeString(::osl::File & rFile, ::osl::FileBase::RC & o_rRC,
     if (::osl::FileBase::E_None == o_rRC) {
         o_rRC = rFile.write(rString.getStr(), rString.getLength(), nWritten);
         if (static_cast<sal_uInt64>(rString.getLength()) != nWritten) {
-            o_rRC = ::osl::FileBase::E_INVAL; //?
+            o_rRC = ::osl::FileBase::E_INVAL; 
         }
     }
 }
@@ -308,8 +308,8 @@ struct WriteDep
     }
 };
 
-// write a dummy target for one included file, so the incremental build does
-// not break with "No rule to make target" if the included file is removed
+
+
 struct WriteDummy
 {
     ::osl::File& m_rFile;
@@ -341,7 +341,7 @@ Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)
     if (::osl::FileBase::E_None != rc) {
         return false;
     }
-    m_includes.erase(getRealFileName()); // eeek, that is a temp file...
+    m_includes.erase(getRealFileName()); 
     ::std::for_each(m_includes.begin(), m_includes.end(),
             WriteDep(depFile, rc));
     lcl_writeString(depFile, rc, "\n\n");

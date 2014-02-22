@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@
 #include "popmenu.hxx"
 #include "tabvwsh.hxx"
 
-// defines -------------------------------------------------------------------
+
 
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -52,9 +52,9 @@
 #define RD_SPECIAL_CONTENT      1
 #define RD_SPECIAL_VISCONTENT   2
 
-//============================================================================
-//  class ScRedlinData
-//----------------------------------------------------------------------------
+
+
+
 ScRedlinData::ScRedlinData()
     :RedlinData()
 {
@@ -79,9 +79,9 @@ ScRedlinData::~ScRedlinData()
     bIsAcceptable=false;
 }
 
-//============================================================================
-//  class ScAcceptChgDlg
-//----------------------------------------------------------------------------
+
+
+
 ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     ScViewData* ptrViewData)
     : SfxModelessDialog(pB, pCW, pParent,
@@ -185,8 +185,8 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     bAcceptEnableFlag=true;
     bRejectEnableFlag=true;
 
-    //  don't call Init here (switching between views), just set link below
-    //  (dialog is just hidden, not deleted anymore, when switching views)
+    
+    
     ClearView();
     UpdateView();
 
@@ -220,7 +220,7 @@ void ScAcceptChgDlg::Init()
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
     if ( pViewSettings!=NULL )
         aChangeViewSet = *pViewSettings;
-    // adjust TimeField for filter tabpage
+    
     aChangeViewSet.AdjustDateMode( *pDoc );
 
     pTPFilter->CheckDate(aChangeViewSet.HasDate());
@@ -666,9 +666,9 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
         a2String = aTmp;
         if(a2String.isEmpty()) a2String=aStrEmpty;
 
-        //aString+="\'";
+        
         aString+=a2String;
-        //aString+="\'";
+        
 
         aDesc=aStrChildOrgContent;
         aDesc += ": ";
@@ -1145,11 +1145,11 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
     ScRedlinData *pEntryData=(ScRedlinData *)(pParent->GetUserData());
     const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
     bool bParentInserted = false;
-    // If the parent is a MatrixOrigin then place it in the right order before
-    // the MatrixReferences. Also if it is the first content change at this
-    // position don't insert the first dependent MatrixReference as the special
-    // content (original value) but insert the predecessor of the MatrixOrigin
-    // itself instead.
+    
+    
+    
+    
+    
     if ( pScChangeAction->GetType() == SC_CAT_CONTENT &&
             ((const ScChangeActionContent*)pScChangeAction)->IsMatrixOrigin() )
     {
@@ -1180,7 +1180,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
         ScRedlinData *pParentData=(ScRedlinData *)(pOriginal->GetUserData());
         pParentData->pData=(void *)pScChangeAction;
         pParentData->nActionNo=pScChangeAction->GetActionNumber();
-        pParentData->bIsAcceptable=pScChangeAction->IsRejectable(); // select old value
+        pParentData->bIsAcceptable=pScChangeAction->IsRejectable(); 
         pParentData->bIsRejectable=false;
         pParentData->bDisabled=false;
     }
@@ -1510,7 +1510,7 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
 
     bool bRemove = false;
 
-    // MUST do it backwards, don't delete parents before children and GPF
+    
     pEntry=pTheView->Last();
     while(pEntry!=NULL)
     {
@@ -1621,12 +1621,12 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
                 case SC_CTM_REMOVE: RemoveEntrys(nStartAction,nEndAction);
                                     break;
                 case SC_CTM_PARENT:
-                case SC_CTM_CHANGE: //bNeedsUpdate=true;
+                case SC_CTM_CHANGE: 
                                     UpdateEntrys(pChgTrack,nStartAction,nEndAction);
                                     break;
                 default:
                 {
-                    // added to avoid warnings
+                    
                 }
             }
         }
@@ -1654,7 +1654,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl)
     bool bRejectFlag = true;
     bool bContMark = false;
 
-    pTabView->DoneBlockMode();  // clears old marking
+    pTabView->DoneBlockMode();  
     SvTreeListEntry* pEntry = pTheView->FirstSelected();
     while( pEntry )
     {
@@ -1793,8 +1793,8 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
         {
             sal_Int32 nPos = pInfo->aExtraString.indexOf("AcceptChgDat:");
 
-            // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
-            // er nicht vorhanden ist, liegt eine "altere Version vor
+            
+            
             if ( nPos != -1 )
             {
                 sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
@@ -1803,7 +1803,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
                     sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
                     if ( n2 != -1 )
                     {
-                        // Alignment-String herausschneiden
+                        
                         aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
                         pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
                         aStr = aStr.copy( n1-nPos+1 );
@@ -1827,7 +1827,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 {

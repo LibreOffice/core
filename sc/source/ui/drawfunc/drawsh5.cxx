@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/eeitem.hxx>
@@ -60,19 +60,19 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
 
-void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
+
+void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             
 {
     ScDrawView* pView = pViewData->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
-        //  Hyperlink
+        
 
     SvxHyperlinkItem aHLinkItem;
 
-    if ( nMarkCount == 1 )              // URL-Button markiert ?
+    if ( nMarkCount == 1 )              
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
@@ -104,7 +104,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                 {
                     OUString sTmp;
-                    // Label
+                    
                     if(xInfo->hasPropertyByName( sPropLabel ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropLabel );
@@ -113,7 +113,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                             aHLinkItem.SetName(sTmp);
                         }
                     }
-                    // URL
+                    
                     if(xInfo->hasPropertyByName( sPropTargetURL ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetURL );
@@ -122,7 +122,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                             aHLinkItem.SetURL(sTmp);
                         }
                     }
-                    // Target
+                    
                     if(xInfo->hasPropertyByName( sPropTargetFrame ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetFrame );
@@ -181,10 +181,10 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
                                 OUString sPropTargetURL( "TargetURL" );
 
-                                // Darf man eine URL an dem Objekt setzen?
+                                
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
-                                    // Ja!
+                                    
 
                                     OUString sPropButtonType( "ButtonType");
                                     OUString sPropTargetFrame( "TargetFrame" );
@@ -214,7 +214,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                         xPropSet->setPropertyValue( sPropButtonType, aAny );
                                     }
 
-                                    //! Undo ???
+                                    
                                     pViewData->GetDocShell()->SetDocumentModified();
                                     bDone = sal_True;
                                 }
@@ -231,7 +231,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                         pViewData->GetViewShell()->
                             InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
 
-                    //  InsertURL an der ViewShell schaltet bei "Text" die DrawShell ab !!!
+                    
                 }
             }
             break;
@@ -242,10 +242,10 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
 sal_uInt16 ScGetFontWorkId();
 
-//------------------------------------------------------------------
+
 
 //
-//          Funktionen auf Drawing-Objekten
+
 //
 
 void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
@@ -256,8 +256,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlotId = rReq.GetSlot();
 
-    //!!!
-    // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
+    
+    
     //
     if (nSlotId == SID_OBJECT_ALIGN && pArgs)
         nSlotId = SID_OBJECT_ALIGN + ((SfxEnumItem&)pArgs->Get(SID_OBJECT_ALIGN)).GetValue() + 1;
@@ -273,7 +273,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             pView->SetMarkedToLayer( SC_LAYER_BACK );
             rBindings.Invalidate(SID_OBJECT_HEAVEN);
             rBindings.Invalidate(SID_OBJECT_HELL);
-            //  leave draw shell if nothing selected (layer may be locked)
+            
             pViewData->GetViewShell()->UpdateDrawShell();
             break;
 
@@ -484,7 +484,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             {
                 if(1L == pView->GetMarkedObjectCount())
                 {
-                    // #i68101#
+                    
                     SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
                     OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
@@ -506,13 +506,13 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                             if (!aName.equals(pSelected->GetName()))
                             {
-                                // handle name change
+                                
                                 const sal_uInt16 nObjType(pSelected->GetObjIdentifier());
 
                                 if (OBJ_GRAF == nObjType && aName.isEmpty())
                                 {
-                                    //  graphics objects must have names
-                                    //  (all graphics are supposed to be in the navigator)
+                                    
+                                    
                                     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
 
                                     if(pModel)
@@ -521,9 +521,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     }
                                 }
 
-                                //  An undo action for renaming is missing in svdraw (99363).
-                                //  For OLE objects (which can be identified using the persist name),
-                                //  ScUndoRenameObject can be used until there is a common action for all objects.
+                                
+                                
+                                
                                 if(OBJ_OLE2 == nObjType)
                                 {
                                     const OUString aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
@@ -535,11 +535,11 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     }
                                 }
 
-                                // set new name
+                                
                                 pSelected->SetName(aName);
                             }
 
-                            // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                            
                             pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( true );
                             pDocSh->SetDrawModified();
                         }
@@ -550,7 +550,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 break;
             }
 
-        // #i68101#
+        
         case SID_TITLE_DESCRIPTION_OBJECT:
             {
                 if(1L == pView->GetMarkedObjectCount())
@@ -572,13 +572,13 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         {
                             ScDocShell* pDocSh = pViewData->GetDocShell();
 
-                            // handle Title and Description
+                            
                             pDlg->GetTitle(aTitle);
                             pDlg->GetDescription(aDescription);
                             pSelected->SetTitle(aTitle);
                             pSelected->SetDescription(aDescription);
 
-                            // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                            
                             pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( true );
                             pDocSh->SetDrawModified();
                         }
@@ -641,15 +641,15 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
         SCTAB nDummyTab;
         if ( pModel->GetNamedObject( aName, 0, nDummyTab ) )
         {
-            // existing object found -> name invalid
+            
             return 0;
         }
     }
 
-    return 1;   // name is valid
+    return 1;   
 }
 
-//------------------------------------------------------------------
+
 
 void ScDrawShell::ExecFormText(SfxRequest& rReq)
 {
@@ -667,14 +667,14 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
     }
 }
 
-//------------------------------------------------------------------
+
 
 void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 {
     ScViewFunc* pView = pViewData->GetView();
     if ( pView->HasPaintBrush() )
     {
-        // cancel paintbrush mode
+        
         pView->ResetBrushDocument();
     }
     else

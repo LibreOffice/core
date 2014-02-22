@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "drawingbase.hxx"
@@ -29,13 +29,13 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::table;
 using namespace ::oox::drawingml;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -51,9 +51,9 @@ inline sal_Int32 lclEmuToHmm( sal_Int64 nValue )
     return (nValue < 0) ? -1 : convertEmuToHmm( nValue );
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 CellAnchorModel::CellAnchorModel() :
     mnCol( -1 ),
@@ -63,7 +63,7 @@ CellAnchorModel::CellAnchorModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 AnchorClientDataModel::AnchorClientDataModel() :
     mbLocksWithSheet( true ),
@@ -71,7 +71,7 @@ AnchorClientDataModel::AnchorClientDataModel() :
 {
 }
 
-// ============================================================================
+
 
 ShapeAnchor::ShapeAnchor( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -186,7 +186,7 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
     EmuSize aPageSize( lclHmmToEmu( rPageSizeHmm.Width ), lclHmmToEmu( rPageSizeHmm.Height ) );
     EmuRectangle aAnchorRect( -1, -1, -1, -1 );
 
-    // calculate shape position
+    
     switch( meAnchorType )
     {
         case ANCHOR_ABSOLUTE:
@@ -210,7 +210,7 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
         break;
     }
 
-    // calculate shape size
+    
     if( (aAnchorRect.X >= 0) && (aAnchorRect.Y >= 0) ) switch( meAnchorType )
     {
         case ANCHOR_ABSOLUTE:
@@ -234,11 +234,11 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
                 aValidTo.mnCol = aToCell.Column;
                 aValidTo.mnRow = aToCell.Row;
                 EmuPoint aPoint = calcCellAnchorEmu( aValidTo );
-                // width (if column index is valid, use the calculated offset, otherwise stretch to maximum available X position)
+                
                 aAnchorRect.Width = aPageSize.Width - aAnchorRect.X;
                 if( aToCell.Column == maTo.mnCol )
                     aAnchorRect.Width = ::std::min< sal_Int64 >( aPoint.X - aAnchorRect.X + 1, aAnchorRect.Width );
-                // height (if row index is valid, use the calculated offset, otherwise stretch to maximum available Y position)
+                
                 aAnchorRect.Height = aPageSize.Height - aAnchorRect.Y;
                 if( aToCell.Row == maTo.mnRow )
                     aAnchorRect.Height = ::std::min< sal_Int64 >( aPoint.Y - aAnchorRect.Y + 1, aAnchorRect.Height );
@@ -248,10 +248,10 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
         break;
     }
 
-    // add 0.75 mm (27,000 EMUs) in X direction to correct display error
+    
     if( aAnchorRect.X >= 0 )
         aAnchorRect.X += 27000;
-    // remove 0.25 mm (9,000 EMUs) in Y direction to correct display error
+    
     if( aAnchorRect.Y >= 9000 )
         aAnchorRect.Y -= 9000;
 
@@ -266,11 +266,11 @@ css::awt::Rectangle ShapeAnchor::calcAnchorRectHmm( const css::awt::Size& rPageS
 
 EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 {
-    // calculate position of top-left edge of the cell
+    
     css::awt::Point aPoint = getCellPosition( rModel.mnCol, rModel.mnRow );
     EmuPoint aEmuPoint( lclHmmToEmu( aPoint.X ), lclHmmToEmu( aPoint.Y ) );
 
-    // add the offset inside the cell
+    
     switch( meCellAnchorType )
     {
         case CELLANCHOR_EMU:
@@ -290,9 +290,9 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
         {
             css::awt::Size aCellSize = getCellSize( rModel.mnCol, rModel.mnRow );
             EmuSize aEmuSize( lclHmmToEmu( aCellSize.Width ), lclHmmToEmu( aCellSize.Height ) );
-            // X offset is given in 1/1024 of column width
+            
             aEmuPoint.X += static_cast< sal_Int64 >( aEmuSize.Width * getLimitedValue< double >( static_cast< double >( rModel.mnColOffset ) / 1024.0, 0.0, 1.0 ) + 0.5 );
-            // Y offset is given in 1/256 of row height
+            
             aEmuPoint.Y += static_cast< sal_Int64 >( aEmuSize.Height * getLimitedValue< double >( static_cast< double >( rModel.mnRowOffset ) / 256.0, 0.0, 1.0 ) + 0.5 );
         }
         break;
@@ -301,9 +301,9 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
     return aEmuPoint;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

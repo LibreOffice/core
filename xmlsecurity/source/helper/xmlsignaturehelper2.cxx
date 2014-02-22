@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmlsecurity/xmlsignaturehelper.hxx>
@@ -62,7 +62,7 @@ void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId,
     maVerifyResultListenerListener.Call( &aResult );
 }
 
-// XDocumentHandler
+
 void SAL_CALL ImplXMLSignatureListener::startDocument(  )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -140,7 +140,7 @@ void SAL_CALL ImplXMLSignatureListener::setDocumentLocator( const com::sun::star
     }
 }
 
-// XUriBinding
+
 
 UriBindingHelper::UriBindingHelper()
 {
@@ -184,8 +184,8 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     sal_Int32 nSepPos = rURI.indexOf( '/' );
     if ( nSepPos == -1 )
     {
-        // Cloning because of I can't keep all storage references open
-        // MBA with think about a better API...
+        
+        
         const OUString sName = ::rtl::Uri::decode(
             rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (sName.isEmpty() && !rURI.isEmpty())

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,7 +80,7 @@ namespace dxcanvas
             {
                 case rendering::PathJoinType::NONE:
                     SAL_WARN( "canvas.directx", "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
-                    // FALLTHROUGH intended
+                    
                 case rendering::PathJoinType::MITER:
                     return Gdiplus::LineJoinMiter;
 
@@ -150,7 +150,7 @@ namespace dxcanvas
 
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->SetCompositingMode(
-                    Gdiplus::CompositingModeSourceCopy ), // force set, don't blend
+                    Gdiplus::CompositingModeSourceCopy ), 
                 "CanvasHelper::clear(): GDI+ SetCompositingMode call failed" );
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->Clear( aClearColor ),
@@ -173,18 +173,18 @@ namespace dxcanvas
                 Gdiplus::Color(
                     tools::sequenceToArgb(renderState.DeviceColor)) );
 
-            // determine size of one-by-one device pixel ellipse
+            
             Gdiplus::Matrix aMatrix;
             pGraphics->GetTransform(&aMatrix);
             aMatrix.Invert();
             Gdiplus::PointF vector(1, 1);
             aMatrix.TransformVectors(&vector);
 
-            // paint a one-by-one circle, with the given point
-            // in the middle (rounded to float)
+            
+            
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->FillEllipse( &aBrush,
-                                                       // disambiguate call
+                                                       
                                                        Gdiplus::REAL(aPoint.X),
                                                        Gdiplus::REAL(aPoint.Y),
                                                        Gdiplus::REAL(vector.X),
@@ -210,17 +210,17 @@ namespace dxcanvas
                     tools::sequenceToArgb(renderState.DeviceColor)),
                 Gdiplus::REAL(0.0) );
 
-            // #122683# Switched precedence of pixel offset
-            // mode. Seemingly, polygon stroking needs
-            // PixelOffsetModeNone to achieve visually pleasing
-            // results, whereas all other operations (e.g. polygon
-            // fills, bitmaps) look better with PixelOffsetModeHalf.
+            
+            
+            
+            
+            
             const Gdiplus::PixelOffsetMode aOldMode(
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
             Gdiplus::Status hr = pGraphics->DrawLine( &aPen,
-                                                      Gdiplus::REAL(aStartPoint.X), // disambiguate call
+                                                      Gdiplus::REAL(aStartPoint.X), 
                                                       Gdiplus::REAL(aStartPoint.Y),
                                                       Gdiplus::REAL(aEndPoint.X),
                                                       Gdiplus::REAL(aEndPoint.Y) );
@@ -249,17 +249,17 @@ namespace dxcanvas
                     tools::sequenceToArgb(renderState.DeviceColor)),
                 Gdiplus::REAL(0.0) );
 
-            // #122683# Switched precedence of pixel offset
-            // mode. Seemingly, polygon stroking needs
-            // PixelOffsetModeNone to achieve visually pleasing
-            // results, whereas all other operations (e.g. polygon
-            // fills, bitmaps) look better with PixelOffsetModeHalf.
+            
+            
+            
+            
+            
             const Gdiplus::PixelOffsetMode aOldMode(
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
             Gdiplus::Status hr = pGraphics->DrawBezier( &aPen,
-                                                        Gdiplus::REAL(aBezierSegment.Px), // disambiguate call
+                                                        Gdiplus::REAL(aBezierSegment.Px), 
                                                         Gdiplus::REAL(aBezierSegment.Py),
                                                         Gdiplus::REAL(aBezierSegment.C1x),
                                                         Gdiplus::REAL(aBezierSegment.C1y),
@@ -295,18 +295,18 @@ namespace dxcanvas
                     tools::sequenceToArgb(renderState.DeviceColor)),
                 Gdiplus::REAL(0.0) );
 
-            // #122683# Switched precedence of pixel offset
-            // mode. Seemingly, polygon stroking needs
-            // PixelOffsetModeNone to achieve visually pleasing
-            // results, whereas all other operations (e.g. polygon
-            // fills, bitmaps) look better with PixelOffsetModeHalf.
+            
+            
+            
+            
+            
             const Gdiplus::PixelOffsetMode aOldMode(
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
             GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
-            // TODO(E1): Return value
+            
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
 
             pGraphics->SetPixelOffsetMode( aOldMode );
@@ -316,7 +316,7 @@ namespace dxcanvas
                 "CanvasHelper::drawPolyPolygon(): GDI+ call failed" );
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -336,19 +336,19 @@ namespace dxcanvas
             setupGraphicsState( pGraphics, viewState, renderState );
 
 
-            // Setup stroke pen
-            // ----------------
+            
+            
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
                     tools::sequenceToArgb(renderState.DeviceColor)),
                 static_cast< Gdiplus::REAL >(strokeAttributes.StrokeWidth) );
 
-            // #122683# Switched precedence of pixel offset
-            // mode. Seemingly, polygon stroking needs
-            // PixelOffsetModeNone to achieve visually pleasing
-            // results, whereas all other operations (e.g. polygon
-            // fills, bitmaps) look better with PixelOffsetModeHalf.
+            
+            
+            
+            
+            
             const Gdiplus::PixelOffsetMode aOldMode(
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
@@ -375,7 +375,7 @@ namespace dxcanvas
 
             GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
 
-            // TODO(E1): Return value
+            
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
 
             pGraphics->SetPixelOffsetMode( aOldMode );
@@ -385,7 +385,7 @@ namespace dxcanvas
                 "CanvasHelper::strokePolyPolygon(): GDI+ call failed" );
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -396,7 +396,7 @@ namespace dxcanvas
                                                                                            const uno::Sequence< rendering::Texture >&           /*textures*/,
                                                                                            const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -408,7 +408,7 @@ namespace dxcanvas
                                                                                                 const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
                                                                                                 const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -418,7 +418,7 @@ namespace dxcanvas
                                                                                    const rendering::RenderState&                        /*renderState*/,
                                                                                    const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
@@ -441,12 +441,12 @@ namespace dxcanvas
 
             GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
-            // TODO(F1): FillRule
+            
             ENSURE_OR_THROW( Gdiplus::Ok == pGraphics->FillPath( &aBrush, pPath.get() ),
                              "CanvasHelper::fillPolyPolygon(): GDI+ call failed  " );
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -457,7 +457,7 @@ namespace dxcanvas
                                                                                               const uno::Sequence< rendering::Texture >&            /*textures*/,
                                                                                               const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -479,7 +479,7 @@ namespace dxcanvas
                                                                             const rendering::FontInfo&                      /*aFilter*/,
                                                                             const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
-        // TODO
+        
         return uno::Sequence< rendering::FontInfo >();
     }
 
@@ -506,21 +506,21 @@ namespace dxcanvas
             CanvasFont::ImplRef pFont(
                 tools::canvasFontFromXFont(xFont) );
 
-            // Move glyphs up, such that output happens at the font
-            // baseline.
+            
+            
             Gdiplus::PointF aPoint( 0.0,
                                     static_cast<Gdiplus::REAL>(-(pFont->getFont()->GetSize()*
                                                                  pFont->getCellAscent() /
                                                                  pFont->getEmHeight())) );
 
-            // TODO(F1): According to
-            // http://support.microsoft.com/default.aspx?scid=kb;EN-US;Q307208,
-            // we might have to revert to GDI and ExTextOut here,
-            // since GDI+ takes the scalability a little bit too
-            // far...
+            
+            
+            
+            
+            
 
-            // TODO(F2): Proper layout (BiDi, CTL)! IMHO must use
-            // DrawDriverString here, and perform layouting myself...
+            
+            
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->DrawString( reinterpret_cast<LPCWSTR>(
                                                           text.Text.copy( text.StartPosition,
@@ -572,10 +572,10 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            // check whether one of our own objects - need to retrieve
-            // bitmap _before_ calling
-            // GraphicsProvider::getGraphics(), to avoid locking our
-            // own surface.
+            
+            
+            
+            
             BitmapSharedPtr pGdiBitmap;
             BitmapProvider* pBitmap = dynamic_cast< BitmapProvider* >(xBitmap.get());
             if( pBitmap )
@@ -595,7 +595,7 @@ namespace dxcanvas
                                                 xBitmap);
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -607,7 +607,7 @@ namespace dxcanvas
         ENSURE_OR_THROW( xBitmap.is(),
                           "CanvasHelper::drawBitmap: bitmap is NULL");
 
-        // no color set -> this is equivalent to a plain drawBitmap(), then
+        
         if( renderState.DeviceColor.getLength() < 3 )
             return drawBitmap( pCanvas, xBitmap, viewState, renderState );
 
@@ -622,8 +622,8 @@ namespace dxcanvas
                                  pBitmap->GetWidth(),
                                  pBitmap->GetHeight() );
 
-            // Setup an ImageAttributes with an alpha-modulating
-            // color matrix.
+            
+            
             const rendering::ARGBColor& rARGBColor(
                 mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0]);
 
@@ -647,7 +647,7 @@ namespace dxcanvas
                 "CanvasHelper::drawBitmapModulated(): GDI+ call failed" );
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -656,8 +656,8 @@ namespace dxcanvas
         return uno::Reference< rendering::XGraphicDevice >(mpDevice);
     }
 
-    // private helper
-    // --------------------------------------------------
+    
+    
 
     Gdiplus::CompositingMode CanvasHelper::calcCompositingMode( sal_Int8 nMode )
     {
@@ -666,7 +666,7 @@ namespace dxcanvas
         switch( nMode )
         {
             case rendering::CompositeOperation::OVER:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::CLEAR:
                 aRet = Gdiplus::CompositingModeSourceOver;
                 break;
@@ -676,27 +676,27 @@ namespace dxcanvas
                 break;
 
             case rendering::CompositeOperation::DESTINATION:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::UNDER:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::INSIDE:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::INSIDE_REVERSE:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::OUTSIDE:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::OUTSIDE_REVERSE:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::ATOP:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::ATOP_REVERSE:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::XOR:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::ADD:
-                // FALLTHROUGH intended
+                
             case rendering::CompositeOperation::SATURATE:
-                // TODO(F2): Problem, because GDI+ only knows about two compositing modes
+                
                 aRet = Gdiplus::CompositingModeSourceOver;
                 break;
 
@@ -717,11 +717,11 @@ namespace dxcanvas
         ENSURE_OR_THROW( mpDevice,
                           "CanvasHelper::setupGraphicsState: reference device invalid" );
 
-        // setup view transform first. Clipping e.g. depends on it
+        
         ::basegfx::B2DHomMatrix aTransform;
         ::canvas::tools::getViewStateTransform(aTransform, viewState);
 
-        // add output offset
+        
         if( !maOutputOffset.equalZero() )
         {
             const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
@@ -736,7 +736,7 @@ namespace dxcanvas
             Gdiplus::Ok == rGraphics->SetTransform( &aMatrix ),
             "CanvasHelper::setupGraphicsState(): Failed to set GDI+ transformation" );
 
-        // setup view and render state clipping
+        
         ENSURE_OR_THROW(
             Gdiplus::Ok == rGraphics->ResetClip(),
             "CanvasHelper::setupGraphicsState(): Failed to reset GDI+ clip" );
@@ -745,22 +745,22 @@ namespace dxcanvas
         {
             GraphicsPathSharedPtr aClipPath( tools::graphicsPathFromXPolyPolygon2D( viewState.Clip ) );
 
-            // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
-            // Try SetClip( Rect ) or similar for simple clip paths (need some support in
-            // LinePolyPolygon, then)
+            
+            
+            
             ENSURE_OR_THROW(
                 Gdiplus::Ok == rGraphics->SetClip( aClipPath.get(),
                                                    Gdiplus::CombineModeIntersect ),
                 "CanvasHelper::setupGraphicsState(): Cannot set GDI+ clip" );
         }
 
-        // setup overall transform only now. View clip above was relative to
-        // view transform
+        
+        
         ::canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                      viewState,
                                                      renderState);
 
-        // add output offset
+        
         if( !maOutputOffset.equalZero() )
         {
             const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
@@ -778,16 +778,16 @@ namespace dxcanvas
         {
             GraphicsPathSharedPtr aClipPath( tools::graphicsPathFromXPolyPolygon2D( renderState.Clip ) );
 
-            // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
-            // Try SetClip( Rect ) or similar for simple clip paths (need some support in
-            // LinePolyPolygon, then)
+            
+            
+            
             ENSURE_OR_THROW(
                 Gdiplus::Ok == rGraphics->SetClip( aClipPath.get(),
                                                    Gdiplus::CombineModeIntersect ),
                 "CanvasHelper::setupGraphicsState(): Cannot set GDI+ clip" );
         }
 
-        // setup compositing
+        
         const Gdiplus::CompositingMode eCompositing( calcCompositingMode( renderState.CompositeOperation ) );
         ENSURE_OR_THROW(
             Gdiplus::Ok == rGraphics->SetCompositingMode( eCompositing ),

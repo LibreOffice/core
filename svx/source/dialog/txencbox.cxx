@@ -32,9 +32,9 @@
 #include <rtl/strbuf.hxx>
 #include <osl/nlsupport.h>
 
-//========================================================================
-//  class SvxTextEncodingBox
-//========================================================================
+
+
+
 
 SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )
@@ -58,14 +58,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxTextEncodingBox(Window *
     return pListBox;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextEncodingBox::~SvxTextEncodingBox()
 {
     delete m_pEncTable;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 {
@@ -78,7 +78,7 @@ sal_uInt16 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::FillFromTextEncodingTable(
         sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
@@ -102,7 +102,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = sal_False;    // InfoFlags don't work for Unicode :-(
+                        bInsert = sal_False;    
                 }
                 else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
                     bInsert = sal_False;
@@ -114,7 +114,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
             {
                 switch ( nEnc )
                 {
-                    // subsets of RTL_TEXTENCODING_GB_18030
+                    
                     case RTL_TEXTENCODING_GB_2312 :
                     case RTL_TEXTENCODING_GBK :
                     case RTL_TEXTENCODING_MS_936 :
@@ -128,7 +128,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::FillFromDbTextEncodingMap(
         sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
@@ -159,7 +159,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = sal_False;    // InfoFlags don't work for Unicode :-(
+                        bInsert = sal_False;    
                 }
                 else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
                     bInsert = sal_False;
@@ -171,7 +171,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
             {
                 switch ( nEnc )
                 {
-                    // subsets of RTL_TEXTENCODING_GB_18030
+                    
                     case RTL_TEXTENCODING_GB_2312 :
                     case RTL_TEXTENCODING_GBK :
                     case RTL_TEXTENCODING_MS_936 :
@@ -179,9 +179,9 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                     break;
                 }
             }
-            // CharsetMap offers a RTL_TEXTENCODING_DONTKNOW for internal use,
-            // makes no sense here and would result in an empty string as list
-            // entry.
+            
+            
+            
             if ( bInsert && nEnc != RTL_TEXTENCODING_DONTKNOW )
                 InsertTextEncoding( nEnc );
         }
@@ -189,7 +189,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 #endif
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
@@ -198,7 +198,7 @@ void SvxTextEncodingBox::FillWithMimeAndSelectBest()
     SelectTextEncoding( nEnc );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry, sal_uInt16 nPos )
@@ -207,7 +207,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
     SetEntryData( nAt, (void*)(sal_uIntPtr)nEnc );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uInt16 nPos )
 {
@@ -218,7 +218,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
         SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
 
-//------------------------------------------------------------------------
+
 
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
@@ -230,7 +230,7 @@ rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
         return RTL_TEXTENCODING_DONTKNOW;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bool bSelect )
 {

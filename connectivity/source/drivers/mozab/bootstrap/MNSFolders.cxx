@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <MNSFolders.hxx>
@@ -23,7 +23,7 @@
 #include <sys/types.h>
 #include <strings.h>
 #include <string.h>
-#endif // End UNIX
+#endif 
 
 #ifdef WNT
 #include "pre_include_windows.h"
@@ -32,7 +32,7 @@
 #include <shlobj.h>
 #include <objidl.h>
 #include "post_include_windows.h"
-#endif // End WNT
+#endif 
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::mozilla;
 
 namespace
 {
-    // -------------------------------------------------------------------
+    
     static OUString lcl_getUserDataDirectory()
     {
         ::osl::Security   aSecurity;
@@ -50,16 +50,16 @@ namespace
     #if defined(XP_WIN) || defined(MACOSX)
         aSecurity.getConfigDir( aConfigPath );
     #else
-        //This is to find the dir under which .mozilla/.thunderbird is created.
-        //mozilla doesn't honour XDG_CONFIG_HOME, so raw home dir required here
-        //not xdg-config dir
+        
+        
+        
         aSecurity.getHomeDir( aConfigPath );
     #endif
 
         return aConfigPath + "/";
     }
 
-    // -------------------------------------------------------------------
+    
     const size_t NB_PRODUCTS = 3;
     const size_t NB_CANDIDATES = 4;
 
@@ -87,7 +87,7 @@ namespace
         "MOZILLA_THUNDERBIRD_PROFILE_ROOT",
     };
 
-    // -------------------------------------------------------------------
+    
     static OUString lcl_guessProfileRoot( MozillaProductType _product )
     {
         size_t productIndex = _product - 1;
@@ -98,19 +98,19 @@ namespace
         {
             OUString sProductPath;
 
-            // check whether we have an anevironment variable which helps us
+            
             const char* pProfileByEnv = getenv( ProductRootEnvironmentVariable[ productIndex ] );
             if ( pProfileByEnv )
             {
                 sProductPath = OUString( pProfileByEnv, rtl_str_getLength( pProfileByEnv ), osl_getThreadTextEncoding() );
-                // asume that this is fine, no further checks
+                
             }
             else
             {
                 OUString sProductDirCandidate;
                 const char* pProfileRegistry = "profiles.ini";
 
-                // check all possible candidates
+                
                 for ( size_t i=0; i<NB_CANDIDATES; ++i )
                 {
                     if ( NULL == DefaultProductDir[ productIndex ][ i ] )
@@ -119,7 +119,7 @@ namespace
                     sProductDirCandidate = lcl_getUserDataDirectory() +
                         OUString::createFromAscii( DefaultProductDir[ productIndex ][ i ] );
 
-                    // check existence
+                    
                     ::osl::DirectoryItem aRegistryItem;
                     ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + OUString::createFromAscii( pProfileRegistry ), aRegistryItem );
                     if ( result == ::osl::FileBase::E_None  )
@@ -128,7 +128,7 @@ namespace
                         result = aRegistryItem.getFileStatus( aStatus );
                         if ( result == ::osl::FileBase::E_None  )
                         {
-                            // the registry file exists
+                            
                             break;
                         }
                     }
@@ -144,7 +144,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------
+
 OUString getRegistryDir(MozillaProductType product)
 {
     if (product == MozillaProductType_Default)

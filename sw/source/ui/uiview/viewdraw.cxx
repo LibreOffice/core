@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,7 +70,7 @@
 
 using namespace ::com::sun::star;
 
-// Execute Drawing-Ids
+
 
 void SwView::ExecDraw(SfxRequest& rReq)
 {
@@ -121,7 +121,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             if (nNewId == m_nFormSfxId)
             {
                 bDeselect = sal_True;
-                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
+                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  
             }
         }
     }
@@ -147,7 +147,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     if(rVisArea.Height() > aDocSize.Height())
                         aStartPos.Y() = aDocSize.Height() / 2 + rVisArea.Top();
 
-                    //determine the size of the object
+                    
                     if(pObj->IsGroupObject())
                     {
                         const Rectangle& rBoundRect = ((SdrObjGroup*)pObj)->GetCurrentBoundRect();
@@ -155,7 +155,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                         aStartPos.Y() -= rBoundRect.GetHeight()/2;
                     }
 
-                    // TODO: unmark all other
+                    
                     m_pWrtShell->EnterStdMode();
                     m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aStartPos );
                 }
@@ -214,7 +214,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
     if( nSlotId == SID_DRAW_CS_ID )
     {
-        //deselect if same custom shape is selected again
+        
         SwDrawBase* pFuncPtr = GetDrawFuncPtr();
         if( pFuncPtr && pFuncPtr->GetSlotId() == SID_DRAW_CS_ID )
         {
@@ -228,7 +228,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         }
     }
 
-    //deselect if same shape is selected again (but different custom shapes do have same slot id)
+    
     if ( bDeselect || (nSlotId == m_nDrawSfxId &&
             (!pStringItem || (pStringItem->GetValue() == m_sDrawCustom))
                 && (nSlotId != SID_DRAW_CS_ID) ) )
@@ -252,7 +252,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     LeaveDrawCreate();
 
     if (m_pWrtShell->IsFrmSelected())
-        m_pWrtShell->EnterStdMode();  // because bug #45639
+        m_pWrtShell->EnterStdMode();  
 
     SwDrawBase* pFuncPtr = NULL;
 
@@ -334,7 +334,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
     static sal_uInt16 const aInval[] =
     {
-        // Slot IDs must be sorted when calling Invalidate!
+        
         SID_ATTRIBUTES_AREA,
         SID_INSERT_DRAW,
         0
@@ -393,7 +393,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     AttrChangedNotify(m_pWrtShell);
 }
 
-// End drawing
+
 
 void SwView::ExitDraw()
 {
@@ -401,7 +401,7 @@ void SwView::ExitDraw()
 
     if(m_pShell)
     {
-        // the shell may be invalid at close/reload/SwitchToViewShell
+        
         SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
         sal_uInt16 nIdx = 0;
         SfxShell* pTest = 0;
@@ -411,8 +411,8 @@ void SwView::ExitDraw()
         }
         while( pTest && pTest != this && pTest != m_pShell);
         if(pTest == m_pShell &&
-            // don't call LeaveSelFrmMode() etc. for the below,
-            // because objects may still be selected:
+            
+            
             !m_pShell->ISA(SwDrawBaseShell) &&
             !m_pShell->ISA(SwBezierShell) &&
             !m_pShell->ISA(svx::ExtrusionBar) &&
@@ -443,7 +443,7 @@ void SwView::ExitDraw()
     }
 }
 
-// Disable rotate mode
+
 
 void SwView::NoRotate()
 {
@@ -457,7 +457,7 @@ void SwView::NoRotate()
     }
 }
 
-// Enable DrawTextEditMode
+
 
 sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
@@ -476,7 +476,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
         !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
         pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
 
-        // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
+        
         ( pObj->ISA( SdrTextObj ) ||
           ( pObj->ISA(SwDrawVirtObj) &&
             ((SwDrawVirtObj*)pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
@@ -491,7 +491,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
     return bReturn;
 }
 
-// Enable DrawTextEditMode
+
 
 sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         bool bIsNewObj, bool bSetSelectionToStart)
@@ -532,21 +532,21 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == m_nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == m_nDrawSfxId );
 
-        // set default horizontal text direction at outliner
+        
         EEHorizontalTextDirection aDefHoriTextDir =
             pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
         pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
 
-    // To allow editing the referenced object from a SwDrawVirtObj here
-    // the original needs to be fetched evenually. This ATM activates the
-    // text edit mode for the original object.
+    
+    
+    
     SdrObject* pToBeActivated = pObj;
 
-    // Always the original object is edited. To allow the TextEdit to happen
-    // where the VirtObj is positioned, on demand a occurring offset is set at
-    // the TextEdit object. That offset is used for creating and managing the
-    // OutlinerView.
+    
+    
+    
+    
     Point aNewTextEditOffset(0, 0);
 
     if(pObj->ISA(SwDrawVirtObj))
@@ -556,15 +556,15 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         aNewTextEditOffset = pVirtObj->GetOffset();
     }
 
-    // set in each case, thus it will be correct for all objects
+    
     ((SdrTextObj*)pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
 
     sal_Bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, sal_True, pOutliner, 0, sal_False, sal_False, sal_False ));
 
-    // #i7672#
-    // Since SdrBeginTextEdit actually creates the OutlinerView and thus also
-    // sets the background color, an own background color needs to be set
-    // after TextEditing was started. This is now done here.
+    
+    
+    
+    
     if(bRet)
     {
         OutlinerView* pView = pSdrView->GetTextEditOutlinerView();
@@ -575,7 +575,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
             pView->SetBackgroundColor(aBackground);
         }
 
-        // editing should start at the end of text, spell checking at the beginning ...
+        
         ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
         if (bSetSelectionToStart)
             aNewSelection = ESelection();
@@ -585,7 +585,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
     return bRet;
 }
 
-// Is a DrawTextObjekt selected?
+
 
 bool SwView::IsTextTool() const
 {
@@ -649,7 +649,7 @@ bool SwView::AreOnlyFormsSelected() const
     {
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            // Except controls, are still normal draw objects selected?
+            
             SdrObject *pSdrObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
             if (!HasOnlyObj(pSdrObj, FmFormInventor))
@@ -703,7 +703,7 @@ sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
     return bRet;
 }
 
-//#i87414# mod
+
 IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
     if (pInfo->nCommand == SPELLCMD_STARTSPELLDLG)

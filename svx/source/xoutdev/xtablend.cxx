@@ -94,14 +94,14 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 
         const Size aSize(rSize.Width() * 2, rSize.Height());
 
-        // prepare line geometry
+        
         basegfx::B2DPolygon aLine;
         const double fBorderDistance(aSize.Height() * 0.1);
 
         aLine.append(basegfx::B2DPoint(fBorderDistance, aSize.Height() / 2));
         aLine.append(basegfx::B2DPoint(aSize.Width() - fBorderDistance, aSize.Height() / 2));
 
-        // prepare LineAttribute
+        
         const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
         const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * 1.1);
         const drawinglayer::attribute::LineAttribute aLineAttribute(
@@ -115,7 +115,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
             aLineEnd,
             false);
 
-        // prepare line primitive
+        
         const drawinglayer::primitive2d::Primitive2DReference aLineStartEndPrimitive(
             new drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D(
                 aLine,
@@ -123,7 +123,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
                 aLineStartEndAttribute,
                 aLineStartEndAttribute));
 
-        // prepare VirtualDevice
+        
         VirtualDevice aVirtualDevice;
         const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
@@ -146,7 +146,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
             aVirtualDevice.Erase();
         }
 
-        // create processor and draw primitives
+        
         drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
             aVirtualDevice,
             aNewViewInformation2D);
@@ -159,7 +159,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
             delete pProcessor2D;
         }
 
-        // get result bitmap and scale
+        
         aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
     }
 

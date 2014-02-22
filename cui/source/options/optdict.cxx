@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// static ----------------------------------------------------------------
+
 
 static const short  NOACTDICT   = -1;
 
@@ -50,12 +50,12 @@ static long nStaticTabs[]=
     2,10,71,120
 };
 
-// static function -------------------------------------------------------
+
 
 static OUString getNormDicEntry_Impl(const OUString &rText)
 {
     OUString aTmp(comphelper::string::stripEnd(rText, '.'));
-    // non-standard hyphenation
+    
     if (aTmp.indexOf('[') > -1)
     {
         OUStringBuffer aTmp2 ( aTmp.getLength() );
@@ -75,7 +75,7 @@ static OUString getNormDicEntry_Impl(const OUString &rText)
     return comphelper::string::remove(aTmp, '=');
 }
 
-// Compare Dictionary Entry  result
+
 enum CDE_RESULT { CDE_EQUAL, CDE_SIMILAR, CDE_DIFFERENT };
 
 static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rText2 )
@@ -85,8 +85,8 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
     if (rText1 == rText2)
         eRes = CDE_EQUAL;
     else
-    {   // similar = equal up to trailing '.' and hyphenation positions
-        // marked with '=' and '[' + alternative spelling pattern + ']'
+    {   
+        
         if (getNormDicEntry_Impl( rText1 ) == getNormDicEntry_Impl( rText2 ))
             eRes = CDE_SIMILAR;
     }
@@ -94,7 +94,7 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
     return eRes;
 }
 
-// class SvxNewDictionaryDialog -------------------------------------------
+
 
 SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
         Reference< XSpellChecker1 >  &xSpl ) :
@@ -107,22 +107,22 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
     get(pLanguageLB,"language");
     get(pExceptBtn,"except");
     get(pOKBtn,"ok");
-    // install handler
+    
     pNameEdit->SetModifyHdl(
         LINK( this, SvxNewDictionaryDialog, ModifyHdl_Impl ) );
     pOKBtn->SetClickHdl( LINK( this, SvxNewDictionaryDialog, OKHdl_Impl ) );
 
-    // display languages
+    
     pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
     pLanguageLB->SelectEntryPos(0);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 {
     OUString sDict = comphelper::string::stripEnd(pNameEdit->GetText(), ' ');
-    // add extension for personal dictionaries
+    
     sDict += ".dic";
 
     Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
@@ -141,17 +141,17 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 
     if ( bFound )
     {
-        // duplicate names?
+        
         InfoBox( this, CUI_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
         pNameEdit->GrabFocus();
         return 0;
     }
 
-    // create and add
+    
     sal_uInt16 nLang = pLanguageLB->GetSelectLanguage();
     try
     {
-        // create new dictionary
+        
         DictionaryType eType = pExceptBtn->IsChecked() ?
                 DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
         if (xDicList.is())
@@ -168,7 +168,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     {
         xNewDic = NULL;
 
-        // error: couldn't create new dictionary
+        
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
             this, RID_SVXERRCTX, &CUI_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
@@ -181,8 +181,8 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     {
         xDicList->addDictionary( Reference< XDictionary > ( xNewDic, UNO_QUERY ) );
 
-        // refresh list of dictionaries
-        //! dictionaries may have been added/removed elsewhere too.
+        
+        
         aDics = xDicList->getDictionaries();
     }
 
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 {
@@ -203,11 +203,11 @@ IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
 
-//==========================================================================
+
 //
-// class SvxEditDictionaryDialog -------------------------------------------
+
 //
-//==========================================================================
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxDictEdit(Window *pParent, VclBuilder::stringmap&)
 {
@@ -250,12 +250,12 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     pWordsLB->SetSelectHdl(LINK(this, SvxEditDictionaryDialog, SelectHdl));
     pWordsLB->SetTabs(nStaticTabs);
 
-    //! we use an algorithm of our own to insert elements sorted
+    
     pWordsLB->SetStyle(pWordsLB->GetStyle()|/*WB_SORT|*/WB_HSCROLL|WB_CLIPCHILDREN);
 
 
     nWidth=pWordED->GetSizePixel().Width();
-    // install handler
+    
     pNewReplacePB->SetClickHdl(
         LINK( this, SvxEditDictionaryDialog, NewDelHdl));
     pDeletePB->SetClickHdl(
@@ -271,7 +271,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     pWordED->SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
     pReplaceED->SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
 
-    // fill listbox with all available WB's
+    
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
     sal_Int32 nCount = aDics.getLength();
 
@@ -313,7 +313,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         if (xDic.is())
             SetLanguage_Impl( LanguageTag( xDic->getLocale() ).getLanguageType() );
 
-        // check if dictionary is read-only
+        
         SetDicReadonly_Impl(xDic);
         sal_Bool bEnable = !IsDicReadonly_Impl();
         pNewReplacePB->Enable( false );
@@ -330,36 +330,36 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxEditDictionaryDialog::~SvxEditDictionaryDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 /*
 void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 {
     ModalDialog::Paint(rRect );
 
-    //Rectangle aRect(aEditDictsBox.GetPosPixel(),aEditDictsBox.GetSizePixel());
+    
 
     sal_uInt16 nStyle=BUTTON_DRAW_NOFILL;
-//    aDecoView.DrawButton( aRect, nStyle);
+
 }
 */
-// -----------------------------------------------------------------------
+
 
 void SvxEditDictionaryDialog::SetDicReadonly_Impl(
             Reference< XDictionary >  &xDic )
 {
-    // enable or disable new and delete button according to file attributes
+    
     bDicIsReadonly = sal_True;
     if (xDic.is())
     {
         Reference< frame::XStorable >  xStor( xDic, UNO_QUERY );
-        if (   !xStor.is()              // non persistent dictionary
-            || !xStor->hasLocation()    // not yet persistent
+        if (   !xStor.is()              
+            || !xStor->hasLocation()    
             || !xStor->isReadonly() )
         {
             bDicIsReadonly = sal_False;
@@ -367,11 +367,11 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
 {
-    // select language
+    
     pLangLB->SelectLanguage( nLanguage );
 }
 
@@ -392,7 +392,7 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
         if (nCmpRes < 0)
             break;
     }
-    if (j < pWordsLB->GetEntryCount())   // entry found?
+    if (j < pWordsLB->GetEntryCount())   
         nPos = j;
 
     return nPos;
@@ -407,14 +407,14 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
         OUString sTmpShort(pWordsLB->GetEntryText(pEntry, 0));
 
         Reference< XDictionary >  xDic = aDics.getConstArray()[ nLBPos ];
-        if (xDic->remove( sTmpShort ))  // sal_True on success
+        if (xDic->remove( sTmpShort ))  
         {
             pWordsLB->GetModel()->Remove(pEntry);
         }
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
 {
@@ -424,9 +424,9 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
     {
         pNewReplacePB->Enable( false );
         pDeletePB->Enable( false );
-        // display dictionary
+        
         ShowWords_Impl( nPos );
-        // enable or disable new and delete button according to file attributes
+        
         Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
         if (xDic.is())
             SetLanguage_Impl( LanguageTag( xDic->getLocale() ).getLanguageType() );
@@ -439,7 +439,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 {
@@ -474,7 +474,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 {
@@ -492,7 +492,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     {
         nStaticTabs[0]=2;
 
-        // make controls for replacement text active
+        
         if(!pReplaceFT->IsVisible())
         {
             Size aSize=pWordED->GetSizePixel();
@@ -506,7 +506,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     {
         nStaticTabs[0]=1;
 
-        // deactivate controls for replacement text
+        
         if(pReplaceFT->IsVisible())
         {
             Size aSize=pWordED->GetSizePixel();
@@ -546,7 +546,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     LeaveWait();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
 {
@@ -556,8 +556,8 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         {
             SvTreeListEntry* pEntry = pBox->FirstSelected();
             OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
-            // without this the curser is always at the beginning of a word, if the text
-            // is set over the ModifyHdl, although you're editing there at the moment
+            
+            
             if(pWordED->GetText() != sTmpShort)
                 pWordED->SetText(sTmpShort);
             pReplaceED->SetText(pBox->GetEntryText(pEntry, 1));
@@ -565,15 +565,15 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         else
             bFirstSelect = sal_False;
 
-        // entries in the list box should exactly correspond to those from the
-        // dictionary. Thus:
+        
+        
         pNewReplacePB->Enable(false);
         pDeletePB->Enable( true && !IsDicReadonly_Impl() );
     }
     return 0;
 };
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 {
@@ -588,7 +588,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         pReplaceED->SetText(aStr);
         pDeletePB->Disable();
 
-        RemoveDictEntry(pEntry);    // remove entry from dic and list-box
+        RemoveDictEntry(pEntry);    
     }
     if(pBtn == pNewReplacePB || pNewReplacePB->IsEnabled())
     {
@@ -605,19 +605,19 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
             if (xDic.is())
             {
-                // make changes in dic
+                
 
-                //! ...IsVisible should reflect whether the dictionary is a negativ
-                //! or not (hopefully...)
+                
+                
                 sal_Bool bIsNegEntry = pReplaceFT->IsVisible();
                 OUString aRplcText;
                 if(bIsNegEntry)
                     aRplcText = aReplaceStr;
 
-                if (_pEntry) // entry selected in pWordsLB ie action = modify entry
+                if (_pEntry) 
                     xDic->remove( pWordsLB->GetEntryText( _pEntry, 0 ) );
-                // if remove has failed the following add should fail too
-                // and thus a warning message should be triggered...
+                
+                
 
                 nAddRes = linguistic::AddEntryToDic( xDic,
                             aNewWord, bIsNegEntry,
@@ -629,7 +629,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
         if(DIC_ERR_NONE == nAddRes && !sEntry.isEmpty())
         {
-            // insert new entry in list-box etc...
+            
 
             pWordsLB->SetUpdateMode(sal_False);
             sal_uInt16 _nPos = USHRT_MAX;
@@ -641,7 +641,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             }
 
             SvTreeListEntry* pNewEntry = NULL;
-            if(_pEntry) // entry selected in pWordsLB ie action = modify entry
+            if(_pEntry) 
             {
                 pWordsLB->SetEntryText( sEntry, _pEntry );
                 pNewEntry = _pEntry;
@@ -656,22 +656,22 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
             pWordsLB->MakeVisible( pNewEntry );
             pWordsLB->SetUpdateMode(sal_True);
-            // if the request came from the ReplaceEdit, give focus to the ShortEdit
+            
             if(pReplaceED->HasFocus())
                 pWordED->GrabFocus();
         }
     }
     else
     {
-        // this can only be an enter in one of the two edit fields
-        // which means EndDialog() - has to be evaluated in KeyInput
+        
+        
         return 0;
     }
     ModifyHdl(pWordED);
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 {
@@ -752,7 +752,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     {
         OUString aReplaceText;
         OUString aWordText;
-        if (pFirstSel)  // a pWordsLB entry is selected
+        if (pFirstSel)  
         {
             aWordText    = pWordsLB->GetEntryText( pFirstSel, 0 );
             aReplaceText = pWordsLB->GetEntryText( pFirstSel, 1 );
@@ -774,17 +774,17 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-//=========================================================
-//SvxDictEdit
-//=========================================================
+
+
+
 void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode aKeyCode = rKEvt.GetKeyCode();
     const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN )
     {
-        // if there's nothing done on enter, call the
-        // base class after all to close the dialog
+        
+        
         if(!nModifier && !aActionLink.Call(this))
                  Edit::KeyInput(rKEvt);
     }

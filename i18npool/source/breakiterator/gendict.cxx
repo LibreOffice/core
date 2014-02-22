@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,11 +45,11 @@ using namespace ::rtl;
    All dictionary searching and loading is performed in the xdictionary class.
    The only thing you need to do is to derive your class from BreakIterator_CJK
    and create an instance of the xdictionary with the language name and
-   pass it to the parent class." (from http://wiki.openoffice.org/wiki/
+   pass it to the parent class." (from http:
    /Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale - 27/01/2011)
 */
 
-// C-standard garantees that static variables are automatically initialized to 0
+
 static sal_uInt8 exists[0x2000];
 static sal_uInt32 charArray[0x10000];
 
@@ -83,15 +83,15 @@ static inline void printFunctions(FILE* source_fp, const char *lang)
 
 static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt32>& lenArray)
 {
-    // generate main dict. data array
+    
     fputs("static const sal_Unicode dataArea[] = {\n\t", source_fp);
     sal_Char str[1024];
     sal_uInt32 lenArrayCurr = 0;
     sal_Unicode current = 0;
 
     while (fgets(str, 1024, dictionary_fp)) {
-        // input file is in UTF-8 encoding
-        // don't convert last new line character to Ostr.
+        
+        
         OUString Ostr((const sal_Char *)str, strlen(str) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *u = Ostr.getStr();
 
@@ -100,7 +100,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
         sal_Int32 i=0;
         Ostr.iterateCodePoints(&i, 1);
         if (len == i)
-            continue;   // skip one character word
+            continue;   
 
         if (u[0] != current) {
             OSL_ENSURE( (u[0] > current), "Dictionary file should be sorted");
@@ -111,7 +111,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
         lenArray.push_back(lenArrayCurr);
 
         set_exists(u[0]);
-        // first character is stored in charArray, so start from second
+        
         for (i = 1; i < len; i++, lenArrayCurr++) {
             set_exists(u[i]);
             fprintf(source_fp, "0x%04x, ", u[i]);
@@ -119,7 +119,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
                 fputs("\n\t", source_fp);
         }
     }
-    lenArray.push_back( lenArrayCurr ); // store last ending pointer
+    lenArray.push_back( lenArrayCurr ); 
     charArray[current+1] = lenArray.size();
     fputs("\n};\n", source_fp);
 }
@@ -127,7 +127,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
 static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenArray)
 {
     fprintf(source_fp, "static const sal_Int32 lenArray[] = {\n\t");
-    fprintf(source_fp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
+    fprintf(source_fp, "0x%x, ", 0); 
     for (size_t k = 0; k < lenArray.size(); k++)
     {
         if( !(k & 0xf) )
@@ -204,7 +204,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(-1);
     }
 
-    dictionary_fp = fopen(argv[1], "rb");   // open the source file for read;
+    dictionary_fp = fopen(argv[1], "rb");   
     if (dictionary_fp == NULL)
     {
         fprintf(stderr, "Opening the dictionary source file %s for reading failed: %s\n", argv[1], strerror(errno));
@@ -215,7 +215,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         source_fp = stdout;
     else
     {
-        // create the C source file to write
+        
         source_fp = fopen(argv[2], "wb");
         if (source_fp == NULL) {
             fclose(dictionary_fp);
@@ -224,7 +224,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
     }
 
-    vector<sal_uInt32> lenArray;   // stores the word boundaries in DataArea
+    vector<sal_uInt32> lenArray;   
     sal_Int16 set[0x100];
 
     printIncludes(source_fp);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -69,7 +69,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< OUString >& rCommands )
             if (fgets( pBuffer, sizeof( pBuffer ), pPipe ) != NULL)
             {
                 int nLen = strlen( pBuffer );
-                if( pBuffer[nLen-1] == '\n' ) // strip newline
+                if( pBuffer[nLen-1] == '\n' ) 
                     pBuffer[--nLen] = 0;
                 aCommand = OUString(pBuffer, nLen, aEncoding);
                 if( ( ( aCommand[ 0 ] == '/' )
@@ -92,7 +92,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< OUString >& rCommands )
             if (fgets( pBuffer, sizeof( pBuffer ), pPipe ) != NULL)
             {
                 int nLen = strlen( pBuffer );
-                if( pBuffer[nLen-1] == '\n' ) // strip newline
+                if( pBuffer[nLen-1] == '\n' ) 
                     pBuffer[--nLen] = 0;
                 aCommand = OUString(pBuffer, nLen, aEncoding);
                 if( ( ( aCommand[ 0 ] == '/' )
@@ -234,7 +234,7 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         m_aPrinterHelp( PaResId( RID_RTS_CMD_STR_PRINTERHELP ) ),
         m_aPdfHelp( PaResId( RID_RTS_CMD_STR_PDFHELP ) )
 {
-    // configuring as printer is only sensible in default print system
+    
     PrinterInfoManager& rMgr( PrinterInfoManager::get() );
     if( rMgr.getType() == PrinterInfoManager::Default || rMgr.isCUPSDisabled() )
         m_nPrinterEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );

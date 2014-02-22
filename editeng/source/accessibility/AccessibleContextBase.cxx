@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/AccessibleContextBase.hxx>
@@ -39,9 +39,9 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
 
-// Define a shortcut for the somewhot longish base class name.
+
+
 typedef ::cppu::PartialWeakComponentImplHelper4<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -62,12 +62,12 @@ AccessibleContextBase::AccessibleContextBase (
         mnClientId(0),
         maRole(aRole)
 {
-    // Create the state set.
+    
     ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
     mxStateSet = pStateSet;
 
-    // Set some states.  Don't use the SetState method because no events
-    // shall be broadcastet (that is not yet initialized anyway).
+    
+    
     if (pStateSet != NULL)
     {
         pStateSet->AddState (AccessibleStateType::ENABLED);
@@ -78,7 +78,7 @@ AccessibleContextBase::AccessibleContextBase (
         pStateSet->AddState (AccessibleStateType::SELECTABLE);
     }
 
-    // Create the relation set.
+    
     ::utl::AccessibleRelationSetHelper* pRelationSet = new ::utl::AccessibleRelationSetHelper ();
     mxRelationSet = pRelationSet;
 }
@@ -101,11 +101,11 @@ sal_Bool AccessibleContextBase::SetState (sal_Int16 aState)
     if ((pStateSet != NULL) && !pStateSet->contains(aState))
     {
         pStateSet->AddState (aState);
-        // Clear the mutex guard so that it is not locked during calls to
-        // listeners.
+        
+        
         aGuard.clear();
 
-        // Send event for all states except the DEFUNC state.
+        
         if (aState != AccessibleStateType::DEFUNC)
         {
             uno::Any aNewValue;
@@ -132,7 +132,7 @@ sal_Bool AccessibleContextBase::ResetState (sal_Int16 aState)
     if ((pStateSet != NULL) && pStateSet->contains(aState))
     {
         pStateSet->RemoveState (aState);
-        // Clear the mutex guard so that it is not locked during calls to listeners.
+        
         aGuard.clear();
 
         uno::Any aOldValue;
@@ -158,7 +158,7 @@ sal_Bool AccessibleContextBase::GetState (sal_Int16 aState)
     if (pStateSet != NULL)
         return pStateSet->contains(aState);
     else
-        // If there is no state set then return false as a default value.
+        
         return sal_False;
 }
 
@@ -171,8 +171,8 @@ void AccessibleContextBase::SetRelationSet (
 {
     OSL_TRACE ("setting relation set");
 
-    // Try to emit some meaningfull events indicating differing relations in
-    // both sets.
+    
+    
     typedef std::pair<short int,short int> RD;
     const RD aRelationDescriptors[] = {
         RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED),
@@ -193,7 +193,7 @@ void AccessibleContextBase::SetRelationSet (
 
 
 
-//=====  XAccessible  =========================================================
+
 
 uno::Reference< XAccessibleContext> SAL_CALL
     AccessibleContextBase::getAccessibleContext (void)
@@ -206,7 +206,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 /** No children.
 */
@@ -253,9 +253,9 @@ sal_Int32 SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    //  Use a simple but slow solution for now.  Optimize later.
+    
 
-    //  Iterate over all the parent's children and search for this object.
+    
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -276,8 +276,8 @@ sal_Int32 SAL_CALL
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+   
+   
    return -1;
 }
 
@@ -315,8 +315,8 @@ OUString SAL_CALL
 
     if (meNameOrigin == NotSet)
     {
-        // Do not send an event because this is the first time it has been
-        // requested.
+        
+        
         msName = CreateAccessibleName();
         meNameOrigin = AutomaticallyCreated;
     }
@@ -335,7 +335,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // Create a copy of the relation set and return it.
+    
     ::utl::AccessibleRelationSetHelper* pRelationSet =
         static_cast< ::utl::AccessibleRelationSetHelper*>(mxRelationSet.get());
     if (pRelationSet != NULL)
@@ -364,18 +364,18 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     if (rBHelper.bDisposed)
     {
-        // We are already disposed!
-        // Create a new state set that has only set the DEFUNC state.
+        
+        
         pStateSet = new ::utl::AccessibleStateSetHelper ();
         if (pStateSet != NULL)
             pStateSet->AddState (AccessibleStateType::DEFUNC);
     }
     else
     {
-        // Create a copy of the state set and return it.
+        
         pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        // Merge current focused state from edit engine.
+        
 #if 0
         if (aState == AccessibleStateType::FOCUSED
             && pStateSet != NULL
@@ -403,7 +403,7 @@ lang::Locale SAL_CALL
         ::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    // Delegate request to parent.
+    
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -412,15 +412,15 @@ lang::Locale SAL_CALL
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    
+    
     throw IllegalAccessibleComponentStateException ();
 }
 
 
 
 
-//=====  XAccessibleEventListener  ============================================
+
 
 void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener)
@@ -455,10 +455,10 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
             mnClientId = 0;
         }
@@ -468,7 +468,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
 
 
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL AccessibleContextBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -485,8 +485,8 @@ sal_Bool SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
+    
+    
     uno::Sequence< OUString > aSupportedServices (
         getSupportedServiceNames ());
     for (int i=0; i<aSupportedServices.getLength(); i++)
@@ -513,7 +513,7 @@ uno::Sequence< OUString > SAL_CALL
 
 
 
-//=====  XTypeProvider  =======================================================
+
 
 uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleContextBase::getTypes (void)
@@ -521,8 +521,8 @@ uno::Sequence< ::com::sun::star::uno::Type>
 {
     ThrowIfDisposed ();
 
-    // This class supports no interfaces on its own.  Just return those
-    // supported by the base class.
+    
+    
     return BaseClass::getTypes();
 }
 
@@ -538,7 +538,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theAccessibleContextBaseImplementationId::get().getSeq();
 }
 
-//=====  internal  ============================================================
+
 
 void SAL_CALL AccessibleContextBase::disposing (void)
 {
@@ -546,7 +546,7 @@ void SAL_CALL AccessibleContextBase::disposing (void)
 
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Send a disposing to all listeners.
+    
     if ( mnClientId )
     {
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
@@ -630,9 +630,9 @@ void AccessibleContextBase::CommitChange (
     const uno::Any& rNewValue,
     const uno::Any& rOldValue)
 {
-    // Do not call FireEvent and do not even create the event object when no
-    // listener has been registered yet.  Creating the event object can
-    // otherwise lead to a crash.  See issue 93419 for details.
+    
+    
+    
     if (mnClientId != 0)
     {
         AccessibleEventObject aEvent (
@@ -683,6 +683,6 @@ void AccessibleContextBase::SetAccessibleRole( sal_Int16 _nRole )
 }
 
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

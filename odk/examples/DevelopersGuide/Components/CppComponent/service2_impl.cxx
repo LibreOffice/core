@@ -45,9 +45,9 @@
 #include <my_module/XSomething.hpp>
 
 
-using namespace ::rtl; // for OUString
-using namespace ::com::sun::star; // for odk interfaces
-using namespace ::com::sun::star::uno; // for basic types
+using namespace ::rtl; 
+using namespace ::com::sun::star; 
+using namespace ::com::sun::star::uno; 
 
 
 namespace my_sc_impl
@@ -75,8 +75,8 @@ class MyService2Impl : public ::cppu::WeakImplHelper3<
       ::my_module::XSomething, lang::XServiceInfo, lang::XInitialization >
 {
     OUString m_sData;
-    // it's good practise to store the context for further use when you use
-    // other UNO API's in your implementation
+    
+    
     Reference< XComponentContext > m_xContext;
 public:
     inline MyService2Impl(Reference< XComponentContext > const & xContext) throw ()
@@ -85,19 +85,19 @@ public:
 
     virtual ~MyService2Impl() {}
 
-    // focus on three given interfaces,
-    // no need to implement XInterface, XTypeProvider, XWeak
+    
+    
 
-    // XInitialization will be called upon
-    // createInstanceWithArguments[AndContext]()
+    
+    
     virtual void SAL_CALL initialize( Sequence< Any > const & args )
         throw (Exception);
-    // XSomething
+    
     virtual OUString SAL_CALL methodOne( OUString const & str )
         throw (RuntimeException);
     virtual OUString SAL_CALL methodTwo( )
         throw (RuntimeException);
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
@@ -106,7 +106,7 @@ public:
         throw (RuntimeException);
 };
 
-// XInitialization implemention
+
 void MyService2Impl::initialize( Sequence< Any > const & args )
     throw (Exception)
 {
@@ -115,22 +115,22 @@ void MyService2Impl::initialize( Sequence< Any > const & args )
         throw lang::IllegalArgumentException(
             OUString(
                           "give a string instanciating this component!"),
-            // resolve to XInterface reference:
+            
             static_cast< ::cppu::OWeakObject * >(this),
-            0 ); // argument pos
+            0 ); 
     }
     if (! (args[ 0 ] >>= m_sData))
     {
         throw lang::IllegalArgumentException(
             OUString(
                           "no string given as argument!"),
-            // resolve to XInterface reference:
+            
             static_cast< ::cppu::OWeakObject * >(this),
-            0 ); // argument pos
+            0 ); 
     }
 }
 
-// XSomething implementation
+
 OUString MyService2Impl::methodOne( OUString const & str )
     throw (RuntimeException)
 {
@@ -144,11 +144,11 @@ OUString MyService2Impl::methodTwo( )
     return OUString( "called methodTwo() of MyService2 implementation: " ) + m_sData;
 }
 
-// XServiceInfo implementation
+
 OUString MyService2Impl::getImplementationName()
     throw (RuntimeException)
 {
-    // unique implementation name
+    
     return OUString("my_module.my_sc_implementation.MyService2");
 }
 

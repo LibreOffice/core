@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "clickableimage.hxx"
@@ -44,10 +44,10 @@
 #include <svtools/imageresourceaccess.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
@@ -65,10 +65,10 @@ namespace frm
     using ::com::sun::star::awt::MouseEvent;
     using ::com::sun::star::task::XInteractionHandler;
 
-    //==================================================================
-    // OClickableImageBaseControl
-    //==================================================================
-    //------------------------------------------------------------------------------
+    
+    
+    
+    
     Sequence<Type> OClickableImageBaseControl::_getTypes()
     {
         static Sequence<Type> aTypes;
@@ -77,7 +77,7 @@ namespace frm
         return aTypes;
     }
 
-    //------------------------------------------------------------------------------
+    
     OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XComponentContext>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
         ,m_pThread(NULL)
@@ -88,7 +88,7 @@ namespace frm
         m_pFeatureInterception.reset( new ControlFeatureInterception( _rxFactory ) );
     }
 
-    //------------------------------------------------------------------------------
+    
     OClickableImageBaseControl::~OClickableImageBaseControl()
     {
         if (!OComponentHelper::rBHelper.bDisposed)
@@ -98,8 +98,8 @@ namespace frm
         }
     }
 
-    // UNO Anbindung
-    //------------------------------------------------------------------------------
+    
+    
     Any SAL_CALL OClickableImageBaseControl::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
         Any aReturn = OControl::queryAggregation(_rType);
@@ -108,35 +108,35 @@ namespace frm
         return aReturn;
     }
 
-    // XApproveActionBroadcaster
-    //------------------------------------------------------------------------------
+    
+    
     void OClickableImageBaseControl::addApproveActionListener(
             const Reference<XApproveActionListener>& l) throw( RuntimeException )
     {
         m_aApproveActionListeners.addInterface(l);
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseControl::removeApproveActionListener(
             const Reference<XApproveActionListener>& l) throw( RuntimeException )
     {
         m_aApproveActionListeners.removeInterface(l);
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor  );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor  );
     }
 
-    // OComponentHelper
-    //------------------------------------------------------------------------------
+    
+    
     void OClickableImageBaseControl::disposing()
     {
         EventObject aEvent( static_cast< XWeak* >( this ) );
@@ -157,7 +157,7 @@ namespace frm
         OControl::disposing();
     }
 
-    //------------------------------------------------------------------------------
+    
     OImageProducerThread_Impl* OClickableImageBaseControl::getImageProducerThread()
     {
         if ( !m_pThread )
@@ -169,7 +169,7 @@ namespace frm
         return m_pThread;
     }
 
-    //------------------------------------------------------------------------------
+    
     bool OClickableImageBaseControl::approveAction( )
     {
         sal_Bool bCancelled = sal_False;
@@ -178,7 +178,7 @@ namespace frm
         ::cppu::OInterfaceIteratorHelper aIter( m_aApproveActionListeners );
         while( !bCancelled && aIter.hasMoreElements() )
         {
-            // Jede approveAction-Methode muss thread-safe sein!!!
+            
             if( !static_cast< XApproveActionListener* >( aIter.next() )->approveAction( aEvent ) )
                 bCancelled = sal_True;
         }
@@ -186,9 +186,9 @@ namespace frm
         return !bCancelled;
     }
 
-    //------------------------------------------------------------------------------
-    // Diese Methode wird auch aus einem Thread gerufen und muss deshalb
-    // thread-safe sein.
+    
+    
+    
     void OClickableImageBaseControl::actionPerformed_Impl(sal_Bool bNotifyListener, const MouseEvent& rEvt)
     {
         if( bNotifyListener )
@@ -197,15 +197,15 @@ namespace frm
                 return;
         }
 
-        // Ob der Rest des Codes Thread-Safe ist weiss man nicht genau. Deshalb
-        // wird das meiste bei gelocktem Solar-Mutex erledigen.
+        
+        
         Reference<XPropertySet>  xSet;
         Reference< XInterface > xModelsParent;
         FormButtonType eButtonType = FormButtonType_PUSH;
         {
             SolarMutexGuard aGuard;
 
-            // Parent holen
+            
             Reference<XFormComponent>  xComp(getModel(), UNO_QUERY);
             if (!xComp.is())
                 return;
@@ -214,7 +214,7 @@ namespace frm
             if (!xModelsParent.is())
                 return;
 
-            // which button type?
+            
             xSet = xSet.query( xComp );
             if ( !xSet.is() )
                 return;
@@ -225,7 +225,7 @@ namespace frm
         {
             case FormButtonType_RESET:
             {
-                // reset-Methoden muessen thread-safe sein!
+                
                 Reference<XReset>  xReset(xModelsParent, UNO_QUERY);
                 if (!xReset.is())
                     return;
@@ -236,7 +236,7 @@ namespace frm
 
             case FormButtonType_SUBMIT:
             {
-                // if some outer component can provide an interaction handler, use it
+                
                 Reference< XInteractionHandler > xHandler( m_pFeatureInterception->queryDispatch( "private:/InteractionHandler" ), UNO_QUERY );
                 try
                 {
@@ -244,7 +244,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    // ignore
+                    
                 }
             }
             break;
@@ -257,8 +257,8 @@ namespace frm
                 if (!xModel.is())
                     return;
 
-                ///////////////////////////////////////////////////////////////////////
-                // Jetzt URL ausfuehren
+                
+                
                 Reference< XController >  xController = xModel->getCurrentController();
                 if (!xController.is())
                     return;
@@ -272,20 +272,20 @@ namespace frm
                     getString(xSet->getPropertyValue(PROPERTY_TARGET_URL));
 
                 if (!aURL.Complete.isEmpty() && (LOCAL_URL_PREFIX == aURL.Complete[0]))
-                {   // the URL contains a local URL only. Since the URLTransformer does not handle this case correctly
-                    // (it can't: it does not know the document URL), we have to take care for this ourself.
-                    // The real solution would be to not allow such relative URLs (there is a rule that at runtime, all
-                    // URLs have to be absolute), but for compatibility reasons this is no option.
-                    // The more as the user does not want to see a local URL as "file://<path>/<document>#mark" if it
-                    // could be "#mark" as well.
-                    // If we someday say that this hack (yes, it's kind of a hack) is not sustainable anymore, the complete
-                    // solutiuon would be:
-                    // * recognize URLs consisting of a mark only while _reading_ the document
-                    // * for this, allow the INetURLObject (which at the moment is invoked when reading URLs) to
-                    //   transform such mark-only URLs into correct absolute URLs
-                    // * at the UI, show only the mark
-                    // * !!!! recognize every SAVEAS on the document, so the absolute URL can be adjusted. This seems
-                    // rather impossible !!!
+                {   
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     aURL.Mark = aURL.Complete;
                     aURL.Complete = xModel->getURL();
                     aURL.Complete += aURL.Mark;
@@ -336,7 +336,7 @@ namespace frm
             }   break;
             default:
             {
-                    // notify the action listeners for a push button
+                    
                 ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
                 m_aActionListeners.notifyEach( &XActionListener::actionPerformed, aEvt );
             }
@@ -344,31 +344,31 @@ namespace frm
     }
 
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
     {
         m_aSubmissionVetoListeners.addInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
     {
         m_aSubmissionVetoListeners.removeInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseControl::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler ) throw (VetoException, WrappedTargetException, RuntimeException)
     {
         implSubmit( MouseEvent(), _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseControl::submit(  ) throw (VetoException, WrappedTargetException, RuntimeException)
     {
         implSubmit( MouseEvent(), NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported = OControl::getSupportedServiceNames();
@@ -380,15 +380,15 @@ namespace frm
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+    
     void OClickableImageBaseControl::implSubmit( const MouseEvent& _rEvent, const Reference< XInteractionHandler >& _rxHandler ) SAL_THROW((VetoException, WrappedTargetException, RuntimeException))
     {
         try
         {
-            // allow the veto listeners to join the game
+            
             m_aSubmissionVetoListeners.notifyEach( &XSubmissionVetoListener::submitting, EventObject( *this ) );
 
-            // see whether there's an "submit interceptor" set at our model
+            
             Reference< submission::XSubmissionSupplier > xSubmissionSupp( getModel(), UNO_QUERY );
             Reference< XSubmission > xSubmission;
             if ( xSubmissionSupp.is() )
@@ -403,7 +403,7 @@ namespace frm
             }
             else
             {
-                // no "interceptor" -> ordinary (old-way) submission
+                
                 Reference< XChild > xChild( getModel(), UNO_QUERY );
                 Reference< XSubmit > xParentSubmission;
                 if ( xChild.is() )
@@ -414,17 +414,17 @@ namespace frm
         }
         catch( const VetoException& )
         {
-            // allowed to leave
+            
             throw;
         }
         catch( const RuntimeException& )
         {
-            // allowed to leave
+            
             throw;
         }
         catch( const WrappedTargetException& )
         {
-            // allowed to leave
+            
             throw;
         }
         catch( const Exception& e )
@@ -434,10 +434,10 @@ namespace frm
         }
     }
 
-    //==================================================================
-    // OClickableImageBaseModel
-    //==================================================================
-    //------------------------------------------------------------------------------
+    
+    
+    
+    
     Sequence<Type> OClickableImageBaseModel::_getTypes()
     {
         return concatSequences(
@@ -446,8 +446,8 @@ namespace frm
         );
     }
 
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
+    
+    
     OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
@@ -462,7 +462,7 @@ namespace frm
         m_eButtonType = FormButtonType_PUSH;
     }
 
-    //------------------------------------------------------------------
+    
     OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
@@ -474,19 +474,19 @@ namespace frm
     {
         implConstruct();
 
-        // copy properties
+        
         m_eButtonType           = _pOriginal->m_eButtonType;
         m_sTargetURL            = _pOriginal->m_sTargetURL;
         m_sTargetFrame          = _pOriginal->m_sTargetFrame;
         m_bDispatchUrlInternal  = _pOriginal->m_bDispatchUrlInternal;
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::implInitializeImageURL( )
     {
         osl_atomic_increment( &m_refCount );
         {
-            // simulate a propertyChanged event for the ImageURL
+            
             Any aImageURL;
             getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
             _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
@@ -494,7 +494,7 @@ namespace frm
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::implConstruct()
     {
         m_pProducer = new ImageProducer;
@@ -511,7 +511,7 @@ namespace frm
         decrement(m_refCount);
     }
 
-    //------------------------------------------------------------------------------
+    
     OClickableImageBaseModel::~OClickableImageBaseModel()
     {
         if (!OComponentHelper::rBHelper.bDisposed)
@@ -520,45 +520,45 @@ namespace frm
             dispose();
         }
         DBG_ASSERT(m_pMedium == NULL, "OClickableImageBaseModel::~OClickableImageBaseModel : leaving a memory leak ...");
-            // spaetestens im dispose sollte das aufgeraeumt worden sein
+            
 
     }
 
-    // XImageProducer
-    //--------------------------------------------------------------------
+    
+    
     void SAL_CALL OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->addConsumer( _rxConsumer );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->removeConsumer( _rxConsumer );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseModel::startProduction(  ) throw (RuntimeException)
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->startProduction();
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< submission::XSubmission > SAL_CALL OClickableImageBaseModel::getSubmission() throw (RuntimeException)
     {
         return m_xSubmissionDelegate;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClickableImageBaseModel::setSubmission( const Reference< submission::XSubmission >& _submission ) throw (RuntimeException)
     {
         m_xSubmissionDelegate = _submission;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames();
@@ -570,8 +570,8 @@ namespace frm
         return aSupported;
     }
 
-    // OComponentHelper
-    //------------------------------------------------------------------------------
+    
+    
     void OClickableImageBaseModel::disposing()
     {
         OControlModel::disposing();
@@ -585,16 +585,16 @@ namespace frm
         m_pProducer = NULL;
     }
 
-    //------------------------------------------------------------------------------
+    
     Any SAL_CALL OClickableImageBaseModel::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
-        // order matters:
-        // we definitely want to "overload" the XImageProducer interface of our aggregate,
-        // thus check OClickableImageBaseModel_Base (which provides this) first
+        
+        
+        
         Any aReturn = OClickableImageBaseModel_Base::queryInterface( _rType );
 
-        // BUT: _don't_ let it feel responsible for the XTypeProvider interface
-        // (as this is implemented by our base class in the proper way)
+        
+        
         if  (   _rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) )
             ||  !aReturn.hasValue()
             )
@@ -603,7 +603,7 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
     {
         switch (nHandle)
@@ -617,7 +617,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( Exception)
     {
         switch (nHandle)
@@ -647,7 +647,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     sal_Bool OClickableImageBaseModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
                                 throw( IllegalArgumentException )
     {
@@ -670,11 +670,11 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::StartProduction()
     {
         ImageProducer *pImgProd = GetImageProducer();
-        // grab the ImageURL
+        
         OUString sURL;
         getPropertyValue("ImageURL") >>= sURL;
         if (!m_pMedium)
@@ -682,7 +682,7 @@ namespace frm
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )
                 pImgProd->SetImage( sURL );
             else
-                // caution: the medium may be NULL if somebody gave us a invalid URL to work with
+                
                 pImgProd->SetImage(OUString());
             m_bDownloading = sal_False;
             return;
@@ -704,21 +704,21 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::SetURL( const OUString& rURL )
     {
         if (m_pMedium || rURL.isEmpty())
         {
-            // Den Stream am Producer freigeben, bevor das Medium geloscht wird.
+            
             GetImageProducer()->SetImage(OUString());
             delete m_pMedium;
             m_pMedium = NULL;
         }
 
-        // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
+        
         INetURLObject aUrl(rURL);
         if (INET_PROT_NOT_VALID == aUrl.GetProtocol())
-            // we treat an invalid URL like we would treat no URL
+            
             return;
 
         if (!rURL.isEmpty() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
@@ -728,12 +728,12 @@ namespace frm
 
             m_pMedium = new SfxMedium(rURL, STREAM_STD_READ);
 
-            // Das XModel suchen, um an die Object-Shell oder zumindest den
-            // Referer zu gelangen.
-            // Das Model findet man allerdings nur beim Laden von HTML-Dokumenten
-            // und dann, wenn die URL in einem bereits geladenen Dokument
-            // geaendert wird. Waehrend des Ladens kommt man nicht an das
-            // Model ran.
+            
+            
+            
+            
+            
+            
             Reference< XModel >  xModel;
             InterfaceRef  xIfc( *this );
             while( !xModel.is() && xIfc.is() )
@@ -743,11 +743,11 @@ namespace frm
                 query_interface(xIfc, xModel);
             }
 
-            // Die Object-Shell suchen, indem wir
-            // ueber alle Object-Shells iterieren und deren XModel mit dem
-            // eigenen vergleichen. Als Optimierung probieren wir aber erstmal
-            // die aktuelle Object-Shell.
-            // wir unser XModel mit dem aller Object
+            
+            
+            
+            
+            
             SfxObjectShell *pObjSh = 0;
 
             if( xModel.is() )
@@ -776,8 +776,8 @@ namespace frm
     #ifdef USE_REGISTER_TRANSFER
             if( pObjSh )
             {
-                // Target-Frame uebertragen, damit auch javascript:-URLs
-                // "geladen" werden koennen.
+                
+                
                 const SfxMedium *pShMedium = pObjSh->GetMedium();
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
@@ -785,20 +785,20 @@ namespace frm
     #else
             if( pObjSh )
             {
-                // Target-Frame uebertragen, damit auch javascript:-URLs
-                // "geladen" werden koennen.
+                
+                
                 const SfxMedium *pShMedium = pObjSh->GetMedium();
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
             }
     #endif
 
-            // Downloading-Flag auf sal_True setzen. Es werden dann auch
-            // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
+            
+            
             m_bDownloading = sal_True;
             m_bProdStarted = sal_False;
 
-            // Download anstossen (Achtung: Kann auch synchron sein).
+            
             m_pMedium->DownLoad(STATIC_LINK(this, OClickableImageBaseModel, DownloadDoneLink));
         }
         else
@@ -809,7 +809,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::DataAvailable()
     {
         if (!m_bProdStarted)
@@ -818,14 +818,14 @@ namespace frm
         GetImageProducer()->NewDataAvailable();
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::DownloadDone()
     {
         DataAvailable();
         m_bDownloading = sal_False;
     }
 
-    //------------------------------------------------------------------------------
+    
     IMPL_STATIC_LINK( OClickableImageBaseModel, DownloadDoneLink, void*, EMPTYARG )
     {
         ::osl::MutexGuard aGuard( pThis->m_aMutex );
@@ -833,17 +833,17 @@ namespace frm
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+    
     void OClickableImageBaseModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         throw( RuntimeException )
     {
-        // Wenn eine URL gesetzt worden ist, muss die noch an den ImageProducer
-        // weitergereicht werden.
+        
+        
         ::osl::MutexGuard aGuard(m_aMutex);
         SetURL( getString(rEvt.NewValue) );
     }
 
-    // -----------------------------------------------------------------------------
+    
     Any OClickableImageBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         switch (nHandle)
@@ -857,16 +857,16 @@ namespace frm
         }
     }
 
-    //==================================================================
-    // OImageProducerThread_Impl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     EventObject* OImageProducerThread_Impl::cloneEvent( const EventObject* _pEvt ) const
     {
         return new EventObject( *_pEvt );
     }
 
-    //------------------------------------------------------------------
+    
     void OImageProducerThread_Impl::processEvent( ::cppu::OComponentHelper *pCompImpl,
                                                 const EventObject* pEvt,
                                                 const Reference<XControl>&,
@@ -875,8 +875,8 @@ namespace frm
         ((OClickableImageBaseControl *)pCompImpl)->actionPerformed_Impl( sal_True, *(MouseEvent *)pEvt );
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,7 +59,7 @@ sal_Int32 PDFFontCache::getGlyphWidth( const PhysicalFontFace* pFont, sal_GlyphI
             const sal_Ucs cCode = static_cast<sal_Ucs>(nGlyph & GF_IDXMASK);
             Ucs2UIntMap::const_iterator it = rFontData.m_aGlyphIdToIndex.find( cCode );
 
-            // allow symbol aliasing U+00xx -> U+F0xx if there is no direct match
+            
             if( it == rFontData.m_aGlyphIdToIndex.end()
             &&  pFont->IsSymbolFont()
             &&  (cCode < 0x0100) )

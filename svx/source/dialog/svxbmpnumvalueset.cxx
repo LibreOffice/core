@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/dialmgr.hxx>
@@ -77,7 +77,7 @@ static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
 
-// The selection of bullets from the star symbol
+
 static const sal_Unicode aBulletTypes[] =
 {
     0x2022,
@@ -133,8 +133,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         20, 30,
         25, 50,
         30, 70,
-        35, 90, // up to here line positions
-        05, 10, // character positions
+        35, 90, 
+        05, 10, 
         10, 30,
         15, 50,
         20, 70,
@@ -178,8 +178,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     if(!pVDev)
     {
-        // The lines are only one time in the virtual device, only the outline
-        // page is currently done
+        
+        
         pVDev = new VirtualDevice(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
@@ -191,7 +191,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         if(aBackColor == aLineColor)
             aLineColor.Invert();
         pVDev->SetLineColor(aLineColor);
-        // Draw line only once
+        
         if(nPageType != NUM_PAGETYPE_NUM)
         {
             Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
@@ -208,7 +208,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
-    // Now comes the text
+    
     const OUString sValue(cValue);
     if( NUM_PAGETYPE_SINGLENUM == nPageType ||
             NUM_PAGETYPE_BULLET == nPageType )
@@ -243,7 +243,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
                 }
-                // start just next to the left edge
+                
                 aStart.X() = aBLPos.X() + 2;
                 aStart.Y() -= pDev->GetTextHeight()/2;
             }
@@ -252,9 +252,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else if(NUM_PAGETYPE_NUM == nPageType )
     {
-        // Outline numbering has to be painted into the virtual device
-        // to get correct lines
-        // has to be made again
+        
+        
+        
         pVDev->DrawRect(aOrgRect);
         long nStartX = aOrgRect.TopLeft().X();
         long nStartY = aOrgRect.TopLeft().Y();
@@ -325,7 +325,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     if(aParentNumberings[i])
                     {
-                        //insert old numberings here
+                        
                         sal_Int32 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
                         for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
@@ -521,7 +521,7 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl)
 {
-    // only when a graphics was not there, it needs to be formatted
+    
     if(bGrfNotFound)
     {
         bGrfNotFound = sal_False;

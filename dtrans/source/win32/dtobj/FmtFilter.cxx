@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -56,9 +56,9 @@ struct METAFILEHEADER
 };
 #pragma pack()
 
-//------------------------------------------------------------------------
-// convert a windows metafile picture to a openoffice metafile picture
-//------------------------------------------------------------------------
+
+
+
 
 Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
 {
@@ -128,9 +128,9 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
     return mfpictStream;
 }
 
-//-------------------------------------------------------------
-// convert a windows enhanced metafile to a openoffice metafile
-//-------------------------------------------------------------
+
+
+
 
 Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 {
@@ -149,9 +149,9 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
     return aRet;
 }
 
-//------------------------------------------------------------------------
-// convert a openoffice metafile picture to a windows metafile picture
-//------------------------------------------------------------------------
+
+
+
 
 HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
@@ -173,9 +173,9 @@ HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePic
     return hPict;
 }
 
-//-----------------------------------------------------------------------------
-// convert a openoffice metafile picture to a windows enhanced metafile picture
-//-----------------------------------------------------------------------------
+
+
+
 
 HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
@@ -184,9 +184,9 @@ HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFileP
     return hEnhMtf;
 }
 
-//------------------------------------------------------------------------
-// convert a windows device independent bitmap into a openoffice bitmap
-//------------------------------------------------------------------------
+
+
+
 
 Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
@@ -211,7 +211,7 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
     }
 
     pBmpFileHdr->bfType = ('M' << 8) | 'B';
-    pBmpFileHdr->bfSize = 0; // maybe: nMemSize + sizeof(BITMAPFILEHEADER)
+    pBmpFileHdr->bfSize = 0; 
     pBmpFileHdr->bfReserved1 = 0;
     pBmpFileHdr->bfReserved2 = 0;
     pBmpFileHdr->bfOffBits = nOffset;
@@ -219,9 +219,9 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
     return ooBmpStream;
 }
 
-//------------------------------------------------------------------------
-// convert a openoffice bitmap into a windows device independent bitmap
-//------------------------------------------------------------------------
+
+
+
 
 Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 {
@@ -234,47 +234,47 @@ Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
     return winDIBStream;
 }
 
-//------------------------------------------------------------------------------
-// converts the openoffice text/html clipboard format to the HTML Format
-// well known under MS Windows
-// the MS HTML Format has a header before the real html data
+
+
+
+
 //
-// Version:1.0      Version number of the clipboard. Staring is 0.9
-// StartHTML:       Byte count from the beginning of the clipboard to the start
-//                  of the context, or -1 if no context
-// EndHTML:         Byte count from the beginning of the clipboard to the end
-//                  of the context, or -1 if no context
-// StartFragment:   Byte count from the beginning of the clipboard to the
-//                  start of the fragment
-// EndFragment:     Byte count from the beginning of the clipboard to the
-//                  end of the fragment
-// StartSelection:  Byte count from the beginning of the clipboard to the
-//                  start of the selection
-// EndSelection:    Byte count from the beginning of the clipboard to the
-//                  end of the selection
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
-// StartSelection and EndSelection are optional
-// The fragment should be preceded and followed by the HTML comments
-// <!--StartFragment--> and <!--EndFragment--> (no space between !-- and the
-// text
-//------------------------------------------------------------------------------
+
+
+
+
+
 /*
 Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextHtml )
 {
     OSL_ASSERT( aTextHtml.getLength( ) > 0 );
 
-    // check parameter
+    
     if ( !(aTextHtml.getLength( ) > 0) )
         return Sequence< sal_Int8 >( );
 
-    // we create a buffer with the approximated size of
-    // the HTML Format header
+    
+    
     char aHTMLFmtHdr[120];
 
     memset( aHTMLFmtHdr, 0, sizeof( aHTMLFmtHdr ) );
 
-    // fill the buffer with dummy values to calc the
-    // exact length
+    
+    
 
     wsprintf(
         aHTMLFmtHdr,
@@ -282,17 +282,17 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
     sal_uInt32 lHTMLFmtHdr = rtl_str_getLength( aHTMLFmtHdr );
 
-    // the office always writes the start
-    // and end html tag in upper cases and
-    // without spaces
-    // both tags don't allow parameters
+    
+    
+    
+    
     OString startHtmlTag( "<HTML>" );
     OString endHtmlTag(   "</HTML>" );
 
-    // we don't include '>' into the search
-    // because the body tag allows parameters
-    // e.g. <BODY param>
-    // #92840#
+    
+    
+    
+    
     OString startBodyTag( "<BODY" );
     OString endBodyTag(   "</BODY" );
 
@@ -311,12 +311,12 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
     if ( (nStartHtml > -1) && (nEndHtml > -1) && (nStartFrgmt > -1) && (nEndFrgmt > -1) )
     {
-        nStartHtml  = nStartHtml  + lHTMLFmtHdr - 1; // we start one before <HTML> Word 2000 does also so
-        nEndHtml    = nEndHtml    + lHTMLFmtHdr + endHtmlTag.getLength( ) + 1; // our SOffice 5.2 wants 2 behind </HTML>?
-        nStartFrgmt = nStartFrgmt + startBodyTag.getLength( ) + lHTMLFmtHdr; // after the <BODY> tag
+        nStartHtml  = nStartHtml  + lHTMLFmtHdr - 1; 
+        nEndHtml    = nEndHtml    + lHTMLFmtHdr + endHtmlTag.getLength( ) + 1; 
+        nStartFrgmt = nStartFrgmt + startBodyTag.getLength( ) + lHTMLFmtHdr; 
         nEndFrgmt   = nEndFrgmt   + lHTMLFmtHdr;
 
-        // fill the html header
+        
         memset( aHTMLFmtHdr, 0, sizeof( aHTMLFmtHdr ) );
 
         wsprintf(
@@ -324,16 +324,16 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
             "Version:1.0\nStartHTML:%010d\r\nEndHTML:%010d\r\nStartFragment:%010d\r\nEndFragment:%010d\r\n",
             nStartHtml, nEndHtml, nStartFrgmt, nEndFrgmt );
 
-        // we add space for a trailing \0
+        
         aHTMLFmtSequence.realloc( lHTMLFmtHdr + aTextHtml.getLength( ) + 1 );
         memset( aHTMLFmtSequence.getArray( ), 0, aHTMLFmtSequence.getLength( ) );
 
-        // copy the HTML Format header
+        
         memcpy(
             static_cast< LPVOID >( aHTMLFmtSequence.getArray( ) ),
             static_cast< LPVOID >( aHTMLFmtHdr ), lHTMLFmtHdr );
 
-        // concat the text/html
+        
         memcpy(
             static_cast< LPVOID >( aHTMLFmtSequence.getArray( ) + lHTMLFmtHdr ),
             static_cast< LPVOID >( aTextHtml.getArray( ) ),
@@ -355,13 +355,13 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
     return htmlHeader.str();
 }
 
-// the case of these tags has to match what we output in our filters
-// both tags don't allow parameters
+
+
 const std::string TAG_HTML = std::string("<html>");
 const std::string TAG_END_HTML = std::string("</html>");
 
-// The body tag may have parameters so we need to search for the
-// closing '>' manually e.g. <body param> #92840#
+
+
 const std::string TAG_BODY = std::string("<body");
 const std::string TAG_END_BODY = std::string("</body");
 
@@ -372,7 +372,7 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
     if (!(aTextHtml.getLength() > 0))
         return Sequence<sal_Int8>();
 
-    // fill the buffer with dummy values to calc the exact length
+    
     std::string dummyHtmlHeader = GetHtmlFormatHeader(0, 0, 0, 0);
     size_t lHtmlFormatHeader = dummyHtmlHeader.length();
 
@@ -380,18 +380,18 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
         reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()),
         reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()) + aTextHtml.getLength());
 
-    std::string::size_type nStartHtml = textHtml.find(TAG_HTML) + lHtmlFormatHeader - 1; // we start one before '<HTML>' Word 2000 does also so
-    std::string::size_type nEndHtml = textHtml.find(TAG_END_HTML) + lHtmlFormatHeader + TAG_END_HTML.length() + 1; // our SOffice 5.2 wants 2 behind </HTML>?
+    std::string::size_type nStartHtml = textHtml.find(TAG_HTML) + lHtmlFormatHeader - 1; 
+    std::string::size_type nEndHtml = textHtml.find(TAG_END_HTML) + lHtmlFormatHeader + TAG_END_HTML.length() + 1; 
 
-    // The body tag may have parameters so we need to search for the
-    // closing '>' manually e.g. <BODY param> #92840#
+    
+    
     std::string::size_type nStartFragment = textHtml.find(">", textHtml.find(TAG_BODY)) + lHtmlFormatHeader + 1;
     std::string::size_type nEndFragment = textHtml.find(TAG_END_BODY) + lHtmlFormatHeader;
 
     std::string htmlFormat = GetHtmlFormatHeader(nStartHtml, nEndHtml, nStartFragment, nEndFragment);
     htmlFormat += textHtml;
 
-    Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
+    Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); 
     memset(byteSequence.getArray(), 0, byteSequence.getLength());
 
     memcpy(
@@ -477,11 +477,11 @@ size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
     if ( fileList.empty() )
         return 0;
 
-    size_t size = 1; // one for the very final '\0'
+    size_t size = 1; 
     FileList_t::const_iterator iter_end = fileList.end();
     for (FileList_t::const_iterator iter = fileList.begin(); iter != iter_end; ++iter)
     {
-        size += iter->length() + 1; // length including terminating '\0'
+        size += iter->length() + 1; 
     }
     return (size * sizeof(FileList_ValueType_t::value_type));
 }
@@ -525,9 +525,9 @@ ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
     return FileListToByteSequence(files);
 }
 
-//------------------------------------------------------------------------
-// convert a windows bitmap handle into a openoffice bitmap
-//------------------------------------------------------------------------
+
+
+
 
 Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
 {
@@ -536,7 +536,7 @@ Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
     SIZE aBmpSize;
     if( GetBitmapDimensionEx( aHBMP, &aBmpSize ) )
     {
-        // fill bitmap info header
+        
         size_t nDataBytes = 4 * aBmpSize.cy * aBmpSize.cy;
         Sequence< sal_Int8 > aBitmapStream(
             sizeof(BITMAPINFO) +
@@ -554,7 +554,7 @@ Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
         pBmp->biYPelsPerMeter = 1000;
         pBmp->biClrUsed = 0;
         pBmp->biClrImportant = 0;
-        if( GetDIBits( 0, // DC, 0 is a default GC, basically that of the desktop
+        if( GetDIBits( 0, 
                        aHBMP,
                        0, aBmpSize.cy,
                        aBitmapStream.getArray() + sizeof(BITMAPINFO),

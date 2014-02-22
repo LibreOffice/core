@@ -65,7 +65,7 @@ using namespace ::utl;
 namespace dbaccess
 {
 
-// OQuery
+
 
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
@@ -97,7 +97,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         }
 
         m_xCommandDefinition->addPropertyChangeListener(OUString(), this);
-        //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
+        
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
     OSL_ENSURE(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
@@ -115,7 +115,7 @@ IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,OData
 void OQuery::rebuildColumns()
 {
     OSL_PRECOND( getColumnCount() == 0, "OQuery::rebuildColumns: column container should be empty!" );
-        // the base class' definition of rebuildColumns promised that clearColumns is called before rebuildColumns
+        
 
     try
     {
@@ -130,7 +130,7 @@ void OQuery::rebuildColumns()
                 m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection );
         }
 
-        // fill the columns with columns from the statement
+        
         Reference< XMultiServiceFactory > xFactory( m_xConnection, UNO_QUERY_THROW );
         SharedUNOComponent< XSingleSelectQueryComposer, DisposableComponent > xComposer(
             Reference< XSingleSelectQueryComposer >( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW ) );
@@ -148,7 +148,7 @@ void OQuery::rebuildColumns()
 
         SharedUNOComponent< XPreparedStatement, DisposableComponent > xPreparedStatement;
         if ( !xColumns.is() || ( xColumnsIndexed->getCount() == 0 ) )
-        {   // the QueryComposer could not parse it. Try a lean version.
+        {   
             xPreparedStatement.set( m_xConnection->prepareStatement( m_sCommand ), UNO_QUERY_THROW );
             Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xPreparedStatement, UNO_QUERY_THROW );
             Reference< XResultSetMetaData > xResultSetMeta( xResMetaDataSup->getMetaData() );
@@ -210,10 +210,10 @@ void OQuery::rebuildColumns()
     }
 }
 
-// XServiceInfo
+
 IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition")
 
-// ::com::sun::star::beans::XPropertyChangeListener
+
 void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) throw(RuntimeException)
 {
     sal_Int32 nOwnHandle = -1;
@@ -224,18 +224,18 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
             "OQuery::propertyChange : where did this call come from ?");
 
         if (m_eDoingCurrently == SETTING_PROPERTIES)
-            // we're setting the property ourself, so we will do the necessary notifications later
+            
             return;
 
-        // forward this to our own member holding a copy of the property value
+        
         if (getArrayHelper()->hasPropertyByName(_rSource.PropertyName))
         {
             Property aOwnProp = getArrayHelper()->getPropertyByName(_rSource.PropertyName);
             nOwnHandle = aOwnProp.Handle;
             ODataSettings::setFastPropertyValue_NoBroadcast(nOwnHandle, _rSource.NewValue);
-                // don't use our own setFastPropertyValue_NoBroadcast, this would forward it to the CommandSettings,
-                // again
-                // and don't use the "real" setPropertyValue, this is to expensive and not sure to succeed
+                
+                
+                
         }
         else
         {
@@ -258,13 +258,13 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
     m_xCommandDefinition = NULL;
 }
 
-// XDataDescriptorFactory
+
 Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  ) throw(RuntimeException)
 {
     return new OQueryDescriptor(*this);
 }
 
-// pseudo-XComponent
+
 void SAL_CALL OQuery::disposing()
 {
     MutexGuard aGuard(m_aMutex);
@@ -286,14 +286,14 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) &&
         m_xCommandPropInfo.is() &&
         m_xCommandPropInfo->hasPropertyByName(sAggPropName))
-    {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
+    {   
 
         m_eDoingCurrently = SETTING_PROPERTIES;
         OAutoActionReset aAutoReset(this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
 
         if ( PROPERTY_ID_COMMAND == _nHandle )
-            // the columns are out of date if we are based on a new statement ....
+            
             setColumnsOutOfDate();
     }
 }
@@ -311,7 +311,7 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(Runt
 ::cppu::IPropertyArrayHelper* OQuery::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
-    // our own props
+    
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -332,8 +332,8 @@ void SAL_CALL OQuery::rename( const OUString& newName ) throw (SQLException, Ele
 
 void OQuery::registerProperties()
 {
-    // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
-    // a OPropertyStateContainer)
+    
+    
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND|PropertyAttribute::CONSTRAINED,
                     &m_sElementName, ::getCppuType(&m_sElementName));
 
@@ -361,6 +361,6 @@ OUString OQuery::determineContentType() const
     return OUString( "application/vnd.org.openoffice.DatabaseQuery" );
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

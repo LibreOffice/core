@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 #include <tools/debug.hxx>
 #include "codec.hxx"
 
-// - GalleryCodec -
+
 
 DBG_NAME(GalleryCodec)
 
@@ -98,7 +98,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         rStm.SeekRel( 6 );
         rStm.ReadUInt32( nUnCompressedSize ).ReadUInt32( nCompressedSize );
 
-        // decompress
+        
         if( 1 == nVersion )
         {
             sal_uInt8*   pCompressedBuffer = new sal_uInt8[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
@@ -119,16 +119,16 @@ void GalleryCodec::Read( SvStream& rStmToRead )
 
                     if ( nRunByte > 2 )
                     {
-                        // filling absolutely
+                        
                         memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
                         pInBuf += nRunByte;
                         nIndex += nRunByte;
 
-                        // note WORD alignment
+                        
                         if ( nRunByte & 1 )
                             pInBuf++;
                     }
-                    else if ( nRunByte == 1 )   // End of the image
+                    else if ( nRunByte == 1 )   
                         bEndDecoding = sal_True;
                 }
                 else

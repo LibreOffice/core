@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -139,7 +139,7 @@ boost::scoped_ptr< ICEConnectionObserver >
 SessionManagerClient::m_pICEConnectionObserver;
 SmcConn SessionManagerClient::m_pSmcConnection = NULL;
 OString SessionManagerClient::m_aClientID;
-bool SessionManagerClient::m_bDocSaveDone = false; // HACK
+bool SessionManagerClient::m_bDocSaveDone = false; 
 
 extern "C" {
 
@@ -237,14 +237,14 @@ bool SessionManagerClient::checkDocumentsSaved()
 
 IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
 {
-    // Decode argument smuggled in as void*:
+    
     sal_uIntPtr nStateVal = reinterpret_cast< sal_uIntPtr >(pStateVal);
     bool shutdown = nStateVal != 0;
 
     SAL_INFO("vcl.sm", "posting save documents event shutdown = " << (shutdown ? "true" : "false" ));
 
     static bool bFirstShutdown=true;
-    if (shutdown && bFirstShutdown) //first shutdown request
+    if (shutdown && bFirstShutdown) 
     {
         bFirstShutdown = false;
         /*
@@ -334,7 +334,7 @@ void SessionManagerClient::SaveYourselfProc(
         SessionManagerClient::saveDone();
         return;
     }
-    // Smuggle argument in as void*:
+    
     sal_uIntPtr nStateVal = shutdown;
     Application::PostUserEvent( STATIC_LINK( 0, SessionManagerClient, SaveYourselfHdl ), reinterpret_cast< void * >(nStateVal) );
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
@@ -411,9 +411,9 @@ void SessionManagerClient::saveDone()
 void SessionManagerClient::open(SalSession * pSession)
 {
     assert(!m_pSession && !m_pICEConnectionObserver && !m_pSmcConnection);
-        // must only be called once
+        
     m_pSession = pSession;
-    // This is the way Xt does it, so we can too:
+    
     if( getenv( "SESSION_MANAGER" ) )
     {
         m_pICEConnectionObserver.reset(new ICEConnectionObserver);
@@ -422,7 +422,7 @@ void SessionManagerClient::open(SalSession * pSession)
         {
             osl::MutexGuard g(m_pICEConnectionObserver->m_ICEMutex);
 
-            static SmcCallbacks aCallbacks; // does this need to be static?
+            static SmcCallbacks aCallbacks; 
             aCallbacks.save_yourself.callback           = SaveYourselfProc;
             aCallbacks.save_yourself.client_data        = NULL;
             aCallbacks.die.callback                     = DieProc;
@@ -639,7 +639,7 @@ void ICEConnectionWorker(void * data)
         if( nRet < 1 )
             continue;
 
-        // clear wakeup pipe
+        
         if( bWakeup )
         {
             char buf[4];
@@ -650,7 +650,7 @@ void ICEConnectionWorker(void * data)
                 continue;
         }
 
-        // check fd's after we obtained the lock
+        
         osl::MutexGuard g(pThis->m_ICEMutex);
         if( pThis->m_nConnections > 0 && pThis->m_nConnections == nConnectionsBefore )
         {
@@ -672,9 +672,9 @@ void ICEWatchProc(
     IceConn ice_conn, IcePointer client_data, Bool opening,
     SAL_UNUSED_PARAMETER IcePointer *)
 {
-    // Note: This is a callback function for ICE; this implicitly means that a
-    // call into ICE lib is calling this, so the m_ICEMutex MUST already be
-    // locked by the caller.
+    
+    
+    
     ICEConnectionObserver * pThis = static_cast< ICEConnectionObserver * >(
         client_data);
     if( opening )
@@ -693,7 +693,7 @@ void ICEWatchProc(
                 int flags;
                 pThis->m_pFilehandles[0].fd      = pThis->m_nWakeupFiles[0];
                 pThis->m_pFilehandles[0].events  = POLLIN;
-                // set close-on-exec and nonblock descriptor flag.
+                
                 if ((flags = fcntl(pThis->m_nWakeupFiles[0], F_GETFD)) != -1)
                 {
                     flags |= FD_CLOEXEC;
@@ -704,7 +704,7 @@ void ICEWatchProc(
                     flags |= O_NONBLOCK;
                     fcntl(pThis->m_nWakeupFiles[0], F_SETFL, flags);
                 }
-                // set close-on-exec and nonblock descriptor flag.
+                
                 if ((flags = fcntl(pThis->m_nWakeupFiles[1], F_GETFD)) != -1)
                 {
                     flags |= FD_CLOEXEC;
@@ -720,7 +720,7 @@ void ICEWatchProc(
             }
         }
     }
-    else // closing
+    else 
     {
         for( int i = 0; i < pThis->m_nConnections; i++ )
         {
@@ -743,13 +743,13 @@ void ICEWatchProc(
             oslThread t = pThis->m_ICEThread;
             pThis->m_ICEThread = NULL;
 
-            // must release the mutex here
+            
             pThis->m_ICEMutex.release();
 
             pThis->terminate(t);
 
-            // acquire the mutex again, because the caller does not expect
-            // it to be released when calling into SM
+            
+            
             pThis->m_ICEMutex.acquire();
         }
     }

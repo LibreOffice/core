@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -98,7 +98,7 @@ namespace cppu_threadpool
     }
 
 
-    //-------------------------------------------------------------------------------
+    
 
     ThreadPool::ThreadPool()
     {
@@ -155,7 +155,7 @@ namespace cppu_threadpool
             m_lstThreads.push_front( &waitingThread );
         }
 
-        // let the thread wait 2 seconds
+        
         TimeValue time = { 2 , 0 };
         osl_waitCondition( waitingThread.condition , &time );
 
@@ -163,7 +163,7 @@ namespace cppu_threadpool
             MutexGuard guard ( m_mutexWaitingThreadList );
             if( waitingThread.thread.is() )
             {
-                // thread wasn't reused, remove it from the list
+                
                 WaitingThreadList::iterator ii = find(
                     m_lstThreads.begin(), m_lstThreads.end(), &waitingThread );
                 OSL_ASSERT( ii != m_lstThreads.end() );
@@ -182,7 +182,7 @@ namespace cppu_threadpool
                  ii != m_lstThreads.end() ;
                  ++ ii )
             {
-                // wake the threads up
+                
                 osl_setCondition( (*ii)->condition );
             }
         }
@@ -195,19 +195,19 @@ namespace cppu_threadpool
     {
         bool bCreate = true;
         {
-            // Can a thread be reused ?
+            
             MutexGuard guard( m_mutexWaitingThreadList );
             if( ! m_lstThreads.empty() )
             {
-                // inform the thread and let it go
+                
                 struct WaitingThread *pWaitingThread = m_lstThreads.back();
                 pWaitingThread->thread->setTask( pQueue , aThreadId , bAsynchron );
                 pWaitingThread->thread = 0;
 
-                // remove from list
+                
                 m_lstThreads.pop_back();
 
-                // let the thread go
+                
                 osl_setCondition( pWaitingThread->condition );
                 bCreate = false;
             }
@@ -232,15 +232,15 @@ namespace cppu_threadpool
         {
             if( ! (*ii).second.second->isEmpty() )
             {
-                // another thread has put something into the queue
+                
                 return false;
             }
 
             (*ii).second.second = 0;
             if( (*ii).second.first )
             {
-                // all oneway request have been processed, now
-                // synchronus requests may go on
+                
+                
                 (*ii).second.first->resume();
             }
         }
@@ -248,7 +248,7 @@ namespace cppu_threadpool
         {
             if( ! (*ii).second.first->isEmpty() )
             {
-                // another thread has put something into the queue
+                
                 return false;
             }
             (*ii).second.first = 0;
@@ -351,7 +351,7 @@ namespace cppu_threadpool
         {
             if( revokeQueue( aThreadId , false) )
             {
-                // remove queue
+                
                 delete pQueue;
             }
         }
@@ -359,12 +359,12 @@ namespace cppu_threadpool
     }
 }
 
-// All uno_ThreadPool handles in g_pThreadpoolHashSet with overlapping life
-// spans share one ThreadPool instance.  When g_pThreadpoolHashSet becomes empty
-// (within the last uno_threadpool_destroy) all worker threads spawned by that
-// ThreadPool instance are joined (which implies that uno_threadpool_destroy
-// must never be called from a worker thread); afterwards, the next call to
-// uno_threadpool_create (if any) will lead to a new ThreadPool instance.
+
+
+
+
+
+
 
 using namespace cppu_threadpool;
 
@@ -424,7 +424,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
         p = g_pThreadpoolHashSet->begin()->second;
     }
 
-    // Just ensure that the handle is unique in the process (via heap)
+    
     uno_ThreadPool h = new struct _uno_ThreadPool;
     g_pThreadpoolHashSet->insert( ThreadpoolHashSet::value_type(h, p) );
     return h;
@@ -458,7 +458,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
 extern "C" void SAL_CALL
 uno_threadpool_detach(SAL_UNUSED_PARAMETER uno_ThreadPool) SAL_THROW_EXTERN_C()
 {
-    // we might do here some tiding up in case a thread called attach but never detach
+    
 }
 
 extern "C" void SAL_CALL

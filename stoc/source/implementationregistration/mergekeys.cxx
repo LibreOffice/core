@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,12 +45,12 @@ struct Link
 };
 typedef ::std::vector< Link > t_links;
 
-//==================================================================================================
+
 static void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource,
     t_links & links )
-    // throw( registry::InvalidRegistryException, registry::MergeConflictException, RuntimeException )
+    
 {
     if (!xSource.is() || !xSource->isValid()) {
         throw registry::InvalidRegistryException(
@@ -63,7 +63,7 @@ static void mergeKeys(
             Reference<XInterface>() );
     }
 
-    // write value
+    
     switch (xSource->getValueType())
     {
     case registry::RegistryValueType_NOT_DEFINED:
@@ -94,12 +94,12 @@ static void mergeKeys(
         break;
     }
 
-    // sub keys
+    
     Sequence< OUString > sourceKeys( xSource->getKeyNames() );
     OUString const * pSourceKeys = sourceKeys.getConstArray();
     for ( sal_Int32 nPos = sourceKeys.getLength(); nPos--; )
     {
-        // key name
+        
         OUString name( pSourceKeys[ nPos ] );
         sal_Int32 nSlash = name.lastIndexOf( '/' );
         if (nSlash >= 0)
@@ -109,18 +109,18 @@ static void mergeKeys(
 
         if (xSource->getKeyType( name ) == registry::RegistryKeyType_KEY)
         {
-            // try to open exisiting dest key or create new one
+            
             Reference< registry::XRegistryKey > xDestKey( xDest->createKey( name ) );
             Reference< registry::XRegistryKey > xSourceKey( xSource->openKey( name ) );
             mergeKeys( xDestKey, xSourceKey, links );
             xSourceKey->closeKey();
             xDestKey->closeKey();
         }
-        else // link
+        else 
         {
-            // remove existing key
+            
             Reference< registry::XRegistryKey > xDestKey( xDest->openKey( name ) );
-            if (xDestKey.is() && xDestKey->isValid()) // something to remove
+            if (xDestKey.is() && xDestKey->isValid()) 
             {
                 xDestKey->closeKey();
                 if (xDest->getKeyType( name ) == registry::RegistryKeyType_LINK)
@@ -134,18 +134,18 @@ static void mergeKeys(
             }
 
             links.push_back( Link(
-                pSourceKeys[ nPos ], // abs path
-                xSource->getResolvedName( name ) // abs resolved name
+                pSourceKeys[ nPos ], 
+                xSource->getResolvedName( name ) 
                 ) );
         }
     }
 }
 
-//==================================================================================================
+
 void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource )
-    // throw( registry::InvalidRegistryException, registry::MergeConflictException, RuntimeException )
+    
 {
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(

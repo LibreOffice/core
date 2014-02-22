@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <MNameMapper.hxx>
@@ -74,7 +74,7 @@ const char * getURI(const nsIAbDirectory*  directory)
     return uri;
 }
 
-// May modify the name passed in so that it's unique
+
 nsresult
 MNameMapper::add( OUString& str, nsIAbDirectory* abook )
 {
@@ -88,7 +88,7 @@ MNameMapper::add( OUString& str, nsIAbDirectory* abook )
     }
 
     OUString ouUri=OUString::createFromAscii(getURI(abook));
-    if ( mUriMap->find (ouUri) != mUriMap->end() ) //There's already an entry with same uri
+    if ( mUriMap->find (ouUri) != mUriMap->end() ) 
     {
         return NS_ERROR_FILE_NOT_FOUND;
     }

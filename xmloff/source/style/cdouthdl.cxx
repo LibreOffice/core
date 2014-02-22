@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cdouthdl.hxx>
@@ -71,11 +71,11 @@ SvXMLEnumMapEntry pXML_CrossedoutWidth_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-// class XMLCrossedOutTypePropHdl
+
 
 XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -85,8 +85,8 @@ bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any
         eNewStrikeout, rStrImpValue, pXML_CrossedoutType_Enum );
     if( bRet )
     {
-        // multi property: style and width might be set already.
-        // If the old value is NONE, the new is used unchanged.
+        
+        
         sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
@@ -94,21 +94,21 @@ bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             {
             case awt::FontStrikeout::NONE:
             case awt::FontStrikeout::SINGLE:
-                // keep existing line style
+                
                 eNewStrikeout = eStrikeout;
                 break;
             case awt::FontStrikeout::DOUBLE:
-                // A double line style has priority over a solid or a bold
-                // line style,
-                // but not about any other line style
+                
+                
+                
                 switch( eStrikeout )
                 {
                 case awt::FontStrikeout::SINGLE:
                 case awt::FontStrikeout::BOLD:
                     break;
                 default:
-                    // If a double line style is not supported for the existing
-                    // value, keep the new one
+                    
+                    
                     eNewStrikeout = eStrikeout;
                     break;
                 }
@@ -146,11 +146,11 @@ bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return bRet;
 }
 
-// class XMLCrossedOutStylePropHdl
+
 
 XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -160,13 +160,13 @@ bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::An
         eNewStrikeout, rStrImpValue, pXML_CrossedoutStyle_Enum );
     if( bRet )
     {
-        // multi property: style and width might be set already.
-        // If the old value is NONE, the new is used unchanged.
+        
+        
         sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
-            // one NONE a SINGLE are possible new values. For both, the
-            // existing value is kept.
+            
+            
         }
         else
         {
@@ -194,11 +194,11 @@ bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::An
     return bRet;
 }
 
-// class XMLCrossedOutWidthPropHdl
+
 
 XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -208,15 +208,15 @@ bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::An
         eNewStrikeout, rStrImpValue, pXML_CrossedoutWidth_Enum );
     if( bRet )
     {
-        // multi property: style and width might be set already.
-        // If the old value is NONE, the new is used unchanged.
+        
+        
         sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
             switch( eNewStrikeout )
             {
             case awt::FontStrikeout::NONE:
-                // keep existing line style
+                
                 eNewStrikeout = eStrikeout;
                 break;
             case awt::FontStrikeout::BOLD:
@@ -225,8 +225,8 @@ bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::An
                 case awt::FontStrikeout::SINGLE:
                     break;
                 default:
-                    // If a double line style is not supported for the existing
-                    // value, keep the new one
+                    
+                    
                     eNewStrikeout = eStrikeout;
                     break;
                 }
@@ -264,11 +264,11 @@ bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::An
     return bRet;
 }
 
-// class XMLCrossedOutTextPropHdl
+
 
 XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const

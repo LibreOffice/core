@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ public:
     }
 };
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -59,7 +59,7 @@ public:
 
 
 
-//----- Service ---------------------------------------------------------------
+
 
 Reference<XInterface> SAL_CALL Configuration_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -89,7 +89,7 @@ Sequence<OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
 
 
 
-//===== Configuration =========================================================
+
 
 Configuration::Configuration (
     const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
@@ -134,7 +134,7 @@ void SAL_CALL Configuration::disposing (void)
 
 
 
-//----- XConfiguration --------------------------------------------------------
+
 
 void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResourceId)
     throw (RuntimeException)
@@ -190,7 +190,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
     bool bFilterResources (!rsResourceURLPrefix.isEmpty());
 
-    // Collect the matching resources in a vector.
+    
     ::std::vector<Reference<XResourceId> > aResources;
     ResourceContainer::const_iterator iResource;
     for (iResource=mpResourceContainer->begin();
@@ -203,16 +203,16 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
         if (bFilterResources)
         {
-            // Apply the given resource prefix as filter.
+            
 
-            // Make sure that the resource is bound directly to the anchor.
+            
             if (eMode != AnchorBindingMode_DIRECT
                 && ! (*iResource)->isBoundTo(rxAnchorId, AnchorBindingMode_DIRECT))
             {
                 continue;
             }
 
-            // Make sure that the resource URL matches the given prefix.
+            
             if ( ! (*iResource)->getResourceURL().match(rsResourceURLPrefix))
             {
                 continue;
@@ -222,7 +222,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
         aResources.push_back(*iResource);
     }
 
-    // Copy the resources from the vector into a new sequence.
+    
     Sequence<Reference<XResourceId> > aResult (aResources.size());
     for (sal_uInt32 nIndex=0; nIndex<aResources.size(); ++nIndex)
         aResult[nIndex] = aResources[nIndex];
@@ -246,7 +246,7 @@ sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxRe
 
 
 
-//----- XCloneable ------------------------------------------------------------
+
 
 Reference<util::XCloneable> SAL_CALL Configuration::createClone (void)
     throw (RuntimeException)
@@ -265,7 +265,7 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone (void)
 
 
 
-//----- XNamed ----------------------------------------------------------------
+
 
 OUString SAL_CALL Configuration::getName (void)
     throw (RuntimeException)
@@ -297,14 +297,14 @@ OUString SAL_CALL Configuration::getName (void)
 void SAL_CALL Configuration::setName (const OUString& rsName)
     throw (RuntimeException)
 {
-    (void)rsName; // rsName is ignored.
+    (void)rsName; 
 }
 
 
 
 
 
-// ----------------------------------------------------------------------------
+
 
 void Configuration::PostEvent (
     const Reference<XResourceId>& rxResourceId,
@@ -348,7 +348,7 @@ void Configuration::ThrowIfDisposed (void) const
 
 
 
-//=============================================================================
+
 
 bool AreConfigurationsEquivalent (
     const Reference<XConfiguration>& rxConfiguration1,
@@ -359,7 +359,7 @@ bool AreConfigurationsEquivalent (
     if ( ! rxConfiguration1.is() && ! rxConfiguration2.is())
         return true;
 
-    // Get the lists of resources from the two given configurations.
+    
     const Sequence<Reference<XResourceId> > aResources1(
         rxConfiguration1->getResources(
             NULL, OUString(), AnchorBindingMode_INDIRECT));
@@ -367,15 +367,15 @@ bool AreConfigurationsEquivalent (
         rxConfiguration2->getResources(
             NULL, OUString(), AnchorBindingMode_INDIRECT));
 
-    // When the number of resources differ then the configurations can not
-    // be equivalent.
+    
+    
     const sal_Int32 nCount (aResources1.getLength());
     const sal_Int32 nCount2 (aResources2.getLength());
     if (nCount != nCount2)
         return false;
 
-    // Comparison of the two lists of resource ids relies on their
-    // ordering.
+    
+    
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
         const Reference<XResourceId> xResource1 (aResources1[nIndex]);
@@ -394,6 +394,6 @@ bool AreConfigurationsEquivalent (
     return true;
 }
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

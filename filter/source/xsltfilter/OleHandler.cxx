@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -81,11 +81,11 @@ namespace XSLT
         Reference<XOutputStream> xOutput = m_rootStream->getOutputStream();
         xOutput->writeBytes(oleData);
         xOutput->flush();
-        //Get the input stream and seek to begin
+        
         Reference<XSeekable> xSeek(m_rootStream->getInputStream(), UNO_QUERY);
         xSeek->seek(0);
 
-        //create an com.sun.star.embed.OLESimpleStorage from the temp stream
+        
         Sequence<Any> args(1);
         args[0] <<= xSeek;
         Reference<XNameContainer> cont(
@@ -99,19 +99,19 @@ namespace XSLT
     {
         if (!m_storage->hasByName(streamName))
             {
-                return "Not Found:";// + streamName;
+                return "Not Found:";
             }
         ;
         Reference<XInputStream> subStream((*(Reference< XInterface > *) m_storage->getByName(streamName).getValue()), UNO_QUERY);
         if (!subStream.is())
             {
-                return "Not Found:";// + streamName;
+                return "Not Found:";
             }
-        //The first four byte are the length of the uncompressed data
+        
         Sequence<sal_Int8> pLength(4);
         Reference<XSeekable> xSeek(subStream, UNO_QUERY);
         xSeek->seek(0);
-        //Get the uncompressed length
+        
         int readbytes = subStream->readBytes(pLength, 4);
         if (4 != readbytes)
             {
@@ -120,21 +120,21 @@ namespace XSLT
         int oleLength = (pLength[0] << 0) + (pLength[1] << 8)
                 + (pLength[2] << 16) + (pLength[3] << 24);
         Sequence<sal_Int8> content(oleLength);
-        //Read all bytes. The compressed length should less then the uncompressed length
+        
         readbytes = subStream->readBytes(content, oleLength);
         if (oleLength < readbytes)
             {
-                return "oleLength";// +oleLength + readBytes;
+                return "oleLength";
             }
 
-        // Decompress the bytes
+        
         ::ZipUtils::Inflater* decompresser = new ::ZipUtils::Inflater(sal_False);
         decompresser->setInput(content);
         Sequence<sal_Int8> result(oleLength);
         decompresser->doInflateSegment(result, 0, oleLength);
         decompresser->end();
         delete decompresser;
-        //return the base64 string of the uncompressed data
+        
         OUStringBuffer buf(oleLength);
         ::sax::Converter::encodeBase64(buf, result);
         return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
@@ -159,15 +159,15 @@ namespace XSLT
     {
         if ( streamName == "oledata.mso" )
         {
-            //get the length and seek to 0
+            
             Reference<XSeekable> xSeek (m_rootStream, UNO_QUERY);
             int oleLength = (int) xSeek->getLength();
             xSeek->seek(0);
-            //read all bytes
+            
             Reference<XInputStream> xInput = m_rootStream->getInputStream();
             Sequence<sal_Int8> oledata(oleLength);
             xInput->readBytes(oledata, oleLength);
-            //return the base64 encoded string
+            
             OUStringBuffer buf(oleLength);
             ::sax::Converter::encodeBase64(buf, oledata);
             return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
@@ -178,15 +178,15 @@ namespace XSLT
     void SAL_CALL
     OleHandler::insertSubStorage(const OUString& streamName, const OString& content)
     {
-        //decode the base64 string
+        
         Sequence<sal_Int8> oledata;
         ::sax::Converter::decodeBase64(oledata,
                 OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
-        //create a temp stream to write data to
+        
         Reference<XStream> subStream = createTempFile();
         Reference<XInputStream> xInput = subStream->getInputStream();
         Reference<XOutputStream> xOutput = subStream->getOutputStream();
-        //write the length to the temp stream
+        
         Sequence<sal_Int8> header(4);
         header[0] = (sal_Int8) (oledata.getLength() >> 0) & 0xFF;
         header[1] = (sal_Int8) (oledata.getLength() >> 8) & 0xFF;
@@ -194,26 +194,26 @@ namespace XSLT
         header[3] = (sal_Int8) (oledata.getLength() >> 24) & 0xFF;
         xOutput->writeBytes(header);
 
-        // Compress the bytes
+        
         Sequence<sal_Int8> output(oledata.getLength());
         ::ZipUtils::Deflater* compresser = new ::ZipUtils::Deflater((sal_Int32) 3, sal_False);
         compresser->setInputSegment(oledata, 0, oledata.getLength());
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());
         delete(compresser);
-        //realloc the data length
+        
         Sequence<sal_Int8> compressed(compressedDataLength);
         for (int i = 0; i < compressedDataLength; i++) {
             compressed[i] = output[i];
         }
 
-        //write the compressed data to the temp stream
+        
         xOutput->writeBytes(compressed);
-        //seek to 0
+        
         Reference<XSeekable> xSeek(xInput, UNO_QUERY);
         xSeek->seek(0);
 
-        //insert the temp stream as a sub stream and use an XTransactedObject to commit it immediately
+        
         Reference<XTransactedObject> xTransact(m_storage, UNO_QUERY);
         Any entry;
         entry <<= xInput;

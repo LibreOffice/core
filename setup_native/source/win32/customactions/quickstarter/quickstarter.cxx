@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "quickstarter.hxx"
@@ -35,7 +35,7 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle)
 
     if (MsiGetProperty(handle, TEXT("INSTALLLOCATION"), dummy, &sz) == ERROR_MORE_DATA)
     {
-        sz++; // space for the final '\0'
+        sz++; 
         DWORD nbytes = sz * sizeof(TCHAR);
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
@@ -53,7 +53,7 @@ std::string GetOfficeProductName(MSIHANDLE handle)
 
     if (MsiGetProperty(handle, TEXT("ProductName"), dummy, &sz) == ERROR_MORE_DATA)
     {
-        sz++; // space for the final '\0'
+        sz++; 
         DWORD nbytes = sz * sizeof(TCHAR);
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
@@ -71,7 +71,7 @@ std::string GetQuickstarterLinkName(MSIHANDLE handle)
 
     if (MsiGetProperty(handle, TEXT("Quickstarterlinkname"), dummy, &sz) == ERROR_MORE_DATA)
     {
-        sz++; // space for the final '\0'
+        sz++; 
         DWORD nbytes = sz * sizeof(TCHAR);
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
@@ -80,7 +80,7 @@ std::string GetQuickstarterLinkName(MSIHANDLE handle)
     }
     else if (MsiGetProperty(handle, TEXT("ProductName"), dummy, &sz) == ERROR_MORE_DATA)
     {
-        sz++; // space for the final '\0'
+        sz++; 
         DWORD nbytes = sz * sizeof(TCHAR);
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);

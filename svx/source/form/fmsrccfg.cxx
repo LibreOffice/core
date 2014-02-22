@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/fmsrccfg.hxx"
@@ -26,7 +26,7 @@ using namespace ::com::sun::star::i18n;
 
 namespace svxform
 {
-    // search parameters
+    
 
     FmSearchParams::FmSearchParams()
         :nTransliterationFlags( 0 )
@@ -70,7 +70,7 @@ namespace svxform
             nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
     }
 
-    // maps from ascii values to int values
+    
 
     struct Ascii2Int16
     {
@@ -105,12 +105,12 @@ namespace svxform
 
     static sal_Int16 lcl_implMapAsciiValue( const OUString& _rAsciiValue, const Ascii2Int16* _pMap )
     {
-        // search the map for the given ascii value
+        
         const Ascii2Int16* pSearch = _pMap;
         while ( pSearch && pSearch->pAscii )
         {
             if ( _rAsciiValue.equalsAscii( pSearch->pAscii ) )
-                // found
+                
                 return pSearch->nValue;
             ++pSearch;
         }
@@ -121,12 +121,12 @@ namespace svxform
 
     static const sal_Char* lcl_implMapIntValue( const sal_Int16 _nValue, const Ascii2Int16* _pMap )
     {
-        // search the map for the given integer value
+        
         const Ascii2Int16* pSearch = _pMap;
         while ( pSearch && pSearch->pAscii )
         {
             if ( _nValue == pSearch->nValue )
-                // found
+                
                 return pSearch->pAscii;
             ++pSearch;
         }
@@ -138,18 +138,18 @@ namespace svxform
             ).getStr()
         );
         static const sal_Char* s_pDummy = "";
-            // just as a fallback ....
+            
         return s_pDummy;
     }
 
-    // class FmSearchConfigItem - a config item that stores search parameters
+    
 
 #define TA( c )     &c, getCppuType( &c )
 
     FmSearchConfigItem::FmSearchConfigItem()
         :OConfigurationValueContainer( ::comphelper::getProcessComponentContext(), m_aMutex, "/org.openoffice.Office.DataAccess/FormSearchOptions", CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE, 2 )
     {
-        // register our members so the data exchange with the node values is done automatically
+        
 
         registerExchangeLocation( "SearchHistory",                      TA( aHistory ) );
         registerExchangeLocation( "LevenshteinOther",                   TA( nLevOther ) );
@@ -164,7 +164,7 @@ namespace svxform
         registerExchangeLocation( "IsSimilaritySearch",                 TA( bApproxSearch ) );
         registerExchangeLocation( "IsUseAsianOptions",                  TA( bSoundsLikeCJK ) );
 
-        // the properties which need to be translated
+        
         registerExchangeLocation( "SearchType",                         TA( m_sSearchForType ) );
         registerExchangeLocation( "SearchPosition",                     TA( m_sSearchPosition ) );
 
@@ -198,13 +198,13 @@ namespace svxform
 
     void FmSearchConfigItem::implTranslateFromConfig( )
     {
-        // the search-for string
+        
         nSearchForType = lcl_implMapAsciiValue( m_sSearchForType, lcl_getSearchForTypeValueMap() );
 
-        // the search position
+        
         nPosition = lcl_implMapAsciiValue( m_sSearchPosition, lcl_getSearchPositionValueMap() );
 
-        // the transliteration flags
+        
         nTransliterationFlags = 0;
 
         if ( !m_bIsMatchCase                )   nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
@@ -231,13 +231,13 @@ namespace svxform
 
     void FmSearchConfigItem::implTranslateToConfig( )
     {
-        // the search-for string
+        
         m_sSearchForType = OUString::createFromAscii( lcl_implMapIntValue( nSearchForType, lcl_getSearchForTypeValueMap() ) );
 
-        // the search position
+        
         m_sSearchPosition = OUString::createFromAscii( lcl_implMapIntValue( nPosition, lcl_getSearchPositionValueMap() ) );
 
-        // the transliteration flags
+        
 
         m_bIsMatchCase                  = ( 0 == ( nTransliterationFlags & TransliterationModules_IGNORE_CASE ) );
         m_bIsMatchFullHalfWidthForms    = ( 0 != ( nTransliterationFlags & TransliterationModules_IGNORE_WIDTH ) );
@@ -263,19 +263,19 @@ namespace svxform
 
     const FmSearchParams& FmSearchConfigItem::getParams() const
     {
-        // ensure that the properties which are not stored directly are up-to-date
+        
         const_cast< FmSearchConfigItem* >( this )->implTranslateFromConfig( );
 
-        // and return our FmSearchParams part
+        
         return *this;
     }
 
     void FmSearchConfigItem::setParams( const FmSearchParams& _rParams )
     {
-        // copy the FmSearchParams part
+        
         *static_cast< FmSearchParams* >( this ) = _rParams;
 
-        // translate the settings not represented by a direct config value
+        
         implTranslateToConfig();
     }
 

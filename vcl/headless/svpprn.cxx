@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
 
-    // copy page size
+    
     OUString aPaper;
     int width, height;
 
@@ -75,7 +75,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pJobSetup->mnPaperHeight    = 0;
     if( pJobSetup->mePaperFormat == PAPER_USER )
     {
-        // transform to 100dth mm
+        
         width               = PtTo10Mu( width );
         height              = PtTo10Mu( height );
 
@@ -91,7 +91,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         }
     }
 
-    // copy input slot
+    
     const PPDKey* pKey = NULL;
     const PPDValue* pValue = NULL;
 
@@ -111,7 +111,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
             pJobSetup->mnPaperBin = 0xffff;
     }
 
-    // copy duplex
+    
     pKey = NULL;
     pValue = NULL;
 
@@ -138,7 +138,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         }
     }
 
-    // copy the whole context
+    
     if( pJobSetup->mpDriverData )
         rtl_freeMemory( pJobSetup->mpDriverData );
 
@@ -163,7 +163,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup*            pJobSetup )
 {
-    // create and initialize SalInfoPrinter
+    
     SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter();
 
     if( pJobSetup )
@@ -193,7 +193,7 @@ void SvpSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 
 SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
-    // create and initialize SalPrinter
+    
     SvpSalPrinter* pPrinter = new SvpSalPrinter( pInfoPrinter );
     pPrinter->m_aJobData = static_cast<SvpSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
 
@@ -211,7 +211,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
     if( ! pNoSyncDetection || ! *pNoSyncDetection )
     {
-        // #i62663# synchronize possible asynchronouse printer detection now
+        
         rManager.checkPrintersChanged( true );
     }
     ::std::list< OUString > aPrinters;
@@ -220,7 +220,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     for( ::std::list< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
     {
         const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
-        // Neuen Eintrag anlegen
+        
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
         pInfo->maPrinterName    = *it;
         pInfo->maDriver         = rInfo.m_aDriverName;

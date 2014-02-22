@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,20 +14,20 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "addinhelpid.hxx"
 #include "sc.hrc"
 
-// A struct containing the built-in function name and the built-in help ID.
+
 struct ScUnoAddInHelpId
 {
     const sal_Char*             pFuncName;
     const sal_Char*             sHelpId;
 };
 
-// Help IDs for Analysis AddIn. MUST BE SORTED for binary search.
+
 const ScUnoAddInHelpId pAnalysisHelpIds[] =
 {
     { "getAccrint"                  , HID_AAI_FUNC_ACCRINT          },
@@ -133,7 +133,7 @@ const ScUnoAddInHelpId pAnalysisHelpIds[] =
     { "getYieldmat"                 , HID_AAI_FUNC_YIELDMAT         }
 };
 
-// Help IDs for DateFunc AddIn. MUST BE SORTED for binary search.
+
 const ScUnoAddInHelpId pDateFuncHelpIds[] =
 {
     { "getDaysInMonth"              , HID_DAI_FUNC_DAYSINMONTH      },

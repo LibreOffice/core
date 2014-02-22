@@ -62,7 +62,7 @@ OPreparedStatement::~OPreparedStatement()
 
 }
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< Type > OPreparedStatement::getTypes() throw (RuntimeException)
 {
     OTypeCollection aTypes(::getCppuType( (const Reference< XServiceInfo > *)0 ),
@@ -90,7 +90,7 @@ Sequence< sal_Int8 > OPreparedStatement::getImplementationId() throw (RuntimeExc
     return pId->getImplementationId();
 }
 
-// com::sun::star::uno::XInterface
+
 Any OPreparedStatement::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     Any aIface = OStatementBase::queryInterface( rType );
@@ -117,7 +117,7 @@ void OPreparedStatement::release() throw ()
     OStatementBase::release();
 }
 
-// XServiceInfo
+
 OUString OPreparedStatement::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdb.OPreparedStatement");
@@ -136,7 +136,7 @@ Sequence< OUString > OPreparedStatement::getSupportedServiceNames(  ) throw (Run
     return aSNS;
 }
 
-// OComponentHelper
+
 void OPreparedStatement::disposing()
 {
     {
@@ -147,13 +147,13 @@ void OPreparedStatement::disposing()
     OStatementBase::disposing();
 }
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
+
 Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getColumns(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
-    // do we have to populate the columns
+    
     if (!m_pColumns->isInitialized())
     {
         try
@@ -166,7 +166,7 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
 
             for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
             {
-                // retrieve the name of the column
+                
                 OUString aName = xMetaData->getColumnName(i + 1);
                 OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
                 m_pColumns->append(aName, pColumn);
@@ -181,7 +181,7 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
     return m_pColumns;
 }
 
-// XResultSetMetaDataSupplier
+
 Reference< XResultSetMetaData > OPreparedStatement::getMetaData(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -189,7 +189,7 @@ Reference< XResultSetMetaData > OPreparedStatement::getMetaData(void) throw( SQL
     return Reference< XResultSetMetaDataSupplier >( m_xAggregateAsSet, UNO_QUERY_THROW )->getMetaData();
 }
 
-// XPreparedStatement
+
 Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -203,7 +203,7 @@ Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException,
     {
         xResultSet = new OResultSet(xDrvResultSet, *this, m_pColumns->isCaseSensitive());
 
-        // keep the resultset weak
+        
         m_aResultSet = xResultSet;
     }
     return xResultSet;
@@ -234,7 +234,7 @@ Reference< XConnection > OPreparedStatement::getConnection(void) throw( SQLExcep
     return Reference< XConnection > (m_xParent, UNO_QUERY);
 }
 
-// XParameters
+
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);

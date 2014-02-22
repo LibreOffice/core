@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -59,7 +59,7 @@ namespace cairocanvas
         mpSurfaceProvider = &rSurfaceProvider;
         mpRefDevice = &rRefDevice;
 
-        // no own surface, this is handled by derived classes
+        
     }
 
     void DeviceHelper::init( SurfaceProvider& rSurfaceProvider,
@@ -77,7 +77,7 @@ namespace cairocanvas
 
     void DeviceHelper::disposing()
     {
-        // release all references
+        
         mpSurface.reset();
         mpRefDevice = NULL;
         mpSurfaceProvider = NULL;
@@ -88,12 +88,12 @@ namespace cairocanvas
         OSL_TRACE("DeviceHelper::setSize(): device size %d x %d", rSize.getX(), rSize.getY() );
 
         if( !mpRefDevice )
-            return; // disposed
+            return; 
 
         OutputDevice* pOutDev=getOutputDevice();
 
 #if HAVE_FEATURE_X11
-        // X11 only
+        
         if( mpSurface )
             mpSurface->Resize( rSize.getX() + pOutDev->GetOutOffXPixel(),
                                rSize.getY() + pOutDev->GetOutOffYPixel() );
@@ -108,7 +108,7 @@ namespace cairocanvas
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
-        // Map a one-by-one millimeter box to pixel
+        
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );
         mpRefDevice->SetMapMode( MapMode(MAP_MM) );
         const Size aPixelSize( mpRefDevice->LogicToPixel(Size(1,1)) );
@@ -120,9 +120,9 @@ namespace cairocanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpRefDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
-        // Map the pixel dimensions of the output window to millimeter
+        
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );
         mpRefDevice->SetMapMode( MapMode(MAP_MM) );
         const Size aLogSize( mpRefDevice->PixelToLogic(mpRefDevice->GetOutputSizePixel()) );
@@ -135,9 +135,9 @@ namespace cairocanvas
         const uno::Reference< rendering::XGraphicDevice >&              ,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
-        // disposed?
+        
         if( !mpSurfaceProvider )
-            return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
+            return uno::Reference< rendering::XLinePolyPolygon2D >(); 
 
         return uno::Reference< rendering::XLinePolyPolygon2D >(
             new ::basegfx::unotools::UnoPolyPolygon(
@@ -148,9 +148,9 @@ namespace cairocanvas
         const uno::Reference< rendering::XGraphicDevice >&                      ,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
-        // disposed?
+        
         if( !mpSurfaceProvider )
-            return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
+            return uno::Reference< rendering::XBezierPolyPolygon2D >(); 
 
         return uno::Reference< rendering::XBezierPolyPolygon2D >(
             new ::basegfx::unotools::UnoPolyPolygon(
@@ -161,9 +161,9 @@ namespace cairocanvas
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const geometry::IntegerSize2D&                      size )
     {
-        // disposed?
+        
         if( !mpSurfaceProvider )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap(
@@ -184,9 +184,9 @@ namespace cairocanvas
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const geometry::IntegerSize2D&                      size )
     {
-        // disposed?
+        
         if( !mpSurfaceProvider )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap(
@@ -205,13 +205,13 @@ namespace cairocanvas
 
     sal_Bool DeviceHelper::hasFullScreenMode()
     {
-        // TODO(F3): offer fullscreen mode the XCanvas way
+        
         return false;
     }
 
     sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool /*bEnter*/ )
     {
-        // TODO(F3): offer fullscreen mode the XCanvas way
+        
         return false;
     }
 
@@ -244,7 +244,7 @@ namespace cairocanvas
 
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
     {
-        // always the same
+        
         return DeviceColorSpace::get();
     }
 

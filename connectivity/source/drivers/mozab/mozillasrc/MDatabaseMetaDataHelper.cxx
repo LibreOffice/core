@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// Mozilla includes.
+
 #include "MNSInclude.hxx"
 
 #include "resource/mozab_res.hrc"
@@ -81,13 +81,13 @@ namespace connectivity
 {
     namespace mozab
     {
-        static const char * const s_pADDRESSBOOKROOTDIR = "moz-abdirectory://";
+        static const char * const s_pADDRESSBOOKROOTDIR = "moz-abdirectory:
     }
 }
 
 extern sal_Bool MNS_Init(sal_Bool& aProfileExists);
 
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     :m_bProfileExists(sal_False)
 {
@@ -96,7 +96,7 @@ MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 
 }
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
     m_aTableNames.clear();
@@ -118,7 +118,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 }
 
 static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array);
-//enum all sub folders
+
 static nsresult enumSubs(nsIAbDirectory * parentDir,nsISupportsArray * array)
 {
     nsCOMPtr<nsISimpleEnumerator> subDirectories;
@@ -133,12 +133,12 @@ static nsresult enumSubs(nsIAbDirectory * parentDir,nsISupportsArray * array)
 static nsresult insertPABDescription()
 {
     nsresult rv = NS_OK ;
-    // mozilla loads the descriptions of pab and history from a file named addressbook.properties
-    // we never deliver it with OOo,so mozab does not auot load personal addressbook and Collected addresses
-    // If we want to deliver addressbook.properties with OOo,we have to deal with hole mozilla chrome mechanism.
-    // So I insert the descriptiones as user prefes,they will cover the default value.
+    
+    
+    
+    
 
-    //"Personal Address Book" "Collected Addresses" are loaded from officecfg
+    
     nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);
     NS_ENSURE_SUCCESS(rv, rv);
 
@@ -184,7 +184,7 @@ static nsresult insertPABDescription()
     return rv;
 }
 //
-// nsAbDirectoryDataSource
+
 //
 #define NS_RDF_CONTRACTID                           "@mozilla.org/rdf"
 #define NS_RDF_DATASOURCE_CONTRACTID                NS_RDF_CONTRACTID "/datasource;1"
@@ -198,8 +198,8 @@ static nsresult insertPABDescription()
     {0xa2, 0xda, 0x0, 0x10, 0x83, 0x0, 0x3d, 0xc}   \
 }
 
-// -------------------------------------------------------------------------
-// Case where we get a parent uri, and need to list its children.
+
+
 static nsresult getSubsFromParent(const OString& aParent, nsIEnumerator **aSubs)
 {
 
@@ -266,7 +266,7 @@ static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array)
     return rv;
 }
 
-// Case where we get a factory uri and need to have it build the directories.
+
 static nsresult getSubsFromFactory(const OString& aFactory, nsIEnumerator **aSubs)
 {
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
@@ -298,7 +298,7 @@ static nsresult getSubsFromFactory(const OString& aFactory, nsIEnumerator **aSub
     return retCode ;
 }
 
-// Case where the uri itself is the directory we're looking for.
+
 static nsresult getSubsFromURI(const OString& aUri, nsIEnumerator **aSubs)
 {
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
@@ -380,7 +380,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
     }
     OSL_TRACE("Using URI %s to getTables()",sAbURI );
 
-    // Get the mozilla addressbooks from the base directory.
+    
     nsresult rv = NS_OK;
     nsCOMPtr<nsIEnumerator> subDirectories;
 
@@ -401,7 +401,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
     }
     NS_ENSURE_SUCCESS(rv, rv);
 
-    // At this point we have a list containing the nsIAbDirectory we need to map as tables
+    
     rv = subDirectories -> First();
     NS_ENSURE_SUCCESS(rv, rv);
 
@@ -427,7 +427,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         subDirectory = do_QueryInterface(item, &rv);
 
         subDirectory -> GetIsMailList(&bIsMailList);
-        // For now we're not interested in mailing lists.
+        
         rv = subDirectory -> GetDirName(&name);
         if ( NS_FAILED( rv ) ) {
             *pErrorId = STR_COULD_NOT_GET_DIRECTORY_NAME;
@@ -438,7 +438,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
 
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
-        // Insert table into map
+        
         if ( aTableName.isEmpty() )
             aTableName = "AddressBook";
 
@@ -449,18 +449,18 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         if (!NS_FAILED(rv))
             rdfService->UnregisterResource(rdfResource);
 
-        if (!NS_FAILED(rv)) //failed means we have added this directory
+        if (!NS_FAILED(rv)) 
         {
-            //map mailing lists as views
-            _rStrings->push_back( aTableName ); // Table name
+            
+            _rStrings->push_back( aTableName ); 
             if (!bIsMailList) {
                 OUString aTableType("TABLE");
-                _rTypes->push_back( aTableType ); // Table type
+                _rTypes->push_back( aTableType ); 
             }
             else
             {
                 OUString aTableType("VIEW");
-                _rTypes->push_back( aTableType ); // Table type
+                _rTypes->push_back( aTableType ); 
             }
         }
         rv = subDirectories -> Next();
@@ -479,7 +479,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)", _pCon, _pCon->getForceLoadTables()?"True":"False" );
 
     ::osl::MutexGuard aGuard( m_aMetaMutex );
-    // Only do the query if we have to - performance degrades otherwise
+    
     if ( ! _pCon->getForceLoadTables() && m_aTableNames.size() > 0 ) {
         _rStrings = m_aTableNames;
         _rTypes   = m_aTableTypes;
@@ -505,7 +505,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     else
         OSL_TRACE("Using URI of ROOTDIR to getTables()");
 
-    // Get the mozilla addressbooks from the base directory.
+    
     nsresult rv = NS_OK;
     nsCOMPtr<nsIEnumerator> subDirectories;
     sal_Int32 nDirectoryType=0;
@@ -546,7 +546,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     }
 
     if ( !_pCon->isLDAP() && !m_bProfileExists )
-    {   // no need to boot up a Mozilla profile for an LDAP connection
+    {   
         Reference<XMozillaBootstrap> xMozillaBootstrap;
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
@@ -554,9 +554,9 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = sal_False;
-        //If there are no profiles for this product
-        //Or the given profile name does not found
-        //We will reaise a "No Addressbook Directories Exist" error
+        
+        
+        
         if ( xMozillaBootstrap->getProfileCount(m_ProductType) == 0 ||
             ( !m_ProfileName.isEmpty() && xMozillaBootstrap->getProfilePath(m_ProductType,m_ProfileName).isEmpty()))
             m_bProfileExists = sal_False;
@@ -619,7 +619,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     OSL_TRACE( "IN MDatabaseMetaDataHelper::getTables()" );
     ::osl::MutexGuard aGuard( m_aMetaMutex );
 
-    ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
+    ODatabaseMetaDataResultSet::ORows().swap(aRows); 
     aRows.clear();
 
     ::std::vector< OUString > tables;
@@ -637,9 +637,9 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
         OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
 
-        // return tables to caller
+        
         if (match( tableNamePattern, aTableName, '\0' ) &&
-                      ( 0 == types.getLength() ||   //types is null or types include aTableType or types include "%"
+                      ( 0 == types.getLength() ||   
                        0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
                        0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength())) {
             if ( aTableName.isEmpty() ) {
@@ -648,9 +648,9 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
             OSL_TRACE( "TableName = %s ; TableType = %s", OUtoCStr(aTableName), OUtoCStr(aTableType) );
 
-            aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
-            aRow.push_back( new ORowSetValueDecorator( aTableType ) );     // Table type
-            aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() );                 // Remarks
+            aRow.push_back( new ORowSetValueDecorator( aTableName ) ); 
+            aRow.push_back( new ORowSetValueDecorator( aTableType ) );     
+            aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() );                 
             aRows.push_back(aRow);
         }
     }
@@ -665,8 +665,8 @@ sal_Bool
 MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 {
     const sal_Unicode QUERY_CHAR = '?';
-    const sal_Char*   MOZ_SCHEMA = "moz-abldapdirectory://";
-    const sal_Char*   LDAP_SCHEMA = "ldap://";
+    const sal_Char*   MOZ_SCHEMA = "moz-abldapdirectory:
+    const sal_Char*   LDAP_SCHEMA = "ldap:
 
     OString   sAbURI;
     OUString   sAbBindDN;
@@ -706,23 +706,23 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 
     MNSMozabProxy xMProxy;
     rv = xMProxy.StartProxy( &args, m_ProductType, OUString() );
-    if ( NS_SUCCEEDED( rv ) )   //Init LDAP,pass OUString() to StarProxy to ignore profile switch
+    if ( NS_SUCCEEDED( rv ) )   
     {
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
-        TimeValue               timeValue = { 1, 0 };  // 1 * 30 Seconds timeout
+        TimeValue               timeValue = { 1, 0 };  
         sal_Int32               times=0;
         while ( times++ < 30 )
         {
             rv = xMProxy.StartProxy( &args, m_ProductType, OUString() );
             if ( NS_SUCCEEDED( rv ) )
-                // connected successfully
+                
                 break;
 
             if ( rv == (nsresult)PR_NOT_CONNECTED_ERROR )
-                // connection failed
+                
                 break;
 
-            // not yet decided - continue waiting
+            
             osl_waitThread( &timeValue );
         }
     }
@@ -744,7 +744,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const OUStri
     else
         OSL_TRACE("Create table");
 
-    // Get the mozilla addressbooks from the base directory.
+    
     MNSMozabProxy xMProxy;
     RunArgs args;
     args.funcIndex = ProxiedFunc::FUNC_NEW_ADDRESS_BOOK;
@@ -752,7 +752,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const OUStri
     args.arg1 = (void*)&aTableName;
     nsresult rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
 
-    _pCon->setForceLoadTables(sal_True); //force reload table next time
+    _pCon->setForceLoadTables(sal_True); 
     if (rv == NS_ERROR_FILE_IS_LOCKED)
     {
         m_aError.setResId( STR_MOZILLA_IS_RUNNING );

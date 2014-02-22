@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -25,9 +25,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "WinClipbImpl.hxx"
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using namespace osl;
 using namespace std;
@@ -41,9 +41,9 @@ using namespace com::sun::star::lang;
 
 #define WINCLIPBOARD_IMPL_NAME  "com.sun.star.datatransfer.clipboard.ClipboardW32"
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 namespace
 {
@@ -55,9 +55,9 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
-// ctor
-//------------------------------------------------------------------------
+
+
+
 /*XEventListener,*/
 CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, const OUString& aClipboardName ) :
     WeakComponentImplHelper3< XSystemClipboard, XFlushableClipboard, XServiceInfo >( m_aCbListenerMutex ),
@@ -66,18 +66,18 @@ CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, c
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
 }
 
-//========================================================================
-// XClipboard
-//========================================================================
 
-//------------------------------------------------------------------------
-// getContent
-// to avoid unecessary traffic we check first if there is a clipboard
-// content which was set via setContent, in this case we don't need
-// to query the content from the clipboard, create a new wrapper object
-// and so on, we simply return the orignial XTransferable instead of our
-// DOTransferable
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( RuntimeException )
 {
@@ -93,9 +93,9 @@ Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( Runtime
     return Reference< XTransferable >( );
 }
 
-//------------------------------------------------------------------------
-// setContent
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTransferable,
                                           const Reference< XClipboardOwner >& xClipboardOwner )
@@ -111,9 +111,9 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
         m_pImpl->setContents( xTransferable, xClipboardOwner );
 }
 
-//------------------------------------------------------------------------
-// getName
-//------------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
 {
@@ -127,9 +127,9 @@ OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
     return OUString("");
 }
 
-//========================================================================
-// XFlushableClipboard
-//========================================================================
+
+
+
 
 void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 {
@@ -143,9 +143,9 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
         m_pImpl->flushClipboard( );
 }
 
-//========================================================================
-// XClipboardEx
-//========================================================================
+
+
+
 
 sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeException )
 {
@@ -159,13 +159,13 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeExce
     return 0;
 }
 
-//========================================================================
-// XClipboardNotifier
-//========================================================================
 
-//------------------------------------------------------------------------
-// getName
-//------------------------------------------------------------------------
+
+
+
+
+
+
 
 void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
@@ -174,7 +174,7 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    // check input parameter
+    
     if ( !listener.is( ) )
         throw IllegalArgumentException("empty reference",
                                         static_cast< XClipboardEx* >( this ),
@@ -183,9 +183,9 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
     rBHelper.aLC.addInterface( getCppuType( &listener ), listener );
 }
 
-//------------------------------------------------------------------------
-// getName
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
@@ -194,7 +194,7 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
         throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
-    // check input parameter
+    
     if ( !listener.is( ) )
         throw IllegalArgumentException("empty reference",
                                         static_cast< XClipboardEx* >( this ),
@@ -203,9 +203,9 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
     rBHelper.aLC.removeInterface( getCppuType( &listener ), listener );
 }
 
-//------------------------------------------------------------------------
-// getName
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
 {
@@ -245,32 +245,32 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
                 {
                     OSL_FAIL("Service Manager disposed");
 
-                    // no further clipboard changed notifications
+                    
                     m_pImpl->unregisterClipboardViewer();
                 }
 
-            } // end if
-        } // end if
-    } // end if
+            } 
+        } 
+    } 
 }
 
-//------------------------------------------------
-// overwritten base class method which will be
-// called by the base class dispose method
-//------------------------------------------------
+
+
+
+
 
 void SAL_CALL CWinClipboard::disposing()
 {
-    // do my own stuff
+    
     m_pImpl->dispose( );
 
-    // force destruction of the impl class
+    
     m_pImpl.reset();
 }
 
-// -------------------------------------------------
-// XServiceInfo
-// -------------------------------------------------
+
+
+
 
 OUString SAL_CALL CWinClipboard::getImplementationName(  )
     throw(RuntimeException)
@@ -278,16 +278,16 @@ OUString SAL_CALL CWinClipboard::getImplementationName(  )
     return OUString( WINCLIPBOARD_IMPL_NAME );
 }
 
-//  XServiceInfo
+
 sal_Bool SAL_CALL CWinClipboard::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
+
+
+
 
 Sequence< OUString > SAL_CALL CWinClipboard::getSupportedServiceNames(   )
     throw(RuntimeException)

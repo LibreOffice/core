@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,7 +80,7 @@ namespace {
 typedef cppu::ImplInheritanceHelper1<PackageRegistryBackend,
                                      lang::XServiceInfo> ImplBaseT;
 
-//==============================================================================
+
 class BackendImpl : public ImplBaseT
 {
     class PackageImpl : public ::dp_registry::backend::Package
@@ -99,7 +99,7 @@ class BackendImpl : public ImplBaseT
 
         Reference<deployment::XPackage> bindBundleItem(
             OUString const & url, OUString const & mediaType,
-            sal_Bool bRemoved, //that is, using data base information
+            sal_Bool bRemoved, 
             OUString const & identifier,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool notifyDetectionError = true );
@@ -124,8 +124,8 @@ class BackendImpl : public ImplBaseT
             Reference<ucb::XCommandEnvironment > const &
                 environment,
             DescriptionInfoset const & description);
-            // throws css::uno::RuntimeException,
-            // css::deployment::DeploymentException
+            
+            
 
         ::sal_Bool checkLicense(
             Reference< ucb::XCommandEnvironment > const & xCmdEnv,
@@ -134,14 +134,14 @@ class BackendImpl : public ImplBaseT
                        ucb::CommandFailedException,
                        ucb::CommandAbortedException,
                        RuntimeException);
-        // @throws DeploymentException
+        
         OUString getTextFromURL(
             const Reference< ucb::XCommandEnvironment >& xCmdEnv,
             const OUString& licenseUrl);
 
         DescriptionInfoset getDescriptionInfoset();
 
-        // Package
+        
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -167,7 +167,7 @@ class BackendImpl : public ImplBaseT
             bool bRemoved,
             OUString const & identifier);
 
-        // XPackage
+        
         virtual sal_Bool SAL_CALL isBundle() throw (RuntimeException);
 
         virtual Sequence< Reference<deployment::XPackage> > SAL_CALL getBundle(
@@ -242,7 +242,7 @@ class BackendImpl : public ImplBaseT
     ExtensionBackendDb::Data readDataFromDb(OUString const & url);
     void revokeEntryFromDb(OUString const & url);
 
-    // PackageRegistryBackend
+    
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
@@ -256,14 +256,14 @@ public:
         Reference<XComponentContext> const & xComponentContext,
         Reference<deployment::XPackageRegistry> const & xRootRegistry );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const& name )
         throw (RuntimeException);
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
 
-    // XPackageRegistry
+    
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
@@ -273,7 +273,7 @@ public:
     using ImplBaseT::disposing;
 };
 
-//Used to find a XPackage with a particular URL
+
 class XPackage_eq : public std::unary_function<Reference<deployment::XPackage>, bool>
 {
     OUString m_URL;
@@ -285,7 +285,7 @@ public:
     }
 };
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext,
@@ -316,14 +316,14 @@ BackendImpl::BackendImpl(
    }
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::disposing()
 {
     m_xRootRegistry.clear();
     PackageRegistryBackend::disposing();
 }
 
-// XServiceInfo
+
 OUString BackendImpl::getImplementationName() throw (RuntimeException)
 {
     return OUString("com.sun.star.comp.deployment.bundle.PackageRegistryBackend");
@@ -342,8 +342,8 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
         OUString(BACKEND_SERVICE_NAME) );
 }
 
-// XPackageRegistry
-//______________________________________________________________________________
+
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -354,8 +354,8 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
         throw (deployment::DeploymentException,
                uno::RuntimeException)
 {
-    //Notify the backend responsible for processing the different media
-    //types that this extension was removed.
+    
+    
     ExtensionBackendDb::Data data = readDataFromDb(url);
     for (ExtensionBackendDb::Data::ITC_ITEMS i = data.items.begin(); i != data.items.end(); ++i)
     {
@@ -367,8 +367,8 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 }
 
 
-// PackageRegistryBackend
-//______________________________________________________________________________
+
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
@@ -377,13 +377,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString mediaType( mediaType_ );
     if (mediaType.isEmpty())
     {
-        // detect media-type:
+        
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
             if (ucbContent.isFolder())
             {
-                //Every .oxt, uno.pkg file must contain a META-INF folder
+                
                 ::ucbhelper::Content metaInfContent;
                 if (create_ucb_content(
                     &metaInfContent, makeURL( url, "META-INF" ),
@@ -391,7 +391,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 {
                      mediaType = "application/vnd.sun.star.package-bundle";
                 }
-                //No support of legacy bundles, because every folder could be one.
+                
             }
             else
             {
@@ -416,8 +416,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         if (type.equalsIgnoreAsciiCase("application"))
         {
 
-            //In case a XPackage is created for a removed extension, we cannot
-            //obtain the name
+            
+            
             OUString name;
             if (!bRemoved)
             {
@@ -490,15 +490,15 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
     {
-        //May throw a DisposedException
+        
         check();
-        //We should never get here...
+        
         throw RuntimeException("Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::disposing()
 {
     sal_Int32 len = m_bundle.getLength();
@@ -510,20 +510,20 @@ void BackendImpl::PackageImpl::disposing()
     Package::disposing();
 }
 
-// Package
-//______________________________________________________________________________
+
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    //In case the object was created for a removed extension (m_bRemoved = true)
-    //but the extension is not registered, then bundle will be empty. Then
-    //the return value will be Optional<...>.IsPresent= false. Althoug this is
-    //not true, this does not matter. Then registerPackage or revokePackage
-    //would never be called for the items. But since the extension is removed
-    //and not registered anyway, this does not matter.
+    
+    
+    
+    
+    
+    
     const Sequence< Reference<deployment::XPackage> > bundle(
         getBundle( abortChannel.get(), xCmdEnv ) );
 
@@ -539,16 +539,16 @@ BackendImpl::PackageImpl::isRegistered_(
         beans::Optional< beans::Ambiguous<sal_Bool> > option(
             xPackage->isRegistered( xSubAbortChannel, xCmdEnv ) );
 
-        //present = true if at least one bundle item has this value.
-        //reg = true if all bundle items have an option value (option.IsPresent == 1)
-        //and all have value of true (option.Value.Value == true)
-        //If not, then the bundle has the status of not registered and ambiguous.
+        
+        
+        
+        
         if (option.IsPresent)
         {
             beans::Ambiguous<sal_Bool> const & status = option.Value;
             if (present)
             {
-                //we never come here in the first iteration
+                
                 if (reg != (status.Value != sal_False)) {
 
                     ambig = true;
@@ -558,7 +558,7 @@ BackendImpl::PackageImpl::isRegistered_(
             }
             else
             {
-                //we always come here in the first iteration
+                
                 reg = status.Value;
                 present = true;
             }
@@ -665,29 +665,29 @@ bool BackendImpl::PackageImpl::checkDependencies(
        if (! simplLicAttr)
             return true;
         OUString sLic = info.getLocalizedLicenseURL();
-        //If we do not get a localized licence then there is an error in the description.xml
-        //This should be handled by using a validating parser. Therefore we assume that no
-        //license is available.
+        
+        
+        
         if (sLic.isEmpty())
             throw css::deployment::DeploymentException(
                 "Could not obtain path to license. Possible error in description.xml", 0, Any());
         OUString sHref = m_url_expanded + "/" + sLic;
            OUString sLicense = getTextFromURL(xCmdEnv, sHref);
-        ////determine who has to agree to the license
-        //check correct value for attribute
+        
+        
         if ( ! (simplLicAttr->acceptBy == "user" || simplLicAttr->acceptBy == "admin"))
             throw css::deployment::DeploymentException(
                 "Could not obtain attribute simple-lincense@accept-by or it has no valid value", 0, Any());
 
 
-        //Only use interaction if there is no version of this extension already installed
-        //and the suppress-on-update flag is not set for the new extension
-        // alreadyInstalled | bSuppressOnUpdate | show license
-        //----------------------------------------
-        //      0     |      0            |     1
-        //      0     |      1            |     1
-        //      1     |      0            |     1
-        //      1     |      1            |     0
+        
+        
+        
+        
+        
+        
+        
+        
 
         if ( !(alreadyInstalled && simplLicAttr->suppressOnUpdate))
         {
@@ -737,9 +737,9 @@ bool BackendImpl::PackageImpl::checkDependencies(
     if (!info.hasDescription())
         return 0;
 
-    //always return LICENSE as long as the user did not accept the license
-    //so that XExtensonManager::checkPrerequisitesAndEnable will again
-    //check the license
+    
+    
+    
     if (!checkPlatform(xCmdEnv))
         return deployment::Prerequisites::PLATFORM |
             deployment::Prerequisites::LICENSE;
@@ -808,7 +808,7 @@ beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
     return aStrPair;
 }
 
-//______________________________________________________________________________
+
 uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool bHighContrast )
     throw (deployment::ExtensionRemovedException, RuntimeException )
 {
@@ -835,7 +835,7 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
     return xGraphic;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
@@ -862,10 +862,10 @@ void BackendImpl::PackageImpl::processPackage_(
             }
             catch (const Exception &)
             {
-               //We even try a rollback if the user cancelled the action (CommandAbortedException)
-                //in order to prevent invalid database entries.
+               
+                
                 Any exc( ::cppu::getCaughtException() );
-                // try to handle exception, notify:
+                
                 bool approve = false, abort = false;
                 if (! interactContinuation(
                         Any( lang::WrappedTargetException(
@@ -874,19 +874,19 @@ void BackendImpl::PackageImpl::processPackage_(
                         cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv,
                         &approve, &abort )) {
                     OSL_ASSERT( !approve && !abort );
-                    if (m_legacyBundle) // default for legacy packages: ignore
+                    if (m_legacyBundle) 
                         continue;
-                    // no selection at all, so rethrow;
-                    // no C++ rethrow after getCaughtException(),
-                    // see cppuhelper/exc_hlp.hxx:
+                    
+                    
+                    
                     ::cppu::throwException(exc);
                 }
-                if (approve && !abort) // ignore error, just continue
+                if (approve && !abort) 
                     continue;
 
                 {
                     ProgressLevel progress( xCmdEnv, "rollback..." );
-                    // try rollback
+                    
                     for ( ; pos--; )
                     {
                         try {
@@ -899,7 +899,7 @@ void BackendImpl::PackageImpl::processPackage_(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
-                            // ignore any errors of rollback
+                            
                         }
                     }
                     progress.update( "rollback finished." );
@@ -911,7 +911,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         dpExc.Message, dpExc.Context, dpExc.Cause );
                 }
                 else {
-                    // rethrow CommandFailedException
+                    
                     ::cppu::throwException(exc);
                 }
             }
@@ -923,7 +923,7 @@ void BackendImpl::PackageImpl::processPackage_(
     }
     else
     {
-        // revoke in reverse order:
+        
         for ( sal_Int32 pos = bundle.getLength(); pos--; )
         {
             checkAborted(abortChannel);
@@ -942,9 +942,9 @@ void BackendImpl::PackageImpl::processPackage_(
                 throw;
             }
             catch (const Exception &) {
-                // CommandFailedException, DeploymentException:
+                
                 Any exc( ::cppu::getCaughtException() );
-                // try to handle exception, notify:
+                
                 bool approve = false, abort = false;
                 if (! interactContinuation(
                         Any( lang::WrappedTargetException(
@@ -953,22 +953,22 @@ void BackendImpl::PackageImpl::processPackage_(
                         cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv,
                         &approve, &abort )) {
                     OSL_ASSERT( !approve && !abort );
-                    if (m_legacyBundle) // default for legacy packages: ignore
+                    if (m_legacyBundle) 
                         continue;
-                    // no selection at all, so rethrow
-                    // no C++ rethrow after getCaughtException(),
-                    // see cppuhelper/exc_hlp.hxx:
+                    
+                    
+                    
                     ::cppu::throwException(exc);
                 }
-                // ignore errors when revoking, although abort may have been
-                // selected
+                
+                
             }
         }
         getMyBackend()->revokeEntryFromDb(getURL());
     }
 }
 
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getDescription()
     throw (deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -996,7 +996,7 @@ OUString BackendImpl::PackageImpl::getDescription()
     return m_oldDescription;
 }
 
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getLicenseText()
     throw (deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -1021,7 +1021,7 @@ OUString BackendImpl::PackageImpl::getLicenseText()
      return sLicense;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1066,7 +1066,7 @@ void BackendImpl::PackageImpl::exportTo(
     erase_path( destURL, xCmdEnv );
 
     OUStringBuffer buf;
-    buf.appendAscii( "vnd.sun.star.zip://" );
+    buf.appendAscii( "vnd.sun.star.zip:
     buf.append( ::rtl::Uri::encode( destURL,
                                     rtl_UriCharClassRegName,
                                     rtl_UriEncodeIgnoreEscapes,
@@ -1077,7 +1077,7 @@ void BackendImpl::PackageImpl::exportTo(
     ::ucbhelper::Content destFolderContent(
         destFolder, xCmdEnv, getMyBackend()->getComponentContext() );
     {
-        // transfer every item of folder into zip:
+        
         Reference<sdbc::XResultSet> xResultSet(
             sourceContent.createCursor(
                 Sequence<OUString>(),
@@ -1094,11 +1094,11 @@ void BackendImpl::PackageImpl::exportTo(
                     OUString(), ucb::NameClash::OVERWRITE ))
                 throw RuntimeException( "UCB transferContent() failed!",
                                         static_cast<OWeakObject *>(this) );
-            progress.update( Any() ); // animating progress bar
+            progress.update( Any() ); 
         }
     }
 
-    // assure META-INF folder:
+    
     ::ucbhelper::Content metainfFolderContent;
     create_folder( &metainfFolderContent,
                    makeURL( destFolderContent.getURL(), "META-INF" ),
@@ -1106,16 +1106,16 @@ void BackendImpl::PackageImpl::exportTo(
 
     if (m_legacyBundle)
     {
-        // easy to migrate legacy bundles to new format:
-        // just export them once using a .oxt name!
-        // set detected media-types of any bundle item:
+        
+        
+        
 
-        // collect all manifest entries:
+        
         Sequence< Reference<deployment::XPackage> > bundle;
         try {
             bundle = getBundle( Reference<task::XAbortChannel>(), xCmdEnv );
         }
-        // xxx todo: think about exception specs:
+        
         catch (const deployment::DeploymentException &) {
             OSL_FAIL( OUStringToOString(
                             ::comphelper::anyToString(
@@ -1164,7 +1164,7 @@ void BackendImpl::PackageImpl::exportTo(
             manifest.push_back( attribs );
         }
 
-        // write into pipe:
+        
         Reference<XComponentContext> xContext(
             getMyBackend()->getComponentContext() );
         Reference<packages::manifest::XManifestWriter> xManifestWriter =
@@ -1173,7 +1173,7 @@ void BackendImpl::PackageImpl::exportTo(
         xManifestWriter->writeManifestSequence(
             xPipe, comphelper::containerToSequence(manifest) );
 
-        // write buffered pipe data to content:
+        
         ::ucbhelper::Content manifestContent(
             makeURL( metainfFolderContent.getURL(), "manifest.xml" ),
             xCmdEnv, getMyBackend()->getComponentContext() );
@@ -1183,7 +1183,7 @@ void BackendImpl::PackageImpl::exportTo(
     }
     else
     {
-        // overwrite manifest.xml:
+        
         ::ucbhelper::Content manifestContent;
         if ( ! create_ucb_content(
             &manifestContent,
@@ -1201,7 +1201,7 @@ void BackendImpl::PackageImpl::exportTo(
                                     static_cast<OWeakObject *>(this) );
     }
 
-    // xxx todo: maybe obsolete in the future
+    
     try {
         destFolderContent.executeCommand( "flush", Any() );
     }
@@ -1209,13 +1209,13 @@ void BackendImpl::PackageImpl::exportTo(
     }
 }
 
-//______________________________________________________________________________
+
 sal_Bool BackendImpl::PackageImpl::isBundle() throw (RuntimeException)
 {
     return true;
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1236,16 +1236,16 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             try {
                 if (m_legacyBundle)
                 {
-                    // .zip legacy packages allow script.xlb, dialog.xlb in bundle
-                    // root folder:
+                    
+                    
                     OUString mediaType;
-                    // probe for script.xlb:
+                    
                     if (create_ucb_content(
                             0, makeURL( m_url_expanded, "script.xlb" ),
                             xCmdEnv, false /* no throw */ )) {
                         mediaType = "application/vnd.sun.star.basic-library";
                     }
-                    // probe for dialog.xlb:
+                    
                     else if (create_ucb_content(
                                  0, makeURL( m_url_expanded, "dialog.xlb" ),
                                  xCmdEnv, false /* no throw */ ))
@@ -1257,14 +1257,14 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                                             xCmdEnv ) );
                         if (xPackage.is())
                             bundle.push_back( xPackage );
-                        // continue scanning:
+                        
                     }
                     scanLegacyBundle( bundle, getURL(),
                                       AbortChannel::get(xAbortChannel), xCmdEnv );
                 }
                 else
                 {
-                    // .oxt:
+                    
                     scanBundle( bundle, AbortChannel::get(xAbortChannel), xCmdEnv );
                 }
 
@@ -1289,7 +1289,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             }
         }
 
-        // sort: schema before config data, typelibs before components:
+        
         Sequence< Reference<deployment::XPackage> > ret( bundle.size() );
         Reference<deployment::XPackage> * pret = ret.getArray();
         sal_Int32 lower_end = 0;
@@ -1338,20 +1338,20 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
 
 inline bool isBundle_( OUString const & mediaType )
 {
-    // xxx todo: additional parsing?
+    
     return !mediaType.isEmpty() &&
         (mediaType.matchIgnoreAsciiCase( "application/vnd.sun.star.package-bundle") ||
          mediaType.matchIgnoreAsciiCase( "application/vnd.sun.star.legacy-package-bundle"));
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     OUString const & url, OUString const & mediaType,
     sal_Bool bRemoved, OUString const & identifier,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     bool notifyDetectionError )
 {
-    // ignore any nested bundles:
+    
     if (isBundle_(mediaType))
         return Reference<deployment::XPackage>();
 
@@ -1371,7 +1371,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
         throw;
     }
     catch (const ucb::CommandFailedException &) {
-        // ignore already handled error
+        
     }
     catch (const Exception &) {
         const Any exc( ::cppu::getCaughtException() );
@@ -1391,14 +1391,14 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
         const Reference<deployment::XPackageTypeInfo> xPackageType(
             xPackage->getPackageType() );
         OSL_ASSERT( xPackageType.is() );
-        // ignore any nested bundles:
+        
         if (xPackageType.is() && isBundle_( xPackageType->getMediaType() ))
             xPackage.clear();
     }
     return xPackage;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::scanBundle(
     t_packagevec & bundle,
     ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -1445,7 +1445,7 @@ void BackendImpl::PackageImpl::scanBundle(
                 attribs[i].Value >>= mediaType;
         }
 
-        if ( fullPath.isEmpty() || mediaType.isEmpty() || mediaType == "text/xml" )// opt: exclude common text/xml
+        if ( fullPath.isEmpty() || mediaType.isEmpty() || mediaType == "text/xml" )
             continue;
 
         OUString type, subType;
@@ -1458,18 +1458,18 @@ void BackendImpl::PackageImpl::scanBundle(
             continue;
         const OUString url( makeURL( packageRootURL, fullPath ) );
 
-        // check for bundle description:
+        
         if (type.equalsIgnoreAsciiCase("application") &&
             subType.equalsIgnoreAsciiCase( "vnd.sun.star.package-bundle-description"))
         {
-            // check locale:
+            
             param = params.find("locale");
             if (param == 0) {
                 if (descrFile.isEmpty())
                     descrFile = url;
             }
             else {
-                // match best locale:
+                
                 LanguageTag descrTag( param->m_sValue);
                 if (officeLocale.getLanguage() == descrTag.getLanguage())
                 {
@@ -1481,9 +1481,9 @@ void BackendImpl::PackageImpl::scanBundle(
                         {
                             if (officeFallbacks[o] == descrFallbacks[d])
                             {
-                                // The last fallbacks are always language-only
-                                // fallbacks, so we _will_ have _some_ match if
-                                // we ever entered the overall if() condition.
+                                
+                                
+                                
                                 nPenalty = o * 1000 + d;
                                 if (descrPenalty > nPenalty)
                                 {
@@ -1494,18 +1494,18 @@ void BackendImpl::PackageImpl::scanBundle(
                         }
                     }
                 }
-                // TODO: we could break here if descrPenalty==0 for an exact
-                // match of officeLocale, but the previous code didn't; are
-                // there side effects?
+                
+                
+                
             }
             continue;
         }
 
         checkAborted( abortChannel );
 
-        //We make sure that we only create one XPackage for a particular URL.
-        //Sometime programmers insert the same URL several times in the manifest
-        //which may lead to DisposedExceptions.
+        
+        
+        
         if (bundle.end() == std::find_if(bundle.begin(), bundle.end(), XPackage_eq(url)))
         {
             const Reference<deployment::XPackage> xPackage(
@@ -1525,7 +1525,7 @@ void BackendImpl::PackageImpl::scanBundle(
         if (create_ucb_content( &descrFileContent, descrFile,
                                 xCmdEnv, false /* no throw */ ))
         {
-            // patch description:
+            
             ::rtl::ByteSequence bytes( readFile( descrFileContent ) );
             OUStringBuffer buf;
             if ( bytes.getLength() )
@@ -1543,7 +1543,7 @@ void BackendImpl::PackageImpl::scanBundle(
     }
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::scanLegacyBundle(
     t_packagevec & bundle,
     OUString const & url,
@@ -1554,7 +1554,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     ::ucbhelper::Content ucbContent(
         url, xCmdEnv, getMyBackend()->getComponentContext() );
 
-    // check for platform paths:
+    
     const OUString title( StrTitle::getTitle( ucbContent ) );
     if (title.endsWithIgnoreAsciiCase( ".plt" ) &&
         !platform_fits( title.copy( 0, title.getLength() - 4 ) )) {
@@ -1592,7 +1592,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
                 mediaType = xPackageType->getMediaType();
 
             if (skip_registration &&
-                // xxx todo: additional parsing?
+                
                 mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.uno-component"))
                 continue;
 
@@ -1600,11 +1600,11 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
         }
 
         if (mediaType.isEmpty() ||
-            // script.xlb, dialog.xlb can be met everywhere:
+            
             mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.basic-library") ||
             mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.dialog-library"))
         {
-            if (xRow->getBoolean( 2 /* IsFolder */ )) { // recurse into folder:
+            if (xRow->getBoolean( 2 /* IsFolder */ )) { 
                 scanLegacyBundle(
                     bundle, path, abortChannel, xCmdEnv, skip_registration );
             }
@@ -1644,9 +1644,9 @@ BackendImpl::PackageImpl::getPackagesFromDb(
     return retVector;
 }
 
-} // anon namespace
+} 
 
-//==============================================================================
+
 Reference<deployment::XPackageRegistry> create(
     Reference<deployment::XPackageRegistry> const & xRootRegistry,
     OUString const & context, OUString const & cachePath, bool readOnly,
@@ -1661,8 +1661,8 @@ Reference<deployment::XPackageRegistry> create(
     return new BackendImpl( args, xComponentContext, xRootRegistry );
 }
 
-} // namespace bundle
-} // namespace backend
-} // namespace dp_registry
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

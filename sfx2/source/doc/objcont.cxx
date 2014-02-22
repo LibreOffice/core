@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -78,7 +78,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-//====================================================================
+
 
 static
 bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
@@ -116,8 +116,8 @@ SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 ::boost::shared_ptr<GDIMetaFile>
 SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
 {
-    // DoDraw can only be called when no printing is done, otherwise
-    // the printer may be turned off
+    
+    
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
@@ -172,13 +172,13 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     return pFile;
 }
 
-//====================================================================
+
 
 void SfxObjectShell::UpdateDocInfoForSave()
 {
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
 
-    // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
+    
     if ( SvtSecurityOptions().IsOptionSet(
             SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
     {
@@ -189,7 +189,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
         OUString aUserName = SvtUserOptions().GetFullName();
         if ( !IsUseUserData() )
         {
-            // remove all data pointing to the current user
+            
             if (xDocProps->getAuthor().equals(aUserName)) {
                 xDocProps->setAuthor( OUString() );
             }
@@ -200,7 +200,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
         }
         else
         {
-            // update ModificationAuthor, revision and editing time
+            
             ::DateTime now( ::DateTime::SYSTEM );
             xDocProps->setModificationDate( util::DateTime(
                 now.GetNanoSec(), now.GetSec(), now.GetMin(),
@@ -208,62 +208,62 @@ void SfxObjectShell::UpdateDocInfoForSave()
                 now.GetYear(), false) );
             xDocProps->setModifiedBy( aUserName );
             if ( !HasName() || pImp->bIsSaving )
-                // QUESTION: not in case of "real" SaveAs as this is meant to create a new document
+                
                 UpdateTime_Impl( xDocProps );
         }
     }
 }
 
-//--------------------------------------------------------------------
+
 
 static void
 lcl_add(util::Duration & rDur, Time const& rTime)
 {
-    // here we don't care about overflow: rDur is converted back to seconds
-    // anyway, and Time cannot store more than ~4000 hours
+    
+    
     rDur.Hours   += rTime.GetHour();
     rDur.Minutes += rTime.GetMin();
     rDur.Seconds += rTime.GetSec();
 }
 
-// Update the processing time
+
 void SfxObjectShell::UpdateTime_Impl(
     const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
-    // Get old time from documentinfo
+    
     const sal_Int32 secs = i_xDocProps->getEditingDuration();
     util::Duration editDuration(sal_False, 0, 0, 0,
             secs/3600, (secs%3600)/60, secs%60, 0);
 
-    // Initialize some local member! Its necessary for wollow operations!
-    DateTime    aNow( DateTime::SYSTEM );   // Date and time at current moment
-    Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
-    sal_uIntPtr     nDays       = 0         ;   // Count of days between now and last editing
-    Time        nAddTime    (0)         ;   // Value to add on aOldTime
+    
+    DateTime    aNow( DateTime::SYSTEM );   
+    Time        n24Time     (24,0,0,0)  ;   
+    sal_uIntPtr     nDays       = 0         ;   
+    Time        nAddTime    (0)         ;   
 
-    // Safe impossible cases!
-    // User has changed time to the past between last editing and now ... its not possible!!!
+    
+    
     DBG_ASSERT( !(aNow.GetDate()<pImp->nTime.GetDate()), "Timestamp of last change is in the past ?!..." );
 
-    // Do the follow only, if user has NOT changed time to the past.
-    // Else add a time of 0 to aOldTime ... !!!
+    
+    
     if (aNow.GetDate()>=pImp->nTime.GetDate())
     {
-        // Get count of days last editing.
+        
         nDays = aNow.GetSecFromDateTime(pImp->nTime.GetDate())/86400 ;
 
         if (nDays==0)
         {
-            // If no day between now and last editing - calculate time directly.
+            
             nAddTime    =   (const Time&)aNow - (const Time&)pImp->nTime ;
         }
         else if (nDays<=31)
         {
-            // If time of working without save greater then 1 month (!) ....
-            // we add 0 to aOldTime!
+            
+            
 
-            // If 1 or up to 31 days between now and last editing - calculate time indirectly.
-            // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
+            
+            
             --nDays;
              nAddTime    =  nDays*n24Time.GetTime() ;
             nAddTime    +=  n24Time-(const Time&)pImp->nTime        ;
@@ -282,11 +282,11 @@ void SfxObjectShell::UpdateTime_Impl(
     }
     catch (const lang::IllegalArgumentException &)
     {
-        // ignore overflow
+        
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
 (
@@ -297,7 +297,7 @@ SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
     return new SfxDocumentInfoDialog(pParent, rSet);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 {
@@ -343,7 +343,7 @@ void SfxObjectShell::LoadStyles
         {
             pDest = &pMyPool->Make( pSource->GetName(),
                     pSource->GetFamily(), pSource->GetMask());
-            // Setting of Parents, the next style
+            
         }
         pFound[nFound].pSource = pSource;
         pFound[nFound].pDest = pDest;
@@ -362,7 +362,7 @@ void SfxObjectShell::LoadStyles
     delete [] pFound;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
@@ -375,17 +375,17 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 */
 
 {
-    // Storage-medium?
+    
     SfxMedium *pFile = GetMedium();
     DBG_ASSERT( pFile, "cannot UpdateFromTemplate without medium" );
     if ( !pFile )
         return;
 
     if ( !::utl::LocalFileHelper::IsLocalFile( pFile->GetName() ) )
-        // update only for documents loaded from the local file system
+        
         return;
 
-    // only for own storage formats
+    
     uno::Reference< embed::XStorage > xDocStor = pFile->GetStorage();
     if ( !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
@@ -393,7 +393,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     SFX_ITEMSET_ARG( pFile->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
     sal_Int16 bCanUpdateFromTemplate = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
-    // created from template?
+    
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     OUString aTemplName( xDocProps->getTemplateName() );
     OUString aTemplURL( xDocProps->getTemplateURL() );
@@ -401,10 +401,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     if ( !aTemplName.isEmpty() || (!aTemplURL.isEmpty() && !IsReadOnly()) )
     {
-        // try to locate template, first using filename this must be done
-        // because writer global document uses this "great" idea to manage
-        // the templates of all parts in the master document but it is NOT
-        // an error if the template filename points not to a valid file
+        
+        
+        
+        
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
         if (!aTemplURL.isEmpty())
@@ -413,26 +413,26 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 aFoundName = ::rtl::Uri::convertRelToAbs(GetMedium()->GetName(),
                             aTemplURL);
             } catch (::rtl::MalformedUriException const&) {
-                assert(false); // don't think that's supposed to happen?
+                assert(false); 
             }
         }
 
         if( aFoundName.isEmpty() && !aTemplName.isEmpty() )
-            // if the template filename did not lead to success,
-            // try to get a file name for the logical template name
+            
+            
             aTempl.GetFull( OUString(), aTemplName, aFoundName );
     }
 
     if ( !aFoundName.isEmpty() )
     {
-        // check existence of template storage
+        
         aTemplURL = aFoundName;
         sal_Bool bLoad = sal_False;
 
-        // should the document checked against changes in the template ?
+        
         if ( IsQueryLoadTemplate() )
         {
-            // load document properties of template
+            
             bool bOK = false;
             util::DateTime aTemplDate;
             try
@@ -450,14 +450,14 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 SAL_INFO("sfx.doc", "caught exception" << e.Message);
             }
 
-            // if modify date was read successfully
+            
             if ( bOK )
             {
-                // compare modify data of template with the last check date of the document
+                
                 const util::DateTime aInfoDate( xDocProps->getTemplateDate() );
                 if ( aTemplDate > aInfoDate )
                 {
-                    // ask user
+                    
                     if( bCanUpdateFromTemplate == document::UpdateDocMode::QUIET_UPDATE
                     || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
                         bLoad = sal_True;
@@ -472,7 +472,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
                     if( !bLoad )
                     {
-                        // user refuses, so don't ask again for this document
+                        
                         SetQueryLoadTemplate(sal_False);
                         SetModified( sal_True );
                     }
@@ -481,25 +481,25 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
             if ( bLoad )
             {
-                // styles should be updated, create document in organizer mode to read in the styles
-                //TODO: testen!
+                
+                
                 SfxObjectShellLock xTemplDoc = CreateObjectByFactoryName( GetFactory().GetFactoryName(), SFX_CREATE_MODE_ORGANIZER );
                 xTemplDoc->DoInitNew(0);
 
-                // TODO/MBA: do we need a BaseURL? Then LoadFrom must be extended!
-                //xTemplDoc->SetBaseURL( aFoundName );
+                
+                
 
-                // TODO/LATER: make sure that we don't use binary templates!
+                
                 SfxMedium aMedium( aFoundName, STREAM_STD_READ );
                 if ( xTemplDoc->LoadFrom( aMedium ) )
                 {
-                    // transfer styles from xTemplDoc to this document
-                    // TODO/MBA: make sure that no BaseURL is needed in *this* document
+                    
+                    
                     LoadStyles(*xTemplDoc);
 
-                    // remember date/time of check
+                    
                     xDocProps->setTemplateDate(aTemplDate);
-                    // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
+                    
                 }
             }
         }
@@ -514,7 +514,7 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
 
 void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName )
 {
-    // only care about reseting this data for openoffice formats otherwise
+    
     if ( IsOwnStorageFormat_Impl( *GetMedium())  )
     {
         uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
@@ -523,8 +523,8 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
         xDocProps->setTemplateDate( util::DateTime() );
         xDocProps->resetUserData( OUString() );
 
-        // TODO/REFACTOR:
-        // Title?
+        
+        
 
         if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
@@ -605,8 +605,8 @@ sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
       || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
     {
-        // the hash can be changed only in editable documents,
-        // or during loading of document
+        
+        
         pImp->m_nModifyPasswordHash = nHash;
         return sal_True;
     }
@@ -624,8 +624,8 @@ sal_Bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::Prop
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
       || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
     {
-        // the hash can be changed only in editable documents,
-        // or during loading of document
+        
+        
         pImp->m_aModifyPasswordInfo = aInfo;
         return sal_True;
     }

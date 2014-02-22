@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "toolkit/controls/tkscrollbar.hxx"
@@ -22,33 +22,33 @@
 #include "toolkit/helper/unopropertyarrayhelper.hxx"
 #include <cppuhelper/typeprovider.hxx>
 
-// for introspection
+
 #include <toolkit/awt/vclxwindows.hxx>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
 
-    //====================================================================
-    //= UnoControlScrollBarModel
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
     {
         return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
     }
 
-    //--------------------------------------------------------------------
+    
     uno::Any UnoControlScrollBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         switch ( nPropId )
@@ -63,7 +63,7 @@ namespace toolkit
         }
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& UnoControlScrollBarModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -75,7 +75,7 @@ namespace toolkit
         return *pHelper;
     }
 
-    //--------------------------------------------------------------------
+    
     uno::Reference< beans::XPropertySetInfo > UnoControlScrollBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
     {
         static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -83,9 +83,9 @@ namespace toolkit
     }
 
 
-    //====================================================================
-    //= UnoControlScrollBarModel
-    //====================================================================
+    
+    
+    
     UnoScrollBarControl::UnoScrollBarControl()
         :UnoControlBase()
         ,maAdjustmentListeners( *this )
@@ -97,7 +97,7 @@ namespace toolkit
         return OUString("ScrollBar");
     }
 
-    // ::com::sun::star::uno::XInterface
+    
     uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
     {
         uno::Any aRet = ::cppu::queryInterface( rType,
@@ -106,7 +106,7 @@ namespace toolkit
         return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
     }
 
-    // ::com::sun::star::lang::XTypeProvider
+    
     IMPL_XTYPEPROVIDER_START( UnoScrollBarControl )
         getCppuType( ( uno::Reference< awt::XAdjustmentListener>* ) NULL ),
         getCppuType( ( uno::Reference< awt::XScrollBar>* ) NULL ),
@@ -129,7 +129,7 @@ namespace toolkit
         xScrollBar->addAdjustmentListener( this );
     }
 
-    // ::com::sun::star::awt::XAdjustmentListener
+    
     void UnoScrollBarControl::adjustmentValueChanged( const ::com::sun::star::awt::AdjustmentEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException)
     {
         switch ( rEvent.Type )
@@ -159,7 +159,7 @@ namespace toolkit
             maAdjustmentListeners.adjustmentValueChanged( rEvent );
     }
 
-    // ::com::sun::star::awt::XScrollBar
+    
     void UnoScrollBarControl::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
     {
         maAdjustmentListeners.addInterface( l );
@@ -279,9 +279,9 @@ namespace toolkit
 
 
 
-//........................................................................
-}  // namespace toolkit
-//........................................................................
+
+}  
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(

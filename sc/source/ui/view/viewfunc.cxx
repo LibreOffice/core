@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -77,7 +77,7 @@
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
 
-//==================================================================
+
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
@@ -90,7 +90,7 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
 }
 
 
-//==================================================================
+
 
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScTabView( pParent, rDocSh, pViewShell ),
@@ -102,15 +102,15 @@ ScViewFunc::~ScViewFunc()
 {
 }
 
-//------------------------------------------------------------------------------------
+
 
 void ScViewFunc::StartFormatArea()
 {
-    //  anything to do?
+    
     if ( !SC_MOD()->GetInputOptions().GetExtendFormat() )
         return;
 
-    //  start only with single cell (marked or cursor position)
+    
     ScRange aMarkRange;
     bool bOk = (GetViewData()->GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
     if ( bOk && aMarkRange.aStart != aMarkRange.aEnd )
@@ -123,24 +123,24 @@ void ScViewFunc::StartFormatArea()
         aFormatArea = ScRange( aFormatSource );
     }
     else
-        bFormatValid = false;       // discard old range
+        bFormatValid = false;       
 }
 
 bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged )
 {
-    //  anything to do?
+    
     if ( !SC_MOD()->GetInputOptions().GetExtendFormat() )
         return false;
 
-    //  Test: treat input with numberformat (bAttrChanged) always as new Attribute
-    //  (discard old Area ). If not not wanted, discard if-statement
+    
+    
     if ( bAttrChanged )
     {
         StartFormatArea();
         return false;
     }
 
-    //! Test if cell empty ???
+    
 
     bool bFound = false;
     ScRange aNewRange = aFormatArea;
@@ -148,18 +148,18 @@ bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrC
     {
         if ( nRow >= aFormatArea.aStart.Row() && nRow <= aFormatArea.aEnd.Row() )
         {
-            //  within range?
+            
             if ( nCol >= aFormatArea.aStart.Col() && nCol <= aFormatArea.aEnd.Col() )
             {
-                bFound = true;          // do not change range
+                bFound = true;          
             }
-            //  left ?
+            
             if ( nCol+1 == aFormatArea.aStart.Col() )
             {
                 bFound = true;
                 aNewRange.aStart.SetCol( nCol );
             }
-            //  right ?
+            
             if ( nCol == aFormatArea.aEnd.Col()+1 )
             {
                 bFound = true;
@@ -168,13 +168,13 @@ bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrC
         }
         if ( nCol >= aFormatArea.aStart.Col() && nCol <= aFormatArea.aEnd.Col() )
         {
-            //  top ?
+            
             if ( nRow+1 == aFormatArea.aStart.Row() )
             {
                 bFound = true;
                 aNewRange.aStart.SetRow( nRow );
             }
-            //  bottom ?
+            
             if ( nRow == aFormatArea.aEnd.Row()+1 )
             {
                 bFound = true;
@@ -184,12 +184,12 @@ bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrC
     }
 
     if (bFound)
-        aFormatArea = aNewRange;    // extend
+        aFormatArea = aNewRange;    
     else
     {
-        bFormatValid = false;       // outdside of range -> break
-        if ( bAttrChanged )         // if value entered with numberformat?
-            StartFormatArea();      // then start again
+        bFormatValid = false;       
+        if ( bAttrChanged )         
+            StartFormatArea();      
     }
 
     return bFound;
@@ -213,7 +213,7 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         ScDocFunc &rFunc = GetViewData()->GetDocFunc();
 
-        // pOldPattern is only valid until call to ApplyAttributes!
+        
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
         const ScStyleSheet* pSrcStyle = pSource->GetStyleSheet();
         if ( pSrcStyle && pSrcStyle != pOldPattern->GetStyleSheet() )
@@ -222,13 +222,13 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
         rFunc.ApplyAttributes( aMark, *pSource, true, false );
     }
 
-    if ( bAttrChanged )                             // value entered with number format?
-        aFormatSource.Set( nCol, nRow, nTab );      // then set a new source
+    if ( bAttrChanged )                             
+        aFormatSource.Set( nCol, nRow, nTab );      
 }
 
-//------------------------------------------------------------------------------------
 
-//      additional routines
+
+
 
 sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula )
 {
@@ -295,22 +295,22 @@ static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
     sal_uInt16* pOldList = rAppOpt.GetLRUFuncList();
     sal_uInt16 nPos;
     for (nPos=0; nPos<nOldCount; nPos++)
-        if (pOldList[nPos] == nOpCode)          // is the function already in the list?
+        if (pOldList[nPos] == nOpCode)          
         {
             if ( nPos == 0 )
-                return false;                   // already at the top -> no change
+                return false;                   
 
-            //  count doesn't change, so the original array is modified
+            
 
             for (sal_uInt16 nCopy=nPos; nCopy>0; nCopy--)
                 pOldList[nCopy] = pOldList[nCopy-1];
             pOldList[0] = nOpCode;
 
-            return sal_True;                        // list has changed
+            return sal_True;                        
         }
 
     if ( !lcl_FunctionKnown( nOpCode ) )
-        return false;                           // not in function list -> no change
+        return false;                           
 
     sal_uInt16 nNewCount = std::min( (sal_uInt16)(nOldCount + 1), (sal_uInt16)LRU_MAX );
     sal_uInt16 nNewList[LRU_MAX];
@@ -319,7 +319,7 @@ static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
         nNewList[nPos] = pOldList[nPos-1];
     rAppOpt.SetLRUFuncList( nNewList, nNewCount );
 
-    return sal_True;                                // list has changed
+    return sal_True;                                
 }
 
 namespace HelperNotifyChanges
@@ -339,9 +339,9 @@ namespace HelperNotifyChanges
     }
 }
 
-//      actual functions
 
-//  input - undo OK
+
+
 
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             const OUString& rString,
@@ -364,17 +364,17 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         bool bFormula = false;
 
-        // a single '=' character is handled as string (needed for special filters)
+        
         if ( rString.getLength() > 1 )
         {
             if ( rString[0] == '=' )
             {
-                // handle as formula
+                
                 bFormula = true;
             }
             else if ( rString[0] == '+' || rString[0] == '-' )
             {
-                // if there is more than one leading '+' or '-' character, remove the additional ones
+                
                 sal_Int32 nIndex = 1;
                 sal_Int32 nLen = rString.getLength();
                 while ( nIndex < nLen && ( rString[ nIndex ] == '+' || rString[ nIndex ] == '-' ) )
@@ -383,8 +383,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 }
                 OUString aString = rString.replaceAt( 1, nIndex - 1, "" );
 
-                // if the remaining part without the leading '+' or '-' character
-                // is non-empty and not a number, handle as formula
+                
+                
                 if ( aString.getLength() > 1 )
                 {
                     sal_uInt32 nFormat = 0;
@@ -401,12 +401,12 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         bool bNumFmtChanged = false;
         if ( bFormula )
-        {   // formula, compile with autoCorrection
+        {   
             i = rMark.GetFirstSelected();
             ScAddress aPos( nCol, nRow, i );
             ScCompiler aComp( pDoc, aPos);
             aComp.SetGrammar(pDoc->GetGrammar());
-//2do: enable/disable autoCorrection via calcoptions
+
             aComp.SetAutoCorrection( true );
             if ( rString[0] == '+' || rString[0] == '-' )
             {
@@ -422,7 +422,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 ScTokenArray* pArrFirst = pArr = aComp.CompileString( aFormula );
                 bool bCorrected = aComp.IsCorrected();
                 if ( bCorrected )
-                {   // try to parse with first parser-correction
+                {   
                     pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
                 }
                 if ( !pArr->GetCodeError() )
@@ -442,7 +442,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                         aCorrectedFormula = aComp.GetCorrectedFormula();
                     short nResult;
                     if ( aCorrectedFormula.getLength() == 1 )
-                        nResult = RET_NO;   // empty formula, just '='
+                        nResult = RET_NO;   
                     else
                     {
                         OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
@@ -468,18 +468,18 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     }
                 }
             } while ( bAgain );
-            // to be used in multiple tabs, the formula must be compiled anew
-            // via ScFormulaCell copy-ctor because of RangeNames,
-            // the same code-array for all cells is not possible.
-            // If the array has an error, (it) must be RPN-erased in the newly generated
-            // cellst and the error be set explicitly, so that
-            // via FormulaCell copy-ctor and Interpreter it will be, when possible,
-            // ironed out again, too intelligent.. e.g.: =1))
+            
+            
+            
+            
+            
+            
+            
             sal_uInt16 nError = pArr->GetCodeError();
             if ( !nError )
             {
-                //  update list of recent functions with all functions that
-                //  are not within parentheses
+                
+                
 
                 ScModule* pScMod = SC_MOD();
                 ScAppOptions aAppOpt = pScMod->GetAppOptions();
@@ -524,7 +524,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     if ( pData )
                     {
-                        // A clone of pData will be stored in the cell.
+                        
                         rFunc.SetEditCell(aPos, *pData, true);
                     }
                     else
@@ -578,11 +578,11 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     else
     {
         ErrorMessage(aTester.GetMessageId());
-        PaintArea( nCol, nRow, nCol, nRow );        // possibly the edit-engine is still painted there
+        PaintArea( nCol, nRow, nCol, nRow );        
     }
 }
 
-// enter value in single cell (on nTab only)
+
 
 void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue )
 {
@@ -604,7 +604,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
 
             pDoc->SetValue( nCol, nRow, nTab, rValue );
 
-            // because of ChangeTrack after change in document
+            
             if (bUndo)
             {
                 pDocSh->GetUndoManager()->AddUndoAction(
@@ -634,7 +634,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if (aTester.IsEditable())
     {
         //
-        //      test for attribute
+        
         //
         bool bSimple = false;
         bool bCommon = false;
@@ -645,14 +645,14 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
         aEngine.SetText(rData);
 
-        if (bTestSimple)                    // test, if simple string without attribute
+        if (bTestSimple)                    
         {
             ScEditAttrTester aAttrTester( &aEngine );
             bSimple = !aAttrTester.NeedsObject();
             bCommon = aAttrTester.NeedsCellAttr();
 
-            // formulas have to be recognized even if they're formatted
-            // (but commmon attributes are still collected)
+            
+            
 
             if ( !bSimple && aEngine.GetParagraphCount() == 1 )
             {
@@ -661,19 +661,19 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     bSimple = true;
             }
 
-            if (bCommon)                // attribute for tab
+            if (bCommon)                
             {
                 pCellAttrs = new ScPatternAttr( *pOldPattern );
                 pCellAttrs->GetFromEditItemSet( &aAttrTester.GetAttribs() );
-                //! remove common attributes from EditEngine?
+                
             }
         }
 
-        // #i97726# always get text for "repeat" of undo action
+        
         aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
 
         //
-        //      undo
+        
         //
 
         EditTextObject* pUndoData = NULL;
@@ -694,11 +694,11 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
 
         //
-        //      enter data
+        
         //
 
         if (bCommon)
-            pDoc->ApplyPattern(nCol,nRow,nTab,*pCellAttrs);         //! undo
+            pDoc->ApplyPattern(nCol,nRow,nTab,*pCellAttrs);         
 
         if (bSimple)
         {
@@ -717,7 +717,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
 
             if ( bRecord )
-            {   //  because of ChangeTrack current first
+            {   
                 pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoEnterData(pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, pUndoData));
             }
@@ -745,7 +745,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     else
     {
         ErrorMessage(aTester.GetMessageId());
-        PaintArea( nCol, nRow, nCol, nRow );        // possibly the edit-engine is still painted there
+        PaintArea( nCol, nRow, nCol, nRow );        
     }
 }
 
@@ -764,8 +764,8 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
     const ScMarkData& rMark = pData->GetMarkData();
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        //  nothing marked -> temporarily calculate block
-        //  with size of result formula to get the size
+        
+        
 
         ScDocument* pDoc = pData->GetDocument();
         SCCOL nCol = pData->GetCurX();
@@ -808,7 +808,7 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
     const ScMarkData& rMark = GetViewData()->GetMarkData();
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        // no selection -> cursor
+        
 
         nScript = pDoc->GetScriptType( GetViewData()->GetCurX(),
                             GetViewData()->GetCurY(), GetViewData()->GetTabNo());
@@ -828,14 +828,14 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
 
 const ScPatternAttr* ScViewFunc::GetSelectionPattern()
 {
-    // Don't use UnmarkFiltered in slot state functions, for performance reasons.
-    // The displayed state is always that of the whole selection including filtered rows.
+    
+    
 
     const ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocument* pDoc = GetViewData()->GetDocument();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
-        //  MarkToMulti is no longer necessary for pDoc->GetSelectionPattern
+        
         const ScPatternAttr* pAttr = pDoc->GetSelectionPattern( rMark );
         return pAttr;
     }
@@ -845,7 +845,7 @@ const ScPatternAttr* ScViewFunc::GetSelectionPattern()
         SCROW  nRow = GetViewData()->GetCurY();
         SCTAB  nTab = GetViewData()->GetTabNo();
 
-        ScMarkData aTempMark( rMark );      // copy sheet selection
+        ScMarkData aTempMark( rMark );      
         aTempMark.SetMarkArea( ScRange( nCol, nRow, nTab ) );
         const ScPatternAttr* pAttr = pDoc->GetSelectionPattern( aTempMark );
         return pAttr;
@@ -862,8 +862,8 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
     {
         if ( rMark.IsMultiMarked() )
         {
-            ScMarkData aNewMark( rMark );   // use local copy for MarkToSimple
-            aNewMark.MarkToSimple();        // simple block is needed for GetSelectionFrame
+            ScMarkData aNewMark( rMark );   
+            aNewMark.MarkToSimple();        
             pDoc->GetSelectionFrame( aNewMark, rLineOuter, rLineInner );
         }
         else
@@ -885,16 +885,16 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
 }
 
 //
-//  apply attribute - undo OK
+
 //
-//  complete set ( ATTR_STARTINDEX, ATTR_ENDINDEX )
+
 //
 
 void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                                   const SfxItemSet* pOldSet,
                                   bool              bRecord )
 {
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
@@ -907,7 +907,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SFX_ITEM_SET )
-    {   // don't reset to default SYSTEM GENERAL if not intended
+    {   
         sal_uInt32 nOldFormat =
             ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
         sal_uInt32 nNewFormat =
@@ -927,7 +927,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                 aNewAttrs.GetItemSet().Put(
                     SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
 
-                //  only the language has changed -> do not touch numberformat-attribute
+                
                 sal_uInt32 nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                 if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
                      nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
@@ -943,7 +943,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
     SfxItemPool*          pNewPool  = rNewSet.GetPool();
 
-    pNewPool->Put( *pNewOuter );        // don't delete yet
+    pNewPool->Put( *pNewOuter );        
     pNewPool->Put( *pNewInner );
     rNewSet.ClearItem( ATTR_BORDER );
     rNewSet.ClearItem( ATTR_BORDER_INNER );
@@ -961,7 +961,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     if ( pNewOuter==pOldOuter && pNewInner==pOldInner )
         bFrame = false;
 
-    //  this should be intercepted by the pool: ?!??!??
+    
 
     if ( bFrame && pNewOuter && pNewInner )
         if ( *pNewOuter == *pOldOuter && *pNewInner == *pOldInner )
@@ -981,10 +981,10 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         bFrame = false;
 
     if (!bFrame)
-        ApplySelectionPattern( aNewAttrs, bRecord );                // standard only
+        ApplySelectionPattern( aNewAttrs, bRecord );                
     else
     {
-        // if new items are default-items, overwrite the old items:
+        
 
         bool bDefNewOuter = ( SFX_ITEMS_STATICDEFAULT == pNewOuter->GetKind() );
         bool bDefNewInner = ( SFX_ITEMS_STATICDEFAULT == pNewInner->GetKind() );
@@ -995,18 +995,18 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                            bRecord );
     }
 
-    pNewPool->Remove( *pNewOuter );         // release
+    pNewPool->Remove( *pNewOuter );         
     pNewPool->Remove( *pNewInner );
 
-    //  adjust height
+    
     AdjustBlockHeight();
 
-    // CellContentChanged is called in ApplySelectionPattern / ApplyPatternLines
+    
 }
 
 void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
 {
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
@@ -1018,24 +1018,24 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
                                             ATTR_PATTERN_START, ATTR_PATTERN_END ) );
 
     aNewAttrs.GetItemSet().Put( rAttrItem );
-    //  if justify is set (with Buttons), always indentation 0
+    
     if ( rAttrItem.Which() == ATTR_HOR_JUSTIFY )
         aNewAttrs.GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, 0 ) );
     ApplySelectionPattern( aNewAttrs );
 
     AdjustBlockHeight();
 
-    // CellContentChanged is called in ApplySelectionPattern
+    
 }
 
 
-//  patterns and borders
+
 
 void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem* pNewOuter,
                                     const SvxBoxInfoItem* pNewInner, bool bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
@@ -1086,11 +1086,11 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     }
 
     sal_uInt16 nExt = SC_PF_TESTMERGE;
-    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content before the change
+    pDocSh->UpdatePaintExt( nExt, aMarkRange ); 
 
     pDoc->ApplySelectionFrame( aFuncMark, pNewOuter, pNewInner );
 
-    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content after the change
+    pDocSh->UpdatePaintExt( nExt, aMarkRange ); 
 
     aFuncMark.MarkToMulti();
     pDoc->ApplySelectionPattern( rAttr, aFuncMark );
@@ -1103,7 +1103,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     StartFormatArea();
 }
 
-//  pattern only
+
 
 void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
                                             bool bRecord, bool bCursorOnly )
@@ -1111,16 +1111,16 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
-    ScMarkData aFuncMark( pViewData->GetMarkData() );       // local copy for UnmarkFiltered
+    ScMarkData aFuncMark( pViewData->GetMarkData() );       
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
 
-    //  State from old ItemSet doesn't matter for paint flags, as any change will be
-    //  from SFX_ITEM_SET in the new ItemSet (default is ignored in ApplyPattern).
-    //  New alignment is checked (check in PostPaint isn't enough) in case a right
-    //  alignment is changed to left.
+    
+    
+    
+    
     const SfxItemSet& rNewSet = rAttr.GetItemSet();
     bool bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SFX_ITEM_SET ||
                      rNewSet.GetItemState( ATTR_SHADOW, true ) == SFX_ITEM_SET;
@@ -1203,7 +1203,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         aModificator.SetDocumentModified();
         CellContentChanged();
     }
-    else                            // single cell - simpler undo
+    else                            
     {
         SCCOL nCol = pViewData->GetCurX();
         SCROW nRow = pViewData->GetCurY();
@@ -1233,7 +1233,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
             pUndo->SetEditData(pOldEditData, pNewEditData);
             pDocSh->GetUndoManager()->AddUndoAction(pUndo);
         }
-        delete pOldPat;     // is copied in undo (Pool)
+        delete pOldPat;     
 
         pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
         pDocSh->UpdateOle(GetViewData());
@@ -1277,7 +1277,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
 
 void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
 {
-    //  ItemSet from UI, may have different pool
+    
 
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
@@ -1296,8 +1296,8 @@ void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
 
 const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
 {
-    // Don't use UnmarkFiltered in slot state functions, for performance reasons.
-    // The displayed state is always that of the whole selection including filtered rows.
+    
+    
 
     const ScStyleSheet* pSheet      = NULL;
     ScViewData*         pViewData   = GetViewData();
@@ -1305,7 +1305,7 @@ const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
     ScMarkData&         rMark       = pViewData->GetMarkData();
 
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-        pSheet = pDoc->GetSelectionStyle( rMark );                  // MarkToMulti isn't necessary
+        pSheet = pDoc->GetSelectionStyle( rMark );                  
     else
         pSheet = pDoc->GetStyle( pViewData->GetCurX(),
                                  pViewData->GetCurY(),
@@ -1316,7 +1316,7 @@ const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
 
 void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord )
 {
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
@@ -1325,12 +1325,12 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
     }
 
     if ( !pStyleSheet) return;
-    // -------------------------------------------------------------------
+    
 
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
-    ScMarkData aFuncMark( pViewData->GetMarkData() );       // local copy for UnmarkFiltered
+    ScMarkData aFuncMark( pViewData->GetMarkData() );       
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     SCTAB nTabCount     = pDoc->GetTableCount();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -1417,7 +1417,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
 void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
-    // -------------------------------------------------------------------
+    
 
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
@@ -1444,7 +1444,7 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
-    // -------------------------------------------------------------------
+    
 
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
@@ -1468,7 +1468,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
         pHdl->ForgetLastPattern();
 }
 
-//  insert cells - undo OK
+
 
 bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
 {
@@ -1501,7 +1501,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
     }
 }
 
-//  delete cells - undo OK
+
 
 void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
 {
@@ -1512,7 +1512,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
         const ScMarkData& rMark = GetViewData()->GetMarkData();
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-        // #i94841# [Collaboration] if deleting rows is rejected, the content is sometimes wrong
+        
         if ( pDocSh->IsDocShared() && ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS ) )
         {
             ScRange aDelRange( aRange.aStart );
@@ -1549,7 +1549,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
             HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
         }
 
-        //  put cursor directly behind deleted range
+        
         SCCOL nCurX = GetViewData()->GetCurX();
         SCROW nCurY = GetViewData()->GetCurY();
         if ( eCmd==DEL_CELLSLEFT || eCmd==DEL_DELCOLS )
@@ -1577,7 +1577,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     ScDocShellModificator aModificator( *pDocSh );
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
 
     if (!pDoc->IsUndoEnabled())
@@ -1595,7 +1595,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         aSpans.push_back(sc::ColRowSpan(nCurPos, nCurPos));
     }
 
-    //  test if allowed
+    
 
     sal_uInt16 nErrorId = 0;
     bool bNeedRefresh = false;
@@ -1621,16 +1621,16 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
             nEndRow   = MAXROW;
         }
 
-        // cell protection (only needed for first range, as all following cells are moved)
+        
         if (i == 0)
         {
-            // test to the end of the sheet
+            
             ScEditableTester aTester( pDoc, nTab, nStartCol, nStartRow, MAXCOL, MAXROW );
             if (!aTester.IsEditable())
                 nErrorId = aTester.GetMessageId();
         }
 
-        // merged cells
+        
         SCCOL nMergeStartX = nStartCol;
         SCROW nMergeStartY = nStartRow;
         SCCOL nMergeEndX   = nEndCol;
@@ -1640,14 +1640,14 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
         if ( nMergeStartX != nStartCol || nMergeStartY != nStartRow )
         {
-            // Disallow deleting parts of a merged cell.
-            // Deleting the start is allowed (merge is removed), so the end doesn't have to be checked.
+            
+            
 
             nErrorId = STR_MSSG_DELETECELLS_0;
         }
         if ( nMergeEndX != nEndCol || nMergeEndY != nEndRow )
         {
-            // detect if the start of a merged cell is deleted, so the merge flags can be refreshed
+            
 
             bNeedRefresh = true;
         }
@@ -1659,16 +1659,16 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         return;
     }
 
-    //  proceed
+    
 
-    WaitObject aWait( GetFrameWin() );      // important for TrackFormulas in UpdateReference
+    WaitObject aWait( GetFrameWin() );      
 
     ScDocument* pUndoDoc = NULL;
     ScRefUndoData* pUndoData = NULL;
     if (bRecord)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, nTab, nTab, !bRows, bRows );      // row height
+        pUndoDoc->InitUndo( pDoc, nTab, nTab, !bRows, bRows );      
 
         for (size_t i = 0, n = aSpans.size(); i < n; ++i)
         {
@@ -1682,7 +1682,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
                         IDF_ALL,false,pUndoDoc );
         }
 
-        //  all Formulas because of references
+        
         SCTAB nTabCount = pDoc->GetTableCount();
         pUndoDoc->AddUndoTab( 0, nTabCount-1, false, false );
         pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA,false,pUndoDoc );
@@ -1744,7 +1744,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
     CellContentChanged();
 
-    //  put cursor directly behind the first deleted range
+    
     SCCOL nCurX = GetViewData()->GetCurX();
     SCROW nCurY = GetViewData()->GetCurY();
     if ( bRows )
@@ -1756,7 +1756,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-//  delete contents
+
 
 void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
 {
@@ -1764,7 +1764,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
     pViewData->SetPasteMode( SC_PASTE_NONE );
     pViewData->GetViewShell()->UpdateCopySourceOverlay();
 
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     bool bEditable = SelectionEditable( &bOnlyNotBecauseOfMatrix );
     if ( !bEditable )
@@ -1782,7 +1782,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
 
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -1804,8 +1804,8 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
             bSimple = true;
     }
 
-    aFuncMark.SetMarking(false);        // for MarkToMulti
-    aFuncMark.MarkToSimple();           // before bMulti test below
+    aFuncMark.SetMarking(false);        
+    aFuncMark.MarkToSimple();           
 
     OSL_ENSURE( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
 
@@ -1823,7 +1823,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
             bMulti = false;
     }
 
-    // no objects on protected tabs
+    
     bool bObjects = false;
     if ( nFlags & IDF_OBJECTS )
     {
@@ -1834,18 +1834,18 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
                 bObjects = false;
     }
 
-    sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
+    sal_uInt16 nExtFlags = 0;       
     if ( nFlags & IDF_ATTRIB )
         pDocSh->UpdatePaintExt( nExtFlags, aMarkRange );
 
-    //  order op opeeration:
-    //  1) BeginDrawUndo
-    //  2) delete objects (DrawUndo is filled)
-    //  3) copy contents for undo
-    //  4) delete contents
-    //  5) add undo-action
+    
+    
+    
+    
+    
+    
 
-    bool bDrawUndo = bObjects || ( nFlags & IDF_NOTE );     // needed for shown notes
+    bool bDrawUndo = bObjects || ( nFlags & IDF_NOTE );     
     if ( bDrawUndo && bRecord )
         pDoc->BeginDrawUndo();
 
@@ -1873,21 +1873,21 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
 
-        //  in case of "Format/Standard" copy all attributes, because CopyToDocument
-        //  with IDF_HARDATTR only is too time-consuming:
+        
+        
         sal_uInt16 nUndoDocFlags = nFlags;
         if (nFlags & IDF_ATTRIB)
             nUndoDocFlags |= IDF_ATTRIB;
-        if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
-            nUndoDocFlags |= IDF_STRING;    // -> cells will be changed
+        if (nFlags & IDF_EDITATTR)          
+            nUndoDocFlags |= IDF_STRING;    
         if (nFlags & IDF_NOTE)
-            nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
-        // do not copy note captions to undo document
+            nUndoDocFlags |= IDF_CONTENTS;  
+        
         nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
     }
 
-    HideAllCursors();   // for if summary is cancelled
+    HideAllCursors();   
     if (bSimple)
         pDoc->DeleteArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                           aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
@@ -1932,11 +1932,11 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
         if ( nFlags & IDF_CONTENTS )
             ForgetFormatArea();
         else
-            StartFormatArea();              // delete attribute is also attribute-change
+            StartFormatArea();              
     }
 }
 
-//  column width/row height (via header) - undo OK
+
 
 void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     ScSizeMode eMode, sal_uInt16 nSizeTwips,
@@ -1945,7 +1945,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
     if (nRangeCnt == 0)
         return;
 
-    // use view's mark if none specified
+    
     if ( !pMarkData )
         pMarkData = &GetViewData()->GetMarkData();
 
@@ -1976,8 +1976,8 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                     bOnlyMatrix;
         }
 
-    // Allow users to resize cols/rows in readonly docs despite the r/o state.
-    // It is frustrating to be unable to see content in mis-sized cells.
+    
+    
     if( !bAllowed && !pDocSh->IsReadOnly() )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -2000,7 +2000,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
 
     if ( bRecord )
     {
-        pDoc->BeginDrawUndo();                          // Drawing Updates
+        pDoc->BeginDrawUndo();                          
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         itr = pMarkData->begin();
@@ -2029,7 +2029,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
         pUndoRanges = new SCCOLROW[ 2*nRangeCnt ];
         memcpy( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
 
-        //! outlines from all tab?
+        
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nCurTab );
         if (pTable)
             pUndoTab = new ScOutlineTable( *pTable );
@@ -2052,15 +2052,15 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             SCCOLROW nStartNo = *(pTabRanges++);
             SCCOLROW nEndNo = *(pTabRanges++);
 
-            if ( !bWidth )                      // height always blockwise
+            if ( !bWidth )                      
             {
                 if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
                 {
                     bool bAll = ( eMode==SC_SIZE_OPTIMAL );
                     if (!bAll)
                     {
-                        //  delete CR_MANUALSIZE for all in range,
-                        //  then SetOptimalHeight with bShrink = FALSE
+                        
+                        
                         for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
                         {
                             SCROW nLastRow = nRow;
@@ -2096,15 +2096,15 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                     if (bAll)
                         pDoc->ShowRows( nStartNo, nEndNo, nTab, true );
 
-                    //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=sal_True
-                    //  (set for Extra-Height, else reset).
+                    
+                    
                 }
                 else if ( eMode==SC_SIZE_DIRECT )
                 {
                     if (nSizeTwips)
                     {
                         pDoc->SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
-                        pDoc->SetManualHeight( nStartNo, nEndNo, nTab, true );          // height was set manually
+                        pDoc->SetManualHeight( nStartNo, nEndNo, nTab, true );          
                     }
                     pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
                 }
@@ -2113,7 +2113,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                     pDoc->ShowRows( nStartNo, nEndNo, nTab, true );
                 }
             }
-            else                                // column width
+            else                                
             {
                 for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
                 {
@@ -2131,7 +2131,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                 }
             }
 
-                                    //  adjust outline
+                                    
 
             if (bWidth)
             {
@@ -2161,8 +2161,8 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                                      pUndoTab, eMode, nSizeTwips, bWidth ) );
     }
 
-    // fdo#36247 Ensure that the drawing layer's map mode scaling factors match
-    // the new heights and widths.
+    
+    
     GetViewData()->GetView()->RefreshZoom();
 
     itr = pMarkData->begin();
@@ -2183,7 +2183,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                             static_cast<SCCOL>(nEnd),MAXROW,nTab,
                             HASATTR_MERGED | HASATTR_OVERLAPPED ))
                     nStart = 0;
-                if (nStart > 0)             // go upwards because of Lines and cursor
+                if (nStart > 0)             
                     --nStart;
                 pDocSh->PostPaint( static_cast<SCCOL>(nStart), 0, nTab,
                         MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
@@ -2228,7 +2228,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
     }
 }
 
-//  column width/row height (via marked range)
+
 
 void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
                                         bool bRecord, bool bPaint )
@@ -2263,8 +2263,8 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
 
 void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 {
-    //! step size adjustable
-    //  step size is also minumum
+    
+    
     sal_uInt16 nStepX = STD_COL_WIDTH / 5;
     sal_uInt16 nStepY = ScGlobal::nStdRowHeight;
 
@@ -2294,15 +2294,15 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
     SCCOLROW nRange[2];
     if ( eDir == DIR_LEFT || eDir == DIR_RIGHT )
     {
-        if (bOptimal)               // width of this single cell
+        if (bOptimal)               
         {
             if ( bAnyEdit )
             {
-                //  when editing the actual entered width
+                
                 ScInputHandler* pHdl = pScMod->GetInputHdl( GetViewData()->GetViewShell() );
                 if (pHdl)
                 {
-                    long nEdit = pHdl->GetTextSize().Width();       // in 0.01 mm
+                    long nEdit = pHdl->GetTextSize().Width();       
 
                     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
                     const SvxMarginItem& rMItem =
@@ -2341,7 +2341,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                     nWidth = STD_COL_WIDTH;
             }
         }
-        else                        // increment / decrement
+        else                        
         {
             if ( eDir == DIR_RIGHT )
                 nWidth = sal::static_int_cast<sal_uInt16>( nWidth + nStepX );
@@ -2353,7 +2353,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
         nRange[0] = nRange[1] = nCol;
         SetWidthOrHeight( true, 1, nRange, SC_SIZE_DIRECT, nWidth );
 
-        //  adjust height of this row if width demands/allows this
+        
 
         if (!bAnyEdit)
         {
@@ -2395,7 +2395,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
         {
             ScInputHandler* pHdl = pScMod->GetInputHdl( GetViewData()->GetViewShell() );
             if (pHdl)
-                pHdl->SetModified();    // so that the height is adjusted with Enter
+                pHdl->SetModified();    
         }
     }
 
@@ -2413,7 +2413,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     ScDocFunc &rFunc = pDocSh->GetDocFunc();
     bool bUndo(pDoc->IsUndoEnabled());
 
-    //  modifying several tabs is handled here
+    
 
     if (bUndo)
     {
@@ -2428,7 +2428,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     if (bUndo)
         pDocSh->GetUndoManager()->LeaveListAction();
 
-    UpdateLayerLocks();         //! broadcast to all views
+    UpdateLayerLocks();         
 }
 
 void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
@@ -2443,7 +2443,7 @@ void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
         rFunc.Protect( nTab, rPassword, false );
     else
     {
-        //  modifying several tabs is handled here
+        
 
         if (bUndo)
         {
@@ -2459,7 +2459,7 @@ void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
             pDocSh->GetUndoManager()->LeaveListAction();
     }
 
-    UpdateLayerLocks();         //! broadcast to all views
+    UpdateLayerLocks();         
 }
 
 bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
@@ -2475,7 +2475,7 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
         bChanged = rFunc.Unprotect( nTab, rPassword, false );
     else
     {
-        //  modifying several tabs is handled here
+        
 
         if (bUndo)
         {
@@ -2493,7 +2493,7 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
     }
 
     if (bChanged)
-        UpdateLayerLocks();     //! broadcast to all views
+        UpdateLayerLocks();     
 
     return bChanged;
 }
@@ -2510,7 +2510,7 @@ void ScViewFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, 
 
 void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
 {
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
@@ -2525,7 +2525,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
     LanguageType        eLanguage = ScGlobal::eLnge;
     ScPatternAttr       aNewAttrs( pDoc->GetPool() );
 
-    //  always take language from cursor position, even if there is a selection
+    
 
     sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( pViewData->GetCurX(),
@@ -2534,19 +2534,19 @@ void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
                            nCurrentNumberFormat );
     const SvNumberformat* pEntry = pNumberFormatter->GetEntry( nCurrentNumberFormat );
     if (pEntry)
-        eLanguage = pEntry->GetLanguage();      // else keep ScGlobal::eLnge
+        eLanguage = pEntry->GetLanguage();      
 
     nNumberFormat = pNumberFormatter->GetStandardFormat( nFormatType, eLanguage ) + nAdd;
 
     SfxItemSet& rSet = aNewAttrs.GetItemSet();
     rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
-    //  ATTR_LANGUAGE_FORMAT not
+    
     ApplySelectionPattern( aNewAttrs, true );
 }
 
 void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
 {
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
@@ -2558,7 +2558,7 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
     ScDocument*         pDoc = pViewData->GetDocument();
     SvNumberFormatter*  pFormatter = pDoc->GetFormatTable();
 
-    //  language always from cursor position
+    
 
     sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( pViewData->GetCurX(), pViewData->GetCurY(),
@@ -2566,21 +2566,21 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
     const SvNumberformat* pEntry = pFormatter->GetEntry( nCurrentNumberFormat );
     LanguageType eLanguage = pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge;
 
-    //  determine index for String
+    
 
     bool bOk = true;
     sal_uInt32 nNumberFormat = pFormatter->GetEntryKey( rCode, eLanguage );
     if ( nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        //  enter new
+        
 
-        OUString    aFormat = rCode;    // will be changed
+        OUString    aFormat = rCode;    
         sal_Int32   nErrPos = 0;
-        short       nType   = 0;        //! ???
+        short       nType   = 0;        
         bOk = pFormatter->PutEntry( aFormat, nErrPos, nType, nNumberFormat, eLanguage );
     }
 
-    if ( bOk )          // valid format?
+    if ( bOk )          
     {
         ScPatternAttr aNewAttrs( pDoc->GetPool() );
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
@@ -2589,12 +2589,12 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
         ApplySelectionPattern( aNewAttrs, true );
     }
 
-    //! else return error / issue warning ???
+    
 }
 
 void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 {
-    // not editable because of matrix only? attribute OK nonetheless
+    
     bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
@@ -2618,7 +2618,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         return;
     }
 
-    //  what have we got here?
+    
 
     sal_uInt32 nNewFormat = nOldFormat;
     bool bError = false;
@@ -2632,35 +2632,35 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
     if ( 0 == ( nOldType & (
                 NUMBERFORMAT_NUMBER |  NUMBERFORMAT_CURRENCY | NUMBERFORMAT_PERCENT ) ) )
     {
-        //  date, time, fraction, logical, text can not be changed
-        //! in case of scientific the Numberformatter also can't
+        
+        
         bError = true;
     }
 
-    //! SvNumberformat has a Member bStandard, but doesn't disclose it
+    
     bool bWasStandard = ( nOldFormat == pFormatter->GetStandardIndex( eLanguage ) );
     if (bWasStandard)
     {
-        //  with "Standard" the decimal places depend on cell content
-        //  0 if empty or text -> no decimal places
+        
+        
         double nVal = pDoc->GetValue( ScAddress( nCol, nRow, nTab ) );
 
-        //  the ways of the Numberformatters are unfathomable, so try:
+        
         OUString aOut;
         Color* pCol;
         ((SvNumberformat*)pOldEntry)->GetOutputString( nVal, aOut, &pCol );
 
         nPrecision = 0;
-        // 'E' for exponential is fixed in Numberformatter
+        
         if ( aOut.indexOf((sal_Unicode)'E') >= 0 )
-            bError = true;                              // exponential not changed
+            bError = true;                              
         else
         {
             OUString aDecSep( pFormatter->GetFormatDecimalSep( nOldFormat ) );
             sal_Int32 nPos = aOut.indexOf( aDecSep );
             if ( nPos >= 0 )
                 nPrecision = aOut.getLength() - nPos - aDecSep.getLength();
-            // else keep 0
+            
         }
     }
 
@@ -2669,16 +2669,16 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         if (bIncrement)
         {
             if (nPrecision<20)
-                ++nPrecision;           // increment
+                ++nPrecision;           
             else
-                bError = true;          // 20 is maximum
+                bError = true;          
         }
         else
         {
             if (nPrecision)
-                --nPrecision;           // decrement
+                --nPrecision;           
             else
-                bError = true;          // 0 is minumum
+                bError = true;          
         }
     }
 
@@ -2706,7 +2706,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         ScPatternAttr aNewAttrs( pDoc->GetPool() );
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
-        //  ATTR_LANGUAGE_FORMAT not
+        
         ApplySelectionPattern( aNewAttrs, true );
     }
 }
@@ -2734,7 +2734,7 @@ void ScViewFunc::ChangeIndent( bool bIncrement )
         pDocSh->UpdateOle(pViewData);
         StartFormatArea();
 
-        // stuff for sidebar panels
+        
         SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_H_ALIGNCELL );
         rBindings.Invalidate( SID_ATTR_ALIGN_INDENT );
@@ -2744,8 +2744,8 @@ void ScViewFunc::ChangeIndent( bool bIncrement )
 bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType )
 {
-    //  Type = P,R,C,F (and combinations)
-    //! undo...
+    
+    
 
     bool bOk = false;
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -2768,30 +2768,30 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
         nType |= RT_CRITERIA;
     pNewEntry->AddType(nType);
 
-    if ( !pNewEntry->GetErrCode() )     //  text valid?
+    if ( !pNewEntry->GetErrCode() )     
     {
         ScDocShellModificator aModificator( *pDocSh );
 
-        pDoc->CompileNameFormula( true );   // CreateFormulaString
+        pDoc->CompileNameFormula( true );   
 
-        // input available yet? Then remove beforehand (=change)
+        
         ScRangeData* pData = pList->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
         if (pData)
-        {                                   // take old Index
+        {                                   
             pNewEntry->SetIndex(pData->GetIndex());
             pList->erase(*pData);
         }
 
         if ( pList->insert( pNewEntry ) )
             bOk = true;
-        pNewEntry = NULL;   // never delete, insert took ownership
+        pNewEntry = NULL;   
 
-        pDoc->CompileNameFormula( false );  // CompileFormulaString
+        pDoc->CompileNameFormula( false );  
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
     }
 
-    delete pNewEntry;       // if it wasn't inserted
+    delete pNewEntry;       
     return bOk;
 }
 
@@ -2830,7 +2830,7 @@ sal_uInt16 ScViewFunc::GetCreateNameFlags()
                 bOk = false;
         if (bOk)
             nFlags |= NAME_TOP;
-        else                            // Bottom only if not Top
+        else                            
         {
             bOk = true;
             for (i=nFirstCol; i<=nLastCol && bOk; i++)
@@ -2849,7 +2849,7 @@ sal_uInt16 ScViewFunc::GetCreateNameFlags()
                 bOk = false;
         if (bOk)
             nFlags |= NAME_LEFT;
-        else                            // Right only if not Left
+        else                            
         {
             bOk = true;
             for (j=nFirstRow; j<=nLastRow && bOk; j++)

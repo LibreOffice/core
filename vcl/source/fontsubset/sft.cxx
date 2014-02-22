@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -639,8 +639,8 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
     } while (flags & MORE_COMPONENTS);
 
-    // #i123417# some fonts like IFAOGrec have no outline points in some compound glyphs
-    // so this unlikely but possible scenario should be handled gracefully
+    
+    
     if( myPoints.empty() )
         return 0;
 
@@ -841,7 +841,7 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
     const sal_uInt8* ptr = name + GetUInt16(name, 4, 1) + GetUInt16(name + 6, 12 * n + 10, 1);
     int len = GetUInt16(name+6, 12 * n + 8, 1);
 
-    // sanity check
+    
     if( (len <= 0) || ((ptr+len) > (name+nTableSize)) )
     {
         if( ucs2result )
@@ -944,10 +944,10 @@ static void GetNames(TrueTypeFont *t)
         t->psname = nameExtract(table, nTableSize, r, 0, NULL);
     if ( ! t->psname && (r = findname(table, n, 3, 0, 0x0409, 6)) != -1)
     {
-        // some symbol fonts like Marlett have a 3,0 name!
+        
         t->psname = nameExtract(table, nTableSize, r, 1, NULL);
     }
-    // for embedded font in Ghostscript PDFs
+    
     if ( ! t->psname && (r = findname(table, n, 2, 2, 0, 6)) != -1)
     {
         t->psname = nameExtract(table, nTableSize, r, 0, NULL);
@@ -1223,7 +1223,7 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt32 table_size = getTableSize(ttf, O_cmap);
     sal_uInt16 ncmaps = GetUInt16(table, 2, 1);
     unsigned int i;
-    sal_uInt32 AppleUni   = 0;              // Apple Unicode
+    sal_uInt32 AppleUni   = 0;              
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
     sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
     sal_uInt32 ThreeTwo   = 0;              /* MS ShiftJIS          */
@@ -1256,7 +1256,7 @@ static void FindCmap(TrueTypeFont *ttf)
         if (pID == 3) {
             switch (eID) {
                 case 0: ThreeZero  = offset; break;
-                case 10: // UCS-4
+                case 10: 
                 case 1: ThreeOne   = offset; break;
                 case 2: ThreeTwo   = offset; break;
                 case 3: ThreeThree = offset; break;
@@ -1267,7 +1267,7 @@ static void FindCmap(TrueTypeFont *ttf)
         }
     }
 
-    // fall back to AppleUnicode if there are no ThreeOne/Threezero tables
+    
     if( AppleUni && !ThreeZero && !ThreeOne)
         ThreeOne = AppleUni;
 
@@ -2089,7 +2089,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP)
     assert(numTables <= 9);                                 /* Type42 has 9 required tables */
 
     sal_uInt32* offs = (sal_uInt32*)scalloc(numTables, sizeof(sal_uInt32));
-//    sal_uInt32* lens = (sal_uInt32*)scalloc(numTables, sizeof(sal_uInt32));
+
 
     fputs("/sfnts [", outf);
     HexFmtOpenString(h);
@@ -2119,7 +2119,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP)
     GlyphOffsetsDispose(go);
     HexFmtDispose(h);
     free(offs);
-//    free(lens);
+
 }
 
 int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
@@ -2582,7 +2582,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
             }
 
             const  sal_uInt8* rec_string = table + nStrBase + nStrOffset;
-            // sanity check
+            
             if( rec_string > (sal_uInt8*)ttf->ptr && rec_string < ((sal_uInt8*)ttf->ptr + ttf->fsize - rec[i].slen ) )
             {
                 rec[i].sptr = (sal_uInt8 *) malloc(rec[i].slen); assert(rec[i].sptr != 0);
@@ -2596,7 +2596,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
         } else {
             rec[i].sptr = 0;
         }
-        // some fonts have 3.0 names => fix them to 3.1
+        
         if( (rec[i].platformID == 3) && (rec[i].encodingID == 0) )
             rec[i].encodingID = 1;
     }
@@ -2621,7 +2621,7 @@ bool getTTCoverage(
 {
     bool bRet = false;
     sal_uInt16 nVersion = GetUInt16(pTable, 0, 1);
-    // parse OS/2 header
+    
     if ( nVersion >= 0x0001 && nLength >= 58 )
     {
         rUnicodeRange.append(GetUInt32(pTable, 42, 1));
@@ -2643,10 +2643,10 @@ void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* p
     if (nLength < 6)
         return;
 
-    // parse GSUB/GPOS header
+    
     const sal_uInt16 nOfsScriptList = GetUInt16(pTable, 4, 1);
 
-    // parse Script Table
+    
     const sal_uInt16 nCntScript = GetUInt16(pTable, nOfsScriptList, 1);
     sal_uInt32 nCurrentPos = nOfsScriptList+2;
     for( sal_uInt16 nScriptIndex = 0;
@@ -2655,13 +2655,13 @@ void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* p
     {
         sal_uInt32 nTag = GetUInt32(pTable, nCurrentPos, 1);
         nCurrentPos+=6;
-        rScriptTags.push_back(nTag); // e.g. hani/arab/kana/hang
+        rScriptTags.push_back(nTag); 
     }
 
     std::sort(rScriptTags.begin(), rScriptTags.end());
     rScriptTags.erase(std::unique(rScriptTags.begin(), rScriptTags.end()), rScriptTags.end());
 }
 
-} // namespace vcl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

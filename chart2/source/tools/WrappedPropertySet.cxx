@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedPropertySet.hxx"
 #include "macros.hxx"
 
-// header for define DELETEZ
+
 #include <tools/solar.h>
 
 namespace chart
@@ -50,9 +50,9 @@ Reference< beans::XPropertyState > WrappedPropertySet::getInnerPropertyState()
 
 void WrappedPropertySet::clearWrappedPropertySet()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-    //delete all wrapped properties
+    
     if(m_pWrappedPropertyMap)
     {
         for( tWrappedPropertyMap::iterator aIt = m_pWrappedPropertyMap->begin()
@@ -69,14 +69,14 @@ void WrappedPropertySet::clearWrappedPropertySet()
     m_xInfo = NULL;
 }
 
-//XPropertySet
+
 Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySetInfo(  )
                                     throw (uno::RuntimeException)
 {
     Reference< beans::XPropertySetInfo > xInfo = m_xInfo;
     if( !xInfo.is() )
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         xInfo = m_xInfo;
         if( !xInfo.is() )
         {
@@ -236,7 +236,7 @@ void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& 
     }
 }
 
-//XMultiPropertySet
+
 void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >& rNameSeq, const Sequence< Any >& rValueSeq )
                                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -255,11 +255,11 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
             bUnknownProperty = true;
         }
     }
-    //todo: store unknown properties elsewhere
+    
     OSL_ENSURE(!bUnknownProperty,"unknown property");
     (void)bUnknownProperty;
-//    if( bUnknownProperty )
-//        throw beans::UnknownPropertyException();
+
+
 }
 Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< OUString >& rNameSeq )
                                     throw (uno::RuntimeException)
@@ -291,22 +291,22 @@ void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< O
                                     throw (uno::RuntimeException)
 {
     OSL_FAIL("not implemented yet");
-    //todo
+    
 }
 void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
     OSL_FAIL("not implemented yet");
-    //todo
+    
 }
 void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
     OSL_FAIL("not implemented yet");
-    //todo
+    
 }
 
-//XPropertyState
+
 beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -383,7 +383,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyNa
     return aRet;
 }
 
-//XMultiPropertyStates
+
 void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
                                     throw (uno::RuntimeException)
 {
@@ -424,7 +424,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
     ::cppu::OPropertyArrayHelper* p = m_pPropertyArrayHelper;
     if(!p)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         p = m_pPropertyArrayHelper;
         if(!p)
         {
@@ -445,7 +445,7 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
     tWrappedPropertyMap* p = m_pWrappedPropertyMap;
     if(!p)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         p = m_pWrappedPropertyMap;
         if(!p)
         {
@@ -462,13 +462,13 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
                     if( nHandle == -1 )
                     {
                         OSL_FAIL( "missing property in property list" );
-                        delete pProperty;//we are owner or the created WrappedProperties
+                        delete pProperty;
                     }
                     else if( p->find( nHandle ) != p->end() )
                     {
-                        //duplicate Wrapped property
+                        
                         OSL_FAIL( "duplicate Wrapped property" );
-                        delete pProperty;//we are owner or the created WrappedProperties
+                        delete pProperty;
                     }
                     else
                         (*p)[ nHandle ] = pProperty;
@@ -486,6 +486,6 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
     return *m_pWrappedPropertyMap;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

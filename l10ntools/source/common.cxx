@@ -4,12 +4,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "common.hxx"
 
-//flags for handleArguments()
+
 #define STATE_NON       0x0001
 #define STATE_INPUT     0x0002
 #define STATE_OUTPUT    0x0003
@@ -28,15 +28,15 @@ bool handleArguments(
     {
         if ( OString( argv[ i ] ).toAsciiUpperCase() == "-I" )
         {
-            nState = STATE_INPUT; // next token specifies source file
+            nState = STATE_INPUT; 
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-O" )
         {
-            nState = STATE_OUTPUT; // next token specifies the dest file
+            nState = STATE_OUTPUT; 
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-M" )
         {
-            nState = STATE_MERGESRC; // next token specifies the merge database
+            nState = STATE_MERGESRC; 
             o_aHandledArgs.m_bMergeMode = true;
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-L" )
@@ -53,7 +53,7 @@ bool handleArguments(
             {
                 case STATE_NON:
                 {
-                    return false;    // no valid command line
+                    return false;    
                 }
                 case STATE_INPUT:
                 {

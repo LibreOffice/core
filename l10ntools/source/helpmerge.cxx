@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -79,7 +79,7 @@ bool HelpParser::CreatePO(
     const OString &rPOFile_in, const OString &sHelpFile,
     XMLFile *pXmlFile, const OString &rGsi1){
     SimpleXMLParser aParser;
-    //TODO: explicit BOM handling?
+    
 
     std::auto_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
 
@@ -149,7 +149,7 @@ bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
 
     SimpleXMLParser aParser;
 
-    //TODO: explicit BOM handling?
+    
 
     XMLFile* xmlfile = ( aParser.Execute( sHelpFile, new XMLFile( OString('0') ) ) );
     bool hasNoError = MergeSingleFile( xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
@@ -171,7 +171,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     std::vector<OString>::iterator pos;
     XMLHashMap::iterator posm;
 
-    for( pos = order.begin(); pos != order.end() ; ++pos ) // Merge every l10n related string in the same order as export
+    for( pos = order.begin(); pos != order.end() ; ++pos ) 
     {
         posm = aXMLStrHM->find( *pos );
         aLangHM = posm->second;
@@ -222,8 +222,8 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                 replaceAll(
                     OString("\t"),
                     OString()));
-            // re-add spaces to the beginning of translated string,
-            // important for indentation of Basic code examples
+            
+            
             sal_Int32 nPreSpaces = 0;
             sal_Int32 nLen = sSourceText.getLength();
             while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
@@ -249,7 +249,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             {
                 if( pXMLElement != NULL )
                 {
-                    XMLData *data = new XMLData( sNewdata , NULL , true ); // Add new one
+                    XMLData *data = new XMLData( sNewdata , NULL , true ); 
                     pXMLElement->RemoveAndDeleteAllChildren();
                     pXMLElement->AddChild( data );
                     aLangHM->erase( sCur );

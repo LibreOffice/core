@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstdlib>
@@ -39,17 +39,17 @@ private:
 void TestThread::run() {
 #if defined WNT
     if (std::getenv("URE_TEST_SETTHREADNAME") != 0) {
-        // On Windows, setting thread names appears to only take effect when the
-        // process is being debugged, so attach a debugger now:
+        
+        
         std::cout << "set: ";
         std::cin.ignore(std::numeric_limits< int >::max(), '\n');
     }
 #endif
     setName("TestThread");
     if (std::getenv("URE_TEST_SETTHREADNAME") != 0) {
-        // On Linux, the thread name can now be observed with "ps -L"; on
-        // Windows with the Microsoft compiler, the thread name can now be
-        // observed in a debugger.
+        
+        
+        
         std::cout << "stop: ";
         std::cin.ignore(std::numeric_limits< int >::max(), '\n');
     }

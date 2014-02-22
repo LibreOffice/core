@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "celltextparacontext.hxx"
@@ -209,7 +209,7 @@ void ScXMLCellFieldSheetNameContext::SetStyleName(const OUString& rStyleName)
 
 void ScXMLCellFieldSheetNameContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
-    // <text:sheet-name> has no attributes (that I'm aware of).
+    
 }
 
 void ScXMLCellFieldSheetNameContext::EndElement()
@@ -323,7 +323,7 @@ void ScXMLCellFieldURLContext::StartElement(const uno::Reference<xml::sax::XAttr
                 maURL = rAttrValue;
             break;
             case XML_TOK_CELL_TEXT_URL_ATTR_TYPE:
-                // Ignored for now.
+                
             break;
             default:
                 ;
@@ -381,7 +381,7 @@ void ScXMLCellFieldSContext::StartElement(const uno::Reference<xml::sax::XAttrib
             case XML_TOK_CELL_TEXT_S_ATTR_C:
                 mnCount = rAttrValue.toInt32();
                 if (mnCount <= 0)
-                    mnCount = 1;     // worth a warning?
+                    mnCount = 1;     
             break;
             default:
                 ;
@@ -398,7 +398,7 @@ void ScXMLCellFieldSContext::EndElement()
 SvXMLImportContext* ScXMLCellFieldSContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
-    // <text:s> does not have child elements, but ...
+    
     if (mnCount)
     {
         PushSpaces();

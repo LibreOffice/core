@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,12 +35,12 @@ namespace internal {
 
 void SequentialTimeContainer::activate_st()
 {
-    // resolve first possible child, ignore
+    
     for ( ; mnFinishedChildren < maChildren.size(); ++mnFinishedChildren ) {
         if (resolveChild( maChildren[mnFinishedChildren] ))
             break;
         else {
-            // node still UNRESOLVED, no need to deactivate or end...
+            
             OSL_FAIL( "### resolving child failed!" );
         }
     }
@@ -48,13 +48,13 @@ void SequentialTimeContainer::activate_st()
     if (isDurationIndefinite() &&
         (maChildren.empty() || mnFinishedChildren >= maChildren.size()))
     {
-        // deactivate ASAP:
+        
         scheduleDeactivationEvent(
             makeEvent(
                  boost::bind< void >( boost::mem_fn( &AnimationNode::deactivate ), getSelf() ),
                  "SequentialTimeContainer::deactivate") );
     }
-    else // use default
+    else 
         scheduleDeactivationEvent();
 }
 
@@ -75,7 +75,7 @@ void SequentialTimeContainer::skipEffect(
     AnimationNodeSharedPtr const& pChildNode )
 {
     if (isChildNode(pChildNode)) {
-        // empty all events ignoring timings => until next effect
+        
         getContext().mrEventQueue.forceEmpty();
         getContext().mrEventQueue.addEvent(
             makeEvent(
@@ -89,7 +89,7 @@ void SequentialTimeContainer::skipEffect(
 void SequentialTimeContainer::rewindEffect(
     AnimationNodeSharedPtr const& /*pChildNode*/ )
 {
-    // xxx todo: ...
+    
 }
 
 bool SequentialTimeContainer::resolveChild(
@@ -97,30 +97,30 @@ bool SequentialTimeContainer::resolveChild(
 {
     bool const bResolved = pChildNode->resolve();
     if (bResolved && isMainSequenceRootNode()) {
-        // discharge events:
+        
         if (mpCurrentSkipEvent)
             mpCurrentSkipEvent->dispose();
         if (mpCurrentRewindEvent)
             mpCurrentRewindEvent->dispose();
 
-        // event that will deactivate the resolved/running child:
+        
         mpCurrentSkipEvent = makeEvent(
             boost::bind( &SequentialTimeContainer::skipEffect,
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
             "SequentialTimeContainer::skipEffect, resolveChild");
-        // event that will reresolve the resolved/activated child:
+        
         mpCurrentRewindEvent = makeEvent(
             boost::bind( &SequentialTimeContainer::rewindEffect,
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
             "SequentialTimeContainer::rewindEffect, resolveChild");
 
-        // deactivate child node when skip event occurs:
+        
         getContext().mrUserEventQueue.registerSkipEffectEvent(
             mpCurrentSkipEvent,
             mnFinishedChildren+1<maChildren.size());
-        // rewind to previous child:
+        
         getContext().mrUserEventQueue.registerRewindEffectEvent(
             mpCurrentRewindEvent );
     }
@@ -138,16 +138,16 @@ void SequentialTimeContainer::notifyDeactivating(
     OSL_ASSERT( pNextChild->getState() == UNRESOLVED );
 
     if (! resolveChild( pNextChild )) {
-        // could not resolve child - since we risk to
-        // stall the chain of events here, play it safe
-        // and deactivate this node (only if we have
-        // indefinite duration - otherwise, we'll get a
-        // deactivation event, anyways).
+        
+        
+        
+        
+        
         deactivate();
     }
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -85,7 +85,7 @@ getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) thr
     static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );
     return xTypeConv;
 }
-// helper method to determine if the view ( calc ) is in print-preview mode
+
 bool isInPrintPreview( SfxViewFrame* pView )
 {
     sal_uInt16 nViewNo = SID_VIEWSHELL1 - SID_VIEWSHELL0;
@@ -140,7 +140,7 @@ public:
     {
         if ( bInitialWarningState )
         {
-            // don't allow dtor to throw
+            
             try
             {
                 setReplaceCellsWarning( true );
@@ -205,7 +205,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
 
     ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !pTabViewShell )
-        // none active, try next best
+        
         pTabViewShell = getCurrentBestViewShell();
     if ( pTabViewShell )
     {
@@ -214,7 +214,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
         if ( pView && pWin )
         {
             if ( bAsLink && bOtherDoc )
-                pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
+                pTabViewShell->PasteFromSystem(0);
             else
             {
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
@@ -387,7 +387,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     To >>= nTo;
     Copies >>= nCopies;
     Preview >>= bPreview;
-    if ( nCopies > 1 ) // Collate only useful when more that 1 copy
+    if ( nCopies > 1 ) 
         Collate >>= bCollate;
 
     OUString sRange(   "-"  );
@@ -452,15 +452,15 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
 
     }
 
-    // #FIXME #TODO
-    // 1 ActivePrinter ( how/can we switch a printer via API? )
-    // 2 PrintToFile ( ms behaviour if this option is specified but no
-    //   filename supplied 'PrToFileName' then the user will be prompted )
-    // 3 Need to check behaviour of Selected sheets with range ( e.g. From & To
-    //    values ) in oOO these options are mutually exclusive
-    // 4 There is a pop up to do with transparent objects in the print source
-    //   should be able to disable that via configuration for the duration
-    //   of this method
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
  void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, css::uno::Reference< css::frame::XModel >& xModel )
@@ -560,9 +560,9 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
     sal_Int32 retvalue = -1;
     for (sal_Int32 i = 0; i < FieldLen; i++)
     {
-        // I wonder why comparing lexicographically is done
-        // when it's a match is whats interesting?
-        //if (SearchList[i].compareTo(SearchString) == 0)
+        
+        
+        
         if ( SearchList[i] == SearchString )
         {
             retvalue = i;
@@ -609,7 +609,7 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                 sResult.append(*(++start));
                 start++;
                 break;
-                // dump the ~ and escape the next characture
+                
             case ']':
                 sResult.append('\\');
                 sResult.append(*start++);
@@ -741,7 +741,7 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
 
 }
 
-} // vba
-} // ooo
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

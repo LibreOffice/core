@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "moduledbu.hxx"
@@ -30,7 +30,7 @@
 namespace dbaui
 {
 
-// OModuleImpl
+
 /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
 */
 class OModuleImpl
@@ -38,11 +38,11 @@ class OModuleImpl
     ResMgr* m_pResources;
 
 public:
-    /// ctor
+    
     OModuleImpl();
     ~OModuleImpl();
 
-    /// get the manager for the resources of the module
+    
     ResMgr* getResManager();
 };
 
@@ -61,17 +61,17 @@ OModuleImpl::~OModuleImpl()
 
 ResMgr* OModuleImpl::getResManager()
 {
-    // note that this method is not threadsafe, which counts for the whole class !
+    
 
     if (!m_pResources)
     {
-        // create a manager with a fixed prefix
+        
         m_pResources = ResMgr::CreateResMgr("dbu");
     }
     return m_pResources;
 }
 
-// OModule
+
 ::osl::Mutex    OModule::s_aMutex;
 sal_Int32       OModule::s_nClients = 0;
 OModuleImpl*    OModule::s_pImpl = NULL;
@@ -104,6 +104,6 @@ void OModule::ensureImpl()
     s_pImpl = new OModuleImpl();
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

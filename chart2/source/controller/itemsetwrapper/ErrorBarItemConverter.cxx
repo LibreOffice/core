@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ErrorBarItemConverter.hxx"
@@ -83,7 +83,7 @@ void lcl_getErrorIndicatorValues(
     }
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -111,7 +111,7 @@ void ErrorBarItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     m_spGraphicConverter->FillItemSet( rOutItemSet );
 
-    // own items
+    
     ItemConverter::FillItemSet( rOutItemSet );
 }
 
@@ -119,13 +119,13 @@ bool ErrorBarItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
     bool bResult = m_spGraphicConverter->ApplyItemSet( rItemSet );
 
-    // own items
+    
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
 const sal_uInt16 * ErrorBarItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nErrorBarWhichPairs;
 }
 
@@ -144,9 +144,9 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
     switch( nWhichId )
     {
-        // Attention !!! This case must be passed before SCHATTR_STAT_PERCENT,
-        // SCHATTR_STAT_BIGERROR, SCHATTR_STAT_CONSTPLUS,
-        // SCHATTR_STAT_CONSTMINUS and SCHATTR_STAT_INDICATE
+        
+        
+        
         case SCHATTR_STAT_KIND_ERROR:
         {
             uno::Reference< beans::XPropertySet > xErrorBarProp( GetPropertySet());
@@ -157,7 +157,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
             if( !xErrorBarProp.is() && eErrorKind == CHERROR_NONE)
             {
-                //nothing to do
+                
             }
             else
             {
@@ -272,7 +272,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_RANGE_POS:
         case SCHATTR_STAT_RANGE_NEG:
         {
-            // @todo: also be able to deal with x-error bars
+            
             const bool bYError =
                 static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
 
@@ -297,7 +297,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                                 xErrorBarSource, bIsPositiveValue, bYError ));
                         if( ! xSeq.is())
                         {
-                            // no data range for error bars yet => create
+                            
                             uno::Reference< chart2::XInternalDataProvider > xIntDataProvider( xDataProvider, uno::UNO_QUERY );
                             OSL_ASSERT( xIntDataProvider.is());
                             if( xIntDataProvider.is())
@@ -443,7 +443,7 @@ void ErrorBarItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

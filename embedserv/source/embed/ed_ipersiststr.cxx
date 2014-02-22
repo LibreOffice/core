@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
@@ -130,7 +130,7 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
     if ( !xTempSeek.is() )
         return E_FAIL;
 
-    // Seek to zero and truncate the stream
+    
     ULARGE_INTEGER nNewPos;
     LARGE_INTEGER aZero = { 0L, 0L };
     HRESULT hr = pStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
@@ -163,9 +163,9 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
 }
 
 
-//===============================================================================
-// EmbedDocument_Impl
-//===============================================================================
+
+
+
 
 EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const GUID* guid )
 : m_refCount( 0L )
@@ -174,7 +174,7 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
 , m_bIsInVerbHandling( sal_False )
-//, m_bLoadedFromFile( sal_False )
+
 {
     m_xOwnAccess = new EmbeddedDocumentInstanceAccess_Impl( this );
     m_pDocHolder = new DocumentHolder( xFactory, m_xOwnAccess );
@@ -187,7 +187,7 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
 
     if ( m_pDocHolder->HasFrame() && m_pDocHolder->IsLink() )
     {
-        // a link with frame should be only disconnected, not closed
+        
         m_pDocHolder->DisconnectFrameDocument( sal_True );
     }
     else
@@ -203,7 +203,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 {
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
 
-    sal_Int32 nInd = 0; // must not be bigger than the preset size
+    sal_Int32 nInd = 0; 
     aArgs[nInd].Name = "FilterName";
     aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
@@ -235,8 +235,8 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 
     aArgs.realloc( nInd );
 
-    // aArgs[].Name = "ReadOnly";
-    // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
+    
+    
 
     return aArgs;
 }
@@ -262,8 +262,8 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
     if ( !pStg || pStg == m_pMasterStorage )
         return E_FAIL;
 
-    // for saveto operation the master storage
-    // should not enter NoScribble mode
+    
+    
     CComPtr< IStream > pOrigOwn = m_pOwnStream;
     CComPtr< IStream > pOrigExt = m_pExtStream;
     HRESULT hr = Save( pStg, sal_False );
@@ -274,8 +274,8 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
     return hr;
 }
 
-//-------------------------------------------------------------------------------
-// IUnknown
+
+
 
 STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
@@ -351,8 +351,8 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
 
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
 {
-    // if there is a time when the last reference is destructed, that means that only internal pointers are alive
-    // after the following call either the refcount is increased or the pointers are empty
+    
+    
     if ( m_refCount == 1 )
         m_xOwnAccess->ClearEmbedDocument();
 
@@ -362,8 +362,8 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
     return nCount;
 }
 
-//-------------------------------------------------------------------------------
-// IPersist
+
+
 
 STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
 {
@@ -371,12 +371,12 @@ STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
-// IPersistStorage
+
+
 
 STDMETHODIMP EmbedDocument_Impl::IsDirty()
 {
-    // the link modified state is controlled by the document
+    
     if ( m_bIsDirty && !m_aFileName.getLength() )
         return S_OK;
 
@@ -415,7 +415,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                     try
                     {
                         xLoadable->initNew();
-                        // xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(), nStreamMode ) );
+                        
                         hr = S_OK;
                     }
                     catch( const uno::Exception& )
@@ -425,10 +425,10 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                 if ( hr == S_OK )
                 {
-                    OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
+                    OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); 
                     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
-                                            cf,                         // ???
+                                            cf,                         
                                             reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
 
                     if ( hr == S_OK )
@@ -504,7 +504,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         if ( !m_pExtStream ) hr = E_FAIL;
     }
 
-    // RECTL aRectToSet;
+    
     SIZEL aSizeToSet;
     if ( SUCCEEDED( hr ) )
     {
@@ -520,10 +520,10 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 
             if ( SUCCEEDED( hr ) )
             {
-                // aRectToSet.left = *((sal_Int32*)aInf);
-                // aRectToSet.top = *((sal_Int32*)&aInf[4]);
-                // aRectToSet.right = *((sal_Int32*)&aInf[8]);
-                // aRectToSet.bottom = *((sal_Int32*)&aInf[12]);
+                
+                
+                
+                
                 aSizeToSet.cx = *((sal_Int32*)&aInf[8]) - *((sal_Int32*)aInf);
                 aSizeToSet.cy = *((sal_Int32*)&aInf[12]) - *((sal_Int32*)&aInf[4]);
             }
@@ -552,7 +552,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                         xLoadable->load( fillArgsForLoading_Impl( xTempIn, nStreamMode ) );
                         m_pMasterStorage = pStg;
                         hr = m_pDocHolder->SetExtent( &aSizeToSet );
-                        // hr = m_pDocHolder->SetVisArea( &aRectToSet );
+                        
                     }
                     catch( const uno::Exception& )
                     {
@@ -634,7 +634,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
             hr = copyXTempOutToIStream( xTempOut, pTargetStream );
             if ( SUCCEEDED( hr ) )
             {
-                // no need to truncate the stream, the size of the stream is always the same
+                
                 ULARGE_INTEGER nNewPos;
                 LARGE_INTEGER aZero = { 0L, 0L };
                 hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
@@ -681,8 +681,8 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 
 STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
 {
-    // m_pOwnStream == NULL && m_pMasterStorage != NULL means the object is in NoScribble mode
-    // m_pOwnStream == NULL && m_pMasterStorage == NULL means the object is in HandsOff mode
+    
+    
 
     if ( m_pOwnStream || m_pExtStream )
         return E_UNEXPECTED;
@@ -738,8 +738,8 @@ STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
-// IPersistFile
+
+
 
 STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 {
@@ -757,10 +757,10 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
     if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
 
-    OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+    OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); 
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
-                            cf,                         // ???
+                            cf,                         
                             reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
     if ( FAILED( hr ) ) return E_FAIL;
 
@@ -808,15 +808,15 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
         if ( hr == S_OK )
         {
-            OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+            OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); 
             CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
-                                    cf,                         // ???
+                                    cf,                         
                                     reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
 
             if ( SUCCEEDED( hr ) )
             {
-                // no need to truncate the stream, the size of the stream is always the same
+                
                 ULARGE_INTEGER nNewPos;
                 LARGE_INTEGER aZero = { 0L, 0L };
                 hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
@@ -865,7 +865,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 
     HRESULT hr = E_FAIL;
 
-    // TODO/LATER: currently there is no hands off state implemented
+    
     try
     {
         uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY_THROW );
@@ -902,7 +902,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 
 STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
-    // the different file name would mean error here
+    
     m_aFileName = OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
     return S_OK;
 }
@@ -920,7 +920,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     return m_aFileName.getLength() ? S_OK : S_FALSE;
 }
 
-// ===============================================
+
 
 LockedEmbedDocument_Impl EmbeddedDocumentInstanceAccess_Impl::GetEmbedDocument()
 {
@@ -934,7 +934,7 @@ void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
     m_pEmbedDocument = NULL;
 }
 
-// ===============================================
+
 
 LockedEmbedDocument_Impl::LockedEmbedDocument_Impl()
 : m_pEmbedDocument( NULL )
@@ -991,9 +991,9 @@ void LockedEmbedDocument_Impl::ExecuteMethod( sal_Int16 nId )
     }
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
+
+
+
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,19 +39,19 @@ IdlDll::IdlDll()
 
 {
     pClassMgr   = new SvClassManager();
-    // File OBJECT.HXX:
+    
     pClassMgr->SV_CLASS_REGISTER( SvMetaAttribute );
     pClassMgr->SV_CLASS_REGISTER( SvMetaClass );
-    //File SLOT.HXX:
+    
     pClassMgr->SV_CLASS_REGISTER( SvMetaSlot );
-    //File MODULE.HXX:
+    
     pClassMgr->SV_CLASS_REGISTER( SvMetaModule );
-    //File BASOBJ.HXX:
+    
     pClassMgr->SV_CLASS_REGISTER( SvMetaObject );
     pClassMgr->SV_CLASS_REGISTER( SvMetaName );
     pClassMgr->SV_CLASS_REGISTER( SvMetaExtern );
     pClassMgr->SV_CLASS_REGISTER( SvMetaReference );
-    //File TYPES.HXX:
+    
     pClassMgr->SV_CLASS_REGISTER( SvMetaType );
     pClassMgr->SV_CLASS_REGISTER( SvMetaTypeString );
     pClassMgr->SV_CLASS_REGISTER( SvMetaEnumValue );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,13 +75,13 @@ using namespace ::com::sun::star::form::inspection;
 using ::com::sun::star::awt::XWindow;
 
 /*************************************************************************/
-//========================================================================
-//= FmPropBrwMgr
-//========================================================================
-//-----------------------------------------------------------------------
+
+
+
+
 SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
-//-----------------------------------------------------------------------
+
 FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
@@ -91,8 +91,8 @@ FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
     ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
 }
 
-//========================================================================
-//========================================================================
+
+
 const long STD_WIN_SIZE_X = 300;
 const long STD_WIN_SIZE_Y = 350;
 
@@ -119,13 +119,13 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
             aUnoObj >>= xIFace;
             nClassNameResourceId = RID_STR_PROPTITLE_EDIT;
             if (xIFace.is())
-            {   // we have a chance to check if it's a formatted field model
+            {   
                 Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                 if (xInfo.is() && (xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD)))
                     nClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
                 else if (!xInfo.is())
                 {
-                    // couldn't distinguish between formatted and edit with the service name, so try with the properties
+                    
                     Reference< XPropertySet >  xProps(xIFace, UNO_QUERY);
                     if (xProps.is())
                     {
@@ -186,11 +186,11 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     return SVX_RESSTR(nClassNameResourceId);
 }
 
-//========================================================================
-// class FmPropBrw
-//========================================================================
+
+
+
 DBG_NAME(FmPropBrw);
-//------------------------------------------------------------------------
+
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
@@ -208,14 +208,14 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
 
     try
     {
-        // create a frame wrapper for myself
+        
         m_xMeAsFrame = Frame::create(m_xORB);
 
-        // create an intermediate window, which is to be the container window of the frame
-        // Do *not* use |this| as container window for the frame, this would result in undefined
-        // responsibility for this window (as soon as we initialize a frame with a window, the frame
-        // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
-        // #i34249#
+        
+        
+        
+        
+        
         Window* pContainerWindow = new Window( this );
         pContainerWindow->Show();
         m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
@@ -240,7 +240,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
         m_sLastActivePage = _pInfo->aExtraString;
 }
 
-//------------------------------------------------------------------------
+
 void FmPropBrw::Resize()
 {
     SfxFloatingWindow::Resize();
@@ -259,16 +259,16 @@ void FmPropBrw::Resize()
     }
 }
 
-//------------------------------------------------------------------------
+
 FmPropBrw::~FmPropBrw()
 {
     if (m_xBrowserController.is())
         implDetachController();
     try
     {
-        // remove our own properties from the component context. We cannot ensure that the component context
-        // is freed (there might be refcount problems :-\), so at least ensure the context itself
-        // does hold the objects anymore
+        
+        
+        
         Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
@@ -287,7 +287,7 @@ FmPropBrw::~FmPropBrw()
     DBG_DTOR(FmPropBrw,NULL);
 }
 
-//-----------------------------------------------------------------------
+
 OUString FmPropBrw::getCurrentPage() const
 {
     OUString sCurrentPage;
@@ -308,7 +308,7 @@ OUString FmPropBrw::getCurrentPage() const
     return sCurrentPage;
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::implDetachController()
 {
     m_sLastActivePage = getCurrentPage();
@@ -327,7 +327,7 @@ void FmPropBrw::implDetachController()
         }
     }
 
-    // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
+    
     if ( m_xBrowserController.is() )
         m_xBrowserController->attachFrame( NULL );
 
@@ -336,10 +336,10 @@ void FmPropBrw::implDetachController()
     m_xMeAsFrame.clear();
 }
 
-//-----------------------------------------------------------------------
+
 bool FmPropBrw::Close()
 {
-    // suspend the controller (it is allowed to veto)
+    
     if ( m_xMeAsFrame.is() )
     {
         try
@@ -359,9 +359,9 @@ bool FmPropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    // remember our bindings: while we're closed, we're deleted, too, so accessing the bindings after this
-    // would be deadly
-    // 10/19/00 - 79321 - FS
+    
+    
+    
     SfxBindings& rBindings = SfxControllerItem::GetBindings();
 
     sal_Bool bClose = SfxFloatingWindow::Close();
@@ -375,7 +375,7 @@ bool FmPropBrw::Close()
     return bClose;
 }
 
-//-----------------------------------------------------------------------
+
 bool FmPropBrw::implIsReadOnlyModel() const
 {
     try
@@ -391,7 +391,7 @@ bool FmPropBrw::implIsReadOnlyModel() const
     return true;
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 {
     if ( m_xBrowserController.is() )
@@ -400,7 +400,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         {
             Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
 
-            // tell it the objects to inspect
+            
             Sequence< Reference< XInterface > > aSelection( _rSelection.size() );
             ::std::copy( _rSelection.begin(), _rSelection.end(), aSelection.getArray() );
 
@@ -416,7 +416,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
             return;
         }
 
-        // set the new title according to the selected object
+        
         OUString sTitle;
 
         if ( _rSelection.empty() )
@@ -425,7 +425,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         }
         else if ( _rSelection.size() > 1 )
         {
-            // no form component and (no form or no name) -> Multiselection
+            
             sTitle = SVX_RESSTR(RID_STR_PROPERTIES_CONTROL);
             sTitle += SVX_RESSTR(RID_STR_PROPTITLE_MULTISELECT);
         }
@@ -449,7 +449,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 
         SetText( sTitle );
 
-        // #95343# ---------------------------------
+        
         Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
         if( xLayoutConstrains.is() )
         {
@@ -482,14 +482,14 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
     rInfo.aExtraString = getCurrentPage();
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
 {
     if (m_xBrowserComponentWindow.is())
@@ -497,7 +497,7 @@ IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 
-//-----------------------------------------------------------------------
+
 namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
@@ -513,15 +513,15 @@ namespace
         return bEnabled;
     }
 }
-//-----------------------------------------------------------------------
+
 void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 {
-    // the document in which we live
+    
     Reference< XInterface > xDocument;
     if ( _pFormShell && _pFormShell->GetObjectShell() )
         xDocument = _pFormShell->GetObjectShell()->GetModel();
 
-    // the context of the controls in our document
+    
     Reference< awt::XControlContainer > xControlContext;
     if ( _pFormShell && _pFormShell->GetFormView() )
     {
@@ -538,18 +538,18 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         }
     }
 
-    // the default parent window for message boxes
+    
     Reference< XWindow > xParentWindow( VCLUnoHelper::GetInterface ( this ) );
 
-    // the mapping from control models to control shapes
+    
     Reference< XMap > xControlMap;
     FmFormPage* pFormPage = _pFormShell ? _pFormShell->GetCurPage() : NULL;
     if ( pFormPage )
         xControlMap = pFormPage->GetImpl().getControlToShapeMap();
 
-    // our own component context
+    
 
-    // a ComponentContext for the
+    
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
         ::cppu::ContextEntry_Init( OUString( "ContextDocument" ), makeAny( xDocument ) ),
@@ -563,13 +563,13 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
 
-    // an object inspector model
+    
     m_xInspectorModel =
             bEnableHelpSection
         ?   DefaultFormComponentInspectorModel::createWithHelpSection( m_xInspectorContext, 3, 5 )
         :   DefaultFormComponentInspectorModel::createDefault( m_xInspectorContext );
 
-    // an object inspector
+    
     m_xBrowserController = m_xBrowserController.query(
         ObjectInspector::createWithModel(
             m_xInspectorContext, m_xInspectorModel
@@ -595,21 +595,21 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
 {
-    // the document in which we live
+    
     Reference< XInterface > xDocument;
     SfxObjectShell* pObjectShell = _pFormShell ? _pFormShell->GetObjectShell() : NULL;
     if ( pObjectShell )
         xDocument = pObjectShell->GetModel();
     if ( ( xDocument == m_xLastKnownDocument ) && m_xBrowserController.is() )
-        // nothing to do
+        
         return;
 
     try
     {
-        // clean up any previous instances of the object inspector
+        
         if ( m_xMeAsFrame.is() )
             m_xMeAsFrame->setComponent( NULL, NULL );
         else
@@ -618,7 +618,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
         m_xInspectorModel.clear();
         m_xBrowserComponentWindow.clear();
 
-        // and create a new one
+        
         impl_createPropertyBrowser_throw( _pFormShell );
     }
     catch( const Exception& )
@@ -628,7 +628,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
     m_xLastKnownDocument = xDocument;
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     if (!pState  || SID_FM_PROPERTY_CONTROL != nSID)
@@ -646,17 +646,17 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
 
             impl_ensurePropertyBrowser_nothrow( pShell );
 
-            // set the new object to inspect
+            
             implSetNewSelection( aSelection );
 
-            // if this is the first time we're here, some additional things need to be done ...
+            
             if ( m_bInitialStateChange )
             {
-                // if we're just newly created, we want to have the focus
+                
                 PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ) );
 
-                // and additionally, we want to show the page which was active during
-                // our previous incarnation
+                
+                
                 if ( !m_sLastActivePage.isEmpty() )
                 {
                     try

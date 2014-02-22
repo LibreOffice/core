@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessiblePageShape.hxx"
@@ -37,7 +37,7 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
+
 
 AccessiblePageShape::AccessiblePageShape (
     const uno::Reference<drawing::XDrawPage>& rxPage,
@@ -47,8 +47,8 @@ AccessiblePageShape::AccessiblePageShape (
     : AccessibleShape (AccessibleShapeInfo (NULL, rxParent, nIndex), rShapeTreeInfo),
       mxPage (rxPage)
 {
-    // The main part of the initialization is done in the init method which
-    // has to be called from this constructor's caller.
+    
+    
 }
 
 
@@ -70,7 +70,7 @@ void AccessiblePageShape::Init (void)
 
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL
        AccessiblePageShape::getAccessibleChildCount (void)
@@ -96,7 +96,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 
 
-//=====  XAccessibleComponent  ================================================
+
 
 awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -125,24 +125,24 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
             aValue >>= aBoundingBox.Height;
         }
 
-        // Transform coordinates from internal to pixel.
+        
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
             ::Size (aBoundingBox.Width, aBoundingBox.Height));
         ::Point aPixelPosition = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
             ::Point (aBoundingBox.X, aBoundingBox.Y));
 
-        // Clip the shape's bounding box with the bounding box of its parent.
+        
         Reference<XAccessibleComponent> xParentComponent (
             getAccessibleParent(), uno::UNO_QUERY);
         if (xParentComponent.is())
         {
-            // Make the coordinates relative to the parent.
+            
             awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
             int x = aPixelPosition.getX() - aParentLocation.X;
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
 
-            // Clip with parent (with coordinates relative to itself).
+            
             ::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
             awt::Size aParentSize (xParentComponent->getSize());
@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
     }
     catch (const ::com::sun::star::beans::UnknownPropertyException&)
     {
-        // Ignore exception and return default color.
+        
     }
     return nColor;
 }
@@ -211,8 +211,8 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
             Reference<beans::XPropertySet> xBGSet (aBGSet, uno::UNO_QUERY);
             if ( ! xBGSet.is())
             {
-                // Draw page has no Background property.  Try the master
-                // page instead.
+                
+                
                 Reference<drawing::XMasterPageTarget> xTarget (mxPage, uno::UNO_QUERY);
                 if (xTarget.is())
                 {
@@ -222,8 +222,8 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
                     xBGSet = Reference<beans::XPropertySet> (aBGSet, uno::UNO_QUERY);
                 }
             }
-            // Fetch the fill color.  Has to be extended to cope with
-            // gradients, hashes, and bitmaps.
+            
+            
             if (xBGSet.is())
             {
                 uno::Any aColor;
@@ -237,7 +237,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     catch (const ::com::sun::star::beans::UnknownPropertyException&)
     {
         OSL_TRACE ("caught excption due to unknown property");
-        // Ignore exception and return default color.
+        
     }
     return nColor;
 }
@@ -245,7 +245,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
 
 
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
     AccessiblePageShape::getImplementationName (void)
@@ -269,7 +269,7 @@ OUString SAL_CALL
 
 
 
-//=====  lang::XEventListener  ================================================
+
 
 void SAL_CALL
     AccessiblePageShape::disposing (const ::com::sun::star::lang::EventObject& aEvent)
@@ -282,29 +282,29 @@ void SAL_CALL
 
 
 
-//=====  XComponent  ==========================================================
+
 
 void AccessiblePageShape::dispose (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     OSL_TRACE ("AccessiblePageShape::dispose");
 
-    // Unregister listeners.
+    
     Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener (this);
 
-    // Cleanup.
+    
     mxShape = NULL;
 
-    // Call base classes.
+    
     AccessibleContextBase::dispose ();
 }
 
 
 
 
-//=====  protected internal  ==================================================
+
 
 OUString
     AccessiblePageShape::CreateAccessibleBaseName (void)
@@ -322,7 +322,7 @@ OUString
 {
     Reference<beans::XPropertySet> xPageProperties (mxPage, UNO_QUERY);
 
-    // Get name of the current slide.
+    
     OUString sCurrentSlideName;
     try
     {
@@ -349,7 +349,7 @@ OUString
 }
 
 
-} // end of namespace accessibility
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

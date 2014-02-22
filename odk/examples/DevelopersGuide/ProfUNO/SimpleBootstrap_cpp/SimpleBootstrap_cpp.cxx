@@ -53,7 +53,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     try
     {
-        // get the remote office component context
+        
         Reference< XComponentContext > xContext( ::cppu::bootstrap() );
         if ( !xContext.is() )
         {
@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return 1;
         }
 
-        // get the remote office service manager
+        
         Reference< XMultiComponentFactory > xServiceManager(
             xContext->getServiceManager() );
         if ( !xServiceManager.is() )
@@ -70,11 +70,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return 1;
         }
 
-        // get an instance of the remote office desktop UNO service
-        // and query the XComponentLoader interface
+        
+        
         Reference < XDesktop2 > xComponentLoader = Desktop::create(xContext);
 
-        // open a spreadsheet document
+        
         Reference< XComponent > xComponent( xComponentLoader->loadComponentFromURL(
             OUString( "private:factory/scalc" ),
             OUString( "_blank" ), 0,

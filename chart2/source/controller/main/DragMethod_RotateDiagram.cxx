@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DragMethod_RotateDiagram.hxx"
@@ -30,7 +30,7 @@
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
-// header for class E3dScene
+
 #include <svx/scene3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -114,7 +114,7 @@ void DragMethod_RotateDiagram::MoveSdrDrag(const Point& rPnt)
     {
         Hide();
 
-        //calculate new angle
+        
         double fX = F_PI / 2.0 * (double)(rPnt.Y() - m_aStartPos.Y())
                 / (double)m_aReferenceRect.GetHeight();
         double fY = F_PI * (double)(rPnt.X() - m_aStartPos.X())
@@ -207,10 +207,10 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         const basegfx::B3DHomMatrix aWorldToView(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection() * aViewInfo3D.getOrientation());
         const basegfx::B3DHomMatrix aTransform(aWorldToView * aCurrentTransform);
 
-        // transform to relative scene coordinates
+        
         basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
 
-        // transform to 2D view coordinates
+        
         aPolyPolygon.transform(rVCScene.getObjectTransformation());
 
         sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
@@ -219,6 +219,6 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         addToOverlayObjectList(*pNew);
     }
 }
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

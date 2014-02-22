@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -83,12 +83,12 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     bool bNewFlyPor = false;
     sal_uInt16 subType = 0;
 
-    // set language
+    
     ((SwTxtFormatter*)this)->SeekAndChg( rInf );
     if (pFld->GetLanguage() != GetFnt()->GetLanguage())
     {
         pFld->SetLanguage( GetFnt()->GetLanguage() );
-        // let the visual note know about its new language
+        
         if (pFld->GetTyp()->Which()==RES_POSTITFLD)
             const_cast<SwFmtFld*> (&pHint->GetFmtFld())->Broadcast( SwFmtFldHint( &pHint->GetFmtFld(), SWFMTFLD_LANGUAGE ) );
     }
@@ -193,7 +193,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 }
                 else if( !pExpFld->IsInBodyTxt() )
                 {
-                    // war vorher anders, also erst expandieren, dann umsetzen!!
+                    
                     pExpFld->ChangeExpansion( *pFrame, *((SwTxtFld*)pHint) );
                     pExpFld->ChgBodyTxtFlag( true );
                 }
@@ -346,7 +346,7 @@ SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
                 {
                     SwFldPortion *const pPortion(
                             lcl_NewMetaPortion(rHint, false));
-                    pPortion->SetNoLength(); // no CH_TXTATR at hint end!
+                    pPortion->SetNoLength(); 
                     return pPortion;
                 }
             }
@@ -430,7 +430,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     const SwTxtNode* pTxtNd = GetTxtFrm()->GetTxtNode();
     const SwNumRule* pNumRule = pTxtNd->GetNumRule();
 
-    // hat ein "gueltige" Nummer ?
+    
     if( pTxtNd->IsNumbered() && pTxtNd->IsCountedInList())
     {
         int nLevel = pTxtNd->GetActualListLevel();
@@ -465,9 +465,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         }
         else
         {
-            // Der SwFont wird dynamisch angelegt und im CTOR uebergeben,
-            // weil das CharFmt nur einen SV-Font zurueckliefert.
-            // Im Dtor vom SwNumberPortion wird der SwFont deletet.
+            
+            
+            
             SwFont *pNumFnt = 0;
             const SwAttrSet* pFmt = rNumFmt.GetCharFmt() ?
                                     &rNumFmt.GetCharFmt()->GetAttrSet() :
@@ -479,18 +479,18 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
 
                 //
-                // Build a new bullet font basing on the current paragraph font:
+                
                 //
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
-                // #i53199#
+                
                 if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                 {
-                    // i18463:
-                    // Underline style of paragraph font should not be considered
-                    // Overline style of paragraph font should not be considered
-                    // Weight style of paragraph font should not be considered
-                    // Posture style of paragraph font should not be considered
+                    
+                    
+                    
+                    
+                    
                     pNumFnt->SetUnderline( UNDERLINE_NONE );
                     pNumFnt->SetOverline( UNDERLINE_NONE );
                     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
@@ -502,8 +502,8 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 }
 
                 //
-                // Apply the explicit attributes from the character style
-                // associated with the numering to the new bullet font.
+                
+                
                 //
                 if( pFmt )
                     pNumFnt->SetDiffFnt( pFmt, pIDSA );
@@ -518,11 +518,11 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     pNumFnt->SetPitch( pFmtFnt->GetPitch(), nAct );
                 }
 
-                // we do not allow a vertical font
+                
                 pNumFnt->SetVertical( pNumFnt->GetOrientation(),
                                       pFrm->IsVertical() );
 
-                // --> OD 2008-01-23 #newlistelevelattrs#
+                
                 pRet = new SwBulletPortion( rNumFmt.GetBulletChar(),
                                             pTxtNd->GetLabelFollowedBy(),
                                             pNumFnt,
@@ -537,37 +537,37 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     aTxt += pTxtNd->GetLabelFollowedBy();
                 }
 
-                // 7974: Nicht nur eine Optimierung...
-                // Eine Numberportion ohne Text wird die Breite von 0
-                // erhalten. Die nachfolgende Textportion wird im BreakLine
-                // in das BreakCut laufen, obwohl rInf.GetLast()->GetFlyPortion()
-                // vorliegt!
+                
+                
+                
+                
+                
                 if( !aTxt.isEmpty() )
                 {
                     //
-                    // Build a new numbering font basing on the current paragraph font:
+                    
                     //
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
-                    // #i53199#
+                    
                     if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                     {
-                        // i18463:
-                        // Underline style of paragraph font should not be considered
+                        
+                        
                         pNumFnt->SetUnderline( UNDERLINE_NONE );
-                        // Overline style of paragraph font should not be considered
+                        
                         pNumFnt->SetOverline( UNDERLINE_NONE );
                     }
 
 
                     //
-                    // Apply the explicit attributes from the character style
-                    // associated with the numering to the new bullet font.
+                    
+                    
                     //
                     if( pFmt )
                         pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
-                    // we do not allow a vertical font
+                    
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 
                     pRet = new SwNumberPortion( aTxt, pNumFnt,

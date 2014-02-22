@@ -32,13 +32,11 @@
 
 namespace dbaui
 {
-
     struct BooleanSettingDesc;
     typedef ::std::vector< BooleanSettingDesc > BooleanSettingDescs;
 
     // SpecialSettingsPage
-    /** implements the "Special Settings" page of the advanced database settings
-    */
+    // implements the "Special Settings" page of the advanced database settings
     class SpecialSettingsPage : public OGenericAdministrationPage
     {
     protected:
@@ -115,7 +113,7 @@ namespace dbaui
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
 
-            // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
+        // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~GeneratedValuesPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
@@ -131,7 +129,7 @@ namespace dbaui
         DECL_LINK( OnCheckBoxClick, CheckBox * );
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
 

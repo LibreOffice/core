@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dpcache.hxx"
@@ -77,8 +77,8 @@ struct ClearObjectSource : std::unary_function<ScDPObject*, void>
 
 ScDPCache::~ScDPCache()
 {
-    // Make sure no live ScDPObject instances hold reference to this cache any
-    // more.
+    
+    
     mbDisposing = true;
     std::for_each(maRefObjects.begin(), maRefObjects.end(), ClearObjectSource());
 }
@@ -110,7 +110,7 @@ OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
     OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
     if (aDocStr.isEmpty())
     {
-        // Replace an empty label string with column name.
+        
         OUStringBuffer aBuf;
         aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
         aBuf.append(' ');
@@ -244,14 +244,14 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
     if (aBuckets.empty())
         return;
 
-    // Sort by the value.
+    
     std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
 
-    // Remember this sort order.
+    
     std::for_each(aBuckets.begin(), aBuckets.end(), TagValueSortOrder());
 
     {
-        // Set order index such that unique values have identical index value.
+        
         SCROW nCurIndex = 0;
         std::vector<Bucket>::iterator it = aBuckets.begin(), itEnd = aBuckets.end();
         ScDPItemData aPrev = it->maValue;
@@ -266,21 +266,21 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
         }
     }
 
-    // Re-sort the bucket this time by the data index.
+    
     std::sort(aBuckets.begin(), aBuckets.end(), LessByDataIndex());
 
-    // Copy the order index series into the field object.
+    
     rField.maData.reserve(aBuckets.size());
     std::for_each(aBuckets.begin(), aBuckets.end(), PushBackOrderIndex(rField.maData));
 
-    // Sort by the value again.
+    
     std::sort(aBuckets.begin(), aBuckets.end(), LessByValueSortIndex());
 
-    // Unique by value.
+    
     std::vector<Bucket>::iterator itUniqueEnd =
         std::unique(aBuckets.begin(), aBuckets.end(), EqualByOrderIndex());
 
-    // Copy the unique values into items.
+    
     std::vector<Bucket>::iterator itBeg = aBuckets.begin();
     size_t nLen = distance(itBeg, itUniqueEnd);
     rField.maItems.reserve(nLen);
@@ -293,16 +293,16 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 {
     Clear();
 
-    // Make sure the formula cells within the data range are interpreted
-    // during this call, for this method may be called from the interpretation
-    // of GETPIVOTDATA, which disables nested formula interpretation without
-    // increasing the macro level.
+    
+    
+    
+    
     MacroInterpretIncrementer aMacroInc(pDoc);
 
-    SCROW nStartRow = rRange.aStart.Row();  // start of data
+    SCROW nStartRow = rRange.aStart.Row();  
     SCROW nEndRow = rRange.aEnd.Row();
 
-    // Sanity check
+    
     if (!ValidRow(nStartRow) || !ValidRow(nEndRow) || nEndRow <= nStartRow)
         return false;
 
@@ -312,21 +312,21 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     mnColumnCount = nEndCol - nStartCol + 1;
 
-    // this row count must include the trailing empty rows.
-    mnRowCount = nEndRow - nStartRow; // skip the topmost label row.
+    
+    mnRowCount = nEndRow - nStartRow; 
 
-    // Skip trailing empty rows if exists.
+    
     SCCOL nCol1 = nStartCol, nCol2 = nEndCol;
     SCROW nRow1 = nStartRow, nRow2 = nEndRow;
     pDoc->ShrinkToDataArea(nDocTab, nCol1, nRow1, nCol2, nRow2);
-    bool bTailEmptyRows = nEndRow > nRow2; // Trailing empty rows exist.
+    bool bTailEmptyRows = nEndRow > nRow2; 
     nEndRow = nRow2;
 
     if (nEndRow <= nStartRow)
     {
-        // Check this again since the end row position has changed. It's
-        // possible that the new end row becomes lower than the start row
-        // after the shrinkage.
+        
+        
+        
         Clear();
         return false;
     }
@@ -343,9 +343,9 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
         Field& rField = maFields[nCol-nStartCol];
         std::vector<Bucket> aBuckets;
-        aBuckets.reserve(nEndRow-nStartRow); // skip the topmost label cell.
+        aBuckets.reserve(nEndRow-nStartRow); 
 
-        // Push back all original values.
+        
         SCROW nOffset = nStartRow + 1;
         for (SCROW i = 0, n = nEndRow-nStartRow; i < n; ++i)
         {
@@ -358,7 +358,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
             {
                 maEmptyRows.insert_back(i, i+1, false);
                 if (nNumFormat)
-                    // Only take non-default number format.
+                    
                     rField.mnNumFormat = nNumFormat;
             }
         }
@@ -367,8 +367,8 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
         if (bTailEmptyRows)
         {
-            // If the last item is not empty, append one. Note that the items
-            // are sorted, and empty item should come last when sorted.
+            
+            
             if (rField.maItems.empty() || !rField.maItems.back().IsEmpty())
             {
                 aData.SetEmpty();
@@ -393,7 +393,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
         for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
             maFields.push_back(new Field);
 
-        // Get column titles and types.
+        
         maLabelNames.clear();
         maLabelNames.reserve(mnColumnCount+1);
 
@@ -470,8 +470,8 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     {
         const ScQueryEntry& rEntry = rParam.GetEntry(i);
         const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-        // we can only handle one single direct query
-        // #i115431# nField in QueryParam is the sheet column, not the field within the source range
+        
+        
         SCCOL nQueryCol = (SCCOL)rEntry.nField;
         if ( nQueryCol < rParam.nCol1 )
             nQueryCol = rParam.nCol1;
@@ -494,7 +494,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
             }
         }
         else if (rEntry.GetQueryItem().meType != ScQueryEntry::ByString && pCellData->IsValue())
-        {   // by Value
+        {   
             double nCellVal = pCellData->GetValue();
 
             switch (rEntry.eOp)
@@ -526,7 +526,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                  || (rEntry.GetQueryItem().meType == ScQueryEntry::ByString
                      && pCellData->HasStringData() )
                 )
-        {   // by String
+        {   
             OUString  aCellStr = pCellData->GetString();
 
             bool bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
@@ -539,10 +539,10 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 
                 bool bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                               ->SearchForward( aCellStr, &nStart, &nEnd );
-                // from 614 on, nEnd is behind the found text
+                
                 if (bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()))
-                    bMatch = false;    // RegExp must match entire cell string
+                    bMatch = false;    
                 if (bRealRegExp)
                     bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
             }
@@ -552,7 +552,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 {
                     if (bMatchWholeCell)
                     {
-                        // TODO: Use shared string for fast equality check.
+                        
                         OUString aStr = rEntry.GetQueryItem().maString.getString();
                         bOk = pTransliteration->isEqual(aCellStr, aStr);
                         bool bHasStar = false;
@@ -589,7 +589,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                         bOk = !bOk;
                 }
                 else
-                {   // use collator here because data was probably sorted
+                {   
                     sal_Int32 nCompare = pCollator->compareString(
                         aCellStr, rEntry.GetQueryItem().maString.getString());
                     switch (rEntry.eOp)
@@ -708,7 +708,7 @@ void ScDPCache::PostInit()
     itr_type it = maEmptyRows.rbegin();
     OSL_ENSURE(it != maEmptyRows.rend(), "corrupt flat_segment_tree instance!");
     mnDataSize = maFields[0].maData.size();
-    ++it; // Skip the first position.
+    ++it; 
     OSL_ENSURE(it != maEmptyRows.rend(), "buggy version of flat_segment_tree is used.");
     if (it->second)
     {
@@ -735,7 +735,7 @@ void ScDPCache::AddLabel(const OUString& rLabel)
     if ( maLabelNames.empty() )
         maLabelNames.push_back(ScGlobal::GetRscString(STR_PIVOT_DATA));
 
-    //reset name if needed
+    
     LabelSet aExistingNames;
     std::for_each(maLabelNames.begin(), maLabelNames.end(), InsertLabel(aExistingNames));
     sal_Int32 nSuffix = 1;
@@ -744,12 +744,12 @@ void ScDPCache::AddLabel(const OUString& rLabel)
     {
         if (!aExistingNames.count(aNewName))
         {
-            // unique name found!
+            
             maLabelNames.push_back(aNewName);
             return;
         }
 
-        // Name already exists.
+        
         OUStringBuffer aBuf(rLabel);
         aBuf.append(++nSuffix);
         aNewName = aBuf.makeStringAndClear();
@@ -763,12 +763,12 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
     const Field& rField = maFields[nDim];
     if (static_cast<size_t>(nRow) >= rField.maData.size())
     {
-        // nRow is in the trailing empty rows area.
+        
         if (bRepeatIfEmpty)
-            nRow = rField.maData.size()-1; // Move to the last non-empty row.
+            nRow = rField.maData.size()-1; 
         else
-            // Return the last item, which should always be empty if the
-            // initialization has skipped trailing empty rows.
+            
+            
             return rField.maItems.size()-1;
 
     }
@@ -791,7 +791,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     size_t nItemId = static_cast<size_t>(nId);
     if (nDimPos < nSourceCount)
     {
-        // source field.
+        
         const Field& rField = maFields[nDimPos];
         if (nItemId < rField.maItems.size())
             return &rField.maItems[nItemId];
@@ -807,7 +807,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
         return &rGI[nItemId];
     }
 
-    // Try group fields.
+    
     nDimPos -= nSourceCount;
     if (nDimPos >= maGroupFields.size())
         return NULL;
@@ -851,8 +851,8 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
     if ( nDim >= mnColumnCount )
         return 0;
 
-    // TODO: Find a way to determine the dominant number format in presence of
-    // multiple number formats in the same field.
+    
+    
     return maFields[nDim].mnNumFormat;
 }
 
@@ -889,7 +889,7 @@ const OUString* ScDPCache::InternString(const OUString& rStr) const
 {
     StringSetType::iterator it = maStringPool.find(rStr);
     if (it != maStringPool.end())
-        // In the pool.
+        
         return &(*it);
 
     std::pair<StringSetType::iterator, bool> r = maStringPool.insert(rStr);
@@ -904,7 +904,7 @@ void ScDPCache::AddReference(ScDPObject* pObj) const
 void ScDPCache::RemoveReference(ScDPObject* pObj) const
 {
     if (mbDisposing)
-        // Object being deleted.
+        
         return;
 
     maRefObjects.erase(pObj);
@@ -924,7 +924,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 
     if (nDim < mnColumnCount)
     {
-        // source field.
+        
         const ItemsType& rItems = maFields[nDim].maItems;
         for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
@@ -935,7 +935,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
         if (!maFields[nDim].mpGroup)
             return -1;
 
-        // grouped source field.
+        
         const ItemsType& rGI = maFields[nDim].mpGroup->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
@@ -945,7 +945,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
         return -1;
     }
 
-    // group field.
+    
     nDim -= mnColumnCount;
     if (static_cast<size_t>(nDim) < maGroupFields.size())
     {
@@ -968,7 +968,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) con
     ScDPItemData::Type eType = rItem.GetType();
     if (eType == ScDPItemData::Value)
     {
-        // Format value using the stored number format.
+        
         sal_uLong nNumFormat = GetNumberFormat(nDim);
         SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
         if (pFormatter)
@@ -1212,7 +1212,7 @@ const char* getGroupTypeName(sal_Int32 nType)
 
 void ScDPCache::Dump() const
 {
-    // Change these flags to fit your debugging needs.
+    
     bool bDumpItems = false;
     bool bDumpSourceData = false;
 

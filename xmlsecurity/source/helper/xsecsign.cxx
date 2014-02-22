@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -86,10 +86,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
     args[2] = cssu::makeAny(OUString::number(nIdOfSignatureElementCollector));
 
-    //i39448 : for nss, the internal module is used for signing, which needs to be improved later
+    
     sal_Int32 nEnvIndex = internalSignatureInfor.signatureInfor.nSecurityEnvironmentIndex;
     if( nEnvIndex < 0 || nEnvIndex >= m_xSecurityContext->getSecurityEnvironmentNumber())
-    {// set defaultEnv
+    {
         args[3] = cssu::makeAny(m_xSecurityContext->getSecurityEnvironment());
     }
     else

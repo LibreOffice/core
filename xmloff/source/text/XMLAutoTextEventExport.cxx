@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLAutoTextEventExport.hxx"
@@ -101,7 +101,7 @@ void XMLAutoTextEventExport::initialize(
         }
     }
 
-    // call super class (for XHandler)
+    
     SvXMLExport::initialize(rArguments);
 }
 
@@ -117,7 +117,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
             Sequence<Any> aArgs( 1 );
             aArgs[0] <<= GetDocHandler();
 
-            // get filter component
+            
             Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.Oasis2OOoTransformer",
@@ -144,7 +144,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
         addNamespaces();
 
         {
-            // container element
+            
             SvXMLElementExport aContainerElement(
                 *this, XML_NAMESPACE_OOO, XML_AUTO_TEXT_EVENTS,
                 sal_True, sal_True);
@@ -152,7 +152,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
             exportEvents();
         }
 
-        // and close document again
+        
         GetDocHandler()->endDocument();
     }
 
@@ -161,13 +161,13 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
 
 sal_Bool XMLAutoTextEventExport::hasEvents()
 {
-    // TODO: provide full implementation that check for presence of events
+    
     return xEvents.is();
 }
 
 void XMLAutoTextEventExport::addNamespaces()
 {
-    // namespaces for office:, text: and script:
+    
     GetAttrList().AddAttribute(
         GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
         GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
@@ -197,7 +197,7 @@ void XMLAutoTextEventExport::exportEvents()
 
 
 
-// methods without content:
+
 
 void XMLAutoTextEventExport::_ExportMeta() {}
 void XMLAutoTextEventExport::_ExportScripts() {}
@@ -209,7 +209,7 @@ void XMLAutoTextEventExport::_ExportContent() {}
 
 
 
-// methods to support the component registration
+
 
 Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames()
     throw()
@@ -231,7 +231,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
     return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExport_getImplementationName(), EXPORT_ALL|EXPORT_OASIS);
 }
 
-// methods to support the component registration
+
 
 Sequence< OUString > SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames()
     throw()

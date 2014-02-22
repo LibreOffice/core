@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/i18n/CTLScriptType.hpp>
@@ -26,25 +26,25 @@
 using namespace com::sun::star::i18n;
 
 static const sal_Int16 scriptDirection[] = {
-    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT = 0,
-    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT = 1,
-    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER = 2,
-    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER_SEPARATOR = 3,
-    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER_TERMINATOR = 4,
-    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_ARABIC_NUMBER = 5,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_COMMON_NUMBER_SEPARATOR = 6,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_BLOCK_SEPARATOR = 7,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_SEGMENT_SEPARATOR = 8,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_WHITE_SPACE_NEUTRAL = 9,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_OTHER_NEUTRAL = 10,
-    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT_EMBEDDING = 11,
-    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT_OVERRIDE = 12,
-    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT_ARABIC = 13,
-    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT_EMBEDDING = 14,
-    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT_OVERRIDE = 15,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_POP_DIRECTIONAL_FORMAT = 16,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_DIR_NON_SPACING_MARK = 17,
-    ScriptDirection::NEUTRAL,           // DirectionProperty_BOUNDARY_NEUTRAL = 18,
+    ScriptDirection::LEFT_TO_RIGHT,     
+    ScriptDirection::RIGHT_TO_LEFT,     
+    ScriptDirection::LEFT_TO_RIGHT,     
+    ScriptDirection::LEFT_TO_RIGHT,     
+    ScriptDirection::LEFT_TO_RIGHT,     
+    ScriptDirection::RIGHT_TO_LEFT,     
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::LEFT_TO_RIGHT,     
+    ScriptDirection::LEFT_TO_RIGHT,     
+    ScriptDirection::RIGHT_TO_LEFT,     
+    ScriptDirection::RIGHT_TO_LEFT,     
+    ScriptDirection::RIGHT_TO_LEFT,     
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::NEUTRAL,           
+    ScriptDirection::NEUTRAL,           
 };
 
 sal_Int16 ScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
@@ -53,7 +53,7 @@ sal_Int16 ScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int3
     return (dir == ScriptDirection::NEUTRAL) ? defaultScriptDirection : dir;
 }
 
-// return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
+
 sal_Int32 ScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
         sal_Int32 cPos = nPos;
@@ -84,17 +84,17 @@ sal_Int32 ScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_In
 sal_Int16 ScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     static const ScriptTypeList typeList[] = {
-        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, CTLScriptType::CTL_HEBREW },    // 10
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, CTLScriptType::CTL_ARABIC },    // 11
-        { UnicodeScript_kDevanagari, UnicodeScript_kDevanagari, CTLScriptType::CTL_INDIC },     // 14
-        { UnicodeScript_kThai, UnicodeScript_kThai, CTLScriptType::CTL_THAI },      // 24
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    // 88
+        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, CTLScriptType::CTL_HEBREW },    
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, CTLScriptType::CTL_ARABIC },    
+        { UnicodeScript_kDevanagari, UnicodeScript_kDevanagari, CTLScriptType::CTL_INDIC },     
+        { UnicodeScript_kThai, UnicodeScript_kThai, CTLScriptType::CTL_THAI },      
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    
     };
 
     return unicode::getUnicodeScriptType(Text[nPos], typeList, CTLScriptType::CTL_UNKNOWN);
 }
 
-// Begin of Script Type is inclusive.
+
 sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     if (nPos < 0)
@@ -111,7 +111,7 @@ sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_In
     }
 }
 
-// End of the Script Type is exclusive, the return value pointing to the begin of next script type
+
 sal_Int32 ScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     if (nPos < 0)

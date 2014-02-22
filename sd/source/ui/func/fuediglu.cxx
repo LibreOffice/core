@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,8 +48,8 @@ FuEditGluePoints::FuEditGluePoints (
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
-     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-     //and SHIFT+ENTER key to decide the postion and draw the new insert point
+     
+     
      ,bBeginInsertPoint(sal_False),
     oldPoint(0,0)
 {
@@ -108,7 +108,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (eHit == SDRHIT_HANDLE)
         {
-            // drag handle
+            
             SdrHdl* pHdl = aVEvt.pHdl;
 
             if (mpView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
@@ -119,18 +119,18 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
             if (pHdl)
             {
-                // drag handle
+                
                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
         {
-            // insert glue points
+            
             mpView->BegInsGluePoint(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
-            // select glue points
+            
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -138,12 +138,12 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
-            // move object
+            
             mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {
-            // select glue points
+            
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -157,7 +157,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            // select or drag object
+            
             if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
             {
                mpView->UnmarkAllObj();
@@ -180,12 +180,12 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (bMarked &&
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
-                // move object
+                
                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {
-                // select glue point
+                
                 if (!rMEvt.IsShift())
                     mpView->UnmarkAllGluePoints();
 
@@ -193,7 +193,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                // select object
+                
                 mpView->BegMarkObj(aMDPos);
             }
         }
@@ -251,7 +251,7 @@ sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (eHit == SDRHIT_NONE)
         {
-            // click on position: deselect
+            
             mpView->UnmarkAllObj();
         }
     }
@@ -269,8 +269,8 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
     mpView->SetActualWin( mpWindow );
 
-    //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-    //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    
+    
 
     sal_Bool bReturn = sal_False;
 
@@ -287,25 +287,25 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 sal_uInt16  nCode = rKEvt.GetKeyCode().GetCode();
                 if (nCode == KEY_UP)
                 {
-                    // Scroll nach oben
+                    
                     nX = 0;
                     nY =-1;
                 }
                 else if (nCode == KEY_DOWN)
                 {
-                    // Scroll nach unten
+                    
                     nX = 0;
                     nY = 1;
                 }
                 else if (nCode == KEY_LEFT)
                 {
-                    // Scroll nach links
+                    
                     nX =-1;
                     nY = 0;
                 }
                 else if (nCode == KEY_RIGHT)
                 {
-                    // Scroll nach rechts
+                    
                     nX = 1;
                     nY = 0;
                 }
@@ -315,7 +315,7 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 Point aPoint = bBeginInsertPoint? oldPoint:centerPoint;
                 Point ePoint = aPoint + Point(nX,nY);
                 mpWindow->SetPointerPosPixel(ePoint);
-                //simulate mouse move action
+                
                 MouseEvent eMevt(ePoint,1,2,MOUSE_LEFT, 0);
                 MouseMove(eMevt);
                 oldPoint = ePoint;
@@ -330,14 +330,14 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 if(bBeginInsertPoint)
                 {
                     mpWindow->SetPointerPosPixel(oldPoint);
-                    //simulate mouse button down action
+                    
                     MouseEvent aMevt(oldPoint,1,3,MOUSE_LEFT,KEY_SHIFT);
-                    // MT IA2: Not used?
-                    // sal_uInt16 ubuttons = aMevt.GetButtons();
-                    // sal_uInt16 uMod      = aMevt.GetModifier();
+                    
+                    
+                    
                     MouseButtonDown(aMevt);
                     mpWindow->CaptureMouse();
-                    //simulate mouse button up action
+                    
                     MouseEvent rMEvt(oldPoint+Point(0,0),1,17, MOUSE_LEFT, KEY_SHIFT);
                     MouseButtonUp(rMEvt);
                     bReturn= sal_True;
@@ -352,8 +352,8 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
     return bReturn;
 }
 
-//Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point, and
-//SHIFT+ENTER key to decide the postion and draw the new insert point
+
+
 void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
 {
     if(bBeginInsertPoint && pMEvt)
@@ -473,11 +473,11 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
         break;
     }
 
-    // at the end, call base class
+    
     FuPoor::ReceiveRequest(rReq);
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/docfile.hxx>
@@ -38,10 +38,10 @@
 
 using ::std::vector;
 
-// -----------------------------------------------------------------------
 
-//------------------------------------------------------------------------
-// struct ScImportParam:
+
+
+
 
 ScImportParam::ScImportParam() :
     nCol1(0),
@@ -102,11 +102,11 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
             bSql        == rOther.bSql &&
             nType       == rOther.nType );
 
-    //! nQuerySh und pConnection sind gleich ?
+    
 }
 
-//------------------------------------------------------------------------
-// struct ScConsolidateParam:
+
+
 
 ScConsolidateParam::ScConsolidateParam() :
     ppDataAreas( NULL )
@@ -114,7 +114,7 @@ ScConsolidateParam::ScConsolidateParam() :
     Clear();
 }
 
-//------------------------------------------------------------------------
+
 
 ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
         nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
@@ -131,14 +131,14 @@ ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScConsolidateParam::~ScConsolidateParam()
 {
     ClearDataAreas();
 }
 
-//------------------------------------------------------------------------
+
 
 void ScConsolidateParam::ClearDataAreas()
 {
@@ -152,7 +152,7 @@ void ScConsolidateParam::ClearDataAreas()
     nDataAreaCount = 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScConsolidateParam::Clear()
 {
@@ -165,7 +165,7 @@ void ScConsolidateParam::Clear()
     eFunction                           = SUBTOTAL_FUNC_SUM;
 }
 
-//------------------------------------------------------------------------
+
 
 ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 {
@@ -181,7 +181,7 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
@@ -206,7 +206,7 @@ bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
 {
@@ -220,15 +220,15 @@ void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
     }
 }
 
-//------------------------------------------------------------------------
-// struct ScSolveParam
+
+
 
 ScSolveParam::ScSolveParam()
     :   pStrTargetVal( NULL )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScSolveParam::ScSolveParam( const ScSolveParam& r )
     :   aRefFormulaCell ( r.aRefFormulaCell ),
@@ -239,7 +239,7 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const ScAddress& rVariableCell,
@@ -250,14 +250,14 @@ ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScSolveParam::~ScSolveParam()
 {
     delete pStrTargetVal;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 {
@@ -271,7 +271,7 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSolveParam::operator==( const ScSolveParam& r ) const
 {
@@ -291,8 +291,8 @@ bool ScSolveParam::operator==( const ScSolveParam& r ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
-// struct ScTabOpParam
+
+
 
 ScTabOpParam::ScTabOpParam() : meMode(Column) {}
 
@@ -305,7 +305,7 @@ ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
@@ -320,7 +320,7 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 {
@@ -332,7 +332,7 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {
@@ -348,14 +348,14 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
 {
     OUString aAbsName;
     if ( !pShell->HasName() )
-    {   // maybe relative to document path working directory
+    {   
         INetURLObject aObj;
         SvtPathOptions aPathOpt;
         aObj.SetSmartURL( aPathOpt.GetWorkPath() );
-        aObj.setFinalSlash();       // it IS a path
+        aObj.setFinalSlash();       
         bool bWasAbs = true;
         aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
-        //  returned string must be encoded because it's used directly to create SfxMedium
+        
     }
     else
     {
@@ -366,8 +366,8 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
             aAbsName = pMedium->GetURLObject().smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
         }
         else
-        {   // This can't happen, but ...
-            // just to be sure to have the same encoding
+        {   
+            
             INetURLObject aObj;
             aObj.SetSmartURL( aAbsName );
             aAbsName = aObj.GetMainURL(INetURLObject::NO_DECODE);
@@ -383,13 +383,13 @@ OUString ScGlobal::GetDocTabName( const OUString& rFileName,
     aDocTab += rFileName;
     sal_Int32 nPos = 1;
     while( (nPos = aDocTab.indexOf( '\'', nPos )) != -1 )
-    {   // escape Quotes
+    {   
         aDocTab = aDocTab.replaceAt( nPos, 0, "\\" );
         nPos += 2;
     }
     aDocTab += "'";
     aDocTab += OUString(SC_COMPILER_FILE_TAB_SEP);
-    aDocTab += rTabName;    // "'Doc'#Tab"
+    aDocTab += rTabName;    
     return aDocTab;
 }
 

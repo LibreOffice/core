@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -215,7 +215,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
                         aFmt.SetSuffix(aParaNumbering.pSuffix->GetText());
                     }
 
-                    //set numbering format into the style-list.
+                    
                     pListStyle->SetListNumber(nPos, aFmt, pParaNumber->GetStart()+1);
 
                 }
@@ -250,8 +250,8 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
 }
 
 #include "xfilter/xflistitem.hxx"
-//Create nested XFList and XFItems and then add it to XFContentContainer(pCont)
-//Return the inner XFItem created.
+
+
 XFContentContainer* LwpBulletStyleMgr::AddBulletList(
         XFContentContainer* pCont, sal_Bool bIsOrdered,
         const OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped)
@@ -260,7 +260,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
 
     m_bIsBulletSkipped = bIsBulletSkiped;
 
-    //todo: need judge here.
+    
     sal_Bool bContinue = m_bContinue;
 
     XFList* theList;
@@ -287,7 +287,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
         {
             theList->SetContinueNumber(bContinue);
         }
-        //Add the outer list to pCont
+        
         if (nC == 0)
         {
             theList->SetStyleName(rStyleName);
@@ -299,7 +299,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
             theItem->SetIsHeader(sal_True);
 
             theList->SetContinueNumber(sal_True);
-            // end of add
+            
         }
 
         if(nC == nLevel-1)

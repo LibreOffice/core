@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -119,7 +119,7 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 void SwHTMLParser::ConnectImageMaps()
 {
     SwNodes& rNds = pDoc->GetNodes();
-    // auf den Start-Node der 1. Section
+    
     sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
     sal_uLong nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
@@ -134,20 +134,20 @@ void SwHTMLParser::ConnectImageMaps()
             const ImageMap *pIMap = aURL.GetMap();
             if( pIMap && pIMap->GetIMapObjectCount()==0 )
             {
-                // Die (leere) Image-Map des Nodes wird entweder
-                // durch die jetzt gefundene Image-Map ersetzt
-                // oder geloescht.
+                
+                
+                
                 ImageMap *pNewIMap =
                     FindImageMap( pIMap->GetName() );
                 aURL.SetMap( pNewIMap );
                 pFmt->SetFmtAttr( aURL );
                 if( !pGrfNd->IsScaleImageMap() )
                 {
-                    // die Grafikgroesse ist mitlerweile da oder dir
-                    // Grafik muss nicht skaliert werden
+                    
+                    
                     pGrfNd->ScaleImageMap();
                 }
-                nMissingImgMaps--;  // eine Map weniger suchen
+                nMissingImgMaps--;  
             }
         }
         nIdx = rNds[nIdx]->EndOfSectionIndex() + 1;
@@ -170,20 +170,20 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
     if( pCntnrItemSet )
     {
-        // Wenn wir und in einem Container befinden wird die Verankerung
-        // des Containers uebernommen.
+        
+        
         rFrmItemSet.Put( *pCntnrItemSet );
     }
     else if( pCSS1Parser->MayBePositioned( rCSS1PropInfo, sal_True ) )
     {
-        // Wenn die Ausrichtung anhand der CSS1-Optionen gesetzt werden kann
-        // werden die benutzt.
+        
+        
         SetAnchorAndAdjustment( rCSS1ItemSet, rCSS1PropInfo, rFrmItemSet );
     }
     else
     {
-        // Sonst wird die Ausrichtung entsprechend der normalen HTML-Optionen
-        // gesetzt.
+        
+        
         SetAnchorAndAdjustment( eVertOri, eHoriOri, rFrmItemSet );
     }
 }
@@ -199,12 +199,12 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
     if( text::HoriOrientation::NONE != eHoriOri )
     {
-        // den Absatz-Einzug bestimmen
+        
         sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
-        // Horizonale Ausrichtung und Umlauf bestimmen.
+        
         sal_Int16 eHoriRel;
         SwSurround eSurround;
         switch( eHoriOri )
@@ -217,7 +217,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
             eSurround = SURROUND_LEFT;
             break;
-        case text::HoriOrientation::CENTER:   // fuer Tabellen
+        case text::HoriOrientation::CENTER:   
             eHoriRel = text::RelOrientation::FRAME;
             eSurround = SURROUND_NONE;
             break;
@@ -227,14 +227,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             break;
         }
 
-        // Einen neuen Absatz aufmachen, wenn der aktuelle
-        // absatzgebundene Rahmen ohne Umlauf enthaelt.
+        
+        
         if( !bDontAppend && HasCurrentParaFlys( sal_True ) )
         {
-            // Wenn der Absatz nur Grafiken enthaelt, braucht er
-            // auch keinen unteren Absatz-Abstand. Da hier auch bei
-            // Verwendung von Styles kein Abstand enstehen soll, wird
-            // hier auch geweohnlich attributiert !!!
+            
+            
+            
+            
             sal_uInt16 nUpper=0, nLower=0;
             GetULSpaceFromContext( nUpper, nLower );
             InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), sal_False, sal_True );
@@ -249,7 +249,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             }
         }
 
-        // Vertikale Ausrichtung und Verankerung bestimmen.
+        
         const sal_Int32 nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
@@ -284,8 +284,8 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
 void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
 {
-    // automatisch verankerte Rahmen muessen noch um eine Position
-    // nach vorne verschoben werden.
+    
+    
     if( RES_DRAWFRMFMT != pFlyFmt->Which() &&
         (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()) &&
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
@@ -311,7 +311,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
 
 void SwHTMLParser::InsertImage()
 {
-    // und jetzt auswerten
+    
     OUString sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
     OUString sGrfNm;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
@@ -360,14 +360,14 @@ void SwHTMLParser::InsertImage()
                                                     text::HoriOrientation::NONE );
                 break;
             case HTML_O_WIDTH:
-                // erstmal nur als Pixelwerte merken!
+                
                 nWidth = rOption.GetNumber();
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
-                // erstmal nur als Pixelwerte merken!
+                
                 nHeight = rOption.GetNumber();
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcHeight && nHeight>100 )
@@ -397,21 +397,21 @@ void SwHTMLParser::InsertImage()
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                
             case HTML_O_ONLOAD:
                 nEvent = SVX_EVENT_IMAGE_LOAD;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONABORT:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                
             case HTML_O_ONABORT:
                 nEvent = SVX_EVENT_IMAGE_ABORT;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONERROR:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                
             case HTML_O_ONERROR:
                 nEvent = SVX_EVENT_IMAGE_ERROR;
                 goto IMAGE_SETEVENT;
@@ -435,9 +435,9 @@ IMAGE_SETEVENT:
     if( sGrfNm.isEmpty() )
         return;
 
-    // Wenn wir in einer Numerierung stehen und der Absatz noch leer und
-    // nicht numeriert ist, handelt es sich vielleicht um die Grafik
-    // einer Bullet-Liste
+    
+    
+    
     if( !pPam->GetPoint()->nContent.GetIndex() &&
         GetNumInfo().GetDepth() > 0 && GetNumInfo().GetDepth() <= MAXLEVEL &&
         !aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
@@ -452,13 +452,13 @@ IMAGE_SETEVENT:
 
             pTxtNode->SetCountedInList( true );
 
-            // Rule invalisieren ist noetig, weil zwischem dem einlesen
-            // des LI und der Grafik ein EndAction gerufen worden sein kann.
+            
+            
             if( GetNumInfo().GetNumRule() )
                 GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
 
-            // Die Vorlage novh mal setzen. Ist noetig, damit der
-            // Erstzeilen-Einzug stimmt.
+            
+            
             SetTxtCollAttrs();
 
             return;
@@ -475,7 +475,7 @@ IMAGE_SETEVENT:
     if( !IsNewDoc() )
         Reader::ResetFrmFmtAttrs( aFrmSet );
 
-    // Umrandung setzen
+    
     long nHBorderWidth = 0, nVBorderWidth = 0;
     if( nBorder )
     {
@@ -517,13 +517,13 @@ IMAGE_SETEVENT:
         aFrmSet.Put( aBoxItem );
     }
 
-    // Ausrichtung setzen
+    
     SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrmSet );
 
-    // Abstaende setzen
+    
     SetSpace( Size( nHSpace, nVSpace), aItemSet, aPropInfo, aFrmSet );
 
-    // Sonstige CSS1-Attribute Setzen
+    
     SetFrmFmtAttrs( aItemSet, aPropInfo, HTML_FF_BOX, aFrmSet );
 
     Size aTwipSz( bPrcWidth ? 0 : nWidth, bPrcHeight ? 0 : nHeight );
@@ -533,12 +533,12 @@ IMAGE_SETEVENT:
                     ->PixelToLogic( aTwipSz, MapMode( MAP_TWIP ) );
     }
 
-    // CSS1-Groesse auf "normale" Groesse umrechnen
+    
     switch( aPropInfo.eWidthType )
     {
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Width() = aPropInfo.nWidth;
-            nWidth = 1; // != 0
+            nWidth = 1; 
             bPrcWidth = sal_False;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
@@ -553,7 +553,7 @@ IMAGE_SETEVENT:
     {
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Height() = aPropInfo.nHeight;
-            nHeight = 1;    // != 0
+            nHeight = 1;    
             bPrcHeight = sal_False;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
@@ -566,25 +566,25 @@ IMAGE_SETEVENT:
     }
 
     Size aGrfSz( 0, 0 );
-    sal_Bool bSetTwipSize = sal_True;       // Twip-Size am Node setzen?
-    sal_Bool bChangeFrmSize = sal_False;    // Frame-Format nachtraeglich anpassen?
+    sal_Bool bSetTwipSize = sal_True;       
+    sal_Bool bChangeFrmSize = sal_False;    
     sal_Bool bRequestGrfNow = sal_False;
     sal_Bool bSetScaleImageMap = sal_False;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
     if( !nWidth || !nHeight )
     {
-        // Es fehlt die Breite oder die Hoehe
-        // Wenn die Grfik in einer Tabelle steht, wird sie gleich
-        // angefordert, damit sie eventuell schon da ist, bevor die
-        // Tabelle layoutet wird.
+        
+        
+        
+        
         if( pTable!=0 && !nWidth )
         {
             bRequestGrfNow = sal_True;
             IncGrfsThatResizeTable();
         }
 
-        // Die Groesse des Rahmens wird nachtraeglich gesetzt
+        
         bChangeFrmSize = sal_True;
         aGrfSz = aTwipSz;
         if( !nWidth && !nHeight )
@@ -594,7 +594,7 @@ IMAGE_SETEVENT:
         }
         else if( nWidth )
         {
-            // eine %-Angabe
+            
             if( bPrcWidth )
             {
                 nPrcWidth = (sal_uInt8)nWidth;
@@ -620,8 +620,8 @@ IMAGE_SETEVENT:
     }
     else
     {
-        // Breite und Hoehe wurden angegeben und brauchen nicht gesetzt
-        // zu werden
+        
+        
         bSetTwipSize = sal_False;
 
         if( bPrcWidth )
@@ -631,12 +631,12 @@ IMAGE_SETEVENT:
             nPrcHeight = (sal_uInt8)nHeight;
     }
 
-    // Image-Map setzen
+    
     aMap = comphelper::string::stripEnd(aMap, ' ');
     if( !aMap.isEmpty() )
     {
-        // Da wir nur lokale Image-Maps kennen nehmen wireinfach alles
-        // hinter dem # als Namen
+        
+        
         sal_Int32 nPos = aMap.indexOf( '#' );
         OUString aName;
         if ( -1 == nPos )
@@ -647,7 +647,7 @@ IMAGE_SETEVENT:
         ImageMap *pImgMap = FindImageMap( aName );
         if( pImgMap )
         {
-            SwFmtURL aURL; aURL.SetMap( pImgMap );//wird kopieiert
+            SwFmtURL aURL; aURL.SetMap( pImgMap );
 
             bSetScaleImageMap = !nPrcWidth || !nPrcHeight;
             aFrmSet.Put( aURL );
@@ -655,18 +655,18 @@ IMAGE_SETEVENT:
         else
         {
             ImageMap aEmptyImgMap( aName );
-            SwFmtURL aURL; aURL.SetMap( &aEmptyImgMap );//wird kopieiert
+            SwFmtURL aURL; aURL.SetMap( &aEmptyImgMap );
             aFrmSet.Put( aURL );
-            nMissingImgMaps++;          // es fehlen noch Image-Maps
+            nMissingImgMaps++;          
 
-            // die Grafik muss beim SetTwipSize skaliert werden, wenn
-            // wir keine Groesse am Node gesetzt haben oder die Groesse
-            // nicht der Grafikgroesse entsprach.
+            
+            
+            
             bSetScaleImageMap = sal_True;
         }
     }
 
-    // min. Werte einhalten !!
+    
     if( nPrcWidth )
     {
         OSL_ENSURE( !aTwipSz.Width(),
@@ -702,7 +702,7 @@ IMAGE_SETEVENT:
     Graphic aEmptyGrf;
     if( sGrfNm.startsWith("data:") )
     {
-        // use embedded base64 encoded data
+        
         ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
         OUString sBase64Data = sGrfNm.replaceAt(0,22,"");
         ::sax::Converter::decodeBase64(aPass, sBase64Data);
@@ -725,7 +725,7 @@ IMAGE_SETEVENT:
     {
         pFlyFmt->SetName( sHTMLGrfName );
 
-        // ggfs. eine Grafik anspringen
+        
         if( JUMPTO_GRAPHIC == eJumpTo && sHTMLGrfName == sJmpMark )
         {
             bChkJumpMark = true;
@@ -775,13 +775,13 @@ IMAGE_SETEVENT:
             aAttrTab.pINetFmt->GetSttCnt() ==
                         pPam->GetPoint()->nContent.GetIndex() - 1 )
         {
-            // das Attribut wurde unmitellbar vor einer zeichengeb.
-            // Grafik eingefuegt, also verschieben wir es
+            
+            
             aAttrTab.pINetFmt->SetStart( *pPam->GetPoint() );
 
-            // Wenn das Attribut auch ein Sprungziel ist, fuegen
-            // wir noch eine Bookmark vor der Grafik ein, weil das
-            // SwFmtURL kein Sprungziel ist.
+            
+            
+            
             if( !rINetFmt.GetName().isEmpty() )
             {
                 pPam->Move( fnMoveBackward );
@@ -795,15 +795,15 @@ IMAGE_SETEVENT:
     if( !aMacroItem.GetMacroTable().empty() )
         pFlyFmt->SetFmtAttr( aMacroItem );
 
-    // Wenn die Grafik gleich angeforder wird, muss dies geschehen,
-    // nachdem das Format vollstaendig aufgebaut ist, weil es evtl.
-    // gleich (synchron) angepasst wird (war bug #40983#)
+    
+    
+    
     if( bRequestGrfNow )
     {
         pGrfNd->SwapIn();
     }
 
-    // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
+    
     RegisterFlyFrm( pFlyFmt );
 
     if( !aId.isEmpty() )
@@ -913,21 +913,21 @@ void SwHTMLParser::InsertBodyOptions()
 
     if( bTextColor && !pCSS1Parser->IsBodyTextSet() )
     {
-        // Die Textfarbe wird an der Standard-Vorlage gesetzt
+        
         pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )
             ->SetFmtAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyTextSet();
     }
 
 
-    // Die Item fuer die Seitenvorlage vorbereiten (Hintergrund, Umrandung)
-    // Beim BrushItem muessen schon gesetzte werte erhalten bleiben!
+    
+    
     SvxBrushItem aBrushItem( pCSS1Parser->GetPageDescBackground() );
     sal_Bool bSetBrush = sal_False;
 
     if( bBGColor && !pCSS1Parser->IsBodyBGColorSet() )
     {
-        // Hintergrundfarbe aus "BGCOLOR"
+        
         OUString aLink;
         if( !aBrushItem.GetGraphicLink().isEmpty() )
             aLink = aBrushItem.GetGraphicLink();
@@ -946,7 +946,7 @@ void SwHTMLParser::InsertBodyOptions()
 
     if( !aBackGround.isEmpty() && !pCSS1Parser->IsBodyBackgroundSet() )
     {
-        // Hintergrundgrafik aus "BACKGROUND"
+        
         aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( sBaseURL, aBackGround ) );
         aBrushItem.SetGraphicPos( GPOS_TILED );
         bSetBrush = sal_True;
@@ -960,8 +960,8 @@ void SwHTMLParser::InsertBodyOptions()
         OUString aDummy;
         ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, 0, &aDir );
 
-        // Ein par Attribute muessen an der Seitenvorlage gesetzt werden,
-        // und zwar die, die nicht vererbit werden
+        
+        
         pCSS1Parser->SetPageDescAttrs( bSetBrush ? &aBrushItem : 0,
                                        &aItemSet );
 
@@ -983,8 +983,8 @@ void SwHTMLParser::InsertBodyOptions()
             }
         }
 
-        // alle noch uebrigen Optionen koennen an der Standard-Vorlage
-        // gesetzt werden und gelten dann automatisch als defaults
+        
+        
         pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )
             ->SetFmtAttr( aItemSet );
     }
@@ -1042,11 +1042,11 @@ void SwHTMLParser::InsertBodyOptions()
 
 void SwHTMLParser::NewAnchor()
 {
-    // den voherigen Link beenden, falls es einen gab
+    
     _HTMLAttrContext *pOldCntxt = PopContext( HTML_ANCHOR_ON );
     if( pOldCntxt )
     {
-        // und ggf. die Attribute beenden
+        
         EndContext( pOldCntxt );
         delete pOldCntxt;
     }
@@ -1133,8 +1133,8 @@ ANCHOR_SETEVENT:
         }
     }
 
-    // Sprungziele, die unseren ipmliziten Zielen entsprechen, schmeissen
-    // wir hier ganz rigoros raus.
+    
+    
     if( !aName.isEmpty() )
     {
         OUString sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
@@ -1161,7 +1161,7 @@ ANCHOR_SETEVENT:
         }
     }
 
-    // einen neuen Kontext anlegen
+    
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_ANCHOR_ON );
 
     sal_Bool bEnAnchor = sal_False, bFtnAnchor = sal_False, bFtnEnSymbol = sal_False;
@@ -1187,7 +1187,7 @@ ANCHOR_SETEVENT:
         }
     }
 
-    // Styles parsen
+    
     if( HasStyleOptions( aStyle, aId, aStrippedClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
@@ -1208,7 +1208,7 @@ ANCHOR_SETEVENT:
         }
         else
         {
-            // Bei leerer URL das Directory nehmen
+            
             INetURLObject aURLObj( aPathToFile );
             sHRef = aURLObj.GetPartBeforeLastName();
         }
@@ -1220,7 +1220,7 @@ ANCHOR_SETEVENT:
         if( !aMacroTbl.empty() )
             aINetFmt.SetMacroTbl( &aMacroTbl );
 
-        // das Default-Attribut setzen
+        
         InsertAttr( &aAttrTab.pINetFmt, aINetFmt, pCntxt );
     }
     else if( !aName.isEmpty() )
@@ -1238,7 +1238,7 @@ ANCHOR_SETEVENT:
         bInFootEndNoteSymbol = bCallNextToken = true;
     }
 
-    // den Kontext merken
+    
     PushContext( pCntxt );
 }
 
@@ -1271,9 +1271,9 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
     sal_Bool bHasMarks = sal_False;
     sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
-    // first step: are there still bookmark in the attribute-stack?
-    // bookmarks are added to the end of the stack - thus we only have
-    // to check the last bookmark
+    
+    
+    
     if( !bIgnoreStack )
     {
         _HTMLAttr* pAttr;
@@ -1291,7 +1291,7 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
 
     if( !bHasMarks )
     {
-        // second step: when we didnt find a bookmark, check if there is one set already
+        
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
             ppMark != pMarkAccess->getAllMarksEnd();
@@ -1339,18 +1339,18 @@ void SwHTMLParser::StripTrailingPara()
                      (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == nNodeIdx )
 
-                    return;     // den Knoten duerfen wir nicht loeschen
+                    return;     
             }
 
-            SetAttr( sal_False );   // die noch offenen Attribute muessen
-                                // beendet werden, bevor der Node
-                                // geloescht wird, weil sonst der
-                                // End-Index in die Botanik zeigt
+            SetAttr( sal_False );   
+                                
+                                
+                                
 
             if( pCNd->Len() && pCNd->IsTxtNode() )
             {
-                // es wurden Felder in den Node eingefuegt, die muessen
-                // wir jetzt verschieben
+                
+                
                 SwTxtNode *pPrvNd = pDoc->GetNodes()[nNodeIdx-1]->GetTxtNode();
                 if( pPrvNd )
                 {
@@ -1359,7 +1359,7 @@ void SwHTMLParser::StripTrailingPara()
                 }
             }
 
-            // jetz muessen wir noch eventuell vorhandene Bookmarks verschieben
+            
             IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
@@ -1377,8 +1377,8 @@ void SwHTMLParser::StripTrailingPara()
                         OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-                    // #i81002# - refactoring
-                    // Do not directly manipulate member of <SwBookmark>
+                    
+                    
                     {
                         SwPosition aNewPos(*pNd);
                         aNewPos.nContent.Assign(pNd, pNd->Len());
@@ -1398,9 +1398,9 @@ void SwHTMLParser::StripTrailingPara()
         }
         else if( pCNd && pCNd->IsTxtNode() && pTable )
         {
-            // In leeren Zellen stellen wir einen kleinen Font ein, damit die
-            // Zelle nicht hoeher wird als die Grafik bzw. so niedrig wie
-            // moeglich bleibt.
+            
+            
+            
             bSetSmallFont = sal_True;
         }
     }
@@ -1408,8 +1408,8 @@ void SwHTMLParser::StripTrailingPara()
              pCNd->StartOfSectionIndex()+2 ==
              pCNd->EndOfSectionIndex() )
     {
-        // Wenn die Zelle nur zeichengebundene Grafiken/Rahmen enthaelt
-        // stellen wir ebenfalls einen kleinen Font ein.
+        
+        
         bSetSmallFont = sal_True;
         SwTxtNode* pTxtNd = pCNd->GetTxtNode();
 
@@ -1425,7 +1425,7 @@ void SwHTMLParser::StripTrailingPara()
 
     if( bSetSmallFont )
     {
-        //Added default to CJK and CTL
+        
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
         SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );

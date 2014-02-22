@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//----------------------------------------------------------------------------
+
 
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
@@ -39,10 +39,10 @@
 
 
 
-//============================================================================
-// class ScFillSeriesDlg
 
-//----------------------------------------------------------------------------
+
+
+
 
 ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   ScDocument&   rDocument,
@@ -88,13 +88,13 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 {
@@ -111,7 +111,7 @@ void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 {
@@ -200,7 +200,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFillSeriesDlg::CheckStartVal()
 {
@@ -221,7 +221,7 @@ bool ScFillSeriesDlg::CheckStartVal()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFillSeriesDlg::CheckIncrementVal()
 {
@@ -232,7 +232,7 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFillSeriesDlg::CheckEndVal()
 {
@@ -253,9 +253,9 @@ bool ScFillSeriesDlg::CheckEndVal()
 }
 
 
-//----------------------------------------------------------------------------
-// Handler:
-//----------------------------------------------------------------------------
+
+
+
 
 IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 {
@@ -294,7 +294,7 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 {

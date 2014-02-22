@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
 
-// --------------------------------------------------------------------
+
 
 extern void fillDurationComboBox( ListBox* pBox );
 
@@ -123,21 +123,21 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
         Rectangle aOutRect( rUDEvt.GetRect() );
         OutputDevice* pDev = rUDEvt.GetDevice();
 
-        // fill the background
+        
         Color aColor (GetSettings().GetStyleSettings().GetDialogColor());
 
         pDev->SetFillColor (aColor);
         pDev->SetLineColor ();
         pDev->DrawRect(aOutRect);
 
-        // Erase the four corner pixels to make the rectangle appear rounded.
+        
         pDev->SetLineColor( GetSettings().GetStyleSettings().GetWindowColor());
         pDev->DrawPixel( aOutRect.TopLeft());
         pDev->DrawPixel( Point(aOutRect.Right(), aOutRect.Top()));
         pDev->DrawPixel( Point(aOutRect.Left(), aOutRect.Bottom()));
         pDev->DrawPixel( Point(aOutRect.Right(), aOutRect.Bottom()));
 
-        // draw the category title
+        
         pDev->DrawText (aOutRect, GetEntry(nItem), TEXT_DRAW_CENTER );
     }
     else
@@ -146,7 +146,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
 {
@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -170,7 +170,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 class CustomAnimationCreateTabPage : public TabPage
 {
@@ -498,7 +498,7 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
 :   TabDialog( pParent, "CustomAnimationCreate", "modules/simpress/ui/customanimationcreatedialog.ui" )
@@ -537,7 +537,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 
     setPosition();
 
-    // select current preset if available
+    
     if( !rsPresetId.isEmpty() )
     {
         for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
@@ -656,7 +656,7 @@ void CustomAnimationCreateDialog::setPosition()
     }
     else
     {
-        // default position: aligned with right edge of parent
+        
         Window * pParent = lcl_GetTopmostParent( this );
         if( pParent )
         {
@@ -664,7 +664,7 @@ void CustomAnimationCreateDialog::setPosition()
             Size  aSize( GetSizePixel());
             Size  aParentSize( pParent->GetSizePixel());
 
-            // right center
+            
             aPos.setX( aParentSize.getWidth() - aSize.getWidth() );
             aPos.setY( (aParentSize.getHeight() - aSize.getHeight()) / 2 );
             SetPosPixel( aPos );
@@ -674,7 +674,7 @@ void CustomAnimationCreateDialog::setPosition()
 
 void CustomAnimationCreateDialog::storePosition()
 {
-    // save settings (screen position and current page)
+    
     SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableConnectionData.hxx"
@@ -23,7 +23,7 @@
 
 using namespace dbaui;
 
-// class OTableConnectionData
+
 OTableConnectionData::OTableConnectionData()
 {
     Init();
@@ -41,10 +41,10 @@ OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _
 
 void OTableConnectionData::Init()
 {
-    // initialise linedatalist with defaults
+    
     OSL_ENSURE(m_vConnLineData.empty(), "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
     ResetConnLines();
-        // this creates the defaults
+        
 }
 
 OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnData )
@@ -55,12 +55,12 @@ OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnDat
 void OTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     *this = rSource;
-    // here I revert to the (non-virtual) operator =, which only copies my members
+    
 }
 
 OTableConnectionData::~OTableConnectionData()
 {
-    // delete LineDataList
+    
     OConnectionLineDataVec().swap(m_vConnLineData);
 }
 
@@ -73,10 +73,10 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     m_pReferencedTable = rConnData.m_pReferencedTable;
     m_aConnName = rConnData.GetConnName();
 
-    // clear line list
+    
     ResetConnLines();
 
-    // and copy
+    
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
 
     OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
@@ -92,7 +92,7 @@ sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& r
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
         return sal_False;
 
-        // == still allowed, this correponds to a Append
+        
 
     if (m_vConnLineData.size() == nIndex)
         return AppendConnLine(rSourceFieldName, rDestFieldName);
@@ -148,7 +148,7 @@ OTableConnectionData* OTableConnectionData::NewInstance() const
 
 OConnectionLineDataVec::size_type OTableConnectionData::normalizeLines()
 {
-    // remove empty lines
+    
     OConnectionLineDataVec::size_type nCount = m_vConnLineData.size();
     OConnectionLineDataVec::size_type nRet = nCount;
     for(OConnectionLineDataVec::size_type i = 0; i < nCount;)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacommandbarcontrol.hxx"
 #include "vbacommandbarcontrols.hxx"
@@ -38,7 +38,7 @@ void ScVbaCommandBarControl::ApplyChange() throw ( uno::RuntimeException )
 OUString SAL_CALL
 ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException )
 {
-    // "Label" always empty
+    
     OUString sCaption;
     getPropertyValue( m_aPropertyValues, "Label" ) >>= sCaption;
     return sCaption;
@@ -63,7 +63,7 @@ ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaCommandBarControl::setOnAction( const OUString& _onaction ) throw (uno::RuntimeException)
 {
-    // get the current model
+    
     uno::Reference< frame::XModel > xModel( pCBarHelper->getModel() );
     MacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
     if ( aResolvedMacro.mbFound )
@@ -107,7 +107,7 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
     }
     else
     {
-        // emulated with Visible
+        
         bEnabled = getVisible();
     }
     return bEnabled;
@@ -124,7 +124,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     }
     else
     {
-        // emulated with Visible
+        
         setVisible( _enabled );
     }
 }
@@ -132,8 +132,8 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException)
 {
-    // TODO: need to check if the item before this item is of type 'separator'
-    //#STUB
+    
+    
     return sal_False;
 }
 
@@ -142,7 +142,7 @@ ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::Runt
 {
     if( getBeginGroup() != _begin )
     {
-        // TODO: need to insert or remove an item of type 'separator' before this item
+        
     }
 }
 
@@ -161,7 +161,7 @@ ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::Runt
 uno::Any SAL_CALL
 ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // only Popup Menu has controls
+    
     uno::Reference< container::XIndexAccess > xSubMenu;
     getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
     if( !xSubMenu.is() )
@@ -193,7 +193,7 @@ ScVbaCommandBarControl::getServiceNames()
     return aServiceNames;
 }
 
-//////////// ScVbaCommandBarPopup //////////////////////////////
+
 ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException) : CommandBarPopup_BASE( xParent, xContext, xSettings, pHelper, xBarSettings, sResourceUrl )
 {
     m_nPosition = nPosition;
@@ -219,7 +219,7 @@ ScVbaCommandBarPopup::getServiceNames()
     return aServiceNames;
 }
 
-//////////// ScVbaCommandBarButton //////////////////////////////
+
 ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException) : CommandBarButton_BASE( xParent, xContext, xSettings, pHelper, xBarSettings, sResourceUrl )
 {
     m_nPosition = nPosition;

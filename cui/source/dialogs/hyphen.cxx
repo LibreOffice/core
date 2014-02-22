@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hyphen.hxx"
@@ -67,7 +67,7 @@ void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
             Edit::KeyInput(rKEvt);
             break;
         default:
-            Control::KeyInput( rKEvt ); // pass on to the dialog
+            Control::KeyInput( rKEvt ); 
             break;
     }
 }
@@ -107,32 +107,32 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         uno::Reference< linguistic2::XPossibleHyphens >  &rxPossHyph,
         sal_uInt16 _nMaxHyphenationPos )
 {
-    // returns a String showing only those hyphen positions which will result
-    // in a line break if hyphenation is done there
-    // 1) we will need to discard all hyphenation positions at th end that
-    // will not result in a line break where the text to the left still fits
-    // on the line.
-    // 2) since as from OOo 3.2 '-' are part of a word an thus text like
-    // 'multi-line-editor' is regarded as single word we also need to discard those
-    // hyphenation positions to the left of the rightmost '-' that is still left of
-    // the rightmost valid hyphenation position according to 1)
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // Example:
-    // If the possible hyphenation position in 'multi-line-editor' are to eb marked
-    // by '=' then the text will look like this 'mul=ti-line-ed=it=or'.
-    // If now the first line is only large enough for 'multi-line-edi' we need to discard
-    // the last possible hyphnation point because of 1). The right most valid
-    // hyphenation position is "ed=itor". The first '-' left of this position is
-    // "line-ed", thus because of 2) we now need to discard all possible hyphneation
-    // positions to the left of that as well. Thus in the end leaving us with just
-    // 'multi-line-ed=itor' as return value for this function. (Just one valid hyphenation
-    // position for the user too choose from. However ALL the '-' characters in the word
-    // will ALWAYS be valid implicit hyphenation positions for the core to choose from!
-    // And thus even if this word is skipped in the hyphenation dialog it will still be broken
-    // right after 'multi-line-' (actually it might already be broken up that way before
-    // the hyphenation dialog is called!).
-    // Thus rule 2) just eliminates those positions which will not be used by the core at all
-    // even if the user were to select one of them.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     OUString aTxt;
     DBG_ASSERT(rxPossHyph.is(), "missing possible hyphens");
@@ -148,7 +148,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         sal_Int32 nLen = aHyphenationPositions.getLength();
         const sal_Int16 *pHyphenationPos = aHyphenationPositions.getConstArray();
 
-        // find position nIdx after which all hyphen positions are unusable
+        
         sal_Int32  nIdx = -1;
         sal_Int32  nPos = 0, nPos1 = 0;
         if (nLen)
@@ -160,7 +160,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                     break;
                 else
                 {
-                    // find corresponding hyphen pos in string
+                    
                     nPos = aTxt.indexOf( sal_Unicode( HYPH_POS_CHAR ), nStart );
 
                     if (nPos == -1)
@@ -175,9 +175,9 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         }
         DBG_ASSERT(nIdx != -1, "no usable hyphenation position");
 
-        // 1) remove all not usable hyphenation positions from the end of the string
+        
         nPos = nIdx == -1 ? 0 : nIdx + 1;
-        nPos1 = nPos;   //save for later use in 2) below
+        nPos1 = nPos;   
         const OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
         const OUString aEmpty;
         while (nPos != -1)
@@ -186,9 +186,9 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
             aTxt = aTxt.replaceFirst( aTmp, aEmpty, &nPos);
         }
 
-        // 2) remove all hyphenation positions from the start that are not considered by the core
+        
         const OUString aSearchRange( aTxt.copy( 0, nPos1 ) );
-        sal_Int32 nPos2 = aSearchRange.lastIndexOf( '-' );  // the '-' position the core will use by default
+        sal_Int32 nPos2 = aSearchRange.lastIndexOf( '-' );  
         if (nPos2 != -1 )
         {
             OUString aLeft( aSearchRange.copy( 0, nPos2 ) );
@@ -241,8 +241,8 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
                 if (HYPH_POS_CHAR == aTmp[ i ])
                     nIdxPos++;
             }
-            // take the possible hyphenation positions that got removed from the
-            // start of the wor dinot account:
+            
+            
             nIdxPos += nHyphenationPositionsOffset;
 
             uno::Sequence< sal_Int16 > aSeq = xPossHyph->getHyphenationPositions();
@@ -257,7 +257,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
         }
         else
         {
-            //! calling with 0 as argument will remove hyphens!
+            
             pHyphWrapper->InsertHyphen( nInsPos );
         }
     }
@@ -266,7 +266,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
     {
         uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( pHyphWrapper->GetLast(), uno::UNO_QUERY );
 
-        // adapt actual word and language to new found hyphenation result
+        
         if(xHyphWord.is())
         {
             aActWord    = xHyphWord->getWord();
@@ -451,7 +451,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl)
 }
 
 
-// class SvxHyphenWordDialog ---------------------------------------------
+
 
 SvxHyphenWordDialog::SvxHyphenWordDialog(
     const OUString &rWord, LanguageType nLang,
@@ -508,7 +508,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
 
     SetWindowTitle( nLang );
 
-    // disable controls if service is not available
+    
     if (!xHyphenator.is())
         Enable( false );
 }

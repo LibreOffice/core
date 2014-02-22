@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TabBar.hxx"
@@ -103,7 +103,7 @@ sal_Int32 TabBar::GetDefaultWidth (void)
 void TabBar::SetDecks (
     const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
-    // Remove the current buttons.
+    
     {
         for(ItemContainer::iterator
                 iItem(maItems.begin()), iEnd(maItems.end());
@@ -198,7 +198,7 @@ void TabBar::Layout (void)
         Theme::GetInteger(Theme::Int_TabItemWidth) * GetDPIScaleFactor(),
         Theme::GetInteger(Theme::Int_TabItemHeight) * GetDPIScaleFactor());
 
-    // Place the menu button and the separator.
+    
     if (mpMenuButton != 0)
     {
         mpMenuButton->SetPosSizePixel(
@@ -209,7 +209,7 @@ void TabBar::Layout (void)
         mnMenuSeparatorY = nY - Theme::GetInteger(Theme::Int_TabMenuPadding)/2 - 1;
     }
 
-    // Place the deck selection buttons.
+    
     for(ItemContainer::const_iterator
             iItem(maItems.begin()), iEnd(maItems.end());
         iItem!=iEnd;
@@ -221,7 +221,7 @@ void TabBar::Layout (void)
         if (iItem->mbIsHidden)
             continue;
 
-        // Place and size the icon.
+        
         rButton.SetPosSizePixel(
             Point(nX,nY),
             aTabItemSize);
@@ -299,7 +299,7 @@ IMPL_LINK(TabBar::Item, HandleClick, Button*, EMPTYARG)
     {
         maDeckActivationFunctor(msDeckId);
     }
-    catch( const ::com::sun::star::uno::Exception&) {} // workaround for #i123198#
+    catch( const ::com::sun::star::uno::Exception&) {} 
 
     return 1;
 }
@@ -411,6 +411,6 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
 
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

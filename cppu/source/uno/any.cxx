@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@ using namespace cppu;
 
 extern "C"
 {
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -43,7 +43,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_any_assign(
         CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -60,7 +60,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_any_assign(
         CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -76,7 +76,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_any_construct(
         CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -92,7 +92,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_any_construct(
         CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -108,7 +108,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_any_constructAndConvert(
         CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -124,13 +124,13 @@ CPPU_DLLPUBLIC void SAL_CALL uno_any_constructAndConvert(
         CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     _destructAny( pValue, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {

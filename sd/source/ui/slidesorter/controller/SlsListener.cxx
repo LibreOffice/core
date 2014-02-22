@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,7 +76,7 @@ Listener::Listener (
     StartListening(*mrSlideSorter.GetModel().GetDocument()->GetDocSh());
     mbListeningToDocument = true;
 
-    // Connect to the UNO document.
+    
     Reference<document::XEventBroadcaster> xBroadcaster (
         mrSlideSorter.GetModel().GetDocument()->getUnoModel(), uno::UNO_QUERY);
     if (xBroadcaster.is())
@@ -85,21 +85,21 @@ Listener::Listener (
         mbListeningToUNODocument = true;
     }
 
-    // Listen for disposing events from the document.
+    
     Reference<XComponent> xComponent (xBroadcaster, UNO_QUERY);
     if (xComponent.is())
         xComponent->addEventListener (
             Reference<lang::XEventListener>(
                 static_cast<XWeak*>(this), UNO_QUERY));
 
-    // Connect to the frame to listen for controllers being exchanged.
+    
     bool bIsMainViewShell (false);
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
     if (pViewShell != NULL)
         bIsMainViewShell = pViewShell->IsMainViewShell();
     if ( ! bIsMainViewShell)
     {
-        // Listen to changes of certain properties.
+        
         Reference<frame::XFrame> xFrame;
         Reference<frame::XController> xController (mrSlideSorter.GetXController());
         if (xController.is())
@@ -113,12 +113,12 @@ Listener::Listener (
             mbListeningToFrame = true;
         }
 
-        // Connect to the current controller.
+        
         ConnectToController ();
     }
 
-    // Listen for hints of the MainViewShell as well.  If that is not yet
-    // present then the EventMultiplexer will tell us when it is available.
+    
+    
     if (mpBase != NULL)
     {
         ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
@@ -167,7 +167,7 @@ void Listener::ReleaseListeners (void)
         if (xBroadcaster.is())
             xBroadcaster->removeEventListener (this);
 
-        // Remove the dispose listener.
+        
         Reference<XComponent> xComponent (xBroadcaster, UNO_QUERY);
         if (xComponent.is())
             xComponent->removeEventListener (
@@ -179,7 +179,7 @@ void Listener::ReleaseListeners (void)
 
     if (mbListeningToFrame)
     {
-        // Listen to changes of certain properties.
+        
         Reference<frame::XFrame> xFrame (mxFrameWeak);
         if (xFrame.is())
         {
@@ -212,13 +212,13 @@ void Listener::ConnectToController (void)
 {
     ViewShell* pShell = mrSlideSorter.GetViewShell();
 
-    // Register at the controller of the main view shell (if we are that not
-    // ourself).
+    
+    
     if (pShell==NULL || ! pShell->IsMainViewShell())
     {
         Reference<frame::XController> xController (mrSlideSorter.GetXController());
 
-        // Listen to changes of certain properties.
+        
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         if (xSet.is())
         {
@@ -240,7 +240,7 @@ void Listener::ConnectToController (void)
             }
         }
 
-        // Listen for disposing events.
+        
         Reference<XComponent> xComponent (xController, UNO_QUERY);
         if (xComponent.is())
         {
@@ -264,7 +264,7 @@ void Listener::DisconnectFromController (void)
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         try
         {
-            // Remove the property listener.
+            
             if (xSet.is())
             {
                 xSet->removePropertyChangeListener (
@@ -275,7 +275,7 @@ void Listener::DisconnectFromController (void)
                     this);
             }
 
-            // Remove the dispose listener.
+            
             Reference<XComponent> xComponent (xController, UNO_QUERY);
             if (xComponent.is())
                 xComponent->removeEventListener (
@@ -306,7 +306,7 @@ void Listener::Notify (
         {
             case HINT_MODELCLEARED:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
-                {   // rhbz#965646 stop listening to dying document
+                {   
                     EndListening(rBroadcaster);
                     return;
                 }
@@ -326,14 +326,14 @@ void Listener::Notify (
         switch (rViewShellHint.GetHintId())
         {
             case ViewShellHint::HINT_PAGE_RESIZE_START:
-                // Initiate a model change but do nothing (well, not much)
-                // until we are told that all slides have been resized.
+                
+                
                 mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
                 mrController.HandleModelChange();
                 break;
 
             case ViewShellHint::HINT_PAGE_RESIZE_END:
-                // All slides have been resized.  The model has to be updated.
+                
                 mpModelChangeLock.reset();
                 break;
 
@@ -406,7 +406,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
         {
             ConnectToController();
-            //            mrController.GetPageSelector().GetCoreSelection();
+            
             UpdateEditMode();
         }
         break;
@@ -440,7 +440,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
 
 
 
-//=====  lang::XEventListener  ================================================
+
 
 void SAL_CALL Listener::disposing (
     const lang::EventObject& rEventObject)
@@ -467,7 +467,7 @@ void SAL_CALL Listener::disposing (
 
 
 
-//=====  document::XEventListener  ============================================
+
 
 void SAL_CALL Listener::notifyEvent (
     const document::EventObject& )
@@ -478,7 +478,7 @@ void SAL_CALL Listener::notifyEvent (
 
 
 
-//=====  beans::XPropertySetListener  =========================================
+
 
 void SAL_CALL Listener::propertyChange (
     const PropertyChangeEvent& rEvent)
@@ -500,10 +500,10 @@ void SAL_CALL Listener::propertyChange (
                 Any aPageNumber = xPageSet->getPropertyValue ("Number");
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
-                // The selection is already set but we call SelectPage()
-                // nevertheless in order to make the new current page the
-                // last recently selected page of the PageSelector.  This is
-                // used when making the selection visible.
+                
+                
+                
+                
                 mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
             }
@@ -513,8 +513,8 @@ void SAL_CALL Listener::propertyChange (
             }
             catch (lang::DisposedException&)
             {
-                // Something is already disposed.  There is not much we can
-                // do, except not to crash.
+                
+                
             }
         }
     }
@@ -530,7 +530,7 @@ void SAL_CALL Listener::propertyChange (
 
 
 
-//===== frame::XFrameActionListener  ==========================================
+
 
 void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
@@ -557,7 +557,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
 
 
 
-//===== accessibility::XAccessibleEventListener  ==============================
+
 
 void SAL_CALL Listener::notifyEvent (
     const AccessibleEventObject& )
@@ -578,8 +578,8 @@ void SAL_CALL Listener::disposing (void)
 
 void Listener::UpdateEditMode (void)
 {
-    // When there is a new controller then the edit mode may have changed at
-    // the same time.
+    
+    
     Reference<frame::XController> xController (mxControllerWeak);
     Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
     bool bIsMasterPageMode = false;
@@ -592,8 +592,8 @@ void Listener::UpdateEditMode (void)
         }
         catch (beans::UnknownPropertyException&)
         {
-            // When the property is not supported then the master page mode
-            // is not supported, too.
+            
+            
             bIsMasterPageMode = false;
         }
     }
@@ -605,31 +605,31 @@ void Listener::UpdateEditMode (void)
 
 void Listener::HandleModelChange (const SdrPage* pPage)
 {
-    // Notify model and selection observer about the page.  The return value
-    // of the model call acts as filter as to which events to pass to the
-    // selection observer.
+    
+    
+    
     if (mrSlideSorter.GetModel().NotifyPageEvent(pPage))
     {
-        // The page of the hint belongs (or belonged) to the model.
+        
 
-        // Tell the cache manager that the preview bitmaps for a deleted
-        // page can be removed from all caches.
+        
+        
         if (pPage!=NULL && ! pPage->IsInserted())
             cache::PageCacheManager::Instance()->ReleasePreviewBitmap(pPage);
 
         mrController.GetSelectionManager()->GetSelectionObserver()->NotifyPageEvent(pPage);
     }
 
-    // Tell the controller about the model change only when the document is
-    // in a sane state, not just in the middle of a larger change.
+    
+    
     SdDrawDocument* pDocument (mrSlideSorter.GetModel().GetDocument());
     if (pDocument != NULL
         && pDocument->GetMasterSdPageCount(PK_STANDARD) == pDocument->GetMasterSdPageCount(PK_NOTES))
     {
-        // A model change can make updates of some text fields necessary
-        // (like page numbers and page count.)  Invalidate all previews in
-        // the cache to cope with this.  Doing this on demand would be a
-        // nice optimization.
+        
+        
+        
+        
         cache::PageCacheManager::Instance()->InvalidateAllPreviewBitmaps(pDocument->getUnoModel());
 
         mrController.HandleModelChange();
@@ -643,8 +643,8 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     if (pPage == NULL)
         return;
 
-    // Invalidate the preview of the page (in all slide sorters that display
-    // it.)
+    
+    
     ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (cache::PageCacheManager::Instance());
     if ( ! pCacheManager)
         return;
@@ -657,8 +657,8 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
     mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(pPage);
 
-    // When the page is a master page then invalidate the previews of all
-    // pages that are linked to this master page.
+    
+    
     if (pPage->IsMasterPage())
     {
         for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
@@ -695,6 +695,6 @@ void Listener::ThrowIfDisposed (void)
 
 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

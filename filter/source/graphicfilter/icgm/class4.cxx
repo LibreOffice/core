@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@ double CGM::ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint )
     return fOrientation;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle )
 {
@@ -49,7 +49,7 @@ void CGM::ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle )
     rEndAngle = nTemp;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplGetVector( double* pVector )
 {
@@ -73,7 +73,7 @@ void CGM::ImplGetVector( double* pVector )
     pVector[ 3 ] *= mnVDCYmul;
 }
 
-// ---------------------------------------------------------------
+
 sal_Bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAngle )
 {
     FloatPoint  aPoint1, aPoint2;
@@ -109,10 +109,10 @@ void CGM::ImplDoClass4()
     if ( mbFirstOutPut )
         mpOutAct->FirstOutPut();
 
-    if ( mpBitmapInUse && ( mnElementID != 9 ) )    // process existend graphic
-    {                                               // because there are now no pending bitmap actions
+    if ( mpBitmapInUse && ( mnElementID != 9 ) )    
+    {                                               
         CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
-        // do anything with the bitmap
+        
         mpOutAct->DrawBitmap( pBmpDesc );
         delete mpBitmapInUse;
         mpBitmapInUse = NULL;
@@ -304,8 +304,8 @@ void CGM::ImplDoClass4()
                 if ( mpBitmapInUse )
                 {
                     CGMBitmap* pBmpDesc = mpBitmapInUse->GetNext();
-                    if ( pBmpDesc ) // we possibly get a bitmap back which does not fit to
-                    {               // to the previous -> we need to delete this one too
+                    if ( pBmpDesc ) 
+                    {               
                         mpOutAct->DrawBitmap( pBmpDesc->GetBitmap() );
                         delete pBmpDesc;
                     }
@@ -319,8 +319,8 @@ void CGM::ImplDoClass4()
 
             case 0x0a : /*Generalized Drawing Primitive*/
             {
-                ImplGetI( pElement->nIntegerPrecision );  //-Wall is this needed
-                ImplGetUI( pElement->nIntegerPrecision ); //-Wall is this needed
+                ImplGetI( pElement->nIntegerPrecision );  
+                ImplGetUI( pElement->nIntegerPrecision ); 
                 mnParaSize = mnElementSize;
             }
             break;
@@ -475,9 +475,9 @@ void CGM::ImplDoClass4()
 
                     sal_uInt32 nType = ImplGetUI16();
                     if ( nType == 0 )
-                        nType = 0;          // is PIE
+                        nType = 0;          
                     else
-                        nType = 1;          // is CHORD
+                        nType = 1;          
 
                     double fOrientation = 0;
                     mpOutAct->DrawEllipticalArc( aCenterPoint, fRadius, fOrientation, nType, fStartAngle, fEndAngle );
@@ -573,9 +573,9 @@ void CGM::ImplDoClass4()
 
                 sal_uInt32 nType = ImplGetUI16();
                 if ( nType == 0 )
-                    nType = 0;          // is PIE
+                    nType = 0;          
                 else
-                    nType = 1;          // is CHORD
+                    nType = 1;          
                 fOrientation = 0;
 
                 mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
@@ -649,9 +649,9 @@ void CGM::ImplDoClass4()
 
                 sal_uInt32 nType = ImplGetUI16();
                 if ( nType == 0 )
-                    nType = 0;          // is PIE
+                    nType = 0;          
                 else
-                    nType = 1;          // is CHORD
+                    nType = 1;          
 
                 if ( bDirection )
                     mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
@@ -667,31 +667,31 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x15 : /*Connection Edge   */                      // NS
+            case 0x15 : /*Connection Edge   */                      
             {
-//              if ( mbFigure )
-//                  mpOutAct->CloseRegion();
+
+
             }
             break;
-            case 0x16 : /*Hyperbolic Arc    */                      // NS
-            {
-                if ( mbFigure )
-                    mpOutAct->CloseRegion();
-            }
-            break;
-            case 0x17 : /*Parabolic Arc */                      // NS
+            case 0x16 : /*Hyperbolic Arc    */                      
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x18 : /*Non Uniform B-Spline  */              // NS
+            case 0x17 : /*Parabolic Arc */                      
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x19 : /*Non Uniform Rational B-Spline */      // NS
+            case 0x18 : /*Non Uniform B-Spline  */              
+            {
+                if ( mbFigure )
+                    mpOutAct->CloseRegion();
+            }
+            break;
+            case 0x19 : /*Non Uniform Rational B-Spline */      
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -741,19 +741,19 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x1b : /*Polysymbol    */                          // NS
+            case 0x1b : /*Polysymbol    */                          
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1c : /*Bitonal Tile  */                      // NS
+            case 0x1c : /*Bitonal Tile  */                      
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1d : /*Tile  */                              // NS
+            case 0x1d : /*Tile  */                              
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();

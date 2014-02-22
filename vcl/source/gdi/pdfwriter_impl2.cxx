@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pdfwriter_impl.hxx"
@@ -49,7 +49,7 @@ using namespace com::sun::star::beans;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
-// -----------------------------------------------------------------------------
+
 
 void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
@@ -64,7 +64,7 @@ void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gra
     m_rOuterFace.Pop();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
@@ -75,9 +75,9 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         Point           aPoint( i_rPoint );
         Size            aSize( i_rSize );
 
-        // #i19065# Negative sizes have mirror semantics on
-        // OutputDevice. BitmapEx and co. have no idea about that, so
-        // perform that _before_ doing anything with aBitmapEx.
+        
+        
+        
         sal_uLong nMirrorFlags(BMP_MIRROR_NONE);
         if( aSize.Width() < 0 )
         {
@@ -98,7 +98,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         }
         if( i_rContext.m_nMaxImageResolution > 50 )
         {
-            // do downsampling if necessary
+            
             const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic( i_pDummyVDev->LogicToPixel( aSize ), MAP_TWIP ) );
             const Size      aBmpSize( aBitmapEx.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();
@@ -106,12 +106,12 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             const double    fMaxPixelX = aDstSizeTwip.Width() * i_rContext.m_nMaxImageResolution / 1440.0;
             const double    fMaxPixelY = aDstSizeTwip.Height() * i_rContext.m_nMaxImageResolution / 1440.0;
 
-            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            
             if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
                 ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
                 ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
             {
-                // do scaling
+                
                 Size            aNewBmpSize;
                 const double    fBmpWH = fBmpPixelX / fBmpPixelY;
                 const double    fMaxWH = fMaxPixelX / fMaxPixelY;
@@ -129,7 +129,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
                 if( aNewBmpSize.Width() && aNewBmpSize.Height() )
                 {
-                    // #i121233# Use best quality for PDF exports
+                    
                     aBitmapEx.Scale( aNewBmpSize, BMP_SCALE_BESTQUALITY );
                 }
                 else
@@ -161,12 +161,12 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             bool bTrueColorJPG = true;
             if ( bUseJPGCompression )
             {
-                sal_uInt32 nZippedFileSize;     // sj: we will calculate the filesize of a zipped bitmap
-                {                               // to determine if jpeg compression is useful
+                sal_uInt32 nZippedFileSize;     
+                {                               
                     SvMemoryStream aTemp;
                     aTemp.SetCompressMode( aTemp.GetCompressMode() | COMPRESSMODE_ZBITMAP );
-                    aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
-                    WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
+                    aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  
+                    WriteDIBBitmapEx(aBitmapEx, aTemp); 
                     aTemp.Seek( STREAM_SEEK_TO_END );
                     nZippedFileSize = aTemp.Tell();
                 }
@@ -243,7 +243,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const vcl::PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )
 {
@@ -408,7 +408,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     const Size&     rSize= pA->GetSize();
                     const Gradient& rTransparenceGradient = pA->GetGradient();
 
-                    // special case constant alpha value
+                    
                     if( rTransparenceGradient.GetStartColor() == rTransparenceGradient.GetEndColor() )
                     {
                         const Color aTransCol( rTransparenceGradient.GetStartColor() );
@@ -421,8 +421,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     {
                         const Size  aDstSizeTwip( pDummyVDev->PixelToLogic( pDummyVDev->LogicToPixel( rSize ), MAP_TWIP ) );
 
-                        // i#115962# Always use at least 300 DPI for bitmap conversion of transparence gradients,
-                        // else the quality is not acceptable (see bugdoc as example)
+                        
+                        
                         sal_Int32 nMaxBmpDPI(300);
 
                         if( i_rContext.m_nMaxImageResolution > 50 )
@@ -456,7 +456,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     aTmpMtf.Scale( fScaleX, fScaleY );
                                 aTmpMtf.SetPrefMapMode( aMapMode );
 
-                                // create paint bitmap
+                                
                                 aTmpMtf.WindStart();
                                 aTmpMtf.Play( pVDev, aPoint, aDstSize );
                                 aTmpMtf.WindStart();
@@ -465,7 +465,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 pVDev->EnableMapMode( true );
 
-                                // create mask bitmap
+                                
                                 pVDev->SetLineColor( COL_BLACK );
                                 pVDev->SetFillColor( COL_BLACK );
                                 pVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
@@ -478,7 +478,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 pVDev->EnableMapMode( true );
 
-                                // create alpha mask from gradient
+                                
                                 pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
                                 pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
                                 pVDev->SetDrawMode( DRAWMODE_DEFAULT );
@@ -612,7 +612,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     if(SvtGraphicStroke::joinNone == aStroke.getJoinType()
                                         && fStrokeWidth > 0.0)
                                     {
-                                        // emulate no edge rounding by handling single edges
+                                        
                                         const sal_uInt16 nPoints(aPath.GetSize());
                                         const bool bCurve(aPath.HasFlags());
 
@@ -699,7 +699,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     if( ! bUseCache )
                                     {
 
-                                        // paint graphic to metafile
+                                        
                                         GDIMetaFile aPattern;
                                         pDummyVDev->SetConnectMetaFile( &aPattern );
                                         pDummyVDev->Push();
@@ -711,16 +711,16 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                         aPattern.WindStart();
 
                                         MapMode aPatternMapMode( aPatternGraphic.GetPrefMapMode() );
-                                        // prepare pattern from metafile
+                                        
                                         Size aPrefSize( aPatternGraphic.GetPrefSize() );
-                                        // FIXME: this magic -1 shouldn't be necessary
+                                        
                                         aPrefSize.Width() -= 1;
                                         aPrefSize.Height() -= 1;
                                         aPrefSize = m_rOuterFace.GetReferenceDevice()->
                                             LogicToLogic( aPrefSize,
                                                           &aPatternMapMode,
                                                           &m_rOuterFace.GetReferenceDevice()->GetMapMode() );
-                                        // build bounding rectangle of pattern
+                                        
                                         Rectangle aBound( Point( 0, 0 ), aPrefSize );
                                         m_rOuterFace.BeginPattern( aBound );
                                         m_rOuterFace.Push();
@@ -733,12 +733,12 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                         nPattern = m_rOuterFace.EndPattern( aPatTransform );
 
-                                        // try some caching and reuse pattern
+                                        
                                         mnCachePatternId = nPattern;
                                         maCacheFill = aFill;
                                     }
 
-                                    // draw polypolygon with pattern fill
+                                    
                                     PolyPolygon aPath;
                                     aFill.getPath( aPath );
                                     m_rOuterFace.DrawPolyPolygon( aPath, nPattern, aFill.getFillRule() == SvtGraphicFill::fillEvenOdd );
@@ -758,10 +758,10 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                         if (sComment == sSeqEnd)
                                             break;
                                     }
-                                    // #i44496#
-                                    // the replacement action for stroke is a filled rectangle
-                                    // the set fillcolor of the replacement is part of the graphics
-                                    // state and must not be skipped
+                                    
+                                    
+                                    
+                                    
                                     else if( pAction->GetType() == META_FILLCOLOR_ACTION )
                                     {
                                         const MetaFillColorAction* pMA = (const MetaFillColorAction*) pAction;
@@ -1039,20 +1039,20 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                 case( META_RASTEROP_ACTION ):
                 {
-                    // !!! >>> we don't want to support this actions
+                    
                 }
                 break;
 
                 case( META_REFPOINT_ACTION ):
                 {
-                    // !!! >>> we don't want to support this actions
+                    
                 }
                 break;
 
                 default:
-                    // #i24604# Made assertion fire only once per
-                    // metafile. The asserted actions here are all
-                    // deprecated
+                    
+                    
+                    
                     if( !bAssertionFired )
                     {
                         bAssertionFired = true;
@@ -1067,7 +1067,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
     delete pPrivateDevice;
 }
 
-// Encryption methods
+
 
 /* a crutch to transport an rtlDigest safely though UNO API
    this is needed for the PDF export dialog, which otherwise would have to pass
@@ -1088,7 +1088,7 @@ public:
     : maUDigest( rtl_digest_createMD5() )
     {
         maID = reinterpret_cast< sal_IntPtr >(this);
-        while( sTransporters.find( maID ) != sTransporters.end() ) // paranoia mode
+        while( sTransporters.find( maID ) != sTransporters.end() ) 
             maID++;
         sTransporters[ maID ] = this;
     }
@@ -1112,7 +1112,7 @@ public:
         }
     }
 
-    // XMaterialHolder
+    
     virtual uno::Any SAL_CALL getMaterial() throw()
     {
         return uno::makeAny( sal_Int64(maID) );
@@ -1165,13 +1165,13 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( register sal_Int32 nObject )
         m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)nObject;
         m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 8 );
         m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 16 );
-        // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
-        // do the MD5 hash
+        
+        
         sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-        // the i+2 to take into account the generation number, always zero
+        
         rtl_digest_MD5( &m_aContext.Encryption.EncryptionKey[0], i+2, nMD5Sum, sizeof(nMD5Sum) );
-        // initialize the RC4 with the key
-        // key length: see algorithm 3.1, step 4: (N+5) max 16
+        
+        
         rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, NULL, 0 );
     }
 }
@@ -1184,13 +1184,13 @@ void PDFWriterImpl::enableStringEncryption( register sal_Int32 nObject )
         m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)nObject;
         m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 8 );
         m_aContext.Encryption.EncryptionKey[i++] = (sal_uInt8)( nObject >> 16 );
-        // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
-        // do the MD5 hash
+        
+        
         sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-        // the i+2 to take into account the generation number, always zero
+        
         rtl_digest_MD5( &m_aContext.Encryption.EncryptionKey[0], i+2, nMD5Sum, sizeof(nMD5Sum) );
-        // initialize the RC4 with the key
-        // key length: see algorithm 3.1, step 4: (N+5) max 16
+        
+        
         rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, NULL, 0 );
     }
 }
@@ -1210,7 +1210,7 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
         EncHashTransporter* pTransporter = new EncHashTransporter;
         xResult = pTransporter;
 
-        // get padded passwords
+        
         sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
         padPassword( i_rOwnerPassword.isEmpty() ? i_rUserPassword : i_rOwnerPassword, aPadOPW );
         padPassword( i_rUserPassword, aPadUPW );
@@ -1227,7 +1227,7 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
         else
             xResult.clear();
 
-        // trash temporary padded cleartext PWDs
+        
         memset( aPadOPW, 0, sizeof(aPadOPW) );
         memset( aPadUPW, 0, sizeof(aPadUPW) );
 
@@ -1273,13 +1273,13 @@ sal_Int32 PDFWriterImpl::computeAccessPermissions( const vcl::PDFWriter::PDFEncr
     nAccessPermissions |= ( i_rProperties.CanCopyOrExtract ) ?   1 << 4 : 0;
     nAccessPermissions |= ( i_rProperties.CanAddOrModify ) ? 1 << 5 : 0;
     o_rKeyLength = SECUR_40BIT_KEY;
-    o_rRC4KeyLength = SECUR_40BIT_KEY+5; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 5
+    o_rRC4KeyLength = SECUR_40BIT_KEY+5; 
 
     if( i_rProperties.Security128bit )
     {
         o_rKeyLength = SECUR_128BIT_KEY;
-        o_rRC4KeyLength = 16; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16, thus maximum
-        // permitted value is 16
+        o_rRC4KeyLength = 16; 
+        
         nAccessPermissions |= ( i_rProperties.CanFillInteractive ) ?         1 << 8 : 0;
         nAccessPermissions |= ( i_rProperties.CanExtractForAccessibility ) ? 1 << 9 : 0;
         nAccessPermissions |= ( i_rProperties.CanAssemble ) ?                1 << 10 : 0;
@@ -1295,17 +1295,17 @@ Implements Algorithm 3.2, step 1 only
 */
 void PDFWriterImpl::padPassword( const OUString& i_rPassword, sal_uInt8* o_pPaddedPW )
 {
-    // get ansi-1252 version of the password string CHECKIT ! i12626
+    
     OString aString( OUStringToOString( i_rPassword, RTL_TEXTENCODING_MS_1252 ) );
 
-    //copy the string to the target
+    
     sal_Int32 nToCopy = ( aString.getLength() < ENCRYPTED_PWD_SIZE ) ? aString.getLength() : ENCRYPTED_PWD_SIZE;
     sal_Int32 nCurrentChar;
 
     for( nCurrentChar = 0; nCurrentChar < nToCopy; nCurrentChar++ )
         o_pPaddedPW[nCurrentChar] = (sal_uInt8)( aString[nCurrentChar] );
 
-    //pad it with standard byte string
+    
     sal_Int32 i,y;
     for( i = nCurrentChar, y = 0 ; i < ENCRYPTED_PWD_SIZE; i++, y++ )
         o_pPaddedPW[i] = s_nPadString[y];
@@ -1326,17 +1326,17 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
     bool bSuccess = true;
     sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
 
-    // transporter contains an MD5 digest with the padded user password already
+    
     rtlDigest aDigest = i_pTransporter->getUDigest();
     rtlDigestError nError = rtl_Digest_E_None;
     if( aDigest )
     {
-        //step 3
+        
         if( ! io_rProperties.OValue.empty() )
             nError = rtl_digest_updateMD5( aDigest, &io_rProperties.OValue[0] , sal_Int32(io_rProperties.OValue.size()) );
         else
             bSuccess = false;
-        //Step 4
+        
         sal_uInt8 nPerm[4];
 
         nPerm[0] = (sal_uInt8)i_nAccessPermissions;
@@ -1347,15 +1347,15 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
         if( nError == rtl_Digest_E_None )
             nError = rtl_digest_updateMD5( aDigest, nPerm , sizeof( nPerm ) );
 
-        //step 5, get the document ID, binary form
+        
         if( nError == rtl_Digest_E_None )
             nError = rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) );
-        //get the digest
+        
         if( nError == rtl_Digest_E_None )
         {
             rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
 
-            //step 6, only if 128 bit
+            
             if( io_rProperties.Security128bit )
             {
                 for( sal_Int32 i = 0; i < 50; i++ )
@@ -1380,7 +1380,7 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
 
     i_pTransporter->invalidate();
 
-    //Step 7
+    
     if( bSuccess )
     {
         io_rProperties.EncryptionKey.resize( MAXIMUM_RC4_KEY_LENGTH );
@@ -1411,8 +1411,8 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
     rtlCipher aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
     if( aDigest && aCipher)
     {
-        //step 1 already done, data is in i_pPaddedOwnerPassword
-        //step 2
+        
+        
 
         rtlDigestError nError = rtl_digest_updateMD5( aDigest, i_pPaddedOwnerPassword, ENCRYPTED_PWD_SIZE );
         if( nError == rtl_Digest_E_None )
@@ -1420,7 +1420,7 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
             sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
 
             rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
-//step 3, only if 128 bit
+
             if( i_nKeyLength == SECUR_128BIT_KEY )
             {
                 sal_Int32 i;
@@ -1435,30 +1435,30 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
                     rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
                 }
             }
-            //Step 4, the key is in nMD5Sum
-            //step 5 already done, data is in i_pPaddedUserPassword
-            //step 6
+            
+            
+            
             rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
                                      nMD5Sum, i_nKeyLength , NULL, 0 );
-            // encrypt the user password using the key set above
-            rtl_cipher_encodeARCFOUR( aCipher, i_pPaddedUserPassword, ENCRYPTED_PWD_SIZE, // the data to be encrypted
-                                      &io_rOValue[0], sal_Int32(io_rOValue.size()) ); //encrypted data
-            //Step 7, only if 128 bit
+            
+            rtl_cipher_encodeARCFOUR( aCipher, i_pPaddedUserPassword, ENCRYPTED_PWD_SIZE, 
+                                      &io_rOValue[0], sal_Int32(io_rOValue.size()) ); 
+            
             if( i_nKeyLength == SECUR_128BIT_KEY )
             {
                 sal_uInt32 i, y;
-                sal_uInt8 nLocalKey[ SECUR_128BIT_KEY ]; // 16 = 128 bit key
+                sal_uInt8 nLocalKey[ SECUR_128BIT_KEY ]; 
 
-                for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
+                for( i = 1; i <= 19; i++ ) 
                 {
                     for( y = 0; y < sizeof( nLocalKey ); y++ )
                         nLocalKey[y] = (sal_uInt8)( nMD5Sum[y] ^ i );
 
                     rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                            nLocalKey, SECUR_128BIT_KEY, NULL, 0 ); //destination data area, on init can be NULL
-                    rtl_cipher_encodeARCFOUR( aCipher, &io_rOValue[0], sal_Int32(io_rOValue.size()), // the data to be encrypted
-                                              &io_rOValue[0], sal_Int32(io_rOValue.size()) ); // encrypted data, can be the same as the input, encrypt "in place"
-                    //step 8, store in class data member
+                                            nLocalKey, SECUR_128BIT_KEY, NULL, 0 ); 
+                    rtl_cipher_encodeARCFOUR( aCipher, &io_rOValue[0], sal_Int32(io_rOValue.size()), 
+                                              &io_rOValue[0], sal_Int32(io_rOValue.size()) ); 
+                    
                 }
             }
         }
@@ -1495,33 +1495,33 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
     rtlCipher aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
     if( aDigest && aCipher )
     {
-        //step 1, common to both 3.4 and 3.5
+        
         if( computeEncryptionKey( i_pTransporter, io_rProperties, i_nAccessPermissions ) )
         {
-            // prepare encryption key for object
+            
             for( sal_Int32 i = i_nKeyLength, y = 0; y < 5 ; y++ )
                 io_rProperties.EncryptionKey[i++] = 0;
 
             if( io_rProperties.Security128bit == false )
             {
-                //3.4
-                //step 2 and 3
+                
+                
                 rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                        &io_rProperties.EncryptionKey[0], 5 , // key and key length
-                                        NULL, 0 ); //destination data area
-                // encrypt the user password using the key set above, save for later use
-                rtl_cipher_encodeARCFOUR( aCipher, s_nPadString, sizeof( s_nPadString ), // the data to be encrypted
-                                          &io_rProperties.UValue[0], sal_Int32(io_rProperties.UValue.size()) ); //encrypted data, stored in class data member
+                                        &io_rProperties.EncryptionKey[0], 5 , 
+                                        NULL, 0 ); 
+                
+                rtl_cipher_encodeARCFOUR( aCipher, s_nPadString, sizeof( s_nPadString ), 
+                                          &io_rProperties.UValue[0], sal_Int32(io_rProperties.UValue.size()) ); 
             }
             else
             {
-                //or 3.5, for 128 bit security
-                //step6, initilize the last 16 bytes of the encrypted user password to 0
+                
+                
                 for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                     io_rProperties.UValue[i] = 0;
-                //step 2
+                
                 rtlDigestError nError = rtl_digest_updateMD5( aDigest, s_nPadString, sizeof( s_nPadString ) );
-                //step 3
+                
                 if( nError == rtl_Digest_E_None )
                     nError = rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) );
                 else
@@ -1529,25 +1529,25 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
 
                 sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
                 rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
-                //Step 4
+                
                 rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                        &io_rProperties.EncryptionKey[0], SECUR_128BIT_KEY, NULL, 0 ); //destination data area
-                rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum, sizeof( nMD5Sum ), // the data to be encrypted
-                                          &io_rProperties.UValue[0], sizeof( nMD5Sum ) ); //encrypted data, stored in class data member
-                //step 5
+                                        &io_rProperties.EncryptionKey[0], SECUR_128BIT_KEY, NULL, 0 ); 
+                rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum, sizeof( nMD5Sum ), 
+                                          &io_rProperties.UValue[0], sizeof( nMD5Sum ) ); 
+                
                 sal_uInt32 i, y;
                 sal_uInt8 nLocalKey[SECUR_128BIT_KEY];
 
-                for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
+                for( i = 1; i <= 19; i++ ) 
                 {
                     for( y = 0; y < sizeof( nLocalKey ) ; y++ )
                         nLocalKey[y] = (sal_uInt8)( io_rProperties.EncryptionKey[y] ^ i );
 
                     rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                            nLocalKey, SECUR_128BIT_KEY, // key and key length
-                                            NULL, 0 ); //destination data area, on init can be NULL
-                    rtl_cipher_encodeARCFOUR( aCipher, &io_rProperties.UValue[0], SECUR_128BIT_KEY, // the data to be encrypted
-                                              &io_rProperties.UValue[0], SECUR_128BIT_KEY ); // encrypted data, can be the same as the input, encrypt "in place"
+                                            nLocalKey, SECUR_128BIT_KEY, 
+                                            NULL, 0 ); 
+                    rtl_cipher_encodeARCFOUR( aCipher, &io_rProperties.UValue[0], SECUR_128BIT_KEY, 
+                                              &io_rProperties.UValue[0], SECUR_128BIT_KEY ); 
                 }
             }
         }
@@ -1625,7 +1625,7 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
         const sal_uInt8 * pByte = static_cast<sal_uInt8*>(i_pLine) + (nIndex/8);
         sal_uInt8 nByte = *pByte;
 
-        // run up to byte boundary
+        
         long nBitInByte = (nIndex & 7);
         if( nBitInByte )
         {
@@ -1724,232 +1724,232 @@ struct PixelCode
 
 static const PixelCode WhitePixelCodes[] =
 {
-    { 0, 8, 0x35 },     // 0011 0101
-    { 1, 6, 0x7 },      // 0001 11
-    { 2, 4, 0x7 },      // 0111
-    { 3, 4, 0x8 },      // 1000
-    { 4, 4, 0xB },      // 1011
-    { 5, 4, 0xC },      // 1100
-    { 6, 4, 0xE },      // 1110
-    { 7, 4, 0xF },      // 1111
-    { 8, 5, 0x13 },     // 1001 1
-    { 9, 5, 0x14 },     // 1010 0
-    { 10, 5, 0x7 },     // 0011 1
-    { 11, 5, 0x8 },     // 0100 0
-    { 12, 6, 0x8 },     // 0010 00
-    { 13, 6, 0x3 },     // 0000 11
-    { 14, 6, 0x34 },    // 1101 00
-    { 15, 6, 0x35 },    // 1101 01
-    { 16, 6, 0x2A },    // 1010 10
-    { 17, 6, 0x2B },    // 1010 11
-    { 18, 7, 0x27 },    // 0100 111
-    { 19, 7, 0xC },     // 0001 100
-    { 20, 7, 0x8 },     // 0001 000
-    { 21, 7, 0x17 },    // 0010 111
-    { 22, 7, 0x3 },     // 0000 011
-    { 23, 7, 0x4 },     // 0000 100
-    { 24, 7, 0x28 },    // 0101 000
-    { 25, 7, 0x2B },    // 0101 011
-    { 26, 7, 0x13 },    // 0010 011
-    { 27, 7, 0x24 },    // 0100 100
-    { 28, 7, 0x18 },    // 0011 000
-    { 29, 8, 0x2 },     // 0000 0010
-    { 30, 8, 0x3 },     // 0000 0011
-    { 31, 8, 0x1A },    // 0001 1010
-    { 32, 8, 0x1B },    // 0001 1011
-    { 33, 8, 0x12 },    // 0001 0010
-    { 34, 8, 0x13 },    // 0001 0011
-    { 35, 8, 0x14 },    // 0001 0100
-    { 36, 8, 0x15 },    // 0001 0101
-    { 37, 8, 0x16 },    // 0001 0110
-    { 38, 8, 0x17 },    // 0001 0111
-    { 39, 8, 0x28 },    // 0010 1000
-    { 40, 8, 0x29 },    // 0010 1001
-    { 41, 8, 0x2A },    // 0010 1010
-    { 42, 8, 0x2B },    // 0010 1011
-    { 43, 8, 0x2C },    // 0010 1100
-    { 44, 8, 0x2D },    // 0010 1101
-    { 45, 8, 0x4 },     // 0000 0100
-    { 46, 8, 0x5 },     // 0000 0101
-    { 47, 8, 0xA },     // 0000 1010
-    { 48, 8, 0xB },     // 0000 1011
-    { 49, 8, 0x52 },    // 0101 0010
-    { 50, 8, 0x53 },    // 0101 0011
-    { 51, 8, 0x54 },    // 0101 0100
-    { 52, 8, 0x55 },    // 0101 0101
-    { 53, 8, 0x24 },    // 0010 0100
-    { 54, 8, 0x25 },    // 0010 0101
-    { 55, 8, 0x58 },    // 0101 1000
-    { 56, 8, 0x59 },    // 0101 1001
-    { 57, 8, 0x5A },    // 0101 1010
-    { 58, 8, 0x5B },    // 0101 1011
-    { 59, 8, 0x4A },    // 0100 1010
-    { 60, 8, 0x4B },    // 0100 1011
-    { 61, 8, 0x32 },    // 0011 0010
-    { 62, 8, 0x33 },    // 0011 0011
-    { 63, 8, 0x34 },    // 0011 0100
-    { 64, 5, 0x1B },    // 1101 1
-    { 128, 5, 0x12 },   // 1001 0
-    { 192, 6, 0x17 },   // 0101 11
-    { 256, 7, 0x37 },   // 0110 111
-    { 320, 8, 0x36 },   // 0011 0110
-    { 384, 8, 0x37 },   // 0011 0111
-    { 448, 8, 0x64 },   // 0110 0100
-    { 512, 8, 0x65 },   // 0110 0101
-    { 576, 8, 0x68 },   // 0110 1000
-    { 640, 8, 0x67 },   // 0110 0111
-    { 704, 9, 0xCC },   // 0110 0110 0
-    { 768, 9, 0xCD },   // 0110 0110 1
-    { 832, 9, 0xD2 },   // 0110 1001 0
-    { 896, 9, 0xD3 },   // 0110 1001 1
-    { 960, 9, 0xD4 },   // 0110 1010 0
-    { 1024, 9, 0xD5 },  // 0110 1010 1
-    { 1088, 9, 0xD6 },  // 0110 1011 0
-    { 1152, 9, 0xD7 },  // 0110 1011 1
-    { 1216, 9, 0xD8 },  // 0110 1100 0
-    { 1280, 9, 0xD9 },  // 0110 1100 1
-    { 1344, 9, 0xDA },  // 0110 1101 0
-    { 1408, 9, 0xDB },  // 0110 1101 1
-    { 1472, 9, 0x98 },  // 0100 1100 0
-    { 1536, 9, 0x99 },  // 0100 1100 1
-    { 1600, 9, 0x9A },  // 0100 1101 0
-    { 1664, 6, 0x18 },  // 0110 00
-    { 1728, 9, 0x9B },  // 0100 1101 1
-    { 1792, 11, 0x8 },  // 0000 0001 000
-    { 1856, 11, 0xC },  // 0000 0001 100
-    { 1920, 11, 0xD },  // 0000 0001 101
-    { 1984, 12, 0x12 }, // 0000 0001 0010
-    { 2048, 12, 0x13 }, // 0000 0001 0011
-    { 2112, 12, 0x14 }, // 0000 0001 0100
-    { 2176, 12, 0x15 }, // 0000 0001 0101
-    { 2240, 12, 0x16 }, // 0000 0001 0110
-    { 2304, 12, 0x17 }, // 0000 0001 0111
-    { 2368, 12, 0x1C }, // 0000 0001 1100
-    { 2432, 12, 0x1D }, // 0000 0001 1101
-    { 2496, 12, 0x1E }, // 0000 0001 1110
-    { 2560, 12, 0x1F }  // 0000 0001 1111
+    { 0, 8, 0x35 },     
+    { 1, 6, 0x7 },      
+    { 2, 4, 0x7 },      
+    { 3, 4, 0x8 },      
+    { 4, 4, 0xB },      
+    { 5, 4, 0xC },      
+    { 6, 4, 0xE },      
+    { 7, 4, 0xF },      
+    { 8, 5, 0x13 },     
+    { 9, 5, 0x14 },     
+    { 10, 5, 0x7 },     
+    { 11, 5, 0x8 },     
+    { 12, 6, 0x8 },     
+    { 13, 6, 0x3 },     
+    { 14, 6, 0x34 },    
+    { 15, 6, 0x35 },    
+    { 16, 6, 0x2A },    
+    { 17, 6, 0x2B },    
+    { 18, 7, 0x27 },    
+    { 19, 7, 0xC },     
+    { 20, 7, 0x8 },     
+    { 21, 7, 0x17 },    
+    { 22, 7, 0x3 },     
+    { 23, 7, 0x4 },     
+    { 24, 7, 0x28 },    
+    { 25, 7, 0x2B },    
+    { 26, 7, 0x13 },    
+    { 27, 7, 0x24 },    
+    { 28, 7, 0x18 },    
+    { 29, 8, 0x2 },     
+    { 30, 8, 0x3 },     
+    { 31, 8, 0x1A },    
+    { 32, 8, 0x1B },    
+    { 33, 8, 0x12 },    
+    { 34, 8, 0x13 },    
+    { 35, 8, 0x14 },    
+    { 36, 8, 0x15 },    
+    { 37, 8, 0x16 },    
+    { 38, 8, 0x17 },    
+    { 39, 8, 0x28 },    
+    { 40, 8, 0x29 },    
+    { 41, 8, 0x2A },    
+    { 42, 8, 0x2B },    
+    { 43, 8, 0x2C },    
+    { 44, 8, 0x2D },    
+    { 45, 8, 0x4 },     
+    { 46, 8, 0x5 },     
+    { 47, 8, 0xA },     
+    { 48, 8, 0xB },     
+    { 49, 8, 0x52 },    
+    { 50, 8, 0x53 },    
+    { 51, 8, 0x54 },    
+    { 52, 8, 0x55 },    
+    { 53, 8, 0x24 },    
+    { 54, 8, 0x25 },    
+    { 55, 8, 0x58 },    
+    { 56, 8, 0x59 },    
+    { 57, 8, 0x5A },    
+    { 58, 8, 0x5B },    
+    { 59, 8, 0x4A },    
+    { 60, 8, 0x4B },    
+    { 61, 8, 0x32 },    
+    { 62, 8, 0x33 },    
+    { 63, 8, 0x34 },    
+    { 64, 5, 0x1B },    
+    { 128, 5, 0x12 },   
+    { 192, 6, 0x17 },   
+    { 256, 7, 0x37 },   
+    { 320, 8, 0x36 },   
+    { 384, 8, 0x37 },   
+    { 448, 8, 0x64 },   
+    { 512, 8, 0x65 },   
+    { 576, 8, 0x68 },   
+    { 640, 8, 0x67 },   
+    { 704, 9, 0xCC },   
+    { 768, 9, 0xCD },   
+    { 832, 9, 0xD2 },   
+    { 896, 9, 0xD3 },   
+    { 960, 9, 0xD4 },   
+    { 1024, 9, 0xD5 },  
+    { 1088, 9, 0xD6 },  
+    { 1152, 9, 0xD7 },  
+    { 1216, 9, 0xD8 },  
+    { 1280, 9, 0xD9 },  
+    { 1344, 9, 0xDA },  
+    { 1408, 9, 0xDB },  
+    { 1472, 9, 0x98 },  
+    { 1536, 9, 0x99 },  
+    { 1600, 9, 0x9A },  
+    { 1664, 6, 0x18 },  
+    { 1728, 9, 0x9B },  
+    { 1792, 11, 0x8 },  
+    { 1856, 11, 0xC },  
+    { 1920, 11, 0xD },  
+    { 1984, 12, 0x12 }, 
+    { 2048, 12, 0x13 }, 
+    { 2112, 12, 0x14 }, 
+    { 2176, 12, 0x15 }, 
+    { 2240, 12, 0x16 }, 
+    { 2304, 12, 0x17 }, 
+    { 2368, 12, 0x1C }, 
+    { 2432, 12, 0x1D }, 
+    { 2496, 12, 0x1E }, 
+    { 2560, 12, 0x1F }  
 };
 
 static const PixelCode BlackPixelCodes[] =
 {
-    { 0, 10, 0x37 },    // 0000 1101 11
-    { 1, 3, 0x2 },      // 010
-    { 2, 2, 0x3 },      // 11
-    { 3, 2, 0x2 },      // 10
-    { 4, 3, 0x3 },      // 011
-    { 5, 4, 0x3 },      // 0011
-    { 6, 4, 0x2 },      // 0010
-    { 7, 5, 0x3 },      // 0001 1
-    { 8, 6, 0x5 },      // 0001 01
-    { 9, 6, 0x4 },      // 0001 00
-    { 10, 7, 0x4 },     // 0000 100
-    { 11, 7, 0x5 },     // 0000 101
-    { 12, 7, 0x7 },     // 0000 111
-    { 13, 8, 0x4 },     // 0000 0100
-    { 14, 8, 0x7 },     // 0000 0111
-    { 15, 9, 0x18 },    // 0000 1100 0
-    { 16, 10, 0x17 },   // 0000 0101 11
-    { 17, 10, 0x18 },   // 0000 0110 00
-    { 18, 10, 0x8 },    // 0000 0010 00
-    { 19, 11, 0x67 },   // 0000 1100 111
-    { 20, 11, 0x68 },   // 0000 1101 000
-    { 21, 11, 0x6C },   // 0000 1101 100
-    { 22, 11, 0x37 },   // 0000 0110 111
-    { 23, 11, 0x28 },   // 0000 0101 000
-    { 24, 11, 0x17 },   // 0000 0010 111
-    { 25, 11, 0x18 },   // 0000 0011 000
-    { 26, 12, 0xCA },   // 0000 1100 1010
-    { 27, 12, 0xCB },   // 0000 1100 1011
-    { 28, 12, 0xCC },   // 0000 1100 1100
-    { 29, 12, 0xCD },   // 0000 1100 1101
-    { 30, 12, 0x68 },   // 0000 0110 1000
-    { 31, 12, 0x69 },   // 0000 0110 1001
-    { 32, 12, 0x6A },   // 0000 0110 1010
-    { 33, 12, 0x6B },   // 0000 0110 1011
-    { 34, 12, 0xD2 },   // 0000 1101 0010
-    { 35, 12, 0xD3 },   // 0000 1101 0011
-    { 36, 12, 0xD4 },   // 0000 1101 0100
-    { 37, 12, 0xD5 },   // 0000 1101 0101
-    { 38, 12, 0xD6 },   // 0000 1101 0110
-    { 39, 12, 0xD7 },   // 0000 1101 0111
-    { 40, 12, 0x6C },   // 0000 0110 1100
-    { 41, 12, 0x6D },   // 0000 0110 1101
-    { 42, 12, 0xDA },   // 0000 1101 1010
-    { 43, 12, 0xDB },   // 0000 1101 1011
-    { 44, 12, 0x54 },   // 0000 0101 0100
-    { 45, 12, 0x55 },   // 0000 0101 0101
-    { 46, 12, 0x56 },   // 0000 0101 0110
-    { 47, 12, 0x57 },   // 0000 0101 0111
-    { 48, 12, 0x64 },   // 0000 0110 0100
-    { 49, 12, 0x65 },   // 0000 0110 0101
-    { 50, 12, 0x52 },   // 0000 0101 0010
-    { 51, 12, 0x53 },   // 0000 0101 0011
-    { 52, 12, 0x24 },   // 0000 0010 0100
-    { 53, 12, 0x37 },   // 0000 0011 0111
-    { 54, 12, 0x38 },   // 0000 0011 1000
-    { 55, 12, 0x27 },   // 0000 0010 0111
-    { 56, 12, 0x28 },   // 0000 0010 1000
-    { 57, 12, 0x58 },   // 0000 0101 1000
-    { 58, 12, 0x59 },   // 0000 0101 1001
-    { 59, 12, 0x2B },   // 0000 0010 1011
-    { 60, 12, 0x2C },   // 0000 0010 1100
-    { 61, 12, 0x5A },   // 0000 0101 1010
-    { 62, 12, 0x66 },   // 0000 0110 0110
-    { 63, 12, 0x67 },   // 0000 0110 0111
-    { 64, 10, 0xF },    // 0000 0011 11
-    { 128, 12, 0xC8 },  // 0000 1100 1000
-    { 192, 12, 0xC9 },  // 0000 1100 1001
-    { 256, 12, 0x5B },  // 0000 0101 1011
-    { 320, 12, 0x33 },  // 0000 0011 0011
-    { 384, 12, 0x34 },  // 0000 0011 0100
-    { 448, 12, 0x35 },  // 0000 0011 0101
-    { 512, 13, 0x6C },  // 0000 0011 0110 0
-    { 576, 13, 0x6D },  // 0000 0011 0110 1
-    { 640, 13, 0x4A },  // 0000 0010 0101 0
-    { 704, 13, 0x4B },  // 0000 0010 0101 1
-    { 768, 13, 0x4C },  // 0000 0010 0110 0
-    { 832, 13, 0x4D },  // 0000 0010 0110 1
-    { 896, 13, 0x72 },  // 0000 0011 1001 0
-    { 960, 13, 0x73 },  // 0000 0011 1001 1
-    { 1024, 13, 0x74 }, // 0000 0011 1010 0
-    { 1088, 13, 0x75 }, // 0000 0011 1010 1
-    { 1152, 13, 0x76 }, // 0000 0011 1011 0
-    { 1216, 13, 0x77 }, // 0000 0011 1011 1
-    { 1280, 13, 0x52 }, // 0000 0010 1001 0
-    { 1344, 13, 0x53 }, // 0000 0010 1001 1
-    { 1408, 13, 0x54 }, // 0000 0010 1010 0
-    { 1472, 13, 0x55 }, // 0000 0010 1010 1
-    { 1536, 13, 0x5A }, // 0000 0010 1101 0
-    { 1600, 13, 0x5B }, // 0000 0010 1101 1
-    { 1664, 13, 0x64 }, // 0000 0011 0010 0
-    { 1728, 13, 0x65 }, // 0000 0011 0010 1
-    { 1792, 11, 0x8 },  // 0000 0001 000
-    { 1856, 11, 0xC },  // 0000 0001 100
-    { 1920, 11, 0xD },  // 0000 0001 101
-    { 1984, 12, 0x12 }, // 0000 0001 0010
-    { 2048, 12, 0x13 }, // 0000 0001 0011
-    { 2112, 12, 0x14 }, // 0000 0001 0100
-    { 2176, 12, 0x15 }, // 0000 0001 0101
-    { 2240, 12, 0x16 }, // 0000 0001 0110
-    { 2304, 12, 0x17 }, // 0000 0001 0111
-    { 2368, 12, 0x1C }, // 0000 0001 1100
-    { 2432, 12, 0x1D }, // 0000 0001 1101
-    { 2496, 12, 0x1E }, // 0000 0001 1110
-    { 2560, 12, 0x1F }  // 0000 0001 1111
+    { 0, 10, 0x37 },    
+    { 1, 3, 0x2 },      
+    { 2, 2, 0x3 },      
+    { 3, 2, 0x2 },      
+    { 4, 3, 0x3 },      
+    { 5, 4, 0x3 },      
+    { 6, 4, 0x2 },      
+    { 7, 5, 0x3 },      
+    { 8, 6, 0x5 },      
+    { 9, 6, 0x4 },      
+    { 10, 7, 0x4 },     
+    { 11, 7, 0x5 },     
+    { 12, 7, 0x7 },     
+    { 13, 8, 0x4 },     
+    { 14, 8, 0x7 },     
+    { 15, 9, 0x18 },    
+    { 16, 10, 0x17 },   
+    { 17, 10, 0x18 },   
+    { 18, 10, 0x8 },    
+    { 19, 11, 0x67 },   
+    { 20, 11, 0x68 },   
+    { 21, 11, 0x6C },   
+    { 22, 11, 0x37 },   
+    { 23, 11, 0x28 },   
+    { 24, 11, 0x17 },   
+    { 25, 11, 0x18 },   
+    { 26, 12, 0xCA },   
+    { 27, 12, 0xCB },   
+    { 28, 12, 0xCC },   
+    { 29, 12, 0xCD },   
+    { 30, 12, 0x68 },   
+    { 31, 12, 0x69 },   
+    { 32, 12, 0x6A },   
+    { 33, 12, 0x6B },   
+    { 34, 12, 0xD2 },   
+    { 35, 12, 0xD3 },   
+    { 36, 12, 0xD4 },   
+    { 37, 12, 0xD5 },   
+    { 38, 12, 0xD6 },   
+    { 39, 12, 0xD7 },   
+    { 40, 12, 0x6C },   
+    { 41, 12, 0x6D },   
+    { 42, 12, 0xDA },   
+    { 43, 12, 0xDB },   
+    { 44, 12, 0x54 },   
+    { 45, 12, 0x55 },   
+    { 46, 12, 0x56 },   
+    { 47, 12, 0x57 },   
+    { 48, 12, 0x64 },   
+    { 49, 12, 0x65 },   
+    { 50, 12, 0x52 },   
+    { 51, 12, 0x53 },   
+    { 52, 12, 0x24 },   
+    { 53, 12, 0x37 },   
+    { 54, 12, 0x38 },   
+    { 55, 12, 0x27 },   
+    { 56, 12, 0x28 },   
+    { 57, 12, 0x58 },   
+    { 58, 12, 0x59 },   
+    { 59, 12, 0x2B },   
+    { 60, 12, 0x2C },   
+    { 61, 12, 0x5A },   
+    { 62, 12, 0x66 },   
+    { 63, 12, 0x67 },   
+    { 64, 10, 0xF },    
+    { 128, 12, 0xC8 },  
+    { 192, 12, 0xC9 },  
+    { 256, 12, 0x5B },  
+    { 320, 12, 0x33 },  
+    { 384, 12, 0x34 },  
+    { 448, 12, 0x35 },  
+    { 512, 13, 0x6C },  
+    { 576, 13, 0x6D },  
+    { 640, 13, 0x4A },  
+    { 704, 13, 0x4B },  
+    { 768, 13, 0x4C },  
+    { 832, 13, 0x4D },  
+    { 896, 13, 0x72 },  
+    { 960, 13, 0x73 },  
+    { 1024, 13, 0x74 }, 
+    { 1088, 13, 0x75 }, 
+    { 1152, 13, 0x76 }, 
+    { 1216, 13, 0x77 }, 
+    { 1280, 13, 0x52 }, 
+    { 1344, 13, 0x53 }, 
+    { 1408, 13, 0x54 }, 
+    { 1472, 13, 0x55 }, 
+    { 1536, 13, 0x5A }, 
+    { 1600, 13, 0x5B }, 
+    { 1664, 13, 0x64 }, 
+    { 1728, 13, 0x65 }, 
+    { 1792, 11, 0x8 },  
+    { 1856, 11, 0xC },  
+    { 1920, 11, 0xD },  
+    { 1984, 12, 0x12 }, 
+    { 2048, 12, 0x13 }, 
+    { 2112, 12, 0x14 }, 
+    { 2176, 12, 0x15 }, 
+    { 2240, 12, 0x16 }, 
+    { 2304, 12, 0x17 }, 
+    { 2368, 12, 0x1C }, 
+    { 2432, 12, 0x1D }, 
+    { 2496, 12, 0x1E }, 
+    { 2560, 12, 0x1F }  
 };
 
 
 void PDFWriterImpl::putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState )
 {
     const PixelCode* pTable = i_bWhitePixel ? WhitePixelCodes : BlackPixelCodes;
-    // maximum encoded span is 2560 consecutive pixels
+    
     while( i_nSpan > 2623 )
     {
-        // write 2560 bits, that is entry (63 + (2560 >> 6)) == 103 in the appropriate table
+        
         putG4Bits( pTable[103].mnCodeBits, pTable[103].mnCode, io_rState );
         i_nSpan -= pTable[103].mnEncodedPixels;
     }
-    // write multiples of 64 pixels up to 2560
+    
     if( i_nSpan > 63 )
     {
         sal_uInt32 nTabIndex = 63 + (i_nSpan >> 6);
@@ -1971,7 +1971,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
 
     BitStreamState aBitState;
 
-    // the first reference line is virtual and completely empty
+    
     const Scanline pFirstRefLine = (Scanline)rtl_allocateZeroMemory( nW/8 + 1 );
     Scanline pRefLine = pFirstRefLine;
     for( long nY = 0; nY < nH; nY++ )
@@ -1989,30 +1989,30 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
             {
                 long nDiff = nRefIndex1 - nRunIndex1;
                 if( -3 <= nDiff && nDiff <= 3 )
-                {   // vertical coding
+                {   
                     static const struct
                     {
                         sal_uInt32 mnCodeBits;
                         sal_uInt32 mnCode;
                     } VerticalCodes[7] = {
-                        { 7, 0x03 },    // 0000 011
-                        { 6, 0x03 },    // 0000 11
-                        { 3, 0x03 },    // 011
-                        { 1, 0x1 },     // 1
-                        { 3, 0x2 },     // 010
-                        { 6, 0x02 },    // 0000 10
-                        { 7, 0x02 }     // 0000 010
+                        { 7, 0x03 },    
+                        { 6, 0x03 },    
+                        { 3, 0x03 },    
+                        { 1, 0x1 },     
+                        { 3, 0x2 },     
+                        { 6, 0x02 },    
+                        { 7, 0x02 }     
                     };
-                    // convert to index
+                    
                     nDiff += 3;
 
-                    // emit diff code
+                    
                     putG4Bits( VerticalCodes[nDiff].mnCodeBits, VerticalCodes[nDiff].mnCode, aBitState );
                     nLineIndex = nRunIndex1;
                 }
                 else
-                {   // difference too large, horizontal coding
-                    // emit horz code 001
+                {   
+                    
                     putG4Bits( 3, 0x1, aBitState );
                     long nRunIndex2 = findBitRun( pCurLine, nRunIndex1, nW, isSet( pCurLine, nRunIndex1 ) );
                     bool bWhiteFirst = ( nLineIndex + nRunIndex1 == 0 || ! isSet( pCurLine, nLineIndex ) );
@@ -2022,7 +2022,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
                 }
             }
             else
-            {   // emit pass code 0001
+            {   
                 putG4Bits( 4, 0x1, aBitState );
                 nLineIndex = nRefIndex2;
             }
@@ -2035,10 +2035,10 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
             }
         }
 
-        // the current line is the reference for the next line
+        
         pRefLine = pCurLine;
     }
-    // terminate strip with EOFB
+    
     putG4Bits( 12, 1, aBitState );
     putG4Bits( 12, 1, aBitState );
     if( aBitState.mnNextBitPos != 8 )
@@ -2060,7 +2060,7 @@ static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
             return false;
     }
 
-    // TODO: handle step count
+    
     if (rGradient.GetSteps() > 0)
         return false;
 

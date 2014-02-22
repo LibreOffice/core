@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ww8toolbar.hxx"
@@ -27,7 +27,7 @@
 
 using namespace com::sun::star;
 
-// no. of visual data elements in a SwCTB ( fixed )
+
 const short nVisualData = 5;
 
 typedef std::map< sal_Int16, OUString > IdToString;
@@ -45,13 +45,13 @@ public:
 
 MSOWordCommandConvertor::MSOWordCommandConvertor()
 {
-    // mso command id to ooo command string
-    // #FIXME and *HUNDREDS* of id's to added here
+    
+    
     msoToOOcmd[ 0x20b ] = ".uno:CloseDoc";
     msoToOOcmd[ 0x50 ] = ".uno:Open";
 
-   // mso tcid to ooo command string
-    // #FIXME and *HUNDREDS* of id's to added here
+   
+    
    tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 }
 
@@ -120,15 +120,15 @@ bool SwCTBWrapper::Read( SvStream& rS )
     long nExpectedPos =  rS.Tell() + cbDTBC;
     if ( cbDTBC )
     {
-        // cbDTBC is the size in bytes of the SwTBC array
-        // but the size of a SwTBC element is dynamic ( and this relates to TBDelta's
+        
+        
         int nStart = rS.Tell();
 
         int bytesRead = 0;
         int bytesToRead = cbDTBC - bytesRead;
-        // cbDTBC specifies the size ( in bytes ) taken by an array ( of unspecified size )
-        // of SwTBC records ( SwTBC records have dynamic length, so we need to check our position
-        // after each read )
+        
+        
+        
         do
         {
             SwTBC aTBC;
@@ -140,12 +140,12 @@ bool SwCTBWrapper::Read( SvStream& rS )
     }
     if ( static_cast< long >( rS.Tell() ) != nExpectedPos )
     {
-        // Strange error condition, shouldn't happen ( but does in at least
-        // one test document ) In the case where it happens the SwTBC &
-        // TBCHeader records seem blank??? ( and incorrect )
+        
+        
+        
         SAL_WARN_IF( static_cast< long >(rS.Tell()) != nExpectedPos, "sw.ww8","### Error: Expected pos not equal to actual pos after reading rtbdc");
         SAL_INFO("sw.ww8","\tPos now is 0x" << std::hex << rS.Tell() << " should be 0x" << std::hex << nExpectedPos );
-        // seek to correct position after rtbdc
+        
         rS.Seek( nExpectedPos );
     }
     if ( cCust )
@@ -263,7 +263,7 @@ bool Customization::Read( SvStream &rS)
             if (!aTBDelta.Read( rS ) )
                 return false;
             customizationDataTBDelta.push_back( aTBDelta );
-            // Only set the drop down for menu's associated with standard toolbar
+            
             if ( aTBDelta.ControlDropsToolBar() && tbidForTBD == 0x25 )
                 pWrapper->InsertDropIndex( aTBDelta.CustomizationIndex() );
         }
@@ -312,29 +312,29 @@ void Customization::Print( FILE* fp )
 
 bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    if ( tbidForTBD == 0x25 )  // we can handle in a limited way additions the built-in menu bar
+    if ( tbidForTBD == 0x25 )  
     {
         for ( std::vector< TBDelta >::iterator it = customizationDataTBDelta.begin(); it != customizationDataTBDelta.end(); ++it )
         {
-            // for each new menu ( control that drops a toolbar )
-            // import a toolbar
+            
+            
             if ( it->ControlIsInserted() && it->ControlDropsToolBar() )
             {
                 Customization* pCust = pWrapper->GetCustomizaton( it->CustomizationIndex() );
                 if ( pCust )
                 {
-                    // currently only support built-in menu
+                    
                     OUString sMenuBar( "private:resource/menubar/" );
 
                     sMenuBar = sMenuBar.concat( "menubar" );
-                    // Get menu name
+                    
                     SwTBC* pTBC = pWrapper->GetTBCAtOffset( it->TBCStreamOffset() );
                     if ( !pTBC )
                         return false;
                     OUString sMenuName = pTBC->GetCustomText();
                     sMenuName = sMenuName.replace('&','~');
 
-                    // see if the document has already setting for the menubar
+                    
 
                     uno::Reference< container::XIndexContainer > xIndexContainer;
                     bool bHasSettings = false;
@@ -354,7 +354,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     uno::Reference< lang::XSingleComponentFactory > xSCF( xIndexContainer, uno::UNO_QUERY_THROW );
                     uno::Reference< uno::XComponentContext > xContext(
                         comphelper::getProcessComponentContext() );
-                    // create the popup menu
+                    
                     uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
                     aPopupMenu[0].Name = "CommandURL";
                     aPopupMenu[0].Value = uno::makeAny( OUString( "vnd.openoffice.org:" ) + sMenuName );
@@ -439,7 +439,7 @@ sal_Int16 TBDelta::CustomizationIndex()
 {
     sal_Int16 nIndex = CiTBDE;
     nIndex = nIndex >> 1;
-    nIndex &= 0x1ff; // only 13 bits are relevant
+    nIndex &= 0x1ff; 
     return nIndex;
 }
 
@@ -454,8 +454,8 @@ bool TBDelta::Read(SvStream &rS)
 
 void TBDelta::Print( FILE* fp )
 {
-    // Like most of the debug output, it's raw and little ( no )
-    // interpretation of the data is output ( e.g. flag values etc. )
+    
+    
     indent_printf( fp, "[ 0x%x ] TBDelta -- dump\n", nOffSet );
     indent_printf( fp, " doprfatendFlags 0x%x\n",doprfatendFlags );
 
@@ -554,19 +554,19 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
     try
     {
         if ( !tb.IsEnabled() )
-            return true;  // didn't fail, just ignoring
-        // Create default setting
+            return true;  
+        
         uno::Reference< container::XIndexContainer > xIndexContainer( helper.getCfgManager()->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xIndexAccess( xIndexContainer, uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
 
-        // set UI name for toolbar
+        
         xProps->setPropertyValue( "UIName", uno::makeAny( name.getString() ) );
 
         OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
         for ( std::vector< SwTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
         {
-            // createToolBar item for control
+            
             if ( !it->ImportToolBarControl( rWrapper, xIndexContainer, helper, IsMenuToolbar() ) )
                 return false;
         }
@@ -575,7 +575,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
 
         helper.getCfgManager()->insertSettings( sToolBarName, xIndexAccess );
         helper.applyIcons();
-#if 1 // don't think this is necessary
+#if 1 
         uno::Reference< ui::XUIConfigurationPersistence > xPersistence( helper.getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         xPersistence->store();
 
@@ -596,7 +596,7 @@ bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const css::uno::Reference< css
 {
     for ( std::vector< SwTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
     {
-        // createToolBar item for control
+        
         if ( !it->ImportToolBarControl( rWrapper, xIndexContainer, rHelper, true ) )
             return false;
     }
@@ -622,7 +622,7 @@ bool SwTBC::Read( SvStream &rS )
         cid.reset( new sal_uInt32 );
         rS.ReadUInt32( *cid );
     }
-    // MUST exist if tbch.tct is not equal to 0x16
+    
     if ( tbch.getTct() != 0x16 )
     {
         tbcd.reset(  new TBCData( tbch ) );
@@ -650,10 +650,10 @@ void SwTBC::Print( FILE* fp )
 bool
 SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
 {
-    // cmtFci       0x1 Command based on a built-in command. See CidFci.
-    // cmtMacro     0x2 Macro command. See CidMacro.
-    // cmtAllocated 0x3 Allocated command. See CidAllocated.
-    // cmtNil       0x7 No command. See Cid.
+    
+    
+    
+    
     bool bBuiltin = false;
     sal_uInt16 cmdId = 0;
     if  ( cid.get() )
@@ -708,10 +708,10 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         if ( pMenu )
         {
             SAL_INFO("sw.ww8","** control has a menu, name of toolbar with menu items is " << pMenu->Name() );
-            // search for SwCTB with the appropriate name ( it contains the
-            // menu items, although we cannot import ( or create ) a menu on
-            // a custom toolbar we can import the menu items in a separate
-            // toolbar ( better than nothing )
+            
+            
+            
+            
             SwCTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
             if ( pCustTB )
             {
@@ -735,7 +735,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
 
         if ( bBeginGroup )
         {
-            // insert spacer
+            
             uno::Sequence< beans::PropertyValue > sProps( 1 );
             sProps[ 0 ].Name = "Type";
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
@@ -828,7 +828,7 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
      {
          case 0x1:
          {
-             pSubStruct = new PlfMcd( false ); // don't read the id
+             pSubStruct = new PlfMcd( false ); 
              break;
          }
          case 0x2:
@@ -870,12 +870,12 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 
 bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
-    // Find the SwCTBWrapper
+    
     for ( std::vector< Tcg255SubStruct* >::const_iterator it = rgtcgData.begin(); it != rgtcgData.end(); ++it )
     {
         if ( (*it)->id() == 0x12 )
         {
-            // not so great, shouldn't really have to do a horror casting
+            
             SwCTBWrapper* pCTBWrapper =  dynamic_cast< SwCTBWrapper* > ( *it );
             if ( pCTBWrapper )
             {
@@ -901,7 +901,7 @@ bool Tcg255::Read(SvStream &rS)
         rS.ReadUChar( nId );
     }
     return true;
-    // Peek at
+    
 }
 
 void Tcg255::Print( FILE* fp)
@@ -1197,7 +1197,7 @@ Xstz::Read(SvStream &rS)
     if ( !xst.Read( rS ) )
         return false;
     rS.ReadUInt16( chTerm );
-    if ( chTerm != 0 ) // should be an assert
+    if ( chTerm != 0 ) 
         return false;
     return true;
 }
@@ -1263,7 +1263,7 @@ void Acd::Print( FILE* fp )
 {
     Indent a;
     indent_printf( fp,"[ 0x%x ] ACD - dump\n", nOffSet );
-    // #TODO flesh out interpretation of these values
+    
     indent_printf( fp,"  ibst 0x%x\n", ibst);
     indent_printf( fp,"  fciBaseObABC 0x%x\n", fciBasedOnABC);
 }

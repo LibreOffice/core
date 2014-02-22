@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbadocument.hxx"
 #include "vbarange.hxx"
@@ -112,7 +112,7 @@ SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd ) throw ( uno
     {
         try
         {
-            // FIXME
+            
             xStart = mxTextDocument->getText()->getStart();
             xEnd = mxTextDocument->getText()->getEnd();
         }
@@ -301,29 +301,29 @@ void SAL_CALL SwVbaDocument::Activate() throw (uno::RuntimeException)
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getProtectionType() throw (css::uno::RuntimeException)
 {
-    //TODO
+    
     return word::WdProtectionType::wdNoProtection;
 }
 
 void SAL_CALL SwVbaDocument::setProtectionType( ::sal_Int32 /*_protectiontype*/ ) throw (css::uno::RuntimeException)
 {
-    //TODO
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaDocument::getUpdateStylesOnOpen() throw (css::uno::RuntimeException)
 {
-    //TODO
+    
     return sal_False;
 }
 
 void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( ::sal_Bool /*_updatestylesonopen*/ ) throw (uno::RuntimeException)
 {
-    //TODO
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaDocument::getAutoHyphenation() throw (uno::RuntimeException)
 {
-    // check this property only in default paragraph style
+    
     sal_Bool IsAutoHyphenation = sal_False;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
     xParaProps->getPropertyValue("ParaIsHyphenation") >>= IsAutoHyphenation;
@@ -332,25 +332,25 @@ void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( ::sal_Bool /*_updatestyleson
 
 void SAL_CALL SwVbaDocument::setAutoHyphenation( ::sal_Bool _autohyphenation ) throw (uno::RuntimeException)
 {
-    //TODO
+    
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
     xParaProps->setPropertyValue("ParaIsHyphenation", uno::makeAny( _autohyphenation ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone() throw (uno::RuntimeException)
 {
-    //TODO
+    
     return 0;
 }
 
 void SAL_CALL SwVbaDocument::setHyphenationZone( ::sal_Int32 /*_hyphenationzone*/ ) throw (uno::RuntimeException)
 {
-    //TODO
+    
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getConsecutiveHyphensLimit() throw (uno::RuntimeException)
 {
-    //TODO
+    
     sal_Int16 nHyphensLimit = 0;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
     xParaProps->getPropertyValue("ParaHyphenationMaxHyphens") >>= nHyphensLimit;
@@ -366,13 +366,13 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 
 void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ ) throw (uno::RuntimeException)
 {
-    // Seems not support in Writer
-    // VbaDocumentBase::Protect( Password );
+    
+    
 }
 
 void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno::Any& /*Append*/, const uno::Any& /*Range*/, const uno::Any& /*OutputFileName*/, const uno::Any& /*From*/, const uno::Any& /*To*/, const uno::Any& /*Item*/, const uno::Any& /*Copies*/, const uno::Any& /*Pages*/, const uno::Any& /*PageType*/, const uno::Any& /*PrintToFile*/, const uno::Any& /*Collate*/, const uno::Any& /*FileName*/, const uno::Any& /*ActivePrinterMacGX*/, const uno::Any& /*ManualDuplexPrint*/, const uno::Any& /*PrintZoomColumn*/, const uno::Any& /*PrintZoomRow*/, const uno::Any& /*PrintZoomPaperWidth*/, const uno::Any& /*PrintZoomPaperHeight*/ ) throw (uno::RuntimeException)
 {
-    //TODO
+    
 }
 
 void SAL_CALL SwVbaDocument::PrintPreview(  ) throw (uno::RuntimeException)
@@ -419,7 +419,7 @@ SwVbaDocument::getControlShape( const OUString& sName )
     for( int index = 0; index < nCount; index++ )
     {
         uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
-        // It seems there are some drawing objects that can not query into Control shapes?
+        
         uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY );
         if( xControlShape.is() )
         {
@@ -445,13 +445,13 @@ SwVbaDocument::invoke( const OUString& aFunctionName, const uno::Sequence< uno::
     OSL_TRACE("** SwVbaDocument::invoke( %s ), will barf",
         OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    throw uno::RuntimeException(); // unsupported operation
+    throw uno::RuntimeException(); 
 }
 
 void SAL_CALL
 SwVbaDocument::setValue( const OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
-    throw uno::RuntimeException(); // unsupported operation
+    throw uno::RuntimeException(); 
 }
 uno::Any SAL_CALL
 SwVbaDocument::getValue( const OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException)
@@ -488,9 +488,9 @@ SwVbaDocument::getFormControls()
         uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
         uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-        // get the www-standard container ( maybe we should access the
-        // 'www-standard' by name rather than index, this seems an
-        // implementation detail
+        
+        
+        
         xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
     }
     catch(const uno::Exception&)

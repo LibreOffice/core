@@ -136,7 +136,7 @@ public:
     void NoteUpLow( long nA, const sal_uInt8 nArea );
     void Calc( const PolyPolygon& rPoly );
     void Concat( const PolyPolygon* pPoly );
-    // inlines
+    
     void NoteLast() { if( bMultiple ) NoteRange( nAct == nFirst ); }
     void SetClosed( const sal_Bool bNew ){ bClosed = bNew; }
     sal_Bool IsClosed() const { return bClosed; }
@@ -246,17 +246,17 @@ void SvxBoundArgs::NoteRange( bool bToggle )
     while( nIdx < nCount && (*pLongArr)[ nIdx ] < nMin )
         ++nIdx;
     sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
-    // No overlap with existing intervals?
+    
     if( nIdx == nCount || ( !bOdd && nMax < (*pLongArr)[ nIdx ] ) )
-    {   // Then a new one is inserted ...
+    {   
         pLongArr->insert( pLongArr->begin() + nIdx, nMin );
         pLongArr->insert( pLongArr->begin() + nIdx + 1, nMax );
         aBoolArr.insert( aBoolArr.begin() + (nIdx/2), bToggle );
     }
     else
-    {   // expand an existing interval ...
+    {   
         sal_uInt16 nMaxIdx = nIdx;
-        // If we end up on a left interval boundary, it must be reduced to nMin.
+        
         if( bOdd )
             --nIdx;
         else
@@ -268,12 +268,12 @@ void SvxBoundArgs::NoteRange( bool bToggle )
             --nMaxIdx;
         if( nMaxIdx < nIdx )
             nMaxIdx = nIdx;
-        // If we end up on a right interval boundary, it must be raised to nMax.
+        
         if( nMaxIdx % 2 )
             (*pLongArr)[ nMaxIdx-- ] = nMax;
-        // Possible merge of intervals.
+        
         sal_uInt16 nDiff = nMaxIdx - nIdx;
-        nMaxIdx = nIdx / 2; // From here on is nMaxIdx the Index in BoolArray.
+        nMaxIdx = nIdx / 2; 
         if( nDiff )
         {
             pLongArr->erase( pLongArr->begin() + nIdx + 1, pLongArr->begin() + nIdx + 1 + nDiff );
@@ -309,7 +309,7 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
             }
             else
             {
-                // The first point of the polygon is within the line.
+                
                 if( nLast )
                 {
                     if( bMultiple || !nAct )
@@ -333,8 +333,8 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                     else
                         NotePoint( A(rNull) );
                 }
-                nFirst = 0; // leaving the line in which direction?
-                nAct = 3;   // we are within the line at the moment.
+                nFirst = 0; 
+                nAct = 3;   
             }
             if( nCount > 1 )
             {
@@ -465,10 +465,10 @@ void SvxBoundArgs::Add()
             pLongArr->pop_front();
             pLongArr->pop_back();
 
-            // Here the line is held inside a large rectangle for "simple"
-            // contour wrap. Currently (April 1999) the EditEngine evaluates
-            // only the first rectangle. If it one day is able to output a line
-            // in several parts, it may be advisable to delete the following lines.
+            
+            
+            
+            
             if( pTextRanger->IsSimple() && pLongArr->size() > 2 )
                 pLongArr->erase( pLongArr->begin() + 1, pLongArr->end() - 1 );
 
@@ -484,7 +484,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
     pLongArr = new std::deque<long>();
     aBoolArr.clear();
     bInner = sal_False;
-    Calc( *pPoly ); // Note that this updates pLongArr, which is why we swapped it out earlier.
+    Calc( *pPoly ); 
     sal_uInt16 nCount = pLongArr->size();
     sal_uInt16 nIdx = 0;
     sal_uInt16 i = 0;
@@ -493,7 +493,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
     {
         sal_uLong nOldCount = pOld->size();
         if( nIdx == nOldCount )
-        {   // Reached the end of the old Array...
+        {   
             if( !bSubtract )
                 pOld->insert( pOld->begin() + nIdx, pLongArr->begin() + i, pLongArr->end() );
             break;
@@ -504,7 +504,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         while( nLeftPos < nOldCount && nLeft > (*pOld)[ nLeftPos ] )
             nLeftPos += 2;
         if( nLeftPos >= nOldCount )
-        {   // The current interval belongs to the end of the old array ...
+        {   
             if( !bSubtract )
                 pOld->insert( pOld->begin() + nOldCount, pLongArr->begin() + i - 2, pLongArr->end() );
             break;
@@ -513,16 +513,16 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         while( nRightPos < nOldCount && nRight >= (*pOld)[ nRightPos ] )
             nRightPos += 2;
         if( nRightPos < nLeftPos )
-        {   // The current interval belongs between two old intervals
+        {   
             if( !bSubtract )
                 pOld->insert( pOld->begin() + nRightPos, pLongArr->begin() + i - 2, pLongArr->begin() + i );
             nIdx = nRightPos + 2;
         }
-        else if( bSubtract ) // Subtract, if necessary separate
+        else if( bSubtract ) 
         {
             long nOld;
             if( nLeft > ( nOld = (*pOld)[ nLeftPos - 1 ] ) )
-            {   // Now we split the left part...
+            {   
                 if( nLeft - 1 > nOld )
                 {
                     pOld->insert( pOld->begin() + nLeftPos - 1, nOld );
@@ -538,7 +538,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
             else
                 (*pOld)[ nLeftPos - 1 ] = nRight;
         }
-        else // Merge
+        else 
         {
             if( nLeft < (*pOld)[ nLeftPos - 1 ] )
                 (*pOld)[ nLeftPos - 1 ] = nLeft;

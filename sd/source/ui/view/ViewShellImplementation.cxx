@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,8 +82,8 @@ ViewShell::Implementation::~Implementation (void)
         ::boost::shared_ptr<ToolBarManagerLock> pLock(mpUpdateLockForMouse);
         if (pLock.get() != NULL)
         {
-            // Force the ToolBarManagerLock to be released even when the
-            // IsUICaptured() returns <TRUE/>.
+            
+            
             pLock->Release(true);
         }
     }
@@ -125,7 +125,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
         {
 
-            // Make the layout menu visible in the tool pane.
+            
             sfx2::sidebar::Sidebar::ShowPanel(
                 OUString("ImpressLayoutsPanel"),
                 mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());
@@ -183,8 +183,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
                 pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
             pUndoManager->AddUndoAction(pAction);
 
-            // Clear the selection because the selected object may be removed as
-            // a result of the assignment of the layout.
+            
+            
             mrViewShell.GetDrawView()->UnmarkAll();
 
             if (!bHandoutMode)
@@ -262,8 +262,8 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         if( pWhatLayout )
             eLayout = static_cast< AutoLayout >( pWhatLayout->GetValue() );
 
-        // Transform the given request into the four argument form that is
-        // understood by ProcessModifyPageSlot().
+        
+        
         SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
         sal_uInt8 aBackground (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false));
         sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false));
@@ -281,7 +281,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
         aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
 
-        // Forward the call with the new arguments.
+        
         ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
     }
 }
@@ -310,9 +310,9 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
         case ViewShell::ST_PRESENTATION:
             return PRESENTATION_FACTORY_ID;
 
-        // Since we have to return a view id for every possible shell type
-        // and there is not (yet) a proper ViewShellBase sub class for the
-        // remaining types we chose the Impress factory as a fall back.
+        
+        
+        
         case ViewShell::ST_SIDEBAR:
         case ViewShell::ST_NONE:
         default:
@@ -335,7 +335,7 @@ SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog (void)
 
 
 
-//===== ToolBarManagerLock ====================================================
+
 
 class ViewShell::Implementation::ToolBarManagerLock::Deleter { public:
     void operator() (ToolBarManagerLock* pObject) { delete pObject; }
@@ -360,8 +360,8 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
     : mpLock(new ToolBarManager::UpdateLock(rpManager)),
       maTimer()
 {
-    // Start a timer that will unlock the ToolBarManager update lock when
-    // that is not done explicitly by calling Release().
+    
+    
     maTimer.SetTimeoutHdl(LINK(this,ToolBarManagerLock,TimeoutCallback));
     maTimer.SetTimeout(100);
     maTimer.Start();
@@ -372,8 +372,8 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
 
 IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
 {
-    // If possible then release the lock now.  Otherwise start the timer
-    // and try again later.
+    
+    
     if (Application::IsUICaptured())
     {
         maTimer.Start();
@@ -390,8 +390,8 @@ IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
 
 void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)
 {
-    // If possible then release the lock now.  Otherwise try again when the
-    // timer expires.
+    
+    
     if (bForce || ! Application::IsUICaptured())
     {
         mpSelf.reset();
@@ -406,6 +406,6 @@ ViewShell::Implementation::ToolBarManagerLock::~ToolBarManagerLock (void)
     mpLock.reset();
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

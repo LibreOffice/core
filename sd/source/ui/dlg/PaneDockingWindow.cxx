@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,11 +60,11 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
             break;
 
         case STATE_CHANGE_VISIBLE:
-            // The visibility of the docking window has changed.  Tell the
-            // ConfigurationController so that it can activate or deactivate
-            // a/the view for the pane.
-            // Without this the side panes remain empty after closing an
-            // in-place slide show.
+            
+            
+            
+            
+            
             ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
                 GetBindings().GetDispatcher()->GetFrame());
             if (pBase != NULL)
@@ -80,11 +80,11 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
 {
     if (rEvent.GetButtons() == MOUSE_LEFT)
     {
-        // For some strange reason we have to set the WB_DIALOGCONTROL at
-        // the content window in order to have it pass focus to its content
-        // window.  Without setting this flag here that works only on views
-        // that have not been taken from the cash and relocated to this pane
-        // docking window.
+        
+        
+        
+        
+        
         GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
         GetContentWindow().GrabFocus();
     }
@@ -105,8 +105,8 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
     {
         const sal_uInt16 nId (pSplitWindow->GetItemId(static_cast< ::Window*>(this)));
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
-        // Because the PaneDockingWindow paints its own decoration, we have
-        // to compensate the valid size range for that.
+        
+        
         const SvBorder aBorder (GetDecorationBorder());
         sal_Int32 nCompensation (pSplitWindow->IsHorizontal()
             ? aBorder.Top() + aBorder.Bottom()
@@ -133,6 +133,6 @@ PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation (void) const
         return VerticalOrientation;
 }
 
-} // end of namespace ::sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/framelink.hxx>
@@ -38,14 +38,14 @@ using namespace editeng;
 namespace svx {
 namespace frame {
 
-// ============================================================================
+
 
 namespace {
 
 typedef std::vector< Point > PointVec;
 
-// ----------------------------------------------------------------------------
-// Link result structs for horizontal and vertical lines and borders.
+
+
 
 /** Result struct used by the horizontal/vertical frame link functions.
 
@@ -94,8 +94,8 @@ typedef std::vector< Point > PointVec;
  */
 struct LineEndResult
 {
-    long                mnOffs1;    /// Offset for top or left edge, dependent of context.
-    long                mnOffs2;    /// Offset for bottom or right edge, dependent of context
+    long                mnOffs1;    
+    long                mnOffs2;    
 
     inline explicit     LineEndResult() : mnOffs1( 0 ), mnOffs2( 0 ) {}
 
@@ -110,9 +110,9 @@ struct LineEndResult
  */
 struct BorderEndResult
 {
-    LineEndResult       maPrim;     /// Result for primary line.
-    LineEndResult       maSecn;     /// Result for secondary line.
-    LineEndResult       maGap;      /// Result for gap line.
+    LineEndResult       maPrim;     
+    LineEndResult       maSecn;     
+    LineEndResult       maGap;      
 
     inline void         Negate() { maPrim.Negate(); maSecn.Negate(); maGap.Negate(); }
 };
@@ -124,12 +124,12 @@ struct BorderEndResult
  */
 struct BorderResult
 {
-    BorderEndResult     maBeg;      /// Result for begin of border line (left or top end).
-    BorderEndResult     maEnd;      /// Result for end of border line (right or bottom end).
+    BorderEndResult     maBeg;      
+    BorderEndResult     maEnd;      
 };
 
-// ----------------------------------------------------------------------------
-// Link result structs for diagonal lines and borders.
+
+
 
 /** Result struct used by the diagonal frame link functions.
 
@@ -138,10 +138,10 @@ struct BorderResult
  */
 struct DiagLineResult
 {
-    long                mnLClip;    /// Offset for left border of clipping rectangle.
-    long                mnRClip;    /// Offset for right border of clipping rectangle.
-    long                mnTClip;    /// Offset for top border of clipping rectangle.
-    long                mnBClip;    /// Offset for bottom border of clipping rectangle.
+    long                mnLClip;    
+    long                mnRClip;    
+    long                mnTClip;    
+    long                mnBClip;    
 
     inline explicit     DiagLineResult() : mnLClip( 0 ), mnRClip( 0 ), mnTClip( 0 ), mnBClip( 0 ) {}
 };
@@ -152,8 +152,8 @@ struct DiagLineResult
  */
 struct DiagBorderResult
 {
-    DiagLineResult      maPrim;     /// Result for primary line.
-    DiagLineResult      maSecn;     /// Result for secondary line.
+    DiagLineResult      maPrim;     
+    DiagLineResult      maSecn;     
 };
 
 /** Result struct used by the diagonal frame link functions.
@@ -162,18 +162,18 @@ struct DiagBorderResult
  */
 struct DiagBordersResult
 {
-    DiagBorderResult    maTLBR;     /// Result for top-left to bottom-right frame border.
-    DiagBorderResult    maBLTR;     /// Result for bottom-left to top-right frame border.
+    DiagBorderResult    maTLBR;     
+    DiagBorderResult    maBLTR;     
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A helper struct containing two points of a line.
  */
 struct LinePoints
 {
-    Point               maBeg;      /// Start position of the line.
-    Point               maEnd;      /// End position of the line.
+    Point               maBeg;      
+    Point               maEnd;      
 
     explicit            LinePoints( const Point& rBeg, const Point& rEnd ) :
                             maBeg( rBeg ), maEnd( rEnd ) {}
@@ -182,7 +182,7 @@ struct LinePoints
                             maEnd( bTLBR ? rRect.BottomRight() : rRect.BottomLeft() ) {}
 };
 
-// ============================================================================
+
 
 /** Rounds and casts a double value to a long value. */
 inline long lclD2L( double fValue )
@@ -196,8 +196,8 @@ double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
     return std::min<double>(nValue * fScale, nMaxWidth);
 }
 
-// ----------------------------------------------------------------------------
-// Line width offset calculation.
+
+
 
 /** Returns the start offset of the single/primary line across the frame border.
 
@@ -336,12 +336,12 @@ inline long lclGetBeforeBeg( const Style& rBorder )
 inline long lclGetBehindEnd( const Style& rBorder )
 { return rBorder.Prim() ? (lclGetEnd( rBorder ) + 256) : 0; }
 
-// ============================================================================
-// Linking functions
-// ============================================================================
 
-// ----------------------------------------------------------------------------
-// Linking of single horizontal line ends.
+
+
+
+
+
 
 /** Calculates X offsets for the left end of a single horizontal frame border.
 
@@ -355,69 +355,69 @@ void lclLinkLeftEnd_Single(
         LineEndResult& rResult, const Style& rBorder,
         const DiagStyle& rLFromTR, const Style& rLFromT, const Style& rLFromL, const Style& rLFromB, const DiagStyle& rLFromBR )
 {
-    // both vertical and diagonal frame borders are double
+    
     if( rLFromT.Secn() && rLFromB.Secn() && rLFromTR.Secn() && rLFromBR.Secn() )
     {
-        // take left position of upper and lower secondary start
+        
         rResult.mnOffs1 = GetBLDiagOffset( lclGetBeg( rBorder ), lclGetSecnBeg( rLFromTR ), rLFromTR.GetAngle() );
         rResult.mnOffs2 = GetTLDiagOffset( lclGetEnd( rBorder ), lclGetSecnBeg( rLFromBR ), rLFromBR.GetAngle() );
     }
     else
     {
-        // both vertical frame borders are double
+        
         if( rLFromT.Secn() && rLFromB.Secn() )
         {
             rResult.mnOffs1 = (!rLFromTR.Secn() && !rLFromBR.Secn() && (rLFromT.GetWidth() == rLFromB.GetWidth())) ?
-                // don't overdraw vertical borders with equal width
+                
                 lclGetBehindEnd( rLFromT ) :
-                // take leftmost start of both secondary lines (#46488#)
+                
                 std::min( lclGetSecnBeg( rLFromT ), lclGetSecnBeg( rLFromB ) );
         }
 
-        // single border with equal width coming from left
+        
         else if( !rLFromL.Secn() && (rLFromL.Prim() == rBorder.Prim()) )
-            // draw to connection point
+            
             rResult.mnOffs1 = 0;
 
-        // single border coming from left
+        
         else if( !rLFromL.Secn() && rLFromL.Prim() )
         {
             if( rLFromL.Prim() == rBorder.Prim() )
-                // draw to reference position, if from left has equal width
+                
                 rResult.mnOffs1 = 0;
             else
                 rResult.mnOffs1 = (rLFromL < rBorder) ?
-                    // take leftmost start of both frame borders, if from left is thinner
+                    
                     std::min( lclGetBeg( rLFromT ), lclGetBeg( rLFromB ) ) :
-                    // do not overdraw vertical, if from left is thicker
+                    
                     std::max( lclGetBehindEnd( rLFromT ), lclGetBehindEnd( rLFromB ) );
         }
 
-        // no border coming from left
+        
         else if( !rLFromL.Prim() )
-            // don't overdraw vertical borders with equal width
+            
             rResult.mnOffs1 = (rLFromT.GetWidth() == rLFromB.GetWidth()) ?
                 lclGetBehindEnd( rLFromT ) :
                 std::min( lclGetBeg( rLFromT ), lclGetBeg( rLFromB ) );
 
-        // double frame border coming from left and from top
+        
         else if( rLFromT.Secn() )
-            // do not overdraw the vertical double frame border
+            
             rResult.mnOffs1 = lclGetBehindEnd( rLFromT );
 
-        // double frame border coming from left and from bottom
+        
         else if( rLFromB.Secn() )
-            // do not overdraw the vertical double frame border
+            
             rResult.mnOffs1 = lclGetBehindEnd( rLFromB );
 
-        // double frame border coming from left, both vertical frame borders are single or off
+        
         else
-            // draw from leftmost start of both frame borders, if from left is not thicker
+            
             rResult.mnOffs1 = (rLFromL <= rBorder) ?
                 std::min( lclGetBeg( rLFromT ), lclGetBeg( rLFromB ) ) :
                 std::max( lclGetBehindEnd( rLFromT ), lclGetBehindEnd( rLFromB ) );
 
-        // bottom-left point is equal to top-left point (results in rectangle)
+        
         rResult.mnOffs2 = rResult.mnOffs1;
     }
 }
@@ -434,39 +434,39 @@ void lclLinkLeftEnd_Prim(
         LineEndResult& rResult, const Style& rBorder,
         const DiagStyle& rLFromTR, const Style& rLFromT, const Style& rLFromL, const Style& rLFromB, const DiagStyle& /*rLFromBR*/ )
 {
-    // double diagonal frame border coming from top right
+    
     if( rLFromTR.Secn() )
     {
-        // draw from where secondary diagonal line meets the own primary
+        
         rResult.mnOffs1 = GetBLDiagOffset( lclGetBeg( rBorder ), lclGetSecnBeg( rLFromTR ), rLFromTR.GetAngle() );
         rResult.mnOffs2 = GetBLDiagOffset( lclGetPrimEnd( rBorder ), lclGetSecnBeg( rLFromTR ), rLFromTR.GetAngle() );
     }
 
-    // no or single diagonal frame border - ignore it
+    
     else
     {
-        // double frame border coming from top
+        
         if( rLFromT.Secn() )
-            // draw from left edge of secondary vertical
+            
             rResult.mnOffs1 = lclGetSecnBeg( rLFromT );
 
-        // double frame border coming from left (from top is not double)
+        
         else if( rLFromL.Secn() )
-            // do not overdraw single frame border coming from top
+            
             rResult.mnOffs1 = (rLFromL.GetWidth() == rBorder.GetWidth()) ?
                 0 : lclGetBehindEnd( rLFromT );
 
-        // double frame border coming from bottom (from top and from left are not double)
+        
         else if( rLFromB.Secn() )
-            // draw from left edge of primary vertical from bottom
+            
             rResult.mnOffs1 = lclGetBeg( rLFromB );
 
-        // no other frame border is double
+        
         else
-            // do not overdraw vertical frame borders
+            
             rResult.mnOffs1 = std::max( lclGetBehindEnd( rLFromT ), lclGetBehindEnd( rLFromB ) );
 
-        // bottom-left point is equal to top-left point (results in rectangle)
+        
         rResult.mnOffs2 = rResult.mnOffs1;
     }
 }
@@ -505,8 +505,8 @@ void lclLinkLeftEnd_Gap(
 
     rResult.mnOffs2 = rResult.mnOffs1;
 }
-// ----------------------------------------------------------------------------
-// Linking of horizontal frame border ends.
+
+
 
 /** Calculates X offsets for the left end of a horizontal frame border.
 
@@ -523,14 +523,14 @@ void lclLinkLeftEnd(
 {
     if( rBorder.Secn() )
     {
-        // current frame border is double
+        
         lclLinkLeftEnd_Prim( rResult.maPrim, rBorder, rLFromTR, rLFromT, rLFromL, rLFromB, rLFromBR );
         lclLinkLeftEnd_Secn( rResult.maSecn, rBorder, rLFromTR, rLFromT, rLFromL, rLFromB, rLFromBR );
         lclLinkLeftEnd_Gap( rResult.maGap, rBorder, rLFromTR, rLFromT, rLFromL, rLFromB, rLFromBR );
     }
     else if( rBorder.Prim() )
     {
-        // current frame border is single
+        
         lclLinkLeftEnd_Single( rResult.maPrim, rBorder, rLFromTR, rLFromT, rLFromL, rLFromB, rLFromBR );
     }
     else
@@ -557,8 +557,8 @@ void lclLinkRightEnd(
     rResult.Negate();
 }
 
-// ----------------------------------------------------------------------------
-// Linking of horizontal and vertical frame borders.
+
+
 
 /** Calculates X offsets for all line ends of a horizontal frame border.
 
@@ -607,10 +607,10 @@ void lclLinkVerFrameBorder(
         rBFromTL.Mirror(), rBFromL, rBFromB, rBFromR, rBFromTR );
 }
 
-// ============================================================================
 
-// ----------------------------------------------------------------------------
-// Linking of diagonal frame borders.
+
+
+
 
 /** Calculates clipping offsets for a top-left to bottom-right frame border.
 
@@ -689,12 +689,12 @@ void lclLinkDiagFrameBorders(
     lclLinkBLTRFrameBorder( rResult.maBLTR, rBLTR, rBLFromT, rBLFromR, rTRFromB, rTRFromL );
 }
 
-// ============================================================================
-// Drawing functions
-// ============================================================================
 
-// ----------------------------------------------------------------------------
-// Simple helper functions
+
+
+
+
+
 
 /** Converts sub units to OutputDevice map units. */
 inline long lclToMapUnit( long nSubUnits )
@@ -747,9 +747,9 @@ void lclSetColorToOutDev( OutputDevice& rDev, const Color& rColor, const Color* 
     rDev.SetFillColor( pForceColor ? *pForceColor : rColor );
 }
 
-// ----------------------------------------------------------------------------
-// ============================================================================
-// Drawing of horizontal frame borders.
+
+
+
 
 /** Draws a horizontal thin or thick line into the passed output device.
 
@@ -800,26 +800,26 @@ void lclDrawHorFrameBorder(
             lclSetColorToOutDev( rDev, rBorder.GetColorGap(), pForceColor );
             lclDrawHorLine( rDev, rLPos, rResult.maBeg.maGap, rRPos, rResult.maEnd.maGap,
                    lclGetPrimEnd( rBorder ), lclGetSecnBeg( rBorder ), rBorder.Type() );
-            rDev.Pop(); // Gap color
+            rDev.Pop(); 
         }
 
         lclSetColorToOutDev( rDev, rBorder.GetColorPrim(), pForceColor );
         lclDrawHorLine( rDev, rLPos, rResult.maBeg.maPrim, rRPos, rResult.maEnd.maPrim,
             lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Type() );
-        rDev.Pop(); // colors
+        rDev.Pop(); 
 
         if( rBorder.Secn() )
         {
             lclSetColorToOutDev( rDev, rBorder.GetColorSecn(), pForceColor );
             lclDrawHorLine( rDev, rLPos, rResult.maBeg.maSecn, rRPos, rResult.maEnd.maSecn,
                 lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Type() );
-            rDev.Pop(); // colors
+            rDev.Pop(); 
         }
     }
 }
 
-// ----------------------------------------------------------------------------
-// Drawing of vertical frame borders.
+
+
 
 /** Draws a vertical thin or thick line into the passed output device.
 
@@ -870,25 +870,25 @@ void lclDrawVerFrameBorder(
             lclSetColorToOutDev( rDev, rBorder.GetColorGap(), pForceColor );
             lclDrawVerLine( rDev, rTPos, rResult.maBeg.maGap, rBPos, rResult.maEnd.maGap,
                    lclGetPrimEnd( rBorder ), lclGetSecnBeg( rBorder ), rBorder.Type() );
-            rDev.Pop(); // Gap color
+            rDev.Pop(); 
         }
 
         lclSetColorToOutDev( rDev, rBorder.GetColorPrim(), pForceColor );
         lclDrawVerLine( rDev, rTPos, rResult.maBeg.maPrim, rBPos, rResult.maEnd.maPrim,
             lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Type() );
-        rDev.Pop(); // colors
+        rDev.Pop(); 
         if( rBorder.Secn() )
         {
             lclSetColorToOutDev( rDev, rBorder.GetColorSecn(), pForceColor );
             lclDrawVerLine( rDev, rTPos, rResult.maBeg.maSecn, rBPos, rResult.maEnd.maSecn,
                 lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Type() );
-            rDev.Pop(); // colors
+            rDev.Pop(); 
         }
     }
 }
 
-// ============================================================================
-// Drawing of diagonal frame borders, incudes clipping functions.
+
+
 
 /** Returns the drawing coordinates for a diagonal thin line.
 
@@ -909,12 +909,12 @@ LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOff
     LinePoints aPoints( rRect, bTLBR );
     bool bVert = rRect.GetWidth() < rRect.GetHeight();
     double fAngle = bVert ? GetVerDiagAngle( rRect ) : GetHorDiagAngle( rRect );
-    // vertical top-left to bottom-right borders are handled mirrored
+    
     if( bVert && bTLBR )
         nDiagOffs = -nDiagOffs;
     long nTOffs = bTLBR ? GetTLDiagOffset( 0, nDiagOffs, fAngle ) : GetTRDiagOffset( 0, nDiagOffs, fAngle );
     long nBOffs = bTLBR ? GetBRDiagOffset( 0, nDiagOffs, fAngle ) : GetBLDiagOffset( 0, nDiagOffs, fAngle );
-    // vertical bottom-left to top-right borders are handled with exchanged end points
+    
     if( bVert && !bTLBR )
         std::swap( nTOffs, nBOffs );
     (bVert ? aPoints.maBeg.Y() : aPoints.maBeg.X()) += lclToMapUnit( nTOffs );
@@ -922,8 +922,8 @@ LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOff
     return aPoints;
 }
 
-// ----------------------------------------------------------------------------
-// Clipping functions for diagonal frame borders.
+
+
 
 /** Limits the clipping region to the inner area of a rectange.
 
@@ -944,13 +944,13 @@ LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOff
  */
 void lclPushDiagClipRect( OutputDevice& rDev, const Rectangle& rRect, const DiagLineResult& rResult )
 {
-    // PixelToLogic() regards internal offset of the output device
+    
     Rectangle aClipRect( rRect );
     aClipRect.Left()   += lclToMapUnit( rResult.mnLClip );
     aClipRect.Top()    += lclToMapUnit( rResult.mnTClip );
     aClipRect.Right()  += lclToMapUnit( rResult.mnRClip );
     aClipRect.Bottom() += lclToMapUnit( rResult.mnBClip );
-    // output device would adjust the rectangle -> invalidate it before
+    
     if( (aClipRect.GetWidth() < 1) ||(aClipRect.GetHeight() < 1) )
         aClipRect.SetEmpty();
 
@@ -1005,8 +1005,8 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
     rDev.IntersectClipRegion( aClipReg );
 }
 
-// ----------------------------------------------------------------------------
-// Drawing functions for diagonal frame borders.
+
+
 
 /** Draws a diagonal thin or thick line into the passed output device.
 
@@ -1028,7 +1028,7 @@ void lclDrawDiagLine(
         nWidth = lclToMapUnit( abs( nDiagOffs1 - nDiagOffs2 ) );
 
     svtools::DrawLine( rDev, aSMid, aEMid, nWidth, nDashing );
-    rDev.Pop(); // clipping region
+    rDev.Pop(); 
 }
 
 /** Draws a diagonal frame border into the passed output device.
@@ -1060,23 +1060,23 @@ void lclDrawDiagFrameBorder(
 
     lclSetColorToOutDev( rDev, rBorder.GetColorPrim(), pForceColor );
     lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maPrim, lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Type() );
-    rDev.Pop(); // colors
+    rDev.Pop(); 
     if( rBorder.Secn() )
     {
         if ( rBorder.UseGapColor( ) )
         {
             lclSetColorToOutDev( rDev, rBorder.GetColorGap(), pForceColor );
             lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maSecn, lclGetDistBeg( rBorder ), lclGetDistEnd( rBorder ), rBorder.Type() );
-            rDev.Pop(); // colors
+            rDev.Pop(); 
         }
 
         lclSetColorToOutDev( rDev, rBorder.GetColorSecn(), pForceColor );
         lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maSecn, lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Type() );
-        rDev.Pop(); // colors
+        rDev.Pop(); 
     }
 
     if( bClip )
-        rDev.Pop(); // clipping region
+        rDev.Pop(); 
 }
 
 /** Draws both diagonal frame borders into the passed output device.
@@ -1114,13 +1114,13 @@ void lclDrawDiagFrameBorders(
     }
 }
 
-// ============================================================================
 
-} // namespace
 
-// ============================================================================
-// Classes
-// ============================================================================
+} 
+
+
+
+
 
 #define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
 
@@ -1209,35 +1209,35 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
     sal_uInt16 nSecn = rBorder.GetInWidth();
 
     mnType = rBorder.GetBorderLineStyle();
-    if( !nSecn )    // no or single frame border
+    if( !nSecn )    
     {
         Set( SCALEVALUE( nPrim ), 0, 0 );
     }
     else
     {
         Set( SCALEVALUE( nPrim ), SCALEVALUE( nDist ), SCALEVALUE( nSecn ) );
-        // Enlarge the style if distance is too small due to rounding losses.
+        
         double nPixWidth = SCALEVALUE( nPrim + nDist + nSecn );
         if( nPixWidth > GetWidth() )
             mfDist = nPixWidth - mfPrim - mfSecn;
-        // Shrink the style if it is too thick for the control.
+        
         while( GetWidth() > nMaxWidth )
         {
-            // First decrease space between lines.
+            
             if (mfDist)
                 --mfDist;
-            // Still too thick? Decrease the line widths.
+            
             if( GetWidth() > nMaxWidth )
             {
                 if (!rtl::math::approxEqual(mfPrim, 0.0) && rtl::math::approxEqual(mfPrim, mfSecn))
                 {
-                    // Both lines equal - decrease both to keep symmetry.
+                    
                     --mfPrim;
                     --mfSecn;
                 }
                 else
                 {
-                    // Decrease each line for itself
+                    
                     if (mfPrim)
                         --mfPrim;
                     if ((GetWidth() > nMaxWidth) && !rtl::math::approxEqual(mfSecn, 0.0))
@@ -1283,36 +1283,36 @@ bool operator==( const Style& rL, const Style& rR )
 
 bool operator<( const Style& rL, const Style& rR )
 {
-    // different total widths -> rL<rR, if rL is thinner
+    
     double nLW = rL.GetWidth();
     double nRW = rR.GetWidth();
     if( nLW != nRW ) return nLW < nRW;
 
-    // one line double, the other single -> rL<rR, if rL is single
+    
     if( (rL.Secn() == 0) != (rR.Secn() == 0) ) return rL.Secn() == 0;
 
-    // both lines double with different distances -> rL<rR, if distance of rL greater
+    
     if( (rL.Secn() && rR.Secn()) && (rL.Dist() != rR.Dist()) ) return rL.Dist() > rR.Dist();
 
-    // both lines single and 1 unit thick, only one is dotted -> rL<rR, if rL is dotted
+    
     if( (nLW == 1) && (rL.Type() != rR.Type()) ) return rL.Type();
 
-    // seem to be equal
+    
     return false;
 }
 
 #undef SCALEVALUE
 
-// ============================================================================
-// Various helper functions
-// ============================================================================
+
+
+
 
 double GetHorDiagAngle( long nWidth, long nHeight )
 {
     return atan2( static_cast< double >( std::abs( nHeight ) ), static_cast< double >( std::abs( nWidth ) ) );
 }
 
-// ============================================================================
+
 
 long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
 {
@@ -1334,24 +1334,24 @@ long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
     return -lclD2L( nVerOffs / tan( fAngle ) - nDiagOffs / sin( fAngle ) );
 }
 
-// ============================================================================
+
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
         const Style& rBFromBL, const Style& rBFromB, const Style& rBFromBR )
 {
-    return      // returns 1 AND (2a OR 2b)
-        // 1) only, if both frame borders are equal
+    return      
+        
         (rLBorder == rRBorder)
         &&
         (
             (
-                // 2a) if the borders are not double, at least one of the vertical must not be double
+                
                 !rLBorder.Secn() && (!rTFromT.Secn() || !rBFromB.Secn())
             )
             ||
             (
-                // 2b) if the borders are double, all other borders must not be double
+                
                 rLBorder.Secn() &&
                 !rTFromTL.Secn() && !rTFromT.Secn() && !rTFromTR.Secn() &&
                 !rBFromBL.Secn() && !rBFromB.Secn() && !rBFromBR.Secn()
@@ -1359,9 +1359,9 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         );
 }
 
-// ============================================================================
-// Drawing functions
-// ============================================================================
+
+
+
 
 double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
                       long nAngleSide = 9000, long nAngleOpposite = 9000 )
@@ -1381,7 +1381,7 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
             nOtherAngle = nAngleOpposite;
     }
 
-    // Let's assume the border we are drawing is horizontal and compute all the angles / distances from this
+    
     basegfx::B2DVector aBaseVector( 1.0, 0.0 );
     basegfx::B2DPoint aBasePoint( 0.0, static_cast<double>( rBorder.GetWidth() / 2 ) );
 
@@ -1389,11 +1389,11 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     aRotation.rotate( double( nOtherAngle ) * M_PI / 18000.0 );
 
     basegfx::B2DVector aOtherVector = aRotation * aBaseVector;
-    // Compute a line shifted by half the width of the other border
+    
     basegfx::B2DVector aPerpendicular = basegfx::getNormalizedPerpendicular( aOtherVector );
     basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * aOtherBorder.GetWidth() / 2;
 
-    // Find the cut between the two lines
+    
     double nCut = 0.0;
     basegfx::tools::findCut(
             aBasePoint, aBaseVector, aOtherPoint, aOtherVector,
@@ -1490,7 +1490,7 @@ void DrawHorFrameBorder( OutputDevice& rDev,
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void DrawVerFrameBorder( OutputDevice& rDev,
         const Point& rTPos, const Point& rBPos, const Style& rBorder,
@@ -1508,7 +1508,7 @@ void DrawVerFrameBorder( OutputDevice& rDev,
     }
 }
 
-// ============================================================================
+
 
 void DrawDiagFrameBorders(
         OutputDevice& rDev, const Rectangle& rRect, const Style& rTLBR, const Style& rBLTR,
@@ -1525,9 +1525,9 @@ void DrawDiagFrameBorders(
     }
 }
 
-// ============================================================================
 
-} // namespace frame
-} // namespace svx
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

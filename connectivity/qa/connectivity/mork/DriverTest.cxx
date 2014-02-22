@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/bootstrapfixture.hxx>
@@ -62,8 +62,8 @@ void MorkDriverTest::setUp()
     m_xMorkComponent = getMultiServiceFactory()->createInstance("com.sun.star.comp.sdbc.MorkDriver");
     CPPUNIT_ASSERT_MESSAGE("no mork component!", m_xMorkComponent.is());
 
-    // is this the best way to pass test file through URL?
-    // may be take a custom Sequence< PropertyValue > route?
+    
+    
     OUString url = "sdbc:address:thunderbird:unittest:" +
         getPathFromSrc("/connectivity/qa/connectivity/mork/abook_10_john_does.mab");
 
@@ -74,13 +74,13 @@ void MorkDriverTest::setUp()
         CPPUNIT_ASSERT_MESSAGE("cannot connect to mork driver!", xDriver.is());
     }
 
-    // bad
+    
     checkAcceptsURL(xDriver, "sdbc:address:macab",        false);
     checkAcceptsURL(xDriver, "sdbc:mozab:ldap:",          false);
     checkAcceptsURL(xDriver, "sdbc:mozab:outlook:",       false);
     checkAcceptsURL(xDriver, "sdbc:mozab:outlookexp:",    false);
 
-    // good
+    
     checkAcceptsURL(xDriver, "sdbc:mozab:mozilla:",       true);
     checkAcceptsURL(xDriver, "sdbc:mozab:thunderbird:",   true);
     checkAcceptsURL(xDriver, "sdbc:address:mozilla:",     true);
@@ -95,8 +95,8 @@ void MorkDriverTest::setUp()
 
 void MorkDriverTest::tearDown()
 {
-// how to make dispose() work?
-// Reference< com::sun::star::lang::XComponent >( m_xMorkComponent, UNO_QUERY_THROW )->dispose();
+
+
     test::BootstrapFixture::tearDown();
 }
 
@@ -120,8 +120,8 @@ void MorkDriverTest::test_metadata()
         CPPUNIT_ASSERT_MESSAGE("cannot retrieve tables!", xResultSet.is());
     }
 
-    // TODO: how to access that result set and check the tables?
-    // it should be 3 tables inside: AddressBook, does_5 and does_10
+    
+    
 }
 
 void MorkDriverTest::test_select_default_all()

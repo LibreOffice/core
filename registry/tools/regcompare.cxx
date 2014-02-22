@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -100,7 +100,7 @@ bool Options_Impl::setRegName_Impl(char c, std::string const & param)
     return (one || two);
 }
 
-//virtual
+
 void Options_Impl::printUsage_Impl() const
 {
     std::string const & rProgName = getProgramName();
@@ -134,7 +134,7 @@ void Options_Impl::printUsage_Impl() const
             );
 }
 
-// virtual
+
 bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
 {
     std::vector< std::string >::const_iterator first = rArgs.begin(), last = rArgs.end();
@@ -157,7 +157,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
                 std::string option(*first), param;
                 if (option.size() == 1)
                 {
-                    // "-r<n><space><param>"
+                    
                     if (!((++first != last) && ((*first)[0] != '-')))
                     {
                         return badOption("invalid", (*first).c_str());
@@ -166,7 +166,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
                 }
                 else
                 {
-                    // "-r<n><param>"
+                    
                     param = std::string(&(option[1]), option.size() - 1);
                 }
                 if (!setRegName_Impl(option[0], param))
@@ -243,12 +243,12 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
                     return badOption("invalid", (*first).c_str());
                 }
                 return printUsage();
-                // break; // Unreachable
+                
             }
         default:
             {
                 return badOption("unknown", (*first).c_str());
-                // break; // Unreachable
+                
             }
         }
     }
@@ -383,10 +383,10 @@ static char const * getConstValueType(RTConstValue& constValue)
             return "sal_Int32";
         case RT_TYPE_UINT32:
             return "sal_uInt32";
-//      case RT_TYPE_INT64:
-//          return "sal_Int64";
-//      case RT_TYPE_UINT64:
-//          return "sal_uInt64";
+
+
+
+
         case RT_TYPE_FLOAT:
             return "float";
         case RT_TYPE_DOUBLE:
@@ -428,10 +428,10 @@ static void printConstValue(RTConstValue& constValue)
                 sal::static_int_cast< unsigned long >(
                     constValue.m_value.aULong));
             break;
-//      case RT_TYPE_INT64:
-//          fprintf(stdout, "%d", constValue.m_value.aHyper);
-//      case RT_TYPE_UINT64:
-//          fprintf(stdout, "%d", constValue.m_value.aUHyper);
+
+
+
+
         case RT_TYPE_FLOAT:
             fprintf(stdout, "%f", constValue.m_value.aFloat);
             break;
@@ -580,8 +580,8 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
                             OUString::number(
                                 constValue2.m_value.aUHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr());
-                        // printing the unsigned values as signed should be
-                        // acceptable...
+                        
+                        
                 }
                 return 1;
             }
@@ -1964,7 +1964,7 @@ int _cdecl main( int argc, char * argv[] )
     {
         if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
         {
-            // failure.
+            
             options.printUsage();
             return (1);
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -33,7 +33,7 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-/// builds a DOM tree from SAX events, by forwarding to SAXDocumentBuilder
+
 class XMLDocumentBuilderContext : public SvXMLImportContext
 {
 private:
@@ -116,7 +116,7 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
     try {
         xInit->initialize(aSeq);
         rImport.SetStatistics(xDocProps->getDocumentStatistics());
-        // convert all URLs from relative to absolute
+        
         xDocProps->setTemplateURL(rImport.GetAbsoluteReference(
             xDocProps->getTemplateURL()));
         xDocProps->setAutoloadURL(rImport.GetAbsoluteReference(
@@ -170,8 +170,8 @@ SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
         xml::dom::SAXDocumentBuilder::create(
             comphelper::getProcessComponentContext()))
 {
-// #i103539#: must always read meta.xml for generator, xDocProps unwanted then
-//    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
+
+
 }
 
 SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
@@ -198,7 +198,7 @@ void SvXMLMetaDocumentContext::StartElement(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     mxDocBuilder->startDocument();
-    // hardcode office:document-meta (necessary in case of flat file ODF)
+    
     mxDocBuilder->startElement(
         GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(),
             GetXMLToken(XML_DOCUMENT_META)), xAttrList);
@@ -207,7 +207,7 @@ void SvXMLMetaDocumentContext::StartElement(
 
 void SvXMLMetaDocumentContext::EndElement()
 {
-    // hardcode office:document-meta (necessary in case of flat file ODF)
+    
     mxDocBuilder->endElement(
         GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(),
             GetXMLToken(XML_DOCUMENT_META)));
@@ -225,11 +225,11 @@ void SvXMLMetaDocumentContext::EndElement()
 void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )
 {
     OUString sBuildId;
-    // skip to second product
+    
     sal_Int32 nBegin = i_rBuildId.indexOf( ' ' );
     if ( nBegin != -1 )
     {
-        // skip to build information
+        
         nBegin = i_rBuildId.indexOf( '/', nBegin );
         if ( nBegin != -1 )
         {
@@ -262,7 +262,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
         }
         else if (i_rBuildId.startsWith("NeoOffice/2"))
         {
-            sBuildId = "680$9134"; // fake NeoOffice as OpenOffice.org 2.2 release
+            sBuildId = "680$9134"; 
         }
     }
 

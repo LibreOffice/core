@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -60,14 +60,14 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-//////////////////////////////////////////////////////////////////////
+
 
 static awt::Rectangle lcl_GetBounds( Window *pWin )
 {
-    // !! see VCLXAccessibleComponent::implGetBounds()
+    
 
-    //! the coordinates returned are relativ to the parent window !
-    //! Thus the top-left point may be different from (0, 0) !
+    
+    
 
     awt::Rectangle aBounds;
     if (pWin)
@@ -91,7 +91,7 @@ static awt::Rectangle lcl_GetBounds( Window *pWin )
 
 static awt::Point lcl_GetLocationOnScreen( Window *pWin )
 {
-    // !! see VCLXAccessibleComponent::getLocationOnScreen()
+    
 
     awt::Point aPos;
     if (pWin)
@@ -103,7 +103,7 @@ static awt::Point lcl_GetLocationOnScreen( Window *pWin )
     return aPos;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     aAccName            (SM_RESSTR(RID_DOCUMENTSTR)),
@@ -146,7 +146,7 @@ OUString SmGraphicAccessible::GetAccessibleText_Impl()
 
 void SmGraphicAccessible::ClearWin()
 {
-    pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
+    pWin = 0;   
 
     if ( nClientId )
     {
@@ -166,7 +166,7 @@ void SmGraphicAccessible::LaunchEvent(
     aEvt.OldValue   = rOldVal;
     aEvt.NewValue   = rNewVal ;
 
-    // pass event on to event-listener's
+    
     if (nClientId)
         comphelper::AccessibleEventNotifier::addEvent( nClientId, aEvt );
 }
@@ -181,8 +181,8 @@ uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessible
 sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    //! the arguments coordinates are relativ to the current window !
-    //! Thus the top-left point is (0, 0)
+    
+    
 
     SolarMutexGuard aGuard;
     if (!pWin)
@@ -304,7 +304,7 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    throw IndexOutOfBoundsException();  // there is no child...
+    throw IndexOutOfBoundsException();  
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
@@ -362,7 +362,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleR
 {
     SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
-    return xRelSet;   // empty relation set
+    return xRelSet;   
 }
 
 Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
@@ -399,8 +399,8 @@ Locale SAL_CALL SmGraphicAccessible::getLocale()
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // should be the document language...
-    // We use the language of the localized symbol names here.
+    
+    
     return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
@@ -431,10 +431,10 @@ void SAL_CALL SmGraphicAccessible::removeAccessibleEventListener(
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( nClientId );
             nClientId = 0;
         }
@@ -491,24 +491,24 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         throw RuntimeException();
     else
     {
-        // get accessible text
+        
         SmViewShell *pView = pWin->GetView();
         SmDocShell  *pDoc  = pView ? pView->GetDoc() : 0;
         if (!pDoc)
             throw RuntimeException();
         OUString aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.getLength()))   // aTxt.getLength() is valid
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.getLength()))   
             throw IndexOutOfBoundsException();
 
-        // find a reasonable rectangle for position aTxt.getLength().
+        
         bool bWasBehindText = (nIndex == aTxt.getLength());
         if (bWasBehindText && nIndex)
             --nIndex;
 
         const SmNode *pTree = pDoc->GetFormulaTree();
         const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( nIndex );
-        //! pNode may be 0 if the index belongs to a char that was inserted
-        //! only for the accessible text!
+        
+        
         if (pNode)
         {
             sal_Int32 nAccIndex = pNode->GetAccessibleIndex();
@@ -521,7 +521,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             sal_Int32 nNodeIndex = nIndex - nAccIndex;
             if (0 <= nNodeIndex  &&  nNodeIndex < aNodeText.getLength())
             {
-                // get appropriate rectangle
+                
                 Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
                 Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
                 aTLPos.X() -= 0;
@@ -547,7 +547,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             }
         }
 
-        // take rectangle from last character and move it to the right
+        
         if (bWasBehindText)
             aRes.X += aRes.Width;
     }
@@ -571,24 +571,24 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
     if (pWin)
     {
         const SmNode *pTree = pWin->GetView()->GetDoc()->GetFormulaTree();
-        // can be NULL! e.g. if one clicks within the window already during loading of the
-        // document (before the parser even started)
+        
+        
         if (!pTree)
             return nRes;
 
-        // get position relative to formula draw position
+        
         Point  aPos( aPoint.X, aPoint.Y );
         aPos = pWin->PixelToLogic( aPos );
         aPos -= pWin->GetFormulaDrawPos();
 
-        // if it was inside the formula then get the appropriate node
+        
         const SmNode *pNode = 0;
         if (pTree->OrientedDist(aPos) <= 0)
             pNode = pTree->FindRectClosestTo(aPos);
 
         if (pNode)
         {
-            // get appropriate rectangle
+            
             Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
             Point   aTLPos ( aOffset );
             aTLPos.X() -= 0;
@@ -675,9 +675,9 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    //!! nEndIndex may be the string length per definition of the interface !!
-    //!! text should be copied exclusive that end index though. And arguments
-    //!! may be switched.
+    
+    
+    
 
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -693,7 +693,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
-    //!! nIndex is allowed to be the string length
+    
     if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
@@ -713,7 +713,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
-    //!! nIndex is allowed to be the string length
+    
     if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
@@ -734,7 +734,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
-    //!! nIndex is allowed to be the string length
+    
     if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
@@ -742,7 +742,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
-    nIndex++; // text *behind*
+    nIndex++; 
     if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex < aTxt.getLength()) )
     {
         aResult.SegmentText = aTxt.copy(nIndex, 1);
@@ -811,9 +811,9 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     return aNames;
 }
 
-//////////////////////////////////////////////////////////////////////
 
-//------------------------------------------------------------------------
+
+
 
 SmEditSource::SmEditSource( SmEditWindow * /*pWin*/, SmEditAccessible &rAcc ) :
     aViewFwd    (rAcc),
@@ -858,8 +858,8 @@ SvxEditViewForwarder* SmEditSource::GetEditViewForwarder( bool /*bCreate*/ )
 
 void SmEditSource::UpdateData()
 {
-    // would possibly only by needed if the XText inteface is implemented
-    // and its text needs to be updated.
+    
+    
 }
 
 SfxBroadcaster & SmEditSource::GetBroadcaster() const
@@ -867,7 +867,7 @@ SfxBroadcaster & SmEditSource::GetBroadcaster() const
     return ((SmEditSource *) this)->aBroadCaster;
 }
 
-//------------------------------------------------------------------------
+
 
 SmViewForwarder::SmViewForwarder( SmEditAccessible &rAcc ) :
     rEditAcc(rAcc)
@@ -892,7 +892,7 @@ Rectangle SmViewForwarder::GetVisArea() const
     {
         Rectangle aVisArea = pEditView->GetVisArea();
 
-        // figure out map mode from edit engine
+        
         EditEngine* pEditEngine = pEditView->GetEditEngine();
 
         if( pEditEngine )
@@ -945,7 +945,7 @@ Point SmViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
 }
 
 
-//------------------------------------------------------------------------
+
 
 SmTextForwarder::SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource) :
     rEditAcc ( rAcc ),
@@ -1105,8 +1105,8 @@ void SmTextForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection&
 sal_Bool SmTextForwarder::IsValid() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    // cannot reliably query EditEngine state
-    // while in the middle of an update
+    
+    
     return pEditEngine ? pEditEngine->GetUpdateMode() : sal_False;
 }
 
@@ -1128,12 +1128,12 @@ static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESel
 
     SfxItemState eState = SFX_ITEM_DEFAULT;
 
-    // check all paragraphs inside the selection
+    
     for( sal_Int32 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
         SfxItemState eParaState = SFX_ITEM_DEFAULT;
 
-        // calculate start and endpos for this paragraph
+        
         sal_Int32 nPos = 0;
         if( rSel.nStartPara == nPara )
             nPos = rSel.nStartPos;
@@ -1143,11 +1143,11 @@ static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESel
             nEndPos = rEditEngine.GetTextLen( nPara );
 
 
-        // get list of char attribs
+        
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        bool bEmpty = true;     // we found no item inside the selektion of this paragraph
-        bool bGaps  = false;    // we found items but theire gaps between them
+        bool bEmpty = true;     
+        bool bGaps  = false;    
         sal_Int32 nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -1158,18 +1158,18 @@ static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESel
 
             const sal_Bool bEmptyPortion = (i->nStart == i->nEnd);
             if( (!bEmptyPortion && (i->nStart >= nEndPos)) || (bEmptyPortion && (i->nStart > nEndPos)) )
-                break;  // break if we are already behind our selektion
+                break;  
 
             if( (!bEmptyPortion && (i->nEnd <= nPos)) || (bEmptyPortion && (i->nEnd < nPos)) )
-                continue;   // or if the attribute ends before our selektion
+                continue;   
 
             if( i->pAttr->Which() != nWhich )
-                continue; // skip if is not the searched item
+                continue; 
 
-            // if we already found an item
+            
             if( pParaItem )
             {
-                // ... and its different to this one than the state is dont care
+                
                 if( *pParaItem != *(i->pAttr) )
                     return SFX_ITEM_DONTCARE;
             }
@@ -1196,7 +1196,7 @@ static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESel
         else
             eParaState = SFX_ITEM_SET;
 
-        // if we already found an item check if we found the same
+        
         if( pLastItem )
         {
             if( (pParaItem == NULL) || (*pLastItem != *pParaItem) )
@@ -1263,7 +1263,7 @@ Rectangle SmTextForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) co
 
     if (pEditEngine)
     {
-        // Handle virtual position one-past-the end of the string
+        
         if( nIndex >= pEditEngine->GetTextLen(nPara) )
         {
             if( nIndex )
@@ -1392,14 +1392,14 @@ sal_Bool SmTextForwarder::QuickFormatDoc( sal_Bool /*bFull*/ )
 
 sal_Int16 SmTextForwarder::GetDepth( sal_Int32 /*nPara*/ ) const
 {
-    // math has no outliner...
+    
     return -1;
 }
 
 sal_Bool SmTextForwarder::SetDepth( sal_Int32 /*nPara*/, sal_Int16 nNewDepth )
 {
-    // math has no outliner...
-    return -1 == nNewDepth;  // is it the value from 'GetDepth' ?
+    
+    return -1 == nNewDepth;  
 }
 
 sal_Bool SmTextForwarder::Delete( const ESelection& rSelection )
@@ -1441,7 +1441,7 @@ const SfxItemSet*   SmTextForwarder::GetEmptyItemSetPtr()
 
 void SmTextForwarder::AppendParagraph()
 {
-    // append an empty paragraph
+    
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
@@ -1456,11 +1456,11 @@ sal_Int32 SmTextForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &r
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine && nPara < pEditEngine->GetParagraphCount())
     {
-        // append text
+        
         ESelection aSel( nPara, pEditEngine->GetTextLen( nPara ) );
         pEditEngine->QuickInsertText( rText, aSel );
 
-        // set attributes for new appended text
+        
         nRes = aSel.nEndPos = pEditEngine->GetTextLen( nPara );
         pEditEngine->QuickSetAttribs( rSet, aSel );
     }
@@ -1483,7 +1483,7 @@ void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
     }
 }
 
-//------------------------------------------------------------------------
+
 
 SmEditViewForwarder::SmEditViewForwarder( SmEditAccessible& rAcc ) :
     rEditAcc( rAcc )
@@ -1510,7 +1510,7 @@ Rectangle SmEditViewForwarder::GetVisArea() const
     {
         Rectangle aVisArea = pEditView->GetVisArea();
 
-        // figure out map mode from edit engine
+        
         EditEngine* pEditEngine = pEditView->GetEditEngine();
 
         if( pEditEngine )
@@ -1622,7 +1622,7 @@ sal_Bool SmEditViewForwarder::Paste()
     return bRes;
 }
 
-//------------------------------------------------------------------------
+
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     aAccName            (SM_RESSTR(STR_CMDBOXWINDOW)),
@@ -1666,25 +1666,25 @@ void SmEditAccessible::Init()
 
 void SmEditAccessible::ClearWin()
 {
-    // remove handler before current object gets destroyed
-    // (avoid handler being called for already dead object)
+    
+    
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
         pEditEngine->SetNotifyHdl( Link() );
 
-    pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
+    pWin = 0;   
 
-    //! make TextHelper implicitly release C++ references to some core objects
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     pTextHelper->SetEditSource( ::std::auto_ptr<SvxEditSource>(NULL) );
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    //! make TextHelper release references
-    //! (e.g. the one set by the 'SetEventSource' call)
+    
+    
     pTextHelper->Dispose();
     delete pTextHelper;     pTextHelper = 0;
 }
 
-// XAccessible
+
 uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleContext(  )
     throw (RuntimeException)
 {
@@ -1692,12 +1692,12 @@ uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleCon
     return this;
 }
 
-// XAccessibleComponent
+
 sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    //! the arguments coordinates are relativ to the current window !
-    //! Thus the top left-point is (0, 0)
+    
+    
 
     SolarMutexGuard aGuard;
     if (!pWin)
@@ -1805,7 +1805,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
     return (sal_Int32) nCol;
 }
 
-// XAccessibleContext
+
 sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
     throw (RuntimeException)
 {
@@ -1863,14 +1863,14 @@ OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return OUString();  // empty as agreed with product-management
+    return OUString();  
 }
 
 OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // same name as displayed by the window when not docked
+    
     return aAccName;
 }
 
@@ -1879,7 +1879,7 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibl
 {
     SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
-    return xRelSet;   // empty relation set
+    return xRelSet;   
 }
 
 uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleStateSet(  )
@@ -1917,24 +1917,24 @@ Locale SAL_CALL SmEditAccessible::getLocale(  )
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // should be the document language...
-    // We use the language of the localized symbol names here.
+    
+    
     return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
 
-// XAccessibleEventBroadcaster
+
 void SAL_CALL SmEditAccessible::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    if (pTextHelper)   // not disposing (about to destroy view shell)
+    if (pTextHelper)   
         pTextHelper->AddEventListener( xListener );
 }
 
 void SAL_CALL SmEditAccessible::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-   if (pTextHelper)   // not disposing (about to destroy view shell)
+   if (pTextHelper)   
         pTextHelper->RemoveEventListener( xListener );
 }
 
@@ -1962,6 +1962,6 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     return aNames;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/charclass.hxx>
@@ -59,7 +59,7 @@ void ScUserListData::InitTokens()
     {
         if (bFirst)
         {
-            // very first character, or the first character after a separator.
+            
             p0 = p;
             nLen = 0;
             bFirst = false;
@@ -113,7 +113,7 @@ size_t ScUserListData::GetSubCount() const
 
 bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) const
 {
-    // First, case sensitive search.
+    
     SubStringsType::const_iterator itr = ::std::find_if(
         maSubStrings.begin(), maSubStrings.end(), FindByName(rSubStr, false));
     if (itr != maSubStrings.end())
@@ -122,7 +122,7 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) co
         return true;
     }
 
-    // When that fails, do a case insensitive search.
+    
     OUString aTmp = ScGlobal::pCharClass->uppercase(rSubStr);
     OUString aUpStr = aTmp;
     itr = ::std::find_if(

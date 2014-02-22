@@ -66,7 +66,7 @@ bool XColorList::Create()
     sal_uInt32 a(0);
     sal_uInt32 b(0);
 
-    // <!-- Gray palette from white to black -->
+    
     const OUString aStrGrey( SVX_RESSTR( RID_SVXSTR_COLOR_GREY ) );
 
     Insert( new XColorEntry( Color( 0xff, 0xff, 0xff ), SVX_RESSTR( RID_SVXSTR_COLOR_WHITE ) ) );
@@ -82,7 +82,7 @@ bool XColorList::Create()
     Insert( new XColorEntry( Color( 0x11, 0x11, 0x11 ), aStrGrey + " 10") );
     Insert( new XColorEntry( Color( 0x00, 0x00, 0x00 ), SVX_RESSTR( RID_SVXSTR_COLOR_BLACK ) ) );
 
-    // <!-- Base colors step 0 to 10 -->
+    
     const sal_uInt32 nNumColorsInGroup(12);
     const sal_uInt32 nNumGroups(11);
     const OUString aStrCol[nNumColorsInGroup] = {
@@ -124,11 +124,11 @@ bool XColorList::Create()
         }
     }
 
-    // <!-- use some 'nice' colors from original palette -->
+    
     Insert( new XColorEntry( Color( 0xe6, 0xe6, 0xff ), SVX_RESSTR( RID_SVXSTR_COLOR_BLUEGREY) ) );
     Insert( new XColorEntry( Color( 0xCF, 0xE7, 0xF5  ), SVX_RESSTR( RID_SVXSTR_COLOR_BLUE_CLASSIC ) ) );
 
-    // <!-- add 'pale' colors from original palette -->
+    
     Insert( new XColorEntry( Color( 0x99, 0x99, 0xff ), SVX_RESSTR( RID_SVXSTR_COLOR_VIOLET ) ) );
     Insert( new XColorEntry( Color( 0x99, 0x33, 0x66 ), SVX_RESSTR( RID_SVXSTR_COLOR_BORDEAUX ) ) );
     Insert( new XColorEntry( Color( 0xff, 0xff, 0xcc ), SVX_RESSTR( RID_SVXSTR_COLOR_PALE_YELLOW ) ) );
@@ -137,7 +137,7 @@ bool XColorList::Create()
     Insert( new XColorEntry( Color( 0xff, 0x80, 0x80 ), SVX_RESSTR( RID_SVXSTR_COLOR_SALMON ) ) );
     Insert( new XColorEntry( Color( 0x00, 0x66, 0xcc ), SVX_RESSTR( RID_SVXSTR_COLOR_SEABLUE ) ) );
 
-    // <!-- add Chart colors from original palette (also 12, coincidence?) -->
+    
     const OUString aStrChart( SVX_RESSTR( RID_SVXSTR_COLOR_CHART ) );
     Insert( new XColorEntry( Color( 0x00, 0x45, 0x86 ), aStrChart + " 1" ) );
     Insert( new XColorEntry( Color( 0xff, 0x42, 0x0e ), aStrChart + " 2" ) );

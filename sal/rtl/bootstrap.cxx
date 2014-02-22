@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -116,7 +116,7 @@ rtl::OUString recursivelyExpandMacros(
 
 }
 
-//----------------------------------------------------------------------------
+
 
 struct rtl_bootstrap_NameValue
 {
@@ -156,7 +156,7 @@ namespace {
         public rtl::Static< NameValueList, rtl_bootstrap_set_list > {};
 }
 
-//----------------------------------------------------------------------------
+
 
 static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
@@ -189,9 +189,9 @@ static bool getFromCommandLineArgs(
                         nameValue.sValue.getLength() &&
                         nameValue.sValue[nameValue.sValue.getLength()-1] == 13 )
                     {
-                        // avoid the 13 linefeed for the last argument,
-                        // when the executable is started from a script,
-                        // that was edited on windows
+                        
+                        
+                        
                         nameValue.sValue = nameValue.sValue.copy(0,nameValue.sValue.getLength()-1);
                     }
                     nameValueList.push_back( nameValue );
@@ -219,7 +219,7 @@ static bool getFromCommandLineArgs(
     return found;
 }
 
-//----------------------------------------------------------------------------
+
 
 extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     rtl_uString ** ppFileURL) SAL_THROW_EXTERN_C();
@@ -229,7 +229,7 @@ inline void getExecutableFile_Impl (rtl_uString ** ppFileURL)
     osl_bootstrap_getExecutableFile_Impl (ppFileURL);
 }
 
-//----------------------------------------------------------------------------
+
 
 static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
 {
@@ -242,7 +242,7 @@ static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
     rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
 }
 
-//----------------------------------------------------------------------------
+
 
 static OUString & getIniFileName_Impl()
 {
@@ -253,17 +253,17 @@ static OUString & getIniFileName_Impl()
         OUString fileName;
 
 #if defined IOS
-        // On iOS hardcode the inifile as "rc" in the .app
-        // directory. Apps are self-contained anyway, there is no
-        // possibility to have several "applications" in the same
-        // installation location with different inifiles.
+        
+        
+        
+        
         const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
         fileName = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
         resolvePathnameUrl(&fileName);
 #elif defined ANDROID
-        // Apps are self-contained on Android, too, can as well hardcode
-        // it as "rc" in the "/assets" directory, i.e.  inside the app's
-        // .apk (zip) archive as the /assets/rc file.
+        
+        
+        
         fileName = rtl::OUString("vnd.sun.star.pathname:/assets/rc");
         resolvePathnameUrl(&fileName);
 #else
@@ -276,7 +276,7 @@ static OUString & getIniFileName_Impl()
         {
             getExecutableFile_Impl (&(fileName.pData));
 
-            // get rid of a potential executable extension
+            
             OUString progExt = ".bin";
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
@@ -287,12 +287,12 @@ static OUString & getIniFileName_Impl()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-            // append config file suffix
+            
             fileName += OUString(SAL_CONFIGFILE(""));
 
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
-            // We keep only executables in the MacOS folder, and all
-            // rc files in LIBO_ETC_FOLDER (typically "Resources").
+            
+            
             sal_Int32 p = fileName.lastIndexOf( "/MacOS/" );
             fileName = fileName.replaceAt( p+1, strlen("MacOS"), LIBO_ETC_FOLDER );
 #endif
@@ -309,9 +309,9 @@ static OUString & getIniFileName_Impl()
     return *pStaticName;
 }
 
-//----------------------------------------------------------------------------
-// #111772#
-// ensure the given file url has no final slash
+
+
+
 
 inline void EnsureNoFinalSlash (rtl::OUString & url)
 {
@@ -353,7 +353,7 @@ struct Bootstrap_Impl
         ExpandRequestLink const * requestStack) const;
 };
 
-//----------------------------------------------------------------------------
+
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),
@@ -361,7 +361,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
       _iniName (rIniName)
 {
     OUString base_ini( getIniFileName_Impl() );
-    // normalize path
+    
     FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
     if (DirectoryItem::E_None == DirectoryItem::get( base_ini, dirItem ) &&
@@ -420,7 +420,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 #endif /* OSL_DEBUG_LEVEL > 1 */
 }
 
-//----------------------------------------------------------------------------
+
 
 Bootstrap_Impl::~Bootstrap_Impl()
 {
@@ -428,7 +428,7 @@ Bootstrap_Impl::~Bootstrap_Impl()
         rtl_bootstrap_args_close( _base_ini );
 }
 
-//----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -468,8 +468,8 @@ struct FundamentalIniData {
     ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
 
 private:
-    FundamentalIniData(FundamentalIniData &); // not defined
-    void operator =(FundamentalIniData &); // not defined
+    FundamentalIniData(FundamentalIniData &); 
+    void operator =(FundamentalIniData &); 
 };
 
 struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
@@ -632,8 +632,8 @@ struct bootstrap_map: private boost::noncopyable {
         rtl::OUStringHash, std::equal_to< rtl::OUString >,
         rtl::Allocator< OUString > > t;
 
-    // get and release must only be called properly synchronized via some mutex
-    // (e.g., osl::Mutex::getGlobalMutex()):
+    
+    
 
     static t * get() {
         if (m_map == NULL) {
@@ -657,7 +657,7 @@ bootstrap_map::t * bootstrap_map::m_map = NULL;
 
 }
 
-//----------------------------------------------------------------------------
+
 
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     rtl_uString * pIniName
@@ -665,7 +665,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
 {
     OUString iniName( pIniName );
 
-    // normalize path
+    
     FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
     if (DirectoryItem::E_None != DirectoryItem::get( iniName, dirItem ) ||
@@ -693,7 +693,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
             ::std::pair< bootstrap_map::t::iterator, bool > insertion(
                 p_bootstrap_map->insert(
                     bootstrap_map::t::value_type( iniName, that ) ) );
-            (void) insertion; // WaE: unused variable
+            (void) insertion; 
             OSL_ASSERT( insertion.second );
         }
         else
@@ -713,7 +713,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     return static_cast< rtlBootstrapHandle >( that );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_args_close (
     rtlBootstrapHandle handle
@@ -730,11 +730,11 @@ void SAL_CALL rtl_bootstrap_args_close (
     --that->_nRefCount;
     if (that->_nRefCount == 0)
     {
-        ::std::size_t nLeaking = 8; // only hold up to 8 files statically
+        ::std::size_t nLeaking = 8; 
 
-#if OSL_DEBUG_LEVEL == 1 // nonpro
+#if OSL_DEBUG_LEVEL == 1 
         nLeaking = 0;
-#elif OSL_DEBUG_LEVEL > 1 // debug
+#elif OSL_DEBUG_LEVEL > 1 
         nLeaking = 1;
 #endif /* OSL_DEBUG_LEVEL */
 
@@ -750,7 +750,7 @@ void SAL_CALL rtl_bootstrap_args_close (
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     rtlBootstrapHandle handle,
@@ -773,7 +773,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     return found;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     rtlBootstrapHandle handle,
@@ -795,7 +795,7 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_setIniFileName (
     rtl_uString * pName
@@ -806,7 +806,7 @@ void SAL_CALL rtl_bootstrap_setIniFileName (
     file = pName;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL rtl_bootstrap_get (
     rtl_uString  * pName,
@@ -817,7 +817,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get (
     return rtl_bootstrap_get_from_handle(0, pName, ppValue, pDefault);
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_set (
     rtl_uString * pName,
@@ -852,7 +852,7 @@ void SAL_CALL rtl_bootstrap_set (
     r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     rtlBootstrapHandle handle,
@@ -868,7 +868,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     rtl_uString_assign( macro, expanded.pData );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_expandMacros(
     rtl_uString ** macro )
@@ -989,7 +989,7 @@ rtl::OUString expandMacros(
                     rtl::ByteSequence seq;
                     rtl::OUString line;
                     rtl::OUString url;
-                    // Silently ignore any errors (is that good?):
+                    
                     if ((f.open(osl_File_OpenFlag_Read) ==
                          osl::FileBase::E_None) &&
                         f.readLine(seq) == osl::FileBase::E_None &&
@@ -1017,8 +1017,8 @@ rtl::OUString expandMacros(
                         lookup(f, mode, f != NULL, seg[2], requestStack));
                 } else {
                     if (n == 3 && seg[1].isEmpty()) {
-                        // For backward compatibility, treat ${file::key} the
-                        // same as just ${file:key}:
+                        
+                        
                         seg[1] = seg[2];
                         n = 2;
                     }
@@ -1029,10 +1029,10 @@ rtl::OUString expandMacros(
                                     rtl::Bootstrap(seg[0]).getHandle()),
                                 mode, false, seg[1], requestStack));
                     } else {
-                        // Going through osl::Profile, this code erroneously
-                        // does not recursively expand macros in the resulting
-                        // replacement text (and if it did, it would fail to
-                        // detect cycles that pass through here):
+                        
+                        
+                        
+                        
                         buf.append(
                             rtl::OStringToOUString(
                                 osl::Profile(seg[0]).readString(

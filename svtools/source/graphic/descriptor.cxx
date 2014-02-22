@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "descriptor.hxx"
@@ -47,9 +47,9 @@ using namespace ::com::sun::star;
 
 namespace unographic {
 
-// ---------------------
-// - GraphicDescriptor -
-// ---------------------
+
+
+
 
 GraphicDescriptor::GraphicDescriptor() :
     ::comphelper::PropertySetHelper( createPropertySetInfo(), SAL_NO_ACQUIRE ),
@@ -62,14 +62,14 @@ GraphicDescriptor::GraphicDescriptor() :
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 GraphicDescriptor::~GraphicDescriptor()
     throw()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicDescriptor::init( const ::Graphic& rGraphic )
     throw()
@@ -77,7 +77,7 @@ void GraphicDescriptor::init( const ::Graphic& rGraphic )
     mpGraphic = &rGraphic;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicDescriptor::init( const OUString& rURL )
     throw()
@@ -91,7 +91,7 @@ void GraphicDescriptor::init( const OUString& rURL )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const OUString& rURL )
     throw()
@@ -105,7 +105,7 @@ void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, 
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 {
@@ -171,7 +171,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString GraphicDescriptor::getImplementationName_Static()
     throw()
@@ -179,7 +179,7 @@ OUString GraphicDescriptor::getImplementationName_Static()
     return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
     throw(  )
@@ -191,7 +191,7 @@ uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
     return aSeq;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -214,7 +214,7 @@ uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -222,7 +222,7 @@ uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface( rType );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GraphicDescriptor::acquire()
     throw()
@@ -230,7 +230,7 @@ void SAL_CALL GraphicDescriptor::acquire()
     OWeakAggObject::acquire();
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GraphicDescriptor::release()
     throw()
@@ -238,7 +238,7 @@ void SAL_CALL GraphicDescriptor::release()
     OWeakAggObject::release();
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
     throw( uno::RuntimeException )
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceNam
     return cppu::supportsService(this, ServiceName);
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -260,7 +260,7 @@ uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     throw( uno::RuntimeException )
@@ -289,7 +289,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     return theGraphicDescriptorUnoTunnelId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::comphelper::PropertySetInfo* GraphicDescriptor::createPropertySetInfo()
 {
@@ -315,7 +315,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     return pRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry** /*ppEntries*/, const uno::Any* /*pValues*/ )
     throw( beans::UnknownPropertyException,
@@ -323,10 +323,10 @@ void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry**
            lang::IllegalArgumentException,
               lang::WrappedTargetException )
 {
-    // we only have readonly attributes
+    
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException )
@@ -366,7 +366,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             case( GFX_LINK_TYPE_NATIVE_MET ): pMimeType = MIMETYPE_MET; break;
                             case( GFX_LINK_TYPE_NATIVE_PCT ): pMimeType = MIMETYPE_PCT; break;
 
-                            // added Svg mimetype support
+                            
                             case( GFX_LINK_TYPE_NATIVE_SVG ): pMimeType = MIMETYPE_SVG; break;
 
                             default:

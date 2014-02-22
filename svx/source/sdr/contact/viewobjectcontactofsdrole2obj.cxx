@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/contact/viewobjectcontactofsdrole2obj.hxx>
@@ -31,11 +31,11 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -49,9 +49,9 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
             const DisplayInfo& /*rDisplayInfo*/) const
         {
-            // this method is overloaded to do some things the old SdrOle2Obj::DoPaintObject did.
-            // In the future, some of these may be solved different, but ATM try to stay compatible
-            // with the old behaviour
+            
+            
+            
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SdrOle2Obj& rSdrOle2 = getSdrOle2Object();
             sal_Int32 nState(-1);
@@ -70,28 +70,28 @@ namespace sdr
             {
                 if( !GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile() )
                 {
-                    //no need to create a primitive sequence here as the OLE object does render itself
-                    //in case of charts the superfluous creation of a metafile is strongly performance relevant!
+                    
+                    
                     bDone = true;
                 }
             }
 
             if( !bDone )
             {
-                //old stuff that should be reworked
+                
                 {
-                    //if no replacement image is available load the OLE object
-//                    if(!rSdrOle2.GetGraphic()) //try to fetch the metafile - this can lead to the actual creation of the metafile what can be extremely expensive (e.g. for big charts)!!! #i101925#
-//                    {
-//                      // try to create embedded object
-//                        rSdrOle2.GetObjRef(); //this loads the OLE object if it is not loaded already
-//                    }
+                    
+
+
+
+
+
                     const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
                     if(xObjRef.is())
                     {
                         const sal_Int64 nMiscStatus(xObjRef->getStatus(rSdrOle2.GetAspect()));
 
-                        // this hack (to change model data during PAINT argh(!)) should be reworked
+                        
                         if(!rSdrOle2.IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
                         {
                             const_cast< SdrOle2Obj* >(&rSdrOle2)->SetResizeProtect(true);
@@ -100,36 +100,36 @@ namespace sdr
                         SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
                         if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
                         {
-                            // connect plugin object
+                            
                             pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
                         }
                     }
-                }//end old stuff to rework
+                }
 
-                // create OLE primitive stuff directly at VC with HC as parameter
+                
                 const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
                 xRetval = rVC.createPrimitive2DSequenceWithParameters();
 
                 if(bIsOutplaceActive)
                 {
-                    // do not shade when printing or PDF exporting
+                    
                     if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
                     {
-                        // get object transformation
+                        
                         const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform());
 
-                        // shade the representation if the object is activated outplace
+                        
                         basegfx::B2DPolygon aObjectOutline(basegfx::tools::createUnitPolygon());
                         aObjectOutline.transform(aObjectMatrix);
 
-                        // Use a FillHatchPrimitive2D with necessary attributes
+                        
                         const drawinglayer::attribute::FillHatchAttribute aFillHatch(
-                            drawinglayer::attribute::HATCHSTYLE_SINGLE, // single hatch
-                            125.0, // 1.25 mm
-                            45.0 * F_PI180, // 45 degree diagonal
-                            Color(COL_BLACK).getBColor(), // black color
-                            3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                            false); // no filling
+                            drawinglayer::attribute::HATCHSTYLE_SINGLE, 
+                            125.0, 
+                            45.0 * F_PI180, 
+                            Color(COL_BLACK).getBColor(), 
+                            3, 
+                            false); 
 
                         const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
                             basegfx::B2DPolyPolygon(aObjectOutline),
@@ -153,7 +153,7 @@ namespace sdr
         ViewObjectContactOfSdrOle2Obj::~ViewObjectContactOfSdrOle2Obj()
         {
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

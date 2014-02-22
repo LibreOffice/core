@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xename.hxx"
@@ -29,7 +29,7 @@
 #include "xelink.hxx"
 #include "globalnames.hxx"
 
-// for filter manager
+
 #include "excrecds.hxx"
 
 #include <formula/grammar.hxx>
@@ -37,9 +37,9 @@
 using namespace ::oox;
 
 
-// ============================================================================
-// *** Helper classes ***
-// ============================================================================
+
+
+
 
 /** Represents an internal defined name, supports writing it to a NAME record. */
 class XclExpName : public XclExpRecord, protected XclExpRoot
@@ -98,18 +98,18 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    OUString            maOrigName;     /// The original user-defined name.
-    OUString            msSymbol;       /// The value of the symbol
-    XclExpStringRef     mxName;         /// The name as Excel string object.
-    XclTokenArrayRef    mxTokArr;       /// The definition of the defined name.
-    sal_Unicode         mcBuiltIn;      /// The built-in index for built-in names.
-    SCTAB               mnScTab;        /// The Calc sheet index for local names.
-    sal_uInt16          mnFlags;        /// Additional flags for this defined name.
-    sal_uInt16          mnExtSheet;     /// The 1-based index to a global EXTERNSHEET record.
-    sal_uInt16          mnXclTab;       /// The 1-based Excel sheet index for local names.
+    OUString            maOrigName;     
+    OUString            msSymbol;       
+    XclExpStringRef     mxName;         
+    XclTokenArrayRef    mxTokArr;       
+    sal_Unicode         mcBuiltIn;      
+    SCTAB               mnScTab;        
+    sal_uInt16          mnFlags;        
+    sal_uInt16          mnExtSheet;     
+    sal_uInt16          mnXclTab;       
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScRangeData;
 class ScDBData;
@@ -192,13 +192,13 @@ private:
      *  index.
      */
     NamedExpIndexMap    maNamedExpMap;
-    XclExpNameList      maNameList;         /// List of NAME records.
-    size_t              mnFirstUserIdx;     /// List index of first user-defined NAME record.
+    XclExpNameList      maNameList;         
+    size_t              mnFirstUserIdx;     
 };
 
-// ============================================================================
-// *** Implementation ***
-// ============================================================================
+
+
+
 
 XclExpName::XclExpName( const XclExpRoot& rRoot, const OUString& rName ) :
     XclExpRecord( EXC_ID_NAME ),
@@ -222,11 +222,11 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
     mnExtSheet( EXC_NAME_GLOBAL ),
     mnXclTab( EXC_NAME_GLOBAL )
 {
-    // filter source range is hidden in Excel
+    
     if( cBuiltIn == EXC_BUILTIN_FILTERDATABASE )
         SetHidden();
 
-    // special case for BIFF5/7 filter source range - name appears as plain text without built-in flag
+    
     if( (GetBiff() <= EXC_BIFF5) && (cBuiltIn == EXC_BUILTIN_FILTERDATABASE) )
     {
         OUString aName( XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE ) );
@@ -254,19 +254,19 @@ void XclExpName::SetLocalTab( SCTAB nScTab )
         mnScTab = nScTab;
         GetGlobalLinkManager().FindExtSheet( mnExtSheet, mnXclTab, nScTab );
 
-        // special handling for NAME record
+        
         switch( GetBiff() )
         {
-            case EXC_BIFF5: // EXTERNSHEET index is positive in NAME record
+            case EXC_BIFF5: 
                 mnExtSheet = ~mnExtSheet + 1;
             break;
-            case EXC_BIFF8: // EXTERNSHEET index not used, but must be created in link table
+            case EXC_BIFF8: 
                 mnExtSheet = 0;
             break;
             default:    DBG_ERROR_BIFF();
         }
 
-        // Excel sheet index is 1-based
+        
         ++mnXclTab;
     }
 }
@@ -312,21 +312,21 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_definedName,
-            // OOXTODO: XML_comment, "",
-            // OOXTODO: XML_customMenu, "",
-            // OOXTODO: XML_description, "",
+            
+            
+            
             XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
-            // OOXTODO: XML_functionGroupId, "",
-            // OOXTODO: XML_help, "",
+            
+            
             XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
             XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::number( mnScTab ).getStr(),
             XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
-            // OOXTODO: XML_publishToServer, "",
-            // OOXTODO: XML_shortcutKey, "",
-            // OOXTODO: XML_statusBar, "",
+            
+            
+            
             XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
-            // OOXTODO: XML_workbookParameter, "",
-            // OOXTODO: XML_xlm, "",
+            
+            
             FSEND );
     rWorkbook->writeEscaped( msSymbol );
     rWorkbook->endElement( XML_definedName );
@@ -336,20 +336,20 @@ void XclExpName::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nFmlaSize = mxTokArr ? mxTokArr->GetSize() : 0;
 
-    rStrm   << mnFlags                  // flags
-            << sal_uInt8( 0 );          // keyboard shortcut
-    mxName->WriteLenField( rStrm );     // length of name
-    rStrm   << nFmlaSize                // size of token array
-            << mnExtSheet               // BIFF5/7: EXTSHEET index, BIFF8: not used
-            << mnXclTab                 // 1-based sheet index for local names
-            << sal_uInt32( 0 );         // length of menu/descr/help/status text
-    mxName->WriteFlagField( rStrm );    // BIFF8 flag field (no-op in <=BIFF7)
-    mxName->WriteBuffer( rStrm );       // character array of the name
+    rStrm   << mnFlags                  
+            << sal_uInt8( 0 );          
+    mxName->WriteLenField( rStrm );     
+    rStrm   << nFmlaSize                
+            << mnExtSheet               
+            << mnXclTab                 
+            << sal_uInt32( 0 );         
+    mxName->WriteFlagField( rStrm );    
+    mxName->WriteBuffer( rStrm );       
     if( mxTokArr )
-        mxTokArr->WriteArray( rStrm );  // token array without size
+        mxTokArr->WriteArray( rStrm );  
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpNameManagerImpl::XclExpNameManagerImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -414,11 +414,11 @@ sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
 
 sal_uInt16 XclExpNameManagerImpl::InsertRawName( const OUString& rName )
 {
-    // empty name? may occur in broken external Calc tokens
+    
     if( rName.isEmpty() )
         return 0;
 
-    // try to find an existing NAME record, regardless of its type
+    
     for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.GetSize(); nListIdx < nListSize; ++nListIdx )
     {
         XclExpNameRef xName = maNameList.GetRecord( nListIdx );
@@ -426,18 +426,18 @@ sal_uInt16 XclExpNameManagerImpl::InsertRawName( const OUString& rName )
             return static_cast< sal_uInt16 >( nListIdx + 1 );
     }
 
-    // create a new NAME record
+    
     XclExpNameRef xName( new XclExpName( GetRoot(), rName ) );
     return Append( xName );
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const OUString& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
 {
-    // empty name? may occur in broken external Calc tokens
+    
     if( rMacroName.isEmpty() )
         return 0;
 
-    // try to find an existing NAME record
+    
     for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.GetSize(); nListIdx < nListSize; ++nListIdx )
     {
         XclExpNameRef xName = maNameList.GetRecord( nListIdx );
@@ -445,12 +445,12 @@ sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const OUString& rMacroName, b
             return static_cast< sal_uInt16 >( nListIdx + 1 );
     }
 
-    // create a new NAME record
+    
     XclExpNameRef xName( new XclExpName( GetRoot(), rMacroName ) );
     xName->SetMacroCall( bVBasic, bFunc );
     xName->SetHidden( bHidden );
 
-    // for sheet macros, add a #NAME! error
+    
     if( !bVBasic )
         xName->SetTokenArray( GetFormulaCompiler().CreateErrorFormula( EXC_ERR_NAME ) );
 
@@ -478,7 +478,7 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
     rWorkbook->endElement( XML_definedNames );
 }
 
-// private --------------------------------------------------------------------
+
 
 sal_uInt16 XclExpNameManagerImpl::FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScIdx )
 {
@@ -497,7 +497,7 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
 
     if( cBuiltIn < EXC_BUILTIN_UNKNOWN )
     {
-        // try to find the record in existing built-in NAME record list
+        
         for( size_t nPos = 0; nPos < mnFirstUserIdx; ++nPos )
         {
             XclExpNameRef xName = maNameList.GetRecord( nPos );
@@ -519,13 +519,13 @@ OUString XclExpNameManagerImpl::GetUnusedName( const OUString& rName ) const
     bool bExist = true;
     while( bExist )
     {
-        // search the list of user-defined names
+        
         bExist = false;
         for( size_t nPos = mnFirstUserIdx, nSize = maNameList.GetSize(); !bExist && (nPos < nSize); ++nPos )
         {
             XclExpNameRef xName = maNameList.GetRecord( nPos );
             bExist = xName->GetOrigName() == aNewName;
-            // name exists -> create a new name "<originalname>_<counter>"
+            
             if( bExist )
                 aNewName = rName + "_" + OUString::number( ++nAppIdx );
         }
@@ -538,7 +538,7 @@ sal_uInt16 XclExpNameManagerImpl::Append( XclExpNameRef xName )
     if( maNameList.GetSize() == 0xFFFF )
         return 0;
     maNameList.AppendRecord( xName );
-    return static_cast< sal_uInt16 >( maNameList.GetSize() );  // 1-based
+    return static_cast< sal_uInt16 >( maNameList.GetSize() );  
 }
 
 sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRangeData )
@@ -553,7 +553,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
     if (nTab != SCTAB_GLOBAL)
         xName->SetLocalTab(nTab);
     sal_uInt16 nNameIdx = Append( xName );
-    // store the index of the NAME record in the lookup map
+    
     NamedExpIndexMap::key_type key = NamedExpIndexMap::key_type(nTab, rRangeData.GetIndex());
     maNamedExpMap[key] = nNameIdx;
 
@@ -576,10 +576,10 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         sal_uInt16 nBuiltInIdx = FindBuiltInNameIdx( rName, *xTokArr, false );
         if( nBuiltInIdx != 0 )
         {
-            // delete the new NAME records
+            
             while( maNameList.GetSize() > nOldListSize )
                 maNameList.RemoveRecord( maNameList.GetSize() - 1 );
-            // use index of the found built-in NAME record
+            
             key = NamedExpIndexMap::key_type(nTab, rRangeData.GetIndex());
             maNamedExpMap[key] = nNameIdx = nBuiltInIdx;
         }
@@ -598,12 +598,12 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
         SheetB!Print_Range, regardless of the position of SheetA in the document! */
     for( SCTAB nScTabIdx = 0, nScTabCount = rTabInfo.GetScTabCount(); nScTabIdx < nScTabCount; ++nScTabIdx )
     {
-        // find real sheet index from the nScTabIdx counter
+        
         SCTAB nScTab = rTabInfo.GetRealScTab( nScTabIdx );
-        // create NAME records for all built-in names of this sheet
+        
         if( rTabInfo.IsExportTab( nScTab ) )
         {
-            // *** 1) print ranges *** ----------------------------------------
+            
 
             if( rDoc.HasPrintRange() )
             {
@@ -611,37 +611,37 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                 for( sal_uInt16 nIdx = 0, nCount = rDoc.GetPrintRangeCount( nScTab ); nIdx < nCount; ++nIdx )
                 {
                     ScRange aRange( *rDoc.GetPrintRange( nScTab, nIdx ) );
-                    // Calc document does not care about sheet index in print ranges
+                    
                     aRange.aStart.SetTab( nScTab );
                     aRange.aEnd.SetTab( nScTab );
                     aRange.Justify();
                     aRangeList.Append( aRange );
                 }
-                // create the NAME record (do not warn if ranges are shrunken)
+                
                 GetAddressConverter().ValidateRangeList( aRangeList, false );
                 if( !aRangeList.empty() )
                     GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTAREA, aRangeList );
             }
 
-            // *** 2) print titles *** ----------------------------------------
+            
 
             ScRangeList aTitleList;
-            // repeated columns
+            
             if( const ScRange* pColRange = rDoc.GetRepeatColRange( nScTab ) )
                 aTitleList.Append( ScRange(
                     pColRange->aStart.Col(), 0, nScTab,
                     pColRange->aEnd.Col(), GetXclMaxPos().Row(), nScTab ) );
-            // repeated rows
+            
             if( const ScRange* pRowRange = rDoc.GetRepeatRowRange( nScTab ) )
                 aTitleList.Append( ScRange(
                     0, pRowRange->aStart.Row(), nScTab,
                     GetXclMaxPos().Col(), pRowRange->aEnd.Row(), nScTab ) );
-            // create the NAME record
+            
             GetAddressConverter().ValidateRangeList( aTitleList, false );
             if( !aTitleList.empty() )
                 GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTTITLES, aTitleList );
 
-            // *** 3) filter ranges *** ---------------------------------------
+            
 
             if( GetBiff() == EXC_BIFF8 )
                 GetFilterManager().InitTabFilter( nScTab );
@@ -655,11 +655,11 @@ void XclExpNameManagerImpl::CreateUserNames()
     ScRangeName::const_iterator itr = rNamedRanges.begin(), itrEnd = rNamedRanges.end();
     for (; itr != itrEnd; ++itr)
     {
-        // skip definitions of shared formulas
+        
         if (!FindNamedExpIndex(SCTAB_GLOBAL, itr->second->GetIndex()))
             CreateName(SCTAB_GLOBAL, *itr->second);
     }
-    //look at every sheet for local range names
+    
     ScRangeName::TabNameCopyMap rLocalNames;
     GetDoc().GetAllTabRangeNames(rLocalNames);
     ScRangeName::TabNameCopyMap::iterator tabIt = rLocalNames.begin(), tabItEnd = rLocalNames.end();
@@ -668,14 +668,14 @@ void XclExpNameManagerImpl::CreateUserNames()
         itr = tabIt->second->begin(), itrEnd = tabIt->second->end();
         for (; itr != itrEnd; ++itr)
         {
-            // skip definitions of shared formulas
+            
             if (!FindNamedExpIndex(tabIt->first, itr->second->GetIndex()))
                 CreateName(tabIt->first, *itr->second);
         }
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpNameManager::XclExpNameManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -758,6 +758,6 @@ void XclExpNameManager::SaveXml( XclExpXmlStream& rStrm )
     mxImpl->SaveXml( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

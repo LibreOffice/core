@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -59,9 +59,9 @@ Sequence<OUString> dropTarget_getSupportedServiceNames()
 
 namespace /* private */
 {
-    // Cocoa's coordinate system has its origin lower-left, VCL's
-    // coordinate system upper-left hence we need to transform
-    // coordinates
+    
+    
+    
 
     inline void CocoaToVCL(NSPoint& rPoint, const NSRect& bounds)
     {
@@ -145,15 +145,15 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
 
     if ([sender draggingSource] != nil)
     {
-        // Internal DnD
+        
         NSView* destView = [[sender draggingDestinationWindow] contentView];
         srcAndDestEqual = (DragSource::g_DragSourceView == destView);
     }
 
-    // If ACTION_DEFAULT is set this means NSDragOperationGeneric
-    // has been set and we map this to ACTION_MOVE or ACTION_COPY
-    // depending on whether or not source and dest are equal,
-    // this hopefully satisfies all parties
+    
+    
+    
+    
     if( (dropActions == DNDConstants::ACTION_DEFAULT)
         || ((dropActions == mDragSourceSupportedActions)
         && !(~mDragSourceSupportedActions & DNDConstants::ACTION_COPY_OR_MOVE ) ) )
@@ -161,9 +161,9 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
         dropAct = srcAndDestEqual ? DNDConstants::ACTION_MOVE :
         DNDConstants::ACTION_COPY;
     }
-     // if more than one drop actions have been specified
-     // set ACTION_DEFAULT in order to let the drop target
-     // decide which one to use
+     
+     
+     
     else if (dropActions != DNDConstants::ACTION_NONE &&
             dropActions != DNDConstants::ACTION_MOVE &&
             dropActions != DNDConstants::ACTION_COPY &&
@@ -173,7 +173,7 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
         {
             dropAct = dropActions;
         }
-        else // source and destination are different
+        else 
         {
             if (dropActions & DNDConstants::ACTION_COPY)
                 dropAct = DNDConstants::ACTION_COPY;
@@ -191,14 +191,14 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
 
 NSDragOperation DropTarget::draggingEntered(id sender)
 {
-    // Initially when DnD will be started no modifier key can be pressed yet
-    // thus we are getting all actions that the drag source supports, we save
-    // this value because later the system masks the drag source actions if
-    // a modifier key will be pressed
+    
+    
+    
+    
     mDragSourceSupportedActions = SystemToOfficeDragActions([sender draggingSourceOperationMask]);
 
-    // Only if the drop target is really interessted in the drag actions
-    // supported by the source
+    
+    
     if (mDragSourceSupportedActions & mDefaultActions)
     {
         sal_Int8 currentAction = determineDropAction(mDragSourceSupportedActions, sender);
@@ -259,12 +259,12 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
 
         fire_dragOver(dtde);
 
-        // drag over callbacks likely have rendered something
+        
         [mView setNeedsDisplay: TRUE];
 
         dragOp = OfficeToSystemDragActions(mSelectedDropAction);
 
-        //NSLog(@"Drag update: Source actions: %x proposed action %x selected action %x", mDragSourceSupportedActions, currentAction, mSelectedDropAction);
+        
     }
 
     if (dragOp == NSDragOperationNone)
@@ -337,9 +337,9 @@ void DropTarget::concludeDragOperation(id /*sender*/)
     [[NSCursor arrowCursor] set];
 }
 
-// called from WeakComponentImplHelperX::dispose
-// WeakComponentImplHelper calls disposing before it destroys
-// itself.
+
+
+
 void SAL_CALL DropTarget::disposing()
 {
 }
@@ -431,8 +431,8 @@ void SAL_CALL DropTarget::rejectDrop() throw (RuntimeException)
 
 void SAL_CALL DropTarget::dropComplete(sal_Bool success) throw (RuntimeException)
 {
-    // Reset the internal transferable used as shortcut in case this is
-    // an internal D&D operation
+    
+    
     DragSource::g_XTransferable = uno::Reference<XTransferable>();
     DragSource::g_DropSuccessSet = true;
     DragSource::g_DropSuccess = success;

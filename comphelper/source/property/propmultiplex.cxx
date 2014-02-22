@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,48 +14,48 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/propmultiplex.hxx>
 #include <osl/diagnose.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//========================================================================
-//= OPropertyChangeListener
-//========================================================================
-//------------------------------------------------------------------------
+
+
+
+
 OPropertyChangeListener::~OPropertyChangeListener()
 {
     if (m_pAdapter)
         m_pAdapter->dispose();
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeListener::_disposing(const EventObject&) throw( RuntimeException)
 {
-    // nothing to do here
+    
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeListener::disposeAdapter()
 {
     if ( m_pAdapter )
         m_pAdapter->dispose();
 
-    // will automatically set a new adapter
+    
     OSL_ENSURE( !m_pAdapter, "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -73,10 +73,10 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
     }
 }
 
-//========================================================================
-//= OPropertyChangeMultiplexer
-//========================================================================
-//------------------------------------------------------------------
+
+
+
+
 OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  Reference< XPropertySet>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
@@ -87,24 +87,24 @@ OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* 
     m_pListener->setAdapter(this);
 }
 
-//------------------------------------------------------------------
+
 OPropertyChangeMultiplexer::~OPropertyChangeMultiplexer()
 {
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::lock()
 {
     ++m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::unlock()
 {
     --m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::dispose()
 {
     if (m_bListening)
@@ -125,17 +125,17 @@ void OPropertyChangeMultiplexer::dispose()
     }
 }
 
-// XEventListener
-//------------------------------------------------------------------
+
+
 void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException)
 {
     if (m_pListener)
     {
-         // tell the listener
+         
         if (!locked())
             m_pListener->_disposing(_rSource);
-        // disconnect the listener
-        if (m_pListener)    // may have been reset whilest calling into _disposing
+        
+        if (m_pListener)    
             m_pListener->setAdapter(NULL);
     }
 
@@ -146,15 +146,15 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
         m_xSet = NULL;
 }
 
-// XPropertyChangeListener
-//------------------------------------------------------------------
+
+
 void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeEvent& _rEvent ) throw( RuntimeException)
 {
     if (m_pListener && !locked())
         m_pListener->_propertyChanged(_rEvent);
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::addProperty(const OUString& _sPropertyName)
 {
     if (m_xSet.is())
@@ -166,8 +166,8 @@ void OPropertyChangeMultiplexer::addProperty(const OUString& _sPropertyName)
     }
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,8 +29,8 @@ namespace accessibility
 {
     namespace
     {
-        // FIXME this is a copy'n'paste from
-        // source/extended/AccessibleBrowseBoxTableCell.cxx, get rid of that...
+        
+        
         static void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
         {
             if ( _nIndex >= _sText.getLength() )
@@ -48,10 +48,10 @@ namespace accessibility
     using namespace ::svt::table;
 
 
-    // =============================================================================
-    // = AccessibleGridControlCell
-    // =============================================================================
-    // -----------------------------------------------------------------------------
+    
+    
+    
+    
     AccessibleGridControlCell::AccessibleGridControlCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,
             sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleTableControlObjType _eType )
@@ -59,8 +59,8 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
-        // set accessible name here, because for that we need the position of the cell
-        // and so the base class isn't capable of doing this
+        
+        
         OUString aAccName;
         if(_eType == TCTYPE_TABLECELL)
             aAccName = _rTable.GetAccessibleObjectName( TCTYPE_TABLECELL, _nRowPos, _nColPos );
@@ -71,20 +71,20 @@ namespace accessibility
         implSetName( aAccName );
     }
 
-    // -----------------------------------------------------------------------------
+    
     AccessibleGridControlCell::~AccessibleGridControlCell()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
     void SAL_CALL AccessibleGridControlCell::grabFocus() throw ( RuntimeException )
     {
         SolarMutexGuard aSolarGuard;
 
         m_aTable.GoToCell( m_nColPos, m_nRowPos );
     }
-    //// -----------------------------------------------------------------------------
-    // implementation of a table cell
+    //
+    
     OUString AccessibleGridControlTableCell::implGetText()
     {
         ensureIsAlive();
@@ -112,7 +112,7 @@ namespace accessibility
     {
     }
 
-    // XInterface -------------------------------------------------------------
+    
 
     /** Queries for a new interface. */
     ::com::sun::star::uno::Any SAL_CALL AccessibleGridControlTableCell::queryInterface(
@@ -198,7 +198,7 @@ namespace accessibility
 
         if( isAlive() )
         {
-            // SHOWING done with mxParent
+            
             if( implIsShowing() )
                 pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
@@ -211,7 +211,7 @@ namespace accessibility
     }
 
 
-    // XAccessible ------------------------------------------------------------
+    
 
     /** @return  The XAccessibleContext interface of this object. */
     Reference< XAccessibleContext > SAL_CALL AccessibleGridControlTableCell::getAccessibleContext() throw ( RuntimeException )
@@ -222,7 +222,7 @@ namespace accessibility
         return this;
     }
 
-    // XAccessibleContext -----------------------------------------------------
+    
 
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getAccessibleIndexInParent()
             throw ( ::com::sun::star::uno::RuntimeException )
@@ -336,7 +336,7 @@ namespace accessibility
         checkIndex_Impl( nStartIndex, sText );
         checkIndex_Impl( nEndIndex, sText );
 
-        //!!! don't know how to put a string into the clipboard
+        
         return sal_False;
     }
 
@@ -352,7 +352,7 @@ namespace accessibility
         Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
         return aCell;
     }
-    // -----------------------------------------------------------------------------
+    
     Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
         Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( NULL );

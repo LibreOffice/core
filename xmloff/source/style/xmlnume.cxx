@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -245,12 +245,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
     GetExport().CheckAttrList();
 
-    // text:level
+    
     OUStringBuffer sTmp;
     sTmp.append( nLevel + 1 );
     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
-    // #i110694#: no style-name on list-level-style-image
-    // #i116149#: neither prefix/suffix
+    
+    
     if (NumberingType::BITMAP != eType)
     {
         if (!sTextStyleName.isEmpty())
@@ -273,7 +273,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     enum XMLTokenEnum eElem = XML_LIST_LEVEL_STYLE_NUMBER;
     if( NumberingType::CHAR_SPECIAL == eType )
     {
-        // <text:list-level-style-bullet>
+        
         eElem = XML_LIST_LEVEL_STYLE_BULLET;
 
         if( cBullet )
@@ -282,20 +282,20 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             {
                 cBullet = 0xF000 + 149;
             }
-            // text:bullet-char="..."
+            
             sTmp.append( cBullet );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR,
                           sTmp.makeStringAndClear() );
         }
         else
         {
-            // If 'cBullet' is zero, XML_BULLET_CHAR must exist with blank.
+            
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR, "");
         }
     }
     else if( NumberingType::BITMAP == eType )
     {
-        // <text:list-level-style-image>
+        
 
         eElem = XML_LIST_LEVEL_STYLE_IMAGE;
 
@@ -320,7 +320,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     }
     else
     {
-        // <text:list-level-style-number> or <text:outline-level-style>
+        
         if( bOutline )
             eElem = XML_OUTLINE_LEVEL_STYLE;
         else
@@ -407,8 +407,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eImageVertOrient )
             {
-            case VertOrientation::BOTTOM:   // yes, its OK: BOTTOM means that the baseline
-                                    // hits the frame at its topmost position
+            case VertOrientation::BOTTOM:   
+                                    
             case VertOrientation::LINE_TOP:
             case VertOrientation::CHAR_TOP:
                 eValue = XML_TOP;
@@ -418,8 +418,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             case VertOrientation::CHAR_CENTER:
                 eValue = XML_MIDDLE;
                 break;
-            case VertOrientation::TOP:      // yes, its OK: TOP means that the baseline
-                                    // hits the frame at its bottommost position
+            case VertOrientation::TOP:      
+                                    
             case VertOrientation::LINE_BOTTOM:
             case VertOrientation::CHAR_BOTTOM:
                 eValue = XML_BOTTOM;
@@ -580,7 +580,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         }
         if( NumberingType::BITMAP != eType )
         {
-            // fo:color = "#..."
+            
             if( bHasColor )
             {
                 if (0xffffffff == static_cast<sal_uInt32>(nColor))
@@ -594,7 +594,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                                   sBuffer.makeStringAndClear() );
                 }
             }
-            // fo:height="...%"
+            
             if( nBullRelSize )
             {
                 ::sax::Converter::convertPercent( sTmp, nBullRelSize );
@@ -609,7 +609,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         }
         if( NumberingType::BITMAP == eType && !sImageURL.isEmpty() )
         {
-            // optional office:binary-data
+            
             GetExport().AddEmbeddedGraphicObjectAsBase64( sImageURL );
         }
     }
@@ -626,7 +626,7 @@ SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     sNumberingRules( "NumberingRules" ),
     sIsPhysical( "IsPhysical" ),
     sIsContinuousNumbering( "IsContinuousNumbering" ),
-    // Let list style creation depend on Load/Save option "ODF format version" (#i89178#)
+    
     mbExportPositionAndSpaceModeLabelAlignment( true )
 {
     switch ( GetExport().getDefaultVersion() )
@@ -637,7 +637,7 @@ SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
             mbExportPositionAndSpaceModeLabelAlignment = false;
         }
         break;
-        default: // ODFVER_UNKNOWN or ODFVER_012
+        default: 
         {
             mbExportPositionAndSpaceModeLabelAlignment = true;
         }
@@ -659,7 +659,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
 
     GetExport().CheckAttrList();
 
-    // style:name="..."
+    
     if( !rName.isEmpty() )
     {
         sal_Bool bEncoded = sal_False;
@@ -670,11 +670,11 @@ void SvxXMLNumRuleExport::exportNumberingRule(
                                  rName);
     }
 
-    // style:hidden="..."
+    
     if ( bIsHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
         GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
 
-    // text:consecutive-numbering="..."
+    
     sal_Bool bContNumbering = sal_False;
     if( xPropSetInfo.is() &&
         xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
@@ -686,7 +686,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                   XML_CONSECUTIVE_NUMBERING, XML_TRUE );
 
-    // other application specific attributes
+    
     AddListStyleAttributes();
 
     {
@@ -703,8 +703,8 @@ sal_Bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 
     Any aAny;
 
-    // Don't export styles that aren't existing really. This may be the
-    // case for StarOffice Writer's pool styles.
+    
+    
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
@@ -769,7 +769,7 @@ void SvxXMLNumRuleExport::exportOutline()
                 if ( nODFVersion != SvtSaveOptions::ODFVER_010 &&
                      nODFVersion != SvtSaveOptions::ODFVER_011 )
                 {
-                    // style:name="..."
+                    
                     GetExport().CheckAttrList();
                     if ( !sOutlineStyleName.isEmpty() )
                      {

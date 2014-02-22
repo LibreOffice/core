@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sax/tools/converter.hxx>
@@ -86,7 +86,7 @@ OUString lcl_ConvertRange( const OUString & rRange, const uno::Reference< chart2
     return aResult;
 }
 
-} // anonymous namespace
+} 
 
 SchXML3DSceneAttributesHelper::SchXML3DSceneAttributesHelper( SvXMLImport& rImporter )
     : SdXML3DSceneAttributesHelper( rImporter )
@@ -95,8 +95,8 @@ SchXML3DSceneAttributesHelper::SchXML3DSceneAttributesHelper( SvXMLImport& rImpo
 
 void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Reference< chart::XDiagram >& xDiagram )
 {
-    //different defaults for camera geometry necessary to workaround wrong behaviour in old chart
-    //in future make this version dependent if we have versioning (metastream) for ole objects
+    
+    
 
     try
     {
@@ -168,7 +168,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
 {
     m_rbHasRangeAtPlotArea = false;
 
-    // get Diagram
+    
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
     if( xDoc.is())
     {
@@ -179,7 +179,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     }
     SAL_WARN_IF( !mxDiagram.is(),"xmloff.chart", "Couldn't get XDiagram" );
 
-    // turn off all axes initially
+    
     uno::Any aFalseBool;
     aFalseBool <<= (sal_Bool)(sal_False);
 
@@ -234,7 +234,7 @@ SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
 
 void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // parse attributes
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
     uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
@@ -259,7 +259,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 break;
             case XML_TOK_PA_CHART_ADDRESS:
                 mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
-                // indicator for getting data from the outside
+                
                 m_rbHasRangeAtPlotArea = true;
                 break;
             case XML_TOK_PA_DS_HAS_LABELS:
@@ -313,7 +313,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
     }
 
-    // set properties
+    
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
     if( !msAutoStyleName.isEmpty())
     {
@@ -332,19 +332,19 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 {
                     pPropStyleContext->FillPropertySet( xProp );
 
-                    // get the data row source that was set without having data
+                    
                     xProp->getPropertyValue("DataRowSource")
                         >>= mrDataRowSource;
 
-                    //lines on/off
-                    //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
+                    
+                    
                     mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
                         OUString("Lines"), pPropStyleContext, pStylesCtxt );
 
-                    //handle automatic position and size
+                    
                     m_aOuterPositioning.readAutomaticPositioningProperties( pPropStyleContext, pStylesCtxt );
 
-                    //correct default starting angle for old 3D pies
+                    
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
                     {
                         bool bIs3d = false;
@@ -365,7 +365,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
     }
 
-    //remember default values for dataseries
+    
     if(xProp.is())
     {
     try
@@ -383,9 +383,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
         mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue("StackedBarsConnected");
 
-        // deep
+        
         uno::Any aDeepProperty( xProp->getPropertyValue("Deep"));
-        // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
+        
         if( ! (bStacked || mbPercentStacked ))
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
@@ -411,23 +411,23 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
         SAL_INFO("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught: " << aBStr);
     }
-    } // if
+    } 
 
     bool bCreateInternalDataProvider = false;
-    if( m_rXLinkHRefAttributeToIndicateDataProvider == "." ) //data comes from the chart itself
+    if( m_rXLinkHRefAttributeToIndicateDataProvider == "." ) 
         bCreateInternalDataProvider = true;
-    else if( m_rXLinkHRefAttributeToIndicateDataProvider == ".." ) //data comes from the parent application
+    else if( m_rXLinkHRefAttributeToIndicateDataProvider == ".." ) 
         bCreateInternalDataProvider = false;
-    else if( !m_rXLinkHRefAttributeToIndicateDataProvider.isEmpty() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
+    else if( !m_rXLinkHRefAttributeToIndicateDataProvider.isEmpty() ) 
         bCreateInternalDataProvider = true;
     else if( !m_rbHasRangeAtPlotArea )
         bCreateInternalDataProvider = true;
 
     if( bCreateInternalDataProvider && mxNewDoc.is() )
     {
-        // we have no complete range => we have own data, so switch the data
-        // provider to internal. Clone is not necessary, as we don't have any
-        // data yet.
+        
+        
+        
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
         if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
             xProp->setPropertyValue("DataRowSource", uno::makeAny(mrDataRowSource) );
@@ -457,14 +457,14 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             bool bAdaptWrongPercentScaleValues = false;
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
-                //correct errors from older versions
+                
 
-                // for NetCharts there were no xAxis exported to older files
-                // so we need to add the x axis here for those old NetChart files
+                
+                
                 if ( maChartTypeServiceName == "com.sun.star.chart2.NetChartType" )
                     bAddMissingXAxisForNetCharts = true;
 
-                //Issue 59288
+                
                 if( mbPercentStacked )
                     bAdaptWrongPercentScaleValues = true;
             }
@@ -472,7 +472,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             bool bAdaptXAxisOrientationForOld2DBarCharts = false;
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_4( GetImport().GetModel() ) )
             {
-                //issue74660
+                
                 if ( maChartTypeServiceName == "com.sun.star.chart2.ColumnChartType" )
                     bAdaptXAxisOrientationForOld2DBarCharts = true;
             }
@@ -515,7 +515,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             pContext = maSceneImportHelper.create3DLightContext( nPrefix, rLocalName, xAttrList );
             break;
 
-        // elements for stock charts
+        
         case XML_TOK_PA_STOCK_GAIN:
             pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
                                                SchXMLStockContext::CONTEXT_TYPE_GAIN );
@@ -538,12 +538,12 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
 void SchXMLPlotAreaContext::EndElement()
 {
-    // set categories
+    
     if( !mrCategoriesAddress.isEmpty() && mxNewDoc.is())
     {
         uno::Reference< chart2::data::XDataProvider > xDataProvider(
             mxNewDoc->getDataProvider()  );
-        // @todo: correct coordinate system index
+        
         sal_Int32 nDimension( 0 );
         ::std::vector< SchXMLAxis >::const_iterator aIt(
             ::std::find_if( maAxes.begin(), maAxes.end(), lcl_AxisHasCategories()));
@@ -562,14 +562,14 @@ void SchXMLPlotAreaContext::EndElement()
         uno::Any aAny = xDiaProp->getPropertyValue("Dim3D");
         aAny >>= bIsThreeDim;
 
-        // set 3d scene attributes
+        
         if( bIsThreeDim )
         {
-            // set scene attributes at diagram
+            
             maSceneImportHelper.setSceneAttributes( xDiaProp );
         }
 
-        // set correct number of lines at series
+        
         if( ! m_aGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && mnNumOfLinesProp > 0 && maChartTypeServiceName == "com.sun.star.chart2.ColumnChartType" )
         {
             try
@@ -584,7 +584,7 @@ void SchXMLPlotAreaContext::EndElement()
             }
         }
 
-        // #i32366# stock has volume
+        
         if( mxDiagram->getDiagramType() == "com.sun.star.chart.StockDiagram" &&
             mbStockHasVolume )
         {
@@ -601,7 +601,7 @@ void SchXMLPlotAreaContext::EndElement()
         }
     }
 
-    // set changed size and position after properties (esp. 3d)
+    
 
     uno::Reference< chart::XDiagramPositioning > xDiaPos( mxDiagram, uno::UNO_QUERY );
     if( xDiaPos.is())
@@ -612,7 +612,7 @@ void SchXMLPlotAreaContext::EndElement()
                 xDiaPos->setDiagramPositionExcludingAxes( m_aInnerPositioning.getRectangle() );
             else if( m_aOuterPositioning.hasPosSize() )
             {
-                if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_3( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
+                if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_3( GetImport().GetModel() ) ) 
                     xDiaPos->setDiagramPositionIncludingAxesAndAxisTitles( m_aOuterPositioning.getRectangle() );
                 else
                     xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
@@ -713,7 +713,7 @@ awt::Rectangle SchXMLPositonAttributesHelper::getRectangle() const
 
 bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
-    //returns true if the attribute was proccessed
+    
     bool bReturn = true;
 
     if( XML_NAMESPACE_SVG == nPrefix )
@@ -755,7 +755,7 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
 {
     if( pPropStyleContext && pStylesCtxt )
     {
-        //handle automatic position and size
+        
         SchXMLTools::getPropertyFromContext(
             OUString("AutomaticSize"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
         SchXMLTools::getPropertyFromContext(
@@ -779,7 +779,7 @@ SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext()
 
 void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // parse attributes
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -830,7 +830,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
             }
         }
 
-        // set properties
+        
         uno::Reference< beans::XPropertySet > xProp( ( meContextType == CONTEXT_TYPE_WALL )
                                                      ? mxWallFloorSupplier->getWall()
                                                      : mxWallFloorSupplier->getFloor(),
@@ -893,7 +893,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
         if( !sAutoStyleName.isEmpty())
         {
-            // set properties
+            
             uno::Reference< beans::XPropertySet > xProp;
             switch( meContextType )
             {
@@ -1128,7 +1128,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     OUString sAutoStyleName;
     OUString aPosRange;
     OUString aNegRange;
-    bool bYError = true;    /// Default errorbar, to be backward compatible with older files!
+    bool bYError = true;    
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -1176,7 +1176,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(sal_True));
                     xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(sal_True));
 
-                    // first import defaults from parent style
+                    
                     SetErrorBarPropertiesFromStyleName( maSeriesStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );
                     SetErrorBarPropertiesFromStyleName( sAutoStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );
 

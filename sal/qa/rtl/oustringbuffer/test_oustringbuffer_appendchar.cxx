@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -25,8 +25,8 @@ private:
 };
 
 void AppendChar::testAppendChar() {
-    // Check that append('a') does not unexpectedly pick
-    // append(sal_Int32 i, sal_Int16 radix = 10):
+    
+    
     rtl::OUStringBuffer s;
     s.append('a');
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s.getLength());

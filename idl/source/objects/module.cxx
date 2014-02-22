@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,24 +44,24 @@ SvMetaModule::SvMetaModule( const OUString & rIdlFileName, sal_Bool bImp )
 #define MODULE_VER      0x0001
 void SvMetaModule::Load( SvPersistStream & rStm )
 {
-    bImported = sal_True; // import always
+    bImported = sal_True; 
     SvMetaExtern::Load( rStm );
 
     sal_uInt16 nVer;
 
-    rStm.ReadUInt16( nVer ); // version
+    rStm.ReadUInt16( nVer ); 
     DBG_ASSERT( (nVer & ~IDL_WRITE_MASK) == MODULE_VER, "false version" );
 
     rStm >> aClassList;
     rStm >> aTypeList;
     rStm >> aAttrList;
-    // browser
+    
     aIdlFileName = rStm.ReadUniOrByteString( rStm.GetStreamCharSet() );
     aHelpFileName.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
     aSlotIdFile.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
     aModulePrefix.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
 
-    // read compiler data
+    
     sal_uInt16 nCmpLen;
     rStm.ReadUInt16( nCmpLen );
     DBG_ASSERT( (nVer & IDL_WRITE_MASK) == IDL_WRITE_COMPILER,
@@ -75,25 +75,25 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 {
     SvMetaExtern::Save( rStm );
 
-    rStm.WriteUInt16( (sal_uInt16)(MODULE_VER | IDL_WRITE_COMPILER) ); // Version
+    rStm.WriteUInt16( (sal_uInt16)(MODULE_VER | IDL_WRITE_COMPILER) ); 
 
     WriteSvDeclPersistList( rStm, aClassList );
     WriteSvDeclPersistList( rStm, aTypeList );
     WriteSvDeclPersistList( rStm, aAttrList );
-    // browser
+    
     rStm.WriteUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
     write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aHelpFileName.getString());
     write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aSlotIdFile.getString());
     write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aModulePrefix.getString());
 
-    // write compiler data
+    
     sal_uInt16 nCmpLen = 0;
     sal_uLong nLenPos = rStm.Tell();
     rStm.WriteUInt16( nCmpLen );
     WriteSvGlobalName( rStm, aBeginName );
     WriteSvGlobalName( rStm, aEndName );
     WriteSvGlobalName( rStm, aNextName );
-    // write length of compiler data
+    
     sal_uLong nPos = rStm.Tell();
     rStm.Seek( nLenPos );
     rStm.WriteUInt16( (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) ) );
@@ -185,7 +185,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         if( aClass->ReadSvIdl( rBase, rInStm ) )
         {
             aClassList.push_back( aClass );
-            // announce globally
+            
             rBase.GetClassList().push_back( aClass );
         }
     }
@@ -195,9 +195,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( aEnum->ReadSvIdl( rBase, rInStm ) )
         {
-            // declared in module
+            
             aTypeList.push_back( aEnum );
-            // announce globally
+            
             rBase.GetTypeList().push_back( aEnum );
         }
     }
@@ -209,9 +209,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( xItem->ReadSvIdl( rBase, rInStm ) )
         {
-            // declared in module
+            
             aTypeList.push_back( xItem );
-            // announce globally
+            
             rBase.GetTypeList().push_back( xItem );
         }
     }
@@ -234,12 +234,12 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
                 if( SVSTREAM_OK == aTokStm.GetStream().GetError() )
                 {
-                    // rescue error from old file
+                    
                     SvIdlError aOldErr = rBase.GetError();
-                    // reset error
+                    
                     rBase.SetError( SvIdlError() );
 
-                    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
+                    sal_uInt32 nBeginPos = 0xFFFFFFFF; 
                     while( nBeginPos != aTokStm.Tell() )
                     {
                         nBeginPos = aTokStm.Tell();
@@ -251,7 +251,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                     {
                         rBase.WriteError( aTokStm );
                     }
-                    // recover error from old file
+                    
                     rBase.SetError( aOldErr );
                 }
                 else
@@ -279,9 +279,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         {
             if( xSlot->Test( rBase, rInStm ) )
             {
-                // declared in module
+                
                 aAttrList.push_back( xSlot );
-                // announce globally
+                
                 rBase.AppendAttr( xSlot );
             }
         }
@@ -315,7 +315,7 @@ void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
 
 sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    bIsModified = sal_True; // up to now always when compiler running
+    bIsModified = sal_True; 
 
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok  = rInStm.GetToken_Next();
@@ -338,15 +338,15 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
     {
         aNextName = aBeginName;
 
-        rBase.Push( this ); // onto the context stack
+        rBase.Push( this ); 
 
         if( ReadNameSvIdl( rBase, rInStm ) )
         {
-            // set pointer to itself
+            
             SetModule( rBase );
             bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
         }
-        rBase.GetStack().Pop(); // remove from stack
+        rBase.GetStack().Pop(); 
     }
     if( !bOk )
         rInStm.Seek( nTokPos );
@@ -394,7 +394,7 @@ void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
     if( !aHelpFileName.getString().isEmpty() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaModule" ) << endl;
+        rOutStm.WriteCharPtr( "
         WriteTab( rOutStm, nTab );
         rOutStm.WriteCharPtr( "helpfile(\"" ).WriteCharPtr( aHelpFileName.getString().getStr() ).WriteCharPtr( "\");" ) << endl;
     }
@@ -457,7 +457,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 if( pSC )
                     rOutStm.WriteCharPtr( " : " ).WriteCharPtr( pSC->GetName().getString().getStr() );
 
-                // imported classes
+                
                 const SvClassElementMemberList& rClassList = pClass->GetClassList();
                 if ( !rClassList.empty() )
                 {
@@ -479,7 +479,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             }
         }
         rOutStm.WriteCharPtr( "</CLASSES>" ) << endl << endl;
-        // no break!
+        
     }
 
     case WRITE_C_SOURCE:

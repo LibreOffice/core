@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbapagesetup.hxx"
 #include <com/sun/star/text/XText.hpp>
@@ -42,13 +42,13 @@ SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
 
 double SAL_CALL SwVbaPageSetup::getGutter() throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
     return 0;
 }
 
 void SAL_CALL SwVbaPageSetup::setGutter( double _gutter ) throw (uno::RuntimeException)
 {
-    // default add gutter into left margin
+    
     if( _gutter != 0 )
     {
         double margin = VbaPageSetupBase::getLeftMargin() + _gutter;
@@ -224,7 +224,7 @@ OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
 
 ::sal_Int32 SAL_CALL SwVbaPageSetup::getSectionStart() throw (uno::RuntimeException)
 {
-    // FIXME:
+    
     sal_Int32 wdSectionStart = word::WdSectionStart::wdSectionNewPage;
     uno::Reference< container::XNamed > xNamed( mxPageProps, uno::UNO_QUERY_THROW );
     OUString sStyleName = xNamed->getName();
@@ -239,8 +239,8 @@ OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
 
 void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) throw (uno::RuntimeException)
 {
-    // fail to find corresponding feature in Writer
-    // #FIXME:
+    
+    
 }
 
 OUString

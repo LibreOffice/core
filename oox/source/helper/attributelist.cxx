@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/attributelist.hxx"
@@ -27,13 +27,13 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-// ============================================================================
+
 
 namespace {
 
@@ -65,9 +65,9 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
     return *rpcStr++;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
 {
@@ -76,7 +76,7 @@ sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
 
 OUString AttributeConversion::decodeXString( const OUString& rValue )
 {
-    // string shorter than one encoded character - no need to decode
+    
     if( rValue.getLength() < XSTRING_ENCCHAR_LEN )
         return rValue;
     OUStringBuffer aBuffer;
@@ -109,14 +109,14 @@ sal_Int64 AttributeConversion::decodeHyper( const OUString& rValue )
 
 sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
 {
-    // It looks like all Office Open XML attributes containing hexadecimal
-    // values are based on xsd:hexBinary and so use an unsigned representation:
+    
+    
     return static_cast< sal_Int32 >(rValue.toUInt32( 16 ));
-        //TODO: Change this function to return sal_uInt32 and get rid of the
-        // cast, but that will have a ripple effect
+        
+        
 }
 
-// ============================================================================
+
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
     mxAttribs( rxAttribs ),
@@ -140,7 +140,7 @@ bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
     return mxAttribs->hasAttribute( nAttrToken );
 }
 
-// optional return values -----------------------------------------------------
+
 
 OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
 {
@@ -150,7 +150,7 @@ OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
 
 OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
 {
-    // check if the attribute exists (empty string may be different to missing attribute)
+    
     if( mxAttribs->hasAttribute( nAttrToken ) )
         return OptValue< OUString >( mxAttribs->getOptionalValue( nAttrToken ) );
     return OptValue< OUString >();
@@ -158,7 +158,7 @@ OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
 
 OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
 {
-    // check if the attribute exists (empty string may be different to missing attribute)
+    
     if( mxAttribs->hasAttribute( nAttrToken ) )
         return OptValue< OUString >( AttributeConversion::decodeXString( mxAttribs->getOptionalValue( nAttrToken ) ) );
     return OptValue< OUString >();
@@ -203,7 +203,7 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 {
     const char *pAttr;
 
-    // catch the common cases as quickly as possible first
+    
     bool bHasAttr = getAttribList()->getAsChar( nAttrToken, pAttr );
     if( !bHasAttr )
         return OptValue< bool >();
@@ -212,15 +212,15 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
     if( !strcmp( pAttr, "true" ) )
         return OptValue< bool >( true );
 
-    // now for all the crazy stuff
+    
 
-    // boolean attributes may be "t", "f", "true", "false", "on", "off", "1", or "0"
+    
     switch( getToken( nAttrToken, XML_TOKEN_INVALID ) )
     {
-        case XML_t:     return OptValue< bool >( true );  // used in VML
+        case XML_t:     return OptValue< bool >( true );  
         case XML_true:  return OptValue< bool >( true );
         case XML_on:    return OptValue< bool >( true );
-        case XML_f:     return OptValue< bool >( false ); // used in VML
+        case XML_f:     return OptValue< bool >( false ); 
         case XML_false: return OptValue< bool >( false );
         case XML_off:   return OptValue< bool >( false );
     }
@@ -246,7 +246,7 @@ OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) co
     return OptValue< util::DateTime >( bValid, aDateTime );
 }
 
-// defaulted return values ----------------------------------------------------
+
 
 sal_Int32 AttributeList::getToken( sal_Int32 nAttrToken, sal_Int32 nDefault ) const
 {
@@ -255,7 +255,7 @@ sal_Int32 AttributeList::getToken( sal_Int32 nAttrToken, sal_Int32 nDefault ) co
 
 OUString AttributeList::getString( sal_Int32 nAttrToken, const OUString& rDefault ) const
 {
-    // try to avoid slow exception throw/catch if we can
+    
     if (rDefault.isEmpty())
         return mxAttribs->getOptionalValue( nAttrToken );
 
@@ -319,8 +319,8 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
     return getDateTime( nAttrToken ).get( rDefault );
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

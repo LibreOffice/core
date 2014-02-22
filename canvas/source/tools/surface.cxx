@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,9 +27,9 @@
 namespace canvas
 {
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::Surface
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     Surface::Surface( const PageManagerSharedPtr&  rPageManager,
                       const IColorBufferSharedPtr& rColorBuffer,
@@ -44,9 +44,9 @@ namespace canvas
     {
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::~Surface
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     Surface::~Surface()
     {
@@ -54,18 +54,18 @@ namespace canvas
             mpPageManager->free(mpFragment);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::getUVCoords
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void Surface::setColorBufferDirty()
     {
         mbIsDirty=true;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::getUVCoords
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     basegfx::B2DRectangle Surface::getUVCoords() const
     {
@@ -87,9 +87,9 @@ namespace canvas
                                         (oy+sy)/ph );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::getUVCoords
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     basegfx::B2DRectangle Surface::getUVCoords( const ::basegfx::B2IPoint& rPos,
                                                 const ::basegfx::B2ISize&  rSize ) const
@@ -109,9 +109,9 @@ namespace canvas
                                         (oy+sy)/ph );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool Surface::draw( double                          fAlpha,
                         const ::basegfx::B2DPoint&      rPos,
@@ -123,7 +123,7 @@ namespace canvas
 
         prepareRendering();
 
-        // convert size to normalized device coordinates
+        
         const ::basegfx::B2DRectangle& rUV( getUVCoords() );
 
         const double u1(rUV.getMinX());
@@ -131,13 +131,13 @@ namespace canvas
         const double u2(rUV.getMaxX());
         const double v2(rUV.getMaxY());
 
-        // concat transforms
-        // 1) offset of surface subarea
-        // 2) surface transform
-        // 3) translation to output position [rPos]
-        // 4) scale to normalized device coordinates
-        // 5) flip y-axis
-        // 6) translate to account for viewport transform
+        
+        
+        
+        
+        
+        
+        
         basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
             maSourceOffset.getX(), maSourceOffset.getY()));
         aTransform = aTransform * rTransform;
@@ -184,7 +184,7 @@ namespace canvas
         {
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_QUAD );
 
-            // issue an endPrimitive() when leaving the scope
+            
             const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                              ::boost::ref(pRenderModule) ) );
@@ -209,9 +209,9 @@ namespace canvas
         return !(pRenderModule->isError());
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::drawRectangularArea
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool Surface::drawRectangularArea(
                         double                         fAlpha,
@@ -220,7 +220,7 @@ namespace canvas
                         const ::basegfx::B2DHomMatrix& rTransform )
     {
         if( rArea.isEmpty() )
-            return true; // immediate exit for empty area
+            return true; 
 
         IRenderModuleSharedPtr pRenderModule(mpPageManager->getRenderModule());
 
@@ -228,7 +228,7 @@ namespace canvas
 
         prepareRendering();
 
-        // these positions are relative to the texture
+        
         ::basegfx::B2IPoint aPos1(
             ::basegfx::fround(rArea.getMinimum().getX()),
             ::basegfx::fround(rArea.getMinimum().getY()));
@@ -236,13 +236,13 @@ namespace canvas
             ::basegfx::fround(rArea.getMaximum().getX()),
             ::basegfx::fround(rArea.getMaximum().getY()) );
 
-        // clip the positions to the area this surface covers
+        
         aPos1.setX(::std::max(aPos1.getX(),maSourceOffset.getX()));
         aPos1.setY(::std::max(aPos1.getY(),maSourceOffset.getY()));
         aPos2.setX(::std::min(aPos2.getX(),maSourceOffset.getX()+maSize.getX()));
         aPos2.setY(::std::min(aPos2.getY(),maSourceOffset.getY()+maSize.getY()));
 
-        // if the resulting area is empty, return immediately
+        
         ::basegfx::B2IVector aSize(aPos2 - aPos1);
         if(aSize.getX() <= 0 || aSize.getY() <= 0)
             return true;
@@ -251,7 +251,7 @@ namespace canvas
         if( mpFragment )
             aDestOffset = mpFragment->getPos();
 
-        // convert size to normalized device coordinates
+        
         const ::basegfx::B2DRectangle& rUV(
             getUVCoords(aPos1 - maSourceOffset + aDestOffset,
                         aSize) );
@@ -260,10 +260,10 @@ namespace canvas
         const double u2(rUV.getMaxX());
         const double v2(rUV.getMaxY());
 
-        // concatenate transforms
-        // 1) offset of surface subarea
-        // 2) surface transform
-        // 3) translation to output position [rPos]
+        
+        
+        
+        
         basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(aPos1.getX(), aPos1.getY()));
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
@@ -310,7 +310,7 @@ namespace canvas
         {
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_QUAD );
 
-            // issue an endPrimitive() when leaving the scope
+            
             const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                              ::boost::ref(pRenderModule) ) );
@@ -335,9 +335,9 @@ namespace canvas
         return !(pRenderModule->isError());
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::drawWithClip
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool Surface::drawWithClip( double                          fAlpha,
                                 const ::basegfx::B2DPoint&      rPos,
@@ -350,9 +350,9 @@ namespace canvas
 
         prepareRendering();
 
-        // untransformed surface rectangle, relative to the whole
-        // image (note: this surface might actually only be a tile of
-        // the whole image, with non-zero maSourceOffset)
+        
+        
+        
         const double x1(maSourceOffset.getX());
         const double y1(maSourceOffset.getY());
         const double w(maSize.getX());
@@ -361,11 +361,11 @@ namespace canvas
         const double y2(y1+h);
         const ::basegfx::B2DRectangle aSurfaceClipRect(x1,y1,x2,y2);
 
-        // concatenate transforms
-        // we use 'fround' here to avoid rounding errors. the vertices will
-        // be transformed by the overall transform and uv coordinates will
-        // be calculated from the result, and this is why we need to use
-        // integer coordinates here...
+        
+        
+        
+        
+        
         basegfx::B2DHomMatrix aTransform;
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
@@ -396,14 +396,14 @@ namespace canvas
             ######################################
         */
 
-        // uv coordinates that map the surface rectangle
-        // to the destination rectangle.
+        
+        
         const ::basegfx::B2DRectangle& rUV( getUVCoords() );
 
         basegfx::B2DPolygon rTriangleList(basegfx::tools::clipTriangleListOnRange(rClipPoly,
                                                                                   aSurfaceClipRect));
 
-        // Push vertices to backend renderer
+        
         if(const sal_uInt32 nVertexCount = rTriangleList.count())
         {
             canvas::Vertex vertex;
@@ -421,7 +421,7 @@ namespace canvas
 
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_TRIANGLE );
 
-            // issue an endPrimitive() when leaving the scope
+            
             const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                                 ::boost::ref(pRenderModule) ) );
@@ -443,18 +443,18 @@ namespace canvas
         return !(pRenderModule->isError());
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Surface::prepareRendering
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void Surface::prepareRendering()
     {
         mpPageManager->validatePages();
 
-        // clients requested to draw from this surface, therefore one
-        // of the above implemented concrete rendering operations
-        // was triggered. we therefore need to ask the pagemanager
-        // to allocate some space for the fragment we're dedicated to.
+        
+        
+        
+        
         if(!(mpFragment))
         {
             mpFragment = mpPageManager->allocateSpace(maSize);
@@ -467,11 +467,11 @@ namespace canvas
 
         if( mpFragment )
         {
-            // now we need to 'select' the fragment, which will in turn
-            // pull information from the image on demand.
-            // in case this fragment is still not located on any of the
-            // available pages ['naked'], we force the page manager to
-            // do it now, no way to defer this any longer...
+            
+            
+            
+            
+            
             if(!(mpFragment->select(mbIsDirty)))
                 mpPageManager->nakedFragment(mpFragment);
 

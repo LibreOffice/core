@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ class SwXFootnote::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
 
@@ -68,8 +68,8 @@ public:
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_EventListeners(m_Mutex)
-// #i111177#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
-//        , m_bIsDescriptor(0 == pFootnote)
+
+
         , m_bIsDescriptor((0 == pFootnote) ? true : false)
         , m_pFmtFtn(pFootnote)
     {
@@ -90,7 +90,7 @@ public:
 
     void    Invalidate();
 protected:
-    // SwClient
+    
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
@@ -111,7 +111,7 @@ void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
-    if (!GetRegisteredIn()) // removed => dispose
+    if (!GetRegisteredIn()) 
     {
         Invalidate();
     }
@@ -150,11 +150,11 @@ SwXFootnote *
 SwXFootnote::GetXFootnote(
         SwModify const& /*rUnoCB*/, SwFmtFtn const& /*rFootnoteFmt*/)
 {
-    // re-use existing SwXFootnote
-    // #i105557#: do not iterate over the registered clients: race condition
-    // to do this properly requires the SwXFootnote to register at the
-    // SwFmtFtn directly, not at the unocallback
-    // also this function must return a uno Reference!
+    
+    
+    
+    
+    
     return 0;
 }
 
@@ -197,12 +197,12 @@ static char const*const g_ServicesFootnote[] =
     "com.sun.star.text.TextContent",
     "com.sun.star.text.Footnote",
     "com.sun.star.text.Text",
-    "com.sun.star.text.Endnote", // NB: only supported for endnotes!
+    "com.sun.star.text.Endnote", 
 };
 
 static const size_t g_nServicesEndnote( sizeof (g_ServicesFootnote) / sizeof (g_ServicesFootnote[0]) );
 
-static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
+static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); 
 
 sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -318,7 +318,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pNewDoc);
-    //das muss jetzt sal_True liefern
+    
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
     UnoActionContext aCont(pNewDoc);
@@ -349,7 +349,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
         m_pImpl->m_pFmtFtn = &rFtn;
         pNewDoc->GetUnoCallBack()->Add(m_pImpl.get());
-        // force creation of sequence id - is used for references
+        
         if (pNewDoc->IsInReading())
         {
             pTxtAttr->SetSeqNo(pNewDoc->GetFtnIdxs().size());
@@ -399,7 +399,7 @@ SwXFootnote::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -408,7 +408,7 @@ SwXFootnote::removeEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -525,7 +525,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    //no values to be set
+    
     throw lang::IllegalArgumentException();
 }
 
@@ -542,7 +542,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         if (rPropertyName == UNO_NAME_START_REDLINE ||
             rPropertyName == UNO_NAME_END_REDLINE)
         {
-            //redline can only be returned if it's a living object
+            
             if (!m_pImpl->m_bIsDescriptor)
             {
                 aRet = SwXText::getPropertyValue(rPropertyName);

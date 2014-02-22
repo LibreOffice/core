@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,9 +26,9 @@
 
 namespace canvas
 {
-    //////////////////////////////////////////////////////////////////////////////////
-    // SurfaceProxy::SurfaceProxy
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     SurfaceProxy::SurfaceProxy( const canvas::IColorBufferSharedPtr& pBuffer,
                                 const PageManagerSharedPtr&          pPageManager ) :
@@ -43,16 +43,16 @@ namespace canvas
         const sal_Int32 aImageSizeX(aImageSize.getX());
         const sal_Int32 aImageSizeY(aImageSize.getY());
 
-        // see if the size of the colorbuffer is larger than the size
-        // of a single page. if this is the case we divide the
-        // colorbuffer into as many surfaces as we need to get the
-        // whole area distributed.  otherwise (the colorbuffer is
-        // smaller than the size of a single page) we search for free
-        // pages or create a new one.
-        // the incoming image is too large to fit into a single
-        // page.  strategy: we split the image into rectangular
-        // areas that are as large as the maximum page size
-        // dictates and follow the strategy for fitting images.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         size_t dwNumSurfaces(0);
         for(sal_Int32 y=0; y<aImageSizeY; y+=aPageSizeY)
             for(sal_Int32 x=0; x<aImageSizeX; x+=aPageSizeX)
@@ -63,8 +63,8 @@ namespace canvas
         {
             for(sal_Int32 x=0; x<aImageSizeX; x+=aPageSizeX)
             {
-                // the current surface is located at the position [x,y]
-                // and has the size [min(restx,pagesizex),min(resty,pagesizey)
+                
+                
                 ::basegfx::B2IPoint aOffset(x,y);
                 ::basegfx::B2ISize aSize( ::std::min( aImageSize.getX()-x,
                                                       aPageSize.getX() ),
@@ -82,9 +82,9 @@ namespace canvas
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // SurfaceProxy::setColorBufferDirty
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void SurfaceProxy::setColorBufferDirty()
     {
@@ -93,9 +93,9 @@ namespace canvas
                          ::boost::mem_fn(&Surface::setColorBufferDirty));
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // SurfaceProxy::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
@@ -112,9 +112,9 @@ namespace canvas
         return true;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // SurfaceProxy::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
@@ -133,9 +133,9 @@ namespace canvas
         return true;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // SurfaceProxy::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool SurfaceProxy::draw( double                           fAlpha,
                              const ::basegfx::B2DPoint&       rPos,
@@ -146,7 +146,7 @@ namespace canvas
             ::basegfx::triangulator::triangulate(rClipPoly));
 
 #if OSL_DEBUG_LEVEL > 2
-        // dump polygons
+        
         OSL_TRACE( "Original clip polygon: %s\n"
                    "Triangulated polygon: %s\n",
                    OUStringToOString(

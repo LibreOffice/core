@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -54,7 +54,7 @@ namespace
     CPPUNIT_ASSERT(!bModified);
     CPPUNIT_ASSERT(str1.isEmpty());
 
-    // Note that '-' isn't a hyphen to RemoveHyphens.
+    
     bModified = linguistic::RemoveHyphens(str2);
     CPPUNIT_ASSERT(!bModified);
     CPPUNIT_ASSERT( str2 == "a-b--c---" );
@@ -78,8 +78,8 @@ namespace
     str4Buf.setLength(33);
     for(int i = 0; i < 33; i++)
       str4Buf[i] = static_cast<sal_Unicode>(i);
-    //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
-    //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
+    
+    
     OUString str4(str4Buf.makeStringAndClear());
 
     bool bModified = linguistic::RemoveControlChars(str1);
@@ -109,8 +109,8 @@ namespace
     str4Buf.setLength(33);
     for(int i = 0; i < 33; i++)
       str4Buf[i] = static_cast<sal_Unicode>(i);
-    //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
-    //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
+    
+    
     OUString str4(str4Buf.makeStringAndClear());
 
     bool bModified = linguistic::ReplaceControlChars(str1);

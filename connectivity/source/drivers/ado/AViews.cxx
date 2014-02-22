@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/AViews.hxx"
@@ -44,19 +44,19 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
     pView->setNew(sal_False);
     return pView;
 }
-// -------------------------------------------------------------------------
+
 void OViews::impl_refresh(  ) throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OViews::createDescriptor()
 {
     return new OAdoView(isCaseSensitive());
 }
 
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoView* pView = NULL;
@@ -81,14 +81,14 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OViews::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
-// -------------------------------------------------------------------------
+
 
 
 

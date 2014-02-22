@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
@@ -32,8 +32,8 @@
 #include <malloc.h>
 #include <tchar.h>
 
-//#####################################################
-// Allocate n number of t's on the stack return a pointer to it in p
+
+
 #ifdef __MINGW32__
 #define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));
 #else
@@ -43,9 +43,9 @@
 
 extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle(HANDLE hFile, sal_uInt32 uFlags);
 
-//#####################################################
-// Temp file functions
-//#####################################################
+
+
+
 
 static oslFileError osl_setup_base_directory_impl_(
     rtl_uString*  pustrDirectoryURL,
@@ -75,7 +75,7 @@ static oslFileError osl_setup_base_directory_impl_(
     return error;
 }
 
-//#####################################################
+
 static oslFileError osl_setup_createTempFile_impl_(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
@@ -102,7 +102,7 @@ static oslFileError osl_setup_createTempFile_impl_(
     return osl_error;
 }
 
-//#####################################################
+
 static oslFileError osl_win32_GetTempFileName_impl_(
     rtl_uString* base_directory, LPWSTR temp_file_name)
 {
@@ -120,7 +120,7 @@ static oslFileError osl_win32_GetTempFileName_impl_(
     return osl_error;
 }
 
-//#####################################################
+
 static sal_Bool osl_win32_CreateFile_impl_(
     LPCWSTR file_name, sal_Bool b_delete_on_close, oslFileHandle* p_handle)
 {
@@ -141,14 +141,14 @@ static sal_Bool osl_win32_CreateFile_impl_(
         flags,
         NULL);
 
-    // @@@ ERROR HANDLING @@@
+    
     if (IsValidHandle(hFile))
         *p_handle = osl_createFileHandleFromOSHandle(hFile, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
 
     return (sal_Bool)IsValidHandle(hFile);
 }
 
-//#############################################
+
 static oslFileError osl_createTempFile_impl_(
     rtl_uString*   base_directory,
     LPWSTR         tmp_name,
@@ -168,7 +168,7 @@ static oslFileError osl_createTempFile_impl_(
             osl_win32_CreateFile_impl_(tmp_name, b_delete_on_close, pHandle))
             break;
 
-    } while(1); // try until success
+    } while(1); 
 
     if ((osl_File_E_None == osl_error) && !b_delete_on_close)
     {
@@ -181,7 +181,7 @@ static oslFileError osl_createTempFile_impl_(
     return osl_error;
 }
 
-//#############################################
+
 oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
@@ -214,7 +214,7 @@ oslFileError SAL_CALL osl_createTempFile(
             pHandle,
             ppustrTempFileURL);
     }
-    else // stack alloc failed
+    else 
     {
         osl_error = osl_File_E_NOMEM;
     }
@@ -225,7 +225,7 @@ oslFileError SAL_CALL osl_createTempFile(
     return osl_error;
 }
 
-//#############################################
+
 oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
@@ -239,7 +239,7 @@ oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 
     if ( nLength > nBufferLength )
     {
-        // the provided path has invalid length
+        
         error = osl_File_E_NOENT;
     }
     else if ( nLength )

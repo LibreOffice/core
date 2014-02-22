@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <FontTable.hxx>
@@ -76,7 +76,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
         case NS_ooxml::LN_CT_Charset_val:
-            // w:characterSet has higher priority, set only if that one is not set
+            
             if( m_pImpl->pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
             {
                 m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
@@ -89,17 +89,17 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             OString tmp;
             sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
             m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
-            // Older LO versions used to write incorrect character set for OpenSymbol, fix.
+            
             if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
                 m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
         break;
         }
         default:
         {
-            //----> debug
+            
             int nVal = val.getInt();
             ++nVal;
-            //<---- debug
+            
         }
     }
 }
@@ -158,11 +158,11 @@ void FontTable::resolveSprm(Sprm & r_Sprm)
 
 void FontTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    //create a new font entry
+    
     OSL_ENSURE( !m_pImpl->pCurrentEntry, "current entry has to be NULL here");
     m_pImpl->pCurrentEntry.reset(new FontEntry);
     ref->resolve(*this);
-    //append it to the table
+    
     m_pImpl->aFontEntries.push_back( m_pImpl->pCurrentEntry );
     m_pImpl->pCurrentEntry.reset();
 }
@@ -248,9 +248,9 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
         return;
     std::vector< unsigned char > key( 32 );
     if( !fontKey.isEmpty())
-    {   // key for unobfuscating
-        //  1 3 5 7 10 2  5 7 20 2  5 7 9 1 3 5
-        // {62E79491-959F-41E9-B76B-6B32631DEA5C}
+    {   
+        
+        
         static const int pos[ 16 ] = { 35, 33, 31, 29, 27, 25, 22, 20, 17, 15, 12, 10, 7, 5, 3, 1 };
         for( int i = 0;
              i < 16;
@@ -281,9 +281,9 @@ void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
             id = sValue;
             break;
         case NS_ooxml::LN_CT_FontRel_subsetted:
-            break; // TODO? Let's just ignore this for now and hope
-                   // it doesn't break anything.
-        case NS_ooxml::LN_inputstream: // the actual font data as stream
+            break; 
+                   
+        case NS_ooxml::LN_inputstream: 
             val.getAny() >>= inputStream;
             break;
         default:
@@ -296,7 +296,7 @@ void EmbeddedFontHandler::lcl_sprm( Sprm& )
 }
 
 
-}//namespace dmapper
-}//namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

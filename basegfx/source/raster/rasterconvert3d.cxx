@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/raster/rasterconvert3d.hxx>
@@ -22,8 +22,8 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// implementations of the 3D raster converter
+
+
 
 namespace basegfx
 {
@@ -61,42 +61,42 @@ namespace basegfx
         {
             OSL_ENSURE(nStopLine >= nStartLine, "nStopLine is bigger than nStartLine (!)");
 
-            // sort global entries by Y, X once. After this, the vector
-            // is seen as frozen. Pointers to it's entries will be used in the following code.
+            
+            
             ::std::sort(maLineEntries.begin(), maLineEntries.end());
 
-            // local parameters
+            
             ::std::vector< RasterConversionLineEntry3D >::iterator aCurrentEntry(maLineEntries.begin());
             ::std::vector< RasterConversionLineEntry3D* > aCurrentLine;
             ::std::vector< RasterConversionLineEntry3D* > aNextLine;
             ::std::vector< RasterConversionLineEntry3D* >::iterator aRasterConversionLineEntry3D;
             sal_uInt32 nPairCount(0);
 
-            // get scanlines first LineNumber as start
+            
             sal_Int32 nLineNumber(::std::max(aCurrentEntry->getY(), nStartLine));
 
             while((aCurrentLine.size() || aCurrentEntry != maLineEntries.end()) && (nLineNumber < nStopLine))
             {
-                // add all entries which start at current line to current scanline
+                
                 while(aCurrentEntry != maLineEntries.end())
                 {
                     const sal_Int32 nCurrentLineNumber(aCurrentEntry->getY());
 
                     if(nCurrentLineNumber > nLineNumber)
                     {
-                        // line is below current one, done (since array is sorted)
+                        
                         break;
                     }
                     else
                     {
-                        // less or equal. Line is above or at current one. Advance it exactly to
-                        // current line
+                        
+                        
                         const sal_uInt32 nStep(nLineNumber - nCurrentLineNumber);
 
                         if(!nStep || aCurrentEntry->decrementRasterConversionLineEntry3D(nStep))
                         {
-                            // add when exactly on current line or when incremet to it did not
-                            // completely consume it
+                            
+                            
                             if(nStep)
                             {
                                 aCurrentEntry->incrementRasterConversionLineEntry3D(nStep, *this);
@@ -109,13 +109,13 @@ namespace basegfx
                     ++aCurrentEntry;
                 }
 
-                // sort current scanline using comparator. Only X is used there
-                // since all entries are already in one processed line. This needs to be done
-                // everytime since not only new spans may have benn added or old removed,
-                // but incrementing may also have changed the order
+                
+                
+                
+                
                 ::std::sort(aCurrentLine.begin(), aCurrentLine.end(), lineComparator());
 
-                // process current scanline
+                
                 aRasterConversionLineEntry3D = aCurrentLine.begin();
                 aNextLine.clear();
                 nPairCount = 0;
@@ -124,14 +124,14 @@ namespace basegfx
                 {
                     RasterConversionLineEntry3D& rPrevScanRasterConversionLineEntry3D(**aRasterConversionLineEntry3D++);
 
-                    // look for 2nd span
+                    
                     if(aRasterConversionLineEntry3D != aCurrentLine.end())
                     {
-                        // work on span from rPrevScanRasterConversionLineEntry3D to aRasterConversionLineEntry3D, fLineNumber is valid
+                        
                         processLineSpan(rPrevScanRasterConversionLineEntry3D, **aRasterConversionLineEntry3D, nLineNumber, nPairCount++);
                     }
 
-                    // increment to next line
+                    
                     if(rPrevScanRasterConversionLineEntry3D.decrementRasterConversionLineEntry3D(1))
                     {
                         rPrevScanRasterConversionLineEntry3D.incrementRasterConversionLineEntry3D(1, *this);
@@ -139,13 +139,13 @@ namespace basegfx
                     }
                 }
 
-                // copy back next scanline if count has changed
+                
                 if(aNextLine.size() != aCurrentLine.size())
                 {
                     aCurrentLine = aNextLine;
                 }
 
-                // increment fLineNumber
+                
                 nLineNumber++;
             }
         }
@@ -174,7 +174,7 @@ namespace basegfx
                 aStart.getZ(), (aEnd.getZ() - aStart.getZ()) * fInvYDelta,
                 nYStart, nYDelta));
 
-            // if extra interpolation data is used, add it to the last created entry
+            
             RasterConversionLineEntry3D& rEntry = maLineEntries[maLineEntries.size() - 1];
 
             if(rFill.areBColorsUsed())
@@ -219,8 +219,8 @@ namespace basegfx
 
         if(nLineWidth > 1 || bForceToPolygon)
         {
-            // this is not a hairline anymore, in most cases since it's an oversampled
-            // hairline to get e.g. AA for Z-Buffering. Create fill geometry.
+            
+            
             if(!aStart.equal(aEnd))
             {
                 reset();
@@ -244,14 +244,14 @@ namespace basegfx
         }
         else
         {
-            // it's a hairline. Use direct RasterConversionLineEntry creation to
-            // rasterconvert lines as similar to areas as possible to avoid Z-Fighting
+            
+            
             sal_Int32 nYStart(fround(aStart.getY()));
             sal_Int32 nYEnd(fround(aEnd.getY()));
 
             if(nYStart == nYEnd)
             {
-                // horizontal line, check X
+                
                 const sal_Int32 nXStart(static_cast<sal_Int32>(aStart.getX()));
                 const sal_Int32 nXEnd(static_cast<sal_Int32>(aEnd.getX()));
 
@@ -260,8 +260,8 @@ namespace basegfx
                     reset();
                     maLineEntries.clear();
 
-                    // horizontal line, create vertical entries. These will be sorted by
-                    // X anyways, so no need to distinguish the case here
+                    
+                    
                     maLineEntries.push_back(RasterConversionLineEntry3D(
                         aStart.getX(), 0.0,
                         aStart.getZ() + fZBufferLineAdd, 0.0,
@@ -286,8 +286,8 @@ namespace basegfx
                 const sal_uInt32 nYDelta(static_cast<sal_uInt32>(nYEnd - nYStart));
                 const double fInvYDelta(1.0 / nYDelta);
 
-                // non-horizontal line, create two parallell entries. These will be sorted by
-                // X anyways, so no need to distinguish the case here
+                
+                
                 maLineEntries.push_back(RasterConversionLineEntry3D(
                     aStart.getX(), (aEnd.getX() - aStart.getX()) * fInvYDelta,
                     aStart.getZ() + fZBufferLineAdd, (aEnd.getZ() - aStart.getZ()) * fInvYDelta,
@@ -295,10 +295,10 @@ namespace basegfx
 
                 RasterConversionLineEntry3D& rEntry = maLineEntries[maLineEntries.size() - 1];
 
-                // need to choose a X-Distance for the 2nd edge which guarantees all pixels
-                // of the line to be set. This is exactly the X-Increment for one Y-Step.
-                // Same is true for Z, so in both cases, add one increment to them. To also
-                // guarantee one pixel per line, add a minimum of one for X.
+                
+                
+                
+                
                 const double fDistanceX(fabs(rEntry.getX().getInc()) >= 1.0 ? rEntry.getX().getInc() : 1.0);
 
                 maLineEntries.push_back(RasterConversionLineEntry3D(
@@ -336,6 +336,6 @@ namespace basegfx
             }
         }
     }
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

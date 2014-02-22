@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <cppuhelper/compbase1.hxx>
@@ -37,9 +37,9 @@ private:
     uno::Reference<i18n::XCharacterClassification> m_xCC;
 };
 
-//A test to ensure that our Title Case functionality is working
-//http://lists.freedesktop.org/archives/libreoffice/2012-June/032767.html
-//https://issues.apache.org/ooo/show_bug.cgi?id=30863
+
+
+
 void TestCharacterClassification::testTitleCase()
 {
     lang::Locale aLocale;
@@ -47,7 +47,7 @@ void TestCharacterClassification::testTitleCase()
     aLocale.Country = "US";
 
     {
-        //basic example
+        
         OUString sTest("Some text");
         OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase == "Some Text");
@@ -58,7 +58,7 @@ void TestCharacterClassification::testTitleCase()
     }
 
     {
-        //tricky one
+        
         const sal_Unicode LATINSMALLLETTERDZ[] = { 0x01F3 };
         OUString aTest(LATINSMALLLETTERDZ, SAL_N_ELEMENTS(LATINSMALLLETTERDZ));
         OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
@@ -70,7 +70,7 @@ void TestCharacterClassification::testTitleCase()
     }
 }
 
-//https://bugs.libreoffice.org/show_bug.cgi?id=69641
+
 void TestCharacterClassification::testStringType()
 {
     lang::Locale aLocale;
@@ -78,14 +78,14 @@ void TestCharacterClassification::testStringType()
     aLocale.Country = "US";
 
     {
-        //simple case
+        
         OUString sTest("Some text");
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_EQUAL(nResult, sal_Int32(230));
     }
 
     {
-        //tricky case
+        
         const sal_Unicode MATHEMATICAL_ITALIC_SMALL_THETA[] = { 0xD835, 0xDF03 };
         OUString sTest(MATHEMATICAL_ITALIC_SMALL_THETA, SAL_N_ELEMENTS(MATHEMATICAL_ITALIC_SMALL_THETA));
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);

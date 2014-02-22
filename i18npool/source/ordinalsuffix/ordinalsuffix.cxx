@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -47,16 +47,16 @@ namespace
 {
     OUString mungeUnicodeStringToOUString(const icu::UnicodeString &rIn, UErrorCode &rCode)
     {
-        // Apply NFKC normalization to get normal letters
+        
         icu::UnicodeString normalized;
         icu::Normalizer::normalize(rIn, UNORM_NFKC, 0, normalized, rCode);
-        // Convert the normalized UnicodeString to OUString
+        
         OUString sRet = (U_SUCCESS(rCode))
             ? OUString(reinterpret_cast<const sal_Unicode *>(normalized.getBuffer()), normalized.length())
             : OUString();
-        // replace any minus signs with hyphen-minus so that negative numbers
-        // from the simple number formatter and heavy-duty pattern formatter
-        // agree as to their negative number sign
+        
+        
+        
         return sRet.replace(0x2212, '-');
     }
 }
@@ -70,7 +70,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
 {
     uno::Sequence< OUString > retValue;
 
-    // Get the value from ICU
+    
     UErrorCode nCode = U_ZERO_ERROR;
     const icu::Locale aIcuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale)));
 
@@ -98,7 +98,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
     {
         icu::UnicodeString ruleSet = formatter.getRuleSetName(i);
 
-        // format the string
+        
         icu::UnicodeString sFormatWithOrdinal;
         icu::FieldPosition icuPosB;
         formatter.format((int32_t)nNumber, ruleSet, sFormatWithOrdinal, icuPosB, nCode);
@@ -110,9 +110,9 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
         if (!U_SUCCESS(nCode))
             continue;
 
-        // fdo#54486 lets make sure that the ordinal format and the non-ordinal
-        // format match at the start, so that the expectation can be verified
-        // that there is some trailing "ordinal suffix" which can be extracted
+        
+        
+        
         bool bSimpleOrdinalSuffix = sValueWithOrdinal.startsWith(sValueWithNoOrdinal);
 
         SAL_WARN_IF(!bSimpleOrdinalSuffix, "i18npool", "ordinal " <<
@@ -122,7 +122,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
         if (!bSimpleOrdinalSuffix)
             continue;
 
-        // Remove the number to get the prefix
+        
         sal_Int32 len = sValueWithNoOrdinal.getLength();
 
         sal_Int32 newLength = retValue.getLength() + 1;

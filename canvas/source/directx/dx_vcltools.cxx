@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ namespace dxcanvas
     {
         namespace
         {
-            /// Calc number of colors in given BitmapInfoHeader
+            
             sal_Int32 calcDIBColorCount( const BITMAPINFOHEADER& rBIH )
             {
                 if( rBIH.biSize != sizeof( BITMAPCOREHEADER ) )
@@ -67,10 +67,10 @@ namespace dxcanvas
                         return 1L << pCoreHeader->bcBitCount;
                 }
 
-                return 0; // nothing known
+                return 0; 
             }
 
-            /// Draw DI bits to given Graphics
+            
             bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
                              const void*                                     hDIB )
             {
@@ -85,8 +85,8 @@ namespace dxcanvas
                     const BYTE*             pBits = (BYTE*) pBI + *(DWORD*)pBI +
                         calcDIBColorCount( *pBIH ) * sizeof( RGBQUAD );
 
-                    // forward to outsourced GDI+ rendering method
-                    // (header clashes)
+                    
+                    
                     bRet = tools::drawDIBits( rGraphics, *pBI, (void*)pBits );
 
                     GlobalUnlock( (HGLOBAL)hDIB );
@@ -109,18 +109,18 @@ namespace dxcanvas
                 if( !rBmp.GetSystemData( aBmpSysData ) ||
                     !aBmpSysData.pDIB )
                 {
-                    // first of all, ensure that Bitmap contains a DIB, by
-                    // aquiring a read access
+                    
+                    
                     BitmapReadAccess* pReadAcc = rBmp.AcquireReadAccess();
 
-                    // TODO(P2): Acquiring a read access can actually
-                    // force a read from VRAM, thus, avoiding this
-                    // step somehow will increase performance
-                    // here.
+                    
+                    
+                    
+                    
                     if( pReadAcc )
                     {
-                        // try again: now, WinSalBitmap must have
-                        // generated a DIB
+                        
+                        
                         if( rBmp.GetSystemData( aBmpSysData ) &&
                             aBmpSysData.pDIB )
                         {
@@ -137,7 +137,7 @@ namespace dxcanvas
                                        aBmpSysData.pDIB );
                 }
 
-                // failed to generate DIBits from vcl bitmap
+                
                 return false;
             }
 
@@ -145,18 +145,18 @@ namespace dxcanvas
              */
             RawRGBABitmap bitmapFromVCLBitmapEx( const ::BitmapEx& rBmpEx )
             {
-                // TODO(P2): Avoid temporary bitmap generation, maybe
-                // even ensure that created DIBs are copied back to
-                // BmpEx (currently, every AcquireReadAccess() will
-                // make the local bitmap copy unique, effectively
-                // duplicating the memory used)
+                
+                
+                
+                
+                
 
                 ENSURE_OR_THROW( rBmpEx.IsTransparent(),
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                   "BmpEx not transparent" );
 
-                // convert transparent bitmap to 32bit RGBA
-                // ========================================
+                
+                
 
                 const ::Size aBmpSize( rBmpEx.GetSizePixel() );
 
@@ -182,21 +182,21 @@ namespace dxcanvas
 
                     Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha );
 
-                    // By convention, the access buffer always has
-                    // one of the following formats:
+                    
+                    
                     //
-                    //    BMP_FORMAT_1BIT_MSB_PAL
-                    //    BMP_FORMAT_4BIT_MSN_PAL
-                    //    BMP_FORMAT_8BIT_PAL
-                    //    BMP_FORMAT_16BIT_TC_LSB_MASK
-                    //    BMP_FORMAT_24BIT_TC_BGR
-                    //    BMP_FORMAT_32BIT_TC_MASK
+                    
+                    
+                    
+                    
+                    
+                    
                     //
-                    // and is always BMP_FORMAT_BOTTOM_UP
+                    
                     //
-                    // This is the way
-                    // WinSalBitmap::AcquireBuffer() sets up the
-                    // buffer
+                    
+                    
+                    
 
                     ENSURE_OR_THROW( pAlphaReadAccess.get() != NULL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
@@ -230,9 +230,9 @@ namespace dxcanvas
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
 
-                                    // out notion of alpha is
-                                    // different from the rest
-                                    // of the world's
+                                    
+                                    
+                                    
                                     *pCurrOutput++ = 255 - (BYTE)*pAScan++;
                                 }
                             }
@@ -245,71 +245,71 @@ namespace dxcanvas
 
                                 for( x=0; x<nWidth; ++x )
                                 {
-                                    // store as RGBA
+                                    
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
 
-                                    // out notion of alpha is
-                                    // different from the rest
-                                    // of the world's
+                                    
+                                    
+                                    
                                     *pCurrOutput++ = 255 - (BYTE)*pAScan++;
                                 }
                             }
                             break;
 
-                            // TODO(P2): Might be advantageous
-                            // to hand-formulate the following
-                            // formats, too.
+                            
+                            
+                            
                             case BMP_FORMAT_1BIT_MSB_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_4BIT_MSN_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_16BIT_TC_LSB_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_MASK:
                             {
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
 
-                                // using fallback for those
-                                // seldom formats
+                                
+                                
                                 for( x=0; x<nWidth; ++x )
                                 {
-                                    // yes. x and y are swapped on Get/SetPixel
+                                    
                                     aCol = pReadAccess->GetColor(y,x);
 
                                     *pCurrOutput++ = aCol.GetBlue();
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
 
-                                    // out notion of alpha is
-                                    // different from the rest
-                                    // of the world's
+                                    
+                                    
+                                    
                                     *pCurrOutput++ = 255 - (BYTE)*pAScan++;
                                 }
                             }
                             break;
 
                             case BMP_FORMAT_1BIT_LSB_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_4BIT_LSN_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_8BIT_TC_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_24BIT_TC_RGB:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_24BIT_TC_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_16BIT_TC_MSB_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_ABGR:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_ARGB:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_BGRA:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_RGBA:
-                                // FALLTHROUGH intended
+                                
                             default:
                                 ENSURE_OR_THROW( false,
                                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
@@ -324,21 +324,21 @@ namespace dxcanvas
 
                     Bitmap::ScopedReadAccess pMaskReadAccess( aMask );
 
-                    // By convention, the access buffer always has
-                    // one of the following formats:
+                    
+                    
                     //
-                    //    BMP_FORMAT_1BIT_MSB_PAL
-                    //    BMP_FORMAT_4BIT_MSN_PAL
-                    //    BMP_FORMAT_8BIT_PAL
-                    //    BMP_FORMAT_16BIT_TC_LSB_MASK
-                    //    BMP_FORMAT_24BIT_TC_BGR
-                    //    BMP_FORMAT_32BIT_TC_MASK
+                    
+                    
+                    
+                    
+                    
+                    
                     //
-                    // and is always BMP_FORMAT_BOTTOM_UP
+                    
                     //
-                    // This is the way
-                    // WinSalBitmap::AcquireBuffer() sets up the
-                    // buffer
+                    
+                    
+                    
 
                     ENSURE_OR_THROW( pMaskReadAccess.get() != NULL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
@@ -355,18 +355,18 @@ namespace dxcanvas
                     sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
                     int             x, y;
 
-                    // mapping table, to get from mask index color to
-                    // alpha value (which depends on the mask's palette)
+                    
+                    
                     sal_uInt8 aColorMap[2];
 
                     const BitmapColor& rCol0( pMaskReadAccess->GetPaletteColor( 0 ) );
                     const BitmapColor& rCol1( pMaskReadAccess->GetPaletteColor( 1 ) );
 
-                    // shortcut for true luminance calculation
-                    // (assumes that palette is grey-level). Note the
-                    // swapped the indices here, to account for the
-                    // fact that VCL's notion of alpha is inverted to
-                    // the rest of the world's.
+                    
+                    
+                    
+                    
+                    
                     aColorMap[0] = rCol1.GetRed();
                     aColorMap[1] = rCol0.GetRed();
 
@@ -400,7 +400,7 @@ namespace dxcanvas
 
                                 for( x=0, nCurrBit=nInitialBit; x<nWidth; ++x )
                                 {
-                                    // store as RGBA
+                                    
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
@@ -411,27 +411,27 @@ namespace dxcanvas
                             }
                             break;
 
-                            // TODO(P2): Might be advantageous
-                            // to hand-formulate the following
-                            // formats, too.
+                            
+                            
+                            
                             case BMP_FORMAT_1BIT_MSB_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_4BIT_MSN_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_16BIT_TC_LSB_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_MASK:
                             {
                                 Scanline pMScan = pMaskReadAccess->GetScanline( y );
 
-                                // using fallback for those
-                                // seldom formats
+                                
+                                
                                 for( x=0, nCurrBit=nInitialBit; x<nWidth; ++x )
                                 {
-                                    // yes. x and y are swapped on Get/SetPixel
+                                    
                                     aCol = pReadAccess->GetColor(y,x);
 
-                                    // store as RGBA
+                                    
                                     *pCurrOutput++ = aCol.GetBlue();
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
@@ -443,25 +443,25 @@ namespace dxcanvas
                             break;
 
                             case BMP_FORMAT_1BIT_LSB_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_4BIT_LSN_PAL:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_8BIT_TC_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_24BIT_TC_RGB:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_24BIT_TC_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_16BIT_TC_MSB_MASK:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_ABGR:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_ARGB:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_BGRA:
-                                // FALLTHROUGH intended
+                                
                             case BMP_FORMAT_32BIT_TC_RGBA:
-                                // FALLTHROUGH intended
+                                
                             default:
                                 ENSURE_OR_THROW( false,
                                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
@@ -493,7 +493,7 @@ namespace dxcanvas
         bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
                                        const uno::Reference< rendering::XBitmap >&     xBitmap )
         {
-            // TODO(F2): add support for floating point bitmap formats
+            
             uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
                 xBitmap, uno::UNO_QUERY );
 

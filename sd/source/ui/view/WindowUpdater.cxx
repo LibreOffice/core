@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ void WindowUpdater::RegisterWindow (::Window* pWindow)
                 maWindowList.begin(), maWindowList.end(), pWindow));
         if (aWindowIterator == maWindowList.end())
         {
-            // Update the device once right now and add it to the list.
+            
             Update (pWindow);
             maWindowList.push_back (pWindow);
         }
@@ -121,10 +121,10 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
         SvtCTLOptions::TextNumerals aNumeralMode (maCTLOptions.GetCTLTextNumerals());
 
         LanguageType aLanguage;
-        // Now this is a bit confusing.  The numerals in arabic languages
-        // are Hindi numerals and what the western world generally uses are
-        // arabic numerals.  The digits used in the Hindi language are not
-        // used at all.
+        
+        
+        
+        
         switch (aNumeralMode)
         {
             case SvtCTLOptions::NUMERALS_HINDI:
@@ -150,22 +150,22 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 
 void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    // Set the current state at all registered output devices.
+    
     tWindowList::iterator aWindowIterator (maWindowList.begin());
     while (aWindowIterator != maWindowList.end())
         Update (*aWindowIterator++);
 
-    // Reformat the document for the modified state to take effect.
+    
     if (mpDocument != NULL)
         mpDocument->ReformatAllTextObjects();
 
-    // Invalidate the windows to make the modified state visible.
+    
     aWindowIterator = maWindowList.begin();
     while (aWindowIterator != maWindowList.end())
         (*aWindowIterator++)->Invalidate();
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

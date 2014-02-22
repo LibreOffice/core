@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "userdat.hxx"
 #include "drwlayer.hxx"
 #include "rechead.hxx"
 
-// -----------------------------------------------------------------------
+
 
 ScDrawObjFactory::ScDrawObjFactory()
 {
@@ -52,7 +52,7 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
 }
 IMPL_LINK_INLINE_END( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 
-//------------------------------------------------------------------------
+
 
 ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
@@ -67,7 +67,7 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
     return new ScDrawObjData( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 ScIMapInfo::ScIMapInfo() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 )
@@ -95,7 +95,7 @@ SdrObjUserData* ScIMapInfo::Clone( SdrObject* ) const
     return new ScIMapInfo( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 ScMacroInfo::ScMacroInfo() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA, 0 )

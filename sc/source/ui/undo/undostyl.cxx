@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itemset.hxx>
@@ -29,14 +29,14 @@
 #include "inputhdl.hxx"
 #include "globstr.hrc"
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1(ScUndoModifyStyle, ScSimpleUndo);
 TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 
-// -----------------------------------------------------------------------
+
 //
-//      modify style (cell or page style)
+
 //
 
 ScStyleSaveData::ScStyleSaveData() :
@@ -83,10 +83,10 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
         pItems = new SfxItemSet( ((SfxStyleSheetBase*)pSource)->GetItemSet() );
     }
     else
-        *this = ScStyleSaveData();      // empty
+        *this = ScStyleSaveData();      
 }
 
-// -----------------------------------------------------------------------
+
 
 ScUndoModifyStyle::ScUndoModifyStyle( ScDocShell* pDocSh, SfxStyleFamily eFam,
                     const ScStyleSaveData& rOld, const ScStyleSaveData& rNew ) :
@@ -111,7 +111,7 @@ OUString ScUndoModifyStyle::GetComment() const
 
 static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sal_Bool bRemoved )
 {
-    //! move to document or docshell
+    
 
     VirtualDevice aVDev;
     Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
@@ -131,25 +131,25 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
     ScDocument* pDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     OUString aNewName = rData.GetName();
-    sal_Bool bDelete = aNewName.isEmpty();         // no new name -> delete style
-    sal_Bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
+    sal_Bool bDelete = aNewName.isEmpty();         
+    sal_Bool bNew = ( rName.isEmpty() && !bDelete );   
 
     SfxStyleSheetBase* pStyle = NULL;
     if ( !rName.isEmpty() )
     {
-        // find old style to modify
+        
         pStyle = pStlPool->Find( rName, eStyleFamily );
         OSL_ENSURE( pStyle, "style not found" );
 
         if ( pStyle && !bDelete )
         {
-            // set new name
+            
             pStyle->SetName( aNewName );
         }
     }
     else if ( !bDelete )
     {
-        // create style (with new name)
+        
         pStyle = &pStlPool->Make( aNewName, eStyleFamily, SFXSTYLEBIT_USERDEF );
 
         if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
@@ -161,16 +161,16 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         if ( bDelete )
         {
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
-                lcl_DocStyleChanged( pDoc, pStyle, sal_True );      // TRUE: remove usage of style
+                lcl_DocStyleChanged( pDoc, pStyle, sal_True );      
             else
                 pDoc->RemovePageStyleInUse( rName );
 
-            // delete style
+            
             pStlPool->Remove( pStyle );
         }
         else
         {
-            // modify style
+            
 
             OUString aNewParent = rData.GetParent();
             if ( aNewParent != pStyle->GetParent() )
@@ -184,11 +184,11 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
 
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
             {
-                lcl_DocStyleChanged( pDoc, pStyle, false );     // cell styles: row heights
+                lcl_DocStyleChanged( pDoc, pStyle, false );     
             }
             else
             {
-                // page styles
+                
 
                 if ( bNew && aNewName != rName )
                     pDoc->RenamePageStyleInUse( rName, aNewName );
@@ -203,8 +203,8 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
 
     pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
 
-    //! undo/redo document modifications for deleted styles
-    //! undo/redo modifications of number formatter
+    
+    
 }
 
 void ScUndoModifyStyle::Undo()
@@ -227,12 +227,12 @@ void ScUndoModifyStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 
 bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;       // no repeat possible
+    return false;       
 }
 
-// -----------------------------------------------------------------------
+
 //
-//      apply page style
+
 //
 ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle ) :
     mnTab( nTab ),
@@ -284,7 +284,7 @@ void ScUndoApplyPageStyle::Redo()
 
 void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //! set same page style to current tab
+    
 }
 
 bool ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const

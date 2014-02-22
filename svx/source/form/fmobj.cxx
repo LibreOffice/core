@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fmobj.hxx"
@@ -58,7 +58,7 @@ using namespace ::svxform;
 
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
-//------------------------------------------------------------------
+
 FmFormObj::FmFormObj(const OUString& rModelName)
           :SdrUnoObj                ( rModelName    )
           ,m_nPos                   ( -1            )
@@ -66,12 +66,12 @@ FmFormObj::FmFormObj(const OUString& rModelName)
 {
     DBG_CTOR(FmFormObj, NULL);
 
-    // normally, this is done in SetUnoControlModel, but if the call happened in the base class ctor,
-    // then our incarnation of it was not called (since we were not constructed at this time).
+    
+    
     impl_checkRefDevice_nothrow( true );
 }
 
-//------------------------------------------------------------------
+
 FmFormObj::FmFormObj()
           :SdrUnoObj                ( ""  )
           ,m_nPos                   ( -1        )
@@ -80,7 +80,7 @@ FmFormObj::FmFormObj()
     DBG_CTOR(FmFormObj, NULL);
 }
 
-//------------------------------------------------------------------
+
 FmFormObj::~FmFormObj()
 {
     DBG_DTOR(FmFormObj, NULL);
@@ -92,7 +92,7 @@ FmFormObj::~FmFormObj()
     m_aEventsHistory.realloc(0);
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, const sal_Int32 nIdx,
                           const Sequence< ScriptEventDescriptor >& rEvts)
 {
@@ -101,7 +101,7 @@ void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, const sal_
     m_nPos    = nIdx;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::ClearObjEnv()
 {
     m_xParent.clear();
@@ -109,7 +109,7 @@ void FmFormObj::ClearObjEnv()
     m_nPos = -1;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
 {
     const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
@@ -148,7 +148,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
     }
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::impl_isolateControlModel_nothrow()
 {
     try
@@ -170,7 +170,7 @@ void FmFormObj::impl_isolateControlModel_nothrow()
     }
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetPage(SdrPage* _pNewPage)
 {
     if ( GetPage() == _pNewPage )
@@ -185,10 +185,10 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 
     FmFormPage* pNewFormPage = PTR_CAST( FmFormPage, _pNewPage );
     if ( !pNewFormPage )
-    {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
-        // me may want to remember our place within the old page. For this we could create a new m_xEnvironmentHistory to store it.
-        // So the next SetPage with a valid new page would restore that environment within the new page.
-        // But for the original Bug (#57300#) we don't need that, so I omit it here. Maybe this will be implemented later.
+    {   
+        
+        
+        
         impl_isolateControlModel_nothrow();
         SdrUnoObj::SetPage(_pNewPage);
         return;
@@ -198,12 +198,12 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     Reference< XIndexContainer >        xNewParent;
     Sequence< ScriptEventDescriptor>    aNewEvents;
 
-    // calc the new parent for my model (within the new page's forms hierarchy)
-    // do we have a history ? (from :Clone)
+    
+    
     if ( m_xEnvironmentHistory.is() )
     {
-        // the element in m_xEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within _pNewPage->GetForms)
-        // is the right-most element in the tree.
+        
+        
         Reference< XIndexContainer > xRightMostLeaf( m_xEnvironmentHistory, UNO_QUERY_THROW );
         try
         {
@@ -217,8 +217,8 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 
             xNewParent.set( ensureModelEnv( xRightMostLeaf, xNewPageForms ), UNO_QUERY_THROW );
 
-            // we successfully cloned the environment in m_xEnvironmentHistory, so we can use m_aEventsHistory
-            // (which describes the events of our model at the moment m_xEnvironmentHistory was created)
+            
+            
             aNewEvents = m_aEventsHistory;
         }
         catch( const Exception& )
@@ -229,14 +229,14 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 
     if ( !xNewParent.is() )
     {
-        // are we a valid part of our current page forms ?
+        
         Reference< XIndexContainer > xOldForms;
         if ( pOldFormPage )
             xOldForms.set( pOldFormPage->GetForms(), UNO_QUERY_THROW );
 
         if ( xOldForms.is() )
         {
-            // search (upward from our model) for xOldForms
+            
             Reference< XChild > xSearch( GetUnoControlModel(), UNO_QUERY );
             while (xSearch.is())
             {
@@ -244,7 +244,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                     break;
                 xSearch = Reference< XChild >( xSearch->getParent(), UNO_QUERY );
             }
-            if ( xSearch.is() ) // implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
+            if ( xSearch.is() ) 
             {
                 Reference< XChild >  xMeAsChild( GetUnoControlModel(), UNO_QUERY );
                 xNewParent.set( ensureModelEnv( xMeAsChild->getParent(), xNewPageForms ), UNO_QUERY );
@@ -253,7 +253,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                 {
                     try
                     {
-                        // transfer the events from our (model's) parent to the new (model's) parent, too
+                        
                         Reference< XEventAttacherManager >  xEventManager(xMeAsChild->getParent(), UNO_QUERY);
                         Reference< XIndexAccess >  xManagerAsIndex(xEventManager, UNO_QUERY);
                         if (xManagerAsIndex.is())
@@ -274,16 +274,16 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         }
     }
 
-    // now set the page
+    
     SdrUnoObj::SetPage(_pNewPage);
 
-    // place my model within the new parent container
+    
     if (xNewParent.is())
     {
         Reference< XFormComponent >  xMeAsFormComp(GetUnoControlModel(), UNO_QUERY);
         if (xMeAsFormComp.is())
         {
-            // check if I have another parent (and remove me, if necessary)
+            
             Reference< XIndexContainer >  xOldParent(xMeAsFormComp->getParent(), UNO_QUERY);
             if (xOldParent.is())
             {
@@ -291,10 +291,10 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                 if (nPos > -1)
                     xOldParent->removeByIndex(nPos);
             }
-            // and insert into the new container
+            
             xNewParent->insertByIndex(xNewParent->getCount(), makeAny(xMeAsFormComp));
 
-            // transfer the events
+            
             if (aNewEvents.getLength())
             {
                 try
@@ -317,7 +317,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         }
     }
 
-    // delete my history
+    
     if (m_xEnvironmentHistory.is())
         m_xEnvironmentHistory->dispose();
 
@@ -328,19 +328,19 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         pNewFormPage->GetImpl().formObjectInserted( *this );
 }
 
-//------------------------------------------------------------------
+
 sal_uInt32 FmFormObj::GetObjInventor()   const
 {
     return FmFormInventor;
 }
 
-//------------------------------------------------------------------
+
 sal_uInt16 FmFormObj::GetObjIdentifier() const
 {
     return OBJ_UNO;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 {
     DBG_ASSERT(_pSource != NULL, "FmFormObj::clonedFrom : invalid source !");
@@ -360,10 +360,10 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 
     ensureModelEnv(xSourceContainer, m_xEnvironmentHistory);
     m_aEventsHistory = aEvts;
-        // if we we're clone there was a call to operator=, so aEvts are excatly the events we need here ...
+        
 }
 
-//------------------------------------------------------------------
+
 FmFormObj* FmFormObj::Clone() const
 {
     FmFormObj* pFormObject = CloneHelper< FmFormObj >();
@@ -374,22 +374,22 @@ FmFormObj* FmFormObj::Clone() const
     return pFormObject;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::NbcReformatText()
 {
     impl_checkRefDevice_nothrow( false );
     SdrUnoObj::NbcReformatText();
 }
 
-//------------------------------------------------------------------
+
 FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
 {
     if( this == &rObj )
         return *this;
     SdrUnoObj::operator= (rObj);
 
-    // liegt das UnoControlModel in einer Eventumgebung,
-    // dann koennen noch Events zugeordnet sein
+    
+    
     Reference< XFormComponent >  xContent(rObj.xUnoControlModel, UNO_QUERY);
     if (xContent.is())
     {
@@ -407,7 +407,7 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
     return *this;
 }
 
-//------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
@@ -417,15 +417,15 @@ namespace
         if (xChild.is())
             xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
 
-        // while the current content is a form
+        
         OUString sReturn;
         OUString sCurrentIndex;
         while (xChild.is())
         {
-            // get the content's relative pos within it's parent container
+            
             sal_Int32 nPos = getElementPos(xParent, xChild);
 
-            // prepend this current relaive pos
+            
             sCurrentIndex = OUString::number(nPos);
             if (!sReturn.isEmpty())
             {
@@ -435,7 +435,7 @@ namespace
 
             sReturn = sCurrentIndex;
 
-            // travel up
+            
             if (::comphelper::query_interface((Reference< XInterface >)xParent,xChild))
                 xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
         }
@@ -445,13 +445,13 @@ namespace
     }
 }
 
-//------------------------------------------------------------------
+
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const Reference<css::form::XForms>& _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
     OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
-        // something went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
+        
         return Reference< XInterface > ();
 
     Reference< XIndexContainer >  xDestContainer(_rTopLevelDestContainer, UNO_QUERY_THROW);
@@ -464,7 +464,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         OUString aToken = sAccessPath.getToken( 0, '\\', nTokIndex );
         sal_uInt16 nIndex = (sal_uInt16)aToken.toInt32();
 
-        // get the DSS of the source form (we have to find an aquivalent for)
+        
         DBG_ASSERT(nIndex<xSourceContainer->getCount(), "FmFormObj::ensureModelEnv : invalid access path !");
         Reference< XPropertySet >  xSourceForm;
         xSourceContainer->getByIndex(nIndex) >>= xSourceForm;
@@ -473,7 +473,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         Any aSrcCursorSource, aSrcCursorSourceType, aSrcDataSource;
         DBG_ASSERT(::comphelper::hasProperty(FM_PROP_COMMAND, xSourceForm) && ::comphelper::hasProperty(FM_PROP_COMMANDTYPE, xSourceForm)
             && ::comphelper::hasProperty(FM_PROP_DATASOURCE, xSourceForm), "FmFormObj::ensureModelEnv : invalid access path or invalid form (missing props) !");
-            // the parent access path should refer to a row set
+            
         try
         {
             aSrcCursorSource        = xSourceForm->getPropertyValue(FM_PROP_COMMAND);
@@ -486,19 +486,19 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         }
 
 
-        // calc the number of (source) form siblings with the same DSS
+        
         Reference< XPropertySet >  xCurrentSourceForm, xCurrentDestForm;
         sal_Int16 nCurrentSourceIndex = 0, nCurrentDestIndex = 0;
         while (nCurrentSourceIndex <= nIndex)
         {
             sal_Bool bEqualDSS = sal_False;
-            while (!bEqualDSS)  // (we don't have to check nCurrentSourceIndex here : it's bound by nIndex)
+            while (!bEqualDSS)  
             {
                 xSourceContainer->getByIndex(nCurrentSourceIndex) >>= xCurrentSourceForm;
                 DBG_ASSERT(xCurrentSourceForm.is(), "FmFormObj::ensureModelEnv : invalid form ancestor (2) !");
                 bEqualDSS = sal_False;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentSourceForm))
-                {   // it is a form
+                {   
                     try
                     {
                         if  (   ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
@@ -519,9 +519,9 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
             }
 
             DBG_ASSERT(bEqualDSS, "FmFormObj::ensureModelEnv : found no source form !");
-            // ??? at least the nIndex-th one should have been found ???
+            
 
-            // now search the next one with the given DSS (within the destination container)
+            
             bEqualDSS = sal_False;
             while (!bEqualDSS && (nCurrentDestIndex < xDestContainer->getCount()))
             {
@@ -529,7 +529,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid destination form !");
                 bEqualDSS = sal_False;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentDestForm))
-                {   // it is a form
+                {   
                     try
                     {
                         if  (   ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
@@ -550,11 +550,11 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
             }
 
             if (!bEqualDSS)
-            {   // There is at least one more source form with the given DSS than destination forms are.
-                // correct this ...
+            {   
+                
                 try
                 {
-                    // create and insert (into the destination) a copy of the form
+                    
                     xCurrentDestForm.set(
                         ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.form.component.DataForm"),
                         UNO_QUERY_THROW );
@@ -564,22 +564,22 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));
 
                     ++nCurrentDestIndex;
-                        // like nCurrentSourceIndex, nCurrentDestIndex now points 'behind' the form it actally means
+                        
                 }
                 catch(Exception&)
                 {
                     OSL_FAIL("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
-                    // no more options anymore ...
+                    
                     return Reference< XInterface > ();
                 }
 
             }
         }
 
-        // now xCurrentDestForm is a form equivalent to xSourceForm (which means they have the same DSS and the same number
-        // of left siblings with the same DSS, which counts for all their ancestors, too)
+        
+        
 
-        // go down
+        
         xDestContainer = Reference< XIndexContainer > (xCurrentDestForm, UNO_QUERY);
         xSourceContainer = Reference< XIndexContainer > (xSourceForm, UNO_QUERY);
         DBG_ASSERT(xDestContainer.is() && xSourceContainer.is(), "FmFormObj::ensureModelEnv : invalid container !");
@@ -589,14 +589,14 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     return xDestContainer;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetModel( SdrModel* _pNewModel )
 {
     SdrUnoObj::SetModel( _pNewModel );
     impl_checkRefDevice_nothrow();
 }
 
-//------------------------------------------------------------------
+
 FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
 {
     FmFormObj* pFormObject = dynamic_cast< FmFormObj* >( _pSdrObject );
@@ -609,7 +609,7 @@ FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
     return pFormObject;
 }
 
-//------------------------------------------------------------------
+
 const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
 {
     const FmFormObj* pFormObject = dynamic_cast< const FmFormObj* >( _pSdrObject );
@@ -622,7 +622,7 @@ const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
     return pFormObject;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XControlModel >& _rxModel )
 {
     SdrUnoObj::SetUnoControlModel( _rxModel );
@@ -634,7 +634,7 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
     impl_checkRefDevice_nothrow( true );
 }
 
-//------------------------------------------------------------------
+
 bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
@@ -652,7 +652,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
                 Reference< XIndexContainer > xFormToInsertInto;
 
                 if ( !xParentForm.is() )
-                {   // model is not yet part of a form component hierachy
+                {   
                     xParentForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
                     xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
                 }
@@ -677,32 +677,32 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
     return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 void FmFormObj::BrkCreate( SdrDragStat& rStat )
 {
     SdrUnoObj::BrkCreate( rStat );
     impl_isolateControlModel_nothrow();
 }
 
-// -----------------------------------------------------------------------------
-// #i70852# overload Layer interface to force to FormColtrol layer
+
+
 
 SdrLayerID FmFormObj::GetLayer() const
 {
-    // #i72535#
-    // i70852 was too radical, in SW obects (and thus, FormControls, too)
-    // get moved to invisible layers to hide them (e.g. in hidden sections).
-    // This means that form controls ARE allowed to be on other layers than
-    // the form control layer ATM and that being member of form control layer
-    // is no criteria to find all FormControls of a document.
-    // To fix, use parent functionality
+    
+    
+    
+    
+    
+    
+    
     return SdrUnoObj::GetLayer();
 }
 
 void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
 {
-    // #i72535#
-    // See above. To fix, use parent functionality
+    
+    
     return SdrUnoObj::NbcSetLayer(nLayer);
 }
 

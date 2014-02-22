@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "entrylisthelper.hxx"
@@ -25,27 +25,27 @@
 #include <comphelper/property.hxx>
 #include <algorithm>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
-    //= OEntryListHelper
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OEntryListHelper::OEntryListHelper( OControlModel& _rControlModel )
         :m_rControlModel( _rControlModel )
         ,m_aRefreshListeners( _rControlModel.getInstanceMutex() )
     {
     }
 
-    //---------------------------------------------------------------------
+    
     OEntryListHelper::OEntryListHelper( const OEntryListHelper& _rSource, OControlModel& _rControlModel )
         :m_rControlModel( _rControlModel )
         ,m_xListSource ( _rSource.m_xListSource  )
@@ -54,32 +54,32 @@ namespace frm
     {
     }
 
-    //---------------------------------------------------------------------
+    
     OEntryListHelper::~OEntryListHelper( )
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
 
-        // disconnect from the current external list source
+        
         disconnectExternalListSource();
 
-        // and connect to the new one
+        
         if ( _rxSource.is() )
             connectExternalListSource( _rxSource, aLock );
     }
 
-    //---------------------------------------------------------------------
+    
     Reference< XListEntrySource > SAL_CALL OEntryListHelper::getListEntrySource(  ) throw (RuntimeException)
     {
         return m_xListSource;
     }
 
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -101,7 +101,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -116,18 +116,18 @@ namespace frm
             &&  ( _rEvent.Entries.getLength() > 0 )
             )
         {
-            // the entries *before* the insertion pos
+            
             Sequence< OUString > aKeepEntries(
                 m_aStringItems.getConstArray(),
                 _rEvent.Position
             );
-            // the entries *behind* the insertion pos
+            
             Sequence< OUString > aMovedEntries(
                 m_aStringItems.getConstArray() + _rEvent.Position,
                 m_aStringItems.getLength() - _rEvent.Position
             );
 
-            // concat all three parts
+            
             m_aStringItems = ::comphelper::concatSequences(
                 aKeepEntries,
                 _rEvent.Entries,
@@ -138,7 +138,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -153,20 +153,20 @@ namespace frm
             &&  ( _rEvent.Position + _rEvent.Count <= m_aStringItems.getLength() )
             )
         {
-            // copy all items after the removed ones
+            
             ::std::copy(
                 m_aStringItems.getConstArray() + _rEvent.Position + _rEvent.Count,
                 m_aStringItems.getConstArray() + m_aStringItems.getLength(),
                 m_aStringItems.getArray( ) + _rEvent.Position
             );
-            // shrink the array
+            
             m_aStringItems.realloc( m_aStringItems.getLength() - _rEvent.Count );
 
             stringItemListChanged( aLock );
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -181,22 +181,22 @@ namespace frm
         }
     }
 
-    // XRefreshable
-    //------------------------------------------------------------------------------
+    
+    
     void SAL_CALL OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.addInterface( _rxListener );
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.removeInterface( _rxListener );
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException)
     {
         {
@@ -208,7 +208,7 @@ namespace frm
         m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::impl_lock_refreshList( ControlModelLock& _rInstanceLock )
     {
         if ( hasExternalListSource() )
@@ -220,7 +220,7 @@ namespace frm
             refreshInternalEntryList();
     }
 
-    //---------------------------------------------------------------------
+    
     bool OEntryListHelper::handleDisposing( const EventObject& _rEvent )
     {
         if ( m_xListSource .is() && ( _rEvent.Source == m_xListSource ) )
@@ -231,7 +231,7 @@ namespace frm
         return false;
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::disposing( )
     {
         EventObject aEvt( static_cast< XRefreshable* >( this ) );
@@ -241,7 +241,7 @@ namespace frm
             disconnectExternalListSource( );
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::disconnectExternalListSource( )
     {
         if ( m_xListSource.is() )
@@ -252,53 +252,53 @@ namespace frm
         disconnectedExternalListSource();
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::connectedExternalListSource( )
     {
-        // nothing to do here
+        
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::disconnectedExternalListSource( )
     {
-        // nothing to do here
+        
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::connectExternalListSource( const Reference< XListEntrySource >& _rxSource, ControlModelLock& _rInstanceLock )
     {
         OSL_ENSURE( !hasExternalListSource(), "OEntryListHelper::connectExternalListSource: only to be called if no external source is active!" );
         OSL_ENSURE( _rxSource.is(), "OEntryListHelper::connectExternalListSource: invalid list source!" );
 
-        // remember it
+        
         m_xListSource = _rxSource;
 
-        // initially fill our item list
+        
         if ( m_xListSource.is() )
         {
-            // be notified when the list changes ...
+            
             m_xListSource->addListEntryListener( this );
 
             m_aStringItems = m_xListSource->getAllListEntries( );
             stringItemListChanged( _rInstanceLock );
 
-            // let derivees react on the new list source
+            
             connectedExternalListSource();
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OEntryListHelper::convertNewListSourceProperty( Any& _rConvertedValue,
         Any& _rOldValue, const Any& _rValue ) SAL_THROW( ( IllegalArgumentException ) )
     {
         if ( hasExternalListSource() )
             throw IllegalArgumentException( );
-            // TODO: error message
+            
 
         return ::comphelper::tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aStringItems );
     }
 
-    //---------------------------------------------------------------------
+    
     void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
@@ -306,8 +306,8 @@ namespace frm
         stringItemListChanged( _rInstanceLock );
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

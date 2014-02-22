@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -69,20 +69,20 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-// The dialog should check whether LO also supports the protocol
-// provided by KIO, and KFileWidget::dirOperator() is only 4.3+ .
-// Moreover it's only in this somewhat internal KFileWidget class,
-// which may not necessarily be what KFileDialog::fileWidget() returns,
-// but that's hopefully not a problem in practice.
+
+
+
+
+
 #if KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2
 #define ALLOW_REMOTE_URLS 1
 #else
 #define ALLOW_REMOTE_URLS 0
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// helper functions
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 #include <QDebug>
 
@@ -100,7 +100,7 @@ namespace
 
 OUString toOUString(const QString& s)
 {
-    // QString stores UTF16, just like OUString
+    
     return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
@@ -109,9 +109,9 @@ QString toQString(const OUString& s)
     return QString::fromUtf16(s.getStr(), s.getLength());
 }
 
-//////////////////////////////////////////////////////////////////////////
-// KDE4FilePicker
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     : KDE4FilePicker_Base(_helperMutex)
@@ -126,24 +126,24 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     if( KFileWidget* fileWidget = dynamic_cast< KFileWidget* >( _dialog->fileWidget()))
     {
         allowRemoteUrls = true;
-        // Use finishedLoading signal rather than e.g. urlEntered, because if there's a problem
-        // such as the URL being mistyped, there's no way to prevent two message boxes about it,
-        // one from us and one from KDE code.
+        
+        
+        
         connect( fileWidget->dirOperator(), SIGNAL( finishedLoading()), SLOT( checkProtocol()));
     }
 #endif
 
     setMultiSelectionMode( false );
-    //default mode
+    
     _dialog->setOperationMode(KFileDialog::Opening);
 
-    // XExecutableDialog functions
+    
     connect( this, SIGNAL( setTitleSignal( const OUString & ) ),
              this, SLOT( setTitleSlot( const OUString & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( executeSignal() ),
              this, SLOT( executeSlot() ), Qt::BlockingQueuedConnection );
 
-    // XFilePicker functions
+    
     connect( this, SIGNAL( setMultiSelectionModeSignal( sal_Bool ) ),
              this, SLOT( setMultiSelectionModeSlot( sal_Bool ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( setDefaultNameSignal( const OUString & ) ),
@@ -155,7 +155,7 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     connect( this, SIGNAL( getFilesSignal() ),
              this, SLOT( getFilesSlot() ), Qt::BlockingQueuedConnection );
 
-    // XFilterManager functions
+    
     connect( this, SIGNAL( appendFilterSignal( const OUString &, const OUString & ) ),
              this, SLOT( appendFilterSlot( const OUString &, const OUString & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( setCurrentFilterSignal( const OUString & ) ),
@@ -163,11 +163,11 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     connect( this, SIGNAL( getCurrentFilterSignal() ),
              this, SLOT( getCurrentFilterSlot() ), Qt::BlockingQueuedConnection );
 
-    // XFilterGroupManager functions
+    
     connect( this, SIGNAL( appendFilterGroupSignal( const OUString &, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > & ) ),
              this, SLOT( appendFilterGroupSlot( const OUString &, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > & ) ), Qt::BlockingQueuedConnection );
 
-    // XFilePickerControlAccess functions
+    
     connect( this, SIGNAL( setValueSignal( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ),
              this, SLOT( setValueSlot( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( getValueSignal( sal_Int16, sal_Int16 ) ),
@@ -179,20 +179,20 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     connect( this, SIGNAL( getLabelSignal( sal_Int16 ) ),
              this, SLOT( getLabelSlot( sal_Int16 ) ), Qt::BlockingQueuedConnection );
 
-    // XFilePicker2 functions
+    
     connect( this, SIGNAL( getSelectedFilesSignal() ),
              this, SLOT( getSelectedFilesSlot() ), Qt::BlockingQueuedConnection );
 
-    // XInitialization
+    
     connect( this, SIGNAL( initializeSignal( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & ) ),
              this, SLOT( initializeSlot( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & ) ), Qt::BlockingQueuedConnection );
 
-    // Destructor proxy
+    
     connect( this, SIGNAL( cleanupProxySignal() ), this, SLOT( cleanupProxy() ), Qt::BlockingQueuedConnection );
 
     connect( this, SIGNAL( checkProtocolSignal() ), this, SLOT( checkProtocol() ), Qt::BlockingQueuedConnection );
 
-    // XFilePickerListener notifications
+    
     connect( _dialog, SIGNAL( filterChanged(const QString&) ), this, SLOT( filterChanged(const QString&) ));
     connect( _dialog, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ));
 }
@@ -245,14 +245,14 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
         return Q_EMIT executeSignal();
     }
 
-    //get the window id of the main OO window to set it for the dialog as a parent
+    
     Window *pParentWin = Application::GetDefDialogParent();
     if ( pParentWin )
     {
         const SystemEnvData* pSysData = ((SystemWindow *)pParentWin)->GetSystemData();
         if ( pSysData )
         {
-            KWindowSystem::setMainWindow( _dialog, pSysData->aWindow); // unx only
+            KWindowSystem::setMainWindow( _dialog, pSysData->aWindow); 
         }
     }
 
@@ -260,14 +260,14 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->setFilter(_filter);
     _dialog->filterWidget()->setEditable(false);
 
-    // We're entering a nested loop.
-    // Release the yield mutex to prevent deadlocks.
+    
+    
     int result = _dialog->exec();
 
-    // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
-    // (such as the auto-extension flag), but that doesn't update KGlobal::config()
-    // (which is probably a KDE bug), so force reading the new configuration,
-    // otherwise the next opening of the dialog would use the old settings.
+    
+    
+    
+    
     KGlobal::config()->reparseConfiguration();
 
     if( result == KFileDialog::Accepted)
@@ -377,14 +377,14 @@ void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUStrin
     if (!_filter.isNull())
         _filter.append("\n");
 
-    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
-    //see the docs
+    
+    
     t.replace("/", "\\/");
 
-    // openoffice gives us filters separated by ';' qt dialogs just want space separated
+    
     f.replace(";", " ");
 
-    // make sure "*.*" is not used as "all files"
+    
     f.replace("*.*", "*");
 
     _filter.append(QString("%1|%2").arg(f).arg(t));
@@ -411,13 +411,13 @@ OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
         return Q_EMIT getCurrentFilterSignal();
     }
 
-    // _dialog->currentFilter() wouldn't quite work, because it returns only e.g. "*.doc",
-    // without the description, and there may be several filters with the same pattern
+    
+    
     QString filter = _dialog->filterWidget()->currentText();
-    filter = filter.mid( filter.indexOf( '|' ) + 1 ); // convert from the pattern|description format if needed
+    filter = filter.mid( filter.indexOf( '|' ) + 1 ); 
     filter.replace( "\\/", "/" );
 
-    //default if not found
+    
     if (filter.isNull())
         filter = "ODF Text Document (.odt)";
 
@@ -461,11 +461,11 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
     throw( uno::RuntimeException )
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
-        // We ignore this one and rely on KFileDialog to provide the function.
-        // Always return false, to pretend we do not support this, otherwise
-        // LO core would try to be smart and cut the extension in some places,
-        // interfering with KFileDialog's handling of it. KFileDialog also
-        // saves the value of the setting, so LO core is not needed for that either.
+        
+        
+        
+        
+        
         return uno::Any( false );
 
     if( qApp->thread() != QThread::currentThread() ) {
@@ -604,8 +604,8 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 
             widget = new QCheckBox(label, _extraControls);
 
-            // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
-            // code, but the checkbox is hidden and ignored
+            
+            
             if( controlId == CHECKBOX_AUTOEXTENSION )
                 widget->hide();
 
@@ -639,7 +639,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
     _filter.clear();
 
-    // parameter checking
+    
     uno::Any arg;
     if (args.getLength() == 0)
     {
@@ -661,7 +661,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     sal_Int16 templateId = -1;
     arg >>= templateId;
 
-    //default is opening
+    
     KFileDialog::OperationMode operationMode = KFileDialog::Opening;
 
     switch ( templateId )
@@ -777,12 +777,12 @@ void KDE4FilePicker::checkProtocol()
         return Q_EMIT checkProtocolSignal();
     }
 
-    // There's no libreoffice.desktop :(, so find a matching one.
+    
     KService::List services = KServiceTypeTrader::self()->query( "Application", "Exec =~ 'libreoffice %U'" );
     QStringList protocols;
     if( !services.isEmpty())
         protocols = services[ 0 ]->property( "X-KDE-Protocols" ).toStringList();
-    if( protocols.isEmpty()) // incorrect (developer?) installation ?
+    if( protocols.isEmpty()) 
         protocols << "file" << "http";
     if( !protocols.contains( _dialog->baseUrl().protocol()) && !protocols.contains( "KIO" ))
         KMessageBox::error( _dialog, KIO::buildErrorString( KIO::ERR_UNSUPPORTED_PROTOCOL, _dialog->baseUrl().protocol()));

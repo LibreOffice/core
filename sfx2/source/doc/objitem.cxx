@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,40 +22,40 @@
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-//====================================================================
+
 
 TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
 
-//=========================================================================
+
 
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
      return PTR_CAST(SfxObjectShellItem, &rItem)->pObjSh == pObjSh;
 }
 
-//--------------------------------------------------------------------
+
 
 OUString SfxObjectShellItem::GetValueText() const
 {
     return OUString();
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 {
     return new SfxObjectShellItem( Which(), pObjSh );
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
-        // This item MUST provide a model. Please don't change this, there are UNO-based
-        // implementations which need it!!
+        
+        
         rVal <<= pObjSh->GetModel();
     }
     else
@@ -65,12 +65,12 @@ bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /
     return true;
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    // This item MUST have a model. Please don't change this, there are UNO-based
-    // implementations which need it!!
+    
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
 
     if ( rVal >>= xModel )
@@ -98,14 +98,14 @@ bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-//=========================================================================
+
 
 SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 :   SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}
 
-//--------------------------------------------------------------------
+
 
 bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 {
@@ -113,7 +113,7 @@ bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
      return pOther->_pSh == _pSh;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
 {

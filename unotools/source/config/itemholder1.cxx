@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
-//-----------------------------------------------
+
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
 {
@@ -80,20 +80,20 @@ ItemHolder1::ItemHolder1()
 #endif
 }
 
-//-----------------------------------------------
+
 ItemHolder1::~ItemHolder1()
 {
     impl_releaseAllItems();
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::holdConfigItem(EItem eItem)
 {
     static ItemHolder1* pHolder = new ItemHolder1();
     pHolder->impl_addItem(eItem);
 }
 
-//-----------------------------------------------
+
 void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
@@ -101,7 +101,7 @@ void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
     impl_releaseAllItems();
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -123,7 +123,7 @@ void ItemHolder1::impl_addItem(EItem eItem)
         m_lItems.push_back(aNewItem);
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_releaseAllItems()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -139,7 +139,7 @@ void ItemHolder1::impl_releaseAllItems()
     m_lItems.clear();
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
@@ -161,7 +161,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         case E_EVENTCFG :
-            //rItem.pItem = new GlobalEventConfig();
+            
             break;
 
         case E_EXTENDEDSECURITYOPTIONS :
@@ -169,7 +169,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         case E_FLTRCFG :
-// no ref count            rItem.pItem = new SvtFilterOptions();
+
             break;
 
         case E_FONTOPTIONS :
@@ -213,7 +213,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         case E_SEARCHOPT :
-// no ref count            rItem.pItem = new SvtSearchOptions();
+
             break;
 
         case E_SECURITYOPTIONS :
@@ -250,7 +250,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
     }
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
 {
     if (rItem.pItem)

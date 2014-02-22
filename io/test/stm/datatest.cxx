@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::test;
 using namespace ::com::sun::star::beans;
-// streams
+
 
 #include "testfactreg.hxx"
 
@@ -211,7 +211,7 @@ sal_Int32 ODataStreamTest::test(
         hTestHandle ++;
 
         if( hTestHandle >= 2) {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -296,7 +296,7 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     }
     catch ( IOException & )
     {
-        //ok
+        
     }
     catch( ... )
     {
@@ -316,7 +316,7 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     }
     catch( IOException & )
     {
-        // ok
+        
     }
     catch( ... ) {
         ERROR_ASSERT( 0 , "IOException  expected, but another exception was thrown" );
@@ -791,7 +791,7 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
         hTestHandle ++;
 
         if( hTestHandle > 1 +DATASTREAM_TEST_MAX_HANDLE ) {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -809,7 +809,7 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
     if( r1->getPropertyValue("long").getValueType() == getCppuVoidType() ||
         r2->getPropertyValue("long").getValueType() == getCppuVoidType() ) {
 
-        // one of the objects is not the correct propertyset !
+        
         fprintf( stderr, "compareMyPropertySet: 1\n" );
         return sal_False;
     }
@@ -840,8 +840,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
     b = b && ( (b1 && b2) || b1 == b2 );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 5\n" );
 
-//      b = b &&    r1->getPropertyValue("bool") ==
-//                  r2->getPropertyValue("bool") );
+
+
 
     b = b && (  r1->getPropertyValue("byte") ==
                 r2->getPropertyValue("byte") );
@@ -896,8 +896,8 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
 
 
 
-    // tests, if saving an object with an unknown service name allows
-    // reading the data behind the object !
+    
+    
     {
         Reference < XInterface > x = * new MyPersistObject(
             OUString( "bla blubs") );
@@ -917,7 +917,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         }
         catch( IOException & )
         {
-            // all is ok
+            
         }
 
         ERROR_ASSERT( (sal_Int32) 0xdeadbeef == rIn->readLong() ,
@@ -966,7 +966,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         any <<= persistRef;
         rProp->setPropertyValue("object", any );
 
-        // do read and write
+        
         rOut->writeObject( persistRef );
         ERROR_ASSERT( 0 != rIn->available() , "no data arrived at input" );
         Reference< XPersistObject > xReadPersist    =   rIn->readObject( );
@@ -974,7 +974,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         Reference< XPropertySet >  rPropRead( xReadPersist , UNO_QUERY );
         ERROR_ASSERT( compareMyPropertySet( rProp , rPropRead ) , "objects has not been read properly !" );
 
-        // destroy selfreferences
+        
         rProp->setPropertyValue("object", Any() );
         rPropRead->setPropertyValue("object", Any() );
     }
@@ -983,8 +983,8 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         Reference< XMarkableStream > markableOut( rOut , UNO_QUERY );
         ERROR_ASSERT( markableOut.is() , "markable stream cannot be queried" );
 
-        // do the same thing multiple times to check if
-        // buffering and marks work correctly
+        
+        
         for( int i = 0 ; i < 2000 ; i ++ ) {
 
             Reference < XInterface > x = m_rFactory->createInstance("test.com.sun.star.io.PersistTest");
@@ -1025,18 +1025,18 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             x = m_rFactory->createInstance("test.com.sun.star.io.PersistTest");
             Reference <XPersistObject > persist2ndRef( x , UNO_QUERY );
 
-            // Note : persist2ndRef contains coincident values, but also coincident values must be
-            // saved properly !
+            
+            
             any <<= persist2ndRef;
             rProp->setPropertyValue("object", any );
 
-            // simply test, if markable operations and object operations do not interfere
+            
             sal_Int32 nMark = markableOut->createMark();
 
-            // do read and write
+            
             rOut->writeObject( persistRef );
 
-            // further markable tests !
+            
             sal_Int32 nOffset = markableOut->offsetToMark( nMark );
             markableOut->jumpToMark( nMark );
             markableOut->deleteMark( nMark );

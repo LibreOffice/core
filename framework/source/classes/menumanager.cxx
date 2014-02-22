@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <classes/menumanager.hxx>
@@ -71,7 +71,7 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
         StringLength() {}
         virtual ~StringLength() {}
 
-        // XStringWidth
+        
         sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
             throw (RuntimeException)
         {
@@ -82,7 +82,7 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
 namespace framework
 {
 
-// special menu ids/command ids for dynamic popup menus
+
 #define SID_SFX_START           5000
 #define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
 #define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
@@ -97,7 +97,7 @@ namespace framework
 #define aSlotSpecialWindowMenu "slot:5610"
 #define aSlotSpecialToolsMenu "slot:6677"
 
-// special uno commands for picklist and window list
+
 #define aSpecialFileCommand "PickList"
 #define aSpecialWindowCommand "WindowList"
 
@@ -132,7 +132,7 @@ MenuManager::MenuManager(
         sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
         bool bShowMenuImages( m_bShowMenuImages );
 
-        // overwrite the show icons on menu option?
+        
         if (!bShowMenuImages)
         {
             MenuItemBits nBits = pMenu->GetItemBits( nItemId );
@@ -147,7 +147,7 @@ MenuManager::MenuManager(
                     aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ) )
             {
 
-                // Create addon popup menu if there exist elements and this is the tools popup menu
+                
                 if ( ( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu )
                     && AddonMenuManager::HasAddonMenuElements() )
                 {
@@ -158,17 +158,17 @@ MenuManager::MenuManager(
                         if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
                             pPopupMenu->InsertSeparator();
 
-                        // Use resource to load popup menu title
+                        
                         OUString aAddonsStrRes(FWK_RESSTR(STR_MENU_ADDONS));
                         pPopupMenu->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
                         pPopupMenu->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 
-                        // Set item command for popup menu to enable it for GetImageFromURL
+                        
                         aItemCommand = "slot:" + OUString::number( ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
                         AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
-                        // Set image for the addon popup menu item
+                        
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
                             Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
@@ -219,7 +219,7 @@ MenuManager::MenuManager(
                 {
                     if ( AddonMenuManager::IsAddonMenuId( nItemId ))
                     {
-                        // Add-Ons uses a images from different places
+                        
                         Image           aImage;
                         OUString   aImageId;
 
@@ -228,7 +228,7 @@ MenuManager::MenuManager(
 
                         if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                         {
-                            // Retrieve image id from menu attributes
+                            
                             aImage = GetImageFromURL( rFrame, aImageId, false );
                         }
 
@@ -257,7 +257,7 @@ MenuManager::MenuManager(
         }
     }
 
-    // retrieve label information for all menu items without item text
+    
 
     SetHdl();
 }
@@ -378,8 +378,8 @@ void MenuManager::RemoveListener()
 
 void MenuManager::ClearMenuDispatch(const EventObject& Source,bool _bRemoveOnly)
 {
-    // disposing called from parent dispatcher
-    // remove all listener to prepare shutdown
+    
+    
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -416,7 +416,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
     }
     else
     {
-        // disposing called from menu item dispatcher, remove listener
+        
         MenuItemHandler* pMenuItemDisposing = NULL;
 
         {
@@ -450,7 +450,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
 
 void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 {
-    // update picklist
+    
     Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
     ::std::vector< MenuItemHandler* > aNewPickVector;
     Reference< XStringWidth > xStringLength( new StringLength );
@@ -494,7 +494,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         Reference< XDispatch > xMenuItemDispatch;
 
         static const OUString s_sDefault("_default");
-        // query for dispatcher
+        
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); ++p )
         {
@@ -505,7 +505,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 
             if ( !xMenuItemDispatch.is() )
             {
-                // attention: this code assume that "_blank" can only be consumed by desktop service
+                
                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, s_sDefault, 0 );
             }
 
@@ -524,7 +524,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 
             if ( nItemCount > 0 )
             {
-                // remove all old picklist entries from menu
+                
                 sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_PICKLIST );
                 for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
                 {
@@ -535,7 +535,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
                     pMenu->RemoveItem( pMenu->GetItemCount()-1 );
 
-                // remove all old picklist entries from menu handler
+                
                 if ( nRemoveItemCount > 0 )
                 {
                     for( sal_uInt32 nIndex = m_aMenuItemHandlerVector.size() - nRemoveItemCount;
@@ -547,7 +547,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 }
             }
 
-            // append new picklist menu entries
+            
             aNewPickVector.reserve(aNewPickVector.size());
             pMenu->InsertSeparator();
             const sal_uInt32 nCount = aNewPickVector.size();
@@ -572,7 +572,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     aMenuShortCut += ": ";
                 }
 
-                // Abbreviate URL
+                
                 OUString   aURLString( aNewPickVector.at( i )->aMenuItemURL );
                 OUString   aTipHelpText;
                 OUString   aMenuTitle;
@@ -580,8 +580,8 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                 {
-                    // Do handle file URL differently => convert it to a system
-                    // path and abbreviate it with a special function:
+                    
+                    
                     OUString aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
                     OUString aSystemPath( aFileSystemPath );
@@ -596,7 +596,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 }
                 else
                 {
-                    // Use INetURLObject to abbreviate all other URLs
+                    
                     OUString  aShortURL;
                     aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
                     aMenuTitle += aShortURL;
@@ -616,7 +616,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 
 void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext,framework::IMutex& _rMutex )
 {
-    // update window list
+    
     ::std::vector< OUString > aNewWindowListVector;
 
     Reference< XDesktop2 > xDesktop = Desktop::create( xContext );
@@ -654,7 +654,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
 
         if ( nItemCount > 0 )
         {
-            // remove all old window list entries from menu
+            
             sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_WINDOWLIST );
             for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
                 pMenu->RemoveItem( n );
@@ -665,7 +665,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
 
         if ( !aNewWindowListVector.empty() )
         {
-            // append new window list entries to menu
+            
             pMenu->InsertSeparator();
             nItemId = START_ITEMID_WINDOWLIST;
             const sal_uInt32 nCount = aNewWindowListVector.size();
@@ -720,15 +720,15 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
 }
 
 
-//_________________________________________________________________________________________________________________
-// vcl handler
-//_________________________________________________________________________________________________________________
+
+
+
 
 IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
     {
-        // set/unset hiding disabled menu entries
+        
         sal_Bool bDontHide          = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
@@ -748,7 +748,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         OUString aCommand( m_aMenuItemCommand );
         if (m_aMenuItemCommand.matchIgnoreAsciiCase(UNO_COMMAND))
         {
-            // Remove protocol part from command so we can use an easier comparision method
+            
             aCommand = aCommand.copy(RTL_CONSTASCII_LENGTH(UNO_COMMAND));
         }
 
@@ -757,10 +757,10 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         else if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aCommand == aSpecialWindowCommand )
             UpdateSpecialWindowMenu( pMenu, m_xContext, m_aLock );
 
-        // Check if some modes have changed so we have to update our menu images
+        
         if ( bShowMenuImages != m_bShowMenuImages )
         {
-            // The mode changed so we have to replace all images
+            
             m_bShowMenuImages   = bShowMenuImages;
             FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
@@ -784,8 +784,8 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                          pMenuItemHandler->pSubMenuManager == 0 &&
                          !pMenuItemHandler->xMenuItemDispatch.is() )
                     {
-                        // There is no dispatch mechanism for the special window list menu items,
-                        // because they are handled directly through XFrame->activate!!!
+                        
+                        
                         if ( pMenuItemHandler->nItemId < START_ITEMID_WINDOWLIST ||
                              pMenuItemHandler->nItemId > END_ITEMID_WINDOWLIST )
                         {
@@ -850,7 +850,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
             if ( nCurItemId >= START_ITEMID_WINDOWLIST &&
                  nCurItemId <= END_ITEMID_WINDOWLIST )
             {
-                // window list menu item selected
+                
 
                 Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 
@@ -884,12 +884,12 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     if ( nCurItemId >= START_ITEMID_PICKLIST &&
                          nCurItemId <  START_ITEMID_WINDOWLIST )
                     {
-                        // picklist menu item selected
+                        
                         CreatePicklistArguments( aArgs, pMenuItemHandler );
                     }
                     else if ( m_bIsBookmarkMenu )
                     {
-                        // bookmark menu item selected
+                        
                         aArgs.realloc( 1 );
                         aArgs[0].Name = "Referer";
                         aArgs[0].Value <<= OUString( "private:user" );
@@ -922,7 +922,7 @@ void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,s
 {
     MenuManager* pSubMenuManager = new MenuManager( m_xContext, m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
 
-    // store menu item command as we later have to know which menu is active (see Activate handler)
+    
     pSubMenuManager->m_aMenuItemCommand = _sItemCommand;
 
     Reference< XDispatch > aXDispatchRef;
@@ -955,7 +955,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_
         if ( _pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
         {
             bool bTmpShowMenuImages( bShowMenuImages );
-            // overwrite the show icons on menu option?
+            
             if (!bTmpShowMenuImages)
             {
                 MenuItemBits nBits =  _pMenu->GetItemBits( nId );
@@ -971,7 +971,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_
                     (::framework::MenuConfiguration::Attributes*)_pMenu->GetUserValue( nId );
 
                 if ( pMenuAttributes )
-                    aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+                    aImageId = pMenuAttributes->aImageId; 
 
                 if ( !aImageId.isEmpty() )
                 {

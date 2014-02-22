@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -34,7 +34,7 @@ public:
     CPPUNIT_TEST(testFindFirst);
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
-    // XPrintAreas
+    
     CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
     CPPUNIT_TEST(testSetAndGetPrintTitleRows);
     CPPUNIT_TEST_SUITE_END();

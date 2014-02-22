@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,28 +14,28 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// Interesting info can be found in:
 
-// MSDN, obviously
 
-// http://www.osronline.com/article.cfm?article=469
 
-// ONTL, "Open NT Native Template Library", a C++ STL-like library
-// that can be used even when writing Windows drivers. This is some
-// quite badass code. The author has done impressive heavy spelunking
-// of MSVCR structures. http://code.google.com/p/ontl/
 
-// Geoff Chappell's pages:
-// http://www.geoffchappell.com/studies/msvc/language/index.htm
 
-// The below is from ONTL's ntl/nt/exception.hxx, cleaned up to keep just the _M_X64 parts:
+
+
+
+
+
+
+
+
+
+
 
 #if 0
 
-/* This information until the corresponding '#endif // 0' is covered
+/* This information until the corresponding '#endif 
  * by ONTL's license, which is said to be the "zlib/libgng license"
  * below, which as far as I see is permissive enough to allow this
  * information to be included here in this source file. Note that no
@@ -69,22 +69,22 @@
 
 typedef uint32_t rva_t;
 
-///\note the calling convention should not matter since this has no arguments
+
 typedef void generic_function_t();
 
-struct ptrtomember // _PMD
+struct ptrtomember 
 {
   typedef __w64 int32_t  mdiff_t;
   mdiff_t member_offset;
-  mdiff_t vbtable_offset; // -1 if not a virtual base
-  mdiff_t vdisp_offset;   // offset to the displacement value inside the vbtable
+  mdiff_t vbtable_offset; 
+  mdiff_t vdisp_offset;   
 
   template<typename T>
   T * operator()(T * const thisptr) const
   {
     uintptr_t tp = reinterpret_cast<uintptr_t>(thisptr);
     uintptr_t ptr = tp + member_offset;
-    if ( vbtable_offset != -1 ) // !(vbtable_offset < 0)
+    if ( vbtable_offset != -1 ) 
     {
       ptr += *reinterpret_cast<mdiff_t*>( static_cast<intptr_t>(vdisp_offset + *reinterpret_cast<mdiff_t*>(tp + vbtable_offset)) )
         + vbtable_offset;
@@ -142,38 +142,38 @@ struct throwinfo
   /* 0x00 */  uint32_t  e8        : 1;
   /* 0x04 */  rva_t     exception_dtor;
   /* 0x08 */  rva_t     forwardcompathandler;
-  /* 0x0C */  rva_t     catchabletypearray; ///< types able to catch the exception.
+  /* 0x0C */  rva_t     catchabletypearray; 
 };
 #pragma pack(pop)
 
-/// This type represents the catch clause
+
 struct ehandler
 {
-  //  union { uint32_t  adjectives; void * ptr; };
+  
   uint32_t isconst      : 1;
   uint32_t isvolatile   : 1;
-  uint32_t isunaligned  : 1;// guess it is not used on x86
+  uint32_t isunaligned  : 1;
   uint32_t isreference  : 1;
 
   uint32_t              :27;
   uint32_t ishz         : 1;
 
   /** offset to the type descriptor of this catch object */
-  /*0x04*/ rva_t        typeinfo;         // dispType
-  /*0x08*/ int          eobject_bpoffset; // dispCatchObj
+  /*0x04*/ rva_t        typeinfo;         
+  /*0x08*/ int          eobject_bpoffset; 
   /** offset to the catch clause funclet */
-  /*0x0C*/ rva_t        handler;          // dispOfHandler
-  /*0x10*/ uint32_t     frame;            // dispFrame
+  /*0x0C*/ rva_t        handler;          
+  /*0x10*/ uint32_t     frame;            
 }
 
-// ___BuildCatchObject
-/// 15.3/16 When the exception-declaration specifies a class type, a copy
-///         constructor is used to initialize either the object declared
-///         in the exception-declaration or,
-///         if the exception-declaration does not specify a name,
-///         a temporary object of that type.
-///\note    This is the question may we optimize out the last case.
-///\warning If the copy constructor throws an exception, std::unexpected would be called
+
+
+
+
+
+
+
+
 void
   constructcatchobject(
   cxxregistration *             cxxreg,
@@ -184,7 +184,7 @@ void
   const
 {
   _EH_TRACE_ENTER();
-  // build helper
+  
   __try {
     struct typeinfo_t { void* vtbl; void* spare; char name[1]; };
     enum catchable_info { cidefault, cicomplex, civirtual } cinfo = cidefault;
@@ -195,15 +195,15 @@ void
         ? reinterpret_cast<eobject**>(cxxreg)
         : reinterpret_cast<eobject**>(catchblock->eobject_bpoffset + cxxreg->fp.FramePointers);
       if(catchblock->isreference){
-        // just ref/pointer
+        
         *objplace = adjust_pointer(get_object(), convertible);
       }else if(convertible->memmoveable){
-        // POD
+        
         std::memcpy(objplace, get_object(), convertible->object_size);
         if(convertible->object_size == sizeof(void*) && *objplace)
           *objplace = adjust_pointer((void*)*objplace, convertible);
       }else{
-        // if copy ctor exists, call it; binary copy otherwise
+        
         if(convertible->copyctor){
           cinfo = convertible->hasvirtbase ? civirtual : cicomplex;
         }else{
@@ -211,7 +211,7 @@ void
         }
       }
     }
-    // end of build helper
+    
     if(cinfo != cidefault){
       eobject* objthis = catchblock->ishz
         ? reinterpret_cast<eobject*>(cxxreg)
@@ -231,7 +231,7 @@ void
   _EH_TRACE_LEAVE();
 }
 
-#endif // 0
+#endif 
 
 
 #pragma warning( disable : 4237 )
@@ -265,7 +265,7 @@ static inline OUString toUNOname(
     throw ()
 {
     OUStringBuffer aRet( 64 );
-    OUString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); // filter .?AUzzz@yyy@xxx@@
+    OUString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); 
     sal_Int32 nPos = aStr.getLength();
     while (nPos > 0)
     {
@@ -285,7 +285,7 @@ static inline OUString toRTTIname(
     throw ()
 {
     OUStringBuffer aRet( 64 );
-    aRet.append( ".?AV" ); // class ".?AV"; struct ".?AU"
+    aRet.append( ".?AV" ); 
     sal_Int32 nPos = rUNOname.getLength();
     while (nPos > 0)
     {
@@ -298,7 +298,7 @@ static inline OUString toRTTIname(
     return aRet.makeStringAndClear();
 }
 
-//RTTI simulation
+
 
 typedef boost::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
@@ -326,7 +326,7 @@ public:
 
     inline __type_info( void * m_data, const char * m_d_name ) throw ()
         : _m_data( m_data )
-        { ::strcpy( _m_d_name, m_d_name ); } // #100211# - checked
+        { ::strcpy( _m_d_name, m_d_name ); } 
 
 private:
     void * _m_data;
@@ -339,21 +339,21 @@ __type_info::~__type_info() throw ()
 
 type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
-    // a must be
+    
     OSL_ENSURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
 
     MutexGuard aGuard( _aMutex );
     t_string2PtrMap::const_iterator const iFind( _allRTTI.find( rUNOname ) );
 
-    // check if type is already available
+    
     if (iFind == _allRTTI.end())
     {
-        // insert new type_info
+        
         OString aRawName( OUStringToOString( toRTTIname( rUNOname ), RTL_TEXTENCODING_ASCII_US ) );
         __type_info * pRTTI = new( ::rtl_allocateMemory( sizeof(__type_info) + aRawName.getLength() ) )
             __type_info( NULL, aRawName.getStr() );
 
-        // put into map
+        
         pair< t_string2PtrMap::iterator, bool > insertion(
             _allRTTI.insert( t_string2PtrMap::value_type( rUNOname, pRTTI ) ) );
         OSL_ENSURE( insertion.second, "### rtti insertion failed?!" );
@@ -381,7 +381,7 @@ RTTInfos::~RTTInfos() throw ()
           iPos != _allRTTI.end(); ++iPos )
     {
         __type_info * pType = (__type_info *)iPos->second;
-        pType->~__type_info(); // obsolete, but good style...
+        pType->~__type_info(); 
         ::rtl_freeMemory( pType );
     }
 }
@@ -411,15 +411,15 @@ void GenerateConstructorTrampoline(
 {
     unsigned char *p = code;
 
-    // mov r8, pTD
+    
     *p++ = 0x49; *p++ = 0xB8;
     *((void **)p) = pTD; p += 8;
 
-    // mov r11, copyConstruct
+    
     *p++ = 0x49; *p++ = 0xBB;
     *((void **)p) = &copyConstruct; p += 8;
 
-    // jmp r11
+    
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
 
     OSL_ASSERT( p < code + codeSnippetSize );
@@ -431,29 +431,29 @@ void GenerateDestructorTrampoline(
 {
     unsigned char *p = code;
 
-    // mov rdx, pTD
+    
     *p++ = 0x48; *p++ = 0xBA;
     *((void **)p) = pTD; p += 8;
 
-    // mov r11, destruct
+    
     *p++ = 0x49; *p++ = 0xBB;
     *((void **)p) = &destruct; p += 8;
 
-    // jmp r11
+    
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
 
     OSL_ASSERT( p < code + codeSnippetSize );
 }
 
-// This looks like it is the struct catchabletype above
+
 
 struct ExceptionType
 {
-    sal_Int32   _n0;            // flags
-    sal_uInt32  _pTypeInfo;     // typeinfo
-    sal_Int32   _n1, _n2, _n3;  // thiscast
-    sal_Int32   _n4;            // object_size
-    sal_uInt32  _pCopyCtor;     // copyctor
+    sal_Int32   _n0;            
+    sal_uInt32  _pTypeInfo;     
+    sal_Int32   _n1, _n2, _n3;  
+    sal_Int32   _n4;            
+    sal_uInt32  _pCopyCtor;     
 
     inline ExceptionType(
         unsigned char * pCode,
@@ -465,9 +465,9 @@ struct ExceptionType
         , _n3( 0 )
         , _n4( pTD->nSize )
         {
-            // As _n0 is always initialized to zero, that means the
-            // hasvirtbase flag (see the ONTL catchabletype struct) is
-            // off, and thus the copyctor is of the ctor_ptr kind.
+            
+            
+            
             _pTypeInfo = (sal_uInt32) ((sal_uInt64) mscx_getRTTI( pTD->pTypeName ) - pCodeBase);
             GenerateConstructorTrampoline( pCode, pTD );
             _pCopyCtor = (sal_uInt32) ((sal_uInt64) pCode - pCodeBase);
@@ -495,7 +495,7 @@ public:
 
 DWORD ExceptionInfos::allocationGranularity = 0;
 
-// This corresponds to the struct throwinfo described above.
+
 
 struct RaiseInfo
 {
@@ -504,7 +504,7 @@ struct RaiseInfo
     sal_Int32           _n2;
     sal_uInt32          _types;
 
-    // Additional fields
+    
     typelib_TypeDescription * _pTD;
     unsigned char *        _code;
     sal_uInt64         _codeBase;
@@ -521,10 +521,10 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
 {
     typelib_CompoundTypeDescription * pCompTD;
 
-    // Count how many trampolines we need
+    
     int codeSize = codeSnippetSize;
 
-    // Info count
+    
     int nLen = 0;
     for ( pCompTD = (typelib_CompoundTypeDescription*)pTD;
           pCompTD; pCompTD = pCompTD->pBaseTypeDescription )
@@ -550,7 +550,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
     _pDtor = (sal_Int32)((sal_uInt64)pCode - _codeBase);
     pCode += codeSnippetSize;
 
-    // Info count accompanied by type info ptrs: type, base type, base base type, ...
+    
     _types = (sal_Int32)((sal_uInt64)::rtl_allocateMemory( 4 + 4* nLen) - _codeBase);
     *(sal_Int32 *)_types = nLen;
 
@@ -635,14 +635,14 @@ RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw 
     {
         pRaiseInfo = new RaiseInfo( pTD );
 
-        // Put into map
+        
         pair< t_string2PtrMap::iterator, bool > insertion(
             s_pInfos->_allRaiseInfos.insert( t_string2PtrMap::value_type( rTypeName, (void *)pRaiseInfo ) ) );
         OSL_ENSURE( insertion.second, "### raise info insertion failed?!" );
     }
     else
     {
-        // Reuse existing info
+        
         pRaiseInfo = (RaiseInfo *)iFind->second;
     }
 
@@ -673,11 +673,11 @@ void mscx_raiseException(
     uno_Any * pUnoExc,
     uno_Mapping * pUno2Cpp )
 {
-    // no ctor/dtor in here: this leads to dtors called twice upon RaiseException()!
-    // thus this obj file will be compiled without opt, so no inlining of
-    // ExceptionInfos::getRaiseInfo()
+    
+    
+    
 
-    // construct cpp exception object
+    
     typelib_TypeDescription * pTD = NULL;
     TYPELIB_DANGER_GET( &pTD, pUnoExc->pType );
 
@@ -690,11 +690,11 @@ void mscx_raiseException(
     arFilterArgs[2] = (ULONG_PTR)ExceptionInfos::getRaiseInfo( pTD );
     arFilterArgs[3] = ((RaiseInfo *)arFilterArgs[2])->_codeBase;
 
-    // Destruct uno exception
+    
     ::uno_any_destruct( pUnoExc, 0 );
     TYPELIB_DANGER_RELEASE( pTD );
 
-    // last point to release anything not affected by stack unwinding
+    
     RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
 }
 
@@ -708,7 +708,7 @@ int mscx_filterCppException(
 
     EXCEPTION_RECORD * pRecord = pPointers->ExceptionRecord;
 
-    // Handle only C++ exceptions:
+    
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
@@ -717,24 +717,24 @@ int mscx_filterCppException(
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
-        // Hack to get msvcrt internal _curexception field:
+        
         pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
             reinterpret_cast< char * >( __pxcptinfoptrs() ) +
-            // As long as we don't demand MSVCR source as build prerequisite,
-            // we have to code those offsets here.
+            
+            
             //
-            // MSVS9/crt/src/mtdll.h:
-            // offsetof (_tiddata, _curexception) -
-            // offsetof (_tiddata, _tpxcptinfoptrs):
+            
+            
+            
 #if _MSC_VER < 1600
-            0x48 // msvcr90.dll
+            0x48 
 #else
             error, please find value for this compiler version
 #endif
             );
     }
 
-    // Rethrow: handle only C++ exceptions:
+    
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
@@ -744,14 +744,14 @@ int mscx_filterCppException(
         pRecord->ExceptionInformation[2] != 0 &&
         pRecord->ExceptionInformation[3] != 0)
     {
-        // ExceptionInformation[1] is the address of the thrown object
-        // (or the address of a pointer to it, in most cases when it
-        // is a C++ class, obviously).
+        
+        
+        
 
-        // [2] is the throwinfo pointer
+        
 
-        // [3] is the image base address which is added the 32-bit
-        // rva_t fields in throwinfo to get actual 64-bit addresses
+        
+        
 
         void * types =
             (void *) (pRecord->ExceptionInformation[3] +
@@ -791,7 +791,7 @@ int mscx_filterCppException(
                 }
                 else
                 {
-                    // construct uno exception any
+                    
                     uno_any_constructAndConvert(
                         pUnoExc, (void *) pRecord->ExceptionInformation[1],
                         pExcTD, pCpp2Uno );
@@ -802,8 +802,8 @@ int mscx_filterCppException(
             }
         }
     }
-    // though this unknown exception leaks now, no user-defined exception
-    // is ever thrown thru the binary C-UNO dispatcher call stack.
+    
+    
     RuntimeException exc(
         OUString( "[mscx_uno bridge error] unexpected "
                   "C++ exception occurred!" ),

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -55,7 +55,7 @@
 #include "patattr.hxx"
 
 
-//========================================================================
+
 
 ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
@@ -66,29 +66,29 @@ ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleSheetPool::~ScStyleSheetPool()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 {
     pDoc = pDocument;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
                                            SfxStyleFamily eFam, sal_uInt16 mask)
 {
-    //  When updating styles from a template, Office 5.1 sometimes created
-    //  files with multiple default styles.
-    //  Create new styles in that case:
+    
+    
+    
 
-    //! only when loading?
+    
 
     if ( rName == STRING_STANDARD && Find( rName, eFam ) != NULL )
     {
@@ -106,7 +106,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
     return SfxStyleSheetPool::Make(rName, eFam, mask);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleFamily  eFamily,
@@ -119,7 +119,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
     return pSheet;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
@@ -127,7 +127,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
     return new ScStyleSheet( (const ScStyleSheet&) rStyle );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
@@ -141,12 +141,12 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                       const OUString& rName, SfxStyleFamily eFamily )
 {
-    //  this ist Dest-Pool
+    
 
     SfxStyleSheetBase* pStyleSheet = pSrcPool->Find( rName, eFamily );
     if (pStyleSheet)
@@ -161,7 +161,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
         const SfxPoolItem* pItem;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
-            //  Set-Items
+            
 
             if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SFX_ITEM_SET )
             {
@@ -178,9 +178,9 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                 rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
             }
         }
-        else    // cell styles
+        else    
         {
-            // number format exchange list has to be handled here, too
+            
 
             if ( pDoc && pDoc->GetFormatExchangeList() &&
                  rSourceSet.GetItemState( ATTR_VALUE_FORMAT, false, &pItem ) == SFX_ITEM_SET )
@@ -197,17 +197,17 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
     }
 }
 
-//------------------------------------------------------------------------
+
 //
-//                      Standard-Vorlagen
+
 //
-//------------------------------------------------------------------------
+
 
 #define SCSTR(id)   ScGlobal::GetRscString(id)
 
 void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 {
-    //  Default-Styles kopieren
+    
 
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SFX_STYLE_FAMILY_PARA );
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT),       SFX_STYLE_FAMILY_PARA );
@@ -218,7 +218,7 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SFX_STYLE_FAMILY_PAGE );
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
 {
@@ -229,7 +229,7 @@ static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFon
                               aDefFont.GetPitch(), aDefFont.GetCharSet(), nItemId );
         if ( aNewItem != rSet.Get( nItemId ) )
         {
-            // put item into style's ItemSet only if different from (static) default
+            
             rSet.Put( aNewItem );
         }
     }
@@ -237,13 +237,13 @@ static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFon
 
 void ScStyleSheetPool::CreateStandardStyles()
 {
-    //  neue Eintraege auch bei CopyStdStylesFrom eintragen
+    
 
     Color           aColBlack   ( COL_BLACK );
     Color           aColGrey    ( COL_LIGHTGRAY );
     OUString        aStr;
     sal_Int32       nStrLen;
-    OUString        aHelpFile;//XXX JN welcher Text???
+    OUString        aHelpFile;
     SfxItemSet*     pSet            = NULL;
     SfxItemSet*     pHFSet          = NULL;
     SvxSetItem*     pHFSetItem      = NULL;
@@ -260,28 +260,28 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     OUString  aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
 
-    //==========================================================
-    // Zellformatvorlagen:
-    //==========================================================
+    
+    
+    
 
-    //------------
-    // 1. Standard
-    //------------
+    
+    
+    
     pSheet = (ScStyleSheet*) &Make( aStrStandard, SFX_STYLE_FAMILY_PARA, SCSTYLEBIT_STANDARD );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_STD );
 
-    //  if default fonts for the document's languages are different from the pool default,
-    //  put them into the default style
-    //  (not as pool defaults, because pool defaults can't be changed by the user)
-    //  the document languages must be set before creating the default styles!
+    
+    
+    
+    
 
     pSet = &pSheet->GetItemSet();
     LanguageType eLatin, eCjk, eCtl;
     pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
-    //  If the UI language is Korean, the default Latin font has to
-    //  be queried for Korean, too (the Latin language from the document can't be Korean).
-    //  This is the same logic as in SwDocShell::InitNew.
+    
+    
+    
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     if (MsLangId::isKorean(eUiLanguage))
         eLatin = eUiLanguage;
@@ -290,15 +290,15 @@ void ScStyleSheetPool::CreateStandardStyles()
     lcl_CheckFont( *pSet, eCjk, DEFAULTFONT_CJK_SPREADSHEET, ATTR_CJK_FONT );
     lcl_CheckFont( *pSet, eCtl, DEFAULTFONT_CTL_SPREADSHEET, ATTR_CTL_FONT );
 
-    // #i55300# default CTL font size for Thai has to be larger
-    // #i59408# The 15 point size causes problems with row heights, so no different
-    // size is used for Thai in Calc for now.
-//    if ( eCtl == LANGUAGE_THAI )
-//        pSet->Put( SvxFontHeightItem( 300, 100, ATTR_CTL_FONT_HEIGHT ) );   // 15 pt
+    
+    
+    
 
-    //------------
-    // 2. Ergebnis
-    //------------
+
+
+    
+    
+    
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_RESULT ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -310,9 +310,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
     pSet->Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
-    //-------------
-    // 3. Ergebnis1
-    //-------------
+    
+    
+    
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_RESULT1 ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -321,9 +321,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetParent( SCSTR( STR_STYLENAME_RESULT ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG1 );
 
-    //----------------
-    // 4. Ueberschrift
-    //----------------
+    
+    
+    
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_HEADLINE ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -332,14 +332,14 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetParent( aStrStandard );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_UEB );
     pSet = &pSheet->GetItemSet();
-    pSet->Put( SvxFontHeightItem( 320, 100, ATTR_FONT_HEIGHT ) ); // 16pt
+    pSet->Put( SvxFontHeightItem( 320, 100, ATTR_FONT_HEIGHT ) ); 
     pSet->Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
     pSet->Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
     pSet->Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
 
-    //-----------------
-    // 5. Ueberschrift1
-    //-----------------
+    
+    
+    
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_HEADLINE1 ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -350,13 +350,13 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     pSet->Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
 
-    //==========================================================
-    // Seitenformat-Vorlagen:
-    //==========================================================
+    
+    
+    
 
-    //------------
-    // 1. Standard
-    //------------
+    
+    
+    
 
     pSheet = (ScStyleSheet*) &Make( aStrStandard,
                                     SFX_STYLE_FAMILY_PAGE,
@@ -365,16 +365,16 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_STD );
 
-    // Abstand der Kopf-/Fusszeilen von der Tabelle
+    
     pHFSetItem = new SvxSetItem( ((SvxSetItem&)pSet->Get( ATTR_PAGE_HEADERSET ) ) );
     pSet->Put( *pHFSetItem, ATTR_PAGE_HEADERSET );
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
 
-    //----------------------------------------
-    // Kopfzeile:
-    // [leer][\TABELLE\][leer]
-    //----------------------------------------
+    
+    
+    
+    
     pEdEngine->SetText(EMPTY_OUSTRING);
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
@@ -384,10 +384,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHeaderItem );
     DELETEZ( pTxtObj );
 
-    //----------------------------------------
-    // Fusszeile:
-    // [leer][Seite \SEITE\][leer]
-    //----------------------------------------
+    
+    
+    
+    
     aStr = SCSTR( STR_PAGE ) + " ";
     pEdEngine->SetText( aStr );
     nStrLen = aStr.getLength();
@@ -399,9 +399,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pFooterItem );
     DELETEZ( pTxtObj );
 
-    //----------
-    // 2. Report
-    //----------
+    
+    
+    
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_REPORT ),
                                     SFX_STYLE_FAMILY_PAGE,
@@ -409,12 +409,12 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_REP );
 
-    // Hintergrund und Umrandung
+    
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_TOP );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
-    aBoxItem.SetDistance( 10 ); // 0.2mm
+    aBoxItem.SetDistance( 10 ); 
     aBoxInfoItem.SetValid( VALID_TOP, true );
     aBoxInfoItem.SetValid( VALID_BOTTOM, true );
     aBoxInfoItem.SetValid( VALID_LEFT, true );
@@ -433,10 +433,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
 
-    //----------------------------------------
-    // Kopfzeile:
-    // [\TABELLE\ (\DATEI\)][leer][\DATUM\, \ZEIT\]
-    //----------------------------------------
+    
+    
+    
+    
     aStr = " ()";
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
@@ -455,10 +455,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     DELETEZ( pTxtObj );
     pSet->Put( *pHeaderItem );
 
-    //----------------------------------------
-    // Fusszeile:
-    // [leer][Seite: \SEITE\ / \SEITEN\][leer]
-    //----------------------------------------
+    
+    
+    
+    
     aStr = SCSTR( STR_PAGE ) + " ";
     nStrLen = aStr.getLength();
     aStr += " / ";
@@ -473,14 +473,14 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pFooterItem );
     DELETEZ( pTxtObj );
 
-    //----------------------------------------------------
+    
     DELETEZ( pEmptyTxtObj );
     DELETEZ( pHeaderItem );
     DELETEZ( pFooterItem );
     DELETEZ( pEdEngine );
 }
 
-//------------------------------------------------------------------------
+
 
 
 ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFamily eFam )

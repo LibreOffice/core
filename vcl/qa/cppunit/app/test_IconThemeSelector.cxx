@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <vcl/IconThemeSelector.hxx>
@@ -52,7 +52,7 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
     static std::vector<vcl::IconThemeInfo>
     GetFakeInstalledThemes();
 
-    // Adds code needed to register the test suite
+    
     CPPUNIT_TEST_SUITE(IconThemeSelectorTest);
 
     CPPUNIT_TEST(OxygenThemeIsReturnedForKde4Desktop);
@@ -66,7 +66,7 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
     CPPUNIT_TEST(DifferentPreferredThemesAreInequal);
     CPPUNIT_TEST(DifferentHighContrastModesAreInequal);
 
-    // End of test suite definition
+    
 
 
     CPPUNIT_TEST_SUITE_END();
@@ -190,7 +190,7 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
 }
 
 
-// Put the test suite in the registry
+
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeSelectorTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

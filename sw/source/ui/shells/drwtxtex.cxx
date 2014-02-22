@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -101,8 +101,8 @@
 #include "chrdlg.hrc"
 #include "misc.hrc"
 
-const sal_uInt32 nFontInc = 40;      // 2pt
-const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
+const sal_uInt32 nFontInc = 40;      
+const sal_uInt32 nFontMaxSz = 19998; 
 
 using namespace ::com::sun::star;
 
@@ -158,7 +158,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 pPool2 = aEditAttr.GetPool();
             SvxScriptSetItem aSetItem( nSlot, *pPool2 );
 
-            // #i78017 establish the same behaviour as in Writer
+            
             sal_uInt16 nScriptTypes = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
             if (nSlot == SID_ATTR_CHAR_FONT)
                 nScriptTypes = pOLV->GetSelectedScriptType();
@@ -305,7 +305,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aOldSelection = pOLV->GetSelection();
                 if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
                 {
-                    // select current paragraph (and restore selection later on...)
+                    
                     EditView & rEditView = pOLV->GetEditView();
                     SwLangHelper::SelectPara( rEditView, rEditView.GetSelection() );
                     bRestoreSelection = true;
@@ -316,7 +316,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
-                // util::Language does not exists in the EditEngine! That is why not in set.
+                
 
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
@@ -441,8 +441,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
         case SID_AUTOSPELL_CHECK:
         {
-//!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
-//!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
+
+
             SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
             sal_uInt32 nCtrl = pOutliner->GetControlWord();
 
@@ -473,7 +473,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
                 {
-                    // Select field so that it will be deleted during insert
+                    
                     ESelection aSel = pOLV->GetSelection();
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
@@ -485,7 +485,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-            // Shell switch!
+            
             {
                 SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
@@ -598,14 +598,14 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
     if (bRestoreSelection)
     {
-        // restore selection
+        
         pOLV->GetEditView().SetSelection( aOldSelection );
     }
 }
 
 void SwDrawTextShell::GetState(SfxItemSet& rSet)
 {
-    if (!IsTextEdit())  // Otherwise sometimes crash!
+    if (!IsTextEdit())  
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -622,7 +622,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
         sal_Bool bFlag = sal_False;
         switch( nSlotId )
         {
-            case SID_LANGUAGE_STATUS://20412:
+            case SID_LANGUAGE_STATUS:
             {
                 nSlotId = SwLangHelper::GetLanguageStatus(pOLV,rSet);
                 break;
@@ -635,13 +635,13 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
                 rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
-                // disable "Thesaurus" context menu entry if there is nothing to look up
+                
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 if (!bIsLookUpWord ||
                     !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( LanguageTag::convertToLocale( nLang ) ))
                     rSet.DisableItem( SID_THES );
 
-                //! avoid putting the same item as SfxBoolItem at the end of this function
+                
                 nSlotId = 0;
                 break;
             }
@@ -741,7 +741,7 @@ ASK_ESCAPE:
 
         case SID_THESAURUS:
         {
-            // disable "Thesaurus" if the language is not supported
+            
             const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
                             GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage())) );
@@ -855,7 +855,7 @@ ASK_ESCAPE:
         }
         break;
         default:
-            nSlotId = 0;                // don't know this slot
+            nSlotId = 0;                
             break;
         }
 
@@ -868,7 +868,7 @@ ASK_ESCAPE:
 
 void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 {
-    if (!IsTextEdit())  // Otherwise crash!
+    if (!IsTextEdit())  
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -954,7 +954,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
 void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 {
-    if (!IsTextEdit())  // Otherwise crash!
+    if (!IsTextEdit())  
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -986,7 +986,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 
 void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 {
-    if (!IsTextEdit())  // Otherwise crash!
+    if (!IsTextEdit())  
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -1031,11 +1031,11 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     }
 }
 
-// Hyperlink status
+
 
 void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 {
-    if (!IsTextEdit())  // Otherwise crash!
+    if (!IsTextEdit())  
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();

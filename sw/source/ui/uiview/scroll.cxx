@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@ SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
     bVisible(sal_False),
     bSizeSet(sal_False)
 {
-    // SSA: --- RTL --- no mirroring for horizontal scrollbars
+    
     if( bHoriz )
         EnableRTL( false );
 }
@@ -41,8 +41,8 @@ SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
 
  SwScrollbar::~SwScrollbar() {}
 
-// Will be called after a change of the document size
-// to refresh the range of the scrollbars.
+
+
 
 void SwScrollbar::DocSzChgd( const Size &rSize )
 {
@@ -53,7 +53,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
     SetPageSize( nVisSize * 77 / 100 );
 }
 
-// Will be called after a change of the visible view section.
+
 
 void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
 {
@@ -98,11 +98,11 @@ void SwScrollbar::SetAuto(sal_Bool bSet)
     {
         bAuto = bSet;
 
-        // hide autmatically - automatisch versteckt - then show
+        
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
             ExtendedShow(sal_True);
         else if(bAuto)
-            AutoShow(); // or hide automatically
+            AutoShow(); 
     }
 }
 

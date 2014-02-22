@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,8 +28,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-//================================================================
-// the entry point for load-on-call usage of the DBTOOLS lib
+
+
 extern "C" void* SAL_CALL createDataAccessToolsFactory()
 {
     ::connectivity::ODataAccessToolsFactory* pFactory = new ::connectivity::ODataAccessToolsFactory;
@@ -37,15 +37,15 @@ extern "C" void* SAL_CALL createDataAccessToolsFactory()
     return pFactory;
 }
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
-    //= ODataAccessToolsFactory
-    //================================================================
-    //----------------------------------------------------------------
+
+    
+    
+    
+    
     ODataAccessToolsFactory::ODataAccessToolsFactory()
     {
         ODataAccessStaticTools* pStaticTools = new ODataAccessStaticTools;
@@ -53,37 +53,37 @@ namespace connectivity
         m_xToolsHelper = pStaticTools;
     }
 
-    //----------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL ODataAccessToolsFactory::acquire()
     {
         return ORefBase::acquire();
     }
 
-    //----------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL ODataAccessToolsFactory::release()
     {
         return ORefBase::release();
     }
 
-    //----------------------------------------------------------------
+    
     ::rtl::Reference< simple::IDataAccessTypeConversion > ODataAccessToolsFactory::getTypeConversionHelper()
     {
         return m_xTypeConversionHelper;
     }
 
-    //----------------------------------------------------------------
+    
     ::rtl::Reference< simple::IDataAccessCharSet > ODataAccessToolsFactory::createCharsetHelper( ) const
     {
         return new ODataAccessCharSet;
     }
 
-    //----------------------------------------------------------------
+    
     ::rtl::Reference< simple::IDataAccessTools > ODataAccessToolsFactory::getDataAccessTools()
     {
         return m_xToolsHelper;
     }
 
-    //----------------------------------------------------------------
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue > ODataAccessToolsFactory::createFormattedColumnValue(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -94,15 +94,15 @@ namespace connectivity
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    //----------------------------------------------------------------
+    
     ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XComponentContext >& rxContext, const IParseContext* _pContext) const
     {
         return new OSimpleSQLParser(rxContext, _pContext);
     }
 
-//........................................................................
-}   // namespace connectivity
-//........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

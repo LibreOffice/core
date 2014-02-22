@@ -22,7 +22,7 @@
 #include "QueryTableView.hxx"
 #include "ConnectionLine.hxx"
 using namespace dbaui;
-// class OQueryTableConnection
+
 
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
     : OTableConnection(pContainer, pTabConnData)
@@ -34,7 +34,7 @@ OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     : OTableConnection( rConn )
     , m_bVisited(sal_False)
 {
-    // no own members, so base class functionality is sufficient
+    
 }
 
 OQueryTableConnection::~OQueryTableConnection()
@@ -47,7 +47,7 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
         return *this;
 
     OTableConnection::operator=(rConn);
-    // no own members ...
+    
     return *this;
 }
 
@@ -55,17 +55,17 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
 {
     OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : one of the two participants has no data!");
 
-    // I don't have to compare all too much (especially not all the members) : merely the windows, which we are connected to, and the indices in the corresponding table have to match.
+    
     OQueryTableConnectionData* pMyData = static_cast<OQueryTableConnectionData*>(GetData().get());
     OQueryTableConnectionData* pCompData = static_cast<OQueryTableConnectionData*>(rCompare.GetData().get());
 
-    // Connections are seen as equal, if source and destination window names and source and destination field Indices match...
+    
     return  (   (   (pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencingTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_TO)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_FROM))
                 )
-                ||  // ... or this cross matching is given
+                ||  
                 (   (pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencedTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_FROM)) &&

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -69,7 +69,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
             CheckItem ( nMID, !_pItem->ISA(SfxVoidItem) &&
                             _pItem->ISA(SfxBoolItem) &&
                             ((SfxBoolItem*)_pItem)->GetValue());
-            //remove full screen entry when not in full screen mode
+            
             if( SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
                 EnableItem(nMID, false);
         }
@@ -236,7 +236,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
     Execute(pWin, nId);
 }
 
-// execute the resulting ID only - necessary to support XContextMenuInterception
+
 void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -329,7 +329,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
             SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( sal_False );
             break;
 
-        default: //forward the id to the SfxBindings
+        default: 
             nExecId = nId;
     }
     if( USHRT_MAX != nExecId )
@@ -347,7 +347,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 
 OUString SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
 {
-    // fish out the graphic's name
+    
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
         if ( !pItem->GetGraphicLink().isEmpty() )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "precompile.h"
@@ -77,7 +77,7 @@ hunit HBox::Height(CharShape *csty)
 }
 
 
-// skip block
+
 SkipData::SkipData(hchar hch)
     : HBox(hch)
     , data_block_len(0)
@@ -92,7 +92,7 @@ SkipData::~SkipData(void)
 }
 
 
-// FieldCode [5]
+
 FieldCode::FieldCode(void) : HBox(CH_FIELD)
 {
     str1 = 0;
@@ -118,7 +118,7 @@ FieldCode::~FieldCode(void)
 }
 
 
-// book mark(6)
+
 Bookmark::Bookmark(void):HBox(CH_BOOKMARK)
 {
 }
@@ -129,13 +129,13 @@ Bookmark::~Bookmark(void)
 }
 
 
-// date format(7)
+
 DateFormat::DateFormat(void):HBox(CH_DATE_FORM)
 {
 }
 
 
-// date code(8)
+
 
 DateCode::DateCode(void):HBox(CH_DATE_CODE)
 {
@@ -242,13 +242,13 @@ hchar_string DateCode::GetString()
             case '+':
                 strcpy(cbuf, (is_pm) ? "P.M." : "A.M.");
                 break;
-            case '8':                             // 2.5 feature
+            case '8':                             
             case '9':
 #if 0
-// LATER
+
                 mkcurfilename(cbuf, *fmt);
                 for (i = 0; cbuf[i] != 0 && slen > 1; i++)
-                {                                 //for hangle filename
+                {                                 
                     if (cbuf[i] & 0x80 && cbuf[i + 1] != 0)
                     {
                         *d++ = (cbuf[i] << 8) | cbuf[i + 1];
@@ -261,7 +261,7 @@ hchar_string DateCode::GetString()
 #endif
                 cbuf[0] = 0;
                 break;
-            case '~':                             // 3.0b feature
+            case '~':                             
                 if (fmt[1] == 0)
                     break;
                 fmt++;
@@ -288,14 +288,14 @@ hchar_string DateCode::GetString()
 }
 
 
-// tab(9)
+
 
 Tab::Tab(void):HBox(CH_TAB)
 {
 }
 
 
-// floating box
+
 FBox::FBox(hchar hch):HBox(hch)
 {
     prev = next = 0;
@@ -308,7 +308,7 @@ FBox::~FBox()
 }
 
 
-// tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
+
 
 TxtBox::TxtBox(void):FBox(CH_TEXT_BOX), cell(0), plists(0)
 {
@@ -346,7 +346,7 @@ hunit TxtBox::Height(CharShape * csty)
 }
 
 
-// picture(11)
+
 
 Picture::Picture(void):FBox(CH_PICTURE)
 {
@@ -382,8 +382,8 @@ hunit Picture::Height(CharShape * sty)
 }
 
 
-// line(14)
-// hidden(15)
+
+
 Hidden::~Hidden(void)
 {
     std::list < HWPPara* >::iterator it = plist.begin();
@@ -395,7 +395,7 @@ Hidden::~Hidden(void)
 }
 
 
-// header/footer(16)
+
 HeaderFooter::~HeaderFooter(void)
 {
     std::list < HWPPara* >::iterator it = plist.begin();
@@ -407,7 +407,7 @@ HeaderFooter::~HeaderFooter(void)
 }
 
 
-// footnote(17)
+
 Footnote::~Footnote(void)
 {
     std::list < HWPPara* >::iterator it = plist.begin();
@@ -419,23 +419,23 @@ Footnote::~Footnote(void)
 }
 
 
-// auto number(18)
-// new number(19)
-// show page number (20)
+
+
+
 // 홀수쪽시작/감추기 (21)
 
-// mail merge(22)
+
 hchar_string MailMerge::GetString()
 {
     return hchar_string();
 }
 
 
-// character compositon(23)
-// hyphen(24)
-// toc mark(25)
-// index mark(26)
-// outline(28)
+
+
+
+
+
 
 #define OL_HANGL_JASO   0
 #define OL_HANGL_KANATA 1
@@ -476,18 +476,18 @@ static hchar olHanglJaso(int num, int type)
 
 static const hchar *GetOutlineStyleChars(int style)
 {
-    static const hchar out_bul_style_entry[5][8] =      // extern
+    static const hchar out_bul_style_entry[5][8] =      
     {
-        {                                         // 0 OLSTY_BULLET1
+        {                                         
             0x2f18, 0x2f12, 0x2f08, 0x2f02, 0x2f06, 0x2f00, 0x2043, 0x0000
         },
-        {                                         // 1
+        {                                         
             0x2f18, 0x2f12, 0x2f06, 0x2f00, 0x2f36, 0x2f30, 0x2043, 0x0000
         },
-        {                                         // 2
+        {                                         
             0x2f26, 0x2f20, 0x2f06, 0x2f00, 0x2f16, 0x2f10, 0x2043, 0x0000
         },
-        {                                         // 3
+        {                                         
             0x2f18, 0x2f16, 0x2f12, 0x2f10, 0x2f06, 0x2f00, 0x2043, 0x0000
         },
         {                                         //

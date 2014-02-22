@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,17 +76,17 @@ public:
     DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
     virtual ~DicEvtListenerHelper();
 
-    // XEventListener
+    
     virtual void SAL_CALL
         disposing( const EventObject& rSource )
             throw(RuntimeException);
 
-    // XDictionaryEventListener
+    
     virtual void SAL_CALL
         processDictionaryEvent( const DictionaryEvent& rDicEvent )
             throw(RuntimeException);
 
-    // non-UNO functions
+    
     void    DisposeAndClear( const EventObject &rEvtObj );
 
     sal_Bool    AddDicListEvtListener(
@@ -131,13 +131,13 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
 
     uno::Reference< XInterface > xSrc( rSource.Source );
 
-    // remove event object from EventListener list
+    
     if (xSrc.is())
         aDicListEvtListeners.removeInterface( xSrc );
 
-    // if object is a dictionary then remove it from the dictionary list
-    // Note: this will probably happen only if someone makes a XDictionary
-    // implementation of his own that is also a XComponent.
+    
+    
+    
     uno::Reference< XDictionary > xDic( xSrc, UNO_QUERY );
     if (xDic.is())
     {
@@ -155,15 +155,15 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
     uno::Reference< XDictionary > xDic( rDicEvent.Source, UNO_QUERY );
     DBG_ASSERT(xDic.is(), "lng : missing event source");
 
-    // assert that there is a corresponding dictionary entry if one was
-    // added or deleted
+    
+    
     uno::Reference< XDictionaryEntry > xDicEntry( rDicEvent.xDictionaryEntry, UNO_QUERY );
     DBG_ASSERT( !(rDicEvent.nEvent &
                     (DictionaryEventFlags::ADD_ENTRY | DictionaryEventFlags::DEL_ENTRY))
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    // evaluate DictionaryEvents and update data for next DictionaryListEvent
+    
     DictionaryType eDicType = xDic->getDictionaryType();
     DBG_ASSERT(eDicType != DictionaryType_MIXED,
         "lng : unexpected dictionary type");
@@ -194,7 +194,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
             DictionaryListEventFlags::DEACTIVATE_NEG_DIC :
             DictionaryListEventFlags::DEACTIVATE_POS_DIC;
 
-    // update list of collected events if needs to be
+    
     if (nNumVerboseListeners > 0)
     {
         sal_Int32 nColEvts = aCollectDicEvt.getLength();
@@ -249,13 +249,13 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
 {
     if (0 != nCondensedEvt)
     {
-        // build DictionaryListEvent to pass on to listeners
+        
         uno::Sequence< DictionaryEvent > aDicEvents;
         if (nNumVerboseListeners > 0)
             aDicEvents = aCollectDicEvt;
         DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
 
-        // pass on event
+        
         cppu::OInterfaceIteratorHelper aIt( aDicListEvtListeners );
         while (aIt.hasMoreElements())
         {
@@ -264,7 +264,7 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
                 xRef->processDictionaryListEvent( aEvent );
         }
 
-        // clear "list" of events
+        
         nCondensedEvt = 0;
         aCollectDicEvt.realloc( 0 );
     }
@@ -322,20 +322,20 @@ void DicList::SearchForDictionaries(
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
-            // When not
+            
             sal_Int32 nPos  = aURL.indexOf('.');
             OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
 
-            if (aDCN.equals(aExt))       // negativ
+            if (aDCN.equals(aExt))       
                 bNeg = sal_True;
-            else if (aDCP.equals(aExt))  // positiv
+            else if (aDCP.equals(aExt))  
                 bNeg = sal_False;
             else
-                continue;          // andere Files
+                continue;          
         }
 
-        // Record in the list of Dictoinaries
-        // When it already exists don't record
+        
+        
         sal_Int16 nSystemLanguage = MsLangId::getSystemLanguage();
         OUString aTmp1 = ToLower( aURL, nSystemLanguage );
         sal_Int32 nPos = aTmp1.lastIndexOf( '/' );
@@ -351,9 +351,9 @@ void DicList::SearchForDictionaries(
             if(aTmp1 == aTmp2)
                 break;
         }
-        if(j >= nCount)     // dictionary not yet in DicList
+        if(j >= nCount)     
         {
-            // get decoded dictionary file name
+            
             INetURLObject aURLObj( aURL );
             OUString aDicName = aURLObj.getName( INetURLObject::LAST_SEGMENT,
                         true, INetURLObject::DECODE_WITH_CHARSET,
@@ -456,7 +456,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
         rDicList.push_back( xDictionary );
         bRes = sal_True;
 
-        // add listener helper to the dictionaries listener lists
+        
         xDictionary->addDictionaryEventListener( xDicEvtLstnrHelper );
     }
     return bRes;
@@ -475,19 +475,19 @@ sal_Bool SAL_CALL
     sal_Int32 nPos = GetDicPos( xDictionary );
     if (nPos >= 0)
     {
-        // remove dictionary list from the dictionaries listener lists
+        
         DictionaryVec_t& rDicList = GetOrCreateDicList();
         uno::Reference< XDictionary > xDic( rDicList[ nPos ] );
         DBG_ASSERT(xDic.is(), "lng : empty reference");
         if (xDic.is())
         {
-            // deactivate dictionary if not already done
+            
             xDic->setActive( sal_False );
 
             xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
 
-        // remove element at nPos
+        
         rDicList.erase( rDicList.begin() + nPos );
         bRes = sal_True;
     }
@@ -507,7 +507,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     DBG_ASSERT(!bReceiveVerbose, "lng : not yet supported");
 
     sal_Bool bRes = sal_False;
-    if (xListener.is()) //! don't add empty references
+    if (xListener.is()) 
     {
         bRes = pDicEvtLstnrHelper->
                         AddDicListEvtListener( xListener, bReceiveVerbose );
@@ -589,7 +589,7 @@ void SAL_CALL
         if (pDicEvtLstnrHelper)
             pDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
 
-        //! avoid creation of dictionaries if not already done
+        
         if ( !aDicList.empty() )
         {
             DictionaryVec_t& rDicList = GetOrCreateDicList();
@@ -598,7 +598,7 @@ void SAL_CALL
             {
                 uno::Reference< XDictionary > xDic( rDicList[i], UNO_QUERY );
 
-                // save (modified) dictionaries
+                
                 uno::Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
                 if (xStor.is())
                 {
@@ -612,8 +612,8 @@ void SAL_CALL
                     }
                 }
 
-                // release references to (members of) this object hold by
-                // dictionaries
+                
+                
                 if (xDic.is())
                     xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
             }
@@ -646,7 +646,7 @@ void DicList::_CreateDicList()
 {
     bInCreation = sal_True;
 
-    // look for dictionaries
+    
     const OUString aWriteablePath( GetDictionaryWriteablePath() );
     uno::Sequence< OUString > aPaths( GetDictionaryPaths() );
     const OUString *pPaths = aPaths.getConstArray();
@@ -656,8 +656,8 @@ void DicList::_CreateDicList()
         SearchForDictionaries( aDicList, pPaths[i], bIsWriteablePath );
     }
 
-    // create IgnoreAllList dictionary with empty URL (non persistent)
-    // and add it to list
+    
+    
     OUString aDicName( "IgnoreAllList" );
     uno::Reference< XDictionary > xIgnAll(
             createDictionary( aDicName, LinguLanguageToLocale( LANGUAGE_NONE ),
@@ -670,10 +670,10 @@ void DicList::_CreateDicList()
     }
 
 
-    // evaluate list of dictionaries to be activated from configuration
-    //! to suppress overwriting the list of active dictionaries in the
-    //! configuration with incorrect arguments during the following
-    //! activation of the dictionaries
+    
+    
+    
+    
     pDicEvtLstnrHelper->BeginCollectEvents();
     const uno::Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
     const OUString *pActiveDic = aActiveDics.getConstArray();
@@ -688,8 +688,8 @@ void DicList::_CreateDicList()
         }
     }
 
-    // suppress collected events during creation of the dictionary list.
-    // there should be no events during creation.
+    
+    
     pDicEvtLstnrHelper->ClearEvents();
 
     pDicEvtLstnrHelper->EndCollectEvents();
@@ -700,16 +700,16 @@ void DicList::_CreateDicList()
 
 void DicList::SaveDics()
 {
-    // save dics only if they have already been used/created.
-    //! don't create them just for the purpose of saving them !
+    
+    
     if ( !aDicList.empty() )
     {
-        // save (modified) dictionaries
+        
         DictionaryVec_t& rDicList = GetOrCreateDicList();
         size_t nCount = rDicList.size();;
         for (size_t i = 0;  i < nCount;  i++)
         {
-            // save (modified) dictionaries
+            
             uno::Reference< frame::XStorable >  xStor( rDicList[i], UNO_QUERY );
             if (xStor.is())
             {
@@ -727,7 +727,7 @@ void DicList::SaveDics()
 }
 
 
-// Service specific part
+
 
 OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
 {
@@ -754,7 +754,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );   // more than 1 service possible
+    uno::Sequence< OUString > aSNS( 1 );   
     aSNS.getArray()[0] = "com.sun.star.linguistic2.DictionaryList";
     return aSNS;
 }
@@ -771,7 +771,7 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
                 DicList::getImplementationName_Static(),
                 DicList_CreateInstance,
                 DicList::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }
@@ -801,11 +801,11 @@ static sal_Int32 lcl_GetToken( OUString &rToken,
                 break;
         }
 
-        if (i >= rText.getLength())   // delimiter not found
+        if (i >= rText.getLength())   
             rToken  = rText.copy( nPos );
         else
             rToken  = rText.copy( nPos, i - nPos );
-        nRes    = i + 1;    // continue after found delimiter
+        nRes    = i + 1;    
     }
 
     return nRes;
@@ -818,7 +818,7 @@ static void AddInternal(
 {
     if (rDic.is())
     {
-        //! TL TODO: word iterator should be used to break up the text
+        
         static const char aDefWordDelim[] =
                 "!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n";
         OUString aDelim(aDefWordDelim);
@@ -866,10 +866,10 @@ static sal_Bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, sal_
     if (aDIC != aExt)
         return sal_False;
 
-    // get stream to be used
+    
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    // get XInputStream stream
+    
     uno::Reference< io::XInputStream > xStream;
     try
     {

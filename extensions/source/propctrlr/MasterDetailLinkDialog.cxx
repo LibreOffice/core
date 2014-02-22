@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
  #include "MasterDetailLinkDialog.hxx"
@@ -25,55 +25,55 @@
     ::pcr::OAutoRegistration< ::pcr::MasterDetailLinkDialog > aAutoRegistration;
 }
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
-    //= MasterDetailLinkDialog
-    //====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     MasterDetailLinkDialog::MasterDetailLinkDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
     {
     }
-//---------------------------------------------------------------------
+
     Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL MasterDetailLinkDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new MasterDetailLinkDialog( _rxContext ) );
     }
 
-    //---------------------------------------------------------------------
+    
     OUString SAL_CALL MasterDetailLinkDialog::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //---------------------------------------------------------------------
+    
     OUString MasterDetailLinkDialog::getImplementationName_static() throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
     }
 
-    //---------------------------------------------------------------------
+    
     ::comphelper::StringSequence SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //---------------------------------------------------------------------
+    
     ::comphelper::StringSequence MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
@@ -81,20 +81,20 @@ namespace pcr
         return aSupported;
     }
 
-    //---------------------------------------------------------------------
+    
     Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //---------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& MasterDetailLinkDialog::getInfoHelper()
     {
         return *const_cast<MasterDetailLinkDialog*>(this)->getArrayHelper();
     }
 
-    //--------------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper* MasterDetailLinkDialog::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -102,13 +102,13 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    //--------------------------------------------------------------------------
+    
     Dialog* MasterDetailLinkDialog::createDialog(Window* _pParent)
     {
         return new FormLinkDialog(_pParent,m_xDetail,m_xMaster, m_aContext
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);
     }
-    //---------------------------------------------------------------------
+    
     void MasterDetailLinkDialog::implInitialize(const Any& _rValue)
     {
         PropertyValue aProperty;
@@ -143,8 +143,8 @@ namespace pcr
         MasterDetailLinkDialog_DBase::implInitialize(_rValue);
     }
 
-//............................................................................
-}   // namespace pcr
-//............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

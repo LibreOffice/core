@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,23 +23,23 @@
 
 class FilterConfigItem;
 
-//============================ PBMReader ==================================
+
 
 class PBMReader {
 
 private:
 
-    SvStream&           mrPBM;              // the PBM file to read
+    SvStream&           mrPBM;              
 
     sal_Bool            mbStatus;
-    sal_Bool            mbRemark;           // sal_False if the stream is in a comment
-    sal_Bool            mbRaw;              // RAW/ASCII MODE
-    sal_uLong           mnMode;             // 0->PBM, 1->PGM, 2->PPM
+    sal_Bool            mbRemark;           
+    sal_Bool            mbRaw;              
+    sal_uLong           mnMode;             
     Bitmap              maBmp;
     BitmapWriteAccess*  mpAcc;
-    sal_uLong           mnWidth, mnHeight;  // dimensions in pixel
+    sal_uLong           mnWidth, mnHeight;  
     sal_uLong           mnCol;
-    sal_uLong           mnMaxVal;           // max value in the <missing comment>
+    sal_uLong           mnMaxVal;           
     sal_Bool            ImplCallback( sal_uInt16 nPercent );
     sal_Bool            ImplReadBody();
     sal_Bool            ImplReadHeader();
@@ -50,7 +50,7 @@ public:
     sal_Bool                ReadPBM(Graphic & rGraphic );
 };
 
-//=================== Methods of PBMReader ==============================
+
 
 PBMReader::PBMReader(SvStream & rPBM)
     : mrPBM( rPBM )
@@ -89,7 +89,7 @@ sal_Bool PBMReader::ReadPBM(Graphic & rGraphic )
 
     mrPBM.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // read header:
+    
 
     if ( ( mbStatus = ImplReadHeader() ) == sal_False )
         return sal_False;
@@ -97,7 +97,7 @@ sal_Bool PBMReader::ReadPBM(Graphic & rGraphic )
     if ( ( mnMaxVal == 0 ) || ( mnWidth == 0 ) || ( mnHeight == 0 ) )
         return sal_False;
 
-    // 0->PBM, 1->PGM, 2->PPM
+    
     switch ( mnMode )
     {
         case 0 :
@@ -137,7 +137,7 @@ sal_Bool PBMReader::ReadPBM(Graphic & rGraphic )
             break;
     }
 
-    // read bitmap data
+    
     mbStatus = ImplReadBody();
 
     if ( mpAcc )
@@ -167,7 +167,7 @@ sal_Bool PBMReader::ImplReadHeader()
             mbRaw = sal_False;
         case '4' :
             mnMode = 0;
-            nMax = 2;               // number of parameters in Header
+            nMax = 2;               
             mnMaxVal = 1;
             break;
         case '2' :
@@ -259,7 +259,7 @@ sal_Bool PBMReader::ImplReadBody()
         switch ( mnMode )
         {
 
-            // PBM
+            
             case 0 :
                 while ( nHeight != mnHeight )
                 {
@@ -277,12 +277,12 @@ sal_Bool PBMReader::ImplReadBody()
                         nShift = 0;
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
+                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   
                     }
                 }
                 break;
 
-            // PGM
+            
             case 1 :
                 while ( nHeight != mnHeight )
                 {
@@ -296,12 +296,12 @@ sal_Bool PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
+                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   
                     }
                 }
                 break;
 
-            // PPM
+            
             case 2 :
                 while ( nHeight != mnHeight )
                 {
@@ -319,7 +319,7 @@ sal_Bool PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  
                     }
                 }
                 break;
@@ -327,7 +327,7 @@ sal_Bool PBMReader::ImplReadBody()
     }
     else switch  ( mnMode )
     {
-        // PBM
+        
         case 0 :
             while ( bFinished == sal_False )
             {
@@ -358,7 +358,7 @@ sal_Bool PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = sal_True;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  
                     }
                 }
                 else
@@ -366,7 +366,7 @@ sal_Bool PBMReader::ImplReadBody()
             }
             break;
 
-        // PGM
+        
         case 1 :
 
             bPara = sal_False;
@@ -387,7 +387,7 @@ sal_Bool PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = sal_True;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  
                     }
                     continue;
                 }
@@ -441,7 +441,7 @@ sal_Bool PBMReader::ImplReadBody()
 
 
 
-        // PPM
+        
         case 2 :
 
             bPara = sal_False;
@@ -463,7 +463,7 @@ sal_Bool PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = sal_True;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  
                     }
                     continue;
                 }
@@ -518,11 +518,11 @@ sal_Bool PBMReader::ImplReadBody()
     return mbStatus;
 }
 
-//================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport ipbGraphicImport
 #endif

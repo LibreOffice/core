@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <iostream>
 
@@ -141,7 +141,7 @@ SAL_IMPLEMENT_MAIN()
     OUString arg, sOption;
     sal_Bool bOption=sal_False;
 
-    // check command
+    
     rtl_getAppCommandArg(nPos++, &arg.pData);
     if ( arg == "dump" ) {
         options.dump = true;
@@ -174,7 +174,7 @@ SAL_IMPLEMENT_MAIN()
         exit(EXIT_FAILURE);
     }
 
-    // read up to arguments
+    
     while ( nPos < nCount )
     {
         rtl_getAppCommandArg(nPos, &arg.pData);
@@ -253,7 +253,7 @@ SAL_IMPLEMENT_MAIN()
         }
 
 
-        // else illegal argument
+        
         throw CannotDumpException("unexpected parameter \"" + arg + "\"!");
     }
 
@@ -278,11 +278,11 @@ SAL_IMPLEMENT_MAIN()
                 "*****************************/\n";
             switch (options.language )
             {
-            case 1: //Java
+            case 1: 
                 java::generateDocumentation(std::cout, options, manager,
                                             *iter, delegate);
                 break;
-            case 2: //C++
+            case 2: 
                 cpp::generateDocumentation(std::cout, options, manager,
                                            *iter, delegate);
                 break;
@@ -295,10 +295,10 @@ SAL_IMPLEMENT_MAIN()
     } else {
         switch ( options.language )
         {
-        case 1: //Java
+        case 1: 
             java::generateSkeleton(options, manager, types);
             break;
-        case 2: //C++
+        case 2: 
             cpp::generateSkeleton(options, manager, types);
             break;
         default:

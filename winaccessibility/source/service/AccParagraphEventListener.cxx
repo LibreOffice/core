@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -59,7 +59,7 @@ throw (::com::sun::star::uno::RuntimeException)
     case AccessibleEventId::BOUNDRECT_CHANGED:
         HandleBoundrectChangedEvent();
         break;
-        //Added for paragraph selected state.
+        
     case AccessibleEventId::STATE_CHANGED:
         {
             short State;
@@ -106,17 +106,17 @@ void AccParagraphEventListener::HandleCaretChangedEvent(Any oldValue, Any newVal
  */
 void AccParagraphEventListener::SetComponentState(short state, bool enable )
 {
-    // only the following state can be fired state event.
+    
     switch (state)
     {
     case AccessibleStateType::EDITABLE:
-        // no msaa state
+        
         break;
     case AccessibleStateType::MULTI_LINE:
-        // no msaa state mapping
+        
         break;
     case AccessibleStateType::SINGLE_LINE:
-        // no msaa state mapping
+        
         break;
     default:
         AccContainerEventListener::SetComponentState(state, enable);

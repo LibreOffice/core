@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ModifyListenerHelper.hxx"
@@ -82,7 +82,7 @@ private:
     Reference< util::XModifyListener > m_xHardRef;
 };
 
-} //  anonymous namespace
+} 
 
 namespace chart
 {
@@ -116,7 +116,7 @@ void ModifyEventForwarder::AddListener( const Reference< util::XModifyListener >
         Reference< uno::XWeak > xWeak( aListener, uno::UNO_QUERY );
         if( xWeak.is())
         {
-            // remember the helper class for later remove
+            
             uno::WeakReference< util::XModifyListener > xWeakRef( aListener );
             xListenerToAdd.set( new WeakModifyListenerAdapter( xWeakRef ));
             m_aListenerMap.push_back( tListenerMap::value_type( xWeakRef, xListenerToAdd ));
@@ -134,14 +134,14 @@ void ModifyEventForwarder::RemoveListener( const Reference< util::XModifyListene
 {
     try
     {
-        // look up fitting helper class that has been added
+        
         Reference< util::XModifyListener > xListenerToRemove( aListener );
         tListenerMap::iterator aIt(
             ::std::find_if( m_aListenerMap.begin(), m_aListenerMap.end(), lcl_weakReferenceToSame( aListener )));
         if( aIt != m_aListenerMap.end())
         {
             xListenerToRemove.set( (*aIt).second );
-            // map entry is no longer needed
+            
             m_aListenerMap.erase( aIt );
         }
 
@@ -161,7 +161,7 @@ void ModifyEventForwarder::DisposeAndClear( const Reference< uno::XWeak > & xSou
         pCntHlp->disposeAndClear( lang::EventObject( xSource ) );
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL ModifyEventForwarder::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -174,28 +174,28 @@ void SAL_CALL ModifyEventForwarder::removeModifyListener( const Reference< util:
     RemoveListener( aListener );
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     FireEvent( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL ModifyEventForwarder::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ WeakComponentImplHelperBase ____
+
 void SAL_CALL ModifyEventForwarder::disposing()
 {
-    // dispose was called at this
+    
     DisposeAndClear( this );
 }
 
-} //  namespace ModifyListenerHelper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

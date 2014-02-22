@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "InternalData.hxx"
@@ -60,14 +60,14 @@ private:
 template< typename T >
     Sequence< T > lcl_ValarrayToSequence( const ::std::valarray< T > & rValarray )
 {
-    // is there a more elegant way of conversion?
+    
     Sequence< T > aResult( rValarray.size());
     for( size_t i = 0; i < rValarray.size(); ++i )
         aResult[i] = rValarray[i];
     return aResult;
 }
 
-} // anonymous namespace
+} 
 
 InternalData::InternalData()
     : m_nColumnCount( 0 )
@@ -91,7 +91,7 @@ void InternalData::createDefaultData()
     m_nRowCount = nRowCount;
     m_nColumnCount = nColumnCount;
     const sal_Int32 nSize = nColumnCount * nRowCount;
-    // @todo: localize this!
+    
     const OUString aRowName(SCH_RESSTR(STR_ROW_LABEL));
     const OUString aColName(SCH_RESSTR(STR_COLUMN_LABEL));
 
@@ -148,7 +148,7 @@ void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
     m_aData.resize( m_nRowCount * m_nColumnCount );
     double fNan;
     ::rtl::math::setNan( & fNan );
-    // set all values to Nan
+    
     m_aData = fNan;
 
     for( sal_Int32 nRow=0; nRow<m_nRowCount; ++nRow )
@@ -305,7 +305,7 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
         double fNan;
         ::rtl::math::setNan( &fNan );
         tDataType aNewData( fNan, nNewSize );
-        // copy old data
+        
         for( int nCol=0; nCol<m_nColumnCount; ++nCol )
             static_cast< tDataType >(
                 aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] ) =
@@ -321,7 +321,7 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 
 void InternalData::insertColumn( sal_Int32 nAfterIndex )
 {
-    // note: -1 is allowed, as we insert after the given index
+    
     OSL_ASSERT( nAfterIndex < m_nColumnCount && nAfterIndex >= -1 );
     if( nAfterIndex >= m_nColumnCount || nAfterIndex < -1 )
         return;
@@ -332,7 +332,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     ::rtl::math::setNan( &fNan );
     tDataType aNewData( fNan, nNewSize );
 
-    // copy old data
+    
     int nCol=0;
     for( ; nCol<=nAfterIndex; ++nCol )
         aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
@@ -347,7 +347,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     m_aData.resize( nNewSize );
     m_aData = aNewData;
 
-    // labels
+    
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), vector< uno::Any >(1) );
 
@@ -370,7 +370,7 @@ sal_Int32 InternalData::appendRow()
 
 void InternalData::insertRow( sal_Int32 nAfterIndex )
 {
-    // note: -1 is allowed, as we insert after the given index
+    
     OSL_ASSERT( nAfterIndex < m_nRowCount && nAfterIndex >= -1 );
     if( nAfterIndex >= m_nRowCount || nAfterIndex < -1 )
         return;
@@ -381,7 +381,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     ::rtl::math::setNan( &fNan );
     tDataType aNewData( fNan, nNewSize );
 
-    // copy old data
+    
     sal_Int32 nIndex = nAfterIndex + 1;
     aNewData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
         static_cast< tDataType >(
@@ -399,7 +399,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     m_aData.resize( nNewSize );
     m_aData = aNewData;
 
-    // labels
+    
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< uno::Any > (1));
 
@@ -420,7 +420,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     ::rtl::math::setNan( &fNan );
     tDataType aNewData( fNan, nNewSize );
 
-    // copy old data
+    
     int nCol=0;
     for( ; nCol<nAtIndex; ++nCol )
         aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
@@ -435,7 +435,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     m_aData.resize( nNewSize );
     m_aData = aNewData;
 
-    // labels
+    
     if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.erase( m_aColumnLabels.begin() + nAtIndex );
 
@@ -456,7 +456,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     ::rtl::math::setNan( &fNan );
     tDataType aNewData( fNan, nNewSize );
 
-    // copy old data
+    
     sal_Int32 nIndex = nAtIndex;
     if( nIndex )
         aNewData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
@@ -475,7 +475,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     m_aData.resize( nNewSize );
     m_aData = aNewData;
 
-    // labels
+    
     if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.erase( m_aRowLabels.begin() + nAtIndex );
 
@@ -540,6 +540,6 @@ void InternalData::traceData() const
 }
 #endif
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "wordbookmigration.hxx"
@@ -27,19 +27,19 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-//.........................................................................
+
 namespace migration
 {
-//.........................................................................
+
 
 
     static OUString sSourceSubDir( "/user/wordbook" );
     static OUString sTargetSubDir( "/user/wordbook" );
 
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     OUString WordbookMigration_getImplementationName()
     {
@@ -56,7 +56,7 @@ namespace migration
         return *pImplName;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< OUString > WordbookMigration_getSupportedServiceNames()
     {
@@ -74,21 +74,21 @@ namespace migration
         return *pNames;
     }
 
-    // =============================================================================
-    // WordbookMigration
-    // =============================================================================
+    
+    
+    
 
     WordbookMigration::WordbookMigration()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     WordbookMigration::~WordbookMigration()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     TStringVectorPtr WordbookMigration::getFiles( const OUString& rBaseURL ) const
     {
@@ -97,7 +97,7 @@ namespace migration
 
         if ( aDir.open() == ::osl::FileBase::E_None )
         {
-            // iterate over directory content
+            
             TStringVector aSubDirs;
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
@@ -112,7 +112,7 @@ namespace migration
                 }
             }
 
-            // iterate recursive over subfolders
+            
             TStringVector::const_iterator aI = aSubDirs.begin();
             while ( aI != aSubDirs.end() )
             {
@@ -125,7 +125,7 @@ namespace migration
         return aResult;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     ::osl::FileBase::RC WordbookMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
@@ -186,7 +186,7 @@ bool IsUserWordbook( const OUString& rFile )
 }
 
 
-    // -----------------------------------------------------------------------------
+    
 
     void WordbookMigration::copyFiles()
     {
@@ -224,16 +224,16 @@ bool IsUserWordbook( const OUString& rFile )
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XServiceInfo
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     OUString WordbookMigration::getImplementationName() throw (RuntimeException)
     {
         return WordbookMigration_getImplementationName();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool WordbookMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -241,16 +241,16 @@ bool IsUserWordbook( const OUString& rFile )
         return cppu::supportsService(this, ServiceName);
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< OUString > WordbookMigration::getSupportedServiceNames() throw (RuntimeException)
     {
         return WordbookMigration_getSupportedServiceNames();
     }
 
-    // -----------------------------------------------------------------------------
-    // XInitialization
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     void WordbookMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -274,9 +274,9 @@ bool IsUserWordbook( const OUString& rFile )
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XJob
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Any WordbookMigration::execute( const Sequence< beans::NamedValue >& )
         throw (lang::IllegalArgumentException, Exception, RuntimeException)
@@ -288,9 +288,9 @@ bool IsUserWordbook( const OUString& rFile )
         return Any();
     }
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     Reference< XInterface > SAL_CALL WordbookMigration_create(
         Reference< XComponentContext > const & )
@@ -299,10 +299,10 @@ bool IsUserWordbook( const OUString& rFile )
         return static_cast< lang::XTypeProvider * >( new WordbookMigration() );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-//.........................................................................
-}   // namespace migration
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

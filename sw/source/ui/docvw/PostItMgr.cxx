@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,46 +77,46 @@
 #include "swevent.hxx"
 #include "switerator.hxx"
 
-// distance between Anchor Y and initial note position
+
 #define POSTIT_INITIAL_ANCHOR_DISTANCE      20
-//distance between two postits
+
 #define POSTIT_SPACE_BETWEEN                8
 #define POSTIT_MINIMUMSIZE_WITH_META        60
 #define POSTIT_SCROLL_SIDEBAR_HEIGHT        20
 
-// if we layout more often we stop, this should never happen
+
 #define MAX_LOOP_COUNT                      50
 
 using namespace sw::sidebarwindows;
 
 bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 {
-    // sort by anchor position
+    
     SwPosition aPosAnchorA = a->GetAnchorPosition();
     SwPosition aPosAnchorB = b->GetAnchorPosition();
 
     bool aAnchorAInFooter = false;
     bool aAnchorBInFooter = false;
 
-    // is the anchor placed in Footnote or the Footer?
+    
     if( aPosAnchorA.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorA.nNode.GetNode().FindFooterStartNode() )
         aAnchorAInFooter = true;
     if( aPosAnchorB.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorB.nNode.GetNode().FindFooterStartNode() )
         aAnchorBInFooter = true;
 
-    // fdo#34800
-    // if AnchorA is in footnote, and AnchorB isn't
-    // we do not want to change over the position
+    
+    
+    
     if( aAnchorAInFooter && !aAnchorBInFooter )
         return false;
-    // if aAnchorA is not placed in a footnote, and aAnchorB is
-    // force a change over
+    
+    
     else if( !aAnchorAInFooter && aAnchorBInFooter )
         return true;
-    // If neither or both are in the footer, compare the positions.
-    // Since footnotes are in Inserts section of nodes array and footers
-    // in Autotext section, all footnotes precede any footers so no need
-    // to check that.
+    
+    
+    
+    
     else
         return aPosAnchorA < aPosAnchorB;
 }
@@ -143,16 +143,16 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     SwNoteProps aProps;
     mbIsShowAnchor = aProps.IsShowAnchor();
 
-    //make sure we get the colour yellow always, even if not the first one of comments or redlining
+    
     SW_MOD()->GetRedlineAuthor();
 
-    // collect all PostIts and redline comments that exist after loading the document
-    // don't check for existance for any of them, don't focus them
+    
+    
     AddPostIts(false,false);
     /*  this code can be used once we want redline comments in the Sidebar
     AddRedlineComments(false,false);
     */
-    // we want to receive stuff like SFX_HINT_DOCCHANGED
+    
     StartListening(*mpView->GetDocShell());
     if (!mvPostItFlds.empty())
     {
@@ -165,7 +165,7 @@ SwPostItMgr::~SwPostItMgr()
 {
     if ( mnEventId )
         Application::RemoveUserEvent( mnEventId );
-    // forget about all our Sidebar windows
+    
     RemoveSidebarWin();
     EndListening( *mpView->GetDocShell() );
 
@@ -198,16 +198,16 @@ void SwPostItMgr::CheckForRemovedPostIts()
 
     if ( bRemoved )
     {
-        // make sure that no deleted items remain in page lists
-        // todo: only remove deleted ones?!
+        
+        
         if ( mvPostItFlds.empty() )
         {
             PreparePageContainer();
             PrepareView();
         }
         else
-            // if postits are their make sure that page lists are not empty
-            // otherwise sudden paints can cause pain (in BorderOverPageBorder)
+            
+            
             CalcRects();
     }
 }
@@ -292,7 +292,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SFX_HINT_USER04:
             {
-                // if we are in a SplitNode/Cut operation, do not delete note and then add again, as this will flicker
+                
                 mbDeleteNote = !mbDeleteNote;
                 break;
             }
@@ -300,7 +300,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 if ( mpView->GetDocShell() != &rBC )
                 {
-                    // field to be removed is the broadcaster
+                    
                     OSL_FAIL("Notification for removed SwFmtFld was not sent!");
                     RemoveItem(&rBC);
                 }
@@ -321,7 +321,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     AddPostIts(true);
                     break;
                 }
-                // get field to be inserted from hint
+                
                 if ( pFld->IsFldInDoc() )
                 {
                     bool bEmpty = !HasNotes();
@@ -413,7 +413,7 @@ void SwPostItMgr::Focus(SfxBroadcaster& rBC)
 
     for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
     {
-        // field to get the focus is the broadcaster
+        
         if ( &rBC == (*i)->GetBroadCaster() )
         {
             if ((*i)->pPostIt)
@@ -423,7 +423,7 @@ void SwPostItMgr::Focus(SfxBroadcaster& rBC)
             }
             else
             {
-                // when the layout algorithm starts, this postit is created and receives focus
+                
                 (*i)->bFocus = true;
             }
         }
@@ -434,8 +434,8 @@ bool SwPostItMgr::CalcRects()
 {
     if ( mnEventId )
     {
-        // if CalcRects() was forced and an event is still pending: remove it
-        // it is superfluous and also may cause reentrance problems if triggered while layouting
+        
+        
         Application::RemoveUserEvent( mnEventId );
         mnEventId = 0;
     }
@@ -460,7 +460,7 @@ bool SwPostItMgr::CalcRects()
             const sal_uLong nOldStartNodeIdx( pItem->maLayoutInfo.mnStartNodeIdx );
             const sal_Int32 nOldStartContent( pItem->maLayoutInfo.mnStartContent );
             {
-                // update layout information
+                
                 const SwTxtAnnotationFld* pTxtAnnotationFld =
                     dynamic_cast< const SwTxtAnnotationFld* >( pItem->GetFmtFld().GetTxtFld() );
                 const ::sw::mark::IMark* pAnnotationMark =
@@ -486,11 +486,11 @@ bool SwPostItMgr::CalcRects()
                       || pItem->maLayoutInfo.mnStartContent != nOldStartContent;
         }
 
-        // show notes in right order in navigator
-        //prevent Anchors during layout to overlap, e.g. when moving a frame
+        
+        
         Sort(SORT_POS);
 
-        // sort the items into the right page vector, so layout can be done by page
+        
         for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
         {
             SwSidebarItem* pItem = (*i);
@@ -559,7 +559,7 @@ bool SwPostItMgr::HasScrollbars() const
 
 void SwPostItMgr::PreparePageContainer()
 {
-    // we do not just delete the SwPostItPageItem, so offset/scrollbar is not lost
+    
     long lPageSize = mpWrtShell->GetNumPages();
     long lContainerSize = mPages.size();
 
@@ -576,7 +576,7 @@ void SwPostItMgr::PreparePageContainer()
             mPages.pop_back();
         }
     }
-    // only clear the list, DO NOT delete the objects itself
+    
     for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i != mPages.end() ; ++i)
     {
         (*i)->mList->clear();
@@ -592,14 +592,14 @@ void SwPostItMgr::LayoutPostIts()
     {
         mbLayouting = true;
 
-            //loop over all pages and do the layout
-            // - create SwPostIt if necessary
-            // - place SwPostIts on their initial position
-            // - calculate necessary height for all PostIts together
+            
+            
+            
+            
             bool bUpdate = false;
             for (unsigned long n=0;n<mPages.size();n++)
             {
-                // only layout if there are notes on this page
+                
                 if (mPages[n]->mList->size()>0)
                 {
                     std::list<SwSidebarWin*>    aVisiblePostItList;
@@ -614,9 +614,9 @@ void SwPostItMgr::LayoutPostIts()
 
                         if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
                         {
-                            // x value for notes positioning
-                            mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
-                            //bending point
+                            
+                            mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);
+                            
                             mlPageEnd =
                                 mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
                                 ? pItem->maLayoutInfo.mPagePrtArea.Left()
@@ -624,9 +624,9 @@ void SwPostItMgr::LayoutPostIts()
                         }
                         else if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
                         {
-                            // x value for notes positioning
+                            
                             mlPageBorder = mpEditWin->LogicToPixel( Point(mPages[n]->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
-                            //bending point
+                            
                             mlPageEnd =
                                 mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
                                 ? pItem->maLayoutInfo.mPagePrtArea.Right() :
@@ -648,7 +648,7 @@ void SwPostItMgr::LayoutPostIts()
                                 pItem->pPostIt = pPostIt;
                                 if (mpAnswer)
                                 {
-                                    if (pPostIt->CalcFollow()) //do we really have another note in front of this one
+                                    if (pPostIt->CalcFollow()) 
                                         static_cast<sw::annotation::SwAnnotationWin*>(pPostIt)->InitAnswer(mpAnswer);
                                     delete mpAnswer;
                                     mpAnswer = 0;
@@ -678,11 +678,11 @@ void SwPostItMgr::LayoutPostIts()
                                 pPostIt->GrabFocus();
                                 pItem->bFocus = false;
                             }
-                            // only the visible postits are used for the final layout
+                            
                             aVisiblePostItList.push_back(pPostIt);
                             lNeededHeight += pPostIt->IsFollow() ? aPostItHeight : aPostItHeight+GetSpaceBetween();
                         }
-                        else // we don't want to see it
+                        else 
                         {
                             if (pPostIt)
                                 pPostIt->HideNote();
@@ -702,7 +702,7 @@ void SwPostItMgr::LayoutPostIts()
                         }
                         else
                         {
-                            //when we changed our zoom level, the offset value can be to big, so lets check for the largest possible zoom value
+                            
                             long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,mPages[n]->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
                             long lOffset = -1 * GetScrollSize() * (aVisiblePostItList.size() - aAvailableHeight / GetScrollSize());
                             if (mPages[n]->lOffset < lOffset)
@@ -714,7 +714,7 @@ void SwPostItMgr::LayoutPostIts()
                                            TODO
                                            - enlarge all notes till GetNextBorder(), as we resized to average value before
                                            */
-                        //lets hide the ones which overlap the page
+                        
                         for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
                         {
                             if (mPages[n]->lOffset != 0)
@@ -769,7 +769,7 @@ void SwPostItMgr::LayoutPostIts()
             }
 
             if (!ShowNotes())
-            {       // we do not want to see the notes anymore -> Options-Writer-View-Notes
+            {       
                 bool bRepair = false;
                 for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
                 {
@@ -797,8 +797,8 @@ void SwPostItMgr::LayoutPostIts()
             }
 
 
-            // notes scrollbar is otherwise not drawn correctly for some cases
-            // scrollbar area is enough
+            
+            
             if (bUpdate)
                 mpEditWin->Invalidate();
         mbLayouting = false;
@@ -829,7 +829,7 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 {
     OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");
-    // do not scroll more than necessary up or down
+    
     if ( ((mPages[aPage-1]->lOffset == 0) && (lScroll>0)) || ( BorderOverPageBorder(aPage) && (lScroll<0)) )
         return;
 
@@ -839,7 +839,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
     for(SwSidebarItem_iterator i = mPages[aPage-1]->mList->begin(); i != mPages[aPage-1]->mList->end(); ++i)
     {
         SwSidebarWin* pPostIt = (*i)->pPostIt;
-        // if this is an answer, we should take the normal position and not the real, slightly moved position
+        
         pPostIt->SetVirtualPosSize(pPostIt->GetPosPixel(),pPostIt->GetSizePixel());
         pPostIt->TranslateTopPosition(lScroll);
 
@@ -880,7 +880,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 
 void SwPostItMgr::AutoScroll(const SwSidebarWin* pPostIt,const unsigned long aPage )
 {
-    // otherwise all notes are visible
+    
     if (mPages[aPage-1]->bScrollbar)
     {
         const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
@@ -890,8 +890,8 @@ void SwPostItMgr::AutoScroll(const SwSidebarWin* pPostIt,const unsigned long aPa
         {
             const long aDiff = bBottom ? mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Top() + aSidebarheight)).Y() - pPostIt->GetPosPixel().Y() :
                                             mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Bottom() - aSidebarheight)).Y() - (pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height());
-            // this just adds the missing value to get the next a* GetScrollSize() after aDiff
-            // e.g aDiff= 61 POSTIT_SCOLL=50 --> lScroll = 100
+            
+            
             const long lScroll = bBottom ? (aDiff + ( GetScrollSize() - (aDiff % GetScrollSize()))) : (aDiff - (GetScrollSize() + (aDiff % GetScrollSize())));
             Scroll(lScroll, aPage);
         }
@@ -902,7 +902,7 @@ void SwPostItMgr::MakeVisible(const SwSidebarWin* pPostIt,long aPage )
 {
     if (aPage == -1)
     {
-        // we dont know the page yet, lets find it ourselves
+        
         for (unsigned long n=0;n<mPages.size();n++)
         {
             if (mPages[n]->mList->size()>0)
@@ -959,24 +959,24 @@ Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) cons
 bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,const Rectangle aBorder, long lNeededHeight)
 {
     /*** General layout idea:***/
-    //  - if we have space left, we always move the current one up,
-    //    otherwise the next one down
-    //  - first all notes are resized
-    //  - then the real layout starts
+    
+    
+    
+    
     /*************************************************************/
 
-    //rBorder is the page rect
+    
     const Rectangle rBorder         = mpEditWin->LogicToPixel( aBorder);
     long            lTopBorder      = rBorder.Top() + 5;
     long            lBottomBorder   = rBorder.Bottom() - 5;
-    const long      lVisibleHeight  = lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
+    const long      lVisibleHeight  = lBottomBorder - lTopBorder; 
     long            lTranslatePos   = 0;
     bool            bScrollbars     = false;
 
-    // do all necessary resizings
+    
     if (lVisibleHeight < lNeededHeight)
     {
-        // ok, now we have to really resize and adding scrollbars
+        
         const long lAverageHeight = (lVisibleHeight - aVisiblePostItList.size()*GetSpaceBetween()) / aVisiblePostItList.size();
         if (lAverageHeight<GetMinimumSizeWithMeta())
         {
@@ -996,13 +996,13 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
         }
     }
 
-    //start the real layout so nothing overlaps anymore
+    
     if (aVisiblePostItList.size()>1)
     {
         long lSpaceUsed = 0;
         int loop = 0;
         bool bDone = false;
-        // if no window is moved anymore we are finished
+        
         while (!bDone)
         {
             loop++;
@@ -1016,16 +1016,16 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                 if (aNextPostIt != aVisiblePostItList.end())
                 {
                     lTranslatePos = ( (*i)->VirtualPos().Y() + (*i)->VirtualSize().Height()) - (*aNextPostIt)->VirtualPos().Y();
-                    if (lTranslatePos > 0) // note windows overlaps the next one
+                    if (lTranslatePos > 0) 
                     {
-                        // we are not done yet, loop at least once more
+                        
                         bDone = false;
-                        // if there is space left, move the current note up
-                        // it could also happen that there is no space left for the first note due to a scrollbar
-                        // then we also jump into, so we move the current one up and the next one down
+                        
+                        
+                        
                         if ( (lSpaceUsed <= (*i)->VirtualPos().Y()) || (i==aVisiblePostItList.begin()))
                         {
-                            // we have space left, so let's move the current one up
+                            
                             if ( ((*i)->VirtualPos().Y()- lTranslatePos - GetSpaceBetween()) > lTopBorder)
                             {
                                 if ((*aNextPostIt)->IsFollow())
@@ -1045,7 +1045,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                         }
                         else
                         {
-                            // no space left, left move the next one down
+                            
                             if ((*aNextPostIt)->IsFollow())
                                 (*aNextPostIt)->TranslateTopPosition(lTranslatePos+ANCHORLINE_WIDTH);
                             else
@@ -1054,7 +1054,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                     }
                     else
                     {
-                        // the first one could overlap the topborder instead of a second note
+                        
                         if (i==aVisiblePostItList.begin())
                         {
                             long lMoveDown = lTopBorder - (*i)->VirtualPos().Y();
@@ -1072,7 +1072,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                 }
                 else
                 {
-                    //(*i) is the last visible item
+                    
                     SwSidebarWin_iterator aPrevPostIt = i;
                     --aPrevPostIt;
                     lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() ) - (*i)->VirtualPos().Y();
@@ -1093,8 +1093,8 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                     }
                     else
                     {
-                        // note does not overlap, but we might be over the lower border
-                        // only do this if there are no scrollbars, otherwise notes are supposed to overlap the border
+                        
+                        
                         if (!bScrollbars && ((*i)->VirtualPos().Y()+ (*i)->VirtualSize().Height() > lBottomBorder) )
                         {
                             bDone = false;
@@ -1103,7 +1103,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                     }
                 }
             }
-            // security check so we don't loop forever
+            
             if (loop>MAX_LOOP_COUNT)
             {
                 OSL_FAIL("PostItMgr::Layout(): We are looping forever");
@@ -1113,7 +1113,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     }
     else
     {
-        // only one left, make sure it is not hidden at the top or bottom
+        
         SwSidebarWin_iterator i = aVisiblePostItList.begin();
         lTranslatePos = lTopBorder - (*i)->VirtualPos().Y();
         if (lTranslatePos>0)
@@ -1145,7 +1145,7 @@ void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
         pSwFmtFld = aIter.Next();
     }
 
-    // if we just added the first one we have to update the view for centering
+    
     if (bEmpty && !mvPostItFlds.empty())
         PrepareView(true);
 }
@@ -1164,13 +1164,13 @@ void SwPostItMgr::RemoveSidebarWin()
         mvPostItFlds.clear();
     }
 
-    // all postits removed, no items should be left in pages
+    
     PreparePageContainer();
 }
 
-// copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFlds as well
-// RemoveItem will clean up the core field and visible postit if necessary
-// we cannot just delete everything as before, as postits could move into change tracking
+
+
+
 void SwPostItMgr::Delete(OUString aAuthor)
 {
     mpWrtShell->StartAllAction();
@@ -1321,7 +1321,7 @@ SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                         return NULL;
                     }
                 }
-                // lets quit, we are back at the beginning
+                
                 if ( (*iNextPostIt)->pPostIt == aPostIt)
                     return NULL;
                 return (*iNextPostIt)->pPostIt;
@@ -1350,7 +1350,7 @@ long SwPostItMgr::GetNextBorder()
                 }
                 else
                 {
-                    //if this is the last item, return the bottom border otherwise the next item
+                    
                     if (aNext == mPages[n]->mList->end())
                         return mpEditWin->LogicToPixel(Point(0,mPages[n]->mPageRect.Bottom())).Y() - GetSpaceBetween();
                     else
@@ -1372,19 +1372,19 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
         {
             if (mShadowState.mpShadowFld)
             {
-                // reset old one if still alive
-                // TODO: does not work properly if mouse and cursor was set
+                
+                
                 sw::annotation::SwAnnotationWin* pOldPostIt =
                                     GetAnnotationWin(mShadowState.mpShadowFld);
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
                     pOldPostIt->SetViewState(VS_NORMAL);
             }
-            //set new one, if it is not currently edited
+            
             sw::annotation::SwAnnotationWin* pNewPostIt = GetAnnotationWin(pFld);
             if (pNewPostIt && pNewPostIt->Shadow() && (pNewPostIt->Shadow()->GetShadowState() != SS_EDIT))
             {
                 pNewPostIt->SetViewState(VS_VIEW);
-                //remember our new field
+                
                 mShadowState.mpShadowFld = pFld;
                 mShadowState.bCursor = false;
                 mShadowState.bMouse = false;
@@ -1405,7 +1405,7 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
                 mShadowState.bMouse = false;
             if (!mShadowState.bCursor && !mShadowState.bMouse)
             {
-                // reset old one if still alive
+                
                 sw::annotation::SwAnnotationWin* pOldPostIt = GetAnnotationWin(mShadowState.mpShadowFld);
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
                 {
@@ -1455,8 +1455,8 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
                     : Rectangle( Point(aPageFrm.Right()+GetSidebarBorderWidth(),aPageFrm.Top()) , Size(GetSidebarWidth(),aPageFrm.Height()));
             if (aRect.IsInside(aPoint))
             {
-                // we hit the note's sidebar
-                // lets now test for the arrow area
+                
+                
                 if (mPages[nPageNum-1]->bScrollbar)
                     return ScrollbarHit(nPageNum,aPoint);
                 else
@@ -1487,7 +1487,7 @@ Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
 }
 
 
-//IMPORTANT: if you change the rects here, also change SwPageFrm::PaintNotesSidebar()
+
 bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
@@ -1526,7 +1526,7 @@ void SwPostItMgr::CorrectPositions()
    if ( mbWaitingForCalcRects || mbLayouting || mvPostItFlds.empty() )
        return;
 
-   // find first valid note
+   
    SwSidebarWin *pFirstPostIt = 0;
    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
    {
@@ -1535,12 +1535,12 @@ void SwPostItMgr::CorrectPositions()
            break;
    }
 
-   //if we have not found a valid note, forget about it and leave
+   
    if (!pFirstPostIt)
        return;
 
-    // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
-    // check, if anchor overlay object exists.
+    
+    
     const long aAnchorX = pFirstPostIt->Anchor()
                           ? mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
                           : 0;
@@ -1555,7 +1555,7 @@ void SwPostItMgr::CorrectPositions()
         {
             for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i != mPages[n]->mList->end(); ++i)
             {
-                // check, if anchor overlay object exists.
+                
                 if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
                 {
                     aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
@@ -1572,7 +1572,7 @@ void SwPostItMgr::CorrectPositions()
 
 bool SwPostItMgr::ShowNotes() const
 {
-    // we only want to see notes if Options - Writer - View - Notes is ticked
+    
     return mpWrtShell->GetViewOptions()->IsPostIts();
 }
 
@@ -1652,9 +1652,9 @@ void SwPostItMgr::SetActiveSidebarWin( SwSidebarWin* p)
 {
     if ( p != mpActivePostIt )
     {
-        // we need the temp variable so we can set mpActivePostIt before we call DeactivatePostIt
-        // therefore we get a new layout in DOCCHANGED when switching from postit to document,
-        // otherwise, GetActivePostIt() would still hold our old postit
+        
+        
+        
         SwSidebarWin* pActive = mpActivePostIt;
         mpActivePostIt = p;
         if (pActive)
@@ -1683,7 +1683,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
         return 0;
     }
 
-    // do not change order, even if it would seem so in the first place, we need the calcrects always
+    
     if (CalcRects() || mbLayout)
     {
         mbLayout = false;
@@ -1801,7 +1801,7 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFmtFld &pFld, const ::com::sun::st
 
 void SwPostItMgr::AssureStdModeAtShell()
 {
-        // deselect any drawing or frame and leave editing mode
+        
           SdrView* pSdrView = mpWrtShell->GetDrawView();
         if ( pSdrView && pSdrView->IsTextEdit() )
         {

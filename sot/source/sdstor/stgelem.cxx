@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@ static const sal_uInt16 nMaxLegalStr = 31;
 
 static const sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1 };
 
-////////////////////////////// struct ClsId  /////////////////////////////
+
 
 SvStream& ReadClsId( SvStream& r, ClsId& rId )
 {
@@ -67,7 +67,7 @@ SvStream& WriteClsId( SvStream& r, const ClsId& rId )
          .WriteUChar( (sal_uInt8) rId.n11 );
 }
 
-///////////////////////////// class StgHeader ////////////////////////////
+
 
 StgHeader::StgHeader()
 : nVersion( 0 )
@@ -96,8 +96,8 @@ void StgHeader::Init()
     memset( &aClsId, 0, sizeof( ClsId ) );
     nVersion      = 0x0003003B;
     nByteOrder    = 0xFFFE;
-    nPageSize     = 9;          // 512 bytes
-    nDataPageSize = 6;          // 64 bytes
+    nPageSize     = 9;          
+    nDataPageSize = 6;          
     bDirty = 0;
     memset( cReserved, 0, sizeof( cReserved ) );
     nFATSize = 0;
@@ -131,20 +131,20 @@ bool StgHeader::Load( SvStream& r )
 {
     r.Seek( 0L );
     r.Read( cSignature, 8 );
-    ReadClsId( r, aClsId );         // 08 Class ID
-    r.ReadInt32( nVersion )                   // 1A version number
-     .ReadUInt16( nByteOrder )                 // 1C Unicode byte order indicator
-     .ReadInt16( nPageSize )                  // 1E 1 << nPageSize = block size
-     .ReadInt16( nDataPageSize );             // 20 1 << this size == data block size
+    ReadClsId( r, aClsId );         
+    r.ReadInt32( nVersion )                   
+     .ReadUInt16( nByteOrder )                 
+     .ReadInt16( nPageSize )                  
+     .ReadInt16( nDataPageSize );             
     r.SeekRel( 10 );
-    r.ReadInt32( nFATSize )                   // 2C total number of FAT pages
-     .ReadInt32( nTOCstrm )                   // 30 starting page for the TOC stream
-     .ReadInt32( nReserved )                  // 34
-     .ReadInt32( nThreshold )                 // 38 minimum file size for big data
-     .ReadInt32( nDataFAT )                   // 3C page # of 1st data FAT block
-     .ReadInt32( nDataFATSize )               // 40 # of data FATpages
-     .ReadInt32( nMasterChain )               // 44 chain to the next master block
-     .ReadInt32( nMaster );                   // 48 # of additional master blocks
+    r.ReadInt32( nFATSize )                   
+     .ReadInt32( nTOCstrm )                   
+     .ReadInt32( nReserved )                  
+     .ReadInt32( nThreshold )                 
+     .ReadInt32( nDataFAT )                   
+     .ReadInt32( nDataFATSize )               
+     .ReadInt32( nMasterChain )               
+     .ReadInt32( nMaster );                   
     for( short i = 0; i < cFATPagesInHeader; i++ )
         r.ReadInt32( nMasterFAT[ i ] );
 
@@ -159,20 +159,20 @@ bool StgHeader::Store( StgIo& rIo )
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
     r.Write( cSignature, 8 );
-    WriteClsId( r, aClsId );                   // 08 Class ID
-    r.WriteInt32( nVersion )                   // 1A version number
-     .WriteUInt16( nByteOrder )                 // 1C Unicode byte order indicator
-     .WriteInt16( nPageSize )                  // 1E 1 << nPageSize = block size
-     .WriteInt16( nDataPageSize )              // 20 1 << this size == data block size
+    WriteClsId( r, aClsId );                   
+    r.WriteInt32( nVersion )                   
+     .WriteUInt16( nByteOrder )                 
+     .WriteInt16( nPageSize )                  
+     .WriteInt16( nDataPageSize )              
      .WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt16( (sal_Int16) 0 )
-     .WriteInt32( nFATSize )                   // 2C total number of FAT pages
-     .WriteInt32( nTOCstrm )                   // 30 starting page for the TOC stream
-     .WriteInt32( nReserved )                  // 34
-     .WriteInt32( nThreshold )                 // 38 minimum file size for big data
-     .WriteInt32( nDataFAT )                   // 3C page # of 1st data FAT block
-     .WriteInt32( nDataFATSize )               // 40 # of data FAT pages
-     .WriteInt32( nMasterChain )               // 44 chain to the next master block
-     .WriteInt32( nMaster );                   // 48 # of additional master blocks
+     .WriteInt32( nFATSize )                   
+     .WriteInt32( nTOCstrm )                   
+     .WriteInt32( nReserved )                  
+     .WriteInt32( nThreshold )                 
+     .WriteInt32( nDataFAT )                   
+     .WriteInt32( nDataFATSize )               
+     .WriteInt32( nMasterChain )               
+     .WriteInt32( nMaster );                   
     for( short i = 0; i < cFATPagesInHeader; i++ )
         r.WriteInt32( nMasterFAT[ i ] );
     bDirty = !rIo.Good();
@@ -192,7 +192,7 @@ static bool isKnownSpecial(sal_Int32 nLocation)
             nLocation == STG_MASTER);
 }
 
-// Perform thorough checks also on unknown variables
+
 bool StgHeader::Check()
 {
     return  memcmp( cSignature, cStgSignature, 8 ) == 0
@@ -256,7 +256,7 @@ void StgHeader::SetMasters( sal_Int32 n )
     if( n != nMaster ) bDirty = sal_True, nMaster = n;
 }
 
-///////////////////////////// class StgEntry /////////////////////////////
+
 
 bool StgEntry::Init()
 {
@@ -284,14 +284,14 @@ bool StgEntry::Init()
 
 static OUString ToUpperUnicode( const OUString & rStr )
 {
-    // I don't know the locale, so en_US is hopefully fine
+    
     static CharClass aCC( LanguageTag( com::sun::star::lang::Locale( "en", "US", "" )) );
     return aCC.uppercase( rStr );
 }
 
 bool StgEntry::SetName( const OUString& rName )
 {
-    // I don't know the locale, so en_US is hopefully fine
+    
     aName = ToUpperUnicode( rName );
     if(aName.getLength() > nMaxLegalStr)
     {
@@ -348,7 +348,7 @@ void StgEntry::GetName( OUString& rName ) const
     rName = OUString(nName, n);
 }
 
-// Compare two entries. Do this case-insensitive.
+
 
 short StgEntry::Compare( const StgEntry& r ) const
 {
@@ -359,8 +359,8 @@ short StgEntry::Compare( const StgEntry& r ) const
     return (short)nRes;
 }
 
-// These load/store operations are a bit more complicated,
-// since they have to copy their contents into a packed structure.
+
+
 
 bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 {
@@ -369,22 +369,22 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 
     SvMemoryStream r( (sal_Char*) pFrom, nBufSize, STREAM_READ );
     for( short i = 0; i < 32; i++ )
-        r.ReadUInt16( nName[ i ] );            // 00 name as WCHAR
-    r.ReadUInt16( nNameLen )                   // 40 size of name in bytes including 00H
-     .ReadUChar( cType )                      // 42 entry type
-     .ReadUChar( cFlags )                     // 43 0 or 1 (tree balance?)
-     .ReadInt32( nLeft )                      // 44 left node entry
-     .ReadInt32( nRight )                     // 48 right node entry
-     .ReadInt32( nChild );                    // 4C 1st child entry if storage
-    ReadClsId( r, aClsId );         // 50 class ID (optional)
-    r.ReadInt32( nFlags )                     // 60 state flags(?)
-     .ReadInt32( nMtime[ 0 ] )                // 64 modification time
-     .ReadInt32( nMtime[ 1 ] )                // 64 modification time
-     .ReadInt32( nAtime[ 0 ] )                // 6C creation and access time
-     .ReadInt32( nAtime[ 1 ] )                // 6C creation and access time
-     .ReadInt32( nPage1 )                     // 74 starting block (either direct or translated)
-     .ReadInt32( nSize )                      // 78 file size
-     .ReadInt32( nUnknown );                  // 7C unknown
+        r.ReadUInt16( nName[ i ] );            
+    r.ReadUInt16( nNameLen )                   
+     .ReadUChar( cType )                      
+     .ReadUChar( cFlags )                     
+     .ReadInt32( nLeft )                      
+     .ReadInt32( nRight )                     
+     .ReadInt32( nChild );                    
+    ReadClsId( r, aClsId );         
+    r.ReadInt32( nFlags )                     
+     .ReadInt32( nMtime[ 0 ] )                
+     .ReadInt32( nMtime[ 1 ] )                
+     .ReadInt32( nAtime[ 0 ] )                
+     .ReadInt32( nAtime[ 1 ] )                
+     .ReadInt32( nPage1 )                     
+     .ReadInt32( nSize )                      
+     .ReadInt32( nUnknown );                  
 
     sal_uInt16 n = nNameLen;
     if( n )
@@ -395,13 +395,13 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 
     if ((cType != STG_STORAGE) && ((nSize < 0) || (nPage1 < 0 && !isKnownSpecial(nPage1))))
     {
-        // the size makes no sense for the substorage
-        // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
+        
+        
         return false;
     }
 
     aName = OUString(nName , n);
-    // I don't know the locale, so en_US is hopefully fine
+    
     aName = ToUpperUnicode( aName );
     if(aName.getLength() > nMaxLegalStr)
     {
@@ -415,22 +415,22 @@ void StgEntry::Store( void* pTo )
 {
     SvMemoryStream r( (sal_Char *)pTo, 128, STREAM_WRITE );
     for( short i = 0; i < 32; i++ )
-        r.WriteUInt16( nName[ i ] );            // 00 name as WCHAR
-    r.WriteUInt16( nNameLen )                   // 40 size of name in bytes including 00H
-     .WriteUChar( cType )                      // 42 entry type
-     .WriteUChar( cFlags )                     // 43 0 or 1 (tree balance?)
-     .WriteInt32( nLeft )                      // 44 left node entry
-     .WriteInt32( nRight )                     // 48 right node entry
-     .WriteInt32( nChild );                    // 4C 1st child entry if storage;
-    WriteClsId( r, aClsId );                   // 50 class ID (optional)
-    r.WriteInt32( nFlags )                     // 60 state flags(?)
-     .WriteInt32( nMtime[ 0 ] )                // 64 modification time
-     .WriteInt32( nMtime[ 1 ] )                // 64 modification time
-     .WriteInt32( nAtime[ 0 ] )                // 6C creation and access time
-     .WriteInt32( nAtime[ 1 ] )                // 6C creation and access time
-     .WriteInt32( nPage1 )                     // 74 starting block (either direct or translated)
-     .WriteInt32( nSize )                      // 78 file size
-     .WriteInt32( nUnknown );                  // 7C unknown
+        r.WriteUInt16( nName[ i ] );            
+    r.WriteUInt16( nNameLen )                   
+     .WriteUChar( cType )                      
+     .WriteUChar( cFlags )                     
+     .WriteInt32( nLeft )                      
+     .WriteInt32( nRight )                     
+     .WriteInt32( nChild );                    
+    WriteClsId( r, aClsId );                   
+    r.WriteInt32( nFlags )                     
+     .WriteInt32( nMtime[ 0 ] )                
+     .WriteInt32( nMtime[ 1 ] )                
+     .WriteInt32( nAtime[ 0 ] )                
+     .WriteInt32( nAtime[ 1 ] )                
+     .WriteInt32( nPage1 )                     
+     .WriteInt32( nSize )                      
+     .WriteInt32( nUnknown );                  
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

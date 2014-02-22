@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**  test coder preface:
@@ -63,11 +63,11 @@ using ::rtl::OString;
 #define IP_PORT_HTTP1  80
 #define IP_PORT_HTTP2  8080
 
-#define IP_PORT_MYPORT  8881    //8888
-#define IP_PORT_MYPORT2  8883   //8890
-#define IP_PORT_MYPORT3  8884   //8891
+#define IP_PORT_MYPORT  8881    
+#define IP_PORT_MYPORT2  8883   
+#define IP_PORT_MYPORT3  8884   
 #define IP_PORT_INVAL  99999
-#define IP_PORT_MYPORT4  8885   //8892
+#define IP_PORT_MYPORT4  8885   
 #define IP_PORT_NETBIOS_DGM  138
 
 
@@ -88,13 +88,13 @@ namespace osl_SocketAddr
 
         void ctors_none()
         {
-            /// SocketAddr constructor.
+            
             ::osl::SocketAddr saSocketAddr;
 
-            // oslSocketResult aResult;
-            // rtl::OUString suHost = saSocketAddr.getLocalHostname( &aResult);
+            
+            
 
-            // rtl::OUString suHost2 = getThisHostname();
+            
 
             CPPUNIT_ASSERT_MESSAGE("test for none parameter constructor function: check if the socket address was created successfully",
                                     sal_True == saSocketAddr.is( ) );
@@ -102,7 +102,7 @@ namespace osl_SocketAddr
 
         void ctors_none_000()
         {
-            /// SocketAddr constructor.
+            
             ::osl::SocketAddr saSocketAddr;
 
             oslSocketResult aResult;
@@ -122,7 +122,7 @@ namespace osl_SocketAddr
 
         void ctors_copy()
         {
-            /// SocketAddr copy constructor.
+            
             ::osl::SocketAddr saSocketAddr( rtl::OUString("localhost"), IP_PORT_HTTP1 );
             ::osl::SocketAddr saCopySocketAddr( saSocketAddr );
 
@@ -146,7 +146,7 @@ namespace osl_SocketAddr
                                    pSocketAddr->getPort( ) == IP_PORT_HTTP2 );
 
             delete pSocketAddrCopy;
-            // LLA: don't do this also:           delete pSocketAddr;
+            
         }
 
         void ctors_copy_no_002()
@@ -183,7 +183,7 @@ namespace osl_SocketAddr
 
         void ctors_hostname_port_001()
         {
-            /// tcpip-specif constructor.
+            
             ::osl::SocketAddr saSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_FTP );
             printUString( saSocketAddr.getHostname( ), "ctors_hostname_port_001:getHostname");
 
@@ -193,10 +193,10 @@ namespace osl_SocketAddr
                                   );
         }
 
-        //same as is_002
+        
         void ctors_hostname_port_002()
         {
-            /// tcpip-specif constructor.
+            
             ::osl::SocketAddr saSocketAddr( rtl::OUString("123.345.67.89"), IP_PORT_MYPORT2 );
 
             CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specific constructor function: using an invalid IP address, the socketaddr ctors should fail", sal_False == saSocketAddr.is( ));
@@ -213,7 +213,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( ctors_hostname_port_002 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class ctors
+    }; 
 
 
     /** testing the method:
@@ -230,7 +230,7 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE("test for is() function: create an unknown type socket, it should be True when call is.",
                                     sal_True == saSocketAddr.is( ) );
         }
-        // refer to setPort_003()
+        
         void is_002()
         {
             ::osl::SocketAddr saSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_INVAL );
@@ -253,7 +253,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( is_003 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class is
+    }; 
 
 
     /** testing the method:
@@ -289,8 +289,8 @@ namespace osl_SocketAddr
             rtl::OUString suResult = saSocketAddr.getHostname( 0 );
             rtl::OUString suError = outputError(suResult, rtl::OUString("sceri.PRC.Sun.COM"), "test for getHostname(0)");
             sal_Bool bOK = compareUString( suResult, rtl::OUString("sceri.PRC.Sun.COM") );
-            // search the returned hostname in /etc/hosts, if find, and the IP in the row is same as IP
-            // in the Addr, it's right also.
+            
+            
             if ( bOK == sal_False)
             {
                 rtl::OString aString = ::rtl::OUStringToOString( suResult, RTL_TEXTENCODING_ASCII_US );
@@ -300,8 +300,8 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK);
         }
 
-// LLA: now we have to control, if this behaviour is right.
-// LLA: this function does not work in company (Linux, Windows) but at home
+
+
         void getHostname_002()
         {
             rtl::OUString suHostname ("cn-1.germany.sun.com");
@@ -336,7 +336,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( getHostname_002 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class getHostname
+    }; 
 
 
     /** testing the method:
@@ -358,13 +358,13 @@ namespace osl_SocketAddr
         {
             ::osl::SocketAddr saSocketAddr( rtl::OUString("129.158.217.202"), IP_PORT_INVAL );
 
-            //t_print("#getPort_002: Port number is %d \n", saSocketAddr.getPort( ));
+            
 
             CPPUNIT_ASSERT_MESSAGE( "test for getPort( ) function: give an invalid port to a SocketAddr, get the port to see if it can detect. it did not pass in (W32).",
                                     saSocketAddr.getPort( )>=1 && saSocketAddr.getPort( ) <= 65535 );
         }
-        //two cases will return OSL_INVALID_PORT: 1. not valid SocketAddr
-        //2. SocketAddr family is not osl_Socket_FamilyInet, but case 2 could not be constructed
+        
+        
         void getPort_003()
         {
             rtl::OUString suInvalidIP ("123.345.67.89");
@@ -380,7 +380,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( getPort_003 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class getPort
+    }; 
 
 
     /** testing the method:
@@ -407,8 +407,8 @@ namespace osl_SocketAddr
             As many of you programmers will know, when you specify the source port of 0 when you connect to a host,
             the OS automatically reassigns the port number to high numbered ephemeral port. The same happens if you
             try to bind a listening socket to port 0.
-            http://www.securiteam.com/securityreviews/5XP0Q2AAKS.html
-            another: http://www.muq.org/~cynbe/muq/mufref_564.html
+            http:
+            another: http:
         */
         void setPort_002()
         {
@@ -417,12 +417,12 @@ namespace osl_SocketAddr
 
             oslSocket sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
             ::osl::Socket sSocket(sHandle);
-            sSocket.setOption( osl_Socket_OptionReuseAddr, 1 );//sal_True);
+            sSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
             sal_Bool bOK1 = sSocket.bind( saSocketAddr );
             CPPUNIT_ASSERT_MESSAGE( "bind SocketAddr failed", bOK1 == sal_True );
 
             sal_Int32 newPort = sSocket.getLocalPort();
-            //t_print("#new port is %d\n", newPort );
+            
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort() function: port number should be in 1 ~ 65535, set port 0, it should be converted to a port number between 1024~65535.",
                                     ( 1024 <= newPort ) && ( 65535 >= newPort ) && ( bOK == sal_True ) );
@@ -433,8 +433,8 @@ namespace osl_SocketAddr
         {
             ::osl::SocketAddr saSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_FTP);
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_INVAL );
-            //on Linux, getPort return 34463
-            //t_print("#Port number is %d \n", saSocketAddr.getPort( ));
+            
+            
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort( ) function: set an address with invalid port. it should return error or convert it to a valid port.",
                                      ( ( 1 <= saSocketAddr.getPort( ) ) && ( 65535 >= saSocketAddr.getPort( ) ) &&( bOK == sal_True ) ) ||
@@ -459,7 +459,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( setPort_004 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class setPort
+    }; 
 
 
     /**  tester comment:
@@ -486,8 +486,8 @@ namespace osl_SocketAddr
             ::rtl::ByteSequence bsSocketAddr = saSocketAddr.getAddr( 0 );
             sal_Bool bOK = sal_False;
 
-            // if ( ( bsSocketAddr[0] == 127 ) && ( bsSocketAddr[1] == 0 ) && ( bsSocketAddr[2] == 0 ) && ( bsSocketAddr[3] == 1 ) )
-            //  bOK = sal_True;
+            
+            
             bOK = ifIpv4is( bsSocketAddr, 127, 0, 0, 1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setAddr() function: construct Addr with  \"129.158.217.202\", set it to \"127.0.0.1\",  and check the correctness ",
@@ -499,7 +499,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( setAddr_001 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class setAddr
+    }; 
 
 
     /** testing the method:
@@ -517,8 +517,8 @@ namespace osl_SocketAddr
 
             sal_Bool bOK = sal_False;
 
-            //if ( ( osl_Socket_Ok == SocketResult ) &&( bsSocketAddr[0] == 127 ) && ( bsSocketAddr[1] == 0 ) &&( bsSocketAddr[2] == 0 ) && ( bsSocketAddr[3] == 1 ) )
-            //  bOK = sal_True;
+            
+            
             bOK = ifIpv4is( bsSocketAddr, 127, 0, 0, 1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getAddr() function: construct a socketaddr with IP assigned, get the address to check correctness.Caught unknown exception on (Win32)",
@@ -529,7 +529,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( getAddr_001 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class getAddr
+    }; 
 
 
     /** testing the methods:
@@ -537,7 +537,7 @@ namespace osl_SocketAddr
         inline SocketAddr & SAL_CALL operator= (const SocketAddr& Addr);
         inline SocketAddr & SAL_CALL assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
         inline sal_Bool SAL_CALL operator== (oslSocketAddr Addr) const;
-        inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;    /// not implemented.
+        inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;    
     */
 
     class operator_equal : public CppUnit::TestFixture
@@ -552,7 +552,7 @@ namespace osl_SocketAddr
             sal_Bool bOK = sal_False;
             ::rtl::ByteSequence bsSocketAddr = saSocketAddrEqual.getAddr( 0 );
 
-            // if ( ( IP_PORT_TELNET == saSocketAddrEqual.getPort( ) ) &&( bsSocketAddr[0] == 127 ) && ( bsSocketAddr[1] == 0 ) &&( bsSocketAddr[2] == 0 ) && ( bsSocketAddr[3] == 1 ) )
+            
             if ( ( IP_PORT_TELNET == saSocketAddrEqual.getPort( ) ) &&  ( ifIpv4is( bsSocketAddr, 127, 0, 0, 1 ) == sal_True ) )
                  bOK = sal_True;
 
@@ -585,7 +585,7 @@ namespace osl_SocketAddr
             sal_Bool bOK = sal_False;
             ::rtl::ByteSequence bsSocketAddr = saSocketAddrEqual.getAddr( 0 );
 
-            // if ( ( IP_PORT_TELNET == saSocketAddrEqual.getPort( ) ) &&( bsSocketAddr[0] == 127 ) && ( bsSocketAddr[1] == 0 ) &&( bsSocketAddr[2] == 0 ) && ( bsSocketAddr[3] == 1 ) )
+            
             if ( ( IP_PORT_TELNET == saSocketAddrEqual.getPort( ) ) && ifIpv4is( bsSocketAddr, 127, 0, 0, 1 ) == sal_True )
                  bOK = sal_True;
 
@@ -611,7 +611,7 @@ namespace osl_SocketAddr
                    CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
                    ::osl::SocketAddr* pSocketAddrAssign = new ::osl::SocketAddr( rtl::OUString("129.158.217.202"), IP_PORT_FTP );
                    oslSocketAddr poslSocketAddr = pSocketAddr->getHandle( );
-                   //if( m_handle ) osl_destroySocketAddr( m_handle ); so pSocketAddrAssign had been destroyed and then point to pSocketAddr
+                   
                    pSocketAddrAssign->assign(poslSocketAddr, SAL_NO_COPY);
 
                    CPPUNIT_ASSERT_MESSAGE("test for SocketAddr no copy constructor function: do a no copy constructor on a given SocketAddr instance, modify the new instance's port, check the original one.",
@@ -648,7 +648,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( operator_is_equal_002 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class operator_equal
+    }; 
 
 
 
@@ -679,7 +679,7 @@ namespace osl_SocketAddr
             oslSocketAddr poslSocketAddr = saSocketAddr.getHandle( );
 
             sal_Bool bOK = ( saSocketAddr == poslSocketAddr );
-            //t_print("getSocketAddrHandle_002\n");
+            
             CPPUNIT_ASSERT_MESSAGE( "test for getHandle() function: use getHandle() function as an intermediate way to create identical address.",
                                       sal_True == bOK );
         }
@@ -689,7 +689,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( getSocketAddrHandle_002 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class getSocketAddrHandle
+    }; 
 
 
     /** testing the method:
@@ -705,7 +705,7 @@ namespace osl_SocketAddr
 
         void getLocalHostname_000()
             {
-                // _osl_getFullQualifiedDomainName( );
+                
                 oslSocketResult aResult = osl_Socket_Error;
                 rtl::OUString suHostname = osl::SocketAddr::getLocalHostname(&aResult);
                 CPPUNIT_ASSERT_MESSAGE("getLocalHostname failed", aResult == osl_Socket_Ok);
@@ -714,10 +714,10 @@ namespace osl_SocketAddr
         void getLocalHostname_001()
         {
             oslSocketResult *pResult = NULL;
-            //printSocketResult(*pResult);
+            
             ::rtl::OUString suResult = ::osl::SocketAddr::getLocalHostname( pResult );
 
-            // LLA: IMHO localhost, or hostname by itself should be ok.
+            
             rtl::OUString suThisHost = getThisHostname( );
             bool bOk = false;
             if ( suThisHost == "localhost" )
@@ -743,7 +743,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( getLocalHostname_001 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class getLocalHostname
+    }; 
 
 
     /** testing the method:
@@ -771,7 +771,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( resolveHostname_001 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class resolveHostname
+    }; 
 
 
     /** testing the method:
@@ -802,7 +802,7 @@ namespace osl_SocketAddr
 
         void gettheServicePort_003()
         {
-        //Solaris has no service called "https", please see /etc/services
+        
             rtl::OUString suServiceNETBIOS ("netbios-dgm");
             rtl::OUString suProtocolUDP    ("udp");
             CPPUNIT_ASSERT_MESSAGE( "test for getServicePort() function: try to get netbios-ssn service port on UDP protocol.",
@@ -823,7 +823,7 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( gettheServicePort_004 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class gettheServicePort
+    }; 
 
     /** testing the method:
 
@@ -848,15 +848,15 @@ namespace osl_SocketAddr
         CPPUNIT_TEST( getFamilyOfSocketAddr_001 );
         CPPUNIT_TEST_SUITE_END( );
 
-    }; // class getFamilyOfSocketAddr
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::is);
-//TODO: enable Test with valid host names
-//CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getHostname);
+
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getPort);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::setPort);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::setAddr);
@@ -868,12 +868,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::resolveHostname);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::gettheServicePort);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr);
 
-} // namespace osl_SocketAddr
+} 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

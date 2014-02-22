@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VPolarTransformation.hxx"
@@ -40,7 +40,7 @@ VPolarTransformation::~VPolarTransformation()
 {
 }
 
-// ____ XTransformation ____
+
 Sequence< double > SAL_CALL VPolarTransformation::transform(
                         const Sequence< double >& rSourceValues )
     throw (RuntimeException,
@@ -60,7 +60,7 @@ Sequence< double > SAL_CALL VPolarTransformation::transform(
     double fY=fRadius*sin(fAnglePi);
     double fZ=rSourceValues[2];
 
-    //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
+    
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
     return B3DPointToSequence(aRet);
@@ -78,6 +78,6 @@ sal_Int32 SAL_CALL VPolarTransformation::getTargetDimension()
     return 3;
 }
 
-}  // namespace chart
+}  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/stdctrl.hxx>
@@ -29,9 +29,9 @@
 
 #include "foptmgr.hxx"
 
-//----------------------------------------------------------------------------
-// ScFilterOptionsMgr (.ui's option helper)
-//----------------------------------------------------------------------------
+
+
+
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 ScViewData*         ptrViewData,
@@ -69,7 +69,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
@@ -81,11 +81,11 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterOptionsMgr::Init()
 {
-//moggi:TODO
+
     OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
 
     pLbCopyArea->SetSelectHdl  ( LINK( this, ScFilterOptionsMgr, LbAreaSelHdl ) );
@@ -113,7 +113,7 @@ void ScFilterOptionsMgr::Init()
 
         theAreaStr = theCurArea.Format(SCR_ABS_3D, pDoc, eConv);
 
-        // Zielbereichsliste fuellen
+        
 
         pLbCopyArea->Clear();
         pLbCopyArea->InsertEntry( rStrUndefined, 0 );
@@ -129,7 +129,7 @@ void ScFilterOptionsMgr::Init()
             pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
-        pBtnDestPers->Check( true );         // beim Aufruf immer an
+        pBtnDestPers->Check( true );         
         pLbCopyArea->SelectEntryPos( 0 );
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 
@@ -171,8 +171,8 @@ void ScFilterOptionsMgr::Init()
             pFtDbArea->SetText( OUString() );
         }
 
-        //------------------------------------------------------
-        // Kopierposition:
+        
+        
 
         if ( !rQueryData.bInplace )
         {
@@ -204,7 +204,7 @@ void ScFilterOptionsMgr::Init()
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
@@ -219,10 +219,10 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
     return ( SCA_VALID == (nResult & SCA_VALID) );
 }
 
-//----------------------------------------------------------------------------
-// Handler:
 
-//----------------------------------------------------------------------------
+
+
+
 
 IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 {
@@ -241,7 +241,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 {
@@ -276,7 +276,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 {

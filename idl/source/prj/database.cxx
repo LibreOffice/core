@@ -50,11 +50,11 @@ SvIdlDataBase::~SvIdlDataBase()
 SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 {
     if( aTypeList.empty() )
-    { // fill initially
+    { 
         aTypeList.push_back( new SvMetaTypeString() );
         aTypeList.push_back( new SvMetaTypevoid() );
 
-        // MI: IDispatch::Invoke can not unsigned
+        
         ADD_TYPE( UINT16,    "long", 'h', "unsigned short", "Long", "&" );
         ADD_TYPE( INT16,     "short", 'h', "short", "Integer", "%" );
         ADD_TYPE( UINT32,    "long", 'l', "unsigned long", "Long", "&" );
@@ -67,7 +67,7 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
         ADD_TYPE( double,    "double", 'F', "double", "Double", "#" );
         ADD_TYPE( SbxObject, "VARIANT", 'o', "C_Object", "Object", "" );
 
-        // Attention! When adding types all binary data bases get incompatible
+        
 
     }
     return aTypeList;
@@ -232,7 +232,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     else
                     {
                         OString aStr("unexpected token after define");
-                        // set error
+                        
                         SetError( aStr, pTok );
                         WriteError( aTokStm );
                         return sal_False;
@@ -264,7 +264,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                                 OStringBuffer aStr("unknown operator '");
                                 aStr.append(pTok->GetChar());
                                 aStr.append("'in define");
-                                // set error
+                                
                                 SetError( aStr.makeStringAndClear(), pTok );
                                 WriteError( aTokStm );
                                 return sal_False;
@@ -272,8 +272,8 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                             if( pTok->GetChar() != '+'
                               && pTok->GetChar() != '('
                               && pTok->GetChar() != ')' )
-                                // only + is allowed, parentheses are immaterial
-                                // because + is commutative
+                                
+                                
                                 break;
                         }
                         else if( pTok->IsInteger() )
@@ -312,7 +312,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         if( pTok->IsEof() )
                         {
                             OString aStr("unexpected eof in #include");
-                            // set error
+                            
                             SetError(aStr, pTok);
                             WriteError( aTokStm );
                             return sal_False;
@@ -361,14 +361,14 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
     sal_Bool bOut   = sal_False;
     int nCall0  = CALL_VALUE;
     int nCall1  = CALL_VALUE;
-    sal_Bool bSet   = sal_False; // any attribute set
+    sal_Bool bSet   = sal_False; 
 
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->HasHash() )
     {
-        sal_uInt32 nBeginPos = 0; // can not happen with Tell
+        sal_uInt32 nBeginPos = 0; 
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
@@ -431,7 +431,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
             }
 
             if( !bSet )
-                // is exactly this type
+                
                 return pType;
 
             DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
@@ -464,7 +464,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
 
     if( !pType )
     {
-        // otherwise SlotId?
+        
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsIdentifier() )
         {
@@ -536,19 +536,19 @@ void SvIdlDataBase::WriteError( const OString& rErrWrn,
                                 const OString& rErrorText,
                                 sal_uLong nRow, sal_uLong nColumn ) const
 {
-    // error treatment
+    
     fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",
              rFileName.getStr(), rErrWrn.getStr(), nRow, nColumn );
 
     if( !rErrorText.isEmpty() )
-    { // error set
+    { 
         fprintf( stderr, "\t%s\n", rErrorText.getStr() );
     }
 }
 
 void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
-    // error treatment
+    
     OUString aFileName( rInStm.GetFileName() );
     OStringBuffer aErrorText;
     sal_uLong   nRow = 0, nColumn = 0;
@@ -556,14 +556,14 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     rInStm.SeekEnd();
     SvToken *pTok = rInStm.GetToken();
 
-    // error position
+    
     nRow    = pTok->GetLine();
     nColumn = pTok->GetColumn();
 
     if( aError.IsError() )
-    { // error set
-        // search error token
-        // error text
+    { 
+        
+        
         if( !aError.GetText().isEmpty() )
         {
             aErrorText.append("may be <");
@@ -579,14 +579,14 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
             pTok = rInStm.GetToken_PrevAll();
         }
 
-        // error position
+        
         aErrorText.append("> at ( ");
         aErrorText.append(static_cast<sal_Int64>(aError.nLine));
         aErrorText.append(", ");
         aErrorText.append(static_cast<sal_Int64>(aError.nColumn));
         aErrorText.append(" )");
 
-        // reset error
+        
         aError = SvIdlError();
     }
 
@@ -597,7 +597,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     if( !pTok )
         return;
 
-    // look for identifier close by
+    
     if( !pTok->IsIdentifier() )
     {
         rInStm.GetToken_PrevAll();
@@ -617,15 +617,15 @@ SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 
 sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported, const OUString & rPath )
 {
-    aPath = rPath; // only valid for this iteration
+    aPath = rPath; 
     SvToken * pTok;
     sal_Bool bOk = sal_True;
         pTok = rInStm.GetToken();
-        // only one import at the very beginning
+        
         if( pTok->Is( SvHash_import() ) )
         {
             rInStm.GetToken_Next();
-            rInStm.Read( '(' ); // optional
+            rInStm.Read( '(' ); 
             pTok = rInStm.GetToken_Next();
             if( pTok->IsString() )
             {
@@ -665,7 +665,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
                 bOk = sal_False;
         }
 
-    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
+    sal_uInt32 nBeginPos = 0xFFFFFFFF; 
 
     while( bOk && nBeginPos != rInStm.Tell() )
     {
@@ -676,7 +676,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
         if( pTok->IsEmpty() )
             bOk = sal_False;
 
-        // only one import at the very beginning
+        
         if( pTok->Is( SvHash_module() ) )
         {
             SvMetaModuleRef aModule = new SvMetaModule( rInStm.GetFileName(), bImported );
@@ -690,7 +690,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
     }
     if( !bOk || !pTok->IsEof() )
     {
-         // error treatment
+         
          WriteError( rInStm );
          return sal_False;
     }
@@ -729,7 +729,7 @@ sal_Bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     if( rOutStm.GetError() != SVSTREAM_OK )
         return sal_False;
 
-    // reset all tmp variables for writing
+    
     WriteReset();
     SvMemoryStream aTmpStm( 256000, 256000 );
     sal_uLong n;
@@ -838,8 +838,8 @@ struct WriteDep
     }
 };
 
-// write a dummy target for one included file, so the incremental build does
-// not break with "No rule to make target" if the included file is removed
+
+
 struct WriteDummy
 {
     SvFileStream & m_rStream;

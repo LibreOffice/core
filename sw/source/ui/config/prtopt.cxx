@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,24 +38,24 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Content/Graphic",              //  0
-        "Content/Table",                //  1
-        "Content/Control",              //  2
-        "Content/Background",           //  3
-        "Content/PrintBlack",           //  4
-        "Content/Note",                 //  5
-        "Page/Reversed",                //  6
-        "Page/Brochure",                //  7
-        "Page/BrochureRightToLeft",     //  8
-        "Output/SinglePrintJob",        //  9
-        "Output/Fax",                   // 10
-        "Papertray/FromPrinterSetup",   // 11
-        "Content/Drawing",              // 12 not in SW/Web
-        "Page/LeftPage",                // 13 not in SW/Web
-        "Page/RightPage",               // 14 not in SW/Web
-        "EmptyPages",                   // 15 not in SW/Web
-        "Content/PrintPlaceholders",    // 16 not in Sw/Web
-        "Content/PrintHiddenText"       // 17 not in Sw/Web
+        "Content/Graphic",              
+        "Content/Table",                
+        "Content/Control",              
+        "Content/Background",           
+        "Content/PrintBlack",           
+        "Content/Note",                 
+        "Page/Reversed",                
+        "Page/Brochure",                
+        "Page/BrochureRightToLeft",     
+        "Output/SinglePrintJob",        
+        "Output/Fax",                   
+        "Papertray/FromPrinterSetup",   
+        "Content/Drawing",              
+        "Page/LeftPage",                
+        "Page/RightPage",               
+        "EmptyPages",                   
+        "Content/PrintPlaceholders",    
+        "Content/PrintHiddenText"       
     };
     const int nCount = bIsWeb ? 12 : 18;
     Sequence<OUString> aNames(nCount);
@@ -119,9 +119,9 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
         }
     }
 
-    // currently there is just one checkbox for print drawings and print graphics
-    // In the UI. (File/Print dialog and Tools/Options/.../Print)
-    // And since print graphics is the only available in Writer and WrtierWeb ...
+    
+    
+    
 
     bPrintDraw = bPrintGraphic;
 }
@@ -167,9 +167,9 @@ void    SwPrintOptions::Commit()
         }
     }
 
-    // currently there is just one checkbox for print drawings and print graphics
-    // In the UI. (File/Print dialog and Tools/Options/.../Print)
-    // And since print graphics is the only available in Writer and WrtierWeb ...
+    
+    
+    
     bPrintDraw = bPrintGraphic;
 
     PutProperties(aNames, aValues);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/relationshandler.hxx"
@@ -25,13 +25,13 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -44,16 +44,16 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
 {
     sal_Int32 nPathLen = ::std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
     return
-        OUStringBuffer( rFragmentPath.copy( 0, nPathLen ) ).    // file path including slash
-        appendAscii( "_rels/" ).                                // additional '_rels/' path
-        append( rFragmentPath.copy( nPathLen ) ).               // file name after path
-        appendAscii( ".rels" ).                                 // '.rels' suffix
+        OUStringBuffer( rFragmentPath.copy( 0, nPathLen ) ).    
+        appendAscii( "_rels/" ).                                
+        append( rFragmentPath.copy( nPathLen ) ).               
+        appendAscii( ".rels" ).                                 
         makeStringAndClear();
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 RelationsFragment::RelationsFragment( XmlFilterBase& rFilter, RelationsRef xRelations ) :
     FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getFragmentPath() ), xRelations ),
@@ -94,9 +94,9 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
     return xRet;
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

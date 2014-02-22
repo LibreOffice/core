@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/AKeys.hxx"
@@ -48,25 +48,25 @@ sdbcx::ObjectType OKeys::createObject(const OUString& _rName)
 {
     return new OAdoKey(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
-// -------------------------------------------------------------------------
+
 void OKeys::impl_refresh() throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OKeys::createDescriptor()
 {
     return new OAdoKey(isCaseSensitive(),m_pConnection);
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoKey* pKey = NULL;
     if ( !getImplementation( pKey, descriptor ) || pKey == NULL)
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
-    // To pass as column parameter to Key's Apppend method
+    
     OLEVariant vOptional;
     vOptional.setNoArg();
 
@@ -85,24 +85,24 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
 
     ADOKeys* pKeys = m_aCollection;
     if ( FAILED(pKeys->Append(OLEVariant((ADOKey*)aKey),
-                            adKeyPrimary, // must be every time adKeyPrimary
+                            adKeyPrimary, 
                             vOptional)) )
     {
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
-        // just make sure that an SQLExceptionis thrown here
+        
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
     }
 
     return new OAdoKey(isCaseSensitive(),m_pConnection,pKey->getImpl());
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OKeys::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(OLEVariant(_sElementName)))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

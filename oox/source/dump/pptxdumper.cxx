@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/dump/pptxdumper.hxx"
@@ -30,15 +30,15 @@ namespace oox {
 namespace dump {
 namespace pptx {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
-//using namespace ::com::sun::star::lang;
+
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 RootStorageObject::RootStorageObject( const DumperBase& rParent )
 {
@@ -105,7 +105,7 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     }
 }
 
-// ============================================================================
+
 
 #define DUMP_PPTX_CONFIG_ENVVAR "OOO_PPTXDUMPER"
 
@@ -130,11 +130,11 @@ void Dumper::implDump()
     RootStorageObject( *this ).dump();
 }
 
-// ============================================================================
 
-} // namespace pptx
-} // namespace dump
-} // namespace oox
+
+} 
+} 
+} 
 
 #endif
 

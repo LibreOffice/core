@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <config_folders.h>
@@ -37,21 +37,21 @@ using namespace com::sun::star;
 /** Dialog that will allow the user to choose a Persona to use.
 
 So far there is no better possibility than just to paste the URL from
-https://addons.mozilla.org/firefox/themes ...
+https:
 */
 class SelectPersonaDialog : public ModalDialog
 {
 private:
-    Edit *m_pEdit;                          ///< The input line for the Persona URL
+    Edit *m_pEdit;                          
 
 public:
     SelectPersonaDialog( Window *pParent );
 
-    /// Get the URL from the Edit field.
+    
     OUString GetPersonaURL() const;
 
 private:
-    /// Handle the [Visit Firefox Personas] button
+    
     DECL_LINK( VisitPersonas, PushButton* );
 };
 
@@ -63,14 +63,14 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
 
     get( m_pEdit, "persona_url" );
-    m_pEdit->SetPlaceholderText( "https://addons.mozilla.org/firefox/themes/" );
+    m_pEdit->SetPlaceholderText( "https:
 }
 
 OUString SelectPersonaDialog::GetPersonaURL() const
 {
     OUString aText( m_pEdit->GetText() );
 
-    if ( aText.startsWith( "https://addons.mozilla.org/" ) )
+    if ( aText.startsWith( "https:
         return aText;
 
     return OUString();
@@ -80,7 +80,7 @@ IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
     uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
 
-    xSystemShell->execute( "https://addons.mozilla.org/firefox/themes/", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    xSystemShell->execute( "https:
 
     return 0;
 }
@@ -88,7 +88,7 @@ IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet )
 {
-    // persona
+    
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
 
@@ -110,7 +110,7 @@ SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet
 
 sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
 {
-    // persona
+    
     OUString aPersona( "default" );
     if ( m_pNoPersona->IsChecked() )
         aPersona = "no";
@@ -126,7 +126,7 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
         bModified = true;
     }
 
-    // write
+    
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
@@ -136,7 +136,7 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
 
     if ( bModified )
     {
-        // broadcast the change
+        
         DataChangedEvent aDataChanged( DATACHANGED_SETTINGS, NULL, SETTINGS_STYLE );
         Application::NotifyAllWindows( aDataChanged );
     }
@@ -148,7 +148,7 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
 {
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    // persona
+    
     OUString aPersona( "default" );
     if ( xContext.is() )
     {
@@ -177,7 +177,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
                 m_pOwnPersona->Check();
             break;
         }
-        // else TODO msgbox that the URL did not match
+        
     }
 
     return 0;
@@ -191,7 +191,7 @@ IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, RadioButton*, pButton )
     return 0;
 }
 
-/// Find the value on the Persona page, and convert it to a usable form.
+
 static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OString &rIdentifier )
 {
     sal_Int32 where = rBuffer.indexOf( rIdentifier, from );
@@ -210,15 +210,15 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
     return aString.replaceAll( "\\/", "/" );
 }
 
-/// Parse the Persona web page, and find where to get the bitmaps + the color values.
+
 static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUString *pFooterURL, OUString *pTextColor, OUString *pAccentColor )
 {
-    // it is the first attribute that contains "persona="
+    
     sal_Int32 persona = rBuffer.indexOf( "data-browsertheme=\"{" );
     if ( persona < 0 )
         return false;
 
-    // now search inside
+    
     *pHeaderURL = searchValue( rBuffer, persona, "&#34;headerURL&#34;:&#34;" );
     if ( pHeaderURL->isEmpty() )
         return false;
@@ -240,7 +240,7 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
 
 bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
 {
-    // init the input stream
+    
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
     if ( !xFileAccess.is() )
         return false;
@@ -256,9 +256,9 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
     if ( !xStream.is() )
         return false;
 
-    // read the persona specification
-    // NOTE: Parsing for real is an overkill here; and worse - I tried, and
-    // the HTML the site provides is not 100% valid ;-)
+    
+    
+    
     const sal_Int32 BUF_LEN = 8000;
     uno::Sequence< sal_Int8 > buffer( BUF_LEN );
     OStringBuffer aBuffer( 64000 );
@@ -272,13 +272,13 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
 
     xStream->closeInput();
 
-    // get the important bits of info
+    
     OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor;
 
     if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor ) )
         return false;
 
-    // copy the images to the user's gallery
+    
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
     gallery += "/user/gallery/personas/";

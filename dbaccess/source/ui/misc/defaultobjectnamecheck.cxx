@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "defaultobjectnamecheck.hxx"
@@ -63,7 +63,7 @@ namespace dbaui
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    // helper
+    
     namespace
     {
         void lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
@@ -76,14 +76,14 @@ namespace dbaui
 
     }
 
-    // HierarchicalNameCheck_Impl
+    
     struct HierarchicalNameCheck_Impl
     {
         Reference< XHierarchicalNameAccess >    xHierarchicalNames;
         OUString                         sRelativeRoot;
     };
 
-    // HierarchicalNameCheck
+    
     HierarchicalNameCheck::HierarchicalNameCheck( const Reference< XHierarchicalNameAccess >& _rxNames, const OUString& _rRelativeRoot )
         :m_pImpl( new HierarchicalNameCheck_Impl )
     {
@@ -123,14 +123,14 @@ namespace dbaui
         return false;
     }
 
-    // DynamicTableOrQueryNameCheck_Impl
+    
     struct DynamicTableOrQueryNameCheck_Impl
     {
         sal_Int32                   nCommandType;
         Reference< XObjectNames >   xObjectNames;
     };
 
-    // DynamicTableOrQueryNameCheck
+    
     DynamicTableOrQueryNameCheck::DynamicTableOrQueryNameCheck( const Reference< XConnection >& _rxSdbLevelConnection, sal_Int32 _nCommandType )
         :m_pImpl( new DynamicTableOrQueryNameCheck_Impl )
     {
@@ -163,6 +163,6 @@ namespace dbaui
         return false;
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

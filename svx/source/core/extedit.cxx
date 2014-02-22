@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -41,13 +41,13 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
 {
     Graphic newGraphic;
 
-    //import the temp file image stream into the newGraphic
+    
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(pData->m_aFileName, STREAM_READ);
     if(pStream)
     {
         GraphicConverter::Import(*pStream, newGraphic);
 
-        // Now update the Graphic in the shell by re-reading from the newGraphic
+        
         pData->Update( newGraphic );
 
         delete(pStream);
@@ -56,7 +56,7 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
 
 IMPL_LINK (ExternalToolEdit, StartListeningEvent, void*, pEvent)
 {
-    //Start an event listener implemented via VCL timeout
+    
     ExternalToolEdit* pData = ( ExternalToolEdit* )pEvent;
 
     new FileChangedChecker(pData->m_aFileName, ::boost::bind(&HandleCloseEvent, pData));
@@ -68,8 +68,8 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
 {
     ExternalToolEdit* pData = (ExternalToolEdit*) pThreadData;
 
-    // Make an asynchronous call to listen to the event of temporary image file
-    // getting changed
+    
+    
     Application::PostUserEvent( LINK( NULL, ExternalToolEdit, StartListeningEvent ), pThreadData);
 
     Reference<XSystemShellExecute> xSystemShellExecute(
@@ -79,40 +79,40 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
 
 void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 {
-    //Get the graphic from the GraphicObject
+    
     m_pGraphicObject = pGraphicObject;
     const Graphic aGraphic = pGraphicObject->GetGraphic();
 
-    //get the Preferred File Extension for this graphic
+    
     OUString fExtension;
     GraphicHelper::GetPreferredExtension(fExtension, aGraphic);
 
-    //Create the temp File
+    
     OUString aTempFileBase;
     OUString aTempFileName;
 
     oslFileHandle pHandle;
     osl::FileBase::createTempFile(0, &pHandle, &aTempFileBase);
 
-    // Move it to a file name with image extension properly set
+    
     aTempFileName = aTempFileBase + OUString('.') + OUString(fExtension);
     osl::File::move(aTempFileBase, aTempFileName);
 
-    //Write Graphic to the Temp File
+    
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumber(fExtension));
 
     OUString aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
 
-    // Write the Graphic to the file now
+    
     XOutBitmap::WriteGraphic(aGraphic, aTempFileName, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE | XOUTBMP_DONT_EXPAND_FILENAME);
 
-    // There is a possiblity that sPath extension might have been changed if the
-    // provided extension is not writable
+    
+    
     m_aFileName = aTempFileName;
 
-    //Create a thread
+    
 
-    // Create the data that is needed by the thread later
+    
     osl_createThread(ExternalToolEdit::threadWorker, this);
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -44,12 +44,12 @@ public:
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Header);
 
-    // XPropertySet
+    
     CPPUNIT_TEST(testGetPropertySetInfo);
     CPPUNIT_TEST(testGetPropertyValue);
     CPPUNIT_TEST(testSetPropertyValue);
 
-    // XTextContent
+    
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
     CPPUNIT_TEST_SUITE_END();
@@ -81,7 +81,7 @@ void ScEditFieldObj_Header::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
     {
-        // Clear these before the component is destroyed.  This is important!
+        
         mxField.clear();
         mxRightText.clear();
         closeDocument(mxComponent);
@@ -92,16 +92,16 @@ void ScEditFieldObj_Header::tearDown()
 
 uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
 {
-    // Return a field that's already in the header.
+    
     if (!mxField.is())
     {
         if (!mxComponent.is())
-            // Load an empty document.
+            
             mxComponent = loadFromDesktop("private:factory/scalc");
 
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
-        // Create a new URL field object, and populate it with name and URL.
+        
         mxField.set(xSM->createInstance("com.sun.star.text.TextField.Time"), UNO_QUERY_THROW);
 
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, UNO_QUERY_THROW);
@@ -112,7 +112,7 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent(
             xPropSet->getPropertyValue("RightPageHeaderContent"), UNO_QUERY_THROW);
 
-        // Use the left header text.
+        
         uno::Reference<text::XText> xText = xHeaderContent->getLeftText();
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
         uno::Reference<text::XTextRange> xRange(xCursor, UNO_QUERY_THROW);
@@ -129,7 +129,7 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
 
 uno::Reference<text::XTextContent> ScEditFieldObj_Header::getTextContent()
 {
-    // Return a field object that's not yet inserted.
+    
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
     uno::Reference<text::XTextContent> xField(
         xSM->createInstance("com.sun.star.text.TextField.Date"), UNO_QUERY_THROW);
@@ -138,7 +138,7 @@ uno::Reference<text::XTextContent> ScEditFieldObj_Header::getTextContent()
 
 uno::Reference<text::XTextRange> ScEditFieldObj_Header::getTextRange()
 {
-    // Use the right header text for this.
+    
     uno::Reference<text::XTextRange> xRange(mxRightText, UNO_QUERY_THROW);
     return xRange;
 }

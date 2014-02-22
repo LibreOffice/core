@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,7 +84,7 @@ SwFmtDrop::~SwFmtDrop()
 
 void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 {
-    // Rewire
+    
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
     if(pNew)
@@ -103,8 +103,8 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )
         {
-            // Notify those who are dependend on the format on our own.
-            // The format itself wouldn't pass on the notify as it does not get past the check.
+            
+            
             pDefinedIn->ModifyBroadcast( this, this );
         }
     }
@@ -112,7 +112,7 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 
 bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 {
-    return true; // Continue
+    return true; 
 }
 
 bool SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const

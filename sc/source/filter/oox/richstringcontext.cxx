@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richstringcontext.hxx"
@@ -24,11 +24,11 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -38,7 +38,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
         {
             case XLS_TOKEN( t ):
                 mxPortion = mxString->importText( rAttribs );
-                return this;    // collect text in onCharacters()
+                return this;    
             case XLS_TOKEN( r ):
                 mxPortion = mxString->importRun( rAttribs );
                 return this;
@@ -61,7 +61,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
                 break;
 
                 case XLS_TOKEN( t ):
-                    return this;    // collect portion text in onCharacters()
+                    return this;    
             }
         break;
 
@@ -69,7 +69,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case XLS_TOKEN( t ):
-                    return this;    // collect phonetic text in onCharacters()
+                    return this;    
             }
         break;
     }
@@ -90,9 +90,9 @@ void RichStringContext::onCharacters( const OUString& rChars )
     }
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

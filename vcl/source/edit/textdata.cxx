@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,7 +75,7 @@ void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
 
 sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, bool bPreferStartingPortion )
 {
-    // find left portion at nCharPos at portion border
+    
     sal_uInt16 nTmpPos = 0;
     for ( sal_uInt16 nPortion = 0; nPortion < size(); nPortion++ )
     {
@@ -83,7 +83,7 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
         nTmpPos = nTmpPos + pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
-            // take this one if we don't prefer the starting portion, or if it's the last one
+            
             if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == size() - 1 ) )
             {
                 nPortionStart = nTmpPos - pPortion->GetLen();
@@ -117,13 +117,13 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
     }
     else
     {
-        // simple consecutive typing
+        
         if ( ( nDiff > 0 ) && ( mnInvalidDiff > 0 ) &&
              ( ( mnInvalidPosStart+mnInvalidDiff ) == nStart ) )
         {
             mnInvalidDiff = mnInvalidDiff + nDiff;
         }
-        // simple consecutive deleting
+        
         else if ( ( nDiff < 0 ) && ( mnInvalidDiff < 0 ) && ( mnInvalidPosStart == nStart ) )
         {
             mnInvalidPosStart = mnInvalidPosStart + nDiff;
@@ -148,12 +148,12 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
     if ( !mbInvalid )
     {
         mnInvalidPosStart = nStart;
-//      nInvalidPosEnd = nEnd;
+
     }
     else
     {
         mnInvalidPosStart = std::min( mnInvalidPosStart, nStart );
-//      nInvalidPosEnd = pNode->Len();
+
     }
 
     maWritingDirectionInfos.clear();
@@ -175,7 +175,7 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, bool bInclEnd )
         }
     }
 
-    // Then it should be at the end of the last line
+    
     OSL_ENSURE(nChar == maLines[maLines.size() - 1]->GetEnd(), "wrong Index");
     OSL_ENSURE(!bInclEnd, "Line not found: FindLine");
     return ( maLines.size() - 1 );
@@ -192,11 +192,11 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         const TextLine* pUnformatted = maLines[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() was inclusive => subtracted one too much!
+        nTextDiff++;    
 
-        // The first unformated one has to start exactly one portion past the last
-        // formated one.
-        // If a portion got split in the changed row, nLastEnd could be > nNextStart!
+        
+        
+        
         short nPDiff = sal::static_int_cast< short >(-( nPortionDiff-1 ));
         short nTDiff = sal::static_int_cast< short >(-( nTextDiff-1 ));
         if ( nPDiff || nTDiff )

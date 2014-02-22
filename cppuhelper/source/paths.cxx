@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -62,24 +62,24 @@ rtl::OUString get_this_libpath() {
 
 rtl::OUString cppu::getUnoIniUri() {
 #if defined ANDROID
-    // Wouldn't it be lovely to avoid this fugly hard-coding.
-    // The problem is that the 'create_bootstrap_macro_expander_factory()'
-    // required for bootstrapping services, calls cppu::get_unorc directly
-    // instead of re-using the BoostrapHandle from:
-    //     defaultBootstrap_InitialComponentContext
-    // and since rtlBootstrapHandle is not ref-counted doing anything
-    // clean here is hardish.
-    rtl::OUString uri("file:///assets/program");
+    
+    
+    
+    
+    
+    
+    
+    rtl::OUString uri("file:
 #else
     rtl::OUString uri(get_this_libpath());
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
-    // We keep both the LO and URE dylibs direcly in "Frameworks"
-    // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"
-    // (LIBO_ETC_FOLDER). Except for unorc, of which there are two,
-    // the "LO" one (which is in "Resources") and the "URE" one (which
-    // is in "Resources/ure/etc" (LIBO_URE_ETC_FOLDER)). As this code
-    // goes into the cppuhelper library which is part of URE, we are
-    // looking for the latter one here. I think...
+    
+    
+    
+    
+    
+    
+    
     if (uri.endsWith( "/" LIBO_LIB_FOLDER ) )
     {
         uri = uri.copy( 0, uri.getLength() - (sizeof(LIBO_LIB_FOLDER)-1) ) + LIBO_URE_ETC_FOLDER;
@@ -111,8 +111,8 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
                 "Cannot stat in directory",
                 css::uno::Reference< css::uno::XInterface >());
         }
-        if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
-            // Ignore backup files:
+        if (stat.getFileType() != osl::FileStatus::Directory) { 
+            
             rtl::OUString name(stat.getFileName());
             if (!(name.match(".") || name.endsWith("~"))) {
                 *url = stat.getFileURL();

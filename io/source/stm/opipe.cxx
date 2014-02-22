@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// streams
+
 #include <com/sun/star/io/XPipe.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::lang;
 #include "services.hxx"
 #include "streamhelper.hxx"
 
-// Implementation and service names
+
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"
 #define SERVICE_NAME "com.sun.star.io.Pipe"
 
@@ -59,7 +59,7 @@ public:
     OPipeImpl( );
     ~OPipeImpl();
 
-public: // XInputStream
+public: 
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
         throw(  NotConnectedException,
                 BufferSizeExceededException,
@@ -79,7 +79,7 @@ public: // XInputStream
         throw( NotConnectedException,
                RuntimeException );
 
-public: // XOutputStream
+public: 
 
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw( NotConnectedException,
@@ -94,7 +94,7 @@ public: // XOutputStream
                BufferSizeExceededException,
                RuntimeException );
 
-public: // XConnectable
+public: 
     virtual void SAL_CALL setPredecessor(const Reference< XConnectable >& aPredecessor)
         throw( RuntimeException );
     virtual Reference< XConnectable > SAL_CALL getPredecessor(void) throw( RuntimeException );
@@ -103,7 +103,7 @@ public: // XConnectable
     virtual Reference < XConnectable > SAL_CALL getSuccessor(void) throw( RuntimeException ) ;
 
 
-public: // XServiceInfo
+public: 
     OUString                    SAL_CALL getImplementationName() throw(  );
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(  );
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
@@ -148,7 +148,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
 {
     while( true )
     {
-        { // start guarded section
+        { 
             MutexGuard guard( m_mutexAccess );
             if( m_bInputStreamClosed )
             {
@@ -165,17 +165,17 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
 
             if( nOccupiedBufferLen < nBytesToRead )
             {
-                // wait outside guarded section
+                
                 osl_resetCondition( m_conditionBytesAvail );
             }
             else {
-                // necessary bytes are available
+                
                 m_pFIFO->read( aData , nBytesToRead );
                 return nBytesToRead;
             }
-        } // end guarded section
+        } 
 
-        // wait for new data outside guarded section!
+        
         osl_waitCondition( m_conditionBytesAvail , 0 );
     }
 }
@@ -205,7 +205,7 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
 
             if( m_bOutputStreamClosed )
             {
-                // no bytes in buffer anymore
+                
                 return 0;
             }
         }
@@ -269,7 +269,7 @@ void OPipeImpl::closeInput(void)
     delete m_pFIFO;
     m_pFIFO = 0;
 
-    // readBytes may throw an exception
+    
     osl_setCondition( m_conditionBytesAvail );
 
     setSuccessor( Reference< XConnectable > () );
@@ -298,15 +298,15 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
             *this );
     }
 
-    // check skipping
+    
     sal_Int32 nLen = aData.getLength();
     if( m_nBytesToSkip  && m_nBytesToSkip >= nLen  ) {
-        // all must be skipped - forget whole call
+        
         m_nBytesToSkip -= nLen;
         return;
     }
 
-    // adjust buffersize if necessary
+    
 
     try
     {
@@ -335,7 +335,7 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
             *this );
     }
 
-    // readBytes may check again if enough bytes are available
+    
     osl_setCondition( m_conditionBytesAvail );
 }
 
@@ -345,7 +345,7 @@ void OPipeImpl::flush(void)
            BufferSizeExceededException,
            RuntimeException)
 {
-    // nothing to do for a pipe
+    
     return;
 }
 
@@ -366,9 +366,9 @@ void OPipeImpl::closeOutput(void)
 void OPipeImpl::setSuccessor( const Reference < XConnectable >  &r )
     throw( RuntimeException )
 {
-     /// if the references match, nothing needs to be done
+     
      if( m_succ != r ) {
-         /// store the reference for later use
+         
          m_succ = r;
 
          if( m_succ.is() )
@@ -385,7 +385,7 @@ Reference < XConnectable > OPipeImpl::getSuccessor()    throw( RuntimeException 
 }
 
 
-// XDataSource
+
 void OPipeImpl::setPredecessor( const Reference < XConnectable > &r )
     throw( RuntimeException )
 {
@@ -406,19 +406,19 @@ Reference < XConnectable > OPipeImpl::getPredecessor() throw( RuntimeException )
 
 
 
-// XServiceInfo
+
 OUString OPipeImpl::getImplementationName() throw(  )
 {
     return OPipeImpl_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool OPipeImpl::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(  )
 {
     return OPipeImpl_getSupportedServiceNames();

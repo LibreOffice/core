@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <vcl/IconThemeScanner.hxx>
@@ -108,12 +108,12 @@ IconThemeScanner::ReadIconThemesFromPath(const OUString& dir)
 /*static*/ bool
 IconThemeScanner::FileIsValidIconTheme(const OUString& filename)
 {
-    // check whether we can construct a IconThemeInfo from it
+    
     if (!IconThemeInfo::UrlCanBeParsed(filename)) {
         return false;
     }
 
-    // check whether the file is a regular file
+    
     osl::DirectoryItem dirItem;
     osl::FileBase::RC retvalGet = osl::DirectoryItem::get(filename, dirItem);
     if (retvalGet != osl::FileBase::E_None) {
@@ -183,4 +183,4 @@ IconThemeScanner::GetIconThemeInfo(const OUString& themeId)
 }
 
 
-} // end namespace vcl
+} 

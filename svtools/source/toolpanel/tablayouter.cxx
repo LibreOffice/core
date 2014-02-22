@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,17 +26,17 @@
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::accessibility::XAccessible;
 
-    //====================================================================
-    //= TabDeckLayouter_Data
-    //====================================================================
+    
+    
+    
     struct TabDeckLayouter_Data
     {
         TabAlignment                    eAlignment;
@@ -54,9 +54,9 @@ namespace svt
         }
     };
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    
+    
+    
     namespace
     {
         static bool lcl_isVerticalTabBar( const TabAlignment i_eAlignment )
@@ -76,25 +76,25 @@ namespace svt
         }
     }
 
-    //====================================================================
-    //= TabDeckLayouter
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     TabDeckLayouter::TabDeckLayouter( Window& i_rParent, IToolPanelDeck& i_rPanels,
             const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :m_pData( new TabDeckLayouter_Data( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     TabDeckLayouter::~TabDeckLayouter()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_IREFERENCE( TabDeckLayouter )
 
-    //--------------------------------------------------------------------
+    
     TabItemContent TabDeckLayouter::GetTabItemContent() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -102,7 +102,7 @@ namespace svt
         return m_pData->pTabBar->GetTabItemContent();
     }
 
-    //--------------------------------------------------------------------
+    
     void TabDeckLayouter::SetTabItemContent( const TabItemContent& i_eItemContent )
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -110,7 +110,7 @@ namespace svt
         m_pData->pTabBar->SetTabItemContent( i_eItemContent );
     }
 
-    //--------------------------------------------------------------------
+    
     TabAlignment TabDeckLayouter::GetTabAlignment() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -118,7 +118,7 @@ namespace svt
         return m_pData->eAlignment;
     }
 
-    //--------------------------------------------------------------------
+    
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -169,13 +169,13 @@ namespace svt
         return aPanelRect;
     }
 
-    //--------------------------------------------------------------------
+    
     void TabDeckLayouter::Destroy()
     {
         m_pData->pTabBar.reset();
     }
 
-    //--------------------------------------------------------------------
+    
     void TabDeckLayouter::SetFocusToPanelSelector()
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -183,7 +183,7 @@ namespace svt
         m_pData->pTabBar->GrabFocus();
     }
 
-    //--------------------------------------------------------------------
+    
     size_t TabDeckLayouter::GetAccessibleChildCount() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -192,7 +192,7 @@ namespace svt
         return 1;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XAccessible > TabDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
         (void)i_nChildIndex;
@@ -203,8 +203,8 @@ namespace svt
         return m_pData->pTabBar->GetAccessible( true );
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

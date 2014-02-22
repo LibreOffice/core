@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -32,12 +32,12 @@
 #include "smdll.hxx"
 
 
-////////////////////////////////////////////////////////////
 
-// return pointer to active SmViewShell, if this is not possible
-// return 0 instead.
-//!! Since this method is based on the current focus it is somewhat
-//!! unreliable and may return unexpected 0 pointers!
+
+
+
+
+
 SmViewShell * SmGetActiveView()
 {
     SfxViewShell *pView = SfxViewShell::Current();
@@ -45,7 +45,7 @@ SmViewShell * SmGetActiveView()
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 
 /**************************************************************************/
@@ -232,12 +232,12 @@ void SmFontPickListBox::Remove(const Font &rFont)
     return;
 }
 
-////////////////////////////////////////
+
 
 bool IsItalic( const Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
-    // the code below leaves only _NONE and _DONTKNOW as not italic
+    
     return eItalic == ITALIC_OBLIQUE  ||  eItalic == ITALIC_NORMAL;
 }
 
@@ -261,16 +261,16 @@ void SmFace::SetSize(const Size& rSize)
 {
     Size  aSize (rSize);
 
-    // check the requested size against minimum value
+    
     static int const    nMinVal = SmPtsTo100th_mm(2);
 
     if (aSize.Height() < nMinVal)
         aSize.Height() = nMinVal;
 
-    //! we don't force a maximum value here because this may prevent eg the
-    //! parentheses in "left ( ... right )" from matching up with large
-    //! bodies (eg stack{...} with many entries).
-    //! Of course this is holds only if characters are used and not polygons.
+    
+    
+    
+    
 
     Font::SetSize(aSize);
 }
@@ -293,9 +293,9 @@ SmFace & SmFace::operator = (const SmFace &rFace)
 
 
 SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
-    // scales the width and height of 'rFace' by 'rFrac' and returns a
-    // reference to 'rFace'.
-    // It's main use is to make scaling fonts look easier.
+    
+    
+    
 {   const Size &rFaceSize = rFace.GetSize();
 
     rFace.SetSize(Size(Fraction(rFaceSize.Width())  *= rFrac,

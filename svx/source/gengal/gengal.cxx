@@ -4,13 +4,13 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
-// Include this before stdio.h for the __MINGW32__ sake.
-// This header contails a define that modifies the way
-// formatting strings work for the mingw platforms.
+
+
+
 #include <sal/types.h>
 
 #include <stdio.h>
@@ -113,9 +113,9 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
 
     for( aIter = rFiles.begin(); aIter != rFiles.end(); ++aIter )
     {
-//  Should/could use:
-//    if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
-//    Requires a load more components ...
+
+
+
 
         Graphic aGraphic;
 
@@ -155,7 +155,7 @@ static int PrintHelp()
     fprintf( stdout, "\t\t\ttheme files.\n");
     fprintf( stdout, " files\t\t\tlists files to be added to the gallery. Absolute paths\n");
     fprintf( stdout, "\t\t\tare required.\n");
-    // --build-tree not documented - only useful during the build ...
+    
 
     return EXIT_SUCCESS;
 }
@@ -174,8 +174,8 @@ void GalApp::Init()
             OUString fileName = GetAppFileName();
             int lastSlash = fileName.lastIndexOf( '/' );
 #ifdef WNT
-        // Don't know which directory separators GetAppFileName() returns on Windows.
-        // Be safe and take into consideration they might be backslashes.
+        
+        
             if( fileName.lastIndexOf( '\\' ) > lastSlash )
                 lastSlash = fileName.lastIndexOf( '\\' );
 #endif
@@ -198,8 +198,8 @@ void GalApp::Init()
         }
         ::comphelper::setProcessServiceFactory( xMSF );
 
-        // For backwards compatibility, in case some code still uses plain
-        // createInstance w/o args directly to obtain an instance:
+        
+        
         com::sun::star::ucb::UniversalContentBroker::create(xComponentContext);
     } catch (const uno::Exception &e) {
         fprintf( stderr, "Bootstrap exception '%s'\n",

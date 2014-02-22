@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,9 +34,9 @@
 
 #include <boost/current_function.hpp>
 
-//........................................................................
+
 namespace comphelper {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -54,9 +54,9 @@ namespace comphelper {
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::frame::XFrame;
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    
+    
+    
     namespace
     {
         OUString lcl_getTitle( const Reference< XInterface >& _rxComponent )
@@ -68,10 +68,10 @@ namespace comphelper {
         }
     }
 
-    //====================================================================
-    //= DocumentInfo
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OUString DocumentInfo::getDocumentTitle( const Reference< XModel >& _rxDocument )
     {
         OUString sTitle;
@@ -82,7 +82,7 @@ namespace comphelper {
         OUString sDocURL;
         try
         {
-            // 1. ask the model and the controller for their XTitle::getTitle
+            
             sTitle = lcl_getTitle( _rxDocument );
             if ( !sTitle.isEmpty() )
                 return sTitle;
@@ -92,13 +92,13 @@ namespace comphelper {
             if ( !sTitle.isEmpty() )
                 return sTitle;
 
-            // work around a problem with embedded objects, which sometimes return
-            // private:object as URL
+            
+            
             sDocURL = _rxDocument->getURL();
             if ( sDocURL.matchAsciiL( "private:", 8 ) )
                 sDocURL = OUString();
 
-            // 2. if the document is not saved, yet, check the frame title
+            
             if ( sDocURL.isEmpty() )
             {
                 Reference< XFrame > xFrame;
@@ -109,7 +109,7 @@ namespace comphelper {
                     return sTitle;
             }
 
-            // 3. try the UNO XDocumentProperties
+            
             Reference< XDocumentPropertiesSupplier > xDPS( _rxDocument, UNO_QUERY );
             if ( xDPS.is() )
             {
@@ -121,17 +121,17 @@ namespace comphelper {
                     return sTitle;
             }
 
-            // 4. try model arguments
+            
             NamedValueCollection aModelArgs( _rxDocument->getArgs() );
             sTitle = aModelArgs.getOrDefault( "Title", sTitle );
             if ( !sTitle.isEmpty() )
                 return sTitle;
 
-            // 5. try the last segment of the document URL
-            // this formerly was an INetURLObject::getName( LAST_SEGMENT, true, DECODE_WITH_CHARSET ),
-            // but since we moved this code to comphelper, we do not have access to an INetURLObject anymore
-            // This heuristics here should be sufficient - finally, we will get an UNO title API in a not
-            // too distant future (hopefully), then  this complete class is superfluous)
+            
+            
+            
+            
+            
             if ( sDocURL.isEmpty() )
             {
                 Reference< XStorable > xDocStorable( _rxDocument, UNO_QUERY_THROW );
@@ -148,8 +148,8 @@ namespace comphelper {
             if ( !sTitle.isEmpty() )
                 return sTitle;
 
-            // 5.
-            // <-- #i88104# (05-16-08) TKR: use the new XTitle Interface to get the Title -->
+            
+            
 
             Reference< XTitle > xTitle( _rxDocument, UNO_QUERY );
             if ( xTitle.is() )
@@ -177,8 +177,8 @@ namespace comphelper {
         return sTitle;
     }
 
-//........................................................................
-} // namespace comphelper
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

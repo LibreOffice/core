@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleDataPilotControl.hxx"
@@ -45,7 +45,7 @@ class ScAccessibleDataPilotButton
     , public ::com::sun::star::accessibility::XAccessibleAction
 {
 public:
-    //=====  internal  ========================================================
+    
     ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
@@ -64,18 +64,18 @@ public:
 protected:
     virtual ~ScAccessibleDataPilotButton(void);
 public:
-    // XAccessibleAction
+    
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    ///=====  XInterface  =====================================================
+    
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
-    ///=====  XAccessibleComponent  ============================================
+    
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
@@ -94,31 +94,31 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///=====  XAccessibleContext  ==============================================
+    
 
-    /// Return the number of currently visible children.
+    
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void) throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or NULL if index is invalid.
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /// Return this objects index among the parents children.
+    
     virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the set of current states.
+    
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet >
         SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
-    ///=====  XServiceInfo  ====================================================
+    
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -126,7 +126,7 @@ public:
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///=====  XTypeProvider  ===================================================
+    
 
     /** Returns a implementation id.
     */
@@ -135,21 +135,21 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// Return this object's description.
+    
     virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current name.
+    
     virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current bounding box relative to the desktop.
+    
     virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current bounding box relative to the parent object.
+    
     virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -158,7 +158,7 @@ private:
     sal_Int32        mnIndex;
 };
 
-    //=====  internal  ========================================================
+    
 ScAccessibleDataPilotControl::ScAccessibleDataPilotControl(
         const uno::Reference<XAccessible>& rxParent,
         ScDPFieldControlBase* pFieldWindow)
@@ -174,9 +174,9 @@ ScAccessibleDataPilotControl::~ScAccessibleDataPilotControl(void)
 {
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
-        // call dispose to inform object which have a weak reference to this object
+        
         dispose();
     }
 }
@@ -232,7 +232,7 @@ void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
         aEvent.Source = uno::Reference< XAccessibleContext >(this);
         aEvent.NewValue <<= getAccessibleChild(nNewIndex);
 
-        CommitChange(aEvent); // new child - event
+        CommitChange(aEvent); 
     }
 }
 
@@ -281,7 +281,7 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
         aEvent.Source = uno::Reference< XAccessibleContext >(this);
         aEvent.OldValue <<= xTempAcc;
 
-        CommitChange(aEvent); // gone child - event
+        CommitChange(aEvent); 
 
         if (pField)
             pField->dispose();
@@ -368,17 +368,17 @@ void ScAccessibleDataPilotControl::LostFocus()
         }
         else
         {
-            // This may actually happen if the last field is dropped somewhere
-            // and was already removed from the pane by dragging it away. This
-            // is odd.. looks like all LostFocus() are called for the previous
-            // field of the same original pane in the remove case?
+            
+            
+            
+            
             SAL_WARN_IF( nIndex != -1 || !maChildren.empty(), "sc",
                     "ScAccessibleDataPilotControl::LostFocus() field index out of bounds: " << nIndex);
         }
     }
 }
 
-    ///=====  XAccessibleComponent  ============================================
+    
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessibleAtPoint(
         const awt::Point& rPoint )
@@ -444,7 +444,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
     return nColor;
 }
 
-    ///=====  XAccessibleContext  ==============================================
+    
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
         throw (uno::RuntimeException)
@@ -465,8 +465,8 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
         if (nIndex < 0 || static_cast< size_t >( nIndex ) >= maChildren.size())
             throw lang::IndexOutOfBoundsException();
 
-        OSL_ENSURE( mpFieldWindow->GetFieldCount() == maChildren.size()         // all except ...
-                ||  mpFieldWindow->GetFieldCount() == maChildren.size() + 1,    // in CommitChange during RemoveField
+        OSL_ENSURE( mpFieldWindow->GetFieldCount() == maChildren.size()         
+                ||  mpFieldWindow->GetFieldCount() == maChildren.size() + 1,    
                 "did not recognize a child count change");
 
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
@@ -508,7 +508,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAc
     return pStateSet;
 }
 
-    ///=====  XServiceInfo  ====================================================
+    
 
 OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
         throw (uno::RuntimeException)
@@ -516,7 +516,7 @@ OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
     return OUString("ScAccessibleDataPilotControl");
 }
 
-    ///=====  XTypeProvider  ===================================================
+    
 
 namespace
 {
@@ -529,7 +529,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
     return theScAccessibleDataPilotControlImplementationId::get().getSeq();
 }
 
-    //=====  internal  ========================================================
+    
 
 OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleDescription(void)
         throw (uno::RuntimeException)
@@ -572,7 +572,7 @@ Rectangle ScAccessibleDataPilotControl::GetBoundingBox(void) const
 }
 
 
-//===============================================================================
+
 
 ScAccessibleDataPilotButton::ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<
@@ -589,9 +589,9 @@ ScAccessibleDataPilotButton::~ScAccessibleDataPilotButton(void)
 {
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
-        // call dispose to inform object which have a weak reference to this object
+        
         dispose();
     }
 }
@@ -618,7 +618,7 @@ void ScAccessibleDataPilotButton::ResetFocused()
     CommitFocusLost();
 }
 
-    ///=====  XAccessibleComponent  ============================================
+    
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotButton::getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& /* rPoint */ )
@@ -670,7 +670,7 @@ throw (uno::RuntimeException)
     return nColor;
 }
 
-    ///=====  XAccessibleContext  ==============================================
+    
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleChildCount(void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -738,7 +738,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 
 }
 
-///=====  XServiceInfo  ====================================================
+
 
 OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException)
@@ -746,7 +746,7 @@ OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
     return OUString("ScAccessibleDataPilotButton");
 }
 
-    ///=====  XTypeProvider  ===================================================
+    
 
 namespace
 {
@@ -803,9 +803,9 @@ Rectangle ScAccessibleDataPilotButton::GetBoundingBox(void) const
         return Rectangle();
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleAction
-// -----------------------------------------------------------------------------
+
+
+
 sal_Int32 ScAccessibleDataPilotButton::getAccessibleActionCount( ) throw (uno::RuntimeException)
 {
     return 1;

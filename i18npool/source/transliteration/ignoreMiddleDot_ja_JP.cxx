@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// prevent internal compiler error with MSVC6SP3
+
 #include <utility>
 
 #define TRANSLITERATION_MiddleDot_ja_JP
@@ -30,10 +30,10 @@ sal_Unicode
 ignoreMiddleDot_ja_JP_translator (const sal_Unicode c)
 {
     switch (c) {
-        case 0x30FB: // KATAKANA MIDDLE DOT
-        case 0xFF65: // HALFWIDTH KATAKANA MIDDLE DOT
-        // no break;
-        return 0xffff; // Skip this character
+        case 0x30FB: 
+        case 0xFF65: 
+        
+        return 0xffff; 
     }
     return c;
 }

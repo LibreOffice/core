@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrpathprimitive2d.hxx>
@@ -24,11 +24,11 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -38,12 +38,12 @@ namespace drawinglayer
         {
             Primitive2DSequence aRetval;
 
-            // add fill
+            
             if(!getSdrLFSTAttribute().getFill().isDefault()
                 && getUnitPolyPolygon().isClosed())
             {
-                // #i108255# no need to use correctOrientations here; target is
-                // straight visualisation
+                
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
                         getUnitPolyPolygon(),
@@ -52,10 +52,10 @@ namespace drawinglayer
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
-            // add line
+            
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createHiddenGeometryPrimitives2D(
                         false,
@@ -78,7 +78,7 @@ namespace drawinglayer
                 appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aTemp);
             }
 
-            // add text
+            
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
@@ -92,7 +92,7 @@ namespace drawinglayer
                         false));
             }
 
-            // add shadow
+            
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
@@ -128,10 +128,10 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrPathPrimitive2D, PRIMITIVE2D_ID_SDRPATHPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

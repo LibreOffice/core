@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -130,14 +130,14 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     sal_Int32 nDecPos;
     bool bNegative = false;
 
-    // On empty string
+    
     if ( rStr.isEmpty() )
         return false;
 
-    // Trim leading and trailing spaces
+    
     aStr = string::strip(aStr, ' ');
 
-    // Find decimal sign's position
+    
     nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSep() );
 
     if ( nDecPos != -1 )
@@ -148,7 +148,7 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     else
         aStr1 = aStr;
 
-    // Negative?
+    
     if ( bCurrency )
     {
         if ( (aStr[ 0 ] == '(') && (aStr[ aStr.getLength()-1 ] == ')') )
@@ -191,7 +191,7 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
             bNegative = true;
     }
 
-    // delete unwanted characters
+    
     for (sal_Int32 i=0; i < aStr1.getLength(); )
     {
         if ( (aStr1[ i ] >= '0') && (aStr1[ i ] <= '9') )
@@ -215,7 +215,7 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     if ( bNegative )
         aStr1.insert( 0, '-');
 
-    // Cut down decimal part and round while doing so
+    
     bool bRound = false;
     if (aStr2.getLength() > nDecDigits)
     {
@@ -229,7 +229,7 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     aStr  = aStr1.makeStringAndClear();
     aStr += aStr2.makeStringAndClear();
 
-    // check range
+    
     BigInt nValue( aStr );
     if ( bRound )
     {
@@ -247,11 +247,11 @@ static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
 static bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                              bool, bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
 {
-    // There's no StrictFormat that makes sense here, thus allow all chars
+    
     return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rLocaleDataWrapper  );
 }
 
-} // namespace
+} 
 
 inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )

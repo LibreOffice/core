@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableWindow.hxx"
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::accessibility;
 #define TABWIN_WIDTH_MIN    90
 #define TABWIN_HEIGHT_MIN   80
 
-// class OTableWindow
+
 OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
@@ -76,18 +76,18 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
           ,m_bActive( sal_False )
 {
 
-    // Set position and size
+    
     if( GetData()->HasPosition() )
         SetPosPixel( GetData()->GetPosition() );
 
     if( GetData()->HasSize() )
         SetSizePixel( GetData()->GetSize() );
 
-    // Set background
+    
     const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
-    // Set the text colour even though there is no text,
-    // because derived classes might need it
+    
+    
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
     EnableClipSiblings();
@@ -165,7 +165,7 @@ sal_Bool OTableWindow::FillListBox()
         if ( xContainer.is() )
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
-    // mark all primary keys with special image
+    
     ModuleRes TmpRes(IMG_JOINS);
     ImageList aImageList(TmpRes);
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
@@ -198,7 +198,7 @@ sal_Bool OTableWindow::FillListBox()
             for (; pIter != pEnd; ++pIter)
             {
                 bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
-                // is this column in the primary key
+                
                 if ( bPrimaryKeyColumn )
                     pEntry = m_pListBox->InsertEntry(*pIter, aPrimKeyImage, aPrimKeyImage);
                 else
@@ -265,7 +265,7 @@ void OTableWindow::impl_updateImage()
 
 sal_Bool OTableWindow::Init()
 {
-    // create list box if necessary
+    
     if ( !m_pListBox )
     {
         m_pListBox = CreateListBox();
@@ -273,13 +273,13 @@ sal_Bool OTableWindow::Init()
         m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 
-    // Set the title
+    
     m_aTitle.SetText( m_pData->GetWinName() );
     m_aTitle.Show();
 
     m_pListBox->Show();
 
-    // add the fields to the ListBox
+    
     clearListBox();
     sal_Bool bSuccess = FillListBox();
     if ( bSuccess )
@@ -294,8 +294,8 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
 {
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
     {
-        // In the worst-case the colours have changed so
-        // adapt myself to the new colours
+        
+        
         const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
         SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
         SetTextColor(aSystemStyle.GetButtonTextColor());
@@ -311,21 +311,21 @@ void OTableWindow::Paint( const Rectangle& rRect )
 
 void OTableWindow::Draw3DBorder(const Rectangle& rRect)
 {
-    // Use the System Style-Settings for my colours
+    
     const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
 
-    // Black lines for bottom and right
+    
     SetLineColor(aSystemStyle.GetDarkShadowColor());
     DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
     DrawLine( rRect.BottomRight(), rRect.TopRight() );
 
-    // Dark grey lines over the black lines
+    
     SetLineColor(aSystemStyle.GetShadowColor());
     Point aEHvector(1,1);
     DrawLine( rRect.BottomLeft()+Point(1,-1), rRect.BottomRight() - aEHvector );
     DrawLine( rRect.BottomRight() - aEHvector, rRect.TopRight()+Point(-1,1) );
 
-    // Light grey lines for top and left
+    
     SetLineColor(aSystemStyle.GetLightColor());
     DrawLine( rRect.BottomLeft()+Point(1,-2), rRect.TopLeft() + aEHvector );
     DrawLine( rRect.TopLeft() + aEHvector, rRect.TopRight()+Point(-2,1) );
@@ -373,7 +373,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
 void OTableWindow::setSizingFlag(const Point& _rPos)
 {
     Size    aOutSize = GetOutputSizePixel();
-    // Set the flags when the mouse cursor is in the sizing area
+    
     m_nSizingFlags = SIZING_NONE;
 
     if( _rPos.X() < TABWIN_SIZING_AREA )
@@ -401,7 +401,7 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
     setSizingFlag(aPos);
     Pointer aPointer;
 
-    // Set the mouse cursor when it is in the sizing area
+    
     switch( m_nSizingFlags )
     {
     case SIZING_TOP:
@@ -430,8 +430,8 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
 
 void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
-    // When resizing, the parent must be informed that
-    // the window size of its child has changed
+    
+    
     if( m_nSizingFlags )
         getTableView()->BeginChildSizing( this, GetPointer() );
 
@@ -440,18 +440,18 @@ void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 
 void OTableWindow::Resize()
 {
-    // The window must not disappear so we enforce a minimum size
+    
     Size    aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
 
     long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
 
-    // Set the title and ListBox
+    
     long n5Pos = CalcZoom(5);
     long nPositionX = n5Pos;
     long nPositionY = n5Pos;
 
-    // position the image which indicates the type
+    
     m_aTypeImage.SetPosPixel( Point( nPositionX, nPositionY ) );
     Size aImageSize( m_aTypeImage.GetImage().GetSizePixel() );
     m_aTypeImage.SetSizePixel( aImageSize );
@@ -483,7 +483,7 @@ void OTableWindow::SetBoldTitle( sal_Bool bBold )
 void OTableWindow::GetFocus()
 {
     Window::GetFocus();
-    // we have to forward the focus to our listbox to enable keystokes
+    
     if(m_pListBox)
         m_pListBox->GrabFocus();
 }
@@ -498,7 +498,7 @@ void OTableWindow::setActive(sal_Bool _bActive)
 
 void OTableWindow::Remove()
 {
-    // Delete the window
+    
     OJoinTableView* pTabWinCont = getTableView();
     pTabWinCont->RemoveTabWin( this );
     pTabWinCont->Invalidate();
@@ -529,7 +529,7 @@ sal_Bool OTableWindow::ExistsAConn() const
 void OTableWindow::EnumValidFields(::std::vector< OUString>& arrstrFields)
 {
     arrstrFields.clear();
-    // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written
+    
     if ( m_pListBox )
     {
         arrstrFields.reserve(m_pListBox->GetEntryCount());
@@ -671,7 +671,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                     }
                     else
                     {
-                        // remember how often the user moved our window
+                        
                         ++m_nMoveCount;
                         if( m_nMoveCount == 5 )
                             m_nMoveIncrement = 10;
@@ -687,7 +687,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             {
                                 SetPosPixel(aStartPoint);
 
-                                // aNewDataPoint can not be used here because SetPosPixel reset it
+                                
                                 pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
                                 pView->TabWinMoved(this,aOldDataPoint);
                                 Invalidate(INVALIDATE_NOCHILDREN);
@@ -695,13 +695,13 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             }
                             else
                             {
-                                m_nMoveCount        = 0; // reset our movement count
+                                m_nMoveCount        = 0; 
                                 m_nMoveIncrement    = 1;
                             }
                         }
                         else
                         {
-                            m_nMoveCount        = 0; // reset our movement count
+                            m_nMoveCount        = 0; 
                             m_nMoveIncrement    = 1;
                         }
                     }
@@ -709,13 +709,13 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 }
                 else
                 {
-                    m_nMoveCount        = 0; // reset our movement count
+                    m_nMoveCount        = 0; 
                     m_nMoveIncrement    = 1;
                 }
             }
             else
             {
-                m_nMoveCount        = 0; // reset our movement count
+                m_nMoveCount        = 0; 
                 m_nMoveIncrement    = 1;
             }
         }
@@ -727,7 +727,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
             sal_uInt16 nKeyCode = rCode.GetCode();
             if ( rCode.IsMod2() && nKeyCode != KEY_UP && nKeyCode != KEY_DOWN && nKeyCode != KEY_LEFT && nKeyCode != KEY_RIGHT )
             {
-                m_nMoveCount        = 0; // reset our movement count
+                m_nMoveCount        = 0; 
                 m_nMoveIncrement    = 1;
             }
         }

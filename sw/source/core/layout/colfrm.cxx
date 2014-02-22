@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/ulspitem.hxx>
@@ -29,7 +29,7 @@
 #include "sectfrm.hxx"
 #include "switerator.hxx"
 
-// ftnfrm.cxx:
+
 void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
 
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
@@ -37,7 +37,7 @@ SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
 {
     mnType = FRMC_COLUMN;
     SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt(), pSib );
-    pColBody->InsertBehind( this, 0 ); // ColumnFrms now with BodyFrm
+    pColBody->InsertBehind( this, 0 ); 
     SetMaxFtnHeight( LONG_MAX );
 }
 
@@ -47,8 +47,8 @@ SwColumnFrm::~SwColumnFrm()
     SwDoc *pDoc;
     if ( !(pDoc = pFmt->GetDoc())->IsInDtor() && pFmt->IsLastDepend() )
     {
-        //I'm the only one, delete the format.
-        //Get default format before, so the base class can cope with it.
+        
+        
         pDoc->GetDfltFrmFmt()->Add( this );
         pDoc->DelFrmFmt( pFmt );
     }
@@ -71,7 +71,7 @@ static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
     {
         SwColumnFrm *pTmp = (SwColumnFrm*)pColumn->GetPrev();
         pColumn->Cut();
-        delete pColumn; //format is going to be destroyed in the DTor if needed.
+        delete pColumn; 
         pColumn = pTmp;
     }
 }
@@ -98,10 +98,10 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     SwDoc *pDoc = pCont->GetFmt()->GetDoc();
     const sal_Bool bMod = pDoc->IsModified();
 
-    //Formats should be shared whenever possible. If a neighbour already has
-    //the same column settings we can add them to the same format.
-    //The neighbour can be searched using the format, however the owner of the
-    //attribute depends on the frame type.
+    
+    
+    
+    
     SwLayoutFrm *pAttrOwner = pCont;
     if ( pCont->IsBodyFrm() )
         pAttrOwner = pCont->FindPageFrm();
@@ -175,8 +175,8 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
-    // #i97379#
-    // If current lower is a no text frame, then columns are not allowed
+    
+    
     if ( Lower() && Lower()->IsNoTxtFrm() &&
          rNew.GetNumCols() > 1 )
     {
@@ -199,22 +199,22 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     else
         bAtEnd = sal_False;
 
-    //Setting the column width is only needed for new formats.
+    
     sal_Bool bAdjustAttributes = nOldNum != rOld.GetNumCols();
 
-    //The content is saved and restored if the column count is different.
+    
     SwFrm *pSave = 0;
     if( nOldNum != nNewNum || bChgFtn )
     {
         SwDoc *pDoc = GetFmt()->GetDoc();
         OSL_ENSURE( pDoc, "FrmFmt doesn't return a document." );
-        // SaveCntnt would also suck up the content of the footnote container
-        // and store it within the normal text flow.
+        
+        
         if( IsPageBodyFrm() )
             pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );
         pSave = ::SaveCntnt( this );
 
-        //If columns exist, they get deleted if a column count of 0 or 1 is requested.
+        
         if ( nNewNum == 1 && !bAtEnd )
         {
             ::lcl_RemoveColumns( this, nOldNum );
@@ -265,17 +265,17 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         }
     }
 
-    //The columns can now be easily adjusted.
+    
     AdjustColumns( &rNew, bAdjustAttributes );
 
-    //Don't restore the content before. An earlier restore would trigger useless
-    //actions during setup.
+    
+    
     if ( pSave )
     {
         OSL_ENSURE( Lower() && Lower()->IsLayoutFrm() &&
                 ((SwLayoutFrm*)Lower())->Lower() &&
                 ((SwLayoutFrm*)Lower())->Lower()->IsLayoutFrm(),
-                "no column body." );   // ColumnFrms contain BodyFrms
+                "no column body." );   
         ::RestoreCntnt( pSave, (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower(), 0, true );
     }
 }
@@ -289,11 +289,11 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     }
 
     const sal_Bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
-    //If we have a pointer or we have to configure an attribute, we set the
-    //column widths in any case. Otherwise we check if a configuration is needed.
+    
+    
     if ( !pAttr )
     {
         pAttr = &GetFmt()->GetCol();
@@ -309,8 +309,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
         }
     }
 
-    //The columns can now be easily adjusted.
-    //The widths get counted so we can give the reminder to the last one.
+    
+    
     SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
     const sal_Bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
@@ -318,13 +318,13 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     const sal_Bool bR2L = IsRightToLeft();
     SwFrm *pCol = bR2L ? GetLastLower() : Lower();
 
-    // #i27399#
-    // bOrtho means we have to adjust the column frames manually. Otherwise
-    // we may use the values returned by CalcColWidth:
+    
+    
+    
     const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
 
-    for ( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; ++i ) //i118878, value returned by GetNumCols() can't be trusted
+    for ( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; ++i ) 
     {
         if( !bOrtho )
         {
@@ -338,10 +338,10 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
 
             pCol->ChgSize( aColSz );
 
-            // With this, the ColumnBodyFrms from page columns gets adjusted and
-            // their bFixHeight flag is set so they won't shrink/grow.
-            // Don't use the flag with frame columns because BodyFrms in frame
-            // columns can grow/shrink.
+            
+            
+            
+            
             if( IsBodyFrm() )
                 ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
 
@@ -354,10 +354,10 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
             const SwAttrSet* pSet = pCol->GetAttrSet();
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
 
-            //In order to have enough space for the separation lines, we have to
-            //take them into account here. Every time two columns meet we
-            //calculate a clearance of 20 + half the pen width on the left or
-            //right side, respectively.
+            
+            
+            
+            
             const sal_uInt16 nLeft = pC->GetLeft();
             const sal_uInt16 nRight = pC->GetRight();
 
@@ -401,7 +401,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     {
         long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
         pCol = Lower();
-        for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) //i118878, value returned by GetNumCols() can't be trusted
+        for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) 
         {
             SwTwips nWidth;
             if ( i == pAttr->GetNumCols() - 1 )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -110,14 +110,14 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     Reference< XInteractionHandler > xInteraction;
     OUString aURL;
     OUString sTemp;
-    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            
+    OUString aPreselectedFilterName;      
 
-    OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; 
 
-    // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
-    // there is no parameter that forbids to open as template
+    
+    
+    
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
 
@@ -125,8 +125,8 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     sal_Bool bRepairAllowed = sal_False;
     bool bDeepDetection = false;
 
-    // now some parameters that can already be in the array, but may be overwritten or new inserted here
-    // remember their indices in the case new values must be added to the array
+    
+    
     sal_Int32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
@@ -136,7 +136,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // extract properties
+        
         if ( lDescriptor[nProperty].Name == "URL" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
@@ -178,9 +178,9 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
             bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
-    // can't check the type for external filters, so set the "dont" flag accordingly
+    
     SolarMutexGuard aGuard;
-    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+    
 
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
@@ -211,7 +211,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     }
     else
     {
-        // ctor of SfxMedium uses owner transition of ItemSet
+        
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( sal_True );
         if ( !aPreselectedFilterName.isEmpty() )
@@ -224,8 +224,8 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-            // remember input stream and content and put them into the descriptor later
-            // should be done here since later the medium can switch to a version
+            
+            
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
@@ -235,16 +235,16 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
             {
                 if (bIsZipStorage)
                 {
-                    // PowerPoint needs to be detected via StreamName, all other storage based formats are our own and can
-                    // be detected by the ClipboardId, so except for the PPT filter all filters must have a ClipboardId set
+                    
+                    
                     Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
 
-                    //TODO/LATER: move error handling to central place! (maybe even complete own filters)
+                    
                     if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                     {
-                        // error during storage creation means _here_ that the medium
-                        // is broken, but we can not handle it in medium since unpossibility
-                        // to create a storage does not _always_ means that the medium is broken
+                        
+                        
+                        
                         aMedium.SetError( aMedium.GetLastStorageCreationState(),  OSL_LOG_PREFIX  );
                         if ( xInteraction.is() )
                         {
@@ -267,11 +267,11 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                     else
                     {
                         if ( pFilter && !pFilter->GetFormat() )
-                            // preselected Filter has no ClipboardId -> doesn't match (see comment above)
+                            
                             pFilter = 0;
 
-                        // the storage must be checked even if filter is already found, since it is deep type detection
-                        // the storage can be corrupted and it will be detected here
+                        
+                        
                         try
                         {
                             OUString sFilterName;
@@ -282,7 +282,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                         catch( const WrappedTargetException& aWrap )
                         {
                             if (!bDeepDetection)
-                                // Bail out early unless it's a deep detection.
+                                
                                 return OUString();
 
                             packages::zip::ZipIOException aZipException;
@@ -290,7 +290,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                             {
                                 if ( xInteraction.is() )
                                 {
-                                    // the package is broken one
+                                    
                                        aDocumentTitle = aMedium.GetURLObject().getName(
                                                                 INetURLObject::LAST_SEGMENT,
                                                                 true,
@@ -298,7 +298,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
                                     if ( !bRepairPackage )
                                     {
-                                        // ask the user whether he wants to try to repair
+                                        
                                         RequestPackageReparation aRequest( aDocumentTitle );
                                         xInteraction->handle( aRequest.GetRequest() );
                                         bRepairAllowed = aRequest.isApproved();
@@ -306,7 +306,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
                                     if ( !bRepairAllowed )
                                     {
-                                        // repair either not allowed or not successful
+                                        
                                         NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
                                         xInteraction->handle( aNotifyRequest.GetRequest() );
                                     }
@@ -331,8 +331,8 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
                         if (!pFilter && !aTypeName.isEmpty())
                         {
-                            //TODO/LATER: using this method impress is always preferred if no flat detecion has been made
-                            // this should been discussed!
+                            
+                            
                             if ( SvtModuleOptions().IsImpress() )
                                 pFilter = SfxFilterMatcher( OUString("simpress") ).GetFilter4EA( aTypeName );
                             else if ( SvtModuleOptions().IsDraw() )
@@ -343,7 +343,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                 else
                 {
                     if (isZipStorageType(aTypeName))
-                        // This stream is a not zip archive, but a zip archive type is specified.
+                        
                         pFilter = NULL;
 
                     SvStream* pStm = NULL;
@@ -379,7 +379,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                         }
                         else
                         {
-                            // vector graphic?
+                            
                             pStm->Seek( STREAM_SEEK_TO_BEGIN );
 
                             const OUString      aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
@@ -395,8 +395,8 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                                         sal_uInt8 n8;
                                         pStm->Seek( STREAM_SEEK_TO_BEGIN );
                                         pStm->ReadUChar( n8 );
-                                        if ( ( n8 & 0xf0 ) == 0 )       // we are supporting binary cgm format only, so
-                                        {                               // this is a small test to exclude cgm text
+                                        if ( ( n8 & 0xf0 ) == 0 )       
+                                        {                               
                                             SfxFilterMatcher aMatch(OUString("simpress"));
                                             pFilter = aMatch.GetFilter4FilterName(OUString("CGM - Computer Graphics Metafile"));
                                         }
@@ -409,9 +409,9 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                                 GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
                                 const OUString aName( rGrfFilter.GetImportFormatTypeName( rGrfFilter.GetImportFormatNumberForShortName( aShortName ) ) );
 
-                                if ( pFilter && aShortName.equalsIgnoreAsciiCase( "PCD" ) )    // there is a multiple pcd selection possible
+                                if ( pFilter && aShortName.equalsIgnoreAsciiCase( "PCD" ) )    
                                 {
-                                    sal_Int32 nBase = 2;    // default Base0
+                                    sal_Int32 nBase = 2;    
                                     OUString aFilterTypeName( pFilter->GetRealTypeName() );
                                     if ( aFilterTypeName == "pcd_Photo_CD_Base4" )
                                         nBase = 1;
@@ -437,7 +437,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
@@ -446,7 +446,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
     if ( nIndexOfContent == -1 && xContent.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
@@ -475,7 +475,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
         bOpenAsTemplate = sal_True;
 
-        // TODO/LATER: set progress bar that should be used
+        
     }
 
     if ( bOpenAsTemplate )
@@ -493,7 +493,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
     if ( !aDocumentTitle.isEmpty() )
     {
-        // the title was set here
+        
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );

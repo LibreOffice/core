@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "copydlg.hxx"
@@ -62,10 +62,10 @@ CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
     get(m_pLbEndColor, "end");
     get(m_pBtnSetDefault, "default");
 
-    // Set up the view data button (image and accessible name).
+    
     m_pBtnSetViewData->SetAccessibleName (m_pBtnSetViewData->GetQuickHelpText());
 
-    // color tables
+    
     DBG_ASSERT( mpColorList.is(), "No colortable available !" );
     m_pLbStartColor->Fill( mpColorList );
     m_pLbEndColor->CopyEntries( *m_pLbStartColor );
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData)
     SetMetricValue( *m_pMtrFldMoveY, Fraction( aRect.GetHeight() ) /
                                     maUIScale, SFX_MAPUNIT_100TH_MM);
 
-    // sets color attribute
+    
     const SfxPoolItem*  pPoolItem = NULL;
     if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
     {
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault)
     SetMetricValue( *m_pMtrFldWidth, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
     SetMetricValue( *m_pMtrFldHeight, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-    // set color attribute
+    
     const SfxPoolItem*  pPoolItem = NULL;
     if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
     {
@@ -297,6 +297,6 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault)
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

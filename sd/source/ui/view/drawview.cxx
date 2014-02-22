@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/dispatch.hxx>
@@ -114,7 +114,7 @@ void DrawView::ModelHasChanged()
 {
     ::sd::View::ModelHasChanged();
 
-    // force framer to rerender
+    
     SfxStyleSheetBasePool* pSSPool = mrDoc.GetStyleSheetPool();
     pSSPool->Broadcast(SfxStyleSheetPoolHint(SFX_STYLESHEETPOOL_CHANGES));
 
@@ -133,7 +133,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 {
     sal_Bool bOk = sal_False;
 
-    // is there a masterpage edit?
+    
     if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
     {
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
@@ -142,7 +142,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
         if (pEditObject)
         {
-            // Textedit
+            
 
             sal_uInt32 nInv = pEditObject->GetObjInventor();
 
@@ -154,7 +154,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 if ( ePresObjKind == PRESOBJ_TITLE ||
                      ePresObjKind == PRESOBJ_NOTES )
                 {
-                    // Presentation object (except outline)
+                    
                     SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
                     DBG_ASSERT(pSheet, "StyleSheet not found");
 
@@ -162,7 +162,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     aTempSet.Put( rSet );
                     aTempSet.ClearInvalidItems();
 
-                    // Undo-Action
+                    
                     StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                     mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
@@ -172,14 +172,14 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 }
                 else if (eObjKind == OBJ_OUTLINETEXT)
                 {
-                    // Presentation object outline
+                    
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
 
                     pOutliner->SetUpdateMode(sal_False);
                     mpDocSh->SetWaitCursor( sal_True );
 
-                    // replace placeholder by template name
+                    
                     OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
                     aComment = aComment.replaceFirst("$", SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
                     mpDocSh->GetUndoManager()->EnterListAction( aComment, OUString() );
@@ -205,18 +205,18 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                         if( nDepth > 0 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
                         {
-                            // no SvxNumBulletItem in outline level 1 to 8!
+                            
                             aTempSet.ClearItem( EE_PARA_NUMBULLET );
                         }
 
-                        // Undo-Action
+                        
                         StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                         mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                         pSheet->GetItemSet().Put(aTempSet);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 
-                        // now also broadcast any child sheets
+                        
                         sal_Int16 nChild;
                         for( nChild = nDepth + 1; nChild < 9; nChild++ )
                         {
@@ -233,7 +233,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                         if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
                             pOutliner->GetDepth( pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
-                            pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
+                            pPara = pOutliner->GetParagraph( 0 );  
                     }
 
                     mpDocSh->SetWaitCursor( sal_False );
@@ -251,7 +251,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
         }
         else
         {
-            // Selection
+            
             const SdrMarkList& rList = GetMarkedObjectList();
             sal_uLong nMarkCount         = rList.GetMarkCount();
             for (sal_uLong nMark = 0; nMark < nMarkCount; nMark++)
@@ -267,7 +267,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     if (ePresObjKind == PRESOBJ_TITLE ||
                         ePresObjKind == PRESOBJ_NOTES)
                     {
-                        // Presentation object (except outline)
+                        
                         SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
                         DBG_ASSERT(pSheet, "StyleSheet not found");
 
@@ -275,7 +275,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         aTempSet.Put( rSet );
                         aTempSet.ClearInvalidItems();
 
-                        // Undo-Action
+                        
                         StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                         mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
@@ -285,7 +285,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     }
                     else if (eObjKind == OBJ_OUTLINETEXT)
                     {
-                        // Presentation object outline
+                        
                         for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
                         {
                             OUString aName = rPage.GetLayoutName() + " " +
@@ -298,8 +298,8 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                             if( nLevel > 1 )
                             {
-                                // for all levels over 1, clear all items that will be
-                                // hard set to level 1
+                                
+                                
                                 SfxWhichIter aWhichIter(rSet);
                                 sal_uInt16 nWhich(aWhichIter.FirstWhich());
                                 while( nWhich )
@@ -312,13 +312,13 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             }
                             else
                             {
-                                // put the items hard into level one
+                                
                                 aTempSet.Put( rSet );
                             }
 
                             aTempSet.ClearInvalidItems();
 
-                            // Undo-Action
+                            
                             StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                             mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
@@ -326,7 +326,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
 
-                        // remove all hard set items from shape that are now set in style
+                        
                         SfxWhichIter aWhichIter(rSet);
                         sal_uInt16 nWhich(aWhichIter.FirstWhich());
                         while( nWhich )
@@ -345,7 +345,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
         }
     }
-    else    // not at masterpage
+    else    
     {
         bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
     }
@@ -372,7 +372,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             mpDrawViewShell->ResetActualLayer();
         }
 
-        // switch to that page when it's not a master page
+        
         if(HINT_SWITCHTOPAGE == eHintKind)
         {
             const SdrPage* pPage = ((const SdrHint&)rHint).GetPage();
@@ -381,7 +381,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             {
                 if(mpDrawViewShell->GetActualPage() != pPage)
                 {
-                    sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) / 2; // Sdr --> Sd
+                    sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) / 2; 
                     mpDrawViewShell->SwitchPage(nPageNum);
                 }
             }
@@ -415,7 +415,7 @@ sal_Bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemov
 {
     sal_Bool bResult = sal_True;
 
-    // is there a masterpage edit?
+    
     if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
         if (IsPresObjSelected(sal_False, sal_True))
@@ -573,14 +573,14 @@ void DrawView::DeleteMarked()
                     Rectangle aRect( pObj->GetLogicRect() );
                     SdrObject* pNewObj = pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
 
-                    // pUndoManager should not be NULL (see assert above)
-                    // but since we have defensive code
-                    // for it earlier and later in the function
-                    // we might as well be consistant
+                    
+                    
+                    
+                    
                     if(pUndoManager)
                     {
-                        // Move the new PresObj to the position before the
-                        // object it will replace.
+                        
+                        
                         pUndoManager->AddUndoAction(
                             mrDoc.GetSdrUndoFactory().CreateUndoObjectOrdNum(
                                 *pNewObj,
@@ -608,6 +608,6 @@ void DrawView::DeleteMarked()
     OSL_TRACE( "DrawView::InsertAutoLayoutShape() - leave" );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

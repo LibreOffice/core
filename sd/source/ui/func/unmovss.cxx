@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDo
     maStyles.swap( rTheStyles );
 
     maListOfChildLists.resize( maStyles.size() );
-    // create list with lists of style sheet children
+    
     std::size_t i = 0;
     for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
     {
@@ -45,15 +45,15 @@ void SdMoveStyleSheetsUndoAction::Undo()
 
     if (mbMySheets)
     {
-        // the styles have to be inserted in the pool
+        
 
-        // first insert all styles to the pool
+        
         for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
         {
             pPool->Insert((*iter).get());
         }
 
-        // now assign the children again
+        
         std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
         for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter, ++childlistiter )
         {
@@ -66,7 +66,7 @@ void SdMoveStyleSheetsUndoAction::Undo()
     }
     else
     {
-        // remove the styles again from the pool
+        
         for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
         {
             pPool->Remove((*iter).get());

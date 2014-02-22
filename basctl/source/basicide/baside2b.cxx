@@ -72,10 +72,10 @@ sal_uInt16 const NoMarker = 0xFFFF;
 long const nBasePad = 2;
 long const nCursorPad = 5;
 
-long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
+long nVirtToolBoxHeight;    
 long nHeaderBarHeight;
 
-// Returns pBase converted to SbxVariable if valid and is not an SbxMethod.
+
 SbxVariable* IsSbxVariable (SbxBase* pBase)
 {
     if (SbxVariable* pVar = dynamic_cast<SbxVariable*>(pBase))
@@ -96,7 +96,7 @@ int const DWBORDER = 3;
 
 char const cSuffixes[] = "%&!#@$";
 
-} // namespace
+} 
 
 
 /**
@@ -139,9 +139,9 @@ void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
     Size aSz = pWin->GetOutputSizePixel();
     const Color aOldLineColor( pWin->GetLineColor() );
     pWin->SetLineColor( Color( COL_WHITE ) );
-    // White line on top
+    
     pWin->DrawLine( Point( 0, 0 ), Point( aSz.Width(), 0 ) );
-    // Black line at bottom
+    
     pWin->SetLineColor( Color( COL_BLACK ) );
     pWin->DrawLine( Point( 0, aSz.Height() - 1 ),
                     Point( aSz.Width(), aSz.Height() - 1 ) );
@@ -179,12 +179,12 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
     }
 }
 
-} // namespace
+} 
 
 
 //
-// EditorWindow
-// ============
+
+
 //
 
 class EditorWindow::ChangesListener:
@@ -289,7 +289,7 @@ OUString EditorWindow::GetWordAtCursor()
         TextEngine* pTextEngine = pEditView->GetTextEngine();
         if ( pTextEngine )
         {
-            // check first, if the cursor is at a help URL
+            
             const TextSelection& rSelection = pEditView->GetSelection();
             const TextPaM& rSelStart = rSelection.GetStart();
             const TextPaM& rSelEnd = rSelection.GetEnd();
@@ -314,12 +314,12 @@ OUString EditorWindow::GetWordAtCursor()
                 nEnd = nLength;
             }
 
-            // Not the selected range, but at the CursorPosition,
-            // if a word is partially selected.
+            
+            
             if ( aWord.isEmpty() )
                 aWord = pTextEngine->GetWord( rSelEnd );
 
-            // Can be empty when full word selected, as Cursor behing it
+            
             if ( aWord.isEmpty() && pEditView->HasSelection() )
                 aWord = pTextEngine->GetWord( rSelStart );
         }
@@ -332,7 +332,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bDone = false;
 
-    // Should have been activated at some point
+    
     if ( pEditEngine )
     {
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
@@ -363,15 +363,15 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     {
                         SbxDataType eType = pVar->GetType();
                         if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
-                            // might cause a crash e. g. at the selections-object
-                            // Type == Object does not mean pVar == Object!
-                            ; // aHelpText = ((SbxObject*)pVar)->GetClassName();
+                            
+                            
+                            ; 
                         else if ( eType & SbxARRAY )
-                            ; // aHelpText = "{...}";
+                            ; 
                         else if ( (sal_uInt8)eType != (sal_uInt8)SbxEMPTY )
                         {
                             aHelpText = pVar->GetName();
-                            if ( aHelpText.isEmpty() )     // name is not copied with the passed parameters
+                            if ( aHelpText.isEmpty() )     
                                 aHelpText = aWord;
                             aHelpText += "=";
                             aHelpText += pVar->GetOUString();
@@ -399,7 +399,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 
 void EditorWindow::Resize()
 {
-    // ScrollBars, etc. happens in Adjust...
+    
     if ( pEditView )
     {
         long nVisY = pEditView->GetStartDocPos().Y();
@@ -474,7 +474,7 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
             {
                 pDispatcher->ExecutePopup();
             }
-            if( pCodeCompleteWnd->IsVisible() ) // hide the code complete window
+            if( pCodeCompleteWnd->IsVisible() ) 
                 pCodeCompleteWnd->ClearAndHide();
         }
     }
@@ -485,8 +485,8 @@ bool EditorWindow::ImpCanModify()
     bool bCanModify = true;
     if ( StarBASIC::IsRunning() && rModulWindow.GetBasicStatus().bIsRunning )
     {
-        // If in Trace-mode, abort the trace or refuse input
-        // Remove markers in the modules in Notify at Basic::Stoped
+        
+        
         if ( QueryBox( 0, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG).toString() ).Execute() == RET_OK )
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
@@ -500,7 +500,7 @@ bool EditorWindow::ImpCanModify()
 
 void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    if ( !pEditView )   // Happens in Win95
+    if ( !pEditView )   
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -511,7 +511,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     long nThumb = rModulWindow.GetHScrollBar()->GetThumbPos(); (void)nThumb;
 #endif
     bool const bWasModified = pEditEngine->IsModified();
-    // see if there is an accelerator to be processed first
+    
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
     if( pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn() )
@@ -598,8 +598,8 @@ void EditorWindow::HandleAutoCorrect()
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
     sal_uInt16 nIndex =  aSel.GetStart().GetIndex();
-    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-    const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
+    OUString aLine( pEditEngine->GetText( nLine ) ); 
+    const OUString& sActSubName = GetActualSubName( nLine ); 
 
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( aLine, aPortions );
@@ -631,22 +631,22 @@ void EditorWindow::HandleAutoCorrect()
     TextSelection sTextSelection( aStart, aEnd );
     rModulWindow.UpdateModule();
     rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
-    // correct the last entered keyword
+    
     if( r.tokenType == TT_KEYWORDS )
     {
         sStr = sStr.toAsciiLowerCase();
         if( !rModulWindow.GetSbModule()->GetKeywordCase(sStr).isEmpty() )
-        // if it is a keyword, get its correct case
+        
             sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
         else
-        // else capitalize first letter/select the correct one, and replace
+        
             sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
 
         pEditEngine->ReplaceText( sTextSelection, sStr );
         pEditView->SetSelection( aSel );
     }
     if( r.tokenType == TT_IDENTIFIER )
-    {// correct variables
+    {
         if( !aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName ).isEmpty() )
         {
             sStr = aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName );
@@ -675,7 +675,7 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
 {//creates a text selection from the highlight portion on the cursor
     sal_uLong nLine = GetEditView()->GetSelection().GetStart().GetPara();
     sal_uInt16 nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
-    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    OUString aLine( pEditEngine->GetText( nLine ) ); 
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( aLine, aPortions );
 
@@ -707,7 +707,7 @@ void EditorWindow::HandleAutoCloseParen()
 {
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
-    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    OUString aLine( pEditEngine->GetText( nLine ) ); 
 
     if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
     {
@@ -722,7 +722,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
 {
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
-    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    OUString aLine( pEditEngine->GetText( nLine ) ); 
 
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( aLine, aPortions );
@@ -776,7 +776,7 @@ void EditorWindow::HandleProcedureCompletion()
     }
 
     if( !bFoundType || !bFoundName )
-        return;// no sub/function keyword or there is no identifier
+        return;
 
     OUString sText("\nEnd ");
     aSel = GetEditView()->GetSelection();
@@ -825,7 +825,7 @@ void EditorWindow::HandleCodeCompletion()
     rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
-    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    OUString aLine( pEditEngine->GetText( nLine ) ); 
     std::vector< OUString > aVect; //vector to hold the base variable+methods for the nested reflection
 
     std::vector<HighlightPortion> aPortions;
@@ -837,9 +837,9 @@ void EditorWindow::HandleCodeCompletion()
                  aPortions.rbegin());
              i != aPortions.rend(); ++i)
         {
-            if( i->tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
+            if( i->tokenType == TT_WHITESPACE ) 
                 break;
-            if( i->tokenType == TT_IDENTIFIER || i->tokenType == TT_KEYWORDS ) // extract the identifers(methods, base variable)
+            if( i->tokenType == TT_IDENTIFIER || i->tokenType == TT_KEYWORDS ) 
             /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
              * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
              * */
@@ -870,7 +870,7 @@ void EditorWindow::HandleCodeCompletion()
             std::vector< OUString > aFieldVect = aTypeCompletor.GetXIdlClassFields();//fields
             aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
             if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-            {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
+            {
                 std::vector< OUString > aMethVect = aTypeCompletor.GetXIdlClassMethods();//methods
                 aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
             }
@@ -882,18 +882,18 @@ void EditorWindow::HandleCodeCompletion()
 
 void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& aEntryVect, TextSelection aSel )
 {
-    // clear the listbox
+    
     pCodeCompleteWnd->ClearListBox();
-    // fill the listbox
+    
     for(unsigned int l = 0; l < aEntryVect.size(); ++l)
     {
         pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
     }
-    // show it
+    
     pCodeCompleteWnd->Show();
     pCodeCompleteWnd->ResizeAndPositionListBox();
     pCodeCompleteWnd->SelectFirstEntry();
-    // correct text selection, and set it
+    
     aSel.GetStart().GetIndex() += 1;
     aSel.GetEnd().GetIndex() += 1;
     pCodeCompleteWnd->SetTextSelection( aSel );
@@ -903,7 +903,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
 
 void EditorWindow::Paint( const Rectangle& rRect )
 {
-    if ( !pEditEngine )     // We need it now at latest
+    if ( !pEditEngine )     
         CreateEditEngine();
 
     pEditView->Paint( rRect );
@@ -919,10 +919,10 @@ bool EditorWindow::SetSourceInBasic()
 {
     bool bChanged = false;
     if ( pEditEngine && pEditEngine->IsModified()
-        && !GetEditView()->IsReadOnly() )   // Added for #i60626, otherwise
-            // any read only bug in the text engine could lead to a crash later
+        && !GetEditView()->IsReadOnly() )   
+            
     {
-        if ( !StarBASIC::IsRunning() ) // Not at runtime!
+        if ( !StarBASIC::IsRunning() ) 
         {
             rModulWindow.UpdateModule();
             bChanged = true;
@@ -931,8 +931,8 @@ bool EditorWindow::SetSourceInBasic()
     return bChanged;
 }
 
-// Returns the position of the last character of any of the following
-// EOL char combinations: CR, CR/LF, LF, return -1 if no EOL is found
+
+
 sal_Int32 searchEOL( const OUString& rStr, sal_Int32 fromIndex )
 {
     sal_Int32 iRetPos = -1;
@@ -966,7 +966,7 @@ void EditorWindow::CreateEditEngine()
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
-    bDoSyntaxHighlight = false; // too slow for large texts...
+    bDoSyntaxHighlight = false; 
     OUString aOUSource(rModulWindow.GetModule());
     sal_Int32 nLines = 0;
     sal_Int32 nIndex = -1;
@@ -977,9 +977,9 @@ void EditorWindow::CreateEditEngine()
     }
     while ( nIndex >= 0 );
 
-    // nLines*4: SetText+Formatting+DoHighlight+Formatting
-    // it could be cut down on one formatting but you would wait even longer
-    // for the text then if the source code is long...
+    
+    
+    
     pProgress.reset(new ProgressInfo(
         GetShell()->GetViewFrame()->GetObjectShell(),
         IDEResId(RID_STR_GENERATESOURCE).toString(),
@@ -992,7 +992,7 @@ void EditorWindow::CreateEditEngine()
     rModulWindow.GetBreakPointWindow().GetCurYOffset() = 0;
     rModulWindow.GetLineNumberWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode(true);
-    rModulWindow.Update();   // has only been invalidated at UpdateMode = true
+    rModulWindow.Update();   
 
     pEditView->ShowCursor( true, true );
 
@@ -1019,7 +1019,7 @@ void EditorWindow::CreateEditEngine()
 
     DBG_ASSERT( rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
 
-    // set readonly mode for readonly libraries
+    
     ScriptDocument aDocument(rModulWindow.GetDocument());
     OUString aOULibName(rModulWindow.GetLibName());
     Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -1032,7 +1032,7 @@ void EditorWindow::CreateEditEngine()
         rModulWindow.SetReadOnly(true);
 }
 
-// virtual
+
 void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
@@ -1153,7 +1153,7 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
 
 void EditorWindow::SetScrollBarRanges()
 {
-    // extra method, not InitScrollBars, because for EditEngine events too
+    
     if ( !pEditEngine )
         return;
 
@@ -1243,11 +1243,11 @@ void EditorWindow::ImplSetFont()
 
 void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
 {
-    // because of the DelayedSyntaxHighlight it's possible
-    // that this line does not exist anymore!
+    
+    
     if ( nPara < pEditEngine->GetParagraphCount() )
     {
-        // unfortunately I'm not sure that excactly this line does Modified() ...
+        
         if ( pProgress )
             pProgress->StepProgress();
         ImpDoHighlight( nPara );
@@ -1256,8 +1256,8 @@ void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
 
 void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
 {
-    // line is only added to 'Liste' (list), processed in TimerHdl
-    // => don't manipulate breaks while EditEngine is formatting
+    
+    
     if ( pProgress )
         pProgress->StepProgress();
 
@@ -1288,7 +1288,7 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
         DoSyntaxHighlight( nLine );
     }
 
-    // #i45572#
+    
     if ( pEditView )
         pEditView->ShowCursor( false, true );
 
@@ -1352,14 +1352,14 @@ void EditorWindow::ForceSyntaxTimeout()
 
 
 //
-// BreakPointWindow
-// ================
+
+
 //
 
 BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow)
     : Window(pParent, WB_BORDER)
     , rModulWindow(*pModulWindow)
-    , nCurYOffset(0) // memorize nCurYOffset and not take it from EditEngine
+    , nCurYOffset(0) 
     , nMarkerPos(NoMarker)
     , bErrorMarker(false)
 {
@@ -1493,7 +1493,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : 0;
         if ( pBrk )
         {
-            // test if break point is enabled...
+            
             PopupMenu aBrkPropMenu( IDEResId( RID_POPUP_BRKPROPS ) );
             aBrkPropMenu.CheckItem( RID_ACTIV, pBrk->bEnabled );
             switch ( aBrkPropMenu.Execute( this, aPos ) )
@@ -1548,7 +1548,7 @@ bool BreakPointWindow::SyncYOffset()
     return false;
 }
 
-// virtual
+
 void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
@@ -1572,8 +1572,8 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 
 
 //
-// WatchWindow
-// ===========
+
+
 //
 
 namespace
@@ -1637,7 +1637,7 @@ WatchWindow::WatchWindow (Layout* pParent) :
     aHeaderBar.InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE).toString(), nTypeTabWidth );
 
     long tabs[ 4 ];
-    tabs[ 0 ] = 3; // two tabs
+    tabs[ 0 ] = 3; 
     tabs[ 1 ] = 0;
     tabs[ 2 ] = nVarTabWidth;
     tabs[ 3 ] = nVarTabWidth + nValueTabWidth;
@@ -1654,7 +1654,7 @@ WatchWindow::WatchWindow (Layout* pParent) :
 
     SetHelpId( HID_BASICIDE_WATCHWINDOW );
 
-    // make watch window keyboard accessible
+    
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
@@ -1703,7 +1703,7 @@ struct WatchItem
     std::vector<OUString> maMemberList;
 
     SbxDimArrayRef  mpArray;
-    int             nDimLevel;  // 0 = Root
+    int             nDimLevel;  
     int             nDimCount;
     std::vector<short> vIndices;
 
@@ -1872,8 +1872,8 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 
 
 //
-// StackWindow
-// ===========
+
+
 //
 
 StackWindow::StackWindow (Layout* pParent) :
@@ -1893,7 +1893,7 @@ StackWindow::StackWindow (Layout* pParent) :
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
 
-    // make stack window keyboard accessible
+    
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
@@ -1952,7 +1952,7 @@ void StackWindow::UpdateCalls()
             if ( pParams )
             {
                 aEntry += "(";
-                // 0 is the sub's name...
+                
                 for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
                 {
                     SbxVariable* pVar = pParams->Get( nParam );
@@ -2006,8 +2006,8 @@ void StackWindow::UpdateCalls()
 
 
 //
-// ComplexEditorWindow
-// ===================
+
+
 //
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
@@ -2101,7 +2101,7 @@ EditorWindow::GetComponentInterface(sal_Bool bCreate)
         Window::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
-        // Make sure edit engine and view are available:
+        
         if (!pEditEngine)
             CreateEditEngine();
 
@@ -2113,8 +2113,8 @@ EditorWindow::GetComponentInterface(sal_Bool bCreate)
 
 
 //
-// WatchTreeListBox
-// ================
+
+
 //
 
 WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
@@ -2123,7 +2123,7 @@ WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
 
 WatchTreeListBox::~WatchTreeListBox()
 {
-    // Destroy user data
+    
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
@@ -2192,7 +2192,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
     {
         sal_uInt16 nElementCount = 0;
 
-        // Loop through indices of current level
+        
         int nParentLevel = bArrayIsRootArray ? pItem->nDimLevel : 0;
         int nThisLevel = nParentLevel + 1;
         sal_Int32 nMin, nMax;
@@ -2201,7 +2201,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
         {
             WatchItem* pChildItem = new WatchItem(pItem->maName);
 
-            // Copy data and create name
+            
 
             OUString aIndexStr = "(";
             pChildItem->mpArrayParentItem = pItem;
@@ -2256,13 +2256,13 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
             pSBX = pObj->Find( aVName, SbxCLASS_DONTCARE );
             if (SbxVariable const* pVar = IsSbxVariable(pSBX))
             {
-                // Force getting value
+                
                 SbxValues aRes;
                 aRes.eType = SbxVOID;
                 pVar->Get( aRes );
             }
         }
-        // Array?
+        
         else if( (pArray = pItem->GetRootArray()) != NULL )
         {
             rbArrayElement = true;
@@ -2284,12 +2284,12 @@ sal_Bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     bool bEdit = false;
     if ( StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError() )
     {
-        // No out of scope entries
+        
         bool bArrayElement;
         SbxBase* pSbx = ImplGetSBXForEntry( pEntry, bArrayElement );
         if (IsSbxVariable(pSbx) || bArrayElement)
         {
-            // Accept no objects and only end nodes of arrays for editing
+            
             if( !pItem->mpObject && (pItem->mpArray == NULL || pItem->nDimLevel == pItem->nDimCount) )
             {
                 aEditingRes = SvHeaderTabListBox::GetEntryText( pEntry, ITEM_ID_VALUE-1 );
@@ -2326,8 +2326,8 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUSt
         if ( (sal_uInt8)eType != (sal_uInt8)SbxOBJECT
              && ( eType & SbxARRAY ) == 0 )
         {
-            // If the type is variable, the conversion of the SBX does not matter,
-            // else the string is converted.
+            
+            
             pVar->PutStringExt( rResult );
         }
     }
@@ -2339,8 +2339,8 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUSt
 
     UpdateWatches();
 
-    // The text should never be taken/copied 1:1,
-    // as the UpdateWatches will be lost
+    
+    
     return false;
 }
 
@@ -2407,7 +2407,7 @@ void implEnableChildren( SvTreeListEntry* pEntry, bool bEnable )
     }
 }
 
-} // namespace
+} 
 
 void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 {
@@ -2428,7 +2428,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             bool bArrayElement;
             SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
 
-            // Array? If no end node create type string
+            
             if( bArrayElement && pItem->nDimLevel < pItem->nDimCount )
             {
                 SbxDimArray* pRootArray = pItem->GetRootArray();
@@ -2440,11 +2440,11 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             bool bCollapse = false;
             if (SbxVariable const* pVar = IsSbxVariable(pSBX))
             {
-                // extra treatment of arrays
+                
                 SbxDataType eType = pVar->GetType();
                 if ( eType & SbxARRAY )
                 {
-                    // consider multidimensinal arrays!
+                    
                     if (SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>(pVar->GetObject()))
                     {
                         SbxDimArray* pOldArray = pItem->mpArray;
@@ -2452,8 +2452,8 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         bool bArrayChanged = false;
                         if( pNewArray != NULL && pOldArray != NULL )
                         {
-                            // Compare Array dimensions to see if array has changed
-                            // Can be a copy, so comparing pointers does not work
+                            
+                            
                             sal_uInt16 nOldDims = pOldArray->GetDims();
                             sal_uInt16 nNewDims = pNewArray->GetDims();
                             if( nOldDims != nNewDims )
@@ -2485,7 +2485,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         {
                             implEnableChildren( pEntry, true );
                         }
-                        // #i37227 Clear always and replace array
+                        
                         if( pNewArray != pOldArray )
                         {
                             pItem->clearWatchItem();
@@ -2514,7 +2514,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 {
                     if (SbxObject* pObj = dynamic_cast<SbxObject*>(pVar->GetObject()))
                     {
-                        // Check if member list has changed
+                        
                         bool bObjChanged = false;
                         if (pItem->mpObject && !pItem->maMemberList.empty())
                         {
@@ -2609,7 +2609,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
         pEntry = Next( pEntry );
     }
 
-    // Force redraw
+    
     Invalidate();
 
     SbxBase::ResetError();
@@ -2647,7 +2647,7 @@ void CodeCompleteListBox::InsertSelectedEntry()
 {
     if( !aFuncBuffer.toString().isEmpty() )
     {
-        // if the user typed in something: remove, and insert
+        
         GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
         GetParentEditView()->DeleteSelected();
 
@@ -2692,7 +2692,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
     {
         switch( aChar )
         {
-            case KEY_ESCAPE: // hide, do nothing
+            case KEY_ESCAPE: 
                 HideAndRestoreFocus();
                 break;
             case KEY_RIGHT:
@@ -2828,20 +2828,20 @@ const TextSelection& CodeCompleteWindow::GetTextSelection() const
 void CodeCompleteWindow::ResizeAndPositionListBox()
 {
     if( pListBox->GetEntryCount() >= 1 )
-    {// if there is at least one element inside
-        // calculate basic position: under the current line
+    {
+        
         Rectangle aRect = ( (TextEngine*) pParent->GetEditEngine() )->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() , false );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
-        Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
+        Point aPos = aRect.BottomRight();
         aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;
 
-        OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
+        OUString aLongestEntry = pListBox->GetEntry( 0 );
         for( sal_uInt16 i=1; i< pListBox->GetEntryCount(); ++i )
         {
             if( ((OUString) pListBox->GetEntry( i )).getLength() > aLongestEntry.getLength() )
                 aLongestEntry = pListBox->GetEntry( i );
         }
-        // get column/line count
+        
         const sal_uInt16& nColumns = aLongestEntry.getLength();
         const sal_uInt16& nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
 
@@ -2897,7 +2897,7 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
 
     try
     {
-        // Get the base class for reflection:
+        
         xClass = css::reflection::theCoreReflection::get(
             comphelper::getProcessComponentContext())->forName(sVarType);
     }
@@ -2975,7 +2975,7 @@ bool UnoTypeCodeCompletetor::CanCodeComplete() const
 }
 
 bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
-{// modifies xClass!!!
+{
     Reference< reflection::XIdlField> xField = xClass->getField( sFieldName );
     if( xField != NULL )
     {
@@ -2989,7 +2989,7 @@ bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
 }
 
 bool UnoTypeCodeCompletetor::CheckMethod( const OUString& sMethName )
-{// modifies xClass!!!
+{
     Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
     if( xMethod != NULL ) //method OK, check return type
     {
@@ -3002,6 +3002,6 @@ bool UnoTypeCodeCompletetor::CheckMethod( const OUString& sMethName )
     return false;
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

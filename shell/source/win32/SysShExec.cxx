@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -37,9 +37,9 @@
 #pragma warning(pop)
 #endif
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
@@ -57,11 +57,11 @@ using namespace cppu;
 
 #define SYSSHEXEC_IMPL_NAME  "com.sun.star.sys.shell.SystemShellExecute"
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-namespace // private
+
+
+
+namespace 
 {
     Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
     {
@@ -170,7 +170,7 @@ namespace // private
 
     #define E_UNKNOWN_EXEC_ERROR -1
 
-    //-----------------------------------------
+    
 
     bool is_system_path(const OUString& path_or_uri)
     {
@@ -179,9 +179,9 @@ namespace // private
         return (rc == osl::FileBase::E_None);
     }
 
-    //-----------------------------------------
-    // trying to identify a jump mark
-    //-----------------------------------------
+    
+    
+    
 
     const OUString    JUMP_MARK_HTM(".htm#");
     const OUString    JUMP_MARK_HTML(".html#");
@@ -199,7 +199,7 @@ namespace // private
         return (jmp_mark > -1);
     }
 
-    //-----------------------------------------
+    
 
     bool is_existing_file(const OUString& file_name)
     {
@@ -219,9 +219,9 @@ namespace // private
         return exist;
     }
 
-    //-------------------------------------------------
-    // Jump marks in file urls are illegal.
-    //-------------------------------------------------
+    
+    
+    
 
     void remove_jump_mark(OUString* p_command)
     {
@@ -238,9 +238,9 @@ namespace // private
         }
     }
 
-} // end namespace
+} 
 
-//-----------------------------------------------------------------------------------------
+
 
 CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
     WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex ),
@@ -257,12 +257,12 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
     CoInitialize( NULL );
 }
 
-//-------------------------------------------------
+
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
-    // parameter checking
+    
     if (0 == aCommand.getLength())
         throw IllegalArgumentException(
             OUString("Empty command"),
@@ -327,8 +327,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
     if (!bRet && (nFlags & NO_SYSTEM_ERROR_MESSAGE))
     {
-        // ShellExecuteEx fails to set an error code
-        // we return osl_File_E_INVAL
+        
+        
         sal_Int32 psxErr = GetLastError();
         if (ERROR_SUCCESS == psxErr)
             psxErr = E_UNKNOWN_EXEC_ERROR;
@@ -342,21 +342,21 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     }
 }
 
-// XServiceInfo
+
 OUString SAL_CALL CSysShExec::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString(SYSSHEXEC_IMPL_NAME );
 }
 
-//  XServiceInfo
+
 sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-//  XServiceInfo
+
 Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
     throw( RuntimeException )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -27,7 +27,7 @@
 #include "dbfunc.hxx"
 #include "sc.hrc"
 
-// ============================================================================
+
 
 const long SC_OL_BITMAPSIZE                 = 12;
 const long SC_OL_POSOFFSET                  = 2;
@@ -40,15 +40,15 @@ const sal_uInt16 SC_OL_IMAGE_MINUS              = SC_OL_IMAGE_PLUS + 1;
 const sal_uInt16 SC_OL_IMAGE_NOTPRESSED         = SC_OL_IMAGE_MINUS + 1;
 const sal_uInt16 SC_OL_IMAGE_PRESSED            = SC_OL_IMAGE_NOTPRESSED + 1;
 
-// ============================================================================
+
 
 ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewData* pViewData, ScSplitPos eWhich ) :
     Window( pParent ),
     mrViewData( *pViewData ),
     meWhich( eWhich ),
     mbHoriz( eMode == SC_OUTLINE_HOR ),
-    mbMirrorEntries( false ),           // updated in SetHeaderSize
-    mbMirrorLevels( false ),            // updated in SetHeaderSize
+    mbMirrorEntries( false ),           
+    mbMirrorLevels( false ),            
     mpSymbols( NULL ),
     maLineColor( COL_BLACK ),
     mnHeaderSize( 0 ),
@@ -61,13 +61,13 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewDa
     mnFocusEntry( SC_OL_HEADERENTRY ),
     mbDontDrawFocus( false )
 {
-    EnableRTL( false );                 // mirroring is done manually
+    EnableRTL( false );                 
 
     InitSettings();
     maFocusRect.SetEmpty();
     SetHeaderSize( 0 );
 
-    // insert the window into task pane list for "F6 cycling"
+    
     if( SystemWindow* pSysWin = GetSystemWindow() )
         if( TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList() )
             pTaskPaneList->AddWindow( this );
@@ -75,7 +75,7 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewDa
 
 ScOutlineWindow::~ScOutlineWindow()
 {
-    // remove the window from task pane list
+    
     if( SystemWindow* pSysWin = GetSystemWindow() )
         if( TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList() )
             pTaskPaneList->RemoveWindow( this );
@@ -130,7 +130,7 @@ void ScOutlineWindow::ScrollPixel( long nDiff )
     Invalidate( GetRectangle( 0, nInvStart, GetOutputSizeLevel() - 1, nInvEnd ) );
     Update();
 
-    // if focus becomes invisible, move it to next visible button
+    
     ImplMoveFocusToVisible( nDiff < 0 );
 
     mbDontDrawFocus = false;
@@ -146,7 +146,7 @@ void ScOutlineWindow::ScrollRel( long nEntryDiff, long nEntryStart, long nEntryE
         Scroll( 0, nEntryDiff, aRect );
 }
 
-// internal -------------------------------------------------------------------
+
 
 void ScOutlineWindow::InitSettings()
 {
@@ -179,7 +179,7 @@ bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
 
 bool ScOutlineWindow::IsFiltered( SCCOLROW nColRowIndex ) const
 {
-    // columns cannot be filtered
+    
     return !mbHoriz && GetDoc().RowFiltered( static_cast<SCROW>(nColRowIndex), GetTab() );
 }
 
@@ -204,7 +204,7 @@ void ScOutlineWindow::GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColR
         rnColRowEnd = rnColRowStart + mrViewData.VisibleCellsY( WhichV( meWhich ) );
     }
 
-    // include collapsed columns/rows in front of visible range
+    
     while ( (rnColRowStart > 0) && IsHidden( rnColRowStart - 1 ) )
         --rnColRowStart;
 }
@@ -241,7 +241,7 @@ size_t ScOutlineWindow::GetLevelCount() const
 
 long ScOutlineWindow::GetLevelPos( size_t nLevel ) const
 {
-    // #i51970# must always return the *left* edge of the area used by a level
+    
     long nPos = static_cast< long >( SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE );
     return mbMirrorLevels ? (GetOutputSizeLevel() - nPos - SC_OL_BITMAPSIZE) : nPos;
 }
@@ -281,7 +281,7 @@ bool ScOutlineWindow::GetEntryPos(
 
     long nEntriesSign = mbMirrorEntries ? -1 : 1;
 
-    // --- common calculation ---
+    
 
     rnStartPos = GetColRowPos( nStart );
     rnEndPos = GetColRowPos( nEnd + 1 );
@@ -294,13 +294,13 @@ bool ScOutlineWindow::GetEntryPos(
                         ( mbMirrorEntries ? 1 : 0 )) / 2L;
     rnImagePos = mbMirrorEntries ? std::max( rnImagePos, nCenter ) : std::min( rnImagePos, nCenter );
 
-    // --- refinements ---
+    
 
-    // do not cut leftmost/topmost image
+    
     if ( bHidden && IsFirstVisible( nStart ) )
         rnImagePos = rnStartPos;
 
-    // do not cover previous collapsed image
+    
     if ( !bHidden && nEntry )
     {
         const ScOutlineEntry* pPrevEntry = GetOutlineEntry( nLevel, nEntry - 1 );
@@ -315,14 +315,14 @@ bool ScOutlineWindow::GetEntryPos(
         }
     }
 
-    // restrict rnStartPos...rnEndPos to valid area
+    
     rnStartPos = std::max( rnStartPos, mnMainFirstPos );
     rnEndPos = std::max( rnEndPos, mnMainFirstPos );
 
     if ( mbMirrorEntries )
-        rnImagePos -= SC_OL_BITMAPSIZE - 1;     // start pos aligns with right edge of bitmap
+        rnImagePos -= SC_OL_BITMAPSIZE - 1;     
 
-    // --- all rows filtered? ---
+    
 
     bool bVisible = true;
     if ( !mbHoriz )
@@ -384,7 +384,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
 
     long nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
 
-    // --- level buttons ---
+    
 
     if ( mnHeaderSize > 0 )
     {
@@ -398,9 +398,9 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
         }
     }
 
-    // --- expand/collapse buttons and expanded lines ---
+    
 
-    // search outline entries backwards
+    
     size_t nEntry = pArray->GetCount( sal::static_int_cast<sal_uInt16>(nLevel) );
     while ( nEntry )
     {
@@ -419,16 +419,16 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
                 rnLevel = nLevel;
                 rnEntry = nEntry;
 
-                // button?
+                
                 if ( (nStart >= nStartIndex) && (nImagePos <= nEntryMousePos) && (nEntryMousePos < nImagePos + SC_OL_BITMAPSIZE) )
                 {
                     rbButton = true;
                     return true;
                 }
 
-                // line?
+                
                 if ( mbMirrorEntries )
-                    ::std::swap( nStartPos, nEndPos );      // in RTL mode, nStartPos is the larger value
+                    ::std::swap( nStartPos, nEndPos );      
                 if ( (nStartPos <= nEntryMousePos) && (nEntryMousePos <= nEndPos) )
                 {
                     rbButton = false;
@@ -490,11 +490,11 @@ void ScOutlineWindow::DoCollapse( size_t nLevel, size_t nEntry ) const
 void ScOutlineWindow::Resize()
 {
     Window::Resize();
-    SetHeaderSize( mnHeaderSize );  // recalculates header/group positions
+    SetHeaderSize( mnHeaderSize );  
     if ( !IsFocusButtonVisible() )
     {
         HideFocus();
-        ShowFocus();    // calculates valid position
+        ShowFocus();    
     }
 }
 
@@ -509,7 +509,7 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-// drawing --------------------------------------------------------------------
+
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
 {
@@ -562,7 +562,7 @@ void ScOutlineWindow::ShowFocus()
 {
     if ( HasFocus() )
     {
-        // first move to a visible position
+        
         ImplMoveFocusToVisible( true );
 
         if ( IsFocusButtonVisible() )
@@ -615,7 +615,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
 
     size_t nLevelCount = GetLevelCount();
 
-    // --- draw header images ---
+    
 
     if ( mnHeaderSize > 0 )
     {
@@ -628,7 +628,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
         DrawLineRel( 0, nLinePos, nLevelEnd, nLinePos );
     }
 
-    // --- draw lines & collapse/expand images ---
+    
 
     SetEntryAreaClipRegion();
 
@@ -643,7 +643,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
         size_t nEntryCount = pArray->GetCount( sal::static_int_cast<sal_uInt16>(nLevel) );
         size_t nEntry;
 
-        // first draw all lines in the current level
+        
         SetLineColor();
         SetFillColor( maLineColor );
         for ( nEntry = 0; nEntry < nEntryCount; ++nEntry )
@@ -653,12 +653,12 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd = pEntry->GetEnd();
 
-            // visible range?
+            
             bool bDraw = (nEnd >= nStartIndex) && (nStart <= nEndIndex);
-            // find output coordinates
+            
             if ( bDraw )
                 bDraw = GetEntryPos( nLevel, nEntry, nEntryPos1, nEntryPos2, nImagePos );
-            // draw, if not collapsed
+            
             if ( bDraw && !pEntry->IsHidden() )
             {
                 if ( nStart >= nStartIndex )
@@ -666,7 +666,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
                 nEntryPos2 -= 2 * nEntriesSign;
                 long nLinePos = nLevelPos;
                 if ( mbMirrorLevels )
-                    nLinePos += SC_OL_BITMAPSIZE - 1;   // align with right edge of bitmap
+                    nLinePos += SC_OL_BITMAPSIZE - 1;   
                 DrawRectRel( nLinePos, nEntryPos1, nLinePos + nLevelsSign, nEntryPos2 );
 
                 if ( nEnd <= nEndIndex )
@@ -675,7 +675,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
             }
         }
 
-        // draw all images in the level from last to first
+        
         nEntry = nEntryCount;
         while ( nEntry )
         {
@@ -685,12 +685,12 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
                                                              sal::static_int_cast<sal_uInt16>(nEntry) );
             SCCOLROW nStart = pEntry->GetStart();
 
-            // visible range?
+            
             bool bDraw = (nStartIndex <= nStart) && (nStart <= nEndIndex + 1);
-            // find output coordinates
+            
             if ( bDraw )
                 bDraw = GetEntryPos( nLevel, nEntry, nEntryPos1, nEntryPos2, nImagePos );
-            // draw, if not hidden by higher levels
+            
             if ( bDraw )
             {
                 sal_uInt16 nImageId = pEntry->IsHidden() ? SC_OL_IMAGE_PLUS : SC_OL_IMAGE_MINUS;
@@ -705,7 +705,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
         ShowFocus();
 }
 
-// focus ----------------------------------------------------------------------
+
 
 /** Increments or decrements a value and wraps at the specified limits.
     @return  true = value wrapped. */
@@ -750,7 +750,7 @@ bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward, bool bFindVisible )
 
     bool bWrapped = false;
     size_t nEntryCount = pArray->GetCount( sal::static_int_cast<sal_uInt16>(mnFocusLevel) );
-    // #i29530# entry count may be decreased after changing active sheet
+    
     if( mnFocusEntry >= nEntryCount )
         mnFocusEntry = SC_OL_HEADERENTRY;
     size_t nOldEntry = mnFocusEntry;
@@ -759,19 +759,19 @@ bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward, bool bFindVisible )
     {
         if ( mnFocusEntry == SC_OL_HEADERENTRY )
         {
-            // move from header to first or last entry
+            
             if ( nEntryCount > 0 )
                 mnFocusEntry = bForward ? 0 : (nEntryCount - 1);
             /*  wrapped, if forward from right header to first entry,
                 or if backward from left header to last entry */
-            // Header and entries are now always in consistent order,
-            // so there's no need to check for mirroring here.
+            
+            
             if ( !nEntryCount || !bForward )
                 bWrapped = true;
         }
         else if ( lcl_RotateValue( mnFocusEntry, 0, nEntryCount - 1, bForward ) )
         {
-            // lcl_RotateValue returns true -> wrapped the entry range -> move to header
+            
             mnFocusEntry = SC_OL_HEADERENTRY;
             /*  wrapped, if forward from last entry to left header,
                 or if backward from first entry to right header */
@@ -813,13 +813,13 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
             bool bFound = false;
             if ( bForward && (mnFocusLevel + 2 < nLevelCount) )
             {
-                // next level -> find first child entry
+                
                 nNewLevel = mnFocusLevel + 1;
                 bFound = pArray->GetEntryIndexInRange(nNewLevel, nStart, nEnd, nNewEntry);
             }
             else if ( !bForward && (mnFocusLevel > 0) )
             {
-                // previous level -> find parent entry
+                
                 nNewLevel = mnFocusLevel - 1;
                 bFound = pArray->GetEntryIndex(nNewLevel, nStart, nNewEntry);
             }
@@ -847,7 +847,7 @@ bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible 
             or one level down, if forward from right header */
         if ( (!bForward) && (mnFocusEntry == SC_OL_HEADERENTRY) )
             bRet |= ImplMoveFocusByLevel( bForward );
-        // move to next/previous entry
+        
         bool bWrapInLevel = ImplMoveFocusByEntry( bForward, false );
         bRet |= bWrapInLevel;
         /*  one level up, if wrapped backward to right header,
@@ -862,10 +862,10 @@ bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible 
 
 void ScOutlineWindow::ImplMoveFocusToVisible( bool bForward )
 {
-    // first try to find an entry in the same level
+    
     if ( !IsFocusButtonVisible() )
         ImplMoveFocusByEntry( bForward, true );
-    // then try to find any other entry
+    
     if ( !IsFocusButtonVisible() )
         ImplMoveFocusByTabOrder( bForward, true );
 }
@@ -904,7 +904,7 @@ void ScOutlineWindow::LoseFocus()
 }
 
 
-// mouse ----------------------------------------------------------------------
+
 
 void ScOutlineWindow::StartMouseTracking( size_t nLevel, size_t nEntry )
 {
@@ -962,7 +962,7 @@ void ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
             DoFunction( nLevel, nEntry );
     }
 
-    // if an item has been hit and window is focused, move focus to this item
+    
     if ( bHit && HasFocus() )
     {
         HideFocus();
@@ -973,7 +973,7 @@ void ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-// keyboard -------------------------------------------------------------------
+
 
 void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -986,24 +986,24 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
     bool bUpDownKey = (nCode == KEY_UP) || (nCode == KEY_DOWN);
     bool bLeftRightKey = (nCode == KEY_LEFT) || (nCode == KEY_RIGHT);
 
-    // TAB key
+    
     if ( (nCode == KEY_TAB) && (bNoMod || bShift) )
-        // move forward without SHIFT key
-        MoveFocusByTabOrder( bNoMod );      // TAB uses logical order, regardless of mirroring
+        
+        MoveFocusByTabOrder( bNoMod );      
 
-    // LEFT/RIGHT/UP/DOWN keys
+    
     else if ( bNoMod && (bUpDownKey || bLeftRightKey) )
     {
         bool bForward = (nCode == KEY_DOWN) || (nCode == KEY_RIGHT);
         if ( mbHoriz == bLeftRightKey )
-            // move inside level with LEFT/RIGHT in horizontal and with UP/DOWN in vertical
+            
             MoveFocusByEntry( bForward != mbMirrorEntries );
         else
-            // move to next/prev level with LEFT/RIGHT in vertical and with UP/DOWN in horizontal
+            
             MoveFocusByLevel( bForward != mbMirrorLevels );
     }
 
-    // CTRL + number
+    
     else if ( bCtrl && (nCode >= KEY_1) && (nCode <= KEY_9) )
     {
         size_t nLevel = static_cast< size_t >( nCode - KEY_1 );
@@ -1011,7 +1011,7 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
             DoFunction( nLevel, SC_OL_HEADERENTRY );
     }
 
-    // other key codes
+    
     else switch ( rKCode.GetFullCode() )
     {
         case KEY_ADD:       DoExpand( mnFocusLevel, mnFocusEntry );     break;
@@ -1023,6 +1023,6 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

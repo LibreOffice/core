@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -41,7 +41,7 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
     EndAllAction();
 }
 
-/// convert current selection into text block and add to the text block document, incl. templates
+
 sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName, const OUString& rShortName,
                                     sal_Bool bSaveRelFile, const OUString* pOnlyTxt )
 {
@@ -113,7 +113,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             pCrsr->GetPoint()->nContent.Assign( pCntntNd, 0 );
         pCrsr->SetMark();
 
-        // then until the end of the Node array
+        
         pCrsr->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
         pCntntNd = pCrsr->GetCntntNode();
         if( pCntntNd )
@@ -135,7 +135,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             SwPaM aCpyPam( *pNd );
             aCpyPam.SetMark();
 
-            // then until the end of the nodes array
+            
             aCpyPam.GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
@@ -152,7 +152,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     return nRet;
 }
 
-/// copy all selections to the doc
+
 sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
     OSL_ENSURE( pInsDoc, "no Ins.Document"  );
@@ -163,7 +163,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     SwCntntNode * pNd = aIdx.GetNode().GetCntntNode();
     SwPosition aPos( aIdx, SwIndex( pNd, pNd->Len() ));
 
-    // Should the index be reset to start?
+    
     if( pSttNd )
     {
         *pSttNd = aPos.nNode;
@@ -177,17 +177,17 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
     if( IsTableMode() )
     {
-        // Copy parts of a table: create a table with the width of the original one and copy the
-        // selected boxes. The sizes are corrected on a percentage basis.
+        
+        
 
-        // search boxes using the layout
+        
         SwTableNode* pTblNd;
         SwSelBoxes aBoxes;
         GetTblSel( *this, aBoxes );
         if( !aBoxes.empty() && 0 != (pTblNd = (SwTableNode*)aBoxes[0]
             ->GetSttNd()->FindTableNode() ))
         {
-            // check if the table name can be copied
+            
             sal_Bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
             if( bCpyTblNm )
             {
@@ -229,14 +229,14 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             }
             else
             {
-                // Make a copy, so that in case we need to adjust the selection
-                // for the purpose of copying, our shell cursor is not touched.
-                // (Otherwise we would have to restore it.)
+                
+                
+                
                 SwPaM aPaM(*PCURCRSR);
                 if (bSelectAll)
-                    // Selection starts at the first para of the first cell,
-                    // but we want to copy the table and the start node before
-                    // the first cell as well.
+                    
+                    
+                    
                     aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
                 bRet = GetDoc()->CopyRange( aPaM, aPos, false ) || bRet;
             }
@@ -249,7 +249,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     if( !pInsDoc->IsExpFldsLocked() )
         pInsDoc->UpdateExpFlds(NULL, true);
 
-    // set the saved Node position back to the correct Node
+    
     if( bRet && pSttNd )
         ++(*pSttNd);
 
@@ -262,7 +262,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
  */
 sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 {
-    GetCrsr();  // creates all cursors if needed
+    GetCrsr();  
     if( IsSelOnePara() )
     {
         rBuf = GetSelTxt();
@@ -292,7 +292,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         SwReaderWriter::GetWriter( OUString(FILTER_TEXT), OUString(), xWrt );
         if( xWrt.Is() )
         {
-            // write selected areas into a ASCII document
+            
             SwWriter aWriter( aStream, *this);
             xWrt->SetShowProgress( sal_False );
 
@@ -309,7 +309,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
                 break;
             }
 
-            //JP 09.05.00: write as UNICODE ! (and not as ANSI)
+            
             SwAsciiOptions aAsciiOpt( xWrt->GetAsciiOptions() );
             aAsciiOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
             xWrt->SetAsciiOptions( aAsciiOpt );
@@ -328,7 +328,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
                     rtl_uString *pStr = rtl_uString_alloc(nLen / sizeof( sal_Unicode ));
                     aStream.Seek( 0 );
                     aStream.ResetError();
-                    //endian specific?, yipes!
+                    
                     aStream.Read(pStr->buffer, nLen);
                     rBuf = OUString(pStr, SAL_NO_ACQUIRE);
                 }

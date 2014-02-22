@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,18 +14,18 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/tplpitem.hxx>
 #include <com/sun/star/frame/status/Template.hpp>
 
 
-// STATIC DATA -----------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
 
-//=========================================================================
+
 
 SfxTemplateItem::SfxTemplateItem() :
     SfxFlagItem()
@@ -34,17 +34,17 @@ SfxTemplateItem::SfxTemplateItem() :
 
 SfxTemplateItem::SfxTemplateItem
 (
-    sal_uInt16 nWhichId,      // Slot-ID
-    const OUString& rStyle, // Name of the current Styles
-    sal_uInt16 nValue         // Flags for the filters of the automatic display
+    sal_uInt16 nWhichId,      
+    const OUString& rStyle, 
+    sal_uInt16 nValue         
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
 }
 
-//-------------------------------------------------------------------------
 
-// copy constuctor
+
+
 SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 
     SfxFlagItem( rCopy ),
@@ -53,9 +53,9 @@ SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 {
 }
 
-//-------------------------------------------------------------------------
 
-// op ==
+
+
 
 bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
 {
@@ -63,14 +63,14 @@ bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
              aStyle == ( (const SfxTemplateItem&)rCmp ).aStyle );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 {
     return new SfxTemplateItem(*this);
 }
 
-//-------------------------------------------------------------------------
+
 bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
@@ -82,7 +82,7 @@ bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
@@ -97,7 +97,7 @@ bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 
     return false;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt8 SfxTemplateItem::GetFlagCount() const
 {

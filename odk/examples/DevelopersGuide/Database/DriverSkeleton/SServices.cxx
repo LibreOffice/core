@@ -56,13 +56,13 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount*
         );
 
-//***************************************************************************************
-//
-// The required C-Api must be provided!
-// It contains of 3 special functions that have to be exported.
+
 //
 
-//---------------------------------------------------------------------------------------
+
+//
+
+
 void REGISTER_PROVIDER(
         const OUString& aServiceImplName,
         const Sequence< OUString>& Services,
@@ -80,7 +80,7 @@ void REGISTER_PROVIDER(
 }
 
 
-//---------------------------------------------------------------------------------------
+
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
@@ -118,7 +118,7 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
-//---------------------------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "subcomponentmanager.hxx"
@@ -68,26 +68,26 @@ namespace dbaui
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyChangeEvent;
 
-    // helper structs
+    
     namespace
     {
         struct SubComponentDescriptor
         {
-            /// the name of the sub component, empty if it is yet unsaved
+            
             OUString sName;
-            /// type of the component - an ElementType value, except for relation design
+            
             sal_Int32       nComponentType;
-            /// the mode in which the sub component has been opened
+            
             ElementOpenMode eOpenMode;
-            /// the frame which the component resides in. Must not be <NULL/>
+            
             Reference< XFrame >             xFrame;
-            /// the controller of the sub component. Must not be <NULL/>
+            
             Reference< XController >        xController;
-            /// the model of the sub component. Might be <NULL/>
+            
             Reference< XModel >             xModel;
-            /// the document definition which holds the component, if any; as CommandProcessor
+            
             Reference< XCommandProcessor >  xComponentCommandProcessor;
-            /// the document definition which holds the component, if any; as PropertySet
+            
             Reference< XPropertySet >       xDocumentDefinitionProperties;
 
             SubComponentDescriptor()
@@ -108,8 +108,8 @@ namespace dbaui
             {
                 if ( !impl_constructFrom( i_rComponent ) )
                 {
-                    // i_rComponent is neither a model, nor a controller, nor a frame
-                    // => it must be a css.sdb.DocumentDefinition
+                    
+                    
                     Reference< XComponentSupplier > xCompSupp( i_rComponent, UNO_QUERY_THROW );
                     Reference< XComponent > xComponent( xCompSupp->getComponent(), UNO_QUERY_THROW );
                     if ( !impl_constructFrom( xComponent ) )
@@ -124,7 +124,7 @@ namespace dbaui
         private:
             bool impl_constructFrom( const Reference< XComponent >& _rxComponent )
             {
-                // is it a model?
+                
                 xModel.set( _rxComponent, UNO_QUERY );
                 if ( xModel.is() )
                 {
@@ -134,7 +134,7 @@ namespace dbaui
                 }
                 else
                 {
-                    // is it a controller?
+                    
                     xController.set( _rxComponent, UNO_QUERY );
                     if ( xController.is() )
                     {
@@ -142,16 +142,16 @@ namespace dbaui
                     }
                     else
                     {
-                        // is it a frame?
+                        
                         xFrame.set( _rxComponent, UNO_QUERY );
                         if ( !xFrame.is() )
                             return false;
 
-                        // ensure we have a controller
+                        
                         xController.set( xFrame->getController(), UNO_SET_THROW );
                     }
 
-                    // check whether there is a model (not required)
+                    
                     xModel.set( xController->getModel() );
                 }
 
@@ -196,7 +196,7 @@ namespace dbaui
         };
     }
 
-    // SubComponentManager_Data
+    
     struct SubComponentManager_Data
     {
         SubComponentManager_Data( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
@@ -212,7 +212,7 @@ namespace dbaui
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
     };
 
-    // SubComponentManager
+    
     SubComponentManager::SubComponentManager( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
         :m_pData( new SubComponentManager_Data( _rController, _rMutex ) )
     {
@@ -239,12 +239,12 @@ namespace dbaui
 
             xFallback.set( _rCompDesc.xModel->getCurrentController() );
             if ( xFallback == _rCompDesc.xController )
-                // don't accept the very same controller as fallback
+                
                 xFallback.clear();
 
             if ( !xFallback.is() )
             {
-                // perhaps XModel2 can be of help here
+                
                 Reference< XModel2 > xModel2( _rCompDesc.xModel, UNO_QUERY );
                 Reference< XEnumeration > xControllerEnum;
                 if ( xModel2.is() )
@@ -294,7 +294,7 @@ namespace dbaui
             Reference< XController > xController( _rComponent.xController );
             OSL_ENSURE( xController.is(), "lcl_closeComponent: invalid controller!" );
 
-            // suspend the controller in the document
+            
             if ( xController.is() )
                 if ( !xController->suspend( sal_True ) )
                     return false;
@@ -335,10 +335,10 @@ namespace dbaui
     void SAL_CALL SubComponentManager::propertyChange( const PropertyChangeEvent& i_rEvent ) throw (RuntimeException)
     {
         if ( i_rEvent.PropertyName != PROPERTY_NAME )
-            // by definition, it's allowed to broadcast more than what we've registered for
+            
             return;
 
-        // find the sub component whose name changed
+        
         for (   SubComponents::iterator comp = m_pData->m_aComponents.begin();
                 comp != m_pData->m_aComponents.end();
                 ++comp
@@ -383,7 +383,7 @@ namespace dbaui
                 }
                 else
                 {
-                    // maybe this is just one view to the sub document, and only this view is closed
+                    
                     if ( !lcl_fallbackToAnotherController( *comp ) )
                     {
                         bRemove = true;
@@ -462,7 +462,7 @@ namespace dbaui
 #if OSL_DEBUG_LEVEL > 0
         if ( !_rName.isEmpty() )
         {
-            // check there does not already exist such a component
+            
             SubComponents::const_iterator existentPos = ::std::find_if(
                 m_pData->m_aComponents.begin(),
                 m_pData->m_aComponents.end(),
@@ -476,7 +476,7 @@ namespace dbaui
 
         m_pData->m_aComponents.push_back( aElement );
 
-        // add as listener
+        
         if ( aElement.xController.is() )
             aElement.xController->addEventListener( this );
         if ( aElement.xModel.is() )
@@ -484,7 +484,7 @@ namespace dbaui
         if ( aElement.xDocumentDefinitionProperties.is() )
             aElement.xDocumentDefinitionProperties->addPropertyChangeListener( PROPERTY_NAME, this );
 
-        // notify this to interested parties
+        
         aGuard.clear();
         lcl_notifySubComponentEvent( *m_pData, "OnSubComponentOpened", aElement );
     }
@@ -500,7 +500,7 @@ namespace dbaui
             SubComponentMatch( _rName, _nComponentType, _eOpenMode )
         );
         if ( pos == m_pData->m_aComponents.end() )
-            // no component with this name/type/open mode
+            
             return false;
 
         const Reference< XFrame > xFrame( pos->xFrame, UNO_SET_THROW );
@@ -565,6 +565,6 @@ namespace dbaui
         return false;
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

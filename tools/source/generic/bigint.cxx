@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <math.h>
@@ -39,7 +39,7 @@ static const long MY_MINSHORT = -MY_MAXSHORT;
  * chapter 4.3.1. The Classical Algorithms.
  */
 
-// TODO: Needs conversion to sal_uInt16/INT16/sal_uInt32/sal_Int32
+
 void BigInt::MakeBigInt( const BigInt& rVal )
 {
     if ( rVal.bIsBig )
@@ -92,9 +92,9 @@ void BigInt::Normalize()
             if ( bIsNeg )
                 nVal = -nVal;
         }
-        // else nVal is undefined !!! W.P.
+        
     }
-    // why? nVal is undefined ??? W.P.
+    
     else if ( nVal & 0xFFFF0000L )
         nLen = 2;
     else
@@ -159,8 +159,8 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         int  i;
         char len;
 
-        // if length of the two values differ, fill remaining positions
-        // of the smaller value with zeros.
+        
+        
         if (nLen >= rB.nLen)
         {
             len = nLen;
@@ -174,7 +174,7 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
                 nNum[i] = 0;
         }
 
-        // Add numerals, starting from the back
+        
         long k;
         long nZ = 0;
         for (i = 0, k = 0; i < len; i++) {
@@ -185,18 +185,18 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
                 k = 0;
             rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
         }
-        // If an overflow occurred, add to solution
-        if (nZ & 0xff0000L) // or if(k)
+        
+        if (nZ & 0xff0000L) 
         {
             rErg.nNum[i] = 1;
             len++;
         }
-        // Set length and sign
+        
         rErg.nLen   = len;
         rErg.bIsNeg = bIsNeg && rB.bIsNeg;
         rErg.bIsBig = true;
     }
-    // If one of the values is negative, perform substraction instead
+    
     else if (bIsNeg)
     {
         bIsNeg = false;
@@ -219,8 +219,8 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         char len;
         long nZ, k;
 
-        // if length of the two values differ, fill remaining positions
-        // of the smaller value with zeros.
+        
+        
         if (nLen >= rB.nLen)
         {
             len = nLen;
@@ -258,13 +258,13 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
                     k = 0;
                 rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
             }
-            // if a < b, revert sign
+            
             rErg.bIsNeg = !bIsNeg;
         }
         rErg.nLen   = len;
         rErg.bIsBig = true;
     }
-    // If one of the values is negative, perform addition instead
+    
     else if (bIsNeg)
     {
         bIsNeg = false;
@@ -327,7 +327,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
     aTmpB.Mult( rB, nMult );
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
-    { // guess divisor
+    { 
         nTmp = ( (long)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
@@ -337,7 +337,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
         if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
             ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
-        // Start division
+        
         nK = 0;
         nTmp = 0;
         for (i = 0; i < nLenB; i++)
@@ -351,7 +351,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
                 nK = (sal_uInt16)(0x10000UL - nK);
         }
         unsigned short& rNum( aTmpA.nNum[j - nLenB + i] );
-        rNum = rNum - nK;   // MSVC yields a warning on -= here, so don't use it
+        rNum = rNum - nK;   
         if (aTmpA.nNum[j - nLenB + i] == 0)
             rErg.nNum[j - nLenB] = nQ;
         else
@@ -396,7 +396,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
     aTmpB.Mult( rB, nMult);
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
-    { // Guess divisor
+    { 
         nTmp = ( (long)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
@@ -406,7 +406,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
         if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
             ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
-        // Start division
+        
         nK = 0;
         nTmp = 0;
         for (i = 0; i < nLenB; i++)
@@ -627,7 +627,7 @@ OUString BigInt::GetString() const
             aTmp /= a1000000000;
             if ( a.nVal < 100000000L )
             {
-                // to get leading 0s
+                
                 OUString aStr(OUString::number( a.nVal + 1000000000L ));
                 sBuff.insert(0, aStr.getStr() + 1);
             }
@@ -669,13 +669,13 @@ BigInt& BigInt::operator+=( const BigInt& rVal )
     {
         if( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG
             && nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
-        { // No overflows may occur here
+        { 
             nVal += rVal.nVal;
             return *this;
         }
 
         if( (nVal < 0) != (rVal.nVal < 0) )
-        { // No overflows may occur here
+        { 
             nVal += rVal.nVal;
             return *this;
         }
@@ -695,13 +695,13 @@ BigInt& BigInt::operator-=( const BigInt& rVal )
     {
         if ( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG &&
              nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
-        { // No overflows may occur here
+        { 
             nVal -= rVal.nVal;
             return *this;
         }
 
         if ( (nVal < 0) == (rVal.nVal < 0) )
-        { // No overflows may occur here
+        { 
             nVal -= rVal.nVal;
             return *this;
         }
@@ -720,8 +720,8 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     if ( !bIsBig && !rVal.bIsBig
          && nVal <= MY_MAXSHORT && rVal.nVal <= MY_MAXSHORT
          && nVal >= MY_MINSHORT && rVal.nVal >= MY_MINSHORT )
-         // TODO: not optimal !!! W.P.
-    { // No overflows may occur here
+         
+    { 
         nVal *= rVal.nVal;
     }
     else
@@ -747,7 +747,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
         if ( !bIsBig )
         {
-            // No overflows may occur here
+            
             nVal /= rVal.nVal;
             return *this;
         }
@@ -763,7 +763,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
-            // Divide BigInt with an sal_uInt16
+            
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
@@ -785,7 +785,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
         return *this;
     }
 
-    // Divide BigInt with BigInt
+    
     BigInt aTmp1, aTmp2;
     aTmp1.MakeBigInt( *this );
     aTmp2.MakeBigInt( rVal );
@@ -806,14 +806,14 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
 
         if ( !bIsBig )
         {
-            // No overflows may occur here
+            
             nVal %= rVal.nVal;
             return *this;
         }
 
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
-            // Divide Bigint by short
+            
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
@@ -832,7 +832,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     if ( ABS_IsLess( rVal ) )
         return *this;
 
-    // Divide BigInt with BigInt
+    
     BigInt aTmp1, aTmp2;
     aTmp1.MakeBigInt( *this );
     aTmp2.MakeBigInt( rVal );

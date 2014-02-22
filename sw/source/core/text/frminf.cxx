@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <pam.hxx>
@@ -64,7 +64,7 @@ sal_Int32 SwTxtMargin::GetTxtEnd() const
  *                   SwTxtFrmInfo::IsOneLine()
  *************************************************************************/
 
-// Does the paragraph fit into one line?
+
 sal_Bool SwTxtFrmInfo::IsOneLine() const
 {
     const SwLineLayout *pLay = pFrm->GetPara();
@@ -72,7 +72,7 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
         return sal_False;
     else
     {
-        // For follows sal_False of course
+        
         if( pFrm->GetFollow() )
             return sal_False;
         pLay = pLay->GetNext();
@@ -90,7 +90,7 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
  *                   SwTxtFrmInfo::IsFilled()
  *************************************************************************/
 
-// Is the line filled for X percent?
+
 sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 {
     const SwLineLayout *pLay = pFrm->GetPara();
@@ -109,7 +109,7 @@ sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
  *                   SwTxtFrmInfo::GetLineStart()
  *************************************************************************/
 
-// Where does the text start (without whitespace)? (document global)
+
 SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 {
     sal_Int32 nTxtStart = rLine.GetTxtStart();
@@ -132,7 +132,7 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
  *                   SwTxtFrmInfo::GetLineStart()
  *************************************************************************/
 
-// Where does the text start (without whitespace)? (relative in the Frame)
+
 SwTwips SwTxtFrmInfo::GetLineStart() const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -140,7 +140,7 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
     return GetLineStart( aLine ) - pFrm->Frm().Left() - pFrm->Prt().Left();
 }
 
-// Calculates the character's position and returns the middle position
+
 SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, sal_Bool bCenter ) const
 {
     SWRECTFN( pFrm )
@@ -186,11 +186,11 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
 {
     if( nLen )
     {
-        // It could be the first
+        
         if( pPam->HasMark() )
         {
-            // If the new position is right after the current one, then
-            // simply extend the Pam
+            
+            
             if( nPos == pPam->GetPoint()->nContent.GetIndex() )
             {
                 pPam->GetPoint()->nContent += nLen;
@@ -207,7 +207,7 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
     return pPam;
 }
 
-// Accumulates the whitespace at line start and end in the Pam
+
 void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -219,14 +219,14 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
         if( aLine.GetCurr()->GetLen() )
         {
             sal_Int32 nPos = aLine.GetTxtStart();
-            // Do NOT include the blanks/tabs from the first line
-            // in the selection
+            
+            
             if( !bFirstLine && nPos > aLine.GetStart() )
                 pPam = AddPam( pPam, pFrm, aLine.GetStart(),
                                 nPos - aLine.GetStart() );
 
-            // Do NOT include the blanks/tabs from the last line
-            // in the selection
+            
+            
             if( aLine.GetNext() )
             {
                 nPos = aLine.GetTxtEnd();
@@ -249,8 +249,8 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
  *                   SwTxtFrmInfo::IsBullet()
  *************************************************************************/
 
-// Is there a bullet/symbol etc. at the text position?
-// Fonts: CharSet, SYMBOL und DONTKNOW
+
+
 sal_Bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -263,10 +263,10 @@ sal_Bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
  *                   SwTxtFrmInfo::GetFirstIndent()
  *************************************************************************/
 
-// Get first line indent
-// The precondition for a positive or negative first line indent:
-// All lines (except for the first one) have the same left margin.
-// We do not want to be so picky and work with a tolerance of TOLERANCE twips.
+
+
+
+
 
 SwTwips SwTxtFrmInfo::GetFirstIndent() const
 {
@@ -290,7 +290,7 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
         }
     }
 
-    // At first we only return +1, -1 and 0
+    
     if( nLeft == nFirst )
         return 0;
     else
@@ -313,14 +313,14 @@ sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
 
     if( pNextFrm )
     {
-        // I'm a single line
+        
         SwTxtSizeInfo aNxtInf( (SwTxtFrm*)pNextFrm );
         SwTxtCursor aNxtLine( (SwTxtFrm*)pNextFrm, &aNxtInf );
         nNextIndent = GetLineStart( aNxtLine );
     }
     else
     {
-        // I'm multi-line
+        
         if( aLine.Next() )
         {
             nNextIndent = GetLineStart( aLine );
@@ -336,7 +336,7 @@ sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
     if( 1 >= rFndPos )
         return 0;
 
-    // Is on front of a non-space
+    
     const OUString& rTxt = aInf.GetTxt();
     sal_Unicode aChar = rTxt[rFndPos];
     if( CH_TAB == aChar || CH_BREAK == aChar || ' ' == aChar ||
@@ -344,12 +344,12 @@ sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
             aInf.HasHint( rFndPos ) ) )
         return 0;
 
-    // and after a space
+    
     aChar = rTxt[rFndPos - 1];
     if( CH_TAB != aChar && CH_BREAK != aChar &&
         ( ( CH_TXTATR_BREAKWORD != aChar && CH_TXTATR_INWORD != aChar ) ||
             !aInf.HasHint( rFndPos - 1 ) ) &&
-        // More than two Blanks!
+        
         ( ' ' != aChar || ' ' != rTxt[rFndPos - 2] ) )
         return 0;
 

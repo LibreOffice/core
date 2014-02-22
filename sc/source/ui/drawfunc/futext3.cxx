@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,19 +44,19 @@
 #include "drawview.hxx"
 #include "undocell.hxx"
 
-// ------------------------------------------------------------------------------------
-//  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
-//  damit die Aenderungen ins Dokument uebernommen werden!
-//  (Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
-//  bTextDirection=sal_True means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
-// ------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 void FuText::StopEditMode(bool /*bTextDirection*/)
 {
     SdrObject* pObject = pView->GetTextEditObject();
     if( !pObject ) return;
 
-    // relock the internal layer that has been unlocked in FuText::SetInEditMode()
+    
     if ( pObject->GetLayer() == SC_LAYER_INTERN )
         pView->LockInternalLayer();
 
@@ -93,7 +93,7 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
                 undo if editing a new note has been cancelled. */
             bNewNote = (pCalcUndo->GetActionCount() > 0) && pCalcUndo->GetAction( 0 )->ISA( SdrUndoNewObj );
 
-            // create a "insert note" undo action if needed
+            
             if( bNewNote )
                 pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, pNote->GetNoteData(), true, pCalcUndo ) );
             else
@@ -102,7 +102,7 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
     }
 
     if( pNote )
-        rDoc.LockStreamValid(true);     // only the affected sheet is invalidated below
+        rDoc.LockStreamValid(true);     
 
     /*  SdrObjEditView::SdrEndTextEdit() may try to delete the entire drawing
         object, if it does not contain text and has invisible border and fill.
@@ -114,7 +114,7 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
         case. */
     /*SdrEndTextEditKind eResult =*/ pView->SdrEndTextEdit( pNote != 0 );
 
-    // or ScEndTextEdit (with drawview.hxx)
+    
     pViewShell->SetDrawTextUndo( 0 );
 
     Cursor* pCur = pWindow->GetCursor();
@@ -123,10 +123,10 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
 
     if( pNote )
     {
-        // hide the caption object if it is in hidden state
+        
         pNote->ShowCaptionTemp( aNotePos, false );
 
-        // update author and date
+        
         pNote->AutoStamp();
 
         /*  If the entire text has been cleared, the cell note and its caption
@@ -137,24 +137,24 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
         {
             if( pUndoMgr )
             {
-                // collect the "remove object" drawing undo action created by DeleteNote()
+                
                 pDrawLayer->BeginCalcUndo(false);
-                // rescue note data before deletion
+                
                 ScNoteData aNoteData( pNote->GetNoteData() );
-                // delete note from document (removes caption, but does not delete it)
+                
                 rDoc.ReleaseNote(aNotePos);
-                // create undo action for removed note
+                
                 pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
             }
             else
             {
                 rDoc.ReleaseNote(aNotePos);
             }
-            // ScDocument::DeleteNote has deleted the note that pNote points to
+            
             pNote = 0;
         }
 
-        // finalize the undo list action
+        
         if( pUndoMgr )
         {
             pUndoMgr->LeaveListAction();
@@ -178,14 +178,14 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
             }
         }
 
-        // invalidate stream positions only for the affected sheet
+        
         rDoc.LockStreamValid(false);
         if (rDoc.IsStreamValid(aNotePos.Tab()))
             rDoc.SetStreamValid(aNotePos.Tab(), false);
     }
 }
 
-// Called following an EndDragObj() to update the new note rectangle position
+
 void FuText::StopDragMode(SdrObject* /*pObject*/)
 {
 }

@@ -52,29 +52,29 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(0); a < nSourceCount; a++)
                 {
-                    // get reference
+                    
                     const Primitive3DReference xReference(aSource[a]);
 
                     if(xReference.is())
                     {
-                        // try to cast to BasePrimitive2D implementation
+                        
                         const BasePrimitive3D* pBasePrimitive = dynamic_cast< const BasePrimitive3D* >(xReference.get());
 
                         if(pBasePrimitive)
                         {
-                            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
-                            // not all content is needed, remove transparencies and ModifiedColorPrimitives
+                            
+                            
                             switch(pBasePrimitive->getPrimitive3DID())
                             {
                                 case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                                 {
-                                    // polyPolygonMaterialPrimitive3D, check texturing and hatching
+                                    
                                     const PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
                                     const basegfx::B3DPolyPolygon aFillPolyPolygon(rPrimitive.getB3DPolyPolygon());
 
                                     if(maHatch.isFillBackground())
                                     {
-                                        // add original primitive for background
+                                        
                                         aDestination.push_back(xReference);
                                     }
 
@@ -132,37 +132,37 @@ namespace drawinglayer
 
                                         if(b2N && b2X && b2Y)
                                         {
-                                            // found two linearly independent 2D vectors
-                                            // get 2d range of texture coordinates
+                                            
+                                            
                                             const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aTexPolyPolygon));
                                             const basegfx::BColor aHatchColor(getHatch().getColor());
                                             const double fAngle(getHatch().getAngle());
                                             ::std::vector< basegfx::B2DHomMatrix > aMatrices;
 
-                                            // get hatch transformations
+                                            
                                             switch(getHatch().getStyle())
                                             {
                                                 case attribute::HATCHSTYLE_TRIPLE:
                                                 {
-                                                    // rotated 45 degrees
+                                                    
                                                     texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle - F_PI4);
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                                 case attribute::HATCHSTYLE_DOUBLE:
                                                 {
-                                                    // rotated 90 degrees
+                                                    
                                                     texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle - F_PI2);
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                                 case attribute::HATCHSTYLE_SINGLE:
                                                 {
-                                                    // angle as given
+                                                    
                                                     texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle);
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                             }
 
-                                            // create geometry from unit line
+                                            
                                             basegfx::B2DPolyPolygon a2DHatchLines;
                                             basegfx::B2DPolygon a2DUnitLine;
                                             a2DUnitLine.append(basegfx::B2DPoint(0.0, 0.0));
@@ -178,14 +178,14 @@ namespace drawinglayer
 
                                             if(a2DHatchLines.count())
                                             {
-                                                // clip against texture polygon
+                                                
                                                 a2DHatchLines = basegfx::tools::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, true);
                                             }
 
                                             if(a2DHatchLines.count())
                                             {
-                                                // create 2d matrix with 2d vectors as column vectors and 2d point as offset, this represents
-                                                // a coordinate system transformation from unit coordinates to the new coordinate system
+                                                
+                                                
                                                 basegfx::B2DHomMatrix a2D;
                                                 a2D.set(0, 0, a2X.getX());
                                                 a2D.set(1, 0, a2X.getY());
@@ -194,16 +194,16 @@ namespace drawinglayer
                                                 a2D.set(0, 2, a2N.getX());
                                                 a2D.set(1, 2, a2N.getY());
 
-                                                // invert that transformation, so we have a back-transformation from texture coordinates
-                                                // to unit coordinates
+                                                
+                                                
                                                 a2D.invert();
                                                 a2DHatchLines.transform(a2D);
 
-                                                // expand back-transformated geometry tpo 3D
+                                                
                                                 basegfx::B3DPolyPolygon a3DHatchLines(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(a2DHatchLines, 0.0));
 
-                                                // create 3d matrix with 3d vectors as column vectors (0,0,1 as Z) and 3d point as offset, this represents
-                                                // a coordinate system transformation from unit coordinates to the object's 3d coordinate system
+                                                
+                                                
                                                 basegfx::B3DHomMatrix a3D;
                                                 a3D.set(0, 0, a3X.getX());
                                                 a3D.set(1, 0, a3X.getY());
@@ -215,10 +215,10 @@ namespace drawinglayer
                                                 a3D.set(1, 3, a3N.getY());
                                                 a3D.set(2, 3, a3N.getZ());
 
-                                                // transform hatch lines to 3D object coordinates
+                                                
                                                 a3DHatchLines.transform(a3D);
 
-                                                // build primitives from this geometry
+                                                
                                                 const sal_uInt32 nHatchLines(a3DHatchLines.count());
 
                                                 for(sal_uInt32 d(0); d < nHatchLines; d++)
@@ -234,7 +234,7 @@ namespace drawinglayer
                                 }
                                 default :
                                 {
-                                    // add reference to result
+                                    
                                     aDestination.push_back(xReference);
                                     break;
                                 }
@@ -242,13 +242,13 @@ namespace drawinglayer
                         }
                         else
                         {
-                            // unknown implementation, add to result
+                            
                             aDestination.push_back(xReference);
                         }
                     }
                 }
 
-                // prepare return value
+                
                 const sal_uInt32 nDestSize(aDestination.size());
                 aRetval.realloc(nDestSize);
 
@@ -298,10 +298,10 @@ namespace drawinglayer
             return getBuffered3DDecomposition();
         }
 
-        // provide unique ID
+        
         ImplPrimitive3DIDBlock(HatchTexturePrimitive3D, PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

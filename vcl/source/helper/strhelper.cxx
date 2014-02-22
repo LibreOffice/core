@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,7 +69,7 @@ inline void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, int bInclude
         }
         pFrom++;
     } while( *pFrom && *pFrom != cUntil );
-    // copy the terminating character unless zero or protector
+    
     if( ! isProtect( *pFrom ) || bIncludeUntil )
     {
         *pTo = *pFrom;
@@ -100,7 +100,7 @@ inline void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode
         }
         pFrom++;
     } while( *pFrom && *pFrom != cUntil );
-    // copy the terminating character unless zero or protector
+    
     if( ! isProtect( *pFrom ) || bIncludeUntil )
     {
         *pTo = *pFrom;
@@ -131,7 +131,7 @@ OUString GetCommandLineToken( int nToken, const OUString& rLine )
         {
             if( *pRun == '\\' )
             {
-                // escapement
+                
                 pRun++;
                 *pLeap = *pRun;
                 pLeap++;
@@ -181,7 +181,7 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
         {
             if( *pRun == '\\' )
             {
-                // escapement
+                
                 pRun++;
                 *pLeap = *pRun;
                 pLeap++;
@@ -229,7 +229,7 @@ int GetCommandLineTokenCount(const OUString& rLine)
         {
             if( *pRun == '\\' )
             {
-                // escapement
+                
                 pRun++;
                 if( *pRun )
                     pRun++;
@@ -285,7 +285,7 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
         {
             if( *pRun == '\\' )
             {
-                // escapement
+                
                 pRun++;
                 *pLeap = *pRun;
                 pLeap++;
@@ -309,7 +309,7 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
 
     *pLeap = 0;
 
-    // there might be a space at beginning or end
+    
     pLeap--;
     if( *pLeap == ' ' )
         *pLeap = 0;
@@ -341,7 +341,7 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
         {
             if( *pRun == '\\' )
             {
-                // escapement
+                
                 pRun++;
                 *pLeap = *pRun;
                 pLeap++;
@@ -365,7 +365,7 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
 
     *pLeap = 0;
 
-    // there might be a space at beginning or end
+    
     pLeap--;
     if( *pLeap == ' ' )
         *pLeap = 0;
@@ -373,6 +373,6 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
     return OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits.h>
@@ -45,7 +45,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -61,7 +61,7 @@
 
 OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
-    // deliver and set the Metric of the application
+    
     FieldUnit eOutUnit = SfxModule::GetModuleFieldUnit( getFrameInterface() );
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
@@ -88,11 +88,11 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
     return sMetric;
 }
 
-// -----------------------------------------------------------------------
+
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 
-// class FunctionPopup_Impl ----------------------------------------------
+
 
 class FunctionPopup_Impl : public PopupMenu
 {
@@ -107,7 +107,7 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
+
 
 FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
     PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
@@ -117,14 +117,14 @@ FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
         CheckItem( nCheck );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FunctionPopup_Impl::Select()
 {
     nSelected = GetCurItemId();
 }
 
-// struct SvxPosSizeStatusBarControl_Impl --------------------------------
+
 
 struct SvxPosSizeStatusBarControl_Impl
 
@@ -139,19 +139,19 @@ struct SvxPosSizeStatusBarControl_Impl
 */
 
 {
-    Point     aPos;       // valid when a position is shown
-    Size      aSize;      // valid when a size is shown
-    OUString  aStr;       // valid when a text is shown
-    bool      bPos;       // show position ?
-    bool      bSize;      // set size ?
-    bool      bTable;     // set table index ?
-    bool      bHasMenu;   // set StarCalc popup menu ?
-    sal_uInt16  nFunction;  // the selected StarCalc function
-    Image     aPosImage;  // Image to show the position
-    Image     aSizeImage; // Image to show the size
+    Point     aPos;       
+    Size      aSize;      
+    OUString  aStr;       
+    bool      bPos;       
+    bool      bSize;      
+    bool      bTable;     
+    bool      bHasMenu;   
+    sal_uInt16  nFunction;  
+    Image     aPosImage;  
+    Image     aSizeImage; 
 };
 
-// class SvxPosSizeStatusBarControl ------------------------------------------
+
 
 /*  [Description]
 
@@ -190,12 +190,12 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
         pImp->aSizeImage = Image(b);
     }
 #endif
-    addStatusListener( OUString( STR_POSITION ));         // SID_ATTR_POSITION
-    addStatusListener( OUString( STR_TABLECELL ));   // SID_TABLE_CELL
-    addStatusListener( OUString( STR_FUNC ));    // SID_PSZ_FUNCTION
+    addStatusListener( OUString( STR_POSITION ));         
+    addStatusListener( OUString( STR_TABLECELL ));   
+    addStatusListener( OUString( STR_FUNC ));    
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -209,7 +209,7 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
     delete pImp;
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -229,8 +229,8 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                                const SfxPoolItem* pState )
 {
-    // Because the combi-controller, always sets the curent Id as HelpId
-    // first clean the cached HelpText
+    
+    
     GetStatusBar().SetHelpText( GetId(), "" );
 
     switch ( nSID )
@@ -254,14 +254,14 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
     else if ( SFX_ITEM_AVAILABLE != eState )
     {
-        // don't switch to empty display before an empty state was
-        // notified for all display types
+        
+        
 
         if ( nSID == SID_TABLE_CELL )
             pImp->bTable = false;
         else if ( nSID == SID_ATTR_POSITION )
             pImp->bPos = false;
-        else if ( nSID == GetSlotId() )     // controller is registered for SID_ATTR_SIZE
+        else if ( nSID == GetSlotId() )     
             pImp->bSize = false;
         else
         {
@@ -270,21 +270,21 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
     else if ( pState->ISA( SfxPointItem ) )
     {
-        // show position
+        
         pImp->aPos = ( (SfxPointItem*)pState )->GetValue();
         pImp->bPos = true;
         pImp->bTable = false;
     }
     else if ( pState->ISA( SvxSizeItem ) )
     {
-        // show size
+        
         pImp->aSize = ( (SvxSizeItem*)pState )->GetSize();
         pImp->bSize = true;
         pImp->bTable = false;
     }
     else if ( pState->ISA( SfxStringItem ) )
     {
-        // show string (table cel or different)
+        
         pImp->aStr = ( (SfxStringItem*)pState )->GetValue();
         pImp->bTable = true;
         pImp->bPos = false;
@@ -301,15 +301,15 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );
 
-    //  set only strings as text at the statusBar, so that the Help-Tips
-    //  can work with the text, when it is too long for the statusBar
+    
+    
     OUString aText;
     if ( pImp->bTable )
         aText = pImp->aStr;
     GetStatusBar().SetItemText( GetId(), aText );
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -341,7 +341,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 aArgs[0].Value = a;
 
                 execute( OUString( ".uno:StatusBarFunc" ), aArgs );
-//              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
+
             }
         }
     }
@@ -349,7 +349,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
         SfxStatusBarControl::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -371,10 +371,10 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 
     if ( pImp->bPos || pImp->bSize )
     {
-        // count the position for showing the size
+        
         long nSizePosX =
             rRect.Left() + rRect.GetWidth() / 2 + PAINT_OFFSET;
-        // draw position
+        
         Point aPnt = rRect.TopLeft();
         aPnt.Y() = aItemPos.Y();
         aPnt.X() += PAINT_OFFSET;
@@ -388,7 +388,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             Rectangle( aPnt, Point( nSizePosX, rRect.Bottom() ) ) );
         pDev->DrawText( aPnt, aStr );
 
-        // draw the size, when available
+        
         aPnt.X() = nSizePosX;
 
         if ( pImp->bSize )
@@ -415,8 +415,8 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     }
     else
     {
-        // Empty display if neither size nor table position are available.
-        // Date/Time are no longer used (#65302#).
+        
+        
         pDev->DrawRect( rRect );
     }
 

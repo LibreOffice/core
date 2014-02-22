@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// CT_Shape
+
 ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
 : ContextHandler2( rParent )
 , mpMasterShapePtr( pMasterShapePtr )
@@ -67,9 +67,9 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
 {
     switch( getBaseToken( aElementToken ) )
     {
-    // nvSpPr CT_ShapeNonVisual begin
-//  case XML_drElemPr:
-//      break;
+    
+
+
     case XML_cNvPr:
     {
         mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
@@ -85,7 +85,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
         if( rAttribs.hasAttribute( XML_idx ) )
             mpShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
         break;
-    // nvSpPr CT_ShapeNonVisual end
+    
 
     case XML_spPr:
         return new ShapePropertiesContext( *this, *mpShapePtr );

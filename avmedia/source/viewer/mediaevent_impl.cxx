@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mediaevent_impl.hxx"
@@ -26,22 +26,22 @@
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
-// ---------------------------
-// - MediaEventListenersImpl -
-// ---------------------------
+
+
+
 
 MediaEventListenersImpl::MediaEventListenersImpl( Window& rEventWindow ) :
     mpNotifyWindow( &rEventWindow )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaEventListenersImpl::~MediaEventListenersImpl()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaEventListenersImpl::cleanUp()
 {
@@ -49,14 +49,14 @@ void MediaEventListenersImpl::cleanUp()
     mpNotifyWindow = NULL;
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::KeyEvent& e )
     throw (::com::sun::star::uno::RuntimeException)
@@ -76,7 +76,7 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt::KeyEvent& e )
     throw (::com::sun::star::uno::RuntimeException)
@@ -95,7 +95,7 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt:
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt::MouseEvent& e )
     throw (::com::sun::star::uno::RuntimeException)
@@ -116,7 +116,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
     }
 }
 
-// ----------------------------------------------gvd-----------------------
+
 
 void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::awt::MouseEvent& e )
     throw (::com::sun::star::uno::RuntimeException)
@@ -137,7 +137,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt::MouseEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
@@ -150,7 +150,7 @@ void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt::MouseEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
@@ -163,7 +163,7 @@ void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt:
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::mouseDragged( const ::com::sun::star::awt::MouseEvent& e )
     throw (::com::sun::star::uno::RuntimeException)
@@ -178,7 +178,7 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const ::com::sun::star::awt
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::MouseEvent& e )
     throw (::com::sun::star::uno::RuntimeException)
@@ -193,21 +193,21 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::focusGained( const ::com::sun::star::awt::FocusEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void SAL_CALL MediaEventListenersImpl::focusLost( const ::com::sun::star::awt::FocusEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-} // namespace priv
-} // namespace avemdia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

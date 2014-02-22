@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -97,14 +97,14 @@ const Sequence< OUString >& PluginManager::getAdditionalSearchPaths()
     return aPaths;
 }
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr ) throw( Exception )
 {
     Reference< XInterface >  xService = *new XPluginManager_Impl( comphelper::getComponentContext(rSMgr) );
     return xService;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+
 OUString XPluginManager_Impl::getImplementationName() throw(  )
 
 {
@@ -112,7 +112,7 @@ OUString XPluginManager_Impl::getImplementationName() throw(  )
 
 }
 
-// ::com::sun::star::lang::XServiceInfo
+
 sal_Bool XPluginManager_Impl::supportsService(const OUString& ServiceName) throw(  )
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
@@ -123,13 +123,13 @@ sal_Bool XPluginManager_Impl::supportsService(const OUString& ServiceName) throw
     return sal_False;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+
 Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-// XPluginManager_Impl
+
 Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 1 );

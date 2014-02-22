@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgusenode.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svgio/svgreader/svgdocument.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -53,13 +53,13 @@ namespace svgio
 
         void SvgUseNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -142,17 +142,17 @@ namespace svgio
 
         void SvgUseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
         {
-            // try to access link to content
+            
             const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);
 
             if(mpXLink && Display_none != mpXLink->getDisplay())
             {
-                // decompose children
+                
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the
-                // SVG docs want the getWidth() and getHeight() from this node
-                // to be valid for the subtree.
+                
+                
+                
                 const_cast< SvgNode* >(mpXLink)->setAlternativeParent(this);
                 mpXLink->decomposeSvgNode(aNewTarget, true);
                 const_cast< SvgNode* >(mpXLink)->setAlternativeParent(0);
@@ -190,10 +190,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

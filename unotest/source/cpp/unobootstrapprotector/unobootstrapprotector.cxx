@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits>
@@ -46,16 +46,16 @@ namespace {
 
 using namespace com::sun::star;
 
-//cppunit calls instantiates a new TextFixture for each test and calls setUp
-//and tearDown on that for every test in a fixture
+
+
 //
-//We basically need to call dispose on our root component context context to
-//shut down cleanly in the right order.
+
+
 //
-//But we can't setup and tear down the root component context for
-//every test because all the uno singletons will be invalid after
-//the first dispose. So lets setup the default context once before
-//all tests are run, and tear it down once after all have finished
+
+
+
+
 
 class Prot : public CppUnit::Protector, private boost::noncopyable
 {

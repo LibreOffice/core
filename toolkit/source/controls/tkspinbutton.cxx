@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
@@ -49,20 +49,20 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoSpinButtonModel( *this ); }
 
-    // XMultiPropertySet
+    
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
 
-    // XPersistObject
+    
     OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 };
 
-//====================================================================
-//= UnoSpinButtonControl
-//====================================================================
+
+
+
 
 typedef ::cppu::ImplHelper2 <   css::awt::XAdjustmentListener
                             ,   css::awt::XSpinValue
@@ -85,13 +85,13 @@ public:
     void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException);
 
-    // XTypeProvider
+    
     DECLARE_XTYPEPROVIDER()
 
-    // XAdjustmentListener
+    
     void SAL_CALL adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) throw(css::uno::RuntimeException);
 
-    // XSpinValue
+    
     virtual void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( sal_Int32 value ) throw (css::uno::RuntimeException);
@@ -106,15 +106,15 @@ public:
     virtual void SAL_CALL setOrientation( sal_Int32 orientation ) throw (css::lang::NoSupportException, css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getOrientation(  ) throw (css::uno::RuntimeException);
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 };
 
-    //====================================================================
-    //= UnoSpinButtonModel
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     UnoSpinButtonModel::UnoSpinButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
@@ -140,13 +140,13 @@ public:
         ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString UnoSpinButtonModel::getServiceName( ) throw (RuntimeException)
     {
         return OUString("com.sun.star.awt.UnoControlSpinButtonModel");
     }
 
-    //--------------------------------------------------------------------
+    
     Any UnoSpinButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         switch ( nPropId )
@@ -165,7 +165,7 @@ public:
         }
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& UnoSpinButtonModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -177,20 +177,20 @@ public:
         return *pHelper;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > UnoSpinButtonModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  ) throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.toolkit.UnoSpinButtonModel" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL UnoSpinButtonModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
@@ -199,23 +199,23 @@ public:
         return aServices;
     }
 
-    //====================================================================
-    //= UnoSpinButtonControl
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     UnoSpinButtonControl::UnoSpinButtonControl()
         :UnoControlBase()
         ,maAdjustmentListeners( *this )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     OUString UnoSpinButtonControl::GetComponentServiceName()
     {
         return OUString("SpinButton");
     }
 
-    //--------------------------------------------------------------------
+    
     Any UnoSpinButtonControl::queryAggregation( const Type & rType ) throw(RuntimeException)
     {
         Any aRet = UnoControlBase::queryAggregation( rType );
@@ -224,10 +224,10 @@ public:
         return aRet;
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoSpinButtonControl, UnoControlBase, UnoSpinButtonControl_Base )
 
-    //--------------------------------------------------------------------
+    
     void UnoSpinButtonControl::dispose() throw(RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -247,13 +247,13 @@ public:
         UnoControl::dispose();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  ) throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.toolkit.UnoSpinButtonControl" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL UnoSpinButtonControl::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServices( UnoControlBase::getSupportedServiceNames() );
@@ -262,7 +262,7 @@ public:
         return aServices;
     }
 
-    //--------------------------------------------------------------------
+    
     void UnoSpinButtonControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
     {
         UnoControl::createPeer( rxToolkit, rParentPeer );
@@ -272,7 +272,7 @@ public:
             xSpinnable->addAdjustmentListener( this );
     }
 
-    //--------------------------------------------------------------------
+    
     void UnoSpinButtonControl::adjustmentValueChanged( const AdjustmentEvent& rEvent ) throw(RuntimeException)
     {
         switch ( rEvent.Type )
@@ -294,27 +294,27 @@ public:
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void UnoSpinButtonControl::addAdjustmentListener( const Reference< XAdjustmentListener > & listener ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         maAdjustmentListeners.addInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void UnoSpinButtonControl::removeAdjustmentListener( const Reference< XAdjustmentListener > & listener ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         maAdjustmentListeners.removeInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL UnoSpinButtonControl::setValue( sal_Int32 value ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( value ), sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL UnoSpinButtonControl::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), makeAny( minValue ), sal_True );
@@ -322,7 +322,7 @@ public:
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( currentValue ), sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL UnoSpinButtonControl::getValue(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
@@ -335,19 +335,19 @@ public:
         return nValue;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL UnoSpinButtonControl::setMinimum( sal_Int32 minValue ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), makeAny( minValue ), sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL UnoSpinButtonControl::setMaximum( sal_Int32 maxValue ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), makeAny( maxValue ), sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL UnoSpinButtonControl::getMinimum(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
@@ -360,7 +360,7 @@ public:
         return nMin;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL UnoSpinButtonControl::getMaximum(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
@@ -373,13 +373,13 @@ public:
         return nMax;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL UnoSpinButtonControl::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPININCREMENT ), makeAny( spinIncrement ), sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL UnoSpinButtonControl::getSpinIncrement(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
@@ -392,13 +392,13 @@ public:
         return nIncrement;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL UnoSpinButtonControl::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), makeAny( orientation ), sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL UnoSpinButtonControl::getOrientation(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );

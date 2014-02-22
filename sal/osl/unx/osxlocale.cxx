@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,7 +51,7 @@ namespace
         CFPropertyListRef pref = CFPreferencesCopyAppValue(CFSTR("AppleLocale"), kCFPreferencesCurrentApplication);
         CFPropertyListGuard proplGuard(pref);
 
-        if (pref == NULL) // return fallback value 'en_US'
+        if (pref == NULL) 
              return CFStringCreateWithCString(kCFAllocatorDefault, "en_US", kCFStringEncodingASCII);
 
         CFStringRef sref = (CFGetTypeID(pref) == CFArrayGetTypeID()) ? (CFStringRef)CFArrayGetValueAtIndex((CFArrayRef)pref, 0) : (CFStringRef)pref;
@@ -70,16 +70,16 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
 
     assert(sref != NULL && "osxlocale.cxx: getProcessLocale must return a non-NULL value");
 
-    // split the string into substrings; the first two (if there are two) substrings
-    // are language and country
+    
+    
     CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("_"));
     CFArrayGuard arrGuard(subs);
 
     CFStringRef lang = (CFStringRef)CFArrayGetValueAtIndex(subs, 0);
     CFStringGetCString(lang, locale, bufferLen, kCFStringEncodingASCII);
 
-    // country also available? Assumption: if the array contains more than one
-    // value the second value is always the country!
+    
+    
     if (CFArrayGetCount(subs) > 1)
     {
         strlcat(locale, "_", bufferLen - strlen(locale));
@@ -87,9 +87,9 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
         CFStringRef country = (CFStringRef)CFArrayGetValueAtIndex(subs, 1);
         CFStringGetCString(country, locale + strlen(locale), bufferLen - strlen(locale), kCFStringEncodingASCII);
     }
-    // Append 'UTF-8' to the locale because the Mac OS X file
-    // system interface is UTF-8 based and sal tries to determine
-    // the file system locale from the locale information
+    
+    
+    
     strlcat(locale, ".UTF-8", bufferLen - strlen(locale));
 
     return noErr;

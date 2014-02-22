@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,7 +70,7 @@ MacrosMenuController::~MacrosMenuController()
     OSL_TRACE("calling dtor");
 }
 
-// private function
+
 void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -85,17 +85,17 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     if (!pPopupMenu)
         return;
 
-    // insert basic
+    
     OUString aCommand(".uno:MacroDialog");
     OUString aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
 
-    // insert providers but not basic or java
+    
     addScriptItems( pPopupMenu, 4);
 }
 
-// XEventListener
+
 void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -114,7 +114,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );
@@ -124,11 +124,11 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) th
     }
 }
 
-// XMenuListener
+
 void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatch*/,const ::com::sun::star::util::URL& aTargetURL)
 {
-    // need to requery, since we handle more than one type of Command
-    // if we don't do this only .uno:ScriptOrganizer commands are executed
+    
+    
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     if( xDispatch.is() )
@@ -145,9 +145,9 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
 {
    try
    {
-       // Asynchronous execution as this can lead to our own destruction!
-       // Framework can recycle our current frame and the layout manager disposes all user interface
-       // elements if a component gets detached from its frame!
+       
+       
+       
        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
    catch ( const Exception& )
@@ -193,7 +193,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
                     OUString aDisplayName = serviceName.copy( providerKey.getLength() );
                     if( aDisplayName == "Java" || aDisplayName == "Basic" )
                     {
-                        // no entries for Java & Basic added elsewhere
+                        
                         break;
                     }
                     aCommand += aDisplayName;

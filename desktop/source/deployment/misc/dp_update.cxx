@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -93,8 +93,8 @@ void getOwnUpdateInfos(
         {
             const OUString id =  dp_misc::getIdentifier(i->second.extension);
             uno::Any anyError;
-            //It is unclear from the idl if there can be a null reference returned.
-            //However all valid information should be the same
+            
+            
             Sequence<Reference< xml::dom::XElement > >
                 infos(getUpdateInformation(updateInformation, urls, id, anyError));
             if (anyError.hasValue())
@@ -156,11 +156,11 @@ void getDefaultUpdateInfos(
         UpdateInfoMap::iterator j = inout_map.find(*id);
         if (j != inout_map.end())
         {
-            //skip those extension which provide its own update urls
+            
             if (j->second.extension->getUpdateInformationURLs().getLength())
                 continue;
             OUString v(infoset.getVersion());
-            //look for the highest version in the online repository
+            
             if (dp_misc::compareVersions(v, j->second.version) ==
                 dp_misc::GREATER)
             {
@@ -211,7 +211,7 @@ bool onlyBundledExtensions(
     return onlyBundled;
 }
 
-} // anon namespace
+} 
 
 
 OUString getExtensionDefaultUpdateURL()
@@ -316,7 +316,7 @@ getExtensionWithHighestVersion(
             continue;
         }
         Reference<deployment::XPackage> const & current = seqExt[i];
-        //greatest has a value
+        
         if (! current.is())
             continue;
 
@@ -350,7 +350,7 @@ UpdateInfoMap getOnlineUpdateInfos(
         const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =  xExtMgr->getAllExtensions(
             Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
 
-        //fill the UpdateInfoMap. key = extension identifier, value = UpdateInfo
+        
         for (int pos = seqAllExt.getLength(); pos --; )
         {
             uno::Sequence<Reference<deployment::XPackage> > const &   seqExt = seqAllExt[pos];
@@ -379,8 +379,8 @@ UpdateInfoMap getOnlineUpdateInfos(
         }
     }
 
-    //Now find the update information for the extensions which provide their own
-    //URLs to update information.
+    
+    
     bool allInfosObtained = false;
     getOwnUpdateInfos(xContext, updateInformation, infoMap, out_errors, allInfosObtained);
 
@@ -406,6 +406,6 @@ OUString getHighestVersion(
 
     return OUString();
 }
-} //namespace dp_misc
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

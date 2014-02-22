@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -133,7 +133,7 @@ const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
 void StartGrammarChecking( SwDoc &rDoc )
 {
-    // check for a visible view
+    
     bool bVisible = false;
     const SwDocShell *mpDocShell = rDoc.GetDocShell();
     SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( mpDocShell, sal_False );
@@ -144,10 +144,10 @@ void StartGrammarChecking( SwDoc &rDoc )
         pFrame = SfxViewFrame::GetNext( *pFrame, mpDocShell, sal_False );
     }
 
-    //!! only documents with visible views need to be checked
-    //!! (E.g. don't check temporary documents created for printing, see printing of notes and selections.
-    //!! Those get created on the fly and get hard deleted a bit later as well, and no one should have
-    //!! a uno reference to them)
+    
+    
+    
+    
     if (bVisible)
     {
         uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
@@ -156,7 +156,7 @@ void StartGrammarChecking( SwDoc &rDoc )
             uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
             uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
 
-            // start automatic background checking if not active already
+            
             if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
                 xGCIterator->startProofreading( xDoc, xFPIP );
         }
@@ -237,7 +237,7 @@ SwDoc::SwDoc()
     mpGrammarContact(createGrammarContact()),
     maChartDataProviderImplRef(),
     mpChartControllerHelper( 0 ),
-    mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
+    mpListItemsList( new tImplSortedNodeNumList() ), 
     m_pXmlIdRegistry(),
     mnAutoFmtRedlnCommentNo( 0 ),
     mnLinkUpdMode( GLOBALSETTING ),
@@ -275,20 +275,20 @@ SwDoc::SwDoc()
     mbPurgeOLE(true),
     mbKernAsianPunctuation(false),
     mbReadlineChecked(false),
-    mbLinksUpdated( false ), //#i38810#
+    mbLinksUpdated( false ), 
     mbClipBoard( false ),
     mbColumnSelection( false ),
     mbIsPrepareSelAll(false),
 #ifdef DBG_UTIL
     mbXMLExport(false),
 #endif
-    mbContainsAtPageObjWithContentAnchor(false), //#i119292#, fdo#37024
+    mbContainsAtPageObjWithContentAnchor(false), 
 
-    // COMPATIBILITY FLAGS START
+    
 
     mbAddFlyOffsets(false),
     mbUseHiResolutionVirtualDevice(true),
-    mbMathBaselineAlignment(false), // default for *old* documents is 'off'
+    mbMathBaselineAlignment(false), 
     mbStylesNoDefault(false),
     mbFloattableNomargins(false),
     mEmbedFonts(false),
@@ -304,10 +304,10 @@ SwDoc::SwDoc()
     mbUnixForceZeroExtLeading(false),
     mbOldPrinterMetrics(false),
     mbTabRelativeToIndent(true),
-    mbProtectForm(false), // i#78591#
+    mbProtectForm(false), 
     mbInvertBorderSpacing (false),
     mbCollapseEmptyCellPara(true),
-    mbTabAtLeftIndentForParagraphsInList(false), //#i89181#
+    mbTabAtLeftIndentForParagraphsInList(false), 
     mbSmallCapsPercentage66(false),
     mbTabOverflow(true),
     mbUnbreakableNumberings(false),
@@ -319,15 +319,15 @@ SwDoc::SwDoc()
     mn32DummyCompatabilityOptions1(0),
     mn32DummyCompatabilityOptions2(0),
 
-    // COMPATIBILITY FLAGS END
+    
 
     mbStartIdleTimer(false),
     mbReadOnly(false)
 {
-    // COMPATIBILITY FLAGS START
+    
 
-    // Note: Any non-hidden compatibility flag should obtain its default
-    // by asking SvtCompatibilityOptions, see below.
+    
+    
     //
     const SvtCompatibilityOptions aOptions;
     mbParaSpaceMax                      = aOptions.IsAddSpacing();
@@ -343,7 +343,7 @@ SwDoc::SwDoc()
 
     mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
 
-    // COMPATIBILITY FLAGS END
+    
 
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)
@@ -356,29 +356,29 @@ SwDoc::SwDoc()
     mpCharFmtTbl->push_back(mpDfltCharFmt);
 
     /* FmtColls */
-    // TXT
+    
     mpTxtFmtCollTbl->push_back(mpDfltTxtFmtColl);
-    // GRF
+    
     mpGrfFmtCollTbl->push_back(mpDfltGrfFmtColl);
 
-    // Create PageDesc, EmptyPageFmt and ColumnFmt
+    
     if ( maPageDescs.empty() )
         GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
-    // Set to "Empty Page"
+    
     mpEmptyPageFmt->SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
-    // Set BodyFmt for columns
+    
     mpColumnContFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     _InitFieldTypes();
 
-    // Create a default OutlineNumRule (for Filters)
+    
     mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),
-                                  // #i89178#
+                                  
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );
     AddNumRule(mpOutlineRule);
-    // Counting of phantoms depends on <IsOldNumbering()>
+    
     mpOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
 
     new SwTxtNode(
@@ -387,7 +387,7 @@ SwDoc::SwDoc()
     new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    // set the own IdleTimer
+    
     maIdleTimer.SetTimeout( 600 );
     maIdleTimer.SetTimeoutHdl( LINK(this, SwDoc, DoIdleJobs) );
 
@@ -397,14 +397,14 @@ SwDoc::SwDoc()
     maStatsUpdateTimer.SetTimeout( 100 );
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
 
-    // Create DBMgr
+    
     mpNewDBMgr = new SwNewDBMgr;
 
-    // create TOXTypes
+    
     InitTOXTypes();
 
-    // pass empty item set containing the paragraph's list attributes
-    // as ignorable items to the stype manager.
+    
+    
     {
         SfxItemSet aIgnorableParagraphItems( GetAttrPool(), RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1);
         mpStyleAccess = createStyleManager( &aIgnorableParagraphItems );
@@ -418,8 +418,8 @@ SwDoc::SwDoc()
     }
     else
     {
-        // Initialize the session id of the current document to a random number
-        // smaller than 2^21.
+        
+        
         static rtlRandomPool aPool = rtl_random_createPool();
         rtl_random_getBytes( aPool, &mnRsid, sizeof ( mnRsid ) );
         mnRsid &= ( 1<<21 ) - 1;
@@ -477,7 +477,7 @@ static void DeleteAndDestroy(SwGrfFmtColls& rFmts, int aStartIdx, int aEndIdx)
  */
 SwDoc::~SwDoc()
 {
-    // nothing here should create Undo actions!
+    
     GetIDocumentUndoRedo().DoUndo(false);
 
     if (mpDocShell)
@@ -485,31 +485,31 @@ SwDoc::~SwDoc()
         mpDocShell->SetUndoManager(0);
     }
 
-    // #i83479#
+    
     delete mpListItemsList;
     mpListItemsList = 0;
 
-    // clean up chart related structures...
-    // Note: the chart data provider gets already diposed in ~SwDocShell
-    // since all UNO API related functionality requires an existing SwDocShell
-    // this assures that dipose gets called if there is need for it.
+    
+    
+    
+    
     maChartDataProviderImplRef.reset();
     delete mpChartControllerHelper;
 
     delete mpGrammarContact;
     mpGrammarContact = 0;
 
-    //!! needs to be done to destroy a possible SwFmtDrop format that may
-    //!! be connected to a char format which may not otherwise be removed
-    //!! and thus would leave a unremoved SwFmt object. (TL)
-    //!! (this is case is not possible via UI but via API...)
+    
+    
+    
+    
     SwFmtDrop aDrop;
     SetDefault(aDrop);
-    //!! same for SwFmtCharFmt
+    
     SwFmtCharFmt aCharFmt(NULL);
     SetDefault(aCharFmt);
 
-    StopIdling();   // stop idle timer
+    StopIdling();   
     maStatsUpdateTimer.Stop();
 
     delete mpUnoCallBack, mpUnoCallBack = 0;
@@ -518,7 +518,7 @@ SwDoc::~SwDoc()
     delete mpLayouter;
     mpLayouter = 0L;
 
-    // Deactivate Undo notification from Draw
+    
     if( mpDrawModel )
     {
         DrawNotifyUndoHdl();
@@ -536,7 +536,7 @@ SwDoc::~SwDoc()
     delete mpUpdtFlds;
     delete mpACEWord;
 
-    // Release the BaseLinks
+    
     {
        ::sfx2::SvLinkSources aTemp(mpLinkMgr->GetServers());
        for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin();
@@ -547,19 +547,19 @@ SwDoc::~SwDoc()
             mpLinkMgr->Remove( 0, mpLinkMgr->GetLinks().size() );
     }
 
-    // The ChapterNumbers/Numbers need to be deleted before the styles
-    // or we update all the time!
+    
+    
     m_pNodes->pOutlineNds->clear();
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
     rUndoNodes.pOutlineNds->clear();
 
     mpFtnIdxs->clear();
 
-    // indices could be registered in attributes
+    
     m_pUndoManager->DelAllUndoObj();
 
-    // The BookMarks contain indices to the Content. These must be deleted
-    // before deleting the Nodes.
+    
+    
     mpMarkManager->clearAllMarks();
 
     if( mpExtInputRing )
@@ -571,8 +571,8 @@ SwDoc::~SwDoc()
         delete pTmp;
     }
 
-    // Old - deletion without a Flag is expensive, because we send a Modify
-    // aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
+    
+    
     {
         for( sal_uInt16 n = mpTOXTypes->size(); n; )
         {
@@ -583,8 +583,8 @@ SwDoc::~SwDoc()
     }
     delete mpDefTOXBases;
 
-    // Any of the FrmFormats can still have indices registered.
-    // These need to be destroyed now at the latest.
+    
+    
     BOOST_FOREACH( SwFrmFmt* pFmt, *mpFrmFmtTbl )
         lcl_DelFmtIndices( pFmt );
     BOOST_FOREACH( SwFrmFmt* pFmt, *mpSpzFrmFmtTbl )
@@ -592,33 +592,33 @@ SwDoc::~SwDoc()
     BOOST_FOREACH( SwSectionFmt* pFmt, *mpSectionFmtTbl )
         lcl_DelFmtIndices( pFmt );
 
-    // The formats/styles that follow depend on the default formats.
-    // Destroy these only after destroying the FmtIndices, because the content
-    // of headers/footers has to be deleted as well. If in the headers/footers
-    // there are still Flys registered at that point, we have a problem.
+    
+    
+    
+    
     BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
         delete pPageDesc;
     maPageDescs.clear();
 
-    // Delete content selections.
-    // Don't wait for the SwNodes dtor to destroy them; so that Formats
-    // do not have any dependencies anymore.
+    
+    
+    
     m_pNodes->DelNodes( SwNodeIndex(*m_pNodes), m_pNodes->Count() );
     rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
 
-    // Delete Formats, make it permanent some time in the future
+    
 
-    // Delete for Collections
-    // So that we get rid of the dependencies
+    
+    
     mpFtnInfo->ReleaseCollection();
     mpEndNoteInfo->ReleaseCollection();
 
     OSL_ENSURE( mpDfltTxtFmtColl == (*mpTxtFmtCollTbl)[0],
             "Default-Text-Collection must always be at the start" );
 
-    // Optimization: Based on the fact that Standard is always 2nd in the
-    // array, we should delete it as the last. With this we avoid
-    // reparenting the Formats all the time!
+    
+    
+    
     if( 2 < mpTxtFmtCollTbl->size() )
         DeleteAndDestroy(*mpTxtFmtCollTbl, 2, mpTxtFmtCollTbl->size());
     DeleteAndDestroy(*mpTxtFmtCollTbl, 1, mpTxtFmtCollTbl->size());
@@ -642,21 +642,21 @@ SwDoc::~SwDoc()
     DELETEZ( mpPrt );
     DELETEZ( mpNewDBMgr );
 
-    // All Flys need to be destroyed before the Drawing Model,
-    // because Flys can still contain DrawContacts, when no
-    // Layout could be constructed due to a read error.
+    
+    
+    
     DeleteAndDestroy( *mpSpzFrmFmtTbl, 0, mpSpzFrmFmtTbl->size() );
 
-    // Only now destroy the Model, the drawing objects - which are also
-    // contained in the Undo - need to remove their attributes from the
-    // Model. Also, DrawContacts could exist before this.
+    
+    
+    
     ReleaseDrawModel();
-    // Destroy DrawModel before the LinkManager, because it's always set
-    // in the DrawModel.
+    
+    
     DELETEZ( mpLinkMgr );
 
-    // Clear the Tables before deleting the defaults, or we crash due to
-    // dependencies on defaults.
+    
+    
     delete mpFrmFmtTbl;
     delete mpSpzFrmFmtTbl;
 
@@ -681,7 +681,7 @@ SwDoc::~SwDoc()
     }
     maListStyleLists.clear();
 
-    disposeXForms(); // #i113606#, dispose the XForms objects
+    disposeXForms(); 
 
     delete mpPrtData;
     delete mpNumberFormatter;
@@ -712,7 +712,7 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
 
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
-    // #i60945# External leading compatibility for unix systems.
+    
     if ( get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
         pNewVir->Compat_ZeroExtleadBug();
 
@@ -732,8 +732,8 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     OSL_TRACE( "Printer will be created!" );
 #endif
 
-    // We create a default SfxPrinter.
-    // The ItemSet is deleted by Sfx!
+    
+    
     SfxItemSet *pSet = new SfxItemSet( ((SwDoc*)this)->GetAttrPool(),
                     FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                     SID_HTML_MODE,  SID_HTML_MODE,
@@ -771,7 +771,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     }
 }
 
-// Convenience method; to avoid excessive includes from docsh.hxx
+
 uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( mpDocShell )
@@ -791,14 +791,14 @@ void SwDoc::ClearDoc()
     GetIDocumentUndoRedo().DelAllUndoObj();
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    // Deactivate Undo notification from Draw
+    
     if( mpDrawModel )
     {
         DrawNotifyUndoHdl();
         ClrContourCache();
     }
 
-    // if there are still FlyFrames dangling around, delete them too
+    
     sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->size()) )
         DelLayoutFmt((*mpSpzFrmFmtTbl)[n-1]);
@@ -810,22 +810,22 @@ void SwDoc::ClearDoc()
 
     delete mpACEWord;
 
-    // The BookMarks contain indices to the Content. These must be deleted
-    // before deleting the Nodes.
+    
+    
     mpMarkManager->clearAllMarks();
     InitTOXTypes();
 
-    // create a dummy pagedesc for the layout
+    
     sal_uInt16 nDummyPgDsc = MakePageDesc(OUString("?DUMMY?"));
     SwPageDesc* pDummyPgDsc = maPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    // create the first one over and over again (without attributes/style etc.
+    
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, mpDfltTxtFmtColl );
 
     if( mpCurrentView )
     {
-        // set the layout to the dummy pagedesc
+        
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
 
         SwPosition aPos( *pFirstNd, SwIndex( pFirstNd ));
@@ -836,14 +836,14 @@ void SwDoc::ClearDoc()
     GetNodes().Delete( aSttIdx,
             GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
 
-    // #i62440#
-    // destruction of numbering rules and creation of new outline rule
-    // *after* the document nodes are deleted.
+    
+    
+    
     mpOutlineRule = NULL;
     BOOST_FOREACH( SwNumRule* pNumRule, *mpNumRuleTbl )
         delete pNumRule;
     mpNumRuleTbl->clear();
-    // #i114725#,#i115828#
+    
     {
         for ( boost::unordered_map< OUString, SwList*, OUStringHash >::iterator
                                                     aListIter = maLists.begin();
@@ -856,29 +856,29 @@ void SwDoc::ClearDoc()
     }
     maListStyleLists.clear();
 
-    // creation of new outline numbering rule
+    
     mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),
-                                  // #i89178#
+                                  
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );
     AddNumRule(mpOutlineRule);
-    // Counting of phantoms depends on <IsOldNumbering()>
+    
     mpOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
 
-    // remove the dummy pagedec from the array and delete all the old ones
+    
     maPageDescs.erase( maPageDescs.begin() + nDummyPgDsc );
     BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
         delete pPageDesc;
     maPageDescs.clear();
 
-    // Delete for Collections
-    // So that we get rid of the dependencies
+    
+    
     mpFtnInfo->ReleaseCollection();
     mpEndNoteInfo->ReleaseCollection();
 
-    // Optimization: Based on the fact that Standard is always 2nd in the
-    // array, we should delete it as the last. With this we avoid
-    // reparenting the Formats all the time!
+    
+    
+    
     if( 2 < mpTxtFmtCollTbl->size() )
         DeleteAndDestroy(*mpTxtFmtCollTbl, 2, mpTxtFmtCollTbl->size());
     DeleteAndDestroy(*mpTxtFmtCollTbl, 1, mpTxtFmtCollTbl->size());
@@ -887,7 +887,7 @@ void SwDoc::ClearDoc()
 
     if( mpCurrentView )
     {
-        // search the FrameFormat of the root frm. This is not allowed to delete
+        
         mpFrmFmtTbl->erase( std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), mpCurrentView->GetLayout()->GetFmt() ) );
         DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
         mpFrmFmtTbl->push_back( mpCurrentView->GetLayout()->GetFmt() );
@@ -908,9 +908,9 @@ void SwDoc::ClearDoc()
     pFirstNd->ChgFmtColl( GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
     nDummyPgDsc = maPageDescs.size();
     maPageDescs.push_back( pDummyPgDsc );
-    // set the layout back to the new standard pagedesc
+    
     pFirstNd->ResetAllAttr();
-    // delete now the dummy pagedesc
+    
     DelPageDesc( nDummyPgDsc );
 }
 
@@ -959,8 +959,8 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
     return pDoc->getGrammarContact();
 }
 
-// #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
-// to new SwDoc::UpdateLinks():
+
+
 void SwDoc::UpdateLinks( bool bUI )
 {
     SfxObjectCreateMode eMode;
@@ -1006,7 +1006,7 @@ void SwDoc::UpdateLinks( bool bUI )
 ::sfx2::IXmlIdRegistry&
 SwDoc::GetXmlIdRegistry()
 {
-    // UGLY: this relies on SetClipBoard being called before GetXmlIdRegistry!
+    
     if (!m_pXmlIdRegistry.get())
     {
         m_pXmlIdRegistry.reset( ::sfx2::createXmlIdRegistry( IsClipBoard() ) );
@@ -1065,7 +1065,7 @@ void SwDoc::InitTOXTypes()
 
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 {
-    // copy property defaults
+    
     const sal_uInt16 aRangeOfDefaults[] =
     {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -1131,13 +1131,13 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
 
-    // we have to use pointer here, since the callee has to decide whether
-    // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
-    // object will be returned with refcount set to 0 ( if no DoInitNew is done )
+    
+    
+    
     SfxObjectShell* pRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
     if( bCallInitNew )
     {
-        // it could happen that DoInitNew creates model, that increases the refcount of the object
+        
         pRetShell->DoInitNew();
     }
 
@@ -1149,10 +1149,10 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceStyles(*this);
 
-    // copy content
+    
     pRet->Paste( *this );
 
-    // remove the temporary shell if it is there as it was done before
+    
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
 
     pRet->release();
@@ -1160,15 +1160,15 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     return pRetShell;
 }
 
-// copy document content - code from SwFEShell::Paste( SwDoc* )
+
 void SwDoc::Paste( const SwDoc& rSource )
 {
-    // this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();
-    // until the end of the NodesArray
+    
+    
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 2 );
-    SwPaM aCpyPam( aSourceIdx ); //DocStart
+    SwPaM aCpyPam( aSourceIdx ); 
     SwNodeIndex aTargetIdx( GetNodes().GetEndOfExtras(), 2 );
-    SwPaM aInsertPam( aTargetIdx ); //replaces PCURCRSR from SwFEShell::Paste()
+    SwPaM aInsertPam( aTargetIdx ); 
 
     aCpyPam.SetMark();
     aCpyPam.Move( fnMoveForward, fnGoDoc );
@@ -1178,7 +1178,7 @@ void SwDoc::Paste( const SwDoc& rSource )
 
     {
         SwPosition& rInsPos = *aInsertPam.GetPoint();
-        //find out if the clipboard document starts with a table
+        
         bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
         SwPosition aInsertPosition( rInsPos );
 
@@ -1198,14 +1198,14 @@ void SwDoc::Paste( const SwDoc& rSource )
             }
         }
 
-        //TODO: Is this necessary here? SaveTblBoxCntnt( &rInsPos );
+        
         if(/*bIncludingPageFrames && */bStartWithTable)
         {
-            //remove the paragraph in front of the table
+            
             SwPaM aPara(aInsertPosition);
             this->DelFullPara(aPara);
         }
-        //additionally copy page bound frames
+        
         if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->size() )
         {
             for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->size(); ++i )

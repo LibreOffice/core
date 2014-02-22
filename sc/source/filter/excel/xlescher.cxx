@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,8 +51,8 @@ double lclGetTwipsScale( MapUnit eMapUnit )
     double fScale = 1.0;
     switch( eMapUnit )
     {
-        case MAP_TWIP:      fScale = PS_POINTS_PER_INCH / POINTS_PER_INCH;  break;  // Calc twips <-> real twips
-        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;                         break;  // Calc twips <-> 1/100mm
+        case MAP_TWIP:      fScale = PS_POINTS_PER_INCH / POINTS_PER_INCH;  break;  
+        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;                         break;  
         default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
     }
     return fScale;
@@ -80,7 +80,7 @@ void lclGetColFromX(
         sal_uInt16& rnOffset, sal_uInt16 nXclStartCol, sal_uInt16 nXclMaxCol,
         long& rnStartW, long nX, double fScale )
 {
-    // rnStartW in conjunction with nXclStartCol is used as buffer for previously calculated width
+    
     long nTwipsX = static_cast< long >( nX / fScale + 0.5 );
     long nColW = 0;
     for( rnXclCol = nXclStartCol; rnXclCol <= nXclMaxCol; ++rnXclCol )
@@ -99,7 +99,7 @@ void lclGetRowFromY(
         sal_uInt32& rnOffset, sal_uInt32 nXclStartRow, sal_uInt32 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {
-    // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
+    
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
     bool bFound = false;
@@ -132,9 +132,9 @@ sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos,
     return static_cast< sal_uInt16 >( nPos * fPosScale / nPageSize * nPageScale + 0.5 );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclObjAnchor::XclObjAnchor() :
     mnLX( 0 ),
@@ -154,7 +154,7 @@ Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMa
         lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
         lclGetYFromRow( rDoc, nScTab, maLast.mnRow,  mnBY, fScale ) );
 
-    // adjust coordinates in mirrored sheets
+    
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
     return aRect;
@@ -166,7 +166,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle&
     sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
     sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
 
-    // adjust coordinates in mirrored sheets
+    
     Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
@@ -186,8 +186,8 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
     double fScale = 1.0;
     switch( eMapUnit )
     {
-        case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
-        case MAP_100TH_MM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
+        case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  
+        case MAP_100TH_MM:  fScale = 1.0;           break;  
         default:            OSL_FAIL( "XclObjAnchor::SetRect - map unit not implemented" );
     }
 
@@ -199,14 +199,14 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
     (bDffAnchor ? maLast.mnCol  : mnRX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Right(),  fScale );
     (bDffAnchor ? maLast.mnRow  : mnBY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Bottom(), fScale );
 
-    // for safety, clear the other members
+    
     if( bDffAnchor )
         mnLX = mnTY = mnRX = mnBY = 0;
     else
         Set( 0, 0, 0, 0 );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclObjLineData::XclObjLineData() :
     mnColorIdx( EXC_OBJ_LINE_AUTOCOLOR ),
@@ -225,7 +225,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclObjLineData& rLineData )
         >> rLineData.mnAuto;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclObjFillData::XclObjFillData() :
     mnBackColorIdx( EXC_OBJ_LINE_AUTOCOLOR ),
@@ -244,7 +244,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclObjFillData& rFillData )
         >> rFillData.mnAuto;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclObjTextData::XclObjTextData() :
     mnTextLen( 0 ),
@@ -287,7 +287,7 @@ void XclObjTextData::ReadTxo8( XclImpStream& rStrm )
     rStrm >> mnFlags >> mnOrient >> mnButtonFlags >> mnShortcut >> mnShortcutEA >> mnTextLen >> mnFormatSize;
 }
 
-// ============================================================================
+
 
 Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape > xShape )
 {
@@ -307,7 +307,7 @@ static const struct
 }
 spTbxListenerData[] =
 {
-    // Attention: MUST be in order of the XclTbxEventType enum!
+    
     /*EXC_TBX_EVENT_ACTION*/    { "XActionListener",     "actionPerformed"        },
     /*EXC_TBX_EVENT_MOUSE*/     { "XMouseListener",      "mouseReleased"          },
     /*EXC_TBX_EVENT_TEXT*/      { "XTextListener",       "textChanged"            },
@@ -315,7 +315,7 @@ spTbxListenerData[] =
     /*EXC_TBX_EVENT_CHANGE*/    { "XChangeListener",     "changed"                }
 };
 
-} // namespace
+} 
 
 bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
         XclTbxEventType eEventType, const OUString& rXclMacroName, SfxObjectShell* pDocShell )
@@ -342,6 +342,6 @@ OUString XclControlHelper::ExtractFromMacroDescriptor(
     return OUString();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

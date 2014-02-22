@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/token/tokenmap.hxx"
@@ -25,13 +25,13 @@
 #include "oox/token/tokens.hxx"
 
 namespace oox {
-// ============================================================================
+
 
 using ::com::sun::star::uno::Sequence;
-// ============================================================================
+
 
 namespace {
-// include auto-generated Perfect_Hash
+
 #if defined __clang__
 #if __has_warning("-Wdeprecated-register")
 #pragma GCC diagnostic push
@@ -44,16 +44,16 @@ namespace {
 #pragma GCC diagnostic pop
 #endif
 #endif
-} // namespace
+} 
 
-// ============================================================================
+
 
 TokenMap::TokenMap() :
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
     static const sal_Char* sppcTokenNames[] =
     {
-// include auto-generated C array with token names as C strings
+
 #include "tokennames.inc"
         ""
     };
@@ -67,11 +67,11 @@ TokenMap::TokenMap() :
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    // check that the perfect_hash is in sync with the token name list
+    
     bool bOk = true;
     for( sal_Int32 nToken = 0; bOk && (nToken < XML_TOKEN_COUNT); ++nToken )
     {
-        // check that the getIdentifier <-> getToken roundtrip works
+        
         OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
         struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
         bOk = pToken && (pToken->nToken == nToken);
@@ -119,8 +119,8 @@ sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength ) c
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

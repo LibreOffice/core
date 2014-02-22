@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    /// Actual canonical implementation of the GraphicsProvider interface
+    
     class GraphicsProviderImpl : public GraphicsProvider
     {
         GraphicsSharedPtr mpGraphics;
@@ -78,15 +78,15 @@ namespace dxcanvas
 
     void Canvas::initialize()
     {
-        // #i64742# Only perform initialization when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
         VERBOSE_TRACE( "Canvas::initialize called" );
 
-        // At index 1, we expect a HWND handle here, containing a
-        // pointer to a valid window, on which to output
-        // At index 2, we expect the current window bound rect
+        
+        
+        
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
@@ -98,7 +98,7 @@ namespace dxcanvas
         if( !pSysData || !pSysData->hDC )
             throw lang::NoSupportException("Passed SystemGraphicsData or HDC invalid!", NULL);
 
-        // setup helper
+        
         maDeviceHelper.init( pSysData->hDC,
                              *this );
         maCanvasHelper.setDevice( *this );
@@ -116,7 +116,7 @@ namespace dxcanvas
 
         mxComponentContext.clear();
 
-        // forward to parent
+        
         CanvasBaseT::disposeThis();
     }
 
@@ -135,15 +135,15 @@ namespace dxcanvas
 
     void BitmapCanvas::initialize()
     {
-        // #i64742# Only perform initialization when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
         VERBOSE_TRACE( "BitmapCanvas::initialize called" );
 
-        // At index 1, we expect a HWND handle here, containing a
-        // pointer to a valid window, on which to output
-        // At index 2, we expect the current window bound rect
+        
+        
+        
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
@@ -155,14 +155,14 @@ namespace dxcanvas
         if( !pSysData || !pSysData->hDC )
             throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!", NULL);
 
-        // setup helper
+        
         maDeviceHelper.init( pSysData->hDC,
                              *this );
         maCanvasHelper.setDevice( *this );
 
-        // check whether we can actually provide a BitmapCanvas
-        // here. for this, check whether the HDC has a bitmap
-        // selected.
+        
+        
+        
         HBITMAP hBmp;
         hBmp=(HBITMAP)GetCurrentObject(pSysData->hDC, OBJ_BITMAP);
         if( !hBmp || GetObjectType(pSysData->hDC) != OBJ_MEMDC )
@@ -188,7 +188,7 @@ namespace dxcanvas
         mpTarget.reset();
         mxComponentContext.clear();
 
-        // forward to parent
+        
         BitmapCanvasBaseT::disposeThis();
     }
 
@@ -231,7 +231,7 @@ namespace dxcanvas
         BITMAPCANVAS_SERVICE_NAME );
 }
 
-// The C shared lib entry points
+
 COMPHELPER_SERVICEDECL_EXPORTS2(gdipluscanvas,
                                 dxcanvas::dxCanvasDecl,
                                 dxcanvas::dxBitmapCanvasDecl)

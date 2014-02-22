@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/presentation/EffectNodeType.hpp>
@@ -57,7 +57,7 @@ struct deprecated_FadeEffect_conversion_table_entry
 
 deprecated_FadeEffect_conversion_table[] =
 {
-// OOo 1.x transitions
+
     { FadeEffect_FADE_FROM_LEFT,            "wipe-right" },
     { FadeEffect_FADE_FROM_TOP,             "wipe-down" },
     { FadeEffect_FADE_FROM_RIGHT,           "wipe-left" },
@@ -114,7 +114,7 @@ deprecated_FadeEffect_conversion_table[] =
     { FadeEffect_FADE_FROM_LOWERLEFT,       "diagonal-squares-right-up" },
     { FadeEffect_FADE_FROM_LOWERRIGHT,      "diagonal-squares-left-up" },
 
-// OOo 1.x transitions not in OOo 2.x
+
     { FadeEffect_CLOCKWISE,                 "clock-wipe-twelve" },
     { FadeEffect_COUNTERCLOCKWISE,          "reverse-clock-wipe-twelve" },
     { FadeEffect_SPIRALIN_LEFT,             "spiral-wipe-top-left-clockwise" },
@@ -125,12 +125,12 @@ deprecated_FadeEffect_conversion_table[] =
     { FadeEffect_WAVYLINE_FROM_TOP,         "snake-wipe-top-left-horizontal" },
     { FadeEffect_WAVYLINE_FROM_RIGHT,       "snake-wipe-bottom-right-vertical" },
     { FadeEffect_WAVYLINE_FROM_BOTTOM,      "snake-wipe-bottom-right-horizontal" },
-    { FadeEffect_STRETCH_FROM_LEFT,         "wipe-right" }, // todo
-    { FadeEffect_STRETCH_FROM_TOP,          "wipe-down" },  // todo
-    { FadeEffect_STRETCH_FROM_RIGHT,        "wipe-left" },  // todo
-    { FadeEffect_STRETCH_FROM_BOTTOM,       "wipe-up" },    // todo
+    { FadeEffect_STRETCH_FROM_LEFT,         "wipe-right" }, 
+    { FadeEffect_STRETCH_FROM_TOP,          "wipe-down" },  
+    { FadeEffect_STRETCH_FROM_RIGHT,        "wipe-left" },  
+    { FadeEffect_STRETCH_FROM_BOTTOM,       "wipe-up" },    
 
-// OOo 1.x not available transitions
+
 
     { FadeEffect_CLOCKWISE,                 "wheel-clockwise-2-spokes" },
     { FadeEffect_CLOCKWISE,                 "wheel-clockwise-3-spokes" },
@@ -228,7 +228,7 @@ struct deprecated_AnimationEffect_conversion_table_entry
 }
 deprecated_AnimationEffect_conversion_table[] =
 {
-// OOo 1.x entrance effects
+
     { AnimationEffect_APPEAR, "ooo-entrance-appear",0 },
 
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-box","in" },
@@ -308,7 +308,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_WAVYLINE_FROM_RIGHT, "ooo-entrance-snake-wipe","from-bottom-right-vertical" },
     { AnimationEffect_WAVYLINE_FROM_BOTTOM, "ooo-entrance-snake-wipe","from-bottom-right-horizontal" },
 
-// ooo 1.x exit effects
+
     { AnimationEffect_HIDE, "ooo-exit-disappear",0 },
     { AnimationEffect_MOVE_TO_LEFT, "ooo-exit-fly-out", "from-right" },
     { AnimationEffect_MOVE_TO_TOP, "ooo-exit-fly-out", "from-bottom" },
@@ -327,7 +327,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_MOVE_SHORT_TO_BOTTOM, "ooo-exit-peek-out", "from-top" },
     { AnimationEffect_MOVE_SHORT_TO_LOWERLEFT, "ooo-exit-peek-out", "from-top" },
 
-// no matching in OOo 2.x
+
     { AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT, "ooo-entrance-peek-in","from-left" },
     { AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT, "ooo-entrance-peek-in","from-top" },
     { AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT, "ooo-entrance-peek-in","from-right" },
@@ -341,7 +341,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_LASER_FROM_LOWERLEFT, "ooo-entrance-fly-in","from-bottom-left" },
     { AnimationEffect_LASER_FROM_LOWERRIGHT, "ooo-entrance-fly-in","from-bottom-right" },
 
-// no matching in OOo 1.x
+
 
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-circle", "in" },
     { AnimationEffect_FADE_FROM_CENTER, "ooo-entrance-circle", "out" },
@@ -387,8 +387,8 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-zoom", 0 },
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-swivel", 0 },
 
-    // still open (no matching effect: AnimationEffect_ZOOM_IN_FROM_*,
-    // AnimationEffect_ZOOM_OUT_FROM_*, AnimationEffect_PATH
+    
+    
 
     { AnimationEffect_NONE, 0, 0 }
 };
@@ -449,21 +449,21 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
         if( (aIterOnlyBackground == aEnd) && (aIterAsWhole == aEnd) )
         {
-            // check if there is already an text effect for this shape
+            
             EffectSequence::iterator aIterOnlyText( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_TEXT ) );
             if( aIterOnlyText != aEnd )
             {
-                // check if this is an animation text group
+                
                 sal_Int32 nGroupId = (*aIterOnlyText)->getGroupId();
                 if( nGroupId >= 0 )
                 {
                     CustomAnimationTextGroupPtr pGroup = pMainSequence->findGroup( nGroupId );
                     if( pGroup.get() )
                     {
-                        // add an effect to animate the shape
+                        
                         pMainSequence->setAnimateForm( pGroup, true );
 
-                        // find this effect
+                        
                         EffectSequence::iterator aIter( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_BACKGROUND ) );
 
                         if( aIter != aEnd )
@@ -482,8 +482,8 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
             if( !bEffectCreated )
             {
-                // if there is not yet an effect that target this shape, we generate one
-                // we insert the shape effect before it
+                
+                
                 Reference< XAnimationNode > xNode( pPreset->create( aPresetSubType ) );
                 DBG_ASSERT( xNode.is(), "EffectMigration::SetAnimationEffect(), could not create preset!" );
                 if( xNode.is() )
@@ -499,7 +499,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
                     if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT ) )
                     {
-                        // special case for outline text, effects are always mapped to text group effect
+                        
                         pMainSequence->
                             createTextGroup( pEffect, 10, bManual ? -1 : 0.0, sal_False, sal_False );
                     }
@@ -508,8 +508,8 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
         }
         else
         {
-            // if there is already an effect targeting this shape
-            // just replace it
+            
+            
             CustomAnimationEffectPtr pEffect;
             if( aIterAsWhole != aEnd )
             {
@@ -532,7 +532,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
     }
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
 {
@@ -556,7 +556,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
                 if( (pEffect->getTargetSubItem() == ShapeAnimationSubType::ONLY_BACKGROUND) ||
                     (pEffect->getTargetSubItem() == ShapeAnimationSubType::AS_WHOLE))
                 {
-                    if( pEffect->getDuration() != 0.1 ) // ignore appear effects created from old text effect import
+                    if( pEffect->getDuration() != 0.1 ) 
                     {
                         aPresetId = (*aIter)->getPresetId();
                         aPresetSubType = (*aIter)->getPresetSubType();
@@ -567,7 +567,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
         }
     }
 
-    // now find old effect
+    
     AnimationEffect eEffect = AnimationEffect_NONE;
 
     if( !ConvertPreset( aPresetId, &aPresetSubType, eEffect ) )
@@ -577,7 +577,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
 }
 
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect eEffect )
 {
@@ -590,7 +590,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
     if( implIsInsideGroup( pObj ) )
         return;
 
-    // first map the deprecated AnimationEffect to a preset and subtype
+    
     OUString aPresetId;
     OUString aPresetSubType;
 
@@ -602,13 +602,13 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
 
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
 
-    // ignore old text effects on shape without text
+    
     if( (pTextObj == 0) || (!pTextObj->HasText()) )
         return;
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
 
-    // create an effect from this preset
+    
     CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( aPresetId ) );
 
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
@@ -622,7 +622,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
 
         CustomAnimationTextGroupPtr pGroup;
 
-        // is there already an animation text group for this shape?
+        
         if( aIterOnlyText != aEnd )
         {
             const sal_Int32 nGroupId = (*aIterOnlyText)->getGroupId();
@@ -630,7 +630,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 pGroup = pMainSequence->findGroup( nGroupId );
         }
 
-        // if there is not yet a group, create it
+        
         if( pGroup.get() == 0 )
         {
             CustomAnimationEffectPtr pShapeEffect;
@@ -673,7 +673,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
                 const bool bManual = (pPage == 0) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
 
-                // now create effects for each paragraph
+                
                 pGroup =
                     pMainSequence->
                         createTextGroup( pShapeEffect, 10, bManual ? -1 : 0.0, sal_True, sal_False );
@@ -684,13 +684,13 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
         {
             const bool bLaserEffect = (eEffect >= AnimationEffect_LASER_FROM_LEFT) && (eEffect <= AnimationEffect_LASER_FROM_LOWERRIGHT);
 
-            // now we have a group, so check if all effects are same as we like to have them
+            
             const EffectSequence& rEffects = pGroup->getEffects();
 
             EffectSequence::const_iterator aIter;
             for( aIter = rEffects.begin(); aIter != rEffects.end(); ++aIter )
             {
-                // only work on paragraph targets
+                
                 if( (*aIter)->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
                 {
                     if( ((*aIter)->getPresetId() != aPresetId) ||
@@ -702,14 +702,14 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                     if( bLaserEffect )
                     {
                         (*aIter)->setIterateType( TextAnimationType::BY_LETTER );
-                        (*aIter)->setIterateInterval( 0.5 );// TODO:
-                                                             // Determine
-                                                             // interval
-                                                             // according
-                                                             // to
-                                                             // total
-                                                             // effect
-                                                             // duration
+                        (*aIter)->setIterateInterval( 0.5 );
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
                     }
                 }
             }
@@ -718,7 +718,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
 {
@@ -742,7 +742,7 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
         }
     }
 
-    // now find old effect
+    
     AnimationEffect eEffect = AnimationEffect_NONE;
 
     if( !ConvertPreset( aPresetId, &aPresetSubType, eEffect ) )
@@ -751,14 +751,14 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
     return eEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, AnimationEffect& rEffect )
 {
     rEffect = AnimationEffect_NONE;
     if( !rPresetId.isEmpty() )
     {
-        // first try a match for preset id and subtype
+        
         deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
         while( p->mpPresetId )
         {
@@ -776,12 +776,12 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
     }
     else
     {
-        // empty preset id means AnimationEffect_NONE
+        
         return true;
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool EffectMigration::ConvertAnimationEffect( const AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType )
 {
@@ -800,7 +800,7 @@ bool EffectMigration::ConvertAnimationEffect( const AnimationEffect& rEffect, OU
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
 {
@@ -814,7 +814,7 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
     }
     return fDuration;
 }
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed )
 {
@@ -851,7 +851,7 @@ void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
 {
@@ -880,7 +880,7 @@ AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
     return ConvertDuration( fDuration );
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationSpeed EffectMigration::ConvertDuration( double fDuration )
 {
@@ -896,7 +896,7 @@ AnimationSpeed EffectMigration::ConvertDuration( double fDuration )
     return eSpeed;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
 {
@@ -932,7 +932,7 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
 {
@@ -964,7 +964,7 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
     return nColor;
 }
 
-// --------------------------------------------------------------------
+
 
 
 void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
@@ -1004,7 +1004,7 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
 {
@@ -1036,7 +1036,7 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
 {
@@ -1078,7 +1078,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
 {
@@ -1110,7 +1110,7 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos )
 {
@@ -1147,7 +1147,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
                 aEffectVector.resize( nPos+1 );
             }
 
-            // is this the first effect for xThis shape?
+            
             if(( nCurrentPos == -1 ) && ( xCurrent == xThis ) )
             {
                 nCurrentPos = nPos;
@@ -1157,14 +1157,14 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         }
     }
 
-    // check if there is at least one effect for xThis
+    
     if( nCurrentPos == -1 )
     {
         OSL_FAIL("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
         return;
     }
 
-    // check trivial case
+    
     if( nCurrentPos != nNewPos )
     {
         std::vector< CustomAnimationEffectPtr > aEffects;
@@ -1201,7 +1201,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** Returns the position of the given SdrObject in the Presentation order.
  *  This function returns -1 if the SdrObject is not in the Presentation order
@@ -1230,7 +1230,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
             nPos++;
             xCurrent = pEffect->getTargetShape();
 
-            // is this the first effect for xThis shape?
+            
             if( xCurrent == xThis )
             {
                 nFound = nPos;
@@ -1242,7 +1242,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
     return nFound;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInfo )
 {
@@ -1282,7 +1282,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInf
     }
 }
 
-// --------------------------------------------------------------------
+
 
 OUString EffectMigration::GetSoundFile( SvxShape* pShape )
 {
@@ -1315,14 +1315,14 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
     return aSoundFile;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
 {
     return !GetSoundFile( pShape ).isEmpty();
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
 {
@@ -1344,23 +1344,23 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
     }
 }
 
-// #i42894# helper which creates the needed XAnimate for changing visibility and all the (currently) needed embeddings
+
 void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
 {
     Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
     Any aAny;
 
-    // create par container node
+    
     Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
 
-    // set begin
+    
     aAny <<= (double)(0.0);
     xOuterSeqTimeContainer->setBegin(aAny);
 
-    // set fill
+    
     xOuterSeqTimeContainer->setFill(AnimationFill::HOLD);
 
-    // set named values
+    
     Sequence< NamedValue > aUserDataSequence;
     aUserDataSequence.realloc(1);
 
@@ -1369,49 +1369,49 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
 
     xOuterSeqTimeContainer->setUserData(aUserDataSequence);
 
-    // create animate set to change visibility for rCandidate
+    
     Reference< XAnimationNode > xAnimateSetForLast(xMsf->createInstance("com.sun.star.animations.AnimateSet"), UNO_QUERY_THROW);
 
-    // set begin
+    
     aAny <<= (double)(0.0);
     xAnimateSetForLast->setBegin(aAny);
 
-    // set duration
+    
     aAny <<= fDuration;
     xAnimateSetForLast->setDuration(aAny);
 
-    // set fill
+    
     xAnimateSetForLast->setFill(AnimationFill::HOLD);
 
-    // set target
+    
     Reference< XAnimate > xAnimate(xAnimateSetForLast, UNO_QUERY);
     Reference< XShape > xTargetShape(rCandidate.getUnoShape(), UNO_QUERY);
     aAny <<= xTargetShape;
     xAnimate->setTarget(aAny);
 
-    // set AttributeName
+    
     xAnimate->setAttributeName(OUString("Visibility"));
 
-    // set attribute value
+    
     aAny <<= bVisible ? sal_True : sal_False;
     xAnimate->setTo(aAny);
 
-    // ad set node to par node
+    
     Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
     xParentContainer->appendChild(xAnimateSetForLast);
 
-    // add node
+    
     rxParentContainer->appendChild(xOuterSeqTimeContainer);
 }
 
-// #i42894# older native formats supported animated group objects, that means all members of the group
-// were shown animated by showing one after the other. This is no longer supported, but the following
-// fallback will create the needed SMIL animation stuff. Unfortunately the members of the group
-// have to be moved directly to the page, else the (explained to be generic, thus I expected this to
-// work) animations will not work in slideshow
+
+
+
+
+
 void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
 {
-    // aw080 will give a vector immeditately
+    
     SdrObjListIter aIter(rGroupObj);
 
     if(aIter.Count())
@@ -1425,26 +1425,26 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
 
             while(aIter.IsMore())
             {
-                // do move to page rough with old/current stuff, will be different in aw080 anyways
+                
                 SdrObject* pCandidate = aIter.Next();
                 rGroupObj.GetSubList()->NbcRemoveObject(pCandidate->GetOrdNum());
                 rPage.NbcInsertObject(pCandidate);
                 aObjects.push_back(pCandidate);
             }
 
-            // create main node
+            
             Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
             Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
             Any aAny;
 
-            // set begin
+            
             aAny <<= (double)(0.0);
             xOuterSeqTimeContainer->setBegin(aAny);
 
-            // prepare parent container
+            
             Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
 
-            // prepare loop over objects
+            
             SdrObject* pLast = 0;
             SdrObject* pNext = 0;
             const double fDurationShow(0.2);
@@ -1455,7 +1455,7 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
                 pLast = pNext;
                 pNext = aObjects[a];
 
-                // create node
+                
                 if(pLast)
                 {
                     createVisibilityOnOffNode(xParentContainer, *pLast, false, false, fDurationHide);
@@ -1467,13 +1467,13 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
                 }
             }
 
-            // create end node
+            
             if(pNext)
             {
                 createVisibilityOnOffNode(xParentContainer, *pNext, false, false, fDurationHide);
             }
 
-            // add to main sequence and rebuild
+            
             pMainSequence->createEffects(xOuterSeqTimeContainer);
             pMainSequence->rebuild();
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/endian.h>
@@ -151,10 +151,10 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
 
         if ( bResize )
         {
-            // Alte Punkte kopieren
+            
             if ( mnPoints < nNewSize )
             {
-                // Neue Punkte mit 0 initialisieren
+                
                 memset( pNewAry+mnPoints, 0, (sal_uIntPtr)(nNewSize-mnPoints)*sizeof(Point) );
                 if ( mpPointAry )
                     memcpy( pNewAry, mpPointAry, mnPoints*sizeof(Point) );
@@ -172,7 +172,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
     if ( mpPointAry )
         delete[] (char*) mpPointAry;
 
-    // ggf. FlagArray beruecksichtigen
+    
     if( mpFlagAry )
     {
         sal_uInt8* pNewFlagAry;
@@ -183,10 +183,10 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
 
             if( bResize )
             {
-                // Alte Flags kopieren
+                
                 if ( mnPoints < nNewSize )
                 {
-                    // Neue Punkte mit 0 initialisieren
+                    
                     memset( pNewFlagAry+mnPoints, 0, nNewSize-mnPoints );
                     memcpy( pNewFlagAry, mpFlagAry, mnPoints );
                 }
@@ -209,7 +209,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
 {
     const sal_uIntPtr   nSpaceSize = nSpace * sizeof( Point );
 
-    //Can't fit this in :-(, throw ?
+    
     if (mnPoints + nSpace > USHRT_MAX)
         return;
 
@@ -217,7 +217,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
 
     if( nPos >= mnPoints )
     {
-        // Append at the back
+        
         nPos = mnPoints;
         ImplSetSize( nNewSize, true );
 
@@ -246,7 +246,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
         memcpy( pNewAry + nSecPos, mpPointAry + nPos, nRest * sizeof( Point ) );
         delete[] (char*) mpPointAry;
 
-        // consider FlagArray
+        
         if( mpFlagAry )
         {
             sal_uInt8* pNewFlagAry = new sal_uInt8[ nNewSize ];
@@ -279,7 +279,7 @@ void ImplPolygon::ImplCreateFlagArray()
 
 inline void Polygon::ImplMakeUnique()
 {
-    // copy references if any exist
+    
     if ( mpImplPolygon->mnRefCount != 1 )
     {
         if ( mpImplPolygon->mnRefCount )
@@ -351,7 +351,7 @@ Polygon::Polygon( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nV
     else
     {
         Rectangle aRect( rRect );
-        aRect.Justify();            // SJ: i9140
+        aRect.Justify();            
 
         nHorzRound = std::min( nHorzRound, (sal_uIntPtr) labs( aRect.GetWidth() >> 1 ) );
         nVertRound = std::min( nVertRound, (sal_uIntPtr) labs( aRect.GetHeight() >> 1 ) );
@@ -401,7 +401,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
 {
     if( nRadX && nRadY )
     {
-        // Compute default (depends on size)
+        
         if( !nPoints )
         {
             nPoints = (sal_uInt16) ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
@@ -413,7 +413,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
                 nPoints >>= 1;
         }
 
-        // Ceil number of points until divisible by four
+        
         mpImplPolygon = new ImplPolygon( nPoints = (nPoints + 3) & ~3 );
 
         Point* pPt;
@@ -467,7 +467,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
 
-        // compute threshold
+        
         const double    fRadX = nRadX;
         const double    fRadY = nRadY;
         const double    fCenterX = aCenter.X();
@@ -485,7 +485,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         if ( bFullCircle )
             fDiff = F_2PI;
 
-        // Proportionally shrink number of points( fDiff / (2PI) );
+        
         nPoints = std::max( (sal_uInt16) ( ( fDiff * 0.1591549 ) * nPoints ), (sal_uInt16) 16 );
         fStep = fDiff / ( nPoints - 1 );
 
@@ -557,7 +557,7 @@ Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
 Polygon::~Polygon()
 {
 
-    // Remove if refcount == 0, otherwise decrement refcount
+    
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -591,8 +591,8 @@ void Polygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::SetFlags(): nPos >= nPoints" );
 
-    // we do only want to create the flag array if there
-    // is at least one flag different to POLY_NORMAL
+    
+    
     if ( mpImplPolygon || ( eFlags != POLY_NORMAL ) )
     {
         ImplMakeUnique();
@@ -789,19 +789,19 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
                                    const double P3x, const double P3y,
                                    const double P4x, const double P4y )
 {
-    // Hard limit on recursion depth, empiric number.
+    
     enum {maxRecursionDepth=128};
 
-    // Perform bezier flatness test (lecture notes from R. Schaback,
-    // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
+    
+    
     //
-    // ||P(t) - L(t)|| <= max     ||b_j - b_0 - j/n(b_n - b_0)||
-    //                    0<=j<=n
+    
+    
     //
-    // What is calculated here is an upper bound to the distance from
-    // a line through b_0 and b_3 (P1 and P4 in our notation) and the
-    // curve. We can drop 0 and n from the running indices, since the
-    // argument of max becomes zero for those cases.
+    
+    
+    
+    
     const double fJ1x( P2x - P1x - 1.0/3.0*(P4x - P1x) );
     const double fJ1y( P2y - P1y - 1.0/3.0*(P4y - P1y) );
     const double fJ2x( P3x - P1x - 2.0/3.0*(P4x - P1x) );
@@ -809,17 +809,17 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
     const double distance2( ::std::max( fJ1x*fJ1x + fJ1y*fJ1y,
                                         fJ2x*fJ2x + fJ2y*fJ2y) );
 
-    // stop if error measure does not improve anymore. This is a
-    // safety guard against floating point inaccuracies.
-    // stop at recursion level 128. This is a safety guard against
-    // floating point inaccuracies.
-    // stop if distance from line is guaranteed to be bounded by d
+    
+    
+    
+    
+    
     if( old_d2 > d2 &&
         recursionDepth < maxRecursionDepth &&
         distance2 >= d2 )
     {
-        // deCasteljau bezier arc, split at t=0.5
-        // Foley/vanDam, p. 508
+        
+        
         const double L1x( P1x ),             L1y( P1y );
         const double L2x( (P1x + P2x)*0.5 ), L2y( (P1y + P2y)*0.5 );
         const double Hx ( (P2x + P3x)*0.5 ), Hy ( (P2y + P3y)*0.5 );
@@ -830,16 +830,16 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
         const double R1x( (L3x + R2x)*0.5 ), R1y( (L3y + R2y)*0.5 );
         const double L4x( R1x ),             L4y( R1y );
 
-        // subdivide further
+        
         ++recursionDepth;
         ImplAdaptiveSubdivide(rPointIter, distance2, recursionDepth, d2, L1x, L1y, L2x, L2y, L3x, L3y, L4x, L4y);
         ImplAdaptiveSubdivide(rPointIter, distance2, recursionDepth, d2, R1x, R1y, R2x, R2y, R3x, R3y, R4x, R4y);
     }
     else
     {
-        // requested resolution reached.
-        // Add end points to output iterator.
-        // order is preserved, since this is so to say depth first traversal.
+        
+        
+        
         *rPointIter++ = Point( FRound(P1x), FRound(P1y) );
     }
 }
@@ -883,8 +883,8 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
             *aPointIter++ = mpImplPolygon->mpPointAry[ i++ ];
         }
 
-        // fill result polygon
-        rResult = Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
+        
+        rResult = Polygon( (sal_uInt16)aPoints.size() ); 
         ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
     }
 }
@@ -991,13 +991,13 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
 
 void Polygon::Move( long nHorzMove, long nVertMove )
 {
-    // This check is required for DrawEngine
+    
     if ( !nHorzMove && !nVertMove )
         return;
 
     ImplMakeUnique();
 
-    // Move points
+    
     sal_uInt16 nCount = mpImplPolygon->mnPoints;
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
@@ -1070,7 +1070,7 @@ protected:
 class ImplPolygonPointFilter : public ImplPointFilter
 {
 public:
-    ImplPolygon*    mpPoly;     // Don't remove, assigned by polygon
+    ImplPolygon*    mpPoly;     
     sal_uInt16      mnSize;
 
                     ImplPolygonPointFilter( sal_uInt16 nDestSize ) :
@@ -1259,7 +1259,7 @@ void ImplEdgePointFilter::LastPoint()
 
 void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
 {
-    // #105251# Justify rect befor edge filtering
+    
     Rectangle               aJustifiedRect( rRect );
     aJustifiedRect.Justify();
 
@@ -1277,7 +1277,7 @@ void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
     else
         aPolygon.LastPoint();
 
-    // Delete old ImpPolygon-data and assign from ImpPolygonPointFilter
+    
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -1290,16 +1290,16 @@ void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
 
 Rectangle Polygon::GetBoundRect() const
 {
-    // Removing the assert. Bezier curves have the attribute that each single
-    // curve segment defined by four points can not exit the four-point polygon
-    // defined by that points. This allows to say that the curve segment can also
-    // never leave the Range of it's defining points.
-    // The result is that Polygon::GetBoundRect() may not create the minimal
-    // BoundRect of the Polygon (to get that, use basegfx::B2DPolygon classes),
-    // but will always create a valid BoundRect, at least as long as this method
-    // 'blindly' travels over all points, including control points.
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
+    
 
     sal_uInt16  nCount = mpImplPolygon->mnPoints;
     if( ! nCount )
@@ -1377,7 +1377,7 @@ bool Polygon::IsInside( const Point& rPoint ) const
 
             if ( aLine.Intersection( Line( aPt1, rPt2 ), aIntersection ) )
             {
-                // This avoids insertion of double intersections
+                
                 if ( nPCounter )
                 {
                     if ( aIntersection != aLastIntersection )
@@ -1397,7 +1397,7 @@ bool Polygon::IsInside( const Point& rPoint ) const
         }
     }
 
-    // is inside, if number of intersection points is odd
+    
     return ( ( nPCounter & 1 ) == 1 );
 }
 
@@ -1453,12 +1453,12 @@ Polygon& Polygon::operator=( const Polygon& rPoly )
 {
     DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
-    // Increase refcounter before assigning
-    // Note: RefCount == 0 for static objects
+    
+    
     if ( rPoly.mpImplPolygon->mnRefCount )
         rPoly.mpImplPolygon->mnRefCount++;
 
-    // Delete if recount == 0, otherwise decrement
+    
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -1508,7 +1508,7 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
     sal_uInt16          i;
     sal_uInt16          nPoints;
 
-    // read all points and create array
+    
     rIStream.ReadUInt16( nPoints );
     if ( rPoly.mpImplPolygon->mnRefCount != 1 )
     {
@@ -1520,7 +1520,7 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
         rPoly.mpImplPolygon->ImplSetSize( nPoints, false );
 
     {
-        // Determine whether we need to write through operators
+        
 #if (SAL_TYPES_SIZEOFLONG) != 4
         if ( true )
 #else
@@ -1533,7 +1533,7 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
         {
             for( i = 0; i < nPoints; i++ )
             {
-                //fdo#39428 SvStream no longer supports operator>>(long&)
+                
                 sal_Int32 nTmpX(0), nTmpY(0);
                 rIStream.ReadInt32( nTmpX ).ReadInt32( nTmpY );
                 rPoly.mpImplPolygon->mpPointAry[i].X() = nTmpX;
@@ -1554,11 +1554,11 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
     sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();
 
-    // Write number of points
+    
     rOStream.WriteUInt16( nPoints );
 
     {
-        // Determine whether we need to write through operators
+        
 #if (SAL_TYPES_SIZEOFLONG) != 4
         if ( true )
 #else
@@ -1571,7 +1571,7 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
         {
             for( i = 0; i < nPoints; i++ )
             {
-                //fdo#39428 SvStream no longer supports operator<<(long)
+                
                 rOStream.WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].X() ) )
                         .WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].Y() ) );
             }
@@ -1624,7 +1624,7 @@ void Polygon::Write( SvStream& rOStream ) const
     ImplWrite( rOStream );
 }
 
-// #i74631#/#i115917# numerical correction method for B2DPolygon
+
 void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal_uInt8 nCFlag)
 {
     const sal_uInt32 nPointCount(roPolygon.count());
@@ -1634,47 +1634,47 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal
     {
         if(roPolygon.isPrevControlPointUsed(nIndex) && roPolygon.isNextControlPointUsed(nIndex))
         {
-            // #i115917# Patch from osnola (modified, thanks for showing the porblem)
+            
             //
-            // The correction is needed because an integer polygon with control points
-            // is converted to double precision. When C1 or C2 is used the involved vectors
-            // may not have the same directions/lengths since these come from integer coordinates
-            //  and may have been snapped to different nearest integer coordinates. The snap error
-            // is in the range of +-1 in y and y, thus 0.0 <= error <= sqrt(2.0). Nonetheless,
-            // it needs to be corrected to be able to detect the continuity in this points
-            // correctly.
+            
+            
+            
+            
+            
+            
+            
             //
-            // We only have the integer data here (already in double precision form, but no mantisses
-            // used), so the best correction is to use:
+            
+            
             //
-            // for C1: The longest vector since it potentially has best preserved the original vector.
-            //         Even better the sum of the vectors, weighted by their length. This gives the
-            //         normal vector addition to get the vector itself, lengths need to be preserved.
-            // for C2: The mediated vector(s) since both should be the same, but mirrored
+            
+            
+            
+            
 
-            // extract the point and vectors
+            
             const basegfx::B2DPoint aPoint(roPolygon.getB2DPoint(nIndex));
             const basegfx::B2DVector aNext(roPolygon.getNextControlPoint(nIndex) - aPoint);
             const basegfx::B2DVector aPrev(aPoint - roPolygon.getPrevControlPoint(nIndex));
 
-            // calculate common direction vector, normalize
+            
             const basegfx::B2DVector aDirection(aNext + aPrev);
 
             if(POLY_SMOOTH == nCFlag)
             {
-                // C1: apply common direction vector, preserve individual lengths
+                
                 const double fInvDirectionLen(1.0 / aDirection.getLength());
                 roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + (aDirection * (aNext.getLength() * fInvDirectionLen))));
                 roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - (aDirection * (aPrev.getLength() * fInvDirectionLen))));
             }
-            else // POLY_SYMMTR
+            else 
             {
-                // C2: get mediated length. Taking half of the unnormalized direction would be
-                // an approximation, but not correct.
+                
+                
                 const double fMedLength((aNext.getLength() + aPrev.getLength()) * (0.5 / aDirection.getLength()));
                 const basegfx::B2DVector aScaledDirection(aDirection * fMedLength);
 
-                // Bring Direction to correct length and apply
+                
                 roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + aScaledDirection));
                 roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - aScaledDirection));
             }
@@ -1682,7 +1682,7 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal
     }
 }
 
-// convert to basegfx::B2DPolygon and return
+
 basegfx::B2DPolygon Polygon::getB2DPolygon() const
 {
     basegfx::B2DPolygon aRetval;
@@ -1692,7 +1692,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
     {
         if(mpImplPolygon->mpFlagAry)
         {
-            // handling for curves. Add start point
+            
             const Point aStartPoint(mpImplPolygon->mpPointAry[0]);
             sal_uInt8 nPointFlag(mpImplPolygon->mpFlagAry[0]);
             aRetval.append(basegfx::B2DPoint(aStartPoint.X(), aStartPoint.Y()));
@@ -1715,7 +1715,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
                     bControlB = true;
                 }
 
-                // assert invalid polygons
+                
                 OSL_ENSURE(bControlA == bControlB, "Polygon::getB2DPolygon: Invalid source polygon (!)");
                 (void)bControlB;
 
@@ -1725,7 +1725,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
 
                     if(bControlA)
                     {
-                        // bezier edge, add
+                        
                         aRetval.appendBezierSegment(
                             basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
                             basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
@@ -1735,7 +1735,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
                     }
                     else
                     {
-                        // no bezier edge, add end point
+                        
                         aRetval.append(basegfx::B2DPoint(aEndPoint.X(), aEndPoint.Y()));
                     }
 
@@ -1743,27 +1743,27 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
                 }
             }
 
-            // if exist, remove double first/last points, set closed and correct control points
+            
             basegfx::tools::checkClosed(aRetval);
 
             if(aRetval.isClosed())
             {
-                // closeWithGeometryChange did really close, so last point(s) were removed.
-                // Correct the continuity in the changed point
+                
+                
                 impCorrectContinuity(aRetval, 0, mpImplPolygon->mpFlagAry[0]);
             }
         }
         else
         {
-            // extra handling for non-curves (most-used case) for speedup
+            
             for(sal_uInt16 a(0); a < nCount; a++)
             {
-                // get point and add
+                
                 const Point aPoint(mpImplPolygon->mpPointAry[a]);
                 aRetval.append(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
             }
 
-            // set closed flag
+            
             basegfx::tools::checkClosed(aRetval);
         }
     }
@@ -1771,12 +1771,12 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
     return aRetval;
 }
 
-// constructor to convert from basegfx::B2DPolygon
-// #i76891# Needed to change from adding all control points (even for unused
-// edges) and creating a fixed-size Polygon in the first run to creating the
-// minimal Polygon. This requires a temporary Point- and Flag-Array for curves
-// and a memcopy at ImplPolygon creation, but contains no zero-controlpoints
-// for straight edges.
+
+
+
+
+
+
 Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 :   mpImplPolygon(0)
 {
@@ -1786,37 +1786,37 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 
     if(bCurve)
     {
-        // #127979# Reduce source point count hard to the limit of the tools Polygon
+        
         if(nB2DLocalCount > ((0x0000ffff / 3L) - 1L))
         {
             OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
             nB2DLocalCount = ((0x0000ffff / 3L) - 1L);
         }
 
-        // calculate target point count
+        
         const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1L : 0L ));
 
         if(nLoopCount)
         {
-            // calculate maximum array size and allocate; prepare insert index
+            
             const sal_uInt32 nMaxTargetCount((nLoopCount * 3) + 1);
             mpImplPolygon = new ImplPolygon(static_cast< sal_uInt16 >(nMaxTargetCount), true);
 
-            // prepare insert index and current point
+            
             sal_uInt32 nArrayInsert(0);
             basegfx::B2DCubicBezier aBezier;
             aBezier.setStartPoint(rPolygon.getB2DPoint(0));
 
             for(sal_uInt32 a(0L); a < nLoopCount; a++)
             {
-                // add current point (always) and remember StartPointIndex for evtl. later corrections
+                
                 const Point aStartPoint(FRound(aBezier.getStartPoint().getX()), FRound(aBezier.getStartPoint().getY()));
                 const sal_uInt32 nStartPointIndex(nArrayInsert);
                 mpImplPolygon->mpPointAry[nStartPointIndex] = aStartPoint;
                 mpImplPolygon->mpFlagAry[nStartPointIndex] = (sal_uInt8)POLY_NORMAL;
                 nArrayInsert++;
 
-                // prepare next segment
+                
                 const sal_uInt32 nNextIndex((a + 1) % nB2DLocalCount);
                 aBezier.setEndPoint(rPolygon.getB2DPoint(nNextIndex));
                 aBezier.setControlPointA(rPolygon.getNextControlPoint(a));
@@ -1824,7 +1824,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 
                 if(aBezier.isBezier())
                 {
-                    // if one is used, add always two control points due to the old schema
+                    
                     mpImplPolygon->mpPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointA().getX()), FRound(aBezier.getControlPointA().getY()));
                     mpImplPolygon->mpFlagAry[nArrayInsert] = (sal_uInt8)POLY_CONTROL;
                     nArrayInsert++;
@@ -1834,7 +1834,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
                     nArrayInsert++;
                 }
 
-                // test continuity with previous control point to set flag value
+                
                 if(aBezier.getControlPointA() != aBezier.getStartPoint() && (bClosed || a))
                 {
                     const basegfx::B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
@@ -1849,20 +1849,20 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
                     }
                 }
 
-                // prepare next polygon step
+                
                 aBezier.setStartPoint(aBezier.getEndPoint());
             }
 
             if(bClosed)
             {
-                // add first point again as closing point due to old definition
+                
                 mpImplPolygon->mpPointAry[nArrayInsert] = mpImplPolygon->mpPointAry[0];
                 mpImplPolygon->mpFlagAry[nArrayInsert] = (sal_uInt8)POLY_NORMAL;
                 nArrayInsert++;
             }
             else
             {
-                // add last point as closing point
+                
                 const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1L));
                 const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
                 mpImplPolygon->mpPointAry[nArrayInsert] = aEnd;
@@ -1880,7 +1880,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
     }
     else
     {
-        // #127979# Reduce source point count hard to the limit of the tools Polygon
+        
         if(nB2DLocalCount > (0x0000ffff - 1L))
         {
             OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
@@ -1889,7 +1889,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 
         if(nB2DLocalCount)
         {
-            // point list creation
+            
             const sal_uInt32 nTargetCount(nB2DLocalCount + (bClosed ? 1L : 0L));
             mpImplPolygon = new ImplPolygon( static_cast< sal_uInt16 >(nTargetCount) );
             sal_uInt16 nIndex(0);
@@ -1903,7 +1903,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 
             if(bClosed)
             {
-                // add first point as closing point
+                
                 mpImplPolygon->mpPointAry[nIndex] = mpImplPolygon->mpPointAry[0];
             }
         }
@@ -1911,7 +1911,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 
     if(!mpImplPolygon)
     {
-        // no content yet, create empty polygon
+        
         mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
     }
 }

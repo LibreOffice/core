@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/multisel.hxx>
@@ -25,7 +25,7 @@
 #include "markdata.hxx"
 #include "prevloc.hxx"
 
-//------------------------------------------------------------------------
+
 
 ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
                                     const ScPrintSelectionStatus& rStatus ) :
@@ -36,8 +36,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     nFirstAttr(),
     bLocInitialized( false )
 {
-    //  page count uses the stored cell widths for the printer anyway,
-    //  so ScPrintFunc with the document's printer can be used to count
+    
+    
 
     SfxPrinter* pPrinter = pDocSh->GetPrinter();
 
@@ -52,7 +52,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     ScDocument* pDoc = pDocSh->GetDocument();
     SCTAB nTabCount = pDoc->GetTableCount();
 
-    // avoid repeated progress bars if row heights for all sheets are needed
+    
     if ( nTabCount > 1 && rMark.GetSelectCount() == nTabCount )
         pDocSh->UpdatePendingRowHeights( nTabCount-1, true );
 
@@ -66,7 +66,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         {
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
-            nFirstAttr.push_back( aFunc.GetFirstPageNo() );         // from page style or previous sheet
+            nFirstAttr.push_back( aFunc.GetFirstPageNo() );         
         }
         else
             nFirstAttr.push_back( nAttrPage );
@@ -83,7 +83,7 @@ ScPrintFuncCache::~ScPrintFuncCache()
 void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDev )
 {
     if ( bLocInitialized )
-        return;                 // initialize only once
+        return;                 
 
     ScRange aRange;
     const ScRange* pSelRange = NULL;
@@ -93,7 +93,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
         pSelRange = &aRange;
     }
 
-    long nRenderer = 0;     // 0-based physical page number across sheets
+    long nRenderer = 0;     
     long nTabStart = 0;
 
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -142,7 +142,7 @@ bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation
             return true;
         }
     }
-    return false;   // not found
+    return false;   
 }
 
 bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
@@ -172,7 +172,7 @@ long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 
 long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 {
-    //! merge with lcl_GetDisplayStart in preview?
+    
 
     long nDisplayStart = 0;
     ScDocument* pDoc = pDocSh->GetDocument();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <docsh.hxx>
 #include "wordvbahelper.hxx"
@@ -101,7 +101,7 @@ uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< 
 
 uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference< text::XText >& xText ) throw (uno::RuntimeException)
 {
-    // if the first object is table, get the position of first cell
+    
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< container::XEnumerationAccess > xParaAccess( xText, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration> xParaEnum = xParaAccess->createEnumeration();
@@ -146,7 +146,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     }
     catch (const uno::RuntimeException&)
     {
-        //catch exception "no text selection"
+        
     }
     uno::Reference< beans::XPropertySet > xVCProps( xTextRange, uno::UNO_QUERY_THROW );
     while( xVCProps->getPropertyValue("TextTable") >>= xTextContent )
@@ -175,7 +175,7 @@ bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel ) th
     return isObjectSelected;
 }
 
-} // word
+} 
 } //
 } //
 

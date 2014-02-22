@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -114,13 +114,13 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 
     if( !pStyle )
         return NULL;
-    //no matter we want to delete the style or not,XFFont object should be saved first.
+    
     ManageStyleFont(pStyle);
 
     if( pStyle->GetStyleName().isEmpty() )
         pConStyle = FindSameStyle(pStyle);
 
-    if( pConStyle )//such a style has exist:
+    if( pConStyle )
     {
         delete pStyle;
         return pConStyle;
@@ -135,7 +135,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
         else
         {
             name = pStyle->GetStyleName();
-            //for name conflict
+            
             if(FindStyle( name))
             {
                 name = name + Int32ToOUString(m_aStyles.size()+1);
@@ -145,7 +145,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 
 
         m_aStyles.push_back(pStyle);
-        //transform the font object to XFFontFactory
+        
 
         return pStyle;
     }
@@ -227,7 +227,7 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         XFFontFactory* pFontFactory = pGlobal->GetXFFontFactory();
         pFactoryFont = pFontFactory->FindSameFont(pStyleFont);
-        //this font has been exists in the factory:
+        
         if( pFactoryFont )
         {
             pTS->SetFont(pFactoryFont);
@@ -248,7 +248,7 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         XFFontFactory* pFontFactory = pGlobal->GetXFFontFactory();
         pFactoryFont = pFontFactory->FindSameFont(pStyleFont);
-        //this font has been exists in the factory:
+        
         if( pFactoryFont )
         {
             pPS->SetFont(pFactoryFont);

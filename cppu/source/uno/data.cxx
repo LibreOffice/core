@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,14 +42,14 @@ using namespace ::osl;
 namespace cppu
 {
 
-// Sequence<>() (default ctor) relies on this being static:
+
 uno_Sequence g_emptySeq = { 1, 0, { 0 } };
 typelib_TypeDescriptionReference * g_pVoidType = 0;
 
-//--------------------------------------------------------------------------------------------------
+
 void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * pDestType )
 {
-    // init queryInterface() td
+    
     static typelib_TypeDescription * g_pQITD = 0;
     if (0 == g_pQITD)
     {
@@ -80,13 +80,13 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
         typelib_TypeDescriptionReference * ret_type = aRet.pType;
         switch (ret_type->eTypeClass)
         {
-        case typelib_TypeClass_VOID: // common case
+        case typelib_TypeClass_VOID: 
             typelib_typedescriptionreference_release( ret_type );
             break;
         case typelib_TypeClass_INTERFACE:
-            // tweaky... avoiding acquire/ release pair
+            
             typelib_typedescriptionreference_release( ret_type );
-            ret = (uno_Interface *) aRet.pReserved; // serving acquired interface
+            ret = (uno_Interface *) aRet.pReserved; 
             break;
         default:
             _destructAny( &aRet, 0 );
@@ -102,7 +102,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
         buf.append( ": [" );
         buf.append( * reinterpret_cast< OUString const * >( &pExc->pType->pTypeName ) );
         buf.append( "] " );
-        // Message is very first member
+        
         buf.append( * reinterpret_cast< OUString const * >( pExc->pData ) );
         OString cstr(
             OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
@@ -113,7 +113,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     return ret;
 }
 
-//==================================================================================================
+
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType )
@@ -121,7 +121,7 @@ void defaultConstructStruct(
 {
     _defaultConstructStruct( pMem, pCompType );
 }
-//==================================================================================================
+
 void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -130,7 +130,7 @@ void copyConstructStruct(
 {
     _copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
 }
-//==================================================================================================
+
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -139,7 +139,7 @@ void destructStruct(
 {
     _destructStruct( pValue, pTypeDescr, release );
 }
-//==================================================================================================
+
 bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -148,7 +148,7 @@ bool equalStruct(
 {
     return _equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
-//==================================================================================================
+
 bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
@@ -158,7 +158,7 @@ bool assignStruct(
     return _assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
 
-//==============================================================================
+
 uno_Sequence * copyConstructSequence(
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -167,7 +167,7 @@ uno_Sequence * copyConstructSequence(
     return icopyConstructSequence( pSource, pElementType, acquire, mapping );
 }
 
-//==============================================================================
+
 void destructSequence(
     uno_Sequence * pSequence,
     typelib_TypeDescriptionReference * pType,
@@ -177,7 +177,7 @@ void destructSequence(
     idestructSequence( pSequence, pType, pTypeDescr, release );
 }
 
-//==================================================================================================
+
 bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
@@ -189,21 +189,21 @@ bool equalSequence(
 
 extern "C"
 {
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
     _defaultConstructData( pMem, pType, 0 );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C()
 {
     _defaultConstructData( pMem, pTypeDescr->pWeakRef, pTypeDescr );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     void * pValue, typelib_TypeDescriptionReference * pType,
     uno_ReleaseFunc release )
@@ -211,7 +211,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
 {
     _destructData( pValue, pType, 0, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,
@@ -220,7 +220,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
 {
     _destructData( pValue, pTypeDescr->pWeakRef, pTypeDescr, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -229,7 +229,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
 {
     _copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -238,7 +238,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
 {
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -247,7 +247,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
 {
     _copyConstructData( pDest, pSource, pType, 0, 0, mapping );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -256,7 +256,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
 {
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
@@ -268,7 +268,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
         pVal2, pVal2Type,
         queryInterface, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TD,
     void * pVal2, typelib_TypeDescription * pVal2TD,
@@ -280,7 +280,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
         pVal2, pVal2TD->pWeakRef,
         queryInterface, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
@@ -292,7 +292,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
         pSource, pSourceType, 0,
         queryInterface, acquire, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTD,
     void * pSource, typelib_TypeDescription * pSourceTD,
@@ -304,7 +304,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
         pSource, pSourceTD->pWeakRef, pSourceTD,
         queryInterface, acquire, release );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
     typelib_TypeDescriptionReference * pAssignable,
     void * pFrom, typelib_TypeDescriptionReference * pFromType,
@@ -319,7 +319,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
         return sal_False;
     }
 
-    // query
+    
     if (0 == pFrom)
         return sal_False;
     void * pInterface = *(void **)pFrom;
@@ -335,9 +335,9 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -346,8 +346,8 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #pragma pack(push, 8)
 #endif
 
-// Why hardcode like this instead of using the (generated)
-// <sal/typesizes.h> ?
+
+
 
 #if (defined(INTEL) \
     && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD)) \
@@ -508,30 +508,30 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BOOST_STATIC_ASSERT( ((sal_Bool) false) == sal_False &&
                          (1 == 0) == sal_False );
 #ifdef MAX_ALIGNMENT_4
-    // max alignment is 4
+    
     BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 4 );
     BINTEST_VERIFYSIZE( AlignSize_Impl, 12 );
 #else
-    // max alignment is 8
+    
     BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 8 );
     BINTEST_VERIFYSIZE( AlignSize_Impl, 16 );
 #endif
 
-    // sequence
+    
     BINTEST_VERIFY( (SAL_SEQUENCE_HEADER_SIZE % 8) == 0 );
-    // enum
+    
     BINTEST_VERIFY( sizeof( Enum ) == sizeof( sal_Int32 ) );
-    // any
+    
     BINTEST_VERIFY( sizeof(void *) >= sizeof(sal_Int32) );
     BINTEST_VERIFY( sizeof( uno_Any ) == sizeof( void * ) * 3 );
     BINTEST_VERIFYOFFSET( uno_Any, pType, 0 );
     BINTEST_VERIFYOFFSET( uno_Any, pData, 1 * sizeof (void *) );
     BINTEST_VERIFYOFFSET( uno_Any, pReserved, 2 * sizeof (void *) );
-    // interface
+    
     BINTEST_VERIFY( sizeof( Ref ) == sizeof( void * ) );
-    // string
+    
     BINTEST_VERIFY( sizeof( OUString ) == sizeof( rtl_uString * ) );
-    // struct
+    
     BINTEST_VERIFYSIZE( M, 8 );
     BINTEST_VERIFYOFFSET( M, o, 4 );
     BINTEST_VERIFYSIZE( N, 12 );
@@ -590,10 +590,10 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYOFFSET( Char4, c, 3 );
 
 #ifdef MAX_ALIGNMENT_4
-    // max alignment is 4
+    
     BINTEST_VERIFYSIZE( P, 20 );
 #else
-    // alignment of P is 8, because of P[] ...
+    
     BINTEST_VERIFYSIZE( P, 24 );
     BINTEST_VERIFYSIZE( second, sizeof( int ) );
 #endif

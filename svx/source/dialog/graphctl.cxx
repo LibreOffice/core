@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itempool.hxx>
@@ -34,7 +34,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdpage.hxx>
 
-// #i72889#
+
 #include "svx/sdrpaintwindow.hxx"
 
 void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& /*rOldBoundRect*/ )
@@ -142,11 +142,11 @@ void GraphCtrl::InitSdrModel()
 
     SdrPage* pPage;
 
-    // destroy old junk
+    
     delete pView;
     delete pModel;
 
-    // Creating a Model
+    
     pModel = new SdrModel;
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit( aMap100.GetMapUnit() );
@@ -160,7 +160,7 @@ void GraphCtrl::InitSdrModel()
     pModel->InsertPage( pPage );
     pModel->SetChanged( false );
 
-    // Creating a View
+    
     pView = new GraphCtrlView( pModel, this );
     pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( sal_True );
@@ -169,19 +169,19 @@ void GraphCtrl::InitSdrModel()
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode( sal_True );
 
-    // #i72889# set neeeded flags
+    
     pView->SetPagePaintingAllowed(false);
     pView->SetBufferedOutputAllowed(true);
     pView->SetBufferedOverlayAllowed(true);
 
-    // Tell the accessibility object about the changes.
+    
     if (mpAccContext != NULL)
         mpAccContext->setModelAndView (pModel, pView);
 }
 
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, sal_Bool bNewModel )
 {
-    // If possible we dither bitmaps for the display
+    
     if ( !bAnim && ( rGraphic.GetType() == GRAPHIC_BITMAP )  )
     {
         if ( rGraphic.IsTransparent() )
@@ -231,7 +231,7 @@ void GraphCtrl::Resize()
         double          fGrfWH = (double) aGraphSize.Width() / aGraphSize.Height();
         double          fWinWH = (double) nWidth / nHeight;
 
-        // Adapt Bitmap to Thumb size
+        
         if ( fGrfWH < fWinWH)
         {
             aNewSize.Width() = (long) ( (double) nHeight * fGrfWH );
@@ -246,7 +246,7 @@ void GraphCtrl::Resize()
         aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
         aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
 
-        // Implementing MapMode for Engine
+        
         aDisplayMap.SetScaleX( Fraction( aNewSize.Width(), aGraphSize.Width() ) );
         aDisplayMap.SetScaleY( Fraction( aNewSize.Height(), aGraphSize.Height() ) );
 
@@ -259,8 +259,8 @@ void GraphCtrl::Resize()
 
 void GraphCtrl::Paint( const Rectangle& rRect )
 {
-    // #i72889# used splitted repaint to be able to paint an own background
-    // even to the buffered view
+    
+    
     const bool bGraphicValid(GRAPHIC_NONE != aGraphic.GetType());
 
     if(bSdrMode)
@@ -283,7 +283,7 @@ void GraphCtrl::Paint( const Rectangle& rRect )
     }
     else
     {
-        // #i73381# in non-SdrMode, paint to local directly
+        
         if(bGraphicValid)
         {
             aGraphic.Draw(this, Point(), aGraphSize);
@@ -363,11 +363,11 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 if( !aCode.IsMod1() && !aCode.IsMod2() )
                 {
                     bool bForward = !aCode.IsShift();
-                    // select next object
+                    
                     if ( ! pView->MarkNextObj( bForward ))
                     {
-                        // At first or last object.  Cycle to the other end
-                        // of the list.
+                        
+                        
                         pView->UnmarkAllObj();
                         pView->MarkNextObj (bForward);
                     }
@@ -375,7 +375,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 }
                 else if(aCode.IsMod1())
                 {
-                    // select next handle
+                    
                     const SdrHdlList& rHdlList = pView->GetHdlList();
                     sal_Bool bForward(!aCode.IsShift());
 
@@ -392,7 +392,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
             if ( aCode.IsMod1() )
             {
-                // mark last object
+                
                 pView->UnmarkAllObj();
                 pView->MarkNextObj(sal_False);
 
@@ -423,25 +423,25 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
             if (aCode.GetCode() == KEY_UP)
             {
-                // Scroll up
+                
                 nX = 0;
                 nY =-1;
             }
             else if (aCode.GetCode() == KEY_DOWN)
             {
-                // Scroll down
+                
                 nX = 0;
                 nY = 1;
             }
             else if (aCode.GetCode() == KEY_LEFT)
             {
-                // Scroll left
+                
                 nX =-1;
                 nY = 0;
             }
             else if (aCode.GetCode() == KEY_RIGHT)
             {
-                // Scroll right
+                
                 nX = 1;
                 nY = 0;
             }
@@ -450,25 +450,25 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 if(aCode.IsMod2())
                 {
-                    // move in 1 pixel distance
+                    
                     Size aLogicSizeOnePixel = PixelToLogic(Size(1,1));
                     nX *= aLogicSizeOnePixel.Width();
                     nY *= aLogicSizeOnePixel.Height();
                 }
                 else
                 {
-                    // old, fixed move distance
+                    
                     nX *= 100;
                     nY *= 100;
                 }
 
-                // II
+                
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                 if(0L == pHdl)
                 {
-                    // restrict movement to WorkArea
+                    
                     const Rectangle& rWorkArea = pView->GetWorkArea();
 
                     if(!rWorkArea.IsEmpty())
@@ -500,7 +500,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         }
                     }
 
-                    // no handle selected
+                    
                     if(0 != nX || 0 != nY)
                     {
                         pView->MoveAllMarked(Size(nX, nY));
@@ -508,15 +508,15 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 }
                 else
                 {
-                    // move handle with index nHandleIndex
+                    
                     if(pHdl && (nX || nY))
                     {
-                        // now move the Handle (nX, nY)
+                        
                         Point aStartPoint(pHdl->GetPos());
                         Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
                         const SdrDragStat& rDragStat = pView->GetDragStat();
 
-                        // start dragging
+                        
                         pView->BegDragObj(aStartPoint, 0, pHdl, 0);
 
                         if(pView->IsDragObj())
@@ -524,7 +524,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                             bool bWasNoSnap = rDragStat.IsNoSnap();
                             sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
 
-                            // switch snapping off
+                            
                             if(!bWasNoSnap)
                                 ((SdrDragStat&)rDragStat).SetNoSnap(true);
                             if(bWasSnapEnabled)
@@ -533,7 +533,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                             pView->MovAction(aEndPoint);
                             pView->EndDragObj();
 
-                            // restore snap
+                            
                             if(!bWasNoSnap)
                                 ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
                             if(bWasSnapEnabled)
@@ -556,7 +556,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 if(pHdl->GetKind() == HDL_POLY)
                 {
-                    // rescue ID of point with focus
+                    
                     sal_uInt32 nPol(pHdl->GetPolyNum());
                     sal_uInt32 nPnt(pHdl->GetPointNum());
 
@@ -579,7 +579,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                     if(0L == rHdlList.GetFocusHdl())
                     {
-                        // restore point with focus
+                        
                         SdrHdl* pNewOne = 0L;
 
                         for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
@@ -627,7 +627,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
             Control::MouseButtonDown( rMEvt );
         else
         {
-            // Get Focus for key inputs
+            
             GrabFocus();
 
             if ( nPolyEdit )
@@ -646,7 +646,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 
         SdrObject* pCreateObj = pView->GetCreateObj();
 
-        // We want to realize the insert
+        
         if ( pCreateObj && !pCreateObj->GetUserCall() )
             pCreateObj->SetUserCall( pUserCall );
 
@@ -778,7 +778,7 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
 
-            // Disable accessibility if no model/view data available
+            
             if( pView &&
                 pModel &&
                 xAccParent.is() )

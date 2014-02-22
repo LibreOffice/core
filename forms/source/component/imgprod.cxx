@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,9 +30,9 @@
 #include "svtools/imageresourceaccess.hxx"
 #include <comphelper/processfactory.hxx>
 
-// --------------------
-// - ImgProdLockBytes -
-// --------------------
+
+
+
 
 class ImgProdLockBytes : public SvLockBytes
 {
@@ -54,14 +54,14 @@ public:
     virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
 };
 
-// ------------------------------------------------------------------------
+
 
 ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, sal_Bool bOwner ) :
         SvLockBytes( pStm, bOwner )
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ImgProdLockBytes::ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStmRef ) :
         xStmRef( rStmRef )
@@ -88,13 +88,13 @@ ImgProdLockBytes::ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ImgProdLockBytes::~ImgProdLockBytes()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const
 {
@@ -125,7 +125,7 @@ ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount,
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten )
 {
@@ -138,14 +138,14 @@ ErrCode ImgProdLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size 
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::Flush() const
 {
     return ERRCODE_NONE;
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
 {
@@ -158,7 +158,7 @@ ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFlag ) const
 {
@@ -172,9 +172,9 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
     }
 }
 
-// -----------------
-// - ImageProducer -
-// -----------------
+
+
+
 
 ImageProducer::ImageProducer() :
     mpStm       ( NULL ),
@@ -183,7 +183,7 @@ ImageProducer::ImageProducer() :
     mpGraphic = new Graphic;
 }
 
-// ------------------------------------------------------------
+
 
 ImageProducer::~ImageProducer()
 {
@@ -194,9 +194,9 @@ ImageProducer::~ImageProducer()
     mpStm = NULL;
 }
 
-// ------------------------------------------------------------
 
-// ::com::sun::star::uno::XInterface
+
+
 ::com::sun::star::uno::Any ImageProducer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -205,7 +205,7 @@ ImageProducer::~ImageProducer()
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer )
     throw(::com::sun::star::uno::RuntimeException,
@@ -216,7 +216,7 @@ void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::
         maConsList.push_back( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( rxConsumer ));
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -226,7 +226,7 @@ void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::co
         maConsList.erase(riter.base()-1);
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::SetImage( const OUString& rPath )
 {
@@ -248,7 +248,7 @@ void ImageProducer::SetImage( const OUString& rPath )
         mpStm = NULL;
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::SetImage( SvStream& rStm )
 {
@@ -260,7 +260,7 @@ void ImageProducer::SetImage( SvStream& rStm )
     mpStm = new SvStream( new ImgProdLockBytes( &rStm, sal_False ) );
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rInputStmRef )
 {
@@ -275,7 +275,7 @@ void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star
         mpStm = NULL;
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::NewDataAvailable()
 {
@@ -283,7 +283,7 @@ void ImageProducer::NewDataAvailable()
         startProduction();
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -291,11 +291,11 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
     {
         bool bNotifyEmptyGraphics = false;
 
-        // valid stream or filled graphic? => update consumers
+        
         if( mpStm || ( mpGraphic->GetType() != GRAPHIC_NONE ) )
         {
-            // if we already have a graphic, we don't have to import again;
-            // graphic is cleared if a new Stream is set
+            
+            
             if( ( mpGraphic->GetType() == GRAPHIC_NONE ) || mpGraphic->GetContext() )
             {
                 if ( ImplImportGraphic( *mpGraphic ) && maDoneHdl.IsSet() )
@@ -312,11 +312,11 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
 
         if ( bNotifyEmptyGraphics )
         {
-            // reset image
-            // create temporary list to hold interfaces
+            
+            
             ConsumerList_t aTmp = maConsList;
 
-            // iterate through interfaces
+            
             for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
             {
                 (*iter)->init( 0, 0 );
@@ -329,7 +329,7 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
     }
 }
 
-// ------------------------------------------------------------
+
 
 sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
@@ -346,7 +346,7 @@ sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
     return bRet;
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 {
@@ -354,19 +354,19 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 
     if( mbConsInit && !maConsList.empty() )
     {
-        // create temporary list to hold interfaces
+        
         ConsumerList_t aTmp = maConsList;
 
         ImplUpdateConsumer( rGraphic );
         mbConsInit = sal_False;
 
-        // iterate through interfaces
+        
         for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
             (*iter)->complete( ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
     }
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 {
@@ -404,7 +404,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 
                 if( rGraphic.IsTransparent() )
                 {
-                    // append transparent entry
+                    
                     *pTmp = (sal_Int32)(0xffffff00L);
                     mnTransIndex = nPalCount;
                     nPalCount++;
@@ -422,10 +422,10 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
             nAMask = 0x000000ffUL;
         }
 
-        // create temporary list to hold interfaces
+        
         ConsumerList_t aTmp = maConsList;
 
-        // iterate through interfaces
+        
         for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
         {
             (*iter)->init( pBmpAcc->Width(), pBmpAcc->Height() );
@@ -437,7 +437,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
     }
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 {
@@ -465,7 +465,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             pMskAcc = aMask.AcquireReadAccess();
         }
 
-        // create temporary list to hold interfaces
+        
         ConsumerList_t aTmp = maConsList;
 
         if( pBmpAcc->HasPalette() )
@@ -489,7 +489,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                     }
                 }
 
-                // iterate through interfaces
+                
                 for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
                     (*iter)->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
@@ -509,7 +509,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                     }
                 }
 
-                // iterate through interfaces
+                
                 for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
                     (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
@@ -535,7 +535,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 }
             }
 
-            // iterate through interfaces
+            
                 for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
                     (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
         }
@@ -567,6 +567,6 @@ SAL_CALL ImageProducer_CreateInstance(
     return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >(
         ( ::cppu::OWeakObject* ) new ImageProducer );
 }
-} // namespace frm
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

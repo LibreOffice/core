@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "WpgContext.hxx"
@@ -48,9 +48,9 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_wsp:
     {
-        // Don't set default character height, Writer has its own way to set
-        // the default, and if we don't set it here, editeng properly inherits
-        // it.
+        
+        
+        
         oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false));
         return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,7 +74,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
-        Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
+        Touch();        
     try
     {
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
@@ -82,7 +82,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     }
     catch(const uno::Exception&)
     {
-        //couldn't open the file - maybe it's readonly
+        
     }
     if( !refStg.is())
     {
@@ -245,8 +245,8 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, c
     uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->commit();
-    // No need to commit xBlkRoot here as SwTextBlocks::Rename calls
-    // WriteInfo which does the commit
+    
+    
     return 0;
 }
 
@@ -257,7 +257,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     OpenFile(sal_True);
     rDestImp.OpenFile(sal_False);
     const OUString aGroup( rShort );
-    sal_Bool bTextOnly = IsOnlyTextBlock ( rShort ) ;//pImp->pBlkRoot->IsStream( aGroup );
+    sal_Bool bTextOnly = IsOnlyTextBlock ( rShort ) ;
     sal_uInt16 nIndex = GetIndex ( rShort );
     OUString sDestShortName( GetPackageName (nIndex) );
     sal_uInt16 nIdx = 0;
@@ -270,7 +270,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     while ( xAccess->hasByName( sDestShortName ) )
     {
         ++nIdx;
-        //falls wirklich mal einer so verrueckt ist
+        
         if(USHRT_MAX == nIdx)
         {
             CloseFile();
@@ -326,7 +326,7 @@ sal_uLong SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString
 
 sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& rLong )
 {
-    // In der Basisklasse ablegen!
+    
     aShort = rShort;
     aLong = rLong;
     aPackageName = GeneratePackageName( rShort );
@@ -348,15 +348,15 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
     xWrt->bBlock = sal_True;
     nRes = aWriter.Write ( xWrt );
     xWrt->bBlock = sal_False;
-    // Save OLE objects if there are some
+    
     SwDocShell *pDocSh = pDoc->GetDocShell();
 
     bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
     if( !nRes && bHasChildren )
     {
-        // we have to write to the temporary storage first, since the used below functions are optimized
-        // TODO/LATER: it is only a temporary solution, that should be changed soon, the used methods should be
-        // called without optimization
+        
+        
+        
 
         sal_Bool bOK = sal_False;
 
@@ -370,8 +370,8 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
 
                 xRoot->copyToStorage( xTempStorage );
 
-                // TODO/LATER: no progress bar?!
-                // TODO/MBA: strange construct
+                
+                
                 pTmpMedium = new SfxMedium( xTempStorage, GetBaseURL() );
                 sal_Bool bTmpOK = pDocSh->SaveAsChildren( *pTmpMedium );
                 if( bTmpOK )
@@ -409,7 +409,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
     {
     }
 
-    //TODO/LATER: error handling
+    
     return 0;
 }
 
@@ -494,7 +494,7 @@ sal_uLong SwXMLTextBlocks::OpenFile( sal_Bool bRdOnly )
     }
     catch (const uno::Exception&)
     {
-        //TODO/LATER: error handling
+        
         nRet = 1;
     }
 

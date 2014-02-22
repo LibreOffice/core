@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "documentevents.hxx"
@@ -46,7 +46,7 @@ namespace dbaccess
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
 
-    // DocumentEvents_Data
+    
     struct DocumentEvents_Data : public ::boost::noncopyable
     {
         ::cppu::OWeakObject&    rParent;
@@ -61,7 +61,7 @@ namespace dbaccess
         }
     };
 
-    // helper
+    
     struct DocumentEventData
     {
         const sal_Char* pAsciiEventName;
@@ -75,8 +75,8 @@ namespace dbaccess
             static const DocumentEventData s_aData[] = {
                 { "OnCreate",               true  },
                 { "OnLoadFinished",         true  },
-                { "OnNew",                  false },    // compatibility, see http://www.openoffice.org/issues/show_bug.cgi?id=46484
-                { "OnLoad",                 false },    // compatibility, see http://www.openoffice.org/issues/show_bug.cgi?id=46484
+                { "OnNew",                  false },    
+                { "OnLoad",                 false },    
                 { "OnSaveAs",               true  },
                 { "OnSaveAsDone",           false },
                 { "OnSaveAsFailed",         false },
@@ -103,7 +103,7 @@ namespace dbaccess
         }
     }
 
-    // DocumentEvents
+    
     DocumentEvents::DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
         :m_pData( new DocumentEvents_Data( _rParent, _rMutex, _rEventsData ) )
     {
@@ -142,7 +142,7 @@ namespace dbaccess
             ++pEventData;
         }
 
-        // this is an unknown event ... assume async notification
+        
         return false;
     }
 
@@ -158,8 +158,8 @@ namespace dbaccess
         if ( _Element.hasValue() && !( _Element >>= aEventDescriptor ) )
             throw IllegalArgumentException( _Element.getValueTypeName(), *this, 2 );
 
-        // Weird enough, the event assignment UI has (well: had) the idea of using an empty "EventType"/"Script"
-        // to indicate the event descriptor should be reset, instead of just passing an empty event descriptor.
+        
+        
         ::comphelper::NamedValueCollection aCheck( aEventDescriptor );
         if ( aCheck.has( "EventType" ) )
         {
@@ -226,6 +226,6 @@ namespace dbaccess
         return !m_pData->rEventsData.empty();
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

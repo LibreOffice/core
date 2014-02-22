@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AreaChartTypeTemplate.hxx"
@@ -117,7 +117,7 @@ struct StaticAreaChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Refer
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -138,7 +138,7 @@ AreaChartTypeTemplate::AreaChartTypeTemplate(
 AreaChartTypeTemplate::~AreaChartTypeTemplate()
 {}
 
-// ____ OPropertySet ____
+
 uno::Any AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -154,7 +154,7 @@ uno::Any AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticAreaChartTypeTemplateInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL AreaChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -166,7 +166,7 @@ sal_Int32 AreaChartTypeTemplate::getDimension() const
     sal_Int32 nDim = 2;
     try
     {
-        // note: UNO-methods are never const
+        
         const_cast< AreaChartTypeTemplate * >( this )->
             getFastPropertyValue( PROP_AREA_TEMPLATE_DIMENSION ) >>= nDim;
     }
@@ -183,7 +183,7 @@ StackMode AreaChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
     return m_eStackMode;
 }
 
-// ____ XChartTypeTemplate ____
+
 void SAL_CALL AreaChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
@@ -252,12 +252,12 @@ uno::Sequence< OUString > AreaChartTypeTemplate::getSupportedServiceNames_Static
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( AreaChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( AreaChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( AreaChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <BorderHandler.hxx>
 #include <TDefTableHandler.hxx>
@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 BorderHandler::BorderHandler( bool bOOXML ) :
 LoggedProperties(dmapper_logger, "BorderHandler"),
 m_nCurrentBorderPosition( BORDER_TOP ),
-m_nLineWidth(15), // Word default, in twips
+m_nLineWidth(15), 
 m_nLineType(0),
 m_nLineColor(0),
 m_nLineDistance(0),
@@ -58,7 +58,7 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
     switch( rName )
     {
         case NS_ooxml::LN_CT_Border_sz:
-            //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
+            
             m_nLineWidth = nIntValue * 5 / 2;
             appendGrabBag("sz", OUString::number(nIntValue));
         break;
@@ -70,7 +70,7 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
             m_nLineColor = nIntValue;
             appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8));
         break;
-        case NS_ooxml::LN_CT_Border_space: // border distance in points
+        case NS_ooxml::LN_CT_Border_space: 
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
             appendGrabBag("space", OUString::number(nIntValue));
         break;
@@ -91,8 +91,8 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 
 void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
-    BorderPosition pos = BORDER_COUNT; // invalid pos
-    bool rtl = false; // TODO detect
+    BorderPosition pos = BORDER_COUNT; 
+    bool rtl = false; 
     OUString aBorderPos;
     switch( rSprm.getId())
     {
@@ -167,7 +167,7 @@ PropertyMapPtr  BorderHandler::getProperties()
         META_PROP_VERTICAL_BORDER
     };
     PropertyMapPtr pPropertyMap(new PropertyMap);
-    // don't fill in default properties
+    
     if( m_bOOXML || m_nCurrentBorderPosition )
     {
         for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
@@ -224,7 +224,7 @@ void BorderHandler::appendGrabBag(OUString aKey, OUString aValue)
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -89,7 +89,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
                 xPropState->getPropertyState( sPageDescName  ) )
         {
             xPropSet->getPropertyValue( sPageDescName ) >>= sName;
-            // fix for #i5551#  if( sName.getLength() > 0 )
+            
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,
                                           GetExport().EncodeStyleName( sName ) );
@@ -143,7 +143,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
                        bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0);
     exportStyleFamily( "CharacterStyles", GetXMLToken(XML_TEXT), GetTextPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
-    // get shape export to make sure the frame family is added correctly.
+    
     GetExport().GetShapeExport();
     exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), GetFramePropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0);

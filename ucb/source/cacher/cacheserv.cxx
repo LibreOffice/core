@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
@@ -40,9 +40,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
-    // CachedContentResultSetFactory.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     if ( CachedContentResultSetFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -50,9 +50,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedContentResultSetFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // CachedContentResultSetStubFactory.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     else if ( CachedContentResultSetStubFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -60,9 +60,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedContentResultSetStubFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // CachedDynamicResultSetFactory.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     else if ( CachedDynamicResultSetFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -70,9 +70,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedDynamicResultSetFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // CachedDynamicResultSetStubFactory.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     else if ( CachedDynamicResultSetStubFactory::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -80,7 +80,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
         xFactory = CachedDynamicResultSetStubFactory::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+    
 
     if ( xFactory.is() )
     {

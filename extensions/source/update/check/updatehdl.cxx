@@ -82,7 +82,7 @@
 
 using namespace com::sun::star;
 
-//--------------------------------------------------------------------
+
 UpdateHandler::UpdateHandler( const uno::Reference< uno::XComponentContext > & rxContext,
                               const rtl::Reference< IActionListener > & rxActionListener ) :
     mxContext( rxContext ),
@@ -100,7 +100,7 @@ UpdateHandler::UpdateHandler( const uno::Reference< uno::XComponentContext > & r
 {
 }
 
-//--------------------------------------------------------------------
+
 UpdateHandler::~UpdateHandler()
 {
     mxContext = NULL;
@@ -109,7 +109,7 @@ UpdateHandler::~UpdateHandler()
     mxActionListener = NULL;
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::enableControls( short nCtrlState )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -138,7 +138,7 @@ void UpdateHandler::enableControls( short nCtrlState )
     mnLastCtrlState = nCtrlState;
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setDownloadBtnLabel( bool bAppendDots )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -157,7 +157,7 @@ void UpdateHandler::setDownloadBtnLabel( bool bAppendDots )
     }
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setState( UpdateState eState )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -168,7 +168,7 @@ void UpdateHandler::setState( UpdateState eState )
         updateState( meCurState );
 }
 
-//--------------------------------------------------------------------
+
 bool UpdateHandler::isVisible() const
 {
     if ( !mxUpdDlg.is() ) return false;
@@ -181,7 +181,7 @@ bool UpdateHandler::isVisible() const
         return false;
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setVisible( bool bVisible )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -224,7 +224,7 @@ void UpdateHandler::setVisible( bool bVisible )
     }
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setProgress( sal_Int32 nPercent )
 {
     if ( nPercent > 100 )
@@ -242,13 +242,13 @@ void UpdateHandler::setProgress( sal_Int32 nPercent )
     }
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setErrorMessage( const OUString& rErrorMsg )
 {
     setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( rErrorMsg ) );
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setDownloadFile( const OUString& rFilePath )
 {
     sal_Int32 nLast = rFilePath.lastIndexOf( '/' );
@@ -260,7 +260,7 @@ void UpdateHandler::setDownloadFile( const OUString& rFilePath )
     }
 }
 
-//--------------------------------------------------------------------
+
 OUString UpdateHandler::getBubbleText( UpdateState eState )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -276,7 +276,7 @@ OUString UpdateHandler::getBubbleText( UpdateState eState )
     return sText;
 }
 
-//--------------------------------------------------------------------
+
 OUString UpdateHandler::getBubbleTitle( UpdateState eState )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -292,7 +292,7 @@ OUString UpdateHandler::getBubbleTitle( UpdateState eState )
     return sText;
 }
 
-//--------------------------------------------------------------------
+
 OUString UpdateHandler::getDefaultInstErrMsg()
 {
     osl::MutexGuard aGuard( maMutex );
@@ -303,7 +303,7 @@ OUString UpdateHandler::getDefaultInstErrMsg()
 }
 
 // XActionListener
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::disposing( const lang::EventObject& rEvt )
     throw( uno::RuntimeException )
 {
@@ -311,7 +311,7 @@ void SAL_CALL UpdateHandler::disposing( const lang::EventObject& rEvt )
         mxUpdDlg.clear();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
     throw( uno::RuntimeException )
 {
@@ -376,13 +376,13 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
 }
 
 // XTopWindowListener
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowOpened( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowClosing( const lang::EventObject& e )
     throw( uno::RuntimeException )
 {
@@ -393,40 +393,40 @@ void SAL_CALL UpdateHandler::windowClosing( const lang::EventObject& e )
     actionPerformed( aActionEvt );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowClosed( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowMinimized( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
     mbMinimized = true;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowNormalized( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
     mbMinimized = false;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowActivated( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::windowDeactivated( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
 }
 
 // XInteractionHandler
-//------------------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest > const & rRequest)
     throw (uno::RuntimeException)
 {
@@ -468,9 +468,9 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
         mxInteractionHdl->handle( rRequest );
 }
 
-//------------------------------------------------------------------------------
+
 // XTerminateListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::queryTermination( const lang::EventObject& )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
@@ -488,7 +488,7 @@ void SAL_CALL UpdateHandler::queryTermination( const lang::EventObject& )
         setVisible( false );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UpdateHandler::notifyTermination( const lang::EventObject& )
     throw ( uno::RuntimeException )
 {
@@ -508,9 +508,9 @@ void SAL_CALL UpdateHandler::notifyTermination( const lang::EventObject& )
     }
 }
 
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
+
+
+
 void UpdateHandler::updateState( UpdateState eState )
 {
     if ( meLastState == eState )
@@ -610,7 +610,7 @@ void UpdateHandler::updateState( UpdateState eState )
     meLastState = eState;
 }
 
-//--------------------------------------------------------------------
+
 OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBundle > xBundle,
                                          sal_Int32 nResourceId ) const
 {
@@ -639,7 +639,7 @@ OUString UpdateHandler::substVariables( const OUString &rSource ) const
         .replaceAll( "%PERCENT", OUString::number( mnPercent ) );
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::loadStrings()
 {
     if ( mbStringsLoaded )
@@ -726,7 +726,7 @@ void UpdateHandler::loadStrings()
 }
 
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::startThrobber( bool bStart )
 {
     uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
@@ -745,7 +745,7 @@ void UpdateHandler::startThrobber( bool bStart )
         xWindow->setVisible( bStart );
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setControlProperty( const OUString &rCtrlName,
                                         const OUString &rPropName,
                                         const uno::Any &rPropValue )
@@ -766,7 +766,7 @@ void UpdateHandler::setControlProperty( const OUString &rCtrlName,
     }
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::showControl( const OUString &rCtrlName, bool bShow )
 {
     uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
@@ -782,7 +782,7 @@ void UpdateHandler::showControl( const OUString &rCtrlName, bool bShow )
         xWindow->setVisible( bShow );
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::focusControl( DialogControls eID )
 {
     uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
@@ -800,7 +800,7 @@ void UpdateHandler::focusControl( DialogControls eID )
         xWindow->setFocus();
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > const & rxDialogModel,
                                         OUString const & rServiceName,
                                         OUString const & rControlName,
@@ -828,7 +828,7 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > con
     xContainer->insertByName( rControlName, uno::Any (uno::Reference< uno::XInterface >(xModel, uno::UNO_QUERY)));
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::setFullVersion( OUString& rString )
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
@@ -854,7 +854,7 @@ void UpdateHandler::setFullVersion( OUString& rString )
     rString = rString.replaceFirst( aProductVersion, aProductFullVersion );
 }
 
-//--------------------------------------------------------------------
+
 bool UpdateHandler::showWarning( const OUString &rWarningText ) const
 {
     bool bRet = false;
@@ -901,7 +901,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText ) const
     return bRet;
 }
 
-//--------------------------------------------------------------------
+
 bool UpdateHandler::showWarning( const OUString &rWarningText,
                                  const OUString &rBtnText_1,
                                  const OUString &rBtnText_2 ) const
@@ -972,7 +972,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
     return bRet;
 }
 
-//--------------------------------------------------------------------
+
 bool UpdateHandler::showOverwriteWarning( const OUString& rFileName ) const
 {
     return showWarning(
@@ -982,13 +982,13 @@ bool UpdateHandler::showOverwriteWarning( const OUString& rFileName ) const
         msReloadContinue, msReloadReload );
 }
 
-//--------------------------------------------------------------------
+
 bool UpdateHandler::showOverwriteWarning() const
 {
     return showWarning( msOverwriteWarning );
 }
 
-//--------------------------------------------------------------------
+
 #define BUTTON_HEIGHT       14
 #define BUTTON_WIDTH        50
 #define BUTTON_X_OFFSET      7
@@ -1023,7 +1023,7 @@ bool UpdateHandler::showOverwriteWarning() const
 #define PROGRESS_X_POS      ( DIALOG_BORDER + 8 )
 #define PROGRESS_Y_POS      ( DIALOG_BORDER + 2*LABEL_OFFSET )
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::showControls( short nControls )
 {
     // The buttons from CANCEL_BUTTON to RESUME_BUTTON will be shown or
@@ -1055,7 +1055,7 @@ void UpdateHandler::showControls( short nControls )
         setControlProperty( TEXT_STATUS, "Height", uno::Any( sal_Int32(BOX_HEIGHT1 - 4*TEXT_OFFSET - LABEL_HEIGHT ) ) );
 }
 
-//--------------------------------------------------------------------
+
 void UpdateHandler::createDialog()
 {
     if ( !mxContext.is() )

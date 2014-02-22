@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterTimer.hxx"
@@ -93,7 +93,7 @@ public:
 private:
     static ::boost::shared_ptr<TimerScheduler> mpInstance;
     static ::osl::Mutex maInstanceMutex;
-    ::boost::shared_ptr<TimerScheduler> mpLateDestroy; // for clean exit
+    ::boost::shared_ptr<TimerScheduler> mpLateDestroy; 
     static sal_Int32 mnTaskId;
 
     ::osl::Mutex maTaskContainerMutex;
@@ -111,9 +111,9 @@ private:
     virtual void SAL_CALL onTerminated (void) { mpLateDestroy.reset(); }
 };
 
-} // end of anonymous namespace
+} 
 
-//===== PresenterTimer ========================================================
+
 
 sal_Int32 PresenterTimer::ScheduleRepeatedTask (
     const Task& rTask,
@@ -140,7 +140,7 @@ void PresenterTimer::CancelTask (const sal_Int32 nTaskId)
     return TimerScheduler::Instance()->CancelTask(nTaskId);
 }
 
-//===== TimerScheduler ========================================================
+
 
 ::boost::shared_ptr<TimerScheduler> TimerScheduler::mpInstance;
 ::osl::Mutex TimerScheduler::maInstanceMutex;
@@ -192,9 +192,9 @@ void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
 
 void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
 {
-    // Set of scheduled tasks is sorted after their due times, not their
-    // task ids.  Therefore we have to do a linear search for the task to
-    // cancel.
+    
+    
+    
     {
         ::osl::MutexGuard aGuard (maTaskContainerMutex);
         TaskContainer::iterator iTask (maScheduledTasks.begin());
@@ -209,9 +209,9 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
         }
     }
 
-    // The task that is to be canceled may be currently about to be
-    // processed.  Mark it with a flag that a) prevents a repeating task
-    // from being scheduled again and b) tries to prevent its execution.
+    
+    
+    
     {
         ::osl::MutexGuard aGuard (maCurrentTaskMutex);
         if (mpCurrentTask.get() != NULL
@@ -219,30 +219,30 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
             mpCurrentTask->mbIsCanceled = true;
     }
 
-    // Let the main-loop cleanup in it's own time
+    
 }
 
 void SAL_CALL TimerScheduler::run (void)
 {
     while (true)
     {
-        // Get the current time.
+        
         TimeValue aCurrentTime;
         if ( ! GetCurrentTime(aCurrentTime))
         {
-            // We can not get the current time and thus can not schedule anything.
+            
             break;
         }
 
-        // Restrict access to the maScheduledTasks member to one, mutext
-        // guarded, block.
+        
+        
         SharedTimerTask pTask;
         sal_Int64 nDifference = 0;
         {
             ::osl::MutexGuard aGuard (maTaskContainerMutex);
 
-            // There are no more scheduled task.  Leave this loop, function and
-            // live of the TimerScheduler.
+            
+            
             if (maScheduledTasks.empty())
                 break;
 
@@ -256,7 +256,7 @@ void SAL_CALL TimerScheduler::run (void)
             }
         }
 
-        // Acquire a reference to the current task.
+        
         {
             ::osl::MutexGuard aGuard (maCurrentTaskMutex);
             mpCurrentTask = pTask;
@@ -264,20 +264,20 @@ void SAL_CALL TimerScheduler::run (void)
 
         if (pTask.get() == NULL)
         {
-            // Wait until the first task becomes due.
+            
             TimeValue aTimeValue;
             ConvertToTimeValue(aTimeValue, nDifference);
             wait(aTimeValue);
         }
         else
         {
-            // Execute task.
+            
             if ( ! pTask->maTask.empty()
                 && ! pTask->mbIsCanceled)
             {
                 pTask->maTask(aCurrentTime);
 
-                // Re-schedule repeating tasks.
+                
                 if (pTask->mnRepeatIntervall > 0)
                 {
                     ConvertToTimeValue(
@@ -290,14 +290,14 @@ void SAL_CALL TimerScheduler::run (void)
 
         }
 
-        // Release reference to the current task.
+        
         {
             ::osl::MutexGuard aGuard (maCurrentTaskMutex);
             mpCurrentTask.reset();
         }
     }
 
-    // While holding maInstanceMutex
+    
     osl::Guard< osl::Mutex > aInstance( maInstanceMutex );
     mpLateDestroy = mpInstance;
     mpInstance.reset();
@@ -332,7 +332,7 @@ sal_Int64 TimerScheduler::ConvertFromTimeValue (
     return sal_Int64(rTimeValue.Seconds) * 1000000000L + rTimeValue.Nanosec;
 }
 
-//===== TimerTask =============================================================
+
 
 namespace {
 
@@ -349,9 +349,9 @@ TimerTask::TimerTask (
 {
 }
 
-} // end of anonymous namespace
+} 
 
-//===== PresenterTimer ========================================================
+
 
 ::rtl::Reference<PresenterClockTimer> PresenterClockTimer::mpInstance;
 
@@ -411,7 +411,7 @@ void PresenterClockTimer::AddListener (const SharedListener& rListener)
 
     maListeners.push_back(rListener);
 
-    // Create a timer task when the first listener is added.
+    
     if (mnTimerTaskId==PresenterTimer::NotAValidTaskId)
     {
         mnTimerTaskId = PresenterTimer::ScheduleRepeatedTask(
@@ -433,7 +433,7 @@ void PresenterClockTimer::RemoveListener (const SharedListener& rListener)
         maListeners.erase(iListener);
     if (maListeners.empty())
     {
-        // We have no more clients and therefore are not interested in time changes.
+        
         if (mnTimerTaskId != PresenterTimer::NotAValidTaskId)
         {
             PresenterTimer::CancelTask(mnTimerTaskId);
@@ -467,11 +467,11 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
                 || aDateTime.Minutes != maDateTime.Minutes
                 || aDateTime.Hours != maDateTime.Hours)
             {
-                // The displayed part of the current time has changed.
-                // Prepare to call the listeners.
+                
+                
                 maDateTime = aDateTime;
 
-                // Schedule notification of listeners.
+                
                 if (mxRequestCallback.is() && ! mbIsCallbackPending)
                 {
                     mbIsCallbackPending = true;
@@ -485,7 +485,7 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
         xRequestCallback->addCallback(xCallback, Any());
 }
 
-//----- XCallback -------------------------------------------------------------
+
 
 void SAL_CALL PresenterClockTimer::notify (const css::uno::Any& rUserData)
     throw (css::uno::RuntimeException)
@@ -516,6 +516,6 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any& rUserData)
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

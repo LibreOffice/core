@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "tabbgcolordlg.hxx"
 #include "scresid.hxx"
@@ -38,7 +38,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//==================================================================
+
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
@@ -65,7 +65,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(Window* pParent, const OUString& rTitle,
     m_pBtnOk->SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {
@@ -102,7 +102,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
         m_pTabBgColorSet->SetStyle( nBits );
     }
 
-    //lock down a preferred size
+    
     const sal_uInt32 nColCount = m_pTabBgColorSet->getColumnCount();
     const sal_uInt32 nRowCount(ceil(double(nColorCount)/nColCount));
     const sal_uInt32 nLength = m_pTabBgColorSet->getEntryEdgeLength();
@@ -128,7 +128,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
 {
 
-//    Handler, called when the OK button is pushed
+
 
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );

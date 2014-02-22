@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "diagramlayoutatoms.hxx"
@@ -76,7 +76,7 @@ ConditionAttr::ConditionAttr()
 void ConditionAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr )
 {
     mnFunc = xAttr->getOptionalValueToken( XML_func, 0 );
-    // mnArg will be -1 for "none" or any other unknown value
+    
     mnArg = LayoutNodeContext::tagToVarIdx( xAttr->getOptionalValueToken( XML_arg, XML_none ) );
     mnOp = xAttr->getOptionalValueToken( XML_op, 0 );
     msVal = xAttr->getOptionalValue( XML_val );
@@ -119,7 +119,7 @@ ConditionAtom::ConditionAtom(const Reference< XFastAttributeList >& xAttributes)
 const std::vector<LayoutAtomPtr>& ConditionAtom::getChildren() const
 {
     bool bDecisionVar=true;
-    // HACK
+    
     if( maCond.mnFunc == XML_var && maCond.mnArg == XML_dir && maCond.mnOp == XML_equ && maCond.msVal != "norm" )
         bDecisionVar=false;
 
@@ -166,14 +166,14 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
             }
 
-            // just put stuff below each other
+            
             const sal_Int32 nIncX=0;
             const sal_Int32 nIncY=1;
 
             std::vector<ShapePtr>::const_iterator aCurrShape=rShape->getChildren().begin();
             const std::vector<ShapePtr>::const_iterator aLastShape=rShape->getChildren().end();
 
-            // find biggest shape
+            
             awt::Size aMaxSize;
             while( aCurrShape != aLastShape )
             {
@@ -234,7 +234,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const std::vector<ShapePtr>::const_iterator aLastShape=rShape->getChildren().end();
             const sal_Int32 nShapes=aLastShape-aCurrShape;
 
-            // find biggest shape
+            
             awt::Size aMaxSize;
             while( aCurrShape != aLastShape )
             {
@@ -250,7 +250,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 ++aCurrShape;
             }
 
-            // layout shapes
+            
             const sal_Int32 nMaxDim=std::max(aMaxSize.Width,aMaxSize.Height);
             awt::Size aTotalSize;
             aCurrShape=rShape->getChildren().begin();
@@ -309,7 +309,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     aTotalSize.Height,
                     aCurrPos.Y + sz.Height);
 
-                // HACK: the spacing is arbitrary
+                
                 aCurrPos.X += nIncX*(sz.Width+5);
                 aCurrPos.Y += nIncY*(sz.Height+5);
 
@@ -325,7 +325,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             break;
 
         case XML_sp:
-            // HACK. Handled one level higher. Or rather, planned to
+            
             break;
 
         case XML_tx:
@@ -339,8 +339,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
             }
 
-            // HACK - count chars & paragraphs to come up with *some*
-            // notion of necessary size
+            
+            
             const sal_Int32 nHackyFontHeight=50;
             const sal_Int32 nHackyFontWidth=20;
             awt::Size aTotalSize;
@@ -381,7 +381,7 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
 
 bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uInt32 nIdx ) const
 {
-    // find the data node to grab text from
+    
     DiagramData::PointsNameMap::const_iterator aDataNode=rDgm.getData()->getPointsPresNameMap().find(msName);
     if( aDataNode != rDgm.getData()->getPointsPresNameMap().end() &&
         aDataNode->second.size() > nIdx )
@@ -391,7 +391,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                    OUSTRING_TO_CSTR( msName ),
                    OUSTRING_TO_CSTR( aDataNode->second.at(nIdx)->msModelId ) );
 
-        // got the presentation node - now, need the actual data node:
+        
         const DiagramData::StringMap::const_iterator aNodeName=rDgm.getData()->getPresOfNameMap().find(
             aDataNode->second.at(nIdx)->msModelId);
         if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
@@ -403,7 +403,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                 DiagramData::PointNameMap::const_iterator aDataNode2=rDgm.getData()->getPointNameMap().find(aVecIter->first);
                 if( aVecIter->second == 0 )
                 {
-                    // grab shape attr from topmost element(s)
+                    
                     rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
                     rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
                     rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
@@ -415,7 +415,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                                OUSTRING_TO_CSTR( msName ) );
                 }
 
-                // append text with right outline level
+                
                 if( aDataNode2->second->mpShape->getTextBody() &&
                     !aDataNode2->second->mpShape->getTextBody()->getParagraphs().empty() &&
                     !aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
@@ -425,7 +425,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                     {
                         pTextBody.reset( new TextBody() );
 
-                        // also copy text attrs
+                        
                         pTextBody->getTextListStyle() =
                             aDataNode2->second->mpShape->getTextBody()->getTextListStyle();
                         pTextBody->getTextProperties() =
@@ -454,9 +454,9 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                       OUSTRING_TO_CSTR( msName ) );
         }
 
-        // TODO(Q1): apply styling & coloring - taking
-        // layout node's styleLbl for both style & color
-        // now, but docs are a bit unclear on this
+        
+        
+        
         if( !msStyleLabel.isEmpty() )
         {
             OSL_TRACE("setting style with label %s",
@@ -492,8 +492,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
             }
         }
 
-        // even if no data node found, successful anyway. it's
-        // contained at the layoutnode
+        
+        
         return true;
     }
     else
@@ -506,9 +506,9 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     return false;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 //
-// Visitation
+
 //
 
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
@@ -570,7 +570,7 @@ void ShapeCreationVisitor::defaultVisit(LayoutAtom& rAtom)
 
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
-    // TODO: eval the constraints
+    
 }
 
 void ShapeCreationVisitor::visit(AlgAtom& rAtom)
@@ -585,9 +585,9 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     sal_Int32 nChildren=1;
     if( rAtom.iterator().mnPtType == XML_node )
     {
-        // cound child data nodes - check all child Atoms for "name"
-        // attribute that is contained in diagram's
-        // getPointsPresNameMap()
+        
+        
+        
         ShallowPresNameVisitor aVisitor(mrDgm);
         std::for_each( pChildren.begin(), pChildren.end(),
                        boost::bind( &LayoutAtom::accept,
@@ -604,14 +604,14 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     const sal_Int32 nStep=rAtom.iterator().mnStep;
     for( mnCurrIdx=0; mnCurrIdx<nCnt && nStep>0; mnCurrIdx+=nStep )
     {
-        // TODO there is likely some conditions
+        
         std::for_each( pChildren.begin(), pChildren.end(),
                        boost::bind( &LayoutAtom::accept,
                                     _1,
                                     boost::ref(*this)) );
     }
 
-    // and restore idx
+    
     mnCurrIdx = nOldIdx;
 }
 
@@ -634,8 +634,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         OSL_TRACE("ShapeCreationVisitor::visit: processing shape type %d",
                   pCurrShape->getCustomShapeProperties()->getShapePresetType() );
 
-        // TODO(F3): cloned shape shares all properties by reference,
-        // don't change them!
+        
+        
         ShapePtr pClonedShape(
             new Shape( pCurrShape ));
 
@@ -651,17 +651,17 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                   OUSTRING_TO_CSTR( rAtom.getName() ) );
     }
 
-    // set new parent for children
+    
     ShapePtr pPreviousParent(mpParentShape);
     mpParentShape=pCurrParent;
 
-    // process children
+    
     defaultVisit(rAtom);
 
-    // restore parent
+    
     mpParentShape=pPreviousParent;
 
-    // layout shapes - now all child shapes are created
+    
     ShapeLayoutingVisitor aLayoutingVisitor(pCurrParent,
                                             mrDgm,
                                             rAtom.getName());
@@ -670,7 +670,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
 void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
 {
-    // visit all children, one of them needs to be the layout algorithm
+    
     const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
                    boost::bind( &LayoutAtom::accept,
@@ -680,7 +680,7 @@ void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
 
 void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
-    // stop processing
+    
 }
 
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
@@ -690,7 +690,7 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 
 void ShapeLayoutingVisitor::visit(ForEachAtom& /*rAtom*/)
 {
-    // stop processing
+    
 }
 
 void ShapeLayoutingVisitor::visit(ConditionAtom& rAtom)
@@ -705,13 +705,13 @@ void ShapeLayoutingVisitor::visit(ChooseAtom& rAtom)
 
 void ShapeLayoutingVisitor::visit(LayoutNode& /*rAtom*/)
 {
-    // stop processing - only traverse Condition/Choose atoms
+    
 }
 
 void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
 {
-    // visit all children, at least one of them needs to have proper
-    // name set
+    
+    
     const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
                    boost::bind( &LayoutAtom::accept,
@@ -721,12 +721,12 @@ void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
 
 void ShallowPresNameVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
-    // stop processing
+    
 }
 
 void ShallowPresNameVisitor::visit(AlgAtom& /*rAtom*/)
 {
-    // stop processing
+    
 }
 
 void ShallowPresNameVisitor::visit(ForEachAtom& rAtom)

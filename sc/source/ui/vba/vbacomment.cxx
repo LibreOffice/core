@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacomment.hxx"
 
@@ -51,7 +51,7 @@ ScVbaComment::ScVbaComment(
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY );
 }
 
-// private helper functions
+
 
 uno::Reference< sheet::XSheetAnnotation > SAL_CALL
 ScVbaComment::getAnnotation() throw (uno::RuntimeException)
@@ -100,13 +100,13 @@ uno::Reference< excel::XComment > SAL_CALL
 ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XIndexAccess > xIndexAccess( getAnnotations(), uno::UNO_QUERY_THROW );
-    // parent is sheet ( parent of the range which is the parent of the comment )
+    
     uno::Reference< XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, mxModel, xIndexAccess ) );
 
     return uno::Reference< excel::XComment > ( xColl->Item( uno::makeAny( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
  }
 
-// public vba functions
+
 
 OUString SAL_CALL
 ScVbaComment::getAuthor() throw (uno::RuntimeException)
@@ -117,7 +117,7 @@ ScVbaComment::getAuthor() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaComment::setAuthor( const OUString& /*_author*/ ) throw (uno::RuntimeException)
 {
-    // #TODO #FIXME  implementation needed
+    
 }
 
 uno::Reference< msforms::XShape > SAL_CALL
@@ -152,14 +152,14 @@ ScVbaComment::Delete() throw (uno::RuntimeException)
 uno::Reference< excel::XComment > SAL_CALL
 ScVbaComment::Next() throw (uno::RuntimeException)
 {
-    // index: uno = 0, vba = 1
+    
     return getCommentByIndex( getAnnotationIndex() + 2 );
 }
 
 uno::Reference< excel::XComment > SAL_CALL
 ScVbaComment::Previous() throw (uno::RuntimeException)
 {
-    // index: uno = 0, vba = 1
+    
     return getCommentByIndex( getAnnotationIndex() );
 }
 

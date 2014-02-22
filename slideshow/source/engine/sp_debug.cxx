@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,19 +14,19 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 //
-//  sp_collector.cpp
+
 //
-//  Copyright (c) 2002, 2003 Peter Dimov
+
 //
-//  Permission to copy, use, modify, sell and distribute this software
-//  is granted provided this copyright notice appears in all copies.
-//  This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+
+
+
+
 //
 
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
@@ -74,7 +74,7 @@ namespace
     };
 }
 
-// assume 4 byte alignment for pointers when scanning
+
 size_t const pointer_align = 4;
 
 typedef std::map<void const *, long> map2_type;
@@ -114,14 +114,14 @@ static void scan_and_mark(void const * area, size_t size, map2_type & m2, open_t
 
 static void find_unreachable_objects_impl(map_type const & m, map2_type & m2)
 {
-    // scan objects for shared_ptr members, compute internal counts
+    
 
     {
         std::cout << "... " << m.size() << " objects in m.\n";
 
         for(map_type::const_iterator i = m.begin(); i != m.end(); ++i)
         {
-            BOOST_ASSERT(static_cast<boost::detail::sp_counted_base const *>(i->first)->use_count() != 0); // there should be no inactive counts in the map
+            BOOST_ASSERT(static_cast<boost::detail::sp_counted_base const *>(i->first)->use_count() != 0); 
 
             scan_and_count(i->second.first, i->second.second, m, m2);
         }
@@ -129,7 +129,7 @@ static void find_unreachable_objects_impl(map_type const & m, map2_type & m2)
         std::cout << "... " << m2.size() << " objects in m2.\n";
     }
 
-    // mark reachable objects
+    
 
     {
         open_type open;
@@ -159,7 +159,7 @@ static void find_unreachable_objects_impl(map_type const & m, map2_type & m2)
         }
     }
 
-    // m2 now contains the unreachable objects
+    
 }
 
 std::size_t find_unreachable_objects(bool report)
@@ -168,8 +168,8 @@ std::size_t find_unreachable_objects(bool report)
 
 #ifdef BOOST_HAS_THREADS
 
-    // This will work without the #ifdef, but some compilers warn
-    // that lock is not referenced
+    
+    
 
     mutex_type::scoped_lock lock(get_mutex());
 
@@ -239,7 +239,7 @@ void free_unreachable_objects()
     std::cout << "... about to free " << free.size() << " objects.\n";
 }
 
-// debug hooks
+
 
 namespace boost
 {
@@ -282,8 +282,8 @@ void sp_array_destructor_hook(void *)
 {
 }
 
-} // namespace boost
+} 
 
-#endif // defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

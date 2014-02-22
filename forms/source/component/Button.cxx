@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,10 +31,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -49,26 +49,26 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XDispatchProviderInterceptor;
 
-//==================================================================
-//= OButtonModel
-//==================================================================
-//------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
+
 OButtonModel::OButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
-                                    // use the old control name for compatibility reasons
+                                    
     ,m_aResetHelper( *this, m_aMutex )
     ,m_eDefaultState( STATE_NOCHECK )
 {
     m_nClassId = FormComponentType::COMMANDBUTTON;
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL OButtonModel::queryAggregation( const Type& _type ) throw(RuntimeException)
 {
     Any aReturn = OClickableImageBaseModel::queryAggregation( _type );
@@ -77,7 +77,7 @@ Any SAL_CALL OButtonModel::queryAggregation( const Type& _type ) throw(RuntimeEx
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 Sequence< Type > OButtonModel::_getTypes()
 {
     return ::comphelper::concatSequences(
@@ -86,7 +86,7 @@ Sequence< Type > OButtonModel::_getTypes()
     );
 }
 
-//------------------------------------------------------------------
+
 OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OClickableImageBaseModel( _pOriginal, _rxFactory )
     ,m_aResetHelper( *this, m_aMutex )
@@ -97,12 +97,12 @@ OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XCom
     implInitializeImageURL();
 }
 
-//------------------------------------------------------------------------------
+
 OButtonModel::~OButtonModel()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 6, OClickableImageBaseModel )
@@ -115,11 +115,11 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence  OButtonModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
@@ -131,22 +131,22 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return OUString(FRM_COMPONENT_COMMANDBUTTON); // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_COMMANDBUTTON); 
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OClickableImageBaseModel::write(_rxOutStream);
 
-    _rxOutStream->writeShort(0x0003);   // Version
+    _rxOutStream->writeShort(0x0003);   
 
     {
         OStreamSection aSection( _rxOutStream.get() );
-            // this will allow readers to skip unknown bytes in their dtor
+            
 
         _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
 
@@ -158,12 +158,12 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OClickableImageBaseModel::read(_rxInStream);
 
-    sal_uInt16 nVersion = _rxInStream->readShort();     // Version
+    sal_uInt16 nVersion = _rxInStream->readShort();     
     switch (nVersion)
     {
         case 0x0001:
@@ -188,21 +188,21 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         case 0x0003:
         {
             OStreamSection aSection( _rxInStream.get() );
-                // this will skip any unknown bytes in it's dtor
+                
 
-            // button type
+            
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
 
-            // URL
+            
             _rxInStream >> m_sTargetURL;
 
-            // target frame
+            
             _rxInStream >> m_sTargetFrame;
 
-            // help text
+            
             readHelpTextCompatibly(_rxInStream);
 
-            // DispatchInternal
+            
             bool bDispath;
             _rxInStream >> bDispath;
             setDispatchUrlInternal(bDispath);
@@ -218,14 +218,14 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonModel::disposing()
 {
     m_aResetHelper.disposing();
     OClickableImageBaseModel::disposing();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonModel::reset() throw (RuntimeException)
 {
     if ( !m_aResetHelper.approveReset() )
@@ -236,19 +236,19 @@ void SAL_CALL OButtonModel::reset() throw (RuntimeException)
     m_aResetHelper.notifyResetted();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonModel::addResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException)
 {
     m_aResetHelper.addResetListener( _listener );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonModel::removeResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException)
 {
     m_aResetHelper.removeResetListener( _listener );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
 {
     switch ( _nHandle )
@@ -263,7 +263,7 @@ void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
 {
     switch ( _nHandle )
@@ -283,7 +283,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
     }
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
 {
     sal_Bool bModified = sal_False;
@@ -300,7 +300,7 @@ sal_Bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue,
     return bModified;
 }
 
-//--------------------------------------------------------------------
+
 Any OButtonModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
     Any aDefault;
@@ -317,7 +317,7 @@ Any OButtonModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     return aDefault;
 }
 
-//--------------------------------------------------------------------
+
 void OButtonModel::impl_resetNoBroadcast_nothrow()
 {
     try
@@ -330,16 +330,16 @@ void OButtonModel::impl_resetNoBroadcast_nothrow()
     }
 }
 
-//==================================================================
-// OButtonControl
-//==================================================================
-//------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OButtonControl::_getTypes()
 {
     return ::comphelper::concatSequences(
@@ -349,7 +349,7 @@ Sequence<Type> OButtonControl::_getTypes()
     );
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence  OButtonControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
@@ -360,7 +360,7 @@ StringSequence  OButtonControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
                  :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
                  ,OFormNavigationHelper( _rxFactory )
@@ -370,28 +370,28 @@ OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
 {
     increment(m_refCount);
     {
-        // Register as ActionListener
+        
         Reference<XButton>  xButton;
         query_aggregation( m_xAggregate, xButton);
         if (xButton.is())
             xButton->addActionListener(this);
     }
-    // For Listener: refcount at one
+    
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------------------
+
 OButtonControl::~OButtonControl()
 {
     if (m_nClickEvent)
         Application::RemoveUserEvent(m_nClickEvent);
 }
 
-// UNO binding
-//------------------------------------------------------------------------------
+
+
 Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    // if asked for the XTypeProvider, don't let OButtonControl_BASE do this
+    
     Any aReturn;
     if ( !_rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) ) )
         aReturn = OButtonControl_BASE::queryInterface( _rType );
@@ -405,7 +405,7 @@ Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (Runtime
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::disposing()
 {
     startOrStopModelPropertyListening( false );
@@ -414,18 +414,18 @@ void SAL_CALL OButtonControl::disposing()
     OFormNavigationHelper::dispose();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( RuntimeException )
 {
     OControl::disposing( _rSource );
     OFormNavigationHelper::disposing( _rSource );
 }
 
-// ActionListener
-//------------------------------------------------------------------------------
+
+
 void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    // Asynchronous for starutil::URL-Button
+    
     sal_uLong n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -433,7 +433,7 @@ void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::co
     }
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OButtonControl, OnClick)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -441,31 +441,31 @@ IMPL_LINK_NOARG(OButtonControl, OnClick)
 
     if (m_aApproveActionListeners.getLength())
     {
-        // if there are listeners, start the action in an own thread, to not allow
-        // them to block us here (we're in the application's main thread)
+        
+        
         getImageProducerThread()->addEvent();
     }
     else
     {
-        // Else, don't. We then must not notify the Listeners in any case,
-        // not even if added later on.
+        
+        
         aGuard.clear();
 
-        // recognize the button type
+        
         Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
         if (!xSet.is())
             return 0L;
 
         if (FormButtonType_PUSH == *(FormButtonType*)xSet->getPropertyValue(PROPERTY_BUTTONTYPE).getValue())
         {
-            // notify the action listeners for a push button
+            
             ::cppu::OInterfaceIteratorHelper aIter(m_aActionListeners);
             ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
             while(aIter.hasMoreElements() )
             {
-                // catch exceptions
-                // and catch them on a per-listener basis - if one listener fails, the others still need
-                // to get notified
+                
+                
+                
                 try
                 {
                     static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);
@@ -473,7 +473,7 @@ IMPL_LINK_NOARG(OButtonControl, OnClick)
 #ifdef DBG_UTIL
                 catch( const RuntimeException& )
                 {
-                    // silence this
+                    
                 }
 #endif
                 catch( const Exception& )
@@ -488,7 +488,7 @@ IMPL_LINK_NOARG(OButtonControl, OnClick)
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt )
 {
     {
@@ -512,8 +512,8 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
     OClickableImageBaseControl::actionPerformed_Impl( _bNotifyListener, _rEvt );
 }
 
-// XButton
-//------------------------------------------------------------------------------
+
+
 void OButtonControl::setLabel(const OUString& Label) throw( RuntimeException )
 {
     Reference<XButton>  xButton;
@@ -522,7 +522,7 @@ void OButtonControl::setLabel(const OUString& Label) throw( RuntimeException )
         xButton->setLabel(Label);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand) throw( RuntimeException )
 {
     {
@@ -536,19 +536,19 @@ void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand) throw(
         xButton->setActionCommand(_rCommand);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::addActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
 {
     m_aActionListeners.addInterface(_rxListener);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
 {
     m_aActionListeners.removeInterface(_rxListener);
 }
 
-//------------------------------------------------------------------------------
+
 class DoPropertyListening
 {
 private:
@@ -566,7 +566,7 @@ public:
     void    handleListening( const OUString& _rPropertyName );
 };
 
-//..............................................................................
+
 DoPropertyListening::DoPropertyListening(
         const Reference< XInterface >& _rxComponent, const Reference< XPropertyChangeListener >& _rxListener,
         bool _bStart )
@@ -578,7 +578,7 @@ DoPropertyListening::DoPropertyListening(
     DBG_ASSERT( m_xListener.is(), "DoPropertyListening::DoPropertyListening: invalid listener!" );
 }
 
-//..............................................................................
+
 void DoPropertyListening::handleListening( const OUString& _rPropertyName )
 {
     if ( m_xProps.is() )
@@ -590,7 +590,7 @@ void DoPropertyListening::handleListening( const OUString& _rPropertyName )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
 {
     DoPropertyListening aListeningHandler( getModel(), this, _bStart );
@@ -599,7 +599,7 @@ void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
     aListeningHandler.handleListening( PROPERTY_ENABLED );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel ) throw ( RuntimeException )
 {
     startOrStopModelPropertyListening( false );
@@ -616,12 +616,12 @@ sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _r
     return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonControl::modelFeatureUrlPotentiallyChanged( )
 {
     sal_Int16 nOldUrlFeatureId = m_nTargetUrlFeatureId;
 
-    // doe we have another TargetURL now? If so, we need to update our dispatches
+    
     m_nTargetUrlFeatureId = getModelUrlFeatureId( );
     if ( nOldUrlFeatureId != m_nTargetUrlFeatureId )
     {
@@ -631,7 +631,7 @@ void OButtonControl::modelFeatureUrlPotentiallyChanged( )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent ) throw ( RuntimeException )
 {
     if  (   _rEvent.PropertyName.equals( PROPERTY_TARGET_URL )
@@ -646,7 +646,7 @@ void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent
     }
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     bool isFormControllerURL( const OUString& _rURL )
@@ -656,12 +656,12 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
 {
     sal_Int16 nFeatureId = -1;
 
-    // some URL related properties of the model
+    
     OUString sUrl;
     FormButtonType eButtonType = FormButtonType_PUSH;
 
@@ -672,10 +672,10 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
         xModelProps->getPropertyValue( PROPERTY_BUTTONTYPE ) >>= eButtonType;
     }
 
-    // are we a URL button?
+    
     if ( eButtonType == FormButtonType_URL )
     {
-        // is it a feature URL?
+        
         if ( isFormControllerURL( sUrl ) )
         {
             OFormNavigationMapper aMapper( m_xContext );
@@ -686,7 +686,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
     return nFeatureId;
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
 {
     OClickableImageBaseControl::setDesignMode( _bOn  );
@@ -695,72 +695,72 @@ void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeExcep
         disconnectDispatchers();
     else
         connectDispatchers();
-        // this will connect if not already connected and just update else
+        
 }
 
-//------------------------------------------------------------------------------
+
 void OButtonControl::getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds )
 {
     if ( -1 != m_nTargetUrlFeatureId )
         _rFeatureIds.push_back( m_nTargetUrlFeatureId );
 }
 
-//------------------------------------------------------------------
+
 void OButtonControl::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
 {
     if ( _nFeatureId == m_nTargetUrlFeatureId )
     {
-        // enable or disable our peer, according to the new state
+        
         Reference< XVclWindowPeer > xPeer( getPeer(), UNO_QUERY );
         if ( xPeer.is() )
             xPeer->setProperty( PROPERTY_ENABLED, makeAny( m_bEnabledByPropertyValue ? _bEnabled : sal_False ) );
-            // if we're disabled according to our model's property, then
-            // we don't care for the feature state, but *are* disabled.
-            // If the model's property states that we're enabled, then we *do*
-            // care for the feature state
+            
+            
+            
+            
     }
 
-    // base class
+    
     OFormNavigationHelper::featureStateChanged( _nFeatureId, _bEnabled );
 }
 
-//------------------------------------------------------------------
+
 void OButtonControl::allFeatureStatesChanged( )
 {
     if ( -1 != m_nTargetUrlFeatureId )
-        // we have only one supported feature, so simulate it has changed ...
+        
         featureStateChanged( m_nTargetUrlFeatureId, isEnabled( m_nTargetUrlFeatureId ) );
 
-    // base class
+    
     OFormNavigationHelper::allFeatureStatesChanged( );
 }
 
-//------------------------------------------------------------------
+
 bool OButtonControl::isEnabled( sal_Int16 _nFeatureId ) const
 {
     if ( const_cast< OButtonControl* >( this )->isDesignMode() )
-        // TODO: the model property?
+        
        return true;
 
     return OFormNavigationHelper::isEnabled( _nFeatureId );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
 {
     OClickableImageBaseControl::registerDispatchProviderInterceptor( _rxInterceptor );
     OFormNavigationHelper::registerDispatchProviderInterceptor( _rxInterceptor );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
 {
     OClickableImageBaseControl::releaseDispatchProviderInterceptor( _rxInterceptor );
     OFormNavigationHelper::releaseDispatchProviderInterceptor( _rxInterceptor );
 }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

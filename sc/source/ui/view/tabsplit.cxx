@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tabsplit.hxx"
@@ -23,7 +23,7 @@
 
 #include <vcl/settings.hxx>
 
-//==================================================================
+
 
 ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pData ) :
     Splitter( pParent, nWinStyle ),
@@ -97,24 +97,24 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
         {
             case SC_SPLIT_NONE:
             {
-                // Draw 3D border
+                
                 SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
                 DrawLine(rRect.TopRight(), rRect.BottomRight());
                 DrawLine(rRect.BottomLeft(), rRect.BottomRight());
                 SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
                 DrawLine(rRect.TopLeft(), rRect.TopRight());
                 DrawLine(rRect.TopLeft(), rRect.BottomLeft());
-                // Fill internal rectangle
+                
                 SetLineColor();
                 SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
                 DrawRect(Rectangle(rRect.Left()+1, rRect.Top()+1, rRect.Right()-1, rRect.Bottom()-1));
-                // Draw handle
+                
                 SetLineColor(Color(COL_BLACK));
                 SetFillColor(Color(COL_BLACK));
                 const long xc = rRect.Right()+rRect.Left();
                 const long h4 = rRect.GetHeight()/4;
-                // First xc fraction is truncated, second one is rounded. This will draw a centered line
-                // in handlers with odd width and a centered rectangle in those with even width.
+                
+                
                 DrawRect(Rectangle(Point(xc/2, rRect.Top()+h4), Point((xc+1)/2, rRect.Bottom()-h4)));
                 break;
             }
@@ -128,7 +128,7 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
                 DrawRect(Rectangle(Point(rRect.Left()+1, rRect.Top()), Point(rRect.Right()-1, rRect.Bottom())));
                 break;
             case SC_SPLIT_FIX:
-                // Nothing to draw
+                
                 break;
         }
     }
@@ -138,24 +138,24 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
         {
             case SC_SPLIT_NONE:
             {
-                // Draw 3D border
+                
                 SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
                 DrawLine(rRect.TopRight(), rRect.BottomRight());
                 DrawLine(rRect.BottomLeft(), rRect.BottomRight());
                 SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
                 DrawLine(rRect.TopLeft(), rRect.TopRight());
                 DrawLine(rRect.TopLeft(), rRect.BottomLeft());
-                // Fill internal rectangle
+                
                 SetLineColor();
                 SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
                 DrawRect(Rectangle(rRect.Left()+1, rRect.Top()+1, rRect.Right()-1, rRect.Bottom()-1));
-                // Draw handle
+                
                 SetLineColor(Color(COL_BLACK));
                 SetFillColor(Color(COL_BLACK));
                 const long yc = rRect.Top()+rRect.Bottom();
                 const long w4 = rRect.GetWidth()/4;
-                // First yc fraction is truncated, second one is rounded. This will draw a centered line
-                // in handlers with odd height and a centered rectangle in those with even height.
+                
+                
                 DrawRect(Rectangle(Point(rRect.Left()+w4, yc/2), Point(rRect.Right()-w4, (yc+1)/2)));
                 break;
             }
@@ -169,7 +169,7 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
                 DrawRect(Rectangle(Point(rRect.Left(), rRect.Top()+1), Point(rRect.Right(), rRect.Bottom()-1)));
                 break;
             case SC_SPLIT_FIX:
-                // Nothing to draw
+                
                 break;
         }
     }

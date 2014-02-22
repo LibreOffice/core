@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,14 +27,14 @@ using namespace ::connectivity::macab;
 MacabOrder::~MacabOrder()
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabSimpleOrder::MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, sal_Bool bAscending)
     : MacabOrder(),
       m_nFieldNumber(header->getColumnNumber(sColumnName)),
       m_bAscending(bAscending)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 MacabSimpleOrder::compare(const MacabRecord *record1, const MacabRecord *record2) const
 {
     sal_Int32 result;
@@ -45,24 +45,24 @@ sal_Int32 MacabSimpleOrder::compare(const MacabRecord *record1, const MacabRecor
 
     return result;
 }
-// -----------------------------------------------------------------------------
+
 MacabComplexOrder::MacabComplexOrder()
     : MacabOrder(),
       m_aOrders()
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabComplexOrder::~MacabComplexOrder()
 {
     for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)
         delete m_aOrders[i];
 }
-// -----------------------------------------------------------------------------
+
 void MacabComplexOrder::addOrder(MacabOrder *pOrder)
 {
     m_aOrders.push_back(pOrder);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 MacabComplexOrder::compare(const MacabRecord *record1, const MacabRecord *record2) const
 {
     for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)

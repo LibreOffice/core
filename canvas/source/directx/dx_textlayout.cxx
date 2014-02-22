@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,12 +55,12 @@ namespace dxcanvas
         mpFont.reset();
     }
 
-    // XTextLayout
+    
     uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
     }
 
@@ -68,7 +68,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -76,7 +76,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -107,7 +107,7 @@ namespace dxcanvas
         uno::Reference< rendering::XGraphicDevice > xGraphicDevice;
         ::dxcanvas::TextLayoutDrawHelper aDrawHelper(xGraphicDevice);
 
-        // render text
+        
         const geometry::RealRectangle2D aBounds(
             aDrawHelper.queryTextBounds(
                 maText,
@@ -122,7 +122,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -131,7 +131,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -139,7 +139,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::TextHit();
     }
 
@@ -148,7 +148,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::Caret();
     }
 
@@ -158,7 +158,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0;
     }
 
@@ -167,7 +167,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -176,7 +176,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -184,7 +184,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -211,8 +211,8 @@ namespace dxcanvas
 
     namespace
     {
-        // TODO(P2): Check whether this gets inlined. If not, make functor
-        // out of it
+        
+        
         inline Gdiplus::PointF gdiPlusPointFromDx( const double& dx )
         {
             return Gdiplus::PointF( static_cast<Gdiplus::REAL>(dx),
@@ -231,7 +231,7 @@ namespace dxcanvas
 
         ::dxcanvas::TextLayoutDrawHelper aDrawHelper(xGraphicDevice);
 
-        // render text
+        
         aDrawHelper.drawText(
             rGraphics,
             rViewState,

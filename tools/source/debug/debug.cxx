@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined (UNX) || defined (__GNUC__)
@@ -47,7 +47,7 @@
 
 #ifdef DBG_UTIL
 
-// PointerList
+
 
 #define PBLOCKCOUNT     1024
 
@@ -78,7 +78,7 @@ public:
     sal_uIntPtr Count() const { return nCount; }
 };
 
-// data types
+
 
 #define DBG_MAXNAME     28
 
@@ -156,7 +156,7 @@ struct DebugData
 #define DBG_TEST_XTOR_EXTRA (DBG_TEST_XTOR_THIS |  DBG_TEST_XTOR_FUNC |               \
                              DBG_TEST_XTOR_EXIT |  DBG_TEST_XTOR_REPORT )
 
-// static maintenance variables
+
 
 static DebugData aDebugData;
 static sal_Char aCurPath[260];
@@ -216,7 +216,7 @@ static bool ImplActivateDebugger( const sal_Char* pMsg )
     DebugBreak();
     return true;
 #else
-    (void) pMsg; // avoid warning about unused parameter
+    (void) pMsg; 
     return false;
 #endif
 }
@@ -342,7 +342,7 @@ namespace
     bool lcl_isConfigSection( const sal_Char* _pLine, size_t _nLineLen )
     {
         if ( _nLineLen < 2 )
-            // not even enough space for '[' and ']'
+            
             return false;
         if ( ( _pLine[0] == '[' ) && ( _pLine[ _nLineLen - 1 ] == ']' ) )
             return true;
@@ -353,7 +353,7 @@ namespace
     {
         size_t nKeyLength = strlen( _pKeyName );
         if ( nKeyLength + 1 >= _nLineLen )
-            // not even long enough for the key name plus "=" plus a one-character value
+            
             return false;
         if ( ( strncmp( _pLine, _pKeyName, nKeyLength ) == 0 ) && ( _pLine[ nKeyLength ] == '=' ) )
             return true;
@@ -601,10 +601,10 @@ static DebugData* GetDebugData()
     {
         aDebugData.bInit = true;
 
-        // set default debug names
+        
         DbgGetLogFileName( aDebugData.aDbgData.aDebugName );
 
-        // DEBUG.INI-File
+        
         sal_Char aBuf[ 4096 ];
         DbgGetDbgFileName( aBuf, sizeof( aBuf ) );
         FILETYPE pIniFile = FileOpen( aBuf, "r" );
@@ -612,7 +612,7 @@ static DebugData* GetDebugData()
         {
             ConfigSection eCurrentSection = eUnknown;
 
-            // no sophisticated algorithm here, assume that the whole file fits into aBuf ...
+            
             sal_uIntPtr nReallyRead = FileRead( aBuf, 1, sizeof( aBuf ) / sizeof( sal_Char ) - 1, pIniFile );
             aBuf[ nReallyRead ] = 0;
             const sal_Char* pLine = aBuf;
@@ -623,7 +623,7 @@ static DebugData* GetDebugData()
                 if ( lcl_isConfigSection( pLine, nLineLength ) )
                     eCurrentSection = lcl_getSectionFromName( pLine + 1, nLineLength - 2 );
 
-                // elements of the [output] section
+                
                 if ( eCurrentSection == eOutput )
                 {
                     lcl_tryReadConfigString( pLine, nLineLength, "log_file", aDebugData.aDbgData.aDebugName, sizeof( aDebugData.aDbgData.aDebugName ) );
@@ -638,13 +638,13 @@ static DebugData* GetDebugData()
                     lcl_tryReadConfigBoolean( pLine, nLineLength, "oslhook", &aDebugData.aDbgData.bHookOSLAssert );
                 }
 
-                // elements of the [gui] section
+                
                 if ( eCurrentSection == eGUI )
                 {
                     lcl_tryReadConfigString( pLine, nLineLength, "debug_window_state", aDebugData.aDbgData.aDbgWinState, sizeof( aDebugData.aDbgData.aDbgWinState ) );
                 }
 
-                // elements of the [objects] section
+                
                 if ( eCurrentSection == eObjects )
                 {
                     lcl_tryReadConfigFlag( pLine, nLineLength, "check_this", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_THIS );
@@ -654,7 +654,7 @@ static DebugData* GetDebugData()
                     lcl_tryReadConfigFlag( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_TRACE );
                 }
 
-                // elements of the [test] section
+                
                 if ( eCurrentSection == eTest )
                 {
                     lcl_tryReadConfigFlag( pLine, nLineLength, "profiling", &aDebugData.aDbgData.nTestFlags, DBG_TEST_PROFILING );
@@ -682,7 +682,7 @@ static DebugData* GetDebugData()
             OSL_TRACE( "getcwd failed with error %s", strerror(errno) );
         }
 
-        // initialize debug data
+        
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
             aDebugData.pXtorList = new PointerList;
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_PROFILING )
@@ -740,7 +740,7 @@ static FILETYPE ImplDbgInitFile()
             pTime = localtime( &nTime );
 #endif
 
-            // print header
+            
             FilePrintF( pDebugFile, "******************************************************************************%s", FILE_LINEEND );
             FilePrintF( pDebugFile, "%s%s", pData->aDbgData.aDebugName, FILE_LINEEND );
             if ( pTime )
@@ -846,11 +846,11 @@ static void DebugDeInit()
         pData->bOslIsHooked = false;
     }
 
-    // Output statistics trace data to file
+    
     nOldOut = pData->aDbgData.nTraceOut;
     pData->aDbgData.nTraceOut = DBG_OUT_FILE;
 
-    // output Xtor list
+    
     if ( pData->pXtorList && pData->pXtorList->Count() &&
          (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_REPORT) )
     {
@@ -865,7 +865,7 @@ static void DebugDeInit()
             XtorType* pXtorData = (XtorType*)pData->pXtorList->Get( i );
             if ( pXtorData->bTest )
             {
-                // Add static objects
+                
                 pXtorData->nDtorCalls += pXtorData->nStatics;
                 if ( pXtorData->nStatics && (pXtorData->nDtorCalls > pXtorData->nCtorCalls) )
                     pXtorData->nDtorCalls = pXtorData->nCtorCalls;
@@ -879,7 +879,7 @@ static void DebugDeInit()
         DbgOutf( "==============================================================================" );
     }
 
-    // free XtorList
+    
     if ( pData->pXtorList )
     {
         for( i = 0, nCount = pData->pXtorList->Count(); i < nCount; i++ )
@@ -891,11 +891,11 @@ static void DebugDeInit()
         pData->pXtorList = NULL;
     }
 
-    // Set everything to false, as global variables
-    // may cause a system crash otherwise.
-    // Maintain memory flags, as otherwise new/delete calls
-    // for global variables will crash,
-    // as pointer alignment won't work then.
+    
+    
+    
+    
+    
     pData->aDbgData.nTraceOut   = nOldOut;
     pData->aDbgData.nTestFlags &= DBG_TEST_PROFILING;
     pData->aDbgPrintUserChannels.clear();
@@ -912,11 +912,11 @@ static void DebugGlobalDeInit()
     sal_uIntPtr       nCount;
     sal_uIntPtr       nOldOut;
 
-    // Output statistics trace data to file
+    
     nOldOut = pData->aDbgData.nTraceOut;
     pData->aDbgData.nTraceOut = DBG_OUT_FILE;
 
-    // output profile liste
+    
     if ( pData->pProfList && pData->pProfList->Count() )
     {
         DbgOutf( "------------------------------------------------------------------------------" );
@@ -937,7 +937,7 @@ static void DebugGlobalDeInit()
         DbgOutf( "==============================================================================" );
     }
 
-    // free profile list
+    
     if ( pData->pProfList )
     {
         for( i = 0, nCount = pData->pProfList->Count(); i < nCount; i++ )
@@ -949,7 +949,7 @@ static void DebugGlobalDeInit()
         pData->pProfList = NULL;
     }
 
-    // disable profiling flags
+    
     pData->aDbgData.nTraceOut   = nOldOut;
     pData->aDbgData.nTestFlags &= ~DBG_TEST_PROFILING;
 }
@@ -973,7 +973,7 @@ static void DebugXTorInfo( sal_Char* pBuf )
     sal_uIntPtr       i;
     sal_uIntPtr       nCount;
 
-    // output Xtor list
+    
     if ( pData->pXtorList && pData->pXtorList->Count() &&
          (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_REPORT) )
     {
@@ -1021,7 +1021,7 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
         if ( ImplDbgFilterMessage( (const sal_Char*) pParam ) )
             return (void*) -1;
         else
-            return (void*) 0;   // aka NULL
+            return (void*) 0;   
     else
 
     {
@@ -1250,7 +1250,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
 {
     DebugData* pData = ImplGetDebugData();
 
-    // quick test
+    
     if ( !(pData->aDbgData.nTestFlags & DBG_TEST_XTOR) )
         return;
 
@@ -1286,10 +1286,10 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
          : nAct == DBG_XTOR_DTOR ? "Enter Dtor from class "
          : "Enter method from class ") << pDbgData->pName);
 
-    // If some Xtor-tests are still tracing
+    
     if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXTRA )
     {
-        // call DBG_CTOR before all other DBG_XTOR calls
+        
         if ( ((nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR) && !pDbgData->pData )
         {
             SAL_WARN(
@@ -1299,13 +1299,13 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
             return;
         }
 
-        // Test if the pointer is still valid
+        
         if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_THIS )
         {
             if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXIT) ||
                  !(nAction & DBG_XTOR_DTOROBJ) )
             {
-                // This-Pointer == NULL
+                
                 if ( !pThis )
                 {
                     SAL_WARN(
@@ -1323,7 +1323,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
             }
         }
 
-        // execute function test and update maintenance data
+        
         const sal_Char* pMsg = NULL;
         switch ( nAction & ~DBG_XTOR_DTOROBJ )
         {
@@ -1469,7 +1469,7 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
         strcat( aBufOut, pFile );
         strcat( aBufOut, " at Line " );
 
-        // Convert line to String and append
+        
         sal_Char    aLine[9];
         sal_Char*   pLine = &aLine[7];
         sal_uInt16      i;

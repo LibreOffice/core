@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <document.hxx>
@@ -15,7 +15,7 @@
 #include <tokenarray.hxx>
 #include <editutil.hxx>
 
-// Add totally brand-new methods to this source file.
+
 
 bool ScDocument::IsMerged( const ScAddress& rPos ) const
 {
@@ -56,12 +56,12 @@ bool ScDocument::CopyOneCellFromClip(
     ScDocument* pClipDoc = rCxt.getClipDoc();
     ScRange aClipRange = pClipDoc->GetClipParam().getWholeRange();
     if (aClipRange.aStart != aClipRange.aEnd)
-        // The source is not really a single cell. Bail out.
+        
         return false;
 
     ScAddress aSrcPos = aClipRange.aStart;
     if (pClipDoc->IsMerged(aSrcPos))
-        // We don't handle merged source cell for this.
+        
         return false;
 
     ScTable* pSrcTab = pClipDoc->FetchTable(aSrcPos.Tab());
@@ -85,8 +85,8 @@ bool ScDocument::CopyOneCellFromClip(
         const ScPatternAttr* pAttr = pClipDoc->GetPattern(aSrcPos);
         rCxt.setSingleCellPattern(pAttr);
 
-        // Check the paste flag to see whether we want to paste this cell.  If the
-        // flag says we don't want to paste this cell, we'll return with true.
+        
+        
         sal_uInt16 nFlags = rCxt.getInsertFlag();
         bool bNumeric  = (nFlags & IDF_VALUE) != 0;
         bool bDateTime = (nFlags & IDF_DATETIME) != 0;
@@ -100,7 +100,7 @@ bool ScDocument::CopyOneCellFromClip(
             {
                 bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
                 if (!bPaste)
-                    // Don't paste this.
+                    
                     rSrcCell.clear();
             }
             break;
@@ -108,7 +108,7 @@ bool ScDocument::CopyOneCellFromClip(
             case CELLTYPE_EDIT:
             {
                 if (!bString)
-                    // Skip pasting.
+                    
                     rSrcCell.clear();
             }
             break;
@@ -116,27 +116,27 @@ bool ScDocument::CopyOneCellFromClip(
             {
                 if (bBoolean)
                 {
-                    // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
+                    
                     ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
                     if (pCode && pCode->GetLen() == 1)
                     {
                         const formula::FormulaToken* p = pCode->First();
                         if (p->GetOpCode() == ocTrue || p->GetOpCode() == ocFalse)
-                            // This is a boolean formula. Good.
+                            
                             break;
                     }
                 }
 
                 if (bFormula)
-                    // Good.
+                    
                     break;
 
                 sal_uInt16 nErr = rSrcCell.mpFormula->GetErrCode();
                 if (nErr)
                 {
-                    // error codes are cloned with values
+                    
                     if (!bNumeric)
-                        // Error code is treated as numeric value. Don't paste it.
+                        
                         rSrcCell.clear();
                 }
                 else if (rSrcCell.mpFormula->IsValue())
@@ -144,12 +144,12 @@ bool ScDocument::CopyOneCellFromClip(
                     bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
                     if (!bPaste)
                     {
-                        // Don't paste this.
+                        
                         rSrcCell.clear();
                         break;
                     }
 
-                    // Turn this into a numeric cell.
+                    
                     rSrcCell.set(rSrcCell.mpFormula->GetValue());
                 }
                 else if (bString)
@@ -157,16 +157,16 @@ bool ScDocument::CopyOneCellFromClip(
                     svl::SharedString aStr = rSrcCell.mpFormula->GetString();
                     if (aStr.isEmpty())
                     {
-                        // do not clone empty string
+                        
                         rSrcCell.clear();
                         break;
                     }
 
-                    // Turn this into a string or edit cell.
+                    
                     if (rSrcCell.mpFormula->IsMultilineResult())
                     {
-                        // TODO : Add shared string support to the edit engine to
-                        // make this process simpler.
+                        
+                        
                         ScFieldEditEngine& rEngine = GetEditEngine();
                         rEngine.SetText(rSrcCell.mpFormula->GetString().getString());
                         boost::scoped_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
@@ -177,13 +177,13 @@ bool ScDocument::CopyOneCellFromClip(
                         rSrcCell.set(rSrcCell.mpFormula->GetString());
                 }
                 else
-                    // We don't want to paste this.
+                    
                     rSrcCell.clear();
             }
             break;
             case CELLTYPE_NONE:
             default:
-                // There is nothing to paste.
+                
                 rSrcCell.clear();
         }
     }
@@ -191,7 +191,7 @@ bool ScDocument::CopyOneCellFromClip(
     if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != 0)
         rCxt.setSingleCellNote(pClipDoc->GetNote(aSrcPos));
 
-    // All good. Proceed with the pasting.
+    
 
     SCTAB nTabEnd = rCxt.getTabEnd();
     for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); ++i)

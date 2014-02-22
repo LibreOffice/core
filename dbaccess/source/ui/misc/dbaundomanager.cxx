@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dbaccess/dbaundomanager.hxx>
@@ -51,7 +51,7 @@ namespace dbaui
     using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::lang::NoSupportException;
 
-    // UndoManager_Impl
+    
     struct UndoManager_Impl : public ::framework::IUndoManagerImplementation
     {
         UndoManager_Impl( UndoManager& i_antiImpl, ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
@@ -75,7 +75,7 @@ namespace dbaui
         SfxUndoManager                  aUndoManager;
         ::framework::UndoManagerHelper  aUndoHelper;
 
-        // IUndoManagerImplementation
+        
         virtual ::svl::IUndoManager&        getImplUndoManager();
         virtual Reference< XUndoManager >   getThis();
     };
@@ -90,7 +90,7 @@ namespace dbaui
         return static_cast< XUndoManager* >( &rAntiImpl );
     }
 
-    // OslMutexFacade
+    
     class OslMutexFacade : public ::framework::IMutex
     {
     public:
@@ -118,7 +118,7 @@ namespace dbaui
         m_rMutex.release();
     }
 
-    // UndoManagerMethodGuard
+    
     /** guard for public UNO methods of the UndoManager
     */
     class UndoManagerMethodGuard : public ::framework::IMutexGuard
@@ -128,7 +128,7 @@ namespace dbaui
             :m_aGuard( i_impl.rMutex )
             ,m_aMutexFacade( i_impl.rMutex )
         {
-            // throw if the instance is already disposed
+            
             if ( i_impl.bDisposed )
                 throw DisposedException( OUString(), i_impl.getThis() );
         }
@@ -136,10 +136,10 @@ namespace dbaui
         {
         }
 
-        // IMutexGuard
+        
         virtual ::framework::IMutex& getGuardedMutex();
 
-        // IGuard
+        
         virtual void clear();
         virtual void reset();
 
@@ -163,7 +163,7 @@ namespace dbaui
         m_aGuard.reset();
     }
 
-    // UndoManager
+    
     UndoManager::UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
         :m_pImpl( new UndoManager_Impl( *this, i_parent, i_mutex ) )
     {
@@ -224,7 +224,7 @@ namespace dbaui
     void SAL_CALL UndoManager::undo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
-            // (all our UndoActions work directly on VCL code, usually, so ...)
+            
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.undo( aGuard );
     }
@@ -232,7 +232,7 @@ namespace dbaui
     void SAL_CALL UndoManager::redo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
-            // (all our UndoActions work directly on VCL code, usually, so ...)
+            
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.redo( aGuard );
     }
@@ -333,6 +333,6 @@ namespace dbaui
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

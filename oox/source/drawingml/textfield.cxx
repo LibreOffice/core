@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textfield.hxx"
@@ -68,46 +68,46 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         {
             bool bIsDate = true;
             int idx = p.toInt32();
-//              OSL_TRACE( "OOX: p = %s, %d", p.pData->buffer, idx );
+
             xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
             aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
             Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
 
-            // here we should format the field properly. waiting after #i81091.
+            
             switch( idx )
             {
-            case 1: // Date dd/mm/yyyy
-                // this is the default format...
+            case 1: 
+                
                 break;
-            case 2: // Date Day, Month dd, yyyy
+            case 2: 
                 break;
-            case 3: // Date dd Month yyyy
+            case 3: 
                 break;
-            case 4: // Date Month dd, yyyy
+            case 4: 
                 break;
-            case 5: // Date dd-Mon-yy
+            case 5: 
                 break;
-            case 6: // Date Month yy
+            case 6: 
                 break;
-            case 7: // Date Mon-yy
+            case 7: 
                 break;
-            case 8: // DateTime dd/mm/yyyy H:MM PM
+            case 8: 
                 lclCreateTextFields( aFields, xModel, "datetime12" );
                 break;
-            case 9: // DateTime dd/mm/yy H:MM:SS PM
+            case 9: 
                 lclCreateTextFields( aFields, xModel, "datetime13" );
                 break;
-            case 10: // Time H:MM
+            case 10: 
                 bIsDate = false;
                 break;
-            case 11: // Time H:MM:SS
+            case 11: 
                 bIsDate = false;
-                // this is the default format
+                
                 break;
-            case 12: // Time H:MM PM
+            case 12: 
                 bIsDate = false;
                 break;
-            case 13: // Time H:MM:SS PM
+            case 13: 
                 bIsDate = false;
                 break;
             }
@@ -126,7 +126,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
     }
 }
 
-} // namespace
+} 
 
 sal_Int32 TextField::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <unoport.hxx>
 #include <IMark.hxx>
-// #i81002#
+
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
 #include <doc.hxx>
@@ -109,19 +109,19 @@ namespace
         bool operator () ( const SwXBookmarkPortion_ImplSharedPtr &r1,
                            const SwXBookmarkPortion_ImplSharedPtr &r2 ) const
         {
-            // #i16896# for bookmark portions at the same position, the start should
-            // always precede the end. Hence compare positions, and use bookmark type
-            // as tie-breaker for same position.
-            // return ( r1->nIndex   == r2->nIndex )
-            //   ? ( r1->nBkmType <  r2->nBkmType )
-            //   : ( r1->nIndex   <  r2->nIndex );
+            
+            
+            
+            
+            
+            
 
-            // MTG: 25/11/05: Note that the above code does not correctly handle
-            // the case when one bookmark ends, and another begins in the same
-            // position. When this occurs, the above code will return the
-            // the start of the 2nd bookmark BEFORE the end of the first bookmark
-            // See bug #i58438# for more details. The below code is correct and
-            // fixes both #i58438 and #i16896#
+            
+            
+            
+            
+            
+            
             return r1->aPosition < r2->aPosition;
         }
     };
@@ -133,16 +133,16 @@ namespace
         if(!pMarkAccess->getBookmarksCount())
             return;
 
-        // no need to consider marks starting after aEndOfPara
+        
         SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
         aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
         const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             aEndOfPara,
-            sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
+            sw::mark::CompareIMarkStartsAfter()); 
 
-        // search for all bookmarks that start or end in this paragraph
+        
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
         for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
             ppMark != pCandidatesEnd;
@@ -156,7 +156,7 @@ namespace
             const SwPosition& rStartPos = pBkmk->GetMarkStart();
             if(rStartPos.nNode == nOwnNode)
             {
-                // #i109272#: cross reference marks: need special handling!
+                
                 sal_uInt8 const nType = (hasOther || pCrossRefMark)
                     ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
@@ -178,7 +178,7 @@ namespace
                 }
                 else if (pCrossRefMark)
                 {
-                    // Crossrefbookmarks only remember the start position but have to span the whole paragraph
+                    
                     SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
                     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -240,16 +240,16 @@ namespace
             return;
         }
 
-        // no need to consider annotation marks starting after aEndOfPara
+        
         SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
         aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
         const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
             pMarkAccess->getAnnotationMarksBegin(),
             pMarkAccess->getAnnotationMarksEnd(),
             aEndOfPara,
-            sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
+            sw::mark::CompareIMarkStartsAfter()); 
 
-        // search for all annotation marks that have its start position in this paragraph
+        
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
         for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin();
              ppMark != pCandidatesEnd;
@@ -338,7 +338,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().getLength()),
             "start or end value invalid!");
 
-    // find all frames, graphics and OLEs that are bound AT character in para
+    
     FrameDependSortList_t frames;
     ::CollectFrameAtNode(*this, pUnoCrsr->GetPoint()->nNode, frames, true);
     lcl_CreatePortions(m_Portions, xParentText, pUnoCrsr, frames, nStart, nEnd);
@@ -413,7 +413,7 @@ lcl_ExportFieldMark(
 {
     uno::Reference<text::XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    //flr: maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation....
+    
     const sal_Int32 start = pUnoCrsr->Start()->nContent.GetIndex();
     OSL_ENSURE(pUnoCrsr->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
@@ -693,11 +693,11 @@ lcl_ExportHints(
     bool & o_rbCursorMoved,
     sal_Int32 & o_rNextAttrPosition )
 {
-    // if the attribute has a dummy character, then xRef is set (except META)
-    // otherwise, the portion for the attribute is inserted into rPortions!
+    
+    
     Reference<XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    //search for special text attributes - first some ends
+    
     sal_uInt16 nEndIndex = 0;
     sal_uInt16 nNextEnd = 0;
     while(nEndIndex < pHints->GetEndCount() &&
@@ -727,7 +727,7 @@ lcl_ExportHints(
                     }
                     break;
                     case RES_TXTATR_CJK_RUBY:
-                       //#i91534# GetEnd() == 0 mixes the order of ruby start/end
+                       
                         if( *pAttr->GetEnd() == *pAttr->GetStart())
                         {
                             lcl_InsertRubyPortion( *rPortionStack.top().first,
@@ -744,11 +744,11 @@ lcl_ExportHints(
                         if ((i_nStartPos > 0) &&
                             (*pAttr->GetStart() < i_nStartPos))
                         {
-                            // force skip pAttr and rest of attribute ends
-                            // at nCurrentIndex
-                            // because they are not contained in the meta pAttr
-                            // and the meta pAttr itself is outside selection!
-                            // (necessary for SwXMeta::createEnumeration)
+                            
+                            
+                            
+                            
+                            
                             if (*pAttr->GetStart() + 1 == i_nStartPos)
                             {
                                 nEndIndex = pHints->GetEndCount() - 1;
@@ -780,7 +780,7 @@ lcl_ExportHints(
         nEndIndex++;
     }
 
-    // then some starts
+    
     sal_uInt16 nStartIndex = 0;
     sal_uInt16 nNextStart = 0;
     while(nStartIndex < pHints->GetStartCount() &&
@@ -859,7 +859,7 @@ lcl_ExportHints(
                     {
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
-                            break; // Robust #i81708 content in covered cells
+                            break; 
                         pUnoCrsr->Exchange();
                         xRef = new SwXTextPortion( pUnoCrsr, xParent, PORTION_FRAME);
                     }
@@ -898,13 +898,13 @@ lcl_ExportHints(
                                 xParent, pUnoCrsr, *pAttr, false)
                             : lcl_CreateTOXMarkPortion(
                                 xParent, pUnoCrsr, *pAttr, false);
-                        if (bIsPoint) // consume CH_TXTATR!
+                        if (bIsPoint) 
                         {
                             pUnoCrsr->Normalize(false);
                             pUnoCrsr->DeleteMark();
                             xRef = xTmp;
                         }
-                        else // just insert it
+                        else 
                         {
                             rPortionStack.top().first->push_back(xTmp);
                         }
@@ -912,7 +912,7 @@ lcl_ExportHints(
                 }
                 break;
                 case RES_TXTATR_CJK_RUBY:
-                    //#i91534# GetEnd() == 0 mixes the order of ruby start/end
+                    
                     if(pAttr->GetEnd() && (*pAttr->GetEnd() != *pAttr->GetStart()))
                     {
                         lcl_InsertRubyPortion( *rPortionStack.top().first,
@@ -927,7 +927,7 @@ lcl_ExportHints(
                         {
                             pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                             o_rbCursorMoved = true;
-                            // only if the end is included in selection!
+                            
                             if ((i_nEndPos < 0) ||
                                 (*pAttr->GetEnd() <= i_nEndPos))
                             {
@@ -940,7 +940,7 @@ lcl_ExportHints(
                 case RES_TXTATR_AUTOFMT:
                 case RES_TXTATR_INETFMT:
                 case RES_TXTATR_CHARFMT:
-                break; // these are handled as properties of a "Text" portion
+                break; 
                 default:
                     OSL_FAIL("unknown attribute");
                 break;
@@ -949,14 +949,14 @@ lcl_ExportHints(
         nStartIndex++;
     }
 
-    if (xRef.is()) // implies that we have moved the cursor
+    if (xRef.is()) 
     {
         o_rbCursorMoved = true;
     }
     if (!o_rbCursorMoved)
     {
-        // search for attribute changes behind the current cursor position
-        // break up at frames, bookmarks, redlines
+        
+        
 
         nStartIndex = 0;
         nNextStart = 0;
@@ -1068,24 +1068,24 @@ static void lcl_ExportRedline(
     const sal_Int32 nIndex)
 {
 
-    // MTG: 23/11/05: We want this loop to iterate over all red lines in this
-    // array. We will only insert the ones with index matches
+    
+    
     for ( SwXRedlinePortion_ImplList::iterator aIter = rRedlineArr.begin(), aEnd = rRedlineArr.end();
           aIter != aEnd; )
     {
         SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
         sal_Int32 nRealIndex = pPtr->getRealIndex();
-        // MTG: 23/11/05: If there are elements before nIndex, remove them
+        
         if ( nIndex > nRealIndex )
             rRedlineArr.erase ( aIter++ );
-        // MTG: 23/11/05: If the elements match, and them to the list
+        
         else if ( nIndex == nRealIndex )
         {
             rPortions.push_back( new SwXRedlinePortion(
                         *pPtr->m_pRedline, pUnoCrsr, xParent, pPtr->m_bStart));
             rRedlineArr.erase ( aIter++ );
         }
-        // MTG: 23/11/05: If we've iterated past nIndex, exit the loop
+        
         else
             break;
     }
@@ -1150,13 +1150,13 @@ static sal_Int32 lcl_ExportFrames(
     FrameDependSortList_t & i_rFrames,
     sal_Int32 const i_nCurrentIndex)
 {
-    // find first Frame in (sorted) i_rFrames at current position
+    
     while (i_rFrames.size() && (i_rFrames.front().nIndex == i_nCurrentIndex))
-    // do not check for i_nEnd here; this is done implicity by lcl_MoveCursor
+    
     {
         const SwModify * const pFrame =
             i_rFrames.front().pFrameDepend->GetRegisteredIn();
-        if (pFrame) // Frame could be disposed
+        if (pFrame) 
         {
             SwXTextPortion* pPortion = new SwXTextPortion(i_pUnoCrsr, i_xParent,
                 *static_cast<SwFrmFmt*>( const_cast<SwModify*>( pFrame ) ) );
@@ -1205,7 +1205,7 @@ static void lcl_CreatePortions(
     if (!pUnoCrsr)
         return;
 
-    // set the start if a selection should be exported
+    
     if ((i_nStartPos > 0) &&
         (pUnoCrsr->Start()->nContent.GetIndex() != i_nStartPos))
     {
@@ -1213,7 +1213,7 @@ static void lcl_CreatePortions(
         OSL_ENSURE(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
             (i_nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->
                         GetTxt().getLength()), "Incorrect start position" );
-        // ??? should this be i_nStartPos - current position ?
+        
         pUnoCrsr->Right(static_cast<sal_Int32>(i_nStartPos),
                 CRSR_SKIP_CHARS, sal_False, sal_False);
     }
@@ -1239,7 +1239,7 @@ static void lcl_CreatePortions(
     PortionStack.push( PortionList_t(&i_rPortions, (const SwTxtAttr *)0) );
 
     bool bAtEnd( false );
-    while (!bAtEnd) // every iteration consumes at least current character!
+    while (!bAtEnd) 
     {
         if (pUnoCrsr->HasMark())
         {
@@ -1257,11 +1257,11 @@ static void lcl_CreatePortions(
         SwpHints * const pHints = pTxtNode->GetpSwpHints();
         const sal_Int32 nCurrentIndex =
             pUnoCrsr->GetPoint()->nContent.GetIndex();
-        // this contains the portion which consumes the character in the
-        // text at nCurrentIndex; i.e. it must be set _once_ per iteration
+        
+        
         uno::Reference< XTextRange > xRef;
 
-        SwUnoCursorHelper::SelectPam(*pUnoCrsr, true); // set mark
+        SwUnoCursorHelper::SelectPam(*pUnoCrsr, true); 
 
         const sal_Int32 nFirstFrameIndex =
             lcl_ExportFrames( *PortionStack.top().first,
@@ -1279,13 +1279,13 @@ static void lcl_CreatePortions(
 
         bool bCursorMoved( false );
         sal_Int32 nNextAttrIndex = -1;
-        // #111716# the cursor must not move right at the
-        //          end position of a selection!
+        
+        
         bAtEnd = ((i_nEndPos >= 0) && (nCurrentIndex >= i_nEndPos))
               || (nCurrentIndex >= pTxtNode->Len());
         if (pHints)
         {
-            // N.B.: side-effects nNextAttrIndex, bCursorMoved; may move cursor
+            
             xRef = lcl_ExportHints(PortionStack, i_xParentText, pUnoCrsr,
                         pHints, i_nStartPos, i_nEndPos, nCurrentIndex, bAtEnd,
                         bCursorMoved, nNextAttrIndex);
@@ -1301,7 +1301,7 @@ static void lcl_CreatePortions(
             if (!bAtEnd &&
                 FieldMarks.size() && (FieldMarks.front() == nCurrentIndex))
             {
-                // moves cursor
+                
                 xRef = lcl_ExportFieldMark(i_xParentText, pUnoCrsr, pTxtNode);
                 FieldMarks.pop_front();
             }
@@ -1339,8 +1339,8 @@ static void lcl_CreatePortions(
         }
         else if (bAtEnd && !xRef.is() && !pTxtNode->Len())
         {
-            // special case: for an empty paragraph, we better put out a
-            // text portion because there may be a hyperlink attribute
+            
+            
             xRef = new SwXTextPortion(pUnoCrsr, i_xParentText, PORTION_TEXT);
         }
 

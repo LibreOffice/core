@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/windowcommanddispatch.hxx>
@@ -38,7 +38,7 @@
 
 namespace framework{
 
-//-----------------------------------------------
+
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                          const css::uno::Reference< css::frame::XFrame >&              xFrame)
     : ThreadHelpBase(                            )
@@ -49,14 +49,14 @@ WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::uno
     impl_startListening();
 }
 
-//-----------------------------------------------
+
 WindowCommandDispatch::~WindowCommandDispatch()
 {
     impl_stopListening();
     m_xContext.clear();
 }
 
-//-----------------------------------------------
+
 void WindowCommandDispatch::impl_startListening()
 {
     ReadGuard aReadLock(m_aLock);
@@ -100,7 +100,7 @@ void WindowCommandDispatch::impl_stopListening()
 }
 
 
-//-----------------------------------------------
+
 IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
 {
     if ( ! pParam)
@@ -145,21 +145,21 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     return 0L;
 }
 
-//-----------------------------------------------
+
 void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
 {
-    // ignore all errors here. It's clicking a menu entry only ...
-    // The user will try it again, in case nothing happens .-)
+    
+    
     try
     {
-        // SYNCHRONIZED ->
+        
         ReadGuard aReadLock(m_aLock);
         css::uno::Reference< css::frame::XDispatchProvider >   xProvider(m_xFrame.get(), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::uno::XComponentContext >     xContext    = m_xContext;
         aReadLock.unlock();
-        // <- SYNCHRONIZED
+        
 
-        // check provider ... we know it's weak reference only
+        
         if ( ! xProvider.is())
             return;
 
@@ -176,6 +176,6 @@ void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
     {}
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

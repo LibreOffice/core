@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/vbainputstream.hxx"
@@ -23,7 +23,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 namespace {
 
@@ -34,9 +34,9 @@ const sal_uInt16 VBACHUNK_SIG               = 0x3000;
 const sal_uInt16 VBACHUNK_COMPRESSED        = 0x8000;
 const sal_uInt16 VBACHUNK_LENMASK           = 0x0FFF;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 VbaInputStream::VbaInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -114,29 +114,29 @@ void VbaInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 bool VbaInputStream::updateChunk()
 {
     if( mbEof || (mnChunkPos < maChunk.size()) ) return !mbEof;
-    // try to read next chunk header, this may trigger EOF
+    
     sal_uInt16 nHeader = mpInStrm->readuInt16();
 
     mbEof = mpInStrm->isEof();
     if( mbEof ) return false;
 
-    // check header signature
+    
     bool bIgnoreBrokenSig = !( (nHeader & VBACHUNK_SIGMASK) == VBACHUNK_SIG );
 
-    // decode length of chunk data and compression flag
+    
     bool bCompressed = getFlag( nHeader, VBACHUNK_COMPRESSED );
     sal_uInt16 nChunkLen = (nHeader & VBACHUNK_LENMASK) + 1;
     OSL_ENSURE( bCompressed || (nChunkLen == 4096), "VbaInputStream::updateChunk - invalid uncompressed chunk size" );
 
-    // From the amazing bit detective work of Valek Filippov<frob@gnome.org>
-    // this tweak and the one at the bottom of the method to seek to the
-    // start of the next chunk we can read those strange broken
-    // ( I guess from a MSO bug ) commpessed streams > 4k
+    
+    
+    
+    
 
     if ( bIgnoreBrokenSig )
     {
@@ -160,22 +160,22 @@ bool VbaInputStream::updateChunk()
                 {
                     sal_uInt16 nCopyToken = mpInStrm->readuInt16();
                     nChunkPos = nChunkPos + 2;
-                    // update bit count used for offset/length in the token
+                    
                     while( static_cast< size_t >( 1 << nBitCount ) < maChunk.size() ) ++nBitCount;
-                    // extract length from lower (16-nBitCount) bits, plus 3
+                    
                     sal_uInt16 nLength = extractValue< sal_uInt16 >( nCopyToken, 0, 16 - nBitCount ) + 3;
-                    // extract offset from high nBitCount bits, plus 1
+                    
                     sal_uInt16 nOffset = extractValue< sal_uInt16 >( nCopyToken, 16 - nBitCount, nBitCount ) + 1;
                     mbEof = (nOffset > maChunk.size()) || (maChunk.size() + nLength > 4096);
                     OSL_ENSURE( !mbEof, "VbaInputStream::updateChunk - invalid offset or size in copy token" );
                     if( !mbEof )
                     {
-                        // append data to buffer
+                        
                         maChunk.resize( maChunk.size() + nLength );
                         sal_uInt8* pnTo = &*(maChunk.end() - nLength);
                         const sal_uInt8* pnEnd = pnTo + nLength;
                         const sal_uInt8* pnFrom = pnTo - nOffset;
-                        // offset may be less than length, effectively duplicating source data several times
+                        
                         size_t nRunLen = ::std::min< size_t >( nLength, nOffset );
                         while( pnTo < pnEnd )
                         {
@@ -185,7 +185,7 @@ bool VbaInputStream::updateChunk()
                         }
                     }
                 }
-                // we suspect this will never be called
+                
                 else
                 {
                     maChunk.resize( maChunk.size() + 1 );
@@ -200,17 +200,17 @@ bool VbaInputStream::updateChunk()
         maChunk.resize( nChunkLen );
         mpInStrm->readMemory( &maChunk.front(), nChunkLen );
     }
-    // decompression sometimes leaves the stream pos offset 1 place ( at
-    // least ) past or before the expected stream pos.
-    // here we make sure we are on the chunk boundry
+    
+    
+    
     mpInStrm->seek( target );
     mnChunkPos = 0;
     return !mbEof;
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,14 +69,14 @@ static void SAL_CALL executeRequest(void * data) {
     try {
         jvmaccess::VirtualMachine::AttachGuard guard(job->pool->virtualMachine);
         JNIEnv * env = guard.getEnvironment();
-        // Failure of the following Job.execute Java call is ignored; if that
-        // call fails, it should be due to a java.lang.Error, which is not
-        // handled well, anyway:
+        
+        
+        
         env->CallObjectMethod(job->job, job->pool->execute);
         env->DeleteGlobalRef(job->job);
         delete job;
     } catch (const jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
-        //TODO: DeleteGlobalRef(job->job)
+        
         delete job;
     }
 }
@@ -88,13 +88,13 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass) SAL_THROW_EXTERN_C()
 {
     sal_Sequence * s = 0;
-    uno_getIdOfCurrentThread(&s); //TODO: out of memory
+    uno_getIdOfCurrentThread(&s); 
     uno_releaseIdFromCurrentThread();
     rtl::ByteSequence seq(s);
     rtl_byte_sequence_release(s);
     sal_Int32 n = seq.getLength();
     jbyteArray a = env->NewByteArray(n);
-        // sal_Int32 and jsize are compatible here
+        
     if (a == 0) {
         return 0;
     }
@@ -103,7 +103,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
         return 0;
     }
     memcpy(p, seq.getConstArray(), n);
-        // sal_Int8 and jbyte ought to be compatible
+        
     env->ReleasePrimitiveArrayCritical(a, p, 0);
     return a;
 }
@@ -113,7 +113,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_create(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass) SAL_THROW_EXTERN_C()
 {
     JavaVM * vm;
-    if (env->GetJavaVM(&vm) != JNI_OK) { //TODO: no Java exception raised?
+    if (env->GetJavaVM(&vm) != JNI_OK) { 
         jclass c = env->FindClass("java/lang/RuntimeException");
         if (c != 0) {
             env->ThrowNew(c, "JNI GetJavaVM failed");
@@ -181,9 +181,9 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_putJob(
     }
     rtl::ByteSequence seq(
         static_cast< sal_Int8 * >(s), env->GetArrayLength(threadId));
-        // sal_Int8 and jbyte ought to be compatible; sal_Int32 and jsize are
-        // compatible here
-        //TODO: out of memory
+        
+        
+        
     env->ReleasePrimitiveArrayCritical(threadId, s, JNI_ABORT);
     Pool * p = reinterpret_cast< Pool * >(pool);
     jobject ref = env->NewGlobalRef(job);

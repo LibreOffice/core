@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -24,35 +24,35 @@
 
 #include <limits>
 
-// #i37443#
+
 #define FACTOR_FOR_UNSHARPEN    (1.6)
 #ifdef DBG_UTIL
 static double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
         void ImpSubDivAngle(
-            const B2DPoint& rfPA,           // start point
-            const B2DPoint& rfEA,           // edge on A
-            const B2DPoint& rfEB,           // edge on B
-            const B2DPoint& rfPB,           // end point
-            B2DPolygon& rTarget,            // target polygon
-            double fAngleBound,             // angle bound in [0.0 .. 2PI]
-            bool bAllowUnsharpen,           // #i37443# allow the criteria to get unsharp in recursions
-            sal_uInt16 nMaxRecursionDepth)  // endless loop protection
+            const B2DPoint& rfPA,           
+            const B2DPoint& rfEA,           
+            const B2DPoint& rfEB,           
+            const B2DPoint& rfPB,           
+            B2DPolygon& rTarget,            
+            double fAngleBound,             
+            bool bAllowUnsharpen,           
+            sal_uInt16 nMaxRecursionDepth)  
         {
             if(nMaxRecursionDepth)
             {
-                // do angle test
+                
                 B2DVector aLeft(rfEA - rfPA);
                 B2DVector aRight(rfEB - rfPB);
 
-                // #i72104#
+                
                 if(aLeft.equalZero())
                 {
                     aLeft = rfEB - rfPA;
@@ -67,14 +67,14 @@ namespace basegfx
 
                 if(fabs(fCurrentAngle) > (F_PI - fAngleBound))
                 {
-                    // end recursion
+                    
                     nMaxRecursionDepth = 0;
                 }
                 else
                 {
                     if(bAllowUnsharpen)
                     {
-                        // #i37443# unsharpen criteria
+                        
 #ifdef DBG_UTIL
                         fAngleBound *= fMultFactUnsharpen;
 #else
@@ -86,7 +86,7 @@ namespace basegfx
 
             if(nMaxRecursionDepth)
             {
-                // divide at 0.5
+                
                 const B2DPoint aS1L(average(rfPA, rfEA));
                 const B2DPoint aS1C(average(rfEA, rfEB));
                 const B2DPoint aS1R(average(rfEB, rfPB));
@@ -94,10 +94,10 @@ namespace basegfx
                 const B2DPoint aS2R(average(aS1C, aS1R));
                 const B2DPoint aS3C(average(aS2L, aS2R));
 
-                // left recursion
+                
                 ImpSubDivAngle(rfPA, aS1L, aS2L, aS3C, rTarget, fAngleBound, bAllowUnsharpen, nMaxRecursionDepth - 1);
 
-                // right recursion
+                
                 ImpSubDivAngle(aS3C, aS2R, aS1R, rfPB, rTarget, fAngleBound, bAllowUnsharpen, nMaxRecursionDepth - 1);
             }
             else
@@ -107,13 +107,13 @@ namespace basegfx
         }
 
         void ImpSubDivAngleStart(
-            const B2DPoint& rfPA,           // start point
-            const B2DPoint& rfEA,           // edge on A
-            const B2DPoint& rfEB,           // edge on B
-            const B2DPoint& rfPB,           // end point
-            B2DPolygon& rTarget,            // target polygon
-            const double& rfAngleBound,     // angle bound in [0.0 .. 2PI]
-            bool bAllowUnsharpen)           // #i37443# allow the criteria to get unsharp in recursions
+            const B2DPoint& rfPA,           
+            const B2DPoint& rfEA,           
+            const B2DPoint& rfEB,           
+            const B2DPoint& rfPB,           
+            B2DPolygon& rTarget,            
+            const double& rfAngleBound,     
+            bool bAllowUnsharpen)           
         {
             sal_uInt16 nMaxRecursionDepth(8);
             const B2DVector aLeft(rfEA - rfPA);
@@ -129,7 +129,7 @@ namespace basegfx
             else
             {
                 const B2DVector aBase(rfPB - rfPA);
-                const bool bBaseEqualZero(aBase.equalZero()); // #i72104#
+                const bool bBaseEqualZero(aBase.equalZero()); 
 
                 if(!bBaseEqualZero)
                 {
@@ -188,7 +188,7 @@ namespace basegfx
 
             if(nMaxRecursionDepth)
             {
-                // divide at 0.5 ad test both edges for angle criteria
+                
                 const B2DPoint aS1L(average(rfPA, rfEA));
                 const B2DPoint aS1C(average(rfEA, rfEB));
                 const B2DPoint aS1R(average(rfEB, rfPB));
@@ -196,34 +196,34 @@ namespace basegfx
                 const B2DPoint aS2R(average(aS1C, aS1R));
                 const B2DPoint aS3C(average(aS2L, aS2R));
 
-                // test left
+                
                 bool bAngleIsSmallerLeft(bAllParallel && bLeftEqualZero);
                 if(!bAngleIsSmallerLeft)
                 {
-                    const B2DVector aLeftLeft(bLeftEqualZero ? aS2L - aS1L : aS1L - rfPA); // #i72104#
+                    const B2DVector aLeftLeft(bLeftEqualZero ? aS2L - aS1L : aS1L - rfPA); 
                     const B2DVector aRightLeft(aS2L - aS3C);
                     const double fCurrentAngleLeft(aLeftLeft.angle(aRightLeft));
                     bAngleIsSmallerLeft = (fabs(fCurrentAngleLeft) > (F_PI - rfAngleBound));
                 }
 
-                // test right
+                
                 bool bAngleIsSmallerRight(bAllParallel && bRightEqualZero);
                 if(!bAngleIsSmallerRight)
                 {
                     const B2DVector aLeftRight(aS2R - aS3C);
-                    const B2DVector aRightRight(bRightEqualZero ? aS2R - aS1R : aS1R - rfPB); // #i72104#
+                    const B2DVector aRightRight(bRightEqualZero ? aS2R - aS1R : aS1R - rfPB); 
                     const double fCurrentAngleRight(aLeftRight.angle(aRightRight));
                     bAngleIsSmallerRight = (fabs(fCurrentAngleRight) > (F_PI - rfAngleBound));
                 }
 
                 if(bAngleIsSmallerLeft && bAngleIsSmallerRight)
                 {
-                    // no recursion necessary at all
+                    
                     nMaxRecursionDepth = 0;
                 }
                 else
                 {
-                    // left
+                    
                     if(bAngleIsSmallerLeft)
                     {
                         rTarget.append(aS3C);
@@ -233,7 +233,7 @@ namespace basegfx
                         ImpSubDivAngle(rfPA, aS1L, aS2L, aS3C, rTarget, rfAngleBound, bAllowUnsharpen, nMaxRecursionDepth);
                     }
 
-                    // right
+                    
                     if(bAngleIsSmallerRight)
                     {
                         rTarget.append(rfPB);
@@ -252,56 +252,56 @@ namespace basegfx
         }
 
         void ImpSubDivDistance(
-            const B2DPoint& rfPA,           // start point
-            const B2DPoint& rfEA,           // edge on A
-            const B2DPoint& rfEB,           // edge on B
-            const B2DPoint& rfPB,           // end point
-            B2DPolygon& rTarget,            // target polygon
-            double fDistanceBound2,         // quadratic distance criteria
-            double fLastDistanceError2,     // the last quadratic distance error
-            sal_uInt16 nMaxRecursionDepth)  // endless loop protection
+            const B2DPoint& rfPA,           
+            const B2DPoint& rfEA,           
+            const B2DPoint& rfEB,           
+            const B2DPoint& rfPB,           
+            B2DPolygon& rTarget,            
+            double fDistanceBound2,         
+            double fLastDistanceError2,     
+            sal_uInt16 nMaxRecursionDepth)  
         {
             if(nMaxRecursionDepth)
             {
-                // decide if another recursion is needed. If not, set
-                // nMaxRecursionDepth to zero
+                
+                
 
-                // Perform bezier flatness test (lecture notes from R. Schaback,
-                // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
+                
+                
                 //
-                // ||P(t) - L(t)|| <= max     ||b_j - b_0 - j/n(b_n - b_0)||
-                //                    0<=j<=n
+                
+                
                 //
-                // What is calculated here is an upper bound to the distance from
-                // a line through b_0 and b_3 (rfPA and P4 in our notation) and the
-                // curve. We can drop 0 and n from the running indices, since the
-                // argument of max becomes zero for those cases.
+                
+                
+                
+                
                 const double fJ1x(rfEA.getX() - rfPA.getX() - 1.0/3.0*(rfPB.getX() - rfPA.getX()));
                 const double fJ1y(rfEA.getY() - rfPA.getY() - 1.0/3.0*(rfPB.getY() - rfPA.getY()));
                 const double fJ2x(rfEB.getX() - rfPA.getX() - 2.0/3.0*(rfPB.getX() - rfPA.getX()));
                 const double fJ2y(rfEB.getY() - rfPA.getY() - 2.0/3.0*(rfPB.getY() - rfPA.getY()));
                 const double fDistanceError2(::std::max(fJ1x*fJ1x + fJ1y*fJ1y, fJ2x*fJ2x + fJ2y*fJ2y));
 
-                // stop if error measure does not improve anymore. This is a
-                // safety guard against floating point inaccuracies.
-                // stop if distance from line is guaranteed to be bounded by d
+                
+                
+                
                 const bool bFurtherDivision(fLastDistanceError2 > fDistanceError2 && fDistanceError2 >= fDistanceBound2);
 
                 if(bFurtherDivision)
                 {
-                    // remember last error value
+                    
                     fLastDistanceError2 = fDistanceError2;
                 }
                 else
                 {
-                    // stop recustion
+                    
                     nMaxRecursionDepth = 0;
                 }
             }
 
             if(nMaxRecursionDepth)
             {
-                // divide at 0.5
+                
                 const B2DPoint aS1L(average(rfPA, rfEA));
                 const B2DPoint aS1C(average(rfEA, rfEB));
                 const B2DPoint aS1R(average(rfEB, rfPB));
@@ -309,10 +309,10 @@ namespace basegfx
                 const B2DPoint aS2R(average(aS1C, aS1R));
                 const B2DPoint aS3C(average(aS2L, aS2R));
 
-                // left recursion
+                
                 ImpSubDivDistance(rfPA, aS1L, aS2L, aS3C, rTarget, fDistanceBound2, fLastDistanceError2, nMaxRecursionDepth - 1);
 
-                // right recursion
+                
                 ImpSubDivDistance(aS3C, aS2R, aS1R, rfPB, rTarget, fDistanceBound2, fLastDistanceError2, nMaxRecursionDepth - 1);
             }
             else
@@ -320,10 +320,10 @@ namespace basegfx
                 rTarget.append(rfPB);
             }
         }
-    } // end of anonymous namespace
-} // end of namespace basegfx
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -351,7 +351,7 @@ namespace basegfx
     {
     }
 
-    // assignment operator
+    
     B2DCubicBezier& B2DCubicBezier::operator=(const B2DCubicBezier& rBezier)
     {
         maStartPoint = rBezier.maStartPoint;
@@ -362,7 +362,7 @@ namespace basegfx
         return *this;
     }
 
-    // compare operators
+    
     bool B2DCubicBezier::operator==(const B2DCubicBezier& rBezier) const
     {
         return (
@@ -393,7 +393,7 @@ namespace basegfx
         );
     }
 
-    // test if vectors are used
+    
     bool B2DCubicBezier::isBezier() const
     {
         if(maControlPointA != maStartPoint || maControlPointB != maEndPoint)
@@ -410,44 +410,44 @@ namespace basegfx
         {
             const B2DVector aEdge(maEndPoint - maStartPoint);
 
-            // controls parallel to edge can be trivial. No edge -> not parallel -> control can
-            // still not be trivial (e.g. ballon loop)
+            
+            
             if(!aEdge.equalZero())
             {
-                // get control vectors
+                
                 const B2DVector aVecA(maControlPointA - maStartPoint);
                 const B2DVector aVecB(maControlPointB - maEndPoint);
 
-                // check if trivial per se
+                
                 bool bAIsTrivial(aVecA.equalZero());
                 bool bBIsTrivial(aVecB.equalZero());
 
-                // #i102241# prepare inverse edge length to normalize cross values;
-                // else the small compare value used in fTools::equalZero
-                // will be length dependent and this detection will work as less
-                // precise as longer the edge is. In principle, the length of the control
-                // vector would need to be used too, but to be trivial it is assumed to
-                // be of roughly equal length to the edge, so edge length can be used
-                // for both. Only needed when one of both is not trivial per se.
+                
+                
+                
+                
+                
+                
+                
                 const double fInverseEdgeLength(bAIsTrivial && bBIsTrivial
                     ? 1.0
                     : 1.0 / aEdge.getLength());
 
-                // if A is not zero, check if it could be
+                
                 if(!bAIsTrivial)
                 {
-                    // #i102241# parallel to edge? Check aVecA, aEdge. Use cross() which does what
-                    // we need here with the precision we need
+                    
+                    
                     const double fCross(aVecA.cross(aEdge) * fInverseEdgeLength);
 
                     if(fTools::equalZero(fCross))
                     {
-                        // get scale to edge. Use bigger distance for numeric quality
+                        
                         const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
                             ? aVecA.getX() / aEdge.getX()
                             : aVecA.getY() / aEdge.getY());
 
-                        // relative end point of vector in edge range?
+                        
                         if(fTools::moreOrEqual(fScale, 0.0) && fTools::lessOrEqual(fScale, 1.0))
                         {
                             bAIsTrivial = true;
@@ -455,21 +455,21 @@ namespace basegfx
                     }
                 }
 
-                // if B is not zero, check if it could be, but only if A is already trivial;
-                // else solve to trivial will not be possible for whole edge
+                
+                
                 if(bAIsTrivial && !bBIsTrivial)
                 {
-                    // parallel to edge? Check aVecB, aEdge
+                    
                     const double fCross(aVecB.cross(aEdge) * fInverseEdgeLength);
 
                     if(fTools::equalZero(fCross))
                     {
-                        // get scale to edge. Use bigger distance for numeric quality
+                        
                         const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
                             ? aVecB.getX() / aEdge.getX()
                             : aVecB.getY() / aEdge.getY());
 
-                        // end point of vector in edge range? Caution: controlB is directed AGAINST edge
+                        
                         if(fTools::lessOrEqual(fScale, 0.0) && fTools::moreOrEqual(fScale, -1.0))
                         {
                             bBIsTrivial = true;
@@ -477,8 +477,8 @@ namespace basegfx
                     }
                 }
 
-                // if both are/can be reduced, do it.
-                // Not possible if only one is/can be reduced (!)
+                
+                
                 if(bAIsTrivial && bBIsTrivial)
                 {
                     maControlPointA = maStartPoint;
@@ -556,7 +556,7 @@ namespace basegfx
     {
         if(isBezier())
         {
-            // use support method #i37443# and allow unsharpen the criteria
+            
             ImpSubDivAngleStart(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget, fAngleBound * F_PI180, bAllowUnsharpen);
         }
         else
@@ -569,7 +569,7 @@ namespace basegfx
     {
         if(fTools::lessOrEqual(t, 0.0))
         {
-            // tangent in start point
+            
             B2DVector aTangent(getControlPointA() - getStartPoint());
 
             if(!aTangent.equalZero())
@@ -577,8 +577,8 @@ namespace basegfx
                 return aTangent;
             }
 
-            // start point and control vector are the same, fallback
-            // to implicit start vector to control point B
+            
+            
             aTangent = (getControlPointB() - getStartPoint()) * 0.3;
 
             if(!aTangent.equalZero())
@@ -586,12 +586,12 @@ namespace basegfx
                 return aTangent;
             }
 
-            // not a bezier at all, return edge vector
+            
             return (getEndPoint() - getStartPoint()) * 0.3;
         }
         else if(fTools::moreOrEqual(t, 1.0))
         {
-            // tangent in end point
+            
             B2DVector aTangent(getEndPoint() - getControlPointB());
 
             if(!aTangent.equalZero())
@@ -599,8 +599,8 @@ namespace basegfx
                 return aTangent;
             }
 
-            // end point and control vector are the same, fallback
-            // to implicit start vector from control point A
+            
+            
             aTangent = (getEndPoint() - getControlPointA()) * 0.3;
 
             if(!aTangent.equalZero())
@@ -608,12 +608,12 @@ namespace basegfx
                 return aTangent;
             }
 
-            // not a bezier at all, return edge vector
+            
             return (getEndPoint() - getStartPoint()) * 0.3;
         }
         else
         {
-            // t is in ]0.0 .. 1.0[. Split and extract
+            
             B2DCubicBezier aRight;
             split(t, 0, &aRight);
 
@@ -621,7 +621,7 @@ namespace basegfx
         }
     }
 
-    // #i37443# adaptive subdivide by nCount subdivisions
+    
     void B2DCubicBezier::adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount) const
     {
         const double fLenFact(1.0 / static_cast< double >(nCount + 1));
@@ -635,7 +635,7 @@ namespace basegfx
         rTarget.append(getEndPoint());
     }
 
-    // adaptive subdivide by distance
+    
     void B2DCubicBezier::adaptiveSubdivideByDistance(B2DPolygon& rTarget, double fDistanceBound) const
     {
         if(isBezier())
@@ -674,11 +674,11 @@ namespace basegfx
         const sal_uInt32 nInitialDivisions(3L);
         B2DPolygon aInitialPolygon;
 
-        // as start make a fix division, creates nInitialDivisions + 2L points
+        
         aInitialPolygon.append(getStartPoint());
         adaptiveSubdivideByCount(aInitialPolygon, nInitialDivisions);
 
-        // now look for the closest point
+        
         const sal_uInt32 nPointCount(aInitialPolygon.count());
         B2DVector aVector(rTestPoint - aInitialPolygon.getB2DPoint(0L));
         double fQuadDist(aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY());
@@ -697,8 +697,8 @@ namespace basegfx
             }
         }
 
-        // look right and left for even smaller distances
-        double fStepValue(1.0 / (double)((nPointCount - 1L) * 2L)); // half the edge step width
+        
+        double fStepValue(1.0 / (double)((nPointCount - 1L) * 2L)); 
         double fPosition((double)nSmallestIndex / (double)(nPointCount - 1L));
         bool bDone(false);
 
@@ -706,7 +706,7 @@ namespace basegfx
         {
             if(!bDone)
             {
-                // test left
+                
                 double fPosLeft(fPosition - fStepValue);
 
                 if(fPosLeft < 0.0)
@@ -728,7 +728,7 @@ namespace basegfx
                 }
                 else
                 {
-                    // test right
+                    
                     double fPosRight(fPosition + fStepValue);
 
                     if(fPosRight > 1.0)
@@ -750,7 +750,7 @@ namespace basegfx
                     }
                     else
                     {
-                        // not less left or right, done
+                        
                         bDone = true;
                     }
                 }
@@ -758,13 +758,13 @@ namespace basegfx
 
             if(0.0 == fPosition || 1.0 == fPosition)
             {
-                // if we are completely left or right, we are done
+                
                 bDone = true;
             }
 
             if(!bDone)
             {
-                // prepare next step value
+                
                 fStepValue /= 2.0;
             }
         }
@@ -853,7 +853,7 @@ namespace basegfx
 
         if(fEnd <= fStart)
         {
-            // empty or NULL, create single point at center
+            
             const double fSplit((fEnd + fStart) * 0.5);
             const B2DPoint aPoint(interpolate(getStartPoint(), getEndPoint(), fSplit));
             aRetval.setStartPoint(aPoint);
@@ -865,8 +865,8 @@ namespace basegfx
         {
             if(isBezier())
             {
-                // copy bezier; cut off right, then cut off left. Do not forget to
-                // adapt cut value when both cuts happen
+                
+                
                 const bool bEndIsOne(fTools::equal(fEnd, 1.0));
                 const bool bStartIsZero(fTools::equalZero(fStart));
                 aRetval = *this;
@@ -888,7 +888,7 @@ namespace basegfx
             }
             else
             {
-                // no bezier, create simple edge
+                
                 const B2DPoint aPointA(interpolate(getStartPoint(), getEndPoint(), fStart));
                 const B2DPoint aPointB(interpolate(getStartPoint(), getEndPoint(), fEnd));
                 aRetval.setStartPoint(aPointA);
@@ -940,9 +940,9 @@ namespace basegfx
     {
         inline void impCheckExtremumResult(double fCandidate, ::std::vector< double >& rResult)
         {
-            // check for range ]0.0 .. 1.0[ with excluding 1.0 and 0.0 clearly
-            // by using the equalZero test, NOT ::more or ::less which will use the
-            // ApproxEqual() which is too exact here
+            
+            
+            
             if(fCandidate > 0.0 && !fTools::equalZero(fCandidate))
             {
                 if(fCandidate < 1.0 && !fTools::equalZero(fCandidate - 1.0))
@@ -957,9 +957,9 @@ namespace basegfx
     {
         rResults.clear();
 
-        // calculate the x-extrema parameters by zeroing first x-derivative
-        // of the cubic bezier's parametric formula, which results in a
-        // quadratic equation: dBezier/dt = t*t*fAX - 2*t*fBX + fCX
+        
+        
+        
         const B2DPoint aControlDiff( maControlPointA - maControlPointB );
         double fCX = maControlPointA.getX() - maStartPoint.getX();
         const double fBX = fCX + aControlDiff.getX();
@@ -967,62 +967,62 @@ namespace basegfx
 
         if(fTools::equalZero(fCX))
         {
-            // detect fCX equal zero and truncate to real zero value in that case
+            
             fCX = 0.0;
         }
 
         if( !fTools::equalZero(fAX) )
         {
-            // derivative is polynomial of order 2 => use binomial formula
+            
             const double fD = fBX*fBX - fAX*fCX;
             if( fD >= 0.0 )
             {
                 const double fS = sqrt(fD);
-                // calculate both roots (avoiding a numerically unstable subtraction)
+                
                 const double fQ = fBX + ((fBX >= 0) ? +fS : -fS);
                 impCheckExtremumResult(fQ / fAX, rResults);
-                if( !fTools::equalZero(fS) ) // ignore root multiplicity
+                if( !fTools::equalZero(fS) ) 
                     impCheckExtremumResult(fCX / fQ, rResults);
             }
         }
         else if( !fTools::equalZero(fBX) )
         {
-            // derivative is polynomial of order 1 => one extrema
+            
             impCheckExtremumResult(fCX / (2 * fBX), rResults);
         }
 
-        // calculate the y-extrema parameters by zeroing first y-derivative
+        
         double fCY = maControlPointA.getY() - maStartPoint.getY();
         const double fBY = fCY + aControlDiff.getY();
         const double fAY = 3 * aControlDiff.getY() + (maEndPoint.getY() - maStartPoint.getY());
 
         if(fTools::equalZero(fCY))
         {
-            // detect fCY equal zero and truncate to real zero value in that case
+            
             fCY = 0.0;
         }
 
         if( !fTools::equalZero(fAY) )
         {
-            // derivative is polynomial of order 2 => use binomial formula
+            
             const double fD = fBY*fBY - fAY*fCY;
             if( fD >= 0.0 )
             {
                 const double fS = sqrt(fD);
-                // calculate both roots (avoiding a numerically unstable subtraction)
+                
                 const double fQ = fBY + ((fBY >= 0) ? +fS : -fS);
                 impCheckExtremumResult(fQ / fAY, rResults);
-                if( !fTools::equalZero(fS) ) // ignore root multiplicity
+                if( !fTools::equalZero(fS) ) 
                     impCheckExtremumResult(fCY / fQ, rResults);
             }
         }
         else if( !fTools::equalZero(fBY) )
         {
-            // derivative is polynomial of order 1 => one extrema
+            
             impCheckExtremumResult(fCY / (2 * fBY), rResults);
         }
     }
 
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

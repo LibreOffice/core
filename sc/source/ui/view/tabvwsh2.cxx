@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/bindings.hxx>
@@ -43,17 +43,17 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 
-// Create default drawing objects via keyboard
+
 #include <svx/svdpagv.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 
-// -----------------------------------------------------------------------
+
 
 SdrView* ScTabViewShell::GetDrawView() const
 {
-    return ((ScTabViewShell*)this)->GetScDrawView();    // GetScDrawView ist nicht-const
+    return ((ScTabViewShell*)this)->GetScDrawView();    
 }
 
 void ScTabViewShell::WindowChanged()
@@ -68,8 +68,8 @@ void ScTabViewShell::WindowChanged()
     if (pFunc)
         pFunc->SetWindow(pWin);
 
-    //  when font from InputContext is used,
-    //  this must be moved to change of cursor position:
+    
+    
     UpdateInputContext();
 }
 
@@ -92,14 +92,14 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( nNewId == SID_DRAW_CHART )
     {
-        // #i71254# directly insert a chart instead of drawing its output rectangle
+        
         FuInsertChart(this, pWin, pView, pDoc, rReq);
         return;
     }
 
     //
-    //  Pseudo-Slots von Draw-Toolbox auswerten
-    //! wird das ueberhaupt noch gebraucht ?????
+    
+    
     //
 
     if (nNewId == SID_INSERT_DRAW && pArgs)
@@ -128,7 +128,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 case SVX_SNAP_DRAW_CAPTION_VERTICAL: nNewId = SID_DRAW_CAPTION_VERTICAL; break;
             }
         }
-        else                    // sal_uInt16-Item vom Controller
+        else                    
         {
             rReq.Done();
             return;
@@ -156,36 +156,36 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
     bool bSwitchCustom = ( !sStringItemValue.isEmpty() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
 
-    if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
+    if (nNewId == SID_INSERT_FRAME)                     
         nNewId = SID_DRAW_TEXT;
 
-    //  CTRL-SID_OBJECT_SELECT is used to select the first object,
-    //  but not if SID_OBJECT_SELECT is the result of clicking a create function again,
-    //  so this must be tested before changing nNewId below.
+    
+    
+    
     bool bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
 
     bool bEx = IsDrawSelMode();
     if ( rReq.GetModifier() & KEY_MOD1 )
     {
-        //  always allow keyboard selection also on background layer
-        //  also allow creation of default objects if the same object type
-        //  was already active
+        
+        
+        
         bEx = true;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
                                     nNewFormId == nFormSfxId || nNewFormId == 0 ) && !bSwitchCustom )
     {
-        //  #i52871# if a different custom shape is selected, the slot id can be the same,
-        //  so the custom shape type string has to be compared, too.
+        
+        
 
-        //  SID_FM_CREATE_CONTROL mit nNewFormId==0 (ohne Parameter) kommt beim Deaktivieren
-        //  aus FuConstruct::SimpleMouseButtonUp
-        //  Execute fuer die Form-Shell, um im Controller zu deselektieren
+        
+        
+        
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
             GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
             GetViewFrame()->GetBindings().InvalidateAll(false);
-            //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
+            
         }
 
         bEx = !bEx;
@@ -196,10 +196,10 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( nDrawSfxId == SID_FM_CREATE_CONTROL && nNewId != nDrawSfxId )
     {
-        //  Wechsel von Control- zu Zeichenfunktion -> im Control-Controller deselektieren
+        
         GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
         GetViewFrame()->GetBindings().InvalidateAll(false);
-        //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
+        
     }
 
     SetDrawSelMode(bEx);
@@ -208,23 +208,23 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( bSelectFirst )
     {
-        //  select first draw object if none is selected yet
+        
         if(!pView->AreObjectsMarked())
         {
-            // select first object
+            
             pView->UnmarkAllObj();
             pView->MarkNextObj(sal_True);
 
-            // ...and make it visible
+            
             if(pView->AreObjectsMarked())
                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWin);
         }
     }
 
     nDrawSfxId = nNewId;
-    sDrawCustom = "";    // value is set below for custom shapes
+    sDrawCustom = "";    
 
-    if ( nNewId != SID_DRAW_CHART )             // Chart nicht mit DrawShell
+    if ( nNewId != SID_DRAW_CHART )             
     {
         if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL ||
                 nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
@@ -254,7 +254,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     switch (nNewId)
     {
         case SID_OBJECT_SELECT:
-            // Nicht immer zurueckschalten
+            
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
             pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
             break;
@@ -321,7 +321,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                     rBind.Invalidate( nNewId );
                     rBind.Update( nNewId );
 
-                    sDrawCustom = pEnumCommand->GetValue();  // to detect when a different shape type is selected
+                    sDrawCustom = pEnumCommand->GetValue();  
                 }
             }
         }
@@ -339,18 +339,18 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     rBindings.Invalidate( SID_INSERT_DRAW );
     rBindings.Update( SID_INSERT_DRAW );
 
-    // Create default drawing objects via keyboard
-    // with qualifier construct directly
+    
+    
     FuPoor* pFuActual = GetDrawFuncPtr();
 
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
-        // Create default drawing objects via keyboard
+        
         const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
         sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
         sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 
-        // calc position and size
+        
         Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
         Point aPagePos = aVisArea.Center();
         aPagePos.X() -= nDefaultObjectSizeWidth / 2;
@@ -365,19 +365,19 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
             if(pPageView)
             {
-                // create the default object
+                
                 SdrObject* pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
 
                 if(pObj)
                 {
-                    // insert into page
+                    
                     pView->InsertObjectAtView(pObj, *pPageView);
 
                     if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
                     {
-                        //  use KeyInput to start edit mode (FuText is created).
-                        //  For FuText objects, edit mode is handled within CreateDefaultObject.
-                        //  KEY_F2 is handled in FuDraw::KeyInput.
+                        
+                        
+                        
 
                         pFuActual->KeyInput( KeyEvent( 0, KeyCode( KEY_F2 ) ) );
                     }
@@ -398,11 +398,11 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
         {
             case SID_INSERT_DRAW:
                 {
-                    //  SID_OBJECT_SELECT nur, wenn "harter" Selektionsmodus
+                    
                     sal_uInt16 nPutId = nDrawSfxId;
                     if ( nPutId == SID_OBJECT_SELECT && !IsDrawSelMode() )
                         nPutId = USHRT_MAX;
-                    // nur die Images, die auch auf dem Controller liegen
+                    
                     if ( nPutId != SID_OBJECT_SELECT &&
                          nPutId != SID_DRAW_LINE &&
                          nPutId != SID_DRAW_RECT &&
@@ -437,7 +437,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                 }
                 break;
 
-            case SID_OBJECT_SELECT:     // wichtig fuer den ollen Control-Controller
+            case SID_OBJECT_SELECT:     
                 rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == SID_OBJECT_SELECT && IsDrawSelMode() ) );
                 break;
         }
@@ -452,7 +452,7 @@ bool ScTabViewShell::SelectObject( const OUString& rName )
         return false;
 
     bool bFound = pView->SelectObject( rName );
-    // DrawShell etc. is handled in MarkListHasChanged
+    
 
     return bFound;
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,12 +29,12 @@ FunctionSet::~FunctionSet()
 
 inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 {
-//  return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
+
     return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
 }
 
 
-// TODO: FunctionSet::SelectAtPoint raus
+
 
 /*************************************************************************
 |*
@@ -129,7 +129,7 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
         {
             if ( nFlags & SELENG_HAS_ANCH )
             {
-                // pFunctionSet->CreateCursor();
+                
                 pFunctionSet->DestroyAnchor();
                 nFlags &= (~SELENG_HAS_ANCH);
             }
@@ -160,8 +160,8 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
     if ( nModifier & KEY_MOD2 )
         return false;
-    // in SingleSelection: Control-Taste filtern (damit auch
-    // mit Ctrl-Click ein D&D gestartet werden kann)
+    
+    
     if ( nModifier == KEY_MOD1 && eSelMode == SINGLE_SELECTION )
         nModifier = 0;
 
@@ -180,7 +180,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 
     switch ( nModifier )
     {
-        case 0:     // KEY_NO_KEY
+        case 0:     
         {
             bool bSelAtPoint = pFunctionSet->IsSelectionAtPoint( aPos );
             nFlags &= (~SELENG_IN_ADD);
@@ -189,7 +189,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                 nFlags |= SELENG_WAIT_UPEVT;
                 nFlags &= ~(SELENG_IN_SEL);
                 pWin->ReleaseMouse();
-                return true;  //auf STARTDRAG-Command-Event warten
+                return true;  
             }
             if ( eSelMode != SINGLE_SELECTION )
             {
@@ -197,11 +197,11 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                     pFunctionSet->DeselectAll();
                 else
                     pFunctionSet->DestroyAnchor();
-                   nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = sal_False;
+                   nFlags &= (~SELENG_HAS_ANCH); 
             }
             pFunctionSet->SetCursorAtPoint( aPos );
-            // Sonderbehandlung Single-Selection, damit Select+Drag
-            // in einem Zug moeglich ist
+            
+            
             if (eSelMode == SINGLE_SELECTION && (nFlags & SELENG_DRG_ENAB))
                 nFlags |= SELENG_WAIT_UPEVT;
             return true;
@@ -230,16 +230,16 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             return true;
 
         case KEY_MOD1:
-            // Control nur bei Mehrfachselektion erlaubt
+            
             if ( eSelMode != MULTIPLE_SELECTION )
             {
                 nFlags &= (~SELENG_IN_SEL);
                 pWin->ReleaseMouse();
-                return true;  // Mausclick verschlucken
+                return true;  
             }
             if ( nFlags & SELENG_HAS_ANCH )
             {
-                // pFunctionSet->CreateCursor();
+                
                 pFunctionSet->DestroyAnchor();
                 nFlags &= (~SELENG_HAS_ANCH);
             }
@@ -261,7 +261,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                 nFlags &= (~SELENG_IN_SEL);
                 return false;
             }
-            nFlags |= SELENG_IN_ADD; //bIsInAddMode = sal_True;
+            nFlags |= SELENG_IN_ADD; 
             if ( !(nFlags & SELENG_HAS_ANCH) )
             {
                 pFunctionSet->CreateAnchor();
@@ -283,7 +283,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
-    //DbgOut("Up");
+    
     if( !pFunctionSet || !pWin )
     {
         nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
@@ -298,24 +298,24 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     if( (nFlags & SELENG_WAIT_UPEVT) && !(nFlags & SELENG_CMDEVT) &&
         eSelMode != SINGLE_SELECTION)
     {
-        // MouseButtonDown in Sel aber kein CommandEvent eingetrudelt
-        // ==> deselektieren
+        
+        
         sal_uInt16 nModifier = aLastMove.GetModifier() | nLockedMods;
         if( nModifier == KEY_MOD1 || IsAlwaysAdding() )
         {
             if( !(nModifier & KEY_SHIFT) )
             {
                 pFunctionSet->DestroyAnchor();
-                nFlags &= (~SELENG_HAS_ANCH); // nix Anker
+                nFlags &= (~SELENG_HAS_ANCH); 
             }
             pFunctionSet->DeselectAtPoint( aLastMove.GetPosPixel() );
-            nFlags &= (~SELENG_HAS_ANCH); // nix Anker
+            nFlags &= (~SELENG_HAS_ANCH); 
             pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), sal_True );
         }
         else
         {
             pFunctionSet->DeselectAll();
-            nFlags &= (~SELENG_HAS_ANCH); // nix Anker
+            nFlags &= (~SELENG_HAS_ANCH); 
             pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel() );
         }
     }
@@ -338,11 +338,11 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
         return false;
 
     if( !(nFlags & SELENG_EXPANDONMOVE) )
-        return false; // auf DragEvent warten!
+        return false; 
 
     aLastMove = rMEvt;
-    // wenn die Maus ausserhalb der Area steht, dann wird die
-    // Frequenz des SetCursorAtPoint() nur durch den Timer bestimmt
+    
+    
     if( aWTimer.IsActive() && !aArea.IsInside( rMEvt.GetPosPixel() ))
         return true;
 
@@ -353,12 +353,12 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
         if ( !(nFlags & SELENG_HAS_ANCH) )
         {
             pFunctionSet->CreateAnchor();
-            //DbgOut("Move:Creating anchor");
+            
             nFlags |= SELENG_HAS_ANCH;
         }
     }
 
-    //DbgOut("Move:SetCursor");
+    
     pFunctionSet->SetCursorAtPoint( rMEvt.GetPosPixel() );
 
     return true;
@@ -405,7 +405,7 @@ void SelectionEngine::Reset()
 
 void SelectionEngine::Command( const CommandEvent& rCEvt )
 {
-    // Timer aWTimer ist beim Aufspannen einer Selektion aktiv
+    
     if ( !pFunctionSet || !pWin || aWTimer.IsActive() )
         return;
     aWTimer.Stop();
@@ -434,17 +434,17 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
 void SelectionEngine::SetUpdateInterval( sal_uLong nInterval )
 {
     if (nInterval < SELENG_AUTOREPEAT_INTERVAL_MIN)
-        // Set a lower threshold.  On Windows, setting this value too low
-        // would cause selection to get updated indefinitely.
+        
+        
         nInterval = SELENG_AUTOREPEAT_INTERVAL_MIN;
 
     if (nUpdateInterval == nInterval)
-        // no update needed.
+        
         return;
 
     if (aWTimer.IsActive())
     {
-        // reset the timer right away on interval change.
+        
         aWTimer.Stop();
         aWTimer.SetTimeout(nInterval);
         aWTimer.Start();

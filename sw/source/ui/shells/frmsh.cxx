@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -39,7 +39,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/hlnkitem.hxx>
-// #i73249#
+
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/diagnose_ex.h>
@@ -76,7 +76,7 @@
 #include <shells.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
-// #i73249#
+
 #include <svx/dialogs.hrc>
 #include <wordcountdialog.hxx>
 
@@ -84,7 +84,7 @@ using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-// Prototypes
+
 static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
 static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rName)
 {
@@ -110,7 +110,7 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
 
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
-    //First those who do not need FrmMgr.
+    
     SwWrtShell &rSh = GetShell();
     bool bMore = false;
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -145,7 +145,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FRAME:
             if (!pArgs)
             {
-                // Frame already exists, open frame dialog for editing.
+                
                 SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, "columns");
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_FORMAT_FRAME_DLG,
                                 SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
@@ -154,7 +154,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                // Frame already exists, only the number of columns will be changed.
+                
                 sal_uInt16 nCols = 1;
                 if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem) == SFX_ITEM_SET)
                     nCols = ((SfxUInt16Item *)pItem)->GetValue();
@@ -162,14 +162,14 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(),RES_COL,RES_COL);
                 rSh.GetFlyFrmAttr( aSet );
                 SwFmtCol aCol((const SwFmtCol&)aSet.Get(RES_COL));
-                // GutterWidth will not always passed, hence get firstly
-                // (see view2: Execute on this slot)
+                
+                
                 sal_uInt16 nGutterWidth = aCol.GetGutterWidth();
                 if(!nCols )
                     nCols++;
                 aCol.Init(nCols, nGutterWidth, aCol.GetWishWidth());
                 aSet.Put(aCol);
-                // Template AutoUpdate
+                
                 SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
                 if(pFmt && pFmt->IsAutoUpdateFmt())
                 {
@@ -432,7 +432,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
                 if( nSel & nsSelectionType::SEL_OLE )
                 {
-                    // #i73249#
+                    
                     aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
                 }
 
@@ -449,14 +449,14 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(aMgr.GetAttrSet());
                 aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-                // On % values initialize size
+                
                 SwFmtFrmSize& rSize = (SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
                 if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff)
                     rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
                 if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff)
                     rSize.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
 
-                // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
+                
                 aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,
                         rSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) ) );
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
@@ -502,15 +502,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         }
                         if (SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_ALT_NAME, true, &pItem))
                         {
-                            // #i73249#
+                            
                             rSh.SetObjTitle(((const SfxStringItem*)pItem)->GetValue());
                         }
-                        // Template AutoUpdate
+                        
                         SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
                         if(pFmt && pFmt->IsAutoUpdateFmt())
                         {
                             rSh.AutoUpdateFrame(pFmt, *pOutSet);
-                            // Anything which is not supported by the format must be set hard.
+                            
                             if(SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
                                 rSh.SetFlyName(((SfxStringItem*)pItem)->GetValue());
                             SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
@@ -536,7 +536,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             OUString sPrevName =
                                 ((const SfxStringItem*)pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
-                            //needs cast - no non-const method available
+                            
                             SwFlyFrmFmt* pFlyFmt =
                                 (SwFlyFrmFmt*)rChain.GetPrev();
                             if(pFlyFmt)
@@ -551,7 +551,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                             if (!sPrevName.isEmpty())
                             {
-                                //needs cast - no non-const method available
+                                
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sPrevName);
                                 OSL_ENSURE(pPrevFmt, "No frame found!");
@@ -570,7 +570,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             OUString sNextName =
                                 ((const SfxStringItem*)pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
-                            //needs cast - no non-const method available
+                            
                             SwFlyFrmFmt* pFlyFmt =
                                 (SwFlyFrmFmt*)rChain.GetNext();
                             if(pFlyFmt)
@@ -585,7 +585,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                             if (!sNextName.isEmpty())
                             {
-                                //needs cast - no non-const method available
+                                
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sNextName);
                                 OSL_ENSURE(pNextFmt, "No frame found!");
@@ -617,7 +617,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
-        // #i73249#
+        
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
             bUpdateMgr = false;
@@ -914,7 +914,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                 }
                 break;
-                // #i73249#
+                
                 case FN_TITLE_DESCRIPTION_SHAPE:
                 {
                     SwWrtShell &rWrtSh = GetShell();
@@ -943,7 +943,7 @@ SwFrameShell::SwFrameShell(SwView &_rView) :
     SetName(OUString("Frame"));
     SetHelpId(SW_FRAMESHELL);
 
-    // #96392# Use this to announce it is the frame shell who creates the selection.
+    
     SwTransferable::CreateSelection( _rView.GetWrtShell(), (SwViewShell *) this );
 
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Frame));
@@ -951,7 +951,7 @@ SwFrameShell::SwFrameShell(SwView &_rView) :
 
 SwFrameShell::~SwFrameShell()
 {
-    // #96392# Only clear the selection if it was this frame shell who created it.
+    
     SwTransferable::ClearSelection( GetShell(), (SwViewShell *) this );
 }
 
@@ -961,9 +961,9 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     bool bDefault = false;
     if (!rSh.IsFrmSelected())
         return;
-    // At first pick the default BoxItem out of the pool.
-    // If unequal to regular box item, then it has already
-    // been changed (New one is no default).
+    
+    
+    
     const SvxBoxItem* pPoolBoxItem = (const SvxBoxItem*)::GetDfltAttr(RES_BOX);
 
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -980,7 +980,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     SvxBorderLine aBorderLine;
     const SfxPoolItem *pItem = 0;
 
-    if(pArgs)    // Any controller can sometimes deliver nothing #48169#
+    if(pArgs)    
     {
         switch (rReq.GetSlot())
         {
@@ -1006,7 +1006,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                                 table::BorderLineStyle::SOLID);
                         aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
                     }
-                    //Set distance only if the request is received from the controller.
+                    
 
 #ifndef DISABLE_SCRIPTING
                     if(!StarBASIC::IsRunning())
@@ -1121,7 +1121,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
         aBoxItem.SetDistance(MIN_BORDER_DIST);
     }
     aFrameSet.Put( aBoxItem );
-    // Template AutoUpdate
+    
     SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
     if(pFmt && pFmt->IsAutoUpdateFmt())
     {

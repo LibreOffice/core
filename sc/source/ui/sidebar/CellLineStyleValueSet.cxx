@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <CellLineStyleValueSet.hxx>
@@ -97,17 +97,17 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->DrawRect(aRect);
     }
 
-    //draw text
+    
     if(nSelItem ==  nItemId )
         aFont.SetColor(COL_WHITE);
     else
-        aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor()); //high contrast
+        aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor()); 
 
     pDev->SetFont(aFont);
     Point aStart(aBLPos.X() + nRectWidth * 7 / 9 - 5 , aBLPos.Y() + nRectHeight/6);
-    pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set TEXT_DRAW_ENDELLIPSIS here, or the text will disapear
+    pDev->DrawText(aStart, maStrUnit[nItemId - 1]); 
 
-    //draw line
+    
     if( nSelItem ==  nItemId )
     {
         pDev->SetFillColor(COL_WHITE);
@@ -115,8 +115,8 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        pDev->SetFillColor(GetSettings().GetStyleSettings().GetFieldTextColor());   //high contrast
-        pDev->SetLineColor(GetSettings().GetStyleSettings().GetFieldTextColor());   //high contrast
+        pDev->SetFillColor(GetSettings().GetStyleSettings().GetFieldTextColor());   
+        pDev->SetLineColor(GetSettings().GetStyleSettings().GetFieldTextColor());   
     }
 
     switch( nItemId )
@@ -156,8 +156,8 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 }
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <cppuhelper/weak.hxx>
 
@@ -141,7 +141,7 @@ void Interceptor::DisconnectDocHolder()
     m_xOleAccess = NULL;
 }
 
-//XDispatch
+
 void SAL_CALL
 Interceptor::dispatch(
     const util::URL& URL,
@@ -280,7 +280,7 @@ Interceptor::addStatusListener(
         return;
 
     if( !m_bLink && URL.Complete == m_aInterceptedURL[0] )
-    {   // Save
+    {   
         DocumentHolder* pTmpDocH = NULL;
         uno::Reference< uno::XInterface > xLock;
         {
@@ -318,7 +318,7 @@ Interceptor::addStatusListener(
       && ( URL.Complete == m_aInterceptedURL[i] ||
            URL.Complete == m_aInterceptedURL[++i] ||
            URL.Complete == m_aInterceptedURL[++i] ) )
-    {   // Close and return
+    {   
         DocumentHolder* pTmpDocH = NULL;
         uno::Reference< uno::XInterface > xLock;
         {
@@ -353,7 +353,7 @@ Interceptor::addStatusListener(
     }
 
     if(URL.Complete == m_aInterceptedURL[5])
-    {   // SaveAs
+    {   
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
         aStateEvent.FeatureDescriptor = "SaveCopyTo";
@@ -394,7 +394,7 @@ Interceptor::removeStatusListener(
 }
 
 
-//XInterceptorInfo
+
 uno::Sequence< OUString >
 SAL_CALL
 Interceptor::getInterceptedURLs(  )
@@ -402,7 +402,7 @@ Interceptor::getInterceptedURLs(  )
         uno::RuntimeException
     )
 {
-    // now implemented as update
+    
     if ( m_bLink )
     {
         uno::Sequence< OUString > aResult( 2 );
@@ -416,7 +416,7 @@ Interceptor::getInterceptedURLs(  )
 }
 
 
-// XDispatchProvider
+
 
 uno::Reference< frame::XDispatch > SAL_CALL
 Interceptor::queryDispatch(
@@ -482,7 +482,7 @@ Interceptor::queryDispatches(
 
 
 
-//XDispatchProviderInterceptor
+
 
 uno::Reference< frame::XDispatchProvider > SAL_CALL
 Interceptor::getSlaveDispatchProvider(  )
@@ -528,9 +528,9 @@ Interceptor::setMasterDispatchProvider(
     m_xMasterDispatchProvider = NewSupplier;
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
+
+
+
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif

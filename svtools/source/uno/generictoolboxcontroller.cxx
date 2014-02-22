@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/generictoolboxcontroller.hxx>
@@ -58,10 +58,10 @@ GenericToolboxController::GenericToolboxController( const Reference< XComponentC
     ,   m_pToolbox( pToolbox )
     ,   m_nID( nID )
 {
-    // Initialization is done through ctor
+    
     m_bInitialized = sal_True;
 
-    // insert main command to our listener map
+    
     if ( !m_aCommandURL.isEmpty() )
         m_aListenerMap.insert( URLToDispatchMap::value_type( aCommand, Reference< XDispatch >() ));
 }
@@ -116,7 +116,7 @@ throw ( RuntimeException )
         aTargetURL.Complete = aCommandURL;
         xURLTransformer->parseStrict( aTargetURL );
 
-        // Execute dispatch asynchronously
+        
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
@@ -147,7 +147,7 @@ throw ( RuntimeException )
 
         if ( Event.State >>= bValue )
         {
-            // Boolean, treat it as checked/unchecked
+            
             m_pToolbox->SetItemBits( m_nID, nItemBits );
             m_pToolbox->CheckItem( m_nID, bValue );
             if ( bValue )
@@ -173,9 +173,9 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolboxController, ExecuteHdl_Impl, ExecuteI
 {
    try
    {
-       // Asynchronous execution as this can lead to our own destruction!
-       // Framework can recycle our current frame and the layout manager disposes all user interface
-       // elements if a component gets detached from its frame!
+       
+       
+       
        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
    catch ( Exception& )
@@ -185,6 +185,6 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolboxController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNamed.hpp>
@@ -54,20 +54,20 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::presentation::XPresentationPage;
 using com::sun::star::task::XStatusIndicator;
 
-// -----------------------------------------------------------------------------
+
 
 PlaceWareExporter::PlaceWareExporter(const Reference< XComponentContext > & rxContext)
 :   mxContext( rxContext )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PlaceWareExporter::~PlaceWareExporter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 class PageEntry
 {
 private:
@@ -127,7 +127,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
         if( osl::File::E_None != nRC )
             throw IOException();
 
-        sal_Int32 nBufferSize = 3*1024; // !!! buffer size must be a factor of 3 for base64 to work
+        sal_Int32 nBufferSize = 3*1024; 
         Sequence< sal_Int8 > aInBuffer( nBufferSize < nLen ? nBufferSize : nLen );
         void* pInBuffer = aInBuffer.getArray();
 
@@ -163,7 +163,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
 
             while( nCount-- )
             {
-                // since base64 is always ascii, we can cast safely
+                
                 *pBytes++ = static_cast<sal_Int8>(*pUnicode++);
             }
 
@@ -282,7 +282,7 @@ static void createSlideFile( Reference< XComponent > xDoc, PlacewareZipFile& rZi
         throw IOException();
 }
 
-//#define PLACEWARE_DEBUG 1
+
 
 sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream,
                                         const OUString& rURL, Reference < XInterface > /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
@@ -312,7 +312,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     PlaceWareTempFile aTempFile( PlaceWareTempFile::createTempFileURL() );
     nRC = aTempFile.open( osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
 #else
-    OUString aURL("file:///e:/test.zip");
+    OUString aURL("file:
     osl::File::remove( aURL );
     osl::File aTempFile( aURL );
     nRC = aTempFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
@@ -323,12 +323,12 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
     vector< PageEntry* > aPageEntries;
 
-    // Create new package...
+    
     try
     {
         PlacewareZipFile aZipFile(aTempFile);
 
-        // export slides as gifs and collect information for slides
+        
 
         const sal_Int32 nPageCount = xDrawPages->getCount();
         sal_Int32 nPage;
@@ -354,11 +354,11 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
             }
         }
 
-        // create the slide.txt file
+        
 
         createSlideFile( xDoc, aZipFile, rURL, aPageEntries );
 
-        // add gifs to zip
+        
         vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
         vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
         while( aIter != aEnd )
@@ -399,7 +399,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
 {
@@ -407,12 +407,12 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
 
     PageEntry* pEntry = new PageEntry();
 
-    // get page name
+    
     Reference< XNamed > xNamed( xDrawPage, UNO_QUERY );
     if( xNamed.is() )
         pEntry->setName( xNamed->getName() );
 
-    // get title text from title presentation shape if available
+    
     const OUString szTitleTextShape("com.sun.star.presentation.TitleTextShape");
     const OUString szIsEmptyPresObj("IsEmptyPresentationObject");
 
@@ -444,7 +444,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
         }
     }
 
-    // get notes text if available
+    
     Reference< XPresentationPage > xPresPage( xDrawPage, UNO_QUERY );
     if( xPresPage.is() )
     {
@@ -480,7 +480,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
         }
     }
 
-    // create the gif
+    
 
     Sequence< PropertyValue > aFilterData( 2 );
     aFilterData[0].Name = "Width";

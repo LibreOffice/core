@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,9 +55,9 @@ using namespace ::sf_misc;
 
 namespace func_provider
 {
-//*************************************************************************
-//  Definitions for MasterScriptProviderFactory global methods.
-//*************************************************************************
+
+
+
 
 OUString SAL_CALL mspf_getImplementationName() ;
 Reference< XInterface > SAL_CALL mspf_create( Reference< XComponentContext > const & xComponentContext );
@@ -77,10 +77,10 @@ bool endsWith( const OUString& target,
 }
 
 /* should be available in some central location. */
-//*************************************************************************
-// XScriptProvider implementation
+
+
 //
-//*************************************************************************
+
 MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ) throw ( RuntimeException ):
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_bIsPkgMSP( false ), m_pPCache( 0 )
@@ -91,7 +91,7 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
     m_bIsValid = true;
 }
 
-//*************************************************************************
+
 MasterScriptProvider::~MasterScriptProvider()
 {
     if ( m_pPCache )
@@ -101,7 +101,7 @@ MasterScriptProvider::~MasterScriptProvider()
     m_pPCache = 0;
 }
 
-//*************************************************************************
+
 void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 throw ( Exception, RuntimeException )
 {
@@ -122,9 +122,9 @@ throw ( Exception, RuntimeException )
 
     if ( len != 0 )
     {
-        // check if first parameter is a string
-        // if it is, this implies that this is a MSP created
-        // with a user or share ctx ( used for browse functionality )
+        
+        
+        
         //
         if ( args[ 0 ] >>= m_sCtxString )
         {
@@ -145,9 +145,9 @@ throw ( Exception, RuntimeException )
 
         if ( m_xModel.is() )
         {
-            // from the arguments, we were able to deduce a model. That alone doesn't
-            // suffice, we also need an XEmbeddedScripts which actually indicates support
-            // for embeddeding scripts
+            
+            
+            
             Reference< XEmbeddedScripts > xScripts( m_xModel, UNO_QUERY );
             if ( !xScripts.is() )
             {
@@ -186,7 +186,7 @@ throw ( Exception, RuntimeException )
         OUString pkgSpec = "uno_packages";
         sal_Int32 indexOfPkgSpec = m_sCtxString.lastIndexOf( pkgSpec );
 
-        // if contex string ends with "uno_packages"
+        
         if ( indexOfPkgSpec > -1 && m_sCtxString.match( pkgSpec, indexOfPkgSpec ) )
         {
             m_bIsPkgMSP = true;
@@ -196,13 +196,13 @@ throw ( Exception, RuntimeException )
             m_bIsPkgMSP = false;
         }
     }
-    else // no args
+    else 
     {
-        // use either scriping context or maybe zero args?
-        invokeArgs = Sequence< Any >( 0 ); // no arguments
+        
+        invokeArgs = Sequence< Any >( 0 ); 
     }
     m_sAargs = invokeArgs;
-    // don't create pkg mgr MSP for documents, not supported
+    
     if ( !m_bIsPkgMSP && !m_xModel.is() )
     {
         createPkgProvider();
@@ -213,7 +213,7 @@ throw ( Exception, RuntimeException )
 }
 
 
-//*************************************************************************
+
 void MasterScriptProvider::createPkgProvider()
 {
     try
@@ -240,7 +240,7 @@ void MasterScriptProvider::createPkgProvider()
     }
 }
 
-//*************************************************************************
+
 Reference< provider::XScript >
 MasterScriptProvider::getScript( const OUString& scriptURI )
 throw ( provider::ScriptFrameworkErrorException,
@@ -254,7 +254,7 @@ throw ( provider::ScriptFrameworkErrorException,
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
 
-    // need to get the language from the string
+    
 
     Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
@@ -291,22 +291,22 @@ throw ( provider::ScriptFrameworkErrorException,
     OUString language = sfUri->getParameter( langKey );
     OUString location = sfUri->getParameter( locKey );
 
-    // if script us located in uno pkg
+    
     sal_Int32 index = -1;
     OUString pkgTag(":uno_packages");
-    // for languages other than basic,  scripts located in uno packages
-    // are merged into the user/share location context.
-    // For other languages the location attribute in script url has the form
-    // location = [user|share]:uno_packages or location :uno_pacakges/xxxx.uno.pkg
-    // we need to extract the value of location part from the
-    // location attribute of the script, if the script is located in an
-    // uno package then that is the location part up to and including
-    // ":uno_packages", if the script is not in an uno package then the
-    // normal value is used e.g. user or share.
-    // The value extracted will be used to determine if the script is
-    // located in the same location context as this MSP.
-    // For Basic, the language script provider can handle the execution of a
-    // script in any location context
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if ( ( index = location.indexOf( pkgTag ) ) > -1 )
     {
         location = location.copy( 0, index + pkgTag.getLength() );
@@ -314,11 +314,11 @@ throw ( provider::ScriptFrameworkErrorException,
 
     Reference< provider::XScript > xScript;
 
-    // If the script location is in the same location context as this
-    // MSP then delate to the lanaguage provider controlled by this MSP
-    // ** Special case is BASIC, all calls to getScript will be handled
-    // by the language script provider in the current location context
-    // even if its different
+    
+    
+    
+    
+    
     if  (   (   location.equals( "document" )
             &&  m_xModel.is()
             )
@@ -369,14 +369,14 @@ throw ( provider::ScriptFrameworkErrorException,
 
     return xScript;
 }
-//*************************************************************************
+
 bool
 MasterScriptProvider::isValid()
 {
     return m_bIsValid;
 }
 
-//*************************************************************************
+
 ProviderCache*
 MasterScriptProvider::providerCache()
 {
@@ -403,7 +403,7 @@ MasterScriptProvider::providerCache()
 }
 
 
-//*************************************************************************
+
 OUString SAL_CALL
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException )
@@ -433,7 +433,7 @@ MasterScriptProvider::getName()
     return m_sNodeName;
 }
 
-//*************************************************************************
+
 Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException )
@@ -463,7 +463,7 @@ MasterScriptProvider::getChildNodes()
     return children;
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
         throw ( css::uno::RuntimeException )
@@ -471,7 +471,7 @@ MasterScriptProvider::hasChildNodes()
     return sal_True;
 }
 
-//*************************************************************************
+
 sal_Int16 SAL_CALL
 MasterScriptProvider::getType()
         throw ( css::uno::RuntimeException )
@@ -479,13 +479,13 @@ MasterScriptProvider::getType()
     return browse::BrowseNodeTypes::CONTAINER;
 }
 
-//*************************************************************************
+
 
 OUString
 MasterScriptProvider::parseLocationName( const OUString& location )
 {
-    // strip out the last leaf of location name
-    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
+    
+    
     OUString temp = location;
     INetURLObject aURLObj( temp );
     if ( !aURLObj.HasError() )
@@ -493,8 +493,8 @@ MasterScriptProvider::parseLocationName( const OUString& location )
     return temp;
 }
 
-//*************************************************************************
-// Register Package
+
+
 void SAL_CALL
 MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, css::uno::RuntimeException)
 {
@@ -531,9 +531,9 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
             throw lang::IllegalArgumentException( "Name not set!!",
                                                       Reference < XInterface > (), 1 );
         }
-        // TODO for library pacakge parse the language, for the moment will try
-        // to get each provider to process the new Package, the first one the succeeds
-        // will terminate processing
+        
+        
+        
         if ( !providerCache() )
         {
             throw RuntimeException(
@@ -564,7 +564,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
         }
         if ( index == xSProviders.getLength() )
         {
-            // No script providers could process the package
+            
             OUString message = "Failed to register package for ";
             message = message.concat( aName );
             throw lang::IllegalArgumentException( message,
@@ -573,8 +573,8 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
    }
 }
 
-//*************************************************************************
-// Revoke Package
+
+
 void SAL_CALL
 MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
@@ -605,9 +605,9 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
             throw lang::IllegalArgumentException( "Name not set!!",
                                                       Reference < XInterface > (), 1 );
         }
-        // TODO for Script library pacakge url parse the language,
-        // for the moment will just try to get each provider to process remove/revoke
-        // request, the first one the succeeds will terminate processing
+        
+        
+        
 
         if ( !providerCache() )
         {
@@ -638,7 +638,7 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
         }
         if ( index == xSProviders.getLength() )
         {
-            // No script providers could process the package
+            
             OUString message = "Failed to revoke package for ";
             message = message.concat( Name );
             throw lang::IllegalArgumentException( message,
@@ -648,27 +648,27 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL
 MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
     (void)aName;
     (void)aElement;
 
-    // TODO needs implementing
+    
     if ( true )
     {
         throw RuntimeException(  "replaceByName not implemented!!!!" ,
                 Reference< XInterface >() );
     }
 }
-//*************************************************************************
+
 Any SAL_CALL
 MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
     (void)aName;
 
-    // TODO needs to be implemented
+    
     Any result;
     if ( true )
     {
@@ -677,7 +677,7 @@ MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSu
     }
     return result;
 }
-//*************************************************************************
+
 sal_Bool SAL_CALL
 MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException)
 {
@@ -696,8 +696,8 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
 
             result = xCont->hasByName( aName );
         }
-        // If this is a document provider then we shouldn't
-        // have a PackageProvider
+        
+        
         else if (!m_xModel.is())
         {
             throw RuntimeException( "PackageMasterScriptProvider is unitialised",
@@ -712,10 +712,10 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
             throw lang::IllegalArgumentException( "Name not set!!",
                                                       Reference < XInterface > (), 1 );
         }
-        // TODO for Script library pacakge url parse the language,
-        // for the moment will just try to get each provider to see if the
-        // package exists in any provider, first one that succeed will
-        // terminate the loop
+        
+        
+        
+        
 
         if ( !providerCache() )
         {
@@ -750,11 +750,11 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
     return result;
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL
 MasterScriptProvider::getElementNames(  ) throw ( RuntimeException)
 {
-    // TODO needs implementing
+    
     Sequence< OUString >  names;
     if ( true )
     {
@@ -763,18 +763,18 @@ MasterScriptProvider::getElementNames(  ) throw ( RuntimeException)
     }
     return names;
 }
-//*************************************************************************
+
 Type SAL_CALL
 MasterScriptProvider::getElementType(  ) throw ( RuntimeException)
 {
-    // TODO needs implementing
+    
     Type t;
     return t;
 }
-//*************************************************************************
+
 sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException)
 {
-    // TODO needs implementing
+    
     if ( true )
     {
         throw RuntimeException(  "hasElements not implemented!!!!" ,
@@ -783,7 +783,7 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException
     return false;
 }
 
-//*************************************************************************
+
 Sequence< Reference< provider::XScriptProvider > > SAL_CALL
 MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 {
@@ -801,7 +801,7 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 }
 
 
-//*************************************************************************
+
 OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 throw( RuntimeException )
 {
@@ -814,7 +814,7 @@ throw( RuntimeException )
     return cppu::supportsService(this, serviceName);
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
 throw( RuntimeException )
 {
@@ -827,7 +827,7 @@ throw( RuntimeException )
     return Sequence< OUString >( names, 3 );
 }
 
-} // namespace func_provider
+} 
 
 
 namespace browsenodefactory
@@ -839,14 +839,14 @@ Sequence< OUString > SAL_CALL bnf_getSupportedServiceNames();
 
 namespace scripting_runtimemgr
 {
-//*************************************************************************
+
 Reference< XInterface > SAL_CALL sp_create(
     const Reference< XComponentContext > & xCompC )
 {
     return ( cppu::OWeakObject * ) new ::func_provider::MasterScriptProvider( xCompC );
 }
 
-//*************************************************************************
+
 Sequence< OUString > sp_getSupportedServiceNames( )
     SAL_THROW(())
 {
@@ -859,14 +859,14 @@ Sequence< OUString > sp_getSupportedServiceNames( )
     return Sequence< OUString >( names, 3 );
 }
 
-//*************************************************************************
+
 OUString sp_getImplementationName( )
 SAL_THROW(())
 {
     return OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
 }
 
-// ***** registration or ScriptingFrameworkURIHelper
+
 Reference< XInterface > SAL_CALL urihelper_create(
     const Reference< XComponentContext > & xCompC )
 {
@@ -922,9 +922,9 @@ static const struct cppu::ImplementationEntry s_entries [] =
     };
 }
 
-//############################################################################
-//#### EXPORTED ##############################################################
-//############################################################################
+
+
+
 
 extern "C"
 {

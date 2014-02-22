@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/XPropertyTable.hxx"
@@ -85,20 +85,20 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     const sal_uInt32 nFactor(2);
     const Size aSize((rSize.Width() * 5 * 2) / 2, rSize.Height() * nFactor);
 
-    // prepare polygon geometry for line
+    
     basegfx::B2DPolygon aLine;
 
     aLine.append(basegfx::B2DPoint(0.0, aSize.Height() / 2.0));
     aLine.append(basegfx::B2DPoint(aSize.Width(), aSize.Height() / 2.0));
 
-    // prepare LineAttribute
+    
     const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
     const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * (nFactor * 1.1));
     const drawinglayer::attribute::LineAttribute aLineAttribute(
         aLineColor,
         fLineWidth);
 
-    // prepare StrokeAttribute
+    
     ::std::vector< double > aDotDashArray;
     double fFullDotDashLen(0.0);
 
@@ -126,14 +126,14 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         aDotDashArray,
         fFullDotDashLen);
 
-    // cerate LinePrimitive
+    
     const drawinglayer::primitive2d::Primitive2DReference aLinePrimitive(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
             aLine,
             aLineAttribute,
             aStrokeAttribute));
 
-    // prepare VirtualDevice
+    
     VirtualDevice aVirtualDevice;
     const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
@@ -157,7 +157,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         aVirtualDevice.Erase();
     }
 
-    // create processor and draw primitives
+    
     drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
         aVirtualDevice,
         aNewViewInformation2D);
@@ -170,7 +170,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         delete pProcessor2D;
     }
 
-    // get result bitmap and scale
+    
     Bitmap aRetval(aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel()));
 
     if(1 != nFactor)
@@ -212,8 +212,8 @@ OUString XDashList::GetStringForUiNoLine() const
 {
     if(maStringNoLine.isEmpty())
     {
-        // formally was RID_SVXSTR_INVISIBLE, but tomake equal
-        // everywhere, use RID_SVXSTR_NONE
+        
+        
         const_cast< XDashList* >(this)->maStringNoLine = ResId(RID_SVXSTR_NONE, DIALOG_MGR()).toString();
     }
 

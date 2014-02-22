@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -24,9 +24,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "WinFOPImpl.hxx"
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
@@ -43,9 +43,9 @@ using namespace com::sun::star::ui::dialogs;
 
 #define FOLDERPICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FolderPicker"
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 namespace
 {
@@ -57,9 +57,9 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
@@ -67,9 +67,9 @@ CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceM
     m_pFolderPickerImpl = std::auto_ptr< CWinFolderPickerImpl > ( new CWinFolderPickerImpl( this ) );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeException )
 {
@@ -78,9 +78,9 @@ void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeEx
     m_pFolderPickerImpl->setTitle( aTitle );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
@@ -90,9 +90,9 @@ void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     m_pFolderPickerImpl->setDisplayDirectory( aDirectory );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
     throw( RuntimeException )
@@ -102,9 +102,9 @@ OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
     return m_pFolderPickerImpl->getDisplayDirectory( );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
 {
@@ -113,9 +113,9 @@ OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
     return m_pFolderPickerImpl->getDirectory( );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) throw( RuntimeException )
 {
@@ -124,25 +124,25 @@ void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) thro
     m_pFolderPickerImpl->setDescription( aDescription );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL CFolderPicker::execute( )
     throw( RuntimeException )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
 
-    // we should not block in this call else
-    // in the case of an event the client can'tgetPImplFromHandle( hWnd )
-    // call another function an we run into a
-    // deadlock !!!!!
+    
+    
+    
+    
     return m_pFolderPickerImpl->execute( );
 }
 
-// -------------------------------------------------
-// XServiceInfo
-// -------------------------------------------------
+
+
+
 
 OUString SAL_CALL CFolderPicker::getImplementationName(  )
     throw( RuntimeException )
@@ -150,16 +150,16 @@ OUString SAL_CALL CFolderPicker::getImplementationName(  )
     return OUString( FOLDERPICKER_IMPL_NAME );
 }
 
-//  XServiceInfo
+
 sal_Bool SAL_CALL CFolderPicker::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
+
+
+
 
 Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
     throw( RuntimeException )
@@ -167,9 +167,9 @@ Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
     return FolderPicker_getSupportedServiceNames();
 }
 
-// -------------------------------------------------
-//  XCancellable
-// -------------------------------------------------
+
+
+
 
 void SAL_CALL CFolderPicker::cancel( )
     throw(RuntimeException)
@@ -179,10 +179,10 @@ void SAL_CALL CFolderPicker::cancel( )
     m_pFolderPickerImpl->cancel( );
 }
 
-//------------------------------------------------
-// overwrite base class method, which is called
-// by base class dispose function
-//------------------------------------------------
+
+
+
+
 
 void SAL_CALL CFolderPicker::disposing()
 {

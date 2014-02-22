@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 
         uno::Reference< css::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xSerialNumberAdapter->toSequence( maTrustedAuthors[nSelected][1] ) );
 
-        // If we don't get it, create it from signature data:
+        
         if ( !xCert.is() )
             xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( maTrustedAuthors[nSelected][2] ) ;
 
@@ -239,7 +239,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
         INetURLObject aNewObj( aPathStr );
         aNewObj.removeFinalSlash();
 
-        // then the new path also an URL else system path
+        
         OUString aSystemFileURL = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID ) ?
             aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
@@ -269,8 +269,8 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl)
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pTrustFileLocLB->RemoveEntry( nSel );
-        // Trusted Path could not be removed (#i33584#)
-        // after remove an entry, select another one if exists
+        
+        
         sal_uInt16 nNewCount = m_pTrustFileLocLB->GetEntryCount();
         if ( nNewCount > 0 )
         {
@@ -309,13 +309,13 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             css::uno::Sequence< OUString >&              rEntry = maTrustedAuthors[ nEntry ];
             uno::Reference< css::security::XCertificate >   xCert;
 
-            // create from RawData
+            
             xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
             SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
             m_pTrustCertLB->SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
             m_pTrustCertLB->SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( ( void* ) (sal_IntPtr)nEntry );      // missuse user data as index
+            pLBEntry->SetUserData( ( void* ) (sal_IntPtr)nEntry );      
         }
     }
 }
@@ -418,8 +418,8 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
-    // Trusted Path could not be removed (#i33584#)
-    // don't forget to remove the old saved SecureURLs
+    
+    
     else
         mpDlg->maSecOptions.SetSecureURLs( css::uno::Sequence< OUString >() );
 

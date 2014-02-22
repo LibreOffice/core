@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbavalidation.hxx"
@@ -223,7 +223,7 @@ ScVbaValidation::Delete(  ) throw (uno::RuntimeException)
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-// Fix the defect that validatation cannot work when the input should be limited between a lower bound and an upper bound
+
 void SAL_CALL
 ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& Operator, const uno::Any& Formula1, const uno::Any& Formula2 ) throw (uno::RuntimeException)
 {
@@ -238,7 +238,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     if ( !Type.hasValue()  || !( Type >>= nType ) )
         throw uno::RuntimeException("missing required param", uno::Reference< uno::XInterface >() );
 
-    Delete(); // set up defaults
+    Delete(); 
     OUString sFormula1;
     Formula1 >>= sFormula1;
     OUString sFormula2;
@@ -247,14 +247,14 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     {
         case excel::XlDVType::xlValidateList:
             {
-                // for validate list
-                // at least formula1 is required
+                
+                
                 if ( !Formula1.hasValue() )
                     throw uno::RuntimeException("missing param", uno::Reference< uno::XInterface >() );
                 nValType = sheet::ValidationType_LIST;
                 xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
-                // #TODO validate required params
-                // #TODO need to correct the ';' delimited formula on get/set
+                
+                
                 break;
             }
         case excel::XlDVType::xlValidateWholeNumber:
@@ -272,8 +272,8 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
         switch( nVbaAlertStyle )
         {
             case excel::XlDVAlertStyle::xlValidAlertStop:
-                // yes I know it's already defaulted but safer to assume
-                // someone propbably could change the code above
+                
+                
                 eStyle = sheet::ValidationAlertStyle_STOP;
                 break;
             case excel::XlDVAlertStyle::xlValidAlertWarning:
@@ -290,8 +290,8 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
 
     xProps->setPropertyValue( ALERTSTYLE, uno::makeAny( eStyle ) );
 
-    // i#108860: fix the defect that validation cannot work when the input
-    // should be limited between a lower bound and an upper bound
+    
+    
     if ( Operator.hasValue() )
     {
         css::sheet::ConditionOperator conOperator = ScVbaFormatCondition::retrieveAPIOperator( Operator );
@@ -317,11 +317,11 @@ ScVbaValidation::getFormula1() throw (uno::RuntimeException)
     formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1;
 
     ScDocShell* pDocSh = excel::GetDocShellFromRange( m_xRange );
-    // in calc validation formula is either a range or formula
-    // that results in range.
-    // In VBA both formula and address can have a leading '='
-    // in result of getFormula1, however it *seems* that a named range or
-    // real formula has to (or is expected to) have the '='
+    
+    
+    
+    
+    
     if ( pDocSh && !ScVbaRange::getCellRangesForAddress(  nFlags, sString, pDocSh, aCellRanges, eConv ) )
         sString = "=" + sString;
     return sString;
@@ -340,7 +340,7 @@ ScVbaValidation::getType() throw (uno::RuntimeException)
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     sheet::ValidationType nValType = sheet::ValidationType_ANY;
     xProps->getPropertyValue( STYPE )  >>= nValType;
-    sal_Int32 nExcelType = excel::XlDVType::xlValidateList; // pick a default
+    sal_Int32 nExcelType = excel::XlDVType::xlValidateList; 
     if ( xProps.is() )
     {
         switch ( nValType )
@@ -348,7 +348,7 @@ ScVbaValidation::getType() throw (uno::RuntimeException)
             case sheet::ValidationType_LIST:
                 nExcelType = excel::XlDVType::xlValidateList;
                 break;
-            case sheet::ValidationType_ANY: // not ANY not really a great match for anything I fear:-(
+            case sheet::ValidationType_ANY: 
                 nExcelType = excel::XlDVType::xlValidateInputOnly;
                 break;
             case sheet::ValidationType_CUSTOM:

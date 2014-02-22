@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/interlck.h"
@@ -200,21 +200,21 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
     return result;
 }
 
-//  rtl::OUString str1("abc:def:ghi");
-//  rtl::OUString str2("abc:def");
-//  rtl::OUString str3("abc");
-//  rtl::OUString str4("");
 
-//  rtl::OUString pref;
 
-//  pref = getPrefix(str1, str1);
-//  pref = getPrefix(str1, str2);
-//  pref = getPrefix(str1, str3);
-//  pref = getPrefix(str1, str4);
 
-//  pref = getPrefix(str2, str1);
-//  pref = getPrefix(str3, str1);
-//  pref = getPrefix(str4, str1);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void getCascadeMapping(uno_Mapping     ** ppMapping,
@@ -241,14 +241,14 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     std::cerr <<" pTo: "   << s_to_name.getStr() << std::endl;
 #endif
 
-    if (from_envPurpose == to_envPurpose) // gcc:bla => uno:bla
+    if (from_envPurpose == to_envPurpose) 
         return;
 
-    // reaching this point means, we need a mediated mapping!!!
-    // we generall mediate via uno[:free]
+    
+    
     uno_Environment * pInterm = NULL;
 
-    // chained uno -> uno
+    
     if (from_envType == uno_envType && to_envType == uno_envType)
     {
         rtl::OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
@@ -256,8 +256,8 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         rtl::OUString uno_envDcp = uno_envType;
         uno_envDcp += purpose;
 
-        // direct mapping possible?
-        // uno:bla-->uno:bla:blubb
+        
+        
         if (from_envPurpose.equals(purpose))
         {
             rtl::OUString rest = to_envPurpose.copy(purpose.getLength());
@@ -287,24 +287,24 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
 
         uno_getEnvironment(&pInterm, uno_envDcp.pData, NULL);
     }
-    else if (from_envType != uno_envType && to_envType == uno_envType) // <ANY> -> UNO ?
-        // mediate via uno:purpose(fromEnv)
+    else if (from_envType != uno_envType && to_envType == uno_envType) 
+        
     {
         rtl::OUString     envDcp = uno_envType;
 
         envDcp += from_envPurpose;
          uno_getEnvironment(&pInterm, envDcp.pData, NULL);
     }
-    else if (from_envType == uno_envType && to_envType != uno_envType) // UNO -> <ANY>?
-        // mediate via uno(context)
+    else if (from_envType == uno_envType && to_envType != uno_envType) 
+        
     {
         rtl::OUString     envDcp = uno_envType;
 
          envDcp += to_envPurpose;
         uno_getEnvironment(&pInterm, envDcp.pData, NULL);
     }
-    else // everything else
-        // mediate via uno:purpose
+    else 
+        
     {
         rtl::OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
 

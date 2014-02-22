@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/dndhelp.hxx>
@@ -89,7 +89,7 @@ void vcl::unohelper::DragAndDropClient::dropActionChanged( const ::com::sun::sta
 {
 }
 
-// =======================================================================
+
 
 vcl::unohelper::DragAndDropWrapper::DragAndDropWrapper( DragAndDropClient* pClient )
 {
@@ -100,7 +100,7 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 {
 }
 
-// uno::XInterface
+
 uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -111,23 +111,23 @@ uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & r
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XEventListener
+
 void vcl::unohelper::DragAndDropWrapper::disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // Empty Source means it's the client, because the client is not a XInterface
+    
     if ( !rEvent.Source.is() )
         mpClient = NULL;
 }
 
 
-// ::com::sun::star::datatransfer::dnd::XDragGestureListener
+
 void vcl::unohelper::DragAndDropWrapper::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( mpClient )
         mpClient->dragGestureRecognized( rDGE );
 }
 
-// ::com::sun::star::datatransfer::dnd::XDragSourceListener
+
 void vcl::unohelper::DragAndDropWrapper::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( mpClient )
@@ -158,7 +158,7 @@ void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::st
         mpClient->dropActionChanged( dsde );
 }
 
-// ::com::sun::star::datatransfer::dnd::XDropTargetListener
+
 void vcl::unohelper::DragAndDropWrapper::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( mpClient )

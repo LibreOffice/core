@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,13 +70,13 @@ namespace sd {
 
 static const sal_Int32 nPreviewColumns = 5;
 static const sal_Int32 nPreviewRows = 5;
-static const sal_Int32 nCellWidth = 12; // one pixel is shared with the next cell!
-static const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cell!
+static const sal_Int32 nCellWidth = 12; 
+static const sal_Int32 nCellHeight = 7; 
 static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
 static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
 
-// --------------------------------------------------------------------
+
 
 static const OUString* getPropertyNames()
 {
@@ -91,7 +91,7 @@ static const OUString* getPropertyNames()
     };
     return &gPropNames[0];
 }
-// --------------------------------------------------------------------
+
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
     : mrBase(rBase)
@@ -122,7 +122,7 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
         m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignWidget, implCheckBoxHdl ) );
     }
 
-    // get current controller and initialize listeners
+    
     try
     {
         mxView = Reference< XDrawView >::query(mrBase.GetController());
@@ -143,14 +143,14 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     updateControls();
 }
 
-// --------------------------------------------------------------------
+
 
 TableDesignWidget::~TableDesignWidget()
 {
     removeListener();
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxBindings* getBindings( ViewShellBase& rBase )
 {
@@ -160,7 +160,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
         return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
@@ -170,7 +170,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
         return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
 {
@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::ApplyStyle()
 {
@@ -231,7 +231,7 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
 {
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::ApplyOptions()
 {
@@ -282,7 +282,7 @@ void TableDesignWidget::ApplyOptions()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::onSelectionChanged()
 {
@@ -326,12 +326,12 @@ void TableDesignWidget::onSelectionChanged()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TableValueSet::Resize()
 {
     ValueSet::Resize();
-    // Calculate the number of rows and columns.
+    
     if( GetItemCount() > 0 )
     {
         Size aValueSetSize = GetSizePixel();
@@ -396,7 +396,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeTableValueSet(::Window *p
     return new TableValueSet(pParent, nWinStyle);
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::updateControls()
 {
@@ -451,7 +451,7 @@ void TableDesignWidget::updateControls()
     m_pValueSet->SelectItem( nSelection );
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::addListener()
 {
@@ -465,7 +465,7 @@ void TableDesignWidget::addListener()
         | tools::EventMultiplexerEvent::EID_DISPOSING);
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::removeListener()
 {
@@ -473,7 +473,7 @@ void TableDesignWidget::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)
@@ -498,7 +498,7 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 struct CellInfo
 {
@@ -517,25 +517,25 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
-        // get style fill color
+        
         if( !GetDraftFillColor(rSet, maCellColor) )
             maCellColor.SetColor( COL_TRANSPARENT );
 
-        // get style text color
+        
         const SvxColorItem* pTextColor = dynamic_cast<const SvxColorItem*>( rSet.GetItem(EE_CHAR_COLOR) );
         if( pTextColor )
             maTextColor = pTextColor->GetValue();
         else
             maTextColor.SetColor( COL_TRANSPARENT );
 
-        // get border
+        
         const SvxBoxItem* pBoxItem = dynamic_cast<const SvxBoxItem*>(rSet.GetItem( SDRATTR_TABLE_BORDER ) );
         if( pBoxItem )
             maBorder = *pBoxItem;
     }
 }
 
-// --------------------------------------------------------------------
+
 
 typedef std::vector< boost::shared_ptr< CellInfo > > CellInfoVector;
 typedef boost::shared_ptr< CellInfo > CellInfoMatrix[nPreviewColumns][nPreviewRows];
@@ -558,7 +558,7 @@ struct TableStyleSettings
         , mbUseColumnBanding(false) {}
 };
 
-// --------------------------------------------------------------------
+
 
 static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, CellInfoVector& rVector )
 {
@@ -591,7 +591,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
         {
             boost::shared_ptr< CellInfo > xCellInfo;
 
-            // first and last row win first, if used and available
+            
             if( bFirstRow )
             {
                 xCellInfo = rStyle[sdr::table::first_row_style];
@@ -603,7 +603,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
 
             if( !xCellInfo.get() )
             {
-                // next come first and last column, if used and available
+                
                 if( rSettings.mbUseFirstColumn && (nCol == 0)  )
                 {
                     xCellInfo = rStyle[sdr::table::first_column_style];
@@ -646,7 +646,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
 
             if( !xCellInfo.get() )
             {
-                // use default cell style if non found yet
+                
                 xCellInfo = rStyle[sdr::table::body_style];
             }
 
@@ -655,7 +655,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
 {
@@ -665,13 +665,13 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     CellInfoMatrix aMatrix;
     FillCellInfoMatrix( aCellInfoVector, rSettings, aMatrix );
 
-// bbbbbbbbbbbb w = 12 pixel
-// bccccccccccb h = 7 pixel
-// bccccccccccb b = border color
-// bcttttttttcb c = cell color
-// bccccccccccb t = text color
-// bccccccccccb
-// bbbbbbbbbbbb
+
+
+
+
+
+
+
 
 
     Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, NULL );
@@ -680,7 +680,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     {
         pAccess->Erase( Color( bIsPageDark ? COL_BLACK : COL_WHITE ) );
 
-        // first draw cell background and text line previews
+        
         sal_Int32 nY = 0;
         sal_Int32 nRow;
         for( nRow = 0; nRow < nPreviewRows; ++nRow, nY += nCellHeight-1 )
@@ -693,7 +693,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                 Color aTextColor( COL_AUTO );
                 if( xCellInfo.get() )
                 {
-                    // fill cell background
+                    
                     const Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
 
                     if( xCellInfo->maCellColor.GetColor() != COL_TRANSPARENT )
@@ -705,7 +705,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     aTextColor = xCellInfo->maTextColor;
                 }
 
-                // draw text preview line
+                
                 if( aTextColor.GetColor() == COL_AUTO )
                     aTextColor.SetColor( bIsPageDark ? COL_WHITE : COL_BLACK );
                 pAccess->SetLineColor( aTextColor );
@@ -715,7 +715,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
             }
         }
 
-        // second draw border lines
+        
         nY = 0;
         for( nRow = 0; nRow < nPreviewRows; ++nRow, nY += nCellHeight-1 )
         {
@@ -734,7 +734,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     sal_Int32 border_diffs[8] = { 0,-1, 0,1, -1,0, 1,0 };
                     sal_Int32* pDiff = &border_diffs[0];
 
-                    // draw top border
+                    
                     for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
                     {
                         const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
@@ -745,14 +745,14 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                         sal_Int32 nBorderRow = nRow + *pDiff++;
                         if( (nBorderCol >= 0) && (nBorderCol < nPreviewColumns) && (nBorderRow >= 0) && (nBorderRow < nPreviewRows) )
                         {
-                            // check border
+                            
                             boost::shared_ptr< CellInfo > xBorderInfo( aMatrix[nBorderCol][nBorderRow] );
                             if( xBorderInfo.get() )
                             {
                                 const sal_uInt16 nOtherLine = nLine ^ 1;
                                 const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
-                                    continue; // other border line wins
+                                    continue; 
                             }
                         }
 
@@ -833,7 +833,7 @@ void TableDesignWidget::FillDesignPreviewControl()
     m_pValueSet->SelectItem(nSelectedItem);
 }
 
-// ====================================================================
+
 
 short TableDesignDialog::Execute()
 {
@@ -849,14 +849,14 @@ short TableDesignDialog::Execute()
     return RET_CANCEL;
 }
 
-// ====================================================================
+
 
 ::Window * createTableDesignPanel( ::Window* pParent, ViewShellBase& rBase )
 {
     return new TableDesignPane( pParent, rBase );
 }
 
-// ====================================================================
+
 
 void showTableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
 {

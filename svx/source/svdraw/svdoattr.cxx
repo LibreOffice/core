@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,14 +72,14 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include "svx/xlinjoit.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::AttributeProperties(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrAttrObj,SdrObject);
 
@@ -106,21 +106,21 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 {
     SdrModel* pOldModel = pModel;
 
-    // test for correct pool in ItemSet; move to new pool if necessary
+    
     if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
     {
         MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
     }
 
-    // call parent
+    
     SdrObject::SetModel(pNewModel);
 
-    // modify properties
+    
     GetProperties().SetModel(pOldModel, pNewModel);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// syntactical sugar for ItemSet accesses
+
+
 
 void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
@@ -133,7 +133,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         SetBoundRectDirty();
         SetRectsDirty(sal_True);
 
-        // This may have led to object change
+        
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);

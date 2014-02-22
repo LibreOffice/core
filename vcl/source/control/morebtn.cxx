@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/morebtn.hxx>
@@ -48,7 +48,7 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     ShowState();
 
     SetSymbolAlign(SYMBOLALIGN_RIGHT);
-    SetImageAlign(IMAGEALIGN_RIGHT); //Resoves: fdo#31849 ensure button remains vertically centered
+    SetImageAlign(IMAGEALIGN_RIGHT); 
     SetSmallSymbol(true);
 
     if ( ! ( nStyle & ( WB_RIGHT | WB_LEFT ) ) )
@@ -98,15 +98,15 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
-        // Don't call method as Dialog should not be switched over
+        
         mbState = ReadShortRes() != 0;
-        // SetText( GetText() );
+        
         ShowState();
     }
     if ( nObjMask & RSC_MOREBUTTON_MAPUNIT )
         meUnit = (MapUnit)ReadLongRes();
     if ( nObjMask & RSC_MOREBUTTON_DELTA )
-        // Size for resizing the Dialog
+        
         mnDelta = ReadShortRes();
 }
 
@@ -123,21 +123,21 @@ void MoreButton::Click()
     Size        aSize( pParent->GetSizePixel() );
     long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
-    // Change status
+    
     mbState = !mbState;
     ShowState();
 
-    // Update the windows according to the status
+    
     if ( mbState )
     {
-        // Show window
+        
         if ( mpMBData->mpItemList ) {
             for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
                 (*mpMBData->mpItemList)[ i ]->Show();
             }
         }
 
-        // Adapt dialogbox
+        
         Point aPos( pParent->GetPosPixel() );
         Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
 
@@ -156,18 +156,18 @@ void MoreButton::Click()
     }
     else
     {
-        // Adapt Dialogbox
+        
         aSize.Height() -= nDeltaPixel;
         pParent->SetSizePixel( aSize );
 
-        // Hide window(s) again
+        
         if ( mpMBData->mpItemList ) {
             for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
                 (*mpMBData->mpItemList)[ i ]->Hide();
             }
         }
     }
-    // Call Click handler here, so that we can initialize the Controls
+    
     PushButton::Click();
 }
 

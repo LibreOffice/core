@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <tools/urlobj.hxx>
 
-// Table for converting option values into strings
+
 static HTMLOptionEnum const aScriptLangOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
@@ -95,13 +95,13 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, sal_Bool bFull )
         rString = rString.copy( 0, rString.getLength()-1 );
 
 
-    // remove SGML comments
+    
     if( rString.startsWith( "<!--" ) )
     {
         sal_Int32 nPos = 3;
         if( bFull )
         {
-            // the whole line
+            
             nPos = 4;
             while( nPos < rString.getLength() &&
                 ( ( c = rString[nPos] ) != '\r' && c != '\n' ) )
@@ -121,11 +121,11 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, sal_Bool bFull )
         rString = rString.copy( 0, rString.getLength()-3 );
         if( bFull )
         {
-            // "//" or "'", maybe preceding CR/LF
+            
             rString = comphelper::string::stripEnd(rString, ' ');
             sal_Int32 nDel = 0, nLen = rString.getLength();
             if( nLen >= 2 &&
-                rString.endsWith("//") )
+                rString.endsWith("
             {
                 nDel = 2;
             }

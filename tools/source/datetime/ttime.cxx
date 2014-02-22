@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined( WNT )
@@ -81,7 +81,7 @@ namespace {
         return aTime;
     }
 
-} // anonymous namespace
+} 
 
 Time::Time( TimeInitSystem )
 {
@@ -89,16 +89,16 @@ Time::Time( TimeInitSystem )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
-    // construct time
+    
     nTime = aDateTime.wHour         * hourMask +
             aDateTime.wMinute       * minMask +
             aDateTime.wSecond       * secMask +
             aDateTime.wMilliseconds * 1000000;
 #else
-    // determine time
+    
     struct timespec tsTime;
 #if defined( __MACH__ )
-    // OS X does not have clock_gettime, use clock_get_time
+    
     clock_serv_t cclock;
     mach_timespec_t mts;
     host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
@@ -107,8 +107,8 @@ Time::Time( TimeInitSystem )
     tsTime.tv_sec  = mts.tv_sec;
     tsTime.tv_nsec = mts.tv_nsec;
 #else
-    // CLOCK_REALTIME should be supported
-    // on any modern Unix, but be extra cautious
+    
+    
     if (clock_gettime(CLOCK_REALTIME, &tsTime) != 0)
     {
         struct timeval tvTime;
@@ -116,9 +116,9 @@ Time::Time( TimeInitSystem )
         tsTime.tv_sec  = tvTime.tv_sec;
         tsTime.tv_nsec = tvTime.tv_usec * 1000;
     }
-#endif // __MACH__
+#endif 
 
-    // construct time
+    
     struct tm aTime;
     time_t nTmpTime = tsTime.tv_sec;
     if ( localtime_r( &nTmpTime, &aTime ) )
@@ -130,7 +130,7 @@ Time::Time( TimeInitSystem )
     }
     else
         nTime = 0;
-#endif // WNT
+#endif 
 }
 
 Time::Time( const Time& rTime )
@@ -148,7 +148,7 @@ Time::Time( const ::com::sun::star::util::Time &_rTime )
 }
 void Time::init( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 nNanoSec )
 {
-    // normalize time
+    
     nSec     += nNanoSec / nanoSecInSec;
     nNanoSec %= nanoSecInSec;
     nMin     += nSec / secInMin;
@@ -156,7 +156,7 @@ void Time::init( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 
     nHour    += nMin / minInHour;
     nMin     %= minInHour;
 
-    // construct time
+    
     nTime = nNanoSec +
             nSec  * secMask +
             nMin  * minMask +
@@ -184,7 +184,7 @@ void Time::SetMin( sal_uInt16 nNewMin )
     sal_Int32   nSec      = GetSec();
     sal_Int32   nNanoSec  = GetNanoSec();
 
-    // no overflow
+    
     nNewMin = nNewMin % minInHour;
 
     nTime = nSign *
@@ -201,7 +201,7 @@ void Time::SetSec( sal_uInt16 nNewSec )
     sal_Int32   nMin      = GetMin();
     sal_Int32   nNanoSec   = GetNanoSec();
 
-    // no overflow
+    
     nNewSec = nNewSec % secInMin;
 
     nTime = nSign *
@@ -218,7 +218,7 @@ void Time::SetNanoSec( sal_uInt32 nNewNanoSec )
     sal_Int32   nMin      = GetMin();
     sal_Int32   nSec      = GetSec();
 
-    // no overflow
+    
     nNewNanoSec = nNewNanoSec % nanoSecInSec;
 
     nTime = nSign *
@@ -254,7 +254,7 @@ void Time::MakeTimeFromNS( sal_Int64 nNS )
     else
         nSign = 1;
 
-    // avoid overflow when sal_uIntPtr is 32 bits
+    
     Time aTime( 0, 0, nNS/nanoSecInSec, nNS % nanoSecInSec );
     SetTime( aTime.GetTime() * nSign );
 }
@@ -285,7 +285,7 @@ void Time::MakeTimeFromMS( sal_Int32 nMS )
     else
         nSign = 1;
 
-    // avoid overflow when sal_uIntPtr is 32 bits
+    
     Time aTime( 0, 0, nMS/1000, (nMS % 1000) * 1000000 );
     SetTime( aTime.GetTime() * nSign );
 }
@@ -365,21 +365,21 @@ Time Time::GetUTCOffset()
     sal_Int32           nUTC;
     short           nTempTime;
 
-    // determine value again if needed
+    
     if ( (nCacheSecOffset == -1)            ||
          ((nTicks - nCacheTicks) > 360000)  ||
-         ( nTicks < nCacheTicks ) // handle overflow
+         ( nTicks < nCacheTicks ) 
          )
     {
         nTime = time( 0 );
         localtime_r( &nTime, &aTM );
         nLocalTime = mktime( &aTM );
 #if defined( SOLARIS )
-        // Solaris gmtime_r() seems not to handle daylight saving time
-        // flags correctly
+        
+        
         nUTC = nLocalTime + ( aTM.tm_isdst == 0 ? timezone : altzone );
 #elif defined( LINUX )
-        // Linux mktime() seems not to handle tm_isdst correctly
+        
         nUTC = nLocalTime - aTM.tm_gmtoff;
 #else
          gmtime_r( &nTime, &aTM );

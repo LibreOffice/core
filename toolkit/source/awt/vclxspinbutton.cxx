@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "toolkit/awt/vclxspinbutton.hxx"
@@ -32,17 +32,17 @@ namespace toolkit
     ::com::sun::star::uno::Any  getButtonLikeFaceColor( const Window* _pWindow );
 }
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         void lcl_modifyStyle( Window* _pWindow, WinBits _nStyleBits, sal_Bool _bShouldBePresent )
@@ -56,30 +56,30 @@ namespace toolkit
         }
     }
 
-    //====================================================================
-    //= VCLXSpinButton
-    //====================================================================
+    
+    
+    
     DBG_NAME( VCLXSpinButton )
-    //--------------------------------------------------------------------
+    
     VCLXSpinButton::VCLXSpinButton()
         :maAdjustmentListeners( *this )
     {
         DBG_CTOR( VCLXSpinButton, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     VCLXSpinButton::~VCLXSpinButton()
     {
         DBG_DTOR( VCLXSpinButton, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( VCLXSpinButton, VCLXWindow, VCLXSpinButton_Base )
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXSpinButton, VCLXWindow, VCLXSpinButton_Base )
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::dispose( ) throw(RuntimeException)
     {
         {
@@ -93,14 +93,14 @@ namespace toolkit
         VCLXWindow::dispose();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::addAdjustmentListener( const Reference< XAdjustmentListener >& listener ) throw (RuntimeException)
     {
         if ( listener.is() )
             maAdjustmentListeners.addInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::removeAdjustmentListener( const Reference< XAdjustmentListener >& listener ) throw (RuntimeException)
     {
         if ( listener.is() )
@@ -112,7 +112,7 @@ namespace toolkit
         typedef void (SpinButton::*SetSpinButtonValue) (long);
         typedef long (SpinButton::*GetSpinButtonValue) (void) const;
 
-        //................................................................
+        
         void lcl_setSpinButtonValue(Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
         {
             SolarMutexGuard aGuard;
@@ -121,7 +121,7 @@ namespace toolkit
                 (pSpinButton->*_pSetter)( _nValue );
         }
 
-        //................................................................
+        
         sal_Int32 lcl_getSpinButtonValue(const Window* _pWindow, GetSpinButtonValue _pGetter )
         {
             SolarMutexGuard aGuard;
@@ -135,13 +135,13 @@ namespace toolkit
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setValue( sal_Int32 n ) throw (RuntimeException)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValue, n );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -151,49 +151,49 @@ namespace toolkit
         setValue( currentValue );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL VCLXSpinButton::getValue(  ) throw (RuntimeException)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValue );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setMinimum( sal_Int32 minValue ) throw (RuntimeException)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMin, minValue );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setMaximum( sal_Int32 maxValue ) throw (RuntimeException)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMax, maxValue );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL VCLXSpinButton::getMinimum(  ) throw (RuntimeException)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMin );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL VCLXSpinButton::getMaximum(  ) throw (RuntimeException)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMax );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValueStep, spinIncrement );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL VCLXSpinButton::getSpinIncrement(  ) throw (RuntimeException)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValueStep );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -201,7 +201,7 @@ namespace toolkit
         lcl_modifyStyle( GetWindow(), WB_HSCROLL, orientation == ScrollBarOrientation::HORIZONTAL );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL VCLXSpinButton::getOrientation(  ) throw (RuntimeException)
     {
         return  ( 0 != ( GetWindow()->GetStyle() & WB_HSCROLL ) )
@@ -209,7 +209,7 @@ namespace toolkit
             :   ScrollBarOrientation::VERTICAL;
     }
 
-    //--------------------------------------------------------------------
+    
     void VCLXSpinButton::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
         SolarMutexClearableGuard aGuard;
@@ -241,7 +241,7 @@ namespace toolkit
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL VCLXSpinButton::setProperty( const OUString& PropertyName, const Any& Value ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -255,8 +255,8 @@ namespace toolkit
             switch ( nPropertyId )
             {
             case BASEPROPERTY_BACKGROUNDCOLOR:
-                // the default implementation of the base class doesn't work here, since our
-                // interpretation for this property is slightly different
+                
+                
                 setButtonLikeFaceColor( GetWindow(), Value);
                 break;
 
@@ -291,7 +291,7 @@ namespace toolkit
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL VCLXSpinButton::getProperty( const OUString& PropertyName ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -304,8 +304,8 @@ namespace toolkit
             switch ( nPropertyId )
             {
             case BASEPROPERTY_BACKGROUNDCOLOR:
-                // the default implementation of the base class doesn't work here, since our
-                // interpretation for this property is slightly different
+                
+                
                 aReturn = getButtonLikeFaceColor( GetWindow() );
                 break;
 
@@ -340,8 +340,8 @@ namespace toolkit
         return aReturn;
     }
 
-//........................................................................
-}   // namespace toolkit
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

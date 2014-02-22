@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rangelst.hxx>
@@ -40,32 +40,32 @@
 #include "compiler.hxx"
 #include "markdata.hxx"
 
-// STATIC DATA ---------------------------------------------------------------
 
-// List box positions for print range (PR)
+
+
 const sal_uInt16 SC_AREASDLG_PR_ENTIRE  = 1;
 const sal_uInt16 SC_AREASDLG_PR_USER    = 2;
 const sal_uInt16 SC_AREASDLG_PR_SELECT  = 3;
 
-// List box positions for repeat ranges (RR)
+
 const sal_uInt16 SC_AREASDLG_RR_NONE    = 0;
 const sal_uInt16 SC_AREASDLG_RR_USER    = 1;
 const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
-//============================================================================
+
 
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \
                             ScGlobal::GetRscString( nId ) ).Execute()
 
-// globale Funktionen (->am Ende der Datei):
+
 
 static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
 static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr );
 
 #if 0
-// this method is useful when debugging address flags.
+
 static void printAddressFlags(sal_uInt16 nFlag)
 {
     if ((nFlag & SCA_COL_ABSOLUTE  ) == SCA_COL_ABSOLUTE  )  printf("SCA_COL_ABSOLUTE \n");
@@ -91,10 +91,10 @@ static void printAddressFlags(sal_uInt16 nFlag)
 }
 #endif
 
-//============================================================================
-//  class ScPrintAreasDlg
 
-//----------------------------------------------------------------------------
+
+
+
 
 ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent )
     : ScAnyRefDlg(pB, pCW, pParent, "PrintAreasDialog", "modules/scalc/ui/printareasdialog.ui")
@@ -140,16 +140,16 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
 
     Impl_Reset();
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
+    
+    
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
-    // Extra-Data an ListBox-Entries abraeumen
+    
     ListBox* aLb[3] = { pLbPrintArea, pLbRepeatRow, pLbRepeatCol };
 
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aLb); ++i)
@@ -161,7 +161,7 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScPrintAreasDlg::Close()
 {
@@ -169,18 +169,18 @@ bool ScPrintAreasDlg::Close()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScPrintAreasDlg::IsTableLocked() const
 {
-    //  Druckbereiche gelten pro Tabelle, darum macht es keinen Sinn,
-    //  bei der Eingabe die Tabelle umzuschalten
+    
+    
 
     return true;
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
 {
@@ -214,7 +214,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScPrintAreasDlg::AddRefEntry()
 {
@@ -233,7 +233,7 @@ void ScPrintAreasDlg::AddRefEntry()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScPrintAreasDlg::Deactivate()
 {
@@ -241,7 +241,7 @@ void ScPrintAreasDlg::Deactivate()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScPrintAreasDlg::SetActive()
 {
@@ -262,7 +262,7 @@ void ScPrintAreasDlg::SetActive()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScPrintAreasDlg::Impl_Reset()
 {
@@ -287,9 +287,9 @@ void ScPrintAreasDlg::Impl_Reset()
 
     Impl_FillLists();
 
-    //-------------------------
-    // Druckbereich
-    //-------------------------
+    
+    
+    
     aStrRange = "";
     OUString aOne;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -308,15 +308,15 @@ void ScPrintAreasDlg::Impl_Reset()
     }
     pEdPrintArea->SetText( aStrRange );
 
-    //-------------------------------
-    // Wiederholungszeile
-    //-------------------------------
+    
+    
+    
     lcl_GetRepeatRangeString(pRepeatRowRange, pDoc, true, aStrRange);
     pEdRepeatRow->SetText( aStrRange );
 
-    //--------------------------------
-    // Wiederholungsspalte
-    //--------------------------------
+    
+    
+    
     lcl_GetRepeatRangeString(pRepeatColRange, pDoc, false, aStrRange);
     pEdRepeatCol->SetText( aStrRange );
 
@@ -326,13 +326,13 @@ void ScPrintAreasDlg::Impl_Reset()
     if( pDoc->IsPrintEntireSheet( nCurTab ) )
         pLbPrintArea->SelectEntryPos( SC_AREASDLG_PR_ENTIRE );
 
-    pEdPrintArea->SaveValue();   // fuer FillItemSet() merken:
+    pEdPrintArea->SaveValue();   
     pEdRepeatRow->SaveValue();
     pEdRepeatCol->SaveValue();
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 {
@@ -353,7 +353,7 @@ bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScPrintAreasDlg::Impl_CheckRefStrings()
 {
@@ -394,7 +394,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
     if ( !bRepeatColOk )
         bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, NULL);
 
-    // Fehlermeldungen
+    
 
     bOk = (bPrintAreaOk && bRepeatRowOk && bRepeatColOk);
 
@@ -418,13 +418,13 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScPrintAreasDlg::Impl_FillLists()
 {
-    //------------------------------------------------------
-    // Selektion holen und String in PrintArea-ListBox merken
-    //------------------------------------------------------
+    
+    
+    
     ScRange  aRange;
     OUString aStrRange;
     sal_Bool bSimple = sal_True;
@@ -445,13 +445,13 @@ void ScPrintAreasDlg::Impl_FillLists()
 
     pLbPrintArea->SetEntryData( SC_AREASDLG_PR_SELECT, new OUString( aStrRange ) );
 
-    //------------------------------------------------------
-    // Ranges holen und in ListBoxen merken
-    //------------------------------------------------------
+    
+    
+    
     ScRangeName* pRangeNames = pDoc->GetRangeName();
 
     if (!pRangeNames || pRangeNames->empty())
-        // No range names to process.
+        
         return;
 
     ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
@@ -493,9 +493,9 @@ void ScPrintAreasDlg::Impl_FillLists()
 }
 
 
-//----------------------------------------------------------------------------
-// Handler:
-//----------------------------------------------------------------------------
+
+
+
 
 IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 {
@@ -509,29 +509,29 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
             SfxStringItem   aRepeatCol( FN_PARAM_3, aStr );
 
-            //-------------------------
-            // Druckbereich veraendert?
-            //-------------------------
+            
+            
+            
 
-            // first try the list box, if "Entite sheet" is selected
+            
             bool bEntireSheet = (pLbPrintArea->GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
             SfxBoolItem aEntireSheet( FN_PARAM_4, bEntireSheet );
 
             bDataChanged = bEntireSheet != pDoc->IsPrintEntireSheet( nCurTab );
             if( !bEntireSheet )
             {
-                // if new list box selection is not "Entire sheet", get the edit field contents
+                
                 bDataChanged |= Impl_GetItem( pEdPrintArea, aPrintArea );
             }
 
-            //-------------------------------
-            // Wiederholungszeile veraendert?
-            //-------------------------------
+            
+            
+            
             bDataChanged |= Impl_GetItem( pEdRepeatRow, aRepeatRow );
 
-            //--------------------------------
-            // Wiederholungsspalte veraendert?
-            //--------------------------------
+            
+            
+            
             bDataChanged |= Impl_GetItem( pEdRepeatCol, aRepeatCol );
 
             if ( bDataChanged )
@@ -553,7 +553,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 {
@@ -580,25 +580,25 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 {
     sal_uInt16 nSelPos = pLb->GetSelectEntryPos();
     Edit* pEd = NULL;
 
-    // list box positions of specific entries, default to "repeat row/column" list boxes
+    
     sal_uInt16 nAllSheetPos = SC_AREASDLG_RR_NONE;
     sal_uInt16 nUserDefPos = SC_AREASDLG_RR_USER;
     sal_uInt16 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
 
-    // find edit field for list box, and list box positions
+    
     if( pLb == pLbPrintArea )
     {
         pEd = pEdPrintArea;
         nAllSheetPos = SC_AREASDLG_PR_ENTIRE;
         nUserDefPos = SC_AREASDLG_PR_USER;
-        nFirstCustomPos = SC_AREASDLG_PR_SELECT;    // "Selection" and following
+        nFirstCustomPos = SC_AREASDLG_PR_SELECT;    
     }
     else if( pLb == pLbRepeatCol )
         pEd = pEdRepeatCol;
@@ -607,7 +607,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
     else
         return 0;
 
-    // fill edit field according to list box selection
+    
     if( (nSelPos == 0) || (nSelPos == nAllSheetPos) )
         pEd->SetText( EMPTY_OUSTRING );
     else if( nSelPos == nUserDefPos && !pLb->IsTravelSelect() && pEd->GetText().isEmpty())
@@ -619,13 +619,13 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 {
     ListBox* pLb = NULL;
 
-    // list box positions of specific entries, default to "repeat row/column" list boxes
+    
     sal_uInt16 nUserDefPos = SC_AREASDLG_RR_USER;
     sal_uInt16 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
 
@@ -633,7 +633,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     {
         pLb = pLbPrintArea;
         nUserDefPos = SC_AREASDLG_PR_USER;
-        nFirstCustomPos = SC_AREASDLG_PR_SELECT;    // "Selection" and following
+        nFirstCustomPos = SC_AREASDLG_PR_SELECT;    
     }
     else if( pEd == pEdRepeatCol )
         pLb = pLbRepeatCol;
@@ -642,7 +642,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     else
         return 0;
 
-    // set list box selection according to edit field
+    
     sal_uInt16  nEntryCount = pLb->GetEntryCount();
     OUString aStrEd( pEd->GetText() );
     OUString aEdUpper = aStrEd.toAsciiUpperCase();
@@ -668,18 +668,18 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 }
 
 
-//============================================================================
-// globale Funktionen:
 
-// ----------------------------------------------------------------------------
 
-// TODO: It might make sense to move these functions to address.?xx. -kohei
+
+
+
+
 
 static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
-    // Zulaessige Syntax fuer rStr:
-    // Row: [$]1-MAXTAB
-    // Col: [$]A-IV
+    
+    
+    
 
     OUString    aStr    = rStr;
     sal_Int32   nLen    = aStr.getLength();
@@ -719,7 +719,7 @@ static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal 
 
 static bool lcl_CheckOne_XL_A1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
-    // XL A1 style is identical to OOO one for print range formats.
+    
     return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
 }
 
@@ -727,7 +727,7 @@ static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& r
 {
     sal_Int32 nLen = rStr.getLength();
     if (nLen <= 1)
-        // There must be at least two characters.
+        
         return false;
 
     const sal_Unicode preUpper = bIsRow ? 'R' : 'C';
@@ -763,7 +763,7 @@ static bool lcl_CheckRepeatOne( const OUString& rStr, formula::FormulaGrammar::A
             return lcl_CheckOne_XL_R1C1(rStr, bIsRow, rVal);
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     return false;
@@ -771,15 +771,15 @@ static bool lcl_CheckRepeatOne( const OUString& rStr, formula::FormulaGrammar::A
 
 static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
 {
-    // Row: [valid row] rsep [valid row]
-    // Col: [valid col] rsep [valid col]
+    
+    
 
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode rsep = ScCompiler::GetNativeSymbolChar(ocRange);
 
     if (pRange)
     {
-        // initialize the range value.
+        
         pRange->aStart.SetCol(0);
         pRange->aStart.SetRow(0);
         pRange->aEnd.SetCol(0);
@@ -796,10 +796,10 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
         if (c == rsep)
         {
             if (bEndPos)
-                // We aren't supposed to have more than one range separator.
+                
                 return false;
 
-            // range separator
+            
             if (aBuf.isEmpty())
                 return false;
 
@@ -854,7 +854,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
 {

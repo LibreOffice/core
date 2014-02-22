@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// TestWin32.cpp : Defines the entry point for the application.
+
 //
 
 #define _WIN32_DCOM
@@ -45,10 +45,10 @@
 
 #define MSG_FLUSHCLIPBOARD WM_USER + 1
 
-// Global variables:
-HINSTANCE           hInst;                      // current instance
-TCHAR               szTitle[MAX_LOADSTRING];            // Text of the title
-TCHAR               szWindowClass[MAX_LOADSTRING];  // Text of the title
+
+HINSTANCE           hInst;                      
+TCHAR               szTitle[MAX_LOADSTRING];            
+TCHAR               szWindowClass[MAX_LOADSTRING];  
 ATOM                MyRegisterClass( HINSTANCE hInstance );
 BOOL                InitInstance( HINSTANCE, int );
 LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
@@ -67,9 +67,9 @@ HWND                g_hWnd;
 HANDLE              g_hEvent;
 BOOL                g_bEnd;
 
-//----------------------------------------------------
-// a thread function
-//----------------------------------------------------
+
+
+
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
@@ -82,22 +82,22 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-//----------------------------------------------------
-// WinMain
-//----------------------------------------------------
+
+
+
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow )
 {
-    // TODO: Add code here.
+    
     MSG     msg;
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
 
-    // it's important to initialize ole
-    // in order to use the clipboard
+    
+    
 #ifdef USE_MTACB
     hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
 #else
@@ -105,12 +105,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #endif
 
 
-    // Initialize global strings
+    
     LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadString(hInstance, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // Initialization of the applications to carry out:
+    
     if( !InitInstance( hInstance, nCmdShow ) )
     {
         return FALSE;
@@ -118,7 +118,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TESTWIN32);
 
-    // Main message loop:
+    
     while( GetMessage(&msg, NULL, 0, 0) )
     {
         if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) )
@@ -128,7 +128,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         }
     }
 
-    // uninitializing the ole libraries
+    
 #ifdef USE_MTACB
     CoUninitialize( );
 #else
@@ -142,17 +142,17 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
 
-//----------------------------------------------------------------
-//  FUNCTION: MyRegisterClass()
+
+
 //
-//  PURPOSE: Registers the window class.
+
 //
-//  COMMENTS:
-//    This function and its usage are only necessary if this code
-//    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
-//    function, which was added to Windows 95. If it important to call
-//    this function to allow the use of small icons in the correct proportions.
-//----------------------------------------------------------------
+
+
+
+
+
+
 
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
@@ -175,19 +175,19 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
     return RegisterClassEx(&wcex);
 }
 
-//----------------------------------------------------------------
-//   FUNCTION: InitInstance(HANDLE, int)
+
+
 //
-//   PURPOSE: Saves instance access number and creates main window
+
 //
-//   Comments:
-//        In this function, the instance access number is stored in a global variable
-//        and the main program window is displayed.
-//----------------------------------------------------------------
+
+
+
+
 
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
-   hInst = hInstance; // Store instance access number in our global variable.
+   hInst = hInstance; 
 
    g_hWnd = CreateWindowEx(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
@@ -203,15 +203,15 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
    return TRUE;
 }
 
-//----------------------------------------------------------------
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
+
+
 //
-//  PURPOSE: Processes messages for the main window.
+
 //
-//  WM_COMMAND  - Handle application menu
-//  WM_PAINT    - Display main windows
-//  WM_DESTROY  - Output completion message and return
-//----------------------------------------------------------------
+
+
+
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -227,7 +227,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            // Analyze menu selections:
+            
             switch( wmId )
             {
                 case IDD_COPY:
@@ -250,7 +250,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
             hdc = BeginPaint (hWnd, &ps);
-            // TODO: Add any code for drawing
+            
             RECT rt;
             GetClientRect( hWnd, &rt );
 
@@ -279,9 +279,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
-//----------------------------------------------
-// copy data into the clipboard
-//----------------------------------------------
+
+
+
 
 void CopyClipboardData( HWND hWnd )
 {
@@ -293,9 +293,9 @@ void CopyClipboardData( HWND hWnd )
 #endif
 }
 
-//----------------------------------------------
-// flush the content into the clipboard
-//----------------------------------------------
+
+
+
 
 void FlushClipboard( )
 {
@@ -320,7 +320,7 @@ void PasteData(HWND hWnd)
 {
     IDataObject* pDataObj;
 
-    //FlushClipboard( );
+    
 
     HRESULT hr = OleGetClipboard( &pDataObj );
     if ( SUCCEEDED( hr ) )

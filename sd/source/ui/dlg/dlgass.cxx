@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/presentation/ClickAction.hpp>
@@ -85,8 +85,8 @@ void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 }
 
 
-// ====================================================================
-// ====================================================================
+
+
 
 const char* PageHelpIds[] =
 {
@@ -97,7 +97,7 @@ const char* PageHelpIds[] =
     HID_SD_AUTOPILOT_PAGE5
 };
 
-// ====================================================================
+
 
 class PasswordEntry
 {
@@ -106,7 +106,7 @@ public:
     OUString maPath;
 };
 
-// ====================================================================
+
 
 /** A simple wrapper that looks like a PushButton and is used to force the
     broadcasting of focus events primarly for accessibility tools.
@@ -132,7 +132,7 @@ private:
 
 
 
-// ====================================================================
+
 
 class AssistentDlgImpl : public SfxListener
 {
@@ -140,7 +140,7 @@ public:
     AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, sal_Bool bAutoPilot  );
     ~AssistentDlgImpl();
 
-    /// Local mutex used to serialize concurrent method calls.
+    
     ::osl::Mutex maMutex;
 
     SfxObjectShellLock GetDocument();
@@ -203,19 +203,19 @@ public:
     OUString GetDocFileName();
     OUString GetLayoutFileName();
 
-    /// List of URLs of recently used impress files.
+    
     std::vector<OUString> maOpenFilesList;
 
-    /// List of folders containing data about impress templates.
+    
     std::vector<TemplateDir*> maPresentList;
 
-    /// Currently selected template folder.
+    
     TemplateDir* mpTemplateRegion;
 
-    /// Currently selected layout folder.
+    
     TemplateDir* mpLayoutRegion;
 
-    // preview
+    
     sal_Bool mbUserDataDirty;
     Timer maPrevTimer;
     Timer maEffectPrevTimer;
@@ -238,7 +238,7 @@ public:
 
     bool IsOwnFormat( const OUString& rPath );
 
-    // dlg status
+    
     void EndDialog( long nResult = 0 );
 
     void SetStartType( StartType eType );
@@ -272,7 +272,7 @@ public:
     DECL_LINK( SelectEffectHdl, void* );
     DECL_LINK( OpenButtonHdl, Button * );
 
-    // Common
+    
     Assistent           maAssistentFunc;
     CheckBox            maPreviewFlag;
     CheckBox            maStartWithFlag;
@@ -286,7 +286,7 @@ public:
     OUString            maCreateStr;
     OUString            maOpenStr;
 
-    // page 1
+    
     FixedBitmap*        mpPage1FB;
     FixedLine*          mpPage1ArtFL;
     RadioButton*        mpPage1EmptyRB;
@@ -297,7 +297,7 @@ public:
     ListBox*            mpPage1OpenLB;
     PushButton*         mpPage1OpenPB;
 
-    // page 2
+    
     FixedBitmap*        mpPage2FB;
     FixedLine*          mpPage2LayoutFL;
     ListBox*            mpPage2RegionLB;
@@ -310,7 +310,7 @@ public:
     RadioButton*        mpPage2Medium5RB;
     RadioButton*        mpPage2Medium6RB;
 
-    // page 3
+    
     FixedBitmap*        mpPage3FB;
     FixedLine*          mpPage3EffectFL;
     FixedText*          mpPage3EffectFT;
@@ -326,7 +326,7 @@ public:
     TimeField*          mpPage3BreakTMF;
     CheckBox*           mpPage3LogoCB;
 
-    // page 4
+    
     FixedBitmap*        mpPage4FB;
     FixedLine*          mpPage4PersonalFL;
     FixedText*          mpPage4AskNameFT;
@@ -336,7 +336,7 @@ public:
     FixedText*          mpPage4AskInfoFT;
     MultiLineEdit*      mpPage4AskInfoEDT;
 
-    // page 5
+    
     FixedBitmap*        mpPage5FB;
     FixedText*          mpPage5PageListFT;
     SdPageListControl*  mpPage5PageListCT;
@@ -346,7 +346,7 @@ public:
 
 
 
-// ====================================================================
+
 
 AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, sal_Bool bAutoPilot ) :
     mpTemplateRegion(NULL),
@@ -381,7 +381,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     else
         maAssistentFunc.InsertControl(1, &maStartWithFlag );
 
-    // initialize page1 and give it to the assistant functionality
+    
     maAssistentFunc.InsertControl(1, &maPreview );
     maAssistentFunc.InsertControl(1, &maPreviewFlag );
     maAssistentFunc.InsertControl(1,
@@ -403,8 +403,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     maAssistentFunc.InsertControl(1,
         mpPage1OpenLB=new ListBox(pWindow,SdResId(LB_PAGE1_OPEN)));
 
-    // Align the button and list box displayed for the "open existing file"
-    // radio button with the text of that radio button.
+    
+    
     {
         RadioButton aEmptyRB (mpWindow);
         sal_Int32 nIndent (aEmptyRB.CalcMinimumSize(0).Width());
@@ -418,15 +418,15 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
             Size(nWidth, mpPage1OpenLB->GetSizePixel().Height()));
     }
 
-    // Set text and icon of the 'Open...' button.
+    
     {
         OUString sText (GetUiTextForCommand(".uno:Open"));
-        // Remove the mnemonic and add a leading space so that icon and text
-        // are not too close together.
+        
+        
         sText = sText.replaceAll("~", "");
         sText = " " + sText;
         mpPage1OpenPB->SetText(sText);
-        // Place icon left of text and both centered in the button.
+        
         mpPage1OpenPB->SetModeImage(
             GetUiIconForCommand(".uno:Open")
         );
@@ -436,7 +436,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage1OpenPB->SetStyle(mpPage1OpenPB->GetStyle() | WB_CENTER);
     }
 
-    // links&handler
+    
     mpPage1RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
     mpPage1RegionLB->SetDropDownLineCount( 6 );
     mpPage1TemplateLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectTemplateHdl));
@@ -450,7 +450,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1OpenLB->SetDoubleClickHdl(rFinishLink);
     mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
 
-    // page 2
+    
     maAssistentFunc.InsertControl(2, &maPreview );
     maAssistentFunc.InsertControl(2, &maPreviewFlag );
     maAssistentFunc.InsertControl(2,
@@ -484,7 +484,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage2LayoutLB->SetStyle(mpPage2LayoutLB->GetStyle() | WB_SORT);
     mpPage2LayoutLB->InsertEntry(SD_RESSTR(STR_ISLOADING));
 
-    // page 3
+    
     maAssistentFunc.InsertControl(3, &maPreview );
     maAssistentFunc.InsertControl(3, &maPreviewFlag );
     maAssistentFunc.InsertControl(3,
@@ -536,7 +536,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage3BreakTMF->SetTime( Time( 0, 0, 10 ) );
     mpPage3LogoCB->Check();
 
-    // set cursor in timefield
+    
     Edit *pEditPage3PresTimeTMF = mpPage3PresTimeTMF->GetField();
     Edit *pEditPage3BreakTMF = mpPage3BreakTMF->GetField();
     Selection aSel1( pEditPage3PresTimeTMF->GetMaxTextLen(), pEditPage3PresTimeTMF->GetMaxTextLen() );
@@ -544,7 +544,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     pEditPage3PresTimeTMF->SetSelection( aSel1 );
     pEditPage3BreakTMF->SetSelection( aSel2 );
 
-    // page 4
+    
     maAssistentFunc.InsertControl(4,
         mpPage4FB = new FixedBitmap(pWindow,SdResId(FB_PAGE4)));
     maAssistentFunc.InsertControl(4,
@@ -566,7 +566,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage4AskTopicEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
     mpPage4AskInfoEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
 
-    // page 5
+    
     maAssistentFunc.InsertControl(5, &maPreview );
     maAssistentFunc.InsertControl(5, &maPreviewFlag );
     maAssistentFunc.InsertControl(5,
@@ -581,7 +581,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
 
-    // general
+    
     InterpolateFixedBitmap( mpPage1FB );
     InterpolateFixedBitmap( mpPage2FB );
     InterpolateFixedBitmap( mpPage3FB );
@@ -595,7 +595,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     maPreviewFlag.SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
     maPreview.SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
 
-    // sets the exit page
+    
     maAssistentFunc.GotoPage(1);
     maLastPageButton.Disable();
 
@@ -616,14 +616,14 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     UpdatePreview( sal_True );
 
-    //check whether we should start with a template document initialy and preselect it
+    
     const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
     OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
     if( !aStandardTemplate.isEmpty() )
     {
         ProvideTemplates();
 
-        //find aStandardTemplate in maPresentList
+        
         TemplateDir*   pStandardTemplateDir = 0;
         TemplateEntry* pStandardTemplateEntry = 0;
 
@@ -646,7 +646,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
                 break;
         }
 
-        //preselect template
+        
         if( pStandardTemplateDir && pStandardTemplateEntry )
         {
             mpPage1RegionLB->SelectEntry( pStandardTemplateDir->msRegion );
@@ -666,7 +666,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     DeletePasswords();
 
-    //  Delete the template file infos.
+    
     std::vector<TemplateDir*>::iterator I;
     std::vector<TemplateEntry*>::iterator   J;
     for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
@@ -676,7 +676,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
         delete (*I);
     }
 
-    // page 1
+    
     delete mpPage1FB;
     delete mpPage1ArtFL;
     delete mpPage1EmptyRB;
@@ -687,7 +687,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage1OpenLB;
     delete mpPage1OpenPB;
 
-    // page 2
+    
     delete mpPage2FB;
     delete mpPage2LayoutFL;
     delete mpPage2RegionLB;
@@ -700,7 +700,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage2Medium5RB;
     delete mpPage2Medium6RB;
 
-    // page 3
+    
     delete mpPage3FB;
     delete mpPage3EffectFL;
     delete mpPage3EffectFT;
@@ -716,7 +716,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage3BreakTMF;
     delete mpPage3LogoCB;
 
-    // page 4
+    
     delete mpPage4FB;
     delete mpPage4PersonalFL;
     delete mpPage4AskNameFT;
@@ -726,7 +726,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage4AskInfoFT;
     delete mpPage4AskInfoEDT;
 
-    // page 5
+    
     delete mpPage5FB;
     delete mpPage5PageListFT;
     delete mpPage5PageListCT;
@@ -775,7 +775,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)
     {
-        //  Get the current history item's properties.
+        
         uno::Sequence<beans::PropertyValue> aPropertySet = aHistory[nItem];
         OUString   sURL;
         OUString   sFilter;
@@ -792,8 +792,8 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             else if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_PASSWORD)
                 aPropertySet[nProperty].Value >>= sPassword;
 
-        //  If the entry is an impress file then insert it into the
-        //  history list and the list box.
+        
+        
         uno::Sequence< beans::PropertyValue > lProps;
         if (xFilterFactory->hasByName(sFilter))
         {
@@ -809,15 +809,15 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
                 (lProps[i].Value >>= sFactoryName) &&
                 sFactoryName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
             {
-                // yes, it's an impress document
+                
                 INetURLObject aURL;
 
-                // Do not include the file if it does not exist.
+                
                 if (xFileAccess.is() && ! xFileAccess->exists(sURL))
                     continue;
 
                 aURL.SetSmartURL (sURL);
-                // The password is set only when it is not empty.
+                
                 if (!sPassword.isEmpty())
                     aURL.SetPass (sPassword);
                 maOpenFilesList.push_back (aURL.GetMainURL(INetURLObject::NO_DECODE));
@@ -833,7 +833,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     }
     catch (uno::RuntimeException& )
     {
-        // Ignore all exceptions.
+        
     }
 }
 
@@ -854,7 +854,7 @@ void AssistentDlgImpl::ProvideTemplates (void)
         }
         catch (uno::RuntimeException& )
         {
-            // Ignore all exceptions.
+            
         }
     }
 }
@@ -862,13 +862,13 @@ void AssistentDlgImpl::ProvideTemplates (void)
 void AssistentDlgImpl::TemplateScanDone (
     std::vector<TemplateDir*>& rTemplateFolder)
 {
-    //  This method is called from a thread.  Therefore we get the solar mutex.
+    
     SolarMutexGuard aGuard;
 
-    // Copy the contents of the given template folders to a local list.
+    
     maPresentList.swap (rTemplateFolder);
 
-    //  Fill in the list box on the first page.
+    
     int nFirstEntry = 0;
     mpPage1RegionLB->Clear();
     std::vector<TemplateDir*>::iterator I;
@@ -879,8 +879,8 @@ void AssistentDlgImpl::TemplateScanDone (
         if (pDir == NULL)
             continue;
 
-        // HACK! presnt directory is always initially selected.
-        // We have to look at the first entry to get a URL.
+        
+        
         if (!pDir->maEntries.empty() )
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
@@ -895,7 +895,7 @@ void AssistentDlgImpl::TemplateScanDone (
     mpPage1RegionLB->Update();
     SelectTemplateRegion (mpPage1RegionLB->GetSelectEntry());
 
-    //  Fill in the list box on the second page.
+    
     nFirstEntry = 0;
     mpPage2RegionLB->Clear();
     for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
@@ -904,8 +904,8 @@ void AssistentDlgImpl::TemplateScanDone (
         if (pDir == NULL)
             continue;
 
-        // HACK! layout directory is always initially selected.
-        // We have to look at the first entry to get a URL.
+        
+        
         if (!pDir->maEntries.empty() )
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
@@ -920,7 +920,7 @@ void AssistentDlgImpl::TemplateScanDone (
     mpPage2RegionLB->Update();
     SelectLayoutRegion (mpPage2RegionLB->GetSelectEntry());
 
-    //  Make the changes visible.
+    
     mbTemplatesReady = sal_True;
     if (mpWindow)
         UpdatePage();
@@ -929,9 +929,9 @@ void AssistentDlgImpl::TemplateScanDone (
 
 
 
-// ********************************************************************
-// state methods
-// ********************************************************************
+
+
+
 
 void AssistentDlgImpl::SetStartType( StartType eType )
 {
@@ -1017,7 +1017,7 @@ OUString AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-    UpdatePreview(sal_False);   // but load completely
+    UpdatePreview(sal_False);   
     UpdatePageList();
 
     SfxObjectShell* pShell = xDocShell;
@@ -1056,9 +1056,9 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             }
             else
             {
-                // delete this page
-                pDoc->DeletePage( (nPgRelNum << 1) + 2 ); // delete not page
-                pDoc->DeletePage( (nPgRelNum << 1) + 1 ); // delete page
+                
+                pDoc->DeletePage( (nPgRelNum << 1) + 2 ); 
+                pDoc->DeletePage( (nPgRelNum << 1) + 1 ); 
             }
 
             nPgAbsNum++;
@@ -1113,7 +1113,7 @@ void AssistentDlgImpl::UpdatePage()
     {
     case 1:
         {
-            // Show elements on first page depending of start type
+            
             SetStartType( GetStartType() );
             mpPage1TemplateRB->Enable(true /*mbTemplatesReady*/);
             break;
@@ -1162,9 +1162,9 @@ void AssistentDlgImpl::UpdatePage()
     }
 }
 
-// ********************************************************************
-// UI-Handler
-// ********************************************************************
+
+
+
 
 IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
 {
@@ -1190,7 +1190,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, SelectEffectHdl)
 
 IMPL_LINK( AssistentDlgImpl, OpenButtonHdl, Button*, pButton )
 {
-    // Clear the selection and forward the call.
+    
     mpPage1OpenLB->SetNoSelection();
     return mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
 }
@@ -1299,12 +1299,12 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 
 IMPL_LINK_NOARG(AssistentDlgImpl, NextPageHdl)
 {
-    // When changing from the first to the second page make sure that the
-    // templates are present.
+    
+    
     if (maAssistentFunc.GetCurrentPage() == 1)
         ProvideTemplates();
 
-    // Change to the next page.
+    
     LeavePage();
     maAssistentFunc.NextPage();
     ChangePage();
@@ -1348,8 +1348,8 @@ IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
     return 0;
 }
 
-// ********************************************************************
-// ********************************************************************
+
+
 
 void AssistentDlgImpl::SelectTemplateRegion( const OUString& rRegion )
 {
@@ -1477,8 +1477,8 @@ void AssistentDlgImpl::UpdatePageList()
 
 void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 {
-    // Guard against multiple concurrent execution to this method caused either
-    // by calls from different threads or recursion.
+    
+    
     ::osl::MutexGuard aGuard (maMutex);
     if (mbPreviewUpdating)
         return;
@@ -1581,7 +1581,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
     if(bChangeMaster && (aLayoutFile != maDocFile))
     {
-        // load layout template
+        
         SfxObjectShellLock xLayoutDocShell;
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
 
@@ -1602,7 +1602,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
         Application::SetDefDialogParent( pParent );
 
-        // determine the implementation
+        
         SfxObjectShell* pShell = xDocShell;
         DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
         SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
@@ -1726,7 +1726,7 @@ OUString AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
             if (sCommandURL.isEmpty())
                 break;
 
-            // Retrieve popup menu labels
+            
             Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             if ( ! xContext.is())
                 break;
@@ -1781,7 +1781,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
             if (sCommandURL.isEmpty())
                 break;
 
-            // Retrieve popup menu labels
+            
             Reference<uno::XComponentContext> xContext ( ::comphelper::getProcessComponentContext() );
             if ( ! xContext.is())
                 break;
@@ -1818,7 +1818,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 }
 
 
-//////////////////////////////////////////////
+
 
 AssistentDlg::AssistentDlg(Window* pParent, sal_Bool bAutoPilot) :
     ModalDialog(pParent,SdResId(DLG_ASS))
@@ -1826,7 +1826,7 @@ AssistentDlg::AssistentDlg(Window* pParent, sal_Bool bAutoPilot) :
     Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
     mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
 
-    // button assigmnent
+    
     mpImpl->maFinishButton.SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
 
     FreeResource();
@@ -1836,7 +1836,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
 {
     if( GetStartType() == ST_OPEN )
     {
-        //if we do not have a file here asked for one before ending the dialog
+        
         OUString aFileToOpen = GetDocPath();
         if (aFileToOpen.isEmpty())
         {
@@ -1850,8 +1850,8 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
                 return 1;
             else
             {
-                //add the selected file to the recent-file-listbox and select the new entry
-                //this is necessary for 'GetDocPath()' returning the selected file after end of dialog
+                
+                
 
                 INetURLObject aURL;
                 aURL.SetSmartURL(aFileToOpen);
@@ -1862,7 +1862,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
         }
     }
 
-    // end
+    
     mpImpl->EndDialog(RET_OK);
     EndDialog(RET_OK);
     return 0;
@@ -1929,14 +1929,14 @@ uno::Sequence< beans::NamedValue > AssistentDlg::GetPassword()
 
 
 
-//===== NextButton ============================================================
+
 
 NextButton::NextButton (::Window* pParent, const ResId& rResId)
     : maNextButton1(pParent, rResId),
       maNextButton2(pParent, rResId),
       mbIsFirstButtonActive(true)
 {
-    // Hide the unused button.
+    
     maNextButton2.Hide();
 }
 
@@ -1945,7 +1945,7 @@ NextButton::NextButton (::Window* pParent, const ResId& rResId)
 
 void NextButton::ForceFocusEventBroadcast (void)
 {
-    // Hide the currently visible button and show and focus the other one.
+    
     if (mbIsFirstButtonActive)
     {
         mbIsFirstButtonActive = false;
@@ -1967,8 +1967,8 @@ void NextButton::ForceFocusEventBroadcast (void)
 
 void NextButton::SetClickHdl (const Link& rLink)
 {
-    // Forward the setting of the click handler to the two buttons
-    // regardless of which one is currently visible.
+    
+    
     maNextButton1.SetClickHdl(rLink);
     maNextButton2.SetClickHdl(rLink);
 }
@@ -1978,8 +1978,8 @@ void NextButton::SetClickHdl (const Link& rLink)
 
 bool NextButton::IsEnabled (void)
 {
-    // Because the buttons are both either enabled or disabled, it is
-    // sufficient to ask one to determine the state.
+    
+    
     return maNextButton1.IsEnabled();
 }
 
@@ -1988,7 +1988,7 @@ bool NextButton::IsEnabled (void)
 
 void NextButton::Enable (bool bEnable)
 {
-    // Enable or disable both buttons but do not change visibility or focus.
+    
     maNextButton1.Enable(bEnable);
     maNextButton2.Enable(bEnable);
 }

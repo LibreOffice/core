@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/emptyproperties.hxx>
@@ -24,16 +24,16 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            // Basic implementation; Basic object has NO attributes
+            
             DBG_ASSERT(false, "EmptyProperties::CreateObjectSpecificItemSet() should never be called");
             return *(new SfxItemSet(rPool));
         }
@@ -48,9 +48,9 @@ namespace sdr
         :   BaseProperties(rProps, rObj),
             mpEmptyItemSet(0L)
         {
-            // #115593#
-            // do not gererate an assert, else derivations like PageProperties will generate an assert
-            // using the Clone() operator path.
+            
+            
+            
         }
 
         EmptyProperties::~EmptyProperties()
@@ -136,7 +136,7 @@ namespace sdr
             DBG_ASSERT(false, "EmptyProperties::GetStyleSheet() should never be called (!)");
             return 0L;
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -117,7 +117,7 @@ namespace
     template <typename T, typename C> sal_Int32 tmpl_getTokenCount(const T &rIn,
         C cTok)
     {
-        // Empty String: TokenCount by Definition is 0
+        
         if (rIn.isEmpty())
             return 0;
 
@@ -149,89 +149,89 @@ sal_uInt32 decimalStringToNumber(
     {
         sal_uInt32 c = str.iterateCodePoints(&i);
         sal_uInt32 value = 0;
-        if( c <= 0x0039)    // ASCII decimal digits, most common
+        if( c <= 0x0039)    
             value = c - 0x0030;
-        else if( c >= 0x1D7F6 )    // mathematical monospace digits
+        else if( c >= 0x1D7F6 )    
             value = c - 0x1D7F6;
-        else if( c >= 0x1D7EC ) // mathematical sans-serif bold digits
+        else if( c >= 0x1D7EC ) 
             value = c - 0x1D7EC;
-        else if( c >= 0x1D7E2 ) // mathematical sans-serif digits
+        else if( c >= 0x1D7E2 ) 
             value = c - 0x1D7E2;
-        else if( c >= 0x1D7D8 ) // mathematical double-struck digits
+        else if( c >= 0x1D7D8 ) 
             value = c - 0x1D7D8;
-        else if( c >= 0x1D7CE ) // mathematical bold digits
+        else if( c >= 0x1D7CE ) 
             value = c - 0x1D7CE;
-        else if( c >= 0x11066 ) // brahmi digits
+        else if( c >= 0x11066 ) 
             value = c - 0x11066;
-        else if( c >= 0x104A0 ) // osmanya digits
+        else if( c >= 0x104A0 ) 
             value = c - 0x104A0;
-        else if( c >= 0xFF10 ) // fullwidth digits
+        else if( c >= 0xFF10 ) 
             value = c - 0xFF10;
-        else if( c >= 0xABF0 ) // meetei mayek digits
+        else if( c >= 0xABF0 ) 
             value = c - 0xABF0;
-        else if( c >= 0xAA50 ) // cham digits
+        else if( c >= 0xAA50 ) 
             value = c - 0xAA50;
-        else if( c >= 0xA9D0 ) // javanese digits
+        else if( c >= 0xA9D0 ) 
             value = c - 0xA9D0;
-        else if( c >= 0xA900 ) // kayah li digits
+        else if( c >= 0xA900 ) 
             value = c - 0xA900;
-        else if( c >= 0xA8D0 ) // saurashtra digits
+        else if( c >= 0xA8D0 ) 
             value = c - 0xA8D0;
-        else if( c >= 0xA620 ) // vai digits
+        else if( c >= 0xA620 ) 
             value = c - 0xA620;
-        else if( c >= 0x1C50 ) // ol chiki digits
+        else if( c >= 0x1C50 ) 
             value = c - 0x1C50;
-        else if( c >= 0x1C40 ) // lepcha digits
+        else if( c >= 0x1C40 ) 
             value = c - 0x1C40;
-        else if( c >= 0x1BB0 ) // sundanese digits
+        else if( c >= 0x1BB0 ) 
             value = c - 0x1BB0;
-        else if( c >= 0x1B50 ) // balinese digits
+        else if( c >= 0x1B50 ) 
             value = c - 0x1B50;
-        else if( c >= 0x1A90 ) // tai tham tham digits
+        else if( c >= 0x1A90 ) 
             value = c - 0x1A90;
-        else if( c >= 0x1A80 ) // tai tham hora digits
+        else if( c >= 0x1A80 ) 
             value = c - 0x1A80;
-        else if( c >= 0x19D0 ) // new tai lue digits
+        else if( c >= 0x19D0 ) 
             value = c - 0x19D0;
-        else if( c >= 0x1946 ) // limbu digits
+        else if( c >= 0x1946 ) 
             value = c - 0x1946;
-        else if( c >= 0x1810 ) // mongolian digits
+        else if( c >= 0x1810 ) 
             value = c - 0x1810;
-        else if( c >= 0x17E0 ) // khmer digits
+        else if( c >= 0x17E0 ) 
             value = c - 0x17E0;
-        else if( c >= 0x1090 ) // myanmar shan digits
+        else if( c >= 0x1090 ) 
             value = c - 0x1090;
-        else if( c >= 0x1040 ) // myanmar digits
+        else if( c >= 0x1040 ) 
             value = c - 0x1040;
-        else if( c >= 0x0F20 ) // tibetan digits
+        else if( c >= 0x0F20 ) 
             value = c - 0x0F20;
-        else if( c >= 0x0ED0 ) // lao digits
+        else if( c >= 0x0ED0 ) 
             value = c - 0x0ED0;
-        else if( c >= 0x0E50 ) // thai digits
+        else if( c >= 0x0E50 ) 
             value = c - 0x0E50;
-        else if( c >= 0x0D66 ) // malayalam digits
+        else if( c >= 0x0D66 ) 
             value = c - 0x0D66;
-        else if( c >= 0x0CE6 ) // kannada digits
+        else if( c >= 0x0CE6 ) 
             value = c - 0x0CE6;
-        else if( c >= 0x0C66 ) // telugu digits
+        else if( c >= 0x0C66 ) 
             value = c - 0x0C66;
-        else if( c >= 0x0BE6 ) // tamil digits
+        else if( c >= 0x0BE6 ) 
             value = c - 0x0BE6;
-        else if( c >= 0x0B66 ) // odia digits
+        else if( c >= 0x0B66 ) 
             value = c - 0x0B66;
-        else if( c >= 0x0AE6 ) // gujarati digits
+        else if( c >= 0x0AE6 ) 
             value = c - 0x0AE6;
-        else if( c >= 0x0A66 ) // gurmukhi digits
+        else if( c >= 0x0A66 ) 
             value = c - 0x0A66;
-        else if( c >= 0x09E6 ) // bengali digits
+        else if( c >= 0x09E6 ) 
             value = c - 0x09E6;
-        else if( c >= 0x0966 ) // devanagari digit
+        else if( c >= 0x0966 ) 
             value = c - 0x0966;
-        else if( c >= 0x07C0 ) // nko digits
+        else if( c >= 0x07C0 ) 
             value = c - 0x07C0;
-        else if( c >= 0x06F0 ) // extended arabic-indic digits
+        else if( c >= 0x06F0 ) 
             value = c - 0x06F0;
-        else if( c >= 0x0660 ) // arabic-indic digits
+        else if( c >= 0x0660 ) 
             value = c - 0x0660;
         result = result * 10 + value;
     }
@@ -240,7 +240,7 @@ sal_uInt32 decimalStringToNumber(
 
 using namespace ::com::sun::star;
 
-// convert between sequence of string and comma separated string
+
 
 OUString convertCommaSeparated(
     uno::Sequence< OUString > const& i_rSeq)
@@ -287,7 +287,7 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         sal_Int32 nLHSChunkLen;
         sal_Int32 nRHSChunkLen;
 
-        //Compare non digit block as normal strings
+        
         nLHSFirstDigitPos = rBI->nextCharBlock(rLHS, nLHSLastNonDigitPos,
             rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
         nRHSFirstDigitPos = rBI->nextCharBlock(rRHS, nRHSLastNonDigitPos,
@@ -304,7 +304,7 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         if (nRet != 0)
             break;
 
-        //Compare digit block as one number vs another
+        
         nLHSLastNonDigitPos = rBI->endOfCharBlock(rLHS, nLHSFirstDigitPos,
             rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
         nRHSLastNonDigitPos = rBI->endOfCharBlock(rRHS, nRHSFirstDigitPos,
@@ -316,9 +316,9 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         nLHSChunkLen = nLHSLastNonDigitPos - nLHSFirstDigitPos;
         nRHSChunkLen = nRHSLastNonDigitPos - nRHSFirstDigitPos;
 
-        //To-Do: Possibly scale down those unicode codepoints that relate to
-        //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
-        //vcl
+        
+        
+        
 
         sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen));
         sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen));
@@ -328,8 +328,8 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
             break;
     }
 
-    //Squeeze these down to -1, 0, 1 in case there is an assumption those are
-    //the only valid returns
+    
+    
     if (nRet > 0)
         nRet = 1;
     else if (nRet < 0)
@@ -349,8 +349,8 @@ NaturalStringSorter::NaturalStringSorter(
 
 namespace
 {
-    //do OPER on each element of the string, return false
-    //if any OPER is false, true otherwise
+    
+    
     template <bool (*OPER)(sal_Unicode), typename T>
     bool tmpl_is_OPER_AsciiString(const T &rString)
     {
@@ -424,10 +424,10 @@ OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
     sal_Int32 nFirstChar = 0;
     sal_Int32 i = 0;
 
-    // Determine token position and length
+    
     while ( i < nLen )
     {
-        // Increase token count if match
+        
         if (*pStr == cTok)
         {
             ++nTok;

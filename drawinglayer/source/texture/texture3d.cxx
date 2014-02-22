@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/texture/texture3d.hxx>
 #include <vcl/bmpacc.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -53,10 +53,10 @@ namespace drawinglayer
         {
             rfOpacity = mfOpacity;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -76,7 +76,7 @@ namespace drawinglayer
             mbIsAlpha(false),
             mbIsTransparent(maBitmapEx.IsTransparent())
         {
-            // #121194# Todo: use alpha channel, too (for 3d)
+            
             mpReadBitmap = maBitmapEx.GetBitmap().AcquireReadAccess();
             OSL_ENSURE(mpReadBitmap, "GeoTexSvxBitmapEx: Got no read access to Bitmap (!)");
 
@@ -191,7 +191,7 @@ namespace drawinglayer
 
                 if(mbIsTransparent)
                 {
-                    // when we have a transparence, make use of it
+                    
                     const sal_uInt8 aLuminance(impGetTransparence(nX, nY));
 
                     rfOpacity = ((double)(0xff - aLuminance) * (1.0 / 255.0));
@@ -215,7 +215,7 @@ namespace drawinglayer
             {
                 if(mbIsTransparent)
                 {
-                    // this texture has an alpha part, use it
+                    
                     const sal_uInt8 aLuminance(impGetTransparence(nX, nY));
                     const double fNewOpacity((double)(0xff - aLuminance) * (1.0 / 255.0));
 
@@ -223,7 +223,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // this texture is a color bitmap used as transparence map
+                    
                     const BitmapColor aBMCol(mpReadBitmap->GetColor(nY, nX));
                     const Color aColor(aBMCol.GetRed(), aBMCol.GetGreen(), aBMCol.GetBlue());
 
@@ -235,10 +235,10 @@ namespace drawinglayer
                 rfOpacity = 0.0;
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -312,10 +312,10 @@ namespace drawinglayer
                 GeoTexSvxBitmapEx::modifyOpacity(impGetCorrected(rUV), rfOpacity);
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -397,7 +397,7 @@ namespace drawinglayer
                 rfOpacity = 0.0;
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

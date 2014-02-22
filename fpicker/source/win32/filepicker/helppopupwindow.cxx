@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,22 +14,22 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tchar.h>
 #include "helppopupwindow.hxx"
 #include <osl/diagnose.h>
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 using osl::Mutex;
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 namespace /* private */
 {
@@ -47,24 +47,24 @@ const sal_Int32 SHADOW_HEIGHT = 6;
 const sal_Int32 SHADOW_OFFSET = 6;
 const sal_Int32 YOFFSET       = 20;
 
-const DWORD OUTER_FRAME_COLOR     = 0; // black
-const sal_Int32 OUTER_FRAME_WIDTH = 1; // pixel
+const DWORD OUTER_FRAME_COLOR     = 0; 
+const sal_Int32 OUTER_FRAME_WIDTH = 1; 
 
-// it's the standard windows color of an inactive window border
+
 const DWORD INNER_FRAME_COLOR     = 0xC8D0D4;
-const sal_Int32 INNER_FRAME_WIDTH = 1; // pixel
+const sal_Int32 INNER_FRAME_WIDTH = 1; 
 
-//---------------------------------------------------
-// static member initialization
-//---------------------------------------------------
+
+
+
 
 osl::Mutex CHelpPopupWindow::s_Mutex;
 ATOM CHelpPopupWindow::s_ClassAtom = 0;
 sal_Int32 CHelpPopupWindow::s_RegisterWndClassCount = 0;
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 CHelpPopupWindow::CHelpPopupWindow(
     HINSTANCE hInstance,
@@ -81,23 +81,23 @@ CHelpPopupWindow::CHelpPopupWindow(
 {
     m_bWndClassRegistered = RegisterWindowClass( ) ? sal_True : sal_False;
 
-    // create a pattern brush for the window shadow
+    
     WORD aPattern[] = { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 };
 
     m_hBitmapShadow = CreateBitmap( 8, 8, 1, 1, aPattern );
     m_hBrushShadow  = CreatePatternBrush( m_hBitmapShadow );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 CHelpPopupWindow::~CHelpPopupWindow( )
 {
-    // remember: we don't have to destroy the
-    // preview window because it will be destroyed
-    // by it's parent window (the FileOpen dialog)
-    // but we have to unregister the window class
+    
+    
+    
+    
     if ( m_bWndClassRegistered )
         UnregisterWindowClass( );
 
@@ -105,27 +105,27 @@ CHelpPopupWindow::~CHelpPopupWindow( )
     DeleteObject( m_hBrushShadow );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::setText( const OUString& aHelpText )
 {
     m_HelpText = aHelpText;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
 {
     OSL_ENSURE( NULL == m_hwnd, "method should not be called twice in sequence" );
 
-    // we create a window with length and height of 0
-    // first in order to get a device context of this
-    // window, then we calculate the upper left corner
-    // and the dimensions and resize the window
+    
+    
+    
+    
 
     m_hwnd = CreateWindowEx(
         0,
@@ -153,9 +153,9 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     ShowWindow( m_hwnd, SW_SHOW );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
 {
@@ -166,10 +166,10 @@ HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
     return oldParent;
 }
 
-//---------------------------------------------------
-// calculates the necessary dimensions of the popup
-// window including the margins etc.
-//---------------------------------------------------
+
+
+
+
 
 void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 {
@@ -179,7 +179,7 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 
     HDC hdc = GetDC( m_hwnd );
 
-    // set the font we are using later
+    
     HGDIOBJ oldFont = SelectObject(
         hdc, GetStockObject( DEFAULT_GUI_FONT ) );
 
@@ -195,8 +195,8 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
       lprect,
       nFormat );
 
-    // add the necessary space for the frames
-    // and margins
+    
+    
 
     lprect->bottom +=
         m_vMargins +
@@ -215,9 +215,9 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
     ReleaseDC( m_hwnd, hdc );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* cy_new )
 {
@@ -226,7 +226,7 @@ void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* 
     RECT rect;
     calcWindowRect( &rect );
 
-    // adjust the window size
+    
     SetWindowPos(
         m_hwnd,
         NULL,
@@ -240,9 +240,9 @@ void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* 
     *cy_new = rect.bottom;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::adjustWindowPos(
     sal_Int32 x, sal_Int32 y, sal_Int32 cx, sal_Int32 cy )
@@ -256,7 +256,7 @@ void SAL_CALL CHelpPopupWindow::adjustWindowPos(
 
     HDC hdc = GetDC( m_hwnd );
 
-    // assuming these are screen coordinates
+    
     popWidth  = cx;
     popHeight = cy;
     popX      = x - ( popWidth / 2 );
@@ -289,9 +289,9 @@ void SAL_CALL CHelpPopupWindow::adjustWindowPos(
     ReleaseDC( m_hwnd, hdc );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 {
@@ -307,7 +307,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 
     GetClientRect( hWnd, &rc );
 
-    // draw the black border
+    
 
     hBrush   = CreateSolidBrush( GetSysColor( COLOR_INFOBK ) );
     oldBrush = SelectObject( hdc, hBrush );
@@ -327,7 +327,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     DeleteObject( hBrush );
     DeleteObject( hpen );
 
-    // draw a light gray border
+    
 
     hBrush   = CreateSolidBrush( GetSysColor( COLOR_INFOBK ) );
     oldBrush = SelectObject( hdc, hBrush );
@@ -347,7 +347,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     DeleteObject( hBrush );
     DeleteObject( hpen );
 
-    // Write some text to this window
+    
 
     rect.left   = rc.left   + OUTER_FRAME_WIDTH + INNER_FRAME_WIDTH + 1 + m_hMargins;
     rect.top    = rc.top    + OUTER_FRAME_WIDTH + INNER_FRAME_WIDTH + 1 + m_vMargins / 2;
@@ -375,18 +375,18 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     SetTextColor( hdc, oldTextColor );
     SetBkColor( hdc, oldBkColor );
 
-    // set text color and text background color
-    // see MSDN PatBlt
+    
+    
 
     oldBkColor   = SetBkColor( hdc, RGB( 0, 0, 0 ) );
     oldTextColor = SetTextColor( hdc, RGB( 255, 255, 255 ) );
 
-    // Get our brush for the shadow
+    
 
     UnrealizeObject( m_hBrushShadow );
     hbrOld = SelectObject( hdc, m_hBrushShadow );
 
-    // bottom shadow
+    
 
     PatBlt(hdc,
            rc.left + SHADOW_OFFSET,
@@ -395,7 +395,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
            SHADOW_HEIGHT,
            0xA000C9);
 
-    // right-side shadow
+    
 
     PatBlt(hdc,
            rc.right - SHADOW_WIDTH,
@@ -409,18 +409,18 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     SetBkColor( hdc, oldBkColor );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::onNcDestroy()
 {
     m_hwnd = NULL;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
 {
@@ -448,9 +448,9 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
     ReleaseDC( m_hwnd, hdc );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 LRESULT CALLBACK CHelpPopupWindow::WndProc(
     HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -469,12 +469,12 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
                     lpcs->lpCreateParams );
 
-                // connect the instance handle to the window
+                
                 SetProp( hWnd, CURRENT_INSTANCE, pImpl );
 
                 pImpl->onCreate( hWnd );
 
-                // capture mouse and keybord events
+                
                 SetCapture( hWnd );
              }
         break;
@@ -496,7 +496,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
 
          case WM_NCDESTROY:
             {
-                // RemoveProp returns the saved value on success
+                
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
                     RemoveProp( hWnd, CURRENT_INSTANCE ) );
 
@@ -522,9 +522,9 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
     return lResult;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
 {
@@ -532,7 +532,7 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
 
     if ( 0 == s_ClassAtom )
     {
-        // register the window class
+        
         WNDCLASSEX wndClsEx;
 
         ZeroMemory(&wndClsEx, sizeof(wndClsEx));
@@ -544,27 +544,27 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
         wndClsEx.hbrBackground = (HBRUSH)GetStockObject( NULL_BRUSH );
         wndClsEx.lpszClassName = HELPPOPUPWND_CLASS_NAME;
 
-        // register the preview window class
-        // !!! Win95 -   the window class will be unregistered automaticly
-        //               if the dll is unloaded
-        //     Win2000 - the window class must be unregistered manually
-        //               if the dll is unloaded
+        
+        
+        
+        
+        
         s_ClassAtom = RegisterClassEx( &wndClsEx );
         OSL_ASSERT(s_ClassAtom);
     }
 
-    // increment the register class counter
-    // so that we keep track of the number
-    // of class registrations
+    
+    
+    
     if (0 != s_ClassAtom)
         s_RegisterWndClassCount++;
 
     return s_ClassAtom;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
 {
@@ -573,9 +573,9 @@ void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
     OSL_ASSERT( ( (0 != s_ClassAtom) && (s_RegisterWndClassCount > 0)) ||
                 ( (0 == s_ClassAtom) && (0 == s_RegisterWndClassCount) ) );
 
-    // update the register class counter
-    // and unregister the window class if
-    // counter drops to zero
+    
+    
+    
     if ( 0 != s_ClassAtom )
     {
         s_RegisterWndClassCount--;

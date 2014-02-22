@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -43,7 +43,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-// OQueryDescriptor
+
 
 OQueryDescriptor::OQueryDescriptor()
     :OQueryDescriptor_Base(m_aMutex,*this)
@@ -70,8 +70,8 @@ IMPLEMENT_FORWARD_XINTERFACE3( OQueryDescriptor,OWeakObject,OQueryDescriptor_Bas
 
 void OQueryDescriptor::registerProperties()
 {
-    // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
-    // a OPropertyStateContainer)
+    
+    
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND|PropertyAttribute::CONSTRAINED,
                     &m_sElementName, ::getCppuType(&m_sElementName));
 
@@ -179,16 +179,16 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
 
     if ( isColumnsOutOfDate() )
     {
-        // clear the current columns
+        
         clearColumns();
 
-        // do this before rebuildColumns. This prevents recursion, e.g. in the case where we
-        // have queries with cyclic references:
-        // foo := SELECT * FROM bar
-        // bar := SELECT * FROM foo
+        
+        
+        
+        
         setColumnsOutOfDate( sal_False );
 
-        // rebuild them
+        
         try
         {
             rebuildColumns();
@@ -228,12 +228,12 @@ void OQueryDescriptor_Base::disposeColumns()
 
 void OQueryDescriptor_Base::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
 {
-    // not interested in
+    
 }
 
 void OQueryDescriptor_Base::columnDropped(const OUString& /*_sName*/)
 {
-    // not interested in
+    
 }
 
 Reference< XPropertySet > OQueryDescriptor_Base::createColumnDescriptor()
@@ -246,7 +246,7 @@ void OQueryDescriptor_Base::rebuildColumns( )
 {
 }
 
-// IRefreshableColumns
+
 void OQueryDescriptor_Base::refreshColumns()
 {
     MutexGuard aGuard( m_rMutex );
@@ -257,7 +257,7 @@ void OQueryDescriptor_Base::refreshColumns()
 
 OColumn* OQueryDescriptor_Base::createColumn( const OUString& /*_rName*/ ) const
 {
-    // creating a column/descriptor for a query/descriptor does not make sense at all
+    
     return NULL;
 }
 

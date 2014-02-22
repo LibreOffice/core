@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,7 +59,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-//------------------------------------------------------------------
+
 
 TYPEINIT1( ScDrawShell, SfxShell );
 
@@ -72,7 +72,7 @@ SFX_IMPL_INTERFACE(ScDrawShell, SfxShell, ScResId(SCSTR_DRAWSHELL) )
 }
 
 
-// abschalten der nicht erwuenschten Acceleratoren:
+
 
 void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
 {
@@ -118,7 +118,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
-        case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
+        case SID_TEXT_STANDARD: 
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
                 pView->SetAttributes(aEmptyAttr, sal_True);
@@ -143,10 +143,10 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ATTR_FILL_TRANSPARENCE:
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
-        // #i25616#
+        
         case SID_ATTR_FILL_SHADOW:
             {
-                // Wenn ToolBar vertikal :
+                
                 if ( !rReq.GetArgs() )
                 {
                     switch ( nSlot )
@@ -169,7 +169,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         case SID_ATTR_FILL_TRANSPARENCE:
                         case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
-                        // #i25616#
+                        
                         case SID_ATTR_FILL_SHADOW:
 
                             ExecuteAreaDlg( rReq );
@@ -179,9 +179,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                             break;
                     }
 
-                    //=====
+                    
                     return;
-                    //=====
+                    
                 }
 
                 if( pView->AreObjectsMarked() )
@@ -246,10 +246,10 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             if( pObj->GetObjIdentifier() == OBJ_CAPTION )
                             {
-                                // --------- Itemset fuer Caption --------
+                                
                                 SfxItemSet aNewAttr(pDoc->GetItemPool());
                                 pView->GetAttributes(aNewAttr);
-                                // --------- Itemset fuer Groesse und Position --------
+                                
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -329,7 +329,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         aItem.SetMacroTable( aTab );
     }
 
-    // create empty itemset for macro-dlg
+    
     SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
     pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 

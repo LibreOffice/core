@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,7 +56,7 @@ public:
     bool            m_isCopied;
 
     BlopObject(const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer);
-        // throws std::bad_alloc
+        
 
     ~BlopObject();
 
@@ -162,11 +162,11 @@ public:
     sal_uInt16      m_numOfStrings;
     sal_uInt16      m_stringsCopied;
 
-    StringCache(sal_uInt16 size); // throws std::bad_alloc
+    StringCache(sal_uInt16 size); 
     ~StringCache();
 
     const sal_Unicode*  getString(sal_uInt16 index);
-    sal_uInt16 createString(const sal_uInt8* buffer); // throws std::bad_alloc
+    sal_uInt16 createString(const sal_uInt8* buffer); 
 };
 
 StringCache::StringCache(sal_uInt16 size)
@@ -230,7 +230,7 @@ class ConstantPool : public BlopObject
 public:
 
     sal_uInt16  m_numOfEntries;
-    sal_Int32*  m_pIndex;           // index values may be < 0 for cached string constants
+    sal_Int32*  m_pIndex;           
 
     StringCache* m_pStringCache;
 
@@ -244,7 +244,7 @@ public:
 
     ~ConstantPool();
 
-    sal_uInt32 parseIndex(); // throws std::bad_alloc
+    sal_uInt32 parseIndex(); 
 
     CPInfoTag       readTag(sal_uInt16 index);
 
@@ -260,7 +260,7 @@ public:
     float               readFloatConstant(sal_uInt16 index);
     double              readDoubleConstant(sal_uInt16 index);
     const sal_Unicode*  readStringConstant(sal_uInt16 index);
-        // throws std::bad_alloc
+        
     void                readUIK(sal_uInt16 index, RTUik* uik);
 };
 
@@ -529,7 +529,7 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index)
     {
         if (m_pIndex[index - 1] >= 0)
         {
-            // create cached string now
+            
 
             if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_STRING)
             {
@@ -603,7 +603,7 @@ public:
     const sal_Char* getFieldType(sal_uInt16 index);
     RTFieldAccess getFieldAccess(sal_uInt16 index);
     RTValueType     getFieldConstValue(sal_uInt16 index, RTConstValueUnion* value);
-        // throws std::bad_alloc
+        
     const sal_Char* getFieldDoku(sal_uInt16 index);
     const sal_Char* getFieldFileName(sal_uInt16 index);
 };
@@ -865,7 +865,7 @@ public:
 
     ~MethodList();
 
-    sal_uInt32 parseIndex(); // throws std::bad_alloc
+    sal_uInt32 parseIndex(); 
 
     const sal_Char* getMethodName(sal_uInt16 index);
     sal_uInt16      getMethodParamCount(sal_uInt16 index);
@@ -1082,7 +1082,7 @@ public:
 
     TypeRegistryEntry(
         const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer);
-        // throws std::bad_alloc
+        
 
     ~TypeRegistryEntry();
 
@@ -1133,7 +1133,7 @@ TypeRegistryEntry::~TypeRegistryEntry()
 }
 
 typereg_Version TypeRegistryEntry::getVersion() const {
-    // Assumes two's complement arithmetic with modulo-semantics:
+    
     return static_cast< typereg_Version >(readUINT32(OFFSET_MAGIC) - magic);
 }
 
@@ -1277,7 +1277,7 @@ static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString
         return;
     }
 
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES )); //+ (index * sizeof(sal_uInt16))));
+    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES )); 
     rtl_string2UString(
         pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);

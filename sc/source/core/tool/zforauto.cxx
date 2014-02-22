@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zforlist.hxx>
@@ -28,7 +28,7 @@
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
     sFormatstring   ( "Standard" ),
     eLnge           (LANGUAGE_SYSTEM),
-    eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
+    eSysLnge        (LANGUAGE_GERMAN)       
 {
 }
 
@@ -52,7 +52,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, rtl_TextEncoding eByteStrSet )
     rStream.ReadUInt16( nSysLang ).ReadUInt16( nLang );
     eLnge = (LanguageType) nLang;
     eSysLnge = (LanguageType) nSysLang;
-    if ( eSysLnge == LANGUAGE_SYSTEM )          // old versions did write it
+    if ( eSysLnge == LANGUAGE_SYSTEM )          
         eSysLnge = Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
@@ -76,7 +76,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     {
         OSL_FAIL("SCNumFormatAbbrev:: unknown number format");
         eLnge = LANGUAGE_SYSTEM;
-        eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
+        eSysLnge = LANGUAGE_GERMAN;     
         sFormatstring = "Standard";
     }
 }

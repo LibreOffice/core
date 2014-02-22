@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/propertymap.hxx"
@@ -82,7 +82,7 @@ using ::com::sun::star::drawing::TextVerticalAdjust;
 namespace oox {
 using ::com::sun::star::container::XIndexReplace;
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -92,7 +92,7 @@ using ::com::sun::star::drawing::TextHorizontalAdjust;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -108,7 +108,7 @@ class GenericPropertySet : public GenericPropertySetBase, private ::osl::Mutex
 public:
     explicit            GenericPropertySet( const PropertyMap& rPropMap );
 
-    // XPropertySet
+    
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
     virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
@@ -117,7 +117,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
 
-    // XPropertySetInfo
+    
     virtual Sequence< Property > SAL_CALL getProperties() throw (RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException);
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException);
@@ -127,7 +127,7 @@ private:
     PropertyNameMap     maPropMap;
 };
 
-// ----------------------------------------------------------------------------
+
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
@@ -155,13 +155,13 @@ Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName
     return aIt->second;
 }
 
-// listeners are not supported by this implementation
+
 void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 void SAL_CALL GenericPropertySet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 void SAL_CALL GenericPropertySet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 
-// XPropertySetInfo
+
 Sequence< Property > SAL_CALL GenericPropertySet::getProperties() throw (RuntimeException)
 {
     Sequence< Property > aSeq( static_cast< sal_Int32 >( maPropMap.size() ) );
@@ -194,12 +194,12 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
     return maPropMap.find( rPropertyName ) != maPropMap.end();
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 PropertyMap::PropertyMap() :
-    mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
+    mpPropNames( &StaticPropertyNameVector::get() ) 
 {
 }
 
@@ -276,7 +276,7 @@ static void lclDumpAnyValue( Any value)
         float floatValue = 0;
         bool boolValue = false;
     LineSpacing spacing;
-//         RectanglePoint pointValue;
+
     WritingMode aWritingMode;
     TextVerticalAdjust aTextVertAdj;
     TextHorizontalAdjust aTextHorizAdj;
@@ -411,8 +411,8 @@ static void lclDumpAnyValue( Any value)
     } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
         fprintf (stderr,"is extractable to int32\n");
     }
-//         else if( value >>= pointValue )
-//             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
+
+
         else
       fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
 }
@@ -502,7 +502,7 @@ static const char *lclGetEnhancedParameterType( sal_uInt16 nType )
 
 static void printParameterPairData(int level, EnhancedCustomShapeParameterPair &pp)
 {
-    // These are always sal_Int32s so lets depend on that for our packing ...
+    
     sal_Int32 nFirstValue, nSecondValue;
     if (!(pp.First.Value >>= nFirstValue))
         assert (false);
@@ -547,7 +547,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
     float floatValue = 0;
     bool boolValue;
     LineSpacing spacing;
-//         RectanglePoint pointValue;
+
     WritingMode aWritingMode;
     TextVerticalAdjust aTextVertAdj;
     TextHorizontalAdjust aTextHorizAdj;
@@ -641,7 +641,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr,"static const sal_uInt16 nValues[] = {\n");
             printLevel (level);
-            fprintf (stderr,"// Command, Count\n");
+            fprintf (stderr,"
             for( int i = 0; i < segArray.getLength(); i++ ) {
                 printLevel (level + 1);
                 fprintf (stderr,"%d,%d%s\n", segArray[i].Command,
@@ -681,7 +681,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr, "EnhancedCustomShapeSegment aSegment;\n");
             printLevel (level);
-            // TODO: use EnhancedCustomShapeSegmentCommand constants
+            
             fprintf (stderr, "aSegment.Command = %d;\n", segment.Command);
             printLevel (level);
             fprintf (stderr, "aSegment.Count = %d;\n", segment.Count);
@@ -839,7 +839,7 @@ void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
 
     for (int i=0; i < props.getLength (); i++) {
 
-        // ignore Type, it is set elsewhere
+        
         if (props[i].Name.equals (sType))
             continue;
 
@@ -866,8 +866,8 @@ void PropertyMap::dumpCode()
 }
 #endif
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

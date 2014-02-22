@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pivotcachefragment.hxx"
@@ -27,13 +27,13 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 PivotCacheFieldContext::PivotCacheFieldContext( WorkbookFragmentBase& rFragment, PivotCacheField& rCacheField ) :
     WorkbookContextBase( rFragment ),
@@ -106,7 +106,7 @@ void PivotCacheFieldContext::onStartRecord( SequenceInputStream& rStrm )
         mrCacheField.importPCDField( rStrm );
 }
 
-// ============================================================================
+
 
 PivotCacheDefinitionFragment::PivotCacheDefinitionFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath, PivotCache& rPivotCache ) :
@@ -191,10 +191,10 @@ const RecordInfo* PivotCacheDefinitionFragment::getRecordInfos() const
 
 void PivotCacheDefinitionFragment::finalizeImport()
 {
-    // finalize the cache (check source range etc.)
+    
     mrPivotCache.finalizeImport();
 
-    // load the cache records, if the cache is based on a deleted or an external worksheet
+    
     if( mrPivotCache.isValidDataSource() && mrPivotCache.isBasedOnDummySheet() )
     {
         OUString aRecFragmentPath = getRelations().getFragmentPathFromRelId( mrPivotCache.getRecordsRelId() );
@@ -208,7 +208,7 @@ void PivotCacheDefinitionFragment::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHelper,
         const OUString& rFragmentPath, const PivotCache& rPivotCache ) :
@@ -218,7 +218,7 @@ PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHe
     mnRowIdx( 0 ),
     mbInRecord( false )
 {
-    // prepare sheet: insert column header names into top row
+    
     rPivotCache.writeSourceHeaderCells( *this );
 }
 
@@ -286,7 +286,7 @@ const RecordInfo* PivotCacheRecordsFragment::getRecordInfos() const
     return spRecInfos;
 }
 
-// private --------------------------------------------------------------------
+
 
 void PivotCacheRecordsFragment::startCacheRecord()
 {
@@ -323,8 +323,8 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 namespace {
 
@@ -338,9 +338,9 @@ bool lclSeekToPCDField( BiffInputStream& rStrm )
     return false;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 BiffPivotCacheFragment::BiffPivotCacheFragment(
         const WorkbookHelper& rHelper, const OUString& rStrmName, PivotCache& rPivotCache ) :
@@ -354,17 +354,17 @@ bool BiffPivotCacheFragment::importFragment()
     BiffInputStream& rStrm = getInputStream();
     if( rStrm.startNextRecord() && (rStrm.getRecId() == BIFF_ID_PCDEFINITION) )
     {
-        // read PCDEFINITION and optional PCDEFINITION2 records
+        
         mrPivotCache.importPCDefinition( rStrm );
 
-        // read cache fields as long as another PCDFIELD record can be found
+        
         while( lclSeekToPCDField( rStrm ) )
             mrPivotCache.createCacheField( true ).importPCDField( rStrm );
 
-        // finalize the cache (check source range etc.)
+        
         mrPivotCache.finalizeImport();
 
-        // load the cache records, if the cache is based on a deleted or an external worksheet
+        
         if( mrPivotCache.isValidDataSource() && mrPivotCache.isBasedOnDummySheet() )
         {
             /*  Last call of lclSeekToPCDField() failed and kept stream position
@@ -383,7 +383,7 @@ bool BiffPivotCacheFragment::importFragment()
     return rStrm.getRecId() == BIFF_ID_EOF;
 }
 
-// ============================================================================
+
 
 BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorksheetHelper& rHelper, const PivotCache& rPivotCache ) :
     BiffWorksheetContextBase( rHelper ),
@@ -393,10 +393,10 @@ BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorksheetHelpe
     mbHasShared( false ),
     mbInRow( false )
 {
-    // prepare sheet: insert column header names into top row
+    
     mrPivotCache.writeSourceHeaderCells( *this );
 
-    // find all fields without shared items, remember column indexes in source data
+    
     for( sal_Int32 nFieldIdx = 0, nFieldCount = mrPivotCache.getCacheFieldCount(), nCol = 0; nFieldIdx < nFieldCount; ++nFieldIdx )
     {
         const PivotCacheField* pCacheField = mrPivotCache.getCacheField( nFieldIdx );
@@ -416,10 +416,10 @@ void BiffPivotCacheRecordsContext::importRecord( BiffInputStream& rStrm )
     if( rStrm.getRecId() == BIFF_ID_PCITEM_INDEXLIST )
     {
         OSL_ENSURE( mbHasShared, "BiffPivotCacheRecordsContext::importRecord - unexpected PCITEM_INDEXLIST record" );
-        // PCITEM_INDEXLIST record always in front of a new data row
+        
         startNextRow();
         mrPivotCache.importPCItemIndexList( rStrm, *this, mnRowIdx );
-        mbInRow = !maUnsharedCols.empty();  // mbInRow remains true, if unshared items are expected
+        mbInRow = !maUnsharedCols.empty();  
         return;
     }
 
@@ -433,20 +433,20 @@ void BiffPivotCacheRecordsContext::importRecord( BiffInputStream& rStrm )
         case BIFF_ID_PCITEM_DATE:       aItem.readDate( rStrm );            break;
         case BIFF_ID_PCITEM_BOOL:       aItem.readBool( rStrm );            break;
         case BIFF_ID_PCITEM_ERROR:      aItem.readError( rStrm );           break;
-        default:                        return; // unknown record, ignore
+        default:                        return; 
     }
 
-    // find next column index, might start new row if no fields with shared items exist
+    
     if( mbInRow && (mnColIdx == maUnsharedCols.size()) )
     {
         OSL_ENSURE( !mbHasShared, "BiffPivotCacheRecordsContext::importRecord - PCITEM_INDEXLIST record missing" );
-        mbInRow = mbHasShared;  // do not leave current row if PCITEM_INDEXLIST is expected
+        mbInRow = mbHasShared;  
     }
-    // start next row on first call, or on row wrap without shared items
+    
     if( !mbInRow )
         startNextRow();
 
-    // write the item data to the sheet cell
+    
     OSL_ENSURE( mnColIdx < maUnsharedCols.size(), "BiffPivotCacheRecordsContext::importRecord - invalid column index" );
     if( mnColIdx < maUnsharedCols.size() )
         mrPivotCache.writeSourceDataCell( *this, maUnsharedCols[ mnColIdx ], mnRowIdx, aItem );
@@ -460,9 +460,9 @@ void BiffPivotCacheRecordsContext::startNextRow()
     mbInRow = true;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

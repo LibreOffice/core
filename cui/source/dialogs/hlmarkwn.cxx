@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dialmgr.hxx>
@@ -24,7 +24,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/wrkwin.hxx>
 
-// UNO-Stuff
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -65,11 +65,11 @@ struct TargetData
 };
 
 
-//########################################################################
-//#                                                                      #
-//# Tree-Window                                                          #
-//#                                                                      #
-//########################################################################
+
+
+
+
+
 
 SvxHlmarkTreeLBox::SvxHlmarkTreeLBox( Window* pParent, const ResId& rResId )
 : SvTreeListBox ( pParent, rResId ),
@@ -107,11 +107,11 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 
 }
 
-//########################################################################
-//#                                                                      #
-//# Window-Class                                                         #
-//#                                                                      #
-//########################################################################
+
+
+
+
+
 
 /*************************************************************************
 |*
@@ -134,9 +134,9 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maBtClose.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
     maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickOkHdl_Impl ) );
 
-    // add lines to the Tree-ListBox
+    
     maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
-                            WB_HASBUTTONS |  //WB_HASLINESATROOT |
+                            WB_HASBUTTONS |  
                             WB_HSCROLL | WB_HASBUTTONSATROOT );
 
     maLbTree.SetAccessibleName(CUI_RES(STR_MARK_TREE));
@@ -241,21 +241,21 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
     SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );
     if (aViewSettings.Exists())
     {
-        //Maybe we might want to have some sort of mru list and keep a mapping
-        //per document, rather than the current reuse of "the last thing
-        //selected, regardless of the document"
+        
+        
+        
         aViewSettings.GetUserItem(TG_SETTING_LASTMARK) >>= sLastSelectedMark;
         uno::Sequence<OUString> aTmp;
         aViewSettings.GetUserItem(TG_SETTING_LASTPATH) >>= aTmp;
         aLastSelectedPath = comphelper::sequenceToContainer< std::deque<OUString> >(aTmp);
     }
-    //fallback to previous entry selected the last
-    //time we executed this dialog. First see if
-    //the exact mark exists and re-use that
+    
+    
+    
     if (!sLastSelectedMark.isEmpty())
         bSelectedEntry = SelectEntry(sLastSelectedMark);
-    //Otherwise just select the closest path available
-    //now to what was available at dialog close time
+    
+    
     if (!bSelectedEntry && !aLastSelectedPath.empty())
     {
         std::deque<OUString> aTmpSelectedPath(aLastSelectedPath);
@@ -316,7 +316,7 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc(OUString aURL)
 
     if( !aURL.isEmpty() )
     {
-        // load from url
+        
         uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
         if( xLoader.is() )
         {
@@ -339,7 +339,7 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc(OUString aURL)
     }
     else
     {
-        // the component with user focus ( current document )
+        
         xComp = xDesktop->getCurrentComponent();
     }
 
@@ -394,8 +394,8 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
         }
         catch(const uno::Exception&)
         {
-            // if the name of the target was invalid (like empty headings)
-            // no object can be provided
+            
+            
             bError = sal_True;
         }
         if(bError)
@@ -407,29 +407,29 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
         {
             try
             {
-                // get name to display
+                
                 aAny = xTarget->getPropertyValue( aProp_LinkDisplayName );
                 OUString aDisplayName;
                 aAny >>= aDisplayName;
                 OUString aStrDisplayname ( aDisplayName );
 
-                // is it a target ?
+                
                 uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
                 sal_Bool bIsTarget = xSI->supportsService( aProp_LinkTarget );
 
-                // create userdata
+                
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
 
                 SvTreeListEntry* pEntry;
 
                 try
                 {
-                    // get bitmap for the tree-entry
+                    
                     uno::Reference< awt::XBitmap > aXBitmap( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ), uno::UNO_QUERY );
                     if( aXBitmap.is() )
                     {
                         Image aBmp( VCLUnoHelper::GetBitmap( aXBitmap ).GetBitmap(), aMaskColor );
-                        // insert Displayname into treelist with bitmaps
+                        
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
@@ -439,7 +439,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     }
                     else
                     {
-                        // insert Displayname into treelist without bitmaps
+                        
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
                                                         sal_False, LIST_APPEND,
@@ -449,7 +449,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 }
                 catch(const com::sun::star::uno::Exception&)
                 {
-                    // insert Displayname into treelist without bitmaps
+                    
                     pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
                                                     sal_False, LIST_APPEND,
@@ -570,8 +570,8 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
         std::deque<OUString> aLastSelectedPath;
         if (pEntry)
         {
-            //If the bottommost entry is expanded but nothing
-            //underneath it is selected leave a dummy entry
+            
+            
             if (maLbTree.IsExpanded(pEntry))
                 aLastSelectedPath.push_front(OUString());
             while (pEntry)
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
         aSettings[1].Name = TG_SETTING_LASTPATH;
         aSettings[1].Value <<= comphelper::containerToSequence<OUString>(aLastSelectedPath);
 
-        // write
+        
         SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );
         aViewSettings.SetUserData( aSettings );
     }

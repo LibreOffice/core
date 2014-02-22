@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star;
 
-/// copy document properties via public interface
+
 static void lcl_copyDocumentProperties(
         uno::Reference<document::XDocumentProperties> i_xSource,
         uno::Reference<document::XDocumentProperties> i_xTarget) {
@@ -75,7 +75,7 @@ static void lcl_copyDocumentProperties(
         try {
             xTargetUD->removeProperty(tgtprops [i].Name);
         } catch (uno::Exception &) {
-            // ignore
+            
         }
     }
     try {
@@ -88,11 +88,11 @@ static void lcl_copyDocumentProperties(
                 xSourceUDSet->getPropertyValue(name));
         }
     } catch (uno::Exception &) {
-        // ignore
+        
     }
 }
 
-/// inserts an AutoText block
+
 bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {
@@ -107,13 +107,13 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
         {
             SwDoc* pGDoc = rBlock.GetDoc();
 
-            // Update all fixed fields, with the right DocInfo.
-            // FIXME: UGLY: Because we cannot limit the range in which to do
-            // field updates, we must update the fixed fields at the glossary
-            // entry document.
-            // To be able to do this, we copy the document properties of the
-            // target document to the glossary document
-            // OSL_ENSURE(GetDocShell(), "no SwDocShell"); // may be clipboard!
+            
+            
+            
+            
+            
+            
+            
             OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
             if (GetDocShell() && pGDoc->GetDocShell()) {
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -128,7 +128,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
         }
             pGDoc->SetFixFields(false, NULL);
 
-            // StartAllAction();
+            
             LockExpFlds();
 
             SwNodeIndex aStt( pGDoc->GetNodes().GetEndOfExtras(), 1 );
@@ -137,7 +137,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             SwPaM aCpyPam( pTblNd ? *(SwNode*)pTblNd : *(SwNode*)pCntntNd );
             aCpyPam.SetMark();
 
-            // till the nodes array's end
+            
             aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
@@ -154,8 +154,8 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                                       pBoxSttNd->GetIndex() &&
                     aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
                 {
-                    // We copy more than one Node to the current Box.
-                    // However, we have to remove the BoxAttributes then.
+                    
+                    
                     ClearBoxNumAttrs( rInsPos.nNode );
                 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cmdid.h"
@@ -60,10 +60,10 @@ SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
 
 TYPEINIT1(SwListShell,SwBaseShell)
 
-// #i35572# Functionality of Numbering/Bullet toolbar
-// for outline numbered paragraphs should match the functions for outlines
-// available in the navigator. Therefore the code in the following
-// function is quite similar the code in SwContentTree::ExecCommand.
+
+
+
+
 static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 {
     const sal_uInt16 nActPos = rSh.GetOutlinePos();
@@ -81,15 +81,15 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
 
             if ( !bUp )
             {
-                // Move down with subpoints:
+                
                 while ( nActEndPos < pIDoc->getOutlineNodesCount() &&
                         pIDoc->getOutlineLevel( nActEndPos ) > nActLevel )
                     ++nActEndPos;
 
                 if ( nActEndPos < pIDoc->getOutlineNodesCount() )
                 {
-                    // The current subpoint which should be moved
-                    // starts at nActPos and ends at nActEndPos - 1
+                    
+                    
                     --nActEndPos;
                     sal_uInt16 nDest = nActEndPos + 2;
                     while ( nDest < pIDoc->getOutlineNodesCount() &&
@@ -101,7 +101,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
             }
             else
             {
-                // Move up with subpoints:
+                
                 if ( nActPos > 0 )
                 {
                     --nActEndPos;
@@ -121,7 +121,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
         }
         else
         {
-            // Up/down with subpoints:
+            
             rSh.OutlineUpDown( bUp ? -1 : 1 );
         }
 
@@ -136,7 +136,7 @@ void SwListShell::Execute(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
-    // #i35572#
+    
     const SwNumRule* pCurRule = rSh.GetCurNumRule();
     OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" );
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
@@ -150,7 +150,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
                 rReq.Done();
                 rSh.NumUpDown( nSlot == FN_NUM_BULLET_DOWN );
-                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // Update status line!
+                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); 
             }
             break;
 

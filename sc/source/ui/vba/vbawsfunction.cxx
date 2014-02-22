@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -48,7 +48,7 @@ void lclConvertDoubleToBoolean( uno::Any& rAny )
             rAny <<= false;
         else if( fValue == 1.0 )
             rAny <<= true;
-        // do nothing for other values or types
+        
     }
 }
 
@@ -64,7 +64,7 @@ void lclConvertBooleanToDouble( uno::Any& rAny )
     }
 }
 
-} // namespace
+} 
 
 ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     ScVbaWSFunction_BASE( xParent, xContext )
@@ -80,7 +80,7 @@ ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
-    // create copy of parameters, replace Excel range objects with UNO range objects
+    
     uno::Sequence< uno::Any > aParamTemp( Params );
     if( aParamTemp.hasElements() )
     {
@@ -102,7 +102,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
                     break;
                 case uno::TypeClass_SEQUENCE:
                 {
-                    // the sheet.FunctionAccess service doesn't deal with Sequences, only Sequences of Sequence
+                    
                     uno::Type aType = pArray->getValueType();
                     if ( aType.equals( getCppuType( (uno::Sequence<sal_Int16>*)0 ) ) )
                     {
@@ -146,12 +146,12 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     uno::Any aRet;
     bool bAsArray = true;
 
-    // special handing for some functions that don't work correctly in FunctionAccess
+    
     ScCompiler aCompiler( 0, ScAddress() );
     OpCode eOpCode = aCompiler.GetEnglishOpCode( FunctionName.toAsciiUpperCase() );
     switch( eOpCode )
     {
-        // ISLOGICAL does not work in array formula mode
+        
         case ocIsLogical:
         {
             if( aParamTemp.getLength() != 1 )
@@ -223,8 +223,8 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     }
 
 #if 0
-    // MATCH function should alwayse return a double value, but currently if the first argument is XCellRange, MATCH function returns an array instead of a double value. Don't know why?
-    // To fix this issue in safe, current solution is to convert this array to a double value just for MATCH function.
+    
+    
     OUString aUpper( FunctionName.toAsciiUpperCase() );
     ScCompiler aCompiler( NULL, ScAddress() );
     OpCode eOp = aCompiler.GetEnglishOpCode( aUpper );
@@ -262,16 +262,16 @@ ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException)
     sal_Bool bIsFound = false;
     try
     {
-    // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
-        // but the function name used in WorksheetFunction is a programmatic name (seems English).
-        // So m_xNameAccess->hasByName( Name ) may fail to find name when a function name has a localized name.
+    
+        
+        
         ScCompiler aCompiler( NULL, ScAddress() );
         if( aCompiler.IsEnglishSymbol( Name ) )
             bIsFound = sal_True;
     }
     catch( uno::Exception& /*e*/ )
     {
-        // failed to find name
+        
     }
     return bIsFound;
 }

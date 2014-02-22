@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WinFOPImpl.hxx"
@@ -26,9 +26,9 @@
 #include <osl/file.hxx>
 #include "FolderPicker.hxx"
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::lang::IllegalArgumentException;
@@ -37,15 +37,15 @@ using com::sun::star::lang::EventObject;
 using namespace com::sun::star::ui::dialogs;
 using osl::FileBase;
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 const OUString BACKSLASH( "\\" );
 
-//------------------------------------------------------------------------
-// ctor
-//------------------------------------------------------------------------
+
+
+
 
 CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
    CMtaFolderPicker( BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS | BIF_EDITBOX | BIF_VALIDATE ),
@@ -54,14 +54,14 @@ CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
 {
 }
 
-//------------------------------------------------------------------------
-// get directory in URL format, convert it to system format and set the
-// member variable
-// If the given URL for the directory is invalid the function throws an
-// IllegalArgumentException
-// If the specified path is well formed but invalid for the underlying
-// OS the FolderPicker starts in the root of the file system hierarchie
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
@@ -70,8 +70,8 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
 
     if( aDirectory.getLength( ) )
     {
-        // assuming that this function succeeds after successful execution
-        // of getAbsolutePath
+        
+        
         ::osl::FileBase::RC rc =
             ::osl::FileBase::getSystemPathFromFileURL( aDirectory, sysDir );
 
@@ -81,28 +81,28 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
                 static_cast< cppu::OWeakObject * >( m_pFolderPicker ),
                 1 );
 
-        // we ensure that there is a trailing '/' at the end of
-        // he given file url, because the windows functions only
-        // works correctly when providing "c:\" or an environment
-        // variable like "=c:=c:\.." etc. is set, else the
-        // FolderPicker would stand in the root of the shell
-        // hierarchie which is the desktop folder
+        
+        
+        
+        
+        
+        
         if ( sysDir.lastIndexOf( BACKSLASH ) != (sysDir.getLength( ) - 1) )
             sysDir += BACKSLASH;
     }
 
-    // call base class method
+    
     CMtaFolderPicker::setDisplayDirectory( sysDir );
 }
 
-//------------------------------------------------------------------------
-// we return the directory in URL format
-//------------------------------------------------------------------------
+
+
+
 
 OUString CWinFolderPickerImpl::getDisplayDirectory( )
     throw( RuntimeException )
 {
-    // call base class method to get the directory in system format
+    
     OUString displayDirectory = CMtaFolderPicker::getDisplayDirectory( );
 
     OUString displayDirectoryURL;
@@ -112,9 +112,9 @@ OUString CWinFolderPickerImpl::getDisplayDirectory( )
     return displayDirectoryURL;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException )
 {
@@ -127,9 +127,9 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException 
     return dirURL;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
 {
@@ -138,9 +138,9 @@ sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
         ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-//---------------------------------------------------------------------
+
 //
-//---------------------------------------------------------------------
+
 
 void CWinFolderPickerImpl::onSelChanged( const OUString& aNewPath )
 {

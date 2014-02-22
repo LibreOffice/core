@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/salbtype.hxx>
@@ -25,15 +25,15 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// - Defines -
+
+
 
 #define DIBCOREHEADERSIZE       ( 12UL )
 #define DIBINFOHEADERSIZE       ( sizeof(DIBInfoHeader) )
 #define DIBV5HEADERSIZE         ( sizeof(DIBV5Header) )
 
-//////////////////////////////////////////////////////////////////////////////
-// - Compression defines
+
+
 
 #define COMPRESS_OWN                ('S'|('D'<<8UL))
 #define COMPRESS_NONE               ( 0UL )
@@ -42,8 +42,8 @@
 #define BITFIELDS                   ( 3UL )
 #define ZCOMPRESS                   ( COMPRESS_OWN | 0x01000000UL ) /* == 'SD01' (binary) */
 
-//////////////////////////////////////////////////////////////////////////////
-// - DIBInfoHeader and DIBV5Header
+
+
 
 typedef sal_Int32 FXPT2DOT30;
 
@@ -148,7 +148,7 @@ struct DIBV5Header : public DIBInfoHeader
     {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -165,15 +165,15 @@ namespace
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown)
 {
-    // BITMAPINFOHEADER or BITMAPCOREHEADER or BITMAPV5HEADER
+    
     const sal_Size aStartPos(rIStm.Tell());
     rIStm.ReadUInt32( rHeader.nSize );
 
-    // BITMAPCOREHEADER
+    
     if ( rHeader.nSize == DIBCOREHEADERSIZE )
     {
         sal_Int16 nTmp16;
@@ -185,10 +185,10 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     }
     else
     {
-        // BITMAPCOREHEADER, BITMAPV5HEADER or unknown. Read as far as possible
+        
         sal_Size nUsed(sizeof(rHeader.nSize));
 
-        // read DIBInfoHeader entries
+        
         if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nWidth ); nUsed += sizeof(rHeader.nWidth); }
         if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nHeight ); nUsed += sizeof(rHeader.nHeight); }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt16( rHeader.nPlanes ); nUsed += sizeof(rHeader.nPlanes); }
@@ -200,14 +200,14 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nColsUsed );  nUsed += sizeof(rHeader.nColsUsed); }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nColsImportant );  nUsed += sizeof(rHeader.nColsImportant); }
 
-        // read DIBV5HEADER members
+        
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5RedMask ); nUsed += sizeof(rHeader.nV5RedMask); }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5GreenMask ); nUsed += sizeof(rHeader.nV5GreenMask);  }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5BlueMask ); nUsed += sizeof(rHeader.nV5BlueMask);  }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5AlphaMask ); nUsed += sizeof(rHeader.nV5AlphaMask);  }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5CSType ); nUsed += sizeof(rHeader.nV5CSType);  }
 
-        // read contained CIEXYZTriple's
+        
         if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzRed.aXyzX ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzX); }
         if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzRed.aXyzY ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzY); }
         if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzRed.aXyzZ ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzZ); }
@@ -226,7 +226,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5ProfileSize ); nUsed += sizeof(rHeader.nV5ProfileSize);  }
         if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5Reserved ); nUsed += sizeof(rHeader.nV5Reserved);  }
 
-        // seek to EndPos
+        
         rIStm.Seek(aStartPos + rHeader.nSize);
     }
 
@@ -245,7 +245,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
 
-    // #144105# protect a little against damaged files
+    
     if( rHeader.nSizeImage > ( 16 * static_cast< sal_uInt32 >( rHeader.nWidth * rHeader.nHeight ) ) )
     {
         rHeader.nSizeImage = 0;
@@ -393,7 +393,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     bool bTCMask(!pAccAlpha && ((16 == rHeader.nBitCount) || (32 == rHeader.nBitCount)));
     bool bRLE((RLE_8 == rHeader.nCompression && 8 == rHeader.nBitCount) || (RLE_4 == rHeader.nCompression && 4 == rHeader.nBitCount));
 
-    // Is native format?
+    
     switch(rAcc.GetScanlineFormat())
     {
         case( BMP_FORMAT_1BIT_MSB_PAL ):
@@ -411,14 +411,14 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         }
     }
 
-    // Read data
+    
     if(bNative)
     {
         rIStm.Read(rAcc.GetBuffer(), rHeader.nHeight * nAlignedWidth);
     }
     else
     {
-        // Read color mask
+        
         if(bTCMask && BITFIELDS == rHeader.nCompression)
         {
             rIStm.SeekRel( -12L );
@@ -626,10 +626,10 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             const bool bGreenSet(0 != aHeader.nV5GreenMask);
             const bool bBlueSet(0 != aHeader.nV5BlueMask);
 
-            // some clipboard entries have alpha mask on zero to say that there is
-            // no alpha; do only use this when the other masks are set. The MS docu
-            // says that that masks are only to be set when bV5Compression is set to
-            // BI_BITFIELDS, but there seem to exist a wild variety of usages...
+            
+            
+            
+            
             if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
             {
                 bAlphaPossible = false;
@@ -668,21 +668,21 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 sal_uInt32  nUncodedSize(0);
                 sal_uLong nCodedPos(0);
 
-                // read coding information
+                
                 rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
                 pData = (sal_uInt8*) rtl_allocateMemory( nUncodedSize );
 
-                // decode buffer
+                
                 nCodedPos = rIStm.Tell();
                 aCodec.BeginCompression();
                 aCodec.Read( rIStm, pData, nUncodedSize );
                 aCodec.EndCompression();
 
-                // skip unread bytes from coded buffer
+                
                 rIStm.SeekRel( nCodedSize - ( rIStm.Tell() - nCodedPos ) );
 
-                // set decoded bytes to memory stream,
-                // from which we will read the bitmap data
+                
+                
                 pIStm = pMemStm = new SvMemoryStream;
                 pMemStm->SetBuffer( (char*) pData, nUncodedSize, false, nUncodedSize );
                 nOffset = 0;
@@ -692,14 +692,14 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 pIStm = &rIStm;
             }
 
-            // read palette
+            
             if(nColors)
             {
                 pAcc->SetPaletteEntryCount(nColors);
                 ImplReadDIBPalette(*pIStm, *pAcc, aHeader.nSize != DIBCOREHEADERSIZE);
             }
 
-            // read bits
+            
             bool bAlphaUsed(false);
 
             if(!pIStm->GetError())
@@ -776,11 +776,11 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             rOffset = nTmp32 - 28UL;
             bRet = ( 0x4D42 == nTmp16 );
         }
-        else // 0x4D42 == nTmp16, 'MB' from BITMAPFILEHEADER
+        else 
         {
-            rIStm.SeekRel( 8L );        // we are on bfSize member of BITMAPFILEHEADER, forward to bfOffBits
-            rIStm.ReadUInt32( nTmp32 );            // read bfOffBits
-            rOffset = nTmp32 - 14UL;    // adapt offset by sizeof(BITMAPFILEHEADER)
+            rIStm.SeekRel( 8L );        
+            rIStm.ReadUInt32( nTmp32 );            
+            rOffset = nTmp32 - 14UL;    
             bRet = ( rIStm.GetError() == 0UL );
         }
     }
@@ -963,14 +963,14 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
     }
     else if(!nCompression)
     {
-        // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are not
-        // handled properly below (would have to set color masks, and
-        // nCompression=BITFIELDS - but color mask is not set for
-        // formats != *_TC_*). Note that this very problem might cause
-        // trouble at other places - the introduction of 32 bit RGBA
-        // bitmaps is relatively recent.
-        // #i59239# discretize bitcount for aligned width to 1,4,8,24
-        // (other cases are not written below)
+        
+        
+        
+        
+        
+        
+        
+        
         const sal_uInt16 nBitCount(pAccAlpha ? 32 : discretizeBitcount(static_cast< sal_uInt16 >(rAcc.GetBitCount())));
         const sal_uLong nAlignedWidth(AlignedWidth4Bytes(rAcc.Width() * nBitCount));
         bool bNative(false);
@@ -1075,9 +1075,9 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
                 }
                 break;
 
-                // #i59239# fallback to 24 bit format, if bitcount is non-default
+                
                 default:
-                    // FALLTHROUGH intended
+                    
                 case( 24 ):
                 {
                     BitmapColor aPixelColor;
@@ -1089,8 +1089,8 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
-                            // when alpha is used, this may be non-24bit main bitmap, so use GetColor
-                            // instead of GetPixel to ensure RGB value
+                            
+                            
                             aPixelColor = rAcc.GetColor( nY, nX );
 
                             *pTmp++ = aPixelColor.GetBlue();
@@ -1127,7 +1127,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
     sal_uInt32 nCompression(COMPRESS_NONE);
     bool bRet(false);
 
-    aHeader.nSize = pAccAlpha ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE; // size dependent on CF_DIB type to use
+    aHeader.nSize = pAccAlpha ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE; 
     aHeader.nWidth = rAcc.Width();
     aHeader.nHeight = rAcc.Height();
     aHeader.nPlanes = 1;
@@ -1140,15 +1140,15 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
     }
     else
     {
-        // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are
-        // not handled properly below (would have to set color
-        // masks, and nCompression=BITFIELDS - but color mask is
-        // not set for formats != *_TC_*). Note that this very
-        // problem might cause trouble at other places - the
-        // introduction of 32 bit RGBA bitmaps is relatively
-        // recent.
-        // #i59239# discretize bitcount to 1,4,8,24 (other cases
-        // are not written below)
+        
+        
+        
+        
+        
+        
+        
+        
+        
         const sal_uInt16 nBitCount(pAccAlpha ? 32 : discretizeBitcount(static_cast< sal_uInt16 >(rAcc.GetBitCount())));
         aHeader.nBitCount = nBitCount;
         aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
@@ -1177,12 +1177,12 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
 
     if(rBitmap.GetPrefSize().Width() && rBitmap.GetPrefSize().Height() && (rBitmap.GetPrefMapMode() != aMapPixel))
     {
-        // #i48108# Try to recover xpels/ypels as previously stored on
-        // disk. The problem with just converting maPrefSize to 100th
-        // mm and then relating that to the bitmap pixel size is that
-        // MapMode is integer-based, and suffers from roundoffs,
-        // especially if maPrefSize is small. Trying to circumvent
-        // that by performing part of the math in floating point.
+        
+        
+        
+        
+        
+        
         const Size aScale100000(OutputDevice::LogicToLogic(Size(100000L, 100000L), MAP_100TH_MM, rBitmap.GetPrefMapMode()));
         const double fBmpWidthM((double)rBitmap.GetPrefSize().Width() / aScale100000.Width());
         const double fBmpHeightM((double)rBitmap.GetPrefSize().Height() / aScale100000.Height());
@@ -1212,10 +1212,10 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
     rOStm.WriteUInt32( aHeader.nColsUsed );
     rOStm.WriteUInt32( aHeader.nColsImportant );
 
-    if(pAccAlpha) // only write DIBV5 when asked to do so
+    if(pAccAlpha) 
     {
-        aHeader.nV5CSType = 0x57696E20; // LCS_WINDOWS_COLOR_SPACE
-        aHeader.nV5Intent = 0x00000004; // LCS_GM_IMAGES
+        aHeader.nV5CSType = 0x57696E20; 
+        aHeader.nV5Intent = 0x00000004; 
 
         rOStm.WriteUInt32( aHeader.nV5RedMask );
         rOStm.WriteUInt32( aHeader.nV5GreenMask );
@@ -1251,27 +1251,27 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
         sal_uInt32 nCodedSize(0);
         sal_uInt32 nUncodedSize(0);
 
-        // write uncoded data palette
+        
         if(aHeader.nColsUsed)
         {
             ImplWriteDIBPalette(aMemStm, rAcc);
         }
 
-        // write uncoded bits
+        
         bRet = ImplWriteDIBBits(aMemStm, rAcc, pAccAlpha, nCompression, aHeader.nSizeImage);
 
-        // get uncoded size
+        
         nUncodedSize = aMemStm.Tell();
 
-        // seek over compress info
+        
         rOStm.SeekRel(12);
 
-        // write compressed data
+        
         aCodec.BeginCompression(3);
         aCodec.Write(rOStm, (sal_uInt8*)aMemStm.GetData(), nUncodedSize);
         aCodec.EndCompression();
 
-        // update compress info ( coded size, uncoded size, uncoded compression )
+        
         nLastPos = rOStm.Tell();
         nCodedSize = nLastPos - nCodedPos - 12;
         rOStm.Seek(nCodedPos);
@@ -1306,7 +1306,7 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : isBitfieldCompression(rAcc.GetScanlineFormat()) ? 3UL : 0UL));
     const sal_uInt32 nOffset(14 + (bUseDIBV5 ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE) + nPalCount * 4UL);
 
-    rOStm.WriteUInt16( (sal_uInt16)0x4D42 ); // 'MB' from BITMAPFILEHEADER
+    rOStm.WriteUInt16( (sal_uInt16)0x4D42 ); 
     rOStm.WriteUInt32( (sal_uInt32)(nOffset + (rAcc.Height() * rAcc.GetScanlineSize())) );
     rOStm.WriteUInt16( (sal_uInt16)0 );
     rOStm.WriteUInt16( (sal_uInt16)0 );
@@ -1315,7 +1315,7 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     return( rOStm.GetError() == 0UL );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool ImplReadDIB(
     Bitmap& rTarget, Bitmap*
@@ -1424,7 +1424,7 @@ bool ImplWriteDIB(
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool ReadDIB(
     Bitmap& rTarget,
@@ -1443,7 +1443,7 @@ bool ReadDIBBitmapEx(
 
     if(bRetval)
     {
-        // base bitmap was read, set as return value and try to read alpha extra-data
+        
         const sal_uLong nStmPos(rIStm.Tell());
         sal_uInt32 nMagic1(0);
         sal_uInt32 nMagic2(0);
@@ -1471,12 +1471,12 @@ bool ReadDIBBitmapEx(
                     {
                         if(!!aMask)
                         {
-                            // do we have an alpha mask?
+                            
                             if((8 == aMask.GetBitCount()) && aMask.HasGreyPalette())
                             {
                                 AlphaMask aAlpha;
 
-                                // create alpha mask quickly (without greyscale conversion)
+                                
                                 aAlpha.ImplSetBitmap(aMask);
                                 rTarget = BitmapEx(aBmp, aAlpha);
                             }
@@ -1504,7 +1504,7 @@ bool ReadDIBBitmapEx(
 
         if(!bRetval)
         {
-            // alpha extra data could not be read; reset, but use base bitmap as result
+            
             rIStm.ResetError();
             rIStm.Seek(nStmPos);
             bRetval = true;
@@ -1522,7 +1522,7 @@ bool ReadDIBV5(
     return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool WriteDIB(
     const Bitmap& rSource,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/urihelper.hxx>
@@ -47,7 +47,7 @@
 using namespace com::sun::star;
 
 //
-//  SmartRel2Abs
+
 //
 
 OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
@@ -61,7 +61,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  bool bRelativeNonURIs,
                                  INetURLObject::FSysStyle eStyle)
 {
-    // Backwards compatibility:
+    
     if( rTheRelURIRef.startsWith("#") )
         return rTheRelURIRef;
 
@@ -105,7 +105,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
 }
 
 //
-//  SetMaybeFileHdl
+
 //
 
 namespace { struct MaybeFileHdl : public rtl::Static< Link, MaybeFileHdl > {}; }
@@ -116,7 +116,7 @@ void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
 }
 
 //
-//  GetMaybeFileHdl
+
 //
 
 Link URIHelper::GetMaybeFileHdl()
@@ -133,10 +133,10 @@ bool isAbsoluteHierarchicalUriReference(
         && uriReference->isHierarchical() && !uriReference->hasRelativePath();
 }
 
-// To improve performance, assume that if for any prefix URL of a given
-// hierarchical URL either a UCB content cannot be created, or the UCB content
-// does not support the getCasePreservingURL command, then this will hold for
-// any other prefix URL of the given URL, too:
+
+
+
+
 enum Result { Success, GeneralFailure, SpecificFailure };
 
 Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
@@ -177,10 +177,10 @@ OUString normalize(
     css::uno::Reference< css::uri::XUriReferenceFactory > const & uriFactory,
     OUString const & uriReference)
 {
-    // normalizePrefix can potentially fail (a typically example being a file
-    // URL that denotes a non-existing resource); in such a case, try to
-    // normalize as long a prefix of the given URL as possible (i.e., normalize
-    // all the existing directories within the path):
+    
+    
+    
+    
     OUString normalized;
     sal_Int32 n = uriReference.indexOf('#');
     normalized = n == -1 ? uriReference : uriReference.copy(0, n);
@@ -205,7 +205,7 @@ OUString normalize(
     OUStringBuffer head(ref->getScheme());
     head.append(':');
     if (ref->hasAuthority()) {
-        head.append("//");
+        head.append("
         head.append(ref->getAuthority());
     }
     for (sal_Int32 i = count - 1; i > 0; --i) {
@@ -221,11 +221,11 @@ OUString normalize(
             css::uno::Reference< css::uri::XUriReference > preRef(
                 uriFactory->parse(normalized));
             if (!isAbsoluteHierarchicalUriReference(preRef)) {
-                // This could only happen if something is inconsistent:
+                
                 break;
             }
             sal_Int32 preCount = preRef->getPathSegmentCount();
-            // normalizePrefix may have added or removed a final slash:
+            
             if (preCount != i) {
                 if (preCount == i - 1) {
                     buf.append('/');
@@ -234,7 +234,7 @@ OUString normalize(
                 {
                     buf.setLength(buf.getLength() - 1);
                 } else {
-                    // This could only happen if something is inconsistent:
+                    
                     break;
                 }
             }
@@ -285,7 +285,7 @@ OUString URIHelper::simpleNormalizedMakeRelative(
 }
 
 //
-//  FindFirstURLInText
+
 //
 
 namespace {
@@ -367,28 +367,28 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 1, 0, 0, 4, 4, 4, 1,   //  !"#$%&'
-                1, 1, 1, 1, 1, 4, 1, 4,   // ()*+,-./
-                4, 4, 4, 4, 4, 4, 4, 4,   // 01234567
-                4, 4, 1, 1, 0, 1, 0, 1,   // 89:;<=>?
-                4, 4, 4, 4, 4, 4, 4, 4,   // @ABCDEFG
-                4, 4, 4, 4, 4, 4, 4, 4,   // HIJKLMNO
-                4, 4, 4, 4, 4, 4, 4, 4,   // PQRSTUVW
-                4, 4, 4, 1, 2, 1, 0, 1,   // XYZ[\]^_
-                0, 4, 4, 4, 4, 4, 4, 4,   // `abcdefg
-                4, 4, 4, 4, 4, 4, 4, 4,   // hijklmno
-                4, 4, 4, 4, 4, 4, 4, 4,   // pqrstuvw
-                4, 4, 4, 0, 3, 0, 1, 0 }; // xyz{|}~
+                0, 1, 0, 0, 4, 4, 4, 1,   
+                1, 1, 1, 1, 1, 4, 1, 4,   
+                4, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 1, 1, 0, 1, 0, 1,   
+                4, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 4, 1, 2, 1, 0, 1,   
+                0, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 4, 4, 4, 4, 4, 4,   
+                4, 4, 4, 0, 3, 0, 1, 0 }; 
         switch (aMap[c])
         {
-            default: // not uric
+            default: 
                 return false;
 
-            case 1: // uric
+            case 1: 
                 ++(*pPos);
                 return true;
 
-            case 2: // "\"
+            case 2: 
                 if (bBackslash)
                 {
                     *pEnd = ++(*pPos);
@@ -397,7 +397,7 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 else
                     return false;
 
-            case 3: // "|"
+            case 3: 
                 if (bPipe)
                 {
                     *pEnd = ++(*pPos);
@@ -406,8 +406,8 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 else
                     return false;
 
-            case 4: // alpha, digit, "$", "%", "&", "-", "/", "@" (see
-                    // isBoundary1)
+            case 4: 
+                    
                 *pEnd = ++(*pPos);
                 return true;
         }
@@ -444,69 +444,69 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     if (!(rBegin <= rEnd && rEnd <= rText.getLength()))
         return OUString();
 
-    // Search for the first substring of [rBegin..rEnd[ that matches any of the
-    // following productions (for which the appropriate style bit is set in
-    // eStyle, if applicable).
+    
+    
+    
     //
-    // 1st Production (known scheme):
-    //    \B1 <one of the known schemes, except file> ":" 1*wchar ["#" 1*wchar]
-    //        \B1
+    
+    
+    
     //
-    // 2nd Production (file):
-    //    \B1 "FILE:" 1*(wchar / "\" / "|") ["#" 1*wchar] \B1
+    
+    
     //
-    // 3rd Production (ftp):
-    //    \B1 "FTP" 2*("." label) ["/" *wchar] ["#" 1*wchar] \B1
+    
+    
     //
-    // 4th Production (http):
-    //    \B1 "WWW" 2*("." label) ["/" *wchar] ["#" 1*wchar] \B1
+    
+    
     //
-    // 5th Production (mailto):
-    //    \B2 local-part "@" domain \B1
+    
+    
     //
-    // 6th Production (UNC file):
-    //    \B1 "\\" domain "\" *(wchar / "\") \B1
+    
+    
     //
-    // 7th Production (DOS file):
-    //    \B1 ALPHA ":\" *(wchar / "\") \B1
+    
+    
     //
-    // 8th Production (Unix-like DOS file):
-    //    \B1 ALPHA ":/" *(wchar / "\") \B1
+    
+    
     //
-    // The productions use the following auxiliary rules.
+    
     //
-    //    local-part = atom *("." atom)
-    //    atom = 1*(alphanum / "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+"
-    //              / "-" / "/" / "=" / "?" / "^" / "_" / "`" / "{" / "|" / "}"
-    //              / "~")
-    //    domain = label *("." label)
-    //    label = alphanum [*(alphanum / "-") alphanum]
-    //    alphanum = ALPHA / DIGIT
-    //    wchar = <any uric character (ignoring the escaped rule), or "%", or
-    //             a letter or digit (according to rCharClass)>
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // "\B1" (boundary 1) stands for the beginning or end of the block of text,
-    // or a character that is neither (a) a letter or digit (according to
-    // rCharClass), nor (b) any of "$", "%", "&", "-", "/", "@", or "\".
-    // (FIXME:  What was the rationale for this set of punctuation characters?)
+    
+    
+    
+    
     //
-    // "\B2" (boundary 2) stands for the beginning or end of the block of text,
-    // or a character that is neither (a) a letter or digit (according to
-    // rCharClass), nor (b) any of "!", "#", "$", "%", "&", "'", "*", "+", "-",
-    // "/", "=", "?", "@", "^", "_", "`", "{", "|", "}", or "~" (i.e., an RFC
-    // 822 <atom> character, or "@" from \B1's set above).
+    
+    
+    
+    
+    
     //
-    // Productions 1--4, and 6--8 try to find a maximum-length match, but they
-    // stop at the first <wchar> character that is a "\B1" character which is
-    // only followed by "\B1" characters (taking "\" and "|" characters into
-    // account appropriately).  Production 5 simply tries to find a maximum-
-    // length match.
+    
+    
+    
+    
+    
     //
-    // Productions 1--4 use the given eMechanism and eCharset.  Productions 5--9
-    // use ENCODE_ALL.
+    
+    
     //
-    // Productions 6--9 are only applicable if the FSYS_DOS bit is set in
-    // eStyle.
+    
+    
 
     bool bBoundary1 = true;
     bool bBoundary2 = true;
@@ -519,7 +519,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
             {
                 sal_Int32 i = nPos;
                 INetProtocol eScheme = INetURLObject::CompareProtocolScheme(rText.copy(i, rEnd - i));
-                if (eScheme == INET_PROT_FILE) // 2nd
+                if (eScheme == INET_PROT_FILE) 
                 {
                     while (rText[i++] != ':') ;
                     sal_Int32 nPrefixEnd = i;
@@ -548,7 +548,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                         }
                     }
                 }
-                else if (eScheme != INET_PROT_NOT_VALID) // 1st
+                else if (eScheme != INET_PROT_NOT_VALID) 
                 {
                     while (rText[i++] != ':') ;
                     sal_Int32 nPrefixEnd = i;
@@ -578,7 +578,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     }
                 }
 
-                // 3rd, 4th:
+                
                 i = nPos;
                 sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
                 if (nLabels >= 3
@@ -595,8 +595,8 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                 || rText[nPos + 1] == 'T')
                             && (rText[nPos + 2] == 'p'
                                 || rText[nPos + 2] == 'P'))))
-                    // (note that rText.GetChar(nPos + 3) is guaranteed to be
-                    // valid)
+                    
+                    
                 {
                     sal_Int32 nUriEnd = i;
                     if (i != rEnd && rText[i] == '/')
@@ -630,7 +630,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                 if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 3
                     && rText[nPos + 1] == ':'
                     && (rText[nPos + 2] == '/'
-                        || rText[nPos + 2] == '\\')) // 7th, 8th
+                        || rText[nPos + 2] == '\\')) 
                 {
                     i = nPos + 3;
                     sal_Int32 nUriEnd = i;
@@ -655,7 +655,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
             }
             else if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 2
                      && rText[nPos] == '\\'
-                     && rText[nPos + 1] == '\\') // 6th
+                     && rText[nPos + 1] == '\\') 
             {
                 sal_Int32 i = nPos + 2;
                 sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
@@ -683,7 +683,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                 }
             }
         }
-        if (bBoundary2 && INetMIME::isAtomChar(c)) // 5th
+        if (bBoundary2 && INetMIME::isAtomChar(c)) 
         {
             bool bDot = false;
             for (sal_Int32 i = nPos + 1; i != rEnd; ++i)
@@ -728,7 +728,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
 }
 
 //
-//  removePassword
+
 //
 
 OUString URIHelper::removePassword(OUString const & rURI,

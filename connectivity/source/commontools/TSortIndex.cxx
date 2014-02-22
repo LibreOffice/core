@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TSortIndex.hxx"
@@ -24,8 +24,8 @@
 #include <o3tl/compat_functional.hxx>
 
 using namespace connectivity;
-//------------------------------------------------------------------
-/// binary_function Functor object for class OSortIndex::TIntValuePairVector::value_type returntype is bool
+
+
 struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::value_type,OSortIndex::TIntValuePairVector::value_type,bool>
 {
     OSortIndex* pIndex;
@@ -33,7 +33,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     TKeyValueFunc(OSortIndex* _pIndex) : pIndex(_pIndex)
     {
     }
-    // return false if compared values are equal otherwise true
+    
     inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
     {
         const ::std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
@@ -43,7 +43,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
             const bool nGreater = (pIndex->getAscending(i) == SQL_ASC) ? false : true;
             const bool nLess = !nGreater;
 
-            // compare depending for type
+            
             switch (*aIter)
             {
                 case SQL_ORDERBYKEY_STRING:
@@ -71,12 +71,12 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
             }
         }
 
-        // know we know that the values are equal
+        
         return false;
     }
 };
 
-// -----------------------------------------------------------------------------
+
 ::rtl::Reference<OKeySet> OSortIndex::CreateKeySet()
 {
     Freeze();
@@ -90,7 +90,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     pKeySet->setFrozen();
     return pKeySet;
 }
-// -----------------------------------------------------------------------------
+
 OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
                         const ::std::vector<TAscendingOrder>& _aAscending)
     :m_aKeyType(_aKeyType)
@@ -98,11 +98,11 @@ OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
     ,m_bFrozen(sal_False)
 {
 }
-//------------------------------------------------------------------
+
 OSortIndex::~OSortIndex()
 {
 }
-//------------------------------------------------------------------
+
 void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
 {
     OSL_ENSURE(pKeyValue,"Can not be null here!");
@@ -116,13 +116,13 @@ void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
 }
 
 
-//------------------------------------------------------------------
+
 void OSortIndex::Freeze()
 {
     OSL_ENSURE(! m_bFrozen,"OSortIndex::Freeze: already frozen!");
-    // Sortierung:
+    
     if (m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
-        // we will sort ourself when the first keyType say so
+        
         ::std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));
 
     TIntValuePairVector::iterator aIter = m_aKeyValues.begin();
@@ -135,20 +135,20 @@ void OSortIndex::Freeze()
     m_bFrozen = sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 OKeyValue::OKeyValue(sal_Int32 nVal)
 : m_nValue(nVal)
 {
 }
-// -----------------------------------------------------------------------------
+
 OKeyValue::~OKeyValue()
 {
 }
-// -----------------------------------------------------------------------------
+
 OKeyValue* OKeyValue::createKeyValue(sal_Int32 _nVal)
 {
     return new OKeyValue(_nVal);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

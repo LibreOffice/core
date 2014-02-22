@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <float.h>
@@ -49,7 +49,7 @@ using namespace nsSwDocInfoSubType;
 static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
                                 const SvNumberFormatter& rFormatter )
 {
-    if( nLng == LANGUAGE_NONE ) // Bug #60010
+    if( nLng == LANGUAGE_NONE ) 
         nLng = LANGUAGE_SYSTEM;
     else if( nLng == ::GetAppLanguage() )
         switch( rFormatter.GetIndexTableOffset( nFmt ))
@@ -65,9 +65,9 @@ static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
     return nLng;
 }
 
-// Globals
 
-/// field names
+
+
 std::vector<OUString>* SwFieldType::pFldNames = 0;
 
 namespace
@@ -80,19 +80,19 @@ namespace
     /* RES_DBNAMEFLD        */      TYP_DBNAMEFLD,
     /* RES_DATEFLD          */      TYP_DATEFLD,
     /* RES_TIMEFLD          */      TYP_TIMEFLD,
-    /* RES_PAGENUMBERFLD    */      TYP_PAGENUMBERFLD,  // dynamic
+    /* RES_PAGENUMBERFLD    */      TYP_PAGENUMBERFLD,  
     /* RES_AUTHORFLD        */      TYP_AUTHORFLD,
     /* RES_CHAPTERFLD       */      TYP_CHAPTERFLD,
     /* RES_DOCSTATFLD       */      TYP_DOCSTATFLD,
-    /* RES_GETEXPFLD        */      TYP_GETFLD,         // dynamic
-    /* RES_SETEXPFLD        */      TYP_SETFLD,         // dynamic
+    /* RES_GETEXPFLD        */      TYP_GETFLD,         
+    /* RES_SETEXPFLD        */      TYP_SETFLD,         
     /* RES_GETREFFLD        */      TYP_GETREFFLD,
     /* RES_HIDDENTXTFLD     */      TYP_HIDDENTXTFLD,
     /* RES_POSTITFLD        */      TYP_POSTITFLD,
     /* RES_FIXDATEFLD       */      TYP_FIXDATEFLD,
     /* RES_FIXTIMEFLD       */      TYP_FIXTIMEFLD,
-    /* RES_REGFLD           */      0,                  // old (no change since 2000)
-    /* RES_VARREGFLD        */      0,                  // old (no change since 2000)
+    /* RES_REGFLD           */      0,                  
+    /* RES_VARREGFLD        */      0,                  
     /* RES_SETREFFLD        */      TYP_SETREFFLD,
     /* RES_INPUTFLD         */      TYP_INPUTFLD,
     /* RES_MACROFLD         */      TYP_MACROFLD,
@@ -110,7 +110,7 @@ namespace
     /* RES_INTERNETFLD      */      TYP_INTERNETFLD,
     /* RES_JUMPEDITFLD      */      TYP_JUMPEDITFLD,
     /* RES_SCRIPTFLD        */      TYP_SCRIPTFLD,
-    /* RES_DATETIMEFLD      */      0,                  // dynamic
+    /* RES_DATETIMEFLD      */      0,                  
     /* RES_AUTHORITY        */      TYP_AUTHORITY,
     /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
     /* RES_DROPDOWN         */      TYP_DROPDOWN
@@ -128,7 +128,7 @@ OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
     return OUString();
 }
 
-// each field refences a field type that is unique for each document
+
 SwFieldType::SwFieldType( sal_uInt16 nWhichId )
     : SwModify(0),
     nWhich( nWhichId )
@@ -149,8 +149,8 @@ bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
     return false;
 }
 
-// Base class for all fields.
-// A field (multiple can exist) references a field type (can exists only once)
+
+
 SwField::SwField(
     SwFieldType* pTyp,
     sal_uInt32 nFmt,
@@ -170,7 +170,7 @@ SwField::~SwField()
 {
 }
 
-// instead of indirectly via the type
+
 
 #ifdef DBG_UTIL
 sal_uInt16 SwField::Which() const
@@ -225,7 +225,7 @@ sal_uInt16 SwField::GetTypeId() const
     return nRet;
 }
 
-/// get name or content
+
 OUString SwField::GetFieldName() const
 {
     sal_uInt16 nTypeId = GetTypeId();
@@ -322,7 +322,7 @@ SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
-/// Does the field have an action on a ClickHandler? (E.g. INetFields,...)
+
 sal_Bool SwField::HasClickHdl() const
 {
     sal_Bool bRet = sal_False;
@@ -388,7 +388,7 @@ OUString SwField::ExpandField(bool const bCached) const
 {
     if ( m_bUseFieldValueCache )
     {
-        if (!bCached) // #i85766# do not expand fields in clipboard documents
+        if (!bCached) 
         {
             m_Cache = Expand();
         }
@@ -401,15 +401,15 @@ OUString SwField::ExpandField(bool const bCached) const
 SwField * SwField::CopyField() const
 {
     SwField *const pNew = Copy();
-    // #i85766# cache expansion of source (for clipboard)
-    // use this->cache, not this->Expand(): only text formatting calls Expand()
+    
+    
     pNew->m_Cache = m_Cache;
     pNew->m_bUseFieldValueCache = m_bUseFieldValueCache;
 
     return pNew;
 }
 
-/// expand numbering
+
 OUString FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
@@ -436,18 +436,18 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
 {
 }
 
-/// return value formatted as string
+
 OUString SwValueFieldType::ExpandValue( const double& rVal,
                                         sal_uInt32 nFmt, sal_uInt16 nLng) const
 {
-    if (rVal >= DBL_MAX) // error string for calculator
+    if (rVal >= DBL_MAX) 
         return SwViewShell::GetShellRes()->aCalc_Error;
 
     OUString sExpand;
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     Color* pCol = 0;
 
-    // Bug #60010
+    
     sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, nFmt, *pFormatter );
 
     if( nFmt < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFmtLng )
@@ -464,7 +464,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
 
             if (nNewFormat == nFmt)
             {
-                // probably user-defined format
+                
                 OUString sFmt(pEntry->GetFormatstring());
 
                 pFormatter->PutandConvertEntry(sFmt, nDummy, nType, nFmt,
@@ -505,11 +505,11 @@ OUString SwValueFieldType::DoubleToString( const double &rVal,
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
 
-    // Bug #60010
+    
     if( nLng == LANGUAGE_NONE )
         nLng = LANGUAGE_SYSTEM;
 
-    pFormatter->ChangeIntl( nLng ); // get separator in the correct language
+    pFormatter->ChangeIntl( nLng ); 
     return ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
                                     pFormatter->GetDecSep(), true );
 }
@@ -555,7 +555,7 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
     return SwField::ChgTyp(pNewType);
 }
 
-/// get format in office language
+
 sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
@@ -568,7 +568,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
 
         if (nNewFormat == nFmt)
         {
-            // probably user-defined format
+            
             short nType = NUMBERFORMAT_DEFINED;
             sal_Int32 nDummy;
 
@@ -586,14 +586,14 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
     return nFmt;
 }
 
-/// set language of the format
+
 void SwValueField::SetLanguage( sal_uInt16 nLng )
 {
     if( IsAutomaticLanguage() &&
             ((SwValueFieldType *)GetTyp())->UseFormat() &&
         GetFormat() != SAL_MAX_UINT32 )
     {
-        // Bug #60010
+        
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
         sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
                                                     *pFormatter );
@@ -611,7 +611,7 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
 
                 if( nNewFormat == GetFormat() )
                 {
-                    // probably user-defined format
+                    
                     short nType = NUMBERFORMAT_DEFINED;
                     sal_Int32 nDummy;
                     OUString sFmt( pEntry->GetFormatstring() );

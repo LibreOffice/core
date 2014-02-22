@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richtextengine.hxx"
@@ -36,15 +36,15 @@
 #include <algorithm>
 #include <functional>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
-    //= RichTextEngine
-    //====================================================================
-    //--------------------------------------------------------------------
+
+    
+    
+    
+    
     RichTextEngine* RichTextEngine::Create()
     {
         SolarMutexGuard g;
@@ -60,17 +60,17 @@ namespace frm
 
         pPool->SetDefaultMetric(  (SfxMapUnit)( aDeviceMapMode.GetMapUnit() ) );
 
-        // defaults
+        
         Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
         aFont.SetName( "Times New Roman" );
         pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
 
-        // 12 pt font size
+        
         MapMode aPointMapMode( MAP_POINT );
         Size a12PointSize( OutputDevice::LogicToLogic( Size( 12, 0 ), aPointMapMode, aDeviceMapMode ) );
         pPool->SetPoolDefaultItem( SvxFontHeightItem( a12PointSize.Width(), 100, EE_CHAR_FONTHEIGHT ) );
 
-        // font languages
+        
         SvtLinguOptions aLinguOpt;
         pPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOpt.nDefaultLanguage, EE_CHAR_LANGUAGE ) );
         pPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOpt.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK ) );
@@ -79,7 +79,7 @@ namespace frm
         return pReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     RichTextEngine* RichTextEngine::Clone()
     {
         RichTextEngine* pClone( NULL );
@@ -98,19 +98,19 @@ namespace frm
         return pClone;
     }
 
-    //--------------------------------------------------------------------
+    
     RichTextEngine::RichTextEngine( SfxItemPool* _pPool )
         :EditEngine( _pPool )
         ,m_pEnginePool( _pPool )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     RichTextEngine::~RichTextEngine( )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextEngine::registerEngineStatusListener( IEngineStatusListener* _pListener )
     {
         OSL_ENSURE( _pListener, "RichTextEngine::registerEngineStatusListener: invalid listener!" );
@@ -118,7 +118,7 @@ namespace frm
             m_aStatusListeners.push_back( _pListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextEngine::revokeEngineStatusListener( IEngineStatusListener* _pListener )
     {
         ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find_if(
@@ -131,7 +131,7 @@ namespace frm
             m_aStatusListeners.erase( aPos );
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( RichTextEngine, EditEngineStatusChanged, EditStatus*, _pStatus )
     {
         for ( ::std::vector< IEngineStatusListener* >::const_iterator aLoop = m_aStatusListeners.begin();
@@ -142,8 +142,8 @@ namespace frm
         return 0L;
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

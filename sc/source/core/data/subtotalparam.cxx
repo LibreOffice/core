@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -22,7 +22,7 @@ ScSubTotalParam::ScSubTotalParam()
     Clear();
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
@@ -56,7 +56,7 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScSubTotalParam::Clear()
 {
@@ -81,7 +81,7 @@ void ScSubTotalParam::Clear()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 {
@@ -130,7 +130,7 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 {
@@ -172,7 +172,7 @@ bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
                                     const SCCOL* ptrSubTotals,
@@ -190,7 +190,7 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
 
     if ( ptrSubTotals && ptrFunctions && (nCount > 0) && (nGroup <= MAXSUBTOTAL) )
     {
-        // 0 wird als 1 aufgefasst, sonst zum Array-Index dekrementieren
+        
         if (nGroup != 0)
             nGroup--;
 

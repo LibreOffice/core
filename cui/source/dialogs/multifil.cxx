@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -33,7 +33,7 @@
 #include "multipat.hrc"
 #include <cuires.hrc>
 
-// #97807# -------------
+
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
@@ -41,7 +41,7 @@
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-// class SvxMultiFileDialog ----------------------------------------------
+
 
 IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 {
@@ -56,7 +56,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        // #97807# URL content comparison of entries -----------
+        
         INetURLObject aFile( aDlg.GetPath() );
         OUString sInsFile = aFile.getFSysPath( INetURLObject::FSYS_DETECT );
         ::ucbhelper::Content aContent( aFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -64,23 +64,23 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         OSL_ENSURE( xContent.is(), "AddHdl_Impl: invalid content interface!" );
         Reference< XContentIdentifier > xID = xContent->getIdentifier();
         OSL_ENSURE( xID.is(), "AddHdl_Impl: invalid ID interface!" );
-        // ensure the content of files are valid
+        
 
         sal_uInt16 nCount = aPathLB.GetEntryCount();
         sal_Bool bDuplicated = sal_False;
         try
         {
-            if( nCount > 0 ) // start comparison
+            if( nCount > 0 ) 
             {
                 sal_uInt16 i;
-                ::ucbhelper::Content & VContent = aContent; // temporary Content reference
+                ::ucbhelper::Content & VContent = aContent; 
                 Reference< XContent > xVContent;
                 Reference< XContentIdentifier > xVID;
                 for( i = 0; i < nCount; i++ )
                 {
                     OUString sVFile = aPathLB.GetEntry( i );
                     std::map< OUString, ::ucbhelper::Content >::iterator aCur = aFileContentMap.find( sVFile );
-                    if( aCur == aFileContentMap.end() ) // look for File Content in aFileContentMap, but not find it.
+                    if( aCur == aFileContentMap.end() ) 
                     {
                         INetURLObject aVFile( sVFile, INetURLObject::FSYS_DETECT );
                         aFileContentMap[sVFile] = ::ucbhelper::Content( aVFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -101,14 +101,14 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                         break;
                     }
                 }
-            } // end of if the entries are more than zero.
-        } // end of try(}
-        catch( const Exception& ) // catch every exception of comparison
+            } 
+        } 
+        catch( const Exception& ) 
            {
             OSL_FAIL( "AddHdl_Impl: caught an unexpected exception!" );
            }
 
-        if ( bDuplicated ) // #97807# --------------------
+        if ( bDuplicated ) 
         {
             OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsFile );
@@ -120,11 +120,11 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
             aPathLB.SetEntryData( nPos, new OUString( sInsFile ) );
         }
 
-    } // end of if ( aDlg.Execute() == ERRCODE_NONE )
+    } 
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiFileDialog, DelHdl_Impl)
 {
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SvxMultiFileDialog, DelHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
 
@@ -157,7 +157,7 @@ SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aDelBtn.Enable();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiFileDialog::~SvxMultiFileDialog()
 {

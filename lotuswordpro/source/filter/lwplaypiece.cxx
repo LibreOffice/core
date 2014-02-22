@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -204,12 +204,12 @@ void LwpExternalBorder:: Read(LwpObjectStream *pStrm)
 {
     if( LwpFileHeader::m_nFileRevision >= 0x000F )
     {
-        //enum {BORDER,JOIN};
+        
         m_LeftName.Read(pStrm);
         m_TopName.Read(pStrm);
         m_RightName.Read(pStrm);
         m_BottomName.Read(pStrm);
-        // TODO: Do not know what it is for
+        
         /*cLeftName = CStyleMgr::GetUniqueMetaFileName(cLeftName,BORDER);
         cRightName = CStyleMgr::GetUniqueMetaFileName(cRightName,BORDER);
         cTopName = CStyleMgr::GetUniqueMetaFileName(cTopName,BORDER);
@@ -342,8 +342,8 @@ void LwpJoinStuff:: Read(LwpObjectStream *pStrm)
     m_Color.Read(pStrm);
     pStrm->SkipExtra();
 
-    // Bug fix: if reading in from something older than Release 9
-    // then check for the external ID and change it to solid.
+    
+    
     if (LwpFileHeader::m_nFileRevision < 0x0010)
     {
         if (m_nID & EXTERNAL_ID)

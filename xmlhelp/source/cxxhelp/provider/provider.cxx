@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -44,7 +44,7 @@
 using namespace com::sun::star;
 using namespace chelp;
 
-// ContentProvider Implementation.
+
 
 ContentProvider::ContentProvider(
     const uno::Reference< uno::XComponentContext >& rxContext )
@@ -55,13 +55,13 @@ ContentProvider::ContentProvider(
 {
 }
 
-// virtual
+
 ContentProvider::~ContentProvider()
 {
     delete m_pDatabases;
 }
 
-// XInterface methods.
+
 
 XINTERFACE_IMPL_6( ContentProvider,
                    lang::XTypeProvider,
@@ -71,7 +71,7 @@ XINTERFACE_IMPL_6( ContentProvider,
                    lang::XEventListener, /* base of XContainerListener */
                    container::XContainerListener);
 
-// XTypeProvider methods.
+
 
 XTYPEPROVIDER_IMPL_5( ContentProvider,
                          lang::XTypeProvider,
@@ -80,7 +80,7 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
                       lang::XComponent,
                       container::XContainerListener);
 
-// XServiceInfo methods.
+
 
 OUString SAL_CALL ContentProvider::getImplementationName()
     throw( uno::RuntimeException )
@@ -131,13 +131,13 @@ ContentProvider::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-// Service factory implementation.
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-// XContentProvider methods.
 
-// virtual
+
+
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& xCanonicId )
@@ -145,7 +145,7 @@ ContentProvider::queryContent(
 {
     if ( !xCanonicId->getContentProviderScheme()
              .equalsIgnoreAsciiCase( m_aScheme ) )
-    {   // Wrong URL-scheme
+    {   
         throw ucb::IllegalIdentifierException();
     }
 
@@ -158,7 +158,7 @@ ContentProvider::queryContent(
     if( !m_pDatabases )
         throw uno::RuntimeException();
 
-    // Check, if a content with given id already exists...
+    
     uno::Reference< ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
@@ -166,10 +166,10 @@ ContentProvider::queryContent(
 
     xContent = new Content( m_xContext, this, xCanonicId, m_pDatabases );
 
-    // register new content
+    
     registerNewContent( xContent );
 
-    // Further checks
+    
 
     if ( !xContent->getIdentifier().is() )
         throw ucb::IllegalIdentifierException();
@@ -223,15 +223,15 @@ void ContentProvider::init()
 
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
-        // try to determine path from default
+        
         instPath = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
-    // replace anything like $(instpath);
+    
     subst( instPath );
 
     OUString stylesheet( getKey( xHierAccess,"Help/HelpStyleSheet" ) );
     try
     {
-        // now adding as configuration change listener for the stylesheet
+        
         uno::Reference< container::XNameAccess> xAccess(
             xHierAccess, uno::UNO_QUERY );
         if( xAccess.is() )
@@ -264,7 +264,7 @@ void ContentProvider::init()
         aParam.Value <<= OUString("/org.openoffice.Setup/Product");
         lParams[0] = uno::makeAny(aParam);
 
-        // open it
+        
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
                     OUString("com.sun.star.configuration.ConfigurationAccess"),
                     lParams) );

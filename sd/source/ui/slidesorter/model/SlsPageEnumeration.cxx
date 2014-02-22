@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,11 +63,11 @@ private:
     */
     inline void AdvanceToNextValidElement (void);
 
-    // Assignment operator not implemented.
+    
     PageEnumerationImpl& operator= (const PageEnumerationImpl&);
 };
 
-} // end of anonymouse namespace
+} 
 
 
 
@@ -168,7 +168,7 @@ void PageEnumeration::Rewind (void)
     return mpImpl->Rewind();
 }
 
-} } } // end of namespace ::sd::slidesorter::model
+} } } 
 
 
 
@@ -230,7 +230,7 @@ SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
-    // Go to the following valid element.
+    
     mnIndex += 1;
     AdvanceToNextValidElement();
 
@@ -242,7 +242,7 @@ SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
 
 void PageEnumerationImpl::Rewind (void)
 {
-    // Go to first valid element.
+    
     mnIndex = 0;
     AdvanceToNextValidElement();
 }
@@ -257,20 +257,20 @@ void PageEnumerationImpl::AdvanceToNextValidElement (void)
     {
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
-        // Test for the predicate being fullfilled.
+        
         if (pDescriptor.get()!=NULL && maPredicate(pDescriptor))
         {
-            // This predicate is valid.
+            
             break;
         }
         else
         {
-            // Advance to next predicate.
+            
             mnIndex += 1;
         }
     }
 }
 
-} // end of anonymous namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -108,7 +108,7 @@ OUString SvDDELinkEditDialog::GetCmd() const
 
 IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
 {
-    (void)pEdit; // unused variable
+    (void)pEdit; 
     pThis->aOKButton1.Enable( !pThis->aEdDdeApp.GetText().isEmpty() &&
                               !pThis->aEdDdeTopic.GetText().isEmpty() &&
                               !pThis->aEdDdeItem.GetText().isEmpty() );
@@ -136,7 +136,7 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     if( !pConnection )
         return sal_False;
 
-    if( pConnection->GetError() )  // then we try once more
+    if( pConnection->GetError() )  
     {
         OUString sServer( pConnection->GetServiceName() );
         OUString sTopic( pConnection->GetTopicName() );
@@ -147,13 +147,13 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
             nError = DDELINK_ERROR_APP;
     }
 
-    if( bWaitForData ) // we are in an rekursive loop, get out again
+    if( bWaitForData ) 
         return sal_False;
 
-    // Lock against Reentrance
+    
     bWaitForData = sal_True;
 
-    // if you want to print, we'll wait until the data is available
+    
     if( bSynchron )
     {
         DdeRequest aReq( *pConnection, sItem, 5000 );
@@ -173,7 +173,7 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     }
     else
     {
-        // otherwise it will be executed asynchronously
+        
         {
             if( pRequest )
                 delete pRequest;
@@ -199,9 +199,9 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     static sal_Bool bInWinExec = sal_False;
 #endif
     sal_uInt16 nLinkType = pSvLink->GetUpdateMode();
-    if( pConnection )           // Connection is already made
+    if( pConnection )           
     {
-        // well, then just add it as dependent
+        
         AddDataAdvise( pSvLink,
                 SotExchange::GetFormatMimeType( pSvLink->GetContentType()),
                 LINKUPDATE_ONCALL == nLinkType
@@ -224,8 +224,8 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     pConnection = new DdeConnection( sServer, sTopic );
     if( pConnection->GetError() )
     {
-       // Is it possible to address the system-Topic?
-       // then the server is up, it just does not know the topic!
+       
+       
         if( sTopic.equalsIgnoreAsciiCase( "SYSTEM" ) )
         {
             sal_Bool bSysTopic;
@@ -239,12 +239,12 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
                 nError = DDELINK_ERROR_DATA;
                 return sal_False;
             }
-            // otherwise in  Win/WinNT, start the Application directly
+            
         }
 
 #if defined(WNT)
 
-        // Server not up, try once more to start it.
+        
         if( !bInWinExec )
         {
             OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
@@ -275,7 +275,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
             }
         }
         else
-#endif  // WNT
+#endif  
         {
             nError = DDELINK_ERROR_APP;
         }
@@ -283,7 +283,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 
     if( LINKUPDATE_ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
     {
-        // Setting up Hot Link, Data will be available at some point later on
+        
         pLink = new DdeHotLink( *pConnection, sItem );
         pLink->SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );
         pLink->SetDoneHdl( LINK( this, SvDDEObject, ImplDoneDDEData ) );
@@ -336,10 +336,10 @@ sal_Bool SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
         nFmt = FORMAT_GDIMETAFILE;
         break;
 
-    // something else?
+    
     }
     if( nFmt )
-        rReq.SetFormat( nFmt );         // try it once more
+        rReq.SetFormat( nFmt );         
     return 0 != nFmt;
 }
 
@@ -381,8 +381,8 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
             Sequence< sal_Int8 > aSeq( (const sal_Int8*)p, nLen );
             if( pGetData )
             {
-                *pGetData <<= aSeq;  // Copy Data
-                pGetData = 0;        // reset the pointer here
+                *pGetData <<= aSeq;  
+                pGetData = 0;        
             }
             else
             {
@@ -405,9 +405,9 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
     {
         DdeTransaction* pReq = 0;
         if( !pLink || ( pLink && pLink->IsBusy() ))
-            pReq = pRequest;  // only the one that is ready
+            pReq = pRequest;  
         else if( pRequest && pRequest->IsBusy() )
-            pReq = pLink;  // only the one that is ready
+            pReq = pLink;  
 
         if( pReq )
         {
@@ -422,7 +422,7 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
         }
     }
     else
-        // End waiting
+        
         bWaitForData = sal_False;
 
     return 0;

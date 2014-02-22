@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbahelper/vbaglobalbase.hxx"
 #include <sal/macros.h>
@@ -28,7 +28,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-// special key to return the Application
+
 const char sAppService[] = "ooo.vba.Application";
 
 VbaGlobalsBase::VbaGlobalsBase(
@@ -38,8 +38,8 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     , msDocCtxName( sDocCtxName )
     , msApplication( "Application" )
 {
-    // overwrite context with custom one ( that contains the application )
-    // wrap the service manager as we don't want the disposing context to tear down the 'normal' ServiceManager ( or at least thats what the code appears like it wants to do )
+    
+    
     uno::Reference< uno::XInterface > aSrvMgr;
     if ( xContext.is() && xContext->getServiceManager().is() )
     {
@@ -52,8 +52,8 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
         ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
         ::cppu::ContextEntry_Init( "/singletons/com.sun.star.lang.theServiceManager" , uno::makeAny( aSrvMgr ) )
     };
-    // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
-    // some strange behavior
+    
+    
     mxContext = ::cppu::createComponentContext(
                         aHandlerContextInfo,
                         ( sizeof ( aHandlerContextInfo ) / sizeof ( aHandlerContextInfo[0] ) ), NULL );
@@ -87,9 +87,9 @@ VbaGlobalsBase::~VbaGlobalsBase()
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
         if ( xNameContainer.is() )
         {
-            // release document reference ( we don't wan't the component context trying to dispose that )
+            
             xNameContainer->removeByName( msDocCtxName );
-            // release application reference, as it is holding onto the context
+            
             xNameContainer->removeByName( msApplication );
         }
     }
@@ -122,7 +122,7 @@ VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier ) throw (uno::
     uno::Reference< uno::XInterface > xReturn;
     if ( aServiceSpecifier == sAppService )
     {
-        // try to extract the Application from the context
+        
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
         xNameContainer->getByName( msApplication ) >>= xReturn;
     }
@@ -138,7 +138,7 @@ VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, 
     uno::Reference< uno::XInterface > xReturn;
     if ( aServiceSpecifier == sAppService )
     {
-        // try to extract the Application from the context
+        
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
         xNameContainer->getByName( msApplication ) >>= xReturn;
     }
@@ -151,7 +151,7 @@ uno::Sequence< OUString > SAL_CALL
 VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
     static const OUString names[] = {
-    // common
+    
         OUString("ooo.vba.msforms.UserForm"),
       };
     static uno::Sequence< OUString > serviceNames( names, sizeof( names )/ sizeof( names[0] ) );

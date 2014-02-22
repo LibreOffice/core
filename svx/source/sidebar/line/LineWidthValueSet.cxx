@@ -62,7 +62,7 @@ void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
     nSelItem = nSel;
     if(nSel == 0)
     {
-        SelectItem(1); // ,false); // 'false' nut supported by AOO
+        SelectItem(1); 
         SetNoSelection();
     }
     else
@@ -127,7 +127,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
         Point aImgStart(aBLPos.X() + 5,         aBLPos.Y() + ( nRectHeight - 23 ) / 2);
         pDev->DrawImage(aImgStart, imgCus);
-    //  Point aStart(aImgStart.X() + 14 + 20 , aBLPos.Y() + nRectHeight/6);
+    
         Rectangle aStrRect = aRect;
         aStrRect.Top() += nRectHeight/6;
         aStrRect.Bottom() -= nRectHeight/6;
@@ -188,6 +188,6 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+

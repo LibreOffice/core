@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -99,8 +99,8 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
     if(xDBContext.is())
     {
         m_refCount++;
-        //block necessary due to solaris' compiler behaviour to
-        //remove temporaries at the block's end
+        
+        
         {
             xDBContext->removeContainerListener( this );
         }
@@ -110,7 +110,7 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
 
 void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (RuntimeException)
 {
-    // information not needed
+    
 }
 
 void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
@@ -206,7 +206,7 @@ void SwDBTreeList::InitTreeList()
         return;
     SetSelectionMode(SINGLE_SELECTION);
     SetStyle(GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    // don't set font, so that the Control's font is being applied!
+    
     SetSpaceBetweenEntries(0);
     SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
                     aImageList.GetImage(IMG_EXPAND  ) );
@@ -256,7 +256,7 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
         while (pEntry)
         {
             pEntry = (SvTreeListEntry*)GetRootLevelParent( pEntry );
-            Collapse(pEntry);       // zuklappen
+            Collapse(pEntry);       
 
             SvTreeListEntry* pChild;
             while ((pChild = FirstChild(pEntry)) != 0L)
@@ -267,7 +267,7 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
 
         if (!sDBName.isEmpty())
         {
-            Select(sDBName, sTableName, sColumnName);   // force RequestingChildren
+            Select(sDBName, sTableName, sColumnName);   
         }
         SetUpdateMode(sal_True);
     }
@@ -277,7 +277,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
 {
     if (!pParent->HasChildren())
     {
-        if (GetParent(pParent)) // column names
+        if (GetParent(pParent)) 
         {
             try
             {
@@ -346,7 +346,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
             {
             }
         }
-        else    // table names
+        else    
         {
             try
             {
@@ -369,7 +369,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                         {
                             sTableName = pTblNames[i];
                             SvTreeListEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
-                            //to discriminate between queries and tables the user data of table entries is set
+                            
                             pTableEntry->SetUserData((void*)0);
                         }
                     }
@@ -404,9 +404,9 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
-        return 1; // don't sort column names
+        return 1; 
 
-    return DefaultCompare(pData);   // otherwise call base class
+    return DefaultCompare(pData);   
 }
 
 OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable)
@@ -419,7 +419,7 @@ OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sa
         if (GetParent(GetParent(pEntry)))
         {
             rColumnName = GetEntryText(pEntry);
-            pEntry = GetParent(pEntry); // column name was selected
+            pEntry = GetParent(pEntry); 
         }
         sDBName = GetEntryText(GetParent(pEntry));
         if(pbIsTable)
@@ -487,7 +487,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
         if( !sColumnName.isEmpty() )
         {
-            // drag database field
+            
             svx::OColumnTransferable aColTransfer(
                             sDBName,
                             OUString(),

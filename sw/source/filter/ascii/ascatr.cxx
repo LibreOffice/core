@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -85,8 +85,8 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        // TODO: This can be optimized, if we make use of the fact that the TxtAttrs
-        // are sorted by starting position. We would need to remember two indices, however.
+        
+        
         for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
@@ -169,9 +169,9 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 }
 
 
-//------------------------
-// Output of the node
-//------------------------
+
+
+
 
 static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {

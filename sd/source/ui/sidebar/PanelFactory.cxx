@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PanelFactory.hxx"
@@ -62,7 +62,7 @@ Reference<lang::XEventListener> mxControllerDisposeListener;
 
 
 
-// ----- Service functions ----------------------------------------------------
+
 
 Reference<XInterface> SAL_CALL PanelFactory_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -91,7 +91,7 @@ Sequence<rtl::OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
 
 
 
-//----- PanelFactory --------------------------------------------------------
+
 
 PanelFactory::PanelFactory(
         const css::uno::Reference<css::uno::XComponentContext>& /*rxContext*/)
@@ -116,7 +116,7 @@ void SAL_CALL PanelFactory::disposing (void)
 
 
 
-// XUIElementFactory
+
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::rtl::OUString& rsUIElementResourceURL,
@@ -126,13 +126,13 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         css::lang::IllegalArgumentException,
         cssu::RuntimeException)
 {
-    // Process arguments.
+    
     const ::comphelper::NamedValueCollection aArguments (rArguments);
     Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
     Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
 
-    // Throw exceptions when the arguments are not as expected.
+    
     ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
@@ -143,7 +143,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             OUString("PanelFactory::createUIElement called without XFrame"),
             NULL);
 
-    // Tunnel through the controller to obtain a ViewShellBase.
+    
     ViewShellBase* pBase = NULL;
     Reference<lang::XUnoTunnel> xTunnel (xFrame->getController(), UNO_QUERY);
     if (xTunnel.is())
@@ -156,11 +156,11 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     if (pBase == NULL)
         throw RuntimeException("can not get ViewShellBase for frame", NULL);
 
-    // Get bindings from given arguments.
+    
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-    // Create a framework view.
+    
     ::Window* pControl = NULL;
     css::ui::LayoutSize aLayoutSize (-1,-1,-1);
 
@@ -186,8 +186,8 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     if (pControl == NULL)
         throw lang::IllegalArgumentException();
 
-    // Create a wrapper around the control that implements the
-    // necessary UNO interfaces.
+    
+    
     return sfx2::sidebar::SidebarPanelBase::Create(
         rsUIElementResourceURL,
         xFrame,
@@ -198,6 +198,6 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

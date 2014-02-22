@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,8 +30,8 @@ using namespace store;
 
 namespace { static char const VALUE_PREFIX[] = "$VL_"; }
 
-//*********************************************************************
-//  ORegKey()
+
+
 //
 ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
     : m_refCount(1)
@@ -42,24 +42,24 @@ ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
 {
 }
 
-//*********************************************************************
-//  ~ORegKey()
+
+
 //
 ORegKey::~ORegKey()
 {
     OSL_POSTCOND(m_refCount == 0, "registry::ORegKey::dtor(): refcount not zero.");
 }
 
-//*********************************************************************
-//  releaseKey
+
+
 //
 RegError ORegKey::releaseKey(RegKeyHandle hKey)
 {
     return m_pRegistry->releaseKey(hKey);
 }
 
-//*********************************************************************
-//  createKey
+
+
 //
 RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 {
@@ -67,8 +67,8 @@ RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 }
 
 
-//*********************************************************************
-//  openKey
+
+
 //
 RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 {
@@ -76,8 +76,8 @@ RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 }
 
 
-//*********************************************************************
-//  openSubKeys
+
+
 //
 RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubKeys, sal_uInt32* pnSubKeys)
 {
@@ -117,8 +117,8 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
             {
                 *phOpenSubKeys = NULL;
                 *pnSubKeys = 0;
-                rtl_freeMemory(pSubKeys); // @@@ leaking 'pSubKeys[0...nSubkeys-1]'
-                return _ret;              // @@@ leaking 'pKey'
+                rtl_freeMemory(pSubKeys); 
+                return _ret;              
             }
 
             pSubKeys[nSubKeys] = pOpenSubKey;
@@ -138,8 +138,8 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
 }
 
 
-//*********************************************************************
-//  getKeyNames
+
+
 //
 RegError ORegKey::getKeyNames(const OUString& keyName,
                               rtl_uString*** pSubKeyNames,
@@ -198,8 +198,8 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 }
 
 
-//*********************************************************************
-//  closeKey
+
+
 //
 RegError ORegKey::closeKey(RegKeyHandle hKey)
 {
@@ -207,8 +207,8 @@ RegError ORegKey::closeKey(RegKeyHandle hKey)
 }
 
 
-//*********************************************************************
-//  deleteKey
+
+
 //
 RegError ORegKey::deleteKey(const OUString& keyName)
 {
@@ -216,8 +216,8 @@ RegError ORegKey::deleteKey(const OUString& keyName)
 }
 
 
-//*********************************************************************
-//  getValueType
+
+
 //
 RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueType, sal_uInt32* pValueSize) const
 {
@@ -261,11 +261,11 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
     readUINT32(pBuffer+VALUE_TYPEOFFSET, size);
 
     *pValueType = (RegValueType)type;
-//    if (*pValueType == RG_VALUETYPE_UNICODE)
-//    {
-//        *pValueSize = (size / 2) * sizeof(sal_Unicode);
-//    } else
-//    {
+
+
+
+
+
         if (*pValueType > 4)
         {
             rtl_freeMemory(pBuffer);
@@ -276,15 +276,15 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
         }
 
         *pValueSize = size;
-//    }
+
 
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
 
 
-//*********************************************************************
-//  setValue
+
+
 //
 RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegValue value, sal_uInt32 vSize)
 {
@@ -358,8 +358,8 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  setLongListValue
+
+
 //
 RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueList, sal_uInt32 len)
 {
@@ -381,7 +381,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
         return REG_SET_VALUE_FAILED;
     }
 
-    sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
+    sal_uInt32 size = 4; 
 
     size += len * 4;
 
@@ -392,7 +392,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+    sal_uInt32 offset = 4; 
 
     for (sal_uInt32 i=0; i < len; i++)
     {
@@ -417,8 +417,8 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  setStringListValue
+
+
 //
 RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValueList, sal_uInt32 len)
 {
@@ -440,7 +440,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         return REG_SET_VALUE_FAILED;
     }
 
-    sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
+    sal_uInt32 size = 4; 
 
     sal_uInt32 i;
     for (i=0; i < len; i++)
@@ -455,7 +455,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; 
     sal_uInt32 sLen = 0;
 
     for (i=0; i < len; i++)
@@ -485,8 +485,8 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  setUnicodeListValue
+
+
 //
 RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** pValueList, sal_uInt32 len)
 {
@@ -508,7 +508,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         return REG_SET_VALUE_FAILED;
     }
 
-    sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
+    sal_uInt32 size = 4; 
 
     sal_uInt32 i;
     for (i=0; i < len; i++)
@@ -523,7 +523,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; 
     sal_uInt32 sLen = 0;
 
     for (i=0; i < len; i++)
@@ -553,8 +553,8 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  getValue
+
+
 //
 RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 {
@@ -646,8 +646,8 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  getLongListValue
+
+
 //
 RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValueList, sal_uInt32* pLen) const
 {
@@ -730,7 +730,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     *pLen = len;
     sal_Int32* pVList = (sal_Int32*)rtl_allocateZeroMemory(len * sizeof(sal_Int32));
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; 
 
     for (sal_uInt32 i=0; i < len; i++)
     {
@@ -743,8 +743,8 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  getStringListValue
+
+
 //
 RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pValueList, sal_uInt32* pLen) const
 {
@@ -827,7 +827,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     *pLen = len;
     sal_Char** pVList = (sal_Char**)rtl_allocateZeroMemory(len * sizeof(sal_Char*));
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; 
     sal_uInt32 sLen = 0;
 
     sal_Char *pValue;
@@ -849,8 +849,8 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  getUnicodeListValue
+
+
 //
 RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** pValueList, sal_uInt32* pLen) const
 {
@@ -933,7 +933,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     *pLen = len;
     sal_Unicode** pVList = (sal_Unicode**)rtl_allocateZeroMemory(len * sizeof(sal_Unicode*));
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; 
     sal_uInt32 sLen = 0;
 
     sal_Unicode *pValue;
@@ -955,8 +955,8 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  getKeyType()
+
+
 //
 RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
 {
@@ -988,8 +988,8 @@ RegError ORegKey::getResolvedKeyName(const OUString& keyName,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  countSubKeys()
+
+
 //
 sal_uInt32 ORegKey::countSubKeys()
 {

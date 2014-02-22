@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MTable.hxx"
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
                 const OUString& _Name, const OUString& _Type, const OUString& _Description )
     :OTable_Base(_pTables, _pConnection, sal_True, _Name, _Type, _Description )
@@ -55,25 +55,25 @@ OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
     construct();
 }
 
-//--------------------------------------------------------------------------
+
 sdbcx::OCollection* OTable::createColumns( const TStringVector& _rNames )
 {
     return new OColumns( this, m_aMutex, _rNames );
 }
 
-//--------------------------------------------------------------------------
+
 sdbcx::OCollection* OTable::createKeys(const TStringVector& _rNames)
 {
     return new OKeysHelper( this, m_aMutex, _rNames );
 }
 
-//--------------------------------------------------------------------------
+
 sdbcx::OCollection* OTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper( this, m_aMutex, _rNames );
 }
 
-// -----------------------------------------------------------------------------
+
 
 
 

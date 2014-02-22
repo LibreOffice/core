@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/processfactory.hxx"
@@ -71,7 +71,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-// keycodes handled internally by VCL
+
 class ImplReservedKey
 {
 public:
@@ -187,7 +187,7 @@ Application* GetpApp()
 
 Application::Application()
 {
-    // useful for themes at least, perhaps extensions too
+    
     OUString aVar("LIBO_VERSION"), aValue(LIBO_VERSION_DOTTED);
     osl_setEnvironment(aVar.pData, aValue.pData);
 
@@ -210,7 +210,7 @@ bool Application::QueryExit()
 {
     WorkWindow* pAppWin = ImplGetSVData()->maWinData.mpAppWin;
 
-    // call the close handler of the application window
+    
     if ( pAppWin )
         return pAppWin->Close();
     else
@@ -268,7 +268,7 @@ OUString Application::GetAppFileName()
     OUString aExeFileName;
     osl_getExecutableFile(&aExeFileName.pData);
 
-    // convert path to native file format
+    
     osl::FileBase::getSystemPathFromFileURL(aExeFileName, aAppFileName);
 
     return aAppFileName;
@@ -278,7 +278,7 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 {
     switch ( nError & EXC_MAJORTYPE )
     {
-        // System has precedence (so do nothing)
+        
         case EXC_SYSTEM:
             return 0;
 
@@ -305,9 +305,9 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 void Application::Abort( const OUString& rErrorText )
 {
-    //HACK: Dump core iff --norestore command line argument is given (assuming
-    // this process is run by developers who are interested in cores, vs. end
-    // users who are not):
+    
+    
+    
     bool dumpCore = false;
     sal_uInt16 n = GetCommandLineParamCount();
     for (sal_uInt16 i = 0; i != n; ++i) {
@@ -348,27 +348,27 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // run timers that have timed out
+    
     if ( !pSVData->mbNoCallTimer )
         while ( pSVData->mbNotAllTimerCalled )
             Timer::ImplTimerCallbackProc();
 
     pSVData->maAppData.mnDispatchLevel++;
-    // do not wait for events if application was already quit; in that
-    // case only dispatch events already available
-    // do not wait for events either if the app decided that it is too busy for timers
-    // (feature added for the slideshow)
+    
+    
+    
+    
     pSVData->mpDefInst->Yield( i_bWait && !pSVData->maAppData.mbAppQuit && !pSVData->maAppData.mbNoYield, i_bAllEvents );
     pSVData->maAppData.mnDispatchLevel--;
 
-    DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
+    DBG_TESTSOLARMUTEX(); 
 
-    // flush lazy deleted objects
+    
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
 
-    // the system timer events will not necessarily come in in non waiting mode
-    // e.g. on OS X; need to trigger timer checks manually
+    
+    
     if( pSVData->maAppData.mbNoYield && !pSVData->mbNoCallTimer )
     {
         do
@@ -378,7 +378,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
         while( pSVData->mbNotAllTimerCalled );
     }
 
-    // call post yield listeners
+    
     if( pSVData->maAppData.mpPostYieldListeners )
         pSVData->maAppData.mpPostYieldListeners->callListeners( NULL );
 }
@@ -463,9 +463,9 @@ bool Application::IsUICaptured()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // If mouse was captured, or if in tracking- or in select-mode of a floatingwindow (e.g. menus
-    // or pulldown toolboxes) another window should be created
-    // D&D active !!!
+    
+    
+    
     if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
          pSVData->maWinData.mpFirstFloat || nImplSysDialog )
         return true;
@@ -487,11 +487,11 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
         ImplSVData* pSVData = ImplGetSVData();
         if ( !pSVData->maAppData.mbSettingsInit )
         {
-            // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
+            
             pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = true;
         }
-        // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
+        
         pWindow->ImplUpdateGlobalSettings( rSettings, false );
     }
 }
@@ -539,12 +539,12 @@ void Application::SetSettings( const AllSettings& rSettings )
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
             GetpApp()->DataChanged( aDCEvt );
 
-            // notify data change handler
+            
             ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);
 
-            // Update all windows
+            
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
-            // Reset data that needs to be re-calculated
+            
             long nOldDPIX = 0;
             long nOldDPIY = 0;
             if ( pFirstFrame )
@@ -556,10 +556,10 @@ void Application::SetSettings( const AllSettings& rSettings )
             Window* pFrame = pFirstFrame;
             while ( pFrame )
             {
-                // restore AppFont cache data
+                
                 pFrame->mpWindowImpl->mpFrameData->meMapUnit = MAP_PIXEL;
 
-                // call UpdateSettings from ClientWindow in order to prevent updating data twice
+                
                 Window* pClientWin = pFrame;
                 while ( pClientWin->ImplGetClientWindow() )
                     pClientWin = pClientWin->ImplGetClientWindow();
@@ -568,7 +568,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                 Window* pTempWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
                 while ( pTempWin )
                 {
-                    // call UpdateSettings from ClientWindow in order to prevent updating data twice
+                    
                     pClientWin = pTempWin;
                     while ( pClientWin->ImplGetClientWindow() )
                         pClientWin = pClientWin->ImplGetClientWindow();
@@ -579,8 +579,8 @@ void Application::SetSettings( const AllSettings& rSettings )
                 pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
             }
 
-            // if DPI resolution for screen output was changed set the new resolution for all
-            // screen compatible VirDev's
+            
+            
             pFirstFrame = pSVData->maWinData.mpFirstFrame;
             if ( pFirstFrame )
             {
@@ -627,7 +627,7 @@ void Application::InitSettings()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    assert(!pSVData->maAppData.mpSettings);     // initialization should not happen twice!
+    assert(!pSVData->maAppData.mpSettings);     
 
     pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
     pSVData->maAppData.mpSettings = new AllSettings();
@@ -702,7 +702,7 @@ void Application::RemoveKeyListener( const Link& rKeyListener )
 
 bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
-    // let listeners process the key event
+    
     VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -831,7 +831,7 @@ sal_uLong Application::PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEv
     return nEventId;
 }
 
-#endif // !HAVE_FEATURE_DESKTOP
+#endif 
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 {
@@ -887,7 +887,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow && pEventData )
         ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (sal_uInt16) nEvent, pEventData );
 
-    // remove this event from list of posted events, watch for destruction of internal data
+    
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
 
     while( aIter != aPostedEventList.end() )
@@ -908,7 +908,7 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 {
     const SolarMutexGuard aGuard;
 
-    // remove all events for specific window, watch for destruction of internal data
+    
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
 
     while( aIter != aPostedEventList.end() )
@@ -979,7 +979,7 @@ bool Application::InsertIdleHdl( const Link& rLink, sal_uInt16 nPrio )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // create if does not exist
+    
     if ( !pSVData->maAppData.mpIdleMgr )
         pSVData->maAppData.mpIdleMgr = new ImplIdleMgr;
 
@@ -1096,7 +1096,7 @@ void Application::SetAppName( const OUString& rUniqueName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // create if does not exist
+    
     if ( !pSVData->maAppData.mpAppName )
         pSVData->maAppData.mpAppName = new OUString( rUniqueName );
     else
@@ -1116,7 +1116,7 @@ void Application::SetDisplayName( const OUString& rName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // create if does not exist
+    
     if ( !pSVData->maAppData.mpDisplayName )
         pSVData->maAppData.mpDisplayName = new OUString( rName );
     else
@@ -1154,8 +1154,8 @@ unsigned int Application::GetDisplayBuiltInScreen()
 
 unsigned int Application::GetDisplayExternalScreen()
 {
-    // This is really unpleasant, in theory we could have multiple
-    // external displays etc.
+    
+    
     int nExternal(0);
     switch (GetDisplayBuiltInScreen())
     {
@@ -1166,9 +1166,9 @@ unsigned int Application::GetDisplayExternalScreen()
         nExternal = 0;
         break;
     default:
-        // When the built-in display is neither 0 nor 1
-        // then place the full-screen presentation on the
-        // first available screen.
+        
+        
+        
         nExternal = 0;
         break;
     }
@@ -1203,10 +1203,10 @@ unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
     for( unsigned int i = 0; i < nScreens; i++ )
     {
         const Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
-        // if a screen contains the rectangle completely it is obviously the best screen
+        
         if( aCurScreenRect.IsInside( i_rRect ) )
             return i;
-        // next the screen which contains most of the area of the rect is the best
+        
         Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
         if( ! aIntersection.IsEmpty() )
         {
@@ -1221,7 +1221,7 @@ unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
     if( nOverlap > 0 )
         return nBestMatchScreen;
 
-    // finally the screen which center is nearest to the rect is the best
+    
     const Point aCenter( (i_rRect.Left() + i_rRect.Right())/2,
                          (i_rRect.Top() + i_rRect.Bottom())/2 );
     unsigned long nDist = ULONG_MAX;
@@ -1306,29 +1306,29 @@ void Application::SetDefDialogParent( Window* pWindow )
 Window* Application::GetDefDialogParent()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    // #103442# find some useful dialog parent if there
-    // was no default set
-    // NOTE: currently even the default is not used
+    
+    
+    
     if( false && pSVData->maWinData.mpDefDialogParent != NULL )
         return pSVData->maWinData.mpDefDialogParent;
     else
     {
-        // always use the topmost parent of the candidate
-        // window to avoid using dialogs or floaters
-        // as DefDialogParent
+        
+        
+        
 
-        // current focus frame
+        
         Window *pWin = NULL;
         if( (pWin = pSVData->maWinData.mpFocusWin) != NULL )
         {
             while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
                 pWin = pWin->mpWindowImpl->mpParent;
 
-            // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
+            
             if( !pWin->mpWindowImpl )
             {
                 OSL_FAIL( "Window hierarchy corrupted!" );
-                pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
+                pSVData->maWinData.mpFocusWin = NULL;   
                 return NULL;
             }
 
@@ -1337,14 +1337,14 @@ Window* Application::GetDefDialogParent()
                 return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
             }
         }
-        // last active application frame
+        
         if( NULL != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
         {
             return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
         else
         {
-            // first visible top window (may be totally wrong....)
+            
             pWin = pSVData->maWinData.mpFirstFrame;
             while( pWin )
             {
@@ -1359,7 +1359,7 @@ Window* Application::GetDefDialogParent()
                 }
                 pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
             }
-            // use the desktop
+            
             return NULL;
         }
     }
@@ -1629,7 +1629,7 @@ void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
 
 bool InitAccessBridge()
 {
-// Disable MSAA bridge on UNIX
+
 #if defined UNX
     return true;
 #else
@@ -1637,7 +1637,7 @@ bool InitAccessBridge()
 
     if( !bRet )
     {
-        // disable accessibility if the user chooses to continue
+        
         AllSettings aSettings = Application::GetSettings();
         MiscSettings aMisc = aSettings.GetMiscSettings();
         aMisc.SetEnableATToolSupport( sal_False );
@@ -1645,10 +1645,10 @@ bool InitAccessBridge()
         Application::SetSettings( aSettings );
     }
     return bRet;
-#endif // !UNX
+#endif 
 }
 
-// MT: AppEvent was in oldsv.cxx, but is still needed...
+
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }

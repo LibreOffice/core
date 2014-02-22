@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -26,14 +26,14 @@
 #include <comphelper/extract.hxx>
 
 //
-//  class SfxEnumItemInterface
+
 //
 
 DBG_NAME(SfxEnumItemInterface)
 
 TYPEINIT1(SfxEnumItemInterface, SfxPoolItem)
 
-// virtual
+
 bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 {
     SFX_ASSERT(SfxPoolItem::operator ==(rItem), Which(), "unequal type");
@@ -42,7 +42,7 @@ bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
                       GetEnumValue();
 }
 
-// virtual
+
 SfxItemPresentation
 SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                       SfxMapUnit, OUString & rText,
@@ -52,7 +52,7 @@ SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// virtual
+
 bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
 {
@@ -60,7 +60,7 @@ bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     return true;
 }
 
-// virtual
+
 bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
                                     sal_uInt8)
 {
@@ -81,13 +81,13 @@ OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
     return OUString();
 }
 
-// virtual
+
 sal_uInt16 SfxEnumItemInterface::GetValueByPos(sal_uInt16 nPos) const
 {
     return nPos;
 }
 
-// virtual
+
 sal_uInt16 SfxEnumItemInterface::GetPosByValue(sal_uInt16 nValue) const
 {
     sal_uInt16 nCount = GetValueCount();
@@ -102,24 +102,24 @@ bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
     return true;
 }
 
-// virtual
+
 bool SfxEnumItemInterface::HasBoolValue() const
 {
     return false;
 }
 
-// virtual
+
 bool SfxEnumItemInterface::GetBoolValue() const
 {
     return false;
 }
 
-// virtual
+
 void SfxEnumItemInterface::SetBoolValue(sal_Bool)
 {}
 
 //
-//  class SfxEnumItem
+
 //
 
 DBG_NAME(SfxEnumItem)
@@ -133,20 +133,20 @@ SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
 
 TYPEINIT1(SfxEnumItem, SfxEnumItemInterface)
 
-// virtual
+
 SvStream & SfxEnumItem::Store(SvStream & rStream, sal_uInt16) const
 {
     rStream.WriteUInt16( m_nValue );
     return rStream;
 }
 
-// virtual
+
 sal_uInt16 SfxEnumItem::GetEnumValue() const
 {
     return GetValue();
 }
 
-// virtual
+
 void SfxEnumItem::SetEnumValue(sal_uInt16 const nTheValue)
 {
     SetValue(nTheValue);
@@ -159,7 +159,7 @@ void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
 }
 
 //
-//  class SfxBoolItem
+
 //
 
 DBG_NAME(SfxBoolItem)
@@ -174,7 +174,7 @@ SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
     m_bValue = tmp;
 }
 
-// virtual
+
 bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_ASSERT(rItem.ISA(SfxBoolItem),
@@ -182,7 +182,7 @@ bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
     return m_bValue == static_cast< SfxBoolItem const * >(&rItem)->m_bValue;
 }
 
-// virtual
+
 int SfxBoolItem::Compare(const SfxPoolItem & rWith) const
 {
     DBG_ASSERT(rWith.ISA(SfxBoolItem), "SfxBoolItem::Compare(): Bad type");
@@ -190,7 +190,7 @@ int SfxBoolItem::Compare(const SfxPoolItem & rWith) const
                0 : m_bValue ? -1 : 1;
 }
 
-// virtual
+
 SfxItemPresentation SfxBoolItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
                                                  OUString & rText,
@@ -200,14 +200,14 @@ SfxItemPresentation SfxBoolItem::GetPresentation(SfxItemPresentation,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// virtual
+
 bool SfxBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_bValue;
     return true;
 }
 
-// virtual
+
 bool SfxBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     bool bTheValue = bool();
@@ -220,32 +220,32 @@ bool SfxBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
     return false;
 }
 
-// virtual
+
 SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
 {
     return new SfxBoolItem(Which(), rStream);
 }
 
-// virtual
+
 SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    rStream.WriteUChar( m_bValue ); // not bool for serialization!
+    rStream.WriteUChar( m_bValue ); 
     return rStream;
 }
 
-// virtual
+
 SfxPoolItem * SfxBoolItem::Clone(SfxItemPool *) const
 {
     return new SfxBoolItem(*this);
 }
 
-// virtual
+
 sal_uInt16 SfxBoolItem::GetValueCount() const
 {
     return 2;
 }
 
-// virtual
+
 OUString SfxBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
     return bTheValue ?  OUString("TRUE") : OUString("FALSE");

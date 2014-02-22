@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "imageprovider.hxx"
@@ -47,14 +47,14 @@ namespace dbaui
 
     namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
-    // ImageProvider_Data
+    
     struct ImageProvider_Data
     {
-        /// the connection we work with
+        
         Reference< XConnection >        xConnection;
-        /// the views of the connection, if the DB supports views
+        
         Reference< XNameAccess >        xViews;
-        /// interface for providing table's UI
+        
         Reference< XTableUIProvider >   xTableUI;
     };
 
@@ -96,7 +96,7 @@ namespace dbaui
             }
         }
     }
-    // ImageProvider
+    
     ImageProvider::ImageProvider()
         :m_pData( new ImageProvider_Data )
     {
@@ -124,12 +124,12 @@ namespace dbaui
     {
         if ( _nDatabaseObjectType != DatabaseObject::TABLE )
         {
-            // for types other than tables, the icon does not depend on the concrete object
+            
             _out_rImage = getDefaultImage( _nDatabaseObjectType );
         }
         else
         {
-            // check whether the connection can give us an icon
+            
             Reference< XGraphic > xGraphic;
             lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic );
             if ( xGraphic.is() )
@@ -137,7 +137,7 @@ namespace dbaui
 
             if ( !_out_rImage )
             {
-                // no -> determine by type
+                
                 sal_uInt16 nImageResourceID = 0;
                 lcl_getTableImageResourceID_nothrow( *m_pData, _rName, nImageResourceID );
 
@@ -213,6 +213,6 @@ namespace dbaui
         return Image( ModuleRes( DATABASE_TREE_ICON ) );
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

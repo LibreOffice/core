@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ const long STD_MIN_SIZE_Y = 250;
 
 const long WIN_BORDER = 2;
 
-} // namespace
+} 
 
 
 DBG_NAME(PropBrw)
@@ -97,10 +97,10 @@ PropBrw::PropBrw (DialogWindowLayout& rLayout_):
 
     try
     {
-        // create a frame wrapper for myself
+        
         m_xMeAsFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
         m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-        m_xMeAsFrame->setName( "form property browser" );  // change name!
+        m_xMeAsFrame->setName( "form property browser" );  
     }
     catch (const Exception&)
     {
@@ -125,7 +125,7 @@ void PropBrw::ImplReCreateController()
     {
         Reference< XComponentContext > xOwnContext = comphelper::getProcessComponentContext();
 
-        // a ComponentContext for the
+        
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =
         {
             ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
@@ -134,7 +134,7 @@ void PropBrw::ImplReCreateController()
         Reference< XComponentContext > xInspectorContext(
             ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), xOwnContext ) );
 
-        // create a property browser controller
+        
         Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
         static const OUString s_sControllerServiceName( "com.sun.star.awt.PropertyBrowserController" );
         m_xBrowserController = Reference< XPropertySet >(
@@ -265,7 +265,7 @@ Sequence< Reference< XInterface > >
                     aInterfaces.push_back(xControlInterface);
             }
 
-            // next element
+            
             pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
     }
@@ -303,7 +303,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
             makeAny( _rxObject )
         );
 
-        // set the new title according to the selected object
+        
         SetText( GetHeadlineName( _rxObject ) );
     }
 }
@@ -314,7 +314,7 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
     OUString aName;
     Reference< lang::XServiceInfo > xServiceInfo( _rxObject, UNO_QUERY );
 
-    if (xServiceInfo.is())    // single selection
+    if (xServiceInfo.is())    
     {
         sal_uInt16 nResId = 0;
         aName = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
@@ -413,7 +413,7 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
             aName += IDE_RESSTR(nResId);
         }
     }
-    else if (!_rxObject.is())    // no properties
+    else if (!_rxObject.is())    
     {
         aName = IDE_RESSTR(RID_STR_BRWTITLE_NO_PROPERTIES);
     }
@@ -426,7 +426,7 @@ void PropBrw::Resize()
 {
     DockingWindow::Resize();
 
-    // adjust size
+    
     Size aSize_ = GetOutputSizePixel();
     Size aPropWinSize( aSize_ );
     aPropWinSize.Width() -= (2*WIN_BORDER);
@@ -444,7 +444,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
 {
     Reference< XModel > xContextDocument( _rxContextDocument );
 
-    // if we should simply "empty" ourself, assume the context document didn't change
+    
     if ( !pNewView )
     {
         OSL_ENSURE( !_rxContextDocument.is(), "PropBrw::ImplUpdate: no view, but a document?!" );
@@ -470,7 +470,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
 
         pView = pNewView;
 
-        // set focus on initialization
+        
         if ( m_bInitialStateChange )
         {
             if ( m_xBrowserComponentWindow.is() )
@@ -495,13 +495,13 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         {
             if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj()))
             {
-                if ( pDlgEdObj->IsGroupObject() ) // group object
+                if ( pDlgEdObj->IsGroupObject() ) 
                     aNewObjects = CreateMultiSelectionSequence( rMarkList );
-                else // single selection
+                else 
                     xNewObject = xNewObject.query( pDlgEdObj->GetUnoControlModel() );
             }
         }
-        else if ( nMarkCount > 1 ) // multiple selection
+        else if ( nMarkCount > 1 ) 
         {
             aNewObjects = CreateMultiSelectionSequence( rMarkList );
         }
@@ -520,6 +520,6 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
     }
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

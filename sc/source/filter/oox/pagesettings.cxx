@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pagesettings.hxx"
@@ -47,7 +47,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -55,13 +55,13 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relations;
 
-// ============================================================================
+
 
 namespace {
 
-const double OOX_MARGIN_DEFAULT_LR                  = 0.748;    /// Left/right default margin in inches.
-const double OOX_MARGIN_DEFAULT_TB                  = 0.984;    /// Top/bottom default margin in inches.
-const double OOX_MARGIN_DEFAULT_HF                  = 0.512;    /// Header/footer default margin in inches.
+const double OOX_MARGIN_DEFAULT_LR                  = 0.748;    
+const double OOX_MARGIN_DEFAULT_TB                  = 0.984;    
+const double OOX_MARGIN_DEFAULT_HF                  = 0.512;    
 
 const sal_uInt16 BIFF12_PRINTOPT_HORCENTER          = 0x0001;
 const sal_uInt16 BIFF12_PRINTOPT_VERCENTER          = 0x0002;
@@ -79,7 +79,7 @@ const sal_uInt16 BIFF12_PAGESETUP_DRAFTQUALITY      = 0x0010;
 const sal_uInt16 BIFF12_PAGESETUP_PRINTNOTES        = 0x0020;
 const sal_uInt16 BIFF12_PAGESETUP_DEFAULTORIENT     = 0x0040;
 const sal_uInt16 BIFF12_PAGESETUP_USEFIRSTPAGE      = 0x0080;
-const sal_uInt16 BIFF12_PAGESETUP_NOTES_END         = 0x0100;   // different to BIFF flag
+const sal_uInt16 BIFF12_PAGESETUP_NOTES_END         = 0x0100;   
 
 const sal_uInt16 BIFF12_CHARTPAGESETUP_LANDSCAPE    = 0x0001;
 const sal_uInt16 BIFF12_CHARTPAGESETUP_INVALID      = 0x0002;
@@ -88,9 +88,9 @@ const sal_uInt16 BIFF12_CHARTPAGESETUP_DEFAULTORIENT= 0x0008;
 const sal_uInt16 BIFF12_CHARTPAGESETUP_USEFIRSTPAGE = 0x0010;
 const sal_uInt16 BIFF12_CHARTPAGESETUP_DRAFTQUALITY = 0x0020;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 PageSettingsModel::PageSettingsModel() :
     mfLeftMargin( OOX_MARGIN_DEFAULT_LR ),
@@ -133,7 +133,7 @@ void PageSettingsModel::setBiffPrintErrors( sal_uInt8 nPrintErrors )
     mnPrintErrors = STATIC_ARRAY_SELECT( spnErrorIds, nPrintErrors, XML_none );
 }
 
-// ============================================================================
+
 
 PageSettings::PageSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -276,7 +276,7 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, SequenceIn
     rStrm   >> maModel.mnPaperSize >> maModel.mnHorPrintRes >> maModel.mnVerPrintRes
             >> maModel.mnCopies >> nFirstPage >> nFlags >> aRelId;
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
-    maModel.mnFirstPage     = nFirstPage; // 16-bit in CHARTPAGESETUP
+    maModel.mnFirstPage     = nFirstPage; 
     maModel.mnOrientation   = getFlagValue( nFlags, BIFF12_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, BIFF12_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
     maModel.mbValidSettings = !getFlag( nFlags, BIFF12_CHARTPAGESETUP_INVALID );
     maModel.mbUseFirstPage  = getFlag( nFlags, BIFF12_CHARTPAGESETUP_USEFIRSTPAGE );
@@ -319,7 +319,7 @@ void PageSettings::finalizeImport()
     PropertySet aStyleProps( xStyle );
     getPageSettingsConverter().writePageSettingsProperties( aStyleProps, maModel, getSheetType() );
 
-    // Set page style name to the sheet.
+    
     SCTAB nTab = getSheetIndex();
     getScDocument().SetPageStyle(nTab, aStyleName);
 }
@@ -331,8 +331,8 @@ void PageSettings::importPictureData( const Relations& rRelations, const OUStrin
         maModel.maGraphicUrl = getBaseFilter().getGraphicHelper().importEmbeddedGraphicObject( aPicturePath );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 enum HFPortionId
 {
@@ -342,15 +342,15 @@ enum HFPortionId
     HF_COUNT
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct HFPortionInfo
 {
-    Reference<text::XText>  mxText;                 /// XText interface of this portion.
-    Reference<text::XTextCursor> mxStart;           /// Start position of current text range for formatting.
-    Reference<text::XTextCursor> mxEnd;             /// End position of current text range for formatting.
-    double              mfTotalHeight;          /// Sum of heights of previous lines in points.
-    double              mfCurrHeight;           /// Height of the current text line in points.
+    Reference<text::XText>  mxText;                 
+    Reference<text::XTextCursor> mxStart;           
+    Reference<text::XTextCursor> mxEnd;             
+    double              mfTotalHeight;          
+    double              mfCurrHeight;           
 
     bool                initialize( const Reference<text::XText>& rxText );
 };
@@ -369,7 +369,7 @@ bool HFPortionInfo::initialize( const Reference<text::XText>& rxText )
     return bRet;
 }
 
-// ============================================================================
+
 
 class HeaderFooterParser : public WorkbookHelper
 {
@@ -433,42 +433,42 @@ private:
     const OUString      maSheetNameService;
     const OUString      maFileNameService;
     const OUString      maDateTimeService;
-    const OStringSet    maBoldNames;            /// All names for bold font style in lowercase UTF-8.
-    const OStringSet    maItalicNames;          /// All names for italic font style in lowercase UTF-8.
+    const OStringSet    maBoldNames;            
+    const OStringSet    maItalicNames;          
     HFPortionInfoVec    maPortions;
-    HFPortionId         meCurrPortion;          /// Identifier of current H/F portion.
-    OUStringBuffer      maBuffer;               /// Text data to append to current text range.
-    FontModel           maFontModel;            /// Font attributes of current text range.
+    HFPortionId         meCurrPortion;          
+    OUStringBuffer      maBuffer;               
+    FontModel           maFontModel;            
 };
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
-// different names for bold font style (lowercase)
+
 static const sal_Char* const sppcBoldNames[] =
 {
     "bold",
-    "fett",             // German 'bold'
+    "fett",             
     "demibold",
-    "halbfett",         // German 'demibold'
+    "halbfett",         
     "black",
     "heavy"
 };
 
-// different names for italic font style (lowercase)
+
 static const sal_Char* const sppcItalicNames[] =
 {
     "italic",
-    "kursiv",           // German 'italic'
+    "kursiv",           
     "oblique",
-    "schr\303\204g",    // German 'oblique' with uppercase A umlaut
-    "schr\303\244g"     // German 'oblique' with lowercase A umlaut
+    "schr\303\204g",    
+    "schr\303\244g"     
 };
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -495,18 +495,18 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
     meCurrPortion = HF_CENTER;
     maBuffer.setLength( 0 );
     maFontModel = getStyles().getDefaultFontModel();
-    OUStringBuffer aFontName;           // current font name
-    OUStringBuffer aFontStyle;          // current font style
-    sal_Int32 nFontHeight = 0;          // current font height
+    OUStringBuffer aFontName;           
+    OUStringBuffer aFontStyle;          
+    sal_Int32 nFontHeight = 0;          
 
     /** State of the parser. */
     enum
     {
-        STATE_TEXT,         /// Literal text data.
-        STATE_TOKEN,        /// Control token following a '&' character.
-        STATE_FONTNAME,     /// Font name ('&' is followed by '"', reads until next '"' or ',').
-        STATE_FONTSTYLE,    /// Font style name (font part after ',', reads until next '"').
-        STATE_FONTHEIGHT    /// Font height ('&' is followed by num. digits, reads until non-digit).
+        STATE_TEXT,         
+        STATE_TOKEN,        
+        STATE_FONTNAME,     
+        STATE_FONTSTYLE,    
+        STATE_FONTHEIGHT    
     }
     eState = STATE_TEXT;
 
@@ -521,11 +521,11 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
             {
                 switch( cChar )
                 {
-                    case '&':           // new token
+                    case '&':           
                         appendText();
                         eState = STATE_TOKEN;
                     break;
-                    case '\n':          // line break
+                    case '\n':          
                         appendText();
                         appendLineBreak();
                     break;
@@ -537,30 +537,30 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
 
             case STATE_TOKEN:
             {
-                // default: back to text mode, may be changed in specific cases
+                
                 eState = STATE_TEXT;
-                // ignore case of token codes
+                
                 if( ('a' <= cChar) && (cChar <= 'z') )
                     (cChar -= 'a') += 'A';
                 switch( cChar )
                 {
-                    case '&':   maBuffer.append( cChar );   break;  // the '&' character
+                    case '&':   maBuffer.append( cChar );   break;  
 
-                    case 'L':   setNewPortion( HF_LEFT );   break;  // left portion
-                    case 'C':   setNewPortion( HF_CENTER ); break;  // center portion
-                    case 'R':   setNewPortion( HF_RIGHT );  break;  // right portion
+                    case 'L':   setNewPortion( HF_LEFT );   break;  
+                    case 'C':   setNewPortion( HF_CENTER ); break;  
+                    case 'R':   setNewPortion( HF_RIGHT );  break;  
 
-                    case 'P':   // page number
+                    case 'P':   
                         appendField( createField( maPageNumberService ) );
                     break;
-                    case 'N':   // total page count
+                    case 'N':   
                         appendField( createField( maPageCountService ) );
                     break;
-                    case 'A':   // current sheet name
+                    case 'A':   
                         appendField( createField( maSheetNameService ) );
                     break;
 
-                    case 'F':   // file name
+                    case 'F':   
                     {
                         Reference<text::XTextContent> xContent = createField( maFileNameService );
                         PropertySet aPropSet( xContent );
@@ -568,12 +568,12 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                         appendField( xContent );
                     }
                     break;
-                    case 'Z':   // file path (without file name), OOXML, BIFF12, and BIFF8 only
+                    case 'Z':   
                         if( (getFilterType() == FILTER_OOXML) || ((getFilterType() == FILTER_BIFF) && (getBiff() == BIFF8)) )
                         {
                             Reference<text::XTextContent> xContent = createField( maFileNameService );
                             PropertySet aPropSet( xContent );
-                            // FilenameDisplayFormat::PATH not supported by Calc
+                            
                             aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::FULL );
                             appendField( xContent );
                             /*  path only is not supported -- if we find a '&Z&F'
@@ -582,7 +582,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                                 pcChar += 2;
                         }
                     break;
-                    case 'D':   // date
+                    case 'D':   
                     {
                         Reference<text::XTextContent> xContent = createField( maDateTimeService );
                         PropertySet aPropSet( xContent );
@@ -590,7 +590,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                         appendField( xContent );
                     }
                     break;
-                    case 'T':   // time
+                    case 'T':   
                     {
                         Reference<text::XTextContent> xContent = createField( maDateTimeService );
                         PropertySet aPropSet( xContent );
@@ -599,60 +599,60 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     }
                     break;
 
-                    case 'B':   // bold
+                    case 'B':   
                         setAttributes();
                         maFontModel.mbBold = !maFontModel.mbBold;
                     break;
-                    case 'I':   // italic
+                    case 'I':   
                         setAttributes();
                         maFontModel.mbItalic = !maFontModel.mbItalic;
                     break;
-                    case 'U':   // underline
+                    case 'U':   
                         setAttributes();
                         maFontModel.mnUnderline = (maFontModel.mnUnderline == XML_single) ? XML_none : XML_single;
                     break;
-                    case 'E':   // double underline
+                    case 'E':   
                         setAttributes();
                         maFontModel.mnUnderline = (maFontModel.mnUnderline == XML_double) ? XML_none : XML_double;
                     break;
-                    case 'S':   // strikeout
+                    case 'S':   
                         setAttributes();
                         maFontModel.mbStrikeout = !maFontModel.mbStrikeout;
                     break;
-                    case 'X':   // superscript
+                    case 'X':   
                         setAttributes();
                         maFontModel.mnEscapement = (maFontModel.mnEscapement == XML_superscript) ? XML_baseline : XML_superscript;
                     break;
-                    case 'Y':   // subsrcipt
+                    case 'Y':   
                         setAttributes();
                         maFontModel.mnEscapement = (maFontModel.mnEscapement == XML_subscript) ? XML_baseline : XML_subscript;
                     break;
-                    case 'O':   // outlined
+                    case 'O':   
                         setAttributes();
                         maFontModel.mbOutline = !maFontModel.mbOutline;
                     break;
-                    case 'H':   // shadow
+                    case 'H':   
                         setAttributes();
                         maFontModel.mbShadow = !maFontModel.mbShadow;
                     break;
 
-                    case 'K':   // text color (not in BIFF)
+                    case 'K':   
                         if( (getFilterType() == FILTER_OOXML) && (pcChar + 6 < pcEnd) )
                         {
                             setAttributes();
-                            // eat the following 6 characters
+                            
                             convertFontColor( OUString( pcChar + 1, 6 ) );
                             pcChar += 6;
                         }
                     break;
 
-                    case '\"':  // font name
+                    case '\"':  
                         aFontName.setLength( 0 );
                         aFontStyle.setLength( 0 );
                         eState = STATE_FONTNAME;
                     break;
                     default:
-                        if( ('0' <= cChar) && (cChar <= '9') )    // font size
+                        if( ('0' <= cChar) && (cChar <= '9') )    
                         {
                             nFontHeight = cChar - '0';
                             eState = STATE_FONTHEIGHT;
@@ -722,7 +722,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
         }
     }
 
-    // finalize
+    
     finalizePortion();
     maPortions[ HF_LEFT   ].mfTotalHeight += getCurrHeight( HF_LEFT );
     maPortions[ HF_CENTER ].mfTotalHeight += getCurrHeight( HF_CENTER );
@@ -732,7 +732,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
         ::std::max( maPortions[ HF_CENTER ].mfTotalHeight, maPortions[ HF_RIGHT ].mfTotalHeight ) );
 }
 
-// private --------------------------------------------------------------------
+
 
 double HeaderFooterParser::getCurrHeight( HFPortionId ePortion ) const
 {
@@ -824,7 +824,7 @@ void HeaderFooterParser::convertFontName( const OUString& rName )
 {
     if( !rName.isEmpty() )
     {
-        // single dash is document default font
+        
         if( (rName.getLength() == 1) && (rName[ 0 ] == '-') )
             maFontModel.maName = getStyles().getDefaultFontModel().maName;
         else
@@ -854,12 +854,12 @@ void HeaderFooterParser::convertFontColor( const OUString& rColor )
 {
     OSL_ENSURE( rColor.getLength() == 6, "HeaderFooterParser::convertFontColor - invalid font color code" );
     if( (rColor[ 2 ] == '+') || (rColor[ 2 ] == '-') )
-        // theme color: TTSNNN (TT = decimal theme index, S = +/-, NNN = decimal tint/shade in percent)
+        
         maFontModel.maColor.setTheme(
             rColor.copy( 0, 2 ).toInt32(),
             static_cast< double >( rColor.copy( 2 ).toInt32() ) / 100.0 );
     else
-        // RGB color: RRGGBB
+        
         maFontModel.maColor.setRgb( rColor.toUInt32( 16 ) );
 }
 
@@ -879,9 +879,9 @@ void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
     }
 }
 
-// ============================================================================
 
-// ----------------------------------------------------------------------------
+
+
 
 PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId ) :
     mnLeftPropId( nLeftPropId ),
@@ -894,7 +894,7 @@ PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_In
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PageSettingsConverter::PageSettingsConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -911,35 +911,35 @@ PageSettingsConverter::~PageSettingsConverter()
 void PageSettingsConverter::writePageSettingsProperties(
         PropertySet& rPropSet, const PageSettingsModel& rModel, WorksheetType eSheetType )
 {
-    // special handling for chart sheets
+    
     bool bChartSheet = eSheetType == SHEETTYPE_CHARTSHEET;
 
-    // printout scaling
+    
     if( bChartSheet )
     {
-        // always fit chart sheet to 1 page
+        
         rPropSet.setProperty< sal_Int16 >( PROP_ScaleToPages, 1 );
     }
     else if( rModel.mbFitToPages )
     {
-        // fit to number of pages
+        
         rPropSet.setProperty( PROP_ScaleToPagesX, getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnFitToWidth, 0, 1000 ) );
         rPropSet.setProperty( PROP_ScaleToPagesY, getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnFitToHeight, 0, 1000 ) );
     }
     else
     {
-        // scale may be 0 which indicates uninitialized
+        
         sal_Int16 nScale = (rModel.mbValidSettings && (rModel.mnScale > 0)) ? getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnScale, 10, 400 ) : 100;
         rPropSet.setProperty( PROP_PageScale, nScale );
     }
 
-    // paper orientation
+    
     bool bLandscape = rModel.mnOrientation == XML_landscape;
-    // default orientation for current sheet type (chart sheets default to landscape)
+    
     if( bChartSheet && ( !rModel.mbValidSettings || (rModel.mnOrientation == XML_default) ) )
         bLandscape = true;
 
-    // paper size
+    
     if( !rModel.mbValidSettings )
     {
         awt::Size aSize;
@@ -965,11 +965,11 @@ void PageSettingsConverter::writePageSettingsProperties(
         }
     }
 
-    // header/footer
+    
     convertHeaderFooterData( rPropSet, maHeaderData, rModel.maOddHeader, rModel.maEvenHeader, rModel.mbUseEvenHF, rModel.mfTopMargin,    rModel.mfHeaderMargin );
     convertHeaderFooterData( rPropSet, maFooterData, rModel.maOddFooter, rModel.maEvenFooter, rModel.mbUseEvenHF, rModel.mfBottomMargin, rModel.mfFooterMargin );
 
-    // write all properties to property set
+    
     const UnitConverter& rUnitConv = getUnitConverter();
     PropertyMap aPropMap;
     aPropMap[ PROP_IsLandscape ]           <<= bLandscape;
@@ -978,13 +978,13 @@ void PageSettingsConverter::writePageSettingsProperties(
     aPropMap[ PROP_PrintAnnotations ]      <<= (rModel.mnCellComments == XML_asDisplayed);
     aPropMap[ PROP_CenterHorizontally ]    <<= rModel.mbHorCenter;
     aPropMap[ PROP_CenterVertically ]      <<= rModel.mbVerCenter;
-    aPropMap[ PROP_PrintGrid ]             <<= (!bChartSheet && rModel.mbPrintGrid);     // no gridlines in chart sheets
-    aPropMap[ PROP_PrintHeaders ]          <<= (!bChartSheet && rModel.mbPrintHeadings); // no column/row headings in chart sheets
+    aPropMap[ PROP_PrintGrid ]             <<= (!bChartSheet && rModel.mbPrintGrid);     
+    aPropMap[ PROP_PrintHeaders ]          <<= (!bChartSheet && rModel.mbPrintHeadings); 
     aPropMap[ PROP_LeftMargin ]            <<= rUnitConv.scaleToMm100( rModel.mfLeftMargin, UNIT_INCH );
     aPropMap[ PROP_RightMargin ]           <<= rUnitConv.scaleToMm100( rModel.mfRightMargin, UNIT_INCH );
-    // #i23296# In Calc, "TopMargin" property is distance to top of header if enabled
+    
     aPropMap[ PROP_TopMargin ]             <<= rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rModel.mfHeaderMargin : rModel.mfTopMargin, UNIT_INCH );
-    // #i23296# In Calc, "BottomMargin" property is distance to bottom of footer if enabled
+    
     aPropMap[ PROP_BottomMargin ]          <<= rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, UNIT_INCH );
     aPropMap[ PROP_HeaderIsOn ]            <<= maHeaderData.mbHasContent;
     aPropMap[ PROP_HeaderIsShared ]        <<= maHeaderData.mbShareOddEven;
@@ -996,7 +996,7 @@ void PageSettingsConverter::writePageSettingsProperties(
     aPropMap[ PROP_FooterIsDynamicHeight ] <<= maFooterData.mbDynamicHeight;
     aPropMap[ PROP_FooterHeight ]          <<= maFooterData.mnHeight;
     aPropMap[ PROP_FooterBodyDistance ]    <<= maFooterData.mnBodyDist;
-    // background image
+    
     if( !rModel.maGraphicUrl.isEmpty() )
     {
         aPropMap[ PROP_BackGraphicURL ] <<= rModel.maGraphicUrl;
@@ -1025,7 +1025,7 @@ void PageSettingsConverter::convertHeaderFooterData(
 
     if( orHFData.mbHasContent )
     {
-        // use maximum height of odd/even header/footer
+        
         orHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
         /*  Calc contains distance between bottom of header and top of page
             body in "HeaderBodyDistance" property, and distance between bottom
@@ -1040,7 +1040,7 @@ void PageSettingsConverter::convertHeaderFooterData(
             "FooterHeight" property is in fact distance from bottom of page
             body to bottom of footer (including "FooterBodyDistance"). */
         orHFData.mnHeight += orHFData.mnBodyDist;
-        // negative body distance not allowed
+        
         orHFData.mnBodyDist = ::std::max< sal_Int32 >( orHFData.mnBodyDist, 0 );
     }
 }
@@ -1063,9 +1063,9 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     return nHeight;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

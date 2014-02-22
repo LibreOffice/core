@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLIndexBibliographyConfigurationContext.hxx"
@@ -89,7 +89,7 @@ void XMLIndexBibliographyConfigurationContext::StartElement(
 
         ProcessAttribute(nPrefix, sLocalName,
                          xAttrList->getValueByIndex(nAttr));
-        // else: ignore
+        
     }
 }
 
@@ -162,7 +162,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     OUString sKey;
     sal_Bool bSort(sal_True);
 
-    // process children here and use default context!
+    
     if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
          IsXMLToken( rLocalName, XML_SORT_KEY ) )
     {
@@ -192,7 +192,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
             }
         }
 
-        // valid data?
+        
         sal_uInt16 nKey;
         if (SvXMLUnitConverter::convertEnum(nKey, sKey,
                                             aBibliographyDataFieldMap))
@@ -223,12 +223,12 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
 void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
 {
-    // (code almost the same as export...)
+    
 
-    // insert and block mode is handled in insertStyleFamily
+    
 
-    // first: get field master
-    // (we'll create one, and get the only master for this type)
+    
+    
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
     if( xFactory.is() )
     {
@@ -239,8 +239,8 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
         while (i < nServiceCount && !bFound)
         {
             if (aServices[i].equals(sFieldMaster_Bibliography))
-            // here we should use a method which compares in reverse order if available
-            // #85282#
+            
+            
                 bFound = sal_True;
             else
                 i++;
@@ -287,10 +287,10 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
                 aAny <<= aKeysSeq;
                 xPropSet->setPropertyValue(sSortKeys, aAny);
             }
-            // else: can't get FieldMaster -> ignore
+            
         }
     }
-    // else: can't even get Factory -> ignore
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

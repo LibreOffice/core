@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Scaling.hxx"
@@ -84,7 +84,7 @@ uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames_Static()
     return uno::Sequence< OUString >( & lcl_aServiceName_Logarithmic, 1 );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LogarithmicScaling, lcl_aServiceName_Logarithmic )
 
 ExponentialScaling::ExponentialScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -133,7 +133,7 @@ uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames_Static()
     return uno::Sequence< OUString >( & lcl_aServiceName_Exponential, 1 );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ExponentialScaling, lcl_aServiceName_Exponential )
 
 LinearScaling::LinearScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -165,7 +165,7 @@ uno::Reference< XScaling > SAL_CALL
     LinearScaling::getInverseScaling()
     throw (uno::RuntimeException)
 {
-    // ToDo: ApproxEqual ?
+    
     if( m_fSlope == 0 )
         throw uno::RuntimeException();
 
@@ -184,7 +184,7 @@ uno::Sequence< OUString > LinearScaling::getSupportedServiceNames_Static()
     return uno::Sequence< OUString >( & lcl_aServiceName_Linear, 1 );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LinearScaling, lcl_aServiceName_Linear )
 
 PowerScaling::PowerScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -214,7 +214,7 @@ uno::Reference< XScaling > SAL_CALL
     PowerScaling::getInverseScaling()
     throw (uno::RuntimeException)
 {
-    // ToDo: ApproxEqual ?
+    
     if( m_fExponent == 0 )
         throw uno::RuntimeException();
 
@@ -233,9 +233,9 @@ uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
     return uno::Sequence< OUString >( & lcl_aServiceName_Power, 1 );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PowerScaling, lcl_aServiceName_Power )
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

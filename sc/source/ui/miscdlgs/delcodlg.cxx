@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,26 +14,26 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "delcodlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
 
-//-----------------------------------------------------------------------
+
 
 ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
                                           sal_uInt16  nCheckDefaults ) :
@@ -78,7 +78,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelAll->SetClickHdl( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
@@ -106,7 +106,7 @@ sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
                 : ScDeleteContentsDlg::nPreviousChecks );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDeleteContentsDlg::DisableChecks( bool bDelAllChecked )
 {
@@ -135,7 +135,7 @@ void ScDeleteContentsDlg::DisableChecks( bool bDelAllChecked )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDeleteContentsDlg::DisableObjects()
 {
@@ -144,7 +144,7 @@ void ScDeleteContentsDlg::DisableObjects()
     aBtnDelObjects->Disable();
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScDeleteContentsDlg, DelAllHdl)
 {

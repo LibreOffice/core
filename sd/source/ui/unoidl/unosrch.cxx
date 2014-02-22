@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -96,7 +96,7 @@ SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
 {
 }
 
-// util::XReplaceable
+
 uno::Reference< util::XReplaceDescriptor > SAL_CALL SdUnoSearchReplaceShape::createReplaceDescriptor()
     throw( uno::RuntimeException )
 {
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
 
     while( xShape.is() )
     {
-        // replace in xShape
+        
         uno::Reference< text::XText >  xText(xShape, uno::UNO_QUERY);
         uno::Reference< text::XTextRange >  xRange(xText, uno::UNO_QUERY);
         uno::Reference< text::XTextRange >  xFound;
@@ -154,9 +154,9 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
             xRange = xFound->getEnd();
             nFound++;
         }
-        // done with xShape -> get next shape
+        
 
-        // test if it's a group
+        
         uno::Reference< drawing::XShapes > xGroupShape( xShape, uno::UNO_QUERY );
         if( xGroupShape.is() && ( xGroupShape->getCount() > 0 ) )
         {
@@ -171,8 +171,8 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
                 xShape = NULL;
         }
 
-        // test parent contexts for next shape if none
-        // is found in the current context
+        
+        
         while( pContext && !xShape.is() )
         {
             if( pContext->getParent() )
@@ -194,7 +194,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     return nFound;
 }
 
-// XSearchable
+
 uno::Reference< ::com::sun::star::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape::createSearchDescriptor(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -241,7 +241,7 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
     }
     while( xShape.is() )
     {
-        // find in xShape
+        
         uno::Reference< text::XText >  xText(xShape, uno::UNO_QUERY);
         uno::Reference< text::XTextRange >  xRange(xText, uno::UNO_QUERY);
         uno::Reference< text::XTextRange >  xFound;
@@ -263,9 +263,9 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
 
             xRange = xFound->getEnd();
         }
-        // done with shape -> get next shape
+        
 
-        // test if it's a group
+        
         uno::Reference< drawing::XShapes >  xGroupShape;
         xGroupShape.set( xShape, uno::UNO_QUERY );
 
@@ -282,8 +282,8 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
                 xShape = NULL;
         }
 
-        // test parent contexts for next shape if none
-        // is found in the current context
+        
+        
         while( pContext && !xShape.is() )
         {
             if( pContext->getParent() )
@@ -363,17 +363,17 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
             xFound = Search( xRange, pDescr );
             if(!xFound.is())
             {
-                // we need a new starting range now
+                
                 xRange = NULL;
 
                 if(mpPage)
                 {
                     uno::Reference< drawing::XDrawPage >  xPage( mpPage );
 
-                    // we do a page wide search, so skip to the next shape here
+                    
                     uno::Reference< container::XIndexAccess > xShapes( xPage, uno::UNO_QUERY );
 
-                    // get next shape on our page
+                    
                     if( xShapes.is() )
                     {
                         uno::Reference< drawing::XShape > xFound2( GetNextShape( xShapes, xCurrentShape ) );
@@ -389,8 +389,8 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
                 }
                 else
                 {
-                    // we search only in this shape, so end search if we have
-                    // not found anything
+                    
+                    
                 }
             }
         }
@@ -441,7 +441,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::R
                     {
                         if( xFound.get() == xCurrentShape.get() )
                         {
-                            // the current shape was found at the end of the group
+                            
                             i++;
                             if( i < nCount )
                             {
@@ -487,8 +487,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
     uno::Reference< container::XEnumerationAccess > xEnumAccess( xParent, uno::UNO_QUERY );
 
-    // first we fill the arrys with the position and paragraph for every character
-    // inside the text
+    
+    
     if( xEnumAccess.is() )
     {
         uno::Reference< container::XEnumeration >  xParaEnum( xEnumAccess->createEnumeration() );
@@ -517,7 +517,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                             ESelection aStartSel( GetSelection( xPortion->getStart() ) );
                             ESelection aEndSel( GetSelection( xPortion->getEnd() ) );
 
-                            // special case for empty portions with content or length one portions with content (fields)
+                            
                             if( (aStartSel.nStartPos == aEndSel.nStartPos) || ( (aStartSel.nStartPos == (aEndSel.nStartPos - 1)) && (nLen > 1) ) )
                             {
                                 for( sal_Int32 i = 0; i < nLen; i++ )
@@ -538,7 +538,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
                                 nLastPos = aStartSel.nStartPos;
                             }
-                            // normal case
+                            
                             else
                             {
                                 for( sal_Int32 i = 0; i < nLen; i++ )
@@ -721,7 +721,7 @@ SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw()
     delete mpPropSet;
 }
 
-// XSearchDescriptor
+
 OUString SAL_CALL SdUnoSearchReplaceDescriptor::getSearchString()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -734,7 +734,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setSearchString( const OUString& aSt
     maSearchStr = aString;
 }
 
-// XReplaceDescriptor
+
 OUString SAL_CALL SdUnoSearchReplaceDescriptor::getReplaceString()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -747,7 +747,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setReplaceString( const OUString& aR
     maReplaceStr = aReplaceString;
 }
 
-// XPropertySet
+
 uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SdUnoSearchReplaceDescriptor::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -827,7 +827,7 @@ SdUnoFindAllAccess::~SdUnoFindAllAccess() throw()
 {
 }
 
-// XElementAccess
+
 uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -840,7 +840,7 @@ sal_Bool SAL_CALL SdUnoFindAllAccess::hasElements()
     return maSequence.getLength() > 0;
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL SdUnoFindAllAccess::getCount()
     throw(::com::sun::star::uno::RuntimeException)
 {

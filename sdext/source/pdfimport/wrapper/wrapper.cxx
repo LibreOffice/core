@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -73,8 +73,8 @@ namespace pdfi
 namespace
 {
 
-// identifier of the strings coming from the out-of-process xpdf
-// converter
+
+
 enum parseKey {
     CLIPPATH,
     DRAWCHAR,
@@ -219,13 +219,13 @@ namespace
             }
             else
             {
-                // Just continue on the next character. The current
-                // block will be copied the next time it goes through the
-                // 'if' branch.
+                
+                
+                
                 ++pCur;
             }
         }
-        // maybe there are some data to copy yet
+        
         if (sal::static_int_cast<size_t>(pRead - pOrig) < nOrigLen)
         {
             const size_t nLen(nOrigLen - (pRead - pOrig));
@@ -326,9 +326,9 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
             {
                 OSL_PRECOND(nContiguousControlPoints==2,"broken bezier path");
 
-                // have two control points before us. the current one
-                // is a normal point - thus, convert previous points
-                // into bezier segment
+                
+                
+                
                 const sal_uInt32 nPoints( aSubPath.count() );
                 const basegfx::B2DPoint aCtrlA( aSubPath.getB2DPoint(nPoints-3) );
                 const basegfx::B2DPoint aCtrlB( aSubPath.getB2DPoint(nPoints-2) );
@@ -339,7 +339,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
                 nContiguousControlPoints=0;
             }
 
-            // one token look-ahead (new subpath or more points?
+            
             nDummy=m_nCharIndex;
             aCurrToken = m_aLine.getToken(m_nNextToken,' ',nDummy);
         }
@@ -369,7 +369,7 @@ void Parser::readChar()
 
     OString aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
-    // chars gobble up rest of line
+    
     m_nCharIndex = -1;
 
     m_pSink->drawGlyphs( OStringToOUString( aChars,
@@ -383,7 +383,7 @@ void Parser::readLineCap()
     switch( readInt32() )
     {
         default:
-            // FALLTHROUGH intended
+            
         case 0: nCap = rendering::PathCapType::BUTT; break;
         case 1: nCap = rendering::PathCapType::ROUND; break;
         case 2: nCap = rendering::PathCapType::SQUARE; break;
@@ -416,7 +416,7 @@ void Parser::readLineJoin()
     switch( readInt32() )
     {
         default:
-            // FALLTHROUGH intended
+            
         case 0: nJoin = rendering::PathJoinType::MITER; break;
         case 1: nJoin = rendering::PathJoinType::ROUND; break;
         case 2: nJoin = rendering::PathJoinType::BEVEL; break;
@@ -480,7 +480,7 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
 
     const sal_Unicode* pCopy = rResult.familyName.getStr();
     sal_Int32 nLen = rResult.familyName.getLength();
-    // parse out truetype subsets (e.g. BAAAAA+Thorndale)
+    
     if( nLen > 8 && pCopy[6] == '+' )
     {
         pCopy += 7;
@@ -575,7 +575,7 @@ void Parser::readFont()
     nSize = nSize < 0.0 ? -nSize : nSize;
     aFontName = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
-    // name gobbles up rest of line
+    
     m_nCharIndex = -1;
 
     FontMapType::const_iterator pFont( m_aFontMap.find(nFontID) );
@@ -589,7 +589,7 @@ void Parser::readFont()
         return;
     }
 
-    // yet unknown font - get info and add to map
+    
     FontAttributes aResult( OStringToOUString( aFontName,
                                                     RTL_TEXTENCODING_UTF8 ),
                             nIsBold != 0,
@@ -598,9 +598,9 @@ void Parser::readFont()
                             false,
                             nSize );
 
-    // extract textual attributes (bold, italic in the name, etc.)
+    
     parseFontFamilyName(aResult);
-    // need to read font file?
+    
     if( nFileLen )
     {
         uno::Sequence<sal_Int8> aFontFile(nFileLen);
@@ -639,7 +639,7 @@ void Parser::readFont()
 
         if( aResult.familyName.isEmpty() )
         {
-            // last fallback
+            
             aResult.familyName  = "Arial";
             aResult.isUnderline = false;
         }
@@ -762,7 +762,7 @@ void Parser::readLink()
                         OStringToOUString( lcl_unescapeLineFeeds(
                                 m_aLine.copy(m_nCharIndex) ),
                                 RTL_TEXTENCODING_UTF8 ) );
-    // name gobbles up rest of line
+    
     m_nCharIndex = -1;
 }
 
@@ -877,7 +877,7 @@ void Parser::parseLine( const OString& rLine )
             break;
     }
 
-    // all consumed?
+    
     OSL_POSTCOND(m_nCharIndex==-1,"leftover scanner input");
 }
 
@@ -885,12 +885,12 @@ oslFileError readLine( oslFileHandle pFile, OStringBuffer& line )
 {
     OSL_PRECOND( line.isEmpty(), "line buf not empty" );
 
-    // TODO(P3): read larger chunks
+    
     sal_Char aChar('\n');
     sal_uInt64 nBytesRead;
     oslFileError nRes;
 
-    // skip garbage \r \n at start of line
+    
     while( osl_File_E_None == (nRes=osl_readFile(pFile, &aChar, 1, &nBytesRead)) &&
            nBytesRead == 1 &&
            (aChar == '\n' || aChar == '\r') ) ;
@@ -907,7 +907,7 @@ oslFileError readLine( oslFileHandle pFile, OStringBuffer& line )
     return nRes;
 }
 
-} // namespace
+} 
 
 static bool checkEncryption( const OUString&                               i_rPath,
                              const uno::Reference< task::XInteractionHandler >& i_xIHdl,
@@ -969,11 +969,11 @@ static bool checkEncryption( const OUString&                               i_rPa
                 else if( i_xIHdl.is() )
                 {
                     reportUnsupportedEncryptionFormat( i_xIHdl );
-                        //TODO: this should either be handled further down the
-                        // call stack, or else information that this has already
-                        // been handled should be passed down the call stack, so
-                        // that SfxBaseModel::load does not show an additional
-                        // "General Error" message box
+                        
+                        
+                        
+                        
+                        
                 }
             }
             else
@@ -1001,7 +1001,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     }
     OUString aDocName( rURL.copy( rURL.lastIndexOf( '/' )+1 ) );
 
-    // check for encryption, if necessary get password
+    
     OUString aPwd( rPwd );
     bool bIsEncrypted = false;
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
@@ -1012,13 +1012,13 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
         return false;
     }
 
-    // Determine xpdfimport executable URL:
+    
     OUString converterURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport");
-    rtl::Bootstrap::expandMacros(converterURL); //TODO: detect failure
+    rtl::Bootstrap::expandMacros(converterURL); 
 
-    // Determine pathname of xpdfimport_err.pdf:
+    
     OUString errPathname("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/xpdfimport/xpdfimport_err.pdf");
-    rtl::Bootstrap::expandMacros(errPathname); //TODO: detect failure
+    rtl::Bootstrap::expandMacros(errPathname); 
     if (osl::FileBase::getSystemPathFromFileURL(errPathname, errPathname)
         != osl::FileBase::E_None)
     {
@@ -1028,8 +1028,8 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
         return false;
     }
 
-    // spawn separate process to keep LGPL/GPL code apart.
-    // ---------------------------------------------------
+    
+    
     rtl_uString** ppEnv = NULL;
     sal_uInt32 nEnv = 0;
 
@@ -1089,9 +1089,9 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
 
         if( pOut && pErr )
         {
-            // read results of PDF parser. One line - one call to
-            // OutputDev. stderr is used for alternate streams, like
-            // embedded fonts and bitmaps
+            
+            
+            
             Parser aParser(rSink,pErr,xContext);
             OStringBuffer line;
             while( osl_File_E_None == readLine(pOut, line) && !line.isEmpty() )
@@ -1100,7 +1100,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     }
     catch( uno::Exception& )
     {
-        // crappy C file interface. need manual resource dealloc
+        
         bRet = false;
     }
 
@@ -1124,13 +1124,13 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
     OSL_ASSERT(xInput.is());
     OSL_ASSERT(rSink);
 
-    // convert XInputStream to local temp file
+    
     oslFileHandle aFile = NULL;
     OUString aURL;
     if( osl_createTempFile( NULL, &aFile, &aURL.pData ) != osl_File_E_None )
         return false;
 
-    // copy content, buffered...
+    
     const sal_uInt32 nBufSize = 4096;
     uno::Sequence<sal_Int8> aBuf( nBufSize );
     sal_uInt64 nBytes = 0;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,7 +69,7 @@ uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
     }
     else
     {
-        // delegate to SwXText and OWeakObject
+        
         aRet = SwXText::queryInterface(rType);
         if(!aRet.hasValue())
         {
@@ -83,10 +83,10 @@ uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
 uno::Sequence<uno::Type> SwXRedlineText::getTypes()
     throw(uno::RuntimeException)
 {
-    // SwXText::getTypes()
+    
     uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
 
-    // add container::XEnumerationAccess
+    
     sal_Int32 nLength = aTypes.getLength();
     aTypes.realloc(nLength + 1);
     aTypes[nLength] = ::getCppuType((uno::Reference<container::XEnumerationAccess> *)0);
@@ -116,11 +116,11 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     SwUnoCrsr *const pUnoCursor = pXCursor->GetCursor();
     pUnoCursor->Move(fnMoveForward, fnGoNode);
 
-    // #101929# prevent a newly created text cursor from running inside a table
-    // because table cells have their own XText.
-    // Patterned after SwXTextFrame::createTextCursor(void).
+    
+    
+    
 
-    // skip all tables at the beginning
+    
     SwTableNode* pTableNode = pUnoCursor->GetNode()->FindTableNode();
     SwCntntNode* pContentNode = NULL;
     bool bTable = pTableNode != NULL;
@@ -135,9 +135,9 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     if( bTable && pUnoCursor->GetNode()->FindSttNodeByType( SwNormalStartNode )
                                                             != GetStartNode() )
     {
-        // We have gone too far and have left our own redline. This means that
-        // no content node outside of a table could be found, and therefore we
-        // except.
+        
+        
+        
         uno::RuntimeException aExcept;
         aExcept.Message = OUString(
             "No content node found that is inside this change section "
@@ -178,7 +178,7 @@ uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException)
 
 sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException)
 {
-    return sal_True;    // we always have a content index
+    return sal_True;    
 }
 
 SwXRedlinePortion::SwXRedlinePortion(SwRangeRedline const& rRedline,
@@ -231,8 +231,8 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
     {
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = UNO_NAME_REDLINE_AUTHOR;
-        // GetAuthorString(n) walks the SwRedlineData* chain;
-        // here we always need element 1
+        
+        
         pValues[0].Value <<= OUString(rRedline.GetAuthorString(1));
         pValues[1].Name = UNO_NAME_REDLINE_DATE_TIME;
         pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
@@ -281,7 +281,7 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCursor();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
-    //search for the redline
+    
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
     bool bFound = false;
@@ -606,7 +606,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
         SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
-        //steht hier eine Tabelle?
+        
         SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
         SwCntntNode* pCont = 0;
         while( pTblNode )

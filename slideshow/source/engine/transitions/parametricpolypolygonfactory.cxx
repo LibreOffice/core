@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -99,14 +99,14 @@ namespace slideshow
                     new RandomWipe( 128, true /* bars */ ) );
             case DISSOLVE:
                 return ParametricPolyPolygonSharedPtr(
-                    new RandomWipe( 16 * 16, // for now until dxcanvas is faster
-//                                     64 * 64 /* elements */,
+                    new RandomWipe( 16 * 16, 
+
                                     false /* dissolve */ ) );
             case WATERFALLWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new WaterfallWipe(
                         128,
-                        // flipOnYAxis:
+                        
                         nSubType == VERTICALRIGHT ||
                         nSubType == HORIZONTALLEFT ) );
             case CLOCKWIPE:
@@ -114,7 +114,7 @@ namespace slideshow
                     new ClockWipe );
             case FANWIPE:
                 return ParametricPolyPolygonSharedPtr(
-                    new FanWipe( // center:
+                    new FanWipe( 
                                  nSubType == CENTERTOP ||
                                  nSubType == CENTERRIGHT ) );
             case PINWHEELWIPE: {
@@ -142,14 +142,14 @@ namespace slideshow
             case SNAKEWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new SnakeWipe(
-                        // elements:
+                        
                         8 * 8,
-                        // diagonal:
+                        
                         nSubType == TOPLEFTDIAGONAL ||
                         nSubType == TOPRIGHTDIAGONAL ||
                         nSubType == BOTTOMRIGHTDIAGONAL ||
                         nSubType == BOTTOMLEFTDIAGONAL,
-                        // flipOnYAxis:
+                        
                         nSubType == TOPLEFTVERTICAL ||
                         nSubType == TOPRIGHTDIAGONAL ||
                         nSubType == BOTTOMLEFTDIAGONAL
@@ -157,16 +157,16 @@ namespace slideshow
             case PARALLELSNAKESWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new ParallelSnakesWipe(
-                        // elements:
+                        
                         8 * 8,
-                        // diagonal:
+                        
                         nSubType == DIAGONALBOTTOMLEFTOPPOSITE ||
                         nSubType == DIAGONALTOPLEFTOPPOSITE,
-                        // flipOnYAxis:
+                        
                         nSubType == VERTICALBOTTOMLEFTOPPOSITE ||
                         nSubType == HORIZONTALTOPLEFTOPPOSITE ||
                         nSubType == DIAGONALTOPLEFTOPPOSITE,
-                        // opposite:
+                        
                         nSubType == VERTICALTOPLEFTOPPOSITE ||
                         nSubType == VERTICALBOTTOMLEFTOPPOSITE ||
                         nSubType == HORIZONTALTOPLEFTOPPOSITE ||
@@ -177,9 +177,9 @@ namespace slideshow
             case SPIRALWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new SpiralWipe(
-                        // elements:
+                        
                         8 * 8,
-                        // flipOnYAxis:
+                        
                         nSubType == TOPLEFTCOUNTERCLOCKWISE ||
                         nSubType == TOPRIGHTCOUNTERCLOCKWISE ||
                         nSubType == BOTTOMRIGHTCOUNTERCLOCKWISE ||
@@ -187,50 +187,50 @@ namespace slideshow
             case BOXSNAKESWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new BoxSnakesWipe(
-                        // elements:
+                        
                         8 * 8,
-                        // fourBox:
+                        
                         nSubType == FOURBOXVERTICAL ||
                         nSubType == FOURBOXHORIZONTAL ) );
             case SINGLESWEEPWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new SweepWipe(
-                        // center:
+                        
                         nSubType == CLOCKWISETOP ||
                         nSubType == CLOCKWISERIGHT ||
                         nSubType == CLOCKWISEBOTTOM ||
                         nSubType == CLOCKWISELEFT,
-                        // single:
+                        
                         true,
-                        // oppositeVertical:
+                        
                         false,
-                        // flipOnYAxis:
+                        
                         nSubType == COUNTERCLOCKWISEBOTTOMLEFT ||
                         nSubType == COUNTERCLOCKWISETOPRIGHT
                         ) );
             case DOUBLESWEEPWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new SweepWipe(
-                        // center:
+                        
                         nSubType == PARALLELVERTICAL ||
                         nSubType == PARALLELDIAGONAL ||
                         nSubType == OPPOSITEVERTICAL ||
                         nSubType == OPPOSITEHORIZONTAL,
-                        // single:
+                        
                         false,
-                        // oppositeVertical:
+                        
                         nSubType == OPPOSITEVERTICAL ||
                         nSubType == OPPOSITEHORIZONTAL,
-                        // flipOnYAxis:
+                        
                         false ) );
             case DOUBLEFANWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new FanWipe(
-                        //center:
+                        
                         true,
-                        // single:
+                        
                         false,
-                        // fanIn:
+                        
                         nSubType == FANINVERTICAL ||
                         nSubType == FANINHORIZONTAL ) );
             case TRIANGLEWIPE:
@@ -284,7 +284,7 @@ namespace slideshow
             case MISCSHAPEWIPE:
             case SALOONDOORWIPE:
             case WINDSHIELDWIPE:
-                // for now, map to barwipe transition
+                
                 return ParametricPolyPolygonSharedPtr(
                     new BarWipePolyPolygon );
 

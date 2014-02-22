@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "doc.hxx"
@@ -25,7 +25,7 @@
 #include "rolbck.hxx"
 #include "docary.hxx"
 
-//--------------------------------------------------
+
 
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,
@@ -38,7 +38,7 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
 {
-    // #i31191#
+    
     if ( pColl )
         aFmtName = pColl->GetName();
 }
@@ -50,11 +50,11 @@ SwUndoFmtColl::~SwUndoFmtColl()
 
 void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    // restore old values
+    
     pHistory->TmpRollback(& rContext.GetDoc(), 0);
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    // create cursor for undo range
+    
     AddUndoRedoPaM(rContext);
 }
 
@@ -72,11 +72,11 @@ void SwUndoFmtColl::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
 {
-    // Only one TextFrmColl can be applied to a section, thus request only in
-    // this array.
+    
+    
     sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
-    // does the format still exist?
+    
     if( USHRT_MAX != nPos )
     {
         rDoc.SetTxtFmtColl(rPaM,
@@ -90,9 +90,9 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
 {
     SwRewriter aResult;
 
-    // #i31191# Use stored format name instead of
-    // pFmtColl->GetName(), because pFmtColl does not have to be available
-    // anymore.
+    
+    
+    
     aResult.AddRule(UndoArg1, aFmtName );
 
     return aResult;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,7 +56,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
 
     if( isAlive() )
     {
-        // SHOWING done with mxParent
+        
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
@@ -76,7 +76,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
 
     return pStateSetHelper;
 }
-// -----------------------------------------------------------------------------
+
 /** @return
         The count of visible children.
 */
@@ -85,7 +85,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /** @return
         The XAccessible interface of the specified child.
@@ -95,7 +95,7 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 {
     throw IndexOutOfBoundsException();
 }
-// -----------------------------------------------------------------------------
+
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
@@ -107,9 +107,9 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
     if ( isRowBarCell() )
         mpBrowseBox->SelectRow(m_nColumnRowId);
     else
-        mpBrowseBox->SelectColumn(static_cast<sal_uInt16>(m_nColumnRowId)); //!!!
+        mpBrowseBox->SelectColumn(static_cast<sal_uInt16>(m_nColumnRowId)); 
 }
-// -----------------------------------------------------------------------------
+
 /** @return
         The name of this class.
 */
@@ -118,7 +118,7 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell" );
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, sal_Bool _bOnScreen,sal_Bool _bRowBar)
@@ -140,13 +140,13 @@ Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
     return getRectangle(mpBrowseBox,m_nColumnRowId,sal_False,isRowBarCell());
 }
-// -----------------------------------------------------------------------------
+
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
     return getRectangle(mpBrowseBox,m_nColumnRowId,sal_True,isRowBarCell());
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
     throw ( RuntimeException )
 {
@@ -157,9 +157,9 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
         --nIndex;
     return nIndex;
 }
-// -----------------------------------------------------------------------------
-} // namespace accessibility
-// -----------------------------------------------------------------------------
+
+} 
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

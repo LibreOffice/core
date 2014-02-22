@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -51,22 +51,22 @@ namespace CPPU_CURRENT_NAMESPACE
     {
     }
 
-    //===================================================================
+    
     static OUString toUNOname( char const * p ) SAL_THROW(())
     {
 #if OSL_DEBUG_LEVEL > 1
         char const * start = p;
 #endif
 
-        // example: N3com3sun4star4lang24IllegalArgumentExceptionE
+        
 
         OUStringBuffer buf( 64 );
         OSL_ASSERT( 'N' == *p );
-        ++p; // skip N
+        ++p; 
 
         while ('E' != *p)
         {
-            // read chars count
+            
             long n = (*p++ - '0');
             while ('0' <= *p && '9' >= *p)
             {
@@ -89,7 +89,7 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     }
 
-    //=====================================================================
+    
     class RTTI
     {
         typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -106,18 +106,18 @@ namespace CPPU_CURRENT_NAMESPACE
 
         type_info * getRTTI(typelib_CompoundTypeDescription *) SAL_THROW(());
     };
-    //____________________________________________________________________
+    
     RTTI::RTTI() SAL_THROW(())
         : m_hApp( dlopen( 0, RTLD_LAZY ) )
     {
     }
-    //____________________________________________________________________
+    
     RTTI::~RTTI() SAL_THROW(())
     {
         dlclose( m_hApp );
     }
 
-    //____________________________________________________________________
+    
     type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
     {
         type_info * rtti;
@@ -128,7 +128,7 @@ namespace CPPU_CURRENT_NAMESPACE
         t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
         if (iRttiFind == m_rttis.end())
         {
-            // RTTI symbol
+            
             OStringBuffer buf( 64 );
             buf.append( "_ZTIN" );
             sal_Int32 index = 0;
@@ -153,20 +153,20 @@ namespace CPPU_CURRENT_NAMESPACE
             }
             else
             {
-                // try to lookup the symbol in the generated rtti map
+                
                 t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
                 if (iFind == m_generatedRttis.end())
                 {
-                    // we must generate it !
-                    // symbol and rtti-name is nearly identical,
-                    // the symbol is prefixed with _ZTI
+                    
+                    
+                    
                     char const * rttiName = symName.getStr() +4;
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr,"generated rtti for %s\n", rttiName );
 #endif
                     if (pTypeDescr->pBaseTypeDescription)
                     {
-                        // ensure availability of base
+                        
                         type_info * base_rtti = getRTTI(
                             (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
                         rtti = new __si_class_type_info(
@@ -174,7 +174,7 @@ namespace CPPU_CURRENT_NAMESPACE
                     }
                     else
                     {
-                        // this class has no base class
+                        
                         rtti = new __class_type_info( strdup( rttiName ) );
                     }
 
@@ -182,7 +182,7 @@ namespace CPPU_CURRENT_NAMESPACE
                         m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                     OSL_ENSURE( insertion.second, "### inserting new generated rtti failed?!" );
                 }
-                else // taking already generated rtti
+                else 
                 {
                     rtti = iFind->second;
                 }
@@ -196,7 +196,7 @@ namespace CPPU_CURRENT_NAMESPACE
         return rtti;
     }
 
-    //------------------------------------------------------------------
+    
     static void deleteException( void * pExc )
     {
         __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
@@ -211,7 +211,7 @@ namespace CPPU_CURRENT_NAMESPACE
         }
     }
 
-    //==================================================================
+    
     void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -225,7 +225,7 @@ namespace CPPU_CURRENT_NAMESPACE
         type_info * rtti;
 
         {
-        // construct cpp exception object
+        
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
         OSL_ASSERT( pTypeDescr );
@@ -240,9 +240,9 @@ namespace CPPU_CURRENT_NAMESPACE
         pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
         ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
-        // destruct uno exception
+        
         ::uno_any_destruct( pUnoExc, 0 );
-        // avoiding locked counts
+        
         static RTTI * s_rtti = 0;
         if (! s_rtti)
         {
@@ -278,7 +278,7 @@ namespace CPPU_CURRENT_NAMESPACE
         return header->adjustedPtr;
     }
 
-    //===================================================================
+    
     void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
     {
         if (! header)
@@ -316,7 +316,7 @@ namespace CPPU_CURRENT_NAMESPACE
         }
         else
         {
-            // construct uno exception any
+            
             uno_any_constructAndConvert( pUnoExc, getAdjustedPtr(header), pExcTypeDescr, pCpp2Uno );
             typelib_typedescription_release( pExcTypeDescr );
         }

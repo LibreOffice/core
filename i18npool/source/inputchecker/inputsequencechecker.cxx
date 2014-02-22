@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <inputsequencechecker.hxx>
@@ -42,7 +42,7 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
 
 InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
-    // Clear lookuptable
+    
     for (size_t l = 0; l < lookupTable.size(); l++)
         delete lookupTable[l];
 
@@ -61,7 +61,7 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
     if (language)
         return getInputSequenceChecker(language)->checkInputSequence(Text, nStartPos, inputChar, inputCheckMode);
     else
-        return sal_True; // not a checkable languages.
+        return sal_True; 
 }
 
 sal_Int32 SAL_CALL
@@ -79,12 +79,12 @@ InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartP
 }
 
 static ScriptTypeList typeList[] = {
-    //{ UnicodeScript_kHebrew,              UnicodeScript_kHebrew },        // 10,
-    //{ UnicodeScript_kArabic,              UnicodeScript_kArabic },        // 11,
-    { UnicodeScript_kDevanagari,UnicodeScript_kDevanagari,          UnicodeScript_kDevanagari },    // 14,
-    { UnicodeScript_kThai,  UnicodeScript_kThai,                  UnicodeScript_kThai },          // 24,
+    
+    
+    { UnicodeScript_kDevanagari,UnicodeScript_kDevanagari,          UnicodeScript_kDevanagari },    
+    { UnicodeScript_kThai,  UnicodeScript_kThai,                  UnicodeScript_kThai },          
 
-    { UnicodeScript_kScriptCount,   UnicodeScript_kScriptCount,           UnicodeScript_kScriptCount }    // 88
+    { UnicodeScript_kScriptCount,   UnicodeScript_kScriptCount,           UnicodeScript_kScriptCount }    
 };
 
 sal_Char* SAL_CALL
@@ -96,8 +96,8 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
             type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
         switch(type) {
             case UnicodeScript_kThai:           return (sal_Char*)"th";
-                                                //case UnicodeScript_kArabic:       return (sal_Char*)"ar";
-                                                //case UnicodeScript_kHebrew:       return (sal_Char*)"he";
+                                                
+                                                
             case UnicodeScript_kDevanagari:   return (sal_Char*)"hi";
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -21,8 +21,8 @@ void CalcUnoApiTest::setUp()
 {
     UnoApiTest::setUp();
 
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
+    
+    
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());

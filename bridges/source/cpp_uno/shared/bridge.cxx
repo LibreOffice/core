@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,26 +65,26 @@ void cpp2unoMapping(
     {
         Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
 
-        // get object id of interface to be wrapped
+        
         rtl_uString * pOId = 0;
         (*pBridge->pCppEnv->getObjectIdentifier)(
             pBridge->pCppEnv, &pOId, pCppI );
         OSL_ASSERT( pOId );
 
-        // try to get any known interface from target environment
+        
         (*pBridge->pUnoEnv->getRegisteredInterface)(
             pBridge->pUnoEnv, ppUnoI, pOId, pTypeDescr );
 
-        if (! *ppUnoI) // no existing interface, register new proxy interface
+        if (! *ppUnoI) 
         {
-            // try to publish a new proxy (refcount initially 1)
+            
             uno_Interface * pSurrogate
                 = bridges::cpp_uno::shared::UnoInterfaceProxy::create(
                     pBridge,
                     static_cast< ::com::sun::star::uno::XInterface * >( pCppI ),
                     pTypeDescr, pOId );
 
-            // proxy may be exchanged during registration
+            
             (*pBridge->pUnoEnv->registerProxyInterface)(
                 pBridge->pUnoEnv, reinterpret_cast< void ** >( &pSurrogate ),
                 freeUnoInterfaceProxy, pOId,
@@ -111,25 +111,25 @@ void uno2cppMapping(
     {
         Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
 
-        // get object id of uno interface to be wrapped
+        
         rtl_uString * pOId = 0;
         (*pBridge->pUnoEnv->getObjectIdentifier)(
             pBridge->pUnoEnv, &pOId, pUnoI );
         OSL_ASSERT( pOId );
 
-        // try to get any known interface from target environment
+        
         (*pBridge->pCppEnv->getRegisteredInterface)(
             pBridge->pCppEnv, ppCppI, pOId, pTypeDescr );
 
-        if (! *ppCppI) // no existing interface, register new proxy interface
+        if (! *ppCppI) 
         {
-            // try to publish a new proxy (ref count initially 1)
+            
             com::sun::star::uno::XInterface * pProxy
                 = bridges::cpp_uno::shared::CppInterfaceProxy::create(
                     pBridge, static_cast< uno_Interface * >( pUnoI ),
                     pTypeDescr, pOId );
 
-            // proxy may be exchanged during registration
+            
             (*pBridge->pCppEnv->registerProxyInterface)(
                 pBridge->pCppEnv, reinterpret_cast< void ** >( &pProxy ),
                 freeCppInterfaceProxy, pOId,

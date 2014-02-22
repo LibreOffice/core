@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ucbhelper/contentidentifier.hxx>
@@ -53,13 +53,13 @@ OUString &WebDAVUserAgent::operator()() const
     return aUserAgent;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ContentProvider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ContentProvider::ContentProvider(
                 const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
@@ -116,60 +116,60 @@ ContentProvider::ContentProvider(
     }
 }
 
-//=========================================================================
-// virtual
+
+
 ContentProvider::~ContentProvider()
 {
     delete m_pProps;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    ucb::XContentProvider );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider );
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1( ContentProvider,
                      OUString( "com.sun.star.comp.WebDAVContentProvider" ),
                      OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
-// XContentProvider methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
             const uno::Reference<
@@ -177,7 +177,7 @@ ContentProvider::queryContent(
     throw( ucb::IllegalIdentifierException,
            uno::RuntimeException )
 {
-    // Check URL scheme...
+    
 
     const OUString aScheme
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
@@ -186,14 +186,14 @@ ContentProvider::queryContent(
          aScheme != DAVS_URL_SCHEME )
         throw ucb::IllegalIdentifierException();
 
-    // Normalize URL and create new Id, if nessacary.
+    
     OUString aURL = Identifier->getContentIdentifier();
 
-    // At least: <scheme> + "://"
+    
     if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
         throw ucb::IllegalIdentifierException();
 
-    if ( aURL.copy( aScheme.getLength(), 3 ) != "://" )
+    if ( aURL.copy( aScheme.getLength(), 3 ) != ":
         throw ucb::IllegalIdentifierException();
 
     uno::Reference< ucb::XContentIdentifier > xCanonicId;
@@ -224,7 +224,7 @@ ContentProvider::queryContent(
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
     if ( nPos != aURL.getLength() - 1 )
     {
-        // Find second slash in URL.
+        
         nPos = aURL.indexOf( '/', aURL.indexOf( '/' ) + 1 );
         if ( nPos == -1 )
             throw ucb::IllegalIdentifierException();
@@ -244,13 +244,13 @@ ContentProvider::queryContent(
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    // Check, if a content with given id already exists...
+    
     uno::Reference< ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
         return xContent;
 
-    // Create a new content.
+    
 
     try
     {

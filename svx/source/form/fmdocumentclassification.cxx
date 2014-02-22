@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,10 +29,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     namespace
     {
@@ -43,7 +43,7 @@ namespace svxform
         using ::com::sun::star::uno::UNO_QUERY;
         using ::com::sun::star::frame::XModule;
 
-        //....................................................................
+        
         template< class TYPE >
         Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
         {
@@ -60,7 +60,7 @@ namespace svxform
             }
         }
 
-        //....................................................................
+        
         Reference< XModel > getDocument( const Reference< XInterface >& _rxModelNode )
         {
             return getTypedModelNode< XModel >( _rxModelNode );
@@ -74,18 +74,18 @@ namespace svxform
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
-    //====================================================================
-    //====================================================================
+    
+    
     namespace
     {
-        //----------------------------------------------------------------
+        
         struct ModuleInfo
         {
             const sal_Char* pAsciiModuleOrServiceName;
             DocumentType    eType;
         };
 
-        //----------------------------------------------------------------
+        
         const ModuleInfo* lcl_getModuleInfo()
         {
             static const ModuleInfo aModuleInfo[] =
@@ -105,10 +105,10 @@ namespace svxform
         }
     }
 
-    //====================================================================
-    //= DocumentClassification
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
     {
         DocumentType eType( eUnknownDocumentType );
@@ -119,14 +119,14 @@ namespace svxform
 
         try
         {
-            // first, check whether the document has a ModuleIdentifier which we know
+            
             Reference< XModule > xModule( _rxDocumentModel, UNO_QUERY );
             if ( xModule.is() )
                 eType = getDocumentTypeForModuleIdentifier( xModule->getIdentifier() );
             if ( eType != eUnknownDocumentType )
                 return eType;
 
-            // second, check whether it supports one of the services we know
+            
             Reference< XServiceInfo > xSI( _rxDocumentModel, UNO_QUERY_THROW );
             const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
             while ( pModuleInfo->pAsciiModuleOrServiceName )
@@ -136,7 +136,7 @@ namespace svxform
                 ++pModuleInfo;
             }
 
-            // last: uhm, there is no last resort
+            
             OSL_FAIL( "DocumentClassification::classifyDocument: unknown document!" );
         }
         catch( const Exception& )
@@ -147,7 +147,7 @@ namespace svxform
         return eType;
     }
 
-    //--------------------------------------------------------------------
+    
     DocumentType DocumentClassification::classifyHostDocument( const Reference< XInterface >& _rxFormComponent ) SAL_THROW(())
     {
         DocumentType eType( eUnknownDocumentType );
@@ -167,7 +167,7 @@ namespace svxform
         return eType;
     }
 
-    //--------------------------------------------------------------------
+    
     DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( const OUString& _rModuleIdentifier )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
@@ -180,7 +180,7 @@ namespace svxform
         return eUnknownDocumentType;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString DocumentClassification::getModuleIdentifierForDocumentType( DocumentType _eType )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
@@ -193,8 +193,8 @@ namespace svxform
         return OUString();
     }
 
-//........................................................................
-} // namespace svxform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

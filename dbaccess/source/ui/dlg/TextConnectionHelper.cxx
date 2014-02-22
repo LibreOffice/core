@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -95,7 +95,7 @@ namespace dbaui
             m_aTextSeparator.InsertEntry( m_aTextSeparatorList.getToken( i, '\t' ) );
         m_aTextSeparator.InsertEntry(m_aTextNone);
 
-        // set the modify handlers
+        
         m_aFieldSeparator.SetUpdateDataHdl(getControlModifiedLink());
         m_aFieldSeparator.SetSelectHdl(getControlModifiedLink());
         m_aTextSeparator.SetUpdateDataHdl(getControlModifiedLink());
@@ -128,14 +128,14 @@ namespace dbaui
         {
             if ( ( m_nAvailableSections & aSections[section].nFlag ) != 0 )
             {
-                // the section is visible, no need to do anything here
+                
                 continue;
             }
 
             Window* pThisSection = aSections[section].pFirstControl;
             Window* pNextSection = aSections[section+1].pFirstControl;
 
-            // hide all elements from this section
+            
             Window* pControl = pThisSection;
             while ( ( pControl != pNextSection ) && pControl )
             {
@@ -148,7 +148,7 @@ namespace dbaui
                 pControl = pControl->GetWindow( WINDOW_NEXT );
             }
 
-            // move all controls in following sections up
+            
             if ( !pNextSection )
                 continue;
             const long nThisSectionStart = pThisSection->GetPosPixel().Y();
@@ -172,14 +172,14 @@ namespace dbaui
             aControlRectUnion = aControlRectUnion.Union( Rectangle( pControl->GetPosPixel(), pControl->GetSizePixel() ) );
         }
 
-        // need some adjustments to the positions, since the resource-specified
-        // positions for the control were relative to *our* parent, while by now
-        // the controls have |this| as parent.
+        
+        
+        
 
-        // first, move ourself to the upper left of the area occupied by all controls
+        
         SetPosPixel( aControlRectUnion.TopLeft() );
 
-        // then, compensate in the control positions, by moving them the up/left
+        
         for (   Window* pControl = aSections[0].pFirstControl;
                 pControl != NULL;
                 pControl = pControl->GetWindow( WINDOW_NEXT )
@@ -189,13 +189,13 @@ namespace dbaui
             aPos.Move( -aControlRectUnion.Left(), -aControlRectUnion.Top() );
             pControl->SetPosPixel( aPos );
 
-            // while we are here ... the controls should not have an own background
-            // (this would not be needed when our outer dialog were also the parent
-            // of the controls)
+            
+            
+            
             pControl->SetBackground();
         }
 
-        // now, change our own size so all controls fit
+        
         SetSizePixel( aControlRectUnion.GetSize() );
 
         SetBackground();
@@ -290,60 +290,60 @@ namespace dbaui
     sal_Bool OTextConnectionHelper::prepareLeave()
     {
         LocalResourceAccess aStringResAccess(PAGE_TEXT, RSC_TABPAGE);
-            // for accessing the strings which are local to our own resource block
+            
         OUString sExtension = GetExtension();
         OUString aErrorText;
         Control* pErrorWin = NULL;
         OUString aDelText(m_aFieldSeparator.GetText());
         if(aDelText.isEmpty())
-        {   // No FieldSeparator
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MISSING);
             aErrorText = aErrorText.replaceFirst("#1",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aDecimalSeparator.GetText().isEmpty())
-        {   // No DecimalSeparator
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MISSING);
             aErrorText = aErrorText.replaceFirst("#1",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aFieldSeparator.GetText())
-        {   // Field and TextSeparator must not be the same
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_aTextSeparatorLabel.GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aDecimalSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Thousands and DecimalSeparator must not be the same
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_aDecimalSeparatorLabel.GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Thousands and FieldSeparator must not be the same
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Tenner and FieldSeparator must not be the same
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Thousands and TextSeparator must not be the same
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_aTextSeparatorLabel.GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Tenner and TextSeparator must not be the same
+        {   
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_aTextSeparatorLabel.GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_aDecimalSeparatorLabel.GetText());
@@ -459,7 +459,7 @@ namespace dbaui
         if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
             return OUString(
                 static_cast< sal_Unicode >( rList.getToken((nPos*2)+1, nTok ).toInt32() ));
-        // somewhat strange ... translates for instance an "32" into " "
+        
         return OUString();
     }
 

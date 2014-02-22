@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/static_assert.hpp>
@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 {
@@ -43,26 +43,26 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     if (nLen == 0)
         return OUString();
 
-    const sal_Unicode cLRE_Embedding  = 0x202A;      // the start char of an LRE embedding
-    const sal_Unicode cRLE_Embedding  = 0x202B;      // the start char of an RLE embedding
-    const sal_Unicode cPopDirectionalFormat = 0x202C;   // the unicode PDF (POP_DIRECTIONAL_FORMAT) char that terminates an LRE/RLE embedding
+    const sal_Unicode cLRE_Embedding  = 0x202A;      
+    const sal_Unicode cRLE_Embedding  = 0x202B;      
+    const sal_Unicode cPopDirectionalFormat = 0x202C;   
 
-    // check if there are alreay embedding characters at the strings start
-    // if so change nothing
+    
+    
     const sal_Unicode cChar = rText[0];
     if (cChar == cLRE_Embedding || cChar == cRLE_Embedding)
         return rText;
 
-    // since we only call the function getCharacterDirection
-    // it does not matter which locale the CharClass is for.
-    // Thus we can readily make use of SvtSysLocale::GetCharClass()
-    // which should come at no cost...
+    
+    
+    
+    
     SvtSysLocale aSysLocale;
     const CharClass &rCharClass = aSysLocale.GetCharClass();
 
-    // we should look for the first non-neutral LTR or RTL character
-    // and use that to determine the embedding of the whole text...
-    // Thus we can avoid to check every character of the text.
+    
+    
+    
     bool bFound     = false;
     bool bIsRtlText = false;
     for (sal_uInt16 i = 0;  i < nLen && !bFound;  ++i)
@@ -74,7 +74,7 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
             case i18n::DirectionProperty_LEFT_TO_RIGHT_EMBEDDING :
             case i18n::DirectionProperty_LEFT_TO_RIGHT_OVERRIDE :
             case i18n::DirectionProperty_EUROPEAN_NUMBER :
-            case i18n::DirectionProperty_ARABIC_NUMBER :        // yes! arabic numbers are written from left to right
+            case i18n::DirectionProperty_ARABIC_NUMBER :        
             {
                 bIsRtlText  = false;
                 bFound      = true;
@@ -93,16 +93,16 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 
             default:
             {
-                // nothing to be done, character is considered to be neutral we need to look further ...
+                
             }
         }
     }
 
-    sal_Unicode cStart  = cLRE_Embedding;   // default is to use LRE embedding characters
+    sal_Unicode cStart  = cLRE_Embedding;   
     if (bIsRtlText)
-        cStart = cRLE_Embedding;            // then use RLE embedding
+        cStart = cRLE_Embedding;            
 
-    // add embedding start and end chars to the text if the direction could be determined
+    
     OUString aRes( rText );
     if (bFound)
     {
@@ -112,12 +112,12 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
-//------------------------------------------------------------------------
+
 
 namespace {
     BOOST_STATIC_ASSERT(
         16642 == STR_ARR_SVT_LANGUAGE_TABLE);
-//        "The value of STR_ARR_SVT_LANGUAGE_TABLE has changed. wizards/com/sun/star/wizards/letter/LocaleCodes.java has this value hard coded, please adapt it to your change."
+
 }
 
 SvtLanguageTable::SvtLanguageTable() :
@@ -125,13 +125,13 @@ SvtLanguageTable::SvtLanguageTable() :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvtLanguageTable::~SvtLanguageTable()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
 {
@@ -141,7 +141,7 @@ const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUser
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
 
-    //Rather than return a fairly useless "Unknown" name, return a geeky but usable-in-a-pinch lang-tag
+    
     OUString sLangTag(LanguageTag::convertToBcp47(eType));
     SAL_WARN("svtools.misc", "Language: 0x"
         << std::hex << eType
@@ -156,7 +156,7 @@ OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
     return aLangTable.GetString( eType );
 }
 
-//------------------------------------------------------------------------
+
 
 LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
 {
@@ -174,14 +174,14 @@ LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
     return eType;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt32 SvtLanguageTable::GetEntryCount() const
 {
     return Count();
 }
 
-//------------------------------------------------------------------------
+
 
 LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
 {
@@ -191,6 +191,6 @@ LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
     return nType;
 }
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

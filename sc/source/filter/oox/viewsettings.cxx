@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "viewsettings.hxx"
@@ -42,7 +42,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -52,13 +52,13 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 namespace {
 
-const sal_Int32 OOX_BOOKVIEW_TABBARRATIO_DEF        = 600;      /// Default tabbar ratio.
-const sal_Int32 OOX_SHEETVIEW_NORMALZOOM_DEF        = 100;      /// Default zoom for normal view.
-const sal_Int32 OOX_SHEETVIEW_SHEETLAYZOOM_DEF      = 60;       /// Default zoom for pagebreak preview.
+const sal_Int32 OOX_BOOKVIEW_TABBARRATIO_DEF        = 600;      
+const sal_Int32 OOX_SHEETVIEW_NORMALZOOM_DEF        = 100;      
+const sal_Int32 OOX_SHEETVIEW_SHEETLAYZOOM_DEF      = 60;       
 
 const sal_uInt8 BIFF12_PANE_FROZEN                  = 0x01;
 const sal_uInt8 BIFF12_PANE_FROZENNOSPLIT           = 0x02;
@@ -81,24 +81,24 @@ const sal_uInt8 BIFF12_WBVIEW_SHOWHORSCROLL         = 0x08;
 const sal_uInt8 BIFF12_WBVIEW_SHOWVERSCROLL         = 0x10;
 const sal_uInt8 BIFF12_WBVIEW_SHOWTABBAR            = 0x20;
 
-// Attention: view settings in Calc do not use com.sun.star.view.DocumentZoomType!
-const sal_Int16 API_ZOOMTYPE_PERCENT                = 0;        /// Zoom value in percent.
 
-const sal_Int32 API_ZOOMVALUE_MIN                   = 20;       /// Minimum zoom in Calc.
-const sal_Int32 API_ZOOMVALUE_MAX                   = 400;      /// Maximum zoom in Calc.
+const sal_Int16 API_ZOOMTYPE_PERCENT                = 0;        
 
-// no predefined constants for split mode
-const sal_Int16 API_SPLITMODE_NONE                  = 0;        /// No splits in window.
-const sal_Int16 API_SPLITMODE_SPLIT                 = 1;        /// Window is split.
-const sal_Int16 API_SPLITMODE_FREEZE                = 2;        /// Window has frozen panes.
+const sal_Int32 API_ZOOMVALUE_MIN                   = 20;       
+const sal_Int32 API_ZOOMVALUE_MAX                   = 400;      
 
-// no predefined constants for pane idetifiers
-const sal_Int16 API_SPLITPANE_TOPLEFT               = 0;        /// Top-left, or top pane.
-const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        /// Top-right pane.
-const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        /// Bottom-left, bottom, left, or single pane.
-const sal_Int16 API_SPLITPANE_BOTTOMRIGHT           = 3;        /// Bottom-right, or right pane.
 
-// ----------------------------------------------------------------------------
+const sal_Int16 API_SPLITMODE_NONE                  = 0;        
+const sal_Int16 API_SPLITMODE_SPLIT                 = 1;        
+const sal_Int16 API_SPLITMODE_FREEZE                = 2;        
+
+
+const sal_Int16 API_SPLITPANE_TOPLEFT               = 0;        
+const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        
+const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        
+const sal_Int16 API_SPLITPANE_BOTTOMRIGHT           = 3;        
+
+
 
 /** Returns the OOXML pane identifier from the passed BIFF pane id. */
 sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
@@ -107,16 +107,16 @@ sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
     return STATIC_ARRAY_SELECT( spnPaneIds, nBiffPaneId, nDefaultPaneId );
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 PaneSelectionModel::PaneSelectionModel() :
     mnActiveCellId( 0 )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 SheetViewModel::SheetViewModel() :
     mnWorkbookViewId( 0 ),
@@ -184,7 +184,7 @@ PaneSelectionModel& SheetViewModel::createPaneSelection( sal_Int32 nPaneId )
     return *rxPaneSel;
 }
 
-// ----------------------------------------------------------------------------
+
 
 SheetViewSettings::SheetViewSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -231,13 +231,13 @@ void SheetViewSettings::importSelection( const AttributeList& rAttribs )
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
     if( !maSheetViews.empty() )
     {
-        // pane this selection belongs to
+        
         sal_Int32 nPaneId = rAttribs.getToken( XML_pane, XML_topLeft );
         PaneSelectionModel& rSelData = maSheetViews.back()->createPaneSelection( nPaneId );
-        // cursor position
+        
         rSelData.maActiveCell = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_activeCell, OUString() ), getSheetIndex(), false );
         rSelData.mnActiveCellId = rAttribs.getInteger( XML_activeCellId, 0 );
-        // selection
+        
         rSelData.maSelection.clear();
         getAddressConverter().convertToCellRangeList( rSelData.maSelection, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), false );
     }
@@ -302,14 +302,14 @@ void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
     if( !maSheetViews.empty() )
     {
-        // pane this selection belongs to
+        
         sal_Int32 nPaneId = rStrm.readInt32();
         PaneSelectionModel& rPaneSel = maSheetViews.back()->createPaneSelection( lclGetOoxPaneId( nPaneId, -1 ) );
-        // cursor position
+        
         BinAddress aActiveCell;
         rStrm >> aActiveCell >> rPaneSel.mnActiveCellId;
         rPaneSel.maActiveCell = getAddressConverter().createValidCellAddress( aActiveCell, getSheetIndex(), false );
-        // selection
+        
         BinRangeList aSelection;
         rStrm >> aSelection;
         rPaneSel.maSelection.clear();
@@ -329,10 +329,10 @@ void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
 
 void SheetViewSettings::finalizeImport()
 {
-    // force creation of sheet view model to get the Excel defaults
+    
     SheetViewModelRef xModel = maSheetViews.empty() ? createSheetView() : maSheetViews.front();
 
-    // #i59590# #158194# special handling for chart sheets (Excel ignores some settings in chart sheets)
+    
     if( getSheetType() == SHEETTYPE_CHARTSHEET )
     {
         xModel->maPaneSelMap.clear();
@@ -350,29 +350,29 @@ void SheetViewSettings::finalizeImport()
         xModel->mbShowOutline = true;
     }
 
-    // sheet selected (active sheet must be selected)
+    
     bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveCalcSheet());
     if ( bSelected )
     {
-        // active tab/sheet cannot be hidden
-        // always force it to be displayed
+        
+        
         PropertySet aPropSet( getSheet() );
         aPropSet.setProperty( PROP_IsVisible, sal_True );
     }
-    // visible area and current cursor position (selection not supported via API)
+    
     CellAddress aFirstPos = xModel->maFirstPos;
     const PaneSelectionModel* pPaneSel = xModel->getActiveSelection();
     CellAddress aCursor = pPaneSel ? pPaneSel->maActiveCell : aFirstPos;
 
-    // freeze/split position default
+    
     sal_Int16 nHSplitMode = API_SPLITMODE_NONE;
     sal_Int16 nVSplitMode = API_SPLITMODE_NONE;
     sal_Int32 nHSplitPos = 0;
     sal_Int32 nVSplitPos = 0;
-    // active pane default
+    
     sal_Int16 nActivePane = API_SPLITPANE_BOTTOMLEFT;
 
-    // freeze/split position
+    
     if( (xModel->mnPaneState == XML_frozen) || (xModel->mnPaneState == XML_frozenSplit) )
     {
         /*  Frozen panes: handle split position as row/column positions.
@@ -389,18 +389,18 @@ void SheetViewSettings::finalizeImport()
     }
     else if( xModel->mnPaneState == XML_split )
     {
-        // split window: view settings API uses twips...
+        
         nHSplitPos = getLimitedValue< sal_Int32, double >( xModel->mfSplitX + 0.5, 0, SAL_MAX_INT32 );
         nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
         nVSplitPos = getLimitedValue< sal_Int32, double >( xModel->mfSplitY + 0.5, 0, SAL_MAX_INT32 );
         nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
     }
 
-    // active pane
+    
     switch( xModel->mnActivePaneId )
     {
-        // no horizontal split -> always use left panes
-        // no vertical split -> always use *bottom* panes
+        
+        
         case XML_topLeft:
             nActivePane = (nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT;
         break;
@@ -417,7 +417,7 @@ void SheetViewSettings::finalizeImport()
         break;
     }
 
-    // write the sheet view settings into the property sequence
+    
     PropertyMap aPropMap;
     aPropMap[ PROP_TableSelected ]                <<= bSelected;
     aPropMap[ PROP_CursorPositionX ]              <<= aCursor.Column;
@@ -442,7 +442,7 @@ void SheetViewSettings::finalizeImport()
     aPropMap[ PROP_ShowZeroValues ]               <<= xModel->mbShowZeros;
     aPropMap[ PROP_IsOutlineSymbolsSet ]          <<= xModel->mbShowOutline;
 
-    // store sheet view settings in global view settings object
+    
     getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
 }
 
@@ -451,7 +451,7 @@ bool SheetViewSettings::isSheetRightToLeft() const
     return !maSheetViews.empty() && maSheetViews.front()->mbRightToLeft;
 }
 
-// private --------------------------------------------------------------------
+
 
 SheetViewModelRef SheetViewSettings::createSheetView()
 {
@@ -460,7 +460,7 @@ SheetViewModelRef SheetViewSettings::createSheetView()
     return xModel;
 }
 
-// ============================================================================
+
 
 WorkbookViewModel::WorkbookViewModel() :
     mnWinX( 0 ),
@@ -478,7 +478,7 @@ WorkbookViewModel::WorkbookViewModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ViewSettings::ViewSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -544,19 +544,19 @@ void ViewSettings::finalizeImport()
     const WorksheetBuffer& rWorksheets = getWorksheets();
     if( rWorksheets.getWorksheetCount() <= 0 ) return;
 
-    // force creation of workbook view model to get the Excel defaults
+    
     const WorkbookViewModel& rModel = maBookViews.empty() ? createWorkbookView() : *maBookViews.front();
 
-    // show object mode is part of workbook settings
+    
     sal_Int16 nShowMode = getWorkbookSettings().getApiShowObjectMode();
 
-    // view settings for all sheets
+    
     Reference< XNameContainer > xSheetsNC = NamedPropertyValues::create( getBaseFilter().getComponentContext() );
     if( !xSheetsNC.is() ) return;
     for( SheetPropertiesMap::const_iterator aIt = maSheetProps.begin(), aEnd = maSheetProps.end(); aIt != aEnd; ++aIt )
         ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( aIt->first ), aIt->second );
 
-    // use active sheet to set sheet properties that are document-global in Calc
+    
     sal_Int16 nActiveSheet = getActiveCalcSheet();
     SheetViewModelRef& rxActiveSheetView = maSheetViews[ nActiveSheet ];
     OSL_ENSURE( rxActiveSheetView.get(), "ViewSettings::finalizeImport - missing active sheet view settings" );
@@ -602,13 +602,13 @@ void ViewSettings::finalizeImport()
         &maOleSize : ContainerHelper::getMapElement( maSheetUsedAreas, nActiveSheet );
     if( pVisibleArea )
     {
-        // calculate the visible area in units of 1/100 mm
+        
         PropertySet aRangeProp( getCellRangeFromDoc( *pVisibleArea ) );
         css::awt::Point aPos;
         css::awt::Size aSize;
         if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
         {
-            // set the visible area as sequence of long at the media descriptor
+            
             Sequence< sal_Int32 > aWinExtent( 4 );
             aWinExtent[ 0 ] = aPos.X;
             aWinExtent[ 1 ] = aPos.Y;
@@ -624,7 +624,7 @@ sal_Int16 ViewSettings::getActiveCalcSheet() const
     return maBookViews.empty() ? 0 : ::std::max< sal_Int16 >( getWorksheets().getCalcSheetIndex( maBookViews.front()->mnActiveSheet ), 0 );
 }
 
-// private --------------------------------------------------------------------
+
 
 WorkbookViewModel& ViewSettings::createWorkbookView()
 {
@@ -633,9 +633,9 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
     return *xModel;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

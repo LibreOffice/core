@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -172,10 +172,10 @@ bool Animation::IsTransparent() const
     Rectangle   aRect( aPoint, maGlobalSize );
     bool        bRet = false;
 
-    // If some small bitmap needs to be replaced by the background,
-    // we need to be transparent, in order to be displayed correctly
-    // as the application (?) does not invalidate on non-transparent
-    // graphics due to performance reasons.
+    
+    
+    
+    
     for( size_t i = 0, nCount = maList.size(); i < nCount; i++ )
     {
         const AnimationBitmap* pAnimBmp = maList[ i ];
@@ -370,13 +370,13 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
         {
             AInfo* pAInfo;
 
-            // create AInfo-List
+            
             for( size_t i = 0, n = maViewList.size(); i < n; ++i )
                 aAInfoList.push_back( maViewList[ i ]->ImplCreateAInfo() );
 
             maNotifyLink.Call( this );
 
-            // set view state from AInfo structure
+            
             for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
             {
                 pAInfo = aAInfoList[ i ];
@@ -394,12 +394,12 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                 pView->ImplSetMarked( true );
             }
 
-            // delete AInfo structures
+            
             for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
                 delete aAInfoList[ i ];
             aAInfoList.clear();
 
-            // delete all unmarked views and reset marked state
+            
             for( size_t i = 0; i < maViewList.size(); )
             {
                 pView = maViewList[ i ];
@@ -449,10 +449,10 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                 }
             }
 
-            // Paint all views; after painting check, if view is
-            // marked; in this case remove view, because area of output
-            // lies out of display area of window; mark state is
-            // set from view itself
+            
+            
+            
+            
             for( size_t i = 0; i < maViewList.size(); )
             {
                 pView = maViewList[ i ];
@@ -467,7 +467,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                     i++;
             }
 
-            // stop or restart timer
+            
             if( maViewList.empty() )
                 Stop();
             else
@@ -492,7 +492,7 @@ bool Animation::Insert( const AnimationBitmap& rStepBmp )
         maGlobalSize = aGlobalRect.Union( Rectangle( rStepBmp.aPosPix, rStepBmp.aSizePix ) ).GetSize();
         maList.push_back( new AnimationBitmap( rStepBmp ) );
 
-        // As a start, we make the first BitmapEx the replacement BitmapEx
+        
         if( maList.size() == 1 )
             maBitmapEx = rStepBmp.aBmpEx;
 
@@ -515,8 +515,8 @@ void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 
     delete maList[ nAnimation ];
     maList[ nAnimation ] = new AnimationBitmap( rNewAnimationBitmap );
 
-    // If we insert at first position we also need to
-    // update the replacement BitmapEx
+    
+    
     if ( (  !nAnimation
          && (  !mbLoopTerminated
             || ( maList.size() == 1 )
@@ -703,14 +703,14 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
     {
         const sal_uInt32    nDummy32 = 0UL;
 
-        // If no BitmapEx was set we write the first Bitmap of
-        // the Animation
+        
+        
         if( !rAnimation.GetBitmapEx().GetBitmap() )
             WriteDIBBitmapEx(rAnimation.Get( 0 ).aBmpEx, rOStm);
         else
             WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
 
-        // Write identifier ( SDANIMA1 )
+        
         rOStm.WriteUInt32( (sal_uInt32) 0x5344414e ).WriteUInt32( (sal_uInt32) 0x494d4931 );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
@@ -718,7 +718,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             const AnimationBitmap&  rAnimBmp = rAnimation.Get( i );
             const sal_uInt16            nRest = nCount - i - 1;
 
-            // Write AnimationBitmap
+            
             WriteDIBBitmapEx(rAnimBmp.aBmpEx, rOStm);
             WritePair( rOStm, rAnimBmp.aPosPix );
             WritePair( rOStm, rAnimBmp.aSizePix );
@@ -727,11 +727,11 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             rOStm.WriteUInt16( (sal_uInt16) rAnimBmp.eDisposal );
             rOStm.WriteUChar( (sal_uInt8) rAnimBmp.bUserInput );
             rOStm.WriteUInt32( (sal_uInt32) rAnimation.mnLoopCount );
-            rOStm.WriteUInt32( nDummy32 ); // Unused
-            rOStm.WriteUInt32( nDummy32 ); // Unused
-            rOStm.WriteUInt32( nDummy32 ); // Unused
-            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); // dummy
-            rOStm.WriteUInt16( nRest ); // Count of remaining structures
+            rOStm.WriteUInt32( nDummy32 ); 
+            rOStm.WriteUInt32( nDummy32 ); 
+            rOStm.WriteUInt32( nDummy32 ); 
+            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); 
+            rOStm.WriteUInt16( nRest ); 
         }
     }
 
@@ -752,11 +752,11 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
 
     rAnimation.Clear();
 
-    // If the BitmapEx at the beginning have already been read (by Graphic)
-    // we can start reading the AnimationBitmaps right away
+    
+    
     if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
         bReadAnimations = true;
-    // Else, we try reading the Bitmap(-Ex)
+    
     else
     {
         rIStm.Seek( nStmPos );
@@ -770,7 +770,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
             rIStm.Seek( nStmPos );
     }
 
-    // Read AnimationBitmaps
+    
     if( bReadAnimations )
     {
         AnimationBitmap aAnimBmp;
@@ -789,11 +789,11 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
             rIStm.ReadUInt16( nTmp16 ); aAnimBmp.eDisposal = ( Disposal) nTmp16;
             rIStm.ReadCharAsBool( cTmp ); aAnimBmp.bUserInput = cTmp;
             rIStm.ReadUInt32( nTmp32 ); rAnimation.mnLoopCount = (sal_uInt16) nTmp32;
-            rIStm.ReadUInt32( nTmp32 ); // Unused
-            rIStm.ReadUInt32( nTmp32 ); // Unused
-            rIStm.ReadUInt32( nTmp32 ); // Unused
-            read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Unused
-            rIStm.ReadUInt16( nTmp16 ); // The rest to read
+            rIStm.ReadUInt32( nTmp32 ); 
+            rIStm.ReadUInt32( nTmp32 ); 
+            rIStm.ReadUInt32( nTmp32 ); 
+            read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); 
+            rIStm.ReadUInt16( nTmp16 ); 
 
             rAnimation.Insert( aAnimBmp );
         }

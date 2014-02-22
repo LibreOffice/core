@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -81,7 +81,7 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
 }
 
 
-// XAccessibleSelection
+
 void SwAccessibleSelectionHelper::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -89,14 +89,14 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 {
     SolarMutexGuard aGuard;
 
-    // Get the respective child as SwFrm (also do index checking), ...
+    
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
                                                         nChildIndex );
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
 
-    // we can only select fly frames, so we ignore (should: return
-    // false) all other attempts at child selection
+    
+    
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != NULL )
     {
@@ -104,10 +104,10 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
         if( pObj )
             rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
     }
-    // no frame shell, or no frame, or no fly frame -> can't select
+    
 }
 
-//When the selected state of the SwFrmOrObj is setted, return true.
+
 static sal_Bool lcl_getSelectedState(const SwAccessibleChild& aChild,
                                      SwAccessibleContext* pContext,
                                      SwAccessibleMap* pMap)
@@ -149,13 +149,13 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 {
     SolarMutexGuard aGuard;
 
-    // Get the respective child as SwFrm (also do index checking), ...
+    
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
                                                         nChildIndex );
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
 
-    // ... and compare to the currently selected frame
+    
     sal_Bool bRet = sal_False;
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
@@ -168,7 +168,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
         {
             bRet = pFEShell->IsObjSelected( *aChild.GetDrawObject() );
         }
-        //If the SwFrmOrObj is not selected directly in the UI, we should check whether it is selected in the selection cursor.
+        
         if( !bRet )
         {
             if( lcl_getSelectedState( aChild, &rContext, rContext.GetMap() ) == sal_True)
@@ -182,7 +182,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
     throw ( RuntimeException )
 {
-    // return sal_False     // we can't deselect
+    
 }
 
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
@@ -190,8 +190,8 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aGuard;
 
-    // We can select only one. So iterate over the children to find
-    // the first we can select, and select it.
+    
+    
 
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
@@ -223,8 +223,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     SolarMutexGuard aGuard;
 
     sal_Int32 nCount = 0;
-    // Only one frame can be selected at a time, and we only frames
-    // for selectable children.
+    
+    
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != 0 )
     {
@@ -259,8 +259,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 }
             }
         }
-        //If the SwFrmOrObj is not selected directly in the UI,
-        //we should check whether it is selected in the selection cursor.
+        
+        
         if( nCount == 0 )
         {
             ::std::list< SwAccessibleChild > aChildren;
@@ -288,10 +288,10 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 {
     SolarMutexGuard aGuard;
 
-    // Since the index is relative to the selected children, and since
-    // there can be at most one selected frame child, the index must
-    // be 0, and a selection must exist, otherwise we have to throw an
-    // lang::IndexOutOfBoundsException
+    
+    
+    
+    
     SwFEShell* pFEShell = GetFEShell();
     if( 0 == pFEShell )
         throwIndexOutOfBoundsException();
@@ -376,7 +376,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     return xChild;
 }
 
-// index has to be treated as global child index.
+
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstdarg>
@@ -174,7 +174,7 @@ void Sane::Init()
         sSaneLibName = "libsane" SAL_DLLEXTENSION ".1";
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
-    // try reasonable places that might not be in the library search path
+    
     if( ! pSaneLib )
     {
         OUString sSaneLibSystemPath( "/usr/local/lib/libsane" SAL_DLLEXTENSION  );
@@ -501,11 +501,11 @@ static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
     if( depth == 16 )
     {
         sal_uInt16 nWord;
-        // data always come in native byte order !
-        // 16 bits is not really supported by backends as of now
-        // e.g. UMAX Astra 1200S delivers 16 bit but in BIGENDIAN
-        // against SANE documentation (xscanimage gets the same result
-        // as we do
+        
+        
+        
+        
+        
         size_t items_read = fread( &nWord, 1, 2, fp );
 
         if (items_read != 2)
@@ -601,19 +601,19 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
     aConverter.Seek( 0 );
     aConverter.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // write bitmap stream header
+    
     aConverter.WriteChar( 'B' ).WriteChar( 'M' );
     aConverter.WriteUInt32( (sal_uInt32) 0 );
     aConverter.WriteUInt32( (sal_uInt32) 0 );
     aConverter.WriteUInt32( (sal_uInt32) 60 );
 
-    // write BITMAPINFOHEADER
+    
     aConverter.WriteUInt32( (sal_uInt32)40 );
-    aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in width later
-    aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in height later
+    aConverter.WriteUInt32( (sal_uInt32)0 ); 
+    aConverter.WriteUInt32( (sal_uInt32)0 ); 
     aConverter.WriteUInt16( (sal_uInt16)1 );
-    // create header for 24 bits
-    // correct later if necessary
+    
+    
     aConverter.WriteUInt16( (sal_uInt16)24 );
     aConverter.WriteUInt32( (sal_uInt32)0 );
     aConverter.WriteUInt32( (sal_uInt32)0 );
@@ -679,7 +679,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
 
             sal_Bool bSynchronousRead = sal_True;
 
-            // should be fail safe, but ... ??
+            
             nStatus = p_set_io_mode( maHandle, SANE_FALSE );
             CheckConsistency( "sane_set_io_mode" );
             if( nStatus != SANE_STATUS_GOOD )
@@ -689,7 +689,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 CheckConsistency( "sane_set_io_mode" );
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
                 if( nStatus != SANE_STATUS_GOOD )
-                    // what ?!?
+                    
                     fprintf( stderr, "Sane::Start: driver is confused\n" );
 #endif
             }
@@ -751,7 +751,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
             if( ! bWidthSet )
             {
                 if( ! fResl )
-                    fResl = 300; // if all else fails that's a good guess
+                    fResl = 300; 
                 if( ! nWidthMM )
                     nWidthMM = (int)(((double)nWidth / fResl) * 25.4);
                 if( ! nHeightMM )
@@ -777,7 +777,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 28 );
                 aConverter.WriteUInt16( (sal_uInt16) 1 );
                 aConverter.Seek( 54 );
-                // write color table
+                
                 aConverter.WriteUInt16( (sal_uInt16)0xffff );
                 aConverter.WriteUChar( (sal_uInt8)0xff );
                 aConverter.WriteUChar( (sal_uInt8)0 );
@@ -791,7 +791,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 28 );
                 aConverter.WriteUInt16( (sal_uInt16) 8 );
                 aConverter.Seek( 54 );
-                // write color table
+                
                 for( nLine = 0; nLine < 256; nLine++ )
                 {
                     aConverter.WriteUChar( (sal_uInt8)nLine );
@@ -868,14 +868,14 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                  if( nGap )
                      aConverter.SeekRel( 4-nGap );
             }
-            fclose( pFrame ); // deletes tmpfile
+            fclose( pFrame ); 
             if( eType != FrameStyle_Separated )
                 break;
         }
         else
             bSuccess = sal_False;
     }
-    // get stream length
+    
     aConverter.Seek( STREAM_SEEK_TO_END );
     int nPos = aConverter.Tell();
 
@@ -887,8 +887,8 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
 
     if( bSuccess )
     {
-        // only cancel a successful operation
-        // sane disrupts memory else
+        
+        
         p_cancel( maHandle );
         CheckConsistency( "sane_cancel" );
     }

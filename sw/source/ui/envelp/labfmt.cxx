@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/poly.hxx>
@@ -96,7 +96,7 @@ void SwLabPreview::Paint(const Rectangle &)
     long lOutWPix   = aSz.Width ();
     long lOutHPix   = aSz.Height();
 
-    // Scale factor
+    
     float fxpix = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
 
     long lOutWPix23 = (long)((float)lOutWPix * fxpix);
@@ -119,7 +119,7 @@ void SwLabPreview::Paint(const Rectangle &)
     aPaintFont.SetTransparent(false);
     SetFont(aPaintFont);
 
-    // size of region to be displayed
+    
     long lDispW = ROUND(aItem.lLeft  + aItem.lHDist);
     long lDispH = ROUND(aItem.lUpper + aItem.lVDist);
     if (aItem.nCols == 1)
@@ -131,12 +131,12 @@ void SwLabPreview::Paint(const Rectangle &)
     else
         lDispH += ROUND(aItem.lVDist / 10);
 
-    // Scale factor
+    
     float fx = (float) lOutWPix23 / std::max(1L, lDispW),
           fy = (float) lOutHPix23 / std::max(1L, lDispH),
           f  = fx < fy ? fx : fy;
 
-    // zero point
+    
     long lOutlineW = ROUND(f * lDispW);
     long lOutlineH = ROUND(f * lDispH);
 
@@ -149,19 +149,19 @@ void SwLabPreview::Paint(const Rectangle &)
     long lX3 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lHDist ));
     long lY3 = ROUND(lY0 + f * (aItem.lUpper + aItem.lVDist ));
 
-    // draw outline (area)
+    
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
-    // draw outline (border)
+    
     SetLineColor(rFieldTextColor);
-    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
-    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
+    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); 
+    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); 
     if (aItem.nCols == 1)
-        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
+        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); 
     if (aItem.nRows == 1)
-        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
+        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); 
 
-    // Labels
+    
     SetClipRegion(Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     SetFillColor( COL_LIGHTGRAYBLUE );
     for (sal_uInt16 nRow = 0; nRow < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
@@ -173,7 +173,7 @@ void SwLabPreview::Paint(const Rectangle &)
                     ROUND(f * aItem.lHeight))));
     SetClipRegion();
 
-    // annotation: left border
+    
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
@@ -182,14 +182,14 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
-    // annotation: upper border
+    
     if (aItem.lUpper)
     {
         DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
         DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
     }
 
-    // annotation: width and height
+    
     {
         long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
         long lY = lY1 + lXHeight;
@@ -201,7 +201,7 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
     }
 
-    // annotation: horizontal gap
+    
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
@@ -210,21 +210,21 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
-    // annotation: vertical gap
+    
     if (aItem.nRows > 1)
     {
         DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
         DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
     }
 
-    // annotation: columns
+    
     {
         long lY = lY0 + lOutlineH + 4;
         DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), true);
         DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
-    // annotation: lines
+    
     {
         long lX = lX0 + lOutlineW + 4;
         DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
@@ -232,7 +232,7 @@ void SwLabPreview::Paint(const Rectangle &)
     }
 }
 
-// Arror or interval character --------------------------------------------
+
 
 void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
 {
@@ -242,10 +242,10 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
     {
         Point aArr[3];
 
-        // Arrow character
+        
         if (rP1.Y() == rP2.Y())
         {
-            // Horizontal
+            
             aArr[0].X() = rP2.X() - 5;
             aArr[0].Y() = rP2.Y() - 2;
             aArr[1].X() = rP2.X();
@@ -255,7 +255,7 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
         }
         else
         {
-            // Vertical
+            
             aArr[0].X() = rP2.X() - 2;
             aArr[0].Y() = rP2.Y() - 5;
             aArr[1].X() = rP2.X() + 2;
@@ -270,16 +270,16 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
     }
     else
     {
-        // Interval symbol
+        
         if (rP1.Y() == rP2.Y())
         {
-            // Horizontal
+            
             DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
             DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
         }
         else
         {
-            // Vertical
+            
             DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
             DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
         }
@@ -315,7 +315,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pPHeightField, "pageheight");
     get(m_pSavePB, "save");
 
-    // Metrics
+    
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(*m_pHDistField, aMetric);
     SetMetric(*m_pVDistField , aMetric);
@@ -326,7 +326,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pPWidthField , aMetric);
     SetMetric(*m_pPHeightField, aMetric);
 
-    // Install handlers
+    
     Link aLk = LINK(this, SwLabFmtPage, ModifyHdl);
     m_pHDistField->SetModifyHdl( aLk );
     m_pVDistField->SetModifyHdl( aLk );
@@ -352,7 +352,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
     m_pPHeightField->SetLoseFocusHdl( aLk );
 
     m_pSavePB->SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
-    // Set timer
+    
     aPreviewTimer.SetTimeout(1000);
     aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
 }
@@ -361,7 +361,7 @@ SwLabFmtPage::~SwLabFmtPage()
 {
 }
 
-// Modify-handler of MetricFields. start preview timer
+
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
 {
     bModified = true;
@@ -370,7 +370,7 @@ IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, ModifyHdl)
 
-// Invalidate preview
+
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
 {
     aPreviewTimer.Stop();
@@ -382,7 +382,7 @@ IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, PreviewHdl)
 
-// LoseFocus-Handler: Update on change --------------------------
+
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
     if (((Edit*) pControl)->IsModified())
@@ -393,10 +393,10 @@ IMPL_LINK_INLINE_END( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 
 void SwLabFmtPage::ChangeMinMax()
 {
-    long lMax = 31748; // 56 cm
-    long nMinSize = 10; // 0,1cm
+    long lMax = 31748; 
+    long nMinSize = 10; 
 
-    // Min and Max
+    
 
     int nCols   = m_pColsField->GetValue(),
         nRows   = m_pRowsField->GetValue();
@@ -434,7 +434,7 @@ void SwLabFmtPage::ChangeMinMax()
 
     m_pPWidthField->SetMax( (long) 100 * lMax, FUNIT_TWIP);
     m_pPHeightField->SetMax( (long) 100 * lMax, FUNIT_TWIP);
-    // First and Last
+    
 
     m_pHDistField->SetFirst(m_pHDistField->GetMin());
     m_pVDistField->SetFirst(m_pVDistField->GetMin());
@@ -519,7 +519,7 @@ sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 
 void SwLabFmtPage::Reset(const SfxItemSet& )
 {
-    // Initialise fields
+    
     GetParentSwLabDlg()->GetLabItem(aItem);
 
     m_pHDistField->SetMax(100 * aItem.lHDist , FUNIT_TWIP);

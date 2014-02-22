@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/scoped_ptr.hpp>
@@ -303,7 +303,7 @@ ImageList::ImageList( const ResId& rResId ) :
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         sal_uLong                               nObjMask = pResMgr->ReadLong();
-        pResMgr->ReadString(); //skip string
+        pResMgr->ReadString(); 
         ::boost::scoped_ptr< Color >        spMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
@@ -401,7 +401,7 @@ void ImageAryData::Load(const OUString &rPrefix)
 #endif
 }
 
-// FIXME: Rather a performance hazard
+
 BitmapEx ImageList::GetAsHorizontalStrip() const
 {
     Size aSize( mpImplData->maImageSize );
@@ -410,7 +410,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         return BitmapEx();
     aSize.Width() *= nCount;
 
-    // Load any stragglers
+    
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
     {
         ImageAryData *pData = mpImplData->maImages[ nIdx ];
@@ -510,8 +510,8 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 
     if( nId )
     {
-        //Just replace the bitmap rather than doing RemoveImage / AddImage
-        //which breaks index-based iteration.
+        
+        
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
         pImg->maBitmapEx = rImage.GetBitmapEx();
     }
@@ -665,7 +665,7 @@ Size ImageList::GetImageSize() const
     {
         aRet = mpImplData->maImageSize;
 
-        // force load of 1st image to see - uncommon case.
+        
         if( aRet.Width() == 0 && aRet.Height() == 0 &&
             !mpImplData->maImages.empty() )
         {
@@ -701,7 +701,7 @@ bool ImageList::operator==( const ImageList& rImageList ) const
         bRet = false;
     else if( rImageList.GetImageCount() == GetImageCount() &&
               rImageList.mpImplData->maImageSize == mpImplData->maImageSize )
-        bRet = true; // strange semantic
+        bRet = true; 
 
     return bRet;
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xpathapi.hxx>
@@ -42,13 +42,13 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 namespace XPath
 {
-    // factory
+    
     Reference< XInterface > CXPathAPI::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
     {
         return Reference< XInterface >(static_cast<XXPathAPI*>(new CXPathAPI(rSMgr)));
     }
 
-    // ctor
+    
     CXPathAPI::CXPathAPI(const Reference< XMultiServiceFactory >& rSMgr)
         : m_aFactory(rSMgr)
     {
@@ -115,8 +115,8 @@ namespace XPath
         }
     }
 
-    // register all namespaces stored in the namespace list for this object
-    // with the current xpath evaluation context
+    
+    
     static void lcl_registerNamespaces(
             xmlXPathContextPtr ctx,
             const nsmap_t& nsmap)
@@ -135,7 +135,7 @@ namespace XPath
         }
     }
 
-    // get all ns decls on a node (and parent nodes, if any)
+    
     static void lcl_collectNamespaces(
             nsmap_t & rNamespaces, Reference< XNode > const& xNamespaceNode)
     {
@@ -152,7 +152,7 @@ namespace XPath
                 OUString aURI((sal_Char*)xHref, strlen((char*)xHref), RTL_TEXTENCODING_UTF8);
                 const xmlChar* xPre = curDef->prefix;
                 OUString aPrefix((sal_Char*)xPre, strlen((char*)xPre), RTL_TEXTENCODING_UTF8);
-                // we could already have this prefix from a child node
+                
                 if (rNamespaces.find(aPrefix) == rNamespaces.end())
                 {
                     rNamespaces.insert(::std::make_pair(aPrefix, aURI));
@@ -175,8 +175,8 @@ namespace XPath
         }
     }
 
-    // register function and variable lookup functions with the current
-    // xpath evaluation context
+    
+    
     static void lcl_registerExtensions(
             xmlXPathContextPtr ctx,
             const extensions_t& extensions)
@@ -305,7 +305,7 @@ namespace XPath
             SAL_WARN("unoxml", "libxml2 error: " << make_error_message(error));
         }
 
-    } // extern "C"
+    } 
 
     /**
      * evaluates an XPath string. relative XPath expressions are evaluated relative to
@@ -327,7 +327,7 @@ namespace XPath
             extensions = m_extensions;
         }
 
-        // get the node and document
+        
         ::rtl::Reference<DOM::CDocument> const pCDoc(
                 dynamic_cast<DOM::CDocument*>( DOM::CNode::GetImplementation(
                         xContextNode->getOwnerDocument())));
@@ -336,7 +336,7 @@ namespace XPath
         DOM::CNode *const pCNode = DOM::CNode::GetImplementation(xContextNode);
         if (!pCNode) { throw RuntimeException(); }
 
-        ::osl::MutexGuard const g(pCDoc->GetMutex()); // lock the document!
+        ::osl::MutexGuard const g(pCDoc->GetMutex()); 
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
         if (!pNode) { throw RuntimeException(); }
@@ -358,13 +358,13 @@ namespace XPath
                 xmlXPathNewContext(pDoc), xmlXPathFreeContext);
         if (xpathCtx == 0) { throw XPathException(); }
 
-        // set context node
+        
         xpathCtx->node = pNode;
-        // error handling
+        
         xpathCtx->error = structured_error_func;
         xmlSetGenericErrorFunc(NULL, generic_error_func);
 
-        // register namespaces and extension
+        
         lcl_registerNamespaces(xpathCtx.get(), nsmap);
         lcl_registerExtensions(xpathCtx.get(), extensions);
 
@@ -375,7 +375,7 @@ namespace XPath
                 xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
         xmlSetGenericErrorFunc(NULL, NULL);
         if (0 == xpathObj) {
-            // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);
+            
             throw XPathException();
         }
         Reference<XXPathObject> const xObj(
@@ -407,7 +407,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // get extension from service manager
+        
         Reference< XXPathExtension > const xExtension(
                 m_aFactory->createInstance(aName), UNO_QUERY_THROW);
         m_extensions.push_back(xExtension);

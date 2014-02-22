@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <crsrsh.hxx>
@@ -40,13 +40,13 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             0 == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
             aIdx--;
 
-        if( pNd ) // is there another section node?
+        if( pNd ) 
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
                   pNd->GetSection().IsProtectFlag() ))
             {
-                // skip protected or hidden ones
+                
                 aIdx.Assign( *pNd, - 1 );
             }
             else if( fnPosRegion == fnMoveForward )
@@ -94,13 +94,13 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                 0 == ( pNd = aIdx.GetNode().GetSectionNode()) )
             ++aIdx;
 
-        if( pNd ) // is there another section node?
+        if( pNd ) 
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
                   pNd->GetSection().IsProtectFlag() ))
             {
-                // skip protected or hidden ones
+                
                 aIdx.Assign( *pNd->EndOfSectionNode(), +1 );
             }
             else if( fnPosRegion == fnMoveForward )
@@ -178,7 +178,7 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
     do {
         SwCntntNode* pCNd;
-        if( bMoveBackward ) // to the end of the section
+        if( bMoveBackward ) 
         {
             SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
             pCNd = pNd->GetNodes().GoPrevSection( &aIdx, true, !bInReadOnly );
@@ -199,10 +199,10 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
         if( &pPos->nNode.GetNode() != pCurrNd ||
             pPos->nContent.GetIndex() != nCurrCnt )
-            // there was a change
+            
             return sal_True;
 
-        // try also the parent of this section
+        
         SwSection* pParent = pNd->GetSection().GetParent();
         pNd = pParent ? pParent->GetFmt()->GetSectionNode() : 0;
     } while( pNd );
@@ -221,7 +221,7 @@ sal_Bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosReg
 
 sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
+    SwCallLink aLk( *this ); 
     sal_Bool bRet = !m_pTblCrsr && m_pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
         UpdateCrsr();
@@ -242,7 +242,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
             0 != ( pIdx = pFmt->GetCntnt().GetCntntIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
-            // area in normal nodes array
+            
             SwCrsrSaveState aSaveState( *this );
 
             GetPoint()->nNode = *pIdx;
@@ -255,7 +255,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
 
 bool SwCrsrShell::GotoRegion( const OUString& rName )
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
+    SwCallLink aLk( *this ); 
     bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |

@@ -38,7 +38,7 @@ ResId SaneResId( sal_uInt32 );
  *
  ***********************************************************************/
 
-// ---------------------------------------------------------------------
+
 
 GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, sal_Bool bCutValues )
 :   ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
@@ -96,7 +96,7 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     FreeResource();
 }
 
-// ---------------------------------------------------------------------
+
 
 GridWindow::~GridWindow()
 {
@@ -104,7 +104,7 @@ GridWindow::~GridWindow()
         delete [] m_pNewYValues;
 }
 
-// ---------------------------------------------------------------------
+
 
 double GridWindow::findMinX()
 {
@@ -117,7 +117,7 @@ double GridWindow::findMinX()
     return fMin;
 }
 
-// ---------------------------------------------------------------------
+
 
 double GridWindow::findMinY()
 {
@@ -130,7 +130,7 @@ double GridWindow::findMinY()
     return fMin;
 }
 
-// ---------------------------------------------------------------------
+
 
 double GridWindow::findMaxX()
 {
@@ -143,7 +143,7 @@ double GridWindow::findMaxX()
     return fMax;
 }
 
-// ---------------------------------------------------------------------
+
 
 double GridWindow::findMaxY()
 {
@@ -156,7 +156,7 @@ double GridWindow::findMaxY()
     return fMax;
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::computeExtremes()
 {
@@ -179,7 +179,7 @@ void GridWindow::computeExtremes()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 Point GridWindow::transform( double x, double y )
 {
@@ -195,7 +195,7 @@ Point GridWindow::transform( double x, double y )
     return aRet;
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::transform( const Point& rOriginal, double& x, double& y )
 {
@@ -203,14 +203,14 @@ void GridWindow::transform( const Point& rOriginal, double& x, double& y )
     y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)m_aGridArea.GetHeight() + m_fMinY;
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::drawLine( double x1, double y1, double x2, double y2 )
 {
     DrawLine( transform( x1, y1 ), transform( x2, y2 ) );
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut )
 {
@@ -238,7 +238,7 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
         fMinChunkOut += fChunkOut;
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::computeNew()
 {
@@ -287,7 +287,7 @@ void GridWindow::computeNew()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 double GridWindow::interpolate(
     double x,
@@ -313,7 +313,7 @@ double GridWindow::interpolate(
     return ret;
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY )
 {
@@ -326,7 +326,7 @@ void GridWindow::setBoundings( double fMinX, double fMinY, double fMaxX, double 
     computeChunk( m_fMinY, m_fMaxY, m_fChunkY, m_fMinChunkY );
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::drawGrid()
 {
@@ -366,7 +366,7 @@ void GridWindow::drawGrid()
     drawLine( m_fMaxX, m_fMinY, m_fMaxX, m_fMaxY );
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::drawOriginal()
 {
@@ -381,7 +381,7 @@ void GridWindow::drawOriginal()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::drawNew()
 {
@@ -398,7 +398,7 @@ void GridWindow::drawNew()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::drawHandles()
 {
@@ -408,7 +408,7 @@ void GridWindow::drawHandles()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::Paint( const Rectangle& rRect )
 {
@@ -419,7 +419,7 @@ void GridWindow::Paint( const Rectangle& rRect )
     drawHandles();
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::MouseMove( const MouseEvent& rEvt )
 {
@@ -454,7 +454,7 @@ void GridWindow::MouseMove( const MouseEvent& rEvt )
     ModalDialog::MouseMove( rEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 {
@@ -472,7 +472,7 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
     ModalDialog::MouseButtonUp( rEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -524,7 +524,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     ModalDialog::MouseButtonDown( rEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fpsmartcontent.hxx"
@@ -30,10 +30,10 @@
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
@@ -41,10 +41,10 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
-    //= SmartContent
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     SmartContent::SmartContent()
         :m_pContent( NULL )
         ,m_eState( NOT_BOUND )
@@ -52,7 +52,7 @@ namespace svt
     {
     }
 
-    //--------------------------------------------------------------------
+    
     SmartContent::SmartContent( const OUString& _rInitialURL )
         :m_pContent( NULL )
         ,m_eState( NOT_BOUND )
@@ -61,7 +61,7 @@ namespace svt
         bindTo( _rInitialURL );
     }
 
-    //--------------------------------------------------------------------
+    
     SmartContent::~SmartContent()
     {
         /* This destructor originally contained the following blurb: "Do
@@ -78,7 +78,7 @@ namespace svt
         delete m_pContent;
     }
 
-    //--------------------------------------------------------------------
+    
     void SmartContent::enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::EInterceptedInteractions eInterceptions)
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -92,11 +92,11 @@ namespace svt
         m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction, Reference< XProgressHandler >() );
     }
 
-    //--------------------------------------------------------------------
+    
     void SmartContent::enableDefaultInteractionHandler()
     {
-        // Don't free the memory here! It will be done by the next
-        // call automaticly - releasing of the uno reference ...
+        
+        
         m_pOwnInteraction = NULL;
         m_xOwnInteraction.clear();
 
@@ -106,7 +106,7 @@ namespace svt
         m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
     }
 
-    //--------------------------------------------------------------------
+    
     ::svt::OFilePickerInteractionHandler* SmartContent::getOwnInteractionHandler() const
     {
         if (!m_xOwnInteraction.is())
@@ -114,7 +114,7 @@ namespace svt
         return m_pOwnInteraction;
     }
 
-    //--------------------------------------------------------------------
+    
     SmartContent::InteractionHandlerType SmartContent::queryCurrentInteractionHandler() const
     {
         if (m_xOwnInteraction.is())
@@ -126,26 +126,26 @@ namespace svt
         return IHT_DEFAULT;
     }
 
-    //--------------------------------------------------------------------
+    
     void SmartContent::disableInteractionHandler()
     {
-        // Don't free the memory here! It will be done by the next
-        // call automaticly - releasing of the uno reference ...
+        
+        
         m_pOwnInteraction = NULL;
         m_xOwnInteraction.clear();
 
         m_xCmdEnv.clear();
     }
 
-    //--------------------------------------------------------------------
+    
     void SmartContent::bindTo( const OUString& _rURL )
     {
         if ( getURL() == _rURL )
-            // nothing to do, regardless of the state
+            
             return;
 
         DELETEZ( m_pContent );
-        m_eState = INVALID; // default to INVALID
+        m_eState = INVALID; 
         m_sURL = _rURL;
 
         if ( !m_sURL.isEmpty() )
@@ -154,9 +154,9 @@ namespace svt
             {
                 m_pContent = new ::ucbhelper::Content( _rURL, m_xCmdEnv, comphelper::getProcessComponentContext() );
                 m_eState = UNKNOWN;
-                    // from now on, the state is unknown -> we cannot know for sure if the content
-                    // is really valid (some UCP's only tell this when asking for properties, not upon
-                    // creation)
+                    
+                    
+                    
             }
             catch( const ContentCreationException& )
             {
@@ -172,8 +172,8 @@ namespace svt
         }
 
 
-        // don't forget to reset the may internal used interaction handler ...
-        // But do it only for our own specialized interaction helper!
+        
+        
         ::svt::OFilePickerInteractionHandler* pHandler = getOwnInteractionHandler();
         if (pHandler)
         {
@@ -182,19 +182,19 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SmartContent::implIs( const OUString& _rURL, Type _eType )
     {
-        // bind to this content
+        
         bindTo( _rURL );
 
-        // did we survive this?
+        
         if ( isInvalid() || !isBound() )
             return sal_False;
 
         DBG_ASSERT( m_pContent, "SmartContent::implIs: inconsistence!" );
-            // if, after an bindTo, we don't have a content, then we should be INVALID, or at least
-            // NOT_BOUND (the latter happens, for example, if somebody tries to ask for an empty URL)
+            
+            
 
         sal_Bool bIs = sal_False;
         try
@@ -204,18 +204,18 @@ namespace svt
             else
                 bIs = m_pContent->isDocument();
 
-            // from here on, we definitely know that the content is valid
+            
             m_eState = VALID;
         }
         catch( const Exception& )
         {
-            // now we're definitely invalid
+            
             m_eState = INVALID;
         }
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+    
     void SmartContent::getTitle( OUString& /* [out] */ _rTitle )
     {
         if ( !isBound() || isInvalid() )
@@ -227,17 +227,17 @@ namespace svt
             m_pContent->getPropertyValue("Title") >>= sTitle;
             _rTitle =  sTitle;
 
-            // from here on, we definitely know that the content is valid
+            
             m_eState = VALID;
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            // now we're definitely invalid
+            
             m_eState = INVALID;
         }
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SmartContent::hasParentFolder( )
     {
         if ( !isBound() || isInvalid() )
@@ -255,20 +255,20 @@ namespace svt
                     const OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
                     bRet = ( !aParentURL.isEmpty() && aParentURL != m_pContent->getURL() );
 
-                    // now we're definitely valid
+                    
                     m_eState = VALID;
                 }
             }
         }
         catch( const Exception& )
         {
-            // now we're definitely invalid
+            
             m_eState = INVALID;
         }
         return bRet;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SmartContent::canCreateFolder( )
     {
         if ( !isBound() || isInvalid() )
@@ -282,7 +282,7 @@ namespace svt
             sal_Int32 nCount = aInfo.getLength();
             for ( sal_Int32 i = 0; i < nCount; ++i, ++pInfo )
             {
-                // Simply look for the first KIND_FOLDER...
+                
                 if ( pInfo->Attributes & ContentInfoAttribute::KIND_FOLDER )
                 {
                     bRet = sal_True;
@@ -290,12 +290,12 @@ namespace svt
                 }
             }
 
-            // now we're definitely valid
+            
             m_eState = VALID;
         }
         catch( const Exception& )
         {
-            // now we're definitely invalid
+            
             m_eState = INVALID;
         }
         return bRet;
@@ -313,7 +313,7 @@ namespace svt
             sal_Int32 nCount = aInfo.getLength();
             for ( sal_Int32 i = 0; i < nCount; ++i, ++pInfo )
             {
-                // Simply look for the first KIND_FOLDER...
+                
                 if ( pInfo->Attributes & ContentInfoAttribute::KIND_FOLDER )
                 {
                     sFolderType = pInfo->Type;
@@ -341,8 +341,8 @@ namespace svt
         return aCreatedUrl;
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

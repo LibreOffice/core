@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -30,7 +30,7 @@ namespace {
 std::vector< OUString > translateAnnotations(OUString const & documentation) {
     std::vector< OUString > ans;
     if (documentation.indexOf("@deprecated") != -1) {
-        //TODO: this check is somewhat crude
+        
         ans.push_back("deprecated");
     }
     return ans;
@@ -219,7 +219,7 @@ rtl::Reference< Entity > readEntity(
         if (probe) {
             return rtl::Reference< Entity >();
         }
-        // fall through
+        
     default:
         throw FileFormatException(
             key.getRegistryName(),
@@ -250,7 +250,7 @@ rtl::Reference< Entity > readEntity(
             }
             sal_uInt16 methodCount = reader.getMethodCount();
             std::vector< InterfaceTypeEntity::Attribute > attrs;
-            n = reader.getFieldCount(); // attributes
+            n = reader.getFieldCount(); 
             for (sal_uInt16 j = 0; j != n; ++j) {
                 OUString attrName(reader.getFieldName(j));
                 std::vector< OUString > getExcs;
@@ -802,7 +802,7 @@ LegacyProvider::LegacyProvider(
     e = root.openKey("UCR", ucr_);
     switch (e) {
     case REG_NO_ERROR:
-    case REG_KEY_NOT_EXISTS: // such effectively empty files exist in the wild
+    case REG_KEY_NOT_EXISTS: 
         break;
     default:
         throw FileFormatException(

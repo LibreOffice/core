@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
@@ -51,7 +51,7 @@ namespace slideshow
 
         ActivitiesQueue::~ActivitiesQueue()
         {
-            // dispose all queue entries
+            
             try
             {
                 std::for_each( maCurrentActivitiesWaiting.begin(),
@@ -77,7 +77,7 @@ namespace slideshow
             if( !pActivity )
                 return false;
 
-            // add entry to waiting list
+            
             maCurrentActivitiesWaiting.push_back( pActivity );
 
             return true;
@@ -87,8 +87,8 @@ namespace slideshow
         {
             VERBOSE_TRACE( "ActivitiesQueue: outer loop heartbeat" );
 
-            // accumulate time lag for all activities, and lag time
-            // base if necessary:
+            
+            
             ActivityQueue::const_iterator iPos(
                 maCurrentActivitiesWaiting.begin() );
             const ActivityQueue::const_iterator iEnd(
@@ -101,10 +101,10 @@ namespace slideshow
                 mpTimer->adjustTimer( -fLag );
             }
 
-            // process list of activities
+            
             while( !maCurrentActivitiesWaiting.empty() )
             {
-                // process topmost activity
+                
                 ActivitySharedPtr pActivity( maCurrentActivitiesWaiting.front() );
                 maCurrentActivitiesWaiting.pop_front();
 
@@ -112,7 +112,7 @@ namespace slideshow
 
                 try
                 {
-                    // fire up activity
+                    
                     bReinsert = pActivity->perform();
                 }
                 catch( uno::RuntimeException& )
@@ -121,32 +121,32 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    // catch anything here, we don't want
-                    // to leave this scope under _any_
-                    // circumstance. Although, do _not_
-                    // reinsert an activity that threw
-                    // once.
+                    
+                    
+                    
+                    
+                    
 
-                    // NOTE: we explicitly don't catch(...) here,
-                    // since this will also capture segmentation
-                    // violations and the like. In such a case, we
-                    // still better let our clients now...
+                    
+                    
+                    
+                    
                     OSL_FAIL( OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
                 catch( SlideShowException& )
                 {
-                    // catch anything here, we don't want
-                    // to leave this scope under _any_
-                    // circumstance. Although, do _not_
-                    // reinsert an activity that threw
-                    // once.
+                    
+                    
+                    
+                    
+                    
 
-                    // NOTE: we explicitly don't catch(...) here,
-                    // since this will also capture segmentation
-                    // violations and the like. In such a case, we
-                    // still better let our clients now...
+                    
+                    
+                    
+                    
                     OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw a SlideShowException, removing from ring" );
                 }
 
@@ -160,18 +160,18 @@ namespace slideshow
 
             if( !maCurrentActivitiesReinsert.empty() )
             {
-                // reinsert all processed, but not finished
-                // activities back to waiting queue. With swap(),
-                // we kill two birds with one stone: we reuse the
-                // list nodes, and we clear the
-                // maCurrentActivitiesReinsert list
+                
+                
+                
+                
+                
                 maCurrentActivitiesWaiting.swap( maCurrentActivitiesReinsert );
             }
         }
 
         void ActivitiesQueue::processDequeued()
         {
-            // notify all dequeued activities from last round
+            
             ::std::for_each( maDequeuedActivities.begin(),
                              maDequeuedActivities.end(),
                              ::boost::mem_fn( &Activity::dequeued ) );
@@ -185,7 +185,7 @@ namespace slideshow
 
         void ActivitiesQueue::clear()
         {
-            // dequeue all entries:
+            
             std::for_each( maCurrentActivitiesWaiting.begin(),
                            maCurrentActivitiesWaiting.end(),
                            boost::mem_fn( &Activity::dequeued ) );

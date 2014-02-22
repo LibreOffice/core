@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 
-//-----------------------------------------------------------------------------
+
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
@@ -36,9 +36,9 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 
 
-//=========================================================================
 
-//  The mutex to synchronize access to containers.
+
+
 static osl::Mutex& getContainerMutex()
 {
     static osl::Mutex* pMutex = NULL;
@@ -55,11 +55,11 @@ static osl::Mutex& getContainerMutex()
     return *pMutex;
 }
 
-//=========================================================================
+
 //
-// SortedDynamicResultSet
+
 //
-//=========================================================================
+
 
 SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XDynamicResultSet > &xOriginal,
@@ -85,7 +85,7 @@ SortedDynamicResultSet::SortedDynamicResultSet(
     mbStatic        = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 SortedDynamicResultSet::~SortedDynamicResultSet()
 {
     mpOwnListener->impl_OwnerDies();
@@ -101,9 +101,9 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
     mpTwo = NULL;
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XINTERFACE_IMPL_4( SortedDynamicResultSet,
                    XTypeProvider,
@@ -111,26 +111,26 @@ XINTERFACE_IMPL_4( SortedDynamicResultSet,
                    XComponent,      /* base class of XDynamicResultSet */
                    XDynamicResultSet );
 
-//--------------------------------------------------------------------------
-// XTypeProvider methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
                       XTypeProvider,
                          XServiceInfo,
                       XDynamicResultSet );
 
-//--------------------------------------------------------------------------
-// XServiceInfo methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
                                    OUString( "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
                                    OUString( DYNAMIC_RESULTSET_SERVICE_NAME ) );
 
-//--------------------------------------------------------------------------
-// XComponent methods.
-//--------------------------------------------------------------------------
+
+
+
 void SAL_CALL SortedDynamicResultSet::dispose()
     throw( RuntimeException )
 {
@@ -152,7 +152,7 @@ void SAL_CALL SortedDynamicResultSet::dispose()
     mbUseOne = sal_True;
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedDynamicResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -166,7 +166,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
     mpDisposeEventListeners->addInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedDynamicResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -177,9 +177,9 @@ void SAL_CALL SortedDynamicResultSet::removeEventListener(
         mpDisposeEventListeners->removeInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
-// XDynamicResultSet methods.
-// ------------------------------------------------------------------------------
+
+
+
 Reference< XResultSet > SAL_CALL
 SortedDynamicResultSet::getStaticResultSet()
     throw( ListenerAlreadySetException, RuntimeException )
@@ -201,7 +201,7 @@ SortedDynamicResultSet::getStaticResultSet()
     return mxOne;
 }
 
-// ------------------------------------------------------------------------------
+
 void SAL_CALL
 SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener >& Listener )
     throw( ListenerAlreadySetException, RuntimeException )
@@ -219,7 +219,7 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
         mxOriginal->setListener( mxOwnListener );
 }
 
-// ------------------------------------------------------------------------------
+
 void SAL_CALL
 SortedDynamicResultSet::connectToCache(
         const Reference< XDynamicResultSet > & xCache )
@@ -256,7 +256,7 @@ SortedDynamicResultSet::connectToCache(
     throw ServiceNotFoundException();
 }
 
-// ------------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL
 SortedDynamicResultSet::getCapabilities()
     throw( RuntimeException )
@@ -273,9 +273,9 @@ SortedDynamicResultSet::getCapabilities()
     return nCaps;
 }
 
-//--------------------------------------------------------------------------
-// XDynamicResultSetListener methods.
-// ------------------------------------------------------------------------------
+
+
+
 
 /** In the first notify-call the listener gets the two
  <type>XResultSet</type>s and has to hold them. The <type>XResultSet</type>s
@@ -303,8 +303,8 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 
     SortedResultSet *pCurSet = NULL;
 
-    // exchange mxNew and mxOld and immediately afterwards copy the tables
-    // from Old to New
+    
+    
     if ( mbGotWelcome )
     {
         if ( mbUseOne )
@@ -337,7 +337,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 
     aRet >>= bWasFinal;
 
-    // handle the actions in the list
+    
     for ( long i=0; i<Changes.Changes.getLength(); i++ )
     {
         const ListAction aAction = Changes.Changes[i];
@@ -370,7 +370,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                     }
                     else
                     {
-                        // throw RuntimeException();
+                        
                     }
                     break;
                 }
@@ -414,16 +414,16 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     if ( bHasNew )
         pCurSet->ResortNew( &maActions );
 
-    // send the new actions with a notify to the listeners
+    
     SendNotify();
 
-    // check for propertyChangeEvents
+    
     pCurSet->CheckProperties( nOldCount, bWasFinal );
 }
 
-//-----------------------------------------------------------------
-// XEventListener
-//-----------------------------------------------------------------
+
+
+
 void SAL_CALL
 SortedDynamicResultSet::impl_disposing( const EventObject& )
     throw( RuntimeException )
@@ -432,9 +432,9 @@ SortedDynamicResultSet::impl_disposing( const EventObject& )
     mxOriginal.clear();
 }
 
-// ------------------------------------------------------------------------------
-// private methods
-// ------------------------------------------------------------------------------
+
+
+
 void SortedDynamicResultSet::SendNotify()
 {
     long nCount = maActions.Count();
@@ -455,61 +455,61 @@ void SortedDynamicResultSet::SendNotify()
         mxListener->notify( aNewEvent );
     }
 
-    // clean up
+    
     maActions.Clear();
 }
 
-//=========================================================================
+
 //
-// SortedDynamicResultSetFactory
+
 //
-//=========================================================================
+
 SortedDynamicResultSetFactory::SortedDynamicResultSetFactory(
                         const Reference< XComponentContext > & rxContext )
 {
     m_xContext = rxContext;
 }
 
-//--------------------------------------------------------------------------
+
 SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory()
 {
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XINTERFACE_IMPL_3( SortedDynamicResultSetFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XSortedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
-// XTypeProvider methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XSortedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
-// XServiceInfo methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XSERVICEINFO_IMPL_1_CTX( SortedDynamicResultSetFactory,
                          OUString( "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
                          OUString( DYNAMIC_RESULTSET_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
-// Service factory implementation.
-//--------------------------------------------------------------------------
+
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( SortedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
-// SortedDynamicResultSetFactory methods.
-//--------------------------------------------------------------------------
+
+
+
 Reference< XDynamicResultSet > SAL_CALL
 SortedDynamicResultSetFactory::createSortedDynamicResultSet(
                 const Reference< XDynamicResultSet > & Source,
@@ -522,11 +522,11 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
     return xRet;
 }
 
-//=========================================================================
+
 //
-// EventList
+
 //
-//=========================================================================
+
 
 void EventList::Clear()
 {
@@ -539,7 +539,7 @@ void EventList::Clear()
     maData.clear();
 }
 
-//--------------------------------------------------------------------------
+
 void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
 {
     ListAction *pAction = new ListAction;
@@ -550,11 +550,11 @@ void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
     Insert( pAction );
 }
 
-//=================================================================
+
 //
-// SortedDynamicResultSetListener
+
 //
-//=================================================================
+
 
 SortedDynamicResultSetListener::SortedDynamicResultSetListener(
                                 SortedDynamicResultSet *mOwner )
@@ -562,22 +562,22 @@ SortedDynamicResultSetListener::SortedDynamicResultSetListener(
     mpOwner = mOwner;
 }
 
-//-----------------------------------------------------------------
+
 SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 {
 }
 
-//-----------------------------------------------------------------
-// XInterface methods.
-//-----------------------------------------------------------------
+
+
+
 
 XINTERFACE_IMPL_2( SortedDynamicResultSetListener,
                    XEventListener,  /* base class of XDynamicResultSetListener */
                    XDynamicResultSetListener );
 
-//-----------------------------------------------------------------
-// XEventListener ( base of XDynamicResultSetListener )
-//-----------------------------------------------------------------
+
+
+
 void SAL_CALL
 SortedDynamicResultSetListener::disposing( const EventObject& Source )
     throw( RuntimeException )
@@ -588,9 +588,9 @@ SortedDynamicResultSetListener::disposing( const EventObject& Source )
         mpOwner->impl_disposing( Source );
 }
 
-//-----------------------------------------------------------------
-// XDynamicResultSetListener
-//-----------------------------------------------------------------
+
+
+
 void SAL_CALL
 SortedDynamicResultSetListener::notify( const ListEvent& Changes )
     throw( RuntimeException )
@@ -601,9 +601,9 @@ SortedDynamicResultSetListener::notify( const ListEvent& Changes )
         mpOwner->impl_notify( Changes );
 }
 
-//-----------------------------------------------------------------
-// own methods:
-//-----------------------------------------------------------------
+
+
+
 void SAL_CALL
 SortedDynamicResultSetListener::impl_OwnerDies()
 {

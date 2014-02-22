@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ShapeToolbarController.hxx"
@@ -81,7 +81,7 @@ ShapeToolbarController::~ShapeToolbarController()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 uno::Any ShapeToolbarController::queryInterface( const uno::Type& rType ) throw (uno::RuntimeException)
 {
     uno::Any aReturn = ToolboxController::queryInterface( rType );
@@ -102,7 +102,7 @@ void ShapeToolbarController::release() throw ()
     ToolboxController::release();
 }
 
-// ::com::sun::star::lang::XInitialization
+
 void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments ) throw (uno::Exception, uno::RuntimeException)
 {
     ToolboxController::initialize( rArguments );
@@ -169,12 +169,12 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
             m_pToolbarController->initialize( rArguments );
         }
 
-        // check if paste special is allowed, when not don't add DROPDOWN
+        
         pToolBox->SetItemBits( m_nToolBoxId, pToolBox->GetItemBits( m_nToolBoxId ) | TIB_DROPDOWN );
     }
 }
 
-// ::com::sun::star::frame::XStatusListener
+
 void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -216,7 +216,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
     }
 }
 
-// ::com::sun::star::frame::XToolbarController
+
 Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
@@ -231,7 +231,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
     return xRet;
 }
 
-// ::com::sun::star::frame::XSubToolbarController
+
 ::sal_Bool ShapeToolbarController::opensSubToolbar() throw (uno::RuntimeException)
 {
     return ( m_nSlotId == SID_DRAWTBX_CS_BASIC ||
@@ -279,6 +279,6 @@ void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
     }
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

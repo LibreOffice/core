@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -70,11 +70,11 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 bool bPasteIsDrop = false;
 
-//==================================================================
+
 
 void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
@@ -103,8 +103,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             EditView aEditView( pEngine, &aWin );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
-            // same method now for clipboard or drag&drop
-            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            
+            
             aEditView.InsertText( rxTransferable, OUString(), true );
         }
 
@@ -125,7 +125,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
             SCROW nRow = nStartRow;
 
-            // Temporarily turn off undo generation for this lot
+            
             bool bUndoEnabled = pDoc->IsUndoEnabled();
             pDoc->EnableUndo( false );
             for( sal_Int32 n = 0; n < nParCnt; n++ )
@@ -166,7 +166,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         OUString aStr;
         SotStorageStreamRef xStream;
         if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
-            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            
             aImpEx.ImportStream( *xStream, OUString(), SOT_FORMAT_RTF );
         else if ( aDataHelper.GetString( SOT_FORMAT_RTF, aStr ) )
             aImpEx.ImportString( aStr, SOT_FORMAT_RTF );
@@ -300,7 +300,7 @@ void ScViewFunc::DoRefConversion( bool bRecord )
     if (!bOk)
         ErrorMessage(STR_ERR_NOREF);
 }
-//  Thesaurus - Undo ok
+
 void ScViewFunc::DoThesaurus( bool bRecord )
 {
     SCCOL nCol;
@@ -320,12 +320,12 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     bool bIsEditMode = GetViewData()->HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    if (bIsEditMode)                                            // Edit-Mode aktiv
+    if (bIsEditMode)                                            
     {
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
         pEditSel.reset(new ESelection(pEditView->GetSelection()));
         SC_MOD()->InputEnterHandler();
-        GetViewData()->GetBindings().Update();          // sonst kommt der Sfx durcheinander...
+        GetViewData()->GetBindings().Update();          
     }
     else
     {
@@ -391,12 +391,12 @@ void ScViewFunc::DoThesaurus( bool bRecord )
 
     pThesaurusEngine->ClearModifyFlag();
 
-    //  language is now in EditEngine attributes -> no longer passed to StartThesaurus
+    
 
     eState = pEditView->StartThesaurus();
     OSL_ENSURE(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
-    if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
+    if (eState == EE_SPELL_ERRORFOUND)              
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
         SvtLanguageTable aLangTab;
@@ -410,7 +410,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
         EditTextObject* pNewTObj = NULL;
         if (pTObject)
         {
-            // The cell will own the text object instance.
+            
             pDoc->SetEditText(
                 ScAddress(nCol,nRow,nTab), pThesaurusEngine->CreateTextObject());
         }
@@ -419,8 +419,8 @@ void ScViewFunc::DoThesaurus( bool bRecord )
             sNewString = pThesaurusEngine->GetText();
             pDoc->SetString(nCol, nRow, nTab, sNewString);
         }
-// erack! it's broadcasted
-//      pDoc->SetDirty();
+
+
         pDocSh->SetDocumentModified();
         if (bRecord)
         {
@@ -458,7 +458,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     bool bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    if (bIsEditMode)                                            // Edit-Mode aktiv
+    if (bIsEditMode)                                            
     {
         rViewData.GetEditView(eWhich, pEditView, nCol, nRow);
         SC_MOD()->InputEnterHandler();
@@ -505,12 +505,12 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
         }
     }
 
-    //  ab hier kein return mehr
+    
 
     bool bOldEnabled = pDoc->IsIdleEnabled();
-    pDoc->EnableIdle(false);   // stop online spelling
+    pDoc->EnableIdle(false);   
 
-    // *** create and init the edit engine *** --------------------------------
+    
 
     ScConversionEngineBase* pEngine = NULL;
     switch( rConvParam.GetType() )
@@ -530,7 +530,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
 
     MakeEditView( pEngine, nCol, nRow );
     pEngine->SetRefDevice( rViewData.GetActiveWin() );
-                                        // dummy Zelle simulieren:
+                                        
     pEditView = rViewData.GetEditView( rViewData.GetActivePart() );
     rViewData.SetSpellingView( pEditView );
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
@@ -540,12 +540,12 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     pEngine->SetPaperSize( aRect.GetSize() );
     pEngine->SetText( EMPTY_OUSTRING );
 
-    // *** do the conversion *** ----------------------------------------------
+    
 
     pEngine->ClearModifyFlag();
     pEngine->ConvertAll( *pEditView );
 
-    // *** undo/redo *** ------------------------------------------------------
+    
 
     if( pEngine->IsAnyModified() )
     {
@@ -568,7 +568,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
         delete pRedoDoc;
     }
 
-    // *** final cleanup *** --------------------------------------------------
+    
 
     rViewData.SetSpellingView( NULL );
     KillEditView(true);
@@ -578,8 +578,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     pDoc->EnableIdle(bOldEnabled);
 }
 
-// Pasten von FORMAT_FILE-Items
-//  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
+
+
 
 bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink )
 {
@@ -587,7 +587,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     aURL.SetSmartURL( rFile );
     OUString aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-    // is it a media URL?
+    
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
@@ -596,37 +596,37 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
                                 &aMediaURLItem, 0L ) );
     }
 
-    if (!bLink)     // bei bLink nur Grafik oder URL
+    if (!bLink)     
     {
-        // 1. Kann ich die Datei oeffnen?
+        
         const SfxFilter* pFlt = NULL;
 
-        // nur nach eigenen Filtern suchen, ohne Auswahlbox (wie in ScDocumentLoader)
+        
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
         SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE) );
-        // #i73992# GuessFilter no longer calls UseInteractionHandler.
-        // This is UI, so it can be called here.
+        
+        
         aSfxMedium.UseInteractionHandler(sal_True);
         ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
 
         if ( pFlt && !nErr )
         {
-            // Code aus dem SFX geklaut!
+            
             SfxDispatcher &rDispatcher = GetViewData()->GetDispatcher();
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
-            // #i69524# add target, as in SfxApplication when the Open dialog is used
+            
             SfxStringItem aTargetItem( SID_TARGETNAME, OUString("_default") );
 
-            // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
-            // und das bekommt dem MAC nicht so gut ...
+            
+            
             return ( 0 != rDispatcher.Execute( SID_OPENDOC,
                                     SFX_CALLMODE_ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
 
-    // 2. Kann die Datei ueber die Grafik-Filter eingefuegt werden?
-    // (als Link, weil Gallery das so anbietet)
+    
+    
 
     sal_uInt16 nFilterFormat;
     Graphic aGraphic;
@@ -643,12 +643,12 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         }
         else
         {
-            // #i76709# if bLink isn't set, pass empty URL/filter, so a non-linked image is inserted
+            
             return PasteGraphic( rPos, aGraphic, EMPTY_OUSTRING, EMPTY_OUSTRING );
         }
     }
 
-    if (bLink)                      // bei bLink alles, was nicht Grafik ist, als URL
+    if (bLink)                      
     {
         Rectangle aRect( rPos, Size(0,0) );
         ScRange aRange = GetViewData()->GetDocument()->
@@ -661,11 +661,11 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     }
     else
     {
-        // 3. Kann die Datei als OLE eingefuegt werden?
-        // auch nicht-Storages, z.B. Sounds (#38282#)
+        
+        
         uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
 
-        //TODO/LATER: what about "bLink"?
+        
 
         uno::Sequence < beans::PropertyValue > aMedium(1);
         aMedium[0].Name = "URL";
@@ -677,7 +677,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         if( xObj.is() )
             return PasteObject( rPos, xObj );
 
-        // If an OLE object can't be created, insert a URL button
+        
 
         GetViewData()->GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_OUSTRING, &rPos );
         return true;
@@ -707,7 +707,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
             nPosX >= pViewData->GetEditStartCol() && nPosX <= pViewData->GetEditEndCol() &&
             nPosY >= pViewData->GetEditStartRow() && nPosY <= pViewData->GetEditEndRow() )
     {
-        //  in die gerade editierte Zelle einfuegen
+        
 
         OUString aTargetFrame;
         if (pTarget)
@@ -716,7 +716,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         return;
     }
 
-    //  in nicht editierte Zelle einfuegen
+    
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     SCTAB nTab = GetViewData()->GetTabNo();
@@ -742,10 +742,10 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
 
     if ( bTryReplace && HasBookmarkAtCursor( NULL ) )
     {
-        //  if called from hyperlink slot and cell contains only a URL,
-        //  replace old URL with new one
+        
+        
 
-        aInsSel = ESelection( 0, 0, 0, 1 );     // replace first character (field)
+        aInsSel = ESelection( 0, 0, 0, 1 );     
     }
 
     SvxURLField aField( rURL, rDescription, SVXURLFORMAT_APPDEFAULT );
@@ -767,21 +767,21 @@ bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
         return false;
 
     if (!pData->IsFieldObject())
-        // not a field object.
+        
         return false;
 
     const SvxFieldItem* pFieldItem = pData->GetField();
     if (!pFieldItem)
-        // doesn't have a field item.
+        
         return false;
 
     const SvxFieldData* pField = pFieldItem->GetField();
     if (!pField)
-        // doesn't have a field item data.
+        
         return false;
 
     if (pField->GetClassId() != com::sun::star::text::textfield::Type::URL)
-        // not a URL field.
+        
         return false;
 
     if (pContent)

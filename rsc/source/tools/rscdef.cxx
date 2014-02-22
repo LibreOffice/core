@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// Programmuebergreifende Includes.
+
 #include <rscdef.hxx>
 
 bool RscId::bNames = true;
@@ -251,7 +251,7 @@ bool RscExpType::Evaluate( sal_Int32 * plValue ) const
     if( IsDefinition() )
     {
         aExp.pDef->Evaluate();
-        // Eventuellen Fehler ignorieren
+        
         *plValue = aExp.pDef->GetNumber();
     }
     else if( IsExpression() )
@@ -304,7 +304,7 @@ bool RscExpression::Evaluate( sal_Int32 * plValue )
     sal_Int32 lLeft;
     sal_Int32 lRight;
 
-    // linken und rechten Zweig auswerten
+    
     if( aLeftExp.Evaluate( &lLeft ) && aRightExp.Evaluate( &lRight ) )
     {
         if( cOperation == '&' )
@@ -336,7 +336,7 @@ OString RscExpression::GetMacro()
 {
     OStringBuffer aLeft;
 
-    // Ausgabeoptimierung
+    
     if( aLeftExp.IsNothing() )
     {
         if ( '-' == cOperation )
@@ -355,13 +355,13 @@ OString RscExpression::GetMacro()
     else
     {
         aLeft.append('(');
-        // linken Zweig auswerten
+        
         aLeftExp.AppendMacro(aLeft);
 
         aLeft.append(cOperation);
 
         aLeft.append('(');
-        // rechten Zweig auswerten
+        
         aRightExp.AppendMacro(aLeft);
         aLeft.append(')');
 
@@ -385,8 +385,8 @@ RscFile :: ~RscFile()
         delete aDepLst[ i ];
     aDepLst.clear();
 
-    //von hinten nach vorne ist besser wegen der Abhaengigkeiten
-    //Objekte zerstoeren sich, wenn Referenzzaehler NULL
+    
+    
     while( aDefLst.Remove() ) ;
 }
 
@@ -420,10 +420,10 @@ bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
             return true;
     }
 
-    // Current-Zeiger steht auf letztem Element
+    
     if( lPos >= aDepLst.size() )
-    { //letztes Element muss immer letztes bleiben
-        // Abhaengigkeit vor der letzten Position eintragen
+    { 
+        
         aDepLst.push_back( new RscDepend( lIncFile ) );
     }
     else
@@ -471,7 +471,7 @@ void RscDefTree::Remove( RscDefine * pDef )
 {
     if( pDefRoot )
     {
-        //falls pDef == pDefRoot
+        
         pDefRoot = (RscDefine *)pDefRoot->Remove( pDef );
     }
     pDef->DecRef();
@@ -616,7 +616,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
 
     if( !pDef )
     {
-        //Macros in den Expressions sind definiert ?
+        
         if( TestDef( lFileKey, lPos, pExp ) )
         {
             RscFile * pFile = GetFile( lFileKey );
@@ -633,8 +633,8 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
 
     if( !pDef )
     {
-        // pExp wird immer Eigentum und muss, wenn es nicht benoetigt wird
-        // geloescht werden
+        
+        
         delete pExp;
     }
     return pDef;

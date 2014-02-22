@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -78,15 +78,15 @@ public:
     SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
     ~SvFilterOptionsDialog();
 
-    // XInterface
+    
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const uno::Sequence< uno::Any > & aArguments )
         throw ( uno::Exception, uno::RuntimeException );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw ( uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -94,7 +94,7 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw ( uno::RuntimeException );
 
-    // XPropertyAccess
+    
     virtual uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues()
         throw ( uno::RuntimeException );
     virtual void SAL_CALL setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
@@ -102,13 +102,13 @@ public:
                 lang::IllegalArgumentException, lang::WrappedTargetException,
                 uno::RuntimeException );
 
-    // XExecuteDialog
+    
     virtual sal_Int16 SAL_CALL execute()
         throw ( uno::RuntimeException );
     virtual void SAL_CALL setTitle( const OUString& aTitle )
         throw ( uno::RuntimeException );
 
-    // XExporter
+    
     virtual void SAL_CALL setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
         throw ( lang::IllegalArgumentException, uno::RuntimeException );
 
@@ -121,33 +121,33 @@ SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XCompon
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SvFilterOptionsDialog::~SvFilterOptionsDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SvFilterOptionsDialog::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SvFilterOptionsDialog::release() throw()
 {
     OWeakObject::release();
 }
 
-// XInitialization
+
 void SAL_CALL SvFilterOptionsDialog::initialize( const uno::Sequence< uno::Any > & )
     throw ( uno::Exception, uno::RuntimeException )
 {
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
     throw( uno::RuntimeException )
 {
@@ -167,7 +167,7 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNam
     return aRet;
 }
 
-// XPropertyAccess
+
 uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
         throw ( uno::RuntimeException )
 {
@@ -180,7 +180,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
     if ( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
 
-    // the "FilterData" Property is an Any that will contain our PropertySequence of Values
+    
     maMediaDescriptor[ i ].Name = "FilterData";
     maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
     return maMediaDescriptor;
@@ -207,7 +207,7 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
     }
 }
 
-// XExecutableDialog
+
 void SvFilterOptionsDialog::setTitle( const OUString& aTitle )
     throw ( uno::RuntimeException )
 {
@@ -261,20 +261,20 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
             delete pResMgr;
 
-            // taking the out parameter from the dialog
+            
             maFilterDataSequence = aFltCallDlgPara.aFilterData;
         }
     }
     return nRet;
 }
 
-// XEmporter
+
 void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
         throw ( lang::IllegalArgumentException, uno::RuntimeException )
 {
     mxSourceDocument = xDoc;
 
-    // try to set the corresponding metric unit
+    
     OUString aConfigPath;
     uno::Reference< lang::XServiceInfo > xServiceInfo
             ( xDoc, uno::UNO_QUERY );

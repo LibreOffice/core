@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -156,7 +156,7 @@ void deleteRootsModule()
 
 OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
-    // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
+    
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (pEnv)
     {
@@ -166,7 +166,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
         return OString(pEnv);
     }
 
-    // second, try to get saved user-preference
+    
     try
     {
         OUString sUserSetCertPath =
@@ -188,7 +188,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
             "getMozillaCurrentProfile: caught exception " << e.Message);
     }
 
-    // third, dig around to see if there's one available
+    
     mozilla::MozillaProductType productTypes[3] = {
         mozilla::MozillaProductType_Thunderbird,
         mozilla::MozillaProductType_Firefox,
@@ -223,32 +223,32 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
     return OString();
 }
 
-//Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
-//the roots certificate module (libnssckbi.so), which they use, into the
-//profile. This module will then already be loaded during NSS_Init (and the
-//other init functions). This fails in two cases. First, FF3 was used to create
-//the profile, or possibly used that profile before, and second the profile was
-//used on a different platform.
+
+
+
+
+
+
 //
-//Then one needs to add the roots module oneself. This should be done with
-//SECMOD_LoadUserModule rather then SECMOD_AddNewModule. The latter would write
-//the location of the roots module to the profile, which makes FF2 and TB2 use
-//it instead of there own module.
+
+
+
+
 //
-//When using SYSTEM_NSS then the libnss3.so lib is typically found in /usr/lib.
-//This folder may, however, NOT contain the roots certificate module. That is,
-//just providing the library name in SECMOD_LoadUserModule or
-//SECMOD_AddNewModule will FAIL to load the mozilla unless the LD_LIBRARY_PATH
-//contains an FF or TB installation.
-//ATTENTION: DO NOT call this function directly instead use initNSS
-//return true - whole initialization was successful
-//param out_nss_init = true: at least the NSS initialization (NSS_InitReadWrite
-//was successful and therefor NSS_Shutdown should be called when terminating.
+
+
+
+
+
+
+
+
+
 bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init )
 {
     bool return_value = true;
 
-    // this method must be called only once, no need for additional lock
+    
     OString sCertDir;
 
 #ifdef XMLSEC_CRYPTO_NSS
@@ -261,7 +261,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
     bool bSuccess = true;
-    // there might be no profile
+    
     if ( !sCertDir.isEmpty() )
     {
         if( NSS_InitReadWrite( sCertDir.getStr() ) != SECSuccess )
@@ -319,8 +319,8 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             SECMODModule * RootsModule =
                 SECMOD_LoadUserModule(
                     const_cast<char*>(aStr.getStr()),
-                    0, // no parent
-                    PR_FALSE); // do not recurse
+                    0, 
+                    PR_FALSE); 
 
             if (RootsModule)
             {
@@ -359,7 +359,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 }
 
 
-// must be extern "C" because we pass the function pointer to atexit
+
 extern "C" void nsscrypto_finalize()
 {
     SECMODModule *RootsModule = SECMOD_FindModule(ROOT_CERTS);
@@ -385,7 +385,7 @@ extern "C" void nsscrypto_finalize()
     PK11_LogoutAll();
     NSS_Shutdown();
 }
-} // namespace
+} 
 
 ONSSInitializer::ONSSInitializer(
     const css::uno::Reference< css::uno::XComponentContext > &rxContext)

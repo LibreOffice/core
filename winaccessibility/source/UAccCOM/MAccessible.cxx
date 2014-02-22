@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stdafx.h"
@@ -76,28 +76,28 @@ enum XInterfaceIndex {
     XI_NULL         = -1
 };
 
-// IA2 states mapping, and name
-// maintenance the consistency, change one array, change the three all
+
+
 long IA2_STATES[] =
 {
-    IA2_STATE_ACTIVE,                   // =                    0x1;
-    IA2_STATE_ARMED,                    // =                    0x2;
-    IA2_STATE_DEFUNCT,                  // =                    0x4;
-    IA2_STATE_EDITABLE,                 // =                    0x8;
-    IA2_STATE_HORIZONTAL,               // =                    0x10;
-    IA2_STATE_ICONIFIED,                // =                    0x20;
-    IA2_STATE_INVALID_ENTRY,            // =                    0x80;
-    IA2_STATE_MANAGES_DESCENDANTS,      // =                    0x100;
-    IA2_STATE_MODAL,                    // =                    0x200;
-    IA2_STATE_MULTI_LINE,               // =                    0x400;
-    IA2_STATE_OPAQUE,                   // =                    0x800;
-    IA2_STATE_REQUIRED,                 // =                    0x2000;
-    IA2_STATE_SELECTABLE_TEXT,          // =                    0x3000;
-    IA2_STATE_SINGLE_LINE,              // =                    0x4000;
-    IA2_STATE_STALE,                    // =                    0x8000;
-    IA2_STATE_SUPPORTS_AUTOCOMPLETION,  // =                    0x10000;
-    IA2_STATE_TRANSIENT,                //=                     0x20000;
-    IA2_STATE_VERTICAL                  // =                    0x40000;
+    IA2_STATE_ACTIVE,                   
+    IA2_STATE_ARMED,                    
+    IA2_STATE_DEFUNCT,                  
+    IA2_STATE_EDITABLE,                 
+    IA2_STATE_HORIZONTAL,               
+    IA2_STATE_ICONIFIED,                
+    IA2_STATE_INVALID_ENTRY,            
+    IA2_STATE_MANAGES_DESCENDANTS,      
+    IA2_STATE_MODAL,                    
+    IA2_STATE_MULTI_LINE,               
+    IA2_STATE_OPAQUE,                   
+    IA2_STATE_REQUIRED,                 
+    IA2_STATE_SELECTABLE_TEXT,          
+    IA2_STATE_SINGLE_LINE,              
+    IA2_STATE_STALE,                    
+    IA2_STATE_SUPPORTS_AUTOCOMPLETION,  
+    IA2_STATE_TRANSIENT,                
+    IA2_STATE_VERTICAL                  
 };
 /*
 
@@ -106,27 +106,27 @@ long IA2_STATES[] =
 */
 short UNO_STATES[] =
 {
-    ACTIVE,         // = (sal_Int16)1;
-    ARMED,          // = (sal_Int16)2;
-    DEFUNC,         // = (sal_Int16)5;
-    EDITABLE,       // = (sal_Int16)6;
-    HORIZONTAL,     // = (sal_Int16)12;
-    ICONIFIED,      // = (sal_Int16)13;
-    -1,             //IA2_STATE_INVALID_ENTRY
-    MANAGES_DESCENDANTS, // = (sal_Int16)15;
-    MODAL,          // = (sal_Int16)16;
-    MULTI_LINE,     // = (sal_Int16)17;
-    OPAQUE,         // = (sal_Int16)19;
-    -1,             //IA2_STATE_REQUIRED
-    -1,             //IA2_STATE_SELECTABLE_TEXT
-    SINGLE_LINE,    // = (sal_Int16)26;
-    STALE,          // = (sal_Int16)27;
-    -1,             //IA2_STATE_SUPPORTS_AUTOCOMPLETION
-    TRANSIENT,      //IA2_STATE_TRANSIENT
-    VERTICAL        // = (sal_Int16)29;
+    ACTIVE,         
+    ARMED,          
+    DEFUNC,         
+    EDITABLE,       
+    HORIZONTAL,     
+    ICONIFIED,      
+    -1,             
+    MANAGES_DESCENDANTS, 
+    MODAL,          
+    MULTI_LINE,     
+    OPAQUE,         
+    -1,             
+    -1,             
+    SINGLE_LINE,    
+    STALE,          
+    -1,             
+    TRANSIENT,      
+    VERTICAL        
 };
 
-//  <=== map ===>
+
 
 BSTR IA2_STATES_NAME[] =
 {
@@ -150,46 +150,46 @@ BSTR IA2_STATES_NAME[] =
     _T("Vertical")
 };
 
-// IA2 states mapping, and name
-// maintenance the consistency. change one, change them all
+
+
 
 BSTR UNO_ALL_STATES[] =
 {
-    _T("INVALID"),          //  INVALID ( 0 )
-    _T("ACTIVE"),           //  ACTIVE  ( 1 )
-    _T("ARMED"),            //  ARMED   ( 2 )
-    _T("BUSY"),             //  BUSY    ( 3 )
-    _T("CHECKED"),          //  CHECKED ( 4 )
-    _T("DEFUNC"),           //  DEFUNC  ( 5 )
-    _T("EDITABLE"),         //  EDITABLE    ( 6 )
-    _T("ENABLED"),          //  ENABLED ( 7 )
-    _T("EXPANDABLE"),       //  EXPANDABLE  ( 8 )
-    _T("EXPANDED"),         //  EXPANDED    ( 9 )
-    _T("FOCUSABLE"),        //  FOCUSABLE   ( 10 )
-    _T("FOCUSED"),          //  FOCUSED ( 11 )
-    _T("HORIZONTAL"),       //  HORIZONTAL  ( 12 )
-    _T("ICONIFIED"),        //  ICONIFIED   ( 13 )
-    _T("INDETERMINATE"),    //  INDETERMINATE   ( 14 )
-    _T("MANAGES_DESCENDANTS"),//    MANAGES_DESCENDANTS ( 15 )
-    _T("MODAL"),            //  MODAL   ( 16 )
-    _T("MULTI_LINE"),       //  MULTI_LINE  ( 17 )
-    _T("MULTI_SELECTABLE"), //  MULTI_SELECTABLE    ( 18 )
-    _T("OPAQUE"),           //  OPAQUE  ( 19 )
-    _T("PRESSED"),          //  PRESSED ( 20 )
-    _T("RESIZABLE"),        //  RESIZABLE   ( 21 )
-    _T("SELECTABLE"),       //  SELECTABLE  ( 22 )
-    _T("SELECTED"),         //  SELECTED    ( 23 )
-    _T("SENSITIVE"),        //  SENSITIVE   ( 24 )
-    _T("SHOWING"),          //  SHOWING ( 25 )
-    _T("SINGLE_LINE"),      //  SINGLE_LINE ( 26 )
-    _T("STALE"),            //  STALE   ( 27 )
-    _T("TRANSIENT"),        //  TRANSIENT   ( 28 )
-    _T("VERTICAL"),         //  VERTICAL    ( 29 )
-    _T("VISIBLE"),          //  VISIBLE ( 30 )
-    _T("MOVEABLE"),         //  MOVEABLE ( 31 )
-    _T("OFFSCREEN"),        //  OFFSCREEN ( 32 )
-    _T("COLLAPSE"),         //  COLLAPSE ( 33 )
-    _T("DEFAULT")           //  DEFAULT ( 34 )
+    _T("INVALID"),          
+    _T("ACTIVE"),           
+    _T("ARMED"),            
+    _T("BUSY"),             
+    _T("CHECKED"),          
+    _T("DEFUNC"),           
+    _T("EDITABLE"),         
+    _T("ENABLED"),          
+    _T("EXPANDABLE"),       
+    _T("EXPANDED"),         
+    _T("FOCUSABLE"),        
+    _T("FOCUSED"),          
+    _T("HORIZONTAL"),       
+    _T("ICONIFIED"),        
+    _T("INDETERMINATE"),    
+    _T("MANAGES_DESCENDANTS"),
+    _T("MODAL"),            
+    _T("MULTI_LINE"),       
+    _T("MULTI_SELECTABLE"), 
+    _T("OPAQUE"),           
+    _T("PRESSED"),          
+    _T("RESIZABLE"),        
+    _T("SELECTABLE"),       
+    _T("SELECTED"),         
+    _T("SENSITIVE"),        
+    _T("SHOWING"),          
+    _T("SINGLE_LINE"),      
+    _T("STALE"),            
+    _T("TRANSIENT"),        
+    _T("VERTICAL"),         
+    _T("VISIBLE"),          
+    _T("MOVEABLE"),         
+    _T("OFFSCREEN"),        
+    _T("COLLAPSE"),         
+    _T("DEFAULT")           
 };
 
 
@@ -293,7 +293,7 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(ppdispParent == NULL)
         {
             return E_INVALIDARG;
@@ -330,7 +330,7 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pcountChildren == NULL)
         {
             return E_INVALIDARG;
@@ -364,14 +364,14 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(ppdispChild == NULL)
         {
             return E_INVALIDARG;
         }
         if(varChild.vt==VT_I4)
         {
-            //get child interface pointer due to child ID
+            
             if(varChild.lVal==CHILDID_SELF)
             {
                 AddRef();
@@ -402,7 +402,7 @@ STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pszName == NULL)
         {
             return E_INVALIDARG;
@@ -441,7 +441,7 @@ STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if( pszValue == NULL )
         {
             return E_INVALIDARG;
@@ -486,7 +486,7 @@ STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescrip
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pszDescription == NULL)
         {
             return E_INVALIDARG;
@@ -525,7 +525,7 @@ STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarRole == NULL)
         {
             return E_INVALIDARG;
@@ -576,7 +576,7 @@ STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarState == NULL)
         {
             return E_INVALIDARG;
@@ -591,7 +591,7 @@ STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
                         m_xAccessible->getAccessibleContext();
                     if(pContext.is())
                     {
-                        // add the STATE_SYSTEM_LINKED state
+                        
                         Reference< XAccessibleHypertext > pRHypertext(pContext,UNO_QUERY);
                         if(pRHypertext.is())
                         {
@@ -681,7 +681,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
         ENTER_PROTECTED_BLOCK
 
         ISDESTROY()
-        // #CHECK#
+        
         if(pszKeyboardShortcut == NULL)
         {
             return E_INVALIDARG;
@@ -724,7 +724,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 
                         long nRelCount = pRrelationSet->getRelationCount();
 
-                        // Modified by Steve Yin, for SODC_1552
+                        
                         if( /*nRelCount <= 0 &&*/ m_iRole == ROLE_SYSTEM_TEXT )
                         {
                             VARIANT varParentRole;
@@ -732,7 +732,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 
                             m_pIParent->get_accRole(varChild, &varParentRole);
 
-                            if( m_pIParent && varParentRole.lVal == ROLE_SYSTEM_COMBOBOX ) // edit in comoboBox
+                            if( m_pIParent && varParentRole.lVal == ROLE_SYSTEM_COMBOBOX ) 
                             {
                                 m_pIParent->get_accKeyboardShortcut(varChild, pszKeyboardShortcut);
                                 return S_OK;
@@ -835,17 +835,17 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarChild == NULL)
         {
             return E_INVALIDARG;
         }
         if( m_dFocusChildID==UACC_NO_FOCUS )
         {
-            pvarChild->vt = VT_EMPTY;//no focus on the object and its children
+            pvarChild->vt = VT_EMPTY;
             return S_OK;
         }
-        //if the descendant of current object has focus indicated by m_dFocusChildID, return the IDispatch of this focused object
+        
         else
         {
             IMAccessible* pIMAcc = NULL;
@@ -874,7 +874,7 @@ STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarChildren == NULL)
         {
             return E_INVALIDARG;
@@ -923,7 +923,7 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pxLeft == NULL || pyTop == NULL || pcxWidth == NULL || pcyHeight == NULL)
         {
             return E_INVALIDARG;
@@ -981,7 +981,7 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarEndUpAt == NULL)
         {
             return E_INVALIDARG;
@@ -1001,13 +1001,13 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
         case NAVDIR_PREVIOUS:
             ret = GetPreSibling(varStart,pvarEndUpAt);
             break;
-        case NAVDIR_DOWN://do not implement temporarily
+        case NAVDIR_DOWN:
             break;
-        case NAVDIR_UP://do not implement temporarily
+        case NAVDIR_UP:
             break;
-        case NAVDIR_LEFT://do not implement temporarily
+        case NAVDIR_LEFT:
             break;
-        case NAVDIR_RIGHT://do not implement temporarily
+        case NAVDIR_RIGHT:
             break;
         default:
             break;
@@ -1023,7 +1023,7 @@ STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarChild == NULL)
         {
             return E_INVALIDARG;
@@ -1160,17 +1160,17 @@ STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 */
 STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pszName == NULL)
         {
             return E_INVALIDARG;
         }
 
-        SAFE_SYSFREESTRING(m_pszName);//??
+        SAFE_SYSFREESTRING(m_pszName);
         m_pszName = SysAllocString(pszName);
         if(m_pszName==NULL)
             return E_FAIL;
@@ -1186,7 +1186,7 @@ STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
 */
 STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_iRole = pRole;
     return S_OK;
@@ -1199,7 +1199,7 @@ STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 */
 STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_dState &= (~pXSate);
     return S_OK;
@@ -1212,7 +1212,7 @@ STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 */
 STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_dState |= pXSate;
     return S_OK;
@@ -1225,7 +1225,7 @@ STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 */
 STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_dState = pXSate;
     return S_OK;
@@ -1240,11 +1240,11 @@ STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 */
 STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescription)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pszDescription == NULL)
         {
             return E_INVALIDARG;
@@ -1267,11 +1267,11 @@ STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescr
 */
 STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pszAccValue == NULL)
         {
             return E_INVALIDARG;
@@ -1293,7 +1293,7 @@ STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 */
 STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1310,7 +1310,7 @@ STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 */
 STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1325,8 +1325,8 @@ STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
         else
         {
             m_dFocusChildID = dChildID;
-            //traverse all ancestors to set the focused child ID so that when the get_accFocus is called on
-            //any of the ancestors, this id can be used to get the IAccessible of focused object.
+            
+            
             if(m_pIParent)
             {
                 m_pIParent->Put_XAccFocus(dChildID);
@@ -1344,7 +1344,7 @@ STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 */
 STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     this->m_sLocation = sLocation;
     return S_OK;
@@ -1358,7 +1358,7 @@ STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
 */
 STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     this->m_pIParent = pIParent;
 
@@ -1375,7 +1375,7 @@ STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 */
 STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     this->m_dChildID = dChildID;
     return S_OK;
@@ -1388,7 +1388,7 @@ STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 */
 STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     g_pAgent = reinterpret_cast<AccObjectManagerAgent*>(pAgent);
     return S_OK;
@@ -1403,7 +1403,7 @@ STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 */
 STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_isDestroy = isDestroy;
     m_xAccessible.clear();
@@ -1419,7 +1419,7 @@ STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
 * @param    lChildID, specify child index,which AT(such as Inspect32) gives.
 * @return  IMAccessible*, pointer to the corresponding child object.
 */
-IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
+IMAccessible* CMAccessible::GetChildInterface(long dChildID)
 {
 
     long dChildIndex = 0;
@@ -1530,9 +1530,9 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
             return NULL;
         }
         delta = (flags==DM_NEXTCHILD)?1:-1;
-        //currently, getAccessibleIndexInParent is error in UNO for
-        //some kind of List,such as ValueSet, the index will be less 1 than
-        //what should be, need to fix UNO code
+        
+        
+        
         index = pChildContext->getAccessibleIndexInParent()+delta;
         if((index>=0)&&(index<=count-1))
         {
@@ -1568,7 +1568,7 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarEndUpAt == NULL)
         {
             return E_INVALIDARG;
@@ -1605,7 +1605,7 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarEndUpAt == NULL)
         {
             return E_INVALIDARG;
@@ -1676,7 +1676,7 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pvarEndUpAt == NULL)
         {
             return E_INVALIDARG;
@@ -1715,7 +1715,7 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
-        // #CHECK#
+        
         if(nRelations == NULL)
         {
             return E_INVALIDARG;
@@ -1745,7 +1745,7 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(relation == NULL)
         {
             return E_INVALIDARG;
@@ -1761,7 +1761,7 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
         *relation = (IAccessibleRelation*)::CoTaskMemAlloc(sizeof(IAccessibleRelation));
 
-        // #CHECK Memory Allocation#
+        
         if(*relation == NULL)
         {
             return E_FAIL;
@@ -1809,12 +1809,12 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
-        // #CHECK#
+        
         if(relation == NULL || nRelations == NULL)
         {
             return E_INVALIDARG;
         }
-        // #CHECK XInterface#
+        
 
         if (!m_xContext.is())
             return E_FAIL;
@@ -1831,7 +1831,7 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
 
         *relation = (IAccessibleRelation*)::CoTaskMemAlloc(nCount*sizeof(IAccessibleRelation));
 
-        // #CHECK Memory Allocation#
+        
         if(*relation == NULL)
         {
             return E_FAIL;
@@ -1884,7 +1884,7 @@ STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
     try
     {
         ISDESTROY()
-            // #CHECK#
+            
             if(nActions == NULL)
             {
                 return E_INVALIDARG;
@@ -1920,7 +1920,7 @@ STDMETHODIMP CMAccessible:: scrollTo(enum IA2ScrollType)
 
 static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
 {
-    // #CHECK#
+    
     if(pXAcc == NULL)
     {
         return NULL;
@@ -1946,7 +1946,7 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
 
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(groupLevel == NULL || similarItemsInGroup == NULL || positionInGroup == NULL)
         {
             return E_INVALIDARG;
@@ -2132,7 +2132,7 @@ STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(uniqueID == NULL)
         {
             return E_INVALIDARG;
@@ -2149,7 +2149,7 @@ STDMETHODIMP CMAccessible:: get_windowHandle(HWND __RPC_FAR *windowHandle)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(windowHandle == NULL)
         {
             return E_INVALIDARG;
@@ -2277,7 +2277,7 @@ HRESULT CMAccessible::SelectMutipleChidren( XAccessible** pItem,int size )
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pItem == NULL)
         {
             return E_INVALIDARG;
@@ -2302,7 +2302,7 @@ HRESULT CMAccessible::DeSelectMutipleChildren( XAccessible** pItem,int size )
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pItem == NULL)
         {
             return E_INVALIDARG;
@@ -2324,7 +2324,7 @@ HRESULT CMAccessible::DeSelectMutipleChildren( XAccessible** pItem,int size )
 */
 STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_xAccessible = reinterpret_cast<XAccessible*>(pXAcc);
     m_pEnumVar->PutSelection(/*XAccessibleSelection*/
@@ -2440,7 +2440,7 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 */
 STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     if(pXAcc == NULL)
         return E_INVALIDARG;
@@ -2456,7 +2456,7 @@ STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 */
 STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     m_xAction = reinterpret_cast<XAccessibleAction*>(pAction);
     return S_OK;
@@ -2475,7 +2475,7 @@ HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, B
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(pszDefaultAction == NULL)
         {
             return E_INVALIDARG;
@@ -2545,11 +2545,11 @@ HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
 */
 STDMETHODIMP CMAccessible::Put_ActionDescription( const OLECHAR* szAction)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(szAction == NULL)
         {
             return E_INVALIDARG;
@@ -2613,11 +2613,11 @@ BOOL CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface**
 template<typename T> HRESULT
 createAggInstance(CMAccessible &rOuter, void ** ppvObject)
 {
-    // Note: CComAggObject has special handling for IUnknown - must
-    // query for that when creating it! Otherwise we get a T member of it
-    // which will redirect QueryInterface back to CMAccessible infinitely.
-    // (CComAggObject has its own ref-count too which is not a problem
-    //  since it is inserted in m_containedObjects.)
+    
+    
+    
+    
+    
     return CComCreator< CComAggObject<T> >::CreateInstance(
             rOuter.GetControllingUnknown(), IID_IUnknown, ppvObject);
 }
@@ -2712,7 +2712,7 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
 
     ENTER_PROTECTED_BLOCK
 
-        // #CHECK#
+        
         if(ppIA == NULL)
         {
             return E_INVALIDARG;
@@ -2731,7 +2731,7 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
 
 void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
 {
-    // #CHECK#
+    
     if(pChar == NULL)
         return;
 
@@ -2917,7 +2917,7 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
     if(pChar == NULL)
         return;
     Reference< ::com::sun::star::container::XIndexReplace > pXIndex;
-    if((pAny>>=pXIndex) && (numberingLevel !=-1))//numbering level is -1,means invalid value
+    if((pAny>>=pXIndex) && (numberingLevel !=-1))
     {
         Any aAny = pXIndex->getByIndex(numberingLevel);
         Sequence< ::com::sun::star::beans::PropertyValue > aProps;
@@ -2958,12 +2958,12 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
         }
     }
 
-    //Because now have three types numbering level:
-    //1.real numbering list,numbering level>=0 and numbering Rule !=NULL;
-    //2.common paragraph, numbering level >=0, and numbering Rule == NULL;
-    //3.TOC paragraph, numbering level >0, and numbering Rule ==NULL;
-    // IAText:numberinglevel base on 0, but TOC's level base on 1,
-    // so NumberingLevel value will be decreased 1 in bridge code.
+    
+    
+    
+    
+    
+    
     else if(numberingLevel >0)
     {
         swprintf(pChar,L"Numbering:NumberingLevel=%d,NumberingType=4,NumberingPrefix=,",numberingLevel-1);
@@ -2978,10 +2978,10 @@ void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal
 {
     if(rAnyVal.hasValue())
     {
-        // Clear VARIANT variable.
+        
         VariantClear(pvData);
 
-        // Set value according to value type.
+        
         switch(rAnyVal.getValueTypeClass())
         {
         case TypeClass_CHAR:
@@ -3084,7 +3084,7 @@ void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal
         case TypeClass_CONSTANTS:
         case TypeClass_SINGLETON:
         case TypeClass_MAKE_FIXED_SIZE:
-            // Output the type string, if there is other uno value type.
+            
             pvData->vt = VT_BSTR;
             pvData->bstrVal = SysAllocString(rAnyVal.getValueTypeName().getStr());
             break;
@@ -3101,7 +3101,7 @@ void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal
 
 STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
 {
-    // internal IMAccessible - no mutex meeded
+    
 
     if(childID == NULL)
     {
@@ -3149,7 +3149,7 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
     LEAVE_PROTECTED_BLOCK
 }
 
-// return the UNO roles
+
 STDMETHODIMP CMAccessible:: get_extendedRole( BSTR __RPC_FAR *  )
 {
     return E_NOTIMPL;
@@ -3176,7 +3176,7 @@ STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
 {
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK#
+        
         if(accParentIndex == NULL)
             return E_INVALIDARG;
 

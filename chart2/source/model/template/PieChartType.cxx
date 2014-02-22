@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PieChartType.hxx"
@@ -121,7 +121,7 @@ struct StaticPieChartTypeInfo : public rtl::StaticAggregate< uno::Reference< bea
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -143,14 +143,14 @@ PieChartType::PieChartType( const PieChartType & rOther ) :
 PieChartType::~PieChartType()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new PieChartType( *this ));
 }
 
-// ____ XChartType ____
+
 OUString SAL_CALL PieChartType::getChartType()
     throw (uno::RuntimeException)
 {
@@ -175,7 +175,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
             continue;
         }
 
-        //hhhh todo make axis invisible
+        
 
         chart2::ScaleData aScaleData = xAxis->getScaleData();
         aScaleData.Scaling = AxisHelper::createLinearScaling();
@@ -186,7 +186,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         else
             aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
 
-        //remove explicit scalings from all axes
+        
         AxisHelper::removeExplicitScaling( aScaleData );
 
         xAxis->setScaleData( aScaleData );
@@ -195,7 +195,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
     return xResult;
 }
 
-// ____ OPropertySet ____
+
 uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -206,13 +206,13 @@ uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartType::getInfoHelper()
 {
     return *StaticPieChartTypeInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -228,10 +228,10 @@ uno::Sequence< OUString > PieChartType::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PieChartType,
                              OUString("com.sun.star.comp.chart.PieChartType") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

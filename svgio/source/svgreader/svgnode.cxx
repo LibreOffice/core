@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -36,7 +36,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
         {
-            if(maCssStyleVector.empty()) // #120435# Evaluate for CSS styles only once, this cannot change
+            if(maCssStyleVector.empty()) 
             {
                 const SvgDocument& rDocument = getDocument();
 
@@ -44,7 +44,7 @@ namespace svgio
                 {
                     if(getClass())
                     {
-                        // find all referenced CSS styles, a list of entries is allowed
+                        
                         const rtl::OUString* pClassList = getClass();
                         const sal_Int32 nLen(pClassList->getLength());
                         sal_Int32 nPos(0);
@@ -62,13 +62,13 @@ namespace svgio
                             rtl::OUString aId(".");
                             const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
-                            // look for CSS style common to token
+                            
                             aId += aOUTokenValue;
                             pNew = rDocument.findSvgStyleAttributesById(aId);
 
                             if(!pNew && !rClassStr.isEmpty())
                             {
-                                // look for CSS style common to class.token
+                                
                                 aId = rClassStr + aId;
 
                                 pNew = rDocument.findSvgStyleAttributesById(aId);
@@ -83,7 +83,7 @@ namespace svgio
 
                     if(maCssStyleVector.empty() && getId())
                     {
-                        // if none found, search for CSS style equal to Id
+                        
                         const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(*getId());
 
                         if(pNew)
@@ -94,7 +94,7 @@ namespace svgio
 
                     if(maCssStyleVector.empty() && !rClassStr.isEmpty())
                     {
-                        // if none found, search for CSS style equal to class type
+                        
                         const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
 
                         if(pNew)
@@ -107,13 +107,13 @@ namespace svgio
 
             if(!maCssStyleVector.empty())
             {
-                // #i123510# if CSS styles were found, create a linked list with rOriginal as parent
-                // and all CSS styles as linked children, so that the style attribute has
-                // priority over the CSS style. If there is no style attribute this means that
-                // no values are set at rOriginal, thus it is still correct to have that order.
-                // Repeated style requests should only be issued from sub-Text nodes and I'm not
-                // sure if in-between text nodes may build other chains (should not happen). But
-                // it's only a re-chaining with pointers (cheap), so allow to do it every time.
+                
+                
+                
+                
+                
+                
+                
                 SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(&rOriginal);
                 pCurrent->setCssStyleParent(0);
 
@@ -177,17 +177,17 @@ namespace svgio
         void SvgNode::parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs)
         {
             const sal_uInt32 nAttributes(xAttribs->getLength());
-            // #i122522# SVG defines that 'In general, this means that the presentation attributes have
-            // lower priority than other CSS style rules specified in author style sheets or style
-            // attributes.' in http://www.w3.org/TR/SVG/styling.html#UsingPresentationAttributes
-            // (6.4 Specifying properties using the presentation attributes SVG 1.1). That means that
-            // e.g. font-size will appear as presentation attribute and CSS style attribute. In these
-            // cases, CSS style attributes need to have precedence. To do so it is possible to create
-            // a proirity system for all properties of a shape, but it will also work to parse the
-            // presentation attributes of type 'style' last, so they will overwrite the less-prioritized
-            // already interpreted ones. Thus, remember SVGTokenStyle entries and parse them last.
-            // To make this work it is required that parseAttribute is only called by parseAttributes
-            // which is the case.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             std::vector< sal_uInt32 > aSVGTokenStyleIndexes;
 
             for(sal_uInt32 a(0); a < nAttributes; a++)
@@ -197,7 +197,7 @@ namespace svgio
 
                 if(SVGTokenStyle == aSVGToken)
                 {
-                    // #i122522# remember SVGTokenStyle entry
+                    
                     aSVGTokenStyleIndexes.push_back(a);
                 }
                 else
@@ -206,8 +206,8 @@ namespace svgio
                 }
             }
 
-            // #i122522# parse SVGTokenStyle entries last to override already interpreted
-            // 'presentation attributes' of potenially the same type
+            
+            
             for(sal_uInt32 b(0); b < aSVGTokenStyleIndexes.size(); b++)
             {
                 const sal_uInt32 nSVGTokenStyleIndex(aSVGTokenStyleIndexes[b]);
@@ -295,7 +295,7 @@ namespace svgio
                 }
             }
 
-            // return the default
+            
             return Display_inline;
         }
 
@@ -365,19 +365,19 @@ namespace svgio
                     SVGTokenMarker == getType() ||
                     SVGTokenPattern == getType())
                 {
-                    // do not decompose defs or symbol nodes (these hold only style-like
-                    // objects which may be used by referencing them) except when doing
-                    // so controlled referenced
+                    
+                    
+                    
 
-                    // also do not decompose ClipPaths and Masks. These should be embedded
-                    // in a defs node (which gets not decomposed by itself), but you never
-                    // know
+                    
+                    
+                    
 
-                    // also not directly used are Markers and Patterns, only indirecty used
-                    // by reference
+                    
+                    
 
-                    // #i121656# also do not decompose nodes which have display="none" set
-                    // as property
+                    
+                    
                     return;
                 }
             }
@@ -415,16 +415,16 @@ namespace svgio
 
                     if(pStyles)
                     {
-                        // check if we have Title or Desc
+                        
                         const OUString& rTitle = pStyles->getTitle();
                         const OUString& rDesc = pStyles->getDesc();
 
                         if(!rTitle.isEmpty() || !rDesc.isEmpty())
                         {
-                            // default object name is empty
+                            
                             OUString aObjectName;
 
-                            // use path as object name when outmost element
+                            
                             if(SVGTokenSvg == getType())
                             {
                                 aObjectName = getDocument().getAbsolutePath();
@@ -440,7 +440,7 @@ namespace svgio
                                 }
                             }
 
-                            // pack in ObjectInfoPrimitive2D group
+                            
                             const drawinglayer::primitive2d::Primitive2DReference xRef(
                                 new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
                                     rTarget,
@@ -463,7 +463,7 @@ namespace svgio
             }
             else
             {
-                return basegfx::B2DRange(); // return empty B2DRange
+                return basegfx::B2DRange(); 
             }
         }
 
@@ -502,7 +502,7 @@ namespace svgio
         double SvgNode::getCurrentXHeight() const
         {
             if(getSvgStyleAttributes())
-                // for XHeight, use FontSize currently
+                
                 return getSvgStyleAttributes()->getFontSize().solve(*this, ycoordinate);
 
             return getCurrentXHeightInherited();
@@ -552,12 +552,12 @@ namespace svgio
                 return getParent()->getXmlSpace();
             }
 
-            // default is XmlSpace_default
+            
             return XmlSpace_default;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

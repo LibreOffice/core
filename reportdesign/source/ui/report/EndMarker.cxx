@@ -38,11 +38,11 @@ OEndMarker::OEndMarker(Window* _pParent ,const OUString& _sColorEntry)
     SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
 }
-// -----------------------------------------------------------------------------
+
 OEndMarker::~OEndMarker()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 {
     Fraction aCornerSpace(long(CORNER_SPACE));
@@ -75,7 +75,7 @@ void OEndMarker::Paint( const Rectangle& /*rRect*/ )
         DrawPolyLine(Polygon(PixelToLogic(aRect)),LineInfo(LINE_SOLID,2));
     }
 }
-// -----------------------------------------------------------------------
+
 void OEndMarker::ImplInitSettings()
 {
     EnableChildTransparentMode( true );
@@ -85,15 +85,15 @@ void OEndMarker::ImplInitSettings()
     SetBackground( Wallpaper( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor)  );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
 }
-// -----------------------------------------------------------------------
+
 void OEndMarker::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !rMEvt.IsLeft() && !rMEvt.IsRight())
         return;
     static_cast<OSectionWindow*>(GetParent())->showProperties();
 }
-// =======================================================================
+
 }
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

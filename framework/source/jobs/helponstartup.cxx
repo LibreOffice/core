@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,19 +14,19 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//_______________________________________________
-// include own header
+
+
 #include <jobs/helponstartup.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
-//_______________________________________________
-// include others
+
+
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
@@ -34,8 +34,8 @@
 #include <vcl/help.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// include interfaces
+
+
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -56,7 +56,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             to create a new instance of this class by our own supported service factory.
                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                         */
-                        // create some needed uno services and cache it
+                        
                         m_xModuleManager = css::frame::ModuleManager::create( m_xContext );
 
                         m_xDesktop = css::frame::Desktop::create(m_xContext);
@@ -68,7 +68,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);
 
-                        // ask for office locale
+                        
                         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xContext,
                             "/org.openoffice.Setup",
@@ -76,7 +76,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             "ooLocale",
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sLocale;
 
-                        // detect system
+                        
                         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xContext,
                             "/org.openoffice.Office.Common",
@@ -84,8 +84,8 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             "System",
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sSystem;
 
-                        // Start listening for disposing events of these services,
-                        // so we can react e.g. for an office shutdown
+                        
+                        
                         css::uno::Reference< css::lang::XComponent > xComponent;
                         xComponent = css::uno::Reference< css::lang::XComponent >(m_xModuleManager, css::uno::UNO_QUERY);
                         if (xComponent.is())
@@ -99,57 +99,57 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                     }
                    )
 
-//-----------------------------------------------
+
 HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
     , m_xContext    (xContext)
 {
 }
 
-//-----------------------------------------------
+
 HelpOnStartup::~HelpOnStartup()
 {
 }
 
-//-----------------------------------------------
-// css.task.XJob
+
+
 css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
     throw(css::lang::IllegalArgumentException,
           css::uno::Exception                ,
           css::uno::RuntimeException         )
 {
-    // Analyze the given arguments; try to locate a model there and
-    // classify it's used application module.
+    
+    
     OUString sModule = its_getModuleIdFromEnv(lArguments);
 
-    // Attention: We are bound to events for openeing any document inside the office.
-    // That includes e.g. the help module itself. But we have to do nothing then!
+    
+    
     if (sModule.isEmpty())
         return css::uno::Any();
 
-    // check current state of the help module
-    // a) help isnt open                       => show default page for the detected module
-    // b) help shows any other default page(!) => show default page for the detected module
-    // c) help shows any other content         => do nothing (user travelled to any other content and leaved the set of default pages)
+    
+    
+    
+    
     OUString sCurrentHelpURL                = its_getCurrentHelpURL();
     sal_Bool        bCurrentHelpURLIsAnyDefaultURL = its_isHelpUrlADefaultOne(sCurrentHelpURL);
     sal_Bool        bShowIt                        = sal_False;
 
-    // a)
+    
     if (sCurrentHelpURL.isEmpty())
         bShowIt = sal_True;
-    // b)
+    
     else if (bCurrentHelpURLIsAnyDefaultURL)
         bShowIt = sal_True;
 
     if (bShowIt)
     {
-        // retrieve the help URL for the detected application module
+        
         OUString sModuleDependendHelpURL = its_checkIfHelpEnabledAndGetURL(sModule);
         if (!sModuleDependendHelpURL.isEmpty())
         {
-            // Show this help page.
-            // Note: The help window brings itself to front ...
+            
+            
             Help* pHelp = Application::GetHelp();
             if (pHelp)
                 pHelp->Start(sModuleDependendHelpURL, 0);
@@ -159,11 +159,11 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     return css::uno::Any();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // SAFE ->
+    
     ResetableGuard aLock(m_aLock);
 
     if (aEvent.Source == m_xModuleManager)
@@ -174,19 +174,19 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
         m_xConfig.clear();
 
     aLock.unlock();
-    // <- SAFE
+    
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
     ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault("Environment", css::uno::Sequence< css::beans::NamedValue >());
     ::comphelper::SequenceAsHashMap lJobConfig   = lArgs.getUnpackedValueOrDefault("JobConfig", css::uno::Sequence< css::beans::NamedValue >());
 
-    // check for right environment.
-    // If its not a DocumentEvent, which triggered this job,
-    // we cant work correctly! => return immediately and do nothing
+    
+    
+    
     OUString sEnvType = lEnvironment.getUnpackedValueOrDefault("EnvType", OUString());
     if (sEnvType != "DOCUMENTEVENT")
         return OUString();
@@ -195,9 +195,9 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     if (!xDoc.is())
         return OUString();
 
-    // be sure that we work on top level documents only, which are registered
-    // on the desktop instance. Ignore e.g. life previews, which are top frames too ...
-    // but not registered at this global desktop instance.
+    
+    
+    
     css::uno::Reference< css::frame::XDesktop >    xDesktopCheck;
     css::uno::Reference< css::frame::XFrame >      xFrame       ;
     css::uno::Reference< css::frame::XController > xController  = xDoc->getCurrentController();
@@ -208,13 +208,13 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     if (!xDesktopCheck.is())
         return OUString();
 
-    // OK - now we are sure this document is a top level document.
-    // Classify it.
-    // SAFE ->
+    
+    
+    
     ResetableGuard aLock(m_aLock);
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
-    // <- SAFE
+    
 
     OUString sModuleId;
     try
@@ -229,14 +229,14 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     return sModuleId;
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::its_getCurrentHelpURL()
 {
-    // SAFE ->
+    
     ResetableGuard aLock(m_aLock);
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = m_xDesktop;
     aLock.unlock();
-    // <- SAFE
+    
 
     if (!xDesktop.is())
         return OUString();
@@ -271,24 +271,24 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     return sCurrentHelpURL;
 }
 
-//-----------------------------------------------
+
 ::sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
 {
     if (sHelpURL.isEmpty())
         return sal_False;
 
-    // SAFE ->
+    
     ResetableGuard aLock(m_aLock);
     css::uno::Reference< css::container::XNameAccess >     xConfig = m_xConfig;
     OUString                                        sLocale = m_sLocale;
     OUString                                        sSystem = m_sSystem;
     aLock.unlock();
-    // <- SAFE
+    
 
     if (!xConfig.is())
         return sal_False;
 
-    // check given help url against all default ones
+    
     const css::uno::Sequence< OUString > lModules = xConfig->getElementNames();
     const OUString*                      pModules = lModules.getConstArray();
           ::sal_Int32                           c        = lModules.getLength();
@@ -318,16 +318,16 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     return sal_False;
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 {
-    // SAFE ->
+    
     ResetableGuard aLock(m_aLock);
     css::uno::Reference< css::container::XNameAccess > xConfig = m_xConfig;
     OUString                                    sLocale = m_sLocale;
     OUString                                    sSystem = m_sSystem;
     aLock.unlock();
-    // <- SAFE
+    
 
     OUString sHelpURL;
 
@@ -356,7 +356,7 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
     return sHelpURL;
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
                                                  const OUString& sLocale ,
                                                  const OUString& sSystem )
@@ -371,6 +371,6 @@ OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
     return sHelpURL.makeStringAndClear();
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

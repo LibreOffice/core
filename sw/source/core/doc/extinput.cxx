@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -64,12 +64,12 @@ SwExtTextInput::~SwExtTextInput()
                 std::swap(nSttCnt, nEndCnt);
             }
 
-            // In order to get Undo/Redlining etc. working correctly,
-            // we need to go through the Doc interface
+            
+            
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
-                // #i41974# Only set language attribute
-                // for CJK/CTL scripts.
+                
+                
                 bool bLang = true;
                 sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
@@ -149,7 +149,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             const sal_Int32 nNewLen = rNewStr.getLength();
             if( nNewLen < nReplace )
             {
-                // We have to insert some characters from the saved original text
+                
                 nReplace -= nNewLen;
                 aIdx += nNewLen;
                 pTNd->ReplaceText( aIdx, nReplace,
@@ -219,7 +219,7 @@ void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
             const sal_Int32 nInPos = sOverwriteText.indexOf( CH_TXTATR_INWORD );
             const sal_Int32 nBrkPos = sOverwriteText.indexOf( CH_TXTATR_BREAKWORD );
 
-            // Find the first attr found, if any.
+            
             sal_Int32 nPos = std::min(nInPos, nBrkPos);
             if (nPos<0)
             {
@@ -233,7 +233,7 @@ void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
     }
 }
 
-// The Doc interfaces
+
 
 SwExtTextInput* SwDoc::CreateExtTextInput( const SwPaM& rPam )
 {

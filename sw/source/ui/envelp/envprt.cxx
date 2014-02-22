@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/print.hxx>
@@ -41,21 +41,21 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pPrtSetup, "setup");
     SetExchangeSupport();
 
-    // Metrics
+    
     FieldUnit eUnit = ::GetDfltMetric(sal_False);
     SetMetric(*m_pRightField, eUnit);
     SetMetric(*m_pDownField, eUnit);
 
-    // Install handlers
+    
     m_pTopButton->SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
     m_pBottomButton->SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
 
     m_pPrtSetup->SetClickHdl(LINK(this, SwEnvPrtPage, ButtonHdl));
 
-    // Bitmaps
+    
     m_pBottomButton->GetClickHdl().Call(m_pBottomButton);
 
-    // ToolBox
+    
     m_pAlignBox->SetClickHdl(LINK(this, SwEnvPrtPage, AlignHdl));
     m_aIds[ENV_HOR_LEFT] = m_pAlignBox->GetItemId("horileft");
     m_aIds[ENV_HOR_CNTR] = m_pAlignBox->GetItemId("horicenter");
@@ -69,7 +69,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
 {
     if (m_pBottomButton->IsChecked())
     {
-        // Envelope from botton
+        
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(Bitmap(SW_RES(BMP_HOR_LEFT_LOWER))));
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(Bitmap(SW_RES(BMP_HOR_CNTR_LOWER))));
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(Bitmap(SW_RES(BMP_HOR_RGHT_LOWER))));
@@ -79,7 +79,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
     }
     else
     {
-        // Envelope from top
+        
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(Bitmap(SW_RES(BMP_HOR_LEFT_UPPER))));
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(Bitmap(SW_RES(BMP_HOR_CNTR_UPPER))));
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(Bitmap(SW_RES(BMP_HOR_RGHT_UPPER))));
@@ -94,7 +94,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
 {
     if (pBtn == m_pPrtSetup)
     {
-        // Call printer setup
+        
         if (pPrt)
         {
             PrinterSetupDialog* pDlg = new PrinterSetupDialog(this );
@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
     }
     else
     {
-        // GetCurItemId() == 0 is possible!
+        
         const SwEnvItem& rItem = (const SwEnvItem&) GetItemSet().Get(FN_ENVELOP);
         m_pAlignBox->CheckItem(m_aIds[rItem.eAlign], true);
     }
@@ -170,7 +170,7 @@ sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
 
 void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 {
-    // Read item
+    
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
     m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
 

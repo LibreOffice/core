@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 
 #include <cstdio>
 
-// =======================================================================
+
 
 ImplFontMetric::ImplFontMetric()
 :   mnAscent( 0 ),
@@ -39,24 +39,24 @@ ImplFontMetric::ImplFontMetric()
     mnRefCount( 1 )
 {}
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplFontMetric::AddReference()
 {
-    // TODO: disable refcounting on the default maps?
+    
     ++mnRefCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplFontMetric::DeReference()
 {
-    // TODO: disable refcounting on the default maps?
+    
     if( --mnRefCount <= 0 )
         delete this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
@@ -76,13 +76,13 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
-// =======================================================================
+
 
 FontInfo::FontInfo()
 :   mpImplMetric( new ImplFontMetric )
 {}
 
-// -----------------------------------------------------------------------
+
 
 FontInfo::FontInfo( const FontInfo& rInfo )
 :  Font( rInfo )
@@ -91,14 +91,14 @@ FontInfo::FontInfo( const FontInfo& rInfo )
     mpImplMetric->AddReference();
 }
 
-// -----------------------------------------------------------------------
+
 
 FontInfo::~FontInfo()
 {
     mpImplMetric->DeReference();
 }
 
-// -----------------------------------------------------------------------
+
 
 FontInfo& FontInfo::operator=( const FontInfo& rInfo )
 {
@@ -114,7 +114,7 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FontInfo::operator==( const FontInfo& rInfo ) const
 {
@@ -127,7 +127,7 @@ bool FontInfo::operator==( const FontInfo& rInfo ) const
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 FontType FontInfo::GetType() const
 {
@@ -138,49 +138,49 @@ FontMetric::FontMetric( const FontMetric& rMetric )
 :    FontInfo( rMetric )
 {}
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetAscent() const
 {
     return mpImplMetric->GetAscent();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetDescent() const
 {
     return mpImplMetric->GetDescent();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetIntLeading() const
 {
     return mpImplMetric->GetIntLeading();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetExtLeading() const
 {
     return mpImplMetric->GetExtLeading();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetLineHeight() const
 {
     return mpImplMetric->GetLineHeight();
 }
 
-// -----------------------------------------------------------------------
+
 
 long FontMetric::GetSlant() const
 {
     return mpImplMetric->GetSlant();
 }
 
-// -----------------------------------------------------------------------
+
 
 FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 {
@@ -188,13 +188,13 @@ FontMetric& FontMetric::operator =( const FontMetric& rMetric )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FontMetric::operator==( const FontMetric& rMetric ) const
 {
     return FontInfo::operator==( rMetric );
 }
 
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -75,7 +75,7 @@ Size SvxXConnectionPreview::GetOptimalSize() const
 
 void SvxXConnectionPreview::AdaptSize()
 {
-    // Adapt size
+    
     if( pObjList )
     {
         Rectangle aRect = pObjList->GetAllObjBoundRect();
@@ -83,7 +83,7 @@ void SvxXConnectionPreview::AdaptSize()
             return;
 
         SetMapMode( MAP_100TH_MM );
-        OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
+        OutputDevice* pOD = pView->GetFirstOutputDevice(); 
 
         MapMode aMapMode = GetMapMode();
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
@@ -98,7 +98,7 @@ void SvxXConnectionPreview::AdaptSize()
         double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
         double          fWinWH = (double) nWidth / nHeight;
 
-        // Adapt bitmap to Thumb size (not here!)
+        
         if ( fRectWH < fWinWH)
         {
             aNewSize.Width() = (long) ( (double) nHeight * fRectWH );
@@ -114,18 +114,18 @@ void SvxXConnectionPreview::AdaptSize()
         Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
         Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
 
-        // Implement MapMode
+        
         aDisplayMap.SetScaleX( aMinFrac );
         aDisplayMap.SetScaleY( aMinFrac );
 
-        // Centering
+        
         aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
         aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
 
         aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
         SetMapMode( aDisplayMap );
 
-        // Origin
+        
         aNewPos = aDisplayMap.GetOrigin();
         aNewPos -= Point( aRect.TopLeft().X(), aRect.TopLeft().Y() );
         aDisplayMap.SetOrigin( aNewPos );
@@ -168,8 +168,8 @@ void SvxXConnectionPreview::Construct()
                 SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( true );
                 SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( false );
 
-                // potential memory leak here (!). Create SdrObjList only when there is
-                // not yet one.
+                
+                
                 if(!pObjList)
                 {
                     pObjList = new SdrObjList( pView->GetModel(), NULL );
@@ -202,14 +202,14 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
 {
     if( pObjList )
     {
-        // #110094#
-        // This will not work anymore. To not start at Adam and Eve, i will
-        // ATM not try to change all this stuff to really using an own model
-        // and a view. I will just try to provide a mechanism to paint such
-        // objects without own model and without a page/view with the new
-        // mechanism.
+        
+        
+        
+        
+        
+        
 
-        // New stuff: Use a ObjectContactOfObjListPainter.
+        
         sdr::contact::SdrObjectVector aObjectVector;
 
         for(sal_uInt32 a(0L); a < pObjList->GetObjCount(); a++)
@@ -223,7 +223,7 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
         sdr::contact::DisplayInfo aDisplayInfo;
 
-        // do processing
+        
         aPainter.ProcessDisplay(aDisplayInfo);
     }
 }
@@ -236,7 +236,7 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 }
 
 
-// Get number of lines which are offset based on the preview object
+
 
 sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
 {

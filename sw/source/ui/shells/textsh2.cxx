@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstdarg>
@@ -98,24 +98,24 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     const SfxPoolItem* pCommandTypeItem = 0;
     const SfxPoolItem* pSelectionItem = 0;
 
-    // first get the selection of rows to be inserted
+    
     pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, false, &pSelectionItem);
 
     Sequence<Any> aSelection;
     if(pSelectionItem)
         ((SfxUsrAnyItem*)pSelectionItem)->GetValue() >>= aSelection;
 
-    // get the data source name
+    
     pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, false, &pSourceItem);
     if(pSourceItem)
         ((const SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSourceArg;
 
-    // get the command
+    
     pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, false, &pCommandItem);
     if(pCommandItem)
         ((const SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommandArg;
 
-    // get the command type
+    
     pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, false, &pCommandTypeItem);
     if(pCommandTypeItem)
         ((const SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
@@ -124,7 +124,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     pArgs->GetItemState(FN_DB_CONNECTION_ANY, false, &pConnectionItem);
     if ( pConnectionItem )
         ((const SfxUsrAnyItem*)pConnectionItem)->GetValue() >>= xConnection;
-    // may be we even get no connection
+    
     if ( !xConnection.is() )
     {
         Reference<XDataSource> xSource;
@@ -133,7 +133,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     if(!xConnection.is())
         return ;
 
-    // get the cursor, we use to travel, may be NULL
+    
     Reference<XResultSet> xCursor;
     pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, false, &pCursorItem);
     if ( pCursorItem )
@@ -150,21 +150,21 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                     pNew->aDBData.sCommand      = sCommandArg;
                     pNew->aDBData.nCommandType  = nCommandTypeArg;
                     pNew->aSelection            = aSelection;
-                    //if the cursor is NULL, it must be created inside InsertDBTextHdl
-                    // because it called via a PostUserEvent
+                    
+                    
                     pNew->xCursor               = xCursor;
                     pNew->xConnection           = xConnection;
 
                     Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
                                             InsertDBTextHdl ), pNew );
-                    // the pNew will be removed in InsertDBTextHdl !!
+                    
                 }
             }
             break;
 
         case FN_QRY_MERGE_FIELD:
             {
-                // we don't get any cursor, so we must create our own
+                
                 sal_Bool bDisposeResultSet = sal_False;
                 if ( !xCursor.is() )
                 {
@@ -242,7 +242,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         bool bDispose = false;
         Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
         Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
-        // #111987# the connection is disposed an so no parent has been found
+        
         if(xConnection.is() && !xSource.is())
             return 0;
 

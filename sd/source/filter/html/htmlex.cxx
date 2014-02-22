@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -89,7 +89,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 
-// get parameter from Itemset
+
 
 #define RESTOHTML( res ) StringToHTMLString(SD_RESSTR(res))
 
@@ -122,9 +122,9 @@ const char *pButtonNames[] =
 #define BTN_MORE    10
 #define BTN_LESS    11
 
-// *********************************************************************
-// Helper class for the simple creation of files local/remote
-// *********************************************************************
+
+
+
 class EasyFile
 {
 private:
@@ -142,9 +142,9 @@ public:
     sal_uLong close();
 };
 
-// *********************************************************************
-// Helper class for the embedding of text attributes into the html output
-// *********************************************************************
+
+
+
 class HtmlState
 {
 private:
@@ -171,9 +171,9 @@ public:
     OUString Flush();
 };
 
-// =====================================================================
-// close all still open tags
-// =====================================================================
+
+
+
 OUString HtmlState::Flush()
 {
     OUString aStr;
@@ -188,9 +188,9 @@ OUString HtmlState::Flush()
     return aStr;
 }
 
-// =====================================================================
-// c'tor with default color for the page
-// =====================================================================
+
+
+
 HtmlState::HtmlState( Color aDefColor )
 {
     mbColor = false;
@@ -202,9 +202,9 @@ HtmlState::HtmlState( Color aDefColor )
     maDefColor = aDefColor;
 }
 
-// =====================================================================
-// enables/disables bold print
-// =====================================================================
+
+
+
 OUString HtmlState::SetWeight( bool bWeight )
 {
     OUString aStr;
@@ -218,9 +218,9 @@ OUString HtmlState::SetWeight( bool bWeight )
     return aStr;
 }
 
-// =====================================================================
-// enables/disables italic
-// =====================================================================
+
+
+
 OUString HtmlState::SetItalic( bool bItalic )
 {
     OUString aStr;
@@ -234,9 +234,9 @@ OUString HtmlState::SetItalic( bool bItalic )
     return aStr;
 }
 
-// =====================================================================
-// enables/disables underlines
-// =====================================================================
+
+
+
 OUString HtmlState::SetUnderline( bool bUnderline )
 {
     OUString aStr;
@@ -250,9 +250,9 @@ OUString HtmlState::SetUnderline( bool bUnderline )
     return aStr;
 }
 
-// =====================================================================
-// enables/disables strike through
-// =====================================================================
+
+
+
 OUString HtmlState::SetStrikeout( bool bStrike )
 {
     OUString aStr;
@@ -266,9 +266,9 @@ OUString HtmlState::SetStrikeout( bool bStrike )
     return aStr;
 }
 
-// =====================================================================
-// Sets the specified text color
-// =====================================================================
+
+
+
 OUString HtmlState::SetColor( Color aColor )
 {
     OUString aStr;
@@ -292,9 +292,9 @@ OUString HtmlState::SetColor( Color aColor )
     return aStr;
 }
 
-// =====================================================================
-// enables/disables a hyperlink
-// =====================================================================
+
+
+
 OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
 {
     OUString aStr;
@@ -324,9 +324,9 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
     return aStr;
 }
 
-// *********************************************************************
-// methods of the class HtmlExport
-// *********************************************************************
+
+
+
 
 static OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 {
@@ -344,9 +344,9 @@ static OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
     return sStyle;
 }
 
-// =====================================================================
-// constructor for the html export helper classes
-// =====================================================================
+
+
+
 HtmlExport::HtmlExport(
     OUString aPath,
     const Sequence< PropertyValue >& rParams,
@@ -372,8 +372,8 @@ HtmlExport::HtmlExport(
         maIndexUrl("index"),
         meScript( SCRIPT_ASP ),
         maHTMLHeader(
-            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
-            "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
+            "<!DOCTYPE HTML PUBLIC \"-
+            "     \"http:
             "<html>\r\n<head>\r\n" ),
         mpButtonSet( new ButtonSet() )
 {
@@ -597,20 +597,20 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 
     }
 
-    // calculate image sizes
+    
     SdPage* pPage = mpDoc->GetSdPage(0, PK_STANDARD);
     Size aTmpSize( pPage->GetSize() );
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
 
     mnHeightPixel = (sal_uInt16)(mnWidthPixel/dRatio);
 
-    //------------------------------------------------------------------
-    // we come up with a destination...
+    
+    
 
     INetURLObject aINetURLObj( maPath );
     DBG_ASSERT( aINetURLObj.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    maExportPath = aINetURLObj.GetPartBeforeLastName(); // with trailing '/'
+    maExportPath = aINetURLObj.GetPartBeforeLastName(); 
     maIndex = aINetURLObj.GetLastName();
 
     mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
@@ -631,9 +631,9 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     maDocFileName = maIndex;
 }
 
-///////////////////////////////////////////////////////////////////////
-// exports the (in the c'tor specified impress document) to html
-///////////////////////////////////////////////////////////////////////
+
+
+
 void HtmlExport::ExportHtml()
 {
     if(mbUserAttr)
@@ -646,15 +646,15 @@ void HtmlExport::ExportHtml()
     }
     else if( mbDocColors )
     {
-        // default colors for the color schema 'From Document'
+        
         SetDocColors();
         maFirstPageColor = maBackColor;
     }
 
-    // get name for downloadable presentation if needed
+    
     if( mbDownload )
     {
-        // fade out separator search and extension
+        
         sal_Int32 nSepPos = maDocFileName.indexOf('.');
         if (nSepPos != -1)
             maDocFileName = maDocFileName.copy(0, nSepPos);
@@ -662,7 +662,7 @@ void HtmlExport::ExportHtml()
         maDocFileName += ".odp";
     }
 
-    //////
+    
 
     sal_uInt16 nProgrCount = mnSdPageCount;
     nProgrCount += mbImpress?mnSdPageCount:0;
@@ -673,12 +673,12 @@ void HtmlExport::ExportHtml()
 
     mpDocSh->SetWaitCursor( true );
 
-    //------------------------------------------------------------------
-    // Exceptions are cool...
+    
+    
 
     CreateFileNames();
 
-    // this is not a true while
+    
     while( true )
     {
         if( checkForExistingFiles() )
@@ -732,13 +732,13 @@ void HtmlExport::ExportHtml()
         return;
     }
 
-    // if we get to this point the export was
-    // canceled by the user after an error
+    
+    
     mpDocSh->SetWaitCursor( false );
     ResetProgress();
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 void HtmlExport::SetDocColors( SdPage* pPage )
 {
@@ -755,7 +755,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 
     if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
-        // default text color from the outline template of the first page
+        
         pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);
         if(pSheet == NULL)
             pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TEXT);
@@ -773,7 +773,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
             maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,true))->GetValue();
     }
 
-    // default background from the background of the master page of the first page
+    
     maBackColor = pPage->GetPageBackgroundColor();
 
     if( maTextColor == COL_AUTO )
@@ -783,14 +783,14 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 void HtmlExport::InitProgress( sal_uInt16 nProgrCount )
 {
     mpProgress = new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nProgrCount );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 void HtmlExport::ResetProgress()
 {
@@ -798,7 +798,7 @@ void HtmlExport::ResetProgress()
     mpProgress = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 void HtmlExport::ExportKiosk()
 {
@@ -815,9 +815,9 @@ void HtmlExport::ExportKiosk()
     ResetProgress();
 }
 
-///////////////////////////////////////////////////////////////////////
-// Export Document with WebCast (TM) Technology
-///////////////////////////////////////////////////////////////////////
+
+
+
 void HtmlExport::ExportWebCast()
 {
     mnPagesWritten = 0;
@@ -846,7 +846,7 @@ void HtmlExport::ExportWebCast()
             maURLPath += "/";
     }
 
-    // this is not a true while
+    
     while(true)
     {
         if( checkForExistingFiles() )
@@ -879,9 +879,9 @@ void HtmlExport::ExportWebCast()
     ResetProgress();
 }
 
-///////////////////////////////////////////////////////////////////////
-// Save the presentation as a downloadable file in the dest directory
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 bool HtmlExport::SavePresentation()
 {
@@ -917,9 +917,9 @@ bool HtmlExport::SavePresentation()
     return false;
 }
 
-// =====================================================================
-// create image files
-// =====================================================================
+
+
+
 bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 {
     try
@@ -983,9 +983,9 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
     return true;
 }
 
-// =====================================================================
-// get SdrTextObject with layout text of this page
-// =====================================================================
+
+
+
 SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 {
     sal_uLong           nObjectCount = pPage->GetObjCount();
@@ -1005,9 +1005,9 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
     return pResult;
 }
 
-// =====================================================================
-// create HTML text version of impress pages
-// =====================================================================
+
+
+
 
 OUString HtmlExport::CreateMetaCharset() const
 {
@@ -1036,7 +1036,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
             SetDocColors( pPage );
         }
 
-// HTML head
+
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
@@ -1045,10 +1045,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr.append("</head>\r\n");
         aStr.append(CreateBodyTag());
 
-// navigation bar
+
         aStr.append(CreateNavBar(nSdPage, true));
 
-// page title
+
         OUString sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
         aStr.append("<h1 style=\"");
         aStr.append(getParagraphStyle(pOutliner, 0));
@@ -1056,10 +1056,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr.append(sTitleText);
         aStr.append("</h1>\r\n");
 
-// write outline text
+
         aStr.append(CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() ));
 
-// notes
+
         if(mbNotes)
         {
             SdPage* pNotesPage = maNotesPages[ nSdPage ];
@@ -1075,7 +1075,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
             }
         }
 
-// clsoe page
+
         aStr.append("</body>\r\n</html>");
 
         bOk = WriteHtml(maTextFiles[nSdPage], false, aStr.makeStringAndClear());
@@ -1119,7 +1119,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
     return nErr == 0;
 }
 
-// =====================================================================
+
 
 /** creates a outliner text for the title objects of a page
  */
@@ -1143,9 +1143,9 @@ OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, 
     return OUString();
 }
 
-// =====================================================================
-// creates a outliner text for a page
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                                       SdPage* pPage,
                                       bool bHeadLine, const Color& rBackgroundColor )
@@ -1237,9 +1237,9 @@ OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// creates a outliner text for a note page
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
                                            SdPage* pPage,
                                            bool,
@@ -1270,9 +1270,9 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// converts a paragraph of the outliner to html
-// =====================================================================
+
+
+
 OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor )
 {
     OUStringBuffer aStr;
@@ -1280,7 +1280,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nP
     if(NULL == pOutliner)
         return OUString();
 
-    // TODO: MALTE!!!
+    
     EditEngine& rEditEngine = *(EditEngine*)&pOutliner->GetEditEngine();
     bool bOldUpdateMode = rEditEngine.GetUpdateMode();
     rEditEngine.SetUpdateMode(true);
@@ -1315,11 +1315,11 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nP
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// Depending on the attributes of the specified set and the specified
-// HtmlState, it creates the needed html tags in order to get the
-// attributes.
-// =====================================================================
+
+
+
+
+
 OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor )
 {
     OUStringBuffer aStr;
@@ -1407,9 +1407,9 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// create HTML wrapper for picture files
-// =====================================================================
+
+
+
 bool HtmlExport::CreateHtmlForPresPages()
 {
     bool bOk = true;
@@ -1418,9 +1418,9 @@ bool HtmlExport::CreateHtmlForPresPages()
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
-        // find clickable objects (also on the master page) and put it in the
-        // list. This in reverse order character order since in html the first
-        // area is taken in the case they overlap.
+        
+        
+        
 
         SdPage* pPage = maPages[ nSdPage ];
 
@@ -1433,7 +1433,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         while (!bMasterDone)
         {
-            // sal_True = backwards
+            
             SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS, true);
 
             SdrObject* pObject = aIter.Next();
@@ -1456,19 +1456,19 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                 pObject = aIter.Next();
             }
-            // now to the master page or finishing
+            
             if (!pPage->IsMasterPage())
                 pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
             else
                 bMasterDone = true;
         }
 
-// HTML Head
+
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
 
-// insert timing information
+
         pPage = maPages[ nSdPage ];
         if( meMode == PUBLISH_KIOSK )
         {
@@ -1509,16 +1509,16 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         aStr.append("</head>\r\n");
 
-// HTML Body
+
         aStr.append(CreateBodyTag());
 
         if( mbSlideSound && pPage->IsSoundOn() )
             aStr.append(InsertSound(pPage->GetSoundFile()));
 
-// navigation bar
+
         if(!mbFrames )
             aStr.append(CreateNavBar(nSdPage, false));
-// Image
+
         aStr.append("<center>");
         aStr.append("<img src=\"");
         aStr.append(maImageFiles[nSdPage]);
@@ -1529,7 +1529,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         aStr.append("></center>\r\n");
 
-// notes
+
         if(mbNotes && !mbFrames)
         {
             SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
@@ -1548,7 +1548,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             }
         }
 
-// create Imagemap if necessary
+
         if (!aClickableObjects.empty())
         {
             aStr.append("<map name=\"map0\">\r\n");
@@ -1566,8 +1566,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                 sal_uLong nPageWidth = pPage->GetSize().Width() - pPage->GetLftBorder() -
                                    pPage->GetRgtBorder();
 
-                // BoundRect is relative to the physical page origin, not the
-                // origin of ordinates
+                
+                
                 aRect.Move(-pPage->GetLftBorder(), -pPage->GetUppBorder());
 
                 double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
@@ -1592,22 +1592,22 @@ bool HtmlExport::CreateHtmlForPresPages()
                         sal_uInt16 nType = pArea->GetType();
                         OUString aURL( pArea->GetURL() );
 
-                        // if necessary, convert page and object names into the
-                        // corresponding names of the html file
+                        
+                        
                         sal_Bool        bIsMasterPage;
                         sal_uInt16      nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
                         SdrObject*  pObj = NULL;
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
                         {
-                            // is the bookmark a object?
+                            
                             pObj = mpDoc->GetObj( aURL );
                             if (pObj)
                                 nPgNum = pObj->GetPage()->GetPageNum();
                         }
                         if (nPgNum != SDRPAGE_NOTFOUND)
                         {
-                            nPgNum = (nPgNum - 1) / 2;  // SdrPageNum --> SdPageNum
+                            nPgNum = (nPgNum - 1) / 2;  
                             aURL = CreatePageURL(nPgNum);
                         }
 
@@ -1618,7 +1618,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 Rectangle aArea(((IMapRectangleObject*)pArea)->
                                                  GetRectangle(false));
 
-                                // conversion into pixel coordinates
+                                
                                 aArea.Move(aLogPos.X() - pPage->GetLftBorder(),
                                            aLogPos.Y() - pPage->GetUppBorder());
                                 aArea.Left()   = (long)(aArea.Left() * fLogicToPixel);
@@ -1685,7 +1685,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
-                                // is the bookmark a object?
+                                
                                 pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
                                     nPgNum = pObj->GetPage()->GetPageNum();
@@ -1736,10 +1736,10 @@ bool HtmlExport::CreateHtmlForPresPages()
                             break;
                     }
 
-                    // and now the areas
+                    
                     if (!aHRef.isEmpty())
                     {
-                        // a circle?
+                        
                         if (pObject->GetObjInventor() == SdrInventor &&
                             pObject->GetObjIdentifier() == OBJ_CIRC  &&
                             bIsSquare )
@@ -1749,7 +1749,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                     aRect.Top() + nRadius,
                                                     aHRef));
                         }
-                        // a polygon?
+                        
                         else if (pObject->GetObjInventor() == SdrInventor &&
                                  (pObject->GetObjIdentifier() == OBJ_PATHLINE ||
                                   pObject->GetObjIdentifier() == OBJ_PLIN ||
@@ -1757,7 +1757,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         {
                             aStr.append(CreateHTMLPolygonArea(((SdrPathObj*)pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef));
                         }
-                        // something completely different: use the BoundRect
+                        
                         else
                         {
                             aStr.append(CreateHTMLRectArea(aRect, aHRef));
@@ -1782,15 +1782,15 @@ bool HtmlExport::CreateHtmlForPresPages()
     return bOk;
 }
 
-// =====================================================================
-// create overview pages
-// =====================================================================
+
+
+
 bool HtmlExport::CreateContentPage()
 {
     if( mbDocColors )
         SetDocColors();
 
-    // html head
+    
     OUStringBuffer aStr(maHTMLHeader);
     aStr.append(CreateMetaCharset());
     aStr.append("  <title>");
@@ -1798,7 +1798,7 @@ bool HtmlExport::CreateContentPage()
     aStr.append("</title>\r\n</head>\r\n");
     aStr.append(CreateBodyTag());
 
-    // page head
+    
     aStr.append("<center>\r\n");
 
     if(mbHeader)
@@ -1810,7 +1810,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.append("<h2>");
 
-    // Solaris compiler bug workaround
+    
     if( mbFrames )
         aStr.append(CreateLink(maFramePage,
                                RESTOHTML(STR_HTMLEXP_CLICKSTART)));
@@ -1822,7 +1822,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.append("<center><table width=\"90%\"><tr>\r\n");
 
-    // table of content
+    
     aStr.append("<td valign=\"top\" align=\"left\" width=\"25%\">\r\n");
     aStr.append("<h3>");
     aStr.append(RESTOHTML(STR_HTMLEXP_CONTENTS));
@@ -1840,7 +1840,7 @@ bool HtmlExport::CreateContentPage()
     }
     aStr.append("</td>\r\n");
 
-    // document information
+    
     aStr.append("<td valign=\"top\" align=\"left\" width=\"75%\">\r\n");
 
     if (!maAuthor.isEmpty())
@@ -1918,9 +1918,9 @@ bool HtmlExport::CreateContentPage()
     return bOk;
 }
 
-// =====================================================================
-// create note pages (for frames)
-// =====================================================================
+
+
+
 bool HtmlExport::CreateNotesPages()
 {
     bool bOk = true;
@@ -1932,7 +1932,7 @@ bool HtmlExport::CreateNotesPages()
         if( mbDocColors )
             SetDocColors( pPage );
 
-        // Html head
+        
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
@@ -1957,9 +1957,9 @@ bool HtmlExport::CreateNotesPages()
     return bOk;
 }
 
-// =====================================================================
-// create outline pages (for frames)
-// =====================================================================
+
+
+
 bool HtmlExport::CreateOutlinePages()
 {
     bool bOk = true;
@@ -1969,10 +1969,10 @@ bool HtmlExport::CreateOutlinePages()
         SetDocColors();
     }
 
-    // page 0 will be the closed outline, page 1 the opened
+    
     for (sal_Int32 nPage = 0; nPage < (mbImpress?2:1) && bOk; ++nPage)
     {
-        // Html head
+        
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
@@ -2019,19 +2019,19 @@ bool HtmlExport::CreateOutlinePages()
     return bOk;
 }
 
-// =====================================================================
-// set file name
-// =====================================================================
+
+
+
 void HtmlExport::CreateFileNames()
 {
-    // create lists with new file names
+    
     maHTMLFiles.resize(mnSdPageCount);
     maImageFiles.resize(mnSdPageCount);
     maThumbnailFiles.resize(mnSdPageCount);
     maPageNames.resize(mnSdPageCount);
     maTextFiles.resize(mnSdPageCount);
 
-    mbHeader = false;   // headline on overview page?
+    mbHeader = false;   
 
     for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
@@ -2067,7 +2067,7 @@ void HtmlExport::CreateFileNames()
 
         SdPage* pSdPage = maPages[ nSdPage ];
 
-        // get slide title from page name
+        
         maPageNames[nSdPage] = pSdPage->GetName();
     }
 
@@ -2081,15 +2081,15 @@ void HtmlExport::CreateFileNames()
 
 OUString HtmlExport::getDocumentTitle()
 {
-    // check for a title object in this page, if its the first
-    // title it becomes this documents title for the content
-    // page
+    
+    
+    
     if( !mbHeader )
     {
         if(mbImpress)
         {
-            // if there is a non-empty title object, use their first passage
-            // as page title
+            
+            
             SdPage* pSdPage = mpDoc->GetSdPage(0, PK_STANDARD);
             SdrObject* pTitleObj = pSdPage->GetPresObj(PRESOBJ_TITLE);
             if (pTitleObj && !pTitleObj->IsEmptyPresObj())
@@ -2128,7 +2128,7 @@ static const char* JS_NavigateAbs =
     "function NavigateAbs( nPage )\r\n"
     "{\r\n"
     "  frames[\"show\"].location.href = \"img\" + nPage + \".$EXT\";\r\n"
-    "  //frames[\"notes\"].location.href = \"note\" + nPage + \".$EXT\";\r\n"
+    "  
     "  nCurrentPage = nPage;\r\n"
     "  if(nCurrentPage==0)\r\n"
     "  {\r\n"
@@ -2168,15 +2168,15 @@ static const char * JS_CollapseOutline =
     "  frames[\"outline\"].location.href = \"outline0.$EXT\";\r\n"
     "}\r\n\r\n";
 
-// ====================================================================
-// create page with the frames
-// ====================================================================
+
+
+
 bool HtmlExport::CreateFrames()
 {
     OUString aTmp;
     OUStringBuffer aStr(
-        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"\r\n"
-        "    \"http://www.w3.org/TR/html4/frameset.dtd\">\r\n"
+        "<!DOCTYPE HTML PUBLIC \"-
+        "    \"http:
         "<html>\r\n<head>\r\n");
 
     aStr.append(CreateMetaCharset());
@@ -2194,10 +2194,10 @@ bool HtmlExport::CreateFrames()
 
     if(mbNotes)
     {
-        aFunction = aFunction.replaceAll("//", "");
+        aFunction = aFunction.replaceAll("
     }
 
-    // substitute HTML file extension
+    
     OUString aPlaceHolder(".$EXT");
     aFunction = aFunction.replaceAll(aPlaceHolder, maHTMLExtension);
     aStr.append(aFunction);
@@ -2216,7 +2216,7 @@ bool HtmlExport::CreateFrames()
         aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
         aStr.append(aTmp);
     }
-    aStr.append("// -->\r\n</script>\r\n");
+    aStr.append("
 
     aStr.append("</head>\r\n");
 
@@ -2274,15 +2274,15 @@ bool HtmlExport::CreateFrames()
     return bOk;
 }
 
-// ====================================================================
-// create button bar for standard
-// we create the following html files
-// navbar0.htm navigation bar graphic for the first page
-// navbar1.htm navigation bar graphic for the second until second last page
-// navbar2.htm navigation bar graphic for the last page
-// navbar3.htm navigation outline closed
-// navbar4.htm navigation outline open
-// ====================================================================
+
+
+
+
+
+
+
+
+
 bool HtmlExport::CreateNavBarFrames()
 {
     bool bOk = true;
@@ -2304,7 +2304,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append(CreateBodyTag());
         aStr.append("<center>\r\n");
 
-    // first page
+    
         aButton = SD_RESSTR(STR_HTMLEXP_FIRSTPAGE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
@@ -2316,7 +2316,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append(aButton);
         aStr.append("\r\n");
 
-    // to the previous page
+    
         aButton = SD_RESSTR(STR_PUBLISH_BACK);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
@@ -2328,7 +2328,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append(aButton);
         aStr.append("\r\n");
 
-    // to the next page
+    
         aButton = SD_RESSTR(STR_PUBLISH_NEXT);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
@@ -2340,7 +2340,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append(aButton);
         aStr.append("\r\n");
 
-    // to the last page
+    
         aButton = SD_RESSTR(STR_HTMLEXP_LASTPAGE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
@@ -2357,19 +2357,19 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append(aButton);
         aStr.append("\r\n");
 
-    // content
+    
         if (mbContentsPage)
         {
             aButton = SD_RESSTR(STR_PUBLISH_OUTLINE);
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
-            // to the overview
+            
             aStr.append(CreateLink(maIndex, aButton, "_top"));
             aStr.append("\r\n");
         }
 
-    // text mode
+    
         if(mbImpress)
         {
             aButton = SD_RESSTR(STR_HTMLEXP_SETTEXT);
@@ -2381,7 +2381,7 @@ bool HtmlExport::CreateNavBarFrames()
             aStr.append("\r\n");
         }
 
-    // and finished...
+    
         aStr.append("</center>\r\n");
         aStr.append("</body>\r\n</html>");
 
@@ -2393,7 +2393,7 @@ bool HtmlExport::CreateNavBarFrames()
             mpProgress->SetState(++mnPagesWritten);
     }
 
-    // the navigation bar outliner closed...
+    
     if(bOk)
     {
         OUStringBuffer aStr(maHTMLHeader);
@@ -2416,7 +2416,7 @@ bool HtmlExport::CreateNavBarFrames()
             mpProgress->SetState(++mnPagesWritten);
     }
 
-    // ... and the outliner open
+    
     if( bOk )
     {
         OUStringBuffer aStr(maHTMLHeader);
@@ -2443,12 +2443,12 @@ bool HtmlExport::CreateNavBarFrames()
     return bOk;
 }
 
-// ====================================================================
-// create button bar for standard
-// ====================================================================
+
+
+
 OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 {
-    // prepare button bar
+    
     OUString aStrNavFirst(SD_RESSTR(STR_HTMLEXP_FIRSTPAGE));
     OUString aStrNavPrev(SD_RESSTR(STR_PUBLISH_BACK));
     OUString aStrNavNext(SD_RESSTR(STR_PUBLISH_NEXT));
@@ -2492,16 +2492,16 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
         aStrNavText    = CreateImage(GetButtonName(BTN_TEXT), aStrNavText);
     }
 
-    OUStringBuffer aStr("<center>\r\n"); //<table><tr>\r\n");
+    OUStringBuffer aStr("<center>\r\n"); 
 
-    // first page
+    
     if(nSdPage > 0)
         aStr.append(CreateLink( bIsText ? maTextFiles[0] : maHTMLFiles[0],aStrNavFirst));
     else
         aStr.append(aStrNavFirst);
     aStr.append(' ');
 
-    // to Previous page
+    
     if(nSdPage > 0)
         aStr.append(CreateLink( bIsText ? maTextFiles[nSdPage-1]
                                         : maHTMLFiles[nSdPage-1], aStrNavPrev));
@@ -2509,7 +2509,7 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
         aStr.append(aStrNavPrev);
     aStr.append(' ');
 
-    // to Next page
+    
     if(nSdPage < mnSdPageCount-1)
         aStr.append(CreateLink( bIsText ? maTextFiles[nSdPage+1]
                                         : maHTMLFiles[nSdPage+1], aStrNavNext));
@@ -2517,7 +2517,7 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
         aStr.append(aStrNavNext);
     aStr.append(' ');
 
-    // to Last page
+    
     if(nSdPage < mnSdPageCount-1)
         aStr.append(CreateLink( bIsText ? maTextFiles[mnSdPageCount-1]
                                         : maHTMLFiles[mnSdPageCount-1],
@@ -2526,14 +2526,14 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
         aStr.append(aStrNavLast);
     aStr.append(' ');
 
-    // to Index page
+    
     if (mbContentsPage)
     {
         aStr.append(CreateLink(maIndex, aStrNavContent));
         aStr.append(' ');
     }
 
-    // Text/Graphics
+    
     if(mbImpress)
     {
         aStr.append(CreateLink( bIsText ? (mbFrames ? maFramePage : maHTMLFiles[nSdPage])
@@ -2567,9 +2567,9 @@ bool HtmlExport::CreateBitmaps()
     return true;
 }
 
-// =====================================================================
-// creates the <body> tag, including the specified color attributes
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateBodyTag() const
 {
     OUStringBuffer aStr( "<body" );
@@ -2598,9 +2598,9 @@ OUString HtmlExport::CreateBodyTag() const
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// creates a hyperlink
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateLink( const OUString& aLink,
                                  const OUString& aText,
                                  const OUString& aTarget ) const
@@ -2619,9 +2619,9 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// creates a image tag
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText,
                                 sal_Int16 nWidth,
                                 sal_Int16 nHeight ) const
@@ -2638,7 +2638,7 @@ OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltTe
     }
     else
     {
-        // Agerskov: HTML 4.01 has to have an alt attribut even if it is an empty string
+        
         aStr.append(" alt=\"\"");
      }
 
@@ -2657,9 +2657,9 @@ OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltTe
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// create area for a circle; we expect pixel coordinates
-// =====================================================================
+
+
+
 OUString HtmlExport::ColorToHTMLString( Color aColor )
 {
     static const char hex[] = "0123456789ABCDEF";
@@ -2674,9 +2674,9 @@ OUString HtmlExport::ColorToHTMLString( Color aColor )
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// create area for a circle; we expect pixel coordinates
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
                                          sal_uLong nCenterX,
                                          sal_uLong nCenterY,
@@ -2693,9 +2693,9 @@ OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
 }
 
 
-// =====================================================================
-// create area for a polygon; we expect pixel coordinates
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPolygon,
     Size aShift, double fFactor, const OUString& rHRef ) const
 {
@@ -2713,8 +2713,8 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
         {
             const ::basegfx::B2DPoint aB2DPoint(aPolygon.getB2DPoint(nPoint));
             Point aPnt(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
-            // coordinates are relative to the physical page origin, not the
-            // origin of ordinates
+            
+            
             aPnt.Move(aShift.Width(), aShift.Height());
 
             aPnt.X() = (long)(aPnt.X() * fFactor);
@@ -2730,9 +2730,9 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
     return aStr.makeStringAndClear();
 }
 
-// =====================================================================
-// create area for a rectangle; we expect pixel coordinates
-// =====================================================================
+
+
+
 OUString HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
                                        const OUString& rHRef ) const
 {
@@ -2747,9 +2747,9 @@ OUString HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
     return aStr;
 }
 
-// =====================================================================
-// escapes a string for html
-// =====================================================================
+
+
+
 OUString HtmlExport::StringToHTMLString( const OUString& rString )
 {
     SvMemoryStream aMemStm;
@@ -2759,9 +2759,9 @@ OUString HtmlExport::StringToHTMLString( const OUString& rString )
     return OUString( (char*)aMemStm.GetData(), nLength, RTL_TEXTENCODING_UTF8 );
 }
 
-// =====================================================================
-// creates a url for a specific page
-// =====================================================================
+
+
+
 OUString HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
 {
     if(mbFrames)
@@ -2823,7 +2823,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
     OUString aDest(rPath + rDest);
 
     meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, rDest );
-    // write script file
+    
     {
         EasyFile aFile;
         SvStream* pStr;
@@ -2935,7 +2935,7 @@ bool HtmlExport::CreateImageNumberFile()
     return nErr == 0;
 }
 
-// =====================================================================
+
 
 OUString HtmlExport::InsertSound( const OUString& rSoundFile )
 {
@@ -2955,7 +2955,7 @@ OUString HtmlExport::InsertSound( const OUString& rSoundFile )
     return aStr;
 }
 
-// =====================================================================
+
 
 bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFile )
 {
@@ -2973,7 +2973,7 @@ bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFil
     }
 }
 
-// =====================================================================
+
 
 bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName )
 {
@@ -2992,7 +2992,7 @@ bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileA
     return false;
 }
 
-// ---------------------------------------------------------------------
+
 
 bool HtmlExport::checkForExistingFiles()
 {
@@ -3060,7 +3060,7 @@ OUString HtmlExport::GetButtonName( int nButton ) const
     return OUString::createFromAscii(pButtonNames[nButton]);
 }
 
-// =====================================================================
+
 EasyFile::EasyFile()
 {
     pMedium = NULL;
@@ -3068,14 +3068,14 @@ EasyFile::EasyFile()
     bOpen = false;
 }
 
-// =====================================================================
+
 EasyFile::~EasyFile()
 {
     if( bOpen )
         close();
 }
 
-// =====================================================================
+
 sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
 {
     sal_uLong nErr = 0;
@@ -3115,7 +3115,7 @@ sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     return nErr;
 }
 
-// =====================================================================
+
 sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
 {
     sal_uLong nErr = 0;
@@ -3140,7 +3140,7 @@ sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
     return nErr;
 }
 
-// =====================================================================
+
 sal_uLong EasyFile::close()
 {
     sal_uLong nErr = 0;
@@ -3152,7 +3152,7 @@ sal_uLong EasyFile::close()
 
     if( pMedium )
     {
-        // transmitted
+        
         pMedium->Close();
         pMedium->Commit();
 
@@ -3165,9 +3165,9 @@ sal_uLong EasyFile::close()
     return nErr;
 }
 
-// =====================================================================
-// This class helps reporting errors during file i/o
-// =====================================================================
+
+
+
 
 HtmlErrorContext::HtmlErrorContext(Window *_pWin)
 : ErrorContext(_pWin)
@@ -3175,7 +3175,7 @@ HtmlErrorContext::HtmlErrorContext(Window *_pWin)
     mnResId = 0;
 }
 
-// =====================================================================
+
 
 bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
 {
@@ -3191,7 +3191,7 @@ bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
     return true;
 }
 
-// =====================================================================
+
 
 void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL )
 {
@@ -3200,7 +3200,7 @@ void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL )
     maURL2 = "";
 }
 
-// =====================================================================
+
 
 void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 )
 {
@@ -3209,7 +3209,7 @@ void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL1, con
     maURL2 = rURL2;
 }
 
-// =====================================================================
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

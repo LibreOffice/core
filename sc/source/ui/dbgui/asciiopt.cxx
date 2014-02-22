@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "global.hxx"
@@ -26,16 +26,16 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
-// ause
+
 #include "editutil.hxx"
 
-// ============================================================================
+
 
 static const sal_Char pStrFix[] = "FIX";
 static const sal_Char pStrMrg[] = "MRG";
 
 
-// ============================================================================
+
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
@@ -199,15 +199,15 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
     return aFieldSeps;
 }
 
-// The options string must not contain semicolons (because of the pick list),
-// use comma as separator.
+
+
 
 void ScAsciiOptions::ReadFromString( const OUString& rString )
 {
     sal_Int32 nCount = comphelper::string::getTokenCount(rString, ',');
     OUString aToken;
 
-    // Field separator.
+    
     if ( nCount >= 1 )
     {
         bFixedLen = bMergeFieldSeps = false;
@@ -218,7 +218,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
     }
 
-    // Text separator.
+    
     if ( nCount >= 2 )
     {
         aToken = rString.getToken(1,',');
@@ -226,21 +226,21 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         cTextSep = (sal_Unicode) nVal;
     }
 
-    // Text encoding.
+    
     if ( nCount >= 3 )
     {
         aToken = rString.getToken(2,',');
         eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
 
-    // Number of start row.
+    
     if ( nCount >= 4 )
     {
         aToken = rString.getToken(3,',');
         nStartRow = aToken.toInt32();
     }
 
-    // Column info.
+    
     if ( nCount >= 5 )
     {
         delete[] pColStart;
@@ -266,31 +266,31 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         }
     }
 
-    // Language
+    
     if (nCount >= 6)
     {
         aToken = rString.getToken(5, ',');
         eLang = static_cast<LanguageType>(aToken.toInt32());
     }
 
-    // Import quoted field as text.
+    
     if (nCount >= 7)
     {
         aToken = rString.getToken(6, ',');
         bQuotedFieldAsText = aToken.equalsAscii("true") ? true : false;
     }
 
-    // Detect special numbers.
+    
     if (nCount >= 8)
     {
         aToken = rString.getToken(7, ',');
         bDetectSpecialNumber = aToken.equalsAscii("true") ? true : false;
     }
     else
-        bDetectSpecialNumber = true;    // default of versions that didn't add the parameter
+        bDetectSpecialNumber = true;    
 
-    // 9th token is used for "Save as shown" in export options
-    // 10th token is used for "Save cell formulas" in export options
+    
+    
 }
 
 
@@ -298,7 +298,7 @@ OUString ScAsciiOptions::WriteToString() const
 {
     OUString aOutStr;
 
-    // Field separator.
+    
     if ( bFixedLen )
         aOutStr += pStrFix;
     else if ( aFieldSeps.isEmpty() )
@@ -319,19 +319,19 @@ OUString ScAsciiOptions::WriteToString() const
         }
     }
 
-    // Text delimiter.
+    
     aOutStr += "," + OUString::number(cTextSep) + ",";
 
-    // Text encoding.
-    if ( bCharSetSystem )           // force "SYSTEM"
+    
+    if ( bCharSetSystem )           
         aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
     else
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
 
-    // Number of start row.
+    
     aOutStr += "," + OUString::number(nStartRow) + ",";
 
-    // Column info.
+    
     OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "NULL pointer in ScAsciiOptions column info" );
     for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
@@ -342,24 +342,24 @@ OUString ScAsciiOptions::WriteToString() const
                    OUString::number(pColFormat[nInfo]);
     }
 
-    // #i112025# the options string is used in macros and linked sheets,
-    // so new options must be added at the end, to remain compatible
+    
+    
 
     aOutStr += "," +
-               // Language
+               
                OUString::number(eLang) + "," +
-               // Import quoted field as text.
+               
                OUString::boolean( bQuotedFieldAsText ) + "," +
-               // Detect special numbers.
+               
                OUString::boolean( bDetectSpecialNumber );
 
-    // 9th token is used for "Save as shown" in export options
-    // 10th token is used for "Save cell formulas" in export options
+    
+    
 
     return aOutStr;
 }
 
-// static
+
 sal_Unicode ScAsciiOptions::GetWeightedFieldSep( const OUString & rFieldSeps, bool bDecodeNumbers )
 {
     bool bMergeFieldSeps = false;
@@ -373,7 +373,7 @@ sal_Unicode ScAsciiOptions::GetWeightedFieldSep( const OUString & rFieldSeps, bo
         return aFieldSeps[0];
     else
     {
-        // There can be only one separator for output. See also fdo#53449
+        
         if (aFieldSeps.indexOf(',') != -1)
             return ',';
         else if (aFieldSeps.indexOf('\t') != -1)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TitleWrapper.hxx"
@@ -105,7 +105,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
 Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return uno::makeAny( OUString() );//default title is a empty String
+    return uno::makeAny( OUString() );
 }
 
 class WrappedStackedTextProperty : public WrappedProperty
@@ -123,7 +123,7 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 {
 }
 
-}// end namespace chart
+}
 
 namespace
 {
@@ -191,7 +191,7 @@ struct StaticTitleWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -205,7 +205,7 @@ TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
         m_eTitleType(eTitleType)
 {
     ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
-    if( !getTitleObject().is() ) //#i83831# create an empty title at the model, thus references to properties can be mapped mapped correctly
+    if( !getTitleObject().is() ) 
         TitleHelper::createTitle( m_eTitleType, OUString(), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
 }
 
@@ -213,7 +213,7 @@ TitleWrapper::~TitleWrapper()
 {
 }
 
-// ____ XShape ____
+
 awt::Point SAL_CALL TitleWrapper::getPosition()
     throw (uno::RuntimeException)
 {
@@ -249,14 +249,14 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
     OSL_FAIL( "trying to set size of title" );
 }
 
-// ____ XShapeDescriptor (base of XShape) ____
+
 OUString SAL_CALL TitleWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return OUString( "com.sun.star.chart.ChartTitle" );
 }
 
-// ____ XComponent ____
+
 void SAL_CALL TitleWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -343,7 +343,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
     }
 }
 
-// WrappedPropertySet
+
 
 void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
@@ -455,7 +455,7 @@ void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPrope
         WrappedPropertySet::removePropertyChangeListener( rPropertyName, xListener );
 }
 
-//ReferenceSizePropertyProvider
+
 void TitleWrapper::updateReferenceSize()
 {
     Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
@@ -485,7 +485,7 @@ Reference< chart2::XTitle > TitleWrapper::getTitleObject()
     return TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() );
 }
 
-// WrappedPropertySet
+
 
 Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
 {
@@ -522,10 +522,10 @@ Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( TitleWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

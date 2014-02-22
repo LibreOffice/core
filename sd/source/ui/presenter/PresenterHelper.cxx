@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
+
 
 Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -71,7 +71,7 @@ Sequence<OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (voi
 
 
 
-//===== PresenterHelper =======================================================
+
 
 PresenterHelper::PresenterHelper (
     const Reference<XComponentContext>& rxContext)
@@ -89,7 +89,7 @@ PresenterHelper::~PresenterHelper (void)
 
 
 
-//----- XInitialize -----------------------------------------------------------
+
 
 void SAL_CALL PresenterHelper::initialize (const Sequence<Any>& rArguments)
     throw(Exception,RuntimeException)
@@ -100,7 +100,7 @@ void SAL_CALL PresenterHelper::initialize (const Sequence<Any>& rArguments)
 
 
 
-//----- XPaneHelper ----------------------------------------------------
+
 
 Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     const Reference<awt::XWindow>& rxParentWindow,
@@ -112,7 +112,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
 {
     ::Window* pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
 
-    // Create a new window.
+    
     ::Window* pWindow = NULL;
     if (bCreateSystemChildWindow)
     {
@@ -126,8 +126,8 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
 
     if (bEnableChildTransparentMode)
     {
-        // Make the frame window transparent and make the parent able to
-        // draw behind it.
+        
+        
         if (pParentWindow != NULL)
             pParentWindow->EnableChildTransparentMode(true);
     }
@@ -195,14 +195,14 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
 {
     (void)nRequestedCanvasFeatures;
 
-    // No shared window is given or an explicit canvas service name is
-    // specified.  Create a new canvas.
+    
+    
     ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL)
     {
         Sequence<Any> aArg (5);
 
-        // common: first any is VCL pointer to window (for VCL canvas)
+        
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
         aArg[2] = makeAny(::com::sun::star::awt::Rectangle());
@@ -478,7 +478,7 @@ void SAL_CALL PresenterHelper::captureMouse (
 {
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
-    // Capture the mouse (if not already done.)
+    
     ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL && ! pWindow->IsMouseCaptured())
     {
@@ -494,7 +494,7 @@ void SAL_CALL PresenterHelper::releaseMouse (const Reference<awt::XWindow>& rxWi
 {
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
-    // Release the mouse (if not already done.)
+    
     ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL && pWindow->IsMouseCaptured())
     {
@@ -523,6 +523,6 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
 
 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

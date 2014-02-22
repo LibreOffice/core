@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleContextBase.hxx"
@@ -39,7 +39,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+
 
 DBG_NAME(ScAccessibleContextBase)
 
@@ -62,16 +62,16 @@ ScAccessibleContextBase::~ScAccessibleContextBase(void)
 
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
-        // call dispose to inform object which have a weak reference to this object
+        
         dispose();
     }
 }
 
 void ScAccessibleContextBase::Init()
 {
-    // hold reference to make sure that the destructor is not called
+    
     uno::Reference< XAccessibleContext > xOwnContext(this);
 
     if (mxParent.is())
@@ -87,9 +87,9 @@ void ScAccessibleContextBase::Init()
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
     SolarMutexGuard aGuard;
-//  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
-    // hold reference to make sure that the destructor is not called
+
+    
     uno::Reference< XAccessibleContext > xOwnContext(this);
 
     if ( mnClientId )
@@ -110,7 +110,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     ScAccessibleContextBaseWeakImpl::disposing();
 }
 
-//=====  XInterface  =====================================================
+
 
 uno::Any SAL_CALL ScAccessibleContextBase::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
@@ -131,7 +131,7 @@ void SAL_CALL ScAccessibleContextBase::release()
     ScAccessibleContextBaseWeakImpl::release();
 }
 
-//=====  SfxListener  =====================================================
+
 
 void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -140,13 +140,13 @@ void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         if (rRef.GetId() == SFX_HINT_DYING)
         {
-            // it seems the Broadcaster is dying, since the view is dying
+            
             dispose();
         }
     }
 }
 
-//=====  XAccessible  =========================================================
+
 
 uno::Reference< XAccessibleContext> SAL_CALL
     ScAccessibleContextBase::getAccessibleContext(void)
@@ -155,7 +155,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
+
 
 sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoint )
         throw (uno::RuntimeException)
@@ -248,7 +248,7 @@ sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
     return COL_WHITE;
 }
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
@@ -279,12 +279,12 @@ sal_Int32 SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    //  Use a simple but slow solution for now.  Optimize later.
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+    
+   
+   
     sal_Int32 nIndex(-1);
 
-    //  Iterate over all the parent's children and search for this object.
+    
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -396,12 +396,12 @@ lang::Locale SAL_CALL
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    
+    
     throw IllegalAccessibleComponentStateException ();
 }
 
-    //=====  XAccessibleEventBroadcaster  =====================================
+    
 
 void SAL_CALL
        ScAccessibleContextBase::addAccessibleEventListener(
@@ -434,10 +434,10 @@ void SAL_CALL
             sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
             if ( !nListenerCount )
             {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
+                
+                
+                
+                
                 comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
                 mnClientId = 0;
             }
@@ -445,7 +445,7 @@ void SAL_CALL
     }
 }
 
-    //=====  XAccessibleEventListener  ========================================
+    
 
 void SAL_CALL ScAccessibleContextBase::disposing(
     const lang::EventObject& rSource )
@@ -462,7 +462,7 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
 {
 }
 
-//=====  XServiceInfo  ========================================================
+
 OUString SAL_CALL ScAccessibleContextBase::getImplementationName(void)
     throw (uno::RuntimeException)
 {
@@ -490,7 +490,7 @@ uno::Sequence< OUString> SAL_CALL
     return aServiceNames;
 }
 
-//=====  XTypeProvider  =======================================================
+
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
         throw (uno::RuntimeException)
@@ -510,7 +510,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theScAccessibleContextBaseImplementationId::get().getSeq();
 }
 
-//=====  internal  ============================================================
+
 
 OUString SAL_CALL
     ScAccessibleContextBase::createAccessibleDescription(void)
@@ -540,8 +540,8 @@ void ScAccessibleContextBase::ChangeName()
     aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= msName;
 
-    msName = ""; // reset the name so it will be hold again
-    getAccessibleName(); // create the new name
+    msName = ""; 
+    getAccessibleName(); 
 
     aEvent.NewValue <<= msName;
 

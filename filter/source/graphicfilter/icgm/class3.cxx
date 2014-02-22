@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <main.hxx>
 #include <outact.hxx>
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass3()
 {
@@ -42,8 +42,8 @@ void CGM::ImplDoClass3()
         case 0x02 : /*VDC Real Precision*/
         {
             nUInteger = ImplGetUI16();
-            nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
-            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
+            nI0 = ImplGetI( pElement->nIntegerPrecision );  
+            nI1 = ImplGetI( pElement->nIntegerPrecision );  
             switch( nUInteger )
             {
                 case 0 :
@@ -109,20 +109,20 @@ void CGM::ImplDoClass3()
             }
         }
         break;
-        case 0x07 : /*Line Clipping Mode */break;               // NS
-        case 0x08 : /*Marker Clipping Mode */break;             // NS
-        case 0x09 : /*Edge Clipping Mode */break;               // NS
+        case 0x07 : /*Line Clipping Mode */break;               
+        case 0x08 : /*Marker Clipping Mode */break;             
+        case 0x09 : /*Edge Clipping Mode */break;               
         case 0x0a : /*New Region*/
             mpOutAct->NewRegion();
         break;
-        case 0x0b : /*Save Primitive Context */break;           // NS
-        case 0x0c : /*Restore Primitive Context */break;        // NS
+        case 0x0b : /*Save Primitive Context */break;           
+        case 0x0c : /*Restore Primitive Context */break;        
         case 0x11 : /*Protection Region Indicator */break;
-        case 0x12 : /*Generalized Text Path Mode */break;       // NS
+        case 0x12 : /*Generalized Text Path Mode */break;       
         case 0x13 : /*Mitre Limit*/
             pElement->nMitreLimit = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
-        break;                                                                      // NS
-        case 0x14 : /*Transparent Cell Color */break;           // NS
+        break;                                                                      
+        case 0x14 : /*Transparent Cell Color */break;           
         case 0xfc : /*Text Path Alignment Modes */break;
         case 0xfd : /*Pop Transformation Stack */break;
         case 0xfe : /*Push Transformation Stack */break;

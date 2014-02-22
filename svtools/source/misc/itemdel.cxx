@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,11 +26,11 @@
 
 #include <svl/itempool.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxItemDesruptor_Impl);
 
-// -----------------------------------------------------------------------
+
 
 class SfxItemDesruptor_Impl
 {
@@ -39,7 +39,7 @@ class SfxItemDesruptor_Impl
 
 private:
     DECL_LINK( Delete, void* );
-    SfxItemDesruptor_Impl( const SfxItemDesruptor_Impl& ); // n.i.
+    SfxItemDesruptor_Impl( const SfxItemDesruptor_Impl& ); 
 
 public:
     SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt );
@@ -47,7 +47,7 @@ public:
     ~SfxItemDesruptor_Impl();
 };
 
-// ------------------------------------------------------------------------
+
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
     aLink( LINK(this, SfxItemDesruptor_Impl, Delete) )
@@ -60,25 +60,25 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
 
 void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
 {
-    // process in Idle
+    
     GetpApp()->InsertIdleHdl( aLink, 1 );
 }
 
-// ------------------------------------------------------------------------
+
 SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 {
     DBG_DTOR(SfxItemDesruptor_Impl, 0);
 
-    // remove from Idle-Handler
+    
     GetpApp()->RemoveIdleHdl( aLink );
 
-    // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
+    
     pItem->SetRefCount( 0 );
 
     delete pItem;
 }
 
-// ------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
     {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}

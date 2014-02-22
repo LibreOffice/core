@@ -66,8 +66,8 @@ namespace drawinglayer
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -98,17 +98,17 @@ namespace drawinglayer
 
             return getBuffered2DDecomposition();
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
-// tooling
+
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        // convert helper stl vector of primitives to Primitive2DSequence
+        
         Primitive2DSequence Primitive2DVectorToPrimitive2DSequence(const Primitive2DVector& rSource, bool bInvert)
         {
             const sal_uInt32 nSize(rSource.size());
@@ -121,32 +121,32 @@ namespace drawinglayer
                 aRetval[bInvert ? nSize - 1 - a : a] = rSource[a];
             }
 
-            // all entries taken over to Uno References as owners. To avoid
-            // errors with users of this mechanism to delete pointers to BasePrimitive2D
-            // itself, clear given vector
+            
+            
+            
             const_cast< Primitive2DVector& >(rSource).clear();
 
             return aRetval;
         }
 
-        // get B2DRange from a given Primitive2DReference
+        
         basegfx::B2DRange getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation)
         {
             basegfx::B2DRange aRetval;
 
             if(rCandidate.is())
             {
-                // try to get C++ implementation base
+                
                 const BasePrimitive2D* pCandidate(dynamic_cast< BasePrimitive2D* >(rCandidate.get()));
 
                 if(pCandidate)
                 {
-                    // use it if possible
+                    
                     aRetval.expand(pCandidate->getB2DRange(aViewInformation));
                 }
                 else
                 {
-                    // use UNO API call instead
+                    
                     const uno::Sequence< beans::PropertyValue >& rViewParameters(aViewInformation.getViewInformationSequence());
                     aRetval.expand(basegfx::unotools::b2DRectangleFromRealRectangle2D(rCandidate->getRange(rViewParameters)));
                 }
@@ -155,7 +155,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // get B2DRange from a given Primitive2DSequence
+        
         basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation)
         {
             basegfx::B2DRange aRetval;
@@ -236,7 +236,7 @@ namespace drawinglayer
             return true;
         }
 
-        // concatenate sequence
+        
         void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource)
         {
             if(rSource.hasElements())
@@ -270,7 +270,7 @@ namespace drawinglayer
             }
         }
 
-        // concatenate single Primitive2D
+        
         void appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource)
         {
             if(rSource.is())
@@ -281,7 +281,7 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

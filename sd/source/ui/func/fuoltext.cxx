@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuoltext.hxx"
@@ -61,9 +61,9 @@ static sal_uInt16 SidArray[] = {
                 SID_OUTLINE_DOWN,
                 SID_OUTLINE_LEFT,
                 SID_OUTLINE_RIGHT,
-                //SID_OUTLINE_FORMAT,
+                
                 SID_OUTLINE_COLLAPSE_ALL,
-                //SID_OUTLINE_BULLET,
+                
                 SID_OUTLINE_COLLAPSE,
                 SID_OUTLINE_EXPAND_ALL,
                 SID_OUTLINE_EXPAND,
@@ -105,7 +105,7 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        // Now the attributs of the current text position can be different
+        
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
@@ -136,7 +136,7 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        // Now the attributs of the current text position can be different
+        
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
@@ -157,13 +157,13 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if ( rMEvt.IsMod1() )
                 {
-                    // open in new frame
+                    
                     pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aBrowseItem, &aReferer, 0L);
                 }
                 else
                 {
-                    // open in current frame
+                    
                     SfxFrameItem aFrameItem( SID_DOCFRAME, pFrame );
                     pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
@@ -212,16 +212,16 @@ sal_Bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 {
-    // Attributes at the current text position may have changed.
+    
     mpViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
 
     bool bUpdatePreview = true;
     switch (rEvent.GetKeyCode().GetCode())
     {
-        // When just the cursor has been moved the preview only changes when
-        // it moved to entries of another page.  To prevent unnecessary
-        // updates we check this here.  This is an early rejection test, so
-        // missing a key is not a problem.
+        
+        
+        
+        
         case KEY_UP:
         case KEY_DOWN:
         case KEY_LEFT:
@@ -294,6 +294,6 @@ void FuOutlineText::DoPasteUnformatted()
 
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

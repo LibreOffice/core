@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableFieldDescWin.hxx"
@@ -30,10 +30,10 @@
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25
-#define CONTROL_SPACING_X   18  // 6
+#define CONTROL_SPACING_X   18  
 #define CONTROL_SPACING_Y   5
 #define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
+#define CONTROL_WIDTH_1     140 
 #define CONTROL_WIDTH_3     250
 #define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
 #define DETAILS_OPT_PAGE_WIDTH          (CONTROL_WIDTH_1 + CONTROL_SPACING_X + CONTROL_WIDTH_4 + 50)
@@ -44,17 +44,17 @@
 #define DETAILS_OPT_HELP_HEIGHT         100
 
 using namespace dbaui;
-// class OTableFieldDescWin
+
 OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     : TabPage(pParent, WB_3DLOOK)
     , m_eChildFocus(NONE)
 {
-    // Header
-    m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
+    
+    m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); 
     m_pHeader->SetText( OUString(ModuleRes(STR_TAB_PROPERTIES)) );
     m_pHeader->Show();
 
-    // HelpBar
+    
     m_pHelpBar = new OTableDesignHelpBar( this );
     m_pHelpBar->SetHelpId(HID_TAB_DESIGN_HELP_TEXT_FRAME);
     m_pHelpBar->Show();
@@ -66,7 +66,7 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
 
 OTableFieldDescWin::~OTableFieldDescWin()
 {
-    // Children zerstoeren
+    
     m_pHelpBar->Hide();
     getGenPage()->Hide();
     m_pHeader->Hide();
@@ -108,13 +108,13 @@ void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 
 void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 {
-    // 3D-Linie am oberen Fensterrand
+    
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     SetLineColor( rStyleSettings.GetLightColor() );
     DrawLine( Point(0,0), Point(GetSizePixel().Width(),0) );
 
-    // 3D-Linie zum Abtrennen des Headers
+    
     DrawLine( Point(3, DETAILS_HEADER_HEIGHT), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT) );
     SetLineColor( rStyleSettings.GetShadowColor() );
     DrawLine( Point(3, DETAILS_HEADER_HEIGHT-1), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT-1) );
@@ -122,56 +122,56 @@ void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 
 void OTableFieldDescWin::Resize()
 {
-    // Abmessungen parent window
+    
     Size aOutputSize( GetOutputSizePixel() );
     long nOutputWidth = aOutputSize.Width();
     long nOutputHeight = aOutputSize.Height();
 
-    // da die GenPage scrollen kann, ich selber aber nicht, positioniere ich das HelpFenster, wenn ich zu schmal werde,
-    // _unter_ der Genpage, nicht rechts daneben. Zuvor versuche ich aber noch, es etwas schmaler zu machen
+    
+    
 
     long nHelpX, nHelpY;
     long nHelpWidth, nHelpHeight;
     long nPageWidth, nPageHeight;
 
-    // passen beide nebeneinander (Rand + Page + Rand + Help) ?
+    
     if (STANDARD_MARGIN + DETAILS_OPT_PAGE_WIDTH + STANDARD_MARGIN + DETAILS_MIN_HELP_WIDTH <= nOutputWidth)
-    {   // ja -> dann ist die Frage, ob man der Hilfe ihre Optimal-Breite geben kann
+    {   
         nHelpWidth = DETAILS_OPT_HELP_WIDTH;
         nPageWidth = nOutputWidth - nHelpWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         if (nPageWidth < DETAILS_OPT_PAGE_WIDTH)
-        {   // dann doch lieber die Hilfe von ihrer optimalen in Richtung auf die minimale Groesse
+        {   
             long nTransfer = DETAILS_OPT_PAGE_WIDTH - nPageWidth;
             nPageWidth += nTransfer;
             nHelpWidth -= nTransfer;
         }
         nHelpX = nOutputWidth - nHelpWidth;
-        // die Hoehen sind dann einfach ...
+        
         nHelpY = DETAILS_HEADER_HEIGHT + 1;
         nHelpHeight = nOutputHeight - nHelpY;
         nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
     }
     else
-    {   // nebeneinander geht nicht, also untereinander (Rand + Header + Page + Help)
+    {   
         if (STANDARD_MARGIN + DETAILS_HEADER_HEIGHT + DETAILS_OPT_PAGE_HEIGHT + DETAILS_MIN_HELP_HEIGHT <= nOutputHeight)
-        {   // es reicht zumindest, um beide untereinander (Page optimal, Help minimal) unterzubringen
+        {   
             nHelpHeight = DETAILS_OPT_HELP_HEIGHT;
             nPageHeight = nOutputHeight - nHelpHeight - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
             if (nPageHeight < DETAILS_OPT_PAGE_HEIGHT)
-            {   // wie oben : Page optimal, Hilfe soviel wie eben bleibt (das ist groesser/gleich ihrem Minimum)
+            {   
                 long nTransfer = DETAILS_OPT_PAGE_HEIGHT - nPageHeight;
                 nPageHeight += nTransfer;
                 nHelpHeight -= nTransfer;
             }
             nHelpY = nOutputHeight - nHelpHeight;
-            // und ueber die ganze Breite
-            nHelpX = 0;                 // ohne Margin, da das HelpCtrl einen eigenen hat
-            nHelpWidth = nOutputWidth;  // dito
+            
+            nHelpX = 0;                 
+            nHelpWidth = nOutputWidth;  
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         }
         else
-        {   // dummerweise reicht es nicht mal, um Page optimal und Help minimal zu zeigen
-            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // -> kein Help-Fenster
+        {   
+            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; 
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
             nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
         }

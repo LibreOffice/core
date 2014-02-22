@@ -76,11 +76,11 @@ using ::rtl::OString;
 OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     throw( RuntimeException )
 {
-    // type name to return
+    
     OUString sOriginalTypeName;
     OUString sTypeName;
     OUString sURL;
-    // stream of the document to be detected
+    
     Reference< XInputStream > xInStream;
     for ( sal_Int32 i = 0 ; i < aArguments.getLength(); i++)
     {
@@ -95,7 +95,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 
     if (!xInStream.is())
     {
-        // open the stream if it was not suplied by the framework
+        
         Reference< XSimpleFileAccess3 > xSFI(SimpleFileAccess::create(mxContext));
         if (sURL.getLength() > 0)
         {
@@ -108,29 +108,29 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
                 return sTypeName;
             }
         } else {
-            // failed to access UCB
+            
             return sTypeName;
         }
     }
 
-    // flatxml starts with an office:document element. this element
-    // conatains a clas="..." attribut by which we can deduct the
-    // type of document that is to be loaded
+    
+    
+    
     //
-    // WARNING:
-    // parsing the plain text of the document is an easy way to do this
-    // but not the purest solution, since namespaces and other xml details
-    // may lead to another syntactic expression of the same document.
-    // this example works for the way the office serializes it's XML stream
-    // but might need extension for other data sources...
+    
+    
+    
+    
+    
+    
     static OString aDocToken("office:document");
-    // static OString aClassToken("office:class=\"");
+    
     static OString aMimeTypeToken("office:mimetype=\"");
 
     sal_Int32 nHeadSize = 4096;
     Sequence< sal_Int8 > aHeadData(nHeadSize);
 
-    // rewind seekable stream
+    
     Reference< XSeekable > xSeek(xInStream, UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
@@ -139,16 +139,16 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 
     OString aHead = OString((const sal_Char *)aHeadData.getConstArray(), bytestRead).toAsciiLowerCase();
 
-    // check for document element of flatxml format
+    
     if (aHead.indexOf(aDocToken) >= 0)
     {
-        // read document class
+        
         sal_Int32 n = aHead.indexOf(aMimeTypeToken);
         if (n >= 0)
         {
             n += aMimeTypeToken.getLength();
             OString aMimeType = aHead.copy(n, aHead.indexOf('\"', n) - n);
-            // return type for class found
+            
             if      (aMimeType.equals("application/x-vnd.oasis.opendocument.text") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.text"))
                 sTypeName = "devguide_FlatXMLType_Cpp_writer";
@@ -176,7 +176,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 }
 
 
-// XInitialization
+
 void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
 {
@@ -229,7 +229,7 @@ Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< X
     return (cppu::OWeakObject*) new FilterDetect( rContext );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL FilterDetect::getImplementationName(  )
     throw (RuntimeException)
 {

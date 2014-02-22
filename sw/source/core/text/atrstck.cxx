@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <atrhndl.hxx>
@@ -72,61 +72,61 @@
 const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
                      static_cast<sal_uInt16>(RES_CHRATR_BEGIN) + 1 ] =
 {
-     0, //                                       //  0
-     1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
-     0, // RES_CHRATR_CHARSETCOLOR,              //  2
-     2, // RES_CHRATR_COLOR,                     //  3
-     3, // RES_CHRATR_CONTOUR,                   //  4
-     4, // RES_CHRATR_CROSSEDOUT,                //  5
-     5, // RES_CHRATR_ESCAPEMENT,                //  6
-     6, // RES_CHRATR_FONT,                      //  7
-     7, // RES_CHRATR_FONTSIZE,                  //  8
-     8, // RES_CHRATR_KERNING,                   //  9
-     9, // RES_CHRATR_LANGUAGE,                  // 10
-    10, // RES_CHRATR_POSTURE,                   // 11
-     0, // RES_CHRATR_PROPORTIONALFONTSIZE,      // 12
-    11, // RES_CHRATR_SHADOWED,                  // 13
-    12, // RES_CHRATR_UNDERLINE,                 // 14
-    13, // RES_CHRATR_WEIGHT,                    // 15
-    14, // RES_CHRATR_WORDLINEMODE,              // 16
-    15, // RES_CHRATR_AUTOKERN,                  // 17
-    16, // RES_CHRATR_BLINK,                     // 18
-    17, // RES_CHRATR_NOHYPHEN,                  // 19
-     0, // RES_CHRATR_NOLINEBREAK,               // 20
-    18, // RES_CHRATR_BACKGROUND,                // 21
-    19, // RES_CHRATR_CJK_FONT,                  // 22
-    20, // RES_CHRATR_CJK_FONTSIZE,              // 23
-    21, // RES_CHRATR_CJK_LANGUAGE,              // 24
-    22, // RES_CHRATR_CJK_POSTURE,               // 25
-    23, // RES_CHRATR_CJK_WEIGHT,                // 26
-    24, // RES_CHRATR_CTL_FONT,                  // 27
-    25, // RES_CHRATR_CTL_FONTSIZE,              // 28
-    26, // RES_CHRATR_CTL_LANGUAGE,              // 29
-    27, // RES_CHRATR_CTL_POSTURE,               // 30
-    28, // RES_CHRATR_CTL_WEIGHT,                // 31
-    29, // RES_CHRATR_ROTATE,                    // 32
-    30, // RES_CHRATR_EMPHASIS_MARK,             // 33
-    31, // RES_CHRATR_TWO_LINES,                 // 34
-    32, // RES_CHRATR_SCALEW,                    // 35
-    33, // RES_CHRATR_RELIEF,                    // 36
-    34, // RES_CHRATR_HIDDEN,                    // 37
-    35, // RES_CHRATR_OVERLINE,                  // 38
-     0, // RES_CHRATR_RSID,                      // 39
-    36, // RES_CHRATR_BOX,                       // 40
-    37, // RES_CHRATR_SHADOW,                    // 41
-    38, // RES_CHRATR_HIGHLIGHT,                 // 42
-     0, // RES_CHRATR_DUMMY2,                    // 43
-     0, // RES_CHRATR_DUMMY3,                    // 44
-    39, // RES_TXTATR_REFMARK,                   // 45
-    40, // RES_TXTATR_TOXMARK,                   // 46
-    41, // RES_TXTATR_META,                      // 47
-    41, // RES_TXTATR_METAFIELD,                 // 48
-     0, // RES_TXTATR_AUTOFMT,                   // 49
-     0, // RES_TXTATR_INETFMT                    // 50
-     0, // RES_TXTATR_CHARFMT,                   // 51
-    42, // RES_TXTATR_CJK_RUBY,                  // 52
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 53
-    43, // RES_TXTATR_INPUTFIELD                 // 54
+     0, 
+     1, 
+     0, 
+     2, 
+     3, 
+     4, 
+     5, 
+     6, 
+     7, 
+     8, 
+     9, 
+    10, 
+     0, 
+    11, 
+    12, 
+    13, 
+    14, 
+    15, 
+    16, 
+    17, 
+     0, 
+    18, 
+    19, 
+    20, 
+    21, 
+    22, 
+    23, 
+    24, 
+    25, 
+    26, 
+    27, 
+    28, 
+    29, 
+    30, 
+    31, 
+    32, 
+    33, 
+    34, 
+    35, 
+     0, 
+    36, 
+    37, 
+    38, 
+     0, 
+     0, 
+    39, 
+    40, 
+    41, 
+    41, 
+     0, 
+     0, 
+     0, 
+    42, 
+     0, 
+    43, 
 };
 
 /*************************************************************************
@@ -147,7 +147,7 @@ const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
     }
     else
     {
-        // Get the attributes from the template
+        
         SwCharFmt* pFmt = RES_TXTATR_INETFMT == rAttr.Which() ?
                         ((SwFmtINetFmt&)rAttr).GetTxtINetFmt()->GetCharFmt() :
                         ((SwFmtCharFmt&)rAttr).GetCharFmt();
@@ -221,10 +221,10 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
          RES_CHRATR_COLOR != rItem.Which() )
         return false;
 
-    // #i15455#
-    // 1. case:
-    // We do not want to show visited links:
-    // (printing, pdf export, page preview)
+    
+    
+    
+    
     //
     if ( pShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
          pShell->GetViewOptions()->IsPDFExport() ||
@@ -234,7 +234,7 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
         {
             if ( pColor )
             {
-                // take color from character format 'unvisited link'
+                
                 SwTxtINetFmt& rInetAttr( const_cast<SwTxtINetFmt&>(
                     static_cast<const SwTxtINetFmt&>(rAttr)) );
                 rInetAttr.SetVisited( false );
@@ -251,9 +251,9 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
     }
 
     //
-    // 2. case:
-    // We do not want to apply the color set in the hyperlink
-    // attribute, instead we take the colors from the view options:
+    
+    
+    
     //
     if ( pShell->GetWin() &&
         (
@@ -266,12 +266,12 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
         {
             if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
             {
-                // take color from view option 'visited link color'
+                
                 *pColor = SwViewOption::GetVisitedLinksColor();
             }
             else
             {
-                // take color from view option 'unvisited link color'
+                
                 *pColor = SwViewOption::GetLinksColor();
             }
         }
@@ -297,27 +297,27 @@ inline SwAttrHandler::SwAttrStack::SwAttrStack()
 
 void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const sal_uInt16 nPos )
 {
-    // do we still have enough space?
+    
     if ( nCount >= nSize )
     {
-         // we are still in our initial array
+         
         if ( INITIAL_NUM_ATTR == nSize )
         {
             nSize += STACK_INCREMENT;
             pArray = new SwTxtAttr*[ nSize ];
-            // copy from pInitArray to new Array
+            
             memcpy( pArray, pInitialArray,
                     INITIAL_NUM_ATTR * sizeof(SwTxtAttr*)
                     );
         }
-        // we are in new memory
+        
         else
         {
             nSize += STACK_INCREMENT;
             SwTxtAttr** pTmpArray = new SwTxtAttr*[ nSize ];
-            // copy from pArray to new Array
+            
             memcpy( pTmpArray, pArray, nCount * sizeof(SwTxtAttr*) );
-            // free old array
+            
             delete [] pArray;
             pArray = pTmpArray;
         }
@@ -366,7 +366,7 @@ const SwTxtAttr* SwAttrHandler::SwAttrStack::Top() const
 sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
 {
     if ( ! nCount )
-        // empty stack
+        
         return USHRT_MAX;
 
     for ( sal_uInt16 nIdx = nCount; nIdx > 0; )
@@ -375,7 +375,7 @@ sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
             return nIdx;
     }
 
-    // element not found
+    
     return USHRT_MAX;
 }
 
@@ -413,14 +413,14 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
                           const SwViewShell* pSh,
                           SwFont& rFnt, bool bVL )
 {
-    // initialize default array
+    
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 
     mpIDocumentSettingAccess = &rIDocumentSettingAcces;
     mpShell = pSh;
 
-    // do we have to apply additional paragraph attributes?
+    
     bVertLayout = bVL;
 
     if ( pAS && pAS->Count() )
@@ -444,8 +444,8 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
         }
     }
 
-    // It is possible, that Init is called more than once, e.g., in a
-    // SwTxtFrm::FormatOnceMore situation.
+    
+    
     delete pFnt;
     pFnt = new SwFont( rFnt );
 }
@@ -462,8 +462,8 @@ void SwAttrHandler::Reset( )
 
 void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
-    // these special attributes in fact represent a collection of attributes
-    // they have to be pushed to each stack they belong to
+    
+    
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
          RES_TXTATR_CHARFMT == rAttr.Which() ||
          RES_TXTATR_AUTOFMT == rAttr.Which() )
@@ -478,10 +478,10 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
             if ( bRet )
             {
-                // we push rAttr onto the appropriate stack
+                
                 if ( Push( rAttr, *pItem ) )
                 {
-                    // we let pItem change rFnt
+                    
                     Color aColor;
                     if ( lcl_ChgHyperLinkColor( rAttr, *pItem, mpShell, &aColor ) )
                     {
@@ -494,12 +494,12 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
             }
         }
     }
-    // this is the usual case, we have a basic attribute, push it onto the
-    // stack and change the font
+    
+    
     else
     {
         if ( Push( rAttr, rAttr.GetAttr() ) )
-            // we let pItem change rFnt
+            
             FontChg( rAttr.GetAttr(), rFnt, true );
     }
 }
@@ -513,14 +513,14 @@ bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
     OSL_ENSURE( rItem.Which() < RES_TXTATR_WITHEND_END,
             "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
-    // robust
+    
     if ( RES_TXTATR_WITHEND_END <= rItem.Which() )
         return false;
 
     const sal_uInt16 nStack = StackPos[ rItem.Which() ];
 
-    // attributes originating from redlining have highest priority
-    // second priority are hyperlink attributes, which have a color replacement
+    
+    
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
     if ( !pTopAttr
          || rAttr.IsPriorityAttr()
@@ -544,10 +544,10 @@ bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
     if ( RES_TXTATR_WITHEND_END <= rAttr.Which() )
-        return; // robust
+        return; 
 
-    // these special attributes in fact represent a collection of attributes
-    // they have to be removed from each stack they belong to
+    
+    
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
          RES_TXTATR_CHARFMT == rAttr.Which() ||
          RES_TXTATR_AUTOFMT == rAttr.Which() )
@@ -561,22 +561,22 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
             bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
             if ( bRet )
             {
-                // we remove rAttr from the appropriate stack
+                
                 sal_uInt16 nStackPos = StackPos[ i ];
                 aAttrStack[ nStackPos ].Remove( rAttr );
-                // reset font according to attribute on top of stack
-                // or default value
+                
+                
                 ActivateTop( rFnt, i );
             }
         }
     }
-    // this is the usual case, we have a basic attribute, remove it from the
-    // stack and reset the font
+    
+    
     else
     {
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
-        // reset font according to attribute on top of stack
-        // or default value
+        
+        
         ActivateTop( rFnt, rAttr.Which() );
     }
 }
@@ -610,7 +610,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
     if ( pTopAt )
     {
-        // check if top attribute is collection of attributes
+        
         if ( RES_TXTATR_INETFMT == pTopAt->Which() ||
              RES_TXTATR_CHARFMT == pTopAt->Which() ||
              RES_TXTATR_AUTOFMT == pTopAt->Which() )
@@ -632,7 +632,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
             FontChg( pTopAt->GetAttr(), rFnt, false );
     }
 
-    // default value has to be set, we only have default values for char attribs
+    
     else if ( nStackPos < NUM_DEFAULT_VALUES )
         FontChg( *pDefaultArray[ nStackPos ], rFnt, false );
     else if ( RES_TXTATR_REFMARK == nAttr )
@@ -645,8 +645,8 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     }
     else if ( RES_TXTATR_CJK_RUBY == nAttr )
     {
-        // ruby stack has no more attributes
-        // check, if an rotation attribute has to be applied
+        
+        
         sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
         bool bTwoLineAct = false;
         const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
@@ -663,7 +663,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         if ( bTwoLineAct )
             return;
 
-        // eventually, an rotate attribute has to be activated
+        
         sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
         const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
@@ -861,10 +861,10 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             break;
         case RES_CHRATR_ROTATE :
         {
-            // rotate attribute is applied, when:
-            // 1. ruby stack is empty and
-            // 2. top of two line stack ( or default attribute )is an
-            //    deactivated two line attribute
+            
+            
+            
+            
             const bool bRuby =
                 0 != aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].Count();
 
@@ -895,17 +895,17 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             bool bRuby = 0 !=
                     aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].Count();
 
-            // two line is activated, if
-            // 1. no ruby attribute is set and
-            // 2. attribute is active
+            
+            
+            
             if ( !bRuby && ((SvxTwoLinesItem&)rItem).GetValue() )
             {
                 rFnt.SetVertical( 0, bVertLayout );
                 break;
             }
 
-            // a deactivating two line attribute is on top of stack,
-            // check if rotate attribute has to be enabled
+            
+            
             if ( bRuby )
                 break;
 
@@ -956,7 +956,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
     }
 }
 
-// Takes the default font and calculated the ascent and height
+
 void SwAttrHandler::GetDefaultAscentAndHeight( SwViewShell* pShell, OutputDevice& rOut,
                                                sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -112,7 +112,7 @@ public:
     virtual ~INetMessageDecode64Stream_Impl(void);
 };
 
-// INetIStream
+
 
 INetIStream::INetIStream()
 {
@@ -127,7 +127,7 @@ int INetIStream::Read(sal_Char* pData, sal_uIntPtr nSize)
     return GetData(pData, nSize);
 }
 
-// INetOStream
+
 
 INetOStream::INetOStream()
 {
@@ -142,7 +142,7 @@ int INetOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
     return PutData(pData, nSize);
 }
 
-// INetMessageIStream
+
 
 INetMessageIStream::INetMessageIStream(sal_uIntPtr nBufferSize)
     : pSourceMsg       (NULL),
@@ -172,39 +172,39 @@ int INetMessageIStream::GetData(sal_Char* pData, sal_uIntPtr nSize)
 
     while (pWBuf < pWEnd)
     {
-        // Caller's buffer not yet filled.
+        
         sal_uIntPtr n = pRead - pWrite;
         if (n > 0)
         {
-            // Bytes still in buffer.
+            
             sal_uIntPtr m = pWEnd - pWBuf;
             if (m < n) n = m;
             for (sal_uIntPtr i = 0; i < n; i++) *pWBuf++ = *pWrite++;
         }
         else
         {
-            // Buffer empty. Reset to <Begin-of-Buffer>.
+            
             pRead = pWrite = pBuffer;
 
-            // Read next message line.
+            
             int nRead = GetMsgLine(pBuffer, nBufSiz);
             if (nRead > 0)
             {
-                // Set read pointer.
+                
                 pRead = pBuffer + nRead;
             }
             else
             {
                 if (!bHeaderGenerated)
                 {
-                    // Header generated. Insert empty line.
+                    
                     bHeaderGenerated = true;
                     *pRead++ = '\r';
                     *pRead++ = '\n';
                 }
                 else
                 {
-                    // Body generated.
+                    
                     return (pWBuf - pData);
                 }
             }
@@ -226,14 +226,14 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 
         if (pMsgBuffer->Tell() == 0)
         {
-            // Insert formatted header into buffer.
+            
             n = pSourceMsg->GetHeaderCount();
             for (i = 0; i < n; i++)
             {
                 INetMessageHeader aHeader (pSourceMsg->GetHeaderField(i));
                 if (aHeader.GetValue().getLength())
                 {
-                    // NYI: Folding long lines.
+                    
                     pMsgBuffer->WriteCharPtr( aHeader.GetName().getStr() );
                     pMsgBuffer->WriteCharPtr( ": " );
                     pMsgBuffer->WriteCharPtr( aHeader.GetValue().getStr() );
@@ -248,13 +248,13 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
         n = pMsgRead - pMsgWrite;
         if (n > 0)
         {
-            // Move to caller.
+            
             if (nSize < n) n = nSize;
             for (i = 0; i < n; i++) *pWBuf++ = *pMsgWrite++;
         }
         else
         {
-            // Reset buffer.
+            
             pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
         }
     }
@@ -272,7 +272,7 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
     return (pWBuf - pData);
 }
 
-// INetMessageOStream
+
 
 INetMessageOStream::INetMessageOStream(void)
     : pTargetMsg    (NULL),
@@ -299,7 +299,7 @@ INetMessageOStream::~INetMessageOStream(void)
     }
 }
 
-/// Simple Field Parsing (RFC822, Appendix B)
+
 int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
 {
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -320,7 +320,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
                 if ((pData < pStop) && ((*pData == '\r') || (*pData == '\n')))
                     pData++;
 
-                // Emit any buffered last header field.
+                
                 if (pMsgBuffer->Tell() > 0)
                 {
                     pMsgBuffer->WriteChar( '\0' );
@@ -329,47 +329,47 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
                     if (status != INETSTREAM_STATUS_OK) return status;
                 }
 
-                // Reset to begin.
+                
                 eOState = INETMSG_EOL_BEGIN;
                 pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
 
-                // Mark header parsed.
+                
                 bHeaderParsed = true;
             }
             else if ((*pData == ' ') || (*pData == '\t'))
             {
-                // Continuation line. Unfold multi-line field-body.
+                
                 pMsgBuffer->WriteChar( ' ' );
                 pData++;
             }
             else
             {
-                // Begin of new header field.
+                
                 if (pMsgBuffer->Tell() > 0)
                 {
-                    // Emit buffered header field now.
+                    
                     pMsgBuffer->WriteChar( '\0' );
                     int status = PutMsgLine((const sal_Char*) pMsgBuffer->GetData(),
                                              pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
                 }
 
-                // Reset to begin of buffer.
+                
                 pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
 
-                // Insert current character into buffer.
+                
                 pMsgBuffer->WriteChar( *pData++ );
             }
 
-            // Search for next line break character.
+            
             if (!bHeaderParsed) eOState = INETMSG_EOL_SCR;
         }
         else if (eOState == INETMSG_EOL_FCR)
         {
-            // Skip line break character.
+            
             pData++;
 
-            // Mark begin of line.
+            
             eOState = INETMSG_EOL_BEGIN;
         }
         else if ((*pData == '\r') || (*pData == '\n'))
@@ -379,23 +379,23 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
         }
         else if (ascii_isWhitespace(*pData & 0x7f))
         {
-            // Any <LWS> is folded into a single <SP> character.
+            
             sal_Char c = *((const sal_Char*) pMsgBuffer->GetData() + pMsgBuffer->Tell() - 1);
             if (!ascii_isWhitespace(c & 0x7f)) pMsgBuffer->WriteChar( ' ' );
 
-            // Skip over this <LWS> character.
+            
             pData++;
         }
         else
         {
-            // Any other character is inserted into line buffer.
+            
             pMsgBuffer->WriteChar( *pData++ );
         }
     }
 
     if (bHeaderParsed && (pData < pStop))
     {
-        // Put message body down-stream.
+        
         return PutMsgLine(pData, (pStop - pData));
     }
 
@@ -404,10 +404,10 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
 
 int INetMessageOStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
 {
-    // Check for message container.
+    
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
-    // Check for header or body.
+    
     if (!IsHeaderParsed())
     {
         OString aField(pData);
@@ -438,7 +438,7 @@ int INetMessageOStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
     return INETSTREAM_STATUS_OK;
 }
 
-// INetMessageIOStream
+
 
 INetMessageIOStream::INetMessageIOStream(sal_uIntPtr nBufferSize)
     : INetMessageIStream (nBufferSize),
@@ -450,7 +450,7 @@ INetMessageIOStream::~INetMessageIOStream(void)
 {
 }
 
-// INetMessageEncodeQPStream_Impl
+
 
 static const sal_Char hex2pr[16] = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -492,20 +492,20 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
     sal_Char* pWBuf = pData;
     while (pWBuf < (pData + nSize))
     {
-        // Caller's buffer not yet filled.
+        
         if ((pMsgRead - pMsgWrite) > 0)
         {
-            // Bytes still in message buffer.
+            
             if ((eState != INETMSG_EOL_BEGIN) &&
                 ((pTokRead - pTokBuffer) < 72))
             {
-                // Token buffer not yet filled.
+                
                 if (eState == INETMSG_EOL_FCR)
                 {
                     eState = INETMSG_EOL_BEGIN;
                     if (*pMsgWrite != '\n')
                     {
-                        // Convert orphant <CR> into <CR><LF> sequence.
+                        
                         *pTokRead++ = '\n';
                     }
                     *pTokRead++ = *pMsgWrite++;
@@ -517,10 +517,10 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                 }
                 else if (*pMsgWrite == '\r')
                 {
-                    // Found <CR>.
+                    
                     if (eState == INETMSG_EOL_FSP)
                     {
-                        // Encode last (trailing space) character.
+                        
                         sal_uInt8 c = (sal_uInt8)(*(--pTokRead));
                         *pTokRead++ = '=';
                         *pTokRead++ = hex2pr[((c & 0xf0) >> 4)];
@@ -531,10 +531,10 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                 }
                 else if (*pMsgWrite == '\n')
                 {
-                    // Found <LF> only.
+                    
                     if (eState == INETMSG_EOL_FSP)
                     {
-                        // Encode last (trailing space) character.
+                        
                         sal_uInt8 c = (sal_uInt8)(*(--pTokRead));
                         *pTokRead++ = '=';
                         *pTokRead++ = hex2pr[((c & 0xf0) >> 4)];
@@ -542,13 +542,13 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                     }
                     eState = INETMSG_EOL_BEGIN;
 
-                    // Convert orphant <LF> into <CR><LF> sequence.
+                    
                     *pTokRead++ = '\r';
                     *pTokRead++ = *pMsgWrite++;
                 }
                 else if (*pMsgWrite == '=')
                 {
-                    // Escape character itself MUST be encoded, of course.
+                    
                     sal_uInt8 c = (sal_uInt8)(*pMsgWrite++);
                     *pTokRead++ = '=';
                     *pTokRead++ = hex2pr[((c & 0xf0) >> 4)];
@@ -568,7 +568,7 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                 }
                 else
                 {
-                    // Encode any other character.
+                    
                     sal_uInt8 c = (sal_uInt8)(*pMsgWrite++);
                     *pTokRead++ = '=';
                     *pTokRead++ = hex2pr[((c & 0xf0) >> 4)];
@@ -579,10 +579,10 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
             }
             else
             {
-                // Check for maximum line length.
+                
                 if (eState != INETMSG_EOL_BEGIN)
                 {
-                    // Insert soft line break.
+                    
                     *pTokRead++ = '=';
                     *pTokRead++ = '\r';
                     *pTokRead++ = '\n';
@@ -590,15 +590,15 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                     eState = INETMSG_EOL_BEGIN;
                 }
 
-                // Copy to caller's buffer.
+                
                 if ((pTokRead - pTokWrite) > 0)
                 {
-                    // Bytes still in token buffer.
+                    
                     *pWBuf++ = *pTokWrite++;
                 }
                 else
                 {
-                    // Token buffer empty. Reset to <Begin-of-Buffer>.
+                    
                     pTokRead = pTokWrite = pTokBuffer;
                     eState = INETMSG_EOL_SCR;
                 }
@@ -606,22 +606,22 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
         }
         else
         {
-            // Message buffer empty. Reset to <Begin-of-Buffer>.
+            
             pMsgRead = pMsgWrite = pMsgBuffer;
 
-            // Read next message block.
+            
             sal_uIntPtr nRead = pMsgStrm->Read(pMsgBuffer, nMsgBufSiz);
             if (nRead > 0)
             {
-                // Set read pointer.
+                
                 pMsgRead = (pMsgBuffer + nRead);
             }
             else
             {
-                // Nothing more ro read.
+                
                 if (!bDone)
                 {
-                    // Append final <CR><LF> and mark we're done.
+                    
                     *pTokRead++ = '\r';
                     *pTokRead++ = '\n';
 
@@ -629,18 +629,18 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                 }
                 else
                 {
-                    // Already done all encoding.
+                    
                     if ((pTokRead - pTokWrite) > 0)
                     {
-                        // Bytes still in token buffer.
+                        
                         *pWBuf++ = *pTokWrite++;
                     }
                     else
                     {
-                        // Token buffer empty. Reset to <Begin-of-Buffer>.
+                        
                         pTokRead = pTokWrite = pTokBuffer;
 
-                        // Return.
+                        
                         return (pWBuf - pData);
                     }
                 }
@@ -650,7 +650,7 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
     return (pWBuf - pData);
 }
 
-// INetMessageDecodeQPStream_Impl
+
 
 static const sal_uInt8 pr2hex[128] = {
     0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10,
@@ -708,27 +708,27 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
             {
                 if ((*pTokBuffer == '\r') || (*pTokBuffer == '\n'))
                 {
-                    // Soft line break (=<CR><LF>). Emit buffer now.
+                    
                     eState = INETMSG_EOL_BEGIN;
                 }
                 else
                 {
-                    // Decode token.
+                    
                     pMsgBuffer->WriteUChar( sal_uInt8 (
                         (pr2hex[(int)(pTokBuffer[0] & 0x7f)] << 4) |
                         (pr2hex[(int)(pTokBuffer[1] & 0x7f)] & 15)   ) );
 
-                    // Search for next <CR>.
+                    
                     eState = INETMSG_EOL_SCR;
                 }
 
-                // Reset token buffer.
+                
                 nTokBufLen = 0;
             }
         }
         else if (*pData == '=')
         {
-            // Found escape character.
+            
             pData++;
             eState = INETMSG_EOL_FESC;
         }
@@ -752,7 +752,7 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
             sal_Size nRead = pMsgBuffer->Tell();
             if (nRead > 0)
             {
-                // Emit buffer.
+                
                 sal_Size nDocSiz = pMsg->GetDocumentSize();
                 sal_Size nWrite  = 0;
 
@@ -769,7 +769,7 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
     return INETSTREAM_STATUS_OK;
 }
 
-// INetMessageEncode64Stream_Impl
+
 
 static const sal_Char six2pr[64] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -814,13 +814,13 @@ int INetMessageEncode64Stream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
     sal_Char* pWBuf = pData;
     while (pWBuf < (pData + nSize))
     {
-        // Caller's buffer not yet filled.
+        
         if ((pMsgRead - pMsgWrite) > 0)
         {
-            // Bytes still in message buffer.
+            
             if ((pTokRead - pTokBuffer) < 72)
             {
-                // Token buffer not yet filled.
+                
                 switch ((pTokRead - pTokBuffer) % 4)
                 {
                 case 0:
@@ -839,7 +839,7 @@ int INetMessageEncode64Stream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                     pMsgWrite++;
                     break;
 
-                default: // == case 3
+                default: 
                     *pTokRead++ = six2pr[(int)(*pMsgWrite & 077)];
                     pMsgWrite++;
                     break;
@@ -847,7 +847,7 @@ int INetMessageEncode64Stream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
             }
             else if ((pTokRead - pTokBuffer) == 72)
             {
-                // Maximum line length. Append <CR><LF>.
+                
                 *pTokRead++ = '\r';
                 *pTokRead++ = '\n';
             }
@@ -855,39 +855,39 @@ int INetMessageEncode64Stream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
             {
                 if ((pTokRead - pTokWrite) > 0)
                 {
-                    // Bytes still in token buffer.
+                    
                     *pWBuf++ = *pTokWrite++;
                 }
                 else
                 {
-                    // Token buffer empty. Reset to <Begin-of-Buffer>.
+                    
                     pTokRead = pTokWrite = pTokBuffer;
                 }
             }
         }
         else
         {
-            // Message buffer empty. Reset to <Begin-of-Buffer>.
+            
             pMsgRead = pMsgWrite = pMsgBuffer;
 
-            // Read next message block.
+            
             sal_uIntPtr nRead = pMsgStrm->Read(pMsgBuffer, nMsgBufSiz);
             if (nRead > 0)
             {
-                // Set read pointer.
+                
                 pMsgRead = (pMsgBuffer + nRead);
             }
             else
             {
-                // Nothing more to read.
+                
                 if (!bDone)
                 {
-                    // Append pad character(s) and final <CR><LF>.
+                    
                     switch ((pTokRead - pTokBuffer) % 4)
                     {
                     case 2:
                         *pTokRead++ = '=';
-                        // Fall through for 2nd pad character.
+                        
                     case 3:
                         *pTokRead++ = '=';
                         break;
@@ -898,36 +898,36 @@ int INetMessageEncode64Stream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSiz
                     *pTokRead++ = '\r';
                     *pTokRead++ = '\n';
 
-                    // Mark we're done.
+                    
                     bDone = true;
                 }
                 else
                 {
-                    // Already done all encoding.
+                    
                     if ((pTokRead - pTokWrite) > 0)
                     {
-                        // Bytes still in token buffer.
+                        
                         *pWBuf++ = *pTokWrite++;
                     }
                     else
                     {
-                        // Token buffer empty. Reset to <Begin-of-Buffer>.
+                        
                         pTokRead = pTokWrite = pTokBuffer;
 
-                        // Reset done flag, if everything has been done.
-                        // if (pWBuf == pData) bDone = false;
+                        
+                        
 
-                        // Return.
+                        
                         return (pWBuf - pData);
                     }
                 }
             }
         }
-    } // while (pWBuf < (pData + nSize))
+    } 
     return (pWBuf - pData);
 }
 
-// INetMessageDecode64Stream_Impl
+
 
 static const sal_uInt8 pr2six[256] = {
     0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
@@ -1008,7 +1008,7 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
              */
             if (*pData == '=')
             {
-                // Final pad character -> Done.
+                
                 sal_Size nDocSiz = pMsg->GetDocumentSize();
                 sal_Size nRead   = pMsgWrite - pMsgBuffer;
                 sal_Size nWrite  = 0;
@@ -1023,10 +1023,10 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
             }
             else if (eState == INETMSG_EOL_FCR)
             {
-                // Skip any line break character.
+                
                 if ((*pData == '\r') || (*pData == '\n')) pData++;
 
-                // Store decoded message buffer contents.
+                
                 sal_Size nDocSiz = pMsg->GetDocumentSize();
                 sal_Size nRead   = pMsgWrite - pMsgBuffer;
                 sal_Size nWrite  = 0;
@@ -1036,25 +1036,25 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
 
                 if (nWrite < nRead) return INETSTREAM_STATUS_ERROR;
 
-                // Reset to <Begin-of-Buffer>.
+                
                 pMsgWrite = pMsgBuffer;
                 eState = INETMSG_EOL_SCR;
             }
             else if ((*pData == '\r') || (*pData == '\n'))
             {
-                // Skip any line break character.
+                
                 pData++;
                 eState = INETMSG_EOL_FCR;
             }
             else
             {
-                // Skip any junk character (may be transmission error).
+                
                 pData++;
             }
         }
         else
         {
-            // Decode any other character into message buffer.
+            
             switch ((pMsgRead - pMsgBuffer) % 4)
             {
             case 0:
@@ -1074,17 +1074,17 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
                 pMsgRead++;
                 break;
 
-            default: // == case 3
+            default: 
                 *pMsgWrite++ |= (pr2six[(int)(*pData++)]);
                 pMsgRead = pMsgBuffer;
                 break;
-            } // switch ((pMsgRead - pMsgBuffer) % 4)
+            } 
         }
-    } // while (pData < pStop)
+    } 
     return INETSTREAM_STATUS_OK;
 }
 
-// INetMIMEMessageStream
+
 
 INetMIMEMessageStream::INetMIMEMessageStream(sal_uIntPtr nBufferSize)
     : INetMessageIOStream(nBufferSize),
@@ -1139,19 +1139,19 @@ INetMIMEMessageStream::GetMsgEncoding(const OUString& rContentType)
     return INETMSG_ENCODING_BASE64;
 }
 
-/// Message Generator
+
 int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 {
-    // Check for message container.
+    
     INetMIMEMessage* pMsg = GetSourceMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
-    // Check for header or body.
+    
     if (!IsHeaderGenerated())
     {
         if (eState == INETMSG_EOL_BEGIN)
         {
-            // Prepare special header fields.
+            
             if (pMsg->GetParent())
             {
                 OUString aPCT(pMsg->GetParent()->GetContentType());
@@ -1165,25 +1165,25 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                 pMsg->SetMIMEVersion("1.0");
             }
 
-            // Check ContentType.
+            
             OUString aContentType(pMsg->GetContentType());
             if (!aContentType.isEmpty())
             {
-                // Determine default Content-Type.
+                
                 OUString aDefaultType = pMsg->GetDefaultContentType();
 
                 if (aDefaultType.equalsIgnoreAsciiCase(aContentType))
                 {
-                    // No need to specify default.
+                    
                     pMsg->SetContentType(OUString());
                 }
             }
 
-            // Check Encoding.
+            
             OUString aEncoding(pMsg->GetContentTransferEncoding());
             if (!aEncoding.isEmpty())
             {
-                // Use given Encoding.
+                
                 if (aEncoding.startsWithIgnoreAsciiCase("base64"))
                 {
                     eEncoding = INETMSG_ENCODING_BASE64;
@@ -1199,51 +1199,51 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
             }
             else
             {
-                // Use default Encoding for (given|default) Content-Type.
+                
                 if (aContentType.isEmpty())
                 {
-                    // Determine default Content-Type.
+                    
                     aContentType = pMsg->GetDefaultContentType();
                 }
                 eEncoding = GetMsgEncoding(aContentType);
             }
 
-            // Set Content-Transfer-Encoding header.
+            
             if (eEncoding == INETMSG_ENCODING_BASE64)
             {
-                // Base64.
+                
                 pMsg->SetContentTransferEncoding("base64");
             }
             else if (eEncoding == INETMSG_ENCODING_QUOTED)
             {
-                // Quoted-Printable.
+                
                 pMsg->SetContentTransferEncoding("quoted-printable");
             }
             else
             {
-                // No need to specify default.
+                
                 pMsg->SetContentTransferEncoding(OUString());
             }
 
-            // Mark we're done.
+            
             eState = INETMSG_EOL_DONE;
         }
 
-        // Generate the message header.
+        
         int nRead = INetMessageIOStream::GetMsgLine(pData, nSize);
         if (nRead <= 0)
         {
-            // Reset state.
+            
             eState = INETMSG_EOL_BEGIN;
         }
         return nRead;
     }
     else
     {
-        // Generate the message body.
+        
         if (pMsg->IsContainer())
         {
-            // Encapsulated message body.
+            
             while (eState == INETMSG_EOL_BEGIN)
             {
                 if (pChildStrm == NULL)
@@ -1251,16 +1251,16 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                     INetMIMEMessage *pChild = pMsg->GetChild(nChildIndex);
                     if (pChild)
                     {
-                        // Increment child index.
+                        
                         nChildIndex++;
 
-                        // Create child stream.
+                        
                         pChildStrm = new INetMIMEMessageStream;
                         pChildStrm->SetSourceMessage(pChild);
 
                         if (pMsg->IsMultipart())
                         {
-                            // Insert multipart delimiter.
+                            
                             OStringBuffer aDelim("--");
                             aDelim.append(pMsg->GetMultipartBoundary());
                             aDelim.append("\r\n");
@@ -1272,13 +1272,13 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                     }
                     else
                     {
-                        // No more parts. Mark we're done.
+                        
                         eState = INETMSG_EOL_DONE;
                         nChildIndex = 0;
 
                         if (pMsg->IsMultipart())
                         {
-                            // Insert close delimiter.
+                            
                             OStringBuffer aDelim("--");
                             aDelim.append(pMsg->GetMultipartBoundary());
                             aDelim.append("--\r\n");
@@ -1291,7 +1291,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                 }
                 else
                 {
-                    // Read current child stream.
+                    
                     int nRead = pChildStrm->Read(pData, nSize);
                     if (nRead > 0)
                     {
@@ -1299,7 +1299,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                     }
                     else
                     {
-                        // Cleanup exhausted child stream.
+                        
                         delete pChildStrm;
                         pChildStrm = NULL;
                     }
@@ -1309,40 +1309,40 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
         }
         else
         {
-            // Single part message body.
+            
             if (pMsg->GetDocumentLB() == NULL)
             {
-                // Empty message body.
+                
                 return 0;
             }
 
-            // Check whether message body needs to be encoded.
+            
             if (eEncoding == INETMSG_ENCODING_7BIT)
             {
-                // No Encoding.
+                
                 return INetMessageIOStream::GetMsgLine(pData, nSize);
             }
 
-            // Apply appropriate Encoding.
+            
             while (eState == INETMSG_EOL_BEGIN)
             {
                 if (pEncodeStrm == NULL)
                 {
-                    // Create encoder stream.
+                    
                     if (eEncoding == INETMSG_ENCODING_QUOTED)
                     {
-                        // Quoted-Printable Encoding.
+                        
                         pEncodeStrm = new INetMessageEncodeQPStream_Impl;
                     }
                     else
                     {
-                        // Base64 Encoding.
+                        
                         pEncodeStrm = new INetMessageEncode64Stream_Impl;
                     }
                     pEncodeStrm->SetSourceMessage(pMsg);
                 }
 
-                // Read encoded message.
+                
                 int nRead = pEncodeStrm->Read(pData, nSize);
                 if (nRead > 0)
                 {
@@ -1350,11 +1350,11 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                 }
                 else
                 {
-                    // Cleanup exhausted encoder stream.
+                    
                     delete pEncodeStrm;
                     pEncodeStrm = NULL;
 
-                    // Mark we're done.
+                    
                     eState = INETMSG_EOL_DONE;
                 }
             }
@@ -1363,47 +1363,47 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
     }
 }
 
-/// Message Parser
+
 int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
 {
-    // Check for message container.
+    
     INetMIMEMessage* pMsg = GetTargetMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
-    // Check for header or body.
+    
     if (!IsHeaderParsed())
     {
-        // Parse the message header.
+        
         int nRet = INetMessageIOStream::PutMsgLine(pData, nSize);
         return nRet;
     }
     else
     {
         pMsg->SetHeaderParsed();
-        // Parse the message body.
+        
         if (pMsg->IsContainer())
         {
 
-            // Content-Transfer-Encoding MUST be "7bit" (RFC1521).
+            
             if (pMsg->IsMessage())
             {
                 if( !pChildStrm )
                 {
-                    // Encapsulated message.
+                    
                     INetMIMEMessage* pNewMessage = new INetMIMEMessage;
                     pNewMessage->SetDocumentLB( new SvAsyncLockBytes(new SvMemoryStream(), false));
                     pMsg->AttachChild( *pNewMessage, true );
 
-                    // Encapsulated message body. Create message parser stream.
+                    
                     pChildStrm = new INetMIMEMessageStream;
                     pChildStrm->SetTargetMessage( pNewMessage );
 
-                    // Initialize control variables.
+                    
                     eState = INETMSG_EOL_BEGIN;
                 }
                 if ( nSize > 0)
                 {
-                    // Bytes still in buffer. Put message down-stream.
+                    
                     int status = pChildStrm->Write( pData, nSize );
                     if (status != INETSTREAM_STATUS_OK)
                         return status;
@@ -1414,11 +1414,11 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
             else
             {
 
-                // Multipart message body. Initialize multipart delimiters.
-                // Multipart message.
+                
+                
                 if (pMsg->GetMultipartBoundary().getLength() == 0)
                 {
-                    // Determine boundary.
+                    
                     OString aType(OUStringToOString(
                         pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US));
                     OString aLowerType(aType.toAsciiLowerCase());
@@ -1429,7 +1429,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                     aBoundary = comphelper::string::strip(aBoundary, ' ');
                     aBoundary = comphelper::string::strip(aBoundary, '"');
 
-                    // Save boundary.
+                    
                     pMsg->SetMultipartBoundary(aBoundary);
                 }
 
@@ -1499,7 +1499,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                                 aPlainClose.compareTo(pOldPos, aClose.getLength())
                                 != -1 )
                             {
-                                // Encapsulated message.
+                                
                                 INetMIMEMessage* pNewMessage =
                                     new INetMIMEMessage;
                                 pNewMessage->SetDocumentLB(
@@ -1508,11 +1508,11 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
 
                                 pMsg->AttachChild( *pNewMessage, true );
 
-                                // Encapsulated message body. Create message parser stream.
+                                
                                 pChildStrm = new INetMIMEMessageStream;
                                 pChildStrm->SetTargetMessage( pNewMessage );
 
-                                // Initialize control variables.
+                                
                             }
                             eState = INETMSG_EOL_BEGIN;
                             status = INetMessageIOStream::PutMsgLine(
@@ -1568,7 +1568,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
 
             if (eEncoding == INETMSG_ENCODING_7BIT)
             {
-                // No decoding necessary.
+                
                 return INetMessageIOStream::PutMsgLine(pData, nSize);
             }
             else

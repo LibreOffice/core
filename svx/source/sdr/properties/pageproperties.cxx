@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/pageproperties.hxx>
@@ -22,16 +22,16 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            // overloaded to legally return a valid ItemSet
+            
             return *(new SfxItemSet(rPool));
         }
 
@@ -54,8 +54,8 @@ namespace sdr
             return *(new PageProperties(*this, rObj));
         }
 
-        // get itemset. Overloaded here to allow creating the empty itemset
-        // without asserting
+        
+        
         const SfxItemSet& PageProperties::GetObjectItemSet() const
         {
             if(!mpEmptyItemSet)
@@ -70,12 +70,12 @@ namespace sdr
 
         void PageProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
-            // #86481# simply ignore item setting on page objects
+            
         }
 
         SfxStyleSheet* PageProperties::GetStyleSheet() const
         {
-            // overloaded to legally return a 0L pointer here
+            
             return 0L;
         }
 
@@ -87,9 +87,9 @@ namespace sdr
 
         void PageProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
-            // simply ignore item clearing on page objects
+            
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

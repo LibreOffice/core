@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "marktree.hxx"
@@ -74,7 +74,7 @@ void OMarkableTreeListBox::InitButtonData()
 
 void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
-    // only if there are spaces
+    
     if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE && !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1())
     {
         SvTreeListEntry* pCurrentHandlerEntry = GetHdlEntry();
@@ -99,10 +99,10 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState(_pEntry);
     if (!GetModel()->HasChildren(_pEntry))
-        // nothing to do in this bottom-up routine if there are no children ...
+        
         return eState;
 
-    // loop through the children and check their states
+    
     sal_uInt16 nCheckedChildren = 0;
     sal_uInt16 nChildrenOverall = 0;
 
@@ -122,12 +122,12 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
 
     if (pChildLoop)
     {
-        // we did not finish the loop because at least one of the children is in tristate
+        
         eState = SV_BUTTON_TRISTATE;
 
-        // but this means that we did not finish all the siblings of pChildLoop,
-        // so their checking may be incorrect at the moment
-        // -> correct this
+        
+        
+        
         while (pChildLoop)
         {
             implDetermineState(pChildLoop);
@@ -135,20 +135,20 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
         }
     }
     else
-        // none if the children are in tristate
+        
         if (nCheckedChildren)
-            // we have at least one child checked
+            
             if (nCheckedChildren != nChildrenOverall)
-                // not all children are checked
+                
                 eState = SV_BUTTON_TRISTATE;
             else
-                // all children are checked
+                
                 eState = SV_BUTTON_CHECKED;
         else
-            // no children are checked
+            
             eState = SV_BUTTON_UNCHECKED;
 
-    // finally set the entry to the state we just determined
+    
     SetCheckButtonState(_pEntry, eState);
 
     return eState;
@@ -174,7 +174,7 @@ void OMarkableTreeListBox::CheckButtonHdl()
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
+    if (GetModel()->HasChildren(_pEntry)) 
     {
         SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
         SvTreeListEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
@@ -189,7 +189,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     while(pEntry)
     {
         SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
+        if(GetModel()->HasChildren(pEntry))   
         {
             SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
             SvTreeListEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);
@@ -204,6 +204,6 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     CheckButtons();
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

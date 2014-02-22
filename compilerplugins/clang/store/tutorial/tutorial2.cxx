@@ -29,40 +29,40 @@ Tutorial2::Tutorial2( CompilerInstance& compiler )
 
 void Tutorial2::run()
     {
-    // The Clang AST helper class will call VisitIfStmt for every if statement.
+    
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-// This function is called for every if statement.
+
 bool Tutorial2::VisitIfStmt( const IfStmt* ifstmt )
     {
     if( ignoreLocation( ifstmt ))
         return true;
-    // Check if the condition of the if statement is a binary operator.
+    
     if( const BinaryOperator* oper = dyn_cast< BinaryOperator >( ifstmt->getCond()))
         {
-        // And if it's operator==.
+        
         if( oper->getOpcode() == BO_EQ )
             {
-            // Now check if the sub-statement is 'return false'.
-            const Stmt* warn = NULL; // The return statement (for the warning message).
-            // Check if the sub-statement is directly 'return false;'.
+            
+            const Stmt* warn = NULL; 
+            
             if( isReturnFalse( ifstmt->getThen()))
                 warn = ifstmt->getThen();
-            // Check if the sub-statement is '{ return false; }'
+            
             else if( const CompoundStmt* compound = dyn_cast< CompoundStmt >( ifstmt->getThen()))
                 {
-                if( compound->size() == 1 ) // one statement
-                    if( isReturnFalse( *compound->body_begin())) // check the one sub-statement
+                if( compound->size() == 1 ) 
+                    if( isReturnFalse( *compound->body_begin())) 
                         warn = *compound->body_begin();
                 }
-            if( warn != NULL ) // there is a return statement to warn about.
+            if( warn != NULL ) 
                 {
                 report( DiagnosticsEngine::Warning,
                     "returning false after if with equality comparison",
-                    cast< ReturnStmt >( warn )->getRetValue()->getLocStart()) // the 'false' in the return
+                    cast< ReturnStmt >( warn )->getRetValue()->getLocStart()) 
                     << warn->getSourceRange();
-                // Also add a note showing the if statement.
+                
                 report( DiagnosticsEngine::Note,
                     "the if statement is here",
                     ifstmt->getLocStart());
@@ -74,10 +74,10 @@ bool Tutorial2::VisitIfStmt( const IfStmt* ifstmt )
 
 bool Tutorial2::isReturnFalse( const Stmt* stmt )
     {
-    // Is it return statement?
+    
     if( const ReturnStmt* returnstmt = dyn_cast< ReturnStmt >( stmt ))
         {
-        // dyn_cast_or_null<> can also be passed NULL, unlike dyn_cast<>
+        
         if( const CXXBoolLiteralExpr* boolliteral = dyn_cast_or_null< CXXBoolLiteralExpr >( returnstmt->getRetValue()))
             {
             if( boolliteral->getValue() == false )
@@ -87,9 +87,9 @@ bool Tutorial2::isReturnFalse( const Stmt* stmt )
     return false;
     }
 
-// Register the plugin action with the LO plugin handling.
+
 static Plugin::Registration< Tutorial2 > X( "tutorial2" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

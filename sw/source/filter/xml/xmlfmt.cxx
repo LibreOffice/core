@@ -231,7 +231,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
-        // TODO: use a map here
+        
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
             if( IsXMLToken( aLocalName, XML_CONDITION ) )
@@ -465,7 +465,7 @@ public:
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
-    // The item set may be empty!
+    
     SfxItemSet *GetItemSet() { return pItemSet; }
     const SfxItemSet *GetItemSet() const { return pItemSet; }
 
@@ -491,11 +491,11 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
         }
         else if ( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
         {
-            // if we have a valid data style name
+            
             if (!rValue.isEmpty())
             {
                 sDataStyleName = rValue;
-                bDataStyleIsResolved = false;   // needs to be resolved
+                bDataStyleIsResolved = false;   
             }
         }
         else
@@ -631,8 +631,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     OUString sName;
-    // #i40788# - first determine the display name of the page style,
-    // then map this name to the corresponding user interface name.
+    
+    
     sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,
@@ -642,8 +642,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {
-        // If the page style is a pool style, then we maybe have to create it
-        // first if it hasn't been used by now.
+        
+        
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
             pPageDesc = pDoc->GetPageDescFromPool( nPoolId, false );
@@ -679,14 +679,14 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
 bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
 {
-    // resolve, if not already done
+    
     if (! bDataStyleIsResolved)
     {
-        // get the format key
+        
         sal_Int32 nFormat =
             GetImport().GetTextImport()->GetDataStyleKey(sDataStyleName);
 
-        // if the key is valid, insert Item into ItemSet
+        
         if( -1 != nFormat )
         {
             if( !pItemSet )
@@ -700,13 +700,13 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
             pItemSet->Put(aNumFormatItem);
         }
 
-        // now resolved
+        
         bDataStyleIsResolved = true;
         return true;
     }
     else
     {
-        // was already resolved; nothing to do
+        
         return false;
     }
 }
@@ -727,14 +727,14 @@ protected:
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    // HACK
+    
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
         sal_uInt16 nFamily ) const;
 
     virtual uno::Reference < container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
     virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
-    // HACK
+    
 
 public:
 
@@ -780,8 +780,8 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
                             rLocalName, xAttrList, *this, nFamily  );
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        // As long as there are no element items, we can use the text
-        // style class.
+        
+        
         pStyle = new XMLTextShapeStyleContext( GetImport(), nPrefix,
                             rLocalName, xAttrList, *this, nFamily );
         break;
@@ -812,7 +812,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
                                           sal_True );
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        // There are no writer specific defaults for graphic styles!
+        
         pStyle = new XMLGraphicsDefaultStyle( GetImport(), nPrefix,
                             rLocalName, xAttrList, *this );
         break;
@@ -1076,7 +1076,7 @@ bool SwXMLImport::FindAutomaticStyle(
                     pStyle->ConnectPageDesc();
                 (*ppItemSet) = pStyle->GetItemSet();
 
-                // resolve data style name late
+                
                 if( XML_STYLE_FAMILY_TABLE_CELL == pStyle->GetFamily() &&
                     pStyle->ResolveDataStyleName() )
                 {

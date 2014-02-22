@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VAxisProperties.hxx"
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::chart2;
 
 sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 {
-    sal_Int32 nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
+    sal_Int32 nWidth = AXIS2D_TICKLENGTH; 
     double fPercent = 1.0;
     switch(nDepth)
     {
@@ -45,7 +45,7 @@ sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
             fPercent = 1.0;
             break;
         case 1:
-            fPercent = 0.75;//percentage like in the old chart
+            fPercent = 0.75;
             break;
         case 2:
             fPercent = 0.5;
@@ -54,17 +54,17 @@ sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
             fPercent = 0.3;
             break;
     }
-    if(nTickmarkStyle==3)//inner and outer tickmarks
+    if(nTickmarkStyle==3)
         fPercent*=2.0;
     return static_cast<sal_Int32>(nWidth*fPercent);
 }
 
 double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
 {
-    double fPercent = 0.0; //0<=fPercent<=1
-    //0.0: completely inner
-    //1.0: completely outer
-    //0.5: half and half
+    double fPercent = 0.0; 
+    
+    
+    
 
     /*
     nTickmarkStyle:
@@ -89,8 +89,8 @@ double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
 
 VLineProperties AxisProperties::makeLinePropertiesForDepth( sal_Int32 /* nDepth */ ) const
 {
-    //@todo get this from somewhere; maybe for each subincrement
-    //so far the model does not offer different settings for each tick depth
+    
+    
     return m_aLineProperties;
 }
 
@@ -109,7 +109,7 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
         nTickmarkStyle = m_nMajorTickmarks;
         if(!nTickmarkStyle)
         {
-            //create major tickmarks as if they were minor tickmarks
+            
             nDepth = 1;
             nTickmarkStyle = m_nMinorTickmarks;
         }
@@ -122,7 +122,7 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
     if( m_fInnerDirectionSign == 0.0 )
     {
         if( nTickmarkStyle != 0 )
-            nTickmarkStyle = 3; //inner and outer tickmarks
+            nTickmarkStyle = 3; 
     }
 
     TickmarkProperties aTickmarkProperties;
@@ -138,7 +138,7 @@ TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
     sal_Int32 nTickmarkStyle = (m_fLabelDirectionSign==m_fInnerDirectionSign) ? 2/*outside*/ : 1/*inside*/;
 
     TickmarkProperties aTickmarkProperties;
-    aTickmarkProperties.Length = nTickLength;// + nTextLevel*( lcl_calcTickLengthForDepth(0,nTickmarkStyle) );
+    aTickmarkProperties.Length = nTickLength;
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length+nTickStartDistanceToAxis,nTickmarkStyle));
     aTickmarkProperties.aLineProperties = this->makeLinePropertiesForDepth( 0 );
     return aTickmarkProperties;
@@ -148,7 +148,7 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 {
     TickmarkProperties aTickmarkProperties;
     sal_Int32 nDepth = 0;
-    sal_Int32 nTickmarkStyle = 3;//inner and outer tickmarks
+    sal_Int32 nTickmarkStyle = 3;
     aTickmarkProperties.Length = lcl_calcTickLengthForDepth( nDepth,nTickmarkStyle );
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>( lcl_getTickOffset( aTickmarkProperties.Length, nTickmarkStyle ) );
     return aTickmarkProperties;
@@ -176,7 +176,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_nMinorTickmarks(1)
     , m_aTickmarkPropertiesList()
     , m_aLineProperties()
-    //for category axes
+    
     , m_nAxisType(AxisType::REALNUMBER)
     , m_bComplexCategories(false)
     , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
@@ -205,7 +205,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
     , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
     , m_aLineProperties( rAxisProperties.m_aLineProperties )
-    //for category axes
+    
     , m_nAxisType( rAxisProperties.m_nAxisType )
     , m_bComplexCategories( rAxisProperties.m_bComplexCategories )
     , m_pExplicitCategoriesProvider( rAxisProperties.m_pExplicitCategoriesProvider )
@@ -342,13 +342,13 @@ void AxisProperties::init( bool bCartesian )
 
     try
     {
-        //init LineProperties
+        
         m_aLineProperties.initFromPropertySet( xProp );
 
-        //init display labels
+        
         xProp->getPropertyValue( "DisplayLabels" ) >>= m_bDisplayLabels;
 
-        //init TickmarkProperties
+        
         xProp->getPropertyValue( "MajorTickmarks" ) >>= m_nMajorTickmarks;
         xProp->getPropertyValue( "MinorTickmarks" ) >>= m_nMinorTickmarks;
 
@@ -429,6 +429,6 @@ bool AxisLabelProperties::getIsStaggered() const
     return ( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

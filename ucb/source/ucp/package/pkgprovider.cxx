@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,11 +40,11 @@ using namespace com::sun::star;
 namespace package_ucp
 {
 
-//=========================================================================
+
 //
-// class Package.
+
 //
-//=========================================================================
+
 
 class Package : public cppu::OWeakObject,
                 public container::XHierarchicalNameAccess
@@ -62,7 +62,7 @@ public:
     : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
     virtual ~Package() { m_pOwner->removePackage( m_aName ); }
 
-    // XInterface
+    
     virtual uno::Any SAL_CALL
     queryInterface( const uno::Type& aType )
         throw( uno::RuntimeException )
@@ -74,7 +74,7 @@ public:
     release() throw()
     { OWeakObject::release(); }
 
-    // XHierarchicalNameAccess
+    
     virtual uno::Any SAL_CALL
     getByHierarchicalName( const OUString& aName )
         throw( container::NoSuchElementException, uno::RuntimeException )
@@ -85,11 +85,11 @@ public:
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 
-//=========================================================================
+
 //
-// Packages.
+
 //
-//=========================================================================
+
 
 struct equalString
 {
@@ -123,13 +123,13 @@ class Packages : public PackageMap {};
 
 using namespace package_ucp;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ContentProvider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -138,60 +138,60 @@ ContentProvider::ContentProvider(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 ContentProvider::~ContentProvider()
 {
     delete m_pPackages;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    ucb::XContentProvider );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider );
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.ucb.PackageContentProvider" ),
                      OUString( PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
-// XContentProvider methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
     throw( ucb::IllegalIdentifierException, uno::RuntimeException )
@@ -203,21 +203,21 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException();
 
-    // Create a new identifier for the mormalized URL returned by
-    // PackageUri::getUri().
+    
+    
     uno::Reference< ucb::XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( aUri.getUri() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    // Check, if a content with given id already exists...
+    
     uno::Reference< ucb::XContent > xContent
         = queryExistingContent( xId ).get();
     if ( xContent.is() )
         return xContent;
 
-    // Create a new content.
+    
 
-    xContent = Content::create( m_xContext, this, Identifier ); // not xId!!!
+    xContent = Content::create( m_xContext, this, Identifier ); 
     registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
@@ -226,11 +226,11 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     return xContent;
 }
 
-//=========================================================================
+
 //
-// Other methods.
+
 //
-//=========================================================================
+
 
 uno::Reference< container::XHierarchicalNameAccess >
 ContentProvider::createPackage( const PackageUri & rURI )
@@ -244,14 +244,14 @@ ContentProvider::createPackage( const PackageUri & rURI )
         Packages::const_iterator it = m_pPackages->find( rURL );
         if ( it != m_pPackages->end() )
         {
-            // Already instanciated. Return package.
+            
             return (*it).second->m_xNA;
         }
     }
     else
         m_pPackages = new Packages;
 
-    // Create new package...
+    
     uno::Sequence< uno::Any > aArguments( 1 );
     aArguments[ 0 ] <<= rURL;
     uno::Reference< container::XHierarchicalNameAccess > xNameAccess;
@@ -278,7 +278,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     return xPackage.get();
 }
 
-//=========================================================================
+
 sal_Bool ContentProvider::removePackage( const OUString & rName )
 {
     osl::MutexGuard aGuard( m_aMutex );

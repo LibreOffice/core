@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -56,8 +56,8 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
     case NSPECIAL:
     {
         const SmTextNode* pText= static_cast< const SmTextNode* >(pNode);
-        //if the token str and the result text are the same then this
-        //is to be seen as text, else assume it's a mathchar
+        
+        
         if (pText->GetText() == pText->GetToken().aText)
             HandleText(pText,nLevel);
         else
@@ -75,7 +75,7 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
         HandleAllSubNodes(pNode, nLevel);
         break;
     case NTABLE:
-        //Root Node, PILE equivalent, i.e. vertical stack
+        
         HandleTable(pNode,nLevel);
         break;
     case NMATRIX:
@@ -83,7 +83,7 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
         break;
     case NLINE:
     {
-// TODO
+
         HandleAllSubNodes(pNode, nLevel);
     }
     break;
@@ -93,7 +93,7 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
         break;
 #endif
     case NPLACE:
-        // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
+        
         break;
     case NBLANK:
         HandleBlank();
@@ -104,15 +104,15 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
     }
 }
 
-//Root Node, PILE equivalent, i.e. vertical stack
+
 void SmWordExportBase::HandleTable(const SmNode* pNode, int nLevel)
 {
-    //The root of the starmath is a table, if
-    //we convert this them each iteration of
-    //conversion from starmath to Word will
-    //add an extra unnecessary level to the
-    //Word output stack which would grow
-    //without bound in a multi step conversion
+    
+    
+    
+    
+    
+    
     if (nLevel || pNode->GetNumSubNodes() > 1)
         HandleVerticalStack(pNode, nLevel);
     else
@@ -126,7 +126,7 @@ void SmWordExportBase::HandleAllSubNodes(const SmNode* pNode, int nLevel)
             i < size;
             ++i)
     {
-// TODO remove when all types of nodes are handled properly
+
         if (pNode->GetSubNode(i) == NULL)
         {
             SAL_WARN("starmath.wordbase", "Subnode is NULL, parent node not handled properly");
@@ -138,22 +138,22 @@ void SmWordExportBase::HandleAllSubNodes(const SmNode* pNode, int nLevel)
 
 void SmWordExportBase::HandleUnaryOperation(const SmUnHorNode* pNode, int nLevel)
 {
-    // update HandleMath() when adding new items
+    
     SAL_INFO("starmath.wordbase", "Unary: " << int(pNode->GetToken().eType));
 
-// Avoid MSVC warning C4065: switch statement contains 'default' but no 'case' labels
-//    switch( pNode->GetToken().eType )
-//    {
-//        default:
+
+
+
+
     HandleAllSubNodes(pNode, nLevel);
-//            break;
-//    }
+
+
 }
 
 void SmWordExportBase::HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel)
 {
     SAL_INFO("starmath.wordbase", "Binary: " << int(pNode->Symbol()->GetToken().eType));
-    // update HandleMath() when adding new items
+    
     switch (pNode->Symbol()->GetToken().eType)
     {
     case TDIVIDEBY:
@@ -171,7 +171,7 @@ void SmWordExportBase::HandleMath(const SmNode* pNode, int nLevel)
     {
     case TDIVIDEBY:
     case TACUTE:
-        // these are handled elsewhere, e.g. when handling BINHOR
+        
         OSL_ASSERT(false);
     default:
         HandleText(pNode, nLevel);
@@ -181,7 +181,7 @@ void SmWordExportBase::HandleMath(const SmNode* pNode, int nLevel)
 
 void SmWordExportBase::HandleSubSupScript(const SmSubSupNode* pNode, int nLevel)
 {
-    // set flags to a bitfield of which sub/sup items exists
+    
     int flags = (pNode->GetSubSup(CSUB) != NULL ? (1 << CSUB) : 0)
                 | (pNode->GetSubSup(CSUP) != NULL ? (1 << CSUP) : 0)
                 | (pNode->GetSubSup(RSUB) != NULL ? (1 << RSUB) : 0)

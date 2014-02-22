@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/processfactory.hxx>
@@ -58,7 +58,7 @@ ResultSetBase::~ResultSetBase()
 }
 
 
-// XInterface
+
 
 void SAL_CALL
 ResultSetBase::acquire(
@@ -96,7 +96,7 @@ ResultSetBase::queryInterface(
 
 
 
-// XComponent
+
 
 
 void SAL_CALL
@@ -152,7 +152,7 @@ ResultSetBase::dispose()
 
 
 
-//  XResultSet
+
 
 sal_Bool SAL_CALL
 ResultSetBase::next(
@@ -186,7 +186,7 @@ ResultSetBase::isAfterLast(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    return sal::static_int_cast<sal_uInt32>( m_nRow ) >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
+    return sal::static_int_cast<sal_uInt32>( m_nRow ) >= m_aItems.size();   
 }
 
 
@@ -261,7 +261,7 @@ ResultSetBase::getRow(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    // Test, whether behind last row
+    
     if( -1 == m_nRow || sal::static_int_cast<sal_uInt32>( m_nRow ) >= m_aItems.size() )
         return 0;
     else
@@ -316,7 +316,7 @@ ResultSetBase::previous(
            uno::RuntimeException)
 {
     if( sal::static_int_cast<sal_uInt32>( m_nRow ) > m_aItems.size() )
-        m_nRow = m_aItems.size();  // Correct Handling of afterLast
+        m_nRow = m_aItems.size();  
     if( 0 <= m_nRow ) -- m_nRow;
 
     return 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size();
@@ -371,7 +371,7 @@ ResultSetBase::getStatement(
 }
 
 
-// XCloseable
+
 
 void SAL_CALL
 ResultSetBase::close(
@@ -489,7 +489,7 @@ private:
 
 
 
-// XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 ResultSetBase::getPropertySetInfo()
     throw( uno::RuntimeException)
@@ -505,7 +505,7 @@ ResultSetBase::getPropertySetInfo()
     seq[1].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[1].Attributes = beans::PropertyAttribute::READONLY;
 
-    //t
+    
     return uno::Reference< beans::XPropertySetInfo > ( new XPropertySetInfoImpl( seq ) );
 }
 
@@ -631,7 +631,7 @@ void SAL_CALL ResultSetBase::removeVetoableChangeListener(
 
 
 
-// XResultSetMetaDataSupplier
+
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
 ResultSetBase::getMetaData(
     void )

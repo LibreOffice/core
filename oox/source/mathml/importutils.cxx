@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "oox/mathml/importutils.hxx"
@@ -31,8 +31,8 @@ namespace formulaimport
 
 namespace
 {
-// a class that inherits from AttributeList, builds the internal data and then will be sliced off
-// during conversion to the base class
+
+
 class AttributeListBuilder
     : public XmlStream::AttributeList
 {
@@ -61,12 +61,12 @@ static OUString tokenToString( int token )
     if( tokenname.isEmpty())
         tokenname = "???";
     int nmsp = ( token & NMSP_MASK & ~( TAG_OPENING | TAG_CLOSING ));
-#if 0 // this is awfully long
+#if 0 
     OUString namespacename = StaticNamespaceMap::get().count( nmsp ) != 0
         ? StaticNamespaceMap::get()[ nmsp ] : OUString( "???" );
 #else
     OUString namespacename;
-    // only few are needed actually
+    
     switch( nmsp )
     {
         case NMSP_officeMath:
@@ -84,11 +84,11 @@ static OUString tokenToString( int token )
         return "<" + namespacename + ":" + tokenname + ">";
     if( token == CLOSING( token ))
         return "</" + namespacename + ":" + tokenname + ">";
-    // just the name itself, not specified whether opening or closing
+    
     return namespacename + ":" + tokenname;
 }
 
-} // namespace
+} 
 
 OUString& XmlStream::AttributeList::operator[] (int token)
 {
@@ -161,7 +161,7 @@ XmlStream::Tag::operator bool() const
 XmlStream::XmlStream()
 : pos( 0 )
 {
-    // make sure our extra bit does not conflict with values used by oox
+    
     assert( TAG_OPENING > ( 1024 << NMSP_SHIFT ));
 }
 
@@ -207,11 +207,11 @@ void XmlStream::ensureClosingTag( int token )
 
 XmlStream::Tag XmlStream::checkTag( int token, bool optional )
 {
-    // either it's the following tag, or find it
+    
     int savedPos = pos;
     if( optional )
-    { // avoid printing debug messages about skipping tags if the optional one
-      // will not be found and the position will be reset back
+    { 
+      
         if( currentToken() != token && !findTagInternal( token, true ))
         {
             pos = savedPos;
@@ -222,10 +222,10 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
     {
         Tag ret = currentTag();
         moveToNextTag();
-        return ret; // ok
+        return ret; 
     }
     if( optional )
-    { // not a problem, just rewind
+    { 
         pos = savedPos;
         return Tag();
     }
@@ -245,7 +245,7 @@ bool XmlStream::findTagInternal( int token, bool silent )
          !atEnd();
          moveToNextTag())
     {
-        if( depth > 0 ) // we're inside a nested element, skip those
+        if( depth > 0 ) 
         {
             if( currentToken() == OPENING( currentToken()))
             {
@@ -269,9 +269,9 @@ bool XmlStream::findTagInternal( int token, bool silent )
             continue;
         }
         if( currentToken() == token )
-            return true; // ok, found
+            return true; 
         if( currentToken() == CLOSING( currentToken()))
-            return false; // that would be leaving current element, so not found
+            return false; 
         if( currentToken() == OPENING( currentToken()))
         {
             if( !silent )
@@ -288,20 +288,20 @@ bool XmlStream::findTagInternal( int token, bool silent )
 
 void XmlStream::skipElementInternal( int token, bool silent )
 {
-    int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
+    int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; 
     assert( currentToken() == OPENING( token ));
     if( !silent )
         SAL_INFO( "oox.xmlstream", "Skipping unexpected element " << tokenToString( currentToken()));
     moveToNextTag();
-    // and just find the matching closing tag
+    
     if( findTag( closing ))
     {
         if( !silent )
             SAL_INFO( "oox.xmlstream", "Skipped unexpected element " << tokenToString( token ));
-        moveToNextTag(); // and skip it too
+        moveToNextTag(); 
         return;
     }
-    // this one is an unexpected problem, do not silent it
+    
     SAL_WARN( "oox.xmlstream", "Expected end of element " << tokenToString( token ) << " not found." );
 }
 
@@ -312,10 +312,10 @@ void XmlStream::handleUnexpectedTag()
     if( currentToken() == CLOSING( currentToken()))
     {
         SAL_INFO( "oox.xmlstream", "Skipping unexpected tag " << tokenToString( currentToken()));
-        moveToNextTag(); // just skip it
+        moveToNextTag(); 
         return;
     }
-    skipElementInternal( currentToken(), false ); // otherwise skip the entire element
+    skipElementInternal( currentToken(), false ); 
 }
 
 
@@ -340,7 +340,7 @@ void XmlStreamBuilder::appendCharacters( const OUString& chars )
     tags.back().text += chars;
 }
 
-} // namespace
-} // namespace
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

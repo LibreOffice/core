@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <filter/msfilter/rtfutil.hxx>
@@ -24,7 +24,7 @@ OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
     if (nLen >= sizeof(aNToABuf))
         nLen = (sizeof(aNToABuf)-1);
 
-    // Set pointer to the buffer end
+    
     sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for (sal_uInt8 n = 0; n < nLen; ++n)
     {
@@ -42,11 +42,11 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
         *pSuccess = true;
     OStringBuffer aBuf;
     const sal_Char* pStr = 0;
-    // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
+    
     switch (c)
     {
     case 0x0b:
-        // hard line break
+        
         pStr = OOO_STRING_SVTOOLS_RTF_LINE;
         break;
     case '\t':
@@ -59,15 +59,15 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
         aBuf.append((sal_Char)c);
         break;
     case 0xa0:
-        // non-breaking space
+        
         pStr = "\\~";
         break;
     case 0x1e:
-        // non-breaking hyphen
+        
         pStr = "\\_";
         break;
     case 0x1f:
-        // optional hyphen
+        
         pStr = "\\-";
         break;
     default:
@@ -89,7 +89,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                 {
                     aBuf.append("\\uc");
                     aBuf.append((sal_Int32)nLen);
-                    // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.
+                    
                     aBuf.append(' ');
                     *pUCMode = nLen;
                 }
@@ -131,12 +131,12 @@ OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode
     {
         aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
         aBuf.append((sal_Int32)1);
-        aBuf.append(" "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+        aBuf.append(" "); 
     }
     return aBuf.makeStringAndClear();
 }
 
-/// Checks if lossless conversion of the string to eDestEnc is possible or not.
+
 static bool TryOutString(const OUString& rStr, rtl_TextEncoding eDestEnc)
 {
     int nUCMode = 1;

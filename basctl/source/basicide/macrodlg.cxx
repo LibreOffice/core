@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -61,8 +61,8 @@ using namespace ::com::sun::star::uno;
 MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries )
     : SfxModalDialog(pParnt, "BasicMacroDialog", "modules/BasicIDE/ui/basicmacrodialog.ui")
     , bNewDelIsDel(true)
-    // the Sfx doesn't aske the BasicManger whether modified or not
-    // => start saving in case of a change without a into the BasicIDE.
+    
+    
     , bForceStoreBasic(false)
     , nMode(All)
 {
@@ -83,7 +83,7 @@ MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries )
     get(m_pNewModButton, "newmodule");
 
     m_pMacroBox->SetSelectionMode( SINGLE_SELECTION );
-    m_pMacroBox->SetHighlightRange(); // select over the whole width
+    m_pMacroBox->SetHighlightRange(); 
 
     m_pRunButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     m_pCloseButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
@@ -92,12 +92,12 @@ MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries )
     m_pDelButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     m_pOrganizeButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
 
-    // Buttons only for MacroChooser::Recording
+    
     m_pNewLibButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     m_pNewModButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
-    m_pNewLibButton->Hide();       // default
-    m_pNewModButton->Hide();       // default
-    m_pMacrosSaveInTxt->Hide();    // default
+    m_pNewLibButton->Hide();       
+    m_pNewModButton->Hide();       
+    m_pMacrosSaveInTxt->Hide();    
 
     m_pMacrosInTxt->SetStyle( WB_NOMULTILINE | WB_PATHELLIPSIS );
 
@@ -165,7 +165,7 @@ void MacroChooser::RestoreMacroDescription()
     OUString aLastMacro( aDesc.GetMethodName() );
     if ( !aLastMacro.isEmpty() )
     {
-        // find entry in macro box
+        
         SvTreeListEntry* pEntry = 0;
         sal_uLong nPos = 0;
         SvTreeListEntry* pE = m_pMacroBox->GetEntry( nPos );
@@ -194,15 +194,15 @@ short MacroChooser::Execute()
     RestoreMacroDescription();
     m_pRunButton->GrabFocus();
 
-    // #104198 Check if "wrong" document is active
+    
     SvTreeListEntry* pSelectedEntry = m_pBasicBox->GetCurEntry();
     EntryDescriptor aDesc( m_pBasicBox->GetEntryDescriptor( pSelectedEntry ) );
     const ScriptDocument& rSelectedDoc( aDesc.GetDocument() );
 
-    // App Basic is always ok, so only check if shell was found
+    
     if( rSelectedDoc.isDocument() && !rSelectedDoc.isActive() )
     {
-        // Search for the right entry
+        
         sal_uLong nRootPos = 0;
         SvTreeListEntry* pRootEntry = m_pBasicBox->GetEntry( nRootPos );
         while( pRootEntry )
@@ -234,7 +234,7 @@ short MacroChooser::Execute()
     Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     short nRet = ModalDialog::Execute();
-    // #57314# If the BasicIDE has been activated, don't reset the DefModalDialogParent to the inactive document.
+    
     if ( Application::GetDefDialogParent() == this )
         Application::SetDefDialogParent( pPrevDlgParent );
     return nRet;
@@ -284,7 +284,7 @@ void MacroChooser::DeleteMacro()
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
 
-        // mark current doc as modified:
+        
         StarBASIC* pBasic = FindBasic(pMethod);
         DBG_ASSERT( pBasic, "Basic?!" );
         BasicManager* pBasMgr = FindBasicManager( pBasic );
@@ -306,7 +306,7 @@ void MacroChooser::DeleteMacro()
         CutLines( aSource, nStart-1, nEnd-nStart+1, true );
         pModule->SetSource32( aSource );
 
-        // update module in library
+        
         OUString aLibName = pBasic->GetName();
         OUString aModName = pModule->GetName();
         OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
@@ -351,7 +351,7 @@ SbMethod* MacroChooser::CreateMacro()
         OUString aModName( aDesc.GetName() );
         if ( !aModName.isEmpty() )
         {
-            // extract the module name from the string like "Sheet1 (Example1)"
+            
             if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
             {
                 sal_Int32 nIndex = 0;
@@ -378,7 +378,7 @@ SbMethod* MacroChooser::CreateMacro()
 
 void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry )
 {
-    // the edit would be killed by the highlight otherwise:
+    
 
     OUString aSaveText( m_pMacroNameEdit->GetText() );
     Selection aCurSel( m_pMacroNameEdit->GetSelection() );
@@ -395,7 +395,7 @@ void MacroChooser::CheckButtons()
     SvTreeListEntry* pMacroEntry = m_pMacroBox->FirstSelected();
     SbMethod* pMethod = GetMacro();
 
-    // check, if corresponding libraries are readonly
+    
     bool bReadOnly = false;
     sal_uInt16 nDepth = pCurEntry ? m_pBasicBox->GetModel()->GetDepth( pCurEntry ) : 0;
     if ( nDepth == 1 || nDepth == 2 )
@@ -413,25 +413,25 @@ void MacroChooser::CheckButtons()
 
     if (nMode != Recording)
     {
-        // Run...
+        
         bool bEnable = pMethod ? true : false;
         if (nMode != ChooseOnly && StarBASIC::IsRunning())
             bEnable = false;
         EnableButton(*m_pRunButton, bEnable);
     }
 
-    // organising still possible?
+    
 
-    // Assign...
+    
     EnableButton(*m_pAssignButton, pMethod ? true : false);
 
-    // Edit...
+    
     EnableButton(*m_pEditButton, pMacroEntry ? true : false);
 
-    // Organizer...
+    
     EnableButton(*m_pOrganizeButton, !StarBASIC::IsRunning() && nMode == All);
 
-    // m_pDelButton->...
+    
     bool bProtected = m_pBasicBox->IsEntryProtected( pCurEntry );
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
     EnableButton(*m_pDelButton, !StarBASIC::IsRunning() && nMode == All && !bProtected && !bReadOnly && !bShare);
@@ -445,11 +445,11 @@ void MacroChooser::CheckButtons()
 
     if (nMode == Recording)
     {
-        // save button
+        
         m_pRunButton->Enable(!bProtected && !bReadOnly && !bShare);
-        // new library button
+        
         m_pNewLibButton->Enable(!bShare);
-        // new module button
+        
         m_pNewModButton->Enable(!bProtected && !bReadOnly && !bShare);
     }
 }
@@ -473,10 +473,10 @@ IMPL_LINK_NOARG_INLINE_END(MacroChooser, MacroDoubleClickHdl)
 
 IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 {
-    // Is also called if deselected!
-    // Two function calls in every SelectHdl because
-    // there's no separate DeselectHDL.
-    // So find out if select or deselect:
+    
+    
+    
+    
     if ( pBox->IsSelected( pBox->GetHdlEntry() ) )
     {
         UpdateFields();
@@ -487,10 +487,10 @@ IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 {
-    // Is also called if deselected!
-    // Two function calls in every SelectHdl because
-    // there's no separate DeselectHDL.
-    // So find out if select or deselect:
+    
+    
+    
+    
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
         return 0;
 
@@ -505,8 +505,8 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
         m_pMacrosInTxt->SetText( aStr );
 
-        // The macros should be called in the same order that they
-        // are written down in the module.
+        
+        
 
         map< sal_uInt16, SbMethod* > aMacros;
         size_t nMacroCount = pModule->GetMethods()->Count();
@@ -545,15 +545,15 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 {
     (void)pEdit;
 
-    // select the module in which the macro is put at Neu (new),
-    // if BasicManager or Lib is selecting
+    
+    
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
     if ( pCurEntry )
     {
         sal_uInt16 nDepth = m_pBasicBox->GetModel()->GetDepth( pCurEntry );
         if ( ( nDepth == 1 ) && ( m_pBasicBox->IsEntryProtected( pCurEntry ) ) )
         {
-            // then put to the respective Std-Lib...
+            
             SvTreeListEntry* pManagerEntry = m_pBasicBox->GetModel()->GetParent( pCurEntry );
             pCurEntry = m_pBasicBox->GetModel()->FirstChild( pManagerEntry );
         }
@@ -589,7 +589,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
             if ( !bFound )
             {
                 SvTreeListEntry* pEntry = m_pMacroBox->FirstSelected();
-                // if the entry exists ->Select ->Desription...
+                
                 if ( pEntry )
                     m_pMacroBox->Select( pEntry, false );
             }
@@ -604,12 +604,12 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 
 IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 {
-    // apart from New/Record the Description is done by LoseFocus
+    
     if (pButton == m_pRunButton)
     {
         StoreMacroDescription();
 
-        // #116444# check security settings before macro execution
+        
         if (nMode == All)
         {
             SbMethod* pMethod = GetMacro();
@@ -659,7 +659,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         BasicManager* pBasMgr = aDocument.getBasicManager();
         OUString aLib( aDesc.GetLibName() );
         OUString aMod( aDesc.GetName() );
-        // extract the module name from the string like "Sheet1 (Example1)"
+        
         if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
         {
             sal_Int32 nIndex = 0;
@@ -691,8 +691,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                                           SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
                 CheckButtons();
                 UpdateFields();
-                //if ( m_pMacroBox->GetCurEntry() )    // OV-Bug ?
-                //  m_pMacroBox->Select( m_pMacroBox->GetCurEntry() );
+                
+                
             }
             else
             {
@@ -769,7 +769,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         sal_uInt16 nRet = pDlg->Execute();
         delete pDlg;
 
-        if ( nRet ) // not only closed
+        if ( nRet ) 
         {
             EndDialog(Macro_Edit);
             return 0;
@@ -849,6 +849,6 @@ OUString MacroChooser::GetInfo( SbxVariable* pVar )
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

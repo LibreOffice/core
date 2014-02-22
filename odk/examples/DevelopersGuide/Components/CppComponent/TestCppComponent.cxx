@@ -52,22 +52,22 @@ SAL_IMPLEMENT_MAIN()
 {
     try
     {
-        // get the remote office component context
+        
         Reference< XComponentContext > xContext( ::cppu::bootstrap() );
         fprintf(stdout, "\nconnected to a running office...\n");
 
-        // create a new instance of MyService1
+        
         Reference<my_module::XSomething> xSomething =
             my_module::MyService1::create(xContext);
 
-        // call methodOne and print the return value on stdout
+        
         OUString s = xSomething->methodOne(OUString("Hello World!"));
         fprintf(stdout,"\nCreate new instance of MyService1\nCall of XSomething.methOne at MyService1 = %s", OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr());
 
-        // create a new instance of MyService2 with the specified string argument
+        
         xSomething = my_module::MyService2::create(xContext, OUString("Hello My World!"));
 
-        // call methodTwo and print the return value of methodTwo
+        
         s = xSomething->methodTwo();
         fprintf(stdout, "\n\nCreate new instance of MyService2 with argument\nCall of XSomething.methTwo at MyService2 = %s", OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr());
 

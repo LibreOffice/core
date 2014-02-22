@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -19,9 +19,9 @@ Crypto::Crypto(CryptoType type) :
     mType(type)
 {
 #if USE_TLS_NSS
-    // Initialize NSS, database functions are not needed
+    
     NSS_NoDB_Init(NULL);
-#endif // USE_TLS_NSS
+#endif 
 }
 
 Crypto::~Crypto()
@@ -97,9 +97,9 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
     mSecParam = PK11_ParamFromIV( mechanism, pIvItem );
     mContext = PK11_CreateContextBySymKey( mechanism, operation, mSymKey, mSecParam );
 }
-#endif // USE_TLS_NSS
+#endif 
 
-// DECRYPT
+
 
 Decrypt::Decrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :
     Crypto(type)
@@ -118,7 +118,7 @@ Decrypt::Decrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type)
 
 #if USE_TLS_NSS
     setupContext(key, iv, type, CKA_DECRYPT);
-#endif // USE_TLS_NSS
+#endif 
 }
 
 sal_uInt32 Decrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, sal_uInt32 inputLength)
@@ -129,11 +129,11 @@ sal_uInt32 Decrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
 
 #if USE_TLS_OPENSSL
     EVP_DecryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
-#endif // USE_TLS_OPENSSL
+#endif 
 
 #if USE_TLS_NSS
     PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
-#endif // USE_TLS_NSS
+#endif 
 
     return static_cast<sal_uInt32>(outputLength);
 }
@@ -155,7 +155,7 @@ sal_uInt32 Decrypt::aes128cbc(vector<sal_uInt8>& output, vector<sal_uInt8>& inpu
     return outputLength;
 }
 
-// ENCRYPT
+
 
 Encrypt::Encrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :
     Crypto(type)
@@ -174,7 +174,7 @@ Encrypt::Encrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type)
 
 #if USE_TLS_NSS
     setupContext(key, iv, type, CKA_ENCRYPT);
-#endif // USE_TLS_NSS
+#endif 
 }
 
 sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, sal_uInt32 inputLength)
@@ -185,11 +185,11 @@ sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
 
 #if USE_TLS_OPENSSL
     EVP_EncryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
-#endif // USE_TLS_OPENSSL
+#endif 
 
 #if USE_TLS_NSS
     PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
-#endif // USE_TLS_NSS
+#endif 
 
     return static_cast<sal_uInt32>(outputLength);
 }
@@ -226,7 +226,7 @@ bool sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
     output.clear();
     output.resize(SHA512_LENGTH, 0);
 
-    // Initialize NSS, database functions are not needed
+    
     NSS_NoDB_Init(NULL);
     SECStatus status;
 
@@ -252,7 +252,7 @@ bool sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
     return aResult;
 }
 
-} // namespace core
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <package/Deflater.hxx>
@@ -138,7 +138,7 @@ void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
 {
     if ((nNewLevel < 0 || nNewLevel > 9) && nNewLevel != DEFAULT_COMPRESSION)
     {
-        // do error handling
+        
     }
     if (nNewLevel != nLevel)
     {
@@ -165,11 +165,11 @@ sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffe
 }
 sal_Int64 SAL_CALL Deflater::getTotalIn(  )
 {
-    return pStream->total_in; // FIXME64: zlib doesn't look 64bit clean here
+    return pStream->total_in; 
 }
 sal_Int64 SAL_CALL Deflater::getTotalOut(  )
 {
-    return pStream->total_out; // FIXME64: zlib doesn't look 64bit clean here
+    return pStream->total_out; 
 }
 void SAL_CALL Deflater::reset(  )
 {

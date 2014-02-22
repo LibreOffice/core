@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -244,10 +244,10 @@ void PageSelector::CheckConsistency (void) const
     }
     if (nSelectionCount!=mnSelectedPageCount)
     {
-        // #i120020# The former call to assert(..) internally calls
-        // SlideSorterModel::GetPageDescriptor which will crash in this situation
-        // (only in non-pro code). All what is wanted there is to assert it (the
-        // error is already detected), so do this directly.
+        
+        
+        
+        
         OSL_ENSURE(false, "PageSelector: Consistency error (!)");
     }
 }
@@ -374,7 +374,7 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 
     mbIsUpdateCurrentPagePending = false;
 
-    // Make the first selected page the current page.
+    
     SharedPageDescriptor pCurrentPageDescriptor;
     const sal_Int32 nPageCount (GetPageCount());
     for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
@@ -390,22 +390,22 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
     }
     if ( ! pCurrentPageDescriptor && nPageCount>0)
     {
-        // No page is selected.  Make the first slide the current page.
+        
         pCurrentPageDescriptor = mrModel.GetPageDescriptor(0);
     }
 
     if (pCurrentPageDescriptor)
     {
-        // Switching the current slide normally sets also the
-        // selection to just the new current slide.  To prevent that,
-        // we store (and at the end of this scope restore) the current
-        // selection.
+        
+        
+        
+        
         ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
 
         mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pCurrentPageDescriptor);
 
-        // Restore the selection and prevent a recursive call to
-        // UpdateCurrentPage().
+        
+        
         SetPageSelection(pSelection, false);
     }
 }
@@ -413,7 +413,7 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 
 
 
-//===== PageSelector::UpdateLock ==============================================
+
 
 PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
     : mpSelector(&rSlideSorter.GetController().GetPageSelector())
@@ -454,7 +454,7 @@ void PageSelector::UpdateLock::Release (void)
 
 
 
-//===== PageSelector::BroadcastLock ==============================================
+
 
 PageSelector::BroadcastLock::BroadcastLock (SlideSorter& rSlideSorter)
     : mrSelector(rSlideSorter.GetController().GetPageSelector())
@@ -479,6 +479,6 @@ PageSelector::BroadcastLock::~BroadcastLock (void)
     mrSelector.EnableBroadcasting();
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

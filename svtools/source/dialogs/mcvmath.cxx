@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,21 +14,21 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <mcvmath.hxx>
 
-// ---------------------------------------------------------------------
-// die folgenden Tabellen enthalten     sin(phi) * 2**14
-// fuer phi= 360Grad*2**-32 bis 360 Grad
-// def. fuer x: phi=360Grad * 2**(x-16)
-//           d.h. x =  16 -> 360 Grad
-//                x = -16 -> (2**-16) * 360 Grad
-//         x:         -16 ... 0 ... 15
-//x=    0,     1,     2,     3,     4,     5,     6,      7,
-//      8,     9,    10,    11,    12,    13,    14,     15
+
+
+
+
+
+
+
+
+
 
 static const short CosTab[16] =
 {
@@ -49,7 +49,7 @@ static const short SinTab[16]=
 |*
 **************************************************************************/
 
-//  first parameter should be the larger one
+
 
 Fix ImpMultBig2( const Fix& a, const Fix& b )
 {
@@ -80,10 +80,10 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
         sup >>= 1;
         inf <<= 1;
     }
-    sqr = (sup+inf) >> 1;               // startvalue for iteration
+    sqr = (sup+inf) >> 1;               
 
-    sqr = (nRadi/sqr + sqr) >> 1;       // 2 Newton-Iterations suffice for
-    sqr = (nRadi/sqr + sqr) >> 1;       // +- 1 Digit
+    sqr = (nRadi/sqr + sqr) >> 1;       
+    sqr = (nRadi/sqr + sqr) >> 1;       
 
     return sal::static_int_cast< sal_uInt16 >(sqr);
 }
@@ -96,12 +96,12 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
 |*
 **************************************************************************/
 
-// e**(i*nPhi), unit nPhi: 2**16 == 360 degrees
+
 
 FixCpx ImpExPI( sal_uInt16 nPhi )
 {
     short i;
-    FixCpx aIter(1L);                   // e**(0*i)
+    FixCpx aIter(1L);                   
     FixCpx Mul;
     const char Sft=14-FIX_POST;
 
@@ -109,8 +109,8 @@ FixCpx ImpExPI( sal_uInt16 nPhi )
     {
         if ( (1L<<i) & nPhi )
         {
-            Mul.r.x = CosTab[i]>>Sft;   // e**(i(phi1+phi2)) =
-            Mul.i.x = SinTab[i]>>Sft;   // e**(i*phi1)) * e**(i*phi2))
+            Mul.r.x = CosTab[i]>>Sft;   
+            Mul.i.x = SinTab[i]>>Sft;   
             aIter  *= Mul;
         }
     }

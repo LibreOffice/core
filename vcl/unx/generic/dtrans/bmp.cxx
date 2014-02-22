@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -104,7 +104,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
     sal_uInt8* pBuffer = 0;
     sal_uInt32 nHeaderSize, nScanlineSize;
     sal_uInt16 nBitCount;
-    // determine header and scanline size
+    
     switch( pImage->depth )
     {
         case 1:
@@ -124,14 +124,14 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
             nBitCount = 8;
             break;
     }
-    // adjust scan lines to begin on %4 boundaries
+    
     if( nScanlineSize & 3 )
     {
         nScanlineSize &= 0xfffffffc;
         nScanlineSize += 4;
     }
 
-    // allocate buffer to hold header and scanlines, initialize to zero
+    
     rOutSize = nHeaderSize + nScanlineSize*pImage->height;
     pBuffer = (sal_uInt8*)rtl_allocateZeroMemory( rOutSize );
     for( int y = 0; y < pImage->height; y++ )
@@ -146,7 +146,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
         }
     }
 
-    // fill in header fields
+    
     pBuffer[ 0 ] = 'B';
     pBuffer[ 1 ] = 'M';
 
@@ -162,7 +162,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
     writeLE( nColors, pBuffer+50 );
 
     XColor aColors[256];
-    if( nColors > (1U << nBitCount) ) // paranoia
+    if( nColors > (1U << nBitCount) ) 
         nColors = (1U << nBitCount);
     for( unsigned long nPixel = 0; nPixel < nColors; nPixel++ )
     {
@@ -177,7 +177,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
         pBuffer[ 56 + i*4 ] = (sal_uInt8)(aColors[i].red >> 8);
     }
 
-    // done
+    
 
     return pBuffer;
 }
@@ -230,7 +230,7 @@ static sal_uInt8* X11_getTCBmpFromImage(
                                              int nScreenNo
                                              )
 {
-    // get masks from visual info (guesswork)
+    
     XVisualInfo aVInfo;
     if( ! XMatchVisualInfo( pDisplay, nScreenNo, pImage->depth, TrueColor, &aVInfo ) )
         return NULL;
@@ -241,7 +241,7 @@ static sal_uInt8* X11_getTCBmpFromImage(
     sal_uInt32 nHeaderSize = 60;
     sal_uInt32 nScanlineSize = pImage->width*3;
 
-    // adjust scan lines to begin on %4 boundaries
+    
     if( nScanlineSize & 3 )
     {
         nScanlineSize &= 0xfffffffc;
@@ -254,7 +254,7 @@ static sal_uInt8* X11_getTCBmpFromImage(
     int nBlueShift, nBlueSig, nBlueShift2 = 0;
     getShift( aVInfo.blue_mask, nBlueShift, nBlueSig, nBlueShift2 );
 
-    // allocate buffer to hold header and scanlines, initialize to zero
+    
     rOutSize = nHeaderSize + nScanlineSize*pImage->height;
     pBuffer = (sal_uInt8*)rtl_allocateZeroMemory( rOutSize );
     for( int y = 0; y < pImage->height; y++ )
@@ -281,7 +281,7 @@ static sal_uInt8* X11_getTCBmpFromImage(
         }
     }
 
-    // fill in header fields
+    
     pBuffer[  0 ] = 'B';
     pBuffer[  1 ] = 'M';
 
@@ -294,7 +294,7 @@ static sal_uInt8* X11_getTCBmpFromImage(
     writeLE( (sal_uInt32)(DisplayWidth(pDisplay,DefaultScreen(pDisplay))*1000/DisplayWidthMM(pDisplay,DefaultScreen(pDisplay))), pBuffer+38);
     writeLE( (sal_uInt32)(DisplayHeight(pDisplay,DefaultScreen(pDisplay))*1000/DisplayHeightMM(pDisplay,DefaultScreen(pDisplay))), pBuffer+42);
 
-    // done
+    
 
     return pBuffer;
 }
@@ -306,13 +306,13 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
                                 sal_Int32& rOutSize
                                 )
 {
-    // get geometry of drawable
+    
     XLIB_Window aRoot;
     int x,y;
     unsigned int w, h, bw, d;
     XGetGeometry( pDisplay, aDrawable, &aRoot, &x, &y, &w, &h, &bw, &d );
 
-    // find which screen we are on
+    
     int nScreenNo = ScreenCount( pDisplay );
     while( nScreenNo-- )
     {
@@ -325,7 +325,7 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
     if( aColormap == None )
         aColormap = DefaultColormap( pDisplay, nScreenNo );
 
-    // get the image
+    
     XImage* pImage = XGetImage( pDisplay, aDrawable, 0, 0, w, h, AllPlanes, ZPixmap );
     if( ! pImage )
         return NULL;
@@ -426,7 +426,7 @@ unsigned long PixmapHolder::getTCPixel( sal_uInt8 r, sal_uInt8 g, sal_uInt8 b ) 
 
 void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage )
 {
-    // setup palette
+    
     XColor aPalette[256];
 
     sal_uInt32 nColors = readLE32( pData+32 );
@@ -461,14 +461,14 @@ void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage 
             nScanlineSize = nWidth;
             break;
     }
-    // adjust scan lines to begin on %4 boundaries
+    
     if( nScanlineSize & 3 )
     {
         nScanlineSize &= 0xfffffffc;
         nScanlineSize += 4;
     }
 
-    // allocate buffer to hold header and scanlines, initialize to zero
+    
     for( unsigned int y = 0; y < nHeight; y++ )
     {
         const sal_uInt8* pScanline = pBMData + (nHeight-1-y)*nScanlineSize;
@@ -538,7 +538,7 @@ void PixmapHolder::setBitmapDataTCDither( const sal_uInt8* pData, XImage* pImage
 
     const sal_uInt8* pBMData = pData + readLE32( pData );
     sal_uInt32 nScanlineSize = nWidth*3;
-    // adjust scan lines to begin on %4 boundaries
+    
     if( nScanlineSize & 3 )
     {
         nScanlineSize &= 0xfffffffc;
@@ -567,7 +567,7 @@ void PixmapHolder::setBitmapDataTC( const sal_uInt8* pData, XImage* pImage )
 
     const sal_uInt8* pBMData = pData + readLE32( pData );
     sal_uInt32 nScanlineSize = nWidth*3;
-    // adjust scan lines to begin on %4 boundaries
+    
     if( nScanlineSize & 3 )
     {
         nScanlineSize &= 0xfffffffc;
@@ -613,7 +613,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
 
     pData = pData+14;
 
-    // reject compressed data
+    
     if( readLE32( pData + 16 ) != 0 )
         return None;
 
@@ -645,7 +645,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
         aImage.red_mask         = m_aInfo.red_mask;
         aImage.green_mask       = m_aInfo.green_mask;
         aImage.blue_mask        = m_aInfo.blue_mask;
-        aImage.bytes_per_line   = 0; // filled in by XInitImage
+        aImage.bytes_per_line   = 0; 
         if( m_aInfo.depth <= 8 )
             aImage.bits_per_pixel = m_aInfo.depth;
         else
@@ -665,7 +665,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
         else
             setBitmapDataPalette( pData, &aImage );
 
-        // put the image
+        
         XPutImage( m_pDisplay,
                    m_aPixmap,
                    DefaultGC( m_pDisplay, m_aInfo.screen ),
@@ -674,10 +674,10 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
                    0, 0,
                    nWidth, nHeight );
 
-        // clean up
+        
         rtl_freeMemory( aImage.data );
 
-        // prepare bitmap (mask)
+        
         m_aBitmap = limitXCreatePixmap( m_pDisplay,
                                    RootWindow( m_pDisplay, m_aInfo.screen ),
                                    nWidth, nHeight, 1 );

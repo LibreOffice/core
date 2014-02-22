@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,7 +97,7 @@ extern "C" int SAL_CALL main( int , char **)
     CoUninitialize();
     return 0;
 }
-//Also supports named args
+
 
 bool doParameterTest(const Reference<XInvocation> & inv)
 {
@@ -190,8 +190,8 @@ bool doParameterTest(const Reference<XInvocation> & inv)
 
 
 
-    //in args + out, optional, positional-----------------------------------------
-    //first general test
+    
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional, seqIndices, seqOut);
@@ -201,7 +201,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqPositional))
         return false;
 
-    //2 optional args, 1 provided
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
@@ -214,7 +214,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt1))
         return false;
 
-    //2 optional args, 0 provided
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
@@ -227,9 +227,9 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt2))
         return false;
 
-    //named args --------------------------------------------
+    
 
-    // 2 named args, correct position
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
@@ -242,7 +242,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqPositional))
         return false;
 
-    // 2named args, position differs
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
@@ -255,7 +255,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqPositional))
         return false;
 
-    //named out args, 2 named args with correct position
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqNamed, seqIndices, seqOut);
@@ -265,7 +265,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqNamed ))
         return false;
 
-    //named out args, 2 named args with different position
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqNamed, seqIndices, seqOut);
@@ -276,7 +276,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
         return false;
 
 
-    //2 args, 1 provided (correct order)
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
@@ -288,7 +288,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     inv->invoke(OUString(L"optional5"), seqPositional, seqIndices, seqOut);
     if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt1))
         return false;
-    //2 args, 1 provided (incorrect order)
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
@@ -301,7 +301,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt3))
         return false;
 
-    //2position + 2 2named args, correct order
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional6"), seqMix0, seqIndices, seqOut);
@@ -314,7 +314,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqMix))
          return false;
 
-    // 4 in args, 1 positional, 1 named, 1 positional omitted
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional6"), seqMix0, seqIndices, seqOut);
@@ -327,7 +327,7 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     if ( ! checkOutArgs(seqOut, seqIndices, seqMixOut))
          return false;
 
-    // 4 out args, 1 positional, 1 named, 1 positional omitted
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"optional6"), seqMix2, seqIndices, seqOut);
@@ -378,7 +378,7 @@ bool doPropertyTest(const Reference<XInvocation> & inv)
     outShort = inv->getValue(OUString(L"prpShort"));
 
     inLong <<= ( sal_Int32) 1234567;
-    inv->setValue(OUString(L"prpLong"), inLong  // TODO: Add your implementation code here
+    inv->setValue(OUString(L"prpLong"), inLong  
 );
     outLong = inv->getValue(OUString(L"prpLong"));
 
@@ -504,15 +504,15 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
     arMultiArgs[1] = makeAny((sal_Int32) 0);
     Sequence<Any> seqMultiVoid2(arMultiArgs, 2);
 
-    //[propput, ...] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [in] VARIANT* newVal);
-    //[propget, ...] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [out, optional, retval] VARIANT* pVal);
+    
+    
     seqIndices.realloc( 0);
      seqOut.realloc(0);
     inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut0, seqIndices, seqOut);
      seqIndices.realloc( 0);
      seqOut.realloc(0);
     inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut1, seqIndices, seqOut);
-    //check in/out args
+    
        seqIndices.realloc( 0);
     seqOut.realloc(0);
      Any anyRet = inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgGet0,
@@ -523,7 +523,7 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
     {
        return false;
     }
-    // test optional (one arg omitted
+    
     seqIndices.realloc( 0);
      seqOut.realloc(0);
     inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut0, seqIndices, seqOut);
@@ -544,7 +544,7 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
        return false;
     }
 
-    //test one named arg and one omitted
+    
     seqIndices.realloc( 0);
      seqOut.realloc(0);
     inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut0, seqIndices, seqOut);
@@ -564,8 +564,8 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
        return false;
     }
 
-//    [propget,...] HRESULT prpMultiArg2([in] VARIANT val1, [out, retval] VARIANT* pVal);
-//    [propput,...] HRESULT prpMultiArg2([in] VARIANT val1, [in] VARIANT newVal);
+
+
     seqIndices.realloc( 0);
      seqOut.realloc(0);
     inv->invoke(OUString(L"prpMultiArg2"), seqMultiArgPut5, seqIndices, seqOut);
@@ -584,8 +584,8 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
      anyRet = inv->invoke(OUString(L"prpMultiArg2GetValues"), seqMultiVoid,
                              seqIndices, seqOut);
 
-// [propget,...] HRESULT prpMultiArg3([in,out] LONG* val1, [out, retval] LONG* pVal);
-// [propput,...] HRESULT prpMultiArg3([in,out] LONG* val1, [in] LONG newVal);
+
+
 
     if ( ! checkOutArgs(seqOut, seqIndices, seqMultiArgGet1 ))
          return false;
@@ -604,7 +604,7 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
         return false;
 
 
-    //hasProperty, hasMethod
+    
     if (inv->hasProperty("prpMultiArg1"))
         return false;
     if ( ! inv->hasMethod("prpMultiArg1"))
@@ -642,9 +642,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
     Any inrefDecimal, outrefDecimal;
 
     Reference<XInterface> xIntFoo(getComObject(L"AxTestComponents.Foo"));
-    //###################################################################################
-    //  in and out parameter
-    //###################################################################################
+    
+    
+    
     sal_Bool aBool = sal_True;
     inBool.setValue(&aBool, getCppuBooleanType());
     inv->invoke(OUString(L"inBool"), Sequence< Any > ( &inBool, 1), seqIndices, seqOut);
@@ -754,9 +754,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         || inCY != outCY
         || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode)
         return false;
-    //###################################################################################
-    //  in/out parameter
-    //###################################################################################
+    
+    
+    
     outBool = Any();
     seqIndices.realloc( 0);
     seqOut.realloc(0);
@@ -841,9 +841,9 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode)
         return false;
 
-    //###################################################################################
-    //  in byref parameters
-    //###################################################################################
+    
+    
+    
 
     inrefLong <<= (sal_Int32) 1234;
     inv->invoke(OUString(L"inrefLong"), Sequence<Any>( & inrefLong, 1), seqIndices, seqOut);
@@ -872,10 +872,10 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         return false;
 
 
-    //###################################################################################
-    //  mixed parameter
-    //###################################################################################
-    // mixed1
+    
+    
+    
+    
     seqIndices.realloc( 0);
     seqOut.realloc(0);
     Any param[3];
@@ -908,7 +908,7 @@ bool doSimpleSequenceTest(const Reference<XInvocation> & inv)
     Any inArObject, outArObject;
     Any outVariant;
 
-    //Initialize arrays
+    
     OUString arStr[]= {L"string0", L"string1", L"string2"};
     Sequence<OUString> seq( arStr, 3);
     inArString <<= seq;
@@ -919,10 +919,10 @@ bool doSimpleSequenceTest(const Reference<XInvocation> & inv)
     arAnyStrTmp[2]<<= arStr[2];
     Sequence<Any> seq_1( arAnyStrTmp, 3);
     inArAny <<= seq_1;
-    //###################################################################################
-    //  in, out Sequences
-    //###################################################################################
-    //Test sequence containing Anys of Strings
+    
+    
+    
+    
     inv->invoke(OUString(L"inArray"), Sequence< Any > ( & inArAny, 1), seqIndices, seqOut);
     seqIndices.realloc(0);
     seqOut.realloc(0);
@@ -1009,9 +1009,9 @@ bool doSimpleSequenceTest(const Reference<XInvocation> & inv)
         || ! equalSequences(inArString, outArString)  || ! equalSequences(inArObject, outArObject))
         return false;
 
-    //###################################################################################
-    //  in/out Sequences
-    //###################################################################################
+    
+    
+    
     seqIndices.realloc(0);
     seqOut.realloc(0);
     inv->invoke(OUString(L"inoutArray"), Sequence< Any >( & inArString, 1), seqIndices, seqOut);
@@ -1108,10 +1108,10 @@ HRESULT doTest()
 
 
 //
-//  //###################################################################################
-//  //  in multi Sequences
-//  //###################################################################################
-//  // inMulDimArrayLong
+
+
+
+
     sal_Int32 arLongi[]={1,2,3};
     sal_Int32 arLongi2[]={4,5,6,7};
     sal_Int32 arLongi3[]={8,9,10,11,12};
@@ -1125,13 +1125,13 @@ HRESULT doTest()
     seq2i[1]= seqLongi2;
     seq2i[2]= seqLongi3;
     seqAny<<= seq2i;
-    // dimension length 3,5
+    
     inv->invoke( OUString(L"inMulDimArrayLong"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
 //
-    //inMulDimArrayVariant
+    
     inv->invoke( OUString(L"inMulDimArrayVariant"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
 
-    //inMulDimArrayLong2
+    
     sal_Int32 arLongii1[]={1,2,3};
     sal_Int32 arLongii2[]={4,5,6,7};
     sal_Int32 arLongii3[]={8,9,10,11,12};
@@ -1159,7 +1159,7 @@ HRESULT doTest()
     seqAny<<= seq3ii;
     inv->invoke( OUString(L"inMulDimArrayLong2"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
 
-    // inMulDimArrayByte2
+    
     sal_Int8 arByteii1[]={1,2,3};
     sal_Int8 arByteii2[]={4,5,6,7};
     sal_Int8 arByteii3[]={8,9,10,11,12};
@@ -1189,18 +1189,18 @@ HRESULT doTest()
 
 
 
-    //###################################################################################
-    //###################################################################################
-    //###################################################################################
-    //  Tests with a MFC ActiveX control, ( pure dispinterface)
-    //###################################################################################
+    
+    
+    
+    
+    
 
-    //###################################################################################
-    //  in parameter MFC ActiveX
-    //###################################################################################
-    // unsigned char is not supported by MFC
-    //  aAny <<= ( sal_Int8) 127;
-    //  invMfc->invoke( OUString(L"inByte"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
+    
+    
+    
+    
+    
+    
     if ( ! invMfc.is())
         return hr;
     aAny <<= static_cast<sal_Int16>(-1);
@@ -1233,52 +1233,52 @@ HRESULT doTest()
     aAny <<= inv5;
     aAny=invMfc->invoke( OUString(L"inObject"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
 //
-//  //###################################################################################
-//  //  out parameter MFC ActiveX
-//  //###################################################################################
+
+
+
 //
-//  // outShort
+
     aAny= invMfc->invoke( OUString(L"outShort"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     anyOut<<= seqOut[0];
     sprintf(buff, "MFC outShort %d",  *(sal_Int16*)anyOut.getValue());
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
-    // outLong
+    
     aAny= invMfc->invoke( OUString(L"outLong"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     anyOut<<= seqOut[0];
     sprintf(buff, "MFC outLong %d",  *(sal_Int32*)anyOut.getValue());
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
-    // outString
+    
     aAny= invMfc->invoke( OUString(L"outString"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     anyOut<<= seqOut[0];
     sprintf(buff, "MFC outString %S",  ((OUString*)anyOut.getValue())->getStr());
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
-    // outFloat
+    
     aAny= invMfc->invoke( OUString(L"outFloat"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     anyOut<<= seqOut[0];
     sprintf(buff, "MFC outFloat %f",  *(float*)anyOut.getValue());
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
-    // outDouble
+    
     aAny= invMfc->invoke( OUString(L"outDouble"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     anyOut<<= seqOut[0];
     sprintf(buff, "MFC outFloat %f",  *(double*)anyOut.getValue());
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
-    // outVariant
-    // we expect a string!! ( VT_BSTR)
+    
+    
     aAny= invMfc->invoke( OUString(L"outVariant"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     anyOut<<= seqOut[0];
     sprintf(buff, "MFC outVariant %S", ((OUString*)anyOut.getValue())->getStr());
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
-    // outDouble
+    
     aAny= invMfc->invoke( OUString(L"outObject"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     Reference<XInvocation> invOut5;
     seqOut[0]>>= invOut5;
-    // we assume that an object of AxTestControls.Basic is being returned.
+    
     anyOut= invOut5->getValue( OUString(L"prpString"));
     OUString tmpStr;
     anyOut>>=tmpStr;
@@ -1286,10 +1286,10 @@ HRESULT doTest()
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
 
-    //###################################################################################
-    //  Sequence parameter MFC ActiveX
-    //###################################################################################
-    // Sequences are not directly supported.
+    
+    
+    
+    
 
 
     delete pWin;
@@ -1299,7 +1299,7 @@ HRESULT doTest()
 
 
 
-//VARIANT_TRUE VT_UI1
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

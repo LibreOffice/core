@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <i18nlangtag/lang.h>
@@ -72,7 +72,7 @@ ThesaurusDispatcher::~ThesaurusDispatcher()
 
 void ThesaurusDispatcher::ClearSvcList()
 {
-    // release memory for each table entry
+    
     ThesSvcByLangMap_t aTmp;
     aSvcMap.swap( aTmp );
 }
@@ -119,7 +119,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
     if (LinguIsUnspecified( nLanguage) || rTerm.isEmpty())
         return aMeanings;
 
-    // search for entry with that language
+    
     ThesSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Thes     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
@@ -139,7 +139,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
         sal_Int32 i = 0;
 
-        // try already instantiated services first
+        
         {
             const Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getConstArray();
             while (i <= pEntry->nLastTriedSvcIndex
@@ -151,7 +151,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
             }
         }
 
-        // if still no result instantiate new services and try those
+        
         if (aMeanings.getLength() == 0
             &&  pEntry->nLastTriedSvcIndex < nLen - 1)
         {
@@ -161,13 +161,13 @@ Sequence< Reference< XMeaning > > SAL_CALL
             Reference< XComponentContext > xContext(
                 comphelper::getProcessComponentContext() );
 
-            // build service initialization argument
+            
             Sequence< Any > aArgs(1);
             aArgs.getArray()[0] <<= GetPropSet();
 
             while (i < nLen  &&  aMeanings.getLength() == 0)
             {
-                // create specific service via it's implementation name
+                
                 Reference< XThesaurus > xThes;
                 try
                 {
@@ -189,8 +189,8 @@ Sequence< Reference< XMeaning > > SAL_CALL
                 ++i;
             }
 
-            // if language is not supported by any of the services
-            // remove it from the list.
+            
+            
             if (i == nLen  &&  aMeanings.getLength() == 0)
             {
                 if (!SvcListHasLanguage( pEntry->aSvcRefs, rLocale ))
@@ -212,11 +212,11 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
-        // remove entry
+        
         aSvcMap.erase( nLanguage );
     else
     {
-        // modify/add entry
+        
         LangSvcEntries_Thes *pEntry = aSvcMap[ nLanguage ].get();
         if (pEntry)
         {
@@ -241,7 +241,7 @@ Sequence< OUString >
 
     Sequence< OUString > aRes;
 
-    // search for entry with that language and use data from that
+    
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
     const ThesSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

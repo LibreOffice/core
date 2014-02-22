@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <swurl.hxx>
@@ -32,7 +32,7 @@
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 
-//Add end
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -215,8 +215,8 @@ awt::Point SAL_CALL SwAccessibleField::getLocationOnScreen()
         throw (RuntimeException)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_False);
-    //Point aPixPos = m_xPara->getLocationOnScreen();
-    return awt::Point( aRect.X,aRect.Y);//aPixPos.X() + aRect.nLeft , aPixPos.Y() + + aRect.nRight );
+    
+    return awt::Point( aRect.X,aRect.Y);
 }
 
 
@@ -255,7 +255,7 @@ sal_Int32 SAL_CALL SwAccessibleField::getBackground()
     Any aRet;
     if ( rType == ::getCppuType((uno::Reference<XAccessibleContext> *)0) )
     {
-        Reference<XAccessibleContext> aAccContext = (XAccessibleContext *) this; // resolve ambiguity
+        Reference<XAccessibleContext> aAccContext = (XAccessibleContext *) this; 
         aRet <<= aAccContext;
     }
     else if ( rType == ::getCppuType((Reference<XAccessibleComponent> *)0) )
@@ -282,7 +282,7 @@ void SAL_CALL SwAccessibleField::addEventListener(
             const Reference< XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    //DBG_MSG( "accessible event listener added" )
+    
 
     if (xListener.is())
     {
@@ -297,7 +297,7 @@ void SAL_CALL SwAccessibleField::removeEventListener(
             const Reference< XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    //DBG_MSG( "accessible event listener removed" )
+    
 
     if (xListener.is())
     {
@@ -305,10 +305,10 @@ void SAL_CALL SwAccessibleField::removeEventListener(
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( m_nClientId );
             m_nClientId = 0;
         }

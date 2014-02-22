@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "breakit.hxx"
@@ -107,8 +107,8 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos 
         sal_Int32 nChgPos = 0;
         if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.getLength() )
         {
-            // A weak character followed by a mark may be meant to combine with
-            // the mark, so prefer the following character's script
+            
+            
             switch (u_charType(rTxt[nPos + 1]))
             {
                 case U_NON_SPACING_MARK:
@@ -178,8 +178,8 @@ sal_Int32 SwBreakIt::getGraphemeCount(const OUString& rText,
     sal_Int32 nCurPos = nStart;
     while (nCurPos < nEnd)
     {
-        // fdo#49208 cheat and assume that nothing can combine with a space
-        // to form a single grapheme
+        
+        
         if (rText[nCurPos] == ' ')
         {
             ++nCurPos;

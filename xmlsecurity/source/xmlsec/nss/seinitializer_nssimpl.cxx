@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /*
@@ -87,14 +87,14 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         pSecEnv->setCertDb(pCertHandle);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
-        //originally the SecurityEnvironment with the internal slot was set as default
+        
         xSecCtx->setDefaultSecurityEnvironmentIndex( n );
         return xSecCtx;
     }
     catch( const uno::Exception& )
     {
-        //PK11_LogoutAll();
-        //NSS_Shutdown();
+        
+        
         return NULL;
     }
 }
@@ -107,8 +107,8 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
      * is destructed, so here no free process for the security context
      * is needed.
      */
-    //PK11_LogoutAll();
-    //NSS_Shutdown();
+    
+    
 }
 
 OUString SEInitializer_NssImpl_getImplementationName ()

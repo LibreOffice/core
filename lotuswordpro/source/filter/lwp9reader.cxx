@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -80,7 +80,7 @@ void Lwp9Reader::Read()
         m_pObjMgr = pGlobal->GetLwpObjFactory();
 
         ReadFileHeader();
-        //Does not support Word Pro 96 and previous versions
+        
         if(LwpFileHeader::m_nFileRevision>=0x000B)
         {
             ReadIndex();
@@ -108,7 +108,7 @@ void Lwp9Reader::ReadFileHeader()
 {
     m_pDocStream->Seek(LwpSvStream::LWP_STREAM_BASE);
 
-    //Remember to initialize the LwpFileHeader::m_nFileRevision first.
+    
     LwpFileHeader::m_nFileRevision = 0;
 
     LwpObjectHeader objHdr;
@@ -146,12 +146,12 @@ void Lwp9Reader::DumpAllObjects()
         LwpObjectHeader objHdr;
         objHdr.Read(*m_pDocStream);
         nFilePos = m_pDocStream->Tell();
-        //Stop when reaching the index object
+        
         if(objHdr.GetTag() >= VO_ROOTLEAFOBJINDEX)
         {
             break;
         }
-        //Stop when the length exceeds the file length
+        
         if(nFilePos + objHdr.GetSize() > nFileSize)
         {
             assert(false);
@@ -182,28 +182,28 @@ void Lwp9Reader::ParseDocument()
 {
     WriteDocHeader();
 
-    //Get root document
+    
     LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID()->obj() );
 
     if (!doc)
         return;
 
-    //Parse Doc Data
+    
     LwpDocData *pDocData = dynamic_cast<LwpDocData*>((doc->GetDocData())->obj());
     if (pDocData!=NULL)
         pDocData->Parse(m_pStream);
 
-    //Register Styles
+    
     RegisteArrowStyles();
     doc->RegisterStyle();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->ToXml(m_pStream);
 
-    //Parse document content
+    
     m_pStream->GetAttrList()->Clear();
     m_pStream->StartElement( A2OUSTR("office:body") );
 
-    //Parse change list, add by
+    
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
     LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
     pChangeMgr->ConvertAllChange(m_pStream);
@@ -223,25 +223,25 @@ void Lwp9Reader::WriteDocHeader()
 
     IXFAttrList *pAttrList = m_pStream->GetAttrList();
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:office"), A2OUSTR("http://openoffice.org/2000/office") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:style"), A2OUSTR("http://openoffice.org/2000/style") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:text"), A2OUSTR("http://openoffice.org/2000/text") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:table"), A2OUSTR("http://openoffice.org/2000/table") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:draw"), A2OUSTR("http://openoffice.org/2000/drawing") );
+    pAttrList->AddAttribute( A2OUSTR("xmlns:office"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:style"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:text"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:table"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:draw"), A2OUSTR("http:
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:fo"), A2OUSTR("http://www.w3.org/1999/XSL/Format") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:xlink"), A2OUSTR("http://www.w3.org/1999/xlink") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:number"), A2OUSTR("http://openoffice.org/2000/datastyle") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:svg"), A2OUSTR("http://www.w3.org/2000/svg") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:chart"), A2OUSTR("http://openoffice.org/2000/chart") );
+    pAttrList->AddAttribute( A2OUSTR("xmlns:fo"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:xlink"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:number"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:svg"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:chart"), A2OUSTR("http:
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:dr3d"), A2OUSTR("http://openoffice.org/2000/dr3d") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:math"), A2OUSTR("http://www.w3.org/1998/Math/MathML") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:form"), A2OUSTR("http://openoffice.org/2000/form") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:script"), A2OUSTR("http://openoffice.org/2000/script") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:dc"), A2OUSTR("http://purl.org/dc/elements/1.1/") );
+    pAttrList->AddAttribute( A2OUSTR("xmlns:dr3d"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:math"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:form"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:script"), A2OUSTR("http:
+    pAttrList->AddAttribute( A2OUSTR("xmlns:dc"), A2OUSTR("http:
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:meta"), A2OUSTR("http://openoffice.org/2000/meta") );
+    pAttrList->AddAttribute( A2OUSTR("xmlns:meta"), A2OUSTR("http:
     pAttrList->AddAttribute( A2OUSTR("office:class"), A2OUSTR("text"));
     pAttrList->AddAttribute( A2OUSTR("office:version"), A2OUSTR("1.0"));
 

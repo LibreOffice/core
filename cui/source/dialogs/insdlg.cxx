@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -100,7 +100,7 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl(Window * pParent, const OString
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvInsertOleDlg, DoubleClickHdl)
 {
@@ -109,7 +109,7 @@ IMPL_LINK_NOARG_INLINE_START(SvInsertOleDlg, DoubleClickHdl)
 }
 IMPL_LINK_INLINE_END( SvInsertOleDlg, DoubleClickHdl, ListBox *, pListBox )
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 {
@@ -117,7 +117,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 
     Reference< XFilePicker3 > xFilePicker = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
 
-    // add filter
+    
     try
     {
         xFilePicker->appendFilter(
@@ -140,7 +140,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 {
@@ -157,14 +157,14 @@ IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvInsertOleDlg::SelectDefault()
 {
     m_pLbObjecttype->SelectEntryPos(0);
 }
 
-// -----------------------------------------------------------------------
+
 SvInsertOleDlg::SvInsertOleDlg
 (
     Window* pParent,
@@ -197,12 +197,12 @@ short SvInsertOleDlg::Execute()
     SvObjectServerList  aObjS;
     if ( !m_pServers )
     {
-        // if no list was provided, take the complete one
+        
         aObjS.FillInsertObjects();
         m_pServers = &aObjS;
     }
 
-    // fill listbox and select default
+    
     ListBox& rBox = GetObjectTypes();
     rBox.SetUpdateMode( false );
     for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
@@ -219,7 +219,7 @@ short SvInsertOleDlg::Execute()
         sal_Bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {
-            // create and insert new embedded object
+            
             OUString aServerName = rBox.GetSelectEntry();
             const SvObjectServer* pS = m_pServers->Get( aServerName );
             if ( pS )
@@ -258,33 +258,33 @@ short SvInsertOleDlg::Execute()
                     }
                     catch( ucb::CommandAbortedException& )
                     {
-                        // the user has pressed cancel
+                        
                     }
                     catch( uno::Exception& )
                     {
-                        // TODO: Error handling
+                        
                     }
                 }
                 else
                 {
-                    // create object with desired ClassId
+                    
                     m_xObj = aCnt.CreateEmbeddedObject( pS->GetClassName().GetByteSequence(), aName );
                 }
 
                 if ( !m_xObj.is() )
                 {
-                    if( !aFileName.isEmpty() )  // from OLE Dialog
+                    if( !aFileName.isEmpty() )  
                     {
-                        // object couldn't be created from file
-                        // global Resource from svtools (former so3 resource)
+                        
+                        
                         OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                         aErr = aErr.replaceFirst( "%", aFileName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
                     else
                     {
-                        // object couldn't be created
-                        // global Resource from svtools (former so3 resource)
+                        
+                        
                         OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
                         aErr = aErr.replaceFirst( "%", aServerName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
@@ -303,7 +303,7 @@ short SvInsertOleDlg::Execute()
 
             if ( !aFileName.isEmpty() )
             {
-                // create MediaDescriptor for file to create object from
+                
                 uno::Sequence < beans::PropertyValue > aMedium( 2 );
                 aMedium[0].Name = "URL";
                 aMedium[0].Value <<= OUString( aFileName );
@@ -315,7 +315,7 @@ short SvInsertOleDlg::Execute()
                aMedium[1].Name = "InteractionHandler";
                aMedium[1].Value <<= xInteraction;
 
-                // create object from media descriptor
+                
                 if ( bLink )
                     m_xObj = aCnt.InsertEmbeddedLink( aMedium, aName );
                 else
@@ -324,8 +324,8 @@ short SvInsertOleDlg::Execute()
 
             if ( !m_xObj.is() )
             {
-                // object couldn't be created from file
-                // global Resource from svtools (former so3 resource)
+                
+                
                 OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                 aErr = aErr.replaceFirst( "%", aFileName );
                 ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
@@ -359,7 +359,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< XFilePicker3 > xFilePicker = ui::dialogs::FilePicker::createWithMode( xContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
-    // add the filters
+    
     try
     {
         const OUString* pNames = aFilterNames.getConstArray();
@@ -382,7 +382,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvInsertPlugInDialog::SvInsertPlugInDialog(Window* pParent,
     const uno::Reference < embed::XStorage >& xStorage)
@@ -400,7 +400,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
     delete m_pURL;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void Plugin_ImplFillCommandSequence( const OUString& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {
@@ -434,11 +434,11 @@ short SvInsertPlugInDialog::Execute()
         m_aCommands = GetPlugInOptions();
         OUString aURL = GetPlugInFile();
 
-        // URL can be a valid and absolute URL or a system file name
+        
         m_pURL->SetSmartProtocol( INET_PROT_FILE );
         if ( aURL.isEmpty() || m_pURL->SetSmartURL( aURL ) )
         {
-            // create a plugin object
+            
             OUString aName;
             SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
             m_xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
@@ -446,7 +446,7 @@ short SvInsertPlugInDialog::Execute()
 
         if ( m_xObj.is() )
         {
-            // set properties from dialog
+            
             if ( m_xObj->getCurrentState() == embed::EmbedStates::LOADED )
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
 
@@ -462,8 +462,8 @@ short SvInsertPlugInDialog::Execute()
         }
         else
         {
-            // PlugIn couldn't be created
-            // global Resource from svtools (former so3 resource)
+            
+            
             OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
             aErr = aErr.replaceFirst( "%", aURL );
             ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
@@ -618,7 +618,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         OUString aURL;
         if ( !m_pEDURL->GetText().isEmpty() )
         {
-            // URL can be a valid and absolute URL or a system file name
+            
             INetURLObject aObj;
             aObj.SetSmartProtocol( INET_PROT_FILE );
             if ( aObj.SetSmartURL( m_pEDURL->GetText() ) )
@@ -627,7 +627,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 
         if ( !m_xObj.is() && !aURL.isEmpty() )
         {
-            // create the object
+            
             OUString aName;
             SvGlobalName aClassId( SO3_IFRAME_CLASSID );
             m_xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
@@ -692,7 +692,7 @@ short SfxInsertFloatingFrameDialog::Execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 {
@@ -715,21 +715,21 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 {
     Window* pOldParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pThis );
 
-    // create the file dialog
+    
     sfx2::FileDialogHelper aFileDlg(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0, OUString() );
 
-    // set the title
+    
     aFileDlg.SetTitle(CUI_RESSTR(RID_SVXSTR_SELECT_FILE_IFRAME));
 
-    // show the dialog
+    
     if ( aFileDlg.Execute() == ERRCODE_NONE )
         pThis->m_pEDURL->SetText(
             INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );

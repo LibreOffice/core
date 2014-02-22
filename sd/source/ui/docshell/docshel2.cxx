@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,7 +51,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {
-      // THUMBNAIL: here we may can set the draft mode
+      
     }
 
     ClientView* pView = new ClientView(this, pOut, NULL);
@@ -129,7 +129,7 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
-        // provide size of first page
+        
         MapMode aSrcMapMode(MAP_PIXEL);
         MapMode aDstMapMode(MAP_100TH_MM);
         Size aSize = mpDoc->GetSdPage(0, PK_STANDARD)->GetSize();
@@ -207,7 +207,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aVDev.SetMapMode( aMapMode );
     aVDev.SetOutputSize( aSize );
 
-    // that we also get the dark lines at the right and bottom page margin
+    
     aFrac = Fraction( nMaxEdgePixel - 1, nMaxEdgePix );
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
@@ -219,7 +219,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     if ( GetFrameView() )
     {
-        // initialize the drawing-(screen) attributes
+        
         pView->SetGridCoarse( pFrameView->GetGridCoarse() );
         pView->SetGridFine( pFrameView->GetGridFine() );
         pView->SetSnapGridWidth(pFrameView->GetSnapGridWidthX(), pFrameView->GetSnapGridWidthY());
@@ -266,7 +266,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     pView->CompleteRedraw( &aVDev, Region(Rectangle(aNullPt, aSize)) );
 
-    // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
+    
     delete pView;
 
     aVDev.SetMapMode( MapMode() );
@@ -321,30 +321,30 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
 {
     bool bCanUseNewName = false;
 
-    // check if name is something like 'Slide n'
+    
     OUString aStrPage(SD_RESSTR(STR_SD_PAGE) + " ");
 
     bool bIsStandardName = false;
 
-    // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
-    // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
+    
+    
     if (rInOutPageName.startsWith(aStrPage) &&
         rInOutPageName.getLength() > aStrPage.getLength())
     {
         OUString sRemainder = rInOutPageName.getToken(1, ' ');
         if (sRemainder[0] >= '0' && sRemainder[0] <= '9')
         {
-            // check for arabic numbering
+            
 
             sal_Int32 nIndex = 1;
-            // skip all following numbers
+            
             while (nIndex < sRemainder.getLength() &&
                    sRemainder[nIndex] >= '0' && sRemainder[nIndex] <= '9')
             {
                 nIndex++;
             }
 
-            // EOL? Reserved name!
+            
             if (nIndex >= sRemainder.getLength())
             {
                 bIsStandardName = true;
@@ -353,21 +353,21 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
         else if (sRemainder.getLength() == 1 &&
                  comphelper::string::islowerAscii(sRemainder[0]))
         {
-            // lower case, single character: reserved
+            
             bIsStandardName = true;
         }
         else if (sRemainder.getLength() == 1 &&
                  comphelper::string::isupperAscii(sRemainder[0]))
         {
-            // upper case, single character: reserved
+            
             bIsStandardName = true;
         }
         else
         {
-            // check for upper/lower case roman numbering
+            
             OUString sReserved("cdilmvx");
 
-            // skip all following characters contained in one reserved class
+            
             if (sReserved.indexOf(sRemainder[0]) == -1)
                 sReserved = sReserved.toAsciiUpperCase();
 
@@ -378,7 +378,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
                 nIndex++;
             }
 
-            // EOL? Reserved name!
+            
             if (nIndex >= sRemainder.getLength())
             {
                 bIsStandardName = true;
@@ -390,9 +390,9 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     {
         if( bResetStringIfStandardName )
         {
-            // this is for insertion of slides from other files with standard
-            // name.  They get a new standard name, if the string is set to an
-            // empty one.
+            
+            
+            
             rInOutPageName = OUString();
             bCanUseNewName = true;
         }
@@ -424,6 +424,6 @@ IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 
     return long(IsNewPageNameValid( aNewName ));
 }
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

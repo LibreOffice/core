@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <escphdl.hxx>
@@ -28,18 +28,18 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// this is a copy of defines in svx/inc/escpitem.hxx
+
 #define DFLT_ESC_PROP    58
 #define DFLT_ESC_AUTO_SUPER 101
 #define DFLT_ESC_AUTO_SUB  -101
 
 //
-// class XMLEscapementPropHdl
+
 //
 
 XMLEscapementPropHdl::~XMLEscapementPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -99,12 +99,12 @@ bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 }
 
 //
-// class XMLEscapementHeightPropHdl
+
 //
 
 XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -132,7 +132,7 @@ bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::A
         if (::sax::Converter::convertPercent( nEscapementPosition, aToken )
             && (nEscapementPosition == 0))
         {
-            nProp = 100; //if escapement position is zero and no escapement height is given the default height should be 100percent and not something smaller (#i91800#)
+            nProp = 100; 
         }
         else
             nProp = (sal_Int8) DFLT_ESC_PROP;

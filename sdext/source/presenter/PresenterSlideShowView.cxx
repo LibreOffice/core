@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -15,7 +15,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterSlideShowView.hxx"
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext { namespace presenter {
 
-//===== PresenterSlideShowView ================================================
+
 
 PresenterSlideShowView::PresenterSlideShowView (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -106,8 +106,8 @@ void PresenterSlideShowView::LateInit (void)
                    mxComponentContext),
                UNO_QUERY_THROW);
 
-    // Use view id and controller to retrieve window and canvas from
-    // configuration controller.
+    
+    
     Reference<XControllerManager> xCM (mxController, UNO_QUERY_THROW);
     Reference<XConfigurationController> xCC (xCM->getConfigurationController());
 
@@ -126,22 +126,22 @@ void PresenterSlideShowView::LateInit (void)
             mxWindow->addWindowListener(this);
         }
 
-        // The window does not have to paint a background.  We do
-        // that ourself.
+        
+        
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
     }
 
-    // Create a window for the actual slide show view.  It is places
-    // centered and with maximal size inside the pane.
+    
+    
     mxViewWindow = CreateViewWindow(mxWindow);
 
     mxViewCanvas = CreateViewCanvas(mxViewWindow);
 
     if (mxViewWindow.is())
     {
-        // Register listeners at window.
+        
         mxViewWindow->addPaintListener(this);
         mxViewWindow->addMouseListener(this);
         mxViewWindow->addMouseMotionListener(this);
@@ -153,14 +153,14 @@ void PresenterSlideShowView::LateInit (void)
     if (mxWindow.is())
         mxWindow->setVisible(sal_True);
 
-    // Add the new slide show view to the slide show.
+    
     if (mxSlideShow.is() && ! mbIsViewAdded)
     {
         impl_addAndConfigureView();
         mbIsViewAdded = true;
     }
 
-    // Read text for one past last slide.
+    
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
         PresenterConfigurationAccess::msPresenterScreenRootName,
@@ -181,7 +181,7 @@ PresenterSlideShowView::~PresenterSlideShowView (void)
 
 void PresenterSlideShowView::disposing (void)
 {
-    // Tell all listeners that we are disposed.
+    
     lang::EventObject aEvent;
     aEvent.Source = static_cast<XWeak*>(this);
 
@@ -190,8 +190,8 @@ void PresenterSlideShowView::disposing (void)
     if (pIterator != NULL)
         pIterator->disposeAndClear(aEvent);
 
-    // Do this for
-    // XPaintListener, XModifyListener,XMouseListener,XMouseMotionListener,XWindowListener?
+    
+    
 
     if (mxWindow.is())
     {
@@ -251,7 +251,7 @@ void PresenterSlideShowView::disposing (void)
     mxCurrentSlide = NULL;
 }
 
-//----- XDrawView -------------------------------------------------------------
+
 
 void SAL_CALL PresenterSlideShowView::setCurrentPage (
     const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
@@ -268,9 +268,9 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
         if (xPeer.is())
             xPeer->invalidate(awt::InvalidateStyle::NOTRANSPARENT);
 
-        // For the end slide we use a special title, without the (n of m)
-        // part.  Save the title template for the case that the user goes
-        // backwards.
+        
+        
+        
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindViewURL(mxViewId->getResourceURL()));
         if (pDescriptor.get() != NULL)
@@ -284,7 +284,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
     {
         mbIsEndSlideVisible = false;
 
-        // Restore the title template.
+        
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindViewURL(mxViewId->getResourceURL()));
         if (pDescriptor.get() != NULL)
@@ -302,7 +302,7 @@ css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::ge
     return mxCurrentSlide;
 }
 
-//----- CachablePresenterView -------------------------------------------------
+
 
 void PresenterSlideShowView::ReleaseView (void)
 {
@@ -313,7 +313,7 @@ void PresenterSlideShowView::ReleaseView (void)
     }
 }
 
-//----- XSlideShowView --------------------------------------------------------
+
 
 Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas (void)
     throw (RuntimeException)
@@ -332,7 +332,7 @@ void SAL_CALL PresenterSlideShowView::clear (void)
 
     if (mxViewCanvas.is() && mxViewWindow.is())
     {
-        // Create a polygon for the window outline.
+        
         awt::Rectangle aViewWindowBox (mxViewWindow->getPosSize());
         Reference<rendering::XPolyPolygon2D> xPolygon (PresenterGeometryHelper::CreatePolygon(
             awt::Rectangle(0,0, aViewWindowBox.Width,aViewWindowBox.Height),
@@ -358,15 +358,15 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (voi
 
     if (mxViewWindow.is())
     {
-        // When the mbIsInModifyNotification is set then a slightly modified
-        // version of the transformation is returned in order to get past
-        // optimizations the avoid updates when the transformation is
-        // unchanged (when the window size changes then due to the constant
-        // aspect ratio the size of the preview may remain the same while
-        // the position changes.  The position, however, is repesented by
-        // the position of the view window.  This transformation is given
-        // relative to the view window and therefore does not contain the
-        // position.)
+        
+        
+        
+        
+        
+        
+        
+        
+        
         const awt::Rectangle aWindowBox = mxViewWindow->getPosSize();
         return geometry::AffineMatrix2D(
             aWindowBox.Width-1, 0, (mbIsInModifyNotification ? 1 : 0),
@@ -470,14 +470,14 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
 {
     ThrowIfDisposed();
 
-    // Create a pointer when it does not yet exist.
+    
     if ( ! mxPointer.is())
     {
         mxPointer = awt::Pointer::create(mxComponentContext);
     }
 
-    // Set the pointer to the given shape and the window(peer) to the
-    // pointer.
+    
+    
     Reference<awt::XWindowPeer> xPeer (mxViewWindow, UNO_QUERY);
     if (mxPointer.is() && xPeer.is())
     {
@@ -498,7 +498,7 @@ awt::Rectangle SAL_CALL PresenterSlideShowView::getCanvasArea(  ) throw (Runtime
     return aRectangle;
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterSlideShowView::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -509,12 +509,12 @@ void SAL_CALL PresenterSlideShowView::disposing (const lang::EventObject& rEvent
         mxSlideShow = NULL;
 }
 
-//----- XPaintListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterSlideShowView::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException)
 {
-    // Deactivated views must not be painted.
+    
     if ( ! mbIsPresenterViewActive)
         return;
 
@@ -530,7 +530,7 @@ void SAL_CALL PresenterSlideShowView::windowPaint (const awt::PaintEvent& rEvent
         PaintInnerWindow(rEvent);
 }
 
-//----- XMouseListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterSlideShowView::mousePressed (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
@@ -544,9 +544,9 @@ void SAL_CALL PresenterSlideShowView::mousePressed (const awt::MouseEvent& rEven
         pIterator->notifyEach(&awt::XMouseListener::mousePressed, aEvent);
     }
 
-    // Only when the end slide is displayed we forward the mouse event to
-    // the PresenterController so that it switches to the next slide and
-    // ends the presentation.
+    
+    
+    
     if (mbIsEndSlideVisible)
         if (mpPresenterController.get() != NULL)
             mpPresenterController->HandleMouseClick(rEvent);
@@ -591,7 +591,7 @@ void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent
     }
 }
 
-//----- XMouseMotionListener --------------------------------------------------
+
 
 void SAL_CALL PresenterSlideShowView::mouseDragged (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
@@ -619,7 +619,7 @@ void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
     }
 }
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterSlideShowView::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
@@ -653,7 +653,7 @@ void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject& rEv
     (void)rEvent;
 }
 
-//----- XView -----------------------------------------------------------------
+
 
 Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId (void)
     throw(RuntimeException)
@@ -667,7 +667,7 @@ sal_Bool SAL_CALL PresenterSlideShowView::isAnchorOnly (void)
     return false;
 }
 
-//----- CachablePresenterView -------------------------------------------------
+
 
 void PresenterSlideShowView::ActivatePresenterView (void)
 {
@@ -687,7 +687,7 @@ void PresenterSlideShowView::DeactivatePresenterView (void)
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox)
 {
@@ -782,7 +782,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
         if (pFont.get() == NULL)
             break;
 
-        /// this is responsible of the " presentation exit " text inside the slide windows
+        
         PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
         aRenderState.AffineTransform.m02 = 20;
         aRenderState.AffineTransform.m12 = 40;
@@ -798,8 +798,8 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
     }
     while (false);
 
-    // Finally, in double buffered environments, request the changes to be
-    // made visible.
+    
+    
     Reference<rendering::XSpriteCanvas> mxSpriteCanvas (mxCanvas, UNO_QUERY);
     if (mxSpriteCanvas.is())
         mxSpriteCanvas->updateScreen(sal_True);
@@ -807,7 +807,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
 
 void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
 {
-    // Forward window paint to listeners.
+    
     awt::PaintEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
@@ -820,8 +820,8 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
     if (mbIsForcedPaintPending)
         ForceRepaint();
 
-    // Finally, in double buffered environments, request the changes to be
-    // made visible.
+    
+    
     Reference<rendering::XSpriteCanvas> mxSpriteCanvas (mxCanvas, UNO_QUERY);
     if (mxSpriteCanvas.is())
         mxSpriteCanvas->updateScreen(sal_True);
@@ -842,7 +842,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
             awt::WindowClass_CONTAINER,
             OUString(),
             Reference<awt::XWindowPeer>(rxParentWindow,UNO_QUERY_THROW),
-            -1, // parent index not available
+            -1, 
             awt::Rectangle(0,0,10,10),
             awt::WindowAttribute::SIZEABLE
                 | awt::WindowAttribute::MOVEABLE
@@ -850,7 +850,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
         xViewWindow = Reference<awt::XWindow>(
             xToolkit->createWindow(aWindowDescriptor),UNO_QUERY_THROW);
 
-        // Make the background transparent.  The slide show paints its own background.
+        
         Reference<awt::XWindowPeer> xPeer (xViewWindow, UNO_QUERY_THROW);
         if (xPeer.is())
         {
@@ -868,7 +868,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
 Reference<rendering::XCanvas> PresenterSlideShowView::CreateViewCanvas (
     const Reference<awt::XWindow>& rxViewWindow) const
 {
-    // Create a canvas for the view window.
+    
     return mxPresenterHelper->createSharedCanvas(
         Reference<rendering::XSpriteCanvas>(mxTopPane->getCanvas(), UNO_QUERY),
         mxTopPane->getWindow(),
@@ -890,7 +890,7 @@ void PresenterSlideShowView::Resize (void)
             double(aWindowBox.Width) / double(aWindowBox.Height));
         if (nWindowAspectRatio > mnPageAspectRatio)
         {
-            // Slides will be painted with the full parent window height.
+            
             aViewWindowBox.Width = sal_Int32(aWindowBox.Height * mnPageAspectRatio + 0.5);
             aViewWindowBox.Height = aWindowBox.Height;
             aViewWindowBox.X = (aWindowBox.Width - aViewWindowBox.Width) / 2;
@@ -898,7 +898,7 @@ void PresenterSlideShowView::Resize (void)
         }
         else
         {
-            // Slides will be painted with the full parent window width.
+            
             aViewWindowBox.Width = aWindowBox.Width;
             aViewWindowBox.Height = sal_Int32(aWindowBox.Width / mnPageAspectRatio + 0.5);
             aViewWindowBox.X = 0;
@@ -912,12 +912,12 @@ void PresenterSlideShowView::Resize (void)
             awt::PosSize::POSSIZE);
     }
 
-    // Clear the background polygon so that on the next paint it is created
-    // for the new size.
+    
+    
     CreateBackgroundPolygons();
 
-    // Notify listeners that the transformation that maps the view into the
-    // window has changed.
+    
+    
     lang::EventObject aEvent (static_cast<XWeak*>(this));
     ::cppu::OInterfaceContainerHelper* pIterator
         = maBroadcaster.getContainer(getCppuType((Reference<util::XModifyListener>*)NULL));
@@ -926,9 +926,9 @@ void PresenterSlideShowView::Resize (void)
         pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
     }
 
-    // Due to constant aspect ratio resizing may lead a preview that changes
-    // its position but not its size.  This invalidates the back buffer and
-    // we have to enforce a complete repaint.
+    
+    
+    
     if ( ! mbIsPaintPending)
         mbIsForcedPaintPending = true;
 }
@@ -953,7 +953,7 @@ void PresenterSlideShowView::CreateBackgroundPolygons (void)
     }
     else if (aWindowBox.Height == aViewWindowBox.Height)
     {
-        // Paint two boxes to the left and right of the view window.
+        
         mxBackgroundPolygon1 = PresenterGeometryHelper::CreatePolygon(
             awt::Rectangle(
                 0,
@@ -971,7 +971,7 @@ void PresenterSlideShowView::CreateBackgroundPolygons (void)
     }
     else
     {
-        // Paint two boxes above and below the view window.
+        
         mxBackgroundPolygon1 = PresenterGeometryHelper::CreatePolygon(
             awt::Rectangle(
                 0,
@@ -1004,8 +1004,8 @@ void PresenterSlideShowView::impl_addAndConfigureView()
 {
     Reference<presentation::XSlideShowView> xView (this);
     mxSlideShow->addView(xView);
-    // Prevent embeded sounds being played twice at the same time by
-    // disabling sound for the new slide show view.
+    
+    
     beans::PropertyValue aProperty;
     aProperty.Name = "IsSoundEnabled";
     Sequence<Any> aValues (2);
@@ -1015,6 +1015,6 @@ void PresenterSlideShowView::impl_addAndConfigureView()
     mxSlideShow->setProperty(aProperty);
 }
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

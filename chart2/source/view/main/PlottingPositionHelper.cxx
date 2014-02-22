@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PlottingPositionHelper.hxx"
@@ -59,7 +59,7 @@ PlottingPositionHelper::PlottingPositionHelper()
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
         : m_aScales( rSource.m_aScales )
         , m_aMatrixScreenToScene( rSource.m_aMatrixScreenToScene )
-        , m_xTransformationLogicToScene( NULL ) //should be recalculated
+        , m_xTransformationLogicToScene( NULL ) 
         , m_bSwapXAndY( rSource.m_bSwapXAndY )
         , m_nXResolution( rSource.m_nXResolution )
         , m_nYResolution( rSource.m_nYResolution )
@@ -111,12 +111,12 @@ const std::vector< ExplicitScaleData >& PlottingPositionHelper::getScales() cons
 
 uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScaledLogicToScene() const
 {
-    //this is a standard transformation for a cartesian coordinate system
+    
 
-    //transformation from 2) to 4) //@todo 2) and 4) need a ink to a document
+    
 
-    //we need to apply this transformation to each geometric object because of a bug/problem
-    //of the old drawing layer (the UNO_NAME_3D_EXTRUDE_DEPTH is an integer value instead of an double )
+    
+    
     if(!m_xTransformationLogicToScene.is())
     {
         ::basegfx::B3DHomMatrix aMatrix;
@@ -131,7 +131,7 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
         AxisOrientation nYAxisOrientation = m_aScales[1].Orientation;
         AxisOrientation nZAxisOrientation = m_aScales[2].Orientation;
 
-        //apply scaling
+        
         doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
         doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
 
@@ -165,7 +165,7 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
         else
             aMatrix.translate(0.0, -MaxY*fScaleY, 0.0);
         if( AxisOrientation_MATHEMATICAL==nZAxisOrientation )
-            aMatrix.translate(0.0, 0.0, -MaxZ*fScaleZ);//z direction in draw is reverse mathematical direction
+            aMatrix.translate(0.0, 0.0, -MaxZ*fScaleZ);
         else
             aMatrix.translate(0.0, 0.0, -MinZ*fScaleZ);
 
@@ -206,18 +206,18 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
                 , AbstractShapeFactory* pShapeFactory
                 , sal_Int32 nDimensionCount )
 {
-    //@todo would like to have a cheaper method to do this transformation
+    
     awt::Point aScreenPoint( static_cast<sal_Int32>(rScenePosition3D.PositionX), static_cast<sal_Int32>(rScenePosition3D.PositionY) );
 
-    //transformation from scene to screen (only necessary for 3D):
+    
     if(3==nDimensionCount)
     {
-        //create 3D anchor shape
+        
         tPropertyNameMap aDummyPropertyNameMap;
         uno::Reference< drawing::XShape > xShape3DAnchor = pShapeFactory->createCube( xSceneTarget
                 , rScenePosition3D,drawing::Direction3D(1,1,1)
                 , 0, 0, aDummyPropertyNameMap);
-        //get 2D position from xShape3DAnchor
+        
         aScreenPoint = xShape3DAnchor->getPosition();
         xSceneTarget->remove(xShape3DAnchor);
     }
@@ -247,7 +247,7 @@ void PlottingPositionHelper::transformScaledLogicToScene( drawing::PolyPolygonSh
 
 void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, double* pZ ) const
 {
-    //get logic clip values:
+    
     double MinX = getLogicMinX();
     double MinY = getLogicMinY();
     double MinZ = getLogicMinZ();
@@ -255,7 +255,7 @@ void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, doub
     double MaxY = getLogicMaxY();
     double MaxZ = getLogicMaxZ();
 
-    //apply scaling
+    
     doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
     doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
 
@@ -284,7 +284,7 @@ void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, doub
 
 basegfx::B2DRectangle PlottingPositionHelper::getScaledLogicClipDoubleRect() const
 {
-    //get logic clip values:
+    
     double MinX = getLogicMinX();
     double MinY = getLogicMinY();
     double MinZ = getLogicMinZ();
@@ -292,7 +292,7 @@ basegfx::B2DRectangle PlottingPositionHelper::getScaledLogicClipDoubleRect() con
     double MaxY = getLogicMaxY();
     double MaxZ = getLogicMaxZ();
 
-    //apply scaling
+    
     doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
     doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
 
@@ -408,7 +408,7 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
                 fScaleY = fScaleLogicZ;
             }
             break;
-        default: //NormalAxis_Z:
+        default: 
             {
                 fTranslateZ = fTranslateLogicZ;
                 fScaleZ = fScaleLogicZ;
@@ -416,8 +416,8 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
             break;
     }
 
-    aRet.translate(fTranslateX, fTranslateY, fTranslateZ);//x first
-    aRet.scale(fScaleX, fScaleY, fScaleZ);//x first
+    aRet.translate(fTranslateX, fTranslateY, fTranslateZ);
+    aRet.scale(fScaleX, fScaleY, fScaleZ);
 
     aRet = rMatrixScreenToScene * aRet;
     return aRet;
@@ -590,11 +590,11 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
             std::swap(fY,fZ);
             fZ*=-1;
             break;
-        default: //NormalAxis_Z
+        default: 
             break;
     }
 
-    //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
+    
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
     return B3DPointToPosition3D(aRet);
@@ -632,7 +632,7 @@ void PlottingPositionHelper::setTimeResolution( long nTimeResolution, const Date
     m_nTimeResolution = nTimeResolution;
     m_aNullDate = rNullDate;
 
-    //adapt category width
+    
     double fCategoryWidth = 1.0;
     if( !m_aScales.empty() )
     {
@@ -641,7 +641,7 @@ void PlottingPositionHelper::setTimeResolution( long nTimeResolution, const Date
             m_bDateAxis = true;
             if( nTimeResolution == ::com::sun::star::chart::TimeUnit::YEAR )
             {
-                const double fMonthCount = 12.0;//todo: this depends on the DateScaling and must be adjusted in case we use more generic calendars in future
+                const double fMonthCount = 12.0;
                 fCategoryWidth = fMonthCount;
             }
         }

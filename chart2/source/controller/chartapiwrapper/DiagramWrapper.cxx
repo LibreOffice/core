@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DiagramWrapper.hxx"
@@ -150,7 +150,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    // see com.sun.star.chart.StackableDiagram
+    
     rOutProperties.push_back(
         Property( "Percent",
                   PROP_DIAGRAM_PERCENT_STACKED,
@@ -171,7 +171,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // see com.sun.star.chart.Chart3DBarProperties
+    
     rOutProperties.push_back(
         Property( "SolidType",
                   PROP_DIAGRAM_SOLIDTYPE,
@@ -179,7 +179,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // see com.sun.star.chart.BarDiagram
+    
     rOutProperties.push_back(
         Property( "Deep",
                   PROP_DIAGRAM_DEEP,
@@ -226,7 +226,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //new for XY charts
+    
     rOutProperties.push_back(
         Property( "SortByXValues",
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
@@ -234,7 +234,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //for pie and donut charts
+    
     rOutProperties.push_back(
         Property( "StartingAngle",
                   PROP_DIAGRAM_STARTING_ANGLE,
@@ -242,7 +242,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //new for 3D charts
+    
     rOutProperties.push_back(
         Property( "RightAngledAxes",
                   PROP_DIAGRAM_RIGHT_ANGLED_AXES,
@@ -268,7 +268,7 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
-    // XAxisXSupplier
+    
     rOutProperties.push_back(
         Property( "HasXAxis",
                   PROP_DIAGRAM_HAS_X_AXIS,
@@ -300,7 +300,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // XAxisYSupplier
+    
     rOutProperties.push_back(
         Property( "HasYAxis",
                   PROP_DIAGRAM_HAS_Y_AXIS,
@@ -332,7 +332,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // XAxisZSupplier
+    
     rOutProperties.push_back(
         Property( "HasZAxis",
                   PROP_DIAGRAM_HAS_Z_AXIS,
@@ -364,7 +364,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // XTwoAxisXSupplier
+    
     rOutProperties.push_back(
         Property( "HasSecondaryXAxis",
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS,
@@ -378,7 +378,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // XTwoAxisYSupplier
+    
     rOutProperties.push_back(
         Property( "HasSecondaryYAxis",
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS,
@@ -392,7 +392,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // XSecondAxisTitleSupplier
+    
     rOutProperties.push_back(
         Property( "HasSecondaryXAxisTitle",
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
@@ -522,56 +522,56 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
     {
         const OUString aName( rTemplateServiceName.copy( aPrefix.getLength()));
 
-        // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
-        // "StackedThreeDArea" "PercentStackedThreeDArea"
+        
+        
         if( aName.indexOf( "Area" ) != -1 )
             return OUString("com.sun.star.chart.AreaDiagram");
 
-        // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
+        
         if( aName.indexOf( "Pie" ) != -1 )
             return OUString("com.sun.star.chart.PieDiagram");
 
-        // "Column" "StackedColumn" "PercentStackedColumn" "ThreeDColumnDeep"
-        // "ThreeDColumnFlat" "StackedThreeDColumnFlat"
-        // "PercentStackedThreeDColumnFlat" "Bar" "StackedBar"
-        // "PercentStackedBar" "ThreeDBarDeep" "ThreeDBarFlat"
-        // "StackedThreeDBarFlat" "PercentStackedThreeDBarFlat" "ColumnWithLine"
-        // "StackedColumnWithLine"
+        
+        
+        
+        
+        
+        
         if( aName.indexOf( "Column" ) != -1 || aName.indexOf( "Bar" ) != -1 )
             return OUString( "com.sun.star.chart.BarDiagram" );
 
-        // "Donut" "DonutAllExploded" "ThreeDDonut" "ThreeDDonutAllExploded"
+        
         if( aName.indexOf( "Donut" ) != -1 )
             return OUString( "com.sun.star.chart.DonutDiagram" );
 
-        // "ScatterLineSymbol" "ScatterLine" "ScatterSymbol" "ThreeDScatter"
+        
         if( aName.indexOf( "Scatter" ) != -1 )
             return OUString( "com.sun.star.chart.XYDiagram" );
 
-        // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
+        
         if( aName.indexOf( "FilledNet" ) != -1 )
             return OUString( "com.sun.star.chart.FilledNetDiagram" );
 
-        // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
-        // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
-        // "PercentStackedNetLine"
+        
+        
+        
         if( aName.indexOf( "Net" ) != -1 )
             return OUString( "com.sun.star.chart.NetDiagram" );
 
-        // "StockLowHighClose" "StockOpenLowHighClose" "StockVolumeLowHighClose"
-        // "StockVolumeOpenLowHighClose"
+        
+        
         if( aName.indexOf( "Stock" ) != -1 )
             return OUString( "com.sun.star.chart.StockDiagram" );
 
         if( aName.indexOf( "Bubble" ) != -1 )
             return OUString( "com.sun.star.chart.BubbleDiagram" );
 
-        // Note: this must be checked after Bar, Net and Scatter
+        
 
-        // "Symbol" "StackedSymbol" "PercentStackedSymbol" "Line" "StackedLine"
-        // "PercentStackedLine" "LineSymbol" "StackedLineSymbol"
-        // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
-        // "PercentStackedThreeDLine" "ThreeDLineDeep"
+        
+        
+        
+        
         if( aName.indexOf( "Line" ) != -1 || aName.indexOf( "Symbol" ) != -1 )
             return OUString( "com.sun.star.chart.LineDiagram" );
 
@@ -614,7 +614,7 @@ OUString lcl_getOldChartTypeName( const OUString & rNewChartTypeName )
     return aOld;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -631,7 +631,7 @@ DiagramWrapper::DiagramWrapper(
 DiagramWrapper::~DiagramWrapper()
 {}
 
-// ____ XDiagram ____
+
 OUString SAL_CALL DiagramWrapper::getDiagramType()
     throw (uno::RuntimeException)
 {
@@ -662,8 +662,8 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
 
     if( aRet.isEmpty())
     {
-        // none of the standard templates matched
-        // use first chart type
+        
+        
         Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
         if( xChartType.is() )
         {
@@ -715,7 +715,7 @@ Reference<
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
-    //todo: check borders of point index
+    
 
     Reference< beans::XPropertySet > xRet( new DataSeriesPointWrapper(
           DataSeriesPointWrapper::DATA_POINT, nNewAPIIndex, nCol, m_spChart2ModelContact ) );
@@ -723,7 +723,7 @@ Reference<
     return xRet;
 }
 
-// ____ XShape (base of XDiagram) ____
+
 awt::Point SAL_CALL DiagramWrapper::getPosition()
     throw (uno::RuntimeException)
 {
@@ -790,14 +790,14 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
     }
 }
 
-// ____ XShapeDescriptor (base of XShape) ____
+
 OUString SAL_CALL DiagramWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return OUString( "com.sun.star.chart.Diagram" );
 }
 
-// ____ XDiagramPositioning ____
+
 
 void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::RuntimeException)
 {
@@ -872,7 +872,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( cons
     return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
 
-// ____ XAxisSupplier ____
+
 Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
     throw (uno::RuntimeException)
 {
@@ -917,7 +917,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensi
     return xAxis;
 }
 
-// ____ XAxisZSupplier ____
+
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
     throw (uno::RuntimeException)
 {
@@ -956,7 +956,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
     return Reference< beans::XPropertySet >( m_xZAxis, uno::UNO_QUERY );
 }
 
-// ____ XTwoAxisXSupplier ____
+
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
     throw (uno::RuntimeException)
 {
@@ -965,7 +965,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
     return Reference< beans::XPropertySet >( m_xSecondXAxis, uno::UNO_QUERY );
 }
 
-// ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
+
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
     throw (uno::RuntimeException)
 {
@@ -1004,7 +1004,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
     return xRet;
 }
 
-// ____ XTwoAxisYSupplier ____
+
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
     throw (uno::RuntimeException)
 {
@@ -1013,7 +1013,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
     return Reference< beans::XPropertySet >( m_xSecondYAxis, uno::UNO_QUERY );
 }
 
-// ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
+
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
     throw (uno::RuntimeException)
 {
@@ -1052,7 +1052,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
     return xRet;
 }
 
-// ____ XSecondAxisTitleSupplier ____
+
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
     throw (uno::RuntimeException)
 {
@@ -1073,7 +1073,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
     return xRet;
 }
 
-// ____ XStatisticDisplay ____
+
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getUpBar()
     throw (uno::RuntimeException)
@@ -1107,7 +1107,7 @@ Reference<
     return m_xMinMaxLineWrapper;
 }
 
-// ____ X3DDisplay ____
+
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
     throw (uno::RuntimeException)
 {
@@ -1129,7 +1129,7 @@ Reference<
     return m_xFloor;
 }
 
-// ____ X3DDefaultSetter ____
+
 void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
     throw (uno::RuntimeException)
 {
@@ -1154,7 +1154,7 @@ void SAL_CALL DiagramWrapper::setDefaultIllumination()
         x3DDefaultSetter->setDefaultIllumination();
 }
 
-// ____ XComponent ____
+
 void SAL_CALL DiagramWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -1190,7 +1190,7 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-//PROP_DIAGRAM_DATAROW_SOURCE
+
 class WrappedDataRowSourceProperty : public WrappedProperty
 {
 public:
@@ -1206,7 +1206,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -1290,9 +1290,9 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//PROP_DIAGRAM_STACKED
-//PROP_DIAGRAM_DEEP
-//PROP_DIAGRAM_PERCENT_STACKED
+
+
+
 class WrappedStackingProperty : public WrappedProperty
 {
 public:
@@ -1308,10 +1308,10 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-protected: //methods
+protected: 
     bool    detectInnerValue( StackMode& eInnerStackMode ) const;
 
-private: //member
+private: 
 ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     const StackMode                         m_eStackMode;
     mutable Any                             m_aOuterValue;
@@ -1404,7 +1404,7 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//PROP_DIAGRAM_THREE_D
+
 class WrappedDim3DProperty : public WrappedProperty
 {
 public:
@@ -1420,7 +1420,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -1475,7 +1475,7 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     return aRet;
 }
 
-//PROP_DIAGRAM_VERTICAL
+
 class WrappedVerticalProperty : public WrappedProperty
 {
 public:
@@ -1491,7 +1491,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -1551,7 +1551,7 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//PROP_DIAGRAM_NUMBER_OF_LINES
+
 class WrappedNumberOfLinesProperty : public WrappedProperty
 {
 public:
@@ -1567,10 +1567,10 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-protected: //methods
+protected: 
     bool    detectInnerValue( uno::Any& rInnerValue ) const;
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -1674,7 +1674,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         {
             try
             {
-                // locked controllers
+                
                 ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
                 xProp->setPropertyValue( "NumberOfLines", uno::makeAny(nNewValue) );
@@ -1705,7 +1705,7 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
+
 class WrappedAttributedDataPointsProperty : public WrappedProperty
 {
 public:
@@ -1721,7 +1721,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -1767,7 +1767,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
                     aVal <<= aNewValue[i];
                 else
                 {
-                    //set empty sequence
+                    
                     uno::Sequence< sal_Int32 > aSeq;
                     aVal <<= aSeq;
                 }
@@ -1819,7 +1819,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
-//PROP_DIAGRAM_SOLIDTYPE
+
 class WrappedSolidTypeProperty : public WrappedProperty
 {
 public:
@@ -1835,7 +1835,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -1964,7 +1964,7 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
+
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
 {
 public:
@@ -1974,7 +1974,7 @@ public:
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
@@ -1998,7 +1998,7 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     ChartModelHelper::setIncludeHiddenCells( bNewValue, *m_spChart2ModelContact->getModel() );
 }
 
-// ____ XDiagramProvider ____
+
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
     throw (uno::RuntimeException)
 {
@@ -2009,7 +2009,7 @@ void SAL_CALL DiagramWrapper::setDiagram(
     const Reference< chart2::XDiagram >& /*xDiagram*/ )
     throw (uno::RuntimeException)
 {
-    //@todo: remove this method from interface
+    
     OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
 }
 
@@ -2071,10 +2071,10 @@ uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( DiagramWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

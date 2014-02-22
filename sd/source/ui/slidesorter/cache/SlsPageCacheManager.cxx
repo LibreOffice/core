@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,13 +43,13 @@ public:
         const Size& rPreviewSize)
         :mpDocument(pDocument),maPreviewSize(rPreviewSize)
     {}
-    /// Test for equality with respect to all members.
+    
     class Equal {public: bool operator() (
         const CacheDescriptor& rDescriptor1, const CacheDescriptor& rDescriptor2) const {
         return rDescriptor1.mpDocument==rDescriptor2.mpDocument
             && rDescriptor1.maPreviewSize==rDescriptor2.maPreviewSize;
     } };
-    /// Hash function that takes all members into account.
+    
     class Hash {public: size_t operator() (const CacheDescriptor& rDescriptor) const {
         return (size_t)rDescriptor.mpDocument.get() + rDescriptor.maPreviewSize.Width();
     } };
@@ -114,7 +114,7 @@ private:
     Size maPreferredSize;
 };
 
-} // end of anonymous namespace
+} 
 
 
 namespace sd { namespace slidesorter { namespace cache {
@@ -164,7 +164,7 @@ public:
 
 
 
-//===== PageCacheManager ====================================================
+
 
 ::boost::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
 
@@ -212,26 +212,26 @@ PageCacheManager::~PageCacheManager (void)
 {
     ::boost::shared_ptr<Cache> pResult;
 
-    // Look for the cache in the list of active caches.
+    
     CacheDescriptor aKey (pDocument, rPreviewSize);
     PageCacheContainer::iterator iCache (mpPageCaches->find(aKey));
     if (iCache != mpPageCaches->end())
         pResult = iCache->second;
 
-    // Look for the cache in the list of recently used caches.
+    
     if (pResult.get() == NULL)
         pResult = GetRecentlyUsedCache(pDocument, rPreviewSize);
 
-    // Create the cache when no suitable one does exist.
+    
     if (pResult.get() == NULL)
         pResult.reset(new Cache());
 
-    // The cache may be newly created and thus empty or is old and may
-    // contain previews that are not up-to-date.  Recycle previews from
-    // other caches to fill in the holes.
+    
+    
+    
     Recycle(pResult, pDocument,rPreviewSize);
 
-    // Put the new (or old) cache into the container.
+    
     if (pResult.get() != NULL)
         mpPageCaches->insert(PageCacheContainer::value_type(aKey, pResult));
 
@@ -248,7 +248,7 @@ void PageCacheManager::Recycle (
 {
     BestFittingPageCaches aCaches;
 
-    // Add bitmap caches from active caches.
+    
     PageCacheContainer::iterator iActiveCache;
     for (iActiveCache=mpPageCaches->begin(); iActiveCache!=mpPageCaches->end(); ++iActiveCache)
     {
@@ -257,7 +257,7 @@ void PageCacheManager::Recycle (
                 iActiveCache->first.maPreviewSize, iActiveCache->second));
     }
 
-    // Add bitmap caches from recently used caches.
+    
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
@@ -310,7 +310,7 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
     if (rpCache.get() != NULL)
     {
-        // Look up the given cache in the list of active caches.
+        
         PageCacheContainer::iterator iCacheToChange (::std::find_if(
             mpPageCaches->begin(),
             mpPageCaches->end(),
@@ -319,9 +319,9 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
         {
             OSL_ASSERT(iCacheToChange->second == rpCache);
 
-            // Now, we can change the preview size of the existing one by
-            // removing the cache from the list and re-insert it with the
-            // updated size.
+            
+            
+            
             const ::sd::slidesorter::cache::PageCacheManager::DocumentKey aKey (
                 iCacheToChange->first.mpDocument);
             mpPageCaches->erase(iCacheToChange);
@@ -351,15 +351,15 @@ bool PageCacheManager::InvalidatePreviewBitmap (
 
     if (pDocument!=NULL)
     {
-        // Iterate over all caches that are currently in use and invalidate
-        // the previews in those that belong to the document.
+        
+        
         PageCacheContainer::iterator iCache;
         for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
             if (iCache->first.mpDocument == pDocument)
                 bHasChanged |= iCache->second->InvalidateBitmap(pKey);
 
-        // Invalidate the previews in the recently used caches belonging to
-        // the given document.
+        
+        
         RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
         if (iQueue != mpRecentlyUsedPageCaches->end())
         {
@@ -380,15 +380,15 @@ void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
     if (pDocument == NULL)
         return;
 
-    // Iterate over all caches that are currently in use and invalidate the
-    // previews in those that belong to the document.
+    
+    
     PageCacheContainer::iterator iCache;
     for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
         if (iCache->first.mpDocument == pDocument)
             iCache->second->InvalidateCache();
 
-    // Invalidate the previews in the recently used caches belonging to the
-    // given document.
+    
+    
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
@@ -403,14 +403,14 @@ void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
 
 void PageCacheManager::InvalidateAllCaches (void)
 {
-    // Iterate over all caches that are currently in use and invalidate
-    // them.
+    
+    
     PageCacheContainer::iterator iCache;
     for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
         iCache->second->InvalidateCache();
 
-    // Remove all recently used caches, there is not much sense in storing
-    // invalidated and unused caches.
+    
+    
     mpRecentlyUsedPageCaches->clear();
 }
 
@@ -433,7 +433,7 @@ void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
 {
     ::boost::shared_ptr<Cache> pCache;
 
-    // Look for the cache in the list of recently used caches.
+    
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
@@ -458,7 +458,7 @@ void PageCacheManager::PutRecentlyUsedCache(
     const Size& rPreviewSize,
     const ::boost::shared_ptr<Cache>& rpCache)
 {
-    // Look up the list of recently used caches for the given document.
+    
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue == mpRecentlyUsedPageCaches->end())
         iQueue = mpRecentlyUsedPageCaches->insert(
@@ -468,7 +468,7 @@ void PageCacheManager::PutRecentlyUsedCache(
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
         iQueue->second.push_front(RecentlyUsedCacheDescriptor(pDocument,rPreviewSize,rpCache));
-        // Shorten the list of recently used caches to the allowed maximal length.
+        
         while (iQueue->second.size() > mnMaximalRecentlyCacheCount)
             iQueue->second.pop_back();
     }
@@ -476,6 +476,6 @@ void PageCacheManager::PutRecentlyUsedCache(
 
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

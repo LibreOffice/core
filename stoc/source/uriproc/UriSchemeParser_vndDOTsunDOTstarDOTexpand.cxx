@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -49,8 +49,8 @@
 namespace {
 
 bool parseSchemeSpecificPart(OUString const & part) {
-    // Liberally accepts both an empty opaque_part and an opaque_part that
-    // starts with a non-escaped "/":
+    
+    
     return part.isEmpty()
         || (!::rtl::Uri::decode(part, ::rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8).isEmpty());
 }
@@ -134,8 +134,8 @@ public:
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
 private:
-    UrlReference(UrlReference &); // not defined
-    void operator =(UrlReference); // not defined
+    UrlReference(UrlReference &); 
+    void operator =(UrlReference); 
 
     virtual ~UrlReference() {}
 
@@ -175,8 +175,8 @@ public:
         throw (css::uno::RuntimeException, std::exception);
 
 private:
-    Parser(Parser &); // not defined
-    void operator =(Parser); // not defined
+    Parser(Parser &); 
+    void operator =(Parser); 
 
     virtual ~Parser() {}
 };
@@ -220,7 +220,7 @@ css::uno::Reference< css::uno::XInterface > create(
         const &)
     SAL_THROW((css::uno::Exception))
 {
-    //TODO: single instance
+    
     return static_cast< ::cppu::OWeakObject * >(new Parser);
 }
 

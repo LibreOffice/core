@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ void XMLFootnoteSeparatorExport::exportXML(
 {
     DBG_ASSERT(NULL != pProperties, "Need property states");
 
-    // intialize values
+    
     sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT;
     sal_Int32 nLineColor = 0;
     sal_Int32 nLineDistance = 0;
@@ -69,7 +69,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     sal_Int16 nLineWeight = 0;
     sal_Int8 nLineStyle = 0;
 
-    // find indices into property map and get values
+    
     sal_uInt32 nCount = pProperties->size();
     for(sal_uInt32 i = 0; i < nCount; i++)
     {
@@ -108,7 +108,7 @@ void XMLFootnoteSeparatorExport::exportXML(
 
     OUStringBuffer sBuf;
 
-    // weight/width
+    
     if (nLineWeight > 0)
     {
         rExport.GetMM100UnitConverter().convertMeasureToXML(sBuf, nLineWeight);
@@ -116,7 +116,7 @@ void XMLFootnoteSeparatorExport::exportXML(
                              sBuf.makeStringAndClear());
     }
 
-    // line text distance
+    
     if (nLineTextDistance > 0)
     {
         rExport.GetMM100UnitConverter().convertMeasureToXML(sBuf,
@@ -125,7 +125,7 @@ void XMLFootnoteSeparatorExport::exportXML(
                              sBuf.makeStringAndClear());
     }
 
-    // line distance
+    
     if (nLineDistance > 0)
     {
         rExport.GetMM100UnitConverter().convertMeasureToXML(sBuf,
@@ -134,7 +134,7 @@ void XMLFootnoteSeparatorExport::exportXML(
                              sBuf.makeStringAndClear());
     }
 
-    // line style
+    
     static const SvXMLEnumMapEntry aXML_LineStyle_Enum[] =
     {
         { XML_NONE,     0 },
@@ -150,7 +150,7 @@ void XMLFootnoteSeparatorExport::exportXML(
                 sBuf.makeStringAndClear());
     }
 
-    // adjustment
+    
     static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
     {
         { XML_LEFT,     text::HorizontalAdjust_LEFT },
@@ -166,17 +166,17 @@ void XMLFootnoteSeparatorExport::exportXML(
                              sBuf.makeStringAndClear());
     }
 
-    // relative line width
+    
     ::sax::Converter::convertPercent(sBuf, nLineRelWidth);
     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                          sBuf.makeStringAndClear());
 
-    // color
+    
     ::sax::Converter::convertColor(sBuf, nLineColor);
     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_COLOR,
                          sBuf.makeStringAndClear());
 
-    // line-style
+    
 
     SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
                              XML_FOOTNOTE_SEP, sal_True, sal_True);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -36,7 +36,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
             css::uno::Reference< css::drawing::XControlShape > xControlShape )
 : OLEObjectImpl_BASE( xParent, xContext ), m_xControlShape( xControlShape )
 {
-    //init m_xWindowPeer
+    
     uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl(), css::uno::UNO_QUERY_THROW );
     uno::Reference< container::XChild > xChild( xControlModel, uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );

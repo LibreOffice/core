@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DrawViewShell.hxx"
@@ -63,7 +63,7 @@ namespace sd {
  */
 void DrawViewShell::ExecFormText(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
+    
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -105,11 +105,11 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         !pObj ||
         !pTextObj ||
         !pTextObj->HasText() ||
-        dynamic_cast< const SdrObjCustomShape* >(pObj)); // #121538# no FontWork for CustomShapes
+        dynamic_cast< const SdrObjCustomShape* >(pObj)); 
 
     if(bDeactivate)
     {
-// automatic open/close the FontWork-Dialog; first deactivate it
+
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -137,7 +137,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 
 void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 {
-    // nothing is executed during a slide show!
+    
     if (HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -182,7 +182,7 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
  */
 void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 {
-    // here we could disable buttons etc.
+    
     sal_uInt16 nValue;
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
@@ -192,15 +192,15 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
         nValue = 0;
     else if( nMarkCount > 1 )
         nValue = 3;
-    else // 1 Object
+    else 
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         sal_uInt32 nInv = pObj->GetObjInventor();
         sal_uInt16 nId  = pObj->GetObjIdentifier();
-        // 1 selected group object
+        
         if( nInv == SdrInventor && nId == OBJ_GRUP )
             nValue = 3;
-        else if( nInv == SdrInventor && nId == OBJ_GRAF ) // Animated GIF ?
+        else if( nInv == SdrInventor && nId == OBJ_GRAF ) 
         {
             sal_uInt16 nCount = 0;
 
@@ -220,7 +220,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 
 void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 {
-    // State of SfxChild-Windows (Animator, Fontwork etc.)
+    
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FONTWORK ) )
     {
         sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -279,7 +279,7 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
  */
 void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 {
-    // nothing is executed during a slide show!
+    
     if (HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -367,7 +367,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    // valid graphic object?
+    
     if( pObj && pObj->ISA( SdrGrafObj ) &&
         !((SdrGrafObj*) pObj)->IsEPS() &&
         !mpDrawView->IsTextEdit() )
@@ -375,10 +375,10 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
         bEnable = sal_True;
     }
 
-    // put value
+    
     rSet.Put( SfxBoolItem( SID_BMPMASK_EXEC, bEnable ) );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/image.hxx>
@@ -39,13 +39,13 @@
 
 using  namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {
-    SCSTR_CONTENT_TABLE,        // SC_LINKTARGETTYPE_SHEET
-    SCSTR_CONTENT_RANGENAME,    // SC_LINKTARGETTYPE_RANGENAME
-    SCSTR_CONTENT_DBAREA        // SC_LINKTARGETTYPE_DBAREA
+    SCSTR_CONTENT_TABLE,        
+    SCSTR_CONTENT_RANGENAME,    
+    SCSTR_CONTENT_DBAREA        
 };
 
 static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
@@ -59,16 +59,16 @@ static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
     return aLinkTargetMap_Impl;
 }
 
-//------------------------------------------------------------------------
 
-// service for ScLinkTargetTypeObj is not defined
-//  must not support document::LinkTarget because the target type cannot be used as a target
+
+
+
 
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetTypesObj, "ScLinkTargetTypesObj", "com.sun.star.document.LinkTargets" )
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetTypeObj,  "ScLinkTargetTypeObj",  "com.sun.star.document.LinkTargetSupplier" )
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetsObj,     "ScLinkTargetsObj",     "com.sun.star.document.LinkTargets" )
 
-//------------------------------------------------------------------------
+
 
 ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -88,10 +88,10 @@ ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
 void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // document gone
+        pDocShell = NULL;       
 }
 
-// container::XNameAccess
+
 
 uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
@@ -125,7 +125,7 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( 
     return false;
 }
 
-// container::XElementAccess
+
 
 uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType(void) throw( uno::RuntimeException )
 {
@@ -137,14 +137,14 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements(void) throw( uno::RuntimeExc
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
     pDocShell( pDocSh ),
     nType( nT )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
-    aName = ScResId( nTypeResIds[nType] );    //! on demand?
+    aName = ScResId( nTypeResIds[nType] );    
 }
 
 ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
@@ -156,10 +156,10 @@ ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
 void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // document gone
+        pDocShell = NULL;       
 }
 
-// document::XLinkTargetSupplier
+
 
 uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks(void) throw( uno::RuntimeException )
 {
@@ -183,14 +183,14 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
         }
     }
 
-    //  wrap collection in ScLinkTargetsObj because service document::LinkTargets requires
-    //  beans::XPropertySet as ElementType in container::XNameAccess.
+    
+    
     if ( xCollection.is() )
         return new ScLinkTargetsObj( xCollection );
     return NULL;
 }
 
-// beans::XPropertySet
+
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
@@ -207,8 +207,8 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aProperty
                 lang::WrappedTargetException,
                  uno::RuntimeException )
 {
-    //  everything is read-only
-    //! exception?
+    
+    
 }
 
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
@@ -249,7 +249,7 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& Property
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScLinkTargetTypeObj )
 
-//------------------------------------------------------------------------
+
 
 ScLinkTargetsObj::ScLinkTargetsObj( const uno::Reference< container::XNameAccess > & rColl ) :
     xCollection( rColl )
@@ -261,7 +261,7 @@ ScLinkTargetsObj::~ScLinkTargetsObj()
 {
 }
 
-// container::XNameAccess
+
 
 uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
@@ -271,7 +271,7 @@ uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
         return uno::makeAny(xProp);
 
     throw container::NoSuchElementException();
-//    return uno::Any();
+
 }
 
 uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames(void) throw( uno::RuntimeException )
@@ -284,7 +284,7 @@ sal_Bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName) throw( uno:
     return xCollection->hasByName(aName);
 }
 
-// container::XElementAccess
+
 
 uno::Type SAL_CALL ScLinkTargetsObj::getElementType(void) throw( uno::RuntimeException )
 {

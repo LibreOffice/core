@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,7 +70,7 @@ Sequence<OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
 
 
 
-//===== ResourceId ============================================================
+
 
 WeakReference<util::XURLTransformer> ResourceId::mxURLTransformerWeak;
 
@@ -102,7 +102,7 @@ ResourceId::ResourceId (
       maResourceURLs(1, rsResourceURL),
       mpURL()
 {
-    // Handle the special case of an empty resource URL.
+    
     if (rsResourceURL.isEmpty())
         maResourceURLs.clear();
     ParseResourceURL();
@@ -243,9 +243,9 @@ OUString SAL_CALL
 {
     if (!maResourceURLs.empty() )
     {
-        // Return the "private:resource/<type>/" prefix.
+        
 
-        // Get the prefix that ends with the second "/".
+        
         const OUString& rsResourceURL (maResourceURLs[0]);
         sal_Int32 nPrefixEnd (rsResourceURL.indexOf('/', 0));
         if (nPrefixEnd >= 0)
@@ -270,7 +270,7 @@ sal_Int16 SAL_CALL
 
     if ( ! rxResourceId.is())
     {
-        // The empty reference is interpreted as empty resource id object.
+        
         if (!maResourceURLs.empty())
             nResult = +1;
         else
@@ -284,14 +284,14 @@ sal_Int16 SAL_CALL
 #endif
         if (pId != NULL)
         {
-            // We have direct access to the implementation of the given
-            // resource id object.
+            
+            
             nResult = CompareToLocalImplementation(*pId);
         }
         else
         {
-            // We have to do the comparison via the UNO interface of the
-            // given resource id object.
+            
+            
             nResult = CompareToExternalImplementation(rxResourceId);
         }
     }
@@ -309,7 +309,7 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
     const sal_uInt32 nLocalURLCount (maResourceURLs.size());
     const sal_uInt32 nURLCount(rId.maResourceURLs.size());
 
-    // Start comparison with the top most anchors.
+    
     for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
          nIndex>=0 && nLocalIndex>=0;
          --nIndex,--nLocalIndex)
@@ -329,9 +329,9 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
 
     if (nResult == 0)
     {
-        // No difference found yet.  When the lengths are the same then the
-        // two resource ids are equivalent.  Otherwise the shorter comes
-        // first.
+        
+        
+        
         if (nLocalURLCount != nURLCount)
         {
             if (nLocalURLCount < nURLCount)
@@ -355,7 +355,7 @@ sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResource
     const sal_uInt32 nLocalURLCount (maResourceURLs.size());
     const sal_uInt32 nURLCount(1+aAnchorURLs.getLength());
 
-    // Start comparison with the top most anchors.
+    
     sal_Int32 nLocalResult (0);
     for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
          nIndex>=0&&nLocalIndex>=0;
@@ -377,9 +377,9 @@ sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResource
 
     if (nResult == 0)
     {
-        // No difference found yet.  When the lengths are the same then the
-        // two resource ids are equivalent.  Otherwise the shorter comes
-        // first.
+        
+        
+        
         if (nLocalURLCount != nURLCount)
         {
             if (nLocalURLCount < nURLCount)
@@ -403,7 +403,7 @@ sal_Bool SAL_CALL
 {
     if ( ! rxResourceId.is())
     {
-        // An empty reference is interpreted as empty resource id.
+        
         return IsBoundToAnchor(NULL, NULL, eMode);
     }
 
@@ -448,7 +448,7 @@ Reference<XResourceId> SAL_CALL
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
     throw (RuntimeException)
@@ -482,7 +482,7 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 /** When eMode is DIRECTLY then the anchor of the called object and the
     anchor represented by the given sequence of anchor URLs have to be
@@ -499,15 +499,15 @@ bool ResourceId::IsBoundToAnchor (
     const sal_uInt32 nAnchorURLCount ((bHasFirstAnchorURL?1:0)
         + (paAnchorURLs!=NULL ? paAnchorURLs->getLength() : 0));
 
-    // Check the lengths.
+    
     if (nLocalAnchorURLCount<nAnchorURLCount ||
         (eMode==AnchorBindingMode_DIRECT && nLocalAnchorURLCount!=nAnchorURLCount))
     {
         return false;
     }
 
-    // Compare the nAnchorURLCount bottom-most anchor URLs of this resource
-    // id and the given anchor.
+    
+    
     sal_uInt32 nOffset = 0;
     if (paAnchorURLs != NULL)
     {
@@ -541,15 +541,15 @@ bool ResourceId::IsBoundToAnchor (
     const sal_uInt32 nLocalAnchorURLCount (maResourceURLs.size() - 1);
     const sal_uInt32 nAnchorURLCount (rAnchorURLs.size());
 
-    // Check the lengths.
+    
     if (nLocalAnchorURLCount<nAnchorURLCount ||
         (eMode==AnchorBindingMode_DIRECT && nLocalAnchorURLCount!=nAnchorURLCount))
     {
         return false;
     }
 
-    // Compare the nAnchorURLCount bottom-most anchor URLs of this resource
-    // id and the given anchor.
+    
+    
     for (sal_uInt32 nOffset=0; nOffset<nAnchorURLCount; ++nOffset)
     {
         if ( ! maResourceURLs[nLocalAnchorURLCount - nOffset].equals(
@@ -571,7 +571,7 @@ void ResourceId::ParseResourceURL (void)
     Reference<util::XURLTransformer> xURLTransformer (mxURLTransformerWeak);
     if ( ! xURLTransformer.is())
     {
-        // Create the URL transformer.
+        
         Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
         xURLTransformer = Reference<util::XURLTransformer>(util::URLTransformer::create(xContext));
         mxURLTransformerWeak = xURLTransformer;
@@ -592,6 +592,6 @@ void ResourceId::ParseResourceURL (void)
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excelhandlers.hxx"
@@ -25,13 +25,13 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler2;
 
-// ============================================================================
-// ============================================================================
+
+
 
 WorkbookFragmentBase::WorkbookFragmentBase(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
@@ -40,7 +40,7 @@ WorkbookFragmentBase::WorkbookFragmentBase(
 {
 }
 
-// ============================================================================
+
 
 WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
@@ -49,25 +49,25 @@ WorksheetFragmentBase::WorksheetFragmentBase(
 {
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 BiffContextHandler::~BiffContextHandler()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
 {
 }
 
-// ============================================================================
+
 
 BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
 {
-    // do not automatically close the root stream (indicated by empty stream name)
+    
     bool bRootStrm = rStrmName.isEmpty();
     mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), !bRootStrm ) );
     mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
@@ -85,7 +85,7 @@ bool BiffFragmentHandler::skipFragment()
     return !mxBiffStrm->isEof() && (mxBiffStrm->getRecId() == BIFF_ID_EOF);
 }
 
-// ============================================================================
+
 
 BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, const OUString& rStrmName, bool bCloneDecoder ) :
     BiffFragmentHandler( rHelper.getBaseFilter(), rStrmName ),
@@ -95,9 +95,9 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
         getCodecHelper().cloneDecoder( getInputStream() );
 }
 
-// ----------------------------------------------------------------------------
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

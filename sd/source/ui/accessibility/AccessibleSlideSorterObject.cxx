@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -107,7 +107,7 @@ void SAL_CALL AccessibleSlideSorterObject::disposing (void)
 {
     const SolarMutexGuard aSolarGuard;
 
-    // Send a disposing to all listeners.
+    
     if (mnClientId != 0)
     {
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(mnClientId, *this);
@@ -117,7 +117,7 @@ void SAL_CALL AccessibleSlideSorterObject::disposing (void)
 
 
 
-//===== XAccessible ===========================================================
+
 
 Reference<XAccessibleContext> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleContext (void)
@@ -129,7 +129,7 @@ Reference<XAccessibleContext> SAL_CALL
 
 
 
-//===== XAccessibleContext ====================================================
+
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
@@ -194,8 +194,8 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    //set Role = Shape
-    //static sal_Int16 nRole = AccessibleRole::LIST_ITEM;
+    
+    
     static sal_Int16 nRole = AccessibleRole::SHAPE;
     return nRole;
 }
@@ -250,7 +250,7 @@ Reference<XAccessibleStateSet> SAL_CALL
 
     if (mxParent.is())
     {
-        // Unconditional states.
+        
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
@@ -259,7 +259,7 @@ Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::ACTIVE);
         pStateSet->AddState(AccessibleStateType::SENSITIVE);
 
-        // Conditional states.
+        
         if (mrSlideSorter.GetController().GetPageSelector().IsPageSelected(mnPageNumber))
             pStateSet->AddState(AccessibleStateType::SELECTED);
         if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
@@ -278,7 +278,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
         RuntimeException)
 {
     ThrowIfDisposed();
-    // Delegate request to parent.
+    
     if (mxParent.is())
     {
         Reference<XAccessibleContext> xParentContext (mxParent->getAccessibleContext());
@@ -286,8 +286,8 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    
+    
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -295,7 +295,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
 
 
 
-//===== XAccessibleEventBroadcaster ===========================================
+
 
 void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
@@ -334,10 +334,10 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
             mnClientId = 0;
         }
@@ -347,7 +347,7 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
 
 
 
-//===== XAccessibleComponent ==================================================
+
 
 sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& aPoint)
     throw (uno::RuntimeException)
@@ -461,7 +461,7 @@ awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
 void SAL_CALL AccessibleSlideSorterObject::grabFocus (void)
     throw (RuntimeException)
 {
-    // nothing to do
+    
 }
 
 
@@ -487,7 +487,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
     return static_cast<sal_Int32>(nColor);
 }
 
-//=====  XServiceInfo  ========================================================
+
 OUString SAL_CALL
        AccessibleSlideSorterObject::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -542,6 +542,6 @@ SdPage* AccessibleSlideSorterObject::GetPage (void) const
         return NULL;
 }
 
-} // end of namespace ::accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

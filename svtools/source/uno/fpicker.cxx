@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/types.h"
@@ -76,7 +76,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
             }
             catch (css::uno::Exception const &)
             {
-                // Handled below (see @ fallback).
+                
             }
         }
     }
@@ -84,14 +84,14 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
 
     if (!xResult.is() && xFactory.is())
     {
-        // Always fall back to OfficeFilePicker.
+        
         xResult = xFactory->createInstanceWithContext (
                 OUString( "com.sun.star.ui.dialogs.OfficeFilePicker"),
                 context);
     }
     if (xResult.is())
     {
-        // Add to FilePicker history.
+        
         svt::addFilePicker (xResult);
     }
     return xResult;
@@ -149,20 +149,20 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
             }
             catch (css::uno::Exception const &)
             {
-                // Handled below (see @ fallback).
+                
             }
         }
     }
     if (!xResult.is() && xFactory.is() )
     {
-        // Always fall back to OfficeFolderPicker.
+        
         xResult = xFactory->createInstanceWithContext (
                 OUString( "com.sun.star.ui.dialogs.OfficeFolderPicker"),
                 context);
     }
     if (xResult.is())
     {
-        // Add to FolderPicker history.
+        
         svt::addFolderPicker (xResult);
     }
     return xResult;

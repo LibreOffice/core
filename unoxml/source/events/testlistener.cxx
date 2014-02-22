@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <stdio.h>
 
@@ -35,8 +35,8 @@ namespace DOM { namespace events
 
     Reference< XInterface > CTestListener::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
     {
-        // XXX
-        // return static_cast< XXPathAPI* >(new CTestListener());
+        
+        
         return Reference< XInterface >(static_cast<XEventListener*>(new CTestListener(rSMgr)));
     }
 
@@ -78,7 +78,7 @@ namespace DOM { namespace events
         return cppu::supportsService(this, aServiceName);
     }
 
-    // --- XInitialize
+    
 
     void SAL_CALL CTestListener::initialize(const Sequence< Any >& args) throw(RuntimeException)
     {
@@ -115,7 +115,7 @@ namespace DOM { namespace events
             m_target->removeEventListener(m_type, Reference< XEventListener >(this), m_capture);
     }
 
-    // --- XEventListener
+    
 
     void SAL_CALL CTestListener::handleEvent(const Reference< XEvent >& evt) throw (RuntimeException)
     {

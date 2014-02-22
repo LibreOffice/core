@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/processfactory.hxx>
@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-// SvSimpleTableContainer  ------------------------------------------------------
+
 
 SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
@@ -86,7 +86,7 @@ void SvSimpleTableContainer::GetFocus()
         m_pTable->GrabFocus();
 }
 
-// SvSimpleTable ------------------------------------------------------------
+
 
 SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         SvHeaderTabListBox(&rParent, nBits | WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
@@ -171,7 +171,7 @@ void SvSimpleTable::SetTabs()
             nPos = (sal_uInt16)GetTab(i);
         }
 
-        aHeaderBar.SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry
+        aHeaderBar.SetItemSize( i, HEADERBAR_FULLSIZE ); 
     }
 }
 

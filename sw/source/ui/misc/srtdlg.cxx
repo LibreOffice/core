@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "srtdlg.hxx"
@@ -86,7 +86,7 @@ static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 
     _FndBox aFndBox( 0, 0 );
 
-    // look for all boxes / lines
+    
     {
         SwSelBoxes aSelBoxes;
         ::GetTblSel( rSh, aSelBoxes );
@@ -178,7 +178,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
         m_pColLbl->SetText(aColTxt);
     }
 
-    // initialise
+    
     Link aLk = LINK(this,SwSortDlg, CheckHdl);
     m_pKeyCB1->SetClickHdl( aLk );
     m_pKeyCB2->SetClickHdl( aLk );
@@ -200,7 +200,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
     m_pColEdt2->SetValue(nCol2);
     m_pColEdt3->SetValue(nCol3);
 
-    // first initialise the language, then select the
+    
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
         nLang = (sal_uInt16)GetAppLanguage();
 
@@ -274,7 +274,7 @@ sal_Unicode SwSortDlg::GetDelimChar() const
  --------------------------------------------------------------------*/
 void SwSortDlg::Apply()
 {
-    // save all settings
+    
     bCheck1 = m_pKeyCB1->IsChecked();
     bCheck2 = m_pKeyCB2->IsChecked();
     bCheck3 = m_pKeyCB3->IsChecked();

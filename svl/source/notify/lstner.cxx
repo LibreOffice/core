@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,14 +29,14 @@
 DBG_NAME(SfxListener)
 TYPEINIT0(SfxListener);
 
-// simple ctor of class SfxListener
+
 
 SfxListener::SfxListener()
 {
     DBG_CTOR(SfxListener, 0);
 }
 
-// copy ctor of class SfxListener
+
 
 SfxListener::SfxListener( const SfxListener &rListener )
 {
@@ -46,13 +46,13 @@ SfxListener::SfxListener( const SfxListener &rListener )
         StartListening( *rListener.aBCs[n] );
 }
 
-// unregisters the SfxListener from its SfxBroadcasters
+
 
 SfxListener::~SfxListener()
 {
     DBG_DTOR(SfxListener, 0);
 
-    // unregister at all remaining broadcasters
+    
     for ( sal_uInt16 nPos = 0; nPos < aBCs.size(); ++nPos )
     {
         SfxBroadcaster *pBC = aBCs[nPos];
@@ -61,7 +61,7 @@ SfxListener::~SfxListener()
 }
 
 
-// unregisters a specific SfxBroadcaster
+
 
 void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
@@ -71,7 +71,7 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 }
 
 
-// registers a specific SfxBroadcaster
+
 
 bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups )
 {
@@ -90,7 +90,7 @@ bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
 }
 
 
-// unregisters a specific SfxBroadcaster
+
 
 bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 {
@@ -109,13 +109,13 @@ bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 }
 
 
-// unregisters all Broadcasters
+
 
 void SfxListener::EndListeningAll()
 {
     DBG_CHKTHIS(SfxListener, 0);
 
-    // MI: bei Optimierung beachten: Seiteneffekte von RemoveListener beachten!
+    
     while ( !aBCs.empty() )
     {
         SfxBroadcaster *pBC = aBCs.front();
@@ -131,7 +131,7 @@ bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 }
 
 
-// base implementation of notification handler
+
 
 #ifdef DBG_UTIL
 void SfxListener::Notify( SfxBroadcaster& rBroadcaster, const SfxHint& )

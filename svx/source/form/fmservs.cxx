@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XSet.hpp>
@@ -24,7 +24,7 @@
 
 using namespace com::sun::star;
 
-// ------------------------------------------------------------------------
+
 #define DECL_SERVICE(ImplName)                      \
 uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno::Reference< lang::XMultiServiceFactory > &) throw( uno::Exception );
 
@@ -42,17 +42,17 @@ uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno
     DECL_SERVICE( LegacyFormController )
 
 
-// ------------------------------------------------------------------------
+
 namespace svxform
 {
 
-    // ------------------------------------------------------------------------
-    // declare selfaware service
+    
+    
     uno::Reference< uno::XInterface > SAL_CALL OAddConditionDialog_Create( const uno::Reference< lang::XMultiServiceFactory >& );
     OUString SAL_CALL OAddConditionDialog_GetImplementationName();
     uno::Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames();
 
-    // ------------------------------------------------------------------------
+    
     void ImplSmartRegisterUnoServices()
     {
         uno::Reference< lang::XMultiServiceFactory >  xServiceFactory(::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
@@ -64,13 +64,13 @@ namespace svxform
 
         OUString sString;
 
-        // ------------------------------------------------------------------------
-        // FormController
+        
+        
         REGISTER_SERVICE( FormController, OUString( "com.sun.star.form.runtime.FormController" ) );
         REGISTER_SERVICE( LegacyFormController, OUString( "com.sun.star.form.FormController" ) );
 
-        // ------------------------------------------------------------------------
-        // FormController - register selfaware service
+        
+        
         xSingleFactory = ::cppu::createSingleFactory( xServiceFactory,
                              OAddConditionDialog_GetImplementationName(),
                              OAddConditionDialog_Create,
@@ -79,13 +79,13 @@ namespace svxform
         if ( xSingleFactory.is() )
             xSet->insert( uno::makeAny( xSingleFactory ) );
 
-        // ------------------------------------------------------------------------
-        // DBGridControl
-        REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);  // compatibility
+        
+        
+        REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);  
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRIDCONTROL);
         REGISTER_SERVICE(FmXGridControl, FM_SUN_CONTROL_GRIDCONTROL);
     };
 
-}   // namespace svxform
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

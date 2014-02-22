@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ximpbody.hxx"
@@ -125,7 +125,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
     uno::Reference< drawing::XDrawPage > xShapeDrawPage(rShapes, uno::UNO_QUERY);
 
-    // set PageName?
+    
     if(!maName.isEmpty())
     {
         if(xShapeDrawPage.is())
@@ -136,14 +136,14 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
-    // set MasterPage?
+    
     if(!maMasterPageName.isEmpty())
     {
-        // #85906# Code for setting masterpage needs complete rework
-        // since GetSdImport().GetMasterStylesContext() gives always ZERO
-        // because of content/style file split. Now the nechanism is to
-        // compare the wanted masterpage-name with the existing masterpages
-        // which were loaded and created in the styles section loading.
+        
+        
+        
+        
+        
         uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
         uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
         uno::Reference< drawing::XDrawPage > xMasterPage;
@@ -217,14 +217,14 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
     SvXMLImportContext *pContext = 0L;
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDrawPageElemTokenMap();
 
-    // some special objects inside draw:page context
+    
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_DRAWPAGE_NOTES:
         {
             if( GetSdImport().IsImpress() )
             {
-                // get notes page
+                
                 uno::Reference< presentation::XPresentationPage > xPresPage(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xPresPage.is())
                 {
@@ -234,7 +234,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
                         uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
                         if(xNewShapes.is())
                         {
-                            // presentation:notes inside draw:page context
+                            
                             pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
                         }
                     }
@@ -258,7 +258,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
         }
     }
 
-    // call parent when no own context was created
+    
     if(!pContext)
         pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
@@ -308,10 +308,10 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
         }
         case XML_TOK_BODY_PAGE:
         {
-            // only read the first page in preview mode
+            
             if( (GetSdImport().GetNewPageCount() == 0) || !GetSdImport().IsPreview() )
             {
-                // import this page
+                
                 uno::Reference< drawing::XDrawPage > xNewDrawPage;
                 uno::Reference< drawing::XDrawPages > xDrawPages(GetSdImport().GetLocalDrawPages(), uno::UNO_QUERY);
 
@@ -320,17 +320,17 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
 
                 if(GetSdImport().GetNewPageCount() + 1 > xDrawPages->getCount())
                 {
-                    // new page, create and insert
+                    
                     xNewDrawPage = xDrawPages->insertNewByIndex(xDrawPages->getCount());
                 }
                 else
                 {
-                    // existing page, use it
+                    
                     uno::Any aAny(xDrawPages->getByIndex(GetSdImport().GetNewPageCount()));
                     aAny >>= xNewDrawPage;
                 }
 
-                // increment global import page counter
+                
                 GetSdImport().IncrementNewPageCount();
 
                 if(xNewDrawPage.is())
@@ -338,7 +338,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
                     uno::Reference< drawing::XShapes > xNewShapes(xNewDrawPage, uno::UNO_QUERY);
                     if(xNewShapes.is())
                     {
-                        // draw:page inside office:body context
+                        
                         pContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
                             xNewShapes);
                     }
@@ -352,7 +352,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
         }
     }
 
-    // call parent when no own context was created
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 

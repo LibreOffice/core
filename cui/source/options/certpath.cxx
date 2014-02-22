@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <officecfg/Office/Common.hxx>
@@ -172,7 +172,7 @@ void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )
 
     if (SV_BUTTON_CHECKED == eState)
     {
-        // uncheck the other entries
+        
         SvTreeListEntry* pEntry = m_aCertPathList.First();
         while (pEntry)
         {
@@ -191,7 +191,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
     while (pEntry)
     {
         OUString* pCertPath = static_cast<OUString*>(pEntry->GetUserData());
-        //already exists, just select the original one
+        
         if (pCertPath->equals(rPath))
         {
             m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);

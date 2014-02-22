@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -56,9 +56,9 @@
 
 using namespace ::com::sun::star;
 
-//  ----------------------------------------------------
-//  class VCLUnoHelper
-//  ----------------------------------------------------
+
+
+
 
 uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
@@ -325,7 +325,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
-    aFD.Type = 0;   // ??? => Nur an Metric...
+    aFD.Type = 0;   
     return aFD;
 }
 
@@ -355,7 +355,7 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDes
     if ( (FontStrikeout)rDescr.Strikeout != STRIKEOUT_DONTKNOW )
         aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
 
-    // Kein DONTKNOW
+    
     aFont.SetOrientation( (short)rDescr.Orientation );
     aFont.SetKerning( rDescr.Kerning );
     aFont.SetWordLineMode( rDescr.WordLineMode );
@@ -448,7 +448,7 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
             return ::com::sun::star::embed::EmbedMapUnits::TWIP;
         case MAP_PIXEL:
             return ::com::sun::star::embed::EmbedMapUnits::PIXEL;
-        default: ; // avoid compiler warning
+        default: ; 
     }
 
     OSL_FAIL( "Unexpected VCL map mode is provided!\n" );
@@ -457,9 +457,9 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
 
 using namespace ::com::sun::star::util;
 
-//====================================================================
-//= file-local helpers
-//====================================================================
+
+
+
 namespace
 {
     enum UnitConversionDirection
@@ -477,7 +477,7 @@ namespace
             sal_Int16 nFieldToMeasureFactor;
         } aUnits[] = {
             { FUNIT_NONE,       -1 , -1},
-            { FUNIT_MM,         MeasureUnit::MM,            1 },    // must precede MM_10TH
+            { FUNIT_MM,         MeasureUnit::MM,            1 },    
             { FUNIT_MM,         MeasureUnit::MM_10TH,       10 },
             { FUNIT_100TH_MM,   MeasureUnit::MM_100TH,      1 },
             { FUNIT_CM,         MeasureUnit::CM,            1 },
@@ -486,7 +486,7 @@ namespace
             { FUNIT_TWIP,       MeasureUnit::TWIP,          1 },
             { FUNIT_POINT,      MeasureUnit::POINT,         1 },
             { FUNIT_PICA,       MeasureUnit::PICA,          1 },
-            { FUNIT_INCH,       MeasureUnit::INCH,          1 },    // must precede INCH_*TH
+            { FUNIT_INCH,       MeasureUnit::INCH,          1 },    
             { FUNIT_INCH,       MeasureUnit::INCH_10TH,     10 },
             { FUNIT_INCH,       MeasureUnit::INCH_100TH,    100 },
             { FUNIT_INCH,       MeasureUnit::INCH_1000TH,   1000 },
@@ -516,16 +516,16 @@ namespace
         return (sal_Int16)FUNIT_NONE;
     }
 }
-//========================================================================
-//= MeasurementUnitConversion
-//========================================================================
-//------------------------------------------------------------------------
+
+
+
+
 sal_Int16 VCLUnoHelper::ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _nUNOToFieldValueFactor )
 {
     return convertMeasurementUnit( (sal_Int16)_nFieldUnit, FieldUnitToMeasurementUnit, _nUNOToFieldValueFactor );
 }
 
-//------------------------------------------------------------------------
+
 FieldUnit VCLUnoHelper::ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor )
 {
     return (FieldUnit)convertMeasurementUnit( _nMeasurementUnit, MeasurementUnitToFieldUnit, _rFieldToUNOValueFactor );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,13 +23,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-//----------------------------------------------------------------------------
+
 namespace utl
 {
-//----------------------------------------------------------------------------
 
 
-//----------------------------------------------------------------------------
+
+
 
 static
 void lcl_resolveCharEntities(OUString & aLocalString)
@@ -73,7 +73,7 @@ void lcl_resolveCharEntities(OUString & aLocalString)
     aLocalString = aResult.makeStringAndClear();
 }
 
-//----------------------------------------------------------------------------
+
 bool splitLastFromConfigurationPath(OUString const& _sInPath,
                                         OUString& _rsOutPath,
                                         OUString& _rsLocalName)
@@ -82,14 +82,14 @@ bool splitLastFromConfigurationPath(OUString const& _sInPath,
 
     sal_Int32 nPos = _sInPath.getLength()-1;
 
-    // strip trailing slash
+    
     if (nPos > 0 && _sInPath[ nPos ] == '/')
     {
         OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 
-    // check for predicate ['xxx'] or ["yyy"]
+    
     if (nPos  > 0 && _sInPath[ nPos ] == ']')
     {
         sal_Unicode chQuote = _sInPath[--nPos];
@@ -99,9 +99,9 @@ bool splitLastFromConfigurationPath(OUString const& _sInPath,
             nEnd = nPos;
             nPos = _sInPath.lastIndexOf(chQuote,nEnd);
             nStart = nPos + 1;
-            --nPos; // nPos = rInPath.lastIndexOf('[',nPos);
+            --nPos; 
         }
-        else // allow [xxx]
+        else 
         {
             nEnd = nPos + 1;
             nPos = _sInPath.lastIndexOf('[',nEnd);
@@ -113,7 +113,7 @@ bool splitLastFromConfigurationPath(OUString const& _sInPath,
         {
             nPos =  _sInPath.lastIndexOf('/',nPos);
         }
-        else // defined behavior for invalid paths
+        else 
         {
             nStart = 0, nEnd = _sInPath.getLength();
             nPos = -1;
@@ -141,7 +141,7 @@ bool splitLastFromConfigurationPath(OUString const& _sInPath,
     return nPos >= 0;
 }
 
-//----------------------------------------------------------------------------
+
 OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _sOutPath)
 {
     sal_Int32 nSep      = _sInPath.indexOf('/');
@@ -150,9 +150,9 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
     sal_Int32 nStart    = nBracket + 1;
     sal_Int32 nEnd      = nSep;
 
-    if (0 <= nBracket) // found a bracket-quoted relative path
+    if (0 <= nBracket) 
     {
-        if (nSep < 0 || nBracket < nSep) // and the separator comes after it
+        if (nSep < 0 || nBracket < nSep) 
         {
             sal_Unicode chQuote = _sInPath[nStart];
             if (chQuote == '\'' || chQuote == '\"')
@@ -169,7 +169,7 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
             OSL_ENSURE(nEnd > nStart && _sInPath[nBracket] == ']', "Invalid config path: improper mismatch of quote or bracket");
             OSL_ENSURE((nBracket+1 == _sInPath.getLength() && nSep == -1) || (_sInPath[nBracket+1] == '/' && nSep == nBracket+1), "Invalid config path: brackets not followed by slash");
         }
-        else // ... but our initial element name is in simple form
+        else 
             nStart = 0;
     }
 
@@ -184,13 +184,13 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
     return sResult;
 }
 
-//----------------------------------------------------------------------------
 
-// find the position after the prefix in the nested path
+
+
 static inline
 sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPrefixPath)
 {
-    // TODO: currently handles only exact prefix matches
+    
     sal_Int32 nPrefixLength = _sPrefixPath.getLength();
 
     OSL_ENSURE(nPrefixLength == 0 || _sPrefixPath[nPrefixLength-1] != '/',
@@ -215,14 +215,14 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
     return bIsPrefix ? nPrefixLength : 0;
 }
 
-//----------------------------------------------------------------------------
+
 bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
                                      OUString const& _sPrefixPath)
 {
     return _sPrefixPath.isEmpty() || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;
 }
 
-//----------------------------------------------------------------------------
+
 OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
                                          OUString const& _sPrefixPath)
 {
@@ -238,7 +238,7 @@ OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
     }
 }
 
-//----------------------------------------------------------------------------
+
 static
 OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
 {
@@ -251,15 +251,15 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     if (pBeginContent == pEndContent)
         return _sType;
 
-    OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
+    OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); 
 
-    // prefix: type, opening bracket and quote
+    
     aNormalized.append( _sType ).append( "['" );
 
-    // content: copy over each char and handle escaping
+    
     for(const sal_Unicode* pCur = pBeginContent; pCur != pEndContent; ++pCur)
     {
-        // append (escape if needed)
+        
         switch(*pCur)
         {
         case sal_Unicode('&') : aNormalized.append( "&amp;" ); break;
@@ -270,29 +270,29 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
         }
     }
 
-    // suffix: closing quote and bracket
+    
     aNormalized.append( "']" );
 
     return aNormalized.makeStringAndClear();
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString wrapConfigurationElementName(OUString const& _sElementName)
 {
     return lcl_wrapName(_sElementName, "*" );
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString wrapConfigurationElementName(OUString const& _sElementName,
                                       OUString const& _sTypeName)
 {
-    // todo: check that _sTypeName is valid
+    
     return lcl_wrapName(_sElementName, _sTypeName);
 }
 
-//----------------------------------------------------------------------------
-} // namespace utl
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

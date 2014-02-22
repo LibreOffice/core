@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,11 +23,11 @@
 #include <string.h>
 #include <ctype.h>
 
-// All symbol names are laid down int the symbol-pool's stringpool, so that
-// all symbols are handled in the same case. On saving the code-image, the
-// global stringpool with the respective symbols is also saved.
-// The local stringpool holds all the symbols that don't move to the image
-// (labels, constant names etc.).
+
+
+
+
+
 
 /***************************************************************************
 |*
@@ -46,7 +46,7 @@ SbiStringPool::~SbiStringPool()
 const OUString& SbiStringPool::Find( sal_uInt32 n ) const
 {
     if( n == 0 || n > aData.size() )
-        return aEmpty; //hack, returning a reference to a simulation of null
+        return aEmpty; 
     else
         return aData[n - 1];
 }
@@ -130,14 +130,14 @@ SbiProcDef* SbiSymPool::AddProc( const OUString& rName )
     SbiProcDef* p = new SbiProcDef( pParser, rName );
     p->nPos    = aData.size();
     p->nId     = rStrings.Add( rName );
-    // procs are always local
+    
     p->nProcId = 0;
     p->pIn     = this;
     aData.insert( aData.begin() + p->nPos, p );
     return p;
 }
 
-// adding an externally constructed symbol definition
+
 
 void SbiSymPool::Add( SbiSymDef* pDef )
 {
@@ -155,8 +155,8 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         pDef->nPos = aData.size();
         if( !pDef->nId )
         {
-            // A unique name must be created in the string pool
-            // for static variables (Form ProcName:VarName)
+            
+            
             OUString aName( pDef->aName );
             if( pDef->IsStatic() )
             {
@@ -220,7 +220,7 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
     }
 }
 
-// find via position (from 0)
+
 
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
 {
@@ -258,7 +258,7 @@ sal_uInt32 SbiSymPool::Reference( const OUString& rName )
     {
         p = AddSym( rName );
     }
-    // to be sure
+    
     pParser->aGen.GenStmnt();
     return p->Reference();
 }
@@ -360,8 +360,8 @@ void SbiSymDef::SetType( SbxDataType t )
     eType = t;
 }
 
-// construct a backchain, if not yet defined
-// the value that shall be stored as an operand is returned
+
+
 
 sal_uInt32 SbiSymDef::Reference()
 {
@@ -388,14 +388,14 @@ sal_uInt32 SbiSymDef::Define()
     return nChain;
 }
 
-// A symbol definition may have its own pool. This is the case
-// for objects and procedures (local variable)
+
+
 
 SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
     {
-        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // is dumped
+        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   
     }
     return *pPool;
 }
@@ -406,18 +406,18 @@ SbiSymScope SbiSymDef::GetScope() const
 }
 
 
-// The procedure definition has three pools:
-// 1) aParams: is filled by the definition. Contains the
-//    parameters' names, like they're used inside the body.
-//    The first element is the return value.
-// 2) pPool: all local variables
-// 3) aLabels: labels
+
+
+
+
+
+
 
 SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
                         bool bProcDecl )
          : SbiSymDef( rName )
-         , aParams( pParser->aGblStrings, SbPARAM )  // is dumped
-         , aLabels( pParser->aLclStrings, SbLOCAL )  // is not dumped
+         , aParams( pParser->aGblStrings, SbPARAM )  
+         , aLabels( pParser->aLclStrings, SbLOCAL )  
          , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
@@ -429,8 +429,8 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
     bPublic = true;
     bCdecl  = false;
     bStatic = false;
-    // For return values the first element of the parameter
-    // list is always defined with name and type of the proc
+    
+    
     aParams.AddSym( aName );
 }
 
@@ -448,21 +448,21 @@ void SbiProcDef::SetType( SbxDataType t )
     aParams.Get( 0 )->SetType( eType );
 }
 
-// match with a forward-declaration
-// if the match is OK, pOld is replaced by this in the pool
-// pOld is deleted in any case!
+
+
+
 
 void SbiProcDef::Match( SbiProcDef* pOld )
 {
     SbiSymDef *pn=NULL;
-    // parameter 0 is the function name
+    
     sal_uInt16 i;
     for( i = 1; i < aParams.GetSize(); i++ )
     {
         SbiSymDef* po = pOld->aParams.Get( i );
         pn = aParams.Get( i );
-        // no type matching - that is done during running
-        // but is it maybe called with too little parameters?
+        
+        
         if( !po && !pn->IsOptional() && !pn->IsParamArray() )
         {
             break;
@@ -472,13 +472,13 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 
     if( pn && i < aParams.GetSize() && pOld->pIn )
     {
-        // mark the whole line
+        
         pOld->pIn->GetParser()->SetCol1( 0 );
         pOld->pIn->GetParser()->Error( SbERR_BAD_DECLARATION, aName );
     }
     if( !pIn && pOld->pIn )
     {
-        // Replace old entry with the new one
+        
         pOld->pIn->aData[ pOld->nPos ] = this;
         nPos = pOld->nPos;
         nId  = pOld->nId;
@@ -492,11 +492,11 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
     mePropMode = ePropMode;
     if( mePropMode != PROPERTY_MODE_NONE )
     {
-        // Prop name = original scanned procedure name
+        
         maPropName = aName;
 
-        // CompleteProcName includes "Property xxx "
-        // to avoid conflicts with other symbols
+        
+        
         OUString aCompleteProcName = "Property ";
         switch( mePropMode )
         {

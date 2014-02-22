@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basidesh.hrc>
@@ -83,9 +83,9 @@ Window* LibBoxControl::CreateItemWindow( Window *pParent )
     return new LibBox( pParent, m_xFrame );
 }
 
-//=============================================================================
-//= DocListenerBox
-//=============================================================================
+
+
+
 
 DocListenerBox::DocListenerBox( Window* pParent )
     :ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
@@ -110,17 +110,17 @@ void DocListenerBox::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
 
 void DocListenerBox::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void DocListenerBox::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void DocListenerBox::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void DocListenerBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
@@ -135,23 +135,23 @@ void DocListenerBox::onDocumentClosed( const ScriptDocument& /*_rDocument*/ )
 
 void DocListenerBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void DocListenerBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
-//=============================================================================
-//= basctl::LibBox
-//=============================================================================
+
+
+
 LibBox::LibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
     DocListenerBox( pParent ),
     m_xFrame( rFrame )
 {
     FillBox();
-    bIgnoreSelect = true;   // do not yet transfer select of 0
+    bIgnoreSelect = true;   
     bFillBox = true;
     SelectEntryPos( 0 );
     aCurText = GetEntry( 0 );
@@ -169,7 +169,7 @@ LibBox::~LibBox()
 void LibBox::Update( const SfxStringItem* pItem )
 {
 
-//  if ( !pItem  || !pItem->GetValue().Len() )
+
         FillBox();
 
     if ( pItem )
@@ -208,7 +208,7 @@ void LibBox::FillBox()
     SelectEntryPos( 0 );
     ClearBox();
 
-    // create list box entries
+    
     sal_uInt16 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
     SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, OUString() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
@@ -236,7 +236,7 @@ void LibBox::FillBox()
 
 void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    // get a sorted list of library names
+    
     Sequence< OUString > aLibNames = rDocument.getLibraryNames();
     sal_Int32 nLibCount = aLibNames.getLength();
     const OUString* pLibNames = aLibNames.getConstArray();
@@ -306,7 +306,7 @@ void LibBox::Select()
         if ( !bIgnoreSelect )
             NotifyIDE();
         else
-            SelectEntry( aCurText );    // since 306... (Select after Escape)
+            SelectEntry( aCurText );    
     }
 }
 
@@ -339,7 +339,7 @@ void LibBox::ClearBox()
     ListBox::Clear();
 }
 
-// class LanguageBoxControl ----------------------------------------------
+
 
 SFX_IMPL_TOOLBOX_CONTROL( LanguageBoxControl, SfxStringItem );
 
@@ -372,7 +372,7 @@ Window* LanguageBoxControl::CreateItemWindow( Window *pParent )
     return new LanguageBox( pParent );
 }
 
-// class basctl::LanguageBox -----------------------------------------------
+
 
 LanguageBox::LanguageBox( Window* pParent ) :
 
@@ -470,7 +470,7 @@ void LanguageBox::Select()
     if ( !m_bIgnoreSelect )
         SetLanguage();
     else
-        SelectEntry( m_sCurrentText );  // Select after Escape
+        SelectEntry( m_sCurrentText );  
 }
 
 bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
@@ -519,6 +519,6 @@ void LanguageBox::Update( const SfxStringItem* pItem )
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

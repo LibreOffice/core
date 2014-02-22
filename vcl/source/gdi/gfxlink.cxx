@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -273,10 +273,10 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
 {
     VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
 
-    // Version 1
+    
     rOStream.WriteUInt16( (sal_uInt16) rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
-    // Version 2
+    
     WritePair( rOStream, rGfxLink.GetPrefSize() );
     WriteMapMode( rOStream, rGfxLink.GetPrefMapMode() );
 
@@ -304,7 +304,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     bool            bMapAndSizeValid( false );
     VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
 
-    // Version 1
+    
     rIStream.ReadUInt16( nType ).ReadUInt32( nSize ).ReadUInt32( nUserId );
 
     if( pCompat->GetVersion() >= 2 )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,9 +25,9 @@
 #include <basegfx/numeric/ftools.hxx>
 
 
-// Properties and methods lay the return value down at Get (bWrite = sal_False)
-// at the element 0 of the Argv; at Put (bWrite = sal_True) the value from
-// element 0 is stored.
+
+
+
 
 RTLFUNC(Erl)
 {
@@ -79,7 +79,7 @@ RTLFUNC(Nothing)
     (void)pBasic;
     (void)bWrite;
 
-    // return an empty object
+    
     rPar.Get( 0 )->PutObject( NULL );
 }
 
@@ -88,7 +88,7 @@ RTLFUNC(Null)
     (void)pBasic;
     (void)bWrite;
 
-    // returns an empty object-variable
+    
     rPar.Get( 0 )->PutNull();
 }
 

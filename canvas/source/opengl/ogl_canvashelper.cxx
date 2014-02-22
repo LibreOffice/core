@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #define GL_GLEXT_PROTOTYPES
@@ -75,7 +75,7 @@ namespace oglcanvas
        necessary?) - or, rather, buffer objects! prune entries older
        than one updateScreen() call)
 
-       Text: http://www.opengl.org/resources/features/fontsurvey/
+       Text: http:
      */
 
     struct CanvasHelper::Action
@@ -184,8 +184,8 @@ namespace oglcanvas
             TransformationPreserver aPreserver;
             setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
 
-            // convert to weird canvas textur coordinate system (not
-            // [0,1]^2, but path coordinate system)
+            
+            
             ::basegfx::B2DHomMatrix aTextureTransform;
             ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
                                                             rTexture.AffineTransform );
@@ -287,7 +287,7 @@ namespace oglcanvas
             glBlendFunc(GL_SRC_ALPHA,
                         GL_ONE_MINUS_SRC_ALPHA);
 
-            // blend against fixed vertex color; texture alpha is multiplied in
+            
             glColor4f(1,1,1,1);
 
             glBegin(GL_TRIANGLE_STRIP);
@@ -331,8 +331,8 @@ namespace oglcanvas
             glBlendFunc(GL_SRC_ALPHA,
                         GL_ONE_MINUS_SRC_ALPHA);
 
-            // convert to weird canvas textur coordinate system (not
-            // [0,1]^2, but path coordinate system)
+            
+            
             ::basegfx::B2DHomMatrix aTextureTransform;
             ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
                                                             rTexture.AffineTransform );
@@ -355,7 +355,7 @@ namespace oglcanvas
                 };
             glLoadMatrixd(aTexTransform);
 
-            // blend against fixed vertex color; texture alpha is multiplied in
+            
             glColor4f(1,1,1,rTexture.Alpha);
 
             aCurr=rPolyPolygons.begin();
@@ -461,7 +461,7 @@ namespace oglcanvas
 
             setupGraphicsState( rAct, viewState, renderState );
 
-            // TODO(F2): subdivide&render whole curve
+            
             rAct.maFunction = ::boost::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             geometry::RealPoint2D(
@@ -487,12 +487,12 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
-            rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+            rAct.maPolyPolys.back().makeUnique(); 
 
             rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -513,13 +513,13 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
-            rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+            rAct.maPolyPolys.back().makeUnique(); 
 
-            // TODO(F3): fallback to drawPolyPolygon currently
+            
             rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -530,7 +530,7 @@ namespace oglcanvas
                                                                                            const uno::Sequence< rendering::Texture >&           /*textures*/,
                                                                                            const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -542,7 +542,7 @@ namespace oglcanvas
                                                                                                 const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
                                                                                                 const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -552,7 +552,7 @@ namespace oglcanvas
                                                                                    const rendering::RenderState&                        /*renderState*/,
                                                                                    const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
@@ -572,12 +572,12 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
-            rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+            rAct.maPolyPolys.back().makeUnique(); 
 
             rAct.maFunction = &lcl_fillPolyPolygon;
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -598,20 +598,20 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
-            rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+            rAct.maPolyPolys.back().makeUnique(); 
 
-            // TODO(F1): Multi-texturing
+            
             if( textures[0].Gradient.is() )
             {
-                // try to cast XParametricPolyPolygon2D reference to
-                // our implementation class.
+                
+                
                 ::canvas::ParametricPolyPolygon* pGradient =
                       dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
 
                 if( pGradient )
                 {
-                    // copy state from Gradient polypoly locally
-                    // (given object might change!)
+                    
+                    
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
@@ -623,22 +623,22 @@ namespace oglcanvas
                 }
                 else
                 {
-                    // TODO(F1): The generic case is missing here
+                    
                     ENSURE_OR_THROW( false,
                                       "CanvasHelper::fillTexturedPolyPolygon(): unknown parametric polygon encountered" );
                 }
             }
             else if( textures[0].Bitmap.is() )
             {
-                // own bitmap?
+                
                 CanvasBitmap* pOwnBitmap=dynamic_cast<CanvasBitmap*>(textures[0].Bitmap.get());
                 if( pOwnBitmap )
                 {
-                    // TODO(F2): own texture bitmap
+                    
                 }
                 else
                 {
-                    // TODO(P3): Highly inefficient - simply copies pixel data
+                    
 
                     uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntegerBitmap(
                         textures[0].Bitmap,
@@ -652,7 +652,7 @@ namespace oglcanvas
                                 aLayout,
                                 geometry::IntegerRectangle2D(0,0,aSize.Width,aSize.Height));
 
-                        // force-convert color to ARGB8888 int color space
+                        
                         uno::Sequence<sal_Int8> aARGBBytes(
                             aLayout.ColorSpace->convertToIntegerColorSpace(
                                 aPixelData,
@@ -668,12 +668,12 @@ namespace oglcanvas
                                                                   aARGBBytes.getLength()),
                                                         _6);
                     }
-                    // TODO(F1): handle non-integer case
+                    
                 }
             }
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -684,7 +684,7 @@ namespace oglcanvas
                                                                                               const uno::Sequence< rendering::Texture >&            /*textures*/,
                                                                                               const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -704,7 +704,7 @@ namespace oglcanvas
                                                                             const rendering::FontInfo&                      /*aFilter*/,
                                                                             const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
-        // TODO
+        
         return uno::Sequence< rendering::FontInfo >();
     }
 
@@ -715,7 +715,7 @@ namespace oglcanvas
                                                                           const rendering::RenderState&                     /*renderState*/,
                                                                           sal_Int8                                          /*textDirection*/ )
     {
-        // TODO - but not used from slideshow
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -736,7 +736,7 @@ namespace oglcanvas
             const rendering::StringContext& rTxt=xLayoutetText->getText();
             if( pFont && rTxt.Length )
             {
-                // create the font
+                
                 const rendering::FontRequest& rFontRequest = pFont->getFontRequest();
                 const geometry::Matrix2D&     rFontMatrix = pFont->getFontMatrix();
                 ::Font aFont(
@@ -750,7 +750,7 @@ namespace oglcanvas
                 aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
                 aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 
-                // adjust to stretched font
+                
                 if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
                 {
                     const Size aSize = aVDev.GetFontMetric( aFont ).GetSize();
@@ -765,7 +765,7 @@ namespace oglcanvas
                     aFont.SetWidth( nNewWidth );
                 }
 
-                // set font
+                
                 aVDev.SetFont(aFont);
 
                 mpRecordedActions->push_back( Action() );
@@ -773,17 +773,17 @@ namespace oglcanvas
 
                 setupGraphicsState( rAct, viewState, renderState );
 
-                // handle custom spacing, if there
+                
                 uno::Sequence<double> aLogicalAdvancements=xLayoutetText->queryLogicalAdvancements();
                 if( aLogicalAdvancements.getLength() )
                 {
-                    // create the DXArray
+                    
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
                     ::boost::scoped_array<sal_Int32> pDXArray( new sal_Int32[nLen] );
                     for( sal_Int32 i=0; i<nLen; ++i )
                         pDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
 
-                    // get the glyphs
+                    
                     aVDev.GetTextOutlines(rAct.maPolyPolys,
                                           rTxt.Text,
                                           0,
@@ -795,7 +795,7 @@ namespace oglcanvas
                 }
                 else
                 {
-                    // get the glyphs
+                    
                     aVDev.GetTextOutlines(rAct.maPolyPolys,
                                           rTxt.Text,
                                           0,
@@ -803,7 +803,7 @@ namespace oglcanvas
                                           rTxt.Length );
                 }
 
-                // own copy, for thread safety
+                
                 std::for_each(rAct.maPolyPolys.begin(),
                               rAct.maPolyPolys.end(),
                               ::boost::mem_fn(&::basegfx::B2DPolyPolygon::makeUnique));
@@ -812,7 +812,7 @@ namespace oglcanvas
             }
         }
 
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -826,13 +826,13 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            // own bitmap?
+            
             CanvasBitmap* pOwnBitmap=dynamic_cast<CanvasBitmap*>(xBitmap.get());
             if( pOwnBitmap )
             {
-                // insert as transformed copy of bitmap action vector -
-                // during rendering, this gets rendered into a temporary
-                // buffer, and then composited to the front
+                
+                
+                
                 mpRecordedActions->push_back( Action() );
                 Action& rAct=mpRecordedActions->back();
 
@@ -843,7 +843,7 @@ namespace oglcanvas
             }
             else
             {
-                // TODO(P3): Highly inefficient - simply copies pixel data
+                
 
                 uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntegerBitmap(
                     xBitmap, uno::UNO_QUERY);
@@ -856,7 +856,7 @@ namespace oglcanvas
                             aLayout,
                             geometry::IntegerRectangle2D(0,0,aSize.Width,aSize.Height));
 
-                    // force-convert color to ARGB8888 int color space
+                    
                     uno::Sequence<sal_Int8> aARGBBytes(
                         aLayout.ColorSpace->convertToIntegerColorSpace(
                             aPixelData,
@@ -873,11 +873,11 @@ namespace oglcanvas
                                                               aARGBBytes.getConstArray(),
                                                               aARGBBytes.getLength()));
                 }
-                // TODO(F1): handle non-integer case
+                
             }
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -886,7 +886,7 @@ namespace oglcanvas
                                                                                      const rendering::ViewState&                    viewState,
                                                                                      const rendering::RenderState&                  renderState )
     {
-        // TODO(F3): remove this wart altogether
+        
         return drawBitmap(pCanvas, xBitmap, viewState, renderState);
     }
 
@@ -902,17 +902,17 @@ namespace oglcanvas
         ENSURE_OR_THROW( mpDevice,
                           "CanvasHelper::setupGraphicsState: reference device invalid" );
 
-        // TODO(F3): clipping
-        // TODO(P2): think about caching transformations between canvas calls
+        
+        
 
-        // setup overall transform only now. View clip above was
-        // relative to view transform
+        
+        
         ::basegfx::B2DHomMatrix aTransform;
         ::canvas::tools::mergeViewAndRenderTransform(o_action.maTransform,
                                                      viewState,
                                                      renderState);
-        // setup compositing - mapping courtesy David Reveman
-        // (glitz_operator.c)
+        
+        
         switch( renderState.CompositeOperation )
         {
             case rendering::CompositeOperation::OVER:
@@ -928,7 +928,7 @@ namespace oglcanvas
                 o_action.meDstBlendMode=GL_ZERO;
                 break;
             case rendering::CompositeOperation::UNDER:
-                // FALLTHROUGH intended - but correct?!
+                
             case rendering::CompositeOperation::DESTINATION:
                 o_action.meSrcBlendMode=GL_ZERO;
                 o_action.meDstBlendMode=GL_ONE;

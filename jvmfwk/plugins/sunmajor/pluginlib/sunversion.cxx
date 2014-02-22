@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@
 #include "diagnostics.h"
 using namespace osl;
 
-namespace jfw_plugin  { //stoc_javadetect
+namespace jfw_plugin  { 
 
 
 #if OSL_DEBUG_LEVEL >= 2
@@ -62,18 +62,18 @@ bool SunVersion::init(const char *szVersion)
     if ( ! szVersion || strlen(szVersion) == 0)
         return false;
 
-    //first get the major,minor,maintainance
+    
     const char * pLast = szVersion;
     const char * pCur = szVersion;
-    //pEnd point to the position after the last character
+    
     const char * pEnd = szVersion + strlen(szVersion);
-    // 0 = major, 1 = minor, 2 = maintainance, 3 = update
+    
     int nPart = 0;
-    // position within part beginning with 0
+    
     int nPartPos = 0;
     char buf[128];
 
-    //char must me a number 0 - 999 and no leading
+    
     while (true)
     {
         if (pCur < pEnd && isdigit(*pCur))
@@ -82,17 +82,17 @@ bool SunVersion::init(const char *szVersion)
                 pCur ++;
             nPartPos ++;
         }
-        //if  correct separator then form integer
+        
         else if (
-            ! (nPartPos == 0) // prevents: ".4.1", "..1", part must start with digit
+            ! (nPartPos == 0) 
             && (
-                //separators after maintainance (1.4.1_01, 1.4.1-beta, or1.4.1
+                
                 ((pCur == pEnd || *pCur == '_' || *pCur == '-') && (nPart == 2 ))
                 ||
-                //separators between major-minor and minor-maintainance
+                
                 (nPart < 2 && *pCur == '.') )
             && (
-                //prevent 1.4.0. 1.4.0-
+                
                 pCur + 1 == pEnd ? isdigit(*(pCur)) : 1) )
         {
             int len = pCur - pLast;
@@ -110,7 +110,7 @@ bool SunVersion::init(const char *szVersion)
             if (nPart == 3)
                 break;
 
-            //check next character
+            
             if (! ( (pCur < pEnd)
                     && ( (nPart < 3) && isdigit(*pCur))))
                 return false;
@@ -122,23 +122,23 @@ bool SunVersion::init(const char *szVersion)
     }
     if (pCur >= pEnd)
         return true;
-    //We have now 1.4.1. This can be followed by _01, -beta, etc.
-    // _01 (update) According to docu must not be followed by any other
-    //characters, but on Solaris 9 we have a 1.4.1_01a!!
+    
+    
+    
     if (* (pCur - 1) == '_')
-    {// _01, _02
-        // update is the last part _01, _01a, part 0 is the digits parts and 1 the trailing alpha
+    {
+        
         while (true)
         {
             if (pCur <= pEnd)
             {
                 if ( ! isdigit(*pCur))
                 {
-                    //1.4.1_01-, 1.4.1_01a, the numerical part may only be 2 chars.
+                    
                     int len = pCur - pLast;
                     if (len > 2)
                         return false;
-                    //we've got the update: 01, 02 etc
+                    
                     strncpy(buf, pLast, len);
                     buf[len] = 0;
                     m_arVersionParts[nPart] = atoi(buf);
@@ -148,17 +148,17 @@ bool SunVersion::init(const char *szVersion)
                     }
                     if (*pCur == 'a' && (pCur + 1) == pEnd)
                     {
-                        //check if it s followed by a simple "a" (not specified)
+                        
                         m_nUpdateSpecial = *pCur;
                         break;
                     }
                     else if (*pCur == '-' && pCur < pEnd)
                     {
-                        //check 1.5.0_01-ea
+                        
                         PreRelease pr = getPreRelease(++pCur);
                         if (pr == Rel_NONE)
                             return false;
-                        //just ignore -ea because its no official release
+                        
                         break;
                     }
                     else
@@ -173,7 +173,7 @@ bool SunVersion::init(const char *szVersion)
             }
         }
     }
-    // 1.4.1-ea
+    
     else if (*(pCur - 1) == '-')
     {
         m_preRelease = getPreRelease(pCur);
@@ -182,15 +182,15 @@ bool SunVersion::init(const char *szVersion)
 #if defined(FREEBSD)
       if (m_preRelease == Rel_FreeBSD)
       {
-          pCur++; //eliminate 'p'
+          pCur++; 
           if (pCur < pEnd && isdigit(*pCur))
               pCur ++;
-          int len = pCur - pLast -1; //eliminate 'p'
+          int len = pCur - pLast -1; 
           if (len >= 127)
               return false;
-          strncpy(buf, (pLast+1), len); //eliminate 'p'
+          strncpy(buf, (pLast+1), len); 
           buf[len] = 0;
-          m_nUpdateSpecial = atoi(buf)+100; //hack for FBSD #i56953#
+          m_nUpdateSpecial = atoi(buf)+100; 
           return true;
       }
 #endif
@@ -257,10 +257,10 @@ bool SunVersion::operator > (const SunVersion& ver) const
     if( &ver == this)
         return false;
 
-    //compare major.minor.maintainance
+    
     for( int i= 0; i < 4; i ++)
     {
-        // 1.4 > 1.3
+        
         if(m_arVersionParts[i] > ver.m_arVersionParts[i])
         {
             return true;
@@ -270,14 +270,14 @@ bool SunVersion::operator > (const SunVersion& ver) const
             return false;
         }
     }
-    //major.minor.maintainance_update are equal. test for a trailing char
+    
     if (m_nUpdateSpecial > ver.m_nUpdateSpecial)
     {
         return true;
     }
 
-    //Until here the versions are equal
-    //compare pre -release values
+    
+    
     if ((m_preRelease == Rel_NONE && ver.m_preRelease == Rel_NONE)
         ||
         (m_preRelease != Rel_NONE && ver.m_preRelease == Rel_NONE))
@@ -339,7 +339,7 @@ SelfTest::SelfTest()
     int num = sizeof (versions) / sizeof(char*);
     int numBad = sizeof (badVersions) / sizeof(char*);
     int numOrdered = sizeof (orderedVer) / sizeof(char*);
-    //parsing test (positive)
+    
     for (int i = 0; i < num; i++)
     {
         SunVersion ver(versions[i]);
@@ -350,7 +350,7 @@ SelfTest::SelfTest()
         }
     }
     OSL_ENSURE(bRet, "SunVersion selftest failed");
-    //Parsing test (negative)
+    
     for ( int i = 0; i < numBad; i++)
     {
         SunVersion ver(badVersions[i]);
@@ -362,7 +362,7 @@ SelfTest::SelfTest()
     }
     OSL_ENSURE(bRet, "SunVersion selftest failed");
 
-    // Ordering test
+    
     bRet = true;
     int j = 0;
     for (int i = 0; i < numOrdered; i ++)

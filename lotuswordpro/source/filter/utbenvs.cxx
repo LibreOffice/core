@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -66,11 +66,11 @@ namespace OpenStormBento
 */
 sal_uLong   LtcUtBenValueStream::GetData( void* pData, sal_uLong nSize )
 {
-    //unsigned long AmtLeft;
+    
     unsigned long AmtRead;
-    //GetAmountLeft(&AmtLeft);
+    
 
-    //unsigned long AmtShouldRead = UtMin(nSize, AmtLeft);
+    
     /*BenError Err = */cpValue->ReadValueData(pData, cCurrentPosition, nSize,
       &AmtRead);
     cCurrentPosition += AmtRead;
@@ -113,8 +113,8 @@ sal_uLong   LtcUtBenValueStream::PutData( const void* /*pData*/, sal_uLong nSize
 */
  void   LtcUtBenValueStream::SetSize( sal_uLong /*nSize*/ )
 {
-    //pLtcBenContainer pContainer = cpValue->GetContainer();
-    //pContainer->GetStream()->SetStreamSize(nSize);
+    
+    
 
     return;
 }
@@ -141,7 +141,7 @@ void    LtcUtBenValueStream::FlushData()
 */
 LtcUtBenValueStream::LtcUtBenValueStream(pCBenValue pValue)
 {
-    // Calculate the length of the whole value stream
+    
     cCurrentPosition = 0;
     m_ulValueLength = pValue->GetValueSize();
     cpValue = pValue;
@@ -151,6 +151,6 @@ LtcUtBenValueStream::~LtcUtBenValueStream()
 {
 }
 
-} // end namespace OpenStormBento
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

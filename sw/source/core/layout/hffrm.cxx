@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pagefrm.hxx"
@@ -34,12 +34,12 @@
 #include "frmfmt.hxx"
 #include "ndindex.hxx"
 #include "hfspacingitem.hxx"
-// OD 2004-05-24 #i28701#
+
 #include <sortedobjs.hxx>
-// #i43771#
+
 #include <objectformatter.hxx>
 
-extern bool bObjsDirect;    //frmtool.cxx
+extern bool bObjsDirect;    
 
 static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 {
@@ -76,7 +76,7 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
         {
             nTmp = ((SwTxtFrm*)pFrm)->GetParHeight()
                 - pFrm->Prt().Height();
-            // This TxtFrm would like to be a bit bigger
+            
             nRemaining += nTmp;
         }
         else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
@@ -113,7 +113,7 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
 
     OSL_ENSURE( rCnt.GetCntntIdx(), "No content for Header." );
 
-    // Have the objects created right now for header and footer
+    
     bool bOld = bObjsDirect;
     bObjsDirect = true;
     sal_uLong nIndex = rCnt.GetCntntIdx()->GetIndex();
@@ -181,7 +181,7 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
             nUL = pAttrs->CalcBottom() + nSpace;
 
         /* set print area */
-        // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
+        
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
 
         maPrt.Left(pAttrs->CalcLeft(this));
@@ -204,13 +204,13 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
     }
     else
     {
-        // Set position
+        
         maPrt.Left( pAttrs->CalcLeft( this ) );
         maPrt.Top ( pAttrs->CalcTop()  );
 
-        // Set sizes - the sizes are given by the surrounding Frm, just
-        // subtract the borders.
-        // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
+        
+        
+        
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
         maPrt.Width ( maFrm.Width() - nLR );
         maPrt.Height( maFrm.Height()- nUL );
@@ -240,16 +240,16 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
             SwTwips nMaxHeight = LONG_MAX;
             SwTwips nRemaining, nOldHeight;
-            // #i64301#
-            // use the position of the footer printing area to control invalidation
-            // of the first footer content.
+            
+            
+            
             Point aOldFooterPrtPos;
 
             do
             {
                 nOldHeight = Prt().Height();
                 SwFrm* pFrm = Lower();
-                // #i64301#
+                
                 if ( pFrm &&
                      aOldFooterPrtPos != ( Frm().Pos() + Prt().Pos() ) )
                 {
@@ -259,11 +259,11 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 while( pFrm )
                 {
                     pFrm->Calc();
-                    // #i43771# - format also object anchored
-                    // at the frame
-                    // #i46941# - frame has to be valid.
-                    // Note: frame could be invalid after calling its format,
-                    //       if it's locked
+                    
+                    
+                    
+                    
+                    
                     OSL_ENSURE( StackHack::IsLocked() || !pFrm->IsTxtFrm() ||
                             pFrm->IsValid() ||
                             static_cast<SwTxtFrm*>(pFrm)->IsJoinLocked(),
@@ -273,7 +273,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pFrm,
                                                                   *(pFrm->FindPageFrm()) ) )
                         {
-                            // restart format with first content
+                            
                             pFrm = Lower();
                             continue;
                         }
@@ -289,7 +289,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
                     if( pFrm->IsTxtFrm() &&
                         ((SwTxtFrm*)pFrm)->IsUndersized() )
-                        // This TxtFrm would like to be a bit bigger
+                        
                         nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
                             - pFrm->Prt().Height();
                     else if( pFrm->IsSctFrm() &&
@@ -360,14 +360,14 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     }
                     else
                         Shrink( -nDiff );
-                    // Quickly update the position
+                    
 
                     MakePos();
                     ColLock();
                 }
                 else
                     break;
-                // Don't overwrite the lower edge of the upper
+                
                 if ( GetUpper() && Frm().Height() )
                 {
                     const SwTwips nDeadLine = GetUpper()->Frm().Top() +
@@ -385,7 +385,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
         }
         mbValidSize = mbValidPrtArea = sal_True;
     }
-    else //if ( GetType() & 0x0018 )
+    else 
     {
         do
         {
@@ -474,9 +474,9 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
         else if (nEat > nMaxEat)
             nEat = nMaxEat;
 
-        // OD 10.04.2003 #108719# - Notify fly frame, if header frame
-        // grows. Consider, that 'normal' grow of layout frame already notifys
-        // the fly frames.
+        
+        
+        
         sal_Bool bNotifyFlys = sal_False;
         if (nEat > 0)
         {
@@ -492,7 +492,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
             }
 
             nResult += nEat;
-            // OD 14.04.2003 #108719# - trigger fly frame notify.
+            
             if ( IsHeaderFrm() )
             {
                 bNotifyFlys = sal_True;
@@ -511,7 +511,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
             }
         }
 
-        // OD 10.04.2003 #108719# - notify fly frames, if necessary and triggered.
+        
         if ( ( nResult > 0 ) && bNotifyFlys )
         {
             NotifyLowerObjs();
@@ -542,7 +542,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
         SwTwips nMinHeight = lcl_GetFrmMinHeight(*this);
         SwTwips nOldHeight = Frm().Height();
-        SwTwips nRest = 0; // Amount to shrink by spitting out spacing
+        SwTwips nRest = 0; 
 
         if ( nOldHeight >= nMinHeight )
         {
@@ -564,9 +564,9 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                spacing. */
             nRest = nDist;
 
-        // OD 10.04.2003 #108719# - Notify fly frame, if header/footer frame
-        // shrinks. Consider, that 'normal' shrink of layout frame already notifys
-        // the fly frames.
+        
+        
+        
         sal_Bool bNotifyFlys = sal_False;
         if (nRest > 0)
         {
@@ -596,7 +596,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             /* shrink no more than maximum shrinking */
             if (nShrink > nMaxShrink)
             {
-                //nRest -= nShrink - nMaxShrink;
+                
                 nShrink = nMaxShrink;
             }
 
@@ -611,7 +611,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 InvalidateAll();
             }
             nResult += nShrink;
-            // OD 14.04.2003 #108719# - trigger fly frame notify.
+            
             if ( IsHeaderFrm() )
             {
                 bNotifyFlys = sal_True;
@@ -630,7 +630,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             }
         }
 
-        // OD 10.04.2003 #108719# - notify fly frames, if necessary.
+        
         if ( ( nResult > 0 ) && bNotifyFlys )
         {
             NotifyLowerObjs();
@@ -670,7 +670,7 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
     }
 }
 
-/// Creates or removes headers
+
 void SwPageFrm::PrepareHeader()
 {
     SwLayoutFrm *pLay = (SwLayoutFrm*)Lower();
@@ -683,11 +683,11 @@ void SwPageFrm::PrepareHeader()
     const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
-    {   //Implant header, but remove first, if already present
+    {   
         OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt for Header not found." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rH.GetHeaderFmt() )
-            return; // Header is already the correct one.
+            return; 
 
         if ( pLay->IsHeaderFrm() )
         {   SwLayoutFrm *pDel = pLay;
@@ -703,14 +703,14 @@ void SwPageFrm::PrepareHeader()
             ::RegistFlys( this, pH );
     }
     else if ( pLay && pLay->IsHeaderFrm() )
-    {   // Remove header if present.
+    {   
         ::DelFlys( pLay, this );
         pLay->Cut();
         delete pLay;
     }
 }
 
-/// Creates or removes footer
+
 void SwPageFrm::PrepareFooter()
 {
     SwLayoutFrm *pLay = (SwLayoutFrm*)Lower();
@@ -725,11 +725,11 @@ void SwPageFrm::PrepareFooter()
     const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
-    {   //Implant footer, but remove first, if already present
+    {   
         OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt for Footer not found." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rF.GetFooterFmt() )
-            return;  // Footer is already the correct one.
+            return;  
 
         if ( pLay->IsFooterFrm() )
         {   ::DelFlys( pLay, this );
@@ -742,7 +742,7 @@ void SwPageFrm::PrepareFooter()
             ::RegistFlys( this, pF );
     }
     else if ( pLay->IsFooterFrm() )
-    {   // Remove footer if already present
+    {   
         ::DelFlys( pLay, this );
         SwViewShell *pShell;
         if ( pLay->GetPrev() && 0 != (pShell = getRootFrm()->GetCurrShell()) &&

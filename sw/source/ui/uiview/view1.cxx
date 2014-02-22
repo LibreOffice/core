@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@
 #include <edtwin.hxx>
 #include "formatclipboard.hxx"
 #include <cmdid.h>
-// header for class SfxRequest
+
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -45,24 +45,24 @@ extern int bDocSzUpdated;
 
 void SwView::Activate(sal_Bool bMDIActivate)
 {
-    // fdo#40438 Update the layout to make sure everything is correct before showing the content
+    
     m_pWrtShell->StartAction();
     m_pWrtShell->EndAction( sal_True );
 
-    // Register the current View at the DocShell.
-    // The view remains active at the DocShell until it will
-    // be destroyed or by Activate a new one will be set.
+    
+    
+    
     SwDocShell* pDocSh = GetDocShell();
     if(pDocSh)
         pDocSh->SetView(this);
     SwModule* pSwMod = SW_MOD();
     pSwMod->SetView(this);
 
-    // Document size has changed.
+    
     if(!bDocSzUpdated)
         DocSzChgd(m_aDocSz);
 
-    // make selection visible
+    
     if(m_bMakeSelectionVisible)
     {
         m_pWrtShell->MakeSelVisible();
@@ -73,7 +73,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
     if ( bMDIActivate )
     {
-        m_pWrtShell->ShGetFcs(sal_False);     // Selections visible
+        m_pWrtShell->ShGetFcs(sal_False);     
 
         if( !m_sSwViewData.isEmpty() )
         {
@@ -83,26 +83,26 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
         AttrChangedNotify(m_pWrtShell);
 
-        // Initialize Flddlg newly if necessary (e.g. for TYP_SETVAR)
+        
         sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = GetViewFrame();
         SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
         if (pWrp)
             pWrp->ReInitDlg(GetDocShell());
 
-        // Initialize RedlineDlg newly if necessary
+        
         nId = SwRedlineAcceptChild::GetChildWindowId();
         SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)pVFrame->GetChildWindow(nId);
         if (pRed)
             pRed->ReInitDlg(GetDocShell());
 
-        // reinit IdxMarkDlg
+        
         nId = SwInsertIdxMarkWrapper::GetChildWindowId();
         SwInsertIdxMarkWrapper *pIdxMrk = (SwInsertIdxMarkWrapper*)pVFrame->GetChildWindow(nId);
         if (pIdxMrk)
             pIdxMrk->ReInitDlg(*m_pWrtShell);
 
-        // reinit AuthMarkDlg
+        
         nId = SwInsertAuthMarkWrapper::GetChildWindowId();
         SwInsertAuthMarkWrapper *pAuthMrk = (SwInsertAuthMarkWrapper*)pVFrame->
                                                                 GetChildWindow(nId);
@@ -110,7 +110,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
             pAuthMrk->ReInitDlg(*m_pWrtShell);
     }
     else
-        // At least call the Notify (as a precaution because of the SlotFilter).
+        
         AttrChangedNotify(m_pWrtShell);
 
     SfxViewShell::Activate(bMDIActivate);
@@ -119,13 +119,13 @@ void SwView::Activate(sal_Bool bMDIActivate)
 void SwView::Deactivate(sal_Bool bMDIActivate)
 {
     extern bool bFlushCharBuffer ;
-        // Are Characters still in the input buffer?
+        
     if( bFlushCharBuffer )
         GetEditWin().FlushInBuffer();
 
     if( bMDIActivate )
     {
-        m_pWrtShell->ShLooseFcs();    // Selections invisible
+        m_pWrtShell->ShLooseFcs();    
 
         m_pHRuler->SetActive( sal_False );
         m_pVRuler->SetActive( sal_False );

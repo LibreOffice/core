@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/implbase3.hxx>
@@ -67,14 +67,14 @@ class PackageInformationProvider :
     static uno::Sequence< OUString > getServiceNames();
     static OUString getImplName();
 
-    // XPackageInformationProvider
+    
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )
         throw ( uno::RuntimeException );
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL isUpdateAvailable( const OUString& extensionId )
         throw ( uno::RuntimeException );
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList()
         throw ( uno::RuntimeException );
-//---------
+
 private:
 
     uno::Reference< uno::XComponentContext> mxContext;
@@ -85,7 +85,7 @@ private:
     uno::Reference< deployment::XUpdateInformationProvider > mxUpdateInformation;
 };
 
-//------------------------------------------------------------------------------
+
 
 PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
     mxContext( xContext ),
@@ -93,13 +93,13 @@ PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XCo
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 PackageInformationProvider::~PackageInformationProvider()
 {
 }
 
-//------------------------------------------------------------------------------
+
 OUString PackageInformationProvider::getPackageLocation(
     const OUString & repository,
     const OUString& _rExtensionId )
@@ -134,7 +134,7 @@ OUString PackageInformationProvider::getPackageLocation(
     return aLocationURL;
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
@@ -158,7 +158,7 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     return aLocationURL;
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL
 PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
@@ -208,7 +208,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
         OUString sOnlineVersion;
         if (info.info.is())
         {
-            // check, if there are unsatisfied dependencies and ignore this online update
+            
             dp_misc::DescriptionInfoset infoset(mxContext, info.info);
             uno::Sequence< uno::Reference< xml::dom::XElement > >
                 ds( dp_misc::Dependencies::check( infoset ) );
@@ -271,7 +271,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
     return aList;
 }
 
-//------------------------------------------------------------------------------
+
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
     throw ( uno::RuntimeException )
 {
@@ -293,16 +293,16 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 
     for (sal_Int32 i = 0; i < cAllIds; i++)
     {
-        //The inner sequence contains extensions with the same identifier from
-        //all the different repositories, that is user, share, bundled.
+        
+        
         const uno::Sequence< uno::Reference< deployment::XPackage > > &
             seqExtension = allExt[i];
         sal_Int32 cExt = seqExtension.getLength();
         OSL_ASSERT(cExt == 3);
         for (sal_Int32 j = 0; j < cExt; j++)
         {
-            //ToDo according to the old code the first found extenions is used
-            //even if another one with the same id has a better version.
+            
+            
             uno::Reference< deployment::XPackage > const & xExtension( seqExtension[j] );
             if (xExtension.is())
             {
@@ -318,17 +318,17 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 }
 
 
-//------------------------------------------------------------------------------
+
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageInformationProvider> servicePIP;
 extern sdecl::ServiceDecl const serviceDecl(
     servicePIP,
-    // a private one:
+    
     "com.sun.star.comp.deployment.PackageInformationProvider",
     "com.sun.star.comp.deployment.PackageInformationProvider" );
 
-} // namespace dp_info
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

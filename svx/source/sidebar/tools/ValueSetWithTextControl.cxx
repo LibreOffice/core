@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "svx/sidebar/ValueSetWithTextControl.hxx"
 #include <svx/dialogs.hrc>
@@ -205,7 +205,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     {
-        //draw backgroud
+        
         if ( GetSelectItemId() == nItemId )
         {
             Rectangle aBackRect = aRect;
@@ -220,7 +220,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
             pDev->DrawRect(aRect);
         }
 
-        //draw image + text resp. text + text
+        
         Image* pImage = 0;
         if ( GetSelectItemId() == nItemId )
         {
@@ -340,8 +340,8 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aTextColor);
     if(!pVDev)
     {
-        // Die Linien werden nur einmalig in das VirtualDevice gepainted
-        // nur die Gliederungspage bekommt es aktuell
+        
+        
         pVDev = new VirtualDevice(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
@@ -358,7 +358,7 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
             pVDev->SetLineColor(aTextColor);
         else
             pVDev->SetLineColor(aLineColor);
-        // Linien nur einmalig Zeichnen
+        
         Point aStart(aBLPos.X() + nRectWidth *30 / 100,0);
         Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
         for( sal_uInt32 i = 11; i < 100; i += 33)
@@ -385,7 +385,7 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->SetFont(aLclFont);
         long nTextWidth = pDev->GetTextWidth(sText);
         long nTextHeight = pDev->GetTextHeight();
-        //GVT refine
+        
         while (nTextWidth>nRectWidth && aLclSize.Height()>4) {
             aLclSize.Height() = aLclSize.Height()*0.9;
             aLclFont.SetSize( aLclSize );
@@ -419,10 +419,10 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->SetFont(aOldFont);
         pDev->SetLineColor(aOldColor);
     }
-    //End
+    
 }
 
-//===============================================================================================
+
 
 SvxNumValueSet3::SvxNumValueSet3( Window* pParent, const ResId& rResId) :
     ValueSet( pParent, rResId )
@@ -457,7 +457,7 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
             if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
                 sal_Unicode cChar = aFmt.GetBulletChar();
-            //End
+            
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
                 const Color aBackColor = rStyleSettings.GetFieldColor();
                 const Color aTextColor = rStyleSettings.GetFieldTextColor();
@@ -471,7 +471,7 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
                 aFont.SetFillColor(aBackColor);
                 aFont.SetSize( aSize );
                 pDev->SetFont(aFont);
-                pDev->SetFillColor( aBackColor ); //wj
+                pDev->SetFillColor( aBackColor ); 
 
                 OUString sText(cChar);
                 Font aOldBulletFont = pDev->GetFont();
@@ -508,7 +508,7 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
             Font aOldFont = pDev->GetFont();
             Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
             Size aSize = aFont.GetSize();
-            //aSize.Height() = nRectHeight/5;
+            
             aSize.Height() = nRectHeight/4;
             aFont.SetColor(aTextColor);
             aFont.SetFillColor(aBackColor);
@@ -520,7 +520,7 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
 
             long nTextWidth = pDev->GetTextWidth(sText);
             long nTextHeight = pDev->GetTextHeight();
-            //GVT refine
+            
             while (nTextWidth>nRectWidth && aSize.Height()>4) {
                 aSize.Height() = aSize.Height()*0.9;
                 aFont.SetSize( aSize );
@@ -536,4 +536,4 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
 
 }
 
-} } // end of namespace svx::sidebar
+} } 

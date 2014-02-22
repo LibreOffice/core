@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits.h>
@@ -84,7 +84,7 @@ EDcrData *EDcrData::GetData()
 
 void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
-    // Register dynamic identifier
+    
     EDcrData* pData=EDcrData::GetData();
     lErrId= (((sal_uIntPtr)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
         pDcr->GetErrorCode();
@@ -272,7 +272,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     if(pCtx)
         pCtx->GetString(pInfo->GetErrorCode(), aAction);
     Window *pParent=0;
-    // Remove parent from context
+    
     for(;pCtx;pCtx=pCtx->pNext)
         if(pCtx->GetParent())
         {
@@ -331,7 +331,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         }
     }
     OSL_FAIL("Error nicht behandelt");
-    // Error 1 is General Error in the Sfx
+    
     if(pInfo->GetErrorCode()!=1)
     {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
@@ -344,7 +344,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     return 0;
 }
 
-// static
+
 bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
 {
     return (bool)HandleError_Impl( lId, USHRT_MAX, true, rStr );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "csvcontrol.hxx"
@@ -23,7 +23,7 @@
 #include "AccessibleCsvControl.hxx"
 
 
-// ============================================================================
+
 
 ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),
@@ -60,7 +60,7 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 }
 
 
-// ============================================================================
+
 
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
@@ -85,7 +85,7 @@ ScCsvControl::~ScCsvControl()
 }
 
 
-// event handling -------------------------------------------------------------
+
 
 void ScCsvControl::GetFocus()
 {
@@ -142,7 +142,7 @@ void ScCsvControl::AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32
 }
 
 
-// repaint helpers ------------------------------------------------------------
+
 
 void ScCsvControl::Repaint( bool bInvalidate )
 {
@@ -165,7 +165,7 @@ void ScCsvControl::EnableRepaint( bool bInvalidate )
 }
 
 
-// command handling -----------------------------------------------------------
+
 
 void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 )
 {
@@ -174,7 +174,7 @@ void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPa
 }
 
 
-// layout helpers -------------------------------------------------------------
+
 
 sal_Int32 ScCsvControl::GetVisPosCount() const
 {
@@ -257,7 +257,7 @@ sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
 }
 
 
-// static helpers -------------------------------------------------------------
+
 
 void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect )
 {
@@ -302,7 +302,7 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
 }
 
 
-// accessibility --------------------------------------------------------------
+
 
 ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
 {
@@ -312,6 +312,6 @@ ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,7 +55,7 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 
-//--------------------------------------------------------------------
+
 void SfxFrameViewWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
@@ -76,9 +76,9 @@ void SfxFrameViewWindow_Impl::Resize()
         pFrame->Resize();
 }
 
-//========================================================================
 
-//--------------------------------------------------------------------
+
+
 void SfxViewFrame::UpdateTitle()
 
 /*  [Description]
@@ -130,7 +130,7 @@ void SfxViewFrame::UpdateTitle()
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
     OUString aURL;
-    GetFrame();  // -Wall required??
+    GetFrame();  
     if ( pObjSh->HasName() )
     {
         INetURLObject aTmp( pMedium->GetName() );
@@ -138,10 +138,10 @@ void SfxViewFrame::UpdateTitle()
     }
 
     if ( aURL != pImp->aActualURL )
-        // URL has changed
+        
         pImp->aActualURL = aURL;
 
-    // SbxObjects name
+    
     OUString aSbxName = pObjSh->SfxShell::GetName();
     if ( IsVisible() )
     {
@@ -156,7 +156,7 @@ void SfxViewFrame::UpdateTitle()
 
 void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 {
-    // If presently the shells are replaced...
+    
     if ( !GetObjectShell() || !GetViewShell() )
         return;
 
@@ -172,16 +172,16 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
             if ( bShow )
             {
-                // First, make the floats viewable
+                
                 pWorkWin->MakeChildrenVisible_Impl( bShow );
                 GetDispatcher()->Update_Impl( sal_True );
 
-                // Then view it
+                
                 GetBindings().HidePopups( !bShow );
             }
             else
             {
-                // Hide all
+                
                 SfxBindings *pBind = &GetBindings();
                 while ( pBind )
                 {
@@ -234,14 +234,14 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_CLOSEWIN:
         {
-            // disable CloseWin, if frame is not a task
+            
             Reference < XCloseable > xTask( GetFrame().GetFrameInterface(),  UNO_QUERY );
             if ( !xTask.is() )
                 break;
 
             if ( GetViewShell()->PrepareClose() )
             {
-                // More Views on the same Document?
+                
                 SfxObjectShell *pDocSh = GetObjectShell();
                 bool bOther = false;
                 for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
@@ -249,14 +249,14 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                       pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
                     bOther = (pFrame != this);
 
-                // Document only needs to be queried, if no other View present.
+                
                 sal_Bool bClosed = sal_False;
                 sal_Bool bUI = sal_True;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     if ( !bOther )
                         pDocSh->SetModified( sal_False );
-                    rReq.Done(); // Must call this before Close()!
+                    rReq.Done(); 
                     bClosed = sal_False;
                     try
                     {
@@ -310,7 +310,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
 
             case SID_CLOSEWIN:
             {
-                // disable CloseWin, if frame is not a task
+                
                 Reference < XCloseable > xTask( GetFrame().GetFrameInterface(),  UNO_QUERY );
                 if ( !xTask.is() )
                     rSet.DisableItem(nWhich);
@@ -369,7 +369,7 @@ void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
         }
     }
 
-    // Recording
+    
     rRequest.Done();
 }
 
@@ -378,7 +378,7 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
     rItemSet.DisableItem( SID_BROWSE_FORWARD );
     rItemSet.DisableItem( SID_BROWSE_BACKWARD );
 
-    // Add/SaveToBookmark at BASIC-IDE, QUERY-EDITOR etc. disable
+    
     SfxObjectShell *pDocSh = GetObjectShell();
     sal_Bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
     sal_Bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
@@ -396,7 +396,7 @@ void SfxViewFrame::Activate( sal_Bool bMDI )
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
         pImp->bActive = sal_True;
-//(mba): here maybe as in Beanframe NotifyEvent ?!
+
 }
 
 void SfxViewFrame::Deactivate( sal_Bool bMDI )
@@ -404,7 +404,7 @@ void SfxViewFrame::Deactivate( sal_Bool bMDI )
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
         pImp->bActive = sal_False;
-//(mba): here maybe as in Beanframe NotifyEvent ?!
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

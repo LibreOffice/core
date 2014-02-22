@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -31,7 +31,7 @@
 
 #include <statstr.hrc>
 
-//-----------------------------------------------------------------
+
 
 SwASCWriter::SwASCWriter( const OUString& rFltNm )
 {
@@ -76,7 +76,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
     default:
         if( rFltNm.getLength() >= 4 && rFltNm.copy( 4 )=="_DLG" )
         {
-            // use the options
+            
             aNewOpts = GetAsciiOptions();
         }
     }
@@ -87,7 +87,7 @@ SwASCWriter::~SwASCWriter() {}
 
 sal_uLong SwASCWriter::WriteStream()
 {
-    if( bASCII_ParaAsCR )           // If predefined
+    if( bASCII_ParaAsCR )           
         m_sLineEnd = "\015";
     else if( bASCII_ParaAsBlanc )
         m_sLineEnd = " ";
@@ -113,7 +113,7 @@ sal_uLong SwASCWriter::WriteStream()
     rtl_TextEncoding eOld = Strm().GetStreamCharSet();
     Strm().SetStreamCharSet( GetAsciiOptions().GetCharSet() );
 
-    // Output all areas of the pam into the ASC file
+    
     do {
         bool bTstFly = true;
         while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
@@ -123,21 +123,21 @@ sal_uLong SwASCWriter::WriteStream()
             SwTxtNode* pNd = pCurPam->GetPoint()->nNode.GetNode().GetTxtNode();
             if( pNd )
             {
-                // Should we have frames only?
-                // That's possible, if we put a frame selection into the clipboard
+                
+                
                 if( bTstFly && bWriteAll &&
                     pNd->GetTxt().isEmpty() &&
-                    // Frame exists
+                    
                     pDoc->GetSpzFrmFmts()->size() &&
-                    // Only one node in the array
+                    
                     pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
                     pDoc->GetNodes().GetEndOfContent().GetIndex() &&
-                    // And exactly this one is selected
+                    
                     pDoc->GetNodes().GetEndOfContent().GetIndex() - 1 ==
                     pCurPam->GetPoint()->nNode.GetIndex() )
                 {
-                    // Print the frame's content.
-                    // It is always at position 0!
+                    
+                    
                     SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[ 0 ];
                     const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                     if( pIdx )
@@ -146,7 +146,7 @@ sal_uLong SwASCWriter::WriteStream()
                         pCurPam = NewSwPaM( *pDoc, pIdx->GetIndex(),
                                     pIdx->GetNode().EndOfSectionIndex() );
                         pCurPam->Exchange();
-                        continue;       // reset while loop!
+                        continue;       
                     }
                 }
                 else
@@ -172,7 +172,7 @@ sal_uLong SwASCWriter::WriteStream()
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
                 }
-                bTstFly = false;        // Testing once is enough
+                bTstFly = false;        
             }
 
             if( !pCurPam->Move( fnMoveForward, fnGoNode ) )
@@ -180,10 +180,10 @@ sal_uLong SwASCWriter::WriteStream()
 
             if( bShowProgress )
                 ::SetProgressState( pCurPam->GetPoint()->nNode.GetIndex(),
-                                    pDoc->GetDocShell() );   // How far?
+                                    pDoc->GetDocShell() );   
 
         }
-    } while( CopyNextPam( &pPam ) ); // Until all pams are processed
+    } while( CopyNextPam( &pPam ) ); 
 
     Strm().SetStreamCharSet( eOld );
 

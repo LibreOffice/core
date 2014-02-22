@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PageMasterExportPropMapper.hxx"
@@ -66,7 +66,7 @@ static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int3
         rPropState.push_back(XMLPropertyState (nIndex, cppu::bool2any(true)));
 }
 
-// helper struct to handle equal XMLPropertyState's for page, header and footer
+
 
 struct XMLPropertyStateBuffer
 {
@@ -129,7 +129,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
 {
     if (pPMMarginAll)
     {
-        lcl_RemoveState(pPMMarginAll); // #i117696# do not write fo:margin
+        lcl_RemoveState(pPMMarginAll); 
     }
 
     if( pPMBorderAll )
@@ -258,7 +258,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                     nFilter = CTF_PM_FOOTERGRAPHICFILTER;
                     break;
                 default:
-                    nPos = 0;  // TODO What values should this be?
+                    nPos = 0;  
                     nFilter = 0;
                 }
                 const Any*  pPos    = NULL;
@@ -326,7 +326,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyState*       pPMScaleToY         = NULL;
     XMLPropertyState*       pPMStandardMode     = NULL;
     XMLPropertyState*       pPMGridBaseWidth    = NULL;
-    // same as pPMGridSnapTo but for backward compatibility only
+    
     XMLPropertyState*       pPMGridSnapToChars  = NULL;
     XMLPropertyState*       pPMGridSnapTo       = NULL;
 

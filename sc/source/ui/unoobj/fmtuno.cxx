@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,9 +40,9 @@
 using namespace ::com::sun::star;
 using namespace ::formula;
 
-//------------------------------------------------------------------------
 
-//  Map nur fuer PropertySetInfo
+
+
 
 static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
@@ -63,13 +63,13 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
     return aValidatePropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScTableConditionalEntry, "ScTableConditionalEntry", "com.sun.star.sheet.TableConditionalEntry" )
 SC_SIMPLE_SERVICE_INFO( ScTableConditionalFormat, "ScTableConditionalFormat", "com.sun.star.sheet.TableConditionalFormat" )
 SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, "ScTableValidationObj", "com.sun.star.sheet.TableValidation" )
 
-//------------------------------------------------------------------------
+
 
 static sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
 {
@@ -88,7 +88,7 @@ static sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
         case SC_COND_DUPLICATE:     eOper = sheet::ConditionOperator2::DUPLICATE;       break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     return eOper;
@@ -110,7 +110,7 @@ static sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMo
         case SC_COND_DIRECT:        eOper = sheet::ConditionOperator_FORMULA;       break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     return eOper;
@@ -132,13 +132,13 @@ static ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOp
         case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     return eMode;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCondFormatEntryItem::ScCondFormatEntryItem() :
     meGrammar1( FormulaGrammar::GRAM_UNSPECIFIED ),
@@ -147,12 +147,12 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScTableConditionalFormat::ScTableConditionalFormat(
         ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
 {
-    //  Eintrag aus dem Dokument lesen...
+    
 
     if ( pDoc && nKey )
     {
@@ -162,7 +162,7 @@ ScTableConditionalFormat::ScTableConditionalFormat(
             const ScConditionalFormat* pFormat = pList->GetFormat( nKey );
             if (pFormat)
             {
-                // During save to XML.
+                
                 if (pDoc->IsInExternalReferenceMarking())
                     pFormat->MarkUsedExternalReferences();
 
@@ -199,12 +199,12 @@ FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, 
     return (eIntGrammar == FormulaGrammar::GRAM_UNSPECIFIED) ? FormulaGrammar::GRAM_PODF_A1 : eIntGrammar;
 }
 
-} // namespace
+} 
 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         ScDocument* pDoc, FormulaGrammar::Grammar eGrammar) const
 {
-    //  ScConditionalFormat = Core-Struktur, muss leer sein
+    
 
     OSL_ENSURE( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
 
@@ -252,7 +252,7 @@ void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry
     aEntries.push_back(pNew);
 }
 
-// XSheetConditionalFormat
+
 
 ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
@@ -348,7 +348,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         else
         {
             OSL_FAIL("falsche Property");
-            //! Exception...
+            
         }
     }
 
@@ -378,7 +378,7 @@ void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException)
     aEntries.clear();
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::createEnumeration()
                                                     throw(uno::RuntimeException)
@@ -387,7 +387,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.TableConditionalEntryEnumeration"));
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScTableConditionalFormat::getCount() throw(uno::RuntimeException)
 {
@@ -419,8 +419,8 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeExce
     return ( getCount() != 0 );
 }
 
-//  conditional format entries have no real names
-//  -> generate name from index
+
+
 
 static OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
 {
@@ -477,7 +477,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
     return false;
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScTableConditionalFormat::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -511,12 +511,12 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aItem) :
     aData( aItem )
 {
-    // #i113668# only store the settings, keep no reference to parent object
+    
 }
 
 ScTableConditionalEntry::~ScTableConditionalEntry()
@@ -528,7 +528,7 @@ void ScTableConditionalEntry::GetData(ScCondFormatEntryItem& rData) const
     rData = aData;
 }
 
-// XSheetCondition
+
 
 sheet::ConditionOperator SAL_CALL ScTableConditionalEntry::getOperator()
                                                 throw(uno::RuntimeException)
@@ -601,7 +601,7 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
     aData.maPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
 }
 
-// XSheetConditionalEntry
+
 
 OUString SAL_CALL ScTableConditionalEntry::getStyleName() throw(uno::RuntimeException)
 {
@@ -616,13 +616,13 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName 
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
 }
 
-//------------------------------------------------------------------------
+
 
 ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
-    //  Eintrag aus dem Dokument lesen...
+    
 
     bool bFound = false;
     if ( pDoc && nKey )
@@ -631,7 +631,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
         if (pData)
         {
             nMode = sal::static_int_cast<sal_uInt16>( pData->GetOperation() );
-            aSrcPos = pData->GetValidSrcPos();  // valid pos for expressions
+            aSrcPos = pData->GetValidSrcPos();  
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
             meGrammar1 = meGrammar2 = eGrammar;
@@ -643,10 +643,10 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
             bShowError = pData->GetErrMsg( aErrorTitle, aErrorMessage, eStyle );
             nErrorStyle = sal::static_int_cast<sal_uInt16>( eStyle );
 
-            // During save to XML, sheet::ValidationType_ANY formulas are not
-            // saved, even if in the list, see
-            // ScMyValidationsContainer::GetCondition(), so shall not mark
-            // anything in use.
+            
+            
+            
+            
             if (nValMode != SC_VALID_ANY && pDoc->IsInExternalReferenceMarking())
                 pData->MarkUsedExternalReferences();
 
@@ -654,13 +654,13 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
         }
     }
     if (!bFound)
-        ClearData_Impl();       // Defaults
+        ClearData_Impl();       
 }
 
 ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
                                             formula::FormulaGrammar::Grammar eGrammar ) const
 {
-    //  ScValidationData = Core-Struktur
+    
 
     FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, meGrammar1 );
     FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, meGrammar2 );
@@ -687,7 +687,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
             pRet->SetFormula2(aTokenArray);
     }
 
-    // set strings for error / input even if disabled (and disable afterwards)
+    
     pRet->SetInput( aInputTitle, aInputMessage );
     if (!bShowInput)
         pRet->ResetInput();
@@ -715,7 +715,7 @@ void ScTableValidationObj::ClearData_Impl()
     aExpr2 = "";
     maExprNmsp1 = "";
     maExprNmsp2 = "";
-    meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overridden when needed
+    meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  
     aInputTitle = OUString();
     aInputMessage = OUString();
     aErrorTitle = OUString();
@@ -726,7 +726,7 @@ ScTableValidationObj::~ScTableValidationObj()
 {
 }
 
-// XSheetCondition
+
 
 sheet::ConditionOperator SAL_CALL ScTableValidationObj::getOperator()
                                                 throw(uno::RuntimeException)
@@ -895,7 +895,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             case sheet::ValidationType_CUSTOM:   nValMode = SC_VALID_CUSTOM;  break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -911,13 +911,13 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             case sheet::ValidationAlertStyle_MACRO:   nErrorStyle = SC_VALERR_MACRO;   break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
     else if ( aString.equalsAscii( SC_UNONAME_SOURCESTR ) )
     {
-        // internal - only for XML filter, not in PropertySetInfo, only set
+        
 
         OUString aStrVal;
         if ( aValue >>= aStrVal )
@@ -925,7 +925,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
     else if ( aString.equalsAscii( SC_UNONAME_FORMULANMSP1 ) )
     {
-        // internal - only for XML filter, not in PropertySetInfo, only set
+        
 
         OUString aStrVal;
         if ( aValue >>= aStrVal )
@@ -933,7 +933,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
     else if ( aString.equalsAscii( SC_UNONAME_FORMULANMSP2 ) )
     {
-        // internal - only for XML filter, not in PropertySetInfo, only set
+        
 
         OUString aStrVal;
         if ( aValue >>= aStrVal )
@@ -941,7 +941,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
     else if ( aString.equalsAscii( SC_UNONAME_GRAMMAR1 ) )
     {
-        // internal - only for XML filter, not in PropertySetInfo, only set
+        
 
         sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
@@ -949,7 +949,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
     else if ( aString.equalsAscii( SC_UNONAME_GRAMMAR2 ) )
     {
-        // internal - only for XML filter, not in PropertySetInfo, only set
+        
 
         sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
@@ -1007,7 +1007,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableValidationObj )
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScTableValidationObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -1041,7 +1041,7 @@ ScTableValidationObj* ScTableValidationObj::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 
 

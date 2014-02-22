@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/shared_ptr.hpp>
@@ -63,27 +63,27 @@ struct SdXMLDataStyleNumber
     { XML_TOKEN_INVALID,        0,              0,             0,       NULL  }
 };
 
-// date
 
-#define DATA_STYLE_NUMBER_DAY               1   // <number:day/>
-#define DATA_STYLE_NUMBER_DAY_LONG          2   // <number:day number:style="long"/>
-#define DATA_STYLE_NUMBER_MONTH_LONG        3   // <number:month number:style="long"/>
-#define DATA_STYLE_NUMBER_MONTH_TEXT        4   // <number:month number:textual="true"/>
-#define DATA_STYLE_NUMBER_MONTH_LONG_TEXT   5   // <number:month number:style="long" number:textual="true"/>
-#define DATA_STYLE_NUMBER_YEAR              6   // <number:year/>
-#define DATA_STYLE_NUMBER_YEAR_LONG         7   // <number:year number:style="long"/>
-#define DATA_STYLE_NUMBER_DAYOFWEEK         8   // <number:day-of-week/>
-#define DATA_STYLE_NUMBER_DAYOFWEEK_LONG    9   // <number:day-of-week number:style="long"/>
-#define DATA_STYLE_NUMBER_TEXT_POINT        10  // <number:text>.</number:text>
-#define DATA_STYLE_NUMBER_TEXT_SPACE        11  // <number:text> </number:text>
-#define DATA_STYLE_NUMBER_TEXT_COMMASPACE   12  // <number:text>, </number:text>
-#define DATA_STYLE_NUMBER_TEXT_POINTSPACE   13  // <number:text>. </number:text>
-#define DATA_STYLE_NUMBER_HOURS             14  // <number:hours/>
-#define DATA_STYLE_NUMBER_MINUTES           15  // <number:minutes/>
-#define DATA_STYLE_NUMBER_TEXT_COLON        16  // <number:text>:</number:text>
-#define DATA_STYLE_NUMBER_AMPM              17  // <number:am-pm/>
-#define DATA_STYLE_NUMBER_SECONDS           18  // <number:seconds/>
-#define DATA_STYLE_NUMBER_SECONDS_02        19  // <number:seconds number:/>
+
+#define DATA_STYLE_NUMBER_DAY               1   
+#define DATA_STYLE_NUMBER_DAY_LONG          2   
+#define DATA_STYLE_NUMBER_MONTH_LONG        3   
+#define DATA_STYLE_NUMBER_MONTH_TEXT        4   
+#define DATA_STYLE_NUMBER_MONTH_LONG_TEXT   5   
+#define DATA_STYLE_NUMBER_YEAR              6   
+#define DATA_STYLE_NUMBER_YEAR_LONG         7   
+#define DATA_STYLE_NUMBER_DAYOFWEEK         8   
+#define DATA_STYLE_NUMBER_DAYOFWEEK_LONG    9   
+#define DATA_STYLE_NUMBER_TEXT_POINT        10  
+#define DATA_STYLE_NUMBER_TEXT_SPACE        11  
+#define DATA_STYLE_NUMBER_TEXT_COMMASPACE   12  
+#define DATA_STYLE_NUMBER_TEXT_POINTSPACE   13  
+#define DATA_STYLE_NUMBER_HOURS             14  
+#define DATA_STYLE_NUMBER_MINUTES           15  
+#define DATA_STYLE_NUMBER_TEXT_COLON        16  
+#define DATA_STYLE_NUMBER_AMPM              17  
+#define DATA_STYLE_NUMBER_SECONDS           18  
+#define DATA_STYLE_NUMBER_SECONDS_02        19  
 
 struct SdXMLFixedDataStyle
 {
@@ -310,7 +310,7 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
     &aSdXML_TimeStyle_7
 };
 
-// export
+
 
 static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber& rElement )
 {
@@ -341,7 +341,7 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 {
     OUString sAttrValue;
 
-    // name
+    
     sAttrValue = OUString::createFromAscii( pStyle->mpName );
     if( pStyle2 )
         sAttrValue += OUString::createFromAscii( pStyle2->mpName );
@@ -474,7 +474,7 @@ OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat
     }
 }
 
-// import
+
 
 class SdXMLNumberFormatMemberImportContext : public SvXMLImportContext
 {
@@ -661,7 +661,7 @@ void SdXMLNumberFormatImportContext::EndElement()
 
     if( mbTimeStyle )
     {
-        // compare import with all time styles
+        
         for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
         {
             sal_Int16 nIndex = 0;
@@ -674,7 +674,7 @@ void SdXMLNumberFormatImportContext::EndElement()
     }
     else
     {
-        // compare import with all date styles
+        
         for( sal_Int16 nFormat = 0; nFormat < SdXMLDateFormatCount; nFormat++ )
         {
             sal_Int16 nIndex = 0;
@@ -685,7 +685,7 @@ void SdXMLNumberFormatImportContext::EndElement()
             }
             else if( mnElements[nIndex] == DATA_STYLE_NUMBER_TEXT_SPACE )
             {
-                // if it's a valid date ending with a space, see if a time style follows
+                
                 for( sal_Int16 nTimeFormat = 0; nTimeFormat < SdXMLTimeFormatCount; nTimeFormat++ )
                 {
                     sal_Int16 nIndex2 = nIndex + 1;
@@ -698,10 +698,10 @@ void SdXMLNumberFormatImportContext::EndElement()
             }
         }
 
-        // no date style found? maybe its an extended time style
+        
         if( mnKey == -1 )
         {
-            // compare import with all time styles
+            
             for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
             {
                 sal_Int16 nIndex = 0;

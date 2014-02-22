@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,13 +32,13 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 
-//struct SAL_DLLPUBLIC_IMPORT ::cppu::OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper, OMultiTypeInterfaceContainerHelper::keyType >;
 
-// Handles for properties
-// (PLEASE SORT THIS FIELD, IF YOU ADD NEW PROPERTIES!)
-// We use an enum to define these handles, to use all numbers from 0 to nn and
-// if you add someone, you don't must control this!
-// But don't forget to change values of follow defines, if you do something with this enum!
+
+
+
+
+
+
 enum EPROPERTIES
 {
     HANDLE_COMMANDURL,
@@ -66,7 +66,7 @@ ActionTriggerPropertySet::~ActionTriggerPropertySet()
 {
 }
 
-// XInterface
+
 Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
 throw ( RuntimeException )
 {
@@ -98,7 +98,7 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
     OWeakObject::release();
 }
 
-// XServiceInfo
+
 OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
 throw ( RuntimeException )
 {
@@ -119,23 +119,23 @@ throw ( RuntimeException )
     return seqServiceNames;
 }
 
-// XTypeProvider
+
 Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeException )
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
+    
+    
+    
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
     if ( pTypeCollection == NULL )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pTypeCollection == NULL )
         {
-            // Create a static typecollection ...
+            
             static ::cppu::OTypeCollection aTypeCollection(
                         ::getCppuType(( const Reference< XPropertySet           >*)NULL ) ,
                         ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
@@ -143,7 +143,7 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
                         ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
 
-            // ... and set his address to static pointer!
+            
             pTypeCollection = &aTypeCollection ;
         }
     }
@@ -153,25 +153,25 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() throw ( RuntimeException )
 {
-    // Create one Id for all instances of this class.
-    // Use ethernet address to do this! (sal_True)
+    
+    
 
-    // Optimize this method
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pID is NULL - for the second call pID is different from NULL!
+    
+    
+    
     static ::cppu::OImplementationId* pID = NULL ;
 
     if ( pID == NULL )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pID == NULL )
         {
-            // Create a new static ID ...
+            
             static ::cppu::OImplementationId aID( false ) ;
-            // ... and set his address to static pointer!
+            
             pID = &aID ;
         }
     }
@@ -186,11 +186,11 @@ sal_Bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
     const Any&  aValue  )
 throw( IllegalArgumentException )
 {
-    //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
-    //  Return sal_True, if changed - else return sal_False.
-    //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
-    //  Initialize return value with sal_False !!!
-    //  (Handle can be invalid)
+    
+    
+    
+    
+    
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -216,7 +216,7 @@ throw( IllegalArgumentException )
             break;
     }
 
-    // Return state of operation.
+    
     return bReturn;
 }
 
@@ -226,7 +226,7 @@ throw( Exception )
 {
     ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
 
-    // Search for right handle ... and try to set property value.
+    
     switch( nHandle )
     {
         case HANDLE_COMMANDURL:
@@ -256,7 +256,7 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
 {
     ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
 
-    // Search for right handle ... and try to get property value.
+    
     switch( nHandle )
     {
         case HANDLE_COMMANDURL:
@@ -283,21 +283,21 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
 
 ::cppu::IPropertyArrayHelper& SAL_CALL ActionTriggerPropertySet::getInfoHelper()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
+    
+    
+    
     static OPropertyArrayHelper* pInfoHelper = NULL;
 
     if( pInfoHelper == NULL )
     {
-        // Ready for multithreading
+        
         ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfoHelper == NULL )
         {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
+            
+            
+            
             static OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
             pInfoHelper = &aInfoHelper;
         }
@@ -309,20 +309,20 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
 Reference< XPropertySetInfo > SAL_CALL ActionTriggerPropertySet::getPropertySetInfo()
 throw ( RuntimeException )
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
+    
+    
+    
     static Reference< XPropertySetInfo >* pInfo = NULL ;
 
     if( pInfo == NULL )
     {
-        // Ready for multithreading
+        
         ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfo == NULL )
         {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
+            
+            
             static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
             pInfo = &xInfo;
         }
@@ -342,10 +342,10 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
         Property( OUString( "Text"          ), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
     };
 
-    // Use it to initialize sequence!
+    
     const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
-    // Return "PropertyDescriptor"
+    
     return seqActionTriggerPropertyDescriptor ;
 }
 
@@ -356,28 +356,28 @@ sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     Any&        aConvertedValue )
 throw( IllegalArgumentException )
 {
-    // Set default return value if method failed.
+    
     sal_Bool bReturn = sal_False;
-    // Get new value from any.
-    // IllegalArgumentException() can be thrown!
+    
+    
     OUString sValue ;
     convertPropertyValue( sValue, aNewValue );
 
-    // If value change ...
+    
     if( sValue != sCurrentValue )
     {
-        // ... set information of change.
+        
         aOldValue       <<= sCurrentValue   ;
         aConvertedValue <<= sValue          ;
-        // Return OK - "value will be change ..."
+        
         bReturn = sal_True;
     }
     else
     {
-        // ... clear information of return parameter!
+        
         aOldValue.clear         () ;
         aConvertedValue.clear   () ;
-        // Return NOTHING - "value will not be change ..."
+        
         bReturn = sal_False;
     }
 
@@ -391,28 +391,28 @@ sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     Any&                        aConvertedValue )
 throw( IllegalArgumentException )
 {
-    // Set default return value if method failed.
+    
     sal_Bool bReturn = sal_False;
-    // Get new value from any.
-    // IllegalArgumentException() can be thrown!
+    
+    
     Reference< XBitmap > aValue ;
     convertPropertyValue( aValue, aNewValue );
 
-    // If value change ...
+    
     if( aValue != aCurrentValue )
     {
-        // ... set information of change.
+        
         aOldValue       <<= aCurrentValue   ;
         aConvertedValue <<= aValue          ;
-        // Return OK - "value will be change ..."
+        
         bReturn = sal_True;
     }
     else
     {
-        // ... clear information of return parameter!
+        
         aOldValue.clear         () ;
         aConvertedValue.clear   () ;
-        // Return NOTHING - "value will not be change ..."
+        
         bReturn = sal_False;
     }
 
@@ -426,28 +426,28 @@ sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     Any&                            aConvertedValue )
 throw( IllegalArgumentException )
 {
-    // Set default return value if method failed.
+    
     sal_Bool bReturn = sal_False;
-    // Get new value from any.
-    // IllegalArgumentException() can be thrown!
+    
+    
     Reference< XInterface > aValue ;
     convertPropertyValue( aValue, aNewValue );
 
-    // If value change ...
+    
     if( aValue != aCurrentValue )
     {
-        // ... set information of change.
+        
         aOldValue       <<= aCurrentValue   ;
         aConvertedValue <<= aValue          ;
-        // Return OK - "value will be change ..."
+        
         bReturn = sal_True;
     }
     else
     {
-        // ... clear information of return parameter!
+        
         aOldValue.clear         () ;
         aConvertedValue.clear   () ;
-        // Return NOTHING - "value will not be change ..."
+        
         bReturn = sal_False;
     }
 

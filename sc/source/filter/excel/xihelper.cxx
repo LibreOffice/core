@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xihelper.hxx"
@@ -37,7 +37,7 @@
 #include "scmatrix.hxx"
 #include "documentimport.hxx"
 
-// Excel->Calc cell address/range conversion ==================================
+
 
 namespace {
 
@@ -49,16 +49,16 @@ inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nX
     rScPos.SetTab( nScTab );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclImpAddressConverter::XclImpAddressConverter( const XclImpRoot& rRoot ) :
     XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetScMaxPos() )
 {
 }
 
-// cell address ---------------------------------------------------------------
+
 
 bool XclImpAddressConverter::CheckAddress( const XclAddress& rXclPos, bool bWarn )
 {
@@ -97,18 +97,18 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
     return aScPos;
 }
 
-// cell range -----------------------------------------------------------------
+
 
 bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
 {
-    // check start position
+    
     bool bValidStart = CheckAddress( rXclRange.maFirst, bWarn );
     if( bValidStart )
     {
         lclFillAddress( rScRange.aStart, rXclRange.maFirst.mnCol, rXclRange.maFirst.mnRow, nScTab1 );
 
-        // check & correct end position
+        
         sal_uInt16 nXclCol2 = rXclRange.maLast.mnCol;
         sal_uInt32 nXclRow2 = rXclRange.maLast.mnRow;
         if( !CheckAddress( rXclRange.maLast, bWarn ) )
@@ -121,7 +121,7 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
     return bValidStart;
 }
 
-// cell range list ------------------------------------------------------------
+
 
 void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
         const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
@@ -135,7 +135,7 @@ void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
     }
 }
 
-// String->EditEngine conversion ==============================================
+
 
 namespace {
 
@@ -174,28 +174,28 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
         sal_Int32 nLen = rString.GetText().getLength();
         for( sal_uInt16 nChar = 0; nChar < nLen; ++nChar )
         {
-            // reached new different formatted text portion
+            
             if( nChar >= aNextRun.mnChar )
             {
-                // send items to edit engine
+                
                 rEE.QuickSetAttribs( aItemSet, aSelection );
 
-                // start new item set
+                
                 aItemSet.ClearItem();
                 rFontBuffer.FillToItemSet( aItemSet, eType, aNextRun.mnFontIdx );
 
-                // read new formatting information
+                
                 if( aIt != aEnd )
                     aNextRun = *aIt++;
                 else
                     aNextRun.mnChar = 0xFFFF;
 
-                // reset selection start to current position
+                
                 aSelection.nStartPara = aSelection.nEndPara;
                 aSelection.nStartPos = aSelection.nEndPos;
             }
 
-            // set end of selection to current position
+            
             if( rString.GetText()[ nChar ] == '\n' )
             {
                 ++aSelection.nEndPara;
@@ -205,7 +205,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
                 ++aSelection.nEndPos;
         }
 
-        // send items of last text portion to edit engine
+        
         rEE.QuickSetAttribs( aItemSet, aSelection );
 
         pTextObj = rEE.CreateTextObject();
@@ -214,7 +214,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
     return pTextObj;
 }
 
-} // namespace
+} 
 
 EditTextObject* XclImpStringHelper::CreateTextObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
@@ -240,20 +240,20 @@ void XclImpStringHelper::SetToDocument(
         OUString aStr = rString.GetText();
         if (aStr.indexOf('\n') != -1 || aStr.indexOf(CHAR_CR) != -1)
         {
-            // Multiline content.
+            
             ScFieldEditEngine& rEngine = rDoc.getDoc().GetEditEngine();
             rEngine.SetText(aStr);
             rDoc.setEditCell(rPos, rEngine.CreateTextObject());
         }
         else
         {
-            // Normal text cell.
+            
             rDoc.setStringCell(rPos, aStr);
         }
     }
 }
 
-// Header/footer conversion ===================================================
+
 
 XclImpHFConverter::XclImpHFPortionInfo::XclImpHFPortionInfo() :
     mnHeight( 0 ),
@@ -263,7 +263,7 @@ XclImpHFConverter::XclImpHFPortionInfo::XclImpHFPortionInfo() :
     maSel.nStartPos = maSel.nEndPos = 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -279,47 +279,47 @@ XclImpHFConverter::~XclImpHFConverter()
 
 void XclImpHFConverter::ParseString( const OUString& rHFString )
 {
-    // edit engine objects
+    
     mrEE.SetText( EMPTY_OUSTRING );
     maInfos.clear();
     maInfos.resize( EXC_HF_PORTION_COUNT );
     meCurrObj = EXC_HF_CENTER;
 
-    // parser temporaries
+    
     maCurrText = "";
-    OUString aReadFont;           // current font name
-    OUString aReadStyle;          // current font style
-    sal_uInt16 nReadHeight = 0; // current font height
+    OUString aReadFont;           
+    OUString aReadStyle;          
+    sal_uInt16 nReadHeight = 0; 
     ResetFontData();
 
     /** State of the parser. */
     enum XclHFParserState
     {
-        xlPSText,           /// Read text, search for functions.
-        xlPSFunc,           /// Read function (token following a '&').
-        xlPSFont,           /// Read font name ('&' is followed by '"', reads until next '"' or ',').
-        xlPSFontStyle,      /// Read font style name (font part after ',', reads until next '"').
-        xlPSHeight          /// Read font height ('&' is followed by num. digits, reads until non-digit).
+        xlPSText,           
+        xlPSFunc,           
+        xlPSFont,           
+        xlPSFontStyle,      
+        xlPSHeight          
     } eState = xlPSText;
 
     const sal_Unicode* pChar = rHFString.getStr();
-    const sal_Unicode* pNull = pChar + rHFString.getLength(); // pointer to teminating null char
+    const sal_Unicode* pNull = pChar + rHFString.getLength(); 
     while( *pChar )
     {
         switch( eState )
         {
 
-// --- read text character ---
+
 
             case xlPSText:
             {
                 switch( *pChar )
                 {
-                    case '&':           // new command
+                    case '&':           
                         InsertText();
                         eState = xlPSFunc;
                     break;
-                    case '\n':          // line break
+                    case '\n':          
                         InsertText();
                         InsertLineBreak();
                     break;
@@ -329,69 +329,69 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
             }
             break;
 
-// --- read control sequence ---
+
 
             case xlPSFunc:
             {
                 eState = xlPSText;
                 switch( *pChar )
                 {
-                    case '&':   maCurrText += "&";  break;  // the '&' character
+                    case '&':   maCurrText += "&";  break;  
 
-                    case 'L':   SetNewPortion( EXC_HF_LEFT );   break;  // Left portion
-                    case 'C':   SetNewPortion( EXC_HF_CENTER ); break;  // Center portion
-                    case 'R':   SetNewPortion( EXC_HF_RIGHT );  break;  // Right portion
+                    case 'L':   SetNewPortion( EXC_HF_LEFT );   break;  
+                    case 'C':   SetNewPortion( EXC_HF_CENTER ); break;  
+                    case 'R':   SetNewPortion( EXC_HF_RIGHT );  break;  
 
-                    case 'P':   InsertField( SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD ) );      break;  // page
-                    case 'N':   InsertField( SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD ) );     break;  // page count
-                    case 'D':   InsertField( SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD ) );      break;  // date
-                    case 'T':   InsertField( SvxFieldItem( SvxTimeField(), EE_FEATURE_FIELD ) );      break;  // time
-                    case 'A':   InsertField( SvxFieldItem( SvxTableField(), EE_FEATURE_FIELD ) );     break;  // table name
+                    case 'P':   InsertField( SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD ) );      break;  
+                    case 'N':   InsertField( SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD ) );     break;  
+                    case 'D':   InsertField( SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD ) );      break;  
+                    case 'T':   InsertField( SvxFieldItem( SvxTimeField(), EE_FEATURE_FIELD ) );      break;  
+                    case 'A':   InsertField( SvxFieldItem( SvxTableField(), EE_FEATURE_FIELD ) );     break;  
 
-                    case 'Z':           // file path
-                        InsertField( SvxFieldItem( SvxExtFileField(), EE_FEATURE_FIELD ) );   // convert to full name
+                    case 'Z':           
+                        InsertField( SvxFieldItem( SvxExtFileField(), EE_FEATURE_FIELD ) );   
                         if( (pNull - pChar >= 2) && (*(pChar + 1) == '&') && (*(pChar + 2) == 'F') )
                         {
-                            // &Z&F found - ignore the &F part
+                            
                             pChar += 2;
                         }
                     break;
-                    case 'F':           // file name
+                    case 'F':           
                         InsertField( SvxFieldItem( SvxExtFileField( EMPTY_OUSTRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
                     break;
 
-                    case 'U':           // underline
+                    case 'U':           
                         SetAttribs();
                         mxFontData->mnUnderline = (mxFontData->mnUnderline == EXC_FONTUNDERL_SINGLE) ?
                             EXC_FONTUNDERL_NONE : EXC_FONTUNDERL_SINGLE;
                     break;
-                    case 'E':           // double underline
+                    case 'E':           
                         SetAttribs();
                         mxFontData->mnUnderline = (mxFontData->mnUnderline == EXC_FONTUNDERL_DOUBLE) ?
                             EXC_FONTUNDERL_NONE : EXC_FONTUNDERL_DOUBLE;
                     break;
-                    case 'S':           // strikeout
+                    case 'S':           
                         SetAttribs();
                         mxFontData->mbStrikeout = !mxFontData->mbStrikeout;
                     break;
-                    case 'X':           // superscript
+                    case 'X':           
                         SetAttribs();
                         mxFontData->mnEscapem = (mxFontData->mnEscapem == EXC_FONTESC_SUPER) ?
                             EXC_FONTESC_NONE : EXC_FONTESC_SUPER;
                     break;
-                    case 'Y':           // subsrcipt
+                    case 'Y':           
                         SetAttribs();
                         mxFontData->mnEscapem = (mxFontData->mnEscapem == EXC_FONTESC_SUB) ?
                             EXC_FONTESC_NONE : EXC_FONTESC_SUB;
                     break;
 
-                    case '\"':          // font name
+                    case '\"':          
                         aReadFont = "";
                         aReadStyle = "";
                         eState = xlPSFont;
                     break;
                     default:
-                        if( ('0' <= *pChar) && (*pChar <= '9') )    // font size
+                        if( ('0' <= *pChar) && (*pChar <= '9') )    
                         {
                             nReadHeight = *pChar - '0';
                             eState = xlPSHeight;
@@ -400,7 +400,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
             }
             break;
 
-// --- read font name ---
+
 
             case xlPSFont:
             {
@@ -408,7 +408,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                 {
                     case '\"':
                         --pChar;
-                        // run through
+                        
                     case ',':
                         eState = xlPSFontStyle;
                     break;
@@ -418,7 +418,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
             }
             break;
 
-// --- read font style ---
+
 
             case xlPSFontStyle:
             {
@@ -437,7 +437,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
             }
             break;
 
-// --- read font height ---
+
 
             case xlPSHeight:
             {
@@ -447,7 +447,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                     {
                         nReadHeight *= 10;
                         nReadHeight += (*pChar - '0');
-                        if( nReadHeight > 1600 )    // max 1600pt = 32000twips
+                        if( nReadHeight > 1600 )    
                             nReadHeight = 0xFFFF;
                     }
                 }
@@ -467,7 +467,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
         ++pChar;
     }
 
-    // finalize
+    
     CreateCurrObject();
     maInfos[ EXC_HF_LEFT   ].mnHeight += GetMaxLineHeight( EXC_HF_LEFT );
     maInfos[ EXC_HF_CENTER ].mnHeight += GetMaxLineHeight( EXC_HF_CENTER );
@@ -492,7 +492,7 @@ sal_Int32 XclImpHFConverter::GetTotalHeight() const
         ::std::max( maInfos[ EXC_HF_CENTER ].mnHeight, maInfos[ EXC_HF_RIGHT ].mnHeight ) );
 }
 
-// private --------------------------------------------------------------------
+
 
 sal_uInt16 XclImpHFConverter::GetMaxLineHeight( XclImpHFPortion ePortion ) const
 {
@@ -592,13 +592,13 @@ void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
     }
 }
 
-// URL conversion =============================================================
+
 
 namespace {
 
 void lclAppendUrlChar( OUString& rUrl, sal_Unicode cChar )
 {
-    // encode special characters
+    
     switch( cChar )
     {
         case '#':   rUrl += "%23";  break;
@@ -607,7 +607,7 @@ void lclAppendUrlChar( OUString& rUrl, sal_Unicode cChar )
     }
 }
 
-} // namespace
+} 
 
 void XclImpUrlHelper::DecodeUrl(
         OUString& rUrl, OUString& rTabName, bool& rbSameWb,
@@ -615,11 +615,11 @@ void XclImpUrlHelper::DecodeUrl(
 {
     enum
     {
-        xlUrlInit,              /// Initial state, read string mode character.
-        xlUrlPath,              /// Read URL path.
-        xlUrlFileName,          /// Read file name.
-        xlUrlSheetName,         /// Read sheet name.
-        xlUrlRaw                /// Raw mode. No control characters will occur.
+        xlUrlInit,              
+        xlUrlPath,              
+        xlUrlFileName,          
+        xlUrlSheetName,         
+        xlUrlRaw                
     } eState = xlUrlInit;
 
     bool bEncoded = true;
@@ -636,7 +636,7 @@ void XclImpUrlHelper::DecodeUrl(
         switch( eState )
         {
 
-// --- first character ---
+
 
             case xlUrlInit:
             {
@@ -662,7 +662,7 @@ void XclImpUrlHelper::DecodeUrl(
             }
             break;
 
-// --- URL path ---
+
 
             case xlUrlPath:
             {
@@ -691,11 +691,11 @@ void XclImpUrlHelper::DecodeUrl(
                             lclAppendUrlChar( rUrl, cCurrDrive );
                             rUrl += ":";
                         }
-                        // run through
+                        
                     case EXC_URL_SUBDIR:
                         if( bEncoded )
                             rUrl += "\\";
-                        else    // control character in raw name -> DDE link
+                        else    
                         {
                             rUrl += OUString( EXC_DDE_DELIM );
                             eState = xlUrlRaw;
@@ -711,7 +711,7 @@ void XclImpUrlHelper::DecodeUrl(
                             sal_Int32 nLen = *++pChar;
                             for( sal_Int32 nChar = 0; (nChar < nLen) && *(pChar + 1); ++nChar )
                                 lclAppendUrlChar( rUrl, *++pChar );
-//                            rUrl.Append( ':' );
+
                         }
                     }
                     break;
@@ -724,7 +724,7 @@ void XclImpUrlHelper::DecodeUrl(
             }
             break;
 
-// --- file name ---
+
 
             case xlUrlFileName:
             {
@@ -736,13 +736,13 @@ void XclImpUrlHelper::DecodeUrl(
             }
             break;
 
-// --- sheet name ---
+
 
             case xlUrlSheetName:
                 rTabName += OUString( *pChar );
             break;
 
-// --- raw read mode ---
+
 
             case xlUrlRaw:
                 lclAppendUrlChar( rUrl, *pChar );
@@ -775,7 +775,7 @@ bool XclImpUrlHelper::DecodeLink( OUString& rApplic, OUString& rTopic, const OUS
     return false;
 }
 
-// Cached Values ==============================================================
+
 
 XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
     mfValue( 0.0 ),
@@ -825,7 +825,7 @@ sal_uInt16 XclImpCachedValue::GetScError() const
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
 }
 
-// Matrix Cached Values ==============================================================
+
 
 XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
     mnScCols( 0 ),
@@ -836,13 +836,13 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
 
     if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
     {
-        // in BIFF2-BIFF7: 256 columns represented by 0 columns
+        
         if( mnScCols == 0 )
             mnScCols = 256;
     }
     else
     {
-        // in BIFF8: columns and rows decreaed by 1
+        
         ++mnScCols;
         ++mnScRows;
     }
@@ -871,7 +871,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix( svl::SharedStringPool& rPool ) c
                 switch( itValue->GetType() )
                 {
                     case EXC_CACHEDVAL_EMPTY:
-                        // Excel shows 0.0 here, not an empty cell
+                        
                         xScMatrix->PutEmpty( nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
@@ -897,6 +897,6 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix( svl::SharedStringPool& rPool ) c
     return xScMatrix;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

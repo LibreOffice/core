@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,7 +38,7 @@ SvXMLEnumMapEntry pXML_tabstop_style[] =
     { XML_CENTER,   style::TabAlign_CENTER  },
     { XML_RIGHT,    style::TabAlign_RIGHT   },
     { XML_CHAR,     style::TabAlign_DECIMAL },
-    { XML_DEFAULT,  style::TabAlign_DEFAULT  }, // ?????????????????????????????????????
+    { XML_DEFAULT,  style::TabAlign_DEFAULT  }, 
     { XML_TOKEN_INVALID,        0 }
 };
 
@@ -46,15 +46,15 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
 {
     SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
 
-    // text:level
+    
     OUStringBuffer sBuffer;
 
-    // position attribute
+    
     rUnitConv.convertMeasureToXML( sBuffer, pTabStop->Position );
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION,
                            sBuffer.makeStringAndClear() );
 
-    // type attribute
+    
     if( style::TabAlign_LEFT != pTabStop->Alignment )
     {
         rUnitConv.convertEnum( sBuffer, pTabStop->Alignment,
@@ -63,7 +63,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
                                sBuffer.makeStringAndClear() );
     }
 
-    // char
+    
     if( style::TabAlign_DECIMAL == pTabStop->Alignment &&
         pTabStop->DecimalChar != 0 )
     {
@@ -72,7 +72,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
                                sBuffer.makeStringAndClear() );
     }
 
-    // leader-char
+    
     if( ' ' != pTabStop->FillChar && 0 != pTabStop->FillChar )
     {
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_STYLE,

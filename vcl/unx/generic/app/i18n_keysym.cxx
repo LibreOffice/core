@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,9 +23,9 @@
 
 #include <unx/i18n_keysym.hxx>
 
-// convert keysyms to unicode
-// for all keysyms with byte1 and byte2 equal zero, and of course only for
-// keysyms that have a unicode counterpart
+
+
+
 
 typedef const sal_Unicode unicode_t;
 typedef struct {
@@ -33,7 +33,7 @@ typedef struct {
     unicode_t *map;
 } keymap_t;
 
-// Latin-1      Byte 3 = 0x00
+
 unicode_t keymap00_map[] = {
     0x0020, 0x0021, 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0027,
     0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f,
@@ -65,7 +65,7 @@ unicode_t keymap00_map[] = {
     0x00f8, 0x00f9, 0x00fa, 0x00fb, 0x00fc, 0x00fd, 0x00fe, 0x00ff };
 const keymap_t keymap00 = { 32, 255, keymap00_map };
 
-// Latin-2      Byte 3 = 0x01
+
 unicode_t keymap01_map[] = {
     0x0104, 0x02d8, 0x0141, 0x0000, 0x013d, 0x015a, 0x0000, 0x0000,
     0x0160, 0x015e, 0x0164, 0x0179, 0x0000, 0x017d, 0x017b, 0x0000,
@@ -81,7 +81,7 @@ unicode_t keymap01_map[] = {
     0x016f, 0x0000, 0x0171, 0x0000, 0x0000, 0x0163, 0x02d9 };
 const keymap_t keymap01 = { 161, 255, keymap01_map };
 
-// Latin-3      Byte 3 = 0x02
+
 unicode_t keymap02_map[] = {
     0x0126, 0x0000, 0x0000, 0x0000, 0x0000, 0x0124, 0x0000, 0x0000,
     0x0130, 0x0000, 0x011e, 0x0134, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -97,7 +97,7 @@ unicode_t keymap02_map[] = {
     0x0000, 0x0000, 0x0000, 0x0000, 0x016d, 0x015d };
 const keymap_t keymap02 = { 161, 254, keymap02_map };
 
-// Latin-4      Byte 3 = 0x03
+
 unicode_t keymap03_map[] = {
     0x0138, 0x0156, 0x0000, 0x0128, 0x013b, 0x0000, 0x0000, 0x0000,
     0x0112, 0x0122, 0x0166, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -113,7 +113,7 @@ unicode_t keymap03_map[] = {
     0x0000, 0x0000, 0x0000, 0x0169, 0x016b };
 const keymap_t keymap03 = { 162, 254, keymap03_map };
 
-// Kana         Byte 3 = 0x04
+
 unicode_t keymap04_map[] = {
     0x203e, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -130,7 +130,7 @@ unicode_t keymap04_map[] = {
     0x309b, 0x309c };
 const keymap_t keymap04 = { 126, 223, keymap04_map };
 
-// Arabic       Byte 3 = 0x05
+
 unicode_t keymap05_map[] = {
     0x060c, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x061b,
@@ -143,7 +143,7 @@ unicode_t keymap05_map[] = {
     0x064c, 0x064d, 0x064e, 0x064f, 0x0650, 0x0651, 0x0652 };
 const keymap_t keymap05 = { 172, 242, keymap05_map };
 
-// Cyrillic     Byte 3 = 0x06
+
 unicode_t keymap06_map[] = {
     0x0452, 0x0453, 0x0451, 0x0454, 0x0455, 0x0456, 0x0457, 0x0458,
     0x0459, 0x045a, 0x045b, 0x045c, 0x0000, 0x045e, 0x045f, 0x2116,
@@ -159,7 +159,7 @@ unicode_t keymap06_map[] = {
     0x042b, 0x0417, 0x0428, 0x042d, 0x0429, 0x0427, 0x042a };
 const keymap_t keymap06 = { 161, 255, keymap06_map };
 
-// Greek        Byte 3 = 0x07
+
 unicode_t keymap07_map[] = {
     0x0386, 0x0388, 0x0389, 0x038a, 0x03aa, 0x0000, 0x038c, 0x038e,
     0x03ab, 0x0000, 0x038f, 0x0000, 0x0000, 0x0385, 0x2015, 0x0000,
@@ -175,7 +175,7 @@ unicode_t keymap07_map[] = {
     0x03c9 };
 const keymap_t keymap07 = { 161, 249, keymap07_map };
 
-// Technical    Byte 3 = 0x08
+
 unicode_t keymap08_map[] = {
     0x23b7, 0x250c, 0x2500, 0x2320, 0x2321, 0x2502, 0x23a1, 0x23a3,
     0x23a4, 0x23a6, 0x239b, 0x239d, 0x239e, 0x23a0, 0x23a8, 0x23ac,
@@ -191,7 +191,7 @@ unicode_t keymap08_map[] = {
     0x0000, 0x0000, 0x2190, 0x2191, 0x2192, 0x2193 };
 const keymap_t keymap08 = { 161, 254, keymap08_map };
 
-// Special      Byte 3 = 0x09
+
 unicode_t keymap09_map[] = {
     0x25c6, 0x2592, 0x2409, 0x240c, 0x240d, 0x240a, 0x0000, 0x0000,
     0x2424, 0x240b, 0x2518, 0x2510, 0x250c, 0x2514, 0x253c, 0x23ba,
@@ -199,7 +199,7 @@ unicode_t keymap09_map[] = {
     0x2502 };
 const keymap_t keymap09 = { 224, 248, keymap09_map };
 
-// Publishing   Byte 3 = 0x0a = 10
+
 unicode_t keymap10_map[] = {
     0x2003, 0x2002, 0x2004, 0x2005, 0x2007, 0x2008, 0x2009, 0x200a,
     0x2014, 0x2013, 0x0000, 0x0000, 0x0000, 0x2026, 0x2025, 0x2153,
@@ -215,7 +215,7 @@ unicode_t keymap10_map[] = {
     0x260e, 0x2315, 0x2117, 0x2038, 0x201a, 0x201e };
 const keymap_t keymap10 = { 161, 254, keymap10_map };
 
-// APL      Byte 3 = 0x0b = 11
+
 unicode_t keymap11_map[] = {
     0x003c, 0x0000, 0x0000, 0x003e, 0x0000, 0x2228, 0x2227, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -231,7 +231,7 @@ unicode_t keymap11_map[] = {
     0x0000, 0x22a3 };
 const keymap_t keymap11 = { 163, 252, keymap11_map };
 
-// Hebrew   Byte 3 = 0x0c = 12
+
 unicode_t keymap12_map[] = {
     0x2017, 0x05d0, 0x05d1, 0x05d2, 0x05d3, 0x05d4, 0x05d5, 0x05d6,
     0x05d7, 0x05d8, 0x05d9, 0x05da, 0x05db, 0x05dc, 0x05dd, 0x05de,
@@ -239,7 +239,7 @@ unicode_t keymap12_map[] = {
     0x05e7, 0x05e8, 0x05e9, 0x05ea };
 const keymap_t keymap12 = { 223, 250, keymap12_map };
 
-// Thai     Byte 3 = 0x0d = 13
+
 unicode_t keymap13_map[] = {
     0x0e01, 0x0e02, 0x0e03, 0x0e04, 0x0e05, 0x0e06, 0x0e07, 0x0e08,
     0x0e09, 0x0e0a, 0x0e0b, 0x0e0c, 0x0e0d, 0x0e0e, 0x0e0f, 0x0e10,
@@ -255,7 +255,7 @@ unicode_t keymap13_map[] = {
     0x0e59 };
 const keymap_t keymap13 = { 161, 249, keymap13_map };
 
-// Korean       Byte 3 = 0x0e = 14
+
 unicode_t keymap14_map[] = {
     0x3131, 0x3132, 0x3133, 0x3134, 0x3135, 0x3136, 0x3137, 0x3138,
     0x3139, 0x313a, 0x313b, 0x313c, 0x313d, 0x313e, 0x313f, 0x3140,
@@ -271,27 +271,27 @@ unicode_t keymap14_map[] = {
     0x11f0, 0x11f9, 0x0000, 0x0000, 0x0000, 0x0000, 0x20a9 };
 const keymap_t keymap14 = { 161, 255, keymap14_map };
 
-// missing:
-// Latin-8      Byte 3 = 0x12 = 18
 
-// Latin-9      Byte 3 = 0x13 = 19
+
+
+
 unicode_t keymap19_map[] = {
     0x0152, 0x0153, 0x0178 };
 const keymap_t keymap19 = { 188, 190, keymap19_map };
 
-// missing:
-// Armenian     Byte 3 = 0x14 = 20
-// Georgian     Byte 3 = 0x15 = 21
-// Azeri        Byte 3 = 0x16 = 22
-// Vietnamese   Byte 3 = 0x1e = 30
 
-// Currency     Byte 3 = 0x20 = 32
+
+
+
+
+
+
 unicode_t keymap32_map[] = {
     0x20a0, 0x20a1, 0x20a2, 0x20a3, 0x20a4, 0x20a5, 0x20a6, 0x20a7,
     0x20a8, 0x0000, 0x20aa, 0x20ab, 0x20ac };
 const keymap_t keymap32 = { 160, 172, keymap32_map };
 
-// Keyboard (Keypad mappings) Byte 3 = 0xff = 255
+
 unicode_t keymap255_map[] = {
     0x0020, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -319,15 +319,15 @@ const keymap_t* p_keymap[INITIAL_KEYMAPS] = {
 sal_Unicode
 KeysymToUnicode (KeySym nKeySym)
 {
-    // keysym is already unicode
+    
     if ((nKeySym & 0xff000000) == 0x01000000)
     {
-        // strip off group indicator and iso10646 plane
-        // FIXME can't handle chars from surrogate area.
+        
+        
         if (! (nKeySym & 0x00ff0000) )
             return (sal_Unicode)(nKeySym & 0x0000ffff);
     }
-    // legacy keysyms, switch to appropriate codeset
+    
     else
     {
         unsigned char n_byte1 = (nKeySym & 0xff000000) >> 24;

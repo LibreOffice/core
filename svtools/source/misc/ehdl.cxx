@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -29,13 +29,13 @@
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
 
-//=========================================================================
+
 
 static sal_uInt16 aWndFunc(
-    Window *pWin,            // Parent of the dialog
+    Window *pWin,            
     sal_uInt16 nFlags,
-    const OUString &rErr,      // error text
-    const OUString &rAction)   // action text
+    const OUString &rErr,      
+    const OUString &rAction)   
 
 /*  [Description]
 
@@ -50,7 +50,7 @@ static sal_uInt16 aWndFunc(
 {
     SolarMutexGuard aGuard;
 
-    // determine necessary WinBits from the flags
+    
     WinBits eBits=0;
     if ( (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY) == (nFlags & (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY)) )
         eBits = WB_RETRY_CANCEL;
@@ -142,7 +142,7 @@ static sal_uInt16 aWndFunc(
     return nRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
 
@@ -156,14 +156,14 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorHandler::~SfxErrorHandler()
 {
     delete pFreeMgr;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxErrorHandler::CreateString(
     const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
@@ -210,7 +210,7 @@ bool SfxErrorHandler::CreateString(
     return false;
 }
 
-//-------------------------------------------------------------------------
+
 
 class ResString: public OUString
 
@@ -229,21 +229,21 @@ class ResString: public OUString
     ResString( ResId &rId);
 };
 
-//-------------------------------------------------------------------------
+
 
 ResString::ResString(ResId & rId):
     OUString(rId.SetAutoRelease(false).toString()),
     nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();
-     // String ctor temporarily sets global ResManager
+     
     if (pResMgr->GetRemainSize())
         nFlags = sal_uInt16(pResMgr->ReadShort());
     rId.SetAutoRelease(true);
     pResMgr->PopContext();
 }
 
-//-------------------------------------------------------------------------
+
 
 struct ErrorResource_Impl : private Resource
 
@@ -293,7 +293,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) con
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxErrorHandler::GetMessageString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
@@ -323,7 +323,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxErrorHandler::GetErrorString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
@@ -371,7 +371,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
@@ -381,7 +381,7 @@ SfxErrorContext::SfxErrorContext(
         nResId=RID_ERRCTX;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, const OUString &aArg1P, Window *pWindow,
@@ -393,7 +393,7 @@ SfxErrorContext::SfxErrorContext(
         nResId=RID_ERRCTX;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
 

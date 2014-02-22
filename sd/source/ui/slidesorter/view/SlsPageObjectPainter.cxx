@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,7 +42,7 @@ using namespace ::drawinglayer::primitive2d;
 
 namespace sd { namespace slidesorter { namespace view {
 
-//===== PageObjectPainter =====================================================
+
 
 PageObjectPainter::PageObjectPainter (
     const SlideSorter& rSlideSorter)
@@ -61,8 +61,8 @@ PageObjectPainter::PageObjectPainter (
       maMouseOverFocusedBackground(),
       maSize()
 {
-    // Replace the color (not the alpha values) in the focus border with a
-    // color derived from the current selection color.
+    
+    
     Color aColor (mpTheme->GetColor(Theme::Color_Selection));
     sal_uInt16 nHue, nSat, nBri;
     aColor.RGBtoHSB(nHue, nSat, nBri);
@@ -85,8 +85,8 @@ void PageObjectPainter::PaintPageObject (
 {
     if (UpdatePageObjectLayouter())
     {
-        // Turn off antialiasing to avoid the bitmaps from being
-        // shifted by fractions of a pixel and thus show blurry edges.
+        
+        
         const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
         rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
 
@@ -104,8 +104,8 @@ void PageObjectPainter::PaintPageObject (
 
 bool PageObjectPainter::UpdatePageObjectLayouter (void)
 {
-    // The page object layouter is quite volatile. It may have been replaced
-    // since the last call.  Update it now.
+    
+    
     mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
     if ( ! mpPageObjectLayouter)
     {
@@ -175,8 +175,8 @@ void PageObjectPainter::PaintBackground (
     const Bitmap& rBackground (GetBackgroundForState(rpDescriptor, rDevice));
     rDevice.DrawBitmap(aBox.TopLeft(), rBackground);
 
-    // Fill the interior of the preview area with the default background
-    // color of the page.
+    
+    
     SdPage* pPage = rpDescriptor->GetPage();
     if (pPage != NULL)
     {
@@ -236,7 +236,7 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
 
     pDevice->DrawBitmap(Point(0,0), rSize, rPreview);
 
-    // Paint bitmap tiled over the preview to mark it as excluded.
+    
     const sal_Int32 nIconWidth (rOverlay.GetSizePixel().Width());
     const sal_Int32 nIconHeight (rOverlay.GetSizePixel().Height());
     if (nIconWidth>0 && nIconHeight>0)
@@ -294,29 +294,29 @@ void PageObjectPainter::PaintPageNumber (
         PageObjectLayouter::PageNumber,
         PageObjectLayouter::ModelCoordinateSystem));
 
-    // Determine the color of the page number.
+    
     Color aPageNumberColor (mpTheme->GetColor(Theme::Color_PageNumberDefault));
     if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver) ||
         rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
     {
-        // Page number is painted on background for hover or selection or
-        // both.  Each of these background colors has a predefined luminance
-        // which is compatible with the PageNumberHover color.
+        
+        
+        
         aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHover));
     }
     else
     {
         const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
         const sal_Int32 nBackgroundLuminance (aBackgroundColor.GetLuminance());
-        // When the background color is black then this is interpreted as
-        // high contrast mode and the font color is set to white.
+        
+        
         if (nBackgroundLuminance == 0)
             aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHighContrast));
         else
         {
-            // Compare luminance of default page number color and background
-            // color.  When the two are similar then use a darker
-            // (preferred) or brighter font color.
+            
+            
+            
             const sal_Int32 nFontLuminance (aPageNumberColor.GetLuminance());
             if (abs(nBackgroundLuminance - nFontLuminance) < 60)
             {
@@ -328,7 +328,7 @@ void PageObjectPainter::PaintPageNumber (
         }
     }
 
-    // Paint the page number.
+    
     OSL_ASSERT(rpDescriptor->GetPage()!=NULL);
     const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
     const OUString sPageNumber(OUString::number(nPageNumber));
@@ -475,14 +475,14 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     VirtualDevice aBitmapDevice (rReferenceDevice);
     aBitmapDevice.SetOutputSizePixel(aSize);
 
-    // Fill the background with the background color of the slide sorter.
+    
     const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
     aBitmapDevice.SetFillColor(aBackgroundColor);
     aBitmapDevice.SetLineColor(aBackgroundColor);
     aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
 
-    // Paint the slide area with a linear gradient that starts some pixels
-    // below the top and ends some pixels above the bottom.
+    
+    
     const Color aTopColor(mpTheme->GetGradientColor(eColorType, Theme::Fill1));
     const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::Fill2));
     if (aTopColor != aBottomColor)
@@ -521,14 +521,14 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
         aBitmapDevice.DrawRect(aPageObjectBox);
     }
 
-    // Paint the simple border and, for some backgrounds, the focus border.
+    
     if (bHasFocusBorder)
         mpFocusBorderPainter->PaintFrame(aBitmapDevice, aPageObjectBox);
     else
         PaintBorder(aBitmapDevice, eColorType, aPageObjectBox);
 
-    // Get bounding box of the preview around which a shadow is painted.
-    // Compensate for the border around the preview.
+    
+    
     const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         Point(0,0),
         PageObjectLayouter::Preview,
@@ -572,6 +572,6 @@ void PageObjectPainter::PaintBorder (
 
 
 
-} } } // end of namespace sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

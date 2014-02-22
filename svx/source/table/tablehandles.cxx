@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@
 
 namespace sdr { namespace table {
 
-// --------------------------------------------------------------------
+
 
 class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
@@ -48,7 +48,7 @@ protected:
     basegfx::B2DPolyPolygon maPolyPolygon;
     bool                    mbVisible;
 
-    // geometry creation for OverlayObject
+    
     virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
 public:
@@ -56,7 +56,7 @@ public:
     virtual ~OverlayTableEdge();
 };
 
-// --------------------------------------------------------------------
+
 
 TableEdgeHdl::TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges )
 : SdrHdl( rPnt, HDL_USER )
@@ -99,7 +99,7 @@ basegfx::B2DPolyPolygon TableEdgeHdl::getSpecialDragPoly(const SdrDragStat& rDra
     basegfx::B2DPolyPolygon aVisible;
     basegfx::B2DPolyPolygon aInvisible;
 
-    // create and return visible and non-visible parts for drag
+    
     getPolyPolygon(aVisible, aInvisible, &rDrag);
     aVisible.append(aInvisible);
 
@@ -108,8 +108,8 @@ basegfx::B2DPolyPolygon TableEdgeHdl::getSpecialDragPoly(const SdrDragStat& rDra
 
 void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2DPolyPolygon& rInvisible, const SdrDragStat* pDrag) const
 {
-    // changed method to create visible and invisible partial polygons in one run in
-    // separate PolyPolygons; both kinds are used
+    
+    
     basegfx::B2DPoint aOffset(aPos.X(), aPos.Y());
     rVisible.clear();
     rInvisible.clear();
@@ -160,7 +160,7 @@ void TableEdgeHdl::CreateB2dIAObject()
             basegfx::B2DPolyPolygon aVisible;
             basegfx::B2DPolyPolygon aInvisible;
 
-            // get visible and invisible parts
+            
             getPolyPolygon(aVisible, aInvisible, 0);
 
             if(aVisible.count() || aInvisible.count())
@@ -176,7 +176,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                         {
                             if(aVisible.count())
                             {
-                                // create overlay object for visible parts
+                                
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
                                 xManager->add(*pOverlayObject);
                                 maOverlayGroup.append(*pOverlayObject);
@@ -184,9 +184,9 @@ void TableEdgeHdl::CreateB2dIAObject()
 
                             if(aInvisible.count())
                             {
-                                // also create overlay object vor invisible parts to allow
-                                // a standard HitTest using the primitives from that overlay object
-                                // (see OverlayTableEdge implementation)
+                                
+                                
+                                
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
                                 xManager->add(*pOverlayObject);
                                 maOverlayGroup.append(*pOverlayObject);
@@ -199,7 +199,7 @@ void TableEdgeHdl::CreateB2dIAObject()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
 :   OverlayObject(Color(COL_GRAY))
@@ -218,8 +218,8 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
 
     if(maPolyPolygon.count())
     {
-        // Discussed with CL. Currently i will leave the transparence out since this
-        // a little bit expensive. We may check the look with drag polygons later
+        
+        
         const drawinglayer::primitive2d::Primitive2DReference aReference(
             new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
                 maPolyPolygon,
@@ -227,13 +227,13 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
 
         if(mbVisible)
         {
-            // visible, just return as sequence
+            
             aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
         }
         else
         {
-            // embed in HiddenGeometryPrimitive2D to support HitTest of this invisible
-            // overlay object
+            
+            
             const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aReference, 1);
             const drawinglayer::primitive2d::Primitive2DReference aNewReference(
                 new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(aSequence));
@@ -244,7 +244,7 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
     return aRetval;
 }
 
-// ====================================================================
+
 
 TableBorderHdl::TableBorderHdl(
     const Rectangle& rRect,
@@ -260,7 +260,7 @@ Pointer TableBorderHdl::GetPointer() const
     return POINTER_MOVE;
 }
 
-// create marker for this kind
+
 void TableBorderHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
@@ -295,10 +295,10 @@ void TableBorderHdl::CreateB2dIAObject()
                             0.0,
                             0.0,
                             500,
-                            // make animation dependent from text edit active, because for tables
-                            // this handle is also used when text edit *is* active for it. This
-                            // interferes too much concerning repaint stuff (at least as long as
-                            // text edit is not yet on the overlay)
+                            
+                            
+                            
+                            
                             getAnimate());
 
                         xManager->add(*pOverlayObject);
@@ -310,9 +310,9 @@ void TableBorderHdl::CreateB2dIAObject()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 
-} // end of namespace table
-} // end of namespace sdr
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

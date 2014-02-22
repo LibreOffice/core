@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgimagenode.hxx>
@@ -33,7 +33,7 @@
 #include <rtl/uri.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -69,13 +69,13 @@ namespace svgio
 
         void SvgImageNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -171,28 +171,28 @@ namespace svgio
             {
                 if(rGraphic.getSvgData().get())
                 {
-                    // embedded Svg
+                    
                     rEmbedded = rGraphic.getSvgData()->getPrimitive2DSequence();
 
-                    // fill aViewBox
+                    
                     rViewBox = rGraphic.getSvgData()->getRange();
                 }
                 else
                 {
-                    // get bitmap
+                    
                     rBitmapEx = rGraphic.GetBitmapEx();
                 }
             }
             else
             {
-                // evtl. convert to bitmap
+                
                 rBitmapEx = rGraphic.GetBitmapEx();
             }
         }
 
         void SvgImageNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
         {
-            // get size range and create path
+            
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
             if(pStyle && getWidth().isSet() && getHeight().isSet())
@@ -205,7 +205,7 @@ namespace svgio
                     BitmapEx aBitmapEx;
                     drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                    // prepare Target and ViewBox for evtl. AspectRatio mappings
+                    
                     const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
                     const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
                     const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
@@ -213,7 +213,7 @@ namespace svgio
 
                     if(!maMimeType.isEmpty() && !maData.isEmpty())
                     {
-                        // use embedded base64 encoded data
+                        
                         ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
                         ::sax::Converter::decodeBase64(aPass, maData);
 
@@ -255,9 +255,9 @@ namespace svgio
                         }
                         else
                         {
-                            // #i123042# detect missing path and assert - content will be missing. The
-                            // absolute path to itself needs to be set to correctly import linked
-                            // content in a SVG file
+                            
+                            
+                            
                             OSL_ENSURE(false, "SVG graphic with internal links is interpreted, but local AbsolutePath is not set: linked content will be missing (!)");
                         }
                     }
@@ -280,13 +280,13 @@ namespace svgio
 
                     if(!aBitmapEx.IsEmpty())
                     {
-                        // create content from created bitmap
+                        
                         aNewTarget.realloc(1);
                         aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
                             aBitmapEx,
                             basegfx::B2DHomMatrix());
 
-                        // fill aViewBox. No size set yet, use unit size
+                        
                         aViewBox = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
                     }
 
@@ -294,17 +294,17 @@ namespace svgio
                     {
                         if(aTarget.equal(aViewBox))
                         {
-                            // just add to rTarget
+                            
                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
                         }
                         else
                         {
-                            // create mapping
+                            
                             const SvgAspectRatio& rRatio = getSvgAspectRatio();
 
                             if(rRatio.isSet())
                             {
-                                // let mapping be created from SvgAspectRatio
+                                
                                 const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
 
                                 if(!aEmbeddingTransform.isIdentity())
@@ -319,7 +319,7 @@ namespace svgio
 
                                 if(!rRatio.isMeetOrSlice())
                                 {
-                                    // need to embed in MaskPrimitive2D to ensure clipping
+                                    
                                     const drawinglayer::primitive2d::Primitive2DReference xMask(
                                         new drawinglayer::primitive2d::MaskPrimitive2D(
                                             basegfx::B2DPolyPolygon(
@@ -331,7 +331,7 @@ namespace svgio
                             }
                             else
                             {
-                                // choose default mapping
+                                
                                 const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createLinearMapping(aTarget, aViewBox));
 
                                 if(!aEmbeddingTransform.isIdentity())
@@ -345,7 +345,7 @@ namespace svgio
                                 }
                             }
 
-                            // embed and add to rTarget, take local extra-transform into account
+                            
                             pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
                         }
                     }
@@ -353,10 +353,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

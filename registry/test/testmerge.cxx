@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -186,7 +186,7 @@ void test_merge()
     REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString("/stardiv/IchbineinMergeKey"),
                 OUString("merge2.rdb")), "testMerge error 4");
 
-    ///////////////////////////////////////////////////////////////////////////
+    
 
     REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1), "testMerge error 5");
 
@@ -215,7 +215,7 @@ void test_merge()
 
     REG_ENSURE(!key1.closeKey(), "testMerge error 24");
 
-    ///////////////////////////////////////////////////////////////////////////
+    
 
     REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key2), "testMerge error 25");
 
@@ -244,7 +244,7 @@ void test_merge()
 
     REG_ENSURE(!key2.closeKey(), "testMerge error 44");
 
-    ///////////////////////////////////////////////////////////////////////////
+    
 
     REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1u2), "testMerge error 40");
 
@@ -288,7 +288,7 @@ void test_merge()
 
     REG_ENSURE(!key1u2.closeKey(), "testMerge error 71");
 
-    ///////////////////////////////////////////////////////////////////////////
+    
 
     RegValueType    valueType;
     sal_uInt32          valueSize;
@@ -395,7 +395,7 @@ void test_merge()
 
     REG_ENSURE(!key1.closeKey(), "testMerge error 24");
 
-    ///////////////////////////////////////////////////////////////////////////
+    
 
     REG_ENSURE(!rootKey.closeKey(), "testMerge error 10");
 

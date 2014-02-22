@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -62,13 +62,13 @@ using namespace ::com::sun::star::script;
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-////////////////////////////////////////////////////////////
+
 
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
     SAL_WARN_IF( aLocalizedStrings.Count() < 18, "starmath", "resource incomplete" );
-    if( aLocalizedStrings.Count() < 9 ) // bad resource ?
+    if( aLocalizedStrings.Count() < 9 ) 
         return;
 
     SmModule *pp = SM_MOD();
@@ -79,44 +79,44 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     sal_Int32 nNumProps = 10, nIdx=0;
 
-    // create sequence of print UI options
-    // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
+    
+    
     m_aUIProperties.realloc( nNumProps );
 
-    // load the math PrinterOptions into the custom tab
+    
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
     m_aUIProperties[nIdx++].Value <<= OUString("modules/smath/ui/printeroptions.ui");
 
-    // create Section for formula (results in an extra tab page in dialog)
+    
     SvtModuleOptions aOpt;
     OUString aAppGroupname(
         aLocalizedStrings.GetString( 0 ).
             replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) ) );
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
-    // create subgroup for print options
+    
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", aLocalizedStrings.GetString(1), OUString());
 
-    // create a bool option for title row (matches to SID_PRINTTITLE)
+    
     m_aUIProperties[nIdx++].Value = setBoolControlOpt("title", aLocalizedStrings.GetString( 2 ),
                                                   ".HelpID:vcl:PrintDialog:TitleRow:CheckBox",
                                                   PRTUIOPT_TITLE_ROW,
                                                   pConfig->IsPrintTitle());
-    // create a bool option for formula text (matches to SID_PRINTTEXT)
+    
     m_aUIProperties[nIdx++].Value = setBoolControlOpt("formulatext", aLocalizedStrings.GetString( 3 ),
                                                   ".HelpID:vcl:PrintDialog:FormulaText:CheckBox",
                                                   PRTUIOPT_FORMULA_TEXT,
                                                   pConfig->IsPrintFormulaText());
-    // create a bool option for border (matches to SID_PRINTFRAME)
+    
     m_aUIProperties[nIdx++].Value = setBoolControlOpt("borders", aLocalizedStrings.GetString( 4 ),
                                                   ".HelpID:vcl:PrintDialog:Border:CheckBox",
                                                   PRTUIOPT_BORDER,
                                                   pConfig->IsPrintFrame());
 
-    // create subgroup for print format
+    
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", aLocalizedStrings.GetString(5), OUString());
 
-    // create a radio button group for print format (matches to SID_PRINTSIZE)
+    
     Sequence< OUString > aChoices( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 6 );
     aChoices[1] = aLocalizedStrings.GetString( 7 );
@@ -136,14 +136,14 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
                                                     );
 
-    // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
+    
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, true );
     m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", OUString(),
                                                      ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
                                                      PRTUIOPT_PRINT_SCALE,
-                                                     pConfig->GetPrintZoomFactor(),    // initial value
-                                                     10,     // min value
-                                                     1000,   // max value
+                                                     pConfig->GetPrintZoomFactor(),    
+                                                     10,     
+                                                     1000,   
                                                      aRangeOpt);
 
     Sequence< PropertyValue > aHintNoLayoutPage( 1 );
@@ -155,12 +155,12 @@ SmPrintUIOptions::SmPrintUIOptions()
 }
 
 
-////////////////////////////////////////////////////////////
-//
-// class SmModel
+
 //
 
-// values from com/sun/star/beans/PropertyAttribute
+//
+
+
 #define PROPERTY_NONE        0
 
 enum SmModelPropertyHandles
@@ -227,8 +227,8 @@ enum SmModelPropertyHandles
     HANDLE_USED_SYMBOLS,
     HANDLE_BASIC_LIBRARIES,
     HANDLE_RUNTIME_UID,
-    HANDLE_LOAD_READONLY,     // Security Options
-    HANDLE_DIALOG_LIBRARIES,  // #i73329#
+    HANDLE_LOAD_READONLY,     
+    HANDLE_DIALOG_LIBRARIES,  
     HANDLE_BASELINE,
     HANDLE_INTEROP_GRAB_BAG,
 };
@@ -300,9 +300,9 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  ::getCppuType((const Sequence < SymbolDescriptor > *)0),                PROPERTY_NONE,  0                     },
         { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  ::getCppuType((const Sequence < SymbolDescriptor > *)0),                PropertyAttribute::READONLY,  0       },
         { OUString("TopMargin")                        , HANDLE_TOP_MARGIN                         ,  ::getCppuType((const sal_Int16*)0),                                     PROPERTY_NONE,  DIS_TOPSPACE          },
-        // #i33095# Security Options
+        
         { OUString("LoadReadonly")                     , HANDLE_LOAD_READONLY                      ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  0                     },
-        // #i972#
+        
         { OUString("BaseLine")                         , HANDLE_BASELINE                           ,  ::getCppuType((const sal_Int16*)0),                                     PROPERTY_NONE,  0                     },
         { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  ::getCppuType((uno::Sequence< beans::PropertyValue >*)0),       PROPERTY_NONE,  0                     },
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -327,14 +327,14 @@ SmModel::~SmModel() throw ()
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
-                                    // OWeakObject interfaces
+                                    
                                     dynamic_cast< XInterface* > ( static_cast< XUnoTunnel* > ( this )),
                                     static_cast< XWeak* > ( this ),
-                                    // PropertySetHelper interfaces
+                                    
                                     static_cast< XPropertySet* > ( this ),
                                     static_cast< XMultiPropertySet* > ( this ),
-                                    //static_cast< XPropertyState* > ( this ),
-                                    // my own interfaces
+                                    
+                                    
                                     static_cast< XServiceInfo*  > ( this ),
                                     static_cast< XRenderable*  > ( this ) );
     if (!aRet.hasValue())
@@ -520,7 +520,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             break;
             case HANDLE_BASE_FONT_HEIGHT                   :
             {
-                // Point!
+                
                 sal_Int16 nVal = lcl_AnyToINT16(*pValues);
                 if(nVal < 1)
                     throw IllegalArgumentException();
@@ -530,7 +530,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 aSize.Height() = nVal;
                 aFormat.SetBaseSize(aSize);
 
-                // apply base size to fonts
+                
                 const Size aTmp( aFormat.GetBaseSize() );
                 for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
                     aFormat.SetFontSize(i, aTmp);
@@ -568,7 +568,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
             case HANDLE_ALIGNMENT                          :
             {
-                // SmHorAlign uses the same values as HorizontalAlignment
+                
                 sal_Int16 nVal = 0;
                 *pValues >>= nVal;
                 if(nVal < 0 || nVal > 2)
@@ -614,7 +614,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             break;
             case HANDLE_PRINTER_NAME:
             {
-                // embedded documents just ignore this property for now
+                
                 if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
@@ -670,7 +670,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             break;
             case HANDLE_SYMBOLS:
             {
-                // this is set
+                
                 Sequence < SymbolDescriptor > aSequence;
                 if ( *pValues >>= aSequence )
                 {
@@ -698,7 +698,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
             }
             break;
-            // #i33095# Security Options
+            
             case HANDLE_LOAD_READONLY :
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
@@ -716,8 +716,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
     pDocSh->SetFormat( aFormat );
 
-    // #i67283# since about all of the above changes are likely to change
-    // the formula size we have to recalculate the vis-area now
+    
+    
     pDocSh->SetVisArea( Rectangle( Point(0, 0), pDocSh->GetSize() ) );
 }
 
@@ -772,13 +772,13 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                bool bVal = IsBold( rFace ); // bold?
+                bool bVal = IsBold( rFace ); 
                 (*pValue).setValue(&bVal, (*ppEntries)->maType);
             }
             break;
             case HANDLE_BASE_FONT_HEIGHT                   :
             {
-                // Point!
+                
                 sal_Int16 nVal = static_cast < sal_Int16 > (aFormat.GetBaseSize().Height());
                 nVal = static_cast < sal_Int16 > (MM100_TO_TWIP(nVal));
                 nVal = (nVal + 10) / 20;
@@ -805,7 +805,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             break;
 
             case HANDLE_ALIGNMENT                          :
-                // SmHorAlign uses the same values as HorizontalAlignment
+                
                 *pValue <<= (sal_Int16)aFormat.GetHorAlign();
             break;
 
@@ -869,7 +869,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 const bool bUsedSymbolsOnly = (*ppEntries)->mnHandle == HANDLE_USED_SYMBOLS;
                 const std::set< OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
 
-                // this is get
+                
                 SmModule *pp = SM_MOD();
                 const SmSymbolManager &rManager = pp->GetSymbolManager();
                 vector < const SmSym * > aVector;
@@ -918,13 +918,13 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_RUNTIME_UID:
                 *pValue <<= getRuntimeUID();
             break;
-            // #i33095# Security Options
+            
             case HANDLE_LOAD_READONLY :
             {
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
-            // #i972#
+            
             case HANDLE_BASELINE:
             {
                 if ( !pDocSh->pTree )
@@ -945,7 +945,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
     }
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 sal_Int32 SAL_CALL SmModel::getRendererCount(
         const uno::Any& /*rSelection*/,
@@ -963,14 +963,14 @@ static Size lcl_GuessPaperSize()
     const LocaleDataWrapper& rLocWrp( AllSettings().GetLocaleDataWrapper() );
     if( MEASURE_METRIC == rLocWrp.getMeasurementSystemEnum() )
     {
-        // in 100th mm
+        
         PaperInfo aInfo( PAPER_A4 );
         aRes.Width()  = aInfo.getWidth();
         aRes.Height() = aInfo.getHeight();
     }
     else
     {
-        // in 100th mm
+        
         PaperInfo aInfo( PAPER_LETTER );
         aRes.Width()  = aInfo.getWidth();
         aRes.Height() = aInfo.getHeight();
@@ -997,8 +997,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     Printer *pPrinter = aPrinterAccess.GetPrinter();
     Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
 
-    // if paper size is 0 (usually if no 'real' printer is found),
-    // guess the paper size
+    
+    
     if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
         aPrtPaperSize = lcl_GuessPaperSize();
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
@@ -1030,7 +1030,7 @@ void SAL_CALL SmModel::render(
     if (!pDocSh)
         throw RuntimeException();
 
-    // get device to be rendered in
+    
     uno::Reference< awt::XDevice >  xRenderDevice;
     for (sal_Int32 i = 0, nCount = rxOptions.getLength();  i < nCount;  ++i)
     {
@@ -1052,8 +1052,8 @@ void SAL_CALL SmModel::render(
         rSelection >>= xModel;
         if (xModel == pDocSh->GetModel())
         {
-            //!! when called via API we may not have an active view
-            //!! thus we go and look for a view that can be used.
+            
+            
             const TypeId aTypeId = TYPE( SmViewShell );
             SfxViewShell* pViewSh = SfxViewShell::GetFirst( &aTypeId, sal_False /* search non-visible views as well*/ );
             while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
@@ -1070,11 +1070,11 @@ void SAL_CALL SmModel::render(
                 Size    aOutputSize   ( pPrinter->GetOutputSize() );
                 Point   aPrtPageOffset( pPrinter->GetPageOffset() );
 
-                // no real printer ??
+                
                 if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
                 {
                     aPrtPaperSize = lcl_GuessPaperSize();
-                    // factors from Windows DIN A4
+                    
                     aOutputSize    = Size( (long)(aPrtPaperSize.Width()  * 0.941),
                                            (long)(aPrtPaperSize.Height() * 0.961));
                     aPrtPageOffset = Point( (long)(aPrtPaperSize.Width()  * 0.0250),
@@ -1084,14 +1084,14 @@ void SAL_CALL SmModel::render(
                 Rectangle OutputRect( aZeroPoint, aOutputSize );
 
 
-                // set minimum top and bottom border
+                
                 if (aPrtPageOffset.Y() < 2000)
                     OutputRect.Top() += 2000 - aPrtPageOffset.Y();
                 if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
                     OutputRect.Bottom() -= 2000 - (aPrtPaperSize.Height() -
                                                 (aPrtPageOffset.Y() + OutputRect.Bottom()));
 
-                // set minimum left and right border
+                
                 if (aPrtPageOffset.X() < 2500)
                     OutputRect.Left() += 2500 - aPrtPageOffset.X();
                 if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
@@ -1104,8 +1104,8 @@ void SAL_CALL SmModel::render(
 
                 pView->Impl_Print( *pOut, *m_pPrintUIOptions, Rectangle( OutputRect ), Point() );
 
-                // release SmPrintUIOptions when everything is done.
-                // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
+                
+                
                 if (m_pPrintUIOptions->getBoolValue( "IsLastPage", false ))
                 {
                     delete m_pPrintUIOptions;   m_pPrintUIOptions = 0;

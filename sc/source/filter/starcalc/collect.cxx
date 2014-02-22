@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "collect.hxx"
@@ -24,15 +24,15 @@
 #define MAXCOLLECTIONSIZE       16384
 #define MAXDELTA                1024
 
-// -----------------------------------------------------------------------
+
 
 ScDataObject::~ScDataObject()
 {
 }
 
-//------------------------------------------------------------------------
-// Collection
-//------------------------------------------------------------------------
+
+
+
 
 static void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
 {
@@ -71,17 +71,17 @@ ScCollection::ScCollection(const ScCollection& rCollection)
     *this = rCollection;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCollection::~ScCollection()
 {
     lcl_DeleteScDataObjects( pItems, nCount );
 }
 
-//------------------------------------------------------------------------
+
 sal_uInt16 ScCollection::GetCount() const { return nCount; }
 
-//------------------------------------------------------------------------
+
 
 bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {
@@ -106,14 +106,14 @@ bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScCollection::Insert(ScDataObject* pScDataObject)
 {
     return AtInsert(nCount, pScDataObject);
 }
 
-//------------------------------------------------------------------------
+
 
 ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
 {
@@ -123,7 +123,7 @@ ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
         return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
 {
@@ -135,11 +135,11 @@ sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
     return nIndex;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCollection& ScCollection::operator=( const ScCollection& r )
 {
-    // Check for self-assignment
+    
     if (this == &r)
        return *this;
 
@@ -155,7 +155,7 @@ ScCollection& ScCollection::operator=( const ScCollection& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDataObject*   ScCollection::Clone() const
 {

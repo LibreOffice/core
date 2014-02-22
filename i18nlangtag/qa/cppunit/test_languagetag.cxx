@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -25,8 +25,8 @@
 
 using namespace com::sun::star;
 
-// To test the replacement code add '&& 0' and also in
-// source/languagetag/languagetag.cxx
+
+
 #if defined(ENABLE_LIBLANGTAG)
 #define USE_LIBLANGTAG 1
 #else
@@ -69,12 +69,12 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getScript() == "" );
         CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de" );
 #else
-        // The simple replacement code doesn't do any fancy stuff.
+        
         CPPUNIT_ASSERT_MESSAGE("Default script was stripped after canonicalize!?!", aBcp47 == s_de_Latn_DE );
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
         CPPUNIT_ASSERT( aLocale.Variant == "de-Latn-DE" );
-        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nLanguageType) );    // XXX not canonicalized!
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nLanguageType) );    
         CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
         CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
         CPPUNIT_ASSERT( de_DE.getScript() == "Latn" );
@@ -176,7 +176,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( sr_Latn_CS.makeFallback().getBcp47() == "sr-Latn-CS");
     }
 
-    // 'sh-RS' has an internal override to 'sr-Latn-RS'
+    
     {
         OUString s_sh_RS( "sh-RS" );
         LanguageTag sh_RS( s_sh_RS, true );
@@ -206,9 +206,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( sh_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
     }
 
-    // 'bs-Latn-BA' with 'Latn' suppress-script, we map that ourselves for a
-    // known LangID with an override and canonicalization should work the same
-    // without liblangtag.
+    
+    
+    
     {
         OUString s_bs_Latn_BA( "bs-Latn-BA" );
         LanguageTag bs_Latn_BA( s_bs_Latn_BA, true );
@@ -283,7 +283,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
     }
 
-    // 'ca-XV' has an internal override to 'ca-ES-valencia'
+    
     {
         OUString s_ca_XV( "ca-XV" );
         OUString s_ca_ES_valencia( "ca-ES-valencia" );
@@ -356,7 +356,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
     }
 
-    // Unmapped but known language-only.
+    
     {
         OUString s_de( "de" );
         LanguageTag de( s_de, true );
@@ -369,13 +369,13 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_LangID != LANGUAGE_GERMAN );
         CPPUNIT_ASSERT( de_LangID == MsLangId::getPrimaryLanguage( LANGUAGE_GERMAN) );
         CPPUNIT_ASSERT( de.makeFallback().getBcp47() == "de-DE");
-        // Check registered mapping.
+        
         LanguageTag de_l( de_LangID);
         CPPUNIT_ASSERT( de_l.getBcp47() == s_de );
     }
 
-    // "bo" and "dz" share the same primary language ID, only one gets it
-    // assigned, "dz" language-only has a special mapping.
+    
+    
     {
         LanguageTag bo( "bo", true );
         CPPUNIT_ASSERT( bo.getLanguageType() == MsLangId::getPrimaryLanguage( LANGUAGE_TIBETAN) );
@@ -383,9 +383,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( dz.getLanguageType() == LANGUAGE_USER_DZONGKHA_MAP_LONLY );
     }
 
-    // "no", "nb" and "nn" share the same primary language ID, which even is
-    // assigned to "no-NO" for legacy so none gets it assigned, all on-the-fly
-    // except if there is a defined MS-LCID for LanguageScriptOnly (LSO).
+    
+    
+    
     {
         LanguageTag no( "no", true );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( no.getLanguageType()) );
@@ -397,8 +397,8 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( no_NO.getLanguageType() == LANGUAGE_NORWEGIAN );
     }
 
-    // 'de-1901' derived from 'de-DE-1901' grandfathered to check that it is
-    // accepted as (DIGIT 3ALNUM) variant
+    
+    
     {
         OUString s_de_1901( "de-1901" );
         LanguageTag de_1901( s_de_1901 );
@@ -419,15 +419,15 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_1901_Fallbacks[1] == "de");
     }
 
-    // 'en-GB-oed' is known grandfathered for English, Oxford English
-    // Dictionary spelling
+    
+    
     {
         OUString s_en_GB_oed( "en-GB-oed" );
         LanguageTag en_GB_oed( s_en_GB_oed );
         lang::Locale aLocale = en_GB_oed.getLocale();
         CPPUNIT_ASSERT( en_GB_oed.getBcp47() == s_en_GB_oed );
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
-        CPPUNIT_ASSERT( aLocale.Country == "GB" );  // only 'GB' because we handle it, liblangtag would not fill this
+        CPPUNIT_ASSERT( aLocale.Country == "GB" );  
         CPPUNIT_ASSERT( aLocale.Variant == s_en_GB_oed );
         CPPUNIT_ASSERT( en_GB_oed.getLanguageType() == LANGUAGE_USER_ENGLISH_UK_OED );
         CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() == true );
@@ -440,11 +440,11 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( en_GB_oed_Fallbacks[0] == "en-GB-oed");
         CPPUNIT_ASSERT( en_GB_oed_Fallbacks[1] == "en-GB");
         CPPUNIT_ASSERT( en_GB_oed_Fallbacks[2] == "en");
-        // 'en-oed' is not a valid fallback!
+        
     }
 
 #if USE_LIBLANGTAG
-    // 'zh-yue-HK' uses extlang and should be preferred 'yue-HK'
+    
     {
         OUString s_zh_yue_HK( "zh-yue-HK" );
         LanguageTag zh_yue_HK( s_zh_yue_HK );
@@ -466,7 +466,7 @@ void TestLanguageTag::testAllTags()
     }
 #endif
 
-    // 'qtz' is a local use known pseudolocale for key ID resource
+    
     {
         OUString s_qtz( "qtz" );
         LanguageTag qtz( s_qtz );
@@ -478,7 +478,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( qtz.getLanguageType() == LANGUAGE_USER_KEYID );
     }
 
-    // 'qty' is a local use unknown locale
+    
     {
         OUString s_qty( "qty" );
         LanguageTag qty( s_qty );
@@ -490,7 +490,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( qty.getLanguageType()) );
     }
 
-    // 'x-comment' is a privateuse known "locale"
+    
     {
         OUString s_xcomment( "x-comment" );
         LanguageTag xcomment( s_xcomment );
@@ -502,7 +502,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( xcomment.getLanguageType() == LANGUAGE_USER_PRIV_COMMENT );
     }
 
-    // 'x-foobar' is a privateuse unknown "locale"
+    
     {
         OUString s_xfoobar( "x-foobar" );
         LanguageTag xfoobar( s_xfoobar );
@@ -514,7 +514,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( xfoobar.getLanguageType()) );
     }
 
-    // '*' the dreaded jolly joker is a "privateuse" known "locale"
+    
     {
         OUString s_joker( "*" );
         LanguageTag joker( s_joker );
@@ -534,7 +534,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( joker.getLanguageType() == LANGUAGE_USER_PRIV_JOKER );
     }
 
-    // test reset() methods
+    
     {
         LanguageTag aTag( LANGUAGE_DONTKNOW );
         lang::Locale aLocale;
@@ -656,7 +656,7 @@ void TestLanguageTag::testAllIsoLangEntries()
         }
         if ((*it).maBcp47 != aTagID.getBcp47())
         {
-            // There are multiple mappings, ID must be equal after conversions.
+            
             LanguageTag aTagBack( aTagID.getBcp47(), true);
             if (aTagString.getLanguageType() != aTagBack.getLanguageType())
             {
@@ -670,12 +670,12 @@ void TestLanguageTag::testAllIsoLangEntries()
             }
         }
 #if 0
-        // This does not hold, there are cases like 'ar'
-        // LANGUAGE_ARABIC_PRIMARY_ONLY that when mapped back results in
-        // 'ar-SA' as default locale.
+        
+        
+        
         if ((*it).mnLang != aTagString.getLanguageType())
         {
-            // There are multiple mappings, string must be equal after conversions.
+            
             LanguageTag aTagBack( aTagString.getLanguageType());
             if (aTagID.getBcp47() != aTagBack.getBcp47())
             {
@@ -688,8 +688,8 @@ void TestLanguageTag::testAllIsoLangEntries()
 #endif
     }
 
-    // Uncommenting this makes the test break and output SAL_WARN/INFO
-    //CPPUNIT_ASSERT( true == false );
+    
+    
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLanguageTag );

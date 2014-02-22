@@ -36,7 +36,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
 
 sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
 {
@@ -54,22 +54,22 @@ sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 
 TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 
-// Constructor from 3D polygon, scale is the conversion factor for the coordinates
+
 
 E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
 :   E3dCompoundObject(rDefault),
     maPolyPoly2D(rPoly2D)
 {
-    // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
+    
     basegfx::B2DHomMatrix aMirrorY;
     aMirrorY.scale(1.0, -1.0);
     maPolyPoly2D.transform(aMirrorY);
 
-    // Set Defaults
+    
     SetDefaultAttributes(rDefault);
 
-    // Superfluous items removed, in particular to prevent duplicate
-    // start and end points
+    
+    
     maPolyPoly2D.removeDoublePoints();
 
     if(maPolyPoly2D.count())
@@ -89,7 +89,7 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
 E3dLatheObj::E3dLatheObj()
 :    E3dCompoundObject()
 {
-    // Set Defaults
+    
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -113,14 +113,14 @@ E3dLatheObj* E3dLatheObj::Clone() const
     return CloneHelper< E3dLatheObj >();
 }
 
-// Convert the object to group object consisting of n polygons
+
 
 SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }
 
-// Set Local parameters set to re-create geometry
+
 
 void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
 {
@@ -146,7 +146,7 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
     }
 }
 
-// Get the name of the object (singular)
+
 
 OUString E3dLatheObj::TakeObjNameSingul() const
 {
@@ -163,7 +163,7 @@ OUString E3dLatheObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-// Get the name of the object (plural)
+
 
 OUString E3dLatheObj::TakeObjNamePlural() const
 {
@@ -177,17 +177,17 @@ bool E3dLatheObj::IsBreakObjPossible()
 
 SdrAttrObj* E3dLatheObj::GetBreakObj()
 {
-    // create PathObj
+    
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
     SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aTransPoly);
 
     if(pPathObj)
     {
-        // Set Attribute
+        
         SfxItemSet aSet(GetObjectItemSet());
 
-        // Enable lines to guarantee that the object becomes visible
+        
         aSet.Put(XLineStyleItem(XLINE_SOLID));
 
         pPathObj->SetMergedItemSet(aSet);

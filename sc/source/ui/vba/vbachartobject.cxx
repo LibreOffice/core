@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbachart.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -93,7 +93,7 @@ ScVbaChartObject::getName() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaChartObject::Delete() throw ( css::script::BasicErrorException )
 {
-    // parent of this object is sheet
+    
     uno::Reference< excel::XWorksheet > xParent( getParent(), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XChartObjects > xColl( xParent->ChartObjects( uno::Any() ), uno::UNO_QUERY_THROW );
     ScVbaChartObjects* pChartObjectsImpl = static_cast< ScVbaChartObjects* >( xColl.get() );
@@ -108,10 +108,10 @@ ScVbaChartObject::Activate() throw ( script::BasicErrorException )
 {
     try
     {
-        // #TODO #FIXME should be ThisWorkbook or equivelant, or in
-        // fact probably the chart object should be created with
-        // the XModel owner
-        //uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getXModel().getCurrentController());
+        
+        
+        
+        
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getCurrentExcelDoc(mxContext)->getCurrentController(), uno::UNO_QUERY_THROW );
         xSelectionSupplier->select(uno::makeAny(xShape));
     }

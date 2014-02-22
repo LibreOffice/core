@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tabletree.hxx"
@@ -64,7 +64,7 @@ using namespace ::comphelper;
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-// OTableTreeListBox
+
 OTableTreeListBox::OTableTreeListBox(Window* pParent, WinBits nWinStyle)
     :OMarkableTreeListBox(pParent, nWinStyle)
     ,m_xImageProvider( new ImageProvider )
@@ -176,7 +176,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(Exception&)
     {
-        // a non-SQLException exception occurred ... simply throw an SQLException
+        
         SQLException aInfo;
         aInfo.Message = sCurrentActionError;
         throw aInfo;
@@ -252,7 +252,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 {
     implOnNewConnection( _rxConnection );
 
-    // throw away all the old stuff
+    
     Clear();
 
     try
@@ -275,17 +275,17 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         }
 
         if ( _rTables.empty() )
-            // nothing to do (besides inserting the root entry)
+            
             return;
 
-        // get the table/view names
+        
         TNames::const_iterator aIter = _rTables.begin();
         TNames::const_iterator aEnd = _rTables.end();
 
         Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
         for ( ; aIter != aEnd; ++aIter )
         {
-            // add the entry
+            
             implAddEntry(
                 xMeta,
                 aIter->first,
@@ -300,9 +300,9 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 
             if ( bSupportsCatalogs || bSupportsSchemas )
             {
-                // we display empty catalogs if the DB supports catalogs, and they're noted at the beginning of a
-                // composed name. Otherwise, we display empty schematas. (also see the tree structure explained in
-                // implAddEntry)
+                
+                
+                
                 bool bCatalogs = bSupportsCatalogs && xMeta->isCatalogAtStart();
 
                 ::std::vector< OUString > aFolderNames( lcl_getMetaDataStrings_throw(
@@ -354,9 +354,9 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
 {
     OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
 
-    // if an entry has children, it makes a difference if the entry is checked
-    // because all children are checked or if the user checked it explicitly.
-    // So we track explicit (un)checking
+    
+    
+    
 
     SvButtonState eState = GetCheckButtonState(_pEntry);
     OSL_ENSURE(SV_BUTTON_TRISTATE != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
@@ -367,10 +367,10 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bCheck
 {
     OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
-    // special emphasizing handling for the "all objects" entry
+    
     sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
-    if  (   GetModel()->HasChildren(_pEntry)              // the entry has children
-        ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
+    if  (   GetModel()->HasChildren(_pEntry)              
+        ||  bAllObjectsEntryAffected                    
         )
     {
         OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
@@ -383,7 +383,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bCheck
 
     if (_bUpdateDescendants)
     {
-        // remove the mark for all children of the checked entry
+        
         SvTreeListEntry* pChildLoop = FirstChild(_pEntry);
         while (pChildLoop)
         {
@@ -395,7 +395,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bCheck
 
     if (_bUpdateAncestors)
     {
-        // remove the mark for all ancestors of the entry
+        
         if (GetModel()->HasParent(_pEntry))
             implEmphasize(GetParent(_pEntry), sal_False, sal_False, sal_True);
     }
@@ -405,7 +405,7 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
 {
     OMarkableTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap, _eButtonKind);
 
-    // replace the text item with our own one
+    
     SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
     OSL_ENSURE(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
     sal_uInt16 nTextPos = _pEntry->GetPos(pTextItem);
@@ -424,20 +424,20 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     if ( !_rxMeta.is() )
         return NULL;
 
-    // split the complete name into it's components
+    
     OUString sCatalog, sSchema, sName;
     qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
 
     SvTreeListEntry* pParentEntry = getAllObjectsEntry();
 
-    // if the DB uses catalog at the start of identifiers, then our hierarchy is
-    //   catalog
-    //   +- schema
-    //      +- table
-    // else it is
-    //   schema
-    //   +- catalog
-    //      +- table
+    
+    
+    
+    
+    
+    
+    
+    
     sal_Bool bCatalogAtStart = _rxMeta->isCatalogAtStart();
     const OUString& rFirstName  = bCatalogAtStart ? sCatalog : sSchema;
     const sal_Int32 nFirstFolderType   = bCatalogAtStart ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
@@ -564,7 +564,7 @@ OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) co
             if  (   pCatalog
                 ||  (   xMeta->supportsCatalogsInDataManipulation()
                     &&  !xMeta->supportsSchemasInDataManipulation()
-                    )   // here we support catalog but no schema
+                    )   
                 )
             {
                 if ( pCatalog == NULL )
@@ -596,7 +596,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
         if ( !impl_getAndAssertMetaData( xMeta ) )
             return NULL;
 
-        // split the complete name into it's components
+        
         OUString sCatalog, sSchema, sName;
         qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
 
@@ -640,6 +640,6 @@ void OTableTreeListBox::removedTable( const OUString& _rName )
     }
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

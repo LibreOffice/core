@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -71,7 +71,7 @@ OUString lclCreateMultiParameterFormula(
         OUString aRangeString(aRangeList[i]->Format(SCR_ABS, pDocument, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
         aResult += aFormulaString;
-        if(i != aRangeList.size() - 1) // Not Last
+        if(i != aRangeList.size() - 1) 
             aResult+= ";";
     }
     return aResult;
@@ -112,7 +112,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     output.nextRow();
     output.nextRow();
 
-    // Write labels
+    
     for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != 0; i++)
     {
         output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatisticsLabels[i]));
@@ -128,7 +128,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pIterator.reset(new DataRangeByRowIterator(mInputRange));
 
-    // Write statistic formulas for rows/columns
+    
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         output.resetColumn();
@@ -157,9 +157,9 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
         output.nextRow();
     }
 
-    output.nextRow(); // Blank row
+    output.nextRow(); 
 
-    // Write ANOVA labels
+    
     output.resetColumn();
     for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
     {
@@ -168,42 +168,42 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     }
     output.nextRow();
 
-    // Between Groups
+    
     {
-        // Label
+        
         output.resetColumn();
         output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_BETWEEN_GROUPS));
         output.nextColumn();
 
-        // Sum of Squares
+        
         aTemplate.setTemplate("=%TOTAL% - %WITHIN%");
         aTemplate.applyAddress("%TOTAL%", output.current(0, 2));
         aTemplate.applyAddress("%WITHIN%", output.current(0, 1));
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // Degree of freedom
+        
         aTemplate.setTemplate("=%TOTAL% - %WITHIN%");
         aTemplate.applyAddress("%TOTAL%", output.current(0, 2));
         aTemplate.applyAddress("%WITHIN%", output.current(0, 1));
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // MS
+        
         aTemplate.setTemplate("=%SS_REF% / %DF_REF%");
         aTemplate.applyAddress("%SS_REF%", output.current(-2, 0));
         aTemplate.applyAddress("%DF_REF%", output.current(-1, 0));
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // F
+        
         aTemplate.setTemplate("=%MS_BETWEEN% / %MS_WITHIN%");
         aTemplate.applyAddress("%MS_BETWEEN%", output.current(-1, 0));
         aTemplate.applyAddress("%MS_WITHIN%",  output.current(-1, 1));
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // P-value
+        
         aTemplate.setTemplate("=FDIST(%F_VAL%; %DF_BETWEEN%; %DF_WITHIN%");
         aTemplate.applyAddress("%F_VAL%",       output.current(-1, 0));
         aTemplate.applyAddress("%DF_BETWEEN%",  output.current(-3, 0));
@@ -211,7 +211,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // F critical
+        
         double aAlphaValue = mpAlpha->GetValue() / 100.0;
         OUString aAlphaString = rtl::math::doubleToUString(
                                     aAlphaValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
@@ -225,28 +225,28 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     }
     output.nextRow();
 
-    // Within Groups
+    
     {
-        // Label
+        
         output.resetColumn();
         output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_WITHIN_GROUPS));
         output.nextColumn();
 
-        // Sum of Squares
+        
         OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, OUString("DEVSQ(%RANGE%)"), strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%)");
         aTemplate.applyString(strWildcardRange, aSSPart);
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // Degree of freedom
+        
         OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, OUString("COUNT(%RANGE%)-1"), strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%)");
         aTemplate.applyString(strWildcardRange, aDFPart);
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // MS
+        
         aTemplate.setTemplate("=%SS% / %DF%");
         aTemplate.applyAddress("%SS%", output.current(-2, 0));
         aTemplate.applyAddress("%DF%", output.current(-1, 0));
@@ -254,20 +254,20 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     }
     output.nextRow();
 
-    // Total
+    
     {
-        // Label
+        
         output.resetColumn();
         output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_TOTAL));
         output.nextColumn();
 
-        // Sum of Squares
+        
         aTemplate.setTemplate("=DEVSQ(%RANGE%)");
         aTemplate.applyRangeList(strWildcardRange, aRangeList);
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
-        // Degree of freedom
+        
         OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, "COUNT(%RANGE%)", strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%) - 1");
         aTemplate.applyString(strWildcardRange, aDFPart);

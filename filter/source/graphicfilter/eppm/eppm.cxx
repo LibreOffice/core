@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,19 +26,19 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
-//============================ PPMWriter ==================================
+
 
 class PPMWriter {
 
 private:
 
-    SvStream& m_rOStm;          // Die auszugebende PPM-Datei
+    SvStream& m_rOStm;          
     sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
     sal_Int32           mnMode;
     BitmapReadAccess*   mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong               mnWidth, mnHeight;  
 
     sal_Bool                ImplWriteHeader();
     void                ImplWriteBody();
@@ -53,7 +53,7 @@ public:
     sal_Bool                WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-//=================== Methods of PPMWriter ==============================
+
 
 PPMWriter::PPMWriter(SvStream &rStrm)
     : m_rOStm(rStrm)
@@ -62,13 +62,13 @@ PPMWriter::PPMWriter(SvStream &rStrm)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 PPMWriter::~PPMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
@@ -111,7 +111,7 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PPMWriter::ImplWriteHeader()
 {
@@ -128,7 +128,7 @@ sal_Bool PPMWriter::ImplWriteHeader()
         m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( mnHeight );
         m_rOStm.WriteUChar( (sal_uInt8)32 );
-        ImplWriteNumber( 255 );         // max. col.
+        ImplWriteNumber( 255 );         
         m_rOStm.WriteUChar( (sal_uInt8)10 );
     }
     else
@@ -137,7 +137,7 @@ sal_Bool PPMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void PPMWriter::ImplWriteBody()
 {
@@ -207,8 +207,8 @@ void PPMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
-// a decimal number in ASCII format is being written into the stream
+
+
 
 void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
@@ -216,15 +216,15 @@ void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
-// - exported function -
-// ---------------------
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport eppGraphicExport
 #endif
@@ -236,7 +236,7 @@ GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterCon
     return aPPMWriter.WritePPM( rGraphic, pFilterConfigItem );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

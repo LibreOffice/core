@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_Scale.hxx"
@@ -26,17 +26,17 @@
 
 #include <svx/svxids.hrc>
 #include <rtl/math.hxx>
-// header for class SvxDoubleItem
+
 #include <svx/chrtitem.hxx>
-// header for class SfxBoolItem
+
 #include <svl/eitem.hxx>
-// header for SfxInt32Item
+
 #include <svl/intitem.hxx>
 
-// header for class WarningBox
+
 #include <vcl/msgbox.hxx>
 
-// header for class SvNumberformat
+
 #include <svl/zformat.hxx>
 
 #include <svtools/controldims.hrc>
@@ -167,7 +167,7 @@ void ScaleTabPage::EnableControls()
     bool bWasDateAxis = m_pMt_MainDateStep->IsVisible();
     if( bWasDateAxis != bDateAxis )
     {
-        //transport value from one to other control
+        
         if( bWasDateAxis )
             lcl_setValue( *m_pFmtFldStepMain, m_pMt_MainDateStep->GetValue() );
         else
@@ -256,7 +256,7 @@ sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     bool bAutoScale = false;
     if( m_nAxisType==chart2::AxisType::CATEGORY )
-        bAutoScale = true;//reset scaling for category charts
+        bAutoScale = true;
 
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,bAutoScale || m_pCbxAutoMin->IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,bAutoScale || m_pCbxAutoMax->IsChecked()));
@@ -400,7 +400,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     sal_uInt32 nMinMaxOriginFmt = m_pFmtFldMax->GetFormatKey();
     if ((pNumFormatter->GetType(nMinMaxOriginFmt) &~ NUMBERFORMAT_DEFINED) == NUMBERFORMAT_TEXT)
         nMinMaxOriginFmt = 0;
-    // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
+    
     sal_uInt32 nStepFmt = m_pFmtFldStepMain->GetFormatKey();
     if ((pNumFormatter->GetType(nStepFmt) &~NUMBERFORMAT_DEFINED) == NUMBERFORMAT_TEXT)
         nStepFmt = 0;
@@ -421,7 +421,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     if( chart2::AxisType::REALNUMBER != m_nAxisType )
         m_pCbxLogarithm->Show( false );
 
-    //check which entries need user action
+    
 
     if ( m_pCbxLogarithm->IsChecked() &&
             ( ( !m_pCbxAutoMin->IsChecked() && fMin <= 0.0 )
@@ -430,7 +430,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         pControl = m_pFmtFldMin;
         nErrStrId = STR_BAD_LOGARITHM;
     }
-    // check for entries that cannot be parsed for the current number format
+    
     else if ( m_pFmtFldMin->IsModified()
               && !m_pCbxAutoMin->IsChecked()
               && !pNumFormatter->IsNumberFormat( m_pFmtFldMin->GetText(), nMinMaxOriginFmt, fDummy))
@@ -514,10 +514,10 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     m_pFmtFldStepMain->SetFormatter( pNumFormatter );
     m_pFmtFldOrigin->SetFormatter( pNumFormatter );
 
-    // #i6278# allow more decimal places than the output format.  As
-    // the numbers shown in the edit fields are used for input, it makes more
-    // sense to display the values in the input format rather than the output
-    // format.
+    
+    
+    
+    
     m_pFmtFldMax->UseInputStringForFormatting();
     m_pFmtFldMin->UseInputStringForFormatting();
     m_pFmtFldStepMain->UseInputStringForFormatting();
@@ -543,7 +543,7 @@ void ScaleTabPage::SetNumFormat()
             short eType = pNumFormatter->GetType( nFmt );
             if( eType == NUMBERFORMAT_DATE )
             {
-                // for intervals use standard format for dates (so you can enter a number of days)
+                
                 const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
                 if( pFormat )
                     nFmt = pNumFormatter->GetStandardIndex( pFormat->GetLanguage());
@@ -552,7 +552,7 @@ void ScaleTabPage::SetNumFormat()
             }
             else if( eType == NUMBERFORMAT_DATETIME )
             {
-                // for intervals use time format for date times
+                
                 const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
                 if( pFormat )
                     nFmt = pNumFormatter->GetStandardFormat( NUMBERFORMAT_TIME, pFormat->GetLanguage() );
@@ -603,10 +603,10 @@ bool ScaleTabPage::ShowWarning( sal_uInt16 nResIdMessage, Control* pControl /* =
 
 void ScaleTabPage::HideAllControls()
 {
-    // We need to set these controls invisible when the class is instantiated
-    // since some code in EnableControls() depends on that logic. The real
-    // visibility of these controls depend on axis data type, and are
-    // set in EnableControls().
+    
+    
+    
+    
 
     m_pBxType->Hide();
     m_pCbxLogarithm->Hide();
@@ -617,6 +617,6 @@ void ScaleTabPage::HideAllControls()
     m_pBxResolution->Hide();
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

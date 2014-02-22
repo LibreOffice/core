@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@
 #include "drawview.hxx"
 #include "markdata.hxx"
 
-//------------------------------------------------------------------
+
 
 /*************************************************************************
 |*
@@ -65,11 +65,11 @@ FuMarkRect::~FuMarkRect()
 
 bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
-    pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
+    pView->UnmarkAll();         
     bStartDrag = true;
 
     aBeginPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
@@ -113,12 +113,12 @@ bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 
 bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( bVisible )
     {
-        // Hide ZoomRect
+        
         pViewShell->DrawMarkRect(aZoomRect);
         bVisible = false;
     }
@@ -128,9 +128,9 @@ bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nMinMove = pView->GetMinMoveDistancePixel();
     if ( aZoomSizePixel.Width() < nMinMove || aZoomSizePixel.Height() < nMinMove )
     {
-        // Klick auf der Stelle
+        
 
-        aZoomRect.SetSize(Size());      // dann ganz leer
+        aZoomRect.SetSize(Size());      
     }
 
     bStartDrag = false;
@@ -139,15 +139,15 @@ bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
     pViewShell->GetViewData()->GetDispatcher().
         Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
-        //  Daten an der View merken
+        
 
     pViewShell->SetChartArea( aSourceRange, aZoomRect );
 
-        //  Chart-Dialog starten:
+        
 
-//  sal_uInt16 nId  = ScChartDlgWrapper::GetChildWindowId();
-//  SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
-//  SC_MOD()->SetRefDialog( nId, pWnd ? sal_False : sal_True );
+
+
+
 
     return true;
 }
@@ -162,8 +162,8 @@ sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
-        //  nicht anfangen, auf der Tabelle rumzudraggen,
-        //  aber Maus-Status nicht zuruecksetzen
+        
+        
         return SC_CMD_IGNORE;
     }
     else
@@ -186,7 +186,7 @@ bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_ESCAPE:
-            //  beenden
+            
             pViewShell->GetViewData()->GetDispatcher().
                 Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             bReturn = true;
@@ -211,7 +211,7 @@ void FuMarkRect::Activate()
 {
     FuPoor::Activate();
 
-        //  Markierung merken, bevor evtl. Tabelle umgeschaltet wird
+        
 
     ScViewData* pViewData = pViewShell->GetViewData();
     ScMarkData& rMark = pViewData->GetMarkData();
@@ -219,9 +219,9 @@ void FuMarkRect::Activate()
     if ( !rMark.IsMultiMarked() && !rMark.IsMarked() )
         pViewShell->MarkDataArea( true );
 
-    pViewData->GetMultiArea( aSourceRange );        // Mehrfachselektion erlaubt
+    pViewData->GetMultiArea( aSourceRange );        
 
-//  pViewShell->Unmark();
+
 
     ForcePointer(NULL);
 }
@@ -238,7 +238,7 @@ void FuMarkRect::Deactivate()
 
     if (bVisible)
     {
-        // Hide ZoomRect
+        
         pViewShell->DrawMarkRect(aZoomRect);
         bVisible = false;
         bStartDrag = false;

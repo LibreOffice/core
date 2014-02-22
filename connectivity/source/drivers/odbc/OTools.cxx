@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "odbc/OTools.hxx"
@@ -97,13 +97,13 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
     case SQL_C_INTERVAL_HOUR_TO_SECOND:
     case SQL_C_INTERVAL_MINUTE_TO_SECOND:
         return sizeof(SQL_INTERVAL_STRUCT);
-    // ** Variable-sized datatypes -> cannot predict length
+    
     case SQL_C_CHAR:
     case SQL_C_WCHAR:
     case SQL_C_BINARY:
-    // UnixODBC gives this the same value as SQL_C_BINARY
-    //case SQL_C_VARBOOKMARK:
-    // Unknown datatype -> cannot predict length
+    
+    
+    
     default:
         return static_cast<size_t>(-1);
     }
@@ -132,7 +132,7 @@ void OTools::getValue(  OConnection* _pConnection,
             SAL_WARN( "connectivity.drivers", "memory region is too big - trying to fudge it");
             memset(_pValue, 0, _nSize);
 #ifdef OSL_BIGENDIAN
-            // This is skewed in favour of integer types
+            
             _pValue += _nSize - properSize;
 #endif
         }
@@ -149,7 +149,7 @@ void OTools::getValue(  OConnection* _pConnection,
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface,sal_False);
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
-// -------------------------------------------------------------------------
+
 void OTools::bindValue( OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
@@ -199,7 +199,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     *((OString*)_pData) = aString;
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
 
-                    // Pointer on Char*
+                    
                     _pData = (void*)aString.getStr();
                 }   break;
                 case SQL_BIGINT:
@@ -213,7 +213,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
                     *pLen = _nMaxLen;
                     *((OString*)_pData) = aString;
-                    // Pointer on Char*
+                    
                     _pData = (void*)((OString*)_pData)->getStr();
                 }   break;
                 case SQL_BIT:
@@ -289,7 +289,7 @@ void OTools::bindValue( OConnection* _pConnection,
 
     OTools::ThrowException(_pConnection,nRetcode,_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
 }
-// -----------------------------------------------------------------------------
+
 void OTools::ThrowException(const OConnection* _pConnection,
                             const SQLRETURN _rRetCode,
                             const SQLHANDLE _pContext,
@@ -308,7 +308,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                         return;
         case SQL_NO_DATA_FOUND:
                                 if(_bNoFound)
-                                    return; // no need to throw a exception
+                                    return; 
         case SQL_ERROR:             break;
 
 
@@ -316,8 +316,8 @@ void OTools::ThrowException(const OConnection* _pConnection,
                                     throw SQLException();
     }
 
-    // Additional Information on the latest ODBC-functioncall available
-    // SQLError provides this Information.
+    
+    
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::ThrowException" );
 
     SDB_ODBC_CHAR szSqlState[5];
@@ -326,12 +326,12 @@ void OTools::ThrowException(const OConnection* _pConnection,
     szErrorMessage[0] = '\0';
     SQLSMALLINT pcbErrorMsg = 0;
 
-    // Information for latest operation:
-    // when hstmt != SQL_NULL_HSTMT is (Used from SetStatus in SdbCursor, SdbTable, ...),
-    // then the status of the latest statements will be fetched, without the Status of the last
-    // statements of this connection [what in this case will probably be the same, but the Reference
-    // Manual isn't totally clear in this...].
-    // corresponding for hdbc.
+    
+    
+    
+    
+    
+    
     SQLRETURN n = (*(T3SQLGetDiagRec)_pConnection->getOdbcFunction(ODBC3SQLGetDiagRec))(_nHandleType,_pContext,1,
                          szSqlState,
                          &pfNativeError,
@@ -340,7 +340,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
     OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
-    // For the Return Code of SQLError see ODBC 2.0 Programmer's Reference Page 287ff
+    
     throw SQLException( OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
                                     _xInterface,
                                     OUString((char *)szSqlState,5,_nTextEncoding),
@@ -349,7 +349,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                                 );
 
 }
-// -------------------------------------------------------------------------
+
 Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          const SQLHANDLE _aStatementHandle,
                                          const sal_Int32 columnIndex,
@@ -359,7 +359,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getBytesValue" );
     sal_Int8 aCharArray[2048];
-    // First try to fetch the data with the little Buffer:
+    
     const SQLLEN nMaxLen = sizeof aCharArray;
     SQLLEN pcbValue = SQL_NO_TOTAL;
     Sequence<sal_Int8> aData;
@@ -385,11 +385,11 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
             return Sequence<sal_Int8>();
 
         SQLLEN nReadBytes;
-        // After the SQLGetData that wrote out to aCharArray the last byte of the data,
-        // pcbValue will not be SQL_NO_TOTAL -> we have a reliable count
+        
+        
         if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
         {
-            // we filled the buffer
+            
             nReadBytes = nMaxLen;
         }
         else
@@ -402,7 +402,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     }
     return aData;
 }
-// -------------------------------------------------------------------------
+
 OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
@@ -420,16 +420,16 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     case SQL_WLONGVARCHAR:
     {
         sal_Unicode waCharArray[2048];
-        // we assume everyone (LibO & ODBC) uses UTF-16; see OPreparedStatement::setParameter
+        
         BOOST_STATIC_ASSERT(sizeof(sal_Unicode) == 2);
         BOOST_STATIC_ASSERT(sizeof(SQLWCHAR)    == 2);
         BOOST_STATIC_ASSERT(sizeof(waCharArray) % 2 == 0);
-        // Size == number of bytes, Len == number of UTF-16 code units
+        
         const SQLLEN nMaxSize = sizeof(waCharArray);
         const SQLLEN nMaxLen  = sizeof(waCharArray) / sizeof(sal_Unicode);
         BOOST_STATIC_ASSERT(nMaxLen * sizeof(sal_Unicode) == nMaxSize);
 
-        // read the unicode data
+        
         SQLLEN pcbValue = SQL_NO_TOTAL;
         while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxSize) )
         {
@@ -451,7 +451,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                         "ODBC: SQLGetData of SQL_C_WCHAR returned odd number of bytes");
             if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxSize) )
             {
-                // we filled the buffer; remove the terminating null character
+                
                 nReadChars = nMaxLen-1;
                 if ( waCharArray[nReadChars] != 0)
                 {
@@ -472,7 +472,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     default:
     {
         char aCharArray[2048];
-        // read the unicode data
+        
         const SQLLEN nMaxLen = sizeof(aCharArray);
         SQLLEN pcbValue = SQL_NO_TOTAL;
 
@@ -494,7 +494,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
             SQLLEN nReadChars;
             if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
             {
-                // we filled the buffer; remove the terminating null character
+                
                 nReadChars = nMaxLen-1;
                 if ( aCharArray[nReadChars] != 0)
                 {
@@ -516,7 +516,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
 
     return aData.makeStringAndClear();
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -532,7 +532,7 @@ void OTools::GetInfo(OConnection* _pConnection,
 
     _rValue = OUString(aValue,nValueLen,_nTextEncoding);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -540,12 +540,12 @@ void OTools::GetInfo(OConnection* _pConnection,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    _rValue = 0;    
     OTools::ThrowException(_pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -553,12 +553,12 @@ void OTools::GetInfo(OConnection* _pConnection,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    _rValue = 0;    
     OTools::ThrowException(_pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -566,12 +566,12 @@ void OTools::GetInfo(OConnection* _pConnection,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    _rValue = 0;    
     OTools::ThrowException(_pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -583,7 +583,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                             (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
                             _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
 {
     sal_Int32 nValue = DataType::VARCHAR;
@@ -658,15 +658,15 @@ sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
     }
     return nValue;
 }
-//--------------------------------------------------------------------
-// jdbcTypeToOdbc
-// Convert the JDBC SQL type to the correct ODBC type
-//--------------------------------------------------------------------
+
+
+
+
 SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::jdbcTypeToOdbc" );
-    // For the most part, JDBC types match ODBC types.  We'll
-    // just convert the ones that we know are different
+    
+    
 
     sal_Int32 odbcType = jdbcType;
 
@@ -681,7 +681,7 @@ SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
     case DataType::TIMESTAMP:
         odbcType = SQL_TIMESTAMP;
         break;
-    // ODBC doesn't have any notion of CLOB or BLOB
+    
     case DataType::CLOB:
         odbcType = SQL_LONGVARCHAR;
         break;
@@ -692,7 +692,7 @@ SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 
     return odbcType;
 }
-//-----------------------------------------------------------------------------
+
 void OTools::getBindTypes(sal_Bool _bUseWChar,
                           sal_Bool _bUseOldTimeDate,
                           SQLSMALLINT _nOdbcType,

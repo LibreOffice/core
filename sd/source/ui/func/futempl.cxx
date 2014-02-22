@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -98,7 +98,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // get StyleSheet parameter
+    
     SfxStyleSheetBasePool* pSSPool = mpDoc->GetDocSh()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = NULL;
 
@@ -184,7 +184,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            // at the moment, the dialog to enter the name of the template is still opened
+            
             mpView->AreObjectsMarked();
                 SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
                 if(p)
@@ -223,25 +223,25 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         break;
 
         case SID_STYLE_APPLY:
-            // apply the template to the document
+            
             pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
 
-            // do not set presentation styles, they will be set implicit
+            
             if ( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
             {
                 SfxStyleSheet* pOldStyleSheet = mpView->GetStyleSheet();
                 OUString aStr;
 
-                if( // if the object had no style sheet, allow all
+                if( 
                     !pOldStyleSheet ||
 
-                    // allow if old and new style sheet has same family
+                    
                     pStyleSheet->GetFamily() == pOldStyleSheet->GetFamily() ||
 
-                    // allow if old was background objects and new is graphics
+                    
                     (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_GRAPHICS && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS) ||
 
-                    // allow if old was presentation and we are a drawing document
+                    
                     (pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
                 {
                     mpView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
@@ -261,12 +261,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     SD_MOD()->SetWaterCan( sal_True );
                     pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
                 }
-                // no presentation object templates, they are only allowed implicitly
+                
                 if( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
                 {
                     ( (SdStyleSheetPool*) pSSPool )->SetActualStyleSheet( pStyleSheet );
 
-                    // we switch explicitly into selection mode
+                    
                     mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 
@@ -277,7 +277,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             else
             {
                 SD_MOD()->SetWaterCan( sal_False );
-                // we have to re-enable to tools-bar
+                
                 mpViewShell->Invalidate();
             }
         }
@@ -346,7 +346,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
 
                         OUString aOutlineStr(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
-                        // determine number, mind the blank between name and number
+                        
                         OUString aNumStr(aName.copy(aOutlineStr.getLength() + 1));
                         sal_uInt16 nLevel = (sal_uInt16)aNumStr.toInt32();
                         switch (nLevel)
@@ -407,7 +407,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                prevent the attribute inheritance) */
                             aTempSet.ClearInvalidItems();
 
-                            // EE_PARA_NUMBULLET item is only valid in first outline template
+                            
                             if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
                             {
                                 if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SFX_ITEM_SET)
@@ -455,7 +455,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                         sdr::properties::CleanupFillProperties( rAttr );
 
-                        // check for unique names of named items for xml
+                        
                         if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLBITMAP );
@@ -550,9 +550,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                         SdrObject* pObj = aIter.Next();
                                         if( pObj->ISA(SdrPageObj) )
                                         {
-                                            // repaint only
+                                            
                                             pObj->ActionChanged();
-                                            // pObj->SendRepaintBroadcast();
+                                            
                                         }
                                     }
                                 }
@@ -582,7 +582,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         delete pStdDlg;
                         delete pPresDlg;
                     }
-                    return; // Cancel
+                    return; 
                 }
                 delete pStdDlg;
                 delete pPresDlg;
@@ -598,10 +598,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 SfxItemSet aCoreSet( mpDoc->GetPool() );
                 mpView->GetAttributes( aCoreSet, sal_True );
 
-                // if the object had a template, this becomes parent of the new template
+                
                 SfxStyleSheet* pOldStyle = mpView->GetStyleSheet();
 
-                // if pOldStyle == pStyleSheet -> recursion
+                
                 if( pOldStyle != pStyleSheet )
                 {
                     if (pOldStyle)
@@ -668,6 +668,6 @@ void FuTemplate::Deactivate()
 {
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

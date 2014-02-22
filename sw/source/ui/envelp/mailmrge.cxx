@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -111,7 +111,7 @@ SwXSelChgLstnr_Impl::~SwXSelChgLstnr_Impl()
 
 void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (RuntimeException)
 {
-    //call the parent to enable selection mode
+    
     Sequence <Any> aSelection;
     if(rParent.pImpl->xSelSupp.is())
         rParent.pImpl->xSelSupp->getSelection() >>= aSelection;
@@ -199,8 +199,8 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     m_aDialogSize( GetSizePixel() )
 {
     FreeResource();
-    aSingleJobsCB.Show(false); // not supported in since cws printerpullpages anymore
-    //task #97066# mailing of form letters is currently not supported
+    aSingleJobsCB.Show(false); 
+    
     aMailingRB.Show(false);
     aSubjectFT.Show(false);
     aSubjectED.Show(false);
@@ -220,7 +220,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     if(pSelection)
     {
         m_aSelection = *pSelection;
-        //move all controls
+        
         long nDiff = aRecordFL.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
         pBeamerWin->Show(false);
         ::Size aSize = GetSizePixel();
@@ -269,7 +269,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     {
         try
         {
-            // create a frame wrapper for myself
+            
             m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
             m_xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
         }
@@ -321,7 +321,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     aAllRB.Check(true);
 
-    // Install handlers
+    
     Link aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
     aOkBTN.SetClickHdl(aLk);
 
@@ -333,7 +333,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aMailingRB.SetClickHdl(aLk);
     aFileRB.SetClickHdl(aLk);
 
-    //#i63267# printing might be disabled
+    
     bool bIsPrintable = !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
     aPrinterRB.Enable(bIsPrintable);
     OutputTypeHdl(bIsPrintable ? &aPrinterRB : &aFileRB);
@@ -492,11 +492,11 @@ static void lcl_ChangeWidth( Window* ppW, long nDiffSize )
 
 void    SwMailMergeDlg::Resize()
 {
-    //the only controls that profit from the resize is pBeamerWin
-    // and aPathED, aFilenameED and aColumnLB
+    
+    
 
     Size aCurSize( GetSizePixel() );
-    //find the difference
+    
     Size aDiffSize( aCurSize.Width() - m_aDialogSize.Width(),
                             aCurSize.Height() - m_aDialogSize.Height() );
     m_aDialogSize = aCurSize;
@@ -546,7 +546,7 @@ void    SwMailMergeDlg::Resize()
         {
             lcl_MoveControlY( *ppW, aDiffSize.Height() );
         }
-        //some controls have to be extended horizontally
+        
         lcl_MoveControlX( &aOkBTN, aDiffSize.Width() );
         lcl_MoveControlX( &aCancelBTN, aDiffSize.Width() );
         lcl_MoveControlX( &aHelpBTN, aDiffSize.Width() );
@@ -691,9 +691,9 @@ bool SwMailMergeDlg::ExecQryShell()
         }
         else
         {
-            //#i97667# reset column name - otherwise it's remembered from the last run
+            
             pMgr->SetEMailColumn(OUString());
-            //start save as dialog
+            
             OUString sFilter;
             sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
             if (sPath.isEmpty())
@@ -704,9 +704,9 @@ bool SwMailMergeDlg::ExecQryShell()
         pMgr->SetSubject(sPath);
     }
 
-    if (aFromRB.IsChecked())    // Insert list
+    if (aFromRB.IsChecked())    
     {
-        // Safe: the maximal value of the fields is limited
+        
         sal_Int32 nStart = sal::static_int_cast<sal_Int32>(aFromNF.GetValue());
         sal_Int32 nEnd = sal::static_int_cast<sal_Int32>(aToNF.GetValue());
 
@@ -719,12 +719,12 @@ bool SwMailMergeDlg::ExecQryShell()
             *pSelection <<= i;
     }
     else if (aAllRB.IsChecked() )
-        m_aSelection.realloc(0);    // Empty selection = insert all
+        m_aSelection.realloc(0);    
     else
     {
         if(pImpl->xSelSupp.is())
         {
-            //update selection
+            
             uno::Reference< XRowLocate > xRowLocate(GetResultSet(),UNO_QUERY);
             uno::Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
             pImpl->xSelSupp->getSelection() >>= m_aSelection;
@@ -805,7 +805,7 @@ uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
     uno::Reference< XResultSet >  xResSetClone;
     if ( pImpl->xFController.is() )
     {
-        // we create a clone to do the task
+        
         uno::Reference< XResultSetAccess > xResultSetAccess( pImpl->xFController->getModel(),UNO_QUERY);
         if ( xResultSetAccess.is() )
             xResSetClone = xResultSetAccess->createResultSet();

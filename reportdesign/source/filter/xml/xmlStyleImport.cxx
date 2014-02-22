@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "xmlStyleImport.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 
-// -----------------------------------------------------------------------------
+
 
 class OSpecialHanldeXMLImportPropertyMapper : public SvXMLImportPropertyMapper
 {
@@ -63,7 +63,7 @@ public:
             const SvXMLUnitConverter& /*rUnitConverter*/,
             const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
     {
-        // nothing to do here
+        
         return true;
     }
 };
@@ -85,13 +85,13 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 OControlStyleContext::~OControlStyleContext()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPropSet )
 {
@@ -123,25 +123,25 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
 }
-// -----------------------------------------------------------------------------
+
 void OControlStyleContext::SetDefaults()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
     sal_Int32 nIndex(static_cast<OReportStylesContext *>(pStyles)->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
-    GetProperties().push_back(aPropState); // has to be insertes in a sort order later
+    GetProperties().push_back(aPropState); 
 }
-// -----------------------------------------------------------------------------
+
 void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
+    
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
         m_sDataStyleName = rValue;
     else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
@@ -149,12 +149,12 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     else
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OControlStyleContext::GetOwnImport() const
 {
     return m_rImport;
 }
-// -----------------------------------------------------------------------------
+
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
@@ -172,13 +172,13 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 OReportStylesContext::~OReportStylesContext()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 void OReportStylesContext::EndElement()
 {
@@ -188,7 +188,7 @@ void OReportStylesContext::EndElement()
     else
         GetImport().GetStyles()->CopyStylesToDoc(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 
 UniReference < SvXMLImportPropertyMapper >
     OReportStylesContext::GetImportPropertyMapper(
@@ -246,7 +246,7 @@ UniReference < SvXMLImportPropertyMapper >
 
     return xMapper;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -256,7 +256,7 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
     switch( nFamily )
     {
         case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-            // There are no writer specific defaults for graphic styles!
+            
             pStyle = new XMLGraphicsDefaultStyle( GetImport(), nPrefix,
                                 rLocalName, xAttrList, *this );
             break;
@@ -269,7 +269,7 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
     }
     return pStyle;
 }
-// ----------------------------------------------------------------------------
+
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -296,7 +296,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
 
     return pStyle;
 }
-// -----------------------------------------------------------------------------
+
 Reference < XNameContainer >
         OReportStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
 {
@@ -381,7 +381,7 @@ Reference < XNameContainer >
 
     return xStyles;
 }
-// -----------------------------------------------------------------------------
+
 
 OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
@@ -408,7 +408,7 @@ OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     }
     return sServiceName;
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
 {
@@ -421,19 +421,19 @@ sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
     }
     return -1;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OReportStylesContext::GetOwnImport() const
 {
     return m_rImport;
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 OReportStylesContext::GetFamily( const OUString& rFamily ) const
 {
     sal_uInt16 nFamily = SvXMLStylesContext::GetFamily(rFamily);
     return nFamily;
 }
-// -----------------------------------------------------------------------------
-} // rptxml
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

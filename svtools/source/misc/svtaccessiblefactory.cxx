@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,31 +14,31 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svtaccessiblefactory.hxx"
 #include <osl/module.h>
 
-// #define UNLOAD_ON_LAST_CLIENT_DYING
-    // this is not recommended currently. If enabled, the implementation will log
-    // the number of active clients, and unload the acc library when the last client
-    // goes away.
-    // Sounds like a good idea, unfortunately, there's no guarantee that all objects
-    // implemented in this library are already dead.
-    // Iow, just because an object implementing an XAccessible (implemented in this lib
-    // here) died, it's not said that everybody released all references to the
-    // XAccessibleContext used by this component, and implemented in the acc lib.
-    // So we cannot really unload the lib.
-    //
-    // Alternatively, if the lib would us own "usage counting", i.e. every component
-    // implemented therein would affect a static ref count, the acc lib could care
-    // for unloading itself.
 
-//........................................................................
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //
+    
+    
+    
+
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -48,16 +48,16 @@ namespace svt
     {
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
         static oslInterlockedCount                      s_nAccessibleFactoryAccesss = 0;
-#endif // UNLOAD_ON_LAST_CLIENT_DYING
+#endif 
 #ifndef DISABLE_DYNLOADING
         static oslModule                                s_hAccessibleImplementationModule = NULL;
 #endif
         static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = NULL;
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
 
-        //====================================================================
-        //= AccessibleDummyFactory
-        //====================================================================
+        
+        
+        
         class AccessibleDummyFactory : public IAccessibleFactory
         {
         public:
@@ -67,17 +67,17 @@ namespace svt
             virtual ~AccessibleDummyFactory();
 
         private:
-            AccessibleDummyFactory( const AccessibleDummyFactory& );            // never implemented
-            AccessibleDummyFactory& operator=( const AccessibleDummyFactory& ); // never implemented
+            AccessibleDummyFactory( const AccessibleDummyFactory& );            
+            AccessibleDummyFactory& operator=( const AccessibleDummyFactory& ); 
 
             oslInterlockedCount m_refCount;
 
         public:
-            // IReference
+            
             virtual oslInterlockedCount SAL_CALL acquire();
             virtual oslInterlockedCount SAL_CALL release();
 
-            // IAccessibleFactory
+            
             virtual IAccessibleTabListBox*
                 createAccessibleTabListBox(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*rxParent*/,
@@ -220,23 +220,23 @@ namespace svt
             }
         };
 
-        //----------------------------------------------------------------
+        
         AccessibleDummyFactory::AccessibleDummyFactory()
         {
         }
 
-        //----------------------------------------------------------------
+        
         AccessibleDummyFactory::~AccessibleDummyFactory()
         {
         }
 
-        //----------------------------------------------------------------
+        
         oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
         {
             return osl_atomic_increment( &m_refCount );
         }
 
-        //----------------------------------------------------------------
+        
         oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
         {
             if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -248,16 +248,16 @@ namespace svt
         }
     }
 
-    //====================================================================
-    //= AccessibleFactoryAccess
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     AccessibleFactoryAccess::AccessibleFactoryAccess()
         :m_bInitialized( false )
     {
     }
 
-    //--------------------------------------------------------------------
+    
 #ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
 #else
@@ -273,9 +273,9 @@ namespace svt
 
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
         if ( 1 == osl_atomic_increment( &s_nAccessibleFactoryAccesss ) )
-        {   // the first client
-#endif // UNLOAD_ON_LAST_CLIENT_DYING
-            // load the library implementing the factory
+        {   
+#endif 
+            
             if ( !s_pFactory.get() )
             {
 #ifndef DISABLE_DYNLOADING
@@ -292,7 +292,7 @@ namespace svt
 #else
                 s_pAccessibleFactoryFunc = getSvtAccessibilityComponentFactory;
 #endif
-                // get a factory instance
+                
                 if ( s_pAccessibleFactoryFunc )
                 {
                     IAccessibleFactory* pFactory = static_cast< IAccessibleFactory* >( (*s_pAccessibleFactoryFunc)() );
@@ -305,8 +305,8 @@ namespace svt
             }
 
             if ( !s_pFactory.get() )
-                // the attempt to load the lib, or to create the factory, failed
-                // -> fall back to a dummy factory
+                
+                
                 s_pFactory = new AccessibleDummyFactory;
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
         }
@@ -315,7 +315,7 @@ namespace svt
         m_bInitialized = true;
     }
 
-    //--------------------------------------------------------------------
+    
     AccessibleFactoryAccess::~AccessibleFactoryAccess()
     {
         if ( m_bInitialized )
@@ -333,11 +333,11 @@ namespace svt
                     s_hAccessibleImplementationModule = NULL;
                 }
             }
-#endif // UNLOAD_ON_LAST_CLIENT_DYING
+#endif 
         }
     }
 
-    //--------------------------------------------------------------------
+    
     IAccessibleFactory& AccessibleFactoryAccess::getFactory()
     {
         ensureInitialized();
@@ -345,8 +345,8 @@ namespace svt
         return *s_pFactory;
     }
 
-//........................................................................
-}   // namespace svt
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

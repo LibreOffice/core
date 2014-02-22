@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -57,11 +57,11 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     const int nAppFontUnits = 130;
     long nWidth = LogicToPixel(Size(nAppFontUnits, 0), MAP_APPFONT).Width();
     m_pPathLB->set_width_request(nWidth);
-    //just has to be something small, real size will be available space
+    
     m_pGroupTLB->set_width_request(nWidth);
 
     long nTabs[] =
-    {   2, // Number of Tabs
+    {   2, 
         0, nAppFontUnits
     };
 
@@ -129,7 +129,7 @@ void SwGlossaryGroupDlg::Apply()
         const OUString sDelGroup = it->getToken(0, '\t');
         if( sDelGroup == aActGroup )
         {
-            //when the current group is deleted, the current group has to be relocated
+            
             if(m_pGroupTLB->GetEntryCount())
             {
                 SvTreeListEntry* pFirst = m_pGroupTLB->First();
@@ -149,7 +149,7 @@ void SwGlossaryGroupDlg::Apply()
             pGlosHdl->DelGroup( sDelGroup );
     }
 
-    //don't rename before there was one
+    
     for (OUVector_t::const_iterator it(m_RenamedArr.begin());
             it != m_RenamedArr.end(); ++it)
     {
@@ -234,7 +234,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     OUString const sEntry(pUserData->sGroupName);
-    // if the name to be deleted is among the new ones - get rid of it
+    
     bool bDelete = true;
     for (OUVector_t::iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
@@ -247,7 +247,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
         }
 
     }
-    // it should probably be renamed?
+    
     if(bDelete)
     {
         for (OUVector_t::iterator it(m_RenamedArr.begin());
@@ -272,7 +272,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     m_pGroupTLB->GetModel()->Remove(pEntry);
     if(!m_pGroupTLB->First())
         pButton->Enable(false);
-    //the content must be deleted - otherwise the new handler would be called in Apply()
+    
     m_pNameED->SetText(aEmptyOUStr);
     return 0;
 }
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
-    // if the name to be renamed is among the new ones - replace
+    
     bool bDone = false;
     for (OUVector_t::iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     else if(!sEntry.isEmpty())
     {
         sal_uLong nPos = m_pGroupTLB->GetEntryPos(sEntry, 0);
-        //if it's not case sensitive you have to search for yourself
+        
         if( 0xffffffff == nPos)
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
@@ -383,9 +383,9 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 {
     sal_Bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
 
-    // OM: if the name is among the new region name, it is deletable
-    // as well! Because for non existing region names ReadOnly issues
-    // sal_True.
+    
+    
+    
 
     for (OUVector_t::const_iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)

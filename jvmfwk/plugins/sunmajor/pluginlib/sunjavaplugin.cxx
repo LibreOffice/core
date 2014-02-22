@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,8 +97,8 @@ OString getPluginJarPath(
             sName = sName1;
         }
         else if (ver < ver150)
-        {//this will cause ea, beta etc. to have plugin.jar in path.
-            //but this does not harm. 1.5.0-beta < 1.5.0
+        {
+            
             sName = sName2;
         }
         if (!sName.isEmpty())
@@ -131,7 +131,7 @@ OString getPluginJarPath(
 
     return ret;
 }
-#endif // UNX
+#endif 
 
 
 JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
@@ -173,7 +173,7 @@ OUString getRuntimeLib(const rtl::ByteSequence & data)
     const sal_Unicode* chars = (sal_Unicode*) data.getConstArray();
     sal_Int32 len = data.getLength();
     OUString sData(chars, len / 2);
-    //the runtime lib is on the first line
+    
     sal_Int32 index = 0;
     OUString aToken = sData.getToken( 0, '\n', index);
 
@@ -185,7 +185,7 @@ sig_atomic_t g_bInGetJavaVM = 0;
 
 extern "C" void JNICALL abort_handler()
 {
-    // If we are within JNI_CreateJavaVM then we jump back into getJavaVM
+    
     if( g_bInGetJavaVM != 0 )
     {
         fprintf( stderr, "JavaVM: JNI_CreateJavaVM called _exit, caught by abort_handler in javavm.cxx\n");
@@ -214,8 +214,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     if (!sVendor || !sMinVersion || !sMaxVersion || !parJavaInfo || !nLenInfoList)
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    //nLenlist contains the number of element in arExcludeList.
-    //If no exclude list is provided then nLenList must be 0
+    
+    
     OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
     if (arExcludeList == NULL && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
@@ -230,7 +230,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 
     JavaInfo** arInfo = NULL;
 
-    //Find all JREs
+    
     vector<rtl::Reference<VendorBase> > vecInfos =
         getAllJREInfos();
     vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
@@ -252,7 +252,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
             catch (MalformedVersionException&)
             {
-                //The minVersion was not recognized as valid for this vendor.
+                
                 JFW_ENSURE(
                     false,
                     "[Java framework]sunjavaplugin does not know version: "
@@ -271,7 +271,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
             catch (MalformedVersionException&)
             {
-                //The maxVersion was not recognized as valid for this vendor.
+                
                 JFW_ENSURE(
                     false,
                     "[Java framework]sunjavaplugin does not know version: "
@@ -295,7 +295,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
             catch (MalformedVersionException&)
             {
-                //The excluded version was not recognized as valid for this vendor.
+                
                 JFW_ENSURE(
                     false,
                     "[Java framework]sunjavaplugin does not know version: "
@@ -309,8 +309,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 
         vecVerifiedInfos.push_back(*i);
     }
-    //Now vecVerifiedInfos contains all those JREs which meet the version requirements
-    //Transfer them into the array that is passed out.
+    
+    
     arInfo = (JavaInfo**) rtl_allocateMemory(vecVerifiedInfos.size() * sizeof (JavaInfo*));
     int j = 0;
     typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
@@ -348,8 +348,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (ouPath.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    //nLenlist contains the number of element in arExcludeList.
-    //If no exclude list is provided then nLenList must be 0
+    
+    
     OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
     if (arExcludeList == NULL && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
@@ -366,7 +366,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (!aVendorInfo.is())
         return JFW_PLUGIN_E_NO_JRE;
 
-    //Check if the detected JRE matches the version requirements
+    
     if (!ouVendor.equals(aVendorInfo->getVendor()))
         return JFW_PLUGIN_E_NO_JRE;
 
@@ -379,7 +379,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         }
         catch (MalformedVersionException&)
         {
-            //The minVersion was not recognized as valid for this vendor.
+            
             JFW_ENSURE(
                 false,
                 "[Java framework]sunjavaplugin does not know version: "
@@ -400,7 +400,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         }
         catch (MalformedVersionException&)
         {
-            //The maxVersion was not recognized as valid for this vendor.
+            
             JFW_ENSURE(
                 false,
                 "[Java framework]sunjavaplugin does not know version: "
@@ -422,7 +422,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         }
         catch (MalformedVersionException&)
         {
-            //The excluded version was not recognized as valid for this vendor.
+            
             JFW_ENSURE(
                 false,
                 "[Java framework]sunjavaplugin does not know version: "
@@ -440,10 +440,10 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
 #if defined(WNT)
 
-// Load msvcr71.dll using an explicit full path from where it is
-// present as bundled with the JRE. In case it is not found where we
-// think it should be, do nothing, and just let the implicit loading
-// that happens when loading the JVM take care of it.
+
+
+
+
 
 static void load_msvcr71(LPCWSTR jvm_dll)
 {
@@ -455,14 +455,14 @@ static void load_msvcr71(LPCWSTR jvm_dll)
 
     wcscpy(msvcr71_dll, jvm_dll);
 
-    // First check if msvcr71.dll is in the same folder as jvm.dll. It
-    // normally isn't, at least up to 1.6.0_22, but who knows if it
-    // might be in the future.
+    
+    
+    
     slash = wcsrchr(msvcr71_dll, L'\\');
 
     if (!slash)
     {
-        // Huh, weird path to jvm.dll. Oh well.
+        
         return;
     }
 
@@ -470,9 +470,9 @@ static void load_msvcr71(LPCWSTR jvm_dll)
     if (LoadLibraryW(msvcr71_dll))
         return;
 
-    // Then check if msvcr71.dll is in the parent folder of where
-    // jvm.dll is. That is currently (1.6.0_22) as far as I know the
-    // normal case.
+    
+    
+    
     *slash = 0;
     slash = wcsrchr(msvcr71_dll, L'\\');
 
@@ -483,9 +483,9 @@ static void load_msvcr71(LPCWSTR jvm_dll)
     LoadLibraryW(msvcr71_dll);
 }
 
-// Check if the jvm DLL imports msvcr71.dll, and in that case try
-// loading it explicitly. In case something goes wrong, do nothing,
-// and just let the implicit loading try to take care of it.
+
+
+
 static void do_msvcr71_magic(rtl_uString *jvm_dll)
 {
     rtl_uString* Module(0);
@@ -527,7 +527,7 @@ static void do_msvcr71_magic(rtl_uString *jvm_dll)
            imports->Name != 0 &&
            imports->Name < (DWORD) st.st_size)
     {
-        // Intentional use of sizeof("msvcr71.dll") here to include the terminating zero byte
+        
         if (strnicmp((char *) dos_hdr + imports->Name, "msvcr71.dll", sizeof("msvcr71.dll")) == 0)
         {
             load_msvcr71(reinterpret_cast<LPCWSTR>(Module->buffer));
@@ -555,15 +555,15 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JavaVM ** ppVm,
     JNIEnv ** ppEnv)
 {
-    // unless guard is volatile the following warning occurs on gcc:
-    // warning: variable 't' might be clobbered by `longjmp' or `vfork'
+    
+    
     volatile osl::MutexGuard guard(PluginMutex::get());
-    // unless errorcode is volatile the following warning occurs on gcc:
-    // warning: variable 'errorcode' might be clobbered by `longjmp' or `vfork'
+    
+    
     volatile javaPluginError errorcode = JFW_PLUGIN_E_NONE;
     if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
-    //Check if the Vendor (pInfo->sVendor) is supported by this plugin
+    
     if ( ! isVendorSupported(pInfo->sVendor))
         return JFW_PLUGIN_E_WRONG_VENDOR;
     OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
@@ -571,9 +571,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
               + sRuntimeLib + ".\n");
 
 #ifndef ANDROID
-    // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
-    // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
-    // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
+    
+    
+    
     oslModule moduleRt = 0;
 #if defined(LINUX)
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData,
@@ -596,7 +596,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
      }
 
 #if defined UNX && !defined MACOSX
-    //Setting the JAVA_HOME is needed for awt
+    
     OUString javaHome("JAVA_HOME=");
     OUString sPathLocation;
     osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
@@ -625,23 +625,23 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
 
-    // Valgrind typically emits many false errors when executing JIT'ed JVM
-    // code, so force the JVM into interpreted mode:
+    
+    
     bool forceInterpreted = RUNNING_ON_VALGRIND > 0;
 
-    // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
-    // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):
+    
+    
     JavaVMInitArgs vm_args;
 
     sal_Int32 nOptions = 1 + cOptions + (forceInterpreted ? 1 : 0);
-        //TODO: check for overflow
+        
     boost::scoped_array<JavaVMOption> sarOptions(new JavaVMOption[nOptions]);
     JavaVMOption * options = sarOptions.get();
 
-    // We set an abort handler which is called when the VM calls _exit during
-    // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
-    // all some directories of the Java installation. This is necessary for
-    // all versions below 1.5.1
+    
+    
+    
+    
     int n = 0;
     options[n].optionString= (char *) "abort";
     options[n].extraInfo= (void* )(sal_IntPtr)abort_handler;
@@ -650,8 +650,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     for (int i = 0; i < cOptions; i++)
     {
 #ifdef UNX
-    // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
-    // in the class path in order to have applet support.
+    
+    
         OString sClassPath = arOptions[i].optionString;
         if (sClassPath.startsWith("-Djava.class.path="))
         {
@@ -684,7 +684,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     }
 
 #ifdef MACOSX
-    vm_args.version= JNI_VERSION_1_4; // issue 88987
+    vm_args.version= JNI_VERSION_1_4; 
 #else
     vm_args.version= JNI_VERSION_1_2;
 #endif
@@ -707,13 +707,13 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     */
     if( jmpval == 0)
     {
-        //returns negative number on failure
+        
         err= pCreateJavaVM(&pJavaVM, ppEnv, &vm_args);
         g_bInGetJavaVM = 0;
     }
     else
-        // set err to a positive number, so as or recognize that an abort (longjmp)
-        //occurred
+        
+        
         err= 1;
 
     if(err != 0)
@@ -739,8 +739,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #else
     (void) arOptions;
     (void) cOptions;
-    // On Android we always have a Java VM as we only expect this code
-    // to be run in an Android app anyway.
+    
+    
     *ppVm = lo_get_javavm();
     fprintf(stderr, "lo_get_javavm returns %p", *ppVm);
 #endif
@@ -773,9 +773,9 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
         ret = JFW_PLUGIN_E_ERROR;
     }
 #ifdef MACOSX
-    //We can have the situation that the JavaVM runtime library is not
-    //contained within JAVA_HOME. Then the check for JAVA_HOME would return
-    //true although the runtime library may not be loadable.
+    
+    
+    
     if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
     {
         OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);

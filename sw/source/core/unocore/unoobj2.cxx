@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -124,7 +124,7 @@ GetSupportedServiceNamesImpl(
     return ret;
 }
 
-} // namespace sw
+} 
 
 namespace sw {
 
@@ -137,9 +137,9 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
         SwPaM *pPam = static_cast<SwPaM *>(rSource.GetNext());
         do
         {
-            // create new PaM
+            
             SwPaM *const pNew = new SwPaM(*pPam);
-            // insert into ring
+            
             pNew->MoveTo(&rTarget);
             pPam = static_cast<SwPaM *>(pPam->GetNext());
         }
@@ -147,7 +147,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
     }
 }
 
-} // namespace sw
+} 
 
 struct FrameDependSortListLess
 {
@@ -159,16 +159,16 @@ struct FrameDependSortListLess
     }
 };
 
-// OD 2004-05-07 #i28701# - adjust 4th parameter
+
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          FrameDependSortList_t & rFrames,
                          const bool _bAtCharAnchoredObjs )
 {
-    // _bAtCharAnchoredObjs:
-    // <sal_True>: at-character anchored objects are collected
-    // <sal_False>: at-paragraph anchored objects are collected
+    
+    
+    
 
-    // search all borders, images, and OLEs that are connected to the paragraph
+    
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
     sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
@@ -187,14 +187,14 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                 if ( rFmt.GetAnchor().GetAnchorId() == nChkType )
                 {
-                    // create SwDepend and insert into array
+                    
                     SwDepend* pNewDepend = new SwDepend( &rClnt, &rFmt );
                     const sal_Int32 idx =
                         rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex();
                     sal_uInt32 nOrder = rFmt.GetAnchor().GetOrder();
 
-                    // OD 2004-05-07 #i28701# - sorting no longer needed,
-                    // because list <SwSortedObjs> is already sorted.
+                    
+                    
                     FrameDependSortListEntry entry(idx, nOrder, pNewDepend);
                     rFrames.push_back(entry);
                 }
@@ -213,11 +213,11 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 0 != (pAnchorPos = rAnchor.GetCntntAnchor()) &&
                     pAnchorPos->nNode == rIdx )
             {
-                //jetzt einen SwDepend anlegen und in das Array einfuegen
+                
                 SwDepend* pNewDepend = new SwDepend( &rClnt, (SwFrmFmt*)pFmt);
 
-                // OD 2004-05-07 #i28701# - determine insert position for
-                // sorted <rFrameArr>
+                
+                
                 const sal_Int32 nIndex = pAnchorPos->nContent.GetIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
@@ -244,7 +244,7 @@ UnoActionContext::UnoActionContext(SwDoc *const pDoc)
 
 UnoActionContext::~UnoActionContext()
 {
-    // Doc may already have been removed here
+    
     if (m_pDoc)
     {
         SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
@@ -288,7 +288,7 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
         break;
 
     case RES_FMT_CHG:
-        // Is the move to the new one finished and will the old one be deleted?
+        
         if( ((SwFmtChg*)pNew)->pChangedFmt == pClient->GetRegisteredIn() &&
             ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
             ((SwModify*)pClient->GetRegisteredIn())->Remove(pClient);
@@ -302,9 +302,9 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
 {
     const SetAttrMode nFlags = nAttrMode | nsSetAttrMode::SETATTR_APICALL;
     SwDoc* pDoc = rPam.GetDoc();
-    //StartEndAction
+    
     UnoActionContext aAction(pDoc);
-    if (rPam.GetNext() != &rPam)    // Ring of Cursors
+    if (rPam.GetNext() != &rPam)    
     {
         pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
@@ -337,9 +337,9 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     }
 }
 
-// #i63870#
-// split third parameter <bCurrentAttrOnly> into new parameters <bOnlyTxtAttr>
-// and <bGetFromChrFmt> to get better control about resulting <SfxItemSet>
+
+
+
 void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
         SfxItemSet & rSet, const bool bOnlyTxtAttr, const bool bGetFromChrFmt)
 {
@@ -358,11 +358,11 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
         {
             rSet.ClearItem();
             rSet.InvalidateAllItems();
-            return;// uno::Any();
+            return;
         }
 
-        // the first node inserts the values into the get set
-        // all other nodes merge their values into the get set
+        
+        
         for (sal_uLong n = nSttNd; n <= nEndNd; ++n)
         {
             SwNode *const pNd = rPam.GetDoc()->GetNodes()[ n ];
@@ -386,7 +386,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
                 break;
 
                 default:
-                    continue; // skip this node
+                    continue; 
             }
 
             if (pSet != &rSet)
@@ -416,9 +416,9 @@ class SwXParagraphEnumeration::Impl
 public:
     uno::Reference< text::XText > const     m_xParentText;
     const CursorType        m_eCursorType;
-    /// Start node of the cell _or_ table the enumeration belongs to.
-    /// Used to restrict the movement of the UNO cursor to the cell and its
-    /// embedded tables.
+    
+    
+    
     SwStartNode const*const m_pOwnStartNode;
     SwTable const*const     m_pOwnTable;
     const sal_uLong             m_nEndIndex;
@@ -435,11 +435,11 @@ public:
         : SwClient( pCursor.release() )
         , m_xParentText( xParent )
         , m_eCursorType( eType )
-        // remember table and start node for later travelling
-        // (used in export of tables in tables)
+        
+        
         , m_pOwnStartNode( pStartNode )
-        // for import of tables in tables we have to remember the actual
-        // table and start node of the current position in the enumeration.
+        
+        
         , m_pOwnTable( pTable )
         , m_nEndIndex( GetCursor()->End()->nNode.GetIndex() )
         , m_nFirstParaStart( -1 )
@@ -466,7 +466,7 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
+        
         delete GetRegisteredIn();
     }
 
@@ -479,7 +479,7 @@ public:
         throw (container::NoSuchElementException, lang::WrappedTargetException,
                 uno::RuntimeException);
 protected:
-    // SwClient
+    
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
@@ -541,12 +541,12 @@ SwXParagraphEnumeration::hasMoreElements() throw (uno::RuntimeException)
     return (m_pImpl->m_bFirstParagraph) ? sal_True : m_pImpl->m_xNextPara.is();
 }
 
-//!! compare to SwShellTableCrsr::FillRects() in viscrs.cxx
+
 static SwTableNode *
 lcl_FindTopLevelTable(
         SwTableNode *const pTblNode, SwTable const*const pOwnTable)
 {
-    // find top-most table in current context (section) level
+    
 
     SwTableNode * pLast = pTblNode;
     for (SwTableNode* pTmp = pLast;
@@ -562,8 +562,8 @@ static bool
 lcl_CursorIsInSection(
         SwUnoCrsr const*const pUnoCrsr, SwStartNode const*const pOwnStartNode)
 {
-    // returns true if the cursor is in the section (or in a sub section!)
-    // represented by pOwnStartNode
+    
+    
 
     bool bRes = true;
     if (pUnoCrsr && pOwnStartNode)
@@ -586,7 +586,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         throw uno::RuntimeException();
     }
 
-    // check for exceeding selections
+    
     if (!m_bFirstParagraph &&
         ((CURSOR_SELECTION == m_eCursorType) ||
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
@@ -596,15 +596,15 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         const ::std::auto_ptr<SwUnoCrsr> aNewCrsr(
             pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        // one may also go into tables here
+        
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
         {
             aNewCrsr->SetRemainInSection( sal_False );
         }
 
-        // os 2005-01-14: This part is only necessary to detect movements out
-        // of a selection; if there is no selection we don't have to care
+        
+        
         SwTableNode *const pTblNode = aNewCrsr->GetNode()->FindTableNode();
         if (((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType)) && pTblNode)
@@ -626,12 +626,12 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     if (!m_bFirstParagraph)
     {
         pUnoCrsr->SetRemainInSection( sal_False );
-        // what to do if already in a table?
+        
         SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
         pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
         if (pTblNode && (&pTblNode->GetTable() != m_pOwnTable))
         {
-            // this is a foreign table: go to end
+            
             pUnoCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
             if (!pUnoCrsr->Move(fnMoveForward, fnGoNode))
             {
@@ -642,8 +642,8 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     }
 
     uno::Reference< text::XTextContent >  xRef;
-    // the cursor must remain in the current section or a subsection
-    // before AND after the movement...
+    
+    
     if (lcl_CursorIsInSection( pUnoCrsr, m_pOwnStartNode ) &&
         (m_bFirstParagraph || bInTable ||
         (pUnoCrsr->MovePara(fnParaNext, fnParaStart) &&
@@ -655,13 +655,13 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         const sal_Int32 nLastContent =
             (m_nEndIndex == pStart->nNode.GetIndex()) ? m_nLastParaEnd : -1;
 
-        // position in a table, or in a simple paragraph?
+        
         SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
         pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
         if (/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
             pTblNode && (&pTblNode->GetTable() != m_pOwnTable))
         {
-            // this is a foreign table
+            
             SwFrmFmt* pTableFmt =
                 static_cast<SwFrmFmt*>(pTblNode->GetTable().GetFrmFmt());
             text::XTextTable *const pTable =
@@ -715,7 +715,7 @@ public:
     const enum RangePosition    m_eRangePosition;
     SwDoc &                     m_rDoc;
     uno::Reference<text::XText> m_xParentText;
-    SwDepend            m_ObjectDepend; // register at format of table or frame
+    SwDepend            m_ObjectDepend; 
     ::sw::mark::IMark * m_pMark;
 
     Impl(   SwDoc & rDoc, const enum RangePosition eRange,
@@ -733,7 +733,7 @@ public:
 
     ~Impl()
     {
-        // Impl owns the bookmark; delete it here: SolarMutex is locked
+        
         Invalidate();
     }
 
@@ -749,7 +749,7 @@ public:
     const ::sw::mark::IMark * GetBookmark() const { return m_pMark; }
 
 protected:
-    // SwClient
+    
     virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
@@ -760,13 +760,13 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
     if (m_ObjectDepend.GetRegisteredIn())
     {
         ClientModify(&m_ObjectDepend, pOld, pNew);
-        // if the depend was removed then the range must be removed too
+        
         if (!m_ObjectDepend.GetRegisteredIn() && GetRegisteredIn())
         {
             const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
         }
-        // or if the range has been removed but the depend is still
-        // connected then the depend must be removed
+        
+        
         else if (bAlreadyRegistered && !GetRegisteredIn() &&
                     m_ObjectDepend.GetRegisteredIn())
         {
@@ -834,7 +834,7 @@ throw (uno::RuntimeException)
 {
     if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
-        // setString on table not allowed
+        
         throw uno::RuntimeException();
     }
 
@@ -872,7 +872,7 @@ const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
     return theSwXTextRangeUnoTunnelId::get().getSeq();
 }
 
-// XUnoTunnel
+
 sal_Int64 SAL_CALL
 SwXTextRange::getSomething(const uno::Sequence< sal_Int8 >& rId)
 throw (uno::RuntimeException)
@@ -954,7 +954,7 @@ SwXTextRange::getStart() throw (uno::RuntimeException)
     }
     else if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
-        // start and end are this, if it's a table
+        
         xRet = this;
     }
     else
@@ -982,7 +982,7 @@ SwXTextRange::getEnd() throw (uno::RuntimeException)
     }
     else if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
-        // start and end are this, if it's a table
+        
         xRet = this;
     }
     else
@@ -997,8 +997,8 @@ OUString SAL_CALL SwXTextRange::getString() throw (uno::RuntimeException)
     SolarMutexGuard aGuard;
 
     OUString sRet;
-    // for tables there is no bookmark, thus also no text
-    // one could export the table as ASCII here maybe?
+    
+    
     SwPaM aPaM(GetDoc()->GetNodes());
     if (GetPositions(aPaM) && aPaM.HasMark())
     {
@@ -1059,9 +1059,9 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         pPara   = ::sw::UnoTunnelGetImplementation<SwXParagraph>(xRangeTunnel);
     }
 
-    // if it's a text then create a temporary cursor there and re-use
-    // the pCursor variable
-    // #i108489#: Reference in outside scope to keep cursor alive
+    
+    
+    
     uno::Reference< text::XTextCursor > xTextCursor;
     if (pText)
     {
@@ -1138,7 +1138,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
     return bRet;
 }
 
-} // namespace sw
+} 
 
 uno::Reference< text::XTextRange >
 SwXTextRange::CreateXTextRange(
@@ -1252,7 +1252,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         break;
         default:
         {
-            // then it is the body text
+            
             const uno::Reference<frame::XModel> xModel =
                 rDoc.GetDocShell()->GetBaseModel();
             const uno::Reference< text::XTextDocument > xDoc(
@@ -1264,7 +1264,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
     return xParentText;
 }
 
-} // namespace sw
+} 
 
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createContentEnumeration(const OUString& rServiceName)
@@ -1534,7 +1534,7 @@ public:
     }
 
     ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
+        
         delete GetRegisteredIn();
     }
 
@@ -1546,7 +1546,7 @@ public:
     void MakeRanges();
 
 protected:
-    // SwClient
+    
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
@@ -1670,13 +1670,13 @@ SwXTextRanges::getElementType() throw (uno::RuntimeException)
 
 sal_Bool SAL_CALL SwXTextRanges::hasElements() throw (uno::RuntimeException)
 {
-    // no mutex necessary: getCount() does locking
+    
     return getCount() > 0;
 }
 
 void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
 {
-    // Start/EndAction
+    
     SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
@@ -1704,7 +1704,7 @@ class SwXParaFrameEnumeration::Impl
     : public SwClient
 {
 public:
-    // created by hasMoreElements
+    
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameDependList_t m_Frames;
 
@@ -1719,7 +1719,7 @@ public:
     }
 
     ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
+        
         delete GetRegisteredIn();
     }
 
@@ -1729,7 +1729,7 @@ public:
     }
 
 protected:
-    // SwClient
+    
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
@@ -1748,7 +1748,7 @@ void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
     }
     else
     {
-        // check if any frame went away...
+        
         FrameDependList_t::iterator const iter =
             ::std::remove_if(m_Frames.begin(), m_Frames.end(),
                     InvalidFrameDepend());
@@ -1767,9 +1767,9 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     SwFrmFmt *const pFormat = static_cast<SwFrmFmt*>(const_cast<SwModify*>(
                 i_rFrames.front()->GetRegisteredIn()));
     i_rFrames.pop_front();
-    // the format should be valid here, otherwise the client
-    // would have been removed in ::Modify
-    // check for a shape first
+    
+    
+    
     SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFormat );
     if (pContact)
     {
@@ -1805,7 +1805,7 @@ static void
 lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
         FrameDependList_t & rFrames)
 {
-    // search for objects at the cursor - anchored at/as char
+    
     SwTxtAttr const*const pTxtAttr = (rUnoCrsr.GetNode()->IsTxtNode())
         ? rUnoCrsr.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
             rUnoCrsr.GetPoint()->nContent.GetIndex(), RES_TXTATR_FLYCNT)
@@ -1835,7 +1835,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
     }
     else if (pFmt)
     {
-        // create SwDepend for frame and insert into array
+        
         SwDepend *const pNewDepend = new SwDepend(m_pImpl.get(), pFmt);
         m_pImpl->m_Frames.push_back(::boost::shared_ptr<SwDepend>(pNewDepend));
     }
@@ -1844,14 +1844,14 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
     {
         if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
-            //get all frames that are bound at paragraph or at character
+            
             SwPosFlyFrms aFlyFrms(rPaM.GetDoc()->GetAllFlyFmts(m_pImpl->GetCursor(), false, true));
 
             for(SwPosFlyFrms::const_iterator aIter(aFlyFrms.begin()); aIter != aFlyFrms.end(); ++aIter)
             {
                 SwFrmFmt *const pFrmFmt = const_cast<SwFrmFmt*>(&((*aIter)->GetFmt()));
 
-                // create SwDepend for frame and insert into array
+                
                 SwDepend *const pNewDepend = new SwDepend(m_pImpl.get(), pFrmFmt);
                 m_pImpl->m_Frames.push_back(::boost::shared_ptr<SwDepend>(pNewDepend));
             }

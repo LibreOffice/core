@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,11 +70,11 @@ SwXMLWriter::~SwXMLWriter()
 sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
                                 const OUString& aDocHierarchicalName )
 {
-    // Get service factory
+    
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
-    // Get data sink ...
+    
     uno::Reference< io::XOutputStream > xOut;
     SvStorageStreamRef xDocStream;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
@@ -98,11 +98,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xObjectResolver = pObjectHelper;
     }
 
-    // create and prepare the XPropertySet that gets passed through
-    // the components, and the XStatusIndicator that shows progress to
-    // the user.
+    
+    
+    
 
-    // create XPropertySet with three properties for status indicator
+    
     comphelper::PropertyMapEntry const aInfoMap[] =
     {
         { OUString("ProgressRange"), 0,
@@ -144,7 +144,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { OUString("StyleFamilies"), 0,
               ::getCppuType( (Sequence<sal_Int32>*)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // #i69627#
+        
         { OUString("OutlineStyleAsNormalListStyle"), 0,
               ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -162,7 +162,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     uno::Any aAny;
     if (bShowProgress)
     {
-        // set progress range and start status indicator
+        
         sal_Int32 nProgressRange(1000000);
         if (xStatusIndicator.is())
         {
@@ -184,18 +184,18 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
-    // save show redline mode ...
+    
     OUString sShowChanges("ShowChanges");
     sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
     sal_Bool bShowChanges( IDocumentRedlineAccess::IsShowChanges( nRedlineMode ) );
     aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
-    // ... and hide redlines for export
+    
     nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
     nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
     pDoc->SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 
-    // Set base URI
+    
     OUString sPropName("BaseURI");
     xInfoSet->setPropertyValue( sPropName, makeAny( OUString( GetBaseURL() ) ) );
 
@@ -220,7 +220,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xInfoSet->setPropertyValue( sAutoTextMode, aAny2 );
     }
 
-    // #i69627#
+    
     const bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
@@ -229,11 +229,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xInfoSet->setPropertyValue( sOutlineStyleAsNormalListStyle, makeAny( sal_True ) );
     }
 
-    // filter arguments
-    // - graphics + object resolver for styles + content
-    // - status indicator
-    // - info property set
-    // - else empty
+    
+    
+    
+    
+    
     sal_Int32 nArgs = 1;
     if( xStatusIndicator.is() )
         nArgs++;
@@ -259,7 +259,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( xStatusIndicator.is() )
         *pArgs++ <<= xStatusIndicator;
 
-    //Get model
+    
     uno::Reference< lang::XComponent > xModelComp(
         pDoc->GetDocShell()->GetModel(), UNO_QUERY );
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
@@ -269,7 +269,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     PutNumFmtFontsInAttrPool();
     PutEditEngFontsInAttrPool();
 
-    // properties
+    
     Sequence < PropertyValue > aProps( pOrigFileName ? 1 : 0 );
     if( pOrigFileName )
     {
@@ -278,11 +278,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         (pProps++)->Value <<= OUString( *pOrigFileName  );
     }
 
-    // export sub streams for package, else full stream into a file
+    
     bool bWarn = false, bErr = false;
 
-    // RDF metadata: export if ODF >= 1.2
-    // N.B.: embedded documents have their own manifest.rdf!
+    
+    
     if ( bOASIS )
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
@@ -291,7 +291,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         try
         {
             OUString Version;
-            // ODF >= 1.2
+            
             if ((xPropSet->getPropertyValue(VersionProp) >>= Version)
                 && !Version.equals(ODFVER_010_TEXT)
                 && !Version.equals(ODFVER_011_TEXT))
@@ -416,7 +416,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
 
-    // restore redline mode
+    
     aAny = xInfoSet->getPropertyValue( sShowChanges );
     nRedlineMode = pDoc->GetRedlineMode();
     nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
@@ -490,7 +490,7 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
     SAL_INFO( "sw.filter", "SwXMLWriter::WriteThroughComponent : stream " << pStreamName );
-    // open stream
+    
     bool bRet = false;
     try
     {
@@ -510,15 +510,15 @@ bool SwXMLWriter::WriteThroughComponent(
 
         OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
-        // even plain stream should be encrypted in encrypted documents
+        
         sal_Bool bTrue = sal_True;
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
         xSet->setPropertyValue( aUseCommonPassPropName, aAny );
 
-        // set buffer and create outputstream
+        
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
 
-        // set Base URL
+        
         uno::Reference< beans::XPropertySet > xInfoSet;
         if( rArguments.getLength() > 0 )
             rArguments.getConstArray()[0] >>= xInfoSet;
@@ -529,7 +529,7 @@ bool SwXMLWriter::WriteThroughComponent(
             xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
         }
 
-        // write the stuff
+        
         bRet = WriteThroughComponent(
             xOutputStream, xComponent, rxContext,
             pServiceName, rArguments, rMediaDesc );
@@ -554,20 +554,20 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( xComponent.is(), "Need component!" );
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
-    // get component
+    
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext);
     SAL_INFO( "sw.filter", "SAX-Writer created" );
-    // connect XML writer to output stream
+    
     xSaxWriter->setOutputStream( xOutputStream );
 
-    // prepare arguments (prepend doc handler to given arguments)
+    
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
     Sequence<Any> aArgs( 1 + rArguments.getLength() );
     aArgs[0] <<= xDocHandler;
     for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
         aArgs[i+1] = rArguments[i];
 
-    // get filter component
+    
     uno::Reference< document::XExporter > xExporter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             OUString::createFromAscii(pServiceName), aArgs, rxContext), UNO_QUERY);
@@ -576,10 +576,10 @@ bool SwXMLWriter::WriteThroughComponent(
     if( !xExporter.is() )
         return false;
     SAL_INFO( "sw.filter", pServiceName << " instantiated." );
-    // connect model and filter
+    
     xExporter->setSourceDocument( xComponent );
 
-    // filter!
+    
     SAL_INFO( "sw.filter", "call filter()" );
     uno::Reference<XFilter> xFilter( xExporter, UNO_QUERY );
     return xFilter->filter( rMediaDesc );

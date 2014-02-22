@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,14 +26,14 @@
 
 #include <stdio.h>
 
-//........................................................................
+
 namespace connectivity { namespace java { namespace sql {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         sal_Int32 lcl_getFreeID( ConnectionLog::ObjectType _eType )
@@ -43,38 +43,38 @@ namespace connectivity { namespace java { namespace sql {
         }
     }
 
-    //====================================================================
-    //= ConnectionLog
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ConnectionLog::ConnectionLog( const ::comphelper::ResourceBasedEventLogger& _rDriverLog )
         :ConnectionLog_Base( _rDriverLog )
         ,m_nObjectID( lcl_getFreeID( CONNECTION ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ConnectionLog::ConnectionLog( const ConnectionLog& _rSourceLog )
         :ConnectionLog_Base( _rSourceLog )
         ,m_nObjectID( _rSourceLog.m_nObjectID )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ConnectionLog::ConnectionLog( const ConnectionLog& _rSourceLog, ConnectionLog::ObjectType _eType )
         :ConnectionLog_Base( _rSourceLog )
         ,m_nObjectID( lcl_getFreeID( _eType ) )
     {
     }
 
-//........................................................................
-} } } // namespace connectivity::java::sql
-//........................................................................
 
-//........................................................................
+} } } 
+
+
+
 namespace comphelper { namespace log { namespace convert
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -82,7 +82,7 @@ namespace comphelper { namespace log { namespace convert
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
 
-    //--------------------------------------------------------------------
+    
     OUString convertLogArgToString( const Date& _rDate )
     {
         char buffer[ 30 ];
@@ -92,7 +92,7 @@ namespace comphelper { namespace log { namespace convert
         return OUString::createFromAscii( buffer );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString convertLogArgToString( const Time& _rTime )
     {
         char buffer[ 30 ];
@@ -102,7 +102,7 @@ namespace comphelper { namespace log { namespace convert
         return OUString::createFromAscii( buffer );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString convertLogArgToString( const DateTime& _rDateTime )
     {
         char buffer[ 30 ];
@@ -113,8 +113,8 @@ namespace comphelper { namespace log { namespace convert
         return OUString::createFromAscii( buffer );
     }
 
-//........................................................................
-} } }   // comphelper::log::convert
-//........................................................................
+
+} } }   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

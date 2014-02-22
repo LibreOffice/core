@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,11 +33,11 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// class DynamicResultSetWrapper
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
+
+
+
 
 DynamicResultSetWrapper::DynamicResultSetWrapper(
                     Reference< XDynamicResultSet > xOrigin
@@ -52,20 +52,20 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                 , m_xSource( xOrigin )
                 , m_xSourceResultOne( NULL )
                 , m_xSourceResultTwo( NULL )
-            //  , m_xSourceResultCurrent( NULL )
-            //  , m_bUseOne( NULL )
+            
+            
                 , m_xMyResultOne( NULL )
                 , m_xMyResultTwo( NULL )
                 , m_xListener( NULL )
 {
     m_pMyListenerImpl = new DynamicResultSetWrapperListener( this );
     m_xMyListenerImpl = Reference< XDynamicResultSetListener >( m_pMyListenerImpl );
-    //call impl_init() at the end of constructor of derived class
+    
 };
 
 void SAL_CALL DynamicResultSetWrapper::impl_init()
 {
-    //call this at the end of constructor of derived class
+    
     //
 
     Reference< XDynamicResultSet > xSource = NULL;
@@ -80,14 +80,14 @@ void SAL_CALL DynamicResultSetWrapper::impl_init()
 
 DynamicResultSetWrapper::~DynamicResultSetWrapper()
 {
-    //call impl_deinit() at start of destructor of derived class
+    
 
     delete m_pDisposeEventListeners;
 };
 
 void SAL_CALL DynamicResultSetWrapper::impl_deinit()
 {
-    //call this at start of destructor of derived class
+    
     //
     m_pMyListenerImpl->impl_OwnerDies();
 }
@@ -101,7 +101,7 @@ void SAL_CALL DynamicResultSetWrapper
         throw DisposedException();
 }
 
-//virtual
+
 void SAL_CALL DynamicResultSetWrapper
 ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
@@ -111,7 +111,7 @@ void SAL_CALL DynamicResultSetWrapper
     m_xMyResultOne = xResultSet;
 }
 
-//virtual
+
 void SAL_CALL DynamicResultSetWrapper
 ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
@@ -121,20 +121,20 @@ void SAL_CALL DynamicResultSetWrapper
     m_xMyResultTwo = xResultSet;
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
-//list all interfaces inclusive baseclasses of interfaces
+
+
+
+
 QUERYINTERFACE_IMPL_START( DynamicResultSetWrapper )
-    (static_cast< XComponent* >(this)) //base of XDynamicResultSet
+    (static_cast< XComponent* >(this)) 
     , (static_cast< XDynamicResultSet* >(this))
     , (static_cast< XSourceInitialization* >(this))
 QUERYINTERFACE_IMPL_END
 
-//--------------------------------------------------------------------------
-// XComponent methods.
-//--------------------------------------------------------------------------
-// virtual
+
+
+
+
 void SAL_CALL DynamicResultSetWrapper
     ::dispose() throw( RuntimeException )
 {
@@ -159,7 +159,7 @@ void SAL_CALL DynamicResultSetWrapper
         }
     }
 
-    /* //@todo ?? ( only if java collection needs to long )
+    /* 
     if( xSourceComponent.is() )
         xSourceComponent->dispose();
     */
@@ -169,8 +169,8 @@ void SAL_CALL DynamicResultSetWrapper
     m_bInDispose = sal_False;
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL DynamicResultSetWrapper
     ::addEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -185,8 +185,8 @@ void SAL_CALL DynamicResultSetWrapper
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL DynamicResultSetWrapper
     ::removeEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -198,11 +198,11 @@ void SAL_CALL DynamicResultSetWrapper
         m_pDisposeEventListeners->removeInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
-// own methods
-//--------------------------------------------------------------------------
 
-//virtual
+
+
+
+
 void SAL_CALL DynamicResultSetWrapper
     ::impl_disposing( const EventObject& )
     throw( RuntimeException )
@@ -214,28 +214,28 @@ void SAL_CALL DynamicResultSetWrapper
     if( !m_xSource.is() )
         return;
 
-    //release all references to the broadcaster:
+    
     m_xSource.clear();
-    m_xSourceResultOne.clear();//?? or only when not static??
-    m_xSourceResultTwo.clear();//??
-    //@todo m_xMyResultOne.clear(); ???
-    //@todo m_xMyResultTwo.clear(); ???
+    m_xSourceResultOne.clear();
+    m_xSourceResultTwo.clear();
+    
+    
 }
 
-//virtual
+
 void SAL_CALL DynamicResultSetWrapper
     ::impl_notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-    //@todo
+    
     /*
     <p>The Listener is allowed to blockade this call, until he really want to go
     to the new version. The only situation, where the listener has to return the
     update call at once is, while he disposes his broadcaster or while he is
     removing himsef as listener (otherwise you deadlock)!!!
     */
-    // handle the actions in the list
+    
 
     ListEvent aNewEvent;
     aNewEvent.Source = static_cast< XDynamicResultSet * >( this );
@@ -265,7 +265,7 @@ void SAL_CALL DynamicResultSetWrapper
                     else
                     {
                         OSL_FAIL( "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
-                        //throw RuntimeException();
+                        
                     }
                     break;
                 }
@@ -287,10 +287,10 @@ void SAL_CALL DynamicResultSetWrapper
     */
 }
 
-//--------------------------------------------------------------------------
-// XSourceInitialization
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 void SAL_CALL DynamicResultSetWrapper
     ::setSource( const Reference< XInterface > & Source )
     throw( AlreadyInitializedException, RuntimeException )
@@ -329,10 +329,10 @@ void SAL_CALL DynamicResultSetWrapper
     m_aSourceSet.set();
 }
 
-//--------------------------------------------------------------------------
-// XDynamicResultSet
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
     ::getStaticResultSet()
     throw( ListenerAlreadySetException, RuntimeException )
@@ -364,7 +364,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
     return m_xMyResultOne;
 }
 
-//virtual
+
 void SAL_CALL DynamicResultSetWrapper
     ::setListener( const Reference<
     XDynamicResultSetListener > & Listener )
@@ -393,7 +393,7 @@ void SAL_CALL DynamicResultSetWrapper
     m_aListenerSet.set();
 }
 
-//virtual
+
 void SAL_CALL DynamicResultSetWrapper
     ::connectToCache( const Reference< XDynamicResultSet > & xCache )
     throw( ListenerAlreadySetException, AlreadyInitializedException, ServiceNotFoundException, RuntimeException )
@@ -409,7 +409,7 @@ void SAL_CALL DynamicResultSetWrapper
     OSL_ENSURE( xTarget.is(), "The given Target dosn't have the required interface 'XSourceInitialization'" );
     if( xTarget.is() && m_xContext.is() )
     {
-        //@todo m_aSourceSet.wait();?
+        
 
         Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
         try
@@ -431,7 +431,7 @@ void SAL_CALL DynamicResultSetWrapper
     throw ServiceNotFoundException();
 }
 
-//virtual
+
 sal_Int16 SAL_CALL DynamicResultSetWrapper
     ::getCapabilities()
     throw( RuntimeException )
@@ -447,11 +447,11 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper
     return xSource->getCapabilities();
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// class DynamicResultSetWrapperListener
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
+
+
+
 
 DynamicResultSetWrapperListener::DynamicResultSetWrapperListener(
         DynamicResultSetWrapper* pOwner )
@@ -465,19 +465,19 @@ DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener()
 
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
-//list all interfaces inclusive baseclasses of interfaces
+
+
+
+
 XINTERFACE_IMPL_2( DynamicResultSetWrapperListener
                    , XDynamicResultSetListener
-                   , XEventListener //base of XDynamicResultSetListener
+                   , XEventListener 
                    );
 
-//--------------------------------------------------------------------------
-// XDynamicResultSetListener methods:
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 void SAL_CALL DynamicResultSetWrapperListener
     ::disposing( const EventObject& rEventObject )
     throw( RuntimeException )
@@ -488,7 +488,7 @@ void SAL_CALL DynamicResultSetWrapperListener
         m_pOwner->impl_disposing( rEventObject );
 }
 
-//virtual
+
 void SAL_CALL DynamicResultSetWrapperListener
     ::notify( const ListEvent& Changes )
     throw( RuntimeException )
@@ -499,9 +499,9 @@ void SAL_CALL DynamicResultSetWrapperListener
         m_pOwner->impl_notify( Changes );
 }
 
-//--------------------------------------------------------------------------
-// own methods:
-//--------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL DynamicResultSetWrapperListener
     ::impl_OwnerDies()

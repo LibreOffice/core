@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -37,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
 
-// due to pTopFrames
+
 #include "appdata.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
@@ -84,7 +84,7 @@ SvCompatWeakHdl* SfxFrame::GetHdl()
     return pImp->GetHdl();
 }
 
-//--------------------------------------------------------------------
+
 void SfxFrame::Construct_Impl()
 {
     pImp = new SfxFrame_Impl( this );
@@ -93,7 +93,7 @@ void SfxFrame::Construct_Impl()
     pFramesArr_Impl->push_back( this );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxFrame::~SfxFrame()
 {
@@ -123,14 +123,14 @@ SfxFrame::~SfxFrame()
 
 sal_Bool SfxFrame::DoClose()
 {
-    // Actually, one more PrepareClose is still needed!
+    
     sal_Bool bRet = sal_False;
     if ( !pImp->bClosing )
     {
         pImp->bClosing = sal_True;
         CancelTransfers();
 
-        // now close frame; it will be deleted if this call is successful, so don't use any members after that!
+        
         bRet = sal_True;
         try
         {
@@ -166,7 +166,7 @@ sal_Bool SfxFrame::DoClose_Impl()
     if ( pImp->pCurrentViewFrame )
         pBindings = &pImp->pCurrentViewFrame->GetBindings();
 
-    // For internal tasks Controllers and Tools must be cleared
+    
     if ( pImp->pWorkWin )
         pImp->pWorkWin->DeleteControllers_Impl();
 
@@ -196,7 +196,7 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
 {
     bool nRet = true;
 
-    // prevent recursive calls
+    
     if( !pImp->bPrepClosing )
     {
         pImp->bPrepClosing = sal_True;
@@ -204,8 +204,8 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
         SfxObjectShell* pCur = GetCurrentDocument() ;
         if( pCur )
         {
-            // SFX components have a known behaviour
-            // First check if this frame is the only view to its current document
+            
+            
             bool bOther = false;
             for ( const SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pCur );
                     !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pCur ) )
@@ -216,16 +216,16 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
             SFX_APP()->NotifyEvent( SfxViewEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur, GetController() ) );
 
             if ( bOther )
-                // if there are other views only the current view of this frame must be asked
+                
                 nRet = GetCurrentViewFrame()->GetViewShell()->PrepareClose( bUI );
             else
-                // otherwise ask the document
+                
                 nRet = pCur->PrepareClose( bUI );
         }
 
         if ( nRet )
         {
-            // if this frame has child frames, ask them too
+            
             for( sal_uInt16 nPos = GetChildFrameCount(); nRet && nPos--; )
                 nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI );
         }
@@ -234,13 +234,13 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
     }
 
     if ( nRet && pImp->pWorkWin )
-        // if closing was accepted by the component the UI subframes must be asked also
+        
         nRet = pImp->pWorkWin->PrepareClose_Impl();
 
     return nRet;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 {
@@ -290,13 +290,13 @@ void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
     {
         pImp->bInCancelTransfers = sal_True;
         SfxObjectShell* pObj = GetCurrentDocument();
-        if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SFX_LOADED_ALL ))
+        if( pObj ) 
         {
             SfxViewFrame* pFrm;
             for( pFrm = SfxViewFrame::GetFirst( pObj );
                  pFrm && &pFrm->GetFrame() == this;
                  pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) ) ;
-            // No more Frame in Document -> Cancel
+            
             if( !pFrm )
             {
                 pObj->CancelTransfers();
@@ -304,12 +304,12 @@ void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
             }
         }
 
-        // First stop multiload Frames
+        
         sal_uInt16 nCount = GetChildFrameCount();
         for( sal_uInt16 n = 0; n<nCount; n++ )
             GetChildFrame( n )->CancelTransfers();
 
-        //  Check if StarOne-Loader should be canceled
+        
         SfxFrameWeak wFrame( this );
         if (wFrame.Is())
             pImp->bInCancelTransfers = sal_False;
@@ -330,17 +330,17 @@ SfxDispatcher* SfxFrame::GetDispatcher_Impl() const
 
 sal_Bool SfxFrame::IsAutoLoadLocked_Impl() const
 {
-    // Its own Docucument is locked?
+    
     const SfxObjectShell* pObjSh = GetCurrentDocument();
     if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
         return sal_False;
 
-    // Its children are locked?
+    
     for ( sal_uInt16 n = GetChildFrameCount(); n--; )
         if ( !GetChildFrame(n)->IsAutoLoadLocked_Impl() )
             return sal_False;
 
-    // otherwise allow AutoLoad
+    
     return sal_True;
 }
 
@@ -368,9 +368,9 @@ void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
 
 void SfxFrame::GetViewData_Impl()
 {
-    // Update all modifiable data between load and unload, the
-    // fixed data is only processed once (after PrepareForDoc_Impl in
-    // updateDescriptor) to save time.
+    
+    
+    
 
     SfxViewFrame* pViewFrame = GetCurrentViewFrame();
     if( pViewFrame && pViewFrame->GetViewShell() )
@@ -392,7 +392,7 @@ void SfxFrame::GetViewData_Impl()
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, pViewFrame->GetCurViewId() ) );
         if ( pChildArr )
         {
-            // For Framesets also the data from the ChildViews hace to be processed
+            
             sal_uInt16 nCount = pChildArr->size();
             for ( sal_uInt16 n=nCount; n>0; n--)
             {
@@ -407,14 +407,14 @@ void SfxFrame::GetViewData_Impl()
 
 void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 {
-    // For PrepareForDoc_Impl frames, the descriptor of the updated
-    // and new itemset to be initialized. All data fir restoring the view
-    // are thus saved. If the document be replaced, GetViewData_Impl (so)
-    // the latest information hinzugef by "added. All together then the
-    // browser-history saved in. When you activate such frame pick entry
-    // is complete itemsets and the descriptor in the OpenDoc sent;.
-    // Here only the fixed properties identified "other adjustable, the
-    // retrieved by GetViewData (saves time).
+    
+    
+    
+    
+    
+    
+    
+    
 
     DBG_ASSERT( pDoc, "NULL-Document inserted ?!" );
 
@@ -427,7 +427,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     GetDescriptor()->SetEditable( bEditable );
 
-    // Mark FileOpen parameter
+    
     SfxItemSet* pItemSet = pMed->GetItemSet();
 
     const SfxFilter* pFilter = pMed->GetOrigFilter();
@@ -441,7 +441,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 
-    // Delete all old Items
+    
     pSet->ClearItem();
 
     if ( pRefererItem )
@@ -458,12 +458,12 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilter ));
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 {
-    // Create a FrameDescriptor On Demand; if there is no TopLevel-Frame
-    // will result in an error, as no valid link is created.
+    
+    
 
     if ( !pImp->pDescr )
     {
@@ -475,13 +475,13 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
     return pImp->pDescr;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxFrame::GetTargetList( TargetList& rList ) const
 {
     if ( !GetParentFrame() )
     {
-        // An empty string for 'No Target'
+        
         rList.push_back( OUString() );
         rList.push_back( OUString( "_top" ) );
         rList.push_back( OUString( "_parent" ) );
@@ -501,7 +501,7 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 {
@@ -554,7 +554,7 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
          ((SfxFrameItem&)rItem).wFrame == wFrame;
 }
 
-//--------------------------------------------------------------------
+
 
 OUString SfxFrameItem::GetValueText() const
 {
@@ -670,19 +670,19 @@ SfxFrameIterator::SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecur )
 
 SfxFrame* SfxFrameIterator::FirstFrame()
 {
-    // GetFirst starts the iteration at the first child frame
+    
     return pFrame->GetChildFrame( 0 );
 }
 
 SfxFrame* SfxFrameIterator::NextFrame( SfxFrame& rPrev )
 {
-    // If recursion is requested testing is done first on Children.
+    
     SfxFrame *pRet = NULL;
     if ( bRecursive )
         pRet = rPrev.GetChildFrame( 0 );
     if ( !pRet )
     {
-        // In other case continue with the siblings of rPrev
+        
         pRet = NextSibling_Impl( rPrev );
     }
 
@@ -818,7 +818,7 @@ void SfxFrame::CreateWorkWindow_Impl()
 
     if ( IsInPlace() )
     {
-        // this makes sence only for inplace activated objects
+        
         try
         {
             Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );
@@ -899,7 +899,7 @@ void SfxFrame::Resize()
         }
         else
         {
-            // check for IPClient that contains UIactive object or object that is currently UI activating
+            
             SfxWorkWindow *pWork = GetWorkWindow_Impl();
             SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : 0;
             if ( pClient )
@@ -920,10 +920,10 @@ void SfxFrame::Resize()
                 pWork->ShowChildren_Impl();
             }
 
-            // problem in presence of UIActive object: when the window is resized, but the toolspace border
-            // remains the same, setting the toolspace border at the ContainerEnvironment doesn't force a
-            // resize on the IPEnvironment; without that no resize is called for the SfxViewFrame. So always
-            // set the window size of the SfxViewFrame explicit.
+            
+            
+            
+            
             SetToolSpaceBorderPixel_Impl( pImp->aBorder );
         }
     }

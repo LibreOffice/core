@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "StatusBarCommandDispatch.hxx"
@@ -85,24 +85,24 @@ void StatusBarCommandDispatch::fireStatusEvent(
     }
 }
 
-// ____ XDispatch ____
+
 void SAL_CALL StatusBarCommandDispatch::dispatch(
     const util::URL& /* URL */,
     const Sequence< beans::PropertyValue >& /* Arguments */ )
     throw (uno::RuntimeException)
 {
-    // nothing to do here
+    
 }
 
-// ____ WeakComponentImplHelperBase ____
-/// is called when this is disposed
+
+
 void SAL_CALL StatusBarCommandDispatch::disposing()
 {
     m_xModifiable.clear();
     m_xSelectionSupplier.clear();
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
@@ -110,7 +110,7 @@ void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* S
     m_xSelectionSupplier.clear();
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
@@ -120,7 +120,7 @@ void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEven
     CommandDispatch::modified( aEvent );
 }
 
-// ____ XSelectionChangeListener ____
+
 void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException)
 {
@@ -131,6 +131,6 @@ void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObjec
     fireAllStatusEvents( 0 );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

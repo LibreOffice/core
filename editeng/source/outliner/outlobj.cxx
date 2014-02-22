@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/intitem.hxx>
@@ -32,20 +32,20 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImplOutlinerParaObject
 {
 public:
-    // data members
+    
     EditTextObject*                 mpEditTextObject;
     ParagraphDataVector             maParagraphDataVector;
     bool                            mbIsEditDoc;
 
-    // refcounter
+    
     sal_uInt32                      mnRefCount;
 
-    // constuctor
+    
     ImplOutlinerParaObject(EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc)
     :   mpEditTextObject(pEditTextObject),
         maParagraphDataVector(rParagraphDataVector),
@@ -56,7 +56,7 @@ public:
             maParagraphDataVector.resize(pEditTextObject->GetParagraphCount());
     }
 
-    // destructor
+    
     ~ImplOutlinerParaObject()
     {
         delete mpEditTextObject;
@@ -69,14 +69,14 @@ public:
             && mbIsEditDoc == rCandidate.mbIsEditDoc);
     }
 
-    // #i102062#
+    
     bool isWrongListEqual(const ImplOutlinerParaObject& rCompare) const
     {
         return mpEditTextObject->isWrongListEqual(*rCompare.mpEditTextObject);
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void OutlinerParaObject::ImplMakeUnique()
 {
@@ -148,7 +148,7 @@ bool OutlinerParaObject::operator==(const OutlinerParaObject& rCandidate) const
     return (*rCandidate.mpImplOutlinerParaObject == *mpImplOutlinerParaObject);
 }
 
-// #i102062#
+
 bool OutlinerParaObject::isWrongListEqual(const OutlinerParaObject& rCompare) const
 {
     if(rCompare.mpImplOutlinerParaObject == mpImplOutlinerParaObject)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -103,11 +103,11 @@ void LinkManager::CloseCachedComps()
     maCachedComps.clear();
 }
 
-//--------------------------------------------------------------------------
+
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
-    // No duplicate links inserted
+    
     int bFound = sal_False;
     for( size_t n = 0; n < aLinkTbl.size(); )
     {
@@ -120,7 +120,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
             bFound = sal_True;
         }
 
-        // Remove empty ones if they exist
+        
         if( !pTmp->Is() )
         {
             delete pTmp;
@@ -167,7 +167,7 @@ sal_Bool LinkManager::Insert( SvBaseLink* pLink )
             aLinkTbl.erase( aLinkTbl.begin() + n-- );
         }
         else if( pLink == *pTmp )
-            return sal_False; // No duplicate links inserted
+            return sal_False; 
     }
 
     SvBaseLinkRef* pTmp = new SvBaseLinkRef( pLink );
@@ -182,7 +182,7 @@ sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nUpdateMode,
                                 const OUString* pName )
 {
-    // This First
+    
     pLink->SetObjType( nObjType );
     if( pName )
         pLink->SetName( *pName );
@@ -221,7 +221,7 @@ sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink )
 }
 
 
-// Obtain the string for the dialog
+
 bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         OUString* pType,
                                         OUString* pFile,
@@ -290,8 +290,8 @@ void LinkManager::UpdateAllLinks(
     bool bUpdateGrfLinks,
     Window* pParentWin )
 {
-    // First make a copy of the array in order to update links
-    // links in ... no contact between them!
+    
+    
     std::vector<SvBaseLink*> aTmpArr;
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
@@ -308,7 +308,7 @@ void LinkManager::UpdateAllLinks(
     {
         SvBaseLink* pLink = aTmpArr[ n ];
 
-        // search first in the array after the entry
+        
         bool bFound = false;
         for( size_t i = 0; i < aLinkTbl.size(); ++i )
             if( pLink == *aLinkTbl[ i ] )
@@ -318,9 +318,9 @@ void LinkManager::UpdateAllLinks(
             }
 
         if( !bFound )
-            continue;  // was not available!
+            continue;  
 
-        // Graphic-Links not to update yet
+        
         if( !pLink->IsVisible() ||
             ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
             continue;
@@ -329,8 +329,8 @@ void LinkManager::UpdateAllLinks(
         {
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString() ).Execute();
             if( RET_YES != nRet )
-                return ;         // nothing should be updated
-            bAskUpdate = false;  // once is enough
+                return ;         
+            bAskUpdate = false;  
         }
 
         pLink->Update();
@@ -338,7 +338,7 @@ void LinkManager::UpdateAllLinks(
     CloseCachedComps();
 }
 
-//--------------------------------------------------------------------------
+
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {
@@ -359,7 +359,7 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 
 sal_Bool LinkManager::InsertServer( SvLinkSource* pObj )
 {
-    // no duplicate inserts
+    
     if( !pObj )
         return sal_False;
 
@@ -415,7 +415,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
             continue;
 
         if (aType != "soffice")
-            // DDE connections between OOo apps are always named 'soffice'.
+            
             continue;
 
         OUString aTmp;
@@ -424,7 +424,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
             aURL = aTmp;
 
         if (!aURL.equalsIgnoreAsciiCase(pMed->GetName()))
-            // This DDE link is not associated with this server shell...  Skip it.
+            
             continue;
 
         if (aLink.isEmpty())
@@ -472,8 +472,8 @@ bool LinkManager::InsertFileLink(
     return InsertLink(&rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &aCmd);
 }
 
-// A transfer is aborted, so cancel all download media
-// (for now this is only of interest for the file links!)
+
+
 void LinkManager::CancelTransfers()
 {
     SvFileObject* pFileObj;
@@ -486,11 +486,11 @@ void LinkManager::CancelTransfers()
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
             pFileObj->CancelTransfers();
 }
-    // For the purpose of sending Status information from the file object to
-    // the base link, there exist a dedicated ClipBoardId. The SvData-object
-    // gets the appropriate information as a string
-    // For now this is required for file object in conjunction with JavaScript
-    // - needs information about Load/Abort/Error
+    
+    
+    
+    
+    
 sal_uIntPtr LinkManager::RegisterStatusInfoId()
 {
     static sal_uIntPtr nFormat = 0;
@@ -503,7 +503,7 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
     return nFormat;
 }
 
-// ----------------------------------------------------------------------
+
 
 sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
@@ -547,7 +547,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
 }
 
 
-// ----------------------------------------------------------------------
+
 OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
     OUString sRet;
@@ -567,8 +567,8 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     LinkManager* pLinkMgr = pLink->GetLinkManager();
     if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && !sTopic.isEmpty())
     {
-        // first only loop over the DocumentShells the shells and find those
-        // with the name:
+        
+        
         CharClass aCC( LanguageTag( LANGUAGE_SYSTEM) );
 
         TypeId aType( TYPE(SfxObjectShell) );
@@ -602,7 +602,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
             sTmp = aCC.lowercase( sTmp );
-            if( sTmp == sNmURL )  // we want these
+            if( sTmp == sNmURL )  
             {
                 pFndShell = pShell;
                 break;
@@ -620,7 +620,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         }
     }
 
-    // empty topics are not allowed - which document is it
+    
     if( sTopic.isEmpty() )
         return sal_False;
 
@@ -642,7 +642,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     }
     else
     {
-        // then try to download the file:
+        
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
         aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic, sReferer ) );
@@ -657,11 +657,11 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
             SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
 
-            // Disable automatic re-connection to avoid this link instance
-            // being destroyed at re-connection.
+            
+            
             SfxBoolItem aDdeConnect(SID_DDE_RECONNECT_ONLOAD, false);
 
-            // #i14200# (DDE-link crashes wordprocessor)
+            
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
             aArgs.Put(aReferer);
             aArgs.Put(aTarget);

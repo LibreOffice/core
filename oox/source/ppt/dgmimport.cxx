@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/dgmimport.hxx"
@@ -56,7 +56,7 @@ bool QuickDiagrammingImport::importDocument() throw()
 {
     /*  to activate the PPTX dumper, define the environment variable
         OOO_PPTXDUMPER and insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
+        file:
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
     OUString aEmpty;
@@ -90,13 +90,13 @@ bool QuickDiagrammingImport::exportDocument() throw()
 
 const ::oox::drawingml::Theme* QuickDiagrammingImport::getCurrentTheme() const
 {
-    // TODO
+    
     return 0;
 }
 
 sal_Int32 QuickDiagrammingImport::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
 {
-    // TODO
+    
     return 0;
 }
 

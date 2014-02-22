@@ -41,12 +41,12 @@ namespace drawinglayer
 
             if(!rViewInformation.getViewport().isEmpty() && !getDirection().equalZero())
             {
-                // position to view coordinates, DashLen and DashLen in logic
+                
                 const basegfx::B2DPoint aViewPosition(rViewInformation.getObjectToViewTransformation() * getPosition());
 
                 switch(getStyle())
                 {
-                    default : // HELPLINESTYLE2D_POINT
+                    default : 
                     {
                         const double fViewFixValue(15.0);
                         basegfx::B2DVector aNormalizedDirection(getDirection());
@@ -79,7 +79,7 @@ namespace drawinglayer
 
                         if(basegfx::areParallel(getDirection(), basegfx::B2DVector(1.0, 0.0)))
                         {
-                            // parallel to X-Axis, get cuts with Y-Axes
+                            
                             const double fCutA((rViewInformation.getDiscreteViewport().getMinX() - aViewPosition.getX()) / getDirection().getX());
                             const double fCutB((rViewInformation.getDiscreteViewport().getMaxX() - aViewPosition.getX()) / getDirection().getX());
                             const basegfx::B2DPoint aPosA(aViewPosition + (fCutA * getDirection()));
@@ -95,7 +95,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            // get cuts with X-Axes
+                            
                             const double fCutA((rViewInformation.getDiscreteViewport().getMinY() - aViewPosition.getY()) / getDirection().getY());
                             const double fCutB((rViewInformation.getDiscreteViewport().getMaxY() - aViewPosition.getY()) / getDirection().getY());
                             const basegfx::B2DPoint aPosA(aViewPosition + (fCutA * getDirection()));
@@ -112,7 +112,7 @@ namespace drawinglayer
 
                         if(aLine.count())
                         {
-                            // clip against visible area
+                            
                             const basegfx::B2DPolyPolygon aResult(basegfx::tools::clipPolygonOnRange(aLine, rViewInformation.getDiscreteViewport(), true, true));
 
                             for(sal_uInt32 a(0L); a < aResult.count(); a++)
@@ -129,7 +129,7 @@ namespace drawinglayer
                 }
             }
 
-            // prepare return value
+            
             Primitive2DSequence aRetval(aTempPrimitiveTarget.size());
 
             for(sal_uInt32 a(0L); a < aTempPrimitiveTarget.size(); a++)
@@ -185,26 +185,26 @@ namespace drawinglayer
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
-                    // conditions of last local decomposition have changed, delete
+                    
                     const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
             if(!getBuffered2DDecomposition().hasElements())
             {
-                // remember ViewRange and ViewTransformation
+                
                 const_cast< HelplinePrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
                 const_cast< HelplinePrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
             }
 
-            // use parent implementation
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(HelplinePrimitive2D, PRIMITIVE2D_ID_HELPLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

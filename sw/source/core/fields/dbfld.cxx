@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <float.h>
@@ -42,13 +42,13 @@
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
 
-/// replace database separator by dots for display
+
 static OUString lcl_DBTrennConv(const OUString& aContent)
 {
     return aContent.replaceAll(OUString(DB_DELIM), OUString('.'));
 }
 
-// database field type
+
 
 SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, const SwDBData& rDBData ) :
     SwValueFieldType( pDocPtr, RES_DBFLD ),
@@ -141,7 +141,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                 SwFmtFld* pFmtFld = aIter.First();
                 while(pFmtFld)
                 {
-                    // field in Undo?
+                    
                     SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
                     if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
                     {
@@ -163,7 +163,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-// database field
+
 
 SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
     :   SwValueField(pTyp, nFmt),
@@ -262,12 +262,12 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
-/// get current field value and cache it
+
 void SwDBField::Evaluate()
 {
     SwNewDBMgr* pMgr = GetDoc()->GetNewDBMgr();
 
-    // first delete
+    
     bValidValue = false;
     double nValue = DBL_MAX;
     const SwDBData& aTmpData = GetDBData();
@@ -277,7 +277,7 @@ void SwDBField::Evaluate()
 
     sal_uInt32 nFmt;
 
-    // search corresponding column name
+    
     OUString aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
@@ -312,18 +312,18 @@ void SwDBField::Evaluate()
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
             if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
-                bValidValue = true; // because of bug #60339 not for all strings
+                bValidValue = true; 
         }
         else
         {
-            // if string length > 0 then true, else false
+            
             SetValue(aContent.isEmpty() ? 0 : 1);
         }
     }
     bInitialized = true;
 }
 
-/// get name
+
 OUString SwDBField::GetPar1() const
 {
     return ((const SwDBFieldType*)GetTyp())->GetName();
@@ -391,7 +391,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         else
             nSubTyp |= nsSwExtendedSubType::SUB_INVISIBLE;
         SetSubType(nSubTyp);
-        //invalidate text node
+        
         if(GetTyp())
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
@@ -401,7 +401,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                 SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
                 if(pTxtFld && (SwDBField*)pFmtFld->GetField() == this )
                 {
-                    //notify the change
+                    
                     pTxtFld->NotifyContentChange(*pFmtFld);
                     break;
                 }
@@ -429,7 +429,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-// base class for all further database fields
+
 
 SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt) :
     SwField(pTyp, nFmt),
@@ -533,7 +533,7 @@ void SwDBNameInfField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-// next dataset
+
 
 SwDBNextSetFieldType::SwDBNextSetFieldType()
     : SwFieldType( RES_DBNEXTSETFLD )
@@ -546,7 +546,7 @@ SwFieldType* SwDBNextSetFieldType::Copy() const
     return pTmp;
 }
 
-// SwDBSetField
+
 
 SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const OUString& rCond,
@@ -579,13 +579,13 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
     pMgr->ToNextRecord(rData.sDataSource, rData.sCommand);
 }
 
-/// get condition
+
 OUString SwDBNextSetField::GetPar1() const
 {
     return aCond;
 }
 
-/// set condition
+
 void SwDBNextSetField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
@@ -619,7 +619,7 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-// dataset with certain ID
+
 
 SwDBNumSetFieldType::SwDBNumSetFieldType() :
     SwFieldType( RES_DBNUMSETFLD )
@@ -632,7 +632,7 @@ SwFieldType* SwDBNumSetFieldType::Copy() const
     return pTmp;
 }
 
-// SwDBNumSetField
+
 
 SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
                                  const OUString& rCond,
@@ -665,30 +665,30 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
 
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
                         pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
-    {   // condition OK -> adjust current Set
+    {   
         pMgr->ToRecordId(std::max((sal_uInt16)aPar2.toInt32(), sal_uInt16(1))-1);
     }
 }
 
-/// get LogDBName
+
 OUString SwDBNumSetField::GetPar1() const
 {
     return aCond;
 }
 
-/// set LogDBName
+
 void SwDBNumSetField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
 }
 
-/// get condition
+
 OUString SwDBNumSetField::GetPar2() const
 {
     return aPar2;
 }
 
-/// set condition
+
 void SwDBNumSetField::SetPar2(const OUString& rStr)
 {
     aPar2 = rStr;
@@ -732,7 +732,7 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-// SwDBNameFieldType
+
 
 SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
     : SwFieldType( RES_DBNAMEFLD )
@@ -752,7 +752,7 @@ SwFieldType* SwDBNameFieldType::Copy() const
     return pTmp;
 }
 
-// name of the connected database
+
 
 SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt)
     : SwDBNameInfField(pTyp, rDBData, nFmt)
@@ -784,7 +784,7 @@ bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
 
-// SwDBSetNumberFieldType
+
 
 SwDBSetNumberFieldType::SwDBSetNumberFieldType()
     : SwFieldType( RES_DBSETNUMBERFLD )
@@ -797,7 +797,7 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
     return pTmp;
 }
 
-// set-number of the connected database
+
 
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
                                        const SwDBData& rDBData,

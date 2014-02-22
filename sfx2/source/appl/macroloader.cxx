@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <macroloader.hxx>
@@ -95,7 +95,7 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
     return pDocShell;
 }
 
-// -----------------------------------------------------------------------
+
 uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
     const util::URL&   aURL            ,
     const OUString&               /*sTargetFrameName*/,
@@ -107,7 +107,7 @@ uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
     return xDispatcher;
 }
 
-// -----------------------------------------------------------------------
+
 uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
                 SfxMacroLoader::queryDispatches( const uno::Sequence < frame::DispatchDescriptor >& seqDescriptor )
                     throw( uno::RuntimeException )
@@ -121,7 +121,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
     return lDispatcher;
 }
 
-// -----------------------------------------------------------------------
+
 void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& /*lArgs*/,
     const uno::Reference<frame::XDispatchResultListener>& xListener )
@@ -133,8 +133,8 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
     if( xListener.is() )
     {
-        // always call dispatchFinished(), because we didn't load a document but
-        // executed a macro instead!
+        
+        
         frame::DispatchResultEvent aEvent;
 
         aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
@@ -177,7 +177,7 @@ void SAL_CALL SfxMacroLoader::addStatusListener(
      */
 }
 
-// -----------------------------------------------------------------------
+
 void SAL_CALL SfxMacroLoader::removeStatusListener(
     const uno::Reference< frame::XStatusListener >&,
     const util::URL&                                                  )
@@ -196,12 +196,12 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
 #else
     SfxObjectShell* pCurrent = pSh;
     if ( !pCurrent )
-        // all not full qualified names use the BASIC of the given or current document
+        
         pCurrent = SfxObjectShell::Current();
 
-    // 'macro:///lib.mod.proc(args)' => macro of App-BASIC
-    // 'macro://[docname|.]/lib.mod.proc(args)' => macro of current or qualified document
-    // 'macro://obj.method(args)' => direct API call, execute it via App-BASIC
+    
+    
+    
     OUString aMacro( rURL );
     sal_Int32 nHashPos = aMacro.indexOf( '/', 8 );
     sal_Int32 nArgsPos = aMacro.indexOf( '(' );
@@ -209,24 +209,24 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     BasicManager *pBasMgr = 0;
     ErrCode nErr = ERRCODE_NONE;
 
-    // should a macro function be executed ( no direct API call)?
+    
     if ( -1 != nHashPos && ( -1 == nArgsPos || nHashPos < nArgsPos ) )
     {
-        // find BasicManager
+        
         SfxObjectShell* pDoc = NULL;
         OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
         if ( aBasMgrName.isEmpty() )
             pBasMgr = pAppMgr;
         else if ( aBasMgrName == "." )
         {
-            // current/actual document
+            
             pDoc = pCurrent;
             if (pDoc)
                 pBasMgr = pDoc->GetBasicManager();
         }
         else
         {
-            // full qualified name, find document by name
+            
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                     pObjSh && !pBasMgr;
                     pObjSh = SfxObjectShell::GetNext(*pObjSh) )
@@ -244,9 +244,9 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
 
             if ( pDoc )
             {
-                // security check for macros from document basic if an SFX doc is given
+                
                 if ( !pDoc->AdjustMacroMode( OUString() ) )
-                    // check forbids execution
+                    
                     return ERRCODE_IO_ACCESSDENIED;
             }
             else if ( pDoc && pDoc->GetMedium() )
@@ -260,12 +260,12 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
                     return ERRCODE_IO_ACCESSDENIED;
             }
 
-            // find BASIC method
+            
             OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nHashPos+1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
             OUString aArgs;
             if ( -1 != nArgsPos )
             {
-                // remove arguments from macro name
+                
                 aArgs = aQualifiedMethod.copy( nArgsPos - nHashPos - 1 );
                 aQualifiedMethod = aQualifiedMethod.copy( 0, nArgsPos - nHashPos - 1 );
             }
@@ -277,26 +277,26 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
                 const bool bSetGlobalThisComponent = ( pDoc != NULL ) && bIsAppBasic;
                 if ( bSetDocMacroMode )
                 {
-                    // mark document: it executes an own macro, so it's in a modal mode
+                    
                     pDoc->SetMacroMode_Impl( sal_True );
                 }
 
                 if ( bSetGlobalThisComponent )
                 {
-                    // document is executed via AppBASIC, adjust ThisComponent variable
+                    
                     aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pDoc->GetModel() ) );
                 }
 
-                // just to let the shell be alive
+                
                 SfxObjectShellRef xKeepDocAlive = pDoc;
 
                 {
-                    // attempt to protect the document against the script tampering with its Undo Context
+                    
                     ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
                     if ( bIsDocBasic )
                         pUndoGuard.reset( new ::framework::DocumentUndoGuard( pDoc->GetModel() ) );
 
-                    // execute the method
+                    
                     SbxVariableRef retValRef = new SbxVariable;
                     nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef );
                     if ( nErr == ERRCODE_NONE )
@@ -310,7 +310,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
 
                 if ( bSetDocMacroMode )
                 {
-                    // remove flag for modal mode
+                    
                     pDoc->SetMacroMode_Impl( sal_False );
                 }
             }
@@ -322,7 +322,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     }
     else
     {
-        // direct API call on a specified object
+        
         OUStringBuffer aCall;
         aCall.append('[').append(INetURLObject::decode(aMacro.copy(6), INET_HEX_ESCAPE,
             INetURLObject::DECODE_WITH_CHARSET));

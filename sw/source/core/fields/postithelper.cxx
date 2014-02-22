@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <postithelper.hxx>
@@ -47,12 +47,12 @@ struct LayoutInfoOrder
     {
         if ( rLayoutInfo.mnPageNumber != rNewLayoutInfo.mnPageNumber )
         {
-            // corresponding <SwFrm> instances are on different pages
+            
             return rLayoutInfo.mnPageNumber < rNewLayoutInfo.mnPageNumber;
         }
         else
         {
-            // corresponding <SwFrm> instances are in different repeating table header rows
+            
             OSL_ENSURE( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
                     "<LayoutInfoOrder::operator()> - table frame not found" );
             OSL_ENSURE( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
@@ -73,7 +73,7 @@ struct LayoutInfoOrder
     }
 };
 
-} // eof anonymous namespace
+} 
 
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     SwLayoutInfo& o_rInfo,

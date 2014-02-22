@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -42,7 +42,7 @@
 #include <editeng/fontitem.hxx>
 #include "macroass.hxx"
 
-// class SvxCharacterMap =================================================
+
 
 SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
@@ -61,14 +61,14 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
     get(m_pSubsetText, "subsetft");
     get(m_pSubsetLB, "subsetlb");
-    //lock the size request of this widget to the width of all possible entries
+    
     fillAllSubsets(*m_pSubsetLB);
     m_pSubsetLB->set_width_request(m_pSubsetLB->get_preferred_size().Width());
     get(m_pCharCodeText, "charcodeft");
-    //lock the size request of this widget to the width of the original .ui string
+    
     m_pCharCodeText->set_width_request(m_pCharCodeText->get_preferred_size().Width());
     get(m_pSymbolText, "symboltext");
-    //lock the size request of this widget to double the height of the label
+    
     m_pShowText->set_height_request(m_pSymbolText->get_preferred_size().Height() * 3);
 
     SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, false );
@@ -104,34 +104,34 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     CreateOutputItemSet( pSet ? *pSet->GetPool() : SFX_APP()->GetPool() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxCharacterMap::~SvxCharacterMap()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 const Font& SvxCharacterMap::GetCharFont() const
 {
     return aFont;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     m_pShowSet->SelectCharacter( c );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
     return m_pShowSet->GetSelectCharacter();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxCharacterMap::GetCharacters() const
 {
@@ -139,7 +139,7 @@ OUString SvxCharacterMap::GetCharacters() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxCharacterMap::DisableFontSelection()
 {
@@ -169,7 +169,7 @@ short SvxCharacterMap::Execute()
 }
 
 
-// class SvxShowText =====================================================
+
 
 SvxShowText::SvxShowText(Window* pParent, sal_Bool bCenter)
     : Control(pParent)
@@ -182,7 +182,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowText(Window *pParent
     return new SvxShowText(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowText::Paint( const Rectangle& )
 {
@@ -213,7 +213,7 @@ void SvxShowText::Paint( const Rectangle& )
         }
         if (!mbCenter)
             break;
-        //only shrink in the single glyph large view mode
+        
         long nTextWidth = aBoundRect.GetWidth();
         if (nAvailWidth > nTextWidth)
             break;
@@ -226,15 +226,15 @@ void SvxShowText::Paint( const Rectangle& )
     }
 
     Point aPoint( 2, mnY );
-    // adjust position using ink boundary if possible
+    
     if( !bGotBoundary )
         aPoint.X() = (aSize.Width() - GetTextWidth( aText )) / 2;
     else
     {
-        // adjust position before it gets out of bounds
+        
         aBoundRect += aPoint;
 
-        // shift back vertically if needed
+        
         int nYLDelta = aBoundRect.Top();
         int nYHDelta = aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
@@ -244,13 +244,13 @@ void SvxShowText::Paint( const Rectangle& )
 
         if( mbCenter )
         {
-            // move glyph to middle of cell
+            
             aPoint.X() = -aBoundRect.Left()
                        + (aSize.Width() - aBoundRect.GetWidth()) / 2;
         }
         else
         {
-            // shift back horizontally if needed
+            
             int nXLDelta = aBoundRect.Left();
             int nXHDelta = aSize.Width() - aBoundRect.Right();
             if( nXLDelta <= 0 )
@@ -266,7 +266,7 @@ void SvxShowText::Paint( const Rectangle& )
         Control::SetFont(aOrigFont);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowText::SetFont( const Font& rFont )
 {
@@ -293,10 +293,10 @@ Size SvxShowText::GetOptimalSize() const
 void SvxShowText::Resize()
 {
     Control::Resize();
-    SetFont(GetFont()); //force recalculation of size
+    SetFont(GetFont()); 
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowText::SetText( const OUString& rText )
 {
@@ -304,12 +304,12 @@ void SvxShowText::SetText( const OUString& rText )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxShowText::~SvxShowText()
 {}
 
-// class SvxCharacterMap =================================================
+
 
 void SvxCharacterMap::init()
 {
@@ -340,9 +340,9 @@ void SvxCharacterMap::init()
             m_pFontLB->SetEntryData( nPos, (void*)(sal_uLong)i );
         }
     }
-    // the font may not be in the list =>
-    // try to find a font name token in list and select found font,
-    // else select topmost entry
+    
+    
+    
     bool bFound = (m_pFontLB->GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
     if( !bFound )
     {
@@ -382,12 +382,12 @@ void SvxCharacterMap::init()
         m_pOKBtn->Enable();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCharacterMap::SetCharFont( const Font& rFont )
 {
-    // first get the underlying info in order to get font names
-    // like "Times New Roman;Times" resolved
+    
+    
     Font aTmp( GetFontMetric( rFont ) );
 
     if ( m_pFontLB->GetEntryPos( aTmp.GetName() ) == LISTBOX_ENTRY_NOTFOUND )
@@ -397,11 +397,11 @@ void SvxCharacterMap::SetCharFont( const Font& rFont )
     aFont = aTmp;
     FontSelectHdl(m_pFontLB);
 
-    // for compatibility reasons
+    
     ModalDialog::SetFont( aFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
 {
@@ -410,7 +410,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
     if ( aStr.isEmpty() )
     {
         sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-        // using the new UCS4 constructor
+        
         OUString aOUStr( &cChar, 1 );
         m_pShowText->SetText( aOUStr );
     }
@@ -430,7 +430,7 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 {
@@ -443,14 +443,14 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
     aFont.SetPitch( PITCH_DONTKNOW );
     aFont.SetFamily( FAMILY_DONTKNOW );
 
-    // notify children using this font
+    
     m_pShowSet->SetFont( aFont );
     m_pShowChar->SetFont( aFont );
     m_pShowText->SetFont( aFont );
 
-    // setup unicode subset listbar with font specific subsets,
-    // hide unicode subset listbar for symbol fonts
-    // TODO: get info from the Font once it provides it
+    
+    
+    
     delete pSubsetMap;
     pSubsetMap = NULL;
     m_pSubsetLB->Clear();
@@ -462,15 +462,15 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
         m_pShowSet->GetFontCharMap( aFontCharMap );
         pSubsetMap = new SubsetMap( &aFontCharMap );
 
-        // update subset listbox for new font's unicode subsets
-        // TODO: is it worth to improve the stupid linear search?
+        
+        
         bool bFirst = true;
         const Subset* s;
         while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
             sal_uInt16 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
             m_pSubsetLB->SetEntryData( nPos_, (void*)s );
-            // NOTE: subset must live at least as long as the selected font
+            
             if( bFirst )
                 m_pSubsetLB->SelectEntryPos( nPos_ );
             bFirst = false;
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
 {
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
 {
@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 {
@@ -524,7 +524,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
         if ( aText.getLength() != CHARMAP_MAXLEN )
         {
             sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-            // using the new UCS4 constructor
+            
             OUString aOUStr( &cChar, 1 );
             m_pShowText->SetText( aText + aOUStr );
         }
@@ -535,7 +535,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
 {
@@ -543,10 +543,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
     sal_Bool bSelect = (cChar > 0);
 
-    // show char sample
+    
     if ( bSelect )
     {
-        // using the new UCS4 constructor
+        
         aText = OUString( &cChar, 1 );
 
         const Subset* pSubset = NULL;
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
     m_pShowChar->SetText( aText );
     m_pShowChar->Update();
 
-    // show char code
+    
     if ( bSelect )
     {
         char aBuf[32];
@@ -574,11 +574,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
 {
-    // adjust subset selection
+    
     if( pSubsetMap )
     {
         sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, DeleteLastHdl)
 {

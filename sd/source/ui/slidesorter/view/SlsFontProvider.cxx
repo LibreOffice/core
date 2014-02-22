@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,8 +40,8 @@ FontProvider& FontProvider::Instance (void)
         ::osl::MutexGuard aGuard (aMutexFunctor());
         if (mpInstance == NULL)
         {
-            // Create an instance of the class and register it at the
-            // SdGlobalResourceContainer so that it is eventually released.
+            
+            
             FontProvider* pInstance = new FontProvider();
             SdGlobalResourceContainer::Instance().AddResource (
                 ::std::auto_ptr<SdGlobalResource>(pInstance));
@@ -54,8 +54,8 @@ FontProvider& FontProvider::Instance (void)
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    // We throw an exception when for some strange reason no instance of
-    // this class exists.
+    
+    
     if (mpInstance == NULL)
         throw ::com::sun::star::uno::RuntimeException("com.sun.star.document.IndexedPropertyValues",
             NULL);
@@ -89,6 +89,6 @@ void FontProvider::Invalidate (void)
 
 
 
-} } }  // end of namespace ::sd::slidesorter::view
+} } }  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

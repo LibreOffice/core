@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,9 +27,9 @@
 
 #include <itemholder1.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
@@ -56,23 +56,23 @@ class SvtPrintWarningOptions_Impl : public ConfigItem
 {
 public:
 
-//---------------------------------------------------------------------------------------------------------
-//  constructor / destructor
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
      SvtPrintWarningOptions_Impl();
     ~SvtPrintWarningOptions_Impl();
 
-//---------------------------------------------------------------------------------------------------------
-//  overloaded methods of baseclass
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
     virtual void Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 
-//---------------------------------------------------------------------------------------------------------
-//  public interface
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
     bool    IsPaperSize() const { return m_bPaperSize; }
     bool    IsPaperOrientation() const { return m_bPaperOrientation; }
@@ -86,17 +86,17 @@ public:
     void        SetTransparency( bool bState ) { m_bTransparency = bState; SetModified(); }
     void        SetModifyDocumentOnPrintingAllowed( bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
-//-------------------------------------------------------------------------------------------------------------
-//  private methods
-//-------------------------------------------------------------------------------------------------------------
+
+
+
 
 private:
 
     static Sequence< OUString > impl_GetPropertyNames();
 
-//-------------------------------------------------------------------------------------------------------------
-//  private member
-//-------------------------------------------------------------------------------------------------------------
+
+
+
 
 private:
 
@@ -107,9 +107,9 @@ private:
     bool    m_bModifyDocumentOnPrintingAllowed;
 };
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
     ConfigItem( ROOTNODE_START  ),
     m_bPaperSize( false ),
@@ -123,7 +123,7 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
 
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to our internal member.
+    
     sal_Int32 nPropertyCount = seqValues.getLength();
     sal_Int32 nProperty = 0;
 
@@ -171,18 +171,18 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
     }
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
 {
     if( IsModified() )
         Commit();
 }
 
-//*****************************************************************************************************************
-//  Commit
-//*****************************************************************************************************************
+
+
+
 void SvtPrintWarningOptions_Impl::Commit()
 {
     Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
@@ -220,12 +220,12 @@ void SvtPrintWarningOptions_Impl::Notify( const Sequence< OUString >&  )
 {
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
 {
-    // Build list of configuration key names.
+    
     const OUString pProperties[] =
     {
         PROPERTYNAME_PAPERSIZE,
@@ -235,30 +235,30 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_PRINTINGMODIFIESDOCUMENT
     };
 
-    // Initialize return sequence with these list ...
+    
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
 
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-//*****************************************************************************************************************
+
+
+
+
+
 SvtPrintWarningOptions_Impl*    SvtPrintWarningOptions::m_pDataContainer = NULL;
 sal_Int32                       SvtPrintWarningOptions::m_nRefCount = 0;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtPrintWarningOptions::SvtPrintWarningOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase ouer refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already!
+    
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtPrintWarningOptions_Impl();
@@ -266,17 +266,17 @@ SvtPrintWarningOptions::SvtPrintWarningOptions()
     }
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtPrintWarningOptions::~SvtPrintWarningOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease ouer refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
@@ -284,60 +284,60 @@ SvtPrintWarningOptions::~SvtPrintWarningOptions()
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 bool SvtPrintWarningOptions::IsPaperSize() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaperSize();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 bool SvtPrintWarningOptions::IsPaperOrientation() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaperOrientation();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 bool SvtPrintWarningOptions::IsTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsTransparency();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtPrintWarningOptions::SetPaperSize( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaperSize( bState );
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtPrintWarningOptions::SetPaperOrientation( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaperOrientation( bState );
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtPrintWarningOptions::SetTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetTransparency( bState );
 }
-// -----------------------------------------------------------------------------
+
 
 bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
 {
@@ -345,7 +345,7 @@ bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
     return m_pDataContainer->IsModifyDocumentOnPrintingAllowed();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( bool bState )
 {
@@ -358,9 +358,9 @@ namespace
     class thePrintWarningOptionsMutex : public rtl::Static<osl::Mutex, thePrintWarningOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 Mutex& SvtPrintWarningOptions::GetOwnStaticMutex()
 {
     return thePrintWarningOptionsMutex::get();

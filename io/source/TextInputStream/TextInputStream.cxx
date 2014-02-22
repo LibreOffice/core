@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -48,8 +48,8 @@ using namespace ::com::sun::star::registry;
 
 namespace io_TextInputStream
 {
-//===========================================================================
-// Implementation XTextInputStream
+
+
 
 typedef WeakImplHelper2< XTextInputStream2, XServiceInfo > TextInputStreamHelper;
 
@@ -60,14 +60,14 @@ class OTextInputStream : public TextInputStreamHelper
 {
     Reference< XInputStream > mxStream;
 
-    // Encoding
+    
     OUString mEncoding;
     sal_Bool mbEncodingInitialized;
     rtl_TextToUnicodeConverter  mConvText2Unicode;
     rtl_TextToUnicodeContext    mContextText2Unicode;
     Sequence<sal_Int8>          mSeqSource;
 
-    // Internal buffer for characters that are already converted successfully
+    
     sal_Unicode* mpBuffer;
     sal_Int32 mnBufferSize;
     sal_Int32 mnCharsInBuffer;
@@ -83,7 +83,7 @@ public:
     OTextInputStream();
     virtual ~OTextInputStream();
 
-    // Methods XTextInputStream
+    
     virtual OUString SAL_CALL readLine(  )
         throw(IOException, RuntimeException);
     virtual OUString SAL_CALL readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
@@ -92,7 +92,7 @@ public:
         throw(IOException, RuntimeException);
     virtual void SAL_CALL setEncoding( const OUString& Encoding ) throw(RuntimeException);
 
-    // Methods XInputStream
+    
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
     virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
@@ -104,13 +104,13 @@ public:
     virtual void SAL_CALL closeInput(  )
         throw(NotConnectedException, IOException, RuntimeException);
 
-    // Methods XActiveDataSink
+    
     virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream )
         throw(RuntimeException);
     virtual Reference< XInputStream > SAL_CALL getInputStream()
         throw(RuntimeException);
 
-    // Methods XServiceInfo
+    
         virtual OUString              SAL_CALL getImplementationName() throw();
         virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
         virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
@@ -145,8 +145,8 @@ void OTextInputStream::implResizeBuffer( void )
 }
 
 
-//===========================================================================
-// XTextInputStream
+
+
 
 OUString OTextInputStream::readLine(  )
     throw(IOException, RuntimeException)
@@ -190,7 +190,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         mpBuffer = new sal_Unicode[ mnBufferSize ];
     }
 
-    // Only for bFindLineEnd
+    
     sal_Unicode cLineEndChar1 = 0x0D;
     sal_Unicode cLineEndChar2 = 0x0A;
 
@@ -203,20 +203,20 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     const sal_Int32 nDelimCount = Delimiters.getLength();
     while( !bFound )
     {
-        // Still characters available?
+        
         if( nBufferReadPos == mnCharsInBuffer )
         {
-            // Already reached EOF? Then we can't read any more
+            
             if( mbReachedEOF )
                 break;
 
-            // No, so read new characters
+            
             if( !implReadNext() )
                 break;
         }
 
-        // Now there should be characters available
-        // (otherwise the loop should have been breaked before)
+        
+        
         sal_Unicode c = mpBuffer[ nBufferReadPos++ ];
 
         if( bFindLineEnd )
@@ -227,7 +227,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
                 nCopyLen = nBufferReadPos - 2;
                 if( c == cLineEndChar1 || c == cLineEndChar2 )
                 {
-                    // Same line end char -> new line break
+                    
                     if( c == cFirstLineEndChar )
                     {
                         nBufferReadPos--;
@@ -235,7 +235,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
                 }
                 else
                 {
-                    // No second line end char
+                    
                     nBufferReadPos--;
                 }
             }
@@ -260,15 +260,15 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         }
     }
 
-    // Nothing found? Return all
+    
     if( !nCopyLen && !bFound && mbReachedEOF )
         nCopyLen = nBufferReadPos;
 
-    // Create string
+    
     if( nCopyLen )
         aRetStr = OUString( mpBuffer, nCopyLen );
 
-    // Copy rest of buffer
+    
     memmove( mpBuffer, mpBuffer + nBufferReadPos,
         (mnCharsInBuffer - nBufferReadPos) * sizeof( sal_Unicode ) );
     mnCharsInBuffer -= nBufferReadPos;
@@ -293,7 +293,7 @@ sal_Int32 OTextInputStream::implReadNext()
         if( nRead < nBytesToRead )
             mbReachedEOF = sal_True;
 
-        // Try to convert
+        
         sal_uInt32 uiInfo;
         sal_Size nSrcCvtBytes = 0;
         sal_Size nTargetCount = 0;
@@ -302,7 +302,7 @@ sal_Int32 OTextInputStream::implReadNext()
         {
             const sal_Int8 *pbSource = mSeqSource.getConstArray();
 
-            // All invalid characters are transformed to the unicode undefined char
+            
             nTargetCount += rtl_convertTextToUnicode(
                                 mConvText2Unicode,
                                 mContextText2Unicode,
@@ -326,7 +326,7 @@ sal_Int32 OTextInputStream::implReadNext()
 
             if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL )
             {
-                // read next byte
+                
                 static Sequence< sal_Int8 > aOneByteSeq( 1 );
                 nRead = mxStream->readSomeBytes( aOneByteSeq, 1 );
                 if( nRead == 0 )
@@ -357,7 +357,7 @@ sal_Int32 OTextInputStream::implReadNext()
     catch( NotConnectedException& )
     {
         throw IOException();
-        //throw IOException( L"OTextInputStream::implReadString failed" );
+        
     }
     catch( BufferSizeExceededException& )
     {
@@ -379,8 +379,8 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
     mEncoding = Encoding;
 }
 
-//===========================================================================
-// XInputStream
+
+
 
 sal_Int32 OTextInputStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
@@ -413,8 +413,8 @@ void OTextInputStream::closeInput(  )
 }
 
 
-//===========================================================================
-// XActiveDataSink
+
+
 
 void OTextInputStream::setInputStream( const Reference< XInputStream >& aStream )
     throw(RuntimeException)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,44 +28,44 @@ using namespace ::com::sun::star::lang;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-// not used
-//static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
+
+
 
 Calendar_jewish::Calendar_jewish()
 {
     cCalendar = "com.sun.star.i18n.Calendar_jewish";
 }
 
-// The following C++ code is translated from the Lisp code in
-// ``Calendrical Calculations'' by Nachum Dershowitz and Edward M. Reingold,
-// Software---Practice & Experience, vol. 20, no. 9 (September, 1990),
-// pp. 899--928.
 
-// This code is in the public domain, but any use of it
-// should acknowledge its source.
-// http://www.ntu.edu.sg/home/ayxyan/date1.txt
 
-// Hebrew dates
 
-const int HebrewEpoch = -1373429; // Absolute date of start of Hebrew calendar
 
-// True if year is an Hebrew leap year
+
+
+
+
+
+
+
+const int HebrewEpoch = -1373429; 
+
+
 sal_Bool HebrewLeapYear(sal_Int32 year) {
     return ((((7 * year) + 1) % 19) < 7);
 }
 
-// Last month of Hebrew year.
+
 sal_Int32 LastMonthOfHebrewYear(sal_Int32 year) {
     return  (HebrewLeapYear(year)) ? 13 : 12;
 }
 
-// Number of days elapsed from the Sunday prior to the start of the
-// Hebrew calendar to the mean conjunction of Tishri of Hebrew year.
+
+
 sal_Int32 HebrewCalendarElapsedDays(sal_Int32 year) {
     sal_Int32 MonthsElapsed =
-        (235 * ((year - 1) / 19))           // Months in complete cycles so far.
-        + (12 * ((year - 1) % 19))          // Regular months in this cycle.
-        + (7 * ((year - 1) % 19) + 1) / 19; // Leap months this cycle
+        (235 * ((year - 1) / 19))           
+        + (12 * ((year - 1) % 19))          
+        + (7 * ((year - 1) % 19) + 1) / 19; 
     sal_Int32 PartsElapsed = 204 + 793 * (MonthsElapsed % 1080);
     int HoursElapsed =
         5 + 12 * MonthsElapsed + 793 * (MonthsElapsed  / 1080)
@@ -74,44 +74,44 @@ sal_Int32 HebrewCalendarElapsedDays(sal_Int32 year) {
     sal_Int32 ConjunctionParts = 1080 * (HoursElapsed % 24) + PartsElapsed % 1080;
     sal_Int32 AlternativeDay;
 
-    if ((ConjunctionParts >= 19440)        // If new moon is at or after midday,
-          || (((ConjunctionDay % 7) == 2)    // ...or is on a Tuesday...
-          && (ConjunctionParts >= 9924)  // at 9 hours, 204 parts or later...
-          && !(HebrewLeapYear(year)))   // ...of a common year,
-          || (((ConjunctionDay % 7) == 1)    // ...or is on a Monday at...
-          && (ConjunctionParts >= 16789) // 15 hours, 589 parts or later...
-          && (HebrewLeapYear(year - 1))))// at the end of a leap year
-        // Then postpone Rosh HaShanah one day
+    if ((ConjunctionParts >= 19440)        
+          || (((ConjunctionDay % 7) == 2)    
+          && (ConjunctionParts >= 9924)  
+          && !(HebrewLeapYear(year)))   
+          || (((ConjunctionDay % 7) == 1)    
+          && (ConjunctionParts >= 16789) 
+          && (HebrewLeapYear(year - 1))))
+        
         AlternativeDay = ConjunctionDay + 1;
     else
         AlternativeDay = ConjunctionDay;
 
-    if (((AlternativeDay % 7) == 0)// If Rosh HaShanah would occur on Sunday,
-          || ((AlternativeDay % 7) == 3)     // or Wednesday,
-          || ((AlternativeDay % 7) == 5))    // or Friday
-        // Then postpone it one (more) day
+    if (((AlternativeDay % 7) == 0)
+          || ((AlternativeDay % 7) == 3)     
+          || ((AlternativeDay % 7) == 5))    
+        
         return (1+ AlternativeDay);
     else
         return AlternativeDay;
 }
 
-// Number of days in Hebrew year.
+
 sal_Int32 DaysInHebrewYear(sal_Int32 year) {
     return ((HebrewCalendarElapsedDays(year + 1)) -
           (HebrewCalendarElapsedDays(year)));
 }
 
-// True if Heshvan is long in Hebrew year.
+
 sal_Bool LongHeshvan(sal_Int32 year) {
     return ((DaysInHebrewYear(year) % 10) == 5);
 }
 
-// True if Kislev is short in Hebrew year.
+
 sal_Bool ShortKislev(sal_Int32 year) {
     return ((DaysInHebrewYear(year) % 10) == 3);
 }
 
-// Last day of month in Hebrew year.
+
 sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
     if ((month == 2)
         || (month == 4)
@@ -129,33 +129,33 @@ sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
 
 class HebrewDate {
 private:
-    sal_Int32 year;   // 1...
-    sal_Int32 month;  // 1..LastMonthOfHebrewYear(year)
-    sal_Int32 day;    // 1..LastDayOfHebrewMonth(month, year)
+    sal_Int32 year;   
+    sal_Int32 month;  
+    sal_Int32 day;    
 
 public:
     HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) { month = m; day = d; year = y; }
 
-    HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
-    year = (d + HebrewEpoch) / 366; // Approximation from below.
-    // Search forward for year from the approximation.
+    HebrewDate(sal_Int32 d) { 
+    year = (d + HebrewEpoch) / 366; 
+    
     while (d >= HebrewDate(7,1,year + 1))
       year++;
-    // Search forward for month from either Tishri or Nisan.
+    
     if (d < HebrewDate(1, 1, year))
-      month = 7;  //  Start at Tishri
+      month = 7;  
     else
-      month = 1;  //  Start at Nisan
+      month = 1;  
     while (d > HebrewDate(month, (LastDayOfHebrewMonth(month,year)), year))
       month++;
-    // Calculate the day by subtraction.
+    
     day = d - HebrewDate(month, 1, year) + 1;
     }
 
-    operator int() { // Computes the absolute date of Hebrew date.
-    sal_Int32 DayInYear = day; // Days so far this month.
-    if (month < 7) { // Before Tishri, so add days in prior months
-             // this year before and after Nisan.
+    operator int() { 
+    sal_Int32 DayInYear = day; 
+    if (month < 7) { 
+             
       sal_Int32 m = 7;
       while (m <= (LastMonthOfHebrewYear(year))) {
         DayInYear = DayInYear + LastDayOfHebrewMonth(m, year);
@@ -167,7 +167,7 @@ public:
         m++;
       }
     }
-    else { // Add days in prior months this year
+    else { 
       sal_Int32 m = 7;
       while (m < month) {
         DayInYear = DayInYear + LastDayOfHebrewMonth(m, year);
@@ -175,8 +175,8 @@ public:
       }
     }
     return (DayInYear +
-        (HebrewCalendarElapsedDays(year)// Days in prior years.
-         + HebrewEpoch));         // Days elapsed before absolute date 1.
+        (HebrewCalendarElapsedDays(year)
+         + HebrewEpoch));         
     }
 
     sal_Int32 GetMonth() const { return month; }
@@ -185,10 +185,10 @@ public:
 
 };
 
-//  Gregorian dates
+
 
 int LastDayOfGregorianMonth(int month, int year) {
-// Compute the last date of the month for the Gregorian calendar.
+
 
     switch (month) {
     case 2:
@@ -207,35 +207,35 @@ int LastDayOfGregorianMonth(int month, int year) {
 
 class GregorianDate {
 private:
-    int year;   // 1...
-    int month;  // 1 == January, ..., 12 == December
-    int day;    // 1..LastDayOfGregorianMonth(month, year)
+    int year;   
+    int month;  
+    int day;    
 
 public:
     GregorianDate(int m, int d, int y) { month = m; day = d; year = y; }
 
-    GregorianDate(int d) { // Computes the Gregorian date from the absolute date.
-        // Search forward year by year from approximate year
+    GregorianDate(int d) { 
+        
         year = d/366;
         while (d >= GregorianDate(1,1,year+1))
           year++;
-        // Search forward month by month from January
+        
         month = 1;
         while (d > GregorianDate(month, LastDayOfGregorianMonth(month,year), year))
           month++;
         day = d - GregorianDate(month,1,year) + 1;
     }
 
-    operator int() { // Computes the absolute date from the Gregorian date.
-        int N = day;           // days this month
-        for (int m = month - 1;  m > 0; m--) // days in prior months this year
+    operator int() { 
+        int N = day;           
+        for (int m = month - 1;  m > 0; m--) 
           N = N + LastDayOfGregorianMonth(m, year);
         return
-          (N                    // days this year
-           + 365 * (year - 1)   // days in previous years ignoring leap days
-           + (year - 1)/4       // Julian leap days before this year...
-           - (year - 1)/100     // ...minus prior century years...
-           + (year - 1)/400);   // ...plus prior years divisible by 400
+          (N                    
+           + 365 * (year - 1)   
+           + (year - 1)/4       
+           - (year - 1)/100     
+           + (year - 1)/400);   
     }
 
     int GetMonth() const { return month; }
@@ -244,7 +244,7 @@ public:
 
 };
 
-// map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
+
 void Calendar_jewish::mapFromGregorian() throw(RuntimeException)
 {
     int y = fieldValue[CalendarFieldIndex::YEAR];
@@ -260,7 +260,7 @@ void Calendar_jewish::mapFromGregorian() throw(RuntimeException)
 }
 
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
-// map field value from other calendar to gregorian calendar, it should be implemented.
+
 void Calendar_jewish::mapToGregorian() throw(RuntimeException)
 {
     if (fieldSet & FIELDS) {
@@ -278,15 +278,15 @@ void Calendar_jewish::mapToGregorian() throw(RuntimeException)
     }
 }
 
-// Methods in XExtendedCalendar
+
 OUString SAL_CALL
 Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
     throw (RuntimeException)
 {
-    nNativeNumberMode = NativeNumberMode::NATNUM2;  // make Hebrew number for Jewish calendar
+    nNativeNumberMode = NativeNumberMode::NATNUM2;  
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR) {
-        sal_Int32 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
+        sal_Int32 value = getValue(CalendarFieldIndex::YEAR) % 1000; 
         return aNatNum.getNativeNumberString(OUString::number(value), aLocale, nNativeNumberMode );
     }
     else

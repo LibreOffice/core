@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,7 +32,7 @@
 #include "impimagetree.hxx"
 #include "window.h"
 
-// =======================================================================
+
 
 #define FIXEDLINE_TEXT_BORDER    4
 
@@ -51,7 +51,7 @@
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                  WB_SCALE)
 
-// =======================================================================
+
 
 static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
                           const Size& rObjSize, const Size& rWinSize )
@@ -85,7 +85,7 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     return aPos;
 }
 
-// =======================================================================
+
 
 void FixedText::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -94,7 +94,7 @@ void FixedText::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits FixedText::ImplInitStyle( WinBits nStyle )
 {
@@ -103,20 +103,20 @@ WinBits FixedText::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------
+
 
 const Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoFont() : _rStyle.GetLabelFont();
 }
 
-// -----------------------------------------------------------------
+
 const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoTextColor() : _rStyle.GetLabelTextColor();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )
@@ -147,7 +147,7 @@ void FixedText::ImplInitSettings( bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedText::FixedText( Window* pParent, WinBits nStyle )
     : Control(WINDOW_FIXEDTEXT)
@@ -158,7 +158,7 @@ FixedText::FixedText( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedText::FixedText( Window* pParent, const ResId& rResId )
     : Control(WINDOW_FIXEDTEXT)
@@ -175,7 +175,7 @@ FixedText::FixedText( Window* pParent, const ResId& rResId )
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
@@ -208,7 +208,7 @@ sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
     return nTextStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                           const Point& rPos, const Size& rSize,
@@ -256,14 +256,14 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       sal_uLong nFlags )
@@ -303,7 +303,7 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::Resize()
 {
@@ -311,7 +311,7 @@ void FixedText::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::StateChanged( StateChangedType nType )
 {
@@ -352,7 +352,7 @@ void FixedText::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -368,7 +368,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth)
 {
@@ -388,7 +388,7 @@ Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
     if ( pControl->GetStyle() & WB_EXTRAOFFSET )
         aSize.Width() += 2;
 
-    // GetTextRect cannot take an empty string
+    
     if ( aSize.Width() < 0 )
         aSize.Width() = 0;
     if ( aSize.Height() <= 0 )
@@ -401,7 +401,7 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
 {
     return CalcWindowSize( CalcMinimumTextSize ( this, nMaxWidth ) );
 }
-// -----------------------------------------------------------------------
+
 
 Size FixedText::GetOptimalSize() const
 {
@@ -425,7 +425,7 @@ Size FixedText::GetOptimalSize() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedText::FillLayoutData() const
 {
@@ -504,26 +504,26 @@ FixedText::~FixedText()
 SelectableFixedText::SelectableFixedText(Window* pParent, WinBits nStyle)
     : Edit(pParent, nStyle)
 {
-    // no border
+    
     SetBorderStyle( WINDOW_BORDER_NOBORDER );
-    // read-only
+    
     SetReadOnly();
-    // make it transparent
+    
     SetControlBackground();
     SetBackground();
     SetPaintTransparent( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SelectableFixedText::LoseFocus()
 {
     Edit::LoseFocus();
-    // clear cursor
+    
     Invalidate();
 }
 
-// =======================================================================
+
 
 void FixedLine::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -532,7 +532,7 @@ void FixedLine::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits FixedLine::ImplInitStyle( WinBits nStyle )
 {
@@ -541,20 +541,20 @@ WinBits FixedLine::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------
+
 
 const Font& FixedLine::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupFont();
 }
 
-// -----------------------------------------------------------------
+
 const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupTextColor();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )
@@ -585,7 +585,7 @@ void FixedLine::ImplInitSettings( bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::ImplDraw( bool bLayout )
 {
@@ -660,7 +660,7 @@ void FixedLine::ImplDraw( bool bLayout )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedLine::FixedLine( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDLINE )
@@ -669,7 +669,7 @@ FixedLine::FixedLine( Window* pParent, WinBits nStyle ) :
     SetSizePixel( Size( 2, 2 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDLINE )
@@ -683,7 +683,7 @@ FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void  FixedLine::FillLayoutData() const
 {
@@ -692,20 +692,20 @@ void  FixedLine::FillLayoutData() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::Paint( const Rectangle& )
 {
     ImplDraw();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::Resize()
 {
@@ -713,7 +713,7 @@ void FixedLine::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::StateChanged( StateChangedType nType )
 {
@@ -752,7 +752,7 @@ void FixedLine::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -768,14 +768,14 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size FixedLine::GetOptimalSize() const
 {
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
 }
 
-// =======================================================================
+
 
 void FixedBitmap::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -784,7 +784,7 @@ void FixedBitmap::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
 {
@@ -793,7 +793,7 @@ WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::ImplInitSettings()
 {
@@ -818,7 +818,7 @@ void FixedBitmap::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::ImplLoadRes( const ResId& rResId )
 {
@@ -833,7 +833,7 @@ void FixedBitmap::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedBitmap::FixedBitmap( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDBITMAP )
@@ -841,7 +841,7 @@ FixedBitmap::FixedBitmap( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedBitmap::FixedBitmap( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDBITMAP )
@@ -855,20 +855,20 @@ FixedBitmap::FixedBitmap( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedBitmap::~FixedBitmap()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
     Bitmap* pBitmap = &maBitmap;
 
-    // do we have a Bitmap?
+    
     if ( !(!(*pBitmap)) )
     {
         if ( GetStyle() & WB_SCALE )
@@ -881,14 +881,14 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                         sal_uLong nFlags )
@@ -900,7 +900,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     pDev->Push();
     pDev->SetMapMode();
 
-    // Border
+    
     if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
     {
         DecorationView aDecoView( pDev );
@@ -912,7 +912,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::Resize()
 {
@@ -920,7 +920,7 @@ void FixedBitmap::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::StateChanged( StateChangedType nType )
 {
@@ -946,7 +946,7 @@ void FixedBitmap::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -960,7 +960,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 {
@@ -969,7 +969,7 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
     queue_resize();
 }
 
-// =======================================================================
+
 
 void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -979,7 +979,7 @@ void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 {
@@ -988,7 +988,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::ImplInitSettings()
 {
@@ -1013,7 +1013,7 @@ void FixedImage::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::ImplLoadRes( const ResId& rResId )
 {
@@ -1028,7 +1028,7 @@ void FixedImage::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedImage::FixedImage( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDIMAGE )
@@ -1036,7 +1036,7 @@ FixedImage::FixedImage( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedImage::FixedImage( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDIMAGE )
@@ -1050,13 +1050,13 @@ FixedImage::FixedImage( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedImage::~FixedImage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                            const Point& rPos, const Size& rSize )
@@ -1070,7 +1070,7 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
     Image *pImage = &maImage;
 
-    // do we have an image?
+    
     if ( !(!(*pImage)) )
     {
         if ( GetStyle() & WB_SCALE )
@@ -1088,27 +1088,27 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     mbInUserDraw = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size FixedImage::GetOptimalSize() const
 {
     return maImage.GetSizePixel();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                        sal_uLong nFlags )
@@ -1120,7 +1120,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Push();
     pDev->SetMapMode();
 
-    // Border
+    
     if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
     {
         ImplDrawFrame( pDev, aRect );
@@ -1131,7 +1131,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::Resize()
 {
@@ -1139,7 +1139,7 @@ void FixedImage::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::StateChanged( StateChangedType nType )
 {
@@ -1166,7 +1166,7 @@ void FixedImage::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1180,7 +1180,7 @@ void FixedImage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FixedImage::SetImage( const Image& rImage )
 {
@@ -1192,7 +1192,7 @@ void FixedImage::SetImage( const Image& rImage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FixedImage::SetModeImage( const Image& rImage )
 {
@@ -1200,7 +1200,7 @@ bool FixedImage::SetModeImage( const Image& rImage )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 const Image& FixedImage::GetModeImage( ) const
 {

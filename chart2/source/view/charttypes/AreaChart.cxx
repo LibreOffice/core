@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AreaChart.hxx"
@@ -83,9 +83,9 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
     }
     catch( uno::Exception& e )
     {
-        //the above properties are not supported by all charttypes supported by this class (e.g. area or net chart)
-        //in that cases this exception is ok
-        e.Context.is();//to have debug information without compilation warnings
+        
+        
+        e.Context.is();
     }
 }
 
@@ -107,7 +107,7 @@ bool AreaChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
 
 bool AreaChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
 {
-    // no separate stacking in all types of line/area charts
+    
     return false;
 }
 
@@ -168,7 +168,7 @@ void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlo
     }
     if( m_nDimension == 3 && !m_bCategoryXAxis )
     {
-        //3D xy always deep
+        
         OSL_ENSURE( zSlot==-1,"3D xy charts should be deep stacked in model also" );
         zSlot=-1;
         xSlot=0;
@@ -214,7 +214,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
         double* pTargetY = pOuterTargetY->getArray();
         double* pTargetZ = pOuterTargetZ->getArray();
 
-        //copy first point
+        
         *pTargetX=*pSourceX++;
         *pTargetY=*pSourceY++;
         *pTargetZ=*pSourceZ++;
@@ -234,7 +234,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
             pSourceX++; pSourceY++; pSourceZ++;
         }
 
-        //free unused space
+        
         if( nTargetPointCount<nPointCount )
         {
             pOuterTargetX->realloc(nTargetPointCount);
@@ -247,7 +247,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
         pOuterSourceZ->realloc(0);
     }
 
-    //free space
+    
     rPolyPoly.SequenceX.realloc(nPolyCount);
     rPolyPoly.SequenceY.realloc(nPolyCount);
     rPolyPoly.SequenceZ.realloc(nPolyCount);
@@ -273,9 +273,9 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
         if( aStartPoly.SequenceX[nOuter].getLength() <= 1 )
-            continue; //we need at least two points
+            continue; 
 
-        sal_uInt32 nMaxIndexPoints = aStartPoly.SequenceX[nOuter].getLength()-1; // is >1
+        sal_uInt32 nMaxIndexPoints = aStartPoly.SequenceX[nOuter].getLength()-1; 
         sal_uInt32 nNewIndexPoints = 0;
         if ( CurveStyle_STEP_START==eCurveStyle || CurveStyle_STEP_END==eCurveStyle)
             nNewIndexPoints = nMaxIndexPoints * 2 + 1;
@@ -308,11 +308,11 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                                    |
                              O-----+
                      */
-                    // create the intermediate point
+                    
                     pNewX[1+oi*2] = pOldX[oi+1];
                     pNewY[1+oi*2] = pOldY[oi];
                     pNewZ[1+oi*2] = pOldZ[oi];
-                    // and now the normal one
+                    
                     pNewX[1+oi*2+1] = pOldX[oi+1];
                     pNewY[1+oi*2+1] = pOldY[oi+1];
                     pNewZ[1+oi*2+1] = pOldZ[oi+1];
@@ -324,11 +324,11 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                             |
                             O
                      */
-                    // create the intermediate point
+                    
                     pNewX[1+oi*2] = pOldX[oi];
                     pNewY[1+oi*2] = pOldY[oi+1];
                     pNewZ[1+oi*2] = pOldZ[oi];
-                    // and now the normal one
+                    
                     pNewX[1+oi*2+1] = pOldX[oi+1];
                     pNewY[1+oi*2+1] = pOldY[oi+1];
                     pNewZ[1+oi*2+1] = pOldZ[oi+1];
@@ -340,15 +340,15 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                                 |
                              O--+
                      */
-                    // create the first intermediate point
+                    
                     pNewX[1+oi*3] = (pOldX[oi]+pOldX[oi+1])/2;
                     pNewY[1+oi*3] = pOldY[oi];
                     pNewZ[1+oi*3] = pOldZ[oi];
-                    // create the second intermediate point
+                    
                     pNewX[1+oi*3+1] = (pOldX[oi]+pOldX[oi+1])/2;
                     pNewY[1+oi*3+1] = pOldY[oi+1];
                     pNewZ[1+oi*3+1] = pOldZ[oi];
-                    // and now the normal one
+                    
                     pNewX[1+oi*3+2] = pOldX[oi+1];
                     pNewY[1+oi*3+2] = pOldY[oi+1];
                     pNewZ[1+oi*3+2] = pOldZ[oi+1];
@@ -360,21 +360,21 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                              |
                              O
                      */
-                    // create the first intermediate point
+                    
                     pNewX[1+oi*3] = pOldX[oi];
                     pNewY[1+oi*3] = (pOldY[oi]+pOldY[oi+1])/2;
                     pNewZ[1+oi*3] = pOldZ[oi];
-                    // create the second intermediate point
+                    
                     pNewX[1+oi*3+1] = pOldX[oi+1];
                     pNewY[1+oi*3+1] = (pOldY[oi]+pOldY[oi+1])/2;
                     pNewZ[1+oi*3+1] = pOldZ[oi];
-                    // and now the normal one
+                    
                     pNewX[1+oi*3+2] = pOldX[oi+1];
                     pNewY[1+oi*3+2] = pOldY[oi+1];
                     pNewZ[1+oi*3+2] = pOldZ[oi+1];
                     break;
                 default:
-                    // this should never be executed
+                    
                     OSL_FAIL("Unknown curvestyle in AreaChart::create_stepped_line");
             }
         }
@@ -388,7 +388,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper )
 {
-    //return true if a line was created successfully
+    
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
 
     drawing::PolyPolygonShape3D aPoly;
@@ -418,7 +418,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         }
     }
     else
-    { // default to creating a straight line
+    { 
         SAL_WARN_IF(CurveStyle_LINES != m_eCurveStyle, "chart2.areachart", "Unknown curve style");
         Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
@@ -426,10 +426,10 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
         return false;
 
-    //transformation 3) -> 4)
+    
     pPosHelper->transformScaledLogicToScene( aPoly );
 
-    //create line:
+    
     uno::Reference< drawing::XShape > xShape(NULL);
     if(m_nDimension==3)
     {
@@ -457,14 +457,14 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
             }
         }
     }
-    else //m_nDimension!=3
+    else 
     {
         xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );
         this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
-        //because of this name this line will be used for marking
+        
         m_pShapeFactory->setShapeName(xShape, "MarkHandles");
     }
     return true;
@@ -475,28 +475,28 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pPreviousSeriesPoly
                 , PlottingPositionHelper* pPosHelper )
 {
-    //return true if an area was created successfully
+    
 
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
     double zValue = pSeries->m_fLogicZPos;
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
-    //add second part to the polygon (grounding points or previous series points)
+    
     if(!pPreviousSeriesPoly)
     {
         double fMinX = pSeries->m_fLogicMinX;
         double fMaxX = pSeries->m_fLogicMaxX;
-        double fY = pPosHelper->getBaseValueY();//logic grounding
+        double fY = pPosHelper->getBaseValueY();
         if( m_nDimension==3 )
             fY = pPosHelper->getLogicMinY();
 
-        //clip to scale
+        
         if(fMaxX<pPosHelper->getLogicMinX() || fMinX>pPosHelper->getLogicMaxX())
-            return false;//no visible shape needed
+            return false;
         pPosHelper->clipLogicValues( &fMinX, &fY, 0 );
         pPosHelper->clipLogicValues( &fMaxX, 0, 0 );
 
-        //apply scaling
+        
         {
             pPosHelper->doLogicScaling( &fMinX, &fY, &zValue );
             pPosHelper->doLogicScaling( &fMaxX, 0, 0 );
@@ -511,28 +511,28 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     }
     AbstractShapeFactory::closePolygon(aPoly);
 
-    //apply clipping
+    
     {
         drawing::PolyPolygonShape3D aClippedPoly;
         Clipping::clipPolygonAtRectangle( aPoly, pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
-        AbstractShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
+        AbstractShapeFactory::closePolygon(aClippedPoly); 
         aPoly = aClippedPoly;
     }
 
     if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
         return false;
 
-    //transformation 3) -> 4)
+    
     pPosHelper->transformScaledLogicToScene( aPoly );
 
-    //create area:
+    
     uno::Reference< drawing::XShape > xShape(NULL);
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
                 , aPoly, this->getTransformedDepth() );
     }
-    else //m_nDimension!=3
+    else 
     {
         xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
@@ -540,16 +540,16 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
-    //because of this name this line will be used for marking
+    
     m_pShapeFactory->setShapeName(xShape, "MarkHandles");
     return true;
 }
 
 void AreaChart::impl_createSeriesShapes()
 {
-    //the polygon shapes for each series need to be created before
+    
 
-    //iterate through all series again to create the series shapes
+    
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
     for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
@@ -564,10 +564,10 @@ void AreaChart::impl_createSeriesShapes()
             ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
             const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
-            std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
+            std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;
             drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
 
-            //iterate through all series
+            
             for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
@@ -591,9 +591,9 @@ void AreaChart::impl_createSeriesShapes()
                         continue;
                 }
                 aPreviousSeriesPolyMap[nAttachedAxisIndex] = pSeriesPoly;
-            }//next series in x slot (next y slot)
-        }//next x slot
-    }//next z slot
+            }
+        }
+    }
 }
 
 namespace
@@ -621,9 +621,9 @@ void lcl_reorderSeries( ::std::vector< ::std::vector< VDataSeriesGroup > >&  rZS
     rZSlots = aRet;
 }
 
-}//anonymous namespace
+}
 
-//better performance for big data
+
 struct FormerPoint
 {
     FormerPoint( double fX, double fY, double fZ )
@@ -643,7 +643,7 @@ struct FormerPoint
 
 void AreaChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if( m_aZSlots.begin() == m_aZSlots.end() ) 
         return;
 
     if( m_nDimension == 2 && ( m_bArea || !m_bCategoryXAxis ) )
@@ -653,11 +653,11 @@ void AreaChart::createShapes()
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
-    //the text labels should be always on top of the other series shapes
-    //for area chart the error bars should be always on top of the other series shapes
+    
+    
 
-    //therefore create an own group for the texts and the error bars to move them to front
-    //(because the text group is created after the series group the texts are displayed on top)
+    
+    
     m_xSeriesTarget   = createGroupShape( m_xLogicTarget,OUString() );
     if( m_bArea )
         m_xErrorBarTarget = createGroupShape( m_xLogicTarget,OUString() );
@@ -666,17 +666,17 @@ void AreaChart::createShapes()
     m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
     m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
 
-    //check necessary here that different Y axis can not be stacked in the same group? ... hm?
+    
 
-    //update/create information for current group
-    double fLogicZ        = 1.0;//as defined
+    
+    double fLogicZ        = 1.0;
 
-    sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
+    sal_Int32 nStartIndex = 0; 
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     if(nEndIndex<=0)
         nEndIndex=1;
 
-    //better performance for big data
+    
     std::map< VDataSeries*, FormerPoint > aSeriesFormerPointMap;
     m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
@@ -688,13 +688,13 @@ void AreaChart::createShapes()
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 
-    std::vector<std::map< sal_Int32, double > > aLogicYSumMapByX(nEndIndex);//one for each different nAttachedAxisIndex
+    std::vector<std::map< sal_Int32, double > > aLogicYSumMapByX(nEndIndex);
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
 
-        //iterate through all x slots in this category to get 100percent sum
+        
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
@@ -736,16 +736,16 @@ void AreaChart::createShapes()
         ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
         ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-        //for the area chart there should be at most one x slot (no side by side stacking available)
-        //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
+        
+        
         for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
         {
             const std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
             std::vector<VDataSeries*>::const_iterator aSeriesIter = rSeriesList.begin();
             const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
 
-            std::vector<std::map< sal_Int32, double > > aLogicYForNextSeriesMapByX(nEndIndex); //one for each different nAttachedAxisIndex
-            //iterate through all series
+            std::vector<std::map< sal_Int32, double > > aLogicYForNextSeriesMapByX(nEndIndex); 
+            
             for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
             {
                 VDataSeries* pSeries( *aSeriesIter );
@@ -773,7 +773,7 @@ void AreaChart::createShapes()
                     if( m_bArea && (rSeriesList.size() == 1) && (nIndex >= (*aSeriesIter)->getTotalPointCount()) )
                         continue;
 
-                    //collect data point information (logic coordinates, style ):
+                    
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
                     if (bDateCategory)
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
@@ -799,7 +799,7 @@ void AreaChart::createShapes()
                             if( 0<= rIndex && rIndex < rPolygon.SequenceX.getLength() )
                             {
                                 if( rPolygon.SequenceX[ rIndex ].getLength() )
-                                    rIndex++; //start a new polygon for the next point if the current poly is not empty
+                                    rIndex++; 
                             }
                         }
                         continue;
@@ -816,8 +816,8 @@ void AreaChart::createShapes()
 
                     bool bIsVisible = pPosHelper->isLogicVisible( fLogicX, fLogicY, fLogicZ );
 
-                    //remind minimal and maximal x values for area 'grounding' points
-                    //only for filled area
+                    
+                    
                     {
                         double& rfMinX = (*aSeriesIter)->m_fLogicMinX;
                         if(!nIndex||fLogicX<rfMinX)
@@ -831,10 +831,10 @@ void AreaChart::createShapes()
                     drawing::Position3D aScaledLogicPosition(aUnscaledLogicPosition);
                     pPosHelper->doLogicScaling( aScaledLogicPosition );
 
-                    //transformation 3) -> 4)
+                    
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
-                    //better performance for big data
+                    
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
@@ -849,15 +849,15 @@ void AreaChart::createShapes()
                     aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
                     //
 
-                    //store point information for series polygon
-                    //for area and/or line (symbols only do not need this)
+                    
+                    
                     if( isValidPosition(aScaledLogicPosition) )
                     {
                         AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
                     }
 
-                    //create a single datapoint if point is visible
-                    //apply clipping:
+                    
+                    
                     if( !bIsVisible )
                         continue;
 
@@ -891,7 +891,7 @@ void AreaChart::createShapes()
                             !bCreateXErrorBar && !pSeries->getDataPointLabelIfLabel(nIndex) )
                         continue;
 
-                    //create a group shape for this point and add to the series shape:
+                    
                     OUString aPointCID = ObjectIdentifier::createPointCID(
                             (*aSeriesIter)->getPointCID_Stub(), nIndex );
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
@@ -902,7 +902,7 @@ void AreaChart::createShapes()
                     {
                         nCreatedPoints++;
 
-                        //create data point
+                        
                         drawing::Direction3D aSymbolSize(0,0,0);
                         if( bCreateSymbol )
                         {
@@ -931,18 +931,18 @@ void AreaChart::createShapes()
                                                 , aScenePosition , aSymbolSize
                                                 , pSymbolProperties->Graphic );
                                     }
-                                    //@todo other symbol styles
+                                    
                                 }
                             }
                         }
-                        //create error bars
+                        
                         if (bCreateXErrorBar)
                             createErrorBar_X( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
 
                         if (bCreateYErrorBar)
                             createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
 
-                        //create data point label
+                        
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
@@ -972,7 +972,7 @@ void AreaChart::createShapes()
                                     break;
                                 case ::com::sun::star::chart::DataLabelPlacement::CENTER:
                                     eAlignment = LABEL_ALIGN_CENTER;
-                                    //todo implement this different for area charts
+                                    
                                     break;
                                 default:
                                     OSL_FAIL("this label alignment is not implemented yet");
@@ -981,8 +981,8 @@ void AreaChart::createShapes()
                                     break;
                             }
 
-                            awt::Point aScreenPosition2D;//get the screen position for the labels
-                            sal_Int32 nOffset = 100; //todo maybe calculate this font height dependent
+                            awt::Point aScreenPosition2D;
+                            sal_Int32 nOffset = 100; 
                             {
                                 if(LABEL_ALIGN_CENTER==eAlignment || m_nDimension == 3 )
                                     nOffset = 0;
@@ -996,19 +996,19 @@ void AreaChart::createShapes()
                         }
                     }
 
-                    //remove PointGroupShape if empty
+                    
                     if(!xPointGroupShape_Shapes->getCount())
                         xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
                 }
 
-            }//next series in x slot (next y slot)
-        }//next x slot
-    }//next z slot
+            }
+        }
+    }
 
     impl_createSeriesShapes();
 
     /* @todo remove series shapes if empty
-    //remove and delete point-group-shape if empty
+    
     if(!xSeriesGroupShape_Shapes->getCount())
     {
         (*aSeriesIter)->m_xShape.set(NULL);
@@ -1016,13 +1016,13 @@ void AreaChart::createShapes()
     }
     */
 
-    //remove and delete series-group-shape if empty
+    
 
-    //... todo
+    
 
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< area chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

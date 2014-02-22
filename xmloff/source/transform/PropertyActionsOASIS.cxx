@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/xmlnmspe.hxx>
@@ -104,8 +104,8 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_CLIP, XML_ATACTION_INS2INCHS,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_REMOVE,
-//      NO_PARAMS }, /* generated entry */ // TODO
+
+
     { XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP, XML_ATACTION_IN2INCH,
@@ -134,7 +134,7 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         XML_FAMILY_TYPE_GRADIENT, 0, 0 },
 
-    // #i25616#
+    
     { XML_NAMESPACE_DRAW, XML_OPACITY, XML_OPTACTION_OPACITY, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY, XML_OPTACTION_IMAGE_OPACITY, NO_PARAMS },
 
@@ -151,7 +151,7 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         XML_FAMILY_TYPE_FILL_IMAGE, 0, 0 },
 
-    // Font work properties
+    
     { XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE, XML_ATACTION_IN2INCH, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FONTWORK_START, XML_ATACTION_IN2INCH, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_X, XML_ATACTION_IN2INCH, NO_PARAMS },
@@ -181,7 +181,7 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
 
 XMLTransformerActionInit aDrawingPagePropertyOASISAttrActionTable[] =
 {
-    // style-graphic-fill-properties-attlist
+    
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF, NO_PARAMS }, /* generated entry */
@@ -402,7 +402,7 @@ XMLTransformerActionInit aParagraphPropertyOASISAttrActionTable[] =
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_KEEP_TOGETHER, XML_OPTACTION_KEEP_TOGETHER,
         NO_PARAMS },
-//  { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_OPTACTION_DRAW_WRITING_MODE, 0 },
+
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 

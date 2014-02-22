@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdmark.hxx>
@@ -40,27 +40,27 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
 {
-    //  SID_RANGE_OFFSET (Offset),
-    //  SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
+    
+    
 }
 
 void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
 {
-    //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
+    
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
 {
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-        //  Objekte aktivieren/deaktivieren immer auf der sichtbaren View
+        
 
     ScTabViewShell* pVisibleSh = this;
     if ( nSlotId == SID_OLE_SELECT || nSlotId == SID_OLE_ACTIVATE || nSlotId == SID_OLE_DEACTIVATE )
@@ -73,7 +73,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OLE_SELECT:
         case SID_OLE_ACTIVATE:
             {
-                //  in beiden Faellen erstmal auf der sichtbaren View selektieren
+                
 
                 OUString aName;
                 SdrView* pDrView = GetSdrView();
@@ -85,7 +85,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
                 pVisibleSh->SelectObject( aName );
 
-                //  aktivieren
+                
 
                 if ( nSlotId == SID_OLE_ACTIVATE )
                     pVisibleSh->DoVerb( 0 );
@@ -108,7 +108,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                     if ( nNewVal < 0 )
                         nNewVal = 0;
 
-                    //! von irgendwas in 1/100mm umrechnen ??????
+                    
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
@@ -127,7 +127,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                                 pDrView->ResizeMarkedObj( aRect.TopLeft(),
                                                 Fraction( nNewVal, aRect.GetWidth() ),
                                                 Fraction( 1, 1 ) );
-                            else // if ( nSlotId == SID_OBJECT_HEIGHT )
+                            else 
                                 pDrView->ResizeMarkedObj( aRect.TopLeft(),
                                                 Fraction( 1, 1 ),
                                                 Fraction( nNewVal, aRect.GetHeight() ) );
@@ -137,7 +137,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
 #ifndef DISABLE_SCRIPTING
                 if (!bDone)
-                    SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
+                    SbxBase::SetError( SbxERR_BAD_PARAMETER );  
 #endif
             }
             break;
@@ -145,7 +145,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     }
 }
 
-static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! Member von ScDrawView?
+static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       
 {
     uno::Reference < embed::XEmbeddedObject > xRet;
     if (pDrView)
@@ -167,7 +167,7 @@ static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pD
 
 void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
 {
-    //  SID_OLE_OBJECT - removed (old Basic)
+    
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -207,10 +207,10 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                                 nVal = aRect.Top();
                             else if ( nWhich == SID_OBJECT_WIDTH )
                                 nVal = aRect.GetWidth();
-                            else // if ( nWhich == SID_OBJECT_HEIGHT )
+                            else 
                                 nVal = aRect.GetHeight();
 
-                            //! von 1/100mm in irgendwas umrechnen ??????
+                            
 
                             rSet.Put( SfxInt32Item( nWhich, nVal ) );
                         }

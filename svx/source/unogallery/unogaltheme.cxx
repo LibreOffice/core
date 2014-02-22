@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 
 namespace unogallery {
 
-// -----------------
-// - GalleryTheme -
-// -----------------
+
+
+
 
 GalleryTheme::GalleryTheme( const OUString& rThemeName )
 {
@@ -51,7 +51,7 @@ GalleryTheme::GalleryTheme( const OUString& rThemeName )
         StartListening( *mpGallery );
 }
 
-// ------------------------------------------------------------------------------
+
 
 GalleryTheme::~GalleryTheme()
 {
@@ -70,7 +70,7 @@ GalleryTheme::~GalleryTheme()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString GalleryTheme::getImplementationName_Static()
     throw()
@@ -78,7 +78,7 @@ OUString GalleryTheme::getImplementationName_Static()
     return OUString( "com.sun.star.comp.gallery.GalleryTheme" );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
     throw()
@@ -134,7 +134,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
     return theGalleryThemeImplementationId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Type SAL_CALL GalleryTheme::getElementType()
     throw (uno::RuntimeException)
@@ -142,7 +142,7 @@ uno::Type SAL_CALL GalleryTheme::getElementType()
     return ::getCppuType( (const uno::Reference< gallery::XGalleryItem >*) 0);
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL GalleryTheme::hasElements()
     throw (uno::RuntimeException)
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL GalleryTheme::hasElements()
     return( ( mpTheme != NULL ) && ( mpTheme->GetObjectCount() > 0 ) );
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL GalleryTheme::getCount()
     throw (uno::RuntimeException)
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL GalleryTheme::getCount()
     return( mpTheme ? mpTheme->GetObjectCount() : 0 );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
@@ -188,7 +188,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SAL_CALL GalleryTheme::getName(  )
     throw (uno::RuntimeException)
@@ -202,7 +202,7 @@ OUString SAL_CALL GalleryTheme::getName(  )
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryTheme::update(  )
     throw (uno::RuntimeException)
@@ -216,7 +216,7 @@ void SAL_CALL GalleryTheme::update(  )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertURLByIndex(
     const OUString& rURL, ::sal_Int32 nIndex )
@@ -249,7 +249,7 @@ void SAL_CALL GalleryTheme::update(  )
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertGraphicByIndex(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nIndex )
@@ -277,7 +277,7 @@ void SAL_CALL GalleryTheme::update(  )
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertDrawingByIndex(
     const uno::Reference< lang::XComponent >& Drawing, sal_Int32 nIndex )
@@ -292,7 +292,7 @@ void SAL_CALL GalleryTheme::update(  )
 
         if( pModel && pModel->GetDoc() && pModel->GetDoc()->ISA( FmFormModel ) )
         {
-            // Here we're inserting something that's already a gallery theme drawing
+            
             nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
             if( mpTheme->InsertModel( *static_cast< FmFormModel* >( pModel->GetDoc() ), nIndex ) )
@@ -300,8 +300,8 @@ void SAL_CALL GalleryTheme::update(  )
         }
         else if (!pModel)
         {
-            // #i80184# Try to do the right thing and make a Gallery drawing out
-            // of an ordinary Drawing if possible.
+            
+            
             try
             {
                 uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
@@ -333,7 +333,7 @@ void SAL_CALL GalleryTheme::update(  )
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -349,7 +349,7 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -386,7 +386,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 {
@@ -404,30 +404,30 @@ void GalleryTheme::implReleaseItems( GalleryObject* pObj )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::GalleryTheme* GalleryTheme::implGetTheme() const
 {
     return mpTheme;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
 
-//  DBG_ASSERT( maItemList.find( &rItem ) == maItemList.end(), "Item already registered" );
+
     maItemList.push_back( &rItem );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
 
-//  DBG_ASSERT( maItemList.find( &rItem ) != maItemList.end(), "Item is not registered" );
+
     maItemList.remove( &rItem );
 }
 

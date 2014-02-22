@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -480,11 +480,11 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     }
     else
     {
-        // unknown action, overread
+        
         return;
     }
 
-    // read attributes
+    
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
@@ -551,7 +551,7 @@ SvXMLImportContext * XMLAnimationsEffectContext::CreateChildContext( sal_uInt16 
 
 void XMLAnimationsEffectContext::EndElement()
 {
-    // set effect on shape
+    
 
     try
     {
@@ -566,7 +566,7 @@ void XMLAnimationsEffectContext::EndElement()
                 xSet = Reference< XPropertySet >::query( GetImport().getInterfaceToIdentifierMapper().getReference( maShapeId ) );
                 if( xSet.is() )
                 {
-                    // check for presentation shape service
+                    
                     {
                         Reference< XServiceInfo > xServiceInfo( xSet, UNO_QUERY );
                         if( !xServiceInfo.is() || !xServiceInfo->supportsService( mpImpl->msPresShapeService ) )
@@ -597,9 +597,9 @@ void XMLAnimationsEffectContext::EndElement()
                     aAny <<= (sal_Bool)sal_True;
                     xSet->setPropertyValue( mpImpl->msIsAnimation, aAny );
 
-                    // #i42894# speed is not supported for the old group animation fallback, so no need to set it
-                    // aAny <<= meSpeed;
-                    // xSet->setPropertyValue( mpImpl->msSpeed, aAny );
+                    
+                    
+                    
                 }
                 else
                 {

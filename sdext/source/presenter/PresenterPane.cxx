@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterPane.hxx"
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext { namespace presenter {
 
-//===== PresenterPane =========================================================
+
 
 PresenterPane::PresenterPane (
     const Reference<XComponentContext>& rxContext,
@@ -53,7 +53,7 @@ PresenterPane::~PresenterPane (void)
 {
 }
 
-//----- XPane -----------------------------------------------------------------
+
 
 Reference<awt::XWindow> SAL_CALL PresenterPane::getWindow (void)
     throw (RuntimeException)
@@ -69,7 +69,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterPane::getCanvas (void)
     return mxContentCanvas;
 }
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterPane::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
@@ -128,7 +128,7 @@ void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
         mxContentWindow->setVisible(sal_False);
 }
 
-//----- XPaintListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException)
@@ -139,7 +139,7 @@ void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
     PaintBorder(rEvent.UpdateRect);
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPane::CreateCanvases (
     const Reference<awt::XWindow>& rxParentWindow,
@@ -170,8 +170,8 @@ void PresenterPane::CreateCanvases (
 
 void PresenterPane::Invalidate (const css::awt::Rectangle& rRepaintBox)
 {
-    // Invalidate the parent window to be able to invalidate an area outside
-    // the current window area.
+    
+    
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow, rRepaintBox);
 }
 
@@ -183,6 +183,6 @@ void PresenterPane::UpdateBoundingBox (void)
         maBoundingBox = awt::Rectangle();
 }
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

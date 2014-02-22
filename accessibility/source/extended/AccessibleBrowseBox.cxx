@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleBrowseBox.hxx"
@@ -24,12 +24,12 @@
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-// ============================================================================
+
 
 namespace accessibility
 {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -37,11 +37,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
-// ============================================================================
+
 class AccessibleBrowseBoxImpl
 {
 public:
-    /// the XAccessible which created the AccessibleBrowseBox
+    
     WeakReference< XAccessible >                                m_aCreator;
 
     /** The data table child. */
@@ -60,7 +60,7 @@ public:
     AccessibleBrowseBoxHeaderBar*                               m_pColumnHeaderBar;
 };
 
-// Ctor/Dtor/disposing --------------------------------------------------------
+
 
 AccessibleBrowseBox::AccessibleBrowseBox(
             const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxCreator,
@@ -72,7 +72,7 @@ AccessibleBrowseBox::AccessibleBrowseBox(
 
     m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -82,11 +82,11 @@ void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator
     m_pImpl->m_aCreator = _rxCreator;
 }
 
-// -----------------------------------------------------------------------------
+
 AccessibleBrowseBox::~AccessibleBrowseBox()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBox::disposing()
 {
@@ -105,15 +105,15 @@ void SAL_CALL AccessibleBrowseBox::disposing()
         xComp->dispose();
 
     }
-//!    ::comphelper::disposeComponent(m_pImpl->mxTable);
+
     ::comphelper::disposeComponent(m_pImpl->mxRowHeaderBar);
     ::comphelper::disposeComponent(m_pImpl->mxColumnHeaderBar);
 
     AccessibleBrowseBoxBase::disposing();
 }
-// -----------------------------------------------------------------------------
 
-// XAccessibleContext ---------------------------------------------------------
+
+
 
 sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
     throw ( uno::RuntimeException )
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
     ensureIsAlive();
     return BBINDEX_FIRSTCONTROL + mpBrowseBox->GetAccessibleControlCount();
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
@@ -140,7 +140,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
             xRet = implGetFixedChild( nChildIndex );
         else
         {
-            // additional controls
+            
             nChildIndex -= BBINDEX_FIRSTCONTROL;
             if( nChildIndex < mpBrowseBox->GetAccessibleControlCount() )
                 xRet = mpBrowseBox->CreateAccessibleControl( nChildIndex );
@@ -152,7 +152,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
     return xRet;
 }
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
@@ -168,8 +168,8 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
         xChild = mpBrowseBox->CreateAccessibleControl( nIndex );
     else
     {
-        // try whether point is in one of the fixed children
-        // (table, header bars, corner control)
+        
+        
         Point aPoint( VCLPoint( rPoint ) );
         for( nIndex = 0; (nIndex < BBINDEX_FIRSTCONTROL) && !xChild.is(); ++nIndex )
         {
@@ -184,7 +184,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
     }
     return xChild;
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBox::grabFocus()
     throw ( uno::RuntimeException )
@@ -194,7 +194,7 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
     ensureIsAlive();
     mpBrowseBox->GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleBrowseBox::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
@@ -202,18 +202,18 @@ Any SAL_CALL AccessibleBrowseBox::getAccessibleKeyBinding()
     ensureIsAlive();
     return Any();
 }
-// -----------------------------------------------------------------------------
 
-// XServiceInfo ---------------------------------------------------------------
+
+
 
 OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBox" );
 }
-// -----------------------------------------------------------------------------
 
-// internal virtual methods ---------------------------------------------------
+
+
 
 Rectangle AccessibleBrowseBox::implGetBoundingBox()
 {
@@ -221,15 +221,15 @@ Rectangle AccessibleBrowseBox::implGetBoundingBox()
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return mpBrowseBox->GetWindowExtentsRelative( pParent );
 }
-// -----------------------------------------------------------------------------
+
 
 Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 {
     return mpBrowseBox->GetWindowExtentsRelative( NULL );
 }
-// -----------------------------------------------------------------------------
 
-// internal helper methods ----------------------------------------------------
+
+
 
 Reference< XAccessible > AccessibleBrowseBox::implGetTable()
 {
@@ -241,7 +241,7 @@ Reference< XAccessible > AccessibleBrowseBox::implGetTable()
     }
     return m_pImpl->mxTable;
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible >
 AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
@@ -272,7 +272,7 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible >
 AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
@@ -292,14 +292,14 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
     OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
     if ( m_pImpl->mxTable.is() )
@@ -307,7 +307,7 @@ void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewV
         m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
     }
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
                                                 const Any& _rNewValue,
                                                 const Any& _rOldValue,sal_Bool _bColumnHeaderBar)
@@ -318,9 +318,9 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
         pHeaderBar->commitEvent(_nEventId,_rNewValue,_rOldValue);
 }
 
-// ============================================================================
-// = AccessibleBrowseBoxAccess
-// ============================================================================
+
+
+
 AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
@@ -328,12 +328,12 @@ AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const Reference< XAccessib
 {
 }
 
-// -----------------------------------------------------------------------------
+
 AccessibleBrowseBoxAccess::~AccessibleBrowseBoxAccess()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBoxAccess::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -342,7 +342,7 @@ void AccessibleBrowseBoxAccess::dispose()
     ::comphelper::disposeComponent( m_xContext );
 }
 
-// -----------------------------------------------------------------------------
+
 Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext() throw ( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -350,8 +350,8 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
     OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "accessibility/extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
 
-    // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),
-    // then reset and re-create.
+    
+    
     if ( m_pContext && !m_pContext->isAlive() )
         m_xContext = m_pContext = NULL;
 
@@ -361,14 +361,14 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
     return m_xContext;
 }
 
-// -----------------------------------------------------------------------------
+
 bool AccessibleBrowseBoxAccess::isContextAlive() const
 {
     return  ( NULL != m_pContext ) && m_pContext->isAlive();
 }
 
-// ============================================================================
 
-}   // namespace accessibility
+
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

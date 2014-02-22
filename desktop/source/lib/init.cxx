@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <config_folders.h>
@@ -105,13 +105,13 @@ static OUString getUString( const char *str )
                               RTL_TEXTENCODING_UTF8 );
 }
 
-// Try to convert a relative URL to an absolute one
+
 static OUString getAbsoluteURL( const char *pURL )
 {
     OUString aURL( getUString( pURL ) );
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
 
-    // FIXME: this would appear to kill non-file URLs.
+    
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath( aURL, sDocPathUrl );
     osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
@@ -168,7 +168,7 @@ struct LibLibreOffice_Impl : public _LibreOffice
     }
 };
 
-// Wonder global state ...
+
 static uno::Reference<css::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
@@ -234,12 +234,12 @@ doc_saveAs( LibreOfficeDocument *pThis,
             pMap = (const ExtensionMap *)aCalcExtensionMap;
         else if( aDocumentService == "com.sun.star.presentation.PresentationDocument" )
             pMap = (const ExtensionMap *)aImpressExtensionMap;
-        else // for the sake of argument only writer documents ...
+        else 
             pMap = (const ExtensionMap *)aWriterExtensionMap;
 
         if( ! format )
         {
-            // sniff from the extension
+            
             sal_Int32 idx = aURL.lastIndexOf( "." );
             if( idx > 0 )
             {
@@ -297,7 +297,7 @@ lo_getError (LibreOffice *pThis)
 static void
 force_c_locale( void )
 {
-    // force locale (and resource files loaded) to en-US
+    
     OUString aLangISO( "en-US" );
     LanguageTag aLocale( aLangISO );
     ResMgr::SetDefaultLocale( aLocale );
@@ -324,10 +324,10 @@ initialize_uno( const OUString &aAppURL )
     rtl::Bootstrap::set( "CONFIGURATION_LAYERS",
                          "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
                          "res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
-//                       "bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini " );
-//                       "sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
-//                       "userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
-//                         "user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstraprc:UserInstallation}/user/registrymodifications.xcu"
+
+
+
+
                          );
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
@@ -336,10 +336,10 @@ initialize_uno( const OUString &aAppURL )
     xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
 
-    // set UserInstallation to user profile dir in test/user-template
-//    rtl::Bootstrap aDefaultVars;
-//    aDefaultVars.set(OUString("UserInstallation"), aAppURL + "../registry" );
-    // configmgr setup ?
+    
+
+
+    
 }
 
 static int
@@ -364,7 +364,7 @@ lo_initialize( LibreOffice *pThis, const char *app_path )
         initialize_uno( aAppURL );
         force_c_locale();
 
-        // Force headless
+        
         rtl::Bootstrap::set( "SAL_USE_VCLPLUGIN", "svp" );
         InitVCL();
         Application::EnableHeadlessMode(true);

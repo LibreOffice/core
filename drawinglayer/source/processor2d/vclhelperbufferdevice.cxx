@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vclhelperbufferdevice.hxx>
@@ -27,8 +27,8 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// buffered VDev usage
+
+
 
 namespace
 {
@@ -37,10 +37,10 @@ namespace
     class VDevBuffer : public Timer, protected comphelper::OBaseMutex
     {
     private:
-        // available buffers
+        
         aBuffers            maFreeBuffers;
 
-        // allocated/used buffers (remembered to allow deleteing them in destructor)
+        
         aBuffers            maUsedBuffers;
 
     public:
@@ -50,7 +50,7 @@ namespace
         VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, sal_Int32 nBits);
         void free(VirtualDevice& rDevice);
 
-        // Timer virtuals
+        
         virtual void Timeout();
     };
 
@@ -59,7 +59,7 @@ namespace
         maFreeBuffers(),
         maUsedBuffers()
     {
-        SetTimeout(10L * 1000L); // ten seconds
+        SetTimeout(10L * 1000L); 
     }
 
     VDevBuffer::~VDevBuffer()
@@ -96,42 +96,42 @@ namespace
 
                 if(nBits == (*a)->GetBitCount())
                 {
-                    // candidate is valid due to bit depth
+                    
                     if(aFound != maFreeBuffers.end())
                     {
-                        // already found
+                        
                         if(bOkay)
                         {
-                            // found is valid
+                            
                             const bool bCandidateOkay((*a)->GetOutputWidthPixel() >= rSizePixel.getWidth() && (*a)->GetOutputHeightPixel() >= rSizePixel.getHeight());
 
                             if(bCandidateOkay)
                             {
-                                // found and candidate are valid
+                                
                                 const sal_uLong aSquare((*aFound)->GetOutputWidthPixel() * (*aFound)->GetOutputHeightPixel());
                                 const sal_uLong aCandidateSquare((*a)->GetOutputWidthPixel() * (*a)->GetOutputHeightPixel());
 
                                 if(aCandidateSquare < aSquare)
                                 {
-                                    // candidate is valid and smaller, use it
+                                    
                                     aFound = a;
                                 }
                             }
                             else
                             {
-                                // found is valid, candidate is not. Keep found
+                                
                             }
                         }
                         else
                         {
-                            // found is invalid, use candidate
+                            
                             aFound = a;
                             bOkay = (*aFound)->GetOutputWidthPixel() >= rSizePixel.getWidth() && (*aFound)->GetOutputHeightPixel() >= rSizePixel.getHeight();
                         }
                     }
                     else
                     {
-                        // none yet, use candidate
+                        
                         aFound = a;
                         bOkay = (*aFound)->GetOutputWidthPixel() >= rSizePixel.getWidth() && (*aFound)->GetOutputHeightPixel() >= rSizePixel.getHeight();
                     }
@@ -157,7 +157,7 @@ namespace
             }
         }
 
-        // no success yet, create new buffer
+        
         if(!pRetval)
         {
             pRetval = new VirtualDevice(rOutDev, nBits);
@@ -165,11 +165,11 @@ namespace
         }
         else
         {
-            // reused, reset some values
+            
             pRetval->SetMapMode();
         }
 
-        // remember allocated buffer
+        
         maUsedBuffers.push_back(pRetval);
 
         return pRetval;
@@ -198,17 +198,17 @@ namespace
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// support for rendering Bitmap and BitmapEx contents
+
+
 
 namespace drawinglayer
 {
-    // static global VDev buffer for the VclProcessor2D's (VclMetafileProcessor2D and VclPixelProcessor2D)
+    
     VDevBuffer& getVDevBuffer()
     {
-        // secure global instance with Vcl's safe desroyer of external (seen by
-        // library base) stuff, the remembered VDevs need to be deleted before
-        // Vcl's deinit
+        
+        
+        
         static vcl::DeleteOnDeinit< VDevBuffer > aVDevBuffer(new VDevBuffer());
         return *aVDevBuffer.get();
     }
@@ -235,7 +235,7 @@ namespace drawinglayer
         {
             mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, 0);
 
-            // #i93485# assert when copying from window to VDev is used
+            
             OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
                 "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
 
@@ -254,7 +254,7 @@ namespace drawinglayer
 
             mpContent->SetMapMode(aNewMapMode);
 
-            // copy AA flag for new target
+            
             mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
         }
     }
@@ -355,7 +355,7 @@ namespace drawinglayer
 #endif
             mpMask->SetMapMode(mpContent->GetMapMode());
 
-            // do NOT copy AA flag for mask!
+            
         }
 
         return *mpMask;
@@ -369,12 +369,12 @@ namespace drawinglayer
             mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 8);
             mpAlpha->SetMapMode(mpContent->GetMapMode());
 
-            // copy AA flag for new target; masking needs to be smooth
+            
             mpAlpha->SetAntialiasing(mpContent->GetAntialiasing());
         }
 
         return *mpAlpha;
     }
-} // end of namespace drawinglayer
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

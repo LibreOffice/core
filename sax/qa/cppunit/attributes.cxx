@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -38,11 +38,11 @@ void AttributesTest::test()
     aAttributeList.add(1, "1");
     aAttributeList.add(2, OString("2"));
 
-    // We can't test getValueToken() and getOptionalValueToken()
-    // without XFastTokenHandler :-(
-    // Uncomment to get segmantation fault:
-    // aAttributeList.getOptionalValueToken(1, 0);
-    // aAttributeList.getValueToken(2);
+    
+    
+    
+    
+    
 
     CPPUNIT_ASSERT( aAttributeList.hasAttribute(1) );
     CPPUNIT_ASSERT( !aAttributeList.hasAttribute(3) );

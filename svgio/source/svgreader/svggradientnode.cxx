@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svggradientnode.hxx>
 #include <svgio/svgreader/svgdocument.hxx>
 #include <svgio/svgreader/svggradientstopnode.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -61,7 +61,7 @@ namespace svgio
         SvgGradientNode::~SvgGradientNode()
         {
             if(mpaGradientTransform) delete mpaGradientTransform;
-            // do NOT delete mpXLink, it's only referenced, not owned
+            
         }
 
         const SvgStyleAttributes* SvgGradientNode::getSvgStyleAttributes() const
@@ -71,13 +71,13 @@ namespace svgio
 
         void SvgGradientNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -270,7 +270,7 @@ namespace svgio
 
                             if(Unit_percent == aOffset.getUnit())
                             {
-                                // percent is not relative to distances in ColorStop context, solve locally
+                                
                                 fOffset = aOffset.getNumber() * 0.01;
                             }
                             else
@@ -318,7 +318,7 @@ namespace svgio
                 return mpXLink->getX1();
             }
 
-            // default is 0%
+            
             return SvgNumber(0.0, Unit_percent);
         }
 
@@ -336,7 +336,7 @@ namespace svgio
                 return mpXLink->getY1();
             }
 
-            // default is 0%
+            
             return SvgNumber(0.0, Unit_percent);
         }
 
@@ -354,7 +354,7 @@ namespace svgio
                 return mpXLink->getX2();
             }
 
-            // default is 100%
+            
             return SvgNumber(100.0, Unit_percent);
         }
 
@@ -372,7 +372,7 @@ namespace svgio
                 return mpXLink->getY2();
             }
 
-            // default is 0%
+            
             return SvgNumber(0.0, Unit_percent);
         }
 
@@ -390,7 +390,7 @@ namespace svgio
                 return mpXLink->getCx();
             }
 
-            // default is 50%
+            
             return SvgNumber(50.0, Unit_percent);
         }
 
@@ -408,7 +408,7 @@ namespace svgio
                 return mpXLink->getCy();
             }
 
-            // default is 50%
+            
             return SvgNumber(50.0, Unit_percent);
         }
 
@@ -426,7 +426,7 @@ namespace svgio
                 return mpXLink->getR();
             }
 
-            // default is 50%
+            
             return SvgNumber(50.0, Unit_percent);
         }
 
@@ -495,10 +495,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

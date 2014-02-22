@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,8 +41,8 @@ namespace vclcanvas
 
     BitmapBackBuffer::~BitmapBackBuffer()
     {
-        // make sure solar mutex is held on deletion (other methods
-        // are supposed to be called with already locked solar mutex)
+        
+        
         SolarMutexGuard aGuard;
 
         if( mpVDev )
@@ -65,7 +65,7 @@ namespace vclcanvas
 
     void BitmapBackBuffer::clear()
     {
-        // force current content to bitmap, make all transparent white
+        
         getBitmapReference().Erase(COL_TRANSPARENT);
     }
 
@@ -76,7 +76,7 @@ namespace vclcanvas
 
         if( mbVDevContentIsCurrent && mpVDev )
         {
-            // VDev content is more current than bitmap - copy contents before!
+            
             mpVDev->EnableMapMode( false );
             mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             const Point aEmptyPoint;
@@ -84,8 +84,8 @@ namespace vclcanvas
                                              mpVDev->GetOutputSizePixel() );
         }
 
-        // client queries bitmap, and will possibly alter content -
-        // next time, VDev needs to be updated
+        
+        
         mbBitmapContentIsCurrent = true;
         mbVDevContentIsCurrent   = false;
 
@@ -110,8 +110,8 @@ namespace vclcanvas
     {
         if( !mpVDev )
         {
-            // VDev not yet created, do it now. Create an alpha-VDev,
-            // if bitmap has transparency.
+            
+            
             mpVDev = maBitmap->IsTransparent() ?
                 new VirtualDevice( mrRefDevice, 0, 0 ) :
                 new VirtualDevice( mrRefDevice );
@@ -121,14 +121,14 @@ namespace vclcanvas
 
             mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
 
-            // #i95645#
+            
 #if defined( MACOSX )
-            // use AA on VCLCanvas for Mac
+            
             mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpVDev->GetAntialiasing() );
 #else
-            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-            // is not required to do AA. It would need to be adapted to use it correctly
-            // (especially gradient painting). This will need extra work.
+            
+            
+            
             mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
 #endif
         }
@@ -141,15 +141,15 @@ namespace vclcanvas
 
         if( mpVDev && mbBitmapContentIsCurrent )
         {
-            // fill with bitmap content
+            
             mpVDev->EnableMapMode( false );
             mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             const Point aEmptyPoint;
             mpVDev->DrawBitmapEx( aEmptyPoint, *maBitmap );
         }
 
-        // canvas queried the VDev, and will possibly paint into
-        // it. Next time, bitmap must be updated
+        
+        
         mbBitmapContentIsCurrent = false;
         mbVDevContentIsCurrent   = true;
     }

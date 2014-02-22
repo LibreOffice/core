@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleChartView.hxx"
@@ -34,10 +34,10 @@
 #include <rtl/ustring.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-// for SolarMutex
+
 #include <vcl/svapp.hxx>
 
-// header for typedef MutexGuard
+
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
@@ -55,9 +55,9 @@ namespace chart
 AccessibleChartView::AccessibleChartView(
     const Reference< uno::XComponentContext >& xContext, SdrView* pView ) :
         impl::AccessibleChartView_Base(
-            AccessibleElementInfo(), // empty for now
-            true, // has children
-            true  // always transparent
+            AccessibleElementInfo(), 
+            true, 
+            true  
             ),
         m_xContext( xContext ),
         m_pSdrView( pView ),
@@ -102,7 +102,7 @@ awt::Point AccessibleChartView::GetUpperLeftOnScreen() const
     return aParentPosition;
 }
 
-// ________ XAccessibleContext ________
+
 OUString SAL_CALL AccessibleChartView::getAccessibleName()
     throw (uno::RuntimeException)
 {
@@ -124,7 +124,7 @@ Reference< XAccessible > SAL_CALL AccessibleChartView::getAccessibleParent()
 sal_Int32 SAL_CALL AccessibleChartView::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
-    // the document is always the only child of the window
+    
     return 0;
 }
 
@@ -134,7 +134,7 @@ sal_Int16 SAL_CALL AccessibleChartView::getAccessibleRole()
     return AccessibleRole::DOCUMENT;
 }
 
-// ________ XAccessibleComponent ________
+
 awt::Rectangle SAL_CALL AccessibleChartView::getBounds()
     throw (uno::RuntimeException)
 {
@@ -170,16 +170,16 @@ awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
     return aResult;
 }
 
-// lang::XInitialization
+
 
 void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments )
                 throw (uno::Exception, uno::RuntimeException)
 {
-    //0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
-    //1: frame::XModel representing the chart model - offers access to object data
-    //2: lang::XInterface representing the normal chart view - offers access to some extra object data
+    
+    
+    
 
-    //all arguments are only valid until next initialization
+    
     bool bChanged = false;
     bool bOldInvalid = false;
     bool bNewInvalid = false;
@@ -306,8 +306,8 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     if( bChanged )
     {
         {
-            //before notification we prepare for creation of new context
-            //the old context will be deleted after notification than
+            
+            
             MutexGuard aGuard( GetMutex());
             Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
             if( xChartDoc.is())
@@ -334,7 +334,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             }
             m_pViewForwarder = new AccessibleViewForwarder( this, pWindow );
             aAccInfo.m_pViewForwarder = m_pViewForwarder;
-            // broadcasts an INVALIDATE_ALL_CHILDREN event globally
+            
             SetInfo( aAccInfo );
         }
     }
@@ -345,7 +345,7 @@ ExplicitValueProvider* AccessibleChartView::getExplicitValueProvider()
     return ExplicitValueProvider::getExplicitValueProvider(m_xChartView);
 }
 
-// view::XSelectionChangeListener
+
 
 void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
                 throw (uno::RuntimeException)
@@ -371,18 +371,18 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
     }
 }
 
-// lang::XComponent::dispose()
+
 void SAL_CALL AccessibleChartView::disposing()
 {
     AccessibleBase::disposing();
 }
 
-// XEventListener
+
 void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
     throw (uno::RuntimeException)
 {
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

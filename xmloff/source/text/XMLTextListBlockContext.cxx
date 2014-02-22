@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -41,8 +41,8 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLTextListBlockContext, SvXMLImportContext );
 
-// OD 2008-05-07 #refactorlists#
-// add optional parameter <bRestartNumberingAtSubList> and its handling
+
+
 XMLTextListBlockContext::XMLTextListBlockContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rTxtImp,
@@ -62,15 +62,15 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 {
     static OUString s_PropNameDefaultListId("DefaultListId");
     {
-        // get the parent list block context (if any); this is a bit ugly...
+        
         XMLTextListBlockContext * pLB(0);
         XMLTextListItemContext  * pLI(0);
         XMLNumberedParaContext  * pNP(0);
         rTxtImp.GetTextListHelper().ListContextTop(pLB, pLI, pNP);
         mxParentListBlock = pLB;
     }
-    // Inherit style name from parent list, as well as the flags whether
-    // numbering must be restarted and formats have to be created.
+    
+    
     OUString sParentListStyleName;
     if( mxParentListBlock.Is() )
     {
@@ -104,9 +104,9 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         {
         case XML_TOK_TEXT_LIST_BLOCK_XMLID:
             sXmlId = rValue;
-//FIXME: there is no UNO API for lists
-            // xml:id is also the list ID (#i92221#)
-            if ( mnLevel == 0 ) // root <list> element
+
+            
+            if ( mnLevel == 0 ) 
             {
                 msListId = rValue;
             }
@@ -119,7 +119,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             msListStyleName = rValue;
             break;
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST:
-            if ( mnLevel == 0 ) // root <list> element
+            if ( mnLevel == 0 ) 
             {
                 msContinueListId = rValue;
             }
@@ -133,10 +133,10 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     if( !mxNumRules.is() )
         return;
 
-    if ( mnLevel == 0 ) // root <list> element
+    if ( mnLevel == 0 ) 
     {
         XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
-        // Inconsistent behavior regarding lists (#i92811#)
+        
         OUString sListStyleDefaultListId;
         {
             uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
@@ -155,7 +155,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 }
             }
         }
-        if ( msListId.isEmpty() )  // no text:id property found
+        if ( msListId.isEmpty() )  
         {
             sal_Int32 nUPD( 0 );
             sal_Int32 nBuild( 0 );
@@ -180,7 +180,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             }
             if ( msListId.isEmpty() )
             {
-                // generate a new list id for the list
+                
                 msListId = rTextListsHelper.GenerateNewListId();
             }
         }
@@ -204,8 +204,8 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             }
             else
             {
-                // search continue list chain for master list and
-                // continue the master list.
+                
+                
                 OUString sTmpStr =
                     rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
                 while ( !sTmpStr.isEmpty() )
@@ -220,14 +220,14 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 
         if ( !rTextListsHelper.IsListProcessed( msListId ) )
         {
-            // Inconsistent behavior regarding lists (#i92811#)
+            
             rTextListsHelper.KeepListAsProcessed(
                 msListId, msListStyleName, msContinueListId,
                 sListStyleDefaultListId );
         }
     }
 
-    // Remember this list block.
+    
     mrTxtImport.GetTextListHelper().PushListContext( this );
 }
 
@@ -237,8 +237,8 @@ XMLTextListBlockContext::~XMLTextListBlockContext()
 
 void XMLTextListBlockContext::EndElement()
 {
-    // Numbering has not to be restarted if it has been restarted within
-    // a child list.
+    
+    
     XMLTextListBlockContext *pParent =
                                 (XMLTextListBlockContext *)&mxParentListBlock;
     if( pParent )
@@ -246,11 +246,11 @@ void XMLTextListBlockContext::EndElement()
         pParent->mbRestartNumbering = mbRestartNumbering;
     }
 
-    // Restore current list block.
+    
     mrTxtImport.GetTextListHelper().PopListContext();
 
-    // Any paragraph following the list within the same list item must not
-    // be numbered.
+    
+    
     mrTxtImport.GetTextListHelper().SetListItem( 0 );
 }
 

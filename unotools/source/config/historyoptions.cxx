@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,10 +69,10 @@ namespace {
     const char s_sThumbnail[] = "Thumbnail";
 }
 
-//*****************************************************************************************************************
-//  class SvtHistoryOptions_Impl
-//  redesigned
-//*****************************************************************************************************************
+
+
+
+
 class SvtHistoryOptions_Impl
 {
 public:
@@ -94,9 +94,9 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xCommonXCU;
 };
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 {
     try
@@ -124,17 +124,17 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     }
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 {
 }
 
-//*****************************************************************************************************************
-//  public method
-//  Attention: We return the max. size of our internal lists - That is the capacity not the size!
-//*****************************************************************************************************************
+
+
+
+
 sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
 {
     css::uno::Reference< css::beans::XPropertySet >  xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
@@ -172,7 +172,7 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
     return nSize;
 }
 
-//*****************************************************************************************************************
+
 void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt32 nSize )
 {
     css::uno::Reference< css::container::XNameAccess >    xList;
@@ -200,8 +200,8 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
             break;
         }
 
-        // If too much items in current list ...
-        // truncate the oldest items BEFORE you set the new one.
+        
+        
         if ( ! xList.is())
             return;
 
@@ -230,10 +230,10 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//  Clear specified history list
-//*****************************************************************************************************************
+
+
+
+
 void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 {
     css::uno::Reference< css::container::XNameAccess >    xListAccess;
@@ -268,14 +268,14 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 
         if (xListAccess.is())
         {
-            // clear ItemList
+            
             xListAccess->getByName(OUString(s_sItemList))  >>= xNode  ;
             lOrders = xNode->getElementNames();
             const sal_Int32 nLength = lOrders.getLength();
             for(sal_Int32 i=0; i<nLength; ++i)
                 xNode->removeByName(lOrders[i]);
 
-            // clear OrderList
+            
             xListAccess->getByName(OUString(s_sOrderList)) >>= xNode ;
             lOrders = xNode->getElementNames();
             for(sal_Int32 j=0; j<nLength; ++j)
@@ -302,15 +302,15 @@ static bool lcl_fileOpenable(const OUString &rURL)
         return false;
 }
 
-//*****************************************************************************************************************
-//  public method
-//  get a sequence list from the items
-//*****************************************************************************************************************
+
+
+
+
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory )
 {
     impl_truncateList (eHistory, GetSize (eHistory));
 
-    Sequence< Sequence< PropertyValue > > seqReturn; // Set default return value.
+    Sequence< Sequence< PropertyValue > > seqReturn; 
     Sequence< PropertyValue >             seqProperties(5);
 
     css::uno::Reference< css::container::XNameAccess > xListAccess;
@@ -367,7 +367,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                     xOrderList->getByName(OUString::number(nItem)) >>= xSet;
                     xSet->getPropertyValue(OUString(s_sHistoryItemRef)) >>= sUrl;
 
-                    if( !sUrl.startsWith("file://") || lcl_fileOpenable( sUrl ) )
+                    if( !sUrl.startsWith("file:
                     {
                         xItemList->getByName(sUrl) >>= xSet;
                         seqProperties[s_nOffsetURL  ].Value <<= sUrl;
@@ -380,13 +380,13 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                 }
                 catch(const css::uno::Exception& ex)
                 {
-                    // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
-                    // "FILEOPEN: No Recent Documents..." discusses a problem
-                    // with corrupted /org.openoffice.Office/Histories/Histories
-                    // configuration items; to work around that problem, simply
-                    // ignore such corrupted individual items here, so that at
-                    // least newly added items are successfully reported back
-                    // from this function:
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
                 }
             }
@@ -403,10 +403,10 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     return seqReturn;
 }
 
-//*****************************************************************************************************************
-//  public method
-//  implements a deque in XML
-//*****************************************************************************************************************
+
+
+
+
 void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
@@ -454,12 +454,12 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         sal_Int32 nLength = xOrderList->getElementNames().getLength();
 
         OUString sHistoryItemRef(s_sHistoryItemRef);
-        // The item to be appended already exists
+        
         if (xItemList->hasByName(sURL))
         {
             if (!sThumbnail.isEmpty())
             {
-                // update the thumbnail
+                
                 xItemList->getByName(sURL) >>= xSet;
                 xSet->setPropertyValue(OUString(s_sThumbnail), css::uno::makeAny(sThumbnail));
             }
@@ -494,14 +494,14 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
 
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
-        else // The item to be appended does not exist yet
+        else 
         {
             css::uno::Reference< css::lang::XSingleServiceFactory > xFac;
             css::uno::Reference< css::uno::XInterface >             xInst;
             css::uno::Reference< css::beans::XPropertySet > xPrevSet;
             css::uno::Reference< css::beans::XPropertySet > xNextSet;
 
-            // Append new item to OrderList.
+            
             if ( nLength == nMaxSize )
             {
                 OUString sRemove;
@@ -513,12 +513,12 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
                 }
                 catch (css::container::NoSuchElementException &)
                 {
-                    // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
-                    // "FILEOPEN: No Recent Documents..." discusses a problem
-                    // with corrupted /org.openoffice.Office/Histories/Histories
-                    // configuration items; to work around that problem, simply
-                    // ignore such corrupted individual items here, so that at
-                    // least newly added items are successfully added:
+                    
+                    
+                    
+                    
+                    
+                    
                     if (!sRemove.isEmpty())
                     {
                         throw;
@@ -543,7 +543,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             xOrderList->getByName( OUString::number(0) ) >>= xSet;
             xSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sURL));
 
-            // Append the item to ItemList.
+            
             xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xItemList, css::uno::UNO_QUERY);
             xInst = xFac->createInstance();
             xItemList->insertByName(sURL, css::uno::makeAny(xInst));
@@ -562,24 +562,24 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
     }
 }
 
-//*****************************************************************************************************************
-// initialize static member
-// DON'T DO IT IN YOUR HEADER!
-// see definition for further information
-//*****************************************************************************************************************
+
+
+
+
+
 SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = NULL ;
 sal_Int32     SvtHistoryOptions::m_nRefCount  = 0  ;
 
-//*****************************************************************************************************************
-// constructor
-//*****************************************************************************************************************
+
+
+
 SvtHistoryOptions::SvtHistoryOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase ouer refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtHistoryOptions_Impl;
@@ -588,17 +588,17 @@ SvtHistoryOptions::SvtHistoryOptions()
     }
 }
 
-//*****************************************************************************************************************
-// destructor
-//*****************************************************************************************************************
+
+
+
 SvtHistoryOptions::~SvtHistoryOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease ouer refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
@@ -606,36 +606,36 @@ SvtHistoryOptions::~SvtHistoryOptions()
     }
 }
 
-//*****************************************************************************************************************
-// public method
-//*****************************************************************************************************************
+
+
+
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetSize( eHistory );
 }
 
-//*****************************************************************************************************************
-// public method
-//*****************************************************************************************************************
+
+
+
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->Clear( eHistory );
 }
 
-//*****************************************************************************************************************
-// public method
-//*****************************************************************************************************************
+
+
+
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetList( eHistory );
 }
 
-//*****************************************************************************************************************
-// public method
-//*****************************************************************************************************************
+
+
+
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
@@ -649,9 +649,9 @@ namespace
     class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
-// private method
-//*****************************************************************************************************************
+
+
+
 Mutex& SvtHistoryOptions::GetOwnStaticMutex()
 {
     return theHistoryOptionsMutex::get();

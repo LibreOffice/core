@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/vml/vmlshapecontainer.hxx"
@@ -25,13 +25,13 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -50,9 +50,9 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 ShapeContainer::ShapeContainer( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
@@ -72,9 +72,9 @@ ShapeType& ShapeContainer::createShapeType()
 
 void ShapeContainer::finalizeFragmentImport()
 {
-    // map all shape templates by shape identifier
+    
     lclMapShapesById( maTypesById, maTypes );
-    // map all shapes by shape identifier
+    
     lclMapShapesById( maShapesById, maShapes );
     /*  process all shapes (map all children templates/shapes in group shapes,
         resolve template references in all shapes) */
@@ -83,10 +83,10 @@ void ShapeContainer::finalizeFragmentImport()
 
 const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId, bool bDeep ) const
 {
-    // search in own shape template list
+    
     if( const ShapeType* pType = maTypesById.get( rShapeId ).get() )
         return pType;
-    // search deep in child shapes
+    
     if( bDeep )
         for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
             if( const ShapeType* pType = (*aVIt)->getChildTypeById( rShapeId ) )
@@ -96,10 +96,10 @@ const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId, boo
 
 const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bDeep ) const
 {
-    // search in own shape list
+    
     if( const ShapeBase* pShape = maShapesById.get( rShapeId ).get() )
         return pShape;
-    // search deep in child shapes
+    
     if( bDeep )
         for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
             if( const ShapeBase* pShape = (*aVIt)->getChildById( rShapeId ) )
@@ -135,9 +135,9 @@ void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, con
         (*aIt)->convertAndInsert( rxShapes, pParentAnchor );
 }
 
-// ============================================================================
 
-} // namespace vml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

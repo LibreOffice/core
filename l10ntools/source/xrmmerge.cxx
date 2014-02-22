@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -38,7 +38,7 @@ using namespace std;
 void yyerror( const char * );
 void YYWarning( const char * );
 
-// set of global variables
+
 bool bMergeMode;
 bool bDisplayName;
 bool bExtensionDescription;
@@ -51,7 +51,7 @@ OString sResourceType;
 XRMResParser *pParser = NULL;
 
 extern "C" {
-// the whole interface to lexer is in this extern "C" section
+
 
 extern char *GetOutputFile( int argc, char* argv[])
 {
@@ -72,7 +72,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     }
     else
     {
-        // command line is not valid
+        
         common::writeUsage("xrmex","*.xrm/*.xml");
         return NULL;
     }
@@ -80,7 +80,7 @@ extern char *GetOutputFile( int argc, char* argv[])
 
 int InitXrmExport( char*, char* pFilename)
 {
-    // instanciate Export
+    
     OString sFilename( pFilename );
 
     if ( bMergeMode )
@@ -104,9 +104,9 @@ extern const char* getFilename()
 
 extern FILE *GetXrmFile()
 {
-    // look for valid filename
+    
     if (!sInputFileName.isEmpty()) {
-        //TODO: explicit BOM handling?
+        
         FILE * pFile = fopen(sInputFileName.getStr(), "r");
         if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
@@ -116,13 +116,13 @@ extern FILE *GetXrmFile()
             return pFile;
         }
     }
-    // this means the file could not be opened
+    
     return NULL;
 }
 
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 {
-    //printf("Typ = %d , text = '%s'\n",nTyp , pTokenText );
+    
     pParser->Execute( nTyp, pTokenText );
 
     return 1;
@@ -144,7 +144,7 @@ int GetError()
 }
 
 //
-// class XRMResParser
+
 //
 
 
@@ -291,7 +291,7 @@ void XRMResParser::Error( const OString &rError )
 }
 
 //
-// class XMLResExport
+
 //
 
 XRMResExport::XRMResExport(
@@ -370,7 +370,7 @@ void XRMResExport::EndOfText(
 }
 
 //
-// class XRMResMerge
+
 //
 
 XRMResMerge::XRMResMerge(
@@ -454,7 +454,7 @@ void XRMResMerge::WorkOnDesc(
                         std::cerr
                             << "Error: output file " << sOutputFile.getStr()
                             << " does not contain any /\n";
-                        throw false; //TODO
+                        throw false; 
                     }
                     OString sOutputDescFile(
                         sOutputFile.copy(0, i + 1) + sLocDescFilename);
@@ -466,7 +466,7 @@ void XRMResMerge::WorkOnDesc(
                         std::cerr
                             << "Error: cannot write "
                             << sOutputDescFile.getStr() << '\n';
-                        throw false; //TODO
+                        throw false; 
                     }
                 }
             }

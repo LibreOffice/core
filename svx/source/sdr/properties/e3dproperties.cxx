@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/e3dproperties.hxx>
@@ -22,26 +22,26 @@
 #include <svx/svddef.hxx>
 #include <svx/obj3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return *(new SfxItemSet(rPool,
 
-                // ranges from SdrAttrObj
+                
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // ranges from E3dObject, contains object and scene because of GetMergedItemSet()
+                
                 SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
 
-                // end
+                
                 0, 0));
         }
 
@@ -68,19 +68,19 @@ namespace sdr
         {
             E3dObject& rObj = (E3dObject&)GetSdrObject();
 
-            // call parent
+            
             AttributeProperties::ItemSetChanged(rSet);
 
-            // local changes
+            
             rObj.StructureChanged();
         }
 
         void E3dProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
-            // call parent
+            
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
-            // propagate call to contained objects
+            
             const SdrObjList* pSub = ((const E3dObject&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
@@ -89,7 +89,7 @@ namespace sdr
                 pSub->GetObj(a)->GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,13 +35,13 @@
 #define erDUMP_ICU_CALENDAR 0
 #define erDUMP_I18N_CALENDAR 0
 #if erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
-// If both are used, DUMP_ICU_CAL_MSG() must be used before DUMP_I18N_CAL_MSG()
-// to obtain internally set values from ICU, else Calendar::get() calls in
-// DUMP_I18N_CAL_MSG() recalculate!
 
-// These pieces of macro are shamelessly borrowed from icu's olsontz.cpp, the
-// double parens'ed approach to pass multiple parameters as one macro parameter
-// is appealing.
+
+
+
+
+
+
 static void debug_cal_loc(const char *f, int32_t l)
 {
     fprintf(stderr, "%s:%d: ", f, l);
@@ -56,22 +56,22 @@ static void debug_cal_msg(const char *pat, ...)
 }
 
 #if erDUMP_ICU_CALENDAR
-// Make icu with
-// DEFS = -DU_DEBUG_CALSVC -DUCAL_DEBUG_DUMP
-// in workdir/UnpackedTarball/icu/source/icudefs.mk
-// May need some patches to fix unmaintained things there.
+
+
+
+
 extern void ucal_dump( const icu::Calendar & );
 static void debug_icu_cal_dump( const ::icu::Calendar & r )
 {
     ucal_dump(r);
     fflush(stderr);
-    // set a breakpoint here to pause display between dumps
+    
 }
-// must use double parens, i.e.:  DUMP_ICU_CAL_MSG(("four is: %d",4));
+
 #define DUMP_ICU_CAL_MSG(x) {debug_cal_loc(__FILE__,__LINE__);debug_cal_msg x;debug_icu_cal_dump(*body);}
-#else   // erDUMP_ICU_CALENDAR
+#else   
 #define DUMP_ICU_CAL_MSG(x)
-#endif  // erDUMP_ICU_CALENDAR
+#endif  
 
 #if erDUMP_I18N_CALENDAR
 static void debug_cal_millis_to_time( long nMillis, long & h, long & m, long & s, long & f )
@@ -107,16 +107,16 @@ static void debug_i18n_cal_dump( const ::icu::Calendar & r )
     fprintf( stderr, "\n");
     fflush(stderr);
 }
-// must use double parens, i.e.:  DUMP_I18N_CAL_MSG(("four is: %d",4));
-#define DUMP_I18N_CAL_MSG(x) {debug_cal_loc(__FILE__,__LINE__);debug_cal_msg x;debug_i18n_cal_dump(*body);}
-#else   // erDUMP_I18N_CALENDAR
-#define DUMP_I18N_CAL_MSG(x)
-#endif  // erDUMP_I18N_CALENDAR
 
-#else   // erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
+#define DUMP_I18N_CAL_MSG(x) {debug_cal_loc(__FILE__,__LINE__);debug_cal_msg x;debug_i18n_cal_dump(*body);}
+#else   
+#define DUMP_I18N_CAL_MSG(x)
+#endif  
+
+#else   
 #define DUMP_ICU_CAL_MSG(x)
 #define DUMP_I18N_CAL_MSG(x)
-#endif  // erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
+#endif  
 
 
 using namespace ::com::sun::star::uno;
@@ -140,17 +140,17 @@ Calendar_gregorian::init(const Era *_eraArray)
 {
     cCalendar = "com.sun.star.i18n.Calendar_gregorian";
 
-    // #i102356# With icu::Calendar::createInstance(UErrorCode) in a Thai
-    // th_TH system locale we accidentally used a Buddhist calendar. Though
-    // the ICU documentation says that should be the case only for
-    // th_TH_TRADITIONAL (and ja_JP_TRADITIONAL Gengou), a plain th_TH
-    // already triggers that behavior, ja_JP does not. Strange enough,
-    // passing a th_TH locale to the calendar creation doesn't trigger
-    // this.
-    // See also http://userguide.icu-project.org/datetime/calendar
+    
+    
+    
+    
+    
+    
+    
+    
 
-    // Whatever ICU offers as the default calendar for a locale, ensure we
-    // have a Gregorian calendar as requested.
+    
+    
 
     /* XXX: with the current implementation the aLocale member variable is
      * not set prior to loading a calendar from locale data. This
@@ -181,7 +181,7 @@ OUString SAL_CALL
 Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
-        // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
+        
         com::sun::star::lang::Locale jaLocale =
             com::sun::star::lang::Locale(OUString("ja"), OUString(), OUString());
         if (idx == 0) return LocaleDataImpl().getLocaleItem(jaLocale).timeAM;
@@ -195,8 +195,8 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 void SAL_CALL
 Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
 {
-    // Since this class could be called by service name 'hanja_yoil', we have to
-    // rename uniqueID to get right calendar defined in locale data.
+    
+    
     Calendar_gregorian::loadCalendar(OUString("hanja"), rLocale);
 }
 
@@ -213,7 +213,7 @@ Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)
 }
 
 static const Era ROC_eraArray[] = {
-    {1912, 1, 1, kDisplayEraForcedLongYear},    // #i116701#
+    {1912, 1, 1, kDisplayEraForcedLongYear},    
     {0, 0, 0, 0}
 };
 Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
@@ -233,7 +233,7 @@ Calendar_buddhist::Calendar_buddhist() : Calendar_gregorian(buddhist_eraArray)
 void SAL_CALL
 Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
 {
-    // init. fieldValue[]
+    
     getValue();
 
     aLocale = rLocale;
@@ -243,10 +243,10 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
         if (uniqueID == xC[i].Name)
         {
             aCalendar = xC[i];
-            // setup minimalDaysInFirstWeek
+            
             setMinimumNumberOfDaysForFirstWeek(
                     aCalendar.MinimumNumberOfDaysForFirstWeek);
-            // setup first day of week
+            
             for (sal_Int16 day = sal::static_int_cast<sal_Int16>(
                         aCalendar.Days.getLength()-1); day>=0; day--)
             {
@@ -258,7 +258,7 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
             }
         }
     }
-    // Calendar is not for the locale
+    
     throw ERROR;
 }
 
@@ -284,13 +284,13 @@ Calendar_gregorian::getUniqueID() throw(RuntimeException)
 void SAL_CALL
 Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException)
 {
-    // ICU handles dates in milliseconds as double values and uses floor()
-    // to obtain integer values, which may yield a date decremented by one
-    // for odd (historical) timezone values where the computed value due to
-    // rounding errors has a fractional part in milliseconds. Ensure we
-    // pass a value without fraction here. If not, that may lead to
-    // fdo#44286 or fdo#52619 and the like, e.g. when passing
-    // -2136315212000.000244 instead of -2136315212000.000000
+    
+    
+    
+    
+    
+    
+    
     double fM = timeInDays * U_MILLIS_PER_DAY;
     double fR = rtl::math::round( fM );
     SAL_INFO_IF( fM != fR, "i18npool",
@@ -314,8 +314,8 @@ Calendar_gregorian::getDateTime() throw(RuntimeException)
     return r / U_MILLIS_PER_DAY;
 }
 
-// map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
-// By using eraArray, it can take care Japanese and Taiwan ROC calendar.
+
+
 void Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
 {
     if (eraArray) {
@@ -326,7 +326,7 @@ void Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
         m = fieldValue[CalendarFieldIndex::MONTH] + 1;
         d = fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
 
-        // since the year is reversed for first era, it is reversed again here for Era compare.
+        
         if (e == 0)
             y = 1 - y;
 
@@ -342,8 +342,8 @@ void Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
 }
 
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR))
-// map field value from other calendar to gregorian calendar, it can be overwritten by derived class.
-// By using eraArray, it can take care Japanese and Taiwan ROC calendar.
+
+
 void Calendar_gregorian::mapToGregorian() throw(RuntimeException)
 {
     if (eraArray && (fieldSet & FIELDS)) {
@@ -441,7 +441,7 @@ void Calendar_gregorian::submitFields() throw(com::sun::star::uno::RuntimeExcept
                 case CalendarFieldIndex::DST_OFFSET:
                 case CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS:
                 case CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS:
-                    break;  // nothing, extra handling
+                    break;  
             }
         }
     }
@@ -492,35 +492,35 @@ static void lcl_setCombinedOffsetFieldValues( sal_Int32 nValue,
 
 void Calendar_gregorian::setValue() throw(RuntimeException)
 {
-    // Correct DST glitch, see also localtime/gmtime conversion pitfalls at
-    // http://www.erack.de/download/timetest.c
+    
+    
     //
-    // #i24082# in order to make the DST correction work in all
-    // circumstances, the time values have to be always resubmitted,
-    // regardless whether specified by the caller or not. It is not
-    // sufficient to rely on the ICU internal values previously set, as the
-    // following may happen:
-    // - Let 2004-03-28T02:00 be the onsetRule.
-    // - On 2004-03-29 (calendar initialized with 2004-03-29T00:00 DST) set
-    //   a date of 2004-03-28 => calendar results in 2004-03-27T23:00 no DST.
-    // - Correcting this with simply "2004-03-28 no DST" and no time
-    //   specified results in 2004-03-29T00:00, the ICU internal 23:00 time
-    //   being adjusted to 24:00 in this case, switching one day further.
-    // => submit 2004-03-28T00:00 no DST.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    // This got even weirder since ICU incorporated also historical data,
-    // even the timezone may differ for different dates! It is necessary to
-    // let ICU choose the corresponding OlsonTimeZone transitions and adapt
-    // values.
-    // #i86094# gives examples where that went wrong:
-    // TZ=Europe/Moscow date <= 1919-07-01
-    //      zone +2:30:48 (!) instead of +3h, DST +2h instead of +1h
-    // TZ=America/St_Johns date <= 1935-03-30
-    //      zone -3:30:52 (!) instead of -3:30
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    // Copy fields before calling submitFields() directly or indirectly below.
+    
     memcpy(fieldSetValue, fieldValue, sizeof(fieldSetValue));
-    // Possibly setup ERA and YEAR in fieldSetValue.
+    
     mapToGregorian();
 
     DUMP_ICU_CAL_MSG(("%s\n","setValue() before any submission"));
@@ -589,7 +589,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 nDST0 = 0;
         }
 
-        // Submit values to obtain a time zone and DST corresponding to the date/time.
+        
         submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0);
 
         DUMP_ICU_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
@@ -602,8 +602,8 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             nDST1 = 0;
     }
 
-    // The original submission, may lead to a different zone/DST and
-    // different date.
+    
+    
     submitFields();
     DUMP_ICU_CAL_MSG(("%s\n","setValue() after original submission"));
     DUMP_I18N_CAL_MSG(("%s\n","setValue() after original submission"));
@@ -619,20 +619,20 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             nDST2 = nDST1;
         if ( nZone0 != nZone1 || nZone2 != nZone1 || nDST0 != nDST1 || nDST2 != nDST1 )
         {
-            // Due to different DSTs, resulting date values may differ if
-            // DST is onset at 00:00 and the very onsetRule date was
-            // submitted with DST off => date-1 23:00, for example, which
-            // is not what we want.
-            // Resubmit all values, this time including DST => date 01:00
-            // Similar for zone differences.
-            // If already the first full submission with nZone0 and nDST0
-            // lead to date-1 23:00, the original submission was based on
-            // that date if it wasn't a full date (nDST0 set, nDST1 not
-            // set, nDST2==nDST1). If it was January 1st without year we're
-            // even off by one year now. Resubmit all values including new
-            // DST => date 00:00.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
-            // Set field values accordingly in case they were used.
+            
             if (!bNeedZone)
                 lcl_setCombinedOffsetFieldValues( nZone2, fieldSetValue,
                         fieldValue, CalendarFieldIndex::ZONE_OFFSET,
@@ -645,10 +645,10 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
             DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
 
-            // Time zone transition => resubmit.
-            // TZ=America/St_Johns date <= 1935-03-30
-            //      -3:30:52 (!) instead of -3:30
-            //      if first submission included time zone -3:30 that would be wrong.
+            
+            
+            
+            
             bool bResubmit = false;
             sal_Int32 nZone3 = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
@@ -662,15 +662,15 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                             CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
             }
 
-            // If the DST onset rule says to switch from 00:00 to 01:00 and
-            // we tried to set onsetDay 00:00 with DST, the result was
-            // onsetDay-1 23:00 and no DST, which is not what we want. So
-            // once again without DST, resulting in onsetDay 01:00 and DST.
-            // Yes, this seems to be weird, but logically correct.
-            // It doesn't even have to be on an onsetDay as the DST is
-            // factored in all days by ICU and there seems to be some
-            // unknown behavior.
-            // TZ=Asia/Tehran 1999-03-22 exposes this, for example.
+            
+            
+            
+            
+            
+            
+            
+            
+            
             sal_Int32 nDST3 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 nDST3 = nDST2;
@@ -700,7 +700,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
     }
 #if erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
     {
-        // force icu::Calendar to recalculate
+        
         UErrorCode status;
         sal_Int32 nTmp = body->get( UCAL_DATE, status = U_ZERO_ERROR);
         DUMP_ICU_CAL_MSG(("%s: %d\n","setValue() result day",nTmp));
@@ -717,14 +717,14 @@ void Calendar_gregorian::getValue() throw(RuntimeException)
     {
         if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS ||
                 fieldIndex == CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS)
-            continue;   // not ICU fields
+            continue;   
 
         UErrorCode status; sal_Int32 value = body->get( fieldNameConverter(
                     fieldIndex), status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
 
-        // Convert millisecond to minute for ZONE and DST and set remainder in
-        // second field.
+        
+        
         if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET)
         {
             sal_Int32 nMinutes = value / 60000;
@@ -744,9 +744,9 @@ void Calendar_gregorian::getValue() throw(RuntimeException)
         else
             fieldValue[fieldIndex] = (sal_Int16) value;
 
-        // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
+        
         if ( fieldIndex == CalendarFieldIndex::DAY_OF_WEEK )
-            fieldValue[fieldIndex]--;   // UCAL_SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
+            fieldValue[fieldIndex]--;   
     }
     mapFromGregorian();
     fieldSet = 0;
@@ -769,7 +769,7 @@ Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
 void SAL_CALL
 Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value ) throw(RuntimeException)
 {
-    // since ZONE and DST could not be add, we don't need to convert value here
+    
     UErrorCode status;
     body->add(fieldNameConverter(fieldIndex), value, status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
@@ -785,7 +785,7 @@ Calendar_gregorian::isValid() throw(RuntimeException)
         memcpy(fieldSetValue, fieldValue, sizeof(fieldSetValue));
         getValue();
         for ( sal_Int16 fieldIndex = 0; fieldIndex < FIELD_INDEX_COUNT; fieldIndex++ ) {
-            // compare only with fields that are set and reset fieldSet[]
+            
             if (tmp & (1 << fieldIndex)) {
                 if (fieldSetValue[fieldIndex] != fieldValue[fieldIndex])
                     return sal_False;
@@ -795,13 +795,13 @@ Calendar_gregorian::isValid() throw(RuntimeException)
     return true;
 }
 
-// NativeNumberMode has different meaning between Number and Calendar for Asian locales.
-// Here is the mapping table
-// calendar(q/y/m/d)    zh_CN           zh_TW           ja              ko
-// NatNum1              NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/4/4   NatNum1/1/7/7
-// NatNum2              NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/5/5   NatNum2/2/8/8
-// NatNum3              NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
-// NatNum4                                                              NatNum9/9/11/11
+
+
+
+
+
+
+
 
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
         sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
@@ -829,7 +829,7 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
             case NativeNumberMode::NATNUM4:
                 if (isKorean)
                     return isShort ? NativeNumberMode::NATNUM9 : NativeNumberMode::NATNUM11;
-                // fall through
+                
             default: return 0;
         }
     }
@@ -877,8 +877,8 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
 sal_Int16 SAL_CALL
 Calendar_gregorian::getFirstDayOfWeek() throw(RuntimeException)
 {
-    // UCAL_SUNDAY == 1, Weekdays::SUNDAY == 0 => offset -1
-    // Check for underflow just in case we're called "out of sync".
+    
+    
     return ::std::max( sal::static_int_cast<sal_Int16>(0),
             sal::static_int_cast<sal_Int16>( static_cast<sal_Int16>(
                     body->getFirstDayOfWeek()) - 1));
@@ -888,7 +888,7 @@ void SAL_CALL
 Calendar_gregorian::setFirstDayOfWeek( sal_Int16 day )
 throw(RuntimeException)
 {
-    // Weekdays::SUNDAY == 0, UCAL_SUNDAY == 1 => offset +1
+    
     body->setFirstDayOfWeek( static_cast<UCalendarDaysOfWeek>( day + 1));
 }
 
@@ -1014,7 +1014,7 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
     return aStr;
 }
 
-// Methods in XExtendedCalendar
+
 OUString SAL_CALL
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
         throw (RuntimeException)
@@ -1033,12 +1033,12 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
             nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER) {
         Sequence< OUString> xR = LocaleDataImpl().getReservedWord(aLocale);
         sal_Int16 quarter = value / 3;
-        // Since this base class method may be called by derived calendar
-        // classes where a year consists of more than 12 months we need a check
-        // to not run out of bounds of reserved quarter words. Perhaps a more
-        // clean way (instead of dividing by 3) would be to first get the
-        // number of months, divide by 4 and then use that result to divide the
-        // actual month value.
+        
+        
+        
+        
+        
+        
         if ( quarter > 3 )
             quarter = 3;
         quarter = sal::static_int_cast<sal_Int16>( quarter +
@@ -1046,46 +1046,46 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
             reservedWords::QUARTER1_ABBREVIATION : reservedWords::QUARTER1_WORD) );
         aOUStr = xR[quarter];
     } else {
-        // The "#100211# - checked" comments serve for detection of "use of
-        // sprintf is safe here" conditions. An sprintf encountered without
-        // having that comment triggers alarm ;-)
+        
+        
+        
         sal_Char aStr[10];
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
-                value += 1;     // month is zero based
-                // fall thru
+                value += 1;     
+                
             case CalendarDisplayCode::SHORT_DAY:
-                sprintf(aStr, "%d", value);     // #100211# - checked
+                sprintf(aStr, "%d", value);     
                 break;
             case CalendarDisplayCode::LONG_YEAR:
                 if ( aCalendar.Name == "gengou" )
-                    sprintf(aStr, "%02d", value);     // #100211# - checked
+                    sprintf(aStr, "%02d", value);     
                 else
-                    sprintf(aStr, "%d", value);     // #100211# - checked
+                    sprintf(aStr, "%d", value);     
                 break;
             case CalendarDisplayCode::LONG_MONTH:
-                value += 1;     // month is zero based
-                sprintf(aStr, "%02d", value);   // #100211# - checked
+                value += 1;     
+                sprintf(aStr, "%02d", value);   
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
-                // Take last 2 digits, or only one if value<10, for example,
-                // in case of the Gengou calendar. For combined era+year always
-                // the full year is displayed, without leading 0.
-                // Workaround for non-combined calls in certain calendars is
-                // the kDisplayEraForcedLongYear flag, but this also could get
-                // called for YY not only E format codes, no differentiation
-                // possible here; the good news is that usually the Gregorian
-                // calendar is the default and hence YY calls for Gregorian and
-                // E for the other calendar and currently (2013-02-28) ROC is
-                // the only calendar using this.
-                // See i#116701 and fdo#60915
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 if (value < 100 || bEraMode || (eraArray && (eraArray[0].flags & kDisplayEraForcedLongYear)))
-                    sprintf(aStr, "%d", value); // #100211# - checked
+                    sprintf(aStr, "%d", value); 
                 else
-                    sprintf(aStr, "%02d", value % 100); // #100211# - checked
+                    sprintf(aStr, "%02d", value % 100); 
                 break;
             case CalendarDisplayCode::LONG_DAY:
-                sprintf(aStr, "%02d", value);   // #100211# - checked
+                sprintf(aStr, "%02d", value);   
                 break;
 
             case CalendarDisplayCode::SHORT_DAY_NAME:
@@ -1131,7 +1131,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         aOUStr = OUString::createFromAscii(aStr);
     }
     if (nNativeNumberMode > 0) {
-        // For Japanese calendar, first year calls GAN, see bug 111668 for detail.
+        
         if (eraArray == gengou_eraArray && value == 1
             && (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
                 nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR)
@@ -1147,12 +1147,12 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
     return aOUStr;
 }
 
-// Methods in XExtendedCalendar
+
 OUString SAL_CALL
 Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
         throw (RuntimeException)
 {
-    // make year and era in different order for year before and after 0.
+    
     if ((nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA ||
                 nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR_AND_ERA) &&
             getValue(CalendarFieldIndex::ERA) == 0) {

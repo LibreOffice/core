@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -98,7 +98,7 @@ OUString decomposeType(
     if (i != -1) {
         OUString tmpl(nucl.copy(0, i));
         do {
-            ++i; // skip '<' or ','
+            ++i; 
             sal_Int32 j = i;
             for (sal_Int32 level = 0; j != nucl.getLength(); ++j) {
                 sal_Unicode c = nucl[j];
@@ -248,7 +248,7 @@ void scanMap(
                 .first);
             switch (ent->getSort()) {
             case unoidl::Entity::SORT_MODULE:
-                assert(false); // this cannot happen
+                assert(false); 
             case unoidl::Entity::SORT_ENUM_TYPE:
             case unoidl::Entity::SORT_CONSTANT_GROUP:
                 break;
@@ -423,9 +423,9 @@ void visit(
     std::vector<OUString> & result)
 {
     if (!iterator->second.sorted) {
-        // Doesn't bother to verify the graph is acyclic (which it is guaranteed
-        // to be for a consistent set of entities); a non-DAG will lead to
-        // infinite recursion/stack overflow:
+        
+        
+        
         for (std::set<OUString>::iterator i(
                  iterator->second.dependencies.begin());
              i != iterator->second.dependencies.end(); ++i)
@@ -513,7 +513,7 @@ void writeAnnotations(std::vector<OUString> const & annotations) {
         for (std::vector<OUString>::const_iterator i(annotations.begin());
              i != annotations.end(); ++i)
         {
-            //TODO: i->indexOf("*/") == -1
+            
             std::cout << " @" << *i;
         }
         std::cout << " */ ";
@@ -609,7 +609,7 @@ void writeEntity(
             static_cast<unoidl::PublishableEntity *>(i->second.entity.get()));
         switch (ent->getSort()) {
         case unoidl::Entity::SORT_MODULE:
-            assert(false); // this cannot happen
+            assert(false); 
         case unoidl::Entity::SORT_ENUM_TYPE:
             {
                 rtl::Reference<unoidl::EnumTypeEntity> ent2(

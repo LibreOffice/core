@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -32,7 +32,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 
@@ -94,7 +94,7 @@ inline OUString GetUsageText( const sal_uInt16 eU )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPageItem::GetPresentation
 (
@@ -150,26 +150,26 @@ SfxItemPresentation SvxPageItem::GetPresentation
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
-        default: ;//prevent warning
+        default: ;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
         case MID_PAGE_NUMTYPE:
         {
-            //! die Konstanten sind nicht mehr in den IDLs ?!?
+            
             rVal <<= (sal_Int16)( eNumType );
         }
         break;
         case MID_PAGE_ORIENTATION:
-            //Landscape= sal_True
+            
             rVal = Bool2Any(bLandscape);
         break;
         case MID_PAGE_LAYOUT     :
@@ -192,7 +192,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
     return true;
 }
-//------------------------------------------------------------------------
+
 bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch( nMemberId )
@@ -226,7 +226,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 case style::PageStyleLayout_RIGHT   : eUse |= SVX_PAGE_RIGHT; break;
                 case style::PageStyleLayout_ALL     : eUse |= SVX_PAGE_ALL  ; break;
                 case style::PageStyleLayout_MIRRORED: eUse |= SVX_PAGE_MIRROR;break;
-                default: ;//prevent warning
+                default: ;
             }
         }
         break;
@@ -234,7 +234,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
@@ -242,7 +242,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     sal_Bool bLand;
     sal_uInt16 nUse;
 
-    // UNICODE: rStream >> sStr;
+    
     OUString sStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
     rStream.ReadUChar( eType );
@@ -257,11 +257,11 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     return pPage;
 }
 
-//------------------------------------------------------------------------
+
 
 SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    // UNICODE: rStrm << aDescName;
+    
     rStrm.WriteUniOrByteString(aDescName, rStrm.GetStreamCharSet());
 
     rStrm.WriteUChar( (sal_uInt8)eNumType ).WriteUChar( bLandscape ).WriteUInt16( eUse );
@@ -295,7 +295,7 @@ SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
     return new SvxSetItem(*this);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxSetItem::GetPresentation
 (

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
@@ -64,7 +64,7 @@
 #include <sfx2/objface.hxx>
 #include "thessubmenu.hxx"
 
-// static member initialization
+
 PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = NULL;
 
 using namespace com::sun::star;
@@ -78,7 +78,7 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMenuManager::~SfxMenuManager()
 {
@@ -87,19 +87,19 @@ SfxMenuManager::~SfxMenuManager()
     pBindings->LEAVEREGISTRATIONS();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
 {
     pMenu = &rMenu;
 
-    // set the handlers
+    
     Menu *pSvMenu = pMenu->GetSVMenu();
     pSvMenu->SetSelectHdl( LINK(this, SfxMenuManager, Select) );
     TryToHideDisabledEntries_Impl( pSvMenu );
 }
 
-//-------------------------------------------------------------------------
+
 void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
 {
     SfxViewShell *pView = pBindings->GetDispatcher()->GetFrame()->GetViewShell();
@@ -110,11 +110,11 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
         sal_uInt16 nr=0;
         for ( sal_uInt16 n = 0; n < aVerbs.getLength(); ++n )
         {
-            // check for ReadOnly verbs
+            
             if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
                 continue;
 
-            // check for verbs that shouldn't appear in the menu
+            
             if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                 continue;
 
@@ -131,7 +131,7 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
 PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 {
 
-    // build thesaurus sub menu if look-up string is available
+    
 
     PopupMenu* pThesSubMenu = 0;
     SfxPoolItem *pItem = 0;
@@ -147,7 +147,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     delete pItem;
     if ( !aThesLookUpStr.isEmpty() && nDelimPos != -1 )
     {
-        // get synonym list for sub menu
+        
         std::vector< OUString > aSynonyms;
         SfxThesSubMenuHelper aHelper;
         OUString aText( aHelper.GetText( aThesLookUpStr, nDelimPos ) );
@@ -171,7 +171,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
             for (sal_uInt16 i = 0; (size_t)i < nNumSynonyms; ++i)
             {
-                //! item ids should start with values > 0, since 0 has special meaning
+                
                 const sal_uInt16 nId = i + 1;
 
                 OUString aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
@@ -184,7 +184,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
                     pThesSubMenu->SetItemImage( nId, aImage );
             }
         }
-        else // nNumSynonyms == 0
+        else 
         {
             const OUString aItemText( SfxResId(STR_MENU_NO_SYNONYM_FOUND).toString() );
             pThesSubMenu->InsertItem( 1, aItemText, MIB_NOSELECT );
@@ -203,9 +203,9 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     return pThesSubMenu;
 }
 
-// ------------------------------------------------------------------------
 
-// executes the function for the selected item
+
+
 IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
 {
     sal_uInt16 nId = (sal_uInt16) pSelMenu->GetCurItemId();
@@ -224,10 +224,10 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         pBindings->ExecuteCommand_Impl( aCommand );
     }
     else if ( pBindings->IsBound(nId) )
-        // normal function
+        
         pBindings->Execute( nId );
     else
-        // special menu function
+        
         pBindings->GetDispatcher_Impl()->Execute( nId );
 
     return sal_True;
@@ -237,7 +237,7 @@ SfxPopupMenuManager::~SfxPopupMenuManager()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxPopupMenuManager::RemoveDisabledEntries()
 {
@@ -245,7 +245,7 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
         TryToHideDisabledEntries_Impl( pSVMenu );
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
 {
@@ -254,7 +254,7 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
     return nVal;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
 :   pMenu(0),
@@ -286,7 +286,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     }
 
     PopupMenu* pThesSubMenu = InsertThesaurusSubmenu_Impl( &pFrame->GetBindings(), pSVMenu );
-    // #i107205# (see comment in header file)
+    
     pStaticThesSubMenu = pThesSubMenu;
 
     if ( n == nCount )
@@ -371,9 +371,9 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         aPop.RemoveDisabledEntries();
         aPop.Execute( rPoint, pWindow );
 
-        // #i112646 avoid crash when context menu is closed.
-        // the (manually inserted) sub-menu needs to be destroyed before
-        // aPop gets destroyed.
+        
+        
+        
         delete pThesSubMenu;
         pThesSubMenu = 0;
     }

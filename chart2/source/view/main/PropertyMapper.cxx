@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PropertyMapper.hxx"
@@ -44,7 +44,7 @@ void lcl_overwriteOrAppendValues(
         rMap[ aIt->first ] = aIt->second;
 }
 
-} // anonymous namespace
+} 
 
 void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
@@ -141,7 +141,7 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
     rNames.realloc(nPropertyCount);
     rValues.realloc(nPropertyCount);
 
-    //fill sequences
+    
     tPropertyNameValueMap::const_iterator aValueIt(  rValueMap.begin() );
     tPropertyNameValueMap::const_iterator aValueEnd( rValueMap.end()   );
     sal_Int32 nN=0;
@@ -150,13 +150,13 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
         const uno::Any& rAny = aValueIt->second;
         if( rAny.hasValue() )
         {
-            //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
+            
             rNames[nN]  = aValueIt->first;
             rValues[nN] = rAny;
             ++nN;
         }
     }
-    //reduce to real property count
+    
     rNames.realloc(nN);
     rValues.realloc(nN);
 }
@@ -184,12 +184,12 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
-    //shape property -- chart model object property
+    
     static tMakePropertyNameMap m_aShapePropertyMapForCharacterProperties =
         tMakePropertyNameMap
         ( "CharColor",                "CharColor" )
         ( "CharContoured",            "CharContoured" )
-        ( "CharEmphasis",             "CharEmphasis" )//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
+        ( "CharEmphasis",             "CharEmphasis" )
 
         ( "CharFontFamily",           "CharFontFamily" )
         ( "CharFontFamilyAsian",      "CharFontFamilyAsian" )
@@ -240,7 +240,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
-    //shape property -- chart model object property
+    
     static tMakePropertyNameMap m_aShapePropertyMapForParagraphProperties =
         tMakePropertyNameMap
         ( "ParaAdjust",          "ParaAdjust" )
@@ -256,7 +256,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProper
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
-    //shape property -- chart model object property
+    
     static tMakePropertyNameMap m_aShapePropertyMapForFillProperties =
         tMakePropertyNameMap
         ( "FillBackground",               "FillBackground" )
@@ -268,7 +268,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
         ( "FillStyle",                    "FillStyle" )
         ( "FillTransparence",             "FillTransparence" )
         ( "FillTransparenceGradientName", "FillTransparenceGradientName" )
-        //bitmap properties
+        
         ( "FillBitmapMode",               "FillBitmapMode" )
         ( "FillBitmapSizeX",              "FillBitmapSizeX" )
         ( "FillBitmapSizeY",              "FillBitmapSizeY" )
@@ -284,7 +284,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
-    //shape property -- chart model object property
+    
     static tMakePropertyNameMap m_aShapePropertyMapForLineProperties =
         tMakePropertyNameMap
         ( "LineColor",              "LineColor" )
@@ -321,7 +321,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProper
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
-    //shape property -- chart model object property
+    
     static tMakePropertyNameMap m_aShapePropertyMapForLineSeriesProperties =
         tMakePropertyNameMap
         ( "LineColor",           "Color" )
@@ -336,7 +336,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
-    //shape property -- chart model object property
+    
     static tMakePropertyNameMap m_aShapePropertyMapForFilledSeriesProperties =
         tMakePropertyNameMap
         ( "FillBackground",               "FillBackground" )
@@ -348,7 +348,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
         ( "FillStyle",                    "FillStyle" )
         ( "FillTransparence",             "Transparency" )
         ( "FillTransparenceGradientName", "TransparencyGradientName" )
-        //bitmap properties
+        
         ( "FillBitmapMode",               "FillBitmapMode" )
         ( "FillBitmapSizeX",              "FillBitmapSizeX" )
         ( "FillBitmapSizeY",              "FillBitmapSizeY" )
@@ -358,7 +358,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
         ( "FillBitmapRectanglePoint",     "FillBitmapRectanglePoint" )
         ( "FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX" )
         ( "FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY" )
-        //line properties
+        
         ( "LineColor",                    "BorderColor" )
         ( "LineDashName",                 "BorderDashName" )
         ( "LineStyle",                    "BorderStyle" )
@@ -386,7 +386,7 @@ void PropertyMapper::setMultiProperties(
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+        ASSERT_EXCEPTION( e ); 
     }
 
     if(!bSuccess)
@@ -423,27 +423,27 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     , sal_Int32 nLimitedSpace
     , bool bLimitedHeight )
 {
-    //fill character properties into the ValueMap
+    
     tPropertyNameValueMap aValueMap;
     PropertyMapper::getValueMap( aValueMap
             , PropertyMapper::getPropertyNameMapForCharacterProperties()
             , xSourceProp );
 
-    //some more shape properties apart from character properties, position-matrix and label string
-    aValueMap.insert( tPropertyNameValueMap::value_type( "LineStyle", uno::makeAny(drawing::LineStyle_NONE) ) ); // drawing::LineStyle
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
+    
+    aValueMap.insert( tPropertyNameValueMap::value_type( "LineStyle", uno::makeAny(drawing::LineStyle_NONE) ) ); 
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); 
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); 
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); 
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); 
     if( bName )
-        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( OUString() ) ) ); //CID OUString - needs to be overwritten for each point
+        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( OUString() ) ) ); 
 
     if( nLimitedSpace > 0 )
     {
         if(bLimitedHeight)
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameHeight", uno::makeAny(nLimitedSpace) ) ); //sal_Int32
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameHeight", uno::makeAny(nLimitedSpace) ) ); 
         else
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameWidth", uno::makeAny(nLimitedSpace) ) ); //sal_Int32
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameWidth", uno::makeAny(nLimitedSpace) ) ); 
         aValueMap.insert( tPropertyNameValueMap::value_type( "ParaIsHyphenation", uno::makeAny(sal_True) ) );
     }
 
@@ -454,19 +454,19 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
     const uno::Reference< beans::XPropertySet >& xSourceProp
     , tNameSequence& rPropNames, tAnySequence& rPropValues )
 {
-    //fill character, line and fill properties into the ValueMap
+    
     tPropertyNameValueMap aValueMap;
     PropertyMapper::getValueMap( aValueMap
             , PropertyMapper::getPropertyNameMapForTextShapeProperties()
             , xSourceProp );
 
-    // auto-grow makes sure the shape has the correct size after setting text
+    
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny( drawing::TextHorizontalAdjust_CENTER )));
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny( drawing::TextVerticalAdjust_CENTER )));
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny( true )));
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny( true )));
 
-    // set some distance to the border, in case it is shown
+    
     const sal_Int32 nWidthDist  = 250;
     const sal_Int32 nHeightDist = 125;
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextLeftDistance",  uno::makeAny( nWidthDist )));
@@ -474,13 +474,13 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextUpperDistance", uno::makeAny( nHeightDist )));
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextLowerDistance", uno::makeAny( nHeightDist )));
 
-    // use a line-joint showing the border of thick lines like two rectangles
-    // filled in between.
+    
+    
     aValueMap["LineJoint"] <<= drawing::LineJoint_ROUND;
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

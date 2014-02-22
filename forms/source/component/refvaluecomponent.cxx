@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "refvaluecomponent.hxx"
@@ -23,20 +23,20 @@
 
 #include <list>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form::binding;
 
-    //====================================================================
-    //=
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
         ,m_eDefaultChecked( STATE_NOCHECK )
@@ -44,7 +44,7 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     OReferenceValueComponent::OReferenceValueComponent( const OReferenceValueComponent* _pOriginal, const Reference< XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
@@ -56,19 +56,19 @@ namespace frm
         calculateExternalValueType();
     }
 
-    //--------------------------------------------------------------------
+    
     OReferenceValueComponent::~OReferenceValueComponent()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void OReferenceValueComponent::setReferenceValue( const OUString& _rRefValue )
     {
         m_sReferenceValue = _rRefValue;
         calculateExternalValueType();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OReferenceValueComponent::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch ( _nHandle )
@@ -86,7 +86,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OReferenceValueComponent::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
     {
         switch ( _nHandle )
@@ -115,7 +115,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
     {
         sal_Bool bModified = sal_False;
@@ -141,13 +141,13 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------------------
+    
     Any OReferenceValueComponent::getDefaultForReset() const
     {
         return makeAny( (sal_Int16)m_eDefaultChecked );
     }
 
-    //--------------------------------------------------------------------
+    
     void OReferenceValueComponent::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( m_bSupportSecondRefValue ? 3 : 2, OBoundControlModel )
@@ -160,7 +160,7 @@ namespace frm
         END_DESCRIBE_PROPERTIES();
     }
 
-    //-----------------------------------------------------------------------------
+    
     Sequence< Type > OReferenceValueComponent::getSupportedBindingTypes()
     {
         ::std::list< Type > aTypes;
@@ -168,14 +168,14 @@ namespace frm
 
         if ( !m_sReferenceValue.isEmpty() )
             aTypes.push_front( ::getCppuType( static_cast< OUString* >( NULL ) ) );
-            // push_front, because this is the preferred type
+            
 
         Sequence< Type > aTypesRet( aTypes.size() );
         ::std::copy( aTypes.begin(), aTypes.end(), aTypesRet.getArray() );
         return aTypesRet;
     }
 
-    //-----------------------------------------------------------------------------
+    
     Any OReferenceValueComponent::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         sal_Int16 nState = STATE_DONTKNOW;
@@ -210,7 +210,7 @@ namespace frm
         return makeAny( nState );
     }
 
-    //-----------------------------------------------------------------------------
+    
     Any OReferenceValueComponent::translateControlValueToExternalValue( ) const
     {
         Any aExternalValue;
@@ -259,7 +259,7 @@ namespace frm
         return aExternalValue;
     }
 
-    //-----------------------------------------------------------------------------
+    
     Any OReferenceValueComponent::translateControlValueToValidatableValue( ) const
     {
         if ( !m_xAggregateSet.is() )
@@ -282,8 +282,8 @@ namespace frm
         return aValidatableValue;
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,28 +29,28 @@
 #include <svx/svddrgv.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 {
     return rRefObj.GetProperties();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// #i27224#
+
+
 sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfVirtObj(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrVirtObj,SdrObject);
 
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)
 {
-    bVirtObj=true; // this is only a virtual object
+    bVirtObj=true; 
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -60,7 +60,7 @@ SdrVirtObj::~SdrVirtObj()
     rRefObj.DelReference(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 const SdrObject& SdrVirtObj::GetReferencedObj() const
 {
@@ -75,9 +75,9 @@ SdrObject& SdrVirtObj::ReferencedObj()
 void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     bClosedObj=rRefObj.IsClosedObj();
-    SetRectsDirty(); // TODO: Optimize this.
+    SetRectsDirty(); 
 
-    // Only a repaint here, rRefObj may have changed and broadcasts
+    
     ActionChanged();
 }
 
@@ -86,7 +86,7 @@ void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
     aAnchor=rAnchorPos;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::SetModel(SdrModel* pNewModel)
 {
@@ -116,14 +116,14 @@ SdrObjList* SdrVirtObj::GetSubList() const
 
 const Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetCurrentBoundRect(); // TODO: Optimize this.
+    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetCurrentBoundRect(); 
     ((SdrVirtObj*)this)->aOutRect+=aAnchor;
     return aOutRect;
 }
 
 const Rectangle& SdrVirtObj::GetLastBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetLastBoundRect(); // TODO: Optimize this.
+    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetLastBoundRect(); 
     ((SdrVirtObj*)this)->aOutRect+=aAnchor;
     return aOutRect;
 }
@@ -141,11 +141,11 @@ void SdrVirtObj::SetChanged()
 
 SdrVirtObj* SdrVirtObj::Clone() const
 {
-    return new SdrVirtObj(this->rRefObj); // only a further reference
+    return new SdrVirtObj(this->rRefObj); 
 }
 
 SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
-{   // reference different object??
+{   
     SdrObject::operator=(rObj);
     aAnchor=rObj.aAnchor;
     return *this;
@@ -203,7 +203,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
     return aPolyPolygon;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 SdrVirtObj::GetHdlCount() const
 {
@@ -214,8 +214,8 @@ SdrHdl* SdrVirtObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pHdl=rRefObj.GetHdl(nHdlNum);
 
-    // #i73248#
-    // GetHdl() at SdrObject is not guaranteed to return an object
+    
+    
     if(pHdl)
     {
         Point aP(pHdl->GetPos()+aAnchor);
@@ -239,22 +239,22 @@ SdrHdl* SdrVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const
 
 void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    // #i73248#
-    // SdrObject::AddToHdlList(rHdlList) is not a good thing to call
-    // since at SdrPathObj, only AddToHdlList may be used and the call
-    // will instead use the standard implementation which uses GetHdlCount()
-    // and GetHdl instead. This is not wrong, but may be much less effective
-    // and may not be prepared to GetHdl returning NULL
+    
+    
+    
+    
+    
+    
 
-    // get handles using AddToHdlList from ref object
+    
     SdrHdlList aLocalList(0);
     rRefObj.AddToHdlList(aLocalList);
     const sal_uInt32 nHdlCount(aLocalList.GetHdlCount());
 
     if(nHdlCount)
     {
-        // translate handles and add them to dest list. They are temporarily part of
-        // two lists then
+        
+        
         const Point aOffset(GetOffset());
 
         for(sal_uInt32 a(0L); a < nHdlCount; a++)
@@ -264,8 +264,8 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
             rHdlList.AddHdl(pCandidate);
         }
 
-        // remove them from source list, else they will be deleted when
-        // source list is deleted
+        
+        
         while(aLocalList.GetHdlCount())
         {
             aLocalList.RemoveHdl(aLocalList.GetHdlCount() - 1L);
@@ -273,7 +273,7 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrVirtObj::hasSpecialDrag() const
 {
@@ -292,10 +292,10 @@ SdrObject* SdrVirtObj::getFullDragClone() const
 
     if(bSpecialHandling)
     {
-        // special handling for VirtObj. Do not create another
-        // reference to rRefObj, this would allow to change that
-        // one on drag. Instead, create a SdrGrafObj for drag containing
-        // the graphical representation
+        
+        
+        
+        
         pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
     }
     else
@@ -320,7 +320,7 @@ bool SdrVirtObj::applySpecialDrag(SdrDragStat& rDrag)
 basegfx::B2DPolyPolygon SdrVirtObj::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
     return rRefObj.getSpecialDragPoly(rDrag);
-    // TODO: we don't handle offsets yet!
+    
 }
 
 OUString SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
@@ -328,7 +328,7 @@ OUString SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     return rRefObj.getSpecialDragComment(rDrag);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrVirtObj::BegCreate(SdrDragStat& rStat)
 {
@@ -358,10 +358,10 @@ void SdrVirtObj::BrkCreate(SdrDragStat& rStat)
 basegfx::B2DPolyPolygon SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
     return rRefObj.TakeCreatePoly(rDrag);
-    // TODO: we don't handle offsets yet!
+    
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::NbcMove(const Size& rSiz)
 {
@@ -393,7 +393,7 @@ void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
     SetRectsDirty();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::Move(const Size& rSiz)
 {
@@ -444,7 +444,7 @@ void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::RecalcSnapRect()
 {
@@ -479,12 +479,12 @@ void SdrVirtObj::NbcSetSnapRect(const Rectangle& rRect)
     rRefObj.NbcSetSnapRect(aR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 const Rectangle& SdrVirtObj::GetLogicRect() const
 {
-    ((SdrVirtObj*)this)->aSnapRect=rRefObj.GetLogicRect();  // An abuse of aSnapRect!
-    ((SdrVirtObj*)this)->aSnapRect+=aAnchor;                // If there's trouble, we need another Rectangle Member (or a Heap).
+    ((SdrVirtObj*)this)->aSnapRect=rRefObj.GetLogicRect();  
+    ((SdrVirtObj*)this)->aSnapRect+=aAnchor;                
     return aSnapRect;
 }
 
@@ -506,7 +506,7 @@ void SdrVirtObj::NbcSetLogicRect(const Rectangle& rRect)
     rRefObj.NbcSetLogicRect(aR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 long SdrVirtObj::GetRotateAngle() const
 {
@@ -518,7 +518,7 @@ long SdrVirtObj::GetShearAngle(bool bVertical) const
     return rRefObj.GetShearAngle(bVertical);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 SdrVirtObj::GetSnapPointCount() const
 {
@@ -555,7 +555,7 @@ void SdrVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     SetRectsDirty();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObjGeoData* SdrVirtObj::NewGeoData() const
 {
@@ -573,7 +573,7 @@ void SdrVirtObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetRectsDirty();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrObjGeoData* SdrVirtObj::GetGeoData() const
 {
@@ -588,7 +588,7 @@ void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrVirtObj::NbcReformatText()
 {
@@ -600,7 +600,7 @@ void SdrVirtObj::ReformatText()
     rRefObj.ReformatText();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrVirtObj::HasMacro() const
 {
@@ -609,32 +609,32 @@ bool SdrVirtObj::HasMacro() const
 
 SdrObject* SdrVirtObj::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
-    return rRefObj.CheckMacroHit(rRec); // TODO: positioning offset
+    return rRefObj.CheckMacroHit(rRec); 
 }
 
 Pointer SdrVirtObj::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
 {
-    return rRefObj.GetMacroPointer(rRec); // TODO: positioning offset
+    return rRefObj.GetMacroPointer(rRec); 
 }
 
 void SdrVirtObj::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
 {
-    rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // TODO: positioning offset
+    rRefObj.PaintMacro(rOut,rDirtyRect,rRec); 
 }
 
 bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
-    return rRefObj.DoMacro(rRec); // TODO: positioning offset
+    return rRefObj.DoMacro(rRec); 
 }
 
 OUString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
-    return rRefObj.GetMacroPopupComment(rRec); // TODO: positioning offset
+    return rRefObj.GetMacroPopupComment(rRec); 
 }
 
 const Point SdrVirtObj::GetOffset() const
 {
-    // #i73248# default offset of SdrVirtObj is aAnchor
+    
     return aAnchor;
 }
 

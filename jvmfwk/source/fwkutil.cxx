@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -102,7 +102,7 @@ bool isAccessibilitySupportDesired()
     RegCloseKey(hKey);
 
 #elif defined UNX
-    // Java is no longer required for a11y - we use atk directly.
+    
     retVal = ::rtl::Bootstrap::get( "JFW_PLUGIN_FORCE_ACCESSIBILITY", sValue) && sValue == "1";
 #endif
 
@@ -143,14 +143,14 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
     static const char decodingTable[] =
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenData = data.getLength();
-    sal_Int32 lenBuf = lenData / 2; //always divisable by two
+    sal_Int32 lenBuf = lenData / 2; 
     unsigned char* pBuf = new unsigned char[lenBuf];
     const sal_Int8* pData = data.getConstArray();
     for (sal_Int32 i = 0; i < lenBuf; i++)
     {
         sal_Int8 curChar = *pData++;
-        //find the index of the first 4bits
-        //  TODO  What happens if text is not valid Hex characters?
+        
+        
         unsigned char nibble = 0;
         for (unsigned char j = 0; j < 16; j++)
         {
@@ -162,7 +162,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         }
         nibble <<= 4;
         curChar = *pData++;
-        //find the index for the next 4bits
+        
         for (unsigned char j = 0; j < 16; j++)
         {
             if (curChar == decodingTable[j])
@@ -234,8 +234,8 @@ OUString findPlugin(
     jfw::FileStatus s = checkFileURL(sUrl);
     if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
     {
-        //If only the name of the library is given, then
-        //use PATH, LD_LIBRARY_PATH etc. to locate the plugin
+        
+        
         if (plugin.indexOf('/') == -1)
         {
             OUString url;

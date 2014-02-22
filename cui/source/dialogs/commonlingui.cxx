@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "commonlingui.hxx"
@@ -26,11 +26,11 @@
 
 #include "hangulhanjadlg.hrc"
 
-//=============================================================================
-// SvxClickInfoCtr
-//=============================================================================
 
-//-----------------------------------------------------------------------------
+
+
+
+
 SvxClickInfoCtr::SvxClickInfoCtr( Window* pParent, const ResId& rResId ) :
         Control( pParent, rResId ),
         aFixedInfo( this)
@@ -39,13 +39,13 @@ SvxClickInfoCtr::SvxClickInfoCtr( Window* pParent, const ResId& rResId ) :
     aFixedInfo.Show();
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxClickInfoCtr::MouseButtonDown( const MouseEvent& )
 {
     aActivateLink.Call(this);
 }
 
-//-----------------------------------------------------------------------------
+
 bool SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_GETFOCUS || rNEvt.GetType()==EVENT_MOUSEBUTTONDOWN)
@@ -56,27 +56,27 @@ bool SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxClickInfoCtr::SetText( const OUString& rStr )
 {
     aFixedInfo.SetText(rStr );
 }
 
-//-----------------------------------------------------------------------------
+
 OUString SvxClickInfoCtr::GetText() const
 {
     return aFixedInfo.GetText();
 }
 
-//-----------------------------------------------------------------------------
+
 SvxClickInfoCtr::~SvxClickInfoCtr()
 {
 }
 
-//=============================================================================
-// SvxCommonLinguisticControl
-//=============================================================================
-//-----------------------------------------------------------------------------
+
+
+
+
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     :Window( _pParent, CUI_RES( RID_SVX_WND_COMMON_LINGU ) )
     ,aWordText      ( this, CUI_RES( FT_WORD ) )
@@ -100,7 +100,7 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     Show();
 }
 
-// -----------------------------------------------------------------------
+
 PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) const
 {
     const PushButton* pButton = NULL;
@@ -116,7 +116,7 @@ PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) cons
     return const_cast< PushButton* >( pButton );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::SetButtonHandler( ButtonType _eType, const Link& _rHandler )
 {
     Button* pButton = GetButton( _eType );
@@ -124,7 +124,7 @@ void SvxCommonLinguisticControl::SetButtonHandler( ButtonType _eType, const Link
         pButton->SetClickHdl( _rHandler );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEnable )
 {
     Button* pButton = GetButton( _eType );
@@ -132,10 +132,10 @@ void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEna
         pButton->Enable( _bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter )
 {
-    Window* pInsertAfter = NULL;    // will be the last window of our own "undividable" group, after which we insert the foreign group
+    Window* pInsertAfter = NULL;    
     switch ( _eInsertAfter )
     {
         case eLeftRightWords    : pInsertAfter = &aNewWordED; break;
@@ -144,33 +144,33 @@ void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow,
         case eDialogButtons     : pInsertAfter = &aCancelBtn; break;
     }
 
-    // now loop through the remaining windows of the foreign group
+    
     Window* pInsertBehind = pInsertAfter;
     Window* pInsert = &_rFirstGroupWindow;
 
-    // some strange thing below: asking a window for WINDOW_NEXT or WINDOW_PREV does not take into
-    // account the border window, _but_ SetZOrder _does_!. Thus, when advancing through a chain
-    // of windows, we need to work with the border windows (WINDOW_BORDER), instead of simply
-    // asking for WINDOW_NEXT.
+    
+    
+    
+    
 
     Window* pLoopEnd = _rLastGroupWindow.GetWindow( WINDOW_BORDER );
     while ( pInsert && ( pInsertBehind != pLoopEnd ) )
     {
-        // we'll destroy the NEXT relation immediately, so remember the next window
+        
         DBG_ASSERT( pInsert->GetWindow( WINDOW_BORDER ), "SvxCommonLinguisticControl::InsertControlGroup: border window is expected to be non NULL!" );
         Window* pNextInsert = pInsert->GetWindow( WINDOW_BORDER )->GetWindow( WINDOW_NEXT );
-        // knit
+        
         pInsert->SetZOrder( pInsertBehind, WINDOW_ZORDER_BEHIND );
-        // advance
+        
         pInsertBehind = pInsert;
         pInsert = pNextInsert;
     }
     DBG_ASSERT( pInsertBehind == pLoopEnd, "SvxCommonLinguisticControl::InsertControlGroup: controls do not form a group!" );
-        // if we did not reach pLoopEnd, then we did not reach _rLastGroupWindow in the loop, then
-        // (FirstWindow, LastWindow) was no valid control group
+        
+        
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::Paint( const Rectangle& rRect )
 {
     Window::Paint(rRect );
@@ -181,13 +181,13 @@ void SvxCommonLinguisticControl::Paint( const Rectangle& rRect )
     aDecoView.DrawButton( aRect, BUTTON_DRAW_NOFILL );
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
 {
     Size aSize;
     Point aPos;
 
-    // the controls which need to be resized
+    
     {
         Window* pResize[] =
         {
@@ -200,7 +200,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         }
     }
 
-    // the controls which stick to the bottom of the window
+    
     {
         Window* pMoveDown[] =
         {
@@ -214,7 +214,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         }
     }
 
-    // the controls which stick to the right
+    
     {
         Window* pMoveRight[] =
         {

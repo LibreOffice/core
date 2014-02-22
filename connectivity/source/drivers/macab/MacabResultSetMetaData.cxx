@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,11 +36,11 @@ MacabResultSetMetaData::MacabResultSetMetaData(MacabConnection* _pConnection, OU
       m_aMacabFields()
 {
 }
-// -------------------------------------------------------------------------
+
 MacabResultSetMetaData::~MacabResultSetMetaData()
 {
 }
-// -------------------------------------------------------------------------
+
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
@@ -50,7 +50,7 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
-    // In case, somehow, we don't have anything with the name m_sTableName
+    
     if(aRecords == NULL)
     {
         impl_throwError(STR_NO_TABLE);
@@ -69,13 +69,13 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
     }
 
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 /* column */) throw(SQLException, RuntimeException)
 {
-    // For now, all columns are the same size.
+    
     return 50;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw(SQLException, RuntimeException)
 {
     MacabRecords *aRecords;
@@ -84,7 +84,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
 
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
-    // In case, somehow, we don't have anything with the name m_sTableName
+    
     if(aRecords == NULL)
     {
         impl_throwError(STR_NO_TABLE);
@@ -101,22 +101,22 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
 
     return ABTypeToDataType(aField->type);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnCount() throw(SQLException, RuntimeException)
 {
     return m_aMacabFields.size();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nFieldNumber = m_aMacabFields[column - 1];
@@ -125,7 +125,7 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(
 
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
-    // In case, somehow, we don't have anything with the name m_sTableName
+    
     if(aRecords == NULL)
     {
         impl_throwError(STR_NO_TABLE);
@@ -136,81 +136,81 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(
 
     return aName;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return m_sTableName;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabResultSetMetaData::getPrecision(sal_Int32) throw(SQLException, RuntimeException)
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return (sal_Int32) sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,7 +52,7 @@ public:
 
 
 
-//===== ResourceManager =======================================================
+
 
 ResourceManager::ResourceManager (
     const Reference<frame::XController>& rxController,
@@ -137,13 +137,13 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
                 FrameworkHelper::msCenterPaneURL,
                 AnchorBindingMode_DIRECT))
             {
-                // A resource directly bound to the center pane has been
-                // requested.
+                
+                
                 if (rEvent.ResourceId->getResourceTypePrefix().equals(
                     FrameworkHelper::msViewURLPrefix))
                 {
-                    // The requested resource is a view.  Show or hide the
-                    // resource managed by this ResourceManager accordingly.
+                    
+                    
                     HandleMainViewSwitch(
                         rEvent.ResourceId->getResourceURL(),
                         rEvent.Configuration,
@@ -152,9 +152,9 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
             }
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
             {
-                // The resource managed by this ResourceManager has been
-                // explicitly been requested (maybe by us).  Remember this
-                // setting.
+                
+                
+                
                 HandleResourceRequest(true, rEvent.Configuration);
             }
             break;
@@ -169,9 +169,9 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
             }
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
             {
-                // The resource managed by this ResourceManager has been
-                // explicitly been requested to be hidden (maybe by us).
-                // Remember this setting.
+                
+                
+                
                 HandleResourceRequest(false, rEvent.Configuration);
             }
             break;
@@ -190,7 +190,7 @@ void ResourceManager::UpdateForMainViewShell (void)
         if (mpActiveMainViewContainer->find(msCurrentMainViewURL)
                != mpActiveMainViewContainer->end())
         {
-            // Activate resource.
+            
             mxConfigurationController->requestResourceActivation(
                 mxResourceId->getAnchor(),
                 ResourceActivationMode_ADD);
@@ -259,12 +259,12 @@ void SAL_CALL ResourceManager::disposing (
         && rEvent.Source == mxConfigurationController)
     {
         SaveResourceState();
-        // Without the configuration controller this class can do nothing.
+        
         mxConfigurationController = NULL;
         dispose();
     }
 }
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,7 +48,7 @@
 using namespace psp;
 
 
-// forward declaration
+
 
 #define nBLOCKSIZE 0x2000
 
@@ -83,7 +83,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
     return true;
 }
 
-} // namespace psp
+} 
 
 /*
  * private convenience routines for file handling
@@ -195,8 +195,8 @@ removeSpoolDir (const OUString& rSpoolDir)
     OUString aSysPath;
     if( osl::File::E_None != osl::File::getSystemPathFromFileURL( rSpoolDir, aSysPath ) )
     {
-        // Conversion did not work, as this is quite a dangerous action,
-        // we should abort here ....
+        
+        
         OSL_FAIL( "psprint: couldn't remove spool directory" );
         return;
     }
@@ -249,24 +249,24 @@ PrinterJob::~PrinterJob ()
     std::list< osl::File* >::iterator pPage;
     for (pPage = maPageList.begin(); pPage != maPageList.end(); ++pPage)
     {
-        //(*pPage)->remove();
+        
         delete *pPage;
     }
     for (pPage = maHeaderList.begin(); pPage != maHeaderList.end(); ++pPage)
     {
-        //(*pPage)->remove();
+        
         delete *pPage;
     }
-    // mpJobHeader->remove();
+    
     delete mpJobHeader;
-    // mpJobTrailer->remove();
+    
     delete mpJobTrailer;
 
-    // XXX should really call osl::remove routines
+    
     if( !maSpoolDirName.isEmpty() )
         removeSpoolDir (maSpoolDirName);
 
-    // osl::Directory::remove (maSpoolDirName);
+    
 }
 
 static void WriteLocalTimePS( osl::File *rFile )
@@ -315,7 +315,7 @@ PrinterJob::StartJob (
     m_pGraphics = pGraphics;
     InitPaperSize (rSetupData);
 
-    // create file container for document header and trailer
+    
     maFileName = rFileName;
     mnFileMode = nMode;
     maSpoolDirName = createSpoolDir ();
@@ -324,23 +324,23 @@ PrinterJob::StartJob (
     OUString aExt(".ps");
     mpJobHeader  = CreateSpoolFile (OUString("psp_head"), aExt);
     mpJobTrailer = CreateSpoolFile (OUString("psp_tail"), aExt);
-    if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
+    if( ! (mpJobHeader && mpJobTrailer) ) 
         return false;
 
-    // write document header according to Document Structuring Conventions (DSC)
+    
     WritePS (mpJobHeader,
              "%!PS-Adobe-3.0\n"
              "%%BoundingBox: (atend)\n" );
 
     OUString aFilterWS;
 
-    // Creator (this application)
+    
     aFilterWS = WhitespaceToSpace( rAppName, false );
     WritePS (mpJobHeader, "%%Creator: (");
     WritePS (mpJobHeader, aFilterWS);
     WritePS (mpJobHeader, ")\n");
 
-    // For (user name)
+    
     osl::Security aSecurity;
     OUString aUserName;
     if( aSecurity.getUserName( aUserName ) )
@@ -350,12 +350,12 @@ PrinterJob::StartJob (
         WritePS (mpJobHeader, ")\n");
     }
 
-    // Creation Date (locale independent local time)
+    
     WritePS (mpJobHeader, "%%CreationDate: (");
     WriteLocalTimePS (mpJobHeader);
     WritePS (mpJobHeader, ")\n");
 
-    // Document Title
+    
     /* #i74335#
     * The title should be clean ascii; rJobName however may
     * contain any Unicode character. So implement the following
@@ -384,7 +384,7 @@ PrinterJob::StartJob (
         WritePS (mpJobHeader, ")\n");
     }
 
-    // Language Level
+    
     sal_Char pLevel[16];
     sal_Int32 nSz = getValueOf(GetPostscriptLevel(&rSetupData), pLevel);
     pLevel[nSz++] = '\n';
@@ -392,17 +392,17 @@ PrinterJob::StartJob (
     WritePS (mpJobHeader, "%%LanguageLevel: ");
     WritePS (mpJobHeader, pLevel);
 
-    // Other
+    
     WritePS (mpJobHeader, "%%DocumentData: Clean7Bit\n");
     WritePS (mpJobHeader, "%%Pages: (atend)\n");
     WritePS (mpJobHeader, "%%Orientation: (atend)\n");
     WritePS (mpJobHeader, "%%PageOrder: Ascend\n");
     WritePS (mpJobHeader, "%%EndComments\n");
 
-    // write Prolog
+    
     writeProlog (mpJobHeader, rSetupData);
 
-    // mark last job setup as not set
+    
     m_aLastJobData.m_pParser = NULL;
     m_aLastJobData.m_aContext.setParser( NULL );
 
@@ -412,19 +412,19 @@ PrinterJob::StartJob (
 bool
 PrinterJob::EndJob ()
 {
-    // no pages ? that really means no print job
+    
     if( maPageList.empty() )
         return false;
 
-    // write document setup (done here because it
-    // includes the accumulated fonts
+    
+    
     if( mpJobHeader )
         writeSetup( mpJobHeader, m_aDocumentJobData );
     m_pGraphics->OnEndJob();
     if( ! (mpJobHeader && mpJobTrailer) )
         return false;
 
-    // write document trailer according to Document Structuring Conventions (DSC)
+    
     OStringBuffer aTrailer(512);
     aTrailer.append( "%%Trailer\n" );
     aTrailer.append( "%%BoundingBox: 0 0 " );
@@ -586,7 +586,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
 
-    OUString aPageNo = OUString::number ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
+    OUString aPageNo = OUString::number ((sal_Int32)maPageList.size()+1); 
     OUString aExt    = aPageNo + ".ps";
 
     osl::File* pPageHeader = CreateSpoolFile ( OUString("psp_pghead"), aExt);
@@ -598,7 +598,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     if( ! (pPageHeader && pPageBody) )
         return false;
 
-    // write page header according to Document Structuring Conventions (DSC)
+    
     WritePS (pPageHeader, "%%Page: ");
     WritePS (pPageHeader, aPageNo);
     WritePS (pPageHeader, " ");
@@ -663,7 +663,7 @@ PrinterJob::EndPage ()
     if( ! (pPageBody && pPageHeader) )
         return false;
 
-    // copy page to paper and write page trailer according to DSC
+    
 
     sal_Char pTrailer[256];
     sal_Int32 nChar = 0;
@@ -672,7 +672,7 @@ PrinterJob::EndPage ()
     nChar += psp::appendStr ("%%PageTrailer\n\n",   pTrailer + nChar);
     WritePS (pPageBody, pTrailer);
 
-    // this page is done for now, close it to avoid having too many open fd's
+    
 
     pPageHeader->close();
     pPageBody->close();
@@ -717,10 +717,10 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
 {
     bool bSuccess = true;
 
-    // emit features ordered to OrderDependency
-    // ignore features that are set to default
+    
+    
 
-    // sanity check
+    
     if( rJob.m_pParser == rJob.m_aContext.getParser() &&
         rJob.m_pParser &&
         ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == NULL )
@@ -756,7 +756,7 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                          )
                    )
                 {
-                    // try to avoid PS level 2 feature commands if level is set to 1
+                    
                     if( GetPostscriptLevel( &rJob ) == 1 )
                     {
                         bool bHavePS2 =
@@ -835,9 +835,9 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     if( ! pKey )
         return;
 
-    // order the patch files
-    // according to PPD spec the JobPatchFile options must be int
-    // and should be emitted in order
+    
+    
+    
     std::list< sal_Int32 > patch_order;
     int nValueCount = pKey->countValues();
     for( int i = 0; i < nValueCount; i++ )
@@ -860,8 +860,8 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
 
     while( patch_order.begin() != patch_order.end() )
     {
-        // note: this discards patch files not adhering to the "int" scheme
-        // as there won't be a value for them
+        
+        
         writeFeature( pFile, pKey, pKey->getValue( OUString::number( patch_order.front() ) ), false );
         patch_order.pop_front();
     }
@@ -871,7 +871,7 @@ bool PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
 {
     WritePS( pFile, "%%BeginProlog\n" );
 
-    // JobPatchFile feature needs to be emitted at begin of prolog
+    
     writeJobPatch( pFile, rJobData );
 
     static const sal_Char pProlog[] = {
@@ -970,7 +970,7 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
 {
     WritePS (pFile, "%%BeginSetup\n%\n");
 
-    // download fonts
+    
     std::list< OString > aFonts;
     m_pGraphics->writeResources( pFile, aFonts );
 
@@ -993,12 +993,12 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     }
 
     bool bSuccess = true;
-    // in case of external print dialog the number of copies is prepended
-    // to the job, let us not complicate things by emitting our own copy count
+    
+    
     bool bExternalDialog = PrinterInfoManager::get().checkFeatureToken( GetPrinterName(), "external_dialog" );
     if( ! bExternalDialog && rJob.m_nCopies > 1 )
     {
-        // setup code
+        
         OStringBuffer aLine("/#copies ");
         aLine.append(static_cast<sal_Int32>(rJob.m_nCopies));
         aLine.append(" def\n");

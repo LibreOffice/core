@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@ namespace accessibility
     using namespace ::svt;
 
 
-    // implementation of a table cell
+    
     OUString AccessibleBrowseBoxTableCell::implGetText()
     {
         ensureIsAlive();
@@ -80,7 +80,7 @@ namespace accessibility
         sal_Int32 nIndex = getIndex_Impl( _nRowPos, _nColPos, _rBrowseBox.GetColumnCount() );
        setAccessibleName( _rBrowseBox.GetAccessibleObjectName( BBTYPE_TABLECELL, nIndex ) );
        setAccessibleDescription( _rBrowseBox.GetAccessibleObjectDescription( BBTYPE_TABLECELL, nIndex ) );
-        // Need to register as event listener
+        
         Reference< XComponent > xComponent(_rxParent, UNO_QUERY);
         if( xComponent.is() )
             xComponent->addEventListener(static_cast< XEventListener *> (this));
@@ -95,7 +95,7 @@ namespace accessibility
         commitEvent( AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
     }
 
-    // XInterface -------------------------------------------------------------
+    
 
     /** Queries for a new interface. */
     ::com::sun::star::uno::Any SAL_CALL AccessibleBrowseBoxTableCell::queryInterface(
@@ -141,8 +141,8 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getIndexAtPoint( const ::com::sun::star::awt::Point& _aPoint ) throw (RuntimeException)
     {
-        //! TODO CTL bidi
-        // OSL_FAIL("Need to be done by base class!");
+        
+        
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
         ensureIsAlive();
@@ -190,7 +190,7 @@ namespace accessibility
 
         if( isAlive() )
         {
-            // SHOWING done with mxParent
+            
             if( implIsShowing() )
                 pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
@@ -203,7 +203,7 @@ namespace accessibility
     }
 
 
-    // XAccessible ------------------------------------------------------------
+    
 
     /** @return  The XAccessibleContext interface of this object. */
     Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleContext() throw ( RuntimeException )
@@ -212,7 +212,7 @@ namespace accessibility
         return this;
     }
 
-    // XAccessibleContext -----------------------------------------------------
+    
 
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
             throw ( ::com::sun::star::uno::RuntimeException )
@@ -328,7 +328,7 @@ namespace accessibility
         checkIndex_Impl( nStartIndex, sText );
         checkIndex_Impl( nEndIndex, sText );
 
-        //!!! don't know how to put a string into the clipboard
+        
         return sal_False;
     }
     void AccessibleBrowseBoxTableCell::disposing( const EventObject& _rSource ) throw (RuntimeException)

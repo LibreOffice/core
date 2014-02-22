@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -47,7 +47,7 @@ private:
     B2DPolygon aShiftedRectangle;
 
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
         aSelfIntersecting.append(B2DPoint(0,  0));
@@ -147,30 +147,30 @@ public:
 
     void checkCrossoverSolver()
     {
-        // partially intersecting polygons, with a common subsection
+        
         validateCrossover(
             "partially intersecting",
             "m0 0 v 5  h 3 h 1 h 1 h 1 v -2 v -3 z"
               "m3 7 v -2 h 1 h 1 h 1 v -2 h 1 v 3 z",
             "m0 0v5h3 1 1 1v-2-3zm3 7v-2h1 1 1v-2h1v3z");
 
-        // first polygon is identical to subset of second polygon
+        
         validateCrossover(
             "full subset",
             "m0 0 v 5  h 3 h 1 h 1 v -5 z"
               "m3 10 v -5 h 1 h 1 v -5 h -5 v 5 h 3 z",
             "m0 0v5h3 1 1v-5zm3 10v-5zm1-5h1v-5h-5v5h3z");
 
-        // first polygon is identical to subset of second polygon, but
-        // oriented in the opposite direction
+        
+        
         validateCrossover(
             "full subset, opposite direction",
             "m0 0 v 5 h 3 h 1 h 1 v -5 z"
               "m3 10 v -5 h -1 h -1 h -1 v -5 h 5 v 5 h 2 z",
             "m0 0v5h1 1 1-1-1-1v-5h5v5-5zm4 5h1 2l-4 5v-5z");
 
-        // first polygon is identical to subset of second polygon, and
-        // has a curve segment (triggers different code path)
+        
+        
         validateCrossover(
             "full subset, plus curves",
             "m0 0 v 5  h 3 h 1 h 1 c 2 0 2 0 0 -5 z"
@@ -178,9 +178,9 @@ public:
             "m0 0v5h3 1 1c2 0 2 0 0-5zm3 10v-5zm1-5h1c2 0 2 0 0-5h-5v5h3z");
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(genericclipper);
     CPPUNIT_TEST(validateOr);
@@ -191,8 +191,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::genericclipper);
-} // namespace basegfx2d
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

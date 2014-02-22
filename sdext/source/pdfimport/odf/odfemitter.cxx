@@ -82,9 +82,9 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
         ++aCurr;
     }
 
-    // since the hash map's sorting is undefined (and varies across
-    // platforms, and even between different compile-time settings),
-    // sort the attributes.
+    
+    
+    
     std::sort(aAttributes.begin(), aAttributes.end());
     std::for_each(aAttributes.begin(),
                   aAttributes.end(),

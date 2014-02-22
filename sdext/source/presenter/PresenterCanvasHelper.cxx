@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterCanvasHelper.hxx"
@@ -72,7 +72,7 @@ void PresenterCanvasHelper::PaintRectangle (
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())
         return;
 
-    // Create a clip polypolygon that has the content box as hole.
+    
     ::std::vector<awt::Rectangle> aRectangles;
     aRectangles.reserve(2);
     aRectangles.push_back(
@@ -147,11 +147,11 @@ void PresenterCanvasHelper::PaintTiledBitmap (
     rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = rxPolygon;
 
-    // Create a local render state at which the location of the bitmap is
-    // set.
+    
+    
     rendering::RenderState aRenderState (rDefaultRenderState);
 
-    // Tile the bitmap over the repaint box.
+    
     const geometry::IntegerSize2D aBitmapSize (rxTexture->getSize());
     if( aBitmapSize.Width < 1 || aBitmapSize.Height < 1)
         return;
@@ -199,12 +199,12 @@ void PresenterCanvasHelper::PaintBitmap (
     if ( ! rxPolygon.is())
         return;
 
-    // Set the repaint box as clip rectangle at the view state.
+    
     rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
-    // Setup the rendering state so that the bitmap is painted top left in
-    // the polygon bounding box.
+    
+    
     rendering::RenderState aRenderState (rDefaultRenderState);
     aRenderState.AffineTransform = geometry::AffineMatrix2D(1,0, rLocation.X, 0,1,rLocation.Y);
     aRenderState.Clip = rxPolygon;
@@ -229,11 +229,11 @@ void PresenterCanvasHelper::PaintColor (
     if ( ! rxPolygon.is())
         return;
 
-    // Set the repaint box as clip rectangle at the view state.
+    
     rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
-    // Setup the rendering state to use the given color.
+    
     rendering::RenderState aRenderState (rDefaultRenderState);
     SetDeviceColor(aRenderState, nColor);
 
@@ -247,7 +247,7 @@ void PresenterCanvasHelper::SetDeviceColor(
     rendering::RenderState& rRenderState,
     const util::Color aColor)
 {
-    // Other component counts then 4 (RGBA) are not accepted (anymore).
+    
 
     OSL_ASSERT(rRenderState.DeviceColor.getLength() == 4);
     if (rRenderState.DeviceColor.getLength() == 4)
@@ -286,6 +286,6 @@ css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
     return css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
 }
 
-} } // end of namespace sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

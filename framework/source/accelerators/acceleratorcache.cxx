@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accelerators/acceleratorcache.hxx>
@@ -32,13 +32,13 @@
 namespace framework
 {
 
-//-----------------------------------------------
+
 AcceleratorCache::AcceleratorCache()
     : ThreadHelpBase(&Application::GetSolarMutex())
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
     : ThreadHelpBase(&Application::GetSolarMutex())
 {
@@ -46,59 +46,59 @@ AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
     m_lKey2Commands = rCopy.m_lKey2Commands;
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::~AcceleratorCache()
 {
-    // Dont save anything automaticly here.
-    // The user has to do that explicitly!
+    
+    
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     m_lCommand2Keys = rCopy.m_lCommand2Keys;
     m_lKey2Commands = rCopy.m_lKey2Commands;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
 {
     takeOver(rCopy);
     return *this;
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     return (m_lKey2Commands.find(aKey) != m_lKey2Commands.end());
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     return (m_lCommand2Keys.find(sCommand) != m_lCommand2Keys.end());
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 {
     TKeyList lKeys;
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     lKeys.reserve(m_lKey2Commands.size());
 
@@ -112,35 +112,35 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     }
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     return lKeys;
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                          const OUString&    sCommand)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
-    // register command for the specified key
+    
     m_lKey2Commands[aKey] = sCommand;
 
-    // update optimized structure to bind multiple keys to one command
+    
     TKeyList& rKeyList = m_lCommand2Keys[sCommand];
     rKeyList.push_back(aKey);
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sCommand) const
 {
     TKeyList lKeys;
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     TCommand2Keys::const_iterator pCommand = m_lCommand2Keys.find(sCommand);
@@ -150,17 +150,17 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sC
     lKeys = pCommand->second;
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     return lKeys;
 }
 
-//-----------------------------------------------
+
 OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 {
     OUString sCommand;
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
@@ -170,42 +170,42 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
     sCommand = pKey->second;
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     return sCommand;
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
-    // check if key exists
+    
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
         return;
 
-    // get its registered command
-    // Because we must know its place inside the optimized
-    // structure, which bind keys to commands, too!
+    
+    
+    
     OUString sCommand = pKey->second;
-    pKey = m_lKey2Commands.end(); // nobody should use an undefined value .-)
+    pKey = m_lKey2Commands.end(); 
 
-    // remove key from primary list
+    
     m_lKey2Commands.erase(aKey);
 
-    // remove key from optimized command list
+    
     m_lCommand2Keys.erase(sCommand);
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     const TKeyList&                            lKeys = getKeysByCommand(sCommand);
@@ -220,9 +220,9 @@ void AcceleratorCache::removeCommand(const OUString& sCommand)
     m_lCommand2Keys.erase(sCommand);
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

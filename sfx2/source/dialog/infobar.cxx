@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -59,7 +59,7 @@ namespace
 
         }
 
-        // Light background
+        
         basegfx::B2DPolygon aPolygon;
         aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Top( ) ) );
         aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Top( ) ) );
@@ -73,7 +73,7 @@ namespace
 
         drawinglayer::attribute::LineAttribute aLineAttribute( aDarkColor, 2.0 );
 
-        // Cross
+        
         basegfx::B2DPolyPolygon aCross;
         basegfx::B2DPolygon aLine1;
         aLine1.append( basegfx::B2DPoint( aRect.Left(), aRect.Top( ) ) );
@@ -115,7 +115,7 @@ SfxInfoBarWindow::SfxInfoBarWindow( Window* pParent, const OUString& sId,
     m_pCloseBtn->SetClickHdl( LINK( this, SfxInfoBarWindow, CloseHandler ) );
     m_pCloseBtn->Show( );
 
-    // Reparent the buttons and place them on the right of the bar
+    
     long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
     long nBtnGap = 5;
     for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
@@ -167,10 +167,10 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
         aDarkColor = rSettings.GetDialogTextColor( ).getBColor( );
     }
 
-    // Update the label background color
+    
     m_pMessage->SetBackground( Wallpaper( Color( aLightColor ) ) );
 
-    // Light background
+    
     basegfx::B2DPolygon aPolygon;
     aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Top( ) ) );
     aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Top( ) ) );
@@ -184,7 +184,7 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
 
     drawinglayer::attribute::LineAttribute aLineAttribute( aDarkColor, 1.0 );
 
-    // Bottom dark line
+    
     basegfx::B2DPolygon aPolygonBottom;
     aPolygonBottom.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom( ) ) );
     aPolygonBottom.append( basegfx::B2DPoint( aRect.Right(), aRect.Bottom( ) ) );
@@ -206,7 +206,7 @@ void SfxInfoBarWindow::Resize( )
     long nWidth = GetSizePixel().getWidth();
     m_pCloseBtn->SetPosSizePixel( Point( nWidth - 25, 15 ), Size( 10, 10 ) );
 
-    // Reparent the buttons and place them on the right of the bar
+    
     long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
     long nBtnGap = 5;
     for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
@@ -302,7 +302,7 @@ void SfxInfoBarContainerWindow::removeInfoBar( SfxInfoBarWindow* pInfoBar )
 
 void SfxInfoBarContainerWindow::Resize( )
 {
-    // Only need to change the width of the infobars
+    
     long nWidth = GetSizePixel( ).getWidth( );
     for ( vector< SfxInfoBarWindow * >::iterator it = m_pInfoBars.begin( );
             it != m_pInfoBars.end( ); ++it )
@@ -340,12 +340,12 @@ SfxChildWinInfo SfxInfoBarContainerChild::GetInfo( ) const
 
 void SfxInfoBarContainerChild::Update( )
 {
-    // Refresh the frame to take the infobars container height change into account
+    
     const sal_uInt16 nId = GetChildWindowId();
     SfxViewFrame* pVFrame = m_pBindings->GetDispatcher( )->GetFrame( );
     pVFrame->ShowChildWindow( nId );
 
-    // Give the focus to the document view
+    
     pVFrame->GetWindow().GrabFocusToDocument();
 }
 

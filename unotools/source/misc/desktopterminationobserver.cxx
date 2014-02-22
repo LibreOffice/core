@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/desktopterminationobserver.hxx>
@@ -26,10 +26,10 @@
 
 #include <list>
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -37,7 +37,7 @@ namespace utl
 
     namespace
     {
-        //................................................................
+        
         typedef ::std::list< ITerminationListener* > Listeners;
 
         struct ListenerAdminData
@@ -49,16 +49,16 @@ namespace utl
             ListenerAdminData() : bAlreadyTerminated( false ), bCreatedAdapter( false ) { }
         };
 
-        //................................................................
+        
         ListenerAdminData& getListenerAdminData()
         {
             static ListenerAdminData s_aData;
             return s_aData;
         }
 
-        //================================================================
-        //= OObserverImpl
-        //================================================================
+        
+        
+        
         class OObserverImpl : public ::cppu::WeakImplHelper1< XTerminateListener >
         {
         public:
@@ -69,25 +69,25 @@ namespace utl
             ~OObserverImpl();
 
         private:
-            // XTerminateListener
+            
             virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException);
             virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException);
 
-            // XEventListener
+            
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
         };
 
-        //--------------------------------------------------------------------
+        
         OObserverImpl::OObserverImpl()
         {
         }
 
-        //--------------------------------------------------------------------
+        
         OObserverImpl::~OObserverImpl()
         {
         }
 
-        //--------------------------------------------------------------------
+        
         void OObserverImpl::ensureObservation()
         {
             {
@@ -111,7 +111,7 @@ namespace utl
             }
         }
 
-        //--------------------------------------------------------------------
+        
         void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
         {
             Listeners aToNotify;
@@ -130,10 +130,10 @@ namespace utl
             }
         }
 
-        //--------------------------------------------------------------------
+        
         void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
         {
-            // get the listeners
+            
             Listeners aToNotify;
             {
                 ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -142,7 +142,7 @@ namespace utl
                 getListenerAdminData().bAlreadyTerminated = true;
             }
 
-            // notify the listeners
+            
             for ( Listeners::const_iterator listener = aToNotify.begin();
                   listener != aToNotify.end();
                   ++listener
@@ -151,28 +151,28 @@ namespace utl
                 (*listener)->notifyTermination();
             }
 
-            // clear the listener container
+            
             {
                 ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
                 getListenerAdminData().aListeners.clear();
             }
         }
 
-        //--------------------------------------------------------------------
+        
         void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException)
         {
 #if OSL_DEBUG_LEVEL > 0
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             OSL_ENSURE( getListenerAdminData().bAlreadyTerminated, "OObserverImpl::disposing: disposing without terminated?" );
 #endif
-            // not interested in
+            
         }
     }
 
-    //====================================================================
-    //= DesktopTerminationObserver
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     void DesktopTerminationObserver::registerTerminationListener( ITerminationListener* _pListener )
     {
         if ( !_pListener )
@@ -192,7 +192,7 @@ namespace utl
         OObserverImpl::ensureObservation();
     }
 
-    //--------------------------------------------------------------------
+    
     void DesktopTerminationObserver::revokeTerminationListener( ITerminationListener* _pListener )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -210,8 +210,8 @@ namespace utl
         }
     }
 
-//........................................................................
-} // namespace utl
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -85,23 +85,23 @@ public __gc class BridgeTest : public WeakBase, public XMain
 
         bool ret = false;
         Type* t1  = val1->GetType();
-            //Sequence
+            
         if (t1->IsArray)
         {
             ret = compareSequence(static_cast<Array*>(val1),
                                   static_cast<Array*>(val2));
         }
-            //String
+            
         else if (t1 == __typeof(String))
         {
             ret = val1->Equals(val2);
         }
-            // Interface implementation
+            
         else if (t1->GetInterfaces()->Length > 0 && ! t1->IsValueType)
         {
             ret = val1 == val2;
         }
-            // Struct
+            
         else if ( ! t1->IsValueType)
         {
             ret = compareStruct(val1, val2);
@@ -114,7 +114,7 @@ public __gc class BridgeTest : public WeakBase, public XMain
         }
         else if (t1->IsValueType)
         {
-            //Any, enum, int, bool char, float, double etc.
+            
             ret = val1->Equals(val2);
         }
         else
@@ -124,7 +124,7 @@ public __gc class BridgeTest : public WeakBase, public XMain
         return ret;
     }
 
-    // Arrays have only one dimension
+    
     static bool compareSequence(Array* ar1, Array* ar2)
     {
         Debug::Assert(ar1 != 0 && ar2 != 0);
@@ -135,7 +135,7 @@ public __gc class BridgeTest : public WeakBase, public XMain
             && ar1->Length == ar2->Length && t1->GetElementType() == t2->GetElementType()))
             return false;
 
-        //arrays have same rank and size and element type.
+        
         int len  = ar1->Length;
         bool ret = true;
         for (int i = 0; i < len; i++)
@@ -318,12 +318,12 @@ static bool performSequenceOfCallTest(XBridgeTest* xLBT)
     {
         for( i = 0 ; i < nRounds ; i ++ )
         {
-            // fire oneways
+            
             xLBT->callOneway(nGlobalIndex, nWaitTimeSpanMUSec);
             nGlobalIndex++;
         }
 
-        // call synchron
+        
         xLBT->call(nGlobalIndex, nWaitTimeSpanMUSec);
         nGlobalIndex++;
     }
@@ -336,14 +336,14 @@ static bool performSequenceOfCallTest(XBridgeTest* xLBT)
 static bool performRecursiveCallTest(XBridgeTest*  xLBT)
 {
     xLBT->startRecursiveCall(new ORecursiveCall(), 50);
-    // on failure, the test would lock up or crash
+    
     return true;
 }
 
 static bool performQueryForUnknownType(XBridgeTest* xLBT)
 {
     bool bRet = false;
-    // test queryInterface for an unknown type
+    
     try
     {
         __try_cast<foo::MyInterface*>(xLBT);
@@ -356,15 +356,15 @@ static bool performQueryForUnknownType(XBridgeTest* xLBT)
     return bRet;
 }
 
-// //==================================================================================================
+
 static bool performTest(XBridgeTest* xLBT)
 {
     check( xLBT != 0, "### no test interface!" );
     bool bRet = true;
     if (xLBT != 0)
     {
-        // this data is never ever granted access to by calls other than equals(), assign()!
-        TestDataElements* aData = new TestDataElements(); // test against this data
+        
+        TestDataElements* aData = new TestDataElements(); 
 
         Object* xI= new WeakBase();
 
@@ -385,12 +385,12 @@ static bool performTest(XBridgeTest* xLBT)
             aData->UShort, aData->Long, aData->ULong,
             aData->Hyper, aData->UHyper, aData->Float,
             aData->Double, aData->Enum, aData->String,
-            aData->Interface, aData->Any); //(TestElement) aData;
-        aData->Sequence[1] = new TestElement(); //is empty
+            aData->Interface, aData->Any); 
+        aData->Sequence[1] = new TestElement(); 
 
-        // aData complete
+        
         //
-        // this is a manually copy of aData for first setting...
+        
         TestDataElements* aSetData = new TestDataElements;
         Any aAnySet(__typeof(Object), xI);
         assign( static_cast<TestElement*>(aSetData),
@@ -411,8 +411,8 @@ static bool performTest(XBridgeTest* xLBT)
             aSetData->UShort, aSetData->Long, aSetData->ULong,
             aSetData->Hyper, aSetData->UHyper, aSetData->Float,
             aSetData->Double, aSetData->Enum, aSetData->String,
-            aSetData->Interface, aSetData->Any); //TestElement) aSetData;
-        aSetData->Sequence[1] = new TestElement(); // empty struct
+            aSetData->Interface, aSetData->Any); 
+        aSetData->Sequence[1] = new TestElement(); 
 
         xLBT->setValues(
                 aSetData->Bool, aSetData->Char, aSetData->Byte, aSetData->Short, aSetData->UShort,
@@ -430,15 +430,15 @@ static bool performTest(XBridgeTest* xLBT)
 
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "getValues test") && bRet;
 
-        // set last retrieved values
+        
         TestDataElements* aSV2ret = xLBT->setValues2(
             & aRet->Bool, & aRet->Char, & aRet->Byte, & aRet->Short, & aRet->UShort,
             & aRet->Long, & aRet->ULong, & aRet->Hyper, & aRet->UHyper, & aRet->Float,
             & aRet->Double, & aRet->Enum, & aRet->String, & aRet->Interface, & aRet->Any,
             & aRet->Sequence, & aRet2 );
 
-        // check inout sequence order
-        // => inout sequence parameter was switched by test objects
+        
+        
         TestElement* temp = aRet->Sequence[ 0 ];
         aRet->Sequence[ 0 ] = aRet->Sequence[ 1 ];
         aRet->Sequence[ 1 ] = temp;
@@ -459,7 +459,7 @@ static bool performTest(XBridgeTest* xLBT)
 
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) && compareData( aData, aGVret ), "getValues test" ) && bRet;
 
-        // set last retrieved values
+        
         xLBT->Bool = aRet->Bool;
         xLBT->Char = aRet->Char;
         xLBT->Byte = aRet->Byte;
@@ -503,18 +503,18 @@ static bool performTest(XBridgeTest* xLBT)
 
         bRet = check(performSequenceTest(xLBT), "sequence test") && bRet;
 
-        // any test
+        
         bRet = check( performAnyTest( xLBT , aData ) , "any test" ) && bRet;
 
-        // sequence of call test
+        
         bRet = check( performSequenceOfCallTest( xLBT ) , "sequence of call test" ) && bRet;
 
-        // recursive call test
+        
         bRet = check( performRecursiveCallTest( xLBT ) , "recursive test" ) && bRet;
 
         bRet = (compareData( aData, aRet ) && compareData( aData, aRet2 )) && bRet ;
 
-        // check setting of null reference
+        
         xLBT->Interface = 0;
         aRet->Interface = xLBT->Interface;
         bRet = (aRet->Interface == 0) && bRet;
@@ -532,8 +532,8 @@ static bool performSequenceTest(XBridgeTest* xBT)
     if ( xBT2 == 0)
         return false;
 
-    // perform sequence tests (XBridgeTest2)
-    // create the sequence which are compared with the results
+    
+    
     bool arBool __gc[] = new bool __gc [3];
     arBool[0] = true; arBool[1] = false; arBool[2] = true;
     Char  arChar[] = new  Char[3];
@@ -610,8 +610,8 @@ static bool performSequenceTest(XBridgeTest* xBT)
     Double seqDoubleRet[] = xBT2->setSequenceDouble(arDouble);
     bRet = check( compareData(seqDoubleRet, arDouble), "sequence test") && bRet;
     xBT2->setSequenceEnum(arEnum);
-    //comparing seqEnumRet with arEnum will fail since they are of different
-    //types because of workaround. arEnum is Int32[].
+    
+    
     Console::WriteLine(new String("cli_cpp_bridgetest: Test omitted because "
         "of C++ compiler bug. XBridgeTest2::setSequenceEnum(sequence<TestEnum>)"));
     UInt16 seqUShortRet[] = xBT2->setSequenceUShort(arUShort);
@@ -693,18 +693,18 @@ static bool testObjectMethodsImplemention(XBridgeTest* xLBT)
     XBridgeTestBase* xBase = dynamic_cast<XBridgeTestBase*>(xLBT);
     if (xBase == 0)
         return false;
-    // Object.Equals
+    
     ret = xLBT->Equals(obj) == false;
     ret = xLBT->Equals(xLBT) && ret;
     ret = Object::Equals(obj, obj) && ret;
     ret = Object::Equals(xLBT, xBase) && ret;
-    //Object.GetHashCode
-    // Don't know how to verify this. Currently it is not possible to get the object id from a proxy
+    
+    
     int nHash = xLBT->GetHashCode();
     ret = nHash == xBase->GetHashCode() && ret;
 
-    //Object.ToString
-    // Don't know how to verify this automatically.
+    
+    
     String* s = xLBT->ToString();
     ret = (s->Length > 0) && ret;
     return ret;
@@ -717,8 +717,8 @@ static bool raiseOnewayException(XBridgeTest* xLBT)
     String* sCompare = Constants::STRING_TEST_CONSTANT;
     try
     {
-        // Note : the exception may fly or not (e.g. remote scenario).
-        //        When it flies, it must contain the correct elements.
+        
+        
         xLBT->raiseRuntimeExceptionOneway(sCompare, xLBT->Interface );
     }
     catch (RuntimeException*  e )
@@ -728,7 +728,7 @@ static bool raiseOnewayException(XBridgeTest* xLBT)
     return bReturn;
 }
 
-// //==================================================================================================
+
 static bool raiseException(XBridgeTest* xLBT )
 {
     int nCount = 0;

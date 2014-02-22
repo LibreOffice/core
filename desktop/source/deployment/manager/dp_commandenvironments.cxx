@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,15 +52,15 @@ BaseCommandEnv::BaseCommandEnv(
 BaseCommandEnv::~BaseCommandEnv()
 {
 }
-// XCommandEnvironment
-//______________________________________________________________________________
+
+
 Reference<task::XInteractionHandler> BaseCommandEnv::getInteractionHandler()
 throw (uno::RuntimeException)
 {
     return this;
 }
 
-//______________________________________________________________________________
+
 Reference<ucb::XProgressHandler> BaseCommandEnv::getProgressHandler()
 throw (uno::RuntimeException)
 {
@@ -78,15 +78,15 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
 {
     if (approve == false && abort == false)
     {
-        //not handled so far -> forwarding
+        
         if (m_forwardHandler.is())
             m_forwardHandler->handle(xRequest);
         else
-            return; //cannot handle
+            return; 
     }
     else
     {
-        // select:
+        
         uno::Sequence< Reference< task::XInteractionContinuation > > conts(
             xRequest->getContinuations() );
         Reference< task::XInteractionContinuation > const * pConts =
@@ -99,7 +99,7 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
                     pConts[ pos ], uno::UNO_QUERY );
                 if (xInteractionApprove.is()) {
                     xInteractionApprove->select();
-                    // don't query again for ongoing continuations:
+                    
                     approve = false;
                 }
             }
@@ -108,7 +108,7 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
                     pConts[ pos ], uno::UNO_QUERY );
                 if (xInteractionAbort.is()) {
                     xInteractionAbort->select();
-                    // don't query again for ongoing continuations:
+                    
                     abort = false;
                 }
             }
@@ -117,7 +117,7 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
 
 }
 
-// XProgressHandler
+
 void BaseCommandEnv::push( uno::Any const & /*Status*/ )
 throw (uno::RuntimeException)
 {
@@ -131,7 +131,7 @@ throw (uno::RuntimeException)
 void BaseCommandEnv::pop() throw (uno::RuntimeException)
 {
 }
-//==============================================================================
+
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 {
@@ -142,7 +142,7 @@ TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
     BaseCommandEnv(handler)
 {
 }
-// XInteractionHandler
+
 void TmpRepositoryCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
@@ -166,7 +166,7 @@ void TmpRepositoryCommandEnv::handle(
 
     handle_(approve, abort, xRequest);
 }
-//================================================================================
+
 
 LicenseCommandEnv::LicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler,
@@ -176,7 +176,7 @@ LicenseCommandEnv::LicenseCommandEnv(
     m_bSuppressLicense(bSuppressLicense)
 {
 }
-// XInteractionHandler
+
 void LicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
@@ -195,10 +195,10 @@ void LicenseCommandEnv::handle(
             || m_repository == "bundled"
             || licExc.AcceptBy == "admin")
         {
-            //always approve in bundled case, because we do not support
-            //showing licenses anyway.
-            //The "admin" already accepted the license when installing the
-            // shared extension
+            
+            
+            
+            
             approve = true;
         }
     }
@@ -206,14 +206,14 @@ void LicenseCommandEnv::handle(
     handle_(approve, abort, xRequest);
 }
 
-//================================================================================
+
 
 NoLicenseCommandEnv::NoLicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler):
     BaseCommandEnv(handler)
 {
 }
-// XInteractionHandler
+
 void NoLicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
@@ -250,7 +250,7 @@ void SilentCheckPrerequisitesCommandEnv::handle(
 
     if (request >>= licExc)
     {
-        handle_(true, false, xRequest); // approve = true, abort = false
+        handle_(true, false, xRequest); 
     }
     else if ((request >>= platformExc)
              || (request >>= depExc))

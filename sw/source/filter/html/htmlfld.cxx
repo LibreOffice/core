@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -137,9 +137,9 @@ static HTMLOptionEnum aHTMLPageNumFldSubTable[] =
     { 0,                     0  }
 };
 
-// UGLY: these are extensions of nsSwDocInfoSubType (in inc/docufld.hxx)
-//       these are necessary for importing document info fields written by
-//       older versions of OOo (< 3.0) which did not have DI_CUSTOM fields
+
+
+
     const SwDocInfoSubType DI_INFO1         =  DI_SUBTYPE_END + 1;
     const SwDocInfoSubType DI_INFO2         =  DI_SUBTYPE_END + 2;
     const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
@@ -256,10 +256,10 @@ void SwHTMLParser::NewField()
     if( !bKnownType )
         return;
 
-    // Autor und Absender werden nur als als variables Feld eingefuegt,
-    // wenn man das Dok selbst als letztes geaendert hat oder es noch
-    // niemend geandert hat und man das Dok erstellt hat. Sonst
-    // wird ein Fixed-Feld daraus gemacht.
+    
+    
+    
+    
     if( !bFixed &&
         (RES_EXTUSERFLD == (RES_FIELDS)nType ||
          RES_AUTHORFLD == (RES_FIELDS)nType) )
@@ -469,8 +469,8 @@ void SwHTMLParser::NewField()
 
                 if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.isEmpty() )
                 {
-                    // backward compatibility for OOo 2:
-                    // map to names stored in AddMetaUserDefined
+                    
+                    
                     aName = m_InfoNames[nSub - DI_INFO1];
                     nSub = DI_CUSTOM;
                 }
@@ -582,7 +582,7 @@ void SwHTMLParser::InsertFieldText()
 {
     if( pField )
     {
-        // das aktuelle Textstueck an den Text anhaengen
+        
         aContents += aToken;
     }
 }
@@ -611,9 +611,9 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
         aComment += ">";
     }
 
-    // MIB 24.06.97: Wenn ein PostIt nach einen Space eingefuegt
-    // werden soll, fuegen wir es vor dem Space ein. Dann gibt es
-    // weniger Probleme beim Formatieren (bug #40483#)
+    
+    
+    
     const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
     SwTxtNode *pTxtNd = pPam->GetNode()->GetTxtNode();
     sal_Bool bMoveFwd = sal_False;

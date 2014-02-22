@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaborders.hxx"
 #include <ooo/vba/word/XBorder.hpp>
@@ -35,13 +35,13 @@ using namespace ::ooo::vba;
 typedef ::cppu::WeakImplHelper1<container::XIndexAccess > RangeBorders_Base;
 typedef InheritedHelperInterfaceImpl1<word::XBorder > SwVbaBorder_Base;
 
-// #TODO sort these indexes to match the order in which Word iterates over the
-// borders, the enumeration will match the order in this list
+
+
 static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBottom, word::WdBorderType::wdBorderDiagonalDown, word::WdBorderType::wdBorderDiagonalUp, word::WdBorderType::wdBorderHorizontal, word::WdBorderType::wdBorderLeft, word::WdBorderType::wdBorderRight, word::WdBorderType::wdBorderTop, word::WdBorderType::wdBorderVertical };
 
 const static OUString sTableBorder("TableBorder");
 
-//  Equiv widths in in 1/100 mm
+
 const static sal_Int32 OOLineHairline = 2;
 
 class SwVbaBorder : public SwVbaBorder_Base
@@ -84,8 +84,8 @@ private:
                 break;
             case word::WdBorderType::wdBorderDiagonalDown:
             case word::WdBorderType::wdBorderDiagonalUp:
-                // #TODO have to ignore at the momement, would be
-                // nice to investigate what we can do here
+                
+                
                 break;
             default:
                     return false;
@@ -127,15 +127,15 @@ private:
 
             case word::WdBorderType::wdBorderDiagonalDown:
             case word::WdBorderType::wdBorderDiagonalUp:
-                // #TODO have to ignore at the momement, would be
-                // nice to investigate what we can do here
+                
+                
                 break;
             default:
                     return false;
         }
         return true;
     }
-    SwVbaBorder(); // no impl
+    SwVbaBorder(); 
 protected:
     virtual OUString getServiceImplName()
     {
@@ -178,8 +178,8 @@ public:
     }
     void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException)
     {
-        // Urk no choice but to silently ignore we don't support this attribute
-        // #TODO would be nice to support the word line styles
+        
+        
         sal_Int32 nLineStyle = 0;
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
@@ -240,7 +240,7 @@ private:
     VbaPalette m_Palette;
     sal_Int32 getTableIndex( sal_Int32 nConst )
     {
-        // hokay return position of the index in the table
+        
         sal_Int32 nIndexes = getCount();
         sal_Int32 realIndex = 0;
         const sal_Int16* pTableEntry = supportedIndexTable;
@@ -249,13 +249,13 @@ private:
             if ( *pTableEntry == nConst )
                 return realIndex;
         }
-        return getCount(); // error condition
+        return getCount(); 
     }
 public:
     RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette& rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
     {
     }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return SAL_N_ELEMENTS( supportedIndexTable );
@@ -306,7 +306,7 @@ public:
     }
 };
 
-// for Table borders
+
 SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, VbaPalette& rPalette  ):  SwVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) )
 {
     m_xProps.set( xRange, uno::UNO_QUERY_THROW );
@@ -321,7 +321,7 @@ SwVbaBorders::createEnumeration() throw (uno::RuntimeException)
 uno::Any
 SwVbaBorders::createCollectionObject( const css::uno::Any& aSource )
 {
-    return aSource; // its already a Border object
+    return aSource; 
 }
 
 uno::Type
@@ -338,14 +338,14 @@ SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )  throw (uno::RuntimeEx
 
 sal_Bool SAL_CALL SwVbaBorders::getShadow() throw (uno::RuntimeException)
 {
-    // always return False for table border in MS Word
+    
     return sal_False;
 }
 
 void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::RuntimeException)
 {
-    // not support in Table border in Word
-    // TODO:
+    
+    
 }
 
 OUString

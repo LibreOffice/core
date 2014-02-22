@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,9 +47,9 @@
 
 using namespace ::com::sun::star;
 
-// -------------
-// - SVGFilter -
-// -------------
+
+
+
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
@@ -66,7 +66,7 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGFilter::~SVGFilter()
 {
@@ -77,7 +77,7 @@ SVGFilter::~SVGFilter()
     DBG_ASSERT( mpObjects == NULL, "mpObjects not destroyed" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
@@ -107,10 +107,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                                                                                   uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
 
-            // which view configuration are we in?
+            
             //
-            // * traverse Impress resources to find slide preview pane, grab selection from there
-            // * otherwise, fallback to current slide
+            
+            
             //
             uno::Sequence<uno::Reference<drawing::framework::XResourceId> > aResIds(
                 xConfigController->getCurrentConfiguration()->getResources(
@@ -120,10 +120,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
             for( sal_Int32 i=0; i<aResIds.getLength(); ++i )
             {
-                // can we somehow obtain the slidesorter from the Impress framework?
+                
                 if( aResIds[i]->getResourceURL() == "private:resource/view/SlideSorter" )
                 {
-                    // got it, grab current selection from there
+                    
                     uno::Reference<drawing::framework::XResource> xRes(
                         xConfigController->getResource(aResIds[i]));
 
@@ -145,7 +145,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                                 mSelectedPages[j] = xDrawPage;
                             }
 
-                            // and stop looping. it is likely not getting better
+                            
                             break;
                         }
                     }
@@ -154,7 +154,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
             if( !mSelectedPages.hasElements() )
             {
-                // apparently failed to glean selection - fallback to current page
+                
                 mSelectedPages.realloc( 1 );
                 mSelectedPages[0] = xDrawView->getCurrentPage();
             }
@@ -221,7 +221,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 aMasterPageTargetSet.insert( xMasterPageTarget->getMasterPage() );
             }
         }
-        // Later we move them to a uno::Sequence so we can get them by index
+        
         mMasterPageTargets.realloc( aMasterPageTargetSet.size() );
         ObjectSet::const_iterator aElem = aMasterPageTargetSet.begin();
         for( sal_Int32 i = 0; aElem != aMasterPageTargetSet.end(); ++aElem, ++i)
@@ -242,13 +242,13 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
     throw (IllegalArgumentException, RuntimeException)
@@ -256,7 +256,7 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
     mxSrcDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
@@ -264,7 +264,7 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
     mxDstDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
 {
@@ -285,8 +285,8 @@ OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor )
     if( xSeek.is() )
         xSeek->seek( 0 );
 
-    // read the first 1024 bytes & check a few magic string
-    // constants (heuristically)
+    
+    
     const sal_Int32 nLookAhead = 1024;
     uno::Sequence< sal_Int8 > aBuf( nLookAhead );
     const sal_uInt64 nBytes=xInput->readBytes(aBuf, nLookAhead);
@@ -305,7 +305,7 @@ OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor )
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 
 #define SVG_FILTER_IMPL_NAME "com.sun.star.comp.Draw.SVGFilter"
 #define SVG_WRITER_IMPL_NAME "com.sun.star.comp.Draw.SVGWriter"
@@ -325,7 +325,7 @@ namespace sdecl = comphelper::service_decl;
      SVG_WRITER_IMPL_NAME,
      "com.sun.star.svg.SVGWriter" );
 
-// The C shared lib entry points
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL svgfilter_component_getFactory(
     sal_Char const* pImplName,
     ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,7 +74,7 @@ static const SvXMLTokenMapEntry aChildren[] =
     TOKEN_MAP_ENTRY( XSD, MAXINCLUSIVE   ),
     TOKEN_MAP_ENTRY( XSD, MAXEXCLUSIVE   ),
     TOKEN_MAP_ENTRY( XSD, PATTERN        ),
-    // ??? XML_ENUMERATION
+    
     TOKEN_MAP_ENTRY( XSD, WHITESPACE     ),
     TOKEN_MAP_ENTRY( XSD, TOTALDIGITS    ),
     TOKEN_MAP_ENTRY( XSD, FRACTIONDIGITS ),
@@ -102,7 +102,7 @@ SchemaRestrictionContext::~SchemaRestrictionContext()
 
 void SchemaRestrictionContext::CreateDataType()
 {
-    // only do something if we don't have a data type already
+    
     if( mxDataType.is() )
         return;
 
@@ -181,7 +181,7 @@ Any xforms_date( const OUString& rValue )
 {
     Any aAny;
 
-    // parse ISO date
+    
     sal_Int32 nPos1 = rValue.indexOf( '-' );
     sal_Int32 nPos2 = rValue.indexOf( '-', nPos1 + 1 );
     if( nPos1 > 0  &&  nPos2 > 0 )
@@ -228,7 +228,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
 {
-    // find value
+    
     OUString sValue;
     sal_Int16 nLength = xAttrList->getLength();
     for( sal_Int16 n = 0; n < nLength; n++ )
@@ -237,7 +237,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             sValue = xAttrList->getValueByIndex( n );
     }
 
-    // determine property name + suitable converter
+    
     OUString sPropertyName;
     convert_t pConvert = NULL;
     switch( nToken )
@@ -275,12 +275,12 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     case XML_MAXINCLUSIVE:
     case XML_MAXEXCLUSIVE:
         {
-            // these attributes are mapped to different properties.
-            // To determine the property name, we use an attribute
-            // dependent prefix and a type dependent suffix. The
-            // converter is only type dependent.
+            
+            
+            
+            
 
-            // first, attribute-dependent prefix
+            
             switch( nToken )
             {
             case XML_MININCLUSIVE:
@@ -297,7 +297,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
                 break;
             }
 
-            // second, type-dependent suffix + converter
+            
             switch( xforms_getTypeClass( mxRepository,
                                       GetImport().GetNamespaceMap(),
                                       msBaseName ) )
@@ -330,7 +330,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             case com::sun::star::xsd::DataTypeClass::STRING:
             case com::sun::star::xsd::DataTypeClass::anyURI:
             case com::sun::star::xsd::DataTypeClass::BOOLEAN:
-                // invalid: These shouldn't have min/max-inclusive
+                
                 break;
 
                 /* data types not yet supported:
@@ -350,7 +350,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         OSL_FAIL( "unknown facet" );
     }
 
-    // finally, set the property
+    
     CreateDataType();
     if( mxDataType.is()
         && !sPropertyName.isEmpty()
@@ -363,7 +363,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         }
         catch( const Exception& )
         {
-            ; // can't set property? Then ignore.
+            ; 
         }
     }
 

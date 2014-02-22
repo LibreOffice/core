@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VertSplitView.hxx"
@@ -27,8 +27,8 @@
 
 using namespace ::dbaui;
 
-// class OSplitterView
-OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
+
+OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) 
     ,m_pSplitter( NULL )
     ,m_pLeft(NULL)
     ,m_pRight(NULL)
@@ -67,7 +67,7 @@ void OSplitterView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
+
     }
 
     if ( bFont || bForeground )
@@ -103,7 +103,7 @@ void OSplitterView::GetFocus()
 {
     Window::GetFocus();
 
-    // forward the focus to the current cell of the editor control
+    
     if ( m_pLeft )
         m_pLeft->GrabFocus();
     else if ( m_pRight )
@@ -126,7 +126,7 @@ void OSplitterView::Resize()
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
         if ( m_bVertical )
         {
-            // calculate the splitter pos and size
+            
             aSplitPos.Y() = aPlaygroundPos.Y();
             aSplitSize.Height() = aPlaygroundSize.Height();
 
@@ -136,14 +136,14 @@ void OSplitterView::Resize()
             if( aSplitPos.X() <= aPlaygroundPos.X() )
                 aSplitPos.X() = aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.3);
 
-            // the tree pos and size
+            
             Point   aTreeViewPos( aPlaygroundPos );
             Size    aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
 
-            // set the size of treelistbox
+            
             m_pLeft->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
 
-            //set the size of the splitter
+            
             m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aPlaygroundSize.Height() ) );
             m_pSplitter->SetDragRectPixel( Rectangle(aPlaygroundPos,aPlaygroundSize) );
         }
@@ -158,14 +158,14 @@ void OSplitterView::Resize()
             if( aSplitPos.Y() <= aPlaygroundPos.Y() )
                 aSplitPos.Y() = aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.3);
 
-            // the tree pos and size
+            
             Point   aTreeViewPos( aPlaygroundPos );
             Size    aTreeViewSize( aPlaygroundSize.Width() ,aSplitPos.Y());
 
-            // set the size of treelistbox
+            
             m_pLeft->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
 
-            //set the size of the splitter
+            
             m_pSplitter->SetPosSizePixel( aSplitPos, Size( aPlaygroundSize.Width(), aSplitSize.Height() ) );
             m_pSplitter->SetDragRectPixel( Rectangle(aPlaygroundPos,aPlaygroundSize) );
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/fontsizemenucontroller.hxx>
@@ -38,9 +38,9 @@
 #include <svtools/ctrltool.hxx>
 #include <osl/mutex.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -71,7 +71,7 @@ FontSizeMenuController::~FontSizeMenuController()
     delete []m_pHeightArray;
 }
 
-// private function
+
 OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame )
 {
     OUString aPrinterName;
@@ -100,10 +100,10 @@ OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::Refer
     return aPrinterName;
 }
 
-// private function
+
 void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    // check menu item
+    
     sal_uInt16          nChecked    = 0;
     sal_uInt16          nItemCount  = rPopupMenu->getItemCount();
     for( sal_uInt16 i = 0; i < nItemCount; i++ )
@@ -124,7 +124,7 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
         rPopupMenu->checkItem( nChecked, sal_False );
 }
 
-// private function
+
 void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*          pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -142,7 +142,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         SolarMutexGuard aSolarMutexGuard;
 
-        // try to retrieve printer name of document
+        
         aPrinterName = retrievePrinterName( m_xFrame );
         if ( !aPrinterName.isEmpty() )
         {
@@ -156,7 +156,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         FontInfo aFntInfo = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
 
-        // setup font size array
+        
         if ( m_pHeightArray )
             delete m_pHeightArray;
 
@@ -169,7 +169,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         sal_uInt16 nPos = 0;
         const OUString aFontHeightCommand( ".uno:FontHeight?FontHeight.Height:float=" );
 
-        // first insert font size names (for simplified/traditional chinese)
+        
         float           fPoint;
         FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
         m_pHeightArray = new long[nSizeCount+aFontSizeNames.Count()];
@@ -179,25 +179,25 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( pAry == pFontList->GetStdSizeAry() )
             {
-                // for scalable fonts all font size names
+                
                 sal_uLong nCount = aFontSizeNames.Count();
                 for( sal_uLong i = 0; i < nCount; i++ )
                 {
                     OUString  aSizeName = aFontSizeNames.GetIndexName( i );
                     long      nSize = aFontSizeNames.GetIndexSize( i );
                     m_pHeightArray[nPos] = nSize;
-                    nPos++; // Id is nPos+1
+                    nPos++; 
                     pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
                     fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
-                    // Create dispatchable .uno command and set it
+                    
                     aCommand = aFontHeightCommand + OUString::number( fPoint );
                     pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                 }
             }
             else
             {
-                // for fixed size fonts only selectable font size names
+                
                 pTempAry = pAry;
                 while ( *pTempAry )
                 {
@@ -205,11 +205,11 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     if ( !aSizeName.isEmpty() )
                     {
                         m_pHeightArray[nPos] = *pTempAry;
-                        nPos++; // Id is nPos+1
+                        nPos++; 
                         pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
                         fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
-                        // Create dispatchable .uno command and set it
+                        
                         aCommand = aFontHeightCommand + OUString::number( fPoint );
                         pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                     }
@@ -218,17 +218,17 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             }
         }
 
-        // then insert numerical font size values
+        
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
         pTempAry = pAry;
         while ( *pTempAry )
         {
             m_pHeightArray[nPos] = *pTempAry;
-            nPos++; // Id is nPos+1
+            nPos++; 
             pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MIB_RADIOCHECK | MIB_AUTOCHECK );
             fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
-            // Create dispatchable .uno command and set it
+            
             aCommand = aFontHeightCommand + OUString::number( fPoint );
             pVCLPopupMenu->SetItemCommand( nPos, aCommand );
 
@@ -242,7 +242,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     }
 }
 
-// XEventListener
+
 void SAL_CALL FontSizeMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -256,7 +256,7 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& ) throw ( Ru
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     com::sun::star::awt::FontDescriptor                 aFontDescriptor;
@@ -284,7 +284,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
     }
 }
 
-// XMenuListener
+
 void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;
@@ -293,12 +293,12 @@ void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatc
         _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
-// XPopupMenuController
+
 void FontSizeMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
-    // Register for font name updates which gives us info about the current font!
+    
     aTargetURL.Complete = ".uno:CharFontName";
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );

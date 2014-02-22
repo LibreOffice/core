@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -70,15 +70,15 @@ void SwAccessibleFrameBase::GetStates(
     OSL_ENSURE( pVSh, "no shell?" );
     sal_Bool bSelectable =  pVSh->ISA( SwFEShell );
 
-    // SELECTABLE
+    
     if( bSelectable )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
-    // FOCUSABLE
+    
     if( bSelectable )
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
-    // SELECTED and FOCUSED
+    
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
@@ -153,8 +153,8 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
 
     if( bNewSelected )
     {
-        // remember that object as the one that has the caret. This is
-        // necessary to notify that object if the cursor leaves it.
+        
+        
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -245,7 +245,7 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         }
         break;
     case RES_OBJECTDYING:
-        // mba: it seems that this class intentionally does not call code in base class SwClient
+        
         if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
             GetRegisteredInNonConst()->Remove( this );
         break;
@@ -258,7 +258,7 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         break;
 
     default:
-        // mba: former call to base class method removed as it is meant to handle only RES_OBJECTDYING
+        
         break;
     }
 }
@@ -273,11 +273,11 @@ void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
     SwAccessibleContext::Dispose( bRecursive );
 }
 
-//Get the selection cursor of the document.
+
 SwPaM* SwAccessibleFrameBase::GetCrsr()
 {
-    // get the cursor shell; if we don't have any, we don't have a
-    // cursor/selection either
+    
+    
     SwPaM* pCrsr = NULL;
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell != NULL && !pCrsrShell->IsTableMode() )
@@ -287,7 +287,7 @@ SwPaM* SwAccessibleFrameBase::GetCrsr()
         if( !pFESh ||
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
-            // get the selection, and test whether it affects our text node
+            
             pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
         }
     }
@@ -295,8 +295,8 @@ SwPaM* SwAccessibleFrameBase::GetCrsr()
     return pCrsr;
 }
 
-//Return the selected state of the object.
-//when the object's anchor are in the selection cursor, we should return true.
+
+
 sal_Bool SwAccessibleFrameBase::GetSelectedState( )
 {
     SolarMutexGuard aGuard;
@@ -306,7 +306,7 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
         return sal_True;
     }
 
-    // SELETED.
+    
     SwFlyFrm* pFlyFrm = getFlyFrm();
     const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
     const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
@@ -322,14 +322,14 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
             const SwTxtNode* pNode = pPos->nNode.GetNode().GetTxtNode();
             sal_uLong nHere = pNode->GetIndex();
 
-            // iterate over ring
+            
             SwPaM* pRingStart = pCrsr;
             do
             {
-                // ignore, if no mark
+                
                 if( pCrsr->HasMark() )
                 {
-                    // check whether nHere is 'inside' pCrsr
+                    
                     SwPosition* pStart = pCrsr->Start();
                     sal_uLong nStartIndex = pStart->nNode.GetIndex();
                     SwPosition* pEnd = pCrsr->End();
@@ -350,11 +350,11 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
                         }
                         break;
                     }
-                    // else: this PaM doesn't point to this paragraph
+                    
                 }
-                // else: this PaM is collapsed and doesn't select anything
+                
 
-                // next PaM in ring
+                
                 pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
             }
             while( pCrsr != pRingStart );

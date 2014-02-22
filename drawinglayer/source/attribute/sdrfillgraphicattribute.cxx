@@ -31,7 +31,7 @@ namespace drawinglayer
         class ImpSdrFillGraphicAttribute
         {
         public:
-            // data definitions
+            
             Graphic                                 maFillGraphic;
             basegfx::B2DVector                      maGraphicLogicSize;
             basegfx::B2DVector                      maSize;
@@ -39,7 +39,7 @@ namespace drawinglayer
             basegfx::B2DVector                      maOffsetPosition;
             basegfx::B2DVector                      maRectPoint;
 
-            // bitfield
+            
             bool                                    mbTiling : 1;
             bool                                    mbStretch : 1;
             bool                                    mbLogSize : 1;
@@ -79,7 +79,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const Graphic& getFillGraphic() const { return maFillGraphic; }
             const basegfx::B2DVector& getGraphicLogicSize() const { return maGraphicLogicSize; }
             const basegfx::B2DVector& getSize() const { return maSize; }
@@ -211,22 +211,22 @@ namespace drawinglayer
 
         FillGraphicAttribute SdrFillGraphicAttribute::createFillGraphicAttribute(const basegfx::B2DRange& rRange) const
         {
-            // get logical size of bitmap (before expanding eventually)
+            
             Graphic aGraphic(getFillGraphic());
 
-            // init values with defaults
+            
             basegfx::B2DPoint aBitmapSize(1.0, 1.0);
             basegfx::B2DVector aBitmapTopLeft(0.0, 0.0);
 
-            // are changes needed?
+            
             if(getTiling() || !getStretch())
             {
-                // init values with range sizes
+                
                 const double fRangeWidth(0.0 != rRange.getWidth() ? rRange.getWidth() : 1.0);
                 const double fRangeHeight(0.0 != rRange.getHeight() ? rRange.getHeight() : 1.0);
                 aBitmapSize = basegfx::B2DPoint(fRangeWidth, fRangeHeight);
 
-                // size changes
+                
                 if(0.0 != getSize().getX())
                 {
                     if(getSize().getX() < 0.0)
@@ -240,8 +240,8 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // #i124002# use GraphicLogicSize directly, do not try to use GetPrefSize
-                    // of the graphic, that may not be adapted to the MapMode of the target
+                    
+                    
                     aBitmapSize.setX(getGraphicLogicSize().getX());
                 }
 
@@ -258,15 +258,15 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // #i124002# use GraphicLogicSize directly, do not try to use GetPrefSize
-                    // of the graphic, that may not be adapted to the MapMode of the target
+                    
+                    
                     aBitmapSize.setY(getGraphicLogicSize().getY());
                 }
 
-                // get values, force to centered if necessary
+                
                 const basegfx::B2DVector aRectPoint(getTiling() ? getRectPoint() : basegfx::B2DVector(0.0, 0.0));
 
-                // position changes X
+                
                 if(0.0 == aRectPoint.getX())
                 {
                     aBitmapTopLeft.setX((fRangeWidth - aBitmapSize.getX()) * 0.5);
@@ -281,7 +281,7 @@ namespace drawinglayer
                     aBitmapTopLeft.setX(aBitmapTopLeft.getX() + (aBitmapSize.getX() * (getOffsetPosition().getX() * 0.01)));
                 }
 
-                // position changes Y
+                
                 if(0.0 == aRectPoint.getY())
                 {
                     aBitmapTopLeft.setY((fRangeHeight - aBitmapSize.getY()) * 0.5);
@@ -296,18 +296,18 @@ namespace drawinglayer
                     aBitmapTopLeft.setY(aBitmapTopLeft.getY() + (aBitmapSize.getY() * (getOffsetPosition().getY() * 0.01)));
                 }
 
-                // apply bitmap size scaling to unit rectangle
+                
                 aBitmapTopLeft.setX(aBitmapTopLeft.getX() / fRangeWidth);
                 aBitmapTopLeft.setY(aBitmapTopLeft.getY() / fRangeHeight);
                 aBitmapSize.setX(aBitmapSize.getX() / fRangeWidth);
                 aBitmapSize.setY(aBitmapSize.getY() / fRangeHeight);
             }
 
-            // get offset in percent
+            
             const double fOffsetX(basegfx::clamp(getOffset().getX() * 0.01, 0.0, 1.0));
             const double fOffsetY(basegfx::clamp(getOffset().getY() * 0.01, 0.0, 1.0));
 
-            // create FillGraphicAttribute
+            
             return FillGraphicAttribute(
                 aGraphic,
                 basegfx::B2DRange(aBitmapTopLeft, aBitmapTopLeft + aBitmapSize),
@@ -315,7 +315,7 @@ namespace drawinglayer
                 fOffsetX,
                 fOffsetY);
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

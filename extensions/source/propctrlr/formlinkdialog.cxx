@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,10 +43,10 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -57,9 +57,9 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //========================================================================
-    //= FieldLinkRow
-    //========================================================================
+    
+    
+    
     class FieldLinkRow : public Window
     {
     private:
@@ -92,7 +92,7 @@ namespace pcr
         DECL_LINK( OnFieldNameChanged, ComboBox* );
     };
 
-    //------------------------------------------------------------------------
+    
     FieldLinkRow::FieldLinkRow( Window* _pParent, const ResId& _rId )
         :Window( _pParent, _rId )
         ,m_aDetailColumn( this, ResId( 1, *_rId.GetResMgr() ) )
@@ -108,7 +108,7 @@ namespace pcr
         m_aMasterColumn.SetModifyHdl( LINK( this, FieldLinkRow, OnFieldNameChanged ) );
     }
 
-    //------------------------------------------------------------------------
+    
     void FieldLinkRow::fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames )
     {
         ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
@@ -119,7 +119,7 @@ namespace pcr
             pBox->InsertEntry( *pFieldName );
     }
 
-    //------------------------------------------------------------------------
+    
     bool FieldLinkRow::GetFieldName( LinkParticipant _eWhich, OUString& /* [out] */ _rName ) const
     {
         const ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
@@ -127,14 +127,14 @@ namespace pcr
         return !_rName.isEmpty();
     }
 
-    //------------------------------------------------------------------------
+    
     void FieldLinkRow::SetFieldName( LinkParticipant _eWhich, const OUString& _rName )
     {
         ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
         pBox->SetText( _rName );
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( FieldLinkRow, OnFieldNameChanged, ComboBox*, /*_pBox*/ )
     {
         if ( m_aLinkChangeHandler.IsSet() )
@@ -143,10 +143,10 @@ namespace pcr
         return 0L;
     }
 
-    //========================================================================
-    //= FormLinkDialog
-    //========================================================================
-    //------------------------------------------------------------------------
+    
+    
+    
+    
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
             const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,
             const OUString& _sExplanation,
@@ -185,15 +185,15 @@ namespace pcr
         updateOkButton();
     }
 
-    //------------------------------------------------------------------------
+    
     FormLinkDialog::~FormLinkDialog( )
     {
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::commitLinkPairs()
     {
-        // collect the field lists from the rows
+        
         ::std::vector< OUString > aDetailFields; aDetailFields.reserve( 4 );
         ::std::vector< OUString > aMasterFields; aMasterFields.reserve( 4 );
 
@@ -213,7 +213,7 @@ namespace pcr
             aMasterFields.push_back( sMasterField );
         }
 
-        // and set as property values
+        
         try
         {
             Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
@@ -231,7 +231,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     short FormLinkDialog::Execute()
     {
         short nResult = ModalDialog::Execute();
@@ -242,7 +242,7 @@ namespace pcr
         return nResult;
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::initializeFieldLists()
     {
         Sequence< OUString > sDetailFields;
@@ -262,10 +262,10 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::initializeColumnLabels()
     {
-        // label for the detail form
+        
         OUString sDetailType = getFormDataSourceType( m_xDetailForm );
         if ( sDetailType.isEmpty() )
         {
@@ -278,7 +278,7 @@ namespace pcr
         }
         m_aDetailLabel.SetText( sDetailType );
 
-        // label for the master form
+        
         OUString sMasterType = getFormDataSourceType( m_xMasterForm );
         if ( sMasterType.isEmpty() )
         {
@@ -292,10 +292,10 @@ namespace pcr
         m_aMasterLabel.SetText( sMasterType );
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::initializeFieldRowsFrom( Sequence< OUString >& _rDetailFields, Sequence< OUString >& _rMasterFields )
     {
-        // our UI does allow 4 fields max
+        
         _rDetailFields.realloc( 4 );
         _rMasterFields.realloc( 4 );
 
@@ -312,7 +312,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::initializeLinks()
     {
         try
@@ -335,12 +335,12 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::updateOkButton()
     {
-        // in all rows, there must be either two valid selections, or none at all
-        // If there is at least one row with exactly one valid selection, then the
-        // OKButton needs to be disabled
+        
+        
+        
         sal_Bool bEnable = sal_True;
 
         const FieldLinkRow* aRows[] = {
@@ -359,7 +359,7 @@ namespace pcr
         m_aOK.Enable( bEnable );
     }
 
-    //------------------------------------------------------------------------
+    
     OUString FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm ) const SAL_THROW(())
     {
         OUString sReturn;
@@ -386,7 +386,7 @@ namespace pcr
         return sReturn;
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::getFormFields( const Reference< XPropertySet >& _rxForm, Sequence< OUString >& /* [out] */ _rNames ) const SAL_THROW(( ))
     {
         _rNames.realloc( 0 );
@@ -438,7 +438,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::ensureFormConnection( const Reference< XPropertySet >& _rxFormProps, Reference< XConnection >& /* [out] */ _rxConnection ) const SAL_THROW(( Exception ))
     {
         OSL_PRECOND( _rxFormProps.is(), "FormLinkDialog::ensureFormConnection: invalid form!" );
@@ -451,7 +451,7 @@ namespace pcr
             _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xContext, sal_True );
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::getConnectionMetaData( const Reference< XPropertySet >& _rxFormProps, Reference< XDatabaseMetaData >& /* [out] */ _rxMeta ) const SAL_THROW(( Exception ))
     {
         if ( _rxFormProps.is() )
@@ -464,7 +464,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     Reference< XPropertySet > FormLinkDialog::getCanonicUnderlyingTable( const Reference< XPropertySet >& _rxFormProps ) const
     {
         Reference< XPropertySet > xTable;
@@ -491,9 +491,9 @@ namespace pcr
         return xTable;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
-            // TODO: fix the usage of _rxRHS. This is issue #i81956#.
+            
         Sequence< OUString >& _rLeftFields, Sequence< OUString >& _rRightFields ) const
     {
         try
@@ -557,7 +557,7 @@ namespace pcr
         return ( _rLeftFields.getLength() > 0 ) && ( !_rLeftFields[ 0 ].isEmpty() );
     }
 
-    //------------------------------------------------------------------------
+    
     void FormLinkDialog::initializeSuggest()
     {
         Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
@@ -569,7 +569,7 @@ namespace pcr
         {
             sal_Bool bEnable = sal_True;
 
-            // only show the button when both forms are based on the same data source
+            
             if ( bEnable )
             {
                 OUString sMasterDS, sDetailDS;
@@ -578,7 +578,7 @@ namespace pcr
                 bEnable = ( sMasterDS == sDetailDS );
             }
 
-            // only show the button when the connection supports relations
+            
             if ( bEnable )
             {
                 Reference< XDatabaseMetaData > xMeta;
@@ -594,7 +594,7 @@ namespace pcr
                 }
             }
 
-            // only enable the button if there is a "canonic" table underlying both forms
+            
             Reference< XPropertySet > xDetailTable, xMasterTable;
             if ( bEnable )
             {
@@ -603,7 +603,7 @@ namespace pcr
                 bEnable = xDetailTable.is() && xMasterTable.is();
             }
 
-            // only enable the button if there is a relation between both tables
+            
             m_aRelationDetailColumns.realloc( 0 );
             m_aRelationMasterColumns.realloc( 0 );
             if ( bEnable )
@@ -611,13 +611,13 @@ namespace pcr
                 bEnable = getExistingRelation( xDetailTable, xMasterTable, m_aRelationDetailColumns, m_aRelationMasterColumns );
                 OSL_POSTCOND( m_aRelationMasterColumns.getLength() == m_aRelationDetailColumns.getLength(), "FormLinkDialog::initializeSuggest: nonsense!" );
                 if ( m_aRelationMasterColumns.getLength() == 0 )
-                {   // okay, there is no relation "pointing" (via a foreign key) from the detail table to the master table
-                    // but perhaps the other way round (would make less sense, but who knows ...)
+                {   
+                    
                     bEnable = getExistingRelation( xMasterTable, xDetailTable, m_aRelationMasterColumns, m_aRelationDetailColumns );
                 }
             }
 
-            // only enable the button if the relation contains at most 4 field pairs
+            
             if ( bEnable )
             {
                 bEnable = ( m_aRelationMasterColumns.getLength() <= 4 );
@@ -631,21 +631,21 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( FormLinkDialog, OnSuggest, void*, /*_pNotInterestedIn*/ )
     {
         initializeFieldRowsFrom( m_aRelationDetailColumns, m_aRelationMasterColumns );
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( FormLinkDialog, OnFieldChanged, FieldLinkRow*, /*_pRow*/ )
     {
         updateOkButton();
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( FormLinkDialog, OnInitialize, void*, /*_pNotInterestedIn*/ )
     {
         initializeColumnLabels();
@@ -654,8 +654,8 @@ namespace pcr
         initializeSuggest();
         return 0L;
     }
-//............................................................................
-}   // namespace pcr
-//............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

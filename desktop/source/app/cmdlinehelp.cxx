@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,14 +34,14 @@
 
 namespace desktop
 {
-    // to be able to display the help nicely in a dialog box with propotional font,
-    // we need to split it in chunks...
-    //  ___HEAD___
-    //  LEFT RIGHT
-    //  LEFT RIGHT
-    //  LEFT RIGHT
-    //  __BOTTOM__
-    //     [OK]
+    
+    
+    
+    
+    
+    
+    
+    
 
     const char aCmdLineHelp_version[] =
         "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"\
@@ -126,15 +126,15 @@ namespace desktop
         "      Store soffice.bin pid to file.\n"\
         "-env:<VAR>[=<VALUE>]\n"\
         "      Set a bootstrap variable.\n"\
-        "      Eg. -env:UserInstallation=file:///tmp/test to set a non-default user profile path.\n"\
+        "      Eg. -env:UserInstallation=file:
         "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
     OUString ReplaceStringHookProc(const OUString& rStr);
 
     void displayCmdlineHelp(OUString const & unknown)
     {
-        // if you put variables in other chunks don't forget to call the replace routines
-        // for those chunks...
+        
+        
         OUString aHelpMessage_version = OUString::createFromAscii(aCmdLineHelp_version);
         OUString aHelpMessage_head = OUString::createFromAscii(aCmdLineHelp_head);
         OUString aHelpMessage_left = OUString::createFromAscii(aCmdLineHelp_left);
@@ -148,11 +148,11 @@ namespace desktop
                 + aHelpMessage_head;
         }
 #ifdef UNX
-        // on unix use console for output
+        
         fprintf(stdout, "%s%s",
                 OUStringToOString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).getStr(),
                 OUStringToOString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).getStr());
-        // merge left and right column
+        
         sal_Int32 n = comphelper::string::getTokenCount(aHelpMessage_left, '\n');
         OString bsLeft(OUStringToOString(aHelpMessage_left,
             RTL_TEXTENCODING_ASCII_US));
@@ -167,7 +167,7 @@ namespace desktop
         fprintf(stdout, "%s", OUStringToOString(aHelpMessage_bottom,
                     RTL_TEXTENCODING_ASCII_US).getStr());
 #else
-        // rest gets a dialog box
+        
         CmdlineHelpDialog aDlg;
         aDlg.m_pftHead->SetText(aHelpMessage_version + aHelpMessage_head);
         aDlg.m_pftLeft->SetText(aHelpMessage_left);
@@ -184,7 +184,7 @@ namespace desktop
 #ifdef UNX
         fprintf(stdout, "%s", OUStringToOString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).getStr());
 #else
-        // Just re-use the help dialog for now.
+        
         CmdlineHelpDialog aDlg;
         aDlg.m_pftHead->SetText(aVersionMsg);
         aDlg.m_pftLeft->SetText("");

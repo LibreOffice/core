@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -30,7 +30,7 @@
 
 namespace {
 
-enum ImplIso2022JpToUnicodeState // order is important:
+enum ImplIso2022JpToUnicodeState 
 {
     IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII,
     IMPL_ISO_2022_JP_TO_UNICODE_STATE_JIS_ROMAN,
@@ -109,7 +109,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         switch (eState)
         {
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII:
-            if (nChar == 0x1B) // ESC
+            if (nChar == 0x1B) 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
@@ -124,19 +124,19 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_JIS_ROMAN:
-            if (nChar == 0x1B) // ESC
+            if (nChar == 0x1B) 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
                 {
                     switch (nChar)
                     {
-                    case 0x5C: // REVERSE SOLIDUS (\)
-                        nChar = 0xA5; // YEN SIGN
+                    case 0x5C: 
+                        nChar = 0xA5; 
                         break;
 
-                    case 0x7E: // ~
-                        nChar = 0xAF; // MACRON
+                    case 0x7E: 
+                        nChar = 0xAF; 
                         break;
                     }
                     *pDestBufPtr++ = (sal_Unicode) nChar;
@@ -151,7 +151,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_0208:
-            if (nChar == 0x1B) // ESC
+            if (nChar == 0x1B) 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC;
             else if (nChar >= 0x21 && nChar <= 0x7E)
             {
@@ -195,11 +195,11 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC:
             switch (nChar)
             {
-            case 0x24: // $
+            case 0x24: 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_DOLLAR;
                 break;
 
-            case 0x28: // (
+            case 0x28: 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_LPAREN;
                 break;
 
@@ -212,11 +212,11 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_LPAREN:
             switch (nChar)
             {
-            case 0x42: // A
+            case 0x42: 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
                 break;
 
-            case 0x4A: // J
+            case 0x4A: 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_JIS_ROMAN;
                 break;
 
@@ -229,8 +229,8 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_DOLLAR:
             switch (nChar)
             {
-            case 0x40: // @
-            case 0x42: // B
+            case 0x40: 
+            case 0x42: 
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_0208;
                 break;
 
@@ -379,15 +379,15 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
             goto bad_input;
         }
 
-        if (nChar == 0x0A || nChar == 0x0D) // LF, CR
+        if (nChar == 0x0A || nChar == 0x0D) 
         {
             if (b0208)
             {
                 if (pDestBufEnd - pDestBufPtr >= 3)
                 {
-                    *pDestBufPtr++ = 0x1B; // ESC
-                    *pDestBufPtr++ = 0x28; // (
-                    *pDestBufPtr++ = 0x42; // B
+                    *pDestBufPtr++ = 0x1B; 
+                    *pDestBufPtr++ = 0x28; 
+                    *pDestBufPtr++ = 0x42; 
                     b0208 = false;
                 }
                 else
@@ -406,9 +406,9 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
             {
                 if (pDestBufEnd - pDestBufPtr >= 3)
                 {
-                    *pDestBufPtr++ = 0x1B; // ESC
-                    *pDestBufPtr++ = 0x28; // (
-                    *pDestBufPtr++ = 0x42; // B
+                    *pDestBufPtr++ = 0x1B; 
+                    *pDestBufPtr++ = 0x28; 
+                    *pDestBufPtr++ = 0x42; 
                     b0208 = false;
                 }
                 else
@@ -433,15 +433,15 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
                     nBytes = pJisX0208Data[nIndex1].
                                  mpToUniTrailTab[nIndex2 - nFirst];
                     if (nBytes == 0)
-                        // For some reason, the tables in tcvtjp4.tab do not
-                        // include these two conversions:
+                        
+                        
                         switch (nChar)
                         {
-                        case 0xA5: // YEN SIGN
+                        case 0xA5: 
                             nBytes = 0x216F;
                             break;
 
-                        case 0xAF: // MACRON
+                        case 0xAF: 
                             nBytes = 0x2131;
                             break;
                         }
@@ -453,9 +453,9 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
                 {
                     if (pDestBufEnd - pDestBufPtr >= 3)
                     {
-                        *pDestBufPtr++ = 0x1B; // ESC
-                        *pDestBufPtr++ = 0x24; // $
-                        *pDestBufPtr++ = 0x42; // B
+                        *pDestBufPtr++ = 0x1B; 
+                        *pDestBufPtr++ = 0x24; 
+                        *pDestBufPtr++ = 0x42; 
                         b0208 = true;
                     }
                     else
@@ -537,9 +537,9 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
         {
             if (pDestBufEnd - pDestBufPtr >= 3)
             {
-                *pDestBufPtr++ = 0x1B; // ESC
-                *pDestBufPtr++ = 0x28; // (
-                *pDestBufPtr++ = 0x42; // B
+                *pDestBufPtr++ = 0x1B; 
+                *pDestBufPtr++ = 0x28; 
+                *pDestBufPtr++ = 0x42; 
                 b0208 = false;
             }
             else

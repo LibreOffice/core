@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "prtsetup.hxx"
@@ -68,7 +68,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         rBox.SelectEntry( m_aInvalidString );
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSDialog
@@ -98,7 +98,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
     }
     else if( m_aJobData.m_aDriverName.startsWith("CUPS:") && ! PrinterInfoManager::get().isCUPSDisabled() )
     {
-        // command page makes no sense for CUPS printers
+        
         m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
     }
 
@@ -108,7 +108,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
     ActivatePage(m_pTabControl);
 }
 
-// --------------------------------------------------------------------------
+
 
 RTSDialog::~RTSDialog()
 {
@@ -118,7 +118,7 @@ RTSDialog::~RTSDialog()
     delete m_pCommandPage;
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
 {
@@ -152,16 +152,16 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     return 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
 {
     if( pButton == m_pOKButton )
     {
-        // refresh the changed values
+        
         if( m_pPaperPage )
         {
-            // orientation
+            
             m_aJobData.m_eOrientation = m_pPaperPage->getOrientation() == 0 ?
                 orientation::Portrait : orientation::Landscape;
         }
@@ -173,10 +173,10 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
             m_aJobData.m_nPDFDevice     = m_pDevicePage->getPDFDevice();
         }
         if( m_pOtherPage )
-            // write other settings
+            
             m_pOtherPage->save();
         if( m_pCommandPage )
-            // write command settings
+            
             m_pCommandPage->save();
 
         EndDialog( 1 );
@@ -187,7 +187,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
     return 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSPaperPage
@@ -212,36 +212,36 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
 
     sal_uInt16 nPos = 0;
 
-    // duplex
+    
     nPos = m_pDuplexBox->InsertEntry( m_pParent->m_aInvalidString );
     m_pDuplexBox->SetEntryData( nPos, NULL );
 
-    // paper does not have an invalid entry
+    
 
-    // input slots
+    
     nPos = m_pSlotBox->InsertEntry( m_pParent->m_aInvalidString );
     m_pSlotBox->SetEntryData( nPos, NULL );
 
     update();
 }
 
-// --------------------------------------------------------------------------
+
 
 RTSPaperPage::~RTSPaperPage()
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 void RTSPaperPage::update()
 {
     const PPDKey* pKey      = NULL;
 
-    // orientation
+    
     m_pOrientBox->SelectEntryPos(
         m_pParent->m_aJobData.m_eOrientation == orientation::Portrait ? 0 : 1);
 
-    // duplex
+    
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) )) )
     {
@@ -253,7 +253,7 @@ void RTSPaperPage::update()
         m_pDuplexBox->Enable( false );
     }
 
-    // paper
+    
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) )) )
     {
@@ -265,7 +265,7 @@ void RTSPaperPage::update()
         m_pPaperBox->Enable( false );
     }
 
-    // input slots
+    
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString("InputSlot") )) )
     {
@@ -278,7 +278,7 @@ void RTSPaperPage::update()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
 {
@@ -312,7 +312,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSDevicePage
@@ -342,14 +342,14 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
         case -1: m_pSpaceBox->SelectEntryPos(2);break;
     }
 
-    sal_uLong nLevelEntryData = 0; //automatic
-    if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) //explicitly PDF
+    sal_uLong nLevelEntryData = 0; 
+    if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) 
         nLevelEntryData = 10;
-    else if (m_pParent->m_aJobData.m_nPSLevel > 0) //explicit PS Level
+    else if (m_pParent->m_aJobData.m_nPSLevel > 0) 
         nLevelEntryData = m_pParent->m_aJobData.m_nPSLevel+1;
-    else if (m_pParent->m_aJobData.m_nPDFDevice == 1) //automatically PDF
+    else if (m_pParent->m_aJobData.m_nPDFDevice == 1) 
         nLevelEntryData = 0;
-    else if (m_pParent->m_aJobData.m_nPDFDevice == -1) //explicitly PS from driver
+    else if (m_pParent->m_aJobData.m_nPDFDevice == -1) 
         nLevelEntryData = 1;
 
     bool bAutoIsPDF = officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get();
@@ -377,7 +377,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     else if (m_pParent->m_aJobData.m_nColorDepth == 24)
         m_pDepthBox->SelectEntryPos(1);
 
-    // fill ppd boxes
+    
     if( m_pParent->m_aJobData.m_pParser )
     {
         for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
@@ -398,13 +398,13 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 RTSDevicePage::~RTSDevicePage()
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 void RTSDevicePage::update()
 {
@@ -434,29 +434,29 @@ sal_uLong RTSDevicePage::getColorDevice()
     return 0;
 }
 
-// ------------------------------------------------------------------
+
 
 sal_uLong RTSDevicePage::getLevel()
 {
     sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
     if (nLevel == 0)
-        return 0;   //automatic
+        return 0;   
     return nLevel < 10 ? nLevel-1 : 0;
 }
 
-// ------------------------------------------------------------------
+
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {
     sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
     if (nLevel > 9)
-        return 2;   //explictly PDF
+        return 2;   
     else if (nLevel == 0)
-        return 0;   //automatic
-    return -1;      //explicitly PS
+        return 0;   
+    return -1;      
 }
 
-// ------------------------------------------------------------------
+
 
 IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
 {
@@ -478,7 +478,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-// ------------------------------------------------------------------
+
 
 void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 {
@@ -503,7 +503,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSOtherPage
@@ -536,13 +536,13 @@ RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
     initValues();
 }
 
-// ------------------------------------------------------------------
+
 
 RTSOtherPage::~RTSOtherPage()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void RTSOtherPage::initValues()
 {
@@ -573,7 +573,7 @@ void RTSOtherPage::initValues()
     m_aCommentEdt.SetText( m_pParent->m_aJobData.m_aComment );
 }
 
-// ------------------------------------------------------------------
+
 
 void RTSOtherPage::save()
 {
@@ -599,7 +599,7 @@ void RTSOtherPage::save()
     m_pParent->m_aJobData.m_aComment = m_aCommentEdt.GetText();
 }
 
-// ------------------------------------------------------------------
+
 
 IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
 {
@@ -703,6 +703,6 @@ extern "C" {
         return bRet;
     }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

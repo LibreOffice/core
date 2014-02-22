@@ -47,24 +47,24 @@ bool ConvertValueOf::VisitCallExpr( const CallExpr* call )
     {
     if( ignoreLocation( call ))
         return true;
-    // Using getDirectCallee() here means that we find only calls
-    // that call the function directly (i.e. not using a pointer, for example).
-    // Use getCallee() to include also those :
-    //    if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( call->getCalleeDecl()))
+    
+    
+    
+    
     if( const FunctionDecl* func = call->getDirectCallee())
         {
-        // Optimize, getQualifiedNameAsString() is reportedly expensive,
-        // so first check fast details like number of arguments or the (unqualified)
-        // name before checking the fully qualified name.
-        // See FunctionDecl for all the API about the function.
+        
+        
+        
+        
         if( func->getIdentifier() != NULL
             && ( func->getName() == "valueOf" ))
             {
             string qualifiedName = func->getQualifiedNameAsString();
             if( qualifiedName == "rtl::OString::valueOf" )
                 {
-                // Further checks about arguments. Check mainly ParmVarDecl, VarDecl,
-                // ValueDecl and QualType for Clang API details.
+                
+                
                 string arg0 = func->getParamDecl( 0 )->getType().getAsString();
                 if( arg0 == "sal_Bool" )
                     replaceText( call->getCallee()->getSourceRange(), "OString::boolean" );
@@ -78,8 +78,8 @@ bool ConvertValueOf::VisitCallExpr( const CallExpr* call )
                 }
             if( qualifiedName == "rtl::OUString::valueOf" )
                 {
-                // Further checks about arguments. Check mainly ParmVarDecl, VarDecl,
-                // ValueDecl and QualType for Clang API details.
+                
+                
                 string arg0 = func->getParamDecl( 0 )->getType().getAsString();
                 if( arg0 == "sal_Bool" )
                     replaceText( call->getCallee()->getSourceRange(), "OUString::boolean" );
@@ -101,18 +101,18 @@ void ConvertValueOf::removeCast( const Expr* arg )
     arg = arg->IgnoreImpCasts();
     if( const ExplicitCastExpr* cast = dyn_cast< ExplicitCastExpr >( arg ))
         {
-// Explicit casts don't seem to actually always change the type (integer promotion
-// takes place first?), so remove also preceding implicit casts:
-//     void f( int );
-//     char a;
-//     f( int( a ));
-//    |-CallExpr 0x1a84f20 <line:6:5, col:16> 'void'
-//    | |-ImplicitCastExpr 0x1a84f08 <col:5> 'void (*)(int)' <FunctionToPointerDecay>
-//    | | `-DeclRefExpr 0x1a84eb8 <col:5> 'void (int)' lvalue Function 0x1a58900 'f' 'void (int)'
-//    | `-CXXFunctionalCastExpr 0x1a84e90 <col:8, col:15> 'int' functional cast to int <NoOp>
-//    |   `-ImplicitCastExpr 0x1a84e78 <col:13> 'int' <IntegralCast>
-//    |     `-ImplicitCastExpr 0x1a84e60 <col:13> 'char' <LValueToRValue>
-//    |       `-DeclRefExpr 0x1a58b88 <col:13> 'char' lvalue Var 0x1a58ab0 'a' 'char'
+
+
+
+
+
+
+
+
+
+
+
+
         const Expr* castFrom = cast->getSubExpr()->IgnoreImpCasts();
         if( cast->getType()->isIntegerType() && castFrom->getType()->isIntegerType())
             {
@@ -146,6 +146,6 @@ void ConvertValueOf::removeCast( const Expr* arg )
 
 static Plugin::Registration< ConvertValueOf > X( "convertvalueof" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

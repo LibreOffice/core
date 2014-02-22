@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/security.hxx>
@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 #define THROW_WHERE ""
 #endif
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
@@ -55,9 +55,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
-    // File Content Provider.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     if ( fileaccess::shell::getImplementationName_static().
             equalsAscii( pImplName ) )
@@ -65,7 +65,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
         xFactory = FileProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+    
 
     if ( xFactory.is() )
     {
@@ -100,9 +100,9 @@ FileProvider::~FileProvider()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// XInterface
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 void SAL_CALL
 FileProvider::acquire(
@@ -139,8 +139,8 @@ FileProvider::queryInterface(
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// XInitialization
+
+
 
 void SAL_CALL FileProvider::init()
 {
@@ -166,9 +166,9 @@ FileProvider::initialize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 //
-// XTypeProvider methods.
+
 
 
 XTYPEPROVIDER_IMPL_7( FileProvider,
@@ -181,8 +181,8 @@ XTYPEPROVIDER_IMPL_7( FileProvider,
                            XContentProvider )
 
 
-////////////////////////////////////////////////////////////////////////////////
-// XServiceInfo methods.
+
+
 
 OUString SAL_CALL
 FileProvider::getImplementationName()
@@ -256,9 +256,9 @@ FileProvider::CreateInstance(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// XContent
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 Reference< XContent > SAL_CALL
@@ -319,7 +319,7 @@ FileProvider::compareContentIds(
         {
             iComp = aStatus1.getFileURL().compareTo( aStatus2.getFileURL() );
 
-// Quick hack for Windows to threat all file systems as case insensitive
+
 #ifdef  WNT
             if ( 0 != iComp )
             {
@@ -351,7 +351,7 @@ FileProvider::createContentIdentifier(
 
 
 
-//XPropertySetInfoImpl
+
 
 class XPropertySetInfoImpl2
     : public cppu::OWeakObject,
@@ -361,7 +361,7 @@ public:
     XPropertySetInfoImpl2();
     ~XPropertySetInfoImpl2();
 
-    // XInterface
+    
     virtual Any SAL_CALL
     queryInterface(
         const Type& aType )
@@ -421,7 +421,7 @@ XPropertySetInfoImpl2::XPropertySetInfoImpl2()
 
 XPropertySetInfoImpl2::~XPropertySetInfoImpl2()
 {
-    // nothing
+    
 }
 
 
@@ -510,10 +510,10 @@ void SAL_CALL FileProvider::initProperties( void )
         osl::Security aSecurity;
         aSecurity.getHomeDir( m_HomeDirectory );
 
-        // static const sal_Int32 UNKNOWN_NOTATION = (sal_Int32)0;
-        // static const sal_Int32 UNIX_NOTATION = (sal_Int32)1;
-        // static const sal_Int32 DOS_NOTATION = (sal_Int32)2;
-        // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
+        
+        
+        
+        
 
         XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
         m_xPropertySetInfo = Reference< XPropertySetInfo >( p );
@@ -521,7 +521,7 @@ void SAL_CALL FileProvider::initProperties( void )
 }
 
 
-// XPropertySet
+
 
 Reference< XPropertySetInfo > SAL_CALL
 FileProvider::getPropertySetInfo(  )
@@ -630,15 +630,15 @@ FileProvider::removeVetoableChangeListener(
 
 
 
-// XFileIdentifierConverter
+
 
 sal_Int32 SAL_CALL
 FileProvider::getFileProviderLocality( const OUString& BaseURL )
     throw( RuntimeException )
 {
-    // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
-    // return -1 (missmatch).  What is missing is a fast comparison to ASCII,
-    // ignoring case:
+    
+    
+    
     return BaseURL.getLength() >= 5
            && (BaseURL[0] == 'F' || BaseURL[0] == 'f')
            && (BaseURL[1] == 'I' || BaseURL[1] == 'i')

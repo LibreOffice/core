@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,19 +50,19 @@
 #include <utility>
 
 
-// ============================================================================
+
 
 namespace {
 
-const long SC_NOTECAPTION_WIDTH             =  2900;    /// Default width of note caption textbox.
-const long SC_NOTECAPTION_MAXWIDTH_TEMP     = 12000;    /// Maximum width of temporary note caption textbox.
-const long SC_NOTECAPTION_HEIGHT            =  1800;    /// Default height of note caption textbox.
-const long SC_NOTECAPTION_CELLDIST          =   600;    /// Default distance of note captions to border of anchor cell.
-const long SC_NOTECAPTION_OFFSET_Y          = -1500;    /// Default Y offset of note captions to top border of anchor cell.
-const long SC_NOTECAPTION_OFFSET_X          =  1500;    /// Default X offset of note captions to left border of anchor cell.
-const long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    /// Distance of temporary note captions to visible sheet area.
+const long SC_NOTECAPTION_WIDTH             =  2900;    
+const long SC_NOTECAPTION_MAXWIDTH_TEMP     = 12000;    
+const long SC_NOTECAPTION_HEIGHT            =  1800;    
+const long SC_NOTECAPTION_CELLDIST          =   600;    
+const long SC_NOTECAPTION_OFFSET_Y          = -1500;    
+const long SC_NOTECAPTION_OFFSET_X          =  1500;    
+const long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    
 
-// ============================================================================
+
 
 /** Static helper functions for caption objects. */
 class ScCaptionUtil
@@ -80,7 +80,7 @@ public:
     static void         SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& rItemSet );
 };
 
-// ----------------------------------------------------------------------------
+
 
 void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 {
@@ -98,7 +98,7 @@ void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShow
 
 void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos )
 {
-    // pass true to ScDrawLayer::GetObjData() to create the object data entry
+    
     ScDrawObjData* pObjData = ScDrawLayer::GetObjData( &rCaption, true );
     OSL_ENSURE( pObjData, "ScCaptionUtil::SetCaptionUserData - missing drawing object user data" );
     pObjData->maStart = rPos;
@@ -109,7 +109,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
 {
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 
-    // caption tail arrow
+    
     ::basegfx::B2DPolygon aTriangle;
     aTriangle.append( ::basegfx::B2DPoint( 10.0,  0.0 ) );
     aTriangle.append( ::basegfx::B2DPoint(  0.0, 30.0 ) );
@@ -125,7 +125,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( XFillColorItem( OUString(), ScDetectiveFunc::GetCommentColor() ) );
     aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
 
-    // shadow
+    
     /*  SdrShadowItem has sal_False, instead the shadow is set for the
         rectangle only with SetSpecialTextBoxShadow() when the object is
         created (item must be set to adjust objects from older files). */
@@ -133,14 +133,14 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( SdrShadowXDistItem( 100 ) );
     aItemSet.Put( SdrShadowYDistItem( 100 ) );
 
-    // text attributes
+    
     aItemSet.Put( SdrTextLeftDistItem( 100 ) );
     aItemSet.Put( SdrTextRightDistItem( 100 ) );
     aItemSet.Put( SdrTextUpperDistItem( 100 ) );
     aItemSet.Put( SdrTextLowerDistItem( 100 ) );
     aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
     aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
-    // use the default cell style to be able to modify the caption font
+    
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
 
@@ -149,16 +149,16 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
 
 void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& rItemSet )
 {
-    // copy all items
+    
     rCaption.SetMergedItemSet( rItemSet );
-    // reset shadow items
+    
     rCaption.SetMergedItem( SdrShadowItem( false ) );
     rCaption.SetMergedItem( SdrShadowXDistItem( 100 ) );
     rCaption.SetMergedItem( SdrShadowYDistItem( 100 ) );
     rCaption.SetSpecialTextBoxShadow();
 }
 
-// ============================================================================
+
 
 /** Helper for creation and manipulation of caption drawing objects independent
     from cell annotations. */
@@ -206,7 +206,7 @@ private:
     bool                mbNegPage;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bShown, bool bTailFront ) :
     mrDoc( rDoc ),
@@ -243,24 +243,24 @@ void ScCaptionCreator::FitCaptionToRect( const Rectangle* pVisRect )
 {
     const Rectangle& rVisRect = GetVisRect( pVisRect );
 
-    // tail position
+    
     Point aTailPos = mpCaption->GetTailPos();
     aTailPos.X() = ::std::max( ::std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() );
     aTailPos.Y() = ::std::max( ::std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() );
     mpCaption->SetTailPos( aTailPos );
 
-    // caption rectangle
+    
     Rectangle aCaptRect = mpCaption->GetLogicRect();
     Point aCaptPos = aCaptRect.TopLeft();
-    // move textbox inside right border of visible area
+    
     aCaptPos.X() = ::std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() );
-    // move textbox inside left border of visible area (this may move it outside on right side again)
+    
     aCaptPos.X() = ::std::max< long >( aCaptPos.X(), rVisRect.Left() );
-    // move textbox inside bottom border of visible area
+    
     aCaptPos.Y() = ::std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() );
-    // move textbox inside top border of visible area (this may move it outside on bottom side again)
+    
     aCaptPos.Y() = ::std::max< long >( aCaptPos.Y(), rVisRect.Top() );
-    // update caption
+    
     aCaptRect.SetPos( aCaptPos );
     mpCaption->SetLogicRect( aCaptRect );
 }
@@ -269,64 +269,64 @@ void ScCaptionCreator::AutoPlaceCaption( const Rectangle* pVisRect )
 {
     const Rectangle& rVisRect = GetVisRect( pVisRect );
 
-    // caption rectangle
+    
     Rectangle aCaptRect = mpCaption->GetLogicRect();
     long nWidth = aCaptRect.GetWidth();
     long nHeight = aCaptRect.GetHeight();
 
-    // n***Space contains available space between border of visible area and cell
+    
     long nLeftSpace = maCellRect.Left() - rVisRect.Left() + 1;
     long nRightSpace = rVisRect.Right() - maCellRect.Right() + 1;
     long nTopSpace = maCellRect.Top() - rVisRect.Top() + 1;
     long nBottomSpace = rVisRect.Bottom() - maCellRect.Bottom() + 1;
 
-    // nNeeded*** contains textbox dimensions plus needed distances to cell or border of visible area
+    
     long nNeededSpaceX = nWidth + SC_NOTECAPTION_CELLDIST;
     long nNeededSpaceY = nHeight + SC_NOTECAPTION_CELLDIST;
 
-    // bFitsWidth*** == true means width of textbox fits into horizontal free space of visible area
-    bool bFitsWidthLeft = nNeededSpaceX <= nLeftSpace;      // text box width fits into the width left of cell
-    bool bFitsWidthRight = nNeededSpaceX <= nRightSpace;    // text box width fits into the width right of cell
-    bool bFitsWidth = nWidth <= rVisRect.GetWidth();        // text box width fits into width of visible area
+    
+    bool bFitsWidthLeft = nNeededSpaceX <= nLeftSpace;      
+    bool bFitsWidthRight = nNeededSpaceX <= nRightSpace;    
+    bool bFitsWidth = nWidth <= rVisRect.GetWidth();        
 
-    // bFitsHeight*** == true means height of textbox fits into vertical free space of visible area
-    bool bFitsHeightTop = nNeededSpaceY <= nTopSpace;       // text box height fits into the height above cell
-    bool bFitsHeightBottom = nNeededSpaceY <= nBottomSpace; // text box height fits into the height below cell
-    bool bFitsHeight = nHeight <= rVisRect.GetHeight();     // text box height fits into height of visible area
+    
+    bool bFitsHeightTop = nNeededSpaceY <= nTopSpace;       
+    bool bFitsHeightBottom = nNeededSpaceY <= nBottomSpace; 
+    bool bFitsHeight = nHeight <= rVisRect.GetHeight();     
 
-    // bFits*** == true means the textbox fits completely into free space of visible area
+    
     bool bFitsLeft = bFitsWidthLeft && bFitsHeight;
     bool bFitsRight = bFitsWidthRight && bFitsHeight;
     bool bFitsTop = bFitsWidth && bFitsHeightTop;
     bool bFitsBottom = bFitsWidth && bFitsHeightBottom;
 
     Point aCaptPos;
-    // use left/right placement if possible, or if top/bottom placement not possible
+    
     if( bFitsLeft || bFitsRight || (!bFitsTop && !bFitsBottom) )
     {
-        // prefer left in RTL sheet and right in LTR sheets
+        
         bool bPreferLeft = bFitsLeft && (mbNegPage || !bFitsRight);
         bool bPreferRight = bFitsRight && (!mbNegPage || !bFitsLeft);
-        // move to left, if left is preferred, or if neither left nor right fit and there is more space to the left
+        
         if( bPreferLeft || (!bPreferRight && (nLeftSpace > nRightSpace)) )
             aCaptPos.X() = maCellRect.Left() - SC_NOTECAPTION_CELLDIST - nWidth;
-        else // to right
+        else 
             aCaptPos.X() = maCellRect.Right() + SC_NOTECAPTION_CELLDIST;
-        // Y position according to top cell border
+        
         aCaptPos.Y() = maCellRect.Top() + SC_NOTECAPTION_OFFSET_Y;
     }
-    else    // top or bottom placement
+    else    
     {
-        // X position
+        
         aCaptPos.X() = maCellRect.Left() + SC_NOTECAPTION_OFFSET_X;
-        // top placement, if possible
+        
         if( bFitsTop )
             aCaptPos.Y() = maCellRect.Top() - SC_NOTECAPTION_CELLDIST - nHeight;
-        else    // bottom placement
+        else    
             aCaptPos.Y() = maCellRect.Bottom() + SC_NOTECAPTION_CELLDIST;
     }
 
-    // update textbox position in note caption object
+    
     aCaptRect.SetPos( aCaptPos );
     mpCaption->SetLogicRect( aCaptRect );
     FitCaptionToRect( pVisRect );
@@ -336,45 +336,45 @@ void ScCaptionCreator::UpdateCaptionPos( const Rectangle* pVisRect )
 {
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
 
-    // update caption position
+    
     const Point& rOldTailPos = mpCaption->GetTailPos();
     Point aTailPos = CalcTailPos( false );
     if( rOldTailPos != aTailPos )
     {
-        // create drawing undo action
+        
         if( pDrawLayer && pDrawLayer->IsRecording() )
             pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoGeoObject( *mpCaption ) );
-        // calculate new caption rectangle (#i98141# handle LTR<->RTL switch correctly)
+        
         Rectangle aCaptRect = mpCaption->GetLogicRect();
         long nDiffX = (rOldTailPos.X() >= 0) ? (aCaptRect.Left() - rOldTailPos.X()) : (rOldTailPos.X() - aCaptRect.Right());
         if( mbNegPage ) nDiffX = -nDiffX - aCaptRect.GetWidth();
         long nDiffY = aCaptRect.Top() - rOldTailPos.Y();
         aCaptRect.SetPos( aTailPos + Point( nDiffX, nDiffY ) );
-        // set new tail position and caption rectangle
+        
         mpCaption->SetTailPos( aTailPos );
         mpCaption->SetLogicRect( aCaptRect );
-        // fit caption into draw page
+        
         FitCaptionToRect( pVisRect );
     }
 
-    // update cell position in caption user data
+    
     ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( mpCaption, maPos.Tab() );
     if( pCaptData && (maPos != pCaptData->maStart) )
     {
-        // create drawing undo action
+        
         if( pDrawLayer && pDrawLayer->IsRecording() )
             pDrawLayer->AddCalcUndo( new ScUndoObjData( mpCaption, pCaptData->maStart, pCaptData->maEnd, maPos, pCaptData->maEnd ) );
-        // set new position
+        
         pCaptData->maStart = maPos;
     }
 }
 
 Point ScCaptionCreator::CalcTailPos( bool bTailFront )
 {
-    // tail position
+    
     bool bTailLeft = bTailFront != mbNegPage;
     Point aTailPos = bTailLeft ? maCellRect.TopLeft() : maCellRect.TopRight();
-    // move caption point 1/10 mm inside cell
+    
     if( bTailLeft ) aTailPos.X() += 10; else aTailPos.X() -= 10;
     aTailPos.Y() += 10;
     return aTailPos;
@@ -382,11 +382,11 @@ Point ScCaptionCreator::CalcTailPos( bool bTailFront )
 
 void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
 {
-    // create the caption drawing object
+    
     Rectangle aTextRect( Point( 0 , 0 ), Size( SC_NOTECAPTION_WIDTH, SC_NOTECAPTION_HEIGHT ) );
     Point aTailPos = CalcTailPos( bTailFront );
     mpCaption = new SdrCaptionObj( aTextRect, aTailPos );
-    // basic caption settings
+    
     ScCaptionUtil::SetBasicCaptionSettings( *mpCaption, bShown );
 }
 
@@ -404,7 +404,7 @@ void ScCaptionCreator::Initialize()
     }
 }
 
-// ============================================================================
+
 
 /** Helper for creation of permanent caption drawing objects for cell notes. */
 class ScNoteCaptionCreator : public ScCaptionCreator
@@ -416,24 +416,24 @@ public:
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj& rCaption, bool bShown );
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
-    ScCaptionCreator( rDoc, rPos )  // use helper c'tor that does not create the caption yet
+    ScCaptionCreator( rDoc, rPos )  
 {
     SdrPage* pDrawPage = GetDrawPage();
     OSL_ENSURE( pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - no drawing page" );
     if( pDrawPage )
     {
-        // create the caption drawing object
+        
         CreateCaption( rNoteData.mbShown, false );
         rNoteData.mpCaption = GetCaption();
         OSL_ENSURE( rNoteData.mpCaption, "ScNoteCaptionCreator::ScNoteCaptionCreator - missing caption object" );
         if( rNoteData.mpCaption )
         {
-            // store note position in user data of caption object
+            
             ScCaptionUtil::SetCaptionUserData( *rNoteData.mpCaption, rPos );
-            // insert object into draw page
+            
             pDrawPage->InsertObject( rNoteData.mpCaption );
         }
     }
@@ -447,42 +447,42 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
     OSL_ENSURE( rCaption.GetPage() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
     if( pDrawPage && (rCaption.GetPage() == pDrawPage) )
     {
-        // store note position in user data of caption object
+        
         ScCaptionUtil::SetCaptionUserData( rCaption, rPos );
-        // basic caption settings
+        
         ScCaptionUtil::SetBasicCaptionSettings( rCaption, bShown );
-        // set correct tail position
+        
         rCaption.SetTailPos( CalcTailPos( false ) );
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 struct ScCaptionInitData
 {
     typedef ::std::auto_ptr< SfxItemSet >           SfxItemSetPtr;
     typedef ::std::auto_ptr< OutlinerParaObject >   OutlinerParaObjPtr;
 
-    SfxItemSetPtr       mxItemSet;          /// Caption object formatting.
-    OutlinerParaObjPtr  mxOutlinerObj;      /// Text object with all text portion formatting.
-    OUString     maSimpleText;       /// Simple text without formatting.
-    Point               maCaptionOffset;    /// Caption position relative to cell corner.
-    Size                maCaptionSize;      /// Size of the caption object.
-    bool                mbDefaultPosSize;   /// True = use default position and size for caption.
+    SfxItemSetPtr       mxItemSet;          
+    OutlinerParaObjPtr  mxOutlinerObj;      
+    OUString     maSimpleText;       
+    Point               maCaptionOffset;    
+    Size                maCaptionSize;      
+    bool                mbDefaultPosSize;   
 
     explicit            ScCaptionInitData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScCaptionInitData::ScCaptionInitData() :
     mbDefaultPosSize( true )
 {
 }
 
-// ============================================================================
+
 
 ScNoteData::ScNoteData( bool bShown ) :
     mpCaption( 0 ),
@@ -494,7 +494,7 @@ ScNoteData::~ScNoteData()
 {
 }
 
-// ============================================================================
+
 
 ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, bool bShown ) :
     mrDoc( rDoc ),
@@ -624,7 +624,7 @@ void ScPostIt::ForgetCaption()
 void ScPostIt::ShowCaption( const ScAddress& rPos, bool bShow )
 {
     CreateCaptionFromInitData( rPos );
-    // no separate drawing undo needed, handled completely inside ScUndoShowHideNote
+    
     maNoteData.mbShown = bShow;
     if( maNoteData.mpCaption )
         ScCaptionUtil::SetCaptionLayer( *maNoteData.mpCaption, bShow );
@@ -652,7 +652,7 @@ void ScPostIt::UpdateCaptionPos( const ScAddress& rPos )
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
 {
@@ -670,13 +670,13 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             crash due to missing document members (e.g. row height array). */
         if( !maNoteData.mpCaption && !mrDoc.IsUndo() )
         {
-            // ScNoteCaptionCreator c'tor creates the caption and inserts it into the document and maNoteData
+            
             ScNoteCaptionCreator aCreator( mrDoc, rPos, maNoteData );
             if( maNoteData.mpCaption )
             {
                 ScCaptionInitData& rInitData = *maNoteData.mxInitData;
 
-                // transfer ownership of outliner object to caption, or set simple text
+                
                 OSL_ENSURE( rInitData.mxOutlinerObj.get() || !rInitData.maSimpleText.isEmpty(),
                     "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
                 if( rInitData.mxOutlinerObj.get() )
@@ -684,15 +684,15 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 else
                     maNoteData.mpCaption->SetText( rInitData.maSimpleText );
 
-                // copy all items or set default items; reset shadow items
+                
                 ScCaptionUtil::SetDefaultItems( *maNoteData.mpCaption, mrDoc );
                 if( rInitData.mxItemSet.get() )
                     ScCaptionUtil::SetCaptionItems( *maNoteData.mpCaption, *rInitData.mxItemSet );
 
-                // set position and size of the caption object
+                
                 if( rInitData.mbDefaultPosSize )
                 {
-                    // set other items and fit caption size to text
+                    
                     maNoteData.mpCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
                     maNoteData.mpCaption->SetMergedItem( SdrTextMaxFrameWidthItem( SC_NOTECAPTION_MAXWIDTH_TEMP ) );
                     maNoteData.mpCaption->AdjustTextFrameWidthAndHeight();
@@ -710,7 +710,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 }
             }
         }
-        // forget the initial caption data struct
+        
         maNoteData.mxInitData.reset();
     }
 }
@@ -726,23 +726,23 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
     if( mrDoc.IsUndo() )
         return;
 
-    // drawing layer may be missing, if a note is copied into a clipboard document
+    
     if( mrDoc.IsClipboard() )
         mrDoc.InitDrawLayer();
 
-    // ScNoteCaptionCreator c'tor creates the caption and inserts it into the document and maNoteData
+    
     ScNoteCaptionCreator aCreator( mrDoc, rPos, maNoteData );
     if( maNoteData.mpCaption )
     {
-        // clone settings of passed caption
+        
         if( pCaption )
         {
-            // copy edit text object (object must be inserted into page already)
+            
             if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
                 maNoteData.mpCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
-            // copy formatting items (after text has been copied to apply font formatting)
+            
             maNoteData.mpCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
-            // move textbox position relative to new cell, copy textbox size
+            
             Rectangle aCaptRect = pCaption->GetLogicRect();
             Point aDist = maNoteData.mpCaption->GetTailPos() - pCaption->GetTailPos();
             aCaptRect.Move( aDist.X(), aDist.Y() );
@@ -751,12 +751,12 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
         }
         else
         {
-            // set default formatting and default position
+            
             ScCaptionUtil::SetDefaultItems( *maNoteData.mpCaption, mrDoc );
             aCreator.AutoPlaceCaption();
         }
 
-        // create undo action
+        
         if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
             if( pDrawLayer->IsRecording() )
                 pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoNewObject( *maNoteData.mpCaption ) );
@@ -778,11 +778,11 @@ void ScPostIt::RemoveCaption()
         if( pDrawPage )
         {
             pDrawPage->RecalcObjOrdNums();
-            // create drawing undo action (before removing the object to have valid draw page in undo action)
+            
             bool bRecording = ( pDrawLayer && pDrawLayer->IsRecording() );
             if( bRecording )
                 pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoDeleteObject( *maNoteData.mpCaption ) );
-            // remove the object from the drawing page, delete if undo is disabled
+            
             SdrObject* pObj = pDrawPage->RemoveObject( maNoteData.mpCaption->GetOrdNum() );
             if( !bRecording )
                 SdrObject::Free( pObj );
@@ -791,14 +791,14 @@ void ScPostIt::RemoveCaption()
     maNoteData.mpCaption = 0;
 }
 
-// ============================================================================
+
 
 SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
         const OUString& rUserText, const Rectangle& rVisRect, bool bTailFront )
 {
     OUStringBuffer aBuffer( rUserText );
-    // add plain text of invisible (!) cell note (no formatting etc.)
+    
     SdrCaptionObj* pNoteCaption = 0;
     const ScPostIt* pNote = rDoc.GetNote( rPos );
     if( pNote && !pNote->IsCaptionShown() )
@@ -808,40 +808,40 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
 
-    // create a caption if any text exists
+    
     if( !pNoteCaption && aBuffer.isEmpty() )
         return 0;
 
-    // prepare visible rectangle (add default distance to all borders)
+    
     Rectangle aVisRect(
         rVisRect.Left() + SC_NOTECAPTION_BORDERDIST_TEMP,
         rVisRect.Top() + SC_NOTECAPTION_BORDERDIST_TEMP,
         rVisRect.Right() - SC_NOTECAPTION_BORDERDIST_TEMP,
         rVisRect.Bottom() - SC_NOTECAPTION_BORDERDIST_TEMP );
 
-    // create the caption object
+    
     ScCaptionCreator aCreator( rDoc, rPos, true, bTailFront );
     SdrCaptionObj* pCaption = aCreator.GetCaption();
 
-    // insert caption into page (needed to set caption text)
+    
     rDrawPage.InsertObject( pCaption );
 
-    // clone the edit text object, unless user text is present, then set this text
+    
     if( pNoteCaption && rUserText.isEmpty() )
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
-        // set formatting (must be done after setting text) and resize the box to fit the text
+        
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );
         pCaption->SetLogicRect( aCaptRect );
     }
     else
     {
-        // if pNoteCaption is null, then aBuffer contains some text
+        
         pCaption->SetText( aBuffer.makeStringAndClear() );
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
-        // adjust caption size to text size
+        
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
         pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( sal_True ) );
         pCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
@@ -850,7 +850,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         pCaption->AdjustTextFrameWidthAndHeight();
     }
 
-    // move caption into visible area
+    
     aCreator.AutoPlaceCaption( &aVisRect );
     return pCaption;
 }
@@ -865,7 +865,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 
     rDoc.SetNote(rPos, pNote);
 
-    // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
+    
     ScNoteCaptionCreator aCreator( rDoc, rPos, rCaption, bShown );
 
     return pNote;
@@ -883,7 +883,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     rInitData.mxItemSet.reset( pItemSet );
     rInitData.mxOutlinerObj.reset( pOutlinerObj );
 
-    // convert absolute caption position to relative position
+    
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
     if( !rInitData.mbDefaultPosSize )
     {
@@ -921,7 +921,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
             visible, the caption object will be created automatically. */
         pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
         pNote->AutoStamp();
-        //insert takes ownership
+        
         rDoc.SetNote(rPos, pNote);
     }
     return pNote;

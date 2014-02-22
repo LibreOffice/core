@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/outdev.hxx>
@@ -25,7 +25,7 @@
 #include <editeng/eerdll.hxx>
 #include <rtl/ustrbuf.hxx>
 
-// -----------------------------------------------------------------------
+
 
 OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl )
 {
@@ -53,7 +53,7 @@ OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, co
                 case SFX_MAPUNIT_100TH_MM:  nRet *= 1000; break;
                 case SFX_MAPUNIT_10TH_MM:   nRet *= 100; break;
                 case SFX_MAPUNIT_MM:        nRet *= 10; break;
-                default: ;//prevent warning
+                default: ;
             }
             break;
         }
@@ -71,7 +71,7 @@ OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, co
                 case SFX_MAPUNIT_1000TH_INCH:   nRet *= 1000; break;
                 case SFX_MAPUNIT_100TH_INCH:    nRet *= 100; break;
                 case SFX_MAPUNIT_10TH_INCH:     nRet *= 10; break;
-                default: ;//prevent warning
+                default: ;
             }
             break;
         }
@@ -128,14 +128,14 @@ OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, co
     return sRet.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString GetSvxString( sal_uInt16 nId )
 {
     return EE_RESSTR( nId );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString GetColorString( const Color& rCol )
 {
@@ -170,7 +170,7 @@ OUString GetColorString( const Color& rCol )
     return sStr;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 GetMetricId( SfxMapUnit eUnit )
 {

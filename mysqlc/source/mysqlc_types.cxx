@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -27,755 +27,755 @@ using namespace com::sun::star::sdbc;
 
 TypeInfoDef mysqlc_types[] = {
 
-    // ------------- MySQL-Type: BIT. SDBC-Type: Bit -------------
+    
     {
-        "BIT",                                       // Typename
-        com::sun::star::sdbc::DataType::BIT,         // sdbc-type
-        1,                                           // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "BIT",                                       // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "BIT",                                       
+        com::sun::star::sdbc::DataType::BIT,         
+        1,                                           
+        "",                                          
+        "",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "BIT",                                       
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ------------ MySQL-Type: BOOL. SDBC-Type: Bit -------------
+    
     {
-        "BOOL",                                      // Typename
-        com::sun::star::sdbc::DataType::BIT,         // sdbc-type
-        1,                                           // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "BOOL",                                      // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "BOOL",                                      
+        com::sun::star::sdbc::DataType::BIT,         
+        1,                                           
+        "",                                          
+        "",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "BOOL",                                      
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // --------- MySQL-Type: TINYINT SDBC-Type: TINYINT ----------
+    
     {
-        "TINYINT",                                   // Typename
-        com::sun::star::sdbc::DataType::TINYINT,     // sdbc-type
-        3,                                           // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "TINYINT",                                   // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "TINYINT",                                   
+        com::sun::star::sdbc::DataType::TINYINT,     
+        3,                                           
+        "",                                          
+        "",                                          
+        "[(M)] [UNSIGNED] [ZEROFILL]",               
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_True,                                    
+        sal_False,                                   
+        sal_True,                                    
+        "TINYINT",                                   
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: BIGINT SDBC-Type: BIGINT ----------
+    
     {
-        "BIGINT",                                    // Typename
-        com::sun::star::sdbc::DataType::BIGINT,      // sdbc-type
-        19,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "BIGINT",                                    // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "BIGINT",                                    
+        com::sun::star::sdbc::DataType::BIGINT,      
+        19,                                          
+        "",                                          
+        "",                                          
+        "[(M)] [UNSIGNED] [ZEROFILL]",               
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_True,                                    
+        sal_False,                                   
+        sal_True,                                    
+        "BIGINT",                                    
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: LONG VARBINARY SDBC-Type: LONGVARBINARY ----------
+    
     {
-        "LONG VARBINARY",                            // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
-        16777215,                                    // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "LONG VARBINARY",                            // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "LONG VARBINARY",                            
+        com::sun::star::sdbc::DataType::LONGVARBINARY, 
+        16777215,                                    
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "LONG VARBINARY",                            
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: MEDIUMBLOB SDBC-Type: LONGVARBINARY ----------
+    
     {
-        "MEDIUMBLOB",                                // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
-        16777215,                                    // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "MEDIUMBLOB",                                // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "MEDIUMBLOB",                                
+        com::sun::star::sdbc::DataType::LONGVARBINARY, 
+        16777215,                                    
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "MEDIUMBLOB",                                
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: LONGBLOB SDBC-Type: LONGVARBINARY ----------
+    
     {
-        "LONGBLOB",                                  // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
-        -1,                                          // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "LONGBLOB",                                  // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "LONGBLOB",                                  
+        com::sun::star::sdbc::DataType::LONGVARBINARY, 
+        -1,                                          
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "LONGBLOB",                                  
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: BLOB SDBC-Type: LONGVARBINARY ----------
+    
     {
-        "BLOB",                                      // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
-        0xFFFF,                                      // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "BLOB",                                      // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "BLOB",                                      
+        com::sun::star::sdbc::DataType::LONGVARBINARY, 
+        0xFFFF,                                      
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "BLOB",                                      
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: TINYBLOB SDBC-Type: LONGVARBINARY ----------
+    
     {
-        "TINYBLOB",                                  // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
-        0xFF,                                         // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "TINYBLOB",                                  // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "TINYBLOB",                                  
+        com::sun::star::sdbc::DataType::LONGVARBINARY, 
+        0xFF,                                         
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "TINYBLOB",                                  
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: VARBINARY SDBC-Type: VARBINARY ----------
+    
     {
-        "VARBINARY",                                 // Typename
-        com::sun::star::sdbc::DataType::VARBINARY,   // sdbc-type
-        0xFF,                                        // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "(M)",                                       // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "VARBINARY",                                 // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "VARBINARY",                                 
+        com::sun::star::sdbc::DataType::VARBINARY,   
+        0xFF,                                        
+        "'",                                          
+        "'",                                          
+        "(M)",                                       
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "VARBINARY",                                 
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: BINARY SDBC-Type: BINARY ----------
+    
     {
-        "BINARY",                                    // Typename
-        com::sun::star::sdbc::DataType::BINARY,      // sdbc-type
-        0xFF,                                        // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "(M)",                                       // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "VARBINARY",                                 // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "BINARY",                                    
+        com::sun::star::sdbc::DataType::BINARY,      
+        0xFF,                                        
+        "'",                                          
+        "'",                                          
+        "(M)",                                       
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_True,                                    
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "VARBINARY",                                 
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: LONG VARCHAR SDBC-Type: LONG VARCHAR ----------
+    
     {
-        "LONG VARCHAR",                              // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
-        0xFFFFFF,                                    // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "LONG VARCHAR",                              // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "LONG VARCHAR",                              
+        com::sun::star::sdbc::DataType::LONGVARCHAR, 
+        0xFFFFFF,                                    
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "LONG VARCHAR",                              
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: MEDIUMTEXT SDBC-Type: LONG VARCHAR ----------
+    
     {
-        "MEDIUMTEXT",                                // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
-        0xFFFFFF,                                    // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "MEDIUMTEXT",                                // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "MEDIUMTEXT",                                
+        com::sun::star::sdbc::DataType::LONGVARCHAR, 
+        0xFFFFFF,                                    
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "MEDIUMTEXT",                                
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: LONGTEXT SDBC-Type: LONG VARCHAR ----------
+    
     {
-        "LONGTEXT",                                  // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
-        0xFFFFFF,                                    // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "LONGTEXT",                                  // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "LONGTEXT",                                  
+        com::sun::star::sdbc::DataType::LONGVARCHAR, 
+        0xFFFFFF,                                    
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "LONGTEXT",                                  
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: TEXT SDBC-Type: LONG VARCHAR ----------
+    
     {
-        "TEXT",                                      // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
-        0xFFFF,                                      // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "TEXT",                                      // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "TEXT",                                      
+        com::sun::star::sdbc::DataType::LONGVARCHAR, 
+        0xFFFF,                                      
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "TEXT",                                      
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: TINYTEXT SDBC-Type: LONG VARCHAR ----------
+    
     {
-        "TINYTEXT",                                  // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
-        0xFF,                                        // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "TINYTEXT",                                  // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "TINYTEXT",                                  
+        com::sun::star::sdbc::DataType::LONGVARCHAR, 
+        0xFF,                                        
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "TINYTEXT",                                  
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: CHAR SDBC-Type: CHAR ----------
+    
     {
-        "CHAR",                                      // Typename
-        com::sun::star::sdbc::DataType::CHAR,        // sdbc-type
-        0xFF,                                        // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "(M)",                                       // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "NUMERIC",                                   // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "CHAR",                                      
+        com::sun::star::sdbc::DataType::CHAR,        
+        0xFF,                                        
+        "'",                                          
+        "'",                                          
+        "(M)",                                       
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "NUMERIC",                                   
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: DECIMAL SDBC-Type: DECIMAL ----------
+    
     {
-        "DECIMAL",                                   // Typename
-        com::sun::star::sdbc::DataType::DECIMAL,     // sdbc-type
-        17,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M[,D])] [ZEROFILL]",                      // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "DECIMAL",                                   // local type name
-        -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "DECIMAL",                                   
+        com::sun::star::sdbc::DataType::DECIMAL,     
+        17,                                          
+        "",                                          
+        "",                                          
+        "[(M[,D])] [ZEROFILL]",                      
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_True,                                    
+        "DECIMAL",                                   
+        -308,                                        
+        308,                                         
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: NUMERIC SDBC-Type: NUMERIC ----------
+    
     {
-        "NUMERIC",                                   // Typename
-        com::sun::star::sdbc::DataType::NUMERIC,     // sdbc-type
-        17,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M[,D])] [ZEROFILL]",                      // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "NUMERIC",                                   // local type name
-        -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "NUMERIC",                                   
+        com::sun::star::sdbc::DataType::NUMERIC,     
+        17,                                          
+        "",                                          
+        "",                                          
+        "[(M[,D])] [ZEROFILL]",                      
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_True,                                    
+        "NUMERIC",                                   
+        -308,                                        
+        308,                                         
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: INTEGER SDBC-Type: INTEGER ----------
+    
     {
-        "INTEGER",                                   // Typename
-        com::sun::star::sdbc::DataType::INTEGER,     // sdbc-type
-        10,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "INTEGER",                                   // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "INTEGER",                                   
+        com::sun::star::sdbc::DataType::INTEGER,     
+        10,                                          
+        "",                                          
+        "",                                          
+        "[(M)] [UNSIGNED] [ZEROFILL]",               
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_True,                                    
+        sal_False,                                   
+        sal_True,                                    
+        "INTEGER",                                   
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: INT SDBC-Type: INTEGER ----------
+    
     {
-        "INT",                                       // Typename
-        com::sun::star::sdbc::DataType::INTEGER,     // sdbc-type
-        10,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "INT",                                       // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "INT",                                       
+        com::sun::star::sdbc::DataType::INTEGER,     
+        10,                                          
+        "",                                          
+        "",                                          
+        "[(M)] [UNSIGNED] [ZEROFILL]",               
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_True,                                    
+        sal_False,                                   
+        sal_True,                                    
+        "INT",                                       
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: MEDIUMINT SDBC-Type: INTEGER ----------
+    
     {
-        "MEDIUMINT",                                 // Typename
-        com::sun::star::sdbc::DataType::INTEGER,     // sdbc-type
-         7,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "MEDIUMINT",                                 // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "MEDIUMINT",                                 
+        com::sun::star::sdbc::DataType::INTEGER,     
+         7,                                          
+        "",                                          
+        "",                                          
+        "[(M)] [UNSIGNED] [ZEROFILL]",               
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_True,                                    
+        sal_False,                                   
+        sal_True,                                    
+        "MEDIUMINT",                                 
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: SMALLINT SDBC-Type: INTEGER ----------
+    
     {
-        "SMALLINT",                                  // Typename
-        com::sun::star::sdbc::DataType::SMALLINT,    // sdbc-type
-         5,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "SMALLINT",                                  // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "SMALLINT",                                  
+        com::sun::star::sdbc::DataType::SMALLINT,    
+         5,                                          
+        "",                                          
+        "",                                          
+        "[(M)] [UNSIGNED] [ZEROFILL]",               
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_True,                                    
+        sal_False,                                   
+        sal_True,                                    
+        "SMALLINT",                                  
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: FLOAT SDBC-Type: REAL ----------
+    
     {
-        "FLOAT",                                     // Typename
-        com::sun::star::sdbc::DataType::REAL,        // sdbc-type
-        10,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M,D)] [ZEROFILL]",                        // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "FLOAT",                                     // local type name
-        -38,                                         // minimum scale
-        38,                                          // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "FLOAT",                                     
+        com::sun::star::sdbc::DataType::REAL,        
+        10,                                          
+        "",                                          
+        "",                                          
+        "[(M,D)] [ZEROFILL]",                        
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_True,                                    
+        "FLOAT",                                     
+        -38,                                         
+        38,                                          
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: DOUBLE SDBC-Type: DOUBLE ----------
+    
     {
-        "DOUBLE",                                    // Typename
-        com::sun::star::sdbc::DataType::DOUBLE,      // sdbc-type
-        17,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M,D)] [ZEROFILL]",                        // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "DOUBLE",                                    // local type name
-        -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "DOUBLE",                                    
+        com::sun::star::sdbc::DataType::DOUBLE,      
+        17,                                          
+        "",                                          
+        "",                                          
+        "[(M,D)] [ZEROFILL]",                        
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_True,                                    
+        "DOUBLE",                                    
+        -308,                                        
+        308,                                         
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: DOUBLE PRECISION SDBC-Type: DOUBLE ----------
+    
     {
-        "DOUBLE PRECISION",                          // Typename
-        com::sun::star::sdbc::DataType::DOUBLE,      // sdbc-type
-        17,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M,D)] [ZEROFILL]",                        // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "DOUBLE PRECISION",                          // local type name
-        -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "DOUBLE PRECISION",                          
+        com::sun::star::sdbc::DataType::DOUBLE,      
+        17,                                          
+        "",                                          
+        "",                                          
+        "[(M,D)] [ZEROFILL]",                        
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_True,                                    
+        "DOUBLE PRECISION",                          
+        -308,                                        
+        308,                                         
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: REAL SDBC-Type: DOUBLE ----------
+    
     {
-        "REAL",                                      // Typename
-        com::sun::star::sdbc::DataType::DOUBLE,      // sdbc-type
-        17,                                          // Precision
-        "",                                          // Literal prefix
-        "",                                          // Literal suffix
-        "[(M,D)] [ZEROFILL]",                        // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
-        "REAL",                                      // local type name
-        -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "REAL",                                      
+        com::sun::star::sdbc::DataType::DOUBLE,      
+        17,                                          
+        "",                                          
+        "",                                          
+        "[(M,D)] [ZEROFILL]",                        
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_True,                                    
+        "REAL",                                      
+        -308,                                        
+        308,                                         
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: VARCHAR SDBC-Type: VARCHAR ----------
+    
     {
-        "VARCHAR",                                   // Typename
-        com::sun::star::sdbc::DataType::VARCHAR,     // sdbc-type
-        255,                                         // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "(M)",                                       // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "VARCHAR",                                   // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "VARCHAR",                                   
+        com::sun::star::sdbc::DataType::VARCHAR,     
+        255,                                         
+        "'",                                          
+        "'",                                          
+        "(M)",                                       
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "VARCHAR",                                   
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: ENUM SDBC-Type: VARCHAR ----------
+    
     {
-        "ENUM",                                      // Typename
-        com::sun::star::sdbc::DataType::VARCHAR,     // sdbc-type
-        0xFFFF,                                      // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "ENUM",                                      // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "ENUM",                                      
+        com::sun::star::sdbc::DataType::VARCHAR,     
+        0xFFFF,                                      
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "ENUM",                                      
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: SET SDBC-Type: VARCHAR ----------
+    
     {
-        "SET",                                       // Typename
-        com::sun::star::sdbc::DataType::VARCHAR,     // sdbc-type
-        64,                                          // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "SET",                                       // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "SET",                                       
+        com::sun::star::sdbc::DataType::VARCHAR,     
+        64,                                          
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "SET",                                       
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: DATE SDBC-Type: DATE ----------
+    
     {
-        "DATE",                                      // Typename
-        com::sun::star::sdbc::DataType::DATE,        // sdbc-type
-        0,                                           // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "DATE",                                      // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "DATE",                                      
+        com::sun::star::sdbc::DataType::DATE,        
+        0,                                           
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "DATE",                                      
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: TIME SDBC-Type: TIME ----------
+    
     {
-        "TIME",                                      // Typename
-        com::sun::star::sdbc::DataType::TIME,        // sdbc-type
-        0,                                           // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "TIME",                                      // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "TIME",                                      
+        com::sun::star::sdbc::DataType::TIME,        
+        0,                                           
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "TIME",                                      
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: DATETIME SDBC-Type: TIMESTAMP ----------
+    
     {
-        "DATETIME",                                  // Typename
-        com::sun::star::sdbc::DataType::TIMESTAMP,   // sdbc-type
-        0,                                           // Precision
-        "'",                                          // Literal prefix
-        "'",                                          // Literal suffix
-        "",                                          // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "DATETIME",                                  // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "DATETIME",                                  
+        com::sun::star::sdbc::DataType::TIMESTAMP,   
+        0,                                           
+        "'",                                          
+        "'",                                          
+        "",                                          
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "DATETIME",                                  
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
      },
 
-    // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
+    
     {
-        "TIMESTAMP",                                 // Typename
-        com::sun::star::sdbc::DataType::TIMESTAMP,   // sdbc-type
-        0,                                           // Precision
-        "'",                                         // Literal prefix
-        "'",                                         // Literal suffix
-        "[(M)]",                                     // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
-        "TIMESTAMP",                                 // local type name
-        0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        "TIMESTAMP",                                 
+        com::sun::star::sdbc::DataType::TIMESTAMP,   
+        0,                                           
+        "'",                                         
+        "'",                                         
+        "[(M)]",                                     
+        com::sun::star::sdbc::ColumnValue::NULLABLE, 
+        sal_False,                                   
+        com::sun::star::sdbc::ColumnSearch::FULL,    
+        sal_False,                                   
+        sal_False,                                   
+        sal_False,                                   
+        "TIMESTAMP",                                 
+        0,                                           
+        0,                                           
+        0,                                           
+        0,                                           
+        10                                           
     },
 
-    // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
+    
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     }

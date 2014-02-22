@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -56,7 +56,7 @@ Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
 
 void Gradient::MakeUnique()
 {
-    // If there are still other references, copy
+    
     if ( mpImplGradient->mnRefCount != 1 )
     {
         if( mpImplGradient->mnRefCount )
@@ -75,7 +75,7 @@ Gradient::Gradient()
 Gradient::Gradient( const Gradient& rGradient )
 {
 
-    // Take over instance data and increment refcount
+    
     mpImplGradient = rGradient.mpImplGradient;
     mpImplGradient->mnRefCount++;
 }
@@ -93,8 +93,8 @@ Gradient::Gradient( GradientStyle eStyle,
 Gradient::~Gradient()
 {
 
-    // If it's the last reference, delete it, otherwise
-    // decrement refcount
+    
+    
     if ( mpImplGradient->mnRefCount == 1 )
         delete mpImplGradient;
     else
@@ -218,29 +218,29 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
         if( GetStyle() == GradientStyle_RADIAL )
         {
-            // Calculation of radii for circle
+            
             aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
             aSize.Height() = aSize.Width();
         }
         else if( GetStyle() == GradientStyle_ELLIPTICAL )
         {
-            // Calculation of radii for ellipse
+            
             aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
             aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
         }
 
-        // Calculate new centers
+        
         long    nZWidth = aRect.GetWidth() * (long) GetOfsX() / 100;
         long    nZHeight = aRect.GetHeight() * (long) GetOfsY() / 100;
         long    nBorderX = (long) GetBorder() * aSize.Width()  / 100;
         long    nBorderY = (long) GetBorder() * aSize.Height() / 100;
         rCenter = Point( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
 
-        // Respect borders
+        
         aSize.Width() -= nBorderX;
         aSize.Height() -= nBorderY;
 
-        // Recalculate output rectangle
+        
         aRect.Left() = rCenter.X() - ( aSize.Width() >> 1 );
         aRect.Top() = rCenter.Y() - ( aSize.Height() >> 1 );
 
@@ -252,10 +252,10 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 Gradient& Gradient::operator=( const Gradient& rGradient )
 {
 
-    // Increment refcount first so that we can reference ourselves
+    
     rGradient.mpImplGradient->mnRefCount++;
 
-    // If it's the last reference, delete it, otherwise decrement
+    
     if ( mpImplGradient->mnRefCount == 1 )
         delete mpImplGradient;
     else

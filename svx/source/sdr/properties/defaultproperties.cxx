@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/defaultproperties.hxx>
@@ -28,7 +28,7 @@
 #include <svx/svdpool.hxx>
 #include <editeng/eeitem.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -36,7 +36,7 @@ namespace sdr
     {
         SfxItemSet& DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            // Basic implementation; Basic object has NO attributes
+            
             return *(new SfxItemSet(rPool));
         }
 
@@ -54,8 +54,8 @@ namespace sdr
             {
                 mpItemSet = rProps.mpItemSet->Clone(sal_True);
 
-                // do not keep parent info, this may be changed by later construrtors.
-                // This class just copies the ItemSet, ignore parent.
+                
+                
                 if(mpItemSet && mpItemSet->GetParent())
                 {
                     mpItemSet->SetParent(0L);
@@ -147,7 +147,7 @@ namespace sdr
             sal_Bool bDidChange(sal_False);
             SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), SDRATTR_START, EE_ITEMS_END);
 
-            // give a hint to STL_Vector
+            
             aPostItemChangeList.reserve(rSet.Count());
 
             while(nWhich)
@@ -198,12 +198,12 @@ namespace sdr
 
         void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
         {
-            // no StyleSheet in DefaultProperties
+            
         }
 
         SfxStyleSheet* DefaultProperties::GetStyleSheet() const
         {
-            // no StyleSheet in DefaultProperties
+            
             return 0L;
         }
 
@@ -218,7 +218,7 @@ namespace sdr
                 ScaleItemSet(*mpItemSet, rScale);
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

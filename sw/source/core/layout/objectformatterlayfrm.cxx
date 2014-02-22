@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <objectformatterlayfrm.hxx>
@@ -23,7 +23,7 @@
 #include <layfrm.hxx>
 #include <pagefrm.hxx>
 
-// #124218#
+
 #include <layact.hxx>
 
 SwObjectFormatterLayFrm::SwObjectFormatterLayFrm( SwLayoutFrm& _rAnchorLayFrm,
@@ -52,8 +52,8 @@ SwObjectFormatterLayFrm* SwObjectFormatterLayFrm::CreateObjFormatter(
 
     SwObjectFormatterLayFrm* pObjFormatter = 0L;
 
-    // create object formatter, if floating screen objects are registered at
-    // given anchor layout frame.
+    
+    
     if ( _rAnchorLayFrm.GetDrawObjs() ||
          ( _rAnchorLayFrm.IsPageFrm() &&
             static_cast<SwPageFrm&>(_rAnchorLayFrm).GetSortedObjs() ) )
@@ -70,15 +70,15 @@ SwFrm& SwObjectFormatterLayFrm::GetAnchorFrm()
     return mrAnchorLayFrm;
 }
 
-// #i40147# - add parameter <_bCheckForMovedFwd>.
-// Not relevant for objects anchored at layout frame.
+
+
 bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool )
 {
     _FormatObj( _rAnchoredObj );
 
-    // #124218# - consider that the layout action has to be
-    // restarted due to a deleted page frame.
+    
+    
     return GetLayAction() ? !GetLayAction()->IsAgain() : true;
 }
 
@@ -90,10 +90,10 @@ bool SwObjectFormatterLayFrm::DoFormatObjs()
 
     if ( bSuccess && GetAnchorFrm().IsPageFrm() )
     {
-        // anchor layout frame is a page frame.
-        // Thus, format also all anchored objects, which are registered at
-        // this page frame, whose 'anchor' isn't on this page frame and whose
-        // anchor frame is valid.
+        
+        
+        
+        
         bSuccess = _AdditionalFormatObjsOnPage();
     }
 
@@ -114,8 +114,8 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         return true;
     }
 
-    // #124218# - consider, if the layout action
-    // has to be restarted due to a delete of a page frame.
+    
+    
     if ( GetLayAction() && GetLayAction()->IsAgain() )
     {
         return false;
@@ -126,7 +126,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 
     if ( !rPageFrm.GetSortedObjs() )
     {
-        // nothing to do, if no floating screen object is registered at the anchor frame.
+        
         return true;
     }
 
@@ -137,34 +137,34 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
     {
         SwAnchoredObject* pAnchoredObj = (*rPageFrm.GetSortedObjs())[i];
 
-        // #i51941# - do not format object, which are anchored
-        // inside or at fly frame.
+        
+        
         if ( pAnchoredObj->GetAnchorFrm()->FindFlyFrm() )
         {
             continue;
         }
-        // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
-        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
-        // have to be checked.
+        
+        
+        
         SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
-        // #i26945# - check, if the page frame of the
-        // object's anchor frame isn't the given page frame
+        
+        
         OSL_ENSURE( pPageFrmOfAnchor,
                 "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - missing page frame" );
         if ( pPageFrmOfAnchor &&
-             // #i35911#
+             
              pPageFrmOfAnchor->GetPhyPageNum() < rPageFrm.GetPhyPageNum() )
         {
-            // if format of object fails, stop formatting and pass fail to
-            // calling method via the return value.
+            
+            
             if ( !DoFormatObj( *pAnchoredObj ) )
             {
                 bSuccess = false;
                 break;
             }
 
-            // considering changes at <GetAnchorFrm().GetDrawObjs()> during
-            // format of the object.
+            
+            
             if ( !rPageFrm.GetSortedObjs() ||
                  i > rPageFrm.GetSortedObjs()->Count() )
             {
@@ -185,7 +185,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
                 }
             }
         }
-    } // end of loop on <rPageFrm.GetSortedObjs()>
+    } 
 
     return bSuccess;
 }

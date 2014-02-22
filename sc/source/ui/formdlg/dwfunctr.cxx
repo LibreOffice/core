@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@
 #include "dwfunctr.hrc"
 #include "dwfunctr.hxx"
 
-// -----------------------------------------------------------------------
+
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
@@ -124,7 +124,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     Font aFont=aFiFuncDesc.GetFont();
     aFont.SetColor(Color(COL_BLACK));
     aFiFuncDesc.SetFont(aFont);
-    aFiFuncDesc.SetBackground( GetBackground() );       //! never transparent?
+    aFiFuncDesc.SetBackground( GetBackground() );       
 
     Link aLink=LINK( this, ScFunctionDockWin, SelHdl);
     aCatBox.SetSelectHdl(aLink);
@@ -242,7 +242,7 @@ void ScFunctionDockWin::UpdateLRUList()
 void ScFunctionDockWin::SetSize()
 {
     sal_uInt16 nSelEntry=0;
-    SfxChildAlignment  aChildAlign=eSfxOldAlignment;//GetAlignment();
+    SfxChildAlignment  aChildAlign=eSfxOldAlignment;
     short nNewDockMode;
     switch(aChildAlign)
     {
@@ -561,7 +561,7 @@ void ScFunctionDockWin::SetDescription()
                     pAllFuncList->GetSelectEntryPos() );
     if (pDesc)
     {
-        pDesc->initArgumentInfo();      // full argument info is needed
+        pDesc->initArgumentInfo();      
 
         OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
         if(nDockMode==0)
@@ -789,7 +789,7 @@ void ScFunctionDockWin::UpdateFunctionList()
             pDesc = pFuncMgr->Next();
         }
     }
-    else // LRU-Liste
+    else 
     {
         for (::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();
                 iter != aLRUList.end(); ++iter)
@@ -801,7 +801,7 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
 
 
-    //------------------------------------------------------
+    
     pAllFuncList->SetUpdateMode( true );
 
     if ( pAllFuncList->GetEntryCount() > 0 )
@@ -863,14 +863,14 @@ void ScFunctionDockWin::DoEnter()
             nArgs = pDesc->nArgCount;
             if(nArgs>0)
             {
-                // NOTE: Theoretically the first parameter could have the
-                // suppress flag as well, but practically it doesn't.
+                
+                
                 aFirstArgStr = pDesc->maDefArgNames[0];
                 aFirstArgStr = comphelper::string::strip(aFirstArgStr, ' ');
                 aFirstArgStr = aFirstArgStr.replaceAll(" ", "_");
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS )
-                {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
+                {   
                     OUString aArgSep("; ");
                     sal_uInt16 nFix;
                     if (nArgs >= PAIRED_VAR_ARGS)
@@ -902,7 +902,7 @@ void ScFunctionDockWin::DoEnter()
                 aString += pAllFuncList->GetSelectEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
-            if(pEdView!=NULL) // @ Wegen Absturz bei Namen festlegen
+            if(pEdView!=NULL) 
             {
                 if(nArgs>0)
                 {
@@ -965,7 +965,7 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
     }
 
 
-    //SetSize();
+    
     return 0;
 }
 
@@ -989,9 +989,9 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
     if ((ImageButton *)pCtrl == &aInsertButton ||
         (ListBox *)pCtrl == &aFuncList)
     {
-        DoEnter();          // Uebernimmt die Eingabe
+        DoEnter();          
     }
-    //...
+    
 
     return 0;
 }
@@ -1027,7 +1027,7 @@ IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
         aFiFuncDesc.SetPosPixel(aFDTopLeft);
         aFiFuncDesc.SetSizePixel(aFDSize);
     }
-    //...
+    
 
     return 0;
 }
@@ -1061,8 +1061,8 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         {
             sal_Int32 nPos = pInfo->aExtraString.indexOf( "ScFuncList:" );
 
-            // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
-            // er nicht vorhanden ist, liegt eine "altere Version vor
+            
+            
             if ( nPos != -1 )
             {
                 sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
@@ -1071,7 +1071,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
                     sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
                     if ( n2 != -1 )
                     {
-                        // Alignment-String herausschneiden
+                        
                         aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
                         pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
                         aStr = aStr.copy( n1-nPos+1 );
@@ -1092,14 +1092,14 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
 
-        //  if the window has already been shown (from SfxDockingWindow::Initialize if docked),
-        //  set the splitter position now, otherwise it is set in StateChanged with type INITSHOW
+        
+        
 
         UseSplitterInitPos();
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void ScFunctionDockWin::FillInfo(SfxChildWinInfo& rInfo) const
 {
@@ -1115,7 +1115,7 @@ void ScFunctionDockWin::UseSplitterInitPos()
     if ( IsVisible() && aPrivatSplit.IsEnabled() && aSplitterInitPos != Point() )
     {
         aPrivatSplit.MoveSplitTo(aSplitterInitPos);
-        aSplitterInitPos = Point();     // use only once
+        aSplitterInitPos = Point();     
     }
 }
 
@@ -1125,7 +1125,7 @@ void ScFunctionDockWin::StateChanged( StateChangedType nStateChange )
 
     if (nStateChange == STATE_CHANGE_INITSHOW)
     {
-        UseSplitterInitPos();           //  set initial splitter position if necessary
+        UseSplitterInitPos();           
     }
 }
 

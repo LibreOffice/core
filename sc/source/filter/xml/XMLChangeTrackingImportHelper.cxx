@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLChangeTrackingImportHelper.hxx"
@@ -228,7 +228,7 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
 }
@@ -301,7 +301,7 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
 }
@@ -432,7 +432,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, O
     aDateTime.SetDate( aDate.GetDate() );
     aDateTime.SetTime( aTime.GetTime() );
 
-    // old files didn't store nanoseconds, enable again
+    
     if ( aInfo.aDateTime.NanoSeconds )
         pTrack->SetTimeNanoSeconds( true );
 
@@ -440,11 +440,11 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, O
     std::set<OUString>::const_iterator it = rUsers.find(aInfo.sUser);
     if (it != rUsers.end())
     {
-        // It's probably pointless to do this.
+        
         rUser = *it;
     }
     else
-        rUser = aInfo.sUser; // shouldn't happen
+        rUser = aInfo.sUser; 
 }
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
@@ -687,8 +687,8 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
                         const ScCellValue& rCell = (*aItr)->pCellInfo->CreateCell(pDoc);
                         if (!rCell.equalsWithoutFormat(pContentAct->GetNewCell()))
                         {
-                            // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
-                            // instead pass the input string to SetNewCell.
+                            
+                            
                             pContentAct->SetNewCell(rCell, pDoc, (*aItr)->pCellInfo->sInputString);
                         }
                     }
@@ -746,15 +746,15 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         {
                             sal_uInt8 nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
                             OUString sFormula;
-                            // With GRAM_ODFF reference detection is faster on compilation.
+                            
                             /* FIXME: new cell should be created with a clone
                              * of the token array instead. Any reason why this
                              * wasn't done? */
                             aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
 
-                            // #i87826# [Collaboration] Rejected move destroys formulas
-                            // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
-                            //        is returned and no further string handling is necessary
+                            
+                            
+                            
                             OUString sFormula2;
                             if ( nMatrixFlag != MM_NONE )
                             {
@@ -776,7 +776,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             }
                             aNewCell.mpFormula->SetInChangeTrack(true);
                             pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
-                            // #i40704# don't overwrite the formula string via SetNewValue()
+                            
                         }
                     }
                 }
@@ -795,7 +795,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     if (pDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
-        // old files didn't store nanoseconds, disable until encountered
+        
         pTrack->SetTimeNanoSeconds( false );
 
         ScMyActions::iterator aItr(aActions.begin());
@@ -841,7 +841,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 break;
                 default:
                 {
-                    // added to avoid warnings
+                    
                 }
             }
 

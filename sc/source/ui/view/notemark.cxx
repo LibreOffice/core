@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,7 +35,7 @@
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70
 
-// -----------------------------------------------------------------------
+
 
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const OUString& rUser,
@@ -89,8 +89,8 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
         OutputDevice* pPrinter = pDoc->GetRefDevice();
         if (pPrinter)
         {
-            //  Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
-            //  und es soll einheitlich aussehen.
+            
+            
             Outliner& rOutliner = pModel->GetDrawOutliner();
             rOutliner.SetRefDevice(pPrinter);
         }
@@ -104,7 +104,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
                 aRect = pObject->GetCurrentBoundRect();
             }
 
-            // Page einfuegen damit das Model sie kennt und auch deleted
+            
             pModel->InsertPage( pPage );
 
         }
@@ -127,7 +127,7 @@ static void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMa
                             DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
     }
 
-    pObject->SingleObjectPainter( *pWindow ); // #110094#-17
+    pObject->SingleObjectPainter( *pWindow ); 
 
     pWindow->SetDrawMode( nOldDrawMode );
     pWindow->SetMapMode( aOld );

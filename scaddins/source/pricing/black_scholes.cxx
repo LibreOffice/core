@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * Copyright (C) 2012 Tino Kluge <tino.kluge@hrz.tu-chemnitz.de>
  *
@@ -18,64 +18,64 @@
 #include <rtl/math.hxx>
 #include "black_scholes.hxx"
 
-// options prices and greeks in the Black-Scholes model
-// also known as TV (theoretical value)
+
+
 //
-// the code is structured as follows:
+
 //
-// (1) basic assets
-//   - cash-or-nothing option:  bincash()
-//   - asset-or-nothing option: binasset()
+
+
+
 //
-// (2) derived basic assets, can all be priced based on (1)
-//   - vanilla put/call:  putcall() = +/- ( binasset() - K*bincash() )
-//   - truncated put/call (barriers active at maturity only)
+
+
+
 //
-// (3) write a wrapper function to include all vanilla pricers
-//   - this is so we don't duplicate code when pricing barriers
-//     as this is derived from vanillas
+
+
+
 //
-// (4) single barrier options (knock-out), priced based on truncated vanillas
-//   - it follows from the reflection principle that the price W(S) of a
-//     single barrier option is given by
-//        W(S) = V(S) - (B/S)^a V(B^2/S), a = 2(rd-rf)/vol^2 - 1
-//     where V(S) is the price of the corresponding truncated vanilla
-//     option
-//   - to reduce code duplication and in anticipation of double barrier
-//     options we write the following function
-//        barrier_term(S,c) = V(c*S) - (B/S)^a V(c*B^2/S)
+
+
+
+
+
+
+
+
+
 //
-//  (5) double barrier options (knock-out)
-//   - value is an infinite sum over option prices of the corresponding
-//     truncated vanillas (truncated at both barriers):
+
+
+
 //
-//   W(S)=sum (B2/B1)^(i*a) (V(S(B2/B1)^(2i)) - (B1/S)^a V(B1^2/S (B2/B1)^(2i))
+
 //
-//  (6) write routines for put/call barriers and touch options which
-//     mainly call the general double barrier pricer
-//     the main routines are touch() and barrier()
-//     both can price in/out barriers, double/single barriers as well as
-//     vanillas
+
+
+
+
+
 //
 //
-// the framework allows any barriers to be priced as long as we define
-// the value/greek functions for the corresponding truncated vanilla
-// and wrap them into internal::vanilla() and internal::vanilla_trunc()
+
+
+
 //
-// disadvantage of that approach is that due to the rules of
-// differentiations the formulas for greeks become long and possible
-// simplifications in the formulas won't be made
+
+
+
 //
-// other code inefficiency due to multiplication with pm (+/- 1)
-//   cvtsi2sd: int-->double, 6/3 cycles
-//   mulsd: double-double multiplication, 5/1 cycles
-//   with -O3, however, it compiles 2 versions with pm=1, and pm=-1
-//   which are efficient
-//   note this is tiny anyway as compared to exp/log (100 cycles),
-//   pow (200 cycles), erf (70 cycles)
+
+
+
+
+
+
+
 //
-// this code is not tested for numerical instability, ie overruns,
-// underruns, accuracy, etc
+
+
 
 
 namespace sca {
@@ -84,27 +84,27 @@ namespace pricing {
 namespace bs {
 
 
-// helper functions
-// ----------------
+
+
 inline double sqr(double x) {
     return x*x;
 }
-// normal density (see also ScInterpreter::phi)
+
 inline double dnorm(double x) {
-    //return (1.0/sqrt(2.0*M_PI))*exp(-0.5*x*x); // windows may not have M_PI
+    
     return 0.39894228040143268*exp(-0.5*x*x);
 }
-// cumulative normal distribution (see also ScInterpreter::integralPhi)
+
 inline double pnorm(double x) {
-    //return 0.5*(erf(sqrt(0.5)*x)+1.0);       // windows may not have erf
+    
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475);
 }
 
 
 
-// binary option cash (domestic)
-//   call - pays 1 if S_T is above strike K
-//   put  - pays 1 if S_T is below strike K
+
+
+
 double bincash(double S, double vol, double rd, double rf,
                double tau, double K,
                types::PutCall pc, types::Greeks greeks) {
@@ -116,7 +116,7 @@ double bincash(double S, double vol, double rd, double rf,
     double   val=0.0;
 
     if(tau<=0.0) {
-        // special case tau=0 (expiry)
+        
         switch(greeks) {
         case types::Value:
             if( (pc==types::Call && S>=K) || (pc==types::Put && S<=K) ) {
@@ -129,12 +129,12 @@ double bincash(double S, double vol, double rd, double rf,
             val = 0.0;
         }
     } else if(K==0.0) {
-        // special case with zero strike
+        
         if(pc==types::Put) {
-            // up-and-out (put) with K=0
+            
             val=0.0;
         } else {
-            // down-and-out (call) with K=0 (zero coupon bond)
+            
             switch(greeks) {
             case types::Value:
                 val = 1.0;
@@ -150,7 +150,7 @@ double bincash(double S, double vol, double rd, double rf,
             }
         }
     } else {
-        // standard case with K>0, tau>0
+        
         double   d1 = ( log(S/K)+(rd-rf+0.5*vol*vol)*tau ) / (vol*sqrt(tau));
         double   d2 = d1 - vol*sqrt(tau);
         int      pm    = (pc==types::Call) ? 1 : -1;
@@ -194,9 +194,9 @@ double bincash(double S, double vol, double rd, double rf,
 
 
 
-// binary option asset (foreign)
-//   call - pays S_T if S_T is above strike K
-//   put  - pays S_T if S_T is below strike K
+
+
+
 double binasset(double S, double vol, double rd, double rf,
                 double tau, double K,
                 types::PutCall pc, types::Greeks greeks) {
@@ -207,7 +207,7 @@ double binasset(double S, double vol, double rd, double rf,
 
     double   val=0.0;
     if(tau<=0.0) {
-        // special case tau=0 (expiry)
+        
         switch(greeks) {
         case types::Value:
             if( (pc==types::Call && S>=K) || (pc==types::Put && S<=K) ) {
@@ -227,12 +227,12 @@ double binasset(double S, double vol, double rd, double rf,
             val = 0.0;
         }
     } else if(K==0.0) {
-        // special case with zero strike (forward with zero strike)
+        
         if(pc==types::Put) {
-            // up-and-out (put) with K=0
+            
             val = 0.0;
         } else {
-            // down-and-out (call) with K=0 (type of forward)
+            
             switch(greeks) {
             case types::Value:
                 val = S;
@@ -251,7 +251,7 @@ double binasset(double S, double vol, double rd, double rf,
             }
         }
     } else {
-        // normal case
+        
         double   d1 = ( log(S/K)+(rd-rf+0.5*vol*vol)*tau ) / (vol*sqrt(tau));
         double   d2 = d1 - vol*sqrt(tau);
         int      pm    = (pc==types::Call) ? 1 : -1;
@@ -293,10 +293,10 @@ double binasset(double S, double vol, double rd, double rf,
     return exp(-rf*tau)*val;
 }
 
-// just for convenience we can combine bincash and binasset into
-// one function binary
-// using bincash()  if fd==types::Domestic
-// using binasset() if fd==types::Foreign
+
+
+
+
 double binary(double S, double vol, double rd, double rf,
               double tau, double K,
               types::PutCall pc, types::ForDom fd,
@@ -310,16 +310,16 @@ double binary(double S, double vol, double rd, double rf,
         val = binasset(S,vol,rd,rf,tau,K,pc,greek);
         break;
     default:
-        // never get here
+        
         assert(false);
     }
     return val;
 }
 
-// further wrapper to combine single/double barrier binary options
-// into one function
-// B1<=0 - it is assumed lower barrier not set
-// B2<=0 - it is assumed upper barrier not set
+
+
+
+
 double binary(double S, double vol, double rd, double rf,
               double tau, double B1, double B2,
               types::ForDom fd, types::Greeks greek) {
@@ -330,16 +330,16 @@ double binary(double S, double vol, double rd, double rf,
     double val=0.0;
 
     if(B1<=0.0 && B2<=0.0) {
-        // no barriers set, payoff 1.0 (domestic) or S_T (foreign)
+        
         val = binary(S,vol,rd,rf,tau,0.0,types::Call,fd,greek);
     } else if(B1<=0.0 && B2>0.0) {
-        // upper barrier (put)
+        
         val = binary(S,vol,rd,rf,tau,B2,types::Put,fd,greek);
     } else if(B1>0.0 && B2<=0.0) {
-        // lower barrier (call)
+        
         val = binary(S,vol,rd,rf,tau,B1,types::Call,fd,greek);
     } else if(B1>0.0 && B2>0.0) {
-        // double barrier
+        
         if(B2<=B1) {
             val = 0.0;
         } else {
@@ -347,7 +347,7 @@ double binary(double S, double vol, double rd, double rf,
                   - binary(S,vol,rd,rf,tau,B1,types::Put,fd,greek);
         }
     } else {
-        // never get here
+        
         assert(false);
     }
 
@@ -356,10 +356,10 @@ double binary(double S, double vol, double rd, double rf,
 
 
 
-// vanilla put/call option
-//   call pays (S_T-K)^+
-//   put  pays (K-S_T)^+
-// this is the same as: +/- (binasset - K*bincash)
+
+
+
+
 double putcall(double S, double vol, double rd, double rf,
                double tau, double K,
                types::PutCall putcall, types::Greeks greeks) {
@@ -373,14 +373,14 @@ double putcall(double S, double vol, double rd, double rf,
     int      pm  = (putcall==types::Call) ? 1 : -1;
 
     if(K==0 || tau==0.0) {
-        // special cases, simply refer to binasset() and bincash()
+        
         val = pm * ( binasset(S,vol,rd,rf,tau,K,putcall,greeks)
                      - K*bincash(S,vol,rd,rf,tau,K,putcall,greeks) );
     } else {
-        // general case
-        // we could just use pm*(binasset-K*bincash), however
-        // since the formula for delta and gamma simplify we write them
-        // down here
+        
+        
+        
+        
         double   d1 = ( log(S/K)+(rd-rf+0.5*vol*vol)*tau ) / (vol*sqrt(tau));
         double   d2 = d1 - vol*sqrt(tau);
 
@@ -395,7 +395,7 @@ double putcall(double S, double vol, double rd, double rf,
             val = exp(-rf*tau)*dnorm(d1)/(S*vol*sqrt(tau));
             break;
         default:
-            // too lazy for the other greeks, so simply refer to binasset/bincash
+            
             val = pm * ( binasset(S,vol,rd,rf,tau,K,putcall,greeks)
                          - K*bincash(S,vol,rd,rf,tau,K,putcall,greeks) );
         }
@@ -403,12 +403,12 @@ double putcall(double S, double vol, double rd, double rf,
     return val;
 }
 
-// truncated put/call option, single barrier
-// need to specify whether it's down-and-out or up-and-out
-// regular (keeps monotonicity): down-and-out for call, up-and-out for put
-// reverse (destroys monoton):   up-and-out for call, down-and-out for put
-//   call pays (S_T-K)^+
-//   put  pays (K-S_T)^+
+
+
+
+
+
+
 double putcalltrunc(double S, double vol, double rd, double rf,
                     double tau, double K, double B,
                     types::PutCall pc, types::KOType kotype,
@@ -426,20 +426,20 @@ double putcalltrunc(double S, double vol, double rd, double rf,
     switch(kotype) {
     case types::Regular:
         if( (pc==types::Call && B<=K) || (pc==types::Put && B>=K) ) {
-            // option degenerates to standard plain vanilla call/put
+            
             val = putcall(S,vol,rd,rf,tau,K,pc,greeks);
         } else {
-            // normal case with truncation
+            
             val = pm * ( binasset(S,vol,rd,rf,tau,B,pc,greeks)
                          - K*bincash(S,vol,rd,rf,tau,B,pc,greeks) );
         }
         break;
     case types::Reverse:
         if( (pc==types::Call && B<=K) || (pc==types::Put && B>=K) ) {
-            // option degenerates to zero payoff
+            
             val = 0.0;
         } else {
-            // normal case with truncation
+            
             val = binasset(S,vol,rd,rf,tau,K,types::Call,greeks)
                   - binasset(S,vol,rd,rf,tau,B,types::Call,greeks)
                   - K * ( bincash(S,vol,rd,rf,tau,K,types::Call,greeks)
@@ -452,10 +452,10 @@ double putcalltrunc(double S, double vol, double rd, double rf,
     return val;
 }
 
-// wrapper function for put/call option which combines
-// double/single/no truncation barrier
-// B1<=0 - assume no lower barrier
-// B2<=0 - assume no upper barrier
+
+
+
+
 double putcalltrunc(double S, double vol, double rd, double rf,
                     double tau, double K, double B1, double B2,
                     types::PutCall pc, types::Greeks greek) {
@@ -468,24 +468,24 @@ double putcalltrunc(double S, double vol, double rd, double rf,
     double val=0.0;
 
     if(B1<=0.0 && B2<=0.0) {
-        // no barriers set, plain vanilla
+        
         val = putcall(S,vol,rd,rf,tau,K,pc,greek);
     } else if(B1<=0.0 && B2>0.0) {
-        // upper barrier: reverse barrier for call, regular barrier for put
+        
         if(pc==types::Call) {
             val = putcalltrunc(S,vol,rd,rf,tau,K,B2,pc,types::Reverse,greek);
         } else {
             val = putcalltrunc(S,vol,rd,rf,tau,K,B2,pc,types::Regular,greek);
         }
     } else if(B1>0.0 && B2<=0.0) {
-        // lower barrier: regular barrier for call, reverse barrier for put
+        
         if(pc==types::Call) {
             val = putcalltrunc(S,vol,rd,rf,tau,K,B1,pc,types::Regular,greek);
         } else {
             val = putcalltrunc(S,vol,rd,rf,tau,K,B1,pc,types::Reverse,greek);
         }
     } else if(B1>0.0 && B2>0.0) {
-        // double barrier
+        
         if(B2<=B1) {
             val = 0.0;
         } else {
@@ -496,7 +496,7 @@ double putcalltrunc(double S, double vol, double rd, double rf,
                   );
         }
     } else {
-        // never get here
+        
         assert(false);
     }
     return val;
@@ -504,18 +504,18 @@ double putcalltrunc(double S, double vol, double rd, double rf,
 
 namespace internal {
 
-// wrapper function for all non-path dependent options
-// this is only an internal function, used to avoid code duplication when
-// going to path-dependent barrier options,
-// K<0  - assume binary option
-// K>=0 - assume put/call option
+
+
+
+
+
 double vanilla(double S, double vol, double rd, double rf,
                double tau, double K, double B1, double B2,
                types::PutCall pc, types::ForDom fd,
                types::Greeks greek) {
     double val = 0.0;
     if(K<0.0) {
-        // binary option if K<0
+        
         val = binary(S,vol,rd,rf,tau,B1,B2,fd,greek);
     } else {
         val = putcall(S,vol,rd,rf,tau,K,pc,greek);
@@ -528,8 +528,8 @@ double vanilla_trunc(double S, double vol, double rd, double rf,
                      types::Greeks greek) {
     double val = 0.0;
     if(K<0.0) {
-        // binary option if K<0
-        // truncated is actually the same as the vanilla binary
+        
+        
         val = binary(S,vol,rd,rf,tau,B1,B2,fd,greek);
     } else {
         val = putcalltrunc(S,vol,rd,rf,tau,K,B1,B2,pc,greek);
@@ -537,23 +537,23 @@ double vanilla_trunc(double S, double vol, double rd, double rf,
     return val;
 }
 
-} // namespace internal
+} 
 
 
-// ---------------------------------------------------------------------
-// path dependent options
-// ---------------------------------------------------------------------
+
+
+
 
 namespace internal {
 
-// helper term for any type of options with continuously monitored barriers,
-// internal, should not be called from outside
-// calculates value and greeks based on
-//   V(S) = V1(sc*S) - (B/S)^a V1(sc*B^2/S)
-//   (a=2 mu/vol^2, mu drift in logspace, ie. mu=(rd-rf-1/2vol^2))
-// with sc=1 and V1() being the price of the respective truncated
-// vanilla option, V() would be the price of the respective barrier
-// option if only one barrier is present
+
+
+
+
+
+
+
+
 double barrier_term(double S, double vol, double rd, double rf,
                     double tau, double K, double B1, double B2, double sc,
                     types::PutCall pc, types::ForDom fd,
@@ -563,12 +563,12 @@ double barrier_term(double S, double vol, double rd, double rf,
     assert(S>0.0);
     assert(vol>0.0);
 
-    // V(S) = V1(sc*S) - (B/S)^a V1(sc*B^2/S)
+    
     double   val = 0.0;
     double   B   = (B1>0.0) ? B1 : B2;
-    double   a   = 2.0*(rd-rf)/(vol*vol)-1.0;    // helper variable
-    double   b   = 4.0*(rd-rf)/(vol*vol*vol);    // helper variable -da/dvol
-    double   c   = 12.0*(rd-rf)/(vol*vol*vol*vol); // helper -db/dvol
+    double   a   = 2.0*(rd-rf)/(vol*vol)-1.0;    
+    double   b   = 4.0*(rd-rf)/(vol*vol*vol);    
+    double   c   = 12.0*(rd-rf)/(vol*vol*vol*vol); 
     switch(greek) {
     case types::Value:
         val = vanilla_trunc(sc*S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek)
@@ -658,15 +658,15 @@ double barrier_term(double S, double vol, double rd, double rf,
     return val;
 }
 
-// one term of the infinite sum for the valuation of double barriers
+
 double barrier_double_term( double S, double vol, double rd, double rf,
                             double tau, double K, double B1, double B2,
                             double fac, double sc, int i,
                             types::PutCall pc, types::ForDom fd, types::Greeks greek) {
 
     double val = 0.0;
-    double   b   = 4.0*i*(rd-rf)/(vol*vol*vol);    // helper variable -da/dvol
-    double   c   = 12.0*i*(rd-rf)/(vol*vol*vol*vol); // helper -db/dvol
+    double   b   = 4.0*i*(rd-rf)/(vol*vol*vol);    
+    double   c   = 12.0*i*(rd-rf)/(vol*vol*vol*vol); 
     switch(greek) {
     case types::Value:
         val = fac*barrier_term(S,vol,rd,rf,tau,K,B1,B2,sc,pc,fd,greek);
@@ -714,9 +714,9 @@ double barrier_double_term( double S, double vol, double rd, double rf,
     return val;
 }
 
-// general pricer for any type of options with continuously monitored barriers
-// allows two, one or zero barriers, only knock-out style
-// payoff profiles allowed based on vanilla_trunc()
+
+
+
 double barrier_ko(double S, double vol, double rd, double rf,
                   double tau, double K, double B1, double B2,
                   types::PutCall pc, types::ForDom fd,
@@ -729,31 +729,31 @@ double barrier_ko(double S, double vol, double rd, double rf,
     double val = 0.0;
 
     if(B1<=0.0 && B2<=0.0) {
-        // no barriers --> vanilla case
+        
         val = vanilla(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if(B1>0.0 && B2<=0.0) {
-        // lower barrier
+        
         if(S<=B1) {
-            val = 0.0;     // knocked out
+            val = 0.0;     
         } else {
             val = barrier_term(S,vol,rd,rf,tau,K,B1,B2,1.0,pc,fd,greek);
         }
     } else if(B1<=0.0 && B2>0.0) {
-        // upper barrier
+        
         if(S>=B2) {
-            val = 0.0;     // knocked out
+            val = 0.0;     
         } else {
             val = barrier_term(S,vol,rd,rf,tau,K,B1,B2,1.0,pc,fd,greek);
         }
     } else if(B1>0.0 && B2>0.0) {
-        // double barrier
+        
         if(S<=B1 || S>=B2) {
-            val = 0.0;     // knocked out (always true if wrong input B1>B2)
+            val = 0.0;     
         } else {
-            // more complex calculation as we have to evaluate an infinite
-            // sum
-            // to reduce very costly pow() calls we define some variables
-            double a = 2.0*(rd-rf)/(vol*vol)-1.0;    // 2 (mu-1/2vol^2)/sigma^2
+            
+            
+            
+            double a = 2.0*(rd-rf)/(vol*vol)-1.0;    
             double BB2=sqr(B2/B1);
             double BBa=pow(B2/B1,a);
             double BB2inv=1.0/BB2;
@@ -763,9 +763,9 @@ double barrier_ko(double S, double vol, double rd, double rf,
             double sc=1.0;
             double scinv=1.0;
 
-            // initial term i=0
+            
             val=barrier_double_term(S,vol,rd,rf,tau,K,B1,B2,fac,sc,0,pc,fd,greek);
-            // infinite loop, 10 should be plenty, normal would be 2
+            
             for(int i=1; i<10; i++) {
                 fac*=BBa;
                 facinv*=BBainv;
@@ -775,23 +775,23 @@ double barrier_ko(double S, double vol, double rd, double rf,
                     barrier_double_term(S,vol,rd,rf,tau,K,B1,B2,fac,sc,i,pc,fd,greek) +
                     barrier_double_term(S,vol,rd,rf,tau,K,B1,B2,facinv,scinv,-i,pc,fd,greek);
                 val += add;
-                //printf("%i: val=%e (add=%e)\n",i,val,add);
+                
                 if(fabs(add) <= 1e-12*fabs(val)) {
                     break;
                 }
             }
-            // not knocked-out double barrier end
+            
         }
-        // double barrier end
+        
     } else {
-        // no such barrier combination exists
+        
         assert(false);
     }
 
     return val;
 }
 
-// knock-in style barrier
+
 double barrier_ki(double S, double vol, double rd, double rf,
                   double tau, double K, double B1, double B2,
                   types::PutCall pc, types::ForDom fd,
@@ -800,7 +800,7 @@ double barrier_ki(double S, double vol, double rd, double rf,
            -barrier_ko(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
 }
 
-// general barrier
+
 double barrier(double S, double vol, double rd, double rf,
                double tau, double K, double B1, double B2,
                types::PutCall pc, types::ForDom fd,
@@ -809,61 +809,61 @@ double barrier(double S, double vol, double rd, double rf,
 
     double val = 0.0;
     if( kio==types::KnockOut && bcont==types::Maturity ) {
-        // truncated vanilla option
+        
         val = vanilla_trunc(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if ( kio==types::KnockOut && bcont==types::Continuous ) {
-        // standard knock-out barrier
+        
         val = barrier_ko(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if ( kio==types::KnockIn && bcont==types::Maturity ) {
-        // inverse truncated vanilla
+        
         val = vanilla(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek)
               - vanilla_trunc(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if ( kio==types::KnockIn && bcont==types::Continuous ) {
-        // standard knock-in barrier
+        
         val = barrier_ki(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else {
-        // never get here
+        
         assert(false);
     }
     return val;
 }
 
-} // namespace internal
+} 
 
 
 
 
-// touch/no-touch options (cash/asset or nothing payoff profile)
+
 double touch(double S, double vol, double rd, double rf,
              double tau, double B1, double B2, types::ForDom fd,
              types::BarrierKIO kio, types::BarrierActive bcont,
              types::Greeks greek) {
 
-    double K=-1.0;                      // dummy
-    types::PutCall pc = types::Call;    // dummy
+    double K=-1.0;                      
+    types::PutCall pc = types::Call;    
     double val = 0.0;
     if( kio==types::KnockOut && bcont==types::Maturity ) {
-        // truncated vanilla option
+        
         val = internal::vanilla_trunc(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if ( kio==types::KnockOut && bcont==types::Continuous ) {
-        // standard knock-out barrier
+        
         val = internal::barrier_ko(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if ( kio==types::KnockIn && bcont==types::Maturity ) {
-        // inverse truncated vanilla
+        
         val = internal::vanilla(S,vol,rd,rf,tau,K,-1.0,-1.0,pc,fd,greek)
               - internal::vanilla_trunc(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else if ( kio==types::KnockIn && bcont==types::Continuous ) {
-        // standard knock-in barrier
+        
         val = internal::vanilla(S,vol,rd,rf,tau,K,-1.0,-1.0,pc,fd,greek)
               - internal::barrier_ko(S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
     } else {
-        // never get here
+        
         assert(false);
     }
     return val;
 }
 
-// barrier option  (put/call payoff profile)
+
 double barrier(double S, double vol, double rd, double rf,
                double tau, double K, double B1, double B2,
                double rebate,
@@ -877,7 +877,7 @@ double barrier(double S, double vol, double rd, double rf,
     types::ForDom fd = types::Domestic;
     double val=internal::barrier(S,vol,rd,rf,tau,K,B1,B2,pc,fd,kio,bcont,greek);
     if(rebate!=0.0) {
-        // opposite of barrier knock-in/out type
+        
         types::BarrierKIO kio2 = (kio==types::KnockIn) ? types::KnockOut
                                  : types::KnockIn;
         val += rebate*touch(S,vol,rd,rf,tau,B1,B2,fd,kio2,bcont,greek);
@@ -887,10 +887,10 @@ double barrier(double S, double vol, double rd, double rf,
 
 
 
-// probability of hitting a barrier
-// this is almost the same as the price of a touch option (domestic)
-// as it pays one if a barrier is hit; we only have to offset the
-// discounting and we get the probability
+
+
+
+
 double prob_hit(double S, double vol, double mu,
                 double tau, double B1, double B2) {
     double rd=0.0;
@@ -899,10 +899,10 @@ double prob_hit(double S, double vol, double mu,
                        types::Continuous, types::Value);
 }
 
-// probability of being in-the-money, ie payoff is greater zero,
-// assuming payoff(S_T) > 0 iff S_T in [B1, B2]
-// this the same as the price of a cash or nothing option
-// with no discounting
+
+
+
+
 double prob_in_money(double S, double vol, double mu,
                      double tau, double B1, double B2) {
     assert(S>0.0);
@@ -921,19 +921,19 @@ double prob_in_money(double S, double vol, double mu,
     assert(vol>0.0);
     assert(tau>=0.0);
 
-    // if K<0 we assume a binary option is given
+    
     if(K<0.0) {
         return prob_in_money(S,vol,mu,tau,B1,B2);
     }
 
     double val = 0.0;
-    double BM1, BM2;     // range of in the money [BM1, BM2]
-    // non-sense parameters with no positive payoff
+    double BM1, BM2;     
+    
     if( (B1>B2 && B1>0.0 && B2>0.0) ||
             (K>=B2 && B2>0.0 && pc==types::Call) ||
             (K<=B1 && pc==types::Put) ) {
         val = 0.0;
-        // need to figure out between what barriers payoff is greater 0
+        
     } else if(pc==types::Call) {
         BM1=std::max(B1, K);
         BM2=B2;
@@ -943,7 +943,7 @@ double prob_in_money(double S, double vol, double mu,
         BM2= (B2>0.0) ? std::min(B2,K) : K;
         val = prob_in_money(S,vol,mu,tau,BM1,BM2);
     } else {
-        // don't get here
+        
         assert(false);
     }
     return val;
@@ -951,10 +951,10 @@ double prob_in_money(double S, double vol, double mu,
 
 
 
-} // namespace bs
+} 
 
-} // namespace pricing
-} // namespace sca
+} 
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

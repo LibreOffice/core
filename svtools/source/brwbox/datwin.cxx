@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 #include <rtl/string.hxx>
 #include <tools/debug.hxx>
 
-//===================================================================
+
 void ButtonFrame::Draw( OutputDevice& rDev )
 {
     Color aOldFillColor = rDev.GetFillColor();
@@ -79,7 +79,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
             ( aInnerRect.Left() + aInnerRect.Right() ) / 2 - ( rDev.GetTextWidth(aVal) / 2 ),
             aInnerRect.Top() ), aVal );
 
-        // restore settings
+        
         if ( !bOldTransp )
         {
             aFont.SetTransparent(false);
@@ -101,7 +101,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     rDev.SetFillColor( aOldFillColor );
 }
 
-//-------------------------------------------------------------------
+
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
                               const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
@@ -121,7 +121,7 @@ BrowserColumn::~BrowserColumn()
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {
@@ -132,13 +132,13 @@ void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZ
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos, sal_Bool bCurs  )
 {
     if ( _nId == 0 )
     {
-        // paint handle column
+        
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
                      "", sal_False, bCurs, false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
@@ -160,7 +160,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     }
     else
     {
-        // paint data column
+        
         long nWidth = Width() == LONG_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
 
         rBox.DoPaintField( rDev,
@@ -172,7 +172,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
@@ -183,7 +183,7 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
     _nWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
-//-------------------------------------------------------------------
+
 
 BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     :Control( pParent, WinBits(WB_CLIPCHILDREN) )
@@ -217,7 +217,7 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     aMouseTimer.SetTimeout( 100 );
 }
 
-//-------------------------------------------------------------------
+
 BrowserDataWin::~BrowserDataWin()
 {
     if( pDtorNotify )
@@ -228,7 +228,7 @@ BrowserDataWin::~BrowserDataWin()
     aInvalidRegion.clear();
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::LeaveUpdateLock()
 {
     if ( !--nUpdateLock )
@@ -242,7 +242,7 @@ void BrowserDataWin::LeaveUpdateLock()
     }
 }
 
-//-------------------------------------------------------------------
+
 void InitSettings_Impl( Window *pWin,
                      sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -274,7 +274,7 @@ void InitSettings_Impl( Window *pWin,
     }
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::Update()
 {
     if ( !nUpdateLock )
@@ -283,7 +283,7 @@ void BrowserDataWin::Update()
         bUpdateOnUnlock = true;
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -302,7 +302,7 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::Paint( const Rectangle& rRect )
 {
     if ( !nUpdateLock && GetUpdateMode() )
@@ -321,19 +321,19 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
         aInvalidRegion.push_back( new Rectangle( rRect ) );
 }
 
-//-------------------------------------------------------------------
+
 
 BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 {
     BrowseBox *pBox = GetParent();
 
-    // seek to row under mouse
+    
     long nRelRow = rPosPixel.Y() < 0
             ? -1
             : rPosPixel.Y() / pBox->GetDataRowHeight();
     long nRow = nRelRow < 0 ? -1 : nRelRow + pBox->nTopRow;
 
-    // find column under mouse
+    
     long nMouseX = rPosPixel.X();
     long nColX = 0;
     size_t nCol;
@@ -350,7 +350,7 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     if ( nCol < pBox->pCols->size() )
         nColId = (*pBox->pCols)[ nCol ]->GetId();
 
-    // compute the field rectangle and field relative MouseEvent
+    
     Rectangle aFieldRect;
     if ( nCol < pBox->pCols->size() )
     {
@@ -361,11 +361,11 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
                   pBox->GetDataRowHeight() ) );
     }
 
-    // assemble and return the BrowseEvent
+    
     return BrowseEvent( this, nRow, nCol, nColId, aFieldRect );
 }
 
-//-------------------------------------------------------------------
+
 sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     bCallingDropCallback = true;
@@ -374,7 +374,7 @@ sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
     return nReturn;
 }
 
-//-------------------------------------------------------------------
+
 sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     bCallingDropCallback = true;
@@ -383,7 +383,7 @@ sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return nReturn;
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     if ( !GetParent()->bRowDividerDrag )
@@ -394,10 +394,10 @@ void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     }
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::Command( const CommandEvent& rEvt )
 {
-    // scroll mouse event?
+    
     BrowseBox *pBox = GetParent();
     if ( ( (rEvt.GetCommand() == COMMAND_WHEEL) ||
            (rEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
@@ -442,7 +442,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     Control::Command( rEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
 {
@@ -458,7 +458,7 @@ sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent
     return ( nDividerDistance <= 4 );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -474,42 +474,42 @@ void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
     GetParent()->MouseButtonDown( BrowserMouseEvent( this, rEvt ) );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 {
-    // avoid pseudo MouseMoves
+    
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
     if ( ( aNewPos == aLastMousePos ) )
         return;
     aLastMousePos = aNewPos;
 
-    // transform to a BrowseEvent
+    
     BrowserMouseEvent aBrowserEvent( this, rEvt );
     GetParent()->MouseMove( aBrowserEvent );
 
-    // pointer shape
+    
     PointerStyle ePointerStyle = POINTER_ARROW;
     if ( ImplRowDividerHitTest( aBrowserEvent ) )
         ePointerStyle = POINTER_VSIZEBAR;
     SetPointer( Pointer( ePointerStyle ) );
 
-    // dragging out of the visible area?
+    
     if ( rEvt.IsLeft() &&
          ( rEvt.GetPosPixel().Y() > GetSizePixel().Height() ||
            rEvt.GetPosPixel().Y() < 0 ) )
     {
-        // repeat the event
+        
         aRepeatEvt = rEvt;
         aMouseTimer.Start();
     }
     else
-        // killing old repeat-event
+        
         if ( aMouseTimer.IsActive() )
             aMouseTimer.Stop();
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(BrowserDataWin, RepeatedMouseMove)
 {
@@ -518,30 +518,30 @@ IMPL_LINK_NOARG_INLINE_START(BrowserDataWin, RepeatedMouseMove)
 }
 IMPL_LINK_NOARG_INLINE_END(BrowserDataWin, RepeatedMouseMove)
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
 {
-    // avoid pseudo MouseMoves
+    
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
     aLastMousePos = aNewPos;
 
-    // simulate a move to the current position
+    
     MouseMove( rEvt );
 
-    // actual button up handling
+    
     ReleaseMouse();
     if ( aMouseTimer.IsActive() )
         aMouseTimer.Stop();
     GetParent()->MouseButtonUp( BrowserMouseEvent( this, rEvt ) );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
 {
     long nDataRowHeight = GetParent()->GetDataRowHeight();
-    // the exact separation pos of the two rows
+    
     long nDragRowDividerCurrentPos = _rStartPos.Y();
     if ( ( nDragRowDividerCurrentPos % nDataRowHeight ) > nDataRowHeight / 2 )
         nDragRowDividerCurrentPos += nDataRowHeight;
@@ -561,7 +561,7 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
     StartTracking();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
 {
@@ -569,7 +569,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
         return;
 
     Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
-    // stop resizing at our bottom line
+    
     if ( aMousePos.Y() > GetOutputSizePixel().Height() )
         aMousePos.Y() = GetOutputSizePixel().Height();
 
@@ -583,7 +583,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
         {
             long nNewRowHeight = aMousePos.Y() + m_nDragRowDividerOffset - m_nDragRowDividerLimit;
 
-            // care for minimum row height
+            
             if ( nNewRowHeight < GetParent()->QueryMinimumRowHeight() )
                 nNewRowHeight = GetParent()->QueryMinimumRowHeight();
 
@@ -597,7 +597,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
 
         long nDragRowDividerCurrentPos = aMousePos.Y() + m_nDragRowDividerOffset;
 
-        // care for minimum row height
+        
         if ( nDragRowDividerCurrentPos < m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight() )
             nDragRowDividerCurrentPos = m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight();
 
@@ -606,16 +606,16 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::KeyInput( const KeyEvent& rEvt )
 {
-    // pass to parent window
+    
     if ( !GetParent()->ProcessKey( rEvt ) )
         Control::KeyInput( rEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -624,7 +624,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
     pEventWin = GetParent();
 }
 
-//===================================================================
+
 
 BrowseEvent::BrowseEvent( Window* pWindow,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
@@ -637,7 +637,7 @@ BrowseEvent::BrowseEvent( Window* pWindow,
 {
 }
 
-//===================================================================
+
 BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
                           const MouseEvent& rEvt ):
     MouseEvent(rEvt),
@@ -645,7 +645,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 {
 }
 
-//-------------------------------------------------------------------
+
 
 BrowserMouseEvent::BrowserMouseEvent( Window *pWindow, const MouseEvent& rEvt,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
@@ -655,7 +655,7 @@ BrowserMouseEvent::BrowserMouseEvent( Window *pWindow, const MouseEvent& rEvt,
 {
 }
 
-//===================================================================
+
 
 BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const AcceptDropEvent& rEvt )
     :AcceptDropEvent(rEvt)
@@ -663,7 +663,7 @@ BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const A
 {
 }
 
-//===================================================================
+
 
 BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const ExecuteDropEvent& rEvt )
     :ExecuteDropEvent(rEvt)
@@ -671,9 +671,9 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 {
 }
 
-//===================================================================
 
-//-------------------------------------------------------------------
+
+
 
 void BrowserDataWin::SetUpdateMode( sal_Bool bMode )
 {
@@ -686,7 +686,7 @@ void BrowserDataWin::SetUpdateMode( sal_Bool bMode )
         DoOutstandingInvalidations();
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::DoOutstandingInvalidations()
 {
     for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i ) {
@@ -696,7 +696,7 @@ void BrowserDataWin::DoOutstandingInvalidations()
     aInvalidRegion.clear();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::Invalidate( sal_uInt16 nFlags )
 {
@@ -711,7 +711,7 @@ void BrowserDataWin::Invalidate( sal_uInt16 nFlags )
         Window::Invalidate( nFlags );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -721,7 +721,7 @@ void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         Window::Invalidate( rRect, nFlags );
 }
 
-//===================================================================
+
 
 void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
 {
@@ -746,7 +746,7 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
     ScrollBar::Tracking( rTEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserScrollBar::EndScroll()
 {

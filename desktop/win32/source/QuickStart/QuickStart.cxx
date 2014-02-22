@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// QuickStart.cpp : Defines the entry point for the application.
+
 //
 
 #include "StdAfx.h"
@@ -28,7 +28,7 @@
 
 bool SofficeRuns()
 {
-    // check for soffice by searching the communication window
+    
     return ( FindWindowEx( NULL, NULL, QUICKSTART_CLASSNAME, NULL ) == NULL ) ? false : true;
 }
 
@@ -39,7 +39,7 @@ bool launchSoffice( )
         char filename[_MAX_PATH + 1];
 
         filename[_MAX_PATH] = 0;
-        GetModuleFileName( NULL, filename, _MAX_PATH ); // soffice resides in the same dir
+        GetModuleFileName( NULL, filename, _MAX_PATH ); 
         char *p = strrchr( filename, '\\' );
         if ( !p )
             return false;
@@ -66,7 +66,7 @@ int APIENTRY WinMain(HINSTANCE /*hInstance*/,
                      LPSTR     /*lpCmdLine*/,
                      int       /*nCmdShow*/)
 {
-    // Look for --killtray argument
+    
 
     for ( int i = 1; i < __argc; i++ )
     {

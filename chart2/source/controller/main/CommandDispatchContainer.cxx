@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CommandDispatchContainer.hxx"
@@ -56,7 +56,7 @@ CommandDispatchContainer::CommandDispatchContainer(
 void CommandDispatchContainer::setModel(
     const Reference< frame::XModel > & xModel )
 {
-    // remove all existing dispatcher that base on the old model
+    
     m_aCachedDispatches.clear();
     DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
     m_aToBeDisposedDispatches.clear();
@@ -109,7 +109,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
                  (m_aContainerDocumentCommands.find( rURL.Path ) != m_aContainerDocumentCommands.end()) )
         {
             xResult.set( getContainerDispatchForURL( xModel->getCurrentController(), rURL ));
-            // ToDo: can those dispatches be cached?
+            
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }
         else if( m_xChartDispatcher.is() &&
@@ -118,10 +118,10 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             xResult.set( m_xChartDispatcher );
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }
-        // #i12587# support for shapes in chart
-        // Note, that the chart dispatcher must be queried first, because
-        // the chart dispatcher is the default dispatcher for all context
-        // sensitive commands.
+        
+        
+        
+        
         else if ( m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported( rURL.Complete ) )
         {
             xResult.set( m_pDrawCommandDispatch );
@@ -193,6 +193,6 @@ void CommandDispatchContainer::setShapeController( ShapeController* pController 
     m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pController ) );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

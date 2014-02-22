@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/storagebase.hxx"
@@ -27,13 +27,13 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -41,7 +41,7 @@ void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, OUString 
 {
     sal_Int32  nSlashPos = aFullName.indexOf( '/' );
 
-    // strip leading slashes
+    
     while( nSlashPos == 0 )
     {
         aFullName = aFullName.copy(1);
@@ -59,9 +59,9 @@ void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, OUString 
     }
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     mxInStream( rxInStream ),
@@ -248,14 +248,14 @@ void StorageBase::commit()
     OSL_ENSURE( !mbReadOnly, "StorageBase::commit - cannot commit in read-only mode" );
     if( !mbReadOnly )
     {
-        // commit all open substorages
+        
         maSubStorages.forEachMem( &StorageBase::commit );
-        // commit this storage
+        
         implCommit();
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreateMissing )
 {
@@ -265,8 +265,8 @@ StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreat
     return rxSubStrg;
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

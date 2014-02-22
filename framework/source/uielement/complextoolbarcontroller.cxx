@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 ComplexToolbarController::ComplexToolbarController(
     const Reference< XComponentContext >& rxContext,
@@ -66,13 +66,13 @@ ComplexToolbarController::ComplexToolbarController(
     m_xURLTransformer.set( URLTransformer::create(m_xContext) );
 }
 
-// ------------------------------------------------------------------
+
 
 ComplexToolbarController::~ComplexToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ComplexToolbarController::dispose()
 throw ( RuntimeException )
@@ -87,17 +87,17 @@ throw ( RuntimeException )
     m_nID = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 1 );
 
-    // Add key modifier to argument list
+    
     aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     return aArgs;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
 throw ( RuntimeException )
 {
@@ -127,7 +127,7 @@ throw ( RuntimeException )
 
     if ( xDispatch.is() && !aTargetURL.Complete.isEmpty() )
     {
-        // Execute dispatch asynchronously
+        
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
@@ -136,7 +136,7 @@ throw ( RuntimeException )
     }
 }
 
-// ------------------------------------------------------------------
+
 
 void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
@@ -162,7 +162,7 @@ throw ( RuntimeException )
 
         if ( Event.State >>= bValue )
         {
-            // Boolean, treat it as checked/unchecked
+            
             if ( m_bMadeInvisible )
                 m_pToolbar->ShowItem( m_nID, true );
             m_pToolbar->CheckItem( m_nID, bValue );
@@ -206,16 +206,16 @@ throw ( RuntimeException )
     }
 }
 
-// ------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
-       // Asynchronous execution as this can lead to our own destruction!
-       // Framework can recycle our current frame and the layout manager disposes all user interface
-       // elements if a component gets detached from its frame!
+       
+       
+       
        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
    catch ( const Exception& )
@@ -227,16 +227,16 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-// ------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
 {
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
-       // Asynchronous execution: As this can lead to our own destruction!
-       // Framework can recycle our current frame and the layout manager disposes all user interface
-       // elements if a component gets detached from its frame!
+       
+       
+       
        frame::ControlEvent aEvent;
        aEvent.aURL  = pNotifyInfo->aSourceURL;
        aEvent.Event = pNotifyInfo->aEventName;
@@ -252,7 +252,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*,
    return 0;
 }
 
-// ------------------------------------------------------------------
+
 
 void ComplexToolbarController::addNotifyInfo(
     const OUString&                      aEventName,
@@ -263,14 +263,14 @@ void ComplexToolbarController::addNotifyInfo(
 
     if ( xControlNotify.is() )
     {
-        // Execute notification asynchronously
+        
         NotifyInfo* pNotifyInfo = new NotifyInfo;
 
         pNotifyInfo->aEventName      = aEventName;
         pNotifyInfo->xNotifyListener = xControlNotify;
         pNotifyInfo->aSourceURL      = getInitializedURL();
 
-        // Add frame as source to the information sequence
+        
         sal_Int32 nCount = rInfo.getLength();
         uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
         aInfoSeq.realloc( nCount+1 );
@@ -282,19 +282,19 @@ void ComplexToolbarController::addNotifyInfo(
     }
 }
 
-// --------------------------------------------------------
+
 sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     const Font&          rFont     = rSettings.GetAppFont();
 
-    // Calculate height of the application font used by window
+    
     sal_Int32 nHeight = sal_Int32( rFont.GetHeight() );
     ::Size aPixelSize = pWindow->LogicToPixel( ::Size( 0, nHeight ), MAP_APPFONT );
     return aPixelSize.Height();
 }
 
-// --------------------------------------------------------
+
 
 uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromCommand( const OUString& aCommand ) const
 {
@@ -310,7 +310,7 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
     return xDispatch;
 }
 
-// --------------------------------------------------------
+
 
 const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
 {
@@ -324,7 +324,7 @@ const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
 
 void ComplexToolbarController::notifyFocusGet()
 {
-    // send focus get notification
+    
     uno::Sequence< beans::NamedValue > aInfo;
     addNotifyInfo( OUString( "FocusSet" ),
                     getDispatchFromCommand( m_aCommandURL ),
@@ -333,7 +333,7 @@ void ComplexToolbarController::notifyFocusGet()
 
 void ComplexToolbarController::notifyFocusLost()
 {
-    // send focus lost notification
+    
     uno::Sequence< beans::NamedValue > aInfo;
     addNotifyInfo( OUString( "FocusLost" ),
                     getDispatchFromCommand( m_aCommandURL ),
@@ -342,7 +342,7 @@ void ComplexToolbarController::notifyFocusLost()
 
 void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
-    // send text changed notification
+    
     uno::Sequence< beans::NamedValue > aInfo( 1 );
     aInfo[0].Name  = "Text";
     aInfo[0].Value <<= aText;
@@ -351,6 +351,6 @@ void ComplexToolbarController::notifyTextChanged( const OUString& aText )
                    aInfo );
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

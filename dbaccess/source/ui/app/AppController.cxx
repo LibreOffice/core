@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AppController.hxx"
@@ -200,7 +200,7 @@ struct XContainerFunctor : public ::std::unary_function< OApplicationController:
     }
 };
 
-// OApplicationController
+
 class SelectionNotifier : public ::boost::noncopyable
 {
 private:
@@ -283,7 +283,7 @@ private:
     SelectionNotifier&  m_rNotifier;
 };
 
-// OApplicationController
+
 OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
@@ -306,7 +306,7 @@ OApplicationController::~OApplicationController()
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
         OSL_FAIL("Please check who doesn't dispose this component!");
-        // increment ref count to prevent double call of Dtor
+        
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -326,7 +326,7 @@ void OApplicationController::disconnect()
 
     try
     {
-        // temporary (hopefully!) hack for #i55274#
+        
         Reference< XFlushable > xFlush( m_xDataSourceConnection, UNO_QUERY );
         if ( xFlush.is() && m_xMetaData.is() && !m_xMetaData->isReadOnly() )
             xFlush->flush();
@@ -375,7 +375,7 @@ void SAL_CALL OApplicationController::disposing()
             m_xDataSource->removePropertyChangeListener(PROPERTY_TABLEFILTER, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_TABLETYPEFILTER, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_USER, this);
-            // otherwise we may delete our datasource twice
+            
             Reference<XPropertySet> xProp = m_xDataSource;
             m_xDataSource = NULL;
         }
@@ -398,7 +398,7 @@ void SAL_CALL OApplicationController::disposing()
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
 
-                    // add to svtool history options
+                    
                     SvtHistoryOptions().AppendItem( ePICKLIST,
                             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                             aFilter,
@@ -406,7 +406,7 @@ void SAL_CALL OApplicationController::disposing()
                             OUString(),
                             OUString());
 
-                    // add to recent document list
+                    
                     if ( aURL.GetProtocol() == INET_PROT_FILE )
                         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                                                               (pFilter) ? pFilter->GetMimeType() : OUString(),
@@ -425,7 +425,7 @@ void SAL_CALL OApplicationController::disposing()
     }
 
     clearView();
-    OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
+    OApplicationController_CBASE::disposing(); 
 }
 
 sal_Bool OApplicationController::Construct(Window* _pParent)
@@ -433,7 +433,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
     getView()->SetUniqueId(UID_APP_VIEW);
 
-    // late construction
+    
     sal_Bool bSuccess = sal_False;
     try
     {
@@ -457,7 +457,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         return sal_False;
     }
 
-    // now that we have a view we can create the clipboard listener
+    
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );
 
@@ -511,7 +511,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
 
 sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
-    // notify the OnPrepareViewClosing event (before locking any mutex)
+    
     Reference< XDocumentEventBroadcaster > xBroadcaster( m_xModel, UNO_QUERY );
     if ( xBroadcaster.is() )
     {
@@ -551,7 +551,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
                     bCanSuspend = !xModi->isModified();
-                    // when we save the document this must be false else some press cancel
+                    
                     break;
                 case RET_CANCEL:
                     bCanSuspend = sal_False;
@@ -571,7 +571,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
     aReturn.bEnabled = sal_False;
-    // check this first
+    
     if ( !getContainer() || m_bReadOnly )
         return aReturn;
 
@@ -696,9 +696,9 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case ID_MIGRATE_SCRIPTS:
             {
-                // Our document supports embedding scripts into it, if and only if there are no
-                // forms/reports with macros/scripts into them. So, we need to enable migration
-                // if and only if the database document does *not* support embedding scripts.
+                
+                
+                
                 bool bAvailable =
                         !Reference< XEmbeddedScripts >( m_xModel, UNO_QUERY ).is()
                     &&  !Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly();
@@ -783,8 +783,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         break;
                     case E_TABLE:
                         aReturn.bEnabled = sal_False;
-                        // there's one exception: views which support altering their underlying
-                        // command can be edited in SQL view, too
+                        
+                        
                         if  (   ( getContainer()->getSelectionCount() > 0 )
                             &&  ( getContainer()->isALeafSelected() )
                             )
@@ -917,7 +917,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         if ( !sDatabaseName.isEmpty() )
                         {
                             ::svt::OFileNotation aFileNotation(sDatabaseName);
-                            // set this decoded URL as text
+                            
                             sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
                         }
                     }
@@ -963,7 +963,7 @@ namespace
     {
         bool bHandled = false;
 
-        // try handling the error with an interaction handler
+        
         ::comphelper::NamedValueCollection aArgs( _rxDocument->getArgs() );
         Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
         if ( xHandler.is() )
@@ -999,7 +999,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
     }
 
     if ( !getContainer() || m_bReadOnly )
-        return; // return without execution
+        return; 
 
     try
     {
@@ -1026,7 +1026,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         case E_TABLE:
                             {
-                                // get the selected tablename
+                                
                                 ::std::vector< OUString > aList;
                                 getSelectionElementNames( aList );
                                 if ( !aList.empty() )
@@ -1179,7 +1179,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         getContainer()->selectContainer(E_NONE);
                         getContainer()->selectContainer(E_TABLE);
-                        // #i95524#
+                        
                         getContainer()->Invalidate();
                         refreshTables();
                     }
@@ -1218,14 +1218,14 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case SID_DB_FORM_NEW_PILOT:
                         case SID_FORM_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = sal_True;
-                            // run through
+                            
                         case SID_APP_NEW_FORM:
                             eType = E_FORM;
                             break;
                         case ID_DOCUMENT_CREATE_REPWIZ:
                         case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = sal_True;
-                            // run through
+                            
                         case SID_APP_NEW_REPORT:
                         case SID_APP_NEW_REPORT_PRE_SEL:
                             eType = E_REPORT;
@@ -1236,13 +1236,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             break;
                         case ID_NEW_QUERY_DESIGN:
                             aCreationArgs.put( (OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
-                            // run through
+                            
                         case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
                             break;
                          case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
                              bAutoPilot = sal_True;
-                             // run through
+                             
                         case ID_NEW_TABLE_DESIGN:
                             break;
                         default:
@@ -1506,14 +1506,14 @@ void OApplicationController::describeSupportedFeatures()
 
     implDescribeSupportedFeature( ".uno:OpenUrl",            SID_OPENURL,               CommandGroup::APPLICATION );
 
-    // this one should not appear under Tools->Customize->Keyboard
+    
     implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
                                                              SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::INTERNAL );
     implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
 
-    // status info
+    
     implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
@@ -1525,7 +1525,7 @@ OApplicationView*   OApplicationController::getContainer() const
     return static_cast< OApplicationView* >( getView() );
 }
 
-// ::com::sun::star::container::XContainerListener
+
 void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -1636,7 +1636,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 default:
                     break;
             }
-            //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
+            
         }
         catch( Exception& )
         {
@@ -1756,14 +1756,14 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
                 getContainer()->getElementType(),
                 E_OPEN_NORMAL
             );
-            return true;    // handled
+            return true;    
         }
         catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    return false;   // not handled
+    return false;   
 }
 
 bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTableOrViewName ) const
@@ -1807,7 +1807,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     Reference< XComponent > xRet;
     if ( _eOpenMode == E_OPEN_DESIGN )
     {
-        // OJ: http://www.openoffice.org/issues/show_bug.cgi?id=30382
+        
         getContainer()->showPreview(NULL);
     }
 
@@ -1817,11 +1817,11 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     case E_REPORT:
         if ( _eOpenMode != E_OPEN_DESIGN )
         {
-            // reports which are opened in a mode other than design are no sub components of our application
-            // component, but standalone documents.
+            
+            
             isStandaloneDocument = true;
         }
-        // NO break!
+        
     case E_FORM:
     {
         if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
@@ -1927,7 +1927,7 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
 void OApplicationController::newElementWithPilot( ElementType _eType )
 {
     utl::CloseVeto aKeepDoc( getFrame() );
-        // prevent the document being closed while the wizard is open
+        
 
     OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );
 
@@ -1969,8 +1969,8 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             break;
     }
 
-    // no need for onDocumentOpened, the table wizard opens the created table by using
-    // XDatabaseDocumentUI::loadComponent method.
+    
+    
 }
 
 Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
@@ -2038,7 +2038,7 @@ void OApplicationController::addContainerListener(const Reference<XNameAccess>& 
         Reference< XContainer > xCont(_xCollection, UNO_QUERY);
         if ( xCont.is() )
         {
-            // add as listener to get notified if elements are inserted or removed
+            
             TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xCont);
             if ( aFind == m_aCurrentContainers.end() )
             {
@@ -2117,7 +2117,7 @@ void OApplicationController::renameEntry()
                     ensureConnection();
                     if ( !getConnection().is() )
                         break;
-                    // NO break
+                    
                 case E_QUERY:
                     if ( xContainer->hasByName(*aList.begin()) )
                     {
@@ -2431,14 +2431,14 @@ sal_Bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point
 sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
 {
     sal_Int8 nActionAskedFor = _rEvt.mnAction;
-    // check if we're a table or query container
+    
     OApplicationView* pView = getContainer();
     if ( pView && !isDataSourceReadOnly() )
     {
         ElementType eType = pView->getElementType();
         if ( eType != E_NONE && (eType != E_TABLE || !isConnectionReadOnly()) )
         {
-            // check for the concrete type
+            
             if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType,sal_True)) != _rFlavors.end())
                 return DND_ACTION_COPY;
             if ( eType == E_FORM || eType == E_REPORT )
@@ -2479,14 +2479,14 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     if ( !pView || pView->getElementType() == E_NONE )
     {
         OSL_FAIL("OApplicationController::executeDrop: what the hell did queryDrop do?");
-            // queryDrop shoud not have allowed us to reach this situation ....
+            
         return DND_ACTION_NONE;
     }
 
-    // a TransferableDataHelper for accessing the dropped data
+    
     TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
-    // reset the data of the previous async drop (if any)
+    
     if ( m_nAsyncDrop )
         Application::RemoveUserEvent(m_nAsyncDrop);
 
@@ -2498,13 +2498,13 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.bHtml          = sal_False;
     m_aAsyncDrop.aUrl           = "";
 
-    // loop through the available formats and see what we can do ...
-    // first we have to check if it is our own format, if not we have to copy the stream :-(
+    
+    
     if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
     {
         m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
 
-        // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+        
         m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         return DND_ACTION_COPY;
     }
@@ -2529,7 +2529,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
                 return DND_ACTION_NONE;
             }
 
-            // check if move is allowed, if another object with the same name exists only copy is allowed
+            
             Reference< XHierarchicalNameAccess > xContainer(getElements(m_aAsyncDrop.nType),UNO_QUERY);
             Reference<XNameAccess> xNameAccess(xContainer,UNO_QUERY);
 
@@ -2552,7 +2552,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         if ( nAction != DND_ACTION_NONE )
         {
             m_aAsyncDrop.nAction = nAction;
-            // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+            
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         }
         else
@@ -2564,7 +2564,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         SharedConnection xConnection( ensureConnection() );
         if ( xConnection.is() && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xConnection ) )
         {
-            // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+            
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
             return DND_ACTION_COPY;
         }
@@ -2597,7 +2597,7 @@ void OApplicationController::onAttachedFrame()
     }
 
     if ( nConnectedControllers > 1 )
-    {   // we are not the first connected controller, there were already others
+    {   
         return;
     }
 
@@ -2611,27 +2611,27 @@ void OApplicationController::OnFirstControllerConnected()
         OSL_FAIL( "OApplicationController::OnFirstControllerConnected: too late!" );
     }
 
-    // if we have forms or reports which contain macros/scripts, then show a warning
-    // which suggests the user to migrate them to the database document
+    
+    
     Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
     if ( xDocumentScripts.is() )
     {
-        // no need to show this warning, obviously the document supports embedding scripts
-        // into itself, so there are no "old-style" forms/reports which have macros/scripts
-        // themselves
+        
+        
+        
         return;
     }
 
     try
     {
-        // If the migration just happened, but was not successful, the document is reloaded.
-        // In this case, we should not show the warning, again.
+        
+        
         ::comphelper::NamedValueCollection aModelArgs( m_xModel->getArgs() );
         if ( aModelArgs.getOrDefault( "SuppressMigrationWarning", sal_False ) )
             return;
 
-        // also, if the document is read-only, then no migration is possible, and the
-        // respective menu entry is hidden. So, don't show the warning in this case, too.
+        
+        
         if ( Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly() )
             return;
 
@@ -2675,7 +2675,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     if ( m_xModel.is() && ( m_xModel != _rxModel ) && ( _rxModel.is() ) )
     {
         OSL_ENSURE( false, "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
-        // we'd need to completely update our view here, close sub components, and the like
+        
         return sal_False;
     }
 
@@ -2684,7 +2684,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         OUString(PROPERTY_URL), OUString(PROPERTY_USER)
     };
 
-    // disconnect from old model
+    
     try
     {
         if ( m_xDataSource.is() )
@@ -2708,7 +2708,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     m_xDocumentModify = xDocModify;
     m_xDataSource.set( xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference< XDataSource >(), UNO_QUERY );
 
-    // connect to new model
+    
     try
     {
         if ( m_xDataSource.is() )
@@ -2728,12 +2728,12 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // initial preview mode
+    
     if ( m_xDataSource.is() )
     {
         try
         {
-            // to get the 'modified' for the data source
+            
             ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
             if ( aLayoutInfo.has( (OUString)INFO_PREVIEW ) )
             {
@@ -2810,7 +2810,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
         return sal_True;
     }
 
-    // BEGIN compatibility
+    
     Sequence< NamedValue > aCurrentSelection;
     if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.getLength() )
     {
@@ -2831,12 +2831,12 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
                 pIter->Value >>= aSelection;
         }
 
-        m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
+        m_aSelectContainerEvent.CancelCall();   
         getContainer()->selectContainer(eType);
         getContainer()->selectElements(aSelection);
         return sal_True;
     }
-    // END compatibility
+    
 
     Sequence< NamedDatabaseObject > aSelectedObjects;
     if ( !( _aSelection >>= aSelectedObjects ) )
@@ -2915,7 +2915,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
         }
     }
 
-    m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
+    m_aSelectContainerEvent.CancelCall();   
     getContainer()->selectContainer( eSelectedCategory );
 
     return sal_True;
@@ -2932,8 +2932,8 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
     {
         getContainer()->describeCurrentSelectionForType( eType, aCurrentSelection );
         if ( aCurrentSelection.getLength() == 0 )
-        {   // if no objects are selected, add an entry to the sequence which describes the overall category
-            // which is selected currently
+        {   
+            
             aCurrentSelection.realloc(1);
             aCurrentSelection[0].Name = getDatabaseName();
             switch ( eType )
@@ -2964,6 +2964,6 @@ void OApplicationController::impl_migrateScripts_nothrow()
     }
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

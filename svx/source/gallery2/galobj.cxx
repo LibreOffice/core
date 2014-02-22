@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,8 +76,8 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
             const double fScaleY((double)rSizePixel.Height() / (double)aCurrentSizePixel.Height());
             const double fScale(std::min(fScaleX, fScaleY));
 
-            // only scale when need to decrease, no need to make bigger as original. Also
-            // prevent scaling close to 1.0 which is not needed for pixel graphics
+            
+            
             if(fScale < 1.0 && fabs(1.0 - fScale) > 0.005)
             {
                 static sal_uInt32 nScaleFlag = BMP_SCALE_BESTQUALITY;
@@ -121,7 +121,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
                 }
             }
 
-            // take over BitmapEx
+            
             aThumbBmp = aBmpEx;
 
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
@@ -296,11 +296,11 @@ void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 
 void SgaObjectBmp::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
-    // Set version
+    
     SgaObject::WriteData( rOut, rDestDir );
     char aDummy[ 10 ];
     rOut.Write( aDummy, 10 );
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rOut, OString()); //dummy
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOut, OString()); 
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 
@@ -308,8 +308,8 @@ void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
 
     SgaObject::ReadData( rIn, rReadVersion );
-    rIn.SeekRel( 10 ); // 16, 16, 32, 16
-    read_uInt16_lenPrefixed_uInt8s_ToOString(rIn); //dummy
+    rIn.SeekRel( 10 ); 
+    read_uInt16_lenPrefixed_uInt8s_ToOString(rIn); 
 
     if( rReadVersion >= 5 )
         aTitle = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
@@ -357,7 +357,7 @@ BitmapEx SgaObjectSound::GetThumbBmp() const
         case( SOUND_TECHNIC ): nId = RID_SVXBMP_GALLERY_SOUND_6; break;
         case( SOUND_ANIMAL ): nId = RID_SVXBMP_GALLERY_SOUND_7; break;
 
-        // standard
+        
         default:
              nId = RID_SVXBMP_GALLERY_MEDIA;
         break;

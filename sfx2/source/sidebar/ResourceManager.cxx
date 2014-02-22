@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ResourceManager.hxx"
@@ -271,8 +271,8 @@ void ResourceManager::ReadDeckList (void)
             OUString());
     }
 
-    // When there where invalid nodes then we have to adapt the size
-    // of the deck vector.
+    
+    
     if (nWriteIndex<nCount)
         maDecks.resize(nWriteIndex);
 }
@@ -332,8 +332,8 @@ void ResourceManager::ReadPanelList (void)
             sDefaultMenuCommand);
     }
 
-    // When there where invalid nodes then we have to adapt the size
-    // of the deck vector.
+    
+    
     if (nWriteIndex<nCount)
         maPanels.resize(nWriteIndex);
 }
@@ -363,9 +363,9 @@ void ResourceManager::ReadContextList (
         {
             if (sApplicationName.getLength() == 0)
             {
-                // This is a valid case: in the XML file the separator
-                // was used as terminator.  Using it in the last line
-                // creates an additional but empty entry.
+                
+                
+                
                 break;
             }
             else
@@ -384,7 +384,7 @@ void ResourceManager::ReadContextList (
 
         const OUString sInitialState (sValue.getToken(0, ',', nCharacterIndex).trim());
 
-        // The fourth argument is optional.
+        
         const OUString sMenuCommandOverride (
             nCharacterIndex<0
                 ? OUString()
@@ -396,17 +396,17 @@ void ResourceManager::ReadContextList (
                     : sMenuCommandOverride)
                 : rsDefaultMenuCommand);
 
-        // Setup a list of application enums.  Note that the
-        // application name may result in more than one value (eg
-        // DrawImpress will result in two enums, one for Draw and one
-        // for Impress).
+        
+        
+        
+        
         ::std::vector<EnumContext::Application> aApplications;
         EnumContext::Application eApplication (EnumContext::GetApplicationEnum(sApplicationName));
         if (eApplication == EnumContext::Application_None
             && !sApplicationName.equals(EnumContext::GetApplicationName(EnumContext::Application_None)))
         {
-            // Handle some special names: abbreviations that make
-            // context descriptions more readable.
+            
+            
             if (sApplicationName.equalsAscii("Writer"))
                 aApplications.push_back(EnumContext::Application_Writer);
             else if (sApplicationName.equalsAscii("Calc"))
@@ -417,16 +417,16 @@ void ResourceManager::ReadContextList (
                 aApplications.push_back(EnumContext::Application_Impress);
             else if (sApplicationName.equalsAscii("DrawImpress"))
             {
-                // A special case among the special names:  it is
-                // common to use the same context descriptions for
-                // both Draw and Impress.  This special case helps to
-                // avoid duplication in the .xcu file.
+                
+                
+                
+                
                 aApplications.push_back(EnumContext::Application_Draw);
                 aApplications.push_back(EnumContext::Application_Impress);
             }
             else if (sApplicationName.equalsAscii("WriterVariants"))
             {
-                // Another special case for all Writer variants.
+                
                 aApplications.push_back(EnumContext::Application_Writer);
                 aApplications.push_back(EnumContext::Application_WriterGlobal);
                 aApplications.push_back(EnumContext::Application_WriterWeb);
@@ -442,11 +442,11 @@ void ResourceManager::ReadContextList (
         }
         else
         {
-            // No conversion of the application name necessary.
+            
             aApplications.push_back(eApplication);
         }
 
-        // Setup the actual context enum.
+        
         const EnumContext::Context eContext (EnumContext::GetContextEnum(sContextName));
         if (eContext == EnumContext::Context_Unknown)
         {
@@ -454,8 +454,8 @@ void ResourceManager::ReadContextList (
             continue;
         }
 
-        // Setup the flag that controls whether a deck/pane is
-        // initially visible/expanded.
+        
+        
         bool bIsInitiallyVisible;
         if (sInitialState.equalsAscii("visible"))
             bIsInitiallyVisible = true;
@@ -467,7 +467,7 @@ void ResourceManager::ReadContextList (
             continue;
         }
 
-        // Add context descriptors.
+        
         for (::std::vector<EnumContext::Application>::const_iterator
                  iApplication(aApplications.begin()),
                  iEnd(aApplications.end());
@@ -490,28 +490,28 @@ void ResourceManager::ReadContextList (
 
 void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 {
-    // Get module name for given frame.
+    
     ::rtl::OUString sModuleName (Tools::GetModuleName(rxFrame));
     if (sModuleName.getLength() == 0)
         return;
     if (maProcessedApplications.find(sModuleName) != maProcessedApplications.end())
     {
-        // Addons for this application have already been read.
-        // There is nothing more to do.
+        
+        
         return;
     }
 
-    // Mark module as processed.  Even when there is an error that
-    // prevents the configuration data from being read, this error
-    // will not be triggered a second time.
+    
+    
+    
     maProcessedApplications.insert(sModuleName);
 
-    // Get access to the configuration root node for the application.
+    
     ::utl::OConfigurationTreeRoot aLegacyRootNode (GetLegacyAddonRootNode(sModuleName));
     if ( ! aLegacyRootNode.isValid())
         return;
 
-    // Process child nodes.
+    
     ::std::vector<OUString> aMatchingNodeNames;
     GetToolPanelNodeNames(aMatchingNodeNames, aLegacyRootNode);
     const sal_Int32 nCount (aMatchingNodeNames.size());
@@ -561,8 +561,8 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
     }
 
-    // When there where invalid nodes then we have to adapt the size
-    // of the deck and panel vectors.
+    
+    
     if (nDeckWriteIndex < maDecks.size())
         maDecks.resize(nDeckWriteIndex);
     if (nPanelWriteIndex < maPanels.size())
@@ -649,8 +649,8 @@ bool ResourceManager::IsDeckEnabled (
     const Context& rContext,
     const Reference<frame::XFrame>& rxFrame) const
 {
-    // Check if any panel that matches the current context can be
-    // displayed.
+    
+    
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
     ResourceManager::Instance().GetMatchingPanels(
         aPanelContextDescriptors,
@@ -672,6 +672,6 @@ bool ResourceManager::IsDeckEnabled (
 }
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

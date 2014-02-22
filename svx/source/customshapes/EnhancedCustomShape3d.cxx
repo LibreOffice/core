@@ -306,12 +306,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         //SJ: vertical writing is not required, by removing this item no outliner is created
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );
 
-        // #i105323# For 3D AutoShapes, the shadow attribute has to be applied to each
-        // created visualisation helper model shape individually. The shadow itself
-        // will then be rendered from the 3D renderer correctly for the whole 3D scene
-        // (and thus behind all objects of which the visualisation may be built). So,
-        // dio NOT remove it from the ItemSet here.
-        // aSet.ClearItem(SDRATTR_SHADOW);
+        
+        
+        
+        
+        
+        
 
         std::vector< E3dCompoundObject* > aPlaceholderObjectList;
 
@@ -327,7 +327,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         if ( pAny )
             *pAny >>= eProjectionMode;
         ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? PR_PARALLEL : PR_PERSPECTIVE );
-        // pShape2d Convert in scenes which include 3D Objects
+        
         E3dDefaultAttributes a3DDefaultAttr;
         a3DDefaultAttr.SetDefaultLatheCharacterMode( sal_True );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( sal_True );
@@ -361,13 +361,13 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             else if ( ( eFillStyle == XFILL_BITMAP ) || ( eFillStyle == XFILL_GRADIENT ) || bUseExtrusionColor )
                 bUseTwoFillStyles = true;
 
-            // #116336#
-            // If shapes are mirrored once (mirroring two times correct geometry again)
-            // double-sided at the object and two-sided-lighting at the scene need to be set.
+            
+            
+            
             //
-            // #i122777# Also use double sided for two fill styles since there several 3d objects get
-            // created with a depth of 0; one of them is the backside which needs double-sided to
-            // get visible
+            
+            
+            
             if(bUseTwoFillStyles || (bIsMirroredX && !bIsMirroredY) || (!bIsMirroredX && bIsMirroredY))
             {
                 aSet.Put( Svx3DDoubleSidedItem( sal_True ) );
@@ -393,10 +393,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 const SfxItemSet& rSet = pNext->GetMergedItemSet();
                 bool bNeedToConvertToContour(false);
 
-                // do conversion only for single line objects; for all others a fill and a
-                // line object get created. When we have fill, we want no line. That line has
-                // always been there, but since it was never converted to contour, it kept
-                // invisible (all this 'hidden' logic should be migrated to primitives).
+                
+                
+                
+                
                 if(!bMultipleSubObjects)
                 {
                     const XFillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
@@ -433,17 +433,17 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
                         if(aPolyPoly.isClosed())
                         {
-                            // correct item properties from line to fill style
+                            
                             if(eShadeMode == drawing::ShadeMode_DRAFT)
                             {
-                                // for draft, create wireframe with fixed line width
+                                
                                 aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
                                 aLocalSet.Put(XLineWidthItem(40));
                                 aLocalFillStyle = XFILL_NONE;
                             }
                             else
                             {
-                                // switch from line to fill, copy line attr to fill attr (color, transparence)
+                                
                                 aLocalSet.Put(XLineWidthItem(0));
                                 aLocalSet.Put(XLineStyleItem(XLINE_NONE));
                                 aLocalSet.Put(XFillColorItem(OUString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
@@ -454,7 +454,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         }
                         else
                         {
-                            // correct item properties to hairlines
+                            
                             aLocalSet.Put(XLineWidthItem(0));
                             aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
                         }
@@ -487,7 +487,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 const Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 
-                // #i122777# depth 0 is okay for planes when using double-sided
+                
                 E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 0 : fDepth );
 
                 p3DObj->NbcSetLayer( pShape2d->GetLayer() );
@@ -503,16 +503,16 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem(XATTR_FILLBITMAP);
                         aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
 
-                        // #i122777# old adaption of FillStyle bitmap size to 5-times the original size; this is not needed
-                        // anymore and was used in old times to male the fill look better when converting to 3D. Removed
-                        // from regular 3D objects for some time, also needs to be removed from CustomShapes
+                        
+                        
+                        
                         //
                         //Size aLogicalSize = aFillBmp.GetPrefSize();
                         //if ( aFillBmp.GetPrefMapMode() == MAP_PIXEL )
-                        //  aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
+                        
                         //else
-                        //  aLogicalSize = OutputDevice::LogicToLogic( aLogicalSize, aFillBmp.GetPrefMapMode(), MAP_100TH_MM );
-                        //aLogicalSize.Width()  *= 5;           ;//             :-(     nice scaling, look at engine3d/obj3d.cxx
+                        
+                        //aLogicalSize.Width()  *= 5;           ;
                         //aLogicalSize.Height() *= 5;
                         //aFillBmp.SetPrefSize( aLogicalSize );
                         //aFillBmp.SetPrefMapMode( MAP_100TH_MM );
@@ -548,7 +548,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
                     pScene->Insert3DObj( p3DObj );
 
-                    // #i122777# depth 0 is okay for planes when using double-sided
+                    
                     p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, 0 );
 
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
@@ -576,17 +576,17 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             }
         }
 
-        if ( bSceneHasObjects ) // is the SdrObject properly converted
+        if ( bSceneHasObjects ) 
         {
-            // then we can change the return value
+            
             pRet = pScene;
 
-            // Camera settings, Perspective ...
+            
             Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
             const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
             pScene->NbcSetSnapRect( aSnapRect );
 
-            // InitScene replacement
+            
             double fW = rVolume.getWidth();
             double fH = rVolume.getHeight();
 
@@ -644,7 +644,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             else
             {
                 aNewTransform.translate( -fOriginX, fOriginY, 0.0 );
-                // now set correct camera position
+                
                 const OUString sViewPoint( "ViewPoint" );
                 drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
                 drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, sViewPoint, aViewPointDefault, pMap ) );
@@ -660,7 +660,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->NbcSetTransform( aNewTransform );
 
             ///////////
-            // light //
+            
             ///////////
 
             const OUString sBrightness( "Brightness" );
@@ -744,7 +744,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             pScene->SetLogicRect( CalculateNewSnapRect( pCustomShape, aSnapRect, aBoundRect2d, pMap ) );
 
-            // removing placeholder objects
+            
             std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() );
             while ( aObjectListIter != aPlaceholderObjectList.end() )
             {
@@ -766,7 +766,7 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
     GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
     sal_uInt32 i;
 
-    // creating initial bound volume ( without rotation. skewing.and camera )
+    
     basegfx::B3DPolygon aBoundVolume;
     const Polygon aPolygon( rBoundRect );
 
@@ -781,14 +781,14 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
     }
 
     const OUString sRotationCenter( "RotationCenter" );
-    drawing::Direction3D aRotationCenterDefault( 0, 0, 0 ); // default seems to be wrong, a fractional size of shape has to be used!!
+    drawing::Direction3D aRotationCenterDefault( 0, 0, 0 ); 
     drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, sRotationCenter, aRotationCenterDefault ) );
 
     double fXRotate, fYRotate;
     GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
     double fZRotate = - ((SdrObjCustomShape*)pCustomShape)->GetObjectRotation() * F_PI180;
 
-    // rotating bound volume
+    
     basegfx::B3DHomMatrix aMatrix;
     aMatrix.translate(-aRotationCenter.DirectionX, -aRotationCenter.DirectionY, -aRotationCenter.DirectionZ);
     if ( fZRotate != 0.0 )

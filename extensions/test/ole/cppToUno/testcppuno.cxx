@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,9 +91,9 @@ HRESULT doTest()
 
         disp= result.pdispVal;
 
-        // disp contains now oletest.OleTest
+        
 
-        // one dimensional array
+        
         par= SafeArrayCreateVector( VT_UI1, 0, 5);
         unsigned char arbyte[]= { 1,2,3,4,5};
         for(long i= 0; i < 5;i++)
@@ -106,12 +106,12 @@ HRESULT doTest()
         SafeArrayDestroy( par);
 
 
-        // two dimensional array
+        
         SAFEARRAYBOUND bounds[2];
-        // least significant dimension first, Dimension 1
+        
         bounds[0].cElements= 3;
         bounds[0].lLbound= 0;
-        // Dimension 2
+        
         bounds[1].cElements= 2;
         bounds[1].lLbound= 0;
         par= SafeArrayCreate( VT_I4, 2, bounds );
@@ -174,7 +174,7 @@ HRESULT doTest()
     return hr;
 }
 
-// left index is least significant
+
 bool incrementMultidimensionalIndex(
     sal_Int32 dimensions,
     const sal_Int32 * parDimensionLengths,
@@ -184,21 +184,21 @@ bool incrementMultidimensionalIndex(
         return sal_False;
 
     bool ret= sal_True;
-    bool carry= sal_True; // to get into the while loop
+    bool carry= sal_True; 
 
-    sal_Int32 currentDimension= 0; //most significant is 1
+    sal_Int32 currentDimension= 0; 
     while( carry)
     {
         parMultidimensionalIndex[ currentDimension ]++;
-        // if carryover, set index to 0 and handle carry on a level above
+        
         if( parMultidimensionalIndex[ currentDimension] > (parDimensionLengths[ currentDimension] - 1))
             parMultidimensionalIndex[ currentDimension]= 0;
         else
             carry= sal_False;
 
         currentDimension ++;
-        // if dimensions drops below 1 and carry is set than then all indices are 0 again
-        // this is signalled by returning sal_False
+        
+        
         if( currentDimension > dimensions - 1 && carry)
         {
             carry= sal_False;

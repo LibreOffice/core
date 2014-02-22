@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UndoNumbering.hxx>
@@ -51,7 +51,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     nSttSet( ULONG_MAX ), pOldNumRule( 0 ),
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
-    // No selection!
+    
     nEndNode = 0, nEndCntnt = USHRT_MAX;
     nSttNode = rPos.nNode.GetIndex();
     nSttCntnt = rPos.nContent.GetIndex();
@@ -90,8 +90,8 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( nLRSavePos )
         {
-            // Update immediately so that potential "old" LRSpaces will be valid again.
-            // For that search firstly the correct NumRule names!
+            
+            
             if( !pNd && nSttNode )
                 pNd = rDoc.GetNodes()[ nSttNode ]->GetTxtNode();
 
@@ -124,7 +124,7 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         else
         {
-            // #i42921# - adapt to changed signature
+            
             rDoc.SetNumRule(rPam, aNumRule, false);
         }
     }
@@ -143,7 +143,7 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
     {
         if( sReplaceRule.isEmpty() )
         {
-            // #i42921# - adapt to changed signature
+            
             rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);
         }
     }
@@ -222,17 +222,17 @@ SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, bool bIsOutlMv )
     SwUndRng( rPam ),
     nNewStt( 0 ), nOffset( nOff )
 {
-    // nOffset: Down    =>  1
-    //          Up      => -1
+    
+    
 }
 
 void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     sal_uLong nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
-    if( nEndNode || USHRT_MAX != nEndCntnt )        // section?
+    if( nEndNode || USHRT_MAX != nEndCntnt )        
     {
-        if( nNewStt < nSttNode )        // moved forwards
+        if( nNewStt < nSttNode )        
             nEndNode = nEndNode - ( nSttNode - nNewStt );
         else
             nEndNode = nEndNode + ( nNewStt - nSttNode );
@@ -270,8 +270,8 @@ SwUndoNumUpDown::SwUndoNumUpDown( const SwPaM& rPam, short nOff )
     : SwUndo( nOff > 0 ? UNDO_NUMUP : UNDO_NUMDOWN ), SwUndRng( rPam ),
       nOffset( nOff )
 {
-    // nOffset: Down    =>  1
-    //          Up      => -1
+    
+    
 }
 
 void SwUndoNumUpDown::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -291,7 +291,7 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().NumUpDown(rContext.GetRepeatPaM(), 1 == nOffset);
 }
 
-// #115901#
+
 SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bOldNum,
                                     sal_Bool bNewNum)
     : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mbNewNum(bNewNum),
@@ -299,7 +299,7 @@ SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bOldNum,
 {
 }
 
-// #115901#, #i40034#
+
 void SwUndoNumOrNoNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwNodeIndex aIdx( rContext.GetDoc().GetNodes(), nIdx );
@@ -311,7 +311,7 @@ void SwUndoNumOrNoNum::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-// #115901#, #i40034#
+
 void SwUndoNumOrNoNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwNodeIndex aIdx( rContext.GetDoc().GetNodes(), nIdx );
@@ -323,7 +323,7 @@ void SwUndoNumOrNoNum::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-// #115901#
+
 void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
@@ -358,7 +358,7 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
         }
         else
         {
-            nOldStt = USHRT_MAX; // indicating, that the list restart value is not set
+            nOldStt = USHRT_MAX; 
         }
     }
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -62,7 +62,7 @@ bool operator == ( const Locale &r1, const Locale &r2 )
 
 OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectoryURL )
 {
-    // build URL to use for new (persistent) dictionaries
+    
 
     OUString aFullDicName = OUString(rDicName) + CONV_DIC_DOT_EXT;
 
@@ -86,7 +86,7 @@ class ConvDicNameContainer :
     uno::Sequence< uno::Reference< XConversionDictionary > >   aConvDics;
     ConvDicList     &rConvDicList;
 
-    // disallow copy-constructor and assignment-operator for now
+    
     ConvDicNameContainer(const ConvDicNameContainer &);
     ConvDicNameContainer & operator = (const ConvDicNameContainer &);
 
@@ -96,27 +96,27 @@ public:
     ConvDicNameContainer( ConvDicList &rMyConvDicList );
     virtual ~ConvDicNameContainer();
 
-    // XElementAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XNameAccess
+    
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XNameReplace
+    
     virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // XNameContainer
+    
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeByName( const OUString& Name ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // looks for conversion dictionaries with the specified extension
-    // in the directory and adds them to the container
+    
+    
     void AddConvDics( const OUString &rSearchDirPathURL, const OUString &rExtension );
 
-    // calls Flush for the dictionaries that support XFlushable
+    
     void    FlushDics() const;
 
     sal_Int32   GetCount() const    { return aConvDics.getLength(); }
@@ -272,7 +272,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
     if (nRplcIdx == -1)
         throw NoSuchElementException();
 
-    // physically remove dictionary
+    
     uno::Reference< XConversionDictionary > xDel = aConvDics.getArray()[nRplcIdx];
     OUString aName( xDel->getName() );
     OUString aDicMainURL( GetConvDicMainURL( aName, GetDictionaryWriteablePath() ) );
@@ -321,13 +321,13 @@ void ConvDicNameContainer::AddConvDics(
         OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
         OUString aSearchExt( rExtension.toAsciiLowerCase() );
         if(aExt != aSearchExt)
-            continue;          // skip other files
+            continue;          
 
         sal_Int16 nLang;
         sal_Int16 nConvType;
         if (IsConvDic( aURL, nLang, nConvType ))
         {
-            // get decoded dictionary file name
+            
             INetURLObject aURLObj( aURL );
             OUString aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
                         true, INetURLObject::DECODE_WITH_CHARSET,
@@ -393,8 +393,8 @@ ConvDicList::~ConvDicList()
 
 void ConvDicList::FlushDics()
 {
-    // check only pointer to avoid creating the container when
-    // the dictionaries were not accessed yet
+    
+    
     if (pNameContainer)
         pNameContainer->FlushDics();
 }
@@ -407,7 +407,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         pNameContainer->AddConvDics( GetDictionaryWriteablePath(), OUString(CONV_DIC_EXT)  );
         xNameContainer = pNameContainer;
 
-        // access list of text conversion dictionaries to activate
+        
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
         sal_Int32 nLen = aOpt.aActiveConvDics.getLength();
@@ -420,8 +420,8 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
                 xDic->setActive( sal_True );
         }
 
-        // since there is no UI to active/deactivate the dictionaries
-        // for chinese text conversion they should be activated by default
+        
+        
         uno::Reference< XConversionDictionary > xS2TDic(
                     pNameContainer->GetByName( "ChineseS2T" ), UNO_QUERY );
         uno::Reference< XConversionDictionary > xT2SDic(
@@ -639,7 +639,7 @@ void * SAL_CALL ConvDicList_getFactory(
                 ConvDicList::getImplementationName_Static(),
                 ConvDicList_CreateInstance,
                 ConvDicList::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }

@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/gdimetafiletools.hxx>
@@ -26,8 +26,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// helpers
+
+
 
 namespace
 {
@@ -43,19 +43,19 @@ namespace
                 basegfx::tools::clipPolyPolygonOnPolyPolygon(
                     rSource,
                     rClip,
-                    true, // inside
+                    true, 
                     bStroke));
 
             if(aResult.count())
             {
                 if(aResult == rSource)
                 {
-                    // not clipped, but inside. Add original
+                    
                     return false;
                 }
                 else
                 {
-                    // add clipped geometry
+                    
                     if(bStroke)
                     {
                         for(sal_uInt32 a(0); a < aResult.count(); a++)
@@ -90,19 +90,19 @@ namespace
                 basegfx::tools::clipPolyPolygonOnPolyPolygon(
                     rSource,
                     rClip,
-                    true, // inside
-                    false)); // stroke
+                    true, 
+                    false)); 
 
             if(aResult.count())
             {
                 if(aResult == rSource)
                 {
-                    // not clipped, but inside. Add original
+                    
                     return false;
                 }
                 else
                 {
-                    // add clipped geometry
+                    
                     rTarget.AddAction(
                         new MetaGradientExAction(
                             PolyPolygon(aResult),
@@ -123,7 +123,7 @@ namespace
     {
         if(!rSize.Width() || !rSize.Height() || rBitmapEx.IsEmpty())
         {
-            // bitmap or size is empty
+            
             return true;
         }
 
@@ -135,16 +135,16 @@ namespace
                 rClip,
                 aLogicBitmapRange,
                 true,
-                false)); // stroke
+                false)); 
 
         if(!aClipOfBitmap.count())
         {
-            // outside clip region
+            
             return true;
         }
 
-        // inside or overlapping. Use area to find out if it is completely
-        // covering (inside) or overlapping
+        
+        
         const double fClipArea(basegfx::tools::getArea(aClipOfBitmap));
         const double fBitmapArea(
             aLogicBitmapRange.getWidth() * aLogicBitmapRange.getWidth() +
@@ -153,13 +153,13 @@ namespace
 
         if(basegfx::fTools::more(fFactor, 1.0 - 0.001))
         {
-            // completely covering (with 0.1% tolerance)
+            
             return false;
         }
 
-        // needs clipping (with 0.1% tolerance). Prepare VirtualDevice
-        // in pixel mode for alpha channel painting (black is transparent,
-        // white to paint 100% opacity)
+        
+        
+        
         const Size aSizePixel(rBitmapEx.GetSizePixel());
         VirtualDevice aVDev;
 
@@ -170,17 +170,17 @@ namespace
 
         if(rBitmapEx.IsTransparent())
         {
-            // use given alpha channel
+            
             aVDev.DrawBitmap(Point(0, 0), rBitmapEx.GetAlpha().GetBitmap());
         }
         else
         {
-            // reset alpha channel
+            
             aVDev.SetBackground(Wallpaper(Color(COL_BLACK)));
             aVDev.Erase();
         }
 
-        // transform polygon from clipping to pixel coordinates
+        
         basegfx::B2DPolyPolygon aPixelPoly(aClipOfBitmap);
         basegfx::B2DHomMatrix aTransform;
 
@@ -190,9 +190,9 @@ namespace
             static_cast< double >(aSizePixel.Height()) / aLogicBitmapRange.getHeight());
         aPixelPoly.transform(aTransform);
 
-        // to fill the non-covered parts, use the Xor fill rule of
-        // PolyPolygon painting. Start with a all-covering polygon and
-        // add the clip polygon one
+        
+        
+        
         basegfx::B2DPolyPolygon aInvertPixelPoly;
 
         aInvertPixelPoly.append(
@@ -202,10 +202,10 @@ namespace
                     aSizePixel.Width(), aSizePixel.Height())));
         aInvertPixelPoly.append(aPixelPoly);
 
-        // paint as alpha
+        
         aVDev.DrawPolyPolygon(aInvertPixelPoly);
 
-        // get created alpha mask and set defaults
+        
         AlphaMask aAlpha(
             aVDev.GetBitmap(
                 Point(0, 0),
@@ -214,7 +214,7 @@ namespace
         aAlpha.SetPrefSize(rBitmapEx.GetPrefSize());
         aAlpha.SetPrefMapMode(rBitmapEx.GetPrefMapMode());
 
-        // add new action replacing the old one
+        
         rTarget.AddAction(
             new MetaBmpExScaleAction(
                 Point(
@@ -230,7 +230,7 @@ namespace
 
     void addSvtGraphicStroke(const SvtGraphicStroke& rStroke, GDIMetaFile& rTarget)
     {
-        // write SvtGraphicFill
+        
         SvMemoryStream aMemStm;
         WriteSvtGraphicStroke( aMemStm, rStroke );
         rTarget.AddAction(
@@ -243,7 +243,7 @@ namespace
 
     void addSvtGraphicFill(const SvtGraphicFill &rFilling, GDIMetaFile& rTarget)
     {
-        // write SvtGraphicFill
+        
         SvMemoryStream aMemStm;
         WriteSvtGraphicFill( aMemStm, rFilling );
         rTarget.AddAction(
@@ -253,10 +253,10 @@ namespace
                 static_cast< const sal_uInt8* >(aMemStm.GetData()),
                 aMemStm.Seek(STREAM_SEEK_TO_END)));
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// #i121267# Tooling to internally clip geometry against internal clip regions
+
+
 
 void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 {
@@ -267,17 +267,17 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         return;
     }
 
-    // prepare target data container and push/pop stack data
+    
     GDIMetaFile aTarget;
     bool bChanged(false);
     std::vector< basegfx::B2DPolyPolygon > aClips;
     std::vector< sal_uInt16 > aPushFlags;
     std::vector< MapMode > aMapModes;
 
-    // start with empty region
+    
     aClips.push_back(basegfx::B2DPolyPolygon());
 
-    // start with default MapMode (MAP_PIXEL)
+    
     aMapModes.push_back(MapMode());
 
     for(sal_uLong i(0); i < nObjCount; ++i)
@@ -286,10 +286,10 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         const sal_uInt16 nType(pAction->GetType());
         bool bDone(false);
 
-        // basic operation takes care of clipregion actions (four) and push/pop of these
-        // to steer the currently set clip region. There *is* an active
-        // clip region when (aClips.size() && aClips.back().count()), see
-        // below
+        
+        
+        
+        
         switch(nType)
         {
             case META_CLIPREGION_ACTION :
@@ -325,8 +325,8 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     aClips.back() = basegfx::tools::clipPolyPolygonOnRange(
                         aClips.back(),
                         aClipRange,
-                        true, // inside
-                        false); // stroke
+                        true, 
+                        false); 
                 }
                 break;
             }
@@ -343,8 +343,8 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     aClips.back() = basegfx::tools::clipPolyPolygonOnPolyPolygon(
                         aClips.back(),
                         aNewClip,
-                        true,  // inside
-                        false); // stroke
+                        true,  
+                        false); 
                 }
                 break;
             }
@@ -438,16 +438,16 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             }
         }
 
-        // this area contains all actions which could potentially be clipped. Since
-        // this tooling is only a fallback (see comments in header), only the needed
-        // actions will be implemented. Extend using the pattern for the already
-        // implemented actions.
+        
+        
+        
+        
         if(aClips.size() && aClips.back().count())
         {
             switch(nType)
             {
                 //
-                // pixel actions, just check on inside
+                
                 //
                 case META_PIXEL_ACTION :
                 {
@@ -458,7 +458,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         basegfx::B2DPoint(rPoint.X(), rPoint.Y())))
                     {
-                        // when not inside, do not add original
+                        
                         bDone = true;
                     }
                     break;
@@ -473,14 +473,14 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         basegfx::B2DPoint(rPoint.X(), rPoint.Y())))
                     {
-                        // when not inside, do not add original
+                        
                         bDone = true;
                     }
                     break;
                 }
 
                 //
-                // geometry actions
+                
                 //
                 case META_LINE_ACTION :
                 {
@@ -496,7 +496,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         basegfx::B2DPolyPolygon(aLine),
                         aTarget,
-                        true); // stroke
+                        true); 
                     break;
                 }
 
@@ -520,7 +520,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                         rRect.Left(), rRect.Top(),
                                         rRect.Right(), rRect.Bottom()))),
                             aTarget,
-                            false); // stroke
+                            false); 
                     }
                     break;
                 }
@@ -559,7 +559,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(aOutline),
                             aTarget,
-                            false); // stroke
+                            false); 
                     }
                     break;
                 }
@@ -585,7 +585,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                     aRange.getWidth() * 0.5,
                                     aRange.getHeight() * 0.5)),
                             aTarget,
-                            false); // stroke
+                            false); 
                     }
                     break;
                 }
@@ -611,7 +611,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(aToolsPoly.getB2DPolygon()),
                             aTarget,
-                            true); // stroke
+                            true); 
                     }
                     break;
                 }
@@ -637,7 +637,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(aToolsPoly.getB2DPolygon()),
                             aTarget,
-                            false); // stroke
+                            false); 
                     }
                     break;
                 }
@@ -663,7 +663,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(aToolsPoly.getB2DPolygon()),
                             aTarget,
-                            false); // stroke
+                            false); 
                     }
                     break;
                 }
@@ -676,7 +676,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         basegfx::B2DPolyPolygon(pA->GetPolygon().getB2DPolygon()),
                         aTarget,
-                        true); // stroke
+                        true); 
                     break;
                 }
 
@@ -688,7 +688,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         basegfx::B2DPolyPolygon(pA->GetPolygon().getB2DPolygon()),
                         aTarget,
-                        false); // stroke
+                        false); 
                     break;
                 }
 
@@ -701,21 +701,21 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         rPoly.getB2DPolyPolygon(),
                         aTarget,
-                        false); // stroke
+                        false); 
                     break;
                 }
 
                 //
-                // bitmap actions, create BitmapEx with alpha channel derived
-                // from clipping
+                
+                
                 //
                 case META_BMPEX_ACTION :
                 {
                     const MetaBmpExAction* pA = static_cast< const MetaBmpExAction* >(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
-                    // the logical size depends on the PrefSize of the given bitmap in
-                    // combination with the current MapMode
+                    
+                    
                     Size aLogicalSize(rBitmapEx.GetPrefSize());
 
                     if(MAP_PIXEL == rBitmapEx.GetPrefMapMode().GetMapUnit())
@@ -741,8 +741,8 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     const MetaBmpAction* pA = static_cast< const MetaBmpAction* >(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
-                    // the logical size depends on the PrefSize of the given bitmap in
-                    // combination with the current MapMode
+                    
+                    
                     Size aLogicalSize(rBitmap.GetPrefSize());
 
                     if(MAP_PIXEL == rBitmap.GetPrefMapMode().GetMapUnit())
@@ -796,7 +796,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                     if(rBitmapEx.IsEmpty())
                     {
-                        // empty content
+                        
                         bDone = true;
                     }
                     else
@@ -806,7 +806,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                         if(aCropRectangle.IsEmpty())
                         {
-                            // empty content
+                            
                             bDone = true;
                         }
                         else
@@ -830,7 +830,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                     if(rBitmap.IsEmpty())
                     {
-                        // empty content
+                        
                         bDone = true;
                     }
                     else
@@ -840,7 +840,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                         if(aCropRectangle.IsEmpty())
                         {
-                            // empty content
+                            
                             bDone = true;
                         }
                         else
@@ -858,7 +858,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 }
 
                 //
-                // need to handle all those 'hacks' which hide data in comments
+                
                 //
                 case META_COMMENT_ACTION :
                 {
@@ -867,18 +867,18 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                     if(rComment.equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {
-                        // nothing to do; this just means that between here and XGRAD_SEQ_END
-                        // exists a META_GRADIENTEX_ACTION mixed with Xor-tricked painiting
-                        // commands. This comment is used to scan over these and filter for
-                        // the gradient action. It is needed to support META_GRADIENTEX_ACTION
-                        // in this processor to solve usages.
+                        
+                        
+                        
+                        
+                        
                     }
                     else if(rComment.equalsIgnoreAsciiCase("XPATHFILL_SEQ_BEGIN"))
                     {
                         SvtGraphicFill aFilling;
                         PolyPolygon aPath;
 
-                        {   // read SvtGraphicFill
+                        {   
                             SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
                             ReadSvtGraphicFill( aMemStm, aFilling );
                         }
@@ -892,14 +892,14 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 basegfx::tools::clipPolyPolygonOnPolyPolygon(
                                     aSource,
                                     aClips.back(),
-                                    true, // inside
-                                    false)); // stroke
+                                    true, 
+                                    false)); 
 
                             if(aResult.count())
                             {
                                 if(aResult != aSource)
                                 {
-                                    // add clipped geometry
+                                    
                                     aFilling.setPath(PolyPolygon(aResult));
                                     addSvtGraphicFill(aFilling, aTarget);
                                     bDone = true;
@@ -907,7 +907,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             }
                             else
                             {
-                                // exchange with empty polygon
+                                
                                 aFilling.setPath(PolyPolygon());
                                 addSvtGraphicFill(aFilling, aTarget);
                                 bDone = true;
@@ -919,7 +919,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         SvtGraphicStroke aStroke;
                         Polygon aPath;
 
-                        {   // read SvtGraphicFill
+                        {   
                             SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
                             ReadSvtGraphicStroke( aMemStm, aStroke );
                         }
@@ -933,14 +933,14 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 basegfx::tools::clipPolygonOnPolyPolygon(
                                     aSource,
                                     aClips.back(),
-                                    true, // inside
-                                    true)); // stroke
+                                    true, 
+                                    true)); 
 
                             if(aResult.count())
                             {
                                 if(aResult.count() > 1 || aResult.getB2DPolygon(0) != aSource)
                                 {
-                                    // add clipped geometry
+                                    
                                     for(sal_uInt32 a(0); a < aResult.count(); a++)
                                     {
                                         aStroke.setPath(Polygon(aResult.getB2DPolygon(a)));
@@ -952,7 +952,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             }
                             else
                             {
-                                // exchange with empty polygon
+                                
                                 aStroke.setPath(Polygon());
                                 addSvtGraphicStroke(aStroke, aTarget);
                                 bDone = true;
@@ -964,7 +964,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 }
 
                 //
-                // need to handle gradient fills (hopefully only unroated ones)
+                
                 //
 
                 case META_GRADIENT_ACTION :
@@ -1006,36 +1006,36 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                // not (yet) supported actions
+                
                 //
-                // META_NULL_ACTION
-                // META_TEXT_ACTION
-                // META_TEXTARRAY_ACTION
-                // META_STRETCHTEXT_ACTION
-                // META_TEXTRECT_ACTION
-                // META_MASK_ACTION
-                // META_MASKSCALE_ACTION
-                // META_MASKSCALEPART_ACTION
-                // META_HATCH_ACTION
-                // META_WALLPAPER_ACTION
-                // META_FILLCOLOR_ACTION
-                // META_TEXTCOLOR_ACTION
-                // META_TEXTFILLCOLOR_ACTION
-                // META_TEXTALIGN_ACTION
-                // META_MAPMODE_ACTION
-                // META_FONT_ACTION
-                // META_TRANSPARENT_ACTION
-                // META_EPS_ACTION
-                // META_REFPOINT_ACTION
-                // META_TEXTLINECOLOR_ACTION
-                // META_TEXTLINE_ACTION
-                // META_FLOATTRANSPARENT_ACTION
-                // META_LAYOUTMODE_ACTION
-                // META_TEXTLANGUAGE_ACTION
-                // META_OVERLINECOLOR_ACTION
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
-                // if an action is not handled at all, it will simply get copied to the
-                // target (see below). This is the default for all non-implemented actions
+                
+                
                 default:
                 {
                     break;
@@ -1056,15 +1056,15 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
     if(bChanged)
     {
-        // when changed, copy back and do not forget to set MapMode
-        // and PrefSize
+        
+        
         aTarget.SetPrefMapMode(rSource.GetPrefMapMode());
         aTarget.SetPrefSize(rSource.GetPrefSize());
         rSource = aTarget;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource)
 {

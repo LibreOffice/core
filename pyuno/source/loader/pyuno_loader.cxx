@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -32,7 +32,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 
-// apparently PATH_MAX is not standard and not defined by MSVC
+
 #ifndef PATH_MAX
 #ifdef _MAX_PATH
 #define PATH_MAX _MAX_PATH
@@ -122,7 +122,7 @@ static void setPythonHome ( const OUString & pythonHome )
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
     OString o = OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
 #if PY_MAJOR_VERSION >= 3
-    // static because Py_SetPythonHome just copies the "wide" pointer
+    
     static wchar_t wide[PATH_MAX + 1];
     size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
     if(len == (size_t)-1)
@@ -137,7 +137,7 @@ static void setPythonHome ( const OUString & pythonHome )
     }
     Py_SetPythonHome(wide);
 #else
-    rtl_string_acquire(o.pData); // increase reference count
+    rtl_string_acquire(o.pData); 
     Py_SetPythonHome(o.pData->buffer);
 #endif
 }
@@ -184,15 +184,15 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         OUString pythonPath;
         OUString pythonHome;
         OUString path( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ));
-        rtl::Bootstrap::expandMacros(path); //TODO: detect failure
+        rtl::Bootstrap::expandMacros(path); 
         rtl::Bootstrap bootstrap(path);
 
-        // look for pythonhome
+        
         bootstrap.getFrom( OUString( "PYUNO_LOADER_PYTHONHOME"), pythonHome );
         bootstrap.getFrom( OUString( "PYUNO_LOADER_PYTHONPATH" ) , pythonPath );
 
-        // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
-        // sadly, there is no api for setting the pythonpath, we have to use the environment variable
+        
+        
         if( !pythonHome.isEmpty() )
             setPythonHome( pythonHome );
 
@@ -200,8 +200,8 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
             prependPythonPath( pythonPath );
 
 #ifdef WNT
-    //extend PATH under windows to include the branddir/program so ssl libs will be found
-    //for use by terminal mailmerge dependency _ssl.pyd
+    
+    
     OUString sEnvName("PATH");
     OUString sPath;
     osl_getEnvironment(sEnvName.pData, &sPath.pData);
@@ -219,15 +219,15 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 #else
         PyImport_AppendInittab( (char*)"pyuno", initpyuno );
 #endif
-        // initialize python
+        
         Py_Initialize();
         PyEval_InitThreads();
 
         PyThreadState *tstate = PyThreadState_Get();
         PyEval_ReleaseThread( tstate );
-        // This tstate is never used again, so delete it here.
-        // This prevents an assertion in PyThreadState_Swap on the
-        // PyThreadAttach below.
+        
+        
+        
         PyThreadState_Delete(tstate);
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "bookmarkcontainer.hxx"
@@ -43,7 +43,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-// OBookmarkContainer
+
 
 OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
     :m_rParent(_rParent)
@@ -56,11 +56,11 @@ void OBookmarkContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
 
-    // say goodbye to our listeners
+    
     EventObject aEvt(*this);
     m_aContainerListeners.disposeAndClear(aEvt);
 
-    // remove our elements
+    
     m_aBookmarksIndexed.clear();
     m_aBookmarks.clear();
 }
@@ -79,7 +79,7 @@ OBookmarkContainer::~OBookmarkContainer()
 {
 }
 
-// XServiceInfo
+
 OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.dba.OBookmarkContainer");
@@ -97,7 +97,7 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) t
     return aReturn;
 }
 
-// XNameContainer
+
 void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -109,14 +109,14 @@ void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const An
     if (_rName.isEmpty())
         throw IllegalArgumentException();
 
-    // approve the new object
+    
     OUString sNewLink;
     if (!(aElement >>= sNewLink))
         throw IllegalArgumentException();
 
     implAppend(_rName, sNewLink);
 
-    // notify the listeners
+    
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sNewLink), Any());
@@ -133,21 +133,21 @@ void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName ) throw(N
         MutexGuard aGuard(m_rMutex);
         checkValid(sal_True);
 
-        // check the arguments
+        
         if (_rName.isEmpty())
             throw IllegalArgumentException();
 
         if (!checkExistence(_rName))
             throw NoSuchElementException();
 
-        // the old element (for the notifications)
+        
         sOldBookmark = m_aBookmarks[_rName];
 
-        // do the removal
+        
         implRemove(_rName);
     }
 
-    // notify the listeners
+    
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sOldBookmark), Any());
@@ -157,32 +157,32 @@ void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName ) throw(N
     }
 }
 
-// XNameReplace
+
 void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ClearableMutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
 
-    // check the arguments
+    
     if (_rName.isEmpty())
         throw IllegalArgumentException();
 
-    // do we have such an element?
+    
     if (!checkExistence(_rName))
         throw NoSuchElementException();
 
-    // approve the new object
+    
     OUString sNewLink;
     if (!(aElement >>= sNewLink))
         throw IllegalArgumentException();
 
-    // the old element (for the notifications)
+    
     OUString sOldLink = m_aBookmarks[_rName];
 
-    // do the replace
+    
     implReplace(_rName, sNewLink);
 
-    // notify the listeners
+    
     aGuard.clear();
     if (m_aContainerListeners.getLength())
     {
@@ -207,7 +207,7 @@ void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XCon
         m_aContainerListeners.removeInterface(_rxListener);
 }
 
-// XElementAccess
+
 Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
     return !m_aBookmarks.empty();
 }
 
-// XEnumerationAccess
+
 Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -230,7 +230,7 @@ Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) thr
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL OBookmarkContainer::getCount(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -291,7 +291,7 @@ void OBookmarkContainer::implRemove(const OUString& _rName)
 {
     MutexGuard aGuard(m_rMutex);
 
-    // look for the name in the index access vector
+    
     MapString2String::iterator aMapPos = m_aBookmarks.end();
     for (   MapIteratorVector::iterator aSearch = m_aBookmarksIndexed.begin();
             aSearch != m_aBookmarksIndexed.end();
@@ -312,7 +312,7 @@ void OBookmarkContainer::implRemove(const OUString& _rName)
         return;
     }
 
-    // remove the map entries
+    
     m_aBookmarks.erase(aMapPos);
 }
 
@@ -346,6 +346,6 @@ void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Pa
     throw NoSupportException();
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

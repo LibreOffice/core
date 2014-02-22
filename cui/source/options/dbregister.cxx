@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbregister.hxx"
@@ -50,17 +50,17 @@
 #define TAB_WIDTH2      1000
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::svt;
 
-// class RegistrationItemSetHolder  -------------------------------------------------
+
 
 RegistrationItemSetHolder::RegistrationItemSetHolder( const SfxItemSet& _rMasterSet )
     :m_aRegistrationItems( _rMasterSet )
@@ -72,7 +72,7 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 {
 }
 
-// class DatabaseRegistrationDialog  ------------------------------------------------
+
 
 DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rInAttrs )
     : RegistrationItemSetHolder(rInAttrs)
@@ -99,7 +99,7 @@ short DatabaseRegistrationDialog::Execute()
     return result;
 }
 
-// class DbRegistrationOptionsPage --------------------------------------------------
+
 
 DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
@@ -163,7 +163,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     pPathBox->ShowTable();
 }
 
-// -----------------------------------------------------------------------
+
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
@@ -172,7 +172,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
     delete pPathBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
@@ -180,11 +180,11 @@ SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
     return ( new DbRegistrationOptionsPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    // the settings for the single drivers
+    
     sal_Bool bModified = sal_False;
     DatabaseRegistrations aRegistrations;
     sal_uLong nCount = pPathBox->GetEntryCount();
@@ -208,11 +208,11 @@ sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
 {
-    // the settings for the single drivers
+    
     SFX_ITEMSET_GET( rSet, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, true );
     if ( !pRegistrations )
         return;
@@ -234,10 +234,10 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
     {
         HeaderBar &rBar = pPathBox->GetTheHeaderBar();
 
-        // restore column width
+        
         rBar.SetItemSize( ITEMID_TYPE, aUserData.getToken(0, ';').toInt32() );
         HeaderEndDrag_Impl( &rBar );
-        // restore sort direction
+        
         sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.getToken(1, ';').toInt32();
         HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
@@ -256,7 +256,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbRegistrationOptionsPage::FillUserData()
 {
@@ -268,7 +268,7 @@ void DbRegistrationOptionsPage::FillUserData()
     aUserData += (bUp ? OUString("1") : OUString("0"));
     SetUserData( aUserData );
 }
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
 {
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
     }
     return 0;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
 {
     OUString sNewName,sNewLocation;
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
     return 1L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
@@ -340,7 +340,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
@@ -372,7 +372,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     }
     return 1;
 }
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
 {
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
     m_pDelete->Enable( !bReadOnly );
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly )
 {
     OUString aStr( _sName );
@@ -410,7 +410,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
     pEntry->SetUserData( new DatabaseRegistration( _sLocation, _bReadOnly ) );
 }
 
-// -----------------------------------------------------------------------------
+
 void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry)
 {
     ODocumentLinkDialog aDlg(this,_pEntry == NULL);
@@ -434,7 +434,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
 {
     if ( _pName )
@@ -449,9 +449,9 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
     }
     return 1L;
 }
-//........................................................................
-}   // namespace svx
-//........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

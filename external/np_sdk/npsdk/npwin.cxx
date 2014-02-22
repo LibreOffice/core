@@ -5,7 +5,7 @@
  * The contents of this file are subject to the Netscape Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/NPL/
+ * http:
  *
  * Software distributed under the License is distributed on an "AS IS" basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
@@ -39,10 +39,10 @@
 #include "npupp.h"
 #include "plugin.h"
 
-//\\// DEFINE
+
 #define NP_EXPORT
 
-//\\// GLOBAL DATA
+
 NPNetscapeFuncs* g_pNavigatorFuncs = 0;
 
 extern "C"
@@ -50,12 +50,12 @@ extern "C"
 #ifdef OJI
 JRIGlobalRef Private_GetJavaClass(void);
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
-// Private_GetJavaClass (global function)
+
+
+
 //
-//  Given a Java class reference (thru NPP_GetJavaClass) inform JRT
-//  of this class existence
+
+
 //
 JRIGlobalRef
 Private_GetJavaClass(void)
@@ -69,36 +69,36 @@ Private_GetJavaClass(void)
 }
 #endif /* OJI */
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
-//                      PLUGIN DLL entry points
-//
-// These are the Windows specific DLL entry points. They must be exoprted
+
+
+
 //
 
-// we need these to be global since we have to fill one of its field
-// with a data (class) which requires knowlwdge of the navigator
-// jump-table. This jump table is known at Initialize time (NP_Initialize)
-// which is called after NP_GetEntryPoint
+//
+
+
+
+
+
 static NPPluginFuncs* g_pluginFuncs;
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
-// NP_GetEntryPoints
+
+
+
 //
-//  fills in the func table used by Navigator to call entry points in
-//  plugin DLL.  Note that these entry points ensure that DS is loaded
-//  by using the NP_LOADDS macro, when compiling for Win16
+
+
+
 //
 NPError WINAPI NP_EXPORT
 NP_GetEntryPoints(NPPluginFuncs* pFuncs)
 {
-    // trap a NULL ptr
+    
     if(pFuncs == NULL)
         return NPERR_INVALID_FUNCTABLE_ERROR;
 
-    // if the plugin's function table is smaller than the plugin expects,
-    // then they are incompatible, and should return an error
+    
+    
 
     pFuncs->version       = (NP_VERSION_MAJOR << 8) | NP_VERSION_MINOR;
     pFuncs->newp          = NPP_New;
@@ -110,34 +110,34 @@ NP_GetEntryPoints(NPPluginFuncs* pFuncs)
     pFuncs->writeready    = NPP_WriteReady;
     pFuncs->write         = NPP_Write;
     pFuncs->print         = NPP_Print;
-    pFuncs->event         = 0;       /// reserved
+    pFuncs->event         = 0;       
 
     g_pluginFuncs         = pFuncs;
 
     return NPERR_NO_ERROR;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
-// NP_Initialize
+
+
+
 //
-//  called immediately after the plugin DLL is loaded
+
 //
 NPError WINAPI NP_EXPORT
 NP_Initialize(NPNetscapeFuncs* pFuncs)
 {
-    // trap a NULL ptr
+    
     if(pFuncs == NULL)
         return NPERR_INVALID_FUNCTABLE_ERROR;
 
-    g_pNavigatorFuncs = pFuncs; // save it for future reference
+    g_pNavigatorFuncs = pFuncs; 
 
-    // if the plugin's major ver level is lower than the Navigator's,
-    // then they are incompatible, and should return an error
+    
+    
     if(HIBYTE(pFuncs->version) > NP_VERSION_MAJOR)
         return NPERR_INCOMPATIBLE_VERSION_ERROR;
 
-    // We have to defer these assignments until g_pNavigatorFuncs is set
+    
     int navMinorVers = g_pNavigatorFuncs->version & 0xFF;
 
     if( navMinorVers >= NPVERS_HAS_NOTIFICATION ) {
@@ -153,13 +153,13 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
     return NPP_Initialize();
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
-// NP_Shutdown
+
+
+
 //
-//  called immediately before the plugin DLL is unloaded.
-//  This functio shuold check for some ref count on the dll to see if it is
-//  unloadable or it needs to stay in memory.
+
+
+
 //
 void WINAPI NP_EXPORT
 NP_Shutdown()
@@ -173,9 +173,9 @@ char * NP_GetMIMEDescription()
   return (char *)NPP_GetMIMEDescription();
 }
 
-//                      END - PLUGIN DLL entry points
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
+
+
+
 
 /*    NAVIGATOR Entry points    */
 
@@ -354,5 +354,5 @@ jref NPN_GetJavaPeer(NPP instance)
     return g_pNavigatorFuncs->getJavaPeer(instance);
 }
 #endif
-} //end of extern "C"
+} 
 

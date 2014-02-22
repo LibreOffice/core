@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -79,7 +79,7 @@
 #include "xfilter/xfparagraph.hxx"
 #include "xfilter/xfannotation.hxx"
 
-//For chart
+
 #include "string.h"
 
 #include <osl/thread.h>
@@ -104,7 +104,7 @@ LwpGraphicObject::~LwpGraphicObject()
 void LwpGraphicObject::Read()
 {
     LwpGraphicOleObject::Read();
-    m_pObjStrm->QuickReaduInt16(); //disksize
+    m_pObjStrm->QuickReaduInt16(); 
     sal_uInt16 strsize = m_pObjStrm->QuickReaduInt16();
     if (strsize<AFID_MAX_FILE_FORMAT_SIZE)
     {
@@ -127,7 +127,7 @@ void LwpGraphicObject::Read()
             m_aIPData.bAutoContrast = (sal_Bool)(pServerContext[44] == 0x00);
         }
     }
-    m_pObjStrm->QuickReaduInt16(); //disksize
+    m_pObjStrm->QuickReaduInt16(); 
     strsize = m_pObjStrm->QuickReaduInt16();
     if (strsize<AFID_MAX_FILE_FORMAT_SIZE)
     {
@@ -160,14 +160,14 @@ void LwpGraphicObject::Read()
         if (LwpFileHeader::m_nFileRevision >= 0x000b)
         {
 
-            // read external file object stuff
+            
             sal_uInt16 type = m_pObjStrm->QuickReaduInt16();
-            if ((EF_ODMA != type) && (EF_NONE != type)) // don't know about this
+            if ((EF_ODMA != type) && (EF_NONE != type)) 
             {
                 sal_uInt32 size = m_pObjStrm->QuickReaduInt32();
                 m_pObjStrm->SeekRel(static_cast<sal_uInt16>(size));
             }
-            // else no external file object
+            
         }
     }
 
@@ -221,7 +221,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
             {
                 pImage->SetImageData(pGrafData, nDataLen);
 
-                // delete used image data
+                
                 delete [] pGrafData;
                 pGrafData = NULL;
             }
@@ -269,7 +269,7 @@ void LwpGraphicObject::RegisterStyle()
     {
         this->CreateDrawObjects();
     }
-    // test codes for importing pictures
+    
     else if(this->IsGrafFormatValid())
     {
         this->CreateGrafObject();
@@ -295,7 +295,7 @@ void LwpGraphicObject::RegisterStyle()
  */
 void LwpGraphicObject::CreateDrawObjects()
 {
-    // if small file, use the compressed stream for BENTO
+    
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
@@ -305,12 +305,12 @@ void LwpGraphicObject::CreateDrawObjects()
 
     SvStream* pDrawObjStream = NULL;
 
-    // get graphic object's bento objet name
+    
     LwpObjectID* pMyID = this->GetObjectID();
     std::string aGrfObjName;
     this->GetBentoNamebyID(pMyID,  aGrfObjName);
 
-    // get bento stream by the name
+    
     pBentoContainer->CreateGraphicStream(pDrawObjStream, aGrfObjName.c_str());
     if (pDrawObjStream)
     {
@@ -342,8 +342,8 @@ void LwpGraphicObject::GetBentoNamebyID(LwpObjectID* pMyID, std::string& rName)
  */
 sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
 {
-    // create graphic object
-    // if small file, use the compressed stream for BENTO
+    
+    
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     boost::scoped_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
@@ -357,18 +357,18 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
 
     SvStream* pGrafStream = NULL;
 
-    // get graphic object's bento objet name
+    
     LwpObjectID* pMyID = this->GetObjectID();
     std::string aGrfObjName;
     this->GetBentoNamebyID(pMyID,  aGrfObjName);
 
-    // get bento stream by the name
+    
     pBentoContainer->CreateGraphicStream(pGrafStream, aGrfObjName.c_str());
     SvMemoryStream* pMemGrafStream = static_cast<SvMemoryStream*>(pGrafStream);
 
     if (pMemGrafStream)
     {
-        // read image data
+        
         sal_uInt32 nDataLen = pMemGrafStream->GetEndOfData();
         pGrafData = new sal_uInt8 [nDataLen];
         pMemGrafStream->Read(pGrafData, nDataLen);
@@ -389,8 +389,8 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
  */
 sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
 {
-    // create graphic object
-    // if small file, use the compressed stream for BENTO
+    
+    
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
@@ -400,7 +400,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
 
     SvStream* pGrafStream = NULL;
 
-    // get graphic object's bento objet name
+    
     LwpObjectID* pMyID = this->GetObjectID();
     std::string aGrfObjName;
     this->GetBentoNamebyID(pMyID,  aGrfObjName);
@@ -408,14 +408,14 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     char sDName[64]="";
     sprintf(sDName, "%s-D", aGrfObjName.c_str());
 
-    // get bento stream by the name
+    
     pGrafStream = pBentoContainer->FindValueStreamWithPropertyName(sDName);
 
     SvMemoryStream* pMemGrafStream = static_cast<SvMemoryStream*>(pGrafStream);
 
     if (pMemGrafStream)
     {
-        // read image data
+        
         sal_uInt32 nPos = pGrafStream->Tell();
         pGrafStream->Seek(STREAM_SEEK_TO_END);
         sal_uInt32 nDataLen = pGrafStream->Tell();
@@ -440,7 +440,7 @@ void LwpGraphicObject::CreateGrafObject()
 {
     XFImage* pImage = new XFImage();
 
-    // set image processing styles
+    
     XFImageStyle* pImageStyle = new XFImageStyle();
     if (m_sServerContextFormat[1]!='w' || m_sServerContextFormat[2]!='m' || m_sServerContextFormat[3]!='f')
     {
@@ -456,7 +456,7 @@ void LwpGraphicObject::CreateGrafObject()
         }
     }
 
-    // set scale and crop styles
+    
     LwpAssociatedLayouts* pLayoutWithMe = GetLayoutsWithMe();
     LwpFrameLayout* pMyFrameLayout =
         static_cast<LwpFrameLayout*>(pLayoutWithMe->GetOnlyLayout()->obj(VO_FRAMELAYOUT));
@@ -465,11 +465,11 @@ void LwpGraphicObject::CreateGrafObject()
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
         LwpLayoutGeometry* pFrameGeo = pMyFrameLayout->GetGeometry();
 
-        // original image size
+        
         double fOrgGrafWidth = (double)m_Cache.Width/TWIPS_PER_CM;
         double fOrgGrafHeight = (double)m_Cache.Height/TWIPS_PER_CM;
 
-        // get margin values
+        
         double fLeftMargin = pMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
         double fRightMargin = pMyFrameLayout->GetMarginsValue(MARGIN_RIGHT);
         double fTopMargin = pMyFrameLayout->GetMarginsValue(MARGIN_TOP);
@@ -477,19 +477,19 @@ void LwpGraphicObject::CreateGrafObject()
 
         if (pMyScale && pFrameGeo)
         {
-            // frame size
+            
             double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
             double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
 
-            // calculate the displayed size of the frame
+            
             double fDisFrameWidth = fFrameWidth - (fLeftMargin+fRightMargin);
             double fDisFrameHeight = fFrameHeight - (fTopMargin+fBottomMargin);
 
-            // scaled image size
+            
             double fSclGrafWidth = fOrgGrafWidth;
             double fSclGrafHeight = fOrgGrafHeight;
 
-            // get scale mode
+            
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
             if (nScalemode & LwpLayoutScale::CUSTOM)
             {
@@ -529,22 +529,22 @@ void LwpGraphicObject::CreateGrafObject()
                 }
             }
 
-            // scaled ratio
+            
             double fXRatio = fSclGrafWidth / fOrgGrafWidth;
             double fYRatio = fSclGrafHeight / fOrgGrafHeight;
 
-            // set image to scaled size.
+            
             pImage->SetWidth(fSclGrafWidth);
             pImage->SetHeight(fSclGrafHeight);
 
-            // placement:centered or tiled. tiled style is not supported so it's processed together with centered.
+            
             if (pMyFrameLayout->GetScaleCenter() || pMyFrameLayout->GetScaleTile())
             {
-                // set center alignment
+                
                 pImageStyle->SetXPosType(enumXFFrameXPosCenter, enumXFFrameXRelFrame);
                 pImageStyle->SetYPosType(enumXFFrameYPosMiddle, enumXFFrameYRelFrame);
 
-                // need horizontal crop?
+                
                 double fClipWidth = 0;
                 double fClipHeight = 0;
                 sal_Bool sal_bCropped = sal_False;
@@ -554,7 +554,7 @@ void LwpGraphicObject::CreateGrafObject()
                     sal_bCropped = sal_True;
                 }
 
-                // need vertical crop?
+                
                 if (fSclGrafHeight > fDisFrameHeight)
                 {
                     fClipHeight = (fSclGrafHeight-fDisFrameHeight ) / 2 / fYRatio;
@@ -568,14 +568,14 @@ void LwpGraphicObject::CreateGrafObject()
                     pImage->SetHeight(fDisFrameHeight);
                 }
             }
-            // placement:automatic
+            
             else
             {
-                // set left-top alignment
+                
                 pImageStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelFrame);
                 pImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 
-                // get image position offset
+                
                 LwpPoint* pOffset = pMyScale->GetOffset();
                 double fOffsetX = LwpTools::ConvertFromUnitsToMetric(pOffset->GetX());
                 double fOffsetY = LwpTools::ConvertFromUnitsToMetric(pOffset->GetY());
@@ -609,11 +609,11 @@ void LwpGraphicObject::CreateGrafObject()
                 if (aFrameRect.fRight <= aImageRect.fLeft || aFrameRect.fLeft >= aImageRect.fRight
                     ||aFrameRect.fBottom <= aImageRect.fTop|| aFrameRect.fTop >= aImageRect.fBottom)
                 {
-                    // display blank
+                    
                 }
-                else// need cropped
+                else
                 {
-                    // horizontal crop
+                    
                     if (aFrameRect.fLeft > aImageRect.fLeft)
                     {
                         aCropRect.fLeft = (aFrameRect.fLeft - aImageRect.fLeft) / fXRatio;
@@ -624,7 +624,7 @@ void LwpGraphicObject::CreateGrafObject()
                         aCropRect.fRight = (aImageRect.fRight - aFrameRect.fRight) / fXRatio;
                     }
 
-                    // vertical crop
+                    
                     if (aFrameRect.fTop > aImageRect.fTop)
                     {
                         aCropRect.fTop = (aFrameRect.fTop - aImageRect.fTop) / fYRatio;
@@ -645,21 +645,21 @@ void LwpGraphicObject::CreateGrafObject()
         }
     }
 
-    // set style for the image
+    
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle)->GetStyleName());
 
-    // set archor to frame
+    
     pImage->SetAnchorType(enumXFAnchorFrame);
 
-    // set object name
+    
     LwpAtomHolder* pHolder = this->GetName();
     if ( pHolder && !pHolder->str().isEmpty() )
     {
         pImage->SetName(pHolder->str());
     }
 
-    // insert image object into array
+    
     m_vXFDrawObjects.push_back(pImage);
 
 }
@@ -673,23 +673,23 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
     sal_uInt32 nDataLen = this->GetGrafData(pGrafData);
     if(pGrafData)
     {
-        //convert equation
+        
         XFParagraph* pXFPara = new XFParagraph;
         pXFPara->Add(A2OUSTR("Formula:"));
-        //add notes
+        
         XFAnnotation* pXFNote = new XFAnnotation;
-        //add equation to comment notes
+        
         XFParagraph* pXFNotePara = new XFParagraph;
-        //equation header text: Times New Roman,
-        //                                18,12,0,0,0,0,0.
-        //                                 .TCIformat{2}
-        //total head length = 45
+        
+        
+        
+        
         sal_uInt32 nBegin = 45;
         sal_uInt32 nEnd = nDataLen -1;
 
         if(pGrafData[nEnd] == '$' && pGrafData[nEnd-1]!= '\\')
         {
-            //equation body is contained by '$';
+            
             nBegin++;
             nEnd--;
         }
@@ -717,7 +717,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 
 void LwpGraphicObject::GetGrafOrgSize(double & rWidth, double & rHeight)
 {
-    // original image size
+    
     rWidth = (double)m_Cache.Width/TWIPS_PER_CM;
     rHeight = (double)m_Cache.Height/TWIPS_PER_CM;
 }

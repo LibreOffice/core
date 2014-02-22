@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,10 +32,10 @@
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace xforms
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
@@ -51,14 +51,14 @@ namespace xforms
     using ::com::sun::star::xsd::XDataType;
     using namespace frm;
 
-    //====================================================================
-    //= ODataTypeRepository
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ODataTypeRepository::ODataTypeRepository( )
     {
 
-        // insert some basic types
+        
         OUString sName( FRM_RES_STRING( RID_STR_DATATYPE_STRING ) );
         m_aRepository[ sName ] = new OStringType( sName, ::com::sun::star::xsd::DataTypeClass::STRING );
 
@@ -96,12 +96,12 @@ namespace xforms
         m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gDay );
     }
 
-    //--------------------------------------------------------------------
+    
     ODataTypeRepository::~ODataTypeRepository( )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const OUString& _rName, bool _bAllowMiss ) SAL_THROW( ( NoSuchElementException ) )
     {
         Repository::iterator aTypePos = m_aRepository.find( _rName );
@@ -111,7 +111,7 @@ namespace xforms
         return aTypePos;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XDataType > SAL_CALL ODataTypeRepository::getBasicDataType( sal_Int16 dataTypeClass ) throw (NoSuchElementException, RuntimeException)
     {
         Reference< XDataType > xReturn;
@@ -131,7 +131,7 @@ namespace xforms
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName ) throw (NoSuchElementException, ElementExistException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -147,7 +147,7 @@ namespace xforms
         return pClone;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ODataTypeRepository::revokeDataType( const OUString& typeName ) throw (NoSuchElementException, VetoException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -155,12 +155,12 @@ namespace xforms
         Repository::iterator aTypePos = implLocate( typeName );
         if ( aTypePos->second->getIsBasic() )
             throw VetoException("This is a built-in type and cannot be removed.", *this );
-            // TODO: localize this error message
+            
 
         m_aRepository.erase( aTypePos );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName ) throw (NoSuchElementException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -168,19 +168,19 @@ namespace xforms
     }
 
 
-    //--------------------------------------------------------------------
+    
     Reference< XEnumeration > SAL_CALL ODataTypeRepository::createEnumeration(  ) throw (RuntimeException)
     {
         return new ::comphelper::OEnumerationByName( this );
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         return makeAny( getDataType( aName ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ODataTypeRepository::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -195,28 +195,28 @@ namespace xforms
         return aNames;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aRepository.find( aName ) != m_aRepository.end();
     }
 
-    //--------------------------------------------------------------------
+    
     Type SAL_CALL ODataTypeRepository::getElementType(  ) throw (RuntimeException)
     {
         return ::getCppuType( static_cast< Reference< XDataType >* >( NULL ) );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL ODataTypeRepository::hasElements(  ) throw (RuntimeException)
     {
         return !m_aRepository.empty();
     }
 
-    //--------------------------------------------------------------------
-    // type specific implementation of registerProperties, using explicit
-    // template instantiations
+    
+    
+    
 
     template<>
     void OValueLimitedType<com::sun::star::util::Date>::registerProperties()
@@ -272,8 +272,8 @@ namespace xforms
         REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_INT, m_aMinInclusive, ValueType );
         REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_INT, m_aMinExclusive, ValueType );
     }
-//........................................................................
-} // namespace xforms
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

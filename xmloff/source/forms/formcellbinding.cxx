@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formcellbinding.hxx"
@@ -95,7 +95,7 @@ namespace
     };
 }
 
-//= FormCellBindingHelper
+
 FormCellBindingHelper::FormCellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxDocument )
     :m_xControlModel( _rxControlModel )
     ,m_xDocument( _rxDocument, UNO_QUERY )
@@ -144,10 +144,10 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
 {
     Reference< XValueBinding > xBinding;
     if ( !m_xDocument.is() )
-        // very bad ...
+        
         return xBinding;
 
-    // get the UNO representation of the address
+    
     CellAddress aAddress;
     if ( _rAddress.isEmpty() || !convertStringAddress( _rAddress, aAddress ) )
         return xBinding;
@@ -169,7 +169,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
     if ( !convertStringAddress( _rAddress, aRangeAddress ) )
         return xSource;
 
-    // create a range object for this address
+    
     xSource = xSource.query( createDocumentDependentInstance(
         SERVICE_CELLRANGELISTSOURCE,
         PROPERTY_LIST_CELL_RANGE,
@@ -304,8 +304,8 @@ bool FormCellBindingHelper::isCellBindingAllowed( ) const
     Reference< XBindableValue > xBindable( m_xControlModel, UNO_QUERY );
     if ( xBindable.is() )
     {
-        // the control can potentially be bound to an external value
-        // Does it live within a Calc document, and is able to supply CellBindings?
+        
+        
         bAllow = isSpreadsheetDocumentWhichSupplies( SERVICE_CELLVALUEBINDING );
     }
 
@@ -442,6 +442,6 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rI
     return bSuccess;
 }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

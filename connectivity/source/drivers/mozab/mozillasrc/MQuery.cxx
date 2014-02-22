@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,9 +50,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace connectivity;
 
-// -------------------------------------------------------------------------
-// Used to store an nsIAbDirectoryQuery member without the need to use Mozilla
-// types in the MQuery.hxx file.
+
+
+
 //
 namespace connectivity {
     namespace mozab {
@@ -65,7 +65,7 @@ namespace connectivity {
     }
 }
 
-// -------------------------------------------------------------------------
+
 MQuery::MQuery( const OColumnAlias& _ca )
     :m_rColumnAlias( _ca )
 {
@@ -79,13 +79,13 @@ MQuery::MQuery( const OColumnAlias& _ca )
 
     OSL_TRACE( "\tOUT MQuery::MQuery( ca )" );
 }
-// -------------------------------------------------------------------------
+
 MQuery::~MQuery()
 {
     OSL_TRACE("IN MQuery::~MQuery()");
 
-    // MQueryHelper is reference counted, so we need to decrement the
-    // count here.
+    
+    
     //
     if ( m_aQueryDirectory->contextId != -1 && m_aQueryDirectory->directoryQuery !=
     NULL )
@@ -98,22 +98,22 @@ MQuery::~MQuery()
 
     OSL_TRACE("\tOUT MQuery::~MQuery()");
 }
-// -----------------------------------------------------------------------------
+
 void MQuery::construct()
 {
-     // Set default values. (For now just as a reminder).
+     
     m_aError.reset();
-    m_bQuerySubDirs   = sal_True;       // LDAP Queryies require this to be set!
-    m_nMaxNrOfReturns = -1; // Unlimited number of returns.
+    m_bQuerySubDirs   = sal_True;       
+    m_nMaxNrOfReturns = -1; 
 
     m_aQueryDirectory = new MQueryDirectory();
-    // MQueryHelper is reference counted, so we need to add to the
-    // count here to prevent accidental deletion else where...
+    
+    
     //
     m_aQueryHelper = new MQueryHelper();
     NS_IF_ADDREF( m_aQueryHelper);
 }
-// -------------------------------------------------------------------------
+
 void MQuery::setAddressbook(OUString &ab)
 {
     OSL_TRACE("IN MQuery::setAddressbook()");
@@ -123,7 +123,7 @@ void MQuery::setAddressbook(OUString &ab)
 
     OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
-// -------------------------------------------------------------------------
+
 void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 {
     OSL_TRACE( "IN MQuery::setMaxNrOfReturns()" );
@@ -132,7 +132,7 @@ void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
     m_nMaxNrOfReturns = mnr;
     OSL_TRACE("\tOUT MQuery::setMaxNrOfReturns()" );
 }
-// -------------------------------------------------------------------------
+
 void MQuery::setExpression( MQueryExpression &_expr )
 {
     OSL_TRACE("IN MQuery::setExpression()");
@@ -142,18 +142,18 @@ void MQuery::setExpression( MQueryExpression &_expr )
 
     OSL_TRACE("\tOUT MQuery::setExpression()");
 }
-// -------------------------------------------------------------------------
+
 static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
                                      nsIAbBooleanExpression* queryExpression )
 {
-    nsresult rv;        // Store return values.
-    // Array that holds all matchItems, to be passed to DoQuery().
+    nsresult rv;        
+    
     nsCOMPtr<nsISupportsArray> matchItems;
     NS_NewISupportsArray(getter_AddRefs(matchItems));
 
-    // Add every individual boolString to matchItems array.
+    
     nsString matchValue;
-    // Initialise the matchItems container.
+    
     MQueryExpression::ExprVector::iterator    evIter;
     for( evIter = _aExpr->getExpressions().begin();
          evIter != _aExpr->getExpressions().end();
@@ -165,12 +165,12 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
 
             MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
 
-            // Set the 'name' property of the boolString.
-            // Check if it's an alias first...
+            
+            
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             boolString->SetName( strdup( attrName.getStr() ) );
             OSL_TRACE("Name = %s ;", attrName.getStr() );
-            // Set the 'matchType' property of the boolString. Check for equal length.
+            
             sal_Bool requiresValue = sal_True;
             switch(evStr->getCond()) {
                 case MQueryOp::Exists:
@@ -220,14 +220,14 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
                     boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
                     break;
             }
-            // Set the 'matchValue' property of the boolString. Value returned in unicode.
+            
             if ( requiresValue )
             {
                 OSL_TRACE("Value = %s", OUtoCStr( evStr->getValue() ) );
                 MTypeConverter::ouStringToNsString( evStr->getValue(), matchValue);
                 boolString->SetValue(matchValue.get ());
             }
-            // Add the individual boolString to the container of matchItems.
+            
             matchItems->AppendElement(boolString);
         }
         else if ( (*evIter)->isExpr() ) {
@@ -239,7 +239,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
             matchItems->AppendElement(subQueryExpr);
         }
         else {
-            // Should never see this...
+            
             OSL_FAIL("Unknown Expression Type!");
             return( NS_ERROR_UNEXPECTED );
         }
@@ -255,7 +255,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
 }
 sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
 {
-    nsresult rv;        // Store return values.
+    nsresult rv;        
 
     OUString nameAB    = _pCon->getHost().replace('.','_');
     OUString bindDN    = _pCon->getBindDN();
@@ -265,8 +265,8 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
     nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);
     NS_ENSURE_SUCCESS(rv, rv);
 
-    // create the ldap maxHits entry for the preferences file.
-    // Note: maxHits is applicable to LDAP only in mozilla.
+    
+    
     nsCAutoString prefName(NS_LITERAL_CSTRING("ldap_2.servers."));
     const char *pAddressBook = MTypeConverter::ouStringToCCharStringAscii(nameAB.getStr());
     prefName.Append(pAddressBook);
@@ -295,7 +295,7 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
     return rv;
 }
 
-//determine whether current profile is locked,any error will lead to return true
+
 sal_Bool isProfileLocked(OConnection* _pCon)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XMozillaBootstrap > xMozillaBootstrap;
@@ -312,7 +312,7 @@ sal_Bool isProfileLocked(OConnection* _pCon)
 }
 
 
-// -------------------------------------------------------------------------
+
 sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
 {
     nsresult retCode;
@@ -349,7 +349,7 @@ sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
     return SDBCAddress::Unknown;
 
 }
-// -------------------------------------------------------------------------
+
 sal_Bool isForceQueryProxyUsed(const nsIAbDirectory*  directory)
 {
     sal_Int32 nType = getDirectoryType(directory);
@@ -357,7 +357,7 @@ sal_Bool isForceQueryProxyUsed(const nsIAbDirectory*  directory)
         return sal_True;
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
 {
     if (!m_aQueryHelper || !m_aQueryDirectory || !m_aQueryDirectory->directoryQuery)
@@ -374,7 +374,7 @@ sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
     return rv;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
 {
     if (!m_aQueryHelper || !m_aQueryDirectory || !m_aQueryDirectory->directoryQuery)
@@ -392,7 +392,7 @@ sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
 
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -410,16 +410,16 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
     rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     return rv;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 {
 #if OSL_DEBUG_LEVEL > 0
     OSL_TRACE("IN MQuery::executeQueryProxied() Caller thread: %4d", m_oThreadID);
 #endif
 
-    nsresult rv;        // Store return values.
-    //  MTypeConverter aTypeConverter;
-    // Create a nsIAbDirectory object to initialise the nsIAbDirectoryQuery object.
+    nsresult rv;        
+    
+    
     nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &rv)) ;
     if (NS_FAILED(rv))
         return(-1);
@@ -432,30 +432,30 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
         return( -1 );
 
 
-    //insert ldap bind info to mozilla profile(in memery,none saved),so we can use it in mozilla part codes
+    
     if (_pCon->isLDAP())
     {
           rv = InsertLoginInfo(_pCon);
         NS_ENSURE_SUCCESS(rv, rv);
 
     }
-    // Since Outlook Express and Outlook in OCL mode support a very limited query capability,
-    // we use the following bool to judge whether we need bypass any use of a DirectoryQuery
-    // interface and instead force the use of the QueryProxy.
+    
+    
+    
     sal_Bool forceQueryProxyUse = isForceQueryProxyUsed(directory);
 
      m_aQueryDirectory->directory = directory;
-    // Initialize directory in cases of LDAP and Mozilla
+    
     if (!forceQueryProxyUse) m_aQueryDirectory->directoryQuery = do_QueryInterface(directory, &rv);
 
     if ( NS_FAILED(rv) || forceQueryProxyUse)
     {
-        // Create a nsIAbDirectoryQuery object which eventually will execute
-        // the query by calling DoQuery().
+        
+        
         nsCOMPtr< nsIAbDirectoryQueryProxy > directoryQueryProxy = do_CreateInstance( kAbDirectoryQueryProxyCID, &rv);
 
-        // Need to turn this off for anything using the Query Proxy since it
-        // treats Mailing Lists as directories!
+        
+        
 
         m_bQuerySubDirs = sal_False;
 
@@ -472,14 +472,14 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 #endif /* OSL_DEBUG_LEVEL */
 
     /*
-    // The problem here is that an LDAP Address Book may exist as
-    // a Mozilla Address Book. So we need to limit the number of
-    // records returned by the Server:
-    // 1. Determine if this is an LDAP Address Book
-    // [LDAP overrides the default operations(write|read|search) of all types with search only].
-    // 2. Determine if the limit is already set by us.
-    // 3. Use the mozilla preferences to see if this value is set.
-    // 4. Use value or else default to 100.
+    
+    
+    
+    
+    
+    
+    
+    
     */
     PRBool isWriteable;
     rv = directory->GetOperations (&isWriteable);
@@ -488,13 +488,13 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     {
         if(m_nMaxNrOfReturns == -1)
         {
-            // Determine if the limit maxHits has been set in the mozilla preferences
-            // if set, then use the value otherwise default to 100
+            
+            
             nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);
             NS_ENSURE_SUCCESS(rv, rv);
 
-            // create the ldap maxHits entry for the preferences file.
-            // Note: maxHits is applicable to LDAP only in mozilla.
+            
+            
             nsCAutoString prefName(NS_LITERAL_CSTRING("ldap_2.servers."));
             const char *pAddressBook = MTypeConverter::ouStringToCCharStringAscii(m_aAddressbook);
             prefName.Append(pAddressBook);
@@ -515,7 +515,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     rv = generateExpression( this, &m_aExpr, queryExpression );
     NS_ENSURE_SUCCESS( rv, rv );
 
-    // Use the nsIAbCard to return the card properties.
+    
     const char    *returnProperties[] = {"card:nsIAbCard"};
     PRInt32   count=1;
 
@@ -535,7 +535,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     rv = arguments->SetTypeSpecificArg( attributeMap );
     NS_ENSURE_SUCCESS( rv, rv );
 
-    // Execute the query.
+    
     OSL_TRACE( "****** calling DoQuery");
 
     m_aError.reset();
@@ -563,11 +563,11 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     return(0);
 }
 
-// -------------------------------------------------------------------------
+
 //
 //
-//  If the query executed is being done asynchronously then this may return
-//  -1 as the count, ie. it's undetermined.
+
+
 //
 sal_Int32
 MQuery::getRowCount()
@@ -575,11 +575,11 @@ MQuery::getRowCount()
     return( m_aQueryHelper->getResultCount() );
 }
 
-// -------------------------------------------------------------------------
+
 //
 //
-// As opposed to getRowCount() this returns the actual number of rows fetched
-// so far (if is an async query)
+
+
 //
 sal_uInt32
 MQuery::getRealRowCount()
@@ -588,8 +588,8 @@ MQuery::getRealRowCount()
 }
 
 //
-//  If the query executed is being done asynchronously then this may be
-//  false
+
+
 //
 sal_Bool
 MQuery::queryComplete( void )
@@ -606,7 +606,7 @@ MQuery::waitForQueryComplete( void )
     return( sal_False );
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Bool
 MQuery::checkRowAvailable( sal_Int32 nDBRow )
@@ -619,7 +619,7 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
 
     return( getRowCount() > nDBRow );
 }
-// -------------------------------------------------------------------------
+
 sal_Bool
 MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType ) const
 {
@@ -644,7 +644,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBC
     return sal_True;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool
 MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType ) const
 {
@@ -670,7 +670,7 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBC
 
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32
 MQuery::getRowStates(sal_Int32 nDBRow)
 {
@@ -728,7 +728,7 @@ MQuery::createNewCard()
     NS_ENSURE_SUCCESS(rv,0);
     return nNumber;
 }
-// -------------------------------------------------------------------------
+
 
 MNameMapper*
 MQuery::CreateNameMapper()
@@ -736,19 +736,19 @@ MQuery::CreateNameMapper()
     return( new MNameMapper() );
 }
 
-// -------------------------------------------------------------------------
+
 void
 MQuery::FreeNameMapper( MNameMapper* _ptr )
 {
     delete _ptr;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool MQuery::isWritable(OConnection* _pCon)
 {
     if ( !m_aQueryDirectory )
         return sal_False;
 
-    nsresult rv;        // Store return values.
+    nsresult rv;        
     nsCOMPtr<nsIAbDirectory> directory = do_QueryInterface(m_aQueryDirectory->directory, &rv);;
     if (NS_FAILED(rv))
         return sal_False;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/transliterationwrapper.hxx>
@@ -130,8 +130,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
-    // Don't modify the name.  The name is not mutable as it is used as a key
-    // in the container to keep the db ranges sorted by the name.
+    
+    
     ScRefreshTimer::operator=( rData );
     mpSortParam.reset(new ScSortParam(*rData.mpSortParam));
     mpQueryParam.reset(new ScQueryParam(*rData.mpQueryParam));
@@ -158,15 +158,15 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
 
 bool ScDBData::operator== (const ScDBData& rData) const
 {
-    //  Daten, die nicht in den Params sind
+    
 
     if ( nTable     != rData.nTable     ||
          bDoSize    != rData.bDoSize    ||
          bKeepFmt   != rData.bKeepFmt   ||
          bIsAdvanced!= rData.bIsAdvanced||
          bStripData != rData.bStripData ||
-//       SAB: I think this should be here, but I don't want to break something
-//         bAutoFilter!= rData.bAutoFilter||
+
+
          ScRefreshTimer::operator!=( rData )
         )
         return false;
@@ -348,8 +348,8 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
 {
     mpQueryParam.reset(new ScQueryParam(rQueryParam));
 
-    //  set bIsAdvanced to false for everything that is not from the
-    //  advanced filter dialog
+    
+    
     bIsAdvanced = false;
 }
 
@@ -374,8 +374,8 @@ void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 {
     rSubTotalParam = *mpSubTotal;
 
-    // Share the data range with the parent db data.  The range in the subtotal
-    // param struct is not used.
+    
+    
     rSubTotalParam.nCol1 = nStartCol;
     rSubTotalParam.nRow1 = nStartRow;
     rSubTotalParam.nCol2 = nEndCol;
@@ -390,7 +390,7 @@ void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
 void ScDBData::GetImportParam(ScImportParam& rImportParam) const
 {
     rImportParam = *mpImportParam;
-    // set the range.
+    
     rImportParam.nCol1 = nStartCol;
     rImportParam.nRow1 = nStartRow;
     rImportParam.nCol2 = nEndCol;
@@ -399,7 +399,7 @@ void ScDBData::GetImportParam(ScImportParam& rImportParam) const
 
 void ScDBData::SetImportParam(const ScImportParam& rImportParam)
 {
-    // the range is ignored.
+    
     mpImportParam.reset(new ScImportParam(rImportParam));
 }
 
@@ -456,20 +456,20 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 {
         ScRange aRange;
         GetArea( aRange );
-        SCTAB nTab = aRange.aStart.Tab();               // hat nur eine Tabelle
+        SCTAB nTab = aRange.aStart.Tab();               
 
-        //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
+        
 
-        if ( nTab == nOldPos )                          // verschobene Tabelle
+        if ( nTab == nOldPos )                          
             nTab = nNewPos;
-        else if ( nOldPos < nNewPos )                   // nach hinten verschoben
+        else if ( nOldPos < nNewPos )                   
         {
-            if ( nTab > nOldPos && nTab <= nNewPos )    // nachrueckender Bereich
+            if ( nTab > nOldPos && nTab <= nNewPos )    
                 --nTab;
         }
-        else                                            // nach vorne verschoben
+        else                                            
         {
-            if ( nTab >= nNewPos && nTab < nOldPos )    // nachrueckender Bereich
+            if ( nTab >= nNewPos && nTab < nOldPos )    
                 ++nTab;
         }
 
@@ -478,7 +478,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
             SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(),aRange.aEnd .Row() );
 
-        //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
+        
 
         SetModified(bChanged);
 
@@ -516,19 +516,19 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
             aRangeAdvSource.aEnd.Set( theCol2,theRow2,theTab2 );
             SetAdvancedQuerySource( &aRangeAdvSource );
 
-            bDoUpdate = true;       // DBData is modified
+            bDoUpdate = true;       
         }
     }
 
     SetModified(bDoUpdate);
 
-    //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
+    
 }
 
 void ScDBData::ExtendDataArea(ScDocument* pDoc)
 {
-    // Extend the DB area to include data rows immediately below.
-    // or shrink it if all cells are empty
+    
+    
     pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
 }
 
@@ -683,7 +683,7 @@ ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 
-// coverity[+free : arg-0]
+
 bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -766,7 +766,7 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
     const ScDBData* pData = findByRange(rRange);
     if (!pData)
     {
-        // Insert a new db data.  They all have identical names.
+        
         OUString aName(STR_DB_GLOBAL_NONAME);
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScDBData> pNew(new ScDBData(
@@ -825,19 +825,19 @@ const ScDBCollection::AnonDBs& ScDBCollection::getAnonDBs() const
 
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {
-    // First, search the global named db ranges.
+    
     NamedDBs::DBsType::const_iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
     if (itr != maNamedDBs.end())
         return &(*itr);
 
-    // Check for the sheet-local anonymous db range.
+    
     const ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
             return pNoNameData;
 
-    // Check the global anonymous db ranges.
+    
     const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, bStartOnly);
     if (pData)
         return pData;
@@ -847,19 +847,19 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
 
 ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly)
 {
-    // First, search the global named db ranges.
+    
     NamedDBs::DBsType::iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
     if (itr != maNamedDBs.end())
         return &(*itr);
 
-    // Check for the sheet-local anonymous db range.
+    
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
             return pNoNameData;
 
-    // Check the global anonymous db ranges.
+    
     const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, bStartOnly);
     if (pData)
         return const_cast<ScDBData*>(pData);
@@ -869,39 +869,39 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool
 
 const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
-    // First, search the global named db ranges.
+    
     ScRange aRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     NamedDBs::DBsType::const_iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByRange(aRange));
     if (itr != maNamedDBs.end())
         return &(*itr);
 
-    // Check for the sheet-local anonymous db range.
+    
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
 
-    // Lastly, check the global anonymous db ranges.
+    
     return maAnonDBs.findByRange(aRange);
 }
 
 ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    // First, search the global named db ranges.
+    
     ScRange aRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     NamedDBs::DBsType::iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByRange(aRange));
     if (itr != maNamedDBs.end())
         return &(*itr);
 
-    // Check for the sheet-local anonymous db range.
+    
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
 
-    // Lastly, check the global anonymous db ranges.
+    
     const ScDBData* pData = getAnonDBs().findByRange(aRange);
     if (pData)
         return const_cast<ScDBData*>(pData);
@@ -912,7 +912,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
 {
     FindByTable func(nTab);
-    // First, collect the positions of all items that need to be deleted.
+    
     ::std::vector<NamedDBs::DBsType::iterator> v;
     {
         NamedDBs::DBsType::iterator itr = maNamedDBs.begin(), itrEnd = maNamedDBs.end();
@@ -923,7 +923,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
         }
     }
 
-    // Delete them all.
+    
     ::std::vector<NamedDBs::DBsType::iterator>::iterator itr = v.begin(), itrEnd = v.end();
     for (; itr != itrEnd; ++itr)
         maNamedDBs.erase(*itr);
@@ -947,7 +947,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         else
         {
-            //this will perhabs break undo
+            
         }
     }
 
@@ -979,15 +979,15 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
             if ( nCol < nStartCol || nCol > nEndCol || nRow < nStartRow || nRow > nEndRow )
             {
                 if (!pNearData)
-                    pNearData = &(*itr);    // ersten angrenzenden Bereich merken
+                    pNearData = &(*itr);    
             }
             else
-                return &(*itr);             // nicht "unbenannt" und Cursor steht wirklich drin
+                return &(*itr);             
         }
     }
     if (pNearData)
-        return pNearData;               // angrenzender, wenn nichts direkt getroffen
-    return pDoc->GetAnonymousDBData(nTab);                  // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+        return pNearData;               
+    return pDoc->GetAnonymousDBData(nTab);                  
 }
 
 bool ScDBCollection::empty() const

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/file.hxx"
@@ -309,17 +309,17 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
 
 #if defined(MACOSX)
 
-    // convert decomposed filename to precomposed unicode
+    
     char composed_name[BUFSIZ];
     CFMutableStringRef strRef = CFStringCreateMutable (NULL, 0 );
-    CFStringAppendCString( strRef, pEntry->d_name, kCFStringEncodingUTF8 );  //UTF8 is default on Mac OSX
+    CFStringAppendCString( strRef, pEntry->d_name, kCFStringEncodingUTF8 );  
     CFStringNormalize( strRef, kCFStringNormalizationFormC );
     CFStringGetCString( strRef, composed_name, BUFSIZ, kCFStringEncodingUTF8 );
     CFRelease( strRef );
     rtl_string2UString( &ustrFileName, composed_name, strlen( composed_name),
     osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
 
-#else  // not MACOSX
+#else  
     /* convert file name to unicode */
     rtl_string2UString( &ustrFileName, pEntry->d_name, strlen( pEntry->d_name ),
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
@@ -515,10 +515,10 @@ static oslFileError create_dir_recursively_(
     if (native_err != ENOENT)
         return oslTranslateFileError(OSL_FET_ERROR, native_err);
 
-    // we step back until '/a_dir' at maximum because
-    // we should get an error unequal ENOENT when
-    // we try to create 'a_dir' at '/' and would so
-    // return before
+    
+    
+    
+    
     int pos = path_make_parent(dir_path);
 
     oslFileError osl_error = create_dir_recursively_(
@@ -548,8 +548,8 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     osl::systemPathRemoveSeparator(sys_path);
 
-    // const_cast because sys_path is a local copy which we want to modify inplace instead of
-    // coyp it into another buffer on the heap again
+    
+    
     return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
 }
 
@@ -920,7 +920,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
                          &SourceFileFH,
                          osl_File_OpenFlag_Read|osl_File_OpenFlag_NoLock|osl_File_OpenFlag_NoExcl) != osl_File_E_None)
     {
-        // Let's hope errno is still set relevantly after osl_openFilePath...
+        
         nRet=errno;
         return nRet;
     }
@@ -953,7 +953,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
             if ( !succeeded )
                 break;
 
-            // We know nRead <= nToRead, so it must fit in a size_t
+            
             nRemains -= (size_t) nRead;
         }
         while( nRemains );

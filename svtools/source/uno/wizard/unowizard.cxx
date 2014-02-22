@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,7 +69,7 @@ namespace {
 
     namespace WizardButton = ::com::sun::star::ui::dialogs::WizardButton;
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     namespace
     {
         sal_uInt32 lcl_convertWizardButtonToWZB( const sal_Int16 i_nWizardButton )
@@ -99,18 +99,18 @@ namespace {
     public:
         Wizard( const uno::Reference< uno::XComponentContext >& i_rContext );
 
-        // lang::XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
         virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
 
-        // beans::XPropertySet
+        
         virtual uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(uno::RuntimeException);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-        // OPropertyArrayUsageHelper
+        
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-        // ui::dialogs::XWizard
+        
         virtual OUString SAL_CALL getHelpURL() throw (uno::RuntimeException);
         virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (uno::RuntimeException);
         virtual uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (uno::RuntimeException);
@@ -125,11 +125,11 @@ namespace {
         virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException);
         virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException);
 
-        // ui::dialogs::XExecutableDialog
+        
         virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (uno::RuntimeException);
         virtual ::sal_Int16 SAL_CALL execute(  ) throw (uno::RuntimeException);
 
-        // lang::XInitialization
+        
         virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException);
 
    protected:
@@ -150,11 +150,11 @@ namespace {
     {
     }
 
-    //--------------------------------------------------------------------
+    
     Wizard::~Wizard()
     {
-        // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
-        // so this virtual-method-call the base class does does not work, we're already dead then ...
+        
+        
         if ( m_pDialog )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -163,22 +163,22 @@ namespace {
         }
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         static void lcl_checkPaths( const Sequence< Sequence< sal_Int16 > >& i_rPaths, const Reference< XInterface >& i_rContext )
         {
-            // need at least one path
+            
             if ( i_rPaths.getLength() == 0 )
                 throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
-            // each path must be of length 1, at least
+            
             for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
             {
                 if ( i_rPaths[i].getLength() == 0 )
                     throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
-                // page IDs must be in ascending order
+                
                 sal_Int16 nPreviousPageID = i_rPaths[i][0];
                 for ( sal_Int32 j=1; j<i_rPaths[i].getLength(); ++j )
                 {
@@ -196,11 +196,11 @@ namespace {
                 }
             }
 
-            // if we have one path, that's okay
+            
             if ( i_rPaths.getLength() == 1 )
                 return;
 
-            // if we have multiple paths, they must start with the same page id
+            
             const sal_Int16 nFirstPageId = i_rPaths[0][0];
             for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
             {
@@ -212,7 +212,7 @@ namespace {
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL Wizard::initialize( const Sequence< Any >& i_Arguments ) throw (Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -222,12 +222,12 @@ namespace {
         if ( i_Arguments.getLength() != 2 )
             throw IllegalArgumentException( OUString(), *this, -1 );
 
-        // the second argument must be a XWizardController, for each constructor
+        
         m_xController.set( i_Arguments[1], UNO_QUERY );
         if ( !m_xController.is() )
             throw IllegalArgumentException( OUString(), *this, 2 );
 
-        // the first arg is either a single path (short[]), or multiple paths (short[][])
+        
         Sequence< sal_Int16 > aSinglePath;
         i_Arguments[0] >>= aSinglePath;
         Sequence< Sequence< sal_Int16 > > aMultiplePaths;
@@ -239,7 +239,7 @@ namespace {
             aMultiplePaths[0] = aSinglePath;
         }
         lcl_checkPaths( aMultiplePaths, *this );
-        // if we survived this, the paths are valid, and we're done here ...
+        
         m_aWizardSteps = aMultiplePaths;
 
         m_bInitialized = true;
@@ -254,7 +254,7 @@ namespace {
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
-    //------------------------------------------------------------------------
+    
     static OUString lcl_getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;
@@ -267,7 +267,7 @@ namespace {
         return aBuffer.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+    
     Dialog* Wizard::createDialog( Window* i_pParent )
     {
         WizardShell* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
@@ -276,7 +276,7 @@ namespace {
         return pDialog;
     }
 
-    //--------------------------------------------------------------------
+    
     void Wizard::destroyDialog()
     {
         if ( m_pDialog )
@@ -285,13 +285,13 @@ namespace {
         Wizard_Base::destroyDialog();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL Wizard::getImplementationName() throw(RuntimeException)
     {
         return OUString("com.sun.star.comp.svtools.uno.Wizard");
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServices(1);
@@ -299,19 +299,19 @@ namespace {
         return aServices;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > SAL_CALL Wizard::getPropertySetInfo() throw(RuntimeException)
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& SAL_CALL Wizard::getInfoHelper()
     {
         return *const_cast< Wizard* >( this )->getArrayHelper();
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper* Wizard::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -319,7 +319,7 @@ namespace {
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString SAL_CALL Wizard::getHelpURL() throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -331,7 +331,7 @@ namespace {
         return lcl_getHelpURL( m_pDialog->GetHelpId() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::setHelpURL( const OUString& i_HelpURL ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -343,7 +343,7 @@ namespace {
             m_pDialog->SetHelpId( lcl_getHelpId( i_HelpURL ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XWindow > SAL_CALL Wizard::getDialogWindow() throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -353,7 +353,7 @@ namespace {
         return Reference< XWindow >( m_pDialog->GetComponentInterface(), UNO_QUERY );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, ::sal_Bool i_Enable ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -365,7 +365,7 @@ namespace {
         pWizardImpl->enableButtons( lcl_convertWizardButtonToWZB( i_WizardButton ), i_Enable );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::setDefaultButton( ::sal_Int16 i_WizardButton ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -377,7 +377,7 @@ namespace {
         pWizardImpl->defaultButton( lcl_convertWizardButtonToWZB( i_WizardButton ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool SAL_CALL Wizard::travelNext(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -389,7 +389,7 @@ namespace {
         return pWizardImpl->travelNext();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool SAL_CALL Wizard::travelPrevious(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -401,7 +401,7 @@ namespace {
         return pWizardImpl->travelPrevious();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, ::sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -419,7 +419,7 @@ namespace {
         pWizardImpl->enablePage( i_PageID, i_Enable );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::updateTravelUI(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -431,7 +431,7 @@ namespace {
         pWizardImpl->updateTravelUI();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -443,7 +443,7 @@ namespace {
         return pWizardImpl->advanceTo( i_PageId );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -455,7 +455,7 @@ namespace {
         return pWizardImpl->goBackTo( i_PageId );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XWizardPage > SAL_CALL Wizard::getCurrentPage(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -467,7 +467,7 @@ namespace {
         return pWizardImpl->getCurrentWizardPage();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, ::sal_Bool i_Final ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -482,14 +482,14 @@ namespace {
         pWizardImpl->activatePath( i_PathIndex, i_Final );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL Wizard::setTitle( const OUString& i_Title ) throw (RuntimeException)
     {
-        // simply disambiguate
+        
         Wizard_Base::OGenericUnoDialog::setTitle( i_Title );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL Wizard::execute(  ) throw (RuntimeException)
     {
         return Wizard_Base::OGenericUnoDialog::execute();

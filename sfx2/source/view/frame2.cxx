@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::frame::XComponentLoader;
 
-//------------------------------------------------------------------------
+
 
 class SfxFrameWindow_Impl : public Window
 {
@@ -114,7 +114,7 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
             pView->MakeActive_Impl( sal_False );
         }
 
-        // if focus was on an external window, the clipboard content might have been changed
+        
         pView->GetBindings().Invalidate( SID_PASTE );
         pView->GetBindings().Invalidate( SID_PASTE_SPECIAL );
         return true;
@@ -190,9 +190,9 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
     {
         pFrame->pImp->bHidden = false;
         if ( pFrame->IsInPlace() )
-            // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
-            // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
-            // the resize event never is sent to the component
+            
+            
+            
             SetSizePixel( GetParent()->GetOutputSizePixel() );
 
         DoResize();
@@ -230,7 +230,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
     SfxFrame* pFrame = NULL;
     try
     {
-        // create and initialize new top level frame for this window
+        
         Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference < XDesktop2 > xDesktop = Desktop::create( xContext );
         Reference < XFrame2 > xFrame = Frame::create( xContext );
@@ -242,7 +242,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
         if ( xWin->isActive() )
             xFrame->activate();
 
-        // create load arguments
+        
         Sequence< PropertyValue > aLoadArgs;
         TransformItems( SID_OPENDOC, *rDoc.GetMedium()->GetItemSet(), aLoadArgs );
 
@@ -254,7 +254,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
 
         aLoadArgs = aArgs.getPropertyValues();
 
-        // load the doc into that frame
+        
         OUString sLoaderURL( "private:object" );
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
@@ -285,7 +285,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
 
 SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 {
-    // create a new TopFrame to an external XFrame object ( wrap controller )
+    
     ENSURE_OR_THROW( i_rFrame.is(), "NULL frame not allowed" );
     Window* pWindow = VCLUnoHelper::GetWindow( i_rFrame->getContainerWindow() );
     ENSURE_OR_THROW( pWindow, "frame without container window not allowed" );
@@ -309,10 +309,10 @@ SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
 
     pWindow = new SfxFrameWindow_Impl( this, i_rContainerWindow );
 
-    // always show pWindow, which is the ComponentWindow of the XFrame we live in
-    // nowadays, since SfxFrames can be created with an XFrame only, hiding or showing the complete XFrame
-    // is not done at level of the container window, not at SFX level. Thus, the component window can
-    // always be visible.
+    
+    
+    
+    
     pWindow->Show();
 }
 
@@ -331,7 +331,7 @@ void SfxFrame::SetPresentationMode( sal_Bool bSet )
     }
 
     if ( xLayoutManager.is() )
-        xLayoutManager->setVisible( !bSet ); // we don't want to have ui in presentation mode
+        xLayoutManager->setVisible( !bSet ); 
 
     SetMenuBarOn_Impl( !bSet );
     if ( GetWorkWindow_Impl() )
@@ -402,14 +402,14 @@ void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
 {
     const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs() );
 
-    // hidden?
+    
     OSL_ENSURE( !pImp->bHidden, "when does this happen?" );
     pImp->bHidden = aDocumentArgs.getOrDefault( "Hidden", pImp->bHidden );
 
-    // update our descriptor
+    
     UpdateDescriptor( &i_rDoc );
 
-    // plugin mode
+    
     sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( sal_True );

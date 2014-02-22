@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,13 +41,13 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ContentProvider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -57,19 +57,19 @@ ContentProvider::ContentProvider(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 ContentProvider::~ContentProvider()
 {
     if ( m_xDocsMgr.is() )
         m_xDocsMgr->destroy();
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_4( ContentProvider,
                    lang::XTypeProvider,
@@ -77,11 +77,11 @@ XINTERFACE_IMPL_4( ContentProvider,
                    ucb::XContentProvider,
                    frame::XTransientDocumentsDocumentContentFactory );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_4( ContentProvider,
                       lang::XTypeProvider,
@@ -89,32 +89,32 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
                       ucb::XContentProvider,
                       frame::XTransientDocumentsDocumentContentFactory );
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1_CTX(
     ContentProvider,
     OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ),
     OUString( TDOC_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
-// XContentProvider methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& Identifier )
@@ -126,19 +126,19 @@ ContentProvider::queryContent(
             OUString( "Invalid URL!" ),
             Identifier );
 
-    // Normalize URI.
+    
     uno::Reference< ucb::XContentIdentifier > xCanonicId
         = new ::ucbhelper::ContentIdentifier( aUri.getUri() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    // Check, if a content with given id already exists...
+    
     uno::Reference< ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).get();
 
     if ( !xContent.is() )
     {
-        // Create a new content.
+        
         xContent = Content::create( m_xContext, this, xCanonicId );
         registerNewContent( xContent );
     }
@@ -146,19 +146,19 @@ ContentProvider::queryContent(
     return xContent;
 }
 
-//=========================================================================
-//
-// XTransientDocumentsDocumentContentFactory methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
     throw ( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    // model -> id -> content identifier -> queryContent
+    
     if ( m_xDocsMgr.is() )
     {
         OUString aDocId = m_xDocsMgr->queryDocumentId( Model );
@@ -173,20 +173,20 @@ ContentProvider::createDocumentContent(
 
             osl::MutexGuard aGuard( m_aMutex );
 
-            // Check, if a content with given id already exists...
+            
             uno::Reference< ucb::XContent > xContent
                 = queryExistingContent( xId ).get();
 
             if ( !xContent.is() )
             {
-                // Create a new content.
+                
                 xContent = Content::create( m_xContext, this, xId );
             }
 
             if ( xContent.is() )
                 return xContent;
 
-            // no content.
+            
             throw lang::IllegalArgumentException(
                 OUString(
                     "Illegal Content Identifier!" ),
@@ -212,13 +212,13 @@ ContentProvider::createDocumentContent(
      }
 }
 
-//=========================================================================
-//
-// interface OfficeDocumentsEventListener
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( getContentListMutex() );
@@ -229,7 +229,7 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
     ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
     ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
-    // Notify all content objects related to the closed doc.
+    
 
     bool bFoundDocumentContent = false;
     rtl::Reference< Content > xRoot;
@@ -252,8 +252,8 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
                 {
                     bFoundDocumentContent = true;
 
-                    // document content will notify removal of child itself;
-                    // no need for the root to propagate this.
+                    
+                    
                     xRoot.clear();
                 }
             }
@@ -261,7 +261,7 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
 
         if ( aUri.getDocumentId() == rDocId )
         {
-            // Inform content.
+            
             rtl::Reference< Content > xContent
                 = static_cast< Content * >( (*it).get() );
 
@@ -273,15 +273,15 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
 
     if ( xRoot.is() )
     {
-        // No document content found for rDocId but root content
-        // instanciated. Root content must announce document removal
-        // to content event listeners.
+        
+        
+        
         xRoot->notifyChildRemoved( rDocId );
     }
 }
 
-//=========================================================================
-// virtual
+
+
 void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( getContentListMutex() );
@@ -292,7 +292,7 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
     ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
     ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
-    // Find root content. If instanciated let it propagate document insertion.
+    
 
     while ( it != end )
     {
@@ -306,7 +306,7 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
                 = static_cast< Content * >( (*it).get() );
             xRoot->notifyChildInserted( rDocId );
 
-            // Done.
+            
             break;
         }
 
@@ -314,11 +314,11 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
     }
 }
 
-//=========================================================================
+
 //
-// Non-UNO
+
 //
-//=========================================================================
+
 
 uno::Reference< embed::XStorage >
 ContentProvider::queryStorage( const OUString & rUri,
@@ -340,8 +340,8 @@ ContentProvider::queryStorage( const OUString & rUri,
         }
         catch ( io::IOException const & )
         {
-            // Okay to happen, for instance when the storage does not exist.
-            //OSL_ENSURE( false, "Caught IOException!" );
+            
+            
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
@@ -351,7 +351,7 @@ ContentProvider::queryStorage( const OUString & rUri,
     return uno::Reference< embed::XStorage >();
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 ContentProvider::queryStorageClone( const OUString & rUri ) const
 {
@@ -379,8 +379,8 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
         }
         catch ( io::IOException const & )
         {
-            // Okay to happen, for instance when the storage does not exist.
-            //OSL_ENSURE( false, "Caught IOException!" );
+            
+            
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
@@ -391,7 +391,7 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
     return uno::Reference< embed::XStorage >();
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream >
 ContentProvider::queryInputStream( const OUString & rUri,
                                    const OUString & rPassword ) const
@@ -419,16 +419,16 @@ ContentProvider::queryInputStream( const OUString & rUri,
         {
             OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
-//        catch ( packages::WrongPasswordException const & )
-//        {
-//            // the key provided is wrong; rethrow; to be handled by caller.
-//            throw;
-//        }
+
+
+
+
+
     }
     return uno::Reference< io::XInputStream >();
 }
 
-//=========================================================================
+
 uno::Reference< io::XOutputStream >
 ContentProvider::queryOutputStream( const OUString & rUri,
                                     const OUString & rPassword,
@@ -452,23 +452,23 @@ ContentProvider::queryOutputStream( const OUString & rUri,
         }
         catch ( io::IOException const & )
         {
-            // Okay to happen, for instance when the storage does not exist.
-            //OSL_ENSURE( false, "Caught IOException!" );
+            
+            
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
             OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
-//        catch ( packages::WrongPasswordException const & )
-//        {
-//            // the key provided is wrong; rethrow; to be handled by caller.
-//            throw;
-//        }
+
+
+
+
+
     }
     return uno::Reference< io::XOutputStream >();
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream >
 ContentProvider::queryStream( const OUString & rUri,
                               const OUString & rPassword,
@@ -491,30 +491,30 @@ ContentProvider::queryStream( const OUString & rUri,
         }
         catch ( io::IOException const & )
         {
-            // Okay to happen, for instance when the storage does not exist.
-            //OSL_ENSURE( false, "Caught IOException!" );
+            
+            
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
             OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
-//        catch ( packages::WrongPasswordException const & )
-//        {
-//            // the key provided is wrong; rethrow; to be handled by caller.
-//            throw;
-//        }
+
+
+
+
+
     }
     return uno::Reference< io::XStream >();
 }
 
-//=========================================================================
+
 bool ContentProvider::queryNamesOfChildren(
     const OUString & rUri, uno::Sequence< OUString > & rNames ) const
 {
     Uri aUri( rUri );
     if ( aUri.isRoot() )
     {
-        // special handling for root, which has no storage, but children.
+        
         if ( m_xDocsMgr.is() )
         {
             rNames = m_xDocsMgr->queryDocuments();
@@ -555,8 +555,8 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( io::IOException const & )
             {
-                // Okay to happen, for instance if the storage does not exist.
-                //OSL_ENSURE( false, "Caught IOException!" );
+                
+                
             }
             catch ( embed::StorageWrappedTargetException const & )
             {
@@ -567,7 +567,7 @@ bool ContentProvider::queryNamesOfChildren(
     return false;
 }
 
-//=========================================================================
+
 OUString
 ContentProvider::queryStorageTitle( const OUString & rUri ) const
 {
@@ -576,19 +576,19 @@ ContentProvider::queryStorageTitle( const OUString & rUri ) const
     Uri aUri( rUri );
     if ( aUri.isRoot() )
     {
-        // always empty.
+        
         aTitle = OUString();
     }
     else if ( aUri.isDocument() )
     {
-        // for documents, title shall not be derived from URL. It shall
-        // be somethimg more 'speaking' than just the document UID.
+        
+        
         if ( m_xDocsMgr.is() )
             aTitle = m_xDocsMgr->queryStorageTitle( aUri.getDocumentId() );
     }
     else
     {
-        // derive title from URL
+        
         aTitle = aUri.getDecodedName();
     }
 
@@ -597,7 +597,7 @@ ContentProvider::queryStorageTitle( const OUString & rUri ) const
     return aTitle;
 }
 
-//=========================================================================
+
 uno::Reference< frame::XModel >
 ContentProvider::queryDocumentModel( const OUString & rUri ) const
 {

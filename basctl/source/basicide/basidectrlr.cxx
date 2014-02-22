@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basidectrlr.hxx"
@@ -42,9 +42,6 @@ OUString const sPropertyIconId("IconId");
 
 }
 
-
-//----------------------------------------------------------------------------
-
 Controller::Controller (Shell* pViewShell)
     :OPropertyContainer( m_aBHelper )
     ,SfxBaseController( pViewShell )
@@ -57,13 +54,9 @@ Controller::Controller (Shell* pViewShell)
     );
 }
 
-//----------------------------------------------------------------------------
-
 Controller::~Controller()
 { }
 
-// XInterface
-//----------------------------------------------------------------------------
 
 Any SAL_CALL Controller::queryInterface( const Type & rType ) throw(RuntimeException)
 {
@@ -74,23 +67,16 @@ Any SAL_CALL Controller::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aReturn;
 }
 
-//----------------------------------------------------------------------------
-
 void SAL_CALL Controller::acquire() throw()
 {
     SfxBaseController::acquire();
 }
-
-//----------------------------------------------------------------------------
 
 void SAL_CALL Controller::release() throw()
 {
     SfxBaseController::release();
 }
 
-
-// XTypeProvider ( ::SfxBaseController )
-//----------------------------------------------------------------------------
 
 Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException)
 {
@@ -101,8 +87,6 @@ Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException)
 
     return aTypes;
 }
-
-//----------------------------------------------------------------------------
 
 Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId() throw(RuntimeException)
 {
@@ -119,8 +103,6 @@ Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId() throw(RuntimeExc
     return pId->getImplementationId();
 }
 
-// XPropertySet
-//----------------------------------------------------------------------------
 
 Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() throw(RuntimeException)
 {
@@ -128,16 +110,12 @@ Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() t
     return xInfo;
 }
 
-// OPropertySetHelper
-//----------------------------------------------------------------------------
 
 ::cppu::IPropertyArrayHelper& Controller::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-// OPropertyArrayUsageHelper
-//----------------------------------------------------------------------------
 
 ::cppu::IPropertyArrayHelper* Controller::createArrayHelper( ) const
 {
@@ -146,8 +124,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() t
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-//----------------------------------------------------------------------------
-
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

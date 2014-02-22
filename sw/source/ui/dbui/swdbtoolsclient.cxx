@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -34,39 +34,39 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
 
-//====================================================================
-//= SwDbtoolsClient
-//====================================================================
+
+
+
 namespace
 {
-    // -----------------------------------------------------------------------------
-    // this namespace contains access to all static members of the class SwDbtoolsClient
-    // to make the initialize of the dll a little bit faster
-    // -----------------------------------------------------------------------------
+    
+    
+    
+    
     ::osl::Mutex& getDbtoolsClientMutex()
     {
         static  ::osl::Mutex aMutex;
         return aMutex;
     }
-    // -----------------------------------------------------------------------------
+    
     sal_Int32& getDbToolsClientClients()
     {
         static  sal_Int32 nClients = 0;
         return nClients;
     }
-    // -----------------------------------------------------------------------------
+    
     oslModule& getDbToolsClientModule()
     {
         static oslModule hDbtoolsModule = NULL;
         return hDbtoolsModule;
     }
-    // -----------------------------------------------------------------------------
+    
     createDataAccessToolsFactoryFunction& getDbToolsClientFactoryFunction()
     {
         static createDataAccessToolsFactoryFunction pFactoryCreationFunc = NULL;
         return pFactoryCreationFunc;
     }
-    // -----------------------------------------------------------------------------
+    
 }
 
 SwDbtoolsClient::SwDbtoolsClient()
@@ -77,10 +77,10 @@ SwDbtoolsClient::~SwDbtoolsClient()
 {
     if(m_xDataAccessFactory.is())
     {
-        // clear the factory _before_ revoking the client
-        // (the revocation may unload the DBT lib)
+        
+        
         m_xDataAccessFactory = NULL;
-        // revoke the client
+        
         revokeClient();
     }
 }
@@ -106,20 +106,20 @@ void SwDbtoolsClient::registerClient()
 #ifndef DISABLE_DYNLOADING
         const OUString sModuleName(SVLIBRARY("dbtools"));
 
-        // load the dbtools library
+        
         getDbToolsClientModule() = osl_loadModuleRelative(
             &thisModule, sModuleName.pData, 0);
         OSL_ENSURE(NULL != getDbToolsClientModule(), "SwDbtoolsClient::registerClient: could not load the dbtools library!");
         if (NULL != getDbToolsClientModule())
         {
-            // get the symbol for the method creating the factory
+            
             const OUString sFactoryCreationFunc("createDataAccessToolsFactory");
-            //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
+            
             getDbToolsClientFactoryFunction() = reinterpret_cast< createDataAccessToolsFactoryFunction >(
                 osl_getFunctionSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
 
             if (NULL == getDbToolsClientFactoryFunction())
-            {   // did not find the symbol
+            {   
                 OSL_FAIL("SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(getDbToolsClientModule());
                 getDbToolsClientModule() = NULL;
@@ -151,14 +151,14 @@ void SwDbtoolsClient::getFactory()
     {
         registerClient();
         if(getDbToolsClientFactoryFunction())
-        {   // loading the lib succeeded
+        {   
             void* pUntypedFactory = (*getDbToolsClientFactoryFunction())();
             IDataAccessToolsFactory* pDBTFactory = static_cast<IDataAccessToolsFactory*>(pUntypedFactory);
             OSL_ENSURE(pDBTFactory, "SwDbtoolsClient::SwDbtoolsClient: no factory returned!");
             if (pDBTFactory)
             {
                 m_xDataAccessFactory = pDBTFactory;
-                // by definition, the factory was aquired once
+                
                 m_xDataAccessFactory->release();
             }
         }

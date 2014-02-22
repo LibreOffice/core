@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,9 +66,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-//====================================================================
 
-// binds the instance to the specified id and assignes the title
+
+
 
 void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
@@ -88,9 +88,9 @@ void SfxMenuControl::Bind(
 }
 
 
-//--------------------------------------------------------------------
 
-// binds the item to the specified menu and assignes the title
+
+
 
 void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
@@ -106,9 +106,9 @@ void SfxMenuControl::Bind(
     aTitle = rTitle;
 }
 
-//--------------------------------------------------------------------
 
-// Constructor for explicit registration
+
+
 
 SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 :   pOwnMenu(0),
@@ -117,9 +117,9 @@ SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 {
 }
 
-//--------------------------------------------------------------------
 
-// Constructor for array
+
+
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(0),
     pSubMenu(0),
@@ -127,7 +127,7 @@ SfxMenuControl::SfxMenuControl():
 {
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     SfxControllerItem(nSlotId, rBindings),
@@ -135,24 +135,24 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     pSubMenu(0),
     b_ShowStrings(sal_False)
 {
-    // This constructor should make it possible already during the design
-    // to fall back to the bindings, but can as always be bound later.
-    // The usefulness of this is for example if a StatusForwarder should
-    // be created in the constructor of a derived class.
+    
+    
+    
+    
     UnBind();
 }
 
 
-//--------------------------------------------------------------------
+
 
 SfxMenuControl::~SfxMenuControl()
 {
     delete pSubMenu;
 }
 
-//--------------------------------------------------------------------
 
-// changes the state in the virtual menu
+
+
 
 void SfxMenuControl::StateChanged
 (
@@ -168,7 +168,7 @@ void SfxMenuControl::StateChanged
     bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
-    // Fix inclusion of enabled/disabled-Flag
+    
 
 #ifdef UNIX
     if (nSID == SID_PASTE)
@@ -181,7 +181,7 @@ void SfxMenuControl::StateChanged
 
     if ( eState != SFX_ITEM_AVAILABLE )
     {
-        // check only for non-Object Menus
+        
         if ( !bIsObjMenu )
             pOwnMenu->CheckItem( GetId(), sal_False );
 
@@ -195,7 +195,7 @@ void SfxMenuControl::StateChanged
     bool bCheck = false;
     if ( pState->ISA(SfxBoolItem) )
     {
-        // BoolItem for check
+        
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((const SfxBoolItem*)pState)->GetValue();
@@ -205,7 +205,7 @@ void SfxMenuControl::StateChanged
     else if ( pState->ISA(SfxEnumItemInterface) &&
               ((SfxEnumItemInterface *)pState)->HasBoolValue() )
     {
-        // Treat EnumItem as Bool
+        
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
@@ -214,7 +214,7 @@ void SfxMenuControl::StateChanged
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {
-        // Get MenuText from SfxStringItem
+        
         OUString aStr( ((const SfxStringItem*)pState)->GetValue() );
         if ( aStr.startsWith("($1)") )
         {
@@ -236,7 +236,7 @@ void SfxMenuControl::StateChanged
     pOwnMenu->CheckItem( GetId(), bCheck );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
 {
@@ -249,7 +249,7 @@ void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
                 SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
 }
 
-//--------------------------------------------------------------------
+
 void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
 {
     SFX_APP()->RegisterMenuControl_Impl( pMod, pFact );
@@ -288,7 +288,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 PopupMenu* SfxMenuControl::GetPopup () const
 {
@@ -306,7 +306,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings )
     : SfxMenuControl( nPos, rBindings ), pMenu(0)
 {
-    // Determine the current background color setting for menus
+    
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_sIconTheme         = rSettings.DetermineIconTheme();
     m_bShowMenuImages    = rSettings.GetUseImagesInMenus();
@@ -355,7 +355,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
 
                         if ( pMenuAttributes )
-                            aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+                            aImageId = pMenuAttributes->aImageId; 
 
                         if ( aImageId.getLength() > 0 )
                         {

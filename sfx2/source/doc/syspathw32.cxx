@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,11 +54,11 @@ static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 
 #endif
 
-// Copied from sal/types.h to circumvent problems with precompiled headers
-// and redefinitions of BOOL, INT32 and other types. Unfortunately tools
-// also define these type incompatible with Win32 types which leads from
-// time to time to very nasty compilation errors. If someone finds a better
-// way to solve these probs please remove this copied part!
+
+
+
+
+
 typedef unsigned short sal_uInt16;
 #if ( defined(WIN32) && !defined(__MINGW32__) )
     typedef wchar_t             sal_Unicode;

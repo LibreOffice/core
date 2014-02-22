@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,7 +64,7 @@ static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XTypeDescription > & xType );
 
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     const Reference< XCompoundTypeDescription > & xType )
 {
@@ -76,7 +76,7 @@ inline static typelib_TypeDescription * createCTD(
         if (pBaseType)
             typelib_typedescription_register( &pBaseType );
 
-        // construct member init array
+        
         const Sequence<Reference< XTypeDescription > > & rMemberTypes = xType->getMemberTypes();
         const Sequence< OUString > & rMemberNames                     = xType->getMemberNames();
 
@@ -100,7 +100,7 @@ inline static typelib_TypeDescription * createCTD(
             OUString aMemberTypeName( pMemberTypes[nPos]->getName() );
             rtl_uString_acquire( rInit.pTypeName = aMemberTypeName.pData );
 
-            // string is held by rMemberNames
+            
             rInit.pMemberName = pMemberNames[nPos].pData;
         }
 
@@ -111,7 +111,7 @@ inline static typelib_TypeDescription * createCTD(
             (pBaseType ? pBaseType->pWeakRef : 0),
             nMembers, pMemberInits );
 
-        // cleanup
+        
         for ( nPos = nMembers; nPos--; )
         {
             rtl_uString_release( pMemberInits[nPos].pTypeName );
@@ -121,7 +121,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XStructTypeDescription > & xType )
@@ -134,7 +134,7 @@ inline static typelib_TypeDescription * createCTD(
         if (pBaseType)
             typelib_typedescription_register( &pBaseType );
 
-        // construct member init array
+        
         const Sequence<Reference< XTypeDescription > > & rMemberTypes = xType->getMemberTypes();
         const Sequence< OUString > & rMemberNames                     = xType->getMemberNames();
 
@@ -173,7 +173,7 @@ inline static typelib_TypeDescription * createCTD(
             rtl_uString_acquire(
                 rInit.aBase.pTypeName = aMemberTypeName.pData );
 
-            // string is held by rMemberNames
+            
             rInit.aBase.pMemberName = pMemberNames[nPos].pData;
 
             rInit.bParameterizedType = templateMemberTypes.getLength() != 0
@@ -187,7 +187,7 @@ inline static typelib_TypeDescription * createCTD(
             (pBaseType ? pBaseType->pWeakRef : 0),
             nMembers, pMemberInits );
 
-        // cleanup
+        
         for ( nPos = nMembers; nPos--; )
         {
             rtl_uString_release( pMemberInits[nPos].aBase.pTypeName );
@@ -197,7 +197,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceAttributeTypeDescription2 > & xAttribute )
 {
@@ -226,16 +226,16 @@ inline static typelib_TypeDescription * createCTD(
         typelib_typedescription_newExtendedInterfaceAttribute(
             (typelib_InterfaceAttributeTypeDescription **)&pRet,
             xAttribute->getPosition(),
-            aMemberName.pData, // name
+            aMemberName.pData, 
             (typelib_TypeClass)xType->getTypeClass(),
-            aMemberTypeName.pData, // type name
+            aMemberTypeName.pData, 
             xAttribute->isReadOnly(),
             getExc.size(), getExc.empty() ? 0 : &getExc[0],
             setExc.size(), setExc.empty() ? 0 : &setExc[0] );
     }
     return pRet;
 }
-//==================================================================================================
+
 static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceMethodTypeDescription > & xMethod )
 {
@@ -244,7 +244,7 @@ static typelib_TypeDescription * createCTD(
     {
         Reference< XTypeDescription > xReturnType( xMethod->getReturnType() );
 
-        // init all params
+        
         const Sequence<Reference< XMethodParameter > > & rParams = xMethod->getParameters();
         const Reference< XMethodParameter > * pParams            = rParams.getConstArray();
         sal_Int32 nParams = rParams.getLength();
@@ -268,7 +268,7 @@ static typelib_TypeDescription * createCTD(
             rInit.bOut = xParam->isOut();
         }
 
-        // init all exception strings
+        
         const Sequence<Reference< XTypeDescription > > & rExceptions = xMethod->getExceptions();
         const Reference< XTypeDescription > * pExceptions = rExceptions.getConstArray();
         sal_Int32 nExceptions = rExceptions.getLength();
@@ -306,7 +306,7 @@ static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XInterfaceTypeDescription2 > & xType )
@@ -316,8 +316,8 @@ inline static typelib_TypeDescription * createCTD(
     {
         Sequence< Reference< XTypeDescription > > aBases(xType->getBaseTypes());
         sal_Int32 nBases = aBases.getLength();
-        // Exploit the fact that a typelib_TypeDescription for an interface type
-        // is also the typelib_TypeDescriptionReference for that type:
+        
+        
         boost::scoped_array< typelib_TypeDescription * > aBaseTypes(
             new typelib_TypeDescription *[nBases]);
         for (sal_Int32 i = 0; i < nBases; ++i) {
@@ -331,7 +331,7 @@ inline static typelib_TypeDescription * createCTD(
             = reinterpret_cast< typelib_TypeDescriptionReference ** >(
                 aBaseTypes.get());
 
-        // construct all member refs
+        
         const Sequence<Reference< XInterfaceMemberTypeDescription > > & rMembers = xType->getMembers();
         sal_Int32 nMembers = rMembers.getLength();
 
@@ -360,7 +360,7 @@ inline static typelib_TypeDescription * createCTD(
             nBases, pBaseTypeRefs,
             nMembers, ppMemberRefs );
 
-        // cleanup refs and base type
+        
         for (int i = 0; i < nBases; ++i) {
             typelib_typedescription_release(aBaseTypes[i]);
         }
@@ -372,7 +372,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDescription > & xType )
 {
     typelib_TypeDescription * pRet = 0;
@@ -380,7 +380,7 @@ inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDes
     {
         OUString aTypeName( xType->getName() );
         Sequence< OUString > aNames( xType->getEnumNames() );
-        OSL_ASSERT( sizeof(OUString) == sizeof(rtl_uString *) ); // !!!
+        OSL_ASSERT( sizeof(OUString) == sizeof(rtl_uString *) ); 
         Sequence< sal_Int32 > aValues( xType->getEnumValues() );
 
         typelib_typedescription_newEnum(
@@ -391,7 +391,7 @@ inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDes
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XIndirectTypeDescription > & xType )
@@ -412,13 +412,13 @@ inline static typelib_TypeDescription * createCTD(
             pRefType->pWeakRef,
             0, 0 );
 
-        // cleanup
+        
         typelib_typedescription_release( pRefType );
     }
     return pRet;
 }
 
-//==================================================================================================
+
 static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XTypeDescription > & xType )
@@ -429,7 +429,7 @@ static typelib_TypeDescription * createCTD(
     {
         switch (xType->getTypeClass())
         {
-            // built in types
+            
         case TypeClass_VOID:
         {
             OUString aTypeName("void");
@@ -562,7 +562,7 @@ static typelib_TypeDescription * createCTD(
 }
 
 
-//==================================================================================================
+
 extern "C"
 {
 static void SAL_CALL typelib_callback(
@@ -592,7 +592,7 @@ static void SAL_CALL typelib_callback(
             }
             catch (container::NoSuchElementException & exc)
             {
-                (void) exc; // avoid warning about unused variable
+                (void) exc; 
                 OSL_TRACE(
                     "typelibrary type not available: %s",
                     OUStringToOString(
@@ -600,7 +600,7 @@ static void SAL_CALL typelib_callback(
             }
             catch (Exception & exc)
             {
-                (void) exc; // avoid warning about unused variable
+                (void) exc; 
                 OSL_TRACE(
                     "%s",
                     OUStringToOString(
@@ -611,7 +611,7 @@ static void SAL_CALL typelib_callback(
 }
 }
 
-//==================================================================================================
+
 class EventListenerImpl
     : public WeakImplHelper1< lang::XEventListener >
 {
@@ -624,22 +624,22 @@ public:
         : m_xTDMgr( xTDMgr )
         {}
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( lang::EventObject const & rEvt )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 void EventListenerImpl::disposing( lang::EventObject const & rEvt )
     throw (RuntimeException)
 {
     if (rEvt.Source != m_xTDMgr) {
         OSL_ASSERT(false);
     }
-    // deregister of c typelib callback
+    
     ::typelib_typedescription_revokeCallback( m_xTDMgr.get(), typelib_callback );
 }
 
-//==================================================================================================
+
 sal_Bool SAL_CALL installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
     SAL_THROW(())
@@ -659,13 +659,13 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
     if (xComp.is())
     {
         xComp->addEventListener( new EventListenerImpl( xTDMgr ) );
-        // register c typelib callback
+        
         ::typelib_typedescription_registerCallback( xTDMgr.get(), typelib_callback );
         return sal_True;
     }
     return sal_False;
 }
 
-} // end namespace cppu
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accfrmobj.hxx>
@@ -332,15 +332,15 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
             const SwFlyFrm* pFly = static_cast< const SwFlyFrm *>( mpFrm );
             if( pFly->IsFlyInCntFrm() )
             {
-                // For FLY_AS_CHAR the parent is the anchor
+                
                 pParent = pFly->GetAnchorFrm();
                 OSL_ENSURE( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
             }
             else
             {
-                // In any other case the parent is the root frm
-                // (in page preview, the page frame)
+                
+                
                 if( bInPagePreview )
                     pParent = pFly->FindPageFrm();
                 else
@@ -368,7 +368,7 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
             OSL_ENSURE( pFrmFmt, "frame format is missing" );
             if( pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
             {
-                // For FLY_AS_CHAR the parent is the anchor
+                
                 pParent = pContact->GetAnchorFrm();
                 OSL_ENSURE( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
@@ -376,7 +376,7 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
             }
             else
             {
-                // In any other case the parent is the root frm
+                
                 if( bInPagePreview )
                     pParent = pContact->GetAnchorFrm()->FindPageFrm();
                 else
@@ -412,6 +412,6 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
     return pParent;
 }
 
-} } // eof of namespace sw::access
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

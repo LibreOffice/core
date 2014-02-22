@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-//Math document
+
 extern Sequence< OUString > SAL_CALL
         SmDocument_getSupportedServiceNames() throw();
 extern OUString SAL_CALL
@@ -40,7 +40,7 @@ extern OUString SAL_CALL
 extern Reference< XInterface >SAL_CALL
         SmDocument_createInstance(const Reference< XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags) throw( Exception );
 
-//MathML import
+
 extern Sequence< OUString > SAL_CALL
         SmXMLImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL
@@ -59,7 +59,7 @@ extern OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw();
 extern Reference< XInterface > SAL_CALL
         SmXMLImportSettings_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
 
-//MathML export
+
 extern Sequence< OUString > SAL_CALL
         SmXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL
@@ -104,7 +104,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
                                      void* pServiceManager,
                                      void* /*pRegistryKey*/ )
 {
-    // Set default return value for this operation - if it failed.
+    
     void* pReturn = NULL ;
 
     if  (
@@ -112,7 +112,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
             ( pServiceManager       !=  NULL )
         )
     {
-        // Define variables which are used in following macros.
+        
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
         Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
@@ -188,7 +188,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
         }
 
 
-        // Factory is valid - service was found.
+        
         if ( xFactory.is() )
         {
             xFactory->acquire();
@@ -196,10 +196,10 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
         }
     }
 
-    // Return with result of this operation.
+    
     return pReturn ;
 }
-} // extern "C"
+} 
 
 
 

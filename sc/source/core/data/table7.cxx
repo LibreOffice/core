@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <table.hxx>
@@ -27,7 +27,7 @@ void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScT
     if (!ValidCol(aRange.mnCol1) || !ValidCol(aRange.mnCol2))
         return;
 
-    // Pass some stuff to the columns via context.
+    
     rCxt.setTableProtected(IsProtected());
     rCxt.setCondFormatList(mpCondFormatList.get());
 
@@ -39,7 +39,7 @@ void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScT
         for (SCCOL nCol = aRange.mnCol1; nCol <= aRange.mnCol2; ++nCol, ++nClipCol)
         {
             if (nClipCol > aClipRange.aEnd.Col())
-                nClipCol = aClipRange.aStart.Col(); // loop through columns.
+                nClipCol = aClipRange.aStart.Col(); 
 
             const ScColumn& rClipCol = rClipTab.aCol[nClipCol];
             aCol[nCol].DeleteBeforeCopyFromClip(rCxt, rClipCol);

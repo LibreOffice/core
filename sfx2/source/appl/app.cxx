@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,19 +14,19 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
 
 #if defined UNX
 #include <limits.h>
-#else // UNX
+#else 
 #include <stdlib.h>
 #ifndef PATH_MAX
 #define PATH_MAX _MAX_PATH
 #endif
-#endif // UNX
+#endif 
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
@@ -119,7 +119,7 @@
 
 using namespace ::com::sun::star;
 
-// Static member
+
 SfxApplication* SfxApplication::pApp = NULL;
 #ifndef DISABLE_SCRIPTING
 static BasicDLL*       pBasic   = NULL;
@@ -142,7 +142,7 @@ namespace
 
 SfxApplication* SfxApplication::GetOrCreate()
 {
-    // SFX on demand
+    
     ::osl::MutexGuard aGuard(theApplicationMutex::get());
     if (!pApp)
     {
@@ -150,9 +150,9 @@ SfxApplication* SfxApplication::GetOrCreate()
 
         pApp = new SfxApplication;
 
-        // at the moment a bug may occur when Initialize_Impl returns FALSE,
-        // but this is only temporary because all code that may cause such
-        // a fault will be moved outside the SFX
+        
+        
+        
         pApp->Initialize_Impl();
 
         ::framework::SetImageProducer( GetImage );
@@ -230,7 +230,7 @@ SfxApplication::~SfxApplication()
     Application::SetHelp( NULL );
 #endif
 
-    // delete global options
+    
     SvtViewOptions::ReleaseOptions();
 
 #ifndef DISABLE_SCRIPTING
@@ -243,7 +243,7 @@ SfxApplication::~SfxApplication()
     pApp = 0;
 }
 
-//====================================================================
+
 
 const OUString& SfxApplication::GetLastDir_Impl() const
 
@@ -277,7 +277,7 @@ const OUString& SfxApplication::GetLastSaveDirectory() const
     return GetLastDir_Impl();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::SetLastDir_Impl
 (
@@ -297,26 +297,26 @@ void SfxApplication::SetLastDir_Impl
     pAppData_Impl->aLastDir = rNewDir;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::ResetLastDir()
 {
     pAppData_Impl->aLastDir = "";
 }
 
-//--------------------------------------------------------------------
+
 
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
     return pAppData_Impl->pViewFrame? pAppData_Impl->pViewFrame->GetDispatcher(): pAppData_Impl->pAppDispat;
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
     if ( pFrame != pAppData_Impl->pViewFrame )
     {
-        // get the containerframes ( if one of the frames is an InPlaceFrame )
+        
         SfxViewFrame *pOldContainerFrame = pAppData_Impl->pViewFrame;
         while ( pOldContainerFrame && pOldContainerFrame->GetParentViewFrame_Impl() )
             pOldContainerFrame = pOldContainerFrame->GetParentViewFrame_Impl();
@@ -324,8 +324,8 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         while ( pNewContainerFrame && pNewContainerFrame->GetParentViewFrame_Impl() )
             pNewContainerFrame = pNewContainerFrame->GetParentViewFrame_Impl();
 
-        // DocWinActivate : both frames belong to the same TopWindow
-        // TopWinActivate : both frames belong to different TopWindows
+        
+        
 
         sal_Bool bTaskActivate = pOldContainerFrame != pNewContainerFrame;
 
@@ -368,30 +368,30 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         }
     }
 
-    // even if the frame actually didn't change, ensure its document is forwarded
-    // to SfxObjectShell::SetCurrentComponent.
-    // Otherwise, the CurrentComponent might not be correct, in case it has meanwhile
-    // been reset to some other document, by some non-SFX component.
-    // #i49133# / 2007-12-19 / frank.schoenheit@sun.com
+    
+    
+    
+    
+    
     if ( pFrame && pFrame->GetViewShell() )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 
-//---------------------------------------------------------------------
+
 
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 {
     return ResMgr::CreateResMgr(pPrefix);
 }
 
-//--------------------------------------------------------------------
+
 
 ResMgr* SfxApplication::GetSfxResManager()
 {
     return SfxResId::GetResMgr();
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxApplication::SetProgress_Impl
 (
@@ -413,21 +413,21 @@ void SfxApplication::SetProgress_Impl
     pAppData_Impl->pProgress = pProgress;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SfxApplication::GetFreeIndex()
 {
     return pAppData_Impl->aIndexBitSet.GetFreeIndex()+1;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxApplication::ReleaseIndex(sal_uInt16 i)
 {
     pAppData_Impl->aIndexBitSet.ReleaseIndex(i-1);
 }
 
-//--------------------------------------------------------------------
+
 
 Window* SfxApplication::GetTopWindow() const
 {
@@ -497,18 +497,18 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 #else
 
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
+    
     static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
-    // load module
+    
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
-    // get symbol
+    
     OUString aSymbol( "basicide_handle_basic_error"  );
     basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
-    // call basicide_handle_basic_error in basctl
+    
     long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
 
 #else
@@ -551,7 +551,7 @@ sal_Bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
     }
     catch (const ::com::sun::star::uno::RuntimeException&)
     {
-        // ignore, will just return FALSE
+        
     }
 #endif
     return result;
@@ -599,18 +599,18 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 #else
 
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
+    
     static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
-    // load module
+    
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
-    // get symbol
+    
     OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
-    // call basicide_macro_organizer in basctl
+    
     pSymbol( nTabId );
 
 #else

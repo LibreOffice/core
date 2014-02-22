@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <threadmanager.hxx>
 
@@ -70,7 +70,7 @@ oslInterlockedCount ThreadManager::AddThread(
 {
     osl::MutexGuard aGuard(maMutex);
 
-    // create new thread
+    
     tThreadData aThreadData;
     oslInterlockedCount nNewThreadID( RetrieveNewThreadID() );
     {
@@ -84,16 +84,16 @@ oslInterlockedCount ThreadManager::AddThread(
                                           *(aThreadData.pThread) );
     }
 
-    // add thread to manager
+    
     if ( maStartedThreads.size() < mnStartedSize &&
          !StartingOfThreadsSuspended() )
     {
-        // Try to start thread
+        
         if ( !StartThread( aThreadData ) )
         {
-            // No success on starting thread
-            // If no more started threads exist, but still threads are waiting,
-            // setup Timer to start thread from waiting ones
+            
+            
+            
             if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
             {
                 maStartNewThreadTimer.Start();
@@ -102,7 +102,7 @@ oslInterlockedCount ThreadManager::AddThread(
     }
     else
     {
-        // Thread will be started later
+        
         maWaitingForStartThreads.push_back( aThreadData );
     }
 
@@ -112,7 +112,7 @@ oslInterlockedCount ThreadManager::AddThread(
 void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
                                   const bool bThreadFinished )
 {
-    // --> SAFE ----
+    
     osl::MutexGuard aGuard(maMutex);
 
     std::deque< tThreadData >::iterator aIter =
@@ -127,7 +127,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
 
         if ( bThreadFinished )
         {
-            // release thread as job from thread joiner instance
+            
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager > rThreadJoiner( mrThreadJoiner );
             if ( rThreadJoiner.is() )
             {
@@ -139,7 +139,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
             }
         }
 
-        // Try to start thread from waiting ones
+        
         TryToStartNewThread( 0 );
     }
     else
@@ -152,7 +152,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
             maWaitingForStartThreads.erase( aIter );
         }
     }
-    // <-- SAFE ----
+    
 }
 
 bool ThreadManager::StartWaitingThread()
@@ -175,12 +175,12 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
 
     if ( rThreadData.pThread->create() )
     {
-        // start of thread successful.
+        
         bThreadStarted = true;
 
         maStartedThreads.push_back( rThreadData );
 
-        // register thread as job at thread joiner instance
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager > rThreadJoiner( mrThreadJoiner );
         if ( rThreadJoiner.is() )
         {
@@ -193,7 +193,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
     }
     else
     {
-        // thread couldn't be started.
+        
         maWaitingForStartThreads.push_front( rThreadData );
     }
 
@@ -206,12 +206,12 @@ IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread)
 
     if ( !StartingOfThreadsSuspended() )
     {
-        // Try to start thread from waiting ones
+        
         if ( !StartWaitingThread() )
         {
-            // No success on starting thread
-            // If no more started threads exist, but still threads are waiting,
-            // setup Timer to start thread from waiting ones
+            
+            
+            
             if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
             {
                 maStartNewThreadTimer.Start();
@@ -233,9 +233,9 @@ void ThreadManager::ResumeStartingOfThreads()
     {
         if ( !StartWaitingThread() )
         {
-            // No success on starting thread
-            // If no more started threads exist, but still threads are waiting,
-            // setup Timer to start thread from waiting ones
+            
+            
+            
             if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
             {
                 maStartNewThreadTimer.Start();

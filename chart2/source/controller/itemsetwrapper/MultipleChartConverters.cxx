@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MultipleChartConverters.hxx"
@@ -75,7 +75,7 @@ AllAxisItemConverter::~AllAxisItemConverter()
 
 const sal_uInt16 * AllAxisItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nAllAxisWhichPairs;
 }
 
@@ -103,7 +103,7 @@ AllGridItemConverter::~AllGridItemConverter()
 
 const sal_uInt16 * AllGridItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nGridWhichPairs;
 }
 
@@ -123,7 +123,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
-        uno::Reference< uno::XComponentContext> xContext(0);//do not need Context for label properties
+        uno::Reference< uno::XComponentContext> xContext(0);
 
         sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, *aIt, -1/*nPointIndex*/, ChartModelHelper::findDiagram( xChartModel ) );
         sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
@@ -151,7 +151,7 @@ AllDataLabelItemConverter::~AllDataLabelItemConverter()
 
 const sal_uInt16 * AllDataLabelItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nDataLabelWhichPairs;
 }
 
@@ -185,7 +185,7 @@ AllTitleItemConverter::~AllTitleItemConverter()
 
 const sal_uInt16 * AllTitleItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nTitleWhichPairs;
 }
 
@@ -211,11 +211,11 @@ AllSeriesStatisticsConverter::~AllSeriesStatisticsConverter()
 
 const sal_uInt16 * AllSeriesStatisticsConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nStatWhichPairs;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -108,7 +108,7 @@ sal_Bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 
             if( (pPickObj != 0) && !pPickObj->IsEmptyPresObj() )
             {
-                // if we text hit another shape than the one currently selected, unselect the old one now
+                
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() >= 1 )
                 {
@@ -117,13 +117,13 @@ sal_Bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
                         if( rMarkList.GetMark(0)->GetMarkedSdrObj() != pPickObj )
                         {
 
-                            // if current selected shape is not that of the hit text edit, deselect it
+                            
                             unmarkimpl( mpView );
                         }
                     }
                     else
                     {
-                        // more than one shape selected, deselect all of them
+                        
                         unmarkimpl( mpView );
                     }
                 }
@@ -252,8 +252,8 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
         if( bUndo && !mpView->GetTextEditOutlinerView() )
             pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-        // n685123: ApplyFormatPaintBrush itself would store undo information
-        // except in a few cases (?)
+        
+        
         if( pObj )
         {
             OUString sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand(".uno:FormatPaintbrush" ) );
@@ -285,6 +285,6 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

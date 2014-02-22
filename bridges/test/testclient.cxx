@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -63,25 +63,25 @@ using namespace ::com::sun::star::test::performance;
 void doPerformanceTest( const Reference < XPerformanceTest > & /* xBench */)
 {
     printf( "not implemented\n" );
-//      sal_Int32 i,nLoop = 2000;
-//      sal_Int32 tStart, tEnd , tEnd2;
-//      //------------------------------------
-//      // oneway calls
-//      i = nLoop;
-//      tStart = GetTickCount();
-//      while (i--)
-//          xBench->async();
-//      tEnd = GetTickCount();
-//      xBench->sync();
-//      tEnd2 = GetTickCount();
-//      printf( "%d %d %d\n" , nLoop, tEnd - tStart , tEnd2 -tStart );
-//      // synchron calls
-//      i = nLoop;
-//      tStart = GetTickCount();
-//      while (i--)
-//          xBench->sync();
-//      tEnd = GetTickCount();
-//      printf( "%d %d \n" , nLoop, tEnd - tStart );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -153,7 +153,7 @@ int main( int argc, char *argv[] )
                 }
                 else
                 {
-                    // just ensure that it is registered
+                    
                     createComponent( OUString("com.sun.star.bridge.Bridge.iiop"),
                                      OUString( "remotebridge.uno" SAL_DLLEXTENSION),
                                      rSMgr );
@@ -173,7 +173,7 @@ int main( int argc, char *argv[] )
                             rConnection,
                             new OInstanceProvider );
                         {
-                            // test the factory
+                            
                               Reference < XBridge > rBridge2 = rFactory->getBridge( OUString("bla blub") );
                               OSL_ASSERT( rBridge2.is() );
                               OSL_ASSERT( rBridge2->getDescription() == rBridge->getDescription( ) );
@@ -190,19 +190,19 @@ int main( int argc, char *argv[] )
                             printf( "got the remote object\n" );
                             if( ! bReverse )
                             {
-  //                                Reference < XComponent > rPerfTest( rInitialObject , UNO_QUERY );
-//                                  if( rPerfTest.is() )
-//                                  {
-//  //                                      doPerformanceTest( rPerfTest );
-//                                  }
-//                                  else
-//                                  {
+  
+
+
+
+
+
+
                                     testRemote( rInitialObject );
-//                                  }
+
                             }
                         }
-//                          Reference < XComponent > rComp( rBridge , UNO_QUERY );
-//                          rComp->dispose();
+
+
 
                         rInitialObject = Reference < XInterface > ();
                         printf( "Waiting...\n" );
@@ -212,7 +212,7 @@ int main( int argc, char *argv[] )
                     }
 
                     Reference < XBridge > rBridge = rFactory->getBridge( OUString("bla blub") );
-//                      OSL_ASSERT( ! rBridge.is() );
+
                 }
 
             }

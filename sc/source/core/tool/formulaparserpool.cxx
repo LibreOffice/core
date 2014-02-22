@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formulaparserpool.hxx"
@@ -50,8 +50,8 @@ private:
         OUString, Reference< XSingleComponentFactory >,
         OUStringHash, ::std::equal_to< OUString > > FactoryMap;
 
-    Reference< XComponentContext > mxContext;   /// Global component context.
-    FactoryMap          maFactories;            /// All parser factories, mapped by formula namespace.
+    Reference< XComponentContext > mxContext;   
+    FactoryMap          maFactories;            
 };
 
 ScParserFactoryMap::ScParserFactoryMap() :
@@ -59,16 +59,16 @@ ScParserFactoryMap::ScParserFactoryMap() :
 {
     if( mxContext.is() ) try
     {
-        // enumerate all implementations of the FormulaParser service
+        
         Reference< XContentEnumerationAccess > xFactoryEA( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< XEnumeration > xEnum( xFactoryEA->createContentEnumeration( OUString( "com.sun.star.sheet.FilterFormulaParser" ) ), UNO_SET_THROW );
-        while( xEnum->hasMoreElements() ) try // single try/catch for every element
+        while( xEnum->hasMoreElements() ) try 
         {
-            // create an instance of the formula parser implementation
+            
             Reference< XSingleComponentFactory > xCompFactory( xEnum->nextElement(), UNO_QUERY_THROW );
             Reference< XFilterFormulaParser > xParser( xCompFactory->createInstanceWithContext( mxContext ), UNO_QUERY_THROW );
 
-            // store factory in the map
+            
             OUString aNamespace = xParser->getSupportedNamespace();
             if( !aNamespace.isEmpty() )
                 maFactories[ aNamespace ] = xCompFactory;
@@ -101,7 +101,7 @@ Reference< XFormulaParser > ScParserFactoryMap::createFormulaParser(
 
 struct ScParserFactorySingleton : public ::rtl::Static< ScParserFactoryMap, ScParserFactorySingleton > {};
 
-} // namespace
+} 
 
 ScFormulaParserPool::ScFormulaParserPool( const ScDocument& rDoc ) :
     mrDoc( rDoc )
@@ -119,15 +119,15 @@ bool ScFormulaParserPool::hasFormulaParser( const OUString& rNamespace )
 
 Reference< XFormulaParser > ScFormulaParserPool::getFormulaParser( const OUString& rNamespace )
 {
-    // try to find an existing parser entry
+    
     ParserMap::iterator aIt = maParsers.find( rNamespace );
     if( aIt != maParsers.end() )
         return aIt->second;
 
-    // always create a new entry in the map (even if the following initialization fails)
+    
     Reference< XFormulaParser >& rxParser = maParsers[ rNamespace ];
 
-    // try to create a new parser object
+    
     if( SfxObjectShell* pDocShell = mrDoc.GetDocumentShell() ) try
     {
         Reference< XComponent > xComponent( pDocShell->GetModel(), UNO_QUERY_THROW );

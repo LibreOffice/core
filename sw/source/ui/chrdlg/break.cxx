@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/request.hxx>
@@ -98,9 +98,9 @@ IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, PageNumModifyHdl)
 IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
 {
     if(m_pPageNumBox->IsChecked()) {
-        // In case of differing page descriptions, test validity
+        
         const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
-        // position 0 says 'Without'.
+        
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( m_pPageCollBox->GetSelectEntry(),
@@ -117,7 +117,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
             case nsUseOnPage::PD_ALL: break;
             case nsUseOnPage::PD_LEFT: bOk = 0 == nUserPage % 2; break;
             case nsUseOnPage::PD_RIGHT: bOk = static_cast< sal_Bool >(nUserPage % 2); break;
-            default:; //prevent warning
+            default:; 
         }
         if(!bOk) {
             InfoBox(this, SW_RES(MSG_ILLEGAL_PAGENUM)).Execute();
@@ -156,7 +156,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
     m_pPageNumEdit->SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 
 
-    // Insert page description to Listbox
+    
     const sal_uInt16 nCount = rSh.GetPageDescCnt();
     sal_uInt16 i;
 
@@ -171,7 +171,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
         if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
-    //add landscape page
+    
     if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFmtName )))
             ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
@@ -203,7 +203,7 @@ void SwBreakDlg::CheckEnable()
     bEnable &= bPage;
     if ( bEnable )
     {
-        // position 0 says 'Without' page template.
+        
         const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
             bEnable = sal_False;

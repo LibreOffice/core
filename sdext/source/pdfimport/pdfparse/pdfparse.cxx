@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 
 #include "pdfparse.hxx"
 
-// workaround windows compiler: do not include multi_pass.hpp
+
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
@@ -35,7 +35,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/alloc.h>
 
-// disable warnings again because someone along the line has enabled them
+
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -113,7 +113,7 @@ public:
                 }
                 else if( c == '(' )
                     nBraceLevel++;
-                else if( c == '\\' ) // ignore escaped braces
+                else if( c == '\\' ) 
                 {
                     ++len;
                     ++scan;
@@ -134,14 +134,14 @@ public:
         {
             PDFGrammar<iteratorT>* pSelf = const_cast< PDFGrammar<iteratorT>* >( &rSelf );
 
-            // workaround workshop compiler: comment_p doesn't work
-            // comment     = comment_p("%")[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )];
+            
+            
             comment     = lexeme_d[ (ch_p('%') >> *(~ch_p('\r') & ~ch_p('\n')) >> eol_p)[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )] ];
 
             boolean     = (str_p("true") | str_p("false"))[boost::bind(&PDFGrammar::pushBool, pSelf, _1, _2)];
 
-            // workaround workshop compiler: confix_p doesn't work
-            //stream      = confix_p( "stream", *anychar_p, "endstream" )[boost::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
+            
+            
             stream      = (str_p("stream") >> *(anychar_p - str_p("endstream")) >> str_p("endstream"))[boost::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
 
             name        = lexeme_d[
@@ -149,10 +149,10 @@ public:
                             >> (*(anychar_p-chset_p("\t\n\f\r ()<>[]{}/%")-ch_p('\0')))
                                [boost::bind(&PDFGrammar::pushName, pSelf, _1, _2)] ];
 
-            // workaround workshop compiler: confix_p doesn't work
-            //stringtype  = ( confix_p("(",*anychar_p, ")") |
-            //                confix_p("<",*xdigit_p,  ">") )
-            //              [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
+            
+            
+            
+            
 
             stringtype  = ( ( ch_p('(') >> functor_parser<pdf_string_parser>() >> ch_p(')') ) |
                             ( ch_p('<') >> *xdigit_p >> ch_p('>') ) )
@@ -301,7 +301,7 @@ public:
 
     void pushComment( iteratorT first, iteratorT last )
     {
-        // add a comment to the current stack element
+        
         PDFComment* pComment =
             new PDFComment(iteratorToString(first,last));
         if( m_aObjectStack.empty() )
@@ -442,7 +442,7 @@ public:
         pDict->m_nOffset = first - m_aGlobalBegin;
 
         insertNewValue( pDict, first );
-        // will not come here if insertion fails (exception)
+        
         m_aObjectStack.push_back( pDict );
     }
     void endDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
@@ -472,7 +472,7 @@ public:
         pArray->m_nOffset = first - m_aGlobalBegin;
 
         insertNewValue( pArray, first );
-        // will not come here if insertion fails (exception)
+        
         m_aObjectStack.push_back( pArray );
     }
 
@@ -674,7 +674,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
     }
 #endif
     return pRet;
-#endif // WIN32
+#endif 
 }
 
 #if defined _MSC_VER

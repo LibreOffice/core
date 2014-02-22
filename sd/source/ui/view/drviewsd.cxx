@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,21 +91,21 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 {
                     case PAGE_FIRST:
                     {
-                        // jump to first page
+                        
                         SwitchPage(0);
                     }
                     break;
 
                     case PAGE_LAST:
                     {
-                        // jumpt to last page
+                        
                         SwitchPage(GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1);
                     }
                     break;
 
                     case PAGE_NEXT:
                     {
-                        // jump to next page
+                        
                         sal_uInt16 nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage < GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1)
@@ -117,7 +117,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 
                     case PAGE_PREVIOUS:
                     {
-                        // jump to previous page
+                        
                         sal_uInt16 nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage > 0)
@@ -172,7 +172,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideshow.is() && xSlideshow->isRunning() )
     {
-        // pen activated?
+        
         nState |= xSlideshow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
 
         nCurrentPage = (sal_uInt16)xSlideshow->getCurrentPageNumber();
@@ -180,7 +180,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         nLastPage = (sal_uInt16)xSlideshow->getLastPageNumber();
         bEndless = xSlideshow->isEndless();
 
-        // Get the page for the current page number.
+        
         SdPage* pPage = 0;
         if( nCurrentPage < GetDoc()->GetSdPageCount( PK_STANDARD ) )
             pPage = GetDoc()->GetSdPage (nCurrentPage, PK_STANDARD);
@@ -200,7 +200,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;
     }
 
-    // first page / previous page
+    
     if( nCurrentPage == nFirstPage )
     {
         nState |= NAVBTN_FIRST_DISABLED;
@@ -214,7 +214,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         nState |= NAVBTN_FIRST_ENABLED | NAVBTN_PREV_ENABLED;
     }
 
-    // last page / next page
+    
     if( nCurrentPage == nLastPage )
     {
         nState |= NAVBTN_LAST_DISABLED;
@@ -232,6 +232,6 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     rSet.Put( SfxStringItem( SID_NAVIGATOR_PAGENAME, aPageName ) );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

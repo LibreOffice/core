@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------
-// testcomponent - Loads a service and its testcomponent from dlls performs a test.
-// Expands the dll-names depending on the actual environment.
-// Example : testcomponent com.sun.star.io.Pipe stm
+
+
+
+
 //
-// Therefor the testcode must exist in teststm and the testservice must be named test.com.sun.star.io.Pipe
+
 //
 
 #include <stdio.h>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::test;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-// Needed to switch on solaris threads
+
 
 int main (int argc, char **argv)
 {
@@ -51,7 +51,7 @@ int main (int argc, char **argv)
         exit( 0 );
     }
 
-    // create service manager
+    
     Reference< XMultiServiceFactory > xSMgr = createRegistryServiceFactory(
         OUString( "applicat.rdb"  ) );
 
@@ -60,7 +60,7 @@ int main (int argc, char **argv)
 
     try
     {
-        // Create registration service
+        
         Reference < XInterface > x = xSMgr->createInstance(
             OUString("com.sun.star.registry.ImplementationRegistration") );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
@@ -75,7 +75,7 @@ int main (int argc, char **argv)
 
     try
     {
-        // Load dll for the tested component
+        
         for( int n = 2 ; n <argc ; n ++ ) {
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
             xReg->registerImplementation(
@@ -93,7 +93,7 @@ int main (int argc, char **argv)
 
     try
     {
-        // Load dll for the test component
+        
         sTestName = "test";
         sTestName += argv[2];
 
@@ -117,7 +117,7 @@ int main (int argc, char **argv)
     }
 
 
-    // Instantiate test service
+    
     sTestName = "test.";
     sTestName += argv[1];
 
@@ -136,10 +136,10 @@ int main (int argc, char **argv)
     sal_Int32 nErrorCount = 0;
     sal_Int32 nWarningCount = 0;
 
-    // loop until all test are performed
+    
     while( nHandle != -1 )
     {
-        // Instantiate serivce
+        
         Reference< XInterface > x =
             xSMgr->createInstance( OStringToOUString( argv[1] , RTL_TEXTENCODING_ASCII_US ) );
         if( ! x.is() )
@@ -148,7 +148,7 @@ int main (int argc, char **argv)
             exit( 1 );
         }
 
-        // do the test
+        
         try
         {
             nNewHandle = xTest->test(
@@ -166,7 +166,7 @@ int main (int argc, char **argv)
         }
 
 
-        // print errors and warning
+        
         Sequence<OUString> seqErrors = xTest->getErrors();
         Sequence<OUString> seqWarnings = xTest->getWarnings();
         if( seqWarnings.getLength() > nWarningCount )

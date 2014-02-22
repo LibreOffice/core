@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdr/properties/properties.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -35,31 +35,31 @@ namespace drawinglayer
         class ImpSdrTextAttribute
         {
         public:
-            // refcounter
+            
             sal_uInt32                          mnRefCount;
 
-            // all-text attributes. The SdrText itself and a copy
-            // of te OPO
+            
+            
             const SdrText*                      mpSdrText;
             const OutlinerParaObject*           mpOutlinerParaObject;
 
-            // Set when it's a FormText; contains all FormText attributes
+            
             SdrFormTextAttribute                maSdrFormTextAttribute;
 
-            // text distances
+            
             sal_Int32                           maTextLeftDistance;
             sal_Int32                           maTextUpperDistance;
             sal_Int32                           maTextRightDistance;
             sal_Int32                           maTextLowerDistance;
 
-            // #i101556# use versioning from text attributes to detect changes
+            
             sal_uInt32                          maPropertiesVersion;
 
-            // text alignments
+            
             SdrTextHorzAdjust                   maSdrTextHorzAdjust;
             SdrTextVertAdjust                   maSdrTextVertAdjust;
 
-            // bitfield
+            
             bool                                mbContour : 1;
             bool                                mbFitToSize : 1;
             bool                                mbAutoFit : 1;
@@ -115,14 +115,14 @@ namespace drawinglayer
                 {
                     if(XFT_NONE != eFormTextStyle)
                     {
-                        // text on path. Create FormText attribute
+                        
                         const SfxItemSet& rSet = pSdrText->GetItemSet();
                         maSdrFormTextAttribute = SdrFormTextAttribute(rSet);
                     }
 
-                    // #i101556# init with version number to detect changes of single text
-                    // attribute and/or style sheets in primitive data without having to
-                    // copy that data locally (which would be better from principle)
+                    
+                    
+                    
                     maPropertiesVersion = pSdrText->GetObject().GetProperties().getVersion();
                 }
             }
@@ -159,7 +159,7 @@ namespace drawinglayer
                 }
             }
 
-            // data read access
+            
             const SdrText& getSdrText() const
             {
                 OSL_ENSURE(mpSdrText, "Access to text of default version of ImpSdrTextAttribute (!)");
@@ -188,24 +188,24 @@ namespace drawinglayer
             SdrTextHorzAdjust getSdrTextHorzAdjust() const { return maSdrTextHorzAdjust; }
             SdrTextVertAdjust getSdrTextVertAdjust() const { return maSdrTextVertAdjust; }
 
-            // compare operator
+            
             bool operator==(const ImpSdrTextAttribute& rCandidate) const
             {
                 if(mpOutlinerParaObject != rCandidate.mpOutlinerParaObject)
                 {
                     if(mpOutlinerParaObject && rCandidate.mpOutlinerParaObject)
                     {
-                        // compares OPO and it's contents, but traditionally not the RedLining
-                        // which is not seen as model, but as temporary information
+                        
+                        
                         if(!(getOutlinerParaObject() == rCandidate.getOutlinerParaObject()))
                         {
                             return false;
                         }
 
-                        // #i102062# for primitive visualisation, the WrongList (SpellChecking)
-                        // is important, too, so use isWrongListEqual since there is no WrongList
-                        // comparison in the regular OutlinerParaObject compare (since it's
-                        // not-persistent data)
+                        
+                        
+                        
+                        
                         if(!(getOutlinerParaObject().isWrongListEqual(rCandidate.getOutlinerParaObject())))
                         {
                             return false;
@@ -213,7 +213,7 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // only one is zero; not equal
+                        
                         return false;
                     }
                 }
@@ -246,10 +246,10 @@ namespace drawinglayer
 
                 if(!pDefault)
                 {
-                    // use default constructor
+                    
                     pDefault = new ImpSdrTextAttribute();
 
-                    // never delete; start with RefCount 1, not 0
+                    
                     pDefault->mnRefCount++;
                 }
 
@@ -447,7 +447,7 @@ namespace drawinglayer
                 getSdrText().GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
             }
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@ void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
     _rRow = *m_aSetIter;
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
+
 Any SAL_CALL OStaticSet::getBookmark() throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::getBookmark" );
@@ -122,7 +122,7 @@ void OStaticSet::fillAllRows()
     }
 }
 
-// XResultSet
+
 sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::next" );
@@ -130,7 +130,7 @@ sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
 
     if(isAfterLast())
         return sal_False;
-    if(!m_bEnd) // not yet all records fetched
+    if(!m_bEnd) 
     {
         ++m_aSetIter;
         if(m_aSetIter == m_aSet.end() && !fetchRow())
@@ -217,7 +217,7 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     SAL_INFO("dbaccess", "OStaticSet::absolute" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     OSL_ENSURE(row,"OStaticSet::absolute: INVALID row number!");
-    // if row greater 0 than count from end - row means last
+    
     if(row < 0)
     {
         if(!m_bEnd)
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
             }
 
             if(row > (sal_Int32)m_aSet.size())
-                m_aSetIter = m_aSet.end();  // check again
+                m_aSetIter = m_aSet.end();  
             else
                 m_aSetIter = m_aSet.begin() + row;
         }
@@ -317,7 +317,7 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     OCacheSet::insertRow( _rInsertRow,_xTable);
     if(m_bInserted)
     {
-        m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); // we don't know where the new row is so we append it to the current rows
+        m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); 
         m_aSetIter = m_aSet.end() - 1;
         ((*m_aSetIter)->get())[0] = (_rInsertRow->get())[0] = getBookmark();
         m_bEnd = sal_False;
@@ -367,7 +367,7 @@ void OStaticSet::reset(const Reference< XResultSet> &_xDriverSet)
     }
     m_aSetIter = m_aSet.end();
     m_bEnd = sal_False;
-    m_aSet.push_back(NULL); // this is the beforefirst record
+    m_aSet.push_back(NULL); 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

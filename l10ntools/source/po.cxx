@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -42,7 +42,7 @@ public:
 
                         GenPoEntry();
     virtual             ~GenPoEntry();
-                        // Default copy constructor and copy operator work well
+                        
 
     virtual OString     getExtractCom() const   { return m_sExtractCom; }
     virtual OString     getReference() const    { return m_sReference; }
@@ -83,7 +83,7 @@ public:
 
 namespace
 {
-    // Convert a normal string to msg/po output string
+    
     static OString lcl_GenMsgString(const OString& rString)
     {
         if ( rString.isEmpty() )
@@ -110,7 +110,7 @@ namespace
         return sResult;
     }
 
-    // Convert msg string to normal form
+    
     static OString lcl_GenNormString(const OString& rString)
     {
         return
@@ -217,7 +217,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
  }
 
 //
-// Class PoEntry
+
 //
 
 PoEntry::PoEntry()
@@ -258,7 +258,7 @@ PoEntry::PoEntry(
         sMsgCtxt += ".quickhelptext"; break;
     case TTITLE:
         sMsgCtxt += ".title"; break;
-    // Default case is unneeded because the type of eType has only three element
+    
     }
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(rText);
@@ -358,14 +358,14 @@ bool PoEntry::isFuzzy() const
     return m_pGenPo->isFuzzy();
 }
 
-// Get translation string in merge format
+
 OString PoEntry::getMsgId() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getMsgId();
 }
 
-// Get translated string in merge format
+
 OString PoEntry::getMsgStr() const
 {
     assert( m_bIsInitialized );
@@ -387,7 +387,7 @@ OString PoEntry::genKeyId(const OString& rGenerator)
     boost::crc_32_type aCRC32;
     aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
     sal_uInt32 nCRC = aCRC32.checksum();
-    // Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
+    
     static const OString sSymbols =
         "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
     char sKeyId[6];
@@ -401,12 +401,12 @@ OString PoEntry::genKeyId(const OString& rGenerator)
 }
 
 //
-// Class PoHeader
+
 //
 
 namespace
 {
-    // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
+    
     static OString lcl_GetTime()
     {
         time_t aNow = time(NULL);
@@ -424,7 +424,7 @@ PoHeader::PoHeader( const OString& rExtSrc )
     m_pGenPo->setExtractCom("extracted from " + rExtSrc);
     m_pGenPo->setMsgStr(
         OString("Project-Id-Version: PACKAGE VERSION\n"
-        "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"
+        "Report-Msgid-Bugs-To: https:
         "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
         "POT-Creation-Date: ") + lcl_GetTime() +
         OString("\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -444,7 +444,7 @@ PoHeader::~PoHeader()
 }
 
 //
-// Class PoOfstream
+
 //
 
 PoOfstream::PoOfstream()
@@ -505,13 +505,13 @@ void PoOfstream::writeEntry( const PoEntry& rPoEntry )
 }
 
 //
-// Class PoIfstream
+
 //
 
 namespace
 {
 
-// Check the validity of read entry
+
 static bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 {
     const OString sMsgCtxt = rEntry.getMsgCtxt();
@@ -555,7 +555,7 @@ void PoIfstream::open( const OString& rFileName )
     assert( !isOpen() );
     m_aInPut.open( rFileName.getStr(), std::ios_base::in );
 
-    // Skip header
+    
     std::string sTemp;
     std::getline(m_aInPut,sTemp);
     while( !sTemp.empty() && !m_aInPut.eof() )

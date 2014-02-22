@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unoidx.hxx>
@@ -150,8 +150,8 @@ static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
     {
         rTmp = cUserDefined;
     }
-    // if the version is not English but the alternative index's name is
-    // "User-Defined" a " (user)" is appended
+    
+    
     else if(rTmp.equalsAscii(cUserDefined))
     {
         rTmp += cUserSuffix;
@@ -169,7 +169,7 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
     else if (!pShellRes->aTOXUserName.equalsAscii(cUserDefined) &&
         USER_AND_SUFFIXLEN == rTmp.getLength())
     {
-        //make sure that in non-English versions the " (user)" suffix is removed
+        
         if (rTmp.matchAsciiL(cUserDefined, sizeof(cUserDefined)) &&
             rTmp.matchAsciiL(cUserSuffix, sizeof(cUserSuffix), USER_LEN))
         {
@@ -188,7 +188,7 @@ class SwXDocumentIndex::StyleAccess_Impl
 {
 
 private:
-    /// can be destroyed threadsafely, so no UnoImplPtr here
+    
     ::rtl::Reference<SwXDocumentIndex> m_xParent;
 
     virtual ~StyleAccess_Impl();
@@ -196,7 +196,7 @@ private:
 public:
     StyleAccess_Impl(SwXDocumentIndex& rParentIdx);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL
@@ -205,17 +205,17 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 uno::RuntimeException);
 
-    // XIndexReplace
+    
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
@@ -233,7 +233,7 @@ class SwXDocumentIndex::TokenAccess_Impl
 {
 
 private:
-    /// can be destroyed threadsafely, so no UnoImplPtr here
+    
     ::rtl::Reference<SwXDocumentIndex> m_xParent;
 
     virtual ~TokenAccess_Impl();
@@ -242,7 +242,7 @@ public:
 
     TokenAccess_Impl(SwXDocumentIndex& rParentIdx);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL
@@ -251,17 +251,17 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 uno::RuntimeException);
 
-    // XIndexReplace
+    
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
@@ -310,7 +310,7 @@ lcl_TypeToPropertyMap_Index(const TOXTypes eType)
         case TOX_ILLUSTRATIONS: return PROPERTY_MAP_INDEX_ILLUSTRATIONS;
         case TOX_OBJECTS:       return PROPERTY_MAP_INDEX_OBJECTS;
         case TOX_AUTHORITIES:   return PROPERTY_MAP_BIBLIOGRAPHY;
-        //case TOX_USER:
+        
         default:
             return PROPERTY_MAP_INDEX_USER;
     }
@@ -320,7 +320,7 @@ class SwXDocumentIndex::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     SwXDocumentIndex &          m_rThis;
@@ -343,7 +343,7 @@ public:
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        
         , m_bIsDescriptor((0 == pBaseSection) ? true : false)
         , m_pDoc(&rDoc)
         , m_pProps((m_bIsDescriptor)
@@ -381,7 +381,7 @@ public:
             : rSection.GetTOXForm().GetFormMax();
     }
 protected:
-    // SwClient
+    
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
@@ -417,8 +417,8 @@ uno::Reference<text::XDocumentIndex>
 SwXDocumentIndex::CreateXDocumentIndex(
         SwDoc & rDoc, SwTOXBaseSection const& rSection)
 {
-    // re-use existing SwXDocumentIndex
-    // #i105557#: do not iterate over the registered clients: race condition
+    
+    
     SwSectionFmt *const pFmt = rSection.GetFmt();
     uno::Reference<text::XDocumentIndex> xIndex(pFmt->GetXObject(),
             uno::UNO_QUERY);
@@ -489,7 +489,7 @@ SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
         case TOX_AUTHORITIES:
             pArray[1] = "com.sun.star.text.Bibliography";
         break;
-        //case TOX_USER:
+        
         default:
             pArray[1] = "com.sun.star.text.UserDefinedIndex";
     }
@@ -504,7 +504,7 @@ throw (uno::RuntimeException)
     sal_uInt16 nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
     {
-//      case TOX_INDEX:             break;
+
         case TOX_USER:          nObjectType = SW_SERVICE_USER_INDEX;
         break;
         case TOX_CONTENT:       nObjectType = SW_SERVICE_CONTENT_INDEX;
@@ -525,7 +525,7 @@ throw (uno::RuntimeException)
 
 void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
 {
-    return refresh(); // update is from deprecated XDocumentIndex
+    return refresh(); 
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
@@ -671,8 +671,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_TOC_NEWLINE:
             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_NEWLINE);
         break;
-//          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
-//          break;
+
+
         case WID_HIDE_TABLEADER_PAGENUMBERS:
               lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TABLEADER);
         break ;
@@ -724,8 +724,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case WID_LABEL_CATEGORY:
         {
-            // convert file-format/API/external programmatic english name
-            // to internal UI name before usage
+            
+            
             OUString aName( SwStyleNameMapper::GetSpecialExtraUIName(
                                 lcl_AnyToString(rValue) ) );
             rTOXBase.SetSequenceName( aName );
@@ -797,7 +797,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             bForm = true;
-            // Header is on Pos 0
+            
             aForm.SetTemplate( 0, aString );
         }
         break;
@@ -830,7 +830,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_PARA_LEV10:
         {
             bForm = true;
-            // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
+            
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
@@ -839,7 +839,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         break;
         default:
-            //this is for items only
+            
             if (WID_PRIMARY_KEY > pEntry->nWID)
             {
                 const SwAttrSet& rSet =
@@ -960,7 +960,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     sTmp = m_pImpl->m_pProps->GetTypeName();
                 }
-                //I18N
+                
                 lcl_ConvertTOUNameToProgrammaticName(sTmp);
                 aRet <<= sTmp;
             }
@@ -1036,9 +1036,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_LABEL_CATEGORY:
             {
-                // convert internal UI name to
-                // file-format/API/external programmatic english name
-                // before usage
+                
+                
+                
                 OUString aName( SwStyleNameMapper::GetSpecialExtraProgName(
                                     pTOXBase->GetSequenceName() ) );
                 aRet <<= OUString( aName );
@@ -1136,7 +1136,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_PARA_HEAD:
             {
-                //Header steht an Pos 0
+                
                 OUString aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
                         nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
@@ -1165,7 +1165,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_PARA_LEV9:
             case WID_PARA_LEV10:
             {
-                // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
+                
                 sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
                 OUString aString;
                 SwStyleNameMapper::FillProgName(
@@ -1200,7 +1200,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             }
             break;
             default:
-                //this is for items only
+                
                 if(WID_PRIMARY_KEY > pEntry->nWID)
                 {
                     const SwAttrSet& rSet =
@@ -1267,7 +1267,7 @@ void lcl_CalcLayout(SwDoc *pDoc)
     }
 }
 
-// XRefreshable
+
 void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
 {
     {
@@ -1284,10 +1284,10 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
         }
         pTOXBase->Update();
 
-        // the insertion of TOC will affect the document layout
+        
         lcl_CalcLayout(m_pImpl->m_pDoc);
 
-        // page numbers
+        
         pTOXBase->UpdatePageNum();
     }
 
@@ -1305,7 +1305,7 @@ void SAL_CALL SwXDocumentIndex::addRefreshListener(
         const uno::Reference<util::XRefreshListener>& xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_Listeners.addInterface(
             cppu::UnoType<util::XRefreshListener>::get(), xListener);
 }
@@ -1314,7 +1314,7 @@ void SAL_CALL SwXDocumentIndex::removeRefreshListener(
         const uno::Reference<util::XRefreshListener>& xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_Listeners.removeInterface(
             cppu::UnoType<util::XRefreshListener>::get(), xListener);
 }
@@ -1343,7 +1343,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
     const SwTOXBase* pOld = pDoc->GetCurTOX( *aPam.Start() );
@@ -1365,13 +1365,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         lcl_ReAssignTOXType(pDoc, rTOXBase, m_pImpl->m_pProps->GetTypeName());
     }
-    //TODO: apply Section attributes (columns and background)
+    
     SwTOXBaseSection const*const pTOX =
         pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0, false );
 
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
 
-    // update page numbers
+    
     pTOX->GetFmt()->Add(m_pImpl.get());
     pTOX->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
     const_cast<SwTOXBaseSection*>(pTOX)->UpdatePageNum();
@@ -1425,7 +1425,7 @@ SwXDocumentIndex::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_Listeners.addInterface(
             cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
@@ -1435,7 +1435,7 @@ SwXDocumentIndex::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_Listeners.removeInterface(
             cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
@@ -1491,7 +1491,7 @@ SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
     }
 }
 
-// MetadatableMixin
+
 ::sfx2::Metadatable* SwXDocumentIndex::GetCoreObject()
 {
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
@@ -1520,7 +1520,7 @@ lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
     {
         case TOX_INDEX:         return PROPERTY_MAP_INDEX_MARK;
         case TOX_CONTENT:       return PROPERTY_MAP_CNTIDX_MARK;
-        //case TOX_USER:
+        
         default:
             return PROPERTY_MAP_USER_MARK;
     }
@@ -1530,7 +1530,7 @@ class SwXDocumentIndexMark::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
     SwXDocumentIndexMark & m_rThis;
     bool m_bInReplaceMark;
 
@@ -1566,8 +1566,8 @@ public:
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
         , m_EventListeners(m_Mutex)
-// #i112513#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
-//        , m_bIsDescriptor(0 == pMark)
+
+
         , m_bIsDescriptor((0 == pMark) ? true : false)
         , m_TypeDepend(this, pType)
         , m_pTOXMark(pMark)
@@ -1584,7 +1584,7 @@ public:
 
     void DeleteTOXMark()
     {
-        m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Modify!
+        m_pDoc->DeleteTOXMark(m_pTOXMark); 
         m_pTOXMark = 0;
     }
 
@@ -1609,7 +1609,7 @@ public:
 
     void    Invalidate();
 protected:
-    // SwClient
+    
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
@@ -1624,7 +1624,7 @@ void SwXDocumentIndexMark::Impl::Invalidate()
                 &m_TypeDepend);
         }
     }
-    if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
+    if (!m_bInReplaceMark) 
     {
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
         m_EventListeners.disposeAndClear(ev);
@@ -1637,7 +1637,7 @@ void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolIt
 {
     ClientModify(this, pOld, pNew);
 
-    if (!GetRegisteredIn()) // removed => dispose
+    if (!GetRegisteredIn()) 
     {
         Invalidate();
     }
@@ -1663,9 +1663,9 @@ uno::Reference<text::XDocumentIndexMark>
 SwXDocumentIndexMark::CreateXDocumentIndexMark(
         SwDoc & rDoc, SwTOXType & rType, SwTOXMark & rMark)
 {
-    // re-use existing SwXDocumentIndexMark
-    // NB: xmloff depends on this caching to generate ID from the address!
-    // #i105557#: do not iterate over the registered clients: race condition
+    
+    
+    
     uno::Reference< text::XDocumentIndexMark > xTOXMark(rMark.GetXTOXMark());
     if (!xTOXMark.is())
     {
@@ -1868,7 +1868,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //which must now return sal_True
+    
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwTOXMark aMark (pTOXType);
     if (!m_pImpl->m_sAltText.isEmpty())
@@ -1936,15 +1936,15 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     SwDoc *const pDoc( rPam.GetDoc() );
     UnoActionContext aAction(pDoc);
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
-    // n.b.: toxmarks must have either alternative text or an extent
+    
     if (bMark && !rMark.GetAlternativeText().isEmpty())
     {
         rPam.Normalize(true);
         rPam.DeleteMark();
         bMark = false;
     }
-    // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
-    // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
+    
+    
     if (!bMark && rMark.GetAlternativeText().isEmpty())
     {
         rMark.SetAlternativeText( OUString(' ') );
@@ -1970,12 +1970,12 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
         rPam.Exchange();
     }
 
-    // rMark was copied into the document pool; now retrieve real format...
+    
     SwTxtAttr * pTxtAttr(0);
     if (bMark)
     {
-        // #i107672#
-        // ensure that we do not retrieve a different mark at the same position
+        
+        
         ::std::vector<SwTxtAttr *> const newMarks(
             rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
@@ -2049,7 +2049,7 @@ SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
     {
-        m_pImpl->DeleteTOXMark(); // call Invalidate() via modify!
+        m_pImpl->DeleteTOXMark(); 
     }
 }
 
@@ -2058,7 +2058,7 @@ SwXDocumentIndexMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -2067,7 +2067,7 @@ SwXDocumentIndexMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -2090,7 +2090,7 @@ SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException)
     {
         const uno::Reference< beans::XPropertySetInfo > xInfo =
             m_pImpl->m_rPropSet.getPropertySetInfo();
-        // extend PropertySetInfo!
+        
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         xInfos[nPos] = new SfxExtItemPropertySetInfo(
             aSwMapProvider.GetPropertyMapEntries(
@@ -2802,7 +2802,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
     {
         const beans::PropertyValue* pProperties = pTokens[i].getConstArray();
         const sal_Int32 nProperties = pTokens[i].getLength();
-        //create an invalid token
+        
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)
         {
@@ -2893,7 +2893,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nChapterFormat = nFormat;
             }
-// #i53420#
+
             else if ( pProperties[j].Name == "ChapterLevel" )
             {
                 const sal_Int16 nLevel = lcl_AnyToInt16(pProperties[j].Value);
@@ -2916,29 +2916,29 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nAuthorityField = nType;
             }
-            // #i21237#
+            
             else if ( pProperties[j].Name == "WithTab" )
             {
                 aToken.bWithTab = lcl_AnyToBool(pProperties[j].Value);
             }
 
         }
-        //exception if wrong TokenType
+        
         if(TOKEN_END <= aToken.eTokenType )
         {
             throw lang::IllegalArgumentException();
         }
-        // set TokenType from TOKEN_ENTRY_TEXT to TOKEN_ENTRY if it is
-        // not a content index
+        
+        
         if(TOKEN_ENTRY_TEXT == aToken.eTokenType &&
                                 (TOX_CONTENT != rTOXBase.GetType()))
         {
             aToken.eTokenType = TOKEN_ENTRY;
         }
-// #i53420#
-// check for chapter format allowed values if it was TOKEN_ENTRY_NO type
-// only allowed value are CF_NUMBER and CF_NUM_NOPREPST_TITLE
-// reading from file
+
+
+
+
         if( TOKEN_ENTRY_NO == aToken.eTokenType )
         {
             switch(aToken.nChapterFormat)
@@ -2980,7 +2980,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         throw lang::IndexOutOfBoundsException();
     }
 
-    // #i21237#
+    
     SwFormTokens aPattern = rTOXBase.GetTOXForm().
         GetPattern(static_cast<sal_uInt16>(nIndex));
     SwFormTokens::iterator aIt = aPattern.begin();
@@ -2988,12 +2988,12 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     sal_uInt16 nTokenCount = 0;
     uno::Sequence< beans::PropertyValues > aRetSeq;
     OUString aString;
-    while(aIt != aPattern.end()) // #i21237#
+    while(aIt != aPattern.end()) 
     {
         nTokenCount++;
         aRetSeq.realloc(nTokenCount);
         beans::PropertyValues* pTokenProps = aRetSeq.getArray();
-        SwFormToken  aToken = *aIt; // #i21237#
+        SwFormToken  aToken = *aIt; 
 
         uno::Sequence< beans::PropertyValue >& rCurTokenSeq =
             pTokenProps[nTokenCount-1];
@@ -3007,15 +3007,15 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         {
             case TOKEN_ENTRY_NO:
             {
-// #i53420#
-// writing to file (from doc to properties)
+
+
                 sal_Int32 nElements = 2;
                 sal_Int32 nCurrentElement = 0;
 
-                // check for default value
+                
                 if (aToken.nChapterFormat != CF_NUMBER)
                 {
-                    nElements++;//we need the element
+                    nElements++;
                 }
                 if( aToken.nOutlineLevel != MAXLEVEL )
                 {
@@ -3036,9 +3036,9 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 {
                     pArr[nCurrentElement].Name = "ChapterFormat";
                     sal_Int16 nVal;
-// the allowed values for chapter format, when used as entry number,
-// are CF_NUMBER and CF_NUM_NOPREPST_TITLE only, all else forced to
-//CF_NUMBER
+
+
+
                     switch(aToken.nChapterFormat)
                     {
                     default:
@@ -3052,7 +3052,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     pArr[nCurrentElement++].Value <<= nVal;
                 }
 
-                // only  a ChapterLevel != MAXLEVEL is registered
+                
                 if (aToken.nOutlineLevel != MAXLEVEL)
                 {
                     pArr[nCurrentElement].Name = "ChapterLevel";
@@ -3060,7 +3060,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 }
             }
             break;
-            case TOKEN_ENTRY:   // no difference between Entry and Entry Text
+            case TOKEN_ENTRY:   
             case TOKEN_ENTRY_TEXT:
             {
                 rCurTokenSeq.realloc( 2 );
@@ -3075,7 +3075,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
             break;
             case TOKEN_TAB_STOP:
             {
-                rCurTokenSeq.realloc(5); // #i21237#
+                rCurTokenSeq.realloc(5); 
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
@@ -3099,7 +3099,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);
                 pArr[3].Name = "CharacterStyleName";
                 pArr[3].Value <<= aProgCharStyle;
-                // #i21237#
+                
                 pArr[4].Name = "WithTab";
                 pArr[4].Value <<= static_cast<sal_Bool>(aToken.bWithTab);
             }
@@ -3163,7 +3163,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     break;
                 }
                 pArr[2].Value <<= nVal;
-// #i53420#
+
                 pArr[3].Name = "ChapterLevel";
                 pArr[3].Value <<= aToken.nOutlineLevel;
             }
@@ -3211,7 +3211,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 ;
         }
 
-        ++aIt; // #i21237#
+        ++aIt; 
     }
 
     uno::Any aRet;

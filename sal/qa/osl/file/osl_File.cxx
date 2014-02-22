@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -47,9 +47,9 @@ using ::rtl::OUStringToOString;
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 /** detailed wrong message.
 */
@@ -234,18 +234,18 @@ inline void printTime( TimeValue *tv )
 */
 /* FIXME: the above assertion is bogus */
 
-#if ( defined UNX )                      //precision of time in Windows is better than UNX
-#   define delta 2000                    //time precision, 2000ms
+#if ( defined UNX )                      
+#   define delta 2000                    
 #else
-#   define delta 1800                    //time precision, 1.8s
+#   define delta 1800                    
 #endif
 
 inline sal_Int64 t_abs64(sal_Int64 _nValue)
 {
-    // std::abs() seems to have some ambiguity problems (so-texas)
-    // return abs(_nValue);
+    
+    
     printf("t_abs64(%ld)\n", (long) _nValue);
-    // CPPUNIT_ASSERT(_nValue < 2147483647);
+    
 
     if (_nValue < 0)
     {
@@ -256,11 +256,11 @@ inline sal_Int64 t_abs64(sal_Int64 _nValue)
 
 inline bool t_compareTime( TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_Int32 nDelta)
 {
-    // sal_uInt64 uTimeValue;
-    // sal_Int64 iTimeValue;
+    
+    
     //
-    // iTimeValue = t_abs64(( tv1->Seconds - tv2->Seconds) * 1000000000 + tv1->Nanosec - tv2->Nanosec);
-    // uTimeValue = ( iTimeValue / 1000000 );
+    
+    
 
     sal_Int32 nDeltaSeconds = m_aEndTime->Seconds - m_aStartTime->Seconds;
     sal_Int32 nDeltaNanoSec = sal_Int32(m_aEndTime->Nanosec) - sal_Int32(m_aStartTime->Nanosec);
@@ -279,7 +279,7 @@ inline bool t_compareTime( TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_
 inline bool compareFileName( const ::rtl::OUString & ustr1, const ::rtl::OUString & ustr2 )
 {
     bool bOk;
-//on Windows, the separator is '\', so here change to '/', then compare
+
 #if defined (WNT )
     ::rtl::OUString ustr1new,ustr2new;
     sal_Unicode reverseSlash = (sal_Unicode)'\\';
@@ -305,13 +305,13 @@ inline bool compareFileName( const ::rtl::OUString & ustr, const sal_Char *astr 
 {
     (void)ustr;
     ::rtl::OUString ustr1 = rtl::OUString::createFromAscii( astr );
-    bool bOk = ustr1.equalsIgnoreAsciiCase( ustr1 ); // TODO: does it really compare with the same var?
+    bool bOk = ustr1.equalsIgnoreAsciiCase( ustr1 ); 
 
     return bOk;
 }
 
 /** simple version to judge if a file name or directory name is a URL or a system path, just to see if it
-    is start with "file:///";.
+    is start with "file:
 */
 inline bool isURL( const sal_Char *pathname )
 {
@@ -319,26 +319,26 @@ inline bool isURL( const sal_Char *pathname )
 }
 
 /** simple version to judge if a file name or directory name is a URL or a system path, just to see if it
-    is start with "file:///";.
+    is start with "file:
 */
 inline bool isURL( const ::rtl::OUString pathname )
 {
     return pathname.startsWith( aPreURL );
 }
 
-/** concat two part to form a URL or system path, add PATH_SEPARATOR between them if necessary, add "file:///" to beginning if necessary.
+/** concat two part to form a URL or system path, add PATH_SEPARATOR between them if necessary, add "file:
 */
 inline void concatURL( ::rtl::OUString & pathname1, const ::rtl::OUString & pathname2 )
 {
-    //check if pathname1 is full qualified URL;
+    
     if ( !isURL( pathname1 ) )
     {
         ::rtl::OUString     aPathName   = pathname1.copy( 0 );
-        ::osl::FileBase::getFileURLFromSystemPath( pathname1, aPathName ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( pathname1, aPathName ); 
         pathname1   = aPathName.copy( 0 );
     }
 
-    //check if '/' is in the end of pathname1 or at the begin of pathname2;
+    
     if ( !pathname1.endsWith( aSlashURL ) && !pathname2.startsWith( aSlashURL ) )
         pathname1 += aSlashURL;
     pathname1 += pathname2;
@@ -352,11 +352,11 @@ inline void createTestFile( const ::rtl::OUString filename )
     ::osl::FileBase::RC nError;
 
     if ( !isURL( filename ) )
-        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); 
 
     File aFile(aPathURL);
     nError = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
-    //CPPUNIT_ASSERT_MESSAGE( "In createTestFile Function: creation ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
+    
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
     {
         printf("createTestFile failed!\n");
@@ -379,14 +379,14 @@ inline void createTestFile( const ::rtl::OUString basename, const ::rtl::OUStrin
 */
 inline void deleteTestFile( const ::rtl::OUString filename )
 {
-    // LLA: printf("deleteTestFile\n");
+    
     ::rtl::OUString     aPathURL   = filename.copy( 0 );
     ::osl::FileBase::RC nError;
 
     if ( !isURL( filename ) )
-        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); 
 
-    nError = ::osl::File::setAttributes( aPathURL, osl_File_Attribute_GrpWrite| osl_File_Attribute_OwnWrite| osl_File_Attribute_OthWrite ); // if readonly, make writtenable.
+    nError = ::osl::File::setAttributes( aPathURL, osl_File_Attribute_GrpWrite| osl_File_Attribute_OwnWrite| osl_File_Attribute_OthWrite ); 
     CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: set writtenable ", ( ::osl::FileBase::E_None == nError ) || ( ::osl::FileBase::E_NOENT == nError ) );
 
     nError = ::osl::File::remove( aPathURL );
@@ -411,9 +411,9 @@ inline void createTestDirectory( const ::rtl::OUString dirname )
     ::osl::FileBase::RC nError;
 
     if ( !isURL( dirname ) )
-        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); 
     nError = ::osl::Directory::create( aPathURL );
-    //CPPUNIT_ASSERT_MESSAGE( "In createTestDirectory Function: creation: ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
+    
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
       printf("createTestDirectory failed!\n");
 }
@@ -435,11 +435,11 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
     if ( !isURL( dirname ) )
-        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); 
 
     ::osl::Directory testDir( aPathURL );
     if ( testDir.isOpen() )
-        testDir.close();  //close if still open.
+        testDir.close();  
 
     nError = ::osl::Directory::remove( aPathURL );
 
@@ -468,7 +468,7 @@ typedef enum {
     osl_Check_Mode_WriteAccess
 } oslCheckMode;
 
-// not used here
+
 inline bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode )
 {
     ::osl::FileBase::RC   nError1, nError2;
@@ -481,18 +481,18 @@ inline bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode )
 
         switch ( nCheckMode ) {
             case osl_Check_Mode_Exist:
-                /// check if the file is exist.
+                
                 if ( ::osl::FileBase::E_None == nError1 )
                     bCheckResult = true;
                 break;
             case osl_Check_Mode_OpenAccess:
-                /// check if the file is openable.
+                
                 if ( ::osl::FileBase::E_None == nError1 )
                     bCheckResult = true;
                 break;
             case osl_Check_Mode_WriteAccess:
-                /// check the file name and whether it can be written.
-                /// write chars into the file.
+                
+                
                 sal_uInt64 nCount_write;
                 nError2 = testFile.write( pBuffer_Char, 10, nCount_write );
                 if ( ::osl::FileBase::E_None == nError2 )
@@ -501,7 +501,7 @@ inline bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode )
 
             default:
                 bCheckResult = false;
-        }/// swith
+        }
 
         nError2 = testFile.close();
         CPPUNIT_ASSERT_MESSAGE( " in CheckFile() function, close file ", nError2 == FileBase::E_None );
@@ -511,18 +511,18 @@ inline bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode )
     return bCheckResult;
 }
 
-//check if the file exist
+
 inline bool ifFileExist( const ::rtl::OUString & str )
 {
     ::osl::File testFile( str );
     return ( osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Read ) );
 }
 
-//check if the file can be written
+
 inline bool ifFileCanWrite( const ::rtl::OUString & str )
 {
     bool  bCheckResult = false;
-    //on Windows, the file has no write right, but can be written
+    
 #ifdef WNT
     ::rtl::OUString  aUStr  = str.copy( 0 );
     if ( isURL( str ) )
@@ -532,7 +532,7 @@ inline bool ifFileCanWrite( const ::rtl::OUString & str )
     const char *path = aString.getStr();
     if (( _access( path, 2 ) ) != -1 )
          bCheckResult = sal_True;
-     //on UNX, just test if open success with osl_File_OpenFlag_Write
+     
 #else
     ::osl::File testFile( str );
     bCheckResult = (osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Write ));
@@ -547,7 +547,7 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
     FileBase::RC    rc;
     bool        bCheckResult= false;
 
-    //::std::auto_ptr<Directory> pDir( new Directory( str ) );
+    
     Directory aDir( str );
     rc = aDir.open();
 
@@ -563,7 +563,7 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
                     bCheckResult = true;
                 break;
             case osl_Check_Mode_ReadAccess:
-                //rc = pDir->getNextItem( rItem, 0 );
+                
                 rc = aDir.getNextItem( rItem, 0 );
                 if ( ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT ) )
                     bCheckResult = true;
@@ -572,11 +572,11 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
                 break;
             case osl_Check_Mode_WriteAccess:
                 ( ( aUString += str ) += aSlashURL ) += aTmpName2;
-                //if ( ( rc = pDir->create( aUString ) ) == ::osl::FileBase::E_None )
+                
                 if ( ( rc = Directory::create( aUString ) ) == ::osl::FileBase::E_None )
                 {
                     bCheckResult = true;
-                    //rc = pDir->remove( aUString );
+                    
                     rc = Directory::remove( aUString );
                     CPPUNIT_ASSERT( rc == ::osl::FileBase::E_None );
                 }
@@ -586,12 +586,12 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
 
             default:
                 bCheckResult = false;
-        }// switch
+        }
 
         rc = aDir.close();
         CPPUNIT_ASSERT( rc == FileBase::E_None );
 
-    }//if
+    }
 
     return bCheckResult;
 }
@@ -614,7 +614,7 @@ inline ::rtl::OString outputError( const ::rtl::OString & returnVal, const ::rtl
 
 /** Change file mode, two version in UNIX and Windows;.
 */
-#if ( defined UNX )         //chmod() method is differ in Windows
+#if ( defined UNX )         
 inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 {
     rtl::OString    aString;
@@ -625,7 +625,7 @@ inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
     aString = ::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US );
     chmod( aString.getStr(), mode );
 }
-#else                                          //Windows version
+#else                                          
 inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 {
     (void)filepath;
@@ -638,24 +638,24 @@ inline ::rtl::OUString getCurrentPID( void );
 
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for FileBase class
-//------------------------------------------------------------------------
+
+
+
 namespace osl_FileBase
 {
 
-    //---------------------------------------------------------------------
-    // testing the method
-    // static inline RC getAbsoluteFileURL( const ::rtl::OUString& ustrBaseDirectoryURL,
-    //                                      const ::rtl::OUString& ustrRelativeFileURL,
-    //                                      ::rtl::OUString& ustrAbsoluteFileURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
 
     class getAbsoluteFileURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase  aFileBase;
+        
         ::rtl::OUString  aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
-            // ::osl::FileBase::RC nError;
+            
 
         public:
 
@@ -687,7 +687,7 @@ namespace osl_FileBase
       CPPUNIT_TEST( getAbsoluteFileURL_004 );
       CPPUNIT_TEST_SUITE_END();
 
-        }; //class getAbsoluteFileURL
+        }; 
 
     void getAbsoluteFileURL::check_getAbsoluteFileURL( rtl::OUString const& _suBaseURL,  rtl::OString const& _sRelativeURL, ::osl::FileBase::RC _nAssumeError, rtl::OUString const& _suAssumeResultStr )
     {
@@ -746,7 +746,7 @@ namespace osl_FileBase
     rtl::OUString suAssume;
 #if (defined UNX )
     suAssume = aUserDirectoryURL.concat( rtl::OUString("/.a/") );
-#else //windows
+#else 
     suAssume = aUserDirectoryURL.concat( rtl::OUString("/.a") );
 #endif
     check_getAbsoluteFileURL( aUserDirectoryURL, "./.a/mydir/..",::osl::FileBase::E_None, suAssume );
@@ -755,14 +755,14 @@ namespace osl_FileBase
   {
     rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/tmp/ok") );
 #if ( defined UNX )
-    check_getAbsoluteFileURL( aUserDirectoryURL, "tmp//ok",::osl::FileBase::E_None, suAssume );
+    check_getAbsoluteFileURL( aUserDirectoryURL, "tmp
 #else
-    check_getAbsoluteFileURL( aUserDirectoryURL, "tmp//ok",::osl::FileBase::E_INVAL, suAssume );
+    check_getAbsoluteFileURL( aUserDirectoryURL, "tmp
 #endif
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_002()
   {
-#if ( defined UNX )     //Link is not defined in Windows
+#if ( defined UNX )     
         ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
         ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
         ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/canonical.name");
@@ -782,13 +782,13 @@ namespace osl_FileBase
         CPPUNIT_ASSERT( fd == 0 );
 #endif
   }
-  //please see line# 930
+  
   void getAbsoluteFileURL::getAbsoluteFileURL_003()
   {
   }
     void getAbsoluteFileURL::getAbsoluteFileURL_004()
     {
-        //create two level directories under $Temp/PID/
+        
         ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString("/test1");
         createTestDirectory( aUStrUpBase );
         ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString("/test1/dir1");
@@ -799,20 +799,20 @@ namespace osl_FileBase
         deleteTestDirectory( aUStrBase );
         deleteTestDirectory( aUStrUpBase );
     }
-    //---------------------------------------------------------------------
-    // testing two methods:
-    // static inline RC getSystemPathFromFileURL( const ::rtl::OUString& ustrFileURL,
-    //                ::rtl::OUString& ustrSystemPath )
-        // static RC getFileURLFromSystemPath( const ::rtl::OUString & ustrSystemPath,
-        //                                ::rtl::OUString & ustrFileURL );
-    //---------------------------------------------------------------------
+    
+    
+    
+    
+        
+        
+    
     class SystemPath_FileURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase aFileBase;
-        // ::rtl::OUString aUStr;
-        // ::osl::FileBase::RC nError;
+        
+        
+        
 
-      //void check_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sAssumeResultStr);
+      
       void check_SystemPath_FileURL(rtl::OString const& _sSource, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sAssumeResultStr, bool bDirection = true );
       void checkWNTBehaviour_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sWNTAssumeResultString );
       void checkUNXBehaviour_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sUnixAssumeResultString );
@@ -820,7 +820,7 @@ namespace osl_FileBase
       void checkUNXBehaviour_getFileURLFromSystemPath(rtl::OString const& _sSysPath, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sUnixAssumeResultString);
 
     public:
-        // test code.
+        
         void getSystemPathFromFileURL_001_1();
         void getSystemPathFromFileURL_001_2();
         void getSystemPathFromFileURL_001_21();
@@ -845,7 +845,7 @@ namespace osl_FileBase
         void getSystemPathFromFileURL_004();
         void getSystemPathFromFileURL_005();
 
-      //test case fot getFileURLFromSystemPath
+      
             void getFileURLFromSystemPath_001();
             void getFileURLFromSystemPath_002();
             void getFileURLFromSystemPath_003();
@@ -882,14 +882,14 @@ namespace osl_FileBase
         CPPUNIT_TEST( getFileURLFromSystemPath_004 );
         CPPUNIT_TEST( getFileURLFromSystemPath_005 );
         CPPUNIT_TEST_SUITE_END();
-    };// class SystemPath_FileURL
+    };
 
 
-    // if bDirection==sal_True, check getSystemPathFromFileURL
-    // if bDirection==sal_False, check getFileURLFromSystemPath
+    
+    
     void SystemPath_FileURL::check_SystemPath_FileURL(rtl::OString const& _sSource, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sAssumeResultStr, bool bDirection)
     {
-        // PRE: URL as String
+        
         rtl::OUString suSource;
         rtl::OUString suStr;
         suSource = rtl::OStringToOUString(_sSource, RTL_TEXTENCODING_UTF8);
@@ -899,8 +899,8 @@ namespace osl_FileBase
     else
       nError = osl::FileBase::getFileURLFromSystemPath( suSource, suStr );
 
-        // if the given string is gt length 0,
-        // we check also this string
+        
+        
         rtl::OString sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
         rtl::OString sError = errorToString(nError);
     if ( bDirection )
@@ -908,9 +908,9 @@ namespace osl_FileBase
     else
       printf("getFileURLFromSystemPath('%s') deliver File URL: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
 
-        // rtl::OUString suStrEncode = rtl::Uri::encode(suStr, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-        // sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
-        // printf("UTF8: %s\n", sStr.getStr() );
+        
+        
+        
 
         if (!_sAssumeResultStr.isEmpty())
         {
@@ -991,14 +991,14 @@ namespace osl_FileBase
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_21()
     {
-      //        rtl::OString sURL("%2f");
+      
       rtl::OString sURL("%2F");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/"); // LLA: this is may be a BUG
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/"); 
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_22()
     {
-      rtl::OString sURL("file:///tmp%2Fmydir");
+      rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
@@ -1016,62 +1016,62 @@ namespace osl_FileBase
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_4()
     {
-        rtl::OString sURL("file://");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_41()
     {
-        rtl::OString sURL("file://localhost/tmp");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_5()
     {
-        rtl::OString sURL("file:///tmp");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_51()
     {
-        rtl::OString sURL("file://c:/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:/tmp"); // LLA: this is may be a BUG
+        rtl::OString sURL("file:
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:/tmp"); 
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_52()
     {
-        rtl::OString sURL("file:///c:/tmp");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_53()
     {
-// LLA: is this a legal file path?
-        rtl::OString sURL("file:///c|/tmp");
+
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c|/tmp");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_6()
     {
-        rtl::OString sURL("file:///tmp/first");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/first");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_61()
     {
-        rtl::OString sURL("file:///c:/tmp/first");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/first");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\first");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_7()
     {
-        rtl::OString sURL("file:///tmp/../second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second"); // LLA: may be a BUG
+        rtl::OString sURL("file:
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second"); 
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_71()
     {
-        rtl::OString sURL("file:///c:/tmp/../second");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/../second");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\..\\second");
     }
@@ -1083,35 +1083,35 @@ namespace osl_FileBase
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_81()
     {
-        rtl::OString sURL("file://~/tmp");
+        rtl::OString sURL("file:
     char* home_path;
     home_path = getenv("HOME");
     rtl::OString expResult(home_path);
     expResult += "/tmp";
     checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, expResult );
-    //  checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "\\tmp");
+    
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_9()
     {
-        rtl::OString sURL("file:///tmp/first%20second");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/first second");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_91()
     {
-        rtl::OString sURL("file:///c:/tmp/first%20second");
+        rtl::OString sURL("file:
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/first second");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\first second");
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_92()
     {
-        rtl::OString sURL("ca@#;+.,$///78no%01ni..name");
+        rtl::OString sURL("ca@#;+.,$
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
 
-        //normal legal case
+        
     void SystemPath_FileURL::getSystemPathFromFileURL_004()
         {
         ::rtl::OUString aUStr;
@@ -1131,7 +1131,7 @@ namespace osl_FileBase
 
         }
 
-        //CJK characters case
+        
     void SystemPath_FileURL::getSystemPathFromFileURL_005()
         {
             ::rtl::OUString aUStr;
@@ -1159,7 +1159,7 @@ namespace osl_FileBase
         char* home_path;
         home_path = getenv("HOME");
         rtl::OString expResult(home_path);
-        expResult = "file://"+ expResult + "/tmp";
+        expResult = "file:
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, expResult );
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "~/tmp");
      }
@@ -1167,18 +1167,18 @@ namespace osl_FileBase
      {
         rtl::OString sSysPath("c:/tmp");
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "c:/tmp");
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///c:/tmp");
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:
      }
      void SystemPath_FileURL::getFileURLFromSystemPath_003()
      {
-        rtl::OString sSysPath("file:///temp");
+        rtl::OString sSysPath("file:
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
      }
     void SystemPath_FileURL::getFileURLFromSystemPath_004()
      {
-        rtl::OString sSysPath("//tmp//first start");
-        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start");
+        rtl::OString sSysPath("
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
      }
      void SystemPath_FileURL::getFileURLFromSystemPath_005()
@@ -1187,21 +1187,21 @@ namespace osl_FileBase
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
      }
-         // start with "~user", not impletment
-    //      void SystemPath_FileURL::getFileURLFromSystemPath_006()
+         
+    
 
 
 
 
-    //---------------------------------------------------------------------
-    // testing the method
-    // static inline RC searchFileURL(  const ::rtl::OUString& ustrFileName,
-    //                                  const ::rtl::OUString& ustrSearchPath,
-    //                                  ::rtl::OUString& ustrFileURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
     class searchFileURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase aFileBase;
+        
         ::rtl::OUString aUStr;
         ::osl::FileBase::RC nError1, nError2, nError3,nError4;
 
@@ -1212,7 +1212,7 @@ namespace osl_FileBase
             , nError2(FileBase::E_None)
             , nError3(FileBase::E_None)
             , nError4(FileBase::E_None) {}
-        // test code.
+        
         void searchFileURL_001()
         {
             /* search file is passed by system filename */
@@ -1290,22 +1290,22 @@ namespace osl_FileBase
         CPPUNIT_TEST( searchFileURL_004 );
         CPPUNIT_TEST( searchFileURL_005 );
         CPPUNIT_TEST_SUITE_END();
-    };// class searchFileURL
+    };
 
 
-    //---------------------------------------------------------------------
-    // testing the method
-    // static inline RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class getTempDirURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase aFileBase;
+        
         ::rtl::OUString aUStr;
         ::osl::FileBase::RC nError;
 
         public:
         getTempDirURL() :nError(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
              nError = FileBase::getTempDirURL( aUStr );
@@ -1315,7 +1315,7 @@ namespace osl_FileBase
         {
         }
 
-        // test code.
+        
         void getTempDirURL_001()
         {
 
@@ -1335,18 +1335,18 @@ namespace osl_FileBase
         CPPUNIT_TEST( getTempDirURL_001 );
         CPPUNIT_TEST( getTempDirURL_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getTempDirURL
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  static inline RC createTempFile( ::rtl::OUString* pustrDirectoryURL,
-    //                                   oslFileHandle* pHandle,
-    //                                   ::rtl::OUString* pustrTempFileURL)
-    //---------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
     class createTempFile:public CppUnit::TestFixture
     {
-        //::osl::FileBase aFileBase;
+        
         ::osl::FileBase::RC nError1, nError2;
         bool bOK;
 
@@ -1357,13 +1357,13 @@ namespace osl_FileBase
         public:
         createTempFile() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
 
-        // initialization
+        
         void setUp()
         {
             pHandle = new oslFileHandle();
             pUStr_DirURL = new ::rtl::OUString( aUserDirectoryURL );
             pUStr_FileURL = new ::rtl::OUString();
-            //*pUStr_DirURL = aUserDirectoryURL;                /// create temp file in /tmp/PID or c:\temp\PID.*/
+            
         }
 
         void tearDown()
@@ -1373,7 +1373,7 @@ namespace osl_FileBase
             delete pHandle;
         }
 
-        // test code.
+        
         void createTempFile_001()
         {
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
@@ -1399,7 +1399,7 @@ namespace osl_FileBase
                 ( osl::FileBase::E_None == nError1 ) && ( pHandle != NULL ) &&
                 ( osl::FileBase::E_EXIST == nError2 ) );
 
-            //check file if have the write permission
+            
             if ( osl::FileBase::E_EXIST == nError2 )  {
                 bOK = ifFileCanWrite( *pUStr_FileURL );
                 osl_closeFile( *pHandle );
@@ -1413,7 +1413,7 @@ namespace osl_FileBase
         void createTempFile_003()
         {
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, 0 );
-            //the temp file will be removed when return from createTempFile
+            
             bOK = (pHandle != NULL && nError1 == osl::FileBase::E_None);
             if ( bOK )
                 osl_closeFile( *pHandle );
@@ -1439,28 +1439,28 @@ namespace osl_FileBase
         CPPUNIT_TEST( createTempFile_003 );
         CPPUNIT_TEST( createTempFile_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class createTempFile
+    };
 
-    // -----------------------------------------------------------------------------
+    
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::getAbsoluteFileURL, "osl_FileBase" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::SystemPath_FileURL, "osl_FileBase" );
-  //        CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::getFileURLFromSystemPath, "osl_FileBase" );
+  
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::searchFileURL, "osl_FileBase" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::getTempDirURL, "osl_FileBase" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::createTempFile, "osl_FileBase" );
-}// namespace osl_FileBase
+}
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for VolumeInfo class
-//------------------------------------------------------------------------
+
+
+
 namespace osl_VolumeInfo
 {
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  ctors : public CppUnit::TestFixture
     {
         ::rtl::OUString aUStr;
@@ -1470,7 +1470,7 @@ namespace osl_VolumeInfo
 
         public:
         ctors() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
         }
@@ -1479,7 +1479,7 @@ namespace osl_VolumeInfo
         {
         }
 
-        // test code.
+        
         void ctors_001()
         {
             ::osl::VolumeInfo   aVolumeInfo( 0 );
@@ -1503,7 +1503,7 @@ namespace osl_VolumeInfo
                                              osl_VolumeInfo_Mask_FileSystemName );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL4, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            //CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
+            
             sal_uInt64 uiTotalSpace = aVolumeInfo.getTotalSpace();
             sal_uInt64 uiUsedSpace = aVolumeInfo.getUsedSpace();
             aUStr = aVolumeInfo.getFileSystemName();
@@ -1513,7 +1513,7 @@ namespace osl_VolumeInfo
                                     ( 0 != uiUsedSpace ) &&
                                     compareFileName( aUStr, "nfs" ) );
         }
-#else           /// Windows version,here we can not determine whichvolume in Windows is serve as an nfs volume.
+#else           
         void ctors_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for ctors function: mask is specified as certain valid fields, and get the masked fields( Windows version )",
@@ -1551,13 +1551,13 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST( ctors_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
 
-     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool isValid( sal_uInt32 nMask ) const
-    //---------------------------------------------------------------------
+     
+    
+    
+    
     class  isValid : public CppUnit::TestFixture
     {
         ::osl::VolumeDevice aVolumeDevice;
@@ -1566,7 +1566,7 @@ namespace osl_VolumeInfo
 
         public:
         isValid() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
         }
@@ -1576,7 +1576,7 @@ namespace osl_VolumeInfo
 
         }
 
-        // test code.
+        
         void isValid_001()
         {
             sal_Int32 mask = 0;
@@ -1601,7 +1601,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for isValid function: all valid fields specified for a nfs volume.",
                                      aVolumeInfo.isValid( mask ) );
         }
-#else           /// Windows version,here we can not determine whichvolume in Windows is serve as an nfs volume.
+#else           
         void isValid_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for isValid function: all valid fields specified for a nfs volume.( Windows version )",
@@ -1631,12 +1631,12 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( isValid_002 );
         CPPUNIT_TEST( isValid_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class isValid
+    };
 
-     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getRemoteFlag() const
-    //---------------------------------------------------------------------
+     
+    
+    
+    
     class  getRemoteFlag : public CppUnit::TestFixture
     {
         ::osl::VolumeDevice aVolumeDevice;
@@ -1645,7 +1645,7 @@ namespace osl_VolumeInfo
 
         public:
         getRemoteFlag() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getRemoteFlag_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1658,7 +1658,7 @@ namespace osl_VolumeInfo
                                     !bOk );
         }
 
- #if ( defined UNX )        //remote Volume is different in Solaris and Windows
+ #if ( defined UNX )        
         void getRemoteFlag_002()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1670,7 +1670,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getRemoteFlag function: get a volume device which is remote( Solaris version ).",
                                     bOk );
         }
-#else                                    //Windows version
+#else                                    
         void getRemoteFlag_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getRemoteFlag function: get a volume device which is remote( Windows version )",
@@ -1682,19 +1682,19 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getRemoteFlag_001 );
         CPPUNIT_TEST( getRemoteFlag_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getRemoteFlag
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getRemoveableFlag() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getRemoveableFlag : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getRemoveableFlag() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getRemoveableFlag_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1722,20 +1722,20 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getRemoveableFlag_001 );
         CPPUNIT_TEST( getRemoveableFlag_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getRemoveableFlag
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getCompactDiscFlag() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getCompactDiscFlag : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getCompactDiscFlag() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getCompactDiscFlag_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1763,20 +1763,20 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getCompactDiscFlag_001 );
         CPPUNIT_TEST( getCompactDiscFlag_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getCompactDiscFlag
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getFloppyDiskFlag() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFloppyDiskFlag : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getFloppyDiskFlag() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getFloppyDiskFlag_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1804,20 +1804,20 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getFloppyDiskFlag_001 );
         CPPUNIT_TEST( getFloppyDiskFlag_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFloppyDiskFlag
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getFixedDiskFlag() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFixedDiskFlag : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getFixedDiskFlag() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getFixedDiskFlag_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1845,19 +1845,19 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getFixedDiskFlag_001 );
         CPPUNIT_TEST( getFixedDiskFlag_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFixedDiskFlag
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getRAMDiskFlag() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getRAMDiskFlag : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getRAMDiskFlag() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getRAMDiskFlag_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -1885,20 +1885,20 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getRAMDiskFlag_001 );
         CPPUNIT_TEST( getRAMDiskFlag_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getRAMDiskFlag
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getTotalSpace() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getTotalSpace : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getTotalSpace() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getTotalSpace_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_TotalSpace;
@@ -1925,7 +1925,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getTotalSpace function: get total space of /proc, it should be 0",
                                      0 == uiTotalSpace );
         }
-#else           /// Windows version, in Windows, there is no /proc directory
+#else           
         void getTotalSpace_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getTotalSpace function:not applicable for /proc( Windows version )",
@@ -1955,7 +1955,7 @@ namespace osl_VolumeInfo
              CPPUNIT_ASSERT_MESSAGE( "test for getTotalSpace function: get total space by hand, then compare with getTotalSpace, it did not pass",
                                      uiTotalSpace == TotalSpace );
         }
-#else           /// Windows version
+#else           
         void getTotalSpace_003()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getTotalSpace function:not implemented yet( Windows version )",
@@ -1968,19 +1968,19 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST( getTotalSpace_002 );
         CPPUNIT_TEST( getTotalSpace_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getTotalSpace
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getFreeSpace() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFreeSpace : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getFreeSpace() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getFreeSpace_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_FreeSpace;
@@ -2007,7 +2007,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getFreeSpace function: get free space of /proc, it should be 0",
                                      0 == uiFreeSpace );
         }
-#else           /// Windows version, in Windows, there is no /proc directory
+#else           
         void getFreeSpace_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getFreeSpace function: not applicable for /proc( Windows version )",
@@ -2036,7 +2036,7 @@ namespace osl_VolumeInfo
              CPPUNIT_ASSERT_MESSAGE( "test for getFreeSpace function: get free space by hand, then compare with getFreeSpace, it did not pass",
                                      uiFreeSpace == FreeSpace );
         }
-#else                                    //Windows version
+#else                                    
         void getFreeSpace_003()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getFreeSpace function: not implemented yet( Windows version )",
@@ -2050,19 +2050,19 @@ namespace osl_VolumeInfo
          CPPUNIT_TEST( getFreeSpace_002 );
         CPPUNIT_TEST( getFreeSpace_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFreeSpace
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getUsedSpace() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getUsedSpace : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getUsedSpace() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getUsedSpace_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_UsedSpace;
@@ -2089,7 +2089,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getUsedSpace function: get used space of /proc, it should be 0",
                                      0 == uiUsedSpace );
         }
-#else                                    /// Windows version, in Windows, there is no /proc directory
+#else                                    
         void getUsedSpace_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getUsedSpace function: not applicable for /proc( Windows version )",
@@ -2119,7 +2119,7 @@ namespace osl_VolumeInfo
              CPPUNIT_ASSERT_MESSAGE( "test for getUsedSpace function: get used space by hand, then compare with getUsedSpace, it did not pass",
                                      uiUsedSpace == UsedSpace );
         }
-#else                                    //Windows version
+#else                                    
         void getUsedSpace_003()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getUsedSpace function: not implemented yet( Windows version )",
@@ -2133,20 +2133,20 @@ namespace osl_VolumeInfo
          CPPUNIT_TEST( getUsedSpace_002 );
         CPPUNIT_TEST( getUsedSpace_003 );
          CPPUNIT_TEST_SUITE_END();
-    };// class getUsedSpace
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt32 getMaxNameLength() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getMaxNameLength : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getMaxNameLength() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getMaxNameLength_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_MaxNameLength;
@@ -2181,7 +2181,7 @@ namespace osl_VolumeInfo
              CPPUNIT_ASSERT_MESSAGE( "test for getMaxNameLength function: get max name length by hand, then compare with getMaxNameLength",
                                      uiMaxNameLength == MaxNameLength );
         }
-#else                                    //Windows version
+#else                                    
         void getMaxNameLength_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getMaxNameLength function: not implemented yet( Windows version )",
@@ -2193,20 +2193,20 @@ namespace osl_VolumeInfo
          CPPUNIT_TEST( getMaxNameLength_001 );
         CPPUNIT_TEST( getMaxNameLength_002 );
          CPPUNIT_TEST_SUITE_END();
-    };// class getMaxNameLength
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt32 getMaxPathLength() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getMaxPathLength : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC nError1;
 
         public:
         getMaxPathLength() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getMaxPathLength_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_MaxPathLength;
@@ -2234,7 +2234,7 @@ namespace osl_VolumeInfo
              CPPUNIT_ASSERT_MESSAGE( "test for getMaxPathLength function: get max path length by hand, then compare with getMaxPathLength",
                                      uiMaxPathLength == PATH_MAX );
         }
-#else                                    //Windows version
+#else                                    
         void getMaxPathLength_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getMaxPathLength function: not implemented yet( Windows version )",
@@ -2247,13 +2247,13 @@ namespace osl_VolumeInfo
          CPPUNIT_TEST( getMaxPathLength_001 );
         CPPUNIT_TEST( getMaxPathLength_002 );
          CPPUNIT_TEST_SUITE_END();
-    };// class getMaxPathLength
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getFileSystemName() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFileSystemName : public CppUnit::TestFixture
     {
         ::rtl::OUString aUStr;
@@ -2261,7 +2261,7 @@ namespace osl_VolumeInfo
 
         public:
         getFileSystemName() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getFileSystemName_001()
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
@@ -2296,7 +2296,7 @@ namespace osl_VolumeInfo
              CPPUNIT_ASSERT_MESSAGE( "test for getFileSystemName function: get file system name by hand, then compare with getFileSystemName",
                                      sal_True == compareFileName( aUStr, astrFileSystemName ) );
         }
-#else                                    //Windows version
+#else                                    
         void getFileSystemName_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getFileSystemName function: not implemented yet( Windows version )",
@@ -2309,12 +2309,12 @@ namespace osl_VolumeInfo
          CPPUNIT_TEST( getFileSystemName_001 );
         CPPUNIT_TEST( getFileSystemName_002 );
          CPPUNIT_TEST_SUITE_END();
-    };// class getFileSystemName
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline VolumeDevice getDeviceHandle() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getDeviceHandle : public CppUnit::TestFixture
     {
         ::rtl::OUString aUStr;
@@ -2322,7 +2322,7 @@ namespace osl_VolumeInfo
 
         public:
         getDeviceHandle() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void getDeviceHandle_001()
         {
             ::osl::VolumeInfo   aVolumeInfo( osl_VolumeInfo_Mask_Attributes );
@@ -2339,10 +2339,10 @@ namespace osl_VolumeInfo
         CPPUNIT_TEST_SUITE( getDeviceHandle );
          CPPUNIT_TEST( getDeviceHandle_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getDeviceHandle
+    };
 
 
-    // -----------------------------------------------------------------------------
+    
     /*CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_VolumeInfo::ctors, "osl_VolumeInfo" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_VolumeInfo::isValid, "osl_VolumeInfo" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_VolumeInfo::getRemoteFlag, "osl_VolumeInfo" );
@@ -2358,20 +2358,20 @@ namespace osl_VolumeInfo
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_VolumeInfo::getMaxPathLength, "osl_VolumeInfo" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_VolumeInfo::getFileSystemName, "osl_VolumeInfo" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_VolumeInfo::getDeviceHandle, "osl_VolumeInfo" );*/
-}// namespace osl_VolumeInfo
+}
 
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for VolumeDevice class
-//------------------------------------------------------------------------
+
+
+
 namespace osl_FileStatus
 {
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  FileStatus( sal_uInt32 nMask ): _nMask( nMask )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  ctors : public CppUnit::TestFixture
     {
         ::rtl::OUString         aUStr;
@@ -2380,10 +2380,10 @@ namespace osl_FileStatus
 
         public:
         ctors() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
@@ -2405,12 +2405,12 @@ namespace osl_FileStatus
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void ctors_001()
         {
              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_All );
@@ -2437,13 +2437,13 @@ namespace osl_FileStatus
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool isValid( sal_uInt32 nMask ) const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  isValid : public CppUnit::TestFixture
     {
         ::rtl::OUString         aUStr;
@@ -2451,15 +2451,15 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem_file, rItem_link;
 
         public:
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
             pDir = new Directory( aTmpName3 );
-            //::std::auto_ptr<Directory> pDir( new Directory( aTmpName3 ) );
+            
                     ::osl::FileBase::RC nError1 = pDir->open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = pDir->getNextItem( rItem_file, 1 );
@@ -2472,12 +2472,12 @@ namespace osl_FileStatus
                     delete pDir;
             CPPUNIT_ASSERT_MESSAGE( errorToStr(nError1).getStr(), ::osl::FileBase::E_None == nError1 );
 
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void isValid_001()
         {
             sal_uInt32 mask = 0;
@@ -2541,28 +2541,28 @@ namespace osl_FileStatus
 
             CPPUNIT_ASSERT_MESSAGE( errorToStr(nError1).getStr(), ::osl::FileBase::E_None == nError1 );
 
-// LLA: this is wrong, we never should try to check on all masks
-//      only on one.
-//      Second, it's not a bug, if a value is not valid, it's an unhandled feature.
 
-//      sal_Bool bOk = rFileStatus.isValid( mask_file );
+
+
+
+
 
                 check_FileStatus(rFileStatus);
             deleteTestFile( aTmpName6 );
 
-                // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: regular file mask fields test, #osl_FileStatus_Mask_CreationTime# should be valid field for regular file, but feedback is invalid",
-                //                      ( sal_True == bOk ) );
+                
+                
         }
 
-        //Link is not defined in Windows, and on Linux, we can not get the directory item of the link file
-        // LLA: we have to differ to filesystems, normal filesystems support links (EXT2, ...)
-        //      castrated filesystems don't (FAT, FAT32)
-        //      Windows NT NTFS support links, but the windows api don't :-(
+        
+        
+        
+        
 
         void isValid_003()
         {
 #if defined ( UNX )
-            // ::osl::FileBase::RC nError;
+            
             sal_Int32 fd;
 
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
@@ -2574,11 +2574,11 @@ namespace osl_FileStatus
                 strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
                 strSrcFileName = OUStringToOString( aUStr_SrcFileSys, RTL_TEXTENCODING_ASCII_US );
 
-            //create a link file and link it to file "/tmp/PID/tmpdir/tmpname"
+            
                 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
             CPPUNIT_ASSERT( fd == 0 );
 
-            // testDirectory is "/tmp/PID/tmpdir/"
+            
             ::osl::Directory testDirectory( aTmpName3 );
                 ::osl::FileBase::RC nError1 = testDirectory.open();
             ::rtl::OUString aFileName ("link.file");
@@ -2591,7 +2591,7 @@ namespace osl_FileStatus
                     rItem_link.getFileStatus( rFileStatus );
                     if ( compareFileName( rFileStatus.getFileName(), aFileName) )
                     {
-                        //printf("find the link file");
+                        
                         if ( rFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
                         {
                             bOk = true;
@@ -2619,18 +2619,18 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
                 check_FileStatus(rFileStatus_all);
-// LLA: this is wrong
-//          sal_Bool bOk1 = rFileStatus_all.isValid( mask_file_all );
+
+
 
             sal_uInt32 mask_file_val = osl_FileStatus_Mask_Validate;
              ::osl::FileStatus   rFileStatus_val( mask_file_val );
             nError1 = rItem_file.getFileStatus( rFileStatus_val );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-                // sal_Bool bOk2 = rFileStatus_val.isValid( mask_file_val );
+                
 
                 check_FileStatus(rFileStatus_val);
-                // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: check for Mask_All and Validate, really not sure what validate used for and how to use it, help me.  did not pass (W32)(UNX).",
-                //                      ( sal_False == bOk1 ) && ( sal_True == bOk2 )  );
+                
+                
         }
 
 
@@ -2640,13 +2640,13 @@ namespace osl_FileStatus
         CPPUNIT_TEST( isValid_003 );
         CPPUNIT_TEST( isValid_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline Type getFileType() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFileType : public CppUnit::TestFixture
     {
         ::rtl::OUString         aUStr;
@@ -2657,13 +2657,13 @@ namespace osl_FileStatus
 
         public:
         getFileType() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile: $TEMP/tmpdir/tmpname.
-            //        a tempdirectory: $TEMP/tmpdir/tmpdir.
-            //        use $ROOT/staroffice as volume ---> use dev/fd as volume.
-            // and get their directory item.
+            
+            
+            
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName3, aTmpName2 );
             createTestDirectory( aTmpName3, aTmpName1 );
@@ -2671,28 +2671,28 @@ namespace osl_FileStatus
             boost::scoped_ptr<Directory> pDir( new Directory( aTmpName3 ) );
             nError1 = pDir->open();
             CPPUNIT_ASSERT_MESSAGE("open aTmpName3 failed!", ::osl::FileBase::E_None == nError1 );
-            //getNextItem can not assure which item retrieved
+            
                     nError1 = pDir->getNextItem( m_aItem_1, 1 );
             CPPUNIT_ASSERT_MESSAGE("get first item failed!", ::osl::FileBase::E_None == nError1 );
 
                     nError1 = pDir->getNextItem( m_aItem_2 );
             CPPUNIT_ASSERT_MESSAGE("get second item failed!", ::osl::FileBase::E_None == nError1 );
             pDir->close();
-            //mindy: failed on my RH9,so removed temporaly
-            //nError1 = ::osl::DirectoryItem::get( aVolURL2, m_aVolumeItem );
-            //CPPUNIT_ASSERT_MESSAGE("get volume item failed!", ::osl::FileBase::E_None == nError1 );
+            
+            
+            
 
         }
 
         void tearDown()
         {
-            // remove all in $TEMP/tmpdir.
+            
             deleteTestDirectory( aTmpName3, aTmpName1 );
             deleteTestFile( aTmpName3, aTmpName2 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void getFileType_001()
         {
              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
@@ -2715,12 +2715,12 @@ namespace osl_FileStatus
 
                         if ( compareFileName( suFilename, aTmpName2) )
                         {
-                            // regular
+                            
                             bOK = ( eType == osl::FileStatus::Regular );
                         }
                         if ( compareFileName( suFilename, aTmpName1) )
                         {
-                            // directory
+                            
                             bOK = ( eType == ::osl::FileStatus::Directory );
                         }
 
@@ -2728,7 +2728,7 @@ namespace osl_FileStatus
                                      bOK );
         }
                 }
-                // LLA: it's not a bug, if a FileStatus not exist, so no else
+                
             }
 
         void getFileType_002()
@@ -2746,11 +2746,11 @@ namespace osl_FileStatus
 
         void getFileType_007()
         {
-#if defined ( SOLARIS ) //Special file is differ in Windows
+#if defined ( SOLARIS ) 
                 nError1 = ::osl::DirectoryItem::get( aTypeURL2, m_aSpecialItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //check for File type
+            
              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type );
             nError1 = m_aSpecialItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -2772,12 +2772,12 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileType_003 );
         CPPUNIT_TEST( getFileType_007 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileType
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getAttributes() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getAttributes : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL, aTypeURL_Hid;
@@ -2786,7 +2786,7 @@ namespace osl_FileStatus
 
         public:
         getAttributes() :nError(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -2808,9 +2808,9 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL_Hid );
         }
 
-        // test code.
+        
 #if ( defined UNX )
-//windows only 3 file attributes: normal, readonly, hidden
+
         void getAttributes_001()
         {
             changeFileMode( aTypeURL, S_IRUSR | S_IRGRP | S_IROTH );
@@ -2823,7 +2823,7 @@ namespace osl_FileStatus
                                     ( osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead ) ==
                                     rFileStatus.getAttributes() );
         }
-#else                                    //Windows version
+#else                                    
         void getAttributes_001()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: ReadOnly, GrpRead, OwnRead, OthRead( Windows version )",
@@ -2861,7 +2861,7 @@ namespace osl_FileStatus
                                     ( osl_File_Attribute_GrpWrite | osl_File_Attribute_OwnWrite | osl_File_Attribute_OthWrite ) ==
                                     rFileStatus.getAttributes() );
         }
-#else                                    //Windows version
+#else                                    
         void getAttributes_003()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: GrpWrite, OwnWrite, OthWrite( Windows version )",
@@ -2869,7 +2869,7 @@ namespace osl_FileStatus
         }
 #endif
 
-#if ( defined UNX )                     //hidden file definition may different in Windows
+#if ( defined UNX )                     
         void getAttributes_004()
         {
             sal_Int32 test_Attributes = osl_File_Attribute_Hidden;
@@ -2881,10 +2881,10 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: Hidden files( Solaris version )",
                                     test_Attributes == osl_File_Attribute_Hidden );
         }
-#else                                    //Windows version
+#else                                    
         void getAttributes_004()
         {
-            ::rtl::OUString aUserHiddenFileURL ("file:///c:/AUTOEXEC.BAT");
+            ::rtl::OUString aUserHiddenFileURL ("file:
             nError = ::osl::DirectoryItem::get( aUserHiddenFileURL, rItem_hidden );
             CPPUNIT_ASSERT_MESSAGE("get item fail", nError == FileBase::E_None );
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
@@ -2902,12 +2902,12 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getAttributes_003 );
         CPPUNIT_TEST( getAttributes_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getAttributes
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline TimeValue getAccessTime() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getAccessTime : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL;
@@ -2916,7 +2916,7 @@ namespace osl_FileStatus
 
         public:
         getAccessTime() :nError(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -2932,7 +2932,7 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL );
         }
 
-        // test code.
+        
         void getAccessTime_001()
         {
             TimeValue *pTV_current = NULL;
@@ -2958,12 +2958,12 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getAccessTime );
         CPPUNIT_TEST( getAccessTime_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getAccessTime
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline TimeValue getModifyTime() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getModifyTime : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL;
@@ -2974,35 +2974,35 @@ namespace osl_FileStatus
         getModifyTime() :nError(FileBase::E_None) {}
 
 
-        // test code.
+        
         void getModifyTime_001()
         {
             TimeValue *pTV_current = NULL;
             CPPUNIT_ASSERT( ( pTV_current = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
 
-            //create file
+            
             aTypeURL = aUserDirectoryURL.copy( 0 );
             concatURL( aTypeURL, aTmpName2 );
             createTestFile( aTypeURL );
 
-            //get current time
+            
             bool bOk = osl_getSystemTime( pTV_current );
             CPPUNIT_ASSERT( bOk );
 
-            //get instance item and filestatus
+            
             nError = ::osl::DirectoryItem::get( aTypeURL, rItem );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_ModifyTime );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
-            //get modify time
+            
             TimeValue *pTV_modify = NULL;
             CPPUNIT_ASSERT( ( pTV_modify = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
             *pTV_modify = rFileStatus.getModifyTime();
 
             bool bOK = t_compareTime( pTV_modify, pTV_current, delta );
-            //delete file
+            
             deleteTestFile( aTypeURL );
             free( pTV_current );
 
@@ -3013,13 +3013,13 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getModifyTime );
         CPPUNIT_TEST( getModifyTime_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getModifyTime
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getFileSize() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFileSize : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL;
@@ -3030,7 +3030,7 @@ namespace osl_FileStatus
 
         getFileSize() :nError(FileBase::E_None) {}
 
-        // initialization
+        
         void setUp()
         {
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -3045,7 +3045,7 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL );
         }
 
-        // test code.
+        
         void getFileSize_001()
         {
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileSize );
@@ -3080,12 +3080,12 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileSize_001 );
         CPPUNIT_TEST( getFileSize_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileSize
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getFileName() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFileName : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL;
@@ -3094,7 +3094,7 @@ namespace osl_FileStatus
 
         public:
         getFileName() :nError(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -3109,7 +3109,7 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL );
         }
 
-        // test code.
+        
         void getFileName_001()
         {
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
@@ -3125,12 +3125,12 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getFileName );
         CPPUNIT_TEST( getFileName_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileName
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getFileURL() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFileURL : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL;
@@ -3140,7 +3140,7 @@ namespace osl_FileStatus
         public:
         getFileURL() :nError(FileBase::E_None) {}
 
-        // initialization
+        
         void setUp()
         {
             createTestFile( aTmpName6 );
@@ -3153,7 +3153,7 @@ namespace osl_FileStatus
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void getFileURL_001()
         {
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileURL );
@@ -3169,12 +3169,12 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getFileURL );
         CPPUNIT_TEST( getFileURL_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileURL
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getLinkTargetURL() const
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getLinkTargetURL : public CppUnit::TestFixture
     {
         ::rtl::OUString         aTypeURL;
@@ -3184,8 +3184,8 @@ namespace osl_FileStatus
         public:
 
         getLinkTargetURL() :nError(FileBase::E_None) {}
-        // test code.
-        // initialization
+        
+        
         void setUp()
         {
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -3198,10 +3198,10 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL );
         }
 
-#if ( defined UNX )            //Link file is not define in Windows
+#if ( defined UNX )            
         void getLinkTargetURL_001()
         {
-            //create a link file;
+            
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
             ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
             ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpname");
@@ -3214,7 +3214,7 @@ namespace osl_FileStatus
                 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
             CPPUNIT_ASSERT_MESSAGE( "in creating link file",  fd == 0 );
 
-            //get linkTarget URL
+            
             nError = ::osl::DirectoryItem::get( aLnkURL1, rItem );
             CPPUNIT_ASSERT_MESSAGE( "in getting link file item", nError == FileBase::E_None );
 
@@ -3223,7 +3223,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_MESSAGE( "in getting link file status", nError == FileBase::E_None );
             ::rtl::OUString aFileURL = rFileStatus.getLinkTargetURL();
 
-            //remove link file
+            
                 fd = remove( strLinkFileName.getStr() );
             CPPUNIT_ASSERT_MESSAGE( "in deleting link file",  fd == 0 );
 
@@ -3241,9 +3241,9 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getLinkTargetURL );
         CPPUNIT_TEST( getLinkTargetURL_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getLinkTargetURL
+    };
 
-    // -----------------------------------------------------------------------------
+    
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::ctors, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::isValid, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileType, "osl_FileStatus" );
@@ -3254,40 +3254,40 @@ namespace osl_FileStatus
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileName, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileURL, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getLinkTargetURL, "osl_FileStatus" );
-}// namespace osl_FileStatus
+}
 
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for File class
-//------------------------------------------------------------------------
+
+
+
 namespace osl_File
 {
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  File( const ::rtl::OUString& ustrFileURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  ctors : public CppUnit::TestFixture
     {
-        // ::osl::FileBase::RC     nError1;
+        
 
         public:
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void ctors_001()
         {
             ::osl::File testFile( aTmpName4 );
@@ -3316,12 +3316,12 @@ namespace osl_File
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC open( sal_uInt32 uFlags )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  open : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2, nError3;
@@ -3331,22 +3331,22 @@ namespace osl_File
             : nError1(FileBase::E_None)
             , nError2(FileBase::E_None)
             , nError3(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void open_001()
         {
             ::osl::File testFile( aTmpName4 );
@@ -3388,7 +3388,7 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Create );
             bool bOK = ( File::E_ACCES == nError1 );
 #if defined (WNT )
-            bOK = sal_True;  /// in Windows, you can create file in c:/ any way.
+            bOK = sal_True;  
             testFile.close();
             deleteTestFile( aTestFile);
 #endif
@@ -3441,12 +3441,12 @@ namespace osl_File
         CPPUNIT_TEST( open_005 );
         CPPUNIT_TEST( open_006 );
         CPPUNIT_TEST_SUITE_END();
-    };// class open
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC close()
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  close : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2, nError3;
@@ -3456,22 +3456,22 @@ namespace osl_File
             : nError1(FileBase::E_None)
             , nError2(FileBase::E_None)
             , nError3(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void close_001()
         {
             ::osl::File testFile( aTmpName4 );
@@ -3505,13 +3505,13 @@ namespace osl_File
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class close
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  setPos : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1;
@@ -3520,14 +3520,14 @@ namespace osl_File
         public:
         setPos() :nError1(FileBase::E_None) {}
 
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -3540,12 +3540,12 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void setPos_001()
         {
             ::osl::File testFile( aTmpName4 );
@@ -3591,7 +3591,7 @@ namespace osl_File
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //the file size is smaller than 100
+            
             nError1 = testFile.setPos( osl_Pos_End,  -100 );
             CPPUNIT_ASSERT_MESSAGE( "should return error", ::osl::FileBase::E_INVAL == nError1 );
 
@@ -3611,12 +3611,12 @@ namespace osl_File
         CPPUNIT_TEST( setPos_002 );
         CPPUNIT_TEST( setPos_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setPos
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC getPos( sal_uInt64& uPos )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getPos : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -3624,14 +3624,14 @@ namespace osl_File
 
         public:
         getPos() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -3644,12 +3644,12 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void getPos_001()
         {
             ::osl::File testFile( aTmpName4 );
@@ -3676,13 +3676,13 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( getPos );
         CPPUNIT_TEST( getPos_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getPos
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC isEndOfFile( sal_Bool *pIsEOF )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  isEndOfFile : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -3690,14 +3690,14 @@ namespace osl_File
 
         public:
         isEndOfFile() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -3710,12 +3710,12 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void isEndOfFile_001()
         {
             ::osl::File   testFile( aTmpName4 );
@@ -3771,13 +3771,13 @@ namespace osl_File
         CPPUNIT_TEST( isEndOfFile_001 );
         CPPUNIT_TEST( isEndOfFile_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class isEndOfFile
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC setSize( sal_uInt64 uSize )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  setSize : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -3785,14 +3785,14 @@ namespace osl_File
 
         public:
         setSize() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -3805,28 +3805,28 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void setSize_001()
         {
             ::osl::File   testFile( aTmpName4 );
-            // sal_Bool      bEOF  = sal_False;
-            // sal_Bool      *pEOF = &bEOF;
+            
+            
             sal_uInt64     nFilePointer;
 
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //enlarge the file to size of 100;
+            
              nError1 = testFile.setSize( 100 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //get the file size;
+            
              nError1 = testFile.setPos( osl_Pos_End, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.getPos( nFilePointer );
@@ -3842,19 +3842,19 @@ namespace osl_File
         void setSize_002()
         {
             ::osl::File   testFile( aTmpName4 );
-            // sal_Bool      bEOF  = sal_False;
-            // sal_Bool      *pEOF = &bEOF;
+            
+            
             sal_uInt64     nFilePointer;
 
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //enlarge the file to size of 100;
+            
              nError1 = testFile.setSize( 10 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //get the file size;
+            
              nError1 = testFile.setPos( osl_Pos_End, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.getPos( nFilePointer );
@@ -3871,13 +3871,13 @@ namespace osl_File
         CPPUNIT_TEST( setSize_001 );
         CPPUNIT_TEST( setSize_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setSize
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  read : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -3885,14 +3885,14 @@ namespace osl_File
 
         public:
         read() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -3905,12 +3905,12 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void read_001()
         {
             ::osl::File    testFile( aTmpName4 );
@@ -3961,12 +3961,12 @@ namespace osl_File
         CPPUNIT_TEST( read_001 );
         CPPUNIT_TEST( read_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class read
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  write : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -3974,20 +3974,20 @@ namespace osl_File
 
         public:
         write() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void write_001()
         {
             ::osl::File    testFile( aTmpName6 );
@@ -3997,13 +3997,13 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //write chars into the file.
+            
             nError1 = testFile.write( pBuffer_Char, 10, nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //get the current pointer;
+            
              nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //reset pointer to the beginning;
+            
              nError1 = testFile.setPos( osl_Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 10, nCount_read );
@@ -4021,12 +4021,12 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( write );
         CPPUNIT_TEST( write_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class write
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC readLine( ::rtl::ByteSequence& aSeq )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  readLine : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -4035,13 +4035,13 @@ namespace osl_File
 
         public:
         readLine() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpname.
+            
             createTestFile( aTmpName6 );
 
-            //write some strings into the file.
+            
             ::osl::File testFile( aTmpName6 );
             sal_Char ppStrSeq[3][27]  =  { "abcde\n",
                                         "1234567890\n",
@@ -4063,11 +4063,11 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void readLine_001()
         {
              ::osl::File    testFile( aTmpName6 );
@@ -4134,12 +4134,12 @@ namespace osl_File
         CPPUNIT_TEST( readLine_android );
 #endif
         CPPUNIT_TEST_SUITE_END();
-    };// class readLine
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  copy : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
@@ -4147,14 +4147,14 @@ namespace osl_File
 
         public:
         copy() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -4167,20 +4167,20 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void copy_001()
         {
              ::osl::File    testFile( aTmpName6 );
 
-            //copy $TEMP/tmpdir/tmpname to $TEMP/tmpname.
+            
             nError1 = ::osl::File::copy( aTmpName4, aTmpName6 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //check
+            
             nError1 = testFile.open( osl_File_OpenFlag_Create );
             deleteTestFile( aTmpName6 );
 
@@ -4190,7 +4190,7 @@ namespace osl_File
 
         void copy_002()
         {
-            //copy $TEMP/tmpdir/tmpname to $TEMP/tmpdir.
+            
             nError1 = ::osl::File::copy( aTmpName4, aTmpName3 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for copy function: use directory as destination",
@@ -4199,10 +4199,10 @@ namespace osl_File
 
         void copy_003()
         {
-            //copy $TEMP/tmpdir/tmpname to $ROOT/tmpname.
+            
             nError1 = ::osl::File::copy( aTmpName4, aTmpName7 );
 #if defined (WNT )
-            nError1 = ::osl::FileBase::E_ACCES;  /// for Windows, c:/ is writtenable any way.
+            nError1 = ::osl::FileBase::E_ACCES;  
             deleteTestFile( aTmpName7);
 #endif
             CPPUNIT_ASSERT_MESSAGE( "test for copy function: copy to an illigal place",
@@ -4211,7 +4211,7 @@ namespace osl_File
 
         void copy_004()
         {
-            //copy $TEMP/tmpname to $TEMP/tmpdir/tmpname.
+            
             nError1 = ::osl::File::copy( aTmpName6, aTmpName4 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for copy function: copy a not exist file",
@@ -4220,7 +4220,7 @@ namespace osl_File
 
         void copy_005()
         {
-            //copy $TEMP/tmpname to $TEMP/system.path using system path.
+            
             nError1 = ::osl::File::copy( aTmpName6, aSysPath1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for copy function: copy a file using system file path",
@@ -4234,11 +4234,11 @@ namespace osl_File
         (void)err;
         tmpFile.setSize( 200 );
         tmpFile.close();
-        //copy to new path
+        
         nError1 = ::osl::File::copy( aTmpName6, aTmpName4 );
         CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
-        //check if is the new file
+        
         File newFile( aTmpName4 );
         newFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Read );
         nError1 = newFile.setPos( osl_Pos_End, 0 );
@@ -4251,7 +4251,7 @@ namespace osl_File
         CPPUNIT_ASSERT_MESSAGE( "test for copy function: the dest file exist",
                     nFilePointer == 200 );
       }
-      //copyLink has not been impletmented yet
+      
       void copy_007()
       {
 #if ( defined UNX )
@@ -4269,12 +4269,12 @@ namespace osl_File
         CPPUNIT_TEST( copy_005 );
         CPPUNIT_TEST( copy_006 );
         CPPUNIT_TEST_SUITE_END();
-    };// class copy
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  move : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1, nError2;
@@ -4282,14 +4282,14 @@ namespace osl_File
 
         public:
         move() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -4302,18 +4302,18 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void move_001()
         {
-            //rename $TEMP/tmpdir/tmpname to $TEMP/canonical.name.
+            
             nError1 = ::osl::File::move( aTmpName4, aCanURL1 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //check
+            
              ::osl::File    testFile( aCanURL1 );
             nError2 = testFile.open( osl_File_OpenFlag_Create );
             deleteTestFile( aCanURL1 );
@@ -4324,19 +4324,19 @@ namespace osl_File
 
         void move_002()
         {
-            //move $TEMP/tmpdir/tmpname to $TEMP/tmpdir.
+            
             nError1 = ::osl::File::move( aTmpName4, aTmpName3 );
-            //returned ::osl::FileBase::E_ACCES on WNT
+            
             CPPUNIT_ASSERT_MESSAGE( "test for move function: use directory as destination",
                  ( ::osl::FileBase::E_ACCES == nError1 || ::osl::FileBase::E_ISDIR == nError1 ) ||( ::osl::FileBase::E_EXIST == nError1 )  );
         }
 
         void move_003()
         {
-            //move $TEMP/tmpdir/tmpname to $ROOT/tmpname.
+            
             nError1 = ::osl::File::move( aTmpName4, aTmpName7 );
 #if defined (WNT )
-            nError1 = ::osl::FileBase::E_ACCES;  /// for Windows, c:/ is writtenable any way.
+            nError1 = ::osl::FileBase::E_ACCES;  
             deleteTestFile( aTmpName7);
 #endif
 
@@ -4346,7 +4346,7 @@ namespace osl_File
 
         void move_004()
         {
-            //move $TEMP/tmpname to $TEMP/tmpdir/tmpname.
+            
             nError1 = ::osl::File::move( aTmpName6, aTmpName4 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for move function: move a not exist file",
@@ -4355,7 +4355,7 @@ namespace osl_File
 
         void move_005()
         {
-            //move $TEMP/tmpname to $TEMP/system.path using system path.
+            
             nError1 = ::osl::File::move( aTmpName6, aSysPath1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for move function: move a file using system file",
@@ -4364,14 +4364,14 @@ namespace osl_File
 
         void move_006()
         {
-            //move directory $TEMP/tmpname to $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName6 );
             nError1 = ::osl::File::move( aTmpName6, aTmpName4 );
-            //move file $TEMP/tmpdir/tmpname to $TEMP/tmpname
+            
             nError2 = ::osl::File::move( aTmpName4, aTmpName6 );
             deleteTestDirectory( aTmpName6 );
 #if defined ( WNT )
-            deleteTestDirectory( aTmpName4 );// in Windows, it can be moved!!!!! this is only for not influence the following test.
+            deleteTestDirectory( aTmpName4 );
             deleteTestFile( aTmpName6 );
             nError1 = ::osl::FileBase::E_NOTDIR;
             nError2 = ::osl::FileBase::E_ISDIR;
@@ -4382,11 +4382,11 @@ namespace osl_File
 
         void move_007()
         {
-            //create directory $TEMP/tmpname.
+            
             createTestDirectory( aTmpName6 );
-            //move directory $TEMP/tmpdir to $TEMP/tmpname/tmpdir
+            
             nError1 = ::osl::File::move( aTmpName3, aTmpName8 );
-            //check
+            
             nError2 = ::osl::Directory::create( aTmpName8 );
             ::osl::File::move( aTmpName8, aTmpName3 );
             deleteTestDirectory( aTmpName6 );
@@ -4395,24 +4395,24 @@ namespace osl_File
                                      (::osl::FileBase::E_None == nError1 ) &&
                                     (::osl::FileBase::E_EXIST == nError2 ) );
         }
-      // oldpath and newpath are not on the same filesystem.EXDEV,no such error no on Solaris, only on linux
+      
       void move_008()
       {
         CPPUNIT_ASSERT_MESSAGE( "oldpath and newpath are not on the same filesystem, should error returns",
                                      ::osl::FileBase::E_None == nError1  );
       }
-      //bugid# 115420, after the bug fix, add the case
+      
       void move_009()
       {
-        //create directory $TEMP/tmpname.
+        
         createTestDirectory( aTmpName6 );
-        //create directory $TEMP/tmpname/tmpdir
+        
         createTestDirectory( aTmpName8 );
-        //move directory $TEMP/tmpname to $TEMP/tmpname/tmpdir/tmpname
+        
         rtl::OUString newName = aTmpName8 + "/tmpname";
         nError1 = ::osl::File::move( aTmpName3, newName );
-        //deleteTestDirectory( newName + "/tmpname" );
-        //deleteTestDirectory( newName );
+        
+        
         deleteTestDirectory( aTmpName8 );
         deleteTestDirectory( aTmpName6 );
         CPPUNIT_ASSERT_MESSAGE( "test for move function: move a directory to it's subdirectory",
@@ -4427,16 +4427,16 @@ namespace osl_File
         CPPUNIT_TEST( move_005 );
         CPPUNIT_TEST( move_006 );
         CPPUNIT_TEST( move_007 );
-      //      CPPUNIT_TEST( move_008 );
-      //CPPUNIT_TEST( move_009 );
+      
+      
         CPPUNIT_TEST_SUITE_END();
-    };// class move
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC remove( const ::rtl::OUString& ustrFileURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  remove : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1, nError2;
@@ -4444,14 +4444,14 @@ namespace osl_File
 
         public:
         remove() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            //write chars into the file.
+            
             ::osl::File testFile( aTmpName4 );
 
             nError1 = testFile.open( osl_File_OpenFlag_Write );
@@ -4464,17 +4464,17 @@ namespace osl_File
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void remove_001()
         {
-            //remove $TEMP/tmpdir/tmpname.
+            
             nError1 = ::osl::File::remove( aTmpName4 );
-            //check
+            
              ::osl::File    testFile( aTmpName4 );
             nError2 = testFile.open( osl_File_OpenFlag_Create );
 
@@ -4485,7 +4485,7 @@ namespace osl_File
 
         void remove_002()
         {
-            //remove $TEMP/tmpname.
+            
             nError1 = ::osl::File::remove( aTmpName6 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for remove function: remove a file not exist",
@@ -4494,7 +4494,7 @@ namespace osl_File
 
         void remove_003()
         {
-            //remove $TEMP/system/path.
+            
             nError1 = ::osl::File::remove( aSysPath2 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for remove function: removing a file not using full qualified URL",
@@ -4503,7 +4503,7 @@ namespace osl_File
 
         void remove_004()
         {
-            //remove $TEMP/tmpdir.
+            
             nError1 = ::osl::File::remove( aTmpName3 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for remove function: remove a directory",
@@ -4516,13 +4516,13 @@ namespace osl_File
         CPPUNIT_TEST( remove_003 );
         CPPUNIT_TEST( remove_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class remove
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  setAttributes : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1, nError2;
@@ -4530,30 +4530,30 @@ namespace osl_File
 
         public:
         setAttributes() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void setAttributes_001()
         {
-        //on windows, only can set 2 attributes: osl_File_Attribute_ReadOnly,  osl_File_Attribute_Hidden
+        
 #ifdef UNX
-            //set the file to readonly
+            
             nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead );
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
-            //get the file attributes
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
@@ -4562,17 +4562,17 @@ namespace osl_File
                                     ( osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead ) ==
                                     rFileStatus.getAttributes() );
 #else
-            //please see GetFileAttributes
+            
             nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_ReadOnly );
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
-            //get the file attributes
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
-            //here the file has 2 Attributes: FILE_ATTRIBUTE_READONLY and FILE_ATTRIBUTE_NORMAL,
-            // but FILE_ATTRIBUTE_NORMAL is valid only if used alone, so this is maybe a bug
+            
+            
             /*::rtl::OString aString = ::rtl::OUStringToOString( aTmpName6, RTL_TEXTENCODING_ASCII_US );
             DWORD dwFileAttributes = GetFileAttributes( aString.getStr() );
             if (dwFileAttributes & FILE_ATTRIBUTE_NORMAL)
@@ -4586,15 +4586,15 @@ namespace osl_File
     }
         void setAttributes_002()
         {
-        //on UNX, can not set hidden attribute to file, rename file can set the attribute
+        
 #ifdef WNT
-            //set the file to hidden
+            
             nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_Hidden);
 
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
-            //get the file attributes
+            
               ::osl::FileStatus rFileStatus( osl_FileStatus_Mask_Attributes );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
@@ -4608,17 +4608,17 @@ namespace osl_File
         CPPUNIT_TEST( setAttributes_001 );
         CPPUNIT_TEST( setAttributes_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setAttributes
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC setTime(
-    //         const ::rtl::OUString& ustrFileURL,
-    //         const TimeValue& rCreationTime,
-    //         const TimeValue& rLastAccessTime,
-    //         const TimeValue& rLastWriteTime )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
+    
+    
     class  setTime : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
@@ -4626,20 +4626,20 @@ namespace osl_File
 
         public:
         setTime() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void setTime_001()
         {
              TimeValue *pTV_current  = NULL;
@@ -4651,15 +4651,15 @@ namespace osl_File
             TimeValue *pTV_modify   = NULL;
             CPPUNIT_ASSERT( ( pTV_modify = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
 
-            //get current time
+            
             bool bOk = osl_getSystemTime( pTV_current );
             CPPUNIT_ASSERT( bOk );
 
-            //set the file time
+            
             nError2 = ::osl::File::setTime( aTmpName6, *pTV_current, *pTV_current, *pTV_current );
             CPPUNIT_ASSERT_MESSAGE( errorToStr( nError2 ).getStr(), nError2 == FileBase::E_None);
 
-             //get the file access time, creation time, modify time
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT_MESSAGE( errorToStr( nError1 ).getStr(), nError1 == FileBase::E_None);
 
@@ -4681,8 +4681,8 @@ namespace osl_File
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set access time then get it. time precision is still a problem for it cut off the nanosec.",
                 t_compareTime( pTV_access, pTV_current, delta ) );
 #if defined ( WNT )
-            //Unfortunately there is no way to get the creation time of a file under Unix (its a Windows only feature).
-            //That means the flag osl_FileStatus_Mask_CreationTime should be deprecated under Unix.
+            
+            
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set creation time then get it. ",
                 sal_True == t_compareTime( pTV_creation, pTV_current, delta ) ) ;
 #endif
@@ -4697,12 +4697,12 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( setTime );
         CPPUNIT_TEST( setTime_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setTime
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC sync()
-    //---------------------------------------------------------------------
+    
+    
+    
+    
         class  sync : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
@@ -4710,21 +4710,21 @@ namespace osl_File
 
         public:
         sync() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestFile( aTmpName6 );
 
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test case: if The file is located on a read only file system.
+        
         void sync_001()
         {
 #ifdef UNX
@@ -4741,7 +4741,7 @@ namespace osl_File
             nError1 = tmp_file.write((void*)buffer, sizeof(buffer), written);
             CPPUNIT_ASSERT_MESSAGE("write failed!", nError1 == FileBase::E_None);
 
-            //set the file to readonly
+            
             nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead );
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
 
@@ -4752,16 +4752,16 @@ namespace osl_File
             tmp_file.close();
 #endif
         }
-      //test case:no enough space, how to create such case???see test_cpy_wrt_file.cxx::test_osl_writeFile
+      
 
 
 
         CPPUNIT_TEST_SUITE( sync );
         CPPUNIT_TEST( sync_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setTime
+    };
 
-    // -----------------------------------------------------------------------------
+    
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::ctors, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::open, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::close, "osl_File" );
@@ -4778,47 +4778,47 @@ namespace osl_File
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::setAttributes, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::setTime, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::sync, "osl_File" );
-// FIXME: to enable these tests (when they work cross-platform) we need to add the below:
-//    CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_File" );
-
-}// namespace osl_File
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for DirectoryItem class
-//------------------------------------------------------------------------
+
+}
+
+
+
+
+
 namespace osl_DirectoryItem
 {
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  DirectoryItem(): _pData( NULL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  ctors : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1;
 
         public:
         ctors() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void ctors_001()
         {
             ::osl::File testFile( aTmpName6 );
-            ::osl::DirectoryItem    rItem;  //constructor
+            ::osl::DirectoryItem    rItem;  
 
-             //get the DirectoryItem.
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( FileBase::E_None == nError1 );
 
@@ -4829,40 +4829,40 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  DirectoryItem( const DirectoryItem& rItem ): _pData( rItem._pData)
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  copy_assin_Ctors : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1;
 
         public:
         copy_assin_Ctors() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void copy_assin_Ctors_001()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( FileBase::E_None == nError1 );
 
-            ::osl::DirectoryItem    copyItem( rItem ); //copy constructor
+            ::osl::DirectoryItem    copyItem( rItem ); 
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = copyItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
@@ -4873,13 +4873,13 @@ namespace osl_DirectoryItem
 
         void copy_assin_Ctors_002()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( FileBase::E_None == nError1 );
 
             ::osl::DirectoryItem    copyItem;
-            copyItem = rItem;               //assinment operator
+            copyItem = rItem;               
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = copyItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
@@ -4892,35 +4892,35 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( copy_assin_Ctors_001 );
         CPPUNIT_TEST( copy_assin_Ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class copy_assin_Ctors
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool is()
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  is : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1;
 
         public:
         is() :nError1(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void is_001()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
+            ::osl::DirectoryItem    rItem;  
 
             CPPUNIT_ASSERT_MESSAGE( "test for is function: use an uninitialized instance.",
                                     !rItem.is() );
@@ -4928,8 +4928,8 @@ namespace osl_DirectoryItem
 
         void is_002()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( FileBase::E_None == nError1 );
 
@@ -4941,39 +4941,39 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( is_001 );
         CPPUNIT_TEST( is_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class is
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  static inline RC get( const ::rtl::OUString& ustrFileURL, DirectoryItem& rItem )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  get : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
         get() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpname.
+            
             createTestFile( aTmpName6 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpname.
+            
             deleteTestFile( aTmpName6 );
         }
 
-        // test code.
+        
         void get_001()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError2 = ::osl::DirectoryItem::get( aTmpName6, rItem );
 
-            //check the file name
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
@@ -4986,7 +4986,7 @@ namespace osl_DirectoryItem
         void get_002()
         {
             ::osl::DirectoryItem    rItem;
-             //get the DirectoryItem.
+             
             nError1 = ::osl::DirectoryItem::get( aSysPath1, rItem );
 
             CPPUNIT_ASSERT_MESSAGE( "test for get function: use a system name instead of a URL.",
@@ -4996,7 +4996,7 @@ namespace osl_DirectoryItem
         void get_003()
         {
             ::osl::DirectoryItem    rItem;
-             //get the DirectoryItem.
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName3, rItem );
 
             CPPUNIT_ASSERT_MESSAGE( "test for get function: use a non existed file URL.",
@@ -5008,42 +5008,42 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( get_002 );
         CPPUNIT_TEST( get_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class get
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC getFileStatus( FileStatus& rStatus )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getFileStatus : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
         getFileStatus() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void getFileStatus_001()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName4, rItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //check the file name
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError2 = rItem.getFileStatus( rFileStatus );
 
@@ -5054,11 +5054,11 @@ namespace osl_DirectoryItem
 
         void getFileStatus_002()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
 
-            //check the file name
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError2 = rItem.getFileStatus( rFileStatus );
 
@@ -5068,12 +5068,12 @@ namespace osl_DirectoryItem
 
         void getFileStatus_003()
         {
-            ::osl::DirectoryItem    rItem;  //constructor
-             //get the DirectoryItem.
+            ::osl::DirectoryItem    rItem;  
+             
             nError1 = ::osl::DirectoryItem::get( aTmpName3, rItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //check the file name
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError2 = rItem.getFileStatus( rFileStatus );
 
@@ -5088,7 +5088,7 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( getFileStatus_002 );
         CPPUNIT_TEST( getFileStatus_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileStatus
+    };
 
 
 
@@ -5097,48 +5097,48 @@ namespace osl_DirectoryItem
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::is, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::get, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::getFileStatus, "osl_DirectoryItem" );
-}// namespace osl_DirectoryItem
+}
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for Directory class
-//------------------------------------------------------------------------
+
+
+
 namespace osl_Directory
 {
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  Directory( const ::rtl::OUString& strPath ): _pData( 0 ), _aPath( strPath )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  ctors : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
         ctors() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
-            // LLA: t_print("tearDown done.\n");
+            
         }
 
-        // test code.
+        
         void ctors_001()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
              CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //close a directory
+            
             nError2 = testDirectory.close();
              CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError2 );
 
@@ -5149,12 +5149,12 @@ namespace osl_Directory
 
         void ctors_002()
         {
-            ::osl::Directory testDirectory( aTmpName9 ); //constructor
+            ::osl::Directory testDirectory( aTmpName9 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
              CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //close a directory
+            
             nError2 = testDirectory.close();
              CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError2 );
 
@@ -5167,43 +5167,43 @@ namespace osl_Directory
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC open()
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  open : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
         open() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void open_001()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
-            //check if directory is opened.
+            
             bool bOk = testDirectory.isOpen();
-            //close a directory
+            
             nError2 = testDirectory.close();
 
             CPPUNIT_ASSERT_MESSAGE( "test for open function: open a directory and check for open",
@@ -5214,9 +5214,9 @@ namespace osl_Directory
 
         void open_002()
         {
-            ::osl::Directory testDirectory( aTmpName6 ); //constructor
+            ::osl::Directory testDirectory( aTmpName6 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
              if ( ::osl::FileBase::E_None == nError1 )
             {
@@ -5230,9 +5230,9 @@ namespace osl_Directory
 
         void open_003()
         {
-            ::osl::Directory testDirectory( aUserDirectorySys ); //constructor
+            ::osl::Directory testDirectory( aUserDirectorySys ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
              if ( ::osl::FileBase::E_None == nError1 )
             {
@@ -5246,9 +5246,9 @@ namespace osl_Directory
 
         void open_004()
         {
-            ::osl::Directory testDirectory( aTmpName4 ); //constructor
+            ::osl::Directory testDirectory( aTmpName4 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
              if ( ::osl::FileBase::E_None == nError1 )
             {
@@ -5266,43 +5266,43 @@ namespace osl_Directory
         CPPUNIT_TEST( open_003 );
         CPPUNIT_TEST( open_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class open
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool isOpen() { return _pData != NULL; };
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  isOpen : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
         isOpen() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempfile in $TEMP/tmpdir/tmpname.
+            
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
         }
 
         void tearDown()
         {
-            // remove the tempfile in $TEMP/tmpdir/tmpname.
+            
             deleteTestFile( aTmpName4 );
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void isOpen_001()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
-            //check if directory is opened.
+            
             bool bOk = testDirectory.isOpen();
-            //close a directory
+            
             nError2 = testDirectory.close();
 
             CPPUNIT_ASSERT_MESSAGE( "test for isOpen function: open a directory and check for open",
@@ -5311,9 +5311,9 @@ namespace osl_Directory
 
         void isOpen_002()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //check if directory is opened.
+            
             bool bOk = testDirectory.isOpen();
 
             CPPUNIT_ASSERT_MESSAGE( "test for isOpen function: do not open a directory and check for open",
@@ -5324,41 +5324,41 @@ namespace osl_Directory
         CPPUNIT_TEST( isOpen_001 );
         CPPUNIT_TEST( isOpen_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class isOpen
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC close()
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  close : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
         close() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempdirectory : $TEMP/tmpdir.
+            
             createTestDirectory( aTmpName3 );
         }
 
         void tearDown()
         {
-            // remove a tempdirectory : $TEMP/tmpdir.
+            
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void close_001()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
-            //close a directory
+            
             nError2 = testDirectory.close();
-            //check if directory is opened.
+            
             bool bOk = testDirectory.isOpen();
 
             CPPUNIT_ASSERT_MESSAGE( "test for isOpen function: close a directory and check for open",
@@ -5367,9 +5367,9 @@ namespace osl_Directory
 
         void close_002()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //close a directory
+            
             nError1 = testDirectory.close();
 
             CPPUNIT_ASSERT_MESSAGE( "test for isOpen function: close a not opened directory",
@@ -5381,12 +5381,12 @@ namespace osl_Directory
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class close
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC reset()
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  reset : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
@@ -5394,12 +5394,12 @@ namespace osl_Directory
 
         public:
         reset() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempdirectory : $TEMP/tmpdir.
+            
             createTestDirectory( aTmpName3 );
-            // create three files : $TEMP/tmpdir/tmpname, $TEMP/tmpdir/tmpdir, $TEMP/tmpdir/hiddenfile,
+            
             createTestFile( aTmpName3, aTmpName2);
             createTestFile( aTmpName3, aTmpName1);
             createTestFile( aTmpName3, aHidURL1);
@@ -5407,44 +5407,44 @@ namespace osl_Directory
 
         void tearDown()
         {
-            // remove three files : $TEMP/tmpdir/tmpname, $TEMP/tmpdir/tmpdir, $TEMP/tmpdir/hiddenfile,
+            
             deleteTestFile( aTmpName3, aHidURL1);
             deleteTestFile( aTmpName3, aTmpName1);
             deleteTestFile( aTmpName3, aTmpName2);
-            // remove a tempdirectory : $TEMP/tmpdir.
+            
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void reset_001()
         {
-            ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //get first Item
+            
             nError1 = testDirectory.getNextItem( rItem, 1 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //check the file name of first Item
+            
               ::osl::FileStatus   rFileStatusFirst( osl_FileStatus_Mask_FileName );
             nError1 = rItem.getFileStatus( rFileStatusFirst );
 
-            //get second Item
-            //mindy: nError1 = testDirectory.getNextItem( rItem, 0 );
-            //mindy: CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
+            
+            
+            
 
-            //reset enumeration
+            
             nError2 = testDirectory.reset();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError2 );
-            //get reseted Item, if reset does not work, getNextItem() should return the second Item (aTmpName1)
+            
             nError1 = testDirectory.getNextItem( rItem, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //check the file name again
+            
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = rItem.getFileStatus( rFileStatus );
-            //close a directory
+            
             nError1 = testDirectory.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
@@ -5459,9 +5459,9 @@ namespace osl_Directory
 
         void reset_002()
         {
-            ::osl::Directory testDirectory( aTmpName6 ); //constructor
+            ::osl::Directory testDirectory( aTmpName6 ); 
 
-            //close a directory
+            
             nError1 = testDirectory.reset();
 
             CPPUNIT_ASSERT_MESSAGE( "test for reset function: reset a non existed directory",
@@ -5471,9 +5471,9 @@ namespace osl_Directory
 
         void reset_003()
         {
-            ::osl::Directory testDirectory( aTmpName4 ); //constructor
+            ::osl::Directory testDirectory( aTmpName4 ); 
 
-            //close a directory
+            
             nError1 = testDirectory.reset();
 
             CPPUNIT_ASSERT_MESSAGE( "test for reset function: reset a file instead of a directory",
@@ -5482,9 +5482,9 @@ namespace osl_Directory
 
         void reset_004()
         {
-            ::osl::Directory testDirectory( aUserDirectorySys ); //constructor
+            ::osl::Directory testDirectory( aUserDirectorySys ); 
 
-            //close a directory
+            
             nError1 = testDirectory.reset();
 
             CPPUNIT_ASSERT_MESSAGE( "test for reset function: use a system path",
@@ -5497,12 +5497,12 @@ namespace osl_Directory
         CPPUNIT_TEST( reset_003 );
         CPPUNIT_TEST( reset_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class reset
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getNextItem : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
@@ -5510,12 +5510,12 @@ namespace osl_Directory
 
         public:
         getNextItem() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // initialization
+        
         void setUp()
         {
-            // create a tempdirectory : $TEMP/tmpdir.
+            
             createTestDirectory( aTmpName3 );
-            // create three files : $TEMP/tmpdir/tmpname, $TEMP/tmpdir/tmpdir, $TEMP/tmpdir/hiddenfile,
+            
             createTestFile( aTmpName3, aTmpName2 );
             createTestFile( aTmpName3, aTmpName1 );
             createTestFile( aTmpName3, aHidURL1 );
@@ -5524,38 +5524,38 @@ namespace osl_Directory
 
         void tearDown()
         {
-            // remove three files : $TEMP/tmpdir/tmpname, $TEMP/tmpdir/tmpdir, $TEMP/tmpdir/hiddenfile,
+            
             deleteTestFile( aTmpName3, aHidURL1 );
             deleteTestFile( aTmpName3, aTmpName1 );
             deleteTestFile( aTmpName3, aTmpName2 );
-            // remove a tempdirectory : $TEMP/tmpdir.
+            
             deleteTestDirectory( aTmpName3 );
         }
 
-        // test code.
+        
         void getNextItem_001()
         {
-             ::osl::Directory testDirectory( aTmpName3 ); //constructor
+             ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            //check the file name
+            
             bool            bOk1 = false;
             bool bOk2 = false;
             bool bOk3 = false;
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             for ( int nCount = 0; nCount < 3; nCount++ )
             {
-                //get three Items
+                
                 nError1 = testDirectory.getNextItem( rItem, 2 );
                 CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
                 nError1 = rItem.getFileStatus( rFileStatus );
                 CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-                // a special order is not guaranteed. So any file may occur on any time.
-                // But every file name should occur only once.
+                
+                
                 if ( !bOk1 && compareFileName( rFileStatus.getFileName(), aTmpName1 ) )
                 {
                     bOk1 = true;
@@ -5572,7 +5572,7 @@ namespace osl_Directory
                 }
            }
 
-            //close a directory
+            
             nError1 = testDirectory.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
@@ -5582,7 +5582,7 @@ namespace osl_Directory
 
         void getNextItem_002()
         {
-             ::osl::Directory testDirectory( aTmpName3 ); //constructor
+             ::osl::Directory testDirectory( aTmpName3 ); 
             nError1 = testDirectory.getNextItem( rItem );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrieve an item in a directory which is not opened, also test for nHint's default value.",
@@ -5591,9 +5591,9 @@ namespace osl_Directory
 
         void getNextItem_003()
         {
-             ::osl::Directory testDirectory( aTmpName3 ); //constructor
+             ::osl::Directory testDirectory( aTmpName3 ); 
 
-            //open a directory
+            
             nError1 = testDirectory.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
@@ -5602,7 +5602,7 @@ namespace osl_Directory
                 nError2 = testDirectory.getNextItem( rItem, 3 );
             }
 
-            //close a directory
+            
             nError1 = testDirectory.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
@@ -5612,7 +5612,7 @@ namespace osl_Directory
 
         void getNextItem_004()
         {
-        //create a link file(can not on Windows), then check if getNextItem can get it.
+        
 #ifdef UNX
             bool bLnkOK = false;
             bool bFoundOK = false;
@@ -5625,12 +5625,12 @@ namespace osl_Directory
             strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
             strSrcFileName  = OUStringToOString( aUStr_SrcFileSys, RTL_TEXTENCODING_ASCII_US );
 
-            // create a link file and link it to file "/tmp/PID/tmpdir/tmpname"
+            
             sal_Int32 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
             CPPUNIT_ASSERT( fd == 0 );
             ::osl::Directory testDirectory( aTmpName3 );
 
-            //open a directory
+            
             nError1 = testDirectory.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             ::rtl::OUString aFileName ("link.file");
@@ -5668,12 +5668,12 @@ namespace osl_Directory
         CPPUNIT_TEST( getNextItem_003 );
         CPPUNIT_TEST( getNextItem_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getNextItem
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  getVolumeInfo : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1;
@@ -5681,12 +5681,12 @@ namespace osl_Directory
         public:
 
         getVolumeInfo() :nError1(FileBase::E_None) {}
-        // test code.
+        
         void checkValidMask(osl::VolumeInfo const& _aVolumeInfo, sal_Int32 _nMask)
             {
                 if (_nMask == osl_VolumeInfo_Mask_FileSystemName)
         {
-            //get file system name
+            
             ::rtl::OUString aFileSysName( aNullURL );
                     aFileSysName = _aVolumeInfo.getFileSystemName();
 
@@ -5716,7 +5716,7 @@ namespace osl_Directory
                 }
                 if (_nMask == osl_VolumeInfo_Mask_TotalSpace)
                 {
-                    // within Linux, df / * 1024 bytes is the result
+                    
                     sal_uInt64 nSize = _aVolumeInfo.getTotalSpace();
                     printf("Total space: %" SAL_PRIuUINT64 "\n", nSize);
                 }
@@ -5750,10 +5750,10 @@ namespace osl_Directory
         void checkVolumeInfo(sal_Int32 _nMask)
             {
                 ::osl::VolumeInfo aVolumeInfo( _nMask );
-                //call getVolumeInfo here
+                
                 nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
-                // LLA: IMHO it's not a bug, if VolumeInfo is not valid, it's a feature
-                // LLA: CPPUNIT_ASSERT_MESSAGE("mask is not valid", sal_True == aVolumeInfo.isValid( _nMask ) );
+                
+                
                 if (aVolumeInfo.isValid( _nMask))
                 {
                     checkValidMask(aVolumeInfo, _nMask);
@@ -5806,13 +5806,13 @@ namespace osl_Directory
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
-            //call getVolumeInfo here
+            
 
-            // LLA: rtl::OUString aRootSysURL;
-            // LLA: nError1 = osl::File::getFileURLFromSystemPath(aRootSys, aRootSysURL);
-            // LLA:
-            // LLA: CPPUNIT_ASSERT_MESSAGE( "can't convert root path to file url",
-            // LLA:                         ( osl::FileBase::E_NONE == nError1 ) );
+            
+            
+            
+            
+            
 
             nError1 = ::osl::Directory::getVolumeInfo( aRootSys, aVolumeInfo );
 
@@ -5824,10 +5824,10 @@ namespace osl_Directory
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
-            //call getVolumeInfo here
+            
             nError1 = ::osl::Directory::getVolumeInfo( aTmpName3, aVolumeInfo );
 
-// LLA: in Windows, it reply no error, it did not pass in (W32).
+
 #if defined(UNX) && !defined(IOS)
             CPPUNIT_ASSERT_MESSAGE( "test for getVolumeInfo function: non-existence test. ",
                                     ( osl::FileBase::E_NOENT == nError1 ) );
@@ -5846,28 +5846,28 @@ namespace osl_Directory
         CPPUNIT_TEST( getVolumeInfo_002 );
         CPPUNIT_TEST( getVolumeInfo_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getVolumeInfo
+    };
 
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC create( const ::rtl::OUString& ustrDirectoryURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  create : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
 
-        // test code.
+        
         create() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         void create_001()
         {
-            //create directory in $TEMP/tmpdir
+            
             nError1 = ::osl::Directory::create( aTmpName3 );
-            //check for existence
+            
             nError2 = ::osl::Directory::create( aTmpName3 );
-            //remove it
+            
             deleteTestDirectory( aTmpName3 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for create function: create a directory and check its existence.",
@@ -5878,7 +5878,7 @@ namespace osl_Directory
         void create_002()
         {
 #if !defined (WNT) && !defined (MACOSX) && defined (SAL_UNX)
-            if (geteuid() == 0) //don't test if building as root
+            if (geteuid() == 0) 
                 return;
 
             rtl::OUString aTmpDir;
@@ -5893,13 +5893,13 @@ namespace osl_Directory
             sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
             sError += "' and check its existence.";
             CPPUNIT_ASSERT_MESSAGE(sError.getStr(), osl::FileBase::E_None == nError1);
-            osl_setFileAttributes(aTmpDir.pData, 0); //no access allowed now
+            osl_setFileAttributes(aTmpDir.pData, 0); 
 
-            //Shouldn't be possible now to create a dir underneath it
+            
             rtl::OUString aTmpSubLevel = aTmpDir + "/notallowedhere";
             nError1 = ::osl::Directory::create(aTmpSubLevel);
 
-            //allow removal
+            
             osl_setFileAttributes(aTmpDir.pData,
                 osl_File_Attribute_OwnRead |
                 osl_File_Attribute_OwnWrite |
@@ -5914,7 +5914,7 @@ namespace osl_Directory
 
         void create_003()
         {
-            //create directory in /tmpname
+            
             nError1 = ::osl::Directory::create( aSysPath1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for create function: create a directory using system path.",
@@ -5926,12 +5926,12 @@ namespace osl_Directory
         CPPUNIT_TEST( create_002 );
         CPPUNIT_TEST( create_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class create
+    };
 
-    //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC remove( const ::rtl::OUString& ustrDirectoryURL )
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     class  remove : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC     nError1, nError2;
@@ -5939,15 +5939,15 @@ namespace osl_Directory
         public:
 
         remove() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
-        // test code.
+        
         void remove_001()
         {
-            //create directory in $TEMP/tmpdir
+            
             nError1 = ::osl::Directory::create( aTmpName3 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //remove it
+            
             nError1 = ::osl::Directory::remove( aTmpName3 );
-            //check for existence
+            
             ::osl::Directory rDirectory( aTmpName3 );
             nError2 = rDirectory.open();
 
@@ -5958,12 +5958,12 @@ namespace osl_Directory
 
         void remove_002()
         {
-            //create directory in $TEMP/tmpdir
+            
             nError1 = ::osl::Directory::create( aTmpName3 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //try to remove it by system path
+            
             nError1 = ::osl::Directory::remove( aSysPath3 );
-             //check for existence
+             
             ::osl::Directory rDirectory( aTmpName3 );
             nError2 = rDirectory.open();
             if ( osl::FileBase::E_NOENT != nError2 )
@@ -5975,7 +5975,7 @@ namespace osl_Directory
 
         void remove_003()
         {
-            //try to remove a non-existed directory
+            
             nError1 = ::osl::Directory::remove( aTmpName6 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for remove function: try to remove a non-existed directory.",
@@ -5986,7 +5986,7 @@ namespace osl_Directory
         {
             createTestFile( aTmpName6 );
             bool bExist = ifFileExist( aTmpName6 );
-            //try to remove file.
+            
             nError1 = ::osl::Directory::remove( aTmpName6 );
             deleteTestFile( aTmpName6 );
 
@@ -6004,8 +6004,8 @@ namespace osl_Directory
             ::rtl::OString sError = "test for remove function: try to remove a directory that is not empty.";
             sError += errorToStr( nError1 ).getStr();
 #if defined ( SOLARIS )
-            //on UNX, the implementation uses rmdir(), which EEXIST is thrown on Solaris when the directory is not empty, refer to: 'man -s 2 rmdir', while on linux, ENOTEMPTY is thrown.
-            //EEXIST The directory contains entries other than those for "." and "..".
+            
+            
             printf("#Solaris test\n");
             CPPUNIT_ASSERT_MESSAGE( sError.getStr(), ( osl::FileBase::E_EXIST == nError1 ) );
 #else
@@ -6020,11 +6020,11 @@ namespace osl_Directory
         CPPUNIT_TEST( remove_004 );
         CPPUNIT_TEST( remove_005 );
         CPPUNIT_TEST_SUITE_END();
-    };// class remove
+    };
 
-    //########################################
-    // TEST Directory::createPath
-    //########################################
+    
+    
+    
 
     #ifdef WNT
     #   define PATH_BUFFER_SIZE MAX_PATH
@@ -6034,7 +6034,7 @@ namespace osl_Directory
 
 #define TEST_PATH_POSTFIX "hello/world"
 
-    //########################################
+    
     OUString get_test_path()
     {
         static OUString test_path;
@@ -6063,7 +6063,7 @@ namespace osl_Directory
                 tmp_x += rtl::OString('/');
 
 #if !defined(WNT) && !defined(ANDROID) && !defined(AIX)
-            // FIXME would be nice to create unique dir even on Windows
+            
             tmp_x += rtl::OString("XXXXXX");
             char *out = mkdtemp(const_cast<char*>(tmp_x.getStr()));
 
@@ -6088,7 +6088,7 @@ namespace osl_Directory
         return test_path;
     }
 
-    //########################################
+    
     void rm_test_path(const OUString& path)
     {
         sal_Unicode buffer[PATH_BUFFER_SIZE];
@@ -6109,7 +6109,7 @@ namespace osl_Directory
         }
     }
 
-    //########################################
+    
     class DirCreatedObserver : public DirectoryCreationObserver
     {
     public:
@@ -6132,15 +6132,15 @@ namespace osl_Directory
     };
 
 
-    //########################################
+    
     class createPath : public CppUnit::TestFixture
     {
     public:
-        //##########################################
+        
         createPath()
         {}
 
-        //##########################################
+        
         void with_relative_path()
         {
             FileBase::RC rc = Directory::createPath( OUString(TEST_PATH_POSTFIX));
@@ -6153,7 +6153,7 @@ namespace osl_Directory
             );
         }
 
-        //##########################################
+        
         void without_callback()
         {
             OUString tp_url = get_test_path();
@@ -6171,7 +6171,7 @@ namespace osl_Directory
             );
         }
 
-        //##########################################
+        
         void with_callback()
         {
             OUString tp_url = get_test_path();
@@ -6195,7 +6195,7 @@ namespace osl_Directory
 
 #ifdef WNT
 
-        //##########################################
+        
         const char* get_unused_drive_letter()
         {
             static const char m_aBuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -6213,7 +6213,7 @@ namespace osl_Directory
             return NULL;
         }
 
-        //##########################################
+        
         void at_invalid_logical_drive()
         {
             const char* drv = get_unused_drive_letter();
@@ -6247,9 +6247,9 @@ namespace osl_Directory
 #endif
     CPPUNIT_TEST_SUITE_END();
 
-    }; // class createPath
+    }; 
 
-    // -----------------------------------------------------------------------------
+    
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::ctors );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::open );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::isOpen );
@@ -6260,7 +6260,7 @@ namespace osl_Directory
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::create );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::remove );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::createPath );
-}// namespace osl_Directory
+}
 
 
 
@@ -6272,7 +6272,7 @@ CPPUNIT_PLUGIN_IMPLEMENT();
 */
 inline ::rtl::OUString getCurrentPID(  )
 {
-    //~ Get current PID and turn it into OUString;
+    
     int nPID = 0;
 #ifdef WNT
     nPID = GetCurrentProcessId();
@@ -6283,7 +6283,7 @@ inline ::rtl::OUString getCurrentPID(  )
 }
 
 
-//~ do some clean up work after all test completed.
+
 class GlobalObject
 {
     public:
@@ -6291,13 +6291,13 @@ class GlobalObject
     {
         try
         {
-            //~ special clean up task in Windows and Unix separately;
+            
 #if ( defined UNX )
-            //~ some clean up task  for UNIX OS
+            
             ;
 #else
-            //~ some clean up task  for Windows OS
-            //~ check if some files are in the way, remove them if necessary.
+            
+            
             if ( ifFileExist( aTmpName6 )  == sal_True )
                 deleteTestFile( aTmpName6 );
             if ( ifFileExist( aTmpName4 )  == sal_True )

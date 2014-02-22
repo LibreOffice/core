@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -36,7 +36,7 @@ namespace rtl_random
 class createPool : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -45,34 +45,34 @@ public:
     {
     }
 
-    // insert your test code here.
-    // this is only demonstration code
+    
+    
     void createPool_001()
     {
-        // this is demonstration code
+        
 
         rtlRandomPool aPool = rtl_random_createPool();
 
-        // LLA: seems to be that an other test is not possible for createPool()
+        
         CPPUNIT_ASSERT_MESSAGE("create failed", aPool != NULL);
 
         rtl_random_destroyPool(aPool);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(createPool);
     CPPUNIT_TEST(createPool_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class createPool
+}; 
 
 
 class destroyPool : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -81,10 +81,10 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void destroyPool_000()
     {
-        // GPF, if failed
+        
         rtl_random_destroyPool(NULL);
     }
 
@@ -92,26 +92,26 @@ public:
     {
         rtlRandomPool aPool = rtl_random_createPool();
 
-        // LLA: seems to be that an other test is not possible for createPool()
+        
         CPPUNIT_ASSERT_MESSAGE("create failed", aPool != NULL);
 
         rtl_random_destroyPool(aPool);
     }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(destroyPool);
     CPPUNIT_TEST(destroyPool_000);
     CPPUNIT_TEST(destroyPool_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class destroyPool
+}; 
 
 
 class addBytes : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -120,8 +120,8 @@ public:
     {
     }
 
-    // insert your test code here.
-    // this is only demonstration code
+    
+    
     void addBytes_000()
     {
         rtlRandomPool aPool = rtl_random_createPool();
@@ -162,15 +162,15 @@ public:
         }
 
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(addBytes);
     CPPUNIT_TEST(addBytes_000);
     CPPUNIT_TEST(addBytes_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class addBytes
+}; 
 
 
 class Statistics
@@ -186,7 +186,7 @@ class Statistics
 public:
     void clearDispensation()
     {
-        for (int i = 0;i < 256;++i)                        // clear array
+        for (int i = 0;i < 256;++i)                        
         {
             m_nDispensation[i] = 0;
         }
@@ -218,7 +218,7 @@ public:
         m_nMinDeviation = _nCountMax;
         m_nMaxDeviation = 0;
 
-        for (int i = 0;i < 256;++i)                        // show dispensation
+        for (int i = 0;i < 256;++i)                        
         {
             m_nMin = std::min(m_nMin, m_nDispensation[i]);
             m_nMax = std::max(m_nMax, m_nDispensation[i]);
@@ -230,7 +230,7 @@ public:
 
     void print()
     {
-        // LLA: these are only info values
+        
         printf("\nSome statistics\n");
         printf("Min: %d\n", m_nMin);
         printf("Max: %d\n", m_nMax);
@@ -247,7 +247,7 @@ public:
 class getBytes : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -256,7 +256,7 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void getBytes_000()
     {
         rtlRandomPool aPool = rtl_random_createPool();
@@ -331,7 +331,7 @@ public:
         int nCount = 0;
 
         int nCountMax = 1000000;
-        for(nCount = 0;nCount < nCountMax; ++nCount)                  // run 100000000 through getBytes(...)
+        for(nCount = 0;nCount < nCountMax; ++nCount)                  
         {
             /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
             /* CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None); */
@@ -363,10 +363,10 @@ public:
         int nCount = 0;
 
         int nCountMax = 10000;
-        for(nCount = 0;nCount < nCountMax; ++nCount)                  // run 100000000 through getBytes(...)
+        for(nCount = 0;nCount < nCountMax; ++nCount)                  
         {
             /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
-            // CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
+            
 
             for (sal_uInt32 i=0;i<nBufLen;++i)
                 aStat.addValue(pBuffer[i], 1);
@@ -381,9 +381,9 @@ public:
         delete [] pBuffer;
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(getBytes);
     CPPUNIT_TEST(getBytes_000);
@@ -392,14 +392,14 @@ public:
     CPPUNIT_TEST(getBytes_003);
     CPPUNIT_TEST(getBytes_003_1);
     CPPUNIT_TEST_SUITE_END();
-}; // class getBytes
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::createPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::destroyPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::addBytes);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::getBytes);
-} // namespace rtl_random
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

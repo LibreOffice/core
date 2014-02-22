@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -34,9 +34,9 @@ namespace unoidl { namespace detail {
 
 namespace {
 
-//TODO: Bad hack to work around osl::FileStatus::getFileName not determining the
-// original spelling of a file name (not even with
-// osl_FileStatus_Mask_Validate):
+
+
+
 OUString getFileName(OUString const & uri, osl::FileStatus & status) {
 #if defined MACOSX
     sal_Int32 i = uri.lastIndexOf('/') + 1;
@@ -101,7 +101,7 @@ private:
     virtual ~Cursor() throw () {}
 
     virtual rtl::Reference<Entity> getNext(OUString *)
-    { return rtl::Reference<Entity>(); } //TODO
+    { return rtl::Reference<Entity>(); } 
 };
 
 class SourceModuleEntity: public ModuleEntity {
@@ -112,7 +112,7 @@ private:
     virtual ~SourceModuleEntity() throw () {}
 
     virtual std::vector<OUString> getMemberNames() const
-    { return std::vector<OUString>(); } //TODO
+    { return std::vector<OUString>(); } 
 
     virtual rtl::Reference< MapCursor > createCursor() const
     { return new Cursor; }
@@ -137,15 +137,15 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
     if (ci != cache_.end()) {
         return ci->second;
     }
-    // Match name against
-    //   name ::= identifier ("." identifier)*
-    //   identifier ::= upper-blocks | lower-block
-    //   upper-blocks ::= upper ("_"? alnum)*
-    //   lower-block :== lower alnum*
-    //   alnum ::= digit | upper | lower
-    //   digit ::= "0"--"9"
-    //   upper ::= "A"--"Z"
-    //   lower ::= "a"--"z"
+    
+    
+    
+    
+    
+    
+    
+    
+    
     OUStringBuffer buf(name);
     sal_Int32 start = 0;
     sal_Int32 i = 0;
@@ -154,7 +154,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
         if (c == '.') {
             assert(i == start || i != 0);
             if (i == start || name[i - 1] == '_') {
-                throw FileFormatException( //TODO
+                throw FileFormatException( 
                     "", "Illegal UNOIDL identifier \"" + name + "\"");
             }
             buf[i] = '/';
@@ -164,27 +164,27 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
             if (i == start || name[i - 1] == '_'
                 || !rtl::isAsciiUpperCase(name[start]))
             {
-                throw FileFormatException( //TODO
+                throw FileFormatException( 
                     "", "Illegal UNOIDL identifier \"" + name + "\"");
             }
         } else if (rtl::isAsciiDigit(c)) {
             if (i == start) {
-                throw FileFormatException( //TODO
+                throw FileFormatException( 
                     "", "Illegal UNOIDL identifier \"" + name + "\"");
             }
         } else if (!rtl::isAsciiAlpha(c)) {
-            throw FileFormatException( //TODO
+            throw FileFormatException( 
                 "", "Illegal UNOIDL identifier \"" + name + "\"");
         }
     }
     if (i == start) {
-        throw FileFormatException( //TODO
+        throw FileFormatException( 
             "", "Illegal UNOIDL identifier \"" + name + "\"");
     }
     OUString uri(uri_ + buf.makeStringAndClear());
     rtl::Reference<Entity> ent;
-    // Prevent conflicts between foo/ and Foo.idl on case-preserving file
-    // systems:
+    
+    
     if (exists(uri, true) && !exists(uri + ".idl", false)) {
         ent = new SourceModuleEntity;
     } else {

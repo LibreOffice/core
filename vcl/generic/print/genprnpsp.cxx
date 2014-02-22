@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,7 +30,7 @@
   printer job functions.
  */
 
-// For spawning PDF and FAX generation
+
 #if defined( UNX )
 #  include <unistd.h>
 #  include <sys/wait.h>
@@ -126,7 +126,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
 
-    // copy page size
+    
     OUString aPaper;
     int width, height;
 
@@ -137,7 +137,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pJobSetup->mnPaperHeight    = 0;
     if( pJobSetup->mePaperFormat == PAPER_USER )
     {
-        // transform to 100dth mm
+        
         width               = PtTo10Mu( width );
         height              = PtTo10Mu( height );
 
@@ -153,7 +153,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         }
     }
 
-    // copy input slot
+    
     const PPDKey* pKey = NULL;
     const PPDValue* pValue = NULL;
 
@@ -173,7 +173,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
             pJobSetup->mnPaperBin = 0;
     }
 
-    // copy duplex
+    
     pKey = NULL;
     pValue = NULL;
 
@@ -200,7 +200,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         }
     }
 
-    // copy the whole context
+    
     if( pJobSetup->mpDriverData )
         rtl_freeMemory( pJobSetup->mpDriverData );
 
@@ -218,7 +218,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 }
 
-// Needs a cleaner abstraction ...
+
 #if defined( UNX )
 static bool passFileToCommandLine( const OUString& rFilename, const OUString& rCommandLine, bool bRemoveFile = true )
 {
@@ -230,7 +230,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
 
     bool bPipe = aCmdLine.indexOf( "(TMP)" ) != -1 ? false : true;
 
-    // setup command line for exec
+    
     if( ! bPipe )
         aCmdLine = aCmdLine.replaceAll(OString("(TMP)"), aFilename);
 
@@ -286,7 +286,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
         if( bPipe && bHavePipes )
         {
             close( fd[1] );
-            if( fd[0] != STDIN_FILENO ) // not probable, but who knows :)
+            if( fd[0] != STDIN_FILENO ) 
                 dup2( fd[0], STDIN_FILENO );
         }
         execv( argv[0], const_cast<char**>(argv) );
@@ -296,7 +296,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
     else
         fprintf( stderr, "failed to fork\n" );
 
-    // clean up the mess
+    
     if( bRemoveFile )
         unlink( aFilename.getStr() );
 
@@ -359,7 +359,7 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
     else
         bSuccess = false;
 
-    // clean up temp file
+    
     unlink(OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr());
 
     return bSuccess;
@@ -410,7 +410,7 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    p
                                                    ImplJobSetup*            pJobSetup )
 {
     mbPrinterInit = true;
-    // create and initialize SalInfoPrinter
+    
     PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter();
     configurePspInfoPrinter(pPrinter, pQueueInfo, pJobSetup);
     return pPrinter;
@@ -424,7 +424,7 @@ void SalGenericInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 SalPrinter* SalGenericInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     mbPrinterInit = true;
-    // create and initialize SalPrinter
+    
     PspSalPrinter* pPrinter = new PspSalPrinter( pInfoPrinter );
     pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
 
@@ -443,7 +443,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
     if( ! pNoSyncDetection || ! *pNoSyncDetection )
     {
-        // #i62663# synchronize possible asynchronouse printer detection now
+        
         rManager.checkPrintersChanged( true );
     }
     ::std::list< OUString > aPrinters;
@@ -452,7 +452,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     for( ::std::list< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
     {
         const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
-        // Neuen Eintrag anlegen
+        
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
         pInfo->maPrinterName    = *it;
         pInfo->maDriver         = rInfo.m_aDriverName;
@@ -536,10 +536,10 @@ int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 
 SalGraphics* PspSalInfoPrinter::GetGraphics()
 {
-    // return a valid pointer only once
-    // the reasoning behind this is that we could have different
-    // SalGraphics that can run in multiple threads
-    // (future plans)
+    
+    
+    
+    
     SalGraphics* pRet = NULL;
     if( ! m_pGraphics )
     {
@@ -591,7 +591,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
         pJobSetup->mnDriverDataLen  = nBytes;
         pJobSetup->mpDriverData     = (sal_uInt8*)pBuffer;
 
-        // copy everything to job setup
+        
         copyJobDataToJobSetup( pJobSetup, aInfo );
         JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
         return true;
@@ -599,11 +599,11 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     return false;
 }
 
-// This function gets the driver data and puts it into pJobSetup
-// If pJobSetup->mpDriverData is NOT NULL, then the independend
-// data should be merged into the driver data
-// If pJobSetup->mpDriverData IS NULL, then the driver defaults
-// should be merged into the independent data
+
+
+
+
+
 bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
     if( pJobSetup->mpDriverData )
@@ -614,10 +614,10 @@ bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
     return true;
 }
 
-// This function merges the independ driver data
-// and sets the new independ data in pJobSetup
-// Only the data must be changed, where the bit
-// in nGetDataFlags is set
+
+
+
+
 bool PspSalInfoPrinter::SetData(
     sal_uLong nSetDataFlags,
     ImplJobSetup* pJobSetup )
@@ -630,7 +630,7 @@ bool PspSalInfoPrinter::SetData(
         const PPDKey* pKey;
         const PPDValue* pValue;
 
-        // merge papersize if necessary
+        
         if( nSetDataFlags & SAL_JOBSET_PAPERSIZE )
         {
             OUString aPaper;
@@ -645,8 +645,8 @@ bool PspSalInfoPrinter::SetData(
             pKey = aData.m_pParser->getKey( OUString("PageSize") );
             pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
 
-            // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
-            // try to find the correct paper anyway using the size
+            
+            
             if( pKey && ! pValue && pJobSetup->mePaperFormat != PAPER_USER )
             {
                 PaperInfo aInfo( pJobSetup->mePaperFormat );
@@ -660,7 +660,7 @@ bool PspSalInfoPrinter::SetData(
                 return false;
         }
 
-        // merge paperbin if necessary
+        
         if( nSetDataFlags & SAL_JOBSET_PAPERBIN )
         {
             pKey = aData.m_pParser->getKey( OUString("InputSlot") );
@@ -672,19 +672,19 @@ bool PspSalInfoPrinter::SetData(
                 else
                     pValue = pKey->getValue( pJobSetup->mnPaperBin );
 
-                // may fail due to constraints;
-                // real paper bin is copied back to jobsetup in that case
+                
+                
                 aData.m_aContext.setValue( pKey, pValue );
             }
-            // if printer has no InputSlot key simply ignore this setting
-            // (e.g. SGENPRT has no InputSlot)
+            
+            
         }
 
-        // merge orientation if necessary
+        
         if( nSetDataFlags & SAL_JOBSET_ORIENTATION )
             aData.m_eOrientation = pJobSetup->meOrientation == ORIENTATION_LANDSCAPE ? orientation::Landscape : orientation::Portrait;
 
-        // merge duplex if necessary
+        
         if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
         {
             pKey = aData.m_pParser->getKey( OUString("Duplex") );
@@ -735,7 +735,7 @@ void PspSalInfoPrinter::GetPageInfo(
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-    // get the selected page size
+    
     if( aData.m_pParser )
     {
 
@@ -809,8 +809,8 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             return 0xffff;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
         {
-            // PPDs don't mention the number of possible collated copies.
-            // so let's guess as many as we want ?
+            
+            
             return 0xffff;
         }
         case PRINTER_CAPABILITIES_SETORIENTATION:
@@ -830,7 +830,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
                 return 1;
             else
             {
-                // see if the PPD contains a value to set PDF device
+                
                 JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
                 if( pJobSetup->mpDriverData )
                     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -840,7 +840,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "external_dialog" ) ? 1 : 0;
         case PRINTER_CAPABILITIES_USEPULLMODEL:
         {
-            // see if the PPD contains a value to set PDF device
+            
             JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
             if( pJobSetup->mpDriverData )
                 JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -901,15 +901,15 @@ bool PspSalPrinter::StartJob(
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     if( m_nCopies > 1 )
     {
-        // in case user did not do anything (m_nCopies=1)
-        // take the default from jobsetup
+        
+        
         m_aJobData.m_nCopies = m_nCopies;
         m_aJobData.setCollate( bCollate );
     }
 
     int nMode = 0;
 #if defined( UNX )
-    // check whether this printer is configured as fax
+    
     sal_Int32 nIndex = 0;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
     while( nIndex != -1 )
@@ -966,11 +966,11 @@ bool PspSalPrinter::EndJob()
 
         if( bSuccess )
         {
-            // check for fax
+            
             if( m_bFax )
             {
                 const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
-                // sendAFax removes the file after use
+                
                 bSuccess = sendAFax( m_aFaxNr, m_aTmpFile, rInfo.m_aCommand );
             }
             else if( m_bPdf )
@@ -1001,8 +1001,8 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
                        m_bSwallowFaxNo, m_pInfoPrinter );
     if( m_nCopies > 1 )
     {
-        // in case user did not do anything (m_nCopies=1)
-        // take the default from jobsetup
+        
+        
         m_aJobData.m_nCopies = m_nCopies;
         m_aJobData.setCollate( m_nCopies > 1 && m_bCollate );
     }
@@ -1064,19 +1064,19 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
     OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
-    // mark for endjob
+    
     m_bIsPDFWriterJob = true;
-    // reset IsLastPage
+    
     i_rController.setLastPage( false );
 
-    // update job data
+    
     if( i_pSetupData )
         JobData::constructFromStreamBuffer( i_pSetupData->mpDriverData, i_pSetupData->mnDriverDataLen, m_aJobData );
 
     OSL_ASSERT( m_aJobData.m_nPDFDevice > 0 );
     m_aJobData.m_nPDFDevice = 1;
 
-    // possibly create one job for collated output
+    
     bool bSinglePrintJobs = false;
     beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
@@ -1087,10 +1087,10 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     int nCopies = i_rController.getPrinter()->GetCopyCount();
     bool bCollate = i_rController.getPrinter()->IsCollateCopy();
 
-    // notify start of real print job
+    
     i_rController.jobStarted();
 
-    // setup PDFWriter context
+    
     vcl::PDFWriter::PDFWriterContext aContext;
     aContext.Version            = vcl::PDFWriter::PDF_1_4;
     aContext.Tagged             = false;
@@ -1098,12 +1098,12 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     aContext.ColorMode          = i_rController.getPrinter()->GetPrinterOptions().IsConvertToGreyscales()
     ? vcl::PDFWriter::DrawGreyscale : vcl::PDFWriter::DrawColor;
 
-    // prepare doc info
+    
     aContext.DocumentInfo.Title              = i_rJobName;
     aContext.DocumentInfo.Creator            = i_rAppName;
     aContext.DocumentInfo.Producer           = i_rAppName;
 
-    // define how we handle metafiles in PDFWriter
+    
     vcl::PDFWriter::PlayMetafileContext aMtfContext;
     aMtfContext.m_bOnlyLosslessCompression = true;
 
@@ -1122,7 +1122,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         if( nPage == nAllPages-1 )
             i_rController.setLastPage( true );
 
-        // get the page's metafile
+        
         GDIMetaFile aPageFile;
         vcl::PrinterController::PageSize aPageSize = i_rController.getFilteredPageFile( nPage, aPageFile );
         if( i_rController.isProgressCanceled() )
@@ -1141,11 +1141,11 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
             pPrinter->SetPaperSizeUser( aPageSize.aSize, true );
             PDFNewJobParameters aNewParm( pPrinter->GetPaperSize(), pPrinter->GetPaperBin() );
 
-            // create PDF writer on demand
-            // either on first page
-            // or on paper format change - cups does not support multiple paper formats per job (yet?)
-            // so we need to start a new job to get a new paper format from the printer
-            // orientation switches (that is switch of height and width) is handled transparently by CUPS
+            
+            
+            
+            
+            
             if( ! pWriter ||
                 (aNewParm != aLastParm && ! i_pFileName ) )
             {
@@ -1153,28 +1153,28 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 {
                     pWriter->Emit();
                 }
-                // produce PDF file
+                
                 OUString aPDFUrl;
                 if( i_pFileName )
                     aPDFUrl = *i_pFileName;
                 else
                     osl_createTempFile( NULL, NULL, &aPDFUrl.pData );
-                // normalize to file URL
+                
                 if( !aPDFUrl.startsWith( "file:" ) )
                 {
-                    // this is not a file URL, but it should
-                    // form it into a osl friendly file URL
+                    
+                    
                     OUString aTmp;
                     osl_getFileURLFromSystemPath( aPDFUrl.pData, &aTmp.pData );
                     aPDFUrl = aTmp;
                 }
-                // save current file and paper format
+                
                 aLastParm = aNewParm;
                 aPDFFiles.push_back( PDFPrintFile( aPDFUrl, aNewParm ) );
-                // update context
+                
                 aContext.URL = aPDFUrl;
 
-                // create and initialize PDFWriter
+                
                 pWriter.reset( new vcl::PDFWriter( aContext, uno::Reference< beans::XMaterialHolder >() ) );
             }
 
@@ -1186,11 +1186,11 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         }
     }
 
-    // emit the last file
+    
     if( pWriter )
         pWriter->Emit();
 
-    // handle collate, copy count and multiple jobs correctly
+    
     int nOuterJobs = 1;
     if( bSinglePrintJobs )
     {
@@ -1221,7 +1221,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
     bool bSuccess(true);
 
-    // spool files
+    
     if( ! i_pFileName && ! bAborted )
     {
         bool bFirstJob = true;
@@ -1234,13 +1234,13 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 if (pFile && (osl_setFilePos(pFile, osl_Pos_Absolut, 0) == osl_File_E_None))
                 {
                     std::vector< char > buffer( 0x10000, 0 );
-                    // update job data with current page size
+                    
                     Size aPageSize( aPDFFiles[i].maParameters.maPageSize );
                     m_aJobData.setPaper( TenMuToPt( aPageSize.Width() ), TenMuToPt( aPageSize.Height() ) );
-                    // update job data with current paperbin
+                    
                     m_aJobData.setPaperBin( aPDFFiles[i].maParameters.mnPaperBin );
 
-                    // spool current file
+                    
                     FILE* fp = PrinterInfoManager::get().startSpool( pPrinter->GetName(), i_rController.isDirectPrint() );
                     if( fp )
                     {
@@ -1273,13 +1273,13 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         }
     }
 
-    // job has been spooled
+    
     i_rController.setJobState( (bAborted)
             ? view::PrintableState_JOB_ABORTED
             : ((bSuccess) ? view::PrintableState_JOB_SPOOLED
                           : view::PrintableState_JOB_SPOOLING_FAILED));
 
-    // clean up the temporary PDF files
+    
     if( ! i_pFileName || bAborted )
     {
         for( size_t i = 0; i < aPDFFiles.size(); i++ )
@@ -1317,7 +1317,7 @@ void PrinterUpdate::doUpdate()
         pInst->PostPrintersChanged();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
 {
@@ -1340,7 +1340,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
 
     if( ! rInstance.isPrinterInit() )
     {
-        // #i45389# start background printer detection
+        
         psp::PrinterInfoManager::get();
         return;
     }

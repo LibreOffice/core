@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <memory>
@@ -258,7 +258,7 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
     else
     {
         mpTextWindow->SetIgnoreTab( false );
-        // #103667# VclMultiLineEdit has the flag, but focusable window also needs this flag
+        
         WinBits nStyle = mpTextWindow->GetStyle();
         nStyle |= WINDOW_DLGCTRL_MOD1TAB;
         mpTextWindow->SetStyle( nStyle );
@@ -283,10 +283,10 @@ void ImpVclMEdit::ImpSetScrollBarRanges()
     }
     if ( mpHScrollBar )
     {
-//      sal_uLong nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
-        // Es gibt kein Notify bei Breiten-Aenderung...
-//      sal_uLong nW = Max( (sal_uLong)mpTextWindow->GetOutputSizePixel().Width()*5, (sal_uLong)nTextWidth );
-//      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
+
+        
+
+
         mpHScrollBar->SetRange( Range( 0, mnTextWidth-1 ) );
     }
 }
@@ -338,7 +338,7 @@ IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
         nDiffX = mpTextWindow->GetTextView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
 
     mpTextWindow->GetTextView()->Scroll( nDiffX, nDiffY );
-    // mpTextWindow->GetTextView()->ShowCursor( sal_False, sal_True );
+    
 
     return 0;
 }
@@ -369,7 +369,7 @@ bool ImpVclMEdit::IsModified() const
 void ImpVclMEdit::SetReadOnly( bool bRdOnly )
 {
     mpTextWindow->GetTextView()->SetReadOnly( bRdOnly );
-    // TODO: Adjust color?
+    
 }
 
 bool ImpVclMEdit::IsReadOnly() const
@@ -459,12 +459,12 @@ void ImpVclMEdit::Resize()
         if ( aOldTextWindowSize == aTextWindowSize )
             break;
 
-        // Changing the text window size might effectively have changed the need for
-        // scrollbars, so do another iteration.
+        
+        
         ++nIteration;
         OSL_ENSURE( nIteration < 3, "ImpVclMEdit::Resize: isn't this expected to terminate with the second iteration?" );
 
-    } while ( nIteration <= 3 );    // artificial break after four iterations
+    } while ( nIteration <= 3 );    
 
     ImpInitScrollBars();
 }
@@ -616,10 +616,10 @@ const Selection& ImpVclMEdit::GetSelection() const
     maSelection = Selection();
     TextSelection aTextSel( mpTextWindow->GetTextView()->GetSelection() );
     aTextSel.Justify();
-    // flatten selection => every line-break a character
+    
 
     ExtTextEngine* pExtTextEngine = mpTextWindow->GetTextEngine();
-    // paragraphs before
+    
     sal_uLong n;
     for ( n = 0; n < aTextSel.GetStart().GetPara(); n++ )
     {
@@ -627,7 +627,7 @@ const Selection& ImpVclMEdit::GetSelection() const
         maSelection.Min()++;
     }
 
-    // first paragraph with selection
+    
     maSelection.Max() = maSelection.Min();
     maSelection.Min() += aTextSel.GetStart().GetIndex();
 
@@ -757,7 +757,7 @@ void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !mbTextSelectable )
         return;
 
-    mbInMBDown = true;  // so that GetFocus does not select everything
+    mbInMBDown = true;  
     mpExtTextView->MouseButtonDown( rMEvt );
     Window::MouseButtonDown( rMEvt );
     GrabFocus();
@@ -785,7 +785,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
     {
         if ( Edit::GetGetSpecialCharsFunction() )
         {
-            // to maintain the selection
+            
             mbActivePopup = true;
             OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
             if (!aChars.isEmpty())
@@ -842,10 +842,10 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         {
             pPopup->EnableItem( SV_MENU_EDIT_UNDO, false );
         }
-//      if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
-//      {
-//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, sal_False );
-//      }
+
+
+
+
         if ( !Edit::GetGetSpecialCharsFunction() )
         {
             sal_uInt16 nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
@@ -857,11 +857,11 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
         {
-            // Sometime do show Menu centered in the selection !!!
+            
             Size aSize = GetOutputSizePixel();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
-//      pPopup->RemoveDisabledEntries();
+
         sal_uInt16 n = pPopup->Execute( this, aPos );
         Edit::DeletePopupMenu( pPopup );
         switch ( n )
@@ -916,7 +916,7 @@ void TextWindow::GetFocus()
                 && ( mbSelectOnTab &&
                     (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_FOCUS ) )) )
         {
-            // select everything, but do not scroll
+            
             bool bAutoScroll = mpExtTextView->IsAutoScroll();
             mpExtTextView->SetAutoScroll( false );
             mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
@@ -969,10 +969,10 @@ VclMultiLineEdit::VclMultiLineEdit( Window* pParent, const ResId& rResId )
     SetCompoundControl( true );
     SetStyle( ImplInitStyle( nWinStyle ) );
 
-    // Base Edit ctor could call Show already, but that would cause problems
-    // with accessibility, as Show might (indirectly) trigger a call to virtual
-    // GetComponentInterface, which is the Edit's base version instead of the
-    // VclMultiLineEdit's version while in the base Edit ctor:
+    
+    
+    
+    
     if ((GetStyle() & WB_HIDE) == 0)
         Show();
 
@@ -1006,8 +1006,8 @@ void VclMultiLineEdit::ImplInitSettings( bool /*bFont*/, bool /*bForeground*/, b
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    // The Font has to be adjusted, as the TextEngine does not take care of
-    // TextColor/Background
+    
+    
 
     Color aTextColor = rStyleSettings.GetFieldTextColor();
     if ( IsControlForeground() )
@@ -1046,7 +1046,7 @@ void VclMultiLineEdit::ImplInitSettings( bool /*bFont*/, bool /*bForeground*/, b
                 pImpVclMEdit->GetTextWindow()->SetBackground( GetControlBackground() );
             else
                 pImpVclMEdit->GetTextWindow()->SetBackground( rStyleSettings.GetFieldColor() );
-            // also adjust for VclMultiLineEdit as the TextComponent might hide Scrollbars
+            
             SetBackground( pImpVclMEdit->GetTextWindow()->GetBackground() );
         }
     }
@@ -1118,7 +1118,7 @@ void VclMultiLineEdit::SetReadOnly( sal_Bool bReadOnly )
     pImpVclMEdit->SetReadOnly( bReadOnly );
     Edit::SetReadOnly( bReadOnly );
 
-    // #94921# ReadOnly can be overwritten in InitFromStyle() when WB not set.
+    
     WinBits nStyle = GetStyle();
     if ( bReadOnly )
         nStyle |= WB_READONLY;
@@ -1209,7 +1209,7 @@ void VclMultiLineEdit::Resize()
 
 void VclMultiLineEdit::GetFocus()
 {
-    if ( !pImpVclMEdit )  // might be called from within the dtor, when pImpVclMEdit == NULL is a valid state
+    if ( !pImpVclMEdit )  
         return;
 
     pImpVclMEdit->GetFocus();
@@ -1243,7 +1243,7 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
     sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
 
-    // center vertically for whole lines
+    
 
     long nHeight = aSz.Height() - nTop - nBottom;
     long nLineHeight = pImpVclMEdit->CalcBlockSize( 1, 1 ).Height();
@@ -1354,7 +1354,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     pDev->SetFont( aFont );
     pDev->SetTextFillColor();
 
-    // Border/Background
+    
     pDev->SetLineColor();
     pDev->SetFillColor();
     bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
@@ -1374,7 +1374,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
         }
     }
 
-    // contents
+    
     if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
@@ -1400,12 +1400,12 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     long nOffX = 3*nOnePixel;
     long nOffY = 2*nOnePixel;
 
-    // Clipping?
+    
     if ( ( nOffY < 0  ) || ( (nOffY+aTextSz.Height()) > aSize.Height() ) || ( (nOffX+aTextSz.Width()) > aSize.Width() ) )
     {
         Rectangle aClip( aPos, aSize );
         if ( aTextSz.Height() > aSize.Height() )
-            aClip.Bottom() += aTextSz.Height() - aSize.Height() + 1;  // so that HP-printer does not 'optimize-away'
+            aClip.Bottom() += aTextSz.Height() - aSize.Height() + 1;  
         pDev->IntersectClipRegion( aClip );
     }
 
@@ -1523,7 +1523,7 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 }
 
 //
-// Internals for derived classes, e.g. TextComponent
+
 
 ExtTextEngine* VclMultiLineEdit::GetTextEngine() const
 {

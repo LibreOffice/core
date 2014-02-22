@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /* Somehow, under same circumstances, MSVC creates object code for 2
@@ -70,7 +70,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+
 
 ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
@@ -111,7 +111,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
     ScAccessibleContextBase::disposing();
 }
 
-//=====  SfxListener  =====================================================
+
 
 void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -126,8 +126,8 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
-            //  column / row layout may change with any document change,
-            //  so it must be invalidated
+            
+            
             DELETEZ( mpTableInfo );
         }
     }
@@ -135,7 +135,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
-//=====  XInterface  =====================================================
+
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
@@ -156,7 +156,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::release()
     ScAccessibleContextBase::release();
 }
 
-//=====  XAccessibleValue  ================================================
+
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue() throw (uno::RuntimeException)
 {
@@ -177,7 +177,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue() throw (uno::R
 sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
                                                                 throw (uno::RuntimeException)
 {
-    //  it is not possible to set a value
+    
     return false;
 }
 
@@ -204,7 +204,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue() throw (uno::R
     return aAny;
 }
 
-//=====  XAccessibleComponent  ============================================
+
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAtPoint( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
@@ -236,7 +236,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus() throw (uno::RuntimeExce
     }
 }
 
-//=====  XAccessibleContext  ==============================================
+
 
 sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount() throw(uno::RuntimeException)
 {
@@ -289,7 +289,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewHeaderCell::getA
     return pStateSet;
 }
 
-//=====  XServiceInfo  ====================================================
+
 
 OUString SAL_CALL ScAccessiblePreviewHeaderCell::getImplementationName() throw(uno::RuntimeException)
 {
@@ -308,7 +308,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupportedServ
     return aSequence;
 }
 
-//=====  XTypeProvider  =======================================================
+
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewHeaderCell::getTypes()
         throw (uno::RuntimeException)
@@ -328,7 +328,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theScAccessiblePreviewHeaderCellImplementationId::get().getSeq();
 }
 
-//====  internal  =========================================================
+
 
 Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException, std::exception)
 {
@@ -398,19 +398,19 @@ OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(un
     {
         if ( mbRowHeader )
         {
-            //! name for corner cell?
+            
 
-//          sName = "Column/Row Header";
+
         }
         else
         {
-            // name of column header
+            
             sName += ScColToAlpha( maCellPos.Col() );
         }
     }
     else
     {
-        // name of row header
+        
         sName += OUString::number(  ( maCellPos.Row() + 1 ) );
     }
 

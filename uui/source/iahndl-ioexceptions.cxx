@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "com/sun/star/beans/PropertyValue.hpp"
@@ -82,15 +82,15 @@ getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
 {
     if (!getStringRequestArgument(rArguments, "Uri",  pValue))
         return false;
-    // Use the resource name only for file URLs, to avoid confusion:
-    //TODO! work with ucp locality concept instead of hardcoded "file"?
+    
+    
     if (pValue
         && pValue->matchIgnoreAsciiCase("file:"))
         getStringRequestArgument(rArguments, "ResourceName", pValue);
     return true;
 }
 
-} // namespace
+} 
 
 bool
 UUIInteractionHelper::handleInteractiveIOException(
@@ -115,74 +115,74 @@ UUIInteractionHelper::handleInteractiveIOException(
         std::vector< OUString > aArguments;
         static ErrCode const
             aErrorCode[ucb::IOErrorCode_WRONG_VERSION + 1][2]
-            = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
+            = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, 
                 { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
-                // ACCESS_DENIED
+                
                 { ERRCODE_IO_ALREADYEXISTS,
-                  ERRCODE_UUI_IO_ALREADYEXISTS }, // ALREADY_EXISTING
-                { ERRCODE_IO_BADCRC, ERRCODE_UUI_IO_BADCRC }, // BAD_CRC
+                  ERRCODE_UUI_IO_ALREADYEXISTS }, 
+                { ERRCODE_IO_BADCRC, ERRCODE_UUI_IO_BADCRC }, 
                 { ERRCODE_IO_CANTCREATE, ERRCODE_UUI_IO_CANTCREATE },
-                // CANT_CREATE
+                
                 { ERRCODE_IO_CANTREAD, ERRCODE_UUI_IO_CANTREAD },
-                // CANT_READ
+                
                 { ERRCODE_IO_CANTSEEK, ERRCODE_UUI_IO_CANTSEEK },
-                // CANT_SEEK
+                
                 { ERRCODE_IO_CANTTELL, ERRCODE_UUI_IO_CANTTELL },
-                // CANT_TELL
+                
                 { ERRCODE_IO_CANTWRITE, ERRCODE_UUI_IO_CANTWRITE },
-                // CANT_WRITE
+                
                 { ERRCODE_IO_CURRENTDIR, ERRCODE_UUI_IO_CURRENTDIR },
-                // CURRENT_DIRECTORY
+                
                 { ERRCODE_IO_DEVICENOTREADY, ERRCODE_UUI_IO_NOTREADY },
-                // DEVICE_NOT_READY
+                
                 { ERRCODE_IO_NOTSAMEDEVICE,
-                  ERRCODE_UUI_IO_NOTSAMEDEVICE }, // DIFFERENT_DEVICES
-                { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, // GENERAL
+                  ERRCODE_UUI_IO_NOTSAMEDEVICE }, 
+                { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, 
                 { ERRCODE_IO_INVALIDACCESS,
-                  ERRCODE_UUI_IO_INVALIDACCESS }, // INVALID_ACCESS
+                  ERRCODE_UUI_IO_INVALIDACCESS }, 
                 { ERRCODE_IO_INVALIDCHAR, ERRCODE_UUI_IO_INVALIDCHAR },
-                // INVALID_CHARACTER
+                
                 { ERRCODE_IO_INVALIDDEVICE,
-                  ERRCODE_UUI_IO_INVALIDDEVICE }, // INVALID_DEVICE
+                  ERRCODE_UUI_IO_INVALIDDEVICE }, 
                 { ERRCODE_IO_INVALIDLENGTH,
-                  ERRCODE_UUI_IO_INVALIDLENGTH }, // INVALID_LENGTH
+                  ERRCODE_UUI_IO_INVALIDLENGTH }, 
                 { ERRCODE_IO_INVALIDPARAMETER,
-                  ERRCODE_UUI_IO_INVALIDPARAMETER }, // INVALID_PARAMETER
+                  ERRCODE_UUI_IO_INVALIDPARAMETER }, 
                 { ERRCODE_IO_ISWILDCARD, ERRCODE_UUI_IO_ISWILDCARD },
-                // IS_WILDCARD
+                
                 { ERRCODE_IO_LOCKVIOLATION,
-                  ERRCODE_UUI_IO_LOCKVIOLATION }, // LOCKING_VIOLATION
+                  ERRCODE_UUI_IO_LOCKVIOLATION }, 
                 { ERRCODE_IO_MISPLACEDCHAR,
-                  ERRCODE_UUI_IO_MISPLACEDCHAR }, // MISPLACED_CHARACTER
+                  ERRCODE_UUI_IO_MISPLACEDCHAR }, 
                 { ERRCODE_IO_NAMETOOLONG, ERRCODE_UUI_IO_NAMETOOLONG },
-                // NAME_TOO_LONG
+                
                 { ERRCODE_IO_NOTEXISTS, ERRCODE_UUI_IO_NOTEXISTS },
-                // NOT_EXISTING
+                
                 { ERRCODE_IO_NOTEXISTSPATH,
-                  ERRCODE_UUI_IO_NOTEXISTSPATH }, // NOT_EXISTING_PATH
+                  ERRCODE_UUI_IO_NOTEXISTSPATH }, 
                 { ERRCODE_IO_NOTSUPPORTED, ERRCODE_UUI_IO_NOTSUPPORTED },
-                // NOT_SUPPORTED
+                
                 { ERRCODE_IO_NOTADIRECTORY,
-                  ERRCODE_UUI_IO_NOTADIRECTORY }, // NO_DIRECTORY
+                  ERRCODE_UUI_IO_NOTADIRECTORY }, 
                 { ERRCODE_IO_NOTAFILE, ERRCODE_UUI_IO_NOTAFILE },
-                // NO_FILE
+                
                 { ERRCODE_IO_OUTOFSPACE, ERRCODE_UUI_IO_OUTOFSPACE },
-                // OUT_OF_DISK_SPACE
+                
                 { ERRCODE_IO_TOOMANYOPENFILES,
                   ERRCODE_UUI_IO_TOOMANYOPENFILES },
-                // OUT_OF_FILE_HANDLES
+                
                 { ERRCODE_IO_OUTOFMEMORY, ERRCODE_UUI_IO_OUTOFMEMORY },
-                // OUT_OF_MEMORY
-                { ERRCODE_IO_PENDING, ERRCODE_UUI_IO_PENDING }, // PENDING
+                
+                { ERRCODE_IO_PENDING, ERRCODE_UUI_IO_PENDING }, 
                 { ERRCODE_IO_RECURSIVE, ERRCODE_UUI_IO_RECURSIVE },
-                // RECURSIVE
-                { ERRCODE_IO_UNKNOWN, ERRCODE_UUI_IO_UNKNOWN }, // UNKNOWN
+                
+                { ERRCODE_IO_UNKNOWN, ERRCODE_UUI_IO_UNKNOWN }, 
                 { ERRCODE_IO_WRITEPROTECTED,
-                  ERRCODE_UUI_IO_WRITEPROTECTED }, // WRITE_PROTECTED
+                  ERRCODE_UUI_IO_WRITEPROTECTED }, 
                 { ERRCODE_IO_WRONGFORMAT, ERRCODE_UUI_IO_WRONGFORMAT },
-                // WRONG_FORMAT
+                
                 { ERRCODE_IO_WRONGVERSION,
-                  ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
+                  ERRCODE_UUI_IO_WRONGVERSION } }; 
         switch (aIoException.Code)
         {
         case ucb::IOErrorCode_CANT_CREATE:

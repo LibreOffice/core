@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "templatedlg.hxx"
@@ -110,7 +110,7 @@ static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
 static std::vector<OUString> lcl_getAllFactoryURLs ();
 
-// Sort by name in ascending order
+
 class SortView_Name
 {
 public:
@@ -201,7 +201,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
     mpTabControl->SetTabPage(mpTabControl->GetPageId("filter_draws"), pTabPage);
     pTabPage->Show();
 
-    // Create popup menus
+    
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,
         SfxResId(STR_ACTION_SORT_NAME).toString(),
@@ -219,16 +219,16 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
     mpTemplateDefaultMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,DefaultTemplateMenuSelectHdl));
     mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 
-    // Set toolbox styles
+    
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
-    // Set toolbox button bits
+    
     mpViewBar->SetItemBits(mpViewBar->GetItemId(VIEWBAR_REPOSITORY), TIB_DROPDOWNONLY);
     mpActionBar->SetItemBits(mpActionBar->GetItemId(ACTIONBAR_ACTION), TIB_DROPDOWNONLY);
     mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
 
-    // Set toolbox handlers
+    
     mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
     mpViewBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpActionBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
@@ -249,7 +249,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
     mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg,OpenRegionHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
 
-    // Set online view position and dimensions
+    
     mpRemoteView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     mpRemoteView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
@@ -300,12 +300,12 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
     writeSettings();
 
-    // Synchronize the config before deleting it
+    
     syncRepositories();
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
         delete maRepositories[i];
 
-    // Ignore view events since we are cleaning the object
+    
     mpLocalView->setItemStateHdl(Link());
     mpLocalView->setOpenRegionHdl(Link());
     mpLocalView->setOpenTemplateHdl(Link());
@@ -322,11 +322,11 @@ void SfxTemplateManagerDlg::setSaveMode()
 {
     mbIsSaveMode = true;
 
-    // FIXME We used to call just mpTabControl->Clear() here; but that worked
-    // only with .src dialogs, as the tab pages could have existed even
-    // without TabControl containing them.  This is not possible with .ui
-    // definitions any more (and rightly so!), so leave just one tab here for
-    // now, until we do a bigger Template manager rework.
+    
+    
+    
+    
+    
     while (mpTabControl->GetPageCount() > 1)
         mpTabControl->RemovePage(mpTabControl->GetPageId(1));
 
@@ -370,7 +370,7 @@ FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentFilter()
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
 {
     mpCurView->filterItems(ViewFilter_Application(getCurrentFilter()));
-    mpCurView->showRootRegion(); // fdo#60586 show the root region of the applied filter
+    mpCurView->showRootRegion(); 
 
     if (mpSearchView->IsVisible())
         SearchUpdateHdl(NULL);
@@ -424,14 +424,14 @@ void SfxTemplateManagerDlg::writeSettings ()
     if (mpCurView == mpLocalView && mpLocalView->getCurRegionId())
         aLastFolder = mpLocalView->getRegionName(mpLocalView->getCurRegionId()-1);
 
-    // last folder
+    
     aSettings[0].Name = TM_SETTING_LASTFOLDER;
     aSettings[0].Value  <<= aLastFolder;
 
     aSettings[1].Name = TM_SETTING_FILTER;
     aSettings[1].Value <<= sal_uInt16(getCurrentFilter());
 
-    // write
+    
     SvtViewOptions aViewSettings(E_DIALOG, TM_SETTING_MANAGER);
     aViewSettings.SetUserData(aSettings);
 }
@@ -581,13 +581,13 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
 
     if (mpSearchView->IsVisible())
     {
-        // Check if we are searching the local or remote templates
+        
         if (mpCurView == mpLocalView)
             localSearchMoveTo(nMenuId);
     }
     else
     {
-        // Check if we are displaying the local or remote templates
+        
         if (mpCurView == mpLocalView)
             localMoveTo(nMenuId);
         else
@@ -615,7 +615,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
 
             if (insertRepository(pPlace->GetName(),pPlace->GetUrl()))
             {
-                // update repository list menu.
+                
                 createRepositoryMenu();
             }
             else
@@ -715,7 +715,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
     {
         mpSearchView->Clear();
 
-        // if the search view is hidden, hide the folder view and display search one
+        
         if (!mpSearchView->IsVisible())
         {
             mpCurView->deselectItems();
@@ -852,15 +852,15 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
     sfx2::FileDialogHelper aFileDlg(nDialogType, SFXWB_MULTISELECTION);
 
-    // add "All" filter
+    
     aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
                         OUString(FILEDIALOG_FILTER_ALL) );
 
-    // add template filter
+    
     OUString sFilterExt;
     OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
 
-    // add filters of modules which are installed
+    
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
         sFilterExt += "*.ott;*.stw;*.oth";
@@ -911,7 +911,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
         {
             if (!maSelFolders.empty())
             {
-                //Import to the selected regions
+                
                 std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
                 for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
                 {
@@ -939,7 +939,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
             }
             else
             {
-                //Import to current region
+                
                 OUString aTemplateList;
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                 {
@@ -1011,7 +1011,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         }
         else
         {
-            // export templates from the current view
+            
 
             sal_uInt16 i = 1;
             sal_uInt16 nRegionItemId = mpLocalView->getCurRegionItemId();
@@ -1057,12 +1057,12 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     mpActionBar->SetItemState(mpActionBar->GetItemId(ACTIONBAR_SEARCH),
             bVisible? STATE_NOCHECK: STATE_CHECK);
 
-    // fdo#74782 We are switching views. No matter to which state,
-    // deselect and hide our current SearchView items.
+    
+    
     mpSearchView->deselectItems();
     mpSearchView->Hide();
 
-    // Hide search view
+    
     if (bVisible)
     {
         mpCurView->Show();
@@ -1092,14 +1092,14 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
         if( xNameAccess.is() )
         {
             OUString sURL;
-            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+            
             Any value( xNameAccess->getByName(sNode) );
             sURL = value.get<OUString> ();
             localizeWebserviceURI(sURL);
 
             Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                 com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-            //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+            
             xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
         }
     }
@@ -1127,7 +1127,7 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
 
     uno::Reference< XStorable > xStorable;
     std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates(
-            maSelTemplates); // Avoids invalid iterators from LoseFocus
+            maSelTemplates); 
     std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
     for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
     {
@@ -1158,9 +1158,9 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
-    // Store selected templates before calling a dialog/QueryBox
-    // which will result in a deselection of all ThumbnailViewItem.
-    // Also avoid invalid iterators
+    
+    
+    
     std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates;
 
     QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE).toString());
@@ -1245,9 +1245,9 @@ void SfxTemplateManagerDlg::OnFolderNew()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
-    // Store selected folders before calling a dialog/QueryBox
-    // which will result in a deselection of all ThumbnailViewItem.
-    // Also copy to avoid invalidating an iterator
+    
+    
+    
     std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders;
 
     QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
@@ -1283,7 +1283,7 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
 {
     if(deleteRepository(mpRemoteView->getCurRegionId()))
     {
-        // switch to local view
+        
         switchMainView(true);
 
         createRepositoryMenu();
@@ -1292,8 +1292,8 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
 
 void SfxTemplateManagerDlg::OnTemplateSaveAs()
 {
-    // Store selected folders before calling a dialog/QueryBox
-    // which will result in a deselection of all ThumbnailViewItem
+    
+    
     std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders;
 
     assert(m_xModel.is());
@@ -1362,7 +1362,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             {
             }
 
-            // After save file, just close the dialog
+            
             Close();
         }
     }
@@ -1414,7 +1414,7 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
 
         mpViewBar->HideItem(VIEWBAR_DELETE);
 
-        // Enable deleting and exporting items from the filesystem
+        
         mpTemplateBar->ShowItem(TEMPLATEBAR_EXPORT);
         mpTemplateBar->ShowItem(TEMPLATEBAR_DELETE);
 
@@ -1427,7 +1427,7 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
 
         mpViewBar->ShowItem(VIEWBAR_DELETE);
 
-        // Disable deleting and exporting items from remote repositories
+        
         mpTemplateBar->HideItem(TEMPLATEBAR_EXPORT);
         mpTemplateBar->HideItem(TEMPLATEBAR_DELETE);
 
@@ -1461,8 +1461,8 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
 
     if (nItemId)
     {
-        // Move templates to desired folder if for some reason move fails
-        // try copying them.
+        
+        
         if (!mpLocalView->moveTemplates(maSelTemplates,nItemId))
         {
             OUString aTemplateList;
@@ -1565,10 +1565,10 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     {
         OUString aTemplateList;
 
-        // Move templates to desired folder if for some reason move fails
-        // try copying them.
+        
+        
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
-        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Copy to avoid invalidating an iterator
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; 
 
         for (aIter = aSelTemplates.begin(); aIter != aSelTemplates.end(); ++aIter)
         {
@@ -1593,7 +1593,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
         }
     }
 
-    // Deselect all items and update search results
+    
     mpSearchView->deselectItems();
 
     SearchUpdateHdl(mpSearchEdit);
@@ -1603,7 +1603,7 @@ void SfxTemplateManagerDlg::loadRepositories()
 {
     uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
 
-    // Load from user settings
+    
     com::sun::star::uno::Sequence<OUString>  aUrls =
             officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(m_context);
 

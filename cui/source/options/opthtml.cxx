@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/langtab.hxx>
@@ -25,7 +25,7 @@
 #include <dialmgr.hxx>
 #include <sal/macros.h>
 
-// modus conversion to the positions in the listbox
+
 const sal_uInt16 aPosToExportArr[] =
 {
     HTML_CFG_MSIE,
@@ -35,12 +35,12 @@ const sal_uInt16 aPosToExportArr[] =
 
 const sal_uInt16 aExportToPosArr[] =
 {
-    1,  //HTML 3.2 (removed, map to Netscape Navigator 4.0)
-    0,  //MS Internet Explorer 4.0
-    2,  //StarWriter
-    1   //Netscape Navigator 4.0
+    1,  
+    0,  
+    2,  
+    1   
 };
-// -----------------------------------------------------------------------
+
 
 OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
 SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
@@ -63,7 +63,7 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
     get(aCharSetLB,"charset");
     aCharSetLB->SetStyle(aCharSetLB->GetStyle() | WB_SORT);
 
-    // replace placeholder with UI string from language list
+    
     OUString aText( aNumbersEnglishUSCB->GetText());
     OUString aPlaceholder("%ENGLISHUSLOCALE");
     sal_Int32 nPos;
@@ -81,7 +81,7 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
     aExportLB->SetSelectHdl(LINK(this, OfaHtmlTabPage, ExportHdl_Impl));
     aStarBasicCB->SetClickHdl(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
 
-    // initialize the characterset listbox
+    
     aCharSetLB->FillWithMimeAndSelectBest();
 }
 
@@ -158,7 +158,7 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aIgnoreFontNamesCB->Check(rHtmlOpt.IsIgnoreFontFamily());
     sal_uInt16 nExport = rHtmlOpt.GetExportMode();
     if( nExport >= SAL_N_ELEMENTS( aExportToPosArr ) )
-        nExport = 3;    // default for bad config entry is NS 4.0
+        nExport = 3;    
     sal_uInt16 nPosArr = aExportToPosArr[ nExport ];
     aExportLB->SelectEntryPos( nPosArr );
     aExportLB->SaveValue();

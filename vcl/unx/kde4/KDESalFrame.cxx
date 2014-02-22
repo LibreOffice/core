@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define Region QtXRegion
@@ -90,13 +90,13 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
 
-    // set family name
+    
     aInfo.m_aFamilyName = OUString( (const char *) rQFont.family().toUtf8(), strlen( (const char *) rQFont.family().toUtf8() ), RTL_TEXTENCODING_UTF8 );
 
-    // set italic
+    
     aInfo.m_eItalic = ( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );
 
-    // set weight
+    
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
         aInfo.m_eWeight = WEIGHT_LIGHT;
@@ -109,7 +109,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     else
         aInfo.m_eWeight = WEIGHT_ULTRABOLD;
 
-    // set width
+    
     int nStretch = rQFont.stretch();
     if ( nStretch <= QFont::UltraCondensed )
         aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
@@ -132,19 +132,19 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 
     SAL_INFO( "vcl.kde4", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"" );
 
-    // match font to e.g. resolve "Sans"
+    
     psp::PrintFontManager::get().matchFont( aInfo, rLocale );
 
     SAL_INFO( "vcl.kde4", "font match " <<
               (aInfo.m_nID != 0 ? "succeeded" : "failed") <<
               ", name AFTER: \"" << aInfo.m_aFamilyName << "\"" );
 
-    // font height
+    
     int nPointHeight = qFontInfo.pointSize();
     if ( nPointHeight <= 0 )
         nPointHeight = rQFont.pointSize();
 
-    // Create the font
+    
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
         aFont.SetWeight( aInfo.m_eWeight );
@@ -165,7 +165,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     StyleSettings style( rSettings.GetStyleSettings() );
     bool bSetTitleFont = false;
 
-    // General settings
+    
     QPalette pal = kapp->palette();
 
     style.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
@@ -179,7 +179,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
     style.SetDeactiveTextColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
-    // WM settings
+    
     KConfig *pConfig = KGlobal::config().data();
     if ( pConfig )
     {
@@ -200,7 +200,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         if ( aGroup.hasKey( pKey ) )
             style.SetPreferredIconTheme( readEntryUntranslated( &aGroup, pKey ) );
 
-        //toolbar
+        
         pKey = "toolbarFont";
         if ( aGroup.hasKey( pKey ) )
         {
@@ -217,55 +217,55 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMid = toColor( pal.color( QPalette::Active, QPalette::Mid ) );
     Color aHigh = toColor( pal.color( QPalette::Active, QPalette::Highlight ) );
 
-    // Foreground
+    
     style.SetRadioCheckTextColor( aFore );
     style.SetLabelTextColor( aFore );
     style.SetInfoTextColor( aFore );
     style.SetDialogTextColor( aFore );
     style.SetGroupTextColor( aFore );
 
-    // Text
+    
     style.SetFieldTextColor( aText );
     style.SetFieldRolloverTextColor( aText );
     style.SetWindowTextColor( aText );
 
-    // Base
+    
     style.SetFieldColor( aBase );
     style.SetWindowColor( aBase );
     style.SetActiveTabColor( aBase );
 
-    // Buttons
+    
     style.SetButtonTextColor( aButn );
     style.SetButtonRolloverTextColor( aButn );
 
-    // Disable color
+    
     style.SetDisableColor( aMid );
 
-    // Workspace
+    
     style.SetWorkspaceColor( aMid );
 
-    // Background
+    
     style.Set3DColors( aBack );
     style.SetFaceColor( aBack );
     style.SetInactiveTabColor( aBack );
     style.SetDialogColor( aBack );
     style.SetCheckedColorSpecialCase( );
 
-    // Selection
+    
     style.SetHighlightColor( aHigh );
     style.SetHighlightTextColor( toColor(pal.color( QPalette::HighlightedText))  );
 
-    // Tooltip
+    
     style.SetHelpColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipBase )));
     style.SetHelpTextColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipText )));
 
-    // Font
+    
     Font aFont = toFont( kapp->font(), rSettings.GetUILanguageTag().getLocale() );
 
     style.SetAppFont( aFont );
 
-    style.SetMenuFont( aFont ); // will be changed according to pMenuBar
-    //style.SetToolFont( aFont ); //already set above
+    style.SetMenuFont( aFont ); 
+    
     style.SetLabelFont( aFont );
     style.SetInfoFont( aFont );
     style.SetRadioCheckFont( aFont );
@@ -286,15 +286,15 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
 
-    // Menu
+    
     style.SetSkipDisabledInMenus( TRUE );
     KMenuBar* pMenuBar = new KMenuBar();
     if ( pMenuBar )
     {
-        // Color
+        
         QPalette qMenuCG = pMenuBar->palette();
 
-        // Menu text and background color, theme specific
+        
         Color aMenuFore = toColor( qMenuCG.color( QPalette::ButtonText ) );
         Color aMenuBack = toColor( qMenuCG.color( QPalette::Button ) );
 
@@ -305,13 +305,13 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
         style.SetMenuHighlightTextColor( aMenuFore );
 
-        // set special menubar higlight text color
+        
         if ( kapp->style()->inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
         else
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
-        // set menubar rollover color
+        
         if ( pMenuBar->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
         {
             style.SetMenuBarRolloverColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
@@ -323,14 +323,14 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             style.SetMenuBarRolloverTextColor( aMenuFore );
         }
 
-        // Font
+        
         aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
         style.SetMenuFont( aFont );
     }
 
     delete pMenuBar;
 
-    // Scroll bar size
+    
     style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
     style.SetMinThumbSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
 

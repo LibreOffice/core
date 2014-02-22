@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,13 +35,13 @@
 using namespace package_ucp;
 
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// PackageUri Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 static void normalize( OUString& rURL )
 {
@@ -62,32 +62,32 @@ static void normalize( OUString& rURL )
     while ( nPos != -1 );
 }
 
-//=========================================================================
+
 void PackageUri::init() const
 {
-    // Already inited?
+    
     if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
-        // Note: Maybe it's a re-init, setUri only resets m_aPath!
+        
         m_aPackage = m_aParentUri = m_aName = m_aParam = m_aScheme
             = OUString();
 
-        // URI must match at least: <sheme>://<non_empty_url_to_file>
+        
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
         {
-            // error, but remember that we did a init().
+            
             m_aPath = "/";
             return;
         }
 
-        // Scheme must be followed by '://'
+        
         if ( ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH ] != ':' )
              ||
              ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH + 1 ] != '/' )
              ||
              ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH + 2 ] != '/' ) )
         {
-            // error, but remember that we did a init().
+            
             m_aPath = "/";
             return;
         }
@@ -102,7 +102,7 @@ void PackageUri::init() const
         else
             aPureUri = m_aUri;
 
-        // Scheme is case insensitive.
+        
         m_aScheme = aPureUri.copy(
             0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
 
@@ -124,9 +124,9 @@ void PackageUri::init() const
             sal_Int32 nEnd   = aPureUri.lastIndexOf( '/' );
             if ( nEnd == PACKAGE_URL_SCHEME_LENGTH + 3 )
             {
-                // Only <scheme>:/// - Empty authority
+                
 
-                // error, but remember that we did a init().
+                
                 m_aPath = "/";
                 return;
             }
@@ -134,14 +134,14 @@ void PackageUri::init() const
             {
                 if ( aPureUri[ aPureUri.getLength() - 2 ] == '/' )
                 {
-                    // Only <scheme>://// or <scheme>://<something>//
+                    
 
-                    // error, but remember that we did a init().
+                    
                     m_aPath = "/";
                     return;
                 }
 
-                // Remove trailing slash.
+                
                 aPureUri = aPureUri.copy( 0, nEnd );
             }
 
@@ -149,7 +149,7 @@ void PackageUri::init() const
             nEnd = aPureUri.indexOf( '/', nStart );
             if ( nEnd == -1 )
             {
-                // root folder.
+                
 
                 OUString aNormPackage = aPureUri.copy( nStart );
                 normalize( aNormPackage );
@@ -176,18 +176,18 @@ void PackageUri::init() const
             {
                 m_aPath = aPureUri.copy( nEnd + 1 );
 
-                // Unexpected sequences of characters:
-                // - empty path segments
-                // - encoded slashes
-                // - parent folder segments ".."
-                // - current folder segments "."
-                if ( m_aPath.indexOf( "//" ) != -1
+                
+                
+                
+                
+                
+                if ( m_aPath.indexOf( "
                   || m_aPath.indexOf( "%2F" ) != -1
                   || m_aPath.indexOf( "%2f" ) != -1
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, OUString( ".." ) )
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, OUString( "." ) ) )
                 {
-                    // error, but remember that we did a init().
+                    
                     m_aPath = "/";
                     return;
                 }
@@ -219,12 +219,12 @@ void PackageUri::init() const
                 }
             }
 
-            // success
+            
             m_bValid = true;
         }
         else
         {
-            // error, but remember that we did a init().
+            
             m_aPath = "/";
         }
     }

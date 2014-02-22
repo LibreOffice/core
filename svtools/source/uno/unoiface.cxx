@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,9 +53,9 @@ namespace
     }
 }
 
-//  ----------------------------------------------------
-//  help function for the toolkit...
-//  ----------------------------------------------------
+
+
+
 
 extern "C" {
 
@@ -167,14 +167,14 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     return pWindow;
 }
 
-}   // extern "C"
+}   
 
-//  ----------------------------------------------------
-//  class VCLXMultiLineEdit
-//  ----------------------------------------------------
+
+
+
 VCLXMultiLineEdit::VCLXMultiLineEdit()
     :maTextListeners( *this )
-    ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
+    ,meLineEndType( LINEEND_LF )    
 {
 }
 
@@ -192,7 +192,7 @@ VCLXMultiLineEdit::~VCLXMultiLineEdit()
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXMultiLineEdit )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextArea>* ) NULL ),
@@ -219,7 +219,7 @@ void VCLXMultiLineEdit::setText( const OUString& aText ) throw(::com::sun::star:
     {
         pEdit->SetText( aText );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pEdit->SetModifyFlag();
         pEdit->Modify();
@@ -511,11 +511,11 @@ void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    // don't grab the focus if we already have it. Reason is that the only thing which the edit
-    // does is forwarding the focus to it's text window. This text window then does a "select all".
-    // So if the text window already has the focus, and we give the focus to the multi line
-    // edit, then all which happens is that everything is selected.
-    // #i27072#
+    
+    
+    
+    
+    
     if ( GetWindow() && !GetWindow()->HasChildPathFocus() )
         GetWindow()->GrabFocus();
 }
@@ -523,7 +523,7 @@ void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::Runti
 void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
-                     // FIXME: elide duplication ?
+                     
                      BASEPROPERTY_LINE_END_FORMAT,
                      BASEPROPERTY_READONLY,
                      BASEPROPERTY_MAXTEXTLEN,
@@ -532,9 +532,9 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 
 }
-//  ----------------------------------------------------
-//  class VCLXFileControl
-//  ----------------------------------------------------
+
+
+
 VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
 {
 }
@@ -555,7 +555,7 @@ VCLXFileControl::~VCLXFileControl()
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXFileControl )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
@@ -621,8 +621,8 @@ void VCLXFileControl::setText( const OUString& aText ) throw(::com::sun::star::u
     {
         pWindow->SetText( aText );
 
-        // also in Java a textChanged is triggered, not in VCL.
-        // ::com::sun::star::awt::Toolkit should be JAVA-compliant...
+        
+        
         ModifyHdl( NULL );
     }
 }
@@ -794,17 +794,17 @@ void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) 
 void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
-                     // FIXME: elide duplication ?
+                     
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
 
 
-//  ----------------------------------------------------
-//  class SVTXFormattedField
-//  ----------------------------------------------------
-// --------------------------------------------------------------------------------------
+
+
+
+
 SVTXFormattedField::SVTXFormattedField()
     :m_pCurrentSupplier(NULL)
     ,bIsStandardSupplier(sal_True)
@@ -812,7 +812,7 @@ SVTXFormattedField::SVTXFormattedField()
 {
 }
 
-// --------------------------------------------------------------------------------------
+
 SVTXFormattedField::~SVTXFormattedField()
 {
     if (m_pCurrentSupplier)
@@ -822,7 +822,7 @@ SVTXFormattedField::~SVTXFormattedField()
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetWindow( Window* _pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
@@ -830,7 +830,7 @@ void SVTXFormattedField::SetWindow( Window* _pWindow )
         GetFormattedField()->SetAutoColor(sal_True);
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -897,12 +897,12 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
             {
                 const ::com::sun::star::uno::TypeClass rTC = Value.getValueType().getTypeClass();
                 if (rTC != ::com::sun::star::uno::TypeClass_STRING)
-                    // no string
+                    
                     if (rTC != ::com::sun::star::uno::TypeClass_DOUBLE)
-                        // no double
+                        
                         if (Value.hasValue())
-                        {   // but a value
-                            // try if it is something converitble
+                        {   
+                            
                             sal_Int32 nValue = 0;
                             if (!(Value >>= nValue))
                                 throw ::com::sun::star::lang::IllegalArgumentException();
@@ -946,8 +946,8 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
         }
 
         if (BASEPROPERTY_TEXTCOLOR == nPropType)
-        {   // after setting a new text color, think again about the AutoColor flag of the control
-            // 17.05.2001 - 86859 - frank.schoenheit@germany.sun.com
+        {   
+            
             pField->SetAutoColor(!Value.hasValue());
         }
     }
@@ -955,7 +955,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
         VCLXSpinField::setProperty( PropertyName, Value );
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1002,7 +1002,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
             case BASEPROPERTY_FORMATSSUPPLIER:
             {
                 if (!bIsStandardSupplier)
-                {   // ansonsten void
+                {   
                     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getFormatsSupplier();
                     aReturn <<= xSupplier;
                 }
@@ -1023,7 +1023,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::convertEffectiveValue(const ::com::sun::star::uno::Any& rValue)
 {
     ::com::sun::star::uno::Any aReturn;
@@ -1046,7 +1046,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
                 SvNumberFormatter* pFormatter = pField->GetFormatter();
                 if (!pFormatter)
                     pFormatter = pField->StandardFormatter();
-                    // should never fail
+                    
 
                 Color* pDum;
                 double d = 0.0;
@@ -1083,7 +1083,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1112,7 +1112,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetMinValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1124,7 +1124,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1152,7 +1152,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetMaxValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1164,7 +1164,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1192,12 +1192,12 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
         break;
         default:
             pField->EnableEmptyField(sal_True);
-                // nur noch void erlaubt
+                
             break;
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetDefaultValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1212,7 +1212,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 sal_Bool SVTXFormattedField::GetTreatAsNumber()
 {
     FormattedField* pField = GetFormattedField();
@@ -1222,7 +1222,7 @@ sal_Bool SVTXFormattedField::GetTreatAsNumber()
     return sal_True;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
 {
     FormattedField* pField = GetFormattedField();
@@ -1230,7 +1230,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
         pField->TreatAsNumber(bSet);
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1245,14 +1245,14 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
     }
     else
     {
-        if (!pField->GetText().isEmpty())    // empty is returned as void by default
+        if (!pField->GetText().isEmpty())    
             aReturn <<= pField->GetValue();
     }
 
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1283,16 +1283,16 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
                 pField->SetTextValue(sText);
         }
     }
-//  NotifyTextListeners();
+
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier(void) const
 {
     return ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > ((::com::sun::star::util::XNumberFormatsSupplier*)m_pCurrentSupplier);
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier)
 {
     FormattedField* pField = GetFormattedField();
@@ -1313,7 +1313,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     }
 
     if (!pNew)
-        return;     // TODO : how to process ?
+        return;     
 
     if (m_pCurrentSupplier)
         m_pCurrentSupplier->release();
@@ -1321,7 +1321,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     m_pCurrentSupplier->acquire();
     if (pField)
     {
-        // save the actual value
+        
         ::com::sun::star::uno::Any aCurrent = GetValue();
         pField->SetFormatter(m_pCurrentSupplier->GetNumberFormatter(), sal_False);
         if (nKeyToSetDelayed != -1)
@@ -1334,14 +1334,14 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 sal_Int32 SVTXFormattedField::getFormatKey(void) const
 {
     FormattedField* pField = GetFormattedField();
     return pField ? pField->GetFormatKey() : 0;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
     FormattedField* pField = GetFormattedField();
@@ -1351,16 +1351,16 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
             pField->SetFormatKey(nKey);
         else
         {
-            // probably I am in a block, in which first the key and next the formatter will be set,
-            // initially this happens quite certain, as the properties are set in alphabettic sequence,
-            // and the FormatsSupplier is processed before the FormatKey
+            
+            
+            
             nKeyToSetDelayed = nKey;
         }
         NotifyTextListeners();
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::NotifyTextListeners()
 {
     if ( GetTextListeners().getLength() )
@@ -1374,7 +1374,7 @@ void SVTXFormattedField::NotifyTextListeners()
 void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
-                     // FIXME: elide duplication ?
+                     
                      BASEPROPERTY_EFFECTIVE_MIN,
                      BASEPROPERTY_VALUEMIN_DOUBLE,
                      BASEPROPERTY_EFFECTIVE_MAX,
@@ -1396,18 +1396,18 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
-//  class SVTXRoadmap
-//  ----------------------------------------------------
+
+
+
 
 using namespace svt;
 
-// --------------------------------------------------------------------------------------
+
 SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
 {
 }
 
-// --------------------------------------------------------------------------------------
+
 SVTXRoadmap::~SVTXRoadmap()
 {
 }
@@ -1473,8 +1473,8 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
             evt.OldValue >>= nID;
             pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
         }
-    //    else
-            // Todo: handle Interactive appropriately
+    
+            
     }
 }
 
@@ -1552,7 +1552,7 @@ void SVTXRoadmap::elementReplaced( const ::com::sun::star::container::ContainerE
 
 
 
-// --------------------------------------------------------------------------------------
+
 void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1607,7 +1607,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 }
 
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1656,9 +1656,9 @@ void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
-//  ----------------------------------------------------
-//  class SVTXNumericField
-//  ----------------------------------------------------
+
+
+
 SVTXNumericField::SVTXNumericField()
 {
 }
@@ -1675,7 +1675,7 @@ SVTXNumericField::~SVTXNumericField()
     return (aRet.hasValue() ? aRet : SVTXFormattedField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( SVTXNumericField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XNumericField>* ) NULL ),
     SVTXFormattedField::getTypes()
@@ -1823,9 +1823,9 @@ void SVTXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
 
-//  ----------------------------------------------------
-//  class SVTXCurrencyField
-//  ----------------------------------------------------
+
+
+
 SVTXCurrencyField::SVTXCurrencyField()
 {
 }
@@ -1842,7 +1842,7 @@ SVTXCurrencyField::~SVTXCurrencyField()
     return (aRet.hasValue() ? aRet : SVTXFormattedField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( SVTXCurrencyField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCurrencyField>* ) NULL ),
     SVTXFormattedField::getTypes()
@@ -2056,9 +2056,9 @@ void SVTXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXProgressBar
-//  ----------------------------------------------------
+
+
+
 
 VCLXProgressBar::VCLXProgressBar()
             :m_nValue(0)
@@ -2080,7 +2080,7 @@ void VCLXProgressBar::ImplUpdateValue()
         sal_Int32 nValMin;
         sal_Int32 nValMax;
 
-        // check min and max
+        
         if (m_nValueMin < m_nValueMax)
         {
             nValMin = m_nValueMin;
@@ -2092,7 +2092,7 @@ void VCLXProgressBar::ImplUpdateValue()
             nValMax = m_nValueMin;
         }
 
-        // check value
+        
         if (m_nValue < nValMin)
         {
             nVal = nValMin;
@@ -2106,7 +2106,7 @@ void VCLXProgressBar::ImplUpdateValue()
             nVal = m_nValue;
         }
 
-        // calculate percent
+        
         sal_Int32 nPercent;
         if (nValMin != nValMax)
         {
@@ -2117,12 +2117,12 @@ void VCLXProgressBar::ImplUpdateValue()
             nPercent = 0;
         }
 
-        // set progressbar value
+        
         pProgressBar->SetValue( (sal_uInt16) nPercent );
     }
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXProgressBar::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -2131,13 +2131,13 @@ void VCLXProgressBar::ImplUpdateValue()
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXProgressBar )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// ::com::sun::star::awt::XProgressBar
+
 void VCLXProgressBar::setForegroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2178,13 +2178,13 @@ void VCLXProgressBar::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::com::su
 
     if ( nMin < nMax )
     {
-        // take correct min and max
+        
         m_nValueMin = nMin;
         m_nValueMax = nMax;
     }
     else
     {
-        // change min and max
+        
         m_nValueMin = nMax;
         m_nValueMax = nMin;
     }
@@ -2199,7 +2199,7 @@ sal_Int32 VCLXProgressBar::getValue() throw(::com::sun::star::uno::RuntimeExcept
     return m_nValue;
 }
 
-// ::com::sun::star::awt::VclWindowPeer
+
 void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2304,9 +2304,9 @@ void VCLXProgressBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
-//  class SVTXDateField
-//  ----------------------------------------------------
+
+
+
 SVTXDateField::SVTXDateField()
     :VCLXDateField()
 {
@@ -2320,7 +2320,7 @@ void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const ::
 {
     VCLXDateField::setProperty( PropertyName, Value );
 
-    // some properties need to be forwarded to the sub edit, too
+    
     Edit* pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow() )->GetSubEdit() : NULL;
     if ( !pSubEdit )
         return;

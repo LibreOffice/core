@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "main.hxx"
 
-// ---------------------------------------------------------------
+
 
 CGMBitmap::CGMBitmap( CGM& rCGM ) :
     mpCGM                           ( &rCGM ),
@@ -29,14 +29,14 @@ CGMBitmap::CGMBitmap( CGM& rCGM ) :
     ImplGetBitmap( *pCGMBitmapDescriptor );
 };
 
-// ---------------------------------------------------------------
+
 
 CGMBitmap::~CGMBitmap()
 {
     delete pCGMBitmapDescriptor;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
@@ -49,9 +49,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
             if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != NULL )
             {
 
-                // the picture may either be read from left to right or right to left, from top to bottom ...
+                
 
-                long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
+                long nxCount = rDesc.mnX + 1;   
                 long nyCount = rDesc.mnY + 1;
                 long    nx, ny, nxC;
 
@@ -74,7 +74,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         {
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
-                            {   // this is not fast, but a one bit/pixel format is rarely used
+                            {   
                                 rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1 );
                             }
                         }
@@ -88,7 +88,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         {
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
-                            {   // this is not fast, but a two bits/pixel format is rarely used
+                            {   
                                 rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3 );
                             }
                         }
@@ -184,7 +184,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                 if ( nY > 0 )
                     fAngle = 360 - fAngle;
 
-                if ( fAngle > 180 )                 // is the picture build upwards or downwards ?
+                if ( fAngle > 180 )                 
                 {
                     rDesc.mnOrigin = rDesc.mnP;
                 }
@@ -220,7 +220,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
     }
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
 {
@@ -233,13 +233,13 @@ void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
     }
 }
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 {
-    mpCGM->ImplGetPoint( rDesc.mnP );           // parallelogram    p < - > r
-    mpCGM->ImplGetPoint( rDesc.mnQ );           //                          |
-    mpCGM->ImplGetPoint( rDesc.mnR );           //                          q
+    mpCGM->ImplGetPoint( rDesc.mnP );           
+    mpCGM->ImplGetPoint( rDesc.mnQ );           
+    mpCGM->ImplGetPoint( rDesc.mnR );           
     sal_uInt32 nPrecision = mpCGM->pElement->nIntegerPrecision;
     rDesc.mnX = mpCGM->ImplGetUI( nPrecision );
     rDesc.mnY = mpCGM->ImplGetUI( nPrecision );
@@ -247,43 +247,43 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     rDesc.mnScanSize = 0;
     switch( rDesc.mnLocalColorPrecision )
     {
-        case long(0x80000001) :                 // monochrome ( bit = 0->backgroundcolor )
-        case 0 :                                //              bit = 1->fillcolor
+        case long(0x80000001) :                 
+        case 0 :                                
             rDesc.mnDstBitsPerPixel = 1;
             break;
-        case 1 :                                // 2 color indexed ( monochrome )
+        case 1 :                                
         case -1 :
             rDesc.mnDstBitsPerPixel = 1;
             break;
-        case 2 :                                // 4 color indexed
+        case 2 :                                
         case -2 :
             rDesc.mnDstBitsPerPixel = 2;
             break;
-        case 4 :                                // 16 color indexed
+        case 4 :                                
         case -4 :
             rDesc.mnDstBitsPerPixel = 4;
             break;
-        case 8 :                                // 256 color indexed
+        case 8 :                                
         case -8 :
             rDesc.mnDstBitsPerPixel = 8;
             rDesc.mnScanSize = rDesc.mnX;
             break;
-        case 16 :                               // NS
+        case 16 :                               
         case -16 :
             rDesc.mbStatus = sal_False;
             break;
-        case 24 :                               // 24 bit directColor ( 8 bits each component )
+        case 24 :                               
         case -24 :
             rDesc.mnDstBitsPerPixel = 24;
             break;
-        case 32 :                               // NS
+        case 32 :                               
         case -32 :
             rDesc.mbStatus = sal_False;
             break;
 
     }
-    // mnCompressionMode == 0 : CCOMP_RUNLENGTH
-    //                   == 1 : CCOMP_PACKED ( no compression. each row starts on a 4 byte boundary )
+    
+    
     if ( ( rDesc.mnCompressionMode = mpCGM->ImplGetUI16() ) != 1 )
         rDesc.mbStatus = sal_False;
 
@@ -295,21 +295,21 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 
     sal_uInt32  nScanSize;
     nScanSize = rDesc.mnScanSize;
-    if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // try a scansize without dw alignment
+    if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  
     {
         nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;
-        if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // then we'll try word alignment
+        if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  
         {
             nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
-            if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // and last we'll try dword alignment
+            if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  
             {
-                nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;          // and LAST BUT NOT LEAST we'll try word alignment without aligning the last line
+                nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;          
                 if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                 {
                     nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
                     if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                     {
-                        mpCGM->mnParaSize = 0;                              // this format is corrupt
+                        mpCGM->mnParaSize = 0;                              
                         rDesc.mbStatus = sal_False;
                     }
                 }
@@ -319,20 +319,20 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     rDesc.mnScanSize = nScanSize;
     if ( rDesc.mbStatus )
     {
-        rDesc.mpBuf = mpCGM->mpSource + mpCGM->mnParaSize;  // mpBuf now points to the first scanline
+        rDesc.mpBuf = mpCGM->mpSource + mpCGM->mnParaSize;  
         mpCGM->mnParaSize += rDesc.mnScanSize * rDesc.mnY;
     }
     return rDesc.mbStatus;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest )
 {
     if ( ( rSource.mnR.Y == rDest.mnQ.Y ) && ( rSource.mnR.X == rDest.mnQ.X ) )
-    {   // Insert on Bottom
+    {   
         if ( mpCGM->mnVDCYmul == -1 )
-            rDest.mnOrigin = rSource.mnOrigin;          // new origin
+            rDest.mnOrigin = rSource.mnOrigin;          
         rDest.mpBitmap->Expand( 0, rSource.mnY );
         rDest.mpBitmap->CopyPixel( Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
@@ -345,9 +345,9 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
         rDest.mnR = rSource.mnR;
     }
     else
-    {   // Insert on Top
+    {   
         if ( mpCGM->mnVDCYmul == 1 )
-            rDest.mnOrigin = rSource.mnOrigin;          // new origin
+            rDest.mnOrigin = rSource.mnOrigin;          
         rDest.mpBitmap->Expand( 0, rSource.mnY );
         rDest.mpBitmap->CopyPixel( Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
@@ -358,7 +358,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
     rDest.mndy += rSource.mndy;
 };
 
-// ---------------------------------------------------------------
+
 
 CGMBitmap* CGMBitmap::GetNext()
 {
@@ -377,7 +377,7 @@ CGMBitmap* CGMBitmap::GetNext()
                 delete pCGMTempBitmap;
                 return NULL;
             }
-            else    // we'll replace the pointers and return the old one
+            else    
             {
                 CGMBitmapDescriptor* pTempBD = pCGMBitmapDescriptor;
                 pCGMBitmapDescriptor = pCGMTempBitmap->pCGMBitmapDescriptor;
@@ -391,7 +391,7 @@ CGMBitmap* CGMBitmap::GetNext()
         return NULL;
 }
 
-// ---------------------------------------------------------------
+
 
 CGMBitmapDescriptor* CGMBitmap::GetBitmap()
 {

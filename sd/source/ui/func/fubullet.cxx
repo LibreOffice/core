@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fubullet.hxx"
@@ -102,7 +102,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     OutlinerView* pOV = NULL;
     ::Outliner*   pOL = NULL;
 
-    // depending on ViewShell set Outliner and OutlinerView
+    
     if (mpViewShell->ISA(DrawViewShell))
     {
         pOV = mpView->GetTextEditOutlinerView();
@@ -116,22 +116,22 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
             mpViewShell->GetActiveWindow());
     }
 
-    // insert string
+    
     if(pOV && pOL)
     {
-        // prevent flickering
+        
         pOV->HideCursor();
         pOL->SetUpdateMode(sal_False);
 
-        // remove old selected text
+        
         pOV->InsertText( aEmptyStr );
 
-        // prepare undo
+        
         ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
         rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
                                     aEmptyStr );
 
-        // insert given text
+        
         OUString aStr( cMark );
         pOV->InsertText( aStr, sal_True);
 
@@ -142,7 +142,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 
         rUndoMgr.LeaveListAction();
 
-        // restart repainting
+        
         pOL->SetUpdateMode(sal_True);
         pOV->ShowCursor();
     }
@@ -196,9 +196,9 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         if( !pDlg )
             return;
 
-        // If a character is selected, it can be shown
-        // pDLg->SetFont( );
-        // pDlg->SetChar( );
+        
+        
+        
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
@@ -224,7 +224,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         OutlinerView* pOV = NULL;
         ::Outliner*   pOL = NULL;
 
-        // determine depending on ViewShell Outliner and OutlinerView
+        
         if(mpViewShell && mpViewShell->ISA(DrawViewShell))
         {
             pOV = mpView->GetTextEditOutlinerView();
@@ -240,10 +240,10 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                 mpViewShell->GetActiveWindow());
         }
 
-        // insert special character
+        
         if (pOV)
         {
-            // prevent flicker
+            
             pOV->HideCursor();
             pOL->SetUpdateMode(sal_False);
 
@@ -262,7 +262,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                                      aEmptyStr );
             pOV->InsertText(aChars, sal_True);
 
-            // set attributes (set font)
+            
             SfxItemSet aSet(pOL->GetEmptyItemSet());
             SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                    aFont.GetStyleName(), aFont.GetPitch(),
@@ -278,12 +278,12 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             aSel.nStartPos = aSel.nEndPos;
             pOV->SetSelection(aSel);
 
-            // do not go ahead with setting attributes of special characters
+            
             pOV->GetOutliner()->QuickSetAttribs(aOldSet, aSel);
 
             rUndoMgr.LeaveListAction();
 
-            // show it again
+            
             pOL->SetUpdateMode(sal_True);
             pOV->ShowCursor();
         }
@@ -338,6 +338,6 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
         }
     }
 }
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

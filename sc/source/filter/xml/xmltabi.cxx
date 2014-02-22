@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmltabi.hxx"
@@ -70,16 +70,16 @@ using ::com::sun::star::xml::sax::XAttributeList;
  */
 static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUString& rExtTabName)
 {
-    // 'file:///path/to/file.ods'#MySheet
-    // 'file:///path/to/file.ods'#MySheet with space
-    // 'file:///path/to/file's.ods'#Sheet (Notice the quote in the file name.
-    //  That's allowed.)
+    
+    
+    
+    
 
-    if ( rName.toChar() != '\'' )       // initial quote
+    if ( rName.toChar() != '\'' )       
         return false;
 
-    // #i114504# Other schemes besides "file:" are also allowed.
-    // CompareProtocolScheme is quick, only looks at the start of the string.
+    
+    
     INetProtocol eProt = INetURLObject::CompareProtocolScheme( rName.copy(1) );
     if ( eProt == INET_PROT_NOT_VALID )
         return false;
@@ -94,26 +94,26 @@ static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUStri
 
     bool bInUrl = true;
     sal_Unicode cPrev = 0;
-    for (sal_Int32 i = nPrefLen+1; i < n; ++i)      // start the loop after quote and prefix
+    for (sal_Int32 i = nPrefLen+1; i < n; ++i)      
     {
         const sal_Unicode c = p[i];
         if (bInUrl)
         {
-            // parsing file URL
+            
             if (c == '#')
             {
                 if (cPrev != '\'')
                     return false;
 
                 rUrl = aUrlBuf.makeStringAndClear();
-                rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
+                rUrl = rUrl.copy(0, rUrl.getLength()-1); 
                 bInUrl = false;
             }
             else
                 aUrlBuf.append(c);
         }
         else
-            // parsing sheet name.
+            
             aTabNameBuf.append(c);
 
         cPrev = c;
@@ -135,7 +135,7 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 {
 }
 
-//------------------------------------------------------------------
+
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -148,7 +148,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     bStartFormPage(false),
     bPrintEntireSheet(true)
 {
-    // get start offset in file (if available)
+    
     nStartOffset = GetScImport().GetByteOffset();
 
     ScXMLTabProtectionData aProtectData;
@@ -199,7 +199,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     OUString aExtUrl, aExtTabName;
     if (lcl_isExternalRefCache(sName, aExtUrl, aExtTabName))
     {
-        // This is an external ref cache table.
+        
         pExternalRefInfo.reset(new ScXMLExternalTabData);
         pExternalRefInfo->maFileUrl = aExtUrl;
         ScDocument* pDoc = GetScImport().GetDocument();
@@ -213,7 +213,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     }
     else
     {
-        // This is a regular table.
+        
         GetScImport().GetTables().NewSheet(sName, sStyleName, aProtectData);
     }
 }
@@ -231,14 +231,14 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
     if (pExternalRefInfo.get())
     {
-        // We only care about the table-row and table-source elements for
-        // external cache data.
+        
+        
         switch (nToken)
         {
             case XML_TOK_TABLE_ROW_GROUP:
             case XML_TOK_TABLE_HEADER_ROWS:
             case XML_TOK_TABLE_ROWS:
-                // #i101319# don't discard rows in groups or header (repeat range)
+                
                 return new ScXMLExternalRefRowsContext(
                     GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
             case XML_TOK_TABLE_ROW:
@@ -306,8 +306,8 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         break;
     case XML_TOK_TABLE_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
+                                                      rLName, xAttrList
+                                                      
                                                       );
         break;
     case XML_TOK_TABLE_SOURCE:
@@ -329,7 +329,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_EVENT_LISTENERS:
     case XML_TOK_TABLE_EVENT_LISTENERS_EXT:
         {
-            // use XEventsSupplier interface of the sheet
+            
             uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
             pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
         }
@@ -369,7 +369,7 @@ void ScXMLTableContext::EndElement()
         }
     }
     else if (!bPrintEntireSheet)
-        // Sheet has "print entire sheet" option by default.  Remove it.
+        
         pDoc->ClearPrintRanges(nCurTab);
 
     ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab, false));
@@ -415,17 +415,17 @@ void ScXMLTableContext::EndElement()
     rTables.DeleteTable();
     rImport.ProgressBarIncrement(false);
 
-    // store stream positions
+    
     if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
     {
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
         SCTAB nTab = rTables.GetCurrentSheet();
-        // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
+        
         pSheetData->StartStreamPos( nTab, nStartOffset );
     }
 }
 
-// ============================================================================
+
 
 ScXMLImport& ScXMLTableProtectionContext::GetScImport()
 {

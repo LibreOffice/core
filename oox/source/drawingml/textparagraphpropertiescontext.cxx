@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::text;
 
 namespace oox { namespace drawingml {
 
-// CT_TextParagraphProperties
+
 TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper& rParent,
                                                                 const AttributeList& rAttribs,
                                                                 TextParagraphProperties& rTextParagraphProperties )
@@ -55,27 +55,27 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
 
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
 
-    // ST_TextAlignType
+    
     rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) );
-    // TODO see to do the same with RubyAdjust
+    
 
-    // ST_Coordinate32
-//  sValue = rAttribs.getString( XML_defTabSz ).get();    SJ: we need to be able to set the default tab size for each text object,
-//                                                          this is possible at the moment only for the whole document.
-//  sal_Int32 nDefTabSize = ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
-    // TODO
+    
 
-//  bool bEaLineBrk = rAttribs.getBool( XML_eaLnBrk, true );
+
+
+    
+
+
     if ( rAttribs.hasAttribute( XML_latinLnBrk ) )
     {
         bool bLatinLineBrk = rAttribs.getBool( XML_latinLnBrk, true );
         rPropertyMap[ PROP_ParaIsHyphenation ] <<= bLatinLineBrk;
     }
-    // TODO see what to do with Asian hyphenation
+    
 
-    // ST_TextFontAlignType
-    // TODO
-//  sal_Int32 nFontAlign = rAttribs.getToken( XML_fontAlgn, XML_base );
+    
+    
+
 
     if ( rAttribs.hasAttribute( XML_hangingPunct ) )
     {
@@ -83,15 +83,15 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
         rPropertyMap[ PROP_ParaIsHangingPunctuation ] <<= bHangingPunct;
     }
 
-  // ST_Coordinate
+  
     if ( rAttribs.hasAttribute( XML_indent ) )
     {
         sValue = rAttribs.getString( XML_indent ).get();
         mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
-  // ST_TextIndentLevelType
-    // -1 is an invalid value and denote the lack of level
+  
+    
     sal_Int32 nLevel = rAttribs.getInteger( XML_lvl, 0 );
     if( nLevel > 8 || nLevel < 0 )
     {
@@ -105,15 +105,15 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     const OUString sStyleNameValue( OUString::createFromAscii( name ) );
     mrBulletList.setStyleName( sStyleNameValue );
 
-    // ST_TextMargin
-    // ParaLeftMargin
+    
+    
     if ( rAttribs.hasAttribute( XML_marL ) )
     {
         sValue = rAttribs.getString( XML_marL ).get();
         mrTextParagraphProperties.getParaLeftMargin() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
-    // ParaRightMargin
+    
     if ( rAttribs.hasAttribute( XML_marR ) )
     {
         sValue = rAttribs.getString( XML_marR ).get();
@@ -161,50 +161,50 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         rPropertyMap[ PROP_ParaAdjust ] <<= mrTextParagraphProperties.getParaAdjust().get();
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case A_TOKEN( lnSpc ):          // CT_TextSpacing
+        case A_TOKEN( lnSpc ):          
             return new TextSpacingContext( *this, maLineSpacing );
-        case A_TOKEN( spcBef ):         // CT_TextSpacing
+        case A_TOKEN( spcBef ):         
             return new TextSpacingContext( *this, mrSpaceBefore );
-        case A_TOKEN( spcAft ):         // CT_TextSpacing
+        case A_TOKEN( spcAft ):         
             return new TextSpacingContext( *this, mrSpaceAfter );
-        // EG_TextBulletColor
-        case A_TOKEN( buClrTx ):        // CT_TextBulletColorFollowText ???
+        
+        case A_TOKEN( buClrTx ):        
             mrBulletList.mbBulletColorFollowText <<= sal_True;
             break;
-        case A_TOKEN( buClr ):          // CT_Color
+        case A_TOKEN( buClr ):          
             return new ColorContext( *this, *mrBulletList.maBulletColorPtr );
-        // EG_TextBulletSize
-        case A_TOKEN( buSzTx ):         // CT_TextBulletSizeFollowText
+        
+        case A_TOKEN( buSzTx ):         
             mrBulletList.setBulletSize(100);
             break;
-        case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
+        case A_TOKEN( buSzPct ):        
             mrBulletList.setBulletSize( static_cast<sal_Int16>( GetPercent( rAttribs.getString( XML_val ).get() ) / 1000 ) );
             break;
-        case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
+        case A_TOKEN( buSzPts ):        
             mrBulletList.setBulletSize(0);
             mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ).get() ) ) );
             break;
 
-        // EG_TextBulletTypeface
-        case A_TOKEN( buFontTx ):       // CT_TextBulletTypefaceFollowText
+        
+        case A_TOKEN( buFontTx ):       
             mrBulletList.mbBulletFontFollowText <<= sal_True;
             break;
-        case A_TOKEN( buFont ):         // CT_TextFont
+        case A_TOKEN( buFont ):         
             mrBulletList.maBulletFont.setAttributes( rAttribs );
             break;
 
-        // EG_TextBullet
-        case A_TOKEN( buNone ):         // CT_TextNoBullet
+        
+        case A_TOKEN( buNone ):         
             mrBulletList.setNone();
             break;
-        case A_TOKEN( buAutoNum ):      // CT_TextAutonumberBullet
+        case A_TOKEN( buAutoNum ):      
         {
             try {
                 sal_Int32 nType = rAttribs.getToken( XML_type, 0 );
@@ -226,7 +226,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             break;
         }
-        case A_TOKEN( buChar ):         // CT_TextCharBullet
+        case A_TOKEN( buChar ):         
             try {
                 mrBulletList.setBulletChar( rAttribs.getString( XML_char ).get() );
             }
@@ -235,14 +235,14 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 OSL_TRACE("OOX: SAXException in XML_buChar");
             }
             break;
-        case A_TOKEN( buBlip ):         // CT_TextBlipBullet
+        case A_TOKEN( buBlip ):         
             {
                 mxBlipProps.reset( new BlipFillProperties );
                 return new BlipFillContext( *this, rAttribs, *mxBlipProps );
             }
-        case A_TOKEN( tabLst ):         // CT_TextTabStopList
+        case A_TOKEN( tabLst ):         
             return new TextTabStopListContext( *this, maTabList );
-        case A_TOKEN( defRPr ):         // CT_TextCharacterProperties
+        case A_TOKEN( defRPr ):         
             return new TextCharacterPropertiesContext( *this, rAttribs, mrTextParagraphProperties.getTextCharacterProperties() );
         case OOX_TOKEN( doc, jc ):
             {
@@ -263,7 +263,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case OOX_TOKEN( doc, spacing ):
             {
-                // Spacing before
+                
                 if( !rAttribs.getBool(OOX_TOKEN(doc, beforeAutospacing), false) )
                 {
                     OptValue<sal_Int32> oBefore = rAttribs.getInteger(OOX_TOKEN(doc, before));
@@ -287,7 +287,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                 }
 
-                // Spacing after
+                
                 if( !rAttribs.getBool(OOX_TOKEN(doc, afterAutospacing), false) )
                 {
                     OptValue<sal_Int32> oAfter = rAttribs.getInteger(OOX_TOKEN(doc, after));
@@ -311,7 +311,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                 }
 
-                // Line spacing
+                
                 OptValue<OUString> oLineRule = rAttribs.getString(OOX_TOKEN(doc, lineRule));
                 OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(OOX_TOKEN(doc, line));
                 if (oLineSpacing.has())

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "align.hxx"
@@ -95,7 +95,7 @@ using namespace ::com::sun::star::container;
 using ::com::sun::star::uno::Reference;
 
 using namespace svx;
-// AbstractTabDialog implementations just forwards everything to the dialog
+
 IMPL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl)
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
 IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
@@ -130,7 +130,7 @@ IMPL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl);
 
-// #i68101#
+
 IMPL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl);
 
@@ -148,17 +148,17 @@ IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
 
-//////////////////////////////////////////////////////////////////////////
-// VclAbstractDialog2_Impl
-//////////////////////////////////////////////////////////////////////////
 
-// virtual
+
+
+
+
 VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
 {
     delete m_pDlg;
 }
 
-// virtual
+
 void  VclAbstractDialog2_Impl::StartExecuteModal( const Link& rEndDialogHdl )
 {
     m_aEndDlgHdl = rEndDialogHdl;
@@ -166,7 +166,7 @@ void  VclAbstractDialog2_Impl::StartExecuteModal( const Link& rEndDialogHdl )
         LINK( this, VclAbstractDialog2_Impl, EndDialogHdl ) );
 }
 
-// virtual
+
 long VclAbstractDialog2_Impl::GetResult()
 {
     return m_pDlg->GetResult();
@@ -185,7 +185,7 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 
 void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
@@ -211,7 +211,7 @@ void CuiAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
-//From class Window.
+
 void CuiAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
@@ -613,7 +613,7 @@ sal_Bool AbstractSvxSearchSimilarityDialog_Impl::IsRelaxed()
     return pDlg->IsRelaxed();
 }
 
-// AbstractSvxTransformTabDialog implementations just forwards everything to the dialog
+
 void AbstractSvxTransformTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
@@ -638,7 +638,7 @@ void AbstractSvxTransformTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
-//From class Window.
+
 void AbstractSvxTransformTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
@@ -652,7 +652,7 @@ void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link& rL
     pDlg->SetValidateFramePosLink( rLink );
 }
 
-// AbstractSvxCaptionDialog implementations just forwards everything to the dialog
+
 void AbstractSvxCaptionDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
@@ -677,7 +677,7 @@ void AbstractSvxCaptionDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
-//From class Window.
+
 void AbstractSvxCaptionDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
@@ -877,7 +877,7 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
     return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
 }
 
-// AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
+
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
@@ -902,7 +902,7 @@ void AbstractSvxAreaTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
-//From class Window.
+
 void AbstractSvxAreaTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
@@ -998,7 +998,7 @@ bool AbstractPasswordToOpenModifyDialog_Impl::IsRecommendToOpenReadonly() const
     return pDlg->IsRecommendToOpenReadonly();
 }
 
-// Create dialogs with simplest interface
+
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent, sal_uInt32 nResId )
 {
     Dialog* pDlg=NULL;
@@ -1024,7 +1024,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
             }
             else if (nResId == SID_LANGUAGE_OPTIONS)
             {
-                //open the tab page "tools/options/languages"
+                
                 pOptDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
             }
             pDlg = pOptDlg;
@@ -1039,7 +1039,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
     return 0;
 }
 
-// dialogs that use SfxBindings
+
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParent*/, const SfxBindings&, sal_uInt32 )
 {
     return 0;
@@ -1052,7 +1052,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     Dialog* pDlg = NULL;
     if ( SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId )
     {
-        // only activate last page if we dont want to activate a special page
+        
         bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
         OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, rxFrame, bActivateLastSelection );
         if ( nResId == SID_OPTIONS_DATABASES )
@@ -1068,7 +1068,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
         return NULL;
 }
 
-// TabDialog outside the drawing layer
+
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pAttrSet,
@@ -1123,7 +1123,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
     return 0;
 }
 
-// TabDialog that use functionality of the drawing layer
+
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView,
@@ -1133,7 +1133,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
     return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
-// TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
+
 AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes )
@@ -1552,7 +1552,7 @@ AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( Wi
     return new AbstractSvxAreaTabDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr, 
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj ,
                                                                 sal_Bool bHasObj)
@@ -1657,7 +1657,7 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
     return new SvxMacroAssignDialog( _pParent, _rxDocumentFrame, _bUnoDialogMode, _rxEvents, _nInitiallySelectedEvent );
 }
 
-// Factories for TabPages
+
 CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
     switch ( nId )

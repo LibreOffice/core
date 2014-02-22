@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -50,7 +50,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-// AW: For VCOfDrawVirtObj and stuff
+
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <sw_primitivetypes2d.hxx>
@@ -85,7 +85,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            /// basic constructor, used from SdrObject.
+            
             VCOfSwFlyDrawObj(SwFlyDrawObj& rObj)
             :   ViewContactOfSdrObj(rObj)
             {
@@ -95,27 +95,27 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
         {
-            // currently gets not visualized, return empty sequence
+            
             return drawinglayer::primitive2d::Primitive2DSequence();
         }
 
         VCOfSwFlyDrawObj::~VCOfSwFlyDrawObj()
         {
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
-    // create default properties
+    
     return new sdr::properties::DefaultProperties(*this);
 }
 
 sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
 {
-    // needs an own VC since createViewIndependentPrimitive2DSequence()
-    // is called when RecalcBoundRect() is used
+    
+    
     return new sdr::contact::VCOfSwFlyDrawObj(*this);
 }
 
@@ -127,7 +127,7 @@ SwFlyDrawObj::~SwFlyDrawObj()
 {
 }
 
-// SwFlyDrawObj - Factory-Methods
+
 
 sal_uInt32 SwFlyDrawObj::GetObjInventor() const
 {
@@ -139,7 +139,7 @@ sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
     return SwFlyDrawObjIdentifier;
 }
 
-// TODO: Need own primitive to get the FlyFrame paint working
+
 
 namespace drawinglayer
 {
@@ -152,7 +152,7 @@ namespace drawinglayer
             const basegfx::B2DRange                 maOuterRange;
 
         protected:
-            /// method which is to be used to implement the local decomposition of a 2D primitive
+            
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
@@ -169,18 +169,18 @@ namespace drawinglayer
 
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // overloaded to allow callbacks to wrap_DoPaintObject
+            
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // data read access
+            
             const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
             const basegfx::B2DRange& getOuterRange() const { return maOuterRange; }
 
-            /// provide unique ID
+            
             DeclPrimitive2DIDBlock()
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 namespace drawinglayer
 {
@@ -192,12 +192,12 @@ namespace drawinglayer
 
             if(!getOuterRange().isEmpty())
             {
-                // currently this SW object has no primitive representation. As long as this is the case,
-                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the
-                // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
-                // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
-                // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
-                // as it was done in the old implementation
+                
+                
+                
+                
+                
+                
                 const Primitive2DReference aHitTestReference(
                     createHiddenGeometryPrimitives2D(
                         true,
@@ -229,27 +229,27 @@ namespace drawinglayer
 
         Primitive2DSequence SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // This is the callback to keep the FlyFrame painting in SW alive as long as it
-            // is not changed to primitives. This is the method which will be called by the processors
-            // when they do not know this primitive (and they do not). Inside wrap_DoPaintObject
-            // there needs to be a test that paint is only done during SW repaints (see there).
-            // Using this mechanism guarantees the correct Z-Order of the VirtualObject-based FlyFrames.
+            
+            
+            
+            
+            
             getSwVirtFlyDrawObj().wrap_DoPaintObject();
 
-            // call parent
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SwVirtFlyDrawObjPrimitive, PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-// AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
-// since offset is defined different from SdrVirtObj's sdr::contact::ViewContactOfVirtObj.
-// For paint, that offset is used by setting at the OutputDevice; for primitives this is
-// not possible since we have no OutputDevice, but define the geometry itself.
+
+
+
+
 
 namespace sdr
 {
@@ -265,21 +265,21 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            /// basic constructor, used from SdrObject.
+            
             VCOfSwVirtFlyDrawObj(SwVirtFlyDrawObj& rObj)
             :   ViewContactOfVirtObj(rObj)
             {
             }
             virtual ~VCOfSwVirtFlyDrawObj();
 
-            /// access to SwVirtFlyDrawObj
+            
             SwVirtFlyDrawObj& GetSwVirtFlyDrawObj() const
             {
                 return (SwVirtFlyDrawObj&)mrObject;
             }
         };
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 namespace sdr
 {
@@ -292,8 +292,8 @@ namespace sdr
 
             if(rReferencedObject.ISA(SwFlyDrawObj))
             {
-                // create an own specialized primitive which is used as repaint callpoint and HitTest
-                // for HitTest processor (see primitive implementation above)
+                
+                
                 const basegfx::B2DRange aOuterRange(GetSwVirtFlyDrawObj().getOuterBound());
 
                 if(!aOuterRange.isEmpty())
@@ -313,8 +313,8 @@ namespace sdr
         VCOfSwVirtFlyDrawObj::~VCOfSwVirtFlyDrawObj()
         {
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 {
@@ -370,8 +370,8 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
 
 sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
 {
-    // need an own ViewContact (VC) to allow creation of a specialized primitive
-    // for being able to visualize the FlyFrames in primitive renderers
+    
+    
     return new sdr::contact::VCOfSwVirtFlyDrawObj(*this);
 }
 
@@ -379,8 +379,8 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     SdrVirtObj( rNew ),
     pFlyFrm( pFly )
 {
-    //#110094#-1
-    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = sal_True;
+    
+    
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
@@ -389,7 +389,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 
 SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
-    if ( GetPage() )    //Withdraw SdrPage the responsibility.
+    if ( GetPage() )    
         GetPage()->RemoveObject( GetOrdNum() );
 }
 
@@ -402,7 +402,7 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
     return GetFlyFrm()->GetFmt();
 }
 
-// --> OD #i102707#
+
 namespace
 {
     class RestoreMapMode
@@ -445,17 +445,17 @@ namespace
             OutputDevice* mpOutDev;
     };
 }
-// <--
+
 
 void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
     SwViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
 
-    // Only paint when we have a current shell and a DrawingLayer paint is in progress.
-    // This avcoids evtl. problems with renderers which do processing stuff,
-    // but no paints. IsPaintInProgress() depends on SW repaint, so, as long
-    // as SW paints self and calls DrawLayer() for Heaven and Hell, this will
-    // be correct
+    
+    
+    
+    
+    
     if ( pShell && pShell->IsDrawingLayerPaintInProgress() )
     {
         bool bDrawObject(true);
@@ -469,15 +469,15 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
         {
             if ( !pFlyFrm->IsFlyInCntFrm() )
             {
-                // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
-                // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
-                // excludes shears and rotates which are not expressable in MapMode.
-                // OD #i102707#
-                // new helper class to restore MapMode - restoration, only if
-                // needed and consideration of paint for meta file creation .
+                
+                
+                
+                
+                
+                
                 RestoreMapMode aRestoreMapModeIfNeeded( pShell );
 
-                // paint the FlyFrame (use standard VCL-Paint)
+                
                 pFlyFrm->Paint( GetFlyFrm()->Frm() );
             }
         }
@@ -496,7 +496,7 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
     rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = false;
 }
 
-// SwVirtFlyDrawObj - Size Determination
+
 
 void SwVirtFlyDrawObj::SetRect() const
 {
@@ -580,7 +580,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
     return aRetval;
 }
 
-//  SwVirtFlyDrawObj::Move() und Resize()
+
 
 void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
@@ -589,16 +589,16 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
 
-    //If the Fly has a automatic align (right or top),
-    //so preserve the automatic.
+    
+    
     SwFrmFmt *pFmt = GetFlyFrm()->GetFmt();
     const sal_Int16 eHori = pFmt->GetHoriOrient().GetHoriOrient();
     const sal_Int16 eVert = pFmt->GetVertOrient().GetVertOrient();
     const sal_Int16 eRelHori = pFmt->GetHoriOrient().GetRelationOrient();
     const sal_Int16 eRelVert = pFmt->GetVertOrient().GetRelationOrient();
-    //On paragraph bound Flys starting from the new position a new
-    //anchor must be set. Anchor and the new RelPos is calculated and
-    //placed by the Fly itself.
+    
+    
+    
     if( GetFlyFrm()->IsFlyAtCntFrm() )
         ((SwFlyAtCntFrm*)GetFlyFrm())->SetAbsPos( aNewPos );
     else
@@ -618,9 +618,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         long lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrm()->GetAnchorFrm()->IsVertical() )
         {
-            //lXDiff -= rVert.GetPos();
-            //lYDiff += rHori.GetPos();
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            
+            
+            
             if ( GetFlyFrm()->GetAnchorFrm()->IsVertLR() )
             {
                 lXDiff += rVert.GetPos();
@@ -656,8 +656,8 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     if( !GetFlyFrm()->IsFlyLayFrm() &&
         ::GetHtmlMode(pFmt->GetDoc()->GetDocShell()) )
     {
-        //In HTML-Mode only automatic aligns are allowed.
-        //Only we can try a snap to left/right respectively left-/right border
+        
+        
         const SwFrm* pAnch = GetFlyFrm()->GetAnchorFrm();
         bool bNextLine = false;
 
@@ -671,7 +671,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             else
             {
                 bNextLine = true;
-                //Horizontal Align:
+                
                 const bool bLeftFrm =
                     aFlyRect.Left() < pAnch->Frm().Left() + pAnch->Prt().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
@@ -691,8 +691,8 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             }
             aSet.Put( aHori );
         }
-        //Vertical alignment simply is retained principally,
-        //only on manual align will be switched over.
+        
+        
         bool bRelChar = text::RelOrientation::CHAR == eRelVert;
         aVert.SetVertOrient( eVert != text::VertOrientation::NONE ? eVert :
                 GetFlyFrm()->IsFlyInCntFrm() ? text::VertOrientation::CHAR_CENTER :
@@ -705,7 +705,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         bPut = true;
     }
 
-    //We want preferably not to lose the automatic alignments.
+    
     if ( !bPut && bInResize )
     {
         if ( text::HoriOrientation::NONE != eHori )
@@ -739,7 +739,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
 
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     const bool bVertL2RX = pTmpFrm->IsVertLR();
     const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          aOutRect.Right() + 1 :
@@ -750,7 +750,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
     if( aSz != GetFlyFrm()->Frm().SSize() )
     {
-        //The width of the columns should not be too narrow
+        
         if ( GetFlyFrm()->Lower() && GetFlyFrm()->Lower()->IsColumnFrm() )
         {
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), GetFlyFrm() );
@@ -805,18 +805,18 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         }
     }
 
-    //Position can also be changed!
+    
     const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          GetFlyFrm()->Frm().TopRight() :
                          GetFlyFrm()->Frm().Pos() );
     if ( aNewPos != aOldPos )
     {
-        //May have been altered by the ChgSize!
+        
         if( bVertX || bRTL )
         {
             if( aOutRect.TopRight() != aNewPos )
             {
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                
                 SwTwips nDeltaX;
                 if ( bVertL2RX )
                     nDeltaX = aNewPos.X() - aOutRect.Left();
@@ -849,7 +849,7 @@ void SwVirtFlyDrawObj::Resize(const Point& rRef,
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
-// Macro
+
 
 Pointer  SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
@@ -897,17 +897,17 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
     return SdrObject::CheckMacroHit( rRec );
 }
 
-// Dragging
+
 
 bool SwVirtFlyDrawObj::supportsFullDrag() const
 {
-    // call parent
+    
     return SdrVirtObj::supportsFullDrag();
 }
 
 SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
 {
-    // call parent
+    
     return SdrVirtObj::getFullDragClone();
 }
 

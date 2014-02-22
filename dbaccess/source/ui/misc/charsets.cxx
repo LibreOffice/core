@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "charsets.hxx"
@@ -28,7 +28,7 @@ namespace dbaui
 {
     using namespace ::dbtools;
 
-    // OCharsetDisplay
+    
     OCharsetDisplay::OCharsetDisplay()
         :OCharsetMap()
         ,SvxTextEncodingTable()
@@ -84,7 +84,7 @@ namespace dbaui
         return const_iterator( this, OCharsetMap::find( eEncoding ) );
     }
 
-    // CharsetDisplayDerefHelper
+    
     CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource)
         :CharsetDisplayDerefHelper_Base(_rSource)
         ,m_sDisplayName(_rSource.m_sDisplayName)
@@ -98,7 +98,7 @@ namespace dbaui
         OSL_ENSURE( !m_sDisplayName.isEmpty(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
-    // OCharsetDisplay::ExtendedCharsetIterator
+    
     OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition )
         :m_pContainer(_pContainer)
         ,m_aPosition(_rPosition)
@@ -144,6 +144,6 @@ namespace dbaui
         return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_aPosition == rhs.m_aPosition);
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

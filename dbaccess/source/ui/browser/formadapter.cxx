@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formadapter.hxx"
@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-// SbaXFormAdapter
+
 
 SbaXFormAdapter::SbaXFormAdapter()
             :m_aLoadListeners(*this, m_aMutex)
@@ -100,7 +100,7 @@ Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType) throw (RuntimeE
 
 void SbaXFormAdapter::StopListening()
 {
-    // log off all our multiplexers
+    
     STOP_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, ::com::sun::star::form::XLoadable, m_xMainForm);
     STOP_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, ::com::sun::star::sdbc::XRowSet, m_xMainForm);
     STOP_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, ::com::sun::star::sdb::XRowSetApproveBroadcaster, m_xMainForm);
@@ -124,7 +124,7 @@ void SbaXFormAdapter::StopListening()
             xBroadcaster->removePropertiesChangeListener(&m_aPropertiesChangeListeners);
     }
 
-    // log off ourself
+    
     Reference< ::com::sun::star::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
     if (xComp.is())
         xComp->removeEventListener((::com::sun::star::lang::XEventListener*)(::com::sun::star::beans::XPropertyChangeListener*)this);
@@ -132,7 +132,7 @@ void SbaXFormAdapter::StopListening()
 
 void SbaXFormAdapter::StartListening()
 {
-    // log off all our multiplexers
+    
     START_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, ::com::sun::star::form::XLoadable, m_xMainForm);
     START_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, ::com::sun::star::sdbc::XRowSet, m_xMainForm);
     START_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, ::com::sun::star::sdb::XRowSetApproveBroadcaster, m_xMainForm);
@@ -157,7 +157,7 @@ void SbaXFormAdapter::StartListening()
             xBroadcaster->addPropertiesChangeListener(::comphelper::StringSequence(&sEmpty, 1), &m_aPropertiesChangeListeners);
     }
 
-    // log off ourself
+    
     Reference< ::com::sun::star::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
     if (xComp.is())
         xComp->addEventListener((::com::sun::star::lang::XEventListener*)(::com::sun::star::beans::XPropertyChangeListener*)this);
@@ -174,7 +174,7 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
     {
         StopListening();
 
-        // if our old master is loaded we have to send an 'unloaded' event
+        
         Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
         if (xLoadable->isLoaded())
         {
@@ -191,7 +191,7 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
     {
         StartListening();
 
-        // if our new master is loaded we have to send an 'loaded' event
+        
         Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
         if (xLoadable->isLoaded())
         {
@@ -202,11 +202,11 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
         }
     }
 
-    // TODO : perhaps _all_ of our listeners should be notified about our new state
-    // (nearly every aspect of us may have changed with new master form)
+    
+    
 }
 
-// ::com::sun::star::sdbc::XCloseable
+
 void SAL_CALL SbaXFormAdapter::close() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XCloseable >  xIface(m_xMainForm, UNO_QUERY);
@@ -214,7 +214,7 @@ void SAL_CALL SbaXFormAdapter::close() throw( ::com::sun::star::sdbc::SQLExcepti
         xIface->close();
 }
 
-// ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+
 Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter::getMetaData() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XResultSetMetaDataSupplier >  xIface(m_xMainForm, UNO_QUERY);
@@ -223,7 +223,7 @@ Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter
     return Reference< ::com::sun::star::sdbc::XResultSetMetaData > ();
 }
 
-// ::com::sun::star::sdbc::XColumnLocate
+
 sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XColumnLocate >  xIface(m_xMainForm, UNO_QUERY);
@@ -232,10 +232,10 @@ sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
     assert(false);
-    return 0; // Never reached
+    return 0; 
 }
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL SbaXFormAdapter::getColumns() throw( RuntimeException )
 {
     Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xIface(m_xMainForm, UNO_QUERY);
@@ -244,7 +244,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL SbaXFormAdapter::
     return Reference< ::com::sun::star::container::XNameAccess > ();
 }
 
-// ::com::sun::star::sdbc::XRow
+
 sal_Bool SAL_CALL SbaXFormAdapter::wasNull() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
@@ -406,7 +406,7 @@ Reference< ::com::sun::star::sdbc::XArray > SAL_CALL SbaXFormAdapter::getArray(s
     return Reference< ::com::sun::star::sdbc::XArray > ();
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
+
 Any SAL_CALL SbaXFormAdapter::getBookmark() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
@@ -455,7 +455,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark) throw( ::c
     return 0;
 }
 
-// ::com::sun::star::sdbc::XRowUpdate
+
 void SAL_CALL SbaXFormAdapter::updateNull(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
@@ -575,7 +575,7 @@ void SAL_CALL SbaXFormAdapter::updateNumericObject(sal_Int32 columnIndex, const 
         xIface->updateNumericObject(columnIndex, x, scale);
 }
 
-// ::com::sun::star::sdbc::XResultSet
+
 sal_Bool SAL_CALL SbaXFormAdapter::next() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     if (m_xMainForm.is())
@@ -699,7 +699,7 @@ Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( ::com::s
     return NULL;
 }
 
-// ::com::sun::star::sdbc::XResultSetUpdate
+
 void SAL_CALL SbaXFormAdapter::insertRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
@@ -742,7 +742,7 @@ void SAL_CALL SbaXFormAdapter::moveToCurrentRow() throw( ::com::sun::star::sdbc:
         xIface->moveToCurrentRow();
 }
 
-// ::com::sun::star::sdbc::XRowSet
+
 void SAL_CALL SbaXFormAdapter::execute() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     if (m_xMainForm.is())
@@ -751,7 +751,7 @@ void SAL_CALL SbaXFormAdapter::execute() throw( ::com::sun::star::sdbc::SQLExcep
 
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdbc, RowSetListener, m_aRowSetListeners, ::com::sun::star::sdbc::XRowSet, m_xMainForm)
 
-// ::com::sun::star::sdbcx::XDeleteRows
+
 Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& rows) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbcx::XDeleteRows >  xIface(m_xMainForm, UNO_QUERY);
@@ -760,7 +760,7 @@ Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& 
     return Sequence<sal_Int32>();
 }
 
-// ::com::sun::star::sdbc::XWarningsSupplier
+
 Any SAL_CALL SbaXFormAdapter::getWarnings() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
@@ -776,13 +776,13 @@ void SAL_CALL SbaXFormAdapter::clearWarnings() throw( ::com::sun::star::sdbc::SQ
         xIface->clearWarnings();
 }
 
-// ::com::sun::star::sdb::XRowSetApproveBroadcaster
+
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, RowSetApproveListener, m_aRowSetApproveListeners, ::com::sun::star::sdb::XRowSetApproveBroadcaster, m_xMainForm)
 
-// com::sun::star::sdbc::XSQLErrorBroadcaster
+
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, SQLErrorListener, m_aErrorListeners, ::com::sun::star::sdb::XSQLErrorBroadcaster, m_xMainForm)
 
-// ::com::sun::star::sdb::XResultSetAccess
+
 Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet() throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdb::XResultSetAccess >  xIface(m_xMainForm, UNO_QUERY);
@@ -791,7 +791,7 @@ Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::create
     return Reference< ::com::sun::star::sdbc::XResultSet > ();
 }
 
-// com::sun::star::form::XLoadable
+
 void SAL_CALL SbaXFormAdapter::load() throw( RuntimeException )
 {
     Reference< ::com::sun::star::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
@@ -823,7 +823,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::isLoaded() throw( RuntimeException )
 
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, LoadListener, m_aLoadListeners, ::com::sun::star::form::XLoadable, m_xMainForm)
 
-// ::com::sun::star::sdbc::XParameters
+
 void SAL_CALL SbaXFormAdapter::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
@@ -985,7 +985,7 @@ void SAL_CALL SbaXFormAdapter::clearParameters() throw( ::com::sun::star::sdbc::
         xIface->clearParameters();
 }
 
-// ::com::sun::star::form::XDatabaseParameterBroadcaster
+
 void SAL_CALL SbaXFormAdapter::addParameterListener(const Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener) throw( RuntimeException )
 {
     m_aParameterListeners.addInterface(aListener);
@@ -1008,7 +1008,7 @@ void SAL_CALL SbaXFormAdapter::removeParameterListener(const Reference< ::com::s
     m_aParameterListeners.removeInterface(aListener);
 }
 
-// ::com::sun::star::container::XChild
+
 Reference< XInterface > SAL_CALL SbaXFormAdapter::getParent() throw( RuntimeException )
 {
     return m_xParent;
@@ -1019,7 +1019,7 @@ void SAL_CALL SbaXFormAdapter::setParent(const Reference< XInterface >& Parent) 
     m_xParent = Parent;
 }
 
-// ::com::sun::star::form::XSubmit
+
 void SAL_CALL SbaXFormAdapter::submit(const Reference< ::com::sun::star::awt::XControl >& aControl, const ::com::sun::star::awt::MouseEvent& aMouseEvt) throw( RuntimeException )
 {
     Reference< ::com::sun::star::form::XSubmit >  xSubmit(m_xMainForm, UNO_QUERY);
@@ -1029,7 +1029,7 @@ void SAL_CALL SbaXFormAdapter::submit(const Reference< ::com::sun::star::awt::XC
 
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubmitListeners, ::com::sun::star::form::XSubmit, m_xMainForm)
 
-// ::com::sun::star::awt::XTabControllerModel
+
 sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupControl : not supported !");
@@ -1073,10 +1073,10 @@ void SAL_CALL SbaXFormAdapter::getGroupByName(const OUString& /*Name*/, Sequence
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupByName : not supported !");
 }
 
-// ::com::sun::star::lang::XComponent
+
 void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException )
 {
-    // log off all multiplexers
+    
     if (m_xMainForm.is())
         StopListening();
 
@@ -1096,7 +1096,7 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException )
     m_aDisposeListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
 
-    // dispose all children
+    
     for (   ::std::vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
             aIter != m_aChildren.end();
             ++aIter
@@ -1127,7 +1127,7 @@ void SAL_CALL SbaXFormAdapter::removeEventListener(const Reference< ::com::sun::
     m_aDisposeListeners.removeInterface(aListener);
 }
 
-// ::com::sun::star::beans::XFastPropertySet
+
 void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     Reference< ::com::sun::star::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
@@ -1140,7 +1140,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
             throw ::com::sun::star::lang::IllegalArgumentException();
         }
 
-        // for notifying property listeners
+        
         ::com::sun::star::beans::PropertyChangeEvent aEvt;
         aEvt.Source = *this;
         aEvt.PropertyName = PROPERTY_NAME;
@@ -1171,7 +1171,7 @@ Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( ::c
     return xSet->getFastPropertyValue(nHandle);
 }
 
-// ::com::sun::star::container::XNamed
+
 OUString SAL_CALL SbaXFormAdapter::getName() throw( RuntimeException )
 {
     return ::comphelper::getString(getPropertyValue(PROPERTY_NAME));
@@ -1182,7 +1182,7 @@ void SAL_CALL SbaXFormAdapter::setName(const OUString& aName) throw( RuntimeExce
     setPropertyValue(PROPERTY_NAME, makeAny(aName));
 }
 
-// ::com::sun::star::io::XPersistObject
+
 OUString SAL_CALL SbaXFormAdapter::getServiceName() throw( RuntimeException )
 {
     Reference< ::com::sun::star::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
@@ -1205,7 +1205,7 @@ void SAL_CALL SbaXFormAdapter::read(const Reference< ::com::sun::star::io::XObje
         xPersist->read(_rxInStream);
 }
 
-// ::com::sun::star::beans::XMultiPropertySet
+
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertySetInfo() throw( RuntimeException )
 {
     Reference< ::com::sun::star::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
@@ -1215,7 +1215,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter:
     Reference< ::com::sun::star::beans::XPropertySetInfo >  xReturn = xSet->getPropertySetInfo();
     if (-1 == m_nNamePropHandle)
     {
-        // we need to determine the handle for the NAME property
+        
  Sequence< ::com::sun::star::beans::Property> aProps = xReturn->getProperties();
         const ::com::sun::star::beans::Property* pProps = aProps.getConstArray();
 
@@ -1246,7 +1246,7 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
 
  Sequence< Any> aReturn = xSet->getPropertyValues(aPropertyNames);
 
-    // search for (and fake) the NAME property
+    
     const OUString* pNames = aPropertyNames.getConstArray();
     Any* pValues = aReturn.getArray();
     OSL_ENSURE(aReturn.getLength() == aPropertyNames.getLength(), "SAL_CALL SbaXFormAdapter::getPropertyValues : the main form returned an invalid-length sequence !");
@@ -1262,7 +1262,7 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
 
 void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUString>& /*aPropertyNames*/, const Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException )
 {
-    // we completely ignore the property names, _all_ changes of _all_ properties will be forwarded to _all_ listeners
+    
     m_aPropertiesChangeListeners.addInterface(xListener);
     if (m_aPropertiesChangeListeners.getLength() == 1)
     {
@@ -1291,14 +1291,14 @@ void SAL_CALL SbaXFormAdapter::firePropertiesChangeEvent(const Sequence< OUStrin
         xSet->firePropertiesChangeEvent(aPropertyNames, xListener);
 }
 
-// ::com::sun::star::beans::XPropertySet
+
 void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     Reference< ::com::sun::star::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
         return;
 
-    // special handling for the "name" property
+    
     if (aPropertyName.equals(PROPERTY_NAME))
         setFastPropertyValue(m_nNamePropHandle, aValue);
 
@@ -1311,7 +1311,7 @@ Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) thr
     if (!xSet.is())
         return Any();
 
-    // special handling for the "name" property
+    
     if (PropertyName.equals(PROPERTY_NAME))
         return getFastPropertyValue(m_nNamePropHandle);
 
@@ -1321,7 +1321,7 @@ Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) thr
 IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, PropertyChangeListener, m_aPropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
 IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, VetoableChangeListener, m_aVetoablePropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
 
-// ::com::sun::star::util::XCancellable
+
 void SAL_CALL SbaXFormAdapter::cancel() throw( RuntimeException )
 {
     Reference< ::com::sun::star::util::XCancellable >  xCancel(m_xMainForm, UNO_QUERY);
@@ -1330,7 +1330,7 @@ void SAL_CALL SbaXFormAdapter::cancel() throw( RuntimeException )
     xCancel->cancel();
 }
 
-// ::com::sun::star::beans::XPropertyState
+
 ::com::sun::star::beans::PropertyState SAL_CALL SbaXFormAdapter::getPropertyState(const OUString& PropertyName) throw( ::com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
     Reference< ::com::sun::star::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
@@ -1345,7 +1345,7 @@ Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL SbaXFormAdapter::getP
     if (xState.is())
         return xState->getPropertyStates(aPropertyName);
 
-    // set them all to DEFAULT
+    
      Sequence< ::com::sun::star::beans::PropertyState> aReturn(aPropertyName.getLength());
     ::com::sun::star::beans::PropertyState* pStates = aReturn.getArray();
     for (sal_uInt16 i=0; i<aPropertyName.getLength(); ++i, ++pStates)
@@ -1368,7 +1368,7 @@ Any SAL_CALL SbaXFormAdapter::getPropertyDefault(const OUString& aPropertyName) 
     return Any();
 }
 
-// ::com::sun::star::form::XReset
+
 void SAL_CALL SbaXFormAdapter::reset() throw( RuntimeException )
 {
     Reference< ::com::sun::star::form::XReset >  xReset(m_xMainForm, UNO_QUERY);
@@ -1378,10 +1378,10 @@ void SAL_CALL SbaXFormAdapter::reset() throw( RuntimeException )
 
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, ResetListener, m_aResetListeners, ::com::sun::star::form::XReset, m_xMainForm)
 
-// ::com::sun::star::container::XNameContainer
+
 void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName) throw( ::com::sun::star::lang::IllegalArgumentException )
 {
-    // extract the form component
+    
     if (aElement.getValueType().getTypeClass() != TypeClass_INTERFACE)
     {
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -1393,7 +1393,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
-    // for the name we need the propset
+    
     Reference< ::com::sun::star::beans::XPropertySet >  xElementSet(xElement, UNO_QUERY);
     if (!xElementSet.is())
     {
@@ -1409,11 +1409,11 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     }
     catch(Exception&)
     {
-        // the set didn't support the name prop
+        
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
-    // check the index
+    
     OSL_ASSERT(nIndex >= 0);
     if (sal::static_int_cast< sal_uInt32 >(nIndex) > m_aChildren.size())
         nIndex = m_aChildren.size();
@@ -1422,13 +1422,13 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     m_aChildren.insert(m_aChildren.begin() + nIndex, xElement);
     m_aChildNames.insert(m_aChildNames.begin() + nIndex, sName);
 
-    // listen for a changes of the name
+    
     xElementSet->addPropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
 
-    // we are now the parent of the new element
+    
     xElement->setParent((::com::sun::star::container::XContainer*)this);
 
-    // notify the container listeners
+    
     ::com::sun::star::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Accessor <<= nIndex;
@@ -1465,7 +1465,7 @@ void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name) throw( ::com::
     removeByIndex(nPos);
 }
 
-// ::com::sun::star::container::XNameReplace
+
 void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& aElement) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     sal_Int32 nPos = implGetPos(aName);
@@ -1476,7 +1476,7 @@ void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& a
     replaceByIndex(nPos, aElement);
 }
 
-// ::com::sun::star::container::XNameAccess
+
 Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     sal_Int32 nPos = implGetPos(aName);
@@ -1498,7 +1498,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasByName(const OUString& aName) throw( Runti
     return (-1 != implGetPos(aName));
 }
 
-// ::com::sun::star::container::XElementAccess
+
 Type SAL_CALL SbaXFormAdapter::getElementType() throw(RuntimeException)
 {
     return ::getCppuType(
@@ -1510,7 +1510,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasElements() throw(RuntimeException)
     return m_aChildren.size() > 0;
 }
 
-// ::com::sun::star::container::XIndexContainer
+
 void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
@@ -1529,14 +1529,14 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::su
     m_aChildren.erase(m_aChildren.begin() + _rIndex);
     m_aChildNames.erase(m_aChildNames.begin() + _rIndex);
 
-    // no need to listen anymore
+    
     Reference< ::com::sun::star::beans::XPropertySet >  xAffectedSet(xAffected, UNO_QUERY);
     xAffectedSet->removePropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
 
-    // we are no longer the parent
+    
     xAffected->setParent(Reference< XInterface > ());
 
-    // notify container listeners
+    
     ::com::sun::star::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Element <<= xAffected;
@@ -1546,13 +1546,13 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::su
 
 }
 
-// ::com::sun::star::container::XIndexReplace
+
 void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
 
-    // extract the form component
+    
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
     {
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -1564,7 +1564,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
-    // for the name we need the propset
+    
     Reference< ::com::sun::star::beans::XPropertySet >  xElementSet(xElement, UNO_QUERY);
     if (!xElementSet.is())
     {
@@ -1577,7 +1577,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     }
     catch(Exception&)
     {
-        // the set didn't support the name prop
+        
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
@@ -1587,16 +1587,16 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     *(m_aChildren.begin() + _rIndex) = xElement;
     *(m_aChildNames.begin() + _rIndex) = sName;
 
-    // correct property change listening
+    
     Reference< ::com::sun::star::beans::XPropertySet >  xOldSet(xOld, UNO_QUERY);
     xOldSet->removePropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
     xElementSet->addPropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
 
-    // parent reset
+    
     xOld->setParent(Reference< XInterface > ());
     xElement->setParent((::com::sun::star::container::XContainer*)this);
 
-    // notify container listeners
+    
     ::com::sun::star::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Accessor <<= (sal_Int32)_rIndex;
@@ -1608,7 +1608,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
         ((::com::sun::star::container::XContainerListener*)aIt.next())->elementReplaced(aEvt);
 }
 
-// ::com::sun::star::container::XIndexAccess
+
 sal_Int32 SAL_CALL SbaXFormAdapter::getCount() throw( RuntimeException )
 {
     return m_aChildren.size();
@@ -1623,7 +1623,7 @@ Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex) throw( ::com::sun::s
     return makeAny(xElement);
 }
 
-// ::com::sun::star::container::XContainer
+
 void SAL_CALL SbaXFormAdapter::addContainerListener(const Reference< ::com::sun::star::container::XContainerListener >& xListener) throw( RuntimeException )
 {
     m_aContainerListeners.addInterface(xListener);
@@ -1634,13 +1634,13 @@ void SAL_CALL SbaXFormAdapter::removeContainerListener(const Reference< ::com::s
     m_aContainerListeners.removeInterface(xListener);
 }
 
-// ::com::sun::star::container::XEnumerationAccess
+
 Reference< ::com::sun::star::container::XEnumeration > SAL_CALL SbaXFormAdapter::createEnumeration() throw( RuntimeException )
 {
     return new ::comphelper::OEnumerationByName(this);
 }
 
-// ::com::sun::star::beans::XPropertyChangeListener
+
 void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( RuntimeException )
 {
     if (evt.PropertyName.equals(PROPERTY_NAME))
@@ -1658,10 +1658,10 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::Pro
     }
 }
 
-// ::com::sun::star::lang::XEventListener
+
 void SAL_CALL SbaXFormAdapter::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
 {
-    // was it our main form ?
+    
     if (Source.Source == m_xMainForm)
         dispose();
 

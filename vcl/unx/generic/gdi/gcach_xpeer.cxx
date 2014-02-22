@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,20 +29,20 @@
 #include "gcach_xpeer.hxx"
 #include "xrender_peer.hxx"
 
-// ===========================================================================
+
 
 X11GlyphPeer::X11GlyphPeer()
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 X11GlyphPeer::~X11GlyphPeer()
 {
     if( !ImplGetSVData() )
         return;
 
-    //Why do this here, move into dtor/shutdown of display?
+    
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display* const pX11Disp = pSalDisp->GetDisplay();
     int nMaxScreens = pSalDisp->GetXScreenCount();
@@ -62,14 +62,14 @@ X11GlyphPeer::~X11GlyphPeer()
     }
 }
 
-// ===========================================================================
+
 
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
 :   GlyphCache( rPeer )
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 namespace
 {
@@ -111,20 +111,20 @@ X11GlyphCache& X11GlyphCache::GetInstance()
     return theGlyphCacheHolder::get().getGlyphCache();
 }
 
-// ---------------------------------------------------------------------------
+
 
 void X11GlyphCache::KillInstance()
 {
     return theGlyphCacheHolder::get().release();
 }
 
-// ===========================================================================
+
 
 void X11SalGraphics::releaseGlyphPeer()
 {
     X11GlyphCache::KillInstance();
 }
 
-// ===========================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/officeresourcebundle.hxx>
@@ -26,10 +26,10 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using com::sun::star::resource::XResourceBundle;
@@ -41,9 +41,9 @@ namespace comphelper
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
 
-    //====================================================================
-    //= ResourceBundle_Impl
-    //====================================================================
+    
+    
+    
     class ResourceBundle_Impl
     {
     private:
@@ -98,7 +98,7 @@ namespace comphelper
                 impl_getStringResourceKey( sal_Int32 _resourceId );
     };
 
-    //--------------------------------------------------------------------
+    
     OUString ResourceBundle_Impl::impl_getStringResourceKey( sal_Int32 _resourceId )
     {
         OUStringBuffer key;
@@ -107,7 +107,7 @@ namespace comphelper
         return key.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString ResourceBundle_Impl::loadString( sal_Int32 _resourceId ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -128,7 +128,7 @@ namespace comphelper
         return sString;
     }
 
-    //--------------------------------------------------------------------
+    
     bool ResourceBundle_Impl::hasString( sal_Int32 _resourceId ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -149,7 +149,7 @@ namespace comphelper
         return has;
     }
 
-    //--------------------------------------------------------------------
+    
     bool ResourceBundle_Impl::impl_loadBundle_nothrow()
     {
         if ( m_bAttemptedCreate )
@@ -184,10 +184,10 @@ namespace comphelper
         return m_xBundle.is();
     }
 
-    //====================================================================
-    //= OfficeResourceBundle
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const sal_Char* _bundleBaseAsciiName )
         :m_pImpl( new ResourceBundle_Impl( _context, OUString::createFromAscii( _bundleBaseAsciiName ) ) )
     {
@@ -195,25 +195,25 @@ namespace comphelper
             throw NullPointerException();
     }
 
-    //--------------------------------------------------------------------
+    
     OfficeResourceBundle::~OfficeResourceBundle()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     OUString OfficeResourceBundle::loadString( sal_Int32 _resourceId ) const
     {
         return m_pImpl->loadString( _resourceId );
     }
 
-    //--------------------------------------------------------------------
+    
     bool OfficeResourceBundle::hasString( sal_Int32 _resourceId ) const
     {
         return m_pImpl->hasString( _resourceId );
     }
 
-//........................................................................
-} // namespace comphelper
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

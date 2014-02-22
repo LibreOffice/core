@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/thumbnailviewitem.hxx>
@@ -223,18 +223,18 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     Size aRectSize = maDrawArea.GetSize();
     Size aImageSize = maPreview1.GetSizePixel();
 
-    // Calculate thumbnail position
+    
     Point aPos = maDrawArea.TopLeft();
     aPos.X() = maDrawArea.getX() + (aRectSize.Width()-aImageSize.Width())/2;
     aPos.Y() = maDrawArea.getY() + nPadding + (nThumbnailHeight-aImageSize.Height())/2;
     maPrev1Pos = aPos;
 
-    // Calculate text position
+    
     aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding * 2;
     aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2;
     maTextPos = aPos;
 
-    // Calculate the text edit max area
+    
     aPos = Point(maDrawArea.getX() + nPadding, maTextPos.getY());
     Size aEditSize(maDrawArea.GetWidth() - nPadding * 2,
                    maDrawArea.Bottom() - maTextPos.Y());
@@ -253,7 +253,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     drawinglayer::primitive2d::Primitive2DSequence aSeq(4);
     double fTransparence = 0.0;
 
-    // Draw background
+    
     if (mbSelected || mbHover)
         aFillColor = pAttrs->aHighlightColor;
 
@@ -271,7 +271,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                0.0,
                                                true));
 
-    // Draw thumbnail
+    
     Point aPos = maPrev1Pos;
     Size aImageSize = maPreview1.GetSizePixel();
 
@@ -284,7 +284,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                             false)
                                         ));
 
-    // draw thumbnail borders
+    
     float fWidth = aImageSize.Width();
     float fHeight = aImageSize.Height();
     float fPosX = maPrev1Pos.getX();
@@ -299,7 +299,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
 
-    // Draw text below thumbnail
+    
     aPos = maTextPos;
     addTextPrimitives( maTitle, pAttrs, aPos, aSeq );
 
@@ -321,7 +321,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     sal_Int32 nPrimitives = rSeq.getLength();
     rSeq.realloc(nPrimitives + aTextEngine.GetLineCount(0));
 
-    // Create the text primitives
+    
     sal_uInt16 nLineStart = 0;
     for (sal_uInt16 i=0; i < aTextEngine.GetLineCount(0); ++i)
     {
@@ -331,7 +331,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
         bool bTooLong = (aPos.getY() + aTextEngine.GetCharHeight()) > maDrawArea.Bottom();
         if (bTooLong && (nLineLength + nLineStart) < rText.getLength())
         {
-            // Add the '...' to the last line to show, even though it may require to shorten the line
+            
             double nDotsWidth = aTextDev.getTextWidth(OUString("..."),0,3);
 
             sal_uInt16 nLength = nLineLength - 1;

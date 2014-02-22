@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,8 +51,8 @@ struct RTFCellDefault
 {
     SfxItemSet          maItemSet;
     sal_Int32           mnCol;
-    sal_uInt16              mnTwips;         // right border of the cell
-    sal_Int32           mnColSpan;   // MergeCell if >1, merged cells if 0
+    sal_uInt16              mnTwips;         
+    sal_Int32           mnColSpan;   
 
     RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnTwips(0 ), mnColSpan(1) {}
 };
@@ -331,7 +331,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
 {
     switch ( pInfo->nToken )
     {
-        case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
+        case RTF_TROWD:         
         {
             mnColCnt = 0;
             maDefaultList.clear();
@@ -339,13 +339,13 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             mnLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CLMGF:         // The first cell of cells to be merged
+        case RTF_CLMGF:         
         {
             mpDefMerge = mpInsDefault;
             mnLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CLMRG:         // A cell to be merged with the preceding cell
+        case RTF_CLMRG:         
         {
             if ( !mpDefMerge )
                 mpDefMerge = maDefaultList.back().get();
@@ -356,7 +356,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             mnLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CELLX:         // closes cell default
+        case RTF_CELLX:         
         {
             mbNewDef = true;
             mpInsDefault->mnCol = mnColCnt;
@@ -374,7 +374,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             mnLastToken = pInfo->nToken;
         }
         break;
-        case RTF_INTBL:         // before the first RTF_CELL
+        case RTF_INTBL:         
         {
             if ( mnLastToken != RTF_INTBL && mnLastToken != RTF_CELL && mnLastToken != RTF_PAR )
             {
@@ -383,7 +383,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             }
         }
         break;
-        case RTF_CELL:          // denotes the end of a cell.
+        case RTF_CELL:          
         {
             DBG_ASSERT( mpActDefault, "RTF_CELL: pActDefault==0" );
             if ( mbNewDef || !mpActDefault )
@@ -398,21 +398,21 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             mnLastToken = pInfo->nToken;
         }
         break;
-        case RTF_ROW:           // means the end of a row
+        case RTF_ROW:           
         {
             NextRow();
             mnLastToken = pInfo->nToken;
         }
         break;
-        case RTF_PAR:           // Paragraph
+        case RTF_PAR:           
             mnLastToken = pInfo->nToken;
             break;
         default:
-        {   // do not set nLastToken
+        {   
             switch ( pInfo->nToken & ~(0xff | RTF_TABLEDEF) )
             {
                 case RTF_SHADINGDEF:
-//                  ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
+
                 break;
                 case RTF_BRDRDEF:
                     ((SvxRTFParser*)pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );

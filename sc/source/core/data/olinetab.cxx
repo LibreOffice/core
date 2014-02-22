@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits.h>
@@ -25,7 +25,7 @@
 #include "address.hxx"
 #include "table.hxx"
 
-//------------------------------------------------------------------------
+
 
 ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden ) :
     nStart  ( nNewStart ),
@@ -104,7 +104,7 @@ void ScOutlineEntry::SetVisible( bool bNewVisible )
     bVisible = bNewVisible;
 }
 
-//------------------------------------------------------------------------
+
 
 ScOutlineCollection::ScOutlineCollection() {}
 
@@ -159,7 +159,7 @@ ScOutlineCollection::iterator ScOutlineCollection::FindStart(SCCOLROW nMinStart)
     return maEntries.lower_bound(nMinStart);
 }
 
-//------------------------------------------------------------------------
+
 
 ScOutlineArray::ScOutlineArray() :
     nDepth(0) {}
@@ -188,7 +188,7 @@ void ScOutlineArray::FindEntry(
     if (nMaxLevel > nDepth)
         nMaxLevel = nDepth;
 
-    for (size_t nLevel = 0; nLevel < nMaxLevel; ++nLevel)               //! rueckwaerts suchen ?
+    for (size_t nLevel = 0; nLevel < nMaxLevel; ++nLevel)               
     {
         ScOutlineCollection* pCollect = &aCollections[nLevel];
         ScOutlineCollection::iterator it = pCollect->begin(), itEnd = pCollect->end();
@@ -197,7 +197,7 @@ void ScOutlineArray::FindEntry(
             ScOutlineEntry* pEntry = it->second;
             if (pEntry->GetStart() <= nSearchPos && pEntry->GetEnd() >= nSearchPos)
             {
-                rFindLevel = nLevel + 1;            // naechster Level (zum Einfuegen)
+                rFindLevel = nLevel + 1;            
                 rFindIndex = std::distance(pCollect->begin(), it);
             }
         }
@@ -214,7 +214,7 @@ bool ScOutlineArray::Insert(
 
     bool bCont;
     sal_uInt16 nFindMax;
-    FindEntry( nStartCol, nStartLevel, nStartIndex );       // nLevel = neuer Level (alter+1) !!!
+    FindEntry( nStartCol, nStartLevel, nStartIndex );       
     FindEntry( nEndCol, nEndLevel, nEndIndex );
     nFindMax = std::max(nStartLevel,nEndLevel);
     do
@@ -255,7 +255,7 @@ bool ScOutlineArray::Insert(
 
     size_t nLevel = nStartLevel;
 
-    //  untere verschieben
+    
 
     bool bNeedSize = false;
     if (nDepth > 0)
@@ -272,7 +272,7 @@ bool ScOutlineArray::Insert(
                 {
                     if (nMoveLevel >= SC_OL_MAXDEPTH - 1)
                     {
-                        rSizeChanged = false;               // kein Platz
+                        rSizeChanged = false;               
                         return false;
                     }
                     aCollections[nMoveLevel+1].insert(new ScOutlineEntry(*pEntry));
@@ -335,7 +335,7 @@ bool ScOutlineArray::FindTouchedLevel(
             if ( ( nBlockStart>=nStart && nBlockStart<=nEnd ) ||
                  ( nBlockEnd  >=nStart && nBlockEnd  <=nEnd ) )
             {
-                rFindLevel = nLevel;            // wirklicher Level
+                rFindLevel = nLevel;            
                 bFound = true;
             }
         }
@@ -359,10 +359,10 @@ void ScOutlineArray::RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLev
         SCCOLROW nEnd   = pEntry->GetEnd();
         if (nStart >= nStartPos && nEnd <= nEndPos)
         {
-            // Overlaps.
+            
             RemoveSub( nStart, nEnd, nLevel+1 );
 
-            // Re-calc iterator positions after the tree gets invalidated.
+            
             size_t nPos = std::distance(rColl.begin(), it);
             rColl.erase(it);
             it = rColl.begin();
@@ -386,7 +386,7 @@ void ScOutlineArray::RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLev
         {
             RemoveSub( nStart, nEnd, nLevel+1 );
 
-            // Re-calc iterator positions after the tree gets invalidated.
+            
             size_t nPos = std::distance(rColl.begin(), it);
             rColl.erase(it);
             it = rColl.begin();
@@ -419,7 +419,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
             {
                 aCollections[nLevel-1].insert(new ScOutlineEntry(*pEntry));
 
-                // Re-calc iterator positions after the tree gets invalidated.
+                
                 size_t nPos = std::distance(rColl.begin(), it);
                 rColl.erase(it);
                 it = rColl.begin();
@@ -442,7 +442,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
             {
                 aCollections[nLevel-1].insert(new ScOutlineEntry(*pEntry));
 
-                // Re-calc iterator positions after the tree gets invalidated.
+                
                 size_t nPos = std::distance(rColl.begin(), it);
                 rColl.erase(it);
                 it = rColl.begin();
@@ -455,7 +455,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
     }
 }
 
-bool ScOutlineArray::DecDepth()                         // nDepth auf leere Levels anpassen
+bool ScOutlineArray::DecDepth()                         
 {
     bool bChanged = false;
     bool bCont;
@@ -492,7 +492,7 @@ bool ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSi
         SCCOLROW nEnd   = pEntry->GetEnd();
         if (nBlockStart <= nEnd && nBlockEnd >= nStart)
         {
-            // Overlaps.
+            
             pCollect->erase(it);
             PromoteSub( nStart, nEnd, nLevel+1 );
             itEnd = pCollect->end();
@@ -503,7 +503,7 @@ bool ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSi
             ++it;
     }
 
-    if (bAny)                                   // Depth anpassen
+    if (bAny)                                   
         if (DecDepth())
             rSizeChanged = true;
 
@@ -568,7 +568,7 @@ bool ScOutlineArray::GetEntryIndex(size_t nLevel, SCCOLROW nPos, size_t& rnIndex
     if (nLevel >= nDepth)
         return false;
 
-    // found entry contains passed position
+    
     const ScOutlineCollection& rColl = aCollections[nLevel];
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
     for (; it != itEnd; ++it)
@@ -589,7 +589,7 @@ bool ScOutlineArray::GetEntryIndexInRange(
     if (nLevel >= nDepth)
         return false;
 
-    // found entry will be completely inside of passed range
+    
     const ScOutlineCollection& rColl = aCollections[nLevel];
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
     for (; it != itEnd; ++it)
@@ -633,7 +633,7 @@ void ScOutlineArray::SetVisibleBelow(
         }
 
         if (bSkipHidden)
-            nSubLevel = nDepth;             // Abbruch
+            nSubLevel = nDepth;             
     }
 }
 
@@ -697,8 +697,8 @@ void ScOutlineArray::InsertSpace(SCCOLROW nStartPos, SCSIZE nSize)
         else
         {
             SCCOLROW nEnd = pEntry->GetEnd();
-            //  immer erweitern, wenn innerhalb der Gruppe eingefuegt
-            //  beim Einfuegen am Ende nur, wenn die Gruppe nicht ausgeblendet ist
+            
+            
             if ( nEnd >= nStartPos || ( nEnd+1 >= nStartPos && !pEntry->IsHidden() ) )
             {
                 SCSIZE nEntrySize = pEntry->GetSize();
@@ -712,8 +712,8 @@ void ScOutlineArray::InsertSpace(SCCOLROW nStartPos, SCSIZE nSize)
 bool ScOutlineArray::DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize)
 {
     SCCOLROW nEndPos = nStartPos + nSize - 1;
-    sal_Bool bNeedSave = false;                         // Original fuer Undo benoetigt?
-    sal_Bool bChanged = false;                          // fuer Test auf Level
+    sal_Bool bNeedSave = false;                         
+    sal_Bool bChanged = false;                          
 
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
@@ -725,21 +725,21 @@ bool ScOutlineArray::DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize)
 
         if ( nEntryEnd >= nStartPos )
         {
-            if ( nEntryStart > nEndPos )                                        // rechts
+            if ( nEntryStart > nEndPos )                                        
                 pEntry->Move(-(static_cast<SCsCOLROW>(nSize)));
-            else if ( nEntryStart < nStartPos && nEntryEnd >= nEndPos )         // aussen
+            else if ( nEntryStart < nStartPos && nEntryEnd >= nEndPos )         
                 pEntry->SetSize( nEntrySize-nSize );
             else
             {
                 bNeedSave = true;
-                if ( nEntryStart >= nStartPos && nEntryEnd <= nEndPos )             // innen
+                if ( nEntryStart >= nStartPos && nEntryEnd <= nEndPos )             
                 {
                     aIter.DeleteLast();
                     bChanged = true;
                 }
-                else if ( nEntryStart >= nStartPos )                                // rechts ueber
+                else if ( nEntryStart >= nStartPos )                                
                     pEntry->SetPosSize( nStartPos, static_cast<SCSIZE>(nEntryEnd-nEndPos) );
-                else                                                                // links ueber
+                else                                                                
                     pEntry->SetSize( static_cast<SCSIZE>(nStartPos-nEntryStart) );
             }
         }
@@ -766,8 +766,8 @@ bool ScOutlineArray::ManualAction(
         {
             if ( pEntry->IsHidden() == bShow )
             {
-                //  #i12341# hide if all columns/rows are hidden, show if at least one
-                //  is visible
+                
+                
                 SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, bCol);
                 bool bAllHidden = (nEntryEnd <= nEnd && nEnd <
                         ::std::numeric_limits<SCCOLROW>::max());
@@ -793,7 +793,7 @@ void ScOutlineArray::RemoveAll()
     nDepth = 0;
 }
 
-//------------------------------------------------------------------------
+
 
 ScOutlineTable::ScOutlineTable()
 {
@@ -835,12 +835,12 @@ bool ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     return aRowOutline.DeleteSpace( nStartRow, nSize );
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubOutlineIterator::ScSubOutlineIterator( ScOutlineArray* pOutlineArray ) :
         pArray( pOutlineArray ),
         nStart( 0 ),
-        nEnd( SCCOLROW_MAX ),                           // alle durchgehen
+        nEnd( SCCOLROW_MAX ),                           
         nSubLevel( 0 ),
         nSubEntry( 0 )
 {
@@ -885,13 +885,13 @@ ScOutlineEntry* ScSubOutlineIterator::GetNext()
         }
         else
         {
-            // Go to the next sub-level.
+            
             nSubEntry = 0;
             ++nSubLevel;
         }
     }
     while (!bFound);
-    return pEntry;                  // nSubLevel gueltig, wenn pEntry != 0
+    return pEntry;                  
 }
 
 size_t ScSubOutlineIterator::LastLevel() const

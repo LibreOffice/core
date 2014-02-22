@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -56,36 +56,36 @@ TableStyleTextStyleContext::~TableStyleTextStyleContext()
 {
 }
 
-// CT_TableStyleTextStyle
+
 ContextHandlerRef
 TableStyleTextStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
-        // EG_ThemeableFontStyles (choice)
-        case A_TOKEN( font ):       // CT_FontCollection
+        
+        case A_TOKEN( font ):       
             return this;
-        case A_TOKEN( ea ):             // CT_TextFont
+        case A_TOKEN( ea ):             
             mrTableStylePart.getAsianFont().setAttributes( rAttribs );
             return 0;
-        case A_TOKEN( cs ):             // CT_TextFont
+        case A_TOKEN( cs ):             
             mrTableStylePart.getComplexFont().setAttributes( rAttribs );
             return 0;
-        case A_TOKEN( sym ):            // CT_TextFont
+        case A_TOKEN( sym ):            
             mrTableStylePart.getSymbolFont().setAttributes( rAttribs );
             return 0;
-        case A_TOKEN( latin ):          // CT_TextFont
+        case A_TOKEN( latin ):          
             mrTableStylePart.getLatinFont().setAttributes( rAttribs );
             return 0;
 
-        case A_TOKEN( fontRef ):    // CT_FontReference
+        case A_TOKEN( fontRef ):    
             {
                 ShapeStyleRef& rFontStyle = mrTableStylePart.getStyleRefs()[ XML_fontRef ];
                 rFontStyle.mnThemedIdx = rAttribs.getToken( XML_idx, XML_none );
                 return new ColorContext( *this, rFontStyle.maPhClr );
             }
 
-        case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
+        case A_TOKEN( extLst ):     
             break;
     }
 

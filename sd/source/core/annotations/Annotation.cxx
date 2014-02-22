@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -58,12 +58,12 @@ public:
     SdPage* GetPage() const { return mpPage; }
     SdrModel* GetModel() { return (mpPage != 0) ? mpPage->GetModel() : 0; }
 
-    // XInterface:
+    
     virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException);
     virtual void SAL_CALL acquire() throw () { ::cppu::WeakComponentImplHelper1< XAnnotation >::acquire(); }
     virtual void SAL_CALL release() throw () { ::cppu::WeakComponentImplHelper1< XAnnotation >::release(); }
 
-    // ::com::sun::star::beans::XPropertySet:
+    
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException);
     virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const Any & aValue) throw (RuntimeException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException);
     virtual Any SAL_CALL getPropertyValue(const OUString & PropertyName) throw (RuntimeException, UnknownPropertyException, WrappedTargetException);
@@ -72,7 +72,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException);
     virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException);
 
-    // ::com::sun::star::office::XAnnotation:
+    
     virtual ::com::sun::star::uno::Any SAL_CALL getAnchor() throw (::com::sun::star::uno::RuntimeException);
     virtual RealPoint2D SAL_CALL getPosition() throw (RuntimeException);
     virtual void SAL_CALL setPosition(const RealPoint2D & the_value) throw (RuntimeException);
@@ -85,17 +85,17 @@ public:
     virtual Reference< XText > SAL_CALL getTextRange() throw (RuntimeException);
 
 private:
-    Annotation(const Annotation &); // not defined
-    Annotation& operator=(const Annotation &); // not defined
+    Annotation(const Annotation &); 
+    Annotation& operator=(const Annotation &); 
 
-    // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
+    
 
     void createChangeUndo();
 
-    // overload WeakComponentImplHelperBase::disposing()
-    // This function is called upon disposing the component,
-    // if your component needs special work when it becomes
-    // disposed, do it here.
+    
+    
+    
+    
     virtual void SAL_CALL disposing();
 
     SdPage* mpPage;
@@ -174,10 +174,10 @@ Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* p
 {
 }
 
-// overload WeakComponentImplHelperBase::disposing()
-// This function is called upon disposing the component,
-// if your component needs special work when it becomes
-// disposed, do it here.
+
+
+
+
 void SAL_CALL Annotation::disposing()
 {
     mpPage = 0;
@@ -193,7 +193,7 @@ Any Annotation::queryInterface(Type const & type) throw (RuntimeException)
     return ::cppu::WeakComponentImplHelper1< XAnnotation>::queryInterface(type);
 }
 
-// com.sun.star.beans.XPropertySet:
+
 Reference< XPropertySetInfo > SAL_CALL Annotation::getPropertySetInfo() throw (RuntimeException)
 {
     return ::cppu::PropertySetMixin< XAnnotation >::getPropertySetInfo();
@@ -241,7 +241,7 @@ Any SAL_CALL Annotation::getAnchor() throw (RuntimeException)
     return aRet;
 }
 
-// ::com::sun::star::office::XAnnotation:
+
 RealPoint2D SAL_CALL Annotation::getPosition() throw (RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
@@ -258,7 +258,7 @@ void SAL_CALL Annotation::setPosition(const RealPoint2D & the_value) throw (Runt
     }
 }
 
-// ::com::sun::star::office::XAnnotation:
+
 RealSize2D SAL_CALL Annotation::getSize() throw (RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
@@ -422,6 +422,6 @@ void UndoAnnotation::Redo()
     maRedoData.set( mxAnnotation );
 }
 
-} // namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/binaryinputstream.hxx"
@@ -29,7 +29,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -38,9 +38,9 @@ namespace {
 
 const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 OUString BinaryInputStream::readNulUnicodeArray()
 {
@@ -96,7 +96,7 @@ OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulCh
 OUString BinaryInputStream::readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars )
 {
     return bCompressed ?
-         // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH
+         
         readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1, bAllowNulChars ) :
         readUnicodeArray( nChars, bAllowNulChars );
 }
@@ -105,7 +105,7 @@ void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nB
 {
     if( nBytes > 0 )
     {
-        // make buffer size a multiple of the passed atom size
+        
         sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, (INPUTSTREAM_BUFFERSIZE / nAtomSize) * nAtomSize );
         StreamDataSequence aBuffer( nBufferSize );
         while( nBytes > 0 )
@@ -121,7 +121,7 @@ void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nB
     }
 }
 
-// ============================================================================
+
 
 BinaryXInputStream::BinaryXInputStream( const Reference< XInputStream >& rxInStrm, bool bAutoClose ) :
     BinaryStreamBase( Reference< XSeekable >( rxInStrm, UNO_QUERY ).is() ),
@@ -202,7 +202,7 @@ void BinaryXInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     }
 }
 
-// ============================================================================
+
 
 SequenceInputStream::SequenceInputStream( const StreamDataSequence& rData ) :
     BinaryStreamBase( true ),
@@ -249,7 +249,7 @@ void SequenceInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     }
 }
 
-// ============================================================================
+
 
 RelativeInputStream::RelativeInputStream( BinaryInputStream& rInStrm, sal_Int64 nSize ) :
     BinaryStreamBase( rInStrm.isSeekable() ),
@@ -325,8 +325,8 @@ void RelativeInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
     }
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

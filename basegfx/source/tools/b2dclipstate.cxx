@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/tools/b2dclipstate.hxx>
@@ -195,9 +195,9 @@ namespace tools
             if( !maPendingPolygons.count() )
                 return;
 
-            // assumption: maClipPoly has kept polygons prepared for
-            // clipping; i.e. no neutral polygons & correct
-            // orientation
+            
+            
+            
             maPendingPolygons = tools::prepareForPolygonOperation(maPendingPolygons);
             const bool bIsEmpty=isNullClipPoly();
             const bool bIsCleared=!maClipPoly.count();
@@ -228,15 +228,15 @@ namespace tools
                         maClipPoly = maPendingPolygons;
                     else if( bIsCleared )
                     {
-                        // not representable, strictly speaking,
-                        // using polygons with the common even/odd
-                        // or nonzero winding number fill rule. If
-                        // we'd want to represent it, fill rule
-                        // would need to be "non-negative winding
-                        // number" (and we then would return
-                        // 'holes' here)
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        // going for an ugly hack meanwhile
+                        
                         maClipPoly = tools::solvePolygonOperationXor(
                             B2DPolyPolygon(
                                 tools::createPolygonFromRect(B2DRange(-1E20,-1E20,1E20,1E20))),
@@ -250,22 +250,22 @@ namespace tools
                 case SUBTRACT:
                     OSL_ASSERT( !bIsEmpty );
 
-                    // first union all pending ones, subtract en bloc then
+                    
                     maPendingPolygons = solveCrossovers(maPendingPolygons);
                     maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
                     maPendingPolygons = stripDispensablePolygons(maPendingPolygons, false);
 
                     if( bIsCleared )
                     {
-                        // not representable, strictly speaking,
-                        // using polygons with the common even/odd
-                        // or nonzero winding number fill rule. If
-                        // we'd want to represent it, fill rule
-                        // would need to be "non-negative winding
-                        // number" (and we then would return
-                        // 'holes' here)
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        // going for an ugly hack meanwhile
+                        
                         maClipPoly = tools::solvePolygonOperationDiff(
                             B2DPolyPolygon(
                                 tools::createPolygonFromRect(B2DRange(-1E20,-1E20,1E20,1E20))),
@@ -287,7 +287,7 @@ namespace tools
             if( !maPendingRanges.count() )
                 return;
 
-            // use the specialized range clipper for the win
+            
             B2DPolyPolygon aCollectedRanges;
             const bool bIsEmpty=isNullClipPoly();
             const bool bIsCleared=!maClipPoly.count();
@@ -330,15 +330,15 @@ namespace tools
                         maClipPoly = aCollectedRanges;
                     else if( bIsCleared )
                     {
-                        // not representable, strictly speaking,
-                        // using polygons with the common even/odd
-                        // or nonzero winding number fill rule. If
-                        // we'd want to represent it, fill rule
-                        // would need to be "non-negative winding
-                        // number" (and we then would return
-                        // 'holes' here)
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        // going for an ugly hack meanwhile
+                        
                         maClipPoly = tools::solvePolygonOperationXor(
                             B2DPolyPolygon(
                                 tools::createPolygonFromRect(B2DRange(-1E20,-1E20,1E20,1E20))),
@@ -352,22 +352,22 @@ namespace tools
                 case SUBTRACT:
                     OSL_ASSERT( !bIsEmpty );
 
-                    // first union all pending ranges, subtract en bloc then
+                    
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
                     aCollectedRanges = stripDispensablePolygons(aCollectedRanges, false);
 
                     if( bIsCleared )
                     {
-                        // not representable, strictly speaking,
-                        // using polygons with the common even/odd
-                        // or nonzero winding number fill rule. If
-                        // we'd want to represent it, fill rule
-                        // would need to be "non-negative winding
-                        // number" (and we then would return
-                        // 'holes' here)
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        // going for an ugly hack meanwhile
+                        
                         maClipPoly = tools::solvePolygonOperationDiff(
                             B2DPolyPolygon(
                                 tools::createPolygonFromRect(B2DRange(-1E20,-1E20,1E20,1E20))),
@@ -479,7 +479,7 @@ namespace tools
         return mpImpl->getClipPoly();
     }
 
-} // end of namespace tools
-} // end of namespace basegfx
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

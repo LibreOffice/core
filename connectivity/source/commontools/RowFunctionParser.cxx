@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// Makes parser a static resource,
-// we're synchronized externally.
-// But watch out, the parser might have
-// state not visible to this code!
+
+
+
+
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 #include <typeinfo>
@@ -47,11 +47,11 @@ using namespace com::sun::star;
 
 namespace
 {
-//////////////////////
-//////////////////////
-// EXPRESSION NODES
-//////////////////////
-//////////////////////
+
+
+
+
+
 class ConstantValueExpression : public ExpressionNode
 {
     ORowSetValueDecoratorRef maValue;
@@ -140,11 +140,11 @@ public:
 };
 
 
-////////////////////////
-////////////////////////
-// FUNCTION PARSER
-////////////////////////
-////////////////////////
+
+
+
+
+
 
 typedef const sal_Char* StringIteratorT;
 
@@ -152,11 +152,11 @@ struct ParserContext
 {
     typedef ::std::stack< ExpressionNodeSharedPtr > OperandStack;
 
-    // stores a stack of not-yet-evaluated operands. This is used
-    // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
-    // arguments from. If all arguments to an operator are constant,
-    // the operator pushes a precalculated result on the stack, and
-    // a composite ExpressionNode otherwise.
+    
+    
+    
+    
+    
     OperandStack                            maOperandStack;
 };
 
@@ -226,15 +226,15 @@ public:
         if( rNodeStack.size() < 2 )
             throw ParseError( "Not enough arguments for binary operator" );
 
-        // retrieve arguments
+        
         ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
         rNodeStack.pop();
         ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
         rNodeStack.pop();
 
-        // create combined ExpressionNode
+        
         ExpressionNodeSharedPtr pNode = ExpressionNodeSharedPtr( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
-        // check for constness
+        
         rNodeStack.push( pNode );
     }
 };
@@ -290,7 +290,7 @@ public :
         if( rNodeStack.size() < 1 )
             throw ParseError( "Not enough arguments for unary operator" );
 
-        // retrieve arguments
+        
         ExpressionNodeSharedPtr pArg( rNodeStack.top() );
         rNodeStack.pop();
 
@@ -334,7 +334,7 @@ public:
     template< typename ScannerT > class definition
     {
     public:
-        // grammar definition
+        
         definition( const ExpressionGrammar& self )
         {
             using ::boost::spirit::str_p;
@@ -405,8 +405,8 @@ public:
         }
 
     private:
-        // the constituents of the Spirit arithmetic expression grammar.
-        // For the sake of readability, without 'ma' prefix.
+        
+        
         ::boost::spirit::rule< ScannerT >   basicExpression;
         ::boost::spirit::rule< ScannerT >   unaryFunction;
         ::boost::spirit::rule< ScannerT >   assignment;
@@ -420,7 +420,7 @@ public:
     }
 
 private:
-    ParserContextSharedPtr          mpParserContext; // might get modified during parsing
+    ParserContextSharedPtr          mpParserContext; 
 };
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
@@ -428,8 +428,8 @@ const ParserContextSharedPtr& getParserContext()
 {
     static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
 
-    // clear node stack (since we reuse the static object, that's
-    // the whole point here)
+    
+    
     while( !lcl_parserContext->maOperandStack.empty() )
         lcl_parserContext->maOperandStack.pop();
 
@@ -440,9 +440,9 @@ const ParserContextSharedPtr& getParserContext()
 
 ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& _sFunction)
 {
-    // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
-    // gives better conversion robustness here (we might want to map space
-    // etc. to ASCII space here)
+    
+    
+    
     const OString& rAsciiFunction(
         OUStringToOString( _sFunction, RTL_TEXTENCODING_ASCII_US ) );
 
@@ -452,8 +452,8 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& _sFunctio
     ParserContextSharedPtr pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-    // static parser context, because the actual
-    // Spirit parser is also a static object
+    
+    
     pContext = getParserContext();
 #else
     pContext.reset( new ParserContext() );
@@ -467,14 +467,14 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& _sFunctio
                                     aExpressionGrammer,
                                     ::boost::spirit::space_p ) );
 
-    OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
+    OSL_DEBUG_ONLY(::std::cout.flush()); 
 
-    // input fully congested by the parser?
+    
     if( !aParseInfo.full )
         throw ParseError( "RowFunctionParser::parseFunction(): string not fully parseable" );
 
-    // parser's state stack now must contain exactly _one_ ExpressionNode,
-    // which represents our formula.
+    
+    
     if( pContext->maOperandStack.size() != 1 )
         throw ParseError( "RowFunctionParser::parseFunction(): incomplete or empty expression" );
 

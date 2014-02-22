@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -55,8 +55,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-//////////////////////////////////////////////////////////////////////
-//     Description: Turn off frame/object shell if applicable
+
+
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 {
@@ -64,16 +64,16 @@ static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
         rWrtSh.EnterStdMode();
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 class SwKeepConversionDirectionStateContext
 {
 public:
     SwKeepConversionDirectionStateContext()
     {
-        //!! hack to transport the current conversion direction state settings
-        //!! into the next incarnation that iterates over the drawing objets
-        //!! ( see SwHHCWrapper::~SwHHCWrapper() )
+        
+        
+        
         editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( true );
     }
 
@@ -83,7 +83,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,
@@ -124,9 +124,9 @@ SwHHCWrapper::~SwHHCWrapper()
 
     m_rWrtShell.SetCareWin( NULL );
 
-    // check for existence of a draw view which means that there are
-    // (or previously were) draw objects present in the document.
-    // I.e. we like to check those too.
+    
+    
+    
     if ( IsDrawObj() /*&& bLastRet*/ && m_pView->GetWrtShell().HasDrawView() )
     {
         Cursor *pSave = m_pView->GetWindow()->GetCursor();
@@ -144,14 +144,14 @@ SwHHCWrapper::~SwHHCWrapper()
     if( m_nPageCount )
         ::EndProgress( m_pView->GetDocShell() );
 
-    // finally for chinese translation we need to change the documents
-    // default language and font to the new ones to be used.
+    
+    
     LanguageType nTargetLang = GetTargetLanguage();
     if (IsChinese( nTargetLang ))
     {
         SwDoc *pDoc = m_pView->GetDocShell()->GetDoc();
 
-        //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
+        
         pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
         //
         const Font *pFont = GetTargetFont();
@@ -180,7 +180,7 @@ void SwHHCWrapper::GetNextPortion(
 
     m_nUnitOffset  = 0;
 
-    // build last pos from currently selected text
+    
     SwPaM* pCrsr = m_rWrtShell.GetCrsr();
     m_nLastPos =  pCrsr->Start()->nContent.GetIndex();
 }
@@ -197,9 +197,9 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
     pCrsr->SetMark();
     m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ sal_True,
                   (sal_uInt16) (nUnitEnd - nUnitStart), sal_True );
-    // end selection now. Otherwise SHIFT+HOME (extending the selection)
-    // won't work when the dialog is closed without any replacement.
-    // (see #116346#)
+    
+    
+    
     m_rWrtShell.EndSelect();
 }
 
@@ -215,7 +215,7 @@ void SwHHCWrapper::HandleNewUnit(
 
     m_rWrtShell.StartAllAction();
 
-    // select current unit
+    
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
 
     m_rWrtShell.EndAllAction();
@@ -227,16 +227,16 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         SwPaM *pCrsr )
 {
-    //!! please see also TextConvWrapper::ChangeText with is a modified
-    //!! copy of this code
+    
+    
 
     OSL_ENSURE( !rNewText.isEmpty(), "unexpected empty string" );
     if (rNewText.isEmpty())
         return;
 
-    if (pOffsets && pCrsr)  // try to keep as much attributation as possible ?
+    if (pOffsets && pCrsr)  
     {
-        // remember cursor start position for later setting of the cursor
+        
         const SwPosition *pStart = pCrsr->Start();
         const sal_Int32 nStartIndex = pStart->nContent.GetIndex();
         const SwNodeIndex aStartNodeIndex  = pStart->nNode;
@@ -251,18 +251,18 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         sal_Int32 nConvChgPos = -1;
         sal_Int32 nConvChgLen = 0;
 
-        // offset to calculate the position in the text taking into
-        // account that text may have been replaced with new text of
-        // different length. Negative values allowed!
+        
+        
+        
         long nCorrectionOffset = 0;
 
         OSL_ENSURE(nIndices == 0 || nIndices == nConvTextLen,
                 "mismatch between string length and sequence length!" );
 
-        // find all substrings that need to be replaced (and only those)
+        
         while (true)
         {
-            // get index in original text that matches nPos in new text
+            
             sal_Int32 nIndex;
             if (nPos < nConvTextLen)
                 nIndex = nPos < nIndices ? pIndices[nPos] : nPos;
@@ -275,7 +275,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
             if (rOrigText[nIndex] == rNewText[nPos] ||
                 nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
             {
-                // substring that needs to be replaced found?
+                
                 if (nChgPos != -1 && nConvChgPos != -1)
                 {
                     nChgLen = nIndex - nChgPos;
@@ -285,7 +285,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
 #endif
                     OUString aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
-                    // set selection to sub string to be replaced in original text
+                    
                     sal_Int32 nChgInNodeStartIndex = nStartIndex + nCorrectionOffset + nChgPos;
                     OSL_ENSURE( m_rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
                     m_rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
@@ -294,9 +294,9 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                     OUString aSelTxt1( m_rWrtShell.GetSelTxt() );
 #endif
 
-                    // replace selected sub string with the corresponding
-                    // sub string from the new text while keeping as
-                    // much from the attributes as possible
+                    
+                    
+                    
                     ChangeText_impl( aInNew, true );
 
                     nCorrectionOffset += nConvChgLen - nChgLen;
@@ -307,7 +307,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
             }
             else
             {
-                // begin of non-matching char sequence found ?
+                
                 if (nChgPos == -1 && nConvChgPos == -1)
                 {
                     nChgPos = nIndex;
@@ -319,9 +319,9 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
             ++nPos;
         }
 
-        // set cursor to the end of all the new text
-        // (as it would happen after ChangeText_impl (Delete and Insert)
-        // of the whole text in the 'else' branch below)
+        
+        
+        
         m_rWrtShell.ClearMark();
         m_rWrtShell.GetCrsr()->Start()->nContent.Assign( pStartTxtNode, nStartIndex + nConvTextLen );
     }
@@ -336,13 +336,13 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
 {
     if (bKeepAttributes)
     {
-        // get item set with all relevant attributes
+        
         sal_uInt16 aRanges[] = {
                 RES_CHRATR_BEGIN, RES_FRMATR_END,
                 0, 0, 0  };
         SfxItemSet aItemSet( m_rWrtShell.GetAttrPool(), aRanges );
-        // get all attributes spanning the whole selection in order to
-        // restore those for the new text
+        
+        
         m_rWrtShell.GetCurAttr( aItemSet );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -351,7 +351,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         m_rWrtShell.Delete();
         m_rWrtShell.Insert( rNewText );
 
-        // select new inserted text (currently the Point is right after the new text)
+        
         if (!m_rWrtShell.GetCrsr()->HasMark())
             m_rWrtShell.GetCrsr()->SetMark();
         SwPosition *pMark = m_rWrtShell.GetCrsr()->GetMark();
@@ -360,13 +360,13 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         OUString aSelTxt2( m_rWrtShell.GetSelTxt() );
 #endif
 
-        // since 'SetAttr' below functions like merging with the attributes
-        // from the itemset with any existing ones we have to get rid of all
-        // all attributes now. (Those attributes that may take effect left
-        // to the position where the new text gets inserted after the old text
-        // was deleted)
+        
+        
+        
+        
+        
         m_rWrtShell.ResetAttr();
-        // apply previously saved attributes to new text
+        
         m_rWrtShell.SetAttrSet( aItemSet );
     }
     else
@@ -391,10 +391,10 @@ void SwHHCWrapper::ReplaceUnit(
 
     lcl_ActivateTextShell( m_rWrtShell );
 
-    // replace the current word
+    
     m_rWrtShell.StartAllAction();
 
-    // select current unit
+    
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
 
     OUString aOrigTxt( m_rWrtShell.GetSelTxt() );
@@ -451,17 +451,17 @@ void SwHHCWrapper::ReplaceUnit(
         m_rWrtShell.StartUndo( UNDO_SETRUBYATTR );
         if (!aNewOrigText.isEmpty())
         {
-            // according to FT we currently should not bother about keeping
-            // attributes in Hangul/Hanja conversion
+            
+            
             ChangeText( aNewOrigText, rOrigText, NULL, NULL );
 
-            //!! since Delete, Insert in 'ChangeText' do not set the WrtShells
-            //!! bInSelect flag
-            //!! back to false we do it now manually in order for the selection
-            //!! to be done properly in the following call to Left.
-            // We didn't fix it in Delete and Insert since it is currently
-            // unclear if someone depends on this incorrect behvaiour
-            // of the flag.
+            
+            
+            
+            
+            
+            
+            
             m_rWrtShell.EndSelect();
 
             m_rWrtShell.Left( 0, sal_True, aNewOrigText.getLength(), sal_True, sal_True );
@@ -482,16 +482,16 @@ void SwHHCWrapper::ReplaceUnit(
     {
         m_rWrtShell.StartUndo( UNDO_OVERWRITE );
 
-        // according to FT we should currently not bother about keeping
-        // attributes in Hangul/Hanja conversion and leave that untouched.
-        // Thus we do this only for Chinese translation...
+        
+        
+        
         const bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
         if (bIsChineseConversion)
             ChangeText( aNewTxt, rOrigText, &rOffsets, m_rWrtShell.GetCrsr() );
         else
             ChangeText( aNewTxt, rOrigText, NULL, NULL );
 
-        // change language and font if necessary
+        
         if (bIsChineseConversion)
         {
             m_rWrtShell.SetMark();
@@ -558,16 +558,16 @@ void SwHHCWrapper::Convert()
                             pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
         }
-        else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
+        else    
         {
-            // get PaM that points to the start of the document
+            
             SwNode& rNode = m_pView->GetDocShell()->GetDoc()->GetNodes().GetEndOfContent();
             SwPaM aPam(rNode);
-            aPam.Move( fnMoveBackward, fnGoDoc ); // move to start of document
+            aPam.Move( fnMoveBackward, fnGoDoc ); 
 
-            pSttPos = aPam.GetPoint();  //! using a PaM here makes sure we will get only text nodes
+            pSttPos = aPam.GetPoint();  
             SwTxtNode *pTxtNode = pSttPos->nNode.GetNode().GetTxtNode();
-            // just in case we check anyway...
+            
             if (!pTxtNode || !pTxtNode->IsTxtNode())
                 return;
             m_pConvArgs = new SwConversionArgs( GetSourceLanguage(),
@@ -579,7 +579,7 @@ void SwHHCWrapper::Convert()
         OSL_ENSURE( m_pConvArgs->pEndNode && m_pConvArgs->pEndNode->IsTxtNode(),
                 "failed to get proper end text node" );
 
-        // chinese conversion specific settings
+        
         OSL_ENSURE( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
                 "source and target language mismatch?" );
         if (IsChinese( GetTargetLanguage() ))
@@ -589,20 +589,20 @@ void SwHHCWrapper::Convert()
             m_pConvArgs->bAllowImplicitChangesForNotConvertibleText = true;
         }
 
-        // if it is not just a selection and we are about to begin
-        // with the current conversion for the very first time
-        // we need to find the start of the current (initial)
-        // convertible unit in order for the text conversion to give
-        // the correct result for that. Since it is easier to obtain
-        // the start of the word we use that though.
-        if (!pCrsr->HasMark())   // is not a selection?
+        
+        
+        
+        
+        
+        
+        if (!pCrsr->HasMark())   
         {
-            // since #118246 / #117803 still occurs if the cursor is placed
-            // between the two chinese characters to be converted (because both
-            // of them are words on their own!) using the word boundary here does
-            // not work. Thus since chinese conversion is not interactive we start
-            // at the begin of the paragraph to solve the problem, i.e. have the
-            // TextConversion service get those characters together in the same call.
+            
+            
+            
+            
+            
+            
             sal_Int32 nStartIdx = -1;
             if (editeng::HangulHanjaConversion::IsChinese( GetSourceLanguage() ) )
                 nStartIdx = 0;
@@ -614,7 +614,7 @@ void SwHHCWrapper::Convert()
                         getWordBoundary( aText, nPos, g_pBreakIt->GetLocale( m_pConvArgs->nConvSrcLang ),
                                 WordType::DICTIONARY_WORD, sal_True ) );
 
-                // valid result found?
+                
                 if (aBoundary.startPos < aText.getLength() &&
                     aBoundary.startPos != aBoundary.endPos)
                 {
@@ -643,15 +643,15 @@ void SwHHCWrapper::Convert()
 
 bool SwHHCWrapper::ConvNext_impl( )
 {
-    //! modified version of SvxSpellWrapper::SpellNext
+    
 
-    // no change of direction so the desired region is fully processed
+    
     if( m_bStartChk )
         m_bStartDone = true;
     else
         m_bEndDone = true;
 
-    if( m_bIsOtherCntnt && m_bStartDone && m_bEndDone ) // document completely checked?
+    if( m_bIsOtherCntnt && m_bStartDone && m_bEndDone ) 
     {
         return false;
     }
@@ -666,7 +666,7 @@ bool SwHHCWrapper::ConvNext_impl( )
     }
     else if ( m_bStartDone && m_bEndDone )
     {
-        // body region done, ask about special region
+        
         if( HasOtherCnt_impl() )
         {
             ConvStart_impl( m_pConvArgs, SVX_SPELL_OTHER );
@@ -685,7 +685,7 @@ bool SwHHCWrapper::ConvNext_impl( )
 
 bool SwHHCWrapper::FindConvText_impl()
 {
-    //! modified version of SvxSpellWrapper::FindSpellError
+    
 
     bool bFound = false;
 
@@ -738,6 +738,6 @@ bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
     return !pConversionArgs->aConvText.isEmpty();
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

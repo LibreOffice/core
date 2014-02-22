@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "consoli.hxx"
@@ -31,9 +31,9 @@
 
 #define SC_CONS_NOTFOUND    -1
 
-// STATIC DATA
-static const OpCode eOpCodeTable[] = {      //  Reihenfolge wie bei enum ScSubTotalFunc
-        ocBad,                              //  none
+
+static const OpCode eOpCodeTable[] = {      
+        ocBad,                              
         ocAverage,
         ocCount,
         ocCount2,
@@ -138,7 +138,7 @@ void ScConsData::DeleteData()
     DELETEARR( ppCount, nColCount );
     DELETEARR( ppSum,   nColCount );
     DELETEARR( ppSumSqr,nColCount );
-    DELETEARR( ppUsed,  nColCount );                // erst nach ppRefs !!!
+    DELETEARR( ppUsed,  nColCount );                
     DELETEARR( ppTitlePos, nRowCount );
     delete[] mpColHeaders;
     mpColHeaders = NULL;
@@ -149,7 +149,7 @@ void ScConsData::DeleteData()
     nTitleCount = 0;
     nDataCount = 0;
 
-    if (bColByName) nColCount = 0;                  // sonst stimmt mpColHeaders nicht
+    if (bColByName) nColCount = 0;                  
     if (bRowByName) nRowCount = 0;
 
     bCornerUsed = false;
@@ -196,11 +196,11 @@ void ScConsData::InitData()
         for (SCSIZE i=0; i<nRowCount; i++)
         {
             ppTitlePos[i] = new SCSIZE[nDataCount];
-            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    //! unnoetig ?
+            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    
         }
     }
 
-    //  CornerText: einzelner String
+    
 }
 
 void ScConsData::DoneFields()
@@ -290,7 +290,7 @@ void ScConsData::AddName( const OUString& rName )
 
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
-            //  Daten auf gleiche Laenge bringen
+            
 
             SCSIZE nMax = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
@@ -307,7 +307,7 @@ void ScConsData::AddName( const OUString& rName )
                 ppRefs[nArrX][nArrY].SetFullSize(nMax);
             }
 
-            //  Positionen eintragen
+            
 
             if (ppTitlePos)
                 if (nTitleCount < nDataCount)
@@ -316,7 +316,7 @@ void ScConsData::AddName( const OUString& rName )
     }
 }
 
-                                // rCount < 0 <=> Fehler aufgetreten
+                                
 
 static void lcl_UpdateArray( ScSubTotalFunc eFunc,
                          double& rCount, double& rSum, double& rSumSqr, double nVal )
@@ -367,7 +367,7 @@ static void lcl_UpdateArray( ScSubTotalFunc eFunc,
         }
         default:
         {
-            // added to avoid warnings
+            
         }
     }
 }
@@ -488,7 +488,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     SCCOL nCol;
     SCROW nRow;
 
-    //      Ecke links oben
+    
 
     if ( bColByName && bRowByName )
     {
@@ -505,7 +505,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         }
     }
 
-    //      Titel suchen
+    
 
     SCCOL nStartCol = nCol1;
     SCROW nStartRow = nRow1;
@@ -559,7 +559,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     nCol1 = nStartCol;
     nRow1 = nStartRow;
 
-    //      Daten
+    
 
     bool bAnyCell = ( eFunction == SUBTOTAL_FUNC_CNT2 );
     for (nCol=nCol1; nCol<=nCol2; nCol++)
@@ -612,7 +612,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     delete[] pDestRows;
 }
 
-//  vorher testen, wieviele Zeilen eingefuegt werden (fuer Undo)
+
 
 SCROW ScConsData::GetInsertCount() const
 {
@@ -634,8 +634,8 @@ SCROW ScConsData::GetInsertCount() const
     return nInsert;
 }
 
-//  fertige Daten ins Dokument schreiben
-//! optimieren nach Spalten?
+
+
 
 void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -644,12 +644,12 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     SCSIZE nArrX;
     SCSIZE nArrY;
 
-    //  Ecke links oben
+    
 
     if ( bColByName && bRowByName && !aCornerText.isEmpty() )
         pDestDoc->SetString( nCol, nRow, nTab, aCornerText );
 
-    //  Titel
+    
 
     SCCOL nStartCol = nCol;
     SCROW nStartRow = nRow;
@@ -666,9 +666,9 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     nCol = nStartCol;
     nRow = nStartRow;
 
-    //  Daten
+    
 
-    if ( ppCount && ppUsed )                            // Werte direkt einfuegen
+    if ( ppCount && ppUsed )                            
     {
         for (nArrX=0; nArrX<nColCount; nArrX++)
             for (nArrY=0; nArrY<nRowCount; nArrY++)
@@ -686,16 +686,16 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 }
     }
 
-    if ( ppRefs && ppUsed )                             // Referenzen einfuegen
+    if ( ppRefs && ppUsed )                             
     {
-                                //! unterscheiden, ob nach Kategorien aufgeteilt
+                                
         OUString aString;
 
-        ScSingleRefData aSRef;      // Daten fuer Referenz-Formelzellen
-        aSRef.InitFlags(); // This reference is absolute at all times.
+        ScSingleRefData aSRef;      
+        aSRef.InitFlags(); 
         aSRef.SetFlag3D(true);
 
-        ScComplexRefData aCRef;         // Daten fuer Summen-Zellen
+        ScComplexRefData aCRef;         
         aCRef.InitFlags();
         aCRef.Ref1.SetColRel(true); aCRef.Ref1.SetRowRel(true); aCRef.Ref1.SetTabRel(true);
         aCRef.Ref2.SetColRel(true); aCRef.Ref2.SetRowRel(true); aCRef.Ref2.SetTabRel(true);
@@ -723,7 +723,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 ScReferenceEntry aRef = rList.GetEntry(nPos);
                                 if (aRef.nTab != SC_CONS_NOTFOUND)
                                 {
-                                    //  Referenz einfuegen (absolut, 3d)
+                                    
 
                                     aSRef.SetAddress(ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
 
@@ -737,7 +737,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 }
                             }
 
-                            //  Summe einfuegen (relativ, nicht 3d)
+                            
 
                             ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                              sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
@@ -747,7 +747,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                             aCRef.SetRange(aRange, aDest);
 
                             ScTokenArray aArr;
-                            aArr.AddOpCode(eOpCode);            // ausgewaehlte Funktion
+                            aArr.AddOpCode(eOpCode);            
                             aArr.AddOpCode(ocOpen);
                             aArr.AddDoubleReference(aCRef);
                             aArr.AddOpCode(ocClose);
@@ -757,7 +757,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         }
                     }
 
-                //  Gliederung einfuegen
+                
 
                 ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
@@ -769,7 +769,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 pDestDoc->SetDrawPageSize(nTab);
                 pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
 
-                //  Zwischentitel
+                
 
                 if (ppTitlePos && mpTitles && mpRowHeaders)
                 {
@@ -780,7 +780,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         bool bDo = true;
                         if (nPos+1<nDataCount)
                             if (ppTitlePos[nArrY][nPos+1] == nTPos)
-                                bDo = false;                                    // leer
+                                bDo = false;                                    
                         if ( bDo && nTPos < nNeeded )
                         {
                             aString =  mpRowHeaders[nArrY];

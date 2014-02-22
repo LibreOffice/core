@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlgedview.hxx"
@@ -33,24 +33,18 @@ namespace basctl
 
 TYPEINIT1( DlgEdView, SdrView );
 
-//----------------------------------------------------------------------------
-
 DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) :
     SdrView(&rModel, &rOut),
     rDlgEditor(rEditor)
 {
-    // #114898#
+    
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdView::~DlgEdView()
 {
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdView::MarkListHasChanged()
 {
@@ -61,21 +55,19 @@ void DlgEdView::MarkListHasChanged()
     rDlgEditor.UpdatePropertyBrowserDelayed();
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
-    // visible area
+    
     MapMode aMap( rWin.GetMapMode() );
     Point aOrg( aMap.GetOrigin() );
     Size aVisSize( rWin.GetOutputSize() );
     Rectangle RectTmp( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
     Rectangle aVisRect( RectTmp );
 
-    // check, if rectangle is inside visible area
+    
     if ( !aVisRect.IsInside( rRect ) )
     {
-        // calculate scroll distance; the rectangle must be inside the visible area
+        
         sal_Int32 nScrollX = 0, nScrollY = 0;
 
         sal_Int32 nVisLeft   = aVisRect.Left();
@@ -98,7 +90,7 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         while ( rRect.Top() < nVisTop + nScrollY )
             nScrollY -= nDeltaY;
 
-        // don't scroll beyond the page size
+        
         Size aPageSize = rDlgEditor.GetPage().GetSize();
         sal_Int32 nPageWidth  = aPageSize.Width();
         sal_Int32 nPageHeight = aPageSize.Height();
@@ -115,7 +107,7 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         if ( nVisTop + nScrollY < 0 )
             nScrollY = -nVisTop;
 
-        // scroll window
+        
         rWin.Update();
         rWin.Scroll( -nScrollX, -nScrollY );
         aMap.SetOrigin( Point( aOrg.X() - nScrollX, aOrg.Y() - nScrollY ) );
@@ -123,15 +115,13 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         rWin.Update();
         rWin.Invalidate();
 
-        // update scroll bars
+        
         rDlgEditor.UpdateScrollBars();
 
         DlgEdHint aHint( DlgEdHint::WINDOWSCROLLED );
         rDlgEditor.Broadcast( aHint );
     }
 }
-
-//----------------------------------------------------------------------------
 
 SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
 {
@@ -143,19 +133,19 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
 
         if(0 != dynamic_cast< DlgEdForm* >(pRetval))
         {
-            // from DlgEdForm::CheckHit; exclude inner for DlgEdForm
+            
             bExcludeInner = true;
         }
         else if(pDlgEdObj->supportsService("com.sun.star.awt.UnoControlGroupBoxModel"))
         {
-            // from DlgEdObj::CheckHit; exclude inner for group shapes
+            
             bExcludeInner = true;
         }
 
         if(bExcludeInner)
         {
-            // use direct model data; it's a DlgEdObj, so GetLastBoundRect()
-            // will access aOutRect directly
+            
+            
             const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
 
             if(!aOuterRectangle.IsEmpty()
@@ -184,18 +174,18 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
 
 SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const
 {
-    // call parent
+    
     SdrObject* pRetval = SdrView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);
 
     if(pRetval)
     {
-        // check hitted object locally
+        
         pRetval = impLocalHitCorrection(pRetval, rPnt, nTol);
     }
 
     return pRetval;
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

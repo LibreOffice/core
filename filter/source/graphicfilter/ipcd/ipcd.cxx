@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,17 +26,17 @@
 #include <svl/solar.hrc>
 #include <vcl/FilterConfigItem.hxx>
 
-//============================ PCDReader ==================================
 
-// these resolutions are contained in a PCD file:
+
+
 enum PCDResolution {
-    PCDRES_BASE16,  //  192 x  128
-    PCDRES_BASE4,   //  384 x  256
-    PCDRES_BASE,    //  768 x  512
-    // the following ones are compressed
-    // and CANNOT be read by us
-    PCDRES_4BASE,   // 1536 x 1024
-    PCDRES_16BASE   // 3072 x 3072
+    PCDRES_BASE16,  
+    PCDRES_BASE4,   
+    PCDRES_BASE,    
+    
+    
+    PCDRES_4BASE,   
+    PCDRES_16BASE   
 };
 
 class PCDReader {
@@ -50,29 +50,29 @@ private:
     SvStream &m_rPCD;
     BitmapWriteAccess*  mpAcc;
 
-    sal_uInt8               nOrientation;   // orientation of the picture withinthe PCD file:
-                                        // 0 - spire point up
-                                        // 1 - spire points to the right
-                                        // 2 - spire points down
-                                        // 3 - spire points to the left
+    sal_uInt8               nOrientation;   
+                                        
+                                        
+                                        
+                                        
 
-    PCDResolution       eResolution;    // which resolution we want
+    PCDResolution       eResolution;    
 
-    sal_uLong               nWidth;         // width of the PCD picture
-    sal_uLong               nHeight;        // height of the PCD picture
-    sal_uLong               nImagePos;      // position of the picture within the PCD file
+    sal_uLong               nWidth;         
+    sal_uLong               nHeight;        
+    sal_uLong               nImagePos;      
 
-    // temporary lLue-Green-Red-Bitmap
+    
     sal_uLong               nBMPWidth;
     sal_uLong               nBMPHeight;
 
     void    MayCallback(sal_uLong nPercent);
 
     void    CheckPCDImagePacFile();
-        // checks whether it's a Photo-CD file with 'Image Pac'
+        
 
     void    ReadOrientation();
-        // reads the orientation and sets nOrientation
+        
 
     void    ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent);
 
@@ -87,7 +87,7 @@ public:
     sal_Bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
 
-//=================== Methods of PCDReader ==============================
+
 
 sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
@@ -98,13 +98,13 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 
     MayCallback( 0 );
 
-    // is it a PCD file with a picture? ( sets bStatus == sal_False, if that's not the case):
+    
     CheckPCDImagePacFile();
 
-    // read orientation of the picture:
+    
     ReadOrientation();
 
-    // which resolution do we want?:
+    
     eResolution = PCDRES_BASE;
     if ( pConfigItem )
     {
@@ -114,7 +114,7 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
         else if ( nResolution == 0 )
             eResolution = PCDRES_BASE16;
     }
-    // determine size and position (position within the PCD file) of the picture:
+    
     switch (eResolution)
     {
         case PCDRES_BASE16 :
@@ -162,13 +162,13 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
     return bStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::MayCallback(sal_uLong /*nPercent*/)
 {
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::CheckPCDImagePacFile()
 {
@@ -181,7 +181,7 @@ void PCDReader::CheckPCDImagePacFile()
         bStatus = sal_False;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::ReadOrientation()
 {
@@ -192,18 +192,18 @@ void PCDReader::ReadOrientation()
     nOrientation &= 0x03;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 {
     sal_uLong  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
     long   nL,nCb,nCr,nRed,nGreen,nBlue;
     sal_uInt8 * pt;
-    sal_uInt8 * pL0; // luminance for each pixel of the 1st row of the current pair of rows
-    sal_uInt8 * pL1; // luminance for each pixel of the 2nd row of the current pair of rows
-    sal_uInt8 * pCb; // blue chrominance for each 2x2 pixel of the current pair of rows
-    sal_uInt8 * pCr; // red chrominance fuer je 2x2 pixel of the current pair of rows
-    sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // like above, but for the next pair of rows
+    sal_uInt8 * pL0; 
+    sal_uInt8 * pL1; 
+    sal_uInt8 * pCb; 
+    sal_uInt8 * pCr; 
+    sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; 
 
     if ( bStatus == sal_False )
         return;
@@ -237,7 +237,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
     m_rPCD.Seek( nImagePos );
 
-    // next pair of rows := first pair of rows:
+    
     m_rPCD.Read( pL0N, nWidth );
     m_rPCD.Read( pL1N, nWidth );
     m_rPCD.Read( pCbN, nW2 );
@@ -247,13 +247,13 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
     for ( nYPair = 0; nYPair < nH2; nYPair++ )
     {
-        // current pair of rows := next pair of rows:
+        
         pt=pL0; pL0=pL0N; pL0N=pt;
         pt=pL1; pL1=pL1N; pL1N=pt;
         pt=pCb; pCb=pCbN; pCbN=pt;
         pt=pCr; pCr=pCrN; pCrN=pt;
 
-        // get the next pair of rows:
+        
         if ( nYPair < nH2 - 1 )
         {
             m_rPCD.Read( pL0N, nWidth );
@@ -272,15 +272,15 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
             }
         }
 
-        // loop trough both rows of the pair of rows:
+        
         for ( ndy = 0; ndy < 2; ndy++ )
         {
             ny = ( nYPair << 1 ) + ndy;
 
-            // loop trough X:
+            
             for ( nx = 0; nx < nWidth; nx++ )
             {
-                // get/calculate nL,nCb,nCr for the pixel nx,ny:
+                
                 nXPair = nx >> 1;
                 if ( ndy == 0 )
                 {
@@ -311,7 +311,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
                                ( (long)pCrN[ nXPair ] ) + ( (long)pCrN[ nXPair + 1 ] ) ) >> 2;
                     }
                 }
-                // conversion of nL,nCb,nCr in nRed,nGreen,nBlue:
+                
                 nL *= 89024L;
                 nCb -= 156;
                 nCr -= 137;
@@ -331,7 +331,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
                 if ( nBlue > 255 )
                     nBlue = 255;
 
-                // register color value in pBMPMap:
+                
                 if ( nOrientation < 2 )
                 {
                     if ( nOrientation == 0 )
@@ -365,11 +365,11 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
     rtl_freeMemory((void*)pCrN);
 }
 
-//================== GraphicImport - the exported Function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport icdGraphicImport
 #endif

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -65,7 +65,7 @@ void SwHTMLParser::NewScript()
 
     if( !aScriptURL.isEmpty() )
     {
-        // Den Inhalt des Script-Tags ignorieren
+        
         bIgnoreRawData = true;
     }
 }
@@ -88,8 +88,8 @@ void SwHTMLParser::EndScript()
     bIgnoreRawData = false;
     aScriptSource = convertLineEnd(aScriptSource, GetSystemLineEnd());
 
-    // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
-    // Modulnamen in einem Feld merken merken
+    
+    
     if( bInsSrcIntoFld && !bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
@@ -105,18 +105,18 @@ void SwHTMLParser::EndScript()
     if( !aScriptSource.isEmpty() && pDocSh &&
         bInsIntoBasic && IsNewDoc() )
     {
-    // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
-        // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
+    
+        
         RemoveSGMLComment( aScriptSource, sal_True );
 
-        // get library name
+        
         OUString aLibName;
         if( !aBasicLib.isEmpty() )
             aLibName = aBasicLib;
         else
             aLibName = "Standard";
 
-        // get module library container
+        
         Reference< script::XLibraryContainer > xModLibContainer( pDocSh->GetBasicContainer(), UNO_QUERY );
 
         if ( xModLibContainer.is() )
@@ -124,13 +124,13 @@ void SwHTMLParser::EndScript()
             Reference< container::XNameContainer > xModLib;
             if ( xModLibContainer->hasByName( aLibName ) )
             {
-                // get module library
+                
                 Any aElement = xModLibContainer->getByName( aLibName );
                 aElement >>= xModLib;
             }
             else
             {
-                // create module library
+                
                 xModLib = xModLibContainer->createLibrary( aLibName );
             }
 
@@ -138,7 +138,7 @@ void SwHTMLParser::EndScript()
             {
                 if( aBasicModule.isEmpty() )
                 {
-                    // create module name
+                    
                     sal_Bool bFound = sal_True;
                     while( bFound )
                     {
@@ -148,7 +148,7 @@ void SwHTMLParser::EndScript()
                     }
                 }
 
-                // create module
+                
                 OUString aModName( aBasicModule );
                 if ( !xModLib->hasByName( aModName ) )
                 {
@@ -159,14 +159,14 @@ void SwHTMLParser::EndScript()
             }
         }
 
-        // get dialog library container
+        
         Reference< script::XLibraryContainer > xDlgLibContainer( pDocSh->GetDialogContainer(), UNO_QUERY );
 
         if ( xDlgLibContainer.is() )
         {
             if ( !xDlgLibContainer->hasByName( aLibName ) )
             {
-                // create dialog library
+                
                 xDlgLibContainer->createLibrary( aLibName );
             }
         }
@@ -182,7 +182,7 @@ void SwHTMLParser::EndScript()
 
 void SwHTMLParser::AddScriptSource()
 {
-    // Hier merken wir und nur ein par Strings
+    
     if( aToken.getLength() > 2 &&
         (HTML_SL_STARBASIC==eScriptLang && aToken[ 0 ] == '\'') )
     {
@@ -218,14 +218,14 @@ void SwHTMLParser::AddScriptSource()
     }
     else if( !aScriptSource.isEmpty() || !aToken.isEmpty() )
     {
-        // Leerzeilen am Anfang werden ignoriert
+        
         if( !aScriptSource.isEmpty() )
         {
             aScriptSource += "\n";
         }
         else
         {
-            // Wir stehen hinter dem CR/LF der Zeile davor
+            
             nScriptStartLineNr = GetLineNr() - 1;
         }
         aScriptSource += aToken;
@@ -262,14 +262,14 @@ void SwHTMLWriter::OutBasic()
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
-    // nur das DocumentBasic schreiben
+    
     if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
         return;
     }
 
-    // und jetzt alle StarBasic-Module und alle unbenutzen JavaSrript-Module
-    // ausgeben
+    
+    
     for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
@@ -295,13 +295,13 @@ void SwHTMLWriter::OutBasic()
                     .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content)
                     .append("=\"text/x-");
                 Strm().WriteCharPtr( sOut.getStr() );
-                // Entities aren't welcome here
+                
                 Strm().WriteCharPtr( OUStringToOString(sLang, eDestEnc).getStr() )
                    .WriteCharPtr( "\">" );
             }
 
             const OUString& rModName = pModule->GetName();
-            Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // nicht einruecken!
+            Strm().WriteCharPtr( SAL_NEWLINE_STRING );   
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,

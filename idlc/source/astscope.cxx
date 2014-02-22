@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <idlc/astscope.hxx>
@@ -108,7 +108,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
     if (scopedName.isEmpty())
         return NULL;
 
-    // If name starts with "::" start look up in global scope
+    
     if ( isGlobal(scopedName) )
     {
         pDecl = scopeAsDecl(this);
@@ -116,22 +116,22 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
             return NULL;
 
         pScope = pDecl->getScope();
-        // If this is the global scope ...
+        
         if ( !pScope )
         {
-            // look up the scopedName part after "::"
+            
             OString subName = scopedName.copy(2);
             pDecl = lookupByName(subName);
             return pDecl;
-            //return pScope->lookupByName();
+            
         }
-        // OK, not global scope yet, so simply iterate with parent scope
+        
         pDecl = pScope->lookupByName(scopedName);
         return pDecl;
     }
 
-    // The name does not start with "::"
-    // Look up in the local scope and start with the first scope
+    
+    
     sal_Int32 nIndex = scopedName.indexOf(':');
     OString firstScope =  nIndex > 0 ? scopedName.copy(0, nIndex) : scopedName;
     bool    bFindFirstScope = true;
@@ -140,7 +140,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
     {
         bFindFirstScope = false;
 
-        // OK, not found. Go down parent scope chain
+        
         pDecl = scopeAsDecl(this);
         if ( pDecl )
         {
@@ -150,8 +150,8 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
             else
                 pDecl = NULL;
 
-             // Special case for scope which is an interface. We
-             // have to look in the inherited interfaces as well.
+             
+             
             if ( !pDecl )
             {
                 if (m_nodeType == NT_interface)
@@ -178,7 +178,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 
         if ( !pDecl )
         {
-            // last try if is not the global scope and the scopeName isn't specify global too
+            
             pDecl = scopeAsDecl(this);
             if ( pDecl && (pDecl->getLocalName() != "") )
             {
@@ -219,13 +219,13 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
     if ( !pInterface )
         return NULL;
 
-    // Can't look in an interface which was not yet defined
+    
     if ( !pInterface->getScope() )
     {
         idlc()->error()->forwardLookupError(pInterface, scopedName);
     }
 
-    // OK, loop through inherited interfaces. Stop when you find it
+    
     AstInterface::InheritedInterfaces::const_iterator iter(
         pInterface->getAllInheritedInterfaces().begin());
     AstInterface::InheritedInterfaces::const_iterator end(
@@ -241,7 +241,7 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
             return pDecl;
         ++iter;
     }
-    // Not found
+    
     return NULL;
 }
 

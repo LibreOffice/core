@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/file.hxx>
@@ -63,38 +63,38 @@ public:
     SdHtmlOptionsDialog();
     ~SdHtmlOptionsDialog();
 
-    // XInterface
+    
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const Sequence< Any > & aArguments ) throw ( Exception, RuntimeException );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw ( RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw ( RuntimeException );
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
 
-    // XPropertyAccess
+    
     virtual Sequence< PropertyValue > SAL_CALL getPropertyValues() throw ( RuntimeException );
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & aProps )
         throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    // XExecuteDialog
+    
     virtual sal_Int16 SAL_CALL execute()
         throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setTitle( const OUString& aTitle )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    // XExporter
+    
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
         throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
 };
 
-// - SdHtmlOptionsDialog -
+
 Reference< XInterface >
     SAL_CALL SdHtmlOptionsDialog_CreateInstance(
         SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
@@ -116,40 +116,40 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
     meDocType   ( DOCUMENT_TYPE_DRAW )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdHtmlOptionsDialog::~SdHtmlOptionsDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SdHtmlOptionsDialog::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SdHtmlOptionsDialog::release() throw()
 {
     OWeakObject::release();
 }
 
-// XInitialization
+
 void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & )
     throw ( Exception, RuntimeException )
 {
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
     throw( RuntimeException )
 {
@@ -167,7 +167,7 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
 }
 
 
-// XPropertyAccess
+
 Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
         throw ( RuntimeException )
 {
@@ -180,7 +180,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
     if ( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
 
-    // the "FilterData" Property is an Any that will contain our PropertySequence of Values
+    
     maMediaDescriptor[ i ].Name = "FilterData";
     maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
     return maMediaDescriptor;
@@ -204,7 +204,7 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
     }
 }
 
-// XExecutableDialog
+
 void SdHtmlOptionsDialog::setTitle( const OUString& aTitle )
     throw ( RuntimeException )
 {
@@ -237,11 +237,11 @@ sal_Int16 SdHtmlOptionsDialog::execute()
     return nRet;
 }
 
-// XEmporter
+
 void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc )
         throw ( IllegalArgumentException, RuntimeException )
 {
-    // try to set the corresponding metric unit
+    
     Reference< XServiceInfo > xServiceInfo(xDoc, UNO_QUERY);
     if ( xServiceInfo.is() )
     {

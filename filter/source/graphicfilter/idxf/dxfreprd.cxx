@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 #include <dxfreprd.hxx>
 
 
-//------------------DXFBoundingBox--------------------------------------------
+
 
 
 void DXFBoundingBox::Union(const DXFVector & rVector)
@@ -47,7 +47,7 @@ void DXFBoundingBox::Union(const DXFVector & rVector)
 }
 
 
-//------------------DXFPalette------------------------------------------------
+
 
 
 DXFPalette::DXFPalette()
@@ -59,20 +59,20 @@ DXFPalette::DXFPalette()
     pGreen=new sal_uInt8[256];
     pBlue =new sal_uInt8[256];
 
-    // colors 0 - 9 (normal colors)
-    SetColor(0, 0x00, 0x00, 0x00); // actually never being used
+    
+    SetColor(0, 0x00, 0x00, 0x00); 
     SetColor(1, 0xff, 0x00, 0x00);
     SetColor(2, 0xff, 0xff, 0x00);
     SetColor(3, 0x00, 0xff, 0x00);
     SetColor(4, 0x00, 0xff, 0xff);
     SetColor(5, 0x00, 0x00, 0xff);
     SetColor(6, 0xff, 0x00, 0xff);
-    SetColor(7, 0x0f, 0x0f, 0x0f); // actually white???
+    SetColor(7, 0x0f, 0x0f, 0x0f); 
     SetColor(8, 0x80, 0x80, 0x80);
     SetColor(9, 0xc0, 0xc0, 0xc0);
 
-    // colors 10 - 249
-    // (Universal-Palette: 24 hues * 5 lightnesses * 2 saturations )
+    
+    
     i=10;
     for (nHue=0; nHue<24; nHue++) {
         for (nVal=5; nVal>=1; nVal--) {
@@ -100,7 +100,7 @@ DXFPalette::DXFPalette()
         }
     }
 
-    // Farben 250 - 255 (shades of gray)
+    
     for (i=0; i<6; i++) {
         nV=(sal_uInt8)(i*38+65);
         SetColor((sal_uInt8)(250+i),nV,nV,nV);
@@ -124,7 +124,7 @@ void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sa
 }
 
 
-//------------------DXFRepresentation-----------------------------------------
+
 
 
 DXFRepresentation::DXFRepresentation()
@@ -202,8 +202,8 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                                  {
                                          rDGR.Read();
 
-                                         // FIXME: we really need a whole table of
-                                         // $DWGCODEPAGE to encodings mappings
+                                         
+                                         
                                          if ( (strcmp(rDGR.GetS(),"ANSI_932")==0) ||
                           (strcmp(rDGR.GetS(),"ansi_932")==0) ||
                                               (strcmp(rDGR.GetS(),"DOS932")==0) ||
@@ -285,13 +285,13 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_TEXT: {
-                //const DXFTextEntity * pE = (DXFTextEntity*)pBE;
-                //???
+                
+                
                 break;
             }
             case DXF_SHAPE: {
-                //const DXFShapeEntity * pE = (DXFShapeEntity*)pBE;
-                //???
+                
+                
                 break;
             }
             case DXF_INSERT: {
@@ -314,13 +314,13 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_ATTDEF: {
-                //const DXFAttDefEntity * pE = (DXFAttDefEntity*)pBE;
-                //???
+                
+                
                 break;
             }
             case DXF_ATTRIB: {
-                //const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
-                //???
+                
+                
                 break;
             }
             case DXF_VERTEX: {
@@ -356,13 +356,13 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_POLYLINE: {
-                //const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
-                //???
+                
+                
                 break;
             }
             case DXF_SEQEND: {
-                //const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
-                //???
+                
+                
                 break;
             }
             case DXF_HATCH :

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-// declare system types in sysdata.hxx
+
 #include <svsys.h>
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -34,11 +34,11 @@
 #include <brdwin.hxx>
 #include <window.h>
 
-// =======================================================================
+
 
 void WorkWindow::ImplInitWorkWindowData()
 {
-    mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
+    mnIcon                  = 0; 
 
     mnPresentationFlags     = 0;
     mbPresentationMode      = false;
@@ -47,7 +47,7 @@ void WorkWindow::ImplInitWorkWindowData()
     mbFullScreenMode        = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
@@ -61,7 +61,7 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     mpWindowImpl->mpBorderWindow  = pBorderWin;
 
-    // mpWindowImpl->mpRealParent    = pParent; // should actually be set, but is not set due to errors with the menubar!!
+    
 
     if ( nStyle & WB_APP )
     {
@@ -73,7 +73,7 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
 {
@@ -83,14 +83,14 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::st
         aSystemWorkWindowToken >>= aSeq;
         SystemParentData* pData = (SystemParentData*)aSeq.getArray();
         DBG_ASSERT( aSeq.getLength() == sizeof( SystemParentData ) && pData->nSize == sizeof( SystemParentData ), "WorkWindow::WorkWindow( Window*, const Any&, WinBits ) called with invalid Any" );
-        // init with style 0 as does WorkWindow::WorkWindow( SystemParentData* );
+        
         ImplInit( pParent, 0, pData );
     }
     else
         ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( WindowType nType ) :
     SystemWindow( nType )
@@ -98,7 +98,7 @@ WorkWindow::WorkWindow( WindowType nType ) :
     ImplInitWorkWindowData();
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -107,7 +107,7 @@ WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -117,7 +117,7 @@ WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSyst
     ImplInit( pParent, nStyle, aSystemWorkWindowToken );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -127,7 +127,7 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
     ImplInit( NULL, 0, pParent );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::~WorkWindow()
 {
@@ -139,7 +139,7 @@ WorkWindow::~WorkWindow()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::ShowFullScreenMode( bool bFullScreenMode )
 {
@@ -154,8 +154,8 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     mbFullScreenMode = bFullScreenMode;
     if ( !mbSysChild )
     {
-        // Dispose of the canvas implementation, which might rely on
-        // screen-specific system data.
+        
+        
         com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
         if( xCanvas.is() )
         {
@@ -171,7 +171,7 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags )
 {
@@ -222,17 +222,17 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WorkWindow::IsMinimized() const
 {
-    //return mpWindowImpl->mpFrameData->mbMinimized;
+    
     SalFrameState aState;
     mpWindowImpl->mpFrame->GetWindowState(&aState);
     return (( aState.mnState & WINDOWSTATE_STATE_MINIMIZED ) != 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 {
@@ -274,7 +274,7 @@ bool WorkWindow::Close()
 {
     bool bCanClose = SystemWindow::Close();
 
-    // Ist es das Applikationsfenster, dann beende die Applikation
+    
     if ( bCanClose && ( ImplGetSVData()->maWinData.mpAppWin == this ) )
         GetpApp()->Quit();
 

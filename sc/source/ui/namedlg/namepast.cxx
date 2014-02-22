@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "namepast.hxx"
 #include "scresid.hxx"
@@ -32,7 +32,7 @@
 #include "viewdata.hxx"
 
 
-//==================================================================
+
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
@@ -76,7 +76,7 @@ ScNamePasteDlg::~ScNamePasteDlg()
     delete mpTable;
 }
 
-//------------------------------------------------------------------
+
 
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 {
@@ -101,7 +101,7 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------
+
 
 std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const
 {

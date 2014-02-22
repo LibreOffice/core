@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
 
 void SvLinkSourceTimer::Timeout()
 {
-    // Secure against beeing destroyed in Handler
+    
     SvLinkSourceRef aAdv( pOwner );
     pOwner->SendDataChanged();
 }
@@ -152,7 +152,7 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
             pRet = aArr[ nPos ];
         else
         {
-            // then we must search the current (or the next) in the orig
+            
             do {
                 pRet = aArr[ nPos ];
                 if( std::find(rOrigArr.begin(), rOrigArr.end(), pRet ) != rOrigArr.end() )
@@ -213,7 +213,7 @@ void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com:
     pImpl->m_bIsReadOnly = bIsReadOnly;
 }
 
-// #i88291#
+
 void SvLinkSource::clearStreamToLoadFrom()
 {
     pImpl->m_xInputStreamToLoadFrom.clear();
@@ -278,7 +278,7 @@ void SvLinkSource::SendDataChanged()
 void SvLinkSource::NotifyDataChanged()
 {
     if( pImpl->nTimeout )
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); 
     else
     {
         SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
@@ -309,16 +309,16 @@ void SvLinkSource::NotifyDataChanged()
     }
 }
 
-// notify the sink, the mime type is not
-// a selection criterion
+
+
 void SvLinkSource::DataChanged( const OUString & rMimeType,
                                 const ::com::sun::star::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
-    {   // only when no data was included
-        // fire all data to the sink, independent of the requested format
+    {   
+        
         pImpl->aDataMimeType = rMimeType;
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); 
     }
     else
     {
@@ -348,7 +348,7 @@ void SvLinkSource::DataChanged( const OUString & rMimeType,
 }
 
 
-// only one link is correct
+
 void SvLinkSource::AddDataAdvise( SvBaseLink * pLink, const OUString& rMimeType,
                                     sal_uInt16 nAdviseModes )
 {
@@ -367,7 +367,7 @@ void SvLinkSource::RemoveAllDataAdvise( SvBaseLink * pLink )
         }
 }
 
-// only one link is correct
+
 void SvLinkSource::AddConnectAdvise( SvBaseLink * pLink )
 {
     SvLinkSource_Entry_Impl* pNew = new SvLinkSource_Entry_Impl( pLink );
@@ -398,13 +398,13 @@ sal_Bool SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
     return bRet;
 }
 
-// sal_True => waitinmg for data
+
 sal_Bool SvLinkSource::IsPending() const
 {
     return sal_False;
 }
 
-// sal_True => data complete loaded
+
 sal_Bool SvLinkSource::IsDataComplete() const
 {
     return sal_True;

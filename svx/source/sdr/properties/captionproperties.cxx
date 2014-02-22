@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/captionproperties.hxx>
@@ -24,29 +24,29 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdocapt.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return *(new SfxItemSet(rPool,
 
-                // range from SdrAttrObj
+                
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // range from SdrCaptionObj
+                
                 SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST,
 
-                // range from SdrTextObj
+                
                 EE_ITEMS_START, EE_ITEMS_END,
 
-                // end
+                
                 0, 0));
         }
 
@@ -73,10 +73,10 @@ namespace sdr
         {
             SdrCaptionObj& rObj = (SdrCaptionObj&)GetSdrObject();
 
-            // local changes
+            
             rObj.ImpRecalcTail();
 
-            // call parent
+            
             RectangleProperties::ItemSetChanged(rSet);
         }
 
@@ -84,26 +84,26 @@ namespace sdr
         {
             SdrCaptionObj& rObj = (SdrCaptionObj&)GetSdrObject();
 
-            // call parent
+            
             RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
-            // local changes
+            
             rObj.ImpRecalcTail();
         }
 
         void CaptionProperties::ForceDefaultAttributes()
         {
-            // call parent
+            
             RectangleProperties::ForceDefaultAttributes();
 
-            // force ItemSet
+            
             GetObjectItemSet();
 
-            // this was set by TextProperties::ForceDefaultAttributes(),
-            // retet to default
+            
+            
             mpItemSet->ClearItem(XATTR_LINESTYLE);
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

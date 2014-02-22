@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "MDatabaseMetaDataHelper.hxx"
@@ -15,7 +15,7 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
-// do we need it?
+
 static ::osl::Mutex m_aMetaMutex;
 
 #include <osl/diagnose.h>
@@ -36,13 +36,13 @@ static ::osl::Mutex m_aMetaMutex;
 using namespace connectivity;
 using namespace connectivity::mork;
 
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 }
 
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
 }
@@ -82,7 +82,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     SAL_INFO("connectivity.mork", "tableNamePattern : " << tableNamePattern);
     ::osl::MutexGuard aGuard( m_aMetaMutex );
 
-    ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
+    ODatabaseMetaDataResultSet::ORows().swap(aRows); 
     aRows.clear();
 
     ::std::vector< OUString > tables;
@@ -97,7 +97,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
         SAL_INFO("connectivity.mork", "TableName: " << aTableName );
 
 
-        // return tables to caller
+        
         if (match( tableNamePattern, aTableName, '\0' ))
         {
             if ( aTableName.isEmpty() ) {
@@ -106,9 +106,9 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
             SAL_INFO("connectivity.mork", "TableName: " << aTableName);
 
-            aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
-            aRow.push_back( new ORowSetValueDecorator( OUString("TABLE") ) ); // Table type
-            aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
+            aRow.push_back( new ORowSetValueDecorator( aTableName ) ); 
+            aRow.push_back( new ORowSetValueDecorator( OUString("TABLE") ) ); 
+            aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); 
             aRows.push_back(aRow);
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/itemconnect.hxx>
@@ -23,13 +23,13 @@
 #include <list>
 #include <svl/itempool.hxx>
 
-// ============================================================================
+
 
 namespace sfx {
 
-// ============================================================================
-// Helpers
-// ============================================================================
+
+
+
 
 namespace {
 
@@ -38,9 +38,9 @@ TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFl
     return (bKnown && bIsKnownFlag) ? STATE_CHECK : ((!bKnown && bIsUnknownFlag) ? STATE_NOCHECK : STATE_DONTKNOW);
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
@@ -70,17 +70,17 @@ void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSe
         rDestSet.ClearItem( nWhich );
 }
 
-// ============================================================================
-// Base control wrapper classes
-// ============================================================================
+
+
+
 
 ControlWrapperBase::~ControlWrapperBase()
 {
 }
 
-// ============================================================================
-// Single control wrappers
-// ============================================================================
+
+
+
 
 DummyWindowWrapper::DummyWindowWrapper( Window& rWindow ) :
     SingleControlWrapperType( rWindow )
@@ -105,7 +105,7 @@ void DummyWindowWrapper::SetControlValue( void* )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 CheckBoxWrapper::CheckBoxWrapper( CheckBox& rCheckBox ) :
         SingleControlWrapperType( rCheckBox )
@@ -133,7 +133,7 @@ void CheckBoxWrapper::SetControlValue( sal_Bool bValue )
     GetControl().Check( bValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ColorListBoxWrapper::ColorListBoxWrapper(ColorListBox & rListBox):
     SingleControlWrapper< ColorListBox, Color >(rListBox)
@@ -162,9 +162,9 @@ void ColorListBoxWrapper::SetControlValue( Color aColor )
     GetControl().SelectEntry( aColor );
 }
 
-// ============================================================================
-// Multi control wrappers
-// ============================================================================
+
+
+
 
 typedef std::vector< ControlWrapperBase* >  ControlWrpVec;
 typedef ControlWrpVec::iterator             ControlWrpVecI;
@@ -209,9 +209,9 @@ void MultiControlWrapperHelper::SetControlDontKnow( bool bSet )
         (*aIt)->SetControlDontKnow( bSet );
 }
 
-// ============================================================================
-// Base connection classes
-// ============================================================================
+
+
+
 
 ItemConnectionBase::ItemConnectionBase( ItemConnFlags nFlags ) :
     mnFlags( nFlags )
@@ -254,9 +254,9 @@ TriState ItemConnectionBase::GetShowState( bool bKnown ) const
     return lclConvertToTriState( bKnown, mnFlags & ITEMCONN_SHOW_KNOWN, mnFlags & ITEMCONN_HIDE_UNKNOWN );
 }
 
-// ============================================================================
-// Standard connections
-// ============================================================================
+
+
+
 
 DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, Window& rWindow, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
@@ -277,12 +277,12 @@ void DummyItemConnection::Reset( const SfxItemSet& /*rItemSet*/ )
 
 bool DummyItemConnection::FillItemSet( SfxItemSet& /*rDestSet*/, const SfxItemSet& /*rOldSet*/ )
 {
-    return false;   // item set not changed
+    return false;   
 }
 
-// ============================================================================
-// Array of connections
-// ============================================================================
+
+
+
 
 class ItemConnectionArrayImpl
 {
@@ -327,7 +327,7 @@ bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSe
     return bChanged;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ItemConnectionArray::ItemConnectionArray() :
     mxImpl( new ItemConnectionArrayImpl )
@@ -358,8 +358,8 @@ bool ItemConnectionArray::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& r
     return mxImpl->FillItemSet( rDestSet, rOldSet );
 }
 
-// ============================================================================
 
-} // namespace sfx
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

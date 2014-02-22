@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osx/salinst.h"
@@ -50,21 +50,21 @@ NSString * getTableNotification( const AccessibleEventObject& aEvent )
     return notification;
 }
 
-//------------------------------------------------------------------------------
+
 
 AquaA11yEventListener::AquaA11yEventListener(id wrapperObject, sal_Int16 role) : m_wrapperObject(wrapperObject), m_role(role)
 {
     [ m_wrapperObject retain ];
 }
 
-//------------------------------------------------------------------------------
+
 
 AquaA11yEventListener::~AquaA11yEventListener()
 {
     [ m_wrapperObject release ];
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
@@ -72,7 +72,7 @@ AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw( RuntimeException )
@@ -81,7 +81,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
     id element = m_wrapperObject;
     Rectangle bounds;
 
-    // TODO: NSAccessibilityValueChanged, NSAccessibilitySelectedRowsChangedNotification
+    
     switch( aEvent.EventId )
     {
         case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
@@ -97,7 +97,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
             break;
 
         case AccessibleEventId::CHILD:
-            // only needed for tooltips (says Apple)
+            
             if ( m_role == AccessibleRole::TOOL_TIP ) {
                 if(aEvent.NewValue.hasValue()) {
                     notification = NSAccessibilityCreatedNotification;
@@ -108,16 +108,16 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
             break;
 
         case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-            // TODO: depricate or remember all children
+            
             break;
 
         case AccessibleEventId::BOUNDRECT_CHANGED:
             bounds = [ element accessibleComponent ] -> getBounds();
             if ( m_oldBounds.X != 0 && ( bounds.X != m_oldBounds.X || bounds.Y != m_oldBounds.Y ) ) {
-                NSAccessibilityPostNotification(element, NSAccessibilityMovedNotification); // post directly since both cases can happen simultaneously
+                NSAccessibilityPostNotification(element, NSAccessibilityMovedNotification); 
             }
             if ( m_oldBounds.X != 0 && ( bounds.Width != m_oldBounds.Width || bounds.Height != m_oldBounds.Height ) ) {
-                NSAccessibilityPostNotification(element, NSAccessibilityResizedNotification); // post directly since both cases can happen simultaneously
+                NSAccessibilityPostNotification(element, NSAccessibilityResizedNotification); 
             }
             m_oldBounds = bounds;
             break;

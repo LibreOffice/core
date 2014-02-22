@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/rc.h>
@@ -49,7 +49,7 @@ namespace
     };
 }
 
-// =======================================================================
+
 
 void Splitter::ImplInitSplitterData()
 {
@@ -64,11 +64,11 @@ void Splitter::ImplInitSplitterData()
     mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
 }
 
-// -----------------------------------------------------------------------
 
-// Should only be called from a ImplInit method for initialization or
-// after checking bNew is different from the current mbHorzSplit value.
-// The public method that does that check is Splitter::SetHorizontal().
+
+
+
+
 void Splitter::ImplInitHorVer(bool bNew)
 {
     mbHorzSplit = bNew;
@@ -90,7 +90,7 @@ void Splitter::ImplInitHorVer(bool bNew)
     SetPointer( Pointer( ePointerStyle ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
 {
@@ -109,7 +109,7 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     pTList->AddWindow( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::ImplSplitMousePos( Point& rPos )
 {
@@ -129,7 +129,7 @@ void Splitter::ImplSplitMousePos( Point& rPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::ImplDrawSplitter()
 {
@@ -149,7 +149,7 @@ void Splitter::ImplDrawSplitter()
     mpRefWin->InvertTracking( mpRefWin->PixelToLogic(aInvRect), SHOWTRACK_SPLIT );
 }
 
-// -----------------------------------------------------------------------
+
 
 Splitter::Splitter( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SPLITTER )
@@ -161,7 +161,7 @@ Splitter::Splitter( Window* pParent, WinBits nStyle ) :
     SetFillColor();
 }
 
-// -----------------------------------------------------------------------
+
 
 Splitter::Splitter( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_SPLITTER )
@@ -179,7 +179,7 @@ Splitter::Splitter( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 Splitter::~Splitter()
 {
@@ -187,7 +187,7 @@ Splitter::~Splitter()
     pTList->RemoveWindow( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::SetHorizontal(bool bNew)
 {
@@ -197,18 +197,18 @@ void Splitter::SetHorizontal(bool bNew)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::SetKeyboardStepSize( long nStepSize )
 {
     mnKeyboardStepSize = nStepSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 Splitter* Splitter::ImplFindSibling()
 {
-    // look for another splitter with the same parent but different orientation
+    
     Window *pWin = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
     Splitter *pSplitter = NULL;
     while( pWin )
@@ -224,11 +224,11 @@ Splitter* Splitter::ImplFindSibling()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Splitter::ImplSplitterActive()
 {
-    // is splitter in document or at scrollbar handle ?
+    
 
     bool bActive = true;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
@@ -249,7 +249,7 @@ bool Splitter::ImplSplitterActive()
     return bActive;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -280,7 +280,7 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
         StartDrag();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::Tracking( const TrackingEvent& rTEvt )
 {
@@ -313,7 +313,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        //Point aNewPos = mpRefWin->ScreenToOutputPixel( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
+        
         Point aNewPos = mpRefWin->NormalizedScreenToOutputPixel( OutputToNormalizedScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
         ImplSplitMousePos( aNewPos );
         Splitting( aNewPos );
@@ -356,7 +356,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::ImplKbdTracking( KeyCode aKeyCode )
 {
@@ -395,10 +395,10 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
         Point aNewPos;
         Size aSize = mpRefWin->GetOutputSize();
         Point aPos = GetPosPixel();
-        // depending on the position calc allows continuous moves or snaps to row/columns
-        // continuous mode is active when position is at the origin or end of the splitter
-        // otherwise snap mode is active
-        // default here is snap, holding shift sets continuous mode
+        
+        
+        
+        
         if( mbHorzSplit )
             aNewPos = Point( ImplSplitterActive() ? aPos.X() : mnSplitPos, aKeyCode.IsShift() ? 0 : aSize.Height()/2);
         else
@@ -406,18 +406,18 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
 
         Point aOldWindowPos = GetPosPixel();
 
-        int maxiter = 500;  // avoid endless loop
+        int maxiter = 500;  
         int delta=0;
         int delta_step = mbHorzSplit  ? aSize.Width()/10 : aSize.Height()/10;
 
-        // use the specified step size if it was set
+        
         if( mnKeyboardStepSize != SPLITTER_DEFAULTSTEPSIZE )
             delta_step = mnKeyboardStepSize;
 
         while( maxiter-- && aOldWindowPos == GetPosPixel() )
         {
-            // inc/dec position until application performs changes
-            // thus a single key press really moves the splitter
+            
+            
             if( aKeyCode.IsShift() )
                 delta++;
             else
@@ -438,7 +438,7 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
                 aNewPos.Y()+=delta;
                 break;
             default:
-                maxiter = 0;    // leave loop
+                maxiter = 0;    
                 break;
             }
             ImplSplitMousePos( aNewPos );
@@ -473,21 +473,21 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::StartSplit()
 {
     maStartSplitHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::Split()
 {
     maSplitHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::EndSplit()
 {
@@ -495,13 +495,13 @@ void Splitter::EndSplit()
         maEndSplitHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::Splitting( Point& /* rSplitPos */ )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::SetDragRectPixel( const Rectangle& rDragRect, Window* _pRefWin )
 {
@@ -512,14 +512,14 @@ void Splitter::SetDragRectPixel( const Rectangle& rDragRect, Window* _pRefWin )
         mpRefWin = _pRefWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::SetSplitPosPixel( long nNewPos )
 {
     mnSplitPos = nNewPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::StartDrag()
 {
@@ -528,10 +528,10 @@ void Splitter::StartDrag()
 
     StartSplit();
 
-    // Tracking starten
+    
     StartTracking();
 
-    // Start-Positon ermitteln
+    
     maDragPos = mpRefWin->GetPointerPosPixel();
     ImplSplitMousePos( maDragPos );
     Splitting( maDragPos );
@@ -547,7 +547,7 @@ void Splitter::StartDrag()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::ImplStartKbdSplitting()
 {
@@ -558,10 +558,10 @@ void Splitter::ImplStartKbdSplitting()
 
     StartSplit();
 
-    // determine start position
-    // because we have no mouse position we take either the position
-    // of the splitter window or the last split position
-    // the other coordinate is just the center of the reference window
+    
+    
+    
+    
     Size aSize = mpRefWin->GetOutputSize();
     Point aPos = GetPosPixel();
     if( mbHorzSplit )
@@ -577,17 +577,17 @@ void Splitter::ImplStartKbdSplitting()
         mnStartSplitPos = maDragPos.Y();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::ImplRestoreSplitter()
 {
-    // set splitter in the center of the ref window
+    
     StartSplit();
     Size aSize = mpRefWin->GetOutputSize();
     Point aPos = Point( aSize.Width()/2 , aSize.Height()/2);
     if ( mnLastSplitPos != mnSplitPos && mnLastSplitPos > 5 )
     {
-        // restore last pos if it was a useful position (>5)
+        
         if ( mbHorzSplit )
             aPos.X() = mnLastSplitPos;
         else
@@ -608,7 +608,7 @@ void Splitter::ImplRestoreSplitter()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::GetFocus()
 {
@@ -618,7 +618,7 @@ void Splitter::GetFocus()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::LoseFocus()
 {
@@ -631,7 +631,7 @@ void Splitter::LoseFocus()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::KeyInput( const KeyEvent& rKEvt )
 {
@@ -705,7 +705,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                 Split();
                 EndSplit();
 
-                // Shift-Del deletes both splitters
+                
                 if( aKeyCode.IsShift() && pSibling )
                     pSibling->KeyInput( rKEvt );
 
@@ -724,7 +724,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
             ImplKbdTracking( aKeyCode );
             GrabFocusToDocument();
             break;
-        default:    // let any key input fix the splitter
+        default:    
             Window::KeyInput( rKEvt );
             GrabFocusToDocument();
             break;
@@ -732,14 +732,14 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
     mbInKeyEvent = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Splitter::Notify( NotifyEvent& rNEvt )
 {
     return Window::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -762,7 +762,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Splitter::Paint( const Rectangle& rPaintRect )
 {
@@ -775,8 +775,8 @@ void Splitter::Paint( const Rectangle& rPaintRect )
     if( mbKbdSplitting )
     {
         LineInfo aInfo( LINE_DASH );
-        //aInfo.SetDashLen( 2 );
-        //aInfo.SetDashCount( 1 );
+        
+        
         aInfo.SetDistance( 1 );
         aInfo.SetDotLen( 2 );
         aInfo.SetDotCount( 3 );

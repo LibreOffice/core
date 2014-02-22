@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -67,7 +67,7 @@ namespace dxcanvas
         mbTextureDirty     = true;
         mbShowSpriteBounds = bShowSpriteBounds;
 
-        // also init base class
+        
         CanvasCustomSpriteHelper::init( rSpriteSize,
                                         rSpriteCanvas.get() );
     }
@@ -77,7 +77,7 @@ namespace dxcanvas
         mpBitmap.reset();
         mpSpriteCanvas.clear();
 
-        // forward to parent
+        
         CanvasCustomSpriteHelper::disposing();
     }
 
@@ -91,13 +91,13 @@ namespace dxcanvas
         if( !mpBitmap ||
             !mpSpriteCanvas.get() )
         {
-            return false; // we're disposed, no redraw necessary
+            return false; 
         }
 
         if( !isActive() ||
             ::basegfx::fTools::equalZero( getAlpha() ) )
         {
-            return false; // sprite is invisible
+            return false; 
         }
 
         return true;
@@ -108,7 +108,7 @@ namespace dxcanvas
         if( !mpBitmap ||
             !mpSpriteCanvas.get() )
         {
-            return; // we're disposed
+            return; 
         }
 
         const ::basegfx::B2DPoint& rPos( getPosPixel() );
@@ -118,11 +118,11 @@ namespace dxcanvas
             !::basegfx::fTools::equalZero( fAlpha ) )
         {
 
-            // TODO(Q2): For the time being, Device does not take a target
-            // surface, but always unconditionally renders to the
-            // background buffer.
+            
+            
+            
 
-            // log output pos in device pixel
+            
             VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)",
                            rPos.getX(),
                            rPos.getY() );
@@ -133,15 +133,15 @@ namespace dxcanvas
             const uno::Reference< rendering::XPolyPolygon2D >& xClip( getClip() );
 
             mbTextureDirty   = false;
-            io_bSurfaceDirty = false; // state taken, and processed.
+            io_bSurfaceDirty = false; 
 
-            ::basegfx::B2DPolyPolygon   aClipPath; // empty for no clip
-            bool                        bIsClipRectangular( false ); // false, if no
-                                                                    // clip, or clip
-                                                                    // is complex
+            ::basegfx::B2DPolyPolygon   aClipPath; 
+            bool                        bIsClipRectangular( false ); 
+                                                                    
+                                                                    
 
-            // setup and apply clip (if any)
-            // =================================
+            
+            
 
             if( xClip.is() )
             {
@@ -150,10 +150,10 @@ namespace dxcanvas
                 const sal_Int32 nNumClipPolygons( aClipPath.count() );
                 if( nNumClipPolygons )
                 {
-                    // TODO(P2): hold rectangle attribute directly
-                    // at the XPolyPolygon2D
+                    
+                    
 
-                    // check whether the clip is rectangular
+                    
                     if( nNumClipPolygons == 1 )
                         if( ::basegfx::tools::isRectangle( aClipPath.getB2DPolygon( 0 ) ) )
                             bIsClipRectangular = true;
@@ -165,15 +165,15 @@ namespace dxcanvas
                                                        rSize.getX(),
                                                        rSize.getY() );
 
-            // draw simple rectangular area if no clip is set.
+            
             if( !aClipPath.count() )
             {
                 mpBitmap->draw(fAlpha,rPos,rTransform);
             }
             else if( bIsClipRectangular )
             {
-                // apply a simple rect clip
-                // ========================
+                
+                
 
                 ::basegfx::B2DRectangle aClipBounds(
                     ::basegfx::tools::getRange( aClipPath ) );
@@ -183,8 +183,8 @@ namespace dxcanvas
             }
             else
             {
-                // apply clip the hard way
-                // =======================
+                
+                
 
                 mpBitmap->draw(fAlpha,rPos,aClipPath,rTransform);
             }
@@ -193,7 +193,7 @@ namespace dxcanvas
             {
                 if( aClipPath.count() )
                 {
-                    // TODO(F2): Re-enable debug output
+                    
                 }
             }
         }

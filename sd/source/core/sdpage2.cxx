@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -83,7 +83,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     /*********************************************************************
     |* Name of the layout of the page
     \********************************************************************/
-    OUString aOldLayoutName(maLayoutName);    // merken
+    OUString aOldLayoutName(maLayoutName);    
     OUStringBuffer aBuf(rLayoutName);
     aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
     maLayoutName = aBuf.makeStringAndClear();
@@ -125,7 +125,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
         DBG_ASSERT(pFoundMaster, "Masterpage for presentation layout not found!");
 
-        // this should never happen, but we play failsafe here
+        
         if( pFoundMaster == 0 )
             pFoundMaster = static_cast< SdDrawDocument *>(pModel)->GetSdPage( 0, mePageKind );
 
@@ -136,9 +136,9 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     /*********************************************************************
     |* templates for presentation objects
     \********************************************************************/
-    // list with:
-    // - pointer to templates for outline text object (old and new templates)
-    // - replace-data for OutlinerParaObject
+    
+    
+    
     std::vector<SfxStyleSheetBase*> aOutlineStyles;
     std::vector<SfxStyleSheetBase*> aOldOutlineStyles;
     boost::ptr_vector<StyleReplaceData> aReplList;
@@ -176,7 +176,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
                     if (bReplaceStyleSheets && pSheet)
                     {
-                        // Replace instead Set
+                        
                         StyleReplaceData* pReplData = new StyleReplaceData;
                         pReplData->nNewFamily = pSheet->GetFamily();
                         pReplData->nFamily    = pSheet->GetFamily();
@@ -233,9 +233,9 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
         else if (pObj->GetObjInventor() == SdrInventor &&
                  pObj->GetObjIdentifier() == OBJ_TITLETEXT)
         {
-            // We do net get PresObjKind via GetPresObjKind() since there are
-            // only PresObjListe considered. But we want to consider all "Title
-            // objects" here (paste from clipboard etc.)
+            
+            
+            
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
             if (pSheet)
@@ -294,7 +294,7 @@ void SdPage::SetModel(SdrModel* pNewModel)
 {
     DisconnectLink();
 
-    // assign model
+    
     FmFormPage::SetModel(pNewModel);
 
     ConnectLink();
@@ -333,7 +333,7 @@ void SdPage::ConnectLink()
 
         if (!pDocSh || !pDocSh->GetMedium()->GetOrigURL().equals(maFileName))
         {
-            // No links to document owned pages!
+            
             mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);
             OUString aFilterName(SdResId(STR_IMPRESS));
             pLinkManager->InsertFileLink(*mpPageLink, OBJECT_CLIENT_FILE,
@@ -379,7 +379,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
 
-    // use shape list directly to preserve constness of rSrcPage
+    
     const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
     for( std::list< SdrObject* >::const_iterator aIter = rShapeList.begin();
          aIter != rShapeList.end(); ++aIter )
@@ -412,10 +412,10 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mnPaperBin           = rSrcPage.mnPaperBin;
     meOrientation        = rSrcPage.meOrientation;
 
-    // header footer
+    
     setHeaderFooterSettings( rSrcPage.getHeaderFooterSettings() );
 
-    mpPageLink           = NULL;    // is set when inserting via ConnectLink()
+    mpPageLink           = NULL;    
 }
 
 
@@ -440,7 +440,7 @@ SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 
     cloneAnimations( *pNewPage );
 
-    // fix user calls for duplicated slide
+    
     SdrObjListIter aSourceIter( *this, IM_DEEPWITHGROUPS );
     SdrObjListIter aTargetIter( *pNewPage, IM_DEEPWITHGROUPS );
 
@@ -595,7 +595,7 @@ OString SdPage::stringify() const
              append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
              append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append((sal_Int32)mnPaperBin).
              append((sal_Int32)meOrientation).append((sal_Int32)mnTransitionType).append((sal_Int32)mnTransitionSubtype).append(mbTransitionDirection).
-             append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
+             append(mnTransitionFadeColor).append(mfTransitionDuration);
 
     sal_Int32 n = GetObjCount();
     for(sal_Int32 i = 0; i < n; i++)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgcharacternode.hxx>
@@ -26,7 +26,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -45,7 +45,7 @@ namespace svgio
 
         void SvgTextPositions::parseTextPositionAttributes(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
         {
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenX:
@@ -148,10 +148,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -163,8 +163,8 @@ namespace svgio
             SvgTextPosition&                    mrSvgTextPosition;
 
         protected:
-            /// allow user callback to allow changes to the new TextTransformation. Default
-            /// does nothing.
+            
+            
             virtual bool allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength);
 
         public:
@@ -193,10 +193,10 @@ namespace svgio
             return true;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -217,7 +217,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgCharacterNode::getSvgStyleAttributes() const
         {
-            // no own style, use parent's
+            
             if(getParent())
             {
                 return getParent()->getSvgStyleAttributes();
@@ -232,22 +232,22 @@ namespace svgio
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
-            // prepare retval, index and length
+            
             drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pRetval = 0;
             sal_uInt32 nIndex(0);
             sal_uInt32 nLength(getText().getLength());
 
             if(nLength)
             {
-                // prepare FontAttribute
+                
                 OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
                     OUString("Times New Roman") :
                     rSvgStyleAttributes.getFontFamily()[0];
 
-                // #i122324# if the FontFamily name ends on ' embedded' it is probably a re-import
-                // of a SVG export with font embedding. Remove this to make font matching work. This
-                // is pretty safe since there should be no font family names ending on ' embedded'.
-                // Remove again when FontEmbedding is implemented in SVG import
+                
+                
+                
+                
                 if(aFontFamily.endsWithAsciiL(" embedded", 9))
                 {
                     aFontFamily = aFontFamily.copy(0, aFontFamily.getLength() - 9);
@@ -274,18 +274,18 @@ namespace svgio
                     bRTL,
                     bBiDiStrong);
 
-                // prepare FontSize
+                
                 double fFontWidth(rSvgStyleAttributes.getFontSize().solve(*this, length));
                 double fFontHeight(fFontWidth);
 
-                // prepare locale
+                
                 ::com::sun::star::lang::Locale aLocale;
 
-                // prepare TextLayouterDevice
+                
                 drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
                 aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
 
-                // prepare TextArray
+                
                 ::std::vector< double > aTextArray(rSvgTextPosition.getX());
 
                 if(!aTextArray.empty() && aTextArray.size() < nLength)
@@ -315,11 +315,11 @@ namespace svgio
                     }
                 }
 
-                // get current TextPosition and TextWidth in units
+                
                 basegfx::B2DPoint aPosition(rSvgTextPosition.getPosition());
                 double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength));
 
-                // check for user-given TextLength
+                
                 if(0.0 != rSvgTextPosition.getTextLength()
                     && !basegfx::fTools::equal(fTextWidth, rSvgTextPosition.getTextLength()))
                 {
@@ -327,7 +327,7 @@ namespace svgio
 
                     if(rSvgTextPosition.getLengthAdjust())
                     {
-                        // spacing, need to create and expand TextArray
+                        
                         if(aTextArray.empty())
                         {
                             aTextArray = aTextLayouterDevice.getTextArray(getText(), nIndex, nLength);
@@ -340,17 +340,17 @@ namespace svgio
                     }
                     else
                     {
-                        // spacing and glyphs, just apply to FontWidth
+                        
                         fFontWidth *= fFactor;
                     }
 
                     fTextWidth = rSvgTextPosition.getTextLength();
                 }
 
-                // get TextAlign
+                
                 TextAlign aTextAlign(rSvgStyleAttributes.getTextAlign());
 
-                // map TextAnchor to TextAlign, there seems not to be a difference
+                
                 if(TextAnchor_notset != rSvgStyleAttributes.getTextAnchor())
                 {
                     switch(rSvgStyleAttributes.getTextAnchor())
@@ -377,7 +377,7 @@ namespace svgio
                     }
                 }
 
-                // apply TextAlign
+                
                 switch(aTextAlign)
                 {
                     case TextAlign_right:
@@ -394,16 +394,16 @@ namespace svgio
                     case TextAlign_left:
                     case TextAlign_justify:
                     {
-                        // TextAlign_notset, TextAlign_left: nothing to do
-                        // TextAlign_justify is not clear currently; handle as TextAlign_left
+                        
+                        
                         break;
                     }
                 }
 
-                // get BaselineShift
+                
                 const BaselineShift aBaselineShift(rSvgStyleAttributes.getBaselineShift());
 
-                // apply BaselineShift
+                
                 switch(aBaselineShift)
                 {
                     case BaselineShift_Sub:
@@ -425,37 +425,37 @@ namespace svgio
                         aPosition.setY(aPosition.getY() + mfBaselineShift);
                         break;
                     }
-                    default: // BaselineShift_Baseline
+                    default: 
                     {
-                        // nothing to do
+                        
                         break;
                     }
                 }
 
-                // get fill color
+                
                 const basegfx::BColor aFill(rSvgStyleAttributes.getFill()
                     ? *rSvgStyleAttributes.getFill()
                     : basegfx::BColor(0.0, 0.0, 0.0));
 
-                // prepare TextTransformation
+                
                 basegfx::B2DHomMatrix aTextTransform;
 
                 aTextTransform.scale(fFontWidth, fFontHeight);
                 aTextTransform.translate(aPosition.getX(), aPosition.getY());
 
-                // check TextDecoration and if TextDecoratedPortionPrimitive2D is needed
+                
                 const TextDecoration aDeco(rSvgStyleAttributes.getTextDecoration());
 
                 if(TextDecoration_underline == aDeco
                     || TextDecoration_overline == aDeco
                     || TextDecoration_line_through == aDeco)
                 {
-                    // get the fill for decroation as described by SVG. We cannot
-                    // have different stroke colors/definitions for those, though
+                    
+                    
                     const SvgStyleAttributes* pDecoDef = rSvgStyleAttributes.getTextDecorationDefiningSvgStyleAttributes();
                     const basegfx::BColor aDecoColor(pDecoDef && pDecoDef->getFill() ? *pDecoDef->getFill() : aFill);
 
-                    // create decorated text primitive
+                    
                     pRetval = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
                         aTextTransform,
                         getText(),
@@ -466,7 +466,7 @@ namespace svgio
                         aLocale,
                         aFill,
 
-                        // extra props for decorated
+                        
                         aDecoColor,
                         aDecoColor,
                         TextDecoration_overline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
@@ -482,7 +482,7 @@ namespace svgio
                 }
                 else
                 {
-                    // create text primitive
+                    
                     pRetval = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextTransform,
                         getText(),
@@ -494,7 +494,7 @@ namespace svgio
                         aFill);
                 }
 
-                // advance current TextPosition
+                
                 rSvgTextPosition.setPosition(rSvgTextPosition.getPosition() + basegfx::B2DVector(fTextWidth, 0.0));
             }
 
@@ -519,7 +519,7 @@ namespace svgio
                 }
                 else
                 {
-                    // need to apply rotations to each character as given
+                    
                     const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate =
                         dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(xRef.get());
 
@@ -534,7 +534,7 @@ namespace svgio
                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aResult);
                         }
 
-                        // also consume for the implied single space
+                        
                         rSvgTextPosition.consumeRotation();
                     }
                     else
@@ -580,10 +580,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -594,24 +594,24 @@ namespace svgio
             const InfoProvider& rInfoProvider,
             const SvgTextPositions& rSvgTextPositions)
         :   mpParent(pParent),
-            maX(), // computed below
-            maY(), // computed below
+            maX(), 
+            maY(), 
             maRotate(solveSvgNumberVector(rSvgTextPositions.getRotate(), rInfoProvider, length)),
             mfTextLength(0.0),
-            maPosition(), // computed below
+            maPosition(), 
             mnRotationIndex(0),
             mbLengthAdjust(rSvgTextPositions.getLengthAdjust()),
             mbAbsoluteX(false),
             mbAbsoluteY(false)
         {
-            // get TextLength if provided
+            
             if(rSvgTextPositions.getTextLength().isSet())
             {
                 mfTextLength = rSvgTextPositions.getTextLength().solve(rInfoProvider, length);
             }
 
-            // SVG does not really define in which units a \91rotate\92 for Text/TSpan is given,
-            // but it seems to be degrees. Convert here to radians
+            
+            
             if(!maRotate.empty())
             {
                 const double fFactor(F_PI / 180.0);
@@ -622,18 +622,18 @@ namespace svgio
                 }
             }
 
-            // get text positions X
+            
             const sal_uInt32 nSizeX(rSvgTextPositions.getX().size());
 
             if(nSizeX)
             {
-                // we have absolute positions, get first one as current text position X
+                
                 maPosition.setX(rSvgTextPositions.getX()[0].solve(rInfoProvider, xcoordinate));
                 mbAbsoluteX = true;
 
                 if(nSizeX > 1)
                 {
-                    // fill deltas to maX
+                    
                     maX.reserve(nSizeX);
 
                     for(sal_uInt32 a(1); a < nSizeX; a++)
@@ -644,7 +644,7 @@ namespace svgio
             }
             else
             {
-                // no absolute position, get from parent
+                
                 if(pParent)
                 {
                     maPosition.setX(pParent->getPosition().getX());
@@ -654,12 +654,12 @@ namespace svgio
 
                 if(nSizeDx)
                 {
-                    // relative positions given, translate position derived from parent
+                    
                     maPosition.setX(maPosition.getX() + rSvgTextPositions.getDx()[0].solve(rInfoProvider, xcoordinate));
 
                     if(nSizeDx > 1)
                     {
-                        // fill deltas to maX
+                        
                         maX.reserve(nSizeDx);
 
                         for(sal_uInt32 a(1); a < nSizeDx; a++)
@@ -670,18 +670,18 @@ namespace svgio
                 }
             }
 
-            // get text positions Y
+            
             const sal_uInt32 nSizeY(rSvgTextPositions.getY().size());
 
             if(nSizeY)
             {
-                // we have absolute positions, get first one as current text position Y
+                
                 maPosition.setY(rSvgTextPositions.getY()[0].solve(rInfoProvider, ycoordinate));
                 mbAbsoluteX = true;
 
                 if(nSizeY > 1)
                 {
-                    // fill deltas to maY
+                    
                     maY.reserve(nSizeY);
 
                     for(sal_uInt32 a(1); a < nSizeY; a++)
@@ -692,7 +692,7 @@ namespace svgio
             }
             else
             {
-                // no absolute position, get from parent
+                
                 if(pParent)
                 {
                     maPosition.setY(pParent->getPosition().getY());
@@ -702,12 +702,12 @@ namespace svgio
 
                 if(nSizeDy)
                 {
-                    // relative positions given, translate position derived from parent
+                    
                     maPosition.setY(maPosition.getY() + rSvgTextPositions.getDy()[0].solve(rInfoProvider, ycoordinate));
 
                     if(nSizeDy > 1)
                     {
-                        // fill deltas to maY
+                        
                         maY.reserve(nSizeDy);
 
                         for(sal_uInt32 a(1); a < nSizeDy; a++)
@@ -770,10 +770,10 @@ namespace svgio
             return fRetval;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

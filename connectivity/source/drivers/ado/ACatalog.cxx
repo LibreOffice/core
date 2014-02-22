@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/ACatalog.hxx"
@@ -27,23 +27,23 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::ado;
-// -------------------------------------------------------------------------
+
 OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_aCatalog(_pCatalog)
                 ,m_pConnection(_pCon)
 {
 }
-// -----------------------------------------------------------------------------
+
 OCatalog::~OCatalog()
 {
     if(m_aCatalog.IsValid())
         m_aCatalog.putref_ActiveConnection(NULL);
     m_aCatalog.clear();
 }
-// -----------------------------------------------------------------------------
+
 void OCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -72,7 +72,7 @@ void OCatalog::refreshTables()
     else
         m_pTables = new OTables(this,m_aMutex,aVector,aTables,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshViews()
 {
     TStringVector aVector;
@@ -85,7 +85,7 @@ void OCatalog::refreshViews()
     else
         m_pViews = new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshGroups()
 {
     TStringVector aVector;
@@ -98,7 +98,7 @@ void OCatalog::refreshGroups()
     else
         m_pGroups = new OGroups(this,m_aMutex,aVector,aGroups,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshUsers()
 {
     TStringVector aVector;
@@ -111,7 +111,7 @@ void OCatalog::refreshUsers()
     else
         m_pUsers = new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

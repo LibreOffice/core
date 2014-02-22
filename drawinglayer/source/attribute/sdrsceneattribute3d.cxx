@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -29,13 +29,13 @@ namespace drawinglayer
         class ImpSdrSceneAttribute
         {
         public:
-            // 3D scene attribute definitions
+            
             double                                      mfDistance;
             double                                      mfShadowSlant;
             ::com::sun::star::drawing::ProjectionMode   maProjectionMode;
             ::com::sun::star::drawing::ShadeMode        maShadeMode;
 
-            // bitfield
+            
             bool                                        mbTwoSidedLighting : 1;
 
         public:
@@ -62,7 +62,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             double getDistance() const { return mfDistance; }
             double getShadowSlant() const { return mfShadowSlant; }
             ::com::sun::star::drawing::ProjectionMode getProjectionMode() const { return maProjectionMode; }
@@ -146,7 +146,7 @@ namespace drawinglayer
             return mpSdrSceneAttribute->getTwoSidedLighting();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

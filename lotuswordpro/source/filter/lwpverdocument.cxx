@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -97,7 +97,7 @@ void LwpVerDocument::RegisterStyle()
     double len =(double) m_nTabSpacing/UNITS_PER_INCH*CM_PER_INCH;
     if(len < 0.001)
     {
-        len = 1.27; //0.5 inch
+        len = 1.27; 
     }
     pDefault->SetTabDistance(len);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();

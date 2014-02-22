@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tolayoutanchoredobjectposition.hxx>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition( _rDrawObj ),
       maRelPos( Point() ),
-      // #i26791#
+      
       maOffsetToFrmAnchorPos( Point() )
 {}
 
@@ -61,16 +61,16 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
     const bool bFlyAtFly = FLY_AT_FLY == rFrmFmt.GetAnchor().GetAnchorId();
 
-    // determine position.
-    // 'vertical' and 'horizontal' position are calculated separately
+    
+    
     Point aRelPos;
 
-    // calculate 'vertical' position
+    
     SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
     {
-        // to-frame anchored objects are *only* vertical positioned centered or
-        // bottom, if its wrap mode is 'throught' and its anchor frame has fixed
-        // size. Otherwise, it's positioned top.
+        
+        
+        
         sal_Int16 eVertOrient = aVert.GetVertOrient();
         if ( ( bFlyAtFly &&
                ( eVertOrient == text::VertOrientation::CENTER ||
@@ -80,7 +80,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         {
             eVertOrient = text::VertOrientation::TOP;
         }
-        // #i26791# - get vertical offset to frame anchor position.
+        
         SwTwips nVertOffsetToFrmAnchorPos( 0L );
         SwTwips nRelPosY =
                 _GetVertRelPos( GetAnchorFrm(), GetAnchorFrm(), eVertOrient,
@@ -88,8 +88,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                                 rLR, rUL, nVertOffsetToFrmAnchorPos );
 
 
-        // keep the calculated relative vertical position - needed for filters
-        // (including the xml-filter)
+        
+        
         {
             SwTwips nAttrRelPosY = nRelPosY - nVertOffsetToFrmAnchorPos;
             if ( aVert.GetVertOrient() != text::VertOrientation::NONE &&
@@ -102,13 +102,13 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             }
         }
 
-        // determine absolute 'vertical' position, depending on layout-direction
-        // #i26791# - determine offset to 'vertical' frame
-        // anchor position, depending on layout-direction
+        
+        
+        
         if( bVert )
         {
             OSL_ENSURE( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            
             if ( bVertL2R )
                    aRelPos.X() = nRelPosY;
             else
@@ -121,8 +121,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             maOffsetToFrmAnchorPos.Y() = nVertOffsetToFrmAnchorPos;
         }
 
-        // if in online-layout the bottom of to-page anchored object is beyond
-        // the page bottom, the page frame has to grow by growing its body frame.
+        
+        
         const SwViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
         if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
              pSh && pSh->GetViewOptions()->getBrowseMode() )
@@ -136,26 +136,26 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                         FindBodyCont()->Grow( nBottom - nAnchorBottom );
             }
         }
-    } // end of determination of vertical position
+    } 
 
-    // calculate 'horizontal' position
+    
     SwFmtHoriOrient aHori( rFrmFmt.GetHoriOrient() );
     {
-        // consider toggle of horizontal position for even pages.
+        
         const bool bToggle = aHori.IsPosToggle() &&
                              !GetAnchorFrm().FindPageFrm()->OnRightPage();
         sal_Int16 eHoriOrient = aHori.GetHoriOrient();
         sal_Int16 eRelOrient = aHori.GetRelationOrient();
-        // toggle orientation
+        
         _ToggleHoriOrientAndAlign( bToggle, eHoriOrient, eRelOrient );
 
-        // determine alignment values:
-        // <nWidth>: 'width' of the alignment area
-        // <nOffset>: offset of alignment area, relative to 'left' of
-        //            frame anchor position
+        
+        
+        
+        
         SwTwips nWidth, nOffset;
         {
-            bool bDummy; // in this context irrelevant output parameter
+            bool bDummy; 
             _GetHoriAlignmentValues( GetAnchorFrm(), GetAnchorFrm(),
                                      eRelOrient, false,
                                      nWidth, nOffset, bDummy );
@@ -163,7 +163,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         SwTwips nObjWidth = (aObjBoundRect.*fnRect->fnGetWidth)();
 
-        // determine relative horizontal position
+        
         SwTwips nRelPosX;
         if ( text::HoriOrientation::NONE == eHoriOrient )
         {
@@ -186,19 +186,19 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             nRelPosX = bVert ? rUL.GetUpper() : rLR.GetLeft();
         nRelPosX += nOffset;
 
-        // no 'negative' relative horizontal position
-        // OD 06.11.2003 #FollowTextFlowAtFrame# - negative positions allow for
-        // to frame anchored objects.
+        
+        
+        
         if ( !bFlyAtFly && nRelPosX < 0 )
         {
             nRelPosX = 0;
         }
 
-        // determine absolute 'horizontal' position, depending on layout-direction
-        // #i26791# - determine offset to 'horizontal' frame
-        // anchor position, depending on layout-direction
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        // --> OD 2009-09-04 #mongolianlayout#
+        
+        
+        
+        
+        
         if( bVert || bVertL2R )
         {
 
@@ -211,8 +211,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             maOffsetToFrmAnchorPos.X() = nOffset;
         }
 
-        // keep the calculated relative horizontal position - needed for filters
-        // (including the xml-filter)
+        
+        
         {
             SwTwips nAttrRelPosX = nRelPosX - nOffset;
             if ( text::HoriOrientation::NONE != aHori.GetHoriOrient() &&
@@ -224,9 +224,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                 const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
             }
         }
-    } // end of determination of horizontal position
+    } 
 
-    // keep calculate relative position
+    
     maRelPos = aRelPos;
 }
 

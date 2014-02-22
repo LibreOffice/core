@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/dispatch.hxx>
@@ -36,16 +36,16 @@
 #include "filtdlg.hxx"
 #include <vcl/msgbox.hxx>
 
-// DEFINE --------------------------------------------------------------------
+
 
 #define ERRORBOX(rid) ErrorBox( this, WinBits( WB_OK|WB_DEF_OK),\
                                     ScGlobal::GetRscString(rid) ).Execute()
 
 
-//============================================================================
-//  class ScSpecialFilterDialog
 
-//----------------------------------------------------------------------------
+
+
+
 
 ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                         const SfxItemSet&   rArgSet )
@@ -90,9 +90,9 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
     Init( rArgSet );
     pEdFilterArea->GrabFocus();
 
-    // Hack: RefInput-Kontrolle
+    
     pTimer = new Timer;
-    pTimer->SetTimeout( 50 ); // 50ms warten
+    pTimer->SetTimeout( 50 ); 
     pTimer->SetTimeoutHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pTimer->Start();
 
@@ -101,7 +101,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
@@ -116,13 +116,13 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
     if ( pOutItem )
         delete pOutItem;
 
-    // Hack: RefInput-Kontrolle
+    
     pTimer->Stop();
     delete pTimer;
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -137,7 +137,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument()  : NULL;
 
-    pEdFilterArea->SetText( EMPTY_OUSTRING );      // may be overwritten below
+    pEdFilterArea->SetText( EMPTY_OUSTRING );      
 
     if ( pViewData && pDoc )
     {
@@ -163,7 +163,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
             }
         }
 
-        //  is there a stored source range?
+        
 
         ScRange aAdvSource;
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
@@ -175,7 +175,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     pLbFilterArea->SelectEntryPos( 0 );
 
-    // Optionen initialisieren lassen:
+    
 
     pOptionsMgr  = new ScFilterOptionsMgr(
                             pViewData,
@@ -193,18 +193,18 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             pFtDbArea,
                             aStrUndefined );
 
-    //  Spezialfilter braucht immer Spaltenkoepfe
+    
     pBtnHeader->Check(true);
     pBtnHeader->Disable();
 
-    // Modal-Modus einschalten
-//  SetDispatcherLock( true );
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Disable(false);        //! allgemeine Methode im ScAnyRefDlg
+    
+
+    
+    
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScSpecialFilterDlg::Close()
 {
@@ -215,13 +215,13 @@ bool ScSpecialFilterDlg::Close()
 }
 
 
-//----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
+
+
+
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode && pRefInputEdit )       // Nur moeglich, wenn im Referenz-Editmodus
+    if ( bRefInputMode && pRefInputEdit )       
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pRefInputEdit );
@@ -239,7 +239,7 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScSpecialFilterDlg::SetActive()
 {
@@ -264,7 +264,7 @@ void ScSpecialFilterDlg::SetActive()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
                                                 const ScRange& rSource )
@@ -277,7 +277,7 @@ ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScSpecialFilterDlg::IsRefInputMode() const
 {
@@ -285,9 +285,9 @@ bool ScSpecialFilterDlg::IsRefInputMode() const
 }
 
 
-//----------------------------------------------------------------------------
-// Handler:
-// ========
+
+
+
 
 IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 {
@@ -406,11 +406,11 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
-    // alle 50ms nachschauen, ob RefInputMode noch stimmt
+    
 
     if( (_pTimer == pTimer) && IsActive() )
     {
@@ -437,7 +437,7 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 {
@@ -456,7 +456,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 {

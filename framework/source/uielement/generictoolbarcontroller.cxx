@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -161,14 +161,14 @@ throw ( RuntimeException )
         com::sun::star::util::URL aTargetURL;
         Sequence<PropertyValue>   aArgs( 1 );
 
-        // Add key modifier to argument list
+        
         aArgs[0].Name  = "KeyModifier";
         aArgs[0].Value <<= KeyModifier;
 
         aTargetURL.Complete = aCommandURL;
         xURLTransformer->parseStrict( aTargetURL );
 
-        // Execute dispatch asynchronously
+        
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
@@ -200,7 +200,7 @@ throw ( RuntimeException )
 
         if (( Event.State >>= bValue ) && !m_bEnumCommand )
         {
-            // Boolean, treat it as checked/unchecked
+            
             if ( m_bMadeInvisible )
                 m_pToolbar->ShowItem( m_nID, true );
             m_pToolbar->CheckItem( m_nID, bValue );
@@ -224,7 +224,7 @@ throw ( RuntimeException )
             }
             else
             {
-                // Replacement for place holders
+                
                 if ( aStrValue.matchAsciiL( "($1)", 4 ))
                 {
                     OUString aTmp(FwkResId(STR_UPDATEDOC));
@@ -277,9 +277,9 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
    catch ( const Exception& )
@@ -369,6 +369,6 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
 
     return NULL;
 }
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

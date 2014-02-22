@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -174,7 +174,7 @@ void write64(osl::File & file, sal_uInt64 value) {
 void writeIso60599Binary32(osl::File & file, float value) {
     union {
         unsigned char buf[4];
-        float f; // assuming float is ISO 60599 binary32
+        float f; 
     } sa;
     sa.f = value;
 #if defined OSL_BIGENDIAN
@@ -187,7 +187,7 @@ void writeIso60599Binary32(osl::File & file, float value) {
 void writeIso60599Binary64(osl::File & file, double value) {
     union {
         unsigned char buf[8];
-        float d; // assuming double is ISO 60599 binary64
+        float d; 
     } sa;
     sa.d = value;
 #if defined OSL_BIGENDIAN
@@ -270,7 +270,7 @@ void writeAnnotations(
     assert(annotate || annotations.empty());
     if (annotate) {
         write32(file, annotations.size());
-            // overflow from std::vector::size_type -> sal_uInt64 is unrealistic
+            
         for (std::vector< OUString >::const_iterator i(annotations.begin());
              i != annotations.end(); ++i)
         {
@@ -784,7 +784,7 @@ sal_uInt64 writeMap(
                             file, j->second.constant.doubleValue);
                         break;
                     default:
-                        for (;;) { std::abort(); } // this cannot happen
+                        for (;;) { std::abort(); } 
                     }
                     writeAnnotations(
                         file, !j->second.annotations.empty(),
@@ -800,8 +800,8 @@ sal_uInt64 writeMap(
                 i->second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, cmap.size());
-                    // overflow from std::map::size_type -> sal_uInt64 is
-                    // unrealistic
+                    
+                    
                 for (std::map< OUString, ConstItem >::iterator j(
                          cmap.begin());
                      j != cmap.end(); ++j)
@@ -1003,12 +1003,12 @@ sal_uInt64 writeMap(
     }
     sal_uInt64 off = getOffset(file);
     if (rootSize == 0) {
-        write8(file, 0); // SORT_MODULE
+        write8(file, 0); 
         write32(file, map.size());
-            // overflow from std::map::size_type -> sal_uInt64 is unrealistic
+            
     } else {
         *rootSize = map.size();
-            // overflow from std::map::size_type -> std::size_t is unrealistic
+            
     }
     for (std::map< OUString, Item >::iterator i(map.begin()); i != map.end();
          ++i)
@@ -1066,8 +1066,8 @@ SAL_IMPLEMENT_MAIN() {
             std::exit(EXIT_FAILURE);
         }
         write(f, "UNOIDL\xFF\0", 8);
-        write32(f, 0); // root map offset
-        write32(f, 0); // root map size
+        write32(f, 0); 
+        write32(f, 0); 
         write(
             f,
             RTL_CONSTASCII_STRINGPARAM(
@@ -1075,7 +1075,7 @@ SAL_IMPLEMENT_MAIN() {
                 " unoidl-write **\0"));
         std::size_t size;
         sal_uInt64 off = writeMap(f, map, &size);
-        e = f.setSize(getOffset(f)); // truncate in case it already existed
+        e = f.setSize(getOffset(f)); 
         if (e != osl::FileBase::E_None) {
             std::cerr
                 << "Cannot set size of <" << f.getURL() << ">, error code "
@@ -1091,7 +1091,7 @@ SAL_IMPLEMENT_MAIN() {
         }
         write32(f, off);
         write32(f, size);
-            // overflow from std::map::size_type -> sal_uInt64 is unrealistic
+            
         e = f.close();
         if (e != osl::FileBase::E_None) {
             std::cerr

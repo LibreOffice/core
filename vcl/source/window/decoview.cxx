@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/settings.hxx>
@@ -23,14 +23,14 @@
 #include <vcl/window.hxx>
 #include <vcl/ctrl.hxx>
 
-// =======================================================================
+
 
 #define BUTTON_DRAW_FLATTEST    (BUTTON_DRAW_FLAT |             \
                                  BUTTON_DRAW_PRESSED |          \
                                  BUTTON_DRAW_CHECKED |          \
                                  BUTTON_DRAW_HIGHLIGHT)
 
-// =======================================================================
+
 
 namespace {
 
@@ -42,14 +42,14 @@ long AdjustRectToSquare( Rectangle &rRect )
 
     if ( nSide && !(nSide & 1) )
     {
-        // we prefer an odd size
+        
         --nSide;
     }
 
-    // Make the rectangle a square
+    
     rRect.SetSize( Size( nSide, nSide ) );
 
-    // and place it at the center of the original rectangle
+    
     rRect.Move( (nWidth-nSide)/2, (nHeight-nSide)/2 );
 
     return nSide;
@@ -66,7 +66,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
         return;
     }
 
-    // Precalculate some values
+    
     const long n2 = nSide/2;
     const long n4 = (n2+1)/2;
     const long n8 = (n4+1)/2;
@@ -214,18 +214,18 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
         case SYMBOL_RADIOCHECKMARK:
         case SYMBOL_RECORD:
             {
-                // Midpoint circle algorithm
+                
                 long x = 0;
                 long y = n2;
                 long p = 1 - n2;
-                // Draw central line
+                
                 pDev->DrawLine( Point( aCenter.X(), aCenter.Y()-y ),
                                 Point( aCenter.X(), aCenter.Y()+y ) );
                 while ( x<y )
                 {
                     if ( p>=0 )
                     {
-                        // Draw vertical lines close to sides
+                        
                         pDev->DrawLine( Point( aCenter.X()+y, aCenter.Y()-x ),
                                         Point( aCenter.X()+y, aCenter.Y()+x ) );
                         pDev->DrawLine( Point( aCenter.X()-y, aCenter.Y()-x ),
@@ -235,7 +235,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                     }
                     ++x;
                     p += 2*x+1;
-                    // Draw vertical lines close to center
+                    
                     pDev->DrawLine( Point( aCenter.X()-x, aCenter.Y()-y ),
                                     Point( aCenter.X()-x, aCenter.Y()+y ) );
                     pDev->DrawLine( Point( aCenter.X()+x, aCenter.Y()-y ),
@@ -259,7 +259,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-n2+1 ),
                             Point( nRect.Left(), aCenter.Y()+n2-1 ) );
             ++nRect.Left();
-            // Intentional fall-through
+            
         case SYMBOL_WINDBACKWARD:
             pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
             pDev->DrawPixel( Point( nRect.Left()+n2, aCenter.Y() ) );
@@ -277,7 +277,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-n2+1 ),
                             Point( nRect.Right(), aCenter.Y()+n2-1 ) );
             --nRect.Right();
-            // Intentional fall-through
+            
         case SYMBOL_WINDFORWARD:
             pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
             pDev->DrawPixel( Point( nRect.Right()-n2, aCenter.Y() ) );
@@ -316,7 +316,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                             Point( nRect.Right(), nRect.Bottom() ) );
             pDev->DrawLine( Point( nRect.Left(), nRect.Bottom() ),
                             Point( nRect.Right(), nRect.Bottom() ) );
-            // Intentional fall-through
+            
         case SYMBOL_ROLLUP:
             pDev->DrawRect( Rectangle( nRect.Left(), nRect.Top(),
                                        nRect.Right(), nRect.Top()+n8 ) );
@@ -327,11 +327,11 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                 long n3 = nSide/3;
                 nRect.Top() -= n3/2;
                 nRect.Bottom() -= n3/2;
-                // #106953# never mirror checkmarks
+                
                 if ( pDev->HasMirroredGraphics() && pDev->IsRTLEnabled() )
                 {
-                    // Draw a mirrored checkmark so that it looks "normal" in a
-                    // mirrored graphics device (double mirroring!)
+                    
+                    
                     pDev->DrawLine( Point( nRect.Right(), nRect.Bottom()-n3 ),
                                     Point( nRect.Right()-n3, nRect.Bottom() ) );
                     pDev->DrawLine( Point( nRect.Right()-n3, nRect.Bottom() ),
@@ -484,7 +484,7 @@ void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
     pDev->DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
     pDev->DrawLine( rRect.TopRight(), rRect.BottomRight() );
 
-    // reduce drawing area
+    
     ++rRect.Left();
     ++rRect.Top();
     --rRect.Right();
@@ -504,7 +504,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         if ( nStyle & BUTTON_DRAW_DEFAULT )
         {
-            // default selection shows a wider border
+            
             ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
         }
 
@@ -525,10 +525,10 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         const Rectangle aOrigFillRect(aFillRect);
         if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
         {
-            // shrink fill rect
+            
             aFillRect.Left() += aBrdSize.Width();
             aFillRect.Top()  += aBrdSize.Height();
-            // draw top and left borders (aOrigFillRect-aFillRect)
+            
             pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
                                        aOrigFillRect.Right(), aFillRect.Top()-1 ) );
             pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
@@ -536,10 +536,10 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         }
         else
         {
-            // shrink fill rect
+            
             aFillRect.Right()  -= aBrdSize.Width();
             aFillRect.Bottom() -= aBrdSize.Height();
-            // draw bottom and right borders (aOrigFillRect-aFillRect)
+            
             pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aFillRect.Bottom()+1,
                                        aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
             pDev->DrawRect( Rectangle( aFillRect.Right()+1, aOrigFillRect.Top(),
@@ -548,7 +548,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         if ( !(nStyle & BUTTON_DRAW_NOFILL) )
         {
-            // Hack: in monochrome mode on printers we like to have grey buttons
+            
             if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
                 pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
             else
@@ -630,17 +630,17 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
     const bool bMenuStyle = nStyle & FRAME_DRAW_MENU;
 
-    // UseFlatBorders disables 3D style for all frames except menus
-    // menus may use different border colors (eg on XP)
-    // normal frames will be drawn using the shadow color
-    // whereas window frame borders will use black
+    
+    
+    
+    
     bool bFlatBorders = !bMenuStyle && rStyleSettings.GetUseFlatBorders();
 
-    // no flat borders for standard VCL controls (ie formcontrols that keep their classic look)
-    // will not affect frame windows (like dropdowns)
+    
+    
     if( bFlatBorders && pWin && pWin->GetType() == WINDOW_BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
     {
-        // check for formcontrol, i.e., a control without NWF enabled
+        
         Control *const pControl = dynamic_cast< Control* >( pWin->GetWindow( WINDOW_CLIENT ) );
         if( !pControl || !pControl->IsNativeWidgetEnabled() )
             bFlatBorders = false;
@@ -664,8 +664,8 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
         if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
             aNatRgn, 0, aControlValue, OUString(), aBound, aContent) )
         {
-            // if bNoDraw is true then don't call the drawing routine
-            // but just update the target rectangle
+            
+            
             if( bNoDraw ||
                 pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, CTRL_STATE_ENABLED,
                                          aControlValue, OUString()) )
@@ -678,7 +678,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
     if ( nStyle & FRAME_DRAW_MONO )
     {
-        // no round corners for window frame borders
+        
         const bool bRound = bFlatBorders && !(nStyle & FRAME_DRAW_WINDOWBORDER);
 
         if ( bNoDraw )
@@ -689,7 +689,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
         {
             Color aColor = bRound ? rStyleSettings.GetShadowColor()
                                   : pDev->GetSettings().GetStyleSettings().GetMonoColor();
-            // when the MonoColor wasn't set, check face color
+            
             if (
                 (bRound && aColor.IsDark()) ||
                 (
@@ -727,7 +727,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     break;
 
                 case FRAME_DRAW_NWF:
-                    // enough space for the native rendering
+                    
                     rRect.Left() += 4;
                     rRect.Top() += 4;
                     rRect.Right() -= 4;
@@ -748,7 +748,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     pDev->DrawRect( Rectangle( rRect.Left(), rRect.Top(),
                                             rRect.Right()-1, rRect.Bottom()-1 ) );
 
-                    // adjust target rectangle
+                    
                     rRect.Left()   += 2;
                     rRect.Top()    += 2;
                     rRect.Right()  -= 2;
@@ -770,7 +770,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                 case FRAME_DRAW_DOUBLEIN:
                     if( bFlatBorders )
                     {
-                        // no 3d effect
+                        
                         ImplDraw2ColorFrame( pDev, rRect,
                                              rStyleSettings.GetShadowColor(),
                                              rStyleSettings.GetShadowColor() );
@@ -805,7 +805,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     else
                     {
                         ImplDraw2ColorFrame( pDev, rRect,
-                                             bFlatBorders ? // no 3d effect
+                                             bFlatBorders ? 
                                              rStyleSettings.GetDarkShadowColor() :
                                              rStyleSettings.GetLightBorderColor(),
                                              rStyleSettings.GetDarkShadowColor() );
@@ -816,7 +816,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     break;
 
                 case FRAME_DRAW_NWF:
-                    // no rendering, just enough space for the native rendering
+                    
                     rRect.Left() += 4;
                     rRect.Top() += 4;
                     rRect.Right() -= 4;
@@ -830,7 +830,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                  const Color& rColor, sal_uInt16 nStyle )
@@ -849,14 +849,14 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
 
     if ( nStyle & SYMBOL_DRAW_MONO )
     {
-        // Monochrome: set color to black if enabled, to gray if disabled
+        
         nColor = Color( ( nStyle & SYMBOL_DRAW_DISABLE ) ? COL_GRAY : COL_BLACK );
     }
     else
     {
         if ( nStyle & SYMBOL_DRAW_DISABLE )
         {
-            // Draw shifted and brighter symbol for embossed look
+            
             mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );
             mpOutDev->SetFillColor( rStyleSettings.GetLightColor() );
             ImplDrawSymbol( mpOutDev, aRect + Point(1, 1) , eType );
@@ -864,18 +864,18 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
         }
     }
 
-    // Set selected color and draw the symbol
+    
     mpOutDev->SetLineColor( nColor );
     mpOutDev->SetFillColor( nColor );
     ImplDrawSymbol( mpOutDev, aRect, eType );
 
-    // Restore previous settings
+    
     mpOutDev->SetLineColor( aOldLineColor );
     mpOutDev->SetFillColor( aOldFillColor );
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-// =======================================================================
+
 
 void DecorationView::DrawFrame( const Rectangle& rRect,
                                 const Color& rLeftTopColor,
@@ -890,7 +890,7 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-// =======================================================================
+
 
 void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
                                          sal_uInt16 nStyle )
@@ -940,7 +940,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     DrawFrame( rRect, aLightColor, aShadowColor );
 }
 
-// =======================================================================
+
 
 Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 {
@@ -975,7 +975,7 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
     return aRect;
 }
 
-// =======================================================================
+
 
 Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
 {
@@ -999,7 +999,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
     mpOutDev->SetLineColor( maOldLineColor );
     mpOutDev->SetFillColor( maOldFillColor );
 
-    // keep border free, altough it is used at default representation
+    
     ++aRect.Left();
     ++aRect.Top();
     --aRect.Right();
@@ -1056,7 +1056,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical )
 {

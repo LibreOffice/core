@@ -586,9 +586,9 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::
     return SvxCreateNumRuleCompare();
 }
 
-//=============================================================================
+
 // class SvxUnoDrawPagesAccess
-//=============================================================================
+
 
 SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
 :   mrModel(rMyModel)

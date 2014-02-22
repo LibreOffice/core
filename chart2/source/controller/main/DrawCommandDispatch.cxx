@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DrawCommandDispatch.hxx"
@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-    // comparing two PropertyValue instances
+    
     struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, OUString, bool >
     {
         bool operator() ( const beans::PropertyValue& rPropValue, const OUString& rName ) const
@@ -63,7 +63,7 @@ namespace
         }
     };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -140,19 +140,19 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                 if ( pSourceObj )
                                 {
                                     const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                    SfxItemSet aDest( pObj->GetModel()->GetItemPool(),          // ranges from SdrAttrObj
+                                    SfxItemSet aDest( pObj->GetModel()->GetItemPool(),          
                                         SDRATTR_START, SDRATTR_SHADOW_LAST,
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                                         SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                                        // Graphic Attributes
+                                        
                                         SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
-                                        // 3d Properties
+                                        
                                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                                        // CustomShape properties
+                                        
                                         SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-                                        // range from SdrTextObj
+                                        
                                         EE_ITEMS_START, EE_ITEMS_END,
-                                        // end
+                                        
                                         0, 0);
                                     aDest.Set( rSource );
                                     pObj->SetMergedItemSet( aDest );
@@ -204,7 +204,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
             SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aSet );
 
-            long nWidth = 300; // (1/100th mm)
+            long nWidth = 300; 
             if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
             {
                 long nValue = ( ( const XLineWidthItem& ) aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
@@ -220,12 +220,12 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
     }
 }
 
-// WeakComponentImplHelperBase
+
 void DrawCommandDispatch::disposing()
 {
 }
 
-// XEventListener
+
 void DrawCommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
@@ -646,6 +646,6 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt
     return bFound;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

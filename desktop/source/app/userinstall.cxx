@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -79,8 +79,8 @@ osl::FileBase::RC copyRecursive(
             assert(!dstUri.endsWith("/"));
             e = copyRecursive(
                 stat2.getFileURL(), dstUri + "/" + stat2.getFileName());
-                // assumes that all files under presets/ have names that can be
-                // copied unencoded into file URLs
+                
+                
             if (e != osl::FileBase::E_None) {
                 return e;
             }
@@ -89,7 +89,7 @@ osl::FileBase::RC copyRecursive(
     } else {
         e = osl::File::copy(srcUri, dstUri);
         if (e == osl::FileBase::E_EXIST) {
-            // Assume an earlier attempt failed half-way through:
+            
             e = osl::FileBase::E_None;
         }
     }
@@ -104,13 +104,13 @@ Status create(OUString const & uri) {
     }
 #if !(defined ANDROID || defined IOS)
 #if defined UNIX
-    // Set safer permissions for the user directory by default:
+    
     osl::File::setAttributes(
         uri,
         (osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead
          | osl_File_Attribute_OwnExe));
 #endif
-    // As of now osl_copyFile does not work on Android => don't do this:
+    
     OUString baseUri;
     if (utl::Bootstrap::locateBaseInstallation(baseUri)
         != utl::Bootstrap::PATH_EXISTS)
@@ -155,7 +155,7 @@ Status finalize() {
         if (isCreated()) {
             return EXISTED;
         }
-        // fall through
+        
     case utl::Bootstrap::PATH_VALID:
         return create(uri);
     default:

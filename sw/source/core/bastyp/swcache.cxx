@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/strbuf.hxx>
@@ -27,7 +27,7 @@ void SwCache::Check()
     if ( !pRealFirst )
         return;
 
-    // consistency check
+    
     SAL_WARN_IF( pLast->GetNext(), "sw.core", "Last but not last." );
     SAL_WARN_IF( pRealFirst->GetPrev(), "sw.core", "First but not first." );
     sal_uInt16 nCnt = 0;
@@ -36,7 +36,7 @@ void SwCache::Check()
     SwCacheObj *pRekursive = pObj;
     while ( pObj )
     {
-        // the object must be found also when moving backwards
+        
         SwCacheObj *pTmp = pLast;
         while ( pTmp && pTmp != pObj )
             pTmp = pTmp->GetPrev();
@@ -165,8 +165,8 @@ void SwCache::ToTop( SwCacheObj *pObj )
 {
     INCREMENT( m_nToTop );
 
-    // cut object out of chain and insert at beginning
-    if ( pRealFirst == pObj )   // pFirst was checked by caller
+    
+    if ( pRealFirst == pObj )   
     {
         CHECK;
         return;
@@ -174,14 +174,14 @@ void SwCache::ToTop( SwCacheObj *pObj )
 
     if ( !pRealFirst )
     {
-        // the first will be inserted
+        
         OSL_ENSURE( !pFirst && !pLast, "First not first." );
         pRealFirst = pFirst = pLast = pObj;
         CHECK;
         return;
     }
 
-    // cut
+    
     if ( pObj == pLast )
     {
         OSL_ENSURE( pObj->GetPrev(), "Last but no Prev." );
@@ -196,7 +196,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
             pObj->GetPrev()->SetNext( pObj->GetNext() );
     }
 
-    // paste at the (virtual) beginning
+    
     if ( pRealFirst == pFirst )
     {
         pRealFirst->SetPrev( pObj );
@@ -298,9 +298,9 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
     if ( m_aCacheObjects.size() > nCurMax &&
          (nCurMax <= (m_aCacheObjects.size() - aFreePositions.size())) )
     {
-        // Shrink if possible.To do so we need enough free positions.
-        // Unpleasent side effect: positions will be moved and the owner of
-        // these might not find them afterwards
+        
+        
+        
         for ( sal_uInt16 i = 0; i < m_aCacheObjects.size(); ++i )
         {
             SwCacheObj *pTmpObj = m_aCacheObjects[i];
@@ -334,14 +334,14 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
     sal_uInt16 nPos;
     if ( m_aCacheObjects.size() < nCurMax )
     {
-        // there is still space; insert directly
+        
         INCREMENT( m_nAppend );
         nPos = m_aCacheObjects.size();
         m_aCacheObjects.push_back(pNew);
     }
     else if ( !aFreePositions.empty() )
     {
-        // there are placeholders; use the last of those
+        
         INCREMENT( m_nInsertFree );
         const sal_uInt16 nFreePos = aFreePositions.size() - 1;
         nPos = aFreePositions[ nFreePos ];
@@ -351,7 +351,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
     else
     {
         INCREMENT( m_nReplace );
-        // the last of the LRU has to go
+        
         SwCacheObj *pObj = pLast;
 
         while ( pObj && pObj->IsLocked() )

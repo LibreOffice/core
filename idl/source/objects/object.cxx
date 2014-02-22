@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,13 +55,13 @@ void SvClassElement::Load( SvPersistStream & rStm )
 
 void SvClassElement::Save( SvPersistStream & rStm )
 {
-    // create mask
+    
     sal_uInt8 nMask = 0;
     if( aAutomation.IsSet() )       nMask |= 0x1;
     if( !aPrefix.isEmpty() )        nMask |= 0x2;
     if( xClass.Is() )               nMask |= 0x4;
 
-    // write data
+    
     rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) rStm.WriteUChar( aAutomation );
     if( nMask & 0x02 ) write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aPrefix);
@@ -107,7 +107,7 @@ void SvMetaClass::Save( SvPersistStream & rStm )
 {
     SvMetaType::Save( rStm );
 
-    // create mask
+    
     sal_uInt8 nMask = 0;
     if( !aAttrList.empty() )        nMask |= 0x1;
     if( aSuperClass.Is() )          nMask |= 0x2;
@@ -115,7 +115,7 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     if( xAutomationInterface.Is() ) nMask |= 0x8;
     if( aAutomation.IsSet() )       nMask |= 0x10;
 
-    // write data
+    
     rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvDeclPersistList( rStm, aAttrList );
     if( nMask & 0x02 ) WriteSvPersistBase( rStm, aSuperClass );
@@ -139,7 +139,7 @@ void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( !aAutomation )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "//class SvMetaClass" ) << endl;
+        rOutStm.WriteCharPtr( "
         if( !aAutomation )
         {
             WriteTab( rOutStm, nTab );
@@ -173,7 +173,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                     {
                         if( xAutomationInterface.Is() )
                         {
-                            // set error
+                            
                             rBase.SetError( "Automation already set",
                                             rInStm.GetToken() );
                             rBase.WriteError( rInStm );
@@ -183,14 +183,14 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                     }
                     else
                     {
-                        // set error
+                        
                         rBase.SetError( "missing ]", rInStm.GetToken() );
                         rBase.WriteError( rInStm );
                     }
                 }
                 else
                 {
-                    // set error
+                    
                     rBase.SetError( "only attribute Automation allowed",
                                     rInStm.GetToken() );
                     rBase.WriteError( rInStm );
@@ -206,7 +206,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            // set error
+            
             rBase.SetError( "unknown imported interface", rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
@@ -289,7 +289,7 @@ sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             bOk = aSuperClass.Is();
             if( !bOk )
             {
-                // set error
+                
                 rBase.SetError( "unknown super class",
                                 rInStm.GetToken() );
                 rBase.WriteError( rInStm );
@@ -321,7 +321,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
         SvMetaAttribute * pS = aAttrList[n];
         if( pS->GetName().getString() == rAttr.GetName().getString() )
         {
-            // values have to match
+            
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
                 OSL_FAIL( "Gleicher Name in MetaClass : " );
@@ -404,7 +404,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             WriteDescription( rOutStm );
             rOutStm.WriteCharPtr( "</INTERFACE>" ) << endl << endl;
 
-            // write all attributes
+            
             sal_uLong n;
             for( n = 0; n < aAttrList.size(); n++ )
             {
@@ -463,14 +463,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
                             SvMetaClassList &rClassList,
                             const OString& rPrefix, SvIdlDataBase& rBase)
 {
-    // was this class already written?
+    
     for ( size_t i = 0, n = rClassList.size(); i < n ; ++i )
         if ( rClassList[ i ] == this )
             return;
 
     rClassList.push_back( this );
 
-    // write all direct attributes
+    
     sal_uLong n;
     for( n = 0; n < aAttrList.size(); n++ )
     {
@@ -483,22 +483,22 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
 
         if( iter == rSuperList.end() )
         {
-            // Write only if not already written by subclass or
-            // imported interface.
+            
+            
             rSuperList.push_back(nId);
             pAttr->Insert(rList, rPrefix, rBase);
         }
     }
 
-    // All Interfaces already imported by SuperShells should not be
-    // written any more.
-    // It is prohibited that Shell and SuperShell directly import the same
-    //class.
+    
+    
+    
+    
     if( IsShell() && aSuperClass.Is() )
         aSuperClass->FillClasses( rClassList );
 
-    // Write all attributes of the imported classes, as long as they have
-    // not already been imported by the superclass.
+    
+    
     for( n = 0; n < aClassList.size(); n++ )
     {
         SvClassElement * pEle = aClassList[n];
@@ -508,12 +508,12 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
             rPre.append('.');
         rPre.append(pEle->GetPrefix());
 
-        // first of all write direct imported interfaces
+        
         pCl->InsertSlots( rList, rSuperList, rClassList,
             rPre.makeStringAndClear(), rBase );
     }
 
-    // only write superclass if no shell and not in the list
+    
     if( !IsShell() && aSuperClass.Is() )
     {
         aSuperClass->InsertSlots( rList, rSuperList, rClassList, rPrefix, rBase );
@@ -522,14 +522,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
 
 void SvMetaClass::FillClasses( SvMetaClassList & rList )
 {
-    // Am I not yet in?
+    
     for ( size_t i = 0, n = rList.size(); i < n; ++i )
         if ( rList[ i ] == this )
             return;
 
     rList.push_back( this );
 
-    // my imports
+    
     for( sal_uInt32 n = 0; n < aClassList.size(); n++ )
     {
         SvClassElement * pEle = aClassList[n];
@@ -537,7 +537,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
         pCl->FillClasses( rList );
     }
 
-    // my superclass
+    
     if( aSuperClass.Is() )
         aSuperClass->FillClasses( rList );
 }
@@ -548,7 +548,7 @@ void SvMetaClass::WriteSlotStubs( const OString& rShellName,
                                 ByteStringList & rList,
                                 SvStream & rOutStm )
 {
-    // write all attributes
+    
     for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
     {
         SvSlotElement *pEle = rSlotList[ i ];
@@ -560,19 +560,19 @@ void SvMetaClass::WriteSlotStubs( const OString& rShellName,
 void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
-    // define class
+    
     rOutStm.WriteCharPtr( "#ifdef " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
     rOutStm.WriteCharPtr( "#undef ShellClass" ) << endl;
     rOutStm.WriteCharPtr( "#undef " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
     rOutStm.WriteCharPtr( "#define ShellClass " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
 
-    // no slotmaps get written for interfaces
+    
     if( !IsShell() )
     {
         rOutStm.WriteCharPtr( "#endif" ) << endl << endl;
         return;
     }
-    // write parameter array
+    
     rOutStm.WriteCharPtr( "SFX_ARGUMENTMAP(" ).WriteCharPtr( GetName().getString().getStr() ).WriteChar( ')' ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
@@ -589,13 +589,13 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     size_t nSlotCount = aSlotList.size();
 
-    // write all attributes
+    
     sal_uInt16 nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
     if( nArgCount )
         Back2Delemitter( rOutStm );
     else
     {
-        // at leaast one dummy
+        
         WriteTab( rOutStm, 1 );
         rOutStm.WriteCharPtr( "SFX_ARGUMENT( 0, 0, SfxVoidItem )" ) << endl;
     }
@@ -610,17 +610,17 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     rOutStm << endl;
 
-    // write slotmap
+    
     rOutStm.WriteCharPtr( "SFX_SLOTMAP_ARG(" ).WriteCharPtr( GetName().getString().getStr() ).WriteChar( ')' ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
-    // write all attributes
+    
     WriteSlots( GetName().getString(), 0, aSlotList, rBase, rOutStm );
     if( nSlotCount )
         Back2Delemitter( rOutStm );
     else
     {
-        // at least one dummy
+        
         WriteTab( rOutStm, 1 );
         rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteCharPtr( GetName().getString().getStr() )
                .WriteCharPtr( ", 0, 0, " )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WColumnSelect.hxx"
@@ -51,7 +51,7 @@ OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
 {
 }
 
-// OWizColumnSelect
+
 OWizColumnSelect::OWizColumnSelect( Window* pParent)
     :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT ))
     ,m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) )
@@ -90,13 +90,13 @@ OWizColumnSelect::~OWizColumnSelect()
 
 void OWizColumnSelect::Reset()
 {
-    // restore original state
+    
 
     clearListBox(m_lbOrgColumnNames);
     clearListBox(m_lbNewColumnNames);
     m_pParent->m_mNameMapping.clear();
 
-    // insert the source columns in the left listbox
+    
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
     ODatabaseExport::TColumnVector::const_iterator aIter = pSrcColumns->begin();
     ODatabaseExport::TColumnVector::const_iterator aEnd = pSrcColumns->end();
@@ -115,7 +115,7 @@ void OWizColumnSelect::Reset()
 
 void OWizColumnSelect::ActivatePage( )
 {
-    // if there are no dest columns reset the left side with the origibnal columns
+    
     if(m_pParent->getDestColumns()->empty())
         Reset();
 
@@ -186,7 +186,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
         pRight = &m_lbOrgColumnNames;
         bAll   = sal_True;
     }
-    // else ????
+    
 
     Reference< XDatabaseMetaData > xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
@@ -235,7 +235,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
         pLeft  = &m_lbNewColumnNames;
     }
 
-    // If database is able to process PrimaryKeys, set PrimaryKey
+    
     Reference< XDatabaseMetaData >  xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
@@ -304,13 +304,13 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 {
     if(_pRight == &m_lbNewColumnNames)
     {
-        // we copy the column into the new format for the dest
+        
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(OUString(_sColumnName))));
         createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
     }
     else
     {
-        // find the new column in the dest name mapping to obtain the old column
+        
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
                                                                 ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, _sColumnName),
@@ -319,12 +319,12 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 
         OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
         if ( aIter == m_pParent->m_mNameMapping.end() )
-            return; // do nothing
+            return; 
         const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
         ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
         if ( aSrcIter != pSrcColumns->end() )
         {
-            // we need also the old position of this column to insert it back on that position again
+            
             const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
             ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
@@ -337,10 +337,10 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     }
 }
 
-// Simply returning fields back to their original position is
-// not enough. We need to take into acccount what fields have
-// been removed earlier and adjust accordingly. Based on the
-// algorithm employed in moveColumn().
+
+
+
+
 sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                const OUString&   _sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
@@ -348,8 +348,8 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
 {
     sal_uInt16 nAdjustedPos = 0;
 
-    // if returning all entries to their original position,
-    // then there is no need to adjust the positions.
+    
+    
     if (m_ibColumns_LH.HasFocus())
         return nAdjustedPos;
 
@@ -360,7 +360,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         sColumnString = _pLeft->GetEntry(i);
         if(_sColumnName != sColumnString)
         {
-            // find the new column in the dest name mapping to obtain the old column
+            
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
                                                                     ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, sColumnString),
@@ -372,7 +372,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
             ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
             if ( aSrcIter != pSrcColumns->end() )
             {
-                // we need also the old position of this column to insert it back on that position again
+                
                 const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
                 ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
                 ODatabaseExport::TColumnVector::size_type nPos = aPos - pSrcVector->begin();

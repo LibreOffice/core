@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,7 +76,7 @@ void GlyphCache::InvalidateAllGlyphs()
 inline
 size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData ) const
 {
-    // TODO: is it worth to improve this hash function?
+    
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
 #if ENABLE_GRAPHITE
     if (rFontSelData.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
@@ -101,13 +101,13 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
 
 bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const FontSelectPattern& rB) const
 {
-    // check font ids
+    
     sal_IntPtr nFontIdA = reinterpret_cast<sal_IntPtr>( rA.mpFontData );
     sal_IntPtr nFontIdB = reinterpret_cast<sal_IntPtr>( rB.mpFontData );
     if( nFontIdA != nFontIdB )
         return false;
 
-    // compare with the requested metrics
+    
     if( (rA.mnHeight         != rB.mnHeight)
     ||  (rA.mnOrientation    != rB.mnOrientation)
     ||  (rA.mbVertical       != rB.mbVertical)
@@ -118,9 +118,9 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     ||  (rA.GetWeight() != rB.GetWeight()) )
         return false;
 
-    // NOTE: ignoring meFamily deliberately
+    
 
-    // compare with the requested width, allow default width
+    
     int nAWidth = rA.mnWidth != 0 ? rA.mnWidth : rA.mnHeight;
     int nBWidth = rB.mnWidth != 0 ? rB.mnWidth : rB.mnHeight;
     if( nAWidth != nBWidth )
@@ -129,7 +129,7 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
 #if ENABLE_GRAPHITE
    if (rA.meLanguage != rB.meLanguage)
         return false;
-   // check for features
+   
    if ((rA.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != -1 ||
         rB.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
@@ -177,15 +177,15 @@ void GlyphCache::ClearFontCache()
 
 ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 {
-    // a serverfont request has pFontData
+    
     if( rFontSelData.mpFontData == NULL )
         return NULL;
-    // a serverfont request has a fontid > 0
+    
     sal_IntPtr nFontId = rFontSelData.mpFontData->GetFontId();
     if( nFontId <= 0 )
         return NULL;
 
-    // the FontList's key mpFontData member is reinterpreted as font id
+    
     FontSelectPattern aFontSelData = rFontSelData;
     aFontSelData.mpFontData = reinterpret_cast<PhysicalFontFace*>( nFontId );
     FontList::iterator it = maFontList.find( aFontSelData );
@@ -197,7 +197,7 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
         return pFound;
     }
 
-    // font not cached yet => create new font item
+    
     ServerFont* pNew = NULL;
     if( mpFtManager )
         pNew = mpFtManager->CreateFont( aFontSelData );
@@ -207,7 +207,7 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
         maFontList[ aFontSelData ] = pNew;
         mnBytesUsed += pNew->GetByteCount();
 
-        // enable garbage collection for new font
+        
         if( !mpCurrentGCFont )
         {
             mpCurrentGCFont = pNew;
@@ -229,9 +229,9 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 
 void GlyphCache::UncacheFont( ServerFont& rServerFont )
 {
-    // the interface for rServerFont must be const because a
-    // user who wants to release it only got const ServerFonts.
-    // The caching algorithm needs a non-const object
+    
+    
+    
     ServerFont* pFont = const_cast<ServerFont*>( &rServerFont );
     if( (pFont->Release() <= 0)
     &&  (mnMaxSize <= (mnBytesUsed + mrPeer.GetByteCount())) )
@@ -244,7 +244,7 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
 
 void GlyphCache::GarbageCollect()
 {
-    // when current GC font has been destroyed get another one
+    
     if( !mpCurrentGCFont )
     {
         FontList::iterator it = maFontList.begin();
@@ -252,26 +252,26 @@ void GlyphCache::GarbageCollect()
             mpCurrentGCFont = it->second;
     }
 
-    // unless there is no other font to collect
+    
     if( !mpCurrentGCFont )
         return;
 
-    // prepare advance to next font for garbage collection
+    
     ServerFont* const pServerFont = mpCurrentGCFont;
     mpCurrentGCFont = pServerFont->mpNextGCFont;
 
-    if( (pServerFont == mpCurrentGCFont)    // no other fonts
-    ||  (pServerFont->GetRefCount() > 0) )  // font still used
+    if( (pServerFont == mpCurrentGCFont)    
+    ||  (pServerFont->GetRefCount() > 0) )  
     {
-        // try to garbage collect at least a few bytes
+        
         pServerFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
     }
-    else // current GC font is unreferenced
+    else 
     {
         DBG_ASSERT( (pServerFont->GetRefCount() == 0),
             "GlyphCache::GC detected RefCount underflow" );
 
-        // free all pServerFont related data
+        
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pServerFont == mpCurrentGCFont )
             mpCurrentGCFont = NULL;
@@ -280,7 +280,7 @@ void GlyphCache::GarbageCollect()
         mrPeer.RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
 
-        // remove font from list of garbage collected fonts
+        
         if( pServerFont->mpPrevGCFont )
             pServerFont->mpPrevGCFont->mpNextGCFont = pServerFont->mpNextGCFont;
         if( pServerFont->mpNextGCFont )
@@ -325,7 +325,7 @@ inline void GlyphCache::RemovingGlyph( GlyphData& rGD )
 
 void ServerFont::ReleaseFromGarbageCollect()
 {
-    // remove from GC list
+    
     ServerFont* pPrev = mpPrevGCFont;
     ServerFont* pNext = mpNextGCFont;
     if( pPrev ) pPrev->mpNextGCFont = pNext;
@@ -344,7 +344,7 @@ long ServerFont::Release() const
 
 GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
 {
-    // usually the GlyphData is cached
+    
     GlyphList::iterator it = maGlyphList.find( aGlyphId );
     if( it != maGlyphList.end() ) {
         GlyphData& rGlyphData = it->second;
@@ -352,7 +352,7 @@ GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
         return rGlyphData;
     }
 
-    // sometimes not => we need to create and initialize it ourselves
+    
     GlyphData& rGlyphData = maGlyphList[ aGlyphId ];
     mnBytesUsed += sizeof( GlyphData );
     InitGlyphData( aGlyphId, rGlyphData );
@@ -400,7 +400,7 @@ void ImplServerFontEntry::SetServerFont(ServerFont* p)
 
 ImplServerFontEntry::~ImplServerFontEntry()
 {
-    // TODO: remove the ServerFont here instead of in the GlyphCache
+    
     if (mpServerFont)
         mpServerFont->Release();
 }

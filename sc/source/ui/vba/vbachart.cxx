@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbachart.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,7 +48,7 @@ using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
 const OUString CHART_NAME("Name");
-// #TODO move this constant to vbaseries.[ch]xx ( when it exists )
+
 const OUString DEFAULTSERIESPREFIX("Series");
 const OUString DATAROWSOURCE("DataRowSource");
 const OUString UPDOWN("UpDown");
@@ -68,11 +68,11 @@ const OUString HASLEGEND("HasLegend");
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {
     mxChartDocument.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
-    // #TODO is is possible that the XPropertySet interface is not set
-    // code in setPlotBy seems to indicate that this is possible? but
-    // additionally there is no check in most of the places where it is used
-    // ( and therefore could possibly be NULL )
-    // I'm going to let it throw for the moment ( npower )
+    
+    
+    
+    
+    
     mxDiagramPropertySet.set( mxChartDocument->getDiagram(), uno::UNO_QUERY_THROW );
     mxChartPropertySet.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
 }
@@ -86,7 +86,7 @@ ScVbaChart::getName() throw (css::uno::RuntimeException)
     {
         xProps->getPropertyValue( CHART_NAME ) >>= sName;
     }
-    catch( const uno::Exception & ) // swallow exceptions
+    catch( const uno::Exception & ) 
     {
     }
     return sName;
@@ -127,7 +127,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
         {
             sal_Int32 nSolidType = chart::ChartSolidType::RECTANGULAR_SOLID;
             if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(SOLIDTYPE))
-            {       //in 2D diagrams 'SolidType' may not be set
+            {       
                 if (is3D())
                     mxDiagramPropertySet->getPropertyValue(SOLIDTYPE) >>= nSolidType;
             }
@@ -142,7 +142,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
                 case chart::ChartSolidType::PYRAMID:
                     nChartType = getSolidType(xlPyramidCol, xlPyramidColStacked, xlPyramidColStacked100, xlPyramidColClustered, xlPyramidBarStacked, xlPyramidBarStacked100, xlPyramidBarClustered);
                     break;
-                default: // RECTANGULAR_SOLID
+                default: 
                     if (is3D())
                     {
                         nChartType = getSolidType(xl3DColumn, xl3DColumnStacked, xl3DColumnStacked100, xl3DColumnClustered, xl3DBarStacked, xl3DBarStacked100, xl3DBarClustered);
@@ -203,7 +203,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
         }
         else if ( sDiagramType == "com.sun.star.chart.DonutDiagram" )
         {
-            nChartType = xlDoughnut;                    // TODO DoughnutExploded ??
+            nChartType = xlDoughnut;                    
         }
         else if ( sDiagramType == "com.sun.star.chart.NetDiagram" )
         {
@@ -258,7 +258,7 @@ try
         case xlCylinderBarStacked:
         case xlCylinderBarStacked100:
         case xlCylinderCol:
-        case xlSurface: // not possible
+        case xlSurface: 
         case xlSurfaceWireframe:
         case xlSurfaceTopView:
         case xlSurfaceTopViewWireframe:
@@ -294,12 +294,12 @@ try
             mxDiagramPropertySet->setPropertyValue(VOLUME, uno::makeAny(sal_Bool((_nChartType == xlStockVHLC) || (_nChartType == xlStockVOHLC))));
             break;
 
-        case xlPieOfPie:                            // not possible
-        case xlPieExploded: // SegmentOffset an ChartDataPointProperties ->am XDiagram abholen //wie macht Excel das?
+        case xlPieOfPie:                            
+        case xlPieExploded: 
         case xl3DPieExploded:
         case xl3DPie:
         case xlPie:
-        case xlBarOfPie:                            // not possible (Zoom pie)
+        case xlBarOfPie:                            
             setDiagram( OUString("com.sun.star.chart.PieDiagram"));
             break;
 
@@ -309,8 +309,8 @@ try
             setDiagram( OUString("com.sun.star.chart.NetDiagram"));
             break;
         case xlXYScatter:
-        case xlBubble:                      // not possible
-        case xlBubble3DEffect:              // not possible
+        case xlBubble:                      
+        case xlBubble3DEffect:              
         case xlXYScatterLines:
         case xlXYScatterLinesNoMarkers:
         case xlXYScatterSmooth:
@@ -319,8 +319,8 @@ try
             switch(_nChartType)
             {
                 case xlXYScatter:
-                case xlBubble:                      // not possible
-                case xlBubble3DEffect:              // not possible
+                case xlBubble:                      
+                case xlBubble3DEffect:              
                     mxDiagramPropertySet->setPropertyValue(LINES, uno::makeAny( sal_False ));
                     break;
                 case xlXYScatterLines:
@@ -348,8 +348,8 @@ try
         case xlXYScatterLines:
         case xlXYScatterSmooth:
         case xlXYScatter:
-        case xlBubble:                      // not possible
-        case xlBubble3DEffect:              // not possible
+        case xlBubble:                      
+        case xlBubble3DEffect:              
             mxDiagramPropertySet->setPropertyValue(SYMBOLTYPE, uno::makeAny( chart::ChartSymbolType::AUTO));
             break;
         default:
@@ -366,7 +366,7 @@ try
         case xlPyramidCol:
         case xlCylinderCol:
         case xl3DColumn:
-        case xlSurface:                         // not possible
+        case xlSurface:                         
         case xlSurfaceWireframe:
         case xlSurfaceTopView:
         case xlSurfaceTopViewWireframe:
@@ -436,7 +436,7 @@ try
             case xl3DColumnClustered:
             case xl3DColumnStacked:
             case xl3DColumnStacked100:
-            case xlSurface: // not possible
+            case xlSurface: 
             case xlSurfaceWireframe:
             case xlSurfaceTopView:
             case xlSurfaceTopViewWireframe:
@@ -546,10 +546,10 @@ try
 void SAL_CALL
 ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // #TODO how are Chart sheets handled ( I know we don't even consider
-    // them in the worksheets/sheets collections ), but.....???
-    // note: in vba for excel the parent of a Chart sheet is a workbook,
-    // e.g. 'ThisWorkbook'
+    
+    
+    
+    
     uno::Reference< XHelperInterface > xParent( getParent() );
     ScVbaChartObject* pChartObj = static_cast< ScVbaChartObject* >( xParent.get() );
     if ( pChartObj )
@@ -613,7 +613,7 @@ ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange 
         {
             sal_Int32 nRows =  mSingleRangeAddress.EndRow - mSingleRangeAddress.StartRow;
             sal_Int32 nCols = mSingleRangeAddress.EndColumn - mSingleRangeAddress.StartColumn;
-            // AutoDetect emulation
+            
             if ( nRows > nCols )
                 setPlotBy( xlColumns );
             else if ( nRows <= nCols )
@@ -707,8 +707,8 @@ ScVbaChart::setDiagram( const OUString& _sDiagramType ) throw( script::BasicErro
     }
 }
 
-// #TODO find out why we have Location/getLocation ? there is afaiks no
-// Location property, just a Location function for the Chart object
+
+
 sal_Int32 SAL_CALL
 ScVbaChart::Location() throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
@@ -724,88 +724,88 @@ ScVbaChart::getLocation() throw (css::script::BasicErrorException, css::uno::Run
 void SAL_CALL
 ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // Helper api just stubs out the code <shrug>
-    // #TODO come back and make sense out of this
-//        String sheetName = null;
+    
+    
+
 //
-//        if ((name != null) && name instanceof String) {
-//            sheetName = (String) name;
-//        }
-//        XSpreadsheetDocument xShDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface( XSpreadsheetDocument.class,getXModel() );
-//        com.sun.star.sheet.XSpreadsheets xSheets = xShDoc.Sheets();
+
+
+
+
+
 //
-//        switch (where) {
-//        case ClLocationType.clLocationAsObject_value: //{
+
+
 //
-//            if (sheetName == null) {
-//                DebugHelper.writeInfo("Can't embed in Chart without knowing SheetName");
-//                return;
-//            }
+
+
+
+
 //
-//            try {
-//                Any any = (Any) xSheets.getByName(sheetName);
-//                chartSheet = (XSpreadsheet) any.getObject();
+
+
+
 //
-//                // chartSheet = (XSpreadsheet) xSheets.getByName( sheetName );
-//            } catch (NoSuchElementException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
+
+
+
+
 //
-//                return;
-//            } catch (WrappedTargetException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
+
+
+
+
 //
-//                return;
-//            } catch (java.lang.Exception e) {
-//                e.printStackTrace();
-//            }
+
+
+
+
 //
-//            XTableChartsSupplier xTCS = (XTableChartsSupplier) UnoRuntime.queryInterface( XTableChartsSupplier.class, chartSheet);
-//            XTableCharts xTableCharts = xTCS.getCharts();
-//            XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xTableCharts);
-//            int numCharts = xIA.getCount();
-//            chartName = "Chart " + (numCharts + 1);
+
+
+
+
+
 //
-//            //}
-//            break;
+
+
 //
-//        case ClLocationType.clLocationAsNewSheet_value:
-//        case ClLocationType.clLocationAutomatic_value:default: //{
-//            chartName = "Chart 1"; // Since it's a new sheet, it's the first on it...
+
+
+
 //
-//            XIndexAccess xSheetIA = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xSheets);
+
 //
-//            short newSheetNum = (short) (xSheetIA.getCount() + 1);
+
 //
-//            if (sheetName == null){
-//                sheetName = "ChartSheet " + newSheetNum; // Why not?
-//            }
-//            // DPK TODO : Probably should use Sheets to create this!
-//            xSheets.insertNewByName(sheetName, newSheetNum);
+
+
+
+
+
 //
-//            try {
-//                chartSheet =
-//                    (XSpreadsheet) xSheets.getByName(sheetName);
-//            } catch (NoSuchElementException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
+
+
+
+
+
+
 //
-//                return;
-//            } catch (WrappedTargetException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
+
+
+
+
 //
-//                return;
-//            }
+
+
 //
-//            //}
-//            break;
-//        }
+
+
+
 //
-//        // Last thing should be a call to createChartForReal(), one of them
-//        // should succeed.
-//        createChartForReal();
+
+
+
 
 }
 
@@ -870,14 +870,14 @@ uno::Reference< excel::XChartTitle > SAL_CALL
 ScVbaChart::getChartTitle(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< drawing::XShape > xTitleShape = mxChartDocument->getTitle();
-    // #TODO check parent
+    
     return new ScVbaChartTitle(this, mxContext, xTitleShape);
 }
 
 uno::Any SAL_CALL
 ScVbaChart::Axes( const uno::Any& Type, const uno::Any& AxisGroup ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // mmm chart probably is the parent, #TODO check parent
+    
     uno::Reference< excel::XAxes > xAxes = new ScVbaAxes( this, mxContext, this );
     if ( !Type.hasValue() )
         return uno::makeAny( xAxes );
@@ -886,7 +886,7 @@ ScVbaChart::Axes( const uno::Any& Type, const uno::Any& AxisGroup ) throw (scrip
 bool
 ScVbaChart::is3D() throw ( uno::RuntimeException )
 {
-    // #TODO perhaps provide limited Debughelper functionality
+    
     sal_Bool is3d = false;
     mxDiagramPropertySet->getPropertyValue(DIM3D) >>= is3d;
     return is3d;
@@ -895,7 +895,7 @@ ScVbaChart::is3D() throw ( uno::RuntimeException )
 sal_Int32
 ScVbaChart::getStackedType( sal_Int32 _nStacked, sal_Int32 _n100PercentStacked, sal_Int32 _nUnStacked ) throw ( uno::RuntimeException )
 {
-    // #TODO perhaps provide limited Debughelper functionality
+    
     if (isStacked())
     {
         if (is100PercentStacked())
@@ -910,7 +910,7 @@ ScVbaChart::getStackedType( sal_Int32 _nStacked, sal_Int32 _n100PercentStacked, 
 bool
 ScVbaChart::isStacked() throw ( uno::RuntimeException )
 {
-    // #TODO perhaps provide limited Debughelper functionality
+    
     sal_Bool bStacked = false;
     mxDiagramPropertySet->getPropertyValue(STACKED) >>= bStacked;
     return bStacked;
@@ -919,7 +919,7 @@ ScVbaChart::isStacked() throw ( uno::RuntimeException )
 bool
 ScVbaChart::is100PercentStacked() throw ( uno::RuntimeException )
 {
-    // #TODO perhaps provide limited Debughelper functionality
+    
     sal_Bool b100Percent = false;
     mxDiagramPropertySet->getPropertyValue(PERCENT) >>= b100Percent;
     return b100Percent;
@@ -976,7 +976,7 @@ ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw
     }
     catch (const uno::Exception&)
     {
-        OUString aTemp;    // temporary needed for g++ 3.3.5
+        OUString aTemp;    
         script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
     }
     return _nNotUpDown;
@@ -994,7 +994,7 @@ ScVbaChart::hasMarkers() throw ( script::BasicErrorException )
     }
     catch (const uno::Exception&)
     {
-        OUString aTemp;    // temporary needed for g++ 3.3.5
+        OUString aTemp;    
         script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
     }
     return bHasMarkers;

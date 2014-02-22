@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "typeselectionpage.hxx"
@@ -25,18 +25,18 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
 
-    //=====================================================================
-    //= TypeSelectionPage
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
         ,m_aHint                (this,  ModuleRes(FT_TYPE_HINTS))
@@ -59,28 +59,28 @@ namespace abp
         Size  aItemSize( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ) );
         aItemSize.Width() = GetOutputSizePixel().Width() - 30;
 
-        //TODO:  For now, try to keep offering the same choices like before the
-        // Mozilla/MORK cleanup, even if the status of what driver actually
-        // provides which functionality is somewhat unclear, see the discussions
-        // of fdo#57285 "Address Book Data Source Wizard lists 'Mac OS X address
-        // book' on Linux" and fdo#57322 "Moz-free LDAP Address Book driver."
-        // In accordance with ancient OOo 3.3, this is as follows:
+        
+        
+        
+        
+        
+        
         //
-        // On Linux:
-        // - EVOLUTION, EVOLUTION_GROUPWISE, EVOLUTION_LDAP (if applicable)
-        // - MORK (via mork driver, which is built unconditionally)
-        // - KAB (if applicable)
-        // - OTHER
+        
+        
+        
+        
+        
         //
-        // On Mac OS X:
-        // - MACAB (if applicable)
-        // - MORK (via mork driver, which is built unconditionally)
-        // - OTHER
+        
+        
+        
+        
         //
-        // On Windows:
-        // - MORK, THUNDERBIRD, LDAP, OUTLOOK, OUTLOOKEXPRESS (via mozab driver,
-        //   if WITH_MOZILLA)
-        // - OTHER
+        
+        
+        
+        
 
         bool bWithMozilla = false;
         bool bHaveEvolution = false;
@@ -99,7 +99,7 @@ namespace abp
 
         try
         {
-            // check whether Evolution is available
+            
             Reference< XDriver > xDriver( xManager->getDriverByURL(OUString("sdbc:address:evolution:local")) );
             if ( xDriver.is() )
                 bHaveEvolution = true;
@@ -108,7 +108,7 @@ namespace abp
         {
         }
 
-        // check whether KDE address book is available
+        
         try
         {
             Reference< XDriver > xDriver( xManager->getDriverByURL(OUString("sdbc:address:kab")) );
@@ -121,7 +121,7 @@ namespace abp
 
         try
         {
-            // check whether Mac OS X address book is available
+            
             Reference< XDriver > xDriver( xManager->getDriverByURL(OUString("sdbc:address:macab")) );
             if ( xDriver.is() )
                 bHaveMacab = true;
@@ -132,7 +132,7 @@ namespace abp
 
 #endif
 
-        // Items are displayed in list order
+        
         m_aAllTypes.push_back( ButtonItem( &m_aEvolution, AST_EVOLUTION, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( &m_aEvolutionGroupwise, AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( &m_aEvolutionLdap, AST_EVOLUTION_LDAP, bHaveEvolution ) );
@@ -168,7 +168,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     TypeSelectionPage::~TypeSelectionPage()
     {
         for ( ::std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
@@ -178,7 +178,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void TypeSelectionPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
@@ -197,14 +197,14 @@ namespace abp
         getDialog()->enableButtons(WZB_PREVIOUS, sal_False);
     }
 
-    //---------------------------------------------------------------------
+    
     void TypeSelectionPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
         getDialog()->enableButtons(WZB_PREVIOUS, sal_True);
     }
 
-    //---------------------------------------------------------------------
+    
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
@@ -215,7 +215,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     AddressSourceType TypeSelectionPage::getSelectedType() const
     {
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
@@ -229,7 +229,7 @@ namespace abp
         return AST_INVALID;
     }
 
-    //---------------------------------------------------------------------
+    
     void TypeSelectionPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
@@ -238,7 +238,7 @@ namespace abp
         selectType(rSettings.eType);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool TypeSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
@@ -257,14 +257,14 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     bool TypeSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()
             &&  (AST_INVALID != getSelectedType());
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, /*NOTINTERESTEDIN*/ )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
@@ -272,8 +272,8 @@ namespace abp
         return 0L;
     }
 
-//.........................................................................
-}   // namespace abp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

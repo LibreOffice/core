@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <tubes/conference.hxx>
@@ -42,7 +42,7 @@ struct InfoLogger
 #else
 #define INFO_LOGGER_F(s)
 #define INFO_LOGGER(s)
-#endif // SAL_LOG_INFO
+#endif 
 
 class TeleConferenceImpl
 {
@@ -109,8 +109,8 @@ static void TeleConference_MethodCallHandler(
     OString aPacket( pPacketData, nPacketSize );
     if (pConference->getCollaboration())
         pConference->getCollaboration()->PacketReceived( aPacket );
-    // Master needs to send the packet back to impose ordering,
-    // so the slave can execute his command.
+    
+    
     if (pConference->isMaster())
         pConference->sendPacket( aPacket );
 
@@ -164,7 +164,7 @@ static void TeleConference_TubeOfferedHandler(
     GDBusConnection* pTube = tp_dbus_tube_channel_offer_finish(
             pChannel, pResult, &pError);
 
-    // "can't find contact ... presence" means contact is not a contact.
+    
     /* FIXME: detect and handle */
     SAL_WARN_IF( !pTube, "tubes", "TeleConference_TubeOfferedHandler: entered with error: " << pError->message);
     if (pError) {
@@ -224,7 +224,7 @@ TeleConference::TeleConference( TpAccount* pAccount,
 
 TeleConference::~TeleConference()
 {
-    // We're destructed from finalize()
+    
     delete pImpl;
 }
 
@@ -405,7 +405,7 @@ void TeleConference::finalize()
         pImpl->mpTube = NULL;
     }
 
-    //! *this gets destructed here!
+    
 }
 
 
@@ -442,7 +442,7 @@ bool TeleConference::sendPacket( const OString& rPacket )
             G_DBUS_CALL_FLAGS_NONE,
             -1, NULL, NULL, NULL);
 
-    // If we started the session, we can execute commands immediately.
+    
     if (mbMaster && mpCollaboration)
         mpCollaboration->PacketReceived( rPacket );
 
@@ -543,7 +543,7 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
     }
 }
 
-// TODO: move sending file to TeleManager
+
 extern void TeleManager_fileReceived( const OUString&, const OString& );
 void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, FileSentCallback pCallback, void* pUserData)
 {
@@ -551,7 +551,7 @@ void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, Fi
 
     if (!pContact)
     {
-        // used in demo mode
+        
         TeleManager_fileReceived( localUri, "demo" );
         return;
     }

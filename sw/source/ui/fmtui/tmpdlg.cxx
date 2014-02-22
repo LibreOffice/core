@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -120,10 +120,10 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    // tinker TabPages together
+    
     switch( nRegion )
     {
-        // character styles
+        
         case SFX_STYLE_FAMILY_CHAR:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
@@ -155,7 +155,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
                 RemoveTabPage("asianlayout");
         }
         break;
-        // paragraph styles
+        
         case SFX_STYLE_FAMILY_PARA:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
@@ -236,7 +236,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
             }
         }
         break;
-        // frame styles
+        
         case SFX_STYLE_FAMILY_FRAME:
         {
             m_nTypeId = AddTabPage("type", SwFrmPage::Create,
@@ -259,7 +259,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
 
         break;
         }
-        // page styles
+        
         case SFX_STYLE_FAMILY_PAGE:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
@@ -292,7 +292,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
             }
         }
         break;
-        // numbering styles
+        
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             m_nSingleId = AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
@@ -332,8 +332,8 @@ short SwTemplateDlg::Ok()
         }
     }
     else
-        //JP 09.01.98 Bug #46446#:
-        // that's the Ok-Handler, so OK has to be default!
+        
+        
         nRet = RET_OK;
     return nRet;
 }
@@ -348,7 +348,7 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    // set style's and metric's names
+    
     OUString sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
@@ -406,13 +406,13 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nOutlineId)
     {
-        //  handle if the current paragraph style is assigned to a list level of outline style,
+        
         SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
         if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
         {
             ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
             ((SwParagraphNumTabPage&)rPage).DisableNumbering();
-        }//<-end
+        }
         ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
@@ -511,7 +511,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-        // collect character styles
+        
         ListBox rCharFmtLB(this);
         rCharFmtLB.Clear();
         rCharFmtLB.InsertEntry( SwViewShell::GetShellRes()->aStrNone );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -61,7 +61,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 static const sal_Char* pDbgHelpText[] =
 {
@@ -256,30 +256,30 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 "String::String()\n",
 "{\n",
-"    // ...\n",
+"    
 "}\n",
 "\n",
 "String::~String()\n",
 "{\n",
-"    //...\n",
+"    
 "}\n",
 "\n",
 "char& String::operator [] ( sal_uInt16 nIndex )\n",
 "{\n",
 "    DBG_ASSERT( nIndex <= pData->nLen, \"String::[] : nIndex > Len\" );\n",
 "\n",
-"    //...\n",
+"    
 "}\n",
 "\n",
 "\n",
 NULL
 };
 
-// =======================================================================
+
 
 namespace
 {
-    // -------------------------------------------------------------------
+    
     typedef ::std::map< OUString, DbgChannelId > UserDefinedChannels;
     UserDefinedChannels& ImplDbgGetUserDefinedChannels()
     {
@@ -287,7 +287,7 @@ namespace
         return s_aChannels;
     }
 
-    // -------------------------------------------------------------------
+    
     void ImplAppendUserDefinedChannels( ListBox& rList )
     {
         const UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();
@@ -301,7 +301,7 @@ namespace
         }
     }
 
-    // -------------------------------------------------------------------
+    
     void ImplSelectChannel( ListBox& rList, sal_uLong nChannelToSelect, sal_uInt16 nPositionOffset )
     {
         if ( nChannelToSelect < DBG_OUT_USER_CHANNEL_0 )
@@ -319,7 +319,7 @@ namespace
             }
         }
     }
-    // -------------------------------------------------------------------
+    
     DbgChannelId ImplGetChannelId( const ListBox& rList, sal_uInt16 nPositionOffset )
     {
         sal_uInt16 nSelectedChannelPos = rList.GetSelectEntryPos();
@@ -330,11 +330,11 @@ namespace
     }
 }
 
-// =======================================================================
 
-// -------------
-// - DbgWindow -
-// -------------
+
+
+
+
 
 #define DBGWIN_MAXLINES     100
 
@@ -356,9 +356,9 @@ private:
     void            GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast );
 };
 
-// -----------------
-// - DbgInfoDialog -
-// -----------------
+
+
+
 
 class DbgInfoDialog : public ModalDialog
 {
@@ -373,9 +373,9 @@ public:
     void            SetInfoText( const OUString& rStr );
 };
 
-// -------------
-// - DbgDialog -
-// -------------
+
+
+
 
 class DbgDialog : public ModalDialog
 {
@@ -425,12 +425,12 @@ public:
     void            RequestHelp( const HelpEvent& rHEvt );
 };
 
-// =======================================================================
+
 
 static sal_Char aDbgInfoBuf[12288];
 static sal_Char aDbgOutBuf[DBG_BUF_MAXLEN];
 
-// =======================================================================
+
 
 DbgWindow::DbgWindow() :
     WorkWindow( NULL, WB_STDWORK ),
@@ -453,18 +453,18 @@ DbgWindow::DbgWindow() :
     Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DbgWindow::Close()
 {
-    // remember window position
+    
     OString aState( GetWindowState() );
     DbgData* pData = DbgGetData();
     size_t nCopy = (sizeof( pData->aDbgWinState ) < size_t(aState.getLength() + 1U ))
     ? sizeof( pData->aDbgWinState ) : size_t(aState.getLength() + 1U );
     strncpy( pData->aDbgWinState, aState.getStr(), nCopy );
     pData->aDbgWinState[ sizeof( pData->aDbgWinState ) - 1 ] = 0;
-    // and save for next session
+    
     DbgSaveData( *pData );
 
     delete this;
@@ -472,14 +472,14 @@ bool DbgWindow::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgWindow::Resize()
 {
     maLstBox.SetSizePixel( GetOutputSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgWindow::GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast )
 {
@@ -500,7 +500,7 @@ void DbgWindow::GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& 
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DbgWindow::PreNotify( NotifyEvent& rNEvt )
 {
@@ -525,12 +525,12 @@ bool DbgWindow::PreNotify( NotifyEvent& rNEvt )
                 sal_uInt16 nSelected = aMenu.Execute( rNEvt.GetWindow(), aPos );
                 if ( nSelected == 1 )
                 {
-                    // search all entries which belong to this assertion
+                    
                     sal_uInt16 nAssertionFirst = 0;
                     sal_uInt16 nAssertionLast = 0;
                     GetAssertionEntryRange( maLstBox.GetSelectEntryPos(), nAssertionFirst, nAssertionLast );
 
-                    // build the string to copy to the clipboard
+                    
                     OUStringBuffer sAssertion;
                     OUString sLineFeed = convertLineEnd(
                         OUString("\n"),
@@ -545,13 +545,13 @@ bool DbgWindow::PreNotify( NotifyEvent& rNEvt )
                         sAssertion.makeStringAndClear(), GetClipboard());
                 }
             }
-            return true;   // handled
+            return true;   
         }
     }
     return WorkWindow::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgWindow::InsertLine( const OUString& rLine )
 {
@@ -580,7 +580,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
     maLstBox.Update();
 }
 
-// =======================================================================
+
 
 DbgDialog::DbgDialog() :
     ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
@@ -916,7 +916,7 @@ DbgDialog::DbgDialog() :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 {
@@ -972,10 +972,10 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         if ( maBoldAppFont.IsChecked() )
             aData.nTestFlags |= DBG_TEST_BOLDAPPFONT;
 
-        // Daten speichern
+        
         DbgSaveData( aData );
 
-        // Umschalten der Laufzeitwerte
+        
         DBG_INSTOUTTRACE( aData.nTraceOut );
         DBG_INSTOUTWARNING( aData.nWarningOut );
         DBG_INSTOUTERROR( aData.nErrorOut );
@@ -1026,7 +1026,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -1046,7 +1046,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-// =======================================================================
+
 
 DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
@@ -1071,7 +1071,7 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
     SetOutputSizePixel( Size( 640, 420 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgInfoDialog::SetInfoText( const OUString& rStr )
 {
@@ -1121,7 +1121,7 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
     maListBox.SetUpdateMode( true );
 }
 
-// =======================================================================
+
 
 void DbgDialogTest( Window* pWindow )
 {
@@ -1232,7 +1232,7 @@ void DbgDialogTest( Window* pWindow )
                                  pClass,
                                  OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
 
-                    // check text width
+                    
                     int aWidth=0;
                     switch( pChild->GetType() )
                     {
@@ -1481,7 +1481,7 @@ void DbgDialogTest( Window* pWindow )
     delete [] pRectAry;
 }
 
-// =======================================================================
+
 #ifndef WNT
 #define USE_VCL_MSGBOX
 #define COPY_BUTTON_ID 25
@@ -1528,7 +1528,7 @@ long SolarMessageBoxExecutor::doIt()
 {
     long nResult = RET_NO;
 
-    // Stop tracking and release mouse, to assure boxes do not hang
+    
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
@@ -1554,7 +1554,7 @@ long SolarMessageBoxExecutor::doIt()
             nResult = RET_CANCEL;
             break;
     }
-#endif // WNT
+#endif 
 #else
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
@@ -1568,11 +1568,11 @@ long SolarMessageBoxExecutor::doIt()
 
 void DbgPrintMsgBox( const char* pLine )
 {
-    // are modal message boxes prohibited at the moment?
+    
     if ( Application::IsDialogCancelEnabled() )
     {
 #if defined( WNT )
-        // TODO: Shouldn't this be a IsDebuggerPresent()?
+        
         if ( GetSystemMetrics( SM_DEBUG ) )
         {
             strcpy( aDbgOutBuf, pLine );
@@ -1612,7 +1612,7 @@ void DbgPrintMsgBox( const char* pLine )
         DbgCoreDump();
 }
 
-// -----------------------------------------------------------------------
+
 
 class SolarWindowPrinter : public ::vcl::SolarThreadExecutor
 {
@@ -1642,13 +1642,13 @@ long SolarWindowPrinter::doIt()
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgPrintWindow( const char* pLine )
 {
     static bool bIn = false;
 
-    // keine rekursiven Traces
+    
     if ( bIn )
         return;
     bIn = true;
@@ -1663,7 +1663,7 @@ void DbgPrintWindow( const char* pLine )
     bIn = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgAbort( char const * i_message )
 {
@@ -1671,14 +1671,14 @@ void DbgAbort( char const * i_message )
     Application::Abort( message );
 }
 
-// =======================================================================
+
 
 void ImplDbgTestSolarMutex()
 {
     assert(ImplGetSVData()->mpDefInst->CheckYieldMutex());
 }
 
-// =======================================================================
+
 
 void DbgGUIInit()
 {
@@ -1688,7 +1688,7 @@ void DbgGUIInit()
     DbgSetAbort( DbgAbort );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgGUIDeInit()
 {
@@ -1701,7 +1701,7 @@ void DbgGUIDeInit()
     delete pDbgWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbgGUIStart()
 {
@@ -1710,7 +1710,7 @@ void DbgGUIStart()
     if ( pData )
     {
         DbgDialog* pDialog = new DbgDialog;
-        // we switch off dialog tests for the debug dialog
+        
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;
         if ( !pDialog->Execute() )
@@ -1723,6 +1723,6 @@ void DbgGUIStart()
     }
 }
 
-#endif // DBG_UTIL
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

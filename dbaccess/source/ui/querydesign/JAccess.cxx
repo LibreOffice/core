@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "JAccess.hxx"
@@ -50,11 +50,11 @@ namespace dbaui
         ::osl::MutexGuard aGuard( m_aMutex );
         m_pTableView = NULL;
     }
-    // XAccessibleContext
+    
     sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  ) throw (RuntimeException)
     {
-        // TODO may be this will change to only visible windows
-        // this is the same assumption mt implements
+        
+        
         ::osl::MutexGuard aGuard( m_aMutex  );
         sal_Int32 nChildCount = 0;
         if ( m_pTableView )
@@ -67,7 +67,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard( m_aMutex  );
         if(i >= 0 && i < getAccessibleChildCount() && m_pTableView )
         {
-            // check if we should return a table window or a connection
+            
             sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
             if( i < nTableWindowCount )
             {
@@ -95,9 +95,9 @@ namespace dbaui
     {
         return this;
     }
-    // XInterface
+    
     IMPLEMENT_FORWARD_XINTERFACE2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
-    // XTypeProvider
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
 }
 

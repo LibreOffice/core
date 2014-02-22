@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,7 +62,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     {
         double offset = 0.0;
         if ((line_ & 1) == 1) {
-            // odd line: => right to left
+            
             offset = (1.0 - col);
         }
         ::basegfx::B2DPolygon poly;
@@ -112,7 +112,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
 
         if ((static_cast<sal_Int32>(sqrtArea2) & 1) == 1)
         {
-            // odd line
+            
             aTransform = basegfx::tools::createRotateB2DHomMatrix(M_PI_2 + M_PI_4);
             aTransform.translate(edge + m_elementEdge, 0.0);
         }
@@ -126,7 +126,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         poly.transform( aTransform );
         res.append(poly);
     }
-    else // out
+    else 
     {
         const double sqrtArea2 = sqrt( t * m_sqrtElements * m_sqrtElements );
         const double edge = ::basegfx::pruneScaleValue(
@@ -156,7 +156,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
 
         if ((static_cast<sal_Int32>(sqrtArea2) & 1) == 1)
         {
-            // odd line
+            
             aTransform = basegfx::tools::createTranslateB2DHomMatrix(0.0, -height);
             aTransform.rotate( M_PI_2 + M_PI_4 );
             aTransform.translate( 1.0, edge );
@@ -199,7 +199,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         OSL_ASSERT( m_opposite );
         ::basegfx::B2DPolyPolygon half(
             calcHalfDiagonalSnake( t, false /* out */ ) );
-        // flip on x axis and rotate 90 degrees:
+        
         basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleB2DHomMatrix(1.0, -1.0));
         aTransform.translate( -0.5, 0.5 );
         aTransform.rotate( M_PI_2 );
@@ -208,7 +208,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         half.flip();
         res.append( half );
 
-        // rotate 180 degrees:
+        
         aTransform = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
         aTransform.rotate( M_PI );
         aTransform.translate( 0.5, 0.5 );
@@ -218,7 +218,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     else
     {
         ::basegfx::B2DPolyPolygon half( calcSnake( t / 2.0 ) );
-        // rotate 90 degrees:
+        
         basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5));
         aTransform.rotate( M_PI_2 );
         aTransform.translate( 0.5, 0.5 );

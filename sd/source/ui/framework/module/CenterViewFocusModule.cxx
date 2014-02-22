@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace framework {
 
-//===== CenterViewFocusModule ====================================================
+
 
 CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxController)
     : CenterViewFocusModuleInterfaceBase(MutexOwner::maMutex),
@@ -58,7 +58,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
 
-        // Tunnel through the controller to obtain a ViewShellBase.
+        
         Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
         if (xTunnel.is())
         {
@@ -68,7 +68,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
                 mpBase = pController->GetViewShellBase();
         }
 
-        // Check, if all required objects do exist.
+        
         if (mxConfigurationController.is() && mpBase!=NULL)
         {
             mbValid = true;
@@ -138,8 +138,8 @@ void CenterViewFocusModule::HandleNewView (
     if (mbNewViewCreated)
     {
         mbNewViewCreated = false;
-        // Make the center pane the active one.  Tunnel through the
-        // controller to obtain a ViewShell pointer.
+        
+        
 
         Sequence<Reference<XResourceId> > xViewIds (rxConfiguration->getResources(
             FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
@@ -182,6 +182,6 @@ void SAL_CALL CenterViewFocusModule::disposing (
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "edittextiterator.hxx"
@@ -31,10 +31,10 @@ const EditTextObject* EditTextIterator::seek()
         incBlock();
         if (maPos.first == miEnd)
         {
-            // Move to the next column.
+            
             ++mpCol;
             if (mpCol == mpColEnd)
-                // No more columns.
+                
                 return NULL;
 
             mpCells = &mpCol->maCells;
@@ -43,14 +43,14 @@ const EditTextObject* EditTextIterator::seek()
         }
     }
 
-    // We are on the right block type.
+    
     return sc::edittext_block::at(*maPos.first->data, maPos.second);
 }
 
 void EditTextIterator::incPos()
 {
     if (maPos.second + 1 < maPos.first->size)
-        // Increment within the block.
+        
         ++maPos.second;
     else
         incBlock();

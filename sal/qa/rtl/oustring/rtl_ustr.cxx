@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,14 +47,14 @@ namespace rtl_ustr
         void compare_000()
             {
                 rtl_ustr_compare( NULL, NULL);
-                // should not GPF
+                
             }
 
         void compare_000_1()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl_ustr_compare( aStr1.getStr(), NULL);
-                // should not GPF
+                
             }
         void compare_001()
             {
@@ -83,9 +83,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(compare);
     CPPUNIT_TEST(compare_000);
@@ -94,7 +94,7 @@ namespace rtl_ustr
     CPPUNIT_TEST(compare_002);
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+}; 
 
 
     class compareIgnoreAsciiCase : public CppUnit::TestFixture
@@ -147,9 +147,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(compareIgnoreAsciiCase);
     CPPUNIT_TEST(compare_000);
@@ -159,9 +159,9 @@ namespace rtl_ustr
     CPPUNIT_TEST(compare_002_1);
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
-    }; // class compareIgnoreAsciiCase
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
@@ -230,9 +230,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(shortenedCompareIgnoreAsciiCase_WithLength);
     CPPUNIT_TEST(compare_000);
@@ -243,65 +243,65 @@ namespace rtl_ustr
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST(compare_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+}; 
 
 
-// // -----------------------------------------------------------------------------
+
 //
-//     class hashCode : public CppUnit::TestFixture
-//     {
-//     public:
+
+
+
 //
-//         void hashCode_000()
-//             {
-//                 sal_Int32 nHashCode = rtl_ustr_hashCode( NULL );
-//                 volatile int dummy = 0;
-//             }
+
+
+
+
+
 //
-//         void hashCode_001()
-//             {
-//                 rtl::OString aStr1 = "Line for a hashCode.";
-//                 sal_Int32 nHashCode = rtl_ustr_hashCode( aStr1.getStr() );
-//                 printf("hashcode: %d\n", nHashCode);
-//                 // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
-//             }
+
+
+
+
+
+
+
 //
-//         void hashCode_002()
-//             {
-//                 rtl::OString aStr1 = "Line for a hashCode.";
-//                 sal_Int32 nHashCode1 = rtl_ustr_hashCode( aStr1.getStr() );
+
+
+
+
 //
-//                 rtl::OString aStr2 = "Line for a hashCode.";
-//                 sal_Int32 nHashCode2 = rtl_ustr_hashCode( aStr2.getStr() );
+
+
 //
-//                 CPPUNIT_ASSERT_MESSAGE("hashcodes must be equal.", nHashCode1 == nHashCode2 );
-//             }
+
+
 //
-//         void hashCode_003()
-//             {
-//                 rtl::OString aStr1 = "Line for a hashCode.";
-//                 sal_Int32 nHashCode1 = rtl_ustr_hashCode( aStr1.getStr() );
+
+
+
+
 //
-//                 rtl::OString aStr2 = "Line for an other hashcode.";
-//                 sal_Int32 nHashCode2 = rtl_ustr_hashCode( aStr2.getStr() );
+
+
 //
-//                 CPPUNIT_ASSERT_MESSAGE("hashcodes must differ.", nHashCode1 != nHashCode2 );
-//             }
+
+
 //
-//         // Change the following lines only, if you add, remove or rename
-//         // member functions of the current class,
-//         // because these macros are need by auto register mechanism.
+
+
+
 //
-//         CPPUNIT_TEST_SUITE(hashCode);
-//         CPPUNIT_TEST(hashCode_000);
-//         CPPUNIT_TEST(hashCode_001);
-//         CPPUNIT_TEST(hashCode_002);
-//         CPPUNIT_TEST(hashCode_003);
-//         CPPUNIT_TEST_SUITE_END();
-//     }; // class compare
+
+
+
+
+
+
+
 //
 //
-// // -----------------------------------------------------------------------------
+
 //
     class indexOfChar : public CppUnit::TestFixture
     {
@@ -337,18 +337,18 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(indexOfChar);
         CPPUNIT_TEST(indexOfChar_000);
         CPPUNIT_TEST(indexOfChar_001);
         CPPUNIT_TEST(indexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class indexOfChar
+    }; 
 
-// // -----------------------------------------------------------------------------
+
     class lastIndexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -383,19 +383,19 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(lastIndexOfChar);
         CPPUNIT_TEST(lastIndexOfChar_000);
         CPPUNIT_TEST(lastIndexOfChar_001);
         CPPUNIT_TEST(lastIndexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class lastIndexOfChar
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 
     class indexOfStr : public CppUnit::TestFixture
     {
@@ -442,17 +442,17 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(indexOfStr);
         CPPUNIT_TEST(indexOfStr_000);
         CPPUNIT_TEST(indexOfStr_001);
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class compare
-// -----------------------------------------------------------------------------
+    }; 
+
 
 
     class lastIndexOfStr : public CppUnit::TestFixture
@@ -505,9 +505,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 20 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(lastIndexOfStr);
         CPPUNIT_TEST(lastIndexOfStr_000);
@@ -515,9 +515,9 @@ namespace rtl_ustr
         CPPUNIT_TEST(lastIndexOfStr_002);
         CPPUNIT_TEST(lastIndexOfStr_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class lastIndexOfStr
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class replaceChar : public CppUnit::TestFixture
     {
@@ -534,7 +534,7 @@ namespace rtl_ustr
                 rtl::OUString aShouldStr1("ruplacu char.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
-                sal_Unicode* pStr = (sal_Unicode*) malloc( nLength + sizeof(sal_Unicode)); // length + 1 (null terminator)
+                sal_Unicode* pStr = (sal_Unicode*) malloc( nLength + sizeof(sal_Unicode)); 
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 memset(pStr, 0, nLength + sizeof(sal_Unicode));
                 memcpy(pStr, aStr1.getStr(), nLength);
@@ -546,17 +546,17 @@ namespace rtl_ustr
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(replaceChar);
         CPPUNIT_TEST(replaceChar_000);
         CPPUNIT_TEST(replaceChar_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class replaceChar_WithLength : public CppUnit::TestFixture
     {
@@ -594,7 +594,7 @@ namespace rtl_ustr
                 rtl::OUString aShouldStr1("uuuuuueeeeeee");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
-                sal_Unicode* pStr = (sal_Unicode*) malloc(nLength);                 // no null terminator is need
+                sal_Unicode* pStr = (sal_Unicode*) malloc(nLength);                 
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 memcpy(pStr, aStr1.getStr(), nLength);
 
@@ -605,9 +605,9 @@ namespace rtl_ustr
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(replaceChar_WithLength);
         CPPUNIT_TEST(replaceChar_WithLength_000);
@@ -615,10 +615,10 @@ namespace rtl_ustr
         CPPUNIT_TEST(replaceChar_WithLength_001);
         CPPUNIT_TEST(replaceChar_WithLength_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 
     class toAsciiLowerCase : public CppUnit::TestFixture
     {
@@ -635,9 +635,9 @@ namespace rtl_ustr
                 rtl::OUString aShouldStr1("change this to ascii lower case.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
-                sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode) );  // we need to add '\0' so one more
+                sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode) );  
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
-                memset(pStr, 0, nLength + sizeof(sal_Unicode));                             // empty the sal_Unicode array
+                memset(pStr, 0, nLength + sizeof(sal_Unicode));                             
                 memcpy(pStr, aStr1.getStr(), nLength);
 
                 rtl_ustr_toAsciiLowerCase( pStr );
@@ -647,15 +647,15 @@ namespace rtl_ustr
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase);
         CPPUNIT_TEST(toAsciiLowerCase_000);
         CPPUNIT_TEST(toAsciiLowerCase_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
     class toAsciiLowerCase_WithLength : public CppUnit::TestFixture
@@ -690,17 +690,17 @@ namespace rtl_ustr
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase_WithLength);
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_000);
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class toAsciiUpperCase : public CppUnit::TestFixture
     {
@@ -717,7 +717,7 @@ namespace rtl_ustr
                 rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
 
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
-                sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
+                sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); 
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 memset(pStr, 0, nLength + sizeof(sal_Unicode));
                 memcpy(pStr, aStr1.getStr(), nLength);
@@ -729,15 +729,15 @@ namespace rtl_ustr
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase);
         CPPUNIT_TEST(toAsciiUpperCase_000);
         CPPUNIT_TEST(toAsciiUpperCase_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
     class toAsciiUpperCase_WithLength : public CppUnit::TestFixture
@@ -762,23 +762,23 @@ namespace rtl_ustr
                 rtl_ustr_toAsciiUpperCase_WithLength( pStr, 10 );
                 rtl::OUString suStr(pStr, aStr1.getLength());
 
-                // printf("Uppercase with length: '%s'\n", aStr1.getStr());
+                
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase_WithLength);
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_000);
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
-    // -----------------------------------------------------------------------------
+    
 
     class trim_WithLength : public CppUnit::TestFixture
     {
@@ -786,7 +786,7 @@ namespace rtl_ustr
         void trim_WithLength_000()
         {
             rtl_ustr_trim_WithLength(NULL, 0);
-            // should not GPF
+            
         }
 
         void trim_WithLength_000_1()
@@ -872,9 +872,9 @@ namespace rtl_ustr
             free(pStr);
         }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(trim_WithLength);
         CPPUNIT_TEST(trim_WithLength_000);
@@ -887,7 +887,7 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     };
 
-    // -----------------------------------------------------------------------------
+    
 
     class valueOfChar : public CppUnit::TestFixture
     {
@@ -895,7 +895,7 @@ namespace rtl_ustr
         void valueOfChar_000()
             {
                 rtl_ustr_valueOfChar(NULL, 0);
-                // should not GPF
+                
             }
         void valueOfChar_001()
             {
@@ -909,9 +909,9 @@ namespace rtl_ustr
                 }
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(valueOfChar);
         CPPUNIT_TEST(valueOfChar_000);
@@ -1010,21 +1010,21 @@ namespace rtl_ustr
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000()
             {
                 rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0);
-                // should not GPF
+                
             }
 
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_1()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0);
-                // should not GPF
+                
             }
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_2()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl::OString sStr2 =                                 "Line is shorter.";
                 rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr(), 0);
-                // should not GPF
+                
             }
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_001()
             {
@@ -1053,9 +1053,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(ascii_shortenedCompareIgnoreAsciiCase_WithLength);
         CPPUNIT_TEST(ascii_shortenedCompareIgnoreAsciiCase_WithLength_000);
@@ -1065,9 +1065,9 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_shortenedCompareIgnoreAsciiCase_WithLength_002);
         CPPUNIT_TEST(ascii_shortenedCompareIgnoreAsciiCase_WithLength_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ascii_shortenedCompareIgnoreAsciiCase_WithLength
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class ascii_compareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
@@ -1076,21 +1076,21 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_WithLength_000()
             {
                 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( NULL, 0, NULL);
-                // should not GPF
+                
             }
 
         void ascii_compareIgnoreAsciiCase_WithLength_000_1()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), 0, NULL);
-                // should not GPF
+                
             }
         void ascii_compareIgnoreAsciiCase_WithLength_000_2()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl::OString sStr2 =                                 "Line is shorter.";
                 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr());
-                // should not GPF
+                
             }
         void ascii_compareIgnoreAsciiCase_WithLength_001()
             {
@@ -1119,9 +1119,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(ascii_compareIgnoreAsciiCase_WithLength);
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_WithLength_000);
@@ -1131,9 +1131,9 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_WithLength_002);
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_WithLength_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ascii_compareIgnoreAsciiCase_WithLength
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class ascii_compare : public CppUnit::TestFixture
     {
@@ -1142,14 +1142,14 @@ namespace rtl_ustr
         void ascii_compare_000()
             {
                 rtl_ustr_ascii_compare( NULL, NULL);
-                // should not GPF
+                
             }
 
         void ascii_compare_000_1()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compare( aStr1.getStr(), NULL);
-                // should not GPF
+                
             }
         void ascii_compare_001()
             {
@@ -1178,9 +1178,9 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(ascii_compare);
         CPPUNIT_TEST(ascii_compare_000);
@@ -1189,9 +1189,9 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_compare_002);
         CPPUNIT_TEST(ascii_compare_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ascii_compare
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class ascii_compareIgnoreAsciiCase : public CppUnit::TestFixture
     {
@@ -1200,14 +1200,14 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_000()
             {
                 rtl_ustr_ascii_compareIgnoreAsciiCase( NULL, NULL);
-                // should not GPF
+                
             }
 
         void ascii_compareIgnoreAsciiCase_000_1()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
-                // should not GPF
+                
             }
         void ascii_compareIgnoreAsciiCase_001()
             {
@@ -1245,29 +1245,29 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-        //! LLA: some more tests with some high level strings
+        
 
-        // void ascii_compareIgnoreAsciiCase_001()
-        //     {
-        //         rtl::OUString suStr1("change this to ascii upper case.");
-        //         rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
+        
+        
+        
+        
         //
-        //         sal_uInt32 nLength = suStr1.getLength() * sizeof(sal_Unicode);
-        //         sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
-        //         CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
-        //         memset(pStr, 0, nLength + sizeof(sal_Unicode));
-        //         memcpy(pStr, suStr1.getStr(), nLength);
+        
+        
+        
+        
+        
         //
-        //         rtl_ustr_ascii_compareIgnoreAsciiCase( pStr );
-        //         rtl::OUString suStr(pStr, suStr1.getLength());
+        
+        
         //
-        //         CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
-        //         free(pStr);
-        //     }
+        
+        
+        
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(ascii_compareIgnoreAsciiCase);
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_000);
@@ -1277,19 +1277,19 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_002_1);
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ascii_compareIgnoreAsciiCase
+    }; 
 
 
-    // sample out of inc/rtl/ustring.hxx
-    // rtl_uString * pToken = NULL;
-    // sal_Int32 nIndex = 0;
-    // do
-    // {
-    //       ...
-    //       nIndex = rtl_uString_getToken(&pToken, pStr, 0, ';', nIndex);
-    //       ...
-    // }
-    // while (nIndex >= 0);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     class getToken : public CppUnit::TestFixture
     {
@@ -1298,14 +1298,14 @@ namespace rtl_ustr
         void getToken_000()
             {
                 rtl_ustr_ascii_compareIgnoreAsciiCase( NULL, NULL);
-                // should not GPF
+                
             }
 
         void ascii_compareIgnoreAsciiCase_000_1()
             {
                 rtl::OUString aStr1("Line must be equal.");
                 rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
-                // should not GPF
+                
             }
         void ascii_compareIgnoreAsciiCase_001()
             {
@@ -1343,29 +1343,29 @@ namespace rtl_ustr
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-        //! LLA: some more tests with some high level strings
+        
 
-        // void ascii_compareIgnoreAsciiCase_001()
-        //     {
-        //         rtl::OUString suStr1("change this to ascii upper case.");
-        //         rtl::OUString aShouldStr1("CHANGE THIS TO ASCII UPPER CASE.");
+        
+        
+        
+        
         //
-        //         sal_uInt32 nLength = suStr1.getLength() * sizeof(sal_Unicode);
-        //         sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
-        //         CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
-        //         memset(pStr, 0, nLength + sizeof(sal_Unicode));
-        //         memcpy(pStr, suStr1.getStr(), nLength);
+        
+        
+        
+        
+        
         //
-        //         rtl_ustr_ascii_compareIgnoreAsciiCase( pStr );
-        //         rtl::OUString suStr(pStr, suStr1.getLength());
+        
+        
         //
-        //         CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
-        //         free(pStr);
-        //     }
+        
+        
+        
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(ascii_compareIgnoreAsciiCase);
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_000);
@@ -1375,16 +1375,16 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_002_1);
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ascii_compareIgnoreAsciiCase
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compare);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compareIgnoreAsciiCase);
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compare_WithLength);
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::shortenedCompareIgnoreAsciiCase_WithLength);
-// CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::hashCode);
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::indexOfChar);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::lastIndexOfChar);
@@ -1407,12 +1407,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_shortenedCompareIgnoreAsciiCase_WithLength);
 
-} // namespace rtl_ustr
+} 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions("")
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 

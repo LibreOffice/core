@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== CanvasUpdateRequester::Deleter ========================================
+
 
 class CanvasUpdateRequester::Deleter
 {
@@ -38,7 +38,7 @@ public:
 
 
 
-//===== CanvasUpdateRequester =================================================
+
 
 CanvasUpdateRequester::RequesterMap CanvasUpdateRequester::maRequesterMap;
 
@@ -52,7 +52,7 @@ CanvasUpdateRequester::RequesterMap CanvasUpdateRequester::maRequesterMap;
             return iRequester->second;
     }
 
-    // No requester for the given canvas found.  Create a new one.
+    
     ::boost::shared_ptr<CanvasUpdateRequester> pRequester (
         new CanvasUpdateRequester(rxSharedCanvas), Deleter());
     maRequesterMap.push_back(RequesterMap::value_type(rxSharedCanvas,pRequester));
@@ -71,7 +71,7 @@ CanvasUpdateRequester::CanvasUpdateRequester (
     Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
     if (xComponent.is())
     {
-        //xComponent->addEventListener(this);
+        
     }
 }
 
@@ -114,6 +114,6 @@ IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
 }
 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

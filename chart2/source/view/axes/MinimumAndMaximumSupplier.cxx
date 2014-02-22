@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MinimumAndMaximumSupplier.hxx"
@@ -138,7 +138,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumZ()
 
 bool MergedMinimumAndMaximumSupplier::isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex )
 {
-    // only return true, if *all* suppliers want to scale to the main tick marks
+    
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( !(*aIt)->isExpandBorderToIncrementRhythm( nDimensionIndex ) )
             return false;
@@ -147,7 +147,7 @@ bool MergedMinimumAndMaximumSupplier::isExpandBorderToIncrementRhythm( sal_Int32
 
 bool MergedMinimumAndMaximumSupplier::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
 {
-    // only return true, if *all* suppliers want to expand the range
+    
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( !(*aIt)->isExpandIfValuesCloseToBorder( nDimensionIndex ) )
             return false;
@@ -156,7 +156,7 @@ bool MergedMinimumAndMaximumSupplier::isExpandIfValuesCloseToBorder( sal_Int32 n
 
 bool MergedMinimumAndMaximumSupplier::isExpandWideValuesToZero( sal_Int32 nDimensionIndex )
 {
-    // already return true, if at least one supplier wants to expand the range
+    
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( (*aIt)->isExpandWideValuesToZero( nDimensionIndex ) )
             return true;
@@ -165,7 +165,7 @@ bool MergedMinimumAndMaximumSupplier::isExpandWideValuesToZero( sal_Int32 nDimen
 
 bool MergedMinimumAndMaximumSupplier::isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex )
 {
-    // already return true, if at least one supplier wants to expand the range
+    
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( (*aIt)->isExpandNarrowValuesTowardZero( nDimensionIndex ) )
             return true;
@@ -174,7 +174,7 @@ bool MergedMinimumAndMaximumSupplier::isExpandNarrowValuesTowardZero( sal_Int32 
 
 bool MergedMinimumAndMaximumSupplier::isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
 {
-    // should not be called
+    
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( (*aIt)->isSeparateStackingForDifferentSigns( nDimensionIndex ) )
             return true;
@@ -204,6 +204,6 @@ void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( long nTimeResolu
         (*aIt)->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

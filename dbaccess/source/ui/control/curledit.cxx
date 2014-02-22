@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "curledit.hxx"
@@ -24,7 +24,7 @@
 
 namespace dbaui
 {
-// OConnectionURLEdit
+
 OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pTypeCollection(NULL)
@@ -35,7 +35,7 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sa
 
 OConnectionURLEdit::~OConnectionURLEdit()
 {
-    // delete my sub controls
+    
     Edit* pSubEdit = GetSubEdit();
     SetSubEdit(NULL);
     delete pSubEdit;
@@ -64,14 +64,14 @@ void OConnectionURLEdit::SetText(const OUString& _rStr)
 
 void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
 {
-    // create new sub controls, if necessary
+    
     if (!GetSubEdit())
         SetSubEdit(new Edit(this, 0));
     if ( !m_pForcedPrefix )
     {
         m_pForcedPrefix = new FixedText(this, WB_VCENTER);
 
-        // we use a gray background for the fixed text
+        
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         m_pForcedPrefix->SetBackground(Wallpaper(aSystemStyle.GetDialogColor()));
     }
@@ -79,18 +79,18 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
     m_pForcedPrefix->Show(m_bShowPrefix);
 
     sal_Bool bIsEmpty = _rStr.isEmpty();
-    // calc the prefix
+    
     OUString sPrefix;
     if (!bIsEmpty)
     {
-        // determine the type of the new URL described by the new text
+        
         sPrefix = m_pTypeCollection->getPrefix(_rStr);
     }
 
-    // the fixed text gets the prefix
+    
     m_pForcedPrefix->SetText(sPrefix);
 
-    // both subs have to be resized according to the text len of the prefix
+    
     Size aMySize = GetSizePixel();
     sal_Int32 nTextWidth = 0;
     if ( m_pForcedPrefix && m_bShowPrefix)
@@ -99,13 +99,13 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
         m_pForcedPrefix->SetPosSizePixel(Point(0, -2), Size(nTextWidth, aMySize.Height()));
     }
     GetSubEdit()->SetPosSizePixel(Point(nTextWidth, -2), Size(aMySize.Width() - nTextWidth - 4, aMySize.Height()));
-        // -2 because the edit has a frame which is 2 pixel wide ... should not be necessary, but I don't fully understand this ....
+        
 
-    // show the sub controls (in case they were just created)
+    
     GetSubEdit()->Show();
 
-    // do the real SetTex
-//  Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
+    
+
     OUString sNewText( _rStr );
     if ( !bIsEmpty )
         sNewText  = m_pTypeCollection->cutPrefix( _rStr );
@@ -126,6 +126,6 @@ void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
         m_pForcedPrefix->Show(m_bShowPrefix);
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

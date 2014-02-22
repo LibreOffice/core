@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <oox/export/vmlexport.hxx>
@@ -79,7 +79,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 
     if ( nEscherContainer == ESCHER_SpContainer )
     {
-        // opening a shape container
+        
 #if OSL_DEBUG_LEVEL > 0
         if ( m_nShapeType != ESCHER_ShpInst_Nil )
             fprintf( stderr, "Warning!  VMLExport::OpenContainer(): opening shape inside a shape.\n" );
@@ -92,8 +92,8 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 
         m_pShapeStyle->ensureCapacity( 200 );
 
-        // postpone the output so that we are able to write even the elements
-        // that we learn inside Commit()
+        
+        
         m_pSerializer->mark();
     }
 }
@@ -102,14 +102,14 @@ void VMLExport::CloseContainer()
 {
     if ( mRecTypes.back() == ESCHER_SpContainer )
     {
-        // write the shape now when we have all the info
+        
         sal_Int32 nShapeElement = StartShape();
 
         m_pSerializer->mergeTopMarks();
 
         EndShape( nShapeElement );
 
-        // cleanup
+        
         m_nShapeType = ESCHER_ShpInst_Nil;
         m_pShapeAttrList = NULL;
     }
@@ -130,7 +130,7 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* p
         pAttrList->add( XML_alt, OUStringToOString( rShapeName, RTL_TEXTENCODING_UTF8 ) );
 
     sal_Bool rbAbsolutePos = true;
-    //editAs
+    
     OUString rEditAs = EscherEx::GetEditAs();
     if (!rEditAs.isEmpty())
     {
@@ -138,14 +138,14 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* p
         rbAbsolutePos = false;
     }
 
-    // style
+    
     if ( pRect )
         AddRectangleDimensions( aStyle, *pRect, rbAbsolutePos );
 
     if ( !aStyle.isEmpty() )
         pAttrList->add( XML_style, aStyle.makeStringAndClear() );
 
-    // coordorigin/coordsize
+    
     if ( pRect && ( mnGroupLevel == 1 ) )
     {
         pAttrList->add( XML_coordorigin,
@@ -275,7 +275,7 @@ static void impl_AddColor( sax_fastparser::FastAttributeList *pAttrList, sal_Int
         case 0x00FFFF: pColor = "aqua"; break;
         default:
             {
-                snprintf( pRgbColor, sizeof( pRgbColor ), "#%06x", static_cast< unsigned int >( nColor ) ); // not too handy to use OString::valueOf() here :-(
+                snprintf( pRgbColor, sizeof( pRgbColor ), "#%06x", static_cast< unsigned int >( nColor ) ); 
                 pColor = pRgbColor;
             }
             break;
@@ -331,17 +331,17 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
         return;
 
-    // postpone the output of the embedded elements so that they are written
-    // inside the shapes
+    
+    
     m_pSerializer->mark();
 
-    // dimensions
+    
     if ( m_nShapeType == ESCHER_ShpInst_Line )
         AddLineDimensions( rRect );
     else
         AddRectangleDimensions( *m_pShapeStyle, rRect );
 
-    // properties
+    
     bool bAlreadyWritten[ 0xFFF ];
     memset( bAlreadyWritten, 0, sizeof( bAlreadyWritten ) );
     const EscherProperties &rOpts = rProps.GetOpts();
@@ -354,13 +354,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
         switch ( nId )
         {
-            case ESCHER_Prop_WrapText: // 133
+            case ESCHER_Prop_WrapText: 
                 {
                     const char *pWrapType = NULL;
                     switch ( it->nPropValue )
                     {
                         case ESCHER_WrapSquare:
-                        case ESCHER_WrapByPoints:  pWrapType = "square"; break; // these two are equivalent according to the docu
+                        case ESCHER_WrapByPoints:  pWrapType = "square"; break; 
                         case ESCHER_WrapNone:      pWrapType = "none"; break;
                         case ESCHER_WrapTopBottom: pWrapType = "topAndBottom"; break;
                         case ESCHER_WrapThrough:   pWrapType = "through"; break;
@@ -373,9 +373,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
 
-            // coordorigin
-            case ESCHER_Prop_geoLeft: // 320
-            case ESCHER_Prop_geoTop: // 321
+            
+            case ESCHER_Prop_geoLeft: 
+            case ESCHER_Prop_geoTop: 
                 {
                     sal_uInt32 nLeft = 0, nTop = 0;
 
@@ -399,9 +399,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_geoTop ] = true;
                 break;
 
-            // coordsize
-            case ESCHER_Prop_geoRight: // 322
-            case ESCHER_Prop_geoBottom: // 323
+            
+            case ESCHER_Prop_geoRight: 
+            case ESCHER_Prop_geoBottom: 
                 {
                     sal_uInt32 nLeft = 0, nRight = 0, nTop = 0, nBottom = 0;
                     rProps.GetOpt( ESCHER_Prop_geoLeft, nLeft );
@@ -428,8 +428,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_geoBottom ] = true;
                 break;
 
-            case ESCHER_Prop_pVertices: // 325
-            case ESCHER_Prop_pSegmentInfo: // 326
+            case ESCHER_Prop_pVertices: 
+            case ESCHER_Prop_pSegmentInfo: 
                 {
                     EscherPropSortStruct aVertices;
                     EscherPropSortStruct aSegments;
@@ -443,7 +443,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
                         sal_uInt16 nPointSize = aVertices.pBuf[4] + ( aVertices.pBuf[5] << 8 );
 
-                        // number of segments
+                        
                         sal_uInt16 nSegments = impl_GetUInt16( pSegmentIt );
                         pSegmentIt += 4;
 
@@ -452,7 +452,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                             sal_uInt16 nSeg = impl_GetUInt16( pSegmentIt );
                             switch ( nSeg )
                             {
-                                case 0x4000: // moveto
+                                case 0x4000: 
                                     {
                                         sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
@@ -463,14 +463,14 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                 case 0xb300:
                                 case 0xac00:
                                     break;
-                                case 0x0001: // lineto
+                                case 0x0001: 
                                     {
                                         sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         aPath.append( "l" ).append( nX ).append( "," ).append( nY );
                                     }
                                     break;
-                                case 0x2001: // curveto
+                                case 0x2001: 
                                     {
                                         sal_Int32 nX1 = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY1 = impl_GetPointComponent( pVerticesIt, nPointSize );
@@ -483,20 +483,20 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                             .append( nX3 ).append( "," ).append( nY3 );
                                     }
                                     break;
-                                case 0xaa00: // nofill
+                                case 0xaa00: 
                                     aPath.append( "nf" );
                                     break;
-                                case 0xab00: // nostroke
+                                case 0xab00: 
                                     aPath.append( "ns" );
                                     break;
-                                case 0x6001: // close
+                                case 0x6001: 
                                     aPath.append( "x" );
                                     break;
-                                case 0x8000: // end
+                                case 0x8000: 
                                     aPath.append( "e" );
                                     break;
                                 default:
-                                    // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
+                                    
                                     for (int i = 0; i < nSeg; ++i)
                                     {
                                         sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
@@ -520,12 +520,12 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_pSegmentInfo ] = true;
                 break;
 
-            case ESCHER_Prop_fillType: // 384
-            case ESCHER_Prop_fillColor: // 385
-            case ESCHER_Prop_fillBackColor: // 387
-            case ESCHER_Prop_fillBlip: // 390
-            case ESCHER_Prop_fNoFillHitTest: // 447
-            case ESCHER_Prop_fillOpacity: // 386
+            case ESCHER_Prop_fillType: 
+            case ESCHER_Prop_fillColor: 
+            case ESCHER_Prop_fillBackColor: 
+            case ESCHER_Prop_fillBlip: 
+            case ESCHER_Prop_fNoFillHitTest: 
+            case ESCHER_Prop_fillOpacity: 
                 {
                     sal_uInt32 nValue;
                     sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
@@ -536,15 +536,15 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         switch ( nValue )
                         {
                             case ESCHER_FillSolid:       pFillType = "solid"; break;
-                            // TODO case ESCHER_FillPattern:     pFillType = ""; break;
+                            
                             case ESCHER_FillTexture:     pFillType = "tile"; break;
-                            // TODO case ESCHER_FillPicture:     pFillType = ""; break;
-                            // TODO case ESCHER_FillShade:       pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeCenter: pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeShape:  pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeScale:  pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeTitle:  pFillType = ""; break;
-                            // TODO case ESCHER_FillBackground:  pFillType = ""; break;
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             default:
 #if OSL_DEBUG_LEVEL > 0
                                 fprintf( stderr, "TODO: unhandled fill type\n" );
@@ -568,7 +568,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
                     {
                         SvMemoryStream aStream;
-                        int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
+                        int nHeaderSize = 25; 
                         aStream.Write(aStruct.pBuf + nHeaderSize, aStruct.nPropSize - nHeaderSize);
                         aStream.Seek(0);
                         Graphic aGraphic;
@@ -582,7 +582,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         impl_AddBool( pAttrList, XML_detectmouseclick, nValue );
 
                     if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
-                        // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
+                        
                         pAttrList->add(XML_opacity, OString::number(double((nValue * 100) >> 16) / 100));
 
                     if (imageData)
@@ -598,17 +598,17 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_fillOpacity ] = true;
                 break;
 
-            case ESCHER_Prop_lineColor: // 448
-            case ESCHER_Prop_lineWidth: // 459
-            case ESCHER_Prop_lineDashing: // 462
-            case ESCHER_Prop_lineStartArrowhead: // 464
-            case ESCHER_Prop_lineEndArrowhead: // 465
-            case ESCHER_Prop_lineStartArrowWidth: // 466
-            case ESCHER_Prop_lineStartArrowLength: // 467
-            case ESCHER_Prop_lineEndArrowWidth: // 468
-            case ESCHER_Prop_lineEndArrowLength: // 469
-            case ESCHER_Prop_lineJoinStyle: // 470
-            case ESCHER_Prop_lineEndCapStyle: // 471
+            case ESCHER_Prop_lineColor: 
+            case ESCHER_Prop_lineWidth: 
+            case ESCHER_Prop_lineDashing: 
+            case ESCHER_Prop_lineStartArrowhead: 
+            case ESCHER_Prop_lineEndArrowhead: 
+            case ESCHER_Prop_lineStartArrowWidth: 
+            case ESCHER_Prop_lineStartArrowLength: 
+            case ESCHER_Prop_lineEndArrowWidth: 
+            case ESCHER_Prop_lineEndArrowLength: 
+            case ESCHER_Prop_lineJoinStyle: 
+            case ESCHER_Prop_lineEndCapStyle: 
                 {
                     sal_uInt32 nValue;
                     sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
@@ -769,14 +769,14 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 break;
             case ESCHER_Prop_Rotation:
                 {
-                    // The higher half of the variable contains the angle.
+                    
                     m_pShapeStyle->append(";rotation:").append(double(it->nPropValue >> 16));
                     bAlreadyWritten[ESCHER_Prop_Rotation] = true;
                 }
                 break;
             case ESCHER_Prop_fNoLineDrawDash:
                 {
-                    // See DffPropertyReader::ApplyLineAttributes().
+                    
                     impl_AddBool( m_pShapeAttrList, XML_stroked, it->nPropValue & 8 );
                     bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
                 }
@@ -833,7 +833,7 @@ void VMLExport::AddFlipXY( )
 
 void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
 {
-    // style
+    
     if ( !m_pShapeStyle->isEmpty() )
         m_pShapeStyle->append( ";" );
 
@@ -841,7 +841,7 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
 
     AddFlipXY();
 
-    // the actual dimensions
+    
     OString aLeft, aTop, aRight, aBottom;
 
     if ( mnGroupLevel == 1 )
@@ -912,7 +912,7 @@ sal_Int32 VMLExport::StartShape()
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
         return -1;
 
-    // some of the shapes have their own name ;-)
+    
     sal_Int32 nShapeElement = -1;
     bool bReferToShapeType = false;
     switch ( m_nShapeType )
@@ -928,7 +928,7 @@ sal_Int32 VMLExport::StartShape()
             {
                 nShapeElement = XML_shape;
 
-                // a predefined shape?
+                
                 const char* pShapeType = pShapeTypes[ m_nShapeType ];
                 if ( pShapeType )
                 {
@@ -941,14 +941,14 @@ sal_Int32 VMLExport::StartShape()
                 }
                 else
                 {
-                    // rectangle is probably the best fallback...
+                    
                     nShapeElement = XML_rect;
                 }
             }
             break;
     }
 
-    // anchoring
+    
     switch (m_eHOri)
     {
         case text::HoriOrientation::LEFT:
@@ -1019,7 +1019,7 @@ sal_Int32 VMLExport::StartShape()
             break;
     }
 
-    // add style
+    
     m_pShapeAttrList->add( XML_style, m_pShapeStyle->makeStringAndClear() );
 
     if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) )
@@ -1031,16 +1031,16 @@ sal_Int32 VMLExport::StartShape()
                     .makeStringAndClear() );
         }
 
-        // start of the shape
+        
         m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
     }
     else
     {
-        // start of the shape
+        
         m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
     }
 
-    // now check if we have some text and we have a text exporter registered
+    
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
     if (pTxtObj && m_pTextExport && m_nShapeType != ESCHER_ShpInst_TextPlainText)
     {
@@ -1064,7 +1064,7 @@ sal_Int32 VMLExport::StartShape()
 
         if( pParaObj )
         {
-            // this is reached only in case some text is attached to the shape
+            
             m_pSerializer->startElementNS(XML_v, XML_textbox, FSEND);
             m_pTextExport->WriteOutliner(*pParaObj);
             m_pSerializer->endElementNS(XML_v, XML_textbox);
@@ -1080,7 +1080,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
 {
     if ( nShapeElement >= 0 )
     {
-        // end of the shape
+        
         m_pSerializer->endElementNS( XML_v, nShapeElement );
     }
 }

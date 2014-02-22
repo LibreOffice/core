@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
@@ -28,7 +28,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -38,14 +38,14 @@ namespace sdr
         {
         }
 
-        // The destructor.
+        
         ObjectContactPainter::~ObjectContactPainter()
         {
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -78,7 +78,7 @@ namespace sdr
         {
         }
 
-        // Process the whole displaying
+        
         void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
         {
             const sal_uInt32 nCount(GetPaintObjectCount());
@@ -89,21 +89,21 @@ namespace sdr
 
                 if(pTargetDevice)
                 {
-                    // update current ViewInformation2D at the ObjectContact
+                    
                     const GDIMetaFile* pMetaFile = pTargetDevice->GetConnectMetaFile();
                     const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
                     basegfx::B2DRange aViewRange;
 
-                    // create ViewRange
+                    
                     if(!bOutputToRecordingMetaFile)
                     {
-                        // use visible pixels, but transform to world coordinates
+                        
                         const Size aOutputSizePixel(pTargetDevice->GetOutputSizePixel());
                         aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
                         aViewRange.transform(pTargetDevice->GetInverseViewTransformation());
                     }
 
-                    // upate local ViewInformation2D
+                    
                     const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
                         basegfx::B2DHomMatrix(),
                         pTargetDevice->GetViewTransformation(),
@@ -113,7 +113,7 @@ namespace sdr
                         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>());
                     updateViewInformation2D(aNewViewInformation2D);
 
-                    // collect primitive data in a sequence; this will already use the updated ViewInformation2D
+                    
                     drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
@@ -124,7 +124,7 @@ namespace sdr
                             rViewObjectContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
                     }
 
-                    // if there is something to show, use a vclProcessor to render it
+                    
                     if(xPrimitiveSequence.hasElements())
                     {
                         drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
@@ -141,20 +141,20 @@ namespace sdr
             }
         }
 
-        // VirtualDevice?
+        
         bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
         {
             return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
         }
 
-        // recording MetaFile?
+        
         bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
         {
             GDIMetaFile* pMetaFile = mrTargetOutputDevice.GetConnectMetaFile();
             return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
         }
 
-        // pdf export?
+        
         bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
         {
             return (0 != mrTargetOutputDevice.GetPDFWriter());
@@ -164,10 +164,10 @@ namespace sdr
         {
             return &mrTargetOutputDevice;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -189,7 +189,7 @@ namespace sdr
             ObjectContact& rOriginalObjectContact)
         :   ObjectContactPainter(),
             mrOriginalObjectContact(rOriginalObjectContact),
-            mxStartPage(const_cast< SdrPage* >(pPage)) // no SdrPageWeakRef available to hold a const SdrPage*
+            mxStartPage(const_cast< SdrPage* >(pPage)) 
         {
         }
 
@@ -201,7 +201,7 @@ namespace sdr
         {
             if(pPage != GetStartPage())
             {
-                mxStartPage.reset(const_cast< SdrPage* >(pPage)); // no SdrPageWeakRef available to hold a const SdrPage*
+                mxStartPage.reset(const_cast< SdrPage* >(pPage)); 
             }
         }
 
@@ -209,7 +209,7 @@ namespace sdr
         {
             return mrOriginalObjectContact.TryToGetOutputDevice();
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

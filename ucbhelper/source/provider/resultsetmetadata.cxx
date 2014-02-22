@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,13 +74,13 @@ using namespace ucbhelper_impl;
 
 namespace ucbhelper {
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ResultSetMetaData Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ResultSetMetaData::ResultSetMetaData(
                         const Reference< XComponentContext >& rxContext,
@@ -93,7 +93,7 @@ ResultSetMetaData::ResultSetMetaData(
 {
 }
 
-//=========================================================================
+
 ResultSetMetaData::ResultSetMetaData(
                         const Reference< XComponentContext >& rxContext,
                         const Sequence< Property >& rProps,
@@ -107,48 +107,48 @@ ResultSetMetaData::ResultSetMetaData(
                 "ResultSetMetaData ctor - different array sizes!" );
 }
 
-//=========================================================================
-// virtual
+
+
 ResultSetMetaData::~ResultSetMetaData()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_2( ResultSetMetaData,
                    XTypeProvider,
                    XResultSetMetaData );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_2( ResultSetMetaData,
                       XTypeProvider,
                       XResultSetMetaData );
 
-//=========================================================================
-//
-// XResultSetMetaData methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 sal_Int32 SAL_CALL ResultSetMetaData::getColumnCount()
     throw( SQLException, RuntimeException )
 {
     return m_aProps.getLength();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -163,8 +163,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -174,8 +174,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isCaseSensitive;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -190,8 +190,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isSearchable;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -205,8 +205,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isCurrency;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -221,8 +221,8 @@ sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isNullable;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -236,8 +236,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isSigned;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -251,8 +251,8 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].columnDisplaySize;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -271,8 +271,8 @@ OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
     return m_aProps.getConstArray()[ column - 1 ].Name;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getColumnName( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -286,8 +286,8 @@ OUString SAL_CALL ResultSetMetaData::getColumnName( sal_Int32 column )
     return m_aProps.getConstArray()[ column - 1 ].Name;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -304,8 +304,8 @@ OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].schemaName;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -323,8 +323,8 @@ sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].precision;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -339,8 +339,8 @@ sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].scale;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -357,8 +357,8 @@ OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].tableName;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -375,8 +375,8 @@ OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].catalogName;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -393,7 +393,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     if ( m_aProps.getConstArray()[ column - 1 ].Type
             == getCppuVoidType() )
     {
-        // No type given. Try UCB's Properties Manager...
+        
 
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -402,7 +402,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
             try
             {
                 Reference< XPropertySetInfo > xInfo = PropertiesManager::create( m_xContext );
-    // Less (remote) calls...
+    
 
                 Sequence< Property > aProps = xInfo->getProperties();
                 const Property* pProps1 = aProps.getConstArray();
@@ -419,7 +419,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                         const Property& rProp1 = pProps1[ m ];
                         if ( rProp.Name == rProp1.Name )
                         {
-                            // Found...
+                            
                             rProp.Type = rProp1.Type;
                             break;
                         }
@@ -432,7 +432,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
             }
             catch ( Exception& )
             {
-                // createInstance
+                
             }
 
             m_pImpl->m_bObtainedTypes = true;
@@ -443,48 +443,48 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     sal_Int32 nType = DataType::OTHER;
 
     if ( rType == getCppuType( static_cast< const OUString * >( 0 ) ) )
-        nType = DataType::VARCHAR;  // XRow::getString
+        nType = DataType::VARCHAR;  
     else if ( rType == getCppuBooleanType() )
-        nType = DataType::BIT;      // XRow::getBoolean
+        nType = DataType::BIT;      
     else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
-        nType = DataType::INTEGER;  // XRow::getInt
+        nType = DataType::INTEGER;  
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
-        nType = DataType::BIGINT;   // XRow::getLong
+        nType = DataType::BIGINT;   
     else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
-        nType = DataType::SMALLINT; // XRow::getShort
+        nType = DataType::SMALLINT; 
     else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
-        nType = DataType::TINYINT;  // XRow::getByte
+        nType = DataType::TINYINT;  
     else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
-        nType = DataType::REAL;     // XRow::getFloat
+        nType = DataType::REAL;     
     else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
-        nType = DataType::DOUBLE;   // XRow::getDouble
+        nType = DataType::DOUBLE;   
     else if ( rType == getCppuType( static_cast< const Sequence< sal_Int8 > * >( 0 ) ) )
-        nType = DataType::VARBINARY;// XRow::getBytes
+        nType = DataType::VARBINARY;
     else if ( rType == getCppuType( static_cast< const Date * >( 0 ) ) )
-        nType = DataType::DATE;     // XRow::getDate
+        nType = DataType::DATE;     
     else if ( rType == getCppuType( static_cast< const Time * >( 0 ) ) )
-        nType = DataType::TIME;     // XRow::getTime
+        nType = DataType::TIME;     
     else if ( rType == getCppuType( static_cast< const DateTime * >( 0 ) ) )
-        nType = DataType::TIMESTAMP;// XRow::getTimestamp
+        nType = DataType::TIMESTAMP;
     else if ( rType == getCppuType( static_cast< Reference< XInputStream > * >( 0 ) ) )
-        nType = DataType::LONGVARBINARY;    // XRow::getBinaryStream
-//      nType = DataType::LONGVARCHAR;      // XRow::getCharacterStream
+        nType = DataType::LONGVARBINARY;    
+
     else if ( rType == getCppuType( static_cast< Reference< XClob > * >( 0 ) ) )
-        nType = DataType::CLOB; // XRow::getClob
+        nType = DataType::CLOB; 
     else if ( rType == getCppuType( static_cast< Reference< XBlob > * >( 0 ) ) )
-        nType = DataType::BLOB; // XRow::getBlob
+        nType = DataType::BLOB; 
     else if ( rType == getCppuType( static_cast< Reference< XArray > * >( 0 ) ) )
-        nType = DataType::ARRAY;// XRow::getArray
+        nType = DataType::ARRAY;
     else if ( rType == getCppuType( static_cast< Reference< XRef > * >( 0 ) ) )
-        nType = DataType::REF;// XRow::getRef
+        nType = DataType::REF;
     else
-        nType = DataType::OBJECT;// XRow::getObject
+        nType = DataType::OBJECT;
 
     return nType;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -501,8 +501,8 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].columnTypeName;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -512,13 +512,13 @@ sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
         return sal_True;
 
-    // autoincrement==true => readonly
+    
     return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement ||
            m_pImpl->m_aColumnData[ column - 1 ].isReadOnly;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -531,8 +531,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isWritable;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -545,8 +545,8 @@ sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].isDefinitelyWritable;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
@@ -562,6 +562,6 @@ OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].columnServiceName;
 }
 
-} // namespace ucbhelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

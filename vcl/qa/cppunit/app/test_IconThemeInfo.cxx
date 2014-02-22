@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <stdexcept>
@@ -47,7 +47,7 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     void
     GalaxyIsReturnedAsDisplayNameForDefaultZip();
 
-    // Adds code needed to register the test suite
+    
     CPPUNIT_TEST_SUITE(IconThemeInfoTest);
     CPPUNIT_TEST(UpperCaseDisplayNameIsReturnedForNonDefaultId);
     CPPUNIT_TEST(ThemeIdIsDetectedFromFileNameWithUnderscore);
@@ -58,7 +58,7 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined1);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined2);
 
-    // End of test suite definition
+    
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -73,7 +73,7 @@ IconThemeInfoTest::UpperCaseDisplayNameIsReturnedForNonDefaultId()
 void
 IconThemeInfoTest::ImagesZipIsNotValid()
 {
-    OUString id("file://images.zip");
+    OUString id("file:
     bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images.zip is not a valid theme name", false, valid);
 }
@@ -81,7 +81,7 @@ IconThemeInfoTest::ImagesZipIsNotValid()
 void
 IconThemeInfoTest::ImagesOxygenZipIsValid()
 {
-    OUString id("file://images_oxygen.zip");
+    OUString id("file:
     bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images_oxygen.zip is a valid theme name", true, valid);
 }
@@ -89,7 +89,7 @@ IconThemeInfoTest::ImagesOxygenZipIsValid()
 void
 IconThemeInfoTest::DefaultZipIsValid()
 {
-    OUString id("file://default.zip");
+    OUString id("file:
     bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("default.zip is a valid theme name", true, valid);
 }
@@ -134,12 +134,12 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
 void
 IconThemeInfoTest::GalaxyIsReturnedAsDisplayNameForDefaultZip()
 {
-    OUString id("file://default.zip");
+    OUString id("file:
     IconThemeInfo i(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("default.zip is displayed as Galaxy", OUString("Galaxy"), i.GetDisplayName());
 }
 
-// Put the test suite in the registry
+
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeInfoTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

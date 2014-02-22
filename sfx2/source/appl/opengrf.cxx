@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@
 #include "app.hrc"
 #include <sfx2/sfxresid.hxx>
 
-//-----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -56,7 +56,7 @@ using namespace ::rtl;
 using namespace ::cppu;
 
 
-//-----------------------------------------------------------------------------
+
 
 sal_uInt16  SvxOpenGrfErr2ResId(    short   err     )
 {
@@ -120,13 +120,13 @@ short SvxOpenGraphicDialog::Execute()
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
 
-            // check whether we can load the graphic
+            
             OUString  aCurFilter( GetCurrentFilter() );
             sal_uInt16  nFormatNum = rFilter.GetImportFormatNumber( aCurFilter );
             sal_uInt16  nRetFormat = 0;
             sal_uInt16  nFound = USHRT_MAX;
 
-            // non-local?
+            
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
                 SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
@@ -156,7 +156,7 @@ short SvxOpenGraphicDialog::Execute()
             if ( GRFILTER_OK == nImpRet )
                 nFound = nRetFormat;
 
-            // could not load?
+            
             if ( nFound == USHRT_MAX )
             {
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ).toString() );
@@ -164,7 +164,7 @@ short SvxOpenGraphicDialog::Execute()
             }
             else
             {
-                // setup appropriate filter (so next time, it will work)
+                
                 if( rFilter.GetImportFormatCount() )
                 {
                     OUString  aFormatName(rFilter.GetImportFormatName(nFound));
@@ -176,7 +176,7 @@ short SvxOpenGraphicDialog::Execute()
         }
     }
 
-    // cancel
+    
     return -1;
 }
 

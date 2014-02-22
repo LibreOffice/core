@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <typelib/typedescription.h>
@@ -26,27 +26,27 @@
 namespace stoc_corefl
 {
 
-// XInterface
-//__________________________________________________________________________________________________
+
+
 Any ArrayIdlClassImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
     Any aRet( ::cppu::queryInterface( rType, static_cast< XIdlArray * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlClassImpl::queryInterface( rType ));
 }
-//__________________________________________________________________________________________________
+
 void ArrayIdlClassImpl::acquire() throw()
 {
     IdlClassImpl::acquire();
 }
-//__________________________________________________________________________________________________
+
 void ArrayIdlClassImpl::release() throw()
 {
     IdlClassImpl::release();
 }
 
-// XTypeProvider
-//__________________________________________________________________________________________________
+
+
 Sequence< Type > ArrayIdlClassImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -64,7 +64,7 @@ Sequence< Type > ArrayIdlClassImpl::getTypes()
     }
     return s_pTypes->getTypes();
 }
-//__________________________________________________________________________________________________
+
 Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -81,8 +81,8 @@ Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()
     return s_pId->getImplementationId();
 }
 
-// XIdlArray
-//__________________________________________________________________________________________________
+
+
 void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -107,7 +107,7 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
                           reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     rArray.pData = ppSeq;
 }
-//__________________________________________________________________________________________________
+
 sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -121,7 +121,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
 
     return (*(uno_Sequence **)rArray.getValue())->nElements;
 }
-//__________________________________________________________________________________________________
+
 Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
@@ -152,7 +152,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     return aRet;
 }
 
-//__________________________________________________________________________________________________
+
 void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
@@ -194,23 +194,23 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     TYPELIB_DANGER_RELEASE( pElemTypeDescr );
 }
 
-// ArrayIdlClassImpl
-//__________________________________________________________________________________________________
+
+
 sal_Bool ArrayIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return (xType.is() &&
             (equals( xType ) ||
-             (xType->getTypeClass() == getTypeClass() && // must be sequence|array
+             (xType->getTypeClass() == getTypeClass() && 
               getComponentType()->isAssignableFrom( xType->getComponentType() ))));
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > ArrayIdlClassImpl::getComponentType()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return getReflection()->forType( getTypeDescr()->pType );
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlArray > ArrayIdlClassImpl::getArray()
     throw(::com::sun::star::uno::RuntimeException)
 {

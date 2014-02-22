@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/sdbcx/VKeyColumn.hxx"
@@ -26,14 +26,14 @@ using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VKeyColumnDescription");
     return OUString("com.sun.star.sdbcx.VKeyColumn");
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -49,12 +49,12 @@ sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) t
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 OKeyColumn::OKeyColumn(sal_Bool _bCase) : OColumn(_bCase)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OKeyColumn::OKeyColumn( const OUString&  _ReferencedColumn,
                         const OUString&  _Name,
                         const OUString&  _TypeName,
@@ -89,27 +89,27 @@ OKeyColumn::OKeyColumn( const OUString&  _ReferencedColumn,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OKeyColumn::~OKeyColumn()
 {
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OKeyColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SAL_CALL OKeyColumn::getInfoHelper()
 {
     return *OKeyColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 
 
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/implbase2.hxx>
@@ -31,9 +31,9 @@ using namespace com::sun::star;
 namespace {
 
 typedef ::cppu::WeakImplHelper2< graphic::XGraphicObject, css::lang::XServiceInfo > GObjectAccess_BASE;
- // Simple uno wrapper around the GraphicObject class to allow basic
- // access. ( and solves a horrible cyclic link problem between
- // goodies/toolkit/extensions )
+ 
+ 
+ 
 class GObjectImpl : public GObjectAccess_BASE
 {
      ::osl::Mutex m_aMutex;
@@ -41,7 +41,7 @@ class GObjectImpl : public GObjectAccess_BASE
 public:
     GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException);
 
-     // XGraphicObject
+     
     virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException);
     virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException);
     OUString SAL_CALL getUniqueID() throw (uno::RuntimeException);

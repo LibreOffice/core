@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/module.h"
@@ -41,10 +41,10 @@ static oslModule pCloseModule = NULL;
 static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
     SalInstance* pInst = NULL;
-    // Disable gtk3 plugin for now unless explicitly requested via
-    // SAL_USE_VCLPLUGIN=gtk3 (would ideally depend on experimental mode, but
-    // reading the experimental mode setting requires the UNO service manager
-    // which has not yet been instantiated):
+    
+    
+    
+    
     if (!bForce && rModuleBase == "gtk3")
     {
         return NULL;
@@ -137,7 +137,7 @@ static DesktopType get_desktop_environment()
 
 #else
 
-#define get_desktop_environment() DESKTOP_NONE // For now...
+#define get_desktop_environment() DESKTOP_NONE 
 
 #endif
 
@@ -180,7 +180,7 @@ static SalInstance* autodetect_plugin()
     const char * const * pList = pStandardFallbackList;
     int nListEntry = 0;
 
-    // no server at all: dummy plugin
+    
     if ( desktop == DESKTOP_NONE )
         pList = pHeadlessFallbackList;
     else if ( desktop == DESKTOP_GNOME ||
@@ -230,7 +230,7 @@ SalInstance *CreateSalInstance()
     if( ! pInst )
         pInst = autodetect_plugin();
 
-    // fallback, try everything
+    
     static const char* const pPlugin[] = {
         "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
 
@@ -243,7 +243,7 @@ SalInstance *CreateSalInstance()
         _exit( 1 );
     }
 
-    // acquire SolarMutex
+    
     pInst->AcquireYieldMutex( 1 );
 
     return pInst;
@@ -251,7 +251,7 @@ SalInstance *CreateSalInstance()
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    // release SolarMutex
+    
     pInst->ReleaseYieldMutex();
 
     delete pInst;
@@ -285,7 +285,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 
 const OUString& SalGetDesktopEnvironment()
 {
-    // Order to match desktops.hxx' DesktopType
+    
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
         "XFCE", "MATE", "TDE",

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string>
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::frame;
 
 SFX_IMPL_CHILDWINDOW_CONTEXT( SwNavigationChild, SID_NAVIGATOR, SwView )
 
-// Filter the control characters out of the Outline-Entry
+
 
 OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
 {
@@ -77,7 +77,7 @@ OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
     return aEntry.makeStringAndClear();
 }
 
-// Execution of the drag operation with and without the children.
+
 
 void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
                                                     bool bWithChildren)
@@ -89,11 +89,11 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
     if ( rSh.IsOutlineMovable( nSource ))
     {
 
-        short nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
+        short nMove = nTarget-nSource; 
         rSh.GotoOutline(nSource);
         if (bWithChildren)
             rSh.MakeOutlineSel(nSource, nSource, sal_True);
-        // While moving, the selected children does not counting.
+        
         sal_uInt16 nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
         if(bWithChildren && nMove > 1 &&
                 nLastOutlinePos < nTarget)
@@ -111,7 +111,7 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
 
 }
 
-// After goto cancel the status frame selection
+
 
 static void lcl_UnSelectFrm(SwWrtShell *pSh)
 {
@@ -122,7 +122,7 @@ static void lcl_UnSelectFrm(SwWrtShell *pSh)
     }
 }
 
-// Select the document view
+
 
 IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
 {
@@ -148,8 +148,8 @@ IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
     return 0;
 }
 
-// Filling of the list box for outline view or documents
-// The PI will be set to full size
+
+
 
 void SwNavigationPI::FillBox()
 {
@@ -196,7 +196,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
     }
 }
 
-// Select handler of the toolboxes
+
 
 IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
 {
@@ -205,10 +205,10 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     if (!pView)
         return 1;
     SwWrtShell &rSh = pView->GetWrtShell();
-    // Get MouseModifier for Outline-Move
+    
 
-    // Standard: sublevels are taken
-    // do not take sublevels with Ctrl
+    
+    
     sal_Bool bOutlineWithChildren  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
     bool bFocusToDoc = false;
@@ -217,7 +217,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         case FN_UP:
         case FN_DOWN:
         {
-            // #i75416# move the execution of the search to an asynchronously called static link
+            
             bool* pbNext = new bool( FN_DOWN == nCurrItemId );
             Application::PostUserEvent( STATIC_LINK(pView, SwView, MoveNavigationHdl), pbNext );
         }
@@ -241,7 +241,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
                 }
             }
             return sal_True;
-        // Functions that will trigger a direct action.
+        
 
         case FN_SELECT_FOOTER:
         {
@@ -275,15 +275,15 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         {
             rSh.MoveCrsr();
             const sal_uInt16 eFrmType = rSh.GetFrmType(0,sal_False);
-                // Jump from the footnote to the anchor.
+                
             if (eFrmType & FRMTYPE_FOOTNOTE)
             {
                 if (rSh.GotoFtnAnchor())
                     nFuncId = FN_FOOTNOTE_TO_ANCHOR;
             }
-                // Otherwise, jump to the first footnote text;
-                // go to the next footnote if this is not possible;
-                // if this is also not possible got to the footnote before.
+                
+                
+                
             else
             {
                 if (rSh.GotoFtnTxt())
@@ -335,7 +335,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     return sal_True;
 }
 
-// Click handler of the toolboxes
+
 
 IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
 {
@@ -458,8 +458,8 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
     SwHelpToolBox::RequestHelp(rHEvt);
 }
 
-// Action-Handler Edit:
-// Switches to the page if the structure view is not turned on.
+
+
 
 IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
 {
@@ -475,7 +475,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
     return 0;
 }
 
-// If the page can be set here, the maximum is set.
+
 
 IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
 {
@@ -498,7 +498,7 @@ sal_Bool SwNavigationPI::Close()
     return sal_True;
 }
 
-// Setting of an automatic mark
+
 
 void SwNavigationPI::MakeMark()
 {
@@ -507,7 +507,7 @@ void SwNavigationPI::MakeMark()
     SwWrtShell &rSh = pView->GetWrtShell();
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
 
-    // collect and sort navigator reminder names
+    
     ::std::vector< ::rtl::OUString > vNavMarkNames;
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
@@ -516,9 +516,9 @@ void SwNavigationPI::MakeMark()
             vNavMarkNames.push_back(ppMark->get()->GetName());
     ::std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
-    // we are maxed out and delete one
-    // nAutoMarkIdx rotates through the available MarkNames
-    // this assumes that IDocumentMarkAccess generates Names in ascending order
+    
+    
+    
     if(vNavMarkNames.size() == MAX_MARKS)
         pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[nAutoMarkIdx]));
 
@@ -564,7 +564,7 @@ void SwNavigationPI::_ZoomOut()
         }
         SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
-            aContentTree.Select(pFirst, sal_True); // Enable toolbox
+            aContentTree.Select(pFirst, sal_True); 
         pConfig->SetSmall( sal_False );
         aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX);
     }
@@ -593,7 +593,7 @@ void SwNavigationPI::_ZoomIn()
             pFloat->SetOutputSizePixel(aSz);
             SvTreeListEntry* pFirst = aContentTree.FirstSelected();
             if(pFirst)
-                aContentTree.Select(pFirst, sal_True); // Enable toolbox
+                aContentTree.Select(pFirst, sal_True); 
             pConfig->SetSmall( sal_True );
             aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, false);
         }
@@ -611,7 +611,7 @@ void SwNavigationPI::Resize()
         if (pDockingParent != NULL)
         {
             FloatingWindow* pFloat =  pDockingParent->GetFloatingWindow();
-            //change the minimum width depending on the dock status
+            
             Size aMinOutSizePixel = pDockingParent->GetMinOutputSizePixel();
             if( pFloat)
             {
@@ -642,7 +642,7 @@ void SwNavigationPI::Resize()
         else
             aDocLBSz.Height() = nDocLBIniHeight;
         aContentTree.SetSizePixel(aNewSize);
-        // GlobalTree starts on to the top and goes all the way down.
+        
         aNewSize.Height() += (nDist + nDocLBIniHeight + aPos.Y() - aGlobalTree.GetPosPixel().Y());
         aGlobalTree.SetSizePixel(aNewSize);
         aDocListBox.setPosSizePixel( aLBPos.X(), aLBPos.Y(),
@@ -697,7 +697,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     nDocLBIniHeight = aDocListBox.GetSizePixel().Height();
     nZoomOutInit = nZoomOut = Resource::ReadShortRes();
 
-    // Insert the numeric field in the toolbox.
+    
     NumEditAction* pEdit = new NumEditAction(
                     &aContentToolBox, SW_RES(NF_PAGE ));
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
@@ -708,8 +708,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     bPageCtrlsVisible = sal_True;
 
-    // Double separators are not allowed, so you have to
-    // determine the suitable size differently.
+    
+    
     Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SELECT_FOOTNOTE);
     Rectangle aSecondRect = aContentToolBox.GetItemRect(FN_SELECT_HEADER);
     sal_uInt16 nWidth = sal_uInt16(aFirstRect.Left() - aSecondRect.Left());
@@ -735,14 +735,14 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     nZoomIn = (short)rOutSize.Height();
 
-    // Make sure the toolbox has a size that fits all its contents
+    
     Size aContentToolboxSize( aContentToolBox.CalcWindowSizePixel() );
     aContentToolBox.SetOutputSizePixel( aContentToolboxSize );
 
-    // position listbox below toolbar and add some space
+    
     long nListboxYPos = aContentToolBox.GetPosPixel().Y() + aContentToolboxSize.Height() + 4;
 
-    // The left and right margins around the toolboxes should be equal.
+    
     nWishWidth = aContentToolboxSize.Width();
     nWishWidth += 2 * aContentToolBox.GetPosPixel().X();
 
@@ -782,7 +782,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentTree.ShowTree();
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, true);
 
-//  TreeListBox for global document
+
     aGlobalTree.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aGlobalTree.SetSelectionMode( MULTIPLE_SELECTION );
     aGlobalTree.SetStyle( aGlobalTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
@@ -790,7 +790,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     Size aGlblSize(aGlobalToolBox.CalcWindowSizePixel());
     aGlobalToolBox.SetSizePixel(aGlblSize);
 
-//  Handler
+
 
     Link aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     aContentToolBox.SetSelectHdl( aLk );
@@ -843,10 +843,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     if (pContextWin == NULL)
     {
-        // When the context window is missing then the navigator is
-        // displayed in the sidebar.  While the navigator could change
-        // its size, the sidebar can not, and the navigator would just
-        // waste space.  Therefore hide this button.
+        
+        
+        
+        
         aContentToolBox.RemoveItem(aContentToolBox.GetItemPos(FN_SHOW_CONTENT_BOX));
     }
 }
@@ -892,16 +892,16 @@ IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
 {
     if ( pPopupWindow->IsVisible() )
     {
-        // Replace floating window with popup window and destroy
-        // floating window instance.
+        
+        
         delete pFloatingWindow;
         pFloatingWindow = pPopupWindow;
         pPopupWindow    = 0;
     }
     else
     {
-        // Popup window has been closed by the user. No replacement, instance
-        // will destroy itself.
+        
+        
         pPopupWindow = 0;
     }
 
@@ -948,7 +948,7 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
     }
 }
 
-// Get the numeric field from the toolbox.
+
 
 NumEditAction& SwNavigationPI::GetPageEdit()
 {
@@ -994,7 +994,7 @@ SfxChildAlignment eRetAlign;
 
 }
 
-// Notification on modified DocInfo
+
 
 void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
@@ -1027,8 +1027,8 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
                         if(aGlobalTree.Update( sal_False ))
                             aGlobalTree.Display();
                         else
-                        // If no update is needed, then paint at least,
-                        // because of the red entries for the broken links.
+                        
+                        
                             aGlobalTree.Invalidate();
                     }
                 }
@@ -1067,7 +1067,7 @@ void SwNavigationPI::UpdateListBox()
     while (pView)
     {
         SfxObjectShell* pDoc = pView->GetDocShell();
-        // #i53333# don't show help pages here
+        
         if ( !pDoc->IsHelpDocument() )
         {
             OUString sEntry = pDoc->GetTitle();
@@ -1090,7 +1090,7 @@ void SwNavigationPI::UpdateListBox()
         }
         pView = SwModule::GetNextView(pView);
     }
-    aDocListBox.InsertEntry(aStatusArr[3]); // "Active Window"
+    aDocListBox.InsertEntry(aStatusArr[3]); 
     nCount++;
 
     if(aContentTree.GetHiddenWrtShell())
@@ -1105,7 +1105,7 @@ void SwNavigationPI::UpdateListBox()
     }
     if(aContentTree.IsActiveView())
     {
-        //Either the name of the current Document or "Active Document".
+        
         sal_uInt16 nTmp = pActView ? nAct : --nCount;
         aDocListBox.SelectEntryPos( nTmp );
     }
@@ -1199,7 +1199,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         INetURLObject aTemp( sFileName );
         GraphicDescriptor aDesc( aTemp );
-        if( !aDesc.Detect() )   // accept no graphics
+        if( !aDesc.Detect() )   
         {
             if( -1 == sFileName.indexOf('#')
                 && (sContentFileName.isEmpty() || sContentFileName != sFileName ))

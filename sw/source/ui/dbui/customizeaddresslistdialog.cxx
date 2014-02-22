@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swtypes.hxx>
@@ -96,10 +96,10 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         else
         {
             if ( m_pFieldsLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-                ++nPos; // append the new entry behind the selected
-            //add the new column
+                ++nPos; 
+            
             m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
-            //add a new entry into all data arrays
+            
             OUString sTemp;
             std::vector< std::vector< OUString > >::iterator aDataIter;
             for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
@@ -121,9 +121,9 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
     m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectEntryPos());
     m_pFieldsLB->SelectEntryPos(nPos > m_pFieldsLB->GetEntryCount() - 1 ? nPos - 1 : nPos);
 
-    //remove the column
+    
     m_pNewData->aDBColumnHeaders.erase(m_pNewData->aDBColumnHeaders.begin() + nPos);
-    //remove the data
+    
     std::vector< std::vector< OUString > >::iterator aDataIter;
     for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
         aDataIter->erase(aDataIter->begin() + nPos);
@@ -144,7 +144,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
         ++nPos;
     m_pFieldsLB->InsertEntry(aTemp, nPos);
     m_pFieldsLB->SelectEntryPos(nPos);
-    //align m_pNewData
+    
     OUString sHeader = m_pNewData->aDBColumnHeaders[nOldPos];
     m_pNewData->aDBColumnHeaders.erase(m_pNewData->aDBColumnHeaders.begin() + nOldPos);
     m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sHeader);

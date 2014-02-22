@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,13 +35,13 @@ using namespace::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {
-    sal_uLong   nFormatId;          // Clipboard Id
-    sal_uInt16  nAction;            // Action Id
-    sal_uInt8   nContextCheckId;    // additional check of content in clipboard
+    sal_uLong   nFormatId;          
+    sal_uInt16  nAction;            
+    sal_uInt8   nContextCheckId;    
 };
 
 
-// define a context check Id for every formatid
+
 #define FILEGRPDSC_ONLY_URL     1
 
 /*
@@ -1294,9 +1294,9 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
 
 
 
-// ---------------------------------
-// - new style GetExchange methods -
-// ---------------------------------
+
+
+
 
 bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
 {
@@ -1316,7 +1316,7 @@ bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
 {
@@ -1363,7 +1363,7 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
                 break;
             }
 #else
-            (void) rEntry; // avoid warnings
+            (void) rEntry; 
 #endif
         }
     }
@@ -1378,7 +1378,7 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 static sal_uInt16 GetTransferableAction_Impl(
                             const DataFlavorExVector& rDataFlavorExVector,
@@ -1396,7 +1396,7 @@ static sal_uInt16 GetTransferableAction_Impl(
             sal_uLong                   nId = pArray->nFormatId;
 
 #if OSL_DEBUG_LEVEL > 1
-// used for testing a specific format - change in the debugger the value
+
     static sal_uLong nChkFormat = 0;
     if( nChkFormat )
     {
@@ -1465,7 +1465,7 @@ static sal_uInt16 GetTransferableAction_Impl(
     return EXCHG_INOUT_ACTION_NONE;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
                                        sal_uInt16 nDestination,
@@ -1476,14 +1476,14 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
                                        sal_uLong nOnlyTestFormat,
                                        const Reference< XTransferable >* pxTransferable )
 {
-    // hier wird jetzt die oben definierte Tabelle "implementiert"
+    
     IMPL_DATA_ARRAY_1;
     IMPL_DATA_ARRAY_2;
     IMPL_DATA_ARRAY_3;
 
     rFormat = SOT_FORMAT_STRING;
 
-    //Todo: Binaere Suche einbauen
+    
     const SotDestinationEntry_Impl* pEntry = aDestinationArray;
     while( 0xffff != pEntry->nDestination )
     {
@@ -1514,10 +1514,10 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
             nUserAction = GetTransferableAction_Impl(
                 rDataFlavorExVector, pEntry->aDefaultActions,
                 rFormat, nOnlyTestFormat, pxTransferable );
-            // Unterstuetzt die Quelle die Aktion?
+            
             if( !(nUserAction & nSourceOptions ))
             {
-                // Nein -> Alle Aktionen der Quelle checken
+                
                 rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
                 if( rDefaultAction )
                 {
@@ -1579,14 +1579,14 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
     return nUserAction;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
 {
     sal_uInt16 nRet=0;
-//  if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
-//      nRet = SOFFICE_FILEFORMAT_8;
-//  else
+
+
+
     if ( rName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SCH_CLASSID_50 ) )
@@ -1602,9 +1602,9 @@ sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
 sal_uInt16 SotExchange::IsMath(  const SvGlobalName& rName )
 {
     sal_uInt16 nRet=0;
-//  if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
-//      nRet = SOFFICE_FILEFORMAT_8;
-//  else
+
+
+
     if ( rName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SM_CLASSID_50 ) )

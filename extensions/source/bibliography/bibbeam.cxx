@@ -76,7 +76,7 @@ namespace bib
             Reference< awt::XControlModel >     m_xGridModel;
             Reference< awt::XControl >          m_xControl;
             Reference< awt::XControlContainer > m_xControlContainer;
-            // #100312#
+            
             Reference< frame::XDispatchProviderInterception> m_xDispatchProviderInterception;
 
     protected:
@@ -92,7 +92,7 @@ namespace bib
             void disposeGridWin();
 
             const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
-            // #100312#
+            
             const Reference< frame::XDispatchProviderInterception>& getDispatchProviderInterception() const { return m_xDispatchProviderInterception; }
 
             virtual void GetFocus();
@@ -145,14 +145,14 @@ namespace bib
 
                 if ( m_xControl.is() )
                 {
-                    // Peer as Child to the FrameWindow
+                    
                     m_xControlContainer->addControl("GridControl", m_xControl);
                     m_xGridWin=uno::Reference< awt::XWindow > (m_xControl, UNO_QUERY );
-                    // #100312#
+                    
                     m_xDispatchProviderInterception=uno::Reference< frame::XDispatchProviderInterception > (m_xControl, UNO_QUERY );
                     m_xGridWin->setVisible( sal_True );
                     m_xControl->setDesignMode( sal_True );
-                    // initially switch on the design mode - switch it off _after_ loading the form
+                    
 
                     ::Size aSize = GetOutputSizePixel();
                     m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::POSSIZE);
@@ -244,7 +244,7 @@ namespace bib
         return xReturn;
     }
 
-    // #100312#
+    
     Reference< frame::XDispatchProviderInterception > BibBeamer::getDispatchProviderInterception()
     {
         Reference< frame::XDispatchProviderInterception > xReturn;
@@ -275,6 +275,6 @@ namespace bib
         return 0L;
     }
 
-}   // namespace bib
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

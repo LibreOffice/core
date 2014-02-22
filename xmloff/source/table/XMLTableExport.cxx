@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/dllapi.h>
@@ -121,7 +121,7 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
     return nMax;
 }
 
-// class XMLTableExport
+
 
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
@@ -233,14 +233,14 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 pTableInfo->maRowStyleMap[xKey] = sStyleName;
             }
 
-            // get the current row
+            
             Reference< XCellRange > xCellRange( xPropSet, UNO_QUERY_THROW );
             for ( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
             {
-                // get current cell, remarks row index is 0, because we get the range for each row separate
+                
                 Reference< XPropertySet > xCellSet( xCellRange->getCellByPosition(nColumn, 0), UNO_QUERY_THROW );
 
-                // get style
+                
                 OUString sParentStyleName;
                 Reference< XPropertySetInfo > xPropertySetInfo( xCellSet->getPropertySetInfo() );
                 if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("Style") )
@@ -250,7 +250,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                         sParentStyleName = xStyle->getName();
                 }
 
-                // create auto style, if needed
+                
                 OUString sStyleName;
                 std::vector< XMLPropertyState > xCellPropStates( mxCellExportPropertySetMapper->Filter( xCellSet ) );
                 if( has_states( xCellPropStates ) )
@@ -264,7 +264,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                     pTableInfo->maCellStyleMap[xKey] = sStyleName;
                 }
 
-                // create auto style for text
+                
                 Reference< XText > xText(xCellSet, UNO_QUERY);
                 if(xText.is() && !xText->getString().isEmpty())
                     GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
@@ -298,7 +298,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     {
         boost::shared_ptr< XMLTableInfo > pTableInfo( maTableInfoMap[xColumnRowRange] );
 
-        // get row and column count
+        
         Reference< XIndexAccess > xIndexAccess( xColumnRowRange->getRows(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xIndexAccessCols( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
 
@@ -307,18 +307,18 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
         SvXMLElementExport tableElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True );
 
-        // export table columns
+        
         ExportTableColumns( xIndexAccessCols, pTableInfo );
 
-        // start iterating rows and columns
+        
         for ( sal_Int32 rowIndex = 0; rowIndex < rowCount; rowIndex++ )
         {
-            // get the current row
+            
             Reference< XCellRange > xCellRange( xIndexAccess->getByIndex(rowIndex), UNO_QUERY_THROW );
 
             OUString sDefaultCellStyle;
 
-            // table:style-name
+            
             if( pTableInfo.get() )
             {
                 Reference< XInterface > xKey( xCellRange, UNO_QUERY );
@@ -331,18 +331,18 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME, sDefaultCellStyle );
             }
 
-            // write row element
+            
             SvXMLElementExport tableRowElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
 
             for ( sal_Int32 columnIndex = 0; columnIndex < columnCount; columnIndex++ )
             {
-                // get current cell, remarks row index is 0, because we get the range for each row separate
+                
                 Reference< XCell > xCell( xCellRange->getCellByPosition(columnIndex, 0), UNO_QUERY_THROW );
 
-                // use XMergeableCell interface from offapi
+                
                 Reference< XMergeableCell > xMergeableCell( xCell, UNO_QUERY_THROW );
 
-                // export cell
+                
                 ExportCell( xCell, pTableInfo, sDefaultCellStyle );
             }
         }
@@ -353,7 +353,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      }
  }
 
-// Export the table columns
+
 
  void XMLTableExport::ExportTableColumns( const Reference < XIndexAccess >& xtableColumnsIndexAccess, const boost::shared_ptr< XMLTableInfo >& pTableInfo )
  {
@@ -363,7 +363,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
          Reference< XPropertySet > xColumnProperties( xtableColumnsIndexAccess->getByIndex(nColumn) , UNO_QUERY );
          if ( xColumnProperties.is() )
         {
-            // table:style-name
+            
             if( pTableInfo.get() )
             {
                 Reference< XInterface > xKey( xColumnProperties, UNO_QUERY );
@@ -372,15 +372,15 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
             }
 
-             // TODO: All columns first have to be checked if some ones
-             // have identical properties. If yes, attr table:number-columns-repeated
-             // has to be written.
+             
+             
+             
              SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
          }
      }
  }
 
-// ODF export for a table cell.
+
 
  void XMLTableExport::ExportCell( const Reference < XCell >& xCell, const boost::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& rDefaultCellStyle )
  {
@@ -392,7 +392,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     {
         if( pTableInfo.get() )
         {
-            // table:style-name
+            
             Reference< XInterface > xKey( xCell, UNO_QUERY );
             const OUString sStyleName( pTableInfo->maCellStyleMap[xKey] );
             if( !sStyleName.isEmpty() && (sStyleName != rDefaultCellStyle) )
@@ -413,27 +413,27 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         OSL_FAIL( "exception while exporting a table cell" );
     }
 
-    // table:number-columns-repeated
-    // todo
+    
+    
 
-    // table:number-columns-spanned
+    
     if( nColSpan > 1 )
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, OUString::number( nColSpan ) );
 
-    // table:number-rows-spanned
+    
     if( nRowSpan > 1 )
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, OUString::number( nRowSpan ) );
 
-     // <table:table-cell> or <table:covered-table-cell>
+     
     SvXMLElementExport tableCellElement( mrExport, XML_NAMESPACE_TABLE, bIsMerged ? XML_COVERED_TABLE_CELL : XML_TABLE_CELL, sal_True, sal_True );
 
-    // export cells text content
+    
     ImpExportText( xCell );
  }
 
-// ODF export of the text contents of a table cell.
-// Remarks: Up to now we only export text contents!
-// TODO: Check against nested tables ....
+
+
+
 
  void XMLTableExport::ImpExportText( const Reference< XCell >& xCell )
  {
@@ -449,13 +449,13 @@ void XMLTableExport::exportTableStyles()
 
     XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
-    // write graphic family styles
+    
     aStEx.exportStyleFamily("cell", OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), sal_True, XML_STYLE_FAMILY_TABLE_CELL);
 
     exportTableTemplates();
 }
 
-// Export the collected automatic styles
+
 
 void XMLTableExport::exportAutoStyles()
 {

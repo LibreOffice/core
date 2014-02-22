@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLExportDatabaseRanges.hxx"
@@ -49,7 +49,7 @@
 
 #include <map>
 
-//! not found in unonames.hxx
+
 #define SC_USERLIST "UserList"
 
 using namespace com::sun::star;
@@ -100,7 +100,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                                 table::CellRangeAddress aArea = xDatabaseRange->getDataArea();
                                 aSkipRanges.AddNewEmptyDatabaseRange(aArea);
 
-                                // #105276#; set last row/column so default styles are collected
+                                
                                 rExport.GetSharedData()->SetLastColumn(aArea.Sheet, aArea.EndColumn);
                                 rExport.GetSharedData()->SetLastRow(aArea.Sheet, aArea.EndRow);
                             }
@@ -136,10 +136,10 @@ public:
         if (meRangeType != ScDBCollection::SheetAnonymous)
             return;
 
-        // name
+        
         OUStringBuffer aBuf;
         aBuf.appendAscii(STR_DB_LOCAL_NONAME);
-        aBuf.append(static_cast<sal_Int32>(r.first)); // appended number equals sheet index on import.
+        aBuf.append(static_cast<sal_Int32>(r.first)); 
 
         write(aBuf.makeStringAndClear(), *r.second);
     }
@@ -148,10 +148,10 @@ public:
     {
         if (meRangeType == ScDBCollection::GlobalAnonymous)
         {
-            // name
+            
             OUStringBuffer aBuf;
             aBuf.appendAscii(STR_DB_GLOBAL_NONAME);
-            aBuf.append(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
+            aBuf.append(++mnCounter); 
 
             write(aBuf.makeStringAndClear(), rData);
         }
@@ -164,7 +164,7 @@ private:
     {
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rName);
 
-        // range
+        
         ScRange aRange;
         rData.GetArea(aRange);
         OUString aRangeStr;
@@ -172,7 +172,7 @@ private:
             aRangeStr, aRange, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aRangeStr);
 
-        // various boolean flags.
+        
         if (rData.HasImportSelection())
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
         if (rData.HasAutoFilter())
@@ -287,7 +287,7 @@ private:
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -297,7 +297,7 @@ private:
         ScSortParam aParam;
         rData.GetSortParam(aParam);
 
-        // Count sort items first.
+        
         size_t nSortCount = 0;
         for (; nSortCount < aParam.GetSortKeyCount(); ++nSortCount)
         {
@@ -306,7 +306,7 @@ private:
         }
 
         if (!nSortCount)
-            // Nothing to export.
+            
             return;
 
         ScAddress aOutPos(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab);
@@ -337,7 +337,7 @@ private:
 
         for (size_t i = 0; i < nSortCount; ++i)
         {
-            // Convert field value from absolute to relative.
+            
             SCCOLROW nField = aParam.maKeyState[i].nField - nFieldStart;
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nField));
 
@@ -353,8 +353,8 @@ private:
             }
             else
             {
-                // Right now we only support automatic field type.  In the
-                // future we may support numeric or alphanumeric field type.
+                
+                
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_AUTOMATIC);
             }
 
@@ -444,7 +444,7 @@ private:
 
         if (rItems.size() == 1)
         {
-            // Single item condition.
+            
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByString)
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
@@ -461,10 +461,10 @@ private:
         }
         else
         {
-            // Multi-item condition.
+            
             OSL_ASSERT(rItems.size() > 1);
 
-            // Store the 1st value for backward compatibility.
+            
             const ScQueryEntry::Item& rItem = rItems.front();
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));
@@ -486,7 +486,7 @@ private:
         }
 
         if (!nCount)
-            // No filter criteria to save. Bail out.
+            
             return;
 
         if (!aParam.bInplace)
@@ -523,7 +523,7 @@ private:
                 bOr = true;
         }
 
-        // Note that export field index values are relative to the first field.
+        
         ScRange aRange;
         rData.GetArea(aRange);
         SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
@@ -649,7 +649,7 @@ private:
         for (size_t i = 0; i < MAXSUBTOTAL; ++i)
         {
             if (!aParam.bGroupActive[i])
-                // We're done!
+                
                 break;
 
             sal_Int32 nFieldCol = static_cast<sal_Int32>(aParam.nField[i]);
@@ -682,7 +682,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
     if (!pDoc)
         return;
 
-    // Get sheet-local anonymous ranges.
+    
     SCTAB nTabCount = pDoc->GetTableCount();
     SheetLocalDBs aSheetDBs;
     for (SCTAB i = 0; i < nTabCount; ++i)
@@ -694,7 +694,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
 
     bool bHasRanges = !aSheetDBs.empty();
 
-    // See if we have global ranges.
+    
     ScDBCollection* pDBCollection = pDoc->GetDBCollection();
     if (pDBCollection)
     {
@@ -703,7 +703,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
     }
 
     if (!bHasRanges)
-        // No ranges to export. Bail out.
+        
         return;
 
     SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, true, true);
@@ -712,18 +712,18 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
 
     if (pDBCollection)
     {
-        // Write global named ranges.
+        
         func.setRangeType(ScDBCollection::GlobalNamed);
         const ScDBCollection::NamedDBs& rNamedDBs = pDBCollection->getNamedDBs();
         ::std::for_each(rNamedDBs.begin(), rNamedDBs.end(), func);
 
-        // Add global anonymous DB ranges.
+        
         func.setRangeType(ScDBCollection::GlobalAnonymous);
         const ScDBCollection::AnonDBs& rAnonDBs = pDBCollection->getAnonDBs();
         ::std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
     }
 
-    // Write sheet-local ranges.
+    
     func.setRangeType(ScDBCollection::SheetAnonymous);
     ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
 }

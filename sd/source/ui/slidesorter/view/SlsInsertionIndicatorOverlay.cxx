@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,13 +59,13 @@ Rectangle GrowRectangle (const Rectangle& rBox, const sal_Int32 nOffset)
 
 sal_Int32 RoundToInt (const double nValue) { return sal_Int32(::rtl::math::round(nValue)); }
 
-} // end of anonymous namespace
+} 
 
 
 namespace sd { namespace slidesorter { namespace view {
 
 
-//=====  InsertionIndicatorOverlay  ===========================================
+
 
 const static sal_Int32 gnShadowBorder = 3;
 
@@ -140,7 +140,7 @@ void InsertionIndicatorOverlay::Create (
     const sal_Int32 nOffset (
         RoundToInt(std::min(aPreviewSize.Width(),aPreviewSize.Height()) * gnPreviewOffsetScale));
 
-    // Determine size and offset depending on the number of previews.
+    
     sal_Int32 nCount (rRepresentatives.size());
     if (nCount > 0)
         --nCount;
@@ -149,8 +149,8 @@ void InsertionIndicatorOverlay::Create (
         aPreviewSize.Height() + 2 * gnShadowBorder + nCount*nOffset);
     maIconOffset = Point(gnShadowBorder, gnShadowBorder);
 
-    // Create virtual devices for bitmap and mask whose bitmaps later be
-    // combined to form the BitmapEx of the icon.
+    
+    
     VirtualDevice aContent (
         *mrSlideSorter.GetContentWindow(),
         0,
@@ -178,7 +178,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
 {
     const Point aOffset (0,rRepresentatives.size()==1 ? -nOffset : 0);
 
-    // Paint the pages.
+    
     Point aPageOffset (0,0);
     double nTransparency (0);
     const BitmapEx aExclusionOverlay (mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_HideSlideOverlay));
@@ -205,18 +205,18 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         aPageOffset.X() += gnShadowBorder;
         aPageOffset.Y() += gnShadowBorder;
 
-        // Paint the preview.
+        
         Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
         aPreview.Scale(aPreviewSize, BMP_SCALE_BESTQUALITY);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 
-        // When the page is marked as excluded from the slide show then
-        // paint an overlay that visualizes this.
+        
+        
         if (rRepresentatives[nIndex].mbIsExcluded)
         {
             const Region aSavedClipRegion (rContent.GetClipRegion());
             rContent.IntersectClipRegion(Rectangle(aPageOffset, aPreviewSize));
-            // Paint bitmap tiled over the preview to mark it as excluded.
+            
             const sal_Int32 nIconWidth (aExclusionOverlay.GetSizePixel().Width());
             const sal_Int32 nIconHeight (aExclusionOverlay.GetSizePixel().Height());
             if (nIconWidth>0 && nIconHeight>0)
@@ -228,7 +228,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
             rContent.SetClipRegion(aSavedClipRegion);
         }
 
-        // Tone down the bitmap.  The further back the darker it becomes.
+        
         Rectangle aBox (
             aPageOffset.X(),
             aPageOffset.Y(),
@@ -243,13 +243,13 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
                 0)),
             nTransparency);
 
-        // Draw border around preview.
+        
         Rectangle aBorderBox (GrowRectangle(aBox, 1));
         rContent.SetLineColor(COL_GRAY);
         rContent.SetFillColor();
         rContent.DrawRect(aBorderBox);
 
-        // Draw shadow around preview.
+        
         mpShadowPainter->PaintFrame(rContent, aBorderBox);
     }
 
@@ -265,29 +265,29 @@ void InsertionIndicatorOverlay::PaintPageCount (
     const Size aPreviewSize,
     const Point aFirstPageOffset) const
 {
-    // Paint the number of slides.
+    
     ::boost::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
     ::boost::shared_ptr<Font> pFont(Theme::GetFont(Theme::Font_PageCount, rDevice));
     if (pFont)
     {
         OUString sNumber (OUString::number(nSelectionCount));
 
-        // Determine the size of the (painted) text and create a bounding
-        // box that centers the text on the first preview.
+        
+        
         rDevice.SetFont(*pFont);
         Rectangle aTextBox;
         rDevice.GetTextBoundRect(aTextBox, sNumber);
         Point aTextOffset (aTextBox.TopLeft());
         Size aTextSize (aTextBox.GetSize());
-        // Place text inside the first page preview.
+        
         Point aTextLocation(aFirstPageOffset);
-        // Center the text.
+        
         aTextLocation += Point(
             (aPreviewSize.Width()-aTextBox.GetWidth())/2,
             (aPreviewSize.Height()-aTextBox.GetHeight())/2);
         aTextBox = Rectangle(aTextLocation, aTextSize);
 
-        // Paint background, border and text.
+        
         static const sal_Int32 nBorder = 5;
         rDevice.SetFillColor(pTheme->GetColor(Theme::Color_Selection));
         rDevice.SetLineColor(pTheme->GetColor(Theme::Color_Selection));
@@ -419,6 +419,6 @@ Size InsertionIndicatorOverlay::GetSize (void) const
 
 
 
-} } } // end of namespace ::sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

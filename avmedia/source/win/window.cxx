@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined _MSC_VER
@@ -99,14 +99,14 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
                 aUNOEvt.Y = aWinPoint.y;
                 aUNOEvt.PopupTrigger = false;
 
-                // Modifiers
+                
                 if( nPar1 & MK_SHIFT )
                     aUNOEvt.Modifiers |= awt::KeyModifier::SHIFT;
 
                 if( nPar1 & MK_CONTROL )
                     aUNOEvt.Modifiers |= awt::KeyModifier::MOD1;
 
-                // Buttons
+                
                 if( WM_LBUTTONDOWN == nMsg || WM_LBUTTONUP == nMsg )
                     aUNOEvt.Buttons |= awt::MouseButton::LEFT;
 
@@ -116,7 +116,7 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
                 if( WM_RBUTTONDOWN == nMsg || WM_RBUTTONUP == nMsg )
                     aUNOEvt.Buttons |= awt::MouseButton::RIGHT;
 
-                // event type
+                
                 if( WM_LBUTTONDOWN == nMsg ||
                     WM_MBUTTONDOWN == nMsg ||
                     WM_RBUTTONDOWN == nMsg )
@@ -303,10 +303,10 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
                                            aRect.X, aRect.Y, aRect.Width, aRect.Height,
                                            (HWND) mnParentWnd, NULL, mpWndClass->hInstance, 0 );
 
-        // if the last CreateWindow failed...
+        
         if( mnFrameWnd == 0 )
         {
-            // try again and this time assume that mnParent is indeed a dc
+            
             mnParentWnd = reinterpret_cast<int>(::WindowFromDC( (HDC)mnParentWnd ));
             mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
                                            WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
@@ -614,7 +614,7 @@ uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace win
-} // namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

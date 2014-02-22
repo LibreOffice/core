@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
@@ -57,7 +57,7 @@ const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
         {
             OUStringBuffer aRet( 64 );
             aRet.append( "];" );
-            // good guid
+            
             sal_uInt8 ar[16];
             ::rtl_getGlobalProcessId( ar );
             for ( sal_Int32 i = 0; i < 16; ++i )
@@ -107,11 +107,11 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
             OSL_ENSURE( xHome.is(), "### query to XInterface failed!" );
             if (xHome.is())
             {
-                // interface
+                
                 OUStringBuffer oid( 64 );
                 oid.append( reinterpret_cast< sal_Int64 >(xHome.get()), 16 );
                 oid.append( ';' );
-                // ;environment[context]
+                
                 oid.append(
                     *reinterpret_cast< OUString const * >(
                         &((uno_Environment *) pEnv)->pTypeName ) );
@@ -120,7 +120,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                     reinterpret_cast< sal_Int64 >(
                         ((uno_Environment *)pEnv)->pContext),
                     16 );
-                // ];good guid
+                
                 oid.append( cppu_cppenv_getStaticOIdPart() );
                 OUString aRet( oid.makeStringAndClear() );
                 ::rtl_uString_acquire( *ppOId = aRet.pData );
@@ -218,7 +218,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             0 == rtl_ustr_ascii_compare(
                 to_envTypeName.pData->buffer, UNO_LB_UNO ))
         {
-            // ref count initially 1
+            
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
                 pFrom->pExtEnv, pTo->pExtEnv, true );
             ::uno_registerMapping(
@@ -232,7 +232,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
                  0 == rtl_ustr_ascii_compare(
                      from_envTypeName.pData->buffer, UNO_LB_UNO ))
         {
-            // ref count initially 1
+            
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
                 pTo->pExtEnv, pFrom->pExtEnv, false );
             ::uno_registerMapping(

@@ -70,24 +70,24 @@ public:
     PipeClientMain( const Reference< XMultiServiceFactory > &r ) :
         m_xSMgr( r )
         {}
-public:     // Methods
+public:     
 
 
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString >& aArguments )
         throw(RuntimeException);
 
 
-private: // helper methods
+private: 
     void testPipe( const Reference < XInterface > & rComponent );
     Reference< XMultiServiceFactory > m_xSMgr;
 };
 
 void PipeClientMain::testPipe( const Reference< XInterface > & rxInterface )
 {
-    // ask for the input stream
+    
     Reference< XInputStream > rInputStream( rxInterface, UNO_QUERY );
 
-    // ask for the output stream
+    
     Reference< XOutputStream > rOutputStream( rxInterface, UNO_QUERY );
 
     if( rInputStream.is() && rOutputStream.is() )
@@ -114,7 +114,7 @@ void PipeClientMain::testPipe( const Reference< XInterface > & rxInterface )
             return;
         }
 
-        // try to read more bytes than written
+        
         if( rInputStream->readBytes( seqRead , 4 ) != 3 )
         {
             printf( "error : Got an unexpected number of bytes\n" );
@@ -149,7 +149,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
                 m_xSMgr->createInstance("com.sun.star.bridge.UnoUrlResolver");
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
 
-            // connect to the remote process and retrieve the initial object
+            
             r = rResolver->resolve( aArguments.getConstArray()[0] );
 
             if( r.is() )

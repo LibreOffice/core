@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -29,7 +29,7 @@
 #include "dbnamdlg.hxx"
 
 
-//============================================================================
+
 
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -37,7 +37,7 @@
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-//----------------------------------------------------------------------------
+
 
 class DBSaveData;
 
@@ -45,8 +45,8 @@ static DBSaveData* pSaveObj = NULL;
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
 
-//============================================================================
-//  class DBSaveData
+
+
 
 class DBSaveData
 {
@@ -78,7 +78,7 @@ private:
 
 
 
-//----------------------------------------------------------------------------
+
 
 void DBSaveData::Save()
 {
@@ -92,7 +92,7 @@ void DBSaveData::Save()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void DBSaveData::Restore()
 {
@@ -109,10 +109,10 @@ void DBSaveData::Restore()
 }
 
 
-//============================================================================
-//  class ScDbNameDlg
 
-//----------------------------------------------------------------------------
+
+
+
 
 ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     ScViewData* ptrViewData)
@@ -150,7 +150,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     m_pFTSource->SetStyle(m_pFTSource->GetStyle() | WB_NOLABEL);
     m_pFTOperations->SetStyle(m_pFTOperations->GetStyle() | WB_NOLABEL);
 
-    //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
+    
     aStrSource      = m_pFTSource->GetText();
     aStrOperations  = m_pFTOperations->GetText();
 
@@ -164,7 +164,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScDbNameDlg::~ScDbNameDlg()
 {
@@ -172,11 +172,11 @@ ScDbNameDlg::~ScDbNameDlg()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScDbNameDlg::Init()
 {
-    m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+    m_pBtnHeader->Check( true );       
     m_pBtnDoSize->Check( true );
     m_pBtnKeepFmt->Check( true );
 
@@ -212,7 +212,7 @@ void ScDbNameDlg::Init()
 
         if ( pDBColl )
         {
-            // Feststellen, ob definierter DB-Bereich markiert wurde:
+            
             pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, true );
             if ( pDBData )
             {
@@ -272,9 +272,9 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     m_pFTOperations->SetText(aBuf.makeStringAndClear());
 }
 
-//----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-//  neue Selektion im Referenz-Fenster angezeigt wird.
+
+
+
 
 void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -295,27 +295,27 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScDbNameDlg::Close()
 {
     return DoClose( ScDbNameDlgWrapper::GetChildWindowId() );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDbNameDlg::SetActive()
 {
     m_pEdAssign->GrabFocus();
 
-    //  kein NameModifyHdl, weil sonst Bereiche nicht geaendert werden koennen
-    //  (nach dem Aufziehen der Referenz wuerde der alte Inhalt wieder angezeigt)
-    //  (der ausgewaehlte DB-Name hat sich auch nicht veraendert)
+    
+    
+    
 
     RefInputDone();
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDbNameDlg::UpdateNames()
 {
@@ -324,7 +324,7 @@ void ScDbNameDlg::UpdateNames()
     const DBsType& rDBs = aLocalDbCol.getNamedDBs();
 
     m_pEdName->SetUpdateMode( false );
-    //-----------------------------------------------------------
+    
     m_pEdName->Clear();
     m_pEdAssign->SetText( EMPTY_OUSTRING );
 
@@ -340,12 +340,12 @@ void ScDbNameDlg::UpdateNames()
         m_pBtnAdd->Disable();
         m_pBtnRemove->Disable();
     }
-    //-----------------------------------------------------------
+    
     m_pEdName->SetUpdateMode( true );
     m_pEdName->Invalidate();
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
 {
@@ -379,7 +379,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
     m_pOptions->Enable();
 }
 
-//------------------------------------------------------------------------
+
 
 
 bool ScDbNameDlg::IsRefInputMode() const
@@ -387,17 +387,17 @@ bool ScDbNameDlg::IsRefInputMode() const
     return bRefInputMode;
 }
 
-//------------------------------------------------------------------------
-// Handler:
-// ========
+
+
+
 
 IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
 {
     AddBtnHdl( 0 );
 
-    // Der View die Aenderungen und die Remove-Liste uebergeben:
-    // beide werden nur als Referenz uebergeben, so dass an dieser
-    // Stelle keine Speicherleichen entstehen koennen:
+    
+    
+    
     if ( pViewData )
         pViewData->GetView()->
             NotifyCloseDbNameDlg( aLocalDbCol, aRemoveList );
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 {
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
     {
         if ( ScRangeData::IsNameValid( aNewName, pDoc ) && !aNewName.equalsAscii(STR_DB_LOCAL_NONAME) )
         {
-            //  weil jetzt editiert werden kann, muss erst geparst werden
+            
             ScRange aTmpRange;
             OUString aText = m_pEdAssign->GetText();
             if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
@@ -438,7 +438,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
                 if (pOldEntry)
                 {
-                    //  Bereich veraendern
+                    
 
                     pOldEntry->MoveTo( aStart.Tab(), aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row() );
@@ -450,7 +450,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 }
                 else
                 {
-                    //  neuen Bereich einfuegen
+                    
 
                     ScDBData* pNewEntry = new ScDBData( aNewName, aStart.Tab(),
                                                         aStart.Col(), aStart.Row(),
@@ -471,11 +471,11 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 m_pBtnAdd->Disable();
                 m_pBtnRemove->Disable();
                 m_pEdAssign->SetText( EMPTY_OUSTRING );
-                m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+                m_pBtnHeader->Check( true );       
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
                 m_pBtnStripData->Check( false );
-                SetInfoStrings( NULL );     // leer
+                SetInfoStrings( NULL );     
                 theCurArea = ScRange();
                 bSaved = true;
                 pSaveObj->Save();
@@ -551,11 +551,11 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
             m_pBtnRemove->Disable();
             m_pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
-            m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+            m_pBtnHeader->Check( true );       
             m_pBtnDoSize->Check( false );
             m_pBtnKeepFmt->Check( false );
             m_pBtnStripData->Check( false );
-            SetInfoStrings( NULL );     // leer
+            SetInfoStrings( NULL );     
             bSaved=false;
             pSaveObj->Restore();
             NameModifyHdl( 0 );
@@ -564,7 +564,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
@@ -580,10 +580,10 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
         m_pBtnRemove->Disable();
         m_pAssignFrame->Disable();
         m_pOptions->Disable();
-        //bSaved=sal_False;
-        //pSaveObj->Restore();
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
+        
+        
+        
+        
         bRefInputMode = false;
     }
     else
@@ -623,18 +623,18 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 
         m_pAssignFrame->Enable();
 
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Enable();
+        
+        
         bRefInputMode = true;
     }
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
 {
-    //  hier parsen fuer Save() etc.
+    
 
     ScRange aTmpRange;
     OUString aText = m_pEdAssign->GetText();
@@ -668,8 +668,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
 IMPL_LINK( ScDbNameDlg, FocusToComoboxHdl, Timer*, pTi)
 {
     (void)pTi;
-    // CallEventListeners is still protected - figure out if we need to make it public, or if the focus stuff can be handled better in VCL directly. First see what AT is expecting...
-    // aEdName.CallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
+    
+    
     return 0;
 }
 

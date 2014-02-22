@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "xmlsourcedlg.hxx"
@@ -51,7 +51,7 @@ OUString getXPath(
         if (!pItem)
             continue;
 
-        // Collect used namespace.
+        
         const ScOrcusXMLTreeParam::EntryData* pData = ScOrcusXMLTreeParam::getUserData(*p);
         if (pData)
             rNamespaces.push_back(pData->mnNamespaceID);
@@ -115,7 +115,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mpBtnOk->Disable();
 
     SetNonLinkable();
-    mpBtnSelectSource->GrabFocus(); // Initial focus is on the select source button.
+    mpBtnSelectSource->GrabFocus(); 
 }
 
 bool ScXMLSourceDlg::IsRefInputMode() const
@@ -170,11 +170,11 @@ void ScXMLSourceDlg::SelectSourceFile()
     uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = ui::dialogs::FilePicker::createWithMode( comphelper::getProcessComponentContext(), ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     if (maSrcPath.isEmpty())
-        // Use default path.
+        
         xFilePicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
     else
     {
-        // Use the directory of current source file.
+        
         INetURLObject aURL(maSrcPath);
         aURL.removeSegment();
         aURL.removeFinalSlash();
@@ -183,14 +183,14 @@ void ScXMLSourceDlg::SelectSourceFile()
     }
 
     if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
-        // File picker dialog cancelled.
+        
         return;
 
     uno::Sequence<OUString> aFiles = xFilePicker->getFiles();
     if (!aFiles.getLength())
         return;
 
-    // There should only be one file returned from the file picker.
+    
     maSrcPath = aFiles[0];
     mpFtSourceFile->SetText(maSrcPath);
     maHighlightedEntries.clear();
@@ -259,10 +259,10 @@ SvTreeListEntry* getReferenceEntry(SvTreeListBox& rTree, SvTreeListEntry* pCurEn
         OSL_ASSERT(pUserData);
         if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
         {
-            // This is a repeat element.
+            
             if (pRefEntry)
             {
-                // Second repeat element encountered. Not good.
+                
                 return pCurEntry;
             }
 
@@ -284,7 +284,7 @@ void ScXMLSourceDlg::TreeItemSelected()
 
     if (!maHighlightedEntries.empty())
     {
-        // Remove highlights from all previously highlighted entries (if any).
+        
         std::for_each(maHighlightedEntries.begin(), maHighlightedEntries.end(), UnhighlightEntry(*mpLbTree));
         maHighlightedEntries.clear();
     }
@@ -324,7 +324,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
 
     if (mpLbTree->GetChildCount(&rEntry) > 0)
     {
-        // Only an element with no child elements (leaf element) can be linked.
+        
         bool bHasChild = false;
         ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
         for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = mpLbTree->NextSibling(pChild))
@@ -333,7 +333,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
             OSL_ASSERT(pUserData);
             if (pUserData->meType != ScOrcusXMLTreeParam::Attribute)
             {
-                // This child is not an attribute. Bail out.
+                
                 bHasChild = true;
                 break;
             }
@@ -346,8 +346,8 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
         }
     }
 
-    // Check all its parents and make sure non of them are range-linked nor
-    // repeat elements.
+    
+    
     if (IsParentDirty(&rEntry))
     {
         SetNonLinkable();
@@ -359,7 +359,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
 
 void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
 {
-    // Check all its parents first.
+    
 
     if (IsParentDirty(&rEntry))
     {
@@ -367,10 +367,10 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
         return;
     }
 
-    // Check all its child elements / attributes and make sure non of them are
-    // linked or repeat elements.  In the future we will support range linking
-    // of repeat element who has another repeat elements. But first I need to
-    // support that scenario in orcus.
+    
+    
+    
+    
 
     if (IsChildrenDirty(&rEntry))
     {
@@ -381,8 +381,8 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
     SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&rEntry);
     if (!p->IsHighlighted())
     {
-        // Highlight the entry if not highlighted already.  This can happen
-        // when the current entry is a child entry of a repeat element entry.
+        
+        
         p->SetHighlighted(true);
         mpLbTree->PaintEntry(&rEntry);
         maHighlightedEntries.push_back(&rEntry);
@@ -394,18 +394,18 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
 
 void ScXMLSourceDlg::AttributeSelected(SvTreeListEntry& rEntry)
 {
-    // Check all its parent elements and make sure non of them are linked nor
-    // repeat elements.  In attribute's case, it's okay to have the immediate
-    // parent element linked (but not range-linked).
+    
+    
+    
 
     SvTreeListEntry* pParent = mpLbTree->GetParent(&rEntry);
-    OSL_ASSERT(pParent); // attribute should have a parent element.
+    OSL_ASSERT(pParent); 
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
     OSL_ASSERT(pUserData);
     if (pUserData->maLinkedPos.IsValid() && pUserData->mbRangeParent)
     {
-        // Parent element is range-linked.  Bail out.
+        
         SetNonLinkable();
         return;
     }
@@ -441,7 +441,7 @@ void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
     for (; it != itEnd; ++it)
     {
         SvTreeListEntry& r = *it;
-        SelectAllChildEntries(r); // select recursively.
+        SelectAllChildEntries(r); 
         SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&r);
         p->SetHighlighted(true);
         mpLbTree->PaintEntry(&r);
@@ -459,12 +459,12 @@ bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
         OSL_ASSERT(pUserData);
         if (pUserData->maLinkedPos.IsValid())
         {
-            // This parent is already linked.
+            
             return true;
         }
         if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
         {
-            // This is a repeat element.
+            
             return true;
         }
         pParent = mpLbTree->GetParent(pParent);
@@ -480,16 +480,16 @@ bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
         pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
         OSL_ASSERT(pUserData);
         if (pUserData->maLinkedPos.IsValid())
-            // Already linked.
+            
             return true;
 
         if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
-            // We don't support linking of nested repeat elements (yet).
+            
             return true;
 
         if (pUserData->meType == ScOrcusXMLTreeParam::ElementDefault)
         {
-            // Check recursively.
+            
             if (IsChildrenDirty(pChild))
                 return true;
         }
@@ -509,7 +509,7 @@ void getFieldLinks(
 {
     const SvTreeListEntries& rChildren = rEntry.GetChildEntries();
     if (rChildren.empty())
-        // No more children.  We're done.
+        
         return;
 
     SvTreeListEntries::const_iterator it = rChildren.begin(), itEnd = rChildren.end();
@@ -522,11 +522,11 @@ void getFieldLinks(
         if (pUserData && pUserData->mbLeafNode)
         {
             if (!aPath.isEmpty())
-                // XPath should never be empty anyway, but it won't hurt to check...
+                
                 rRangeLink.maFieldPaths.push_back(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
         }
 
-        // Walk recursively.
+        
         getFieldLinks(rRangeLink, rNamespaces, rTree, rChild);
     }
 }
@@ -545,11 +545,11 @@ void ScXMLSourceDlg::OkPressed()
     if (!mpXMLContext)
         return;
 
-    // Begin import.
+    
 
     ScOrcusImportXMLParam aParam;
 
-    // Convert single cell links.
+    
     {
         std::set<const SvTreeListEntry*>::const_iterator it = maCellLinks.begin(), itEnd = maCellLinks.end();
         for (; it != itEnd; ++it)
@@ -564,8 +564,8 @@ void ScXMLSourceDlg::OkPressed()
         }
     }
 
-    // Convert range links. For now, an element with range link takes all its
-    // child elements as its fields.
+    
+    
     {
         std::set<const SvTreeListEntry*>::const_iterator it = maRangeLinks.begin(), itEnd = maRangeLinks.end();
         for (; it != itEnd; ++it)
@@ -576,24 +576,24 @@ void ScXMLSourceDlg::OkPressed()
             ScOrcusImportXMLParam::RangeLink aRangeLink;
             aRangeLink.maPos = pUserData->maLinkedPos;
 
-            // Go through all its child elements.
+            
             getFieldLinks(aRangeLink, aParam.maNamespaces, *mpLbTree, rEntry);
 
             aParam.maRangeLinks.push_back(aRangeLink);
         }
     }
 
-    // Remove duplicate namespace IDs.
+    
     removeDuplicates(aParam.maNamespaces);
 
-    // Now do the import.
+    
     mpXMLContext->importXML(aParam);
 
-    // Don't forget to broadcast the change.
+    
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
     pShell->Broadcast(SfxSimpleHint(FID_DATACHANGED));
 
-    // Repaint the grid to force repaint the cell values.
+    
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->PaintGrid();
@@ -610,26 +610,26 @@ void ScXMLSourceDlg::RefEditModified()
 {
     OUString aRefStr = mpRefEdit->GetText();
 
-    // Check if the address is valid.
+    
     ScAddress aLinkedPos;
     sal_uInt16 nRes = aLinkedPos.Parse(aRefStr, mpDoc, mpDoc->GetAddressConvention());
     bool bValid = (nRes & SCA_VALID) == SCA_VALID;
 
-    // TODO: For some unknown reason, setting the ref invalid will hide the text altogether.
-    // Find out how to make this work.
-//  mpRefEdit->SetRefValid(bValid);
+    
+    
+
 
     if (!bValid)
         aLinkedPos.SetInvalid();
 
-    // Set this address to the current reference entry.
+    
     if (!mpCurRefEntry)
-        // This should never happen.
+        
         return;
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
     if (!pUserData)
-        // This should never happen either.
+        
         return;
 
     bool bRepeatElem = pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat;
@@ -651,7 +651,7 @@ void ScXMLSourceDlg::RefEditModified()
             maCellLinks.erase(mpCurRefEntry);
     }
 
-    // Enable the import button only when at least one link exists.
+    
     bool bHasLink = !maCellLinks.empty() || !maRangeLinks.empty();
     mpBtnOk->Enable(bHasLink);
 }

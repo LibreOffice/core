@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
@@ -78,7 +78,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     {
         pPageToRename = GetDoc()->GetSdPage( nPageId - 1, ePageKind );
 
-        // Undo
+        
         SdPage* pUndoPage = pPageToRename;
         SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
         sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRND), false );
@@ -92,19 +92,19 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
             aVisibleLayers.IsSet( nBgObj ));
         pManager->AddUndoAction( pAction );
 
-        // rename
+        
         pPageToRename->SetName( rName );
 
         if( ePageKind == PK_STANDARD )
         {
-            // also rename notes-page
+            
             SdPage* pNotesPage = GetDoc()->GetSdPage( nPageId - 1, PK_NOTES );
             pNotesPage->SetName( rName );
         }
     }
     else
     {
-        // rename MasterPage -> rename LayoutTemplate
+        
         pPageToRename = GetDoc()->GetMasterSdPage( nPageId - 1, ePageKind );
         GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
     }
@@ -113,19 +113,19 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
 
     if( bSuccess )
     {
-        // user edited page names may be changed by the page so update control
+        
         maTabControl.SetPageText( nPageId, rName );
 
-        // set document to modified state
+        
         GetDoc()->SetChanged( true );
 
-        // inform navigator about change
+        
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         GetViewFrame()->GetDispatcher()->Execute(
             SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-        // Tell the slide sorter about the name change (necessary for
-        // accessibility.)
+        
+        
         slidesorter::SlideSorterViewShell* pSlideSorterViewShell
             = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
         if (pSlideSorterViewShell != NULL)
@@ -196,7 +196,7 @@ void DrawViewShell::ModifyLayer (
 
         if (!bIsVisible)
         {
-            // invisible layers are presented different
+            
             nBits = TPB_SPECIAL;
         }
 
@@ -206,13 +206,13 @@ void DrawViewShell::ModifyLayer (
             SID_SWITCHLAYER,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
-        // Call Invalidate at the form shell.
+        
         FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
         if (pFormShell != NULL)
             pFormShell->Invalidate();
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

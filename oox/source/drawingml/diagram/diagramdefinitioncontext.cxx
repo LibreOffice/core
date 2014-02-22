@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "diagramdefinitioncontext.hxx"
@@ -28,7 +28,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 
-// CT_DiagramDefinition
+
 DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rParent,
                                                     const AttributeList& rAttributes,
                                                     const DiagramLayoutPtr &pLayout )
@@ -40,7 +40,7 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rPare
     OUString sValue = rAttributes.getString( XML_minVer ).get();
     if( sValue.isEmpty() )
     {
-        sValue = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
+        sValue = "http:
     }
     mpLayout->setMinVer( sValue );
     mpLayout->setUniqueId( rAttributes.getString( XML_uniqueId ).get() );
@@ -74,7 +74,7 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         return new LayoutNodeContext( *this, rAttribs, pNode );
     }
      case DGM_TOKEN( clrData ):
-        // TODO, does not matter for the UI. skip.
+        
         return 0;
     case DGM_TOKEN( sampData ):
         mpLayout->getSampData().reset( new DiagramData );
@@ -84,7 +84,7 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         return new DataModelContext( *this, mpLayout->getStyleData() );
     case DGM_TOKEN( cat ):
     case DGM_TOKEN( catLst ):
-        // TODO, does not matter for the UI
+        
     default:
         break;
     }

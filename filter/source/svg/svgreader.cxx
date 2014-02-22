@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "svgreader.hxx"
@@ -85,10 +85,10 @@ template<typename Func> void visitElements(Func& rFunc,
     else
         rFunc(xElem);
 
-    // notify children processing
+    
     rFunc.push();
 
-    // recurse over children
+    
     uno::Reference<xml::dom::XNodeList> xChildren( xElem->getChildNodes() );
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
@@ -100,7 +100,7 @@ template<typename Func> void visitElements(Func& rFunc,
                                uno::UNO_QUERY_THROW) );
     }
 
-    // children processing done
+    
     rFunc.pop();
 }
 
@@ -147,7 +147,7 @@ struct AnnotatingVisitor
         maCurrState = maParentStates.back();
         maCurrState.maTransform.identity();
         maCurrState.maViewBox.reset();
-        // if necessary, serialize to automatic-style section
+        
         writeStyle(xElem,nTagId);
     }
 
@@ -162,10 +162,10 @@ struct AnnotatingVisitor
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 maGradientVector.push_back(Gradient(Gradient::LINEAR));
 
-                // do we have a reference to a parent gradient? parse
-                // that first, as it sets our defaults here (manually
-                // tracking default state on each Gradient variable is
-                // much more overhead)
+                
+                
+                
+                
                 uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
                 if(xNode.is())
                 {
@@ -180,10 +180,10 @@ struct AnnotatingVisitor
                         maGradientVector.back() = maGradientVector[aFound->second];
                 }
 
-                // do that after dereferencing, to prevent hyperlinked
-                // gradient to clobber our Id again
+                
+                
                 maGradientVector.back().mnId = maGradientVector.size()-1;
-                maGradientVector.back().meType = Gradient::LINEAR; // has been clobbered as well
+                maGradientVector.back().meType = Gradient::LINEAR; 
 
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -199,10 +199,10 @@ struct AnnotatingVisitor
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 maGradientVector.push_back(Gradient(Gradient::RADIAL));
 
-                // do we have a reference to a parent gradient? parse
-                // that first, as it sets our defaults here (manually
-                // tracking default state on each Gradient variable is
-                // much more overhead)
+                
+                
+                
+                
                 uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
                 if(xNode.is())
                 {
@@ -217,10 +217,10 @@ struct AnnotatingVisitor
                         maGradientVector.back() = maGradientVector[aFound->second];
                 }
 
-                // do that after dereferencing, to prevent hyperlinked
-                // gradient to clobber our Id again
+                
+                
                 maGradientVector.back().mnId = maGradientVector.size()-1;
-                maGradientVector.back().meType = Gradient::RADIAL; // has been clobbered as well
+                maGradientVector.back().meType = Gradient::RADIAL; 
 
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -247,12 +247,12 @@ struct AnnotatingVisitor
             }
             default:
             {
-                // init state. inherit defaults from parent.
+                
                 maCurrState = maParentStates.back();
                 maCurrState.maTransform.identity();
                 maCurrState.maViewBox.reset();
 
-                // scan for style info
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
@@ -267,13 +267,13 @@ struct AnnotatingVisitor
                                        sAttributeValue);
                 }
 
-                // all attributes parsed, can calc total CTM now
+                
                 basegfx::B2DHomMatrix aLocalTransform;
                 if( !maCurrState.maViewBox.isEmpty() &&
                     maCurrState.maViewBox.getWidth() != 0.0 &&
                     maCurrState.maViewBox.getHeight() != 0.0 )
                 {
-                    // transform aViewBox into viewport, keep aspect ratio
+                    
                     aLocalTransform.translate(-maCurrState.maViewBox.getMinX(),
                                               -maCurrState.maViewBox.getMinY());
                     double scaleW = maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth();
@@ -291,7 +291,7 @@ struct AnnotatingVisitor
                           maCurrState.maCTM.get(1,1),
                           maCurrState.maCTM.get(1,2));
 
-                // if necessary, serialize to automatic-style section
+                
                 writeStyle(xElem,nTagId);
             }
         }
@@ -328,14 +328,14 @@ struct AnnotatingVisitor
 
     void optimizeGradientStops( Gradient& rGradient )
     {
-        // sort for increasing stop position
+        
         std::sort(rGradient.maStops.begin(),rGradient.maStops.end(),
                   StopSorter(maGradientStopVector));
 
         if( rGradient.maStops.size() < 3 )
-            return; //easy! :-)
+            return; 
 
-        // join similar colors
+        
         std::vector<sal_Size> aNewStops(1,rGradient.maStops.front());
         for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
         {
@@ -347,23 +347,23 @@ struct AnnotatingVisitor
         rGradient.maStops = aNewStops;
         if (rGradient.maStops.size() < 2)
         {
-            return; // can't optimize further...
+            return; 
         }
 
-        // axial gradient, maybe?
+        
         if( rGradient.meType == Gradient::LINEAR &&
             rGradient.maStops.size() == 3 &&
             maGradientStopVector[rGradient.maStops.front()].maStopColor ==
             maGradientStopVector[rGradient.maStops.back()].maStopColor )
         {
-            // yep - keep it at that
+            
             return;
         }
 
-        // find out most significant color difference, and limit to
-        // those two stops around this border (metric is
-        // super-simplistic: take euclidean distance of colors, weigh
-        // with stop distance)
+        
+        
+        
+        
         sal_Size nMaxIndex=0;
         double    fMaxDistance=0.0;
         for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
@@ -388,14 +388,14 @@ struct AnnotatingVisitor
 
     sal_Int8 toByteColor( double val )
     {
-        // TODO(Q3): duplicated from vcl::unotools
+        
         return sal::static_int_cast<sal_Int8>(
             basegfx::fround(val*255.0));
     }
 
     OUString getOdfColor( const ARGBColor& rColor )
     {
-        // TODO(Q3): duplicated from pdfimport
+        
         OUStringBuffer aBuf( 7 );
         const sal_uInt8 nRed  ( toByteColor(rColor.r)   );
         const sal_uInt8 nGreen( toByteColor(rColor.g) );
@@ -411,7 +411,7 @@ struct AnnotatingVisitor
             aBuf.append( '0' );
         aBuf.append( sal_Int32(nBlue), 16 );
 
-        // TODO(F3): respect alpha transparency (polygons etc.)
+        
         OSL_ASSERT(rColor.a == 1.0);
 
         return aBuf.makeStringAndClear();
@@ -421,7 +421,7 @@ struct AnnotatingVisitor
     {
         static OUString aStart("start");
         static OUString aEnd("end");
-        // static OUString aJustify("justify");
+        
         static OUString aCenter("center");
         switch(eAlign)
         {
@@ -455,11 +455,11 @@ struct AnnotatingVisitor
         SAL_INFO ("svg", "size " << mrStates.size() << "   id " <<  const_cast<State&>(*aRes.first).mnStyleId);
 
         if( !aRes.second )
-            return false; // not written
+            return false; 
 
         ++mnCurrStateId;
 
-        // mnStyleId does not take part in hashing/comparison
+        
         const_cast<State&>(*aRes.first).mnStyleId = mnCurrStateId;
         SAL_INFO ("svg", " --> " <<  const_cast<State&>(*aRes.first).mnStyleId);
 
@@ -467,23 +467,23 @@ struct AnnotatingVisitor
                               mnCurrStateId,
                               rState));
 
-        // find two representative stop colors (as ODF only support
-        // start&end color)
+        
+        
         optimizeGradientStops(rState.maFillGradient);
 
         if( !mxDocumentHandler.is() )
-            return true; // cannot write style, svm import case
+            return true; 
 
-        // do we have a gradient fill? then write out gradient as well
+        
         if( rState.meFillType == GRADIENT && rState.maFillGradient.maStops.size() > 1 )
         {
-            // TODO(F3): ODF12 supposedly also groks svg:linear/radialGradient. But CL says: nope.
+            
             xAttrs->AddAttribute( "draw:name", getStyleName("svggradient", rState.maFillGradient.mnId) );
             if( rState.maFillGradient.meType == Gradient::LINEAR )
             {
-                // should the optimizeGradientStops method decide that
-                // this is a three-color gradient, it prolly wanted us
-                // to take axial instead
+                
+                
+                
                 xAttrs->AddAttribute( "draw:style",
                                       rState.maFillGradient.maStops.size() == 3 ?
                                       OUString("axial") :
@@ -515,7 +515,7 @@ struct AnnotatingVisitor
 
             if( hasGradientOpacity(rState.maFillGradient) )
             {
-                // need to write out opacity style as well
+                
                 xAttrs->Clear();
                 xAttrs->AddAttribute( "draw:name", getStyleName("svgopacity", rState.maFillGradient.mnId) );
                 if( rState.maFillGradient.meType == Gradient::LINEAR )
@@ -529,7 +529,7 @@ struct AnnotatingVisitor
                     xAttrs->AddAttribute( "draw:cy", "50%" );
                 }
 
-                // modulate gradient opacity with overall fill opacity
+                
                 xAttrs->AddAttribute( "draw:end",
                                       OUString::number(
                                           maGradientStopVector[
@@ -546,10 +546,10 @@ struct AnnotatingVisitor
             }
         }
 
-        // serialize to automatic-style section
+        
         if( nTagId == XML_TEXT )
         {
-            // write paragraph style attributes
+            
             xAttrs->Clear();
 
             xAttrs->AddAttribute( "style:name", getStyleName("svgparagraphstyle", mnCurrStateId) );
@@ -563,7 +563,7 @@ struct AnnotatingVisitor
             mxDocumentHandler->endElement( "style:paragraph-properties" );
             mxDocumentHandler->endElement( "style:style" );
 
-            // write text style attributes
+            
             xAttrs->Clear();
 
             xAttrs->AddAttribute( "style:name", getStyleName("svgtextstyle", mnCurrStateId) );
@@ -590,15 +590,15 @@ struct AnnotatingVisitor
         mxDocumentHandler->startElement( "style:style", xUnoAttrs );
 
         xAttrs->Clear();
-        // text or shape? if the former, no use in processing any
-        // graphic attributes except stroke color, ODF can do ~nothing
-        // with text shapes
+        
+        
+        
         if( nTagId == XML_TEXT )
         {
-            //xAttrs->AddAttribute( "draw:auto-grow-height", "true");
+            
             xAttrs->AddAttribute( "draw:auto-grow-width", "true");
             xAttrs->AddAttribute( "draw:textarea-horizontal-align", "left");
-            //xAttrs->AddAttribute( "draw:textarea-vertical-align", "top");
+            
             xAttrs->AddAttribute( "fo:min-height", "0cm");
 
             xAttrs->AddAttribute( "fo:padding-top", "0cm");
@@ -606,7 +606,7 @@ struct AnnotatingVisitor
             xAttrs->AddAttribute( "fo:padding-right", "0cm");
             xAttrs->AddAttribute( "fo:padding-bottom", "0cm");
 
-            // disable any background shape
+            
             xAttrs->AddAttribute( "draw:stroke", "none");
             xAttrs->AddAttribute( "draw:fill", "none");
         }
@@ -621,7 +621,7 @@ struct AnnotatingVisitor
                                           getStyleName("svggradient", rState.maFillGradient.mnId) );
                     if( hasGradientOpacity(rState.maFillGradient) )
                     {
-                        // needs transparency gradient as well
+                        
                         xAttrs->AddAttribute( "draw:opacity-name",
                                               getStyleName("svgopacity", rState.maFillGradient.mnId) );
                     }
@@ -676,7 +676,7 @@ struct AnnotatingVisitor
         mxDocumentHandler->endElement( "style:graphic-properties" );
         mxDocumentHandler->endElement( "style:style" );
 
-        return true; // newly written
+        return true; 
     }
 
     void writeStyle(const uno::Reference<xml::dom::XElement>& xElem, const sal_Int32 nTagId)
@@ -851,7 +851,7 @@ struct AnnotatingVisitor
             }
             case XML_VIEWBOX:
             {
-                // TODO(F1): preserveAspectRatio
+                
                 parseViewBox(
                     aValueUtf8.getStr(),
                     maCurrState.maViewBox);
@@ -1036,7 +1036,7 @@ struct AnnotatingVisitor
 
     void parseStyle( const OUString& sValue )
     {
-        // split individual style attributes
+        
         sal_Int32 nIndex=0, nDummyIndex=0;
         OUString aCurrToken;
         do
@@ -1045,7 +1045,7 @@ struct AnnotatingVisitor
 
             if( !aCurrToken.isEmpty() )
             {
-                // split attrib & value
+                
                 nDummyIndex=0;
                 OUString aCurrAttrib(
                     aCurrToken.getToken(0,':',nDummyIndex).trim());
@@ -1055,7 +1055,7 @@ struct AnnotatingVisitor
                     aCurrToken.getToken(1,':',nDummyIndex).trim());
                 OSL_ASSERT(nDummyIndex==-1);
 
-                // recurse into normal attribute parsing
+                
                 parseAttribute( getTokenId(aCurrAttrib),
                                 aCurrValue );
             }
@@ -1088,7 +1088,7 @@ struct AnnotatingVisitor
             io_rInitialState.meTextAnchor = CENTER;
         else if( strcmp(sValue,"end") == 0 )
             io_rInitialState.meTextAnchor = AFTER;
-        // keep current val for sValue == "inherit"
+        
     }
 
     void parsePaint( const OUString& rValue,
@@ -1120,7 +1120,7 @@ struct AnnotatingVisitor
         {
             if( aPaintUri.first != aPaintUri.second )
             {
-                // assuming gradient. assumption does not hold generally
+                
                 if( strstr(sValue,")") && rValue.getLength() > 5 )
                 {
                     ElementRefMapType::iterator aRes;
@@ -1162,7 +1162,7 @@ struct AnnotatingVisitor
     ElementRefMapType                          maStopIdMap;
 };
 
-/// Annotate svg styles with unique references to state pool
+
 static void annotateStyles( StatePool&                                        rStatePool,
                             StateMap&                                         rStateMap,
                             const State&                                       rInitialState,
@@ -1201,7 +1201,7 @@ struct ShapeWritingVisitor
             sStyleId.toInt32());
 
         if( pOrigState == mrStateMap.end() )
-            return; // non-exportable element, e.g. linearGradient
+            return; 
 
         maCurrState = pOrigState->second;
 
@@ -1210,7 +1210,7 @@ struct ShapeWritingVisitor
         {
             case XML_LINE:
             {
-                // collect attributes
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 double x1=0.0,y1=0.0,x2=0.0,y2=0.0;
@@ -1234,7 +1234,7 @@ struct ShapeWritingVisitor
                             y2 = convLength(sAttributeValue,maCurrState,'v');
                             break;
                         default:
-                            // skip
+                            
                             break;
                     }
                 }
@@ -1273,7 +1273,7 @@ struct ShapeWritingVisitor
             }
             case XML_RECT:
             {
-                // collect attributes
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 bool bRxSeen=false, bRySeen=false;
@@ -1306,7 +1306,7 @@ struct ShapeWritingVisitor
                         bRySeen=true;
                         break;
                     default:
-                        // skip
+                        
                         break;
                     }
                 }
@@ -1345,7 +1345,7 @@ struct ShapeWritingVisitor
             }
             case XML_CIRCLE:
             {
-                // collect attributes
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 double cx=0.0,cy=0.0,r=0.0;
@@ -1365,7 +1365,7 @@ struct ShapeWritingVisitor
                         case XML_R:
                             r = convLength(sAttributeValue,maCurrState,'r');
                         default:
-                            // skip
+                            
                             break;
                     }
                 }
@@ -1380,7 +1380,7 @@ struct ShapeWritingVisitor
             }
             case XML_ELLIPSE:
             {
-                // collect attributes
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 double cx=0.0,cy=0.0,rx=0.0, ry=0.0;
@@ -1403,7 +1403,7 @@ struct ShapeWritingVisitor
                         case XML_RY:
                             ry = convLength(sAttributeValue,maCurrState,'v');
                         default:
-                            // skip
+                            
                             break;
                     }
                 }
@@ -1418,7 +1418,7 @@ struct ShapeWritingVisitor
             }
             case XML_IMAGE:
             {
-                // collect attributes
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 double x=0.0, y=0.0, width=0.0, height=0.0;
@@ -1442,23 +1442,23 @@ struct ShapeWritingVisitor
                             height = convLength(sAttributeValue,maCurrState,'v');
                             break;
                         default:
-                            // skip
+                            
                             break;
                     }
                 }
-                // extract basic transformations out of CTM
+                
                 basegfx::B2DTuple aScale, aTranslate;
                 double fRotate, fShearX;
                 if (maCurrState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
                 {
-                    // apply transform
+                    
                     x *= aScale.getX();
                     width *= aScale.getX();
                     y *= aScale.getY();
                     height *= aScale.getY();
                     x += aTranslate.getX();
                     y += aTranslate.getY();
-                    //TODO: Rotate
+                    
                 }
 
                 OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : "";
@@ -1472,7 +1472,7 @@ struct ShapeWritingVisitor
             }
             case XML_TEXT:
             {
-                // collect text from all TEXT_NODE children into sText
+                
                 OUStringBuffer sText;
                 visitChildren(boost::bind(
                                   (OUStringBuffer& (OUStringBuffer::*)(const OUString& str))&OUStringBuffer::append,
@@ -1482,7 +1482,7 @@ struct ShapeWritingVisitor
                               xElem,
                               xml::dom::NodeType_TEXT_NODE);
 
-                // collect attributes
+                
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
                 double x=0.0,y=0.0;
@@ -1500,33 +1500,33 @@ struct ShapeWritingVisitor
                             y = convLength(sAttributeValue,maCurrState,'v');
                             break;
                         default:
-                            // skip
+                            
                             break;
                     }
                 }
 
-                // actually export text
+                
                 xAttrs->Clear();
 
 
-                // extract basic transformations out of CTM
+                
                 basegfx::B2DTuple aScale, aTranslate;
                 double fRotate, fShearX;
                 if (maCurrState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
                 {
-                    // some heuristic attempts to have text output
-                    // baseline-relative
+                    
+                    
                     y -= 2.0*maCurrState.mnFontSize/aScale.getX()/3.0;
-                    // apply transform
+                    
                     x *= aScale.getX();
                     y *= aScale.getY();
                     x += aTranslate.getX();
                     y += aTranslate.getY();
-                    //TODO: Rotate
+                    
                 }
                 else {
-                    // some heuristic attempts to have text output
-                    // baseline-relative
+                    
+                    
                     y -= 2.0*maCurrState.mnFontSize/3.0;
                 }
 
@@ -1613,8 +1613,8 @@ struct ShapeWritingVisitor
                          const OUString&                            rStyleId,
                          const basegfx::B2DPolyPolygon&                  rPoly )
     {
-        // we might need to split up polypolygon into multiple path
-        // shapes (e.g. when emulating line stroking)
+        
+        
         std::vector<basegfx::B2DPolyPolygon> aPolys(1,rPoly);
         State aState = maCurrState;
         OUString aStyleId(rStyleId);
@@ -1629,9 +1629,9 @@ struct ShapeWritingVisitor
                   maCurrState.maCTM.get(1,1),
                   maCurrState.maCTM.get(1,2));
 
-        // TODO(F2): separate out shear, rotate etc.
-        // apply transformation to polygon, to keep draw
-        // import in 100th mm
+        
+        
+        
         std::for_each(aPolys.begin(),aPolys.end(),
                       boost::bind(&basegfx::B2DPolyPolygon::transform,
                                   _1,boost::cref(aState.maCTM)));
@@ -1648,10 +1648,10 @@ struct ShapeWritingVisitor
                                 aBounds,
                                 "svggraphicstyle"+aStyleId);
 
-            // force path coordinates to 100th millimeter, after
-            // putting polygon data at origin (ODF viewbox
-            // calculations largely untested codepaths, as OOo always
-            // writes "0 0 w h" viewboxes)
+            
+            
+            
+            
             basegfx::B2DHomMatrix aNormalize;
             aNormalize.translate(-aBounds.getMinX(),-aBounds.getMinY());
             aNormalize.scale(2540.0/72.0,2540.0/72.0);
@@ -1659,8 +1659,8 @@ struct ShapeWritingVisitor
 
             xAttrs->AddAttribute( "svg:d", basegfx::tools::exportToSvgD(
                 aPolys[i],
-                false,   // no relative coords. causes rounding errors
-                false,   // no quad bezier detection. crashes older versions.
+                false,   
+                false,   
                 false ));
             mxDocumentHandler->startElement("draw:path", xUnoAttrs);
             mxDocumentHandler->endElement("draw:path");
@@ -1677,7 +1677,7 @@ struct ShapeWritingVisitor
         xAttrs->AddAttribute( "svg:width", OUString::number(pt2mm(rShapeBounds.getWidth()))+"mm");
         xAttrs->AddAttribute( "svg:height", OUString::number(pt2mm(rShapeBounds.getHeight()))+"mm");
 
-        // OOo expects the viewbox to be in 100th of mm
+        
         xAttrs->AddAttribute( "svg:viewBox",
             "0 0 "
             + OUString::number(
@@ -1686,9 +1686,9 @@ struct ShapeWritingVisitor
             + OUString::number(
                 basegfx::fround(pt100thmm(rShapeBounds.getHeight())) ));
 
-        // TODO(F1): decompose transformation in calling code, and use
-        // transform attribute here
-        // writeTranslate(maCurrState.maCTM, xAttrs);
+        
+        
+        
         xAttrs->AddAttribute( "svg:x", OUString::number(pt2mm(rShapeBounds.getMinX()))+"mm");
         xAttrs->AddAttribute( "svg:y", OUString::number(pt2mm(rShapeBounds.getMinY()))+"mm");
     }
@@ -1699,7 +1699,7 @@ struct ShapeWritingVisitor
     sal_Int32                                  mnShapeNum;
 };
 
-/// Write out shapes from DOM tree
+
 static void writeShapes( StatePool&                                        rStatePool,
                          StateMap&                                         rStateMap,
                          const uno::Reference<xml::dom::XElement>          xElem,
@@ -1709,7 +1709,7 @@ static void writeShapes( StatePool&                                        rStat
     visitElements(aVisitor, xElem);
 }
 
-} // namespace
+} 
 
 struct OfficeStylesWritingVisitor
 {
@@ -1735,7 +1735,7 @@ struct OfficeStylesWritingVisitor
             sStyleId.toInt32());
 
         if( pOrigState == mrStateMap.end() )
-            return; // non-exportable element, e.g. linearGradient
+            return; 
 
         maCurrState = pOrigState->second;
 
@@ -1888,19 +1888,19 @@ sal_Bool SVGReader::parseAndConvert()
     uno::Reference<xml::dom::XElement> xDocElem( xDom->getDocumentElement(),
                                                  uno::UNO_QUERY_THROW );
 
-    // the root state for svg document
+    
     State aInitialState;
 
-    /////////////////////////////////////////////////////////////////
-    // doc boilerplate
-    /////////////////////////////////////////////////////////////////
+    
+    
+    
 
     m_xDocumentHandler->startDocument();
 
-    // get the document dimensions
+    
 
-    // if the "width" and "height" attributes are missing, inkscape fakes
-    // A4 portrait for. Let's do the same.
+    
+    
     if (!xDocElem->hasAttribute("width"))
         xDocElem->setAttribute("width", "210mm");
     if (!xDocElem->hasAttribute("height"))
@@ -1909,7 +1909,7 @@ sal_Bool SVGReader::parseAndConvert()
     double fViewPortWidth( pt2mm(convLength(xDocElem->getAttribute("width"),aInitialState,'h')) );
     double fViewPortHeight( pt2mm(convLength(xDocElem->getAttribute("height"),aInitialState,'v')) );
 
-    // document prolog
+    
     rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
     uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
@@ -1920,17 +1920,17 @@ sal_Bool SVGReader::parseAndConvert()
     xAttrs->AddAttribute( "xmlns:table", OASIS_STR "table:1.0" );
     xAttrs->AddAttribute( "xmlns:draw", OASIS_STR "drawing:1.0" );
     xAttrs->AddAttribute( "xmlns:fo", OASIS_STR "xsl-fo-compatible:1.0" );
-    xAttrs->AddAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink");
-    xAttrs->AddAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    xAttrs->AddAttribute( "xmlns:xlink", "http:
+    xAttrs->AddAttribute( "xmlns:dc", "http:
     xAttrs->AddAttribute( "xmlns:number", OASIS_STR "datastyle:1.0" );
     xAttrs->AddAttribute( "xmlns:presentation", OASIS_STR "presentation:1.0" );
-    xAttrs->AddAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML");
+    xAttrs->AddAttribute( "xmlns:math", "http:
     xAttrs->AddAttribute( "xmlns:form", OASIS_STR "form:1.0" );
     xAttrs->AddAttribute( "xmlns:script", OASIS_STR "script:1.0" );
-    xAttrs->AddAttribute( "xmlns:dom", "http://www.w3.org/2001/xml-events");
-    xAttrs->AddAttribute( "xmlns:xforms", "http://www.w3.org/2002/xforms");
-    xAttrs->AddAttribute( "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-    xAttrs->AddAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    xAttrs->AddAttribute( "xmlns:dom", "http:
+    xAttrs->AddAttribute( "xmlns:xforms", "http:
+    xAttrs->AddAttribute( "xmlns:xsd", "http:
+    xAttrs->AddAttribute( "xmlns:xsi", "http:
     xAttrs->AddAttribute( "office:version", "1.0");
     xAttrs->AddAttribute( "office:mimetype", "application/vnd.oasis.opendocument.graphics");
 
@@ -1996,11 +1996,11 @@ sal_Bool SVGReader::parseAndConvert()
 
     xAttrs->AddAttribute( "style:name", "pagelayout1");
     m_xDocumentHandler->startElement( "style:page-layout", xUnoAttrs );
-    // TODO(Q3): this is super-ugly. In-place container come to mind.
+    
     xAttrs->Clear();
 
-    // make page viewport-width times viewport-height mm large - add
-    // 5% border at every side
+    
+    
     xAttrs->AddAttribute( "fo:margin-top", "0mm");
     xAttrs->AddAttribute( "fo:margin-bottom", "0mm");
     xAttrs->AddAttribute( "fo:margin-left", "0mm");
@@ -2036,7 +2036,7 @@ sal_Bool SVGReader::parseAndConvert()
 
     m_xDocumentHandler->endElement( "office:automatic-styles" );
 
-    ////////////////////////////////////////////////////////////////////
+    
 
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:styles", xUnoAttrs);
@@ -2045,7 +2045,7 @@ sal_Bool SVGReader::parseAndConvert()
                        m_xDocumentHandler);
     m_xDocumentHandler->endElement( "office:styles" );
 
-    ////////////////////////////////////////////////////////////////////
+    
 
     m_xDocumentHandler->startElement( "office:master-styles", xUnoAttrs );
     xAttrs->Clear();
@@ -2057,7 +2057,7 @@ sal_Bool SVGReader::parseAndConvert()
 
     m_xDocumentHandler->endElement( "office:master-styles" );
 
-    ////////////////////////////////////////////////////////////////////
+    
 
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:body", xUnoAttrs );
@@ -2068,7 +2068,7 @@ sal_Bool SVGReader::parseAndConvert()
     xAttrs->AddAttribute( "draw:style-name", "pagestyle1");
     m_xDocumentHandler->startElement("draw:page", xUnoAttrs);
 
-    // write out all shapes
+    
     writeShapes(aStatePool,
                 aStateMap,
                 xDocElem,
@@ -2083,6 +2083,6 @@ sal_Bool SVGReader::parseAndConvert()
     return sal_True;
 }
 
-} // namespace svgi
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

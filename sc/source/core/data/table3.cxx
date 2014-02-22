@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,18 +91,18 @@ bool SplitString( const OUString &sWhole,
 {
     i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
-    // Get prefix element
+    
     OUString sEmpty, sUser = "-";
     ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, sWhole, 0,
         KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );
     sPrefix = sWhole.copy( 0, aPRPre.EndPos );
 
-    // Return FALSE if no numeral element is found
+    
     if ( aPRPre.EndPos == sWhole.getLength() )
         return false;
 
-    // Get numeral element
+    
     sUser = aLocaleItem.decimalSeparator;
     ParseResult aPRNum = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::ANY_NUMBER, sWhole, aPRPre.EndPos,
@@ -151,7 +151,7 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
         bool bNumFound1 = SplitString( sStr1, sPre1, sSuf1, nNum1 );
         bool bNumFound2 = SplitString( sStr2, sPre2, sSuf2, nNum2 );
 
-        short nPreRes; // Prefix comparison result
+        short nPreRes; 
         if ( pData )
         {
             if ( bCaseSens )
@@ -177,7 +177,7 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
                 nPreRes = static_cast<short>(pCW->compareString( sPre1, sPre2 ));
         }
 
-        // Prefix strings differ.  Return immediately.
+        
         if ( nPreRes != 0 ) return nPreRes;
 
         if ( nNum1 != nNum2 )
@@ -186,8 +186,8 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
             return static_cast<short>( nNum1 > nNum2 );
         }
 
-        // The prefix and the first numerical elements are equal, but the suffix
-        // strings may still differ.  Stay in the loop.
+        
+        
 
         sStr1 = sSuf1;
         sStr2 = sSuf2;
@@ -199,7 +199,7 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
 
 }
 
-// STATIC DATA -----------------------------------------------------------
+
 
 struct ScSortInfo
 {
@@ -209,7 +209,7 @@ struct ScSortInfo
 };
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 
-// END OF STATIC DATA -----------------------------------------------------
+
 
 
 class ScSortInfoArray
@@ -320,7 +320,7 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
             rPar.aCollatorLocale, (rPar.bCaseSens ? 0 : SC_COLLATOR_IGNORES) );
     }
     else
-    {   // SYSTEM
+    {   
         DestroySortCollator();
         pSortCollator = (rPar.bCaseSens ? ScGlobal::GetCaseCollator() :
             ScGlobal::GetCollator());
@@ -360,7 +360,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 SwapRow( nDest, nOrg );
             else
                 SwapCol( static_cast<SCCOL>(nDest), static_cast<SCCOL>(nOrg) );
-            // neue Position des weggeswapten eintragen
+            
             ScSortInfo* p = ppInfo[nPos];
             p->nOrg = nDest;
             ::std::swap(p, aTable[nDest-nStart]);
@@ -393,7 +393,7 @@ short ScTable::CompareCell(
             if (eType2 == CELLTYPE_FORMULA && rCell2.mpFormula->IsValue())
                 bStr2 = false;
 
-            if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
+            if ( bStr1 && bStr2 )           
             {
                 OUString aStr1;
                 OUString aStr2;
@@ -406,9 +406,9 @@ short ScTable::CompareCell(
                 else
                     GetString(nCell2Col, nCell2Row, aStr2);
 
-                bool bUserDef     = aSortParam.bUserDef;        // custom sort order
-                bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
-                bool bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
+                bool bUserDef     = aSortParam.bUserDef;        
+                bool bNaturalSort = aSortParam.bNaturalSort;    
+                bool bCaseSens    = aSortParam.bCaseSens;       
 
                 if (bUserDef)
                 {
@@ -439,11 +439,11 @@ short ScTable::CompareCell(
                         nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
                 }
             }
-            else if ( bStr1 )               // String <-> Zahl
-                nRes = 1;                   // Zahl vorne
-            else if ( bStr2 )               // Zahl <-> String
-                nRes = -1;                  // Zahl vorne
-            else                            // Zahlen untereinander
+            else if ( bStr1 )               
+                nRes = 1;                   
+            else if ( bStr2 )               
+                nRes = -1;                  
+            else                            
             {
                 double nVal1 = rCell1.getValue();
                 double nVal2 = rCell2.getValue();
@@ -463,7 +463,7 @@ short ScTable::CompareCell(
         if (!rCell2.isEmpty())
             nRes = 1;
         else
-            nRes = 0;                   // beide leer
+            nRes = 0;                   
     }
     return nRes;
 }
@@ -624,7 +624,7 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
     return nRes;
 }
 
-bool ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd ) const   // ueber aSortParam
+bool ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd ) const   
 {
     for (SCCOLROW i=nStart; i<nEnd; i++)
     {
@@ -668,7 +668,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
             QuickSort( pArray, nRow1, nLastRow );
             SortReorder( pArray, pProgress );
             delete pArray;
-            // #i59745# update position of caption objects of cell notes --> reported at (SortReorder) ScColumn::SwapCellNotes level
+            
         }
     }
     else
@@ -688,7 +688,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
             QuickSort( pArray, nCol1, nLastCol );
             SortReorder( pArray, pProgress );
             delete pArray;
-            // #i59745# update position of caption objects of cell notes --> reported at (SortReorder) ScColumn::SwapCellNotes level
+            
         }
     }
     DestroySortCollator();
@@ -731,7 +731,7 @@ public:
 bool ScTable::TestRemoveSubTotals( const ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCROW nStartRow = rParam.nRow1 + 1;     
     SCCOL nEndCol   = rParam.nCol2;
     SCROW nEndRow    = rParam.nRow2;
 
@@ -762,7 +762,7 @@ public:
 
     void getRows(std::vector<SCROW>& rRows)
     {
-        // Sort and remove duplicates.
+        
         std::sort(maRemoved.begin(), maRemoved.end());
         std::vector<SCROW>::iterator it = std::unique(maRemoved.begin(), maRemoved.end());
         maRemoved.erase(it, maRemoved.end());
@@ -776,9 +776,9 @@ public:
 void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCROW nStartRow = rParam.nRow1 + 1;     
     SCCOL nEndCol   = rParam.nCol2;
-    SCROW nEndRow    = rParam.nRow2;            // wird veraendert
+    SCROW nEndRow    = rParam.nRow2;            
 
     RemoveSubTotalsHandler aFunc;
     for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
@@ -801,7 +801,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
     rParam.nRow2 -= aRows.size();
 }
 
-//  harte Zahlenformate loeschen (fuer Ergebnisformeln)
+
 
 static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 {
@@ -818,7 +818,7 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 }
 
 
-// at least MSC needs this at linkage level to be able to use it in a template
+
 typedef struct lcl_ScTable_DoSubTotals_RowEntry
 {
     sal_uInt16  nGroupNo;
@@ -828,24 +828,24 @@ typedef struct lcl_ScTable_DoSubTotals_RowEntry
     SCROW   nFuncEnd;
 } RowEntry;
 
-//      neue Zwischenergebnisse
-//      rParam.nRow2 wird veraendert !
+
+
 
 bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCROW nStartRow = rParam.nRow1 + 1;     
     SCCOL nEndCol   = rParam.nCol2;
-    SCROW nEndRow    = rParam.nRow2;            // wird veraendert
+    SCROW nEndRow    = rParam.nRow2;            
     sal_uInt16 i;
 
-    //  Leerzeilen am Ende weglassen,
-    //  damit alle Ueberlaeufe (MAXROW) bei InsertRow gefunden werden (#35180#)
-    //  Wenn sortiert wurde, sind alle Leerzeilen am Ende.
+    
+    
+    
     SCSIZE nEmpty = GetEmptyLinesInBlock( nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM );
     nEndRow -= nEmpty;
 
-    sal_uInt16 nLevelCount = 0;             // Anzahl Gruppierungen
+    sal_uInt16 nLevelCount = 0;             
     bool bDoThis = true;
     for (i=0; i<MAXSUBTOTAL && bDoThis; i++)
         if (rParam.bGroupActive[i])
@@ -853,15 +853,15 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         else
             bDoThis = false;
 
-    if (nLevelCount==0)                 // nichts tun
+    if (nLevelCount==0)                 
         return true;
 
-    SCCOL*          nGroupCol = rParam.nField;  // Spalten nach denen
-                                                // gruppiert wird
+    SCCOL*          nGroupCol = rParam.nField;  
+                                                
 
-    //  Durch (leer) als eigene Kategorie muss immer auf
-    //  Teilergebniszeilen aus den anderen Spalten getestet werden
-    //  (frueher nur, wenn eine Spalte mehrfach vorkam)
+    
+    
+    
     bool bTestPrevSub = ( nLevelCount > 1 );
 
     OUString  aSubString;
@@ -869,34 +869,34 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     bool bIgnoreCase = !rParam.bCaseSens;
 
-    OUString *pCompString[MAXSUBTOTAL];               // Pointer wegen Compiler-Problemen
+    OUString *pCompString[MAXSUBTOTAL];               
     for (i=0; i<MAXSUBTOTAL; i++)
         pCompString[i] = new OUString;
 
-                                //! sortieren?
+                                
 
     ScStyleSheet* pStyle = (ScStyleSheet*) pDocument->GetStyleSheetPool()->Find(
                                 ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA );
 
-    bool bSpaceLeft = true;                                         // Erfolg beim Einfuegen?
+    bool bSpaceLeft = true;                                         
 
-    // For performance reasons collect formula entries so their
-    // references don't have to be tested for updates each time a new row is
-    // inserted
+    
+    
+    
     RowEntry aRowEntry;
     ::std::vector< RowEntry > aRowVector;
 
-    for (sal_uInt16 nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      // incl. Gesamtergebnis
+    for (sal_uInt16 nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      
     {
         bool bTotal = ( nLevel == nLevelCount );
         aRowEntry.nGroupNo = bTotal ? 0 : (nLevelCount-nLevel-1);
 
-        // how many results per level
+        
         SCCOL nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
-        // result functions
+        
         ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
 
-        if (nResCount > 0)                                      // sonst nur sortieren
+        if (nResCount > 0)                                      
         {
             for (i=0; i<=aRowEntry.nGroupNo; i++)
             {
@@ -905,9 +905,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     *pCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
                 else
                     *pCompString[i] = aSubString;
-            }                                                   // aSubString bleibt auf dem letzten stehen
+            }                                                   
 
-            bool bBlockVis = false;             // Gruppe eingeblendet?
+            bool bBlockVis = false;             
             aRowEntry.nSubStartRow = nStartRow;
             for (SCROW nRow=nStartRow; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
             {
@@ -925,14 +925,14 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
                                 aString = ScGlobal::pCharClass->uppercase(aString);
-                            //  wenn sortiert, ist "leer" eine eigene Gruppe
-                            //  sonst sind leere Zellen unten erlaubt
+                            
+                            
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
                                             aString != *pCompString[i] );
                         }
                         if ( bChanged && bTestPrevSub )
                         {
-                            // No group change on rows that will contain subtotal formulas
+                            
                             for ( ::std::vector< RowEntry >::const_iterator
                                     iEntry( aRowVector.begin());
                                     iEntry != aRowVector.end(); ++iEntry)
@@ -975,13 +975,13 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             if ( aRowEntry.nDestRow <= iMove->nFuncEnd )
                                 ++iMove->nFuncEnd;
                         }
-                        // collect formula positions
+                        
                         aRowVector.push_back( aRowEntry );
 
-                        if (bTotal)     // "Gesamtergebnis"
+                        if (bTotal)     
                             aOutString = ScGlobal::GetRscString( STR_TABLE_GESAMTERGEBNIS );
                         else
-                        {               // " Ergebnis"
+                        {               
                             aOutString = aSubString;
                             if (aOutString.isEmpty())
                                 aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
@@ -1003,7 +1003,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                                     case SUBTOTAL_FUNC_VARP:    nStrId = STR_FUN_TEXT_VAR;      break;
                                     default:
                                     {
-                                        // added to avoid warnings
+                                        
                                     }
                                 }
                             aOutString += ScGlobal::GetRscString( nStrId );
@@ -1029,7 +1029,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         }
     }
 
-    // now insert the formulas
+    
     ScComplexRefData aRef;
     aRef.InitFlags();
     aRef.Ref1.SetAbsTab(nTab);
@@ -1064,16 +1064,16 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             {
                 ApplyStyle( nResCols[nResult], iEntry->nDestRow, *pStyle );
 
-                //  Zahlformat loeschen
+                
                 lcl_RemoveNumberFormat( this, nResCols[nResult], iEntry->nDestRow );
             }
         }
 
     }
 
-    //!     je nach Einstellung Zwischensummen-Zeilen nach oben verschieben ?
+    
 
-    //!     Outlines direkt erzeugen?
+    
 
     if (bSpaceLeft)
         DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
@@ -1081,7 +1081,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     for (i=0; i<MAXSUBTOTAL; i++)
         delete pCompString[i];
 
-    rParam.nRow2 = nEndRow;                 // neues Ende
+    rParam.nRow2 = nEndRow;                 
     return bSpaceLeft;
 }
 
@@ -1091,22 +1091,22 @@ void ScTable::MarkSubTotalCells(
     if (!ValidCol(nCol1) || !ValidCol(nCol2))
         return;
 
-    // Pick up all subtotal formula cells.
+    
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         aCol[nCol].MarkSubTotalCells(rSet, nRow1, nRow2, bVal);
 
-    // Pick up all filtered rows.
+    
     ScFlatBoolRowSegments::RangeData aFilteredSpan;
     SCROW nRow = nRow1;
     while (nRow <= nRow2)
     {
         if (!mpFilteredRows->getRangeData(nRow, aFilteredSpan))
-            // Failed for whatever reason.
+            
             return;
 
         if (aFilteredSpan.mbValue)
         {
-            // Filtered span found.
+            
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
                 rSet.set(nTab, nCol, nRow, aFilteredSpan.mnRow2, bVal);
         }
@@ -1132,7 +1132,7 @@ class QueryEvaluator
     {
         switch (rEntry.eOp)
         {
-            // these operators can only be used with textural comparisons.
+            
             case SC_CONTAINS:
             case SC_DOES_NOT_CONTAIN:
             case SC_BEGINS_WITH:
@@ -1153,7 +1153,7 @@ class QueryEvaluator
 
         switch (rEntry.eOp)
         {
-            // these operators can be used for either textural or value comparison.
+            
             case SC_EQUAL:
             case SC_NOT_EQUAL:
                 return true;
@@ -1213,7 +1213,7 @@ public:
         if (!rCell.isEmpty())
         {
             if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
-                // Error values are compared as string.
+                
                 return false;
 
             return rCell.hasNumeric();
@@ -1284,8 +1284,8 @@ public:
                  * filter query for x >= date AND x < date+1 */
                 if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
                 {
-                    // The format is of date type.  Strip off the time
-                    // element.
+                    
+                    
                     nCellVal = ::rtl::math::approxFloor(nCellVal);
                 }
             }
@@ -1317,7 +1317,7 @@ public:
                 break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
 
@@ -1332,14 +1332,14 @@ public:
         bool bMatchWholeCell = mbMatchWholeCell;
         svl::SharedString aCellStr;
         if (isPartialTextMatchOp(rEntry))
-            // may have to do partial textural comparison.
+            
             bMatchWholeCell = false;
 
         if (!rCell.isEmpty())
         {
             if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
             {
-                // Error cell is evaluated as string (for now).
+                
                 aCellStr = mrStrPool.intern(ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode()));
             }
             else if (rCell.meType == CELLTYPE_STRING)
@@ -1367,7 +1367,7 @@ public:
             sal_Int32 nStart = 0;
             sal_Int32 nEnd   = aCellStr.getLength();
 
-            // from 614 on, nEnd is behind the found text
+            
             bool bMatch = false;
             if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
             {
@@ -1383,7 +1383,7 @@ public:
             }
             if ( bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()) )
-                bMatch = false;    // RegExp must match entire cell string
+                bMatch = false;    
             if ( bRealRegExp )
                 switch (rEntry.eOp)
             {
@@ -1409,7 +1409,7 @@ public:
                     break;
                 default:
                     {
-                        // added to avoid warnings
+                        
                     }
             }
             else
@@ -1417,21 +1417,21 @@ public:
         }
         if ( !bRealRegExp )
         {
-            // Simple string matching i.e. no regexp match.
+            
             if (isTextMatchOp(rEntry))
             {
                 if (rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                 {
-                    // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
-                    // the query value is assigned directly, and the string is empty. In that case,
-                    // don't find any string (isEqual would find empty string results in formula cells).
+                    
+                    
+                    
                     bOk = false;
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
                 else if ( bMatchWholeCell )
                 {
-                    // Fast string equality check by comparing string identifiers.
+                    
                     if (mrParam.bCaseSens)
                         bOk = aCellStr.getData() == rItem.maString.getData();
                     else
@@ -1476,13 +1476,13 @@ public:
                         break;
                     default:
                         {
-                            // added to avoid warnings
+                            
                         }
                     }
                 }
             }
             else
-            {   // use collator here because data was probably sorted
+            {   
                 sal_Int32 nCompare = mpCollator->compareString(
                     aCellStr.getString(), rItem.maString.getString());
                 switch (rEntry.eOp)
@@ -1505,7 +1505,7 @@ public:
                         break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
             }
@@ -1514,9 +1514,9 @@ public:
         return std::pair<bool,bool>(bOk, bTestEqual);
     }
 
-    // To be called only if both isQueryByValue() and isQueryByString()
-    // returned false and range lookup is wanted! In range lookup comparison
-    // numbers are less than strings. Nothing else is compared.
+    
+    
+    
     std::pair<bool,bool> compareByRangeLookup(
         const ScRefCellValue& rCell, SCCOL nCol, SCROW nRow,
         const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem)
@@ -1534,7 +1534,7 @@ public:
             if (rItem.meType == ScQueryEntry::ByString)
             {
                 if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
-                    // Error values are compared as string.
+                    
                     return std::pair<bool,bool>(false, bTestEqual);
 
                 return std::pair<bool,bool>(rCell.hasNumeric(), bTestEqual);
@@ -1573,7 +1573,7 @@ bool ScTable::ValidQuery(
         const ScQueryEntry& rEntry = *it;
         SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
 
-        // we can only handle one single direct query
+        
         ScRefCellValue aCell;
         if (pCell && it == itBeg)
             aCell = *pCell;
@@ -1678,7 +1678,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             case SC_BOTPERC:
             {
                 ScSortParam aLocalSortParam( rParam, static_cast<SCCOL>(rEntry.nField) );
-                aSortParam = aLocalSortParam;       // used in CreateSortInfoArray, Compare
+                aSortParam = aLocalSortParam;       
                 if ( !bSortCollatorInitialized )
                 {
                     bSortCollatorInitialized = true;
@@ -1689,18 +1689,18 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 QuickSort( pArray, nRow1, rParam.nRow2 );
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
-                // keine Note-/Leerzellen zaehlen, sind ans Ende sortiert
+                
                 while (nValidCount > 0 && ppInfo[nValidCount-1]->maCell.isEmpty())
                     nValidCount--;
-                // keine Strings zaehlen, sind zwischen Value und Leer
+                
                 while (nValidCount > 0 && ppInfo[nValidCount-1]->maCell.hasString())
                     nValidCount--;
                 if ( nValidCount > 0 )
                 {
                     if ( rItem.meType == ScQueryEntry::ByString )
-                    {   // dat wird nix
+                    {   
                         rItem.meType = ScQueryEntry::ByValue;
-                        rItem.mfVal = 10;   // 10 bzw. 10%
+                        rItem.mfVal = 10;   
                     }
                     SCSIZE nVal = (rItem.mfVal >= 1 ? static_cast<SCSIZE>(rItem.mfVal) : 1);
                     SCSIZE nOffset = 0;
@@ -1711,7 +1711,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                             rEntry.eOp = SC_GREATER_EQUAL;
                             if ( nVal > nValidCount )
                                 nVal = nValidCount;
-                            nOffset = nValidCount - nVal;   // 1 <= nVal <= nValidCount
+                            nOffset = nValidCount - nVal;   
                         }
                         break;
                         case SC_BOTVAL:
@@ -1719,7 +1719,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                             rEntry.eOp = SC_LESS_EQUAL;
                             if ( nVal > nValidCount )
                                 nVal = nValidCount;
-                            nOffset = nVal - 1;     // 1 <= nVal <= nValidCount
+                            nOffset = nVal - 1;     
                         }
                         break;
                         case SC_TOPPERC:
@@ -1744,7 +1744,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                         break;
                         default:
                         {
-                            // added to avoid warnings
+                            
                         }
                     }
                     ScRefCellValue aCell = ppInfo[nOffset]->maCell;
@@ -1768,7 +1768,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -1793,9 +1793,9 @@ public:
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
 
-        // Advanced Filter creates only ByString queries that need to be
-        // converted to ByValue if appropriate. rItem.mfVal now holds the value
-        // if bNumber==true.
+        
+        
+        
 
         if (rItem.meType == ScQueryEntry::ByString)
         {
@@ -1804,7 +1804,7 @@ public:
             return;
         }
 
-        // Double-check if the query by date is really appropriate.
+        
 
         if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
         {
@@ -1813,13 +1813,13 @@ public:
             {
                 short nNumFmtType = pEntry->GetType();
                 if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
-                    rItem.meType = ScQueryEntry::ByValue;    // not a date only
+                    rItem.meType = ScQueryEntry::ByValue;    
             }
             else
-                rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
+                rItem.meType = ScQueryEntry::ByValue;    
         }
         else
-            rItem.meType = ScQueryEntry::ByValue;    // not a date
+            rItem.meType = ScQueryEntry::ByValue;    
     }
 };
 
@@ -1892,9 +1892,9 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
     SCROW nRealRow2 = aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {
-        bool bResult;                                   // Filterergebnis
+        bool bResult;                                   
         bool bValid = ValidQuery(j, aParam);
-        if (!bValid && bKeepSub)                        // Subtotals stehenlassen
+        if (!bValid && bKeepSub)                        
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
             {
@@ -1927,7 +1927,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
                 }
 
                 std::pair<StrSetType::iterator, bool> r = aStrSet.insert(aStr);
-                bool bIsUnique = r.second; // unique if inserted.
+                bool bIsUnique = r.second; 
                 bResult = bIsUnique;
             }
         }
@@ -1978,7 +1978,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
     SCROW   nDBRow1 = rQueryParam.nRow1;
     SCCOL   nDBCol2 = rQueryParam.nCol2;
-    // Erste Zeile muessen Spaltenkoepfe sein
+    
     while (bValid && (nCol <= nCol2))
     {
         OUString aQueryStr;
@@ -2050,14 +2050,14 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
 bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
-    // A valid StarQuery must be at least 4 columns wide. To be precise it
-    // should be exactly 4 columns ...
-    // Additionally, if this wasn't checked, a formula pointing to a valid 1-3
-    // column Excel style query range immediately left to itself would result
-    // in a circular reference when the field name or operator or value (first
-    // to third query range column) is obtained (#i58354#). Furthermore, if the
-    // range wasn't sufficiently specified data changes wouldn't flag formula
-    // cells for recalculation.
+    
+    
+    
+    
+    
+    
+    
+    
     if (nCol2 - nCol1 < 3)
         return false;
 
@@ -2080,7 +2080,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         ScQueryEntry& rEntry = rQueryParam.GetEntry(nIndex);
 
         bValid = false;
-        // Erste Spalte UND/ODER
+        
         if (nIndex > 0)
         {
             GetUpperCellString(nCol1, nRow, aCellStr);
@@ -2095,7 +2095,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
                 bValid = true;
             }
         }
-        // Zweite Spalte FeldName
+        
         if ((nIndex < 1) || bValid)
         {
             bFound = false;
@@ -2117,7 +2117,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
                     bValid = false;
             }
         }
-        // Dritte Spalte Operator =<>...
+        
         if (bValid)
         {
             bFound = false;
@@ -2142,7 +2142,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
                 rEntry.eOp = SC_EQUAL;
 
         }
-        // Vierte Spalte Wert
+        
         if (bValid)
         {
             OUString aStr;
@@ -2167,22 +2167,22 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     for (i=0; i < nCount; i++)
         rQueryParam.GetEntry(i).Clear();
 
-    // Standard QueryTabelle
+    
     bool bValid = CreateStarQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
-    // Excel QueryTabelle
+    
     if (!bValid)
         bValid = CreateExcelQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
     nCount = rQueryParam.GetEntryCount();
     if (bValid)
     {
-        //  bQueryByString muss gesetzt sein
+        
         for (i=0; i < nCount; i++)
             rQueryParam.GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
     }
     else
     {
-        //  nix
+        
         for (i=0; i < nCount; i++)
             rQueryParam.GetEntry(i).Clear();
     }
@@ -2219,7 +2219,7 @@ void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector
 void ScTable::GetFilteredFilterEntries(
     SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
-    // remove the entry for this column from the query parameter
+    
     ScQueryParam aParam( rParam );
     aParam.RemoveEntryByField(nCol);
 
@@ -2273,7 +2273,7 @@ sal_uLong ScTable::GetWeightedCount() const
     sal_uLong nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
+        if ( aCol[nCol].GetCellCount() )                    
             nCellCount += aCol[nCol].GetWeightedCount();
 
     return nCellCount;
@@ -2284,7 +2284,7 @@ sal_uLong ScTable::GetCodeCount() const
     sal_uLong nCodeCount = 0;
 
     for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
+        if ( aCol[nCol].GetCellCount() )                    
             nCodeCount += aCol[nCol].GetCodeCount();
 
     return nCodeCount;

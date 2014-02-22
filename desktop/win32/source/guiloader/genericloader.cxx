@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
@@ -40,7 +40,7 @@
 #include "tools/pathutils.hxx"
 #include "../extendloaderenvironment.hxx"
 
-//---------------------------------------------------------------------------
+
 
 static int GenericMain()
 {
@@ -71,7 +71,7 @@ static int GenericMain()
         tools::buildPath(
             redirect, szIniDirectory, szIniDirectory + iniDirLen,
             MY_STRING(L"redirect.ini")) != NULL &&
-        (GetBinaryType(redirect, &dummy) || // cheaper check for file existence?
+        (GetBinaryType(redirect, &dummy) || 
          GetLastError() != ERROR_FILE_NOT_FOUND);
     LPTSTR cl1 = GetCommandLine();
     WCHAR * cl2 = new WCHAR[
@@ -81,8 +81,8 @@ static int GenericMain()
             iniDirLen + MY_LENGTH(L"redirect.ini\""))
          : 0) +
         MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen + MY_LENGTH(L"\"") + 1];
-        // 4 * cwdLen: each char preceded by backslash, each trailing backslash
-        // doubled
+        
+        
     WCHAR * p = desktop_win32::commandLineAppend(cl2, cl1);
     if (hasRedirect) {
         p = desktop_win32::commandLineAppend(
@@ -119,8 +119,8 @@ static int GenericMain()
 
         do
         {
-            // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWidth" so we have to do so
-            // as if we where processing any messages
+            
+            
 
             dwWaitResult = MsgWaitForMultipleObjects( 1, &aProcessInfo.hProcess, FALSE, INFINITE, QS_ALLEVENTS );
 
@@ -142,7 +142,7 @@ static int GenericMain()
     return dwExitCode;
 }
 
-//---------------------------------------------------------------------------
+
 
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
@@ -153,7 +153,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     return GenericMain();
 }
 
-//---------------------------------------------------------------------------
+
 
 #ifdef __MINGW32__
 int __cdecl main()

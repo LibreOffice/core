@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/XConfigManager.hpp>
@@ -37,10 +37,10 @@ using namespace ::com::sun::star::lang;
 XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent) :
     TabPage( pParent, "XmlFilterTabPageTransformation", "filter/ui/xmlfiltertabpagetransformation.ui" ),
 
-    sHTTPSchema( "http://" ),
-    sSHTTPSchema( "https://" ),
-    sFILESchema( "file://" ),
-    sFTPSchema( "ftp://" ),
+    sHTTPSchema( "http:
+    sSHTTPSchema( "https:
+    sFILESchema( "file:
+    sFTPSchema( "ftp:
     sInstPath( "$(prog)/" )
 {
     get(m_pEDDocType,"doc");
@@ -96,16 +96,16 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
 {
     OUString aPath;
 
-    if( rURL.matchIgnoreAsciiCase( "file://" ) )
+    if( rURL.matchIgnoreAsciiCase( "file:
     {
         osl::FileBase::getSystemPathFromFileURL( rURL, aPath );
 
         rURLBox->SetBaseURL( rURL );
         rURLBox->SetText( aPath );
     }
-    else if( rURL.matchIgnoreAsciiCase( "http://" ) ||
-             rURL.matchIgnoreAsciiCase( "https://" ) ||
-             rURL.matchIgnoreAsciiCase( "ftp://" ) )
+    else if( rURL.matchIgnoreAsciiCase( "http:
+             rURL.matchIgnoreAsciiCase( "https:
+             rURL.matchIgnoreAsciiCase( "ftp:
     {
         rURLBox->SetBaseURL( rURL );
         rURLBox->SetText( rURL );
@@ -131,9 +131,9 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox* rURLBox )
 {
     OUString aURL;
     OUString aStrPath ( rURLBox->GetText() );
-    if( aStrPath.matchIgnoreAsciiCase( "http://" ) ||
-        aStrPath.matchIgnoreAsciiCase( "https://" ) ||
-        aStrPath.matchIgnoreAsciiCase( "ftp://" ) )
+    if( aStrPath.matchIgnoreAsciiCase( "http:
+        aStrPath.matchIgnoreAsciiCase( "https:
+        aStrPath.matchIgnoreAsciiCase( "ftp:
     {
         return aStrPath;
     }
@@ -162,7 +162,7 @@ IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
         pURLBox = m_pEDImportTemplate;
     }
 
-    // Open Fileopen-Dialog
+    
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 

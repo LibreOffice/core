@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CheckBox.hxx"
@@ -25,7 +25,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -41,23 +41,23 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//==================================================================
-//= OCheckBoxControl
-//==================================================================
 
-//------------------------------------------------------------------
+
+
+
+
 OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CHECKBOX)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OCheckBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -68,43 +68,43 @@ StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com
     return aSupported;
 }
 
-//==================================================================
-//= OCheckBoxModel
-//==================================================================
 
-//==================================================================
+
+
+
+
 InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OCheckBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_True )
-                    // use the old control name for compytibility reasons
+                    
 {
 
     m_nClassId = FormComponentType::CHECKBOX;
     initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
 }
 
-//------------------------------------------------------------------
+
 OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
 }
 
-//------------------------------------------------------------------------------
+
 OCheckBoxModel::~OCheckBoxModel()
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
@@ -127,7 +127,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
@@ -135,35 +135,35 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
 {
-    return OUString(FRM_COMPONENT_CHECKBOX);  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_CHECKBOX);  
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
     throw(stario::IOException, RuntimeException)
 {
     OReferenceValueComponent::write(_rxOutStream);
 
-    // Version
+    
     _rxOutStream->writeShort(0x0003);
-    // Properties
+    
     _rxOutStream << getReferenceValue();
     _rxOutStream << (sal_Int16)getDefaultChecked();
     writeHelpTextCompatibly(_rxOutStream);
-    // from version 0x0003 : common properties
+    
     writeCommonProperties(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OReferenceValueComponent::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);
 
-    // Version
+    
     sal_uInt16 nVersion = _rxInStream->readShort();
 
     OUString sReferenceValue;
@@ -193,9 +193,9 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
     setReferenceValue( sReferenceValue );
     setDefaultChecked( static_cast< ToggleState >( nDefaultChecked ) );
 
-    // After reading in, display the default values
+    
     if ( !getControlSource().isEmpty() )
-        // (not if we don't have a control source - the "State" property acts like it is persistent, then
+        
         resetNoBroadcast();
 }
 
@@ -206,14 +206,14 @@ bool OCheckBoxModel::DbUseBool()
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 Any OCheckBoxModel::translateDbColumnToControlValue()
 {
     Any aValue;
 
-    //////////////////////////////////////////////////////////////////
-    // Set value in ControlModel
-    bool bValue = bool(); // avoid warning
+    
+    
+    bool bValue = bool(); 
     if(DbUseBool())
     {
         bValue = m_xColumn->getBoolean();
@@ -237,17 +237,17 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
     }
     else if ( !aValue.hasValue() )
     {
-        // Since above either bValue is initialised, either aValue.hasValue(),
-        // bValue cannot be used uninitialised here.
-        // But GCC does not see/understand that, which breaks -Werror builds,
-        // so we explicitly default-initialise it.
+        
+        
+        
+        
         aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
     }
 
     return aValue;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     OSL_PRECOND( m_xColumnUpdate.is(), "OCheckBoxModel::commitControlValueToDbColumn: not bound!" );
@@ -287,8 +287,8 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

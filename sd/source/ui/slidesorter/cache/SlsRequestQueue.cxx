@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -85,7 +85,7 @@ class RequestQueue::Container
 
 
 
-//=====  GenericRequestQueue  =================================================
+
 
 
 RequestQueue::RequestQueue (const SharedCacheContext& rpCacheContext)
@@ -117,16 +117,16 @@ void RequestQueue::AddRequest (
 
     OSL_ASSERT(eRequestClass>=MIN__CLASS && eRequestClass<=MAX__CLASS);
 
-    // If the request is already a member of the queue then remove it so
-    // that the following insertion will use the new prioritization.
+    
+    
 #if OSL_DEBUG_LEVEL >=2
     bool bRemoved =
 #endif
         RemoveRequest(aKey);
 
-    // The priority of the request inside its priority class is defined by
-    // the page number.  This ensures a strict top-to-bottom, left-to-right
-    // order.
+    
+    
+    
     sal_Int32 nPriority (mpCacheContext->GetPriority(aKey));
     Request aRequest (aKey, nPriority, eRequestClass);
 
@@ -150,7 +150,7 @@ void RequestQueue::AddRequest (
 
 void RequestQueue::PageInDestruction(const SdrPage& rPage)
 {
-    //remove any requests pending for this page which is going away now
+    
     RemoveRequest(&rPage);
 }
 
@@ -258,7 +258,7 @@ void RequestQueue::PopFront (void)
         pPage->RemovePageUser(*this);
         mpRequestQueue->erase(aIter);
 
-        // Reset the priority counter if possible.
+        
         if (mpRequestQueue->empty())
         {
             mnMinimumPriority = 0;
@@ -303,7 +303,7 @@ void RequestQueue::Clear (void)
 }
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 
 

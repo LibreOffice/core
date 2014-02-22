@@ -92,10 +92,10 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
     if ( pAny )
-    {   // property is already available
+    {   
         sal_Int32 i;
         if ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
-        {   // old property is a sequence->each entry has to be removed from the HashPairMap
+        {   
             ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
                 *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pAny->getValue());
             for ( i = 0; i < rSecSequence.getLength(); i++ )
@@ -107,7 +107,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
         }
         *pAny = rPropVal.Value;
         if ( rPropVal.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
-        {   // the new property is a sequence->each entry has to be inserted into the HashPairMap
+        {   
             ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
                 *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pAny->getValue());
             for ( i = 0; i < rSecSequence.getLength(); i++ )
@@ -118,7 +118,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
         }
     }
     else
-    {   // it's a new property
+    {   
         sal_uInt32 nIndex = aPropSeq.getLength();
         aPropSeq.realloc( nIndex + 1 );
         aPropSeq[ nIndex ] = rPropVal ;
@@ -130,7 +130,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
 void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal )
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rSequenceName, rPropVal.Name );
-    if ( pAny ) // just replacing
+    if ( pAny ) 
         *pAny = rPropVal.Value;
     else
     {
@@ -199,7 +199,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
                     {
                         PropertyPairHashMap::iterator _aHashIter( aPropPairHashMap.find( PropertyPair( rPropName, rSecSequence[ i ].Name ) ) );
                         if ( _aHashIter != aPropPairHashMap.end() )
-                            aPropPairHashMap.erase( _aHashIter );       // removing property from pair hashmap
+                            aPropPairHashMap.erase( _aHashIter );       
                     }
                 }
             }
@@ -207,7 +207,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
             if ( nLength )
             {
                 sal_Int32 nIndex  = (*aHashIter).second;
-                if ( nIndex != ( nLength - 1 ) )                        // resizing sequence
+                if ( nIndex != ( nLength - 1 ) )                        
                 {
                     PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
                     (*aHashIter2).second = nIndex;
@@ -215,7 +215,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
                 }
                 aPropSeq.realloc( aPropSeq.getLength() - 1 );
             }
-            aPropHashMap.erase( aHashIter );                            // removing property from hashmap
+            aPropHashMap.erase( aHashIter );                            
         }
     }
 }

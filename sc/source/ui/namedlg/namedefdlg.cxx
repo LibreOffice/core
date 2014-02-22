@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "namedefdlg.hxx"
@@ -24,7 +24,7 @@
 #include "tokenarray.hxx"
 #include "sc.hrc"
 
-// defines -------------------------------------------------------------------
+
 
 #define ABS_SREF          SCA_VALID \
     | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -62,7 +62,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     get(m_pFtInfo, "label");
     maStrInfoDefault = m_pFtInfo->GetText();
 
-    // Initialize scope list.
+    
     m_pLbScope->InsertEntry(maGlobalNameStr);
     m_pLbScope->SelectEntryPos(0);
     SCTAB n = mpDoc->GetTableCount();
@@ -78,7 +78,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     m_pEdName->SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
     m_pEdRange->SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
 
-    m_pBtnAdd->Disable(); // empty name is invalid
+    m_pBtnAdd->Disable(); 
 
     ScRange aRange;
 
@@ -111,7 +111,7 @@ bool ScNameDefDlg::IsFormulaValid()
     ScTokenArray* pCode = aComp.CompileString(m_pEdRange->GetText());
     if (pCode->GetCodeError())
     {
-        //TODO: info message
+        
         delete pCode;
         return false;
     }
@@ -198,7 +198,7 @@ void ScNameDefDlg::AddPushed()
     if (!pRangeName)
         return;
 
-    if (!IsNameValid()) //should not happen, but make sure we don't break anything
+    if (!IsNameValid()) 
         return;
     else
     {
@@ -222,7 +222,7 @@ void ScNameDefDlg::AddPushed()
                 pNewEntry->AddType(nType);
             }
 
-            // aExpression valid?
+            
             if ( 0 == pNewEntry->GetErrCode() )
             {
                 if ( !pRangeName->insert( pNewEntry ) )
@@ -230,18 +230,18 @@ void ScNameDefDlg::AddPushed()
 
                 if (mbUndo)
                 {
-                    // this means we called directly through the menu
+                    
 
                     SCTAB nTab;
-                    // if no table with that name is found, assume global range name
+                    
                     if (!mpDoc->GetTable(aScope, nTab))
                         nTab = -1;
 
                     mpDocShell->GetUndoManager()->AddUndoAction(
                             new ScUndoAddRangeData( mpDocShell, pNewEntry, nTab) );
 
-                    // set table stream invalid, otherwise RangeName won't be saved if no other
-                    // call invalidates the stream
+                    
+                    
                     if (nTab != -1)
                         mpDoc->SetStreamValid(nTab, false);
                     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );

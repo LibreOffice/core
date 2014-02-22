@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/types.h"
@@ -25,7 +25,7 @@
 namespace inprocserv
 {
 
-//-------------------------------------------------------------------------------
+
 BOOL StringsEqual( LPCOLESTR pszNameFromOutside, wchar_t* pOwnName )
 {
     BOOL bResult = TRUE;
@@ -47,19 +47,19 @@ BOOL StringsEqual( LPCOLESTR pszNameFromOutside, wchar_t* pOwnName )
     return bResult;
 }
 
-//-------------------------------------------------------------------------------
+
 HRESULT InprocEmbedDocument_Impl::Init()
 {
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 void InprocEmbedDocument_Impl::SetName( LPCOLESTR pszNameFromOutside, wchar_t*& pOwnName )
 {
     if ( !pszNameFromOutside )
         return;
 
-    // copy the string
+    
     size_t nLen = 0;
     while( pszNameFromOutside[nLen] != 0 )
         nLen++;
@@ -76,10 +76,10 @@ void InprocEmbedDocument_Impl::SetName( LPCOLESTR pszNameFromOutside, wchar_t*& 
     pOwnName[nLen] = 0;
 }
 
-//-------------------------------------------------------------------------------
+
 BOOL InprocEmbedDocument_Impl::CheckDefHandler()
 {
-    // set the own listener
+    
     if ( m_pOleAdvises[0] == NULL )
     {
         m_pOleAdvises[0] = new OleWrapperAdviseSink();
@@ -90,7 +90,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
         {
             if ( m_pDefHandler )
             {
-                // deregister all the listeners
+                
 
                 ComSmart< IOleObject > pOleObject;
                 HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
@@ -132,7 +132,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                 hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
                 if ( SUCCEEDED( hr ) && pPersist )
                 {
-                    // disconnect the old wrapper from the storage
+                    
                     pPersist->HandsOffStorage();
                 }
 
@@ -148,7 +148,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
 
     if ( !m_pDefHandler )
     {
-        // create a new default inprocess handler
+        
         HRESULT hr = OleCreateDefaultHandler( m_guid, NULL, IID_IUnknown, (void**)&m_pDefHandler );
         if ( SUCCEEDED( hr ) )
         {
@@ -158,7 +158,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                         ComSmart< IPersistStorage > pPersist;
                         hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-                        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                        ULONGGuard aGuard( &m_nCallsOnStack ); 
                         if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
                             hr = pPersist->InitNew( m_pStorage );
                     }
@@ -167,7 +167,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                         ComSmart< IPersistStorage > pPersist;
                         hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-                        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                        ULONGGuard aGuard( &m_nCallsOnStack ); 
                         if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
                             hr = pPersist->Load( m_pStorage );
                     }
@@ -176,7 +176,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                         ComSmart< IPersistFile > pPersistFile;
                         hr = m_pDefHandler->QueryInterface( IID_IPersistFile, (void**)&pPersistFile );
 
-                        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                        ULONGGuard aGuard( &m_nCallsOnStack ); 
                         if ( SUCCEEDED( hr ) && pPersistFile && m_pFileName )
                             hr = pPersistFile->Load( m_pFileName, m_nFileOpenMode );
                     }
@@ -189,7 +189,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
             return FALSE;
         }
 
-        // register all the listeners new
+        
 
         ComSmart< IOleObject > pOleObject;
         hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
@@ -233,10 +233,10 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
+
 DWORD InprocEmbedDocument_Impl::InsertAdviseLinkToList( const ComSmart<OleWrapperAdviseSink>& pOwnAdvise, ComSmart< OleWrapperAdviseSink > pAdvises[] )
 {
-    // the result should start from 1 in case of success, the element 0 can be used for own needs
+    
     DWORD nResult = 0;
 
     if ( pOwnAdvise )
@@ -258,12 +258,12 @@ DWORD InprocEmbedDocument_Impl::InsertAdviseLinkToList( const ComSmart<OleWrappe
     return nResult;
 }
 
-//-------------------------------------------------------------------------------
+
 void InprocEmbedDocument_Impl::Clean()
 {
     m_pDefHandler = (IUnknown*)NULL;
 
-    // no DisconnectOrigAdvise() call here, since it is no explicit disconnection
+    
     for ( DWORD nInd = 0; nInd < DEFAULT_ARRAY_LEN; nInd++ )
     {
         if ( m_pOleAdvises[nInd] )
@@ -300,8 +300,8 @@ void InprocEmbedDocument_Impl::Clean()
     }
 }
 
-// IUnknown
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
     if(IsEqualIID(riid, IID_IUnknown))
@@ -393,20 +393,20 @@ STDMETHODIMP InprocEmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FA
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::AddRef()
 {
     return ++m_refCount;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::Release()
 {
-    // unfortunately there are reentrance problems in mfc that have to be workarounded
+    
     sal_Int32 nCount = m_refCount > 0 ? --m_refCount : 0;
     if ( nCount == 0 && !m_bDeleted )
     {
-        // deleting of this object can trigger deleting of mfc objects that will try to delete this object one more time
+        
         m_bDeleted = TRUE;
 
         Clean();
@@ -415,16 +415,16 @@ STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::Release()
     return nCount;
 }
 
-// IPersist
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetClassID( CLSID* pClassId )
 {
     *pClassId = *&m_guid;
     return S_OK;
 }
 
-// IPersistStorage
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
 {
     if ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() )
@@ -435,7 +435,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
             return pPersist->IsDirty();
     }
@@ -443,7 +443,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
 {
     if ( CheckDefHandler() )
@@ -451,7 +451,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
         {
             hr = pPersist->InitNew( pStg );
@@ -475,7 +475,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
 {
     if ( CheckDefHandler() )
@@ -483,7 +483,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
         {
             hr = pPersist->Load( pStg );
@@ -507,7 +507,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 {
     if ( fSameAsLoad && ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() ) )
@@ -518,7 +518,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoa
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
             return pPersist->Save( pStgSave, fSameAsLoad );
     }
@@ -526,7 +526,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoa
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
 {
     if ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() )
@@ -542,7 +542,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
         {
             hr = pPersist->SaveCompleted( pStgNew );
@@ -569,7 +569,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
 {
     if ( CheckDefHandler() )
@@ -577,7 +577,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
         {
             hr = pPersist->HandsOffStorage();
@@ -593,8 +593,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
     return E_FAIL;
 }
 
-// IPersistFile
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
 {
     if ( CheckDefHandler() && pszFileName )
@@ -602,7 +602,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode
         ComSmart< IPersistFile > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistFile, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
         {
             hr = pPersist->Load( pszFileName, dwMode );
@@ -613,7 +613,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode
                     m_pStorage = NULL;
 
                 m_nFileOpenMode = dwMode;
-                // copy the string
+                
                 SetName( pszFileName, m_pFileName );
             }
 
@@ -624,7 +624,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 {
     if ( CheckDefHandler() )
@@ -632,7 +632,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRememb
         ComSmart< IPersistFile > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistFile, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
             return pPersist->Save( pszFileName, fRemember );
     }
@@ -640,7 +640,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRememb
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
     if ( CheckDefHandler() )
@@ -648,7 +648,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
         ComSmart< IPersistFile > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistFile, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
         {
             hr = pPersist->SaveCompleted( pszFileName );
@@ -658,8 +658,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
                 if ( m_pStorage )
                     m_pStorage = NULL;
 
-                m_nFileOpenMode = STGM_READWRITE; // was just written
-                // copy the string
+                m_nFileOpenMode = STGM_READWRITE; 
+                
                 SetName( pszFileName, m_pFileName );
             }
         }
@@ -669,7 +669,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 {
     if ( CheckDefHandler() )
@@ -677,7 +677,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
         ComSmart< IPersistFile > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistFile, (void**)&pPersist );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pPersist )
             return pPersist->GetCurFile( ppszFileName );
     }
@@ -685,8 +685,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     return E_FAIL;
 }
 
-// IOleObject
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 {
     if ( pSite == m_pClientSite )
@@ -707,7 +707,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             HRESULT hr2 = pOleObject->SetClientSite( pSite );
@@ -733,7 +733,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 {
     if ( CheckDefHandler() )
@@ -741,7 +741,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->GetClientSite( pSite );
     }
@@ -749,7 +749,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
 
@@ -758,7 +758,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             hr = pOleObject->SetHostNames( szContainerApp, szContainerObj );
@@ -768,17 +768,17 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
     HRESULT ret = S_OK;
     if ( m_pDefHandler && CheckDefHandler() )
     {
-        // no need to close if there is no default handler.
+        
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             hr = pOleObject->Close( dwSaveOption );
@@ -790,13 +790,13 @@ STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
         }
     }
 
-    // if the object is closed from outside that means that it should go to uninitialized state
+    
     Clean();
 
     return ret;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMoniker * pmk )
 {
     if ( CheckDefHandler() )
@@ -804,7 +804,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMonike
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->SetMoniker( dwWhichMoniker, pmk );
     }
@@ -812,7 +812,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMonike
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker ** ppmk )
 {
     if ( CheckDefHandler() )
@@ -820,7 +820,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhich
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->GetMoniker( dwAssign, dwWhichMoniker, ppmk );
     }
@@ -828,7 +828,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhich
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, BOOL fCreation, DWORD dwReserved )
 {
     if ( CheckDefHandler() )
@@ -836,7 +836,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, 
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->InitFromData( pDataObject, fCreation, dwReserved );
     }
@@ -844,7 +844,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, 
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject ** ppDataObject )
 {
     if ( CheckDefHandler() )
@@ -852,7 +852,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IData
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->GetClipboardData( dwReserved, ppDataObject );
     }
@@ -860,7 +860,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IData
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
     LONG iVerb,
     LPMSG pMsg,
@@ -874,7 +874,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             hr = pOleObject->DoVerb( iVerb, pMsg, pActiveSite, nLong, hWin, pRect );
@@ -890,7 +890,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb )
 {
     if ( CheckDefHandler() )
@@ -898,7 +898,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb 
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->EnumVerbs( ppEnumOleVerb );
     }
@@ -906,7 +906,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb 
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Update()
 {
 
@@ -915,7 +915,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Update()
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->Update();
     }
@@ -923,7 +923,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Update()
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
 {
     if ( CheckDefHandler() )
@@ -931,7 +931,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->IsUpToDate();
     }
@@ -939,7 +939,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
 {
     if ( pClsid )
@@ -948,7 +948,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR * pszUserType )
 {
     if ( CheckDefHandler() )
@@ -956,7 +956,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->GetUserType( dwFormOfType, pszUserType );
     }
@@ -964,7 +964,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
 {
     if ( CheckDefHandler() )
@@ -972,7 +972,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psi
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->SetExtent( dwDrawAspect, psizel );
     }
@@ -980,7 +980,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psi
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * psizel )
 {
     if ( CheckDefHandler() )
@@ -988,7 +988,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * ps
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->GetExtent( dwDrawAspect, psizel );
     }
@@ -996,14 +996,14 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * ps
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )
 {
 
     if ( !pdwConnection )
         return E_FAIL;
 
-    // CheckDefHandler will set the listener, avoid reusing of old listener
+    
     if ( DEFAULT_ARRAY_LEN > *pdwConnection && *pdwConnection > 0 && m_pOleAdvises[*pdwConnection] )
     {
         m_pOleAdvises[*pdwConnection]->DisconnectOrigAdvise();
@@ -1015,7 +1015,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdw
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             ComSmart< OleWrapperAdviseSink > pOwnAdvise( new OleWrapperAdviseSink( pAdvSink ) );
@@ -1033,11 +1033,11 @@ STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdw
         }
     }
 
-    // return success always for now
+    
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwConnection )
 {
     if ( DEFAULT_ARRAY_LEN > dwConnection && dwConnection > 0 && m_pOleAdvises[dwConnection] )
@@ -1047,7 +1047,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwConnection )
             ComSmart< IOleObject > pOleObject;
             HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-            ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+            ULONGGuard aGuard( &m_nCallsOnStack ); 
             if ( SUCCEEDED( hr ) && pOleObject )
             {
                 DWORD nID = m_pOleAdvises[dwConnection]->GetRegID();
@@ -1064,13 +1064,13 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwConnection )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvise*/ )
 {
     return E_NOTIMPL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pdwStatus )
 {
     if ( CheckDefHandler() )
@@ -1078,7 +1078,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pd
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->GetMiscStatus( dwAspect, pdwStatus );
     }
@@ -1086,7 +1086,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pd
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
 {
     if ( CheckDefHandler() )
@@ -1094,7 +1094,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pOleObject )
             return pOleObject->SetColorScheme( pLogpal );
     }
@@ -1102,8 +1102,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
     return E_FAIL;
 }
 
-//IDataObject
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium )
 {
     if ( CheckDefHandler() )
@@ -1111,7 +1111,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIU
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->GetData( pFormatetc, pMedium );
     }
@@ -1119,7 +1119,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIU
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pMedium )
 {
     if ( CheckDefHandler() )
@@ -1127,7 +1127,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGM
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->GetDataHere( pFormatetc, pMedium );
     }
@@ -1135,7 +1135,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGM
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
 {
     if ( CheckDefHandler() )
@@ -1143,7 +1143,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->QueryGetData( pFormatetc );
     }
@@ -1151,7 +1151,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn, FORMATETC * pFormatetcOut )
 {
     if ( CheckDefHandler() )
@@ -1159,7 +1159,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pForma
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->GetCanonicalFormatEtc( pFormatetcIn, pFormatetcOut );
     }
@@ -1167,7 +1167,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pForma
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease )
 {
     if ( CheckDefHandler() )
@@ -1175,7 +1175,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIU
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->SetData( pFormatetc, pMedium, fRelease );
     }
@@ -1183,7 +1183,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIU
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc )
 {
     if ( CheckDefHandler() )
@@ -1191,7 +1191,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFO
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->EnumFormatEtc( dwDirection, ppFormatetc );
     }
@@ -1199,14 +1199,14 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFO
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection )
 {
 
     if ( !pdwConnection )
         return E_FAIL;
 
-    // avoid reusing of the old listener
+    
     if ( m_pDefHandler && DEFAULT_ARRAY_LEN > *pdwConnection && *pdwConnection > 0 && m_pDataAdvises[*pdwConnection] )
     {
         m_pDataAdvises[*pdwConnection]->DisconnectOrigAdvise();
@@ -1218,7 +1218,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD ad
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
         {
             ComSmart< OleWrapperAdviseSink > pOwnAdvise( new OleWrapperAdviseSink( ComSmart<IAdviseSink>( pAdvSink ), pFormatetc, advf ) );
@@ -1236,11 +1236,11 @@ STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD ad
         }
     }
 
-    // return success always for now
+    
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
 {
     if ( m_pDefHandler && DEFAULT_ARRAY_LEN > dwConnection && dwConnection > 0 && m_pDataAdvises[dwConnection] )
@@ -1250,7 +1250,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
             ComSmart< IDataObject > pIDataObject;
             HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-            ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+            ULONGGuard aGuard( &m_nCallsOnStack ); 
             if ( SUCCEEDED( hr ) && pIDataObject )
             {
                 DWORD nID = m_pDataAdvises[dwConnection]->GetRegID();
@@ -1267,7 +1267,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 {
     if ( CheckDefHandler() )
@@ -1275,7 +1275,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvis
         ComSmart< IDataObject > pIDataObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDataObject )
             return pIDataObject->EnumDAdvise( ppenumAdvise );
     }
@@ -1283,8 +1283,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvis
     return E_FAIL;
 }
 
-// IRunnableObject
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
 {
     if ( CheckDefHandler() )
@@ -1292,7 +1292,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, (void**)&pIRunObj );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIRunObj )
             return pIRunObj->GetRunningClass( lpClsid );
     }
@@ -1300,7 +1300,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
 {
     if ( CheckDefHandler() )
@@ -1308,7 +1308,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, (void**)&pIRunObj );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIRunObj )
             return pIRunObj->Run( pbc );
     }
@@ -1316,7 +1316,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 {
    if ( CheckDefHandler() )
@@ -1324,7 +1324,7 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, (void**)&pIRunObj );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIRunObj )
             return pIRunObj->IsRunning();
     }
@@ -1333,7 +1333,7 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlockCloses )
 {
    if ( CheckDefHandler() )
@@ -1341,7 +1341,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlock
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, (void**)&pIRunObj );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIRunObj )
             return pIRunObj->LockRunning( fLock, fLastUnlockCloses );
     }
@@ -1349,7 +1349,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlock
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 {
    if ( CheckDefHandler() )
@@ -1357,7 +1357,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
         ComSmart< IRunnableObject > pIRunObj;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, (void**)&pIRunObj );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIRunObj )
             return pIRunObj->SetContainedObject( fContained );
     }
@@ -1366,8 +1366,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 }
 
 
-// IViewObject methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcWBounds, BOOL ( STDMETHODCALLTYPE *pfnContinue )( ULONG_PTR dwContinue ), ULONG_PTR dwContinue )
 {
     if ( CheckDefHandler() )
@@ -1375,7 +1375,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, vo
         ComSmart< IViewObject > pIViewObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIViewObject )
             return pIViewObject->Draw( dwDrawAspect, lindex, pvAspect, ptd, hdcTargetDev, hdcDraw, lprcBounds, lprcWBounds, pfnContinue, dwContinue );
     }
@@ -1383,7 +1383,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, vo
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hicTargetDev, LOGPALETTE **ppColorSet )
 {
     if ( CheckDefHandler() )
@@ -1391,7 +1391,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lin
         ComSmart< IViewObject > pIViewObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIViewObject )
             return pIViewObject->GetColorSet( dwDrawAspect, lindex, pvAspect, ptd, hicTargetDev, ppColorSet );
     }
@@ -1399,7 +1399,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lin
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DWORD *pdwFreeze )
 {
     if ( CheckDefHandler() )
@@ -1407,7 +1407,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, 
         ComSmart< IViewObject > pIViewObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIViewObject )
             return pIViewObject->Freeze( dwDrawAspect, lindex, pvAspect, pdwFreeze );
     }
@@ -1415,7 +1415,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, 
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
 {
     if ( CheckDefHandler() )
@@ -1423,7 +1423,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
         ComSmart< IViewObject > pIViewObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIViewObject )
             return pIViewObject->Unfreeze( dwFreeze );
     }
@@ -1431,11 +1431,11 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAdviseSink *pAdvSink )
 {
 
-    // CheckDefHandler will set the listener, avoid reusing of old listener
+    
     if ( m_pViewAdvise )
     {
         m_pViewAdvise->DisconnectOrigAdvise();
@@ -1447,7 +1447,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAd
         ComSmart< IViewObject > pIViewObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIViewObject )
         {
             ComSmart< OleWrapperAdviseSink > pOwnAdvise( new OleWrapperAdviseSink( pAdvSink, aspects, advf ) );
@@ -1463,7 +1463,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAd
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetAdvise( DWORD *pAspects, DWORD *pAdvf, IAdviseSink **ppAdvSink )
 {
     if ( !ppAdvSink )
@@ -1487,8 +1487,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetAdvise( DWORD *pAspects, DWORD *pAdvf,
     return S_OK;
 }
 
-// IViewObject2 methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG lindex, DVTARGETDEVICE *ptd, LPSIZEL lpsizel )
 {
     if ( CheckDefHandler() )
@@ -1496,7 +1496,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG linde
         ComSmart< IViewObject2 > pIViewObject2;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IViewObject2, (void**)&pIViewObject2 );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIViewObject2 )
             return pIViewObject2->GetExtent( dwDrawAspect, lindex, ptd, lpsizel );
     }
@@ -1506,8 +1506,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG linde
 
 
 
-// IOleWindow methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
 {
     if ( CheckDefHandler() )
@@ -1515,7 +1515,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
         ComSmart< IOleWindow > pIOleWindow;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleWindow, (void**)&pIOleWindow );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleWindow )
             return pIOleWindow->GetWindow( phwnd );
     }
@@ -1523,7 +1523,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 {
     if ( CheckDefHandler() )
@@ -1531,7 +1531,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
         ComSmart< IOleWindow > pIOleWindow;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleWindow, (void**)&pIOleWindow );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleWindow )
             return pIOleWindow->ContextSensitiveHelp( fEnterMode );
     }
@@ -1540,8 +1540,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 }
 
 
-// IOleInPlaceObject methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
 {
     if ( CheckDefHandler() )
@@ -1549,7 +1549,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleInPlaceObject, (void**)&pIOleInPlaceObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleInPlaceObject )
             return pIOleInPlaceObject->InPlaceDeactivate();
     }
@@ -1557,7 +1557,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
 {
     if ( CheckDefHandler() )
@@ -1565,7 +1565,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleInPlaceObject, (void**)&pIOleInPlaceObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleInPlaceObject )
             return pIOleInPlaceObject->UIDeactivate();
     }
@@ -1573,7 +1573,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCRECT lprcClipRect )
 {
     if ( CheckDefHandler() )
@@ -1581,7 +1581,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCR
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleInPlaceObject, (void**)&pIOleInPlaceObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleInPlaceObject )
             return pIOleInPlaceObject->SetObjectRects( lprcPosRect, lprcClipRect );
     }
@@ -1589,7 +1589,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCR
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
 {
     if ( CheckDefHandler() )
@@ -1597,7 +1597,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleInPlaceObject, (void**)&pIOleInPlaceObject );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleInPlaceObject )
             return pIOleInPlaceObject->ReactivateAndUndo();
     }
@@ -1606,8 +1606,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
 }
 
 
-// IDispatch methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
 {
     if ( CheckDefHandler() )
@@ -1615,7 +1615,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
         ComSmart< IDispatch > pIDispatch;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDispatch, (void**)&pIDispatch );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDispatch )
             return pIDispatch->GetTypeInfoCount( pctinfo );
     }
@@ -1623,7 +1623,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo )
 {
     if ( CheckDefHandler() )
@@ -1631,7 +1631,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITyp
         ComSmart< IDispatch > pIDispatch;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDispatch, (void**)&pIDispatch );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDispatch )
             return pIDispatch->GetTypeInfo( iTInfo, lcid, ppTInfo );
     }
@@ -1639,7 +1639,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITyp
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId )
 {
     if ( CheckDefHandler() )
@@ -1647,7 +1647,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgs
         ComSmart< IDispatch > pIDispatch;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDispatch, (void**)&pIDispatch );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDispatch )
             return pIDispatch->GetIDsOfNames( riid, rgszNames, cNames, lcid, rgDispId );
     }
@@ -1655,7 +1655,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgs
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr )
 {
     if ( CheckDefHandler() )
@@ -1663,7 +1663,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid,
         ComSmart< IDispatch > pIDispatch;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IDispatch, (void**)&pIDispatch );
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIDispatch )
             return pIDispatch->Invoke( dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr );
     }
@@ -1672,31 +1672,31 @@ STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid,
 }
 
 
-// ====
-// InternalCacheWrapper
-// ====
 
-// IUnknown
-//-------------------------------------------------------------------------------
+
+
+
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
     return m_rOwnDocument.QueryInterface( riid, ppv );
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::InternalCacheWrapper::AddRef()
 {
     return m_rOwnDocument.AddRef();
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::InternalCacheWrapper::Release()
 {
     return m_rOwnDocument.Release();
 }
 
-// IOleCache methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *pformatetc, DWORD advf, DWORD *pdwConnection )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1704,7 +1704,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *p
         ComSmart< IOleCache > pIOleCache;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache, (void**)&pIOleCache );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache )
             return pIOleCache->Cache( pformatetc, advf, pdwConnection );
     }
@@ -1712,7 +1712,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *p
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwConnection )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1720,7 +1720,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwCo
         ComSmart< IOleCache > pIOleCache;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache, (void**)&pIOleCache );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache )
             return pIOleCache->Uncache( dwConnection );
     }
@@ -1728,7 +1728,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwCo
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTATDATA **ppenumSTATDATA )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1736,7 +1736,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTA
         ComSmart< IOleCache > pIOleCache;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache, (void**)&pIOleCache );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache )
             return pIOleCache->EnumCache( ppenumSTATDATA );
     }
@@ -1744,7 +1744,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTA
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObject *pDataObject )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1752,7 +1752,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObj
         ComSmart< IOleCache > pIOleCache;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache, (void**)&pIOleCache );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache )
             return pIOleCache->InitCache( pDataObject );
     }
@@ -1760,7 +1760,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObj
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRelease )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1768,7 +1768,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC 
         ComSmart< IOleCache > pIOleCache;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache, (void**)&pIOleCache );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache )
             return pIOleCache->SetData( pformatetc, pmedium, fRelease );
     }
@@ -1776,8 +1776,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC 
     return E_FAIL;
 }
 
-// IOleCache2 methods
-//-------------------------------------------------------------------------------
+
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATAOBJECT pDataObject, DWORD grfUpdf, LPVOID pReserved )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1785,7 +1785,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATA
         ComSmart< IOleCache2 > pIOleCache2;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache2, (void**)&pIOleCache2 );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache2 )
             return pIOleCache2->UpdateCache( pDataObject, grfUpdf, pReserved );
     }
@@ -1793,7 +1793,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATA
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD dwDiscardOptions )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1801,7 +1801,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD
         ComSmart< IOleCache2 > pIOleCache2;
         HRESULT hr = m_rOwnDocument.GetDefHandler()->QueryInterface( IID_IOleCache2, (void**)&pIOleCache2 );
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); 
         if ( SUCCEEDED( hr ) && pIOleCache2 )
             return pIOleCache2->DiscardCache( dwDiscardOptions );
     }
@@ -1809,6 +1809,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD
     return E_FAIL;
 }
 
-}; // namespace inprocserv
+}; 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

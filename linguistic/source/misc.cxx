@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file754
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -58,7 +58,7 @@ using namespace com::sun::star::linguistic2;
 namespace linguistic
 {
 
-//!! multi-thread safe mutex for all platforms !!
+
 struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
 {
 };
@@ -105,9 +105,9 @@ bool LinguIsUnspecified( LanguageType nLanguage )
     return false;
 }
 
-// When adding anything keep both LinguIsUnspecified() methods in sync!
-// For mappings between language code string and LanguageType see
-// i18nlangtag/source/isolang/isolang.cxx
+
+
+
 
 bool LinguIsUnspecified( const OUString & rBcp47 )
 {
@@ -184,7 +184,7 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
             sal_Int32 nNew = Minimum( aData.Value(i-1, k  ) + 1,
                                        aData.Value(i  , k-1) + 1,
                                        aData.Value(i-1, k-1) + nCost );
-            // take transposition (exchange with left or right char) in account
+            
             if (2 < i && 2 < k)
             {
                 int nT = aData.Value(i-2, k-2) + 1;
@@ -220,7 +220,7 @@ sal_Bool IsUseDicList( const PropertyValues &rProperties,
             break;
         }
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    if (i >= nLen)  
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -247,7 +247,7 @@ sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
             break;
         }
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    if (i >= nLen)  
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -262,8 +262,8 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
     sal_Bool bRes = sal_False;
     if (xEntry.is())
     {
-        // there has to be (at least one) '=' or '[' denoting a hyphenation position
-        // and it must not be before any character of the word
+        
+        
         sal_Int32 nIdx = xEntry->getDictionaryWord().indexOf( '=' );
         if (nIdx == -1)
             nIdx = xEntry->getDictionaryWord().indexOf( '[' );
@@ -365,8 +365,8 @@ sal_uInt8 AddEntryToDic(
         sal_Int32 nLen = rWord.getLength();
         if (nLen > 0  &&  '.' == rWord[ nLen - 1])
         {
-            // remove trailing '.'
-            // (this is the official way to do this :-( )
+            
+            
             aTmp = aTmp.copy( 0, nLen - 1 );
         }
     }
@@ -449,27 +449,27 @@ static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUStri
         const sal_Unicode *pWord    = aWord.getStr(),
                           *pAltWord = aHyphenatedWord.getStr();
 
-        // at least char changes directly left or right to the hyphen
-        // should(!) be handled properly...
-        //! nHyphenationPos and nHyphenPos differ at most by 1 (see above)
-        //! Beware: eg "Schiffahrt" in German (pre spelling reform)
-        //! proves to be a bit nasty (nChgPosLeft and nChgPosRight overlap
-        //! to an extend.)
+        
+        
+        
+        
+        
+        
 
-        // find first different char from left
+        
         sal_Int32   nPosL    = 0,
                     nAltPosL = 0;
         for (sal_Int16 i = 0 ;  pWord[ nPosL ] == pAltWord[ nAltPosL ];  nPosL++, nAltPosL++, i++)
         {
-            // restrict changes area beginning to the right to
-            // the char immediately following the hyphen.
-            //! serves to insert the additional "f" in "Schiffahrt" at
-            //! position 5 rather than position 6.
+            
+            
+            
+            
             if (i >= nHyphenationPos + 1)
                 break;
         }
 
-        // find first different char from right
+        
         sal_Int32   nPosR    = aWord.getLength() - 1,
                     nAltPosR = aHyphenatedWord.getLength() - 1;
         for ( ;  nPosR >= nPosL  &&  nAltPosR >= nAltPosL
@@ -546,19 +546,19 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         }
         else
         {
-            //! should at least work with the German words
-            //! B-"u-c-k-er and Sc-hif-fah-rt
+            
+            
 
             OUString aLeft, aRight;
             sal_Int16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
 
-            // get words like Sc-hif-fah-rt to work correct
+            
             sal_Int16 nHyphenationPos = rxHyphWord->getHyphenationPos();
             if (nChgPos > nHyphenationPos)
                 --nPos;
 
             aLeft = rOrigWord.copy( 0, nPos );
-            aRight = rOrigWord.copy( nPos ); // FIXME: changes at the right side
+            aRight = rOrigWord.copy( nPos ); 
 
             aOrigHyphenatedWord =  aLeft;
             aOrigHyphenatedWord += aRplc;
@@ -643,43 +643,43 @@ OUString ToLower( const OUString &rText, sal_Int16 nLanguage )
     return rCC.lowercase( rText );
 }
 
-// sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
-// and thus may NOT not be part of names or words like the Chinese/Japanese number characters
+
+
 static const sal_uInt32 the_aDigitZeroes [] =
 {
-    0x00000030, //0039    ; Decimal # Nd  [10] DIGIT ZERO..DIGIT NINE
-    0x00000660, //0669    ; Decimal # Nd  [10] ARABIC-INDIC DIGIT ZERO..ARABIC-INDIC DIGIT NINE
-    0x000006F0, //06F9    ; Decimal # Nd  [10] EXTENDED ARABIC-INDIC DIGIT ZERO..EXTENDED ARABIC-INDIC DIGIT NINE
-    0x000007C0, //07C9    ; Decimal # Nd  [10] NKO DIGIT ZERO..NKO DIGIT NINE
-    0x00000966, //096F    ; Decimal # Nd  [10] DEVANAGARI DIGIT ZERO..DEVANAGARI DIGIT NINE
-    0x000009E6, //09EF    ; Decimal # Nd  [10] BENGALI DIGIT ZERO..BENGALI DIGIT NINE
-    0x00000A66, //0A6F    ; Decimal # Nd  [10] GURMUKHI DIGIT ZERO..GURMUKHI DIGIT NINE
-    0x00000AE6, //0AEF    ; Decimal # Nd  [10] GUJARATI DIGIT ZERO..GUJARATI DIGIT NINE
-    0x00000B66, //0B6F    ; Decimal # Nd  [10] ODIA DIGIT ZERO..ODIA DIGIT NINE
-    0x00000BE6, //0BEF    ; Decimal # Nd  [10] TAMIL DIGIT ZERO..TAMIL DIGIT NINE
-    0x00000C66, //0C6F    ; Decimal # Nd  [10] TELUGU DIGIT ZERO..TELUGU DIGIT NINE
-    0x00000CE6, //0CEF    ; Decimal # Nd  [10] KANNADA DIGIT ZERO..KANNADA DIGIT NINE
-    0x00000D66, //0D6F    ; Decimal # Nd  [10] MALAYALAM DIGIT ZERO..MALAYALAM DIGIT NINE
-    0x00000E50, //0E59    ; Decimal # Nd  [10] THAI DIGIT ZERO..THAI DIGIT NINE
-    0x00000ED0, //0ED9    ; Decimal # Nd  [10] LAO DIGIT ZERO..LAO DIGIT NINE
-    0x00000F20, //0F29    ; Decimal # Nd  [10] TIBETAN DIGIT ZERO..TIBETAN DIGIT NINE
-    0x00001040, //1049    ; Decimal # Nd  [10] MYANMAR DIGIT ZERO..MYANMAR DIGIT NINE
-    0x00001090, //1099    ; Decimal # Nd  [10] MYANMAR SHAN DIGIT ZERO..MYANMAR SHAN DIGIT NINE
-    0x000017E0, //17E9    ; Decimal # Nd  [10] KHMER DIGIT ZERO..KHMER DIGIT NINE
-    0x00001810, //1819    ; Decimal # Nd  [10] MONGOLIAN DIGIT ZERO..MONGOLIAN DIGIT NINE
-    0x00001946, //194F    ; Decimal # Nd  [10] LIMBU DIGIT ZERO..LIMBU DIGIT NINE
-    0x000019D0, //19D9    ; Decimal # Nd  [10] NEW TAI LUE DIGIT ZERO..NEW TAI LUE DIGIT NINE
-    0x00001B50, //1B59    ; Decimal # Nd  [10] BALINESE DIGIT ZERO..BALINESE DIGIT NINE
-    0x00001BB0, //1BB9    ; Decimal # Nd  [10] SUNDANESE DIGIT ZERO..SUNDANESE DIGIT NINE
-    0x00001C40, //1C49    ; Decimal # Nd  [10] LEPCHA DIGIT ZERO..LEPCHA DIGIT NINE
-    0x00001C50, //1C59    ; Decimal # Nd  [10] OL CHIKI DIGIT ZERO..OL CHIKI DIGIT NINE
-    0x0000A620, //A629    ; Decimal # Nd  [10] VAI DIGIT ZERO..VAI DIGIT NINE
-    0x0000A8D0, //A8D9    ; Decimal # Nd  [10] SAURASHTRA DIGIT ZERO..SAURASHTRA DIGIT NINE
-    0x0000A900, //A909    ; Decimal # Nd  [10] KAYAH LI DIGIT ZERO..KAYAH LI DIGIT NINE
-    0x0000AA50, //AA59    ; Decimal # Nd  [10] CHAM DIGIT ZERO..CHAM DIGIT NINE
-    0x0000FF10, //FF19    ; Decimal # Nd  [10] FULLWIDTH DIGIT ZERO..FULLWIDTH DIGIT NINE
-    0x000104A0, //104A9   ; Decimal # Nd  [10] OSMANYA DIGIT ZERO..OSMANYA DIGIT NINE
-    0x0001D7CE  //1D7FF   ; Decimal # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
+    0x00000030, 
+    0x00000660, 
+    0x000006F0, 
+    0x000007C0, 
+    0x00000966, 
+    0x000009E6, 
+    0x00000A66, 
+    0x00000AE6, 
+    0x00000B66, 
+    0x00000BE6, 
+    0x00000C66, 
+    0x00000CE6, 
+    0x00000D66, 
+    0x00000E50, 
+    0x00000ED0, 
+    0x00000F20, 
+    0x00001040, 
+    0x00001090, 
+    0x000017E0, 
+    0x00001810, 
+    0x00001946, 
+    0x000019D0, 
+    0x00001B50, 
+    0x00001BB0, 
+    0x00001C40, 
+    0x00001C50, 
+    0x0000A620, 
+    0x0000A8D0, 
+    0x0000A900, 
+    0x0000AA50, 
+    0x0000FF10, 
+    0x000104A0, 
+    0x0001D7CE  
 };
 
 sal_Bool HasDigits( const OUString &rText )
@@ -688,10 +688,10 @@ sal_Bool HasDigits( const OUString &rText )
     const sal_Int32 nLen = rText.getLength();
 
     sal_Int32 i = 0;
-    while (i < nLen) // for all characters ...
+    while (i < nLen) 
     {
-        const sal_uInt32 nCodePoint = rText.iterateCodePoints( &i );    // handle unicode surrogates correctly...
-        for (int j = 0; j < nNumDigitZeroes; ++j)   // ... check in all 0..9 ranges
+        const sal_uInt32 nCodePoint = rText.iterateCodePoints( &i );    
+        for (int j = 0; j < nNumDigitZeroes; ++j)   
         {
             sal_uInt32 nDigitZero = the_aDigitZeroes[ j ];
             if (nDigitZero > nCodePoint)
@@ -755,8 +755,8 @@ uno::Reference< XDictionary > GetIgnoreAllList()
 
 AppExitListener::AppExitListener()
 {
-    // add object to Desktop EventListeners in order to properly call
-    // the AtExit function at appliction exit.
+    
+    
     uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     try
@@ -793,7 +793,7 @@ void SAL_CALL
 
     if (xDesktop.is()  &&  rEvtSource.Source == xDesktop)
     {
-        xDesktop = NULL;    //! release reference to desktop
+        xDesktop = NULL;    
     }
 }
 
@@ -815,6 +815,6 @@ void SAL_CALL
     }
 }
 
-}   // namespace linguistic
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

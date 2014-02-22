@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/customshapeproperties.hxx"
@@ -73,13 +73,13 @@ sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomSh
     return static_cast< sal_Int32 >( nIndex );
 }
 
-// returns the index into the guidelist for a given formula name,
-// if the return value is < 0 then the guide value could not be found
+
+
 sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const OUString& rFormulaName )
 {
-    // traverse the list from the end, because guide names can be reused
-    // and current is the last one
-    // see a1 guide in gear6 custom shape preset as example
+    
+    
+    
     sal_Int32 nIndex = static_cast< sal_Int32 >( rGuideList.size() ) - 1;
     for( ; nIndex >= 0; nIndex-- )
     {
@@ -127,7 +127,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         if (sConnectorShapeType.getLength() > 0)
         {
             OSL_TRACE("connector shape: %s (%d)", USS(sConnectorShapeType), mnShapePresetType);
-            //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
+            
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
             if( xDefaulter.is() ) {
                 xDefaulter->createCustomShapeDefaults( sConnectorShapeType );
@@ -149,7 +149,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
         aPropertyMap[ PROP_TextPreRotateAngle ] <<= Any( mnTextRotateAngle );
-        aPropertyMap[ PROP_IsPostRotateAngle ] <<= true; // For OpenXML Imports
+        aPropertyMap[ PROP_IsPostRotateAngle ] <<= true; 
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
@@ -214,10 +214,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Type ] <<= OUString( "ooxml-non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
-        // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
-        // while if they are not, standard ooxml coordinates are used.
-        // This size specifically affects scaling.
-        // Note 2: Width and Height are set to 0 to force scaling to 1.
+        
+        
+        
+        
         awt::Rectangle aViewBox( 0, 0, aSize.Width, aSize.Height );
         if( maGuideList.size() )
             aViewBox = awt::Rectangle( 0, 0, 0, 0 );
@@ -295,12 +295,12 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         for ( i = 0; i < maAdjustHandleList.size(); i++ )
         {
             PropertyMap aHandle;
-            // maAdjustmentHandle[ i ].gdRef1 ... maAdjustmentHandle[ i ].gdRef2 ... :(
-            // gdRef1 && gdRef2 -> we do not offer such reference, so it is difficult
-            // to determine the correct adjustment handle that should be updated with the adjustment
-            // position. here is the solution: the adjustment value that is used within the position
-            // has to be updated, in case the position is a formula the first usage of a
-            // adjustment value is decisive
+            
+            
+            
+            
+            
+            
             if ( maAdjustHandleList[ i ].polar )
             {
                 aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
@@ -321,8 +321,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                 aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
                 if ( maAdjustHandleList[ i ].gdRef1.has() )
                 {
-                    // TODO: PROP_RefX and PROP_RefY are not yet part of our file format,
-                    // so the handles will not work after save/reload
+                    
+                    
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
                     if ( nIndex >= 0 )
                         aHandle[ PROP_RefX ] <<= nIndex;
@@ -351,7 +351,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap.dumpCode();
         SAL_INFO("oox.cscode", "==cscode== end");
 #endif
-        // converting the vector to a sequence
+        
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         PropertySet aPropSet( xPropSet );
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );

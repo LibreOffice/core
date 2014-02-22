@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/ucb/Command.hpp>
@@ -52,7 +52,7 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext
     for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )
     {
         m_aPath[i] =
-            OUString( "vnd.sun.star.help://" ) +
+            OUString( "vnd.sun.star.help:
             m_aPath[i]                              +
             OUString( "?Language=" )           +
             m_aURLParameter.get_language()          +
@@ -65,7 +65,7 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext
         if( content.is() )
         {
             uno::Reference< XCommandProcessor > cmd( content,uno::UNO_QUERY );
-            cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[i]; //TODO: check return value of operator >>=
+            cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[i]; 
         }
         m_nRow = 0xffffffff;
     }

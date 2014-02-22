@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,14 +34,14 @@
 
 static long nTmpCount = 0;
 
-// The internal open mode is STREAM_READ | STREAM_TRUNC, which is silly
-// by itself. It inhibits the checking of sharing modes and is used
-// during CopyTo() and MoveTo() for opening a stream in read mode
-// although it may be open in DENYALL mode
+
+
+
+
 
 #define INTERNAL_MODE ( STREAM_READ | STREAM_TRUNC )
 
-///////////////////////// class StorageBase //////////////////////////////
+
 
 TYPEINIT0( StorageBase );
 TYPEINIT1( BaseStorageStream, StorageBase );
@@ -58,8 +58,8 @@ StorageBase::~StorageBase()
 {
 }
 
-// The following three methods are declared as const, since they
-// may be called from within a const method.
+
+
 
 sal_uLong StorageBase::GetError() const
 {
@@ -79,7 +79,7 @@ void StorageBase::ResetError() const
     ((StorageBase*) this)->m_nError = SVSTREAM_OK;
 }
 
-// Retrieve the underlying SvStream for info purposes
+
 
 const SvStream* OLEStorageBase::GetSvStream_Impl() const
 {
@@ -119,7 +119,7 @@ OLEStorageBase::~OLEStorageBase()
     }
 }
 
-// Validate the instance for I/O
+
 
 bool OLEStorageBase::Validate_Impl( bool bWrite ) const
 {
@@ -139,7 +139,7 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
     sal_uInt16 nCurMode = ( p && p->nRefCnt ) ? p->nMode : 0xFFFF;
     if( ( m & 3 ) == STREAM_READ )
     {
-        // only SHARE_DENYWRITE or SHARE_DENYALL allowed
+        
         if( ( ( m & STREAM_SHARE_DENYWRITE )
            && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
          || ( ( m & STREAM_SHARE_DENYALL )
@@ -148,9 +148,9 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
     }
     else
     {
-        // only SHARE_DENYALL allowed
-        // storages open in r/o mode are OK, since only
-        // the commit may fail
+        
+        
+        
         if( ( m & STREAM_SHARE_DENYALL )
          && ( nCurMode & STREAM_SHARE_DENYALL ) )
             return true;
@@ -159,14 +159,14 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
 }
 
 
-//////////////////////// class StorageStream /////////////////////////////
+
 
 TYPEINIT1( StorageStream, BaseStorageStream );
 
 StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
              : OLEStorageBase( p, q, m_nMode ), nPos( 0L )
 {
-    // The dir entry may be 0; this means that the stream is invalid.
+    
     if( q && p )
     {
         if( q->nRefCnt == 1 )
@@ -182,7 +182,7 @@ StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
 
 StorageStream::~StorageStream()
 {
-    // Do an auto-commit if the entry is open in direct mode
+    
     if( m_bAutoCommit )
         Commit();
     if( pEntry && pEntry->nRefCnt && pEntry->bDirect && (m_nMode & STREAM_WRITE) )
@@ -233,7 +233,7 @@ sal_uLong StorageStream::Seek( sal_uLong n )
 
 void StorageStream::Flush()
 {
-    // Flushing means committing, since streams are never transacted
+    
     Commit();
 }
 
@@ -319,7 +319,7 @@ bool StorageStream::ValidateMode( StreamMode nMode ) const
     return bRet;
 }
 
-///////////////////////// class SvStorageInfo //////////////////////////////
+
 
 SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )
 {
@@ -329,7 +329,7 @@ SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )
     nSize    = bStorage ? 0 : rE.aEntry.GetSize();
 }
 
-/////////////////////////// class Storage ////////////////////////////////
+
 
 bool Storage::IsStorageFile( const OUString & rFileName )
 {
@@ -349,7 +349,7 @@ bool Storage::IsStorageFile( SvStream* pStream )
         sal_uLong nPos = pStream->Tell();
         bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
 
-        // It's not a stream error if it is too small for a OLE storage header
+        
         if ( pStream->GetErrorCode() == ERRCODE_IO_CANTSEEK )
             pStream->ResetError();
         pStream->Seek( nPos );
@@ -358,8 +358,8 @@ bool Storage::IsStorageFile( SvStream* pStream )
     return bRet;
 }
 
-// Open the storage file. If writing is permitted and the file is not
-// a storage file, initialize it.
+
+
 
 TYPEINIT1( Storage, BaseStorage );
 
@@ -370,11 +370,11 @@ Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
     bool bTemp = false;
     if( aName.isEmpty() )
     {
-        // no name = temporary name!
+        
         aName = utl::TempFile::CreateTempName();
         bTemp = true;
     }
-    // the root storage creates the I/O system
+    
     m_nMode = m;
     if( pIo->Open( aName, m ) )
     {
@@ -393,7 +393,7 @@ Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
     }
 }
 
-// Create a storage on a given stream.
+
 
 Storage::Storage( SvStream& r, bool bDirect )
     : OLEStorageBase( new StgIo, NULL, m_nMode )
@@ -407,7 +407,7 @@ Storage::Storage( SvStream& r, bool bDirect )
         pIo->SetStrm( &r, false );
         sal_uLong nSize = r.Seek( STREAM_SEEK_TO_END );
         r.Seek( 0L );
-        // Initializing is OK if the stream is empty
+        
         Init( nSize == 0 );
         if( pEntry )
         {
@@ -452,7 +452,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
 
     sal_uLong nSize = pStream->Seek( STREAM_SEEK_TO_END );
     pStream->Seek( 0L );
-    // Initializing is OK if the stream is empty
+    
     Init( nSize == 0 );
     if( pEntry )
     {
@@ -464,7 +464,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
 }
 
 
-// Perform common code for both ctors above.
+
 
 void Storage::Init( bool bCreate )
 {
@@ -482,16 +482,16 @@ void Storage::Init( bool bCreate )
             bHdrLoaded = pIo->Load();
             if( !bHdrLoaded && !bCreate  )
             {
-                // File is not a storage and not empty; do not destroy!
+                
                 SetError( SVSTREAM_FILEFORMAT_ERROR );
                 return;
             }
         }
     }
-    // file is a storage, empty or should be overwritten
+    
     pIo->ResetError();
-    // we have to set up the data structures, since
-    // the file is empty
+    
+    
     if( !bHdrLoaded )
         pIo->Init();
     if( pIo->Good() && pIo->pTOC )
@@ -501,7 +501,7 @@ void Storage::Init( bool bCreate )
     }
 }
 
-// Internal ctor
+
 
 Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
        : OLEStorageBase( p, q, m_nMode ), bIsRoot( false )
@@ -517,21 +517,21 @@ Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
 
 Storage::~Storage()
 {
-    // Invalidate all open substorages
+    
     if( m_bAutoCommit )
         Commit();
     if( pEntry )
     {
-        // Do an auto-commit if the entry is open in direct mode
+        
         if( pEntry->nRefCnt && pEntry->bDirect && (m_nMode & STREAM_WRITE) )
             Commit();
         if( pEntry->nRefCnt == 1 )
             pEntry->Invalidate();
     }
-    // close the stream is root storage
+    
     if( bIsRoot )
         pIo->Close();
-    // remove the file if temporary root storage
+    
     if( bIsRoot && pEntry && pEntry->bTemp )
     {
         osl::File::remove( GetName() );
@@ -545,7 +545,7 @@ const OUString& Storage::GetName() const
     return aName;
 }
 
-// Fill in the info list for this storage
+
 
 void Storage::FillInfoList( SvStorageInfoList* pList ) const
 {
@@ -565,7 +565,7 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
     }
 }
 
-// Open or create a substorage
+
 
 BaseStorage* Storage::OpenUCBStorage( const OUString& rName, StreamMode m, bool bDirect )
 {
@@ -591,7 +591,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
         if( !( m & STREAM_NOCREATE ) )
         {
             bool bTemp = false;
-            // create a new storage
+            
             OUString aNewName = rName;
             if( aNewName.isEmpty() )
             {
@@ -614,11 +614,11 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
         p = NULL;
     }
 
-    // Either direct or transacted mode is supported
+    
     if( p && pEntry->nRefCnt == 1 )
         p->bDirect = bDirect;
 
-    // Dont check direct conflict if opening readonly
+    
     if( p && (m & STREAM_WRITE ))
     {
         if( p->bDirect != bDirect )
@@ -630,7 +630,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     return pStg;
 }
 
-// Open a stream
+
 
 BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, bool,
                                         const OString*
@@ -649,8 +649,8 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
     {
         if( !( m & STREAM_NOCREATE ) )
         {
-            // create a new stream
-            // make a name if the stream is temporary (has no name)
+            
+            
             OUString aNewName( rName );
             if( aNewName.isEmpty() )
             {
@@ -682,7 +682,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
     return pStm;
 }
 
-// Delete a stream or substorage by setting the temp bit.
+
 
 bool Storage::Remove( const OUString& rName )
 {
@@ -701,7 +701,7 @@ bool Storage::Remove( const OUString& rName )
     }
 }
 
-// Rename a storage element
+
 
 bool Storage::Rename( const OUString& rOld, const OUString& rNew )
 {
@@ -715,7 +715,7 @@ bool Storage::Rename( const OUString& rOld, const OUString& rNew )
         return false;
 }
 
-// Copy one element
+
 
 bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString& rNew )
 {
@@ -726,7 +726,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
     {
         if( pElem->aEntry.GetType() == STG_STORAGE )
         {
-            // copy the entire storage
+            
             BaseStorage* p1 = OpenStorage( rElem, INTERNAL_MODE );
             BaseStorage* p2 = pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
 
@@ -755,7 +755,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
         }
         else
         {
-            // stream copy
+            
             BaseStorageStream* p1 = OpenStream( rElem, INTERNAL_MODE );
             BaseStorageStream* p2 = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
 
@@ -809,7 +809,7 @@ bool Storage::CopyTo( BaseStorage* pDest ) const
     return Good() && pDest->Good();
 }
 
-// Move one element
+
 
 bool Storage::MoveTo( const OUString& rElem, BaseStorage* pODest, const OUString& rNew )
 {
@@ -822,17 +822,17 @@ bool Storage::MoveTo( const OUString& rElem, BaseStorage* pODest, const OUString
     StgDirEntry* pElem = pIo->pTOC->Find( *pEntry, rElem );
     if( pElem )
     {
-        // Simplest case: both storages share the same file
+        
         bool bRes;
         Storage *pOther = PTR_CAST( Storage, pODest );
         if( pOther && pIo == pOther->pIo && rElem == rNew )
         {
             Storage *p = (Storage*) pODest;
             Storage *pDest = p;
-            // both storages are conventional storages, use implementation dependent code
+            
             if( !pElem->IsContained( pDest->pEntry ) )
             {
-                // cyclic move
+                
                 SetError( SVSTREAM_ACCESS_DENIED );
                 return false;
             }
@@ -892,8 +892,8 @@ bool Storage::IsContained( const OUString& rName ) const
         return false;
 }
 
-// Commit all sub-elements within this storage. If this is
-// the root, commit the FAT, the TOC and the header as well.
+
+
 
 bool Storage::Commit()
 {
@@ -907,7 +907,7 @@ bool Storage::Commit()
     }
     else
     {
-        // Also commit the sub-streams and Storages
+        
         StgIterator aIter( *pEntry );
         for( StgDirEntry* p = aIter.First(); p && bRes; p = aIter.Next() )
             bRes = p->Commit();
@@ -927,9 +927,9 @@ bool Storage::Revert()
     return true;
 }
 
-///////////////////////////// OLE Support ////////////////////////////////
 
-// Set the storage type
+
+
 
 void Storage::SetClass( const SvGlobalName & rClass,
                         sal_uLong nOriginalClipFormat,
@@ -937,10 +937,10 @@ void Storage::SetClass( const SvGlobalName & rClass,
 {
     if( Validate( true ) )
     {
-        // set the class name in the root entry
+        
         pEntry->aEntry.SetClassId( (const ClsId&) rClass.GetCLSID() );
         pEntry->SetDirty();
-        // then create the streams
+        
         StgCompObjStream aCompObj( *this, true );
         aCompObj.GetClsId() = (const ClsId&) rClass.GetCLSID();
         aCompObj.GetCbFormat() = nOriginalClipFormat;
@@ -965,7 +965,7 @@ void Storage::SetConvertClass( const SvGlobalName & rConvertClass,
     if( Validate( true ) )
     {
         SetClass( rConvertClass, nOriginalClipFormat, rUserTypeName );
-        // plus the convert flag:
+        
         StgOleStream aOle( *this, true );
         aOle.GetFlags() |= 4;
         if( !aOle.Store() )

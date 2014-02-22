@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/time.h>
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace {
 
 
-//----- CallbackCaller --------------------------------------------------------
+
 
 typedef ::cppu::WeakComponentImplHelper1 <
     ::com::sun::star::drawing::framework::XConfigurationChangeListener
@@ -96,10 +96,10 @@ public:
     virtual ~CallbackCaller (void);
 
     virtual void SAL_CALL disposing (void);
-    // XEventListener
+    
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
         throw (RuntimeException);
-    // XConfigurationChangeListener
+    
     virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent)
         throw (RuntimeException);
 
@@ -113,7 +113,7 @@ private:
 
 
 
-//----- LifetimeController ----------------------------------------------------
+
 
 typedef ::cppu::WeakComponentImplHelper1 <
     ::com::sun::star::lang::XEventListener
@@ -159,7 +159,7 @@ private:
 
 
 
-} // end of anonymous namespace
+} 
 
 namespace sd { namespace framework {
 
@@ -184,9 +184,9 @@ namespace {
         cssu::Reference<cssdf::XResourceId> mxResourceId;
     };
 
-} // end of anonymous namespace
+} 
 
-// Pane URLS.
+
 
 const OUString FrameworkHelper::msPaneURLPrefix("private:resource/pane/");
 const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
@@ -196,7 +196,7 @@ const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPa
 const OUString FrameworkHelper::msSidebarPaneURL( msPaneURLPrefix + "SidebarPane");
 
 
-// View URLs.
+
 
 const OUString FrameworkHelper::msViewURLPrefix("private:resource/view/");
 const OUString FrameworkHelper::msImpressViewURL( msViewURLPrefix + "ImpressView");
@@ -209,13 +209,13 @@ const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "Presen
 const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView");
 
 
-// Tool bar URLs.
+
 
 const OUString FrameworkHelper::msToolBarURLPrefix("private:resource/toolbar/");
 const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBar");
 
 
-// Task panel URLs.
+
 const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
 const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
 const OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "RecentMasterPages" );
@@ -226,7 +226,7 @@ const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPre
 const OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions" );
 
 
-// Event URLs.
+
 const OUString FrameworkHelper::msResourceActivationRequestEvent( "ResourceActivationRequested" );
 const OUString FrameworkHelper::msResourceDeactivationRequestEvent( "ResourceDeactivationRequest" );
 const OUString FrameworkHelper::msResourceActivationEvent( "ResourceActivation" );
@@ -236,11 +236,11 @@ const OUString FrameworkHelper::msConfigurationUpdateStartEvent( "ConfigurationU
 const OUString FrameworkHelper::msConfigurationUpdateEndEvent( "ConfigurationUpdateEnd" );
 
 
-// Service names of controllers.
+
 const OUString FrameworkHelper::msModuleControllerService("com.sun.star.drawing.framework.ModuleController");
 const OUString FrameworkHelper::msConfigurationControllerService("com.sun.star.drawing.framework.ConfigurationController");
 
-//----- helper ----------------------------------------------------------------
+
 namespace
 {
     static ::boost::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
@@ -281,7 +281,7 @@ namespace
 }
 
 
-//----- FrameworkHelper::ViewURLMap -------------------------------------------
+
 
 /** The ViewURLMap is used to translate between the view URLs used by the
     drawing framework and the enums defined in the ViewShell class.
@@ -299,7 +299,7 @@ public:
 
 
 
-//----- Framework::DiposeListener ---------------------------------------------
+
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper1 <
@@ -327,7 +327,7 @@ private:
 
 
 
-//----- FrameworkHelper::Deleter ----------------------------------------------
+
 
 class FrameworkHelper::Deleter
 {
@@ -341,7 +341,7 @@ public:
 
 
 
-//----- FrameworkHelper -------------------------------------------------------
+
 
 ::boost::scoped_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
 
@@ -353,7 +353,7 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 ::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (
     const Reference<frame::XController>& rxController)
 {
-    // Tunnel through the controller to obtain a ViewShellBase.
+    
     Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
     if (xTunnel.is())
     {
@@ -682,8 +682,8 @@ void FrameworkHelper::HandleModeChangeSlot (
         if (xView.is()
             && xView->getResourceId()->getResourceURL().equals(sRequestedView))
         {
-            // We do not have to switch the view shell but maybe the edit mode
-            // has changed.
+            
+            
             DrawViewShell* pDrawViewShell
                 = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
             if (pDrawViewShell != NULL)
@@ -911,7 +911,7 @@ Reference<XConfigurationController> FrameworkHelper::GetConfigurationController 
 
 
 
-//----- FrameworkHelper::DisposeListener --------------------------------------
+
 
 FrameworkHelper::DisposeListener::DisposeListener (
     const ::boost::shared_ptr<FrameworkHelper>& rpHelper)
@@ -955,7 +955,7 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObje
 
 
 
-//===== FrameworkHelperResourceIdFilter =======================================
+
 
 FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
     const Reference<XResourceId>& rxResourceId)
@@ -964,11 +964,11 @@ FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 namespace {
 
-//===== CallbackCaller ========================================================
+
 
 CallbackCaller::CallbackCaller (
     ::sd::ViewShellBase& rBase,
@@ -991,12 +991,12 @@ CallbackCaller::CallbackCaller (
                 mxConfigurationController->addConfigurationChangeListener(this,msEventType,Any());
             else
             {
-                // There are no requests waiting to be processed.  Therefore
-                // no event, especially not the one we are waiting for, will
-                // be sent in the near future and the callback would never be
-                // called.
-                // Call the callback now and tell him that the event it is
-                // waiting for was not sent.
+                
+                
+                
+                
+                
+                
                 mxConfigurationController = NULL;
                 maCallback(false);
             }
@@ -1060,13 +1060,13 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
         maCallback(true);
         if (mxConfigurationController.is())
         {
-            // Reset the reference to the configuration controller so that
-            // dispose() will not try to remove the listener a second time.
+            
+            
             Reference<XConfigurationController> xCC (mxConfigurationController);
             mxConfigurationController = NULL;
 
-            // Removing this object from the controller may very likely lead
-            // to its destruction, so no calls after that.
+            
+            
             xCC->removeConfigurationChangeListener(this);
         }
     }
@@ -1075,7 +1075,7 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
 
 
 
-//----- LifetimeController -------------------------------------------------
+
 
 LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
     : LifetimeControllerInterfaceBase(maMutex),
@@ -1083,11 +1083,11 @@ LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
       mbListeningToViewShellBase(false),
       mbListeningToController(false)
 {
-    // Register as listener at the ViewShellBase.  Because that is not done
-    // via a reference we have to increase the reference count manually.
-    // This is necessary even though listening to the XController did
-    // increase the reference count because the controller may release its
-    // reference to us before the ViewShellBase is destroyed.
+    
+    
+    
+    
+    
     StartListening(mrBase);
     acquire();
     mbListeningToViewShellBase = true;
@@ -1148,27 +1148,27 @@ void LifetimeController::Update (void)
 {
     if (mbListeningToViewShellBase && mbListeningToController)
     {
-        // Both the controller and the ViewShellBase are alive.  Keep
-        // waiting for their destruction.
+        
+        
     }
     else if (mbListeningToViewShellBase)
     {
-        // The controller has been destroyed but the ViewShellBase is still
-        // alive.  Dispose the associated FrameworkHelper but keep it around
-        // so that no new instance is created for the dying framework.
+        
+        
+        
         ::sd::framework::FrameworkHelper::DisposeInstance(mrBase);
     }
     else
     {
-        // Both the controller and the ViewShellBase have been destroyed.
-        // Remove the FrameworkHelper so that the next call its Instance()
-        // method can create a new instance.
+        
+        
+        
         ::sd::framework::FrameworkHelper::ReleaseInstance(mrBase);
     }
 }
 
 
 
-} // end of anonymous namespace.
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

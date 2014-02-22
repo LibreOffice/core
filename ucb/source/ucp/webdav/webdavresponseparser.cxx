@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "webdavresponseparser.hxx"
@@ -30,12 +30,12 @@
 #include <map>
 #include <hash_map>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
-// WebDAVNamespace enum and StringToEnum converter
+
+
 
 namespace
 {
@@ -54,17 +54,17 @@ namespace
         {
             return WebDAVNamespace_DAV;
         }
-        else if(rStr == "http://ucb.openoffice.org/dav/props/")
+        else if(rStr == "http:
         {
             return WebDAVNamespace_ucb_openoffice_org_dav_props;
         }
 
         return WebDAVNamespace_unknown;
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// WebDAVName enum and StringToEnum converter using hash_map
+
+
 
 namespace
 {
@@ -134,10 +134,10 @@ namespace
             return aResult->second;
         }
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// WebDAVContext, holding information for each start/endElement pair
+
+
 
 namespace
 {
@@ -157,7 +157,7 @@ namespace
         WebDAVNamespace             maWebDAVNamespace;
         WebDAVName                  maWebDAVName;
 
-        // local helpers
+        
         void parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs);
         OUString mapNamespaceToken(const OUString& rToken) const;
         void splitName(const OUString& rSource);
@@ -254,14 +254,14 @@ namespace
 
         if(nAttributes)
         {
-            // parse evtl. namespace entries
+            
             parseForNamespaceTokens(xAttribs);
         }
 
-        // split name to namespace and name
+        
         splitName(aName);
 
-        // evaluate enums for namespace and name
+        
         maWebDAVNamespace = StrToWebDAVNamespace(maNamespace);
         maWebDAVName = StrToWebDAVName(maName);
     }
@@ -269,10 +269,10 @@ namespace
     WebDAVContext::~WebDAVContext()
     {
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// the Xml parser itself
+
+
 
 namespace
 {
@@ -300,12 +300,12 @@ namespace
         ucb::LockType                               maLockType;
         WebDAVResponseParserMode                    meWebDAVResponseParserMode;
 
-        // bitfield
+        
         bool                                        mbResourceTypeCollection : 1;
         bool                                        mbLockScopeSet : 1;
         bool                                        mbLockTypeSet : 1;
 
-        // local helpers
+        
         bool whitespaceIsAvailable() const
         {
             return mpContext && mpContext->getWhiteSpace().getLength();
@@ -348,7 +348,7 @@ namespace
         WebDAVResponseParser(WebDAVResponseParserMode eWebDAVResponseParserMode);
         ~WebDAVResponseParser();
 
-        // Methods XDocumentHandler
+        
         virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException);
@@ -407,19 +407,19 @@ namespace
 
         if(nLen)
         {
-            // create new context (push)
+            
             mpContext = new WebDAVContext(mpContext, aName, xAttribs);
 
             if(collectThisPropertyAsName())
             {
-                // When collecting property names and parent is prop there is no need
-                // to handle the content of this property deeper (evtl. preparations)
+                
+                
             }
             else
             {
                 switch(mpContext->getWebDAVNamespace())
                 {
-                    default: // WebDAVNamespace_unknown, WebDAVNamespace_last or unhandled
+                    default: 
                     {
                         break;
                     }
@@ -427,57 +427,57 @@ namespace
                     {
                         switch(mpContext->getWebDAVName())
                         {
-                            default: // WebDAVName_unknown, WebDAVName_last or unhandled
+                            default: 
                             {
                                 break;
                             }
                             case WebDAVName_propstat:
                             {
-                                // propstat start
+                                
                                 if(isCollectingProperties())
                                 {
-                                    // reset maPropStatProperties
+                                    
                                     maPropStatProperties.clear();
                                 }
                                 else
                                 {
-                                    // when collecting properties reset maPropStatNames
+                                    
                                     maPropStatNames.clear();
                                 }
                                 break;
                             }
                             case WebDAVName_response:
                             {
-                                // response start, reset Href and status and maResponseProperties
+                                
                                 maHref = maStatus = "";
 
                                 if(isCollectingProperties())
                                 {
-                                    // reset maResponseProperties
+                                    
                                     maResponseProperties.clear();
                                 }
                                 else
                                 {
-                                    // reset maResponseNames when collecting properties
+                                    
                                     maResponseNames.clear();
                                 }
                                 break;
                             }
                             case WebDAVName_resourcetype:
                             {
-                                // resourcetype start, reset collection
+                                
                                 mbResourceTypeCollection = false;
                                 break;
                             }
                             case WebDAVName_supportedlock:
                             {
-                                // supportedlock start, reset maLockEntries
+                                
                                 maLockEntries.realloc(0);
                                 break;
                             }
                             case WebDAVName_lockentry:
                             {
-                                // lockentry start, reset maLockEntries
+                                
                                 mbLockScopeSet = false;
                                 mbLockTypeSet = false;
                                 break;
@@ -503,15 +503,15 @@ namespace
         {
             if(collectThisPropertyAsName())
             {
-                // When collecting property names and parent is prop, just append the prop name
-                // to the collection, no need to parse deeper
+                
+                
                 maPropStatNames.push_back(mpContext->getNamespace() + mpContext->getName());
             }
             else
             {
                 switch(mpContext->getWebDAVNamespace())
                 {
-                    default: // WebDAVNamespace_unknown, WebDAVNamespace_last or unhandled
+                    default: 
                     {
                         break;
                     }
@@ -519,13 +519,13 @@ namespace
                     {
                         switch(mpContext->getWebDAVName())
                         {
-                            default: // WebDAVName_unknown, WebDAVName_last or unhandled
+                            default: 
                             {
                                 break;
                             }
                             case WebDAVName_href:
                             {
-                                // href end, save it if we have whitespace
+                                
                                 if(whitespaceIsAvailable())
                                 {
                                     maHref = mpContext->getWhiteSpace();
@@ -534,7 +534,7 @@ namespace
                             }
                             case WebDAVName_status:
                             {
-                                // status end, save it if we have whitespace
+                                
                                 if(whitespaceIsAvailable())
                                 {
                                     maStatus = mpContext->getWhiteSpace();
@@ -543,7 +543,7 @@ namespace
                             }
                             case WebDAVName_getlastmodified:
                             {
-                                // getlastmodified end, safe if content is correct
+                                
                                 if(propertyIsReady())
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
@@ -556,7 +556,7 @@ namespace
                             }
                             case WebDAVName_creationdate:
                             {
-                                // creationdate end, safe if content is correct
+                                
                                 if(propertyIsReady())
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
@@ -569,7 +569,7 @@ namespace
                             }
                             case WebDAVName_collection:
                             {
-                                // collection end, check and set
+                                
                                 if(hasParent(WebDAVName_resourcetype))
                                 {
                                     mbResourceTypeCollection = true;
@@ -578,7 +578,7 @@ namespace
                             }
                             case WebDAVName_resourcetype:
                             {
-                                // resourcetype end, check for collection
+                                
                                 if(hasParent(WebDAVName_prop))
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
@@ -591,7 +591,7 @@ namespace
                             }
                             case WebDAVName_getcontentlength:
                             {
-                                // getcontentlength end, safe if content is correct
+                                
                                 if(propertyIsReady())
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
@@ -604,7 +604,7 @@ namespace
                             }
                             case WebDAVName_getcontenttype:
                             {
-                                // getcontenttype end, safe if content is correct
+                                
                                 if(propertyIsReady())
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
@@ -617,7 +617,7 @@ namespace
                             }
                             case WebDAVName_supportedlock:
                             {
-                                // supportedlock end
+                                
                                 if(hasParent(WebDAVName_prop) && maLockEntries.hasElements())
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
@@ -630,7 +630,7 @@ namespace
                             }
                             case WebDAVName_lockentry:
                             {
-                                // lockentry end
+                                
                                 if(hasParent(WebDAVName_supportedlock) && (mbLockScopeSet && mbLockTypeSet))
                                 {
                                     const sal_Int32 nLength(maLockEntries.getLength());
@@ -645,7 +645,7 @@ namespace
                             }
                             case WebDAVName_exclusive:
                             {
-                                // exclusive lockscope end
+                                
                                 if(hasParent(WebDAVName_lockscope))
                                 {
                                     maLockScope = ucb::LockScope_EXCLUSIVE;
@@ -655,7 +655,7 @@ namespace
                             }
                             case WebDAVName_shared:
                             {
-                                // shared lockscope end
+                                
                                 if(hasParent(WebDAVName_lockscope))
                                 {
                                     maLockScope = ucb::LockScope_SHARED;
@@ -665,7 +665,7 @@ namespace
                             }
                             case WebDAVName_write:
                             {
-                                // write locktype end
+                                
                                 if(hasParent(WebDAVName_locktype))
                                 {
                                     maLockType = ucb::LockType_WRITE;
@@ -675,7 +675,7 @@ namespace
                             }
                             case WebDAVName_propstat:
                             {
-                                // propstat end, check status
+                                
                                 if(maStatus.getLength())
                                 {
                                     if(maStatus == "HTTP/1.1 200 OK")
@@ -684,7 +684,7 @@ namespace
                                         {
                                             if(!maPropStatProperties.empty())
                                             {
-                                                // append to maResponseProperties if okay
+                                                
                                                 maResponseProperties.insert(maResponseProperties.end(), maPropStatProperties.begin(), maPropStatProperties.end());
                                             }
                                         }
@@ -692,7 +692,7 @@ namespace
                                         {
                                             if(!maPropStatNames.empty())
                                             {
-                                                // when collecting properties append to
+                                                
                                                 maResponseNames.insert(maResponseNames.end(), maPropStatNames.begin(), maPropStatNames.end());
                                             }
                                         }
@@ -702,12 +702,12 @@ namespace
                             }
                             case WebDAVName_response:
                             {
-                                // respose end
+                                
                                 if(maHref.getLength())
                                 {
                                     if(isCollectingProperties())
                                     {
-                                        // create DAVResource when we have content
+                                        
                                         if(!maResponseProperties.empty())
                                         {
                                             http_dav_ucp::DAVResource aDAVResource;
@@ -719,7 +719,7 @@ namespace
                                     }
                                     else
                                     {
-                                        // when collecting properties add them to result when there are some
+                                        
                                         if(!maResponseNames.empty())
                                         {
                                             http_dav_ucp::DAVResourceInfo aDAVResourceInfo(maHref);
@@ -741,20 +741,20 @@ namespace
                 }
             }
 
-            // destroy last context (pop)
+            
             pop_context();
         }
     }
 
     void SAL_CALL WebDAVResponseParser::characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
-        // collect whitespace over evtl. several calls in mpContext
+        
         OSL_ENSURE(mpContext, "Parser characters without content (!)");
         const sal_Int32 nLen(aChars.getLength());
 
         if(mpContext && nLen)
         {
-            // remove leading/trailing blanks and CRLF
+            
             const OUString aTrimmedChars(aChars.trim());
 
             if(aTrimmedChars.getLength())
@@ -763,7 +763,7 @@ namespace
 
                 if(aNew.getLength())
                 {
-                    // add one char when appending (see html1.1 spec)
+                    
                     aNew += OUString(' ');
                 }
 
@@ -784,10 +784,10 @@ namespace
     void SAL_CALL WebDAVResponseParser::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// wrapper for various calls to the parser
+
+
 
 namespace
 {
@@ -801,23 +801,23 @@ namespace
         {
             try
             {
-                // prepare ParserInputSrouce
+                
                 xml::sax::InputSource myInputSource;
                 myInputSource.aInputStream = xInputStream;
 
-                // get parser
+                
                 uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(
                     comphelper::getProcessComponentContext() );
 
-                // create parser; connect parser and filter
+                
                 WebDAVResponseParser* pWebDAVResponseParser = new WebDAVResponseParser(eWebDAVResponseParserMode);
                 uno::Reference< xml::sax::XDocumentHandler > xWebDAVHdl(pWebDAVResponseParser);
                 xParser->setDocumentHandler(xWebDAVHdl);
 
-                // finally, parse the stream
+                
                 xParser->parseStream(myInputSource);
 
-                // get result
+                
                 switch(eWebDAVResponseParserMode)
                 {
                     case WebDAVResponseParserMode_PropFind:
@@ -838,10 +838,10 @@ namespace
             }
         }
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// helper to parse a XML WebDAV response
+
+
 
 namespace http_dav_ucp
 {
@@ -862,6 +862,6 @@ namespace http_dav_ucp
         parseWebDAVPropNameResponse(xInputStream, aFoo, aRetval, WebDAVResponseParserMode_PropName);
         return aRetval;
     }
-} // namespace http_dav_ucp
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

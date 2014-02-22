@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -150,7 +150,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
 
-    //std::cout << "File: " << aTempFile.GetURL() << std::endl;
+    
 
     sal_uInt32 nFormat = 0;
     if (nFormatType == ODS_FORMAT_TYPE)
@@ -327,17 +327,17 @@ void ScExportTest::testMiscRowHeightExport()
         { 0, 4, 0, 529, 0, false },
         { 5, 10, 0, 1058, 0, false },
         { 17, 20, 0, 1767, 0, false },
-        // check last couple of row in document to ensure
-        // they are 5.29mm ( effective default row xlsx height )
+        
+        
         { 1048573, 1048575, 0, 529, 0, false },
     };
 
     TestParam::RowData EmptyRepeatRowData[] =
     {
-        // rows 0-4, 5-10, 17-20 are all set at various
-        // heights, there is no content in the rows, there
-        // was a bug where only the first row ( of repeated rows )
-        // was set after export
+        
+        
+        
+        
         { 0, 4, 0, 529, 0, false },
         { 5, 10, 0, 1058, 0, false },
         { 17, 20, 0, 1767, 0, false },
@@ -345,16 +345,16 @@ void ScExportTest::testMiscRowHeightExport()
 
     TestParam aTestValues[] =
     {
-        // Checks that some distributed ( non-empty ) heights remain set after export (roundtrip)
-        // additionally there is effectively a default row height ( 5.29 mm ). So we test the
-        // unset rows at the end of the document to ensure the effective xlsx default height
-        // is set there too.
+        
+        
+        
+        
         { "miscrowheights.", XLSX, XLSX, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
-        // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
+        
         { "miscrowheights.", XLSX, XLS, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
-        // Checks that repreated rows ( of various heights ) remain set after export ( to xlsx )
+        
         { "miscemptyrepeatedrowheights.", ODS, XLSX, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
-        // Checks that repreated rows ( of various heights ) remain set after export ( to xls )
+        
         { "miscemptyrepeatedrowheights.", ODS, XLS, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
     miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
@@ -408,10 +408,10 @@ void ScExportTest::testNamedRangeBugfdo62729()
     CPPUNIT_ASSERT(pDoc);
 
     ScRangeName* pNames = pDoc->GetRangeName();
-    //should be just a single named range
+    
     CPPUNIT_ASSERT(pNames->size() == 1 );
     pDoc->DeleteTab(0);
-    //should be still a single named range
+    
     CPPUNIT_ASSERT(pNames->size() == 1 );
     ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
     xShell->DoClose();
@@ -421,7 +421,7 @@ void ScExportTest::testNamedRangeBugfdo62729()
     CPPUNIT_ASSERT(pDoc);
 
     pNames = pDoc->GetRangeName();
-    //after reload should still have a named range
+    
     CPPUNIT_ASSERT(pNames->size() == 1 );
 
     xDocSh->DoClose();
@@ -498,7 +498,7 @@ void ScExportTest::testRichTextExportODS()
             if (aSecAttrs.size() != 3)
                 return false;
 
-            // Check the first bold section.
+            
             const editeng::Section* pAttr = &aSecAttrs[0];
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
                 return false;
@@ -506,7 +506,7 @@ void ScExportTest::testRichTextExportODS()
             if (pAttr->maAttributes.size() != 1 || !isBold(*pAttr))
                 return false;
 
-            // The middle section should be unformatted.
+            
             pAttr = &aSecAttrs[1];
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 4 || pAttr->mnEnd != 9)
                 return false;
@@ -514,7 +514,7 @@ void ScExportTest::testRichTextExportODS()
             if (!pAttr->maAttributes.empty())
                 return false;
 
-            // The last section should be italic.
+            
             pAttr = &aSecAttrs[2];
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 9 || pAttr->mnEnd != 15)
                 return false;
@@ -590,7 +590,7 @@ void ScExportTest::testRichTextExportODS()
             if (aSecAttrs.size() != 2)
                 return false;
 
-            // Check the first strike-out section.
+            
             const editeng::Section* pAttr = &aSecAttrs[0];
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 6)
                 return false;
@@ -598,7 +598,7 @@ void ScExportTest::testRichTextExportODS()
             if (pAttr->maAttributes.size() != 1 || !isStrikeOut(*pAttr))
                 return false;
 
-            // The last section should be unformatted.
+            
             pAttr = &aSecAttrs[1];
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 6 || pAttr->mnEnd != 9)
                 return false;
@@ -608,29 +608,29 @@ void ScExportTest::testRichTextExportODS()
 
     } aCheckFunc;
 
-    // Start with an empty document, put one edit text cell, and make sure it
-    // survives the save and reload.
+    
+    
     ScDocShellRef xOrigDocSh = loadDoc("empty.", ODS);
     ScDocument* pDoc = xOrigDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
-    // Insert an edit text cell.
+    
     ScFieldEditEngine& rEE = pDoc->GetEditEngine();
     rEE.SetText("Bold and Italic");
-    // Set the 'Bold' part bold.
+    
     setAttribute(rEE, 0, 0, 4, EE_CHAR_WEIGHT);
-    // Set the 'Italic' part italic.
+    
     setAttribute(rEE, 0, 9, 15, EE_CHAR_ITALIC);
     ESelection aSel;
     aSel.nStartPara = aSel.nEndPara = 0;
 
-    // Set this edit text to cell B2.
+    
     pDoc->SetEditText(ScAddress(1,1,0), rEE.CreateTextObject());
     const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(1,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
 
-    // Now, save and reload this document.
+    
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
@@ -638,17 +638,17 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
-    // Make sure the content of B2 is still intact.
+    
     CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
 
-    // Insert a multi-line content to B4.
+    
     rEE.Clear();
     rEE.SetText("One\nTwo\nThree");
     pDoc->SetEditText(ScAddress(3,1,0), rEE.CreateTextObject());
     pEditText = pDoc->GetEditText(ScAddress(3,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
 
-    // Reload the doc again, and check the content of B2 and B4.
+    
     ScDocShellRef xNewDocSh2 = saveAndReload(xNewDocSh, ODS);
     pDoc = xNewDocSh2->GetDocument();
     xNewDocSh->DoClose();
@@ -658,23 +658,23 @@ void ScExportTest::testRichTextExportODS()
     pEditText = pDoc->GetEditText(ScAddress(3,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
 
-    // Insert a multi-line content to B5, but this time, set some empty paragraphs.
+    
     rEE.Clear();
     rEE.SetText("\nTwo\nThree\n\nFive\n");
     pDoc->SetEditText(ScAddress(4,1,0), rEE.CreateTextObject());
     pEditText = pDoc->GetEditText(ScAddress(4,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
 
-    // Insert a text with strikethrough in B6.
+    
     rEE.Clear();
     rEE.SetText("Strike Me");
-    // Set the 'Strike' part strikethrough.
+    
     setAttribute(rEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
     pDoc->SetEditText(ScAddress(5,1,0), rEE.CreateTextObject());
     pEditText = pDoc->GetEditText(ScAddress(5,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
 
-    // Reload the doc again, and check the content of B2, B4 and B6.
+    
     ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2, ODS);
     pDoc = xNewDocSh3->GetDocument();
     xNewDocSh2->DoClose();
@@ -696,13 +696,13 @@ void ScExportTest::testFormulaRefSheetNameODS()
     ScDocShellRef xDocSh = loadDoc("formula-quote-in-sheet-name.", ODS, true);
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn on auto calc.
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); 
     pDoc->SetString(ScAddress(1,1,0), "='90''s Data'.B2");
     CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1,1,0)));
     if (!checkFormula(*pDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
         CPPUNIT_FAIL("Wrong formula");
 
-    // Now, save and reload this document.
+    
     ScDocShellRef xNewDocSh = saveAndReload(xDocSh, ODS);
     xDocSh->DoClose();
 
@@ -717,35 +717,35 @@ void ScExportTest::testFormulaRefSheetNameODS()
 
 void ScExportTest::testCellValuesExportODS()
 {
-    // Start with an empty document
+    
     ScDocShellRef xOrigDocSh = loadDoc("empty.", ODS);
     ScDocument* pDoc = xOrigDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
-    // set a value double
-    pDoc->SetValue(ScAddress(0,0,0), 2.0); // A1
+    
+    pDoc->SetValue(ScAddress(0,0,0), 2.0); 
 
-    // set a formula
-    pDoc->SetValue(ScAddress(2,0,0), 3.0); // C1
-    pDoc->SetValue(ScAddress(3,0,0), 3); // D1
-    pDoc->SetString(ScAddress(4,0,0), "=10*C1/4"); // E1
-    pDoc->SetValue(ScAddress(5,0,0), 3.0); // F1
-    pDoc->SetString(ScAddress(7,0,0), "=SUM(C1:F1)"); //H1
+    
+    pDoc->SetValue(ScAddress(2,0,0), 3.0); 
+    pDoc->SetValue(ScAddress(3,0,0), 3); 
+    pDoc->SetString(ScAddress(4,0,0), "=10*C1/4"); 
+    pDoc->SetValue(ScAddress(5,0,0), 3.0); 
+    pDoc->SetString(ScAddress(7,0,0), "=SUM(C1:F1)"); 
 
-    // set a string
-    pDoc->SetString(ScAddress(0,2,0), "a simple line"); //A3
+    
+    pDoc->SetString(ScAddress(0,2,0), "a simple line"); 
 
-    // set a digit string
-    pDoc->SetString(ScAddress(0,4,0), "'12"); //A5
-    // set a contiguous value
-    pDoc->SetValue(ScAddress(0,5,0), 12.0); //A6
-    // set acontiguous string
-    pDoc->SetString(ScAddress(0,6,0), "a string"); //A7
-    // set a contiguous formula
-    pDoc->SetString(ScAddress(0,7,0), "=$A$6"); //A8
+    
+    pDoc->SetString(ScAddress(0,4,0), "'12"); 
+    
+    pDoc->SetValue(ScAddress(0,5,0), 12.0); 
+    
+    pDoc->SetString(ScAddress(0,6,0), "a string"); 
+    
+    pDoc->SetString(ScAddress(0,7,0), "=$A$6"); 
 
-    // save and reload
+    
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
@@ -753,34 +753,34 @@ void ScExportTest::testCellValuesExportODS()
     CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
-    // check value
+    
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(0,0,0));
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(2,0,0));
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(3,0,0));
     CPPUNIT_ASSERT_EQUAL(7.5, pDoc->GetValue(4,0,0));
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(5,0,0));
 
-    // check formula
+    
     if (!checkFormula(*pDoc, ScAddress(4,0,0), "10*C1/4"))
         CPPUNIT_FAIL("Wrong formula =10*C1/4");
     if (!checkFormula(*pDoc, ScAddress(7,0,0), "SUM(C1:F1)"))
         CPPUNIT_FAIL("Wrong formula =SUM(C1:F1)");
     CPPUNIT_ASSERT_EQUAL(16.5, pDoc->GetValue(7,0,0));
 
-    // check string
+    
     ScRefCellValue aCell;
     aCell.assign(*pDoc, ScAddress(0,2,0));
     CPPUNIT_ASSERT_EQUAL( CELLTYPE_STRING, aCell.meType );
 
-    // check for an empty cell
+    
     aCell.assign(*pDoc, ScAddress(0,3,0));
     CPPUNIT_ASSERT_EQUAL( CELLTYPE_NONE, aCell.meType);
 
-    // check a digit string
+    
     aCell.assign(*pDoc, ScAddress(0,4,0));
     CPPUNIT_ASSERT_EQUAL( CELLTYPE_STRING, aCell.meType);
 
-    //check contiguous values
+    
     CPPUNIT_ASSERT_EQUAL( 12.0, pDoc->GetValue(0,5,0) );
     CPPUNIT_ASSERT_EQUAL( OUString("a string"), pDoc->GetString(0,6,0) );
     if (!checkFormula(*pDoc, ScAddress(0,7,0), "$A$6"))
@@ -795,24 +795,24 @@ void ScExportTest::testCellNoteExportODS()
     ScDocShellRef xOrigDocSh = loadDoc("single-note.", ODS);
     ScDocument* pDoc = xOrigDocSh->GetDocument();
 
-    ScAddress aPos(0,0,0); // Start with A1.
+    ScAddress aPos(0,0,0); 
     CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
 
-    aPos.IncRow(); // Move to A2.
+    aPos.IncRow(); 
     ScPostIt* pNote = pDoc->GetOrCreateNote(aPos);
     pNote->SetText(aPos, "Note One");
     pNote->SetAuthor("Author One");
     CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
 
-    // save and reload
+    
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
     pDoc = xNewDocSh->GetDocument();
 
-    aPos.SetRow(0); // Move back to A1.
+    aPos.SetRow(0); 
     CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
-    aPos.IncRow(); // Move to A2.
+    aPos.IncRow(); 
     CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
 
     xNewDocSh->DoClose();
@@ -820,12 +820,12 @@ void ScExportTest::testCellNoteExportODS()
 
 void ScExportTest::testCellNoteExportXLS()
 {
-    // Start with an empty document.s
+    
     ScDocShellRef xOrigDocSh = loadDoc("notes-on-3-sheets.", ODS);
     ScDocument* pDoc = xOrigDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", pDoc->GetTableCount() == 3);
 
-    // Check note's presence.
+    
     CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,0,0)));
     CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,0)));
     CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,0)));
@@ -838,14 +838,14 @@ void ScExportTest::testCellNoteExportXLS()
     CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,2)));
     CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,2,2)));
 
-    // save and reload as XLS.
+    
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, XLS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
     pDoc = xNewDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", pDoc->GetTableCount() == 3);
 
-    // Check note's presence again.
+    
     CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,0,0)));
     CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,0)));
     CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,0)));
@@ -899,13 +899,13 @@ void ScExportTest::testInlineArrayXLS()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    // B2:C3 contains a matrix.
+    
     checkMatrixRange(*pDoc, ScRange(1,1,0,2,2,0));
 
-    // B5:D6 contains a matrix.
+    
     checkMatrixRange(*pDoc, ScRange(1,4,0,3,5,0));
 
-    // B8:C10 as well.
+    
     checkMatrixRange(*pDoc, ScRange(1,7,0,2,9,0));
 
     xDocSh->DoClose();
@@ -923,7 +923,7 @@ void ScExportTest::testEmbeddedChartXLS()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    // Make sure the 2nd sheet is named 'Chart1'.
+    
     OUString aName;
     pDoc->GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Chart1"), aName);
@@ -993,13 +993,13 @@ void ScExportTest::testSheetProtectionXLSX()
     if ( pTabProtect )
     {
         Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
-        // check has
+        
         if (aHash.getLength() >= 2)
         {
             CPPUNIT_ASSERT( (sal_uInt8)aHash[0] == 204 );
             CPPUNIT_ASSERT( (sal_uInt8)aHash[1] == 61 );
         }
-        // we could flesh out this check I guess
+        
         CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
         CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
     }
@@ -1039,14 +1039,14 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         sal_Int16 mnStyle;
         long mnWidth;
     } aChecks[] = {
-        {  1, table::BorderLineStyle::SOLID,        1L }, // hair
-        {  3, table::BorderLineStyle::DOTTED,      15L }, // thin
-        {  9, table::BorderLineStyle::FINE_DASHED, 15L }, // dashed
-        { 11, table::BorderLineStyle::SOLID,       15L }, // thin
-        { 19, table::BorderLineStyle::DASHED,      35L }, // medium dashed
-        { 21, table::BorderLineStyle::SOLID,       35L }, // medium
-        { 23, table::BorderLineStyle::SOLID,       50L }, // thick
-        { 25, table::BorderLineStyle::DOUBLE,      -1L }, // double (don't check width)
+        {  1, table::BorderLineStyle::SOLID,        1L }, 
+        {  3, table::BorderLineStyle::DOTTED,      15L }, 
+        {  9, table::BorderLineStyle::FINE_DASHED, 15L }, 
+        { 11, table::BorderLineStyle::SOLID,       15L }, 
+        { 19, table::BorderLineStyle::DASHED,      35L }, 
+        { 21, table::BorderLineStyle::SOLID,       35L }, 
+        { 23, table::BorderLineStyle::SOLID,       50L }, 
+        { 25, table::BorderLineStyle::DOUBLE,      -1L }, 
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -1095,7 +1095,7 @@ void ScExportTest::testSharedFormulaExportXLS()
             pDoc->SetGrammar(eGram);
             sc::TokenStringContext aCxt(pDoc, eGram);
 
-            // Check the title row.
+            
 
             OUString aActual = pDoc->GetString(0,1,0);
             OUString aExpected = "Response";
@@ -1113,7 +1113,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                 return false;
             }
 
-            // A3:A12 and B3:B12 are numbers from 1 to 10.
+            
             for (SCROW i = 0; i <= 9; ++i)
             {
                 double fExpected = i + 1.0;
@@ -1158,7 +1158,7 @@ void ScExportTest::testSharedFormulaExportXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    // Check the content of the original.
+    
     bool bRes = aTest.checkContent(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the original document failed.", bRes);
 
@@ -1168,7 +1168,7 @@ void ScExportTest::testSharedFormulaExportXLS()
 
     pDoc = xDocSh2->GetDocument();
 
-    // Check the content of the reloaded. This should be identical.
+    
     bRes = aTest.checkContent(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
 
@@ -1184,8 +1184,8 @@ void ScExportTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
+    
+    
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());

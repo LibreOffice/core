@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editsh.hxx>
@@ -81,16 +81,16 @@ void SwEditShell::GCAttr()
     FOREACHPAM_END()
 }
 
-/// Set the attribute as new default attribute in the document.
+
 void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
 {
-    // 7502: Action-Parenthesis
+    
     StartAllAction();
     GetDoc()->SetDefault( rFmtHint );
     EndAllAction();
 }
 
-/// request the default attribute in this document.
+
 const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetDoc()->GetDefault( nFmtHint );
@@ -101,7 +101,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, sal_uInt16 nFlags )
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
+    if( pCrsr->GetNext() != pCrsr )     
     {
         sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
@@ -131,7 +131,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* 
 
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     StartAllAction();
-    if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
+    if( pCrsr->GetNext() != pCrsr )     
     {
         sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);

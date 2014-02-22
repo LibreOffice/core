@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/shapepropertymap.hxx"
@@ -28,14 +28,14 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -50,7 +50,7 @@ static const sal_Int32 spnDefaultShapeIds[ SHAPEPROP_END ] =
     PROP_ShadowXDistance
 };
 
-} // namespace
+} 
 
 ShapePropertyInfo ShapePropertyInfo::DEFAULT( spnDefaultShapeIds, true, false, false, false );
 
@@ -65,7 +65,7 @@ ShapePropertyInfo::ShapePropertyInfo( const sal_Int32* pnPropertyIds,
     OSL_ENSURE( mpnPropertyIds != 0, "ShapePropertyInfo::ShapePropertyInfo - missing property identifiers" );
 }
 
-// ============================================================================
+
 
 ShapePropertyMap::ShapePropertyMap( ModelObjectHelper& rModelObjHelper, const ShapePropertyInfo& rShapePropInfo ) :
     mrModelObjHelper( rModelObjHelper ),
@@ -85,11 +85,11 @@ bool ShapePropertyMap::hasNamedLineMarkerInTable( const OUString& rMarkerName ) 
 
 bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValue )
 {
-    // get current property identifier for the specified property
+    
     sal_Int32 nPropId = maShapePropInfo[ ePropId ];
     if( nPropId < 0 ) return false;
 
-    // special handling for properties supporting named objects in tables
+    
     switch( ePropId )
     {
         case SHAPEPROP_LineStart:
@@ -108,26 +108,26 @@ bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValu
         case SHAPEPROP_FillBitmapUrl:
             return setFillBitmapUrl( nPropId, rValue );
 
-        default:;   // suppress compiler warnings
+        default:;   
     }
 
-    // set plain property value
+    
     operator[]( nPropId ) = rValue;
     return true;
 }
 
-// private --------------------------------------------------------------------
+
 
 bool ShapePropertyMap::setLineMarker( sal_Int32 nPropId, const Any& rValue )
 {
     NamedValue aNamedMarker;
     if( (rValue >>= aNamedMarker) && !aNamedMarker.Name.isEmpty() )
     {
-        // push line marker explicitly
+        
         if( !maShapePropInfo.mbNamedLineMarker )
             return setAnyProperty( nPropId, aNamedMarker.Value );
 
-        // create named line marker (if coordinates have been passed) and push its name
+        
         bool bInserted = !aNamedMarker.Value.has< PolyPolygonBezierCoords >() ||
             mrModelObjHelper.insertLineMarker( aNamedMarker.Name, aNamedMarker.Value.get< PolyPolygonBezierCoords >() );
         return bInserted && setProperty( nPropId, aNamedMarker.Name );
@@ -137,11 +137,11 @@ bool ShapePropertyMap::setLineMarker( sal_Int32 nPropId, const Any& rValue )
 
 bool ShapePropertyMap::setLineDash( sal_Int32 nPropId, const Any& rValue )
 {
-    // push line dash explicitly
+    
     if( !maShapePropInfo.mbNamedLineDash )
         return setAnyProperty( nPropId, rValue );
 
-    // create named line dash and push its name
+    
     if( rValue.has< LineDash >() )
     {
         OUString aDashName = mrModelObjHelper.insertLineDash( rValue.get< LineDash >() );
@@ -153,11 +153,11 @@ bool ShapePropertyMap::setLineDash( sal_Int32 nPropId, const Any& rValue )
 
 bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
 {
-    // push gradient explicitly
+    
     if( !maShapePropInfo.mbNamedFillGradient )
         return setAnyProperty( nPropId, rValue );
 
-    // create named gradient and push its name
+    
     if( rValue.has< awt::Gradient >() )
     {
         OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< awt::Gradient >() );
@@ -169,7 +169,7 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
 
 bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
 {
-    // create named gradient and push its name
+    
     if( rValue.has< awt::Gradient >() )
     {
         OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< awt::Gradient >() );
@@ -181,11 +181,11 @@ bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
 
 bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
 {
-    // push bitmap URL explicitly
+    
     if( !maShapePropInfo.mbNamedFillBitmapUrl )
         return setAnyProperty( nPropId, rValue );
 
-    // create named bitmap URL and push its name
+    
     if( rValue.has< OUString >() )
     {
         OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapUrl( rValue.get< OUString >() );
@@ -195,9 +195,9 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
     return false;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

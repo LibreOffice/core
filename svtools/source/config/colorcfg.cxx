@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,7 +42,7 @@
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 
-//-----------------------------------------------------------------------------
+
 using namespace utl;
 using namespace com::sun::star;
 
@@ -76,7 +76,7 @@ public:
 
     void                            Load(const OUString& rScheme);
     void                            CommitCurrentSchemeName();
-    //changes the name of the current scheme but doesn't load it!
+    
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
     virtual void                    Commit();
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames);
@@ -97,7 +97,7 @@ public:
     void                            SettingsChanged();
     bool GetAutoDetectSystemHC() {return m_bAutoDetectSystemHC;}
 
-    // #100822#
+    
     DECL_LINK( DataChangedEventListener, VclWindowEvent* );
 
     void ImplUpdateApplicationSettings();
@@ -193,7 +193,7 @@ ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
 {
     if(!m_bEditMode)
     {
-        //try to register on the root node - if possible
+        
         uno::Sequence < OUString > aNames(1);
         EnableNotification( aNames );
     }
@@ -201,14 +201,14 @@ ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
 
     ImplUpdateApplicationSettings();
 
-    // #100822#
+    
     ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 
 }
 
 ColorConfig_Impl::~ColorConfig_Impl()
 {
-    // #100822#
+    
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 }
 
@@ -217,7 +217,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     OUString sScheme(rScheme);
     if(sScheme.isEmpty())
     {
-        //detect current scheme name
+        
         uno::Sequence < OUString > aCurrent(1);
         aCurrent.getArray()[0] = "CurrentColorScheme";
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
@@ -239,11 +239,11 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         nIndex++;
         if(nIndex >= aColors.getLength())
             break;
-        //test for visibility property
+        
         if(pColorNames[nIndex].match(m_sIsVisible, pColorNames[nIndex].getLength() - m_sIsVisible.getLength()))
              m_aConfigValues[i / 2].bIsVisible = Any2Bool(pColors[nIndex++]);
     }
-    // fdo#71511: check if we are running in a11y autodetect
+    
     {
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(comphelper::getProcessComponentContext(),OUString("org.openoffice.Office.Common/Accessibility") );
         if(aNode.isValid())
@@ -256,7 +256,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
 
 void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
 {
-    //loading via notification always uses the default setting
+    
     Load(OUString());
     NotifyListeners(0);
 }
@@ -272,14 +272,14 @@ void ColorConfig_Impl::Commit()
     for(int i = 0; i < 2 * ColorConfigEntryCount && aColorNames.getLength() > nIndex; i+= 2)
     {
         pPropValues[nIndex].Name = pColorNames[nIndex];
-        //save automatic colors as void value
+        
         if(COL_AUTO != sal::static_int_cast<ColorData>(m_aConfigValues[i/2].nColor))
             pPropValues[nIndex].Value <<= m_aConfigValues[i/2].nColor;
 
         nIndex++;
         if(nIndex >= aColorNames.getLength())
             break;
-        //test for visibility property
+        
         if(pColorNames[nIndex].match(m_sIsVisible, pColorNames[nIndex].getLength() - m_sIsVisible.getLength()))
         {
              pPropValues[nIndex].Name = pColorNames[nIndex];
@@ -295,7 +295,7 @@ void ColorConfig_Impl::Commit()
 
 void ColorConfig_Impl::CommitCurrentSchemeName()
 {
-    //save current scheme name
+    
     uno::Sequence < OUString > aCurrent(1);
     aCurrent.getArray()[0] = "CurrentColorScheme";
     uno::Sequence< uno::Any > aCurrentVal(1);
@@ -360,7 +360,7 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
         return 0L;
 }
 
-// ---------------------------------------------------------------------------
+
 
 /** updates the font color in the vcl window settings */
 void ColorConfig_Impl::ImplUpdateApplicationSettings()
@@ -387,7 +387,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     }
 }
 
-// ---------------------------------------------------------------------------
+
 
 ColorConfig::ColorConfig()
 {
@@ -416,52 +416,52 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
     static const sal_Int32 aAutoColors[] =
     {
-        COL_WHITE, // DOCCOLOR
-        0xc0c0c0, // DOCBOUNDARIES
-        0x808080, // APPBACKGROUND
-        0xc0c0c0, // OBJECTBOUNDARIES
-        0xc0c0c0, // TABLEBOUNDARIES
-        COL_BLACK, // FONTCOLOR
-        0xcc, // LINKS
-        0x80, // LINKSVISITED
-        0xff0000, // SPELL
-        COL_LIGHTMAGENTA,// SMARTTAGS
-        COL_GRAY, // SHADOWCOLOR
-        0xc0c0c0, // WRITERTEXTGRID
-        0xc0c0c0, // WRITERFIELDSHADIN
-        0xc0c0c0, // WRITERIDXSHADINGS
-        0, // WRITERDIRECTCURSOR
-        COL_GREEN,  //WRITERSCRIPTINDICATOR
-        0xc0c0c0, //WRITERSECTIONBOUNDARIES
-        0x0369a3, //WRITERHEADERFOOTERMARK,
-        COL_BLUE, //WRITERPAGEBREAKS,
-        COL_LIGHTBLUE, // HTMLSGML
-        COL_LIGHTGREEN, // HTMLCOMMENT
-        COL_LIGHTRED, // HTMLKEYWORD
-        COL_GRAY, // HTMLUNKNOWN
-        COL_LIGHTGRAY, // CALCGRID
-        COL_BLUE, //CALCPAGEBREAK
-        0x2300dc, //CALCPAGEBREAKMANUAL
-        COL_GRAY, //CALCPAGEBREAKAUTOMATIC
-        COL_LIGHTBLUE, // CALCDETECTIVE
-        COL_LIGHTRED, // CALCDETECTIVEERROR
-        0xef0fff, // CALCREFERENCE
-        0xffffc0, // CALCNOTESBACKGROUND
-        0xc0c0c0, // DRAWGRID
-        COL_GREEN, // BASICIDENTIFIER,
-        COL_GRAY,// BASICCOMMENT   ,
-        COL_LIGHTRED,// BASICNUMBER    ,
-        COL_LIGHTRED,// BASICSTRING    ,
-        COL_BLUE, // BASICOPERATOR  ,
-        COL_BLUE, // BASICKEYWORD   ,
-        COL_RED, //BASICERROR
-        0x009900, // SQLIDENTIFIER
-        0x000000, // SQLNUMBER
-        0xCE7B00, // SQLSTRING
-        0x000000, // SQLOPERATOR
-        0x0000E6, // SQLKEYWORD
-        0x259D9D, // SQLPARAMTER
-        0x969696,// SQLCOMMENT
+        COL_WHITE, 
+        0xc0c0c0, 
+        0x808080, 
+        0xc0c0c0, 
+        0xc0c0c0, 
+        COL_BLACK, 
+        0xcc, 
+        0x80, 
+        0xff0000, 
+        COL_LIGHTMAGENTA,
+        COL_GRAY, 
+        0xc0c0c0, 
+        0xc0c0c0, 
+        0xc0c0c0, 
+        0, 
+        COL_GREEN,  
+        0xc0c0c0, 
+        0x0369a3, 
+        COL_BLUE, 
+        COL_LIGHTBLUE, 
+        COL_LIGHTGREEN, 
+        COL_LIGHTRED, 
+        COL_GRAY, 
+        COL_LIGHTGRAY, 
+        COL_BLUE, 
+        0x2300dc, 
+        COL_GRAY, 
+        COL_LIGHTBLUE, 
+        COL_LIGHTRED, 
+        0xef0fff, 
+        0xffffc0, 
+        0xc0c0c0, 
+        COL_GREEN, 
+        COL_GRAY,
+        COL_LIGHTRED,
+        COL_LIGHTRED,
+        COL_BLUE, 
+        COL_BLUE, 
+        COL_RED, 
+        0x009900, 
+        0x000000, 
+        0xCE7B00, 
+        0x000000, 
+        0x0000E6, 
+        0x259D9D, 
+        0x969696,
     };
     Color aRet;
     switch(eEntry)
@@ -481,7 +481,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         default:
             aRet = aAutoColors[eEntry];
     }
-    // fdo#71511: if in autodetected a11y HC mode, do pull background color from theme
+    
     if(m_pImpl &&  m_pImpl->GetAutoDetectSystemHC())
     {
         switch(eEntry)
@@ -556,7 +556,7 @@ sal_Bool EditableColorConfig::LoadScheme(const OUString& rScheme )
         m_pImpl->Commit();
     m_bModified = sal_False;
     m_pImpl->Load(rScheme);
-    //the name of the loaded scheme has to be committed separately
+    
     m_pImpl->CommitCurrentSchemeName();
     return sal_True;
 }
@@ -566,7 +566,7 @@ const OUString& EditableColorConfig::GetCurrentSchemeName()const
     return m_pImpl->GetLoadedScheme();
 }
 
-// Changes the name of the current scheme but doesn't load it!
+
 void EditableColorConfig::SetCurrentSchemeName(const OUString& rScheme)
 {
     m_pImpl->SetCurrentSchemeName(rScheme);
@@ -600,18 +600,18 @@ void EditableColorConfig::Commit()
         m_pImpl->Commit();
     m_bModified = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void EditableColorConfig::DisableBroadcast()
 {
     m_pImpl->BlockBroadcasts(true);
 }
-// -----------------------------------------------------------------------------
+
 void EditableColorConfig::EnableBroadcast()
 {
     m_pImpl->BlockBroadcasts(false);
 }
-// -----------------------------------------------------------------------------
 
-}//namespace svtools
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

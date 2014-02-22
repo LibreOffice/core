@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RegressionCurveHelper.hxx"
@@ -79,7 +79,7 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
     return aServiceName;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -97,7 +97,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 {
     Reference< XRegressionCurve > xResult;
 
-    // todo: use factory methods with service name
+    
     if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
         xResult.set( new LinearRegressionCurve( xContext ) );
@@ -131,7 +131,7 @@ Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionC
 {
     Reference< XRegressionCurveCalculator > xResult;
 
-    // todo: use factory methods with service name
+    
     if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {
         xResult.set( new MeanValueRegressionCurveCalculator() );
@@ -210,8 +210,8 @@ void RegressionCurveHelper::initializeCurveCalculator(
     if( ! bXValuesFound &&
         bYValuesFound )
     {
-        // initialize with 1, 2, ...
-        //first category (index 0) matches with real number 1.0
+        
+        
         aXValues.realloc( aYValues.getLength());
         for( i=0; i<aXValues.getLength(); ++i )
             aXValues[i] = i+1;
@@ -230,7 +230,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
     const Reference< frame::XModel > & xModel )
 {
     sal_Int32 nAxisType = ChartTypeHelper::getAxisType(
-        ChartModelHelper::getChartTypeOfSeries( xModel, xSeries ), 0 ); // x-axis
+        ChartModelHelper::getChartTypeOfSeries( xModel, xSeries ), 0 ); 
 
     initializeCurveCalculator( xOutCurveCalculator,
                                uno::Reference< data::XDataSource >( xSeries, uno::UNO_QUERY ),
@@ -306,7 +306,7 @@ void RegressionCurveHelper::addMeanValueLine(
         ::chart::RegressionCurveHelper::hasMeanValueLine( xRegCnt ) )
         return;
 
-    // todo: use a valid context
+    
     uno::Reference< XRegressionCurve > xCurve( createMeanValueLine( xContext ));
     xRegCnt->addRegressionCurve( xCurve );
 
@@ -336,10 +336,10 @@ void RegressionCurveHelper::removeMeanValueLine(
             if( isMeanValueLine( aCurves[i] ))
             {
                 xRegCnt->removeRegressionCurve( aCurves[i] );
-                // attention: the iterator i has become invalid now
+                
 
-                // note: assume that there is only one mean-value curve
-                // to remove multiple mean-value curves remove the break
+                
+                
                 break;
             }
         }
@@ -371,7 +371,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionC
     OUString aServiceName( lcl_getServiceNameForType( eType ));
     if( !aServiceName.isEmpty())
     {
-        // todo: use a valid context
+        
         xCurve.set( createRegressionCurveByServiceName(
                          uno::Reference< uno::XComponentContext >(), aServiceName ));
 
@@ -721,7 +721,7 @@ void RegressionCurveHelper::resetEquationPosition(
         try
         {
             const OUString aPosPropertyName( "RelativePosition" );
-            Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
+            Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); 
             if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
                 xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
         }
@@ -768,6 +768,6 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
     return bHasEquation;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

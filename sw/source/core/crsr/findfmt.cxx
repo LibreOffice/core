@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -28,7 +28,7 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     const bool bSrchForward = (fnMove == fnMoveForward);
     boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
-    // if at beginning/end then move it out of the node
+    
     if( bSrchForward
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
@@ -47,17 +47,17 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     {
         if ( pNode->GetFmtColl() == &rFmt )
         {
-            // if a FormatCollection is found then it is definitely a SwCntntNode
+            
 
-            // FORWARD:  SPoint at the end, GetMark at the beginning of the node
-            // BACKWARD: SPoint at the beginning, GetMark at the end of the node
-            // always: incl. start and incl. end
+            
+            
+            
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
             GetMark()->nContent = 0;
 
-            // if backward search, switch point and mark
+            
             if( !bSrchForward )
                 Exchange();
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SeriesOptionsItemConverter.hxx"
@@ -33,11 +33,11 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 
-// for SfxBoolItem
+
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 
-//SfxIntegerListItem
+
 #include <svl/ilstitem.hxx>
 
 #include <rtl/math.hxx>
@@ -150,9 +150,9 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         {
             try
             {
-                //test whether the data provider offers this property
+                
                 xProp->getPropertyValue( "IncludeHiddenCells" );
-                //if not exception is thrown the property is offered
+                
                 m_bSupportingPlottingOfHiddenCells = true;
                 xDiagramProperties->getPropertyValue( "IncludeHiddenCells" ) >>= m_bIncludeHiddenCells;
             }
@@ -173,7 +173,7 @@ SeriesOptionsItemConverter::~SeriesOptionsItemConverter()
 
 const sal_uInt16 * SeriesOptionsItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nSeriesOptionsWhichPairs;
 }
 
@@ -195,7 +195,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             bool bAttachToMainAxis = nItemValue == CHART_AXIS_PRIMARY_Y;
             if( bAttachToMainAxis != m_bAttachToMainAxis )
             {
-                //change model:
+                
                 bChanged = DiagramHelper::attachSeriesToAxis( bAttachToMainAxis, uno::Reference< XDataSeries >::query( GetPropertySet() )
                     , ChartModelHelper::findDiagram(m_xChartModel), m_xCC );
 
@@ -231,7 +231,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             bool bGroupBarsPerAxis =  static_cast< const SfxBoolItem & >(rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS )).GetValue();
                             if(!bGroupBarsPerAxis)
                             {
-                                //set the same value for all axes
+                                
                                 for( sal_Int32 nN = 0; nN < m_aBarPositionSequence.getLength(); nN++ )
                                     m_aBarPositionSequence[nN] = rBarPosition;
                             }
@@ -435,7 +435,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -105,7 +105,7 @@ namespace
 
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XIndexAccess>& _xTableKeys,
-                 const OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
+                 const OUString& _rUpdateTableName,    
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                  const ORowSetValueVector& _aParameterValueForCache,
                  sal_Int32 i_nMaxRows,
@@ -130,7 +130,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
 OKeySet::~OKeySet()
 {
     tryDispose(m_xSet);
-    // m_xStatement is necessarily one of those
+    
     const vStatements_t::const_iterator end(m_vStatements.end());
     for(vStatements_t::iterator i(m_vStatements.begin());
         i != end;
@@ -160,7 +160,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
                                                 const Reference<XNameAccess>& i_xQueryColumns,
                                                 ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames)
 {
-    // first ask the database itself for the best columns which can be used
+    
     Sequence< OUString> aBestColumnNames;
     Reference<XNameAccess> xKeyColumns  = getPrimaryKeyColumns_throw(i_aTable);
     if ( xKeyColumns.is() )
@@ -168,7 +168,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
 
     const Reference<XColumnsSupplier> xTblColSup(i_aTable,UNO_QUERY_THROW);
     const Reference<XNameAccess> xTblColumns = xTblColSup->getColumns();
-    // locate parameter in select columns
+    
     Reference<XParametersSupplier> xParaSup(m_xComposer,UNO_QUERY);
     Reference<XIndexAccess> xQueryParameters = xParaSup->getParameters();
     const sal_Int32 nParaCount = xQueryParameters->getCount();
@@ -183,14 +183,14 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
     if ( sUpdateTableName.isEmpty() )
     {
         SAL_WARN("dbaccess", "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
-        // If i_aTable originates from a query composer, and is a table which appears with an alias in the SELECT statement,
-        // then the below code will not produce correct results.
-        // For instance, imagine a "SELECT alias.col FROM table AS alias". Now i_aTable would be the table named
-        // "table", so our sUpdateTableName would be "table" as well - not the information about the "alias" is
-        // already lost here.
-        // now getColumnPositions would traverse the columns, and check which of them belong to the table denoted
-        // by sUpdateTableName. Since the latter is "table", but the columns only know that they belong to a table
-        // named "alias", there will be no matching - so getColumnPositions wouldn't find anything.
+        
+        
+        
+        
+        
+        
+        
+        
 
         OUString sCatalog, sSchema, sTable;
         Reference<XPropertySet> xTableProp( i_aTable, UNO_QUERY_THROW );
@@ -251,8 +251,8 @@ void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParam
 {
     if ( _rValue.isNull() )
     {
-        // Nothing to do, appendOneKeyColumnClause took care of it,
-        // the "IS NULL" is hardcoded in the query
+        
+        
     }
     else
     {
@@ -267,7 +267,7 @@ OUStringBuffer OKeySet::createKeyFilter()
     static const OUString aAnd(" AND ");
     const OUString aQuote    = getIdentifierQuoteString();
     OUStringBuffer aFilter;
-    // create the where clause
+    
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     SelectColumnsMetaData::const_iterator aPosEnd = m_pKeyColumnNames->end();
     for(SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();aPosIter != aPosEnd; ++aPosIter)
@@ -312,7 +312,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
     Reference<XTablesSupplier> xTabSup(xAnalyzer,uno::UNO_QUERY);
     Reference<XNameAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
     const Sequence< OUString> aSeq = xSelectTables->getElementNames();
-    if ( aSeq.getLength() > 1 ) // special handling for join
+    if ( aSeq.getLength() > 1 ) 
     {
         const OUString* pIter = aSeq.getConstArray();
         const OUString* const pEnd  = pIter + aSeq.getLength();
@@ -326,14 +326,14 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
 
                 ::dbaccess::getColumnPositions(xQueryColumns, xSelColSup->getColumns()->getElementNames(), sSelectTableName, (*m_pForeignColumnNames), true);
 
-                // LEM: there used to be a break here; however, I see no reason to stop
-                //      at first non-updateTable, so I removed it. (think of multiple joins...)
+                
+                
             }
         }
     }
 
-    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
-    // without extra variable to be set
+    
+    
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
     m_aKeyMap.insert(OKeySetMatrix::value_type(0, keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
@@ -351,8 +351,8 @@ void OKeySet::reset(const Reference< XResultSet>& _xDriverSet)
 
 void OKeySet::ensureStatement( )
 {
-    // do we already have a statement for the current combination of NULLness
-    // of key & foreign columns?
+    
+    
     FilterColumnsNULL_t FilterColumnsNULL;
     FilterColumnsNULL.reserve(m_aKeyIter->second.first->get().size());
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
@@ -362,15 +362,15 @@ void OKeySet::ensureStatement( )
     vStatements_t::iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
     if(pNewStatement == m_vStatements.end())
     {
-        // no: make a new one
+        
         makeNewStatement();
         std::pair< vStatements_t::iterator, bool > insert_result
             (m_vStatements.insert(vStatements_t::value_type(FilterColumnsNULL, m_xStatement)));
-        (void) insert_result; // WaE: unused variable
+        (void) insert_result; 
         assert(insert_result.second);
     }
     else
-        // yes: use it
+        
         m_xStatement = pNewStatement->second;
 }
 
@@ -409,7 +409,7 @@ void OKeySet::executeStatement(OUStringBuffer& io_aFilter, Reference<XSingleSele
             {
                 OUString sValue;
                 if ( !(pAnd->Value >>= sValue) || !( sValue == "?" || sValue.matchAsciiL( ":",1,0 ) ) )
-                { // we have a criteria which has to be taken into account for updates
+                { 
                     m_aFilterColumns.push_back(pAnd->Name);
                 }
             }
@@ -478,7 +478,7 @@ sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLExcepti
     return ::comphelper::getINT32(bookmark);
 }
 
-// ::com::sun::star::sdbcx::XDeleteRows
+
 Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& _xTable) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::deleteRows" );
@@ -487,13 +487,13 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
 
     OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
 
-    // list all columns that should be set
+    
     const OUString aQuote    = getIdentifierQuoteString();
     static OUString aAnd(" AND ");
     static OUString aOr(" OR ");
     static OUString aEqual(" = ?");
 
-    // use keys for exact positioning
+    
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
     OUStringBuffer aCondition("( ");
@@ -505,12 +505,12 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         aCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
     }
     aCondition.setLength(aCondition.getLength() - aAnd.getLength());
-    // sCon is (parenthesised) the condition to locate ONE row
-    // e.g. ( colName1 = ? AND colName2 = ? AND colName3 = ? )
+    
+    
     const OUString sCon( aCondition.makeStringAndClear() );
 
-    // since we need to delete all rows in "rows",
-    // we need to OR as many row locators.
+    
+    
     const Any* pBegin     = rows.getConstArray();
     const Any* const pEnd = pBegin + rows.getLength();
     for(;pBegin != pEnd;++pBegin)
@@ -519,22 +519,22 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     }
     aSql.setLength(aSql.getLength()-3);
 
-    // now create end execute the prepared statement
+    
 
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
-    // now, fill in the parameters in the row locators
+    
     pBegin  = rows.getConstArray();
     sal_Int32 i=1;
     for(;pBegin != pEnd;++pBegin)
     {
         m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(*pBegin));
-        // LEM FIXME: what happens if m_aKeyIter == m_aKeyMap.end() ?
-        //            the whole operation fails because there are unfilled parameters
-        //            the remaining rows *are* deleted?
-        //            check what happens vs what is supposed to happen
-        //            (cf documentation of ::com::sun::star::sdbcx::XDeleteRows)
+        
+        
+        
+        
+        
         if(m_aKeyIter != m_aKeyMap.end())
         {
             connectivity::ORowVector< ORowSetValue >::Vector::iterator aKeyIter = m_aKeyIter->second.first->get().begin();
@@ -574,18 +574,18 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     fillTableName(xSet);
 
     OUStringBuffer aSql = "UPDATE " + m_aComposedTableName + " SET ";
-    // list all cloumns that should be set
+    
     static OUString aPara(" = ?,");
     OUString aQuote  = getIdentifierQuoteString();
     static OUString aAnd(" AND ");
     OUString sIsNull(" IS NULL");
     OUString sParam(" = ?");
 
-    // use keys and indexes for exact postioning
-    // first the keys
+    
+    
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
-    // second the indexes
+    
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
     if ( xIndexSup.is() )
@@ -599,7 +599,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 
     const sal_Int32 nOldLength = aSql.getLength();
     sal_Int32 i = 1;
-    // here we build the condition part for the update statement
+    
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter,++i)
@@ -662,26 +662,26 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         {
             aSql.append(sIndexCondition.makeStringAndClear());
         }
-        aSql.setLength(aSql.getLength()-5); // remove the last AND
+        aSql.setLength(aSql.getLength()-5); 
     }
     else
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), SQL_GENERAL_ERROR, m_xConnection );
 
-    // now create end execute the prepared statement
+    
     OUString sEmpty;
     executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),sEmpty,aIndexColumnPositions);
 }
 
 void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions)
 {
-    // now create end execute the prepared statement
+    
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     bool bRefetch = true;
     Reference<XRow> xRow;
     sal_Int32 i = 1;
-    // first the set values
+    
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     sal_uInt16 j = 0;
@@ -702,7 +702,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
             }
         }
     }
-    // and then the values of the where condition
+    
     aIter = m_pKeyColumnNames->begin();
     aEnd = m_pKeyColumnNames->end();
     j = 0;
@@ -715,7 +715,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     }
     if ( !_aIndexColumnPositions.empty() )
     {
-        // now we have to set the index values
+        
         ::std::vector<sal_Int32>::const_iterator aIdxColIter = _aIndexColumnPositions.begin();
         ::std::vector<sal_Int32>::const_iterator aIdxColEnd = _aIndexColumnPositions.end();
         j = 0;
@@ -746,7 +746,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 
     OUStringBuffer aSql( "INSERT INTO " + m_aComposedTableName + " ( ");
 
-    // set values and column names
+    
     OUStringBuffer aValues(" VALUES ( ");
     static OUString aPara("?,");
     OUString aQuote = getIdentifierQuoteString();
@@ -776,14 +776,14 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     aSql[aSql.getLength() - 1] = ')';
     aValues[aValues.getLength() - 1] = ')';
     aSql.append(aValues.makeStringAndClear());
-    // now create,fill and execute the prepared statement
+    
     OUString sEmpty;
     executeInsert(_rInsertRow,aSql.makeStringAndClear(),sEmpty,bRefetch);
 }
 
 void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,const OUString& i_sTableName,bool bRefetch )
 {
-    // now create,fill and execute the prepared statement
+    
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
@@ -812,7 +812,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
     sal_Bool bAutoValuesFetched = sal_False;
     if ( m_bInserted )
     {
-        // first insert the default values into the insertrow
+        
         aIter = m_pColumnNames->begin();
         for(;aIter != aEnd;++aIter)
         {
@@ -856,7 +856,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
 
     if ( i_sTableName.isEmpty() && !bAutoValuesFetched && m_bInserted )
     {
-        // first check if all key column values were set
+        
         const OUString sMax(" MAX(");
         const OUString sMaxEnd("),");
         const OUString sQuote = getIdentifierQuoteString();
@@ -866,7 +866,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         ::std::vector< OUString >::iterator aAutoEnd = m_aAutoColumns.end();
         for (;aAutoIter !=  aAutoEnd; ++aAutoIter)
         {
-            // we will only fetch values which are keycolumns
+            
             SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
             if ( aFind != aEnd )
             {
@@ -886,7 +886,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
             sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
             try
             {
-                // now fetch the autoincrement values
+                
                 Reference<XStatement> xStatement = m_xConnection->createStatement();
                 Reference<XResultSet> xRes = xStatement->executeQuery(sStmt);
                 Reference<XRow> xRow(xRes,UNO_QUERY);
@@ -895,7 +895,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                     aAutoIter = m_aAutoColumns.begin();
                     for (sal_Int32 i=1;aAutoIter != aAutoEnd; ++aAutoIter,++i)
                     {
-                        // we will only fetch values which are keycolumns
+                        
                         SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != aEnd )
                             (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
@@ -917,7 +917,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         copyRowValue(_rInsertRow,aKeyRow,aKeyIter->first + 1);
 
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(aKeyIter->first + 1,OKeySetValue(aKeyRow,::std::pair<sal_Int32,Reference<XRow> >(1,(Reference<XRow>)NULL)))).first;
-        // now we set the bookmark for this row
+        
         (_rInsertRow->get())[0] = makeAny((sal_Int32)m_aKeyIter->first);
         tryRefetch(_rInsertRow,bRefetch);
     }
@@ -947,7 +947,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     SAL_INFO("dbaccess", "OKeySet::copyRowValue" );
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->get().begin();
 
-    // check the if the parameter values have been changed
+    
     OSL_ENSURE((m_aParameterValueForCache.get().size()-1) == m_pParameterNames->size(),"OKeySet::copyRowValue: Parameter values and names differ!");
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache.get().begin() +1;
 
@@ -971,7 +971,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
         m_aUpdatedParameter.erase(i_nBookmark);
     }
 
-    // update the key values
+    
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     const SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
@@ -990,19 +990,19 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
 
     OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
 
-    // list all cloumns that should be set
+    
     OUString aQuote  = getIdentifierQuoteString();
     static OUString aAnd(" AND ");
 
-    // use keys and indexes for excat postioning
+    
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
-    // second the indexes
+    
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
     if ( xIndexSup.is() )
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
-    //  Reference<XColumnsSupplier>
+    
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
     lcl_fillIndexColumns(xIndexes,aAllIndexColumns);
 
@@ -1052,7 +1052,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     aSql.append(sIndexCondition.makeStringAndClear());
     aSql.setLength(aSql.getLength()-5);
 
-    // now create end execute the prepared statement
+    
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
@@ -1064,7 +1064,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
         setParameter(i,xParameter,(_rDeleteRow->get())[aIter->second.nPosition],aIter->second.nType,aIter->second.nScale);
     }
 
-    // now we have to set the index values
+    
     ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
     ::std::vector<sal_Int32>::iterator aIdxColEnd = aIndexColumnPositions.end();
     aIter = m_pColumnNames->begin();
@@ -1104,8 +1104,8 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
    SAL_INFO("dbaccess", "OKeySet::getKeyColumns" );
-    // use keys and indexes for exact postioning
-    // first the keys
+    
+    
 
     Reference<XIndexAccess> xKeys = m_xTableKeys;
     if ( !xKeys.is() )
@@ -1152,8 +1152,8 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
     ++m_aKeyIter;
     if(!m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end())
     {
-        // not yet all records fetched, but we reached the end of those we fetched
-        // try to fetch one more row
+        
+        
         if (fetchRow())
         {
             OSL_ENSURE(!isAfterLast(), "fetchRow succeeded, but isAfterLast()");
@@ -1161,7 +1161,7 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
         }
         else
         {
-            // nope, we arrived at end of data
+            
             m_aKeyIter = m_aKeyMap.end();
             OSL_ENSURE(isAfterLast(), "fetchRow failed, but not end of data");
         }
@@ -1290,29 +1290,29 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
     {
         if(row >= (sal_Int32)m_aKeyMap.size())
         {
-            // we don't have this row
+            
             if(!m_bRowCountFinal)
             {
-                // but there may still be rows to fetch.
+                
                 sal_Bool bNext = sal_True;
                 for(sal_Int32 i=m_aKeyMap.size()-1;i < row && bNext;++i)
                     bNext = fetchRow();
-                // it is guaranteed that the above loop has executed at least once,
-                // that is fetchRow called at least once.
+                
+                
                 if ( bNext )
                 {
                     fetchedRow = true;
                 }
                 else
                 {
-                    // reached end of data before desired row
+                    
                     m_aKeyIter = m_aKeyMap.end();
                     return false;
                 }
             }
             else
             {
-                // no more rows to fetch -> fail
+                
                 m_aKeyIter = m_aKeyMap.end();
                 return false;
             }
@@ -1363,7 +1363,7 @@ sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
 {
     ensureStatement( );
-    // we just reassign the base members
+    
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
     OSL_ENSURE(xParameter.is(),"No Parameter interface!");
     xParameter->clearParameters();
@@ -1388,7 +1388,7 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
         ::dbtools::setObjectWithInfo( xParameter, nPos, aParaIter->makeAny(), aParaIter->getTypeKind() );
     }
 
-    // now set the primary key column values
+    
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
     SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();
     SelectColumnsMetaData::const_iterator aPosEnd = m_pKeyColumnNames->end();
@@ -1422,13 +1422,13 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     sal_Bool bOK = doTryRefetch_throw();
     if ( !bOK )
     {
-        // This row has disappeared; remove it.
+        
         OKeySetMatrix::iterator aTemp = m_aKeyIter;
-        // use *next* row
+        
         ++m_aKeyIter;
         m_aKeyMap.erase(aTemp);
 
-        // adjust RowCount for the row we have removed
+        
         if (m_rRowCount > 0)
             --m_rRowCount;
         else
@@ -1439,16 +1439,16 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
             ::comphelper::disposeComponent(m_xSet);
             if (!isAfterLast())
             {
-                // it was the last fetched row,
-                // but there may be another one to fetch
+                
+                
                 if (!fetchRow())
                 {
-                    // nope, that really was the last
+                    
                     m_aKeyIter = m_aKeyMap.end();
                     OSL_ENSURE(isAfterLast(), "fetchRow() failed but not isAfterLast()!");
                 }
             }
-            // Now, either fetchRow has set m_xRow or isAfterLast()
+            
         }
         else
         {
@@ -1465,7 +1465,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 sal_Bool OKeySet::fetchRow()
 {
    SAL_INFO("dbaccess", "OKeySet::fetchRow" );
-    // fetch the next row and append on the keyset
+    
     sal_Bool bRet = sal_False;
     if ( !m_bRowCountFinal && (!m_nMaxRows || sal_Int32(m_aKeyMap.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
@@ -1477,7 +1477,7 @@ sal_Bool OKeySet::fetchRow()
         m_xRow.set(m_xDriverRow, UNO_QUERY_THROW);
 
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
-        // copy key columns
+        
         SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
         SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
         for(;aPosIter != aPosEnd;++aPosIter,++aIter)
@@ -1485,7 +1485,7 @@ sal_Bool OKeySet::fetchRow()
             const SelectColumnDescription& rColDesc = aPosIter->second;
             aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xRow);
         }
-        // copy missing columns from other tables
+        
         aPosIter = (*m_pForeignColumnNames).begin();
         aPosEnd  = (*m_pForeignColumnNames).end();
         for(;aPosIter != aPosEnd;++aPosIter,++aIter)
@@ -1515,7 +1515,7 @@ bool OKeySet::fillAllRows()
     }
 }
 
-// XRow
+
 sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::wasNull" );
@@ -1698,7 +1698,7 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                             SelectColumnsMetaData& o_rColumnNames,
                             bool i_bAppendTableName)
     {
-        // get the real name of the columns
+        
         Sequence< OUString> aSelNames(_rxQueryColumns->getElementNames());
         const OUString* pSelIter     = aSelNames.getConstArray();
         const OUString* pSelEnd      = pSelIter + aSelNames.getLength();

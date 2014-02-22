@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "filter/msfilter/mscodec.hxx"
@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 namespace msfilter {
 
-// ============================================================================
+
 
 namespace {
 
@@ -113,9 +113,9 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Size nBufferSize )
 }
 
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 MSCodec_Xor95::MSCodec_Xor95(int nRotateDistance) :
     mnOffset( 0 ),
@@ -216,7 +216,7 @@ void MSCodec_XorXLS95::Decode( sal_uInt8* pnData, sal_Size nBytes )
         if( pnCurrKey < pnKeyLast ) ++pnCurrKey; else pnCurrKey = mpnKey;
     }
 
-    // update mnOffset
+    
     Skip( nBytes );
 }
 
@@ -237,7 +237,7 @@ void MSCodec_XorWord95::Decode( sal_uInt8* pnData, sal_Size nBytes )
             pnCurrKey = mpnKey;
     }
 
-    // update mnOffset
+    
     Skip( nBytes );
 }
 
@@ -247,7 +247,7 @@ void MSCodec_Xor95::Skip( sal_Size nBytes )
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
 
-// ============================================================================
+
 
 MSCodec_Std97::MSCodec_Std97 ()
 {
@@ -332,7 +332,7 @@ void MSCodec_Std97::InitKey (
     fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
 #endif
     uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
-    // Fill raw digest of above updates into DigestValue.
+    
 
     if ( aKey.getLength() == sizeof(m_pDigestValue) )
         (void)memcpy ( m_pDigestValue, aKey.getConstArray(), sizeof(m_pDigestValue) );
@@ -350,7 +350,7 @@ bool MSCodec_Std97::VerifyKey (
     const sal_uInt8 pSaltData[16],
     const sal_uInt8 pSaltDigest[16])
 {
-    // both the salt data and salt digest (hash) come from the document being imported.
+    
 
 #if DEBUG_MSO_ENCRYPTION_STD97
     fprintf(stdout, "MSCodec_Std97::VerifyKey: \n");
@@ -365,14 +365,14 @@ bool MSCodec_Std97::VerifyKey (
         GetDigestFromSalt(pSaltData, pDigest);
 
         sal_uInt8 pBuffer[16];
-        // Decode original SaltDigest into Buffer.
+        
         rtl_cipher_decode (
             m_hCipher, pSaltDigest, 16, pBuffer, sizeof(pBuffer));
 
-        // Compare Buffer with computed Digest.
+        
         result = (memcmp (pBuffer, pDigest, sizeof(pDigest)) == 0);
 
-        // Erase Buffer and Digest arrays.
+        
         (void)memset (pBuffer, 0, sizeof(pBuffer));
         (void)memset (pDigest, 0, sizeof(pDigest));
     }
@@ -383,15 +383,15 @@ bool MSCodec_Std97::VerifyKey (
 bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
 {
     rtlCipherError result;
-    sal_uInt8      pKeyData[64]; // 512-bit message block
+    sal_uInt8      pKeyData[64]; 
 
-    // Initialize KeyData array.
+    
     (void)memset (pKeyData, 0, sizeof(pKeyData));
 
-    // Fill 40 bit of DigestValue into [0..4].
+    
     (void)memcpy (pKeyData, m_pDigestValue, 5);
 
-    // Fill counter into [5..8].
+    
     pKeyData[ 5] = sal_uInt8((nCounter >>  0) & 0xff);
     pKeyData[ 6] = sal_uInt8((nCounter >>  8) & 0xff);
     pKeyData[ 7] = sal_uInt8((nCounter >> 16) & 0xff);
@@ -400,18 +400,18 @@ bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
     pKeyData[ 9] = 0x80;
     pKeyData[56] = 0x48;
 
-    // Fill raw digest of KeyData into KeyData.
+    
     (void)rtl_digest_updateMD5 (
         m_hDigest, pKeyData, sizeof(pKeyData));
     (void)rtl_digest_rawMD5 (
         m_hDigest, pKeyData, RTL_DIGEST_LENGTH_MD5);
 
-    // Initialize Cipher with KeyData (for decoding).
+    
     result = rtl_cipher_init (
         m_hCipher, rtl_Cipher_DirectionBoth,
         pKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0);
 
-    // Erase KeyData array and leave.
+    
     (void)memset (pKeyData, 0, sizeof(pKeyData));
 
     return (result == rtl_Cipher_E_None);
@@ -483,20 +483,20 @@ void MSCodec_Std97::GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 
     sal_uInt8 pBuffer[64];
     sal_uInt8 pDigestLocal[16];
 
-    // Decode SaltData into Buffer.
+    
     rtl_cipher_decode (
         m_hCipher, pSaltData, 16, pBuffer, sizeof(pBuffer));
 
-    // set the 129th bit to make the buffer 128-bit in length.
+    
     pBuffer[16] = 0x80;
 
-    // erase the rest of the buffer with zeros.
+    
     (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
 
-    // set the 441st bit.
+    
     pBuffer[56] = 0x80;
 
-    // Fill raw digest of Buffer into Digest.
+    
     rtl_digest_updateMD5 (
         m_hDigest, pBuffer, sizeof(pBuffer));
     rtl_digest_rawMD5 (
@@ -543,8 +543,8 @@ void MSCodec_Std97::GetDocId( sal_uInt8 pDocId[16] )
         (void)memcpy( pDocId, m_pDocId, 16 );
 }
 
-// ============================================================================
 
-} // namespace svx
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

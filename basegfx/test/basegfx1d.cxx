@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -30,7 +30,7 @@ namespace basegfx1d
 class b1drange : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -39,25 +39,25 @@ public:
     {
     }
 
-    // insert your test code here.
-    // this is only demonstration code
+    
+    
     void EmptyMethod()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+          
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(b1drange);
     CPPUNIT_TEST(EmptyMethod);
     CPPUNIT_TEST_SUITE_END();
-}; // class b1drange
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx1d::b1drange);
-} // namespace basegfx1d
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,22 +26,22 @@ using namespace ::com::sun::star::lang;
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
-// FastPropertySetInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 FastPropertySetInfo::FastPropertySetInfo( const PropertyVector& rProps )
 {
     addProperties( rProps );
 }
 
-// -----------------------------------------------------------------------------
+
 
 FastPropertySetInfo::~FastPropertySetInfo()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FastPropertySetInfo::addProperties( const PropertyVector& rProps )
 {
@@ -57,7 +57,7 @@ void FastPropertySetInfo::addProperties( const PropertyVector& rProps )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 const Property& FastPropertySetInfo::getProperty( const OUString& aName ) throw (UnknownPropertyException )
 {
@@ -67,7 +67,7 @@ const Property& FastPropertySetInfo::getProperty( const OUString& aName ) throw 
     return maProperties[(*aIter).second];
 }
 
-// -----------------------------------------------------------------------------
+
 
 const Property* FastPropertySetInfo::hasProperty( const OUString& aName )
 {
@@ -78,94 +78,94 @@ const Property* FastPropertySetInfo::hasProperty( const OUString& aName )
         return &maProperties[(*aIter).second];
 }
 
-// -----------------------------------------------------------------------------
-// XPropertySetInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 Sequence< Property > SAL_CALL FastPropertySetInfo::getProperties() throw (RuntimeException)
 {
     return Sequence< Property >( &maProperties[0], maProperties.size() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Property SAL_CALL FastPropertySetInfo::getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException)
 {
     return getProperty( aName );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName ) throw (RuntimeException)
 {
     return hasProperty( aName ) != 0 ? sal_True : sal_False;
 }
 
-// -----------------------------------------------------------------------------
-// FastPropertySet
-// -----------------------------------------------------------------------------
+
+
+
 
 FastPropertySet::FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo )
 : mxInfo( xInfo )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 FastPropertySet::~FastPropertySet()
 {
 }
 
-// -----------------------------------------------------------------------------
-// XPropertySet
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< XPropertySetInfo > SAL_CALL FastPropertySet::getPropertySetInfo(  ) throw (RuntimeException)
 {
     return Reference< XPropertySetInfo >( mxInfo.get() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     setFastPropertyValue( mxInfo->getProperty( aPropertyName ).Handle, aValue );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL FastPropertySet::getPropertyValue( const OUString& aPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     return getFastPropertyValue( mxInfo->getProperty( aPropertyName ).Handle );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
-// XMultiPropertySet
-// -----------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL FastPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
@@ -189,7 +189,7 @@ void SAL_CALL FastPropertySet::setPropertyValues( const Sequence< OUString >& aP
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException)
 {
@@ -213,19 +213,19 @@ Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUS
     return aValues;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& ) throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FastPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw (RuntimeException)
 {

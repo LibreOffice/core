@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,9 +31,9 @@
 #include "drawdoc.hxx"
 #include <tools/urlobj.hxx>
 
-// --------------
-// - Namespaces -
-// --------------
+
+
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -62,9 +62,9 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 
 #endif
 
-// ---------------
-// - SdPPTFilter -
-// ---------------
+
+
+
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),
@@ -72,14 +72,14 @@ SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdPPTFilter::~SdPPTFilter()
 {
-    delete pBas;    // deleting the compressed basic storage
+    delete pBas;    
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdPPTFilter::Import()
 {
@@ -131,7 +131,7 @@ sal_Bool SdPPTFilter::Import()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdPPTFilter::Export()
 {
@@ -173,7 +173,7 @@ sal_Bool SdPPTFilter::Export()
                 if( mbShowProgress )
                     CreateStatusIndicator();
 
-                //OUString sBaseURI( "BaseURI");
+                
                 std::vector< PropertyValue > aProperties;
                 PropertyValue aProperty;
                 aProperty.Name = "BaseURI";

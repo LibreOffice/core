@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -28,7 +28,7 @@
 
 namespace rtl_locale
 {
-    // default locale for test purpose
+    
     void setDefaultLocale()
     {
         rtl_locale_setDefault(rtl::OUString("de").getStr(), rtl::OUString("DE").getStr(), /* rtl::OUString() */ rtl::OUString("hochdeutsch").getStr() );
@@ -37,10 +37,10 @@ namespace rtl_locale
 class getDefault : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -54,23 +54,23 @@ public:
         CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != NULL);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(getDefault);
     CPPUNIT_TEST(getDefault_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class getDefault
+}; 
 
 
 class setDefault : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -79,33 +79,33 @@ public:
         setDefaultLocale();
     }
 
-    // insert your test code here.
+    
     void setDefault_001()
     {
         rtl_locale_setDefault(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
         rtl_Locale* pData = rtl_locale_getDefault();
         CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != NULL);
 
-        // be sure to not GPF
+        
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(setDefault);
     CPPUNIT_TEST(setDefault_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class setDefault
+}; 
 
 
 class getLanguage : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -113,7 +113,7 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void getLanguage_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
@@ -127,24 +127,24 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "locale language must be 'de'", suLanguage == "de" );
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(getLanguage);
     CPPUNIT_TEST(getLanguage_001);
     CPPUNIT_TEST(getLanguage_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class getLanguage
+}; 
 
 
 class getCountry : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -152,7 +152,7 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void getCountry_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
@@ -166,24 +166,24 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "locale country must be 'DE'", suCountry == "DE" );
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(getCountry);
     CPPUNIT_TEST(getCountry_001);
     CPPUNIT_TEST(getCountry_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class getCountry
+}; 
 
 
 class getVariant : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -191,7 +191,7 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void getVariant_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
@@ -205,24 +205,24 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "locale variant must be 'hochdeutsch'", suVariant == "hochdeutsch" );
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(getVariant);
     CPPUNIT_TEST(getVariant_001);
     CPPUNIT_TEST(getVariant_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class getVariant
+}; 
 
 
 class hashCode : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -230,7 +230,7 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void hashCode_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
@@ -244,24 +244,24 @@ public:
         CPPUNIT_ASSERT_MESSAGE("locale hashcode must be 3831", nHashCode != 0);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(hashCode);
     CPPUNIT_TEST(hashCode_001);
     CPPUNIT_TEST(hashCode_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class hashCode
+}; 
 
 
 class equals : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
-        // start message
+        
         rtl_locale::setDefaultLocale();
     }
 
@@ -269,7 +269,7 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void equals_001()
     {
         rtl_Locale* pData1 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
@@ -290,17 +290,17 @@ public:
         CPPUNIT_ASSERT(nEqual != 0);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(equals);
     CPPUNIT_TEST(equals_001);
     CPPUNIT_TEST(equals_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class equals
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getDefault);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::setDefault);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getLanguage);
@@ -308,13 +308,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getCountry);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getVariant);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::hashCode);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::equals);
-} // namespace rtl_locale
+} 
 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

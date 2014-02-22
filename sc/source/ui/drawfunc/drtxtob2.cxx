@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@
 #include "drwtrans.hxx"
 #include "drwlayer.hxx"
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScGetFontWorkId()
 {
@@ -57,7 +57,7 @@ bool ScDrawTextObjectBar::IsNoteEdit()
     return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
 }
 
-//  wenn kein Text editiert wird, Funktionen wie in drawsh
+
 
 void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 {
@@ -81,9 +81,9 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_CLIPBOARD_FORMAT_ITEMS:
         case SID_HYPERLINK_SETLINK:
             {
-                //  cell methods are at cell shell, which is not available if
-                //  ScDrawTextObjectBar is active
-                //! move paste etc. to view shell?
+                
+                
+                
             }
             break;
 
@@ -100,7 +100,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                         com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
                         SDRATTR_TEXTDIRECTION ) );
                 pView->SetAttributes( aAttr );
-                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
+                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  
                 rReq.Done( aAttr );
             }
             break;
@@ -123,9 +123,9 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
 {
-    //  cell methods are at cell shell, which is not available if
-    //  ScDrawTextObjectBar is active -> disable everything
-    //! move paste etc. to view shell?
+    
+    
+    
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -178,7 +178,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                 EE_PARA_JUST ) );
                 pView->SetAttributes( aAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
-                rReq.Done();        //! Done(aAttr) ?
+                rReq.Done();        
 
             }
             break;
@@ -222,7 +222,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
         !pObj ||
         !pTextObj ||
         !pTextObj->HasText() ||
-        dynamic_cast< const SdrObjCustomShape* >(pObj)); // #121538# no FontWork for CustomShapes
+        dynamic_cast< const SdrObjCustomShape* >(pObj)); 
 
     if(bDeactivate)
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -88,10 +88,10 @@ SvxHatchTabPage::SvxHatchTabPage
     get(m_pBtnLoad, "load");
     get(m_pBtnSave, "save");
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
-    // adjust metric
+    
     FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
@@ -100,16 +100,16 @@ SvxHatchTabPage::SvxHatchTabPage
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
-        default: ;//prevent warning
+        default: ;
     }
     SetFieldUnit( *m_pMtrDistance, eFUnit );
 
-    // determine PoolUnit
+    
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
-    // setting the output device
+    
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXHatchItem );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
@@ -135,7 +135,7 @@ SvxHatchTabPage::SvxHatchTabPage
     setPreviewsToSamePlace(pParent, this);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxHatchTabPage::Construct()
 {
@@ -143,33 +143,33 @@ void SvxHatchTabPage::Construct()
     m_pLbHatchings->Fill( pHatchingList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_uInt16 nPos;
     sal_uInt16 nCount;
 
-    if( nDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) 
     {
         *pbAreaTP = sal_False;
 
         if( pColorList.is() )
         {
-            // ColorList
+            
             if( *pnColorListState & CT_CHANGED ||
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
                     pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
-                // LbLineColor
+                
                 nPos = m_pLbLineColor->GetSelectEntryPos();
                 m_pLbLineColor->Clear();
                 m_pLbLineColor->Fill( pColorList );
                 nCount = m_pLbLineColor->GetEntryCount();
                 if( nCount == 0 )
-                    ; // this case should not occur
+                    ; 
                 else if( nCount <= nPos )
                     m_pLbLineColor->SelectEntryPos( 0 );
                 else
@@ -178,8 +178,8 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
                 ModifiedHdl_Impl( this );
             }
 
-            // determining (possibly cutting) the name
-            // and displaying it in the GroupBox
+            
+            
             OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString         += ": ";
             INetURLObject   aURL( pHatchingList->GetPath() );
@@ -199,7 +199,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             {
                 m_pLbHatchings->SelectEntryPos( *pPos );
             }
-            // colors could have been deleted
+            
             ChangeHatchHdl_Impl( this );
 
             *pPageType = PT_HATCH;
@@ -213,7 +213,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     m_pCtlPreview->Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -226,7 +226,7 @@ int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxHatchTabPage::CheckChanges_Impl()
 {
@@ -276,15 +276,15 @@ long SvxHatchTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
+    if( nDlgType == 0 && *pbAreaTP == sal_False ) 
     {
         if( *pPageType == PT_HATCH )
         {
-            // CheckChanges(); <-- duplicate inquiry ?
+            
 
             XHatch* pXHatch = NULL;
             OUString  aString;
@@ -294,7 +294,7 @@ sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
                 pXHatch = new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() );
                 aString = m_pLbHatchings->GetSelectEntry();
             }
-            // gradient has been (unidentifiedly) passed
+            
             else
             {
                 pXHatch = new XHatch( m_pLbLineColor->GetSelectEntryColor(),
@@ -312,13 +312,13 @@ sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
 {
     ChangeHatchHdl_Impl( this );
 
-    // determine button state
+    
     if( pHatchingList->Count() )
     {
         m_pBtnModify->Enable();
@@ -338,7 +338,7 @@ void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
     m_pCtlPreview->Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxHatchTabPage::Create( Window* pWindow,
                 const SfxItemSet& rSet )
@@ -346,7 +346,7 @@ SfxTabPage* SvxHatchTabPage::Create( Window* pWindow,
     return new SvxHatchTabPage( pWindow, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 {
@@ -379,7 +379,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 {
@@ -411,8 +411,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
     {
         m_pLbLineType->SelectEntryPos(
             sal::static_int_cast< sal_uInt16 >( pHatch->GetHatchStyle() ) );
-        // if the entry is not in the listbox
-        // the color is added temporarily
+        
+        
         m_pLbLineColor->SetNoSelection();
         m_pLbLineColor->SelectEntry( pHatch->GetColor() );
         if( m_pLbLineColor->GetSelectEntryCount() == 0 )
@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
             default:  m_pCtlAngle->SetActualRP( RP_MM ); break;
         }
 
-        // fill ItemSet and pass it on to m_pCtlPreview
+        
         rXFSet.Put( XFillHatchItem( OUString(), *pHatch ) );
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 {
@@ -526,10 +526,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
         m_pLbHatchings->SelectEntryPos( m_pLbHatchings->GetEntryCount() - 1 );
 
 #ifdef WNT
-        // hack: #31355# W.P.
+        
         Rectangle aRect( m_pLbHatchings->GetPosPixel(), m_pLbHatchings->GetSizePixel() );
-        if( sal_True ) {                // ??? overlapped with pDlg
-                                    // and srolling
+        if( sal_True ) {                
+                                    
             Invalidate( aRect );
         }
 #endif
@@ -539,7 +539,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
         ChangeHatchHdl_Impl( this );
     }
 
-    // determine button state
+    
     if( pHatchingList->Count() )
     {
         m_pBtnModify->Enable();
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 {
@@ -597,7 +597,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 
                 m_pLbHatchings->SelectEntryPos( nPos );
 
-                // save values for changes recognition (-> method)
+                
                 m_pMtrDistance->SaveValue();
                 m_pMtrAngle->SaveValue();
                 m_pLbLineType->SaveValue();
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 {
@@ -642,7 +642,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
             *pnHatchingListState |= CT_MODIFIED;
         }
     }
-    // determine button state
+    
     if( !pHatchingList->Count() )
     {
         m_pBtnModify->Disable();
@@ -652,7 +652,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 {
@@ -699,8 +699,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
                 pHatchingList->SetName( aURL.getName() );
 
-                // determining (and possibly cutting) the name
-                // and displaying it in the GroupBox
+                
+                
                 OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                 aString += ": ";
 
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
         }
     }
 
-    // determine button state
+    
     if ( pHatchingList->Count() )
     {
         m_pBtnModify->Enable();
@@ -738,7 +738,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
 {
@@ -771,8 +771,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
 
         if( pHatchingList->Save() )
         {
-            // determining (and possibly cutting) the name
-            // and displaying it in the GroupBox
+            
+            
             OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString += ": ";
 
@@ -798,7 +798,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxHatchTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <services/dispatchhelper.hxx>
@@ -30,8 +30,8 @@
 
 namespace framework{
 
-//_______________________________________________
-// XInterface, XTypeProvider, XServiceInfo
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper                   ,
                                  ::cppu::OWeakObject              ,
@@ -40,7 +40,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper                   ,
 
 DEFINE_INIT_SERVICE( DispatchHelper, {} )
 
-//_______________________________________________
+
 
 /** ctor.
 
@@ -48,12 +48,12 @@ DEFINE_INIT_SERVICE( DispatchHelper, {} )
 */
 DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   ThreadHelpBase(     )
-        // Init member
+        
         ,   m_xContext    (xContext)
 {
 }
 
-//_______________________________________________
+
 
 /** dtor.
 */
@@ -61,7 +61,7 @@ DispatchHelper::~DispatchHelper()
 {
 }
 
-//_______________________________________________
+
 
 /** capsulate all steps of a dispatch request and provide so an easy way for dispatches.
 
@@ -92,7 +92,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 {
     css::uno::Reference< css::uno::XInterface > xTHIS(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
-    // check for valid parameters
+    
     if (
         (!xDispatchProvider.is()) ||
         (sURL.isEmpty()         )
@@ -101,7 +101,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         return css::uno::Any();
     }
 
-    // parse given URL
+    
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
@@ -112,11 +112,11 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     aURL.Complete = sURL;
     xParser->parseStrict(aURL);
 
-    // search dispatcher
+    
     css::uno::Reference< css::frame::XDispatch >          xDispatch       = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
     css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyDispatch (xDispatch, css::uno::UNO_QUERY);
 
-    // make sure that synchronous execution is used (if possible)
+    
     css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
     sal_Int32 nLength = lArguments.getLength();
     aArguments.realloc( nLength + 1 );
@@ -126,8 +126,8 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Any aResult;
     if (xNotifyDispatch.is())
     {
-        // dispatch it with guaranteed notification
-        // Here we can hope for a result ... instead of the normal dispatch.
+        
+        
         css::uno::Reference< css::frame::XDispatchResultListener > xListener(xTHIS, css::uno::UNO_QUERY);
         /* SAFE { */
         WriteGuard aWriteLock(m_aLock);
@@ -137,21 +137,21 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         aWriteLock.unlock();
         /* } SAFE */
 
-        // dispatch it and wait for a notification
-        // TODO/MBA: waiting in main thread?!
+        
+        
         xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
         aResult = m_aResult;
     }
     else if (xDispatch.is())
     {
-        // dispatch it without any chance to get a result
+        
         xDispatch->dispatch( aURL, aArguments );
     }
 
     return aResult;
 }
 
-//_______________________________________________
+
 
 /** callback for started dispatch with guaranteed notifications.
 
@@ -175,7 +175,7 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** we has to realease our broadcaster reference.
 

@@ -49,7 +49,7 @@ namespace dmapper {
 
     TablePropertiesHandler::~TablePropertiesHandler( )
     {
-        // Do not delete the table manager... this will be done somewhere else
+        
         m_pTableManager = NULL;
     }
 
@@ -68,7 +68,7 @@ namespace dmapper {
         {
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
             case NS_ooxml::LN_CT_TblPrBase_jc:
-            case 0x5400: // sprmTJc
+            case 0x5400: 
             {
                 //table justification 0: left, 1: center, 2: right
                 sal_Int16 nOrient = ConversionHelper::convertTableJustification( nIntValue );
@@ -77,9 +77,9 @@ namespace dmapper {
                 insertTableProps( pTableMap );
             }
             break;
-            case 0x9601: // sprmTDxaLeft
+            case 0x9601: 
             break;
-            case 0x9602: // sprmTDxaGapHalf
+            case 0x9602: 
             {
                 //m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -97,7 +97,7 @@ namespace dmapper {
                     pProperties->resolve(*pMeasureHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
-                    // In case a cell already wanted fixed size, we should not overwrite it here.
+                    
                     DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
                     if (!pManager || !pManager->IsRowSizeTypeInserted())
                         pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
@@ -130,8 +130,8 @@ namespace dmapper {
                     pProperties->resolve(*pTrackChangesHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
-                    // Add the 'track changes' properties to the 'table row' via UNO.
-                    // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
+                    
+                    
                     uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
                     pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
                     insertRowProps(pPropMap);
@@ -161,16 +161,16 @@ namespace dmapper {
                     pProperties->resolve(*pTrackChangesHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
-                    // Add the 'track changes' properties to the 'table row' via UNO.
-                    // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
+                    
+                    
                     uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
                     pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
                     cellProps(pPropMap);
                 }
             }
             break;
-            case 0x3403: // sprmTFCantSplit
-            case NS_sprm::LN_TCantSplit: // 0x3644
+            case 0x3403: 
+            case NS_sprm::LN_TCantSplit: 
             {
                 //row can't break across pages if nIntValue == 1
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -178,9 +178,9 @@ namespace dmapper {
                 insertRowProps(pPropMap);
             }
             break;
-            case 0x9407: // sprmTDyaRowHeight
+            case 0x9407: 
             {
-                // table row height - negative values indicate 'exact height' - positive 'at least'
+                
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 bool bMinHeight = true;
                 sal_Int16 nHeight = static_cast<sal_Int16>( nIntValue );
@@ -311,13 +311,13 @@ namespace dmapper {
                 }
             }
             break;
-            case 0xd61a : // sprmTCellTopColor
-            case 0xd61b : // sprmTCellLeftColor
-            case 0xd61c : // sprmTCellBottomColor
-            case 0xd61d : // sprmTCellRightColor
+            case 0xd61a : 
+            case 0xd61b : 
+            case 0xd61c : 
+            case 0xd61d : 
             case NS_ooxml::LN_CT_TcPrBase_shd:
             {
-                // each color sprm contains as much colors as cells are in a row
+                
                 //LN_CT_TcPrBase_shd: cell shading contains: LN_CT_Shd_val, LN_CT_Shd_fill, LN_CT_Shd_color
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
@@ -336,7 +336,7 @@ namespace dmapper {
             case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins
             {
                 //contains LN_CT_TblCellMar_top, LN_CT_TblCellMar_left, LN_CT_TblCellMar_bottom, LN_CT_TblCellMar_right
-                // LN_CT_TblCellMar_start, LN_CT_TblCellMar_end
+                
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
@@ -378,9 +378,9 @@ namespace dmapper {
            }
             break;
             default:
-            // Not handled here, give the next handler a chance.
+            
             bRet = false;
-            // However, these logically belong here, so save the value if necessary.
+            
             switch (nSprmId)
             {
                 case NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize:

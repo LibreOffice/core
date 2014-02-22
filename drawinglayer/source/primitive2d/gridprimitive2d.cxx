@@ -41,22 +41,22 @@ namespace drawinglayer
 
             if(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0)
             {
-                // decompose grid matrix to get logic size
+                
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
                 getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-                // create grid matrix which transforms from scaled logic to view
+                
                 basegfx::B2DHomMatrix aRST(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
                     fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
                 aRST *= rViewInformation.getObjectToViewTransformation();
 
-                // get step widths
+                
                 double fStepX(getWidth());
                 double fStepY(getHeight());
                 const double fMinimalStep(10.0);
 
-                // guarantee a step width of 10.0
+                
                 if(basegfx::fTools::less(fStepX, fMinimalStep))
                 {
                     fStepX = fMinimalStep;
@@ -67,13 +67,13 @@ namespace drawinglayer
                     fStepY = fMinimalStep;
                 }
 
-                // get relative distances in view coordinates
+                
                 double fViewStepX((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(fStepX, 0.0)).getLength());
                 double fViewStepY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fStepY)).getLength());
                 double fSmallStepX(1.0), fViewSmallStepX(1.0), fSmallStepY(1.0), fViewSmallStepY(1.0);
                 sal_uInt32 nSmallStepsX(0L), nSmallStepsY(0L);
 
-                // setup subdivisions
+                
                 if(getSubdivisionsX())
                 {
                     fSmallStepX = fStepX / getSubdivisionsX();
@@ -86,7 +86,7 @@ namespace drawinglayer
                     fViewSmallStepY = fViewStepY / getSubdivisionsY();
                 }
 
-                // correct step width
+                
                 while(fViewStepX < getSmallestViewDistance())
                 {
                     fViewStepX *= 2.0;
@@ -99,7 +99,7 @@ namespace drawinglayer
                     fStepY *= 2.0;
                 }
 
-                // correct small step width
+                
                 if(getSubdivisionsX())
                 {
                     while(fViewSmallStepX < getSmallestSubdivisionViewDistance())
@@ -122,39 +122,39 @@ namespace drawinglayer
                     nSmallStepsY = (sal_uInt32)(fStepY / fSmallStepY);
                 }
 
-                // calculate extended viewport in which grid points may lie at all
+                
                 basegfx::B2DRange aExtendedViewport;
 
                 if(rViewInformation.getDiscreteViewport().isEmpty())
                 {
-                    // not set, use logic size to travel over all potentioal grid points
+                    
                     aExtendedViewport = basegfx::B2DRange(0.0, 0.0, aScale.getX(), aScale.getY());
                 }
                 else
                 {
-                    // transform unit range to discrete view
+                    
                     aExtendedViewport = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
                     basegfx::B2DHomMatrix aTrans(rViewInformation.getObjectToViewTransformation() * getTransform());
                     aExtendedViewport.transform(aTrans);
 
-                    // intersect with visible part
+                    
                     aExtendedViewport.intersect(rViewInformation.getDiscreteViewport());
 
                     if(!aExtendedViewport.isEmpty())
                     {
-                        // convert back and apply scale
+                        
                         aTrans.invert();
                         aTrans.scale(aScale.getX(), aScale.getY());
                         aExtendedViewport.transform(aTrans);
 
-                        // crop start/end in X/Y to multiples of logical step width
+                        
                         const double fHalfCrossSize((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(3.0, 0.0)).getLength());
                         const double fMinX(floor((aExtendedViewport.getMinX() - fHalfCrossSize) / fStepX) * fStepX);
                         const double fMaxX(ceil((aExtendedViewport.getMaxX() + fHalfCrossSize) / fStepX) * fStepX);
                         const double fMinY(floor((aExtendedViewport.getMinY() - fHalfCrossSize) / fStepY) * fStepY);
                         const double fMaxY(ceil((aExtendedViewport.getMaxY() + fHalfCrossSize) / fStepY) * fStepY);
 
-                        // put to aExtendedViewport and crop on object logic size
+                        
                         aExtendedViewport = basegfx::B2DRange(
                             std::max(fMinX, 0.0),
                             std::max(fMinY, 0.0),
@@ -165,7 +165,7 @@ namespace drawinglayer
 
                 if(!aExtendedViewport.isEmpty())
                 {
-                    // prepare point vectors for point and cross markers
+                    
                     std::vector< basegfx::B2DPoint > aPositionsPoint;
                     std::vector< basegfx::B2DPoint > aPositionsCross;
 
@@ -179,8 +179,8 @@ namespace drawinglayer
 
                             if(!bXZero && !bYZero)
                             {
-                                // get discrete position and test against 3x3 area surrounding it
-                                // since it's a cross
+                                
+                                
                                 const double fHalfCrossSize(3.0 * 0.5);
                                 const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fY));
                                 const basegfx::B2DRange aDiscreteRangeCross(
@@ -228,7 +228,7 @@ namespace drawinglayer
                         }
                     }
 
-                    // prepare return value
+                    
                     const sal_uInt32 nCountPoint(aPositionsPoint.size());
                     const sal_uInt32 nCountCross(aPositionsCross.size());
                     const sal_uInt32 nRetvalCount((nCountPoint ? 1 : 0) + (nCountCross ? 1 : 0));
@@ -236,19 +236,19 @@ namespace drawinglayer
 
                     aRetval.realloc(nRetvalCount);
 
-                    // add PointArrayPrimitive2D if point markers were added
+                    
                     if(nCountPoint)
                     {
                         aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsPoint, getBColor()));
                     }
 
-                    // add MarkerArrayPrimitive2D if cross markers were added
+                    
                     if(nCountCross)
                     {
                         if(!getSubdivisionsX() && !getSubdivisionsY())
                         {
-                            // no subdivisions, so fall back to points at grid positions, no need to
-                            // visualize a difference between divisions and sub-divisions
+                            
+                            
                             aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsCross, getBColor()));
                         }
                         else
@@ -309,11 +309,11 @@ namespace drawinglayer
 
         basegfx::B2DRange GridPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // get object's range
+            
             basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
             aUnitRange.transform(getTransform());
 
-            // intersect with visible part
+            
             aUnitRange.intersect(rViewInformation.getViewport());
 
             return aUnitRange;
@@ -327,26 +327,26 @@ namespace drawinglayer
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
-                    // conditions of last local decomposition have changed, delete
+                    
                     const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
             if(!getBuffered2DDecomposition().hasElements())
             {
-                // remember ViewRange and ViewTransformation
+                
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
                 const_cast< GridPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
             }
 
-            // use parent implementation
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(GridPrimitive2D, PRIMITIVE2D_ID_GRIDPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

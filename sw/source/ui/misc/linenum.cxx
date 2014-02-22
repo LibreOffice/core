@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/viewfrm.hxx>
@@ -68,7 +68,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     sIntervalName += ")";
     m_pNumIntervalNF->SetAccessibleName(sIntervalName);
 
-    // char styles
+    
     ::FillCharStyleListBox(*m_pCharStyleLB, pSh->GetView().GetDocShell());
 
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
@@ -88,31 +88,31 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
         }
     }
 
-    // format
+    
     sal_uInt16 nSelFmt = rInf.GetNumType().GetNumberingType();
 
     m_pFormatLB->SelectNumberingType(nSelFmt);
 
-    // position
+    
     m_pPosLB->SelectEntryPos((sal_uInt16)rInf.GetPos());
 
-    // offset
+    
     sal_uInt16 nOffset = rInf.GetPosFromLeft();
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
     m_pOffsetMF->SetValue(m_pOffsetMF->Normalize(nOffset), FUNIT_TWIP);
 
-    // numbering offset
+    
     m_pNumIntervalNF->SetValue(rInf.GetCountBy());
 
-    // divider
+    
     m_pDivisorED->SetText(rInf.GetDivider());
 
-    // divider offset
+    
     m_pDivIntervalNF->SetValue(rInf.GetDividerCountBy());
 
-    // count
+    
     m_pCountEmptyLinesCB->Check(rInf.IsCountBlankLines());
     m_pCountFrameLinesCB->Check(rInf.IsCountInFlys());
     m_pRestartEachPageCB->Check(rInf.IsRestartEachPage());
@@ -135,7 +135,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
-    // char styles
+    
     OUString sCharFmtName(m_pCharStyleLB->GetSelectEntry());
     SwCharFmt *pCharFmt = pSh->FindCharFmtByName(sCharFmtName);
 
@@ -152,27 +152,27 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     if (pCharFmt)
         aInf.SetCharFmt(pCharFmt);
 
-    // format
+    
     SvxNumberType aType;
     aType.SetNumberingType(m_pFormatLB->GetSelectedNumberingType());
     aInf.SetNumType(aType);
 
-    // position
+    
     aInf.SetPos((LineNumberPosition)m_pPosLB->GetSelectEntryPos());
 
-    // offset
+    
     aInf.SetPosFromLeft((sal_uInt16)m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FUNIT_TWIP)));
 
-    // numbering offset
+    
     aInf.SetCountBy((sal_uInt16)m_pNumIntervalNF->GetValue());
 
-    // divider
+    
     aInf.SetDivider(m_pDivisorED->GetText());
 
-    // divider offset
+    
     aInf.SetDividerCountBy((sal_uInt16)m_pDivIntervalNF->GetValue());
 
-    // count
+    
     aInf.SetCountBlankLines(m_pCountEmptyLinesCB->IsChecked());
     aInf.SetCountInFlys(m_pCountFrameLinesCB->IsChecked());
     aInf.SetRestartEachPage(m_pRestartEachPageCB->IsChecked());

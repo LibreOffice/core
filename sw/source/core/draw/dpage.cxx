@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/basmgr.hxx>
@@ -97,7 +97,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 
             if ( pRect )
             {
-                //The drawing demands all pages which overlap with the rest.
+                
                 const SwRect aRect( *pRect );
                 const SwFrm *pPg = pSh->GetLayout()->Lower();
                 do
@@ -108,7 +108,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             }
             else
             {
-                //The drawing demands all visible pages
+                
                 const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
                 if ( pPg )
                     do
@@ -160,11 +160,11 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
                 if( rURL.IsServerMap() )
                 {
-                    // then append the relative pixel position!!
+                    
                     Point aPt( aPos );
                     aPt -= pFly->Frm().Pos();
-                    // without MapMode-Offset !!!!!
-                    // without MapMode-Offset, without Offset, w ... !!!!!
+                    
+                    
                     aPt = pWindow->LogicToPixel(
                             aPt, MapMode( MAP_TWIP ) );
                     sTxt += "?" + OUString::number( aPt.getX() )
@@ -174,7 +174,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
             if ( !sTxt.isEmpty() )
             {
-                // #i80029#
+                
                 sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
@@ -194,7 +194,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                 }
                 else
                 {
-                    // then display the help:
+                    
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }

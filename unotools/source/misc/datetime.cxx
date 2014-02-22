@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/datetime.hxx>
@@ -39,7 +39,7 @@ namespace
         sal_Int32 nPos = 0L;
         sal_Int32 nLen = rString.getLength();
 
-        // skip white space
+        
         while( nPos < nLen && ' ' == rString[nPos] )
             nPos++;
 
@@ -49,12 +49,12 @@ namespace
             nPos++;
         }
 
-        // get number
+        
         while( nPos < nLen &&
                '0' <= rString[nPos] &&
                '9' >= rString[nPos] )
         {
-            // TODO: check overflow!
+            
             rValue *= 10;
             rValue += (rString[nPos] - sal_Unicode('0'));
             nPos++;
@@ -66,26 +66,26 @@ namespace
         return nPos == nLen;
     }
 
-    // although the standard calls for fixed-length (zero-padded) tokens
-    // (in their integer part), we are here liberal and allow shorter tokens
-    // (when there are separators, else it is ambiguous).
-    // Note that:
-    //   the token separator is OPTIONAL
-    //   empty string is a valid token! (to recognise hh or hhmm or hh:mm formats)
-    // returns: success / failure
-    // in case of failure, no reference argument is changed
-    // arguments:
-    //   i_str: string to extract token from
-    //   index: index in i_str where to start tokenizing
-    //          after return, start of *next* token (if any)
-    //          if this was the last token, then the value is UNDEFINED
-    //   o_strInt:    output; integer part of token
-    //   o_bFraction: output; was there a fractional part?
-    //   o_strFrac:   output; fractional part of token
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     bool impl_getISO8601TimeToken(const OUString &i_str, sal_Int32 &nPos, OUString &resInt, bool &bFraction, OUString &resFrac)
     {
         bFraction = false;
-        // all tokens are of length 2
+        
         const sal_Int32 nEndPos = nPos + 2;
         const sal_Unicode c0 = '0';
         const sal_Unicode c9 = '9';
@@ -109,7 +109,7 @@ namespace
             {
                 const sal_Unicode c = i_str[nPos];
                 if (c == sep)
-                    // fractional part allowed only in *last* token
+                    
                     return false;
                 if (c < c0 || c > c9)
                     return false;
@@ -140,10 +140,10 @@ namespace
     }
 }
 
-//.........................................................................
+
 namespace utl
 {
-//------------------------------------------------------------------
+
 void typeConvert(const Date& _rDate, starutil::Date& _rOut)
 {
     _rOut.Day = _rDate.GetDay();
@@ -151,13 +151,13 @@ void typeConvert(const Date& _rDate, starutil::Date& _rOut)
     _rOut.Year = _rDate.GetYear();
 }
 
-//------------------------------------------------------------------
+
 void typeConvert(const starutil::Date& _rDate, Date& _rOut)
 {
     _rOut = Date(_rDate.Day, _rDate.Month, _rDate.Year);
 }
 
-//------------------------------------------------------------------
+
 void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
 {
     _rOut.Year = _rDateTime.GetYear();
@@ -169,7 +169,7 @@ void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
     _rOut.NanoSeconds = _rDateTime.GetNanoSec();
 }
 
-//------------------------------------------------------------------
+
 void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
 {
     Date aDate(_rDateTime.Day, _rDateTime.Month, _rDateTime.Year);
@@ -264,11 +264,11 @@ bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime
         aTimeStr = rString.copy( nPos + 1 );
     }
     else
-        aDateStr = rString;         // no separator: only date part
+        aDateStr = rString;         
 
     bSuccess = ISO8601parseDate(aDateStr, aDate);
 
-    if ( bSuccess && !aTimeStr.isEmpty() )           // time is optional
+    if ( bSuccess && !aTimeStr.isEmpty() )           
     {
         bSuccess = ISO8601parseTime(aTimeStr, aTime);
     }
@@ -283,9 +283,9 @@ bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime
 }
 
 /** convert ISO8601 Date String to util::Date */
-// TODO: supports only calendar dates YYYY-MM-DD
-// MISSING: calendar dates YYYYMMDD YYYY-MM
-//          year, week date, ordinal date
+
+
+
 bool ISO8601parseDate(const OUString &aDateStr, starutil::Date& rDate)
 {
     bool bSuccess = true;
@@ -341,11 +341,11 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     OUString tokInt;
     OUString tokFrac;
     bool bFrac = false;
-    // hours
+    
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
         if ( bFrac && n < aTimeStr.getLength())
-            // junk after ISO time
+            
             bSuccess = false;
         else if ( (bSuccess = convertNumber<sal_Int32>( nHour, tokInt, 0, 23 )) )
         {
@@ -355,17 +355,17 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
                 {
                     double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
-                    // minutes
+                    
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac hours (of hours) not between 0 and 1");
                     frac *= 60;
                     nMin = floor(frac);
                     frac -=  nMin;
-                    // seconds
+                    
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of hours) not between 0 and 1");
                     frac *= 60;
                     nSec = floor(frac);
                     frac -=  nSec;
-                    // nanoseconds
+                    
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of hours) not between 0 and 1");
                     frac *= 1000000000;
                     nNanoSec = ::rtl::math::round(frac);
@@ -377,11 +377,11 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
         }
     }
 
-    // minutes
+    
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
         if ( bFrac && n < aTimeStr.getLength())
-            // junk after ISO time
+            
             bSuccess = false;
         else if ( (bSuccess = convertNumber<sal_Int32>( nMin, tokInt, 0, 59 )) )
         {
@@ -391,12 +391,12 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
                 {
                     double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
-                    // seconds
+                    
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of minutes) not between 0 and 1");
                     frac *= 60;
                     nSec = floor(frac);
                     frac -=  nSec;
-                    // nanoseconds
+                    
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of minutes) not between 0 and 1");
                     frac *= 1000000000;
                     nNanoSec = ::rtl::math::round(frac);
@@ -407,13 +407,13 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 goto end;
         }
     }
-    // seconds
+    
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
         if (n < aTimeStr.getLength())
-            // junk after ISO time
+            
             bSuccess = false;
-        // max 60 for leap seconds
+        
         else if ( (bSuccess = convertNumber<sal_Int32>( nSec, tokInt, 0, 60 )) )
         {
             if (bFrac)
@@ -422,7 +422,7 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
                 {
                     double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
-                    // nanoseconds
+                    
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of seconds) not between 0 and 1");
                     frac *= 1000000000;
                     nNanoSec = ::rtl::math::round(frac);
@@ -435,7 +435,7 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     end:
     if (bSuccess)
     {
-        // normalise time
+        
         const int secondsOverFlow = (nSec == 60) ? 61 : 60;
         if (nNanoSec == 1000000000)
         {
@@ -461,8 +461,8 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
 
     return bSuccess;
 }
-//.........................................................................
-}   // namespace utl
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

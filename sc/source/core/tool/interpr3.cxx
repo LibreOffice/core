@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/solar.h>
@@ -37,10 +37,10 @@
 using ::std::vector;
 using namespace formula;
 
-// STATIC DATA
+
 #define MAX_ANZ_DOUBLE_FOR_SORT 100000
 
-const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
+const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
 
 class ScDistFunc
@@ -52,9 +52,9 @@ protected:
     ~ScDistFunc() {}
 };
 
-//  iteration for inverse distributions
 
-//template< class T > double lcl_IterateInverse( const T& rFunction, double x0, double x1, bool& rConvError )
+
+
 
 /** u*w<0.0 fails for values near zero */
 static inline bool lcl_HasChangeOfSign( double u, double w )
@@ -70,7 +70,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
 
     OSL_ENSURE(fAx<fBx, "IterateInverse: wrong interval");
 
-    //  find enclosing interval
+    
 
     double fAy = rFunction.GetValue(fAx);
     double fBy = rFunction.GetValue(fBx);
@@ -107,15 +107,15 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         rConvError = true;
         return 0.0;
     }
-    // inverse quadric interpolation with additional brackets
-    // set three points
+    
+    
     double fPx = fAx;
     double fPy = fAy;
     double fQx = fBx;
     double fQy = fBy;
     double fRx = fAx;
     double fRy = fAy;
-    double fSx = 0.5 * (fAx + fBx); // potential next point
+    double fSx = 0.5 * (fAx + fBx); 
     bool bHasToInterpolate = true;
     nCount = 0;
     while ( nCount < 500 && fabs(fRy) > fYEps &&
@@ -128,7 +128,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
                 fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)
                     + fRx * fQy * fPy / (fQy-fRy) / (fPy-fRy)
                     + fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);
-                bHasToInterpolate = (fAx < fSx) && (fSx < fBx); // inside the brackets?
+                bHasToInterpolate = (fAx < fSx) && (fSx < fBx); 
             }
             else
                 bHasToInterpolate = false;
@@ -136,15 +136,15 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         if(!bHasToInterpolate)
         {
             fSx = 0.5 * (fAx + fBx);
-            // reset points
+            
             fPx = fAx; fPy = fAy;
             fQx = fBx; fQy = fBy;
             bHasToInterpolate = true;
         }
-        // shift points for next interpolation
+        
         fPx = fQx; fQx = fRx; fRx = fSx;
         fPy = fQy; fQy = fRy; fRy = rFunction.GetValue(fSx);
-        // update brackets
+        
         if (lcl_HasChangeOfSign( fAy, fRy))
         {
             fBx = fRx; fBy = fRy;
@@ -153,15 +153,15 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         {
             fAx = fRx; fAy = fRy;
         }
-        // if last interration brought to small advance, then do bisection next
-        // time, for safety
+        
+        
         bHasToInterpolate = bHasToInterpolate && (fabs(fRy) * 2.0 <= fabs(fQy));
         ++nCount;
     }
     return fRx;
 }
 
-// Allgemeine Funktionen
+
 
 void ScInterpreter::ScNoName()
 {
@@ -184,8 +184,8 @@ double ScInterpreter::phi(double x)
 }
 
 double ScInterpreter::integralPhi(double x)
-{ // Using gauss(x)+0.5 has severe cancellation errors for x<-4
-    return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
+{ 
+    return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475); 
 }
 
 double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
@@ -250,7 +250,7 @@ double ScInterpreter::gauss(double x)
 }
 
 //
-//  #i26836# new gaussinv implementation by Martin Eitzenberger <m.eitzenberger@unix.net>
+
 //
 
 double ScInterpreter::gaussinv(double x)
@@ -447,8 +447,8 @@ double ScInterpreter::Fakultaet(double x)
 
 double ScInterpreter::BinomKoeff(double n, double k)
 {
-    // this method has been duplicated as BinomialCoefficient()
-    // in scaddins/source/analysis/analysishelper.cxx
+    
+    
 
     double nVal = 0.0;
     k = ::rtl::math::approxFloor(k);
@@ -472,8 +472,8 @@ double ScInterpreter::BinomKoeff(double n, double k)
     return nVal;
 }
 
-// The algorithm is based on lanczos13m53 in lanczos.hpp
-// in math library from http://www.boost.org
+
+
 /** you must ensure fZ>0
     Uses a variant of the Lanczos sum with a rational function. */
 static double lcl_getLanczosSum(double fZ)
@@ -508,7 +508,7 @@ static double lcl_getLanczosSum(double fZ)
         66,
         1
         };
-    // Horner scheme
+    
     double fSumNum;
     double fSumDenom;
     int nI;
@@ -525,7 +525,7 @@ static double lcl_getLanczosSum(double fZ)
         }
     }
     else
-    // Cancel down with fZ^12; Horner scheme with reverse coefficients
+    
     {
         double fZInv = 1/fZ;
         fSumNum = fNum[0];
@@ -541,15 +541,15 @@ static double lcl_getLanczosSum(double fZ)
     return fSumNum/fSumDenom;
 }
 
-// The algorithm is based on tgamma in gamma.hpp
-// in math library from http://www.boost.org
+
+
 /** You must ensure fZ>0; fZ>171.624376956302 will overflow. */
 static double lcl_GetGammaHelper(double fZ)
 {
     double fGamma = lcl_getLanczosSum(fZ);
     const double fg = 6.024680040776729583740234375;
     double fZgHelp = fZ + fg - 0.5;
-    // avoid intermediate overflow
+    
     double fHalfpower = pow( fZgHelp, fZ / 2 - 0.25);
     fGamma *= fHalfpower;
     fGamma /= exp(fZgHelp);
@@ -559,8 +559,8 @@ static double lcl_GetGammaHelper(double fZ)
     return fGamma;
 }
 
-// The algorithm is based on tgamma in gamma.hpp
-// in math library from http://www.boost.org
+
+
 /** You must ensure fZ>0 */
 static double lcl_GetLogGammaHelper(double fZ)
 {
@@ -584,10 +584,10 @@ double ScInterpreter::GetGamma(double fZ)
     if (fZ >= 1.0)
         return lcl_GetGammaHelper(fZ);
 
-    if (fZ >= 0.5)  // shift to x>=1 using Gamma(x)=Gamma(x+1)/x
+    if (fZ >= 0.5)  
         return lcl_GetGammaHelper(fZ+1) / fZ;
 
-    if (fZ >= -0.5) // shift to x>=1, might overflow
+    if (fZ >= -0.5) 
     {
         double fLogTest = lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log( fabs(fZ));
         if (fLogTest >= fLogDblMax)
@@ -597,14 +597,14 @@ double ScInterpreter::GetGamma(double fZ)
         }
         return lcl_GetGammaHelper(fZ+2) / (fZ+1) / fZ;
     }
-    // fZ<-0.5
-    // Use Euler's reflection formula: gamma(x)= pi/ ( gamma(1-x)*sin(pi*x) )
+    
+    
     double fLogDivisor = lcl_GetLogGammaHelper(1-fZ) + log( fabs( ::rtl::math::sin( F_PI*fZ)));
-    if (fLogDivisor - fLogPi >= fLogDblMax)     // underflow
+    if (fLogDivisor - fLogPi >= fLogDblMax)     
         return 0.0;
 
     if (fLogDivisor<0.0)
-        if (fLogPi - fLogDivisor > fLogDblMax)  // overflow
+        if (fLogPi - fLogDivisor > fLogDblMax)  
         {
             SetError(errIllegalFPOperation);
             return HUGE_VAL;
@@ -637,13 +637,13 @@ double ScInterpreter::GetTDist( double T, double fDF, int nType )
 {
     switch ( nType )
     {
-        case 1 : // 1-tailed T-distribution
+        case 1 : 
             return 0.5 * GetBetaDist( fDF / ( fDF + T * T ), fDF / 2.0, 0.5 );
-        case 2 : // 2-tailed T-distribution
+        case 2 : 
             return GetBetaDist( fDF / ( fDF + T * T ), fDF / 2.0, 0.5);
-        case 3 : // left-tailed T-distribution (probability density function)
+        case 3 : 
             return pow( 1 + ( T * T / fDF ), -( fDF + 1 ) / 2 ) / ( sqrt( fDF ) * GetBeta( 0.5, fDF / 2.0 ) );
-        case 4 : // left-tailed T-distribution (cumulative distribution function)
+        case 4 : 
             double X = fDF / ( T * T + fDF );
             double R = 0.5 * GetBetaDist( X, 0.5 * fDF, 0.5 );
             return ( T < 0 ? R : 1 - R );
@@ -652,45 +652,45 @@ double ScInterpreter::GetTDist( double T, double fDF, int nType )
     return HUGE_VAL;
 }
 
-// for LEGACY.CHIDIST, returns right tail, fDF=degrees of freedom
+
 /** You must ensure fDF>0.0 */
 double ScInterpreter::GetChiDist(double fX, double fDF)
 {
     if (fX <= 0.0)
-        return 1.0; // see ODFF
+        return 1.0; 
     else
         return GetUpRegIGamma( fDF/2.0, fX/2.0);
 }
 
-// ready for ODF 1.2
-// for ODF CHISQDIST; cumulative distribution function, fDF=degrees of freedom
-// returns left tail
+
+
+
 /** You must ensure fDF>0.0 */
 double ScInterpreter::GetChiSqDistCDF(double fX, double fDF)
 {
     if (fX <= 0.0)
-        return 0.0; // see ODFF
+        return 0.0; 
     else
         return GetLowRegIGamma( fDF/2.0, fX/2.0);
 }
 
 double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
 {
-    // you must ensure fDF is positive integer
+    
     double fValue;
     if (fX <= 0.0)
-        return 0.0; // see ODFF
+        return 0.0; 
     if (fDF*fX > 1391000.0)
     {
-        // intermediate invalid values, use log
+        
         fValue = exp((0.5*fDF - 1) * log(fX*0.5) - 0.5 * fX - log(2.0) - GetLogGamma(0.5*fDF));
     }
-    else // fDF is small in most cases, we can iterate
+    else 
     {
         double fCount;
         if (fmod(fDF,2.0)<0.5)
         {
-            // even
+            
             fValue = 0.5;
             fCount = 2.0;
         }
@@ -704,7 +704,7 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
             fValue *= (fX / fCount);
             fCount += 2.0;
         }
-        if (fX>=1425.0) // underflow in e^(-x/2)
+        if (fX>=1425.0) 
             fValue = exp(log(fValue)-fX/2);
         else
             fValue *= exp(-fX/2);
@@ -779,7 +779,7 @@ void ScInterpreter::ScGamma()
 void ScInterpreter::ScLogGamma()
 {
     double x = GetDouble();
-    if (x > 0.0)    // constraint from ODFF
+    if (x > 0.0)    
         PushDouble( GetLogGamma(x));
     else
         PushIllegalArgument();
@@ -797,19 +797,19 @@ double ScInterpreter::GetBeta(double fAlpha, double fBeta)
     {
         fA = fBeta; fB = fAlpha;
     }
-    if (fA+fB < fMaxGammaArgument) // simple case
+    if (fA+fB < fMaxGammaArgument) 
         return GetGamma(fA)/GetGamma(fA+fB)*GetGamma(fB);
-    // need logarithm
-    // GetLogGamma is not accurate enough, back to Lanczos for all three
-    // GetGamma and arrange factors newly.
-    const double fg = 6.024680040776729583740234375; //see GetGamma
+    
+    
+    
+    const double fg = 6.024680040776729583740234375; 
     double fgm = fg - 0.5;
     double fLanczos = lcl_getLanczosSum(fA);
     fLanczos /= lcl_getLanczosSum(fA+fB);
     fLanczos *= lcl_getLanczosSum(fB);
     double fABgm = fA+fB+fgm;
     fLanczos *= sqrt((fABgm/(fA+fgm))/(fB+fgm));
-    double fTempA = fB/(fA+fgm); // (fA+fgm)/fABgm = 1 / ( 1 + fB/(fA+fgm))
+    double fTempA = fB/(fA+fgm); 
     double fTempB = fA/(fB+fgm);
     double fResult = exp(-fA * ::rtl::math::log1p(fTempA)
                             -fB * ::rtl::math::log1p(fTempB)-fgm);
@@ -817,7 +817,7 @@ double ScInterpreter::GetBeta(double fAlpha, double fBeta)
     return fResult;
 }
 
-// Same as GetBeta but with logarithm
+
 double ScInterpreter::GetLogBeta(double fAlpha, double fBeta)
 {
     double fA;
@@ -830,7 +830,7 @@ double ScInterpreter::GetLogBeta(double fAlpha, double fBeta)
     {
         fA = fBeta; fB = fAlpha;
     }
-    const double fg = 6.024680040776729583740234375; //see GetGamma
+    const double fg = 6.024680040776729583740234375; 
     double fgm = fg - 0.5;
     double fLanczos = lcl_getLanczosSum(fA);
     fLanczos /= lcl_getLanczosSum(fA+fB);
@@ -838,7 +838,7 @@ double ScInterpreter::GetLogBeta(double fAlpha, double fBeta)
     double fLogLanczos = log(fLanczos);
     double fABgm = fA+fB+fgm;
     fLogLanczos += 0.5*(log(fABgm)-log(fA+fgm)-log(fB+fgm));
-    double fTempA = fB/(fA+fgm); // (fA+fgm)/fABgm = 1 / ( 1 + fB/(fA+fgm))
+    double fTempA = fB/(fA+fgm); 
     double fTempB = fA/(fB+fgm);
     double fResult = -fA * ::rtl::math::log1p(fTempA)
                         -fB * ::rtl::math::log1p(fTempB)-fgm;
@@ -846,11 +846,11 @@ double ScInterpreter::GetLogBeta(double fAlpha, double fBeta)
     return fResult;
 }
 
-// beta distribution probability density function
+
 double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
 {
-    // special cases
-    if (fA == 1.0) // result b*(1-x)^(b-1)
+    
+    if (fA == 1.0) 
     {
         if (fB == 1.0)
             return 1.0;
@@ -866,7 +866,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
         else
             return fB * pow(0.5-fX+0.5,fB-1.0);
     }
-    if (fB == 1.0) // result a*x^(a-1)
+    if (fB == 1.0) 
     {
         if (fA == 2.0)
             return fA * fX;
@@ -898,7 +898,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
             return 0.0;
     }
 
-    // normal cases; result x^(a-1)*(1-x)^(b-1)/Beta(a,b)
+    
     const double fLogDblMax = log( ::std::numeric_limits<double>::max());
     const double fLogDblMin = log( ::std::numeric_limits<double>::min());
     double fLogY = (fX < 0.1) ? ::rtl::math::log1p(-fX) : log(0.5-fX+0.5);
@@ -906,14 +906,14 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     double fAm1LogX = (fA-1.0) * fLogX;
     double fBm1LogY = (fB-1.0) * fLogY;
     double fLogBeta = GetLogBeta(fA,fB);
-    // check whether parts over- or underflow
+    
     if (   fAm1LogX < fLogDblMax  && fAm1LogX > fLogDblMin
         && fBm1LogY < fLogDblMax  && fBm1LogY > fLogDblMin
         && fLogBeta < fLogDblMax  && fLogBeta > fLogDblMin
         && fAm1LogX + fBm1LogY < fLogDblMax && fAm1LogX + fBm1LogY > fLogDblMin)
         return pow(fX,fA-1.0) * pow(0.5-fX+0.5,fB-1.0) / GetBeta(fA,fB);
-    else // need logarithm;
-        // might overflow as a whole, but seldom, not worth to pre-detect it
+    else 
+        
         return exp( fAm1LogX + fBm1LogY - fLogBeta);
 }
 
@@ -923,7 +923,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
                 a * Beta(a,b)
 */
 static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
-{   // like old version
+{   
     double a1, b1, a2, b2, fnorm, apl2m, d2m, d2m1, cfnew, cf;
     a1 = 1.0; b1 = 1.0;
     b2 = 1.0 - (fA+fB)/(fA+1.0)*fX;
@@ -943,9 +943,9 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
     double rm = 1.0;
 
     const double fMaxIter = 50000.0;
-    // loop security, normal cases converge in less than 100 iterations.
-    // FIXME: You will get so much iteratons for fX near mean,
-    // I do not know a better algorithm.
+    
+    
+    
     bool bfinished = false;
     do
     {
@@ -969,23 +969,23 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
     return cf;
 }
 
-// cumulative distribution function, normalized
+
 double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
 {
-// special cases
-    if (fXin <= 0.0)  // values are valid, see spec
+
+    if (fXin <= 0.0)  
         return 0.0;
-    if (fXin >= 1.0)  // values are valid, see spec
+    if (fXin >= 1.0)  
         return 1.0;
     if (fBeta == 1.0)
         return pow(fXin, fAlpha);
     if (fAlpha == 1.0)
-    //            1.0 - pow(1.0-fX,fBeta) is not accurate enough
+    
         return -::rtl::math::expm1(fBeta * ::rtl::math::log1p(-fXin));
-    //FIXME: need special algorithm for fX near fP for large fA,fB
+    
     double fResult;
-    // I use always continued fraction, power series are neither
-    // faster nor more accurate.
+    
+    
     double fY = (0.5-fXin)+0.5;
     double flnY = ::rtl::math::log1p(-fXin);
     double fX = fXin;
@@ -1007,14 +1007,14 @@ double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
     double fP = fA/(fA+fB);
     double fQ = fB/(fA+fB);
     double fTemp;
-    if (fA > 1.0 && fB > 1.0 && fP < 0.97 && fQ < 0.97) //found experimental
+    if (fA > 1.0 && fB > 1.0 && fP < 0.97 && fQ < 0.97) 
         fTemp = GetBetaDistPDF(fX,fA,fB)*fX*fY;
     else
         fTemp = exp(fA*flnX + fB*flnY - GetLogBeta(fA,fB));
     fResult *= fTemp;
     if (bReflect)
         fResult = 0.5 - fResult + 0.5;
-    if (fResult > 1.0) // ensure valid range
+    if (fResult > 1.0) 
         fResult = 1.0;
     if (fResult < 0.0)
         fResult = 0.0;
@@ -1024,7 +1024,7 @@ double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
 void ScInterpreter::ScBetaDist()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 3, 6 ) ) // expanded, see #i91547#
+    if ( !MustHaveParamCount( nParamCount, 3, 6 ) ) 
         return;
     double fLowerBound, fUpperBound;
     double alpha, beta, x;
@@ -1050,23 +1050,23 @@ void ScInterpreter::ScBetaDist()
         PushIllegalArgument();
         return;
     }
-    if (bIsCumulative) // cumulative distribution function
+    if (bIsCumulative) 
     {
-        // special cases
+        
         if (x < fLowerBound)
         {
-            PushDouble(0.0); return; //see spec
+            PushDouble(0.0); return; 
         }
         if (x > fUpperBound)
         {
-            PushDouble(1.0); return; //see spec
+            PushDouble(1.0); return; 
         }
-        // normal cases
-        x = (x-fLowerBound)/fScale;  // convert to standard form
+        
+        x = (x-fLowerBound)/fScale;  
         PushDouble(GetBetaDist(x, alpha, beta));
         return;
     }
-    else // probability density function
+    else 
     {
         if (x < fLowerBound || x > fUpperBound)
         {
@@ -1111,23 +1111,23 @@ void ScInterpreter::ScBetaDist_MS()
         PushIllegalArgument();
         return;
     }
-    if (bIsCumulative) // cumulative distribution function
+    if (bIsCumulative) 
     {
-        // special cases
+        
         if (x < fLowerBound)
         {
-            PushDouble(0.0); return; //see spec
+            PushDouble(0.0); return; 
         }
         if (x > fUpperBound)
         {
-            PushDouble(1.0); return; //see spec
+            PushDouble(1.0); return; 
         }
-        // normal cases
-        x = (x-fLowerBound)/fScale;  // convert to standard form
+        
+        x = (x-fLowerBound)/fScale;  
         PushDouble(GetBetaDist(x, alpha, beta));
         return;
     }
-    else // probability density function
+    else 
     {
         if (x < fLowerBound || x > fUpperBound)
         {
@@ -1208,7 +1208,7 @@ void ScInterpreter::ScVariationen()
         if (n < 0.0 || k < 0.0 || k > n)
             PushIllegalArgument();
         else if (k == 0.0)
-            PushInt(1);     // (n! / (n - 0)!) == 1
+            PushInt(1);     
         else
         {
             double nVal = n;
@@ -1233,8 +1233,8 @@ void ScInterpreter::ScVariationen2()
 }
 
 double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
-// used in ScB and ScBinomDist
-// preconditions: 0.0 <= x <= n, 0.0 < p < 1.0;  x,n integral although double
+
+
 {
     double q = (0.5 - p) + 0.5;
     double fFactor = pow(q, n);
@@ -1262,15 +1262,15 @@ double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
 
 double lcl_GetBinomDistRange(double n, double xs,double xe,
             double fFactor /* q^n */, double p, double q)
-//preconditions: 0.0 <= xs < xe <= n; xs,xe,n integral although double
+
 {
     sal_uInt32 i;
     double fSum;
-    // skip summands index 0 to xs-1, start sum with index xs
+    
     sal_uInt32 nXs = static_cast<sal_uInt32>( xs );
     for (i = 1; i <= nXs && fFactor > 0.0; i++)
         fFactor *= (n-i+1)/i * p/q;
-    fSum = fFactor; // Summand xs
+    fSum = fFactor; 
     sal_uInt32 nXe = static_cast<sal_uInt32>(xe);
     for (i = nXs+1; i <= nXe && fFactor > 0.0; i++)
     {
@@ -1285,7 +1285,7 @@ void ScInterpreter::ScB()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return ;
-    if (nParamCount == 3)   // mass function
+    if (nParamCount == 3)   
     {
         double x = ::rtl::math::approxFloor(GetDouble());
         double p = GetDouble();
@@ -1300,7 +1300,7 @@ void ScInterpreter::ScB()
             PushDouble(GetBinomDistPMF(x,n,p));
     }
     else
-    {   // nParamCount == 4
+    {   
         double xe = ::rtl::math::approxFloor(GetDouble());
         double xs = ::rtl::math::approxFloor(GetDouble());
         double p = GetDouble();
@@ -1309,7 +1309,7 @@ void ScInterpreter::ScB()
         bool bIsValidX = ( 0.0 <= xs && xs <= xe && xe <= n);
         if ( bIsValidX && 0.0 < p && p < 1.0)
         {
-            if (xs == xe)       // mass function
+            if (xs == xe)       
                 PushDouble(GetBinomDistPMF(xs,n,p));
             else
             {
@@ -1321,8 +1321,8 @@ void ScInterpreter::ScB()
                     fFactor = pow(p, n);
                     if (fFactor > ::std::numeric_limits<double>::min())
                     {
-                        // sum from j=xs to xe {(n choose j) * p^j * q^(n-j)}
-                        // = sum from i = n-xe to n-xs { (n choose i) * q^i * p^(n-i)}
+                        
+                        
                         PushDouble(lcl_GetBinomDistRange(n,n-xe,n-xs,fFactor,q,p));
                     }
                     else
@@ -1332,7 +1332,7 @@ void ScInterpreter::ScB()
         }
         else
         {
-            if ( bIsValidX ) // not(0<p<1)
+            if ( bIsValidX ) 
             {
                 if ( p == 0.0 )
                     PushDouble( (xs == 0.0) ? 1.0 : 0.0 );
@@ -1351,11 +1351,11 @@ void ScInterpreter::ScBinomDist()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        bool bIsCum   = GetBool();     // false=mass function; true=cumulative
+        bool bIsCum   = GetBool();     
         double p      = GetDouble();
         double n      = ::rtl::math::approxFloor(GetDouble());
         double x      = ::rtl::math::approxFloor(GetDouble());
-        double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
+        double q = (0.5 - p) + 0.5;           
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
         {
             PushIllegalArgument();
@@ -1423,10 +1423,10 @@ void ScInterpreter::ScCritBinom()
         else
         {
             double fFactor;
-            double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
-            if ( q > p )                          // work from the side where the cumulative curve is
+            double q = (0.5 - p) + 0.5;           
+            if ( q > p )                          
             {
-                // work from 0 upwards
+                
                 fFactor = pow(q,n);
                 if (fFactor > ::std::numeric_limits<double>::min())
                 {
@@ -1441,7 +1441,7 @@ void ScInterpreter::ScCritBinom()
                 }
                 else
                 {
-                    // accumulate BinomDist until accumulated BinomDist reaches alpha
+                    
                     double fSum = 0.0, x;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                     for (i = 0; i < max && fSum < alpha; i++)
@@ -1462,7 +1462,7 @@ void ScInterpreter::ScCritBinom()
             }
             else
             {
-                // work from n backwards
+                
                 fFactor = pow(p, n);
                 if (fFactor > ::std::numeric_limits<double>::min())
                 {
@@ -1477,7 +1477,7 @@ void ScInterpreter::ScCritBinom()
                 }
                 else
                 {
-                    // accumulate BinomDist until accumulated BinomDist reaches alpha
+                    
                     double fSum = 0.0, x;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                     alpha = 1 - alpha;
@@ -1505,9 +1505,9 @@ void ScInterpreter::ScNegBinomDist()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double p      = GetDouble();                    // p
-        double r      = GetDouble();                    // r
-        double x      = GetDouble();                    // x
+        double p      = GetDouble();                    
+        double r      = GetDouble();                    
+        double x      = GetDouble();                    
         if (r < 0.0 || x < 0.0 || p < 0.0 || p > 1.0)
             PushIllegalArgument();
         else
@@ -1527,9 +1527,9 @@ void ScInterpreter::ScNormDist( int nMinParamCount )
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
     bool bCumulative = nParamCount == 4 ? GetBool() : true;
-    double sigma = GetDouble();                 // standard deviation
-    double mue = GetDouble();                   // mean
-    double x = GetDouble();                     // x
+    double sigma = GetDouble();                 
+    double mue = GetDouble();                   
+    double x = GetDouble();                     
     if (sigma <= 0.0)
     {
         PushIllegalArgument();
@@ -1541,29 +1541,29 @@ void ScInterpreter::ScNormDist( int nMinParamCount )
         PushDouble(phi((x-mue)/sigma)/sigma);
 }
 
-void ScInterpreter::ScLogNormDist( int nMinParamCount ) //expanded, see #i100119# and fdo72158
+void ScInterpreter::ScLogNormDist( int nMinParamCount ) 
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
-    bool bCumulative = nParamCount == 4 ? GetBool() : true; // cumulative
-    double sigma = nParamCount >= 3 ? GetDouble() : 1.0; // standard deviation
-    double mue = nParamCount >= 2 ? GetDouble() : 0.0;   // mean
-    double x = GetDouble();                              // x
+    bool bCumulative = nParamCount == 4 ? GetBool() : true; 
+    double sigma = nParamCount >= 3 ? GetDouble() : 1.0; 
+    double mue = nParamCount >= 2 ? GetDouble() : 0.0;   
+    double x = GetDouble();                              
     if (sigma <= 0.0)
     {
         PushIllegalArgument();
         return;
     }
     if (bCumulative)
-    { // cumulative
+    { 
         if (x <= 0.0)
             PushDouble(0.0);
         else
             PushDouble(integralPhi((log(x)-mue)/sigma));
     }
     else
-    { // density
+    { 
         if (x <= 0.0)
             PushIllegalArgument();
         else
@@ -1581,8 +1581,8 @@ void ScInterpreter::ScStdNormDist_MS()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2 ) )
         return;
-    bool bCumulative = GetBool();                        // cumulative
-    double x = GetDouble();                              // x
+    bool bCumulative = GetBool();                        
+    double x = GetDouble();                              
 
     if ( bCumulative )
         PushDouble( integralPhi( x ) );
@@ -1594,19 +1594,19 @@ void ScInterpreter::ScExpDist()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double kum    = GetDouble();                    // 0 oder 1
-        double lambda = GetDouble();                    // lambda
-        double x      = GetDouble();                    // x
+        double kum    = GetDouble();                    
+        double lambda = GetDouble();                    
+        double x      = GetDouble();                    
         if (lambda <= 0.0)
             PushIllegalArgument();
-        else if (kum == 0.0)                        // Dichte
+        else if (kum == 0.0)                        
         {
             if (x >= 0.0)
                 PushDouble(lambda * exp(-lambda*x));
             else
                 PushInt(0);
         }
-        else                                        // Verteilung
+        else                                        
         {
             if (x > 0.0)
                 PushDouble(1.0 - exp(-lambda*x));
@@ -1690,12 +1690,12 @@ void ScInterpreter::ScFDist_LT()
     }
     if ( bCum )
     {
-        // left tail cumulative distribution
+        
         PushDouble( 1.0 - GetFDist( fF, fF1, fF2 ) );
     }
     else
     {
-        // probability density function
+        
         PushDouble( pow( fF1 / fF2, fF1 / 2 ) * pow( fF, ( fF1 / 2 ) - 1 ) /
                     ( pow( ( 1 + ( fF * fF1 / fF2 ) ), ( fF1 + fF2 ) / 2 ) *
                       GetBeta( fF1 / 2, fF2 / 2 ) ) );
@@ -1709,7 +1709,7 @@ void ScInterpreter::ScChiDist()
         return;
     double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fChi = GetDouble();
-    if (fDF < 1.0) // x<=0 returns 1, see ODFF 6.17.10
+    if (fDF < 1.0) 
     {
         PushIllegalArgument();
         return;
@@ -1727,16 +1727,16 @@ void ScInterpreter::ScWeibull()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        double kum   = GetDouble();                 // 0 oder 1
-        double beta  = GetDouble();                 // beta
-        double alpha = GetDouble();                 // alpha
-        double x     = GetDouble();                 // x
+        double kum   = GetDouble();                 
+        double beta  = GetDouble();                 
+        double alpha = GetDouble();                 
+        double x     = GetDouble();                 
         if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
             PushIllegalArgument();
-        else if (kum == 0.0)                        // Dichte
+        else if (kum == 0.0)                        
             PushDouble(alpha/pow(beta,alpha)*pow(x,alpha-1.0)*
                        exp(-pow(x/beta,alpha)));
-        else                                        // Verteilung
+        else                                        
             PushDouble(1.0 - exp(-pow(x/beta,alpha)));
     }
 }
@@ -1746,19 +1746,19 @@ void ScInterpreter::ScPoissonDist()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        bool bCumulative = (nParamCount == 3 ? GetBool() : true); // default cumulative
-        double lambda    = GetDouble();                           // Mean
-        double x         = ::rtl::math::approxFloor(GetDouble()); // discrete distribution
+        bool bCumulative = (nParamCount == 3 ? GetBool() : true); 
+        double lambda    = GetDouble();                           
+        double x         = ::rtl::math::approxFloor(GetDouble()); 
         if (lambda < 0.0 || x < 0.0)
             PushIllegalArgument();
-        else if (!bCumulative)                            // Probability mass function
+        else if (!bCumulative)                            
         {
             if (lambda == 0.0)
                 PushInt(0);
             else
             {
-                if (lambda >712)    // underflow in exp(-lambda)
-                {   // accuracy 11 Digits
+                if (lambda >712)    
+                {   
                     PushDouble( exp(x*log(lambda)-lambda-GetLogGamma(x+1.0)));
                 }
                 else
@@ -1770,19 +1770,19 @@ void ScInterpreter::ScPoissonDist()
                 }
             }
         }
-        else                                // Cumulative distribution function
+        else                                
         {
             if (lambda == 0.0)
                 PushInt(1);
             else
             {
-                if (lambda > 712 )  // underflow in exp(-lambda)
-                {   // accuracy 12 Digits
+                if (lambda > 712 )  
+                {   
                     PushDouble(GetUpRegIGamma(x+1.0,lambda));
                 }
                 else
                 {
-                    if (x >= 936.0) // result is always undistinghable from 1
+                    if (x >= 936.0) 
                         PushDouble (1.0);
                     else
                     {
@@ -1892,7 +1892,7 @@ void ScInterpreter::ScHypGeomDist_MS()
  */
 double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
 {
-    const size_t nMaxArraySize = 500000; // arbitrary max array size
+    const size_t nMaxArraySize = 500000; 
 
     typedef ::std::vector< double > HypContainer;
     HypContainer cnNumer, cnDenom;
@@ -1907,7 +1907,7 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
     cnNumer.reserve( nEstContainerSize + 10 );
     cnDenom.reserve( nEstContainerSize + 10 );
 
-    // Trim coefficient C first
+    
     double fCNumVarUpper = N - n - M + x - 1.0;
     double fCDenomVarLower = 1.0;
     if ( N - n - M + x >= M - x + 1.0 )
@@ -1927,17 +1927,17 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
     {
         if ( N - M < n + 1.0 )
         {
-            // Case 1
+            
 
             if ( N - n < n + 1.0 )
             {
-                // no overlap
+                
                 lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, N - n - 1.0, N );
             }
             else
             {
-                // overlap
+                
                 OSL_ENSURE( fCNumLower < n + 1.0, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnNumer, N - 2.0*n, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
@@ -1946,11 +1946,11 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
             OSL_ENSURE( fCDenomUpper <= N - M, "ScHypGeomDist: wrong assertion" );
 
             if ( fCDenomUpper < n - x + 1.0 )
-                // no overlap
+                
                 lcl_PutFactorialElements( cnNumer, 1.0, N - M - n + x, N - M + 1.0 );
             else
             {
-                // overlap
+                
                 lcl_PutFactorialElements( cnNumer, 1.0, N - M - fCDenomUpper, N - M + 1.0 );
 
                 fCDenomUpper = n - x;
@@ -1959,11 +1959,11 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
         }
         else
         {
-            // Case 2
+            
 
             if ( n > M - 1.0 )
             {
-                // no overlap
+                
                 lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, M - 1.0, N );
             }
@@ -1976,7 +1976,7 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
             OSL_ENSURE( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
 
             if ( fCDenomUpper < n - x + 1.0 )
-                // no overlap
+                
                 lcl_PutFactorialElements( cnNumer, N - M - n + 1.0, N - M - n + x, N - M + 1.0 );
             else
             {
@@ -1992,11 +1992,11 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
     {
         if ( N - M < M + 1.0 )
         {
-            // Case 3
+            
 
             if ( N - n < M + 1.0 )
             {
-                // No overlap
+                
                 lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, N - M - 1.0, N );
             }
@@ -2007,11 +2007,11 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
             }
 
             if ( n - x + 1.0 > fCDenomUpper )
-                // No overlap
+                
                 lcl_PutFactorialElements( cnNumer, 1.0, N - M - n + x, N - M + 1.0 );
             else
             {
-                // Overlap
+                
                 lcl_PutFactorialElements( cnNumer, 1.0, N - M - fCDenomUpper, N - M + 1.0 );
 
                 fCDenomVarLower = N - M - 2.0*(n - x) + 1.0;
@@ -2020,27 +2020,27 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
         }
         else
         {
-            // Case 4
+            
 
             OSL_ENSURE( M >= n - x, "ScHypGeomDist: wrong assertion" );
             OSL_ENSURE( M - x <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
 
             if ( N - n < N - M + 1.0 )
             {
-                // No overlap
+                
                 lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, M - 1.0, N );
             }
             else
             {
-                // Overlap
+                
                 OSL_ENSURE( fCNumLower <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnNumer, M - n, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
 
             if ( n - x + 1.0 > fCDenomUpper )
-                // No overlap
+                
                 lcl_PutFactorialElements( cnNumer, N - 2.0*M + 1.0, N - M - n + x, N - M + 1.0 );
             else if ( M >= fCDenomUpper )
             {
@@ -2099,16 +2099,16 @@ void ScInterpreter::ScGammaDist( int nMinParamCount )
         bCumulative = GetBool();
     else
         bCumulative = true;
-    double fBeta = GetDouble();                 // scale
-    double fAlpha = GetDouble();                // shape
-    double fX = GetDouble();                    // x
+    double fBeta = GetDouble();                 
+    double fAlpha = GetDouble();                
+    double fX = GetDouble();                    
     if (fAlpha <= 0.0 || fBeta <= 0.0)
         PushIllegalArgument();
     else
     {
-        if (bCumulative)                        // distribution
+        if (bCumulative)                        
             PushDouble( GetGammaDist( fX, fAlpha, fBeta));
-        else                                    // density
+        else                                    
             PushDouble( GetGammaDistPDF( fX, fAlpha, fBeta));
     }
 }
@@ -2144,9 +2144,9 @@ void ScInterpreter::ScLogNormInv()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double sigma = GetDouble();                 // Stdabw
-        double mue = GetDouble();                   // Mittelwert
-        double y = GetDouble();                     // y
+        double sigma = GetDouble();                 
+        double mue = GetDouble();                   
+        double y = GetDouble();                     
         if (sigma <= 0.0 || y <= 0.0 || y >= 1.0)
             PushIllegalArgument();
         else
@@ -2236,18 +2236,18 @@ void ScInterpreter::ScBetaInv()
     {
         bool bConvError;
         ScBetaDistFunction aFunc( *this, fP, fAlpha, fBeta );
-        // 0..1 as range for iteration so it isn't extended beyond the valid range
+        
         double fVal = lcl_IterateInverse( aFunc, 0.0, 1.0, bConvError );
         if (bConvError)
             PushError( errNoConvergence);
         else
-            PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
+            PushDouble(fA + fVal*(fB-fA));                  
     }
 }
 
-                                                            // Achtung: T, F und Chi
-                                                            // sind monoton fallend,
-                                                            // deshalb 1-Dist als Funktion
+                                                            
+                                                            
+                                                            
 
 class ScTDistFunction : public ScDistFunc
 {
@@ -2275,7 +2275,7 @@ void ScInterpreter::ScTInv( int nType )
         PushIllegalArgument();
         return;
     }
-    if ( nType == 4 ) // left-tailed cumulative t-distribution
+    if ( nType == 4 ) 
     {
         if ( fP < 0.5 )
             PushDouble( -GetTInv( 1 - fP, fDF, nType ) );
@@ -2610,7 +2610,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     {
         PushNoValue();
         return false;
-    } // if (fCount1 < 2.0 || fCount2 < 2.0)
+    } 
     if ( _bTemplin )
     {
         double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0)/fCount1;
@@ -2622,14 +2622,14 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
-    //  GetTDist wird mit GetBetaDist berechnet und kommt auch mit nicht ganzzahligen
-    //  Freiheitsgraden klar. Dann stimmt das Ergebnis auch mit Excel ueberein (#52406#):
+    
+    
         fF = 1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0));
     }
     else
     {
-        //  laut Bronstein-Semendjajew
-        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    // Varianz
+        
+        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    
         double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2) / (fCount2 - 1.0);
         fT = fabs( fSum1/fCount1 - fSum2/fCount2 ) /
              sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 ) *
@@ -3244,7 +3244,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
     {
         PushError( nGlobalError);
         return false;
-    } // if (nGlobalError)
+    } 
     return true;
 }
 
@@ -3301,16 +3301,16 @@ double ScInterpreter::GetMedian( vector<double> & rArray )
         return 0.0;
     }
 
-    // Upper median.
+    
     size_t nMid = nSize / 2;
     vector<double>::iterator iMid = rArray.begin() + nMid;
     ::std::nth_element( rArray.begin(), iMid, rArray.end());
     if (nSize & 1)
-        return *iMid;   // Lower and upper median are equal.
+        return *iMid;   
     else
     {
         double fUp = *iMid;
-        // Lower median.
+        
         iMid = rArray.begin() + nMid - 1;
         ::std::nth_element( rArray.begin(), iMid, rArray.end());
         return (fUp + *iMid) / 2;
@@ -3492,7 +3492,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
         PushNoValue();
     else
     {
-        // TODO: the sorted case for array: PushDouble( aSortArray[ bSmall ? k-1 : nSize-k ] );
+        
         vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
         ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
         PushDouble( *iPos);
@@ -3529,7 +3529,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
         {
             double fRes;
             if ( nSize == 1 )
-                fRes = 1.0;            // fNum == aSortArray[ 0 ], see test above
+                fRes = 1.0;            
             else
                 fRes = GetPercentrank( aSortArray, fNum, bInclusive );
             if ( fRes != 0.0 )
@@ -3577,9 +3577,9 @@ double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVa
         }
         else
         {
-            //  nOldCount is the count of smaller entries
-            //  fVal is between rArray[ nOldCount - 1 ] and rArray[ nOldCount ]
-            //  use linear interpolation to find a position between the entries
+            
+            
+            
             if ( nOldCount == 0 )
             {
                 OSL_FAIL( "should not happen" );
@@ -3704,10 +3704,10 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             break;
         }
         if (nGlobalError)
-            break;  // while
+            break;  
     }
-    // nParam > 0 in case of error, clean stack environment and obtain earlier
-    // error if there was one.
+    
+    
     while (nParam-- > 0)
         PopError();
 }
@@ -3727,7 +3727,7 @@ void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortAr
 
 static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
-    // If pIndexOrder is not NULL, we assume rSortArray.size() == pIndexOrder->size().
+    
 
     using ::std::swap;
 
@@ -4101,7 +4101,7 @@ void ScInterpreter::ScProbability()
 
 void ScInterpreter::ScCorrel()
 {
-    // This is identical to ScPearson()
+    
     ScPearson();
 }
 
@@ -4167,9 +4167,9 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
+        double fSumDeltaXDeltaY = 0.0; 
+        double fSumSqrDeltaX    = 0.0; 
+        double fSumSqrDeltaY    = 0.0; 
         const double fMeanX = fSumX / fCount;
         const double fMeanY = fSumY / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
@@ -4211,7 +4211,7 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
 
 void ScInterpreter::ScRSQ()
 {
-    // Same as ScPearson()*ScPearson()
+    
     ScPearson();
     if (!nGlobalError)
     {
@@ -4254,7 +4254,7 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         PushIllegalArgument();
         return;
     }
-    // #i78250# numerical stability improved
+    
     double fCount           = 0.0;
     double fSumX            = 0.0;
     double fSumY            = 0.0;
@@ -4277,8 +4277,8 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fSumDeltaXDeltaY = 0.0; 
+        double fSumSqrDeltaX    = 0.0; 
         double fMeanX = fSumX / fCount;
         double fMeanY = fSumY / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
@@ -4337,7 +4337,7 @@ void ScInterpreter::ScForecast()
         return;
     }
     double fVal = GetDouble();
-    // #i78250# numerical stability improved
+    
     double fCount           = 0.0;
     double fSumX            = 0.0;
     double fSumY            = 0.0;
@@ -4360,8 +4360,8 @@ void ScInterpreter::ScForecast()
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fSumDeltaXDeltaY = 0.0; 
+        double fSumSqrDeltaX    = 0.0; 
         double fMeanX = fSumX / fCount;
         double fMeanY = fSumY / fCount;
         for (SCSIZE i = 0; i < nC1; i++)

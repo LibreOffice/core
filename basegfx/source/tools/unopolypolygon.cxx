@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
@@ -46,7 +46,7 @@ namespace unotools
         maPolyPoly( rPolyPoly ),
         meFillRule( rendering::FillRule_EVEN_ODD )
     {
-        // or else races will haunt us.
+        
         maPolyPoly.makeUnique();
     }
 
@@ -57,32 +57,32 @@ namespace unotools
         osl::MutexGuard const guard( m_aMutex );
         modifying();
 
-        // TODO(F1): Correctly fulfill the UNO API
-        // specification. This will probably result in a vector of
-        // poly-polygons to be stored in this object.
+        
+        
+        
 
         const sal_Int32 nPolys( polyPolygon->getNumberOfPolygons() );
 
         if( !polyPolygon.is() || !nPolys )
         {
-            // invalid or empty polygon - nothing to do.
+            
             return;
         }
 
         B2DPolyPolygon        aSrcPoly;
         const UnoPolyPolygon* pSrc( dynamic_cast< UnoPolyPolygon* >(polyPolygon.get()) );
 
-        // try to extract polygon data from interface. First,
-        // check whether it's the same implementation object,
-        // which we can tunnel then.
+        
+        
+        
         if( pSrc )
         {
             aSrcPoly = pSrc->getPolyPolygon();
         }
         else
         {
-            // not a known implementation object - try data source
-            // interfaces
+            
+            
             uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
                 polyPolygon,
                 uno::UNO_QUERY );
@@ -101,8 +101,8 @@ namespace unotools
                     polyPolygon,
                     uno::UNO_QUERY );
 
-                // no implementation class and no data provider
-                // found - contract violation.
+                
+                
                 if( !xLinePoly.is() )
                     throw lang::IllegalArgumentException(
                         "UnoPolyPolygon::addPolyPolygon(): Invalid input "
@@ -178,18 +178,18 @@ namespace unotools
 
         if( index == -1L )
         {
-            // set all
+            
             maPolyPoly.setClosed( closedState );
         }
         else
         {
             checkIndex( index );
 
-            // fetch referenced polygon, change state
+            
             B2DPolygon aTmp( maPolyPoly.getB2DPolygon(index) );
             aTmp.setClosed( closedState );
 
-            // set back to container
+            
             maPolyPoly.setB2DPolygon( index, aTmp );
         }
     }
@@ -363,7 +363,7 @@ namespace unotools
 
         const sal_Int32 nPolyCount( maPolyPoly.count() );
 
-        // check for "full polygon" case
+        
         if( !nPolygonIndex &&
             !nPointIndex &&
             nNumberOfPolygons == nPolyCount &&
@@ -374,8 +374,8 @@ namespace unotools
 
         B2DPolyPolygon aSubsetPoly;
 
-        // create temporary polygon (as an extract from maPoly,
-        // which contains the requested subset)
+        
+        
         for( sal_Int32 i=nPolygonIndex; i<nNumberOfPolygons; ++i )
         {
             checkIndex(i);
@@ -387,11 +387,11 @@ namespace unotools
 
             if( nPointIndex && i==nPolygonIndex )
             {
-                // very first polygon - respect nPointIndex, if
-                // not zero
+                
+                
 
-                // empty polygon - impossible to specify _any_
-                // legal value except 0 here!
+                
+                
                 if( !nPolyCount && nPointIndex )
                     throw lang::IndexOutOfBoundsException();
 
@@ -400,10 +400,10 @@ namespace unotools
 
             if( i==nNumberOfPolygons-1 && nNumberOfPoints != -1 )
             {
-                // very last polygon - respect nNumberOfPoints
+                
 
-                // empty polygon - impossible to specify _any_
-                // legal value except -1 here!
+                
+                
                 if( !nPolyCount )
                     throw lang::IndexOutOfBoundsException();
 
@@ -412,8 +412,8 @@ namespace unotools
 
             if( !nPolyCount )
             {
-                // empty polygon - index checks already performed
-                // above, now simply append empty polygon
+                
+                
                 aSubsetPoly.append( rCurrPoly );
             }
             else
@@ -459,7 +459,7 @@ namespace unotools
     {
         osl::MutexGuard const guard( m_aMutex );
 
-        // detach result from us
+        
         B2DPolyPolygon aRet( maPolyPoly );
         aRet.makeUnique();
         return aRet;

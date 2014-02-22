@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -217,7 +217,7 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
 
     pStream->StartElement( A2OUSTR("style:page-master") );
 
-    //style:properties
+    
     pAttrList->Clear();
     if( m_fPageWidth != 0 )
         pAttrList->AddAttribute( A2OUSTR("fo:page-width"), DoubleToOUString(m_fPageWidth) + A2OUSTR("cm") );
@@ -239,7 +239,7 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
     if( m_aBackColor.IsValid() )
         pAttrList->AddAttribute( A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
 
-    //text directory
+    
     if( m_eTextDir != enumXFTextDirNone )
         pAttrList->AddAttribute( A2OUSTR("style:writing-mode"), GetTextDirName(m_eTextDir) );
 
@@ -270,10 +270,10 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
 
     pStream->EndElement( A2OUSTR("style:properties") );
 
-    //header style:
+    
     if( m_pHeaderStyle )
         m_pHeaderStyle->ToXml(pStream);
-    //footer style:
+    
     if( m_pFooterStyle )
         m_pFooterStyle->ToXml(pStream);
 

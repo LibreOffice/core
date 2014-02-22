@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,14 +70,14 @@ struct SfxProgress_Impl
 
 };
 
-//========================================================================
+
 
 #include "sfxslots.hxx"
 
-//========================================================================
+
 extern sal_uInt32 Get10ThSec();
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 {
@@ -100,7 +100,7 @@ void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
         SFX_APP()->GetAppDispatcher_Impl()->Lock( !bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     : nMax(0)
@@ -117,7 +117,7 @@ SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress::SfxProgress
 (
@@ -172,7 +172,7 @@ SfxProgress::SfxProgress
     Resume();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress::~SfxProgress()
 
@@ -189,7 +189,7 @@ SfxProgress::~SfxProgress()
     delete pImp;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Stop()
 
@@ -220,7 +220,7 @@ void SfxProgress::Stop()
         pImp->Enable_Impl(sal_True);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::SetText( const OUString&  /*      new Text */)
 
@@ -238,9 +238,9 @@ void SfxProgress::SetText( const OUString&  /*      new Text */)
     }
 }
 
-// -----------------------------------------------------------------------
 
-// Required in App data
+
+
 static sal_uIntPtr nLastTime = 0;
 
 long TimeOut_Impl( void*, void* pArgV )
@@ -255,7 +255,7 @@ long TimeOut_Impl( void*, void* pArgV )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxProgress::SetStateText
 (
@@ -269,7 +269,7 @@ sal_Bool SfxProgress::SetStateText
     return SetState( nNewVal, nNewRange );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxProgress::SetState
 (
@@ -295,7 +295,7 @@ sal_Bool SfxProgress::SetState
 
     nVal = nNewVal;
 
-    // new Range?
+    
     if ( nNewRange && nNewRange != pImp->nMax )
     {
         DBG( DbgOutf( "SfxProgress: range changed from %lu to %lu",
@@ -305,20 +305,20 @@ sal_Bool SfxProgress::SetState
 
     if ( !pImp->xStatusInd.is() )
     {
-        // get the active ViewFrame of the document this progress is working on
-        // if it doesn't work on a document, take the current ViewFrame
+        
+        
         SfxObjectShell* pObjSh = pImp->xObjSh;
         pImp->pView = SfxViewFrame::Current();
         DBG_ASSERT( pImp->pView || pObjSh, "Can't make progress bar!");
         if ( pObjSh && ( !pImp->pView || pObjSh != pImp->pView->GetObjectShell() ) )
         {
-            // current document does not belong to current ViewFrame; take it's first visible ViewFrame
+            
             SfxViewFrame* pDocView = SfxViewFrame::GetFirst( pObjSh );
             if ( pDocView )
                 pImp->pView = pDocView;
             else
             {
-                // don't show status indicator for hidden documents (only valid while loading)
+                
                 SfxMedium* pMedium = pObjSh->GetMedium();
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, false );
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
@@ -354,7 +354,7 @@ sal_Bool SfxProgress::SetState
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Resume()
 
@@ -400,7 +400,7 @@ void SfxProgress::Resume()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Suspend()
 
@@ -442,7 +442,7 @@ void SfxProgress::Suspend()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::UnLock()
 {
@@ -455,7 +455,7 @@ void SfxProgress::UnLock()
     pImp->Enable_Impl(sal_True);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Reschedule()
 
@@ -478,7 +478,7 @@ void SfxProgress::Reschedule()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress* SfxProgress::GetActiveProgress
 (
@@ -527,14 +527,14 @@ SfxProgress* SfxProgress::GetActiveProgress
     return pProgress;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::EnterLock()
 {
     SFX_APP()->Get_Impl()->nRescheduleLocks++;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::LeaveLock()
 {

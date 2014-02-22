@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -40,7 +40,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 
 using namespace ::com::sun::star;
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -60,9 +60,9 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
     return static_cast< sal_Int32 >( (fPixelPerHmm > 0.0) ? (fPixel / fPixelPerHmm + 0.5) : 0.0 );
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxContext( rxContext ),
@@ -73,7 +73,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     if( mxContext.is() )
         mxGraphicProvider.set( graphic::GraphicProvider::create( mxContext ) );
 
-    //! TODO: get colors from system
+    
     maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;
     maSystemPalette[ XML_3dLight ]                  = 0xF1EFE2;
     maSystemPalette[ XML_activeBorder ]             = 0xD4D0C8;
@@ -105,8 +105,8 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     maSystemPalette[ XML_windowFrame ]              = 0x000000;
     maSystemPalette[ XML_windowText ]               = 0x000000;
 
-    // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
-    // TODO: we need some mechanism to keep and pass the parent frame
+    
+    
     Reference< XFrame > xFrame = rxTargetFrame;
     if( !xFrame.is() && mxContext.is() ) try
     {
@@ -117,9 +117,9 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     {
     }
 
-    // get the metric of the output device
+    
     OSL_ENSURE( xFrame.is(), "GraphicHelper::GraphicHelper - cannot get target frame" );
-    maDeviceInfo.PixelPerMeterX = maDeviceInfo.PixelPerMeterY = 3500.0; // some default just in case
+    maDeviceInfo.PixelPerMeterX = maDeviceInfo.PixelPerMeterY = 3500.0; 
     if( xFrame.is() ) try
     {
         Reference< awt::XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
@@ -139,7 +139,7 @@ GraphicHelper::~GraphicHelper()
 {
 }
 
-// System colors and predefined colors ----------------------------------------
+
 
 sal_Int32 GraphicHelper::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) const
 {
@@ -158,7 +158,7 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
     return API_RGB_TRANSPARENT;
 }
 
-// Device info and device dependent unit conversion ---------------------------
+
 
 const awt::DeviceInfo& GraphicHelper::getDeviceInfo() const
 {
@@ -230,7 +230,7 @@ awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
     return awt::Size( 0, 0 );
 }
 
-// Graphics and graphic objects  ----------------------------------------------
+
 
 Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm,
         const WMF_EXTERNALHEADER* pExtHeader ) const
@@ -331,7 +331,7 @@ awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic 
 {
     awt::Size aSizeHmm;
     PropertySet aPropSet( xGraphic );
-    if( aPropSet.getProperty( aSizeHmm, PROP_Size100thMM ) && (aSizeHmm.Width == 0) && (aSizeHmm.Height == 0) )     // MAPMODE_PIXEL used?
+    if( aPropSet.getProperty( aSizeHmm, PROP_Size100thMM ) && (aSizeHmm.Width == 0) && (aSizeHmm.Height == 0) )     
     {
         awt::Size aSizePixel( 0, 0 );
         if( aPropSet.getProperty( aSizePixel, PROP_SizePixel ) )
@@ -340,8 +340,8 @@ awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic 
     return aSizeHmm;
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

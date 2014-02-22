@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hsqldb/HTables.hxx"
@@ -58,7 +58,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
+    sTableTypes[2] = s_sAll;    
 
     Any aCatalog;
     if ( !sCatalog.isEmpty() )
@@ -69,13 +69,13 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        if ( xResult->next() ) // there can be only one table with this name
+        if ( xResult->next() ) 
         {
             sal_Int32 nPrivileges = ::dbtools::getTablePrivileges( m_xMetaData, sCatalog, sSchema, sTable );
             if ( m_xMetaData->isReadOnly() )
                 nPrivileges &= ~( Privilege::INSERT | Privilege::UPDATE | Privilege::DELETE | Privilege::CREATE | Privilege::ALTER | Privilege::DROP );
 
-            // obtain privileges
+            
             OHSQLTable* pRet = new OHSQLTable( this
                                                 ,static_cast<OHCatalog&>(m_rParent).getConnection()
                                                 ,sTable
@@ -91,31 +91,31 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OHCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OTables::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OTables::createDescriptor()
 {
     return new OHSQLTable(this,static_cast<OHCatalog&>(m_rParent).getConnection());
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createTable(descriptor);
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XInterface > xObject( getObject( _nPos ) );
@@ -132,7 +132,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
-        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW"))) // here we have a view
+        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW"))) 
             aSql += "VIEW ";
         else
             aSql += "TABLE ";
@@ -146,7 +146,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
             xStmt->execute(aSql);
             ::comphelper::disposeComponent(xStmt);
         }
-        // if no exception was thrown we must delete it from the views
+        
         if ( bIsView )
         {
             HViews* pViews = static_cast<HViews*>(static_cast<OHCatalog&>(m_rParent).getPrivateViews());
@@ -155,7 +155,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection > xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
@@ -168,23 +168,23 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTables::appendNew(const OUString& _rsNewTable)
 {
     insertElement(_rsNewTable,NULL);
 
-    // notify our container listeners
+    
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
-// -----------------------------------------------------------------------------
+
 OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
     return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

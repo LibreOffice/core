@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -57,7 +57,7 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-    // XContextChangeEventMultiplexer
+    
     virtual void SAL_CALL addContextChangeEventListener (
         const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
         const cssu::Reference<cssu::XInterface>& rxEventFocus)
@@ -74,7 +74,7 @@ public:
         const cssu::Reference<cssu::XInterface>& rxEventFocus)
         throw(cssu::RuntimeException);
 
-    // XServiceInfo
+    
     virtual ::rtl::OUString SAL_CALL getImplementationName (void)
         throw (cssu::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService  (
@@ -83,7 +83,7 @@ public:
     virtual cssu::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames (void)
         throw (cssu::RuntimeException);
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent)
         throw (cssu::RuntimeException);
@@ -135,12 +135,12 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing (void)
          iContainer!=iEnd;
          ++iContainer)
     {
-        // Unregister from the focus object.
+        
         Reference<lang::XComponent> xComponent (iContainer->first, UNO_QUERY);
         if (xComponent.is())
             xComponent->removeEventListener(this);
 
-        // Tell all listeners that we are being disposed.
+        
         const FocusDescriptor& rFocusDescriptor (iContainer->second);
         for (ListenerContainer::const_iterator
                  iListener(rFocusDescriptor.maListeners.begin()),
@@ -153,7 +153,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing (void)
     }
 }
 
-// XContextChangeEventMultiplexer
+
 void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
@@ -173,14 +173,14 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
             rContainer.push_back(rxListener);
         else
         {
-            // The listener was added for the same event focus
-            // previously.  That is an error.
+            
+            
             throw cssl::IllegalArgumentException("listener added twice", static_cast<XWeak*>(this), 0);
         }
     }
 
-    // Send out an initial event that informs the new listener about
-    // the current context.
+    
+    
     if (rxEventFocus.is() && pFocusDescriptor!=NULL)
     {
         css::ui::ContextChangeEventObject aEvent (
@@ -211,8 +211,8 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
         {
             rContainer.erase(iListener);
 
-            // We hold on to the focus descriptor even when the last listener has been removed.
-            // This allows us to keep track of the current context and send it to new listeners.
+            
+            
         }
     }
 
@@ -239,8 +239,8 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
         {
             iContainer->second.maListeners.erase(iListener);
 
-            // We hold on to the focus descriptor even when the last listener has been removed.
-            // This allows us to keep track of the current context and send it to new listeners.
+            
+            
         }
     }
 }
@@ -250,7 +250,7 @@ void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
     throw(cssu::RuntimeException)
 {
-    // Remember the current context.
+    
     if (rxEventFocus.is())
     {
         FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, true);
@@ -273,8 +273,8 @@ void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
     if (pFocusDescriptor != NULL)
     {
-        // Create a copy of the listener container to avoid problems
-        // when one of the called listeners calls add... or remove...
+        
+        
         ListenerContainer aContainer (pFocusDescriptor->maListeners);
         for (ListenerContainer::const_iterator
                  iListener(aContainer.begin()),
@@ -294,12 +294,12 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
     ListenerMap::iterator iDescriptor (maListeners.find(rxEventFocus));
     if (iDescriptor == maListeners.end() && bCreateWhenMissing)
     {
-        // Listen for the focus being disposed.
+        
         Reference<lang::XComponent> xComponent (rxEventFocus, UNO_QUERY);
         if (xComponent.is())
             xComponent->addEventListener(this);
 
-        // Create a new listener container for the event focus.
+        
         iDescriptor = maListeners.insert(
             ListenerMap::value_type(
                 rxEventFocus,
@@ -326,7 +326,7 @@ sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const ::rtl::
 css::uno::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames()
     throw (cssu::RuntimeException)
 {
-    // it's a singleton, not a service
+    
     return css::uno::Sequence<OUString>();
 }
 
@@ -341,7 +341,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
         return;
     }
 
-    // Should we notify the remaining listeners?
+    
 
     maListeners.erase(iDescriptor);
 }

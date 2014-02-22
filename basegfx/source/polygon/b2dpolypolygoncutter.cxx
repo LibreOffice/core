@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -31,13 +31,13 @@
 #include <vector>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace
     {
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         struct StripHelper
         {
@@ -46,7 +46,7 @@ namespace basegfx
             B2VectorOrientation                     meOrinetation;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         struct PN
         {
@@ -57,7 +57,7 @@ namespace basegfx
             sal_uInt32              mnIN;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         struct VN
         {
@@ -65,14 +65,14 @@ namespace basegfx
             B2DVector               maPrev;
             B2DVector               maNext;
 
-            // to have the correct curve segments in the crossover checks,
-            // it is necessary to keep the original next vectors, too. Else,
-            // it may happen to use a already switched next vector which
-            // would interpolate the wrong comparison point
+            
+            
+            
+            
             B2DVector               maOriginalNext;
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         struct SN
         {
@@ -99,7 +99,7 @@ namespace basegfx
             }
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         typedef ::std::vector< PN > PNV;
         typedef ::std::vector< VN > VNV;
@@ -107,7 +107,7 @@ namespace basegfx
         typedef ::std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
         typedef ::std::vector< CorrectionPair > CorrectionTable;
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         class solver
         {
@@ -152,11 +152,11 @@ namespace basegfx
 
             bool impLeftOfEdges(const B2DVector& rVecA, const B2DVector& rVecB, const B2DVector& rTest)
             {
-                // tests if rTest is left of both directed line segments along the line -rVecA, rVecB. Test is
-                // with border.
+                
+                
                 if(rVecA.cross(rVecB) > 0.0)
                 {
-                    // b is left turn seen from a, test if Test is left of both and so inside (left is seeen as inside)
+                    
                     const bool bBoolA(fTools::moreOrEqual(rVecA.cross(rTest), 0.0));
                     const bool bBoolB(fTools::lessOrEqual(rVecB.cross(rTest), 0.0));
 
@@ -164,7 +164,7 @@ namespace basegfx
                 }
                 else
                 {
-                    // b is right turn seen from a, test if Test is right of both and so outside (left is seeen as inside)
+                    
                     const bool bBoolA(fTools::lessOrEqual(rVecA.cross(rTest), 0.0));
                     const bool bBoolB(fTools::moreOrEqual(rVecB.cross(rTest), 0.0));
 
@@ -195,8 +195,8 @@ namespace basegfx
                 const B2DPoint& rStart(rPN.maPoint);
                 const B2DPoint& rEnd(maPNV[bPrev ? rPN.mnIP : rPN.mnIN].maPoint);
                 const B2DVector& rCPA(bPrev ? maVNV[rPN.mnI].maPrev : maVNV[rPN.mnI].maNext);
-                // Use maOriginalNext, not maNext to create the original (yet unchanged)
-                // curve segment. Otherwise, this segment would NOT ne correct.
+                
+                
                 const B2DVector& rCPB(bPrev ? maVNV[maPNV[rPN.mnIP].mnI].maOriginalNext : maVNV[maPNV[rPN.mnIN].mnI].maPrev);
 
                 return B2DCubicBezier(rStart, rStart + rCPA, rEnd + rCPB, rEnd);
@@ -211,7 +211,7 @@ namespace basegfx
 
                     if(aNextA.equal(aPrevA))
                     {
-                        // deadend on A (identical edge)
+                        
                         return;
                     }
 
@@ -220,33 +220,33 @@ namespace basegfx
 
                     if(aNextB.equal(aPrevB))
                     {
-                        // deadend on B (identical edge)
+                        
                         return;
                     }
 
                     if(aPrevA.equal(aPrevB))
                     {
-                        // common edge in same direction
+                        
                         return;
                     }
                     else if(aPrevA.equal(aNextB))
                     {
-                        // common edge in opposite direction
+                        
                         if(aNextA.equal(aPrevB))
                         {
-                            // common edge in opposite direction continues
+                            
                             return;
                         }
                         else
                         {
-                            // common edge in opposite direction leave
+                            
                             impSwitchNext(rPNa, rPNb);
                         }
                     }
                     else if(aNextA.equal(aNextB))
                     {
-                        // common edge in same direction enter
-                        // search leave edge
+                        
+                        
                         PN* pPNa2 = &maPNV[rPNa.mnIN];
                         PN* pPNb2 = &maPNV[rPNb.mnIN];
                         bool bOnEdge(true);
@@ -270,13 +270,13 @@ namespace basegfx
 
                         if(bOnEdge)
                         {
-                            // loop over two identical polygon paths
+                            
                             return;
                         }
                         else
                         {
-                            // enter at rPNa, rPNb; leave at pPNa2, pPNb2. No common edges
-                            // at enter/leave. Check for crossover.
+                            
+                            
                             const B2DVector aPrevCA(aPrevA.interpolatePoint(0.5) - aPrevA.getStartPoint());
                             const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
                             const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
@@ -292,19 +292,19 @@ namespace basegfx
 
                             if(bEnter != bLeave)
                             {
-                                // crossover
+                                
                                 impSwitchNext(rPNa, rPNb);
                             }
                         }
                     }
                     else if(aNextA.equal(aPrevB))
                     {
-                        // common edge in opposite direction enter
+                        
                         impSwitchNext(rPNa, rPNb);
                     }
                     else
                     {
-                        // no common edges, check for crossover
+                        
                         const B2DVector aPrevCA(aPrevA.interpolatePoint(0.5) - aPrevA.getStartPoint());
                         const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
                         const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
@@ -315,7 +315,7 @@ namespace basegfx
 
                         if(bEnter != bLeave)
                         {
-                            // crossover
+                            
                             impSwitchNext(rPNa, rPNb);
                         }
                     }
@@ -327,7 +327,7 @@ namespace basegfx
 
                     if(rNextA.equal(rPrevA))
                     {
-                        // deadend on A
+                        
                         return;
                     }
 
@@ -336,33 +336,33 @@ namespace basegfx
 
                     if(rNextB.equal(rPrevB))
                     {
-                        // deadend on B
+                        
                         return;
                     }
 
                     if(rPrevA.equal(rPrevB))
                     {
-                        // common edge in same direction
+                        
                         return;
                     }
                     else if(rPrevA.equal(rNextB))
                     {
-                        // common edge in opposite direction
+                        
                         if(rNextA.equal(rPrevB))
                         {
-                            // common edge in opposite direction continues
+                            
                             return;
                         }
                         else
                         {
-                            // common edge in opposite direction leave
+                            
                             impSwitchNext(rPNa, rPNb);
                         }
                     }
                     else if(rNextA.equal(rNextB))
                     {
-                        // common edge in same direction enter
-                        // search leave edge
+                        
+                        
                         PN* pPNa2 = &maPNV[rPNa.mnIN];
                         PN* pPNb2 = &maPNV[rPNb.mnIN];
                         bool bOnEdge(true);
@@ -386,13 +386,13 @@ namespace basegfx
 
                         if(bOnEdge)
                         {
-                            // loop over two identical polygon paths
+                            
                             return;
                         }
                         else
                         {
-                            // enter at rPNa, rPNb; leave at pPNa2, pPNb2. No common edges
-                            // at enter/leave. Check for crossover.
+                            
+                            
                             const B2DPoint& aPointE(rPNa.maPoint);
                             const B2DVector aPrevAE(rPrevA - aPointE);
                             const B2DVector aNextAE(rNextA - aPointE);
@@ -408,19 +408,19 @@ namespace basegfx
 
                             if(bEnter != bLeave)
                             {
-                                // crossover; switch start or end
+                                
                                 impSwitchNext(rPNa, rPNb);
                             }
                         }
                     }
                     else if(rNextA.equal(rPrevB))
                     {
-                        // common edge in opposite direction enter
+                        
                         impSwitchNext(rPNa, rPNb);
                     }
                     else
                     {
-                        // no common edges, check for crossover
+                        
                         const B2DPoint& aPoint(rPNa.maPoint);
                         const B2DVector aPrevA(rPrevA - aPoint);
                         const B2DVector aNextA(rNextA - aPoint);
@@ -432,7 +432,7 @@ namespace basegfx
 
                         if(bEnter != bLeave)
                         {
-                            // crossover
+                            
                             impSwitchNext(rPNa, rPNb);
                         }
                     }
@@ -441,14 +441,14 @@ namespace basegfx
 
             void impSolve()
             {
-                // sort by point to identify common nodes easier
+                
                 ::std::sort(maSNV.begin(), maSNV.end());
 
-                // handle common nodes
+                
                 const sal_uInt32 nNodeCount(maSNV.size());
                 sal_uInt32 a(0);
 
-                // snap unsharp-equal points
+                
                 if(nNodeCount)
                 {
                     basegfx::B2DPoint* pLast(&maSNV[0].mpPN->maPoint);
@@ -480,7 +480,7 @@ namespace basegfx
 
                 for(a = 0; a < nNodeCount - 1; a++)
                 {
-                    // test a before using it, not after. Also use nPointCount instead of aSortNodes.size()
+                    
                     PN& rPNb = *(maSNV[a].mpPN);
 
                     for(sal_uInt32 b(a + 1); b < nNodeCount && rPNb.maPoint.equal(maSNV[b].mpPN->maPoint); b++)
@@ -507,20 +507,20 @@ namespace basegfx
 
                     const sal_uInt32 nPointCount(aGeometry.count());
 
-                    // If it's not a pezier polygon, at least four points are needed to create
-                    // a self-intersection. If it's a bezier polygon, the minimum point number
-                    // is two, since with a single point You get a curve, but no self-intersection
+                    
+                    
+                    
                     if(nPointCount > 3 || (nPointCount > 1 && mbIsCurve))
                     {
-                        // reserve space in point, control and sort vector.
+                        
                         maSNV.reserve(nPointCount);
                         maPNV.reserve(nPointCount);
                         maVNV.reserve(mbIsCurve ? nPointCount : 0);
 
-                        // fill data
+                        
                         impAddPolygon(0, aGeometry);
 
-                        // solve common nodes
+                        
                         impSolve();
                     }
                 }
@@ -546,17 +546,17 @@ namespace basegfx
                         sal_uInt32 nPointCount(0);
                         sal_uInt32 a(0);
 
-                        // count points
+                        
                         for(a = 0; a < nOriginalCount; a++)
                         {
                             const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
                             const sal_uInt32 nCandCount(aCandidate.count());
 
-                            // If it's not a bezier curve, at least three points would be needed to have a
-                            // topological relevant (not empty) polygon. Since its not known here if trivial
-                            // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
-                            // more than one point.
-                            // For bezier curves, the minimum for defining an area is also one.
+                            
+                            
+                            
+                            
+                            
                             if(nCandCount)
                             {
                                 nPointCount += nCandCount;
@@ -565,12 +565,12 @@ namespace basegfx
 
                         if(nPointCount)
                         {
-                            // reserve space in point, control and sort vector.
+                            
                             maSNV.reserve(nPointCount);
                             maPNV.reserve(nPointCount);
                             maVNV.reserve(mbIsCurve ? nPointCount : 0);
 
-                            // fill data
+                            
                             sal_uInt32 nInsertIndex(0);
 
                             for(a = 0; a < nOriginalCount; a++)
@@ -578,8 +578,8 @@ namespace basegfx
                                 const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
                                 const sal_uInt32 nCandCount(aCandidate.count());
 
-                                // use same condition as above, the data vector is
-                                // pre-allocated
+                                
+                                
                                 if(nCandCount)
                                 {
                                     impAddPolygon(nInsertIndex, aCandidate);
@@ -587,7 +587,7 @@ namespace basegfx
                                 }
                             }
 
-                            // solve common nodes
+                            
                             impSolve();
                         }
                     }
@@ -608,7 +608,7 @@ namespace basegfx
 
                         if(SAL_MAX_UINT32 != rPN.mnI)
                         {
-                            // unused node, start new part polygon
+                            
                             B2DPolygon aNewPart;
                             PN* pPNCurr = &rPN;
 
@@ -638,7 +638,7 @@ namespace basegfx
                             }
                             while(pPNCurr != &rPN && SAL_MAX_UINT32 != pPNCurr->mnI);
 
-                            // close and add
+                            
                             aNewPart.setClosed(true);
                             aRetval.append(aNewPart);
                         }
@@ -650,13 +650,13 @@ namespace basegfx
                 {
                     const sal_uInt32 nCorrectionSize(maCorrectionTable.size());
 
-                    // no change, return original
+                    
                     if(!nCorrectionSize)
                     {
                         return maOriginal;
                     }
 
-                    // apply coordinate corrections to ensure inside/outside correctness after solving
+                    
                     const sal_uInt32 nPolygonCount(maOriginal.count());
                     basegfx::B2DPolyPolygon aRetval(maOriginal);
 
@@ -691,18 +691,18 @@ namespace basegfx
             }
         };
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
-    } // end of anonymous namespace
-} // end of namespace basegfx
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace tools
     {
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
@@ -717,7 +717,7 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
         {
@@ -725,7 +725,7 @@ namespace basegfx
             return aSolver.getB2DPolyPolygon();
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate)
         {
@@ -744,13 +744,13 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aCandidate;
 
-            // remove all self-intersections and intersections
+            
             if(rCandidate.count() == 1)
             {
                 aCandidate = basegfx::tools::solveCrossovers(rCandidate.getB2DPolygon(0));
@@ -760,10 +760,10 @@ namespace basegfx
                 aCandidate = basegfx::tools::solveCrossovers(rCandidate);
             }
 
-            // cleanup evtl. neutral polygons
+            
             aCandidate = basegfx::tools::stripNeutralPolygons(aCandidate);
 
-            // remove all polygons which have the same orientation as the polygon they are directly contained in
+            
             const sal_uInt32 nCount(aCandidate.count());
 
             if(nCount > 1)
@@ -779,7 +779,7 @@ namespace basegfx
                     pNewHelper->maRange = tools::getRange(aCand);
                     pNewHelper->meOrinetation = tools::getOrientation(aCand);
 
-                    // initialize with own orientation
+                    
                     pNewHelper->mnDepth = (ORIENTATION_NEGATIVE == pNewHelper->meOrinetation ? -1 : 1);
                 }
 
@@ -796,7 +796,7 @@ namespace basegfx
 
                         if(bAInB)
                         {
-                            // A is inside B, add orientation of B to A
+                            
                             rHelperA.mnDepth += (ORIENTATION_NEGATIVE == rHelperB.meOrinetation ? -1 : 1);
                         }
 
@@ -804,7 +804,7 @@ namespace basegfx
 
                         if(bBInA)
                         {
-                            // B is inside A, add orientation of A to B
+                            
                             rHelperB.mnDepth += (ORIENTATION_NEGATIVE == rHelperA.meOrinetation ? -1 : 1);
                         }
                     }
@@ -816,10 +816,10 @@ namespace basegfx
                 for(a = 0L; a < nCount; a++)
                 {
                     const StripHelper& rHelper = aHelpers[a];
-                    // for contained unequal oriented polygons sum will be 0
-                    // for contained equal it will be >=2 or <=-2
-                    // for free polygons (not contained) it will be 1 or -1
-                    // -> accept all which are >=-1 && <= 1
+                    
+                    
+                    
+                    
                     bool bAcceptEntry(rHelper.mnDepth >= -1 && rHelper.mnDepth <= 1);
 
                     if(bAcceptEntry)
@@ -832,7 +832,7 @@ namespace basegfx
             return aCandidate;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
         {
@@ -877,17 +877,17 @@ namespace basegfx
 
                             if(bAInB && bBInA)
                             {
-                                // congruent
+                                
                                 if(rHelperA.meOrinetation == rHelperB.meOrinetation)
                                 {
-                                    // two polys or two holes. Lower one of them to get one of them out of the way.
-                                    // Since each will be contained in the other one, both will be increased, too.
-                                    // So, for lowering, increase only one of them
+                                    
+                                    
+                                    
                                     rHelperA.mnDepth++;
                                 }
                                 else
                                 {
-                                    // poly and hole. They neutralize, so get rid of both. Move securely below zero.
+                                    
                                     rHelperA.mnDepth = -((sal_Int32)nCount);
                                     rHelperB.mnDepth = -((sal_Int32)nCount);
                                 }
@@ -936,7 +936,7 @@ namespace basegfx
             return aRetval;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate)
         {
@@ -966,8 +966,8 @@ namespace basegfx
             }
             else
             {
-                // concatenate polygons, solve crossovers and throw away all sub-polygons
-                // which have a depth other than 0.
+                
+                
                 B2DPolyPolygon aRetval(rCandidateA);
 
                 aRetval.append(rCandidateB);
@@ -990,9 +990,9 @@ namespace basegfx
             }
             else
             {
-                // XOR is pretty simple: By definition it is the simple concatenation of
-                // the single polygons since we imply XOR fill rule. Make it intersection-free
-                // and correct orientations
+                
+                
+                
                 B2DPolyPolygon aRetval(rCandidateA);
 
                 aRetval.append(rCandidateB);
@@ -1015,9 +1015,9 @@ namespace basegfx
             }
             else
             {
-                // concatenate polygons, solve crossovers and throw away all sub-polygons
-                // with a depth of < 1. This means to keep all polygons where at least two
-                // polygons do overlap.
+                
+                
+                
                 B2DPolyPolygon aRetval(rCandidateA);
 
                 aRetval.append(rCandidateB);
@@ -1040,14 +1040,14 @@ namespace basegfx
             }
             else
             {
-                // Make B topologically to holes and append to A
+                
                 B2DPolyPolygon aRetval(rCandidateB);
 
                 aRetval.flip();
                 aRetval.append(rCandidateA);
 
-                // solve crossovers and throw away all sub-polygons which have a
-                // depth other than 0.
+                
+                
                 aRetval = basegfx::tools::solveCrossovers(aRetval);
                 aRetval = basegfx::tools::stripNeutralPolygons(aRetval);
 
@@ -1059,8 +1059,8 @@ namespace basegfx
         {
             B2DPolyPolygonVector aInput(rInput);
 
-            // first step: prepareForPolygonOperation and simple merge of non-overlapping
-            // PolyPolygons for speedup; this is possible for the wanted OR-operation
+            
+            
             if(!aInput.empty())
             {
                 B2DPolyPolygonVector aResult;
@@ -1102,7 +1102,7 @@ namespace basegfx
                 aInput = aResult;
             }
 
-            // second step: melt pairwise to a single PolyPolygon
+            
             while(aInput.size() > 1)
             {
                 B2DPolyPolygonVector aResult;
@@ -1112,12 +1112,12 @@ namespace basegfx
                 {
                     if(a + 1 < aInput.size())
                     {
-                        // a pair for processing
+                        
                         aResult.push_back(solvePolygonOperationOr(aInput[a], aInput[a + 1]));
                     }
                     else
                     {
-                        // last single PolyPolygon; copy to target to not lose it
+                        
                         aResult.push_back(aInput[a]);
                     }
                 }
@@ -1125,7 +1125,7 @@ namespace basegfx
                 aInput = aResult;
             }
 
-            // third step: get result
+            
             if(1 == aInput.size())
             {
                 return aInput[0];
@@ -1134,9 +1134,9 @@ namespace basegfx
             return B2DPolyPolygon();
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
-    } // end of namespace tools
-} // end of namespace basegfx
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

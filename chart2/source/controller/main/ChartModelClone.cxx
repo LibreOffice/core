@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartModelClone.hxx"
@@ -61,7 +61,7 @@ namespace chart
     using ::com::sun::star::chart2::data::XDataSource;
     using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
-    // = helper
+    
     namespace
     {
         Reference< XModel > lcl_cloneModel( const Reference< XModel > & xModel )
@@ -81,7 +81,7 @@ namespace chart
 
     }
 
-    // = ChartModelClone
+    
     ChartModelClone::ChartModelClone( const Reference< XModel >& i_model, const ModelFacet i_facet )
     {
         m_xModelClone.set( lcl_cloneModel( i_model ) );
@@ -168,7 +168,7 @@ namespace chart
             Reference< XChartDocument > xDoc( i_model, UNO_QUERY );
             OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider() );
 
-            // copy data from stored internal data provider
+            
             if( xDoc.is() && xDoc->hasInternalDataProvider())
             {
                 Reference< XAnyDescriptionAccess > xCurrentData( xDoc->getDataProvider(), UNO_QUERY );
@@ -190,34 +190,34 @@ namespace chart
         ENSURE_OR_RETURN_VOID( i_modelToCopyFrom.is(), "ChartModelElement::applyModelContentToModel: invalid source model!" );
         try
         {
-            // /-- loccked controllers of destination
+            
             ControllerLockGuardUNO aLockedControllers( i_model );
             Reference< XChartDocument > xSource( i_modelToCopyFrom, UNO_QUERY_THROW );
             Reference< XChartDocument > xDestination( i_model, UNO_QUERY_THROW );
 
-            // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
+            
             ChartModel* pModel = dynamic_cast<ChartModel*>(i_model.get());
             ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ) , *pModel );
 
-            // diagram
+            
             xDestination->setFirstDiagram( xSource->getFirstDiagram() );
 
-            // main title
+            
             Reference< XTitled > xDestinationTitled( xDestination, UNO_QUERY_THROW );
             Reference< XTitled > xSourceTitled( xSource, UNO_QUERY_THROW );
             xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject() );
 
-            // page background
+            
             ::comphelper::copyProperties(
                 xSource->getPageBackground(),
                 xDestination->getPageBackground() );
 
-            // apply data (not applied in standard Undo)
+            
             if ( i_data.is() )
                 ImplApplyDataToModel( i_model, i_data );
 
-            // register all sequences at the internal data provider to get adapted
-            // indexes when columns are added/removed
+            
+            
             if ( xDestination->hasInternalDataProvider() )
             {
                 Reference< XInternalDataProvider > xNewDataProvider( xDestination->getDataProvider(), UNO_QUERY );
@@ -233,14 +233,14 @@ namespace chart
                 }
             }
 
-            // restore modify status
+            
             Reference< XModifiable > xSourceMod( xSource, UNO_QUERY );
             Reference< XModifiable > xDestMod( xDestination, UNO_QUERY );
             if ( xSourceMod.is() && xDestMod.is() && !xSourceMod->isModified() )
             {
                 xDestMod->setModified( sal_False );
             }
-            // \-- loccked controllers of destination
+            
         }
         catch( const Exception& )
         {
@@ -248,6 +248,6 @@ namespace chart
         }
     }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

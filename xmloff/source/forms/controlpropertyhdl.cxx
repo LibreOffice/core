@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/controlpropertyhdl.hxx>
@@ -45,7 +45,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::xmloff::token;
 
-    //= OControlPropertyHandlerFactory
+    
     OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
         :m_pTextAlignHandler(NULL)
         ,m_pControlBorderStyleHandler(NULL)
@@ -127,7 +127,7 @@ namespace xmloff
         return pHandler;
     }
 
-    //= OControlTextEmphasisHandler
+    
     OControlTextEmphasisHandler::OControlTextEmphasisHandler()
     {
     }
@@ -139,12 +139,12 @@ namespace xmloff
         sal_Int16 nFontEmphasis = sal_Int16();
         if (_rValue >>= nFontEmphasis)
         {
-            // the type
+            
             sal_Int16 nType = nFontEmphasis & ~(awt::FontEmphasisMark::ABOVE | awt::FontEmphasisMark::BELOW);
-            // the position of the mark
+            
             bool bBelow = 0 != (nFontEmphasis & awt::FontEmphasisMark::BELOW);
 
-            // convert
+            
             bSuccess = SvXMLUnitConverter::convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE);
             if (bSuccess)
             {
@@ -206,7 +206,7 @@ namespace xmloff
         return bSuccess;
     }
 
-    //= OControlBorderHandlerBase
+    
     OControlBorderHandler::OControlBorderHandler( const OControlBorderHandler::BorderFacet _eFacet )
         :m_eFacet( _eFacet )
     {
@@ -219,14 +219,14 @@ namespace xmloff
 
         sal_uInt16 nStyle = 1;
 
-        while   (   aTokens.getNextToken(sToken)    // have a new token
-                &&  (!sToken.isEmpty())       // really have a new token
+        while   (   aTokens.getNextToken(sToken)    
+                &&  (!sToken.isEmpty())       
                 )
         {
-            // try interpreting the token as border style
+            
             if ( m_eFacet == STYLE )
             {
-                // is it a valid enum value?
+                
                 if ( SvXMLUnitConverter::convertEnum( nStyle, sToken, OEnumMapper::getEnumMap( OEnumMapper::epBorderWidth ) ) )
                 {
                     _rValue <<= nStyle;
@@ -234,7 +234,7 @@ namespace xmloff
                 }
             }
 
-            // try interpreting it as color value
+            
             if ( m_eFacet == COLOR )
             {
                 sal_Int32 nColor(0);
@@ -273,7 +273,7 @@ namespace xmloff
             }
         }
         break;
-        }   // switch ( m_eFacet )
+        }   
 
         if ( !bSuccess )
             return false;
@@ -285,7 +285,7 @@ namespace xmloff
         return true;
     }
 
-    //= OFontWidthHandler
+    
     OFontWidthHandler::OFontWidthHandler()
     {
     }
@@ -315,7 +315,7 @@ namespace xmloff
         return !_rStrExpValue.isEmpty();
     }
 
-    //= ORotationAngleHandler
+    
     ORotationAngleHandler::ORotationAngleHandler()
     {
     }
@@ -349,12 +349,12 @@ namespace xmloff
         return bSuccess;
     }
 
-    //= ImageScaleModeHandler
+    
     ImageScaleModeHandler::ImageScaleModeHandler()
         :XMLConstantsPropertyHandler( OEnumMapper::getEnumMap( OEnumMapper::epImageScaleMode ), XML_STRETCH )
     {
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

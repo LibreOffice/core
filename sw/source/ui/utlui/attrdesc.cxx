@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <i18nutil/unicode.hxx>
@@ -60,7 +60,7 @@ using namespace com::sun::star;
 
 TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
 
-// query the attribute descriptions
+
 void SwAttrSet::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric,
@@ -120,7 +120,7 @@ SfxItemPresentation SwFmtCharFmt::GetPresentation
                 rText = OUString( SW_RESSTR( STR_NO_CHARFMT ) );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -142,10 +142,10 @@ SfxItemPresentation SwFmtAutoFmt::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            rText = OUString(); //TODO
+            rText = OUString(); 
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -170,7 +170,7 @@ SfxItemPresentation SwFmtINetFmt::GetPresentation
             rText = GetValue();
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -190,7 +190,7 @@ SfxItemPresentation SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
                 rText = OUString();
                 return ePres;
             }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -229,7 +229,7 @@ SfxItemPresentation SwFmtDrop::GetPresentation
                 rText = SW_RESSTR( STR_NO_DROP_LINES );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -255,7 +255,7 @@ SfxItemPresentation SwRegisterItem::GetPresentation
             rText = SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -284,7 +284,7 @@ SfxItemPresentation SwNumRuleItem::GetPresentation
                 rText = SW_RESSTR( STR_NUMRULE_OFF );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -310,12 +310,12 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
             rText = SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// Frame attribute
+
 
 SfxItemPresentation SwFmtFrmSize::GetPresentation
 (
@@ -365,13 +365,13 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             }
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//Header for page formats.
-//Client of FrmFmt which describes the header.
+
+
 
 SfxItemPresentation SwFmtHeader::GetPresentation
 (
@@ -394,13 +394,13 @@ SfxItemPresentation SwFmtHeader::GetPresentation
             rText = SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//Footer for page formats.
-//Client of FrmFmt which describes the footer.
+
+
 
 SfxItemPresentation SwFmtFooter::GetPresentation
 (
@@ -423,7 +423,7 @@ SfxItemPresentation SwFmtFooter::GetPresentation
             rText = SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -466,7 +466,7 @@ SfxItemPresentation SwFmtSurround::GetPresentation
                 case SURROUND_RIGHT:
                     nId = STR_SURROUND_RIGHT;
                 break;
-                default:;//prevent warning
+                default:;
             }
             if ( nId )
                 rText = SW_RESSTR( nId );
@@ -477,12 +477,12 @@ SfxItemPresentation SwFmtSurround::GetPresentation
             }
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//VertOrientation, how and by what orientate the FlyFrm in the vertical?
+
 
 SfxItemPresentation SwFmtVertOrient::GetPresentation
 (
@@ -529,18 +529,18 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
                 case text::VertOrientation::LINE_BOTTOM:
                     nId = STR_LINE_BOTTOM;
                     break;
-                default:;//prevent warning
+                default:;
             }
             if ( nId )
                 rText += SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//HoriOrientation, how and by what orientate the FlyFrm in the horizontal?
+
 
 SfxItemPresentation SwFmtHoriOrient::GetPresentation
 (
@@ -587,18 +587,18 @@ SfxItemPresentation SwFmtHoriOrient::GetPresentation
                 case text::HoriOrientation::FULL:
                     nId = STR_HORI_FULL;
                 break;
-                default:;//prevent warning
+                default:;
             }
             if ( nId )
                 rText += SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// FlyAnchor, Anchor of the free-flying frame
+
 
 SfxItemPresentation SwFmtAnchor::GetPresentation
 (
@@ -629,13 +629,13 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
                 case FLY_AT_PAGE:
                     nId = STR_FLY_AT_PAGE;
                     break;
-                default:;//prevent warning
+                default:;
             }
             if ( nId )
                 rText += SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -664,12 +664,12 @@ SfxItemPresentation SwFmtPageDesc::GetPresentation
                 rText = SW_RESSTR( STR_NO_PAGEDESC );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//The ColumnDescriptor
+
 
 SfxItemPresentation SwFmtCol::GetPresentation
 (
@@ -704,12 +704,12 @@ SfxItemPresentation SwFmtCol::GetPresentation
                 rText = OUString();
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//URL's and maps
+
 
 SfxItemPresentation SwFmtURL::GetPresentation
 (
@@ -744,7 +744,7 @@ SfxItemPresentation SwFmtURL::GetPresentation
             }
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -771,7 +771,7 @@ SfxItemPresentation SwFmtEditInReadonly::GetPresentation
                 rText = SW_RESSTR(STR_EDIT_IN_READONLY);
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -797,7 +797,7 @@ SfxItemPresentation SwFmtLayoutSplit::GetPresentation
                 rText = SW_RESSTR(STR_LAYOUT_SPLIT);
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -885,7 +885,7 @@ SfxItemPresentation SwFmtChain::GetPresentation
             }
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -918,7 +918,7 @@ SfxItemPresentation SwFmtLineNumber::GetPresentation
             }
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -958,7 +958,7 @@ SfxItemPresentation SwTextGridItem::GetPresentation
                 rText += SW_RESSTR( nId );
             return ePres;
         }
-        default:;//prevent warning
+        default:;
     }
 
     return SFX_ITEM_PRESENTATION_NONE;
@@ -976,7 +976,7 @@ SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// Graphic attributes
+
 
 SfxItemPresentation SwMirrorGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,

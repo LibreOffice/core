@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -79,6 +79,6 @@ CBenObject::UseValue(BenObjectID PropertyID)
     return pProperty->UseValue();
 }
 
-}// end namespace OpenStormBento
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

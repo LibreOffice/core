@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SMARTTAGS
+
 
 #include <svx/SmartTagMgr.hxx>
 
@@ -69,7 +69,7 @@ SmartTagMgr::~SmartTagMgr()
 
 void SmartTagMgr::Init( const OUString& rConfigurationGroupName )
 {
-    // get component context to pass to components:
+    
     if ( mxContext.is() )
     {
         PrepareConfiguration( rConfigurationGroupName );
@@ -82,7 +82,7 @@ void SmartTagMgr::CreateBreakIterator() const
 {
     if ( !mxBreakIter.is() && mxContext.is() )
     {
-        // get the break iterator
+        
         mxBreakIter.set( BreakIterator::create(mxContext) );
     }
 }
@@ -99,8 +99,8 @@ void SmartTagMgr::RecognizeString( const OUString& rText,
     {
         Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
 
-        // if all smart tag types supported by this recognizer have been
-        // disabled, we do not have to call the recognizer:
+        
+        
         bool bCallRecognizer = false;
         const sal_uInt32 nSmartTagCount = xRecognizer->getSmartTagCount();
         for ( sal_uInt32 j = 0; j < nSmartTagCount && !bCallRecognizer; ++j )
@@ -133,8 +133,8 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange> xRange,
 
         if (!xRangeBasedRecognizer.is()) continue;
 
-        // if all smart tag types supported by this recognizer have been
-        // disabled, we do not have to call the recognizer:
+        
+        
         bool bCallRecognizer = false;
         const sal_uInt32 nSmartTagCount = xRecognizer->getSmartTagCount();
         for ( sal_uInt32 j = 0; j < nSmartTagCount && !bCallRecognizer; ++j )
@@ -276,7 +276,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
     }
 }
 
-// ::com::sun::star::util::XModifyListener
+
 void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -288,7 +288,7 @@ void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException 
     LoadLibraries();
 }
 
-// ::com::sun::star::lang::XEventListener
+
 void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -315,7 +315,7 @@ void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeExc
     }
 }
 
-// ::com::sun::star::util::XChangesListener
+
 void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -349,12 +349,12 @@ void SmartTagMgr::LoadLibraries()
     if ( !rContent.is() )
         return;
 
-    // load recognizers: No recognizers -> nothing to do.
+    
     Reference < container::XEnumeration > rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagRecognizer");
     if ( !rEnum.is() || !rEnum->hasMoreElements() )
         return;
 
-    // iterate over all implementations of the smart tag recognizer service:
+    
     while( rEnum->hasMoreElements())
     {
         const Any a = rEnum->nextElement();
@@ -376,12 +376,12 @@ void SmartTagMgr::LoadLibraries()
         maRecognizerList.push_back(xLib);
     }
 
-    // load actions: No actions -> nothing to do.
+    
     rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagAction");
     if ( !rEnum.is() )
         return;
 
-    // iterate over all implementations of the smart tag action service:
+    
     while( rEnum->hasMoreElements())
     {
         const Any a = rEnum->nextElement();
@@ -419,7 +419,7 @@ void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName 
     aArguments[ 0 ] <<= aPathArgument;
     Reference< lang::XMultiServiceFactory > xConfProv = configuration::theDefaultProvider::get( mxContext );
 
-    // try to get read-write access to configuration:
+    
     Reference< XInterface > xConfigurationAccess;
     try
     {
@@ -430,7 +430,7 @@ void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName 
     {
     }
 
-    // fallback: try read-only access to configuration:
+    
     if ( !xConfigurationAccess.is() )
     {
         try
@@ -483,7 +483,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
 */
 void SmartTagMgr::RegisterListener()
 {
-    // register as listener at package manager
+    
     try
     {
         Reference<deployment::XExtensionManager> xExtensionManager(
@@ -497,7 +497,7 @@ void SmartTagMgr::RegisterListener()
     {
     }
 
-    // register as listener at configuration
+    
     try
     {
         Reference<util::XChangesNotifier> xCN( mxConfigurationSettings, UNO_QUERY_THROW );
@@ -526,7 +526,7 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
         {
             const OUString aSmartTagName = xRecognizer->getSmartTagName(j);
 
-            // check if smart tag type has already been processed:
+            
             if ( maSmartTagMap.find( aSmartTagName ) != maSmartTagMap.end() )
                 continue;
 
@@ -540,10 +540,10 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
                     const OUString aSmartTagNameInActionLib = xActionLib->getSmartTagName(l);
                     if ( aSmartTagName.equals( aSmartTagNameInActionLib ) )
                     {
-                        // found actions and recognizer for same smarttag
+                        
                         ActionReference aActionRef( xActionLib, l );
 
-                        // add recognizer/action pair to map
+                        
                         maSmartTagMap.insert( SmartTagMapElement( aSmartTagName, aActionRef ));
 
                         bFound = true;
@@ -553,12 +553,12 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
 
             if ( !bFound )
             {
-                // insert 'empty' action reference if there is no action associated with
-                // the current smart tag type:
+                
+                
                 Reference< smarttags::XSmartTagAction > xActionLib;
                 ActionReference aActionRef( xActionLib, 0 );
 
-                // add recognizer/action pair to map
+                
                 maSmartTagMap.insert( SmartTagMapElement( aSmartTagName, aActionRef ));
             }
         }

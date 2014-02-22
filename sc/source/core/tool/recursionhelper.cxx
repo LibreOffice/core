@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "recursionhelper.hxx"
@@ -31,7 +31,7 @@ ScRecursionHelper::ScRecursionHelper()
 
 void ScRecursionHelper::SetInRecursionReturn( bool b )
 {
-    // Do not use IsInRecursionReturn() here, it decouples iteration.
+    
     if (b && !bInRecursionReturn)
         aInsertPos = aRecursionFormulas.begin();
     bInRecursionReturn = b;
@@ -46,7 +46,7 @@ void ScRecursionHelper::Insert(
 
 void ScRecursionHelper::SetInIterationReturn( bool b )
 {
-    // An iteration return is always coupled to a recursion return.
+    
     SetInRecursionReturn( b);
     bInIterationReturn = b;
 }

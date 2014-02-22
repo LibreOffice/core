@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/i18n/WordType.hpp>
@@ -65,8 +65,8 @@ OutlinerView::~OutlinerView()
 
 void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    // For the first Paint/KeyInput/Drop an emty Outliner is turned into
-    // an Outliner with exactly one paragraph.
+    
+    
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( OUString() );
 
@@ -75,8 +75,8 @@ void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 
 sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
 {
-    // For the first Paint/KeyInput/Drop an emty Outliner is turned into
-    // an Outliner with exactly one paragraph.
+    
+    
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( OUString() );
 
@@ -138,7 +138,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                 }
             }
             break;
-            default:    // is then possibly edited below.
+            default:    
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -186,13 +186,13 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
             {
                 if ( !bReadOnly )
                 {
-                    // Special treatment: hard return at the end of a paragraph,
-                    // which has collapsed subparagraphs.
+                    
+                    
                     Paragraph* pPara = pOwner->pParaList->GetParagraph( aSel.nEndPara );
 
                     if( !aKeyCode.IsShift() )
                     {
-                        // ImpGetCursor again???
+                        
                         if( !bSelection &&
                                 aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                         {
@@ -202,12 +202,12 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                                 pOwner->UndoActionStart( OLUNDO_INSERT );
                                 sal_Int32 nTemp = aSel.nEndPara;
                                 nTemp += nChildren;
-                                nTemp++; // insert above next Non-Child
+                                nTemp++; 
                                 SAL_WARN_IF( nTemp < 0, "editeng", "OutlinerView::PostKeyEvent - overflow");
                                 if (nTemp >= 0)
                                 {
                                     pOwner->Insert( OUString(),nTemp,pPara->GetDepth());
-                                    // Position the cursor
+                                    
                                     ESelection aTmpSel(nTemp,0,nTemp,0);
                                     pEditView->SetSelection( aTmpSel );
                                 }
@@ -226,7 +226,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                         nTemp++;
                         pOwner->Insert( OUString(), nTemp, pPara->GetDepth()+1 );
 
-                        // Position the cursor
+                        
                         ESelection aTmpSel(nTemp,0,nTemp,0);
                         pEditView->SetSelection( aTmpSel );
                         pEditView->ShowCursor( true, true );
@@ -275,7 +275,7 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
             }
             else
             {
-                // Check for hyperlink
+                
                 const SvxFieldItem* pFieldItem = pEditView->GetField( aMousePosWin );
                 if ( pFieldItem && pFieldItem->GetField() && pFieldItem->GetField()->ISA( SvxURLField ) )
                     reTarget = MouseHypertext;
@@ -323,7 +323,7 @@ sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
             sal_Int32 nEndPara = nPara;
             if ( bHasChildren && pOwner->pParaList->HasVisibleChildren(pPara) )
                 nEndPara += pOwner->pParaList->GetChildCount( pPara );
-            // The selection is inverted, so that EditEngine does not scroll
+            
             ESelection aSel(nEndPara, EE_TEXTPOS_ALL, nPara, 0 );
             pEditView->SetSelection( aSel );
         }
@@ -333,7 +333,7 @@ sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         return sal_True;
     }
 
-    // special case for outliner view in impress, check if double click hits the page icon for toggle
+    
     if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW) && (eTarget == MouseText) && (rMEvt.GetClicks() == 2) )
     {
         ESelection aSel( pEditView->GetSelection() );
@@ -401,7 +401,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 
     pEditView->SetAttribs( rAttrs );
 
-    // Update Bullet text
+    
     for( sal_Int32 nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         pOwner->ImplCheckNumBulletItem( nPara );
@@ -423,7 +423,7 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChildre
     ParaRange aParas( aSel.nStartPara, aSel.nEndPara );
     aParas.Adjust();
 
-    // Record the  invisible Children of the last Parents in the selection
+    
     if ( bIncludeHiddenChildren )
     {
         Paragraph* pLast = pOwner->pParaList->GetParagraph( aParas.nEndPara );
@@ -433,7 +433,7 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChildre
     return aParas;
 }
 
-// TODO: Name should be changed!
+
 void OutlinerView::AdjustDepth( short nDX )
 {
     Indent( nDX );
@@ -453,7 +453,7 @@ void OutlinerView::Indent( short nDiff )
     if( bUndo )
         pOwner->UndoActionStart( OLUNDO_DEPTH );
 
-    sal_Int16 nMinDepth = -1;   // Optimization: Not to recalculate to manny parargaphs when not really needed.
+    sal_Int16 nMinDepth = -1;   
 
     ParaRange aSel = ImpGetSelectedParagraphs( sal_True );
     for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
@@ -468,7 +468,7 @@ void OutlinerView::Indent( short nDiff )
             const bool bPage = pPara->HasFlag(PARAFLAG_ISPAGE);
             if( (bPage && (nDiff == +1)) || (!bPage && (nDiff == -1) && (nOldDepth <= 0))  )
             {
-                            // Notify App
+                            
                 pOwner->nDepthChangedHdlPrevDepth = nOldDepth;
                 pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
                 pOwner->pHdlParagraph = pPara;
@@ -488,11 +488,11 @@ void OutlinerView::Indent( short nDiff )
             }
         }
 
-        // do not switch off numeration with tab
+        
         if( (nOldDepth == 0) && (nNewDepth == -1) )
             continue;
 
-        // do not indent if there is no numeration enabled
+        
         if( nOldDepth == -1 )
             continue;
 
@@ -510,10 +510,10 @@ void OutlinerView::Indent( short nDiff )
         {
             if ( ( nPara == aSel.nStartPara ) && aSel.nStartPara && ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ))
             {
-                // Special case: the predecessor of an indented paragraph is
-                // invisible and is now on the same level as the visible
-                // paragraph. In this case, the next visible paragraph is
-                // searched for and fluffed.
+                
+                
+                
+                
 #ifdef DBG_UTIL
                 Paragraph* _pPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
                 DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!");
@@ -522,8 +522,8 @@ void OutlinerView::Indent( short nDiff )
 
                 if( !pPrev->IsVisible() && ( pPrev->GetDepth() == nNewDepth ) )
                 {
-                    // Predecessor is collapsed and is on the same level
-                    // => find next visible paragraph and expand it
+                    
+                    
                     pPrev = pOwner->pParaList->GetParent( pPrev );
                     while( !pPrev->IsVisible() )
                         pPrev = pOwner->pParaList->GetParent( pPrev );
@@ -543,12 +543,12 @@ void OutlinerView::Indent( short nDiff )
             if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
 
-            // Notify App
+            
             pOwner->DepthChangedHdl();
         }
         else
         {
-            // Needs at least a repaint...
+            
             pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
         }
     }
@@ -575,7 +575,7 @@ void OutlinerView::Indent( short nDiff )
 sal_Bool OutlinerView::AdjustHeight( long nDY )
 {
     pEditView->MoveParagraphs( nDY );
-    return sal_True;    // remove return value...
+    return sal_True;    
 }
 
 Rectangle OutlinerView::GetVisArea() const
@@ -623,7 +623,7 @@ void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara
         sal_Bool bDone = bExpand ? pOwner->Expand( pPara ) : pOwner->Collapse( pPara );
         if( bDone )
         {
-            // The line under the paragraph should disappear ...
+            
             pOwner->pEditEngine->QuickMarkToBeRepainted( nPara );
         }
     }
@@ -640,14 +640,14 @@ void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara
 
 void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 {
-    // Like Paste, only EditView::Insert, instead of EditView::Paste.
-    // Actually not quite true that possible indentations must be corrected,
-    // but that comes later by a universal import. The indentation level is
-    // then determined right in the Inserted method.
-    // Possible structure:
-    // pImportInfo with DestPara, DestPos, nFormat, pParaObj...
-    // Possibly problematic:
-    // EditEngine, RTF => Splitting the area, later join together.
+    
+    
+    
+    
+    
+    
+    
+    
 
     if ( ImpCalcSelectedPages( sal_False ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
         return;
@@ -677,7 +677,7 @@ void OutlinerView::Cut()
 
 void OutlinerView::Paste()
 {
-    PasteSpecial(); // HACK(SD does not call PasteSpecial)
+    PasteSpecial(); 
 }
 
 void OutlinerView::PasteSpecial()
@@ -797,7 +797,7 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected )
     sal_Int32 nFirstPage = EE_PARA_MAX_COUNT;
     sal_Int32 nStartPara = aSel.nStartPara;
     if ( !bIncludeFirstSelected )
-        nStartPara++;   // All paragraphs after StartPara will be deleted
+        nStartPara++;   
     for ( sal_Int32 nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
@@ -846,7 +846,7 @@ void OutlinerView::ToggleBullets()
                 nNewDepth = (pOwner->GetDepth(nPara) == -1) ? 0 : -1;
                 if ( nNewDepth == 0 )
                 {
-                    // determine default numbering rule for bullets
+                    
                     const ESelection aSelection(nPara, 0);
                     const SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
                     const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetDefaultItem( EE_PARA_NUMBULLET );
@@ -913,23 +913,23 @@ void OutlinerView::ToggleBulletsNumbering(
         const sal_Int16 nBulletNumberingStatus( pOwner->GetBulletsNumberingStatus( aSel.nStartPara, aSel.nEndPara ) );
         if ( nBulletNumberingStatus != 0 && bHandleBullets )
         {
-            // not all paragraphs have bullets and method called to toggle bullets --> bullets on
+            
             bToggleOn = true;
         }
         else if ( nBulletNumberingStatus != 1 && !bHandleBullets )
         {
-            // not all paragraphs have numbering and method called to toggle numberings --> numberings on
+            
             bToggleOn = true;
         }
     }
     if ( bToggleOn )
     {
-        // apply bullets/numbering for selected paragraphs
+        
         ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle, true );
     }
     else
     {
-        // switch off bullets/numbering for selected paragraphs
+        
         SwitchOffBulletsNumbering( true );
     }
 
@@ -1017,7 +1017,7 @@ void OutlinerView::ApplyBulletsNumbering(
             SfxItemSet aAttrs(rAttrs);
             aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, true));
 
-            // apply new numbering rule
+            
             if ( pNewNumRule )
             {
                 bool bApplyNumRule = false;
@@ -1038,13 +1038,13 @@ void OutlinerView::ApplyBulletsNumbering(
                         if ( bHandleBullets
                              && nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
                         {
-                            // Set to Normal bullet, old bullet type is Numbering bullet.
+                            
                             bApplyNumRule = true;
                         }
                         else if ( !bHandleBullets
                                   && (nNumType == SVX_NUM_BITMAP || nNumType == SVX_NUM_CHAR_SPECIAL))
                         {
-                            // Set to Numbering bullet, old bullet type is Normal bullet.
+                            
                             bApplyNumRule = true;
                         }
                     }
@@ -1054,13 +1054,13 @@ void OutlinerView::ApplyBulletsNumbering(
                 {
                     SvxNumRule aNewRule(*pNewNumRule);
 
-                    // Get old bullet space.
+                    
                     {
                         const SfxPoolItem* pPoolItem=NULL;
                         SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, false, &pPoolItem);
                         if (eState != SFX_ITEM_SET)
                         {
-                            // Use default value when has not contain bullet item.
+                            
                             ESelection aSelection(nPara, 0);
                             SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
                             pPoolItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
@@ -1171,7 +1171,7 @@ void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich
         pEditView->RemoveAttribs( bRemoveParaAttribs, nWhich );
     if ( bRemoveParaAttribs )
     {
-        // Loop through all paragraphs and set indentation and level
+        
         ESelection aSel = pEditView->GetSelection();
         aSel.Adjust();
         for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
@@ -1186,9 +1186,9 @@ void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich
 
 
 
-// ======================================================================
-// ======================   Simple pass-through   =======================
-// ======================================================================
+
+
+
 
 
 void OutlinerView::InsertText( const OUString& rNew, sal_Bool bSelect )
@@ -1443,9 +1443,9 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 }
 
 
-// ======================================================================
-// ===== some code for thesaurus sub menu within context menu
-// ======================================================================
+
+
+
 
 namespace {
 
@@ -1465,14 +1465,14 @@ bool isSingleScriptType( sal_uInt16 nScriptType )
 
 }
 
-// returns: true if a word for thesaurus look-up was found at the current cursor position.
-// The status string will be word + iso language string (e.g. "light#en-US")
+
+
 bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     OUString &rStatusVal,
     LanguageType &rLang,
     const EditView &rEditView )
 {
-    // get text and locale for thesaurus look up
+    
     OUString aText;
     EditEngine *pEditEngine = rEditView.GetEditEngine();
     ESelection aTextSel( rEditView.GetSelection() );
@@ -1487,7 +1487,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
     OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
-    // set word and locale to look up as status value
+    
     rStatusVal  = aText + "#" + aLangText;
     rLang       = nLang;
 
@@ -1497,17 +1497,17 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
 
 void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText )
 {
-    // get selection to use
+    
     ESelection aCurSel( rEditView.GetSelection() );
     if (!rEditView.HasSelection())
     {
-        // select the same word that was used in GetStatusValueForThesaurusFromContext by calling GetWord.
-        // (In the end both functions will call ImpEditEngine::SelectWord)
+        
+        
         rEditView.SelectCurrentWord( i18n::WordType::DICTIONARY_WORD );
         aCurSel = rEditView.GetSelection();
     }
 
-    // replace word ...
+    
     rEditView.InsertText( rSynonmText );
     rEditView.ShowCursor( true, false );
 }

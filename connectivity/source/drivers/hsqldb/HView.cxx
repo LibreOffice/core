@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,10 +34,10 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 
-//........................................................................
+
 namespace connectivity { namespace hsqldb
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -55,10 +55,10 @@ namespace connectivity { namespace hsqldb
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
 
-    //====================================================================
-    //= HView
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rSchemaName, const OUString& _rName )
         :HView_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, OUString() )
@@ -66,37 +66,37 @@ namespace connectivity { namespace hsqldb
     {
     }
 
-    //--------------------------------------------------------------------
+    
     HView::~HView()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( HView, HView_Base, HView_IBASE )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( HView, HView_Base, HView_IBASE )
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL HView::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException)
     {
-        // not really atomic ... as long as we do not have something like
-        //   ALTER VIEW <name> TO <command>
-        // in HSQL, we need to do it this way ...
+        
+        
+        
         //
-        // I can imagine scenarios where this fails, e.g. when dropping the view
-        // succeedes, re-creating it fails, some other thread alters a table which
-        // the view was based on, and then we try to restore the view with the
-        // original command, which then fails, too.
+        
+        
+        
+        
         //
-        // However, there's not much chance to prevent this kind of errors without
-        // backend support.
+        
+        
 
         OUString sQualifiedName( ::dbtools::composeTableName(
             m_xMetaData, m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::eInDataManipulation ) );
 
         ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
 
-        // create a statement which can be used to re-create the original view, in case
-        // dropping it succeeds, but creating it with a new statement fails
+        
+        
         OUStringBuffer aRestoreCommand;
         aRestoreCommand.appendAscii( "CREATE VIEW " );
         aRestoreCommand.append     ( sQualifiedName );
@@ -107,14 +107,14 @@ namespace connectivity { namespace hsqldb
         bool bDropSucceeded( false );
         try
         {
-            // drop the existing view
+            
             OUStringBuffer aCommand;
             aCommand.appendAscii( "DROP VIEW " );
             aCommand.append     ( sQualifiedName );
             xStatement->execute( aCommand.makeStringAndClear() );
             bDropSucceeded = true;
 
-            // create a new one with the same name
+            
             aCommand.appendAscii( "CREATE VIEW " );
             aCommand.append     ( sQualifiedName );
             aCommand.appendAscii( " AS " );
@@ -124,8 +124,8 @@ namespace connectivity { namespace hsqldb
         catch( const SQLException& )
         {
             if ( bDropSucceeded )
-                // drop succeeded, but creation failed -> re-create the view with the original
-                // statemnet
+                
+                
                 xStatement->execute( sRestoreCommand );
             throw;
         }
@@ -143,13 +143,13 @@ namespace connectivity { namespace hsqldb
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL HView::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( _nHandle == PROPERTY_ID_COMMAND )
         {
-            // retrieve the very current command, don't rely on the base classes cached value
-            // (which we initialized empty, anyway)
+            
+            
             _rValue <<= impl_getCommand_throw( false );
             return;
         }
@@ -157,7 +157,7 @@ namespace connectivity { namespace hsqldb
         HView_Base::getFastPropertyValue( _rValue, _nHandle );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString HView::impl_getCommand_throw( bool _bAllowSQLException ) const
     {
         OUString sCommand;
@@ -171,8 +171,8 @@ namespace connectivity { namespace hsqldb
             Reference< XResultSet > xResult( xStatement->executeQuery( aCommand.makeStringAndClear() ), UNO_QUERY_THROW );
             if ( !xResult->next() )
             {
-                // hmm. There is no view view the name as we know it. Can only mean some other instance
-                // dropped this view meanwhile ...
+                
+                
                 throw DisposedException();
             }
 
@@ -194,8 +194,8 @@ namespace connectivity { namespace hsqldb
         return sCommand;
     }
 
-//........................................................................
-} } // namespace connectivity::hsqldb
-//........................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

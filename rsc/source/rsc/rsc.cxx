@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -104,24 +104,24 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         {
             if( !rsc_stricmp( (*ppStr) + 1, "h" )
               || !strcmp( (*ppStr) + 1, "?" ) )
-            { // Write help to standard output
+            { 
                 nCommands |= HELP_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "p" ) )
-            { // No preprocessor
+            { 
                 nCommands |= NOPREPRO_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "s" ) )
-            { // Syntax analysis, creates .srs file
+            { 
                 nCommands |= NOLINK_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "l" ) )
-            { // Linken, keine Syntax und kein Prepro
+            { 
                 nCommands |= NOPREPRO_FLAG;
                 nCommands |= NOSYNTAX_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "r" ) )
-            { // erzeugt kein .res-file
+            { 
                 nCommands |= NORESFILE_FLAG;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "sub", 3 ) )
@@ -136,23 +136,23 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
-            { // Alle Resourcen mit Preload
+            { 
                 nCommands |= PRELOAD_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "LITTLEENDIAN" ) )
-            { // Byte Ordnung beim Schreiben
+            { 
                 nByteOrder = RSC_LITTLEENDIAN;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "BIGENDIAN" ) )
-            { // Byte Ordnung beim Schreiben
+            { 
                 nByteOrder = RSC_BIGENDIAN;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "d", 1 ) )
-            { // Symbole definieren
+            { 
                 nCommands |= DEFINE_FLAG;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
-            { // define include path
+            { 
                 nCommands |= INCLUDE_FLAG;
                 OStringBuffer aBuffer(aPath);
                 if (!aBuffer.isEmpty())
@@ -161,16 +161,16 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 aPath = aBuffer.makeStringAndClear();
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fs=", 3 ) )
-            { // define name of .res file
+            { 
                 if( m_aOutputFiles.back().aOutputRc.getLength() )
                     m_aOutputFiles.push_back( OutputFile() );
                 m_aOutputFiles.back().aOutputRc = (*ppStr) + 4;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lip=", 4 ) )
-            {  // additional language specific include for system dependent files
+            {  
                 const OString aSysSearchDir( (*ppStr)+5 );
 
-                // ignore empty -lip= arguments that we get lots of these days
+                
                 if (!aSysSearchDir.isEmpty())
                 {
                     m_aOutputFiles.back().aSysSearchDirs.push_back(aSysSearchDir);
@@ -185,7 +185,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 }
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
-            { // define name of .srs file
+            { 
                 aOutputSrs = (*ppStr) + 4;
                 bOutputSrsIsSet = true;
             }
@@ -194,11 +194,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 aILDir = (*ppStr) + 5;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "NoSysResTest" ) )
-            { // Bitmap, Pointers, Icons nicht ueberpruefen
+            { 
                 nCommands |= NOSYSRESTEST_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "SrsDefault" ) )
-            { // Only write one language to srs file
+            { 
                 nCommands |= SRSDEFAULT_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
@@ -216,7 +216,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         }
         else
         {
-            // Eingabedatei
+            
             aInputList.push_back( new OString(*ppStr) );
         }
         ppStr++;
@@ -225,7 +225,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 
     if( nCommands & HELP_FLAG )
         pEH->FatalError( ERR_USAGE, RscId() );
-    // was an inputted file specified
+    
     else if( !aInputList.empty() )
     {
         ::std::list<OutputFile>::iterator it;
@@ -250,21 +250,21 @@ RscCmdLine::~RscCmdLine()
 
 OString RscCmdLine::substitutePaths( const OString& rIn )
 {
-    // prepare return value
+    
     OStringBuffer aRet( 256 );
     std::list< std::pair< OString, OString > >::const_iterator last_match = m_aReplacements.end();
 
-    // search for longest replacement match
+    
     for( std::list< std::pair< OString, OString > >::const_iterator repl = m_aReplacements.begin(); repl != m_aReplacements.end(); ++repl )
     {
-        if( rIn.startsWith( repl->second ) ) // path matches
+        if( rIn.startsWith( repl->second ) ) 
         {
             if( last_match == m_aReplacements.end() || last_match->second.getLength() < repl->second.getLength() )
                 last_match = repl;
         }
     }
 
-    // copy replacement found and rest of rIn
+    
     sal_Int32 nIndex = 0;
     if( last_match != m_aReplacements.end() )
     {
@@ -287,7 +287,7 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
     fListing      = NULL;
     fExitFile     = NULL;
 
-    //Set Command Line, set Type Container
+    
     pCL = pLine;
     pTC = pTypCont;
 }
@@ -328,7 +328,7 @@ ERRTYPE RscCompiler::Start()
                 if( !pFName->bScanned && !pFName->IsIncFile() )
                 {
                     aError = IncludeParser( aIndex );
-                    // Currentzeiger richtig setzen
+                    
                     aIndex = pTC->aFileTab.GetIndexOf( pFName );
                 };
                 aIndex = pTC->aFileTab.NextIndex( aIndex );
@@ -372,8 +372,8 @@ void RscCompiler::EndCompile()
         pTC->pEH->StdOut( pCL->aOutputSrs.getStr(), RscVerbosityVerbose );
         pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputSrs.getStr() );   // Zieldatei loeschen
+        
+        unlink( pCL->aOutputSrs.getStr() );   
         if( !(pCL->nCommands & NOSYNTAX_FLAG) )
         {
             FILE        * foutput;
@@ -383,7 +383,7 @@ void RscCompiler::EndCompile()
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputSrs.getStr() );
             else
             {
-                // Schreibe Datei
+                
                 sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
                 while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
                 {
@@ -391,7 +391,7 @@ void RscCompiler::EndCompile()
                     if( !pFN->IsIncFile() )
                     {
                         pTC->WriteSrc( foutput, NOFILE_INDEX, false );
-                        break; // ?T 281091MM nur eine Src-Datei
+                        break; 
                     }
                 };
 
@@ -427,7 +427,7 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
             ::IncludeParser( &aFileInst );
             fclose( finput );
 
-            // Include-Pfad durchsuchen
+            
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
                 RscDepend       * pDep = pFName->aDepLst[ i ];
@@ -438,7 +438,7 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
             {
                 RscDepend       * pDep = pFName->aDepLst[ i ];
                 RscFile         * pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
-                // Kein Pfad und Include Datei
+                
                 if( pFNTmp && !pFNTmp->bLoaded )
                 {
                    pFNTmp->aPathName = pFNTmp->aFileName;
@@ -465,8 +465,8 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
     {
         RscDepend * pDep;
 
-        //Include-Dateien vorher lesen
-        pFName->bLoaded = true; //Endlos Rekursion vermeiden
+        
+        pFName->bLoaded = true; 
 
         for ( size_t i = 0; i < pFName->aDepLst.size() && aError.IsOk(); ++i )
         {
@@ -475,7 +475,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
         }
 
         if( aError.IsError() )
-            pFName->bLoaded = false; //bei Fehler nicht geladenen
+            pFName->bLoaded = false; 
         else
         {
             OUString aTmpPath;
@@ -508,7 +508,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
 
                 aError = ::parser( &aFileInst );
                 if( aError.IsError() )
-                    pTC->Delete( lFileKey );//Resourceobjekte loeschen
+                    pTC->Delete( lFileKey );
                 pTC->pEH->StdOut( "\n", RscVerbosityVerbose );
                 fclose( finput );
             };
@@ -546,7 +546,7 @@ namespace
 
     static inline OString lcl_getTempFile(OUString& sTempDirUrl)
     {
-        // get a temp file name for the rc file
+        
         OUString sTempUrl;
         if(FileBase::createTempFile(&sTempDirUrl, NULL, &sTempUrl) != FileBase::E_None)
             throw RscIoError();
@@ -567,7 +567,7 @@ ERRTYPE RscCompiler::Link()
 
         for( it = pCL->m_aOutputFiles.begin(); it != pCL->m_aOutputFiles.end(); ++it )
         {
-            // cleanup nodes
+            
             for( sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
                  aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk();
                  aIndex = pTC->aFileTab.NextIndex( aIndex ) )
@@ -582,14 +582,14 @@ ERRTYPE RscCompiler::Link()
             }
 
 
-            // get two temp file urls
+            
             OString aRcTmp, aSysListTmp, aSysList;
             try
             {
                 OUString sPwdUrl;
                 osl_getProcessWorkingDir( &sPwdUrl.pData );
                 OUString sRcUrl = lcl_getAbsoluteUrl(sPwdUrl, it->aOutputRc);
-                // TempDir is either the directory where the rc file is located or pwd
+                
                 OUString sTempDirUrl = sRcUrl.copy(0,sRcUrl.lastIndexOf('/'));
                 OSL_TRACE("rc directory URL: %s", OUStringToOString(sTempDirUrl, RTL_TEXTENCODING_UTF8).getStr());
 
@@ -626,7 +626,7 @@ ERRTYPE RscCompiler::Link()
             if ( NULL == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
-            // Schreibe Datei
+            
             sal_Char cSearchDelim = SAL_PATHSEPARATOR;
             sal_Char cAccessDelim = SAL_PATHDELIMITER;
             pTC->ChangeLanguage( it->aLangName );
@@ -657,7 +657,7 @@ ERRTYPE RscCompiler::Link()
             aContext.aOutputSysList = aSysListTmp;
             aContext.pCmdLine = pCL;
 
-            // create empty sys list
+            
             if( !aContext.aOutputSysList.isEmpty() )
             {
                 FILE* pSysListFile = fopen( aContext.aOutputSysList.getStr(), "wb" );
@@ -668,7 +668,7 @@ ERRTYPE RscCompiler::Link()
                     fclose( pSysListFile );
             }
 
-            // parse files for specific language
+            
             for( sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
                  aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk();
                  aIndex = pTC->aFileTab.NextIndex( aIndex ) )
@@ -720,7 +720,7 @@ ERRTYPE RscCompiler::Link()
     }
     else
     {
-        // parse files
+        
         for( sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
              aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk();
              aIndex = pTC->aFileTab.NextIndex( aIndex ) )
@@ -882,7 +882,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     }
                     while (aLine.indexOf("IdList") == -1);
 
-                    // scan all ids and collect images
+                    
                     while (aLine.indexOf('}') == -1)
                     {
                         if( !aIStm.ReadLine(aLine) )

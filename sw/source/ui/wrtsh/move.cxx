@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/bindings.hxx>
@@ -53,8 +53,8 @@ public:
     {
         if( bAct )
         {
-            // The action is used for scrolling in "single paragraph"
-            // frames with fixed height.
+            
+            
             pSh->StartAllAction();
             pSh->EndAllAction();
         }
@@ -208,7 +208,7 @@ sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
             else
                 SttSelect();
         }
-            // Table cell ?
+            
         if ( !bBoxSelection && (MoveSection( fnSectionCurr, fnSectionStart)
                 || bDontMoveRegion))
         {
@@ -224,11 +224,11 @@ sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
         }
         else if( bBoxSelection && pMoveTable )
         {
-            // JP 09.01.96: We have a box selection (or a empty cell)
-            //              and we want select (pMoveTable will be
-            //              set in SelAll). Then the table must not
-            //              be left, otherwise there is no selection
-            //              of the entire table possible!
+            
+            
+            
+            
+            
             *pMoveTable = sal_True;
             return sal_True;
         }
@@ -256,7 +256,7 @@ sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
         else if ( bKeepArea )
             return sal_True;
     }
-    // Regions ???
+    
     return SwCrsrShell::MoveRegion( fnRegionCurrAndSkip, fnRegionStart ) ||
            SwCrsrShell::SttEndDoc(sal_True);
 }
@@ -290,7 +290,7 @@ sal_Bool SwWrtShell::GoEnd(sal_Bool bKeepArea, sal_Bool *pMoveTable)
                 return sal_True;
         }
     }
-    // Regions ???
+    
     return SwCrsrShell::MoveRegion( fnRegionCurrAndSkip, fnRegionEnd ) ||
            SwCrsrShell::SttEndDoc(sal_False);
 }
@@ -355,9 +355,9 @@ sal_Bool SwWrtShell::EndPara( sal_Bool bSelect )
     return MovePara(fnParaCurr,fnParaEnd);
 }
 
-// Column-by-jumping.
-// SSelection with or without
-// returns success or failure
+
+
+
 
 sal_Bool SwWrtShell::StartOfColumn( sal_Bool bSelect )
 {
@@ -400,15 +400,15 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
     sal_Bool bDiff = sal_False;
     SwRect aOldRect( GetCharRect() ), aTmpArea( VisArea() );
 
-    // bDestOnStack indicates if I could not set the coursor at the current
-    // position, because in this region is no content.
+    
+    
     if( !bDestOnStack )
     {
         Point aPt( aOldRect.Center() );
 
         if( !IsCrsrVisible() )
-            // set CrsrPos to top-/bottom left pos. So the pagescroll is not
-            // be dependent on the current cursor, but on the visarea.
+            
+            
             aPt.Y() = aTmpArea.Top() + aTmpArea.Height() / 2;
 
         aPt.Y() += lOffset;
@@ -417,15 +417,15 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
         bDestOnStack = true;
     }
 
-    // If we had a frame selection, it must be removed after the fnSetCrsr
-    // and we have to remember the position on the stack to return to it later.
+    
+    
     sal_Bool bIsFrmSel = sal_False;
 
 
-    //Target position is now within the viewable region -->
-    //Place the cursor at the target position; remember that no target
-    //position is longer on the stack.
-    //The new visible region is to be determined beforehand.
+    
+    
+    
+    
     aTmpArea.Pos().Y() += lOffset;
     if( aTmpArea.IsInside(aDest) )
     {
@@ -437,7 +437,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
         bIsFrmSel = IsFrmSelected();
         bool bIsObjSel = 0 != IsObjSelected();
 
-        // unselect frame
+        
         if( bIsFrmSel || bIsObjSel )
         {
             UnSelectFrm();
@@ -457,17 +457,17 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
 
         if( bIsFrmSel )
         {
-            // In frames take only the upper corner
-            // so that it can be re-selected.
+            
+            
             aOldRect.SSize( 5, 5 );
         }
 
-            // reset Dest. SPoint Flags
+            
         bDestOnStack = false;
     }
 
-    // Position into the stack; bDiff indicates if there is a
-    // difference between the old and the new cursor position.
+    
+    
     pCrsrStack = new CrsrStack( bDiff, bIsFrmSel, aOldRect.Center(),
                                 lOffset, pCrsrStack );
     return !bDestOnStack && bDiff;
@@ -483,8 +483,8 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
     const sal_Bool bValidPos = pCrsrStack->bValidCurPos;
     if( bUpdate && bValidPos )
     {
-            // If a predecessor is on the stack,
-            // use the flag for a valid position.
+            
+            
         SwRect aTmpArea(VisArea());
         aTmpArea.Pos().Y() -= pCrsrStack->lOffset;
         if( aTmpArea.IsInside( pCrsrStack->aDocPos ) )
@@ -502,9 +502,9 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
                 EnterSelFrmMode( &pCrsrStack->aDocPos );
             }
         }
-            // If a discrepancy between the visible range and the
-            // remembered cursor position occurs, all of the remembered
-            // positions are thrown away.
+            
+            
+            
         else
         {
             _ResetCursorStack();
@@ -522,8 +522,8 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
     return bValidPos;
 }
 
-// Reset of all pushed cursor positions; these will
-// not be displayed ( --> No Start-/EndAction!!)
+
+
 
 void SwWrtShell::_ResetCursorStack()
 {
@@ -550,20 +550,20 @@ void SwWrtShell::_ResetCursorStack()
 
 sal_Bool SwWrtShell::PageCrsr(SwTwips lOffset, sal_Bool bSelect)
 {
-    // Do nothing if an offset of 0 was indicated
+    
     if(!lOffset) return sal_False;
-        // Was once used to force a reformat of the layout.
-        // This has not work that way, because the cursor was not set
-        // because this does not happen within a
-        // Start-/EndActionParentheses.
-        // Because only SwViewShell::EndAction() is called at the end,
-        // no updating of the display of the cursor position takes place.
-        // The CrsrShell-Actionparentheses cannot be used, because it
-        // always leads to displaying the cursor, thus also,
-        // if after the scroll scrolled in a region without a valid postition.
-        // SwViewShell::StartAction();
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     PageMove eDir = lOffset > 0? MV_PAGE_DOWN: MV_PAGE_UP;
-        // Change of direction and stack present
+        
     if( eDir != ePageMove && ePageMove != MV_NO && PopCrsr( sal_True, bSelect ))
         return sal_True;
 

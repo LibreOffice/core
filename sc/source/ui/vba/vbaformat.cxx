@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaformat.hxx"
 #include <ooo/vba/excel/XStyle.hpp>
@@ -56,8 +56,8 @@ ScVbaFormat< Ifc1 >::ScVbaFormat( const uno::Reference< XHelperInterface >& xPar
     {
         if ( !mxModel.is() )
             DebugHelper::exception(SbERR_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
-        // mxServiceInfo is unused,
-        // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
+        
+        
     }
     catch (const uno::Exception& )
     {
@@ -168,8 +168,8 @@ ScVbaFormat<Ifc1>::setHorizontalAlignment( const uno::Any& HorizontalAlignment )
                 aVal = uno::makeAny( table::CellHoriJustify_RIGHT);
                 break;
         }
-        // #FIXME what about the default case above?
-        // shouldn't need the test below
+        
+        
         if ( aVal.hasValue() )
             mxPropertySet->setPropertyValue( OUString( SC_UNONAME_CELLHJUS ), aVal );
     }
@@ -208,7 +208,7 @@ ScVbaFormat<Ifc1>::getHorizontalAlignment(  ) throw (script::BasicErrorException
                     case table::CellHoriJustify_RIGHT:
                         NRetAlignment =  uno::makeAny( excel::XlHAlign::xlHAlignRight );
                         break;
-                     default: // handle those other cases with a NULL return
+                     default: 
                         break;
                 }
             }
@@ -247,8 +247,8 @@ ScVbaFormat<Ifc1>::setOrientation( const uno::Any& _aOrientation ) throw (script
                 aVal = uno::makeAny( table::CellOrientation_STACKED);
                 break;
         }
-        // #FIXME what about the default case above?
-        // shouldn't need the test below
+        
+        
         if ( aVal.hasValue() )
             mxPropertySet->setPropertyValue( OUString( SC_UNONAME_CELLORI ), aVal );
 
@@ -559,7 +559,7 @@ ScVbaFormat<Ifc1>::getLocked(  ) throw (script::BasicErrorException, uno::Runtim
                 if(eState != SFX_ITEM_DONTCARE)
                     aCellProtection =  uno::makeAny(rProtAttr.GetProtection());
             }
-            else // fallback to propertyset
+            else 
             {
                 util::CellProtection cellProtection;
                 mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
@@ -757,7 +757,7 @@ ScVbaFormat<Ifc1>::initializeNumberFormats() throw ( script::BasicErrorException
     {
         mxNumberFormatsSupplier.set( mxModel, uno::UNO_QUERY_THROW );
         xNumberFormats = mxNumberFormatsSupplier->getNumberFormats();
-        xNumberFormatTypes.set( xNumberFormats, uno::UNO_QUERY ); // _THROW?
+        xNumberFormatTypes.set( xNumberFormats, uno::UNO_QUERY ); 
     }
 }
 

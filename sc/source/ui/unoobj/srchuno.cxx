@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -34,11 +34,11 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
-//! SearchWords sucht in ganzen Zellen - umbenennen ???
 
-//  SfxItemPropertyMapEntry nur fuer GetPropertySetInfo
+
+
+
 
 static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
@@ -54,29 +54,29 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
         {OUString(SC_UNO_SRCHSIMREL),   0,      getBooleanCppuType(),       0, 0},
         {OUString(SC_UNO_SRCHSIMREM),   0,      getCppuType((sal_Int16*)0), 0, 0},
         {OUString(SC_UNO_SRCHSTYLES),   0,      getBooleanCppuType(),       0, 0},
-        {OUString(SC_UNO_SRCHTYPE),     0,      getCppuType((sal_Int16*)0), 0, 0}, // enum TableSearch ist weg
+        {OUString(SC_UNO_SRCHTYPE),     0,      getCppuType((sal_Int16*)0), 0, 0}, 
         {OUString(SC_UNO_SRCHWORDS),    0,      getBooleanCppuType(),       0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aSearchPropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 #define SCSEARCHDESCRIPTOR_SERVICE      "com.sun.star.util.SearchDescriptor"
 #define SCREPLACEDESCRIPTOR_SERVICE     "com.sun.star.util.ReplaceDescriptor"
 
-//------------------------------------------------------------------------
+
 
 ScCellSearchObj::ScCellSearchObj() :
     aPropSet(lcl_GetSearchPropertyMap())
 {
     pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
-    //  Defaults:
+    
     pSearchItem->SetWordOnly(false);
     pSearchItem->SetExact(false);
     pSearchItem->SetMatchFullHalfWidthForms(false);
-    pSearchItem->SetUseAsianOptions(false);     // or all asian bits would have to be handled
+    pSearchItem->SetUseAsianOptions(false);     
     pSearchItem->SetBackward(false);
     pSearchItem->SetSelection(false);
     pSearchItem->SetRegExp(false);
@@ -86,11 +86,11 @@ ScCellSearchObj::ScCellSearchObj() :
     pSearchItem->SetLEVOther(2);
     pSearchItem->SetLEVShorter(2);
     pSearchItem->SetLEVLonger(2);
-    //  Calc-Flags
+    
     pSearchItem->SetRowDirection(false);
     pSearchItem->SetCellType(SVX_SEARCHIN_FORMULA);
 
-    //  Selection-Flag wird beim Aufruf gesetzt
+    
 }
 
 ScCellSearchObj::~ScCellSearchObj()
@@ -98,7 +98,7 @@ ScCellSearchObj::~ScCellSearchObj()
     delete pSearchItem;
 }
 
-// XSearchDescriptor
+
 
 OUString SAL_CALL ScCellSearchObj::getSearchString() throw(uno::RuntimeException)
 {
@@ -113,7 +113,7 @@ void SAL_CALL ScCellSearchObj::setSearchString( const OUString& aString )
     pSearchItem->SetSearchString( aString );
 }
 
-// XReplaceDescriptor
+
 
 OUString SAL_CALL ScCellSearchObj::getReplaceString() throw(uno::RuntimeException)
 {
@@ -128,7 +128,7 @@ void SAL_CALL ScCellSearchObj::setReplaceString( const OUString& aReplaceString 
     pSearchItem->SetReplaceString( aReplaceString );
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -190,7 +190,7 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyNa
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
-// XServiceInfo
+
 
 OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeException)
 {
@@ -213,7 +213,7 @@ uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
     return aRet;
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -248,7 +248,7 @@ ScCellSearchObj* ScCellSearchObj::getImplementation(
 }
 
 
-//------------------------------------------------------------------------
+
 
 
 

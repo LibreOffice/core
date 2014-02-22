@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -74,7 +74,7 @@ const int TRANSFER_BUFFER_SIZE = 65536;
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-result.h>
 #include <libgnomevfs/gnome-vfs-standard-callbacks.h>
-extern "C" { // missing in the header: doh.
+extern "C" { 
 #  include <libgnomevfs/gnome-vfs-module-callback.h>
 }
 
@@ -136,20 +136,20 @@ Content::Content(
 #if OSL_DEBUG_LEVEL > 1
     g_warning ("New Transient content ('%s') (%d)", getURI(), IsFolder);
 #endif
-//  m_info.name = FIXME: set name ?
+
     m_info.valid_fields = GNOME_VFS_FILE_INFO_FIELDS_TYPE;
     m_info.type = IsFolder ? GNOME_VFS_FILE_TYPE_DIRECTORY :
                          GNOME_VFS_FILE_TYPE_REGULAR;
 }
 
-// virtual
+
 Content::~Content()
 {
     gnome_vfs_file_info_clear( &m_info );
 }
 
 //
-// XInterface methods.
+
 //
 
 void SAL_CALL Content::acquire()
@@ -165,8 +165,8 @@ void SAL_CALL Content::release()
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
 {
-    // Note: isFolder may require network activities! So call it only
-    //       if it is really necessary!!!
+    
+    
     uno::Any aRet = cppu::queryInterface( rType,
                         static_cast< ucb::XContentCreator * >( this ) );
     if ( aRet.hasValue() )
@@ -177,7 +177,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 }
 
 //
-// XTypeProvider methods.
+
 //
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
@@ -203,7 +203,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                  CPPU_TYPE_REF( beans::XPropertyContainer ),
                  CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                  CPPU_TYPE_REF( container::XChild ),
-                 CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
+                 CPPU_TYPE_REF( ucb::XContentCreator ) ); 
             static cppu::OTypeCollection aFileCollection
                 (CPPU_TYPE_REF( lang::XTypeProvider ),
                  CPPU_TYPE_REF( lang::XServiceInfo ),
@@ -232,7 +232,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 }
 
 //
-// XServiceInfo methods.
+
 //
 
 OUString SAL_CALL Content::getImplementationName()
@@ -250,7 +250,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 }
 
 //
-// XContent methods.
+
 //
 
 OUString SAL_CALL Content::getContentType()
@@ -263,7 +263,7 @@ OUString SAL_CALL Content::getContentType()
 }
 
 //
-// XCommandProcessor methods.
+
 //
 
 uno::Any Content::getBadArgExcept()
@@ -352,9 +352,9 @@ uno::Any SAL_CALL Content::execute(
                       xEnv );
             }
             if ( !feedSink( aOpenCommand.Sink, xEnv ) ) {
-                // Note: aOpenCommand.Sink may contain an XStream
-                //       implementation. Support for this type of
-                //       sink is optional...
+                
+                
+                
 #ifdef DEBUG
                 g_warning ("Failed to load data from '%s'", getURI());
 #endif
@@ -406,7 +406,7 @@ uno::Any SAL_CALL Content::execute(
 
         transfer( transferArgs, xEnv );
 
-    } else { // Unsuported
+    } else { 
 #ifdef DEBUG
         g_warning( "Unsupported command: '%s'",
                OUStringToGnome( aCommand.Name ) );
@@ -425,11 +425,11 @@ uno::Any SAL_CALL Content::execute(
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
-    // FIXME: we should use the GnomeVFSCancellation APIs here ...
+    
 }
 
 //
-// XContentCreator methods.
+
 //
 
 uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
@@ -440,7 +440,7 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
     {
         uno::Sequence< ucb::ContentInfo > seq(2);
 
-        // Minimum set of props we really need
+        
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
             OUString("Title"),
@@ -448,13 +448,13 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
             getCppuType( static_cast< OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
-        // file
+        
         seq[0].Type       = OUString( GVFS_FILE_TYPE );
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
-        // folder
+        
         seq[1].Type       = OUString( GVFS_FOLDER_TYPE );
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
@@ -502,7 +502,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         aURL += "/";
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
-    // This looks problematic to me cf. webdav
+    
     aURL += OUString::createFromAscii( name );
 
     uno::Reference< ucb::XContentIdentifier > xId
@@ -518,18 +518,18 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 OUString Content::getParentURL()
 {
     OUString aParentURL;
-    // <scheme>://              -> ""
-    // <scheme>://foo           -> ""
-    // <scheme>://foo/          -> ""
-    // <scheme>://foo/bar       -> <scheme>://foo/
-    // <scheme>://foo/bar/      -> <scheme>://foo/
-    // <scheme>://foo/bar/abc   -> <scheme>://foo/bar/
+    
+    
+    
+    
+    
+    
 
     OUString aURL = getOUURI();
 
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
     if ( nPos == ( aURL.getLength() - 1 ) ) {
-        // Trailing slash found. Skip.
+        
         nPos = aURL.lastIndexOf( '/', nPos );
     }
 
@@ -667,7 +667,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
 
         else if ( rProp.Name == "MediaType" ) {
-            // We do this by sniffing in gnome-vfs; rather expensively.
+            
 #ifdef DEBUG
             g_warning ("FIXME: Requested mime-type - an expensive op. indeed!");
 #endif
@@ -709,7 +709,7 @@ Content::makeNewURL( const char */*newName*/ )
     return aNewURL;
 }
 
-// This is slightly complicated by needing to support either 'move' or 'setname'
+
 GnomeVFSResult
 Content::doSetFileInfo( const GnomeVFSFileInfo *newInfo,
             GnomeVFSSetFileInfoMask setMask,
@@ -723,14 +723,14 @@ Content::doSetFileInfo( const GnomeVFSFileInfo *newInfo,
 
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    // The simple approach:
+    
     if( setMask != GNOME_VFS_SET_FILE_INFO_NONE )
-        result = gnome_vfs_set_file_info // missed a const in the API there
+        result = gnome_vfs_set_file_info 
             ( aURI.getStr(), (GnomeVFSFileInfo *)newInfo, setMask );
 
     if ( result == GNOME_VFS_ERROR_NOT_SUPPORTED &&
          ( setMask & GNOME_VFS_SET_FILE_INFO_NAME ) ) {
-        // Try a move instead
+        
 #ifdef DEBUG
         g_warning( "SetFileInfo not supported on '%s'", getURI() );
 #endif
@@ -770,9 +770,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
     aEvent.PropertyHandle = -1;
-    // aEvent.PropertyName = fill in later ...
-    // aEvent.OldValue     =
-    // aEvent.NewValue     =
+    
+    
+    
 
     int nCount = rValues.getLength();
     const beans::PropertyValue* pValues = rValues.getConstArray();
@@ -813,7 +813,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                         newInfo.name = newName;
                         setMask |= GNOME_VFS_SET_FILE_INFO_NAME;
-                    } else // same name
+                    } else 
                         g_free (newName);
                 }
             } else
@@ -822,7 +822,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                       static_cast< cppu::OWeakObject * >( this ) );
 
         } else if ( rValue.Name == "DateCreated" || rValue.Name == "DateModified" ) {
-            // FIXME: should be able to set the timestamps
+            
             aRet[ n ] <<= getReadOnlyException( this );
         } else {
 #ifdef DEBUG
@@ -871,9 +871,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    // Obtain a list with a snapshot of all currently instanciated contents
-    // from provider and extract the contents which are direct children
-    // of this content.
+    
+    
+    
 
     ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
@@ -894,7 +894,7 @@ void Content::queryChildren( ContentRefList& rChildren )
         OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
-        // Is aURL a prefix of aChildURL?
+        
         if ( ( aChildURL.getLength() > nLen ) &&
              ( aChildURL.compareTo( aURL, nLen ) == 0 ) ) {
             sal_Int32 nPos = nLen;
@@ -902,7 +902,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
             if ( ( nPos == -1 ) ||
                  ( nPos == ( aChildURL.getLength() - 1 ) ) ) {
-                // No further slashes / only a final slash. It's a child!
+                
                 rChildren.push_back( ::gvfs::Content::ContentRef
                              (static_cast< ::gvfs::Content * >(xChild.get() ) ) );
             }
@@ -925,7 +925,7 @@ void Content::insert(
 #endif
 
     GnomeVFSResult result = getInfo( xEnv );
-    // a racy design indeed.
+    
     if( !bReplaceExisting && !m_bTransient &&
         result != GNOME_VFS_ERROR_NOT_FOUND) {
 #ifdef DEBUG
@@ -956,7 +956,7 @@ void Content::insert(
     }
 
     if ( !xInputStream.is() ) {
-        // FIXME: slightly unclear whether to accept this and create an empty file
+        
         ucbhelper::cancelCommandExecution
             ( uno::makeAny
               ( ucb::MissingInputStreamException
@@ -993,7 +993,7 @@ void Content::insert(
         if (result != GNOME_VFS_OK)
             cancelCommandExecution( result, xEnv, sal_True );
 
-    } else { // copy it over
+    } else { 
         uno::Reference < io::XOutputStream > xOutput =
             new gvfs::Stream( handle, &m_info );
 
@@ -1011,8 +1011,8 @@ void Content::transfer(const ucb::TransferInfo & /*rArgs*/,
                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    // FIXME: see gnome-vfs-xfer.h - but we need to be able to easily
-    // detect which are gnome-vfs owned URI types ...
+    
+    
     ucbhelper::cancelCommandExecution
         ( uno::makeAny
             ( ucb::InteractiveBadTransferURLException
@@ -1024,14 +1024,14 @@ void Content::transfer(const ucb::TransferInfo & /*rArgs*/,
 void Content::destroy( sal_Bool bDeletePhysical )
     throw( uno::Exception )
 {
-    // @@@ take care about bDeletePhysical -> trashcan support
+    
     uno::Reference< ucb::XContent > xThis = this;
 
     deleted();
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    // Process instanciated children...
+    
     ::gvfs::Content::ContentRefList aChildren;
     queryChildren( aChildren );
 
@@ -1044,8 +1044,8 @@ void Content::destroy( sal_Bool bDeletePhysical )
     }
 }
 
-// Used by the 'setPropertyValues' method for
-// propagating the renaming of a Content.
+
+
 sal_Bool Content::exchangeIdentity(
     const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -1069,10 +1069,10 @@ sal_Bool Content::exchangeIdentity(
 
     OUString aOldURL = getOUURI();
 
-    // Exchange own identitity.
+    
     if ( exchange( xNewId ) ) {
 
-        // Process instanciated children...
+        
         ContentRefList aChildren;
         queryChildren( aChildren );
 
@@ -1082,7 +1082,7 @@ sal_Bool Content::exchangeIdentity(
         while ( it != end ) {
             ContentRef xChild = (*it);
 
-            // Create new content identifier for the child...
+            
             uno::Reference< ucb::XContentIdentifier >
                 xOldChildId = xChild->getIdentifier();
             OUString aOldChildURL
@@ -1293,7 +1293,7 @@ void Content::cancelCommandExecution(
     throw ( uno::Exception )
 {
     ucbhelper::cancelCommandExecution( mapVFSException( result, bWrite ), xEnv );
-    // Unreachable
+    
 }
 
 uno::Sequence< beans::Property > Content::getProperties(
@@ -1312,17 +1312,17 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::Property( OUString(  "Title"  ),
                  -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                  beans::PropertyAttribute::BOUND ),
-        // Optional ...
+        
         beans::Property( OUString(  "DateCreated"  ),
                  -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( OUString(  "DateModified"  ),
                  -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-// FIXME: Too expensive for now (?)
-//                beans::Property( OUString(  "MediaType"  ),
-//                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
-//                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+
+
+
+
                 beans::Property( OUString(  "Size"  ),
                  -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
@@ -1353,7 +1353,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     static const ucb::CommandInfo aCommandInfoTable[] = {
-        // Required commands
+        
         ucb::CommandInfo
         ( OUString(  "getCommandInfo"  ),
           -1, getCppuVoidType() ),
@@ -1367,7 +1367,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         ( OUString(  "setPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
-        // Optional standard commands
+        
         ucb::CommandInfo
         ( OUString(  "delete"  ),
           -1, getCppuBooleanType() ),
@@ -1378,7 +1378,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         ( OUString(  "open"  ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
-        // Folder Only, omitted if not a folder
+        
         ucb::CommandInfo
         ( OUString(  "transfer"  ),
           -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
@@ -1426,7 +1426,7 @@ Content::copyData( uno::Reference< io::XInputStream > xIn,
     xOut->closeOutput();
 }
 
-// Inherits an authentication context
+
 uno::Reference< io::XInputStream >
 Content::createTempStream(
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1437,7 +1437,7 @@ Content::createTempStream(
     OString aURI = getOURI();
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    // Something badly wrong happened - can't seek => stream to a temporary file
+    
     uno::Reference < io::XOutputStream > xTempOut =
         uno::Reference < io::XOutputStream >
             ( io::TempFile::create( m_xContext ), uno::UNO_QUERY );
@@ -1485,7 +1485,7 @@ Content::createInputStream(
     if (result != GNOME_VFS_OK)
         cancelCommandExecution( result, xEnv );
 
-    // Try a seek just to make sure it's Random access: some lie.
+    
     result = gnome_vfs_seek( handle, GNOME_VFS_SEEK_START, 0);
     if (result == GNOME_VFS_ERROR_NOT_SUPPORTED) {
         gnome_vfs_close( handle );
@@ -1585,7 +1585,7 @@ extern "C" {
             if (aDomain.isEmpty())
                 aDomain = GnomeToOUString( in->default_domain );
         }
-        else // no underlying capability to display realm otherwise
+        else 
             eDomain = ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
 
         aUserName = GnomeToOUString( in->username );
@@ -1597,15 +1597,15 @@ extern "C" {
                     ucbhelper::SimpleAuthenticationRequest::ENTITY_FIXED :
                     ucbhelper::SimpleAuthenticationRequest::ENTITY_NA);
 
-        // No suggested password.
+        
         ePassword = (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_PASSWORD) ?
             ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY :
             ucbhelper::SimpleAuthenticationRequest::ENTITY_FIXED;
 
-        // Really, really bad things happen if we don't provide
-        // the same user/password as was entered last time if
-        // we failed to authenticate - infinite looping / flickering
-        // madness etc. [ nice infrastructure ! ]
+        
+        
+        
+        
         static OUString aLastUserName, aLastPassword;
         if (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_PREVIOUS_ATTEMPT_FAILED)
         {
@@ -1626,7 +1626,7 @@ extern "C" {
             = xRequest->getSelection();
 
         if ( xSelection.is() ) {
-            // Handler handled the request.
+            
             uno::Reference< task::XInteractionAbort > xAbort(xSelection.get(), uno::UNO_QUERY );
             if ( !xAbort.is() ) {
                 const rtl::Reference<
@@ -1696,14 +1696,14 @@ extern "C" {
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         GnomeVFSModuleCallbackFullAuthenticationOut mapped_out = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        // Map the old style input auth. data to the new style structure.
+        
         if (in->previous_attempt_failed)
             mapped_in.flags = (GnomeVFSModuleCallbackFullAuthenticationFlags)
                 (mapped_in.flags |
                  GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_PREVIOUS_ATTEMPT_FAILED);
 
         GnomeVFSURI *pURI = NULL;
-        // Urk - parse all this from the URL ...
+        
         mapped_in.uri = in->uri;
         if (in->uri)
         {
@@ -1726,7 +1726,7 @@ extern "C" {
         if (pURI)
             gnome_vfs_uri_unref (pURI);
 
-        // Map the new style auth. out data to the old style out structure.
+        
         out->username = mapped_out.username;
         out->password = mapped_out.password;
         g_free (mapped_out.domain);
@@ -1742,8 +1742,8 @@ extern "C" {
             xIH->release();
     }
 
-    // This sucks, but gnome-vfs doesn't much like
-    // repeated set / unsets - so we have to compensate.
+    
+    
     GPrivate *auth_queue = NULL;
 
     void auth_queue_destroy( gpointer data )

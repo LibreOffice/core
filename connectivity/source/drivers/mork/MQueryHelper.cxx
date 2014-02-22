@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,8 +68,8 @@ OUString MQueryHelperResultEntry::getValue( const OString &key ) const
 
 void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rValue)
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::setValue()" );
-//    SAL_INFO("connectivity.mork", "key: " << &key << " value: " << &rValue);
+
+
 
     m_Fields[ key ] = rValue;
 }
@@ -92,7 +92,7 @@ MQueryHelper::~MQueryHelper()
     OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
 
-// -------------------------------------------------------------------------
+
 void MQueryHelper::setAddressbook(OUString &ab)
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::setAddressbook()");
@@ -103,7 +103,7 @@ void MQueryHelper::setAddressbook(OUString &ab)
 
     OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
-// -------------------------------------------------------------------------
+
 void MQueryHelper::setExpression( MQueryExpression &_expr )
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::setExpression()");
@@ -117,7 +117,7 @@ void MQueryHelper::setExpression( MQueryExpression &_expr )
 
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::append()");
+
 
     if ( resEnt != NULL ) {
         m_aResults.push_back( resEnt );
@@ -147,8 +147,8 @@ void MQueryHelper::reset()
 MQueryHelperResultEntry*
 MQueryHelper::getByIndex(sal_uInt32 nRow)
 {
-    // Row numbers are from 1 to N, need to ensure this, and then
-    // substract 1
+    
+    
     if ( nRow < 1 ) {
         return( NULL );
     }
@@ -157,14 +157,14 @@ MQueryHelper::getByIndex(sal_uInt32 nRow)
 
 sal_Int32 MQueryHelper::getResultCount() const
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::getResultCount()" );
+
     sal_Int32 result = static_cast<sal_Int32>(m_aResults.size());
-//    SAL_INFO("connectivity.mork", "result: " << result);
+
 
     return result;
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Bool MQueryHelper::queryComplete() const
 {
@@ -221,11 +221,11 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     bool handleListTable = false;
     MorkParser* xMork = xConnection->getMorkParser(oStringTable);
 
-    // check if we are retrieving the default table
+    
     if (oStringTable != "AddressBook" && oStringTable != "CollectedAddressBook")
     {
         handleListTable = true;
-        // retrieve row ids for that list table
+        
         std::string listTable = oStringTable.getStr();
         xMork->getRecordKeysForListTable(listTable, listRecords);
     }
@@ -234,25 +234,25 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     MorkRowMap *Rows = 0;
     MorkRowMap::iterator rowIter;
 
-    // Iterate all tables
+    
     for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
     {
         if (tableIter->first != 1) break;
         Rows = xMork->getRows( 0x80, &tableIter->second );
         if ( Rows )
         {
-            // Iterate all rows
+            
             for ( rowIter = Rows->begin(); rowIter != Rows->end(); ++rowIter )
             {
-                // list specific table
-                // only retrieve rowIds that belong to that list table.
+                
+                
                 if (handleListTable)
                 {
                     int rowId = rowIter->first;
-                    // belongs this row id to the list table?
+                    
                     if (listRecords.end() == std::find(listRecords.begin(), listRecords.end(), rowId))
                     {
-                        // no, skip it
+                        
                         continue;
                     }
                 }
@@ -298,7 +298,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     {
         if ( (*evIter)->isStringExpr() ) {
             MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
-            // Set the 'name' property of the boolString.
+            
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
             sal_Bool requiresValue = sal_True;
@@ -350,7 +350,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
         else if ( (*evIter)->isExpr() ) {
             SAL_INFO("connectivity.mork", "Appending Subquery Expression");
             MQueryExpression* queryExpression = static_cast<MQueryExpression*> (*evIter);
-            // recursive call
+            
             ::std::vector<sal_Bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
@@ -370,7 +370,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
             }
         }
         else {
-            // Should never see this...
+            
             SAL_WARN("connectivity.mork", "Unknown Expression Type!");
             _aQuery->getError().setResId(STR_ERROR_GET_ROW);
             return resultVector;

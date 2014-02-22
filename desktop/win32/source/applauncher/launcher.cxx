@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "launcher.hxx"
@@ -40,7 +40,7 @@ extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
-    // Retreive startup info
+    
 
     STARTUPINFO aStartupInfo;
 
@@ -48,7 +48,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     aStartupInfo.cb = sizeof( aStartupInfo );
     GetStartupInfo( &aStartupInfo );
 
-    // Retrieve command line
+    
 
     LPTSTR  lpCommandLine = GetCommandLine();
 
@@ -61,7 +61,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     }
 
 
-    // Calculate application name
+    
 
     TCHAR   szApplicationName[MAX_PATH];
     TCHAR   szDrive[MAX_PATH];
@@ -90,8 +90,8 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     if ( fSuccess )
     {
-        // Wait for soffice process to be terminated to allow other applications
-        // to wait for termination of started process
+        
+        
 
         WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
 
@@ -110,16 +110,16 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,
         dwError,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
         (LPTSTR)&lpMsgBuf,
         0,
         NULL
     );
 
-    // Display the string.
+    
     MessageBox( NULL, (LPCTSTR)lpMsgBuf, NULL, MB_OK | MB_ICONERROR );
 
-    // Free the buffer.
+    
     LocalFree( lpMsgBuf );
 
     return GetLastError();

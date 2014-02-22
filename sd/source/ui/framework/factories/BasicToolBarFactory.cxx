@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,7 +63,7 @@ Sequence<OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (void)
 
 
 
-//===== BasicToolBarFactory ===================================================
+
 
 BasicToolBarFactory::BasicToolBarFactory (
     const Reference<XComponentContext>& rxContext)
@@ -109,7 +109,7 @@ void BasicToolBarFactory::Shutdown (void)
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
@@ -118,10 +118,10 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
     {
         try
         {
-            // Get the XController from the first argument.
+            
             mxController = Reference<frame::XController>(aArguments[0], UNO_QUERY_THROW);
 
-            // Tunnel through the controller to obtain a ViewShellBase.
+            
             Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
             ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
                 xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
@@ -133,7 +133,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
                 utl::MediaDescriptor::PROP_PREVIEW(),
                 sal_False))
             {
-                // Register the factory for its supported tool bars.
+                
                 Reference<XControllerManager> xControllerManager(mxController, UNO_QUERY_THROW);
                 mxConfigurationController = xControllerManager->getConfigurationController();
                 if (mxConfigurationController.is())
@@ -148,8 +148,8 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
             }
             else
             {
-                // The view shell is in preview mode and thus does not need
-                // the view tab bar.
+                
+                
                 mxConfigurationController = NULL;
             }
         }
@@ -164,7 +164,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
 
 
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL BasicToolBarFactory::disposing (
     const lang::EventObject& rEventObject)
@@ -177,7 +177,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
 
 
 
-//===== XPaneFactory ==========================================================
+
 
 Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)
@@ -229,6 +229,6 @@ void BasicToolBarFactory::ThrowIfDisposed (void) const
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

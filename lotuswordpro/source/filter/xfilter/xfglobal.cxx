@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -70,20 +70,20 @@ int XFGlobal::s_nNoteID = 1;
 int XFGlobal::s_nStrokeDashID = 1;
 int XFGlobal::s_nAreaID = 1;
 
-//For chart object, /2005/2
+
 int XFGlobal::s_nObjID = 1;
 
 int XFGlobal::s_nImageID = 1;
 
 OUString XFGlobal::GenSectionName()
 {
-    //give it a initial name:
+    
     return A2OUSTR("sect") + Int32ToOUString(s_nSectionID++);
 }
 
 OUString XFGlobal::GenFrameName()
 {
-    //give it a initial name:
+    
     return A2OUSTR("frame") + Int32ToOUString(s_nFrameID++);
 }
 
@@ -125,8 +125,8 @@ void    XFGlobal::Reset()
 
 void    XFGlobalReset()
 {
-//  XFFontFactory::Reset();
-//  XFStyleManager::Reset();
+
+
     XFGlobal::Reset();
 }
 

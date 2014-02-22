@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -153,7 +153,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
         if(bXMirr != bYMirr)
         {
-            // turn polygon and move it a little
+            
             Polygon aPol0(aPol);
 
             aPol[0] = aPol0[1];
@@ -168,7 +168,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
     if (bRota90Merk) {
         bool bRota90=aGeo.nDrehWink % 9000 ==0;
-        if (!bRota90) { // there's seems to be a rounding error occurring: correct it
+        if (!bRota90) { 
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
@@ -178,7 +178,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aGeo.nDrehWink=a;
             aGeo.RecalcSinCos();
         }
-        if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
+        if (bNoShearMerk!=(aGeo.nShearWink==0)) { 
             aGeo.nShearWink=0;
             aGeo.RecalcTan();
         }
@@ -224,7 +224,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
 {
     SetGlueReallyAbsolute(true);
 
-    // when this is a SdrPathObj, aRect may be uninitialized
+    
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
@@ -258,7 +258,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     for (i=0; i<nPntAnz; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
-    // turn polygon and move it a little
+    
     Polygon aPol0(aPol);
     aPol[0]=aPol0[1];
     aPol[1]=aPol0[0];
@@ -269,7 +269,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
     if (bRota90Merk) {
         bool bRota90=aGeo.nDrehWink % 9000 ==0;
-        if (bRota90Merk && !bRota90) { // there's seems to be a rounding error occurring: correct it
+        if (bRota90Merk && !bRota90) { 
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
@@ -280,7 +280,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
             aGeo.RecalcSinCos();
         }
     }
-    if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
+    if (bNoShearMerk!=(aGeo.nShearWink==0)) { 
         aGeo.nShearWink=0;
         aGeo.RecalcTan();
     }
@@ -295,7 +295,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 {
@@ -303,33 +303,33 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
     if(!ImpCanConvTextToCurve())
     {
-        // suppress HelpTexts from PresObj's
+        
         return 0;
     }
 
-    // get primitives
+    
     const drawinglayer::primitive2d::Primitive2DSequence xSequence(GetViewContact().getViewIndependentPrimitive2DSequence());
 
     if(xSequence.hasElements())
     {
-        // create an extractor with neutral ViewInformation
+        
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
         drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
-        // extract text as polygons
+        
         aExtractor.process(xSequence);
 
-        // get results
+        
         const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
         const sal_uInt32 nResultCount(rResult.size());
 
         if(nResultCount)
         {
-            // prepare own target
+            
             SdrObjGroup* pGroup = new SdrObjGroup();
             SdrObjList* pObjectList = pGroup->GetSubList();
 
-            // process results
+            
             for(sal_uInt32 a(0); a < nResultCount; a++)
             {
                 const drawinglayer::processor2d::TextAsPolygonDataNode& rCandidate = rResult[a];
@@ -337,7 +337,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
                 if(aPolyPolygon.count())
                 {
-                    // take care of wanted polygon type
+                    
                     if(bToPoly)
                     {
                         if(aPolyPolygon.areControlPointsUsed())
@@ -353,36 +353,36 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                         }
                     }
 
-                    // create ItemSet with object attributes
+                    
                     SfxItemSet aAttributeSet(GetObjectItemSet());
                     SdrPathObj* pPathObj = 0;
 
-                    // always clear objectshadow; this is included in the extraction
+                    
                     aAttributeSet.Put(SdrShadowItem(false));
 
                     if(rCandidate.getIsFilled())
                     {
-                        // set needed items
+                        
                         aAttributeSet.Put(XFillColorItem(OUString(), Color(rCandidate.getBColor())));
                         aAttributeSet.Put(XLineStyleItem(XLINE_NONE));
                         aAttributeSet.Put(XFillStyleItem(XFILL_SOLID));
 
-                        // create filled SdrPathObj
+                        
                         pPathObj = new SdrPathObj(OBJ_PATHFILL, aPolyPolygon);
                     }
                     else
                     {
-                        // set needed items
+                        
                         aAttributeSet.Put(XLineColorItem(OUString(), Color(rCandidate.getBColor())));
                         aAttributeSet.Put(XLineStyleItem(XLINE_SOLID));
                         aAttributeSet.Put(XLineWidthItem(0));
                         aAttributeSet.Put(XFillStyleItem(XFILL_NONE));
 
-                        // create line SdrPathObj
+                        
                         pPathObj = new SdrPathObj(OBJ_PATHLINE, aPolyPolygon);
                     }
 
-                    // copy basic information from original
+                    
                     pPathObj->ImpSetAnchorPos(GetAnchorPos());
                     pPathObj->NbcSetLayer(GetLayer());
 
@@ -392,13 +392,13 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                         pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
                     }
 
-                    // apply prepared ItemSet and add to target
+                    
                     pPathObj->SetMergedItemSet(aAttributeSet);
                     pObjectList->InsertObject(pPathObj);
                 }
             }
 
-            // postprocess; if no result and/or only one object, simplify
+            
             if(!pObjectList->GetObjCount())
             {
                 delete pGroup;
@@ -418,7 +418,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
     return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
@@ -440,7 +440,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     SdrObjKind ePathKind = bClosed ? OBJ_PATHFILL : OBJ_PATHLINE;
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
 
-    // #i37011#
+    
     if(!bBezier)
     {
         aB2DPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aB2DPolyPolygon);
@@ -451,7 +451,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
     if(bBezier)
     {
-        // create bezier curves
+        
         pPathObj->SetPathPoly(basegfx::tools::expandToCurve(pPathObj->GetPathPoly()));
     }
 
@@ -500,7 +500,7 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
 
     if(pText->IsGroupObject())
     {
-        // is already group object, add partial shape in front
+        
         SdrObjList* pOL=pText->GetSubList();
         pOL->InsertObject(pObj,0);
 
@@ -508,7 +508,7 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
     }
     else
     {
-        // not yet a group, create one and add partial and new shapes
+        
         SdrObjGroup* pGrp=new SdrObjGroup;
         SdrObjList* pOL=pGrp->GetSubList();
         pOL->InsertObject(pObj);

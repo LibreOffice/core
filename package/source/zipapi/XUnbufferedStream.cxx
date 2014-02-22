@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
@@ -91,11 +91,11 @@ XUnbufferedStream::XUnbufferedStream(
 
     if ( bHaveEncryptData && mbWrappedRaw && bIsEncrypted )
     {
-        // if we have the data needed to decrypt it, but didn't want it decrypted (or
-        // we couldn't decrypt it due to wrong password), then we prepend this
-        // data to the stream
+        
+        
+        
 
-        // Make a buffer big enough to hold both the header and the data itself
+        
         maHeader.realloc  ( n_ConstHeaderSize +
                             rData->m_aInitVector.getLength() +
                             rData->m_aSalt.getLength() +
@@ -107,7 +107,7 @@ XUnbufferedStream::XUnbufferedStream(
     }
 }
 
-// allows to read package raw stream
+
 XUnbufferedStream::XUnbufferedStream(
                     const uno::Reference< uno::XComponentContext >& /*xContext*/,
                     const Reference < XInputStream >& xRawStream,
@@ -128,10 +128,10 @@ XUnbufferedStream::XUnbufferedStream(
 , mnMyCurrent ( 0 )
 , mbCheckCRC( sal_False )
 {
-    // for this scenario maEntry is not set !!!
+    
     OSL_ENSURE( mxZipSeek.is(), "The stream must be seekable!\n" );
 
-    // skip raw header, it must be already parsed to rData
+    
     mnZipCurrent = n_ConstHeaderSize + rData->m_aInitVector.getLength() +
                             rData->m_aSalt.getLength() + rData->m_aDigest.getLength();
 
@@ -140,14 +140,14 @@ XUnbufferedStream::XUnbufferedStream(
             mnZipSize = mxZipSeek->getLength();
     } catch( Exception& e )
     {
-        // in case of problem the size will stay set to 0
+        
         SAL_WARN("package", "ignoring Exception " + e.Message);
     }
 
     mnZipEnd = mnZipCurrent + mnZipSize;
 
-    // the raw data will not be decrypted, no need for the cipher
-    // m_xCipherContext = ZipFile::StaticGetCipher( xContext, rData, false );
+    
+    
 }
 
 XUnbufferedStream::~XUnbufferedStream()
@@ -256,8 +256,8 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                                             Reference< XInterface >() );
 
                     mnZipCurrent += nZipRead;
-                    // maCompBuffer now has the data, check if we need to decrypt
-                    // before passing to the Inflater
+                    
+                    
                     if ( m_xCipherContext.is() )
                     {
                         if ( mbCheckCRC )

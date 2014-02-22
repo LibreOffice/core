@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,9 +27,9 @@
 #include <vcl/FilterConfigItem.hxx>
 #include "giflzwc.hxx"
 
-// -------------
-// - GIFWriter -
-// -------------
+
+
+
 
 class GIFWriter
 {
@@ -81,7 +81,7 @@ GIFWriter::GIFWriter(SvStream &rStream)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
@@ -170,7 +170,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
                                sal_Bool bExtended, long nTimer, Disposal eDisposal )
@@ -200,7 +200,7 @@ void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteAnimation( const Animation& rAnimation )
 {
@@ -225,7 +225,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::MayCallback( sal_uLong nPercent )
 {
@@ -240,7 +240,7 @@ void GIFWriter::MayCallback( sal_uLong nPercent )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 {
@@ -274,7 +274,7 @@ sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::DestroyAccess()
 {
@@ -282,7 +282,7 @@ void GIFWriter::DestroyAccess()
     m_pAcc = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteSignature( sal_Bool bGIF89a )
 {
@@ -295,27 +295,27 @@ void GIFWriter::WriteSignature( sal_Bool bGIF89a )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteGlobalHeader( const Size& rSize )
 {
     if( bStatus )
     {
-        // 256 colors
+        
         const sal_uInt16    nWidth = (sal_uInt16) rSize.Width();
         const sal_uInt16    nHeight = (sal_uInt16) rSize.Height();
         const sal_uInt8     cFlags = 128 | ( 7 << 4 );
 
-        // write values
+        
         m_rGIF.WriteUInt16( nWidth );
         m_rGIF.WriteUInt16( nHeight );
         m_rGIF.WriteUChar( cFlags );
         m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
         m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
 
-        // write dummy palette with two entries (black/white);
-        // we do this only because of a bug in Photoshop, since those can't
-        // read pictures without a global color palette
+        
+        
+        
         m_rGIF.WriteUInt16( (sal_uInt16) 0 );
         m_rGIF.WriteUInt16( (sal_uInt16) 255 );
         m_rGIF.WriteUInt16( (sal_uInt16) 65535 );
@@ -325,7 +325,7 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 {
@@ -333,13 +333,13 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 
     sal_uInt16 nLoopCount = (sal_uInt16) rAnimation.GetLoopCount();
 
-    // if only one run should take place
-    // the LoopExtension won't be written
-    // The default in this case is a single run
+    
+    
+    
     if( nLoopCount != 1 )
     {
-        // Netscape interprets the LoopCount
-        // as the sole number of _repetitions_
+        
+        
         if( nLoopCount )
             nLoopCount--;
 
@@ -358,11 +358,11 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
 {
-    // writer PrefSize in 100th-mm as ApplicationExtension
+    
     if( rSize100.Width() && rSize100.Height() )
     {
         m_rGIF.WriteUChar( (sal_uInt8) 0x21 );
@@ -377,7 +377,7 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
 {
@@ -386,11 +386,11 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
         const sal_uInt16    nDelay = (sal_uInt16) nTimer;
         sal_uInt8           cFlags = 0;
 
-        // set Transparency-Flag
+        
         if( bTransparent )
             cFlags |= 1;
 
-        // set Disposal-value
+        
         if( eDisposal == DISPOSE_BACK )
             cFlags |= ( 2 << 2 );
         else if( eDisposal == DISPOSE_PREVIOUS )
@@ -409,7 +409,7 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteLocalHeader()
 {
@@ -421,14 +421,14 @@ void GIFWriter::WriteLocalHeader()
         const sal_uInt16    nHeight = (sal_uInt16) m_pAcc->Height();
         sal_uInt8       cFlags = (sal_uInt8) ( m_pAcc->GetBitCount() - 1 );
 
-        // set Interlaced-Flag
+        
         if( nInterlaced )
             cFlags |= 0x40;
 
-        // set Flag for the local color palette
+        
         cFlags |= 0x80;
 
-        // alles rausschreiben
+        
         m_rGIF.WriteUChar( (sal_uInt8) 0x2c );
         m_rGIF.WriteUInt16( nPosX );
         m_rGIF.WriteUInt16( nPosY );
@@ -441,7 +441,7 @@ void GIFWriter::WriteLocalHeader()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WritePalette()
 {
@@ -459,7 +459,7 @@ void GIFWriter::WritePalette()
             m_rGIF.WriteUChar( rColor.GetBlue() );
         }
 
-        // fill up the rest with 0
+        
         if( nCount < nMaxCount )
             m_rGIF.SeekRel( ( nMaxCount - nCount ) * 3 );
 
@@ -468,7 +468,7 @@ void GIFWriter::WritePalette()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteAccess()
 {
@@ -543,7 +543,7 @@ void GIFWriter::WriteAccess()
     delete[] pBuffer;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteTerminator()
 {
@@ -556,11 +556,11 @@ void GIFWriter::WriteTerminator()
     }
 }
 
-// ------------------------------------------------------------------------
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport egiGraphicExport
 #endif
@@ -573,7 +573,7 @@ GraphicExport( SvStream& rStream, Graphic& rGraphic,
     return aWriter.WriteGIF(rGraphic, pConfigItem);
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

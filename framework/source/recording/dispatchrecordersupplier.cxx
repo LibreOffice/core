@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <recording/dispatchrecordersupplier.hxx>
@@ -28,9 +28,9 @@
 
 namespace framework{
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorderSupplier,
@@ -49,22 +49,22 @@ DEFINE_INIT_SERVICE(
     }
 )
 
-//_____________________________________________________________________________
+
 /**
     @short  standard constructor to create instance
     @descr  Because an instance will be initialized by her interface methods
             it's not necessary to do anything here.
  */
 DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& )
-        //  init baseclasses first!
-        //  Attention: Don't change order of initialization!
+        
+        
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
-        //  init member
+        
         , m_xDispatchRecorder( NULL                          )
 {
 }
 
-//_____________________________________________________________________________
+
 /**
     @short  standard destructor
     @descr  We are a helper and not a real service. So we don't provide
@@ -76,7 +76,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
     m_xDispatchRecorder = NULL;
 }
 
-//_____________________________________________________________________________
+
 /**
     @short      set a new dispatch recorder on this supplier
     @descr      Because there can exist more then one recorder implementations
@@ -96,12 +96,12 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
  */
 void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder ) throw (css::uno::RuntimeException)
 {
-    // SAFE =>
+    
     WriteGuard aWriteLock(m_aLock);
     m_xDispatchRecorder=xRecorder;
-    // => SAFE
+    
 }
-//_____________________________________________________________________________
+
 /**
     @short      provides access to the dispatch recorder of this supplier
     @descr      Such recorder can be used outside to record dispatches.
@@ -118,13 +118,13 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
  */
 css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSupplier::getDispatchRecorder() throw (css::uno::RuntimeException)
 {
-    // SAFE =>
+    
     ReadGuard aReadLock(m_aLock);
     return m_xDispatchRecorder;
-    // => SAFE
+    
 }
 
-//_____________________________________________________________________________
+
 /**
     @short      execute a dispatch request and record it
     @descr      If given dispatch object provides right recording interface it
@@ -142,21 +142,21 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
                                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
                                                            const css::uno::Reference< css::frame::XDispatch >&    xDispatcher ) throw (css::uno::RuntimeException)
 {
-    // SAFE =>
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = m_xDispatchRecorder;
     aReadLock.unlock();
-    // => SAFE
+    
 
-    // clear unspecific situations
+    
     if (!xDispatcher.is())
         throw css::uno::RuntimeException("specification violation: dispatcher is NULL", static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xRecorder.is())
         throw css::uno::RuntimeException("specification violation: no valid dispatch recorder available", static_cast< ::cppu::OWeakObject* >(this));
 
-    // check, if given dispatch supports record functionality by itself ...
-    // or must be wrapped.
+    
+    
     css::uno::Reference< css::frame::XRecordableDispatch > xRecordable(
         xDispatcher,
         css::uno::UNO_QUERY);
@@ -165,15 +165,15 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
         xRecordable->dispatchAndRecord(aURL,lArguments,xRecorder);
     else
     {
-        // There is no reason to wait for information about success
-        // of this request. Because status information of a dispatch
-        // are not guaranteed. So we execute it and record used
-        // parameters only.
+        
+        
+        
+        
         xDispatcher->dispatch(aURL,lArguments);
         xRecorder->recordDispatch(aURL,lArguments);
     }
 }
 
-}   // namespace framework
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

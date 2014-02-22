@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/svmedit.hxx>
@@ -53,7 +53,7 @@
 
 
 using namespace ::com::sun::star;
-// -----------------------------------------------------------------------
+
 
 SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, SvxEventConfigPage::EarlyInit ) :
 
@@ -73,7 +73,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     FreeResource();
 
-    // must be done after FreeResource is called
+    
     InitResources();
 
     mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
@@ -94,7 +94,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     aSaveInListBox.SelectEntryPos( nPos, true );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFrame  )
 {
     SetFrame( _rxFrame );
@@ -105,11 +105,11 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
     SelectHdl_Impl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
-    // need to delete the user data
+    
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.GetEntry( 0 );
     while( pE )
@@ -126,7 +126,7 @@ SvxEventConfigPage::~SvxEventConfigPage()
     delete mpImpl->pDeletePB;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxEventConfigPage::ImplInitDocument()
 {
@@ -174,7 +174,7 @@ void SvxEventConfigPage::ImplInitDocument()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 {
@@ -221,7 +221,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {

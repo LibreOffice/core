@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define POLY_CLIP_INT   0
@@ -226,7 +226,7 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
 {
     if(nOptimizeFlags && Count())
     {
-        // #115630# ImplDrawHatch does not work with beziers included in the polypolygon, take care of that
+        
         bool bIsCurve(false);
 
         for(sal_uInt16 a(0); !bIsCurve && a < Count(); a++)
@@ -261,14 +261,14 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
                 nOptimizeFlags &= ~POLY_OPTIMIZE_EDGES;
             }
 
-            // watch for ref counter
+            
             if( mpImplPolyPolygon->mnRefCount > 1 )
             {
                 mpImplPolyPolygon->mnRefCount--;
                 mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
             }
 
-            // Optimize polygons
+            
             for( sal_uInt16 i = 0, nPolyCount = mpImplPolyPolygon->mnCount; i < nPolyCount; i++ )
             {
                 if( bEdges )
@@ -309,38 +309,38 @@ void PolyPolygon::GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult )
 
 void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const
 {
-    // Convert to B2DPolyPolygon, temporarily. It might be
-    // advantageous in the future, to have a PolyPolygon adaptor that
-    // just simulates a B2DPolyPolygon here...
+    
+    
+    
     basegfx::B2DPolyPolygon aMergePolyPolygonA( getB2DPolyPolygon() );
     basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
 
-    // normalize the two polypolygons before. Force properly oriented
-    // polygons.
+    
+    
     aMergePolyPolygonA = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonA );
     aMergePolyPolygonB = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonB );
 
     switch( nOperation )
     {
-        // All code extracted from svx/source/svdraw/svedtv2.cxx
+        
 
         case POLY_CLIP_UNION:
         {
-            // merge A and B (OR)
+            
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
         case POLY_CLIP_DIFF:
         {
-            // substract B from A (DIFF)
+            
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
         case POLY_CLIP_XOR:
         {
-            // compute XOR between poly A and B
+            
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
@@ -348,7 +348,7 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         default:
         case POLY_CLIP_INT:
         {
-            // cut poly 1 against polys 2..n (AND)
+            
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
@@ -364,7 +364,7 @@ sal_uInt16 PolyPolygon::Count() const
 
 void PolyPolygon::Move( long nHorzMove, long nVertMove )
 {
-    // Required for DrawEngine
+    
     if( nHorzMove || nVertMove )
     {
         if ( mpImplPolyPolygon->mnRefCount > 1 )
@@ -373,7 +373,7 @@ void PolyPolygon::Move( long nHorzMove, long nVertMove )
             mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
         }
 
-        // move points
+        
         sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
             mpImplPolyPolygon->mpPolyAry[i]->Move( nHorzMove, nVertMove );
@@ -388,7 +388,7 @@ void PolyPolygon::Translate( const Point& rTrans )
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // move points
+    
     for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
         mpImplPolyPolygon->mpPolyAry[ i ]->Translate( rTrans );
 }
@@ -401,7 +401,7 @@ void PolyPolygon::Scale( double fScaleX, double fScaleY )
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // Move points
+    
     for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
         mpImplPolyPolygon->mpPolyAry[ i ]->Scale( fScaleX, fScaleY );
 }
@@ -425,7 +425,7 @@ void PolyPolygon::Rotate( const Point& rCenter, double fSin, double fCos )
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // move points
+    
     for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
         mpImplPolyPolygon->mpPolyAry[ i ]->Rotate( rCenter, fSin, fCos );
 }
@@ -444,7 +444,7 @@ void PolyPolygon::Clip( const Rectangle& rRect )
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // Clip every polygon, deleting the empty ones
+    
     for ( i = 0; i < nPolyCount; i++ )
         mpImplPolyPolygon->mpPolyAry[i]->Clip( rRect );
     while ( nPolyCount )
@@ -560,7 +560,7 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly )
     Polygon* pPoly;
     sal_uInt16   nPolyCount;
 
-    // read number of polygons
+    
     rIStream.ReadUInt16( nPolyCount );
 
     if( nPolyCount )
@@ -589,11 +589,11 @@ SvStream& WritePolyPolygon( SvStream& rOStream, const PolyPolygon& rPolyPoly )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
-    // Write number of polygons
+    
     sal_uInt16 nPolyCount = rPolyPoly.mpImplPolyPolygon->mnCount;
     rOStream.WriteUInt16( nPolyCount );
 
-    // output polygons
+    
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         WritePolygon( rOStream, *(rPolyPoly.mpImplPolyPolygon->mpPolyAry[i]) );
 
@@ -609,7 +609,7 @@ void PolyPolygon::Read( SvStream& rIStream )
     Polygon* pPoly;
     sal_uInt16   nPolyCount;
 
-    // Read number of polygons
+    
     rIStream.ReadUInt16( nPolyCount );
 
     if( nPolyCount )
@@ -638,16 +638,16 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
-    // Write number of polygons
+    
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
     rOStream.WriteUInt16( nPolyCount );
 
-    // Output polygons
+    
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         mpImplPolyPolygon->mpPolyAry[i]->ImplWrite( rOStream );
 }
 
-// convert to basegfx::B2DPolyPolygon and return
+
 basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
 {
     basegfx::B2DPolyPolygon aRetval;
@@ -661,7 +661,7 @@ basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
     return aRetval;
 }
 
-// constructor to convert from basegfx::B2DPolyPolygon
+
 PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     const sal_uInt16 nCount(sal_uInt16(rPolyPolygon.count()));

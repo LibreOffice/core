@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
         rStm.SetError( SVSTREAM_GENERALERROR );
     if( nLen > 0 )
     {
-        // get a string name
+        
         sal_Char * p = new( ::std::nothrow ) sal_Char[ nLen ];
         if( p && rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
@@ -45,19 +45,19 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
         delete [] p;
     }
     else if( nLen == -1L )
-        // Windows clipboard format
-        // SV und Win stimmen ueberein (bis einschl. FORMAT_GDIMETAFILE)
+        
+        
         rStm.ReadUInt32( nFormat );
     else if( nLen == -2L )
     {
         rStm.ReadUInt32( nFormat );
-        // Mac clipboard format
-        // ??? not implemented
+        
+        
         rStm.SetError( SVSTREAM_GENERALERROR );
     }
     else if( nLen != 0 )
     {
-        // unknown identifier
+        
         rStm.SetError( SVSTREAM_GENERALERROR );
     }
     return nFormat;
@@ -65,7 +65,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
 
 void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
 {
-    // determine the clipboard format string
+    
     OUString aCbFmt;
     if( nFormat > FORMAT_GDIMETAFILE )
         aCbFmt = SotExchange::GetFormatName( nFormat );
@@ -79,12 +79,12 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
     }
     else if( nFormat )
     {
-        rStm.WriteInt32( (sal_Int32) -1 )         // for Windows
+        rStm.WriteInt32( (sal_Int32) -1 )         
             .WriteInt32( (sal_Int32) nFormat );
     }
     else
     {
-        rStm.WriteInt32( (sal_Int32) 0 );         // no clipboard format
+        rStm.WriteInt32( (sal_Int32) 0 );         
     }
 }
 

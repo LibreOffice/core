@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/request.hxx>
@@ -72,12 +72,12 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
     m_pTypeTLB->SetSelectionMode(SINGLE_SELECTION);
     m_pTypeTLB->SetStyle(m_pTypeTLB->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     m_pTypeTLB->SetOptimalImageIndent();
-    // Don't set font, so that the control's font is adobted!
-    // Otherwise at wrong font bug to OV.
+    
+    
     m_pTypeTLB->SetSpaceBetweenEntries(0);
 
     m_pTypeTLB->SetNodeDefaultImages();
-    //enable 'active' language selection
+    
     m_pFormatLB->SetShowLanguageControl(sal_True);
 
     SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, false );
@@ -91,14 +91,14 @@ SwFldDokInfPage::~SwFldDokInfPage()
 
 void SwFldDokInfPage::Reset(const SfxItemSet& )
 {
-    Init(); // general initialisation
+    Init(); 
 
-    // initialise TypeListBox
+    
     m_pTypeTLB->SetUpdateMode(sal_False);
     m_pTypeTLB->Clear();
     pSelEntry = 0;
 
-    // display SubTypes in TypeLB
+    
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
     SvTreeListEntry* pEntry = 0;
 
@@ -176,7 +176,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         }
     }
 
-    // select old Pos
+    
     if (pSelEntry != 0)
     {
         m_pTypeTLB->Select(pSelEntry);
@@ -209,10 +209,10 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
 IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
 {
-    // save old ListBoxPos
+    
     SvTreeListEntry* pOldEntry = pSelEntry;
 
-    // current ListBoxPos
+    
     pSelEntry = m_pTypeTLB->FirstSelected();
 
     if(!pSelEntry)
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
                 m_pFormat->Enable(false);
                 if( nSubType == DI_CUSTOM )
                 {
-                    //find out which type the custom field has - for a start set to DATE format
+                    
                     OUString sName = m_pTypeTLB->GetEntryText(pSelEntry);
                     try
                     {
@@ -363,12 +363,12 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
 
 sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 {
-    // fill Format-Listbox
+    
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
 
     EnableInsert(nSubType != USHRT_MAX);
 
-    if (nSubType == USHRT_MAX)  // Info-Text
+    if (nSubType == USHRT_MAX)  
         nSubType = DI_SUBTYPE_BEGIN;
 
     m_pSelectionLB->Clear();
@@ -385,7 +385,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     if (nSubType < DI_CREATE || nSubType == DI_DOCNO || nSubType == DI_EDIT|| nSubType == DI_CUSTOM )
     {
-        // Format Box is empty for Title and Time
+        
     }
     else
     {

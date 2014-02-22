@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "QTableConnectionData.hxx"
@@ -23,7 +23,7 @@
 
 using namespace dbaui;
 
-// class OQueryTableConnectionData
+
 OQueryTableConnectionData::OQueryTableConnectionData()
     : OTableConnectionData()
     , m_nFromEntryIndex(0)
@@ -66,7 +66,7 @@ OQueryTableConnectionData::~OQueryTableConnectionData()
 
 OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
 {
-    // no specializing of LineDatas, so it is an instance of standard class
+    
     return new OConnectionLineData();
 }
 
@@ -77,7 +77,7 @@ OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConn
 
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
-    // same as in base class, use of (non-virtual) operator=
+    
     *this = (const OQueryTableConnectionData&)rSource;
 }
 
@@ -106,7 +106,7 @@ OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
 
 void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight)
 {
-    // convert Information in rDrag into parameters for the base class init
+    
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(rDragLeft->GetTabWindow());
     OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight->GetTabWindow());
     OSL_ENSURE(pSourceWin,"NO Source window found!");
@@ -114,7 +114,7 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     m_pReferencingTable = pSourceWin->GetData();
     m_pReferencedTable  = pDestWin->GetData();
 
-    // set members
+    
     SetFieldIndex(JTCS_FROM, rDragLeft->GetFieldIndex());
     SetFieldIndex(JTCS_TO, rDragRight->GetFieldIndex());
 

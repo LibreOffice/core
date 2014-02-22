@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 /*
@@ -47,11 +47,11 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
             OUString aValue;
             sal_Int32 n;
 
-            // comments
+            
             if( aLine.startsWith( "#" ) )
                 continue;
 
-            // a[en_US] = Bob
+            
             if( ( n = aLine.indexOf( '=' ) ) >= 1)
             {
                 aKey = OStringToOUString(
@@ -69,7 +69,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
             }
             SAL_INFO("svx", "ini file has '" << aKey << "' [ '" << aLocale << "' ] = '" << aValue << "'");
 
-            // grisly language matching, is this not available somewhere else?
+            
             if( aKey == aKeyName )
             {
                 /* FIXME-BCP47: what is this supposed to do? */
@@ -80,7 +80,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
                 {
                     SAL_INFO( "svx", "compare '" << aLang << "' with '" << *i << "' rank " << nRank << " vs. " << n );
                     if( *i == aLang && n < nRank ) {
-                        nRank = n; // try to get the most accurate match
+                        nRank = n; 
                         aResult = aValue;
                     }
                 }

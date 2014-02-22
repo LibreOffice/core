@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -38,7 +38,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj ) :
     SfxInPlaceClient( pViewShell, pDraw, pObj->GetAspect() ),
@@ -68,7 +68,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
             {
-                // name from InfoObject is PersistName
+                
                 if ( ((SdrOle2Obj*)pObject)->GetPersistName() == aName )
                     pOle2Obj = (SdrOle2Obj*)pObject;
             }
@@ -107,8 +107,8 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
         Size aSize = pPage->GetSize();
         if ( aSize.Width() < 0 )
         {
-            aPos.X() = aSize.Width() + 1;       // negative
-            aSize.Width() = -aSize.Width();     // positive
+            aPos.X() = aSize.Width() + 1;       
+            aSize.Width() = -aSize.Width();     
         }
         Rectangle aPageRect( aPos, aSize );
 
@@ -150,13 +150,13 @@ void ScClient::ObjectAreaChanged()
         return;
     }
 
-    //  Position und Groesse ins Dokument uebernehmen
+    
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
         Rectangle aNewRectangle(GetScaledObjArea());
 
-        // #i118524# if sheared/rotated, center to non-rotated LogicRect
+        
         pDrawObj->setSuppressSetVisAreaSize(true);
 
         if(pDrawObj->GetGeoStat().nDrehWink || pDrawObj->GetGeoStat().nShearWink)
@@ -172,10 +172,10 @@ void ScClient::ObjectAreaChanged()
         pDrawObj->SetLogicRect( aNewRectangle );
         pDrawObj->setSuppressSetVisAreaSize(false);
 
-        //  set document modified (SdrModel::SetChanged is not used)
-        // TODO/LATER: is there a reason that this code is not executed in Draw?
-//        SfxViewShell* pSfxViewSh = GetViewShell();
-//        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+        
+        
+
+
         if (pViewSh)
             pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
     }
@@ -188,16 +188,16 @@ void ScClient::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
-        // the iconified object seems not to need such a scaling handling
-        // since the replacement image and the size a completely controlled by the container
-        // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
+        
+        
+        
 
         return;
     }
 
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
 
-    // TODO/LEAN: working with Visual Area can switch object to running state
+    
     awt::Size aSz;
     try {
         aSz = xObj->getVisualAreaSize( GetAspect() );
@@ -209,7 +209,7 @@ void ScClient::ViewChanged()
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
 
-    //  Groesse ins Dokument uebernehmen
+    
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -218,13 +218,13 @@ void ScClient::ViewChanged()
         Fraction aFractY = GetScaleHeight();
         aFractX *= aVisSize.Width();
         aFractY *= aVisSize.Height();
-        aVisSize = Size( (long) aFractX, (long) aFractY );      // skaliert fuer Draw-Model
+        aVisSize = Size( (long) aFractX, (long) aFractY );      
 
-        //  pClientData->SetObjArea vor pDrawObj->SetLogicRect, damit keine
-        //  falschen Skalierungen ausgerechnet werden:
-        //Rectangle aObjArea = aLogicRect;
-        //aObjArea.SetSize( aVisSize );          // Dokument-Groesse vom Server
-        //SetObjArea( aObjArea );
+        
+        
+        
+        
+        
 
         SfxViewShell* pSfxViewSh = GetViewShell();
         ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
@@ -236,7 +236,7 @@ void ScClient::ViewChanged()
                 aLogicRect.SetSize( aVisSize );
                 pDrawObj->SetLogicRect( aLogicRect );
 
-                //  set document modified (SdrModel::SetChanged is not used)
+                
                 pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
             }
         }

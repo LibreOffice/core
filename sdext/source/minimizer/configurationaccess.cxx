@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,8 +65,8 @@ void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAcc
                     case TK_DeleteHiddenSlides :        aValue >>= mbDeleteHiddenSlides; break;
                     case TK_DeleteNotesPages :          aValue >>= mbDeleteNotesPages ;break;
                     case TK_SaveAs :                    aValue >>= mbSaveAs; break;
-//                  case TK_SaveAsURL :                 aValue >>= maSaveAsURL; break;      // URL is not saved to configuration
-//                  case TK_FilterName :                aValue >>= maFilterName; break;     // URL is not saved to configuration
+
+
                     case TK_OpenNewDocument :           aValue >>= mbOpenNewDocument; break;
                     default: break;
                 }
@@ -95,8 +95,8 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
             OUString("DeleteHiddenSlides"),
             OUString("DeleteNotesPages"),
             OUString("SaveAs"),
-//          OUString("SaveAsURL"),
-//          OUString("FilterName"),
+
+
             OUString("OpenNewDocument") };
 
         Any pValues[] = {
@@ -112,8 +112,8 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
             Any( mbDeleteHiddenSlides ),
             Any( mbDeleteNotesPages ),
             Any( mbSaveAs ),
-//          Any( maSaveAsURL ),
-//          Any( maFilterName ),
+
+
             Any( mbOpenNewDocument ) };
 
         sal_Int32 i, nCount = SAL_N_ELEMENTS( pNames );
@@ -143,7 +143,7 @@ sal_Bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSetti
         && ( rOptimizerSettings.mbDeleteUnusedMasterPages == mbDeleteUnusedMasterPages )
         && ( rOptimizerSettings.mbDeleteHiddenSlides == mbDeleteHiddenSlides )
         && ( rOptimizerSettings.mbDeleteNotesPages == mbDeleteNotesPages );
-//      && ( rOptimizerSettings.mbOpenNewDocument == mbOpenNewDocument );
+
 }
 
 
@@ -278,12 +278,12 @@ void ConfigurationAccess::SaveConfiguration()
             unsigned int k;
             Reference<util::XChangesBatch> xRoot( OpenConfiguration( false ), UNO_QUERY_THROW );
 
-            // storing the last used settings
+            
             Reference< container::XNameReplace > xSet( GetConfigurationNode( xRoot, "LastUsedSettings" ), UNO_QUERY_THROW );
             OptimizerSettings& rCurrent( maSettings.front() );
             rCurrent.SaveSettingsToConfiguration( xSet );
 
-            // updating template elements
+            
             xSet = Reference< container::XNameReplace >( GetConfigurationNode( xRoot, "Settings/Templates" ), UNO_QUERY_THROW );
             Reference< container::XNameContainer > xNameContainer( xSet, UNO_QUERY_THROW );
 

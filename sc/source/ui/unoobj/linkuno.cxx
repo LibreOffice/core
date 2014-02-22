@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/smplhint.hxx>
@@ -49,9 +49,9 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
 using ::std::vector;
 
-//------------------------------------------------------------------------
 
-//  fuer Sheet- und Area-Links benutzt:
+
+
 static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
 {
     static const SfxItemPropertyMapEntry aSheetLinkMap_Impl[] =
@@ -66,7 +66,7 @@ static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
     return aSheetLinkMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScAreaLinkObj, "ScAreaLinkObj", "com.sun.star.sheet.CellAreaLink" )
 SC_SIMPLE_SERVICE_INFO( ScAreaLinksObj, "ScAreaLinksObj", "com.sun.star.sheet.CellAreaLinks" )
@@ -75,7 +75,7 @@ SC_SIMPLE_SERVICE_INFO( ScDDELinksObj, "ScDDELinksObj", "com.sun.star.sheet.DDEL
 SC_SIMPLE_SERVICE_INFO( ScSheetLinkObj, "ScSheetLinkObj", "com.sun.star.sheet.SheetLink" )
 SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, "ScSheetLinksObj", "com.sun.star.sheet.SheetLinks" )
 
-//------------------------------------------------------------------------
+
 
 ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName) :
     aPropSet( lcl_GetSheetLinkMap() ),
@@ -93,13 +93,13 @@ ScSheetLinkObj::~ScSheetLinkObj()
 
 void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! notify if links in document are changed
-    //  UpdateRef is not needed here
+    
+    
 
     if ( rHint.ISA( SfxSimpleHint ) )
     {
         if ( ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-            pDocShell = NULL;       // pointer is invalid
+            pDocShell = NULL;       
     }
     else if ( rHint.ISA( ScLinkRefreshedHint ) )
     {
@@ -126,24 +126,24 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
             }
         }
     }
-    return NULL;    // nicht gefunden
+    return NULL;    
 }
 
-// XNamed
+
 
 OUString SAL_CALL ScSheetLinkObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return getFileName();   // Name ist der Dateiname (URL)
+    return getFileName();   
 }
 
 void SAL_CALL ScSheetLinkObj::setName( const OUString& aName ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    setFileName(aName);     // Name ist der Dateiname (URL)
+    setFileName(aName);     
 }
 
-// XRefreshable
+
 
 void SAL_CALL ScSheetLinkObj::refresh() throw(uno::RuntimeException)
 {
@@ -162,7 +162,7 @@ void SAL_CALL ScSheetLinkObj::addRefreshListener(
             new uno::Reference<util::XRefreshListener>( xListener );
     aRefreshListeners.push_back( pObj );
 
-    //  hold one additional ref to keep this object alive as long as there are listeners
+    
     if ( aRefreshListeners.size() == 1 )
         acquire();
 }
@@ -180,7 +180,7 @@ void SAL_CALL ScSheetLinkObj::removeRefreshListener(
         {
             aRefreshListeners.erase( aRefreshListeners.begin() + n );
             if ( aRefreshListeners.empty() )
-                release();                          // release ref for listeners
+                release();                          
             break;
         }
     }
@@ -201,7 +201,7 @@ void ScSheetLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
         pLink->SetRefreshDelay( (sal_uLong) nRefresh );
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSheetLinkObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -272,7 +272,7 @@ uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const OUString& aPropertyNam
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSheetLinkObj )
 
-// internal:
+
 
 OUString ScSheetLinkObj::getFileName(void) const
 {
@@ -286,34 +286,34 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        //  pLink->Refresh mit neuem Dateinamen bringt sfx2::LinkManager durcheinander
-        //  darum per Hand die Tabellen umsetzen und Link per UpdateLinks neu erzeugen
+        
+        
 
         OUString aNewStr(ScGlobal::GetAbsDocName( rNewName, pDocShell ));
 
-        //  zuerst Tabellen umsetzen
+        
 
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  // alte Datei
+            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  
                 pDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), aNewStr,
                                 pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
                                 pDoc->GetLinkTab(nTab),
-                                pDoc->GetLinkRefreshDelay(nTab) );  // nur Datei aendern
+                                pDoc->GetLinkRefreshDelay(nTab) );  
 
-        //  Links updaten
-        //! Undo !!!
+        
+        
 
-        pLink = NULL;               // wird bei UpdateLinks ungueltig
-        pDocShell->UpdateLinks();   // alter Link raus, evtl. neuen Link anlegen
+        pLink = NULL;               
+        pDocShell->UpdateLinks();   
 
-        //  Daten kopieren
+        
 
         aFileName = aNewStr;
-        pLink = GetLink_Impl();     // neuer Link mit neuem Namen
+        pLink = GetLink_Impl();     
         if (pLink)
-            pLink->Update();        // inkl. Paint & Undo fuer Daten
+            pLink->Update();        
     }
 }
 
@@ -375,7 +375,7 @@ void ScSheetLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
     ModifyRefreshDelay_Impl( nRefreshDelay );
 }
 
-//------------------------------------------------------------------------
+
 
 ScSheetLinksObj::ScSheetLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -391,16 +391,16 @@ ScSheetLinksObj::~ScSheetLinksObj()
 
 void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
-// XSheetLinks
+
 
 ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
@@ -420,19 +420,19 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
         OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
         if (aNames.insert(aLinkDoc).second)
         {
-            // unique document name.
+            
             if (nCount == nIndex)
                 return new ScSheetLinkObj( pDocShell, aLinkDoc );
             ++nCount;
         }
     }
 
-    return NULL;    // kein Dokument oder Index zu gross
+    return NULL;    
 }
 
 ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
 {
-    //  Name ist der Dateiname
+    
 
     if (pDocShell)
     {
@@ -443,7 +443,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
-                //! case-insensitiv ???
+                
                 OUString aLinkDoc = pDoc->GetLinkDoc( nTab );
                 if ( aLinkDoc == aNameStr )
                     return new ScSheetLinkObj( pDocShell, aNameStr );
@@ -453,7 +453,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
     return NULL;
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumeration()
                                                     throw(uno::RuntimeException)
@@ -462,7 +462,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumerat
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SheetLinksEnumeration"));
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
 {
@@ -523,14 +523,14 @@ uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
         return uno::makeAny(xLink);
     else
         throw container::NoSuchElementException();
-//    return uno::Any();
+
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //  Name ist der Dateiname
+    
 
     if (pDocShell)
     {
@@ -541,7 +541,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
-                //! case-insensitiv ???
+                
                 OUString aLinkDoc(pDoc->GetLinkDoc( nTab ));
                 if ( aLinkDoc == aNameStr )
                     return sal_True;
@@ -555,7 +555,7 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::R
     typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
 
     SolarMutexGuard aGuard;
-    //  Name ist der Dateiname
+    
 
     if (!pDocShell)
         return uno::Sequence<OUString>();
@@ -581,7 +581,7 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::R
     return aSeq;
 }
 
-//------------------------------------------------------------------------
+
 
 static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
 {
@@ -601,7 +601,7 @@ static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
             }
         }
     }
-    return NULL;    // nicht gefunden
+    return NULL;    
 }
 
 ScAreaLinkObj::ScAreaLinkObj(ScDocShell* pDocSh, size_t nP) :
@@ -620,20 +620,20 @@ ScAreaLinkObj::~ScAreaLinkObj()
 
 void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! notify if links in document are changed
-    //  UpdateRef is not needed here
+    
+    
 
     if ( rHint.ISA( SfxSimpleHint ) )
     {
         if ( ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-            pDocShell = NULL;       // pointer is invalid
+            pDocShell = NULL;       
     }
     else if ( rHint.ISA( ScLinkRefreshedHint ) )
     {
         const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
         if ( rLH.GetLinkType() == SC_LINKREFTYPE_AREA )
         {
-            //  get this link to compare dest position
+            
             ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
             if ( pLink && pLink->GetDestArea().aStart == rLH.GetDestPos() )
                 Refreshed_Impl();
@@ -641,7 +641,7 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// XFileLink
+
 
 void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewFilter,
                                  const OUString* pNewOptions, const OUString* pNewSource,
@@ -657,18 +657,18 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         ScRange aDest   (pLink->GetDestArea());
         sal_uLong nRefresh  = pLink->GetRefreshDelay();
 
-        //! Undo fuer Loeschen
-        //! Undo zusammenfassen
+        
+        
 
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         pLinkManager->Remove( pLink );
-        pLink = NULL;   // bei Remove geloescht
+        pLink = NULL;   
 
-        sal_Bool bFitBlock = sal_True;          // verschieben, wenn durch Update Groesse geaendert
+        sal_Bool bFitBlock = sal_True;          
         if (pNewFile)
         {
             aFile = *pNewFile;
-            aFile = ScGlobal::GetAbsDocName( aFile, pDocShell );    //! in InsertAreaLink?
+            aFile = ScGlobal::GetAbsDocName( aFile, pDocShell );    
         }
         if (pNewFilter)
             aFilter = *pNewFilter;
@@ -679,7 +679,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         if (pNewDest)
         {
             ScUnoConversion::FillScRange( aDest, *pNewDest );
-            bFitBlock = false;  // neuer Bereich angegeben -> keine Inhalte verschieben
+            bFitBlock = false;  
         }
         pDocShell->GetDocFunc().InsertAreaLink( aFile, aFilter, aOptions, aSource,
                                                 aDest, nRefresh, bFitBlock, true );
@@ -693,7 +693,7 @@ void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
         pLink->SetRefreshDelay( (sal_uLong) nRefresh );
 }
 
-// XRefreshable
+
 
 void SAL_CALL ScAreaLinkObj::refresh()
     throw(uno::RuntimeException, std::exception)
@@ -713,7 +713,7 @@ void SAL_CALL ScAreaLinkObj::addRefreshListener(
             new uno::Reference<util::XRefreshListener>( xListener );
     aRefreshListeners.push_back( pObj );
 
-    //  hold one additional ref to keep this object alive as long as there are listeners
+    
     if ( aRefreshListeners.size() == 1 )
         acquire();
 }
@@ -731,7 +731,7 @@ void SAL_CALL ScAreaLinkObj::removeRefreshListener(
         {
             aRefreshListeners.erase( aRefreshListeners.begin() + n );
             if ( aRefreshListeners.empty() )
-                release();                          // release ref for listeners
+                release();                          
             break;
         }
 
@@ -748,7 +748,7 @@ void ScAreaLinkObj::Refreshed_Impl()
         aRefreshListeners[n]->refreshed( aEvent );
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAreaLinkObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -819,7 +819,7 @@ uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const OUString& aPropertyName
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAreaLinkObj )
 
-//  internal:
+
 
 OUString ScAreaLinkObj::getFileName(void) const
 {
@@ -885,7 +885,7 @@ void ScAreaLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
     ModifyRefreshDelay_Impl( nRefreshDelay );
 }
 
-// XAreaLink
+
 
 OUString SAL_CALL ScAreaLinkObj::getSourceArea() throw(uno::RuntimeException)
 {
@@ -921,7 +921,7 @@ void SAL_CALL ScAreaLinkObj::setDestArea( const table::CellRangeAddress& aDestAr
     Modify_Impl( NULL, NULL, NULL, NULL, &aDestArea );
 }
 
-//------------------------------------------------------------------------
+
 
 ScAreaLinksObj::ScAreaLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -937,23 +937,23 @@ ScAreaLinksObj::~ScAreaLinksObj()
 
 void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
-// XAreaLinks
+
 
 ScAreaLinkObj* ScAreaLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if ( pDocShell && nIndex >= 0 && nIndex < getCount() )
         return new ScAreaLinkObj( pDocShell, (size_t)nIndex );
 
-    return NULL;    // nicht gefunden
+    return NULL;    
 }
 
 void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestPos,
@@ -972,10 +972,10 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         OUString aSourceStr (aSourceArea);
         ScAddress aDestAddr( (SCCOL)aDestPos.Column, (SCROW)aDestPos.Row, aDestPos.Sheet );
 
-        aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
+        aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  
         pDocShell->GetDocFunc().InsertAreaLink( aFileStr, aFilterStr, aOptionStr,
                                                 aSourceStr, ScRange(aDestAddr),
-                                                0, false, true ); // don't move contents
+                                                0, false, true ); 
     }
 }
 
@@ -985,14 +985,14 @@ void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex ) throw(uno::Runti
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, (size_t)nIndex);
     if (pLink)
     {
-        //! SetAddUndo oder so
+        
 
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         pLinkManager->Remove( pLink );
     }
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumeration()
                                                     throw(uno::RuntimeException)
@@ -1001,7 +1001,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumerati
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.CellAreaLinksEnumeration"));
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
 {
@@ -1045,7 +1045,7 @@ sal_Bool SAL_CALL ScAreaLinksObj::hasElements() throw(uno::RuntimeException)
     return ( getCount() != 0 );
 }
 
-//------------------------------------------------------------------------
+
 
 ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
                             const OUString& rT, const OUString& rI) :
@@ -1065,13 +1065,13 @@ ScDDELinkObj::~ScDDELinkObj()
 
 void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! notify if links in document are changed
-    //  UpdateRef is not needed here
+    
+    
 
     if ( rHint.ISA( SfxSimpleHint ) )
     {
         if ( ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-            pDocShell = NULL;       // pointer is invalid
+            pDocShell = NULL;       
     }
     else if ( rHint.ISA( ScLinkRefreshedHint ) )
     {
@@ -1079,16 +1079,16 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( rLH.GetLinkType() == SC_LINKREFTYPE_DDE &&
              rLH.GetDdeAppl()  == aAppl &&
              rLH.GetDdeTopic() == aTopic &&
-             rLH.GetDdeItem()  == aItem )       //! mode is ignored
+             rLH.GetDdeItem()  == aItem )       
             Refreshed_Impl();
     }
 }
 
-// XNamed
+
 
 static OUString lcl_BuildDDEName( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
 {
-    //  Appl|Topic!Item (wie Excel)
+    
     OUString aRet = rAppl + "|" + rTopic + "!" + rItem;
     return aRet;
 }
@@ -1101,16 +1101,16 @@ OUString SAL_CALL ScDDELinkObj::getName() throw(uno::RuntimeException)
 
 void SAL_CALL ScDDELinkObj::setName( const OUString& /* aName */ ) throw(uno::RuntimeException)
 {
-    //  name can't be changed (formulas wouldn't find the link)
+    
     throw uno::RuntimeException();
 }
 
-// XDDELink
+
 
 OUString SAL_CALL ScDDELinkObj::getApplication() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //! Test, ob Link noch im Dokument enthalten?
+    
 
     return aAppl;
 }
@@ -1118,7 +1118,7 @@ OUString SAL_CALL ScDDELinkObj::getApplication() throw(uno::RuntimeException)
 OUString SAL_CALL ScDDELinkObj::getTopic() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //! Test, ob Link noch im Dokument enthalten?
+    
 
     return aTopic;
 }
@@ -1126,12 +1126,12 @@ OUString SAL_CALL ScDDELinkObj::getTopic() throw(uno::RuntimeException)
 OUString SAL_CALL ScDDELinkObj::getItem() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //! Test, ob Link noch im Dokument enthalten?
+    
 
     return aItem;
 }
 
-// XRefreshable
+
 
 void SAL_CALL ScDDELinkObj::refresh() throw(uno::RuntimeException)
 {
@@ -1152,7 +1152,7 @@ void SAL_CALL ScDDELinkObj::addRefreshListener(
             new uno::Reference<util::XRefreshListener>( xListener );
     aRefreshListeners.push_back( pObj );
 
-    //  hold one additional ref to keep this object alive as long as there are listeners
+    
     if ( aRefreshListeners.size() == 1 )
         acquire();
 }
@@ -1170,13 +1170,13 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
         {
             aRefreshListeners.erase( aRefreshListeners.begin() + n );
             if ( aRefreshListeners.empty() )
-                release();                          // release ref for listeners
+                release();                          
             break;
         }
     }
 }
 
-// XDDELinkResults
+
 
 uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
     throw (uno::RuntimeException)
@@ -1255,7 +1255,7 @@ void ScDDELinkObj::Refreshed_Impl()
         aRefreshListeners[n]->refreshed( aEvent );
 }
 
-//------------------------------------------------------------------------
+
 
 ScDDELinksObj::ScDDELinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -1271,16 +1271,16 @@ ScDDELinksObj::~ScDDELinksObj()
 
 void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
-// XDDELinks
+
 
 ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
@@ -1312,7 +1312,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
     return NULL;
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeration()
                                                     throw(uno::RuntimeException)
@@ -1321,7 +1321,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeratio
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DDELinksEnumeration"));
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScDDELinksObj::getCount() throw(uno::RuntimeException)
 {
@@ -1411,7 +1411,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
     return false;
 }
 
-// XDDELinks
+
 
 uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     const OUString& aApplication, const OUString& aTopic,
@@ -1468,7 +1468,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     return xLink;
 }
 
-// ============================================================================
+
 
 ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
     mpTable(pTable),
@@ -1495,7 +1495,7 @@ void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nR
     else if (rValue >>= aVal)
         pToken.reset(new FormulaStringToken(aVal));
     else
-        // unidentified value type.
+        
         return;
 
     mpTable->setCell(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), pToken);
@@ -1570,7 +1570,7 @@ sal_Int32 SAL_CALL ScExternalSheetCacheObj::getTokenIndex()
     return static_cast< sal_Int32 >( mnIndex );
 }
 
-// ============================================================================
+
 
 ScExternalDocLinkObj::ScExternalDocLinkObj(ScExternalRefManager* pRefMgr, sal_uInt16 nFileId) :
     mpRefMgr(pRefMgr), mnFileId(nFileId)
@@ -1589,7 +1589,7 @@ Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetC
     size_t nIndex = 0;
     ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aSheetName, true, &nIndex);
     if (!bDynamicCache)
-        // Set the whole table cached to prevent access to the source document.
+        
         pTable->setWholeTableCached();
 
     Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
@@ -1619,7 +1619,7 @@ Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
     vector<OUString> aTabNames;
     mpRefMgr->getAllCachedTableNames(mnFileId, aTabNames);
 
-    // #i116940# be consistent with getByName: include only table names which have a cache already
+    
     vector<OUString> aValidNames;
     for (vector<OUString>::iterator aIter = aTabNames.begin(); aIter != aTabNames.end(); ++aIter)
         if (mpRefMgr->getCacheTable(mnFileId, *aIter, false))
@@ -1637,7 +1637,7 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
 {
     SolarMutexGuard aGuard;
 
-    // #i116940# be consistent with getByName: allow only table names which have a cache already
+    
     ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aName, false);
     return (pTable.get() != NULL);
 }
@@ -1647,7 +1647,7 @@ sal_Int32 SAL_CALL ScExternalDocLinkObj::getCount()
 {
     SolarMutexGuard aGuard;
 
-    // #i116940# be consistent with getByName: count only table names which have a cache already
+    
     return getElementNames().getLength();
 }
 
@@ -1656,8 +1656,8 @@ Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nApiIndex)
 {
     SolarMutexGuard aGuard;
 
-    // #i116940# Can't use nApiIndex as index for the ref manager, because the API counts only
-    // the entries which have a cache already. Quick solution: Use getElementNames.
+    
+    
     Sequence< OUString > aNames( getElementNames() );
     if (nApiIndex < 0 || nApiIndex >= aNames.getLength())
         throw lang::IndexOutOfBoundsException();
@@ -1696,7 +1696,7 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasElements()
 {
     SolarMutexGuard aGuard;
 
-    // #i116940# be consistent with getByName: count only table names which have a cache already
+    
     return ( getElementNames().getLength() > 0 );
 }
 
@@ -1706,7 +1706,7 @@ sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()
     return static_cast<sal_Int32>(mnFileId);
 }
 
-// ============================================================================
+
 
 ScExternalDocLinksObj::ScExternalDocLinksObj(ScDocShell* pDocShell) :
     mpDocShell(pDocShell),

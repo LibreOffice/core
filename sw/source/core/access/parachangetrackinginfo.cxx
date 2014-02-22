@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <parachangetrackinginfo.hxx>
@@ -57,7 +57,7 @@ namespace {
         if ( !IDocumentRedlineAccess::IsShowChanges( pIDocChangeTrack->GetRedlineMode() ) ||
              pIDocChangeTrack->GetRedlineTbl().empty() )
         {
-            // nothing to do --> empty change track text markup lists.
+            
             return;
         }
 
@@ -65,7 +65,7 @@ namespace {
                     pIDocChangeTrack->GetRedlinePos( rTxtNode, USHRT_MAX );
         if ( nIdxOfFirstRedlineForTxtNode == USHRT_MAX )
         {
-            // nothing to do --> empty change track text markup lists.
+            
             return;
         }
 
@@ -76,7 +76,7 @@ namespace {
                                              ? rTxtFrm.GetFollow()->GetOfst()
                                              : rTxtFrm.GetTxt().getLength();
 
-        // iteration over the redlines which overlap with the text node.
+        
         const SwRedlineTbl& rRedlineTbl = pIDocChangeTrack->GetRedlineTbl();
         const sal_uInt16 nRedlineCount( rRedlineTbl.size() );
         for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTxtNode;
@@ -97,7 +97,7 @@ namespace {
             if ( nTxtNodeChangeTrackStart > nTxtFrmTextEndPos ||
                  nTxtNodeChangeTrackEnd < nTxtFrmTextStartPos )
             {
-                // Consider only redlines which overlap with the text frame's text.
+                
                 continue;
             }
 
@@ -121,7 +121,7 @@ namespace {
                 break;
                 default:
                 {
-                    // other types are not considered
+                    
                 }
             }
             if ( pMarkupList )
@@ -137,9 +137,9 @@ namespace {
                                      nTxtFrmChangeTrackEnd - nTxtFrmChangeTrackStart,
                                      pMarkupList->Count() );
             }
-        } // eof iteration over the redlines which overlap with the text node
+        } 
     }
-} // eof anonymous namespace
+} 
 
 SwParaChangeTrackingInfo::SwParaChangeTrackingInfo( const SwTxtFrm& rTxtFrm )
     : mrTxtFrm( rTxtFrm )

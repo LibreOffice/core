@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     fprintf(fp, "#include <sal/types.h>\n");
     fprintf(fp, "\nextern \"C\" {\n");
 
-    // generate main dict. data array
+    
     fprintf(fp, "\nstatic const sal_uInt8 %s[] = {", name);
 
     sal_Int32 count = 0;
@@ -81,7 +81,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (argc < 4) exit(-1);
 
-    fp = fopen(argv[1], "rb");  // open the source file for read;
+    fp = fopen(argv[1], "rb");  
     if (fp == NULL){
         fprintf(stderr, "Opening the rule source file %s for reading failed: %s\n", argv[1], strerror(errno));
         exit(1);
@@ -90,29 +90,29 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sal_Char str[1024];
     OUStringBuffer Obuf;
     while (fgets(str, 1024, fp)) {
-        // don't convert last new line character to Ostr.
+        
         sal_Int32 len = strlen(str) - 1;
-        // skip comment line
+        
         if (len == 0 || str[0] == '#')
             continue;
 
-        // input file is in UTF-8 encoding
+        
         OUString Ostr = OUString((const sal_Char *)str, len, RTL_TEXTENCODING_UTF8).trim();
 
         len = Ostr.getLength();
         if (len == 0)
-            continue; // skip empty line.
+            continue; 
 
         Obuf.append(Ostr);
     }
     fclose(fp);
 
     UErrorCode status = U_ZERO_ERROR;
-    //UParseError parseError;
-    //UCollator *coll = ucol_openRules(Obuf.getStr(), Obuf.getLength(), UCOL_OFF,
-    //        UCOL_DEFAULT_STRENGTH, &parseError, &status);
+    
+    
+    
 
-    RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);    // UChar != sal_Unicode in MinGW
+    RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);    
 
     if (U_SUCCESS(status)) {
 
@@ -134,6 +134,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         delete coll;
 
     return U_SUCCESS(status) ? 0 : 1;
-}   // End of main
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

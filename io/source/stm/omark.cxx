@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ public:
     OMarkableOutputStream(  );
     ~OMarkableOutputStream();
 
-public: // XOutputStream
+public: 
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
@@ -91,7 +91,7 @@ public: // XOutputStream
                 BufferSizeExceededException,
                 RuntimeException);
 
-public: // XMarkable
+public: 
     virtual sal_Int32 SAL_CALL createMark(void)
         throw (IOException, RuntimeException);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)
@@ -109,13 +109,13 @@ public: // XMarkable
                IllegalArgumentException,
                RuntimeException);
 
-public: // XActiveDataSource
+public: 
     virtual void SAL_CALL setOutputStream(const Reference < XOutputStream > & aStream)
         throw (RuntimeException);
     virtual Reference < XOutputStream > SAL_CALL getOutputStream(void)
         throw (RuntimeException);
 
-public: // XConnectable
+public: 
     virtual void SAL_CALL setPredecessor(const Reference < XConnectable > & aPredecessor)
         throw (RuntimeException);
     virtual Reference < XConnectable > SAL_CALL getPredecessor(void) throw (RuntimeException);
@@ -123,13 +123,13 @@ public: // XConnectable
         throw (RuntimeException);
     virtual Reference<  XConnectable >  SAL_CALL getSuccessor(void) throw (RuntimeException);
 
-public: // XServiceInfo
+public: 
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
 private:
-    // helper methods
+    
     void checkMarksAndFlush() throw( NotConnectedException, BufferSizeExceededException);
 
     Reference< XConnectable > m_succ;
@@ -159,7 +159,7 @@ OMarkableOutputStream::~OMarkableOutputStream()
 }
 
 
-// XOutputStream
+
 void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
     throw ( NotConnectedException,
             BufferSizeExceededException,
@@ -167,12 +167,12 @@ void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
 {
     if( m_bValidStream ) {
         if( m_mapMarks.empty() && ( m_pBuffer->getSize() == 0 ) ) {
-            // no mark and  buffer active, simple write through
+            
             m_output->writeBytes( aData );
         }
         else {
             MutexGuard guard( m_mutex );
-            // new data must be buffered
+            
             try
             {
                 m_pBuffer->writeAt( m_nCurrentPos , aData );
@@ -205,9 +205,9 @@ void OMarkableOutputStream::flush(void)
         output = m_output;
     }
 
-    // Markable cannot flush buffered data, because the data may get rewritten,
-    // however one can forward the flush to the chained stream to give it
-    // a chance to write data buffered in the chained stream.
+    
+    
+    
     if( output.is() )
     {
         output->flush();
@@ -221,7 +221,7 @@ void OMarkableOutputStream::closeOutput(void)
 {
     if( m_bValidStream ) {
         MutexGuard guard( m_mutex );
-        // all marks must be cleared and all
+        
 
         if( ! m_mapMarks.empty() )
         {
@@ -327,7 +327,7 @@ sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 
 
 
-// XActiveDataSource2
+
 void OMarkableOutputStream::setOutputStream(const Reference < XOutputStream >& aStream)
     throw (RuntimeException)
 {
@@ -350,9 +350,9 @@ Reference< XOutputStream > OMarkableOutputStream::getOutputStream(void) throw (R
 void OMarkableOutputStream::setSuccessor( const Reference< XConnectable > &r )
     throw (RuntimeException)
 {
-     /// if the references match, nothing needs to be done
+     
      if( m_succ != r ) {
-         /// store the reference for later use
+         
          m_succ = r;
 
          if( m_succ.is() ) {
@@ -367,7 +367,7 @@ Reference <XConnectable > OMarkableOutputStream::getSuccessor()     throw (Runti
 }
 
 
-// XDataSource
+
 void OMarkableOutputStream::setPredecessor( const Reference< XConnectable > &r )
     throw (RuntimeException)
 {
@@ -385,14 +385,14 @@ Reference < XConnectable > OMarkableOutputStream::getPredecessor() throw (Runtim
 }
 
 
-// private methods
+
 
 void OMarkableOutputStream::checkMarksAndFlush() throw(     NotConnectedException,
                                                             BufferSizeExceededException)
 {
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii;
 
-    // find the smallest mark
+    
     sal_Int32 nNextFound = m_nCurrentPos;
     for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
         if( (*ii).second <= nNextFound )  {
@@ -401,7 +401,7 @@ void OMarkableOutputStream::checkMarksAndFlush() throw(     NotConnectedExceptio
     }
 
     if( nNextFound ) {
-        // some data must be released !
+        
         m_nCurrentPos -= nNextFound;
         for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
             (*ii).second -= nNextFound;
@@ -411,29 +411,29 @@ void OMarkableOutputStream::checkMarksAndFlush() throw(     NotConnectedExceptio
         m_pBuffer->readAt( 0 , seq , nNextFound );
         m_pBuffer->forgetFromStart( nNextFound );
 
-        // now write data through to streams
+        
         m_output->writeBytes( seq );
     }
     else {
-        // nothing to do. There is a mark or the current cursor position, that prevents
-        // releasing data !
+        
+        
     }
 }
 
 
-// XServiceInfo
+
 OUString OMarkableOutputStream::getImplementationName() throw ()
 {
     return OMarkableOutputStream_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName) throw ()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw ()
 {
     return OMarkableOutputStream_getSupportedServiceNames();
@@ -471,11 +471,11 @@ Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames(void)
 
 
 
-//------------------------------------------------
+
 //
-// XMarkableInputStream
+
 //
-//------------------------------------------------
+
 
 class OMarkableInputStream :
     public WeakImplHelper5
@@ -492,7 +492,7 @@ public:
     ~OMarkableInputStream();
 
 
-public: // XInputStream
+public: 
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
@@ -511,7 +511,7 @@ public: // XInputStream
                 RuntimeException);
     virtual void SAL_CALL closeInput(void) throw (NotConnectedException, RuntimeException);
 
-public: // XMarkable
+public: 
     virtual sal_Int32 SAL_CALL createMark(void)
         throw (IOException, RuntimeException);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)
@@ -523,13 +523,13 @@ public: // XMarkable
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException,RuntimeException);
 
-public: // XActiveDataSink
+public: 
     virtual void SAL_CALL setInputStream(const Reference < XInputStream > & aStream)
         throw (RuntimeException);
     virtual Reference < XInputStream > SAL_CALL getInputStream(void)
         throw (RuntimeException);
 
-public: // XConnectable
+public: 
     virtual void SAL_CALL setPredecessor(const Reference < XConnectable > & aPredecessor)
         throw (RuntimeException);
     virtual Reference < XConnectable > SAL_CALL getPredecessor(void)
@@ -538,7 +538,7 @@ public: // XConnectable
         throw (RuntimeException);
     virtual Reference < XConnectable > SAL_CALL getSuccessor(void) throw (RuntimeException);
 
-public: // XServiceInfo
+public: 
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                         SAL_CALL  supportsService(const OUString& ServiceName) throw ();
@@ -578,7 +578,7 @@ OMarkableInputStream::~OMarkableInputStream()
 
 
 
-// XInputStream
+
 
 sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw ( NotConnectedException,
@@ -590,14 +590,14 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
     if( m_bValidStream ) {
         MutexGuard guard( m_mutex );
         if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
-            // normal read !
+            
             nBytesRead = m_input->readBytes( aData, nBytesToRead );
         }
         else {
-            // read from buffer
+            
             sal_Int32 nRead;
 
-            // read enough bytes into buffer
+            
             if( m_pBuffer->getSize() - m_nCurrentPos < nBytesToRead  ) {
                 sal_Int32 nToRead = nBytesToRead - ( m_pBuffer->getSize() - m_nCurrentPos );
                 nRead = m_input->readBytes( aData , nToRead );
@@ -647,17 +647,17 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
     if( m_bValidStream ) {
         MutexGuard guard( m_mutex );
         if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
-            // normal read !
+            
             nBytesRead = m_input->readSomeBytes( aData, nMaxBytesToRead );
         }
         else {
-            // read from buffer
+            
             sal_Int32 nRead = 0;
             sal_Int32 nInBuffer = m_pBuffer->getSize() - m_nCurrentPos;
             sal_Int32 nAdditionalBytesToRead = Min(nMaxBytesToRead-nInBuffer,m_input->available());
             nAdditionalBytesToRead = Max(0 , nAdditionalBytesToRead );
 
-            // read enough bytes into buffer
+            
             if( 0 == nInBuffer ) {
                 nRead = m_input->readSomeBytes( aData , nMaxBytesToRead );
             }
@@ -683,7 +683,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
 
             nBytesRead = Min( nMaxBytesToRead , nInBuffer + nRead );
 
-            // now take everything from buffer !
+            
             m_pBuffer->readAt( m_nCurrentPos , aData , nBytesRead );
 
             m_nCurrentPos += nBytesRead;
@@ -712,7 +712,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
             *this
         );
 
-    // this method is blocking
+    
     Sequence<sal_Int8> seqDummy( nBytesToSkip );
     readBytes( seqDummy , nBytesToSkip );
 }
@@ -758,7 +758,7 @@ void OMarkableInputStream::closeInput(void) throw (NotConnectedException, Runtim
     }
 }
 
-// XMarkable
+
 
 sal_Int32 OMarkableInputStream::createMark(void)            throw (IOException, RuntimeException)
 {
@@ -843,7 +843,7 @@ sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 
 
 
-// XActiveDataSource
+
 void OMarkableInputStream::setInputStream(const Reference< XInputStream > & aStream)
     throw (RuntimeException)
 {
@@ -866,17 +866,17 @@ Reference< XInputStream > OMarkableInputStream::getInputStream(void) throw (Runt
 
 
 
-// XDataSink
+
 void OMarkableInputStream::setSuccessor( const Reference< XConnectable > &r )
     throw (RuntimeException)
 {
-     /// if the references match, nothing needs to be done
+     
      if( m_succ != r ) {
-         /// store the reference for later use
+         
          m_succ = r;
 
          if( m_succ.is() ) {
-              /// set this instance as the sink !
+              
               m_succ->setPredecessor( Reference< XConnectable > (
                   (static_cast< XConnectable *  >(this)) ) );
          }
@@ -889,7 +889,7 @@ Reference < XConnectable >  OMarkableInputStream::getSuccessor() throw (RuntimeE
 }
 
 
-// XDataSource
+
 void OMarkableInputStream::setPredecessor( const Reference < XConnectable >  &r )
     throw (RuntimeException)
 {
@@ -913,7 +913,7 @@ void OMarkableInputStream::checkMarksAndFlush()
 {
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii;
 
-    // find the smallest mark
+    
     sal_Int32 nNextFound = m_nCurrentPos;
     for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
         if( (*ii).second <= nNextFound )  {
@@ -922,7 +922,7 @@ void OMarkableInputStream::checkMarksAndFlush()
     }
 
     if( nNextFound ) {
-        // some data must be released !
+        
         m_nCurrentPos -= nNextFound;
         for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
             (*ii).second -= nNextFound;
@@ -932,24 +932,24 @@ void OMarkableInputStream::checkMarksAndFlush()
 
     }
     else {
-        // nothing to do. There is a mark or the current cursor position, that prevents
-        // releasing data !
+        
+        
     }
 }
 
-// XServiceInfo
+
 OUString OMarkableInputStream::getImplementationName() throw ()
 {
     return OMarkableInputStream_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName) throw ()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw ()
 {
     return OMarkableInputStream_getSupportedServiceNames();

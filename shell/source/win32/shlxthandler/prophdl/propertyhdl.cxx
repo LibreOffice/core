@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef OSL_DEBUG_LEVEL
@@ -38,13 +38,13 @@
 
 #include "internal/stream_helper.hxx"
 
-//---------------------------
-// Module global
-//---------------------------
+
+
+
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
 
-// Map of property keys to the locations of their value(s) in the .??? XML schema
+
 struct PROPERTYMAP
 {
     PROPERTYKEY key;
@@ -63,7 +63,7 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
 
 size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
 
-//----------------------------
+
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     m_RefCnt( nRefCnt ),
@@ -73,7 +73,7 @@ CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     InterlockedIncrement( &g_DllRefCnt );
 }
 
-//----------------------------
+
 
 CPropertyHdl::~CPropertyHdl()
 {
@@ -85,9 +85,9 @@ CPropertyHdl::~CPropertyHdl()
     InterlockedDecrement( &g_DllRefCnt );
 }
 
-//-----------------------------
-// IUnknown methods
-//-----------------------------
+
+
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = 0;
@@ -121,13 +121,13 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_F
     return E_NOINTERFACE;
 }
 
-//----------------------------
+
 ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef( void )
 {
     return InterlockedIncrement( &m_RefCnt );
 }
 
-//----------------------------
+
 ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void )
 {
     long refcnt = InterlockedDecrement( &m_RefCnt );
@@ -138,9 +138,9 @@ ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void )
     return refcnt;
 }
 
-//-----------------------------
-// IPropertyStore
-//-----------------------------
+
+
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::GetCount( DWORD *pcProps )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -152,7 +152,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetCount( DWORD *pcProps )
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::GetAt( DWORD iProp, PROPERTYKEY *pKey )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -164,7 +164,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetAt( DWORD iProp, PROPERTYKEY *pKey )
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::GetValue( REFPROPERTYKEY key, PROPVARIANT *pPropVar )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -176,7 +176,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetValue( REFPROPERTYKEY key, PROPVARIAN
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE
 CPropertyHdl::SetValue(REFPROPERTYKEY /*key*/, REFPROPVARIANT /*propVar*/)
 {
@@ -188,25 +188,25 @@ CPropertyHdl::SetValue(REFPROPERTYKEY /*key*/, REFPROPVARIANT /*propVar*/)
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::Commit()
 {
     return S_OK;
 }
 
-//-----------------------------
-// IPropertyStore
-//-----------------------------
+
+
+
 HRESULT STDMETHODCALLTYPE
 CPropertyHdl::IsPropertyWritable(REFPROPERTYKEY /*key*/)
 {
-    // We start with read only properties only
+    
     return S_FALSE;
 }
 
-//-----------------------------
-// IInitializeWithStream
-//-----------------------------
+
+
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfMode )
 {
     if ( grfMode & STGM_READWRITE )
@@ -241,7 +241,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
     return S_OK;
 }
 
-//-----------------------------
+
 void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
 {
     OutputDebugStringFormat( "CPropertyHdl: LoadProperties\n" );
@@ -253,18 +253,18 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
         HRESULT hr = GetItemData( pMetaInfoReader, i, &propvarValues);
         if (hr == S_OK)
         {
-            // coerce the value(s) to the appropriate type for the property key
+            
             hr = PSCoerceToCanonicalValue( g_rgPROPERTYMAP[i].key, &propvarValues );
             if (SUCCEEDED(hr))
             {
-                // cache the value(s) loaded
+                
                 hr = m_pCache->SetValueAndState( g_rgPROPERTYMAP[i].key, &propvarValues, PSC_NORMAL );
             }
         }
     }
 }
 
-//-----------------------------
+
 HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex, PROPVARIANT *pVarData )
 {
     switch (nIndex) {
@@ -309,13 +309,13 @@ HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex
     return S_FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//                              CClassFactory
-//-----------------------------------------------------------------------------
+
+
+
 
 long CClassFactory::s_ServerLocks = 0;
 
-//-----------------------------------------------------------------------------
+
 CClassFactory::CClassFactory( const CLSID& clsid ) :
     m_RefCnt(1),
     m_Clsid(clsid)
@@ -323,15 +323,15 @@ CClassFactory::CClassFactory( const CLSID& clsid ) :
     InterlockedIncrement( &g_DllRefCnt );
 }
 
-//-----------------------------------------------------------------------------
+
 CClassFactory::~CClassFactory()
 {
     InterlockedDecrement( &g_DllRefCnt );
 }
 
-//-----------------------------------------------------------------------------
-//                              IUnknown methods
-//-----------------------------------------------------------------------------
+
+
+
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject )
 {
     *ppvObject = 0;
@@ -347,13 +347,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC
     return E_NOINTERFACE;
 }
 
-//-----------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef( void )
 {
     return InterlockedIncrement( &m_RefCnt );
 }
 
-//-----------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE CClassFactory::Release( void )
 {
     long refcnt = InterlockedDecrement( &m_RefCnt );
@@ -364,9 +364,9 @@ ULONG STDMETHODCALLTYPE CClassFactory::Release( void )
     return refcnt;
 }
 
-//-----------------------------------------------------------------------------
-//                          IClassFactory methods
-//-----------------------------------------------------------------------------
+
+
+
 HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
             REFIID riid,
@@ -387,13 +387,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 
     HRESULT hr = pUnk->QueryInterface( riid, ppvObject );
 
-    // if QueryInterface failed the component will destroy itself
+    
     pUnk->Release();
 
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer( BOOL fLock )
 {
     if ( fLock )
@@ -404,13 +404,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer( BOOL fLock )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 bool CClassFactory::IsLocked()
 {
     return ( s_ServerLocks > 0 );
 }
 
-//-----------------------------------------------------------------------------
+
 extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
     OutputDebugStringFormat( "DllGetClassObject.\n" );
@@ -427,7 +427,7 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 extern "C" STDAPI DllCanUnloadNow( void )
 {
     OutputDebugStringFormat( "DllCanUnloadNow.\n" );
@@ -437,7 +437,7 @@ extern "C" STDAPI DllCanUnloadNow( void )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 BOOL WINAPI DllMain( HINSTANCE hInst, ULONG /*ul_reason_for_call*/, LPVOID /*lpReserved*/ )
 {
     OutputDebugStringFormat( "DllMain.\n" );

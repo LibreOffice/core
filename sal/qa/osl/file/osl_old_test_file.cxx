@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/file.h>
@@ -27,7 +27,7 @@
 #include <sys/stat.h>
 #define TEST_VOLUME ""
 #else
-// WINDOWS
+
 #define TEST_VOLUME "c:/"
 #endif
 
@@ -38,7 +38,7 @@
 namespace osl_test_file
 {
 
-// -----------------------------------------------------------------------------
+
 
 class oldtestfile : public CppUnit::TestFixture
 {
@@ -56,28 +56,28 @@ public:
 
 const char * const aSource1[] =
 {
-    "a"    , "file:///" TEST_VOLUME "bla/a",
-    ///TODO: check if last slash must be omitted in resolved path.
-//    "a/"   , "file:///" TEST_VOLUME "bla/a",
-    "../a" , "file:///" TEST_VOLUME "a" ,
-    "a/.." , "file:///" TEST_VOLUME "bla/",
-    "a/../b" , "file:///" TEST_VOLUME "bla/b",
-    ".."   , "file:///" TEST_VOLUME "",
-    "a/b/c/d"   , "file:///" TEST_VOLUME "bla/a/b/c/d",
-    "a/./c"   , "file:///" TEST_VOLUME "bla/a/c",
-    "file:///bla/blub", "file:///"  "bla/blub",
+    "a"    , "file:
+    
+
+    "../a" , "file:
+    "a/.." , "file:
+    "a/../b" , "file:
+    ".."   , "file:
+    "a/b/c/d"   , "file:
+    "a/./c"   , "file:
+    "file:
     0 , 0
 };
 
 const char * const aSource2[ ] =
 {
-    "a" , "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
-    ///TODO: check if last slash must be omitted in resolved path.
-//    "a/", "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
-    "../a", "file:///" TEST_VOLUME "bla/blubs/a",
-    "../../a", "file:///" TEST_VOLUME "bla/a",
-    "../../../a", "file:///" TEST_VOLUME "a",
-    "../../../a/b/c/d", "file:///" TEST_VOLUME "a/b/c/d",
+    "a" , "file:
+    
+
+    "../a", "file:
+    "../../a", "file:
+    "../../../a", "file:
+    "../../../a/b/c/d", "file:
     0,0
 };
 
@@ -88,7 +88,7 @@ using ::rtl::OString;
 void oldtestfile::test_file_001()
 {
 #ifndef WIN32
-    OUString base1( "file:///" TEST_VOLUME "bla" );
+    OUString base1( "file:
     int i;
     for( i = 0 ; aSource1[i] ; i +=2 )
     {
@@ -107,7 +107,7 @@ void oldtestfile::test_file_001()
 void oldtestfile::test_file_002()
 {
 #ifndef WIN32
-    OUString base2( "file:///" TEST_VOLUME "bla/blubs/schnubbel" );
+    OUString base2( "file:
     int i;
     for(  i = 0 ; aSource2[i] ; i +=2 )
     {
@@ -126,7 +126,7 @@ void oldtestfile::test_file_002()
 void oldtestfile::test_file_004()
 {
 #ifndef WIN32
-    OUString base4( "file:///" TEST_VOLUME "bla/" );
+    OUString base4( "file:
     int i;
     for( i = 0 ; aSource1[i] ; i +=2 )
     {
@@ -142,12 +142,12 @@ void oldtestfile::test_file_004()
 #endif
 }
 
-} // namespace osl_test_file
+} 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_test_file::oldtestfile);
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 #define BEEHIVE_BUGS_WORKAROUND
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct LockSequenceParseContext
 {
@@ -68,7 +68,7 @@ struct LockSequenceParseContext
 #define STATE_WRITE         (STATE_TOP + 9)
 #define STATE_HREF          (STATE_TOP + 10)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockSequence_startelement_callback(
     void *,
     int parent,
@@ -118,14 +118,14 @@ extern "C" int LockSequence_startelement_callback(
                 break;
 
             case STATE_OWNER:
-                // owner elem contains ANY. Accept anything; no state change.
+                
                 return STATE_OWNER;
         }
     }
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockSequence_chardata_callback(
     void *userdata,
     int state,
@@ -142,7 +142,7 @@ extern "C" int LockSequence_chardata_callback(
         pCtx->pLock = new ucb::Lock;
 
 #ifdef BEEHIVE_BUGS_WORKAROUND
-    // Beehive sends XML values containing trailing newlines.
+    
     if ( buf1[ len - 1 ] == 0x0a )
         len--;
 
@@ -177,7 +177,7 @@ extern "C" int LockSequence_chardata_callback(
 
         case STATE_OWNER:
         {
-            // collect raw XML data... (owner contains ANY)
+            
             OUString aValue;
             pCtx->pLock->Owner >>= aValue;
             aValue += OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
@@ -187,15 +187,15 @@ extern "C" int LockSequence_chardata_callback(
 
         case STATE_TIMEOUT:
             //
-            //  RFC2518, RFC2616:
+            
             //
-            //  TimeType = ("Second-" DAVTimeOutVal | "Infinite" | Other)
-            //  DAVTimeOutVal = 1*digit
-            //  Other = "Extend" field-value
-            //  field-value = *( field-content | LWS )
-            //  field-content = <the OCTETs making up the field-value
-            //                  and consisting of either *TEXT or combinations
-            //                  of token, separators, and quoted-string>
+            
+            
+            
+            
+            
+            
+            
 
             if ( rtl_str_compareIgnoreAsciiCase_WithLength(
                     buf, len, "Infinite", 8 ) == 0 )
@@ -210,11 +210,11 @@ extern "C" int LockSequence_chardata_callback(
                     = OString( buf + 7, len - 7 ).toInt64();
                 pCtx->hasTimeout = true;
             }
-//          else if ( rtl_str_shortenedCompareIgnoreCase_WithLength(
-//                                          buf, len, "Extend", 6, 6 ) == 0 )
-//          {
-//              @@@
-//          }
+
+
+
+
+
             else
             {
                 pCtx->pLock->Timeout = sal_Int64( -1 );
@@ -225,7 +225,7 @@ extern "C" int LockSequence_chardata_callback(
 
         case STATE_HREF:
         {
-            // collect hrefs.
+            
             sal_Int32 nPos = pCtx->pLock->LockTokens.getLength();
             pCtx->pLock->LockTokens.realloc( nPos + 1 );
             pCtx->pLock->LockTokens[ nPos ]
@@ -240,10 +240,10 @@ extern "C" int LockSequence_chardata_callback(
     delete [] buf;
 #endif
 
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockSequence_endelement_callback(
     void *userdata,
     int state,
@@ -274,49 +274,49 @@ extern "C" int LockSequence_endelement_callback(
 
         case STATE_DEPTH:
             if ( !pCtx->hasDepth )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_HREF:
             if ( !pCtx->hasHREF )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_TIMEOUT:
             if ( !pCtx->hasTimeout )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_LOCKSCOPE:
             if ( !pCtx->hasLockScope )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_LOCKTYPE:
             if ( !pCtx->hasLockType )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_ACTIVELOCK:
             if ( !pCtx->hasLockType || !pCtx->hasDepth )
-                return 1; // abort
+                return 1; 
             break;
 
         default:
             break;
     }
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool LockSequence::createFromXML( const OString & rInData,
                                   uno::Sequence< ucb::Lock > & rOutData )
 {
-    const sal_Int32 TOKEN_LENGTH = 13; // </activelock>
+    const sal_Int32 TOKEN_LENGTH = 13; 
     bool success = true;
 
-    // rInData may contain multiple <activelock>...</activelock> tags.
+    
     sal_Int32 nCount = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd   = rInData.indexOf( "</activelock>" );

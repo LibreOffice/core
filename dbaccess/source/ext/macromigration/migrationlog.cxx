@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbmm_module.hxx"
@@ -31,7 +31,7 @@
 
 namespace dbmm
 {
-    // LibraryEntry
+    
     struct LibraryEntry
     {
         ScriptType      eType;
@@ -53,7 +53,7 @@ namespace dbmm
         }
     };
 
-    // DocumentEntry
+    
     struct DocumentEntry
     {
         SubDocumentType                 eType;
@@ -74,13 +74,13 @@ namespace dbmm
         }
     };
 
-    // DocumentLogs
+    
     typedef ::std::map< DocumentID, DocumentEntry > DocumentLogs;
 
-    // ErrorLog
+    
     typedef ::std::list< MigrationError >   ErrorLog;
 
-    // MigrationLog_Data
+    
     struct MigrationLog_Data
     {
         OUString sBackupLocation;
@@ -89,7 +89,7 @@ namespace dbmm
         ErrorLog        aWarnings;
     };
 
-    // MigrationLog
+    
     MigrationLog::MigrationLog()
         :m_pData( new MigrationLog_Data )
     {
@@ -159,7 +159,7 @@ namespace dbmm
 
         DocumentEntry& rDocEntry = m_pData->aDocumentLogs[ _nDocID ];
         (void)rDocEntry;
-        // nothing to do here
+        
     }
 
     const OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
@@ -330,8 +330,8 @@ namespace dbmm
                 aParameterNames.push_back(OUString("#doc#"));
                 break;
 
-                // do *not* add a default case here: Without a default, some compilers will warn you when
-                // you miss a newly-introduced enum value here
+                
+                
             }
             OSL_ENSURE( pAsciiErrorDescription, "lcl_appendErrorDescription: no error message!" );
             if ( pAsciiErrorDescription )
@@ -452,6 +452,6 @@ namespace dbmm
         return aBuffer.makeStringAndClear();
     }
 
-} // namespace dbmm
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

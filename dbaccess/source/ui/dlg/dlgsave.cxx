@@ -77,7 +77,7 @@ public:
                     sal_Int32 _nFlags);
 };
 
-} // dbaui
+} 
 
 OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
                         const sal_Int32& _rType,
@@ -205,7 +205,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 }
                 else
                 {
-                    // now fill the catalogs
+                    
                     lcl_fillComboList( *m_pImpl->m_pCatalog, _xConnection,
                         &XDatabaseMetaData::getCatalogs, _xConnection->getCatalog() );
                 }
@@ -256,9 +256,9 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_pCatalog->SetMaxTextLen(nLength);
 
                 sal_Bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
-                m_pImpl->m_pTitle->setCheck(bCheck); // enable non valid sql chars as well
-                m_pImpl->m_pSchema->setCheck(bCheck); // enable non valid sql chars as well
-                m_pImpl->m_pCatalog->setCheck(bCheck); // enable non valid sql chars as well
+                m_pImpl->m_pTitle->setCheck(bCheck); 
+                m_pImpl->m_pSchema->setCheck(bCheck); 
+                m_pImpl->m_pCatalog->setCheck(bCheck); 
             }
             break;
 
@@ -303,7 +303,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
                 getCatalog(),
                 getSchema(),
                 sNameToCheck,
-                sal_False,  // no quoting
+                sal_False,  
                 ::dbtools::eInDataManipulation
             );
         }
@@ -334,14 +334,14 @@ void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
     m_pImpl->m_pSchema->Hide();
 
     m_pImpl->m_pTitle->SetText(m_pImpl->m_aName);
-    m_pImpl->m_pTitle->setCheck(sal_False); // enable non valid sql chars as well
+    m_pImpl->m_pTitle->setCheck(sal_False); 
 }
 
 void OSaveAsDlg::implInit()
 {
     if ( 0 == ( m_pImpl->m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) )
     {
-        // hide the description window
+        
         m_pImpl->m_pDescription->Hide();
     }
 

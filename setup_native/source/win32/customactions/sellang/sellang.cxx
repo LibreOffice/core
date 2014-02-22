@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /* Currently the "all" installer has a bit over 100 UI languages, and
@@ -193,8 +193,8 @@ namespace {
 
 /* TODO-BCP47: unlimit this, and if possible change from '_' to '-' separator
  * to ease things. */
-// XXX NOTE: the sizeof needs to follow what is accepted in
-// setup_native/source/packinfo/spellchecker_selection.pl
+
+
 struct InstallLocalized {
     char lang[sizeof("lll_Ssss_CC_vvvvvvvv")];
     bool install;
@@ -318,19 +318,19 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     } else {
         add_ui_lang(langid_to_string(GetSystemDefaultUILanguage()));
         add_ui_lang(langid_to_string(LANGIDFROMLCID(GetThreadLocale())));
-            //TODO: are the above two explicit additions necessary, or will
-            // those values always be included in the below EnumUILanguages
-            // anyway?
+            
+            
+            
         EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
     }
 
-    // If the set of langpacks that match any of the relevant UI languages is
-    // non-empty, select just those matching langpacks; otherwise, if an en_US
-    // langpack is included, select just that langpack (this happens if, e.g.,
-    // a multi-language en-US,de,es,fr,it,pt-BR installation set is installed on
-    // a Finnish Windows); otherwise, select all langpacks (this happens if,
-    // e.g., a single-language de installation set is installed on a Finnish
-    // Windows):
+    
+    
+    
+    
+    
+    
+    
     bool matches = false;
     for (int i = 0; i < nlangs; i++) {
         if (present_in_ui_langs(langs[i].lang)) {
@@ -362,7 +362,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         }
     }
 
-    // Select just those dictionaries that match any of the selected langpacks:
+    
     for (int i = 0; i != ndicts; ++i) {
         if (!dicts[i].install) {
             sprintf(feature, "gm_r_ex_Dictionary_%s", dicts[i].lang);

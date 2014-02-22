@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,25 +14,25 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "browserpage.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     #define LAYOUT_BORDER_LEFT      3
     #define LAYOUT_BORDER_TOP       3
     #define LAYOUT_BORDER_RIGHT     3
     #define LAYOUT_BORDER_BOTTOM    3
 
-    //==================================================================
-    // class OBrowserPage
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OBrowserPage::OBrowserPage(Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)
             ,m_aListBox(this)
@@ -42,12 +42,12 @@ namespace pcr
         m_aListBox.Show();
     }
 
-    //------------------------------------------------------------------
+    
     OBrowserPage::~OBrowserPage()
     {
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserPage::Resize()
     {
         Size aSize( GetOutputSizePixel() );
@@ -56,19 +56,19 @@ namespace pcr
         m_aListBox.SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
     }
 
-    //------------------------------------------------------------------
+    
     OBrowserListBox& OBrowserPage::getListBox()
     {
         return m_aListBox;
     }
 
-    //------------------------------------------------------------------
+    
     const OBrowserListBox& OBrowserPage::getListBox() const
     {
         return m_aListBox;
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserPage::StateChanged(StateChangedType nType)
     {
         Window::StateChanged( nType);
@@ -76,21 +76,21 @@ namespace pcr
             m_aListBox.ActivateListBox(IsVisible());
     }
 
-    //------------------------------------------------------------------
+    
     sal_Int32 OBrowserPage::getMinimumWidth()
     {
         return m_aListBox.GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
     }
 
-    //------------------------------------------------------------------
+    
     sal_Int32 OBrowserPage::getMinimumHeight()
     {
         return m_aListBox.GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
     }
 
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

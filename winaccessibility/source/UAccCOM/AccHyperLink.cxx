@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stdafx.h"
@@ -109,19 +109,19 @@ STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(anchor == NULL)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+    
     if(!pRXLink.is())
     {
         return E_FAIL;
     }
-    // Get Any type value via pRXLink.
+    
     ::com::sun::star::uno::Any  anyVal = GetXInterface()->getAccessibleActionAnchor(index);
-    // Convert Any to VARIANT.
+    
     CMAccessible::ConvertAnyToVariant(anyVal, anchor);
 
     return S_OK;
@@ -141,19 +141,19 @@ STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(anchorTarget == NULL)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+    
     if(!pRXLink.is())
     {
         return E_FAIL;
     }
-    // Get Any type value via pRXLink.
+    
     ::com::sun::star::uno::Any  anyVal = GetXInterface()->getAccessibleActionObject(index);
-    // Convert Any to VARIANT.
+    
     CMAccessible::ConvertAnyToVariant(anyVal, anchorTarget);
 
     return S_OK;
@@ -173,7 +173,7 @@ STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *i
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(index == NULL)
     {
         return E_INVALIDARG;
@@ -196,12 +196,12 @@ STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *ind
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(index == NULL)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+    
     if(!pRXLink.is())
     {
         return E_FAIL;
@@ -224,12 +224,12 @@ STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *val
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(valid == NULL)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+    
     if(!pRXLink.is())
     {
         return E_FAIL;
@@ -248,12 +248,12 @@ STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *val
 */
 STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
 
     CAccActionBase::put_XInterface(pXInterface);
-    //special query.
+    
     if(pUNOInterface != NULL)
     {
         Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
@@ -281,7 +281,7 @@ STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 */
 STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    
 
     pRXLink = reinterpret_cast<XAccessibleHyperlink*>(pXSubInterface);
     pRXAct = reinterpret_cast<XAccessibleAction*>(pXSubInterface);

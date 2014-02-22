@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/XText.hpp>
@@ -62,7 +62,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         sal_uInt16 nPrefix(GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLName ));
         const OUString& rValue(xAttrList->getValueByIndex( i ));
 
-        // TODO: use a map here
+        
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
             if( IsXMLToken(aLName, XML_DISPLAY ) )
@@ -76,13 +76,13 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         if( bOn && bDisplay )
         {
             if( ::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
-                // Don't share headers any longer
+                
                 xPropSet->setPropertyValue( sShareContent, uno::makeAny(false) );
         }
         else
         {
             if( !::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
-                // share headers
+                
                 xPropSet->setPropertyValue( sShareContent, uno::makeAny(sal_True) );
         }
     }
@@ -156,7 +156,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
                 if (xText.is())
                 {
                     xText->setString(sEmpty);
-                    //SvXMLImport aSvXMLImport( GetImport() );
+                    
                     uno::Reference < text::XTextCursor > xTempTextCursor(xText->createTextCursor());
                     pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xAttrList, xTempTextCursor);
                 }
@@ -173,7 +173,7 @@ void XMLTableHeaderFooterContext::EndElement()
 {
     if( GetImport().GetTextImport()->GetCursor().is() )
     {
-        //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+        
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, true ) )
         {
             GetImport().GetTextImport()->GetText()->insertString(
@@ -241,7 +241,7 @@ void XMLHeaderFooterRegionContext::EndElement()
 {
     if( GetImport().GetTextImport()->GetCursor().is() )
     {
-        //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+        
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, true ) )
         {
             OUString sEmpty;

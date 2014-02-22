@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,11 +46,11 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
 
-// Wrapper class to notify controller about events from ListBox.
-// Unfortunaltly the events are notifed through virtual methods instead
-// of Listeners.
+
+
+
+
 
 class ListBoxControl : public ListBox
 {
@@ -118,7 +118,7 @@ bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 DropdownToolbarController::DropdownToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -134,7 +134,7 @@ DropdownToolbarController::DropdownToolbarController(
     if ( nWidth == 0 )
         nWidth = 100;
 
-    // default dropdown size
+    
     ::Size aLogicalSize( 0, 160 );
     ::Size aPixelSize = m_pListBoxControl->LogicToPixel( aLogicalSize, MAP_APPFONT );
 
@@ -143,13 +143,13 @@ DropdownToolbarController::DropdownToolbarController(
     m_pListBoxControl->SetDropDownLineCount( 5 );
 }
 
-// ------------------------------------------------------------------
+
 
 DropdownToolbarController::~DropdownToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL DropdownToolbarController::dispose()
 throw ( RuntimeException )
@@ -164,13 +164,13 @@ throw ( RuntimeException )
     m_pListBoxControl = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
     OUString aSelectedText = m_pListBoxControl->GetSelectEntry();
 
-    // Add key modifier to argument list
+    
     aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     aArgs[1].Name = "Text";
@@ -178,7 +178,7 @@ Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyM
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void DropdownToolbarController::Select()
 {
@@ -210,7 +210,7 @@ bool DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void DropdownToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
@@ -229,7 +229,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
 
                 m_pListBoxControl->SelectEntryPos( 0 );
 
-                // send notification
+                
                 uno::Sequence< beans::NamedValue > aInfo( 1 );
                 aInfo[0].Name  = "List";
                 aInfo[0].Value <<= aList;
@@ -321,6 +321,6 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
     }
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

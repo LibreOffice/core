@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "FormattedString.hxx"
@@ -95,7 +95,7 @@ struct StaticFormattedStringInfo : public rtl::StaticAggregate< uno::Reference< 
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -118,14 +118,14 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
 FormattedString::~FormattedString()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new FormattedString( *this ));
 }
 
-// ____ XFormattedString ____
+
 OUString SAL_CALL FormattedString::getString()
     throw (uno::RuntimeException)
 {
@@ -140,12 +140,12 @@ void SAL_CALL FormattedString::setString( const OUString& String )
         MutexGuard aGuard( GetMutex());
         m_aString = String;
     }
-    //don't keep the mutex locked while calling out
+    
     fireModifyEvent();
 
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -174,21 +174,21 @@ void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util:
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL FormattedString::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL FormattedString::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void FormattedString::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -208,7 +208,7 @@ Sequence< OUString > FormattedString::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// ____ OPropertySet ____
+
 uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -219,13 +219,13 @@ uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL FormattedString::getInfoHelper()
 {
     return *StaticFormattedStringInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -237,12 +237,12 @@ using impl::FormattedString_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( FormattedString, FormattedString_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::property::OPropertySet )
 
-// do this in derived classes!
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
+
 APPHELPER_XSERVICEINFO_IMPL( FormattedString,
                              OUString("com.sun.star.comp.chart.FormattedString") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

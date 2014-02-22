@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -151,17 +151,17 @@ GalleryThemePopup::GalleryThemePopup(
 {
     DBG_CTOR(GalleryThemePopup,NULL);
 
-    // SID_GALLERY_ENABLE_ADDCOPY
+    
     m_aCommandInfo.insert(
         CommandInfoMap::value_type(
             SID_GALLERY_ENABLE_ADDCOPY,
             CommandInfo( OUString(CMD_SID_GALLERY_ENABLE_ADDCOPY ))));
-    // SID_GALLERY_BG_BRUSH
+    
     m_aCommandInfo.insert(
         CommandInfoMap::value_type(
             SID_GALLERY_BG_BRUSH,
             CommandInfo(OUString(CMD_SID_GALLERY_BG_BRUSH ))));
-    // SID_GALLERY_FORMATS
+    
     m_aCommandInfo.insert(
         CommandInfoMap::value_type(
             SID_GALLERY_FORMATS,
@@ -295,7 +295,7 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
     maPopupMenu.EnableItem( MN_PASTECLIPBOARD, false );
 #endif
 
-    // update status
+    
     css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
         mpBrowser->GetFrame(), css::uno::UNO_QUERY );
     css::uno::Reference< css::util::XURLTransformer > xTransformer(
@@ -378,12 +378,12 @@ IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu )
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs( 6 );
     aArgs[0].Name = "Background.Transparent";
-    aArgs[0].Value <<= sal_Int32( 0 ); // 0 - 100
+    aArgs[0].Value <<= sal_Int32( 0 ); 
     aArgs[1].Name = "Background.BackColor";
     aArgs[1].Value <<= sal_Int32( - 1 );
     aArgs[2].Name = "Background.URL";
     aArgs[2].Value <<= aURL;
-    aArgs[3].Name = "Background.Filtername"; // FIXME should be FilterName
+    aArgs[3].Name = "Background.Filtername"; 
     aArgs[3].Value <<= aFilterName;
     aArgs[4].Name = "Background.Position";
     aArgs[4].Value <<= css::style::GraphicLocation_TILED;
@@ -397,7 +397,7 @@ IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu )
     return 0;
 }
 
-} // end anonymous namespace
+} 
 
 DBG_NAME(GalleryToolBox)
 
@@ -710,7 +710,7 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
             case( KEY_INSERT ):
             case( KEY_I ):
             {
-                // Inserting a gallery item in the document must be dispatched
+                
                 if( bValidURL )
                 {
                     Dispatch( MN_ADD );
@@ -1125,7 +1125,7 @@ void GalleryBrowser2::Dispatch(
                 case( SGA_OBJ_BMP ):
                 case( SGA_OBJ_ANIM ):
                 case( SGA_OBJ_INET ):
-                // TODO drawing objects are inserted as drawings only via drag&drop
+                
                 case( SGA_OBJ_SVDRAW ):
                     nType = css::gallery::GalleryItemType::GRAPHIC;
                 break;

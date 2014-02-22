@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -75,7 +75,7 @@ using ::com::sun::star::sdb::tools::XDataSourceMetaData;
 namespace dbaccess
 {
 
-// XServiceInfo
+
 OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OConnection::getImplementationName" );
@@ -102,11 +102,11 @@ Sequence< OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeExc
     return aSupported;
 }
 
-// XCloseable
+
 void OConnection::close(void) throw( SQLException, RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::close" );
-    // being closed is the same as being disposed
+    
     dispose();
 }
 
@@ -117,7 +117,7 @@ sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException )
     return !m_xMasterConnection.is();
 }
 
-// XConnection
+
 Reference< XStatement >  OConnection::createStatement(void) throw( SQLException, RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::createStatement" );
@@ -140,7 +140,7 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const OUString& s
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    // TODO convert the SQL to SQL the driver understands
+    
     Reference< XPreparedStatement > xStatement;
     Reference< XPreparedStatement > xMasterStatement = m_xMasterConnection->prepareStatement(sql);
     if ( xMasterStatement.is() )
@@ -279,15 +279,15 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
     m_xMasterConnection->setTypeMap(typeMap);
 }
 
-// OConnection
+
 
 OConnection::OConnection(ODatabaseSource& _rDB
                          , Reference< XConnection >& _rxMaster
                          , const Reference< XComponentContext >& _rxORB)
             :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
-                // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
-                // container would do it's own refcounting, it would have to aquire m_pMutex
-                // same for tables
+                
+                
+                
             ,m_aTableFilter(_rDB.m_pImpl->m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_aContext( _rxORB )
@@ -334,7 +334,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         Reference< XNameContainer > xTableDefinitions(_rDB.getTables(),UNO_QUERY);
         m_pTables = new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, &m_aWarnings,m_nInAppend );
 
-        // check if we supports types
+        
         if ( xMeta.is() )
         {
             Reference<XResultSet> xRes = xMeta->getTableTypes();
@@ -352,7 +352,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                     }
                 }
             }
-            // some dbs don't support this type so we should ask if a XViewsSupplier is supported
+            
             if(!m_bSupportsViews)
             {
                 Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
@@ -385,7 +385,7 @@ OConnection::~OConnection()
     delete m_pViews;
 }
 
-// XWarningsSupplier
+
 Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OConnection::getWarnings" );
@@ -420,7 +420,7 @@ namespace
     }
 }
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 {
     SAL_INFO("dbaccess", "OConnection::getTypes" );
@@ -448,7 +448,7 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
     return getUnoTunnelImplementationId();
 }
 
-// com::sun::star::uno::XInterface
+
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     if ( !m_bSupportsViews && rType.equals( cppu::UnoType<XViewsSupplier>::get() ) )
@@ -469,17 +469,17 @@ Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 
 void OConnection::acquire() throw ()
 {
-    // include this one when you want to see who calls it (call graph)
+    
     OSubComponent::acquire();
 }
 
 void OConnection::release() throw ()
 {
-    // include this one when you want to see who calls it (call graph)
+    
     OSubComponent::release();
 }
 
-// OSubComponent
+
 void OConnection::disposing()
 {
     SAL_INFO("dbaccess", "OConnection::disposing" );
@@ -524,7 +524,7 @@ void OConnection::disposing()
     m_xMasterConnection = NULL;
 }
 
-// XChild
+
 Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::getParent" );
@@ -539,14 +539,14 @@ void OConnection::setParent(const Reference< XInterface > & /*Parent*/) throw( N
     throw NoSupportException();
 }
 
-// XSQLQueryComposerFactory
+
 Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::createQueryComposer" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
+    
     Reference< XSQLQueryComposer >  xComposer( new OQueryComposer( this ) );
     m_aComposers.push_back(WeakReferenceHelper(xComposer));
     return xComposer;
@@ -570,15 +570,15 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
         if (m_pTables && !m_pTables->isInitialized())
         {
             impl_fillTableFilter();
-            // check if our "master connection" can supply tables
+            
             getMasterTables();
 
             if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
-            {   // yes -> wrap them
+            {   
                 m_pTables->construct(m_xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
             }
             else
-            {   // no -> use an own container
+            {   
                 m_pTables->construct(m_aTableFilter, m_aTableTypeFilter);
             }
         }
@@ -588,7 +588,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
         if (m_pViews && !m_pViews->isInitialized())
         {
             impl_fillTableFilter();
-            // check if our "master connection" can supply tables
+            
             Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 
             if (xMaster.is() && xMaster->getViews().is())
@@ -599,7 +599,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     }
 }
 
-// XTablesSupplier
+
 Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::getTables" );
@@ -622,7 +622,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
     return m_pViews;
 }
 
-// XQueriesSupplier
+
 Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::getQueries" );
@@ -632,7 +632,7 @@ Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException 
     return m_xQueries;
 }
 
-// ::com::sun::star::sdb::XCommandPreparation
+
 Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OConnection::prepareCommand" );
@@ -661,7 +661,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUS
         default:
             aStatement = command;
     }
-    // TODO EscapeProcessing
+    
     return prepareStatement(aStatement);
 }
 
@@ -713,7 +713,7 @@ Sequence< OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (R
 Reference< XTablesSupplier > OConnection::getMasterTables()
 {
     SAL_INFO("dbaccess", "OConnection::getMasterTables" );
-// check if out "master connection" can supply tables
+
     if(!m_xMasterTables.is())
     {
         try
@@ -729,7 +729,7 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
     return m_xMasterTables;
 }
 
-// XUsersSupplier
+
 Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OConnection::getUsers" );
@@ -740,7 +740,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeExcepti
     return xUsr.is() ? xUsr->getUsers() : Reference< XNameAccess >();
 }
 
-// XGroupsSupplier
+
 Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OConnection::getGroups" );
@@ -812,7 +812,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     SAL_INFO("dbaccess", "OConnection::impl_checkTableQueryNames_nothrow" );
     DatabaseMetaData aMeta( static_cast< XConnection* >( this ) );
     if ( !aMeta.supportsSubqueriesInFrom() )
-        // nothing to do
+        
         return;
 
     try
@@ -847,14 +847,14 @@ Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& _Table
     SAL_INFO("dbaccess", "OConnection::getTableIcon" );
     Reference< XGraphic > xReturn;
 
-    // ask our aggregate
+    
     if ( m_xTableUIProvider.is() )
         xReturn = m_xTableUIProvider->getTableIcon( _TableName, _ColorMode );
 
-    // ask ourself
-    // well, we don't have own functionality here ...
-    // In the future, we might decide to delegate the complete handling to this interface.
-    // In this case, we would need to load the icon here.
+    
+    
+    
+    
 
     return xReturn;
 }
@@ -864,18 +864,18 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
     SAL_INFO("dbaccess", "OConnection::getTableEditor" );
     Reference< XInterface > xReturn;
 
-    // ask our aggregate
+    
     if ( m_xTableUIProvider.is() )
         xReturn = m_xTableUIProvider->getTableEditor( _DocumentUI, _TableName );
 
-    // ask ourself
-    // well, we don't have own functionality here ...
-    // In the future, we might decide to delegate the complete handling to this interface.
-    // In this case, we would need to instantiate an css.sdb.TableDesign here.
+    
+    
+    
+    
 
     return xReturn;
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

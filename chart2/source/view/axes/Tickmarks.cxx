@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Tickmarks.hxx"
@@ -51,7 +51,7 @@ double TickInfo::getUnscaledTickValue() const
 
 sal_Int32 TickInfo::getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo ) const
 {
-    //return the positive distance between the two first tickmarks in screen values
+    
 
     B2DVector aDistance = rOherTickInfo.aTickScreenPosition - aTickScreenPosition;
     sal_Int32 nRet = static_cast<sal_Int32>(aDistance.getLength());
@@ -92,7 +92,7 @@ TickFactory::TickFactory(
             , m_rIncrement( rIncrement )
             , m_xInverseScaling(NULL)
 {
-    //@todo: make sure that the scale is valid for the scaling
+    
 
     if( m_rScale.Scaling.is() )
     {
@@ -134,10 +134,10 @@ void TickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >
         EquidistantTickFactory( m_rScale, m_rIncrement ).getAllTicksShifted( rAllTickInfos );
 }
 
-// ___TickFactory_2D___
+
 TickFactory_2D::TickFactory_2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
-          //, double fStrech_SceneToScreen, double fOffset_SceneToScreen )
+          
           , const B2DVector& rStartScreenPos, const B2DVector& rEndScreenPos
           , const B2DVector& rAxisLineToLabelLineShift )
           : TickFactory( rScale, rIncrement )
@@ -177,11 +177,11 @@ bool TickFactory_2D::isVerticalAxis() const
     return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() );
 }
 
-//static
+
 sal_Int32 TickFactory_2D::getTickScreenDistance( TickIter& rIter )
 {
-    //return the positive distance between the two first tickmarks in screen values
-    //if there are less than two tickmarks -1 is returned
+    
+    
 
     const TickInfo* pFirstTickInfo = rIter.firstInfo();
     const TickInfo* pSecondTickInfo = rIter.nextInfo();
@@ -292,7 +292,7 @@ void TickFactory_2D::createPointSequenceForAxisMainLine( drawing::PointSequenceS
 
 void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
-    //get the transformed screen values for all tickmarks in rAllTickInfos
+    
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter       = rAllTickInfos.begin();
     const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
     for( ; aDepthIter != aDepthEnd; ++aDepthIter )
@@ -308,6 +308,6 @@ void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo 
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

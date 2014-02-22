@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/recentdocsviewitem.hxx>
@@ -39,16 +39,16 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 
     if (aThumbnail.IsEmpty())
     {
-        // Use the default thumbnail if we have nothing else
+        
         BitmapEx aExt(RecentDocsView::getDefaultThumbnail(rURL));
         Size aExtSize(aExt.GetSizePixel());
 
-        // attempt to make it appear as if it is on a piece of paper
+        
         long nPaperHeight;
         long nPaperWidth;
         if( RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aURLObj.getExtension()) )
         {
-            // Swap width and height (PAPER_SCREEN_4_3 definition make it needed)
+            
             PaperInfo aInfo(PAPER_SCREEN_4_3);
             nPaperHeight = aInfo.getWidth();
             nPaperWidth = aInfo.getHeight();
@@ -68,7 +68,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
             aExtSize = aExt.GetSizePixel();
         }
 
-        // create empty, and copy the default thumbnail in
+        
         sal_uInt8 nAlpha = 255;
         aThumbnail = BitmapEx(Bitmap(aThumbnailSize, 24), AlphaMask(aThumbnailSize, &nAlpha));
 
@@ -84,7 +84,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 
 void RecentDocsViewItem::setEditTitle (bool edit, bool bChangeFocus)
 {
-    // Unused parameters.
+    
     (void)edit;
     (void)bChangeFocus;
 }

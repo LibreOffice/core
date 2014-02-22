@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "progressmixer.hxx"
@@ -27,14 +27,14 @@ namespace dbmm
 {
 #define OVERALL_RANGE   100000
 
-    // misc types
+    
     struct PhaseData
     {
-        // the weight of the phase, relative to all other phases
+        
         PhaseWeight nWeight;
-        // the "local"  range of the phase
+        
         sal_uInt32  nRange;
-        // this is the point in the "overall range" at which this phase starts
+        
         sal_uInt32  nGlobalStart;
         /** the "global" range of the phase, i.e. its range after weighting with all other
             phases
@@ -60,12 +60,12 @@ namespace dbmm
 
     typedef ::std::map< PhaseID, PhaseData >   Phases;
 
-    // ProgressMixer_Data
+    
     struct ProgressMixer_Data
     {
         Phases              aPhases;
         Phases::iterator    pCurrentPhase;
-        sal_uInt32          nWeightSum;         /// the cached sum of the weights
+        sal_uInt32          nWeightSum;         /
         double              nOverallStretch;
         IProgressConsumer&  rConsumer;
 
@@ -96,7 +96,7 @@ namespace dbmm
 
             _rData.nOverallStretch = 1.0 * OVERALL_RANGE / _rData.nWeightSum;
 
-            // tell the single phases their "overall starting point"
+            
             PhaseWeight nRunningWeight( 0 );
             for (   Phases::iterator phase = _rData.aPhases.begin();
                     phase != _rData.aPhases.end();
@@ -114,7 +114,7 @@ namespace dbmm
         }
     }
 
-    // ProgressMixer
+    
     ProgressMixer::ProgressMixer( IProgressConsumer& _rConsumer )
         :m_pData( new ProgressMixer_Data( _rConsumer ) )
     {
@@ -146,8 +146,8 @@ namespace dbmm
     {
         OSL_PRECOND( lcl_isRunning( *m_pData ), "ProgresMixer::advancePhase: not running!" );
 
-        // in case this is the first call, ensure all the ranges/weights are calculated
-        // correctly
+        
+        
         lcl_ensureInitialized( *m_pData );
 
         const PhaseData& rPhase( m_pData->pCurrentPhase->second );
@@ -163,20 +163,20 @@ namespace dbmm
     {
         OSL_PRECOND( lcl_isRunning( *m_pData ), "ProgresMixer::endPhase: not running!" );
 
-        // in case this is the first call, ensure all the ranges/weights are calculated
-        // correctly
+        
+        
         lcl_ensureInitialized( *m_pData );
 
-        // simply assume the phase's complete range is over
+        
         advancePhase( m_pData->pCurrentPhase->second.nRange );
 
-        // if that's the last phase, this is the "global end", too
+        
         Phases::const_iterator pNextPhase( m_pData->pCurrentPhase );
         ++pNextPhase;
         if ( pNextPhase == m_pData->aPhases.end() )
             m_pData->rConsumer.end();
     }
 
-} // namespace dbmm
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

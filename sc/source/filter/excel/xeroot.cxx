@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@
 
 using namespace ::com::sun::star;
 
-// Global data ================================================================
+
 
 XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
@@ -63,7 +63,7 @@ XclExpRootData::~XclExpRootData()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),
@@ -203,7 +203,7 @@ void XclExpRoot::InitializeGlobals()
         mrExpData.mxObjMgr.reset( new XclExpObjectManager( GetRoot() ) );
         mrExpData.mxFilterMgr.reset( new XclExpFilterManager( GetRoot() ) );
         mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
-        // BIFF8: only one link manager for all sheets
+        
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
         mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
     }
@@ -213,11 +213,11 @@ void XclExpRoot::InitializeGlobals()
         do
         {
             ScDocument& rDoc = GetDoc();
-            // Pass the model factory to OpCodeProvider, not the process
-            // service factory, otherwise a FormulaOpCodeMapperObj would be
-            // instanciated intead of a ScFormulaOpCodeMapperObj and the
-            // ScCompiler virtuals not be called! Which would be the case with
-            // the current (2013-01-24) rDoc.GetServiceManager()
+            
+            
+            
+            
+            
             const SfxObjectShell* pShell = rDoc.GetDocumentShell();
             if (!pShell)
             {
@@ -231,12 +231,12 @@ void XclExpRoot::InitializeGlobals()
                 break;
             }
             uno::Reference< lang::XMultiServiceFactory > xModelFactory( xComponent, uno::UNO_QUERY);
-            // OOXML is also BIFF8 function-wise
+            
             oox::xls::OpCodeProvider aOpCodeProvider( xModelFactory,
                     oox::xls::FILTER_OOXML, oox::xls::BIFF8, false, true);
-            // Compiler mocks about non-matching ctor or conversion from
-            // Sequence<...> to Sequence<const ...> if directly created or passed,
-            // conversion through Any works around.
+            
+            
+            
             uno::Any aAny( aOpCodeProvider.getOoxParserMap());
             uno::Sequence< const sheet::FormulaOpCodeMapEntry > aOpCodeMapping;
             if (!(aAny >>= aOpCodeMapping))
@@ -259,7 +259,7 @@ void XclExpRoot::InitializeTable( SCTAB nScTab )
     SetCurrScTab( nScTab );
     if( GetBiff() == EXC_BIFF5 )
     {
-        // local link manager per sheet
+        
         mrExpData.mxLocLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
     }
 }
@@ -290,13 +290,13 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
 
 bool XclExpRoot::IsDocumentEncrypted() const
 {
-    // We need to encrypt the content when the document structure is protected.
+    
     const ScDocProtection* pDocProt = GetDoc().GetDocProtection();
     if (pDocProt && pDocProt->isProtected() && pDocProt->isOptionEnabled(ScDocProtection::STRUCTURE))
         return true;
 
     if ( GetEncryptionData().getLength() > 0 )
-        // Password is entered directly into the save dialog.
+        
         return true;
 
     return false;
@@ -339,7 +339,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
     else
     {
-        // try to get the encryption data from the password
+        
         SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
         if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             aEncryptionData = GenerateEncryptionData( pPasswordItem->GetValue() );
@@ -362,6 +362,6 @@ XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const
     return IsInGlobals() ? mrExpData.mxGlobLinkMgr : mrExpData.mxLocLinkMgr;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

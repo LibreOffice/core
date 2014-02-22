@@ -40,7 +40,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-// OCommandDefinition
+
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
 {
     static ::dba::OAutoRegistration< OCommandDefinition > aAutoRegistration;
@@ -198,6 +198,6 @@ void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLEx
     }
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

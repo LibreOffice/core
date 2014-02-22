@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -61,7 +61,7 @@ class OPropertySetHelperInfo_Impl
 public:
     OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW(());
 
-    // XPropertySetInfo-Methoden
+    
     virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException);
     virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException);
@@ -126,7 +126,7 @@ ConstItemContainer::ConstItemContainer( const ItemContainer& rItemContainer )
 
 ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSourceContainer, sal_Bool bFastCopy )
 {
-    // We also have to copy the UIName property
+    
     try
     {
         Reference< XPropertySet > xPropSet( rSourceContainer, UNO_QUERY );
@@ -191,7 +191,7 @@ ConstItemContainer::~ConstItemContainer()
 {
 }
 
-// private
+
 void ConstItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector )
 {
     const sal_uInt32 nCount = rSourceVector.size();
@@ -234,7 +234,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
     return xReturn;
 }
 
-// XUnoTunnel
+
 sal_Int64 ConstItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ConstItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
@@ -261,14 +261,14 @@ ConstItemContainer* ConstItemContainer::GetImplementation( const ::com::sun::sta
                           xUT->getSomething( ConstItemContainer::GetUnoTunnelId() ))) : NULL;
 }
 
-// XElementAccess
+
 sal_Bool SAL_CALL ConstItemContainer::hasElements()
 throw ( RuntimeException )
 {
     return ( !m_aItemVector.empty() );
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL ConstItemContainer::getCount()
 throw ( RuntimeException )
 {
@@ -284,24 +284,24 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
-// XPropertySet
+
 Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
+    
+    
+    
     static Reference< XPropertySetInfo >* pInfo = NULL;
 
     if( pInfo == NULL )
     {
-        // Ready for multithreading
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfo == NULL )
         {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
+            
+            
             static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
             pInfo = &xInfo;
         }
@@ -332,22 +332,22 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
 void SAL_CALL ConstItemContainer::removePropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    // Only read-only properties - do nothing
+    
 }
 
 void SAL_CALL ConstItemContainer::addVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    // Only read-only properties - do nothing
+    
 }
 
 void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    // Only read-only properties - do nothing
+    
 }
 
-// XFastPropertySet
+
 void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const ::com::sun::star::uno::Any& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
@@ -364,22 +364,22 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
 
 ::cppu::IPropertyArrayHelper& SAL_CALL ConstItemContainer::getInfoHelper()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
+    
+    
+    
     static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
 
     if( pInfoHelper == NULL )
     {
-        // Ready for multithreading
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfoHelper == NULL )
         {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
+            
+            
+            
             static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
             pInfoHelper = &aInfoHelper;
         }
@@ -390,12 +390,12 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
 
 const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
 {
-    // Create a property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
+    
+    
+    
+    
+    
+    
 
     const com::sun::star::beans::Property pProperties[] =
     {
@@ -403,9 +403,9 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItem
                                          ::getCppuType((const OUString*)NULL),
                                          com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY  )
     };
-    // Use it to initialize sequence!
+    
     const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
-    // Return "PropertyDescriptor"
+    
     return lPropertyDescriptor;
 }
 
@@ -415,6 +415,6 @@ Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
     return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
 };
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -94,7 +94,7 @@ public:
 
 
 
-//===== ViewTabBar ============================================================
+
 
 ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
@@ -107,16 +107,16 @@ ViewTabBar::ViewTabBar (
       mxViewTabBarId(rxViewTabBarId),
       mpViewShellBase(NULL)
 {
-    // Set one new tab page for all tab entries.  We need it only to
-    // determine the height of the tab bar.
+    
+    
     mpTabPage.reset(new TabPage (mpTabControl.get()));
     mpTabPage->Hide();
 
-    // add some space before the tabitems
+    
     mpTabControl->SetItemsOffset(Point(5, 3));
 
-    // Tunnel through the controller and use the ViewShellBase to obtain the
-    // view frame.
+    
+    
     try
     {
         Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
@@ -128,7 +128,7 @@ ViewTabBar::ViewTabBar (
     {
     }
 
-    // Register as listener at XConfigurationController.
+    
     Reference<XControllerManager> xControllerManager (mxController, UNO_QUERY);
     if (xControllerManager.is())
     {
@@ -173,22 +173,22 @@ void ViewTabBar::disposing (void)
 
     if (mxConfigurationController.is())
     {
-        // Unregister listener from XConfigurationController.
+        
         try
         {
             mxConfigurationController->removeConfigurationChangeListener(this);
         }
         catch (const lang::DisposedException&)
         {
-            // Receiving a disposed exception is the normal case.  Is there
-            // a way to avoid it?
+            
+            
         }
         mxConfigurationController = NULL;
     }
 
     {
         const SolarMutexGuard aSolarGuard;
-        // Set all references to the one tab page to NULL and delete the page.
+        
         for (sal_uInt16 nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
             mpTabControl->SetTabPage(nIndex, NULL);
         mpTabPage.reset();
@@ -216,8 +216,8 @@ void ViewTabBar::disposing (void)
     ::Window* pWindow = NULL;
     ViewShellBase* pBase = NULL;
 
-    // Tunnel through the controller and use the ViewShellBase to obtain the
-    // view frame.
+    
+    
     try
     {
         Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
@@ -229,7 +229,7 @@ void ViewTabBar::disposing (void)
     {
     }
 
-    // The ViewTabBar supports at the moment only the center pane.
+    
     if (rxViewTabBarId.is()
         && rxViewTabBarId->isBoundToURL(
             FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
@@ -238,7 +238,7 @@ void ViewTabBar::disposing (void)
             pWindow = &pBase->GetViewFrame()->GetWindow();
     }
 
-    // The rest is (at the moment) just for the emergency case.
+    
     if (pWindow == NULL)
     {
         Reference<XPane> xPane;
@@ -254,7 +254,7 @@ void ViewTabBar::disposing (void)
         {
         }
 
-        // Tunnel through the XWindow to the VCL side.
+        
         try
         {
             Reference<lang::XUnoTunnel> xTunnel (xPane, UNO_QUERY_THROW);
@@ -274,7 +274,7 @@ void ViewTabBar::disposing (void)
 
 
 
-//----- XConfigurationChangeListener ------------------------------------------
+
 
 void SAL_CALL  ViewTabBar::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -291,7 +291,7 @@ void SAL_CALL  ViewTabBar::notifyConfigurationChange (
 
 
 
-//----- XEventListener --------------------------------------------------------
+
 
 void SAL_CALL ViewTabBar::disposing(
     const lang::EventObject& rEvent)
@@ -307,7 +307,7 @@ void SAL_CALL ViewTabBar::disposing(
 
 
 
-//----- XTabBar ---------------------------------------------------------------
+
 
 void SAL_CALL ViewTabBar::addTabBarButtonAfter (
     const TabBarButton& rButton,
@@ -360,7 +360,7 @@ Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons (void)
 
 
 
-//----- XResource -------------------------------------------------------------
+
 
 Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId (void)
     throw (RuntimeException)
@@ -380,7 +380,7 @@ sal_Bool SAL_CALL ViewTabBar::isAnchorOnly (void)
 
 
 
-//----- XUnoTunnel ------------------------------------------------------------
+
 
 namespace
 {
@@ -409,7 +409,7 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 bool ViewTabBar::ActivatePage (void)
 {
@@ -450,9 +450,9 @@ bool ViewTabBar::ActivatePage (void)
         }
         else
         {
-            // When we run into this else branch then we have an active OLE
-            // object.  We ignore the request to switch views.  Additionally
-            // we put the active tab back to the one for the current view.
+            
+            
+            
             UpdateActiveButton();
         }
     }
@@ -479,9 +479,9 @@ int ViewTabBar::GetHeight (void)
             nHeight = pActivePage->GetPosPixel().Y();
 
         if (nHeight <= 0)
-            // Using a default when the real height can not be determined.
-            // To get correct height this method should be called when the
-            // control is visible.
+            
+            
+            
             nHeight = 21;
     }
 
@@ -539,7 +539,7 @@ void ViewTabBar::AddTabBarButton (
     {
         sal_uInt16 nIndex ((sal_uInt16)nPosition);
 
-        // Insert the button into our local array.
+        
         maTabBarButtons.insert(maTabBarButtons.begin()+nIndex, rButton);
         UpdateTabBarButtons();
         UpdateActiveButton();
@@ -635,17 +635,17 @@ void ViewTabBar::UpdateTabBarButtons (void)
     sal_uInt16 nIndex;
     for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
     {
-        // Create a new tab when there are not enough.
+        
         if (nPageCount < nIndex)
             mpTabControl->InsertPage(nIndex, iTab->ButtonLabel);
 
-        // Update the tab.
+        
         mpTabControl->SetPageText(nIndex, iTab->ButtonLabel);
         mpTabControl->SetHelpText(nIndex, iTab->HelpText);
         mpTabControl->SetTabPage(nIndex, mpTabPage.get());
     }
 
-    // Delete tabs that are no longer used.
+    
     for (; nIndex<=nPageCount; ++nIndex)
         mpTabControl->RemovePage(nIndex);
 
@@ -655,7 +655,7 @@ void ViewTabBar::UpdateTabBarButtons (void)
 
 
 
-//===== TabBarControl =========================================================
+
 
 TabBarControl::TabBarControl (
     ::Window* pParentWindow,
@@ -673,10 +673,10 @@ void TabBarControl::Paint (const Rectangle& rRect)
     Color aOriginalFillColor (GetFillColor());
     Color aOriginalLineColor (GetLineColor());
 
-    // Because the actual window background is transparent--to avoid
-    // flickering due to multiple background paintings by this and by child
-    // windows--we have to paint the background for this control explicitly:
-    // the actual control is not painted over its whole bounding box.
+    
+    
+    
+    
     SetFillColor (GetSettings().GetStyleSettings().GetDialogColor());
     SetLineColor ();
     DrawRect (rRect);
@@ -693,11 +693,11 @@ void TabBarControl::ActivatePage (void)
 {
     if (mpViewTabBar->ActivatePage())
     {
-        // Call the parent so that the correct tab is highlighted.
+        
         this->::TabControl::ActivatePage();
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

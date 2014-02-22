@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,7 +25,7 @@
 
 #include "salgdi.hxx"
 
-// -----------------------------------------------------------------------
+
 
 static bool lcl_enableNativeWidget( const OutputDevice& i_rDevice )
 {
@@ -140,12 +140,12 @@ PushButtonValue* PushButtonValue::clone() const
     return new PushButtonValue( *this );
 }
 
-// -----------------------------------------------------------------------
-// These functions are mainly passthrough functions that allow access to
-// the SalFrame behind a Window object for native widget rendering purposes.
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
+
+
+
 
 bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
@@ -160,7 +160,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
 }
 
 
-// -----------------------------------------------------------------------
+
 
 bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
@@ -183,7 +183,7 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
         rIsInside, this ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
@@ -273,7 +273,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     if( !lcl_enableNativeWidget( *this ) )
         return false;
 
-    // make sure the current clip region is initialized correctly
+    
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
             return false;
@@ -288,22 +288,22 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     if ( mbInitFillColor )
         ImplInitFillColor();
 
-    // Convert the coordinates from relative to Window-absolute, so we draw
-    // in the correct place in platform code
+    
+    
     boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
     if (aTestRegion == Region(rControlRegion))
-        nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
+        nState |= CTRL_CACHING_ALLOWED;   
 
     bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
@@ -321,8 +321,8 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
         if ( !ImplGetGraphics() )
             return false;
 
-    // Convert the coordinates from relative to Window-absolute, so we draw
-    // in the correct place in platform code
+    
+    
     boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
@@ -331,7 +331,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 rNativeContentRegion, this );
     if( bRet )
     {
-        // transform back native regions
+        
         rNativeBoundingRegion = ImplDevicePixelToLogic( rNativeBoundingRegion );
         rNativeContentRegion = ImplDevicePixelToLogic( rNativeContentRegion );
     }

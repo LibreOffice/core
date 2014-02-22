@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/datapilotfield.hxx>
@@ -49,7 +49,7 @@ void DataPilotField::testSortInfo()
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as got value", aNewSortInfoValue.Field == aSortInfoValue.Field
             && aNewSortInfoValue.Mode == aSortInfoValue.Mode && aNewSortInfoValue.IsAscending == aSortInfoValue.IsAscending);
 
-    //setting HasSortInfo only makes sense for false, for true the uno implementation does nothing
+    
     sal_Bool bHasSortInfo;
     OUString aHasSortInfo("HasSortInfo");
     xValue = xPropSet->getPropertyValue(aHasSortInfo);
@@ -82,7 +82,7 @@ void DataPilotField::testLayoutInfo()
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewLayoutInfoValue.LayoutMode == aLayoutInfoValue.LayoutMode &&
             aNewLayoutInfoValue.AddEmptyLines == aLayoutInfoValue.AddEmptyLines);
 
-    //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
+    
     sal_Bool bHasLayoutInfo;
     OUString aHasLayoutInfo("HasLayoutInfo");
     xValue = xPropSet->getPropertyValue(aHasLayoutInfo);
@@ -115,7 +115,7 @@ void DataPilotField::testAutoShowInfo()
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewAutoShowInfoValue.DataField == aAutoShowInfoValue.DataField &&
             aNewAutoShowInfoValue.IsEnabled == aAutoShowInfoValue.IsEnabled);
 
-    //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
+    
     sal_Bool bHasAutoShowInfo;
     OUString aHasAutoShowInfo("HasAutoShowInfo");
     xValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
@@ -148,7 +148,7 @@ void DataPilotField::testReference()
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aReferenceValue.ReferenceField == aNewReferenceValue.ReferenceField
             && aReferenceValue.ReferenceItemType == aNewReferenceValue.ReferenceItemType);
 
-    //setting HasReference only makes sense for false, tor true the uno implementation does nothing
+    
     sal_Bool bHasReference;
     OUString aHasReference("HasReference");
     xValue = xPropSet->getPropertyValue(aHasReference);
@@ -173,7 +173,7 @@ void DataPilotField::testIsGroupField()
 
     xValue = xPropSet->getPropertyValue(aIsGroupField);
     CPPUNIT_ASSERT( xValue >>= bIsGroupField);
-    //only setting to false is supported
+    
     if (bIsGroupField)
     {
         bIsGroupField = false;

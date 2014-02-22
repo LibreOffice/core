@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,18 +22,18 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/fltcall.hxx>
 
-//============================ XPMWriter ==================================
+
 
 class XPMWriter {
 
 private:
 
-    SvStream&           m_rOStm;            // the output XPM file
+    SvStream&           m_rOStm;            
 
     sal_Bool            mbStatus;
     sal_Bool            mbTrans;
     BitmapReadAccess*   mpAcc;
-    sal_uLong           mnWidth, mnHeight;  // size in Pixel
+    sal_uLong           mnWidth, mnHeight;  
     sal_uInt16          mnColors;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
@@ -53,7 +53,7 @@ public:
     sal_Bool            WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-//=================== Methoden von XPMWriter ==============================
+
 
 XPMWriter::XPMWriter(SvStream& rOStm)
     : m_rOStm(rOStm)
@@ -63,13 +63,13 @@ XPMWriter::XPMWriter(SvStream& rOStm)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 XPMWriter::~XPMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplCallback( sal_uInt16 nPercent )
 {
@@ -80,7 +80,7 @@ void XPMWriter::ImplCallback( sal_uInt16 nPercent )
     }
 }
 
-//  ------------------------------------------------------------------------
+
 
 sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
@@ -99,10 +99,10 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     aBmp = aBmpEx.GetBitmap();
 
-    if ( rGraphic.IsTransparent() )                 // possibly create transparent color
+    if ( rGraphic.IsTransparent() )                 
     {
         mbTrans = sal_True;
-        if ( aBmp.GetBitCount() >= 8 )              // if necessary convert image to 8 bit
+        if ( aBmp.GetBitCount() >= 8 )              
             aBmp.Convert( BMP_CONVERSION_8BIT_TRANS );
         else
             aBmp.Convert( BMP_CONVERSION_4BIT_TRANS );
@@ -110,7 +110,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     }
     else
     {
-        if ( aBmp.GetBitCount() > 8 )               // if necessary convert image to 8 bit
+        if ( aBmp.GetBitCount() > 8 )               
             aBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
     }
     mpAcc = aBmp.AcquireReadAccess();
@@ -141,7 +141,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool XPMWriter::ImplWriteHeader()
 {
@@ -163,7 +163,7 @@ sal_Bool XPMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplWritePalette()
 {
@@ -186,13 +186,13 @@ void XPMWriter::ImplWritePalette()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplWriteBody()
 {
     for ( sal_uLong y = 0; y < mnHeight; y++ )
     {
-        ImplCallback( (sal_uInt16)( ( 100 * y ) / mnHeight ) );         // processing output in percent
+        ImplCallback( (sal_uInt16)( ( 100 * y ) / mnHeight ) );         
         m_rOStm.WriteUChar( (sal_uInt8)0x22 );
         for ( sal_uLong x = 0; x < mnWidth; x++ )
         {
@@ -202,8 +202,8 @@ void XPMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
-// write a decimal number in ascii format into the stream
+
+
 
 void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
@@ -211,7 +211,7 @@ void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
 {
@@ -225,14 +225,14 @@ void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
         m_rOStm.WriteUChar( (sal_uInt8)( nCol + 'A' ) );
 }
 
-// ------------------------------------------------------------------------
-// write a color value in hex format into the stream
+
+
 void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 {
     sal_uLong   nTmp;
     sal_uInt8   j;
 
-    m_rOStm.WriteCharPtr( "c #" );   // # indicates a following hex value
+    m_rOStm.WriteCharPtr( "c #" );   
     const BitmapColor& rColor = mpAcc->GetPaletteColor( nNumber );
     nTmp = ( rColor.GetRed() << 16 ) | ( rColor.GetGreen() << 8 ) | rColor.GetBlue();
     for ( signed char i = 20; i >= 0 ; i-=4 )
@@ -245,11 +245,11 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
     }
 }
 
-// ------------------------------------------------------------------------
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport expGraphicExport
 #endif

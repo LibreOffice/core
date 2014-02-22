@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "boost/scoped_array.hpp"
@@ -94,31 +94,31 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             return JFW_E_INVALID_ARG;
 
         jfw::VendorSettings aVendorSettings;
-        //Get a list of plugins which provide Java information
+        
         std::vector<jfw::PluginLibrary> vecPlugins =
             aVendorSettings.getPluginData();
 #ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
+        
+        
         boost::scoped_array<osl::Module> sarModules;
         sarModules.reset(new osl::Module[vecPlugins.size()]);
         osl::Module * arModules = sarModules.get();
 #endif
-        //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
-        //Make sure that the contents are destroyed if this
-        //function returns with an error
+        
+        
+        
         std::vector<jfw::CJavaInfo> vecInfo;
-        //Add the JavaInfos found by jfw_plugin_getJavaInfoByPath to this vector
-        //Make sure that the contents are destroyed if this
-        //function returns with an error
+        
+        
+        
         std::vector<jfw::CJavaInfo> vecInfoManual;
         typedef std::vector<jfw::CJavaInfo>::iterator it_info;
-        //get the list of paths to jre locations which have been
-        //added manually
+        
+        
         const jfw::MergedSettings settings;
         const std::vector<OUString>& vecJRELocations =
             settings.getJRELocations();
-        //Use every plug-in library to get Java installations.
+        
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
          for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
@@ -149,8 +149,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             if (getAllJavaFunc == NULL)
                 return JFW_E_ERROR;
 
-            //get all installations of one vendor according to minVersion,
-            //maxVersion and excludeVersions
+            
+            
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
             javaPluginError plerr  = (*getAllJavaFunc)(
@@ -170,9 +170,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 
             rtl_freeMemory(arInfos);
 
-            //Check if the current plugin can detect JREs at the location
-            // of the paths added by jfw_setJRELocations or jfw_addJRELocation
-            //get the function from the plugin
+            
+            
+            
 #ifndef DISABLE_DYNLOADING
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                 (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
@@ -186,7 +186,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 #endif
 
             typedef std::vector<OUString>::const_iterator citLoc;
-            //Check every manually added location
+            
             for (citLoc ii = vecJRELocations.begin();
                 ii != vecJRELocations.end(); ++ii)
             {
@@ -208,8 +208,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 
                 if (aInfo)
                 {
-                    //Was this JRE already added?. Different plugins could detect
-                    //the same JRE
+                    
+                    
                     it_info it_duplicate =
                         std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
                                 std::bind2nd(std::ptr_fun(areEqualJavaInfo), aInfo));
@@ -218,10 +218,10 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 }
             }
         }
-        //Make sure vecInfoManual contains only JavaInfos for the vendors for which
-        //there is a javaSelection/plugins/library entry in the javavendors.xml
-        //To obtain the JavaInfos for the manually added JRE locations the function
-        //jfw_getJavaInfoByPath is called which can return a JavaInfo of any vendor.
+        
+        
+        
+        
         std::vector<jfw::CJavaInfo> vecInfoManual2;
         for (it_info ivm = vecInfoManual.begin(); ivm != vecInfoManual.end(); ++ivm)
         {
@@ -234,9 +234,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 }
             }
         }
-        //Check which JavaInfo from vector vecInfoManual2 is already
-        //contained in vecInfo. If it already exists then remove it from
-        //vecInfoManual2
+        
+        
+        
         for (it_info j = vecInfo.begin(); j != vecInfo.end(); ++j)
         {
             it_info it_duplicate =
@@ -245,7 +245,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             if (it_duplicate != vecInfoManual2.end())
                 vecInfoManual2.erase(it_duplicate);
         }
-        //create an fill the array of JavaInfo*
+        
         sal_Int32 nSize = vecInfo.size() + vecInfoManual2.size();
         *pparInfo = (JavaInfo**) rtl_allocateMemory(
             nSize * sizeof(JavaInfo*));
@@ -254,10 +254,10 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 
         typedef std::vector<jfw::CJavaInfo>::iterator it;
         int index = 0;
-        //Add the automatically detected JREs
+        
         for (it k = vecInfo.begin(); k != vecInfo.end(); ++k)
             (*pparInfo)[index++] = k->detach();
-        //Add the manually detected JREs
+        
         for (it l = vecInfoManual2.begin(); l != vecInfoManual2.end(); ++l)
             (*pparInfo)[index++] = l->detach();
 
@@ -285,8 +285,8 @@ javaFrameworkError SAL_CALL jfw_startVM(
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
 
-        //We keep this pointer so we can determine if a VM has already
-        //been created.
+        
+        
         if (g_pJavaVM != NULL)
             return JFW_E_RUNNING_JVM;
 
@@ -305,52 +305,52 @@ javaFrameworkError SAL_CALL jfw_startVM(
                 if (!settings.getEnabled())
                     return JFW_E_JAVA_DISABLED;
                 aInfo.attach(settings.createJavaInfo());
-                //check if a Java has ever been selected
+                
                 if (aInfo == NULL)
                     return JFW_E_NO_SELECT;
 
 #ifdef WNT
-                //Because on Windows there is no system setting that we can use to determine
-                //if Assistive Technology Tool support is needed, we ship a .reg file that the
-                //user can use to create a registry setting. When the user forgets to set
-                //the key before he starts the office then a JRE may be selected without access bridge.
-                //When he later sets the key then we select a JRE with accessibility support but
-                //only if the user has not manually changed the selected JRE in the options dialog.
+                
+                
+                
+                
+                
+                
                 if (jfw::isAccessibilitySupportDesired())
                 {
-                    // If no JRE has been selected then we do not select one. This function shall then
-                    //return JFW_E_NO_SELECT
+                    
+                    
                     if (aInfo != NULL &&
                         (aInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
                     {
-                        //has the user manually selected a JRE?
+                        
                         if (settings.getJavaInfoAttrAutoSelect() == true)
                         {
-                            // if not then the automatism has previously selected a JRE
-                            //without accessibility support. We return JFW_E_NO_SELECT
-                            //to cause that we search for another JRE. The search code will
-                            //then prefer a JRE with accessibility support.
+                            
+                            
+                            
+                            
                             return JFW_E_NO_SELECT;
                         }
                     }
                 }
 #endif
-                //check if the javavendors.xml has changed after a Java was selected
+                
                 OString sVendorUpdate = jfw::getElementUpdated();
 
                 if (sVendorUpdate != settings.getJavaInfoAttrVendorUpdate())
                     return JFW_E_INVALID_SETTINGS;
 
-                //check if JAVA is disabled
-                //If Java is enabled, but it was disabled when this process was started
-                // then no preparational work, such as setting the LD_LIBRARY_PATH, was
-                //done. Therefore if a JRE needs it it must not be started.
+                
+                
+                
+                
                 if (g_bEnabledSwitchedOn &&
                     (aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     return JFW_E_NEED_RESTART;
 
-                //Check if the selected Java was set in this process. If so it
-                //must not have the requirments flag JFW_REQUIRE_NEEDRESTART
+                
+                
                 if ((aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART)
                     &&
                     (jfw::wasJavaSelectedInSameProcess() == true))
@@ -358,14 +358,14 @@ javaFrameworkError SAL_CALL jfw_startVM(
 
                 vmParams = settings.getVmParametersUtf8();
                 sUserClassPath = jfw::makeClassPathOption(settings.getUserClassPath());
-            } // end mode FWK_MODE_OFFICE
+            } 
             else if (mode == jfw::JFW_MODE_DIRECT)
             {
                 errcode = jfw_getSelectedJRE(&aInfo.pInfo);
                 if (errcode != JFW_E_NONE)
                     return errcode;
-                //In direct mode the options are specified by bootstrap variables
-                //of the form UNO_JAVA_JFW_PARAMETER_1 .. UNO_JAVA_JFW_PARAMETER_n
+                
+                
                 vmParams = jfw::BootParams::getVMParameters();
                 sUserClassPath =
                     "-Djava.class.path=" + jfw::BootParams::getClasspath();
@@ -376,7 +376,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
         }
         assert(pInfo != NULL);
 
-        //get the function jfw_plugin_startJavaVirtualMachine
+        
         jfw::VendorSettings aVendorSettings;
         OUString sLibPath = aVendorSettings.getPluginLibrary(pInfo->sVendor);
 
@@ -396,25 +396,25 @@ javaFrameworkError SAL_CALL jfw_startVM(
             jfw_plugin_startJavaVirtualMachine;
 #endif
 
-        // create JavaVMOptions array that is passed to the plugin
-        // it contains the classpath and all options set in the
-        //options dialog
+        
+        
+        
         boost::scoped_array<JavaVMOption> sarJOptions(
             new JavaVMOption[cOptions + 2 + vmParams.size()]);
         JavaVMOption * arOpt = sarJOptions.get();
         if (! arOpt)
             return JFW_E_ERROR;
 
-        //The first argument is the classpath
+        
         arOpt[0].optionString= (char*) sUserClassPath.getStr();
         arOpt[0].extraInfo = NULL;
-        // Set a flag that this JVM has been created via the JNI Invocation API
-        // (used, for example, by UNO remote bridges to share a common thread pool
-        // factory among Java and native bridge implementations):
+        
+        
+        
         arOpt[1].optionString = (char *) "-Dorg.openoffice.native=";
         arOpt[1].extraInfo = 0;
 
-        //add the options set by options dialog
+        
         int index = 2;
         typedef std::vector<OString>::const_iterator cit;
         for (cit i = vmParams.begin(); i != vmParams.end(); ++i)
@@ -423,7 +423,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
             arOpt[index].extraInfo = 0;
             index ++;
         }
-        //add all options of the arOptions argument
+        
         for (int ii = 0; ii < cOptions; ii++)
         {
             arOpt[index].optionString = arOptions[ii].optionString;
@@ -431,7 +431,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
             index++;
         }
 
-        //start Java
+        
         JavaVM *pVm = NULL;
         SAL_INFO("jfw", "Starting Java");
         javaPluginError plerr = (*pFunc)(pInfo, arOpt, index, & pVm, ppEnv);
@@ -476,24 +476,24 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             return JFW_E_DIRECT_MODE;
         sal_uInt64 nFeatureFlags = 0;
         jfw::CJavaInfo aCurrentInfo;
-//Determine if accessibility support is needed
+
         bool bSupportAccessibility = jfw::isAccessibilitySupportDesired();
         nFeatureFlags = bSupportAccessibility ?
             JFW_FEATURE_ACCESSBRIDGE : 0L;
 
-        //Get a list of services which provide Java information
+        
         jfw::VendorSettings aVendorSettings;
         std::vector<jfw::PluginLibrary> vecPlugins =
              aVendorSettings.getPluginData();
 #ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
+        
+        
         boost::scoped_array<osl::Module> sarModules;
         sarModules.reset(new osl::Module[vecPlugins.size()]);
         osl::Module * arModules = sarModules.get();
 #endif
-        //Use every plug-in library to get Java installations. At the first usable
-        //Java the loop will break
+        
+        
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
@@ -518,8 +518,8 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             if (getAllJavaFunc == NULL)
                 continue;
 
-            //get all installations of one vendor according to minVersion,
-            //maxVersion and excludeVersions
+            
+            
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
             javaPluginError plerr  = (*getAllJavaFunc)(
@@ -533,8 +533,8 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 
             if (plerr != JFW_PLUGIN_E_NONE)
                 continue;
-            //iterate over all installations to find the best which has
-            //all features
+            
+            
             if (cInfos == 0)
             {
                 rtl_freeMemory(arInfos);
@@ -545,41 +545,41 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             {
                 JavaInfo* pJInfo = arInfos[ii];
 
-                //We remember the very first installation in aCurrentInfo
+                
                 if (aCurrentInfo.getLocation().isEmpty())
                         aCurrentInfo = pJInfo;
-                // compare features
-                // If the user does not require any features (nFeatureFlags = 0)
-                // then the first installation is used
+                
+                
+                
                 if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
                 {
-                    //the just found Java implements all required features
-                    //currently there is only accessibility!!!
+                    
+                    
                     aCurrentInfo = pJInfo;
                     bInfoFound = true;
                     break;
                 }
             }
-            //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
-            //its contents
+            
+            
             for (int j = 0; j < cInfos; j++)
                 jfw_freeJavaInfo(arInfos[j]);
             rtl_freeMemory(arInfos);
 
             if (bInfoFound == true)
                 break;
-            //All Java installations found by the current plug-in lib
-            //do not provide the required features. Try the next plug-in
+            
+            
         }
         if ((JavaInfo*) aCurrentInfo == NULL)
-        {//The plug-ins did not find a suitable Java. Now try the paths which have been
-        //added manually.
-            //get the list of paths to jre locations which have been added manually
+        {
+        
+            
             const jfw::MergedSettings settings;
-            //node.loadFromSettings();
+            
             const std::vector<OUString> & vecJRELocations =
                 settings.getJRELocations();
-            //use every plug-in to determine the JavaInfo objects
+            
             bool bInfoFound = false;
             for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i)
             {
@@ -590,9 +590,9 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 osl::Module pluginLib(library.sPath);
                 if (!pluginLib.is())
                     return JFW_E_NO_PLUGIN;
-                //Check if the current plugin can detect JREs at the location
-                // of the paths added by jfw_setJRELocations or jfw_addJRELocation
-                //get the function from the plugin
+                
+                
+                
                 jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                     (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
                         OUString("jfw_plugin_getJavaInfoByPath"));
@@ -626,37 +626,37 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 
                     if (aInfo)
                     {
-                        //We remember the very first installation in aCurrentInfo
+                        
                         if (aCurrentInfo.getLocation().isEmpty())
                             aCurrentInfo = aInfo;
-                        // compare features
-                        // If the user does not require any features (nFeatureFlags = 0)
-                        // then the first installation is used
+                        
+                        
+                        
                         if ((aInfo.getFeatures() & nFeatureFlags) == nFeatureFlags)
                         {
-                            //the just found Java implements all required features
-                            //currently there is only accessibility!!!
+                            
+                            
                             aCurrentInfo = aInfo;
                             bInfoFound = true;
                             break;
                         }
                     }
-                }//end iterate over paths
+                }
                 if (bInfoFound == true)
                     break;
-            }// end iterate plug-ins
+            }
         }
         if ((JavaInfo*) aCurrentInfo)
         {
             jfw::NodeJava javaNode(jfw::NodeJava::USER);
             javaNode.setJavaInfo(aCurrentInfo,true);
             javaNode.write();
-            //remember that this JRE was selected in this process
+            
             jfw::setJavaSelected();
 
             if (pInfo !=NULL)
             {
-                //copy to out param
+                
                 *pInfo = aCurrentInfo.cloneJavaInfo();
             }
         }
@@ -746,9 +746,9 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
             *ppInfo = NULL;
             return JFW_E_NONE;
         }
-        //If the javavendors.xml has changed, then the current selected
-        //Java is not valid anymore
-        // /java/javaInfo/@vendorUpdate != javaSelection/updated (javavendors.xml)
+        
+        
+        
         OString sUpdated = jfw::getElementUpdated();
 
         if (!sUpdated.equals(settings.getJavaInfoAttrVendorUpdate()))
@@ -787,12 +787,12 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             return JFW_E_INVALID_ARG;
 
         jfw::VendorSettings aVendorSettings;
-        //Get a list of plugins which provide Java information
+        
         std::vector<jfw::PluginLibrary> vecPlugins =
             aVendorSettings.getPluginData();
 #ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
+        
+        
         boost::scoped_array<osl::Module> sarModules;
         sarModules.reset(new osl::Module[vecPlugins.size()]);
         osl::Module * arModules = sarModules.get();
@@ -801,8 +801,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         std::vector<OUString> vecVendors =
             aVendorSettings.getSupportedVendors();
 
-        //Use every plug-in library to determine if the path represents a
-        //JRE. If a plugin recognized it then the loop will break
+        
+        
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end();
@@ -835,9 +835,9 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             if (jfw_plugin_getJavaInfoByPathFunc == NULL)
                 continue;
 
-            //ask the plugin if this is a JRE.
-            //If so check if it meets the version requirements.
-            //Only if it does return a JavaInfo
+            
+            
+            
             JavaInfo* pInfo = NULL;
             javaPluginError plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
                 pPath,
@@ -850,10 +850,10 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
 
             if (plerr == JFW_PLUGIN_E_NONE)
             {
-                //check if the vendor of the found JRE is supported
+                
                 if (vecVendors.empty())
                 {
-                    //vendor does not matter
+                    
                     *ppInfo = pInfo;
                     break;
                 }
@@ -875,13 +875,13 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
                 }
             }
             else if(plerr == JFW_PLUGIN_E_FAILED_VERSION)
-            {//found JRE but it has the wrong version
+            {
                 *ppInfo = NULL;
                 errcode = JFW_E_FAILED_VERSION;
                 break;
             }
             else if (plerr == JFW_PLUGIN_E_NO_JRE)
-            {// plugin does not recognize this path as belonging to JRE
+            {
                 continue;
             }
             OSL_ASSERT(false);
@@ -908,7 +908,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        //check if pInfo is the selected JRE
+        
         JavaInfo *currentInfo = NULL;
         errcode = jfw_getSelectedJRE( & currentInfo);
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
@@ -919,7 +919,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
             jfw::NodeJava node(jfw::NodeJava::USER);
             node.setJavaInfo(pInfo, false);
             node.write();
-            //remember that the JRE was selected in this process
+            
             jfw::setJavaSelected();
         }
     }
@@ -942,12 +942,12 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
 
         if (g_bEnabledSwitchedOn == false && bEnabled == sal_True)
         {
-            //When the process started then Enabled was false.
-            //This is first time enabled is set to true.
-            //That means, no preparational work has been done, such as setting the
-            //LD_LIBRARY_PATH, etc.
+            
+            
+            
+            
 
-            //check if Enabled is false;
+            
             const jfw::MergedSettings settings;
             if (!settings.getEnabled())
                 g_bEnabledSwitchedOn = true;
@@ -1162,10 +1162,10 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
 
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
 {
-    //get the function jfw_plugin_existJRE
+    
     jfw::VendorSettings aVendorSettings;
     jfw::CJavaInfo aInfo;
-    aInfo = (const ::JavaInfo*) pInfo; //makes a copy of pInfo
+    aInfo = (const ::JavaInfo*) pInfo; 
 #ifndef DISABLE_DYNLOADING
     OUString sLibPath = aVendorSettings.getPluginLibrary(aInfo.getVendor());
     osl::Module modulePlugin(sLibPath);

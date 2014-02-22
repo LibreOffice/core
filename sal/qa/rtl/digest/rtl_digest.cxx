@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -30,12 +30,12 @@
 
 #include <string.h>
 
-// sample, how to use digest
+
 
 rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
 {
-    // PRE: aStr "file"
-    // BACK: Str "ababab....0f" Hexcode String
+    
+    
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle > 0 )
@@ -50,7 +50,7 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
         rtl_digest_get( handle, pMD5KeyBuffer, nMD5KeyLen );
         rtl_digest_destroy( handle );
 
-        // Create hex-value string from the MD5 value to keep the string size minimal
+        
         rtl::OUStringBuffer aBuffer( nMD5KeyLen * 2 + 1 );
         for ( sal_uInt32 i = 0; i < nMD5KeyLen; ++i )
             aBuffer.append( (sal_Int32)pMD5KeyBuffer[i], 16 );
@@ -62,7 +62,7 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
     return rtl::OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 namespace rtl_digest
 {
 
@@ -79,7 +79,7 @@ namespace rtl_digest
 class create : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -133,9 +133,9 @@ public:
             rtl_digest_destroy( handle );
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(create);
     CPPUNIT_TEST(create_001);
@@ -146,17 +146,17 @@ public:
     CPPUNIT_TEST(create_006);
     CPPUNIT_TEST(create_007);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
 
 
 
-// -----------------------------------------------------------------------------
+
 
 class createMD5 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -177,15 +177,15 @@ public:
     CPPUNIT_TEST_SUITE(createMD5);
     CPPUNIT_TEST(createMD5_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
 
-// -----------------------------------------------------------------------------
+
 
 class createMD2 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -206,14 +206,14 @@ public:
     CPPUNIT_TEST_SUITE(createMD2);
     CPPUNIT_TEST(createMD2_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 
 class createSHA : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -234,13 +234,13 @@ public:
     CPPUNIT_TEST_SUITE(createSHA);
     CPPUNIT_TEST(createSHA_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 
 class createSHA1 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -261,13 +261,13 @@ public:
     CPPUNIT_TEST_SUITE(createSHA1);
     CPPUNIT_TEST(createSHA1_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 
 class createHMAC_MD5 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -288,13 +288,13 @@ public:
     CPPUNIT_TEST_SUITE(createHMAC_MD5);
     CPPUNIT_TEST(createHMAC_MD5_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 
 class createHMAC_SHA1 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -317,14 +317,14 @@ public:
     CPPUNIT_TEST_SUITE(createHMAC_SHA1);
     CPPUNIT_TEST(createHMAC_SHA1_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 
 class queryAlgorithm : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -397,9 +397,9 @@ public:
             rtl_digest_destroy( handle );
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(queryAlgorithm);
     CPPUNIT_TEST( query_001 );
@@ -410,14 +410,14 @@ public:
     CPPUNIT_TEST( query_006 );
     CPPUNIT_TEST( query_007 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
 
-// -----------------------------------------------------------------------------
+
 class queryLength : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -431,7 +431,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query Length", RTL_DIGEST_LENGTH_MD5 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -441,7 +441,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_MD2 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -451,7 +451,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmSHA );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_SHA == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -461,7 +461,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_SHA1 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -471,7 +471,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmHMAC_MD5 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_HMAC_MD5 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -481,7 +481,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmHMAC_SHA1 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_HMAC_SHA1 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -492,15 +492,15 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmInvalid );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            
             CPPUNIT_ASSERT_MESSAGE("query length", 0 == nAlgoLength);
 
             rtl_digest_destroy( handle );
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(queryLength);
     CPPUNIT_TEST( queryLength_MD2 );
@@ -511,18 +511,18 @@ public:
     CPPUNIT_TEST( queryLength_HMAC_SHA1 );
     CPPUNIT_TEST( queryLength_Illegal );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 
 rtl::OString createHex(sal_uInt8 *_pMD5KeyBuffer, sal_uInt32 _nMD5KeyLen)
 {
-    // Create hex-value string from the MD5 value to keep the string size minimal
+    
     rtl::OStringBuffer aBuffer( _nMD5KeyLen * 2 + 1 );
     for ( sal_uInt32 i = 0; i < _nMD5KeyLen; ++i )
     {
         sal_Int32 nValue = (sal_Int32)_pMD5KeyBuffer[i];
-        if (nValue < 16)                         // maximul hex value for 1 byte
+        if (nValue < 16)                         
             aBuffer.append( static_cast<sal_Int32>(0), static_cast<sal_Int16>(16) /* radix */ );
         aBuffer.append( nValue, 16 /* radix */ );
     }
@@ -531,11 +531,11 @@ rtl::OString createHex(sal_uInt8 *_pMD5KeyBuffer, sal_uInt32 _nMD5KeyLen)
 }
 
 
-// -----------------------------------------------------------------------------
+
 class init : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -564,7 +564,7 @@ public:
             rtl_digest_destroy( handle );
         }
 
-    // ------------------------------------
+    
     void init_MD2()
         {
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
@@ -587,8 +587,8 @@ public:
             delete [] pKeyBuffer;
 
             printf("MD2 Sum: %s\n", aSum.getStr());
-            // LLA: how to check right values
-            // samples?
+            
+            
 
             rtl_digest_destroy( handle );
         }
@@ -615,8 +615,8 @@ public:
             delete [] pKeyBuffer;
 
             printf("MD5 Sum: %s\n", aSum.getStr());
-            // LLA: how to check right values
-            // samples?
+            
+            
 
             rtl_digest_destroy( handle );
         }
@@ -643,8 +643,8 @@ public:
             delete [] pKeyBuffer;
 
             printf("SHA Sum: %s\n", aSum.getStr());
-            // LLA: how to check right values
-            // samples?
+            
+            
 
             rtl_digest_destroy( handle );
         }
@@ -670,8 +670,8 @@ public:
             delete [] pKeyBuffer;
 
             printf("SHA1 Sum: %s\n", aSum.getStr());
-            // LLA: how to check right values
-            // samples?
+            
+            
 
             rtl_digest_destroy( handle );
         }
@@ -701,8 +701,8 @@ public:
             delete [] pKeyBuffer;
 
             printf("HMAC_MD5 Sum: %s\n", aSum.getStr());
-            // LLA: how to check right values
-            // samples?
+            
+            
 
             rtl_digest_destroy( handle );
         }
@@ -732,16 +732,16 @@ public:
             delete [] pKeyBuffer;
 
             printf("HMAC_SHA1 Sum: %s\n", aSum.getStr());
-            // LLA: how to check right values
-            // samples?
+            
+            
 
             rtl_digest_destroy( handle );
         }
 
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(init);
     CPPUNIT_TEST( init_000 );
@@ -753,9 +753,9 @@ public:
     CPPUNIT_TEST( init_HMAC_MD5 );
     CPPUNIT_TEST( init_HMAC_SHA1 );
     CPPUNIT_TEST_SUITE_END();
-}; // class init
+}; 
 
-// ------------------------------------
+
 
 rtl::OString getMD5Sum(rtl::OString const& _aMsg )
 {
@@ -778,12 +778,12 @@ rtl::OString getMD5Sum(rtl::OString const& _aMsg )
     return aMD5Sum;
 }
 
-// -----------------------------------------------------------------------------
+
 
 class equalTests : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -792,7 +792,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     void equal_001()
         {
             rtl::OString aMsg1 = sSampleString;
@@ -804,7 +804,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE("md5sum must have a length", aMsgMD5Sum1.getLength() == 32 && aMsgMD5Sum2.getLength() == 32 );
             CPPUNIT_ASSERT_MESSAGE("source is the same, dest must be also the same", aMsgMD5Sum1.equals(aMsgMD5Sum2) == sal_True);
         }
-    // ------------------------------------
+    
     void equal_002()
         {
             rtl::OString aMsg1 = sSampleString;
@@ -817,22 +817,22 @@ public:
             CPPUNIT_ASSERT_MESSAGE("differ only in one char", aMsgMD5Sum1.equals(aMsgMD5Sum2) == sal_False);
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(equalTests);
     CPPUNIT_TEST( equal_001 );
     CPPUNIT_TEST( equal_002 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
 
-// -----------------------------------------------------------------------------
+
 class digest_MD2 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -841,7 +841,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     void MD2_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -864,19 +864,19 @@ public:
             delete [] pBuffer;
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_MD2);
     CPPUNIT_TEST( MD2_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 class digest_MD5 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -884,7 +884,7 @@ public:
     void tearDown()
     {
     }
-    // ------------------------------------
+    
     void MD5_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -907,20 +907,20 @@ public:
             delete [] pBuffer;
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_MD5);
     CPPUNIT_TEST( MD5_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 class digest_SHA : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -929,7 +929,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     void SHA_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -952,20 +952,20 @@ public:
             delete [] pBuffer;
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_SHA);
     CPPUNIT_TEST( SHA_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 class digest_SHA1 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -974,7 +974,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     void SHA1_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -996,19 +996,19 @@ public:
 
             delete [] pBuffer;
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_SHA1);
     CPPUNIT_TEST( SHA1_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 class digest_HMAC_MD5 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -1017,7 +1017,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     void HMAC_MD5_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -1043,19 +1043,19 @@ public:
 
             delete [] pBuffer;
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_HMAC_MD5);
     CPPUNIT_TEST( HMAC_MD5_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 class digest_HMAC_SHA1 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -1064,7 +1064,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     void HMAC_SHA1_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -1091,19 +1091,19 @@ public:
             delete [] pBuffer;
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_HMAC_SHA1);
     CPPUNIT_TEST( HMAC_SHA1_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 class digest_PBKDF2 : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -1112,7 +1112,7 @@ public:
     {
     }
 
-    // ------------------------------------
+    
     rtl::OString /* key */ run_check_PBKDF2(rtl::OString const& _sPassword, bool _bClearSalt, sal_uInt32 _nCount)
         {
             sal_uInt32   nKeyLen = RTL_DIGEST_LENGTH_HMAC_SHA1;
@@ -1130,7 +1130,7 @@ public:
 
             if (! _bClearSalt)
             {
-                // wilful contamination
+                
                 pSaltData[0] = 1;
             }
 
@@ -1141,10 +1141,10 @@ public:
             rtl::OString aKey = createHex(pKeyBuffer, nKeyLen);
             printf("Key: %s\n", aKey.getStr());
 
-            // rtl::OString sSalt = createHex(pSaltData, nSaltDataLen);
-            // printf("Salt: %s\n", sSalt.getStr());
+            
+            
 
-            // CPPUNIT_ASSERT_MESSAGE("md5sum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_PBKDF2) );
+            
 
             delete [] pSaltData;
             delete [] pKeyBuffer;
@@ -1155,7 +1155,7 @@ public:
         {
             rtl::OString  aPassword = "Password";
 
-            // all permutations
+            
             run_check_PBKDF2(aPassword, false, 1);
             run_check_PBKDF2(aPassword, false, 2);
             run_check_PBKDF2(aPassword, true,  1);
@@ -1165,20 +1165,20 @@ public:
             run_check_PBKDF2(aPassword, true,  3);
             run_check_PBKDF2(aPassword, true,  4);
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(digest_PBKDF2);
     CPPUNIT_TEST( PBKDF2_001 );
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 
 class update : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -1226,7 +1226,7 @@ public:
 
     void updateMD5_001()
         {
-            // use wrong Algorithm!!! This is volitional!
+            
             rtlDigest aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
             CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
 
@@ -1285,9 +1285,9 @@ public:
             CPPUNIT_ASSERT_MESSAGE("does not handle wrong parameter", aError == rtl_Digest_E_Argument );
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(update);
     CPPUNIT_TEST(update_000);
@@ -1300,13 +1300,13 @@ public:
     CPPUNIT_TEST(updateHMAC_MD5_000);
     CPPUNIT_TEST(updateHMAC_SHA1_000);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 
 class get : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -1329,7 +1329,7 @@ public:
         }
     void getMD5_001()
         {
-            // test with wrong algorithm
+            
             rtlDigest aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
             CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
 
@@ -1363,9 +1363,9 @@ public:
             delete [] pKeyBuffer;
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(get);
     CPPUNIT_TEST(get_000);
@@ -1373,13 +1373,13 @@ public:
     CPPUNIT_TEST(getMD5_001);
     CPPUNIT_TEST(getMD5_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 class destroy : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -1393,20 +1393,20 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
             CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", handle != 0);
 
-            // not really testable
-            // LLA: good will test.
+            
+            
             rtl_digest_destroy( handle );
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(destroy);
     CPPUNIT_TEST(destroy_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
-// -----------------------------------------------------------------------------
+}; 
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::create);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createMD2);
@@ -1434,7 +1434,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_PBKDF2);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::update);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::get);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::destroy);
-} // namespace rtl_digest
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

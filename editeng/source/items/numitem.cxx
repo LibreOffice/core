@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,8 +46,8 @@
 
 #define MM100_TO_TWIP(MM100)    ((MM100*72L+63L)/127L)
 
-#define DEF_WRITER_LSPACE   500     //Standard Indentation
-#define DEF_DRAW_LSPACE     800     //Standard Indentation
+#define DEF_WRITER_LSPACE   500     
+#define DEF_DRAW_LSPACE     800     
 
 #define NUMITEM_VERSION_03        0x03
 #define NUMITEM_VERSION_04        0x04
@@ -119,7 +119,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
             break;
             default:
                 {
-                    // '0' allowed for ARABIC numberings
+                    
                     if(NumberingType::ARABIC == nNumType && 0 == nNo )
                         return OUString('0');
                     else
@@ -182,7 +182,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 {
     sal_uInt16 nTmp16;
     sal_Int32  nTmp32;
-    rStream.ReadUInt16( nTmp16 ); // Version number
+    rStream.ReadUInt16( nTmp16 ); 
 
     rStream.ReadUInt16( nTmp16 ); SetNumberingType( nTmp16 );
     rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
@@ -267,9 +267,9 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     {
         rStream.WriteUInt16( (sal_uInt16)1 );
 
-        // in SD or SI force bullet itself to be stored,
-        // for that purpose throw away link when link and graphic
-        // are present, so Brush save is forced
+        
+        
+        
         if(!pGraphicBrush->GetGraphicLink().isEmpty() && pGraphicBrush->GetGraphic())
         {
             pGraphicBrush->SetGraphicLink("");
@@ -514,7 +514,7 @@ long SvxNumberFormat::GetIndentAt() const
 
 IMPL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void *, EMPTYARG )
 {
-    // if necessary, set the GrfSize:
+    
     if( !pThis->aGraphicSize.Width() || !pThis->aGraphicSize.Height() )
     {
         const Graphic* pGrf = pThis->pGraphicBrush->GetGraphic();
@@ -549,12 +549,12 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
 
 OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
 {
-    nNo %= 4000;            // more can not be displayed
-//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
-//                          (Dummy),1000,500,100,50,10,5,1
+    nNo %= 4000;            
+
+
     const char *cRomanArr = bUpper
-                        ? "MDCLXVI--"   // +2 Dummy entries!
-                        : "mdclxvi--";  // +2 Dummy entries!
+                        ? "MDCLXVI--"   
+                        : "mdclxvi--";  
 
     OUString sRet;
     sal_uInt16 nMask = 1000;
@@ -587,7 +587,7 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
                     break;
         }
 
-        nMask /= 10;            // for the next decade
+        nMask /= 10;            
         cRomanArr += 2;
     }
     return sRet;
@@ -618,7 +618,7 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
         if(i < nLevels)
         {
             aFmts[i] = new SvxNumberFormat(SVX_NUM_CHARS_UPPER_LETTER);
-            // It is a distinction between writer and draw
+            
             if(nFeatures & NUM_CONTINUOUS)
             {
                 if ( eDefaultNumberFormatPositionAndSpaceMode ==
@@ -631,11 +631,11 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
                 else if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                             SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    // first line indent of general numbering in inch: -0,25 inch
+                    
                     const long cFirstLineIndent = -1440/4;
-                    // indent values of general numbering in inch:
-                    //  0,5         0,75        1,0         1,25        1,5
-                    //  1,75        2,0         2,25        2,5         2,75
+                    
+                    
+                    
                     const long cIndentAt = 1440/4;
                     aFmts[i]->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
                     aFmts[i]->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
@@ -678,10 +678,10 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 SvxNumRule::SvxNumRule( SvStream &rStream )
 {
     sal_uInt16 nTmp16;
-    rStream.ReadUInt16( nTmp16 ); // NUM_ITEM_VERSION
+    rStream.ReadUInt16( nTmp16 ); 
     rStream.ReadUInt16( nLevelCount );
 
-    // first nFeatureFlags of old Versions
+    
     rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
     rStream.ReadUInt16( nTmp16 ); bContinuousNumbering = nTmp16;
     rStream.ReadUInt16( nTmp16 ); eNumberingType = ( SvxNumRuleType )nTmp16;
@@ -690,17 +690,17 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     {
         rStream.ReadUInt16( nTmp16 );
         sal_Bool hasNumberingFormat = nTmp16 & 1;
-        aFmtsSet[i] = nTmp16 & 2; // fdo#68648 reset flag
+        aFmtsSet[i] = nTmp16 & 2; 
         if ( hasNumberingFormat ){
             aFmts[i] = new SvxNumberFormat( rStream );
         }
         else
         {
             aFmts[i] = 0;
-            aFmtsSet[i] = sal_False; // actually only false is valid
+            aFmtsSet[i] = sal_False; 
         }
     }
-    //second nFeatureFlags for new versions
+    
     rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
 }
 
@@ -713,7 +713,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
 {
     rStream.WriteUInt16( (sal_uInt16)NUMITEM_VERSION_03 );
     rStream.WriteUInt16( nLevelCount );
-    //first save of nFeatureFlags for old versions
+    
     rStream.WriteUInt16( (sal_uInt16)nFeatureFlags );
     rStream.WriteUInt16( (sal_uInt16)bContinuousNumbering );
     rStream.WriteUInt16( (sal_uInt16)eNumberingType );
@@ -722,7 +722,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     sal_Bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
-        sal_uInt16 nSetFlag(aFmtsSet[i] ? 2 : 0); // fdo#68648 store that too
+        sal_uInt16 nSetFlag(aFmtsSet[i] ? 2 : 0); 
         if(aFmts[i])
         {
             rStream.WriteUInt16( sal_uInt16(1 | nSetFlag) );
@@ -738,7 +738,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
         else
             rStream.WriteUInt16( sal_uInt16(0 | nSetFlag) );
     }
-    //second save of nFeatureFlags for new versions
+    
     rStream.WriteUInt16( (sal_uInt16)nFeatureFlags );
     if(pConverter)
         DestroyFontToSubsFontConverter(pConverter);
@@ -860,7 +860,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclString
             sal_uInt8 i = rNum.GetLevel();
 
             if( !IsContinuousNumbering() &&
-                1 < rMyNFmt.GetIncludeUpperLevels() )       // only on own level?
+                1 < rMyNFmt.GetIncludeUpperLevels() )       
             {
                 sal_uInt8 n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
@@ -889,7 +889,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclString
                         bDot = sal_False;
                 }
                 else
-                    aStr += "0";       // all 0-levels are a 0
+                    aStr += "0";       
                 if( i != rNum.GetLevel() && bDot)
                     aStr += ".";
             }
@@ -903,7 +903,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclString
     return aStr;
 }
 
-// changes linked to embedded bitmaps
+
 sal_Bool SvxNumRule::UnLinkGraphics()
 {
     sal_Bool bRet = sal_False;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPagesSelector.hxx"
@@ -160,13 +160,13 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 {
     ItemList aNewLockList;
 
-    // In here we first lock the master pages in the given list and then
-    // release the locks acquired in a previous call to this method.  When
-    // this were done the other way round the lock count of some master
-    // pages might drop temporarily to 0 and would lead to unnecessary
-    // deletion and re-creation of MasterPageDescriptor objects.
+    
+    
+    
+    
+    
 
-    // Lock the master pages in the given list.
+    
     ItemList::const_iterator iItem;
     for (iItem=rItemList.begin(); iItem!=rItemList.end(); ++iItem)
     {
@@ -174,7 +174,7 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
         aNewLockList.push_back(*iItem);
     }
 
-    // Release the previously locked master pages.
+    
     ItemList::const_iterator iPage;
     ItemList::const_iterator iEnd (maLockedMasterPages.end());
     for (iPage=maLockedMasterPages.begin(); iPage!=iEnd; ++iPage)
@@ -209,9 +209,9 @@ ResId MasterPagesSelector::GetContextMenuResId (void) const
 
 IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler)
 {
-    // We use the framework to assign the clicked-on master page because we
-    // so use the same mechanism as the context menu does (where we do not
-    // have the option to call the assignment method directly.)
+    
+    
+    
     ExecuteCommand(mnDefaultClickAction);
 
     return 0;
@@ -222,10 +222,10 @@ IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler)
 
 IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
 {
-    // Here we only prepare the display of the context menu: the item under
-    // the mouse is selected.  The actual display of the context menu is
-    // done in ContextMenuCallback which is called indirectly through
-    // PreviewValueSet::Command().
+    
+    
+    
+    
     PreviewValueSet::GrabFocus ();
     PreviewValueSet::ReleaseMouse();
     SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
@@ -251,15 +251,15 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
     {
         case COMMAND_CONTEXTMENU:
         {
-            // Use the currently selected item and show the popup menu in its
-            // center.
+            
+            
             const sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
             if (nIndex > 0)
             {
-                // The position of the upper left corner of the context menu is
-                // taken either from the mouse position (when the command was sent
-                // as reaction to a right click) or in the center of the selected
-                // item (when the command was sent as reaction to Shift+F10.)
+                
+                
+                
+                
                 Point aPosition (rEvent.GetMousePosPixel());
                 if ( ! rEvent.IsMouseEvent())
                 {
@@ -267,7 +267,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                     aPosition = aBBox.Center();
                 }
 
-                // Setup the menu.
+                
                 ::boost::scoped_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != NULL)
@@ -277,7 +277,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
 
                 ProcessPopupMenu(*pMenu);
 
-                // Show the menu.
+                
                 pMenu->Execute(this, Rectangle(aPosition,Size(1,1)), POPUPMENU_EXECUTE_DOWN);
             }
             break;
@@ -290,7 +290,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
 
 void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
-    // Disable some entries.
+    
     if (mpContainer->GetPreviewSize() == MasterPageContainer::SMALL)
         rMenu.EnableItem(SID_TP_SHOW_SMALL_PREVIEW, false);
     else
@@ -357,7 +357,7 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
             using namespace ::com::sun::star;
             uno::Reference<drawing::XDrawPage> xSelectedMaster;
             SdPage* pMasterPage = GetSelectedMasterPage();
-            assert(pMasterPage); //rhbz#902884
+            assert(pMasterPage); 
             if (pMasterPage)
                 xSelectedMaster = uno::Reference<drawing::XDrawPage>(pMasterPage->getUnoPage(), uno::UNO_QUERY);
             SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
@@ -378,7 +378,7 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
         case SID_CUT:
         case SID_COPY:
         case SID_PASTE:
-            // Cut, copy, and paste are not supported and thus are ignored.
+            
             break;
     }
 }
@@ -425,9 +425,9 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     if (nPageCount == 0)
         return;
 
-    // Get a list of all pages.  As a little optimization we only
-    // include pages that do not already have the given master page
-    // assigned.
+    
+    
+    
     OUString sFullLayoutName(pMasterPage->GetLayoutName());
     ::sd::slidesorter::SharedPageSelection pPageList (
         new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
@@ -458,19 +458,19 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
     if (pMasterPage == NULL)
         return;
 
-    // Find a visible slide sorter.
+    
     SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
     if (pSlideSorter == NULL)
         return;
 
-    // Get a list of selected pages.
+    
     SharedPageSelection pPageSelection = pSlideSorter->GetPageSelection();
     if (pPageSelection->empty())
         return;
 
     AssignMasterPageToPageList(pMasterPage, pPageSelection);
 
-    // Restore the previous selection.
+    
     pSlideSorter->SetPageSelection(pPageSelection);
 }
 
@@ -672,7 +672,7 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
     UserData* pData = GetUserData(nIndex);
     if (pData != NULL)
     {
-        // Get the token that the index pointed to previously.
+        
         MasterPageContainer::Token aOldToken (pData->second);
 
         if (aNewToken != aOldToken
@@ -807,7 +807,7 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
     ItemList::const_iterator iCurrentEnd (maCurrentItemList.end());
     sal_uInt16 nIndex (1);
 
-    // Update existing items.
+    
     for ( ; iNewItem!=iNewEnd && iCurrentItem!=iCurrentEnd; ++iNewItem, ++iCurrentItem,++nIndex)
     {
         if (*iNewItem != *iCurrentItem)
@@ -816,13 +816,13 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
         }
     }
 
-    // Append new items.
+    
     for ( ; iNewItem!=iNewEnd; ++iNewItem,++nIndex)
     {
         SetItem(nIndex,*iNewItem);
     }
 
-    // Remove trailing items.
+    
     for ( ; iCurrentItem!=iCurrentEnd; ++iCurrentItem,++nIndex)
     {
         SetItem(nIndex,MasterPageContainer::NIL_TOKEN);
@@ -844,6 +844,6 @@ css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth (const sal_Int32 nWid
     return css::ui::LayoutSize(nHeight,nHeight,nHeight);
 }
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

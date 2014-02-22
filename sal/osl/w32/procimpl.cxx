@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,10 +46,10 @@
 #include <string>
 #include <string.h>
 
-//#################################################
+
 extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile, sal_uInt32 uFlags );
 
-//#################################################
+
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
 const sal_Char* SPACE = " ";
 const rtl::OUString ENV_COMSPEC ("COMSPEC");
@@ -57,14 +57,14 @@ const rtl::OUString QUOTE("\"");
 
 namespace /* private */
 {
-    //#################################################
+    
     typedef std::list<rtl::OUString> string_container_t;
     typedef string_container_t::iterator string_container_iterator_t;
     typedef string_container_t::const_iterator string_container_const_iterator_t;
     typedef std::pair<string_container_iterator_t, string_container_iterator_t> iterator_pair_t;
     typedef std::vector<sal_Unicode> environment_container_t;
 
-    //#################################################
+    
     /* Function object that compares two strings that are
        expected to be environment variables in the form
        "name=value". Only the 'name' part will be compared.
@@ -80,8 +80,8 @@ namespace /* private */
                         (rhs.indexOf(NAME_VALUE_SEPARATOR) > -1), \
                         "Malformed environment variable");
 
-            // Windows compares environment variables uppercase
-            // so we do it, too
+            
+            
             return (rtl_ustr_compare_WithLength(
                 lhs.toAsciiUpperCase().pData->buffer,
                 lhs.indexOf(NAME_VALUE_SEPARATOR),
@@ -90,27 +90,27 @@ namespace /* private */
         }
     };
 
-    //#################################################
+    
     /* Function object used by for_each algorithm to
        calculate the sum of the length of all strings
        in a string container. */
     class sum_of_string_lengths
     {
     public:
-        //--------------------------------
+        
         sum_of_string_lengths() : sum_(0) {}
 
-        //--------------------------------
+        
         void operator() (const rtl::OUString& string)
         {
             OSL_ASSERT(string.getLength());
 
-            // always include the terminating '\0'
+            
             if (string.getLength())
                 sum_ += string.getLength() + 1;
         }
 
-        //--------------------------------
+        
         operator size_t () const
         {
             return sum_;
@@ -119,18 +119,18 @@ namespace /* private */
         size_t sum_;
     };
 
-    //#################################################
+    
     inline size_t calc_sum_of_string_lengths(const string_container_t& string_cont)
     {
         return std::for_each(
             string_cont.begin(), string_cont.end(), sum_of_string_lengths());
     }
 
-    //#################################################
+    
     void read_environment(/*out*/ string_container_t* environment)
     {
-        // GetEnvironmentStrings returns a sorted list, Windows
-        // sorts environment variables upper case
+        
+        
         LPTSTR env = reinterpret_cast<LPTSTR>(GetEnvironmentStrings());
         LPTSTR p   = env;
 
@@ -142,7 +142,7 @@ namespace /* private */
         FreeEnvironmentStrings(env);
     }
 
-    //#################################################
+    
     /* the environment list must be sorted, new values
     should either replace existing ones or should be
     added to the list, environment variables will
@@ -175,16 +175,16 @@ namespace /* private */
             }
             else
             {
-                if (iter_pair.first != iter_pair.second) // found
+                if (iter_pair.first != iter_pair.second) 
                     *iter_pair.first = env_var;
-                else // not found
+                else 
                     merged_env->insert(iter_pair.first, env_var);
             }
         }
         return true;
     }
 
-    //#################################################
+    
     /* Create a merged environment */
     bool setup_process_environment(
         rtl_uString* environment_vars[],
@@ -195,8 +195,8 @@ namespace /* private */
         if (!create_merged_environment(environment_vars, n_environment_vars, &merged_env))
             return false;
 
-        // allocate enough space for the '\0'-separated environment strings and
-        // a final '\0'
+        
+        
         environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
 
         string_container_const_iterator_t iter = merged_env.begin();
@@ -209,19 +209,19 @@ namespace /* private */
 
             OSL_ASSERT(envv.getLength());
 
-            sal_uInt32 n = envv.getLength() + 1; // copy the final '\0', too
+            sal_uInt32 n = envv.getLength() + 1; 
             memcpy(
                 reinterpret_cast<void*>(&environment[pos]),
                 reinterpret_cast<const void*>(envv.getStr()),
                 n * sizeof(sal_Unicode));
             pos += n;
         }
-        environment[pos] = 0; // append a final '\0'
+        environment[pos] = 0; 
 
         return true;
     }
 
-    //##########################################################
+    
     /*  In contrast to the Win32 API function CreatePipe with
         this function the caller is able to determine separately
         which handle of the pipe is inheritable. */
@@ -274,9 +274,9 @@ namespace /* private */
         return bRet;
     }
 
-    //#########################################################
-    // Add a quote sign to the start and the end of a string
-    // if not already present
+    
+    
+    
     rtl::OUString quote_string(const rtl::OUString& string)
     {
         rtl::OUStringBuffer quoted;
@@ -291,19 +291,19 @@ namespace /* private */
         return quoted.makeStringAndClear();
     }
 
-    //The parameter path must be a system path. If it is longer than 260 characters
-    //then it is shortened using the GetShortPathName function. This function only
-    //works if the path exists. Because "path" can be the path to an executable, it
-    //may not have the file extension ".exe". However, if the file on disk has the
-    //".exe" extension, then the function will fail. In this case a second attempt
-    //is started by adding the parameter "extension" to "path".
+    
+    
+    
+    
+    
+    
     rtl::OUString getShortPath(rtl::OUString const & path, rtl::OUString const & extension)
     {
         rtl::OUString ret(path);
         if (path.getLength() > 260)
         {
             std::vector<sal_Unicode> vec(path.getLength() + 1);
-            //GetShortPathNameW only works if the file can be found!
+            
             const DWORD len = GetShortPathNameW(
                 reinterpret_cast<LPCWSTR>(path.getStr()), reinterpret_cast<LPWSTR>(&vec[0]), path.getLength() + 1);
 
@@ -324,11 +324,11 @@ namespace /* private */
         }
         return ret;
     }
-    //##########################################################
-    // Returns the system path of the executable which can either
-    // be provided via the strImageName parameter or as first
-    // element of the strArguments list.
-    // The returned path will be quoted if it contains spaces.
+    
+    
+    
+    
+    
     rtl::OUString get_executable_path(
         rtl_uString* image_name,
         rtl_uString* cmdline_args[],
@@ -358,7 +358,7 @@ namespace /* private */
         return exe_path;
     }
 
-    //##########################################################
+    
     rtl::OUString get_file_extension(const rtl::OUString& file_name)
     {
         sal_Int32 index = file_name.lastIndexOf('.');
@@ -368,7 +368,7 @@ namespace /* private */
         return rtl::OUString();
     }
 
-    //##########################################################
+    
     bool is_batch_file(const rtl::OUString& file_name)
     {
         rtl::OUString ext = get_file_extension(file_name);
@@ -377,7 +377,7 @@ namespace /* private */
                 ext.equalsIgnoreAsciiCase("btm"));
     }
 
-    //##########################################################
+    
     rtl::OUString get_batch_processor()
     {
         rtl::OUString comspec;
@@ -392,10 +392,10 @@ namespace /* private */
         return comspec;
     }
 
-} // namespace private
+} 
 
 
-//#################################################
+
 oslProcessError SAL_CALL osl_executeProcess(
     rtl_uString *strImageName,
     rtl_uString *strArguments[],
@@ -421,7 +421,7 @@ oslProcessError SAL_CALL osl_executeProcess(
         NULL, NULL, NULL );
 }
 
-//#################################################
+
 oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     rtl_uString *ustrImageName,
     rtl_uString *ustrArguments[],
@@ -462,7 +462,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
             command_line.appendAscii(" /c ");
         }
         else
-            // should we return here in case of error?
+            
             return osl_Process_E_Unknown;
     }
 
@@ -538,9 +538,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         case osl_Process_HIDDEN:
             startup_info.wShowWindow = SW_HIDE;
-            flags |= CREATE_NO_WINDOW; // ignored for non-console
-                                       // applications; ignored on
-                                       // Win9x
+            flags |= CREATE_NO_WINDOW; 
+                                       
+                                       
             break;
 
         case osl_Process_MINIMIZED:

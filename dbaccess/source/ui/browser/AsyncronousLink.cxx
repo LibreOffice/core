@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dbaccess/AsyncronousLink.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 
-// OAsyncronousLink
+
 using namespace dbaui;
 OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
     :m_aHandler(_rHandler)
@@ -42,10 +42,10 @@ OAsyncronousLink::~OAsyncronousLink()
 
     {
         ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
-        // this is just for the case we're deleted while another thread just handled the event :
-        // if this other thread called our link while we were deleting the event here, the
-        // link handler blocked. With leaving the above block it continued, but now we are prevented
-        // to leave this destructor 'til the link handler recognizes that nEvent == 0 and leaves.
+        
+        
+        
+        
     }
 }
 
@@ -72,8 +72,8 @@ IMPL_LINK(OAsyncronousLink, OnAsyncCall, void*, _pArg)
         {
             ::osl::MutexGuard aEventGuard( m_aEventSafety );
             if (!m_nEventId)
-                // our destructor deleted the event just while we we're waiting for m_aEventSafety
-                // -> get outta here
+                
+                
                 return 0;
             m_nEventId = 0;
         }

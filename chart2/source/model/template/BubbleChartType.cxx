@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BubbleChartType.hxx"
@@ -97,7 +97,7 @@ struct StaticBubbleChartTypeInfo : public rtl::StaticAggregate< uno::Reference< 
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -116,14 +116,14 @@ BubbleChartType::BubbleChartType( const BubbleChartType & rOther ) :
 BubbleChartType::~BubbleChartType()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL BubbleChartType::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new BubbleChartType( *this ));
 }
 
-// ____ XChartType ____
+
 Reference< chart2::XCoordinateSystem > SAL_CALL
     BubbleChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
@@ -181,7 +181,7 @@ OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()
     return OUString("values-size");
 }
 
-// ____ OPropertySet ____
+
 uno::Any BubbleChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -192,13 +192,13 @@ uno::Any BubbleChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartType::getInfoHelper()
 {
     return *StaticBubbleChartTypeInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -214,10 +214,10 @@ uno::Sequence< OUString > BubbleChartType::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( BubbleChartType,
                              OUString("com.sun.star.comp.chart.BubbleChartType") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

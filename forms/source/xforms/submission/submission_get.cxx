@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,14 +49,14 @@ CSubmissionGet::CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< 
 
 CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
 {
-    // GET always uses apllicatin/x-www-formurlencoded
+    
     boost::scoped_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();
 
     CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
 
-    // create a commandEnvironment and use the default interaction handler
+    
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
     if( aInteractionHandler.is() )
         pHelper->m_aInteractionHandler = aInteractionHandler;
@@ -66,10 +66,10 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
 
-    // UCB has ownership of environment...
+    
     CSS::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
 
-    // append query string to the URL
+    
     try {
         OStringBuffer aUTF8QueryURL(OUStringToOString(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE),
             RTL_TEXTENCODING_UTF8));
@@ -89,7 +89,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         ucbhelper::Content aContent(aQueryURL, aEnvironment, m_xContext);
         CSS::uno::Reference< XOutputStream > aPipe( CSS::io::Pipe::create(m_xContext), UNO_QUERY_THROW );
         aContent.openStream(aPipe);
-        // get reply
+        
         try {
             m_aResultStream = aContent.openStream();
         } catch (const Exception&) {
@@ -97,7 +97,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         }
     } catch (const Exception&)
     {
-        // XXX
+        
         OSL_FAIL("Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }

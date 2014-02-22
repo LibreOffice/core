@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/fontdefs.hxx>
@@ -28,7 +28,7 @@ struct ImplLocalizedFontName
     const sal_Unicode*  mpLocalizedNames;
 };
 
-// TODO: where did the 0,0 delimiters come from? A single 0 should suffice...
+
 static sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0, 0 };
 static sal_Unicode const aBatangChe[] = { 0xBC14, 0xD0D5, 0xCCB4, 0, 0 };
 static sal_Unicode const aGungsuh[] = { 0xAD81, 0xC11C, 0, 0 };
@@ -49,8 +49,8 @@ static sal_Unicode const aFZKai[] = { 0x65B9, 0x6B63, 0x6977, 0x4F53, 0, 0 };
 static sal_Unicode const aFZSongYI[] = { 0x65B9, 0x6B63, 0x5B8B, 0x4E00, 0, 0 };
 static sal_Unicode const aFZShuSong[] = { 0x65B9, 0x6B63, 0x4E66, 0x5B8B, 0, 0 };
 static sal_Unicode const aFZFangSong[] = { 0x65B9, 0x6B63, 0x4EFF, 0x5B8B, 0, 0 };
-// Attention: this fonts includes the wrong encoding vector - so we double the names with correct and wrong encoding
-// First one is the GB-Encoding (we think the correct one), second is the big5 encoded name
+
+
 static sal_Unicode const aMHei[] = { 'm', 0x7B80, 0x9ED1, 0, 'm', 0x6F60, 0x7AAA, 0, 0 };
 static sal_Unicode const aMKai[] = { 'm', 0x7B80, 0x6977, 0x566C, 0, 'm', 0x6F60, 0x7FF1, 0x628E, 0, 0 };
 static sal_Unicode const aMSong[] = { 'm', 0x7B80, 0x5B8B, 0, 'm', 0x6F60, 0x51BC, 0, 0 };
@@ -320,24 +320,24 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   NULL,                   NULL },
 };
 
-// -----------------------------------------------------------------------
+
 
 void GetEnglishSearchFontName( OUString& rName )
 {
     bool        bNeedTranslation = false;
     sal_Int32  nLen = rName.getLength();
 
-    // Remove trailing whitespaces
+    
     sal_Int32 i = nLen;
     while ( i && (rName[ i-1 ] < 32) )
         i--;
     if ( i != nLen )
         rName = rName.copy( 0, i );
 
-    // Remove Script at the end
-    // Scriptname must be the last part of the fontname and
-    // looks like "fontname (scriptname)". So there can only be a
-    // script name at the and of the fontname, when the last char is ')'
+    
+    
+    
+    
     if ( (nLen >= 3) && rName[ nLen-1 ] == ')' )
     {
         int nOpen = 1;
@@ -349,7 +349,7 @@ void GetEnglishSearchFontName( OUString& rName )
                 nOpen--;
                 if ( !nOpen )
                 {
-                    // Remove Space at the end
+                    
                     if ( nTempLen && (rName[ nTempLen-1 ] == ' ') )
                         nTempLen--;
                     rName = rName.copy( 0, nTempLen );
@@ -363,23 +363,23 @@ void GetEnglishSearchFontName( OUString& rName )
         }
     }
 
-    // remove all whitespaces and converts to lower case ASCII
-    // TODO: better transliteration to ASCII e.g. all digits
+    
+    
     i = 0;
     while ( i < nLen )
     {
         sal_Unicode c = rName[ i ];
         if ( c > 127 )
         {
-            // Translate to Lowercase-ASCII
-            // FullWidth-ASCII to half ASCII
+            
+            
             if ( (c >= 0xFF00) && (c <= 0xFF5E) )
             {
                 c -= 0xFF00-0x0020;
-                // Upper to Lower
+                
                 if ( (c >= 'A') && (c <= 'Z') )
                     c += 'a' - 'A';
-                //rName[ i ] = c ;
+                
 
                 OUStringBuffer aTmpStr( rName.getStr() ) ;
                 aTmpStr[ i ] = c ;
@@ -388,27 +388,27 @@ void GetEnglishSearchFontName( OUString& rName )
            }
             else
             {
-                // Only Fontnames with None-Ascii-Characters must be translated
+                
                 bNeedTranslation = true;
             }
         }
-        // not lowercase Ascii
+        
         else if ( !((c >= 'a') && (c <= 'z')) )
         {
-            // To Lowercase-Ascii
+            
             if ( (c >= 'A') && (c <= 'Z') )
             {
                 c += 'a' - 'A';
-                //rName[ i ] = c ;
+                
 
                 OUStringBuffer aTmpStr( rName.getStr() ) ;
                 aTmpStr[ i ] = c ;
                 rName = aTmpStr.makeStringAndClear() ;
 
             }
-            else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
+            else if( ((c < '0') || (c > '9')) && (c != ';') ) 
             {
-                // Remove white spaces and special characters
+                
 
                 OUStringBuffer aTmpStr( rName.getStr() ) ;
                 aTmpStr.remove(i,1);
@@ -422,15 +422,15 @@ void GetEnglishSearchFontName( OUString& rName )
         i++;
     }
 
-    // translate normalized localized name to its normalized English ASCII name
+    
     if( bNeedTranslation )
     {
         typedef boost::unordered_map<const OUString, const char*, FontNameHash> FontNameDictionary;
         static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
-        // the font name dictionary needs to be intialized once
+        
         if( aDictionary.empty() )
         {
-            // TODO: check if all dictionary entries are already normalized?
+            
             const ImplLocalizedFontName* pList = aImplLocalizedNamesList;
             for(; pList->mpEnglishName; ++pList )
                 aDictionary[ pList->mpLocalizedNames ] = pList->mpEnglishName;
@@ -442,11 +442,11 @@ void GetEnglishSearchFontName( OUString& rName )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 {
-    // check for valid start index
+    
     sal_Int32 nStringLen = rTokenStr.getLength();
     if( rIndex >= nStringLen )
     {
@@ -454,7 +454,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
         return OUString();
     }
 
-    // find the next token delimiter and return the token substring
+    
     const sal_Unicode* pStr = rTokenStr.getStr() + rIndex;
     const sal_Unicode* pEnd = rTokenStr.getStr() + nStringLen;
     for(; pStr < pEnd; ++pStr )
@@ -467,14 +467,14 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
     {
         rIndex = sal::static_int_cast<sal_Int32>(pStr - rTokenStr.getStr());
         nTokenLen = rIndex - nTokenStart;
-        ++rIndex; // skip over token separator
+        ++rIndex; 
     }
     else
     {
-        // no token delimiter found => handle last token
+        
         rIndex = -1;
 
-        // optimize if the token string consists of just one token
+        
         if( !nTokenStart )
         {
             return rTokenStr;
@@ -488,7 +488,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
     return OUString( rTokenStr.getStr() + nTokenStart, nTokenLen );
 }
 
-// =======================================================================
+
 
 static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
 {
@@ -505,7 +505,7 @@ static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
 {
@@ -522,7 +522,7 @@ void AddTokenFontName( OUString& rName, const OUString& rNewToken )
         ImplAppendFontToken( rName, rNewToken );
 }
 
-// =======================================================================
+
 
 OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 {
@@ -530,10 +530,10 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 
     sal_Int32 nIndex = 0;
     OUString aOrgName = GetNextFontToken( rName, nIndex );
-    // clean up and lowercase font name
+    
     GetEnglishSearchFontName( aOrgName );
 
-    // #93662# do not try to replace StarSymbol with MS only font
+    
     if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)
     &&  ( aOrgName == "starsymbol"
       ||  aOrgName == "opensymbol" ) )
@@ -578,12 +578,12 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
     return aName;
 }
 
-// -----------------------------------------------------------------------
 
-// TODO: use a more generic String hash
+
+
 int FontNameHash::operator()( const OUString& rStr ) const
 {
-    // this simple hash just has to be good enough for font names
+    
     int nHash = 0;
     const int nLen = rStr.getLength();
     const sal_Unicode* p = rStr.getStr();
@@ -592,10 +592,10 @@ int FontNameHash::operator()( const OUString& rStr ) const
         default: nHash = (p[0]<<16) - (p[1]<<8) + p[2];
                  nHash += nLen;
                  p += nLen - 3;
-                 // fall through
-        case 3:  nHash += (p[2]<<16);   // fall through
-        case 2:  nHash += (p[1]<<8);    // fall through
-        case 1:  nHash += p[0];         // fall through
+                 
+        case 3:  nHash += (p[2]<<16);   
+        case 2:  nHash += (p[1]<<8);    
+        case 1:  nHash += p[0];         
         case 0:  break;
     };
 

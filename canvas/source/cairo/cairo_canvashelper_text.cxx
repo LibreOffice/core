@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -54,7 +54,7 @@ namespace cairocanvas
                                                                             const rendering::FontInfo&                      /*aFilter*/,
                                                                             const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
-        // TODO
+        
         return uno::Sequence< rendering::FontInfo >();
     }
 
@@ -77,18 +77,18 @@ namespace cairocanvas
 
         aMatrix.decompose( aScale, aTranslate, nRotate, nShearX );
 
-        // query font metric _before_ tampering with width and height
+        
         if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
         {
-            // retrieve true font width
+            
             const sal_Int32 nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetWidth() );
 
             const sal_Int32 nScaledFontWidth( ::basegfx::fround(nFontWidth * aScale.getX()) );
 
             if( !nScaledFontWidth )
             {
-                // scale is smaller than one pixel - disable text
-                // output altogether
+                
+                
                 return false;
             }
 
@@ -103,7 +103,7 @@ namespace cairocanvas
 
         io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)*(1800.0/M_PI)) ) );
 
-        // TODO(F2): Missing functionality in VCL: shearing
+        
         o_rPoint.X() = ::basegfx::fround(aTranslate.getX());
         o_rPoint.Y() = ::basegfx::fround(aTranslate.getY());
 
@@ -119,17 +119,17 @@ namespace cairocanvas
     {
         ::canvas::tools::verifyInput( renderState,
                                       BOOST_CURRENT_FUNCTION,
-                                      const_cast<rendering::XCanvas*>(pOwner), // only for refcount
+                                      const_cast<rendering::XCanvas*>(pOwner), 
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
         int nTransparency(0);
 
-        // TODO(P2): Don't change clipping all the time, maintain current clip
-        // state and change only when update is necessary
+        
+        
 
-        // accumulate non-empty clips into one region
-        // ==========================================
+        
+        
 
         Region aClipRegion;
 
@@ -141,7 +141,7 @@ namespace cairocanvas
 
             if( aClipPoly.count() )
             {
-                // setup non-empty clipping
+                
                 ::basegfx::B2DHomMatrix aMatrix;
                 aClipPoly.transform(
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
@@ -165,7 +165,7 @@ namespace cairocanvas
 
             if( aClipPoly.count() )
             {
-                // setup non-empty clipping
+                
                 Region aRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
 
                 if( aClipRegion.IsEmpty() )
@@ -175,17 +175,17 @@ namespace cairocanvas
             }
             else
             {
-                // clip polygon is empty
+                
                 aClipRegion.SetEmpty();
             }
         }
 
-        // setup accumulated clip region. Note that setting an
-        // empty clip region denotes "clip everything" on the
-        // OutputDevice (which is why we translate that into
-        // SetClipRegion() here). When both view and render clip
-        // are empty, aClipRegion remains default-constructed,
-        // i.e. empty, too.
+        
+        
+        
+        
+        
+        
         if( aClipRegion.IsEmpty() )
         {
             rOutDev.SetClipRegion();
@@ -204,8 +204,8 @@ namespace cairocanvas
                 aColor = ::vcl::unotools::stdColorSpaceSequenceToColor( renderState.DeviceColor );
             }
 
-            // extract alpha, and make color opaque
-            // afterwards. Otherwise, OutputDevice won't draw anything
+            
+            
             nTransparency = aColor.GetTransparency();
             aColor.SetTransparency(0);
 
@@ -263,11 +263,11 @@ namespace cairocanvas
             aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(renderState.DeviceColor );
         }
 
-        // setup font color
+        
         aVCLFont.SetColor( aColor );
         aVCLFont.SetFillColor( aColor );
 
-        // no need to replicate this for mp2ndOutDev, we're modifying only aVCLFont here.
+        
         if( !setupFontTransform( rOutDev, o_rOutPos, aVCLFont, viewState, renderState ) )
             return false;
 
@@ -298,21 +298,21 @@ namespace cairocanvas
         if( mpVirtualDevice )
         {
 #if defined CAIRO_HAS_WIN32_SURFACE
-            // FIXME: Some kind of work-araound...
+            
             cairo_rectangle (mpSurface->getCairo().get(), 0, 0, 0, 0);
             cairo_fill(mpSurface->getCairo().get());
 #endif
             ::Point aOutpos;
             if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xFont ) )
-                return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                return uno::Reference< rendering::XCachedPrimitive >(NULL); 
 
-                // change text direction and layout mode
+                
             sal_uLong nLayoutMode(0);
             switch( textDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_LTR;
-                    // FALLTHROUGH intended
+                    
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
                     nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_LEFT;
@@ -320,14 +320,14 @@ namespace cairocanvas
 
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
-                    // FALLTHROUGH intended
+                    
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
                     nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_RIGHT;
                     break;
             }
 
-            // TODO(F2): alpha
+            
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
 
             OSL_TRACE(":cairocanvas::CanvasHelper::drawText(O,t,f,v,r,d): %s", OUStringToOString( text.Text.copy( text.StartPosition, text.Length ),
@@ -358,20 +358,20 @@ namespace cairocanvas
             if( mpVirtualDevice )
             {
 #if defined CAIRO_HAS_WIN32_SURFACE
-                // FIXME: Some kind of work-araound...
+                
                 cairo_rectangle( mpSurface->getCairo().get(), 0, 0, 0, 0);
                 cairo_fill(mpSurface->getCairo().get());
 #endif
-                // TODO(T3): Race condition. We're taking the font
-                // from xLayoutedText, and then calling draw() at it,
-                // without exclusive access. Move setupTextOutput(),
-                // e.g. to impltools?
+                
+                
+                
+                
 
                 ::Point aOutpos;
                 if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
-                    return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                    return uno::Reference< rendering::XCachedPrimitive >(NULL); 
 
-                // TODO(F2): What about the offset scalings?
+                
                 pTextLayout->draw( mpSurface, *mpVirtualDevice, aOutpos, viewState, renderState );
             }
         }

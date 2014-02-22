@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -34,7 +34,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct LockEntrySequenceParseContext
 {
@@ -56,7 +56,7 @@ struct LockEntrySequenceParseContext
 #define STATE_LOCKTYPE  (STATE_TOP + 4)
 #define STATE_WRITE     (STATE_TOP + 5)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockEntrySequence_startelement_callback(
     void *,
     int parent,
@@ -121,17 +121,17 @@ extern "C" int LockEntrySequence_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockEntrySequence_chardata_callback(
     void *,
     int,
     const char *,
     size_t )
 {
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LockEntrySequence_endelement_callback(
     void *userdata,
     int state,
@@ -162,35 +162,35 @@ extern "C" int LockEntrySequence_endelement_callback(
 
         case STATE_LOCKSCOPE:
             if ( !pCtx->hasScope )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_LOCKTYPE:
             if ( !pCtx->hasType )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_LOCKENTRY:
             if ( !pCtx->hasType || !pCtx->hasScope )
-                return 1; // abort
+                return 1; 
             break;
 
         default:
             break;
     }
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool LockEntrySequence::createFromXML( const OString & rInData,
                                        uno::Sequence<
                                                 ucb::LockEntry > & rOutData )
 {
-    const sal_Int32 TOKEN_LENGTH = 12; // </lockentry>
+    const sal_Int32 TOKEN_LENGTH = 12; 
     bool success = true;
 
-    // rInData may contain multiple <lockentry>...</lockentry> tags.
+    
     sal_Int32 nCount = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd   = rInData.indexOf( "</lockentry>" );

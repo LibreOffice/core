@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,19 +14,19 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "inspectorhelpwindow.hxx"
 #include "modulepcr.hxx"
 #include "propresid.hrc"
 
-//........................................................................
+
 namespace pcr
 {
-    //====================================================================
-    //= InspectorHelpWindow
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     InspectorHelpWindow::InspectorHelpWindow( Window* _pParent )
         :Window( _pParent, WB_DIALOGCONTROL )
         ,m_aSeparator( this )
@@ -46,20 +46,20 @@ namespace pcr
         m_aHelpText.Show();
     }
 
-    //--------------------------------------------------------------------
+    
     void InspectorHelpWindow::SetText( const OUString& _rStr )
     {
         m_aHelpText.SetText( _rStr );
     }
 
-    //--------------------------------------------------------------------
+    
     void InspectorHelpWindow::SetLimits( sal_Int32 _nMinLines, sal_Int32 _nMaxLines )
     {
         m_nMinLines = _nMinLines;
         m_nMaxLines = _nMaxLines;
     }
 
-    //--------------------------------------------------------------------
+    
     long InspectorHelpWindow::impl_getHelpTextBorderHeight()
     {
         sal_Int32 nTop(0), nBottom(0), nDummy(0);
@@ -67,7 +67,7 @@ namespace pcr
         return nTop + nBottom;
     }
 
-    //--------------------------------------------------------------------
+    
     long InspectorHelpWindow::impl_getSpaceAboveTextWindow()
     {
         Size aSeparatorSize( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ) );
@@ -75,28 +75,28 @@ namespace pcr
         return aSeparatorSize.Height() + a3AppFontSize.Height();
     }
 
-    //--------------------------------------------------------------------
+    
     long InspectorHelpWindow::GetMinimalHeightPixel()
     {
         return impl_getMinimalTextWindowHeight() + impl_getSpaceAboveTextWindow();
     }
 
-    //--------------------------------------------------------------------
+    
     long InspectorHelpWindow::impl_getMinimalTextWindowHeight()
     {
         return impl_getHelpTextBorderHeight() + m_aHelpText.GetTextHeight() * m_nMinLines;
     }
 
-    //--------------------------------------------------------------------
+    
     long InspectorHelpWindow::impl_getMaximalTextWindowHeight()
     {
         return impl_getHelpTextBorderHeight() + m_aHelpText.GetTextHeight() * m_nMaxLines;
     }
 
-    //--------------------------------------------------------------------
+    
     long InspectorHelpWindow::GetOptimalHeightPixel()
     {
-        // --- calc the height as needed for the mere text window
+        
         long nMinTextWindowHeight = impl_getMinimalTextWindowHeight();
         long nMaxTextWindowHeight = impl_getMaximalTextWindowHeight();
 
@@ -107,11 +107,11 @@ namespace pcr
 
         long nOptTextWindowHeight = ::std::max( nMinTextWindowHeight, ::std::min( nMaxTextWindowHeight, nActTextWindowHeight ) );
 
-        // --- then add the space above the text window
+        
         return nOptTextWindowHeight + impl_getSpaceAboveTextWindow();
     }
 
-    //--------------------------------------------------------------------
+    
     void InspectorHelpWindow::Resize()
     {
         Size a3AppFont( LogicToPixel( Size( 3, 3 ), MAP_APPFONT ) );
@@ -127,8 +127,8 @@ namespace pcr
         m_aHelpText.SetPosSizePixel( aTextArea.TopLeft(), aTextArea.GetSize() );
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

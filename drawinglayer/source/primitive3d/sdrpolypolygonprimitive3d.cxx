@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive3d/sdrpolypolygonprimitive3d.hxx>
@@ -25,11 +25,11 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -44,10 +44,10 @@ namespace drawinglayer
                 ::std::vector< basegfx::B3DPolyPolygon > aFill;
                 aFill.push_back(getPolyPolygon3D());
 
-                // get full range
+                
                 const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));
 
-                // #i98295# normal creation
+                
                 if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     if(::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
@@ -65,7 +65,7 @@ namespace drawinglayer
                     }
                 }
 
-                // #i98314# texture coordinates
+                
                 if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     applyTextureTo3DGeometry(
@@ -78,7 +78,7 @@ namespace drawinglayer
 
                 if(!getSdrLFSAttribute().getFill().isDefault())
                 {
-                    // add fill
+                    
                     aRetval = create3DPolyPolygonFillPrimitives(
                         aFill,
                         getTransform(),
@@ -89,7 +89,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // create simplified 3d hit test geometry
+                    
                     aRetval = createHiddenGeometryPrimitives3D(
                         aFill,
                         getTransform(),
@@ -97,7 +97,7 @@ namespace drawinglayer
                         getSdr3DObjectAttribute());
                 }
 
-                // add line
+                
                 if(!getSdrLFSAttribute().getLine().isDefault())
                 {
                     basegfx::B3DPolyPolygon aLine(getPolyPolygon3D());
@@ -108,7 +108,7 @@ namespace drawinglayer
                     appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
                 }
 
-                // add shadow
+                
                 if(!getSdrLFSAttribute().getShadow().isDefault()
                     && aRetval.hasElements())
                 {
@@ -146,11 +146,11 @@ namespace drawinglayer
 
         basegfx::B3DRange SdrPolyPolygonPrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            // added this implementation to make sure that non-visible objects of this
-            // kind will deliver their expansion. If not implemented, it would never deliver
-            // the used space for non-visible objects since the decomposition for that
-            // case will be empty (what is correct). To support chart ATM which relies on
-            // non-visible objects occupying space in 3D, this method was added
+            
+            
+            
+            
+            
             basegfx::B3DRange aRetval;
 
             if(getPolyPolygon3D().count())
@@ -164,7 +164,7 @@ namespace drawinglayer
 
                     if(!rLine.isDefault() && !basegfx::fTools::equalZero(rLine.getWidth()))
                     {
-                        // expand by half LineWidth as tube radius
+                        
                         aRetval.grow(rLine.getWidth() / 2.0);
                     }
                 }
@@ -173,10 +173,10 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive3DIDBlock(SdrPolyPolygonPrimitive3D, PRIMITIVE3D_ID_SDRPOLYPOLYGONPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 
 void MathType::Init()
 {
-    //These are the default MathType sizes
+    
     aSizeTable[0]=12;
     aSizeTable[1]=8;
     aSizeTable[2]=6;
@@ -495,17 +495,17 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersio
         case 0xE425:
             pC = " leslant ";
             break;
-        case 0xeb01:    //no space
-        case 0xeb08:    //normal space
+        case 0xeb01:    
+        case 0xeb08:    
             bRet=true;
             break;
-        case 0xef04:    //tiny space
-        case 0xef05:    //tiny space
-        case 0xeb02:    //small space
-        case 0xeb04:    //medium space
+        case 0xef04:    
+        case 0xef05:    
+        case 0xeb02:    
+        case 0xeb04:    
             rRet += "`";
             break;
-        case 0xeb05:    //large space
+        case 0xeb05:    
             rRet += "~";
             break;
         case 0x3a9:
@@ -570,7 +570,7 @@ int MathType::Parse(SotStorage *pStor)
     pS->ReadUChar( nProdVersion );
     pS->ReadUChar( nProdSubVersion );
 
-    if (nVersion > 3)   // allow only supported versions of MathType to be parsed
+    if (nVersion > 3)   
         return 0;
 
 #ifdef STANDALONE
@@ -584,18 +584,18 @@ int MathType::Parse(SotStorage *pStor)
 #endif
 
     int nRet = HandleRecords();
-    //little crude hack to close ocassionally open expressions
-    //a sophisticated system to determine what expressions are
-    //opened is required, but this is as much work as rewriting
-    //starmaths internals.
+    
+    
+    
+    
     rRet += "{}";
 
 #if OSL_DEBUG_LEVEL > 1
 #   ifdef CAOLAN
-    //sanity check
+    
 
-    //sigh, theres no point! MathType (in some bizarre subvarient) pads
-    //the end of the formula with ENDs (0)'s
+    
+    
     sal_uLong nEnd = pS->Tell();
     OSL_ENSURE(nEnd == pS->Seek(STREAM_SEEK_TO_END),
         "Possibly unfully parsed formula");
@@ -629,7 +629,7 @@ static void lcl_AppendDummyTerm(OUString &rRet)
             bOk=true;
         break;
     }
-    if (!bOk)   //No term, use dummy
+    if (!bOk)   
         rRet += " {}";
 }
 
@@ -838,9 +838,9 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " widevec ";//left arrow above
+                                    rRet += " widevec ";
                                 else if (nVariation == 1)
-                                    rRet += " widevec ";//left arrow below
+                                    rRet += " widevec ";
                                 rRet += " {";
                             }
                             break;
@@ -848,9 +848,9 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " widevec ";//right arrow above
+                                    rRet += " widevec ";
                                 else if (nVariation == 1)
-                                    rRet += " widevec ";//right arrow below
+                                    rRet += " widevec ";
                                 rRet += " {";
                             }
                             break;
@@ -858,9 +858,9 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " widevec ";//double arrow above
+                                    rRet += " widevec ";
                                 else if (nVariation == 1)
-                                    rRet += " widevec ";//double arrow below
+                                    rRet += " widevec ";
                                 rRet += " {";
                             }
                             break;
@@ -1075,7 +1075,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         case 0x23:
                             if (nPart == 0)
                             {
-                                rRet += " union"; //union
+                                rRet += " union"; 
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -1093,7 +1093,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         case 0x24:
                             if (nPart == 0)
                             {
-                                rRet += " union"; //union
+                                rRet += " union"; 
                                 sPush = rRet;
                                 rRet = OUString();
                             }
@@ -1108,7 +1108,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         case 0x25:
                             if (nPart == 0)
                             {
-                                rRet += " intersect"; //intersect
+                                rRet += " intersect"; 
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -1126,7 +1126,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         case 0x26:
                             if (nPart == 0)
                             {
-                                rRet += " intersect"; //intersect
+                                rRet += " intersect"; 
                                 sPush = rRet;
                                 rRet = OUString();
                             }
@@ -1234,20 +1234,20 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         case 0x2e:
                             if (nVariation == 0)
-                                rRet += " widevec ";//left below
+                                rRet += " widevec ";
                             else if (nVariation == 1)
-                                rRet += " widevec ";//right below
+                                rRet += " widevec ";
                             else if (nVariation == 2)
-                                rRet += " widevec ";//double headed below
+                                rRet += " widevec ";
                             rRet += " {";
                             break;
                         case 0x2f:
                             if (nVariation == 0)
-                                rRet += " widevec ";//left above
+                                rRet += " widevec ";
                             else if (nVariation == 1)
-                                rRet += " widevec ";//right above
+                                rRet += " widevec ";
                             else if (nVariation == 2)
-                                rRet += " widevec ";//double headed above
+                                rRet += " widevec ";
                             rRet += " {";
                             break;
                         default:
@@ -1663,7 +1663,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 if (nPart == 0)
                                 {
-                                    newline--; //there is another term to arrive
+                                    newline--; 
                                     rRet += " mline ";
                                 }
                                 else
@@ -1678,9 +1678,9 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         default:
                             break;
                         }
-                        bSilent = true; //Skip the optional brackets and/or
-                                        //symbols that follow some of these
-                                        //records. Foo Data.
+                        bSilent = true; 
+                                        
+                                        
 
                         /*In matrices and piles we cannot separate equation
                          *lines with the newline keyword*/
@@ -1748,7 +1748,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         aSeq.push_back(nChar8);
                     }
-                    // Do nothing to the font name now in aSeq!?
+                    
                 }
                 break;
             case SIZE:
@@ -1936,7 +1936,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
         pS = &xSrc;
         pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-        pS->SeekRel(EQNOLEFILEHDR_SIZE); //Skip 28byte Header and fill it in later
+        pS->SeekRel(EQNOLEFILEHDR_SIZE); 
         pS->WriteUChar( sal_uInt8(0x03) );
         pS->WriteUChar( sal_uInt8(0x01) );
         pS->WriteUChar( sal_uInt8(0x01) );
@@ -1989,8 +1989,8 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
         case NSPECIAL:
             {
             SmTextNode *pText=(SmTextNode *)pNode;
-            //if the token str and the result text are the same then this
-            //is to be seen as text, else assume it's a mathchar
+            
+            
             if (pText->GetText() == pText->GetToken().aText)
                 HandleText(pText,nLevel);
             else
@@ -2013,7 +2013,7 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             }
             break;
         case NTABLE:
-            //Root Node, PILE equivalent, i.e. vertical stack
+            
             HandleTable(pNode,nLevel);
             break;
         case NMATRIX:
@@ -2057,24 +2057,24 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
 int MathType::StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation)
 {
     int nOldPending=nPendingAttributes;
-    pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-    pS->WriteUChar( sal_uInt8(nSelector) ); //selector
-    pS->WriteUChar( sal_uInt8(nVariation) ); //variation
-    pS->WriteUChar( sal_uInt8(0x00) ); //options
+    pS->WriteUChar( sal_uInt8(TMPL) ); 
+    pS->WriteUChar( sal_uInt8(nSelector) ); 
+    pS->WriteUChar( sal_uInt8(nVariation) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
     pS->WriteUChar( sal_uInt8(LINE) );
-    //theres just no way we can now handle any character
-    //attributes (from mathtypes perspective) centered
-    //over an expression but above template attribute
-    //such as widevec and similar constructs
-    //we have to drop them
+    
+    
+    
+    
+    
     nPendingAttributes=0;
     return nOldPending;
 }
 
 void MathType::EndTemplate(int nOldPendingAttributes)
 {
-    pS->WriteUChar( sal_uInt8(END) ); //end line
-    pS->WriteUChar( sal_uInt8(END) ); //end template
+    pS->WriteUChar( sal_uInt8(END) ); 
+    pS->WriteUChar( sal_uInt8(END) ); 
     nPendingAttributes=nOldPendingAttributes;
 }
 
@@ -2082,52 +2082,52 @@ void MathType::EndTemplate(int nOldPendingAttributes)
 void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
 {
     pS->WriteUChar( sal_uInt8(MATRIX) );
-    pS->WriteUChar( sal_uInt8(0x00) ); //vAlign ?
-    pS->WriteUChar( sal_uInt8(0x00) ); //h_just
-    pS->WriteUChar( sal_uInt8(0x00) ); //v_just
-    pS->WriteUChar( sal_uInt8(pMatrix->GetNumRows()) ); //v_just
-    pS->WriteUChar( sal_uInt8(pMatrix->GetNumCols()) ); //v_just
+    pS->WriteUChar( sal_uInt8(0x00) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
+    pS->WriteUChar( sal_uInt8(pMatrix->GetNumRows()) ); 
+    pS->WriteUChar( sal_uInt8(pMatrix->GetNumCols()) ); 
     int nBytes=(pMatrix->GetNumRows()+1)*2/8;
     if (((pMatrix->GetNumRows()+1)*2)%8)
         nBytes++;
     for (sal_uInt16 j = 0; j < nBytes; j++)
-        pS->WriteUChar( sal_uInt8(0x00) ); //row_parts
+        pS->WriteUChar( sal_uInt8(0x00) ); 
     nBytes=(pMatrix->GetNumCols()+1)*2/8;
     if (((pMatrix->GetNumCols()+1)*2)%8)
         nBytes++;
     for (sal_uInt16 k = 0; k < nBytes; k++)
-        pS->WriteUChar( sal_uInt8(0x00) ); //col_parts
+        pS->WriteUChar( sal_uInt8(0x00) ); 
     sal_uInt16  nSize = pMatrix->GetNumSubNodes();
     for (sal_uInt16 i = 0; i < nSize; i++)
         if (SmNode *pTemp = pMatrix->GetSubNode(i))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //end line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
     pS->WriteUChar( sal_uInt8(END) );
 }
 
 
-//Root Node, PILE equivalent, i.e. vertical stack
+
 void MathType::HandleTable(SmNode *pNode,int nLevel)
 {
     sal_uInt16  nSize = pNode->GetNumSubNodes();
-    //The root of the starmath is a table, if
-    //we convert this them each iteration of
-    //conversion from starmath to mathtype will
-    //add an extra unnecessary level to the
-    //mathtype output stack which would grow
-    //without bound in a multi step conversion
+    
+    
+    
+    
+    
+    
 
     if (nLevel == 0)
-        pS->WriteUChar( sal_uInt8(0x0A) ); //initial size
+        pS->WriteUChar( sal_uInt8(0x0A) ); 
 
     if ( nLevel || (nSize >1))
     {
         pS->WriteUChar( sal_uInt8(PILE) );
-        pS->WriteUChar( sal_uInt8(nHAlign) ); //vAlign ?
-        pS->WriteUChar( sal_uInt8(0x01) ); //hAlign
+        pS->WriteUChar( sal_uInt8(nHAlign) ); 
+        pS->WriteUChar( sal_uInt8(0x01) ); 
     }
 
     for (sal_uInt16 i = 0; i < nSize; i++)
@@ -2145,29 +2145,29 @@ void MathType::HandleTable(SmNode *pNode,int nLevel)
 void MathType::HandleRoot(SmNode *pNode,int nLevel)
 {
     SmNode *pTemp;
-    pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-    pS->WriteUChar( sal_uInt8(0x0D) ); //selector
+    pS->WriteUChar( sal_uInt8(TMPL) ); 
+    pS->WriteUChar( sal_uInt8(0x0D) ); 
     if (pNode->GetSubNode(0))
-        pS->WriteUChar( sal_uInt8(0x01) ); //variation
+        pS->WriteUChar( sal_uInt8(0x01) ); 
     else
-        pS->WriteUChar( sal_uInt8(0x00) ); //variation
-    pS->WriteUChar( sal_uInt8(0x00) ); //options
+        pS->WriteUChar( sal_uInt8(0x00) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
 
     if (NULL != (pTemp = pNode->GetSubNode(2)))
     {
-        pS->WriteUChar( sal_uInt8(LINE) ); //line
+        pS->WriteUChar( sal_uInt8(LINE) ); 
         HandleNodes(pTemp,nLevel+1);
         pS->WriteUChar( sal_uInt8(END) );
     }
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
-        pS->WriteUChar( sal_uInt8(LINE) ); //line
+        pS->WriteUChar( sal_uInt8(LINE) ); 
         HandleNodes(pTemp,nLevel+1);
         pS->WriteUChar( sal_uInt8(END) );
     }
     else
-        pS->WriteUChar( sal_uInt8(LINE|0x10) ); //dummy line
+        pS->WriteUChar( sal_uInt8(LINE|0x10) ); 
 
 
 
@@ -2192,16 +2192,16 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
     {
         if (pPos)
             *pPos = pS->Tell();
-        pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-        pS->WriteUChar( sal_uInt8(0x2B) ); //selector
+        pS->WriteUChar( sal_uInt8(TMPL) ); 
+        pS->WriteUChar( sal_uInt8(0x2B) ); 
         pS->WriteUChar( nVariation2 );
-        pS->WriteUChar( sal_uInt8(0x00) ); //options
+        pS->WriteUChar( sal_uInt8(0x00) ); 
 
         if (pContent)
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pContent,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
@@ -2211,17 +2211,17 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
         SmNode *pTemp;
         if (NULL != (pTemp = pNode->GetSubNode(CSUB+1)))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
         if (bTest && NULL != (pTemp = pNode->GetSubNode(CSUP+1)))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
@@ -2252,25 +2252,25 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
     SmNode *pTemp;
     if (nVariation!=0xff)
     {
-        pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-        pS->WriteUChar( sal_uInt8(0x2c) ); //selector
+        pS->WriteUChar( sal_uInt8(TMPL) ); 
+        pS->WriteUChar( sal_uInt8(0x2c) ); 
         pS->WriteUChar( nVariation );
-        pS->WriteUChar( sal_uInt8(0x00) ); //options
+        pS->WriteUChar( sal_uInt8(0x00) ); 
         pS->WriteUChar( sal_uInt8(0x0B) );
 
         if (NULL != (pTemp = pNode->GetSubNode(LSUB+1)))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
         if (NULL != (pTemp = pNode->GetSubNode(LSUP+1)))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
@@ -2300,33 +2300,33 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 
     if (nVariation!=0xff)
     {
-        pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-        pS->WriteUChar( sal_uInt8(0x0F) ); //selector
+        pS->WriteUChar( sal_uInt8(TMPL) ); 
+        pS->WriteUChar( sal_uInt8(0x0F) ); 
         pS->WriteUChar( nVariation );
-        pS->WriteUChar( sal_uInt8(0x00) ); //options
+        pS->WriteUChar( sal_uInt8(0x00) ); 
         pS->WriteUChar( sal_uInt8(0x0B) );
 
         if (NULL != (pTemp = pNode->GetSubNode(RSUB+1)))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
         if (NULL != (pTemp = pNode->GetSubNode(RSUP+1)))
         {
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( sal_uInt8(END) ); //line
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUChar( sal_uInt8(LINE|0x10) );
-    pS->WriteUChar( sal_uInt8(END) ); //line
+    pS->WriteUChar( sal_uInt8(END) ); 
     }
 
-    //After subscript mathtype will keep the size of
-    //normal text at the subscript size, sigh.
+    
+    
     pS->WriteUChar( sal_uInt8(0x0A) );
 }
 
@@ -2334,19 +2334,19 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 void MathType::HandleFractions(SmNode *pNode,int nLevel)
 {
     SmNode *pTemp;
-    pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-    pS->WriteUChar( sal_uInt8(0x0E) ); //selector
-    pS->WriteUChar( sal_uInt8(0x00) ); //variation
-    pS->WriteUChar( sal_uInt8(0x00) ); //options
+    pS->WriteUChar( sal_uInt8(TMPL) ); 
+    pS->WriteUChar( sal_uInt8(0x0E) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
 
     pS->WriteUChar( sal_uInt8(0x0A) );
-    pS->WriteUChar( sal_uInt8(LINE) ); //line
+    pS->WriteUChar( sal_uInt8(LINE) ); 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
         HandleNodes(pTemp,nLevel+1);
     pS->WriteUChar( sal_uInt8(END) );
 
     pS->WriteUChar( sal_uInt8(0x0A) );
-    pS->WriteUChar( sal_uInt8(LINE) ); //line
+    pS->WriteUChar( sal_uInt8(LINE) ); 
     if (NULL != (pTemp = pNode->GetSubNode(2)))
         HandleNodes(pTemp,nLevel+1);
     pS->WriteUChar( sal_uInt8(END) );
@@ -2361,7 +2361,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
     SmNode *pLeft=pNode->GetSubNode(0);
     SmNode *pRight=pNode->GetSubNode(2);
 
-    pS->WriteUChar( sal_uInt8(TMPL) ); //Template
+    pS->WriteUChar( sal_uInt8(TMPL) ); 
     bIsReInterpBrace=0;
     sal_uInt8 nBSpec=0x10;
     sal_uLong nLoc = pS->Tell();
@@ -2370,42 +2370,42 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
         switch (pLeft->GetToken().eType)
         {
             case TLANGLE:
-                pS->WriteUChar( sal_uInt8(tmANGLE) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmANGLE) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 break;
             case TLBRACE:
-                pS->WriteUChar( sal_uInt8(tmBRACE) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmBRACE) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 nBSpec+=3;
                 break;
             case TLBRACKET:
-                pS->WriteUChar( sal_uInt8(tmBRACK) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmBRACK) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 nBSpec+=3;
                 break;
             case TLFLOOR:
-                pS->WriteUChar( sal_uInt8(tmFLOOR) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmFLOOR) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 break;
             case TLLINE:
-                pS->WriteUChar( sal_uInt8(tmBAR) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmBAR) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 nBSpec+=3;
                 break;
             case TLDLINE:
-                pS->WriteUChar( sal_uInt8(tmDBAR) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmDBAR) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 break;
             default:
-                pS->WriteUChar( sal_uInt8(tmPAREN) ); //selector
-                pS->WriteUChar( sal_uInt8(0x00) ); //variation
-                pS->WriteUChar( sal_uInt8(0x00) ); //options
+                pS->WriteUChar( sal_uInt8(tmPAREN) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
+                pS->WriteUChar( sal_uInt8(0x00) ); 
                 nBSpec+=3;
                 break;
         }
@@ -2413,9 +2413,9 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
 
     if (NULL != (pTemp = pNode->GetSubNode(1)))
     {
-        pS->WriteUChar( sal_uInt8(LINE) ); //line
+        pS->WriteUChar( sal_uInt8(LINE) ); 
         HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( sal_uInt8(END) ); //options
+        pS->WriteUChar( sal_uInt8(END) ); 
     }
     nSpec=nBSpec;
     if (pLeft)
@@ -2441,26 +2441,26 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
 void MathType::HandleVerticalBrace(SmNode *pNode,int nLevel)
 {
     SmNode *pTemp;
-    pS->WriteUChar( sal_uInt8(TMPL) ); //Template
+    pS->WriteUChar( sal_uInt8(TMPL) ); 
     if (pNode->GetToken().eType == TUNDERBRACE)
-        pS->WriteUChar( sal_uInt8(tmLHBRACE) ); //selector
+        pS->WriteUChar( sal_uInt8(tmLHBRACE) ); 
     else
-        pS->WriteUChar( sal_uInt8(tmUHBRACE) ); //selector
-    pS->WriteUChar( sal_uInt8(0x01) ); //variation
-    pS->WriteUChar( sal_uInt8(0x00) ); //options
+        pS->WriteUChar( sal_uInt8(tmUHBRACE) ); 
+    pS->WriteUChar( sal_uInt8(0x01) ); 
+    pS->WriteUChar( sal_uInt8(0x00) ); 
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
-        pS->WriteUChar( sal_uInt8(LINE) ); //line
+        pS->WriteUChar( sal_uInt8(LINE) ); 
         HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( sal_uInt8(END) ); //options
+        pS->WriteUChar( sal_uInt8(END) ); 
     }
 
     if (NULL != (pTemp = pNode->GetSubNode(2)))
     {
-        pS->WriteUChar( sal_uInt8(LINE) ); //line
+        pS->WriteUChar( sal_uInt8(LINE) ); 
         HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( sal_uInt8(END) ); //options
+        pS->WriteUChar( sal_uInt8(END) ); 
     }
     pS->WriteUChar( sal_uInt8(END) );
 }
@@ -2517,10 +2517,10 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     {
     case TINT:
         if (nOldVariation != 0xff)
-            pS->WriteUChar( sal_uInt8(0x18) ); //selector
+            pS->WriteUChar( sal_uInt8(0x18) ); 
         else
-            pS->WriteUChar( sal_uInt8(0x15) ); //selector
-        pS->WriteUChar( nIntVariation ); //variation
+            pS->WriteUChar( sal_uInt8(0x15) ); 
+        pS->WriteUChar( nIntVariation ); 
         break;
     case TIINT:
         if (nOldVariation != 0xff)
@@ -2596,15 +2596,15 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         pS->WriteUChar( nVariation );
         break;
     }
-    pS->WriteUChar( sal_uInt8(0x00) ); //options
+    pS->WriteUChar( sal_uInt8(0x00) ); 
 
     if (nPos2)
         pS->Seek(nPos2);
     else
     {
-        pS->WriteUChar( sal_uInt8(LINE) ); //line
+        pS->WriteUChar( sal_uInt8(LINE) ); 
         HandleNodes(pNode->GetSubNode(1),nLevel+1);
-        pS->WriteUChar( sal_uInt8(END) ); //line
+        pS->WriteUChar( sal_uInt8(END) ); 
         pS->WriteUChar( sal_uInt8(LINE|0x10) );
         pS->WriteUChar( sal_uInt8(LINE|0x10) );
     }
@@ -2694,7 +2694,7 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
 
     sal_Int32 nI = rRet.lastIndexOf('#');
     if (nI > 0)
-        if (rRet[nI-1] != '#')  //missing column
+        if (rRet[nI-1] != '#')  
             rRet += "{}";
 
     rRet += "\n} ";
@@ -2704,7 +2704,7 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
 int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     sal_uInt8 &rVariation, sal_Int32 &rLastTemplateBracket)
 {
-    sal_uInt8 nOption; //This appears utterly unused
+    sal_uInt8 nOption; 
     pS->ReadUChar( rSelector );
     pS->ReadUChar( rVariation );
     pS->ReadUChar( nOption );
@@ -2718,9 +2718,9 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
         OSL_ENSURE(nOption < 3,"Option out of range");
     }
 
-    //For the (broken) case where one subscript template ends, and there is
-    //another one after it, mathtype handles it as if the second one was
-    //inside the first one and renders it as sub of sub
+    
+    
+    
     bool bRemove=false;
     if ( (rSelector == 0xf) && (rLastTemplateBracket != -1) )
     {
@@ -2733,7 +2733,7 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
             }
     }
 
-    //suborderlist
+    
     int nRet = HandleRecords(nLevel+1,rSelector,rVariation);
 
     if (bRemove)
@@ -2862,8 +2862,8 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
 
     if (xfAUTO(nTag))
     {
-    //This is a candidate for function recognition, whatever
-    //that is!
+    
+    
     }
 
     sal_uInt8 nOldTypeFace = nTypeFace;
@@ -2885,19 +2885,19 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
 
     if (xfEMBELL(nTag))
     {
-        //A bit tricky, the character emblishments for
-        //mathtype can all be listed after eachother, in
-        //starmath some must go before the character and some
-        //must go after. In addition some of the emblishments
-        //may repeated and in starmath some of these groups
-        //must be gathered together. sPost is the portion that
-        //follows the char and nPostSup and nPostlSup are the
-        //indexes at which this class of emblishment is
-        //collated together
+        
+        
+        
+        
+        
+        
+        
+        
+        
         sPost = OUString();
         nPostSup = nPostlSup = 0;
         int nOriglen=rRet.getLength()-rTextStart;
-        rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rRet += " {";  
         if ((!bSilent) && ((nOriglen) > 1))
             rRet += "\"";
         nRet = HandleRecords(nLevel+1,nSelector,nVariation);
@@ -2956,7 +2956,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
 
     if ((xfEMBELL(nTag)) && (!bSilent))
     {
-        rRet += "}}" + sPost;  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rRet += "}}" + sPost;  
         rTextStart = rRet.getLength();
     }
     return nRet;
@@ -2965,7 +2965,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
 sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
 {
     bool bRet=false;
-    //Special case for the "lim" option in StarMath
+    
     if ((pNode->GetToken().eType == TLIM)
         || (pNode->GetToken().eType == TLIMSUP)
         || (pNode->GetToken().eType == TLIMINF)
@@ -2977,7 +2977,7 @@ sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
                 nLevel);
 
             pS->WriteUChar( sal_uInt8(0x0A) );
-            pS->WriteUChar( sal_uInt8(LINE) ); //line
+            pS->WriteUChar( sal_uInt8(LINE) ); 
             pS->WriteUChar( sal_uInt8(CHAR|0x10) );
             pS->WriteUChar( sal_uInt8(0x82) );
             pS->WriteUInt16( sal_uInt16('l') );
@@ -2990,7 +2990,7 @@ sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
 
             if (pNode->GetToken().eType == TLIMSUP)
             {
-                pS->WriteUChar( sal_uInt8(CHAR) ); //some space
+                pS->WriteUChar( sal_uInt8(CHAR) ); 
                 pS->WriteUChar( sal_uInt8(0x98) );
                 pS->WriteUInt16( sal_uInt16(0xEB04) );
 
@@ -3006,7 +3006,7 @@ sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
             }
             else if (pNode->GetToken().eType == TLIMINF)
             {
-                pS->WriteUChar( sal_uInt8(CHAR) ); //some space
+                pS->WriteUChar( sal_uInt8(CHAR) ); 
                 pS->WriteUChar( sal_uInt8(0x98) );
                 pS->WriteUInt16( sal_uInt16(0xEB04) );
 
@@ -3022,7 +3022,7 @@ sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
             }
 
 
-            pS->WriteUChar( sal_uInt8(CHAR) ); //some space
+            pS->WriteUChar( sal_uInt8(CHAR) ); 
             pS->WriteUChar( sal_uInt8(0x98) );
             pS->WriteUInt16( sal_uInt16(0xEB04) );
 
@@ -3032,7 +3032,7 @@ sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
                 pS->WriteUChar( sal_uInt8(END) );
             }
             HandleNodes(pNode->GetSubNode(1),nLevel+1);
-            //*pS << sal_uInt8(END); //options
+            
             bRet = true;
         }
     }
@@ -3085,39 +3085,39 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
                 pS->WriteUChar( sal_uInt8(0x22) );
             }
         else
-            pS->WriteUChar( sal_uInt8(CHAR) ); //char without formula recognition
-        //The typeface seems to be MTEXTRA for unicode characters,
-        //though how to determine when mathtype chooses one over
-        //the other is unknown. This should do the trick
-        //nevertheless.
+            pS->WriteUChar( sal_uInt8(CHAR) ); 
+        
+        
+        
+        
         sal_uInt8 nBias;
         if ( (nArse == 0x2213) || (nArse == 0x2218) ||
             (nArse == 0x210F) || (
                 (nArse >= 0x22EE) && (nArse <= 0x22FF)
             ))
         {
-            nBias = 0xB; //typeface
+            nBias = 0xB; 
         }
         else if ((nArse > 0x2000) || (nArse == 0x00D7))
-            nBias = 0x6; //typeface
+            nBias = 0x6; 
         else if (nArse == 0x3d1)
             nBias = 0x4;
         else if ((nArse > 0xFF) && ((nArse < 0x393) || (nArse > 0x3c9)))
-            nBias = 0xB; //typeface
+            nBias = 0xB; 
         else if ((nArse == 0x2F) || (nArse == 0x2225))
-            nBias = 0x2; //typeface
+            nBias = 0x2; 
         else
-            nBias = 0x3; //typeface
+            nBias = 0x3; 
 
-        pS->WriteUChar( sal_uInt8(nSpec+nBias+128) ); //typeface
+        pS->WriteUChar( sal_uInt8(nSpec+nBias+128) ); 
 
         if (nArse == 0x2224)
         {
             pS->WriteUInt16( sal_uInt16(0x7C) );
             pS->WriteUChar( sal_uInt8(EMBEL) );
             pS->WriteUChar( sal_uInt8(0x0A) );
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
+            pS->WriteUChar( sal_uInt8(END) ); 
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else if (nArse == 0x2225)
             pS->WriteUInt16( sal_uInt16(0xEC09) );
@@ -3144,24 +3144,24 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
             pS->WriteUInt16( sal_uInt16(0x2286) );
             pS->WriteUChar( sal_uInt8(EMBEL) );
             pS->WriteUChar( sal_uInt8(0x0A) );
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
+            pS->WriteUChar( sal_uInt8(END) ); 
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else if (nArse == 0x2289)
         {
             pS->WriteUInt16( sal_uInt16(0x2287) );
             pS->WriteUChar( sal_uInt8(EMBEL) );
             pS->WriteUChar( sal_uInt8(0x0A) );
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
+            pS->WriteUChar( sal_uInt8(END) ); 
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else if (nArse == 0x2285)
         {
             pS->WriteUInt16( sal_uInt16(0x2283) );
             pS->WriteUChar( sal_uInt8(EMBEL) );
             pS->WriteUChar( sal_uInt8(0x0A) );
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
+            pS->WriteUChar( sal_uInt8(END) ); 
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
         else
             pS->WriteUInt16( nArse );
@@ -3182,25 +3182,25 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         switch (pTemp->GetToken().eType)
         {
         case TWIDEVEC:
-            //theres just no way we can now handle any character
-            //attributes (from mathtypes perspective) centered
-            //over an expression but above template attributes
-            //such as widevec and similar constructs
-            //we have to drop them
+            
+            
+            
+            
+            
             nOldPending = StartTemplate(0x2f,0x01);
             break;
-        case TCHECK: //Not Exportable
-        case TACUTE: //Not Exportable
-        case TGRAVE: //Not Exportable
-        case TCIRCLE: //Not Exportable
-        case TWIDETILDE: //Not Exportable
-        case TWIDEHAT: //Not Exportable
+        case TCHECK: 
+        case TACUTE: 
+        case TGRAVE: 
+        case TCIRCLE: 
+        case TWIDETILDE: 
+        case TWIDEHAT: 
             break;
         case TUNDERLINE:
             nOldPending = StartTemplate(0x10);
             break;
-        case TOVERLINE: //If the next node is not text
-                        //or text with more than one char
+        case TOVERLINE: 
+                        
             if ((pIsText->GetToken().eType != TTEXT) ||
                 (pIsText->GetText().getLength() > 1))
                 nOldPending = StartTemplate(0x11);
@@ -3229,8 +3229,8 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             break;
     }
 
-    //if there was no suitable place to put the attribute,
-    //then we have to just give up on it
+    
+    
     if (nPendingAttributes)
         nPendingAttributes--;
     else
@@ -3242,9 +3242,9 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             pS->Seek(nInsertion);
             switch(pTemp->GetToken().eType)
             {
-            case TACUTE: //Not Exportable
-            case TGRAVE: //Not Exportable
-            case TCIRCLE: //Not Exportable
+            case TACUTE: 
+            case TGRAVE: 
+            case TCIRCLE: 
                 break;
             case TCDOT:
                 pS->WriteUChar( sal_uInt8(2) );
@@ -3300,8 +3300,8 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
         if ((nPendingAttributes) &&
             (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
-            pS->WriteUChar( sal_uInt8(0x22) );     //char, with attributes right
-                                //after the character
+            pS->WriteUChar( sal_uInt8(0x22) );     
+                                
         }
         else
             pS->WriteUChar( sal_uInt8(CHAR) );
@@ -3311,22 +3311,22 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
             nFace = 0x3;
         else if (pNode->GetFont().GetWeight() == WEIGHT_BOLD)
             nFace = 0x7;
-        pS->WriteUChar( sal_uInt8(nFace+128) ); //typeface
+        pS->WriteUChar( sal_uInt8(nFace+128) ); 
         sal_uInt16 nChar = pTemp->GetText()[i];
         pS->WriteUInt16( SmTextNode::ConvertSymbolToUnicode(nChar) );
 
-        //Mathtype can only have these sort of character
-        //attributes on a single character, starmath can put them
-        //anywhere, when the entity involved is a text run this is
-        //a large effort to place the character attribute on the
-        //central mathtype character so that it does pretty much
-        //what the user probably has in mind. The attributes
-        //filled in here are dummy ones which are replaced in the
-        //ATTRIBUT handler if a suitable location for the
-        //attributes was found here. Unfortunately it is
-        //possible for starmath to place character attributes on
-        //entities which cannot occur in mathtype e.g. a Summation
-        //symbol so these attributes may be lost
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if ((nPendingAttributes) &&
             (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
@@ -3334,13 +3334,13 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
             while (nPendingAttributes)
             {
                 pS->WriteUChar( sal_uInt8(2) );
-                //wedge the attributes in here and clear
-                //the pending stack
+                
+                
                 nPendingAttributes--;
             }
             nInsertion=pS->Tell();
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
-            pS->WriteUChar( sal_uInt8(END) ); //end embel
+            pS->WriteUChar( sal_uInt8(END) ); 
+            pS->WriteUChar( sal_uInt8(END) ); 
         }
     }
 }

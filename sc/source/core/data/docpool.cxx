@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@
 #define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
 #define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)
 
-// STATIC DATA -----------------------------------------------------------
+
 
 sal_uInt16* ScDocumentPool::pVersionMap1 = 0;
 sal_uInt16* ScDocumentPool::pVersionMap2 = 0;
@@ -87,106 +87,106 @@ sal_uInt16* ScDocumentPool::pVersionMap10 = 0;
 sal_uInt16* ScDocumentPool::pVersionMap11 = 0;
 sal_uInt16* ScDocumentPool::pVersionMap12 = 0;
 
-// ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
+
 
 static SfxItemInfo const  aItemInfos[] =
 {
-    { SID_ATTR_CHAR_FONT,           SFX_ITEM_POOLABLE },    // ATTR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_FONT_HEIGHT
-    { SID_ATTR_CHAR_WEIGHT,         SFX_ITEM_POOLABLE },    // ATTR_FONT_WEIGHT
-    { SID_ATTR_CHAR_POSTURE,        SFX_ITEM_POOLABLE },    // ATTR_FONT_POSTURE
-    { SID_ATTR_CHAR_UNDERLINE,      SFX_ITEM_POOLABLE },    // ATTR_FONT_UNDERLINE
-    { SID_ATTR_CHAR_OVERLINE,       SFX_ITEM_POOLABLE },    // ATTR_FONT_OVERLINE
-    { SID_ATTR_CHAR_STRIKEOUT,      SFX_ITEM_POOLABLE },    // ATTR_FONT_CROSSEDOUT
-    { SID_ATTR_CHAR_CONTOUR,        SFX_ITEM_POOLABLE },    // ATTR_FONT_CONTOUR
-    { SID_ATTR_CHAR_SHADOWED,       SFX_ITEM_POOLABLE },    // ATTR_FONT_SHADOWED
-    { SID_ATTR_CHAR_COLOR,          SFX_ITEM_POOLABLE },    // ATTR_FONT_COLOR
-    { SID_ATTR_CHAR_LANGUAGE,       SFX_ITEM_POOLABLE },    // ATTR_FONT_LANGUAGE
-    { SID_ATTR_CHAR_CJK_FONT,       SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT            from 614
-    { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_WEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_POSTURE,    SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CJK_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_CTL_FONT,       SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT            from 614
-    { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_WEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_POSTURE,    SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_EMPHASISMARK,   SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_USERDEF             from 614 / 641c
-    { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEM_POOLABLE },    // ATTR_FONT_WORDLINE       from 632b
-    { SID_ATTR_CHAR_RELIEF,         SFX_ITEM_POOLABLE },    // ATTR_FONT_RELIEF         from 632b
-    { SID_ATTR_ALIGN_HYPHENATION,   SFX_ITEM_POOLABLE },    // ATTR_HYPHENATE           from 632b
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_SCRIPTSPACE         from 614d
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d
-    { SID_ATTR_PARA_FORBIDDEN_RULES,SFX_ITEM_POOLABLE },    // ATTR_FORBIDDEN_RULES     from 614d
-    { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
-    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // ATTR_HOR_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          ab 350
-    { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_VER_JUSTIFY
-    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // ATTR_VER_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_STACKED,       SFX_ITEM_POOLABLE },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
-    { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    ab 367
-    { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     ab 367
-    { SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEM_POOLABLE },    // ATTR_VERTICAL_ASIAN  from 642
-    { SID_ATTR_FRAMEDIRECTION,      SFX_ITEM_POOLABLE },    // ATTR_WRITINGDIR      from 643
-    { SID_ATTR_ALIGN_LINEBREAK,     SFX_ITEM_POOLABLE },    // ATTR_LINEBREAK
-    { SID_ATTR_ALIGN_SHRINKTOFIT,   SFX_ITEM_POOLABLE },    // ATTR_SHRINKTOFIT     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_TLBR,    SFX_ITEM_POOLABLE },    // ATTR_BORDER_TLBR     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_BLTR,    SFX_ITEM_POOLABLE },    // ATTR_BORDER_BLTR     from 680/dr14
-    { SID_ATTR_ALIGN_MARGIN,        SFX_ITEM_POOLABLE },    // ATTR_MARGIN
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE_FLAG
-    { SID_ATTR_NUMBERFORMAT_VALUE,  SFX_ITEM_POOLABLE },    // ATTR_VALUE_FORMAT
-    { ATTR_LANGUAGE_FORMAT,         SFX_ITEM_POOLABLE },    // ATTR_LANGUAGE_FORMAT ab 329, wird im Dialog mit SID_ATTR_NUMBERFORMAT_VALUE kombiniert
-    { SID_ATTR_BRUSH,               SFX_ITEM_POOLABLE },    // ATTR_BACKGROUND
-    { SID_SCATTR_PROTECTION,        SFX_ITEM_POOLABLE },    // ATTR_PROTECTION
-    { SID_ATTR_BORDER_OUTER,        SFX_ITEM_POOLABLE },    // ATTR_BORDER
-    { SID_ATTR_BORDER_INNER,        SFX_ITEM_POOLABLE },    // ATTR_BORDER_INNER
-    { SID_ATTR_BORDER_SHADOW,       SFX_ITEM_POOLABLE },    // ATTR_SHADOW
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_VALIDDATA
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CONDITIONAL
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HYPERLINK
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PATTERN
-    { SID_ATTR_LRSPACE,             SFX_ITEM_POOLABLE },    // ATTR_LRSPACE
-    { SID_ATTR_ULSPACE,             SFX_ITEM_POOLABLE },    // ATTR_ULSPACE
-    { SID_ATTR_PAGE,                SFX_ITEM_POOLABLE },    // ATTR_PAGE
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PAGE_PAPERTRAY, seit 303 nur noch dummy
-    { SID_ATTR_PAGE_PAPERBIN,       SFX_ITEM_POOLABLE },    // ATTR_PAGE_PAPERBIN
-    { SID_ATTR_PAGE_SIZE,           SFX_ITEM_POOLABLE },    // ATTR_PAGE_SIZE
-    { SID_ATTR_PAGE_MAXSIZE,        SFX_ITEM_POOLABLE },    // ATTR_PAGE_MAXSIZE
-    { SID_ATTR_PAGE_EXT1,           SFX_ITEM_POOLABLE },    // ATTR_PAGE_HORCENTER
-    { SID_ATTR_PAGE_EXT2,           SFX_ITEM_POOLABLE },    // ATTR_PAGE_VERCENTER
-    { SID_ATTR_PAGE_ON,             SFX_ITEM_POOLABLE },    // ATTR_PAGE_ON
-    { SID_ATTR_PAGE_DYNAMIC,        SFX_ITEM_POOLABLE },    // ATTR_PAGE_DYNAMIC
-    { SID_ATTR_PAGE_SHARED,         SFX_ITEM_POOLABLE },    // ATTR_PAGE_SHARED
-    { SID_SCATTR_PAGE_NOTES,        SFX_ITEM_POOLABLE },    // ATTR_PAGE_NOTES
-    { SID_SCATTR_PAGE_GRID,         SFX_ITEM_POOLABLE },    // ATTR_PAGE_GRID
-    { SID_SCATTR_PAGE_HEADERS,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_HEADERS
-    { SID_SCATTR_PAGE_CHARTS,       SFX_ITEM_POOLABLE },    // ATTR_PAGE_CHARTS
-    { SID_SCATTR_PAGE_OBJECTS,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_OBJECTS
-    { SID_SCATTR_PAGE_DRAWINGS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_DRAWINGS
-    { SID_SCATTR_PAGE_TOPDOWN,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_TOPDOWN
-    { SID_SCATTR_PAGE_SCALE,        SFX_ITEM_POOLABLE },    // ATTR_PAGE_SCALE
-    { SID_SCATTR_PAGE_SCALETOPAGES, SFX_ITEM_POOLABLE },    // ATTR_PAGE_SCALETOPAGES
-    { SID_SCATTR_PAGE_FIRSTPAGENO,  SFX_ITEM_POOLABLE },    // ATTR_PAGE_FIRSTPAGENO
-    { SID_SCATTR_PAGE_PRINTAREA,    SFX_ITEM_POOLABLE },    // ATTR_PAGE_PRINTAREA
-    { SID_SCATTR_PAGE_REPEATROW,    SFX_ITEM_POOLABLE },    // ATTR_PAGE_REPEATROW
-    { SID_SCATTR_PAGE_REPEATCOL,    SFX_ITEM_POOLABLE },    // ATTR_PAGE_REPEATCOL
-    { SID_SCATTR_PAGE_PRINTTABLES,  SFX_ITEM_POOLABLE },    // ATTR_PAGE_PRINTTABLES
-    { SID_SCATTR_PAGE_HEADERLEFT,   SFX_ITEM_POOLABLE },    // ATTR_PAGE_HEADERLEFT
-    { SID_SCATTR_PAGE_FOOTERLEFT,   SFX_ITEM_POOLABLE },    // ATTR_PAGE_FOOTERLEFT
-    { SID_SCATTR_PAGE_HEADERRIGHT,  SFX_ITEM_POOLABLE },    // ATTR_PAGE_HEADERRIGHT
-    { SID_SCATTR_PAGE_FOOTERRIGHT,  SFX_ITEM_POOLABLE },    // ATTR_PAGE_FOOTERRIGHT
-    { SID_ATTR_PAGE_HEADERSET,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_HEADERSET
-    { SID_ATTR_PAGE_FOOTERSET,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_FOOTERSET
-    { SID_SCATTR_PAGE_FORMULAS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_FORMULAS
-    { SID_SCATTR_PAGE_NULLVALS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_NULLVALS
-    { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_SCALETO
+    { SID_ATTR_CHAR_FONT,           SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_WEIGHT,         SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_POSTURE,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_UNDERLINE,      SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_OVERLINE,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_STRIKEOUT,      SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CONTOUR,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_SHADOWED,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_COLOR,          SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_LANGUAGE,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CJK_FONT,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CJK_WEIGHT,     SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CJK_POSTURE,    SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CJK_LANGUAGE,   SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CTL_FONT,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CTL_WEIGHT,     SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CTL_POSTURE,    SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_EMPHASISMARK,   SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEM_POOLABLE },    
+    { SID_ATTR_CHAR_RELIEF,         SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_HYPHENATION,   SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PARA_FORBIDDEN_RULES,SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, 
+    { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, 
+    { SID_ATTR_ALIGN_STACKED,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEM_POOLABLE },    
+    { SID_ATTR_FRAMEDIRECTION,      SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_LINEBREAK,     SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_SHRINKTOFIT,   SFX_ITEM_POOLABLE },    
+    { SID_ATTR_BORDER_DIAG_TLBR,    SFX_ITEM_POOLABLE },    
+    { SID_ATTR_BORDER_DIAG_BLTR,    SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ALIGN_MARGIN,        SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { SID_ATTR_NUMBERFORMAT_VALUE,  SFX_ITEM_POOLABLE },    
+    { ATTR_LANGUAGE_FORMAT,         SFX_ITEM_POOLABLE },    
+    { SID_ATTR_BRUSH,               SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PROTECTION,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_BORDER_OUTER,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_BORDER_INNER,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_BORDER_SHADOW,       SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { SID_ATTR_LRSPACE,             SFX_ITEM_POOLABLE },    
+    { SID_ATTR_ULSPACE,             SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE,                SFX_ITEM_POOLABLE },    
+    { 0,                            SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_PAPERBIN,       SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_SIZE,           SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_MAXSIZE,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_EXT1,           SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_EXT2,           SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_ON,             SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_DYNAMIC,        SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_SHARED,         SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_NOTES,        SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_GRID,         SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_HEADERS,      SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_CHARTS,       SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_OBJECTS,      SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_DRAWINGS,     SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_TOPDOWN,      SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_SCALE,        SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_SCALETOPAGES, SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_FIRSTPAGENO,  SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_PRINTAREA,    SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_REPEATROW,    SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_REPEATCOL,    SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_PRINTTABLES,  SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_HEADERLEFT,   SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_FOOTERLEFT,   SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_HEADERRIGHT,  SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_FOOTERRIGHT,  SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_HEADERSET,      SFX_ITEM_POOLABLE },    
+    { SID_ATTR_PAGE_FOOTERSET,      SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_FORMULAS,     SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_NULLVALS,     SFX_ITEM_POOLABLE },    
+    { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE },    
     { SID_SCGRIDSHOW,               SFX_ITEM_POOLABLE }
 };
 
-// -----------------------------------------------------------------------
+
 
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
@@ -195,7 +195,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
                         aItemInfos, NULL, false/*bLoadRefCounts*/ ),
         pSecondary  ( pSecPool )
 {
-    //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
+    
     Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
                                                     DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamily(),
@@ -227,7 +227,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
 
     ppPoolDefaults[ ATTR_FONT            - ATTR_STARTINDEX ] = pStdFont;
-    ppPoolDefaults[ ATTR_FONT_HEIGHT     - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_FONT_HEIGHT );       // 10 pt;
+    ppPoolDefaults[ ATTR_FONT_HEIGHT     - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_FONT_HEIGHT );       
     ppPoolDefaults[ ATTR_FONT_WEIGHT     - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_FONT_WEIGHT );
     ppPoolDefaults[ ATTR_FONT_POSTURE    - ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_FONT_POSTURE );
     ppPoolDefaults[ ATTR_FONT_UNDERLINE  - ATTR_STARTINDEX ] = new SvxUnderlineItem( UNDERLINE_NONE, ATTR_FONT_UNDERLINE );
@@ -266,9 +266,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     ppPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new SfxInt32Item( ATTR_ROTATE_VALUE, 0 );
     ppPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
     ppPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
-    //  The default for the ATTR_WRITINGDIR cell attribute must by FRMDIR_ENVIRONMENT,
-    //  so that value is returned when asking for a default cell's attributes.
-    //  The value from the page style is set as DefaultHorizontalTextDirection for the EditEngine.
+    
+    
+    
     ppPoolDefaults[ ATTR_WRITINGDIR      - ATTR_STARTINDEX ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, ATTR_WRITINGDIR );
     ppPoolDefaults[ ATTR_LINEBREAK       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_LINEBREAK );
     ppPoolDefaults[ ATTR_SHRINKTOFIT     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_SHRINKTOFIT );
@@ -288,14 +288,14 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
     ppPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, OUString() ) ;
 
-    //  GetRscString funktioniert erst nach ScGlobal::Init, zu erkennen am EmptyBrushItem
-    //! zusaetzliche Methode ScGlobal::IsInit() oder so...
-    //! oder erkennen, ob dies der Secondary-Pool fuer einen MessagePool ist
+    
+    
+    
     if ( ScGlobal::GetEmptyBrushItem() )
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
     else
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet,
-            OUString(STRING_STANDARD) ); //! without name?
+            OUString(STRING_STANDARD) ); 
 
     ppPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     ppPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );
@@ -339,42 +339,42 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     if ( pSecondary )
         SetSecondaryPool( pSecondary );
 
-    // ATTR_LANGUAGE_FORMAT ab sv329 eingefuegt, VersionMap in _ScGlobal__Init
+    
     SetVersionMap( 1, 100, 157, pVersionMap1 );
 
-    // ATTR_VALIDDATA, ATTR_CONDITIONAL ab 341
+    
     SetVersionMap( 2, 100, 158, pVersionMap2 );
 
-    // ATTR_INDENT ab 350
+    
     SetVersionMap( 3, 100, 160, pVersionMap3 );
 
-    // ATTR_ROTATE_VALUE, ATTR_ROTATE_MODE ab 367
+    
     SetVersionMap( 4, 100, 161, pVersionMap4 );
 
-    // CJK, CTL, EMPHASISMARK, TWOLINES from 614
+    
     SetVersionMap( 5, 100, 163, pVersionMap5 );
 
-    // ATTR_SCRIPTSPACE, ATTR_HANGPUNCTUATION, ATTR_FORBIDDEN_RULES from 614d
+    
     SetVersionMap( 6, 100, 175, pVersionMap6 );
 
-    // ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE from 632b
+    
     SetVersionMap( 7, 100, 178, pVersionMap7 );
 
-    // ATTR_VERTICAL_ASIAN from 642q
+    
     SetVersionMap( 8, 100, 181, pVersionMap8 );
 
-    // ATTR_WRITINGDIR from 643y
+    
     SetVersionMap( 9, 100, 182, pVersionMap9 );
 
-    // ATTR_PAGE_SCALETO added in 680/sab008
-    // new version map not required
+    
+    
 
-    // ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
+    
     SetVersionMap( 10, 100, 184, pVersionMap10 );
 
-    // ATTR_FONT_OVERLINE added in DEV300/overline2
+    
     SetVersionMap( 11, 100, 187, pVersionMap11 );
-    // ATTR_HYERLINK added
+    
     SetVersionMap( 12, 100, 192, pVersionMap12 );
 }
 
@@ -401,163 +401,163 @@ void ScDocumentPool::InitVersionMaps()
                 !pVersionMap9 && !pVersionMap10 &&
                 !pVersionMap11 && !pVersionMap12 , "InitVersionMaps call multiple times" );
 
-    // alte WhichId's mappen
-    // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
+    
+    
 
-    //  erste Map: ATTR_LANGUAGE_FORMAT ab sv329 eingefuegt
+    
 
-    const sal_uInt16 nMap1Start = 100;  // alter ATTR_STARTINDEX
-    const sal_uInt16 nMap1End   = 157;  // alter ATTR_ENDINDEX
+    const sal_uInt16 nMap1Start = 100;  
+    const sal_uInt16 nMap1End   = 157;  
     const sal_uInt16 nMap1Count = nMap1End - nMap1Start + 1;
-    const sal_uInt16 nMap1New   = 18;   // ATTR_LANGUAGE_FORMAT - ATTR_STARTINDEX
+    const sal_uInt16 nMap1New   = 18;   
     pVersionMap1 = new sal_uInt16 [ nMap1Count ];
     sal_uInt16 i, j;
     for ( i=0, j=nMap1Start; i < nMap1New; i++, j++ )
         pVersionMap1[i] = j;
-    // ein Eintrag eingefuegt...
+    
     for ( i=nMap1New, j=nMap1Start+nMap1New+1; i < nMap1Count; i++, j++ )
         pVersionMap1[i] = j;
 
-    //  zweite Map: ATTR_VALIDDATA und ATTR_CONDITIONAL ab 341 eingefuegt
+    
 
-    const sal_uInt16 nMap2Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap2End   = 158;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap2Start = 100;  
+    const sal_uInt16 nMap2End   = 158;  
     const sal_uInt16 nMap2Count = nMap2End - nMap2Start + 1;
-    const sal_uInt16 nMap2New   = 24;   // ATTR_VALIDDATA - ATTR_STARTINDEX
+    const sal_uInt16 nMap2New   = 24;   
     pVersionMap2 = new sal_uInt16 [ nMap2Count ];
     for ( i=0, j=nMap2Start; i < nMap2New; i++, j++ )
         pVersionMap2[i] = j;
-    // zwei Eintraege eingefuegt...
+    
     for ( i=nMap2New, j=nMap2Start+nMap2New+2; i < nMap2Count; i++, j++ )
         pVersionMap2[i] = j;
 
-    //  dritte Map: ATTR_INDENT ab 350 eingefuegt
+    
 
-    const sal_uInt16 nMap3Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap3End   = 160;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap3Start = 100;  
+    const sal_uInt16 nMap3End   = 160;  
     const sal_uInt16 nMap3Count = nMap3End - nMap3Start + 1;
-    const sal_uInt16 nMap3New   = 11;   // ATTR_INDENT - ATTR_STARTINDEX
+    const sal_uInt16 nMap3New   = 11;   
     pVersionMap3 = new sal_uInt16 [ nMap3Count ];
     for ( i=0, j=nMap3Start; i < nMap3New; i++, j++ )
         pVersionMap3[i] = j;
-    // ein Eintrag eingefuegt...
+    
     for ( i=nMap3New, j=nMap3Start+nMap3New+1; i < nMap3Count; i++, j++ )
         pVersionMap3[i] = j;
 
-    //  vierte Map: ATTR_ROTATE_VALUE und ATTR_ROTATE_MODE ab 367 eingefuegt
+    
 
-    const sal_uInt16 nMap4Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap4End   = 161;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap4Start = 100;  
+    const sal_uInt16 nMap4End   = 161;  
     const sal_uInt16 nMap4Count = nMap4End - nMap4Start + 1;
-    const sal_uInt16 nMap4New   = 14;   // ATTR_ROTATE_VALUE - ATTR_STARTINDEX
+    const sal_uInt16 nMap4New   = 14;   
     pVersionMap4 = new sal_uInt16 [ nMap4Count ];
     for ( i=0, j=nMap4Start; i < nMap4New; i++, j++ )
         pVersionMap4[i] = j;
-    // zwei Eintraege eingefuegt...
+    
     for ( i=nMap4New, j=nMap4Start+nMap4New+2; i < nMap4Count; i++, j++ )
         pVersionMap4[i] = j;
 
-    //  fifth map: CJK..., CTL..., EMPHASISMARK, TWOLINES (12 items) added in 614
+    
 
-    const sal_uInt16 nMap5Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap5End   = 163;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap5Start = 100;  
+    const sal_uInt16 nMap5End   = 163;  
     const sal_uInt16 nMap5Count = nMap5End - nMap5Start + 1;
-    const sal_uInt16 nMap5New   = 10;   // ATTR_CJK_FONT - ATTR_STARTINDEX
+    const sal_uInt16 nMap5New   = 10;   
     pVersionMap5 = new sal_uInt16 [ nMap5Count ];
     for ( i=0, j=nMap5Start; i < nMap5New; i++, j++ )
         pVersionMap5[i] = j;
-    // 12 entries inserted
+    
     for ( i=nMap5New, j=nMap5Start+nMap5New+12; i < nMap5Count; i++, j++ )
         pVersionMap5[i] = j;
 
-    // sixth map: ATTR_SCRIPTSPACE, ATTR_HANGPUNCTUATION, ATTR_FORBIDDEN_RULES added in 614d
+    
 
-    const sal_uInt16 nMap6Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap6End   = 175;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap6Start = 100;  
+    const sal_uInt16 nMap6End   = 175;  
     const sal_uInt16 nMap6Count = nMap6End - nMap6Start + 1;
-    const sal_uInt16 nMap6New   = 22;   // ATTR_SCRIPTSPACE - ATTR_STARTINDEX
+    const sal_uInt16 nMap6New   = 22;   
     pVersionMap6 = new sal_uInt16 [ nMap6Count ];
     for ( i=0, j=nMap6Start; i < nMap6New; i++, j++ )
         pVersionMap6[i] = j;
-    // 3 entries inserted
+    
     for ( i=nMap6New, j=nMap6Start+nMap6New+3; i < nMap6Count; i++, j++ )
         pVersionMap6[i] = j;
 
-    //  seventh map: ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE added in 632b
+    
 
-    const sal_uInt16 nMap7Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap7End   = 178;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap7Start = 100;  
+    const sal_uInt16 nMap7End   = 178;  
     const sal_uInt16 nMap7Count = nMap7End - nMap7Start + 1;
-    const sal_uInt16 nMap7New   = 22;   // ATTR_FONT_WORDLINE - ATTR_STARTINDEX
+    const sal_uInt16 nMap7New   = 22;   
     pVersionMap7 = new sal_uInt16 [ nMap7Count ];
     for ( i=0, j=nMap7Start; i < nMap7New; i++, j++ )
         pVersionMap7[i] = j;
-    // 3 entries inserted
+    
     for ( i=nMap7New, j=nMap7Start+nMap7New+3; i < nMap7Count; i++, j++ )
         pVersionMap7[i] = j;
 
-    //  eighth map: ATTR_VERTICAL_ASIAN added in 642q
+    
 
-    const sal_uInt16 nMap8Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap8End   = 181;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap8Start = 100;  
+    const sal_uInt16 nMap8End   = 181;  
     const sal_uInt16 nMap8Count = nMap8End - nMap8Start + 1;
-    const sal_uInt16 nMap8New   = 34;   // ATTR_VERTICAL_ASIAN - ATTR_STARTINDEX
+    const sal_uInt16 nMap8New   = 34;   
     pVersionMap8 = new sal_uInt16 [ nMap8Count ];
     for ( i=0, j=nMap8Start; i < nMap8New; i++, j++ )
         pVersionMap8[i] = j;
-    // 1 entry inserted
+    
     for ( i=nMap8New, j=nMap8Start+nMap8New+1; i < nMap8Count; i++, j++ )
         pVersionMap8[i] = j;
 
-    //  9th map: ATTR_WRITINGDIR added in 643y
+    
 
-    const sal_uInt16 nMap9Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap9End   = 182;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap9Start = 100;  
+    const sal_uInt16 nMap9End   = 182;  
     const sal_uInt16 nMap9Count = nMap9End - nMap9Start + 1;
-    const sal_uInt16 nMap9New   = 35;   // ATTR_WRITINGDIR - ATTR_STARTINDEX
+    const sal_uInt16 nMap9New   = 35;   
     pVersionMap9 = new sal_uInt16 [ nMap9Count ];
     for ( i=0, j=nMap9Start; i < nMap9New; i++, j++ )
         pVersionMap9[i] = j;
-    // 1 entry inserted
+    
     for ( i=nMap9New, j=nMap9Start+nMap9New+1; i < nMap9Count; i++, j++ )
         pVersionMap9[i] = j;
 
-    // ATTR_PAGE_SCALETO added in 680/sab008
+    
 
-    // 10th map: ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
+    
 
-    const sal_uInt16 nMap10Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap10End   = 184;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap10Start = 100;  
+    const sal_uInt16 nMap10End   = 184;  
     const sal_uInt16 nMap10Count = nMap10End - nMap10Start + 1;
-    const sal_uInt16 nMap10New   = 37;   // ATTR_SHRINKTOFIT - ATTR_STARTINDEX
+    const sal_uInt16 nMap10New   = 37;   
     pVersionMap10 = new sal_uInt16 [ nMap10Count ];
     for ( i=0, j=nMap10Start; i < nMap10New; i++, j++ )
         pVersionMap10[i] = j;
-    // 3 entries inserted
+    
     for ( i=nMap10New, j=nMap10Start+nMap10New+3; i < nMap10Count; i++, j++ )
         pVersionMap10[i] = j;
 
-    // 11th map: ATTR_FONT_OVERLINE added in DEV300/overline2
+    
 
-    const sal_uInt16 nMap11Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap11End   = 187;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap11Start = 100;  
+    const sal_uInt16 nMap11End   = 187;  
     const sal_uInt16 nMap11Count = nMap11End - nMap11Start + 1;
-    const sal_uInt16 nMap11New   = 5;    // ATTR_FONT_OVERLINE - ATTR_STARTINDEX
+    const sal_uInt16 nMap11New   = 5;    
     pVersionMap11 = new sal_uInt16 [ nMap11Count ];
     for ( i=0, j=nMap11Start; i < nMap11New; i++, j++ )
         pVersionMap11[i] = j;
-    // 1 entry inserted
+    
     for ( i=nMap11New, j=nMap11Start+nMap11New+1; i < nMap11Count; i++, j++ )
         pVersionMap11[i] = j;
 
-    const sal_uInt16 nMap12Start = 100;  // ATTR_STARTINDEX
-    const sal_uInt16 nMap12End   = 192;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap12Start = 100;  
+    const sal_uInt16 nMap12End   = 192;  
     const sal_uInt16 nMap12Count = nMap12End - nMap12Start + 1;
-    const sal_uInt16 nMap12New   = 55;    // ATTR_HYPERLINK - ATTR_STARTINDEX
+    const sal_uInt16 nMap12New   = 55;    
     pVersionMap12 = new sal_uInt16 [ nMap12Count ];
     for ( i=0, j=nMap12Start; i < nMap12New; i++, j++ )
         pVersionMap12[i] = j;
-    // 1 entry inserted
+    
     for ( i=nMap12New, j=nMap12Start+nMap12New+1; i < nMap12Count; i++, j++ )
         pVersionMap12[i] = j;
 }
@@ -597,27 +597,27 @@ void ScDocumentPool::DeleteVersionMaps()
     pVersionMap1 = 0;
 }
 
-// ----------------------------------------------------------------------------------------
+
 //
-//  Fuer die Pattern-Attribute (SetItems) kann der sal_uInt16 RefCount leicht ueberlaufen
-//  (z.B. 600 ganze Zeilen abwechselnd formatieren).
-//  Darum wird der RefCount bei SC_MAX_POOLREF festgehalten und nicht mehr hoch- oder
-//  heruntergezaehlt. Dieser RefCount wird dann erst beim naechsten Laden neu gezaehlt.
-//  Die Differenz zwischen SC_MAX_POOLREF und SC_SAFE_POOLREF ist ein wenig groesser
-//  als noetig, um zu erkennen, wenn der RefCount aus Versehen doch "normal" veraendert
-//  wird (Assertions).
+
+
+
+
+
+
+
 //
 
 const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
-    if ( rItem.Which() != ATTR_PATTERN )                // nur Pattern ist special
+    if ( rItem.Which() != ATTR_PATTERN )                
         return SfxItemPool::Put( rItem, nWhich );
 
-    //  das Default-Pattern dieses Pools nicht kopieren
+    
     if (&rItem == ppPoolDefaults[ ATTR_PATTERN - ATTR_STARTINDEX ])
         return rItem;
 
-    //  ansonsten muss Put immer passieren, weil es ein anderer Pool sein kann
+    
     const SfxPoolItem& rNew = SfxItemPool::Put( rItem, nWhich );
     CheckRef( rNew );
     return rNew;
@@ -625,7 +625,7 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
 
 void ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
-    if ( rItem.Which() == ATTR_PATTERN )                // nur Pattern ist special
+    if ( rItem.Which() == ATTR_PATTERN )                
     {
         sal_uLong nRef = rItem.GetRefCount();
         if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
@@ -635,7 +635,7 @@ void ScDocumentPool::Remove( const SfxPoolItem& rItem )
                 OSL_FAIL("Who fiddles with my ref counts?");
                 SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
             }
-            return;                 // nicht herunterzaehlen
+            return;                 
         }
     }
     SfxItemPool::Remove( rItem );
@@ -646,15 +646,15 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
     sal_uLong nRef = rItem.GetRefCount();
     if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
     {
-        // beim Apply vom Cache wird evtl. um 2 hochgezaehlt (auf MAX+1 oder SAFE+2),
-        // heruntergezaehlt wird nur einzeln (in LoadCompleted)
+        
+        
         OSL_ENSURE( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
         SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
     }
 }
 
-// ----------------------------------------------------------------------------------------
+
 
 void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
 {
@@ -669,10 +669,10 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
 
 void ScDocumentPool::CellStyleCreated( const OUString& rName )
 {
-    // If a style was created, don't keep any pattern with its name string in the pool,
-    // because it would compare equal to a pattern with a pointer to the new style.
-    // Calling StyleSheetChanged isn't enough because the pool may still contain items
-    // for undo or clipboard content.
+    
+    
+    
+    
 
     sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
@@ -684,7 +684,7 @@ void ScDocumentPool::CellStyleCreated( const OUString& rName )
         {
             const OUString* pStyleName = pPattern->GetStyleName();
             if ( pStyleName && *pStyleName == rName )
-                pPattern->UpdateStyleSheet();           // find and store style pointer
+                pPattern->UpdateStyleSheet();           
         }
     }
 }
@@ -757,7 +757,7 @@ static SfxItemPresentation lcl_HFPresentation
                 }
                 aText += cpDelim;
 
-                // nPropFirstLineOfst haben wir nicht
+                
 
                 aText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
@@ -814,7 +814,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_PRINTDIR) + aStrSep;
-//          break; // DURCHFALLEN!!!
+
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ?
                 ScGlobal::GetRscString(STR_SCATTR_PAGE_TOPDOWN) :
@@ -822,7 +822,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         break;
@@ -832,13 +832,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_HEADERS) + aStrSep;
-//          break; // DURCHFALLEN!!!
+
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         break;
@@ -848,13 +848,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NULLVALS) + aStrSep;
-//          break; // DURCHFALLEN!!!
+
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         break;
@@ -864,13 +864,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FORMULAS) + aStrSep;
-//          break; // DURCHFALLEN!!!
+
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         break;
@@ -880,13 +880,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NOTES) + aStrSep;
-//          break; // DURCHFALLEN!!!
+
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         break;
@@ -896,13 +896,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_GRID) + aStrSep;
-//          break; // DURCHFALLEN!!!
+
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         break;
@@ -919,7 +919,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                     {
                         rText = ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETOPAGES ) + aStrSep;
                     }
-//                  break; // DURCHFALLEN!!!
+
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     {
                         OUString aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
@@ -929,7 +929,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                     break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
             }
@@ -950,13 +950,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                 {
                     case SFX_ITEM_PRESENTATION_COMPLETE:
                     rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FIRSTPAGENO) + aStrSep;
-//                  break; // DURCHFALLEN!!!
+
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     rText += OUString::number( nPagNo );
                     break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
             }
@@ -977,14 +977,14 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                 {
                     case SFX_ITEM_PRESENTATION_COMPLETE:
                     rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_SCALE) + aStrSep;
-//                  break; // DURCHFALLEN!!!
+
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     rText = rText + unicode::formatPercent(nPercent,
                         Application::GetSettings().GetUILanguageTag());
                     break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
             }
@@ -1029,7 +1029,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
 
 SfxMapUnit ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
 {
-    //  eigene Attribute: Twips, alles andere 1/100 mm
+    
 
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
         return SFX_MAPUNIT_TWIP;

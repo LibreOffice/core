@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <gdimtftools.hxx>
@@ -52,30 +52,30 @@
 using namespace ::com::sun::star;
 
 
-// free support functions
-// ======================
+
+
 
 namespace slideshow
 {
 namespace internal
 {
-// TODO(E2): Detect the case when svx/drawing layer is not
-// in-process, or even not on the same machine, and
-// fallback to metafile streaming!
 
-// For fixing #i48102#, have to be a _lot_ more selective
-// on which metafiles to convert to bitmaps. The problem
-// here is that we _always_ get the shape content as a
-// metafile, even if we have a bitmap graphic shape. Thus,
-// calling GetBitmapEx on such a Graphic (see below) will
-// result in one poorly scaled bitmap into another,
-// somewhat arbitrarily sized bitmap.
+
+
+
+
+
+
+
+
+
+
 bool hasUnsupportedActions( const GDIMetaFile& rMtf )
 {
-    // search metafile for RasterOp action
+    
     MetaAction* pCurrAct;
 
-    // TODO(Q3): avoid const-cast
+    
     for( pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction();
          pCurrAct;
          pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction() )
@@ -83,24 +83,24 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
         switch( pCurrAct->GetType() )
         {
             case META_RASTEROP_ACTION:
-                // overpaint is okay - that's the default, anyway
+                
                 if( ROP_OVERPAINT ==
                     static_cast<MetaRasterOpAction*>(pCurrAct)->GetRasterOp() )
                 {
                     break;
                 }
-                // FALLTHROUGH intended
+                
             case META_MOVECLIPREGION_ACTION:
-                // FALLTHROUGH intended
+                
             case META_REFPOINT_ACTION:
-                // FALLTHROUGH intended
+                
             case META_WALLPAPER_ACTION:
-                return true; // at least one unsupported
-                             // action encountered
+                return true; 
+                             
         }
     }
 
-    return false; // no unsupported action found
+    return false; 
 }
 
 namespace {
@@ -118,7 +118,7 @@ public:
         {
         }
 
-    //---  XGraphicRenderer  -----------------------------------
+    
     virtual void SAL_CALL render( const uno::Reference< graphic::XGraphic >& rGraphic ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -143,7 +143,7 @@ public:
             (bForeignSource &&
              hasUnsupportedActions(aGraphic.GetGDIMetaFile()) ) )
         {
-            // wrap bitmap into GDIMetafile
+            
             GDIMetaFile     aMtf;
             ::Point         aEmptyPoint;
 
@@ -166,10 +166,10 @@ private:
     uno::Reference< graphic::XGraphic > mxGraphic;
 };
 
-} // anon namespace
+} 
 
-// Quick'n'dirty way: tunnel Graphic (only works for
-// in-process slideshow, of course)
+
+
 bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
                   const uno::Reference< drawing::XDrawPage >&     xContainingPage,
                   GDIMetaFile&                                    rMtf,
@@ -179,16 +179,16 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     ENSURE_OR_RETURN_FALSE( rxContext.is(),
                        "getMetaFile(): Invalid context" );
 
-    // create dummy XGraphicRenderer, which receives the
-    // generated XGraphic from the GraphicExporter
+    
+    
 
-    // TODO(P3): Move creation of DummyRenderer out of the
-    // loop! Either by making it static, or transforming
-    // the whole thing here into a class.
+    
+    
+    
     DummyRenderer*                              pRenderer( new DummyRenderer() );
     uno::Reference< graphic::XGraphicRenderer > xRenderer( pRenderer );
 
-    // creating the graphic exporter
+    
     uno::Reference< drawing::XGraphicExportFilter > xExporter =
         drawing::GraphicExportFilter::create(rxContext);
 
@@ -222,20 +222,20 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
 
     rMtf = pRenderer->getMtf( (mtfLoadFlags & MTF_LOAD_FOREIGN_SOURCE) != 0 );
 
-    // pRenderer is automatically destroyed when xRenderer
-    // goes out of scope
+    
+    
 
-    // TODO(E3): Error handling. Exporter might have
-    // generated nothing, a bitmap, threw an exception,
-    // whatever.
+    
+    
+    
     return true;
 }
 
 sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 {
-    // Special handling for actions that represent
-    // more than one indexable action
-    // ===========================================
+    
+    
+    
 
     switch (pCurrAct->GetType()) {
     case META_TEXT_ACTION: {
@@ -258,10 +258,10 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     case META_FLOATTRANSPARENT_ACTION: {
         MetaFloatTransparentAction * pAct =
             static_cast<MetaFloatTransparentAction*>(pCurrAct);
-        // TODO(F2): Recurse into action metafile
-        // (though this is currently not used from the
-        // DrawingLayer - shape transparency gradients
-        // don't affect shape text)
+        
+        
+        
+        
         return pAct->GetGDIMetaFile().GetActionSize();
     }
     default:
@@ -279,20 +279,20 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     if( !rGraphic.IsAnimated() )
         return false;
 
-    // some loop invariants
+    
     Animation   aAnimation( rGraphic.GetAnimation() );
     const Point aEmptyPoint;
     const Size  aAnimSize( aAnimation.GetDisplaySizePixel() );
 
-    // setup VDev, into which all bitmaps are painted (want to
-    // normalize animations to n bitmaps of same size. An Animation,
-    // though, can contain bitmaps of varying sizes and different
-    // update modes)
+    
+    
+    
+    
     VirtualDevice aVDev;
     aVDev.SetOutputSizePixel( aAnimSize );
     aVDev.EnableMapMode( false );
 
-    // setup mask VDev (alpha VDev is currently rather slow)
+    
     VirtualDevice aVDevMask;
     aVDevMask.SetOutputSizePixel( aAnimSize );
     aVDevMask.EnableMapMode( false );
@@ -305,14 +305,14 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             break;
 
         case CYCLE_FALLBACK:
-            // FALLTHROUGH intended
+            
         case CYCLE_NORMAL:
             o_rLoopCount = aAnimation.GetLoopCount();
             o_eCycleMode = CYCLE_LOOP;
             break;
 
         case CYCLE_REVERS:
-            // FALLTHROUGH intended
+            
         case CYCLE_REVERS_FALLBACK:
             o_rLoopCount = aAnimation.GetLoopCount();
             o_eCycleMode = CYCLE_PINGPONGLOOP;
@@ -355,7 +355,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
             case DISPOSE_BACK:
             {
-                // #i70772# react on no mask
+                
                 const Bitmap aMask(rAnimBmp.aBmpEx.GetMask());
                 const Bitmap aContent(rAnimBmp.aBmpEx.GetBitmap());
 
@@ -393,8 +393,8 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             }
         }
 
-        // extract current aVDev content into a new animation
-        // frame
+        
+        
         GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
@@ -406,24 +406,24 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                                          aEmptyPoint,
                                          aAnimSize ))));
 
-        // setup mtf dimensions and pref map mode (for
-        // simplicity, keep it all in pixel. the metafile
-        // renderer scales it down to (1, 1) box anyway)
+        
+        
+        
         pMtf->SetPrefMapMode( MapMode() );
         pMtf->SetPrefSize( aAnimSize );
 
-        // Take care of special value for MultiPage TIFFs. ATM these shall just
-        // show their first page for _quite_ some time.
+        
+        
         sal_Int32 nWaitTime100thSeconds( rAnimBmp.nWait );
         if( ANIMATION_TIMEOUT_ON_CLICK == nWaitTime100thSeconds )
         {
-            // ATM the huge value would block the timer, so use a long
-            // time to show first page (whole day)
+            
+            
             nWaitTime100thSeconds = 100 * 60 * 60 * 24;
         }
 
-        // There are animated GIFs with no WaitTime set. Take 0.1 sec, the
-        // same duration that is used by the edit view.
+        
+        
         if( nWaitTime100thSeconds == 0 )
             nWaitTime100thSeconds = 10;
 
@@ -438,7 +438,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                                  ::basegfx::B2DRectangle&       o_rPaintRect,
                                  const GDIMetaFileSharedPtr&    rMtf )
 {
-    // extract bounds: scroll rect, paint rect
+    
     bool bScrollRectSet(false);
     bool bPaintRectSet(false);
 
@@ -449,7 +449,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
         {
             MetaCommentAction * pAct =
                 static_cast<MetaCommentAction *>(pCurrAct);
-            // skip comment if not a special XTEXT... comment
+            
             if( pAct->GetComment().matchIgnoreAsciiCase( OString("XTEXT"), 0 ) )
             {
                 if (pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_SCROLLRECT"))

@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;
 
-// fills the given attribute list with the items in the given set
+
 void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                 SvXMLAttributeList& rAttrList,
                                 const SfxItemSet& rSet,
@@ -71,18 +71,18 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
     {
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nIndex );
 
-        // we have a valid map entry here, so lets use it...
+        
         if( 0 == (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
         {
             const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId,
                                                 nFlags );
-            // do we have an item?
+            
             if(pItem)
             {
                 if( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT) )
                 {
-                    // element items do not add any properties,
-                    // we export it later
+                    
+                    
                     if( pIndexArray )
                         pIndexArray->push_back( nIndex );
 
@@ -161,8 +161,8 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 {
                     OUString sNamespace( pUnknown->GetAttrNamespace( i ) );
 
-                    // if the prefix isn't defined yet or has another meaning,
-                    // we have to redefine it now.
+                    
+                    
                     sal_uInt16 nIdx =   pNamespaceMap->GetIndexByPrefix( sPrefix );
                     if( USHRT_MAX == nIdx ||
                         pNamespaceMap->GetNameByIndex( nIdx ) != sNamespace )
@@ -233,7 +233,7 @@ void SvXMLExportItemMapper::exportElementItems(
                     "wrong mid flag!" );
 
         const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId, nFlags );
-        // do we have an item?
+        
         if(pItem)
         {
             rExport.IgnorableWhitespace();
@@ -255,7 +255,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
                                                    sal_uInt16 nWhichId,
                                                    sal_uInt16 nFlags )
 {
-    // first get item from itemset
+    
     const SfxPoolItem* pItem;
     SfxItemState eState =
         rSet.GetItemState( nWhichId,
@@ -269,7 +269,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
     else if( (nFlags & XML_EXPORT_FLAG_DEFAULTS) != 0 &&
               SFX_WHICH_MAX > nWhichId )
     {
-        // if its not set, try the pool if we export defaults
+        
         return &rSet.GetPool()->GetDefaultItem(nWhichId);
     }
     else
@@ -569,7 +569,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
 
 
-            // check if we need to export it
+            
             switch( nMemberId )
             {
                 case ALL_BORDER_PADDING:
@@ -581,8 +581,8 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     bool bEqual = nLeftDist == nRightDist &&
                                       nLeftDist == nTopDist &&
                                       nLeftDist == nBottomDist;
-                    // don't export individual paddings if all paddings are equal and
-                    // don't export all padding if some paddings are not equal
+                    
+                    
                     if( (bEqual && ALL_BORDER_PADDING != nMemberId) ||
                         (!bEqual && ALL_BORDER_PADDING == nMemberId) )
                         return false;
@@ -600,8 +600,8 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                                        *pTop == *pBottom  && *pTop == *pLeft &&
                                         *pTop == *pRight );
 
-                    // don't export individual borders if all are the same and
-                    // don't export all borders if some are not equal
+                    
+                    
                     if( (bEqual && ALL_BORDER != nMemberId) ||
                         (!bEqual && ALL_BORDER == nMemberId) )
                         return false;
@@ -613,7 +613,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 case TOP_BORDER_LINE_WIDTH:
                 case BOTTOM_BORDER_LINE_WIDTH:
                 {
-                    // if no line is set, there is nothing to export
+                    
                     if( !pTop && !pBottom && !pLeft && !pRight )
                         return false;
 
@@ -679,10 +679,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 break;
             }
 
-            // now export it export
+            
             switch( nMemberId )
                 {
-                    // padding
+                    
                 case ALL_BORDER_PADDING:
                 case LEFT_BORDER_PADDING:
                     rUnitConverter.convertMeasureToXML( aOut, nLeftDist );
@@ -697,7 +697,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     rUnitConverter.convertMeasureToXML( aOut, nBottomDist );
                     break;
 
-                    // border
+                    
                 case ALL_BORDER:
                 case LEFT_BORDER:
                 case RIGHT_BORDER:
@@ -786,7 +786,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 }
                 break;
 
-                // width
+                
                 case ALL_BORDER_LINE_WIDTH:
                 case LEFT_BORDER_LINE_WIDTH:
                 case RIGHT_BORDER_LINE_WIDTH:
@@ -887,9 +887,9 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
             OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
-            // note: the graphic is only exported if nMemberId equals
-            //       MID_GRAPHIC..
-            //       If not, only the color or transparency is exported
+            
+            
+            
 
             switch( nMemberId )
             {
@@ -1006,7 +1006,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 ::boost::optional<sal_uInt16> oNumOffset = pPageDesc->GetNumOffset();
                 if (oNumOffset && oNumOffset.get() > 0)
                 {
-                    // #i114163# positiveInteger only!
+                    
                     sal_Int32 const number(oNumOffset.get());
                     ::sax::Converter::convertNumber(aOut, number);
                 }

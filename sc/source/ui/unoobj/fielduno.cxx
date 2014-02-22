@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fielduno.hxx"
@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 namespace {
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+
 
 const SfxItemPropertySet* getDateTimePropertySet()
 {
@@ -149,9 +149,9 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
 
-//------------------------------------------------------------------------
 
-//  ScUnoEditEngine nur um aus einer EditEngine die Felder herauszubekommen...
+
+
 
 enum ScUnoCollectMode
 {
@@ -171,7 +171,7 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     ScUnoCollectMode    eMode;
     sal_uInt16              nFieldCount;
     sal_Int32           mnFieldType;
-    SvxFieldData*       pFound;         // lokale Kopie
+    SvxFieldData*       pFound;         
     sal_Int32           nFieldPar;
     sal_Int32           nFieldPos;
     sal_uInt16              nFieldIndex;
@@ -281,7 +281,7 @@ SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, sal_Int32 nPos, sal_Int
     return pFound;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellFieldsObj::ScCellFieldsObj(
     const uno::Reference<text::XTextRange>& xContent,
@@ -303,7 +303,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
 
     delete mpEditSource;
 
-    // increment refcount to prevent double call off dtor
+    
     osl_atomic_increment( &m_refCount );
 
     if (mpRefreshListeners)
@@ -322,22 +322,22 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        //! Ref-Update
+        
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 
-    //  EditSource hat sich selber als Listener angemeldet
+    
 }
 
-// XIndexAccess (via XTextFields)
+
 
 uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
     SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index));
@@ -346,7 +346,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      
 
     sal_Int32 eType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
@@ -358,11 +358,11 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    return aTempEngine.CountFields();       // Felder zaehlen, in Zelle ist der Typ egal
+    return aTempEngine.CountFields();       
 }
 
 uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -410,13 +410,13 @@ void SAL_CALL ScCellFieldsObj::removeContainerListener(
     OSL_FAIL("not implemented");
 }
 
-// XRefreshable
+
 void SAL_CALL ScCellFieldsObj::refresh(  )
                                     throw (uno::RuntimeException)
 {
     if (mpRefreshListeners)
     {
-        //  Call all listeners.
+        
         uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
         sal_uInt32 nLength(aListeners.getLength());
         if (nLength)
@@ -483,7 +483,7 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 {
     delete mpEditSource;
 
-    // increment refcount to prevent double call off dtor
+    
     osl_atomic_increment( &m_refCount );
 
     if (mpRefreshListeners)
@@ -498,11 +498,11 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
     }
 }
 
-// XIndexAccess (via XTextFields)
+
 
 uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
@@ -510,7 +510,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     if (!pData)
         return NULL;
 
-    // Get the parent text range instance.
+    
     uno::Reference<text::XTextRange> xTextRange;
     ScHeaderFooterContentObj& rContentObj = mrData.GetContentObj();
     uno::Reference<text::XText> xText;
@@ -527,7 +527,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      
 
     sal_Int32 eRealType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
@@ -539,7 +539,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
     return aTempEngine.CountFields();
@@ -590,13 +590,13 @@ void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
     OSL_FAIL("not implemented");
 }
 
-// XRefreshable
+
 void SAL_CALL ScHeaderFieldsObj::refresh(  )
                                     throw (uno::RuntimeException)
 {
     if (mpRefreshListeners)
     {
-        //  Call all listeners.
+        
         uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
         sal_uInt32 nLength(aListeners.getLength());
         if (nLength)
@@ -704,11 +704,11 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const com::sun::
     OUString aStrVal;
     if (mpEditSource)
     {
-        // Edit engine instance already exists for this field item.  Use it.
+        
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        
         SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
@@ -716,7 +716,7 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const com::sun::
             return;
 
         if (pField->GetClassId() != text::textfield::Type::URL)
-            // Make sure this is indeed a URL field.
+            
             return;
 
         SvxURLField* pURL = static_cast<SvxURLField*>(pField);
@@ -744,7 +744,7 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const com::sun::
         return;
     }
 
-    // Edit engine instance not yet present.  Store the item data for later use.
+    
     SvxFieldData* pData = getData();
     if (!pData)
         throw uno::RuntimeException();
@@ -773,15 +773,15 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
 {
     uno::Any aRet;
 
-    // anchor type is always "as character", text wrap always "none"
+    
 
     if (mpEditSource)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
+        
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        
         const SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
@@ -802,7 +802,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
         else
             throw beans::UnknownPropertyException();
     }
-    else        // noch nicht eingefuegt
+    else        
     {
         const SvxFieldData* pField = getData();
         if (!pField)
@@ -838,7 +838,7 @@ void ScEditFieldObj::setPropertyValueFile(const OUString& rName, const uno::Any&
                 OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
                 if (pField)
                 {
-                    SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
+                    SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   
                     pExtFile->SetFormat(eFormat);
                     pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
                     mpEditSource->UpdateData();
@@ -892,7 +892,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
 {
     if (mpEditSource)
     {
-        // Field already inserted.
+        
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
         SvxFieldData* pField = aTempEngine.FindByPos(aSelection.nStartPara, aSelection.nStartPos, meType);
@@ -906,7 +906,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 SvxDateField* p = static_cast<SvxDateField*>(pField);
                 if (rName == SC_UNONAME_ISDATE)
                 {
-                    // Do nothing for now.
+                    
                 }
                 else if (rName == SC_UNONAME_ISFIXED)
                 {
@@ -930,7 +930,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
             break;
             case text::textfield::Type::TIME:
             {
-                // SvxTimeField doesn't have any attributes.
+                
                 if (rName != SC_UNONAME_ISDATE && rName != SC_UNONAME_ISFIXED &&
                     rName != SC_UNONAME_DATETIME && rName != SC_UNONAME_NUMFMT)
                     throw beans::UnknownPropertyException();
@@ -941,7 +941,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 SvxExtTimeField* p = static_cast<SvxExtTimeField*>(pField);
                 if (rName == SC_UNONAME_ISDATE)
                 {
-                    // Do nothing for now.
+                    
                 }
                 else if (rName == SC_UNONAME_ISFIXED)
                 {
@@ -986,7 +986,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
 {
     if (mpEditSource)
     {
-        // Field already inserted.
+        
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
         SvxFieldData* pField = aTempEngine.FindByPos(aSelection.nStartPara, aSelection.nStartPos, meType);
@@ -1023,7 +1023,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
             break;
             case text::textfield::Type::TIME:
             {
-                // SvxTimeField doesn't have any attributes.
+                
                 if (rName == SC_UNONAME_ISDATE)
                     return uno::makeAny(sal_False);
 
@@ -1031,11 +1031,11 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
                     return uno::makeAny(sal_False);
 
                 if (rName == SC_UNONAME_DATETIME)
-                    // This is the best we can do.
+                    
                     return uno::makeAny(maDateTime);
 
                 if (rName == SC_UNONAME_NUMFMT)
-                    // Same as above.
+                    
                     return uno::makeAny<sal_Int32>(0);
             }
             break;
@@ -1091,11 +1091,11 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
 {
     if (mpEditSource)
     {
-        // Edit engine instance already exists for this field item.  Use it.
+        
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        
         SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
@@ -1103,7 +1103,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
             return;
 
         if (pField->GetClassId() != text::textfield::Type::TABLE)
-            // Make sure this is indeed a URL field.
+            
             return;
 
         SvxTableField* p = static_cast<SvxTableField*>(pField);
@@ -1121,7 +1121,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
         return;
     }
 
-    // Edit engine instance not yet present.  Store the item data for later use.
+    
     SvxFieldData* pData = getData();
     if (!pData)
         throw uno::RuntimeException();
@@ -1210,8 +1210,8 @@ void ScEditFieldObj::DeleteField()
         aSelection.nEndPara = aSelection.nStartPara;
         aSelection.nEndPos  = aSelection.nStartPos;
 
-        //! Broadcast, um Selektion in anderen Objekten anzupassen
-        //! (auch bei anderen Aktionen)
+        
+        
     }
 }
 
@@ -1220,7 +1220,7 @@ bool ScEditFieldObj::IsInserted() const
     return mpEditSource != NULL;
 }
 
-// XTextField
+
 
 OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
                                                     throw(uno::RuntimeException)
@@ -1230,11 +1230,11 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     if (!mpEditSource)
         return OUString();
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    //  Typ egal (in Zellen gibts nur URLs)
+    
     const SvxFieldData* pField = aTempEngine.FindByPos(
         aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
     OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
@@ -1246,7 +1246,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         case text::textfield::Type::URL:
         {
             if (pField->GetClassId() != text::textfield::Type::URL)
-                // Not an URL field, but URL is expected.
+                
                 throw uno::RuntimeException();
 
             const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
@@ -1259,7 +1259,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     return OUString();
 }
 
-// XTextContent
+
 
 void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
@@ -1281,7 +1281,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor() throw(uno:
     return mpContent;
 }
 
-// XComponent
+
 
 void SAL_CALL ScEditFieldObj::dispose() throw(uno::RuntimeException)
 {
@@ -1302,7 +1302,7 @@ void SAL_CALL ScEditFieldObj::removeEventListener(
     OComponentHelper::removeEventListener( xListener );
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -1397,7 +1397,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyNam
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScEditFieldObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -1430,7 +1430,7 @@ ScEditFieldObj* ScEditFieldObj::getImplementation(const uno::Reference<text::XTe
     return pRet;
 }
 
-// XServiceInfo
+
 
 OUString SAL_CALL ScEditFieldObj::getImplementationName() throw(uno::RuntimeException)
 {
@@ -1470,7 +1470,7 @@ uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes() throw(uno::RuntimeE
         pPtr[nParentLen + 3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
+            pPtr[i] = pParentPtr[i];                
     }
     return aTypes;
 }

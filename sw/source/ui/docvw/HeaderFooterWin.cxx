@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <app.hrc>
@@ -135,21 +135,21 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_nFadeRate( 100 ),
     m_aFadeTimer( )
 {
-    // Get the font and configure it
+    
     Font aFont = GetSettings().GetStyleSettings().GetToolFont();
     SetZoomedPointFont( aFont );
 
-    // Use pixels for the rest of the drawing
+    
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
-    // Create the line control
+    
     m_pLine = new SwDashedLine( GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor );
     m_pLine->SetZOrder( this, WINDOW_ZORDER_BEFOR );
 
-    // Create and set the PopupMenu
+    
     m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
 
-    // Rewrite the menu entries' text
+    
     if ( m_bIsHeader )
     {
         m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, SW_RESSTR( STR_FORMAT_HEADER ) );
@@ -180,14 +180,14 @@ const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )
 
 void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineEnd )
 {
-    // Compute the text to show
+    
     m_sLabel = SW_RESSTR( STR_HEADER_TITLE );
     if ( !m_bIsHeader )
         m_sLabel = SW_RESSTR( STR_FOOTER_TITLE );
     sal_Int32 nPos = m_sLabel.lastIndexOf( "%1" );
     m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
 
-    // Compute the text size and get the box position & size from it
+    
     Rectangle aTextRect;
     GetTextBoundRect( aTextRect, OUString( m_sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
@@ -207,7 +207,7 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
         aBoxPos.setX( aOffset.X() + BOX_DISTANCE );
     }
 
-    // Set the position & Size of the window
+    
     SetPosSizePixel( aBoxPos, aBoxSize );
 
     double nYLinePos = aBoxPos.Y();
@@ -250,7 +250,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
 
     B2DPolygon aPolygon = lcl_GetPolygon( aRect, m_bIsHeader );
 
-    // Colors
+    
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
     basegfx::BColor aLighterColor = lcl_GetLighterGradientColor( aFillColor );
@@ -276,11 +276,11 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                 aGradientRect, aFillAttrs ) );
     }
 
-    // Create the border lines primitive
+    
     aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             aPolygon, aLineColor ) );
 
-    // Create the text primitive
+    
     B2DVector aFontSize;
     FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
            aFontSize, GetFont(), false, false );
@@ -301,14 +301,14 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                 com::sun::star::lang::Locale(),
                 aLineColor ) );
 
-    // Create the 'plus' or 'arrow' primitive
+    
     B2DRectangle aSignArea( B2DPoint( aRect.Right() - BUTTON_WIDTH, 0.0 ),
                             B2DSize( aRect.Right(), aRect.getHeight() ) );
 
     B2DPolygon aSign;
     if ( IsEmptyHeaderFooter( ) )
     {
-        // Create the + polygon
+        
         double nLeft = aSignArea.getMinX() + TEXT_PADDING;
         double nRight = aSignArea.getMaxX() - TEXT_PADDING;
         double nHalfW = ( nRight - nLeft ) / 2.0;
@@ -332,7 +332,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     }
     else
     {
-        // Create the v polygon
+        
         B2DPoint aLeft( aSignArea.getMinX() + TEXT_PADDING, aSignArea.getCenterY() );
         B2DPoint aRight( aSignArea.getMaxX() - TEXT_PADDING, aSignArea.getCenterY() );
         B2DPoint aBottom( ( aLeft.getX() + aRight.getX() ) / 2.0, aLeft.getY() + 4.0 );
@@ -350,13 +350,13 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
             B2DPolyPolygon( aSign ), aSignColor ) );
 
-    // Create the processor and process the primitives
+    
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
                     *this, aNewViewInfos );
 
-    // TODO Ghost it all if needed
+    
     drawinglayer::primitive2d::Primitive2DSequence aGhostedSeq( 1 );
     double nFadeRate = double( m_nFadeRate ) / 100.0;
     const basegfx::BColorModifierSharedPtr aBColorModifier(
@@ -374,7 +374,7 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
 {
     bool bResult = true;
 
-    // Actually check it
+    
     const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
 
     bool const bFirst(GetPageFrame()->OnFirstPage());
@@ -425,7 +425,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 
                 aSet.Put( pHFFmt->GetAttrSet() );
 
-                // Create a box info item... needed by the dialog
+                
                 SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                 const SfxPoolItem *pBoxInfo;
                 if ( SFX_ITEM_SET == pHFFmt->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,

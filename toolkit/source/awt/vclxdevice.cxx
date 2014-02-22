@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
@@ -38,9 +38,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXDevice
-//  ----------------------------------------------------
+
+
+
 VCLXDevice::VCLXDevice()
 {
     mpOutputDevice = NULL;
@@ -65,7 +65,7 @@ void VCLXDevice::SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit )
         nFlags &= ~FLAGS_CREATEDWITHTOOLKIT;
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXDevice::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -76,17 +76,17 @@ void VCLXDevice::SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit )
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+
 IMPL_XUNOTUNNEL( VCLXDevice )
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXDevice )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 
-// ::com::sun::star::awt::XDevice,
+
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > VCLXDevice::createGraphics(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -140,7 +140,7 @@ IMPL_XTYPEPROVIDER_END
             aInfo.RightInset = aDevSz.Width() - aOutSz.Width() - aOffset.X();
             aInfo.BottomInset = aDevSz.Height() - aOutSz.Height() - aOffset.Y();
         }
-        else // VirtualDevice
+        else 
         {
             aDevSz = mpOutputDevice->GetOutputSizePixel();
             aInfo.LeftInset = 0;
@@ -235,9 +235,9 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 }
 
 
-// -----------------------------------------------------------------------------
-// Interface implementation of ::com::sun::star::awt::XUnitConversion
-// -----------------------------------------------------------------------------
+
+
+
 
 ::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -245,12 +245,12 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     SolarMutexGuard aGuard;
     if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT )
     {
-        // percentage not allowed here
+        
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
     ::com::sun::star::awt::Point aAWTPoint(0,0);
-    // X,Y
+    
 
     if( mpOutputDevice )
     {
@@ -271,7 +271,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
         SourceUnit == com::sun::star::util::MeasureUnit::PIXEL )
     {
-        // pixel or percentage not allowed here
+        
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
@@ -294,12 +294,12 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     SolarMutexGuard aGuard;
     if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT)
     {
-        // percentage not allowed here
+        
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
     ::com::sun::star::awt::Size aAWTSize(0,0);
-    // Width, Height
+    
 
 
     if( mpOutputDevice )
@@ -320,12 +320,12 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
         SourceUnit == com::sun::star::util::MeasureUnit::PIXEL)
     {
-        // pixel or percentage not allowed here
+        
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
     ::com::sun::star::awt::Size aAWTSize(0,0);
-    // Width, Height
+    
     if( mpOutputDevice )
     {
         MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(SourceUnit));

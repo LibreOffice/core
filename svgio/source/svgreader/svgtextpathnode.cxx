@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgtextpathnode.hxx>
@@ -29,7 +29,7 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -51,8 +51,8 @@ namespace svgio
             double                          mfSegmentStartPosition;
 
         protected:
-            /// allow user callback to allow changes to the new TextTransformation. Default
-            /// does nothing.
+            
+            
             virtual bool allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength);
 
             void freeB2DCubicBezierHelper();
@@ -68,7 +68,7 @@ namespace svgio
                 const basegfx::B2DPoint& rTextStart);
             virtual ~pathTextBreakupHelper();
 
-            // read access to evtl. advanced position
+            
             double getPosition() const { return mfPosition; }
         };
 
@@ -165,41 +165,41 @@ namespace svgio
 
                         advanceToPosition(mfPosition + fHalfSnippetWidth);
 
-                        // create representation for this snippet
+                        
                         bRetval = true;
 
-                        // get target position and tangent in that pint
+                        
                         basegfx::B2DPoint aPosition(0.0, 0.0);
                         basegfx::B2DVector aTangent(0.0, 1.0);
 
                         if(mfPosition < 0.0)
                         {
-                            // snippet center is left of first segment, but right edge is on it (SVG allows that)
+                            
                             aTangent = maCurrentSegment.getTangent(0.0);
                             aTangent.normalize();
                             aPosition = maCurrentSegment.getStartPoint() + (aTangent * (mfPosition - mfSegmentStartPosition));
                         }
                         else if(mfPosition > mfBasegfxPathLength)
                         {
-                            // snippet center is right of last segment, but left edge is on it (SVG allows that)
+                            
                             aTangent = maCurrentSegment.getTangent(1.0);
                             aTangent.normalize();
                             aPosition = maCurrentSegment.getEndPoint() + (aTangent * (mfPosition - mfSegmentStartPosition));
                         }
                         else
                         {
-                            // snippet center inside segment, interpolate
+                            
                             double fBezierDistance(mfPosition - mfSegmentStartPosition);
 
                             if(getB2DCubicBezierHelper())
                             {
-                                // use B2DCubicBezierHelper to bridge the non-linear gap between
-                                // length and bezier distances (if it's a bezier segment)
+                                
+                                
                                 fBezierDistance = getB2DCubicBezierHelper()->distanceToRelative(fBezierDistance);
                             }
                             else
                             {
-                                // linear relationship, make relative to segment length
+                                
                                 fBezierDistance = fBezierDistance / mfCurrentSegmentLength;
                             }
 
@@ -208,30 +208,30 @@ namespace svgio
                             aTangent.normalize();
                         }
 
-                        // detect evtl. hor/ver translations (depends on text direction)
+                        
                         const basegfx::B2DPoint aBasePoint(rNewTransform * basegfx::B2DPoint(0.0, 0.0));
                         const basegfx::B2DVector aOffset(aBasePoint - mrTextStart);
 
                         if(!basegfx::fTools::equalZero(aOffset.getY()))
                         {
-                            // ...and apply
+                            
                             aPosition.setY(aPosition.getY() + aOffset.getY());
                         }
 
-                        // move target position from snippet center to left text start
+                        
                         aPosition -= fHalfSnippetWidth * aTangent;
 
-                        // remove current translation
+                        
                         rNewTransform.translate(-aBasePoint.getX(), -aBasePoint.getY());
 
-                        // rotate due to tangent
+                        
                         rNewTransform.rotate(atan2(aTangent.getY(), aTangent.getX()));
 
-                        // add new translation
+                        
                         rNewTransform.translate(aPosition.getX(), aPosition.getY());
                     }
 
-                    // advance to end
+                    
                     advanceToPosition(fEndPos);
                 }
             }
@@ -239,10 +239,10 @@ namespace svgio
             return bRetval;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -271,13 +271,13 @@ namespace svgio
 
         void SvgTextPathNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -404,7 +404,7 @@ namespace svgio
 
                         if(!basegfx::fTools::equalZero(fBasegfxPathLength))
                         {
-                            double fUserToBasegfx(1.0); // multiply: user->basegfx, divide: basegfx->user
+                            double fUserToBasegfx(1.0); 
 
                             if(pSvgPathNode->getPathLength().isSet())
                             {
@@ -422,7 +422,7 @@ namespace svgio
                             {
                                 if(Unit_percent == getStartOffset().getUnit())
                                 {
-                                    // percent are relative to path length
+                                    
                                     fPosition = getStartOffset().getNumber() * 0.01 * fBasegfxPathLength;
                                 }
                                 else
@@ -463,7 +463,7 @@ namespace svgio
                                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aResult);
                                         }
 
-                                        // advance position to consumed
+                                        
                                         fPosition = aPathTextBreakupHelper.getPosition();
                                     }
 
@@ -476,10 +476,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

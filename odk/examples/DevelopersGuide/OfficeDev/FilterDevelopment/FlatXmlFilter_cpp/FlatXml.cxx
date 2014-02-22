@@ -76,37 +76,37 @@ namespace XFlatXml {
 class XFlatXml : public WeakImplHelper3< XImportFilter, XExportFilter, XDocumentHandler>
 {
 private:
-    // the UNO ServiceFactory
+    
     Reference< XMultiServiceFactory > m_rServiceFactory;
 
-    // DocumentHandler interface of the css::xml::sax::Writer service
+    
     Reference < XExtendedDocumentHandler > m_rDocumentHandler;
 
-    // controls pretty-printing
+    
     sal_Bool m_bPrettyPrint;
 
 public:
 
-    // ctor...
+    
     XFlatXml( const Reference< XMultiServiceFactory > &r )
         : m_rServiceFactory(r)
         , m_bPrettyPrint(sal_True)
     {}
 
-    // XImportFilter
+    
     virtual sal_Bool SAL_CALL importer(
             const Sequence<PropertyValue>& aSourceData,
             const Reference<XDocumentHandler>& xHandler,
             const Sequence<OUString>& msUserData)
         throw(RuntimeException);
 
-    // XExportFilter
+    
     virtual sal_Bool SAL_CALL exporter(
             const Sequence<PropertyValue>& aSourceData,
             const Sequence<OUString>& msUserData)
         throw(RuntimeException);
 
-    // XDocumentHandler
+    
     virtual void SAL_CALL startDocument()
         throw (SAXException,RuntimeException);
     virtual void SAL_CALL endDocument()
@@ -131,10 +131,10 @@ sal_Bool XFlatXml::importer(
         const Sequence<OUString>& msUserData)
     throw (RuntimeException)
 {
-    // get information from media descriptor
-    // the imput stream that represents the imported file
-    // is most important here since we need to supply it to
-    // the sax parser that drives the supplied document handler
+    
+    
+    
+    
     sal_Int32 nLength = aSourceData.getLength();
     OUString aName, aFileName, aURL;
     Reference< XInputStream > xInputStream;
@@ -149,24 +149,24 @@ sal_Bool XFlatXml::importer(
             aSourceData[i].Value >>= aURL;
     }
 
-    // we need an input stream
+    
     OSL_ASSERT(xInputStream.is());
     if (!xInputStream.is()) return sal_False;
 
-    // rewind seekable stream
+    
     Reference< XSeekable > xSeek(xInputStream, UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
 
 
-    // create SAX parser that will read the document file
-    // and provide events to xHandler passed to this call
+    
+    
     Reference < XParser > xSaxParser( m_rServiceFactory->createInstance(
         OUString("com.sun.star.xml.sax.Parser")), UNO_QUERY );
     OSL_ASSERT(xSaxParser.is());
     if(!xSaxParser.is())return sal_False;
 
-    // let the parser try to send the sax event to the document handler
+    
     try
     {
         InputSource aInput;
@@ -178,12 +178,12 @@ sal_Bool XFlatXml::importer(
     }
     catch( Exception &exc)
     {
-        // something went wrong
+        
         OSL_FAIL(rtl::OUStringToOString(exc.Message,RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
-    // done
+    
     return sal_True;
 }
 
@@ -193,10 +193,10 @@ sal_Bool XFlatXml::exporter(
     throw (RuntimeException)
 {
 
-    // read source data
-    // we are especialy interested in the output stream
-    // since that is where our xml-writer will push the data
-    // from it's data-source interface
+    
+    
+    
+    
     OUString aName, sURL;
     Reference<XOutputStream> rOutputStream;
     sal_Int32 nLength = aSourceData.getLength();
@@ -210,7 +210,7 @@ sal_Bool XFlatXml::exporter(
     }
 
     if (!m_rDocumentHandler.is()) {
-        // get the document writer
+        
         m_rDocumentHandler = Reference<XExtendedDocumentHandler>(
             m_rServiceFactory->createInstance(
             OUString("com.sun.star.xml.sax.Writer")),
@@ -218,21 +218,21 @@ sal_Bool XFlatXml::exporter(
         OSL_ASSERT(m_rDocumentHandler.is());
         if (!m_rDocumentHandler.is()) return sal_False;
     }
-    // get data source interface ...
+    
     Reference< XActiveDataSource > rDataSource(m_rDocumentHandler, UNO_QUERY);
     OSL_ASSERT(rDataSource.is());
     if (!rDataSource.is()) return sal_False;
     OSL_ASSERT(rOutputStream.is());
     if (!rOutputStream.is()) return sal_False;
-    // ... and set output stream
+    
     rDataSource->setOutputStream(rOutputStream);
 
     return sal_True;
 }
 
-// for the DocumentHandler implementation, we just proxy the the
-// events to the XML writer that we created upon the output stream
-// that was provided by the XMLFilterAdapter
+
+
+
 void XFlatXml::startDocument() throw (SAXException,RuntimeException){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->startDocument();
@@ -286,9 +286,9 @@ void XFlatXml::setDocumentLocator(const Reference<XLocator>& doclocator)
     m_rDocumentHandler->setDocumentLocator(doclocator);
 }
 
-// --------------------------------------
-// Component management
-// --------------------------------------
+
+
+
 Reference< XInterface > SAL_CALL CreateInstance( const Reference< XMultiServiceFactory > &r)
 {
     return Reference< XInterface >(( OWeakObject *)new XFlatXml(r));
@@ -346,6 +346,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

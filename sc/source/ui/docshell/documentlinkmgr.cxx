@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <documentlinkmgr.hxx>
@@ -43,7 +43,7 @@ struct DocumentLinkManagerImpl : boost::noncopyable
 
     ~DocumentLinkManagerImpl()
     {
-        // Shared base links
+        
         if (mpLinkManager)
         {
             sfx2::SvLinkSources aTemp = mpLinkManager->GetServers();
@@ -106,7 +106,7 @@ bool DocumentLinkManager::idleCheckLinks()
             continue;
 
         pDdeLink->TryUpdate();
-        if (pDdeLink->NeedsUpdate()) // Was not successful?
+        if (pDdeLink->NeedsUpdate()) 
             bAnyLeft = true;
     }
 
@@ -137,8 +137,8 @@ bool DocumentLinkManager::updateDdeLinks( Window* pWin )
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager.get();
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
 
-    // If the update takes longer, reset all values so that nothing
-    // old (wrong) is left behind
+    
+    
     bool bAny = false;
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
@@ -151,7 +151,7 @@ bool DocumentLinkManager::updateDdeLinks( Window* pWin )
             bAny = true;
         else
         {
-            // Update failed.  Notify the user.
+            
             OUString aFile = pDdeLink->GetTopic();
             OUString aElem = pDdeLink->GetItem();
             OUString aType = pDdeLink->GetAppl();
@@ -196,7 +196,7 @@ bool DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& 
              OUString(pDdeLink->GetItem()) == rItem )
         {
             pDdeLink->TryUpdate();
-            bFound = true; // Could be multiple (Mode), so continue searching
+            bFound = true; 
         }
     }
 

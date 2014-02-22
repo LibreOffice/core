@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <functional>
@@ -42,11 +42,11 @@
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024
 
-typedef ::std::pair< MetaAction*, int > Component; // MetaAction plus index in metafile
+typedef ::std::pair< MetaAction*, int > Component; 
 
 typedef ::std::list< Component > ComponentList;
 
-// List of (intersecting) actions, plus overall bounds
+
 struct ConnectedComponents
 {
     ConnectedComponents() :
@@ -102,8 +102,8 @@ static bool checkRect( Rectangle&       io_rPrevRect,
                        const Rectangle& rCurrRect,
                        OutputDevice&    rMapModeVDev )
 {
-    // shape needs to fully cover previous content, and have uniform
-    // color
+    
+    
     const bool bRet(
         rMapModeVDev.LogicToPixel(rCurrRect).IsInside(io_rPrevRect) &&
         rMapModeVDev.IsFillColor() );
@@ -134,12 +134,12 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         const MetaTransparentAction* pTransAct = static_cast<const MetaTransparentAction*>(&rAct);
         sal_uInt16                       nTransparency( pTransAct->GetTransparence() );
 
-        // #i10613# Respect transparency for draw color
+        
         if( nTransparency )
         {
             o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR|PUSH_FILLCOLOR ) );
 
-            // assume white background for alpha blending
+            
             Color aLineColor( rStateOutDev.GetLineColor() );
             aLineColor.SetRed( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetRed()) / 100L ) );
             aLineColor.SetGreen( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetGreen()) / 100L ) );
@@ -186,11 +186,11 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         Bitmap aBmp( aBmpEx.GetBitmap() );
         if( !aBmpEx.IsAlpha() )
         {
-            // blend with mask
+            
             BitmapReadAccess* pRA = aBmp.AcquireReadAccess();
 
             if( !pRA )
-                return; // what else should I do?
+                return; 
 
             Color aActualColor( aBgColor );
 
@@ -199,29 +199,29 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
 
             aBmp.ReleaseAccess(pRA);
 
-            // did we get true white?
+            
             if( aActualColor.GetColorError( aBgColor ) )
             {
-                // no, create truecolor bitmap, then
+                
                 aBmp.Convert( BMP_CONVERSION_24BIT );
 
-                // fill masked out areas white
+                
                 aBmp.Replace( aBmpEx.GetMask(), aBgColor );
             }
             else
             {
-                // fill masked out areas white
+                
                 aBmp.Replace( aBmpEx.GetMask(), aActualColor );
             }
         }
         else
         {
-            // blend with alpha channel
+            
             aBmp.Convert( BMP_CONVERSION_24BIT );
             aBmp.Blend(aBmpEx.GetAlpha(),aBgColor);
         }
 
-        // add corresponding action
+        
         switch( rAct.GetType() )
         {
             case META_BMPEX_ACTION:
@@ -250,8 +250,8 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
     }
 }
 
-// #i10613# Extracted from ImplCheckRect::ImplCreate
-// Returns true, if given action creates visible (i.e. non-transparent) output
+
+
 static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
 {
     const bool  bLineTransparency( rOut.IsLineColor() ? rOut.GetLineColor().GetTransparency() == 255 : true );
@@ -353,7 +353,7 @@ static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rO
         case META_TEXTRECT_ACTION:
         case META_STRETCHTEXT_ACTION:
         case META_TEXTLINE_ACTION:
-            // all other actions: generate non-transparent output
+            
             bRet = true;
             break;
 
@@ -364,7 +364,7 @@ static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rO
     return bRet;
 }
 
-// #i10613# Extracted from ImplCheckRect::ImplCreate
+
 static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut )
 {
     Rectangle aActionBounds;
@@ -541,8 +541,8 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             {
                 const Point aPtLog( rTextAct.GetPoint() );
 
-                // #105987# Use API method instead of Impl* methods
-                // #107490# Set base parameter equal to index parameter
+                
+                
                 rOut.GetTextBoundRect( aActionBounds, rTextAct.GetText(), rTextAct.GetIndex(),
                                        rTextAct.GetIndex(), rTextAct.GetLen() );
                 aActionBounds.Move( aPtLog.X(), aPtLog.Y() );
@@ -557,7 +557,7 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 
             if( !aString.isEmpty() )
             {
-                // #105987# ImplLayout takes everything in logical coordinates
+                
                 SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
                                                          rTextAct.GetLen(), rTextAct.GetPoint(),
                                                          0, rTextAct.GetDXArray() );
@@ -580,14 +580,14 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             const MetaStretchTextAction& rTextAct = static_cast<const MetaStretchTextAction&>(rAct);
             const OUString               aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
 
-            // #i16195# Literate copy from TextArray action, the
-            // semantics for the ImplLayout call are copied from the
-            // OutDev::DrawStretchText() code. Unfortunately, also in
-            // this case, public outdev methods such as GetTextWidth()
-            // don't provide enough info.
+            
+            
+            
+            
+            
             if( !aString.isEmpty() )
             {
-                // #105987# ImplLayout takes everything in logical coordinates
+                
                 SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
                                                          rTextAct.GetLen(), rTextAct.GetPoint(),
                                                          rTextAct.GetWidth() );
@@ -611,7 +611,7 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 
     if( !aActionBounds.IsEmpty() )
     {
-        // fdo#40421 limit current action's output to clipped area
+        
         if( rOut.IsClipRegion() )
             return rOut.LogicToPixel(
                 rOut.GetClipRegion().GetBoundRect().Intersection( aActionBounds ) );
@@ -624,13 +624,13 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 
 static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
 {
-    // META_FLOATTRANSPARENT_ACTION can contain a whole metafile,
-    // which is to be rendered with the given transparent gradient. We
-    // currently cannot emulate transparent painting on a white
-    // background reliably.
+    
+    
+    
+    
 
-    // the remainder can handle printing itself correctly on a uniform
-    // white background.
+    
+    
     switch( rAct.GetType() )
     {
         case META_TRANSPARENT_ACTION:
@@ -658,20 +658,20 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
     if( ! bReduceTransparency || bTransparencyAutoMode )
     {
-        // watch for transparent drawing actions
+        
         for( pCurrAct = ( (GDIMetaFile&) rInMtf ).FirstAction();
              pCurrAct && !bTransparent;
              pCurrAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
         {
-            // #i10613# Extracted "specialness" predicate into extra method
+            
 
-            // #107169# Also examine metafiles with masked bitmaps in
-            // detail. Further down, this is optimized in such a way
-            // that there's no unnecessary painting of masked bitmaps
-            // (which are _always_ subdivided into rectangular regions
-            // of uniform opacity): if a masked bitmap is printed over
-            // empty background, we convert to a plain bitmap with
-            // white background.
+            
+            
+            
+            
+            
+            
+            
             if( ImplIsActionSpecial( *pCurrAct ) )
             {
                 bTransparent = true;
@@ -679,51 +679,51 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         }
     }
 
-    // #i10613# Determine set of connected components containing transparent objects. These are
-    // then processed as bitmaps, the original actions are removed from the metafile.
+    
+    
     if( !bTransparent )
     {
-        // nothing transparent -> just copy
+        
         rOutMtf = rInMtf;
     }
     else
     {
-        // #i10613#
-        // This works as follows: we want a number of distinct sets of
-        // connected components, where each set contains metafile
-        // actions that are intersecting (note: there are possibly
-        // more actions contained as are directly intersecting,
-        // because we can only produce rectangular bitmaps later
-        // on. Thus, each set of connected components is the smallest
-        // enclosing, axis-aligned rectangle that completely bounds a
-        // number of intersecting metafile actions, plus any action
-        // that would otherwise be cut in two). Therefore, we
-        // iteratively add metafile actions from the original metafile
-        // to this connected components list (aCCList), by checking
-        // each element's bounding box against intersection with the
-        // metaaction at hand.
-        // All those intersecting elements are removed from aCCList
-        // and collected in a temporary list (aCCMergeList). After all
-        // elements have been checked, the aCCMergeList elements are
-        // merged with the metaaction at hand into one resulting
-        // connected component, with one big bounding box, and
-        // inserted into aCCList again.
-        // The time complexity of this algorithm is O(n^3), where n is
-        // the number of metafile actions, and it finds all distinct
-        // regions of rectangle-bounded connected components. This
-        // algorithm was designed by AF.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         //
 
         //
-        //  STAGE 1: Detect background
-        //  ==========================
+        
+        
         //
 
-        // Receives uniform background content, and is _not_ merged
-        // nor checked for intersection against other aCCList elements
+        
+        
         ConnectedComponents aBackgroundComponent;
 
-        // create an OutputDevice to record mapmode changes and the like
+        
         VirtualDevice aMapModeVDev;
         aMapModeVDev.mnDPIX = mnDPIX;
         aMapModeVDev.mnDPIY = mnDPIY;
@@ -731,11 +731,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         int nLastBgAction, nActionNum;
 
-        // weed out page-filling background objects (if they are
-        // uniformly coloured). Keeping them outside the other
-        // connected components often prevents whole-page bitmap
-        // generation.
-        bool bStillBackground=true; // true until first non-bg action
+        
+        
+        
+        
+        bool bStillBackground=true; 
         nActionNum=0; nLastBgAction=-1;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
         if( rBackground != Color( COL_TRANSPARENT ) )
@@ -763,9 +763,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                             aBackgroundComponent.aBgColor,
                             static_cast<const MetaRectAction*>(pCurrAct)->GetRect(),
                             aMapModeVDev) )
-                        bStillBackground=false; // incomplete occlusion of background
+                        bStillBackground=false; 
                     else
-                        nLastBgAction=nActionNum; // this _is_ background
+                        nLastBgAction=nActionNum; 
                     break;
                 }
                 case META_POLYGON_ACTION:
@@ -779,9 +779,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                             aBackgroundComponent.aBgColor,
                             aPoly.GetBoundRect(),
                             aMapModeVDev) )
-                        bStillBackground=false; // incomplete occlusion of background
+                        bStillBackground=false; 
                     else
-                        nLastBgAction=nActionNum; // this _is_ background
+                        nLastBgAction=nActionNum; 
                     break;
                 }
                 case META_POLYPOLYGON_ACTION:
@@ -796,9 +796,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                             aBackgroundComponent.aBgColor,
                             aPoly.GetBoundRect(),
                             aMapModeVDev) )
-                        bStillBackground=false; // incomplete occlusion of background
+                        bStillBackground=false; 
                     else
-                        nLastBgAction=nActionNum; // this _is_ background
+                        nLastBgAction=nActionNum; 
                     break;
                 }
                 case META_WALLPAPER_ACTION:
@@ -808,102 +808,102 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                             aBackgroundComponent.aBgColor,
                             static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect(),
                             aMapModeVDev) )
-                        bStillBackground=false; // incomplete occlusion of background
+                        bStillBackground=false; 
                     else
-                        nLastBgAction=nActionNum; // this _is_ background
+                        nLastBgAction=nActionNum; 
                     break;
                 }
                 default:
                 {
                     if( ImplIsNotTransparent( *pCurrAct,
                                               aMapModeVDev ) )
-                        bStillBackground=false; // non-transparent action, possibly
-                                                // not uniform
+                        bStillBackground=false; 
+                                                
                     else
-                        // extend current bounds (next uniform action
-                        // needs to fully cover this area)
+                        
+                        
                         aBackgroundComponent.aBounds.Union(
                             ImplCalcActionBounds(*pCurrAct, aMapModeVDev) );
                     break;
                 }
             }
 
-            // execute action to get correct MapModes etc.
+            
             pCurrAct->Execute( &aMapModeVDev );
 
             pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction();
             ++nActionNum;
         }
 
-        // clean up aMapModeVDev
+        
         sal_uInt32 nCount = aMapModeVDev.GetGCStackDepth();
         while( nCount-- )
             aMapModeVDev.Pop();
 
-        ConnectedComponentsList aCCList; // list containing distinct sets of connected components as elements.
+        ConnectedComponentsList aCCList; 
 
-        // fast-forward until one after the last background action
-        // (need to reconstruct map mode vdev state)
+        
+        
         nActionNum=0;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
         while( pCurrAct && nActionNum<=nLastBgAction )
         {
-            // up to and including last ink-generating background
-            // action go to background component
+            
+            
             aBackgroundComponent.aComponentList.push_back(
                 ::std::make_pair(
                     pCurrAct, nActionNum) );
 
-            // execute action to get correct MapModes etc.
+            
             pCurrAct->Execute( &aMapModeVDev );
             pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction();
             ++nActionNum;
         }
 
         //
-        //  STAGE 2: Generate connected components list
-        //  ===========================================
+        
+        
         //
 
-        // iterate over all actions (start where background action
-        // search left off)
+        
+        
         for( ;
              pCurrAct;
              pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction(), ++nActionNum )
         {
-            // execute action to get correct MapModes etc.
+            
             pCurrAct->Execute( &aMapModeVDev );
 
-            // cache bounds of current action
+            
             const Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, aMapModeVDev) );
 
-            // accumulate collected bounds here, initialize with current action
-            Rectangle                               aTotalBounds( aBBCurrAct ); // thus,
-                                                                                // aTotalComponents.aBounds
-                                                                                // is
-                                                                                // empty
-                                                                                // for
-                                                                                // non-output-generating
-                                                                                // actions
+            
+            Rectangle                               aTotalBounds( aBBCurrAct ); 
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
             bool                                    bTreatSpecial( false );
             ConnectedComponents                     aTotalComponents;
 
             //
-            //  STAGE 2.1: Search for intersecting cc entries
-            //  =============================================
+            
+            
             //
 
-            // if aBBCurrAct is empty, it will intersect with no
-            // aCCList member. Thus, we can save the check.
-            // Furthermore, this ensures that non-output-generating
-            // actions get their own aCCList entry, which is necessary
-            // when copying them to the output metafile (see stage 4
-            // below).
+            
+            
+            
+            
+            
+            
 
-            // #107169# Wholly transparent objects need
-            // not be considered for connected components,
-            // too. Just put each of them into a separate
-            // component.
+            
+            
+            
+            
             aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, aMapModeVDev);
 
             if( !aBBCurrAct.IsEmpty() &&
@@ -912,11 +912,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 if( !aBackgroundComponent.aComponentList.empty() &&
                     !aBackgroundComponent.aBounds.IsInside(aTotalBounds) )
                 {
-                    // it seems the background is not large enough. to
-                    // be on the safe side, combine with this component.
+                    
+                    
                     aTotalBounds.Union( aBackgroundComponent.aBounds );
 
-                    // extract all aCurr actions to aTotalComponents
+                    
                     aTotalComponents.aComponentList.splice( aTotalComponents.aComponentList.end(),
                                                             aBackgroundComponent.aComponentList );
 
@@ -928,50 +928,50 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 const ConnectedComponentsList::iterator aLastCC( aCCList.end() );
                 bool                                    bSomeComponentsChanged;
 
-                // now, this is unfortunate: since changing anyone of
-                // the aCCList elements (e.g. by merging or addition
-                // of an action) might generate new intersection with
-                // other aCCList elements, have to repeat the whole
-                // element scanning, until nothing changes anymore.
-                // Thus, this loop here makes us O(n^3) in the worst
-                // case.
+                
+                
+                
+                
+                
+                
+                
                 do
                 {
-                    // only loop here if 'intersects' branch below was hit
+                    
                     bSomeComponentsChanged = false;
 
-                    // iterate over all current members of aCCList
+                    
                     for( aCurrCC=aCCList.begin(); aCurrCC != aLastCC; )
                     {
-                        // first check if current element's bounds are
-                        // empty. This ensures that empty actions are not
-                        // merged into one component, as a matter of fact,
-                        // they have no position.
+                        
+                        
+                        
+                        
 
-                        // #107169# Wholly transparent objects need
-                        // not be considered for connected components,
-                        // too. Just put each of them into a separate
-                        // component.
+                        
+                        
+                        
+                        
                         if( !aCurrCC->aBounds.IsEmpty() &&
                             !aCurrCC->bIsFullyTransparent &&
                             aCurrCC->aBounds.IsOver( aTotalBounds ) )
                         {
-                            // union the intersecting aCCList element into aTotalComponents
+                            
 
-                            // calc union bounding box
+                            
                             aTotalBounds.Union( aCurrCC->aBounds );
 
-                            // extract all aCurr actions to aTotalComponents
+                            
                             aTotalComponents.aComponentList.splice( aTotalComponents.aComponentList.end(),
                                                                     aCurrCC->aComponentList );
 
                             if( aCurrCC->bIsSpecial )
                                 bTreatSpecial = true;
 
-                            // remove and delete aCurrCC element from list (we've now merged its content)
+                            
                             aCurrCC = aCCList.erase( aCurrCC );
 
-                            // at least one component changed, need to rescan everything
+                            
                             bSomeComponentsChanged = true;
                         }
                         else
@@ -984,70 +984,70 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             }
 
             //
-            //  STAGE 2.2: Determine special state for cc element
-            //  =================================================
+            
+            
             //
 
-            // now test whether the whole connected component must be
-            // treated specially (i.e. rendered as a bitmap): if the
-            // added action is the very first action, or all actions
-            // before it are completely transparent, the connected
-            // component need not be treated specially, not even if
-            // the added action contains transparency. This is because
-            // painting of transparent objects on _white background_
-            // works without alpha compositing (you just calculate the
-            // color). Note that for the test "all objects before me
-            // are transparent" no sorting is necessary, since the
-            // added metaaction pCurrAct is always in the order the
-            // metafile is painted. Generally, the order of the
-            // metaactions in the ConnectedComponents are not
-            // guaranteed to be the same as in the metafile.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             if( bTreatSpecial )
             {
-                // prev component(s) special -> this one, too
+                
                 aTotalComponents.bIsSpecial = true;
             }
             else if( !ImplIsActionSpecial( *pCurrAct ) )
             {
-                // added action and none of prev components special ->
-                // this one normal, too
+                
+                
                 aTotalComponents.bIsSpecial = false;
             }
             else
             {
-                // added action is special and none of prev components
-                // special -> do the detailed tests
+                
+                
 
-                // can the action handle transparency correctly
-                // (i.e. when painted on white background, does the
-                // action still look correct)?
+                
+                
+                
                 if( !ImplIsActionHandlingTransparency( *pCurrAct ) )
                 {
-                    // no, action cannot handle its transparency on
-                    // a printer device, render to bitmap
+                    
+                    
                     aTotalComponents.bIsSpecial = true;
                 }
                 else
                 {
-                    // yes, action can handle its transparency, so
-                    // check whether we're on white background
+                    
+                    
                     if( aTotalComponents.aComponentList.empty() )
                     {
-                        // nothing between pCurrAct and page
-                        // background -> don't be special
+                        
+                        
                         aTotalComponents.bIsSpecial = false;
                     }
                     else
                     {
-                        // #107169# Fixes abnove now ensure that _no_
-                        // object in the list is fully transparent. Thus,
-                        // if the component list is not empty above, we
-                        // must assume that we have to treat this
-                        // component special.
+                        
+                        
+                        
+                        
+                        
 
-                        // there are non-transparent objects between
-                        // pCurrAct and the empty sheet of paper -> be
-                        // special, then
+                        
+                        
+                        
                         aTotalComponents.bIsSpecial = true;
                     }
                 }
@@ -1055,17 +1055,17 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
 
             //
-            //  STAGE 2.3: Add newly generated CC list element
-            //  ==============================================
+            
+            
             //
 
-            // set new bounds and add action to list
+            
             aTotalComponents.aBounds = aTotalBounds;
             aTotalComponents.aComponentList.push_back(
                 ::std::make_pair(
                     pCurrAct, nActionNum) );
 
-            // add aTotalComponents as a new entry to aCCList
+            
             aCCList.push_back( aTotalComponents );
 
             DBG_ASSERT( !aTotalComponents.aComponentList.empty(),
@@ -1078,19 +1078,19 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
         }
 
-        // well now, we've got the list of disjunct connected
-        // components. Now we've got to create a map, which contains
-        // the corresponding aCCList element for every
-        // metaaction. Later on, we always process the complete
-        // metafile for each bitmap to be generated, but switch on
-        // output only for actions contained in the then current
-        // aCCList element. This ensures correct mapmode and attribute
-        // settings for all cases.
+        
+        
+        
+        
+        
+        
+        
+        
 
-        // maps mtf actions to CC list entries
+        
         ::std::vector< const ConnectedComponents* > aCCList_MemberMap( rInMtf.GetActionSize() );
 
-        // iterate over all aCCList members and their contained metaactions
+        
         ConnectedComponentsList::iterator       aCurr( aCCList.begin() );
         const ConnectedComponentsList::iterator aLast( aCCList.end() );
         for( ; aCurr != aLast; ++aCurr )
@@ -1099,29 +1099,29 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             const ComponentList::iterator aLastAction( aCurr->aComponentList.end() );
             for( ; aCurrentAction != aLastAction; ++aCurrentAction )
             {
-                // set pointer to aCCList element for corresponding index
+                
                 aCCList_MemberMap[ aCurrentAction->second ] = &(*aCurr);
             }
         }
 
         //
-        //  STAGE 3.1: Output background mtf actions (if there are any)
-        //  ===========================================================
+        
+        
         //
 
         ComponentList::iterator       aCurrAct( aBackgroundComponent.aComponentList.begin() );
         const ComponentList::iterator aLastAct( aBackgroundComponent.aComponentList.end() );
         for( ; aCurrAct != aLastAct; ++aCurrAct )
         {
-            // simply add this action (above, we inserted the actions
-            // starting at index 0 up to and including nLastBgAction)
+            
+            
             rOutMtf.AddAction( ( aCurrAct->first->Duplicate(), aCurrAct->first ) );
         }
 
 
         //
-        //  STAGE 3.2: Generate banded bitmaps for special regions
-        //  ====================================================
+        
+        
         //
 
         Point aPageOffset;
@@ -1131,7 +1131,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             aTmpSize = mpPDFWriter->getCurPageSize();
             aTmpSize = LogicToPixel( aTmpSize, MapMode( MAP_POINT ) );
 
-            // also add error code to PDFWriter
+            
             mpPDFWriter->insertError( vcl::PDFWriter::Warning_Transparency_Converted );
         }
         else if( meOutDevType == OUTDEV_PRINTER )
@@ -1144,7 +1144,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         const Rectangle aOutputRect( aPageOffset, aTmpSize );
         bool bTiling = dynamic_cast<Printer*>(this) != NULL;
 
-        // iterate over all aCCList members and generate bitmaps for the special ones
+        
         for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )
         {
             if( aCurr->bIsSpecial )
@@ -1155,26 +1155,26 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 const double fBmpArea( (double) aBoundRect.GetWidth() * aBoundRect.GetHeight() );
                 const double fOutArea( (double) aOutputRect.GetWidth() * aOutputRect.GetHeight() );
 
-                // check if output doesn't exceed given size
+                
                 if( bReduceTransparency && bTransparencyAutoMode && ( fBmpArea > ( 0.25 * fOutArea ) ) )
                 {
-                    // output normally. Therefore, we simply clear the
-                    // special attribute, as everything non-special is
-                    // copied to rOutMtf further below.
+                    
+                    
+                    
                     aCurr->bIsSpecial = false;
                 }
                 else
                 {
-                    // create new bitmap action first
+                    
                     if( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
                     {
                         Point           aDstPtPix( aBoundRect.TopLeft() );
                         Size            aDstSzPix;
 
-                        VirtualDevice   aMapVDev;   // here, we record only mapmode information
+                        VirtualDevice   aMapVDev;   
                         aMapVDev.EnableOutput(false);
 
-                        VirtualDevice   aPaintVDev; // into this one, we render.
+                        VirtualDevice   aPaintVDev; 
                         aPaintVDev.SetBackground( aBackgroundComponent.aBgColor );
 
                         rOutMtf.AddAction( new MetaPushAction( PUSH_MAPMODE ) );
@@ -1206,19 +1206,19 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                                     aPaintVDev.EnableOutput(false);
 
-                                    // iterate over all actions
+                                    
                                     for( pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction(), nActionNum=0;
                                          pCurrAct;
                                          pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction(), ++nActionNum )
                                     {
-                                        // enable output only for
-                                        // actions that are members of
-                                        // the current aCCList element
-                                        // (aCurr)
+                                        
+                                        
+                                        
+                                        
                                         if( aCCList_MemberMap[nActionNum] == &(*aCurr) )
                                             aPaintVDev.EnableOutput(true);
 
-                                        // but process every action
+                                        
                                         const sal_uInt16 nType( pCurrAct->GetType() );
 
                                         if( META_MAPMODE_ACTION == nType )
@@ -1259,7 +1259,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                                     Bitmap aBandBmp( aPaintVDev.GetBitmap( Point(), aDstSzPix ) );
 
-                                    // scale down bitmap, if requested
+                                    
                                     if( bDownsampleBitmaps )
                                     {
                                         aBandBmp = GetDownsampledBitmap( aDstSzPix,
@@ -1277,11 +1277,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     aPaintVDev.Pop();
                                 }
 
-                                // overlapping bands to avoid missing lines (e.g. PostScript)
+                                
                                 aDstPtPix.X() += aDstSzPix.Width();
                             }
 
-                            // overlapping bands to avoid missing lines (e.g. PostScript)
+                            
                             aDstPtPix.Y() += aDstSzPix.Height();
                         }
 
@@ -1291,41 +1291,41 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             }
         }
 
-        // clean up aMapModeVDev
+        
         nCount = aMapModeVDev.GetGCStackDepth();
         while( nCount-- )
             aMapModeVDev.Pop();
 
         //
-        //  STAGE 4: Copy actions to output metafile
-        //  ========================================
+        
+        
         //
 
-        // iterate over all actions and duplicate the ones not in a
-        // special aCCList member into rOutMtf
+        
+        
         for( pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction(), nActionNum=0;
              pCurrAct;
              pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction(), ++nActionNum )
         {
             const ConnectedComponents* pCurrAssociatedComponent = aCCList_MemberMap[nActionNum];
 
-            // NOTE: This relies on the fact that map-mode or draw
-            // mode changing actions are solitary aCCList elements and
-            // have empty bounding boxes, see comment on stage 2.1
-            // above
+            
+            
+            
+            
             if( pCurrAssociatedComponent &&
                 (pCurrAssociatedComponent->aBounds.IsEmpty() ||
                  !pCurrAssociatedComponent->bIsSpecial) )
             {
-                // #107169# Treat transparent bitmaps special, if they
-                // are the first (or sole) action in their bounds
-                // list. Note that we previously ensured that no
-                // fully-transparent objects are before us here.
+                
+                
+                
+                
                 if( ImplIsActionHandlingTransparency( *pCurrAct ) &&
                     pCurrAssociatedComponent->aComponentList.begin()->first == pCurrAct )
                 {
-                    // convert actions, where masked-out parts are of
-                    // given background color
+                    
+                    
                     ImplConvertTransparentAction(rOutMtf,
                                                  *pCurrAct,
                                                  aMapModeVDev,
@@ -1333,7 +1333,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 }
                 else
                 {
-                    // simply add this action
+                    
                     rOutMtf.AddAction( ( pCurrAct->Duplicate(), pCurrAct ) );
                 }
 
@@ -1345,7 +1345,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         rOutMtf.SetPrefSize( rInMtf.GetPrefSize() );
 
 #if OSL_DEBUG_LEVEL > 1
-        // iterate over all aCCList members and generate rectangles for the bounding boxes
+        
         rOutMtf.AddAction( new MetaFillColorAction( COL_WHITE, false ) );
         for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )
         {
@@ -1373,7 +1373,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
         const Rectangle aBmpRect( aPoint, aBmp.GetSizePixel() );
         Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
-        // do cropping if necessary
+        
         if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
         {
             if( !aSrcRect.IsEmpty() )
@@ -1384,10 +1384,10 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
         if( !aBmp.IsEmpty() )
         {
-            // do downsampling if necessary
+            
             Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
 
-            // #103209# Normalize size (mirroring has to happen outside of this method)
+            
             aDstSizeTwip = Size( labs(aDstSizeTwip.Width()), labs(aDstSizeTwip.Height()) );
 
             const Size      aBmpSize( aBmp.GetSizePixel() );
@@ -1396,12 +1396,12 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
             const double    fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPIX / 1440.0;
             const double    fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPIY / 1440.0;
 
-            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            
             if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
                   ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
                 ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
             {
-                // do scaling
+                
                 Size            aNewBmpSize;
                 const double    fBmpWH = fBmpPixelX / fBmpPixelY;
                 const double    fMaxWH = fMaxPixelX / fMaxPixelY;

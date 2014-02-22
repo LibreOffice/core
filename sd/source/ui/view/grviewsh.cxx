@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,7 +62,7 @@ void GraphicViewShell::ConstructGraphicViewShell(void)
     mpLayerTabBar.reset (new LayerTabBar(this,GetParentWindow()));
     mpLayerTabBar->SetSplitHdl(LINK(this,GraphicViewShell,TabBarSplitHandler));
 
-    // pb: #i67363# no layer tabbar on preview mode
+    
     if ( !GetObjectShell()->IsPreview() )
         mpLayerTabBar->Show();
 }
@@ -74,9 +74,9 @@ void GraphicViewShell::ChangeEditMode (
     EditMode eMode,
     bool )
 {
-    // There is no page tab that could be shown instead of the layer tab.
-    // Therefore we have it always visible regardless of what the caller
-    // said. (We have to change the callers behaviour, of course.)
+    
+    
+    
     DrawViewShell::ChangeEditMode (eMode, true);
 }
 
@@ -140,6 +140,6 @@ IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
     return 0;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RecentMasterPagesSelector.hxx"
@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(RecentMasterPagesSelector, MasterPageListListener)
 
 void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 {
-    // Create a set of names of the master pages used by the document.
+    
     MasterPageObserver::MasterPageNameSet aCurrentNames;
     sal_uInt16 nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     sal_uInt16 nIndex;
@@ -116,15 +116,15 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
             aCurrentNames.insert (pMasterPage->GetName());
     }
 
-    // Insert the recently used master pages that are currently not used.
+    
     RecentlyUsedMasterPages& rInstance (RecentlyUsedMasterPages::Instance());
     int nPageCount = rInstance.GetMasterPageCount();
     for (nIndex=0; nIndex<nPageCount; nIndex++)
     {
-        // Add an entry when a) the page is already known to the
-        // MasterPageContainer, b) the style name is empty, i.e. it has not yet
-        // been loaded (and thus can not be in use) or otherwise c) the
-        // style name is not currently in use.
+        
+        
+        
+        
         MasterPageContainer::Token aToken (rInstance.GetTokenForIndex(nIndex));
         if (aToken != MasterPageContainer::NIL_TOKEN)
         {
@@ -149,7 +149,7 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
 
     MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rpPageList);
 
-    // Restore the selection.
+    
     if (PreviewValueSet::GetItemCount() > 0)
     {
         if (PreviewValueSet::GetItemCount() >= nSelectedItemId)
@@ -171,6 +171,6 @@ void RecentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

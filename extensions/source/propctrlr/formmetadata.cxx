@@ -35,9 +35,9 @@ namespace pcr
 
     using namespace ::com::sun::star::uno;
 
-    //========================================================================
+    
     //= OPropertyInfoImpl
-    //========================================================================
+    
     struct OPropertyInfoImpl
     {
         OUString        sName;
@@ -56,7 +56,7 @@ namespace pcr
                         sal_uInt32                  _nUIFlags);
     };
 
-    //------------------------------------------------------------------------
+    
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
                                    const OUString& aString, sal_uInt16 nP, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
@@ -68,8 +68,8 @@ namespace pcr
     {
     }
 
-    //------------------------------------------------------------------------
-    // Compare PropertyInfo
+    
+    
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
@@ -78,9 +78,9 @@ namespace pcr
         }
     };
 
-    //========================================================================
+    
     //= OPropertyInfoService
-    //========================================================================
+    
 #define DEF_INFO( ident, uinameres, pos, helpid, flags )       \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
             PcrRes( RID_STR_##uinameres ).toString(), pos, HID_PROP_##helpid, flags )
@@ -99,14 +99,14 @@ namespace pcr
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
-    //------------------------------------------------------------------------
+    
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
         if ( s_pPropertyInfos )
             return s_pPropertyInfos;
 
         PcrClient aResourceAccess;
-        // this ensures that we have our resource file loaded
+        
 
         static OPropertyInfoImpl aPropertyInfos[] =
         {
@@ -160,8 +160,8 @@ namespace pcr
         DEF_INFO_3( LISTSOURCE,        LISTSOURCE,          43, LISTSOURCE,        FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_3( BOUNDCOLUMN,       BOUNDCOLUMN,         44, BOUNDCOLUMN,       FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
 
-        // <!----------------->
-        // XML node binding
+        
+        
         DEF_INFO_2( LIST_BINDING,      LIST_BINDING,        45, LIST_BINDING,      FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XML_DATA_MODEL,    XML_DATA_MODEL,      46, XML_DATA_MODEL,    FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( BINDING_NAME,      BINDING_NAME,        47, BINDING_NAME,      FORM_VISIBLE, DATA_PROPERTY ),
@@ -172,45 +172,45 @@ namespace pcr
         DEF_INFO_2( XSD_CONSTRAINT,    XSD_CONSTRAINT,      52, XSD_CONSTRAINT,    FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_CALCULATION,   XSD_CALCULATION,     53, XSD_CALCULATION,   FORM_VISIBLE, DATA_PROPERTY ),
 
-        // data type
+        
         DEF_INFO_2( XSD_DATA_TYPE,     XSD_DATA_TYPE,       54, XSD_DATA_TYPE,     FORM_VISIBLE, DATA_PROPERTY ),
-        // data types facets
-        //  common
+        
+        
         DEF_INFO_3( XSD_WHITESPACES,   XSD_WHITESPACES,     55, XSD_WHITESPACES,   FORM_VISIBLE, DATA_PROPERTY, ENUM ),
         DEF_INFO_2( XSD_PATTERN,       XSD_PATTERN,         56, XSD_PATTERN,       FORM_VISIBLE, DATA_PROPERTY ),
-        //  string
+        
         DEF_INFO_2( XSD_LENGTH,        XSD_LENGTH,          57, XSD_LENGTH,        FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_LENGTH,    XSD_MIN_LENGTH,      58, XSD_MIN_LENGTH,    FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MAX_LENGTH,    XSD_MAX_LENGTH,      59, XSD_MAX_LENGTH,    FORM_VISIBLE, DATA_PROPERTY ),
-        //  decimal
+        
         DEF_INFO_2( XSD_TOTAL_DIGITS,   XSD_TOTAL_DIGITS,   60, XSD_TOTAL_DIGITS,   FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_FRACTION_DIGITS,XSD_FRACTION_DIGITS,61,XSD_FRACTION_DIGITS,FORM_VISIBLE, DATA_PROPERTY ),
-        //  int value types (year, month, day)
+        
         DEF_INFO_2( XSD_MAX_INCLUSIVE_INT, XSD_MAX_INCLUSIVE, 62, XSD_MAX_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MAX_EXCLUSIVE_INT, XSD_MAX_EXCLUSIVE, 63, XSD_MAX_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_INCLUSIVE_INT, XSD_MIN_INCLUSIVE, 64, XSD_MIN_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_EXCLUSIVE_INT, XSD_MIN_EXCLUSIVE, 65, XSD_MIN_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
-        //  double value types (double, float, decimal)
+        
         DEF_INFO_2( XSD_MAX_INCLUSIVE_DOUBLE, XSD_MAX_INCLUSIVE, 66, XSD_MAX_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MAX_EXCLUSIVE_DOUBLE, XSD_MAX_EXCLUSIVE, 67, XSD_MAX_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_INCLUSIVE_DOUBLE, XSD_MIN_INCLUSIVE, 68, XSD_MIN_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_EXCLUSIVE_DOUBLE, XSD_MIN_EXCLUSIVE, 69, XSD_MIN_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
-        // date value type
+        
         DEF_INFO_2( XSD_MAX_INCLUSIVE_DATE, XSD_MAX_INCLUSIVE, 70, XSD_MAX_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MAX_EXCLUSIVE_DATE, XSD_MAX_EXCLUSIVE, 71, XSD_MAX_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_INCLUSIVE_DATE, XSD_MIN_INCLUSIVE, 72, XSD_MIN_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_EXCLUSIVE_DATE, XSD_MIN_EXCLUSIVE, 73, XSD_MIN_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
-        // time value type
+        
         DEF_INFO_2( XSD_MAX_INCLUSIVE_TIME, XSD_MAX_INCLUSIVE, 74, XSD_MAX_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MAX_EXCLUSIVE_TIME, XSD_MAX_EXCLUSIVE, 75, XSD_MAX_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_INCLUSIVE_TIME, XSD_MIN_INCLUSIVE, 76, XSD_MIN_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_EXCLUSIVE_TIME, XSD_MIN_EXCLUSIVE, 77, XSD_MIN_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
-        // dateTime value type
+        
         DEF_INFO_2( XSD_MAX_INCLUSIVE_DATE_TIME, XSD_MAX_INCLUSIVE, 78, XSD_MAX_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MAX_EXCLUSIVE_DATE_TIME, XSD_MAX_EXCLUSIVE, 79, XSD_MAX_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_INCLUSIVE_DATE_TIME, XSD_MIN_INCLUSIVE, 80, XSD_MIN_INCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_MIN_EXCLUSIVE_DATE_TIME, XSD_MIN_EXCLUSIVE, 81, XSD_MIN_EXCLUSIVE, FORM_VISIBLE, DATA_PROPERTY ),
-        // <!----------------->
+        
 
         DEF_INFO_2( HIDDEN_VALUE,      VALUE,               82, HIDDEN_VALUE,      FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( VALUE,             VALUE,               83, VALUE,             DIALOG_VISIBLE, COMPOSEABLE ),
@@ -349,7 +349,7 @@ namespace pcr
         s_pPropertyInfos = aPropertyInfos;
         s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
 
-        // sort
+        
         ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -362,49 +362,49 @@ namespace pcr
         return s_pPropertyInfos;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OPropertyInfoService::getPropertyName( sal_Int32 _nPropId )
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nPropId);
         return pInfo ? pInfo->sName : OUString();
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
-    //------------------------------------------------------------------------
+    
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sHelpId : OString();
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nPos : 0xFFFF;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
     }
 
-    //------------------------------------------------------------------------
+    
     ::std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
@@ -528,7 +528,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Bool OPropertyInfoService::isComposeable( const OUString& _rPropertyName ) const
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
@@ -539,10 +539,10 @@ namespace pcr
         return ( nFlags & PROP_FLAG_COMPOSEABLE ) != 0;
     }
 
-    //------------------------------------------------------------------------
+    
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
-        // Initialization
+        
         if(!s_pPropertyInfos)
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), 0, "", 0);
@@ -560,14 +560,14 @@ namespace pcr
     }
 
 
-    //------------------------------------------------------------------------
+    
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
-        // Initialization
+        
         if(!s_pPropertyInfos)
             getPropertyInfo();
 
-        // TODO: a real structure which allows quick access by name as well as by id
+        
         for (sal_uInt16 i = 0; i < s_nCount; i++)
             if (s_pPropertyInfos[i].nId == _nId)
                 return &s_pPropertyInfos[i];
@@ -575,11 +575,11 @@ namespace pcr
         return NULL;
     }
 
-    //====================================================================
+    
     //= DefaultEnumRepresentation
-    //====================================================================
+    
     DBG_NAME( DefaultEnumRepresentation )
-    //--------------------------------------------------------------------
+    
     DefaultEnumRepresentation::DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const Type& _rType, sal_Int32 _nPropertyId )
         :m_refCount( 0 )
         ,m_rMetaData( _rInfo )
@@ -589,19 +589,19 @@ namespace pcr
         DBG_CTOR( DefaultEnumRepresentation, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     DefaultEnumRepresentation::~DefaultEnumRepresentation()
     {
         DBG_DTOR( DefaultEnumRepresentation, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     ::std::vector< OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
     {
         return m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
     {
         sal_uInt32  nPropertyUIFlags = m_rMetaData.getPropertyUIFlags( m_nPropertyId );
@@ -611,7 +611,7 @@ namespace pcr
         {
             sal_Int32 nPos = pos - aEnumStrings.begin();
             if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
-                // enum value starting with 1
+                
                 ++nPos;
 
             switch ( m_aType.getTypeClass() )
@@ -644,7 +644,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
     {
         OUString sReturn;
@@ -653,7 +653,7 @@ namespace pcr
 
         sal_uInt32 nUIFlags = m_rMetaData.getPropertyUIFlags( m_nPropertyId );
         if ( ( nUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
-            // enum value starting with 1
+            
             --nIntValue;
 
         ::std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
@@ -668,13 +668,13 @@ namespace pcr
         return sReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -686,7 +686,7 @@ namespace pcr
     }
 
 //............................................................................
-} // namespace pcr
+} 
 //............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <documentdigitalsignatures.hxx>
@@ -81,9 +81,9 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
                 "DocumentDigitalSignatures::initialize: the second arguments must be a bool",
                 Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 1);
 
-        //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
-        //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily
-        //if initialize was called. Only then m_sODFVersion.getLength() is greater than 0
+        
+        
+        
         if (m_sODFVersion.isEmpty())
             m_sODFVersion = ODFVER_010_TEXT;
     }
@@ -215,7 +215,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
             if ( aSignaturesDialog.SignaturesChanged() )
             {
                 bChanges = sal_True;
-                // If we have a storage and no stream, we are responsible for commit
+                
                 if ( rxStorage.is() && !xSignStream.is() )
                 {
                     uno::Reference< embed::XTransactedObject > xTrans( rxStorage, uno::UNO_QUERY );
@@ -243,7 +243,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
         DBG_ASSERT(false, "Error, no XStorage provided");
         return Sequence<css::security::DocumentSignatureInformation>();
     }
-    // First check for the InputStream, to avoid unnecessary initialization of the security environemnt...
+    
     SignatureStreamHelper aStreamHelper;
     Reference< io::XInputStream > xInputStream = xSignStream;
 
@@ -303,20 +303,20 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-            // Time support again (#i38744#)
+            
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
             Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds );
             rSigInfo.SignatureDate = aDate.GetDate();
             rSigInfo.SignatureTime = aTime.GetTime();
 
-            // Verify certificate
-            //We have patched our version of libxmlsec, so that it does not verify the certificates. This has two
-            //reasons. First we want two separate status for signature and certificate. Second libxmlsec calls
-            //CERT_VerifyCertificate (Solaris, Linux) falsely, so that it always regards the certificate as valid.
-            //On Windows the checking of the certificate path is buggy. It does name matching (issuer, subject name)
-            //to find the parent certificate. It does not take into account that there can be several certificates
-            //with the same subject name.
+            
+            
+            
+            
+            
+            
+            
             if (rSigInfo.Signer.is())
             {
                 try {
@@ -329,8 +329,8 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             }
             else
             {
-                //We should always be able to get the certificates because it is contained in the document,
-                //unless the document is damaged so that signature xml file could not be parsed.
+                
+                
                 rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
             }
 
@@ -355,10 +355,10 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
 void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException)
 {
-    // MT: i45295
-    // SecEnv is only needed to display certificate information from trusted sources.
-    // Macro Security also has some options where no security environment is needed, so raise dialog anyway.
-    // Later I should change the code so the Dialog creates the SecEnv on demand...
+    
+    
+    
+    
 
     Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
 

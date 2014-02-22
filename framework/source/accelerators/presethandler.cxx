@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accelerators/presethandler.hxx>
@@ -49,43 +49,43 @@ static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 namespace framework
 {
 
-//-----------------------------------------------
+
 OUString PresetHandler::PRESET_DEFAULT()
 {
     return OUString("default");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::TARGET_CURRENT()
 {
     return OUString("current");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_MENUBAR()
 {
     return OUString("menubar");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_TOOLBAR()
 {
     return OUString("toolbar");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_ACCELERATOR()
 {
     return OUString("accelerator");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 {
     return OUString("statusbar");
 }
 
-//-----------------------------------------------
+
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_xContext         (xContext                                )
@@ -95,7 +95,7 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentCont
 {
 }
 
-//-----------------------------------------------
+
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_aLanguageTag( rCopy.m_aLanguageTag)
@@ -116,7 +116,7 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_sRelPathUser          = rCopy.m_sRelPathUser;
 }
 
-//-----------------------------------------------
+
 PresetHandler::~PresetHandler()
 {
     m_xWorkingStorageShare.clear();
@@ -143,10 +143,10 @@ PresetHandler::~PresetHandler()
     m_lDocumentStorages.forgetCachedStorages();
 }
 
-//-----------------------------------------------
+
 void PresetHandler::forgetCachedStorages()
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     if (m_eConfigType == E_DOCUMENT)
@@ -159,7 +159,7 @@ void PresetHandler::forgetCachedStorages()
     m_lDocumentStorages.forgetCachedStorages();
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
 namespace {
@@ -192,7 +192,7 @@ void lcl_throwCorruptedUIConfigurationException(
 {
     css::uno::Exception e;
     bool ok = (exception >>= e);
-    OSL_ASSERT(ok); (void) ok; // avoid warnings
+    OSL_ASSERT(ok); (void) ok; 
     throw css::configuration::CorruptedUIConfigurationException(
         lcl_getLocalizedMessage(id),
         css::uno::Reference< css::uno::XInterface >(),
@@ -209,33 +209,33 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (xRoot.is())
         return xRoot;
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xContext );
 
     OUString sShareLayer = xPathSettings->getBasePathShareLayer();
 
-    // "UIConfig" is a "multi path" ... use first part only here!
+    
     sal_Int32 nPos = sShareLayer.indexOf(';');
     if (nPos > 0)
         sShareLayer = sShareLayer.copy(0, nPos);
 
-    // Note: May be an user uses URLs without a final slash! Check it ...
+    
     nPos = sShareLayer.lastIndexOf('/');
     if (nPos != sShareLayer.getLength()-1)
         sShareLayer += "/";
 
     sShareLayer += "soffice.cfg";
     /*
-    // TODO remove me!
-    // Attention: This is temp. workaround ... We create a temp. storage file
-    // based of a sytem directory. This must be used so, till the storage implementation
-    // can work on directories too.
+    
+    
+    
+    
     */
     css::uno::Sequence< css::uno::Any > lArgs(2);
     lArgs[0] <<= sShareLayer;
@@ -260,30 +260,30 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
 {
     css::uno::Reference< css::embed::XStorage > xRoot = m_aSharedStorages->m_lStoragesUser.getRootStorage();
     if (xRoot.is())
         return xRoot;
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xContext );
 
     OUString sUserLayer = xPathSettings->getBasePathUserLayer();
 
-    // Note: May be an user uses URLs without a final slash! Check it ...
+    
     sal_Int32 nPos = sUserLayer.lastIndexOf('/');
     if (nPos != sUserLayer.getLength()-1)
         sUserLayer += "/";
 
-    sUserLayer  += "soffice.cfg"; // storage file
+    sUserLayer  += "soffice.cfg"; 
 
     css::uno::Sequence< css::uno::Any > lArgs(2);
     lArgs[0] <<= sUserLayer;
@@ -308,58 +308,58 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShare()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     return m_xWorkingStorageShare;
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     return m_xWorkingStorageUser;
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageShare;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     return m_aSharedStorages->m_lStoragesShare.getParentStorage(xWorking);
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageUser;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     return m_aSharedStorages->m_lStoragesUser.getParentStorage(xWorking);
 }
 
-//-----------------------------------------------
+
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
                                       const OUString&                             sResource    ,
                                       const OUString&                             sModule      ,
                                       const css::uno::Reference< css::embed::XStorage >& xDocumentRoot,
                                       const LanguageTag&                                 rLanguageTag )
 {
-    // TODO free all current open storages!
+    
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     m_eConfigType   = eConfigType  ;
@@ -368,14 +368,14 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     m_aLanguageTag  = rLanguageTag ;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::embed::XStorage > xShare;
     css::uno::Reference< css::embed::XStorage > xNoLang;
     css::uno::Reference< css::embed::XStorage > xUser;
 
-    // special case for documents
-    // use outside root storage, if we run in E_DOCUMENT mode!
+    
+    
     if (eConfigType == E_DOCUMENT)
     {
         if (!xDocumentRoot.is())
@@ -392,14 +392,14 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         xUser  = getOrCreateRootStorageUser();
     }
 
-    // #...#
+    
     try
     {
 
-    // a) inside share layer we should not create any new structures ... We jave to use
-    //    existing ones only!
-    // b) inside user layer we can (SOFT mode!) but sometimes we should not (HARD mode!)
-    //    create new empty structures. We should preferr using of any existing structure.
+    
+    
+    
+    
     sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
     sal_Int32 eUserMode  = (css::embed::ElementModes::READWRITE                                     );
 
@@ -439,9 +439,9 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_DOCUMENT :
         {
-            // A document does not have a share layer in real.
-            // It has one layer only, and this one should be opened READ_WRITE.
-            // So we open the user layer here only and set the share layer equals to it .-)
+            
+            
+            
 
             sRelPathBuf.append(sResource);
             sRelPathUser  = sRelPathBuf.makeStringAndClear();
@@ -460,25 +460,25 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         break;
     }
 
-    // Non-localized global share
+    
     xNoLang = xShare;
     sRelPathNoLang = sRelPathShare;
 
     if (
-        (rLanguageTag != LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)) && // localized level?
-        (eConfigType != E_DOCUMENT                           )    // no localization in document mode!
+        (rLanguageTag != LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)) && 
+        (eConfigType != E_DOCUMENT                           )    
        )
     {
-        // First try to find the right localized set inside share layer.
-        // Fallbacks are allowed there.
+        
+        
         OUString             aShareLocale( rLanguageTag.getBcp47());
         OUString      sLocalizedSharePath(sRelPathShare);
         sal_Bool             bAllowFallbacks    = sal_True     ;
         xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
 
-        // The try to locate the right sub dir inside user layer ... without using fallbacks!
-        // Normaly the corresponding sub dir should be created matching the specified locale.
-        // Because we allow creation of storages inside user layer by default.
+        
+        
+        
         OUString             aUserLocale( rLanguageTag.getBcp47());
         OUString      sLocalizedUserPath(sRelPathUser);
                              bAllowFallbacks    = sal_False  ;
@@ -488,7 +488,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         sRelPathUser  = sLocalizedUserPath ;
     }
 
-    // read content of level 3 (presets, targets)
+    
           css::uno::Reference< css::container::XNameAccess > xAccess ;
           css::uno::Sequence< OUString >              lNames  ;
     const OUString*                                   pNames  ;
@@ -497,7 +497,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
           OUStringList                                       lPresets;
           OUStringList                                       lTargets;
 
-    // read preset names of share layer
+    
     xAccess = css::uno::Reference< css::container::XNameAccess >(xShare, css::uno::UNO_QUERY);
     if (xAccess.is())
     {
@@ -515,7 +515,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         }
     }
 
-    // read preset names of user layer
+    
     xAccess = css::uno::Reference< css::container::XNameAccess >(xUser, css::uno::UNO_QUERY);
     if (xAccess.is())
     {
@@ -533,7 +533,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         }
     }
 
-    // SAFE -> ----------------------------------
+    
     aWriteLock.lock();
 
     m_xWorkingStorageShare = xShare  ;
@@ -546,7 +546,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     m_sRelPathUser         = sRelPathUser;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     }
     catch(const css::uno::Exception&)
@@ -557,22 +557,22 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 }
 
-//-----------------------------------------------
+
 void PresetHandler::copyPresetToTarget(const OUString& sPreset,
                                        const OUString& sTarget)
 {
-    // dont check our preset list, if element exists
-    // We try to open it and forward all errors to the user!
+    
+    
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorkingShare = m_xWorkingStorageShare;
     css::uno::Reference< css::embed::XStorage > xWorkingNoLang= m_xWorkingStorageNoLang;
     css::uno::Reference< css::embed::XStorage > xWorkingUser  = m_xWorkingStorageUser ;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // e.g. module without any config data ?!
+    
     if (
         (!xWorkingShare.is()) ||
         (!xWorkingUser.is() )
@@ -587,52 +587,52 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     OUString sTargetFile(sTarget);
     sTargetFile += ".xml";
 
-    // remove existing elements before you try to copy the preset to that location ...
-    // Otherwise w will get an ElementExistException inside copyElementTo()!
+    
+    
     css::uno::Reference< css::container::XNameAccess > xCheckingUser(xWorkingUser, css::uno::UNO_QUERY_THROW);
     if (xCheckingUser->hasByName(sTargetFile))
         xWorkingUser->removeElement(sTargetFile);
 
     xWorkingShare->copyElementTo(sPresetFile, xWorkingUser, sTargetFile);
 
-    // If our storages work in transacted mode, we have
-    // to commit all changes from bottom to top!
+    
+    
     commitUserChanges();
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset,
                                                                   sal_Bool bUseNoLangGlobal)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xFolder = bUseNoLangGlobal? m_xWorkingStorageNoLang: m_xWorkingStorageShare;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // e.g. module without any config data ?!
+    
     if (!xFolder.is())
        return css::uno::Reference< css::io::XStream >();
 
     OUString sFile(sPreset);
     sFile += ".xml";
 
-    // inform user about errors (use original exceptions!)
+    
     css::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
     return xStream;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget         ,
                                                                         sal_Bool         bCreateIfMissing)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xFolder = m_xWorkingStorageUser;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // e.g. module without any config data ?!
+    
     if (!xFolder.is())
        return css::uno::Reference< css::io::XStream >();
 
@@ -643,7 +643,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
     if (!bCreateIfMissing)
         nOpenMode |= css::embed::ElementModes::NOCREATE;
 
-    // try it in read/write mode first and ignore errors.
+    
     css::uno::Reference< css::io::XStream > xStream;
     try
     {
@@ -655,25 +655,25 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
     catch(const css::uno::Exception&)
         { xStream.clear(); }
 
-    // try it readonly if it failed before.
-    // inform user about errors (use original exceptions!)
+    
+    
     nOpenMode &= ~css::embed::ElementModes::WRITE;
     xStream    = xFolder->openStreamElement(sFile, nOpenMode);
 
     return xStream;
 }
 
-//-----------------------------------------------
+
 void PresetHandler::commitUserChanges()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageUser;
     EConfigType                                 eCfgType = m_eConfigType;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // e.g. module without any config data ?!
+    
     if (!xWorking.is())
        return;
 
@@ -700,15 +700,15 @@ void PresetHandler::commitUserChanges()
     }
 }
 
-//-----------------------------------------------
+
 void PresetHandler::addStorageListener(IStorageListener* pListener)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
-    OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
+    OUString sRelPath = m_sRelPathUser; 
     EConfigType     eCfgType = m_eConfigType;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     if (sRelPath.isEmpty())
         return;
@@ -730,15 +730,15 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
     }
 }
 
-//-----------------------------------------------
+
 void PresetHandler::removeStorageListener(IStorageListener* pListener)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
-    OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
+    OUString sRelPath = m_sRelPathUser; 
     EConfigType     eCfgType = m_eConfigType;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     if (sRelPath.isEmpty())
         return;
@@ -760,7 +760,7 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
     }
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                              sal_Int32        eMode ,
                                                                                              sal_Bool         bShare)
@@ -780,7 +780,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return xPath;
 }
 
-//-----------------------------------------------
+
 ::std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
         const ::std::vector< OUString >& lLocalizedValues,
         OUString& rLanguageTag,
@@ -790,8 +790,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     if (bAllowFallbacks)
     {
         pFound = LanguageTag::getFallback(lLocalizedValues, rLanguageTag);
-        // if we found a valid locale ... take it over to our in/out parameter
-        // rLanguageTag
+        
+        
         if (pFound != lLocalizedValues.end())
         {
             rLanguageTag = *pFound;
@@ -811,7 +811,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return pFound;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
         OUString&      sPath         ,
         sal_Int32             eMode         ,
@@ -823,16 +823,16 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     ::std::vector< OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
     ::std::vector< OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, rLanguageTag, bAllowFallback);
 
-    // no fallback ... creation not allowed => no storage
+    
     if (
         (pLocaleFolder == lSubFolders.end()                                                ) &&
         ((eMode & css::embed::ElementModes::NOCREATE) == css::embed::ElementModes::NOCREATE)
        )
         return css::uno::Reference< css::embed::XStorage >();
 
-    // it doesn't matter, if there is a locale fallback or not
-    // If creation of storages is allowed, we do it anyway.
-    // Otherwhise we have no acc config at all, which can make other trouble.
+    
+    
+    
     OUString sLocalizedPath;
     sLocalizedPath  = sPath;
     sLocalizedPath += "/";
@@ -851,7 +851,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return xLocalePath;
 }
 
-//-----------------------------------------------
+
 ::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
 {
     css::uno::Reference< css::container::XNameAccess > xAccess(xFolder, css::uno::UNO_QUERY);
@@ -880,7 +880,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return lSubFolders;
 }
 
-//-----------------------------------------------
-} // namespace framework
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

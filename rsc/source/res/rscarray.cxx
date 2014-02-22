@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -135,7 +135,7 @@ void RscArray::Destroy( const RSCINST & rInst )
 
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
 
-    //Baum rekursiv loeschen
+    
     ::Destroy( pClassData->pNode );
 }
 
@@ -153,7 +153,7 @@ ERRTYPE RscArray::GetValueEle( const RSCINST & rInst,
 
     Atom  nId;
     if( !pTypeClass->GetValueConst( sal_uInt32(lValue), &nId ) )
-    { // nicht gefunden
+    { 
         return ERR_ARRAY_INVALIDINDEX;
     }
 
@@ -188,7 +188,7 @@ ERRTYPE RscArray::GetArrayEle( const RSCINST & rInst,
 {
     sal_Int32  lValue;
     if( !pTypeClass->GetConstValue( nId, &lValue ) )
-    { // nicht gefunden
+    { 
         return ERR_ARRAY_INVALIDINDEX;
     }
 
@@ -310,7 +310,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
 
     if( pTC->IsSrsDefault() )
-    { // nur einen Wert schreiben
+    { 
         RscInstNode *   pNode = NULL;
         if( pClassData->pNode )
         {
@@ -451,7 +451,7 @@ ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                       RscTypCont * pTC, const RscId & aId,
                                       sal_uInt32 nDeep, bool bExtra )
 {
-    // Eigenen Typ schreiben
+    
     return GetSuperClass()->WriteRcHeader( rInst, aMem, pTC, aId,
                                            nDeep, bExtra );
 }

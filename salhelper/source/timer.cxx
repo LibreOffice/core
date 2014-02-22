@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <salhelper/timer.hxx>
 
@@ -32,51 +32,51 @@ class salhelper::TimerManager : public osl::Thread
 
 public:
 
-    ///
+    
     TimerManager();
 
-    ///
+    
     ~TimerManager();
 
-    /// register timer
+    
     bool SAL_CALL registerTimer(salhelper::Timer* pTimer);
 
-    /// unregister timer
+    
     bool SAL_CALL unregisterTimer(salhelper::Timer* pTimer);
 
-    /// lookup timer
+    
     bool SAL_CALL lookupTimer(const salhelper::Timer* pTimer);
 
-    /// retrieves the "Singleton" TimerManager Instance
+    
     static TimerManager* SAL_CALL getTimerManager();
 
 
 protected:
 
-    /// worker-function of thread
+    
     virtual void SAL_CALL run();
 
-    // Checking and triggering of a timer event
+    
     void SAL_CALL checkForTimeout();
 
-    // cleanup Method
+    
     virtual void SAL_CALL onTerminated();
 
-    // sorted-queue data
+    
     salhelper::Timer*       m_pHead;
-    // List Protection
+    
     osl::Mutex                  m_Lock;
-    // Signal the insertion of a timer
+    
     osl::Condition              m_notEmpty;
 
-    // "Singleton Pattern"
+    
     static salhelper::TimerManager* m_pManager;
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
-// Timer class
+
 //
 
 Timer::Timer()
@@ -232,13 +232,13 @@ TTimeValue Timer::getRemainingTime() const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
-// Timer manager
+
 //
 namespace
 {
-    // Synchronize access to TimerManager
+    
     struct theTimerManagerMutex : public rtl::Static< osl::Mutex, theTimerManagerMutex> {};
 }
 
@@ -256,7 +256,7 @@ TimerManager::TimerManager()
 
     m_notEmpty.reset();
 
-    // start thread
+    
     create();
 }
 
@@ -270,7 +270,7 @@ TimerManager::~TimerManager()
 
 void TimerManager::onTerminated()
 {
-    delete this; // mfe: AAARRRGGGHHH!!!
+    delete this; 
 }
 
 TimerManager* TimerManager::getTimerManager()
@@ -294,30 +294,30 @@ bool TimerManager::registerTimer(Timer* pTimer)
 
     osl::MutexGuard Guard(m_Lock);
 
-    // try to find one with equal or lower remaining time.
+    
     Timer** ppIter = &m_pHead;
 
     while (*ppIter)
     {
         if (pTimer->expiresBefore(*ppIter))
         {
-            // next element has higher remaining time,
-            // => insert new timer before
+            
+            
             break;
         }
         ppIter= &((*ppIter)->m_pNext);
     }
 
-    // next element has higher remaining time,
-    // => insert new timer before
+    
+    
     pTimer->m_pNext= *ppIter;
     *ppIter = pTimer;
 
 
     if (pTimer == m_pHead)
     {
-        // it was inserted as new head
-        // signal it to TimerManager Thread
+        
+        
         m_notEmpty.set();
     }
 
@@ -333,7 +333,7 @@ bool TimerManager::unregisterTimer(Timer* pTimer)
         return false;
     }
 
-    // lock access
+    
     osl::MutexGuard Guard(m_Lock);
 
     Timer** ppIter = &m_pHead;
@@ -342,7 +342,7 @@ bool TimerManager::unregisterTimer(Timer* pTimer)
     {
         if (pTimer == (*ppIter))
         {
-            // remove timer from list
+            
             *ppIter = (*ppIter)->m_pNext;
             return true;
         }
@@ -361,10 +361,10 @@ bool TimerManager::lookupTimer(const Timer* pTimer)
         return false;
     }
 
-    // lock access
+    
     osl::MutexGuard Guard(m_Lock);
 
-    // check the list
+    
     for (Timer* pIter = m_pHead; pIter != 0; pIter= pIter->m_pNext)
     {
         if (pIter == pTimer)
@@ -391,7 +391,7 @@ void TimerManager::checkForTimeout()
 
     if (pTimer->isExpired())
     {
-        // remove expired timer
+        
         m_pHead = pTimer->m_pNext;
 
         pTimer->acquire();
@@ -400,7 +400,7 @@ void TimerManager::checkForTimeout()
 
         pTimer->onShot();
 
-        // restart timer if specified
+        
         if ( ! pTimer->m_aRepeatDelta.isEmpty() )
         {
             TTimeValue Now;
@@ -461,17 +461,17 @@ void TimerManager::run()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Timer manager cleanup
+
 //
 
-// jbu:
-// The timer manager cleanup has been removed (no thread is killed anymore).
-// So the thread leaks.
-// This will result in a GPF in case the salhelper-library gets unloaded before
-// process termination.
-// -> TODO : rewrite this file, so that the timerManager thread gets destroyed,
-//           when there are no timers anymore !
+//
+
+
+
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

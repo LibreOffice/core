@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <redline.hxx>
@@ -49,12 +49,12 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent)
     pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
 
     pImplDlg->Initialize(GetExtraData());
-    pImplDlg->Activate();   // for data's initialisation
+    pImplDlg->Activate();   
 }
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(sal_False);   // refuse everything remaining
+    AcceptAll(sal_False);   
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
@@ -71,7 +71,7 @@ void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(sal_False);    // turn off all filters
+        pFilterTP->CheckDate(sal_False);    
         pFilterTP->CheckAuthor(sal_False);
         pFilterTP->CheckRange(sal_False);
         pFilterTP->CheckAction(sal_False);

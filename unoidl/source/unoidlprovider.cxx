@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -31,7 +31,7 @@ namespace unoidl { namespace detail {
 
 namespace {
 
-// sizeof (Memory16) == 2
+
 struct Memory16 {
     unsigned char byte[2];
 
@@ -41,7 +41,7 @@ struct Memory16 {
     }
 };
 
-// sizeof (Memory32) == 4
+
 struct Memory32 {
     unsigned char byte[4];
 
@@ -55,7 +55,7 @@ struct Memory32 {
     float getIso60599Binary32() const {
         union {
             unsigned char buf[4];
-            float f; // assuming float is ISO 60599 binary32
+            float f; 
         } sa;
 #if defined OSL_LITENDIAN
         sa.buf[0] = byte[0];
@@ -72,7 +72,7 @@ struct Memory32 {
     }
 };
 
-// sizeof (Memory64) == 8
+
 struct Memory64 {
     unsigned char byte[8];
 
@@ -90,7 +90,7 @@ struct Memory64 {
     double getIso60599Binary64() const {
         union {
             unsigned char buf[8];
-            double d; // assuming double is ISO 60599 binary64
+            double d; 
         } sa;
 #if defined OSL_LITENDIAN
         sa.buf[0] = byte[0];
@@ -358,7 +358,7 @@ OUString MappedFile::readIdxString(
     return name;
 }
 
-// sizeof (MapEntry) == 8
+
 struct MapEntry {
     Memory32 name;
     Memory32 data;
@@ -375,7 +375,7 @@ Compare compare(
     assert(file.is());
     assert(entry != 0);
     sal_uInt32 off = entry->name.getUnsigned32();
-    if (off > file->size - 1) { // at least a trailing NUL
+    if (off > file->size - 1) { 
         throw FileFormatException(
             file->uri, "UNOIDL format: string offset too large");
     }
@@ -389,8 +389,8 @@ Compare compare(
         if (c1 < c2) {
             return COMPARE_LESS;
         } else if (c1 > c2 || c2 == 0) {
-            // ...the "|| c2 == 0" is for the odd case where name erroneously
-            // contains NUL characters
+            
+            
             return COMPARE_GREATER;
         }
     }
@@ -423,7 +423,7 @@ sal_uInt32 findInMap(
     case COMPARE_GREATER:
         return findInMap(
             file, p + 1, mapSize - n - 1, name, nameOffset, nameLength);
-    default: // COMPARE_EQUAL
+    default: 
         break;
     }
     sal_uInt32 off = mapBegin[n].data.getUnsigned32();
@@ -463,7 +463,7 @@ ConstantValue readConstant(
         *annotated = (v & 0x80) != 0;
     }
     switch (type) {
-    case 0: // BOOLEAN
+    case 0: 
         v = file->read8(offset + 1);
         if (newOffset != 0) {
             *newOffset = offset + 2;
@@ -479,58 +479,58 @@ ConstantValue readConstant(
                 ("UNOIDL format: bad boolean constant value "
                  + OUString::number(v)));
         }
-    case 1: // BYTE
+    case 1: 
         if (newOffset != 0) {
             *newOffset = offset + 2;
         }
         return ConstantValue(static_cast< sal_Int8 >(file->read8(offset + 1)));
-            //TODO: implementation-defined behavior of conversion from sal_uInt8
-            // to sal_Int8 relies on two's complement representation
-    case 2: // SHORT
+            
+            
+    case 2: 
         if (newOffset != 0) {
             *newOffset = offset + 3;
         }
         return ConstantValue(
             static_cast< sal_Int16 >(file->read16(offset + 1)));
-            //TODO: implementation-defined behavior of conversion from
-            // sal_uInt16 to sal_Int16 relies on two's complement representation
-    case 3: // UNSIGNED SHORT
+            
+            
+    case 3: 
         if (newOffset != 0) {
             *newOffset = offset + 3;
         }
         return ConstantValue(file->read16(offset + 1));
-    case 4: // LONG
+    case 4: 
         if (newOffset != 0) {
             *newOffset = offset + 5;
         }
         return ConstantValue(
             static_cast< sal_Int32 >(file->read32(offset + 1)));
-            //TODO: implementation-defined behavior of conversion from
-            // sal_uInt32 to sal_Int32 relies on two's complement representation
-    case 5: // UNSIGNED LONG
+            
+            
+    case 5: 
         if (newOffset != 0) {
             *newOffset = offset + 5;
         }
         return ConstantValue(file->read32(offset + 1));
-    case 6: // HYPER
+    case 6: 
         if (newOffset != 0) {
             *newOffset = offset + 9;
         }
         return ConstantValue(
             static_cast< sal_Int64 >(file->read64(offset + 1)));
-            //TODO: implementation-defined behavior of conversion from
-            // sal_uInt64 to sal_Int64 relies on two's complement representation
-    case 7: // UNSIGNED HYPER
+            
+            
+    case 7: 
         if (newOffset != 0) {
             *newOffset = offset + 9;
         }
         return ConstantValue(file->read64(offset + 1));
-    case 8: // FLOAT
+    case 8: 
         if (newOffset != 0) {
             *newOffset = offset + 5;
         }
         return ConstantValue(file->readIso60599Binary32(offset + 1));
-    case 9: // DOUBLE
+    case 9: 
         if (newOffset != 0) {
             *newOffset = offset + 9;
         }
@@ -617,7 +617,7 @@ rtl::Reference< Entity > readEntity(
     bool annotated = (v & 0x40) != 0;
     bool flag = (v & 0x20) != 0;
     switch (type) {
-    case 0: // module
+    case 0: 
         {
             if (v != 0) {
                 throw FileFormatException(
@@ -630,14 +630,14 @@ rtl::Reference< Entity > readEntity(
                 throw FileFormatException(
                     file->uri, "UNOIDL format: too many items in module");
             }
-            if (offset + 5 + 8 * n > file->size) { //TODO: overflow
+            if (offset + 5 + 8 * n > file->size) { 
                 throw FileFormatException(
                     file->uri,
                     "UNOIDL format: module map offset + size too large");
             }
             return new UnoidlModuleEntity(file, offset + 5, n);
         }
-    case 1: // enum type
+    case 1: 
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
@@ -650,9 +650,9 @@ rtl::Reference< Entity > readEntity(
                 OUString memName(file->readIdxName(&offset));
                 sal_Int32 memValue = static_cast< sal_Int32 >(
                     file->read32(offset));
-                    //TODO: implementation-defined behavior of conversion from
-                    // sal_uInt32 to sal_Int32 relies on two's complement
-                    // representation
+                    
+                    
+                    
                 offset += 4;
                 mems.push_back(
                     EnumTypeEntity::Member(
@@ -662,8 +662,8 @@ rtl::Reference< Entity > readEntity(
             return new EnumTypeEntity(
                 published, mems, readAnnotations(annotated, file, offset));
         }
-    case 2: // plain struct type without base
-    case 2 | 0x20: // plain struct type with base
+    case 2: 
+    case 2 | 0x20: 
         {
             ++offset;
             OUString base;
@@ -697,7 +697,7 @@ rtl::Reference< Entity > readEntity(
                 published, base, mems,
                 readAnnotations(annotated, file, offset));
         }
-    case 3: // polymorphic struct type template
+    case 3: 
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
@@ -741,8 +741,8 @@ rtl::Reference< Entity > readEntity(
                 published, params, mems,
                 readAnnotations(annotated, file, offset));
         }
-    case 4: // exception type without base
-    case 4 | 0x20: // exception type with base
+    case 4: 
+    case 4 | 0x20: 
         {
             ++offset;
             OUString base;
@@ -775,7 +775,7 @@ rtl::Reference< Entity > readEntity(
                 published, base, mems,
                 readAnnotations(annotated, file, offset));
         }
-    case 5: // interface type
+    case 5: 
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
@@ -935,14 +935,14 @@ rtl::Reference< Entity > readEntity(
                 published, mandBases, optBases, attrs, meths,
                 readAnnotations(annotated, file, offset));
         }
-    case 6: // typedef
+    case 6: 
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
             return new TypedefEntity(
                 published, base, readAnnotations(annotated, file, offset));
         }
-    case 7: // constant group
+    case 7: 
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
@@ -950,7 +950,7 @@ rtl::Reference< Entity > readEntity(
                     file->uri,
                     "UNOIDL format: too many constants in constant group");
             }
-            if (offset + 5 + 8 * n > file->size) { //TODO: overflow
+            if (offset + 5 + 8 * n > file->size) { 
                 throw FileFormatException(
                     file->uri,
                     ("UNOIDL format: constant group map offset + size too"
@@ -972,8 +972,8 @@ rtl::Reference< Entity > readEntity(
                 published, mems,
                 readAnnotations(annotated, file, offset + 5 + 8 * n));
         }
-    case 8: // single-interface--based service without default constructor
-    case 8 | 0x20: // single-interface--based service with default constructor
+    case 8: 
+    case 8 | 0x20: 
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
@@ -1053,7 +1053,7 @@ rtl::Reference< Entity > readEntity(
                 published, base, ctors,
                 readAnnotations(annotated, file, offset));
         }
-    case 9: // accumulation-based service
+    case 9: 
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
@@ -1133,7 +1133,7 @@ rtl::Reference< Entity > readEntity(
                 offset += 2;
                 OUString propName(file->readIdxName(&offset));
                 OUString propType(file->readIdxName(&offset));
-                if (attrs > 0x01FF) { // see css.beans.PropertyAttribute
+                if (attrs > 0x01FF) { 
                     throw FileFormatException(
                         file->uri,
                         ("UNOIDL format: bad mode " + OUString::number(v)
@@ -1153,14 +1153,14 @@ rtl::Reference< Entity > readEntity(
                 published, mandServs, optServs, mandIfcs, optIfcs, props,
                 readAnnotations(annotated, file, offset));
         }
-    case 10: // interface-based singleton
+    case 10: 
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
             return new InterfaceBasedSingletonEntity(
                 published, base, readAnnotations(annotated, file, offset));
         }
-    case 11: // service-based singleton
+    case 11: 
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
@@ -1186,7 +1186,7 @@ UnoidlProvider::UnoidlProvider(OUString const & uri): file_(new MappedFile(uri))
     }
     sal_uInt32 off = file_->read32(8);
     mapSize_ = file_->read32(12);
-    if (off + 8 * mapSize_ > file_->size) { //TODO: overflow
+    if (off + 8 * mapSize_ > file_->size) { 
         throw FileFormatException(
             file_->uri, "UNOIDL format: root map offset + size too large");
     }
@@ -1217,23 +1217,23 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
         }
         if (cgroup) {
             return rtl::Reference< Entity >();
-                //TODO: throw an exception instead here, where the segments of a
-                // constant's name are a prefix of the requested name's
-                // segments?
+                
+                
+                
         }
         int v = file_->read8(off);
-        if (v != 0) { // module
-            if ((v & 0x3F) == 7) { // constant group
+        if (v != 0) { 
+            if ((v & 0x3F) == 7) { 
                 cgroup = true;
             } else {
                 return rtl::Reference< Entity >();
-                    //TODO: throw an exception instead here, where the segments
-                    // of a non-module, non-constant-group entity's name are a
-                    // prefix of the requested name's segments?
+                    
+                    
+                    
             }
         }
         mapSize = file_->read32(off + 1);
-        if (8 * mapSize > file_->size - off - 5) { //TODO: overflow
+        if (8 * mapSize > file_->size - off - 5) { 
             throw FileFormatException(
                 file_->uri, "UNOIDL format: map offset + size too large");
         }

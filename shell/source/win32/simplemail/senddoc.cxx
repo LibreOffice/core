@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -42,7 +42,7 @@ typedef StringList_t::const_iterator StringListIterator_t;
 typedef std::vector<MapiRecipDesc> MapiRecipientList_t;
 typedef std::vector<MapiFileDesc> MapiAttachmentList_t;
 
-const int LEN_SMTP_PREFIX = 5; // "SMTP:"
+const int LEN_SMTP_PREFIX = 5; 
 
 namespace /* private */
 {
@@ -96,19 +96,19 @@ void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 {
     OSL_ASSERT(pMapiRecipientList->empty());
 
-    // add to recipients
+    
     StringListIterator_t iter = gTo.begin();
     StringListIterator_t iter_end = gTo.end();
     for (; iter != iter_end; ++iter)
         addRecipient(MAPI_TO, *iter, pMapiRecipientList);
 
-    // add cc recipients
+    
     iter = gCc.begin();
     iter_end = gCc.end();
     for (; iter != iter_end; ++iter)
         addRecipient(MAPI_CC, *iter, pMapiRecipientList);
 
-    // add bcc recipients
+    
     iter = gBcc.begin();
     iter_end = gBcc.end();
     for (; iter != iter_end; ++iter)
@@ -214,7 +214,7 @@ void initParameter(int argc, char* argv[])
         {
             gMapiFlags |= MAPI_LOGON_UI;
         }
-        else if ((i+1) < argc) // is the value of a parameter available too?
+        else if ((i+1) < argc) 
         {
             if (_tcsicmp(argv[i], TEXT("--to")) == 0)
                 gTo.push_back(prefixEmailAddress(argv[i+1]));
@@ -258,11 +258,11 @@ int main(int argc, char* argv[])
     {
         CSimpleMapi mapi;
 
-        // we have to set the flag MAPI_NEW_SESSION,
-        // because in the case Outlook xxx (not Outlook Express!)
-        // is installed as Exchange and Mail Client a Profile
-        // selection dialog must appear because we specify no
-        // profile name, so the user has to specify a profile
+        
+        
+        
+        
+        
         FLAGS flFlag = MAPI_NEW_SESSION | MAPI_LOGON_UI;
         LHANDLE hSession;
         ulRet = mapi.MAPILogon(0, NULL, NULL, flFlag, 0L, &hSession);
@@ -281,16 +281,16 @@ int main(int argc, char* argv[])
 
             ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);
 
-            // There is no point in treating an aborted mail sending
-            // dialog as an error to be returned as our exit
-            // status. If the user decided to abort sending a document
-            // as mail, OK, that is not an error.
+            
+            
+            
+            
 
-            // Also, it seems that GroupWise makes MAPISendMail()
-            // return MAPI_E_USER_ABORT even if the mail sending
-            // dialog was not aborted by the user, and the mail was
-            // actually sent just fine. See bnc#660241 (visible to
-            // Novell people only, sorry).
+            
+            
+            
+            
+            
 
             if (ulRet == MAPI_E_USER_ABORT)
                 ulRet = SUCCESS_SUCCESS;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,38 +14,38 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "markarr.hxx"
 #include "global.hxx"
 #include "address.hxx"
 
-// STATIC DATA -----------------------------------------------------------
 
-//------------------------------------------------------------------------
+
+
 
 ScMarkArray::ScMarkArray() :
     nCount( 0 ),
     nLimit( 0 ),
     pData( NULL )
 {
-    // special case "no marks" with pData = NULL
+    
 }
 
-//------------------------------------------------------------------------
+
 
 ScMarkArray::~ScMarkArray()
 {
     delete[] pData;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScMarkArray::Reset( bool bMarked )
 {
-    // always create pData here
-    // (or have separate method to ensure pData)
+    
+    
 
     delete[] pData;
 
@@ -55,7 +55,7 @@ void ScMarkArray::Reset( bool bMarked )
     pData[0].bMarked = bMarked;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
@@ -103,7 +103,7 @@ bool ScMarkArray::GetMark( SCROW nRow ) const
 
 }
 
-//------------------------------------------------------------------------
+
 
 void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
@@ -116,7 +116,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
         else
         {
             if (!pData)
-                Reset(false);   // create pData for further processing - could use special case handling!
+                Reset(false);   
 
             SCSIZE nNeeded = nCount + 2;
             if ( nLimit < nNeeded )
@@ -130,13 +130,13 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 pData = pNewData;
             }
 
-            SCSIZE ni;          // number of entries in beginning
-            SCSIZE nInsert;     // insert position (MAXROW+1 := no insert)
+            SCSIZE ni;          
+            SCSIZE nInsert;     
             sal_Bool bCombined = false;
             sal_Bool bSplit = false;
             if ( nStartRow > 0 )
             {
-                // skip beginning
+                
                 SCSIZE nIndex;
                 Search( nStartRow, nIndex );
                 ni = nIndex;
@@ -145,8 +145,8 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 if ( pData[ni].bMarked != bMarked )
                 {
                     if ( ni == 0 || (pData[ni-1].nRow < nStartRow - 1) )
-                    {   // may be a split or a simple insert or just a shrink,
-                        // row adjustment is done further down
+                    {   
+                        
                         if ( pData[ni].nRow > nEndRow )
                             bSplit = sal_True;
                         ni++;
@@ -156,7 +156,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                         nInsert = ni;
                 }
                 if ( ni > 0 && pData[ni-1].bMarked == bMarked )
-                {   // combine
+                {   
                     pData[ni-1].nRow = nEndRow;
                     nInsert = MAXROWCOUNT;
                     bCombined = sal_True;
@@ -168,47 +168,47 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 ni = 0;
         }
 
-            SCSIZE nj = ni;     // stop position of range to replace
+            SCSIZE nj = ni;     
             while ( nj < nCount && pData[nj].nRow <= nEndRow )
                 nj++;
             if ( !bSplit )
             {
                 if ( nj < nCount && pData[nj].bMarked == bMarked )
-                {   // combine
+                {   
                     if ( ni > 0 )
                     {
                         if ( pData[ni-1].bMarked == bMarked )
-                        {   // adjacent entries
+                        {   
                             pData[ni-1].nRow = pData[nj].nRow;
                             nj++;
                         }
                         else if ( ni == nInsert )
-                            pData[ni-1].nRow = nStartRow - 1;   // shrink
+                            pData[ni-1].nRow = nStartRow - 1;   
                     }
                     nInsert = MAXROWCOUNT;
                     bCombined = sal_True;
                 }
                 else if ( ni > 0 && ni == nInsert )
-                    pData[ni-1].nRow = nStartRow - 1;   // shrink
+                    pData[ni-1].nRow = nStartRow - 1;   
             }
             if ( ni < nj )
-            {   // remove middle entries
+            {   
                 if ( !bCombined )
-                {   // replace one entry
+                {   
                     pData[ni].nRow = nEndRow;
                     pData[ni].bMarked = bMarked;
                     ni++;
                     nInsert = MAXROWCOUNT;
                 }
                 if ( ni < nj )
-                {   // remove entries
+                {   
                     memmove( pData + ni, pData + nj, (nCount - nj) * sizeof(ScMarkEntry) );
                     nCount -= nj - ni;
                 }
             }
 
             if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
-            {   // insert or append new entry
+            {   
                 if ( nInsert <= nCount )
                 {
                     if ( !bSplit )
@@ -302,7 +302,7 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
 SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, bool bUp ) const
 {
     if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
+        const_cast<ScMarkArray*>(this)->Reset(false);   
 
     SCsROW nRet = nRow;
     if (ValidRow(nRow))
@@ -328,7 +328,7 @@ SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, bool bUp ) const
 SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 {
     if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
+        const_cast<ScMarkArray*>(this)->Reset(false);   
 
     SCROW nRet;
     SCSIZE nIndex;
@@ -348,7 +348,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 }
 
 //
-//  -------------- Iterator ----------------------------------------------
+
 //
 
 ScMarkArrayIter::ScMarkArrayIter( const ScMarkArray* pNewArray ) :

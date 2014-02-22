@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ctype.h>
@@ -26,7 +26,7 @@
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 
-// ImpSvGlobalName ------------------------------------------------------------
+
 
 ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
 {
@@ -45,7 +45,7 @@ bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
     return !memcmp( szData, rObj.szData, sizeof( szData ) );
 }
 
-// SvGlobalName ----------------------------------------------------------------
+
 
 SvGlobalName::SvGlobalName()
 {
@@ -139,7 +139,7 @@ SvStream& WriteSvGlobalName( SvStream& rOStr, const SvGlobalName & rObj )
 
 SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 {
-    rObj.NewImp(); // copy if necessary
+    rObj.NewImp(); 
 
     sal_uInt32 a;
     rStr.ReadUInt32( a );
@@ -200,7 +200,7 @@ SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
 
     if( nOld > nNew )
     {
-        // overflow
+        
         sal_uInt16 Data2;
         memcpy(&Data2, pImp->szData + 4, sizeof(sal_uInt16));
         ++Data2;
@@ -333,8 +333,8 @@ OUString SvGlobalName::GetHexName() const
 
 com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 {
-    // platform independent representation of a "GlobalName"
-    // maybe transported remotely
+    
+    
     com::sun::star::uno::Sequence< sal_Int8 > aResult( 16 );
 
     sal_uInt32 Data1;
@@ -365,7 +365,7 @@ com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 
 SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aSeq )
 {
-    // create SvGlobalName from a platform independent representation
+    
     GUID aResult;
     memset( &aResult, 0, sizeof( aResult ) );
     if ( aSeq.getLength() == 16 )

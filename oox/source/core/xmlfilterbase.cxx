@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/xmlfilterbase.hxx"
@@ -87,27 +87,27 @@ struct NamespaceIds: public rtl::StaticWithInit<
     Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
     {
         static const char* const namespaceURIs[] = {
-            "http://www.w3.org/XML/1998/namespace",
-            "http://schemas.openxmlformats.org/package/2006/relationships",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-            "http://schemas.openxmlformats.org/drawingml/2006/main",
-            "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-            "http://schemas.openxmlformats.org/drawingml/2006/chart",
-            "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
             "urn:schemas-microsoft-com:vml",
             "urn:schemas-microsoft-com:office:office",
             "urn:schemas-microsoft-com:office:word",
             "urn:schemas-microsoft-com:office:excel",
             "urn:schemas-microsoft-com:office:powerpoint",
-            "http://schemas.microsoft.com/office/2006/activeX",
-            "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-            "http://schemas.microsoft.com/office/excel/2006/main",
-            "http://schemas.openxmlformats.org/presentationml/2006/main",
-            "http://schemas.openxmlformats.org/markup-compatibility/2006",
-            "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
-            "http://schemas.microsoft.com/office/drawing/2008/diagram",
-            "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
+            "http:
         };
 
         static const sal_Int32 namespaceIds[] = {
@@ -150,7 +150,7 @@ void registerNamespaces( FastParser& rParser )
         rParser.registerNamespace(ids[i].Second);
 }
 
-} // namespace
+} 
 
 struct XmlFilterBaseImpl
 {
@@ -170,7 +170,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
     maBinSuffix( ".bin" ),
     maVmlSuffix( ".vml" )
 {
-    // register XML namespaces
+    
     registerNamespaces(maFastParser);
 }
 
@@ -186,7 +186,7 @@ XmlFilterBase::~XmlFilterBase()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XmlFilterBase::importDocumentProperties()
 {
@@ -216,7 +216,7 @@ FastParser* XmlFilterBase::createParser() const
 
 OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
-    // importRelations() caches the relations map for subsequence calls
+    
     return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
 }
 
@@ -231,25 +231,25 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
     if( !rxHandler.is() )
         return false;
 
-    // fragment handler must contain path to fragment stream
+    
     OUString aFragmentPath = rxHandler->getFragmentPath();
     OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - missing fragment path" );
     if( aFragmentPath.isEmpty() )
         return false;
 
-    // try to import binary streams (fragment extension must be '.bin')
+    
     if( lclHasSuffix( aFragmentPath, mxImpl->maBinSuffix ) )
     {
         try
         {
-            // try to open the fragment stream (this may fail - do not assert)
+            
             Reference< XInputStream > xInStrm( openInputStream( aFragmentPath ), UNO_SET_THROW );
 
-            // create the record parser
+            
             RecordParser aParser;
             aParser.setFragmentHandler( rxHandler );
 
-            // create the input source and parse the stream
+            
             RecordInputSource aSource;
             aSource.mxInStream.reset( new BinaryXInputStream( xInStrm, true ) );
             aSource.maSystemId = aFragmentPath;
@@ -262,12 +262,12 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         return false;
     }
 
-    // get the XFastDocumentHandler interface from the fragment handler
+    
     Reference< XFastDocumentHandler > xDocHandler( rxHandler.get() );
     if( !xDocHandler.is() )
         return false;
 
-    // try to import XML stream
+    
     try
     {
         /*  Try to open the fragment stream (may fail, do not throw/assert).
@@ -276,7 +276,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             have to preprocess the raw input data. */
         Reference< XInputStream > xInStrm = rxHandler->openFragmentStream();
 
-        // own try/catch block for showing parser failure assertion with fragment path
+        
         if( xInStrm.is() ) try
         {
             rParser.setDocumentHandler(xDocHandler);
@@ -314,28 +314,28 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
 {
     Reference<XDocument> xRet;
 
-    // path to fragment stream valid?
+    
     OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - empty fragment path" );
     if( aFragmentPath.isEmpty() )
         return xRet;
 
-    // try to open the fragment stream (this may fail - do not assert)
+    
     Reference< XInputStream > xInStrm = openInputStream( aFragmentPath );
     if( !xInStrm.is() )
         return xRet;
 
-    // binary streams (fragment extension is '.bin') currently not supported
+    
     sal_Int32 nBinSuffixPos = aFragmentPath.getLength() - mxImpl->maBinSuffix.getLength();
     if( (nBinSuffixPos >= 0) && aFragmentPath.match( mxImpl->maBinSuffix, nBinSuffixPos ) )
         return xRet;
 
-    // try to import XML stream
+    
     try
     {
-        // create the dom parser
+        
         Reference<XDocumentBuilder> xDomBuilder( DocumentBuilder::create( getComponentContext() ) );
 
-        // create DOM from fragment
+        
         xRet = xDomBuilder->parse(xInStrm);
     }
     catch( Exception& )
@@ -352,7 +352,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     if( !xDocHandler.is() )
         return false;
 
-    // try to import XML stream
+    
     try
     {
         rxSerializer->fastSerialize( xDocHandler,
@@ -369,11 +369,11 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
 
 RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )
 {
-    // try to find cached relations
+    
     RelationsRef& rxRelations = mxImpl->maRelationsMap[ rFragmentPath ];
     if( !rxRelations )
     {
-        // import and cache relations
+        
         rxRelations.reset( new Relations( rFragmentPath ) );
         importFragment( new RelationsFragment( *this, rxRelations ) );
     }
@@ -423,7 +423,7 @@ OUString lclAddRelation( const Reference< XRelationshipAccess > xRelations, sal_
     return sId;
 }
 
-} // namespace
+} 
 
 OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget, bool bExternal )
 {
@@ -512,10 +512,10 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< OUString > aIte
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const LanguageTag& rLanguageTag )
 {
-    // dc:language, Dublin Core recommends "such as RFC 4646", which is BCP 47
-    // and obsoleted by RFC 5646, see
-    // http://dublincore.org/documents/dcmi-terms/#terms-language
-    // http://dublincore.org/documents/dcmi-terms/#elements-language
+    
+    
+    
+    
     writeElement( pDoc, nXmlElement, rLanguageTag.getBcp47() );
 }
 
@@ -524,20 +524,20 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
 {
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
-        sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
+        sValue = "http:
     else
-        sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
+        sValue = "http:
 
     rSelf.addRelation( sValue, "docProps/core.xml" );
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
             "docProps/core.xml",
             "application/vnd.openxmlformats-package.core-properties+xml" );
     pCoreProps->startElementNS( XML_cp, XML_coreProperties,
-            FSNS( XML_xmlns, XML_cp ),          "http://schemas.openxmlformats.org/package/2006/metadata/core-properties",
-            FSNS( XML_xmlns, XML_dc ),          "http://purl.org/dc/elements/1.1/",
-            FSNS( XML_xmlns, XML_dcterms ),     "http://purl.org/dc/terms/",
-            FSNS( XML_xmlns, XML_dcmitype ),    "http://purl.org/dc/dcmitype/",
-            FSNS( XML_xmlns, XML_xsi ),         "http://www.w3.org/2001/XMLSchema-instance",
+            FSNS( XML_xmlns, XML_cp ),          "http:
+            FSNS( XML_xmlns, XML_dc ),          "http:
+            FSNS( XML_xmlns, XML_dcterms ),     "http:
+            FSNS( XML_xmlns, XML_dcmitype ),    "http:
+            FSNS( XML_xmlns, XML_xsi ),         "http:
             FSEND );
 
 #ifdef OOXTODO
@@ -570,14 +570,14 @@ static void
 writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
 {
     rSelf.addRelation(
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+            "http:
             "docProps/app.xml" );
     FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
             "docProps/app.xml",
             "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
     pAppProps->startElement( XML_Properties,
-            XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties",
-            FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",
+            XML_xmlns,                  "http:
+            FSNS( XML_xmlns, XML_vt ),  "http:
             FSEND );
 
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
@@ -640,7 +640,7 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
     return *this;
 }
 
-// protected ------------------------------------------------------------------
+
 
 Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
 {
@@ -672,7 +672,7 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
     {
         return FilterBase::implGetOutputStream( rMediaDescriptor );
     }
-    else // We need to encrypt the stream so create a memory stream
+    else 
     {
         Reference< XComponentContext > xContext = getComponentContext();
         return Reference< XStream > (
@@ -717,7 +717,7 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
     return bRet;
 }
 
-// private --------------------------------------------------------------------
+
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
@@ -729,9 +729,9 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
     return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

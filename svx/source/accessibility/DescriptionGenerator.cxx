@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,7 +38,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 
-// Includes for string resources.
+
 #include "accessibility.hrc"
 #include "svx/svdstr.hrc"
 #include <svx/dialmgr.hxx>
@@ -74,14 +74,14 @@ DescriptionGenerator::~DescriptionGenerator (void)
 
 void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
 {
-    // Get the string from the resource for the specified id.
+    
     OUString sPrefix;
     {
         SolarMutexGuard aGuard;
         sPrefix = OUString (SVX_RESSTR (nResourceId));
     }
 
-    // Forward the call with the resulting string.
+    
     Initialize (sPrefix);
 }
 
@@ -160,7 +160,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
         && xState->getPropertyState(sPropertyName)!=beans::PropertyState_DEFAULT_VALUE)
         if (mxSet.is())
         {
-            // Append a separator from previous Properties.
+            
             if ( ! mbIsFirstProperty)
                 msDescription.append(',');
             else
@@ -173,7 +173,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
                 mbIsFirstProperty = false;
             }
 
-            // Delegate to type specific property handling.
+            
             switch (aType)
             {
                 case COLOR:
@@ -349,7 +349,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
             drawing::FillStyle aFillStyle;
             aValue >>= aFillStyle;
 
-            // Get the fill style name from the resource.
+            
             OUString sFillStyleName;
             {
                 SolarMutexGuard aGuard;
@@ -376,7 +376,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
             }
             msDescription.append (sFillStyleName);
 
-            // Append the appropriate properties.
+            
             switch (aFillStyle)
             {
                 case drawing::FillStyle_NONE:
@@ -408,6 +408,6 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
     }
 }
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

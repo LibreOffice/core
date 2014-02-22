@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -95,7 +95,7 @@ void parseXcsFile(
     bool ok = rtl::Reference< ParseManager >(
         new ParseManager(url, new XcsParser(layer, data)))->parse(0);
     assert(ok);
-    (void) ok; // avoid warnings
+    (void) ok; 
 }
 
 void parseXcuFile(
@@ -110,12 +110,12 @@ void parseXcuFile(
             new XcuParser(layer, data, partial, modifications, additions)))->
         parse(0);
     assert(ok);
-    (void) ok; // avoid warnings
+    (void) ok; 
 }
 
 OUString expand(OUString const & str) {
     OUString s(str);
-    rtl::Bootstrap::expandMacros(s); //TODO: detect failure
+    rtl::Bootstrap::expandMacros(s); 
     return s;
 }
 
@@ -137,7 +137,7 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
         return true;
     case Node::KIND_SET:
         return node->getMembers().empty();
-    default: // Node::KIND_PROPERTY, Node::KIND_LOCALIZED_VALUE
+    default: 
         return true;
     }
 }
@@ -176,14 +176,14 @@ Components::WriteThread::WriteThread(
 }
 
 void Components::WriteThread::execute() {
-    TimeValue t = { 1, 0 }; // 1 sec
-    delay_.wait(&t); // must not throw; result_error is harmless and ignored
-    osl::MutexGuard g(*lock_); // must not throw
+    TimeValue t = { 1, 0 }; 
+    delay_.wait(&t); 
+    osl::MutexGuard g(*lock_); 
     try {
         try {
             writeModFile(components_, url_, data_);
         } catch (css::uno::RuntimeException & e) {
-            // Ignore write errors, instead of aborting:
+            
             SAL_WARN(
                 "configmgr",
                 "error writing modifications: \"" << e.Message << '"');
@@ -241,11 +241,11 @@ void Components::initGlobalBroadcaster(
     Modifications const & modifications,
     rtl::Reference< RootAccess > const & exclude, Broadcaster * broadcaster)
 {
-    //TODO: Iterate only over roots w/ listeners:
+    
     for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
         rtl::Reference< RootAccess > root;
         if ((*i)->acquireCounting() > 1) {
-            root.set(*i); // must not throw
+            root.set(*i); 
         }
         (*i)->releaseNondeleting();
         if (root.is()) {
@@ -261,9 +261,9 @@ void Components::initGlobalBroadcaster(
                     }
                     mods = &k->second;
                 }
-                //TODO: If the complete tree of which root is a part is deleted,
-                // or replaced, mods will be null, but some of the listeners
-                // from within root should probably fire nonetheless:
+                
+                
+                
                 if (mods != 0) {
                     root->initBroadcaster(*mods, broadcaster);
                 }
@@ -338,19 +338,19 @@ void Components::insertExtensionXcuFile(
 void Components::removeExtensionXcuFile(
     OUString const & fileUri, Modifications * modifications)
 {
-    //TODO: Ideally, exactly the data coming from the specified xcu file would
-    // be removed.  However, not enough information is recorded in the in-memory
-    // data structures to do so.  So, as a workaround, all those set elements
-    // that were freshly added by the xcu and have afterwards been left
-    // unchanged or have only had their properties changed in the user layer are
-    // removed (and nothing else).  The heuristic to determine
-    // whether a node has been left unchanged is to check the layer ID (as
-    // usual) and additionally to check that the node does not recursively
-    // contain any non-empty sets (multiple extension xcu files are merged into
-    // one layer, so checking layer ID alone is not enough).  Since
-    // item->additions records all additions of set members in textual order,
-    // the latter check works well when iterating through item->additions in
-    // reverse order.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     assert(modifications != 0);
     rtl::Reference< Data::ExtensionXcu > item(
         data_.removeExtensionXcuAdditions(fileUri));
@@ -416,7 +416,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             "bad external value descriptor " + descriptor,
             css::uno::Reference< css::uno::XInterface >());
     }
-    //TODO: Do not make calls with mutex locked:
+    
     OUString name(descriptor.copy(0, i));
     ExternalServices::iterator j(externalServices_.find(name));
     if (j == externalServices_.end()) {
@@ -425,11 +425,11 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             service = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
         } catch (css::uno::RuntimeException &) {
-            // Assuming these exceptions are real errors:
+            
             throw;
         } catch (css::uno::Exception & e) {
-            // Assuming these exceptions indicate that the service is not
-            // installed:
+            
+            
             SAL_WARN(
                 "configmgr",
                 "createInstance(" << name << ") failed with \"" << e.Message
@@ -505,11 +505,11 @@ Components::Components(
         OUString url(conf.copy(c + 1, n - c - 1));
         if ( type == "xcsxcu" ) {
             parseXcsXcuLayer(layer, url);
-            layer += 2; //TODO: overflow
+            layer += 2; 
         } else if ( type == "bundledext" )
         {
             parseXcsXcuIniLayer(layer, url, false);
-            layer += 2; //TODO: overflow
+            layer += 2; 
         } else if ( type == "sharedext" ) {
             if (sharedExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
@@ -518,7 +518,7 @@ Components::Components(
             }
             sharedExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
-            layer += 2; //TODO: overflow
+            layer += 2; 
         } else if ( type == "userext" ) {
             if (userExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
@@ -527,13 +527,13 @@ Components::Components(
             }
             userExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
-            layer += 2; //TODO: overflow
+            layer += 2; 
         } else if ( type == "module" ) {
             parseModuleLayer(layer, url);
-            ++layer; //TODO: overflow
+            ++layer; 
         } else if ( type == "res" ) {
             parseResLayer(layer, url);
-            ++layer; //TODO: overflow
+            ++layer; 
         } else if ( type == "user" ) {
             if (url.isEmpty()) {
                 throw css::uno::RuntimeException(
@@ -587,9 +587,9 @@ void Components::parseFileLeniently(
         (*parseFile)(url, layer, data, partial, modifications, additions);
     } catch (css::container::NoSuchElementException &) {
         throw;
-    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
-        // Ignore invalid XML files, instead of completely preventing OOo from
-        // starting:
+    } catch (css::uno::Exception & e) { 
+        
+        
         SAL_WARN(
             "configmgr",
             "error reading \"" << url << "\": \"" << e.Message << '"');
@@ -608,7 +608,7 @@ void Components::parseFiles(
         if (!recursive) {
             return;
         }
-        // fall through
+        
     default:
         throw css::uno::RuntimeException(
             "cannot open directory " + url,
@@ -633,7 +633,7 @@ void Components::parseFiles(
                 "cannot stat in directory " + url,
                 css::uno::Reference< css::uno::XInterface >());
         }
-        if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
+        if (stat.getFileType() == osl::FileStatus::Directory) { 
             parseFiles(layer, extension, parseFile, stat.getFileURL(), true);
         } else {
             OUString file(stat.getFileName());
@@ -712,7 +712,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
                 "cannot stat in directory " + url,
                 css::uno::Reference< css::uno::XInterface >());
         }
-        if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
+        if (stat.getFileType() != osl::FileStatus::Directory) { 
             OUString file(stat.getFileName());
             OUString name;
             if (file.endsWith(".xcd", &name)) {
@@ -763,9 +763,9 @@ void Components::parseXcsXcuLayer(int layer, OUString const & url) {
 void Components::parseXcsXcuIniLayer(
     int layer, OUString const & url, bool recordAdditions)
 {
-    // Check if ini file exists (otherwise .override would still read global
-    // SCHEMA/DATA variables, which could interfere with unrelated environment
-    // variables):
+    
+    
+    
     if (rtl::Bootstrap(url).getHandle() != 0) {
         OUStringBuffer prefix("${.override:");
         for (sal_Int32 i = 0; i != url.getLength(); ++i) {
@@ -775,7 +775,7 @@ void Components::parseXcsXcuIniLayer(
             case ':':
             case '\\':
                 prefix.append('\\');
-                // fall through
+                
             default:
                 prefix.append(c);
             }
@@ -810,9 +810,9 @@ void Components::parseModificationLayer(OUString const & url) {
     } catch (css::container::NoSuchElementException &) {
         SAL_INFO(
             "configmgr", "user registrymodifications.xcu does not (yet) exist");
-        // Migrate old user layer data (can be removed once migration is no
-        // longer relevant, probably OOo 4; also see hack for xsi namespace in
-        // xmlreader::XmlReader::registerNamespaceIri):
+        
+        
+        
         parseFiles(
             Data::NO_LAYER, ".xcu", &parseXcuFile,
             expand(

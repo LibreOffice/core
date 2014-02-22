@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -59,12 +59,12 @@
  ************************************************************************/
 #include "lwpfilter.hxx"
 #include "lwpresource.hxx"
-//for sax stream
+
 #include "xfilter/xfsaxstream.hxx"
-//for file parser
+
 #include "lwp9reader.hxx"
 #include "lwpsvstream.hxx"
-//for container reset
+
 #include "xfilter/xffontfactory.hxx"
 #include "xfilter/xfstylemanager.hxx"
 
@@ -114,7 +114,7 @@ sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     OUString sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        //Note we should attempt to use "InputStream" if it exists first!
+        
         if ( aDescriptor[i].Name == "URL" )
             aDescriptor[i].Value >>= sURL;
     }
@@ -203,10 +203,10 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
         throw (::com::sun::star::uno::RuntimeException)
 {
     OUString   ret;
-    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
-    // there is no parameter that forbids to open as template
+    OUString aTypeName;            
+    
+    
+    
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Int32 nPropertyCount = aDescriptor.getLength();
      for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -230,8 +230,8 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
             uno::Reference< XInputStream> rInputStream;
             aDescriptor[i].Value >>= rInputStream;
             //
-            // TODO TRANSFORM IMPLEMENTATION HERE!!!!!!
-            // and call m_DocumentHandler's SAX mDochods
+            
+            
             //
             if( IsWordproFile(rInputStream) )
             {
@@ -266,7 +266,7 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
                 throw except;
             }
             */
-            //end with .lwp:
+            
             if( IsWordproFile(sURL) )
             {
                 if ( aTypeName == "wordpro_template" )
@@ -318,7 +318,7 @@ using namespace OpenStormBento;
     if (!aWordProData.get())
         return sal_False;
 
-    // decompressing
+    
     Decompression decompress(aWordProData.get(), aDecompressed.get());
     if (0!= decompress.explode())
         return sal_False;
@@ -330,7 +330,7 @@ using namespace OpenStormBento;
     while (sal_uInt32 iRead = pCompressed->Read(buffer, 512))
         aDecompressed->Write(buffer, iRead);
 
-    //transfer ownership of aDecompressed's ptr
+    
     pOutDecompressed = aDecompressed.release();
     return sal_True;
 }
@@ -349,9 +349,9 @@ using namespace OpenStormBento;
     sal_uInt32 nTag;
     pStream->Seek(0x10);
     pStream->ReadUInt32( nTag );
-    if (nTag != 0x3750574c) // "LWP7"
+    if (nTag != 0x3750574c) 
     {
-        // small file, needs decompression
+        
         if (!Decompress(pStream, pDecompressed))
         {
             pLwpSvStream = NULL;
@@ -395,7 +395,7 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandle
 
         if (!pRawLwpSvStream)
         {
-            // nothing returned, fail when uncompressing
+            
             return 1;
         }
 
@@ -403,7 +403,7 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandle
 
         boost::scoped_ptr<IXFStream> pStrm(new XFSaxStream(xHandler));
         Lwp9Reader reader(aLwpSvStream.get(), pStrm.get());
-        //Reset all static objects,because this function may be called many times.
+        
         XFGlobalReset();
         reader.Read();
 

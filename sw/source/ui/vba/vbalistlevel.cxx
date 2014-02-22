@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbalistlevel.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -110,29 +110,29 @@ void SAL_CALL SwVbaListLevel::setFont( const uno::Reference< ::ooo::vba::word::X
 
 OUString SAL_CALL SwVbaListLevel::getLinkedStyle() throw (uno::RuntimeException)
 {
-    // TODO:
+    
     return OUString();
 }
 
 void SAL_CALL SwVbaListLevel::setLinkedStyle( const OUString& /*_linkedstyle*/ ) throw (uno::RuntimeException)
 {
-    // TODO:
+    
 }
 
 OUString SAL_CALL SwVbaListLevel::getNumberFormat() throw (uno::RuntimeException)
 {
-    // TODO::
+    
     return OUString();
 }
 
 void SAL_CALL SwVbaListLevel::setNumberFormat( const OUString& /*_numberformat*/ ) throw (uno::RuntimeException)
 {
-    // TODO::
+    
 }
 
 float SAL_CALL SwVbaListLevel::getNumberPosition() throw (uno::RuntimeException)
 {
-    // indentAt + firstlineindent
+    
     sal_Int32 nIndentAt = 0;
     sal_Int32 nFirstLineIndent = 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("IndentAt") ) >>= nIndentAt;
@@ -294,13 +294,13 @@ void SAL_CALL SwVbaListLevel::setNumberStyle( ::sal_Int32 _numberstyle ) throw (
 
 ::sal_Int32 SAL_CALL SwVbaListLevel::getResetOnHigher() throw (uno::RuntimeException)
 {
-    //seems not support?
+    
     return 0;
 }
 
 void SAL_CALL SwVbaListLevel::setResetOnHigher( ::sal_Int32 /*_resetonhigher*/ ) throw (uno::RuntimeException)
 {
-    //seems not support?
+    
 }
 
 ::sal_Int32 SAL_CALL SwVbaListLevel::getStartAt() throw (uno::RuntimeException)
@@ -332,7 +332,7 @@ void SAL_CALL SwVbaListLevel::setTabPosition( float _tabposition ) throw (uno::R
 
 float SAL_CALL SwVbaListLevel::getTextPosition() throw (uno::RuntimeException)
 {
-    // indentAt
+    
     sal_Int32 nIndentAt = 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("IndentAt") ) >>= nIndentAt;
 

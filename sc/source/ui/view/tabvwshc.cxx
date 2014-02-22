@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_mpl.h>
@@ -73,16 +73,16 @@
 
 #include <config_orcus.h>
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {
-    //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
-    //  and in the view to identify the view that has opened the dialog
+    
+    
     nCurRefDlgId = nNew;
 }
 
-//ugly hack to call Define Name from Manage Names
+
 void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 {
    sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
@@ -117,18 +117,18 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                         SfxBindings* pB, SfxChildWindow* pCW, SfxChildWinInfo* pInfo,
                         Window* pParent, sal_uInt16 nSlotId )
 {
-    //  Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
-    //  z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).
+    
+    
 
     if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
         return NULL;
 
     if ( nCurRefDlgId != nSlotId )
     {
-        //  the dialog has been opened in a different view
-        //  -> lock the dispatcher for this view (modal mode)
+        
+        
 
-        GetViewData()->GetDispatcher().Lock( sal_True );    // lock is reset when closing dialog
+        GetViewData()->GetDispatcher().Lock( sal_True );    
         return NULL;
     }
 
@@ -235,7 +235,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_DEFINE_DBNAME:
         {
-            //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
+            
             GetDBData( true, SC_DB_OLD );
             const ScMarkData& rMark = GetViewData()->GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
@@ -267,7 +267,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
             aArgSet.Put( aItem );
 
-            // aktuelle Tabelle merken (wg. RefInput im Dialog)
+            
             GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
 
             pResult = new ScSpecialFilterDlg( pB, pCW, pParent, aArgSet );
@@ -294,7 +294,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                       GetViewData(),
                                       &aQueryParam ) );
 
-            // aktuelle Tabelle merken (wg. RefInput im Dialog)
+            
             GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
 
             pResult = new ScFilterDlg( pB, pCW, pParent, aArgSet );
@@ -388,11 +388,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_OPENDLG_PIVOTTABLE:
         {
 #if ! MPL_HAVE_SUBSET
-            //  all settings must be in pDialogDPObject
+            
 
             if( pDialogDPObject )
             {
-                // Check for an existing datapilot output.
+                
                 ScViewData* pViewData = GetViewData();
                 ScDPObject* pObj = pDoc->GetDPAtCursor(
                     pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
@@ -412,7 +412,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_FUNCTION:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            
 
             pResult = new ScFormulaDlg( pB, pCW, pParent, GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
         }
@@ -428,7 +428,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case FID_CHG_SHOW:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            
 
             pResult = new ScHighlightChgDlg( pB, pCW, pParent, GetViewData() );
         }
@@ -436,7 +436,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case WID_SIMPLE_REF:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            
 
             ScViewData* pViewData = GetViewData();
             pViewData->SetRefTabNo( pViewData->GetTabNo() );
@@ -452,9 +452,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
     if (pResult)
     {
-        //  Die Dialoge gehen immer mit eingeklapptem Zusaetze-Button auf,
-        //  darum muss die Groesse ueber das Initialize gerettet werden
-        //  (oder den Zusaetze-Status mit speichern !!!)
+        
+        
+        
 
         Size aSize = pResult->GetSizePixel();
         pResult->Initialize( pInfo );

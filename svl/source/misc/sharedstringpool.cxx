@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "svl/sharedstringpool.hxx"
@@ -21,18 +21,18 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 
     InsertResultType aRes = findOrInsert(maStrPool, rStr);
     if (aRes.first == maStrPool.end())
-        // Insertion failed.
+        
         return SharedString();
 
     rtl_uString* pOrig = aRes.first->pData;
 
     if (!mpCharClass)
-        // We don't track case insensitive strings.
+        
         return SharedString(pOrig, NULL);
 
     if (!aRes.second)
     {
-        // No new string has been inserted. Return the existing string in the pool.
+        
         StrStoreType::iterator it = maStrStore.find(pOrig);
         if (it == maStrStore.end())
             return SharedString();
@@ -41,12 +41,12 @@ SharedString SharedStringPool::intern( const OUString& rStr )
         return SharedString(pOrig, pUpper);
     }
 
-    // This is a new string insertion. Establish mapping to upper-case variant.
+    
 
     OUString aUpper = mpCharClass->uppercase(rStr);
     aRes = findOrInsert(maStrPoolUpper, aUpper);
     if (aRes.first == maStrPoolUpper.end())
-        // Failed to insert or fetch upper-case variant. Should never happen.
+        
         return SharedString();
 
     maStrStore.insert(StrStoreType::value_type(pOrig, *aRes.first));
@@ -74,20 +74,20 @@ void SharedStringPool::purge()
         const rtl_uString* p = it->pData;
         if (getRefCount(p) == 1)
         {
-            // Remove it from the upper string map.  This should unref the
-            // upper string linked to this original string.
+            
+            
             maStrStore.erase(p);
         }
         else
-            // Still referenced outside the pool. Keep it.
+            
             aNewStrPool.insert(*it);
     }
 
     maStrPool.swap(aNewStrPool);
 
-    aNewStrPool.clear(); // for re-use.
+    aNewStrPool.clear(); 
 
-    // Purge the upper string pool as well.
+    
     it = maStrPoolUpper.begin();
     itEnd = maStrPoolUpper.end();
     for (; it != itEnd; ++it)
@@ -118,10 +118,10 @@ SharedStringPool::InsertResultType SharedStringPool::findOrInsert( StrHashType& 
     bool bInserted = false;
     if (it == rPool.end())
     {
-        // Not yet in the pool.
+        
         std::pair<StrHashType::iterator, bool> r = rPool.insert(rStr);
         if (!r.second)
-            // Insertion failed.
+            
             return InsertResultType(rPool.end(), false);
 
         it = r.first;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);
 
@@ -31,7 +31,7 @@ TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);
 #define VIEWLAYOUT_PARAM_BOOKMODE   "BookMode"
 #define VIEWLAYOUT_PARAMS           2
 
-// -----------------------------------------------------------------------
+
 
 SvxViewLayoutItem::SvxViewLayoutItem
 (
@@ -44,7 +44,7 @@ SvxViewLayoutItem::SvxViewLayoutItem
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
 :   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
@@ -52,34 +52,34 @@ SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxViewLayoutItem::~SvxViewLayoutItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxViewLayoutItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxViewLayoutItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStrm;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {

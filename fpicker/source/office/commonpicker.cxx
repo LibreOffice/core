@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,15 +29,15 @@
 #include <vcl/msgbox.hxx>
 #include "iodlg.hxx"
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
 #define PROPERTY_ID_HELPURL     1
 #define PROPERTY_ID_WINDOW      2
 
-    // using --------------------------------------------------------------
+    
 
     using namespace     ::com::sun::star::lang;
     using namespace     ::com::sun::star::ui::dialogs;
@@ -45,7 +45,7 @@ namespace svt
     using namespace     ::com::sun::star::beans;
     using namespace     ::comphelper;
 
-    //---------------------------------------------------------------------
+    
     OCommonPicker::OCommonPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory )
         :OCommonPicker_Base( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
@@ -54,7 +54,7 @@ namespace svt
         ,m_nCancelEvent( 0 )
         ,m_bExecuting( sal_False )
     {
-        // the two properties we have
+        
         registerProperty(
             OUString( "HelpURL" ), PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
@@ -68,7 +68,7 @@ namespace svt
         );
     }
 
-    //---------------------------------------------------------------------
+    
     OCommonPicker::~OCommonPicker()
     {
         if ( !GetBroadcastHelper().bDisposed )
@@ -78,19 +78,19 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
-    // disambiguate XInterface
-    //---------------------------------------------------------------------
+    
+    
+    
     IMPLEMENT_FORWARD_XINTERFACE2( OCommonPicker, OCommonPicker_Base, OPropertyContainer )
 
-    //---------------------------------------------------------------------
-    // disambiguate XTypeProvider
-    //---------------------------------------------------------------------
+    
+    
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCommonPicker, OCommonPicker_Base, OPropertyContainer )
 
-    //---------------------------------------------------------------------
-    // XComponent related methods
-    //---------------------------------------------------------------------
+    
+    
+    
     void OCommonPicker::checkAlive() const SAL_THROW( (DisposedException) )
     {
         if ( GetBroadcastHelper().bInDispose || GetBroadcastHelper().bDisposed )
@@ -102,12 +102,12 @@ namespace svt
         if ( !getDialog() )
             createPicker();
 
-        // set the title
+        
         if ( !m_aTitle.isEmpty() )
             getDialog()->SetText( m_aTitle );
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OCommonPicker::disposing()
     {
         SolarMutexGuard aGuard;
@@ -129,16 +129,16 @@ namespace svt
         m_xDialogParent = NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     void OCommonPicker::stopWindowListening()
     {
         disposeComponent( m_xWindowListenerAdapter );
         disposeComponent( m_xParentListenerAdapter );
     }
 
-    //---------------------------------------------------------------------
-    // XEventListener
-    //---------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -149,7 +149,7 @@ namespace svt
         {
             stopWindowListening();
 
-            if ( !bDialogDying )    // it's the parent which is dying -> delete the dialog
+            if ( !bDialogDying )    
                 delete m_pDlg;
 
             m_pDlg = NULL;
@@ -162,9 +162,9 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
-    // property set related methods
-    //---------------------------------------------------------------------
+    
+    
+    
     ::cppu::IPropertyArrayHelper* OCommonPicker::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -172,31 +172,31 @@ namespace svt
         return new cppu::OPropertyArrayHelper( aProps );
     }
 
-    //---------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& SAL_CALL OCommonPicker::getInfoHelper()
     {
         return *const_cast< OCommonPicker* >( this )->getArrayHelper();
     }
 
-    //---------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > SAL_CALL OCommonPicker::getPropertySetInfo(  ) throw(RuntimeException)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OCommonPicker::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
     {
         OPropertyContainer::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
-        // if the HelpURL changed, forward this to the dialog
+        
         if ( PROPERTY_ID_HELPURL == _nHandle )
             if ( m_pDlg )
                 OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
     }
 
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OCommonPicker::createPicker()
     {
         SolarMutexGuard aGuard;
@@ -208,9 +208,9 @@ namespace svt
 
             if ( m_pDlg )
             {
-                // synchronize the help id of the dialog with out help URL property
+                
                 if ( !m_sHelpURL.isEmpty() )
-                {   // somebody already set the help URL while we had no dialog yet
+                {   
                     OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
                 }
                 else
@@ -220,24 +220,24 @@ namespace svt
 
                 m_xWindow = VCLUnoHelper::GetInterface( m_pDlg );
 
-                // add as event listener to the window
+                
                 Reference< XComponent > xWindowComp( m_xWindow, UNO_QUERY );
                 OSL_ENSURE( xWindowComp.is(), "OCommonPicker::createFileDialog: invalid window component!" );
                 if ( xWindowComp.is() )
                 {
                     m_xWindowListenerAdapter = new OWeakEventListenerAdapter( this, xWindowComp );
-                        // the adapter will add itself as listener, and forward notifications
+                        
                 }
 
-                // _and_ add as event listener to the parent - in case the parent is destroyed
-                // before we are disposed, our disposal would access dead VCL windows then ....
+                
+                
                 m_xDialogParent = VCLUnoHelper::GetInterface( m_pDlg->GetParent() );
                 xWindowComp = xWindowComp.query( m_xDialogParent );
                 OSL_ENSURE( xWindowComp.is() || !m_pDlg->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!" );
                 if ( xWindowComp.is() )
                 {
                     m_xParentListenerAdapter = new OWeakEventListenerAdapter( this, xWindowComp );
-                        // the adapter will add itself as listener, and forward notifications
+                        
                 }
             }
         }
@@ -245,9 +245,9 @@ namespace svt
         return NULL != m_pDlg;
     }
 
-    //---------------------------------------------------------------------
-    // XControlAccess functions
-    //---------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -260,7 +260,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -275,9 +275,9 @@ namespace svt
         return Any();
     }
 
-    //---------------------------------------------------------------------
-    // XControlInformation functions
-    //---------------------------------------------------------------------
+    
+    
+    
     Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControls(  ) throw (RuntimeException)
     {
         checkAlive();
@@ -292,7 +292,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName ) throw (RuntimeException)
     {
         checkAlive();
@@ -307,7 +307,7 @@ namespace svt
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -322,7 +322,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -337,16 +337,16 @@ namespace svt
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
-    // XExecutableDialog functions
-    //---------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OCommonPicker::setTitle( const OUString& _rTitle ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
         m_aTitle = _rTitle;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int16 OCommonPicker::execute() throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -366,43 +366,43 @@ namespace svt
         return nResult;
     }
 
-    //---------------------------------------------------------------------
-    // XCancellable functions
-    //---------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OCommonPicker::cancel(  ) throw (RuntimeException)
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( m_nCancelEvent )
-                // nothing to do - the event for cancelling the dialog is already on the way
+                
                 return;
         }
 
-        // The thread which executes our dialog has locked the solar mutex for
-        // sure. Cancelling the dialog should be done with a locked solar mutex, too.
-        // Thus we post ourself a message for cancelling the dialog. This way, the message
-        // is either handled in the thread which opened the dialog (which may even be
-        // this thread here), or, if no dialog is open, in the thread doing scheduling
-        // currently. Both is okay for us ....
+        
+        
+        
+        
+        
+        
         //
-        // Note that we could do check if we are really executing the dialog currently.
-        // but the information would be potentially obsolete at the moment our event
-        // arrives, so we need to check it there, anyway ...
+        
+        
+        
         m_nCancelEvent = Application::PostUserEvent( LINK( this, OCommonPicker, OnCancelPicker ) );
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(OCommonPicker, OnCancelPicker)
     {
-        // By definition, the solar mutex is locked when we arrive here. Note that this
-        // is important, as for instance the consistency of m_pDlg depends on this mutex.
+        
+        
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nCancelEvent = 0;
 
         if ( !m_bExecuting )
-            // nothing to do. This may be because the dialog was canceled after our cancel method
-            // posted this async event, or because somebody called cancel without the dialog
-            // being executed at this time.
+            
+            
+            
             return 0;
 
         OSL_ENSURE( getDialog(), "OCommonPicker::OnCancelPicker: executing, but no dialog!" );
@@ -412,9 +412,9 @@ namespace svt
         return 0L;
     }
 
-    //------------------------------------------------------------------------------------
-    // XInitialization functions
-    //------------------------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OCommonPicker::initialize( const Sequence< Any >& _rArguments )
         throw ( Exception, RuntimeException )
     {
@@ -475,7 +475,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
         sal_Bool bKnown = sal_True;
@@ -490,8 +490,8 @@ namespace svt
         return bKnown;
     }
 
-//.........................................................................
-}   // namespace svt
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

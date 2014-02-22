@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RTableConnectionData.hxx"
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// class ORelationTableConnectionData
+
 ORelationTableConnectionData::ORelationTableConnectionData()
     :OTableConnectionData()
     ,m_nUpdateRules(KeyRule::NO_ACTION)
@@ -78,7 +78,7 @@ ORelationTableConnectionData::~ORelationTableConnectionData()
 sal_Bool ORelationTableConnectionData::DropRelation()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // Relation loeschen
+    
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
     if( !m_aConnName.isEmpty() && xKeys.is() )
     {
@@ -107,7 +107,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
 
 void ORelationTableConnectionData::ChangeOrientation()
 {
-    // Source- und DestFieldName der Linien austauschen
+    
     OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
@@ -118,7 +118,7 @@ void ORelationTableConnectionData::ChangeOrientation()
         (*aIter)->SetDestFieldName( sTempString );
     }
 
-    // Member anpassen
+    
     TTableWindowData::value_type pTemp = m_pReferencingTable;
     m_pReferencingTable = m_pReferencedTable;
     m_pReferencedTable = pTemp;
@@ -147,7 +147,7 @@ void ORelationTableConnectionData::SetCardinality()
 
 sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
-    // check if Table has the primary key column dependig on _eEConnectionSide
+    
     sal_uInt16  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
     const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
@@ -184,7 +184,7 @@ sal_Bool ORelationTableConnectionData::IsConnectionPossible()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Wenn die SourceFelder ein PrimKey sind, ist nur die Orientierung falsch
+    
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
 
@@ -203,7 +203,7 @@ OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj( const OC
 
 void ORelationTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
-    // wie in der Basisklasse zurueckziehen auf das (nicht-virtuelle) operator=
+    
     *this = *static_cast<const ORelationTableConnectionData*>(&rSource);
 }
 
@@ -251,20 +251,20 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
 sal_Bool ORelationTableConnectionData::Update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // Alte Relation loeschen
+    
     {
         DropRelation();
         if( !IsConnectionPossible() )
             return sal_False;
     }
 
-    // reassign the keys because the orientaion could be changed
+    
     Reference<XPropertySet> xTableProp(getReferencingTable()->getTable());
     Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
 
     if ( !xKeys.is() )
         return sal_False;
-    // Neue Relation erzeugen
+    
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
     Reference<XAppend> xAppend(xKeyFactory,UNO_QUERY);
@@ -274,7 +274,7 @@ sal_Bool ORelationTableConnectionData::Update()
     OSL_ENSURE(xKey.is(),"Key is null!");
     if ( xKey.is() && xTableProp.is() )
     {
-        // build a foreign key name
+        
         OUString sSourceName;
         xTableProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
         OUString sKeyName = sSourceName;
@@ -315,10 +315,10 @@ sal_Bool ORelationTableConnectionData::Update()
             if ( xColumns->hasElements() )
                 xAppend->appendByDescriptor(xKey);
         }
-        // to get the key we have to reget it because after append it is no longer valid
+        
     }
 
-    // get the name of foreign key // search for columns
+    
     m_aConnName = OUString();
 xKey.clear();
     bool bDropRelation = false;
@@ -367,8 +367,8 @@ xKey.clear();
                     {
                         xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
                         m_aConnName = sName;
-                        bDropRelation = aNames.getLength() == 0; // the key contains no column, so it isn't valid and we have to drop it
-                        //here we already know our column structure so we don't have to recreate the table connection data
+                        bDropRelation = aNames.getLength() == 0; 
+                        
                         xColSup.clear();
                         break;
                     }
@@ -387,7 +387,7 @@ xKey.clear();
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
 
-    // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
+    
     if ( xColSup.is() )
     {
         OConnectionLineDataVec().swap(m_vConnLineData);
@@ -416,9 +416,9 @@ xKey.clear();
             }
         }
     }
-    // NOTE : the caller is responsible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
+    
 
-    // Kardinalitaet bestimmen
+    
     SetCardinality();
 
     return sal_True;

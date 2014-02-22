@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -39,12 +39,12 @@ using namespace ::svt;
 using namespace ::svt::table;
 
 
-// ============================================================================
+
 
 namespace accessibility {
 
 using namespace com::sun::star::accessibility::AccessibleStateType;
-// ============================================================================
+
 
 AccessibleGridControlBase::AccessibleGridControlBase(
         const Reference< XAccessible >& rxParent,
@@ -64,7 +64,7 @@ AccessibleGridControlBase::~AccessibleGridControlBase()
 {
     if( isAlive() )
     {
-        // increment ref count to prevent double call of Dtor
+        
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -82,10 +82,10 @@ void SAL_CALL AccessibleGridControlBase::disposing()
     }
 
     m_xParent = NULL;
-    //m_aTable = NULL;
+    
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()
     throw ( uno::RuntimeException )
@@ -103,12 +103,12 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
 
     ensureIsAlive();
 
-    // -1 for child not found/no parent (according to specification)
+    
     sal_Int32 nRet = -1;
 
     Reference< uno::XInterface > xMeMyselfAndI( static_cast< XAccessibleContext* >( this ), uno::UNO_QUERY );
 
-    //  iterate over parent's children and search for this object
+    
     if( m_xParent.is() )
     {
         Reference< XAccessibleContext >
@@ -157,7 +157,7 @@ AccessibleGridControlBase::getAccessibleRelationSet()
    SolarMutexGuard g;
 
    ensureIsAlive();
-   // GridControl does not have relations.
+   
    return new utl::AccessibleRelationSetHelper;
 }
 
@@ -167,7 +167,7 @@ AccessibleGridControlBase::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
 
-    // don't check whether alive -> StateSet may contain DEFUNC
+    
     return implCreateStateSetHelper();
 }
 
@@ -187,7 +187,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 sal_Bool SAL_CALL AccessibleGridControlBase::containsPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
@@ -243,7 +243,7 @@ sal_Bool SAL_CALL AccessibleGridControlBase::isFocusTraversable()
     return xStateSet.is() ?
         xStateSet->contains( AccessibleStateType::FOCUSABLE ) : sal_False;
 }
-// XAccessibleEventBroadcaster ------------------------------------------------
+
 
 void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
@@ -271,10 +271,10 @@ void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
         sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
     if ( !nListenerCount )
     {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
+        
+        
+        
+        
         AccessibleEventNotifier::TClientId nId( getClientId( ) );
         setClientId( 0 );
         AccessibleEventNotifier::revokeClient( nId );
@@ -282,7 +282,7 @@ void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
     }
 }
 
-// XTypeProvider --------------------------------------------------------------
+
 
 namespace
 {
@@ -295,7 +295,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
     return theAccessibleGridControlBaseImplementationId::get().getSeq();
 }
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
         const OUString& rServiceName )
@@ -310,7 +310,7 @@ Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceName
     const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
 }
-// internal virtual methods ---------------------------------------------------
+
 
 sal_Bool AccessibleGridControlBase::implIsShowing()
 {
@@ -333,10 +333,10 @@ sal_Bool AccessibleGridControlBase::implIsShowing()
 
     if( isAlive() )
     {
-        // SHOWING done with m_xParent
+        
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
-        // GridControl fills StateSet with states depending on object type
+        
         m_aTable.FillAccessibleStateSet( *pStateSetHelper, getType() );
     }
     else
@@ -344,11 +344,11 @@ sal_Bool AccessibleGridControlBase::implIsShowing()
     return pStateSetHelper;
 }
 
-// internal helper methods ----------------------------------------------------
+
 
 sal_Bool AccessibleGridControlBase::isAlive() const
 {
-    ::osl::MutexGuard g(m_aMutex); // guards rBHelper members
+    ::osl::MutexGuard g(m_aMutex); 
     return !rBHelper.bDisposed && !rBHelper.bInDispose && &m_aTable;
 }
 
@@ -391,18 +391,18 @@ void AccessibleGridControlBase::commitEvent(
     SolarMutexGuard g;
 
     if ( !getClientId( ) )
-            // if we don't have a client id for the notifier, then we don't have listeners, then
-            // we don't need to notify anything
+            
+            
             return;
 
-    // build an event object
+    
     AccessibleEventObject aEvent;
     aEvent.Source = *this;
     aEvent.EventId = _nEventId;
     aEvent.OldValue = _rOldValue;
     aEvent.NewValue = _rNewValue;
 
-    // let the notifier handle this event
+    
 
     AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
 }
@@ -434,19 +434,19 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     }
     return nRole;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL AccessibleGridControlBase::getAccessibleKeyBinding()
         throw ( uno::RuntimeException )
 {
     return Any();
 }
-// -----------------------------------------------------------------------------
+
 Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
         throw ( uno::RuntimeException )
 {
     return NULL;
 }
-//// -----------------------------------------------------------------------------
+//
 sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -471,7 +471,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
     }
     return nColor;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -489,7 +489,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::su
     return nColor;
 }
 
-//// ============================================================================
+//
 GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAccessible >& rxParent,
                         IAccessibleTable& rTable,
                         AccessibleTableControlObjType  eObjType )
@@ -497,13 +497,13 @@ GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAc
 {
 }
 
-// XInterface -----------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2( GridControlAccessibleElement, AccessibleGridControlBase, GridControlAccessibleElement_Base)
 
-// XTypeProvider --------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridControlAccessibleElement, AccessibleGridControlBase, GridControlAccessibleElement_Base )
 
-// XAccessible ----------------------------------------------------------------
+
 
 Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException )
 {
@@ -512,15 +512,15 @@ Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccess
     ensureIsAlive();
     return this;
 }
-// ----------------------------------------------------------------------------
+
 GridControlAccessibleElement::~GridControlAccessibleElement( )
 {
 }
 
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,19 +31,19 @@
 namespace basctl
 {
 
-// FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
-// numbers, whereas BreakPoint supports sal_uLong?
+
+
 
 namespace
 {
 
 bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
 {
-    // aText should look like "# n" where
-    // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
-    // All spaces are ignored, so there can even be spaces within the
-    // number n.  (Maybe it would be better to ignore all whitespace instead
-    // of just spaces.)
+    
+    
+    
+    
+    
     OUString aText(
         rText.replaceAll(" ", OUString()));
     if (aText.isEmpty())
@@ -53,7 +53,7 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
         return false;
     if (cFirst == '#')
         aText = aText.copy(1);
-    // XXX Assumes that sal_uInt16 is contained within sal_Int32:
+    
     sal_Int32 n = aText.toInt32();
     if ( n <= 0 )
         return false;
@@ -61,7 +61,7 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
     return true;
 }
 
-} // namespace
+} 
 
 BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList )
     : ModalDialog(pParent, "ManageBreakpointsDialog",
@@ -117,9 +117,9 @@ void BreakPointDialog::SetCurrentBreakPoint( BreakPoint* pBrk )
 
 void BreakPointDialog::CheckButtons()
 {
-    // "New" button is enabled if the combo box edit contains a valid line
-    // number that is not already present in the combo box list; otherwise
-    // "OK" and "Delete" buttons are enabled:
+    
+    
+    
     size_t nLine;
     if (lcl_ParseText(m_pComboBox->GetText(), nLine)
         && m_aModifiedBreakPointList.FindBreakPoint(nLine) == 0)
@@ -188,7 +188,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     }
     else if (pButton == m_pNewButton)
     {
-        // keep checkbox in mind!
+        
         OUString aText( m_pComboBox->GetText() );
         size_t nLine;
         bool bValid = lcl_ParseText( aText, nLine );
@@ -250,6 +250,6 @@ BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
     return pBrk;
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

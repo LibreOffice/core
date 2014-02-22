@@ -80,6 +80,6 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
     return sal_False;
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

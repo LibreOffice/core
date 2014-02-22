@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/HatchStyle.hxx>
@@ -57,7 +57,7 @@ SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// Import
+
 
 XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -170,7 +170,7 @@ sal_Bool XMLHatchStyleImport::importXML(
     return bRet;
 }
 
-// Export
+
 
 XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
@@ -198,14 +198,14 @@ sal_Bool XMLHatchStyleExport::exportXML(
             SvXMLUnitConverter& rUnitConverter =
                 rExport.GetMM100UnitConverter();
 
-            // Style
+            
             if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
             {
                 bRet = sal_False;
             }
             else
             {
-                // Name
+                
                 sal_Bool bEncoded = sal_False;
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                       rExport.EncodeStyleName( rStrName,
@@ -217,22 +217,22 @@ sal_Bool XMLHatchStyleExport::exportXML(
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
-                // Color
+                
                 ::sax::Converter::convertColor(aOut, aHatch.Color);
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
 
-                // Distance
+                
                 rUnitConverter.convertMeasureToXML( aOut, aHatch.Distance );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
 
-                // Angle
+                
                 ::sax::Converter::convertNumber(aOut, sal_Int32(aHatch.Angle));
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
 
-                // Do Write
+                
                 SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_HATCH,
                                           sal_True, sal_False );
             }

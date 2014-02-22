@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cellvaluebinding.hxx"
@@ -31,10 +31,10 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-//.........................................................................
+
 namespace calc
 {
-//.........................................................................
+
 
 #define PROP_HANDLE_BOUND_CELL  1
 
@@ -48,11 +48,11 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
-    //= OCellValueBinding
-    //=====================================================================
+    
+    
+    
     DBG_NAME( OCellValueBinding )
-    //---------------------------------------------------------------------
+    
 #ifdef DBG_UTIL
     const char* OCellValueBinding::checkConsistency_static( const void* _pThis )
     {
@@ -63,16 +63,16 @@ namespace calc
     {
         const char* pAssertion = NULL;
         if ( m_xCellText.is() && !m_xCell.is() )
-            // there are places (e.g. getSupportedTypes) which rely on the fact
-            // that m_xCellText.is() implies m_xCell.is()
+            
+            
             pAssertion = "cell references inconsistent!";
 
-        // TODO: place any additional checks here to ensure consistency of this instance
+        
         return pAssertion;
     }
 #endif
 
-    //---------------------------------------------------------------------
+    
     OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, bool _bListPos )
         :OCellValueBinding_Base( m_aMutex )
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
@@ -83,7 +83,7 @@ namespace calc
     {
         DBG_CTOR( OCellValueBinding, checkConsistency_static );
 
-        // register our property at the base class
+        
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
             OUString( "BoundCell" ),
@@ -93,29 +93,29 @@ namespace calc
             &aInitialPropValue
         );
 
-        // TODO: implement a ReadOnly property as required by the service,
-        // which probably maps to the cell being locked
+        
+        
     }
 
-    //---------------------------------------------------------------------
+    
     OCellValueBinding::~OCellValueBinding( )
     {
         if ( !OCellValueBinding_Base::rBHelper.bDisposed )
         {
-            acquire();  // prevent duplicate dtor
+            acquire();  
             dispose();
         }
 
         DBG_DTOR( OCellValueBinding, checkConsistency_static );
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::disposing()
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -128,24 +128,24 @@ namespace calc
 
         WeakAggComponentImplHelperBase::disposing();
 
-        // TODO: clean up here whatever you need to clean up (e.g. deregister as XEventListener
-        // for the cell)
+        
+        
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > SAL_CALL OCellValueBinding::getPropertySetInfo(  ) throw(RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         return createPropertySetInfo( getInfoHelper() ) ;
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& SAL_CALL OCellValueBinding::getInfoHelper()
     {
         return *OCellValueBinding_PABase::getArrayHelper();
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper* OCellValueBinding::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -153,13 +153,13 @@ namespace calc
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         OSL_ENSURE( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
-            // we only have this one property ....
-        (void)_nHandle;     // avoid warning in product version
+            
+        (void)_nHandle;     
 
         _rValue.clear();
         Reference< XCellAddressable > xCellAddress( m_xCell, UNO_QUERY );
@@ -167,7 +167,7 @@ namespace calc
             _rValue <<= xCellAddress->getCellAddress( );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Type > SAL_CALL OCellValueBinding::getSupportedValueTypes(  ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -181,17 +181,17 @@ namespace calc
         Sequence< Type > aTypes( nCount );
         if ( m_xCell.is() )
         {
-            // an XCell can be used to set/get "double" values
+            
             aTypes[0] = ::getCppuType( static_cast< double* >( NULL ) );
             if ( m_xCellText.is() )
             {
-                // an XTextRange can be used to set/get "string" values
+                
                 aTypes[1] = ::getCppuType( static_cast< OUString* >( NULL ) );
-                // and additionally, we use it to handle booleans
+                
                 aTypes[2] = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
             }
 
-            // add sal_Int32 only if constructed as ListPositionCellBinding
+            
             if ( m_bListPos )
                 aTypes[nCount-1] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
         }
@@ -199,14 +199,14 @@ namespace calc
         return aTypes;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         checkDisposed( );
         checkInitialized( );
 
-        // look up in our sequence
+        
         Sequence< Type > aSupportedTypes( getSupportedValueTypes() );
         const Type* pTypes = aSupportedTypes.getConstArray();
         const Type* pTypesEnd = aSupportedTypes.getConstArray() + aSupportedTypes.getLength();
@@ -217,7 +217,7 @@ namespace calc
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType ) throw (IncompatibleTypesException, RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -240,7 +240,7 @@ namespace calc
             OSL_ENSURE( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
             if ( m_xCell.is() )
             {
-                // check if the cell has a numeric value (this might go into a helper function):
+                
 
                 sal_Bool bHasValue = false;
                 CellContentType eCellType = m_xCell->getType();
@@ -248,7 +248,7 @@ namespace calc
                     bHasValue = sal_True;
                 else if ( eCellType == CellContentType_FORMULA )
                 {
-                    // check if the formula result is a value
+                    
                     if ( m_xCell->getError() == 0 )
                     {
                         Reference<XPropertySet> xProp( m_xCell, UNO_QUERY );
@@ -263,12 +263,12 @@ namespace calc
 
                 if ( bHasValue )
                 {
-                    // 0 is "unchecked", any other value is "checked", regardless of number format
+                    
                     double nCellValue = m_xCell->getValue();
                     sal_Bool bBoolValue = ( nCellValue != 0.0 );
                     aReturn <<= bBoolValue;
                 }
-                // empty cells, text cells and text or error formula results: leave return value empty
+                
             }
             break;
 
@@ -284,8 +284,8 @@ namespace calc
             OSL_ENSURE( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
             if ( m_xCell.is() )
             {
-                // The list position value in the cell is 1-based.
-                // We subtract 1 from any cell value (no special handling for 0 or negative values).
+                
+                
 
                 sal_Int32 nValue = (sal_Int32) rtl::math::approxFloor( m_xCell->getValue() );
                 --nValue;
@@ -298,13 +298,13 @@ namespace calc
 
         default:
             OSL_FAIL( "OCellValueBinding::getValue: unreachable code!" );
-                // a type other than double and string should never have survived the checkValueType
-                // above
+                
+                
         }
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::setValue( const Any& aValue ) throw (IncompatibleTypesException, NoSupportException, RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -330,8 +330,8 @@ namespace calc
             {
                 OSL_ENSURE( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
-                // boolean is stored as values 0 or 1
-                // TODO: set the number format to boolean if no format is set?
+                
+                
 
                 sal_Bool bValue( false );
                 aValue >>= bValue;
@@ -360,8 +360,8 @@ namespace calc
                 OSL_ENSURE( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
                 sal_Int32 nValue = 0;
-                aValue >>= nValue;      // list index from control layer (0-based)
-                ++nValue;               // the list position value in the cell is 1-based
+                aValue >>= nValue;      
+                ++nValue;               
                 if ( m_xCell.is() )
                     m_xCell->setValue( nValue );
             }
@@ -369,14 +369,14 @@ namespace calc
 
         case TypeClass_VOID:
             {
-                // #N/A error value can only be set using XCellRangeData
+                
 
                 Reference<XCellRangeData> xData( m_xCell, UNO_QUERY );
                 OSL_ENSURE( xData.is(), "OCellValueBinding::setValue: don't have XCellRangeData!" );
                 if ( xData.is() )
                 {
-                    Sequence<Any> aInner(1);                            // one empty element
-                    Sequence< Sequence<Any> > aOuter( &aInner, 1 );     // one row
+                    Sequence<Any> aInner(1);                            
+                    Sequence< Sequence<Any> > aOuter( &aInner, 1 );     
                     xData->setDataArray( aOuter );
                 }
             }
@@ -384,14 +384,14 @@ namespace calc
 
         default:
             OSL_FAIL( "OCellValueBinding::setValue: unreachable code!" );
-                // a type other than double and string should never have survived the checkValueType
-                // above
+                
+                
         }
     }
-    //--------------------------------------------------------------------
+    
     void OCellValueBinding::setBooleanFormat()
     {
-        // set boolean number format if not already set
+        
 
         OUString sPropName( "NumberFormat" );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
@@ -413,11 +413,11 @@ namespace calc
                 }
                 catch ( Exception& )
                 {
-                    // non-existing format - can happen, use defaults
+                    
                 }
                 if ( xOldFormat.is() )
                 {
-                    // use the locale of the existing format
+                    
                     xOldFormat->getPropertyValue("Locale") >>= aLocale;
 
                     sal_Int16 nOldType = ::comphelper::getINT16(
@@ -435,23 +435,23 @@ namespace calc
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void OCellValueBinding::checkDisposed( ) const SAL_THROW( ( DisposedException ) )
     {
         if ( OCellValueBinding_Base::rBHelper.bInDispose || OCellValueBinding_Base::rBHelper.bDisposed )
             throw DisposedException();
-            // TODO: is it worth having an error message here?
+            
     }
 
-    //--------------------------------------------------------------------
+    
     void OCellValueBinding::checkInitialized() SAL_THROW( ( RuntimeException ) )
     {
         if ( !m_bInitialized )
             throw RuntimeException();
-            // TODO: error message
+            
     }
 
-    //--------------------------------------------------------------------
+    
     void OCellValueBinding::checkValueType( const Type& _rType ) const SAL_THROW( ( IncompatibleTypesException ) )
     {
         OCellValueBinding* pNonConstThis = const_cast< OCellValueBinding* >( this );
@@ -460,10 +460,10 @@ namespace calc
             OUString sMessage( "The given type (" );
             sMessage += _rType.getTypeName();
             sMessage += ") is not supported by this binding.";
-                // TODO: localize this error message
+                
 
             throw IncompatibleTypesException( sMessage, *pNonConstThis );
-                // TODO: alternatively use a type converter service for this?
+                
         }
     }
 
@@ -497,14 +497,14 @@ namespace calc
            m_aModifyListeners.addInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
        if ( _rxListener.is() )
            m_aModifyListeners.removeInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void OCellValueBinding::notifyModified()
     {
         EventObject aEvent;
@@ -519,7 +519,7 @@ namespace calc
             }
             catch( const RuntimeException& )
             {
-                // silent this
+                
             }
             catch( const Exception& )
             {
@@ -528,7 +528,7 @@ namespace calc
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -536,7 +536,7 @@ namespace calc
         notifyModified();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::disposing( const EventObject& aEvent ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -544,20 +544,20 @@ namespace calc
         Reference<XInterface> xCellInt( m_xCell, UNO_QUERY );
         if ( xCellInt == aEvent.Source )
         {
-            // release references to cell object
+            
             m_xCell.clear();
             m_xCellText.clear();
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         if ( m_bInitialized )
             throw Exception();
-            // TODO: error message
+            
 
-        // get the cell address
+        
         CellAddress aAddress;
         sal_Bool bFoundAddress = false;
 
@@ -577,13 +577,13 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            // TODO: error message
+            
             throw Exception();
 
-        // get the cell object
+        
         try
         {
-            // first the sheets collection
+            
             Reference< XIndexAccess > xSheets;
             if ( m_xDocument.is() )
                 xSheets.set(xSheets.query( m_xDocument->getSheets( ) ));
@@ -591,11 +591,11 @@ namespace calc
 
             if ( xSheets.is() )
             {
-                // the concrete sheet
+                
                 Reference< XCellRange > xSheet(xSheets->getByIndex( aAddress.Sheet ), UNO_QUERY);
                 OSL_ENSURE( xSheet.is(), "OCellValueBinding::initialize: NULL sheet, but no exception!" );
 
-                // the concrete cell
+                
                 if ( xSheet.is() )
                 {
                     m_xCell.set(xSheet->getCellByPosition( aAddress.Column, aAddress.Row ));
@@ -611,7 +611,7 @@ namespace calc
 
         if ( !m_xCell.is() )
             throw Exception();
-            // TODO error message
+            
 
         m_xCellText.set(m_xCellText.query( m_xCell ));
 
@@ -621,22 +621,22 @@ namespace calc
             xBroadcaster->addModifyListener( this );
         }
 
-        // TODO: add as XEventListener to the cell, so we get notified when it dies,
-        // and can dispose ourself then
+        
+        
 
-        // TODO: somehow add as listener so we get notified when the address of the cell changes
-        // We need to forward this as change in our BoundCell property to our property change listeners
+        
+        
 
-        // TODO: be an XModifyBroadcaster, so that changes in our cell can be notified
-        // to the BindableValue which is/will be bound to this instance.
+        
+        
 
         m_bInitialized = true;
-        // TODO: place your code here
+        
     }
 
 
-//.........................................................................
-}   // namespace calc
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

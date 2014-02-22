@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -33,7 +33,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <rtl/uuid.h>
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -71,29 +71,29 @@ namespace comphelper
         GenericPropertySet( PropertySetInfo* pInfo ) throw();
         virtual ~GenericPropertySet() throw();
 
-        // XInterface
+        
         virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException);
         virtual  Any SAL_CALL queryInterface( const  Type & rType ) throw( RuntimeException);
         virtual void SAL_CALL acquire() throw();
         virtual void SAL_CALL release() throw();
 
-        // XTypeProvider
+        
         virtual  Sequence<  Type > SAL_CALL getTypes(  ) throw( RuntimeException);
         virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw( RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(  RuntimeException );
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(  RuntimeException );
         virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException );
 
-        // XPropertySet
+        
         virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     };
 
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 : PropertySetHelper( pInfo )
@@ -190,7 +190,7 @@ void GenericPropertySet::_getPropertyValues( const comphelper::PropertyMapEntry*
     }
 }
 
-// XInterface
+
 
 Any SAL_CALL GenericPropertySet::queryInterface( const Type & rType )
     throw( RuntimeException )
@@ -253,7 +253,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
     return theGenericPropertySetImplmentationId::get().getSeq();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceName ) throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);

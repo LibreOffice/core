@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -219,7 +219,7 @@ void moveCursorByMergedCell(
         SCCOL nOld = rCol;
         if (bOriginMerged)
         {
-            // Original cell is merged.  Push the block end outside the merged region.
+            
             if (nOrigX < MAXCOL && nOrigX < rCol && rCol <= nOrigX + nColSpan - 1)
                 rCol = nOrigX + nColSpan;
         }
@@ -230,7 +230,7 @@ void moveCursorByMergedCell(
 
         if (nOld < rCol)
         {
-            // The block end has moved.  Check the protection setting and move back if needed.
+            
             checkBoundary(rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 --rCol;
@@ -242,7 +242,7 @@ void moveCursorByMergedCell(
         if (bOriginMerged)
         {
             if (nOrigX > 0 && nOrigX <= rCol && rCol < nOrigX + nColSpan - 1)
-                // Block end is still within the merged region.  Push it outside.
+                
                 rCol = nOrigX - 1;
         }
         else
@@ -252,7 +252,7 @@ void moveCursorByMergedCell(
 
         if (nOld > rCol)
         {
-            // The block end has moved.  Check the protection setting and move back if needed.
+            
             checkBoundary(rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 ++rCol;
@@ -263,7 +263,7 @@ void moveCursorByMergedCell(
         SCROW nOld = rRow;
         if (bOriginMerged)
         {
-            // Original cell is merged.  Push the block end outside the merged region.
+            
             if (nOrigY < MAXROW && nOrigY < rRow && rRow <= nOrigY + nRowSpan - 1)
                 rRow = nOrigY + nRowSpan;
         }
@@ -274,7 +274,7 @@ void moveCursorByMergedCell(
 
         if (nOld < rRow)
         {
-            // The block end has moved.  Check the protection setting and move back if needed.
+            
             checkBoundary(rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 --rRow;
@@ -286,7 +286,7 @@ void moveCursorByMergedCell(
         if (bOriginMerged)
         {
             if (nOrigY > 0 && nOrigY <= rRow && rRow < nOrigY + nRowSpan - 1)
-                // Block end is still within the merged region.  Push it outside.
+                
                 rRow = nOrigY - 1;
         }
         else
@@ -296,7 +296,7 @@ void moveCursorByMergedCell(
 
         if (nOld > rRow)
         {
-            // The block end has moved.  Check the protection setting and move back if needed.
+            
             checkBoundary(rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 ++rRow;
@@ -338,7 +338,7 @@ void ScTabView::InitOwnBlockMode()
 {
     if (!IsBlockMode())
     {
-        //  Wenn keine (alte) Markierung mehr da ist, Anker in SelectionEngine loeschen:
+        
 
         ScMarkData& rMark = aViewData.GetMarkData();
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
@@ -352,7 +352,7 @@ void ScTabView::InitOwnBlockMode()
         nBlockEndY = 0;
         nBlockEndZ = 0;
 
-        SelectionChanged();     // Status wird mit gesetzer Markierung abgefragt
+        SelectionChanged();     
     }
 }
 
@@ -367,7 +367,7 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         ScMarkData& rMark = aViewData.GetMarkData();
         SCTAB nTab = aViewData.GetTabNo();
 
-        //  Teil von Markierung aufheben?
+        
         if (bForceNeg)
             bBlockNeg = true;
         else if (bTestNeg)
@@ -413,9 +413,9 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
 void ScTabView::DoneBlockMode( bool bContinue )
 {
-    //  Wenn zwischen Tabellen- und Header SelectionEngine gewechselt wird,
-    //  wird evtl. DeselectAll gerufen, weil die andere Engine keinen Anker hat.
-    //  Mit bMoveIsShift wird verhindert, dass dann die Selektion aufgehoben wird.
+    
+    
+    
 
     if (IsBlockMode() && !bMoveIsShift)
     {
@@ -430,14 +430,14 @@ void ScTabView::DoneBlockMode( bool bContinue )
             rMark.MarkToMulti();
         else
         {
-            //  Die Tabelle kann an dieser Stelle ungueltig sein, weil DoneBlockMode
-            //  aus SetTabNo aufgerufen wird
-            //  (z.B. wenn die aktuelle Tabelle von einer anderen View aus geloescht wird)
+            
+            
+            
 
             SCTAB nTab = aViewData.GetTabNo();
             ScDocument* pDoc = aViewData.GetDocument();
             if ( pDoc->HasTable(nTab) )
-                PaintBlock( true );                             // true -> Block loeschen
+                PaintBlock( true );                             
             else
                 rMark.ResetMark();
         }
@@ -478,13 +478,13 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         ( aMarkRange.aStart.Row() != nBlockStartY && aMarkRange.aEnd.Row() != nBlockStartY ) ||
         ( meBlockMode == Own ))
     {
-        //  Markierung ist veraendert worden
-        //  (z.B. MarkToSimple, wenn per negativ alles bis auf ein Rechteck geloescht wurde)
-        //  oder nach InitOwnBlockMode wird mit Shift-Klick weitermarkiert...
+        
+        
+        
 
         bool bOldShift = bMoveIsShift;
-        bMoveIsShift = false;               //  wirklich umsetzen
-        DoneBlockMode(false);               //! direkt Variablen setzen? (-> kein Geflacker)
+        bMoveIsShift = false;               
+        DoneBlockMode(false);               
         bMoveIsShift = bOldShift;
 
         InitBlockMode( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
@@ -493,14 +493,14 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     if ( nCurX != nOldCurX || nCurY != nOldCurY )
     {
-        // Current cursor has moved
+        
 
         SCTAB nTab = nCurZ;
 
         if ( bCellSelection )
         {
-            // Expand selection area accordingly when the current selection ends
-            // with a merged cell.
+            
+            
             SCsCOL nCurXOffset = 0;
             SCsCOL nBlockStartXOffset = 0;
             SCsROW nCurYOffset = 0;
@@ -509,12 +509,12 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             const ScMergeAttr* pMergeAttr = NULL;
             ScDocument* pDocument = aViewData.GetDocument();
 
-            // The following block checks whether or not the "BlockStart" (anchor)
-            // cell is merged.  If it's merged, it'll then move the position of the
-            // anchor cell to the corner that's diagonally opposite of the
-            // direction of a current selection area.  For instance, if a current
-            // selection is moving in the upperleft direction, the anchor cell will
-            // move to the lower-right corner of the merged anchor cell, and so on.
+            
+            
+            
+            
+            
+            
 
             pMergeAttr = static_cast<const ScMergeAttr*>(
                 pDocument->GetAttr( nBlockStartXOrig, nBlockStartYOrig, nTab, ATTR_MERGE ) );
@@ -535,12 +535,12 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 }
             }
 
-            // The following block checks whether or not the current cell is
-            // merged.  If it is, it'll then set the appropriate X & Y offset
-            // values (nCurXOffset & nCurYOffset) such that the selection area will
-            // grow by those specified offset amounts.  Note that the values of
-            // nCurXOffset/nCurYOffset may also be specified in the previous code
-            // block, in which case whichever value is greater will take on.
+            
+            
+            
+            
+            
+            
 
             pMergeAttr = static_cast<const ScMergeAttr*>(
                 pDocument->GetAttr( nCurX, nCurY, nTab, ATTR_MERGE ) );
@@ -571,8 +571,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             }
             else
             {
-                // The current cell is not merged.  Move the anchor cell to its
-                // original position.
+                
+                
                 if ( !bBlockStartMerged )
                 {
                     nBlockStartX = nBlockStartXOrig;
@@ -591,7 +591,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             nBlockEndY = nCurY;
         }
 
-        // Set new selection area
+        
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
         UpdateSelectionOverlay();
@@ -618,13 +618,13 @@ void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPage
     }
     else if (IsBlockMode())
     {
-        // block end position.
+        
         nCurX = nBlockEndX;
         nCurY = nBlockEndY;
     }
     else
     {
-        // cursor position
+        
         nCurX = aViewData.GetCurX();
         nCurY = aViewData.GetCurY();
     }
@@ -658,7 +658,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     SCCOL nNewX = -1;
     SCROW nNewY = -1;
 
-    // current cursor position.
+    
     SCCOL nCurX = aViewData.GetCurX();
     SCROW nCurY = aViewData.GetCurY();
 
@@ -671,7 +671,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     }
     else if (IsBlockMode())
     {
-        // block end position.
+        
         nNewX = nBlockEndX;
         nNewY = nBlockEndY;
     }
@@ -684,7 +684,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
 
-    //  FindAreaPos kennt nur -1 oder 1 als Richtung
+    
     ScModule* pScModule = SC_MOD();
     bool bLegacyCellSelection = pScModule->GetInputOptions().GetLegacyCellSelection();
     SCCOL nVirtualX = bLegacyCellSelection ? nNewX : nCurX;
@@ -704,7 +704,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
         for ( i=0; i<-nMovY; i++ )
             pDoc->FindAreaPos( nVirtualX, nNewY, nTab,  SC_MOVE_UP );
 
-    if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
+    if (eMode==SC_FOLLOW_JUMP)                  
     {
         if (nMovX != 0 && nNewX == MAXCOL)
             eMode = SC_FOLLOW_LINE;
@@ -852,20 +852,20 @@ void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, S
 void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
 {
     if (!nMovX && !nMovY)
-        // Nothing to do.  Bail out.
+        
         return;
 
     ScTabViewShell* pViewShell = aViewData.GetViewShell();
     bool bRefInputMode = pViewShell && pViewShell->IsRefInputMode();
     if (bRefInputMode && !aViewData.IsRefMode())
-        // initialize formula reference mode if it hasn't already.
+        
         InitRefMode(aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo(), SC_REFTYPE_REF);
 
     ScDocument* pDoc = aViewData.GetDocument();
 
     if (aViewData.IsRefMode())
     {
-        // formula reference mode
+        
 
         SCCOL nNewX = aViewData.GetRefEndX();
         SCROW nNewY = aViewData.GetRefEndY();
@@ -921,13 +921,13 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
     }
     else
     {
-        // normal selection mode
+        
 
         SCTAB nTab = aViewData.GetTabNo();
         SCCOL nOrigX = aViewData.GetCurX();
         SCROW nOrigY = aViewData.GetCurY();
 
-        // Note that the origin position *never* moves during selection.
+        
 
         if (!IsBlockMode())
             InitBlockMode(nOrigX, nOrigY, nTab, true);
@@ -939,7 +939,7 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
 
         MarkCursor(nBlockEndX, nBlockEndY, nTab, false, false, true);
 
-        // Check if the entire row(s) or column(s) are selected.
+        
         ScSplitPos eActive = aViewData.GetActivePart();
         bool bRowSelected = (nBlockStartX == 0 && nBlockEndX == MAXCOL);
         bool bColSelected = (nBlockStartY == 0 && nBlockEndY == MAXROW);
@@ -996,9 +996,9 @@ void ScTabView::UpdateAllOverlays()
             pGridWin[i]->UpdateAllOverlays();
 }
 
-//!
-//! PaintBlock in zwei Methoden aufteilen: RepaintBlock und RemoveBlock o.ae.
-//!
+
+
+
 
 void ScTabView::PaintBlock( bool bReset )
 {
@@ -1034,7 +1034,7 @@ void ScTabView::PaintBlock( bool bReset )
         {
             if ( bReset )
             {
-                // Invertieren beim Loeschen nur auf aktiver View
+                
                 if ( aViewData.IsActive() )
                 {
                     rMark.ResetMark();
@@ -1120,7 +1120,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
     SCCOL nCol;
     for (nCol=0; nCol<nFixPosX; nCol++)
     {
-        //  for frozen panes, add both parts
+        
         sal_uInt16 nColTwips = pDoc->GetColWidth( nCol, nTab );
         if (nColTwips)
         {
@@ -1146,7 +1146,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         if (pDoc->RowHidden(nRow, nTab))
             continue;
 
-        //  for frozen panes, add both parts
+        
         sal_uInt16 nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
@@ -1171,21 +1171,21 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
 
 sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 {
-    sal_uInt16 nZoom = 0; // Ergebnis
+    sal_uInt16 nZoom = 0; 
 
     switch ( eType )
     {
-        case SVX_ZOOM_PERCENT: // rZoom ist kein besonderer prozentualer Wert
+        case SVX_ZOOM_PERCENT: 
             nZoom = nOldZoom;
             break;
 
-        case SVX_ZOOM_OPTIMAL:  // nZoom entspricht der optimalen Gr"o\se
+        case SVX_ZOOM_OPTIMAL:  
             {
                 ScMarkData& rMark = aViewData.GetMarkData();
                 ScDocument* pDoc = aViewData.GetDocument();
 
                 if (!rMark.IsMarked() && !rMark.IsMultiMarked())
-                    nZoom = 100;                // nothing selected
+                    nZoom = 100;                
                 else
                 {
                     SCTAB   nTab = aViewData.GetTabNo();
@@ -1209,7 +1209,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     SCROW nFixPosY = 0;
                     if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
                     {
-                        //  use right part
+                        
                         eUsedPart = (WhichV(eUsedPart)==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
                         nFixPosX = aViewData.GetFixPosX();
                         if ( nStartCol < nFixPosX )
@@ -1217,7 +1217,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     }
                     if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
                     {
-                        //  use bottom part
+                        
                         eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
                         nFixPosY = aViewData.GetFixPosY();
                         if ( nStartRow < nFixPosY )
@@ -1226,12 +1226,12 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
                     if (pGridWin[eUsedPart])
                     {
-                        //  Because scale is rounded to pixels, the only reliable way to find
-                        //  the right scale is to check if a zoom fits
+                        
+                        
 
                         Size aWinSize = pGridWin[eUsedPart]->GetOutputSizePixel();
 
-                        //  for frozen panes, use sum of both parts for calculation
+                        
 
                         if ( nFixPosX != 0 )
                             aWinSize.Width() += GetGridWidth( SC_SPLIT_LEFT );
@@ -1260,8 +1260,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
                         if ( nZoom != nOldZoom )
                         {
-                            // scroll to block only in active split part
-                            // (the part for which the size was calculated)
+                            
+                            
 
                             if ( nStartCol <= nEndCol )
                                 aViewData.SetPosX( WhichH(eUsedPart), nStartCol );
@@ -1273,8 +1273,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
             }
             break;
 
-            case SVX_ZOOM_WHOLEPAGE:    // nZoom entspricht der ganzen Seite oder
-            case SVX_ZOOM_PAGEWIDTH:    // nZoom entspricht der Seitenbreite
+            case SVX_ZOOM_WHOLEPAGE:    
+            case SVX_ZOOM_PAGEWIDTH:    
                 {
                     SCTAB               nCurTab     = aViewData.GetTabNo();
                     ScDocument*         pDoc        = aViewData.GetDocument();
@@ -1293,11 +1293,11 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
                         Size aPageSize = aPrintFunc.GetDataSize();
 
-                        //  use the size of the largest GridWin for normal split,
-                        //  or both combined for frozen panes, with the (document) size
-                        //  of the frozen part added to the page size
-                        //  (with frozen panes, the size of the individual parts
-                        //  depends on the scale that is to be calculated)
+                        
+                        
+                        
+                        
+                        
 
                         if ( !pGridWin[SC_SPLIT_BOTTOMLEFT] ) return 0;
                         Size aWinSize = pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutputSizePixel();
@@ -1357,7 +1357,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
     return nZoom;
 }
 
-//  wird z.B. gerufen, wenn sich das View-Fenster verschiebt:
+
 
 void ScTabView::StopMarking()
 {
@@ -1387,10 +1387,10 @@ void ScTabView::MakeDrawLayer()
     {
         aViewData.GetDocShell()->MakeDrawLayer();
 
-        //  pDrawView wird per Notify gesetzt
+        
         OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
 
-        // #114409#
+        
         for(sal_uInt16 a(0); a < 4; a++)
         {
             if(pGridWin[a])
@@ -1405,11 +1405,11 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
 {
     if ( SC_MOD()->IsInExecuteDrop() )
     {
-        // #i28468# don't show error message when called from Drag&Drop, silently abort instead
+        
         return;
     }
 
-    StopMarking();      // falls per Focus aus MouseButtonDown aufgerufen
+    StopMarking();      
 
     Window* pParent = aViewData.GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
@@ -1463,14 +1463,14 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
         pNewData = new ScPageBreakData(nCount);
 
         ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,NULL, NULL, pNewData );
-        //  ScPrintFunc fuellt im ctor die PageBreakData
+        
         if ( nCount > 1 )
         {
             aPrintFunc.ResetBreaks(nTab);
             pNewData->AddPages();
         }
 
-        //  Druckbereiche veraendert?
+        
         if ( bForcePaint || ( pPageBreakData && !( *pPageBreakData == *pNewData ) ) )
             PaintGrid();
     }

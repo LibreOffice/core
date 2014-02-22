@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "Context.hxx"
 
@@ -26,7 +26,7 @@ namespace sfx2 { namespace sidebar {
 const sal_Int32 Context::NoMatch = 4;
 const sal_Int32 Context::ApplicationWildcardMatch = 1;
 const sal_Int32 Context::ContextWildcardMatch = 2;
-const sal_Int32 Context::OptimalMatch = 0;  // Neither application nor context name is "any".
+const sal_Int32 Context::OptimalMatch = 0;  
 
 Context::Context (void)
     : msApplication(AnyApplicationName),
@@ -54,11 +54,11 @@ sal_Int32 Context::EvaluateMatch (
     const bool bApplicationNameIsAny (rOther.msApplication.equalsAscii(AnyApplicationName));
     if (rOther.msApplication.equals(msApplication) || bApplicationNameIsAny)
     {
-        // Application name matches.
+        
         const bool bContextNameIsAny (rOther.msContext.equalsAscii(AnyContextName));
         if (rOther.msContext.equals(msContext) || bContextNameIsAny)
         {
-            // Context name matches.
+            
             return (bApplicationNameIsAny ? ApplicationWildcardMatch : 0)
                 + (bContextNameIsAny ? ContextWildcardMatch : 0);
         }
@@ -84,7 +84,7 @@ sal_Int32 Context::EvaluateMatch (const ::std::vector<Context>& rOthers) const
         {
             if (nMatch == OptimalMatch)
             {
-                // We will find no better match so stop searching.
+                
                 return OptimalMatch;
             }
             nBestMatch = nMatch;
@@ -112,6 +112,6 @@ bool Context::operator!= (const Context& rOther) const
 }
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

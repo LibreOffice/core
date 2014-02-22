@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef DBG_UTIL
@@ -124,15 +124,15 @@ static sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 
 class SwImplProtocol
 {
-    SvFileStream *pStream;          // output stream
-    std::set<sal_uInt16> *pFrmIds;  // which FrmIds shall be logged ( NULL == all)
-    std::vector<long> aVars;        // variables
-    OStringBuffer aLayer;      // indentation of output ("  " per start/end)
-    sal_uInt16 nTypes;              // which types shall be logged
-    sal_uInt16 nLineCount;          // printed lines
-    sal_uInt16 nMaxLines;           // max lines to be printed
-    sal_uInt8 nInitFile;            // range (FrmId,FrmType,Record) during reading of the INI file
-    sal_uInt8 nTestMode;            // special for test formatting, logging may only be done in test formatting.
+    SvFileStream *pStream;          
+    std::set<sal_uInt16> *pFrmIds;  
+    std::vector<long> aVars;        
+    OStringBuffer aLayer;      
+    sal_uInt16 nTypes;              
+    sal_uInt16 nLineCount;          
+    sal_uInt16 nMaxLines;           
+    sal_uInt8 nInitFile;            
+    sal_uInt8 nTestMode;            
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
@@ -140,12 +140,12 @@ class SwImplProtocol
 public:
     SwImplProtocol();
     ~SwImplProtocol();
-    // logging
+    
     void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
         { if( pStream ) _Record( pFrm, nFunction, nAct, pParam ); }
-    bool InsertFrm( sal_uInt16 nFrmId );    // take FrmId for logging
-    bool DeleteFrm( sal_uInt16 nFrmId );    // remove FrmId; don't log him anymore
-    void FileInit();                    // read the INI file
+    bool InsertFrm( sal_uInt16 nFrmId );    
+    bool DeleteFrm( sal_uInt16 nFrmId );    
+    void FileInit();                    
     void ChkStream() { if( !pStream ) NewStream(); }
 };
 
@@ -163,15 +163,15 @@ public:
 class SwImplEnterLeave
 {
 protected:
-    const SwFrm* pFrm;              // the frame
-    sal_uLong nFunction, nAction;   // the function, the action if needed
-    void* pParam;                   // further parameter
+    const SwFrm* pFrm;              
+    sal_uLong nFunction, nAction;   
+    void* pParam;                   
 public:
     SwImplEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : pFrm( pF ), nFunction( nFunct ), nAction( nAct ), pParam( pPar ) {}
     virtual ~SwImplEnterLeave() {}
-    virtual void Enter();           // message when entering
-    virtual void Leave();           // message when leaving
+    virtual void Enter();           
+    virtual void Leave();           
 };
 
 class SwSizeEnterLeave : public SwImplEnterLeave
@@ -181,7 +181,7 @@ public:
     SwSizeEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmHeight( pF->Frm().Height() ) {}
     virtual ~SwSizeEnterLeave() {}
-    virtual void Leave();           // resize message
+    virtual void Leave();           
 };
 
 class SwUpperEnterLeave : public SwImplEnterLeave
@@ -191,8 +191,8 @@ public:
     SwUpperEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmId( 0 ) {}
     virtual ~SwUpperEnterLeave() {}
-    virtual void Enter();           // message
-    virtual void Leave();           // message of FrmId from upper
+    virtual void Enter();           
+    virtual void Leave();           
 };
 
 class SwFrmChangesLeave : public SwImplEnterLeave
@@ -202,34 +202,34 @@ public:
     SwFrmChangesLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrm( pF->Frm() ) {}
     virtual ~SwFrmChangesLeave() {}
-    virtual void Enter();           // no message
-    virtual void Leave();           // message when resizing the Frm area
+    virtual void Enter();           
+    virtual void Leave();           
 };
 
 void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
 {
     if( Start() )
-    {   // We reach this point if SwProtocol::nRecord is binary OR'd with PROT_INIT(0x1) using the debugger
-        bool bFinit = false; // This gives the possibility to stop logging of this action in the debugger
+    {   
+        bool bFinit = false; 
         if( bFinit )
         {
-            nRecord &= ~nFunction;  // Don't log this function any longer
-            nRecord &= ~PROT_INIT;  // Always reset PROT_INIT
+            nRecord &= ~nFunction;  
+            nRecord &= ~PROT_INIT;  
             return;
         }
-        nRecord |= nFunction;       // Acitivate logging of this function
-        nRecord &= ~PROT_INIT;      // Always reset PROT_INIT
+        nRecord |= nFunction;       
+        nRecord &= ~PROT_INIT;      
         if( pImpl )
             pImpl->ChkStream();
     }
-    if( !pImpl )                        // Create Impl object if needed
+    if( !pImpl )                        
         pImpl = new SwImplProtocol();
-    pImpl->Record( pFrm, nFunction, nAct, pParam ); // ...and start logging
+    pImpl->Record( pFrm, nFunction, nAct, pParam ); 
 }
 
-// The following function gets called when pulling in the writer DLL through
-// TxtInit(..) and gives the possibility to release functions
-// and/or FrmIds to the debugger
+
+
+
 
 void SwProtocol::Init()
 {
@@ -244,7 +244,7 @@ void SwProtocol::Init()
     aStream.Close();
 }
 
-// End of logging
+
 
 void SwProtocol::Stop()
 {
@@ -290,53 +290,53 @@ SwImplProtocol::~SwImplProtocol()
     aVars.clear();
 }
 
-/// analyze a line in the INI file
+
 void SwImplProtocol::CheckLine( OString& rLine )
 {
-    rLine = rLine.toAsciiLowerCase(); // upper/lower case is the same
+    rLine = rLine.toAsciiLowerCase(); 
     rLine = rLine.replace( '\t', ' ' );
-    if( '#' == rLine[0] )   // comments start with '#'
+    if( '#' == rLine[0] )   
         return;
-    if( '[' == rLine[0] )   // section: FrmIds, type or funciton
+    if( '[' == rLine[0] )   
     {
         OString aTmp = comphelper::string::getToken(rLine, 0, ']');
-        if (aTmp == "[frmid")      // section FrmIds
+        if (aTmp == "[frmid")      
         {
             nInitFile = 1;
             pFrmIds->clear();
             delete pFrmIds;
-            pFrmIds = NULL;         // default: log all frames
+            pFrmIds = NULL;         
         }
-        else if (aTmp == "[frmtype")// section types
+        else if (aTmp == "[frmtype")
         {
             nInitFile = 2;
-            nTypes = USHRT_MAX;     // default: log all frame types
+            nTypes = USHRT_MAX;     
         }
-        else if (aTmp == "[record")// section functions
+        else if (aTmp == "[record")
         {
             nInitFile = 3;
-            SwProtocol::SetRecord( 0 );// default: don't log any function
+            SwProtocol::SetRecord( 0 );
         }
-        else if (aTmp == "[test")// section functions
+        else if (aTmp == "[test")
         {
-            nInitFile = 4; // default:
-            nTestMode = 0; // log outside of test formatting
+            nInitFile = 4; 
+            nTestMode = 0; 
         }
-        else if (aTmp == "[max")// Max number of lines
+        else if (aTmp == "[max")
         {
-            nInitFile = 5; // default:
+            nInitFile = 5; 
             nMaxLines = USHRT_MAX;
         }
-        else if (aTmp == "[var")// variables
+        else if (aTmp == "[var")
         {
             nInitFile = 6;
         }
         else
-            nInitFile = 0;          // oops: unknown section?
+            nInitFile = 0;          
         rLine = rLine.copy(aTmp.getLength() + 1);
     }
 
-    // spaces (or tabs) are the delimiter
+    
     sal_Int32 nIndex = 0;
     do
     {
@@ -344,7 +344,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         bool bNo = false;
         if( '!' == aTok[0] )
         {
-            bNo = true;                 // remove this function/type
+            bNo = true;                 
             aTok = aTok.copy(1);
         }
         if( !aTok.isEmpty() )
@@ -353,31 +353,31 @@ void SwImplProtocol::CheckLine( OString& rLine )
             sscanf( aTok.getStr(), "%li", &nVal );
             switch ( nInitFile )
             {
-                case 1: InsertFrm( sal_uInt16( nVal ) );    // add FrmId
+                case 1: InsertFrm( sal_uInt16( nVal ) );    
                         break;
                 case 2: {
                             sal_uInt16 nNew = (sal_uInt16)nVal;
                             if( bNo )
-                                nTypes &= ~nNew;    // remove type
+                                nTypes &= ~nNew;    
                             else
-                                nTypes |= nNew;     // add type
+                                nTypes |= nNew;     
                         }
                         break;
                 case 3: {
                             sal_uLong nOld = SwProtocol::Record();
                             if( bNo )
-                                nOld &= ~nVal;      // remove function
+                                nOld &= ~nVal;      
                             else
-                                nOld |= nVal;       // remove function
+                                nOld |= nVal;       
                             SwProtocol::SetRecord( nOld );
                         }
                         break;
                 case 4: {
                             sal_uInt8 nNew = (sal_uInt8)nVal;
                             if( bNo )
-                                nTestMode &= ~nNew; // reset test mode
+                                nTestMode &= ~nNew; 
                             else
-                                nTestMode |= nNew;      // set test mode
+                                nTestMode |= nNew;      
                         }
                         break;
                 case 5: nMaxLines = (sal_uInt16)nVal;
@@ -390,7 +390,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
     while ( nIndex >= 0 );
 }
 
-/// read the file "dbg_lay.ini" in the current directory and evaluate it.
+
 void SwImplProtocol::FileInit()
 {
     OUString aName("dbg_lay.ini");
@@ -403,23 +403,23 @@ void SwImplProtocol::FileInit()
         {
             sal_Char c;
             aStream.ReadChar( c );
-            if( '\n' == c || '\r' == c )    // line ending
+            if( '\n' == c || '\r' == c )    
             {
                 aLine = aLine.trim();
                 if( !aLine.isEmpty() )
-                    CheckLine( aLine );     // evaluate line
+                    CheckLine( aLine );     
                 aLine = OString();
             }
             else
                 aLine = OString(c);
         }
         if( !aLine.isEmpty() )
-            CheckLine( aLine );     // evaluate last line
+            CheckLine( aLine );     
     }
     aStream.Close();
 }
 
-/// enable indentation by two spaces during ACT_START and disable it again at ACT_END.
+
 static void lcl_Start(OStringBuffer& rOut, OStringBuffer& rLay, sal_uLong nAction)
 {
     if( nAction == ACT_START )
@@ -438,8 +438,8 @@ static void lcl_Start(OStringBuffer& rOut, OStringBuffer& rLay, sal_uLong nActio
     }
 }
 
-/// output the ValidSize-, ValidPos- and ValidPrtArea-Flag ("Sz","Ps","PA")
-/// of the frame; "+" stands for valid, "-" stands for invalid.
+
+
 static void lcl_Flags(OStringBuffer& rOut, const SwFrm* pFrm)
 {
     rOut.append(" Sz");
@@ -450,7 +450,7 @@ static void lcl_Flags(OStringBuffer& rOut, const SwFrm* pFrm)
     rOut.append(pFrm->GetValidPrtAreaFlag() ? '+' : '-');
 }
 
-/// output the type of the frame as plain text.
+
 static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
 {
     if( pFrm->IsTxtFrm() )
@@ -505,7 +505,7 @@ static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
 void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
 {
     sal_uInt16 nSpecial = 0;
-    if( nSpecial )  // the possible debugger manipulations
+    if( nSpecial )  
     {
         sal_uInt16 nId = sal_uInt16(lcl_GetFrameId( pFrm ));
         switch ( nSpecial )
@@ -518,22 +518,22 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         return;
     }
     if( !pStream && !NewStream() )
-        return; // still no stream
+        return; 
 
     if( pFrmIds && !pFrmIds->count( sal_uInt16(lcl_GetFrameId( pFrm )) ) )
-        return; // doesn't belong to the wished FrmIds
+        return; 
 
     if( !(pFrm->GetType() & nTypes) )
-        return; // the type is unwanted
+        return; 
 
     if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
-        return; // we may only log inside a test formatting
+        return; 
     sal_Bool bTmp = sal_False;
     OStringBuffer aOut(aLayer);
     aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(pFrm)));
     aOut.append(' ');
-    lcl_FrameType( aOut, pFrm );    // then the frame type
-    switch ( nFunction )            // and the function
+    lcl_FrameType( aOut, pFrm );    
+    switch ( nFunction )            
     {
         case PROT_SNAPSHOT: lcl_Flags( aOut, pFrm );
                             break;
@@ -542,7 +542,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             if( nAct == ACT_START )
                                 lcl_Flags( aOut, pFrm );
                             break;
-        case PROT_MOVE_FWD: bTmp = sal_True; // NoBreak
+        case PROT_MOVE_FWD: bTmp = sal_True; 
         case PROT_MOVE_BWD:
                             if (nFunction == bTmp)
                                 aOut.append("Fwd");
@@ -564,7 +564,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             aOut.append("TestShrink");
                             break;
         case PROT_ADJUSTN :
-        case PROT_SHRINK:   bTmp = sal_True; // NoBreak
+        case PROT_SHRINK:   bTmp = sal_True; 
         case PROT_GROW:
                             if (!bTmp)
                                 aOut.append("Grow");
@@ -605,7 +605,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             break;
         case PROT_SECTION:  SectFunc(aOut, pFrm, nAct, pParam);
                             break;
-        case PROT_CUT:      bTmp = sal_True; // NoBreak
+        case PROT_CUT:      bTmp = sal_True; 
         case PROT_PASTE:
                             if (bTmp)
                                 aOut.append("Cut from ");
@@ -656,13 +656,13 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             }
     }
     pStream->WriteCharPtr( aOut.getStr() );
-    (*pStream) << endl;  // output
-    pStream->Flush();   // to the disk, so we can read it immediately
-    if( ++nLineCount >= nMaxLines )     // max number of lines reached?
-        SwProtocol::SetRecord( 0 );        // => end f logging
+    (*pStream) << endl;  
+    pStream->Flush();   
+    if( ++nLineCount >= nMaxLines )     
+        SwProtocol::SetRecord( 0 );        
 }
 
-/// Handle the output of the SectionFrms.
+
 void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
 {
     bool bTmp = false;
@@ -671,7 +671,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct
         case ACT_MERGE:         rOut.append("Merge Section ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
-        case ACT_CREATE_MASTER: bTmp = true; // NoBreak
+        case ACT_CREATE_MASTER: bTmp = true; 
         case ACT_CREATE_FOLLOW: rOut.append("Create Section ");
                                 if (bTmp)
                                     rOut.append("Master to ");
@@ -679,7 +679,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct
                                     rOut.append("Follow from ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
-        case ACT_DEL_MASTER:    bTmp = true; // NoBreak
+        case ACT_DEL_MASTER:    bTmp = true; 
         case ACT_DEL_FOLLOW:    rOut.append("Delete Section ");
                                 if (bTmp)
                                     rOut.append("Master to ");
@@ -707,7 +707,7 @@ bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
     return true;
 }
 
-/// Removes a FrmId from the pFrmIds array, so that it won't be logged anymore.
+
 bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
@@ -788,6 +788,6 @@ void SwFrmChangesLeave::Leave()
         SwProtocol::Record( pFrm, PROT_FRMCHANGES, 0, &aFrm );
 }
 
-#endif // DBG_UTIL
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

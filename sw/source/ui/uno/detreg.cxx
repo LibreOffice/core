@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swdetect.hxx"
@@ -30,7 +30,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL swd_component_getFactory(
     void* pServiceManager,
     void* /*pRegistryKey*/ )
 {
-    // Set default return value for this operation - if it failed.
+    
     void* pReturn = NULL ;
 
     if  (
@@ -38,7 +38,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL swd_component_getFactory(
             ( pServiceManager       !=  NULL )
         )
     {
-        // Define variables which are used in following macros.
+        
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
         Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
@@ -50,7 +50,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL swd_component_getFactory(
             SwFilterDetect::impl_getStaticSupportedServiceNames() );
         }
 
-        // Factory is valid - service was found.
+        
         if ( xFactory.is() )
         {
             xFactory->acquire();
@@ -58,10 +58,10 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL swd_component_getFactory(
         }
     }
 
-    // Return with result of this operation.
+    
     return pReturn ;
 }
-} // extern "C"
+} 
 
 
 

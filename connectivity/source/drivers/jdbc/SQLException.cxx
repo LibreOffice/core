@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "java/sql/SQLException.hxx"
@@ -26,9 +26,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//**************************************************************
-//************ Class: java.sql.SQLException
-//**************************************************************
+
+
+
 java_sql_SQLException::java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const Reference< XInterface> & _rContext)
     : starsdbc::SQLException(   _rException.getMessage(),
                                 _rContext,
@@ -55,7 +55,7 @@ jclass java_sql_SQLException_BASE::getMyClass() const
 }
 jclass java_sql_SQLException_BASE::st_getMyClass()
 {
-    // The class needs to be fetched just once, that is why it is static
+    
     if( !theClass )
         theClass = findMyClass("java/sql/SQLException");
     return theClass;
@@ -66,7 +66,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", mID);
-    // WARNING: the caller will become the owner of the returned pointers !!!
+    
     if( out )
     {
         java_sql_SQLException_BASE  warn_base(t.pEnv,out);

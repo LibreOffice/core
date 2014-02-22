@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -81,7 +81,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
     return aConfigPropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDocumentConfiguration::ScDocumentConfiguration(ScDocShell* pDocSh)
     : pDocShell(pDocSh) ,
@@ -98,16 +98,16 @@ ScDocumentConfiguration::~ScDocumentConfiguration()
 
 void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -173,7 +173,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 OUString sPrinterName;
                 if ( aValue >>= sPrinterName )
                 {
-                    // #i75610# if the name is empty, do nothing (don't create any printer)
+                    
                     if ( !sPrinterName.isEmpty() && pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                     {
                         SfxPrinter* pPrinter = pDocShell->GetPrinter();
@@ -201,7 +201,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 if ( aValue >>= aSequence )
                 {
                     sal_uInt32 nSize = aSequence.getLength();
-                    // #i75610# if the sequence is empty, do nothing (don't create any printer)
+                    
                     if ( nSize != 0 )
                     {
                         SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
@@ -224,11 +224,11 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_FORBIDDEN ) )
             {
-                //  read-only - should not be set
+                
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_CHARCOMP ) )
             {
-                // Int16 contains CharacterCompressionType values
+                
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
                 pDoc->SetAsianCompression( (sal_uInt8) nUno );
                 bUpdateHeights = sal_True;
@@ -314,7 +314,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
             if ( bUpdateHeights && !pDoc->IsImportingXML() )
             {
-                //  update automatic row heights and repaint
+                
                 SCTAB nTabCount = pDoc->GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
@@ -374,8 +374,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->GetAutoCalc() );
             else if ( aPropertyName.equalsAscii( SC_UNO_PRINTERNAME ) )
             {
-                // #i75610# don't create the printer, return empty string if no printer created yet
-                // (as in SwXDocumentSettings)
+                
+                
                 SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                     aRet <<= OUString ( pPrinter->GetName());
@@ -384,8 +384,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_PRINTERSETUP ) )
             {
-                // #i75610# don't create the printer, return empty sequence if no printer created yet
-                // (as in SwXDocumentSettings)
+                
+                
                 SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                 {
@@ -462,7 +462,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
-// XServiceInfo
+
 OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScDocumentConfiguration" );

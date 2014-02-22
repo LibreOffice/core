@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**
@@ -41,7 +41,7 @@
 
 static hchar jaso2ks(hchar hh);
 
-// ccvHH2ASC    code convert HWP20 to ASC(KSSM)
+
 
 #define HCA_KSS         0x3400
 #define HCA_TG          0x37C0
@@ -385,7 +385,7 @@ static const unsigned hhtg_tg[] =
 
 #define LINEBASE    0x3013
 
-// ?
+
 static char LineCharDir(hchar ch)
 {
     static const char index2dir[] = { 10, 11, 9, 14, 15, 13, 6, 7, 5, 3, 12 };
@@ -577,7 +577,7 @@ static hchar jaso2ks(hchar hh)
 }
 
 
-//1 00011 00 001 00011
+
 static const hchar choseong_to_unicode[] =
 {
     0x111e,  0,  0x1100, 0x1101, 0x1102, 0x1103, 0x1104, 0x1105,
@@ -888,11 +888,11 @@ static const JamoComp jamocomp1_to_unicode[] =
     {2, 0x1109, 0x1192, 0x0000}, {3, 0x1109, 0x1192, 0x11bc}
 };
 
-//#define IS_OLD_HAN(x) (((x) >= 0x8020 && (x) <= 0x83ff ) || ( (x) >= 0x8420 && (x) <= 0x843f )) // beside these, there are very much characters in the hangul.
+
 int hcharconv(hchar ch, hchar *dest, int codeType)
 {
     unsigned char lo;
-     //printf("hcharconv[%04x]\n",ch);
+     
     if (ch < 128){
          dest[0] = ch;
         return 1;
@@ -908,7 +908,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                     return 1 ;
                 }
                 int res = kssm_hangul_to_ucs2(ch, dest);
-               //printf("hcharconv Hangul[%04x]\n",dest[0]);
+               
                 return res;
           }
           dest[0] = ch;
@@ -953,7 +953,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                 lo += 0x12;
             ch = (hi << 8) | lo;
         }
-          //printf("hcharconv Hanja[%04x]\n",ch);
+          
           dest[0] = ch;
         return 1;
     }
@@ -964,7 +964,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
     }
     else if (0x2f00 <= ch && ch <= 0x2f6f && (ch & 0x0f) < 9)
     {
-// bullet
+
         lo = sal::static_int_cast<unsigned char>(ch & 0x0f);
 
         if( codeType != KSSM )
@@ -992,7 +992,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
             else ch = 0xd9b9;
             ch = (lo < 6) ? ch : ch + 1;
         }
-          //printf("hcharconv Bullet[%04x]\n",ch);
+          
           dest[0] = ch;
         return 1 ;
     }
@@ -1004,10 +1004,10 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
     {
         if( codeType != KSSM )
         {
-               //printf("code[0x%04x]\n",ch);
+               
                 hchar ch2 = ch;
             ch = s_hh2ks(ch);
-                //printf("code ks[0x%04x]\n",ch);
+                
                 if( codeType == UNICODE ){
                      if (ch < 128){
                          dest[0] = ch;
@@ -1039,21 +1039,21 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                      else{
                           ch = ksc5601_sym_to_ucs2(ch);
                      }
-                     //printf("code ucs2[0x%04x]\n",ch);
+                     
                 }
         }
         else{
             ch = s_hh2kssm(ch);
           }
 
-        if (ch == 0){ // not '?', but square mark
+        if (ch == 0){ 
                 if( codeType == UNICODE )
                      dest[0] =  0x25A1;
                 else
                      dest[0] =  0xA1E0;
                 return 1;
           }
-          //printf("hcharconv Special[%04x]\n",ch);
+          
           dest[0] = ch;
         return 1;
     }
@@ -1068,7 +1068,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
     joongseong = ((ch >> 5) & 0x1f);
     jongseong = (ch & 0x1f) ;
 
-     //printf("kssm_hangul_to_ucs2 : [%d,%d,%d]\n", choseong,joongseong,jongseong);
+     
 
      if( joongseong < 2 ){ /* 조합되지 않은 영역 중성=0,1 */
          if( joongseong == 0 && ch < 0xa414 ){ /* 고어포함 자모 */
@@ -1084,7 +1084,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
                  dest[2] = jamocomp1_to_unicode[index].v3;
                  return jamocomp1_to_unicode[index].size;
              }
-             dest[0] = 0x25a1; // empty square.
+             dest[0] = 0x25a1; 
              return 1;
          }
      }
@@ -1161,7 +1161,7 @@ hchar ksc5601_han_to_ucs2 (hchar input)
     ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx >= 3854){
-    // Hanja : row 42 - row 93 : 3854 = 94 * (42-1)
+    
     hchar value = ksc5601_2uni_page21[idx - 3854];
     return value ? value : '?';
     }
@@ -1251,17 +1251,17 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 
     switch( (int)color )
     {
-        case 0 :                                  // black
+        case 0 :                                  
             red =  0xff * (100 - shade ) /100;
             green =  0xff * (100 - shade ) /100;
             blue =  0xff * (100 - shade ) /100;
             break;
-        case 1:                                   // blue
+        case 1:                                   
             red =  0xff * (100 - shade ) /100;
             green =  0xff * (100 - shade ) /100;
             blue = 0xff;
             break;
-        case 2:                                   // green
+        case 2:                                   
             red =  0xff * (100 - shade ) /100;
                 if( bIsChar )
                      green = 0x80;
@@ -1269,27 +1269,27 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
                      green = 0xff;
             blue =  0xff * (100 - shade ) /100;
             break;
-        case 3:                                   // cyan
+        case 3:                                   
             red =  0xff * (100 - shade ) /100;
             green = 0xff;
             blue = 0xff;
             break;
-        case 4:                                   // red
+        case 4:                                   
             red = 0xff;
             green =  0xff * (100 - shade ) /100;
             blue =  0xff * (100 - shade ) /100;
             break;
-        case 5:                                   // magenta
+        case 5:                                   
             red = 0xff;
             green =  0xff * (100 - shade ) /100;
             blue = 0xff;
             break;
-        case 6:                                   //yellow
+        case 6:                                   
             red = 0xff;
             green = 0xff;
             blue =  0xff * (100 - shade ) /100;
             break;
-        case 7:                                   //white
+        case 7:                                   
         default:
             red = 0xff;
             green = 0xff;
@@ -1306,21 +1306,21 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 {
     ::std::string ret;
     unsigned int i = 0;
-    if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) // Home Dir
+    if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) 
     {
-        ret.append("file://");
+        ret.append("file:
         ret.append(getenv("HOME"));
         ret.push_back('/');
-        i = 3; // skip first 3
+        i = 3; 
     }
-    else if( src[0] == 'D' && src[1] == ':' && src[2] == '\\' ) // Root Dir
+    else if( src[0] == 'D' && src[1] == ':' && src[2] == '\\' ) 
     {
-        ret.append("file:///");
-        i = 3; // skip first 3
+        ret.append("file:
+        i = 3; 
     }
-    else if( !strncmp(src,"http",4)  ) // Start from "http"
+    else if( !strncmp(src,"http",4)  ) 
     {
-        // nothing special here, just copy
+        
     }
      else
     {
@@ -1334,7 +1334,7 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
             if (strcasecmp(ext,"HWP") && strcasecmp(ext,"HWT"))
 #endif
             {
-                ret.append("http://");
+                ret.append("http:
             }
         }
      }
@@ -1355,7 +1355,7 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
     std::string ret;
     if( !_strnicmp(src, "http", 4))
      {
-        // nothing special here, just copy
+        
     }
      else
     {
@@ -1365,11 +1365,11 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
             char const*const ext = src + (srclen-3);
             if (_strnicmp(ext,"HWP",3) && _strnicmp(ext,"HWT",3))
             {
-                ret.append("http://");
+                ret.append("http:
             }
             else
             {
-                ret.append(src); // no backslash conversion
+                ret.append(src); 
                 return ret;
             }
         }

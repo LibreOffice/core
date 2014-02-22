@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -132,7 +132,7 @@ OString URLParameter::getByName( const char* par )
 OUString URLParameter::get_id()
 {
     if( m_aId.equalsAscii("start") )
-    {   // module is set
+    {   
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),
                                                          get_language() );
@@ -166,7 +166,7 @@ OUString URLParameter::get_title()
         if( inf )
             m_aTitle = inf->get_title();
     }
-    else   // This must be the root
+    else   
         m_aTitle = "root";
 
     return m_aTitle;
@@ -203,7 +203,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
     m_bHelpDataFileRead = false;
     m_bStart = false;
     m_bUseDB = true;
-    m_nHitCount = 100;                // The default maximum hitcount
+    m_nHitCount = 100;                
 }
 
 
@@ -315,7 +315,7 @@ void URLParameter::readHelpDataFile()
 
 
 
-// Class encapsulating the transformation of the XInputStream to XHTML
+
 
 
 class InputStreamTransformer
@@ -439,7 +439,7 @@ void URLParameter::open( const Command& aCommand,
     }
     else
     {
-        // a standard document or else an active help text, plug in the new input stream
+        
         InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
         try
         {
@@ -488,7 +488,7 @@ void URLParameter::open( const Command& aCommand,
         xDataSink->setInputStream( turnToSeekable(xStream) );
     }
     else
-        // a standard document or else an active help text, plug in the new input stream
+        
         xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases,isRoot() ) );
 }
 
@@ -512,9 +512,9 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
 
 bool URLParameter::scheme()
 {
-    // Correct extension help links as sometimes the
-    // module is missing resulting in a misformed URL
-    if( m_aExpr.startsWith("vnd.sun.star.help:///") )
+    
+    
+    if( m_aExpr.startsWith("vnd.sun.star.help:
     {
         sal_Int32 nLen = m_aExpr.getLength();
         OUString aLastStr =
@@ -532,7 +532,7 @@ bool URLParameter::scheme()
 
     for( sal_Int32 nPrefixLen = 20 ; nPrefixLen >= 18 ; --nPrefixLen )
     {
-        if( m_aExpr.matchAsciiL( "vnd.sun.star.help://", nPrefixLen ) )
+        if( m_aExpr.matchAsciiL( "vnd.sun.star.help:
         {
             m_aExpr = m_aExpr.copy( nPrefixLen );
             return true;
@@ -563,7 +563,7 @@ bool URLParameter::module()
 
 bool URLParameter::name( bool modulePresent )
 {
-    // if modulepresent, a name may be present, but must not
+    
 
     sal_Int32 length = m_aExpr.getLength();
 
@@ -651,7 +651,7 @@ bool URLParameter::query()
         else if( parameter.equalsAscii( "Active" ) )
             m_aActive = value;
         else if( parameter.equalsAscii( "Version" ) )
-            ; // ignored (but accepted) in the build-in help, useful only for the online help
+            ; 
         else
             ret = false;
     }
@@ -828,14 +828,14 @@ fileClose(void * context) {
     return 0;
 }
 
-} // extern "C"
+} 
 
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases,
                                                 bool isRoot )
     : len( 0 ),
       pos( 0 ),
-      buffer( new char[1] ) // Initializing with one element to avoid gcc compiler warning
+      buffer( new char[1] ) 
 {
     if( isRoot )
     {
@@ -857,7 +857,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
     {
         UserData userData( this,urlParam,pDatabases );
 
-        // Uses the implementation detail, that OString::getStr returns a zero terminated character-array
+        
 
         const char* parameter[47];
         OString parString[46];
@@ -922,7 +922,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = OString("''");
         }
 
-        // Do we need to add extension path?
+        
         OUString aExtensionPath;
         OUString aJar = urlParam->get_jar();
 
@@ -938,7 +938,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         }
         else
         {
-            // Path not yet specified, search directly
+            
             Reference< XHierarchicalNameAccess > xNA = pDatabases->findJarFileForPath
                 ( aJar, urlParam->get_language(), urlParam->get_path(), &aExtensionPath, &aExtensionRegistryPath );
             if( xNA.is() && !aExtensionPath.isEmpty() )
@@ -956,7 +956,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = "ExtensionPath";
             parString[last++] = OString('\'') + aExpandedExtensionPath + OString('\'');
 
-            // ExtensionId
+            
             OString aPureExtensionId;
             sal_Int32 iSlash = aPath.indexOf( '/' );
             if( iSlash != -1 )
@@ -999,9 +999,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             addToBuffer((const char*)doc_txt_ptr, doc_txt_len);
             xmlFree(doc_txt_ptr);
         }
-        xmlPopInputCallbacks(); //filePatch
-        xmlPopInputCallbacks(); //helpPatch
-        xmlPopInputCallbacks(); //zipMatch
+        xmlPopInputCallbacks(); 
+        xmlPopInputCallbacks(); 
+        xmlPopInputCallbacks(); 
         xmlFreeDoc(res);
         xmlFreeDoc(doc);
         xsltFreeStylesheet(cur);

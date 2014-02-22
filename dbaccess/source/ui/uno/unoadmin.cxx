@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbustrings.hrc"
@@ -29,10 +29,10 @@
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 
-// --- needed because of the solar mutex
+
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-// ---
+
 
 namespace dbaui
 {
@@ -55,8 +55,8 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
 
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 {
-    // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
-    // so this virtual-method-call the base class does does not work, we're already dead then ...
+    
+    
     if (m_pDialog)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -95,6 +95,6 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
         ODatabaseAdministrationDialogBase::implInitialize(_rValue);
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/shapepropertiescontext.hxx"
@@ -41,33 +41,33 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// ====================================================================
 
-// CT_ShapeProperties
+
+
 ShapePropertiesContext::ShapePropertiesContext( ContextHandler2Helper& rParent, Shape& rShape )
 : ContextHandler2( rParent )
 , mrShape( rShape )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
-    // CT_Transform2D
+    
     case A_TOKEN( xfrm ):
         return new Transform2DContext( *this, rAttribs, mrShape );
 
-    // GeometryGroup
-    case A_TOKEN( custGeom ):   // custom geometry "CT_CustomGeometry2D"
+    
+    case A_TOKEN( custGeom ):   
         return new CustomShapeGeometryContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
 
-    case A_TOKEN( prstGeom ):   // preset geometry "CT_PresetGeometry2D"
+    case A_TOKEN( prstGeom ):   
         {
             sal_Int32 nToken = rAttribs.getToken( XML_prst, 0 );
-            // TODO: Move the following checks to a separate place or as a separate function
+            
             if ( nToken == XML_line )
             {
                 mrShape.getServiceName() = "com.sun.star.drawing.LineShape";
@@ -84,27 +84,27 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
     case A_TOKEN( prstTxWarp ):
         return new PresetTextShapeContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
 
-    // CT_LineProperties
+    
     case A_TOKEN( ln ):
         return new LinePropertiesContext( *this, rAttribs, mrShape.getLineProperties() );
 
-    // EffectPropertiesGroup
-    // todo not supported by core
-    case A_TOKEN( effectLst ):  // CT_EffectList
-    case A_TOKEN( effectDag ):  // CT_EffectContainer
+    
+    
+    case A_TOKEN( effectLst ):  
+    case A_TOKEN( effectDag ):  
         return new EffectPropertiesContext( *this, mrShape.getEffectProperties() );
 
-    // todo
-    case A_TOKEN( scene3d ):    // CT_Scene3D
-//      return new Scene3DContext( *this, rAttribs, *(mrShape.get3DShapeProperties()) );
+    
+    case A_TOKEN( scene3d ):    
+
         break;
 
-    // todo
-    case A_TOKEN( sp3d ):       // CT_Shape3D
+    
+    case A_TOKEN( sp3d ):       
         break;
     }
 
-    // FillPropertiesGroupContext
+    
     return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrShape.getFillProperties() );
 }
 

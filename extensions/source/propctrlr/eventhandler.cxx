@@ -225,8 +225,8 @@ namespace pcr
         ScriptEventDescriptor lcl_getAssignedScriptEvent( const EventDescription& _rEvent, const Sequence< ScriptEventDescriptor >& _rAllAssignedMacros )
         {
             ScriptEventDescriptor aScriptEvent;
-            // for the case there is actually no event assigned, initialize at least ListenerType and MethodName,
-            //  so this ScriptEventDescriptor properly describes the given event
+            
+            
             aScriptEvent.ListenerType = _rEvent.sListenerClassName;
             aScriptEvent.EventMethod = _rEvent.sListenerMethodName;
 
@@ -252,10 +252,10 @@ namespace pcr
                 if ( aScriptEvent.ScriptType != "StarBasic" )
                     continue;
 
-                // this is an old-style macro specification:
-                // [document|application]:Library.Module.Function
-                // we need to translate this to the new-style macro specification
-                // vnd.sun.star.script:Library.Module.Function?language=Basic&location=[document|application]
+                
+                
+                
+                
 
                 sal_Int32 nPrefixLen = aScriptEvent.ScriptCode.indexOf( ':' );
                 OSL_ENSURE( nPrefixLen > 0, "lcl_getAssignedScriptEvent: illegal location!" );
@@ -270,7 +270,7 @@ namespace pcr
 
                 aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
 
-                // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
+                
                 aScriptEvent.ScriptType = "Script";
             }
             return aScriptEvent;
@@ -282,10 +282,10 @@ namespace pcr
             if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
                 return aKnownEvent.sListenerClassName;
             OSL_FAIL( "lcl_getQualifiedKnownListenerName: unknown method name!" );
-                // somebody assigned an script to a form component event which we don't know
-                // Speaking strictly, this is not really an error - it is possible to do
-                // this programmatically -, but it should rarely happen, since it's not possible
-                // via UI
+                
+                
+                
+                
             return _rFormComponentEventDescriptor.ListenerType;
         }
 
@@ -340,7 +340,7 @@ namespace pcr
         */
         ScriptEventDescriptor getNormalizedDescriptorByName( const OUString& _rEventName ) const;
 
-        // XNameReplace
+        
         virtual void SAL_CALL replaceByName( const OUString& _rName, const Any& aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException);
         virtual Any SAL_CALL getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
         virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
@@ -423,15 +423,15 @@ namespace pcr
         Sequence< OUString > aReturn( m_aEventIndexAccess.size() );
         OUString* pReturn = aReturn.getArray();
 
-        // SvxMacroAssignDlg has a weird API: It expects a XNameReplace, means a container whose
-        // main access method is by name. In it's UI, it shows the possible events in exactly the
-        // order in which XNameAccess::getElementNames returns them.
-        // However, SvxMacroAssignDlg *also* takes an index for the initial selection, which is
-        // relative to the sequence returned by XNameAccess::getElementNames.
-        // This is IMO weird, since it mixes index access with name access, which decreases efficiency
-        // of the implementation.
-        // Well, it means we're forced to return the events in getElementNames in exactly the same as they
-        // appear in the property browser UI.
+        
+        
+        
+        
+        
+        
+        
+        
+        
         for (   EventMapIndexAccess::const_iterator loop = m_aEventIndexAccess.begin();
                 loop != m_aEventIndexAccess.end();
                 ++loop, ++pReturn
@@ -616,14 +616,14 @@ namespace pcr
         ScriptEventDescriptor aAssignedScript = lcl_getAssignedScriptEvent( rEvent, aAllAssignedEvents );
 
         OSL_ENSURE( sNewScriptCode.isEmpty(), "EventHandler::convertToPropertyValue: cannot convert a non-empty display name!" );
-        // Usually, there is no possibility for the user to change the content of an event binding directly in the
-        // input field, this instead is done with the macro assignment dialog.
-        // The only exception is the user pressing "DEL" while the control has the focus, in this case, we reset the
-        // control content to an empty string. So this is the only scenario where this method is allowed to be called.
+        
+        
+        
+        
 
-        // Striclty, we would be able to convert the display value to a property value,
-        // using the "name (location, language)" format we used in convertToControlValue. However,
-        // there is no need for this code ...
+        
+        
+        
 
         aAssignedScript.ScriptCode = sNewScriptCode;
         return makeAny( aAssignedScript );
@@ -643,19 +643,19 @@ namespace pcr
         OUString sScript( aScriptEvent.ScriptCode );
         if ( !sScript.isEmpty() )
         {
-            // format is: "name (location, language)"
+            
             try
             {
-                // parse
+                
                 Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_xContext );
                 Reference< XVndSunStarScriptUrlReference > xScriptUri( xUriRefFac->parse( sScript ), UNO_QUERY_THROW );
 
                 OUStringBuffer aComposeBuffer;
 
-                // name
+                
                 aComposeBuffer.append( xScriptUri->getName() );
 
-                // location
+                
                 const OUString sLocationParamName(  "location"  );
                 const OUString sLocation = xScriptUri->getParameter( sLocationParamName );
                 const OUString sLangParamName(  "language"  );
@@ -665,7 +665,7 @@ namespace pcr
                 {
                     aComposeBuffer.appendAscii( " (" );
 
-                    // location
+                    
                     OSL_ENSURE( !sLocation.isEmpty(), "EventHandler::convertToControlValue: unexpected: no location!" );
                     if ( !sLocation.isEmpty() )
                     {
@@ -673,7 +673,7 @@ namespace pcr
                         aComposeBuffer.appendAscii( ", " );
                     }
 
-                    // language
+                    
                     if ( !sLanguage.isEmpty() )
                     {
                         aComposeBuffer.append( sLanguage );
@@ -727,19 +727,19 @@ namespace pcr
                 Property aCurrentProperty;
                 OUString sListenerClassName;
 
-                // loop through all listeners and all methods, and see which we can present at the UI
+                
                 const Type* pListeners = aListeners.getConstArray();
                 for ( sal_Int32 listener = 0; listener < listenerCount; ++listener, ++pListeners )
                 {
                     aCurrentProperty = Property();
 
-                    // the programmatic name of the listener, to be used as "property" name
+                    
                     sListenerClassName = pListeners->getTypeName();
                     OSL_ENSURE( !sListenerClassName.isEmpty(), "EventHandler::getSupportedProperties: strange - no listener name ..." );
                     if ( sListenerClassName.isEmpty() )
                         continue;
 
-                    // loop through all methods
+                    
                     Sequence< OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
 
                     const OUString* pMethods = aMethods.getConstArray();
@@ -766,7 +766,7 @@ namespace pcr
             }
         }
 
-        // sort them by ID - this is the relative ordering in the UI
+        
         ::std::map< EventId, Property > aOrderedProperties;
         for (   EventMap::const_iterator loop = m_aEvents.begin();
                 loop != m_aEvents.end();
@@ -787,13 +787,13 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException)
     {
-        // none
+        
         return Sequence< OUString >( );
     }
 
     Sequence< OUString > SAL_CALL EventHandler::getActuatingProperties( ) throw (RuntimeException)
     {
-        // none
+        
         return Sequence< OUString >( );
     }
 
@@ -836,7 +836,7 @@ namespace pcr
         Sequence< ScriptEventDescriptor > aAllAssignedEvents;
         impl_getComponentScriptEvents_nothrow( aAllAssignedEvents );
 
-        // SvxMacroAssignDlg-compatible structure holding all event/assignments
+        
         ::rtl::Reference< EventHolder >  pEventHolder( new EventHolder );
 
         for (   EventMap::const_iterator event = m_aEvents.begin();
@@ -844,17 +844,17 @@ namespace pcr
                 ++event
             )
         {
-            // the script which is assigned to the current event (if any)
+            
             ScriptEventDescriptor aAssignedScript = lcl_getAssignedScriptEvent( event->second, aAllAssignedEvents );
             pEventHolder->addEvent( event->second.nId, event->second.sListenerMethodName, aAssignedScript );
         }
 
-        // the initial selection in the dialog
+        
         Sequence< OUString > aNames( pEventHolder->getElementNames() );
         const OUString* pChosenEvent = ::std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
         sal_uInt16 nInitialSelection = (sal_uInt16)( pChosenEvent - aNames.getConstArray() );
 
-        // the dialog
+        
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
         if ( !pFactory )
             return InteractiveSelectionResult_Cancelled;
@@ -870,8 +870,8 @@ namespace pcr
         if ( !pDialog.get() )
             return InteractiveSelectionResult_Cancelled;
 
-        // DF definite problem here
-        // OK & Cancel seem to be both returning 0
+        
+        
         if ( pDialog->Execute() == RET_CANCEL )
             return InteractiveSelectionResult_Cancelled;
 
@@ -884,7 +884,7 @@ namespace pcr
             {
                 ScriptEventDescriptor aScriptDescriptor( pEventHolder->getNormalizedDescriptorByName( event->second.sListenerMethodName ) );
 
-                // set the new "property value"
+                
                 setPropertyValue(
                     lcl_getEventPropertyName( event->second.sListenerClassName, event->second.sListenerMethodName ),
                     makeAny( aScriptDescriptor )
@@ -941,7 +941,7 @@ namespace pcr
         Reference< XChild > xChild( m_xComponent, UNO_QUERY_THROW );
         Reference< XIndexAccess > xParentAsIndexAccess( xChild->getParent(), UNO_QUERY_THROW );
 
-        // get the index of the inspected object within it's parent container
+        
         sal_Int32 nElements = xParentAsIndexAccess->getCount();
         for ( sal_Int32 i=0; i<nElements; ++i )
         {
@@ -961,8 +961,8 @@ namespace pcr
             Reference< XEventAttacherManager > xEventManager( xChild->getParent(), UNO_QUERY_THROW );
             _out_rEvents = xEventManager->getScriptEvents( impl_getComponentIndexInParent_throw() );
 
-            // the form component script API has unqualified listener names, but for normalization
-            // purpose, we want fully qualified ones
+            
+            
             ScriptEventDescriptor* pEvents = _out_rEvents.getArray();
             ScriptEventDescriptor* pEventsEnd = _out_rEvents.getArray() + _out_rEvents.getLength();
             while ( pEvents != pEventsEnd )
@@ -982,23 +982,23 @@ namespace pcr
         _out_rTypes.realloc( 0 );
         try
         {
-            // we use a set to avoid duplicates
+            
             TypeBag aListeners;
 
             Reference< XIntrospection > xIntrospection = Introspection::create( m_xContext );
 
-            // --- model listeners
+            
             lcl_addListenerTypesFor_throw(
                 m_xComponent, xIntrospection, aListeners );
 
-            // --- "secondary component" (usually: "control" listeners)
+            
             {
                 Reference< XInterface > xSecondaryComponent( impl_getSecondaryComponentForEventInspection_throw() );
                 lcl_addListenerTypesFor_throw( xSecondaryComponent, xIntrospection, aListeners );
                 ::comphelper::disposeComponent( xSecondaryComponent );
             }
 
-            // now that they're disambiguated, copy these types into our member
+            
             _out_rTypes.realloc( aListeners.size() );
             ::std::copy( aListeners.begin(), aListeners.end(), _out_rTypes.getArray() );
         }
@@ -1036,7 +1036,7 @@ namespace pcr
     {
         Reference< XInterface > xReturn;
 
-        // if it's a form, create a form controller for the additional events
+        
         Reference< XForm > xComponentAsForm( m_xComponent, UNO_QUERY );
         if ( xComponentAsForm.is() )
         {
@@ -1090,26 +1090,26 @@ namespace pcr
             Reference< XEventAttacherManager > xEventManager( xChild->getParent(), UNO_QUERY_THROW );
             Sequence< ScriptEventDescriptor > aEvents( xEventManager->getScriptEvents( nObjectIndex ) );
 
-            // is there already a registered script for this event?
+            
             ScriptEventDescriptor* pEvent = aEvents.getArray();
             sal_Int32 eventCount = aEvents.getLength(), event = 0;
             for ( event = 0; event < eventCount; ++event, ++pEvent )
             {
                 if  (   ( pEvent->EventMethod == _rScriptEvent.EventMethod )
                     &&  ( lcl_endsWith( _rScriptEvent.ListenerType, pEvent->ListenerType ) )
-                          // (strange enough, the events we get from getScriptEvents are not fully qualified)
+                          
                     )
                 {
-                    // yes
+                    
                     if ( !bResetScript )
                     {
-                        // set to something non-empty -> overwrite
+                        
                         pEvent->ScriptCode = sScriptCode;
                         pEvent->ScriptType = sScriptType;
                     }
                     else
                     {
-                        // set to empty -> remove from sequence
+                        
                         ::std::copy( pEvent + 1, aEvents.getArray() + eventCount, pEvent );
                         aEvents.realloc( eventCount - 1 );
                         --eventCount;
@@ -1119,7 +1119,7 @@ namespace pcr
             }
             if ( ( event >= eventCount ) && !bResetScript )
             {
-                // no, did not find it -> append
+                
                 aEvents.realloc( eventCount + 1 );
                 aEvents[ eventCount ] = _rScriptEvent;
             }
@@ -1176,9 +1176,9 @@ namespace pcr
 
     bool EventHandler::impl_filterMethod_nothrow( const EventDescription& _rEvent ) const
     {
-        // some (control-triggered) events do not make sense for certain grid control columns. However,
-        // our mechnism to retrieve control-triggered events does not know about this, so we do some
-        // late filtering here.
+        
+        
+        
         switch ( m_nGridColumnType )
         {
         case FormComponentType::COMBOBOX:
@@ -1196,6 +1196,6 @@ namespace pcr
         return true;
     }
 
-} // namespace pcr
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

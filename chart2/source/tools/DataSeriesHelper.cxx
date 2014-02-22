@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataSeriesHelper.hxx"
@@ -91,7 +91,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
     for( sal_Int32 i=0; i<aSequences.getLength(); ++i )
     {
         OSL_ENSURE( aSequences[i].is(), "empty LabeledDataSequence" );
-        // no values are set but a label exists
+        
         if( aSequences[i].is() &&
             ( ! aSequences[i]->getValues().is() &&
               aSequences[i]->getLabel().is()))
@@ -182,7 +182,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
     }
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -318,22 +318,22 @@ OUString getLabelForLabeledDataSequence(
             aResult = lcl_getDataSequenceLabel( xSeq );
         if( !xSeq.is() || aResult.isEmpty() )
         {
-            // no label set or label content is empty -> use auto-generated one
+            
             Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues() );
             if( xValueSeq.is() )
             {
                 Sequence< OUString > aLabels( xValueSeq->generateLabel(
                     chart2::data::LabelOrigin_SHORT_SIDE ) );
-                // no labels returned is interpreted as: auto-generation not
-                // supported by sequence
+                
+                
                 if( aLabels.getLength() )
                     aResult=aLabels[0];
                 else
                 {
-                    //todo?: maybe use the index of the series as name
-                    //but as the index may change it would be better to have such a name persistent
-                    //what is not possible at the moment
-                    //--> maybe use the identifier as part of the name ...
+                    
+                    
+                    
+                    
                     aResult = lcl_getDataSequenceLabel( xValueSeq );
                 }
             }
@@ -357,8 +357,8 @@ OUString getDataSeriesLabel(
             aResult = getLabelForLabeledDataSequence( xLabeledSeq );
         else
         {
-            // special case: labeled data series with only a label and no values may
-            // serve as label
+            
+            
             xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
             if( xLabeledSeq.is())
             {
@@ -550,7 +550,7 @@ void switchSymbolsOnOrOff( const Reference< beans::XPropertySet > & xSeriesPrope
         }
         xSeriesProperties->setPropertyValue( "Symbol", uno::makeAny( aSymbProp ));
     }
-    //todo: check attributed data points
+    
 }
 
 void switchLinesOnOrOff( const Reference< beans::XPropertySet > & xSeriesProperties, bool bLinesOn )
@@ -560,7 +560,7 @@ void switchLinesOnOrOff( const Reference< beans::XPropertySet > & xSeriesPropert
 
     if( bLinesOn )
     {
-        // keep line-styles that are not NONE
+        
         drawing::LineStyle eLineStyle;
         if( (xSeriesProperties->getPropertyValue( "LineStyle") >>= eLineStyle ) &&
             eLineStyle == drawing::LineStyle_NONE )
@@ -639,7 +639,7 @@ bool areAllSeriesAttachedToSameAxis( const uno::Reference< chart2::XChartType >&
         uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDataSeriesContainer->getDataSeries());
 
         const sal_Int32 nSeriesCount( aSeriesSeq.getLength());
-        // AxisIndex can only be 0 or 1
+        
         sal_Int32 nSeriesAtFirstAxis = 0;
         sal_Int32 nSeriesAtSecondAxis = 0;
 
@@ -894,7 +894,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
     }
 }
 
-} //  namespace DataSeriesHelper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

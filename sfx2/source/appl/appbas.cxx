@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_options.h>
@@ -86,7 +86,7 @@ using namespace ::com::sun::star::script;
 
 using ::basic::BasicManagerRepository;
 
-//=========================================================================
+
 sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
 {
     if ( pAppData_Impl->pBasicManager->isValid() )
@@ -94,7 +94,7 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
            const char *pName, sal_uInt32 nSID, SbxDataType eType, SbxClassType eClassType )
@@ -108,7 +108,7 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
     (void) eClassType;
     return 0;
 #else
-    SbxVariable *pVar = pBas->Make( OUString::createFromAscii(pName), eClassType, eType ); //SbxCLASS_PROPERTY
+    SbxVariable *pVar = pBas->Make( OUString::createFromAscii(pName), eClassType, eType ); 
     pVar->SetUserData( nSID );
     pVar->SetFlag( SBX_DONTSTORE );
     pObject->StartListening( pVar->GetBroadcaster() );
@@ -116,7 +116,7 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 BasicManager* SfxApplication::GetBasicManager()
 {
@@ -127,7 +127,7 @@ BasicManager* SfxApplication::GetBasicManager()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 XLibraryContainer * SfxApplication::GetDialogContainer()
 {
@@ -140,7 +140,7 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 XLibraryContainer * SfxApplication::GetBasicContainer()
 {
@@ -153,7 +153,7 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 StarBASIC* SfxApplication::GetBasic()
 {
@@ -164,7 +164,7 @@ StarBASIC* SfxApplication::GetBasic()
 #endif
 }
 
-//-------------------------------------------------------------------------
+
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
 #ifdef DISABLE_SCRIPTING
@@ -219,7 +219,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 #endif
 }
 
-//-------------------------------------------------------------------------
+
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
 #ifdef DISABLE_SCRIPTING

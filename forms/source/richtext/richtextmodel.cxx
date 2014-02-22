@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richtextmodel.hxx"
@@ -33,16 +33,16 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ORichTextModel()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextModel >   aRegisterModel;
 }
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -55,10 +55,10 @@ namespace frm
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-    //====================================================================
-    //= ORichTextModel
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ORichTextModel::ORichTextModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _rxFactory, OUString() )
         ,FontControlModel    ( true                          )
@@ -90,7 +90,7 @@ namespace frm
         implInit();
     }
 
-    //------------------------------------------------------------------
+    
     ORichTextModel::ORichTextModel( const ORichTextModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _pOriginal, _rxFactory, sal_False )
         ,FontControlModel    ( _pOriginal                        )
@@ -131,7 +131,7 @@ namespace frm
         implInit();
     }
 
-    //------------------------------------------------------------------
+    
     void ORichTextModel::implInit()
     {
         OSL_ENSURE( m_pEngine.get(), "ORichTextModel::implInit: where's the engine?" );
@@ -152,7 +152,7 @@ namespace frm
         implRegisterProperties();
     }
 
-    //------------------------------------------------------------------
+    
     void ORichTextModel::implDoAggregation()
     {
         increment( m_refCount );
@@ -166,7 +166,7 @@ namespace frm
         decrement( m_refCount );
     }
 
-    //------------------------------------------------------------------
+    
     void ORichTextModel::implRegisterProperties()
     {
         REGISTER_PROP_2( DEFAULTCONTROL,        m_sDefaultControl,          BOUND, MAYBEDEFAULT );
@@ -189,8 +189,8 @@ namespace frm
         REGISTER_VOID_PROP_2( BORDERCOLOR,      m_aBorderColor,         sal_Int32,          BOUND, MAYBEDEFAULT );
         REGISTER_VOID_PROP_2( VERTICAL_ALIGN,   m_aVerticalAlignment,   VerticalAlignment,  BOUND, MAYBEDEFAULT );
 
-        // properties which exist only for compatibility with the css.swt.UnoControlEditModel,
-        // since we replace the default implementation for this service
+        
+        
         REGISTER_PROP_2( ECHO_CHAR,             m_nEchoChar,            BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( MAXTEXTLEN,            m_nMaxTextLength,       BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( MULTILINE,             m_bMultiLine,           BOUND, MAYBEDEFAULT );
@@ -202,7 +202,7 @@ namespace frm
         REGISTER_VOID_PROP_2( ALIGN,        m_aAlign,           sal_Int16, BOUND, MAYBEDEFAULT );
     }
 
-    //--------------------------------------------------------------------
+    
     ORichTextModel::~ORichTextModel( )
     {
         if ( !OComponentHelper::rBHelper.bDisposed )
@@ -221,7 +221,7 @@ namespace frm
 
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ORichTextModel::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = ORichTextModel_BASE::queryInterface( _rType );
@@ -232,10 +232,10 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextModel, OControlModel, ORichTextModel_BASE )
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_SERVICE_REGISTRATION_8( ORichTextModel, OControlModel,
         FRM_SUN_COMPONENT_RICHTEXTCONTROL,
         OUString( "com.sun.star.text.TextRange" ),
@@ -247,17 +247,17 @@ namespace frm
         OUString( "com.sun.star.style.ParagraphPropertiesComplex" )
     )
 
-    //------------------------------------------------------------------------------
+    
     IMPLEMENT_DEFAULT_CLONING( ORichTextModel )
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::disposing()
     {
         m_aModifyListeners.disposeAndClear( EventObject( *this ) );
         OControlModel::disposing();
     }
 
-    //------------------------------------------------------------------------------
+    
     namespace
     {
         void lcl_removeProperty( Sequence< Property >& _rSeq, const OUString& _rPropertyName )
@@ -276,40 +276,40 @@ namespace frm
             }
         }
     }
-    //------------------------------------------------------------------------------
+    
     void ORichTextModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
             DECL_PROP2( TABINDEX,       sal_Int16,  BOUND,    MAYBEDEFAULT );
         END_DESCRIBE_PROPERTIES();
 
-        // properties which the OPropertyContainerHelper is responsible for
+        
         Sequence< Property > aContainedProperties;
         describeProperties( aContainedProperties );
 
-        // properties which the FontControlModel is responsible for
+        
         Sequence< Property > aFontProperties;
         describeFontRelatedProperties( aFontProperties );
 
         _rProps = concatSequences( aContainedProperties, aFontProperties, _rProps );
     }
 
-    //------------------------------------------------------------------------------
+    
     void ORichTextModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
     {
         OControlModel::describeAggregateProperties( _rAggregateProps );
 
-        // our aggregate (the SvxUnoText) declares a FontDescriptor property, as does
-        // our FormControlFont base class. We remove it from the base class' sequence
-        // here, and later on care for both instances being in sync
+        
+        
+        
         lcl_removeProperty( _rAggregateProps, PROPERTY_FONT );
 
-        // similar, the WritingMode property is declared in our aggregate, too, but we override
-        // it, since the aggregate does no proper PropertyState handling.
+        
+        
         lcl_removeProperty( _rAggregateProps, PROPERTY_WRITING_MODE );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -326,7 +326,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL ORichTextModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
         sal_Bool bModified = sal_False;
@@ -347,7 +347,7 @@ namespace frm
         return bModified;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception)
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -370,9 +370,9 @@ namespace frm
                 MapMode aNewMapMode = m_pEngine->GetRefDevice()->GetMapMode();
                 OSL_ENSURE( aNewMapMode.GetMapUnit() == aOldMapMode.GetMapUnit(),
                     "ORichTextModel::setFastPropertyValue_NoBroadcast: You should not tamper with the MapUnit of the ref device!" );
-                // if this assertion here is triggered, then we would need to adjust all
-                // items in all text portions in all paragraphs in the attributes of the EditEngine,
-                // as long as they are MapUnit-dependent. This holds at least for the FontSize.
+                
+                
+                
             #endif
             }
             break;
@@ -383,7 +383,7 @@ namespace frm
                 impl_smlock_setEngineText( m_sLastKnownEngineText );
             }
             break;
-            }   // switch ( _nHandle )
+            }   
         }
         else if ( isFontRelatedProperty( _nHandle ) )
         {
@@ -397,7 +397,7 @@ namespace frm
             {
             case PROPERTY_ID_WRITING_MODE:
             {
-                // forward to our aggregate, so the EditEngine knows about it
+                
                 if ( m_xAggregateSet.is() )
                     m_xAggregateSet->setPropertyValue(
                         OUString( "WritingMode" ), _rValue );
@@ -411,7 +411,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any ORichTextModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aDefault;
@@ -480,7 +480,7 @@ namespace frm
         return aDefault;
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextModel::impl_smlock_setEngineText( const OUString& _rText )
     {
         if ( m_pEngine.get() )
@@ -492,27 +492,27 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL ORichTextModel::getServiceName() throw ( RuntimeException)
     {
         return OUString(FRM_SUN_COMPONENT_RICHTEXTCONTROL);
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::write(const Reference< XObjectOutputStream >& _rxOutStream) throw ( IOException, RuntimeException)
     {
         OControlModel::write( _rxOutStream );
-        // TODO: place your code here
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::read(const Reference< XObjectInputStream >& _rxInStream) throw ( IOException, RuntimeException)
     {
         OControlModel::read( _rxInStream );
-        // TODO: place your code here
+        
     }
 
-    //--------------------------------------------------------------------
+    
     RichTextEngine* ORichTextModel::getEditEngine( const Reference< XControlModel >& _rxModel )
     {
         RichTextEngine* pEngine = NULL;
@@ -533,7 +533,7 @@ namespace frm
         return pEngine;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< sal_Int8 > ORichTextModel::getEditEngineTunnelId()
     {
         static ::cppu::OImplementationId * pId = 0;
@@ -549,7 +549,7 @@ namespace frm
         return pId->getImplementationId();
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( ORichTextModel, OnEngineContentModified, void*, /*_pNotInterestedIn*/ )
     {
         if ( !m_bSettingEngineText )
@@ -557,16 +557,16 @@ namespace frm
             m_aModifyListeners.notifyEach( &XModifyListener::modified, EventObject( *this ) );
 
             potentialTextChange();
-                // is this a good idea? It may become expensive in case of larger texts,
-                // and this method here is called for every single changed character ...
-                // On the other hand, the API *requires* us to notify changes in the "Text"
-                // property immediately ...
+                
+                
+                
+                
         }
 
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int64 SAL_CALL ORichTextModel::getSomething( const Sequence< sal_Int8 >& _rId ) throw (RuntimeException)
     {
         Sequence< sal_Int8 > aEditEngineAccessId( getEditEngineTunnelId() );
@@ -582,19 +582,19 @@ namespace frm
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::addModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
         m_aModifyListeners.addInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextModel::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
         m_aModifyListeners.removeInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextModel::potentialTextChange( )
     {
         OUString sCurrentEngineText;
@@ -612,8 +612,8 @@ namespace frm
         }
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

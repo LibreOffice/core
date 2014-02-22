@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/table/CellAddress.hpp>
@@ -32,7 +32,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, bool _bIsRange) :
     pDocShell( pDocSh ),
@@ -53,7 +53,7 @@ void ScAddressConversionObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // invalid
+        pDocShell = NULL;       
     }
 }
 
@@ -73,7 +73,7 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
                 aRange.aStart.SetTab( static_cast<SCTAB>(nRefSheet) );
             if ( ( nResult & SCA_TAB2_3D ) == 0 )
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
-            // different sheets are not supported in CellRangeAddress
+            
             if ( aRange.aStart.Tab() == aRange.aEnd.Tab() )
                 bSuccess = true;
         }
@@ -91,7 +91,7 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
     return bSuccess;
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -142,7 +142,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
     OUString aNameStr(aPropertyName);
     if ( aNameStr.equalsAscii( SC_UNONAME_ADDRESS ) )
     {
-        //  read the cell/range address from API struct
+        
         if ( bIsRange )
         {
             table::CellRangeAddress aRangeAddress;
@@ -164,7 +164,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
     }
     else if ( aNameStr.equalsAscii( SC_UNONAME_REFSHEET ) )
     {
-        //  set the reference sheet
+        
         sal_Int32 nIntVal = 0;
         if ( aValue >>= nIntVal )
         {
@@ -174,7 +174,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
     }
     else if ( aNameStr.equalsAscii( SC_UNONAME_UIREPR ) )
     {
-        //  parse the UI representation string
+        
         OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
@@ -187,26 +187,26 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) ?
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
-        //  parse the file format string
+        
         OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
             OUString aUIString(sRepresentation);
 
-            //  cell or range: strip a single "." at the start
+            
             if ( aUIString[0]== (sal_Unicode) '.' )
                 aUIString = aUIString.copy( 1 );
 
             if ( bIsRange )
             {
-                //  range: also strip a "." after the last colon
+                
                 sal_Int32 nColon = OUString(aUIString).lastIndexOf( (sal_Unicode) ':' );
                 if ( nColon >= 0 && nColon < aUIString.getLength() - 1 &&
                      aUIString[nColon+1] == '.' )
                     aUIString = aUIString.replaceAt( nColon+1, 1, "" );
             }
 
-            //  parse the rest like a UI string
+            
             bSuccess = ParseUIString( aUIString, eConv );
         }
     }
@@ -249,7 +249,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
     }
     else if ( aNameStr.equalsAscii( SC_UNONAME_UIREPR ) )
     {
-        //  generate UI representation string - include sheet only if different from ref sheet
+        
         OUString aFormatStr;
         sal_uInt16 nFlags = SCA_VALID;
         if ( aRange.aStart.Tab() != nRefSheet )
@@ -265,11 +265,11 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
         ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) ?
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
-        //  generate file format string - always include sheet
+        
         OUString aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, pDoc, eConv));
         if ( bIsRange )
         {
-            //  manually concatenate range so both parts always have the sheet name
+            
             aFormatStr += ":";
             sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
@@ -287,7 +287,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
-// lang::XServiceInfo
+
 
 OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException)
 {

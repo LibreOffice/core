@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -61,9 +61,9 @@ TYPEINIT1(SfxStyleSheetPoolHint, SfxHint);
 
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
-    sal_uInt16          nAction,        // SFX_STYLESHEET_... (s.o.)
+    sal_uInt16          nAction,        
     const OUString&     rOldName,
-    SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
+    SfxStyleSheetBase&  rStyleSheet     
 )
 :   SfxStyleSheetHint( nAction, rStyleSheet ),
     aName( rOldName )
@@ -72,8 +72,8 @@ SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 
 SfxStyleSheetHint::SfxStyleSheetHint
 (
-    sal_uInt16              nAction,        // SFX_STYLESHEET_... (s.o.)
-    SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
+    sal_uInt16              nAction,        
+    SfxStyleSheetBase&  rStyleSheet     
 )
 :   pStyleSh( &rStyleSheet ),
     nHint( nAction )
@@ -144,7 +144,7 @@ sal_uInt16 SfxStyleSheetBase::GetVersion() const
     return 0x0000;
 }
 
-// Change name
+
 
 const OUString& SfxStyleSheetBase::GetName() const
 {
@@ -198,7 +198,7 @@ void SfxStyleSheetBase::SetDisplayName( const OUString& rDisplayName )
     maDisplayName = rDisplayName;
 }
 
-// Change Parent
+
 
 const OUString& SfxStyleSheetBase::GetParent() const
 {
@@ -218,7 +218,7 @@ bool SfxStyleSheetBase::SetParent( const OUString& rName )
             OSL_FAIL( "StyleSheet-Parent not found" );
             return false;
         }
-        // prevent recursive linkages
+        
         if( !aName.isEmpty() )
         {
             while(pIter)
@@ -240,7 +240,7 @@ void SfxStyleSheetBase::SetHidden( sal_Bool hidden )
     pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
 }
 
-// Change follow
+
 
 const OUString& SfxStyleSheetBase::GetFollow() const
 {
@@ -262,7 +262,7 @@ bool SfxStyleSheetBase::SetFollow( const OUString& rName )
     return true;
 }
 
-// Set Itemset. The dflt-implementation creates a new set
+
 
 SfxItemSet& SfxStyleSheetBase::GetItemSet()
 {
@@ -274,7 +274,7 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
     return *pSet;
 }
 
-// Hilfe-Datei und -ID setzen und abfragen
+
 
 sal_uLong SfxStyleSheetBase::GetHelpId( OUString& rFile )
 {
@@ -288,42 +288,42 @@ void SfxStyleSheetBase::SetHelpId( const OUString& rFile, sal_uLong nId )
     nHelpId = nId;
 }
 
-// Next style possible? Default: Yes
+
 
 bool SfxStyleSheetBase::HasFollowSupport() const
 {
     return true;
 }
 
-// Basisvorlage m"oglich? Default: Ja
+
 
 bool SfxStyleSheetBase::HasParentSupport() const
 {
     return true;
 }
 
-// Basisvorlage uf NULL setzen m"oglich? Default: Nein
+
 
 bool SfxStyleSheetBase::HasClearParentSupport() const
 {
     return false;
 }
 
-// Defaultmaessig sind alle StyleSheets Used
+
 
 bool SfxStyleSheetBase::IsUsed() const
 {
     return true;
 }
 
-// eingestellte Attribute ausgeben
+
 
 OUString SfxStyleSheetBase::GetDescription()
 {
     return GetDescription( SFX_MAPUNIT_CM );
 }
 
-// eingestellte Attribute ausgeben
+
 
 OUString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
 {
@@ -498,9 +498,9 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
     {
         SfxStyleSheetBase* pStyle = pBasePool->aStyles[n].get();
 
-        // #98454# performance: in case of bSearchUsed==sal_True it may be
-        // significant to first compare the name and only if it matches to call
-        // the style sheet IsUsed() method in DoesStyleMatch().
+        
+        
+        
         if ( pStyle->GetName() == rStr && DoesStyleMatch( pStyle ) )
         {
             nAktPosition = n;
@@ -643,9 +643,9 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
     return *xStyle.get();
 }
 
-// Hilfsroutine: Falls eine Vorlage dieses Namens existiert, wird
-// sie neu erzeugt. Alle Vorlagen, die diese Vorlage zum Parent haben,
-// werden umgehaengt.
+
+
+
 
 SfxStyleSheetBase& SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
 {
@@ -718,28 +718,28 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 {
     if( p )
     {
-        // Reference to keep p alive until after Broadcast call!
+        
         rtl::Reference<SfxStyleSheetBase> xP(p);
         SfxStyles::iterator const aIter(
                 std::find(aStyles.begin(), aStyles.end(), xP));
         if( aIter != aStyles.end() )
         {
-            // Alle Styles umsetzen, deren Parent dieser hier ist
+            
             ChangeParent( p->GetName(), p->GetParent() );
 
-            // #120015# Do not dispose, the removed StyleSheet may still be used in
-            // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,
-            // this works well under normal conditions (checked breaking and counting
-            // on SfxStyleSheetBase constructors and destructors)
+            
+            
+            
+            
             //
-            // com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
-            // if( xComp.is() ) try
-            // {
-            //  xComp->dispose();
-            // }
-            // catch( com::sun::star::uno::Exception& )
-            // {
-            // }
+            
+            
+            
+            
+            
+            
+            
+            
 
             aStyles.erase(aIter);
             Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) );
@@ -853,16 +853,16 @@ bool SfxStyleSheet::SetParent( const OUString& rName )
     const OUString aOldParent(aParent);
     if(SfxStyleSheetBase::SetParent(rName))
     {
-            // aus der Benachrichtigungskette des alten
-            // Parents gfs. austragen
+            
+            
         if(!aOldParent.isEmpty())
         {
             SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aOldParent, nFamily, SFXSTYLEBIT_ALL);
             if(pParent)
                 EndListening(*pParent);
         }
-            // in die Benachrichtigungskette des neuen
-            // Parents eintragen
+            
+            
         if(!aParent.isEmpty())
         {
             SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aParent, nFamily, SFXSTYLEBIT_ALL);
@@ -874,7 +874,7 @@ bool SfxStyleSheet::SetParent( const OUString& rName )
     return false;
 }
 
-// Notify all listeners
+
 void SfxStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     Forward(rBC, rHint);
@@ -902,7 +902,7 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const SfxStyleSheet& r )
     return new SfxStyleSheet( r );
 }
 
-// class SfxUnoStyleSheet
+
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
 : ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
 {
@@ -920,7 +920,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::un
     return pRet;
 }
 
-// XUnoTunnel
+
 ::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
     if( rId.getLength() == 16 && 0 == memcmp( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )

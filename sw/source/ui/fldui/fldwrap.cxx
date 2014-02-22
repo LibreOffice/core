@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cmdid.h>
@@ -41,14 +41,14 @@ SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
 {
-    // avoid flickering of buttons:
+    
     m_aUpdateTimer.SetTimeout(200);
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
 
 IMPL_LINK_NOARG(SwChildWinWrapper, UpdateHdl)
 {
-    GetWindow()->Activate();    // update dialog
+    GetWindow()->Activate();    
 
     return 0;
 }
@@ -63,7 +63,7 @@ sal_Bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
     if (m_pDocSh != GetOldDocShell())
     {
         m_aUpdateTimer.Stop();
-        bRet = sal_True;            // immediate Update
+        bRet = sal_True;            
     }
     else
         m_aUpdateTimer.Start();
@@ -101,7 +101,7 @@ sal_Bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     sal_Bool bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  
     {
         pDlgInterface->ReInitDlg();
     }
@@ -119,8 +119,8 @@ SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
 SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-// prevent instatiation of dialog other than by calling
-// the mail merge dialog
+
+
     aInfo.bVisible = sal_False;
     return aInfo;
 }
@@ -150,7 +150,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 n
 sal_Bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     sal_Bool bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  
     {
         pDlgInterface->ReInitDlg();
     }

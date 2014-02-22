@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/theAutoRecovery.hpp>
@@ -45,7 +45,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 
-// for child window ids
+
 #include <sfx2/templdlg.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/imapdlg.hxx>
@@ -103,17 +103,17 @@ namespace sd
     Have to be sorted in the order of the SIDs */
 static sal_uInt16 const pAllowed[] =
 {
-    SID_OPENDOC                             , //     5501   ///< that internally jumps work
-    SID_JUMPTOMARK                          , //     5598
-    SID_OPENHYPERLINK                       , //     6676
-    SID_NAVIGATOR                           , //    10366
-    SID_PRESENTATION_END                    , //    27218
-    SID_NAVIGATOR_PAGENAME                  , //    27287
-    SID_NAVIGATOR_STATE                     , //    27288
-    SID_NAVIGATOR_INIT                      , //    27289
-    SID_NAVIGATOR_PEN                       , //    27291
-    SID_NAVIGATOR_PAGE                      , //    27292
-    SID_NAVIGATOR_OBJECT                      //    27293
+    SID_OPENDOC                             , 
+    SID_JUMPTOMARK                          , 
+    SID_OPENHYPERLINK                       , 
+    SID_NAVIGATOR                           , 
+    SID_PRESENTATION_END                    , 
+    SID_NAVIGATOR_PAGENAME                  , 
+    SID_NAVIGATOR_STATE                     , 
+    SID_NAVIGATOR_INIT                      , 
+    SID_NAVIGATOR_PEN                       , 
+    SID_NAVIGATOR_PAGE                      , 
+    SID_NAVIGATOR_OBJECT                      
 };
 
 
@@ -275,7 +275,7 @@ bool AnimationSlideController::jumpToSlideNumber( sal_Int32 nNewSlideNumber )
     }
     else if( (nNewSlideNumber >= 0) && (nNewSlideNumber < mnSlideCount) )
     {
-        // jump to a hidden slide
+        
         mnHiddenSlideNumber = nNewSlideNumber;
         return true;
     }
@@ -359,10 +359,10 @@ sal_Int32 AnimationSlideController::getNextSlideIndex() const
             sal_Int32 nNewSlideIndex = mnCurrentSlideIndex + 1;
             if( isValidIndex( nNewSlideIndex ) )
             {
-                // if the current slide is not excluded, make sure the
-                // next slide is also not excluded.
-                // if the current slide is excluded, we want to go
-                // to the next slide, even if this is also excluded.
+                
+                
+                
+                
                 if( maSlideVisible[mnCurrentSlideIndex] )
                 {
                     while( isValidIndex( nNewSlideIndex ) )
@@ -415,8 +415,8 @@ sal_Int32 AnimationSlideController::getPreviousSlideIndex() const
     {
         case ALL:
         {
-            // make sure the previous slide is visible
-            // or was already visited
+            
+            
             while( isValidIndex( nNewSlideIndex ) )
             {
                 if( maSlideVisible[nNewSlideIndex] || maSlideVisited[nNewSlideIndex] )
@@ -469,10 +469,10 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
         }
         if (bSkipAllMainSequenceEffects)
         {
-            // Add one property that prevents the slide transition from being
-            // shown (to speed up the transition to the previous slide) and
-            // one to show all main sequence effects so that the user can
-            // continue to undo effects.
+            
+            
+            
+            
             aProperties.push_back(
                 PropertyValue( "SkipAllMainSequenceEffects",
                     -1,
@@ -485,7 +485,7 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
                     PropertyState_DIRECT_VALUE));
         }
 
-        // Convert vector into uno Sequence.
+        
         Sequence< PropertyValue > aPropertySequence (aProperties.size());
         for (int nIndex=0,nCount=aProperties.size();nIndex<nCount; ++nIndex)
             aPropertySequence[nIndex] = aProperties[nIndex];
@@ -557,7 +557,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 
     SvtSaveOptions aOptions;
 
-        // no autosave during show
+        
     if( aOptions.IsAutoSave() )
         mbAutoSaveWasOn = true;
 
@@ -576,7 +576,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 SlideshowImpl::~SlideshowImpl()
 {
     SdModule *pModule = SD_MOD();
-    //rhbz#806663 SlideshowImpl can outlive SdModule
+    
     SdOptions* pOptions = pModule ?
         pModule->GetSdOptions(DOCUMENT_TYPE_IMPRESS) : NULL;
     if( pOptions )
@@ -663,7 +663,7 @@ void SAL_CALL SlideshowImpl::disposing()
     mxListenerProxy.clear();
     mpSlideController.reset();
 
-    // take DrawView from presentation window, but give the old window back
+    
     if( mpShowWindow && mpView )
         mpView->DeleteWindowFromPaintView( mpShowWindow );
 
@@ -682,7 +682,7 @@ void SAL_CALL SlideshowImpl::disposing()
     if( maPresSettings.mbFullScreen )
     {
 #ifndef DISABLE_SCRIPTING
-        // restore StarBASICErrorHdl
+        
         StarBASIC::SetGlobalErrorHdl(maStarBASICGlobalErrorHdl);
         maStarBASICGlobalErrorHdl = Link();
 #endif
@@ -705,7 +705,7 @@ void SAL_CALL SlideshowImpl::disposing()
         mnChildMask = 0UL;
     }
 
-    // show current window again
+    
     if( mpViewShell && !mpViewShell->ISA(PresentationViewShell))
     {
         if( meAnimationMode == ANIMATIONMODE_SHOW )
@@ -745,7 +745,7 @@ void SAL_CALL SlideshowImpl::disposing()
             }
         }
 
-        // restart the custom show dialog if he started us
+        
         if( mpViewShell->IsStartShowWithDialog() && getDispatcher() )
         {
             mpViewShell->SetStartShowWithDialog( sal_False );
@@ -833,7 +833,7 @@ bool SlideshowImpl::startPreview(
             mpView->SetAnimationPause( true );
         }
 
-        // call resize handler
+        
         if( pParent )
         {
             maPresSize = pParent->GetSizePixel();
@@ -861,7 +861,7 @@ bool SlideshowImpl::startPreview(
 
         Sequence< beans::PropertyValue > aProperties(nPropertyCount);
         aProperties[0].Name = "AutomaticAdvancement";
-        aProperties[0].Value = uno::makeAny( (double)1.0 ); // one second timeout
+        aProperties[0].Value = uno::makeAny( (double)1.0 ); 
 
         if( mxPreviewAnimationNode.is() )
         {
@@ -900,7 +900,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
     if (mpParentWindow == NULL)
         return false;
 
-    // Autoplay (pps/ppsx)
+    
     if (mpViewShell->GetDoc()->IsStartWithPresentation()){
         mpViewShell->GetDoc()->SetExitAfterPresenting(true);
     }
@@ -915,13 +915,13 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             mbRehearseTimings = pPresSettings->mbRehearseTimings;
         }
 
-        // ---
+        
 
         OUString  aPresSlide( maPresSettings.maPresPage );
         SdPage* pStartPage = mpViewShell->GetActualPage();
         bool    bStartWithActualSlide =  pStartPage;
 
-        // times should be measured?
+        
         if( mbRehearseTimings )
         {
             maPresSettings.mbEndless = sal_False;
@@ -937,8 +937,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
         {
             if( pStartPage->GetPageKind() == PK_NOTES )
             {
-                // we are in notes page mode, so get
-                // the corresponding draw page
+                
+                
                 const sal_uInt16 nPgNum = ( pStartPage->GetPageNum() - 2 ) >> 1;
                 pStartPage = mpDoc->GetSdPage( nPgNum, PK_STANDARD );
             }
@@ -948,9 +948,9 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
         {
             if ( aPresSlide.isEmpty())
             {
-                // no preset slide yet, so pick current on one
+                
                 aPresSlide = pStartPage->GetName();
-                // if the starting slide is hidden, we can't set slide controller to ALL mode
+                
                 maPresSettings.mbAll = !pStartPage->IsExcluded();
             }
 
@@ -974,16 +974,16 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             }
         }
 
-        // build page list
+        
         createSlideList( maPresSettings.mbAll, aPresSlide );
 
-        // remember Slide number from where the show was started
+        
         if( pStartPage )
             mnRestoreSlide = ( pStartPage->GetPageNum() - 1 ) / 2;
 
         if( mpSlideController->hasSlides() )
         {
-            // hide child windows
+            
             hideChildWindows();
 
             mpShowWindow = new ShowWindow( this, mpParentWindow );
@@ -993,7 +993,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 mpViewShell->SetActiveWindow( mpShowWindow );
                 mpShowWindow->SetViewShell (mpViewShell);
                 mpViewShell->GetViewShellBase().ShowUIControls (false);
-                // Hide the side panes for in-place presentations.
+                
                 if ( ! maPresSettings.mbFullScreen)
                     mpPaneHider.reset(new PaneHider(*mpViewShell,this));
 
@@ -1001,7 +1001,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                     getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
             }
 
-            // these Slots are forbiden in other views for this document
+            
             if( mpDocSh )
             {
                 mpDocSh->SetSlotFilter( sal_True, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
@@ -1014,13 +1014,13 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             if( maPresSettings.mbFullScreen )
             {
 #ifndef DISABLE_SCRIPTING
-                // disable basic ide error handling
+                
                 maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
                 StarBASIC::SetGlobalErrorHdl( Link() );
 #endif
             }
 
-            // call resize handler
+            
             maPresSize = mpParentWindow->GetSizePixel();
             if( !maPresSettings.mbFullScreen && mpViewShell )
             {
@@ -1030,12 +1030,12 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 resize( maPresSize );
             }
 
-            // #i41824#
-            // Note: In FullScreen Mode the OS (window manager) sends a resize to
-            // the WorkWindow once it actually resized it to full size.  The
-            // WorkWindow propagates the resize to the DrawViewShell which calls
-            // resize() at the SlideShow (this).  Calling resize here results in a
-            // temporary display of a black window in the window's default size
+            
+            
+            
+            
+            
+            
 
             if( mpView )
             {
@@ -1050,8 +1050,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 pBindings->Invalidate( SID_REHEARSE_TIMINGS );
             }
 
-            // Defer the sd::ShowWindow's GrabFocus to SlideShow::activate. so that the accessible event can be fired correctly.
-            //mpShowWindow->GrabFocus();
+            
+            
 
             std::vector<beans::PropertyValue> aProperties;
             aProperties.reserve( 4 );
@@ -1082,13 +1082,13 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
              {
                 aProperties.push_back(
                     beans::PropertyValue( "UserPaintColor" ,
-                        // User paint color is black by default.
+                        
                         -1, Any( mnUserPaintColor ),
                         beans::PropertyState_DIRECT_VALUE ) );
 
                 aProperties.push_back(
                     beans::PropertyValue( "UserPaintStrokeWidth" ,
-                        // User paint color is black by default.
+                        
                         -1, Any( mdUserPaintStrokeWidth ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
@@ -1132,7 +1132,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                                              this,
                                              maPresSettings.mbFullScreen) );
 
-        // try add wait symbol to properties:
+        
         const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
             mxView->getCanvas() );
         if (xSpriteCanvas.is())
@@ -1215,7 +1215,7 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
     if( mxView.is() ) try
     {
         awt::PaintEvent aEvt;
-        // aEvt.UpdateRect = TODO
+        
         mxView->paint( aEvt );
     }
     catch( Exception& )
@@ -1229,7 +1229,7 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException)
 {
@@ -1237,7 +1237,7 @@ void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowLi
         mxListenerProxy->addSlideShowListener( xListener );
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException)
 {
@@ -1245,7 +1245,7 @@ void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideSho
         mxListenerProxy->removeSlideShowListener( xListener );
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::slideEnded(const bool bReverse)
 {
@@ -1255,7 +1255,7 @@ void SlideshowImpl::slideEnded(const bool bReverse)
         gotoNextSlide();
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::removeShapeEvents()
 {
@@ -1283,7 +1283,7 @@ void SlideshowImpl::removeShapeEvents()
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
 {
@@ -1318,7 +1318,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( Exception )
 {
@@ -1375,7 +1375,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
                     xSet->getPropertyValue( msVerb ) >>= pEvent->mnVerb;
                 break;
             default:
-                continue; // skip all others
+                continue; 
             }
 
             maShapeEventMap[ xShape ] = pEvent;
@@ -1396,7 +1396,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
 {
@@ -1418,7 +1418,7 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
             pBindings->Invalidate( SID_NAVIGATOR_PAGENAME );
         }
     }
-    // send out page change event and notity to update all acc info for current page
+    
     if (mpViewShell)
     {
         sal_Int32 currentPageIndex = getCurrentSlideIndex();
@@ -1427,7 +1427,7 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::endPresentation()
 {
@@ -1442,7 +1442,7 @@ void SlideshowImpl::endPresentation()
         mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }
 
-// ---------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
 {
@@ -1453,7 +1453,7 @@ IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
 {
@@ -1481,7 +1481,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
 {
@@ -1520,7 +1520,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
 #endif
 }
 
-// ---------------------------------------------------------
+
 
 sal_Bool SAL_CALL SlideshowImpl::isPaused() throw (RuntimeException)
 {
@@ -1528,7 +1528,7 @@ sal_Bool SAL_CALL SlideshowImpl::isPaused() throw (RuntimeException)
     return mbIsPaused;
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeException)
 {
@@ -1543,9 +1543,9 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeExcep
     }
 }
 
-// ---------------------------------------------------------
-// XShapeEventListener
-// ---------------------------------------------------------
+
+
+
 
 void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& /* aOriginalEvent */ )
 {
@@ -1637,14 +1637,14 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
         }
         else
         {
-            // aMacro has the following syntax:
-            // "Macroname.Modulname.Libname.Documentname" or
-            // "Macroname.Modulname.Libname.Applicationname"
+            
+            
+            
             OUString aMacroName = aMacro.getToken(0, '.');
             OUString aModulName = aMacro.getToken(1, '.');
 
-            // todo: is the limitation still given that only
-            // Modulname+Macroname can be used here?
+            
+            
             OUString aExecMacro = aModulName + "." + aMacroName;
             mpDocSh->GetBasic()->Call(aExecMacro);
         }
@@ -1653,7 +1653,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
 
     case ClickAction_VERB:
     {
-        // todo, better do it async?
+        
         SdrObject* pObj = GetSdrObjectFromXShape( xShape );
         SdrOle2Obj* pOleObject = PTR_CAST(SdrOle2Obj, pObj);
         if (pOleObject && mpViewShell )
@@ -1665,7 +1665,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
     }
 }
 
-// ---------------------------------------------------------
+
 
 sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark )
 {
@@ -1675,7 +1675,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
 
     if( nPgNum == SDRPAGE_NOTFOUND )
     {
-        // Is the bookmark an object?
+        
         SdrObject* pObj = mpDoc->GetObj( aBookmark );
 
         if( pObj )
@@ -1691,7 +1691,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
     return ( nPgNum - 1) >> 1;
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
 {
@@ -1709,7 +1709,7 @@ void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (Runtim
     mpDocSh->OpenBookmark( aBookmark );
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
 {
@@ -1722,7 +1722,7 @@ void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
     }
 }
 
-// ---------------------------------------------------------
+
 
 /** nSlideIndex == -1 displays current slide again */
 void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
@@ -1736,7 +1736,7 @@ void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
 {
@@ -1745,14 +1745,14 @@ void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
         displaySlideNumber( nSlideNumber );
 }
 
-// ---------------------------------------------------------
+
 
 sal_Int32 SlideshowImpl::getCurrentSlideNumber()
 {
     return mpSlideController.get() ? mpSlideController->getCurrentSlideNumber() : -1;
 }
 
-// ---------------------------------------------------------
+
 
 sal_Int32 SlideshowImpl::getFirstSlideNumber()
 {
@@ -1775,7 +1775,7 @@ sal_Int32 SlideshowImpl::getFirstSlideNumber()
     return nRet;
 }
 
-// ---------------------------------------------------------
+
 
 sal_Int32 SlideshowImpl::getLastSlideNumber()
 {
@@ -1798,7 +1798,7 @@ sal_Int32 SlideshowImpl::getLastSlideNumber()
     return nRet;
 }
 
-// ---------------------------------------------------------
+
 
 sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException )
 {
@@ -1806,7 +1806,7 @@ sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException )
     return maPresSettings.mbEndless;
 }
 
-// ---------------------------------------------------------
+
 
 double SlideshowImpl::update()
 {
@@ -1814,7 +1814,7 @@ double SlideshowImpl::update()
     return -1;
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::startUpdateTimer()
 {
@@ -1823,7 +1823,7 @@ void SlideshowImpl::startUpdateTimer()
     maUpdateTimer.Start();
 }
 
-// ---------------------------------------------------------
+
 
 /** this timer is called 20ms after a new slide was displayed.
     This is used to unfreeze user input that was disabled after
@@ -1835,7 +1835,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 /** if I catch someone someday who calls this method by hand
     and not by using the timer, I will personaly punish this
@@ -1853,14 +1853,14 @@ IMPL_LINK_NOARG(SlideshowImpl, updateHdl)
 
 IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
 {
-    // prevent me from deletion when recursing (App::Reschedule does)
+    
     const rtl::Reference<SlideshowImpl> this_(this);
 
     Application::DisableNoYieldMode();
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
-    Application::Reschedule(true); // fix for fdo#32861 - process
-                                   // *all* outstanding events after
-                                   // yield is done.
+    Application::Reschedule(true); 
+                                   
+                                   
     if (mbDisposed)
         return 0;
     Application::Reschedule(true);
@@ -1872,7 +1872,7 @@ IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
 
 sal_Int32 SlideshowImpl::updateSlideShow (void)
 {
-    // prevent me from deletion when recursing (App::EnableYieldMode does)
+    
     const rtl::Reference<SlideshowImpl> this_(this);
 
     Reference< XSlideShow > xShow( mxShow );
@@ -1881,12 +1881,12 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
 
     try
     {
-        // TODO(Q3): Evaluate under various systems and setups,
-        // whether this is really necessary. Under WinXP and Matrox
-        // G550, the frame rates were much more steadier with this
-        // tweak, although.
+        
+        
+        
+        
 
-        // currently no solution, because this kills sound (at least on Windows)
+        
 
         double fUpdate = 0.0;
         if( !xShow->update(fUpdate) )
@@ -1896,32 +1896,32 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
         {
             if (::basegfx::fTools::equalZero(fUpdate))
             {
-                // Use post yield listener for short update intervalls.
+                
                 Application::EnableNoYieldMode();
                 Application::AddPostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
             }
             else
             {
-                // Avoid busy loop when the previous call to update()
-                // returns a small positive number but not 0 (which is
-                // handled above).  Also, make sure that calls to update()
-                // have a minimum frequency.
-                // => Allow up to 60 frames per second.  Call at least once
-                // every 4 seconds.
+                
+                
+                
+                
+                
+                
                 const static sal_Int32 mnMaximumFrameCount (60);
                 const static double mnMinimumTimeout (1.0 / mnMaximumFrameCount);
                 const static double mnMaximumTimeout (4.0);
                 fUpdate = ::basegfx::clamp(fUpdate, mnMinimumTimeout, mnMaximumTimeout);
 
-                // Make sure that the maximum frame count has not been set
-                // too high (only then conversion to milliseconds and long
-                // integer may lead to zero value.)
+                
+                
+                
                 OSL_ASSERT(static_cast<sal_uLong>(fUpdate * 1000.0) > 0);
 
                 Application::DisableNoYieldMode();
                 Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
 
-                // Use a timer for the asynchronous callback.
+                
                 maUpdateTimer.SetTimeout(static_cast<sal_uLong>(fUpdate * 1000.0));
                 maUpdateTimer.Start();
             }
@@ -1938,7 +1938,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
 {
@@ -1961,11 +1961,11 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 }
                 break;
 
-            // cancel show
+            
             case KEY_ESCAPE:
             case KEY_SUBTRACT:
-                // in case the user cancels the presentation, switch to current slide
-                // in edit mode
+                
+                
                 if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
                 {
                     if( mpSlideController->getCurrentSlideNumber() != -1 )
@@ -1974,14 +1974,14 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 endPresentation();
                 break;
 
-            // advance show
+            
             case KEY_PAGEDOWN:
                 if(rKEvt.GetKeyCode().IsMod2())
                 {
                     gotoNextSlide();
                     break;
                 }
-                // warning, fall through!
+                
             case KEY_SPACE:
             case KEY_RIGHT:
             case KEY_DOWN:
@@ -2007,7 +2007,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             }
             break;
 
-            // numeric: add to buffer
+            
             case KEY_0:
             case KEY_1:
             case KEY_2:
@@ -2027,7 +2027,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                     gotoPreviousSlide();
                     break;
                 }
-                // warning, fall through!
+                
             case KEY_LEFT:
             case KEY_UP:
             case KEY_P:
@@ -2129,8 +2129,8 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
                 gotoFirstSlide();
                 break;
             case MEDIA_COMMAND_STOP:
-                // in case the user cancels the presentation, switch to current slide
-                // in edit mode
+                
+                
                 if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
                 {
                     if( mpSlideController->getCurrentSlideNumber() != -1 )
@@ -2145,7 +2145,7 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -2156,7 +2156,7 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
     }
 }
 
-// ---------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 {
@@ -2171,7 +2171,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 
     PopupMenu* pMenu = new PopupMenu( SdResId( RID_SLIDESHOW_CONTEXTMENU ) );
 
-    // Adding button to display if in Pen  mode
+    
     pMenu->CheckItem( CM_PEN_MODE, mbUsePen);
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
@@ -2198,7 +2198,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
         }
     }
 
-    // populate slide goto list
+    
     if( pPageMenu )
     {
         const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
@@ -2244,7 +2244,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 
     PopupMenu* pWidthMenu = pMenu->GetPopupMenu( CM_WIDTH_PEN);
 
-    // populate color width list
+    
     if( pWidthMenu )
     {
         sal_Int32 nIterator;
@@ -2292,7 +2292,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
 {
@@ -2344,7 +2344,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
         break;
         case CM_COLOR_PEN:
             {
-                //Open a color picker based on SvColorDialog
+                
                 ::Color aColor( mnUserPaintColor );
                 SvColorDialog aColorDlg( mpShowWindow);
                 aColorDlg.SetColor( aColor );
@@ -2405,8 +2405,8 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
             }
             break;
         case CM_EDIT_PRESENTATION:
-            // When in autoplay mode (pps/ppsx), offer editing of the presentation
-            // Turn autostart off, else Impress will close when exiting the Presentation
+            
+            
             mpViewShell->GetDoc()->SetExitAfterPresenting(false);
             if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
             {
@@ -2418,8 +2418,8 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
             endPresentation();
             break;
         case CM_ENDSHOW:
-            // in case the user cancels the presentation, switch to current slide
-            // in edit mode
+            
+            
             if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
             {
                 if( mpSlideController->getCurrentSlideNumber() != -1 )
@@ -2448,7 +2448,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 {
@@ -2474,7 +2474,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
     return xShow;
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 {
@@ -2489,7 +2489,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
         else
             pCustomShow = NULL;
 
-        // create animation slide controller
+        
         AnimationSlideController::Mode eMode =
             ( pCustomShow && pCustomShow->PagesVector().size() ) ? AnimationSlideController::CUSTOM :
                 (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
@@ -2503,7 +2503,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
             sal_Int32 nFirstVisibleSlide = 0;
 
 
-            // normal presentation
+            
             if( !rPresSlide.isEmpty() )
             {
                 sal_Int32 nSlide;
@@ -2564,7 +2564,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
     }
 }
 
-// ---------------------------------------------------------
+
 
 typedef sal_uInt16 (*FncGetChildWindowId)();
 
@@ -2612,7 +2612,7 @@ void SlideshowImpl::hideChildWindows()
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::showChildWindows()
 {
@@ -2632,28 +2632,28 @@ void SlideshowImpl::showChildWindows()
     }
 }
 
-// ---------------------------------------------------------
+
 
 SfxViewFrame* SlideshowImpl::getViewFrame() const
 {
     return mpViewShell ? mpViewShell->GetViewFrame() : 0;
 }
 
-// ---------------------------------------------------------
+
 
 SfxDispatcher* SlideshowImpl::getDispatcher() const
 {
     return (mpViewShell && mpViewShell->GetViewFrame()) ? mpViewShell->GetViewFrame()->GetDispatcher() : 0;
 }
 
-// ---------------------------------------------------------
+
 
 SfxBindings* SlideshowImpl::getBindings() const
 {
     return (mpViewShell && mpViewShell->GetViewFrame()) ? &mpViewShell->GetViewFrame()->GetBindings() : 0;
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::resize( const Size& rSize )
 {
@@ -2681,19 +2681,19 @@ void SlideshowImpl::resize( const Size& rSize )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
 {
-    // in case of ActiveX control the toolbars should not be visible if slide show runs in window mode
-    // actually it runs always in window mode in case of ActiveX control
+    
+    
     if ( !maPresSettings.mbFullScreen && mpDocSh && mpDocSh->GetMedium() )
     {
         SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, false );
         if ( pItem && pItem->GetValue() )
         {
-            // this is a plugin/activex mode, no toolbars should be visible during slide show
-            // after the end of slide show they should be visible again
+            
+            
             SfxViewFrame* pViewFrame = getViewFrame();
             if( pViewFrame )
             {
@@ -2715,7 +2715,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
 {
@@ -2741,7 +2741,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
 
                 if( pDispatcher )
                 {
-                    // filter all forbiden slots
+                    
                     pDispatcher->SetSlotFilter( sal_True, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
                 }
 
@@ -2756,7 +2756,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException)
 {
@@ -2768,7 +2768,7 @@ void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
 {
@@ -2792,7 +2792,7 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
     return 0;
 }
 
-// ---------------------------------------------------------
+
 
 sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException)
 {
@@ -2800,7 +2800,7 @@ sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException)
     return mbActive;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SlideshowImpl::receiveRequest(SfxRequest& rReq)
 {
@@ -2830,14 +2830,14 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
         {
             const OUString aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
 
-            // is the bookmark a Slide?
+            
             sal_Bool        bIsMasterPage;
             sal_uInt16      nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
             SdrObject*  pObj   = NULL;
 
             if( nPgNum == SDRPAGE_NOTFOUND )
             {
-                // is the bookmark an object?
+                
                 pObj = mpDoc->GetObj( aTarget );
 
                 if( pObj )
@@ -2854,7 +2854,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideshowImpl::setAutoSaveState( bool bOn)
 {
@@ -2880,7 +2880,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
     }
 }
 
-// ---------------------------------------------------------
+
 
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeException)
 {
@@ -2897,7 +2897,7 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeE
     return xSlide;
 }
 
-// ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException)
 {
@@ -2913,23 +2913,23 @@ sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException)
     }
 }
 
-// ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException)
 {
     return mpSlideController.get() ? mpSlideController->getCurrentSlideIndex() : -1;
 }
 
-// --------------------------------------------------------------------
-// ::com::sun::star::presentation::XSlideShowController:
-// --------------------------------------------------------------------
+
+
+
 
 ::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount() throw (RuntimeException)
 {
     return mpSlideController.get() ? mpSlideController->getSlideIndexCount() : 0;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index) throw (RuntimeException, css::lang::IndexOutOfBoundsException)
 {
@@ -2945,7 +2945,7 @@ sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException)
     return maPresSettings.mbAlwaysOnTop;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeException)
 {
@@ -2953,11 +2953,11 @@ void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeEx
     if( maPresSettings.mbAlwaysOnTop != bAlways )
     {
         maPresSettings.mbAlwaysOnTop = bAlways;
-        // todo, can this be changed while running?
+        
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SlideshowImpl::isFullScreen() throw (RuntimeException)
 {
@@ -2965,7 +2965,7 @@ sal_Bool SAL_CALL SlideshowImpl::isFullScreen() throw (RuntimeException)
     return maPresSettings.mbFullScreen;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException)
 {
@@ -2973,7 +2973,7 @@ sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException)
     return maPresSettings.mbMouseVisible;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (RuntimeException)
 {
@@ -2986,7 +2986,7 @@ void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (Runtime
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SlideshowImpl::getUsePen() throw (RuntimeException)
 {
@@ -2994,7 +2994,7 @@ sal_Bool SAL_CALL SlideshowImpl::getUsePen() throw (RuntimeException)
     return mbUsePen;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeException)
 {
@@ -3002,7 +3002,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     mbUsePen = bMouseAsPen;
     if( mxShow.is() ) try
     {
-        // For Pencolor;
+        
         Any aValue;
         if( mbUsePen )
             aValue <<= mnUserPaintColor;
@@ -3011,7 +3011,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
         aPenProp.Value = aValue;
         mxShow->setProperty( aPenProp );
 
-        //for StrokeWidth :
+        
         if( mbUsePen )
         {
             beans::PropertyValue aPenPropWidth;
@@ -3019,7 +3019,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
             aPenPropWidth.Value <<= mdUserPaintStrokeWidth;
             mxShow->setProperty( aPenPropWidth );
 
-            // for Pen Mode
+            
             beans::PropertyValue aPenPropSwitchPenMode;
             aPenPropSwitchPenMode.Name = "SwitchPenMode";
             aPenPropSwitchPenMode.Value <<= sal_True;
@@ -3037,7 +3037,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     }
 }
 
-// --------------------------------------------------------------------
+
 
 double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException)
 {
@@ -3045,16 +3045,16 @@ double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException)
     return mdUserPaintStrokeWidth;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     mdUserPaintStrokeWidth = dStrokeWidth;
-    setUsePen( true ); // enable pen mode, update color and width
+    setUsePen( true ); 
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException)
 {
@@ -3062,31 +3062,31 @@ sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException)
     return mnUserPaintColor;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     mnUserPaintColor = nColor;
-    setUsePen( true ); // enable pen mode, update color
+    setUsePen( true ); 
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setUseEraser( ::sal_Bool /*_usepen*/ ) throw (css::uno::RuntimeException)
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setPenMode( bool bSwitchPenMode ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    setUsePen( bSwitchPenMode ); // SwitchPen Mode
+    setUsePen( bSwitchPenMode ); 
 
 }
 
-// --------------------------------------------------------------------
+
 void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -3105,7 +3105,7 @@ void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (cs
     }
 }
 
-// --------------------------------------------------------------------
+
 void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometry::RealPoint2D& pos ) throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -3123,7 +3123,7 @@ void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometr
             "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
     }
 }
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeException)
 {
@@ -3153,9 +3153,9 @@ void SAL_CALL SlideshowImpl::setEraserMode( bool /*bSwitchEraserMode*/ ) throw (
 {
 }
 
-// --------------------------------------------------------------------
-// XSlideShowController Methods
-// --------------------------------------------------------------------
+
+
+
 
 sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException)
 {
@@ -3163,7 +3163,7 @@ sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException)
     return mxShow.is();
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException)
 {
@@ -3191,7 +3191,7 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException)
 {
@@ -3215,7 +3215,7 @@ void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException)
 {
@@ -3238,7 +3238,7 @@ void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
 {
@@ -3254,9 +3254,9 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
     }
     else
     {
-        // if this is a show, ignore user inputs and
-        // start 20ms timer to reenable inputs to fiter
-        // buffered inputs during slide transition
+        
+        
+        
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {
             mbInputFreeze = true;
@@ -3311,7 +3311,7 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoPreviousSlide(  ) throw (RuntimeException)
 {
@@ -3342,16 +3342,16 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
                 displayCurrentSlide(bSkipAllMainSequenceEffects);
             else if (bSkipAllMainSequenceEffects)
             {
-                // We could not go to the previous slide (probably because
-                // the current slide is already the first one).  We still
-                // have to call displayCurrentSlide because the calling
-                // slideshow can not determine whether there is a previous
-                // slide or not and has already prepared for a slide change.
-                // This slide change has to be completed now, even when
-                // changing to the same slide.
-                // Note that in this special case we do NOT pass
-                // bSkipAllMainSequenceEffects because we display the same
-                // slide as before and do not want to show all its effects.
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 displayCurrentSlide(false);
             }
         }
@@ -3367,7 +3367,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException)
 {
@@ -3393,7 +3393,7 @@ void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (RuntimeException)
 {
@@ -3407,7 +3407,7 @@ void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (Ru
         displaySlideNumber( nSlideNumber );
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
     throw(IllegalArgumentException, RuntimeException)
@@ -3430,7 +3430,7 @@ void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeException)
 {
@@ -3442,7 +3442,7 @@ void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeEx
     displaySlideIndex( nIndex );
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
 {
@@ -3467,44 +3467,44 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
-// XIndexAccess
-// --------------------------------------------------------------------
+
+
+
 
 ::sal_Int32 SAL_CALL SlideshowImpl::getCount(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return getSlideCount();
 }
 
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     return Any( getSlideByIndex( Index ) );
 }
 
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return cppu::UnoType<XDrawPage>::get();
 }
 
-// --------------------------------------------------------------------
+
 
 ::sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return getSlideCount() != 0;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow() throw (RuntimeException)
 {
     return mxShow;
 }
 
-// --------------------------------------------------------------------
+
 
 
 PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r )
@@ -3629,11 +3629,11 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
     throw IllegalArgumentException();
 }
 
-////////////////////////////////
 
-// ---------------------------------------------------------
-// XAnimationListener
-// ---------------------------------------------------------
+
+
+
+
 
 SlideShowListenerProxy::SlideShowListenerProxy( const rtl::Reference< SlideshowImpl >& xController, const css::uno::Reference< css::presentation::XSlideShow >& xSlideShow )
 : maListeners( m_aMutex )
@@ -3642,13 +3642,13 @@ SlideShowListenerProxy::SlideShowListenerProxy( const rtl::Reference< SlideshowI
 {
 }
 
-// ---------------------------------------------------------
+
 
 SlideShowListenerProxy::~SlideShowListenerProxy()
 {
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::addAsSlideShowListener()
 {
@@ -3659,7 +3659,7 @@ void SlideShowListenerProxy::addAsSlideShowListener()
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::removeAsSlideShowListener()
 {
@@ -3670,7 +3670,7 @@ void SlideShowListenerProxy::removeAsSlideShowListener()
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
@@ -3681,7 +3681,7 @@ void SlideShowListenerProxy::addShapeEventListener( const css::uno::Reference< c
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
@@ -3692,21 +3692,21 @@ void SlideShowListenerProxy::removeShapeEventListener( const css::uno::Reference
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::addSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& xListener )
 {
     maListeners.addInterface(xListener);
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::removeSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& xListener )
 {
     maListeners.removeInterface(xListener);
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException)
 {
@@ -3716,7 +3716,7 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::beginEvent, _1,  boost::cref(xNode) ));
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException)
 {
@@ -3726,7 +3726,7 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::endEvent, _1, boost::cref(xNode) ));
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException)
 {
@@ -3736,9 +3736,9 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  boost::cref(xNode), boost::cref(nRepeat) ));
 }
 
-// ---------------------------------------------------------
-// ::com::sun::star::presentation::XSlideShowListener:
-// ---------------------------------------------------------
+
+
+
 
 void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -3748,7 +3748,7 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::R
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -3758,7 +3758,7 @@ void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::resumed ) );
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException)
 {
@@ -3768,7 +3768,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeEx
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -3778,7 +3778,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun:
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
 }
 
-// ---------------------------------------------------------
+
 
 void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -3788,7 +3788,7 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException)
 {
@@ -3807,7 +3807,7 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeExcepti
     }
 }
 
-// ---------------------------------------------------------
+
 
 void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
 {
@@ -3825,9 +3825,9 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
     }
 }
 
-// ---------------------------------------------------------
-// XEventListener
-// ---------------------------------------------------------
+
+
+
 
 void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::EventObject& aDisposeEvent ) throw (RuntimeException)
 {
@@ -3836,9 +3836,9 @@ void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::E
     mxSlideShow.clear();
 }
 
-// ---------------------------------------------------------
-// XShapeEventListener
-// ---------------------------------------------------------
+
+
+
 
 void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException)
 {
@@ -3847,6 +3847,6 @@ void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, 
         mxController->click(xShape, aOriginalEvent );
 }
 
-} // namespace ::sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartPlotAreaOASISTContext.hxx"
@@ -82,7 +82,7 @@ XMLTransformerContext * XMLAxisOASISContext::CreateChildContext(
     if( XML_NAMESPACE_CHART == nPrefix &&
         IsXMLToken( rLocalName, XML_CATEGORIES ) )
     {
-        // store categories element at parent
+        
         m_rCategoriesContext.set( new XMLPersAttrListTContext( GetTransformer(), rQName ));
         m_bHasCategories = true;
         pContext = m_rCategoriesContext.get();
@@ -123,9 +123,9 @@ void XMLAxisOASISContext::StartElement(
             if( IsXMLToken( rAttrValue, XML_X ))
             {
                 eToken = XML_DOMAIN;
-                // has to be XML_CATEGORY for axes with a categories
-                // sub-element.  The attribute is changed later (when it is
-                // known that there is a categories sub-element) in this case.
+                
+                
+                
             }
             else if( IsXMLToken( rAttrValue, XML_Y ))
             {
@@ -157,7 +157,7 @@ void XMLAxisOASISContext::StartElement(
 
 void XMLAxisOASISContext::EndElement()
 {
-    // if we have categories, change the "class" attribute
+    
     if( IsCategoryAxis() &&
         m_rCategoriesContext.is() )
     {
@@ -218,8 +218,8 @@ XMLTransformerContext * XMLChartPlotAreaOASISTContext::CreateChildContext(
     }
     else
     {
-        // export (and forget) categories if found in an axis-element
-        // otherwise export regularly
+        
+        
         ExportCategories();
         pContext =  XMLProcAttrTransformerContext::CreateChildContext(
                 nPrefix, rLocalName, rQName, xAttrList );

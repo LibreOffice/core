@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// Description:
-// Parse a string of features specified as & separated pairs.
-// e.g.
-// 1001=1&2002=2&fav1=0
+
+
+
+
 
 
 #include <sal/types.h>
@@ -33,7 +33,7 @@
 #include <graphite_features.hxx>
 
 using namespace grutils;
-// These mustn't conflict with font name lists which use ; and ,
+
 const char GrFeatureParser::FEAT_PREFIX = ':';
 const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
@@ -61,7 +61,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString features, 
             mbErrors = true;
             break;
         }
-        // check for a lang=xxx specification
+        
         const OString aLangPrefix("lang");
         if (features.match(aLangPrefix, pos ))
         {
@@ -80,9 +80,9 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString features, 
                 for (sal_Int32 i = pos; i < nFeatEnd; i++)
                     aLang.label[i-pos] = features[i];
 
-                //ext_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
-                //    = font.getSupportedLanguages();
-                //gr::LanguageIterator iL = aSupported.first;
+                
+                
+                
                 unsigned short i = 0;
                 for (; i < gr_face_n_languages(pFace); i++)
                 {
@@ -90,7 +90,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString features, 
                     FeatId aSupportedLang;
                     aSupportedLang.num = nFaceLang;
 #ifdef OSL_BIGENDIAN
-                    // here we only expect full 3 letter codes
+                    
                     if (aLang.label[0] == aSupportedLang.label[0] &&
                         aLang.label[1] == aSupportedLang.label[1] &&
                         aLang.label[2] == aSupportedLang.label[2] &&
@@ -163,7 +163,7 @@ void GrFeatureParser::setLang(const gr_face * pFace, const OString & lang)
             gr_uint32 nFaceLang = gr_face_lang_by_index(pFace, i);
             FeatId aSupportedLang;
             aSupportedLang.num = nFaceLang;
-            // here we only expect full 2 & 3 letter codes
+            
 #ifdef OSL_BIGENDIAN
             if (aLang.label[0] == aSupportedLang.label[0] &&
                 aLang.label[1] == aSupportedLang.label[1] &&

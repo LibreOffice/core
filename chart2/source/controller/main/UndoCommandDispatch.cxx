@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "UndoCommandDispatch.hxx"
@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
-// for resource strings STR_UNDO and STR_REDO
+
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 
@@ -70,13 +70,13 @@ void UndoCommandDispatch::fireStatusEvent(
         uno::Any aUndoState, aRedoState;
         if( m_xUndoManager->isUndoPossible())
         {
-            // using assignment for broken gcc 3.3
+            
             OUString aUndo = SvtResId( STR_UNDO ).toString();
             aUndoState <<= ( aUndo + m_xUndoManager->getCurrentUndoActionTitle());
         }
         if( m_xUndoManager->isRedoPossible())
         {
-            // using assignment for broken gcc 3.3
+            
             OUString aRedo = SvtResId( STR_REDO ).toString();
             aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoActionTitle());
         }
@@ -88,7 +88,7 @@ void UndoCommandDispatch::fireStatusEvent(
     }
 }
 
-// ____ XDispatch ____
+
 void SAL_CALL UndoCommandDispatch::dispatch(
     const util::URL& URL,
     const Sequence< beans::PropertyValue >& /* Arguments */ )
@@ -96,7 +96,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
 {
     if( m_xUndoManager.is() )
     {
-        // why is it necessary to lock the solar mutex here?
+        
         SolarMutexGuard aSolarGuard;
         try
         {
@@ -107,18 +107,18 @@ void SAL_CALL UndoCommandDispatch::dispatch(
         }
         catch( const document::UndoFailedException& )
         {
-            // silently ignore
+            
         }
         catch( const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        // \--
+        
     }
 }
 
-// ____ WeakComponentImplHelperBase ____
-/// is called when this is disposed
+
+
 void SAL_CALL UndoCommandDispatch::disposing()
 {
     Reference< util::XModifyBroadcaster > xBroadcaster( m_xUndoManager, uno::UNO_QUERY );
@@ -132,7 +132,7 @@ void SAL_CALL UndoCommandDispatch::disposing()
     m_xModel.clear();
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
@@ -140,6 +140,6 @@ void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& /* Source
     m_xModel.clear();
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/Aolevariant.hxx"
@@ -130,7 +130,7 @@ OLEVariant::~OLEVariant()
     HRESULT eRet = ::VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
-} // clears all the memory that was allocated before
+} 
 
 OLEVariant::OLEVariant(const ::com::sun::star::util::Date& x )
 {
@@ -196,7 +196,7 @@ OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
     OSL_UNUSED(eRet);
     return *this;
 }
-// Assign a const VARIANT& (::VariantCopy handles everything)
+
 //
 OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
 {
@@ -207,7 +207,7 @@ OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
     return *this;
 }
 
-// Assign a const VARIANT* (::VariantCopy handles everything)
+
 //
 OLEVariant& OLEVariant::operator=(const VARIANT* pSrc)
 {
@@ -412,11 +412,11 @@ OLEVariant::operator OUString() const
     return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(&varDest)));
 }
 
-// -----------------------------------------------------------------------------
+
 void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
 {
     //
-    // If pDest is NULL, convert type in place
+    
     //
     if (pSrc == NULL)
         pSrc = this;
@@ -443,7 +443,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
 {
     ::com::sun::star::uno::Sequence< sal_Int8 > aRet;
@@ -460,7 +460,7 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
         {
             HRESULT hresult1,hresult2;
             long lBound,uBound;
-            // Verify that the SafeArray is the proper shape.
+            
             hresult1 = ::SafeArrayGetLBound(pArray, 1, &lBound);
             hresult2 = ::SafeArrayGetUBound(pArray, 1, &uBound);
             if ( SUCCEEDED(hresult1) && SUCCEEDED(hresult2) )
@@ -484,7 +484,7 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
 
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 OUString OLEVariant::getString() const
 {
     if(isNull())
@@ -492,7 +492,7 @@ OUString OLEVariant::getString() const
     else
         return *this;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OLEVariant::getBool() const
 {
     if (V_VT(this) == VT_BOOL)
@@ -506,7 +506,7 @@ sal_Bool OLEVariant::getBool() const
 
     return V_BOOL(&varDest) == VARIANT_TRUE ? sal_True : sal_False;
 }
-// -----------------------------------------------------------------------------
+
 IUnknown* OLEVariant::getIUnknown() const
 {
     if (V_VT(this) == VT_UNKNOWN)
@@ -523,7 +523,7 @@ IUnknown* OLEVariant::getIUnknown() const
     V_UNKNOWN(&varDest)->AddRef();
     return V_UNKNOWN(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 IDispatch* OLEVariant::getIDispatch() const
 {
     if (V_VT(this) == VT_DISPATCH)
@@ -541,7 +541,7 @@ IDispatch* OLEVariant::getIDispatch() const
     V_DISPATCH(&varDest)->AddRef();
     return V_DISPATCH(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt8 OLEVariant::getByte() const
 {
     if (V_VT(this) == VT_UI1)
@@ -555,7 +555,7 @@ sal_uInt8 OLEVariant::getByte() const
 
     return V_UI1(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int16 OLEVariant::getInt16() const
 {
     if (V_VT(this) == VT_I2)
@@ -569,7 +569,7 @@ sal_Int16 OLEVariant::getInt16() const
 
     return V_I2(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int8 OLEVariant::getInt8() const
 {
     if (V_VT(this) == VT_I1)
@@ -584,7 +584,7 @@ sal_Int8 OLEVariant::getInt8() const
 
     return V_I1(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 OLEVariant::getInt32() const
 {
     if (V_VT(this) == VT_I4)
@@ -599,7 +599,7 @@ sal_Int32 OLEVariant::getInt32() const
 
     return V_I4(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 OLEVariant::getUInt32() const
 {
     if (V_VT(this) == VT_UI4)
@@ -614,7 +614,7 @@ sal_uInt32 OLEVariant::getUInt32() const
 
     return V_UI4(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 float OLEVariant::getFloat() const
 {
     if (V_VT(this) == VT_R4)
@@ -628,7 +628,7 @@ float OLEVariant::getFloat() const
 
     return V_R4(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 double OLEVariant::getDouble() const
 {
     if (V_VT(this) == VT_R8)
@@ -642,7 +642,7 @@ double OLEVariant::getDouble() const
 
     return V_R8(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 double OLEVariant::getDate() const
 {
     if (V_VT(this) == VT_DATE)
@@ -656,7 +656,7 @@ double OLEVariant::getDate() const
 
     return V_DATE(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 CY OLEVariant::getCurrency() const
 {
     if (V_VT(this) == VT_CY)
@@ -674,7 +674,7 @@ CY OLEVariant::getCurrency() const
 
     return V_CY(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
 {
     if (V_VT(this) == (VT_ARRAY|VT_UI1))
@@ -688,7 +688,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
 
     return V_ARRAY(&varDest);
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any OLEVariant::makeAny() const
 {
     ::com::sun::star::uno::Any aValue;
@@ -736,7 +736,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
         case VT_I1:
             aValue.setValue( & cVal, getCppuType((sal_Int8*)0));
             break;
-        case VT_UI1: // there is no unsigned char in UNO
+        case VT_UI1: 
             aValue.setValue( & bVal, getCppuType( (sal_Int8*)0));
             break;
         case VT_UI2:
@@ -771,8 +771,8 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
     }
     return aValue;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

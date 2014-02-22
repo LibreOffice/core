@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/fontlb.hxx"
@@ -24,7 +24,7 @@
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 
-// ============================================================================
+
 
 DBG_NAME( SvLBoxFontString );
 
@@ -66,7 +66,7 @@ void SvLBoxFontString::Paint(
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
     bool bSel = pView->IsSelected();
-    if( !mbUseColor || bSel )       // selection always gets highlight color
+    if( !mbUseColor || bSel )       
     {
         const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
         aNewFont.SetColor( bSel ? rSett.GetHighlightTextColor() : rSett.GetFieldTextColor() );
@@ -87,7 +87,7 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 }
 
 
-// ============================================================================
+
 
 SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
@@ -109,9 +109,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pPar
 
 void SvxFontListBox::InsertFontEntry( const OUString& rString, const Font& rFont, const Color* pColor )
 {
-    mbUseFont = true;           // InitEntry() will use maEntryFont
-    maEntryFont = rFont;        // font to use in InitEntry() over InsertEntry()
-    mpEntryColor = pColor;      // color to use in InitEntry() over InsertEntry()
+    mbUseFont = true;           
+    maEntryFont = rFont;        
+    mpEntryColor = pColor;      
     InsertEntry( rString );
     mbUseFont = false;
 }
@@ -160,6 +160,6 @@ void SvxFontListBox::InitEntry(
                                   eButtonKind );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

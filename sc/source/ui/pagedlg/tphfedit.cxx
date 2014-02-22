@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -47,7 +47,7 @@
 #include "scabstdlg.hxx"
 
 
-// STATIC DATA -----------------------------------------------------------
+
 static ScEditWindow* pActiveEdWnd = NULL;
 
 ScEditWindow* GetScEditWindow ()
@@ -55,7 +55,7 @@ ScEditWindow* GetScEditWindow ()
     return pActiveEdWnd;
 }
 
-//========================================================================
+
 
 static void lcl_GetFieldData( ScHeaderFieldData& rData )
 {
@@ -69,9 +69,9 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
     }
 }
 
-//========================================================================
-// class ScEditWindow
-//========================================================================
+
+
+
 
 ScEditWindow::ScEditWindow( Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
     :   Control( pParent, nBits ),
@@ -97,7 +97,7 @@ ScEditWindow::ScEditWindow( Window* pParent, WinBits nBits, ScEditWindowLocation
     ScHeaderFieldData aData;
     lcl_GetFieldData( aData );
 
-        //  Feldbefehle:
+        
     pEdEngine->SetData( aData );
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
     mbRTL = ScGlobal::IsSystemRTL();
@@ -121,11 +121,11 @@ void ScEditWindow::Resize()
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScEditWindow::~ScEditWindow()
 {
-    // delete Accessible object before deleting EditEngine and EditView
+    
     if (pAcc)
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
@@ -141,7 +141,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScEditWindow(Window *pParen
     return new ScEditWindow (pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
 {
@@ -149,12 +149,12 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
     pEdEngine->UpdateFields();
 }
 
-// -----------------------------------------------------------------------
+
 
 EditTextObject* ScEditWindow::CreateTextObject()
 {
-    //  Absatzattribute zuruecksetzen
-    //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
+    
+    
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
     sal_Int32 nParCnt = pEdEngine->GetParagraphCount();
@@ -164,14 +164,14 @@ EditTextObject* ScEditWindow::CreateTextObject()
     return pEdEngine->CreateTextObject();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
     SfxItemSet* pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
     rPattern.FillEditItemSet( pSet );
-    //  FillEditItemSet adjusts font height to 1/100th mm,
-    //  but for header/footer twips is needed, as in the PatternAttr:
+    
+    
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
     pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
@@ -180,21 +180,21 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pEdEngine->SetDefaults( pSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )
 {
     pEdEngine->SetText( rTextObject );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 {
     pEdView->InsertField( rFld );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetCharAttriutes()
 {
@@ -233,7 +233,7 @@ void ScEditWindow::SetCharAttriutes()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::Paint( const Rectangle& rRect )
 {
@@ -252,14 +252,14 @@ void ScEditWindow::Paint( const Rectangle& rRect )
         pEdView->ShowCursor(true,true);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 {
     pEdView->MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -269,14 +269,14 @@ void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
     pEdView->MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEdView->MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -299,14 +299,14 @@ void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::Command( const CommandEvent& rCEvt )
 {
     pEdView->Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::GetFocus()
 {
@@ -333,7 +333,7 @@ void ScEditWindow::LoseFocus()
         pAcc = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
@@ -374,7 +374,7 @@ ScExtIButton::ScExtIButton(Window* pParent, WinBits nBits )
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScExtIButton(Window *pParent, VclBuilder::stringmap &)
 {
-    return new ScExtIButton (pParent, 0);// WB_BORDER|WB_TABSTOP);
+    return new ScExtIButton (pParent, 0);
 }
 
 void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)

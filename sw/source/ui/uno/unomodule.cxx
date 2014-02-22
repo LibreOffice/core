@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,12 +51,12 @@ uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance(
     return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule( rSMgr )), uno::UNO_QUERY );
 }
 
-    // XNotifyingDispatch
+    
 void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener ) throw (uno::RuntimeException)
 {
-    // there is no guarantee, that we are holded alive during this method!
-    // May the outside dispatch container will be updated by a CONTEXT_CHANGED
-    // asynchronous ...
+    
+    
+    
     uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
 
     SolarMutexGuard aGuard;
@@ -84,7 +84,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     }
 }
 
-    // XDispatch
+    
 void SAL_CALL SwUnoModule::dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw( uno::RuntimeException )
 {
     dispatchWithNotification(aURL, aArgs, uno::Reference< frame::XDispatchResultListener >());
@@ -119,7 +119,7 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SwUnoModule::queryD
     return lDispatcher;
 }
 
-// XDispatchProvider
+
 uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
     const util::URL& aURL, const OUString& /*sTargetFrameName*/,
     sal_Int32 /*eSearchFlags*/    ) throw( uno::RuntimeException )
@@ -135,7 +135,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
     return xReturn;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SwUnoModule::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return SwUnoModule_getImplementationName();

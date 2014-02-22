@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "reffact.hxx"
@@ -29,7 +29,7 @@
 #include <vcl/msgbox.hxx>
 
 
-//============================================================================
+
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
 #define QUERYBOX(m) QueryBox(this,WinBits(WB_YES_NO|WB_DEF_YES),m).Execute()
@@ -39,8 +39,8 @@ const sal_uLong nEntryDataRow = 1;
 const sal_uLong nEntryDataDelim = 2;
 
 
-//============================================================================
-//  class ScColRowNameRangesDlg
+
+
 
 
 /*************************************************************************
@@ -221,36 +221,36 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     SCROW nRow1 = theCurArea.aStart.Row();
     SCROW nRow2 = theCurArea.aEnd.Row();
     if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
-    {   // Spaltenkoepfe und Grenzfall gesamte Tabelle
+    {   
         pBtnColHead->Check( true );
         pBtnRowHead->Check( false );
         if ( nRow2 == MAXROW  )
         {
             if ( nRow1 == 0 )
-                bValid = false;     // Grenzfall gesamte Tabelle
+                bValid = false;     
             else
-            {   // Head unten, Data oben
+            {   
                 theCurData.aStart.SetRow( 0 );
                 theCurData.aEnd.SetRow( nRow1 - 1 );
             }
         }
         else
-        {   // Head oben, Data unten
+        {   
             theCurData.aStart.SetRow( nRow2 + 1 );
             theCurData.aEnd.SetRow( MAXROW );
         }
     }
     else
-    {   // Zeilenkoepfe
+    {   
         pBtnRowHead->Check( true );
         pBtnColHead->Check( false );
         if ( nCol2 == MAXCOL )
-        {   // Head rechts, Data links
+        {   
             theCurData.aStart.SetCol( 0 );
             theCurData.aEnd.SetCol( nCol2 - 1 );
         }
         else
-        {   // Head links, Data rechts
+        {   
             theCurData.aStart.SetCol( nCol2 + 1 );
             theCurData.aEnd.SetCol( MAXCOL );
         }
@@ -315,7 +315,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
 {
     theCurData = rDataRange;
     if ( pBtnColHead->IsChecked() )
-    {   // Datenbereich gleiche Spalten wie Koepfe
+    {   
         theCurData.aStart.SetCol( theCurArea.aStart.Col() );
         theCurData.aEnd.SetCol( theCurArea.aEnd.Col() );
         if ( theCurData.Intersects( theCurArea ) )
@@ -324,13 +324,13 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             SCROW nRow2 = theCurArea.aEnd.Row();
             if ( nRow1 > 0
               && (theCurData.aEnd.Row() < nRow2 || nRow2 == MAXROW) )
-            {   // Data oben
+            {   
                 theCurData.aEnd.SetRow( nRow1 - 1 );
                 if ( theCurData.aStart.Row() > theCurData.aEnd.Row() )
                     theCurData.aStart.SetRow( theCurData.aEnd.Row() );
             }
             else
-            {   // Data unten
+            {   
                 theCurData.aStart.SetRow( nRow2 + 1 );
                 if ( theCurData.aStart.Row() > theCurData.aEnd.Row() )
                     theCurData.aEnd.SetRow( theCurData.aStart.Row() );
@@ -338,7 +338,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
         }
     }
     else
-    {   // Datenbereich gleiche Zeilen wie Koepfe
+    {   
         theCurData.aStart.SetRow( theCurArea.aStart.Row() );
         theCurData.aEnd.SetRow( theCurArea.aEnd.Row() );
         if ( theCurData.Intersects( theCurArea ) )
@@ -347,13 +347,13 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             SCCOL nCol2 = theCurArea.aEnd.Col();
             if ( nCol1 > 0
               && (theCurData.aEnd.Col() < nCol2 || nCol2 == MAXCOL) )
-            {   // Data links
+            {   
                 theCurData.aEnd.SetCol( nCol1 - 1 );
                 if ( theCurData.aStart.Col() > theCurData.aEnd.Col() )
                     theCurData.aStart.SetCol( theCurData.aEnd.Col() );
             }
             else
-            {   // Data rechts
+            {   
                 theCurData.aStart.SetCol( nCol2 + 1 );
                 if ( theCurData.aStart.Col() > theCurData.aEnd.Col() )
                     theCurData.aEnd.SetCol( theCurData.aStart.Col() );
@@ -478,16 +478,16 @@ void ScColRowNameRangesDlg::SetActive()
 void ScColRowNameRangesDlg::UpdateNames()
 {
     pLbRange->SetUpdateMode( false );
-    //-----------------------------------------------------------
+    
     pLbRange->Clear();
     aRangeMap.clear();
     pEdAssign->SetText( EMPTY_OUSTRING );
 
     size_t nCount, j;
-    sal_uInt16 nPos; //@008 Hilfsvariable q eingefuegt
+    sal_uInt16 nPos; 
 
     SCCOL nCol1;
-    SCROW nRow1;    //Erweiterung fuer Bereichsnamen
+    SCROW nRow1;    
     SCTAB nTab1;
     SCCOL nCol2;
     SCROW nRow2;
@@ -512,12 +512,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             const ScRange aRange(ppSortArray[j]->GetRange(0));
             aString = aRange.Format(SCR_ABS_3D, pDoc, aDetails);
 
-            //@008 Hole Bereichsparameter aus Dok
+            
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
                                             nCol2, nRow2, nTab2 );
             SCCOL q=nCol1+3;
             if(q>nCol2) q=nCol2;
-            //@008 Baue String zusammen
+            
             strShow = " [";
             if(pDoc!=NULL)
             {
@@ -530,13 +530,13 @@ void ScColRowNameRangesDlg::UpdateNames()
                     strShow += rString;
                 }
             }
-            if(q<nCol2) // Zu lang? Ergaenzen um ",..."
+            if(q<nCol2) 
             {
                 strShow += ", ...";
             }
             strShow += "]";
 
-            //@008 String einfuegen in Listbox
+            
             OUString aInsStr = aString;
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
@@ -559,7 +559,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             const ScRange aRange(ppSortArray[j]->GetRange(0));
             aString = aRange.Format(SCR_ABS_3D, pDoc, aDetails);
 
-            //@008 Ab hier baue String fuer Zeilen
+            
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
                                             nCol2, nRow2, nTab2 );
             SCROW q=nRow1+3;
@@ -590,7 +590,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         }
         delete [] ppSortArray;
     }
-    //-----------------------------------------------------------
+    
     pLbRange->SetUpdateMode( true );
     pLbRange->Invalidate();
 }
@@ -666,9 +666,9 @@ bool ScColRowNameRangesDlg::IsRefInputMode() const
     return (pEdActive != NULL);
 }
 
-//------------------------------------------------------------------------
-// Handler:
-// ========
+
+
+
 
 /*************************************************************************
 #*  Handler:    OkBtnHdl
@@ -690,10 +690,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl)
 {
     AddBtnHdl( 0 );
 
-    // die RangeLists den Refs am Doc zuweisen
+    
     pDoc->GetColNameRangesRef() = xColNameRanges;
     pDoc->GetRowNameRangesRef() = xRowNameRanges;
-    // geaenderte Datenbereiche muessen sich auswirken
+    
     pDoc->CompileColRowNameFormula();
     ScDocShell* pDocShell = pViewData->GetDocShell();
     pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
@@ -859,7 +859,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
             pLbRange->SelectEntryPos( nSelectPos );
             if ( nSelectPos &&
                     (sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataDelim )
-                pLbRange->SelectEntryPos( --nSelectPos );    // ---Zeile---
+                pLbRange->SelectEntryPos( --nSelectPos );    
 
             pLbRange->GrabFocus();
             pBtnAdd->Disable();
@@ -899,7 +899,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     sal_uInt16 nMoves = 0;
     while ( nSelectPos < nCnt
             && (sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataDelim )
-    {   // skip Delimiter
+    {   
         ++nMoves;
         pLbRange->SelectEntryPos( ++nSelectPos );
     }
@@ -907,15 +907,15 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     if ( nMoves )
     {
         if ( nSelectPos > 1 && nSelectPos >= nCnt )
-        {   // am Ende nicht auf dem " --- Zeile --- " Delimiter stehenbleiben
-            // wenn davor Eintraege existieren
+        {   
+            
             nSelectPos = nCnt - 2;
             pLbRange->SelectEntryPos( nSelectPos );
             aRangeStr = pLbRange->GetSelectEntry();
         }
         else if ( nSelectPos > 2 && nSelectPos < nCnt && !aRangeStr.isEmpty()
                   && aRangeStr == pEdAssign->GetText() )
-        {   // nach oben wandern statt nach unten auf die vorherige Position
+        {   
             nSelectPos -= 2;
             pLbRange->SelectEntryPos( nSelectPos );
             aRangeStr = pLbRange->GetSelectEntry();

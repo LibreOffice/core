@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -29,7 +29,7 @@
 #include <vector>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 struct CoordinateData2D : public basegfx::B2DPoint
 {
@@ -52,7 +52,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class CoordinateDataArray2D
 {
@@ -110,7 +110,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rValue
+            
             CoordinateData2DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
@@ -123,7 +123,7 @@ public:
 
         if(nCount)
         {
-            // insert data
+            
             CoordinateData2DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             CoordinateData2DVector::const_iterator aStart(rSource.maVector.begin());
@@ -136,7 +136,7 @@ public:
     {
         if(nCount)
         {
-            // remove point data
+            
             CoordinateData2DVector::iterator aStart(maVector.begin());
             aStart += nIndex;
             const CoordinateData2DVector::iterator aEnd(aStart + nCount);
@@ -148,8 +148,8 @@ public:
     {
         if(maVector.size() > 1)
         {
-            // to keep the same point at index 0, just flip all points except the
-            // first one when closed
+            
+            
             const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
             CoordinateData2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
             CoordinateData2DVector::iterator aEnd(maVector.end() - 1);
@@ -165,8 +165,8 @@ public:
 
     void removeDoublePointsAtBeginEnd()
     {
-        // remove from end as long as there are at least two points
-        // and begin/end are equal
+        
+        
         while((maVector.size() > 1) && (maVector[0] == maVector[maVector.size() - 1]))
         {
             maVector.pop_back();
@@ -177,18 +177,18 @@ public:
     {
         sal_uInt32 nIndex(0);
 
-        // test as long as there are at least two points and as long as the index
-        // is smaller or equal second last point
+        
+        
         while((maVector.size() > 1) && (nIndex <= maVector.size() - 2))
         {
             if(maVector[nIndex] == maVector[nIndex + 1])
             {
-                // if next is same as index, delete next
+                
                 maVector.erase(maVector.begin() + (nIndex + 1));
             }
             else
             {
-                // if different, step forward
+                
                 nIndex++;
             }
         }
@@ -238,7 +238,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ControlVectorPair2D
 {
@@ -281,7 +281,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ControlVectorArray2D
 {
@@ -412,7 +412,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rValue
+            
             ControlVectorPair2DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
@@ -431,7 +431,7 @@ public:
 
         if(nCount)
         {
-            // insert data
+            
             ControlVectorPair2DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             ControlVectorPair2DVector::const_iterator aStart(rSource.maVector.begin());
@@ -466,7 +466,7 @@ public:
                     mnUsedVectors--;
             }
 
-            // remove point data
+            
             maVector.erase(aDeleteStart, aDeleteEnd);
         }
     }
@@ -475,19 +475,19 @@ public:
     {
         if(maVector.size() > 1)
         {
-            // to keep the same point at index 0, just flip all points except the
-            // first one when closed
+            
+            
             const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
             ControlVectorPair2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
             ControlVectorPair2DVector::iterator aEnd(maVector.end() - 1);
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
-                // swap Prev and Next
+                
                 aStart->flip();
                 aEnd->flip();
 
-                // swap entries
+                
                 ::std::swap(*aStart, *aEnd);
 
                 ++aStart;
@@ -496,28 +496,28 @@ public:
 
             if(aStart == aEnd)
             {
-                // swap Prev and Next at middle element (if exists)
+                
                 aStart->flip();
             }
 
             if(bIsClosed)
             {
-                // swap Prev and Next at start element
+                
                 maVector.begin()->flip();
             }
         }
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImplBufferedData
 {
 private:
-    // Possibility to hold the last subdivision
+    
     boost::scoped_ptr< basegfx::B2DPolygon >        mpDefaultSubdivision;
 
-    // Possibility to hold the last B2DRange calculation
+    
     boost::scoped_ptr< basegfx::B2DRange >          mpB2DRange;
 
 public:
@@ -572,11 +572,11 @@ public:
 
                                 if(!aNewRange.isInside(aBezierRangeWithControlPoints))
                                 {
-                                    // the range with control points of the current edge is not completely
-                                    // inside the current range without control points. Expand current range by
-                                    // subdividing the bezier segment.
-                                    // Ideal here is a subdivision at the extreme values, so use
-                                    // getAllExtremumPositions to get all extremas in one run
+                                    
+                                    
+                                    
+                                    
+                                    
                                     ::std::vector< double > aExtremas;
 
                                     aExtremas.reserve(4);
@@ -591,7 +591,7 @@ public:
                                 }
                             }
 
-                            // prepare next edge
+                            
                             aEdge.setStartPoint(aEdge.getEndPoint());
                         }
                     }
@@ -605,23 +605,23 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImplB2DPolygon
 {
 private:
-    // The point vector. This vector exists always and defines the
-    // count of members.
+    
+    
     CoordinateDataArray2D                           maPoints;
 
-    // The control point vectors. This vectors are created on demand
-    // and may be zero.
+    
+    
     boost::scoped_ptr< ControlVectorArray2D >       mpControlVector;
 
-    // buffered data for e.g. default subdivision and range
+    
     boost::scoped_ptr< ImplBufferedData >           mpBufferedData;
 
-    // flag which decides if this polygon is opened or closed
+    
     bool                                            mbIsClosed;
 
 public:
@@ -663,7 +663,7 @@ public:
         mpBufferedData(),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
-        // complete initialization using copy
+        
         if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
         {
             mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector) );
@@ -676,7 +676,7 @@ public:
         mpBufferedData(),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
-        // complete initialization using partly copy
+        
         if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
         {
             mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector, nIndex, nCount) );
@@ -693,7 +693,7 @@ public:
         mpBufferedData.reset();
         mbIsClosed = rToBeCopied.mbIsClosed;
 
-        // complete initialization using copy
+        
         if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
             mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector) );
 
@@ -735,7 +735,7 @@ public:
                     }
                     else
                     {
-                        // candidate has no control vector, so it's assumed all unused.
+                        
                         bControlVectorsAreEqual = !mpControlVector->isUsed();
                     }
                 }
@@ -743,7 +743,7 @@ public:
                 {
                     if(rCandidate.mpControlVector)
                     {
-                        // we have no control vector, so it's assumed all unused.
+                        
                         bControlVectorsAreEqual = !rCandidate.mpControlVector->isUsed();
                     }
                 }
@@ -776,7 +776,7 @@ public:
 
     void append(const basegfx::B2DPoint& rPoint)
     {
-        mpBufferedData.reset(); // TODO: is this needed?
+        mpBufferedData.reset(); 
         const CoordinateData2D aCoordinate(rPoint);
         maPoints.append(aCoordinate);
 
@@ -959,12 +959,12 @@ public:
         {
             mpBufferedData.reset();
 
-            // flip points
+            
             maPoints.flip(mbIsClosed);
 
             if(mpControlVector)
             {
-                // flip control vector
+                
                 mpControlVector->flip(mbIsClosed);
             }
         }
@@ -974,7 +974,7 @@ public:
     {
         if(mbIsClosed)
         {
-            // check for same start and end point
+            
             const sal_uInt32 nIndex(maPoints.count() - 1);
 
             if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
@@ -993,7 +993,7 @@ public:
             }
         }
 
-        // test for range
+        
         for(sal_uInt32 a(0); a < maPoints.count() - 1; a++)
         {
             if(maPoints.getCoordinate(a) == maPoints.getCoordinate(a + 1))
@@ -1017,7 +1017,7 @@ public:
 
     void removeDoublePointsAtBeginEnd()
     {
-        // Only remove DoublePoints at Begin and End when poly is closed
+        
         if(mbIsClosed)
         {
             mpBufferedData.reset();
@@ -1079,8 +1079,8 @@ public:
         {
             sal_uInt32 nIndex(0);
 
-            // test as long as there are at least two points and as long as the index
-            // is smaller or equal second last point
+            
+            
             while((maPoints.count() > 1) && (nIndex <= maPoints.count() - 2))
             {
                 bool bRemove(maPoints.getCoordinate(nIndex) == maPoints.getCoordinate(nIndex + 1));
@@ -1103,12 +1103,12 @@ public:
                         mpControlVector->setPrevVector(nIndex + 1, mpControlVector->getPrevVector(nIndex));
                     }
 
-                    // if next is same as index and the control vectors are unused, delete index
+                    
                     remove(nIndex, 1);
                 }
                 else
                 {
-                    // if different, step forward
+                    
                     nIndex++;
                 }
             }
@@ -1183,7 +1183,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -1203,8 +1203,8 @@ namespace basegfx
     B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   mpPolygon(ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
     {
-        // TODO(P2): one extra temporary here (cow_wrapper copies
-        // given ImplB2DPolygon into its internal impl_t wrapper type)
+        
+        
         OSL_ENSURE(nIndex + nCount <= rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
     }
 
@@ -1449,14 +1449,14 @@ namespace basegfx
             }
             else
             {
-                // no bezier, reset control poins at rTarget
+                
                 rTarget.setControlPointA(rTarget.getStartPoint());
                 rTarget.setControlPointB(rTarget.getEndPoint());
             }
         }
         else
         {
-            // no valid edge at all, reset rTarget to current point
+            
             const B2DPoint aPoint(mpPolygon->getPoint(nIndex));
             rTarget.setStartPoint(aPoint);
             rTarget.setEndPoint(aPoint);
@@ -1555,6 +1555,6 @@ namespace basegfx
         }
     }
 
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

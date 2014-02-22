@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <edtwin.hxx>
@@ -101,7 +101,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
 {
     OSL_ASSERT( eType == Header || eType == Footer );
 
-    // Check if we already have the control
+    
     SwFrameControlPtr pControl;
     const bool bHeader = ( eType == Header );
 
@@ -131,7 +131,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
 
 void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
 {
-    // Check if we already have the control
+    
     SwFrameControlPtr pControl;
 
     SwFrameControlPtrMap& rControls = m_aControls[PageBreak];

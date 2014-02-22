@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dpcontrol.hxx"
@@ -64,7 +64,7 @@ void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize, bool 
     maSize = rSize;
     if (bLayoutRTL)
     {
-        // rPos is the logical-left position, adjust maPos to visual-left (inside the cell border)
+        
         maPos.X() -= maSize.Width() - 1;
     }
 }
@@ -101,13 +101,13 @@ void ScDPFieldButton::draw()
 
     if (mbBaseButton)
     {
-        // Background
+        
         Rectangle aRect(maPos, maSize);
         mpOutDev->SetLineColor(mpStyle->GetFaceColor());
         mpOutDev->SetFillColor(mpStyle->GetFaceColor());
         mpOutDev->DrawRect(aRect);
 
-        // Border lines
+        
         mpOutDev->SetLineColor(mpStyle->GetLightColor());
         mpOutDev->DrawLine(Point(maPos), Point(maPos.X(), maPos.Y()+maSize.Height()-1));
         mpOutDev->DrawLine(Point(maPos), Point(maPos.X()+maSize.Width()-1, maPos.Y()));
@@ -118,12 +118,12 @@ void ScDPFieldButton::draw()
         mpOutDev->DrawLine(Point(maPos.X()+maSize.Width()-1, maPos.Y()),
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
 
-        // Field name.
-        // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
+        
+        
         Font aTextFont( mpStyle->GetAppFont() );
         if ( mpDoc )
         {
-            //  use ScPatternAttr::GetFont only for font size
+            
             Font aAttrFont;
             static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                 GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
@@ -134,7 +134,7 @@ void ScDPFieldButton::draw()
 
         Point aTextPos = maPos;
         long nTHeight = mpOutDev->GetTextHeight();
-        aTextPos.setX(maPos.getX() + 2); // 2 = Margin
+        aTextPos.setX(maPos.getX() + 2); 
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
 
         mpOutDev->Push(PUSH_CLIPREGION);
@@ -158,8 +158,8 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     if (nH > 18)
         nH = 18;
 
-    // #i114944# AutoFilter button is left-aligned in RTL.
-    // DataPilot button is always right-aligned for now, so text output isn't affected.
+    
+    
     if (mbPopupLeft)
         rPos.setX(maPos.getX());
     else
@@ -175,14 +175,14 @@ void ScDPFieldButton::drawPopupButton()
     Size aSize;
     getPopupBoundingBox(aPos, aSize);
 
-    // Background & outer black border
+    
     mpOutDev->SetLineColor(COL_BLACK);
     mpOutDev->SetFillColor(mpStyle->GetFaceColor());
     mpOutDev->DrawRect(Rectangle(aPos, aSize));
 
     if (!mbPopupPressed)
     {
-        // border lines
+        
         mpOutDev->SetLineColor(mpStyle->GetLightColor());
         mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+1, aPos.Y()+aSize.Height()-2));
         mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+aSize.Width()-2, aPos.Y()+1));
@@ -194,7 +194,7 @@ void ScDPFieldButton::drawPopupButton()
                            Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
     }
 
-    // the arrowhead
+    
     Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
     mpOutDev->SetLineColor(aArrowColor);
     mpOutDev->SetFillColor(aArrowColor);
@@ -225,7 +225,7 @@ void ScDPFieldButton::drawPopupButton()
 
     if (mbHasHiddenMember)
     {
-        // tiny little box to display in presence of hidden member(s).
+        
         Point aBoxPos(aPos.X() + aSize.Width() - 5, aPos.Y() + aSize.Height() - 5);
         if (mbPopupPressed)
         {

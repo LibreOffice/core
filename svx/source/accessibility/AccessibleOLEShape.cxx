@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/AccessibleOLEShape.hxx>
@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+
 
 AccessibleOLEShape::AccessibleOLEShape (
     const AccessibleShapeInfo& rShapeInfo,
@@ -47,7 +47,7 @@ AccessibleOLEShape::~AccessibleOLEShape (void)
 
 
 
-//=====  XAccessibleAction  ===================================================
+
 
 sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -87,7 +87,7 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
 
 
 
-//=====  XInterface  ==========================================================
+
 
 com::sun::star::uno::Any SAL_CALL
     AccessibleOLEShape::queryInterface (const com::sun::star::uno::Type & rType)
@@ -121,7 +121,7 @@ void SAL_CALL
 
 
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
     AccessibleOLEShape::getImplementationName (void)
@@ -138,12 +138,12 @@ OUString SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // Get list of supported service names from base class...
+    
     uno::Sequence< OUString > aServiceNames =
         AccessibleShape::getSupportedServiceNames();
     sal_Int32 nCount (aServiceNames.getLength());
 
-    // ...and add additional names.
+    
     aServiceNames.realloc (nCount + 1);
     static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleOLEShape");
     aServiceNames[nCount] = sAdditionalServiceName;
@@ -154,15 +154,15 @@ OUString SAL_CALL
 
 
 
-//=====  XTypeProvider  ===================================================
+
 
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleOLEShape::getTypes (void)
     throw (uno::RuntimeException)
 {
-    // Get list of types from the context base implementation...
+    
     uno::Sequence<uno::Type> aTypeList (AccessibleShape::getTypes());
-    // ...and add the additional type for the component.
+    
     long nTypeCount = aTypeList.getLength();
     aTypeList.realloc (nTypeCount + 1);
     const uno::Type aActionType =
@@ -172,7 +172,7 @@ uno::Sequence<uno::Type> SAL_CALL
     return aTypeList;
 }
 
-//=====  XAccessibleExtendedAttributes  ========================================================
+
 uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
@@ -180,7 +180,7 @@ uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
     ::rtl::OUString style;
     if( m_pShape )
     {
-        //style = ::rtl::OUString::createFromAscii("style=");
+        
         style = ::rtl::OUString::createFromAscii("style:");
         style += ((SdrOle2Obj*)m_pShape)->GetStyleString();
     }
@@ -189,7 +189,7 @@ uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
     return strRet;
 }
 
-/// Set this object's name if is different to the current name.
+/
 OUString
     AccessibleOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)

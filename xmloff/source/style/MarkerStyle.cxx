@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/MarkerStyle.hxx>
@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 using namespace ::xmloff::token;
 
-// Import
+
 
 XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
     : rImport( rImp )
@@ -101,8 +101,8 @@ sal_Bool XMLMarkerStyleImport::importXML(
         {
             if(aPolyPolygon.count())
             {
-                // ViewBox probably not used, but stay with former processing inside of
-                // SdXMLImExSvgDElement
+                
+                
                 const basegfx::B2DRange aSourceRange(
                     pViewBox->GetX(), pViewBox->GetY(),
                     pViewBox->GetX() + pViewBox->GetWidth(), pViewBox->GetY() + pViewBox->GetHeight());
@@ -118,7 +118,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
                             aTargetRange));
                 }
 
-                // always use PolyPolygonBezierCoords here
+                
                 drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
 
                 basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
@@ -142,7 +142,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
     return bHasViewBox && bHasPathData;
 }
 
-// Export
+
 
 XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
     : rExport( rExp )
@@ -165,7 +165,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
 
         if(rValue >>= aBezier)
         {
-            // Name
+            
             sal_Bool bEncoded(sal_False);
             OUString aStrName( rStrName );
 
@@ -181,8 +181,8 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                     aBezier));
             const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
 
-            /////////////////
-            // Viewbox (viewBox="0 0 1500 1000")
+            
+            
 
             SdXMLImExViewBox aViewBox(
                 aPolyPolygonRange.getMinX(),
@@ -191,18 +191,18 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                 aPolyPolygonRange.getHeight());
             rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
 
-            // Pathdata
+            
             const OUString aPolygonString(
                 basegfx::tools::exportToSvgD(
                     aPolyPolygon,
-                    true,           // bUseRelativeCoordinates
-                    false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                    true));         // bHandleRelativeNextPointCompatible
+                    true,           
+                    false,          
+                    true));         
 
-            // write point array
+            
             rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
 
-            // Do Write
+            
             SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER, sal_True, sal_False );
         }
     }

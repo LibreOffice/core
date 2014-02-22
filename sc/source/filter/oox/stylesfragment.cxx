@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stylesfragment.hxx"
@@ -24,12 +24,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 IndexedColorsContext::IndexedColorsContext( WorkbookFragmentBase& rFragment ) :
     WorkbookContextBase( rFragment )
@@ -58,7 +58,7 @@ ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId,
     return 0;
 }
 
-// ============================================================================
+
 
 ContextHandlerRef FontContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -67,7 +67,7 @@ ContextHandlerRef FontContext::onCreateContext( sal_Int32 nElement, const Attrib
     return 0;
 }
 
-// ============================================================================
+
 
 void BorderContext::onStartElement( const AttributeList& rAttribs )
 {
@@ -90,7 +90,7 @@ ContextHandlerRef BorderContext::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-// ============================================================================
+
 
 ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -125,7 +125,7 @@ ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const Attrib
     return 0;
 }
 
-// ============================================================================
+
 
 void XfContext::onStartElement( const AttributeList& rAttribs )
 {
@@ -148,7 +148,7 @@ ContextHandlerRef XfContext::onCreateContext( sal_Int32 nElement, const Attribut
     return 0;
 }
 
-// ============================================================================
+
 
 ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -172,7 +172,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
     return 0;
 }
 
-// ============================================================================
+
 
 StylesFragment::StylesFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
@@ -314,9 +314,9 @@ void StylesFragment::finalizeImport()
     getStyles().finalizeImport();
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

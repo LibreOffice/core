@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "submissionhandler.hxx"
@@ -30,16 +30,16 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler()
 {
     ::pcr::SubmissionPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::comphelper;
     using namespace ::com::sun::star;
@@ -52,10 +52,10 @@ namespace pcr
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
-    //= SubmissionHelper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     SubmissionHelper::SubmissionHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
     {
@@ -63,7 +63,7 @@ namespace pcr
             "SubmissionHelper::SubmissionHelper: you should not have instantiated me!" );
     }
 
-    //--------------------------------------------------------------------
+    
     bool SubmissionHelper::canTriggerSubmissions( const Reference< XPropertySet >& _rxControlModel,
         const Reference< frame::XModel >& _rxContextDocument ) SAL_THROW(())
     {
@@ -83,11 +83,11 @@ namespace pcr
         return false;
     }
 
-    //====================================================================
-    //= SubmissionPropertyHandler
-    //====================================================================
+    
+    
+    
     DBG_NAME( SubmissionPropertyHandler )
-    //--------------------------------------------------------------------
+    
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
         ,OPropertyChangeListener( m_aMutex )
@@ -96,20 +96,20 @@ namespace pcr
         DBG_CTOR( SubmissionPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     SubmissionPropertyHandler::~SubmissionPropertyHandler( )
     {
         disposeAdapter();
         DBG_DTOR( SubmissionPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL SubmissionPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.SubmissionPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -117,14 +117,14 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL SubmissionPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            
 
         Any aReturn;
         try
@@ -135,7 +135,7 @@ namespace pcr
             {
                 Reference< submission::XSubmissionSupplier > xSubmissionSupp( m_xComponent, UNO_QUERY );
                 OSL_ENSURE( xSubmissionSupp.is(), "SubmissionPropertyHandler::getPropertyValue: this should never happen ..." );
-                    // this handler is not intended for components which are no XSubmissionSupplier
+                    
                 Reference< submission::XSubmission > xSubmission;
                 if ( xSubmissionSupp.is() )
                     xSubmission = xSubmissionSupp->getSubmission( );
@@ -166,14 +166,14 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL SubmissionPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::setPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            
 
         try
         {
@@ -186,7 +186,7 @@ namespace pcr
 
                 Reference< submission::XSubmissionSupplier > xSubmissionSupp( m_xComponent, UNO_QUERY );
                 OSL_ENSURE( xSubmissionSupp.is(), "SubmissionPropertyHandler::setPropertyValue: this should never happen ..." );
-                    // this handler is not intended for components which are no XSubmissionSupplier
+                    
                 if ( xSubmissionSupp.is() )
                 {
                     xSubmissionSupp->setSubmission( xSubmission );
@@ -209,7 +209,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -221,7 +221,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -235,7 +235,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SubmissionPropertyHandler::onNewComponent()
     {
         if ( m_pPropChangeMultiplexer )
@@ -262,7 +262,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Property > SAL_CALL SubmissionPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -276,7 +276,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+    
     LineDescriptor SAL_CALL SubmissionPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -297,8 +297,8 @@ namespace pcr
 
         case PROPERTY_ID_XFORMS_BUTTONTYPE:
         {
-            // available options are nearly the same as for the "normal" button type, but only the
-            // first two options
+            
+            
             aListEntries = m_pInfoService->getPropertyEnumRepresentations( PROPERTY_ID_BUTTONTYPE );
             aListEntries.resize( 2 );
         }
@@ -317,7 +317,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL SubmissionPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -326,7 +326,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
         OSL_PRECOND( m_pHelper.get(), "SubmissionPropertyHandler::actuatingPropertyChanged: inconsistentcy!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            
 
         switch ( nActuatingPropId )
         {
@@ -343,7 +343,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL SubmissionPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -370,7 +370,7 @@ namespace pcr
         {
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
                 new DefaultEnumRepresentation( *m_pInfoService, ::getCppuType( static_cast< FormButtonType* >( NULL ) ), PROPERTY_ID_BUTTONTYPE ) );
-            // TODO/UNOize: make aEnumConversion a member?
+            
             aEnumConversion->getValueFromDescription( sControlValue, aPropertyValue );
         }
         break;
@@ -382,7 +382,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL SubmissionPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -411,7 +411,7 @@ namespace pcr
         {
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
                 new DefaultEnumRepresentation( *m_pInfoService, _rPropertyValue.getValueType(), PROPERTY_ID_BUTTONTYPE ) );
-            // TODO/UNOize: make aEnumConversion a member?
+            
             aControlValue <<= aEnumConversion->getDescriptionForValue( _rPropertyValue );
         }
         break;
@@ -423,15 +423,15 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+    
     void SubmissionPropertyHandler::_propertyChanged( const PropertyChangeEvent& _rEvent ) throw(RuntimeException)
     {
         if ( _rEvent.PropertyName == PROPERTY_BUTTONTYPE )
             firePropertyChange( PROPERTY_XFORMS_BUTTONTYPE, PROPERTY_ID_XFORMS_BUTTONTYPE, _rEvent.OldValue, _rEvent.NewValue );
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

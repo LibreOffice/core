@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "compare.hxx"
@@ -38,42 +38,42 @@ CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bo
     bMatchWholeCell(pDoc->GetDocOptions().IsMatchWholeCell())
 {
     bRegEx = (bRegEx && (aQueryEntry.eOp == SC_EQUAL || aQueryEntry.eOp == SC_NOT_EQUAL));
-    // Interpreter functions usually are case insensitive, except the simple
-    // comparison operators, for which these options aren't used. Override in
-    // struct if needed.
+    
+    
+    
 }
 
 double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bool bIgnoreCase, CompareOptions* pOptions )
 {
-    // Keep DoubleError if encountered
-    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    
+    
     if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
         return rCell1.mfValue;
     if (!rCell2.mbEmpty && rCell2.mbValue && !rtl::math::isFinite(rCell2.mfValue))
         return rCell2.mfValue;
 
-    size_t nStringQuery = 0;    // 0:=no, 1:=0, 2:=1
+    size_t nStringQuery = 0;    
     double fRes = 0;
     if (rCell1.mbEmpty)
     {
         if (rCell2.mbEmpty)
-            ;       // empty cell == empty cell, fRes 0
+            ;       
         else if (rCell2.mbValue)
         {
             if (rCell2.mfValue != 0.0)
             {
                 if (rCell2.mfValue < 0.0)
-                    fRes = 1;       // empty cell > -x
+                    fRes = 1;       
                 else
-                    fRes = -1;      // empty cell < x
+                    fRes = -1;      
             }
-            // else: empty cell == 0.0
+            
         }
         else
         {
             if (!rCell2.maStr.isEmpty())
-                fRes = -1;      // empty cell < "..."
-            // else: empty cell == ""
+                fRes = -1;      
+            
         }
     }
     else if (rCell2.mbEmpty)
@@ -83,17 +83,17 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
             if (rCell1.mfValue != 0.0)
             {
                 if (rCell1.mfValue < 0.0)
-                    fRes = -1;      // -x < empty cell
+                    fRes = -1;      
                 else
-                    fRes = 1;       // x > empty cell
+                    fRes = 1;       
             }
-            // else: empty cell == 0.0
+            
         }
         else
         {
             if (!rCell1.maStr.isEmpty())
-                fRes = 1;       // "..." > empty cell
-            // else: "" == empty cell
+                fRes = 1;       
+            
         }
     }
     else if (rCell1.mbValue)
@@ -110,23 +110,23 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
         }
         else
         {
-            fRes = -1;          // number is less than string
-            nStringQuery = 2;   // 1+1
+            fRes = -1;          
+            nStringQuery = 2;   
         }
     }
     else if (rCell2.mbValue)
     {
-        fRes = 1;               // string is greater than number
-        nStringQuery = 1;       // 0+1
+        fRes = 1;               
+        nStringQuery = 1;       
     }
     else
     {
-        // Both strings.
+        
         if (pOptions)
         {
-            // All similar to ScTable::ValidQuery(), *rComp.pVal[1] actually
-            // is/must be identical to *rEntry.pStr, which is essential for
-            // regex to work through GetSearchTextPtr().
+            
+            
+            
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
             OSL_ENSURE(rEntry.GetQueryItem().maString == rCell2.maStr, "ScInterpreter::CompareFunc: broken options");
             if (pOptions->bRegEx)
@@ -137,7 +137,7 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
                         !bIgnoreCase)->SearchForward(
                             rCell1.maStr.getString(), &nStart, &nStop);
                 if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rCell1.maStr.getLength()))
-                    bMatch = false;     // RegEx must match entire string.
+                    bMatch = false;     
                 fRes = (bMatch ? 0 : 1);
             }
             else if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
@@ -190,16 +190,16 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
             if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
                 (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
             {
-                // As in ScTable::ValidQuery() match a numeric string for a
-                // number query that originated from a string, e.g. in SUMIF
-                // and COUNTIF. Transliteration is not needed here.
+                
+                
+                
                 bool bEqual = false;
                 if (nStringQuery == 1)
                     bEqual = rCell1.maStr == rItem.maString;
                 else
                     bEqual = rCell2.maStr == rItem.maString;
 
-                // match => fRes=0, else fRes=1
+                
                 fRes = double((rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual);
             }
         }
@@ -210,8 +210,8 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
 
 double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* pOptions )
 {
-    // Keep DoubleError if encountered
-    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    
+    
     if (!rtl::math::isFinite(fCell1))
         return fCell1;
     if (!rCell2.mbEmpty && rCell2.mbValue && !rtl::math::isFinite(rCell2.mfValue))
@@ -224,11 +224,11 @@ double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* 
         if (fCell1 != 0.0)
         {
             if (fCell1 < 0.0)
-                fRes = -1;      // -x < empty cell
+                fRes = -1;      
             else
-                fRes = 1;       // x > empty cell
+                fRes = 1;       
         }
-        // else: empty cell == 0.0
+        
     }
     else
     {
@@ -244,7 +244,7 @@ double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* 
         }
         else
         {
-            fRes = -1;          // number is less than string
+            fRes = -1;          
             bStringQuery = true;
         }
     }
@@ -259,12 +259,12 @@ double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* 
             if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
                 (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
             {
-                // As in ScTable::ValidQuery() match a numeric string for a
-                // number query that originated from a string, e.g. in SUMIF
-                // and COUNTIF. Transliteration is not needed here.
+                
+                
+                
                 bool bEqual = rCell2.maStr == rItem.maString;
 
-                // match => fRes=0, else fRes=1
+                
                 fRes = double((rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual);
             }
         }
@@ -275,8 +275,8 @@ double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* 
 
 double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions )
 {
-    // Keep DoubleError if encountered
-    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    
+    
     if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
         return rCell1.mfValue;
     if (!rtl::math::isFinite(fCell2))
@@ -289,11 +289,11 @@ double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* 
         if (fCell2 != 0.0)
         {
             if (fCell2 < 0.0)
-                fRes = 1;       // empty cell > -x
+                fRes = 1;       
             else
-                fRes = -1;      // empty cell < x
+                fRes = -1;      
         }
-        // else: empty cell == 0.0
+        
     }
     else if (rCell1.mbValue)
     {
@@ -307,7 +307,7 @@ double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* 
     }
     else
     {
-        fRes = 1;               // string is greater than number
+        fRes = 1;               
         bStringQuery = true;
     }
 
@@ -321,12 +321,12 @@ double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* 
             if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
                 (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
             {
-                // As in ScTable::ValidQuery() match a numeric string for a
-                // number query that originated from a string, e.g. in SUMIF
-                // and COUNTIF. Transliteration is not needed here.
+                
+                
+                
                 bool bEqual = rCell1.maStr == rItem.maString;
 
-                // match => fRes=0, else fRes=1
+                
                 fRes = double((rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual);
             }
         }
@@ -337,8 +337,8 @@ double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* 
 
 double CompareFunc( double fCell1, double fCell2 )
 {
-    // Keep DoubleError if encountered
-    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    
+    
     if (!rtl::math::isFinite(fCell1))
         return fCell1;
     if (!rtl::math::isFinite(fCell2))
@@ -359,8 +359,8 @@ double CompareFunc( double fCell1, double fCell2 )
 
 double CompareEmptyToNumericFunc( double fCell2 )
 {
-    // Keep DoubleError if encountered
-    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    
+    
     if (!rtl::math::isFinite(fCell2))
         return fCell2;
 
@@ -368,11 +368,11 @@ double CompareEmptyToNumericFunc( double fCell2 )
     if (fCell2 != 0.0)
     {
         if (fCell2 < 0.0)
-            fRes = 1;       // empty cell > -x
+            fRes = 1;       
         else
-            fRes = -1;      // empty cell < x
+            fRes = -1;      
     }
-    // else: empty cell == 0.0
+    
 
     return fRes;
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -97,7 +97,7 @@ SwFldFuncPage::~SwFldFuncPage()
 void SwFldFuncPage::Reset(const SfxItemSet& )
 {
     SavePos(m_pTypeLB);
-    Init(); // general initialisation
+    Init(); 
 
     m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
@@ -106,10 +106,10 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
     if (!IsFldEdit())
     {
-        // initialise TypeListBox
+        
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
-        // fill Typ-Listbox
+        
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
@@ -130,7 +130,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
         }
     }
 
-    // select old Pos
+    
     RestorePos(m_pTypeLB);
 
     m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFldFuncPage, InsertHdl));
@@ -183,10 +183,10 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
 IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 {
-    // save old ListBoxPos
+    
     const sal_uInt16 nOld = GetTypeSel();
 
-    // current ListBoxPos
+    
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -199,10 +199,10 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-        // fill Selection-Listbox
+        
         UpdateSubType();
 
-        // fill Format-Listbox
+        
         m_pFormatLB->Clear();
 
         sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
@@ -225,7 +225,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         sal_Bool bValue = sal_False, bName = sal_False, bMacro = sal_False, bInsert = sal_True;
         sal_Bool bFormat = nSize != 0;
 
-        // two controls for conditional text
+        
         sal_Bool bDropDown = TYP_DROPDOWN == nTypeId;
         sal_Bool bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
 
@@ -443,7 +443,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 
 IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
 {
-    //enable "Add" button when text is in the Edit that's not already member of the box
+    
     m_pListAddPB->Enable(!m_pListItemED->GetText().isEmpty() &&
                 LISTBOX_ENTRY_NOTFOUND == m_pListItemsLB->GetEntryPos(m_pListItemED->GetText()));
     sal_Bool bEnableButtons = m_pListItemsLB->GetSelectEntryCount() > 0;
@@ -462,7 +462,7 @@ void SwFldFuncPage::UpdateSubType()
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-    // fill Selction-Listbox
+    
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 
@@ -539,14 +539,14 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
     {
         case TYP_INPUTFLD:
             nSubType = INP_TXT;
-            // to prevent removal of CR/LF restore old content
+            
             if(!m_pNameED->IsModified() && IsFldEdit())
                 aName = GetCurField()->GetPar1();
 
             break;
 
         case TYP_MACROFLD:
-            // use the full script URL, not the name in the Edit control
+            
             aName = GetFldMgr().GetMacroPath();
             break;
 
@@ -580,7 +580,7 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // enable/disable Insert if applicable
+    ModifyHdl();    
 
     return sal_False;
 }
@@ -589,7 +589,7 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
 {
     if (!rMacro.isEmpty())
     {
-        // reverse content of aName
+        
         OUString sTmp;
         OUStringBuffer sBuf;
         sal_Int32 nPos = 0;

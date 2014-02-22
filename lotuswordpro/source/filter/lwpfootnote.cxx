@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -94,9 +94,9 @@ void LwpFribFootnote::RegisterNewStyle()
     LwpFootnote* pFootnote = GetFootnote();
     if(pFootnote)
     {
-        //register footnote number font style
+        
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
-        //register footnote content style
+        
         pFootnote->SetFoundry(m_pPara->GetFoundry());
         pFootnote->RegisterStyle();
     }
@@ -122,10 +122,10 @@ void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
         pFootnote->XFConvert(pContent);
         if(m_ModFlag)
         {
-            //set footnote number font style
+            
             XFTextSpan *pSpan = new XFTextSpan();
             pSpan->SetStyleName(GetStyleName());
-            //add the xffootnote into the content container
+            
             pSpan->Add(pContent);
             pCont->Add(pSpan);
         }
@@ -172,8 +172,8 @@ void LwpFootnote::Read()
  */
 void LwpFootnote::RegisterStyle()
 {
-    //Only register footnote contents style,
-    //Endnote contents style registers in LwpEnSuperTableLayout::RegisterStyle
+    
+    
     if(m_nType == FN_FOOTNOTE)
     {
         LwpContent* pContent = FindFootnoteContent();
@@ -230,8 +230,8 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
     LwpDocument* pDivision = NULL;
     LwpDocument* pFootnoteDivision =NULL;
 
-    // Make sure the footnote does belong to some division
-    // The division might not have a DivisionInfo if it's being Destruct()ed
+    
+    
     pPrev = m_pFoundry->GetDocument();
     pFootnoteDivision = pPrev;
     if (!pPrev || pPrev->GetDivInfoID()->IsNull())
@@ -241,18 +241,18 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
     {
         case FN_FOOTNOTE:
         {
-            // Footnotes always use the source division
+            
             return pFootnoteDivision;
         }
         case FN_DIVISION:
         {
-            // Start with the footnote's division
+            
             pDivision = pPrev;
             break;
         }
         case FN_DIVISION_SEPARATE:
         {
-            // It had better be the next division
+            
             pDivision = pPrev->GetNextDivision();
             break;
         }
@@ -275,10 +275,10 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
 
     }
 
-    // Make sure we're using the proper endnote division, if it's separate
+    
     if (m_nType & FN_MASK_SEPARATE)
         pDivision = GetEndnoteDivision(pDivision);
-    // Don't use a division that's specifically for endnotes
+    
     else
     {
         while (pDivision)
@@ -304,16 +304,16 @@ LwpDocument* LwpFootnote::GetEndnoteDivision(LwpDocument* pPossible)
     LwpDocument*  pDivision = pPossible;
     sal_uInt16 nDivType;
 
-    // In case we have multiple endnote divisions, walk backwards until
-    // we find one.
+    
+    
     while (pDivision)
     {
-        // Do we already have the right division?
+        
         nDivType = pDivision->GetEndnoteType();
         if (nDivType == m_nType)
             return pDivision;
-        // When we hit the first non-endnote division, stop looking.
-        // -- SDC 10/8/96
+        
+        
         if (nDivType == FN_DONTCARE)
             break;
         pDivision = pDivision->GetPreviousDivision();
@@ -373,7 +373,7 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
         if (pContent->IsTable() && (strClassName.equals(pContent->GetClassName())) &&
             pContent->IsActive() && pContent->GetLayout(NULL))
         {
-            // Found it!
+            
             return (LwpEnSuperTableLayout *)
                 ((LwpTable*)pContent)->GetSuperTableLayout();
         }
@@ -387,8 +387,8 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 LwpContent* LwpFootnote::FindFootnoteContent()
 {
     LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj());
-    //if the content has layout, the content has footnote contents;
-    //or looking for the celllayout and return the footnote contents.
+    
+    
     if(pContent && pContent->GetLayout(NULL))
         return pContent;
 
@@ -513,13 +513,13 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
     OUString message = m_EndnoteDocNumbering.GetLeadingText();
     if(message.isEmpty())
     {
-        message = A2OUSTR("[");//default prefix
+        message = A2OUSTR("[");
     }
     pEndnoteConfig->SetNumPrefix(message);
     message = m_EndnoteDocNumbering.GetTrailingText();
     if(message.isEmpty())
     {
-        message = A2OUSTR("]");//default suffix
+        message = A2OUSTR("]");
     }
     pEndnoteConfig->SetNumSuffix(message);
     if(m_EndnoteDocNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
@@ -543,7 +543,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage()
     {
         return m_ContinuedOnMessage.str();
     }
-    // else reture defauls message
+    
     return A2OUSTR(STRID_FOOTCONTINUEDON);
 }
 
@@ -556,7 +556,7 @@ OUString LwpFootnoteOptions::GetContinuedFromMessage()
     {
         return m_ContinuedFromMessage.str();
     }
-    // else reture defauls message
+    
     return A2OUSTR(STRID_FOOTCONTINUEDFROM);
 }
 

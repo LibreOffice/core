@@ -62,11 +62,11 @@ bool PointerToBool::VisitImplicitCastExpr( const ImplicitCastExpr* expr )
     {
     if( ignoreLocation( expr ))
         return true;
-    // Warning about CK_MemberPointerToBoolean would mean warning about
-    // cases there the 'safe bool' idiom is used, so give that such
-    // a conversion is otherwise unlikely anyway, it's probably better
-    // not to warn here at all (at least as long as the 'explicit bool'
-    // from C++11 is not in use).
+    
+    
+    
+    
+    
     if( expr->getCastKind() == CK_PointerToBoolean )
         {
         if( ignoreConversion( expr ))
@@ -84,7 +84,7 @@ bool PointerToBool::VisitImplicitCastExpr( const ImplicitCastExpr* expr )
 
 bool PointerToBool::ignoreConversion( const Stmt* stmt )
     {
-#if 1 // less strict version
+#if 1 
     const Stmt* parent = parentStmt( stmt );
     if( parent == NULL )
         return true;
@@ -116,15 +116,15 @@ bool PointerToBool::ignoreConversion( const Stmt* stmt )
                 if( castexpr->getTypeAsWritten()->isBooleanType() && stmt == castexpr->getSubExpr())
                     return true;
             if( dyn_cast< CallExpr >( parent ))
-                return false; // The only place where it's not ignored.
+                return false; 
             break;
         }
     return ignoreConversion( parent );
-#else // more strict version
-    // Warn only if the expression is not used in a conditional context.
+#else 
+    
     const Stmt* parent = parentStmt( stmt );
-    if( parent == NULL ) // Should not happen inside a function, but can happen inside
-        return false;    // ctor initializer list.
+    if( parent == NULL ) 
+        return false;    
     switch( parent->getStmtClass())
         {
         case Stmt::IfStmtClass:
@@ -148,7 +148,7 @@ bool PointerToBool::ignoreConversion( const Stmt* stmt )
             const UnaryOperator* unary = cast< UnaryOperator >( parent );
             return ( unary->getOpcode() == UO_LNot && stmt == unary->getSubExpr());
             }
-        case Stmt::ExprWithCleanupsClass: // Often happens inside if() condition.
+        case Stmt::ExprWithCleanupsClass: 
             return isInConditionalContext( parent );
         default:
             if( const ExplicitCastExpr* castexpr = dyn_cast< ExplicitCastExpr >( parent ))
@@ -162,6 +162,6 @@ bool PointerToBool::ignoreConversion( const Stmt* stmt )
 
 static Plugin::Registration< PointerToBool > X( "pointertobool" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

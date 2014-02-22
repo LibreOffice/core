@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::style;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
@@ -68,7 +68,7 @@ double GetPositiveFixedPercentage( const OUString& sValue )
     return fPercent;
 }
 
-// --------------------------------------------------------------------
+
 
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
 awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
@@ -76,7 +76,7 @@ awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
     return awt::Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
 }
 
-// --------------------------------------------------------------------
+
 
 /** converts the ST_TextFontSize to point */
 float GetTextSize( const OUString& sValue )
@@ -105,7 +105,7 @@ sal_Int32 GetTextSpacingPoint( const sal_Int32 nValue )
 
 float GetFontHeight( sal_Int32 nHeight )
 {
-    // convert 1/100 points to points
+    
     return static_cast< float >( nHeight / 100.0 );
 }
 
@@ -131,7 +131,7 @@ sal_Int16 GetFontUnderline( sal_Int32 nToken )
         case XML_wavy:              return awt::FontUnderline::WAVE;
         case XML_wavyDbl:           return awt::FontUnderline::DOUBLEWAVE;
         case XML_wavyHeavy:         return awt::FontUnderline::BOLDWAVE;
-//        case XML_words:             // TODO
+
     }
     return awt::FontUnderline::DONTKNOW;
 }
@@ -256,7 +256,7 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
 {
     const char* sPattern = 0;
     const sal_Int32 nAngle = rHatch.Angle > 1800 ? rHatch.Angle - 1800 : rHatch.Angle;
-    // Angle ~ 0° (horizontal)
+    
     if( (nAngle >= 0 && nAngle < 225) || nAngle >= 1575 )
     {
         switch( rHatch.Style )
@@ -283,7 +283,7 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
             default: break;
         }
     }
-    // Angle ~ 45° (upward diagonal)
+    
     else if( nAngle < 675 )
     {
         switch( rHatch.Style )
@@ -310,7 +310,7 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
             default: break;
         }
     }
-    // Angle ~ 90° (vertical)
+    
     else if( nAngle < 1125 )
     {
         switch( rHatch.Style )
@@ -337,7 +337,7 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
             default: break;
         }
     }
-    // Angle ~ 135° (downward diagonal)
+    
     else if( nAngle < 1575 )
     {
         switch( rHatch.Style )
@@ -380,7 +380,7 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
     return r;
 }
 
-// ============================================================================
+
 
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
 awt::Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
@@ -396,9 +396,9 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     return range;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

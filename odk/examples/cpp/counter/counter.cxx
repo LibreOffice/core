@@ -50,7 +50,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-// generated c++ interfaces
+
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -72,7 +72,7 @@ class MyCounterImpl
     : public XCountable
     , public XServiceInfo
 {
-    // to obtain other services if needed
+    
     Reference< XMultiServiceFactory > m_xServiceManager;
 
     sal_Int32 m_nRefCount;
@@ -85,7 +85,7 @@ public:
     ~MyCounterImpl()
         { printf( "< MyCounterImpl dtor called >\n" ); }
 
-    // XInterface implementation
+    
     virtual void SAL_CALL acquire() throw ()
         { ++m_nRefCount; }
     virtual void SAL_CALL release() throw ()
@@ -96,13 +96,13 @@ public:
                                       static_cast< XCountable* >( this ),
                                       static_cast< XServiceInfo* >( this ) ); }
 
-    // XServiceInfo implementation
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
-    // XCountable implementation
+    
     virtual sal_Int32 SAL_CALL getCount() throw (RuntimeException)
         { return m_nCount; }
     virtual void SAL_CALL setCount( sal_Int32 nCount ) throw (RuntimeException)
@@ -148,9 +148,9 @@ Reference< XInterface > SAL_CALL MyCounterImpl_create(
 }
 
 
-//#########################################################################
-//#### EXPORTED ###########################################################
-//#########################################################################
+
+
+
 
 /**
  * This function is called to get service factories for an implementation.

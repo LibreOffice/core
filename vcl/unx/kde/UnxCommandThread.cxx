@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UnxCommandThread.hxx>
@@ -29,9 +29,9 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
-// UnxFilePickerCommandThread
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 UnxFilePickerCommandThread::UnxFilePickerCommandThread( UnxFilePickerNotifyThread *pNotifyThread, int nReadFD )
     : m_pNotifyThread( pNotifyThread ),
@@ -75,8 +75,8 @@ uno::Sequence< OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
         aFiles[0] = m_aGetFiles.front();
     else if ( nSize > 1 )
     {
-        // First entry in the sequence must be the dirname, the others are the
-        // filenames, so we have to rearrange the list...
+        
+        
 
         OUString aFront = m_aGetFiles.front();
         sal_Int32 nLastSlash = aFront.lastIndexOf( '/' );
@@ -108,7 +108,7 @@ void SAL_CALL UnxFilePickerCommandThread::run()
     if ( m_nReadFD < 0 )
         return;
 
-    sal_Int32 nBufferSize = 1024; // 1 is for testing, 1024 for real use
+    sal_Int32 nBufferSize = 1024; 
     sal_Char *pBuffer = new sal_Char[nBufferSize];
     sal_Char *pBufferEnd = pBuffer + nBufferSize;
 
@@ -146,7 +146,7 @@ void SAL_CALL UnxFilePickerCommandThread::run()
         }
         else
         {
-            // enlarge the buffer size
+            
             nBufferSize *= 2;
             sal_Char *pNewBuffer = new sal_Char[nBufferSize];
             if ( pEntryBegin < pBufferEnd )

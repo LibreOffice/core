@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -138,7 +138,7 @@ sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
     if( m_fTextIndent != pOther->m_fTextIndent )
         return sal_False;
 
-    //align:
+    
     if( m_eHoriAlign != pOther->m_eHoriAlign )
         return sal_False;
     if( m_eVertAlign != pOther->m_eVertAlign )
@@ -146,21 +146,21 @@ sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
 
     if( m_aBackColor != pOther->m_aBackColor )
         return sal_False;
-    //shadow:
+    
     if( m_aShadow != pOther->m_aShadow )
         return sal_False;
-    //margin:
+    
     if( m_aMargin != pOther->m_aMargin )
         return sal_False;
-    //padding:
+    
     if( m_aPadding != pOther->m_aPadding )
         return sal_False;
 
-    //wrap:
+    
     if( m_bWrapText != pOther->m_bWrapText )
         return sal_False;
 
-    //font:
+    
     if( m_pFont )
     {
         if( !pOther->m_pFont )
@@ -171,7 +171,7 @@ sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
     else if( pOther->m_pFont )
         return sal_False;
 
-    //border:
+    
     if( m_pBorders )
     {
         if( !pOther->m_pBorders )
@@ -182,7 +182,7 @@ sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
     else if( pOther->m_pBorders )
         return sal_False;
 
-    //if there is backimage
+    
     if( m_pBackImage )
     {
         if( !pOther->m_pBackImage )
@@ -218,44 +218,44 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement(A2OUSTR("style:style"));
 
-    //Paragraph properties:
+    
     pAttrList->Clear();
 
-    //text indent:
+    
     if( m_fTextIndent>FLOAT_MIN )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:text-indent"), DoubleToOUString(m_fTextIndent) + A2OUSTR("cm") );
     }
-    //padding:
+    
     m_aPadding.ToXml(pStrm);
-    //margin:
+    
     m_aMargin.ToXml(pStrm);
 
-    //text horizontal align:
+    
     if( m_eHoriAlign != enumXFAlignNone )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:text-align"), GetAlignName(m_eHoriAlign) );
     }
-    //text vertical align
+    
     if( m_eVertAlign != enumXFAlignNone )
         pAttrList->AddAttribute( A2OUSTR("fo:vertical-align"), GetAlignName(m_eVertAlign) );
 
-    //wrap text:
+    
     if( m_bWrapText )
         pAttrList->AddAttribute( A2OUSTR("fo:wrap-option"), A2OUSTR("wrap") );
 
-    //shadow:
+    
     m_aShadow.ToXml(pStrm);
-    //borders:
+    
     if( m_pBorders )
         m_pBorders->ToXml(pStrm);
 
-    //background color:
+    
     if( m_aBackColor.IsValid() && !m_pBackImage )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
     }
-    //Font properties:
+    
     if( m_pFont )
         m_pFont->ToXml(pStrm);
 

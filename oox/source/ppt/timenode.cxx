@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/timenode.hxx"
@@ -109,8 +109,8 @@ namespace oox { namespace ppt {
     {
     }
 
-// BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.hxx
-// --------------------------------------------------------------------
+
+
     static void fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
     {
         try
@@ -120,7 +120,7 @@ namespace oox { namespace ppt {
             Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
             while( xE->hasMoreElements() )
             {
-                // click node
+                
                 Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
 
                 Event aEvent;
@@ -135,7 +135,7 @@ namespace oox { namespace ppt {
                     Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_QUERY_THROW );
                     if( xE2->hasMoreElements() )
                     {
-                        // with node
+                        
                         xE2->nextElement() >>= xEA2;
                         if( xEA2.is() )
                             xE2.query( xEA2->createEnumeration() );
@@ -156,8 +156,8 @@ namespace oox { namespace ppt {
                                     p->Value >>= nNodeType;
                                     if( nNodeType != ::com::sun::star::presentation::EffectNodeType::ON_CLICK )
                                     {
-                                        // first effect does not start on click, so correct
-                                        // first click nodes begin to 0s
+                                        
+                                        
                                         xClickNode->setBegin( makeAny( (double)0.0 ) );
                                         break;
                                     }
@@ -176,7 +176,7 @@ namespace oox { namespace ppt {
         }
     }
 
-// --------------------------------------------------------------------
+
 
     static void fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
     {
@@ -190,7 +190,7 @@ namespace oox { namespace ppt {
             Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
             while( xE->hasMoreElements() )
             {
-                // click node
+                
                 Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
                 xClickNode->setBegin( aBegin );
             }
@@ -202,7 +202,7 @@ namespace oox { namespace ppt {
         }
     }
 
-// END CUT&PASTE
+
 
     void TimeNode::addNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& rxNode, const SlidePersistPtr & pSlide )
     {
@@ -255,7 +255,7 @@ namespace oox { namespace ppt {
                     xNode->setEnd( aAny );
                 }
             }
-#if 0  // FIXME even the binary filter has this disabled.
+#if 0  
             if( !maNextCondList.empty() )
             {
                 Any aAny = AnimationCondition::convertList( pSlide, maNextCondList );
@@ -562,7 +562,7 @@ namespace oox { namespace ppt {
                 break;
             }
             case AnimationNodeType::PAR:
-                // some other cut&paste... from AnimationImporter::importAnimationContainer()
+                
                 break;
             }
         }

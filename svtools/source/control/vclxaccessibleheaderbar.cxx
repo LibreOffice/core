@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <svtools/vclxaccessibleheaderbar.hxx>
 #include <svtools/vclxaccessibleheaderbaritem.hxx>
@@ -58,36 +58,36 @@ VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     m_pHeadBar = static_cast< HeaderBar* >( GetWindow() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
 }
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 ::rtl::OUString VCLXAccessibleHeaderBar::getImplementationName() throw (RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -96,7 +96,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() 
     return aNames;
 }
 
-// =======XAccessibleContext=======
+
 
 sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
         throw (::com::sun::star::uno::RuntimeException)
@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
-    // search for the child
+    
     if ( static_cast<sal_uInt16>(i) >= m_aAccessibleChildren.size() )
         xChild = CreateChild (i);
     else
@@ -152,14 +152,14 @@ void SAL_CALL VCLXAccessibleHeaderBar::disposing()
     {
         m_aAccessibleChildren.resize(nPos + 1);
 
-        // insert into the container
+        
         xChild = new VCLXAccessibleHeaderBarItem(m_pHeadBar, i);
         m_aAccessibleChildren[nPos] = xChild;
     }
     else
     {
         xChild = m_aAccessibleChildren[nPos];
-        // check if position is empty and can be used else we have to adjust all entries behind this
+        
         if ( !xChild.is() )
         {
             xChild = new VCLXAccessibleHeaderBarItem(m_pHeadBar, i);

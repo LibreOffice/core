@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/gen.hxx>
@@ -59,8 +59,8 @@ namespace cppcanvas
 {
     namespace internal
     {
-        // free support functions
-        // ======================
+        
+        
         namespace
         {
             class TransparencyGroupAction : public Action, private ::boost::noncopyable
@@ -113,12 +113,12 @@ namespace cppcanvas
 
                 const ::basegfx::B2DSize                            maDstSize;
 
-                mutable uno::Reference< rendering::XBitmap >        mxBufferBitmap; // contains last rendered version
-                mutable ::basegfx::B2DHomMatrix                     maLastTransformation; // contains last active transformation
-                mutable Subset                                      maLastSubset; // contains last effective subset
+                mutable uno::Reference< rendering::XBitmap >        mxBufferBitmap; 
+                mutable ::basegfx::B2DHomMatrix                     maLastTransformation; 
+                mutable Subset                                      maLastSubset; 
 
-                // transformation for
-                // mxBufferBitmap content
+                
+                
                 CanvasSharedPtr                                     mpCanvas;
                 rendering::RenderState                              maState;
                 const double                                        mnAlpha;
@@ -161,7 +161,7 @@ namespace cppcanvas
                 tools::initRenderState(maState,rState);
                 implSetupTransform( maState, rDstPoint );
 
-                // correct clip (which is relative to original transform)
+                
                 tools::modifyClip( maState,
                                    rState,
                                    rCanvas,
@@ -174,21 +174,21 @@ namespace cppcanvas
             }
             SAL_WNODEPRECATED_DECLARATIONS_POP
 
-            // TODO(P3): The whole float transparency handling is a mess,
-            // this should be refactored. What's more, the old idea of
-            // having only internal 'metaactions', and not the original
-            // GDIMetaFile now looks a lot less attractive. Try to move
-            // into the direction of having a direct GDIMetaFile2XCanvas
-            // renderer, and maybe a separate metafile XCanvas
-            // implementation.
+            
+            
+            
+            
+            
+            
+            
             bool TransparencyGroupAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TransparencyGroupAction::renderSubset()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TransparencyGroupAction: 0x" << std::hex << this );
 
-                // determine overall transformation matrix (render, view,
-                // and passed transformation)
+                
+                
                 ::basegfx::B2DHomMatrix aTransform;
                 ::canvas::tools::getRenderStateTransform( aTransform, maState );
                 aTransform = rTransformation * aTransform;
@@ -197,14 +197,14 @@ namespace cppcanvas
                 ::canvas::tools::getViewStateTransform( aTotalTransform, mpCanvas->getViewState() );
                 aTotalTransform = aTotalTransform * aTransform;
 
-                // since pure translational changes to the transformation
-                // does not matter, remove them before comparing
+                
+                
                 aTotalTransform.set( 0, 2, 0.0 );
                 aTotalTransform.set( 1, 2, 0.0 );
 
-                // determine total scaling factor of the
-                // transformation matrix - need to make the bitmap
-                // large enough
+                
+                
+                
                 ::basegfx::B2DTuple aScale;
                 ::basegfx::B2DTuple aTranslate;
                 double              nRotate;
@@ -218,9 +218,9 @@ namespace cppcanvas
                     return false;
                 }
 
-                // if there's no buffer bitmap, or as soon as the
-                // total transformation changes, we've got to
-                // re-render the bitmap
+                
+                
+                
                 if( !mxBufferBitmap.is() ||
                     aTotalTransform != maLastTransformation ||
                     rSubset.mnSubsetBegin != maLastSubset.mnSubsetBegin ||
@@ -228,18 +228,18 @@ namespace cppcanvas
                 {
                     DBG_TESTSOLARMUTEX();
 
-                    // output size of metafile
+                    
                     ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getX() ),
                                              ::basegfx::fround( aScale.getY() * maDstSize.getY() ) );
 
-                    // pixel size of cache bitmap: round up to nearest int
+                    
                     ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.getX() )+1,
                                              static_cast<sal_Int32>( aScale.getY() * maDstSize.getY() )+1 );
 
                     ::Point aEmptyPoint;
 
-                    // render our content into an appropriately sized
-                    // VirtualDevice with alpha channel
+                    
+                    
                     VirtualDevice aVDev(
                         *::Application::GetDefaultDevice(), 0, 0 );
                     aVDev.SetOutputSizePixel( aBitmapSizePixel );
@@ -248,13 +248,13 @@ namespace cppcanvas
                     if( rSubset.mnSubsetBegin != 0 ||
                         rSubset.mnSubsetEnd != -1 )
                     {
-                        // true subset - extract referenced
-                        // metaactions from mpGroupMtf
+                        
+                        
                         GDIMetaFile aMtf;
                         MetaAction* pCurrAct;
                         int         nCurrActionIndex;
 
-                        // extract subset actions
+                        
                         for( nCurrActionIndex=0,
                                  pCurrAct=mpGroupMtf->FirstAction();
                              pCurrAct;
@@ -278,7 +278,7 @@ namespace cppcanvas
                                 case META_RASTEROP_ACTION:
                                 case META_REFPOINT_ACTION:
                                 case META_LAYOUTMODE_ACTION:
-                                    // state-changing action - copy as-is
+                                    
                                     aMtf.AddAction( pCurrAct->Clone() );
                                     break;
 
@@ -316,9 +316,9 @@ namespace cppcanvas
                                 case META_TEXTLINE_ACTION:
                                 case META_TEXTRECT_ACTION:
                                 case META_STRETCHTEXT_ACTION:
-                                    // output-generating action - only
-                                    // copy, if we're within the
-                                    // requested subset
+                                    
+                                    
+                                    
                                     if( rSubset.mnSubsetBegin <= nCurrActionIndex &&
                                         rSubset.mnSubsetEnd > nCurrActionIndex )
                                     {
@@ -339,7 +339,7 @@ namespace cppcanvas
                     }
                     else
                     {
-                        // no subsetting - render whole mtf
+                        
                         aVDev.DrawTransparent( *mpGroupMtf,
                                                aEmptyPoint,
                                                aOutputSizePixel,
@@ -347,7 +347,7 @@ namespace cppcanvas
                     }
 
 
-                    // update buffered bitmap and transformation
+                    
                     BitmapSharedPtr aBmp( VCLFactory::getInstance().createBitmap(
                                               mpCanvas,
                                               aVDev.GetBitmapEx(
@@ -358,22 +358,22 @@ namespace cppcanvas
                     maLastSubset = rSubset;
                 }
 
-                // determine target transformation (we can't simply pass
-                // aTotalTransform as assembled above, since we must take
-                // the canvas' view state as is, it might contain clipping
-                // (which, in turn, is relative to the view
-                // transformation))
+                
+                
+                
+                
+                
 
-                // given that aTotalTransform is the identity
-                // transformation, we could simply render our bitmap
-                // as-is. Now, since the mxBufferBitmap content already
-                // accounts for scale changes in the overall
-                // transformation, we must factor this out
-                // before. Generally, the transformation matrix should be
-                // structured like this:
-                // Translation*Rotation*Shear*Scale. Thus, to neutralize
-                // the contained scaling, we've got to right-multiply with
-                // the inverse.
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 ::basegfx::B2DHomMatrix aScaleCorrection;
                 aScaleCorrection.scale( 1/aScale.getX(), 1/aScale.getY() );
                 aTransform = aTransform * aScaleCorrection;
@@ -398,14 +398,14 @@ namespace cppcanvas
 
                 if( ::rtl::math::approxEqual(mnAlpha, 1.0) )
                 {
-                    // no further alpha changes necessary -> draw directly
+                    
                     mpCanvas->getUNOCanvas()->drawBitmap( mxBufferBitmap,
                                                           mpCanvas->getViewState(),
                                                           aLocalState );
                 }
                 else
                 {
-                    // add alpha modulation value to DeviceColor
+                    
                     uno::Sequence<rendering::ARGBColor> aCols(1);
                     aCols[0] = rendering::ARGBColor( mnAlpha, 1.0, 1.0, 1.0);
                     aLocalState.DeviceColor =
@@ -420,13 +420,13 @@ namespace cppcanvas
                 return true;
             }
 
-            // TODO(P3): The whole float transparency handling is a mess,
-            // this should be refactored. What's more, the old idea of
-            // having only internal 'metaactions', and not the original
-            // GDIMetaFile now looks a lot less attractive. Try to move
-            // into the direction of having a direct GDIMetaFile2XCanvas
-            // renderer, and maybe a separate metafile XCanvas
-            // implementation.
+            
+            
+            
+            
+            
+            
+            
             bool TransparencyGroupAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 Subset aSubset;
@@ -453,13 +453,13 @@ namespace cppcanvas
             ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation,
                                                                     const Subset&                   rSubset ) const
             {
-                // TODO(F3): Currently, the bounds for
-                // TransparencyGroupAction subsets equal those of the
-                // full set, although this action is able to render
-                // true subsets.
+                
+                
+                
+                
 
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return ::basegfx::B2DRange();

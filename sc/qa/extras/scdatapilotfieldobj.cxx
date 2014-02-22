@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -41,8 +41,8 @@ public:
     CPPUNIT_TEST(testReference);
     CPPUNIT_TEST(testIsGroupField);
     CPPUNIT_TEST(testCreateNameGroup);
-    // see fdo#
-    //CPPUNIT_TEST(testCreateDateGroup);
+    
+    
     CPPUNIT_TEST_SUITE_END();
 private:
     static sal_Int32 nTest;

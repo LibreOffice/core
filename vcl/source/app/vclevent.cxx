@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,7 +51,7 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     if ( m_aListeners.empty() )
         return;
 
-    // Copy the list, because this can be destroyed when calling a Link...
+    
     std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
     std::list<Link>::const_iterator aEnd( aCopy.end() );
@@ -62,7 +62,7 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
         while ( aIter != aEnd && ! aDel.IsDead() )
         {
             Link &rLink = *aIter;
-            // check this hasn't been removed in some re-enterancy scenario fdo#47368
+            
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
             ++aIter;
@@ -86,7 +86,7 @@ bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
         return false;
 
     bool bProcessed = false;
-    // Copy the list, because this can be destroyed when calling a Link...
+    
     std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
     std::list<Link>::const_iterator aEnd( aCopy.end() );
@@ -122,7 +122,7 @@ VclEventListeners2::~VclEventListeners2()
 
 void VclEventListeners2::addListener( const Link& i_rLink )
 {
-    // ensure uniqueness
+    
     for( std::list< Link >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
     {
         if( *it == i_rLink )
@@ -155,7 +155,7 @@ void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
     {
         m_aIterators[ nIndex ].m_aIt->Call( i_pEvent );
         if( m_aIterators[ nIndex ].m_bWasInvalidated )
-            // check if the current element was removed and the iterator increased in the meantime
+            
             m_aIterators[ nIndex ].m_bWasInvalidated = false;
         else
             ++m_aIterators[ nIndex ].m_aIt;

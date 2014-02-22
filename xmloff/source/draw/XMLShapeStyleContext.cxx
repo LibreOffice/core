@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -127,26 +127,26 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
     {
         m_bIsNumRuleAlreadyConverted = sal_True;
 
-        // for compatibility to beta files, search for CTF_SD_NUMBERINGRULES_NAME to
-        // import numbering rules from the style:properties element
+        
+        
         const UniReference< XMLPropertySetMapper >&rMapper = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
         ::std::vector< XMLPropertyState > &rProperties = GetProperties();
         ::std::vector< XMLPropertyState >::iterator end( rProperties.end() );
         ::std::vector< XMLPropertyState >::iterator property;
 
-        // first, look for the old format, where we had a text:list-style-name
-        // attribute in the style:properties element
+        
+        
         for( property = rProperties.begin(); property != end; ++property )
         {
-            // find properties with context
+            
             if( (property->mnIndex != -1) && (rMapper->GetEntryContextId( property->mnIndex ) == CTF_SD_NUMBERINGRULES_NAME) )
                 break;
         }
 
-        // if we did not find an old list-style-name in the properties, and we need one
-        // because we got a style:list-style attribute in the style-style element
-        // we generate one
+        
+        
+        
         if( (property == end) && ( !m_sListStyleName.isEmpty() ) )
         {
             sal_Int32 nIndex = rMapper->FindEntryIndex( CTF_SD_NUMBERINGRULES_NAME );
@@ -158,8 +158,8 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             property = end - 1;
         }
 
-        // so, if we have an old or a new list style name, we set its value to
-        // a numbering rule
+        
+        
         if( property != end )
         {
             if( m_sListStyleName.isEmpty() )
@@ -216,7 +216,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
     Reference< XPropertySetInfo > xInfo;
-    // get property set mapper
+    
     UniReference<XMLPropertySetMapper> xPropMapper( xImpPrMap->getPropertySetMapper() );
 
     for( sal_uInt16 i=0; aContextIDs[i].nContextID != -1; i++ )
@@ -239,7 +239,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             try
             {
 
-                // set property
+                
                 const OUString& rPropertyName = xPropMapper->GetEntryAPIName(rState.mnIndex);
                 if( !xInfo.is() )
                     xInfo = rPropSet->getPropertySetInfo();
@@ -287,9 +287,9 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
     }
 
     if (!m_sControlDataStyleName.isEmpty())
-    {   // we had a data-style-name attribute
+    {   
 
-        // set the formatting on the control model of the control shape
+        
         uno::Reference< drawing::XControlShape > xControlShape(rPropSet, uno::UNO_QUERY);
         DBG_ASSERT(xControlShape.is(), "XMLShapeStyleContext::FillPropertySet: data style for a non-control shape!");
         if (xControlShape.is())

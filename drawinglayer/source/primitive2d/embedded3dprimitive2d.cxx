@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
@@ -28,11 +28,11 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -42,10 +42,10 @@ namespace drawinglayer
         {
             osl::MutexGuard aGuard( m_aMutex );
 
-            // create on demand
+            
             if(!mbShadow3DChecked && getChildren3D().hasElements())
             {
-                // create shadow extraction processor
+                
                 processor3d::Shadow3DExtractingProcessor aShadowProcessor(
                     getViewInformation3D(),
                     getObjectTransformation(),
@@ -53,21 +53,21 @@ namespace drawinglayer
                     getShadowSlant(),
                     getScene3DRange());
 
-                // process local primitives
+                
                 aShadowProcessor.process(getChildren3D());
 
-                // fetch result and set checked flag
+                
                 const_cast< Embedded3DPrimitive2D* >(this)->maShadowPrimitives = aShadowProcessor.getPrimitive2DSequence();
                 const_cast< Embedded3DPrimitive2D* >(this)->mbShadow3DChecked = true;
             }
 
-            // return if there are shadow primitives
+            
             return maShadowPrimitives.hasElements();
         }
 
         Primitive2DSequence Embedded3DPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
+            
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
             const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aLocal2DRange));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
@@ -118,18 +118,18 @@ namespace drawinglayer
         {
             if(maB2DRange.isEmpty())
             {
-                // use the 3d transformation stack to create a projection of the 3D range
+                
                 basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
                 a3DRange.transform(getViewInformation3D().getObjectToView());
 
-                // create 2d range from projected 3d and transform with scene's object transformation
+                
                 basegfx::B2DRange aNewRange;
                 aNewRange.expand(basegfx::B2DPoint(a3DRange.getMinX(), a3DRange.getMinY()));
                 aNewRange.expand(basegfx::B2DPoint(a3DRange.getMaxX(), a3DRange.getMaxY()));
                 aNewRange.transform(getObjectTransformation());
 
-                // cehck for 3D shadows and their 2D projections. If those exist, they need to be
-                // taken into account
+                
+                
                 if(impGetShadow3D(rViewInformation))
                 {
                     const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
@@ -140,17 +140,17 @@ namespace drawinglayer
                     }
                 }
 
-                // assign to buffered value
+                
                 const_cast< Embedded3DPrimitive2D* >(this)->maB2DRange = aNewRange;
             }
 
             return maB2DRange;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(Embedded3DPrimitive2D, PRIMITIVE2D_ID_EMBEDDED3DPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

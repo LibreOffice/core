@@ -4,14 +4,14 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sortkeydlg.hxx"
 #include "sortdlg.hxx"
 #include <vcl/layout.hxx>
 
-// =======================================================================
+
 
 ScSortKeyItem::ScSortKeyItem(Window* pParent)
 {
@@ -34,14 +34,14 @@ void ScSortKeyItem::DisableField()
     m_pFrame->Disable();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyItem::EnableField()
 {
     m_pFrame->Enable();
 }
 
-// =======================================================================
+
 
 ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyItems)
     : mrSortKeyItems(rSortKeyItems)
@@ -56,20 +56,20 @@ ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyIt
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScSortKeyWindow::~ScSortKeyWindow()
 {
     mrSortKeyItems.clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
 {
     ScSortKeyItem* pSortKeyItem = new ScSortKeyItem(m_pBox);
 
-    // Set Sort key number
+    
     OUString aLine = pSortKeyItem->m_pFlSort->GetText() +
                      OUString::number( nItemNumber );
     pSortKeyItem->m_pFlSort->SetText( aLine );
@@ -77,14 +77,14 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     mrSortKeyItems.push_back(pSortKeyItem);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
 {
     m_pBox->SetPosPixel(Point(0, nNewPos));
 }
 
-// =======================================================================
+
 
 ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     : m_aSortWin(pParent, rItems)
@@ -126,7 +126,7 @@ void ScSortKeyCtrl::setScrollRange()
     checkAutoVScroll();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 {
@@ -136,7 +136,7 @@ IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
 {

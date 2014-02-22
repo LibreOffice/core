@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 
-// HINTIDs must be on top; it is required for the macitem.hxx header
+
 #include "hintids.hxx"
 #include "unoevent.hxx"
 #include "unoframe.hxx"
@@ -44,7 +44,7 @@ using ::com::sun::star::beans::PropertyValue;
 using ::cppu::WeakImplHelper2;
 
 //
-// tables of allowed events for specific objects
+
 //
 
 const struct SvEventDescription aGraphicEvents[] =
@@ -106,7 +106,7 @@ const struct SvEventDescription aFrameStyleEvents[] =
 };
 
 //
-// SwHyperlinkEventDescriptor
+
 //
 
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
@@ -157,12 +157,12 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
     uno::Reference<
         container::XNameReplace> & xReplace)
 {
-    // iterate over all names (all names that *we* support)
+    
     Sequence<OUString> aNames = getElementNames();
     sal_Int32 nCount = aNames.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        // copy element for that name
+        
         const OUString& rName = aNames[i];
         if (xReplace->hasByName(rName))
         {
@@ -174,10 +174,10 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
 
 
 //
-// SwFrameEventDescriptor
+
 //
 
-// use double cast in superclass constructor to avoid ambigous cast
+
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
         SvEventDescriptor((text::XTextFrame&)rFrameRef, aFrameEvents),
@@ -227,7 +227,7 @@ OUString SwFrameEventDescriptor::getImplementationName()
 
 
 //
-// SwFrameStyleEventDescriptor
+
 //
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
@@ -245,8 +245,8 @@ SwFrameStyleEventDescriptor::~SwFrameStyleEventDescriptor()
 
 void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
-    // As I was told, for some entirely unobvious reason getting an
-    // item from a style has to look as follows:
+    
+    
     SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
     if (pBasePool)
     {
@@ -266,8 +266,8 @@ static const SvxMacroItem aEmptyMacroItem(RES_FRMMACRO);
 
 const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 {
-    // As I was told, for some entirely unobvious reason getting an
-    // item from a style has to look as follows:
+    
+    
     SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
     if (pBasePool)
     {

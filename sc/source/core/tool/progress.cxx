@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -80,7 +80,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
     {
         if ( lcl_IsHiddenDocument(pObjSh) )
         {
-            // loading a hidden document while a progress is active is possible - no error
+            
             pProgress = NULL;
         }
         else
@@ -91,9 +91,9 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
     }
     else if ( SFX_APP()->IsDowning() )
     {
-        //  This happens. E.g. when saving the clipboard-content as OLE when closing the app.
-        //  In this case a SfxProgress would produce dirt in memory.
-        //! Should that be this way ???
+        
+        
+        
 
         pProgress = NULL;
     }
@@ -101,8 +101,8 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
                           pObjSh->GetProgress() ||
                           lcl_HasControllersLocked(*pObjSh) ) )
     {
-        //  no own progress for embedded objects,
-        //  no second progress if the document already has one
+        
+        
 
         pProgress = NULL;
     }
@@ -119,7 +119,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
 
 ScProgress::ScProgress() :
         pProgress( NULL )
-{   // DummyInterpret
+{   
 }
 
 
@@ -147,9 +147,9 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
             nInterpretProgress = 1;
             bIdleWasEnabled = pDoc->IsIdleEnabled();
             pDoc->EnableIdle(false);
-            // Interpreter may be called in many circumstances, also if another
-            // progress bar is active, for example while adapting row heights.
-            // Keep the dummy interpret progress.
+            
+            
+            
             if ( !pGlobalProgress )
                 pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
                     ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
@@ -174,7 +174,7 @@ void ScProgress::DeleteInterpretProgress()
         {
             if ( pInterpretProgress != &theDummyInterpretProgress )
             {
-                // move pointer to local temporary to avoid double deletion
+                
                 ScProgress* pTmpProgress = pInterpretProgress;
                 pInterpretProgress = &theDummyInterpretProgress;
                 delete pTmpProgress;

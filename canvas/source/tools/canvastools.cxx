@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -117,7 +117,7 @@ namespace canvas
 
         rendering::RenderState& initRenderState( rendering::RenderState& renderState )
         {
-            // setup identity transform
+            
             setIdentityAffineMatrix2D( renderState.AffineTransform );
             renderState.Clip = uno::Reference< rendering::XPolyPolygon2D >();
             renderState.DeviceColor = uno::Sequence< double >();
@@ -128,7 +128,7 @@ namespace canvas
 
         rendering::ViewState& initViewState( rendering::ViewState& viewState )
         {
-            // setup identity transform
+            
             setIdentityAffineMatrix2D( viewState.AffineTransform );
             viewState.Clip = uno::Reference< rendering::XPolyPolygon2D >();
 
@@ -190,7 +190,7 @@ namespace canvas
             ::basegfx::unotools::homMatrixFromAffineMatrix( combinedTransform, renderState.AffineTransform );
             ::basegfx::unotools::homMatrixFromAffineMatrix( viewTransform, viewState.AffineTransform );
 
-            // this statement performs combinedTransform = viewTransform * combinedTransform
+            
             combinedTransform *= viewTransform;
 
             return combinedTransform;
@@ -246,8 +246,8 @@ namespace canvas
                                                                             const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                       uno::RuntimeException)
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
@@ -355,7 +355,7 @@ namespace canvas
                     return aRes;
                 }
 
-                // XIntegerBitmapColorSpace
+                
                 virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException)
                 {
                     return 32;
@@ -393,8 +393,8 @@ namespace canvas
                     }
                     else
                     {
-                        // TODO(P3): if we know anything about target
-                        // colorspace, this can be greatly sped up
+                        
+                        
                         uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertFromARGB(aIntermediate);
@@ -406,13 +406,13 @@ namespace canvas
                 {
                     if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
                     {
-                        // it's us, so simply pass-through the data
+                        
                         return deviceColor;
                     }
                     else
                     {
-                        // TODO(P3): if we know anything about target
-                        // colorspace, this can be greatly sped up
+                        
+                        
                         uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertIntegerFromARGB(aIntermediate);
@@ -583,8 +583,8 @@ namespace canvas
                                                                             const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                       uno::RuntimeException)
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
@@ -652,7 +652,7 @@ namespace canvas
                         *pColors++ = pIn->Red;
                         *pColors++ = pIn->Green;
                         *pColors++ = pIn->Blue;
-                        *pColors++ = 1.0; // the value does not matter
+                        *pColors++ = 1.0; 
                         ++pIn;
                     }
                     return aRes;
@@ -669,7 +669,7 @@ namespace canvas
                         *pColors++ = pIn->Red;
                         *pColors++ = pIn->Green;
                         *pColors++ = pIn->Blue;
-                        *pColors++ = 1.0; // the value does not matter
+                        *pColors++ = 1.0; 
                         ++pIn;
                     }
                     return aRes;
@@ -686,13 +686,13 @@ namespace canvas
                         *pColors++ = pIn->Red/pIn->Alpha;
                         *pColors++ = pIn->Green/pIn->Alpha;
                         *pColors++ = pIn->Blue/pIn->Alpha;
-                        *pColors++ = 1.0; // the value does not matter
+                        *pColors++ = 1.0; 
                         ++pIn;
                     }
                     return aRes;
                 }
 
-                // XIntegerBitmapColorSpace
+                
                 virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException)
                 {
                     return 32;
@@ -730,8 +730,8 @@ namespace canvas
                     }
                     else
                     {
-                        // TODO(P3): if we know anything about target
-                        // colorspace, this can be greatly sped up
+                        
+                        
                         uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertFromARGB(aIntermediate);
@@ -743,13 +743,13 @@ namespace canvas
                 {
                     if( dynamic_cast<StandardNoAlphaColorSpace*>(targetColorSpace.get()) )
                     {
-                        // it's us, so simply pass-through the data
+                        
                         return deviceColor;
                     }
                     else
                     {
-                        // TODO(P3): if we know anything about target
-                        // colorspace, this can be greatly sped up
+                        
+                        
                         uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertIntegerFromARGB(aIntermediate);
@@ -960,11 +960,11 @@ namespace canvas
             return aRet;
         }
 
-        // Create a corrected view transformation out of the give one,
-        // which ensures that the rectangle given by (0,0) and
-        // rSpriteSize is mapped with its left,top corner to (0,0)
-        // again. This is required to properly render sprite
-        // animations to buffer bitmaps.
+        
+        
+        
+        
+        
         ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&            o_transform,
                                                             const ::basegfx::B2DRange&          i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&      i_transformation )
@@ -972,18 +972,18 @@ namespace canvas
             if( i_srcRect.isEmpty() )
                 return o_transform=i_transformation;
 
-            // transform by given transformation
+            
             ::basegfx::B2DRectangle aTransformedRect;
 
             calcTransformedRectBounds( aTransformedRect,
                                        i_srcRect,
                                        i_transformation );
 
-            // now move resulting left,top point of bounds to (0,0)
+            
             const basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
                 -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
 
-            // prepend to original transformation
+            
             o_transform = aCorrectedTransform * i_transformation;
 
             return o_transform;
@@ -998,32 +998,32 @@ namespace canvas
             if( inRect.isEmpty() )
                 return outRect;
 
-            // transform all four extremal points of the rectangle,
-            // take bounding rect of those.
+            
+            
 
-            // transform left-top point
+            
             outRect.expand( transformation * inRect.getMinimum() );
 
-            // transform bottom-right point
+            
             outRect.expand( transformation * inRect.getMaximum() );
 
             ::basegfx::B2DPoint aPoint;
 
-            // transform top-right point
+            
             aPoint.setX( inRect.getMaxX() );
             aPoint.setY( inRect.getMinY() );
 
             aPoint *= transformation;
             outRect.expand( aPoint );
 
-            // transform bottom-left point
+            
             aPoint.setX( inRect.getMinX() );
             aPoint.setY( inRect.getMaxY() );
 
             aPoint *= transformation;
             outRect.expand( aPoint );
 
-            // over and out.
+            
             return outRect;
         }
 
@@ -1057,14 +1057,14 @@ namespace canvas
 
                 ::basegfx::B2IRange aLocalSourceArea( io_rSourceArea );
 
-                // clip source area (which must be inside rSourceBounds)
+                
                 aLocalSourceArea.intersect( rSourceBounds );
 
                 if( aLocalSourceArea.isEmpty() )
                     return false;
 
-                // calc relative new source area points (relative to orig
-                // source area)
+                
+                
                 const ::basegfx::B2IVector aUpperLeftOffset(
                     aLocalSourceArea.getMinimum()-aSourceTopLeft );
                 const ::basegfx::B2IVector aLowerRightOffset(
@@ -1073,14 +1073,14 @@ namespace canvas
                 ::basegfx::B2IRange aLocalDestArea( io_rDestPoint + aUpperLeftOffset,
                                                     io_rDestPoint + aLowerRightOffset );
 
-                // clip dest area (which must be inside rDestBounds)
+                
                 aLocalDestArea.intersect( rDestBounds );
 
                 if( aLocalDestArea.isEmpty() )
                     return false;
 
-                // calc relative new dest area points (relative to orig
-                // source area)
+                
+                
                 const ::basegfx::B2IVector aDestUpperLeftOffset(
                     aLocalDestArea.getMinimum()-io_rDestPoint );
                 const ::basegfx::B2IVector aDestLowerRightOffset(
@@ -1104,8 +1104,8 @@ namespace canvas
         {
             ::basegfx::B2IRange aResultingDestArea;
 
-            // compute full destination area (to determine uninitialized
-            // areas below)
+            
+            
             const ::basegfx::B2I64Tuple& rRange( io_rSourceArea.getRange() );
             ::basegfx::B2IRange aInputDestArea( io_rDestPoint.getX(),
                                                 io_rDestPoint.getY(),
@@ -1113,10 +1113,10 @@ namespace canvas
                                                  + static_cast<sal_Int32>(rRange.getX())),
                                                 (io_rDestPoint.getY()
                                                  + static_cast<sal_Int32>(rRange.getY())) );
-            // limit to output area (no point updating outside of it)
+            
             aInputDestArea.intersect( rBounds );
 
-            // clip to rBounds
+            
             if( !clipAreaImpl( &aResultingDestArea,
                                io_rSourceArea,
                                io_rDestPoint,
@@ -1124,8 +1124,8 @@ namespace canvas
                                rBounds ) )
                 return false;
 
-            // finally, compute all areas clipped off the total
-            // destination area.
+            
+            
             ::basegfx::computeSetDifference( o_ClippedAreas,
                                              aInputDestArea,
                                              aResultingDestArea );
@@ -1170,7 +1170,7 @@ namespace canvas
                 }
                 catch( const uno::Exception& )
                 {
-                    // ignore, but return empty sequence
+                    
                 }
             }
 
@@ -1248,8 +1248,8 @@ namespace canvas
                                    const rendering::Texture&     texture,
                                    int                           nColorSteps )
         {
-            // calculate overall texture transformation (directly from
-            // texture to device space).
+            
+            
             ::basegfx::B2DHomMatrix aMatrix;
 
             rTotalTransform.identity();
@@ -1258,10 +1258,10 @@ namespace canvas
             ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
                                                          viewState,
                                                          renderState);
-            rTotalTransform *= aMatrix; // prepend total view/render transformation
+            rTotalTransform *= aMatrix; 
 
-            // determine size of gradient in device coordinate system
-            // (to e.g. determine sensible number of gradient steps)
+            
+            
             ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
             ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
             ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
@@ -1272,26 +1272,26 @@ namespace canvas
             aRightTop   *= rTotalTransform;
             aRightBottom*= rTotalTransform;
 
-            // longest line in gradient bound rect
+            
             const int nGradientSize(
                 static_cast<int>(
                     ::std::max(
                         ::basegfx::B2DVector(aRightBottom-aLeftTop).getLength(),
                         ::basegfx::B2DVector(aRightTop-aLeftBottom).getLength() ) + 1.0 ) );
 
-            // typical number for pixel of the same color (strip size)
+            
             const int nStripSize( nGradientSize < 50 ? 2 : 4 );
 
-            // use at least three steps, and at utmost the number of color
-            // steps
+            
+            
             return ::std::max( 3,
                                ::std::min(
                                    nGradientSize / nStripSize,
                                    nColorSteps ) );
         }
 
-    } // namespace tools
+    } 
 
-} // namespace canvas
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

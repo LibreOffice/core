@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "uielement/uicommanddescription.hxx"
@@ -46,9 +46,9 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+
+
+
 
 struct ModuleToCommands
 {
@@ -62,13 +62,13 @@ static const char CONFIGURATION_POP_ELEMENT_ACCESS[]    = "/UserInterface/Popups
 static const char CONFIGURATION_PROPERTY_LABEL[]        = "Label";
 static const char CONFIGURATION_PROPERTY_CONTEXT_LABEL[] = "ContextLabel";
 
-// Property names of the resulting Property Set
+
 static const char PROPSET_LABEL[]                       = "Label";
 static const char PROPSET_NAME[]                        = "Name";
 static const char PROPSET_POPUP[]                       = "Popup";
 static const char PROPSET_PROPERTIES[]                  = "Properties";
 
-// Special resource URLs to retrieve additional information
+
 static const char PRIVATE_RESOURCE_URL[]                = "private:";
 
 const sal_Int32   COMMAND_PROPERTY_IMAGE                = 1;
@@ -78,11 +78,11 @@ const sal_Int32   COMMAND_PROPERTY_MIRROR               = 4;
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  Configuration access class for PopupMenuControllerFactory implementation
-//*****************************************************************************************************************
 
-class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
+
+
+
+class ConfigurationAccess_UICommand : 
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
     osl::Mutex m_aMutex;
@@ -90,7 +90,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                                   ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICommand();
 
-        // XNameAccess
+        
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
@@ -100,19 +100,19 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
 
-        // XElementAccess
+        
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
             throw (::com::sun::star::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
-        // container.XContainerListener
+        
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException);
         virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException);
         virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException);
 
-        // lang.XEventListener
+        
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
 
     protected:
@@ -179,9 +179,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         sal_Bool                          m_bGenericDataRetrieved;
 };
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
+
+
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
@@ -197,7 +197,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
     m_bCacheFilled( sal_False ),
     m_bGenericDataRetrieved( sal_False )
 {
-    // Create configuration hierachical access name
+    
     m_aConfigCmdAccess += aModuleName;
     m_aConfigCmdAccess += CONFIGURATION_CMD_ELEMENT_ACCESS;
 
@@ -209,7 +209,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
@@ -220,7 +220,7 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 }
 
 
-// XNameAccess
+
 Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
 {
     static sal_Int32 nRequests  = 0;
@@ -235,8 +235,8 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
 
     if ( rCommandURL.startsWith( m_aPrivateResourceURL ) )
     {
-        // special keys to retrieve information about a set of commands
-        // SAFE
+        
+        
         addGenericInfoToCache();
 
         if ( rCommandURL.equalsIgnoreAsciiCase( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST ))
@@ -250,7 +250,7 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
     }
     else
     {
-        // SAFE
+        
         ++nRequests;
         return getInfoFromCommand( rCommandURL );
     }
@@ -278,7 +278,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return getByNameImpl( rCommandURL ).hasValue();
 }
 
-// XElementAccess
+
 Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
 throw ( RuntimeException )
 {
@@ -288,7 +288,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
 throw ( RuntimeException )
 {
-    // There must are global commands!
+    
     return sal_True;
 }
 
@@ -296,7 +296,7 @@ void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, 
 {
     OUString aStr(aLabel.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName()));
     rCmdInfo.aLabel = aStr;
-    aStr = comphelper::string::stripEnd(aStr, '.'); // Remove "..." from string
+    aStr = comphelper::string::stripEnd(aStr, '.'); 
     rCmdInfo.aCommandName = MnemonicGenerator::EraseAllMnemonicChars(aStr);
     rCmdInfo.bCommandNameCreated = true;
 }
@@ -378,7 +378,7 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
 
     impl_fill(m_xConfigAccess,sal_False,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
     impl_fill(m_xConfigAccessPopups,sal_True,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
-    // Create cached sequences for fast retrieving
+    
     m_aCommandImageList       = comphelper::containerToSequence( aImageCommandVector );
     m_aCommandRotateImageList = comphelper::containerToSequence( aImageRotateVector );
     m_aCommandMirrorImageList = comphelper::containerToSequence( aImageMirrorVector );
@@ -436,8 +436,8 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandU
         a = getSequenceFromCache( rCommandURL );
         if ( !a.hasValue() )
         {
-            // First try to ask our global commands configuration access. It also caches maybe
-            // we find the entry in its cache first.
+            
+            
             if ( m_xGenericUICommands.is() && m_xGenericUICommands->hasByName( rCommandURL ) )
             {
                 try
@@ -465,7 +465,7 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandU
 
 Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
@@ -485,7 +485,7 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 
             if ( m_xGenericUICommands.is() )
             {
-                // Create concat list of supported user interface commands of the module
+                
                 Sequence< OUString > aGenericNameSeq = m_xGenericUICommands->getElementNames();
                 sal_uInt32 nCount1 = aNameSeq.getLength();
                 sal_uInt32 nCount2 = aGenericNameSeq.getLength();
@@ -525,7 +525,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
-            // Add as container listener
+            
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
             {
@@ -540,7 +540,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccessPopups.is() )
         {
-            // Add as container listener
+            
             Reference< XContainer > xContainer( m_xConfigAccessPopups, UNO_QUERY );
             if ( xContainer.is() )
             {
@@ -561,7 +561,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
     return sal_False;
 }
 
-// container.XContainerListener
+
 void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
@@ -583,11 +583,11 @@ void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEve
     fillCache();
 }
 
-// lang.XEventListener
+
 void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEvent ) throw(RuntimeException)
 {
-    // SAFE
-    // remove our reference to the config access
+    
+    
     osl::MutexGuard g(m_aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
@@ -613,7 +613,7 @@ UICommandDescription::UICommandDescription( const Reference< XComponentContext >
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");
 
-    // insert generic commands
+    
     UICommandsHashMap::iterator pIter = m_aUICommandsHashMap.find( aGenericUICommand );
     if ( pIter != m_aUICommandsHashMap.end() )
         pIter->second = m_xGenericUICommands;
@@ -652,15 +652,15 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
                 }
             }
 
-            // Create first mapping ModuleIdentifier ==> Command File
+            
             m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type( aModuleIdentifier, aCommandStr ));
 
-            // Create second mapping Command File ==> commands instance
+            
             UICommandsHashMap::iterator pIter = m_aUICommandsHashMap.find( aCommandStr );
             if ( pIter == m_aUICommandsHashMap.end() )
                 m_aUICommandsHashMap.insert( UICommandsHashMap::value_type( aCommandStr, Reference< XNameAccess >() ));
         }
-    } // for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
+    } 
 }
 Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const OUString& _sName)
 {
@@ -697,7 +697,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     }
     else if ( !m_aPrivateResourceURL.isEmpty() && aName.startsWith( m_aPrivateResourceURL ) )
     {
-        // special keys to retrieve information about a set of commands
+        
         return m_xGenericUICommands->getByName( aName );
     }
     else
@@ -735,7 +735,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return ( pIter != m_aModuleToCommandFileMap.end() );
 }
 
-// XElementAccess
+
 Type SAL_CALL UICommandDescription::getElementType()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -745,11 +745,11 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL UICommandDescription::hasElements()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    // generic UI commands are always available!
+    
     return sal_True;
 }
 
-} // namespace framework
+} 
 
 namespace {
 

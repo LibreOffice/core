@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/oslfile2streamwrap.hxx>
@@ -25,18 +25,18 @@ namespace comphelper
 {
     using namespace osl;
 
-//------------------------------------------------------------------
+
 OSLInputStreamWrapper::OSLInputStreamWrapper( File& _rFile )
     : m_pFile(&_rFile)
 {
 }
 
-//------------------------------------------------------------------
+
 OSLInputStreamWrapper::~OSLInputStreamWrapper()
 {
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                 throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
@@ -55,14 +55,14 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 
     if (eError != FileBase::E_None)
         throw stario::BufferSizeExceededException(OUString(),static_cast<staruno::XWeak*>(this));
 
-    // Wenn gelesene Zeichen < MaxLength, staruno::Sequence anpassen
+    
     if (nRead < (sal_uInt32)nBytesToRead)
         aData.realloc( sal::static_int_cast< sal_Int32 >(nRead) );
 
     return sal::static_int_cast< sal_Int32 >(nRead);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     if (!m_pFile)
@@ -74,7 +74,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_I
     return readBytes(aData, nMaxBytesToRead);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -92,7 +92,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnectedException, staruno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -122,7 +122,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
         std::max(nAvailable, sal::static_int_cast< sal_uInt64 >(SAL_MAX_INT32)));
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedException, staruno::RuntimeException )
 {
     if (!m_pFile)
@@ -134,8 +134,8 @@ void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedExc
 }
 
 /*************************************************************************/
-// stario::XOutputStream
-//------------------------------------------------------------------------------
+
+
 
 OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
     rFile(_rFile)
@@ -154,18 +154,18 @@ void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_In
     }
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OSLOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     rFile.close();
 }
 
-} // namespace comphelper
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

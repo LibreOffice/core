@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,7 +97,7 @@ namespace canvas
 
     uno::Reference< beans::XPropertySetInfo > PropertySetHelper::getPropertySetInfo() const
     {
-        // we're a stealth property set
+        
         return uno::Reference< beans::XPropertySetInfo >();
     }
 
@@ -131,16 +131,16 @@ namespace canvas
         if( !aCallbacks.getter.empty() )
             return aCallbacks.getter();
 
-        // TODO(Q1): subtlety, empty getter method silently returns
-        // the empty any
+        
+        
         return uno::Any();
     }
 
     void PropertySetHelper::addPropertyChangeListener( const OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
-        // check validity of property, but otherwise ignore the
-        // request
+        
+        
         if( !isPropertyName( aPropertyName ) )
             throwUnknown( aPropertyName );
     }
@@ -148,14 +148,14 @@ namespace canvas
     void PropertySetHelper::removePropertyChangeListener( const OUString&                                  /*aPropertyName*/,
                                                           const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
-        // ignore request, no listener added in the first place
+        
     }
 
     void PropertySetHelper::addVetoableChangeListener( const OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
-        // check validity of property, but otherwise ignore the
-        // request
+        
+        
         if( !isPropertyName( aPropertyName ) )
             throwUnknown( aPropertyName );
     }
@@ -163,7 +163,7 @@ namespace canvas
     void PropertySetHelper::removeVetoableChangeListener( const OUString&                                  /*aPropertyName*/,
                                                           const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
-        // ignore request, no listener added in the first place
+        
     }
 }
 

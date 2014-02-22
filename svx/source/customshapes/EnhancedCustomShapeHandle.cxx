@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "EnhancedCustomShapeHandle.hxx"
 #include "svx/EnhancedCustomShape2d.hxx"
 #include "svx/unoapi.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
     mnIndex     ( nIndex ),
@@ -29,27 +29,27 @@ EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Refer
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL EnhancedCustomShapeHandle::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL EnhancedCustomShapeHandle::release() throw()
 {
     OWeakObject::release();
 }
 
-// XCustomShapeHandle
+
 com::sun::star::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
     throw ( com::sun::star::uno::RuntimeException )
 {
@@ -76,7 +76,7 @@ void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const com::sun::
         throw com::sun::star::uno::RuntimeException();
 }
 
-// XInitialization
+
 void SAL_CALL EnhancedCustomShapeHandle::initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& /* aArguments */ )
     throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException )
 {

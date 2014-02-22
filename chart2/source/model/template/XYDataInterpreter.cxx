@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XYDataInterpreter.hxx"
@@ -47,7 +47,7 @@ XYDataInterpreter::~XYDataInterpreter()
 {
 }
 
-// ____ XDataInterpreter ____
+
 chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
@@ -66,7 +66,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     bool bHasCategories = HasCategories( aArguments, aData );
     bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
-    // parse data
+    
     bool bCategoriesUsed = false;
     bool bSetXValues = aData.getLength()>(bCategoriesUsed?2:1);
     for( sal_Int32 nDataIdx= 0; nDataIdx < aData.getLength(); ++nDataIdx )
@@ -103,7 +103,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
         }
     }
 
-    // create DataSeries
+    
     vector< Reference< data::XLabeledDataSequence > >::const_iterator
           aSequencesVecIt = aSequencesVec.begin();
 
@@ -159,12 +159,12 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
             Reference< data::XDataSource > xSeriesSource( aSeries[i], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
-            // values-y
+            
             Reference< data::XLabeledDataSequence > xValuesY(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
             Reference< data::XLabeledDataSequence > xValuesX(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x", false ));
-            // re-use values-... as values-x/values-y
+            
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
@@ -231,7 +231,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
     return aResult;
 }
 
-// criterion: all series must have exactly two data::XLabeledDataSequences
+
 sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
     throw (uno::RuntimeException)
@@ -255,6 +255,6 @@ sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
     return sal_True;
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-// Create default drawing objects via keyboard
+
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -58,7 +58,7 @@ FuConstPolygon::~FuConstPolygon()
 
 bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -67,7 +67,7 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
     if (aVEvt.eEvent == SDREVENT_BEGTEXTEDIT)
     {
-        // Texteingabe hier nicht zulassen
+        
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
         pView->EnableExtendedMouseEventDispatcher(false);
     }
@@ -102,7 +102,7 @@ bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 
 bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = false;
@@ -116,7 +116,7 @@ bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
         bReturn = true;
-        bSimple = true;         // Doppelklick nicht weiterreichen
+        bSimple = true;         
     }
 
     bool bParent;
@@ -229,13 +229,13 @@ void FuConstPolygon::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// Create default drawing objects via keyboard
+
 SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_POLYGON:
-    // case SID_DRAW_POLYGON_NOFILL:
-    // case SID_DRAW_BEZIER_NOFILL:
-    // case SID_DRAW_FREELINE_NOFILL:
+    
+    
+    
+    
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "chartview/DrawModelWrapper.hxx"
@@ -24,29 +24,29 @@
 #include "ObjectIdentifier.hxx"
 #include <svx/unomodel.hxx>
 #include <svl/itempool.hxx>
-// header for class SfxBoolItem
+
 #include <svl/eitem.hxx>
-// header for define EE_PARA_HYPHENATE
+
 #include <editeng/eeitem.hxx>
-// header for class Svx3DPercentDiagonalItem
+
 #include <svx/svx3ditems.hxx>
-// header for class SvtPathOptions
+
 #include <unotools/pathoptions.hxx>
-// header E3dObjFactory
+
 #include <svx/objfac3d.hxx>
-// header for class SdrObjList
+
 #include <svx/svdpage.hxx>
-// header for SvxUnoXDashTable_createInstance
+
 #include <svx/XPropertyTable.hxx>
-// header for class XDashList
+
 #include <svx/xtable.hxx>
-// header for class SdrOutliner
+
 #include <svx/svdoutl.hxx>
-// header for class LinguMgr
+
 #include <editeng/unolingu.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
-// header for class VirtualDevice
+
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-// this code is copied from sfx2/source/doc/objembed.cxx
+
 SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel > & xModel )
 {
     SfxObjectShell* pResult = NULL;
@@ -81,14 +81,14 @@ SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel >
     }
     catch( const uno::Exception& )
     {
-        // TODO: error handling
+        
     }
 
     return pResult;
 }
 
-// this code is copied from sfx2/source/doc/objembed.cxx.  It is a workaround to
-// get the reference device (e.g. printer) fromthe parent document
+
+
 OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & xModel )
 {
     SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );
@@ -97,7 +97,7 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
     return NULL;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -112,7 +112,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
-    SetDefaultFontHeight(423);     // 12pt
+    SetDefaultFontHeight(423);     
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
@@ -120,7 +120,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     pMasterPool->SetPoolDefaultItem(Svx3DPercentDiagonalItem (5));
 
     SfxItemPool* pPool = pMasterPool;
-    // append chart pool to end of pool chain
+    
     for (;;)
     {
         SfxItemPool* pSecondary = pPool->GetSecondaryPool();
@@ -132,8 +132,8 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     pPool->SetSecondaryPool(m_pChartItemPool);
     pMasterPool->FreezeIdRanges();
 
-    //this factory needs to be created before first use of 3D scenes once upon an office runtime
-    //@todo in future this should be done by drawing engine itself on demand
+    
+    
     static bool b3dFactoryInitialized = false;
     if(!b3dFactoryInitialized)
     {
@@ -141,7 +141,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
         b3dFactoryInitialized = true;
     }
 
-    //Hyphenyation and spellchecking
+    
     SdrOutliner& rOutliner = GetDrawOutliner();
     try
     {
@@ -158,7 +158,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
         OSL_FAIL("Can't get Hyphenator or SpellChecker for chart");
     }
 
-    //ref device for font rendering
+    
     OutputDevice* pDefaultDevice = rOutliner.GetRefDevice();
     if( !pDefaultDevice )
         pDefaultDevice = Application::GetDefaultDevice();
@@ -172,7 +172,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
 
 DrawModelWrapper::~DrawModelWrapper()
 {
-    //remove m_pChartItemPool from pool chain
+    
     if(m_pChartItemPool)
     {
         SfxItemPool* pPool = &GetItemPool();
@@ -193,7 +193,7 @@ DrawModelWrapper::~DrawModelWrapper()
 uno::Reference< uno::XInterface > DrawModelWrapper
 ::createUnoModel()
 {
-    uno::Reference< lang::XComponent > xComponent = new SvxUnoDrawingModel( this ); //tell Andreas Schluens if SvxUnoDrawingModel is not needed anymore -> remove export from svx to avoid link problems in writer
+    uno::Reference< lang::XComponent > xComponent = new SvxUnoDrawingModel( this ); 
     return uno::Reference< uno::XInterface >::query( xComponent );
 }
 
@@ -216,7 +216,7 @@ uno::Reference< lang::XMultiServiceFactory > DrawModelWrapper::getShapeFactory()
 
 uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
 {
-    //create draw page:
+    
     if( !m_xMainDrawPage.is() )
     {
         uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSuplier( this->getUnoModel(), uno::UNO_QUERY );
@@ -234,10 +234,10 @@ uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
             }
         }
     }
-    //ensure that additional shapes are in front of the chart objects so create the chart root before
-    // let us disable this call for now
-    // TODO:moggi
-    // AbstractShapeFactory::getOrCreateShapeFactory(this->getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
+    
+    
+    
+    
     return m_xMainDrawPage;
 }
 uno::Reference< drawing::XDrawPage > DrawModelWrapper::getHiddenDrawPage()
@@ -266,7 +266,7 @@ uno::Reference< drawing::XDrawPage > DrawModelWrapper::getHiddenDrawPage()
 }
 void DrawModelWrapper::clearMainDrawPage()
 {
-    //uno::Reference<drawing::XShapes> xChartRoot( m_xMainDrawPage, uno::UNO_QUERY );
+    
     uno::Reference<drawing::XShapes> xChartRoot( AbstractShapeFactory::getChartRootShape( m_xMainDrawPage ) );
     if( xChartRoot.is() )
     {
@@ -387,6 +387,6 @@ bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xSh
     return false;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -122,7 +122,7 @@ void handleCommand(
     if (system(cmd.getStr()) != 0)
     {
         cerr << "Error: Failed to execute " << cmd.getStr() << '\n';
-        throw false; //TODO
+        throw false; 
     }
 }
 
@@ -130,7 +130,7 @@ void InitPoFile(
     const OString& rProject, const OString& rInPath,
     const OString& rPotDir, const OString& rOutPath )
 {
-    //Create directory for po file
+    
     {
         OUString outDir =
             OStringToOUString(
@@ -141,12 +141,12 @@ void InitPoFile(
         {
             cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
             << "       outDir: " << OUStringToOString(outDir, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
-            throw false; //TODO
+            throw false; 
         }
         osl::Directory::createPath(outDirUrl);
     }
 
-    //Add header to the po file
+    
     PoOfstream aPoOutPut;
     aPoOutPut.open(rOutPath.getStr());
     if (!aPoOutPut.isOpen())
@@ -154,7 +154,7 @@ void InitPoFile(
         cerr
             << "Error: Cannot open po file "
             << rOutPath.getStr() << "\n";
-        throw false; //TODO
+        throw false; 
     }
 
     const sal_Int32 nProjectInd = rInPath.indexOf(rProject);
@@ -195,7 +195,7 @@ bool handleFile(
         {
             if (commands[i].positive ? passesPositiveList(rUrl) : passesNegativeList(rUrl))
             {
-                //Get input file path
+                
                 OString sInPath;
                 {
                     OUString sInPathTmp;
@@ -203,7 +203,7 @@ bool handleFile(
                         osl::FileBase::E_None)
                     {
                         cerr << "osl::FileBase::getSystemPathFromFileURL(" << rUrl << ") failed\n";
-                        throw false; //TODO
+                        throw false; 
                     }
                     sInPath = OUStringToOString( sInPathTmp, RTL_TEXTENCODING_UTF8 );
                 }
@@ -226,12 +226,12 @@ void handleFilesOfDir(
     std::vector<OUString>& aFiles, const OString& rProject,
     const OString& rPotDir )
 {
-    ///Handle files in lexical order
+    
     std::sort(aFiles.begin(), aFiles.end());
 
     typedef std::vector<OUString>::const_iterator citer_t;
 
-    bool bFirstLocFile = true; ///< First file in directory which needs localization
+    bool bFirstLocFile = true; 
 
     for( citer_t aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
     {
@@ -243,7 +243,7 @@ void handleFilesOfDir(
 
     if( !bFirstLocFile )
     {
-        //Delete pot file if it contain only the header
+        
         OString sPotFile = rPotDir.concat(".pot");
         PoIfstream aPOStream( sPotFile );
         PoEntry aPO;
@@ -257,7 +257,7 @@ void handleFilesOfDir(
                 cerr
                     << "Error: Cannot remove entryless pot file: "
                     << sPotFile.getStr() << "\n";
-                    throw false; //TODO
+                    throw false; 
             }
         }
     }
@@ -322,20 +322,20 @@ bool includeProject(const OString& rProject) {
     return false;
 }
 
-/// Handle one directory in the hierarchy.
-///
-/// Ignores symlinks and instead explicitly descends into clone/* or src/*,
-/// as the Cygwin symlinks are not supported by osl::Directory on Windows.
-///
-/// @param rUrl the absolute file URL of this directory
-///
-/// @param nLevel 0 if this is either the root directory that contains the
-/// projects or one of the clone/* or src/* directories that contain the
-/// additional projects; -1 if this is the clone directory; 1 if this
-/// is a project directory; 2 if this is a directory inside a project
-///
-/// @param rProject the name of the project (empty and ignored if nLevel <= 0)
-/// @param rPotDir the path of pot directory
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void handleDirectory(
     const OUString& rUrl, int nLevel,
     const OString& rProject, const OString& rPotDir)
@@ -344,7 +344,7 @@ void handleDirectory(
     if (dir.open() != osl::FileBase::E_None) {
         cerr
             << "Error: Cannot open directory: " << rUrl << '\n';
-        throw false; //TODO
+        throw false; 
     }
     std::vector<OUString> aFileNames;
     for (;;) {
@@ -355,25 +355,25 @@ void handleDirectory(
         }
         if (e != osl::FileBase::E_None) {
             cerr << "Error: Cannot read directory\n";
-            throw false; //TODO
+            throw false; 
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName
             | osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(stat) != osl::FileBase::E_None) {
             cerr << "Error: Cannot get file status\n";
-            throw false; //TODO
+            throw false; 
         }
         const OString sDirName =
             OUStringToOString(stat.getFileName(),RTL_TEXTENCODING_UTF8);
         switch (nLevel) {
-        case -1: // the clone or src directory
+        case -1: 
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 handleDirectory(
                     stat.getFileURL(), 0, OString(), rPotDir);
             }
             break;
-        case 0: // a root directory
+        case 0: 
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 if (includeProject(sDirName)) {
                     handleDirectory(
@@ -406,10 +406,10 @@ void handleDirectory(
 
     if (dir.close() != osl::FileBase::E_None) {
         cerr << "Error: Cannot close directory\n";
-        throw false; //TODO
+        throw false; 
     }
 
-    //Remove empty pot directory
+    
     OUString sPoPath =
         OStringToOUString(
             rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
@@ -419,7 +419,7 @@ void handleDirectory(
     {
         cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
              << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr() << "\n";
-        throw false; //TODO
+        throw false; 
     }
     osl::Directory::remove(sPoUrl);
 }
@@ -435,7 +435,7 @@ void handleProjects(char * sSourceRoot, char const * sDestRoot)
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         cerr << "Error: Cannot convert pathname to UTF-16\n";
-        throw false; //TODO
+        throw false; 
     }
     OUString rootUrl;
     if (osl::FileBase::getFileURLFromSystemPath(root16, rootUrl)
@@ -443,7 +443,7 @@ void handleProjects(char * sSourceRoot, char const * sDestRoot)
     {
         cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
              << "       root16: " << OUStringToOString(root16, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
-        throw false; //TODO
+        throw false; 
     }
     handleDirectory(rootUrl, 0, OString(), OString(sDestRoot));
 }
@@ -461,7 +461,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     }
     try {
         handleProjects(argv[1],argv[2]);
-    } catch (bool) { //TODO
+    } catch (bool) { 
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;

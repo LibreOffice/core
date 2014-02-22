@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/scriptedtext.hxx>
@@ -32,22 +32,22 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-//_____________________________________________________________________________
+
 
 class SvtScriptedTextHelper_Impl
 {
 private:
-    OutputDevice&               mrOutDevice;        /// The output device for drawing the text.
-    Font                        maLatinFont;        /// The font for latin text portions.
-    Font                        maAsianFont;        /// The font for asian text portions.
-    Font                        maCmplxFont;        /// The font for complex text portions.
-    Font                        maDefltFont;        /// The default font of the output device.
-    OUString                    maText;             /// The text.
+    OutputDevice&               mrOutDevice;        
+    Font                        maLatinFont;        
+    Font                        maAsianFont;        
+    Font                        maCmplxFont;        
+    Font                        maDefltFont;        
+    OUString                    maText;             
 
-    vector< sal_Int32 >         maPosVec;           /// The start position of each text portion.
-    vector< sal_Int16 >         maScriptVec;        /// The script type of each text portion.
-    vector< sal_Int32 >         maWidthVec;         /// The output width of each text portion.
-    Size                        maTextSize;         /// The size the text will take in the current output device.
+    vector< sal_Int32 >         maPosVec;           
+    vector< sal_Int16 >         maScriptVec;        
+    vector< sal_Int32 >         maWidthVec;         
+    Size                        maTextSize;         
 
                                 /** Assignment operator not implemented to prevent usage. */
     SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& );
@@ -138,7 +138,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
     maTextSize.Width() = maTextSize.Height() = 0;
     maDefltFont = mrOutDevice.GetFont();
 
-    // calculate text portion widths and total width
+    
     maWidthVec.clear();
     if( !maPosVec.empty() )
     {
@@ -168,7 +168,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
         }
     }
 
-    // calculate maximum font height
+    
     SetOutDevFont( i18n::ScriptType::LATIN );
     maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
     SetOutDevFont( i18n::ScriptType::ASIAN );
@@ -191,9 +191,9 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
     {
         if( _xBreakIter.is() )
         {
-            sal_Int32 nThisPos = 0;         // first position of this portion
-            sal_Int32 nNextPos = 0;         // first position of next portion
-            sal_Int16 nPortScript;          // script type of this portion
+            sal_Int32 nThisPos = 0;         
+            sal_Int32 nNextPos = 0;         
+            sal_Int16 nPortScript;          
             do
             {
                 nPortScript = _xBreakIter->getScriptType( maText, nThisPos );
@@ -235,20 +235,20 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                             }
                             while( nCharIx < nNextPos );
                         }
-                        // nothing to do for following portions
+                        
                     }
                 }
                 nThisPos = nNextPos;
             }
             while( (0 <= nThisPos) && (nThisPos < nLen) );
         }
-        else            // no break iterator: whole text LATIN
+        else            
         {
             maPosVec.push_back( 0 );
             maScriptVec.push_back( i18n::ScriptType::LATIN );
         }
 
-        // push end position of last portion
+        
         if( !maPosVec.empty() )
             maPosVec.push_back( nLen );
     }
@@ -300,14 +300,14 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
         SetOutDevFont( nScript );
         mrOutDevice.DrawText( aCurrPos, maText, nThisPos, nNextPos - nThisPos );
         aCurrPos.X() += maWidthVec[ nVecIndex++ ];
-        aCurrPos.X() += mrOutDevice.GetTextHeight() / 5;   // add 20% of font height as portion spacing
+        aCurrPos.X() += mrOutDevice.GetTextHeight() / 5;   
         nThisPos = nNextPos;
     }
     mrOutDevice.SetFont( maDefltFont );
 }
 
 
-//_____________________________________________________________________________
+
 
 SvtScriptedTextHelper::SvtScriptedTextHelper( OutputDevice& _rOutDevice ) :
     mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice, NULL, NULL, NULL ) )
@@ -350,6 +350,6 @@ void SvtScriptedTextHelper::DrawText( const Point& _rPos )
 }
 
 
-//_____________________________________________________________________________
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

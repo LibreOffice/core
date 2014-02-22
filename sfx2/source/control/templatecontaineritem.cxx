@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/templatecontaineritem.hxx>
@@ -68,7 +68,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
     BColor aFillColor = pAttrs->aFillColor;
     drawinglayer::primitive2d::Primitive2DSequence aSeq(nSeqSize);
 
-    // Draw background
+    
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
@@ -76,16 +76,16 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
-    // Create rounded rectangle border
+    
     aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolygonStrokePrimitive2D(
                                               Polygon(maThumbnailArea,5,5).getB2DPolygon(),
                                               LineAttribute(BColor(0.8, 0.8, 0.8), 2.0)));
 
-    // Paint the thumbnails side by side on a 2x2 grid
+    
     long nThumbPadding = 4;
     Size aThumbSize( ( maThumbnailArea.getWidth() - 3 * nThumbPadding ) / 2, ( maThumbnailArea.getHeight() - 3* nThumbPadding ) / 2 );
 
-    // Draw thumbnail
+    
     for (int i=0; i<4; ++i)
     {
         long nPosX = 0;
@@ -114,11 +114,11 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
 
         if (!pImage->IsEmpty())
         {
-            // Check the size of the picture and resize if needed
+            
             Size aImageSize = pImage->GetSizePixel();
             if (aImageSize.getWidth() > aThumbSize.getWidth() || aImageSize.getHeight() > aThumbSize.getHeight())
             {
-                // Resize the picture and store it for next times
+                
                 *pImage = TemplateAbstractView::scaleImg( *pImage, aThumbSize.getWidth(), aThumbSize.getHeight() );
                 aImageSize = pImage->GetSizePixel();
             }
@@ -149,7 +149,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                                     false)
                                                 ));
 
-            // draw thumbnail borders
+            
             aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
         }
     }

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -210,7 +210,7 @@ sal_Int32 Decompression::explode()
         return -1;
 
     /* I think this means 0=binary and 1=ascii file, but in RESOURCEs I saw always 0 */
-    if (P1 >= 1) // changed per 's review comments
+    if (P1 >= 1) 
         return -1;
 
     sal_uInt32 P2;
@@ -226,13 +226,13 @@ sal_Int32 Decompression::explode()
     /*  The algorithm terminates as soon as it runs out of bits. */
     while(true)
     {
-        // read 1 bit (take bits from the lowest value (LSB) to the MSB i.e. bit 0, bit 1 etc ...)
+        
         sal_uInt32 iBit;
         if (0 != ReadBits(1, iBit))
             break;
         if ( 0 == (iBit & 0x01) )
         {
-            //if the bit is 0 read 8 bits and write it to the output as it is.
+            
             sal_uInt32 symbol;
             if (0 != ReadBits(8, symbol))
                 break;
@@ -244,21 +244,21 @@ sal_Int32 Decompression::explode()
             }
             continue;
         }
-        // if the bit is 1 we have here a length/distance pair:
-        // -decode a number with Hufmman Tree #1; variable bit length, result is 0x00 .. 0x0F -> L1
+        
+        
         sal_uInt32 L1 = Decode(m_Tree1);
         sal_uInt32 Length;
         if (L1 <= 7)
         {
-            //if L1 <= 7:
-            //           LENGTH = L1 + 2
+            
+            
             Length = L1 + 2;
         }
         else
         {
-            // if L1 > 7
-            //            read more (L1-7) bits -> L2
-            //             LENGTH = L2 + M[L1-7] + 2
+            
+            
+            
             sal_uInt32 L2;
             if (0 != ReadBits((sal_uInt16)(L1 - 7), L2))
                 break;
@@ -266,63 +266,63 @@ sal_Int32 Decompression::explode()
         }
         if (Length == 519)
         {
-            // end of compressed data
+            
             break;
         }
 
-        // - decode another number with Hufmann Tree #2 giving result 0x00..0x3F -> D1
+        
         sal_uInt32 D1 = Decode(m_Tree2);
         sal_uInt32 D2;
         if (Length == 2)
         {
-            //       if LENGTH == 2
-            //              D1 = D1 << 2
-            //              read 2 bits -> D2
+            
+            
+            
             D1 = D1 << 2;
             if (0 != ReadBits(2, D2))
                 break;
         }
         else
         {
-            //        else
-            //               D1 = D1 << P2  // the parameter 2
-            //               read P2 bits -> D2
+            
+            
+            
             D1 = D1 << P2;
             if (0 != ReadBits((sal_uInt16)P2, D2))
                 break;
         }
-        // DISTANCE = (D1 | D2) + 1
+        
         sal_uInt32 distance = (D1 | D2) + 1;
 
-            // - now copy LENGTH bytes from (output_ptr-DISTANCE) to output_ptr
-            // write current buffer to output
+            
+            
         m_pOutStream->Write(m_Output, m_nOutputBufferPos);
         m_nOutputBufferPos = 0;
 
-        // remember current position
+        
         sal_uInt32 nOutputPos = m_pOutStream->Tell();
         if (distance > nOutputPos)
-            return -3; // format error
+            return -3; 
 
         m_pOutStream->Flush();
-        // point back to copy position and read bytes
+        
         m_pOutStream->SeekRel(-(long)distance);
         sal_uInt8 sTemp[MAXWIN];
         sal_uInt32 nRead = distance > Length? Length:distance;
         m_pOutStream->Read(sTemp, nRead);
         if (nRead != Length)
         {
-            // fill the buffer with read content repeatly until full
+            
             for (sal_uInt32 i=nRead; i<Length; i++)
             {
                 sTemp[i] = sTemp[i-nRead];
             }
         }
 
-        // restore output stream position
+        
         m_pOutStream->Seek(nOutputPos);
 
-           // write current buffer to output
+           
         m_pOutStream->Write(sTemp, Length);
     }
     return 0;
@@ -353,12 +353,12 @@ sal_uInt32 Decompression::Decode(HuffmanTreeNode * pRoot)
     sal_uInt32 nRead, nReadAlready;
 
     if( 0 != ReadBits(1, nReadAlready))
-        return 0; // something wrong
+        return 0; 
 
     for (sal_uInt16 i=2; i <= 8; i++)
     {
         if ( 0 != ReadBits(1, nRead))
-            return 0; // something wrong
+            return 0; 
 
         nReadAlready  = (nReadAlready << 1) | (nRead & 0x01);
 
@@ -377,25 +377,25 @@ sal_uInt32 Decompression::Decode(HuffmanTreeNode * pRoot)
  * @return
  */
 void Decompression::ConstructTree1()
-{   // Huffman Tree #1
-    // The first huffman tree (the Section called Decompression algorithm HUFFMAN) contains the length values. It is described by the following table:
-    // value (hex)  code (binary)
-    // 0    101
-    // 1    11
-    // 2    100
-    // 3    011
-    // 4    0101
-    // 5    0100
-    // 6    0011
-    // 7    0010 1
-    // 8    0010 0
-    // 9    0001 1
-    // a    0001 0
-    // b    0000 11
-    // c    0000 10
-    // d    0000 01
-    // e    0000 001
-    // f    0000 000
+{   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     m_Tree1 = new HuffmanTreeNode();
     for (sal_uInt32 i=0; i< 16; i++)
     {
@@ -432,7 +432,7 @@ void Decompression::ConstructTree2()
     {
         m_Tree2->InsertNode(i, Tree2String[i]);
     }
-    //where bits should be read from the left to the right.
+    
 }
 /**
  * @descr
@@ -444,7 +444,7 @@ void Decompression::fillArray()
     for (int i=1; i < 16; i++)
     {
         double dR = 2.0;
-        m_iArrayOfM[i]  = m_iArrayOfM[i - 1]+ (sal_uInt32)pow(dR, i-1);//2
+        m_iArrayOfM[i]  = m_iArrayOfM[i - 1]+ (sal_uInt32)pow(dR, i-1);
     }
 }
 
@@ -474,7 +474,7 @@ HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char 
     sal_Char pCode[32];
         strcpy(pCode, pInCode );
 
-    // query its parents
+    
     sal_Char cLast = pCode[strlen(pCode) - 1];
     pCode[strlen(pCode) - 1] = '\0';
     HuffmanTreeNode * pParent = QueryNode(pCode);
@@ -484,7 +484,7 @@ HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char 
     }
     if (cLast == '0')
         pParent->left = pNew;
-    else // (cChar == '1')
+    else 
         pParent->right = pNew;
 
     return pNew;
@@ -493,7 +493,7 @@ HuffmanTreeNode * HuffmanTreeNode::QueryNode(const sal_Char * pCode)
 {
     sal_uInt32 nLen = strlen(pCode);
 
-    HuffmanTreeNode * pNode = this; // this is the root
+    HuffmanTreeNode * pNode = this; 
     for(sal_uInt32 i=0; i<nLen && pNode; i++)
     {
         sal_Char cChar= pCode[i];
@@ -501,7 +501,7 @@ HuffmanTreeNode * HuffmanTreeNode::QueryNode(const sal_Char * pCode)
         {
             pNode = pNode->left;
         }
-        else // (cChar == '1')
+        else 
         {
             pNode = pNode->right;
         }

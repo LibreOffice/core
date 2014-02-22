@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility {
 
 
-//=====  internal  ============================================================
+
 
 AccessibleOutlineView::AccessibleOutlineView (
     ::sd::Window* pSdWindow,
@@ -69,8 +69,8 @@ AccessibleOutlineView::AccessibleOutlineView (
 {
     SolarMutexGuard aGuard;
 
-    // Beware! Here we leave the paths of the UNO API and descend into the
-    // depths of the core.  Necessary for making the edit engine accessible.
+    
+    
     if( pViewShell && pSdWindow )
     {
         ::sd::View* pView = pViewShell->GetView();
@@ -102,7 +102,7 @@ AccessibleOutlineView::~AccessibleOutlineView (void)
 
 void AccessibleOutlineView::Init (void)
 {
-    // Set event source _before_ starting to listen
+    
     maTextHelper.SetEventSource(this);
 
     AccessibleDocumentViewBase::Init ();
@@ -118,7 +118,7 @@ void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType,
 }
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL
     AccessibleOutlineView::getAccessibleChildCount (void)
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // forward
+    
     return maTextHelper.GetChildCount();
 }
 
@@ -136,7 +136,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    // Forward request to children manager.
+    
     return maTextHelper.GetChild(nIndex);
 }
 
@@ -170,11 +170,11 @@ OUString SAL_CALL
     return sName;
 }
 
-//=====  XAccessibleEventBroadcaster  ========================================
+
 
 void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
-    // delegate listener handling to children manager.
+    
     if ( ! IsDisposed())
         maTextHelper.AddEventListener(xListener);
     AccessibleContextBase::addEventListener(xListener);
@@ -182,13 +182,13 @@ void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Refe
 
 void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
-    // forward
+    
     if ( ! IsDisposed())
         maTextHelper.RemoveEventListener(xListener);
     AccessibleContextBase::removeEventListener(xListener);
 }
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
     AccessibleOutlineView::getImplementationName (void)
@@ -198,7 +198,7 @@ OUString SAL_CALL
 }
 
 
-//=====  XEventListener  ======================================================
+
 
 void SAL_CALL
     AccessibleOutlineView::disposing (const lang::EventObject& rEventObject)
@@ -207,11 +207,11 @@ void SAL_CALL
     AccessibleDocumentViewBase::disposing (rEventObject);
 }
 
-//=====  protected internal  ==================================================
+
 
 void AccessibleOutlineView::FireEvent(const AccessibleEventObject& aEvent )
 {
-    // delegate listener handling to children manager.
+    
     maTextHelper.FireEvent(aEvent);
 }
 
@@ -219,7 +219,7 @@ void AccessibleOutlineView::Activated (void)
 {
     SolarMutexGuard aGuard;
 
-    // delegate listener handling to children manager.
+    
     maTextHelper.SetFocus(sal_True);
 }
 
@@ -227,19 +227,19 @@ void AccessibleOutlineView::Deactivated (void)
 {
     SolarMutexGuard aGuard;
 
-    // delegate listener handling to children manager.
+    
     maTextHelper.SetFocus(sal_False);
 }
 
 void SAL_CALL AccessibleOutlineView::disposing (void)
 {
-    // dispose children
+    
     maTextHelper.Dispose();
 
     AccessibleDocumentViewBase::disposing ();
 }
 
-//=====  XPropertyChangeListener  =============================================
+
 
 void SAL_CALL
     AccessibleOutlineView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
@@ -250,13 +250,13 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleOutlineView::propertyChange");
-    //add page switch event for slide show mode
+    
     if (rEventObject.PropertyName == "CurrentPage" ||
         rEventObject.PropertyName == "PageChange")
     {
         OSL_TRACE ("    current page changed");
 
-        // The current page changed. Update the children accordingly.
+        
         UpdateChildren();
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue, rEventObject.OldValue);
     }
@@ -264,7 +264,7 @@ void SAL_CALL
     {
         OSL_TRACE ("    visible area changed");
 
-        // The visible area changed. Update the children accordingly.
+        
         UpdateChildren();
     }
     else
@@ -275,7 +275,7 @@ void SAL_CALL
 }
 
 
-/// Create a name for this view.
+
 OUString
     AccessibleOutlineView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -302,10 +302,10 @@ void AccessibleOutlineView::UpdateChildren()
 {
     SolarMutexGuard aGuard;
 
-    // Update visible children
+    
     maTextHelper.UpdateChildren();
 }
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -147,7 +147,7 @@ void ScRetypePassDlg::Init()
     maTextSheetStatus4.SetText(maTextNotProtected);
     maBtnRetypeDoc.Disable();
 
-    // Make all sheet rows invisible.
+    
 
     maTextSheetName1.Show(false);
     maTextSheetStatus1.Show(false);
@@ -181,11 +181,11 @@ void ScRetypePassDlg::Init()
 
 void ScRetypePassDlg::PopulateDialog()
 {
-    // Document protection first.
+    
     SetDocData();
 
-    // Sheet protection next.  We're only interested in the first 4 sheets
-    // (or less).
+    
+    
     size_t n = maTableItems.size();
     for (size_t i = 0; i < n && i < 4; ++i)
         SetTableData(i, static_cast< SCTAB >( i ));
@@ -208,7 +208,7 @@ void ScRetypePassDlg::SetDocData()
             maTextDocStatus.SetText(maTextHashGood);
         else
         {
-            // incompatible hash
+            
             maTextDocStatus.SetText(maTextHashBad);
             bBtnEnabled = true;
         }
@@ -262,7 +262,7 @@ void ScRetypePassDlg::SetTableData(size_t nRowPos, SCTAB nTab)
             pStatus->SetText(maTextHashGood);
         else
         {
-            // incompatible hash
+            
             pStatus->SetText(maTextHashBad);
             bBtnEnabled = true;
         }
@@ -287,7 +287,7 @@ void ScRetypePassDlg::ResetTableRows()
 static bool lcl_IsInGoodStatus(ScPassHashProtectable* pProtected, ScPasswordHash eDesiredHash)
 {
     if (!pProtected || !pProtected->isProtected())
-        // Not protected.
+        
         return true;
 
     if (pProtected->isPasswordEmpty())
@@ -335,12 +335,12 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
     ScPassHashProtectable* pProtected = NULL;
     if (pBtn == &maBtnRetypeDoc)
     {
-        // document protection.
+        
         pProtected = mpDocItem.get();
     }
     else
     {
-        // sheet protection.
+        
         size_t nTabPos = mnCurScrollPos;
         if (pBtn == &maBtnRetypeSheet2)
             nTabPos += 1;
@@ -349,32 +349,32 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         else if (pBtn == &maBtnRetypeSheet4)
             nTabPos += 3;
         else if (pBtn != &maBtnRetypeSheet1)
-            // This should never happen !
+            
             return 0;
 
         if (nTabPos >= maTableItems.size())
-            // Likewise, this should never happen !
+            
             return 0;
 
         pProtected = maTableItems[nTabPos].mpProtect.get();
     }
 
     if (!pProtected)
-        // What the ... !?
+        
         return 0;
 
     ScRetypePassInputDlg aDlg(this, pProtected);
     if (aDlg.Execute() == RET_OK)
     {
-        // OK is pressed.  Update the protected item.
+        
         if (aDlg.IsRemovePassword())
         {
-            // Remove password from this item.
+            
             pProtected->setPassword(OUString());
         }
         else
         {
-            // Set a new password.
+            
             OUString aNewPass = aDlg.GetNewPassword();
             pProtected->setPassword(aNewPass);
         }
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(ScRetypePassDlg, ScrollHdl)
     return 0;
 }
 
-// ============================================================================
+
 
 ScRetypePassInputDlg::ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected)
     : ModalDialog(pParent, "RetypePasswordDialog",
@@ -455,14 +455,14 @@ void ScRetypePassInputDlg::CheckPasswordInput()
 
     if (aPass1.isEmpty() || aPass2.isEmpty())
     {
-        // Empty password is not allowed.
+        
         m_pBtnOk->Disable();
         return;
     }
 
     if (aPass1 != aPass2)
     {
-        // The two passwords differ.
+        
         m_pBtnOk->Disable();
         return;
     }
@@ -475,7 +475,7 @@ void ScRetypePassInputDlg::CheckPasswordInput()
 
     if (!mpProtected)
     {
-        // This should never happen!
+        
         m_pBtnOk->Disable();
         return;
     }

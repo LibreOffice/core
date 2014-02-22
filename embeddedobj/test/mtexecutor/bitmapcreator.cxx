@@ -26,7 +26,7 @@
 
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -35,20 +35,20 @@ uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServ
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL VCLBitmapCreator::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.BitmapCreator");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new VCLBitmapCreator( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 
 uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
         throw ( uno::Exception,
@@ -60,31 +60,31 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
     return aResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstanceWithArguments(
                                                 const uno::Sequence< uno::Any >& aArguments )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
     if ( aArguments.getLength() != 1 )
-        throw uno::Exception(); // TODO
+        throw uno::Exception(); 
 
     uno::Sequence< sal_Int8 > aOrigBitmap;
     if ( !( aArguments[0] >>= aOrigBitmap ) )
-        throw uno::Exception(); // TODO
+        throw uno::Exception(); 
 
     BitmapEx aBitmap;
     SvMemoryStream aStream( aOrigBitmap.getArray(), aOrigBitmap.getLength(), STREAM_READ );
     aStream >> aBitmap;
     if ( aStream.GetError() )
-        throw uno::Exception(); // TODO
+        throw uno::Exception(); 
 
     uno::Reference< uno::XInterface > aResult( VCLUnoHelper::CreateBitmap( aBitmap ), uno::UNO_QUERY );
 
     return aResult;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL VCLBitmapCreator::getImplementationName()
         throw ( uno::RuntimeException )
 {
@@ -97,7 +97,7 @@ sal_Bool SAL_CALL VCLBitmapCreator::supportsService( const OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,7 +42,7 @@ XMLTextListsHelper::XMLTextListsHelper()
    :  mpProcessedLists( 0 ),
       msLastProcessedListId(),
       msListStyleOfLastProcessedList(),
-      // Inconsistent behavior regarding lists (#i92811#)
+      
       mpMapListIdToListStyleDefaultListId( 0 ),
       mpContinuingLists( 0 ),
       mpListStack( 0 )
@@ -56,7 +56,7 @@ XMLTextListsHelper::~XMLTextListsHelper()
         mpProcessedLists->clear();
         delete mpProcessedLists;
     }
-    // Inconsistent behavior regarding lists (#i92811#)#
+    
     if ( mpMapListIdToListStyleDefaultListId )
     {
         mpMapListIdToListStyleDefaultListId->clear();
@@ -77,7 +77,7 @@ XMLTextListsHelper::~XMLTextListsHelper()
 void XMLTextListsHelper::PushListContext(
     XMLTextListBlockContext *i_pListBlock)
 {
-//    fprintf(stderr, "PushListContext\n");
+
     mListStack.push(::boost::make_tuple(i_pListBlock,
         static_cast<XMLTextListItemContext*>(0),
         static_cast<XMLNumberedParaContext*>(0)));
@@ -86,7 +86,7 @@ void XMLTextListsHelper::PushListContext(
 void XMLTextListsHelper::PushListContext(
     XMLNumberedParaContext *i_pNumberedParagraph)
 {
-//    fprintf(stderr, "PushListContext(NP)\n");
+
     mListStack.push(::boost::make_tuple(
         static_cast<XMLTextListBlockContext*>(0),
         static_cast<XMLTextListItemContext*>(0), i_pNumberedParagraph));
@@ -96,7 +96,7 @@ void XMLTextListsHelper::PopListContext()
 {
     OSL_ENSURE(mListStack.size(),
         "internal error: PopListContext: mListStack empty");
-//    fprintf(stderr, "PopListContext\n");
+
     if ( !mListStack.empty())
         mListStack.pop();
 }
@@ -118,7 +118,7 @@ void XMLTextListsHelper::ListContextTop(
 
 void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
 {
-    // may be cleared by ListBlockContext for upper list...
+    
     if (i_pListItem) {
         OSL_ENSURE(mListStack.size(),
             "internal error: SetListItem: mListStack empty");
@@ -132,7 +132,7 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
     }
 }
 
-// Handling for parameter <sListStyleDefaultListId> (#i92811#)
+
 void XMLTextListsHelper::KeepListAsProcessed( OUString sListId,
                                               OUString sListStyleName,
                                               OUString sContinueListId,
@@ -157,7 +157,7 @@ void XMLTextListsHelper::KeepListAsProcessed( OUString sListId,
     msLastProcessedListId = sListId;
     msListStyleOfLastProcessedList = sListStyleName;
 
-    // Inconsistent behavior regarding lists (#i92811#)
+    
     if ( !sListStyleDefaultListId.isEmpty())
     {
         if ( mpMapListIdToListStyleDefaultListId == 0 )
@@ -238,11 +238,11 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     }
     else
     {
-        // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
+        
         sal_Int64 n = Time( Time::SYSTEM ).GetTime();
         n += Date( Date::SYSTEM ).GetDate();
         n += rand();
-        // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
+        
         sTmpStr += OUString::number( n );
     }
 
@@ -261,7 +261,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     return sNewListId;
 }
 
-// Provide list id for a certain list block for import (#i92811#)
+
 OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
 {
     OUString sListBlockListId( rListBlock.GetContinueListId() );
@@ -388,18 +388,18 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     OSL_ENSURE(!i_ListId.isEmpty(), "invalid ListId");
     OSL_ENSURE(io_rLevel >= 0, "invalid Level");
     NumParaList_t & rNPList( mNPLists[i_ListId] );
-    const OUString none; // default
+    const OUString none; 
     if ( rNPList.empty() ) {
-        // create default list style for top level
+        
         sal_Int16 lev(0);
         rNPList.push_back(::std::make_pair(none,
             MakeNumRule(i_rImport, 0, none, none, lev) ));
     }
-    // create num rule first because this might clamp the level...
+    
     uno::Reference<container::XIndexReplace> xNumRules;
     if ((0 == io_rLevel) || rNPList.empty() || !i_StyleName.isEmpty()) {
-        // no parent to inherit from, or explicit style given => new numrules!
-        // index of parent: level - 1, but maybe that does not exist
+        
+        
         const size_t parent( std::min(static_cast<size_t>(io_rLevel),
             rNPList.size()) - 1 );
         xNumRules = MakeNumRule(i_rImport,
@@ -407,11 +407,11 @@ XMLTextListsHelper::EnsureNumberedParagraph(
             io_rLevel > 0 ? rNPList[parent].first  : none,
             i_StyleName, io_rLevel);
     } else {
-        // no style given, but has a parent => reuse parent numrules!
+        
         ClampLevel(rNPList.back().second, io_rLevel);
     }
     if (static_cast<sal_uInt16>(io_rLevel) + 1U > rNPList.size()) {
-        // new level: need to enlarge
+        
         for (size_t i = rNPList.size();
                 i < static_cast<size_t>(io_rLevel); ++i)
         {
@@ -423,7 +423,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
             ? ::std::make_pair(i_StyleName, xNumRules)
             : rule);
     } else {
-        // old level: no need to enlarge; possibly shrink
+        
         if (xNumRules.is()) {
             rNPList[io_rLevel] = std::make_pair(i_StyleName, xNumRules);
         }
@@ -431,7 +431,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
             rNPList.erase(rNPList.begin() + io_rLevel + 1, rNPList.end());
         }
     }
-    // remember the list id
+    
     if (mLastNumberedParagraphs.size() <= static_cast<size_t>(io_rLevel)) {
         mLastNumberedParagraphs.resize(io_rLevel+1);
     }
@@ -489,9 +489,9 @@ XMLTextListsHelper::MakeNumRule(
     sal_Bool bSetDefaults(io_pSetDefaults ? *io_pSetDefaults : sal_False);
     if ( !xNumRules.is() )
     {
-        // If no style name has been specified for this style and for any
-        // parent or if no num rule with the specified name exists,
-        // create a new one.
+        
+        
+        
 
         xNumRules =
             SvxXMLListStyleContext::CreateNumRule( i_rImport.GetModel() );
@@ -499,7 +499,7 @@ XMLTextListsHelper::MakeNumRule(
         if ( !xNumRules.is() )
             return xNumRules;
 
-        // Because it is a new num rule, numbering must not be restarted.
+        
         if (o_pRestartNumbering) *o_pRestartNumbering = sal_False;
         bSetDefaults = sal_True;
         if (io_pSetDefaults) *io_pSetDefaults = bSetDefaults;
@@ -509,8 +509,8 @@ XMLTextListsHelper::MakeNumRule(
 
     if ( bSetDefaults )
     {
-        // Because there is no list style sheet for this style, a default
-        // format must be set for any level of this num rule.
+        
+        
         SvxXMLListStyleContext::SetDefaultStyle( xNumRules, io_rLevel,
             sal_False );
     }

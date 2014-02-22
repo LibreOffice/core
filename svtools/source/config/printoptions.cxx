@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/printoptions.hxx>
@@ -100,9 +100,9 @@ public:
     void        SetConvertToGreyscales( sal_Bool bState ) ;
     void        SetPDFAsStandardPrintJobFormat( sal_Bool bState ) ;
 
-//-------------------------------------------------------------------------------------------------------------
-//  private API
-//-------------------------------------------------------------------------------------------------------------
+
+
+
 
 private:
     void impl_setValue (const OUString& sProp,
@@ -110,9 +110,9 @@ private:
     void impl_setValue (const OUString& sProp,
                               ::sal_Int16      nNew );
 
-//-------------------------------------------------------------------------------------------------------------
-//  private member
-//-------------------------------------------------------------------------------------------------------------
+
+
+
 
 private:
        css::uno::Reference< css::container::XNameAccess > m_xCfg;
@@ -513,23 +513,23 @@ SvtBasePrintOptions::~SvtBasePrintOptions()
 
 Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
+    
     static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
+    
     if( pMutex == NULL )
     {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
+        
+        
         MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of our class will be fastr then these!
+        
         if( pMutex == NULL )
         {
-            // Create the new mutex and set it for return on static variable.
+            
             static Mutex aMutex;
             pMutex = &aMutex;
         }
     }
-    // Return new created or already existing mutex object.
+    
     return *pMutex;
 }
 
@@ -716,11 +716,11 @@ void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
 
 SvtPrinterOptions::SvtPrinterOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
+    
     if( m_pStaticDataContainer == NULL )
     {
         OUString aRootPath( ROOTNODE_START );
@@ -734,12 +734,12 @@ SvtPrinterOptions::SvtPrinterOptions()
 
 SvtPrinterOptions::~SvtPrinterOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pStaticDataContainer;
@@ -750,11 +750,11 @@ SvtPrinterOptions::~SvtPrinterOptions()
 
 SvtPrintFileOptions::SvtPrintFileOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
+    
     if( m_pStaticDataContainer == NULL )
     {
         OUString aRootPath( ROOTNODE_START );
@@ -769,12 +769,12 @@ SvtPrintFileOptions::SvtPrintFileOptions()
 
 SvtPrintFileOptions::~SvtPrintFileOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pStaticDataContainer;

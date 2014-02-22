@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,7 +80,7 @@ namespace cppcanvas
                 const ::basegfx::B2DRange                           maBounds;
                 const CanvasSharedPtr                               mpCanvas;
 
-                // stroke color is now implicit: the maState.DeviceColor member
+                
                 rendering::RenderState                              maState;
 
                 uno::Sequence< double >                             maFillColor;
@@ -129,8 +129,8 @@ namespace cppcanvas
                     if( maFillColor.getLength() < 4 )
                         maFillColor.realloc( 4 );
 
-                    // TODO(F1): Color management
-                    // adapt fill color transparency
+                    
+                    
                     maFillColor[3] = 1.0 - nTransparency / 100.0;
                 }
 
@@ -141,8 +141,8 @@ namespace cppcanvas
                     if( maState.DeviceColor.getLength() < 4 )
                         maState.DeviceColor.realloc( 4 );
 
-                    // TODO(F1): Color management
-                    // adapt fill color transparency
+                    
+                    
                     maState.DeviceColor[3] = 1.0 - nTransparency / 100.0;
                 }
             }
@@ -158,8 +158,8 @@ namespace cppcanvas
 
                 if( maFillColor.getLength() )
                 {
-                    // TODO(E3): Use DBO's finalizer here,
-                    // fillPolyPolygon() might throw
+                    
+                    
                     const uno::Sequence< double > aTmpColor( aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
@@ -183,11 +183,11 @@ namespace cppcanvas
             bool PolyPolyAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                                const Subset&                  rSubset ) const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
 
-                // polygon only contains a single action, fail if subset
-                // requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return false;
@@ -209,11 +209,11 @@ namespace cppcanvas
             ::basegfx::B2DRange PolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                            const Subset&                    rSubset ) const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
 
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return ::basegfx::B2DRange();
@@ -223,13 +223,13 @@ namespace cppcanvas
 
             sal_Int32 PolyPolyAction::getActionCount() const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
                 return 1;
             }
 
 
-            // -------------------------------------------------------------------------------
+            
 
             class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
@@ -257,7 +257,7 @@ namespace cppcanvas
                 const ::basegfx::B2DRectangle                       maBounds;
                 const CanvasSharedPtr                               mpCanvas;
 
-                // stroke color is now implicit: the maState.DeviceColor member
+                
                 rendering::RenderState                              maState;
                 const rendering::Texture                            maTexture;
             };
@@ -298,11 +298,11 @@ namespace cppcanvas
             bool TexturedPolyPolyAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                                        const Subset&                  rSubset ) const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
 
-                // polygon only contains a single action, fail if subset
-                // requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return false;
@@ -324,11 +324,11 @@ namespace cppcanvas
             ::basegfx::B2DRange TexturedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                                    const Subset&                    rSubset ) const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
 
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return ::basegfx::B2DRange();
@@ -338,12 +338,12 @@ namespace cppcanvas
 
             sal_Int32 TexturedPolyPolyAction::getActionCount() const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
                 return 1;
             }
 
-            // -------------------------------------------------------------------------------
+            
 
             class StrokedPolyPolyAction : public CachedPrimitiveBase
             {
@@ -408,11 +408,11 @@ namespace cppcanvas
             bool StrokedPolyPolyAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
                                                       const Subset&                   rSubset ) const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
 
-                // polygon only contains a single action, fail if subset
-                // requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return false;
@@ -434,11 +434,11 @@ namespace cppcanvas
             ::basegfx::B2DRange StrokedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                                   const Subset&                 rSubset ) const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
 
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return ::basegfx::B2DRange();
@@ -448,8 +448,8 @@ namespace cppcanvas
 
             sal_Int32 StrokedPolyPolyAction::getActionCount() const
             {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
+                
+                
                 return 1;
             }
         }

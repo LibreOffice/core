@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@
 #include <set>
 #include <string.h>
 
-// XML-header to query SPELLML support
+
 #define SPELLML_SUPPORT "<?xml?>"
 
 using namespace osl;
@@ -56,7 +56,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
@@ -125,7 +125,7 @@ PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
         pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        pPropHelper->AddAsPropListener();   
     }
     return *pPropHelper;
 }
@@ -136,14 +136,14 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // this routine should return the locales supported by the installed
-    // dictionaries.
+    
+    
 
     if (!numthes)
     {
         SvtLinguConfig aLinguCfg;
 
-        // get list of dictionaries-to-use
+        
         std::list< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
@@ -156,21 +156,21 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
 
-        //!! for compatibility with old dictionaries (the ones not using extensions
-        //!! or new configuration entries, but still using the dictionary.lst file)
-        //!! Get the list of old style spell checking dictionaries to use...
+        
+        
+        
         std::vector< SvtLinguConfigDictionaryEntry > aOldStyleDics(
                 GetOldStyleDics( "THES" ) );
 
-        // to prefer dictionaries with configuration entries we will only
-        // use those old style dictionaries that add a language that
-        // is not yet supported by the list od new style dictionaries
+        
+        
+        
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
         numthes = aDics.size();
         if (numthes)
         {
-            // get supported locales from the dictionaries-to-use...
+            
             sal_Int32 k = 0;
             std::set< OUString, lt_rtl_OUString > aLocaleNamesSet;
             std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
@@ -183,7 +183,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     aLocaleNamesSet.insert( aLocaleNames[k] );
                 }
             }
-            // ... and add them to the resulting sequence
+            
             aSuppLocales.realloc( aLocaleNamesSet.size() );
             std::set< OUString, lt_rtl_OUString >::const_iterator aItB;
             k = 0;
@@ -193,16 +193,16 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! For each dictionary and each locale we need a separate entry.
-            //! If this results in more than one dictionary per locale than (for now)
-            //! it is undefined which dictionary gets used.
-            //! In the future the implementation should support using several dictionaries
-            //! for one locale.
+            
+            
+            
+            
+            
             numthes = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
                 numthes = numthes + aDictIt->aLocaleNames.getLength();
 
-            // add dictionary information
+            
             aThes   = new MyThes* [numthes];
             aTEncs  = new rtl_TextEncoding [numthes];
             aTLocs  = new Locale [numthes];
@@ -218,9 +218,9 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                     sal_Int32 nLocales = aLocaleNames.getLength();
 
-                    // currently only one language per dictionary is supported in the actual implementation...
-                    // Thus here we work-around this by adding the same dictionary several times.
-                    // Once for each of it's supported locales.
+                    
+                    
+                    
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );
@@ -228,9 +228,9 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                         aTEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aTLocs[k]  = aLanguageTag.getLocale();
                         aCharSetInfo[k] = new CharClass( aLanguageTag );
-                        // also both files have to be in the same directory and the
-                        // file names must only differ in the extension (.aff/.dic).
-                        // Thus we use the first location only and strip the extension part.
+                        
+                        
+                        
                         OUString aLocation = aDictIt->aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
@@ -325,12 +325,12 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
     CharClass * pCC = NULL;
 
-    // find the first thesaurus that matches the locale
+    
     for (int i =0; i < numthes; i++)
     {
         if (rLocale == aTLocs[i])
         {
-            // open up and intialize this thesaurus if need be
+            
             if (!aThes[i])
             {
                 OUString datpath = aTNames[i] + ".dat";
@@ -343,10 +343,10 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                 OString aTmpdat(OU2ENC(ndat,osl_getThreadTextEncoding()));
 
 #if defined(WNT)
-                // workaround for Windows specific problem that the
-                // path length in calls to 'fopen' is limted to somewhat
-                // about 120+ characters which will usually be exceed when
-                // using dictionaries as extensions.
+                
+                
+                
+                
                 aTmpidx = Win_GetShortPathName( nidx );
                 aTmpdat = Win_GetShortPathName( ndat );
 #endif
@@ -364,17 +364,17 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
         }
     }
 
-    // we don't want to work with a default text encoding since following incorrect
-    // results may occur only for specific text and thus may be hard to notice.
-    // Thus better always make a clean exit here if the text encoding is in question.
-    // Hopefully something not working at all will raise proper attention quickly. ;-)
+    
+    
+    
+    
     DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
     if (eEnc == RTL_TEXTENCODING_DONTKNOW)
         return noMeanings;
 
     while (pTH)
     {
-        // convert word to all lower case for searching
+        
         if (!stem)
             ct = capitalType(rTerm, pCC);
         OUString nTerm(makeLowerCase(rTerm, pCC));
@@ -420,12 +420,12 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     OUString catst2;
                     if (catpos > 2)
                     {
-                        // remove category name for affixation and casing
+                        
                         catst = " " + sTerm.copy(catpos);
                         sTerm = sTerm.copy(0, catpos);
                         sTerm = sTerm.trim();
                     }
-                    // generate synonyms with affixes
+                    
                     if (stem && stem2)
                     {
                         Reference< XSpellAlternatives > xTmpRes;
@@ -494,12 +494,12 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
             Sequence<OUString>seq = xTmpRes->getAlternatives();
             if (seq.getLength() > 0)
             {
-                rTerm = seq[0];  // XXX Use only the first stem
+                rTerm = seq[0];  
                 continue;
             }
         }
 
-        // stem the last word of the synonym (for categories after affixation)
+        
         rTerm = rTerm.trim();
         sal_Int32 pos = rTerm.lastIndexOf(' ');
         if (!pos)
@@ -559,12 +559,12 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
             Reference< XLinguProperties >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            
+            
+            
+            
             pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            pPropHelper->AddAsPropListener();   
         }
         else
             OSL_FAIL( "wrong number of arguments in sequence" );
@@ -647,7 +647,7 @@ void SAL_CALL Thesaurus::removeEventListener( const Reference< XEventListener >&
         aEvtListeners.removeInterface( rxListener );
 }
 
-// Service specific part
+
 OUString SAL_CALL Thesaurus::getImplementationName()
         throw(RuntimeException)
 {
@@ -674,7 +674,7 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 ); 
     aSNS.getArray()[0] = SN_THESAURUS;
     return aSNS;
 }
@@ -692,7 +692,7 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
                 Thesaurus::getImplementationName_Static(),
                 Thesaurus_CreateInstance,
                 Thesaurus::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }
@@ -700,6 +700,6 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

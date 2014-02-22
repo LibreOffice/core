@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Title.hxx"
@@ -159,10 +159,10 @@ private:
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-        // ParagraphProperties
+        
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_ADJUST,
                                                           ::com::sun::star::style::ParagraphAdjust_CENTER );
-        // PROP_TITLE_PARA_LAST_LINE_ADJUST
+        
 
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_LEFT_MARGIN, 0 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_RIGHT_MARGIN, 0 );
@@ -170,11 +170,11 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_IS_HYPHENATION, true );
 
-        // own properties
+        
         ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_TITLE_TEXT_ROTATION, 0.0 );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_TEXT_STACKED, false );
 
-        // override other defaults
+        
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
     }
@@ -226,7 +226,7 @@ struct StaticTitleInfo : public rtl::StaticAggregate< uno::Reference< beans::XPr
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -254,14 +254,14 @@ Title::~Title()
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new Title( *this ));
 }
 
-// ____ XTitle ____
+
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
     throw (uno::RuntimeException)
 {
@@ -278,7 +278,7 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
         std::swap( m_aStrings, aOldStrings );
         m_aStrings = rNewStrings;
     }
-    //don't keep the mutex locked while calling out
+    
     ModifyListenerHelper::removeListenerFromAllElements(
         ContainerHelper::SequenceToVector( aOldStrings ), m_xModifyEventForwarder );
     ModifyListenerHelper::addListenerToAllElements(
@@ -286,7 +286,7 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
     fireModifyEvent();
 }
 
-// ____ OPropertySet ____
+
 uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -302,14 +302,14 @@ uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticTitleInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticTitleInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -338,21 +338,21 @@ void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyLi
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL Title::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL Title::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void Title::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -373,15 +373,15 @@ uno::Sequence< OUString > Title::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( Title, lcl_aServiceName );
 
-// needed by MSC compiler
+
 using impl::Title_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( Title, Title_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Title, Title_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

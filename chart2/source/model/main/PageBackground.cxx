@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PageBackground.hxx"
@@ -56,7 +56,7 @@ private:
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-        // override other defaults
+        
         ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff );
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
     }
@@ -108,7 +108,7 @@ struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< b
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -130,14 +130,14 @@ PageBackground::PageBackground( const PageBackground & rOther ) :
 PageBackground::~PageBackground()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new PageBackground( *this ));
 }
 
-// ____ OPropertySet ____
+
 uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -153,14 +153,14 @@ uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticPageBackgroundInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticPageBackgroundInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL PageBackground::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -189,21 +189,21 @@ void SAL_CALL PageBackground::removeModifyListener( const uno::Reference< util::
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL PageBackground::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL PageBackground::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void PageBackground::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -222,13 +222,13 @@ uno::Sequence< OUString > PageBackground::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PageBackground, lcl_aServiceName );
 
 using impl::PageBackground_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( PageBackground, PageBackground_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

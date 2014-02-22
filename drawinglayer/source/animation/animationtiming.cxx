@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,19 +14,19 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
     namespace animation
     {
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         AnimationEntry::AnimationEntry()
         {
@@ -36,7 +36,7 @@ namespace drawinglayer
         {
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
         :   mfDuration(fDuration),
@@ -84,7 +84,7 @@ namespace drawinglayer
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         AnimationEntryLinear::AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop)
         :   mfDuration(fDuration),
@@ -143,9 +143,9 @@ namespace drawinglayer
         {
             if(basegfx::fTools::less(fTime, mfDuration))
             {
-                // use the simple solution: just add the frequency. More correct (but also more
-                // complicated) would be to calculate the slice of time we are in and when this
-                // slice will end. For the animations, this makes no quality difference.
+                
+                
+                
                 fTime += mfFrequency;
 
                 if(basegfx::fTools::more(fTime, mfDuration))
@@ -161,7 +161,7 @@ namespace drawinglayer
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         sal_uInt32 AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
         {
@@ -270,7 +270,7 @@ namespace drawinglayer
             return fNewTime;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        
 
         AnimationEntryLoop::AnimationEntryLoop(sal_uInt32 nRepeat)
         :   AnimationEntryList(),
@@ -352,7 +352,7 @@ namespace drawinglayer
 
             return fNewTime;
         }
-    } // end of namespace animation
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

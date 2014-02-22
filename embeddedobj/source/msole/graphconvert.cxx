@@ -45,7 +45,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                                 const OUString& aMimeType,
                                 uno::Any& aResult )
 {
-    // produces sequence with data in requested format and returns it in aResult
+    
     if ( pBuf )
     {
         uno::Sequence < sal_Int8 > aData( (sal_Int8*)pBuf, nBufSize );
@@ -79,9 +79,9 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
     return sal_False;
 }
 
-// =====================================================================
-// MainThreadNotificationRequest
-// =====================================================================
+
+
+
 MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect )
 : m_pObject( xObj.get() )
 , m_xObject( static_cast< embed::XEmbeddedObject* >( xObj.get() ) )
@@ -98,7 +98,7 @@ void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (un
             uno::Reference< uno::XInterface > xLock = m_xObject.get();
             if ( xLock.is() )
             {
-                // this is the main thread, the solar mutex must be locked
+                
                 if ( m_nNotificationType == OLECOMP_ONCLOSE )
                     m_pObject->OnClosed_Impl();
                 else if ( m_nAspect == embed::Aspects::MSOLE_CONTENT )
@@ -109,7 +109,7 @@ void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (un
         }
         catch( const uno::Exception& )
         {
-            // ignore all the errors
+            
         }
     }
 }

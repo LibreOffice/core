@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/propertystatecontainer.hxx"
 #include <rtl/ustrbuf.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -33,10 +33,10 @@ namespace comphelper
     {
         static OUString lcl_getUnknownPropertyErrorMessage( const OUString& _rPropertyName )
         {
-            // TODO: perhaps it's time to think about resources in the comphelper module?
-            // Would be nice to have localized exception strings (a simply resource file containing
-            // strings only would suffice, and could be realized with an UNO service, so we do not
-            // need the dependency to the Tools project)
+            
+            
+            
+            
             OUStringBuffer sMessage;
             sMessage.appendAscii( "The property \"" );
             sMessage.append( _rPropertyName );
@@ -45,16 +45,16 @@ namespace comphelper
         }
     }
 
-    //=====================================================================
-    //= OPropertyStateContainer
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OPropertyStateContainer::OPropertyStateContainer( ::cppu::OBroadcastHelper& _rBHelper )
         :OPropertyContainer( _rBHelper )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL OPropertyStateContainer::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn = OPropertyContainer::queryInterface( _rType );
@@ -63,13 +63,13 @@ namespace comphelper
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyStateContainer, OPropertyContainer, OPropertyStateContainer_TBase )
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 OPropertyStateContainer::getHandleForName( const OUString& _rPropertyName ) SAL_THROW( ( UnknownPropertyException ) )
     {
-        // look up the handle for the name
+        
         ::cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName( _rPropertyName );
 
@@ -79,13 +79,13 @@ namespace comphelper
         return nHandle;
     }
 
-    //--------------------------------------------------------------------
+    
     PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         return getPropertyStateByHandle( getHandleForName( _rPropertyName ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames ) throw (UnknownPropertyException, RuntimeException)
     {
         sal_Int32 nProperties = _rPropertyNames.getLength();
@@ -94,7 +94,7 @@ namespace comphelper
             return aStates;
 
 #ifdef _DEBUG
-        // precondition: property sequence is sorted (the algorithm below relies on this)
+        
         {
             const OUString* pNames = _rPropertyNames.getConstArray();
             const OUString* pNamesCompare = pNames + 1;
@@ -131,20 +131,20 @@ namespace comphelper
         }
 
         if ( pLookup != pLookupEnd )
-            // we run out of properties from the IPropertyArrayHelper, but still have properties to lookup
-            // -> we were asked for a nonexistent property
+            
+            
             throw UnknownPropertyException( lcl_getUnknownPropertyErrorMessage( *pLookup ), static_cast< XPropertyState* >( this ) );
 
         return aStates;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         setPropertyToDefaultByHandle( getHandleForName( _rPropertyName ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         Any aDefault;
@@ -152,10 +152,10 @@ namespace comphelper
         return aDefault;
     }
 
-    //--------------------------------------------------------------------
+    
     PropertyState OPropertyStateContainer::getPropertyStateByHandle( sal_Int32 _nHandle )
     {
-        // simply compare the current and the default value
+        
         Any aCurrentValue; getFastPropertyValue( aCurrentValue, _nHandle );
         Any aDefaultValue; getPropertyDefaultByHandle( _nHandle, aDefaultValue );
 
@@ -171,7 +171,7 @@ namespace comphelper
             return PropertyState_DIRECT_VALUE;
     }
 
-    //--------------------------------------------------------------------
+    
     void OPropertyStateContainer::setPropertyToDefaultByHandle( sal_Int32 _nHandle )
     {
         Any aDefault;
@@ -179,8 +179,8 @@ namespace comphelper
         setFastPropertyValue( _nHandle, aDefault );
     }
 
-//.........................................................................
-}   // namespace comphelper
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

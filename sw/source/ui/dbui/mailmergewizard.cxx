@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <mailmergewizard.hxx>
@@ -69,7 +69,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);
     m_pPrevPage->SetHelpId(HID_MM_PREV_PAGE);
 
-    //#i51949# no output type page visible if e-Mail is not supported
+    
     if(rItem.IsMailAvailable())
         declarePath(
             0,
@@ -147,9 +147,9 @@ void SwMailMergeWizard::enterState( WizardState _nState )
     }
     else if(_nState < MM_MERGEPAGE && m_rConfigItem.GetTargetView())
     {
-        //close the dialog, remove the target view, show the source view
+        
         m_nRestartPage = _nState;
-        //set ResultSet back to start
+        
         m_rConfigItem.MoveResultSet(1);
         EndDialog(RET_REMOVE_TARGET);
         return;
@@ -219,7 +219,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     MM_OUTPUTPAGE               > only active if address data has been selected
 */
 
-    // enableState( <page id>, false );
+    
     const sal_uInt16 nCurPage = GetCurLevel();
     TabPage* pCurPage = GetPage( nCurPage );
     if(!pCurPage)
@@ -231,7 +231,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(sal_False) ||
             !m_rConfigItem.IsIndividualGreeting(sal_False)||
                     m_rConfigItem.IsGreetingFieldsAssigned();
-    //#i97436# if a document has to be loaded then enable output type page only
+    
     m_bDocumentLoad = false;
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
         static_cast<svt::OWizardPage*>(pCurPage)->commitPage( ::svt::WizardTypes::eValidate );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -93,17 +93,17 @@ struct XMLShapeImportPageContextImpl
 /** this class is to enable adding members to the XMLShapeImportHelper without getting incompatible */
 struct XMLShapeImportHelperImpl
 {
-    // context for sorting shapes
+    
     ShapeSortContext*           mpSortContext;
 
     IdShapeMap                  maShapeIds;
 
     std::vector<ConnectionHint> maConnections;
 
-    // #88546# possibility to swich progress bar handling on/off
+    
     sal_Bool                    mbHandleProgressBar;
 
-    // stores the capability of the current model to create presentation shapes
+    
     sal_Bool                    mbIsPresentationShapesSupported;
 };
 
@@ -139,18 +139,18 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpImpl = new XMLShapeImportHelperImpl();
     mpImpl->mpSortContext = 0;
 
-    // #88546# init to sal_False
+    
     mpImpl->mbHandleProgressBar = sal_False;
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );
 
-    // set lock to avoid deletion
+    
     mpSdPropHdlFactory->acquire();
 
-    // construct PropertySetMapper
+    
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
     mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
-    // set lock to avoid deletion
+    
     mpPropertySetMapper->acquire();
 
     if( pExtMapper )
@@ -159,16 +159,16 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         mpPropertySetMapper->ChainImportMapper( xExtMapper );
     }
 
-    // chain text attributes
+    
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImporter));
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
 
-    // construct PresPagePropsMapper
+    
     xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory, false);
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     if(mpPresPagePropsMapper)
     {
-        // set lock to avoid deletion
+        
         mpPresPagePropsMapper->acquire();
     }
 
@@ -181,21 +181,21 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
 {
     DBG_ASSERT( mpImpl->maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
 
-    // cleanup factory, decrease refcount. Should lead to destruction.
+    
     if(mpSdPropHdlFactory)
     {
         mpSdPropHdlFactory->release();
         mpSdPropHdlFactory = 0L;
     }
 
-    // cleanup mapper, decrease refcount. Should lead to destruction.
+    
     if(mpPropertySetMapper)
     {
         mpPropertySetMapper->release();
         mpPropertySetMapper = 0L;
     }
 
-    // cleanup presPage mapper, decrease refcount. Should lead to destruction.
+    
     if(mpPresPagePropsMapper)
     {
         mpPresPagePropsMapper->release();
@@ -215,7 +215,7 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     if(mp3DSceneShapeAttrTokenMap) delete mp3DSceneShapeAttrTokenMap;
     if(mp3DLightAttrTokenMap) delete mp3DLightAttrTokenMap;
 
-    // Styles or AutoStyles context?
+    
     if(mpStylesContext)
     {
         mpStylesContext->Clear();
@@ -266,7 +266,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
 };
 
         mpGroupShapeElemTokenMap = new SvXMLTokenMap(aGroupShapeElemTokenMap);
-    } // if(!mpGroupShapeElemTokenMap)
+    } 
 
     return *mpGroupShapeElemTokenMap;
 }
@@ -289,7 +289,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
 };
 
         mpFrameShapeElemTokenMap = new SvXMLTokenMap(aFrameShapeElemTokenMap);
-    } // if(!mpFrameShapeElemTokenMap)
+    } 
 
     return *mpFrameShapeElemTokenMap;
 }
@@ -309,7 +309,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
 };
 
         mp3DSceneShapeElemTokenMap = new SvXMLTokenMap(a3DSceneShapeElemTokenMap);
-    } // if(!mp3DSceneShapeElemTokenMap)
+    } 
 
     return *mp3DSceneShapeElemTokenMap;
 }
@@ -326,7 +326,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
 };
 
         mp3DObjectAttrTokenMap = new SvXMLTokenMap(a3DObjectAttrTokenMap);
-    } // if(!mp3DObjectAttrTokenMap)
+    } 
 
     return *mp3DObjectAttrTokenMap;
 }
@@ -343,7 +343,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
 };
 
         mp3DPolygonBasedAttrTokenMap = new SvXMLTokenMap(a3DPolygonBasedAttrTokenMap);
-    } // if(!mp3DPolygonBasedAttrTokenMap)
+    } 
 
     return *mp3DPolygonBasedAttrTokenMap;
 }
@@ -360,7 +360,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
 };
 
         mp3DCubeObjectAttrTokenMap = new SvXMLTokenMap(a3DCubeObjectAttrTokenMap);
-    } // if(!mp3DCubeObjectAttrTokenMap)
+    } 
 
     return *mp3DCubeObjectAttrTokenMap;
 }
@@ -377,7 +377,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 };
 
         mp3DSphereObjectAttrTokenMap = new SvXMLTokenMap(a3DSphereObjectAttrTokenMap);
-    } // if(!mp3DSphereObjectAttrTokenMap)
+    } 
 
     return *mp3DSphereObjectAttrTokenMap;
 }
@@ -396,7 +396,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 };
 
         mp3DLightAttrTokenMap = new SvXMLTokenMap(a3DLightAttrTokenMap);
-    } // if(!mp3DLightAttrTokenMap)
+    } 
 
     return *mp3DLightAttrTokenMap;
 }
@@ -417,38 +417,38 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
         {
             case XML_TOK_3DSCENE_3DSCENE:
             {
-                // dr3d:3dscene inside dr3d:3dscene context
+                
                 pContext = new SdXML3DSceneShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DCUBE:
             {
-                // dr3d:3dcube inside dr3d:3dscene context
+                
                 pContext = new SdXML3DCubeObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DSPHERE:
             {
-                // dr3d:3dsphere inside dr3d:3dscene context
+                
                 pContext = new SdXML3DSphereObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DLATHE:
             {
-                // dr3d:3dlathe inside dr3d:3dscene context
+                
                 pContext = new SdXML3DLatheObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DEXTRUDE:
             {
-                // dr3d:3dextrude inside dr3d:3dscene context
+                
                 pContext = new SdXML3DExtrudeObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
         }
     }
 
-    // now parse the attribute list and call the child context for each unknown attribute
+    
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 a(0); a < nAttrCount; a++)
     {
@@ -492,95 +492,95 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     {
         case XML_TOK_GROUP_GROUP:
         {
-            // draw:g inside group context (RECURSIVE)
+            
             pContext = new SdXMLGroupShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
             break;
         }
         case XML_TOK_GROUP_3DSCENE:
         {
-            // dr3d:3dscene inside group context
+            
             pContext = new SdXML3DSceneShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
             break;
         }
         case XML_TOK_GROUP_RECT:
         {
-            // draw:rect inside group context
+            
             pContext = new SdXMLRectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_LINE:
         {
-            // draw:line inside group context
+            
             pContext = new SdXMLLineShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CIRCLE:
         case XML_TOK_GROUP_ELLIPSE:
         {
-            // draw:circle or draw:ellipse inside group context
+            
             pContext = new SdXMLEllipseShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_POLYGON:
         case XML_TOK_GROUP_POLYLINE:
         {
-            // draw:polygon or draw:polyline inside group context
+            
             pContext = new SdXMLPolygonShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes,
                 rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? sal_True : sal_False, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PATH:
         {
-            // draw:path inside group context
+            
             pContext = new SdXMLPathShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
             break;
         }
         case XML_TOK_GROUP_FRAME:
         {
-            // text:text-box inside group context
+            
             pContext = new SdXMLFrameShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CONTROL:
         {
-            // draw:control inside group context
+            
             pContext = new SdXMLControlShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CONNECTOR:
         {
-            // draw:connector inside group context
+            
             pContext = new SdXMLConnectorShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_MEASURE:
         {
-            // draw:measure inside group context
+            
             pContext = new SdXMLMeasureShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PAGE:
         {
-            // draw:page inside group context
+            
             pContext = new SdXMLPageShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CAPTION:
         case XML_TOK_GROUP_ANNOTATION:
         {
-            // draw:caption inside group context
+            
             pContext = new SdXMLCaptionShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CHART:
         {
-            // chart:chart inside group context
+            
             pContext = new SdXMLChartShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CUSTOM_SHAPE:
         {
-            // draw:customshape
+            
             pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
@@ -588,12 +588,12 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
          {
              return new SdXMLShapeLinkContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
          }
-        // add other shapes here...
+        
         default:
             return new SvXMLShapeContext( rImport, p_nPrefix, rLocalName, bTemporaryShape );
     }
 
-    // now parse the attribute list and call the child context for each unknown attribute
+    
     for(sal_Int16 a(0); a < nAttrCount; a++)
     {
         const OUString& rAttrName = xAttrList->getNameByIndex(a);
@@ -607,7 +607,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     return pContext;
 }
 
-// This method is called from SdXMLFrameContext to create children of drawe:frame
+
 SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImport& rImport,
     sal_uInt16 p_nPrefix,
@@ -629,26 +629,26 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     {
         case XML_TOK_FRAME_TEXT_BOX:
         {
-            // text:text-box inside group context
+            
             pContext = new SdXMLTextBoxShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_IMAGE:
         {
-            // office:image inside group context
+            
             pContext = new SdXMLGraphicObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_OBJECT:
         case XML_TOK_FRAME_OBJECT_OLE:
         {
-            // draw:object or draw:object_ole
+            
             pContext = new SdXMLObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_TABLE:
         {
-            // draw:object or draw:object_ole
+            
             if( rImport.IsTableShapeSupported() )
                 pContext = new SdXMLTableShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
             break;
@@ -656,30 +656,30 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         }
         case XML_TOK_FRAME_PLUGIN:
         {
-            // draw:plugin
+            
             pContext = new SdXMLPluginShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_FLOATING_FRAME:
         {
-            // draw:floating-frame
+            
             pContext = new SdXMLFloatingFrameShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_APPLET:
         {
-            // draw:applet
+            
             pContext = new SdXMLAppletShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
-        // add other shapes here...
+        
         default:
             break;
     }
 
     if( pContext )
     {
-        // now parse the attribute list and call the child context for each unknown attribute
+        
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 a(0); a < nAttrCount; a++)
         {
@@ -719,7 +719,7 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
 {
     if( rShape.is() && rShapes.is() )
     {
-        // add new shape to parent
+        
         rShapes->add( rShape );
     }
 }
@@ -762,7 +762,7 @@ void XMLShapeImportHelper::finishShape(
     }
 }
 
-// helper functions for z-order sorting
+
 struct ZOrderHint
 {
     sal_Int32 nIs;
@@ -848,17 +848,17 @@ void XMLShapeImportHelper::popGroupAndSort()
         list<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
         list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
 
-        // sort shapes
+        
         if( !rZList.empty() )
         {
-            // only do something if we have shapes to sort
+            
 
-            // check if there are more shapes than inserted with ::shapeWithZIndexAdded()
-            // This can happen if there where already shapes on the page before import
-            // Since the writer may delete some of this shapes during import, we need
-            // to do this here and not in our c'tor anymore
+            
+            
+            
+            
 
-            // check if we have more shapes than we know of
+            
             sal_Int32 nCount = mpImpl->mpSortContext->mxShapes->getCount();
 
             nCount -= rZList.size();
@@ -866,7 +866,7 @@ void XMLShapeImportHelper::popGroupAndSort()
 
             if( nCount > 0 )
             {
-                // first update offsets of added shapes
+                
                 list<ZOrderHint>::iterator aIter( rZList.begin() );
                 while( aIter != rZList.end() )
                     (*aIter++).nIs += nCount;
@@ -875,7 +875,7 @@ void XMLShapeImportHelper::popGroupAndSort()
                 while( aIter != rUnsortedList.end() )
                     (*aIter++).nIs += nCount;
 
-                // second add the already existing shapes in the unsorted list
+                
                 ZOrderHint aNewHint;
 
                 do
@@ -890,11 +890,11 @@ void XMLShapeImportHelper::popGroupAndSort()
                 while( nCount );
             }
 
-            // sort z ordered shapes
+            
             rZList.sort();
 
-            // this is the current index, all shapes before that
-            // index are finished
+            
+            
             sal_Int32 nIndex = 0;
             while( !rZList.empty() )
             {
@@ -921,7 +921,7 @@ void XMLShapeImportHelper::popGroupAndSort()
         OSL_FAIL("exception while sorting shapes, sorting failed!");
     }
 
-    // put parent on top and delete current context, were done
+    
     ShapeSortContext* pContext = mpImpl->mpSortContext;
     mpImpl->mpSortContext = pContext->mpParentContext;
     delete pContext;
@@ -937,12 +937,12 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
 
         if( nZIndex == -1 )
         {
-            // don't care, so add to unsorted list
+            
             mpImpl->mpSortContext->maUnsortedList.push_back(aNewHint);
         }
         else
         {
-            // insert into sort list
+            
             mpImpl->mpSortContext->maZOrderList.push_back(aNewHint);
         }
     }
@@ -975,7 +975,7 @@ void XMLShapeImportHelper::restoreConnections()
             uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
             if( xConnector.is() )
             {
-                // #86637# remember line deltas
+                
                 uno::Any aLine1Delta;
                 uno::Any aLine2Delta;
                 uno::Any aLine3Delta;
@@ -986,9 +986,9 @@ void XMLShapeImportHelper::restoreConnections()
                 aLine2Delta = xConnector->getPropertyValue(aStr2);
                 aLine3Delta = xConnector->getPropertyValue(aStr3);
 
-                // #86637# simply setting these values WILL force the connector to do
-                // an new layout promptly. So the line delta values have to be rescued
-                // and restored around connector changes.
+                
+                
+                
                 uno::Reference< drawing::XShape > xShape(
                     mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
                 if( xShape.is() )
@@ -1001,7 +1001,7 @@ void XMLShapeImportHelper::restoreConnections()
                     xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
                 }
 
-                // #86637# restore line deltas
+                
                 xConnector->setPropertyValue(aStr1, aLine1Delta );
                 xConnector->setPropertyValue(aStr2, aLine2Delta );
                 xConnector->setPropertyValue(aStr3, aLine3Delta );
@@ -1017,7 +1017,7 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, false );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
-    // chain text attributes
+    
     pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper( rImport ) );
     return pResult;
 }
@@ -1125,7 +1125,7 @@ rShapes
     mpPageContext = pNextContext;
 }
 
-// #88546#
+
 /** defines if the import should increment the progress bar or not */
 void XMLShapeImportHelper::enableHandleProgressBar( sal_Bool bEnable )
 {

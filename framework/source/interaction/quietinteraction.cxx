@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "interaction/quietinteraction.hxx"
@@ -41,7 +41,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 
 QuietInteraction::QuietInteraction()
     : ThreadHelpBase     ( &Application::GetSolarMutex() )
@@ -49,11 +49,11 @@ QuietInteraction::QuietInteraction()
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException )
 {
-    // safe the request for outside analyzing everytime!
+    
     css::uno::Any aRequest = xRequest->getRequest();
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
@@ -61,9 +61,9 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     aWriteLock.unlock();
     /* } SAFE */
 
-    // analyze the request
-    // We need XAbort as possible continuation as minimum!
-    // An optional filter selection we can handle too.
+    
+    
+    
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
     css::uno::Reference< css::task::XInteractionAbort >                              xAbort     ;
     css::uno::Reference< css::task::XInteractionApprove >                            xApprove   ;
@@ -86,8 +86,8 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
             xFOptions = css::uno::Reference< css::document::XInteractionFilterOptions >( lContinuations[i], css::uno::UNO_QUERY );
     }
 
-    // differ between abortable interactions (error, unknown filter ...)
-    // and other ones (ambigous but not unknown filter ...)
+    
+    
     css::task::ErrorCodeRequest          aErrorCodeRequest     ;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     css::document::LockedDocumentRequest aLockedDocumentRequest;
@@ -97,7 +97,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     {
         if (xFilter.is())
         {
-            // user selected filter wins everytime!
+            
             xFilter->setFilter( aAmbigousFilterRequest.SelectedFilter );
             xFilter->select();
         }
@@ -105,8 +105,8 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     else
     if( aRequest >>= aErrorCodeRequest )
     {
-        // warnings can be ignored   => approve
-        // errors must break loading => abort
+        
+        
         sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK;
         if (xApprove.is() && bWarning)
             xApprove->select();
@@ -117,7 +117,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     else
     if( aRequest >>= aLockedDocumentRequest )
     {
-        // the locked document should be opened readonly by default
+        
         if (xApprove.is())
             xApprove->select();
         else
@@ -129,7 +129,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     {
         if (xFOptions.is())
         {
-            // let the default filter options be used
+            
             xFOptions->select();
         }
     }
@@ -138,7 +138,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
         xAbort->select();
 }
 
-//_________________________________________________________________________________________________________________
+
 
 css::uno::Any QuietInteraction::getRequest() const
 {
@@ -148,7 +148,7 @@ css::uno::Any QuietInteraction::getRequest() const
     /* } SAFE */
 }
 
-//_________________________________________________________________________________________________________________
+
 
 sal_Bool QuietInteraction::wasUsed() const
 {
@@ -158,6 +158,6 @@ sal_Bool QuietInteraction::wasUsed() const
     /* } SAFE */
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

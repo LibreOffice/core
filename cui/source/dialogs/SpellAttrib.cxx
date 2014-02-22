@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <SpellAttrib.hxx>
@@ -26,7 +26,7 @@ using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
 
 
-//-----------------------------------------------------------------------
+
 SpellErrorAttrib::SpellErrorAttrib( const SpellErrorDescription& rDesc ) :
     TextAttrib(TEXTATTR_SPELL_ERROR),
     m_aSpellErrorDescription( rDesc )
@@ -34,107 +34,107 @@ SpellErrorAttrib::SpellErrorAttrib( const SpellErrorDescription& rDesc ) :
 }
 
 
-//-----------------------------------------------------------------------
+
 SpellErrorAttrib::SpellErrorAttrib( const SpellErrorAttrib& rAttr ) :
     TextAttrib(TEXTATTR_SPELL_ERROR),
     m_aSpellErrorDescription( rAttr.m_aSpellErrorDescription )
 {
 }
 
-//-----------------------------------------------------------------------
+
 SpellErrorAttrib::~SpellErrorAttrib()
 {
 }
 
-//-----------------------------------------------------------------------
+
 void SpellErrorAttrib::SetFont( Font&  ) const
 {
-    //this attribute doesn't have a visual effect
+    
 }
 
-//-----------------------------------------------------------------------
+
 TextAttrib*     SpellErrorAttrib::Clone() const
 {
     return new SpellErrorAttrib(*this);
 }
 
-//-----------------------------------------------------------------------
+
 bool SpellErrorAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&
             m_aSpellErrorDescription == static_cast<const SpellErrorAttrib&>(rAttr).m_aSpellErrorDescription;
 }
 
-//-----------------------------------------------------------------------
+
 SpellLanguageAttrib::SpellLanguageAttrib(LanguageType eLang) :
     TextAttrib(TEXTATTR_SPELL_LANGUAGE),
     m_eLanguage(eLang)
 {
 }
 
-//-----------------------------------------------------------------------
+
 SpellLanguageAttrib::SpellLanguageAttrib( const SpellLanguageAttrib& rAttr ) :
     TextAttrib(TEXTATTR_SPELL_LANGUAGE),
     m_eLanguage(rAttr.m_eLanguage)
 {
 }
 
-//-----------------------------------------------------------------------
+
 SpellLanguageAttrib::~SpellLanguageAttrib()
 {
 }
 
-//-----------------------------------------------------------------------
+
 void SpellLanguageAttrib::SetFont( Font&  ) const
 {
-    //no visual effect
+    
 }
 
-//-----------------------------------------------------------------------
+
 TextAttrib* SpellLanguageAttrib::Clone() const
 {
     return new SpellLanguageAttrib(*this);
 }
 
-//-----------------------------------------------------------------------
+
 bool SpellLanguageAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&
             m_eLanguage == static_cast<const SpellLanguageAttrib&>(rAttr).m_eLanguage;
 }
 
-//-----------------------------------------------------------------------
+
 SpellBackgroundAttrib::SpellBackgroundAttrib(const Color& rCol) :
     TextAttrib(TEXTATTR_SPELL_BACKGROUND),
     m_aBackgroundColor(rCol)
 {
 }
 
-//-----------------------------------------------------------------------
+
 SpellBackgroundAttrib::SpellBackgroundAttrib( const SpellBackgroundAttrib& rAttr ) :
     TextAttrib(TEXTATTR_SPELL_BACKGROUND),
     m_aBackgroundColor(rAttr.m_aBackgroundColor)
 {
 }
 
-//-----------------------------------------------------------------------
+
 SpellBackgroundAttrib::~SpellBackgroundAttrib()
 {
 }
 
-//-----------------------------------------------------------------------
+
 void SpellBackgroundAttrib::SetFont( Font& rFont ) const
 {
     rFont.SetFillColor(m_aBackgroundColor);
 }
 
-//-----------------------------------------------------------------------
+
 TextAttrib* SpellBackgroundAttrib::Clone() const
 {
     return new SpellBackgroundAttrib(*this);
 }
 
-//-----------------------------------------------------------------------
+
 bool SpellBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&

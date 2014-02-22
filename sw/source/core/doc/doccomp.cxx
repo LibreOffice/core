@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -69,21 +69,21 @@ protected:
     vector< CompareLine* > aLines;
     sal_uLong nSttLineNum;
 
-    // Truncate beginning and end and add all others to the LinesArray
+    
     virtual void CheckRanges( CompareData& ) = 0;
 
 public:
     CompareData();
     virtual ~CompareData();
 
-    // Are there differences?
+    
     bool HasDiffs( const CompareData& rData ) const;
 
-    // Triggers the comparison and creation of two documents
+    
     void CompareLines( CompareData& rData );
-    // Display the differences - calls the methods ShowInsert and ShowDelete.
-    // These are passed the start and end line number.
-    // Displaying the actually content is to be handled by the subclass!
+    
+    
+    
     sal_uLong ShowDiffs( const CompareData& rData );
 
     virtual void ShowInsert( sal_uLong nStt, sal_uLong nEnd );
@@ -93,12 +93,12 @@ public:
                                     sal_uLong& nStt, sal_uLong& nEnd,
                                     sal_uLong& nThisStt, sal_uLong& nThisEnd );
 
-    // Set non-ambiguous index for a line. Same lines have the same index, even in the other CompareData!
+    
     void SetIndex( size_t nLine, size_t nIndex );
     size_t GetIndex( size_t nLine ) const
         { return nLine < aLines.size() ? pIndex[ nLine ] : 0; }
 
-    // Set/get of a line has changed
+    
     void SetChanged( size_t nLine, bool bFlag = true );
     bool GetChanged( size_t nLine ) const
         {
@@ -157,7 +157,7 @@ public:
     };
 
 private:
-    /// Look for the moved lines
+    
     class CompareSequence
     {
         CompareData &rData1, &rData2;
@@ -194,8 +194,8 @@ public:
     virtual ~ArrayComparator() {}
 };
 
-/// Consider two lines equal if similar enough (e.g. look like different
-/// versions of the same paragraph)
+
+
 class LineArrayComparator : public ArrayComparator
 {
 private:
@@ -217,7 +217,7 @@ class WordArrayComparator : public ArrayComparator
 private:
     const SwTxtNode *pTxtNd1, *pTxtNd2;
     int *pPos1, *pPos2;
-    int nCnt1, nCnt2;		// number of words
+    int nCnt1, nCnt2;		
 
     void CalcPositions( int *pPos, const SwTxtNode *pTxtNd, int &nCnt );
 
@@ -248,7 +248,7 @@ public:
     virtual int GetLen2() const { return pTxtNd2->GetTxt().getLength(); }
 };
 
-/// Options set in Tools->Options->Writer->Comparison
+
 struct CmpOptionsContainer
 {
     SvxCompareMode eCmpMode;
@@ -284,11 +284,11 @@ public:
                                 int nLcsLen, int nPieceLen );
 };
 
-/// Use Hirschberg's algorithm to find LCS in linear space
+
 class LgstCommonSubseq: public CommonSubseq
 {
 private:
-    static const int CUTOFF = 1<<20; // Stop recursion at this value
+    static const int CUTOFF = 1<<20; 
 
     int *pL1, *pL2;
     int *pBuff1, *pBuff2;
@@ -304,7 +304,7 @@ public:
     int Find( int *pSubseq1, int *pSubseq2 );
 };
 
-/// Find a common subsequence in linear time
+
 class FastCommonSubseq: private CommonSubseq
 {
 private:
@@ -387,14 +387,14 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
     {
         if( rData.GetChanged( nStt1 ) || GetChanged( nStt2 ) )
         {
-            // Find a region of different lines between two pairs of identical
-            // lines.
+            
+            
             sal_uLong nSav1 = nStt1, nSav2 = nStt2;
             while( nStt1 < nLen1 && rData.GetChanged( nStt1 )) ++nStt1;
             while( nStt2 < nLen2 && GetChanged( nStt2 )) ++nStt2;
 
-            // Check if there are changed lines (only slightly different) and
-            // compare them in detail.
+            
+            
             CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
 
             ++nCnt;
@@ -524,7 +524,7 @@ void Hash::CalcHashValue( CompareData& rData )
 Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
 {
     MovedData *pMD1, *pMD2;
-    // Look for the differing lines
+    
     {
         sal_Char* pDiscard1 = new sal_Char[ rData1.GetLineCount() ];
         sal_Char* pDiscard2 = new sal_Char[ rData2.GetLineCount() ];
@@ -534,16 +534,16 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
         memset( pCount1, 0, nDiff * sizeof( sal_uLong ));
         memset( pCount2, 0, nDiff * sizeof( sal_uLong ));
 
-        // find indices in CompareData which have been assigned multiple times
+        
         CountDifference( rData1, pCount1 );
         CountDifference( rData2, pCount2 );
 
-        // All which occur only once now have either been inserted or deleted.
-        // All which are also contained in the other one have been moved.
+        
+        
         SetDiscard( rData1, pDiscard1, pCount2 );
         SetDiscard( rData2, pDiscard2, pCount1 );
 
-        // forget the arrays again
+        
         delete [] pCount1; delete [] pCount2;
 
         CheckDiscard( rData1.GetLineCount(), pDiscard1 );
@@ -552,7 +552,7 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
         pMD1 = new MovedData( rData1, pDiscard1 );
         pMD2 = new MovedData( rData2, pDiscard2 );
 
-        // forget the arrays again
+        
         delete [] pDiscard1; delete [] pDiscard2;
     }
 
@@ -581,7 +581,7 @@ void Compare::SetDiscard( const CompareData& rData,
 {
     sal_uLong nLen = rData.GetLineCount();
 
-    // calculate Max with respect to the line count
+    
     sal_uInt16 nMax = 5;
     sal_uLong n;
 
@@ -736,7 +736,7 @@ Compare::MovedData::~MovedData()
     delete [] pLineNum;
 }
 
-/// Find the differing lines
+
 Compare::CompareSequence::CompareSequence(
                             CompareData& rD1, CompareData& rD2,
                             const MovedData& rMD1, const MovedData& rMD2 )
@@ -967,7 +967,7 @@ public:
 
     const SwNode& GetEndNode() const;
 
-    // for debugging
+    
     OUString GetText() const;
 };
 
@@ -1036,7 +1036,7 @@ sal_uLong SwCompareLine::GetHashValue() const
 
     case ND_GRFNODE:
     case ND_OLENODE:
-        // Fixed ID? Should never occur ...
+        
         break;
     }
     return nRet;
@@ -1113,7 +1113,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
             bRet = ( rTSrcNd.EndOfSectionIndex() - rTSrcNd.GetIndex() ) ==
                    ( rTDstNd.EndOfSectionIndex() - rTDstNd.GetIndex() );
 
-            // --> #i107826#: compare actual table content
+            
             if (bRet)
             {
                 bRet = (SimpleTableToText(rSrcNd) == SimpleTableToText(rDstNd));
@@ -1136,7 +1136,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                         rSrcSect.IsProtect() == rDstSect.IsProtect();
                 if( bRet && rSrcSect.IsProtect() )
                 {
-                    // the only have they both the same size
+                    
                     bRet = ( rSSrcNd.EndOfSectionIndex() - rSSrcNd.GetIndex() ) ==
                               ( rSDstNd.EndOfSectionIndex() - rSDstNd.GetIndex() );
                 }
@@ -1147,7 +1147,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                 if( TOX_HEADER_SECTION == eDstSectType ||
                     TOX_CONTENT_SECTION == eDstSectType )
                 {
-                    // the same type of TOX?
+                    
                     const SwTOXBase* pSrcTOX = rSrcSect.GetTOXBase();
                     const SwTOXBase* pDstTOX = rDstSect.GetTOXBase();
                     bRet =  pSrcTOX && pDstTOX
@@ -1172,7 +1172,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
         bRet = rSrcNd.StartOfSectionNode()->GetNodeType() ==
                rDstNd.StartOfSectionNode()->GetNodeType();
 
-        // --> #i107826#: compare actual table content
+        
         if (bRet && rSrcNd.StartOfSectionNode()->GetNodeType() == ND_TABLENODE)
         {
             bRet = CompareNode(
@@ -1253,10 +1253,10 @@ bool SwCompareLine::CompareTxtNd( const SwTxtNode& rDstNd,
                                   const SwTxtNode& rSrcNd )
 {
     bool bRet = false;
-    // Very simple at first
+    
     if( rDstNd.GetTxt() == rSrcNd.GetTxt() )
     {
-        // The text is the same, but are the "special attributes" (0xFF) also the same?
+        
         bRet = true;
     }
     return bRet;
@@ -1267,7 +1267,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 {
     bool bRet = false;
 
-    // Only compare textnodes
+    
     if( ND_TEXTNODE == rNode.GetNodeType() &&
         ND_TEXTNODE == rLine.GetNode().GetNodeType() )
     {
@@ -1322,7 +1322,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
             }
         }
 
-        // find the sum of the squares of the continuous substrings
+        
         int nSqSum = 0;
         int nCnt = 1;
         for( int i = 0; i < nLcsLen; i++ )
@@ -1339,13 +1339,13 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
             }
         }
 
-        // Don't compare if there aren't enough similarities
+        
         if ( nAvgLen >= 8 && nSqSum*32 < nAvgLen*nAvgLen )
         {
             return false;
         }
 
-        // Show the differences
+        
         int nSkip = 0;
         for( int i = 0; i <= nLcsLen; i++ )
         {
@@ -1504,7 +1504,7 @@ void SwCompareData::ShowInsert( sal_uLong nStt, sal_uLong nEnd )
     if( !pInsRing )
         pInsRing = pTmp;
 
-    // #i65201#: These SwPaMs are calculated smaller than needed, see comment below
+    
 }
 
 void SwCompareData::ShowDelete(
@@ -1551,11 +1551,11 @@ void SwCompareData::ShowDelete(
     rDoc.SetModified();
     ++aSavePos;
 
-    // #i65201#: These SwPaMs are calculated when the (old) delete-redlines are hidden,
-    // they will be inserted when the delete-redlines are shown again.
-    // To avoid unwanted insertions of delete-redlines into these new redlines, what happens
-    // especially at the end of the document, I reduce the SwPaM by one node.
-    // Before the new redlines are inserted, they have to expand again.
+    
+    
+    
+    
+    
     SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, -1, pDelRing );
     if( !pDelRing )
         pDelRing = pTmp;
@@ -1586,13 +1586,13 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
     int nLcsLen = subseq.Find( pLcsDst.get(), pLcsSrc.get() );
     for (int i = 0; i <= nLcsLen; i++)
     {
-        // Beginning of inserted lines (inclusive)
+        
         int nDstFrom = i ? pLcsDst[i - 1] + 1 : 0;
-        // End of inserted lines (exclusive)
+        
         int nDstTo = ( i == nLcsLen ) ? aCmp.GetLen1() : pLcsDst[i];
-        // Beginning of deleted lines (inclusive)
+        
         int nSrcFrom = i ? pLcsSrc[i - 1] + 1 : 0;
-        // End of deleted lines (exclusive)
+        
         int nSrcTo = ( i == nLcsLen ) ? aCmp.GetLen2() : pLcsSrc[i];
 
         if( i )
@@ -1600,8 +1600,8 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
             SwCompareLine* pDstLn = (SwCompareLine*)GetLine( rThisStt + nDstFrom - 1 );
             SwCompareLine* pSrcLn = (SwCompareLine*)rData.GetLine( rStt + nSrcFrom - 1 );
 
-            // Show differences in detail for lines that
-            // were matched as only slightly different
+            
+            
             if( !pDstLn->ChangesInLine( *pSrcLn, pInsRing, pDelRing ) )
             {
                 ShowInsert( rThisStt + nDstFrom - 1, rThisStt + nDstFrom );
@@ -1610,13 +1610,13 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
             }
         }
 
-        // Lines missing from source are inserted
+        
         if( nDstFrom != nDstTo )
         {
             ShowInsert( rThisStt + nDstFrom, rThisStt + nDstTo );
         }
 
-        // Lines missing from destination are deleted
+        
         if( nSrcFrom != nSrcTo )
         {
             ShowDelete( rData, rStt + nSrcFrom, rStt + nSrcTo, rThisStt + nDstTo );
@@ -1628,7 +1628,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
 {
     SwPaM* pTmp = pDelRing;
 
-    // get the Author / TimeStamp from the "other" document info
+    
     sal_uInt16 nAuthor = rDoc.GetRedlineAuthor();
     DateTime aTimeStamp( DateTime::SYSTEM );
     SwDocShell *pDocShell(rDoc.GetDocShell());
@@ -1664,14 +1664,14 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_DELETE, nAuthor, aTimeStamp,
                                     OUString(), 0, 0 );
         do {
-            // #i65201#: Expand again, see comment above.
+            
             if( pTmp->GetPoint()->nContent == 0 )
             {
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
-            // #i101009#
-            // prevent redlines that end on structural end node
+            
+            
             if (& rDoc.GetNodes().GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
             {
@@ -1702,8 +1702,8 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
-            // #i101009#
-            // prevent redlines that end on structural end node
+            
+            
             if (& rDoc.GetNodes().GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
             {
@@ -1716,7 +1716,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     OUString(), 0, 0 );
 
-        // combine consecutive
+        
         if( pTmp->GetNext() != pInsRing )
         {
             const SwCntntNode* pCNd;
@@ -1731,14 +1731,14 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 {
                     if( pTmp->GetNext() == pInsRing )
                     {
-                        // are consecutive, so combine
+                        
                         rEndStt = *pTmp->Start();
                         delete pTmp;
                         pTmp = pInsRing;
                     }
                     else
                     {
-                        // are consecutive, so combine
+                        
                         rSttEnd = *((SwPaM*)pTmp->GetNext())->End();
                         delete pTmp->GetNext();
                     }
@@ -1759,7 +1759,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
     }
 }
 
-// Returns (the difference count?) if something is different
+
 long SwDoc::CompareDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
@@ -1767,7 +1767,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    // Get comparison options
+    
     CmpOptions.eCmpMode = SW_MOD()->GetCompareMode();
     if( CmpOptions.eCmpMode == SVX_CMP_AUTO )
     {
@@ -1851,7 +1851,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
 
     if( nsRedlineType_t::REDLINE_DELETE == pDestRedl->GetType() )
     {
-        // mark the area as deleted
+        
         const SwPosition* pEnd = pStt == rSrcRedl.GetPoint()
                                             ? rSrcRedl.GetMark()
                                             : rSrcRedl.GetPoint();
@@ -1871,7 +1871,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
 
     if( nsRedlineType_t::REDLINE_INSERT == pDestRedl->GetType() )
     {
-        // the part was inserted so copy it from the SourceDoc
+        
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
@@ -1901,13 +1901,13 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
     }
     else
     {
-        //JP 21.09.98: Bug 55909
-        // If there already is a deleted or inserted one at the same position, we have to split it!
+        
+        
         SwPosition* pDStt = pDestRedl->GetMark(),
                   * pDEnd = pDestRedl->GetPoint();
         sal_uInt16 n = 0;
 
-            // find the first redline for StartPos
+            
         if( !pDoc->GetRedline( *pDStt, &n ) && n )
             --n;
 
@@ -1931,7 +1931,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
                 case POS_INSIDE:
                 case POS_EQUAL:
                     delete pDestRedl, pDestRedl = 0;
-                    // break; -> no break !!!!
+                    
 
                 case POS_COLLIDE_END:
                 case POS_BEFORE:
@@ -1949,7 +1949,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
                             (pDoc->GetIDocumentUndoRedo().DoesUndo())
                                     ? new SwUndoCompDoc( *pCpyRedl ) : 0;
 
-                        // now modify doc: append redline, undo (and count)
+                        
                         pDoc->AppendRedline( pCpyRedl, true );
                         if( pUndo )
                         {
@@ -1959,7 +1959,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
 
                         *pDStt = *pREnd;
 
-                        // we should start over now
+                        
                         n = USHRT_MAX;
                     }
                     break;
@@ -1984,7 +1984,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         SwUndoCompDoc *const pUndo = (pDoc->GetIDocumentUndoRedo().DoesUndo())
             ? new SwUndoCompDoc( *pDestRedl ) : 0;
 
-        // now modify doc: append redline, undo (and count)
+        
         bool bRedlineAccepted = pDoc->AppendRedline( pDestRedl, true );
         if( pUndo )
         {
@@ -1992,15 +1992,15 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         }
         ++nIns;
 
-        // if AppendRedline has deleted our redline, we may not keep a
-        // reference to it
+        
+        
         if( ! bRedlineAccepted )
             pDestRedl = NULL;
     }
     return nIns;
 }
 
-/// Merge two documents
+
 long SwDoc::MergeDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
@@ -2024,9 +2024,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     if( !aD1.HasDiffs( aD0 ) )
     {
-        // we want to get all redlines from the SourceDoc
+        
 
-        // look for all insert redlines from the SourceDoc and determine their position in the DestDoc
+        
         _SaveMergeRedlines* pRing = 0;
         const SwRedlineTbl& rSrcRedlTbl = rSrcDoc.GetRedlineTbl();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
@@ -2042,8 +2042,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
                 const SwNode* pDstNd = GetNodes()[
                                         nMyEndOfExtra + nNd - nEndOfExtra ];
 
-                // Found the positon.
-                // Then we also have to insert the redline to the line in the DestDoc.
+                
+                
                 _SaveMergeRedlines* pTmp = new _SaveMergeRedlines(
                                                     *pDstNd, *pRedl, pRing );
                 if( !pRing )
@@ -2053,7 +2053,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
         if( pRing )
         {
-          // Carry over all into DestDoc
+          
           rSrcDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
           SetRedlineMode((RedlineMode_t)(
@@ -2227,7 +2227,7 @@ int WordArrayComparator::GetCharSequence( const int *pWordLcs1,
     int nLen = 0;
     for( int i = 0; i < nLcsLen; i++ )
     {
-        // Check for hash collisions
+        
         if( pPos1[ pWordLcs1[i] + 1 ] - pPos1[ pWordLcs1[i] ]
             != pPos2[ pWordLcs2[i] + 1 ] - pPos2[ pWordLcs2[i] ] )
         {
@@ -2260,7 +2260,7 @@ void WordArrayComparator::CalcPositions( int *pPos, const SwTxtNode *pTxtNd,
         if (i == 0 || i == pTxtNd->GetTxt().getLength()
                     || !isalnum( pTxtNd->GetTxt()[ i - 1 ])
                     || !isalnum( pTxtNd->GetTxt()[ i ]))
-        { // Begin new word
+        { 
             nCnt++;
             pPos[ nCnt ] = i;
         }
@@ -2288,7 +2288,7 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
     for( int j = 0; j <= nLen2; j++ )
         pLcs[0][j] = 0;
 
-    // Find lcs
+    
     for( int i = 1; i <= nLen1; i++ )
     {
         for( int j = 1; j <= nLen2; j++ )
@@ -2302,7 +2302,7 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
 
     int nLcsLen = pLcs[ nLen1 ][ nLen2 ];
 
-    // Recover the lcs in the two sequences
+    
     if( pLcs1 && pLcs2 )
     {
         int nIdx1 = nLen1;
@@ -2340,7 +2340,7 @@ int CommonSubseq::IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1,
 
     int nNext = 0;
 
-    // Don't ignore text at the beginning of the paragraphs
+    
     if( pLcs1[ 0 ] == 0 && pLcs2[ 0 ] == 0 )
     {
         while( nNext < nLcsLen - 1 && pLcs1[ nNext ] + 1 == pLcs1[ nNext + 1 ]
@@ -2363,7 +2363,7 @@ int CommonSubseq::IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1,
         else
         {
             if( nCnt > nPieceLen
-                // Don't ignore text at the end of the paragraphs
+                
                 || ( i == nLcsLen - 1
                 && pLcs1[i] == nLen1 - 1 && pLcs2[i] == nLen2 - 1 ))
             {
@@ -2409,7 +2409,7 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
     int *currL = pBuff1;
     int *prevL = pBuff2;
 
-    // Avoid memory corruption
+    
     if( nLen2 > rCmp.GetLen2() )
     {
         assert( false );
@@ -2419,7 +2419,7 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
     memset( pBuff1, 0, sizeof( *pBuff1 ) * ( nLen2 + 1 ) );
     memset( pBuff2, 0, sizeof( *pBuff2 ) * ( nLen2 + 1 ) );
 
-    // Find lcs
+    
     for( int i = 1; i <= nLen1; i++ )
     {
         for( int j = 1; j <= nLen2; j++ )
@@ -2487,7 +2487,7 @@ int LgstCommonSubseq::Find( int *pSubseq1, int *pSubseq2 )
     int nEnd1 = rCmp.GetLen1();
     int nEnd2 = rCmp.GetLen2();
 
-    // Check for corresponding lines in the beginning of the sequences
+    
     while( nStt < nEnd1 && nStt < nEnd2 && rCmp.Compare( nStt, nStt ) )
     {
         pSubseq1[ nStt ] = nStt;
@@ -2498,7 +2498,7 @@ int LgstCommonSubseq::Find( int *pSubseq1, int *pSubseq2 )
     pSubseq1 += nStt;
     pSubseq2 += nStt;
 
-    // Check for corresponding lines in the end of the sequences
+    
     while( nStt < nEnd1 && nStt < nEnd2
                         && rCmp.Compare( nEnd1 - 1, nEnd2 - 1 ) )
     {
@@ -2524,7 +2524,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
     int nCutBeg = 0;
     int nCutEnd = 0;
 
-    // Check for corresponding lines in the beginning of the sequences
+    
     while( nStt1 < nEnd1 && nStt2 < nEnd2 && rCmp.Compare( nStt1, nStt2 ) )
     {
         pSeq1[ nCutBeg ] = nStt1++;
@@ -2535,7 +2535,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
     pSeq1 += nCutBeg;
     pSeq2 += nCutBeg;
 
-    // Check for corresponding lines in the end of the sequences
+    
     while( nStt1 < nEnd1 && nStt2 < nEnd2
                         && rCmp.Compare( nEnd1 - 1, nEnd2 - 1 ) )
     {
@@ -2547,7 +2547,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
     int nLen1 = nEnd1 - nStt1;
     int nLen2 = nEnd2 - nStt2;
 
-    // Return if a sequence is empty
+    
     if( nLen1 <= 0 || nLen2 <= 0 )
     {
         for( int i = 0; i < nCutEnd; i++ )
@@ -2558,7 +2558,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
         return nCutBeg + nCutEnd;
     }
 
-    // Cut to LCS for small values
+    
     if( nLen1 < 3 || nLen2 < 3 || ( nLen1 + 1 ) * ( nLen2 + 1 ) <= CUTOFF )
     {
         int nLcsLen = FindLCS( pSeq1, pSeq2, nStt1, nEnd1, nStt2, nEnd2);
@@ -2577,10 +2577,10 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
     int nRad;
     int nPos1 = -1, nPos2 = -1;
 
-    // Find a point of correspondence in the middle of the sequences
+    
     for( nRad = 0; nRad*nRad < std::min( nMid1, nMid2 ); nRad++ )
     {
-        // Search to the left and to the right of the middle of the first sequence
+        
         for( int i = nMid1 - nRad; i <= nMid1 + nRad; i++ )
         {
             if( rCmp.Compare( nStt1 + i, nStt2 + nMid2 - nRad ) )
@@ -2596,7 +2596,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
                 break;
             }
         }
-        // Search to the left and to the right of the middle of the second sequence
+        
         for( int i = nMid2 - nRad; i <= nMid2 + nRad; i++ )
         {
             if( rCmp.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
@@ -2614,7 +2614,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
         }
     }
 
-    // return if no point of correspondence found
+    
     if( nPos1 == -1 )
     {
         for( int i = 0; i < nCutEnd; i++ )
@@ -2625,13 +2625,13 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
         return nCutBeg + nCutEnd;
     }
 
-    // Run the same on the sequences to the left of the correspondence point
+    
     int nLen = FindFastCS( pSeq1, pSeq2, nStt1, nPos1, nStt2, nPos2 );
 
     pSeq1[ nLen ] = nPos1;
     pSeq2[ nLen ] = nPos2;
 
-    // Run the same on the sequences to the right of the correspondence point
+    
     nLen += FindFastCS( pSeq1 + nLen + 1, pSeq2 + nLen + 1,
                          nPos1 + 1, nEnd1, nPos2 + 1, nEnd2 ) + 1;
 

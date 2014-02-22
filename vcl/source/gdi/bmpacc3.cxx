@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,16 +49,16 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
 
 void BitmapWriteAccess::Erase( const Color& rColor )
 {
-    // convert the color format from RGB to palette index if needed
-    // TODO: provide and use Erase( BitmapColor& method)
+    
+    
     BitmapColor aColor = rColor;
     if( HasPalette() )
         aColor = BitmapColor( (sal_uInt8)GetBestPaletteIndex( rColor) );
-    // try fast bitmap method first
+    
     if( ImplFastEraseBitmap( *mpBuffer, aColor ) )
         return;
 
-    // use the canonical method to clear the bitmap
+    
     BitmapColor*    pOldFillColor = mpFillColor ? new BitmapColor( *mpFillColor ) : NULL;
     const Point     aPoint;
     const Rectangle aRect( aPoint, maBitmap.GetSizePixel() );
@@ -78,7 +78,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 
         if ( rStart.X() == rEnd.X() )
         {
-            // Vertical Line
+            
             const long nEndY = rEnd.Y();
 
             nX = rStart.X();
@@ -97,7 +97,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         }
         else if ( rStart.Y() == rEnd.Y() )
         {
-            // Horizontal Line
+            
             const long nEndX = rEnd.X();
 
             nX = rStart.X();

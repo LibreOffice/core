@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 
 #include <rtl/string.hxx>
 
-/// entry point for the KDE4 VCL plugin
+
 extern "C" {
     VCLPLUG_KDE4_PUBLIC SalInstance* create_SalInstance( oslModule )
     {
@@ -47,19 +47,19 @@ extern "C" {
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
         {
 #if QT_VERSION >= 0x040800
-            // let Qt call XInitThreads(), so that also Qt knows it's been used
-            // (otherwise QPixmap may warn about threads not being initialized)
+            
+            
             QApplication::setAttribute( Qt::AA_X11InitThreads );
 #else
             XInitThreads();
-            // just in case somebody builds with old version and then upgrades Qt,
-            // otherwise this is a no-op
+            
+            
             QApplication::setAttribute( static_cast< Qt::ApplicationAttribute >( 10 ));
 #endif
         }
 
 #if QT_VERSION < 0x050000
-        // Qt 4.x support needs >= 4.1.0
+        
         OString aVersion( qVersion() );
         SAL_INFO( "vcl.kde4", "qt version string is " << aVersion );
 
@@ -82,7 +82,7 @@ extern "C" {
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
         SAL_INFO( "vcl.kde4", "created KDESalInstance " << &pInstance );
 
-        // initialize SalData
+        
         KDEData *salData = new KDEData( pInstance );
         salData->Init();
         salData->initNWF();

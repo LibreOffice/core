@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,7 +37,7 @@ Options::~Options()
 {
 }
 
-// static
+
 bool Options::checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len)
 {
   bool result = ((arg != 0) && (len > 0));
@@ -49,14 +49,14 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
     case '@':
       if ((result = (len > 1)) == true)
       {
-        // "@<cmdfile>"
+        
         result = Options::checkCommandFile (rArgs, &(arg[1]));
       }
       break;
     case '-':
       if ((result = (len > 1)) == true)
       {
-        // "-<option>"
+        
         switch (arg[1])
         {
         case 'O':
@@ -64,26 +64,26 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
         case 'I':
         case 'D':
           {
-            // "-<option>[<param>]
+            
             std::string option(&(arg[0]), 2);
             rArgs.push_back(option);
             if (len > 2)
             {
-              // "-<option><param>"
+              
               std::string param(&(arg[2]), len - 2);
               rArgs.push_back(param);
             }
             break;
           }
         default:
-          // "-<option>" ([long] option, w/o param)
+          
           rArgs.push_back(std::string(arg, len));
           break;
         }
       }
       break;
     default:
-      // "<param>"
+      
       rArgs.push_back(std::string(arg, len));
       break;
     }
@@ -91,7 +91,7 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
   return (result);
 }
 
-// static
+
 bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const * filename)
 {
     FILE * fp = fopen(filename, "r");
@@ -121,7 +121,7 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
           {
               if (!buffer.empty())
               {
-                  // append current argument.
+                  
                   if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
                   {
                       (void) fclose(fp);
@@ -132,14 +132,14 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
               break;
           }
         default:
-          // quoted white-space fall through
+          
           buffer.push_back(sal::static_int_cast<char>(c));
           break;
         }
     }
     if (!buffer.empty())
     {
-        // append unterminated argument.
+        
         if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
         {
             (void) fclose(fp);
@@ -217,22 +217,22 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
         }
         OString param((*first).c_str(), (*first).size());
         {
-          // quote param token(s).
+          
           OStringBuffer buffer;
           sal_Int32 k = 0;
           do
           {
             if (!buffer.isEmpty())
               buffer.append(' ');
-//          buffer.append("-I\"");
+
             buffer.append(param.getToken(0, ';', k));
-//          buffer.append("\"");
+
           } while (k != -1);
           param = buffer.makeStringAndClear();
         }
         if (m_options.count("-I") > 0)
         {
-          // append param.
+          
           OStringBuffer buffer(m_options["-I"]);
           buffer.append(' '); buffer.append(param);
           param = buffer.makeStringAndClear();
@@ -309,7 +309,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
           (void) fprintf(stdout, "%s", prepareHelp().getStr());
           return (false);
         }
-        // break; // Unreachable
+        
       }
     case 's':
       {

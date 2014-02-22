@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits.h>
@@ -99,10 +99,10 @@ static void Reduce( BigInt &rVal1, BigInt &rVal2 )
     rVal2 /= nB;
 }
 
-// Initialized by setting nNum as nominator and nDen as denominator
-// Negative values in the denominator are invalid and cause the
-// inversion of both nominator and denominator signs
-// in order to return the correct value.
+
+
+
+
 Fraction::Fraction( long nNum, long nDen )
 {
     nNumerator = nNum;
@@ -113,15 +113,15 @@ Fraction::Fraction( long nNum, long nDen )
         nNumerator   = -nNumerator;
     }
 
-    // Reduce through GCD
+    
     long n = GetGGT( nNumerator, nDenominator );
     nNumerator   /= n;
     nDenominator /= n;
 }
 
-// If dVal > LONG_MAX, the fraction is set as invalid.
-// Otherwise, dVal and denominator are multiplied with 10, until one of them
-// is larger than (LONG_MAX / 10) and the fraction is reduced with GCD
+
+
+
 Fraction::Fraction( double dVal )
 {
     long nDen = 1;
@@ -142,7 +142,7 @@ Fraction::Fraction( double dVal )
     nNumerator   = (long)dVal;
     nDenominator = nDen;
 
-    // Reduce through GCD
+    
     long n = GetGGT( nNumerator, nDenominator );
     nNumerator   /= n;
     nDenominator /= n;
@@ -156,12 +156,12 @@ Fraction::operator double() const
         return (double)0;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For addition both fractions are extended to match the denominator,
-// then nominators are added and reduced (through GCD).
-// Internal datatype for computation is SLong to detect overflows,
-// which cause the operation to be marked as invalid
+
+
+
+
+
+
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -172,7 +172,7 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
     if ( !IsValid() )
         return *this;
 
-    // (a/b) + (c/d) = ( (a*d) + (c*b) ) / (b*d)
+    
     BigInt nN( nNumerator );
     nN *= BigInt( rVal.nDenominator );
     BigInt nW1Temp( nDenominator );
@@ -198,12 +198,12 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
     return *this;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For substraction, both fractions are extended to match the denominator,
-// then nominators are substracted and reduced (through GCD).
-// Internal datatype for computation is SLong to detect overflows,
-// which cause the operation to be marked as invalid
+
+
+
+
+
+
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -214,7 +214,7 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     if ( !IsValid() )
         return *this;
 
-    // (a/b) - (c/d) = ( (a*d) - (c*b) ) / (b*d)
+    
     BigInt nN( nNumerator );
     nN *= BigInt( rVal.nDenominator );
     BigInt nW1Temp( nDenominator );
@@ -240,12 +240,12 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     return *this;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For mutliplication, nominator and denominators are first reduced
-// (through GCD), and then multiplied.
-// Internal datatype for computation is BigInt to detect overflows,
-// which cause the operation to be marked as invalid
+
+
+
+
+
+
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -277,12 +277,12 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
     return *this;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For dividing a/b, we multiply a with the inverse of b.
-// To avoid overflows, we first reduce both fractions with GCD.
-// Internal datatype for computation is BigInt to detect overflows,
-// which cause the operation to be marked as invalid
+
+
+
+
+
+
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -319,7 +319,7 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
     return *this;
 }
 
-// Similar to clz_table that can be googled
+
 const char nbits_table[32] =
 {
     32,  1, 23,  2, 29, 24, 14,  3,
@@ -330,17 +330,17 @@ const char nbits_table[32] =
 
 static int impl_NumberOfBits( unsigned long nNum )
 {
-    // http://en.wikipedia.org/wiki/De_Bruijn_sequence
-    // background paper: Using de Bruijn Sequences to Index a 1 in a
-    // Computer Word (1998) Charles E. Leiserson,
-    // Harald Prokop, Keith H. Randall
-    // (e.g. http://citeseer.ist.psu.edu/leiserson98using.html)
+    
+    
+    
+    
+    
     const sal_uInt32 nDeBruijn = 0x7DCD629;
 
     if ( nNum == 0 )
         return 0;
 
-    // Get it to form like 0000001111111111b
+    
     nNum |= ( nNum >>  1 );
     nNum |= ( nNum >>  2 );
     nNum |= ( nNum >>  4 );
@@ -369,16 +369,16 @@ static int impl_NumberOfBits( unsigned long nNum )
 #error "Unknown size of long!"
 #endif
 
-    // De facto shift left of nDeBruijn using multiplication (nNumber
-    // is all ones from topmost bit, thus nDeBruijn + (nDeBruijn *
-    // nNumber) => nDeBruijn * (nNumber+1) clears all those bits to
-    // zero, sets the next bit to one, and thus effectively shift-left
-    // nDeBruijn by lg2(nNumber+1). This generates a distinct 5bit
-    // sequence in the msb for each distinct position of the last
-    // leading 0 bit - that's the property of a de Bruijn number.
+    
+    
+    
+    
+    
+    
+    
     nNumber = nDeBruijn + ( nDeBruijn * nNumber );
 
-    // 5-bit window indexes the result
+    
     return ( nbits_table[nNumber >> 27] ) + nBonus;
 }
 
@@ -405,31 +405,31 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     if ( !nNumerator || !nDenominator )
         return;
 
-    // Count with unsigned longs only
+    
     const bool bNeg = ( nNumerator < 0 );
     unsigned long nMul = (unsigned long)( bNeg? -nNumerator: nNumerator );
     unsigned long nDiv = (unsigned long)( nDenominator );
 
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
 
-    // How much bits can we lose?
+    
     const int nMulBitsToLose = std::max( ( impl_NumberOfBits( nMul ) - int( nSignificantBits ) ), 0 );
     const int nDivBitsToLose = std::max( ( impl_NumberOfBits( nDiv ) - int( nSignificantBits ) ), 0 );
 
     const int nToLose = std::min( nMulBitsToLose, nDivBitsToLose );
 
-    // Remove the bits
+    
     nMul >>= nToLose;
     nDiv >>= nToLose;
 
     if ( !nMul || !nDiv )
     {
-        // Return without reduction
+        
         OSL_FAIL( "Oops, we reduced too much..." );
         return;
     }
 
-    // Reduce
+    
     long n1 = GetGGT( nMul, nDiv );
     if ( n1 != 1 )
     {
@@ -450,9 +450,9 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
            && rVal1.nDenominator == rVal2.nDenominator;
 }
 
-// This methods first validates and reduces both values.
-// To compare (a/b) with (c/d), extend denominators (b*d), then return
-// the result of comparing the nominators (a < c)
+
+
+
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
@@ -466,9 +466,9 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
     return nN < nD;
 }
 
-// This methods first validates and reduces both values.
-// To compare (a/b) with (c/d), extend denominators (b*d), then return
-// the result of comparing nominators (a > c)
+
+
+
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
@@ -484,7 +484,7 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 
 SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 {
-    //fdo#39428 SvStream no longer supports operator>>(long&)
+    
     sal_Int32 nTmp(0);
     rIStream.ReadInt32( nTmp );
     rFract.nNumerator = nTmp;
@@ -495,7 +495,7 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
-    //fdo#39428 SvStream no longer supports operator<<(long)
+    
     rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rFract.nNumerator) );
     rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rFract.nDenominator) );
     return rOStream;

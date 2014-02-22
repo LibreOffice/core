@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -93,12 +93,12 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
 {
     if ( pColInfo )
     {
-        //  cells completely left of the visible area
+        
         SCCOL nStart = 0;
         while ( nStart < nCols && pColInfo[nStart].nPixelEnd < rPixelArea.Left() )
             ++nStart;
 
-        //  cells completely right of the visible area
+        
         SCCOL nEnd = nCols;
         while ( nEnd > 0 && pColInfo[nEnd-1].nPixelStart > rPixelArea.Right() )
             --nEnd;
@@ -114,18 +114,18 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
                 SetColInfo( nNewCount, pNewInfo );
             }
             else
-                SetColInfo( 0, NULL );      // all invisible
+                SetColInfo( 0, NULL );      
         }
     }
 
     if ( pRowInfo )
     {
-        //  cells completely above the visible area
+        
         SCROW nStart = 0;
         while ( nStart < nRows && pRowInfo[nStart].nPixelEnd < rPixelArea.Top() )
             ++nStart;
 
-        //  cells completely below the visible area
+        
         SCROW nEnd = nRows;
         while ( nEnd > 0 && pRowInfo[nEnd-1].nPixelStart > rPixelArea.Bottom() )
             --nEnd;
@@ -141,7 +141,7 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
                 SetRowInfo( nNewCount, pNewInfo );
             }
             else
-                SetRowInfo( 0, NULL );      // all invisible
+                SetRowInfo( 0, NULL );      
         }
     }
 }
@@ -210,7 +210,7 @@ void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange&
 
 void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, bool bRepCol )
 {
-    SCTAB nTab = 0; //! ?
+    SCTAB nTab = 0; 
     ScRange aRange( nStartCol, 0, nTab, nEndCol, 0, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
@@ -219,7 +219,7 @@ void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, SCCOL nStartC
 
 void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, bool bRepRow )
 {
-    SCTAB nTab = 0; //! ?
+    SCTAB nTab = 0; 
     ScRange aRange( 0, nStartRow, nTab, 0, nEndRow, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
@@ -228,7 +228,7 @@ void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, SCROW nStartR
 
 void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect, bool bHeader, bool bLeft )
 {
-    ScRange aRange;     //! ?
+    ScRange aRange;     
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
     ScPreviewLocationType eType = bHeader ?
@@ -459,7 +459,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     const double nScaleX = HMM_PER_TWIPS;
     const double nScaleY = HMM_PER_TWIPS;
 
-    // from left to right:
+    
     bool bHasHeaderCol = false;
     bool bHasRepCols   = false;
     bool bHasMainCols  = false;
@@ -468,7 +468,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     SCCOL nMainColStart   = 0;
     SCCOL nMainColEnd     = 0;
 
-    // from top to bottom:
+    
     bool bHasHeaderRow = false;
     bool bHasRepRows   = false;
     bool bHasMainRows  = false;
@@ -517,18 +517,18 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
                 aMainRect.Top() = it->aPixelRect.Top();
                 aMainRect.Bottom() = it->aPixelRect.Bottom();
             }
-            nTab = it->aCellRange.aStart.Tab();     //! store separately?
+            nTab = it->aCellRange.aStart.Tab();     
         }
         else if ( it->eType == SC_PLOC_ROWHEADER )
         {
-            // row headers result in an additional column
+            
             bHasHeaderCol = true;
             aHeaderRect.Left() = it->aPixelRect.Left();
             aHeaderRect.Right() = it->aPixelRect.Right();
         }
         else if ( it->eType == SC_PLOC_COLHEADER )
         {
-            // column headers result in an additional row
+            
             bHasHeaderRow = true;
             aHeaderRect.Top() = it->aPixelRect.Top();
             aHeaderRect.Bottom() = it->aPixelRect.Bottom();
@@ -536,7 +536,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     }
 
     //
-    //  get column info
+    
     //
 
     SCCOL nColCount = 0;
@@ -606,7 +606,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         rInfo.SetColInfo( 0, NULL );
 
     //
-    //  get row info
+    
     //
 
     SCROW nRowCount = 0;
@@ -675,7 +675,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         rInfo.SetRowInfo( 0, NULL );
 
     //
-    //  limit to visible area
+    
     //
 
     rInfo.SetTab( nTab );
@@ -684,8 +684,8 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
 
 Rectangle ScPreviewLocationData::GetHeaderCellOutputRect(const Rectangle& rVisRect, const ScAddress& rCellPos, bool bColHeader) const
 {
-    // first a stupid implementation
-    // NN says here should be done more
+    
+    
     Rectangle aClipRect;
     ScPreviewTableInfo aTableInfo;
     GetTableInfo( rVisRect, aTableInfo );
@@ -711,14 +711,14 @@ Rectangle ScPreviewLocationData::GetHeaderCellOutputRect(const Rectangle& rVisRe
 
 Rectangle ScPreviewLocationData::GetCellOutputRect(const ScAddress& rCellPos) const
 {
-    // first a stupid implementation
-    // NN says here should be done more
+    
+    
     Rectangle aRect;
     GetCellPosition(rCellPos, aRect);
     return aRect;
 }
 
-// GetMainCellRange is used for links in PDF export
+
 
 bool ScPreviewLocationData::GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const
 {

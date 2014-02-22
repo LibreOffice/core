@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLChangeTrackingExportHelper.hxx"
@@ -193,8 +193,8 @@ void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependA
     sal_uInt32 nActionNumber(pDependAction->GetActionNumber());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(nActionNumber));
 
-    // #i80033# save old "dependence" element if backward compatibility is requested,
-    // correct "dependency" element otherwise
+    
+    
     const bool bSaveBackwardsCompatible = ( rExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
     SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE,
         bSaveBackwardsCompatible ? XML_DEPENDENCE : XML_DEPENDENCY,

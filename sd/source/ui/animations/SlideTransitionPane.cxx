@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -60,10 +60,10 @@ using ::com::sun::star::uno::RuntimeException;
 
 using ::sd::framework::FrameworkHelper;
 
-// ____________________________
+
 //
-// ::sd::impl::TransitionEffect
-// ____________________________
+
+
 
 namespace sd
 {
@@ -197,22 +197,22 @@ struct TransitionEffect
         mbPresChangeAmbiguous = mbPresChangeAmbiguous || aOtherEffect.mbPresChangeAmbiguous || mePresChange != aOtherEffect.mePresChange;
         mbSoundAmbiguous = mbSoundAmbiguous || aOtherEffect.mbSoundAmbiguous || mbSoundOn != aOtherEffect.mbSoundOn;
 #if 0
-                        // Weird leftover isolated expression with no effect, introduced in 2007 in
-                        // CWS impress122. Ifdeffed out to avoid compiler warning, kept here in case
-                        // somebody who understands this code notices and understands what the
-                        // "right" thing to do might be.
+                        
+                        
+                        
+                        
                         (!mbStopSound && !aOtherEffect.mbStopSound && maSound != aOtherEffect.maSound) || (mbStopSound != aOtherEffect.mbStopSound);
 #endif
         mbLoopSoundAmbiguous = mbLoopSoundAmbiguous || aOtherEffect.mbLoopSoundAmbiguous || mbLoopSound != aOtherEffect.mbLoopSound;
     }
 
-    // effect
+    
     sal_Int16 mnType;
     sal_Int16 mnSubType;
     sal_Bool  mbDirection;
     sal_Int32 mnFadeColor;
 
-    // other settings
+    
     double      mfDuration;
     double       mfTime;
     PresChange  mePresChange;
@@ -229,13 +229,13 @@ struct TransitionEffect
     bool mbLoopSoundAmbiguous;
 };
 
-} // namespace impl
-} // namespace sd
+} 
+} 
 
-// ______________________
+
 //
-// Local Helper Functions
-// ______________________
+
+
 
 namespace
 {
@@ -282,7 +282,7 @@ sal_uInt16 lcl_getTransitionEffectIndex(
     SdDrawDocument * pDoc,
     const ::sd::impl::TransitionEffect & rTransition )
 {
-    // first entry: "<none>"
+    
     sal_uInt16 nResultIndex = LISTBOX_ENTRY_NOTFOUND;
 
     if( pDoc )
@@ -335,8 +335,8 @@ struct lcl_EqualsSoundFileName : public ::std::unary_function< OUString, bool >
 
     bool operator() ( const OUString & rStr ) const
     {
-        // note: formerly this was a case insensitive search for all
-        // platforms. It seems more sensible to do this platform-dependent
+        
+        
 #if defined( WNT )
         return maStr.equalsIgnoreAsciiCase( rStr );
 #else
@@ -348,7 +348,7 @@ private:
     OUString maStr;
 };
 
-// returns -1 if no object was found
+
 bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
                           const OUString & rFileName,
                           ::std::vector< OUString >::size_type & rOutPosition )
@@ -372,7 +372,7 @@ OUString lcl_getSoundFileURL(
     if( rListBox->GetSelectEntryCount() > 0 )
     {
         sal_uInt16 nPos = rListBox->GetSelectEntryPos();
-        // the first three entries are no actual sounds
+        
         if( nPos >= 3 )
         {
             DBG_ASSERT( (sal_uInt32)(rListBox->GetEntryCount() - 3) == rSoundList.size(),
@@ -408,7 +408,7 @@ void lcl_FillSoundListBox(
 {
     sal_uInt16 nCount = rOutListBox->GetEntryCount();
 
-    // keep first three entries
+    
     for( sal_uInt16 i=nCount - 1; i>=3; --i )
         rOutListBox->RemoveEntry( i );
 
@@ -416,15 +416,15 @@ void lcl_FillSoundListBox(
                      lcl_AppendSoundToListBox( rOutListBox ));
 }
 
-} // anonymous namespace
+} 
 
 namespace sd
 {
 
-// ___________________
+
 //
-// SlideTransitionPane
-// ___________________
+
+
 
 SlideTransitionPane::SlideTransitionPane(
     ::Window * pParent,
@@ -461,20 +461,20 @@ SlideTransitionPane::SlideTransitionPane(
 
     if( pDoc )
         mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
-    // TODO: get correct view
+    
     if( mxModel.is())
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
 
-    // fill list box of slide transitions
+    
     mpLB_SLIDE_TRANSITIONS->InsertEntry( SD_RESSTR( STR_SLIDETRANSITION_NONE ) );
 
-    // set defaults
-    mpCB_AUTO_PREVIEW->Check();      // automatic preview on
+    
+    mpCB_AUTO_PREVIEW->Check();      
 
-    // update control states before adding handlers
+    
     updateControls();
 
-    // set handlers
+    
     mpPB_APPLY_TO_ALL->SetClickHdl( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
     mpPB_PLAY->SetClickHdl( LINK( this, SlideTransitionPane, PlayButtonClicked ));
     mpPB_SLIDE_SHOW->SetClickHdl( LINK( this, SlideTransitionPane, SlideShowButtonClicked ));
@@ -571,32 +571,32 @@ void SlideTransitionPane::updateControls()
     DBG_ASSERT( ! mbUpdatingControls, "Multiple Control Updates" );
     mbUpdatingControls = true;
 
-    // get model data for first page
+    
     SdPage * pFirstPage = pSelectedPages->front();
     DBG_ASSERT( pFirstPage, "Invalid Page" );
 
     impl::TransitionEffect aEffect( *pFirstPage );
 
-    // merge with other pages
+    
     ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aIt(
         pSelectedPages->begin());
     ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aEndIt(
         pSelectedPages->end());
 
-    // start with second page (note aIt != aEndIt, because ! aSelectedPages.empty())
+    
     for( ++aIt ;aIt != aEndIt; ++aIt )
     {
         if( *aIt )
             aEffect.compareWith( *(*aIt) );
     }
 
-    // detect current slide effect
+    
     if( aEffect.mbEffectAmbiguous )
         mpLB_SLIDE_TRANSITIONS->SetNoSelection();
     else
     {
-        // ToDo: That 0 is "no transition" is documented nowhere except in the
-        // CTOR of sdpage
+        
+        
         if( aEffect.mnType == 0 )
             mpLB_SLIDE_TRANSITIONS->SelectEntryPos( 0 );
         else
@@ -606,7 +606,7 @@ void SlideTransitionPane::updateControls()
                 mpLB_SLIDE_TRANSITIONS->SetNoSelection();
             else
             {
-                // first entry in list is "none", so add 1 after translation
+                
                 if( m_aPresetIndexes.find( nEntry ) != m_aPresetIndexes.end())
                     mpLB_SLIDE_TRANSITIONS->SelectEntryPos( m_aPresetIndexes[ nEntry ] + 1 );
                 else
@@ -621,7 +621,7 @@ void SlideTransitionPane::updateControls()
         mpLB_SPEED->SelectEntryPos(
             (aEffect.mfDuration > 2.0 )
             ? 0 : (aEffect.mfDuration < 2.0)
-            ? 2 : 1 );       // else FADE_SPEED_FAST
+            ? 2 : 1 );       
 
     if( aEffect.mbSoundAmbiguous )
     {
@@ -640,7 +640,7 @@ void SlideTransitionPane::updateControls()
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
-                // skip first three entries
+                
                 mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
@@ -733,9 +733,9 @@ void SlideTransitionPane::openSoundFileDialog()
         {
             bQuitLoop = true;
         }
-        else // not in sound list
+        else 
         {
-            // try to insert into gallery
+            
             if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile ) )
             {
                 updateSoundList();
@@ -757,7 +757,7 @@ void SlideTransitionPane::openSoundFileDialog()
         }
 
         if( bValidSoundFile )
-            // skip first three entries in list
+            
             mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
     }
 
@@ -769,10 +769,10 @@ void SlideTransitionPane::openSoundFileDialog()
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
                 mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
             else
-                mpLB_SOUND->SelectEntryPos( 0 );  // NONE
+                mpLB_SOUND->SelectEntryPos( 0 );  
         }
         else
-            mpLB_SOUND->SelectEntryPos( 0 );  // NONE
+            mpLB_SOUND->SelectEntryPos( 0 );  
     }
 }
 
@@ -781,7 +781,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     impl::TransitionEffect aResult;
     aResult.setAllAmbiguous();
 
-    // check first (aResult might be overwritten)
+    
     if( mpLB_SLIDE_TRANSITIONS->IsEnabled() &&
         mpLB_SLIDE_TRANSITIONS->GetSelectEntryCount() > 0 )
     {
@@ -800,7 +800,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         aResult.mbEffectAmbiguous = false;
     }
 
-    // speed
+    
     if( mpLB_SPEED->IsEnabled() &&
         mpLB_SPEED->GetSelectEntryCount() > 0 )
     {
@@ -809,13 +809,13 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             ? 3.0
             : (nPos == 1)
             ? 2.0
-            : 1.0;   // nPos == 2
+            : 1.0;   
         DBG_ASSERT( aResult.mfDuration != 1.0 || nPos == 2, "Invalid Listbox Entry" );
 
         aResult.mbDurationAmbiguous = false;
     }
 
-    // slide-advance mode
+    
     if( mpRB_ADVANCE_ON_MOUSE->IsEnabled() && mpRB_ADVANCE_AUTO->IsEnabled() &&
         (mpRB_ADVANCE_ON_MOUSE->IsChecked() || mpRB_ADVANCE_AUTO->IsChecked()))
     {
@@ -834,7 +834,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         aResult.mbPresChangeAmbiguous = false;
     }
 
-    // sound
+    
     if( mpLB_SOUND->IsEnabled())
     {
         maCurrentSoundFile = "";
@@ -857,7 +857,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         }
     }
 
-    // sound loop
+    
     if( mpCB_LOOP_SOUND->IsEnabled() )
     {
         aResult.mbLoopSound = mpCB_LOOP_SOUND->IsChecked();
@@ -882,7 +882,7 @@ void SlideTransitionPane::applyToSelectedPages()
         if( mpCB_AUTO_PREVIEW->IsEnabled() &&
             mpCB_AUTO_PREVIEW->IsChecked())
         {
-            if (aEffect.mnType) // mnType = 0 denotes no transition
+            if (aEffect.mnType) 
                 playCurrentEffect();
             else
                 stopEffects();
@@ -956,9 +956,9 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             {
                 mbIsMainViewChangePending = false;
 
-                // At this moment the controller may not yet been set at
-                // model or ViewShellBase.  Take it from the view shell
-                // passed with the event.
+                
+                
+                
                 if (mrBase.GetMainViewShell() != 0)
                 {
                     mxView = Reference<drawing::XDrawView>::query(mrBase.GetController());
@@ -1046,7 +1046,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected)
         sal_uInt16 nPos = mpLB_SOUND->GetSelectEntryPos();
         if( nPos == 2 )
         {
-            // other sound ...
+            
             openSoundFileDialog();
         }
     }
@@ -1108,6 +1108,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     return pWindow;
 }
 
-} //  namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

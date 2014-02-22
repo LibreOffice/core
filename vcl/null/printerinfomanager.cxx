@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/printerinfomanager.hxx"
@@ -52,7 +52,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_bDisableCUPS( false )
 #endif
 {
-    // initSystemDefaultPaper();
+    
 }
 
 PrinterInfoManager::~PrinterInfoManager()
@@ -67,7 +67,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool /* bWait */ )
 
 void PrinterInfoManager::initialize()
 {
-    // ???
+    
 }
 
 bool PrinterInfoManager::isCUPSDisabled() const
@@ -77,7 +77,7 @@ bool PrinterInfoManager::isCUPSDisabled() const
 
 void PrinterInfoManager::setCUPSDisabled( bool /* bDisable */ )
 {
-    // cups is already disabled in config so do nothing
+    
 }
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const

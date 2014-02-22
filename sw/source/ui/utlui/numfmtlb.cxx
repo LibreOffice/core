@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-// STATIC DATA
+
 
 /**
  *  Description:
@@ -122,7 +122,7 @@ SwView* NumFormatListBox::GetView()
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
     if (nCurrFormatType == -1 ||
-        (nCurrFormatType & nFormatType) == 0)   // there are mixed formats, like for example DateTime
+        (nCurrFormatType & nFormatType) == 0)   
     {
         SvNumberFormatter* pFormatter;
 
@@ -138,7 +138,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             pFormatter = rSh.GetNumberFormatter();
         }
 
-        Clear();    // Remove all entries from the Listbox
+        Clear();    
 
         NfIndexTableOffset eOffsetStart = NF_NUMBER_START;
         NfIndexTableOffset eOffsetEnd = NF_NUMBER_START;
@@ -302,7 +302,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
         }
     }
 
-    // No entry found:
+    
     double fValue = GetDefValue(nType);
     OUString sValue;
     Color* pCol = 0;
@@ -346,7 +346,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
         sValue += SW_RES(RID_STR_SYSTEM);
     }
 
-    nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
+    nPos = InsertEntry(sValue, nPos);   
     SetEntryData(nPos, (void*)nDefFmt);
     SelectEntryPos(nPos);
     nDefFormat = GetFormat();
@@ -419,11 +419,11 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
                 SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ))
             {
                 sal_uInt32 nNumberFormat = ((SfxUInt32Item*)pItem)->GetValue();
-                // oj #105473# change order of calls
+                
                 const SvNumberformat* pFmt = pFormatter->GetEntry(nNumberFormat);
                 if( pFmt )
                     eCurLanguage = pFmt->GetLanguage();
-                // SetDefFormat uses eCurLanguage to look for if this format already in the list
+                
                 SetDefFormat(nNumberFormat);
             }
             if( bShowLanguageControl && SFX_ITEM_SET == pOutSet->GetItemState(

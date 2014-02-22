@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,14 +37,14 @@
 #include "miscuno.hxx"
 #include <tools/urlobj.hxx>
 
-//! TODO make dynamic
+
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
 
 using namespace com::sun::star::uno;
 
 
-// Defines - CSV Import Preserve Options
+
 #define FIXED_WIDTH         "FixedWidth"
 #define FROM_ROW            "FromRow"
 #define CHAR_SET            "CharSet"
@@ -58,7 +58,7 @@ using namespace com::sun::star::uno;
 #define SEP_PATH_CLPBRD     "Office.Calc/Dialogs/ClipboardTextImport"
 #define SEP_PATH_TEXT2COL   "Office.Calc/Dialogs/TextToColumnsImport"
 
-// ============================================================================
+
 
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
@@ -74,7 +74,7 @@ static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode 
             if ( (sal_Unicode)rList.getToken(i+1,'\t').toInt32() == cSelect )
                 aStr = rList.getToken(i,'\t');
         if (aStr.isEmpty())
-            aStr = OUString(cSelect);         // Ascii
+            aStr = OUString(cSelect);         
 
         rCombo.SetText(aStr);
     }
@@ -95,11 +95,11 @@ static sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const OUString& rList )
         if (!c && !aStr.isEmpty())
         {
             sal_Unicode cFirst = aStr[0];
-            // #i24235# first try the first character of the string directly
+            
             if( (aStr.getLength() == 1) || (cFirst < '0') || (cFirst > '9') )
                 c = cFirst;
-            else    // keep old behaviour for compatibility (i.e. "39" -> "'")
-                c = (sal_Unicode) aStr.toInt32();       // Ascii
+            else    
+                c = (sal_Unicode) aStr.toInt32();       
         }
     }
     return c;
@@ -233,7 +233,7 @@ static void save_Separators(
     aItem.PutProperties(aNames, aValues);
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
@@ -288,10 +288,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
             SetText( aName );
     }
 
-    // To be able to prefill the correct values based on the file extension
+    
     bool bIsTSV = (aDatName.endsWithIgnoreAsciiCase(".tsv") || aDatName.endsWithIgnoreAsciiCase(".tab"));
 
-    // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
+    
     OUString sFieldSeparators(",;\t");
     OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
@@ -303,7 +303,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     sal_Int32 nLanguage = 0;
     load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage, meCall);
-    // load from saved settings
+    
     maFieldSeparators = OUString(sFieldSeparators);
 
     if( bMergeDelimiters && !bIsTSV )
@@ -320,15 +320,15 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     if ( bIsTSV )
         pCkbTab->Check();
     else
-        SetSeparators(); // Set Separators in the dialog from maFieldSeparators (empty are not set)
+        SetSeparators(); 
 
-    // Get Separators from the dialog (empty are set from default)
+    
     maFieldSeparators = GetSeparators();
 
-    // Clipboard is always Unicode, else detect.
+    
     rtl_TextEncoding ePreselectUnicode = (meCall == SC_IMPORTFILE ?
             RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
-    // Sniff for Unicode / not
+    
     if( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW && mpDatStream )
     {
         Seek( 0 );
@@ -337,17 +337,17 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
         switch (nUniPos)
         {
             case 2:
-                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
+                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   
                 break;
             case 3:
-                ePreselectUnicode = RTL_TEXTENCODING_UTF8;      // UTF-8
+                ePreselectUnicode = RTL_TEXTENCODING_UTF8;      
                 break;
             case 0:
                 {
                     sal_uInt16 n;
                     mpDatStream->ReadUInt16( n );
-                    // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
-                    // control characters except CR,LF,TAB
+                    
+                    
                     if ( (n & 0xff00) < 0x2000 )
                     {
                         switch ( n & 0xff00 )
@@ -357,21 +357,21 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
                             case 0x0d00 :
                                 break;
                             default:
-                                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
+                                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   
                         }
                     }
                     mpDatStream->Seek(0);
                 }
                 break;
             default:
-                ;   // nothing
+                ;   
         }
         mnStreamPos = mpDatStream->Tell();
     }
 
     pNfRow->SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
-    // *** Separator characters ***
+    
     lcl_FillCombo( *pCbTextSep, aTextSepList, mcTextSep );
     pCbTextSep->SetText( sTextSeparators );
 
@@ -388,11 +388,11 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     pCkbOther->SetClickHdl( aSeparatorHdl );
     pEdOther->SetModifyHdl( aSeparatorHdl );
 
-    // *** text encoding ListBox ***
-    // all encodings allowed, including Unicode, but subsets are excluded
+    
+    
     pLbCharSet->FillFromTextEncodingTable( sal_True );
-    // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
-    // independent document linkage.
+    
+    
     pLbCharSet->InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
     pLbCharSet->SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
             osl_getThreadTextEncoding() : ePreselectUnicode );
@@ -408,7 +408,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     pLbCustomLang->InsertLanguage(LANGUAGE_SYSTEM);
     pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage), true);
 
-    // *** column type ListBox ***
+    
     sal_Int32 nCount = comphelper::string::getTokenCount(aColumnUser, ';');
     for (sal_Int32 i=0; i<nCount; i++)
         pLbType->InsertEntry( aColumnUser.getToken( i, ';' ) );
@@ -417,7 +417,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     pFtType->Disable();
     pLbType->Disable();
 
-    // *** table box preview ***
+    
     mpTableBox->Init();
     mpTableBox->SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
     mpTableBox->InitTypes( *pLbType );
@@ -446,11 +446,11 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
         pFtRow->Disable();
         pNfRow->Disable();
 
-        // Quoted field as text option is not used for text-to-columns mode.
+        
         pCkbQuotedAsText->Check(false);
         pCkbQuotedAsText->Disable();
 
-        // Always detect special numbers for text-to-columns mode.
+        
         pCkbDetectNumber->Check();
         pCkbDetectNumber->Disable();
     }
@@ -463,7 +463,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 {
@@ -476,7 +476,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
     if (!mpRowPosArray)
         mpRowPosArray = new sal_uLong[ASCIIDLG_MAXROWS + 2];
 
-    if (!mnRowPosCount) // complete re-fresh
+    if (!mnRowPosCount) 
     {
         memset( mpRowPosArray, 0, sizeof(mpRowPosArray[0]) * (ASCIIDLG_MAXROWS+2));
 
@@ -489,7 +489,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 
     if (nLine >= mnRowPosCount)
     {
-        // need to work out some more line information
+        
         do
         {
             if (!Seek( mpRowPosArray[mnRowPosCount]) ||
@@ -509,7 +509,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
         if (mpDatStream->IsEof() &&
                 mnStreamPos == mpRowPosArray[mnRowPosCount-1])
         {
-            // the very end, not even an empty line read
+            
             bRet = false;
             --mnRowPosCount;
         }
@@ -521,10 +521,10 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
         mnStreamPos = mpDatStream->Tell();
     }
 
-    //  If the file content isn't unicode, ReadUniStringLine
-    //  may try to seek beyond the file's end and cause a CANTSEEK error
-    //  (depending on the stream type). The error code has to be cleared,
-    //  or further read operations (including non-unicode) will fail.
+    
+    
+    
+    
     if ( mpDatStream->GetError() == ERRCODE_IO_CANTSEEK )
         mpDatStream->ResetError();
 
@@ -630,7 +630,7 @@ void ScImportAsciiDlg::UpdateVertical()
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {
@@ -666,8 +666,8 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     maFieldSeparators = GetSeparators();
     sal_Unicode cOldSep = mcTextSep;
     mcTextSep = lcl_CharFromCombo( *pCbTextSep, aTextSepList );
-    // Any separator changed may result in completely different lines due to
-    // embedded line breaks.
+    
+    
     if (cOldSep != mcTextSep || aOldFldSeps != maFieldSeparators)
         UpdateVertical();
 
@@ -684,7 +684,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
         SetPointer( Pointer( POINTER_WAIT ) );
         rtl_TextEncoding eOldCharSet = meCharSet;
         SetSelectedCharSet();
-        // switching char-set invalidates 8bit -> String conversions
+        
         if (eOldCharSet != meCharSet)
             UpdateVertical();
 
@@ -713,10 +713,10 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
 {
     sal_Int32 nBaseLine = mpTableBox->GetFirstVisLine();
     sal_Int32 nRead = mpTableBox->GetVisLineCount();
-    // If mnRowPosCount==0, this is an initializing call, read ahead for row
-    // count and resulting scroll bar size and position to be able to scroll at
-    // all. When adding lines, read only the amount of next lines to be
-    // displayed.
+    
+    
+    
+    
     if (!mnRowPosCount || nRead > CSV_PREVIEW_LINES)
         nRead = CSV_PREVIEW_LINES;
 

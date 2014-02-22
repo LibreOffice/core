@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -110,7 +110,7 @@ bool JobData::setPaperBin( int i_nPaperBin )
 
 bool JobData::getStreamBuffer( void*& pData, int& bytes )
 {
-    // consistency checks
+    
     if( ! m_pParser )
         m_pParser = m_aContext.getParser();
     if( m_pParser != m_aContext.getParser() ||
@@ -119,7 +119,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
 
     SvMemoryStream aStream;
 
-    // write header job data
+    
     aStream.WriteLine(OString("JobData 1"));
 
     OStringBuffer aLine;
@@ -172,7 +172,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     aLine.append(static_cast<sal_Int32>(m_nColorDevice));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    // now append the PPDContext stream buffer
+    
     aStream.WriteLine( "PPDContexData" );
     sal_uLong nBytes;
     char* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
@@ -180,7 +180,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
         aStream.Write( pContextBuffer, nBytes );
     delete [] pContextBuffer;
 
-    // success
+    
     pData = rtl_allocateMemory( bytes = aStream.Tell() );
     memcpy( pData, aStream.GetData(), bytes );
     return true;

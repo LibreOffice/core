@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <libcmis/libcmis.hxx>
@@ -22,7 +22,7 @@ namespace cmis
     {
         INetURLObject aUrl( urlStr );
 
-        // Decode the authority to get the binding URL and repository id
+        
         OUString sDecodedHost = aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
         INetURLObject aHostUrl( sDecodedHost );
         m_sBindingUrl = aHostUrl.GetURLNoMark( );
@@ -31,7 +31,7 @@ namespace cmis
         m_sUser = aUrl.GetUser( INetURLObject::DECODE_WITH_CHARSET );
         m_sPass = aUrl.GetPass( INetURLObject::DECODE_WITH_CHARSET );
 
-        // Store the path to the object
+        
         m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         m_sId = aUrl.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
@@ -77,7 +77,7 @@ namespace cmis
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis:
 
         if ( !m_sPath.isEmpty( ) )
         {

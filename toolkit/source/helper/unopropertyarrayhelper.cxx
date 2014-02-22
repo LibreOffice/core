@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,9 +22,9 @@
 #include <toolkit/helper/property.hxx>
 #include <map>
 
-//  ----------------------------------------------------
-//  class UnoPropertyArrayHelper
-//  ----------------------------------------------------
+
+
+
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs )
 {
@@ -49,7 +49,7 @@ sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
     return maIDs.find( nPropId ) != maIDs.end() ? sal_True : sal_False;
 }
 
-// ::cppu::IPropertyArrayHelper
+
 sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
 {
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >(nPropId);
@@ -66,7 +66,7 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropNa
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > UnoPropertyArrayHelper::getProperties()
 {
-    // Sortiert nach Namen...
+    
 
     std::map<sal_Int32, sal_uInt16> aSortedPropsIds;
     for( std::set<sal_Int32>::const_iterator it =  maIDs.begin(); it != maIDs.end(); ++it)
@@ -76,13 +76,13 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropNa
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
-            // Einzelproperties...
+            
             for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
                 aSortedPropsIds[ 1+GetPropertyOrderNr( i ) ]  = i;
         }
     }
 
-    sal_uInt32 nProps = aSortedPropsIds.size();   // koennen jetzt mehr sein
+    sal_uInt32 nProps = aSortedPropsIds.size();   
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps( nProps );
     ::com::sun::star::beans::Property* pProps = aProps.getArray();
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -176,7 +176,7 @@ class SwHTMLForm_Impl
 
     SvKeyValueIterator          *pHeaderAttrs;
 
-    // gecachte Interfaces
+    
     uno::Reference< drawing::XDrawPage >            xDrawPage;
     uno::Reference< container::XIndexContainer >    xForms;
     uno::Reference< drawing::XShapes >              xShapes;
@@ -185,7 +185,7 @@ class SwHTMLForm_Impl
     uno::Reference< script::XEventAttacherManager >     xControlEventManager;
     uno::Reference< script::XEventAttacherManager >     xFormEventManager;
 
-    // Kontext-Informationen
+    
     uno::Reference< container::XIndexContainer >    xFormComps;
     uno::Reference< beans::XPropertySet >           xFCompPropSet;
     uno::Reference< drawing::XShape >               xShape;
@@ -361,9 +361,9 @@ const uno::Reference< script::XEventAttacherManager >&
 class SwHTMLImageWatcher :
     public cppu::WeakImplHelper2< awt::XImageConsumer, XEventListener >
 {
-    uno::Reference< drawing::XShape >       xShape;     // das control
+    uno::Reference< drawing::XShape >       xShape;     
     uno::Reference< XImageProducerSupplier >    xSrc;
-    uno::Reference< awt::XImageConsumer >   xThis;      // man selbst
+    uno::Reference< awt::XImageConsumer >   xThis;      
     sal_Bool                            bSetWidth;
     sal_Bool                            bSetHeight;
 
@@ -374,13 +374,13 @@ public:
                         sal_Bool bWidth, sal_Bool bHeight );
     ~SwHTMLImageWatcher();
 
-    // startProduction darf nicht im Konstruktor gerufen werden, weil
-    // wir und ggf. selbst zerstoeren ... Deshlab eine eigene Methode.
+    
+    
     void start() { xSrc->getImageProducer()->startProduction(); }
 
-    // UNO Anbindung
+    
 
-    // XImageConsumer
+    
     virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height)
         throw( uno::RuntimeException );
     virtual void SAL_CALL setColorModel(
@@ -403,7 +403,7 @@ public:
             const uno::Reference< awt::XImageProducer > & Producer)
         throw( uno::RuntimeException );
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const EventObject& Source ) throw ( uno::RuntimeException);
 };
 
@@ -413,25 +413,25 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     xShape( rShape ),
     bSetWidth( bWidth ), bSetHeight( bHeight )
 {
-    // Die Quelle des Images merken
+    
     uno::Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
     uno::Reference< awt::XControlModel > xControlModel(
             xControlShape->getControl() );
     xSrc = uno::Reference< XImageProducerSupplier >( xControlModel, UNO_QUERY );
     OSL_ENSURE( xSrc.is(), "Kein XImageProducerSupplier" );
 
-    // Als Event-Listener am Shape anmelden, damit wir es beim dispose
-    // loslassen ko"onnen ...
+    
+    
     uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
     uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->addEventListener( xEvtLstnr );
 
-    // Zum Schluss halten wir noch eine Referenz auf uns selbst, damit
-    // wir am Leben bleiben ... (eigentlich sollte das nicht neotig sein,
-    // weil wir ja noch an diversen anderen Stellen angemeldet sind)
+    
+    
+    
     xThis = (awt::XImageConsumer *)this;
 
-    // und am ImageProducer anmelden, um die Groesse zu erehalten ...
+    
     xSrc->getImageProducer()->addConsumer( xThis );
 }
 
@@ -441,12 +441,12 @@ SwHTMLImageWatcher::~SwHTMLImageWatcher()
 
 void SwHTMLImageWatcher::clear()
 {
-    // Am Shape als Event-Listener abmelden
+    
     uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
     uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->removeEventListener( xEvtLstnr );
 
-    // Am ImageProducer abmelden
+    
     uno::Reference<awt::XImageProducer> xProd = xSrc->getImageProducer();
     if( xProd.is() )
         xProd->removeConsumer( xThis );
@@ -458,9 +458,9 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
     OSL_ENSURE( bSetWidth || bSetHeight,
             "Breite oder Hoehe muss angepasst werden" );
 
-    // Wenn keine Breite oder Hoehe angegeben ist, ist das das init von
-    // der leeren Grafik, die angezeigt wird, bevor der Stream einer
-    // asynchron anzuzeigenden Grfik verfuegbar ist.
+    
+    
+    
     if( !Width && !Height )
         return;
 
@@ -500,11 +500,11 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
     xShape->setSize( aNewSz );
     if( bSetWidth )
     {
-        // Wenn das Control in einer Tabelle verankert ist, muesen
-        // die Tabellen-Spalten neu berechnet werden
+        
+        
 
-        // Um an den SwXShape* zu gelangen, brauchen wir ein Interface,
-        // das auch vom SwXShape implementiert wird.
+        
+        
 
         uno::Reference< beans::XPropertySet > xPropSet( xShape, UNO_QUERY );
         uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
@@ -545,7 +545,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
         }
     }
 
-    // uns selbst abmelden und loeschen
+    
     clear();
     uno::Reference< awt::XImageConsumer >  xTmp = (awt::XImageConsumer*)this;
     xThis = 0;
@@ -578,7 +578,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
 {
     if( awt::ImageStatus::IMAGESTATUS_ERROR == Status || awt::ImageStatus::IMAGESTATUS_ABORTED == Status )
     {
-        // uns selbst abmelden und loeschen
+        
         clear();
         uno::Reference< awt::XImageConsumer > xTmp = (awt::XImageConsumer*)this;
         xThis = 0;
@@ -589,7 +589,7 @@ void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( uno::Ru
 {
     uno::Reference< awt::XImageConsumer > xTmp;
 
-    // Wenn das Shape verschwindet soll muessen wir es loslassen
+    
     uno::Reference< drawing::XShape > xTmpShape;
     if( evt.Source == xShape )
     {
@@ -681,23 +681,23 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     if( !rTextSz.Width() && !rTextSz.Height() && !bMinWidth  && !bMinHeight )
         return;
 
-    // Um an den SwXShape* zu gelangen, brauchen wir ein Interface,
-    // das auch vom SwXShape implementiert wird.
+    
+    
     uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
 
     SwViewShell *pVSh;
     pDoc->GetEditShell( &pVSh );
     if( !pVSh && !nEventId )
     {
-        // If there is no view shell by now and the doc shell is an internal
-        // one, no view shell will be created. That for, we have to do that of
-        // our own. This happens if a linked section is inserted or refreshed.
+        
+        
+        
         SwDocShell *pDocSh = pDoc->GetDocShell();
         if( pDocSh )
         {
             if ( pDocSh->GetMedium() )
             {
-                // if there is no hidden property in the MediaDescriptor it should be removed after loading
+                
                 SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, false );
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
@@ -716,11 +716,11 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
     OSL_ENSURE( pSwShape, "Wo ist das SW-Shape?" );
 
-    // es muss ein Draw-Format sein
+    
     SwFrmFmt *pFrmFmt = pSwShape->GetFrmFmt();
     OSL_ENSURE( RES_DRAWFRMFMT == pFrmFmt->Which(), "Kein DrawFrmFmt" );
 
-    // Schauen, ob es ein SdrObject dafuer gibt
+    
     const SdrObject *pObj = pFrmFmt->FindSdrObject();
     OSL_ENSURE( pObj, "SdrObject nicht gefunden" );
     OSL_ENSURE( FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
@@ -735,7 +735,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     awt::Size aSz( rShape->getSize() );
     awt::Size aNewSz( 0, 0 );
 
-    // #i71248# ensure we got a XControl before apllying corrections
+    
     if(xControl.is())
     {
         if( bMinWidth || bMinHeight )
@@ -799,15 +799,15 @@ static void lcl_html_setEvents(
         const std::vector<OUString>& rUnoMacroParamTbl,
         const OUString& rType )
 {
-    // Erstmal muss die Anzahl der Events ermittelt werden ...
+    
     sal_Int32 nEvents = 0;
     sal_uInt16 i;
 
     for( i = 0; HTML_ET_END != aEventTypeTable[i]; i++ )
     {
         const SvxMacro *pMacro = rMacroTbl.Get( aEventTypeTable[i] );
-        // Solange nicht alle Events implementiert sind, enthaelt die
-        // Tabelle auch Leerstrings!
+        
+        
         if( pMacro && aEventListenerTable[i] )
             nEvents++;
     }
@@ -947,12 +947,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         uno::Reference< beans::XPropertySet > xShapePropSet( xCreate, UNO_QUERY );
 
-        // linken/rechten Rand setzen
+        
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true,
                                                      &pItem ) )
         {
-            // Ggf. den Erstzeilen-Einzug noch plaetten
+            
             const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
             SvxLRSpaceItem aLRItem( *pLRItem );
             aLRItem.SetTxtFirstLineOfst( 0 );
@@ -980,11 +980,11 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 OUString("RightMargin"), aAny2 );
         }
 
-        // oberen/unteren Rand setzen
+        
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true,
                                                      &pItem ) )
         {
-            // Ggf. den Erstzeilen-Einzug noch plaetten
+            
             const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
             if( rCSS1PropInfo.bTopMargin )
             {
@@ -1019,10 +1019,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             const Color &rColor = ((const SvxBrushItem *)pItem)->GetColor();
-            /// copy color, if color is not "no fill"/"auto fill"
+            /
             if( rColor.GetColor() != COL_TRANSPARENT )
             {
-                /// copy complete color with transparency
+                /
                 aTmp <<= static_cast<sal_Int32>(rColor.GetColor());
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
@@ -1141,7 +1141,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 nAnchorType = text::TextContentAnchorType_AT_FRAME;
                 SwPaM aPaM( *pFlySttNd );
 
-                uno::Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
+                uno::Reference< text::XText >  xDummyTxtRef; 
                 xTxtRg = new SwXTextRange( aPaM, xDummyTxtRef );
             }
             else
@@ -1220,7 +1220,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             if( !xTxtRg.is() )
             {
-                uno::Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
+                uno::Reference< text::XText >  xDummyTxtRef; 
                 xTxtRg = new SwXTextRange( *pPam, xDummyTxtRef );
             }
 
@@ -1255,16 +1255,16 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         pFormImpl->GetShapes()->add(xShape);
 
-        // Das Control-Model am Control-Shape setzen
+        
         uno::Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
         uno::Reference< awt::XControlModel >  xControlModel( rFComp, UNO_QUERY );
         xControlShape->setControl( xControlModel );
     }
 
-    // Da beim Einfuegen der Controls der Fokus gesetzt wird, werden
-    // auch schon Fokus-Events verschickt. Damit die nicht evtl. schon
-    // vorhendene JavaSCript-Eents rufen, werden die Events nachtraeglich
-    // gesetzt.
+    
+    
+    
+    
     if( !rMacroTbl.empty() || !rUnoMacroTbl.empty() )
     {
         lcl_html_setEvents( pFormImpl->GetControlEventManager(),
@@ -1283,7 +1283,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
 void SwHTMLParser::NewForm( sal_Bool bAppend )
 {
-    // Gibt es schon eine Form?
+    
     if( pFormImpl && pFormImpl->GetFormComps().is() )
         return;
 
@@ -1398,7 +1398,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     }
     else
     {
-        // Bei leerer URL das Directory nehmen
+        
         INetURLObject aURLObj( aPathToFile );
         aAction = aURLObj.GetPartBeforeLastName();
     }
@@ -1526,11 +1526,11 @@ void SwHTMLParser::InsertInput()
             sImgSrc = rOption.GetString();
             break;
         case HTML_O_WIDTH:
-            // erstmal nur als Pixelwerte merken!
+            
             nWidth = rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            // erstmal nur als Pixelwerte merken!
+            
             nHeight = rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
@@ -1540,21 +1540,21 @@ void SwHTMLParser::InsertInput()
                 rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_TABINDEX:
-            // erstmal nur als Pixelwerte merken!
+            
             nTabIndex = rOption.GetNumber();
             break;
 
         case HTML_O_SDONFOCUS:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONBLUR:               // eigtl. nur EDIT
+        case HTML_O_SDONBLUR:               
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = sal_True;
@@ -1562,23 +1562,23 @@ void SwHTMLParser::InsertInput()
 
         case HTML_O_SDONCLICK:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONCHANGE:             // eigtl. nur EDIT
+        case HTML_O_SDONCHANGE:             
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONSELECT:             // eigtl. nur EDIT
+        case HTML_O_SDONSELECT:             
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
             bSetEvent = sal_True;
@@ -1607,20 +1607,20 @@ void SwHTMLParser::InsertInput()
 
     if( HTML_IT_IMAGE==eType )
     {
-        // Image-Controls ohne Image-URL werden ignoriert (wie bei MS)
+        
         if( sImgSrc.isEmpty() )
             return;
     }
     else
     {
-        // ALIGN fuer alle Controls auszuwerten ist keine so gute Idee,
-        // solange Absatz-gebundene Controls die Hoehe von Tabellen-Zellen
-        // nicht beeinflussen
+        
+        
+        
         eVertOri = text::VertOrientation::TOP;
         eHoriOri = text::HoriOrientation::NONE;
     }
 
-    // Defaults entsprechen HTML_IT_TEXT
+    
     const sal_Char *pType = "TextField";
     sal_Bool bKeepCRLFInValue = sal_False;
     switch( eType )
@@ -1662,8 +1662,8 @@ void SwHTMLParser::InsertInput()
         ;
     }
 
-    // Fuer ein par Controls mussen CR/LF noch aus dem VALUE
-    // geloescht werden.
+    
+    
     if( !bKeepCRLFInValue )
     {
         sText = comphelper::string::remove(sText, '\r');
@@ -1710,8 +1710,8 @@ void SwHTMLParser::InsertInput()
 
     aTmp <<= sText;
 
-    Size aSz( 0, 0 );       // defaults
-    Size aTextSz( 0, 0 );   // Text-Size
+    Size aSz( 0, 0 );       
+    Size aTextSz( 0, 0 );   
     sal_Bool bMinWidth = sal_False, bMinHeight = sal_False;
     sal_Bool bUseSize = sal_False;
     switch( eType )
@@ -1726,10 +1726,10 @@ void SwHTMLParser::InsertInput()
             aTmp <<= OUString();
             xPropSet->setPropertyValue("Label",
                                         aTmp );
-            // Beim RadioButton darf die DefaultChecked-Property
-            // erst gesetzt werden, wenn das Control angelegt und ein
-            // activateTabOrder gerufen wurde, weil es sonst noch zu der
-            // vorhergehenden Gruppe gehoert.
+            
+            
+            
+            
             if( HTML_IT_CHECKBOX == eType )
             {
                 aTmp <<= (sal_Int16) nChecked ;
@@ -1743,14 +1743,14 @@ void SwHTMLParser::InsertInput()
                 aMacroTbl.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
                 aMacroTbl.Erase( HTML_ET_ONCLICK );
             }
-            // SIZE auszuwerten duerfte hier keinen Sinn machen???
+            
             bMinWidth = bMinHeight = sal_True;
         }
         break;
 
     case HTML_IT_IMAGE:
         {
-            // SIZE = WIDTH
+            
             aSz.Width() = nSize ? nSize : nWidth;
             aSz.Width() = nWidth;
             aSz.Height() = nHeight;
@@ -1813,7 +1813,7 @@ void SwHTMLParser::InsertInput()
     case HTML_IT_FILE:
         if( HTML_IT_FILE != eType )
         {
-        // Beim File-Control wird der VALUE aus Sicherheitsgruenden ignoriert.
+        
             xPropSet->setPropertyValue(
                 OUString("DefaultText"), aTmp );
             if( nMaxLen != 0 )
@@ -1883,8 +1883,8 @@ void SwHTMLParser::InsertInput()
         bMinHeight = sal_False;
     }
 
-    // Beim Image-Button bei nicht gegebern Groesse einen sinnvollen Default
-    // setzen
+    
+    
     if( HTML_IT_IMAGE== eType )
     {
         if( !aSz.Width() )
@@ -1926,9 +1926,9 @@ void SwHTMLParser::InsertInput()
 
     if( HTML_IT_IMAGE == eType )
     {
-        // Die URL erst nach dem Einfuegen setzen, weil sich der
-        // Download der Grafik erst dann am XModel anmelden kann,
-        // wenn das Control eingefuegt ist.
+        
+        
+        
         aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc, Link(), false));
         xPropSet->setPropertyValue("ImageURL",
                                     aTmp );
@@ -1957,7 +1957,7 @@ void SwHTMLParser::NewTextArea()
 
     if( !pFormImpl || !pFormImpl->GetFormComps().is() )
     {
-        // Spezialbehandlung fuer TextArea auch untem im Parser beenden
+        
         FinishTextArea();
         return;
     }
@@ -2016,7 +2016,7 @@ void SwHTMLParser::NewTextArea()
 
         case HTML_O_SDONFOCUS:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = sal_True;
@@ -2024,7 +2024,7 @@ void SwHTMLParser::NewTextArea()
 
         case HTML_O_SDONBLUR:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = sal_True;
@@ -2032,7 +2032,7 @@ void SwHTMLParser::NewTextArea()
 
         case HTML_O_SDONCLICK:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = sal_True;
@@ -2040,7 +2040,7 @@ void SwHTMLParser::NewTextArea()
 
         case HTML_O_SDONCHANGE:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = sal_True;
@@ -2048,7 +2048,7 @@ void SwHTMLParser::NewTextArea()
 
         case HTML_O_SDONSELECT:
             eScriptType2 = STARBASIC;
-            //fallthrough
+            
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
             bSetEvent = sal_True;
@@ -2170,10 +2170,10 @@ void SwHTMLParser::NewTextArea()
     if( aTextSz.Width() || aTextSz.Height() )
         SetControlSize( xShape, aTextSz, sal_False, sal_False );
 
-    // einen neuen Kontext anlegen
+    
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_TEXTAREA_ON );
 
-    // und PRE/Listing/XMP voruebergehend aussetzen
+    
     SplitPREListingXMP( pCntxt );
     PushContext( pCntxt );
 
@@ -2198,11 +2198,11 @@ void SwHTMLParser::EndTextArea()
 
     pFormImpl->ReleaseFCompPropSet();
 
-    // den Kontext holen
+    
     _HTMLAttrContext *pCntxt = PopContext( HTML_TEXTAREA_ON );
     if( pCntxt )
     {
-        // und ggf. die Attribute beenden
+        
         EndContext( pCntxt );
         delete pCntxt;
     }
@@ -2224,7 +2224,7 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
         break;
     case HTML_NEWPARA:
         if( !bTAIgnoreNewPara )
-            rText += "\n";    // das ist hier richtig!!!
+            rText += "\n";    
         break;
     default:
         rText += "<";
@@ -2402,7 +2402,7 @@ void SwHTMLParser::NewSelect()
     }
     else
     {
-        if( nSelectEntryCnt <= 1 )      // 4 Zeilen als default
+        if( nSelectEntryCnt <= 1 )      
             nSelectEntryCnt = 4;
 
         if( bMultiple )
@@ -2454,10 +2454,10 @@ void SwHTMLParser::NewSelect()
     if( aTextSz.Height() || bMinWidth || bMinHeight )
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
 
-    // einen neuen Kontext anlegen
+    
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_SELECT_ON );
 
-    // und PRE/Listing/XMP voruebergehend aussetzen
+    
     SplitPREListingXMP( pCntxt );
     PushContext( pCntxt );
 
@@ -2514,8 +2514,8 @@ void SwHTMLParser::EndSelect()
         size_t nSelCnt = pFormImpl->GetSelectedList().size();
         if( !nSelCnt && 1 == nSelectEntryCnt && nEntryCnt )
         {
-            // In einer DropDown-Listbox sollte immer ein Eintrag selektiert
-            // sein.
+            
+            
             pFormImpl->GetSelectedList().insert( pFormImpl->GetSelectedList().begin(), 0 );
             nSelCnt = 1;
         }
@@ -2546,11 +2546,11 @@ void SwHTMLParser::EndSelect()
 
     pFormImpl->ReleaseFCompPropSet();
 
-    // den Kontext holen
+    
     _HTMLAttrContext *pCntxt = PopContext( HTML_SELECT_ON );
     if( pCntxt )
     {
-        // und ggf. die Attribute beenden
+        
         EndContext( pCntxt );
         delete pCntxt;
     }
@@ -2574,7 +2574,7 @@ void SwHTMLParser::InsertSelectOption()
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            // erstmal weglassen!!!
+            
             break;
         case HTML_O_SELECTED:
             bLBEntrySelected = true;

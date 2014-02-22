@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -27,7 +27,7 @@
 #include <svx/svdobj.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-// folgende fuer InsertSdPage()
+
 #include <svx/svdlayer.hxx>
 
 #include "DrawDocShell.hxx"
@@ -53,9 +53,9 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-//=============================================================================
-// class SdLayer
-//=============================================================================
+
+
+
 
 #define WID_LAYER_LOCKED    1
 #define WID_LAYER_PRINTABLE 2
@@ -150,10 +150,10 @@ SdLayer::~SdLayer() throw()
 {
 }
 
-// uno helper
+
 UNO3_GETIMPLEMENTATION_IMPL( SdLayer );
 
-// XServiceInfo
+
 OUString SAL_CALL SdLayer::getImplementationName()
     throw(uno::RuntimeException)
 {
@@ -174,7 +174,7 @@ uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
     return aSeq;
 }
 
-// beans::XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SdLayer::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
@@ -309,7 +309,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
 {
     if(pLayer&&pLayerManager)
     {
-        // Try 1. is an arbitrary page open?
+        
         ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
@@ -326,7 +326,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             }
         }
 
-        // Try 2. get info from FrameView
+        
         if(pLayerManager->GetDocShell())
         {
             ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
@@ -339,14 +339,14 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
                 }
         }
     }
-    return sal_False; //TODO: uno::Exception?
+    return sal_False; 
 }
 
 void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
 {
     if(pLayer&&pLayerManager)
     {
-        // Try 1. is an arbitrary page open?
+        
         ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
@@ -366,7 +366,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             }
         }
 
-        // Try 2. get info from FrameView
+        
         if(pLayerManager->GetDocShell())
         {
             ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
@@ -399,13 +399,13 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             }
         }
     }
-    //TODO: uno::Exception?
+    
 }
 
 
 
 
-//=====  ::com::sun::star::container::XChild  =================================
+
 
 uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -426,7 +426,7 @@ void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
     throw lang::NoSupportException ();
 }
 
-// XComponent
+
 void SAL_CALL SdLayer::dispose(  ) throw (uno::RuntimeException)
 {
     pLayerManager = 0;
@@ -445,9 +445,9 @@ void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventLi
 }
 
 
-//=============================================================================
-// class SdLayerManager
-//=============================================================================
+
+
+
 
 /** */
 SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()
@@ -462,10 +462,10 @@ SdLayerManager::~SdLayerManager() throw()
     dispose();
 }
 
-// uno helper
+
 UNO3_GETIMPLEMENTATION_IMPL( SdLayerManager );
 
-// XComponent
+
 void SAL_CALL SdLayerManager::dispose(  ) throw (uno::RuntimeException)
 {
     mpModel = 0;
@@ -488,7 +488,7 @@ void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::X
     OSL_FAIL("not implemented!");
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SdLayerManager::getImplementationName()
     throw(uno::RuntimeException)
 {
@@ -509,7 +509,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
     return aSeq;
 }
 
-// XLayerManager
+
 uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal_Int32 nIndex )
     throw(uno::RuntimeException)
 {
@@ -527,7 +527,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         sal_Int32 nLayer = nLayerCnt - 2 + 1;
         OUString aLayerName;
 
-        // Test for existing names
+        
         while( aLayerName.isEmpty() || rLayerAdmin.GetLayer( aLayerName, false) )
         {
             aLayerName = SD_RESSTR(STR_LAYER);
@@ -610,7 +610,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
     return xLayer;
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL SdLayerManager::getCount()
     throw(uno::RuntimeException)
 {
@@ -651,7 +651,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
 }
 
 
-// XNameAccess
+
 uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -706,7 +706,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
     return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), false );
 }
 
-// XElementAccess
+
 uno::Type SAL_CALL SdLayerManager::getElementType()
     throw(uno::RuntimeException)
 {
@@ -793,16 +793,16 @@ uno::Reference<drawing::XLayer> SdLayerManager::GetLayer (SdrLayer* pLayer)
     uno::WeakReference<uno::XInterface> xRef;
     uno::Reference<drawing::XLayer>  xLayer;
 
-    // Search existing xLayer for the given pLayer.
+    
     if (mpLayers->findRef (xRef, (void*)pLayer, compare_layers))
         xLayer = uno::Reference<drawing::XLayer> (xRef, uno::UNO_QUERY);
 
-    // Create the xLayer if necessary.
+    
     if ( ! xLayer.is())
     {
         xLayer = new SdLayer (this, pLayer);
 
-        // Remember the new xLayer for future calls.
+        
         uno::WeakReference<uno::XInterface> wRef(xLayer);
         mpLayers->insert(wRef);
     }

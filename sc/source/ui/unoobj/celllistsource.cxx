@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "celllistsource.hxx"
@@ -27,10 +27,10 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-//.........................................................................
+
 namespace calc
 {
-//.........................................................................
+
 
 #define PROP_HANDLE_RANGE_ADDRESS  1
 
@@ -44,11 +44,11 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-    //=====================================================================
-    //= OCellListSource
-    //=====================================================================
+    
+    
+    
     DBG_NAME( OCellListSource )
-    //---------------------------------------------------------------------
+    
 #ifdef DBG_UTIL
     const char* OCellListSource::checkConsistency_static( const void* _pThis )
     {
@@ -59,13 +59,13 @@ namespace calc
     {
         const char* pAssertion = NULL;
 
-        // TODO: place any checks here to ensure consistency of this instance
+        
 
         return pAssertion;
     }
 #endif
 
-    //---------------------------------------------------------------------
+    
     OCellListSource::OCellListSource( const Reference< XSpreadsheetDocument >& _rxDocument )
         :OCellListSource_Base( m_aMutex )
         ,OCellListSource_PBase( OCellListSource_Base::rBHelper )
@@ -77,7 +77,7 @@ namespace calc
 
         OSL_PRECOND( m_xDocument.is(), "OCellListSource::OCellListSource: invalid document!" );
 
-        // register our property at the base class
+        
         CellRangeAddress aInitialPropValue;
         registerPropertyNoMember(
             OUString( "CellRange" ),
@@ -88,25 +88,25 @@ namespace calc
         );
     }
 
-    //---------------------------------------------------------------------
+    
     OCellListSource::~OCellListSource( )
     {
         if ( !OCellListSource_Base::rBHelper.bDisposed )
         {
-            acquire();  // prevent duplicate dtor
+            acquire();  
             dispose();
         }
 
         DBG_DTOR( OCellListSource, checkConsistency_static );
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( OCellListSource, OCellListSource_Base, OCellListSource_PBase )
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCellListSource, OCellListSource_Base, OCellListSource_PBase )
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -123,23 +123,23 @@ namespace calc
 
         WeakAggComponentImplHelperBase::disposing();
 
-        // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)
+        
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  ) throw(RuntimeException)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         return createPropertySetInfo( getInfoHelper() ) ;
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& SAL_CALL OCellListSource::getInfoHelper()
     {
         return *OCellListSource_PABase::getArrayHelper();
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper* OCellListSource::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -147,30 +147,30 @@ namespace calc
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         OSL_ENSURE( _nHandle == PROP_HANDLE_RANGE_ADDRESS, "OCellListSource::getFastPropertyValue: invalid handle!" );
-            // we only have this one property ....
-        (void)_nHandle;     // avoid warning in product version
+            
+        (void)_nHandle;     
 
         _rValue <<= getRangeAddress( );
     }
 
-    //--------------------------------------------------------------------
+    
     void OCellListSource::checkDisposed( ) const SAL_THROW( ( DisposedException ) )
     {
         if ( OCellListSource_Base::rBHelper.bInDispose || OCellListSource_Base::rBHelper.bDisposed )
             throw DisposedException();
-            // TODO: is it worth having an error message here?
+            
     }
 
     void OCellListSource::checkInitialized() SAL_THROW( ( RuntimeException ) )
     {
         if ( !m_bInitialized )
             throw RuntimeException();
-            // TODO: error message
+            
     }
 
     OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException)
@@ -202,7 +202,7 @@ namespace calc
         return aAddress;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeColumn, sal_Int32 _nRangeRelativeRow )
     {
         OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
@@ -216,7 +216,7 @@ namespace calc
         return sText;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -228,7 +228,7 @@ namespace calc
         return aAddress.EndRow - aAddress.StartRow + 1;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -242,7 +242,7 @@ namespace calc
         return getCellTextContent_noCheck( 0, _nPosition );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -260,7 +260,7 @@ namespace calc
         return aAllEntries;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -274,7 +274,7 @@ namespace calc
         m_aListEntryListeners.addInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -288,7 +288,7 @@ namespace calc
         m_aListEntryListeners.removeInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -296,7 +296,7 @@ namespace calc
         notifyModified();
     }
 
-    //--------------------------------------------------------------------
+    
     void OCellListSource::notifyModified()
     {
         EventObject aEvent;
@@ -311,7 +311,7 @@ namespace calc
             }
             catch( const RuntimeException& )
             {
-                // silent this
+                
             }
             catch( const Exception& )
             {
@@ -321,7 +321,7 @@ namespace calc
 
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::disposing( const EventObject& aEvent ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -329,19 +329,19 @@ namespace calc
         Reference<XInterface> xRangeInt( m_xRange, UNO_QUERY );
         if ( xRangeInt == aEvent.Source )
         {
-            // release references to range object
+            
             m_xRange.clear();
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         if ( m_bInitialized )
             throw Exception();
-            // TODO: error message
+            
 
-        // get the cell address
+        
         CellRangeAddress aRangeAddress;
         sal_Bool bFoundAddress = false;
 
@@ -361,25 +361,25 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            // TODO: error message
+            
             throw Exception();
 
-        // determine the range we're bound to
+        
         try
         {
             if ( m_xDocument.is() )
             {
-                // first the sheets collection
+                
                 Reference< XIndexAccess > xSheets(m_xDocument->getSheets( ), UNO_QUERY);
                 OSL_ENSURE( xSheets.is(), "OCellListSource::initialize: could not retrieve the sheets!" );
 
                 if ( xSheets.is() )
                 {
-                    // the concrete sheet
+                    
                     Reference< XCellRange > xSheet(xSheets->getByIndex( aRangeAddress.Sheet ), UNO_QUERY);
                     OSL_ENSURE( xSheet.is(), "OCellListSource::initialize: NULL sheet, but no exception!" );
 
-                    // the concrete cell
+                    
                     if ( xSheet.is() )
                     {
                         m_xRange.set(xSheet->getCellRangeByPosition(
@@ -398,7 +398,7 @@ namespace calc
 
         if ( !m_xRange.is() )
             throw Exception();
-            // TODO error message
+            
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xRange, UNO_QUERY );
         if ( xBroadcaster.is() )
@@ -406,24 +406,24 @@ namespace calc
             xBroadcaster->addModifyListener( this );
         }
 
-        // TODO: add as XEventListener to the cell range, so we get notified when it dies,
-        // and can dispose ourself then
+        
+        
 
-        // TODO: somehow add as listener so we get notified when the address of the cell range changes
-        // We need to forward this as change in our CellRange property to our property change listeners
+        
+        
 
-        // TODO: somehow add as listener to the cells in the range, so that we get notified
-        // when their content changes. We need to forward this to our list entry listeners then
+        
+        
 
-        // TODO: somehow add as listener so that we get notified of insertions and removals of rows in our
-        // range. In this case, we need to fire a change in our CellRange property, and additionally
-        // notify our XListEntryListeners
+        
+        
+        
 
         m_bInitialized = true;
     }
 
-//.........................................................................
-}   // namespace calc
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

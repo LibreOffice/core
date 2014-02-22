@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ogl_spritedevicehelper.hxx"
@@ -246,14 +246,14 @@ static const char rectangularMultiColorGradientFragmentShader[] =
 
 static void initContext()
 {
-    // need the backside for mirror effects
+    
     glDisable(GL_CULL_FACE);
 
-    // no perspective, we're 2D
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    // misc preferences
+    
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
@@ -265,12 +265,12 @@ static void initContext()
 
 static void initTransformation(const ::Size& rSize, bool bMirror=false)
 {
-    // use whole window
+    
     glViewport( 0,0,
                 (GLsizei)rSize.Width(),
                 (GLsizei)rSize.Height() );
 
-    // model coordinate system is already in device pixel
+    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslated(-1.0, (bMirror ? -1.0 : 1.0), 0.0);
@@ -278,7 +278,7 @@ static void initTransformation(const ::Size& rSize, bool bMirror=false)
               (bMirror ? 2.0 : -2.0) / rSize.Height(),
               1.0 );
 
-    // clear to black
+    
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -290,91 +290,91 @@ static boost::shared_ptr<SystemChildWindow> createChildWindow( unx::XVisualInfo*
                                                                unx::Display*      pDisplay,
                                                                int                nScreen )
 {
-    // select appropriate visual
+    
     static int winAttrList3[] =
         {
-            GLX_RGBA,//only TrueColor or DirectColor
-            //single buffered
-            GLX_RED_SIZE,4,//use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,//use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,//use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,0,//no depth buffer
+            GLX_RGBA,
+            
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
+            GLX_DEPTH_SIZE,0,
             None
         };
     static int pBufAttrList3[] =
         {
-            GLX_DOUBLEBUFFER,False,// never doublebuffer pbuffer
-            GLX_RED_SIZE,4,//use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,//use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,//use the maximum blue bits, with a minimum of 4 bits
+            GLX_DOUBLEBUFFER,False,
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
             GLX_ALPHA_SIZE,4,
-            GLX_DEPTH_SIZE,0,//no depth buffer
+            GLX_DEPTH_SIZE,0,
             GLX_RENDER_TYPE,   GLX_RGBA_BIT,
             GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
             None
         };
     static int winAttrList2[] =
         {
-            GLX_RGBA,//only TrueColor or DirectColor
-            /// single buffered
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
+            GLX_RGBA,
+            
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
+            GLX_DEPTH_SIZE,1,
             None
         };
     static int pBufAttrList2[] =
         {
-            GLX_DOUBLEBUFFER,False,// never doublebuffer pbuffer
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
+            GLX_DOUBLEBUFFER,False,
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
             GLX_ALPHA_SIZE,4,
-            GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
+            GLX_DEPTH_SIZE,1,
             GLX_RENDER_TYPE,   GLX_RGBA_BIT,
             GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
             None
         };
     static int winAttrList1[] =
         {
-            GLX_RGBA,//only TrueColor or DirectColor
-            GLX_DOUBLEBUFFER,/// only double buffer
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,0,/// no depth buffer
+            GLX_RGBA,
+            GLX_DOUBLEBUFFER,
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
+            GLX_DEPTH_SIZE,0,
             None
         };
     static int pBufAttrList1[] =
         {
-            GLX_DOUBLEBUFFER,False,// never doublebuffer pbuffer
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
+            GLX_DOUBLEBUFFER,False,
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
             GLX_ALPHA_SIZE,4,
-            GLX_DEPTH_SIZE,0,/// no depth buffer
+            GLX_DEPTH_SIZE,0,
             GLX_RENDER_TYPE,   GLX_RGBA_BIT,
             GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
             None
         };
     static int winAttrList0[] =
         {
-            GLX_RGBA,//only TrueColor or DirectColor
-            GLX_DOUBLEBUFFER,// only double buffer
-            GLX_RED_SIZE,4,// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,// use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,1,// use the maximum depth bits, making sure there is a depth buffer
+            GLX_RGBA,
+            GLX_DOUBLEBUFFER,
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
+            GLX_DEPTH_SIZE,1,
             None
         };
     static int pBufAttrList0[] =
         {
-            GLX_DOUBLEBUFFER,False,// never doublebuffer pbuffer
-            GLX_RED_SIZE,4,// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,// use the maximum blue bits, with a minimum of 4 bits
+            GLX_DOUBLEBUFFER,False,
+            GLX_RED_SIZE,4,
+            GLX_GREEN_SIZE,4,
+            GLX_BLUE_SIZE,4,
             GLX_ALPHA_SIZE,4,
-            GLX_DEPTH_SIZE,1,// use the maximum depth bits, making sure there is a depth buffer
+            GLX_DEPTH_SIZE,1,
             GLX_RENDER_TYPE,   GLX_RGBA_BIT,
             GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
             None
@@ -403,21 +403,21 @@ static boost::shared_ptr<SystemChildWindow> createChildWindow( unx::XVisualInfo*
     int nConfigs, nVal;
     while( *pWinAttributeTable && *pBufAttributeTable )
     {
-        // try to find a window visual for the current set of
-        // attributes
+        
+        
         viWin = unx::glXChooseVisual( pDisplay,
                                       nScreen,
                                       *pWinAttributeTable );
         if( viWin )
         {
-            // try to find a framebuffer config for the current set of
-            // attributes
+            
+            
             fbConfigs = glXChooseFBConfig( pDisplay,
                                            nScreen,
                                            *pBufAttributeTable,
                                            &nConfigs );
-            // don't use glXGetFBConfigs, that does not list alpha-configs
-            // fbConfigs = unx::glXGetFBConfigs(pDisplay, nScreen, &nConfigs);
+            
+            
             for(int i=0; i<nConfigs; i++)
             {
                 viPB = glXGetVisualFromFBConfig(pDisplay, fbConfigs[i]);
@@ -555,7 +555,7 @@ namespace oglcanvas
                 VCLUnoHelper::GetInterface(&rWindow),
                 uno::UNO_QUERY_THROW) );
 
-        // init OpenGL
+        
         const SystemEnvData* sysData(rWindow.GetSystemData());
         unx::Display* pDisplay=reinterpret_cast<unx::Display*>(sysData->pDisplay);
         mpDisplay=pDisplay;
@@ -573,8 +573,8 @@ namespace oglcanvas
         mpChildWindow=createChildWindow(viWin,viPB,mpFBConfig,
                                         rWindow,pDisplay,nScreen);
 
-        // tweak SysChild window to act as an input-transparent
-        // overlay
+        
+        
         if( mpChildWindow )
         {
             childXWindow=mpChildWindow->GetSystemData()->aWindow;
@@ -614,7 +614,7 @@ namespace oglcanvas
             const GLubyte* extensions=glGetString( GL_EXTENSIONS );
             if( gluCheckExtension((const GLubyte*)"GLX_SGI_swap_control", extensions) )
             {
-                // try to enable vsync
+                
                 typedef GLint (*glXSwapIntervalProc)(GLint);
                 glXSwapIntervalProc glXSwapInterval =
                     (glXSwapIntervalProc) unx::glXGetProcAddress((const GLubyte*)"glXSwapIntervalSGI");
@@ -622,21 +622,21 @@ namespace oglcanvas
                 {
                     int (*oldHandler)(unx::Display*, unx::XErrorEvent*);
 
-                    // synchronize on global mutex - no other ogl
-                    // canvas instance permitted to enter here
+                    
+                    
                     {
                         ::osl::MutexGuard aGuard( *::osl::Mutex::getGlobalMutex() );
 
-                        // replace error handler temporarily
+                        
                         oldHandler = unx::XSetErrorHandler( lcl_XErrorHandler );
 
                         lcl_bErrorTriggered = false;
 
-                        // Note: if this fails, so be it. Buggy
-                        // drivers will then not have vsync.
+                        
+                        
                         glXSwapInterval(1);
 
-                        // sync so that we possibly get an XError
+                        
                         unx::glXWaitGL();
                         XSync(pDisplay, false);
 
@@ -645,10 +645,10 @@ namespace oglcanvas
                 }
             }
 
-            // init window context
+            
             initContext();
 
-            // compile & link shaders - code courtesy rodo
+            
             compileShader(mnDummyVertexProgram,
                           GL_VERTEX_SHADER,
                           dummyVertexShader);
@@ -698,12 +698,12 @@ namespace oglcanvas
 
         notifySizeUpdate(rViewArea);
         mpChildWindow->Show();
-        // TODO(E3): check for GL_ARB_imaging extension
+        
     }
 
     void SpriteDeviceHelper::disposing()
     {
-        // release all references
+        
         mpSpriteCanvas = NULL;
         mpDevice = NULL;
         mpTextureCache.reset();
@@ -736,9 +736,9 @@ namespace oglcanvas
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalResolution()
     {
         if( !mpChildWindow )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
-        // Map a one-by-one millimeter box to pixel
+        
         const MapMode aOldMapMode( mpChildWindow->GetMapMode() );
         mpChildWindow->SetMapMode( MapMode(MAP_MM) );
         const Size aPixelSize( mpChildWindow->LogicToPixel(Size(1,1)) );
@@ -750,9 +750,9 @@ namespace oglcanvas
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalSize()
     {
         if( !mpChildWindow )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
-        // Map the pixel dimensions of the output window to millimeter
+        
         const MapMode aOldMapMode( mpChildWindow->GetMapMode() );
         mpChildWindow->SetMapMode( MapMode(MAP_MM) );
         const Size aLogSize( mpChildWindow->PixelToLogic(mpChildWindow->GetOutputSizePixel()) );
@@ -765,9 +765,9 @@ namespace oglcanvas
         const uno::Reference< rendering::XGraphicDevice >&              /*rDevice*/,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
-        // disposed?
+        
         if( !mpSpriteCanvas )
-            return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
+            return uno::Reference< rendering::XLinePolyPolygon2D >(); 
 
         return uno::Reference< rendering::XLinePolyPolygon2D >(
             new ::basegfx::unotools::UnoPolyPolygon(
@@ -778,9 +778,9 @@ namespace oglcanvas
         const uno::Reference< rendering::XGraphicDevice >&                      /*rDevice*/,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
-        // disposed?
+        
         if( !mpSpriteCanvas )
-            return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
+            return uno::Reference< rendering::XBezierPolyPolygon2D >(); 
 
         return uno::Reference< rendering::XBezierPolyPolygon2D >(
             new ::basegfx::unotools::UnoPolyPolygon(
@@ -791,9 +791,9 @@ namespace oglcanvas
         const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      size )
     {
-        // disposed?
+        
         if( !mpSpriteCanvas )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( size,
@@ -813,9 +813,9 @@ namespace oglcanvas
         const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      size )
     {
-        // disposed?
+        
         if( !mpSpriteCanvas )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( size,
@@ -833,27 +833,27 @@ namespace oglcanvas
 
     sal_Bool SpriteDeviceHelper::hasFullScreenMode()
     {
-        // TODO(F3): offer fullscreen mode the XCanvas way
+        
         return false;
     }
 
     sal_Bool SpriteDeviceHelper::enterFullScreenMode( sal_Bool /*bEnter*/ )
     {
-        // TODO(F3): offer fullscreen mode the XCanvas way
+        
         return false;
     }
 
     ::sal_Int32 SpriteDeviceHelper::createBuffers( ::sal_Int32 /*nBuffers*/ )
     {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
+        
+        
         return 1;
     }
 
     void SpriteDeviceHelper::destroyBuffers()
     {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
+        
+        
     }
 
     namespace
@@ -869,7 +869,7 @@ namespace oglcanvas
                 const double nPrioL( rLHS->getPriority() );
                 const double nPrioR( rRHS->getPriority() );
 
-                // if prios are equal, tie-break on ptr value
+                
                 return nPrioL == nPrioR ? rLHS.get() < rRHS.get() : nPrioL < nPrioR;
             }
         };
@@ -877,7 +877,7 @@ namespace oglcanvas
 
     ::sal_Bool SpriteDeviceHelper::showBuffer( bool bIsVisible, ::sal_Bool /*bUpdateAll*/ )
     {
-        // hidden or disposed?
+        
         if( !bIsVisible || !mpChildWindow || !mpSpriteCanvas )
             return false;
 
@@ -887,10 +887,10 @@ namespace oglcanvas
         const ::Size& rOutputSize=mpChildWindow->GetSizePixel();
         initTransformation(rOutputSize);
 
-        // render the actual spritecanvas content
+        
         mpSpriteCanvas->renderRecordedActions();
 
-        // render all sprites (in order of priority) on top of that
+        
         std::vector< ::rtl::Reference<CanvasCustomSprite> > aSprites;
         std::copy(maActiveSprites.begin(),
                   maActiveSprites.end(),
@@ -904,7 +904,7 @@ namespace oglcanvas
                       boost::mem_fn(&CanvasCustomSprite::renderSprite));
 
 
-        // frame counter, other info
+        
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslated(-1.0, 1.0, 0.0);
@@ -923,7 +923,7 @@ namespace oglcanvas
         aVec.push_back(mpTextureCache->getCacheHitCount());
         renderOSD( aVec, 20 );
 
-        // switch buffer, sync etc.
+        
         const unx::Window aXWindow=mpChildWindow->GetSystemData()->aWindow;
         unx::glXSwapBuffers(reinterpret_cast<unx::Display*>(mpDisplay),
                             aXWindow);
@@ -931,10 +931,10 @@ namespace oglcanvas
         unx::glXWaitGL();
         XSync( reinterpret_cast<unx::Display*>(mpDisplay), false );
 
-        // flush texture cache, such that it does not build up
-        // indefinitely.
-        // TODO: have max cache size/LRU time in config, prune only on
-        // demand
+        
+        
+        
+        
         mpTextureCache->prune();
 
         return true;
@@ -942,7 +942,7 @@ namespace oglcanvas
 
     ::sal_Bool SpriteDeviceHelper::switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll )
     {
-        // no difference for VCL canvas
+        
         return showBuffer( bIsVisible, bUpdateAll );
     }
 
@@ -963,7 +963,7 @@ namespace oglcanvas
 
     uno::Reference<rendering::XColorSpace> SpriteDeviceHelper::getColorSpace() const
     {
-        // always the same
+        
         return uno::Reference<rendering::XColorSpace>(
             ::canvas::tools::getStdColorSpace(),
             uno::UNO_QUERY);
@@ -996,7 +996,7 @@ namespace oglcanvas
     {
         const GLint nTransformLocation = glGetUniformLocation(nProgramId,
                                                              "m_transform" );
-        // OGL is column-major
+        
         float aTexTransform[] =
             {
                 float(rTexTransform.get(0,0)), float(rTexTransform.get(1,0)),
@@ -1034,11 +1034,11 @@ namespace oglcanvas
 
         const GLint nColorArrayLocation = glGetUniformLocation(nProgramId,
                                                                "t_colorArray4d" );
-        glUniform1i( nColorArrayLocation, 0 ); // unit 0
+        glUniform1i( nColorArrayLocation, 0 ); 
 
         const GLint nStopArrayLocation = glGetUniformLocation(nProgramId,
                                                               "t_stopArray1d" );
-        glUniform1i( nStopArrayLocation, 1 ); // unit 1
+        glUniform1i( nStopArrayLocation, 1 ); 
 
         const GLint nNumColorLocation = glGetUniformLocation(nProgramId,
                                                              "i_nColors" );

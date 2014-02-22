@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TitleItemConverter.hxx"
@@ -45,7 +45,7 @@ namespace
 
     return aTitlePropertyMap;
 };
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -119,8 +119,8 @@ TitleItemConverter::TitleItemConverter(
                                  xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
 
-    // CharacterProperties are not at the title but at its contained XFormattedString objects
-    // take the first formatted string in the sequence
+    
+    
     uno::Reference< chart2::XTitle > xTitle( rPropertySet, uno::UNO_QUERY );
     if( xTitle.is())
     {
@@ -145,7 +145,7 @@ void TitleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::FillItemSetFunc( rOutItemSet ));
 
-    // own items
+    
     ItemConverter::FillItemSet( rOutItemSet );
 }
 
@@ -156,13 +156,13 @@ bool TitleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
 
-    // own items
+    
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
 const sal_uInt16 * TitleItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nTitleWhichPairs;
 }
 
@@ -188,7 +188,7 @@ bool TitleItemConverter::ApplySpecialItem(
     {
         case SCHATTR_TEXT_DEGREES:
         {
-            // convert int to double (divided by 100)
+            
             double fVal = static_cast< double >(
                 static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
@@ -217,7 +217,7 @@ void TitleItemConverter::FillSpecialItem(
     {
         case SCHATTR_TEXT_DEGREES:
         {
-            // convert double to int (times 100)
+            
             double fVal = 0;
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
@@ -230,7 +230,7 @@ void TitleItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

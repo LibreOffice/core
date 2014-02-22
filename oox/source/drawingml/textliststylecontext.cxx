@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textliststylecontext.hxx"
@@ -27,7 +27,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// CT_TextListStyle
+
 TextListStyleContext::TextListStyleContext( ContextHandler2Helper& rParent, TextListStyle& rTextListStyle )
 : ContextHandler2( rParent )
 , mrTextListStyle( rTextListStyle )
@@ -38,13 +38,13 @@ TextListStyleContext::~TextListStyleContext()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
-        case A_TOKEN( defPPr ):     // CT_TextParagraphProperties
+        case A_TOKEN( defPPr ):     
             return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 0 ] );
         case A_TOKEN( outline1pPr ):
             return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getAggregationListStyle()[ 0 ] );
@@ -73,7 +73,7 @@ ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken
     return this;
 }
 
-// --------------------------------------------------------------------
+
 
 } }
 

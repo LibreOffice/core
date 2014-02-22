@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -61,7 +61,7 @@ using namespace framework;
 
 namespace {
 
-// Must be zero value based
+
 enum EnvironmentType
 {
         ET_HOST = 0             ,
@@ -73,7 +73,7 @@ enum EnvironmentType
         ET_COUNT
 };
 
-// Must be zero value based
+
 enum OperatingSystem
 {
         OS_WINDOWS = 0,
@@ -143,7 +143,7 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         virtual void Commit();
 
         private:
-            // Wrapper methods for low-level functions
+            
             OperatingSystem         GetOperatingSystem();
             const OUString&    GetYPDomainName();
             const OUString&    GetDNSDomainName();
@@ -157,7 +157,7 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
                                                                                                                                 const OUString& aSharePointNodeName,
                                                                                                                                 SubstituteRuleVector& aRuleSet );
 
-            // Stored values for domains and host
+            
             bool                    m_bYPDomainRetrieved;
             OUString           m_aYPDomain;
             bool                    m_bDNSDomainRetrieved;
@@ -192,7 +192,7 @@ enum PreDefVariable
     PREDEFVAR_PROGURL,
     PREDEFVAR_USERURL,
     PREDEFVAR_WORKDIRURL,
-    // New variable of hierachy service (#i32656#)
+    
     PREDEFVAR_BASEINSTURL,
     PREDEFVAR_USERDATAURL,
     PREDEFVAR_BRANDBASEURL,
@@ -201,10 +201,10 @@ enum PreDefVariable
 
 struct PredefinedPathVariables
 {
-    // Predefined variables supported by substitute variables
-    LanguageType    m_eLanguageType;                    // Lanuage type of Office
-    OUString   m_FixedVar[ PREDEFVAR_COUNT ];      // Variable value access by PreDefVariable
-    OUString   m_FixedVarNames[ PREDEFVAR_COUNT ]; // Variable name access by PreDefVariable
+    
+    LanguageType    m_eLanguageType;                    
+    OUString   m_FixedVar[ PREDEFVAR_COUNT ];      
+    OUString   m_FixedVarNames[ PREDEFVAR_COUNT ]; 
 };
 
 struct ReSubstFixedVarOrder
@@ -214,7 +214,7 @@ struct ReSubstFixedVarOrder
 
     bool operator< ( const ReSubstFixedVarOrder& aFixedVarOrder ) const
     {
-        // Reverse operator< to have high to low ordering
+        
         return ( nVarValueLength > aFixedVarOrder.nVarValueLength );
     }
 };
@@ -226,7 +226,7 @@ struct ReSubstUserVarOrder
 
     bool operator< ( const ReSubstUserVarOrder& aUserVarOrder ) const
     {
-        // Reverse operator< to have high to low ordering
+        
         return ( nVarValueLength > aUserVarOrder.nVarValueLength );
     }
 };
@@ -266,7 +266,7 @@ public:
         return aSeq;
     }
 
-    // XStringSubstitution
+    
     virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText )
@@ -280,15 +280,15 @@ protected:
     void            SetPredefinedPathVariables( PredefinedPathVariables& );
     OUString   ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const;
 
-    // Special case (transient) values can change during runtime!
-    // Don't store them in the pre defined struct
+    
+    
     OUString   GetWorkPath() const;
     OUString   GetWorkVariableValue() const;
     OUString   GetPathVariableValue() const;
 
     OUString   GetHomeVariableValue() const;
 
-    // XStringSubstitution implementation methods
+    
     OUString impl_substituteVariable( const OUString& aText, bool bSustRequired )
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     OUString impl_reSubstituteVariables( const OUString& aText )
@@ -308,12 +308,12 @@ private:
         }
     };
 
-    VarNameToIndexMap            m_aPreDefVarMap;         // Mapping from pre-def variable names to enum for array access
-    SubstituteVariables          m_aSubstVarMap;          // Active rule set map indexed by variable name!
-    PredefinedPathVariables      m_aPreDefVars;           // All predefined variables
-    SubstitutePathVariables_Impl m_aImpl;                 // Implementation class that access the configuration
-    ReSubstFixedVarOrderVector   m_aReSubstFixedVarOrder; // To speed up resubstitution fixed variables (order for lookup)
-    ReSubstUserVarOrderVector    m_aReSubstUserVarOrder;  // To speed up resubstitution user variables
+    VarNameToIndexMap            m_aPreDefVarMap;         
+    SubstituteVariables          m_aSubstVarMap;          
+    PredefinedPathVariables      m_aPreDefVars;           
+    SubstitutePathVariables_Impl m_aImpl;                 
+    ReSubstFixedVarOrderVector   m_aReSubstFixedVarOrder; 
+    ReSubstUserVarOrderVector    m_aReSubstUserVarOrder;  
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
@@ -331,21 +331,21 @@ struct TableEntry
     sal_Int32   nStrLen;
 };
 
-// Table with valid operating system strings
-// Name of the os as char* and the length
-// of the string
+
+
+
 static const TableEntry aOSTable[OS_COUNT] =
 {
     { RTL_CONSTASCII_STRINGPARAM("WINDOWS") },
     { RTL_CONSTASCII_STRINGPARAM("UNIX") },
     { RTL_CONSTASCII_STRINGPARAM("SOLARIS") },
     { RTL_CONSTASCII_STRINGPARAM("LINUX") },
-    { RTL_CONSTASCII_STRINGPARAM("") } // unknown
+    { RTL_CONSTASCII_STRINGPARAM("") } 
 };
 
-// Table with valid environment variables
-// Name of the environment type as a char* and
-// the length of the string.
+
+
+
 static const TableEntry aEnvTable[ET_COUNT] =
 {
     { RTL_CONSTASCII_STRINGPARAM("HOST") },
@@ -353,29 +353,29 @@ static const TableEntry aEnvTable[ET_COUNT] =
     { RTL_CONSTASCII_STRINGPARAM("DNSDOMAIN") },
     { RTL_CONSTASCII_STRINGPARAM("NTDOMAIN") },
     { RTL_CONSTASCII_STRINGPARAM("OS") },
-    { RTL_CONSTASCII_STRINGPARAM("") } // unknown
+    { RTL_CONSTASCII_STRINGPARAM("") } 
 };
 
-// Priority table for the environment types. Lower numbers define
-// a higher priority. Equal numbers has the same priority that means
-// that the first match wins!!
+
+
+
 static const sal_Int16 aEnvPrioTable[ET_COUNT] =
 {
-    1,      // ET_HOST
-    2,      // ET_IPDOMAIN
-    2,      // ET_DNSDOMAIN
-    2,      // ET_NTDOMAIN
-    3,      // ET_OS
-    99,     // ET_UNKNOWN
+    1,      
+    2,      
+    2,      
+    2,      
+    3,      
+    99,     
 };
 
-// Table with all fixed/predefined variables supported.
+
 static const FixedVariable aFixedVarTable[] =
 {
     { RTL_CONSTASCII_STRINGPARAM("$(inst)"),        PREDEFVAR_INST,         true  },
     { RTL_CONSTASCII_STRINGPARAM("$(prog)"),        PREDEFVAR_PROG,         true  },
     { RTL_CONSTASCII_STRINGPARAM("$(user)"),        PREDEFVAR_USER,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(work)"),        PREDEFVAR_WORK,         true  },      // Special variable (transient)!
+    { RTL_CONSTASCII_STRINGPARAM("$(work)"),        PREDEFVAR_WORK,         true  },      
     { RTL_CONSTASCII_STRINGPARAM("$(home)"),        PREDEFVAR_HOME,         true  },
     { RTL_CONSTASCII_STRINGPARAM("$(temp)"),        PREDEFVAR_TEMP,         true  },
     { RTL_CONSTASCII_STRINGPARAM("$(path)"),        PREDEFVAR_PATH,         true  },
@@ -387,15 +387,15 @@ static const FixedVariable aFixedVarTable[] =
     { RTL_CONSTASCII_STRINGPARAM("$(insturl)"),     PREDEFVAR_INSTURL,      true  },
     { RTL_CONSTASCII_STRINGPARAM("$(progurl)"),     PREDEFVAR_PROGURL,      true  },
     { RTL_CONSTASCII_STRINGPARAM("$(userurl)"),     PREDEFVAR_USERURL,      true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(workdirurl)"),  PREDEFVAR_WORKDIRURL,   true  },  // Special variable (transient) and don't use for resubstitution!
+    { RTL_CONSTASCII_STRINGPARAM("$(workdirurl)"),  PREDEFVAR_WORKDIRURL,   true  },  
     { RTL_CONSTASCII_STRINGPARAM("$(baseinsturl)"), PREDEFVAR_BASEINSTURL,  true  },
     { RTL_CONSTASCII_STRINGPARAM("$(userdataurl)"), PREDEFVAR_USERDATAURL,  true  },
     { RTL_CONSTASCII_STRINGPARAM("$(brandbaseurl)"),PREDEFVAR_BRANDBASEURL, true  }
 };
 
-//_________________________________________________________________________________________________________________
-//      Implementation helper classes
-//_________________________________________________________________________________________________________________
+
+
+
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( const OUString& aOSString )
 {
@@ -431,8 +431,8 @@ SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyL
     m_aEnvPropertyName( OUString( "/Environment" )),
     m_aLevelSep( OUString(  "/" ))
 {
-    // Enable notification mechanism
-    // We need it to get information about changes outside these class on our configuration branch
+    
+    
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = "SharePoints";
     EnableNotification( aNotifySeq, true );
@@ -451,7 +451,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
     {
         sal_Int32 nSharePoints = 0;
 
-        // Read SharePoints container from configuration
+        
         while ( nSharePoints < aSharePointNames.getLength() )
         {
             OUString aSharePointNodeName( m_aSharePointsNodeName );
@@ -462,12 +462,12 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
             ReadSharePointRuleSetFromConfiguration( aSharePointNames[ nSharePoints ], aSharePointNodeName, aRuleSet );
             if ( !aRuleSet.empty() )
             {
-                // We have at minimum one rule. Filter the correct rule out of the rule set
-                // and put into our SubstituteVariable map
+                
+                
                 SubstituteRule aActiveRule;
                 if ( FilterRuleSet( aRuleSet, aActiveRule ))
                 {
-                    // We have found an active rule
+                    
                     aActiveRule.aSubstVariable = aSharePointNames[ nSharePoints ];
                     aSubstVarMap.insert( SubstituteVariables::value_type(
                     aActiveRule.aSubstVariable, aActiveRule ));
@@ -480,7 +480,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
 
 void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& /*aPropertyNames*/ )
 {
-    // NOT implemented yet!
+    
 }
 
 void SubstitutePathVariables_Impl::Commit()
@@ -488,9 +488,9 @@ void SubstitutePathVariables_Impl::Commit()
 }
 
 
-//_________________________________________________________________________________________________________________
-//      private methods
-//_________________________________________________________________________________________________________________
+
+
+
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
 {
@@ -530,7 +530,7 @@ const OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
         osl::SocketAddr::resolveHostname( aHostName, aSockAddr );
         aTemp = aSockAddr.getHostname( &aResult );
 
-        // DNS domain name begins after the first "."
+        
         sal_Int32 nIndex = aTemp.indexOf( '.' );
         if ( nIndex >= 0 && aTemp.getLength() > nIndex+1 )
             m_aDNSDomain = aTemp.copy( nIndex+1 ).toAsciiLowerCase();
@@ -579,7 +579,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
             const SubstituteRule& aRule = aRuleSet[nIndex];
             EnvironmentType eEnvType        = aRule.aEnvType;
 
-            // Check if environment type has a higher priority than current one!
+            
             if ( nPrioCurrentRule > aEnvPrioTable[eEnvType] )
             {
                 switch ( eEnvType )
@@ -591,7 +591,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                         aRule.aEnvValue >>= aHostStr;
                         aHostStr = aHostStr.toAsciiLowerCase();
 
-                        // Pattern match if domain environment match
+                        
                         WildCard aPattern(aHostStr);
                         bool bMatch = aPattern.Matches(aHost);
                         if ( bMatch )
@@ -612,7 +612,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                         aRule.aEnvValue >>= aDomainStr;
                         aDomainStr = aDomainStr.toAsciiLowerCase();
 
-                        // Retrieve the correct domain value
+                        
                         if ( eEnvType == ET_YPDOMAIN )
                             aDomain = GetYPDomainName();
                         else if ( eEnvType == ET_DNSDOMAIN )
@@ -620,7 +620,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                         else
                             aDomain = GetNTDomainName();
 
-                        // Pattern match if domain environment match
+                        
                         WildCard aPattern(aDomainStr);
                         bool bMatch = aPattern.Matches(aDomain);
                         if ( bMatch )
@@ -634,7 +634,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
 
                     case ET_OS:
                     {
-                        // No pattern matching for OS type
+                        
                         OperatingSystem eOSType = GetOperatingSystem();
 
                         sal_Int16 nValue = 0;
@@ -643,7 +643,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                         bool            bUnix = ( eOSType == OS_LINUX ) || ( eOSType == OS_SOLARIS );
                         OperatingSystem eRuleOSType = (OperatingSystem)nValue;
 
-                        // Match if OS identical or rule is set to UNIX and OS is LINUX/SOLARIS!
+                        
                         if (( eRuleOSType == eOSType ) || ( eRuleOSType == OS_UNIX && bUnix ))
                         {
                             aActiveRule      = aRule;
@@ -653,7 +653,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                     }
                     break;
 
-                    case ET_UNKNOWN: // nothing to do
+                    case ET_UNKNOWN: 
                         break;
 
                     default:
@@ -668,7 +668,7 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
 
 void SubstitutePathVariables_Impl::ReadSharePointsFromConfiguration( Sequence< OUString >& aSharePointsSeq )
 {
-    //returns all the names of all share point nodes
+    
     aSharePointsSeq = GetNodeNames( m_aSharePointsNodeName );
 }
 
@@ -686,12 +686,12 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
         aSharePointMapping += m_aLevelSep;
         aSharePointMapping += aSharePointMappingsNodeNames[ nSharePointMapping ];
 
-        // Read SharePointMapping
+        
         OUString aDirValue;
         OUString aDirProperty( aSharePointMapping );
         aDirProperty += m_aDirPropertyName;
 
-        // Read only the directory property
+        
         Sequence< OUString > aDirPropertySeq( 1 );
         aDirPropertySeq[0] = aDirProperty;
 
@@ -699,13 +699,13 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
         if ( aValueSeq.getLength() == 1 )
             aValueSeq[0] >>= aDirValue;
 
-        // Read the environment setting
+        
         OUString aEnvUsed;
         OUString aEnvProperty( aSharePointMapping );
         aEnvProperty += m_aEnvPropertyName;
         Sequence< OUString > aEnvironmentVariable = GetNodeNames( aEnvProperty );
 
-        // Filter the property which has a value set
+        
         Sequence< OUString > aEnvUsedPropertySeq( aEnvironmentVariable.getLength() );
 
         OUString aEnvUsePropNameTemplate( aEnvProperty );
@@ -727,7 +727,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
             }
         }
 
-        // Decode the environment and optional the operatng system settings
+        
         Any                             aEnvValue;
         EnvironmentType eEnvType = GetEnvTypeFromString( aEnvUsed );
         if ( eEnvType == ET_OS )
@@ -738,7 +738,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
         else
             aEnvValue <<= aEnvUsedValue;
 
-        // Create rule struct and push it into the rule set
+        
         SubstituteRule aRule( aSharePointName, aDirValue, aEnvValue, eEnvType );
         rRuleSet.push_back( aRule );
 
@@ -756,26 +756,26 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     SetPredefinedPathVariables( m_aPreDefVars );
     m_aImpl.GetSharePointsRules( m_aSubstVarMap );
 
-    // Init the predefined/fixed variable to index hash map
+    
     for ( i = 0; i < PREDEFVAR_COUNT; i++ )
     {
-        // Store variable name into struct of predefined/fixed variables
+        
         m_aPreDefVars.m_FixedVarNames[i] = OUString::createFromAscii( aFixedVarTable[i].pVarName );
 
-        // Create hash map entry
+        
         m_aPreDefVarMap.insert( VarNameToIndexMap::value_type(
             m_aPreDefVars.m_FixedVarNames[i], aFixedVarTable[i].nEnumValue ) );
     }
 
-    // Sort predefined/fixed variable to path length
+    
     for ( i = 0; i < PREDEFVAR_COUNT; i++ )
     {
         if (( i != PREDEFVAR_WORKDIRURL ) && ( i != PREDEFVAR_PATH ))
         {
-            // Special path variables, don't include into automatic resubstituion search!
-            // $(workdirurl) is not allowed to resubstitute! This variable is the value of path settings entry
-            // and it could be possible that it will be resubstituted by itself!!
-            // Example: WORK_PATH=c:\test, $(workdirurl)=WORK_PATH => WORK_PATH=$(workdirurl) and this cannot be substituted!
+            
+            
+            
+            
             ReSubstFixedVarOrder aFixedVar;
             aFixedVar.eVariable       = aFixedVarTable[i].nEnumValue;
             aFixedVar.nVarValueLength = m_aPreDefVars.m_FixedVar[(sal_Int32)aFixedVar.eVariable].getLength();
@@ -784,7 +784,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     }
     m_aReSubstFixedVarOrder.sort();
 
-    // Sort user variables to path length
+    
     SubstituteVariables::const_iterator pIter;
     for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); ++pIter )
     {
@@ -800,7 +800,7 @@ SubstitutePathVariables::~SubstitutePathVariables()
 {
 }
 
-// XStringSubstitution
+
 OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
@@ -822,9 +822,9 @@ throw ( NoSuchElementException, RuntimeException )
     return impl_getSubstituteVariableValue( aVariable );
 }
 
-//_________________________________________________________________________________________________________________
-//      protected methods
-//_________________________________________________________________________________________________________________
+
+
+
 
 IMPL_LINK_NOARG(SubstitutePathVariables, implts_ConfigurationNotify)
 {
@@ -842,7 +842,7 @@ OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompli
     osl::FileBase::getSystemPathFromFileURL( aOSLCompliantURL, aTemp );
     utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemp, aResult );
 
-    // Not all OSL URL's can be mapped to UCB URL's!
+    
     if ( aResult.isEmpty() )
         return aOSLCompliantURL;
     else
@@ -855,7 +855,7 @@ OUString SubstitutePathVariables::GetWorkPath() const
     css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(m_xContext), css::uno::UNO_QUERY_THROW);
     OUString xWork;
     if (!(xPaths->getByHierarchicalName("['Work']/WritePath") >>= xWork))
-        // fallback in case config layer does not return an useable work dir value.
+        
         aWorkPath = GetWorkVariableValue();
 
     return aWorkPath;
@@ -867,8 +867,8 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     boost::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get(m_xContext));
     if (!x)
     {
-        // fallback to $HOME in case platform dependend config layer does not return
-        // an usuable work dir value.
+        
+        
         osl::Security aSecurity;
         aSecurity.getHomeDir( aWorkPath );
     }
@@ -908,7 +908,7 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
             {
                 osl::FileBase::getFileURLFromSystemPath( sToken, aTmp );
                 if ( bAppendSep )
-                    aPathStrBuffer.appendAscii( ";" ); // Office uses ';' as path separator
+                    aPathStrBuffer.appendAscii( ";" ); 
                 aPathStrBuffer.append( aTmp );
                 bAppendSep = true;
             }
@@ -924,70 +924,70 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
 OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText, bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
-    // This is maximal recursive depth supported!
+    
     const sal_Int32 nMaxRecursiveDepth = 8;
 
     OUString   aWorkText = rText;
     OUString   aResult;
 
-    // Use vector with strings to detect endless recursions!
+    
     std::vector< OUString > aEndlessRecursiveDetector;
 
-    // Search for first occurrence of "$(...".
+    
     sal_Int32   nDepth = 0;
     bool        bSubstitutionCompleted = false;
     sal_Int32   nPosition = aWorkText.indexOf( "$(" );
-    sal_Int32   nLength = 0; // = count of letters from "$(" to ")" in string
+    sal_Int32   nLength = 0; 
     bool        bVarNotSubstituted = false;
 
-    // Have we found any variable like "$(...)"?
+    
     if ( nPosition != -1 )
     {
-        // Yes; Get length of found variable.
-        // If no ")" was found - nLength is set to 0 by default! see before.
+        
+        
         sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
         if ( nEndPosition != -1 )
             nLength = nEndPosition - nPosition + 1;
     }
 
-    // Is there something to replace ?
+    
     bool bWorkRetrieved       = false;
     bool bWorkDirURLRetrieved = false;
     while ( !bSubstitutionCompleted && nDepth < nMaxRecursiveDepth )
     {
-        while ( ( nPosition != -1 ) && ( nLength > 3 ) ) // "$(" ")"
+        while ( ( nPosition != -1 ) && ( nLength > 3 ) ) 
         {
-            // YES; Get the next variable for replace.
+            
             sal_Int32     nReplaceLength  = 0;
             OUString aReplacement;
             OUString aSubString      = aWorkText.copy( nPosition, nLength );
             OUString aSubVarString;
 
-            // Path variables are not case sensitive!
+            
             aSubVarString = aSubString.toAsciiLowerCase();
             VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( aSubVarString );
             if ( pNTOIIter != m_aPreDefVarMap.end() )
             {
-                // Fixed/Predefined variable found
+                
                 PreDefVariable nIndex = (PreDefVariable)pNTOIIter->second;
 
-                // Determine variable value and length from array/table
+                
                 if ( nIndex == PREDEFVAR_WORK && !bWorkRetrieved )
                 {
-                    // Transient value, retrieve it again
+                    
                     m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ] = GetWorkVariableValue();
                     bWorkRetrieved = true;
                 }
                 else if ( nIndex == PREDEFVAR_WORKDIRURL && !bWorkDirURLRetrieved )
                 {
-                    // Transient value, retrieve it again
+                    
                     m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ] = GetWorkPath();
                     bWorkDirURLRetrieved = true;
                 }
 
-                // Check preconditions to substitue path variables.
-                // 1. A path variable can only be substituted if it follows a ';'!
-                // 2. It's located exactly at the start of the string being substituted!
+                
+                
+                
                 if (( aFixedVarTable[ int( nIndex ) ].bAbsPath && (( nPosition == 0 ) || (( nPosition > 0 ) && ( aWorkText[nPosition-1] == ';')))) ||
             ( !aFixedVarTable[ int( nIndex ) ].bAbsPath ))
         {
@@ -997,50 +997,50 @@ throw ( NoSuchElementException, RuntimeException )
             }
             else
             {
-                // Extract the variable name and try to find in the user defined variable set
+                
                 OUString aVarName = aSubString.copy( 2, nLength-3 );
                 SubstituteVariables::const_iterator pIter = m_aSubstVarMap.find( aVarName );
                 if ( pIter != m_aSubstVarMap.end() )
                 {
-                    // Found.
+                    
                     aReplacement = pIter->second.aSubstValue;
                     nReplaceLength = nLength;
                 }
             }
 
-            // Have we found something to replace?
+            
             if ( nReplaceLength > 0 )
             {
-                // Yes ... then do it.
+                
                 aWorkText = aWorkText.replaceAt( nPosition, nReplaceLength, aReplacement );
             }
             else
             {
-                // Variable not known
+                
                 bVarNotSubstituted = true;
                 nPosition += nLength;
             }
 
-            // Step after replaced text! If no text was replaced (unknown variable!),
-            // length of aReplacement is 0 ... and we don't step then.
+            
+            
             nPosition += aReplacement.getLength();
 
-            // We must control index in string before call something at OUString!
-            // The OUString-implementation don't do it for us :-( but the result is not defined otherwise.
+            
+            
             if ( nPosition + 1 > aWorkText.getLength() )
             {
-                // Position is out of range. Break loop!
+                
                 nPosition = -1;
                 nLength = 0;
             }
             else
             {
-                // Else; Position is valid. Search for next variable to replace.
+                
                 nPosition = aWorkText.indexOf( "$(", nPosition );
-                // Have we found any variable like "$(...)"?
+                
                 if ( nPosition != -1 )
                 {
-                    // Yes; Get length of found variable. If no ")" was found - nLength must set to 0!
+                    
                     nLength = 0;
                     sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
                     if ( nEndPosition != -1 )
@@ -1053,29 +1053,29 @@ throw ( NoSuchElementException, RuntimeException )
         if ( nPosition == -1 )
         {
             bSubstitutionCompleted = true;
-            break; // All variables are substituted
+            break; 
         }
         else
         {
-            // Check for recursion
+            
             const sal_uInt32 nCount = aEndlessRecursiveDetector.size();
             for ( sal_uInt32 i=0; i < nCount; i++ )
             {
                 if ( aEndlessRecursiveDetector[i] == aWorkText )
                 {
                     if ( bVarNotSubstituted )
-                        break; // Not all variables could be substituted!
+                        break; 
                     else
                     {
                         nDepth = nMaxRecursiveDepth;
-                        break; // Recursion detected!
+                        break; 
                     }
                 }
             }
 
             aEndlessRecursiveDetector.push_back( aWorkText );
 
-            // Initialize values for next
+            
             sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
             if ( nEndPosition != -1 )
                 nLength = nEndPosition - nPosition + 1;
@@ -1084,18 +1084,18 @@ throw ( NoSuchElementException, RuntimeException )
         }
     }
 
-    // Fill return value with result
+    
     if ( bSubstitutionCompleted )
     {
-        // Substitution successful!
+        
         aResult = aWorkText;
     }
     else
     {
-        // Substitution not successful!
+        
         if ( nDepth == nMaxRecursiveDepth )
         {
-            // recursion depth reached!
+            
             if ( bSubstRequired )
             {
                 OUString aMsg( "Endless recursion detected. Cannot substitute variables!" );
@@ -1106,7 +1106,7 @@ throw ( NoSuchElementException, RuntimeException )
         }
         else
         {
-            // variable in text but unknown!
+            
             if ( bSubstRequired )
             {
                 OUString aMsg( "Unknown variable found!" );
@@ -1130,7 +1130,7 @@ throw ( RuntimeException )
         aURL = aUrl.GetMainURL( INetURLObject::NO_DECODE );
     else
     {
-        // Convert a system path to a UCB compliant URL before resubstitution
+        
         OUString aTemp;
         if ( osl::FileBase::getFileURLFromSystemPath( rURL, aTemp ) == osl::FileBase::E_None )
         {
@@ -1146,12 +1146,12 @@ throw ( RuntimeException )
         }
         else
         {
-            // rURL is not a valid URL nor a osl system path. Give up and return error!
+            
             return rURL;
         }
     }
 
-    // Get transient predefined path variable $(work) value before starting resubstitution
+    
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_WORK ] = GetWorkVariableValue();
 
     for (;;)
@@ -1170,8 +1170,8 @@ throw ( RuntimeException )
                 if ( i->eVariable == PREDEFVAR_LANGID ||
                      i->eVariable == PREDEFVAR_VLANG )
                 {
-                    // Special path variables as they can occur in the middle of a path. Only match if they
-                    // describe a whole directory and not only a substring of a directory!
+                    
+                    
                     const sal_Unicode* pStr = aURL.getStr();
 
                     if ( nPos > 0 )
@@ -1189,13 +1189,13 @@ throw ( RuntimeException )
                     aURL = aURL.replaceAt(
                         nPos, aValue.getLength(),
                         m_aPreDefVars.m_FixedVarNames[i->eVariable]);
-                    bVariableFound = true; // Resubstitution not finished yet!
+                    bVariableFound = true; 
                     break;
                 }
             }
         }
 
-        // This part can be iteratered more than one time as variables can contain variables again!
+        
         for (ReSubstUserVarOrderVector::const_iterator i(
                  m_aReSubstUserVarOrder.begin());
              i != m_aReSubstUserVarOrder.end(); ++i)
@@ -1206,7 +1206,7 @@ throw ( RuntimeException )
             {
                 aURL = aURL.replaceAt(
                     nPos, aVarValue.getLength(), "$(" + aVarValue + ")");
-                bVariableFound = true;  // Resubstitution not finished yet!
+                bVariableFound = true;  
             }
         }
 
@@ -1217,7 +1217,7 @@ throw ( RuntimeException )
     }
 }
 
-// This method support both request schemes "$("<varname>")" or "<varname>".
+
 OUString SubstitutePathVariables::impl_getSubstituteVariableValue( const OUString& rVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
@@ -1226,13 +1226,13 @@ throw ( NoSuchElementException, RuntimeException )
     sal_Int32 nPos = rVariable.indexOf( "$(" );
     if ( nPos == -1 )
     {
-        // Prepare variable name before hash map access
+        
         aVariable = "$(" + rVariable + ")";
     }
 
     VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( ( nPos == -1 ) ? aVariable : rVariable );
 
-    // Fixed/Predefined variable
+    
     if ( pNTOIIter != m_aPreDefVarMap.end() )
     {
         PreDefVariable nIndex = (PreDefVariable)pNTOIIter->second;
@@ -1240,7 +1240,7 @@ throw ( NoSuchElementException, RuntimeException )
     }
     else
     {
-        // Prepare variable name before hash map access
+        
         if ( nPos >= 0 )
         {
             if ( rVariable.getLength() > 3 )
@@ -1254,11 +1254,11 @@ throw ( NoSuchElementException, RuntimeException )
         else
             aVariable = rVariable;
 
-        // User defined variable
+        
         SubstituteVariables::const_iterator pIter = m_aSubstVarMap.find( aVariable );
         if ( pIter != m_aSubstVarMap.end() )
         {
-            // found!
+            
             return pIter->second.aSubstValue;
         }
 
@@ -1274,34 +1274,34 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     rtl::Bootstrap::expandMacros(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
-    // Get inspath and userpath from bootstrap mechanism in every case as file URL
+    
     ::utl::Bootstrap::PathStatus aState;
     OUString              sVal  ;
 
     aState = utl::Bootstrap::locateUserData( sVal );
-    //There can be the valid case that there is no user installation.
-    //TODO: Is that still the case? (With OOo 3.4, "unopkg sync" was run as part
-    // of the setup. Then no user installation was required.)
-    //Therefore we do not assert here.
+    
+    
+    
+    
     if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
     }
 
-    // Set $(inst), $(instpath), $(insturl)
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] = aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // New variable of hierachy service (#i32656#)
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
 
-    // Set $(user), $(userpath), $(userurl)
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // New variable of hierachy service (#i32656#)
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERDATAURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
 
-    // Detect the program directory
-    // Set $(prog), $(progpath), $(progurl)
+    
+    
     INetURLObject aProgObj(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
     if ( !aProgObj.HasError() && aProgObj.insertName( OUString(LIBO_BIN_FOLDER) ) )
@@ -1311,36 +1311,36 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROG ]     = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];
     }
 
-    // Detect the language type of the current office
+    
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
     OUString aLocaleStr( utl::ConfigManager::getLocale() );
     aPreDefPathVariables.m_eLanguageType = LanguageTag::convertToLanguageTypeWithFallback( aLocaleStr );
-    // We used to have an else branch here with a SAL_WARN, but that
-    // always fired in some unit tests when this code was built with
-    // debug=t, so it seems fairly pointless, especially as
-    // aPreDefPathVariables.m_eLanguageType has been initialized to a
-    // default value above anyway.
+    
+    
+    
+    
+    
 
-    // Set $(vlang)
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
 
-    // Set $(langid)
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( aPreDefPathVariables.m_eLanguageType );
 
-    // Set the other pre defined path variables
-    // Set $(work)
+    
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORK ] = GetWorkVariableValue();
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_HOME ] = GetHomeVariableValue();
 
-    // Set $(workdirurl) this is the value of the path PATH_WORK which doesn't make sense
-    // anymore because the path settings service has this value! It can deliver this value more
-    // quickly than the substitution service!
+    
+    
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORKDIRURL ] = GetWorkPath();
 
-    // Set $(path) variable
+    
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
 
-    // Set $(temp)
+    
     OUString aTmp;
     osl::FileBase::getTempDirURL( aTmp );
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );

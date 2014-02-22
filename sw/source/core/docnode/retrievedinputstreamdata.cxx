@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <retrievedinputstreamdata.hxx>
 #include <retrieveinputstreamconsumer.hxx>
 #include <vcl/svapp.hxx>
 
-// #i73788#
+
 
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::mnNextKeyValue = 1;
 
@@ -43,12 +43,12 @@ SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::R
 {
     osl::MutexGuard aGuard(maMutex);
 
-    // create empty data container for given thread Consumer
+    
     tDataKey nDataKey( mnNextKeyValue );
     tData aNewEntry( pThreadConsumer );
     maInputStreamData[ nDataKey ] = aNewEntry;
 
-    // prepare next data key value
+    
     if ( mnNextKeyValue < SAL_MAX_UINT64 )
     {
         ++mnNextKeyValue;
@@ -72,11 +72,11 @@ void SwRetrievedInputStreamDataManager::PushData(
 
     if ( aIter != maInputStreamData.end() )
     {
-        // Fill data container.
+        
         (*aIter).second.mxInputStream = xInputStream;
         (*aIter).second.mbIsStreamReadOnly = bIsStreamReadOnly;
 
-        // post user event to process the retrieved input stream data
+        
         if ( GetpApp() )
         {
 
@@ -86,7 +86,7 @@ void SwRetrievedInputStreamDataManager::PushData(
         }
         else
         {
-            // no application available -> discard data
+            
             maInputStreamData.erase( aIter );
         }
     }

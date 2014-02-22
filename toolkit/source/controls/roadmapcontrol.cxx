@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,10 +24,10 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -35,24 +35,24 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-//  ----------------------------------------------------
-//  helper
-//  ----------------------------------------------------
+
+
+
 
 static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{   
     throw IllegalArgumentException();
 }
 
 static void lcl_throwIndexOutOfBoundsException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{   
     throw IndexOutOfBoundsException();
 }
 
-    // ===================================================================
-    // = UnoControlRoadmapModel
-    // ===================================================================
-    // -------------------------------------------------------------------
+    
+    
+    
+    
     UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XComponentContext >& i_factory )
         :UnoControlRoadmapModel_Base( i_factory )
         ,maContainerListeners( *this )
@@ -74,14 +74,14 @@ static void lcl_throwIndexOutOfBoundsException( )
         ImplRegisterProperty( BASEPROPERTY_TEXT );
     }
 
-    // -------------------------------------------------------------------
+    
     OUString UnoControlRoadmapModel::getServiceName() throw(RuntimeException)
     {
         return OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
     }
 
 
-    // -------------------------------------------------------------------
+    
     Any UnoControlRoadmapModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         Any aReturn;
@@ -99,7 +99,7 @@ static void lcl_throwIndexOutOfBoundsException( )
                 case BASEPROPERTY_TEXT:
                    break;
                 case BASEPROPERTY_BORDER:
-                    aReturn <<= (sal_Int16) 2;              // No Border
+                    aReturn <<= (sal_Int16) 2;              
                     break;
                 case BASEPROPERTY_DEFAULTCONTROL:
                     aReturn <<= OUString( OUString::createFromAscii( szServiceName_UnoControlRoadmap ) );
@@ -121,7 +121,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
     {
-        // Todo: implementation of the arguments handling
+        
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
         Reference< XInterface > xNewRoadmapItem = (::cppu::OWeakObject*)pRoadmapItem;
         return xNewRoadmapItem;
@@ -131,7 +131,7 @@ static void lcl_throwIndexOutOfBoundsException( )
  IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, UnoControlRoadmapModel_IBase )
 
 
-    // -------------------------------------------------------------------
+    
     ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
@@ -141,7 +141,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    // -------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& UnoControlRoadmapModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -154,8 +154,8 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    // beans::XMultiPropertySet
-    // -------------------------------------------------------------------
+    
+    
     Reference< XPropertySetInfo > UnoControlRoadmapModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -202,7 +202,7 @@ static void lcl_throwIndexOutOfBoundsException( )
             sal_Int32 LocID = 0;
             Any aValue = xPropertySet->getPropertyValue("ID");
             aValue >>= LocID;
-            if (LocID < 0)              // index may not be smaller than zero
+            if (LocID < 0)              
             {
                 aAny <<= GetUniqueID();
                 xPropertySet->setPropertyValue("ID", aAny );
@@ -211,9 +211,9 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-// The performance of this method could certainly be improved.
-// As long as only vectors with up to 10 elements are
-// involved it should be sufficient
+
+
+
        sal_Int32 UnoControlRoadmapModel::GetUniqueID()
       {
           Any aAny;
@@ -324,7 +324,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         MakeRMItemValidation( Index, xRoadmapItem);
         SetRMItemDefaultProperties( Index, xRoadmapItem );
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
-        maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);        //push_back( xRoadmapItem );
+        maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);        
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
         maContainerListeners.elementReplaced( aEvent );
     }
@@ -353,10 +353,10 @@ static void lcl_throwIndexOutOfBoundsException( )
         maContainerListeners.removeInterface( xListener );
     }
 
-    // ===================================================================
-    // = UnoRoadmapControl
-    // ===================================================================
-    // -------------------------------------------------------------------
+    
+    
+    
+    
     UnoRoadmapControl::UnoRoadmapControl()
         :UnoControlRoadmap_Base()
         ,maItemListeners( *this )
@@ -385,7 +385,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     }
 
 
-    // -------------------------------------------------------------------
+    
     OUString UnoRoadmapControl::GetComponentServiceName()
     {
         return OUString("Roadmap");

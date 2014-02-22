@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <math.h>
@@ -38,13 +38,13 @@ sal_uInt32 AStringLen( const sal_Char *pAStr )
         while( *pTempStr )
         {
             pTempStr++;
-        } // while
+        } 
 
         nStrLen = (sal_uInt32)( pTempStr - pAStr );
-    } // if
+    } 
 
     return nStrLen;
-} // AStringLen
+} 
 
 sal_Char* cpystr( sal_Char* dst, const sal_Char* src )
 {
@@ -69,7 +69,7 @@ sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt )
         return( cpystr( dst, src ) );
     }
 
-    // copy string by char
+    
     for( i = 0; i < len; i++ )
         *pdst++ = *psrc++;
     *pdst = '\0';
@@ -77,7 +77,7 @@ sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt )
     return ( dst );
 }
 
-//------------------------------------------------------------------------
+
 bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len )
 {
     const sal_Char* pBuf1 = str1;
@@ -92,7 +92,7 @@ bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len )
     }
     return( i == len );
 }
-//-----------------------------------------------------------------------
+
 bool cmpstr( const sal_Char* str1, const sal_Char* str2 )
 {
     const sal_Char* pBuf1 = str1;
@@ -110,7 +110,7 @@ bool cmpstr( const sal_Char* str1, const sal_Char* str2 )
         res = false;
     return (res);
 }
-//------------------------------------------------------------------------
+
 bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len )
 {
     const sal_Unicode* pBuf1 = str1;
@@ -126,7 +126,7 @@ bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len )
     return( i == len );
 }
 
-//-----------------------------------------------------------------------
+
 bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
 {
     const sal_Unicode* pBuf1 = str1;

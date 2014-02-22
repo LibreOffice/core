@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <vector>
@@ -38,7 +38,7 @@ namespace cmis
 
         list< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
 
-        // Loop over the results and filter them
+        
         for ( list< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
                 it != aChildren.end(); ++it )
         {
@@ -86,7 +86,7 @@ namespace cmis
 
     bool DataSupplier::getResult( sal_uInt32 nIndex )
     {
-        if ( maResults.size() > nIndex ) // Result already present.
+        if ( maResults.size() > nIndex ) 
             return true;
 
         if ( getData() && maResults.size() > nIndex )
@@ -118,7 +118,7 @@ namespace cmis
             uno::Reference< sdbc::XRow > xRow = maResults[ nIndex ]->xRow;
             if ( xRow.is() )
             {
-                // Already cached.
+                
                 return xRow;
             }
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -35,22 +35,22 @@ using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
 XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl()
-    ://i39448 : m_pKeysMngr( NULL ) ,
+    :
     m_nDefaultEnvIndex(-1)
-    //m_xSecurityEnvironment( NULL )
+    
 {
-    //Init xmlsec library
+    
     if( xmlSecInit() < 0 ) {
         throw RuntimeException() ;
     }
 
-    //Init xmlsec crypto engine library
+    
     if( xmlSecCryptoInit() < 0 ) {
         xmlSecShutdown() ;
         throw RuntimeException() ;
     }
 
-    //Enable external stream handlers
+    
     if( xmlEnableStreamInputCallbacks() < 0 ) {
         xmlSecCryptoShutdown() ;
         xmlSecShutdown() ;
@@ -59,14 +59,14 @@ XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl()
 }
 
 XMLSecurityContext_NssImpl :: ~XMLSecurityContext_NssImpl() {
-    //i39448
+    
 
     xmlDisableStreamInputCallbacks() ;
     xmlSecCryptoShutdown() ;
     xmlSecShutdown() ;
 }
 
-//i39448 : new methods
+
 sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::addSecurityEnvironment(
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
     throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException)
@@ -126,7 +126,7 @@ void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sa
     m_nDefaultEnvIndex = nDefaultEnvIndex;
 }
 
-//i39448 : old methods deleted
+
 
 
 /* XServiceInfo */
@@ -150,7 +150,7 @@ Sequence< OUString > SAL_CALL XMLSecurityContext_NssImpl :: getSupportedServiceN
     return impl_getSupportedServiceNames() ;
 }
 
-//Helper for XServiceInfo
+
 Sequence< OUString > XMLSecurityContext_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
@@ -162,15 +162,15 @@ OUString XMLSecurityContext_NssImpl :: impl_getImplementationName() throw( Runti
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl") ;
 }
 
-//Helper for registry
+
 Reference< XInterface > SAL_CALL XMLSecurityContext_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
     return Reference< XInterface >( *new XMLSecurityContext_NssImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLSecurityContext_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
+    
+    
+    
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 

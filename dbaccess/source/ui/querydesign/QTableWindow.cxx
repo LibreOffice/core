@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "QTableWindow.hxx"
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
-// class OQueryTableWindow
+
 OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
@@ -58,8 +58,8 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::v
     else
         m_strInitialAlias = GetAliasName();
 
-    // if table name matches alias, do not pass to InitialAlias,
-    // as the appending of a possible token could not succeed...
+    
+    
     if (m_strInitialAlias == pTabWinData->GetTableName())
         m_strInitialAlias = OUString();
 
@@ -78,20 +78,20 @@ sal_Bool OQueryTableWindow::Init()
 
     OQueryTableView* pContainer = static_cast<OQueryTableView*>(getTableView());
 
-    // first determine Alias
+    
     OUString sAliasName;
 
     TTableWindowData::value_type pWinData = GetData();
 
     if (!m_strInitialAlias.isEmpty() )
-        // Alias was explicitly given
+        
         sAliasName = m_strInitialAlias;
     else if ( GetTable().is() )
         GetTable()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
     else
         return sal_False;
 
-    // Alias with successive number
+    
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
     {
         sAliasName += OUString('_');
@@ -100,26 +100,26 @@ sal_Bool OQueryTableWindow::Init()
 
     sAliasName = comphelper::string::remove(sAliasName, '"');
     SetAliasName(sAliasName);
-        // SetAliasName passes it as WinName, hence it uses the base class
-    // reset the title
+        
+    
     m_aTitle.SetText( pWinData->GetWinName() );
     m_aTitle.Show();
 
     if (!bSuccess)
-    {   // it should just open a dummy window...
+    {   
         OSL_ENSURE(!GetAliasName().isEmpty(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
-            // .. but that needs at least an Alias
+            
 
-        // create ::com::sun::star::form::ListBox
+        
         if (!m_pListBox)
             m_pListBox = CreateListBox();
 
-        // set titel
+        
         m_aTitle.SetText(GetAliasName());
         m_aTitle.Show();
 
         clearListBox();
-            // don't need to refill them as I don't have a table
+            
         m_pListBox->Show();
     }
 
@@ -145,7 +145,7 @@ void OQueryTableWindow::deleteUserData(void*& _pUserData)
 void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 {
     OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry must not be NULL !");
-        // you could also scan that and then return, but like this it could possibly hint to faults at the caller
+        
 
     if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
@@ -153,14 +153,14 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
     OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
 
-    // build up DragInfo
+    
     OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
     aInfo->SetTabWindow(this);
     aInfo->SetAlias(GetAliasName());
     aInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
     aInfo->SetDataType(pInf->GetDataType());
 
-    // and insert corresponding field
+    
     static_cast<OQueryTableView*>(getTableView())->InsertField(aInfo);
 }
 

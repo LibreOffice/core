@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbatable.hxx"
@@ -54,10 +54,10 @@ SwVbaTable::Select(  ) throw (script::BasicErrorException, uno::RuntimeException
     uno::Reference< text::XTextViewCursorSupplier > xViewCursorSupplier( xController, uno::UNO_QUERY_THROW );
     uno::Reference< view::XSelectionSupplier > xSelectionSupplier( xController, uno::UNO_QUERY_THROW );
 
-    // set the view cursor to the start of the table.
+    
     xSelectionSupplier->select( uno::makeAny( mxTextTable ) );
 
-    // go to the end of the table and span the view
+    
     uno::Reference< text::XTextViewCursor > xCursor = xViewCursorSupplier->getViewCursor();
     xCursor->gotoEnd(sal_True);
 
@@ -73,8 +73,8 @@ SwVbaTable::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException
 uno::Reference< word::XRange > SAL_CALL
 SwVbaTable::ConvertToText( const uno::Any& /*Separator*/, const uno::Any& /*NestedTables*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // #FIXME the helper api uses the dreaded dispatch mechanism, holding off
-    // implementation while I look for alternative solution
+    
+    
     throw uno::RuntimeException();
 }
 
@@ -116,7 +116,7 @@ SwVbaTable::Columns( const uno::Any& index ) throw (uno::RuntimeException)
     return uno::makeAny( xCol );
 }
 
-// XHelperInterface
+
 OUString
 SwVbaTable::getServiceImplName()
 {

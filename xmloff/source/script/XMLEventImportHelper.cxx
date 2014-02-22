@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@ XMLEventImportHelper::XMLEventImportHelper() :
 
 XMLEventImportHelper::~XMLEventImportHelper()
 {
-    // delete factories
+    
     FactoryMap::iterator aEnd = aFactoryMap.end();
     for(FactoryMap::iterator aIter = aFactoryMap.begin();
         aIter != aEnd;
@@ -49,7 +49,7 @@ XMLEventImportHelper::~XMLEventImportHelper()
     }
     aFactoryMap.clear();
 
-    // delete name map
+    
     delete pEventNameMap;
 }
 
@@ -69,28 +69,28 @@ void XMLEventImportHelper::AddTranslationTable(
 {
     if (NULL != pTransTable)
     {
-        // put translation table into map
+        
         for(const XMLEventNameTranslation* pTrans = pTransTable;
             pTrans->sAPIName != NULL;
             pTrans++)
         {
             XMLEventName aName( pTrans->nPrefix, pTrans->sXMLName );
 
-            // check for conflicting entries
+            
             DBG_ASSERT(pEventNameMap->find(aName) == pEventNameMap->end(),
                        "conflicting event translations");
 
-            // assign new translation
+            
             (*pEventNameMap)[aName] =
                 OUString::createFromAscii(pTrans->sAPIName);
         }
     }
-    // else? ignore!
+    
 }
 
 void XMLEventImportHelper::PushTranslationTable()
 {
-    // save old map and install new one
+    
     aEventNameMapList.push_back(pEventNameMap);
     pEventNameMap = new NameMap();
 }
@@ -101,7 +101,7 @@ void XMLEventImportHelper::PopTranslationTable()
                "no translation tables left to pop");
     if ( !aEventNameMapList.empty() )
     {
-        // delete current and install old map
+        
         delete pEventNameMap;
         pEventNameMap = aEventNameMapList.back();
         aEventNameMapList.pop_back();
@@ -120,7 +120,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    // translate event name form xml to api
+    
     OUString sMacroName;
     sal_uInt16 nMacroPrefix =
         rImport.GetNamespaceMap().GetKeyByAttrName( rXmlEventName,
@@ -135,19 +135,19 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
         if( XML_NAMESPACE_OOO != nScriptPrefix )
             aScriptLanguage = rLanguage ;
 
-        // check for factory
+        
         FactoryMap::iterator aFactoryIterator =
             aFactoryMap.find(aScriptLanguage);
         if (aFactoryIterator != aFactoryMap.end())
         {
-            // delegate to factory
+            
             pContext = aFactoryIterator->second->CreateContext(
                 rImport, nPrefix, rLocalName, xAttrList,
                 rEvents, aNameIter->second, aScriptLanguage);
         }
     }
 
-    // default context (if no context was created above)
+    
     if( NULL == pContext )
     {
         pContext = new SvXMLImportContext(rImport, nPrefix, rLocalName);

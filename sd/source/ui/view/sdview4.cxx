@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "View.hxx"
@@ -75,7 +75,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrEndTextEdit();
     mnAction = rAction;
 
-    // Is there a object at the position rPos?
+    
     SdrGrafObj*     pNewGrafObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
@@ -98,9 +98,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     if (DND_ACTION_LINK == mnAction
         && pPickObj
         && pPV
-        && (bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster))) // #121603# Do not use pObj, it may be NULL
+        && (bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster))) 
     {
-        // hit on SdrGrafObj with wanted new linked graphic (or PresObj placeholder hit)
+        
         if( IsUndoEnabled() )
             BegUndo(OUString(SdResId(STR_INSERTGRAPHIC)));
 
@@ -108,7 +108,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if( bIsGraphic )
         {
-            // We fill the object with the Bitmap
+            
             pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
             pNewGrafObj->SetGraphic(rGraphic);
         }
@@ -128,7 +128,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if (pPage && pPage->IsPresObj(pPickObj))
         {
-            // Insert new PresObj into the list
+            
             pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
             pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
         }
@@ -136,7 +136,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if (pImageMap)
             pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
 
-        ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
+        ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); 
 
         if( IsUndoEnabled() )
             EndUndo();
@@ -147,8 +147,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         && pPickObj->IsClosedObj()
         && !dynamic_cast< SdrOle2Obj* >(pPickObj))
     {
-        // fill style change (fill object with graphic), independent of mnAction
-        // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
+        
+        
         if( IsUndoEnabled() )
         {
             BegUndo(OUString(SdResId(STR_UNDO_DRAGDROP)));
@@ -165,7 +165,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     else if ( pPV )
     {
-        // create  new object
+        
         Size aSize;
 
         if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
@@ -214,7 +214,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && !bIsPresTarget )
         {
-            // replace object
+            
             if (pImageMap)
                 pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
 
@@ -268,7 +268,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     return pNewGrafObj;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize,
@@ -404,7 +404,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                     pGrafObj->SetGraphicLink( aCurrentDropFile, ""/*TODO?*/, OUString() );
                 }
 
-                // return action from first inserted graphic
+                
                 if( aIter == maDropFileVector.begin() )
                     mnAction = nTempAction;
 
@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                 {
                     try
                     {
-                        //TODO/MBA: testing
+                        
                         OUString aName;
                         uno::Sequence < beans::PropertyValue > aMedium(1);
                         aMedium[0].Name = "URL" ;
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                         if ( xPersist.is())
                         {
-                            // TODO/LEAN: VisualArea access can switch the object to running state
+                            
                             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
                             xPersist->storeOwn();
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                             }
                             catch( embed::NoVisualAreaSizeException& )
                             {
-                                // the default size will be set later
+                                
                             }
 
                             Size        aSize( aSz.Width, aSz.Height );
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                     catch( uno::Exception& )
                     {
                         nError = ERRCODE_IO_GENERAL;
-                        // TODO/LATER: better error handling
+                        
                     }
                 }
             }
@@ -570,6 +570,6 @@ SfxStyleSheet* View::GetStyleSheet() const
     return SdrView::GetStyleSheet();
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

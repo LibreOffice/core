@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -105,7 +105,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
 
         if ( i == nCount-1 )
         {
-            // Check last reference path element. Must be a leave (menu item).
+            
             sal_uInt16 nTmpPos = FindMenuItem( aCmd, pCurrMenu );
             if ( nTmpPos != MENU_ITEM_NOTFOUND )
                 nPos = nTmpPos;
@@ -113,7 +113,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
         }
         else
         {
-            // Check reference path element. Must be a node (popup menu)!
+            
             sal_uInt16 nTmpPos = FindMenuItem( aCmd, pCurrMenu );
             if ( nTmpPos != MENU_ITEM_NOTFOUND )
             {
@@ -244,8 +244,8 @@ bool MenuBarMerger::ReplaceMenuItem(
     const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
 {
-    // There is no replace available. Therfore we first have to
-    // remove the old menu entry,
+    
+    
     pMenu->RemoveItem( nPos );
 
     return MergeMenuItems( pMenu, nPos, 0, rItemId, rModuleIdentifier, rAddonMenuItems );
@@ -356,7 +356,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
 
                 if ( bFirstLevel && ( aRefPathInfo.eResult == RP_MENUITEM_INSTEAD_OF_POPUPMENU_FOUND ))
                 {
-                    // special case: menu item without popup
+                    
                     nInsPos = aRefPathInfo.nPos;
                     sal_uInt16 nSetItemId = pCurrMenu->GetItemId( nInsPos );
                     pCurrMenu->SetItemCommand( nSetItemId, aCmd );
@@ -364,7 +364,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
                 }
                 else
                 {
-                    // normal case: insert a new item with popup
+                    
                     pCurrMenu->InsertItem(rItemId, OUString());
                     pCurrMenu->SetItemCommand( rItemId, aCmd );
                     pCurrMenu->SetPopupMenu( rItemId, pPopupMenu );
@@ -386,7 +386,7 @@ void MenuBarMerger::GetMenuEntry(
     const uno::Sequence< beans::PropertyValue >& rAddonMenuEntry,
     AddonMenuItem&                               rAddonMenuItem )
 {
-    // Reset submenu member
+    
     rAddonMenuItem.aSubMenu.clear();
 
     for ( sal_Int32 i = 0; i < rAddonMenuEntry.getLength(); i++ )
@@ -429,6 +429,6 @@ void MenuBarMerger::GetSubMenu(
     }
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -42,19 +42,19 @@ namespace vclcanvas
     {
         DeviceHelper::init(pOutDev);
 
-        // setup back buffer
+        
         OutputDevice& rOutDev( pOutDev->getOutDev() );
         mpBackBuffer.reset( new BackBuffer( rOutDev ));
         mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
 
-        // #i95645#
+        
 #if defined( MACOSX )
-        // use AA on VCLCanvas for Mac
+        
         mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpBackBuffer->getOutDev().GetAntialiasing() );
 #else
-        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-        // is not required to do AA. It would need to be adapted to use it correctly
-        // (especially gradient painting). This will need extra work.
+        
+        
+        
         mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
 #endif
     }
@@ -63,15 +63,15 @@ namespace vclcanvas
     {
         (void)nBuffers;
 
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
+        
+        
         return 1;
     }
 
     void SpriteDeviceHelper::destroyBuffers()
     {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
+        
+        
     }
 
     ::sal_Bool SpriteDeviceHelper::showBuffer( bool, ::sal_Bool )
@@ -88,7 +88,7 @@ namespace vclcanvas
 
     void SpriteDeviceHelper::disposing()
     {
-        // release all references
+        
         mpBackBuffer.reset();
 
         DeviceHelper::disposing();

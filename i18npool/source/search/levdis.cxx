@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-/*************************************************************************
+/*
 
     Weighted Levenshtein Distance
     including wildcards
@@ -53,9 +53,7 @@
 
     See also: German computer magazine
     c't 07/89 pages 192-208 and c't 03/94 pages 230-239
-
-*************************************************************************/
-
+*/
 
 #include <string.h>
 
@@ -69,13 +67,13 @@
 #undef min
 #endif
 
-#define LEVDISBIG   (nLimit + 1)    // Returnwert wenn Distanz > nLimit
-#define LEVDISDOUBLEBUF 2048        // dadrueber wird nicht mehr gedoppelt
+#define LEVDISBIG   (nLimit + 1)    
+#define LEVDISDOUBLEBUF 2048        
 
-// Balance, aus Geschwindigkeitsgruenden ist dieses keine Funktion
-// c == cpPattern[jj] == cString[ii]
-// erst wird bis Fundstelle gesucht, wenn dort die Balance gleich ist, wird
-// auch nach der Fundstelle verglichen
+
+
+
+
 #define LEVDISBALANCE(jj,ii)                        \
 {                                                   \
     if ( jj != ii )                                 \
@@ -109,25 +107,25 @@ static sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
     return (sal_Int32)(pTempStr-pStr);
 }
 
-// Distanz von String zu Pattern
+
 int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 {
-    int nSPMin = 0;     // StrafPunkteMinimum
-    int nRepS = 0;      // fuer SplitCount
+    int nSPMin = 0;     
+    int nRepS = 0;      
 
-    // Laengendifferenz von Pattern und String
+    
     int nLenDiff = nPatternLen - nStars - nStringLen;
-    // mehr Einfuegungen oder Loeschungen noetig als Limit? => raus hier
+    
     if ( (nLenDiff * nInsQ0 > nLimit)
             || ((nStars == 0) && (nLenDiff * nDelR0 < -nLimit)) )
         return(LEVDISBIG);
 
-    // wenn der zu vergleichende String groesser ist als das bisherige Array
-    // muss dieses angepasst werden
+    
+    
     if ( nStringLen >= nArrayLen )
     {
-        // gib ihm moeglichst mehr, damit nicht gleich naechstesmal
-        // wieder realloziert werden muss
+        
+        
         if ( nStringLen < LEVDISDOUBLEBUF )
             nArrayLen = 2 * nStringLen;
         else
@@ -135,18 +133,18 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         npDistance = aDisMem.NewMem( nArrayLen );
     }
 
-    // Anfangswerte der zweiten Spalte (erstes Pattern-Zeichen) berechnen
-    // die erste Spalte (0-Len Pattern) ist immer 0 .. nStringLen * nInsQ0,
-    // deren Minimum also 0
+    
+    
+    
     if ( nPatternLen == 0 )
     {
-        // Anzahl der Loeschungen, um auf Pattern zu kommen
+        
         for ( sal_Int32 i=0; i <= nStringLen; i++ )
             npDistance[i] = i * nDelR0;
     }
     else if ( cpPattern[0] == '*' && bpPatIsWild[0] )
     {
-        // statt einem '*' ist alles einsetzbar
+        
         for ( sal_Int32 i=0; i <= nStringLen; i++ )
             npDistance[i] = 0;
     }
@@ -156,34 +154,34 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         int nP;
         c = cpPattern[0];
         if ( c == '?' && bpPatIsWild[0] )
-            nP = 0;     // ein '?' kann jedes Zeichen sein
+            nP = 0;     
         else
-            // Minimum von Ersetzen und Loeschen+Einfuegen Gewichtung
+            
             nP = Min3( nRepP0, nRepP0, nDelR0 + nInsQ0 );
-        npDistance[0] = nInsQ0;     // mit einfachem Einfuegen geht's los
+        npDistance[0] = nInsQ0;     
         npDistance[1] = nInsQ0;
         npDistance[2] = nInsQ0;
-        int nReplacePos = -1;       // tristate Flag
+        int nReplacePos = -1;       
         int nDelCnt = 0;
         for ( sal_Int32 i=1; i <= nStringLen; i++, nDelCnt += nDelR0 )
         {
             if ( cString[i-1] == c )
-                nP = 0;     // Replace ab dieser Stelle ist 0
-            // Loeschungen um auf Pattern zu kommen + Replace
+                nP = 0;     
+            
             npDistance[i] = nDelCnt + nP;
             if ( bSplitCount )
             {
                 if ( nReplacePos < 0 && nP )
-                {   // diese Stelle wird ersetzt
+                {   
                     nRepS++;
                     nReplacePos = i;
                 }
                 else if ( nReplacePos > 0 && !nP )
                 {
-                    int nBalance = 0;   // gleiche Anzahl c
+                    int nBalance = 0;   
                     LEVDISBALANCE( 0, i-1 );
                     if ( !nBalance )
-                    {   // einer wurde ersetzt, der ein Insert war
+                    {   
                         nRepS--;
                         nReplacePos = 0;
                     }
@@ -193,8 +191,8 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         nSPMin = Min3( npDistance[0], npDistance[1], npDistance[2] );
     }
 
-    // Distanzmatrix berechnen
-    sal_Int32 j = 0;        // fuer alle Spalten des Pattern, solange nicht Limit
+    
+    sal_Int32 j = 0;        
     while ( (j < nPatternLen-1)
             && nSPMin <= (bSplitCount ? 2 * nLimit : nLimit) )
     {
@@ -203,68 +201,68 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 
         j++;
         c = cpPattern[j];
-        if ( bpPatIsWild[j] )   // '*' oder '?' nicht escaped
-            nP = 0;     // kann ohne Strafpunkte ersetzt werden
+        if ( bpPatIsWild[j] )   
+            nP = 0;     
         else
             nP = nRepP0;
         if ( c == '*' && bpPatIsWild[j] )
         {
-            nQ = 0;     // Einfuegen und Loeschen ohne Strafpunkte
+            nQ = 0;     
             nR = 0;
         }
         else
         {
-            nQ = nInsQ0;    // normale Gewichtung
+            nQ = nInsQ0;    
             nR = nDelR0;
         }
         d2 = npDistance[0];
-        // Anzahl Einfuegungen um von Null-String auf Pattern zu kommen erhoehen
+        
         npDistance[0] = npDistance[0] + nQ;
         nSPMin = npDistance[0];
-        int nReplacePos = -1;       // tristate Flag
-        // fuer jede Patternspalte den String durchgehen
+        int nReplacePos = -1;       
+        
         for ( sal_Int32 i=1; i <= nStringLen; i++ )
         {
-            d1 = d2;                // WLD( X(i-1), Y(j-1) )
-            d2 = npDistance[i];     // WLD( X(i)  , Y(j-1) )
+            d1 = d2;                
+            d2 = npDistance[i];     
             if ( cString[i-1] == c )
             {
-                nPij = 0;           // p(i,j)
+                nPij = 0;           
                 if ( nReplacePos < 0 )
                 {
-                    int nBalance = 0;   // gleiche Anzahl c
+                    int nBalance = 0;   
                     LEVDISBALANCE( j, i-1 );
                     if ( !nBalance )
-                        nReplacePos = 0;    // keine Ersetzung mehr
+                        nReplacePos = 0;    
                 }
             }
             else
                 nPij = nP;
-            // WLD( X(i), Y(j) ) = min( WLD( X(i-1), Y(j-1) ) + p(i,j) ,
-            //                          WLD( X(i)  , Y(j-1) ) + q      ,
-            //                          WLD( X(i-1), Y(j)   ) + r      )
+            
+            
+            
             npDistance[i] = Min3( d1 + nPij, d2 + nQ, npDistance[i-1] + nR );
             if ( npDistance[i] < nSPMin )
                 nSPMin = npDistance[i];
             if ( bSplitCount )
             {
                 if ( nReplacePos < 0 && nPij && npDistance[i] == d1 + nPij )
-                {   // diese Stelle wird ersetzt
+                {   
                     nRepS++;
                     nReplacePos = i;
                 }
                 else if ( nReplacePos > 0 && !nPij )
-                {   // Zeichen in String und Pattern gleich.
-                    // wenn ab hier die gleiche Anzahl dieses Zeichens
-                    // sowohl in Pattern als auch in String ist, und vor
-                    // dieser Stelle das Zeichen gleich oft vorkommt, war das
-                    // Replace keins. Buchstabendreher werden hier erfasst
-                    // und der ReplaceS zurueckgenommen, wodurch das doppelte
-                    // Limit zum Tragen kommt.
-                    int nBalance = 0;   // gleiche Anzahl c
+                {   
+                    
+                    
+                    
+                    
+                    
+                    
+                    int nBalance = 0;   
                     LEVDISBALANCE( j, i-1 );
                     if ( !nBalance )
-                    {   // einer wurde ersetzt, der ein Insert war
+                    {   
                         nRepS--;
                         nReplacePos = 0;
                     }
@@ -279,7 +277,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         if ( bSplitCount )
         {
             if ( nRepS && nLenDiff > 0 )
-                nRepS -= nLenDiff;      // Inserts wurden mitgezaehlt
+                nRepS -= nLenDiff;      
             if ( (nSPMin <= 2 * nLimit)
                     && (npDistance[nStringLen] <= 2 * nLimit)
                     && (nRepS * nRepP0 <= nLimit) )
@@ -292,23 +290,21 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 
 
 
-// Berechnung von nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
-// aus Userwerten           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
 int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 {
-    if ( nX < 0 ) nX = 0;       // nur positive Werte
+    if ( nX < 0 ) nX = 0;       
     if ( nY < 0 ) nY = 0;
     if ( nZ < 0 ) nZ = 0;
-    if (0 == Min3( nX, nY, nZ ))     // mindestens einer 0
+    if (0 == Min3( nX, nY, nZ ))     
     {
         int nMid, nMax;
-        nMax = Max3( nX, nY, nZ );      // entweder 0 bei drei 0 oder Max
-        if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // sogar zwei 0
-            nLimit = nMax;  // entweder 0 oder einziger >0
-        else        // einer 0
+        nMax = Max3( nX, nY, nZ );      
+        if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     
+            nLimit = nMax;  
+        else        
             nLimit = KGV( nMid, nMax );
     }
-    else        // alle drei nicht 0
+    else        
         nLimit = KGV( KGV( nX, nY ), nZ );
     nRepP0 = ( nX ? nLimit / nX : nLimit + 1 );
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
@@ -319,8 +315,6 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 
 
 
-// Groesster Gemeinsamer Teiler nach Euklid (Kettendivision)
-// Sonderfall: 0 und irgendwas geben 1
 int WLevDistance::GGT( int a, int b )
 {
     if ( !a || !b )
@@ -338,18 +332,15 @@ int WLevDistance::GGT( int a, int b )
 }
 
 
-
-// Kleinstes Gemeinsames Vielfaches: a * b / GGT(a,b)
 int WLevDistance::KGV( int a, int b )
 {
-    if ( a > b )    // Ueberlauf unwahrscheinlicher machen
+    if ( a > b )    
         return( (a / GGT(a,b)) * b );
     else
         return( (b / GGT(a,b)) * a );
 }
 
 
-// Minimum von drei Werten
 inline int WLevDistance::Min3( int x, int y, int z )
 {
     if ( x < y )
@@ -359,8 +350,6 @@ inline int WLevDistance::Min3( int x, int y, int z )
 }
 
 
-
-// mittlerer von drei Werten
 int WLevDistance::Mid3( int x, int y, int z )
 {
     int min = Min3(x,y,z);
@@ -368,13 +357,11 @@ int WLevDistance::Mid3( int x, int y, int z )
         return( y < z ? y : z);
     else if ( y == min )
         return( x < z ? x : z);
-    else        // z == min
+    else        
         return( x < y ? x : y);
 }
 
 
-
-// Maximum von drei Werten
 int WLevDistance::Max3( int x, int y, int z )
 {
     if ( x > y )
@@ -384,8 +371,6 @@ int WLevDistance::Max3( int x, int y, int z )
 }
 
 
-
-// Daten aus CTor initialisieren
 void WLevDistance::InitData( const sal_Unicode* cPattern )
 {
     cpPattern = aPatMem.GetcPtr();
@@ -395,22 +380,22 @@ void WLevDistance::InitData( const sal_Unicode* cPattern )
     const sal_Unicode* cp1 = cPattern;
     sal_Unicode* cp2 = cpPattern;
     bool* bp = bpPatIsWild;
-    // Pattern kopieren, Sternchen zaehlen, escaped Jokers
+    
     while ( *cp1 )
     {
-        if ( *cp1 == '\\' )     // maybe escaped
+        if ( *cp1 == '\\' )     
         {
-            if ( *(cp1+1) == '*' || *(cp1+1) == '?' )   // naechstes Joker?
+            if ( *(cp1+1) == '*' || *(cp1+1) == '?' )   
             {
-                cp1++;          // skip '\\'
+                cp1++;          
                 nPatternLen--;
             }
             *bp++ = false;
         }
-        else if ( *cp1 == '*' || *cp1 == '?' )      // Joker
+        else if ( *cp1 == '*' || *cp1 == '?' )      
         {
             if ( *cp1 == '*' )
-                nStars++;       // Sternchenzaehler erhoehen
+                nStars++;       
             *bp++ = true;
         }
         else
@@ -419,7 +404,6 @@ void WLevDistance::InitData( const sal_Unicode* cPattern )
     }
     *cp2 = '\0';
 }
-
 
 WLevDistance::WLevDistance( const sal_Unicode* cPattern,
                             int nOtherX, int nShorterY, int nLongerZ,
@@ -434,7 +418,6 @@ WLevDistance::WLevDistance( const sal_Unicode* cPattern,
 }
 
 
-// CopyCTor
 WLevDistance::WLevDistance( const WLevDistance& rWLD ) :
     nPatternLen( rWLD.nPatternLen ),
     aPatMem( nPatternLen + 1 ),
@@ -460,7 +443,6 @@ WLevDistance::WLevDistance( const WLevDistance& rWLD ) :
 }
 
 
-// DTor
 WLevDistance::~WLevDistance()
 {
 }

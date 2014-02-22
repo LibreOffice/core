@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,7 +29,7 @@ namespace desktop {
 
 bool Lockfile_execWarning( Lockfile * that )
 {
-    // read information from lock
+    
     OUString aLockname = that->m_aLockname;
     Config aConfig(aLockname);
     aConfig.SetGroup( LOCKFILE_GROUP );
@@ -37,12 +37,12 @@ bool Lockfile_execWarning( Lockfile * that )
     OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
     OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
 
-    // display warning and return response
+    
     QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );
-    // set box title
+    
     OUString aTitle = OUString( DesktopResId( STR_TITLE_USERDATALOCKED ));
     aBox.SetText( aTitle );
-    // insert values...
+    
     OUString aMsgText = aBox.GetMessText( );
     aMsgText = aMsgText.replaceFirst(
         "$u", OStringToOUString( aUser, RTL_TEXTENCODING_ASCII_US) );
@@ -51,7 +51,7 @@ bool Lockfile_execWarning( Lockfile * that )
     aMsgText = aMsgText.replaceFirst(
         "$t", OStringToOUString( aTime, RTL_TEXTENCODING_ASCII_US) );
     aBox.SetMessText(aMsgText);
-    // do it
+    
     return aBox.Execute( ) == RET_YES;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -42,21 +42,21 @@ public:
         range<int>
             t2(33,33);
 
-        // ctor
+        
         CPPUNIT_ASSERT_MESSAGE("int ctor1", t1.begin() == 12);
         CPPUNIT_ASSERT_MESSAGE("int ctor2", t1.end() == 88);
         CPPUNIT_ASSERT_MESSAGE("int ctor3", t2.begin() == 33);
         CPPUNIT_ASSERT_MESSAGE("int ctor4", t2.end() == 33);
 
-        // make_range
+        
         CPPUNIT_ASSERT_MESSAGE("int make_range1", make_range(0,8).begin() == 0);
         CPPUNIT_ASSERT_MESSAGE("int make_range2", make_range(0,8).end() == 8);
 
-        // size
+        
         CPPUNIT_ASSERT_MESSAGE("int size1", t1.size() == size_t(t1.end() - t1.begin()) );
         CPPUNIT_ASSERT_MESSAGE("int size2", t2.size() == size_t(0) );
 
-        // contains
+        
         range<int>      t3(0,10);
         range<int>      t4(7, 15);
         range<int>      t5(12, 12);
@@ -89,7 +89,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("int contains n6", ! t1.contains(88));
         CPPUNIT_ASSERT_MESSAGE("int contains n7", ! t1.contains(100));
 
-        // overlaps
+        
         range<int>      t13(88,99);
 
         CPPUNIT_ASSERT_MESSAGE("int overlaps1", t1.overlaps(t1));
@@ -106,7 +106,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("int overlaps12", ! t1.overlaps(t12));
         CPPUNIT_ASSERT_MESSAGE("int overlaps13", ! t1.overlaps(t13));
 
-        // distance_to
+        
         CPPUNIT_ASSERT_MESSAGE("int distance_to1", t1.distance_to(t13) == 0);
         CPPUNIT_ASSERT_MESSAGE("int distance_to2", t1.distance_to(t9) == 0);
         CPPUNIT_ASSERT_MESSAGE("int distance_to3", t1.distance_to(t11) == 2);
@@ -128,21 +128,21 @@ public:
         range<test_it>
             t2(hv.begin()+33, hv.begin()+33);
 
-        // ctor
+        
         CPPUNIT_ASSERT_MESSAGE("ivec ctor1", t1.begin() == hit1);
         CPPUNIT_ASSERT_MESSAGE("ivec ctor2", t1.end() == hit2);
         CPPUNIT_ASSERT_MESSAGE("ivec ctor3", t2.begin() == hv.begin()+33);
         CPPUNIT_ASSERT_MESSAGE("ivec ctor4", t2.end() == hv.begin()+33);
 
-        // make_range
+        
         CPPUNIT_ASSERT_MESSAGE("ivec make_range1", make_range(hv.begin(), hv.begin()+8).begin() == hv.begin());
         CPPUNIT_ASSERT_MESSAGE("ivec make_range2", make_range(hv.begin(), hv.begin()+8).end() == hv.begin()+8);
 
-        // size
+        
         CPPUNIT_ASSERT_MESSAGE("ivec size1", t1.size() == size_t(t1.end() - t1.begin()) );
         CPPUNIT_ASSERT_MESSAGE("ivec size2", t2.size() == size_t(0) );
 
-        // contains
+        
         range<test_it>      t3(hv.begin(), hv.begin() + 10);
         range<test_it>      t4(hv.begin() + 7, hv.begin() + 15);
         range<test_it>      t5(hit1, hit1);
@@ -175,7 +175,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("ivec contains n6", ! t1.contains(hit2));
         CPPUNIT_ASSERT_MESSAGE("ivec contains n7", ! t1.contains(hv.begin() + 100));
 
-        // overlaps
+        
         range<test_it>      t13(hit2, hv.begin() + 99);
 
         CPPUNIT_ASSERT_MESSAGE("ivec overlaps1", t1.overlaps(t1));
@@ -192,7 +192,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("ivec overlaps12", ! t1.overlaps(t12));
         CPPUNIT_ASSERT_MESSAGE("ivec overlaps13", ! t1.overlaps(t13));
 
-        // distance_to
+        
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to1", t1.distance_to(t13) == 0);
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to2", t1.distance_to(t8) == -1);
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to3", t1.distance_to(t9) == 0);
@@ -206,7 +206,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("range_of2", range_of(h3).end() == h3.end());
     }
 
-    // insert your test code here.
+    
     void global()
     {
         int_test();
@@ -214,13 +214,13 @@ public:
     }
 
 
-    // These macros are needed by auto register mechanism.
+    
     CPPUNIT_TEST_SUITE(range_test);
     CPPUNIT_TEST(global);
     CPPUNIT_TEST_SUITE_END();
-}; // class range_test
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(range_test);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

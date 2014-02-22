@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -77,48 +77,48 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
         {
             if (!bInEscape)
             {
-                //If this is the quote is the first of the couple which enclose the
-                //whole value, because the value contains special characters
-                //then we just drop it. That is, this character must be followed by
-                //a character which is not '"'.
+                
+                
+                
+                
                 if ( i + 1 < length && rRawString[i+1] == '"')
                     bInEscape = true;
                 else
-                    bInValue = !bInValue; //value is enclosed in " "
+                    bInValue = !bInValue; 
             }
             else
             {
-                //This quote is escaped by a preceding quote and therefore is
-                //part of the value
+                
+                
                 bInEscape = false;
             }
         }
         else if (c == ',' || c == '+')
         {
-            //The comma separate the attribute value pairs.
-            //If the comma is not part of a value (the value would then be enclosed in '"'),
-            //then we have reached the end of the value
+            
+            
+            
             if (!bInValue)
             {
-                //The next char is the start of the new type
+                
                 nTypeNameStart = i + 1;
             }
         }
     }
 
-    //Found the Type Name, but there can still be spaces after the last comma
-    //and the beginning of the type.
+    
+    
     if (bFound)
     {
         while (true)
         {
             sal_Unicode c = rRawString[nTypeNameStart];
             if (c != ' ' && c != '\t')
-                //found
+                
                 break;
             nTypeNameStart ++;
         }
-        // search end (one after last letter)
+        
         sal_Int32 nTypeNameEnd = nTypeNameStart;
         nTypeNameEnd++;
         while (true)
@@ -175,7 +175,7 @@ X509Certificate_MSCryptImpl :: ~X509Certificate_MSCryptImpl() {
     }
 }
 
-//Methods from XCertificate
+
 sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         return ( char )m_pCertContext->pCertInfo->dwVersion ;
@@ -208,7 +208,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::
             NULL, 0
         ) ;
 
-        // Here the cbIssuer count the last 0x00 , take care.
+        
         if( cbIssuer != 0 ) {
             issuer = new char[ cbIssuer ] ;
             if( issuer == NULL )
@@ -226,13 +226,13 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::
                 throw RuntimeException() ;
             }
 
-            // for correct encoding
+            
             sal_uInt16 encoding ;
             rtl_Locale *pLocale = NULL ;
             osl_getProcessLocale( &pLocale ) ;
             encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
-            if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
+            if(issuer[cbIssuer-1] == 0) cbIssuer--; 
             OUString xIssuer(issuer , cbIssuer ,encoding ) ;
             delete [] issuer ;
 
@@ -301,7 +301,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
         if (FileTimeToLocalFileTime(&( m_pCertContext->pCertInfo->NotBefore ), &localFileTime))
         {
             if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
-                //Convert the time to readable local time
+                
                 dateTime.NanoSeconds = explTime.wMilliseconds * ::Time::nanoPerMilli ;
                 dateTime.Seconds = explTime.wSecond ;
                 dateTime.Minutes = explTime.wMinute ;
@@ -327,7 +327,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
         if (FileTimeToLocalFileTime(&( m_pCertContext->pCertInfo->NotAfter ), &localFileTime))
         {
             if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
-                //Convert the time to readable local time
+                
                 dateTime.NanoSeconds = explTime.wMilliseconds * ::Time::nanoPerMilli ;
                 dateTime.Seconds = explTime.wSecond ;
                 dateTime.Minutes = explTime.wMinute ;
@@ -408,7 +408,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
             pExtn = &( m_pCertContext->pCertInfo->rgExtension[i] ) ;
 
-            //TODO: Compare the oid
+            
             if( 0 ) {
                 xExtn = new CertificateExtension_XmlSecImpl() ;
                 if( xExtn == NULL )
@@ -438,7 +438,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-//Helper methods
+
 void X509Certificate_MSCryptImpl :: setMswcryCert( const CERT_CONTEXT* cert ) {
     if( m_pCertContext != NULL ) {
         CertFreeCertificateContext( m_pCertContext ) ;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pyuno_impl.hxx"
@@ -64,7 +64,7 @@ GCThread::GCThread( PyInterpreterState *interpreter, PyObject * object ) :
 
 void GCThread::execute()
 {
-    //  otherwise we crash here, when main has been left already
+    
     if( isAfterUnloadOrPy_Finalize() )
         return;
     try
@@ -73,7 +73,7 @@ void GCThread::execute()
         {
             Runtime runtime;
 
-            // remove the reference from the pythonobject2adapter map
+            
             PyRef2Adapter::iterator ii =
                 runtime.getImpl()->cargo->mappedObjects.find( mPyObject );
             if( ii != runtime.getImpl()->cargo->mappedObjects.end() )
@@ -94,19 +94,19 @@ void GCThread::execute()
 
 void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
 {
-    //  otherwise we crash in the last after main ...
+    
     if( isAfterUnloadOrPy_Finalize() )
         return;
 
-    // delegate to a new thread, because there does not seem
-    // to be a method, which tells, whether the global
-    // interpreter lock is held or not
-    // TODO: Look for a more efficient solution
+    
+    
+    
+    
     rtl::Reference< GCThread >(new GCThread(interpreter, object))->launch();
-        //TODO: a protocol is missing how to join with the launched thread
-        // before exit(3), to ensure the thread is no longer relying on any
-        // infrastructure while that infrastructure is being shut down in
-        // atexit handlers
+        
+        
+        
+        
 }
 
 }

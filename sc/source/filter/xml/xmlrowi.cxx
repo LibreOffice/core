@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlrowi.hxx"
@@ -45,7 +45,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
+
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -117,22 +117,22 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL:
-//      if( IsInsertCellPossible() )
+
         {
             bHasCell = true;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, false, static_cast<SCROW>(nRepeatedRows)
-                                                      //this
+                                                      
                                                       );
         }
         break;
     case XML_TOK_TABLE_ROW_COVERED_CELL:
-//      if( IsInsertCellPossible() )
+
         {
             bHasCell = true;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, true, static_cast<SCROW>(nRepeatedRows)
-                                                      //this
+                                                      
                                                       );
         }
         break;
@@ -149,7 +149,7 @@ void ScXMLTableRowContext::EndElement()
     ScXMLImport& rXMLImport(GetScImport());
     if (!bHasCell && nRepeatedRows > 1)
     {
-        for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) //one row is always added
+        for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) 
             GetScImport().GetTables().AddRow();
         OSL_FAIL("it seems here is a nonvalid file; possible missing of table:table-cell element");
     }
@@ -226,7 +226,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     bGroup(bTempGroup),
     bGroupDisplay(true)
 {
-    // don't have any attributes
+    
     if (bHeader)
     {
         ScAddress aAddr = rImport.GetTables().GetCurrentCellPos();
@@ -283,8 +283,8 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefi
         break;
     case XML_TOK_TABLE_ROWS_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
+                                                      rLName, xAttrList
+                                                      
                                                       );
         break;
     }

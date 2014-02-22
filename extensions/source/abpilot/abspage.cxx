@@ -36,45 +36,45 @@ namespace abp
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void AddressBookSourcePage::DeactivatePage()
     {
         AddressBookSourcePage_Base::DeactivatePage();
         getDialog()->enableButtons(WZB_NEXT, sal_True);
     }
 
-    //---------------------------------------------------------------------
+    
     OAddessBookSourcePilot* AddressBookSourcePage::getDialog()
     {
         return static_cast<OAddessBookSourcePilot*>(GetParent());
     }
 
-    //---------------------------------------------------------------------
+    
     const OAddessBookSourcePilot* AddressBookSourcePage::getDialog() const
     {
         return static_cast<const OAddessBookSourcePilot*>(GetParent());
     }
 
-    //---------------------------------------------------------------------
+    
     AddressSettings& AddressBookSourcePage::getSettings()
     {
         return getDialog()->getSettings();
     }
 
-    //---------------------------------------------------------------------
+    
     const AddressSettings&  AddressBookSourcePage::getSettings() const
     {
         return getDialog()->getSettings();
     }
 
-    //---------------------------------------------------------------------
+    
     const Reference< XComponentContext > & AddressBookSourcePage::getORB()
     {
         return getDialog()->getORB();
     }
 
 //.........................................................................
-}   // namespace abp
+}   
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

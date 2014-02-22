@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <ModelEventListener.hxx>
 #include <PropertyIds.hxx>
@@ -58,11 +58,11 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         {
             PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-            //remove listener
+            
             uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
             uno::Reference<document::XEventListener>(this));
 
-            // If we have PAGEREF fields, update fields as well.
+            
             uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(rEvent.Source, uno::UNO_QUERY);
             uno::Reference<container::XEnumeration> xEnumeration(xTextFieldsSupplier->getTextFields()->createEnumeration(), uno::UNO_QUERY);
             sal_Int32 nIndex = 0;
@@ -80,7 +80,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
                 }
                 catch( const beans::UnknownPropertyException& )
                 {
-                    // doesn't even have such a property? ignore
+                    
                 }
             }
             if (nIndex)
@@ -98,7 +98,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
     if ( rEvent.EventName == "OnFocus" && m_bControls)
     {
 
-        // Form design mode is enabled by default in Writer, not in Word.
+        
         uno::Reference<frame::XModel> xModel(rEvent.Source, uno::UNO_QUERY);
         uno::Reference<view::XFormLayerAccess> xFormLayerAccess(xModel->getCurrentController(), uno::UNO_QUERY);
         xFormLayerAccess->setFormDesignMode(false);
@@ -118,7 +118,7 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno
     }
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

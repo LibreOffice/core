@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -57,7 +57,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// - SgaTheme -
+
 
 DBG_NAME(GalleryTheme)
 
@@ -93,7 +93,7 @@ GalleryTheme::~GalleryTheme()
 void GalleryTheme::ImplCreateSvDrawStorage()
 {
     aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
-    // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
+    
     if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
         aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 }
@@ -152,7 +152,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
         {
             sal_uInt32 nInventor;
 
-            // Check to ensure that the file is a valid SGA file
+            
             pIStm->Seek( pEntry->nOffset );
             pIStm->ReadUInt32( nInventor );
 
@@ -248,7 +248,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
 
     aInfoFileURL.Append( OUString("sdddndx1") );
 
-    // read next possible number
+    
     if( FileExists( aInfoFileURL ) )
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
@@ -260,7 +260,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
         }
     }
 
-    // create extension
+    
     if( nFormat )
     {
         switch( nFormat )
@@ -284,7 +284,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
 
     do
     {
-        // get URL
+        
         if( SGA_OBJ_SVDRAW == eObjKind )
         {
             OUString aFileName( "gallery/svdraw/dd" );
@@ -314,7 +314,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     }
     while( bExists );
 
-    // write updated number
+    
     SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
 
     if( pOStm )
@@ -381,7 +381,7 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
         {
             GalleryObject aNewEntry;
 
-            // update title of new object if necessary
+            
             if( rObj.GetTitle().isEmpty() )
             {
                 SgaObject* pOldObj = ImplReadSgaObject( pFoundEntry );
@@ -521,7 +521,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         LockBroadcaster();
         bAbortActualize = sal_False;
 
-        // reset delete flag
+        
         for (size_t i = 0; i < nCount; i++)
             aObjectList[ i ]->mbDelete = false;
 
@@ -536,12 +536,12 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
             rActualizeLink.Call( (void*) &aURL );
 
-            // SvDraw objects will be updated later
+            
             if( pEntry->eObjKind != SGA_OBJ_SVDRAW )
             {
-                // Still a function should be implemented,
-                // which assigns files to the relevant entry.
-                // insert graphics as graphic objects into the gallery
+                
+                
+                
                 if( pEntry->eObjKind == SGA_OBJ_SOUND )
                 {
                     SgaObjectSound aObjSound( aURL );
@@ -569,7 +569,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                         delete pNewObj;
                     }
                     else
-                        pEntry->mbDelete = true; // set delete flag
+                        pEntry->mbDelete = true; 
                 }
             }
             else
@@ -594,7 +594,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             }
         }
 
-        // remove all entries with set flag
+        
         for ( size_t i = 0; i < aObjectList.size(); )
         {
             pEntry = aObjectList[ i ];
@@ -610,7 +610,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             else ++i;
         }
 
-        // update theme
+        
         ::utl::TempFile aTmp;
         INetURLObject   aInURL( GetSdgURL() );
         INetURLObject   aTmpURL( aTmp.GetURL() );
@@ -709,7 +709,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                 OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
                 aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
-                // execute a charakter conversion
+                
                 if( nVersion >= 0x0004 )
                 {
                     sal_uInt32  nCount;
@@ -718,9 +718,9 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                     pIStm->ReadUInt32( nCount ).ReadUInt16( nTemp16 );
                     pIStm->Seek( STREAM_SEEK_TO_END );
 
-                    // check whether there is a newer version;
-                    // therefore jump back by 520Bytes (8 bytes ID + 512Bytes reserve buffer)
-                    // if this is at all possible.
+                    
+                    
+                    
                     if( pIStm->Tell() >= 520 )
                     {
                         sal_uInt32 nId1, nId2;
@@ -829,9 +829,9 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
                 if( pObj )
                 {
                     rGraphic = pObj->GetThumbBmp();
-                    //Bitmap aBmp( pObj->GetThumbBmp() );
-                    //aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
-                    //rGraphic = aBmp;
+                    
+                    
+                    
                     ReleaseObject( pObj );
                     bRet = sal_True;
                 }
@@ -1246,7 +1246,7 @@ sal_Bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::X
 
                 ImageMap aImageMap;
 
-                // according to KA we don't need a BaseURL here
+                
                 if( aDataHelper.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) )
                 {
                     SvxGalleryDrawModel aModel;
@@ -1351,18 +1351,18 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( (sal_uInt16) pObj->eObjKind );
     }
 
-    // more recently, a 512-byte reserve buffer is written,
-    // to recognize them two sal_uIntPtr-Ids will be written.
+    
+    
     rOStm.WriteUInt32( COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) ).WriteUInt32( COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) );
 
     const long      nReservePos = rOStm.Tell();
     VersionCompat*  pCompat = new VersionCompat( rOStm, STREAM_WRITE, 2 );
 
-    rOStm.WriteUInt32( (sal_uInt32) GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
+    rOStm.WriteUInt32( (sal_uInt32) GetId() ).WriteUChar( IsThemeNameFromResource() ); 
 
     delete pCompat;
 
-    // Fill the rest of the buffer.
+    
     const long  nRest = std::max( 512L - ( (long) rOStm.Tell() - nReservePos ), 0L );
 
     if( nRest )
@@ -1451,7 +1451,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
                     aPath += aFileName;
 
-                    // assign this URL, even in the case it is not valid (#94482)
+                    
                     pObj->aURL = INetURLObject( aPath );
                 }
             }
@@ -1482,9 +1482,9 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
         rIStm.ReadUInt32( nId1 ).ReadUInt32( nId2 );
 
-        // In newer versions a 512 byte reserve buffer is located at the end,
-        // the data is located at the beginning of this buffer and are clamped
-        // by a VersionCompat.
+        
+        
+        
         if( !rIStm.IsEof() &&
             nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )

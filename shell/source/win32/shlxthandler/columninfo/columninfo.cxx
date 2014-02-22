@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "internal/global.hxx"
@@ -31,7 +31,7 @@
 #pragma GCC diagnostic warning "-Wmissing-braces"
 #endif
 
-//----------------------------
+
 
 namespace /* private */
 {
@@ -48,7 +48,7 @@ namespace /* private */
     size_t ColumnInfoTableSize = sizeof(ColumnInfoTable)/sizeof(ColumnInfoTable[0]);
 }
 
-//----------------------------
+
 
 CColumnInfo::CColumnInfo(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -56,16 +56,16 @@ CColumnInfo::CColumnInfo(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//----------------------------
+
 
 CColumnInfo::~CColumnInfo()
 {
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-// IUnknown methods
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -82,14 +82,14 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FA
     return E_NOINTERFACE;
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CColumnInfo::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
 {
@@ -101,28 +101,28 @@ ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
     return refcnt;
 }
 
-//-----------------------------
-// IColumnProvider
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT /*psci*/)
 {
     return S_OK;
 }
 
-//-----------------------------
-// Register all columns we support
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psci)
 {
     if (dwIndex >= ColumnInfoTableSize)
         return S_FALSE;
 
-    //  Return information on each column we support. Return S_FALSE
-    //  to indicate that we have returned information on all our
-    //  columns. GetColumnInfo will be called repeatedly until S_FALSE
-    //  or an error is returned
+    
+    
+    
+    
     psci->scid.fmtid = ColumnInfoTable[dwIndex].scid.fmtid;
     psci->scid.pid   = ColumnInfoTable[dwIndex].scid.pid;
     ZeroMemory(psci->wszTitle, sizeof(psci->wszTitle));
@@ -132,7 +132,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     return S_OK;
 }
 
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
 {
@@ -198,7 +198,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOL
     return S_FALSE;
 }
 
-//-----------------------------
+
 
 bool CColumnInfo::IsOOFileExtension(wchar_t* Extension) const
 {

@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -35,7 +35,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct LinkSequenceParseContext
 {
@@ -54,7 +54,7 @@ struct LinkSequenceParseContext
 #define STATE_DST  (STATE_TOP + 1)
 #define STATE_SRC  (STATE_TOP + 2)
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LinkSequence_startelement_callback(
     void *,
     int parent,
@@ -82,7 +82,7 @@ extern "C" int LinkSequence_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LinkSequence_chardata_callback(
     void *userdata,
     int state,
@@ -108,10 +108,10 @@ extern "C" int LinkSequence_chardata_callback(
             pCtx->hasSource = true;
             break;
     }
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int LinkSequence_endelement_callback(
     void *userdata,
     int state,
@@ -127,21 +127,21 @@ extern "C" int LinkSequence_endelement_callback(
     {
         case STATE_LINK:
             if ( !pCtx->hasDestination || !pCtx->hasSource )
-                return 1; // abort
+                return 1; 
             break;
     }
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool LinkSequence::createFromXML( const OString & rInData,
                                   uno::Sequence< ucb::Link > & rOutData )
 {
-    const sal_Int32 TOKEN_LENGTH = 7; // </link>
+    const sal_Int32 TOKEN_LENGTH = 7; 
     bool success = true;
 
-    // rInData may contain multiple <link>...</link> tags.
+    
     sal_Int32 nCount = 0;
     sal_Int32 nStart = 0;
     sal_Int32 nEnd   = rInData.indexOf( "</link>" );
@@ -188,12 +188,12 @@ bool LinkSequence::createFromXML( const OString & rInData,
     return success;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
                           OUString & rOutData )
 {
-    // <link><src>value</src><dst>value</dst></link><link><src>....
+    
 
     sal_Int32 nCount = rInData.getLength();
     if ( nCount )

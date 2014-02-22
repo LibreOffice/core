@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,19 +26,19 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
-//============================ PBMWriter ==================================
+
 
 class PBMWriter {
 
 private:
 
-    SvStream&           m_rOStm;            // the output PBM file
+    SvStream&           m_rOStm;            
     sal_uInt16          mpOStmOldModus;
 
     sal_Bool            mbStatus;
-    sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
+    sal_Int32           mnMode;             
     BitmapReadAccess*   mpAcc;
-    sal_uLong           mnWidth, mnHeight;  // size in pixel
+    sal_uLong           mnWidth, mnHeight;  
 
     sal_Bool            ImplWriteHeader();
     void                ImplWriteBody();
@@ -53,7 +53,7 @@ public:
     sal_Bool WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-//=================== Methods of PBMWriter ==============================
+
 
 PBMWriter::PBMWriter(SvStream &rPBM)
     : m_rOStm(rPBM)
@@ -62,13 +62,13 @@ PBMWriter::PBMWriter(SvStream &rPBM)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 PBMWriter::~PBMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
@@ -110,7 +110,7 @@ sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PBMWriter::ImplWriteHeader()
 {
@@ -132,7 +132,7 @@ sal_Bool PBMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void PBMWriter::ImplWriteBody()
 {
@@ -174,8 +174,8 @@ void PBMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
-// A decimal number in ascii format is written in the stream.
+
+
 
 void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
@@ -183,15 +183,15 @@ void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
-// - exported function -
-// ---------------------
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport epbGraphicExport
 #endif
@@ -204,7 +204,7 @@ GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterCon
     return aPBMWriter.WritePBM( rGraphic, pFilterConfigItem );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

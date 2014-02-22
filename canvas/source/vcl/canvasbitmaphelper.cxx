@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,8 +60,8 @@ namespace vclcanvas
         mpBackBuffer.reset( new BitmapBackBuffer( rBitmap,
                                                   mpOutDev->getOutDev() ) );
 
-        // tell canvas helper about the new target OutDev (don't
-        // protect state, it's our own VirDev, anyways)
+        
+        
         setOutDev( mpBackBuffer, false );
     }
 
@@ -72,9 +72,9 @@ namespace vclcanvas
         mpOutDevReference = rOutDevReference;
         mpBackBuffer.reset( new BitmapBackBuffer( rBitmap, rOutDevReference->getOutDev() ));
 
-        // forward new settings to base class (ref device, output
-        // surface, no protection (own backbuffer), alpha depends on
-        // whether BmpEx is transparent or not)
+        
+        
+        
         CanvasHelper::init( rDevice,
                             mpBackBuffer,
                             false,
@@ -86,7 +86,7 @@ namespace vclcanvas
         mpBackBuffer.reset();
         mpOutDevReference.reset();
 
-        // forward to base class
+        
         CanvasHelper::disposing();
     }
 
@@ -100,9 +100,9 @@ namespace vclcanvas
 
     void CanvasBitmapHelper::clear()
     {
-        // are we disposed?
+        
         if( mpBackBuffer )
-            mpBackBuffer->clear(); // alpha vdev needs special treatment
+            mpBackBuffer->clear(); 
     }
 
     uno::Reference< rendering::XBitmap > CanvasBitmapHelper::getScaledBitmap( const geometry::RealSize2D&   newSize,
@@ -114,7 +114,7 @@ namespace vclcanvas
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getScaledBitmap()" );
 
         if( !mpBackBuffer || mpDevice )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         BitmapEx aRes( mpBackBuffer->getBitmapReference() );
 
@@ -131,7 +131,7 @@ namespace vclcanvas
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getData()" );
 
         if( !mpBackBuffer )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return uno::Sequence< sal_Int8 >(); 
 
         rLayout = getMemoryLayout();
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
@@ -145,14 +145,14 @@ namespace vclcanvas
         ENSURE_OR_THROW( pReadAccess.get() != NULL,
                          "Could not acquire read access to bitmap" );
 
-        // TODO(F1): Support more formats.
+        
         const Size aBmpSize( aBitmap.GetSizePixel() );
 
         rLayout.ScanLines = aBmpSize.Height();
         rLayout.ScanLineBytes = aBmpSize.Width()*4;
         rLayout.ScanLineStride = rLayout.ScanLineBytes;
 
-        // for the time being, always return as BGRA
+        
         uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
         sal_Int8* pRes = aRes.getArray();
 
@@ -197,7 +197,7 @@ namespace vclcanvas
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::setData()" );
 
         if( !mpBackBuffer )
-            return; // we're disposed
+            return; 
 
         const rendering::IntegerBitmapLayout aRefLayout( getMemoryLayout() );
         ENSURE_ARG_OR_THROW( aRefLayout.PlaneStride != rLayout.PlaneStride ||
@@ -206,14 +206,14 @@ namespace vclcanvas
                              aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
                              "Mismatching memory layout" );
 
-        // retrieve local copies from the BitmapEx, which are later
-        // stored back. Unfortunately, the BitmapEx does not permit
-        // in-place modifications, as they are necessary here.
+        
+        
+        
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
 
-        bool bCopyBack( false ); // only copy something back, if we
-                                 // actually changed a pixel
+        bool bCopyBack( false ); 
+                                 
 
         {
             Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
@@ -231,10 +231,10 @@ namespace vclcanvas
             ENSURE_OR_THROW( pWriteAccess.get() != NULL,
                              "Could not acquire write access to bitmap" );
 
-            // TODO(F1): Support more formats.
+            
             const Size aBmpSize( aBitmap.GetSizePixel() );
 
-            // for the time being, always read as BGRA
+            
             int x, y, nCurrPos(0);
             for( y=rect.Y1;
                  y<aBmpSize.Height() && y<rect.Y2;
@@ -260,7 +260,7 @@ namespace vclcanvas
 
                                 nCurrPos += 3;
 
-                                // cast to unsigned byte, for correct subtraction result
+                                
                                 *pAScan++ = static_cast<sal_uInt8>(255 -
                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ]));
                             }
@@ -282,7 +282,7 @@ namespace vclcanvas
 
                                 nCurrPos += 3;
 
-                                // cast to unsigned byte, for correct subtraction result
+                                
                                 *pAScan++ = static_cast<sal_uInt8>(255 -
                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ]));
                             }
@@ -304,7 +304,7 @@ namespace vclcanvas
 
                                 nCurrPos += 3;
 
-                                // cast to unsigned byte, for correct subtraction result
+                                
                                 *pAScan++ = static_cast<sal_uInt8>(255 -
                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ]));
                             }
@@ -322,7 +322,7 @@ namespace vclcanvas
                                                                            data[ nCurrPos+2 ] ) );
                                 nCurrPos += 3;
 
-                                // cast to unsigned byte, for correct subtraction result
+                                
                                 pAlphaWriteAccess->SetPixel( y, x,
                                                              BitmapColor(
                                                                  static_cast<sal_uInt8>(255 -
@@ -334,8 +334,8 @@ namespace vclcanvas
                 }
                 else
                 {
-                    // TODO(Q3): This is copy'n'pasted from
-                    // canvashelper.cxx, unify!
+                    
+                    
                     switch( pWriteAccess->GetScanlineFormat() )
                     {
                         case BMP_FORMAT_8BIT_PAL:
@@ -351,7 +351,7 @@ namespace vclcanvas
                                                  data[ nCurrPos+1 ],
                                                  data[ nCurrPos+2 ] ) );
 
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
+                                nCurrPos += 4; 
                             }
                         }
                         break;
@@ -368,7 +368,7 @@ namespace vclcanvas
                                 *pScan++ = data[ nCurrPos+1 ];
                                 *pScan++ = data[ nCurrPos   ];
 
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
+                                nCurrPos += 4; 
                             }
                         }
                         break;
@@ -385,7 +385,7 @@ namespace vclcanvas
                                 *pScan++ = data[ nCurrPos+1 ];
                                 *pScan++ = data[ nCurrPos+2 ];
 
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
+                                nCurrPos += 4; 
                             }
                         }
                         break;
@@ -399,7 +399,7 @@ namespace vclcanvas
                                 pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
                                                                            data[ nCurrPos+1 ],
                                                                            data[ nCurrPos+2 ] ) );
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
+                                nCurrPos += 4; 
                             }
                         }
                         break;
@@ -410,8 +410,8 @@ namespace vclcanvas
             }
         }
 
-        // copy back only here, since the BitmapAccessors must be
-        // destroyed beforehand
+        
+        
         if( bCopyBack )
         {
             if( aAlpha.IsEmpty() )
@@ -429,7 +429,7 @@ namespace vclcanvas
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::setPixel()" );
 
         if( !mpBackBuffer )
-            return; // we're disposed
+            return; 
 
         const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
 
@@ -447,14 +447,14 @@ namespace vclcanvas
                              aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
                              "Mismatching memory layout" );
 
-        // retrieve local copies from the BitmapEx, which are later
-        // stored back. Unfortunately, the BitmapEx does not permit
-        // in-place modifications, as they are necessary here.
+        
+        
+        
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
 
-        bool bCopyBack( false ); // only copy something back, if we
-                                 // actually changed a pixel
+        bool bCopyBack( false ); 
+                                 
 
         {
             Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
@@ -475,8 +475,8 @@ namespace vclcanvas
             bCopyBack = true;
         }
 
-        // copy back only here, since the BitmapAccessors must be
-        // destroyed beforehand
+        
+        
         if( bCopyBack )
         {
             if( aAlpha.IsEmpty() )
@@ -493,7 +493,7 @@ namespace vclcanvas
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getPixel()" );
 
         if( !mpBackBuffer )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return uno::Sequence< sal_Int8 >(); 
 
         rLayout = getMemoryLayout();
         rLayout.ScanLines = 1;
@@ -536,7 +536,7 @@ namespace vclcanvas
     rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout()
     {
         if( !mpOutDev.get() )
-            return rendering::IntegerBitmapLayout(); // we're disposed
+            return rendering::IntegerBitmapLayout(); 
 
         rendering::IntegerBitmapLayout xBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );
         if ( !hasAlpha() )
@@ -548,7 +548,7 @@ namespace vclcanvas
     BitmapEx CanvasBitmapHelper::getBitmap() const
     {
         if( !mpBackBuffer )
-            return BitmapEx(); // we're disposed
+            return BitmapEx(); 
         else
             return mpBackBuffer->getBitmapReference();
     }

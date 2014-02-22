@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/loaddispatcher.hxx>
@@ -81,24 +81,24 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                                              const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
-    // Attention: May be nobody outside hold such temp. dispatch object alive (because
-    // the container in which we resists isnt implemented threadsafe but updated by a timer
-    // and clear our reference ...) we should hold us self alive!
+    
+    
+    
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
-    // We are the only client of this load env object ... but
-    // may a dispatch request before is still in progress (?!).
-    // Then we should wait a little bit and block this new request.
-    // In case we run into the timeout, we should reject this new request
-    // and return "FAILED" as result. Otherwhise we can start this new operation.
-    if (!m_aLoader.waitWhileLoading(2000)) // => 2 sec.
+    
+    
+    
+    
+    
+    if (!m_aLoader.waitWhileLoading(2000)) 
     {
         if (xListener.is())
             xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); // DONTKNOW? ... not really started ... not really failed :-)
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); 
     }
 
     css::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), css::uno::UNO_QUERY);
@@ -109,18 +109,18 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                 css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
     }
 
-    // OK ... now the internal loader seems to be useable for new requests
-    // and our owner frame seems to be valid for such operations.
-    // Initialize it with all new but needed properties and start the loading.
+    
+    
+    
     css::uno::Reference< css::lang::XComponent > xComponent;
     try
     {
         m_aLoader.initializeLoading( rURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, (LoadEnv::EFeature)(LoadEnv::E_ALLOW_CONTENTHANDLER | LoadEnv::E_WORK_WITH_UI));
         m_aLoader.startLoading();
-        m_aLoader.waitWhileLoading(); // wait for ever!
+        m_aLoader.waitWhileLoading(); 
         xComponent = m_aLoader.getTargetComponent();
 
-        // TODO thinking about asynchronous operations and listener support
+        
     }
     catch(const LoadEnvException& e)
     {
@@ -147,16 +147,16 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                 css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
     }
 
-    // return the model - like loadComponentFromURL()
+    
     css::uno::Any aRet;
     if ( xComponent.is () )
         aRet = css::uno::makeAny( xComponent );
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
     return aRet;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -82,7 +82,7 @@ extern "C"
     static void ThreadEventHandler( XtPointer /*client_data*/, int* /*source*/, XtInputId* id )
     {
         char buf[256];
-        // clear pipe
+        
         int len, nLast = -1;
 
         while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
@@ -93,9 +93,9 @@ extern "C"
                 pConnector->CallWorkHandler();
             else
             {
-                // it seems you can use XtRemoveInput only
-                // safely from within the callback
-                // why is that ?
+                
+                
+                
                 SAL_INFO("extensions.plugin", "removing wakeup pipe");
                 XtRemoveInput( *id );
                 XtAppSetExitFlag( app_context );
@@ -186,7 +186,7 @@ static oslModule LoadModule( const char* pPath )
     return pLib;
 }
 
-// Unix specific implementation
+
 static void CheckPlugin( const char* pPath )
 {
     oslModule pLib = LoadModule( pPath );
@@ -222,7 +222,7 @@ static void signal_handler( int nSig )
 #endif
     if( pConnector )
     {
-        // ensure that a read on the other side will wakeup
+        
         delete pConnector;
         pConnector = NULL;
     }
@@ -237,7 +237,7 @@ static gboolean noClosure( gpointer )
     return sal_True;
 }
 
-// Xt events
+
 static gboolean prepareXtEvent( GSource*, gint* )
 {
     int nMask = XtAppPending( app_context );
@@ -293,7 +293,7 @@ static gboolean checkWakeupEvent( GSource* pSource )
 static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
 {
     char buf[256];
-    // clear pipe
+    
     int len, nLast = -1;
 
     while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
@@ -321,7 +321,7 @@ static GSourceFuncs aWakeupEventFuncs = {
   NULL
 };
 
-#endif // GTK
+#endif 
 
 }
 
@@ -358,10 +358,10 @@ int main( int argc, char **argv)
         SAL_WARN("extensions.plugin", "could not pipe()");
         return 1;
     }
-    // initialize 'wakeup' pipe.
+    
     int flags;
 
-    // set close-on-exec descriptor flag.
+    
     if ((flags = fcntl (wakeup_fd[0], F_GETFD)) != -1)
     {
         flags |= FD_CLOEXEC;
@@ -373,7 +373,7 @@ int main( int argc, char **argv)
         fcntl (wakeup_fd[1], F_SETFD, flags);
     }
 
-    // set non-blocking I/O flag.
+    
     if ((flags = fcntl (wakeup_fd[0], F_GETFL)) != -1)
     {
         flags |= O_NONBLOCK;
@@ -408,7 +408,7 @@ int main( int argc, char **argv)
 
 
     #if ENABLE_GTK
-    // integrate Xt events into GTK event loop
+    
     GPollFD aXtPollDesc, aWakeupPollDesc;
 
     GSource* pXTSource = g_source_new( &aXtEventFuncs, sizeof(GSource) );
@@ -427,7 +427,7 @@ int main( int argc, char **argv)
     g_source_add_poll( pXTSource, &aXtPollDesc );
 
     gint xt_polling_timer_id = g_timeout_add( 25, pollXtTimerCallback, NULL);
-    // Initialize wakeup events listener
+    
     GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
     if ( pWakeupSource == NULL )
     {
@@ -450,7 +450,7 @@ int main( int argc, char **argv)
                    ThreadEventHandler, NULL );
     #endif
 
-     // send that we are ready to go
+     
     MediatorMessage* pMessage =
         pConnector->Transact( "init req", 8,
                               NULL );
@@ -474,10 +474,10 @@ int main( int argc, char **argv)
     /*
      *  Loop for events.
      */
-    // for some reason XtAppSetExitFlag won't quit the application
-    // in ThreadEventHandler most of times; Xt will hang in select
-    // (hat is in XtAppNextEvent). Have our own mainloop instead
-    // of XtAppMainLoop
+    
+    
+    
+    
     do
     {
         #if ENABLE_GTK

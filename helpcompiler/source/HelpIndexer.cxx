@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <helpcompiler/HelpIndexer.hxx>
@@ -41,7 +41,7 @@ bool HelpIndexer::indexDocuments()
         OUString sLang = d_lang.getToken(0, '-');
         bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
 
-        // Construct the analyzer appropriate for the given language
+        
         boost::scoped_ptr<lucene::analysis::Analyzer> analyzer;
         if (bUseCJK)
             analyzer.reset(new lucene::analysis::LanguageBasedAnalyzer(L"cjk"));
@@ -53,12 +53,12 @@ bool HelpIndexer::indexDocuments()
 
         OString indexDirStr = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
         lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer.get(), true);
-        //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
-        //exception for ja help. Could alternative ignore the exception and get
-        //truncated results as per java-Lucene apparently
+        
+        
+        
         writer.setMaxFieldLength(lucene::index::IndexWriter::DEFAULT_MAX_FIELD_LENGTH*2);
 
-        // Index the identified help files
+        
         Document doc;
         for (std::set<OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
             helpDocument(*i, &doc);
@@ -67,7 +67,7 @@ bool HelpIndexer::indexDocuments()
         }
         writer.optimize();
 
-        // Optimize the index
+        
         writer.optimize();
     }
     catch (CLuceneError &e)
@@ -114,7 +114,7 @@ bool HelpIndexer::scanForFiles(OUString const & path) {
 }
 
 bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
-    // Add the help path as an indexed, untokenized field.
+    
 
     OUString path = "#HLP#" + d_module + "/" + fileName;
     std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
@@ -124,11 +124,11 @@ bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
         rtl::Uri::encode(fileName,
         rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
 
-    // Add the caption as a field.
+    
     OUString captionPath = d_captionDir + "/" + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
-    // Add the content as a field.
+    
     OUString contentPath = d_contentDir + "/" + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 

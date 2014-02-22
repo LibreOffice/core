@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sc.hrc"
@@ -54,13 +54,13 @@
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>
 
-//========================================================================
 
-// We don't want to end up with 2GB read in one line just because of malformed
-// multiline fields, so chop it _somewhere_, which is twice supported columns
-// times maximum cell content length, 2*1024*64K=128M, and because it's
-// sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of luck
-// anyway.
+
+
+
+
+
+
 static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
 
 namespace
@@ -72,14 +72,14 @@ namespace
 
 enum SylkVersion
 {
-    SYLK_SCALC3,    // Wrote wrongly quoted strings and unescaped semicolons.
-    SYLK_OOO32,     // Correct strings, plus multiline content.
-    SYLK_OWN,       // Place our new versions, if any, before this value.
-    SYLK_OTHER      // Assume that aliens wrote correct strings.
+    SYLK_SCALC3,    
+    SYLK_OOO32,     
+    SYLK_OWN,       
+    SYLK_OTHER      
 };
 
 
-// Gesamtdokument ohne Undo
+
 
 
 ScImportExport::ScImportExport( ScDocument* p )
@@ -94,7 +94,7 @@ ScImportExport::ScImportExport( ScDocument* p )
     pExtOptions = NULL;
 }
 
-// Insert am Punkt ohne Bereichschecks
+
 
 
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
@@ -111,8 +111,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 }
 
 
-//  ctor with a range is only used for export
-//! ctor with a string (and bSingle=true) is also used for DdeSetData
+
+
 
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
@@ -125,12 +125,12 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
-    // Zur Zeit nur in einer Tabelle!
+    
     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 }
 
-// String auswerten: Entweder Bereich, Punkt oder Gesamtdoc (bei Fehler)
-// Falls eine View existiert, wird die TabNo der View entnommen!
+
+
 
 
 ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
@@ -147,7 +147,7 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     SCTAB nTab = ScDocShell::GetCurTab();
     aRange.aStart.SetTab( nTab );
     OUString aPos( rPos );
-    //  Benannter Bereich?
+    
     ScRangeName* pRange = pDoc->GetRangeName();
     if( pRange )
     {
@@ -157,14 +157,14 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
             if( pData->HasType( RT_REFAREA )
                 || pData->HasType( RT_ABSAREA )
                 || pData->HasType( RT_ABSPOS ) )
-                pData->GetSymbol( aPos );                   // mit dem Inhalt weitertesten
+                pData->GetSymbol( aPos );                   
         }
     }
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    // Bereich?
+    
     if( aRange.Parse( aPos, pDoc, eConv ) & SCA_VALID )
         bSingle = false;
-    // Zelle?
+    
     else if( aRange.aStart.Parse( aPos, pDoc, eConv ) & SCA_VALID )
         aRange.aEnd = aRange.aStart;
     else
@@ -186,7 +186,7 @@ void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
     else
         pExtOptions = new ScAsciiOptions( rOpt );
 
-    //  "normale" Optionen uebernehmen
+    
 
     cSep = ScAsciiOptions::GetWeightedFieldSep( rOpt.GetFieldSeps(), false);
     cStr = rOpt.GetTextSep();
@@ -204,9 +204,9 @@ bool ScImportExport::IsFormatSupported( sal_uLong nFormat )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 
-// Vorbereitung fuer Undo: Undo-Dokument erzeugen
+
+
 
 
 bool ScImportExport::StartPaste()
@@ -231,7 +231,7 @@ bool ScImportExport::StartPaste()
     return true;
 }
 
-// Nachbereitung Insert: Undo/Redo-Aktionen erzeugen, Invalidate/Repaint
+
 
 
 void ScImportExport::EndPaste(bool bAutoRowHeight)
@@ -253,7 +253,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     if( pDocSh )
     {
         if (!bHeight)
-            pDocSh->PostPaint( aRange, PAINT_GRID );    // AdjustRowHeight paintet evtl. selber
+            pDocSh->PostPaint( aRange, PAINT_GRID );    
         pDocSh->SetDocumentModified();
     }
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
@@ -262,7 +262,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 
 bool ScImportExport::ImportData( const OUString& /* rMimeType */,
                      const ::com::sun::star::uno::Any & /* rValue */ )
@@ -275,7 +275,7 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
                                  ::com::sun::star::uno::Any & rValue )
 {
     SvMemoryStream aStrm;
-    // mba: no BaseURL for data exchange
+    
     if( ExportStream( aStrm, OUString(),
                 SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
     {
@@ -293,21 +293,21 @@ bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
 {
     switch ( nFmt )
     {
-        // formats supporting unicode
+        
         case FORMAT_STRING :
         {
             ScImportStringStream aStrm( rText);
             return ImportStream( aStrm, OUString(), nFmt );
-            // ImportStream must handle RTL_TEXTENCODING_UNICODE
+            
         }
-        //break;
+        
         default:
         {
             rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
             OString aTmp( rText.getStr(), rText.getLength(), eEnc );
             SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
             aStrm.SetStreamCharSet( eEnc );
-            SetNoEndianSwap( aStrm );       //! no swapping in memory
+            SetNoEndianSwap( aStrm );       
             return ImportStream( aStrm, OUString(), nFmt );
         }
     }
@@ -325,12 +325,12 @@ bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
         rText = OStringToOUString( aTmp, eEnc );
         return bOk;
     }
-    //  nSizeLimit not needed for OUString
+    
 
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-    SetNoEndianSwap( aStrm );       //! no swapping in memory
-    // mba: no BaseURL for data exc
+    SetNoEndianSwap( aStrm );       
+    
     if( ExportStream( aStrm, OUString(), nFmt ) )
     {
         aStrm.WriteUInt16( (sal_Unicode) 0 );
@@ -342,7 +342,7 @@ bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
     rText = OUString();
     return false;
 
-    // ExportStream must handle RTL_TEXTENCODING_UNICODE
+    
 }
 
 
@@ -357,13 +357,13 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
 
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( eEnc );
-    SetNoEndianSwap( aStrm );       //! no swapping in memory
-    // mba: no BaseURL for data exchange
+    SetNoEndianSwap( aStrm );       
+    
     if( ExportStream( aStrm, OUString(), nFmt ) )
     {
         aStrm.WriteChar( (sal_Char) 0 );
         aStrm.Seek( STREAM_SEEK_TO_END );
-        // Sicherheits-Check:
+        
         if( aStrm.Tell() <= nSizeLimit )
         {
             rText = (const sal_Char*) aStrm.GetData();
@@ -379,7 +379,7 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, sa
 {
     if( nFmt == FORMAT_STRING )
     {
-        if( ExtText2Doc( rStrm ) )      // pExtOptions auswerten
+        if( ExtText2Doc( rStrm ) )      
             return true;
     }
     if( nFmt == SOT_FORMATSTR_ID_SYLK )
@@ -398,7 +398,7 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, sa
             return true;
     }
     if( nFmt == SOT_FORMATSTR_ID_LINK )
-        return true;            // Link-Import?
+        return true;            
     if ( nFmt == SOT_FORMATSTR_ID_HTML )
     {
         if( HTML2Doc( rStrm, rBaseURL ) )
@@ -406,7 +406,7 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, sa
     }
     if ( nFmt == SOT_FORMATSTR_ID_HTML_SIMPLE )
     {
-        MSE40HTMLClipFormatObj aMSE40ClpObj;                // needed to skip the header data
+        MSE40HTMLClipFormatObj aMSE40ClpObj;                
         SvStream* pHTML = aMSE40ClpObj.IsValid( rStrm );
         if ( pHTML && HTML2Doc( *pHTML, rBaseURL ) )
             return true;
@@ -448,7 +448,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sa
         OSL_ENSURE( !aDocName.isEmpty(), "ClipBoard document has no name! :-/" );
         if( !aDocName.isEmpty() )
         {
-            // Always use Calc A1 syntax for paste link.
+            
             OUString aRefName;
             sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;
             if( bSingle )
@@ -461,8 +461,8 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sa
             }
             OUString aAppName = Application::GetAppName();
 
-            // extra bits are used to tell the client to prefer external
-            // reference link.
+            
+            
             OUString aExtraBits("calc:extref");
 
             WriteUnicodeOrByteString( rStrm, aAppName, true );
@@ -520,11 +520,11 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& 
 }
 
 
-// This function could be replaced by endlub()
+
 void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
 {
     if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-    {   // same as endl() but unicode
+    {   
         switch ( rStrm.GetLineDelimiter() )
         {
             case LINEEND_CR :
@@ -562,9 +562,9 @@ enum QuoteType
  */
 static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* pSeps )
 {
-    // Due to broken CSV generators that don't double embedded quotes check if
-    // a field separator immediately or with trailing spaces follows the quote,
-    // only then end the field, or at end of string.
+    
+    
+    
     const sal_Unicode cBlank = ' ';
     if (p[1] == cBlank && ScGlobal::UnicodeStrChr( pSeps, cBlank))
         return FIELDEND_QUOTE;
@@ -638,18 +638,18 @@ static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const s
 
 enum DoubledQuoteMode
 {
-    DQM_KEEP_ALL,   // both are taken, additionally start and end quote are included in string
-    DQM_KEEP,       // both are taken
-    DQM_ESCAPE,     // escaped quote, one is taken, one ignored
-    DQM_CONCAT,     // first is end, next is start, both ignored => strings combined
-    DQM_SEPARATE    // end one string and begin next
+    DQM_KEEP_ALL,   
+    DQM_KEEP,       
+    DQM_ESCAPE,     
+    DQM_CONCAT,     
+    DQM_SEPARATE    
 };
 
 static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString,
             const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
     if (eMode != DQM_KEEP_ALL)
-        p++;    //! jump over opening quote
+        p++;    
     bool bCont;
     do
     {
@@ -663,7 +663,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
             {
                 if ( *++p != cStr )
                 {
-                    // break or continue for loop
+                    
                     if (eMode == DQM_ESCAPE)
                     {
                         if (lcl_isFieldEndQuote( p-1, pSeps) == FIELDEND_QUOTE)
@@ -674,28 +674,28 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
                     else
                         break;
                 }
-                // doubled quote char
+                
                 switch ( eMode )
                 {
                     case DQM_KEEP_ALL :
                     case DQM_KEEP :
-                        p++;            // both for us (not breaking for-loop)
+                        p++;            
                     break;
                     case DQM_ESCAPE :
-                        p++;            // one for us (breaking for-loop)
-                        bCont = true;   // and more
+                        p++;            
+                        bCont = true;   
                     break;
                     case DQM_CONCAT :
                         if ( p0+1 < p )
                         {
-                            // first part
+                            
                             if (!lcl_appendLineData( rString, p0, p-1))
                                 rbOverflowCell = true;
                         }
-                        p0 = ++p;       // text of next part starts here
+                        p0 = ++p;       
                     break;
                     case DQM_SEPARATE :
-                                        // positioned on next opening quote
+                                        
                     break;
                 }
                 if ( eMode == DQM_ESCAPE || eMode == DQM_SEPARATE )
@@ -715,9 +715,9 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
 
 static void lcl_UnescapeSylk( OUString & rString, SylkVersion eVersion )
 {
-    // Older versions didn't escape the semicolon.
-    // Older versions quoted the string and doubled embedded quotes, but not
-    // the semicolons, which was plain wrong.
+    
+    
+    
     if (eVersion >= SYLK_OOO32)
         rString = rString.replaceAll( OUString(DOUBLE_SEMICOLON), OUString(';') );
     else
@@ -742,27 +742,27 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
                 {
                     if (*(p+2) == ';')
                     {
-                        p += 2;     // escaped ';'
+                        p += 2;     
                         pEndQuote = 0;
                     }
                     else
-                        break;      // end field
+                        break;      
                 }
             }
             else
             {
                 if (*(p+1) == '"')
                 {
-                    ++p;            // escaped '"'
+                    ++p;            
                     pEndQuote = 0;
                 }
                 else if (*(p+1) == ';')
-                    break;          // end field
+                    break;          
             }
         }
     }
     if (!pEndQuote)
-        pEndQuote = p;  // Take all data as string.
+        pEndQuote = p;  
     rString += OUString(pStartQuote + 1, sal::static_int_cast<sal_Int32>( pEndQuote - pStartQuote - 1 ) );
     lcl_UnescapeSylk( rString, eVersion);
     return p;
@@ -779,9 +779,9 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
             if (*p == ';')
             {
                 if (*(p+1) == ';')
-                    ++p;        // escaped ';'
+                    ++p;        
                 else
-                    break;      // end field
+                    break;      
             }
             ++p;
         }
@@ -790,31 +790,31 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
     }
     else
     {
-        // Nasty. If in old versions the formula contained a semicolon, it was
-        // quoted and embedded quotes were doubled, but semicolons were not. If
-        // there was no semicolon, it could still contain quotes and doubled
-        // embedded quotes if it was something like ="a""b", which was saved as
-        // E"a""b" as is and has to be preserved, even if older versions
-        // couldn't even load it correctly. However, theoretically another
-        // field might follow and thus the line contain a semicolon again, such
-        // as ...;E"a""b";...
+        
+        
+        
+        
+        
+        
+        
+        
         bool bQuoted = false;
         if (*p == '"')
         {
-            // May be a quoted expression or just a string constant expression
-            // with quotes.
+            
+            
             while (*(++p))
             {
                 if (*p == '"')
                 {
                     if (*(p+1) == '"')
-                        ++p;            // escaped '"'
+                        ++p;            
                     else
-                        break;          // closing '"', had no ';' yet
+                        break;          
                 }
                 else if (*p == ';')
                 {
-                    bQuoted = true;     // ';' within quoted expression
+                    bQuoted = true;     
                     break;
                 }
             }
@@ -860,7 +860,7 @@ static inline void lcl_WriteSimpleString( SvStream& rStrm, const OUString& rStri
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 
 bool ScImportExport::Text2Doc( SvStream& rStrm )
@@ -900,14 +900,14 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 const sal_Unicode* q = p;
                 while (*p && *p != cSep)
                 {
-                    // Always look for a pairing quote and ignore separator in between.
+                    
                     while (*p && *p == cStr)
                         q = p = lcl_ScanString( p, aCell, pSeps, cStr, DQM_KEEP_ALL, bOverflowCell );
-                    // All until next separator or quote.
+                    
                     while (*p && *p != cSep && *p != cStr)
                         ++p;
                     if (!lcl_appendLineData( aCell, q, p))
-                        bOverflowCell = true;   // display warning on import
+                        bOverflowCell = true;   
                     q = p;
                 }
                 if (*p)
@@ -922,12 +922,12 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                     if( bData && nCol <= nEndCol && nRow <= nEndRow )
                         pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell );
                 }
-                else                            // zuviele Spalten/Zeilen
+                else                            
                 {
                     if (!ValidRow(nRow))
-                        bOverflowRow = true;    // display warning on import
+                        bOverflowRow = true;    
                     if (!ValidCol(nCol))
-                        bOverflowCol = true;    // display warning on import
+                        bOverflowCol = true;    
                 }
                 ++nCol;
             }
@@ -956,7 +956,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 }
 
         //
-        //  erweiterter Ascii-Import
+        
         //
 
 
@@ -977,7 +977,7 @@ static bool lcl_PutString(
         sal_uInt32 nIndex = 0;
         if (pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
         {
-            // Set the format of this cell to Text.
+            
             sal_uInt32 nFormat = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
             ScPatternAttr aNewAttrs(pDoc->GetPool());
             SfxItemSet& rSet = aNewAttrs.GetItemSet();
@@ -1001,22 +1001,22 @@ static bool lcl_PutString(
 
     if ( nColFormat == SC_COL_ENGLISH )
     {
-        //! SetString mit Extra-Flag ???
+        
 
         SvNumberFormatter* pDocFormatter = pDoc->GetFormatTable();
         sal_uInt32 nEnglish = pDocFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
         if ( pDocFormatter->IsNumberFormat( rStr, nEnglish, fVal ) )
         {
-            //  Zahlformat wird nicht auf englisch gesetzt
+            
             rDocImport.setNumericCell( ScAddress( nCol, nRow, nTab ), fVal );
             return bMultiLine;
         }
-        //  sonst weiter mit SetString
+        
     }
-    else if ( nColFormat != SC_COL_STANDARD )                   // Datumsformate
+    else if ( nColFormat != SC_COL_STANDARD )                   
     {
-        const sal_uInt16 nMaxNumberParts = 7;   // Y-M-D h:m:s.t
+        const sal_uInt16 nMaxNumberParts = 7;   
         sal_Int32 nLen = rStr.getLength();
         sal_Int32 nStart[nMaxNumberParts];
         sal_Int32 nEnd[nMaxNumberParts];
@@ -1037,7 +1037,7 @@ static bool lcl_PutString(
         {
             if (bInNum && nFound == 3 && nColFormat == SC_COL_YMD &&
                     nPos <= nStart[nFound]+2 && rStr[nPos] == 'T')
-                bInNum = false;     // ISO-8601: YYYY-MM-DDThh:mm...
+                bInNum = false;     
             else if ((((!bInNum && nFound==nMP) || (bInNum && nFound==nMP+1))
                         && ScGlobal::pCharClass->isLetterNumeric( rStr, nPos))
                     || ScGlobal::pCharClass->isDigit( rStr, nPos))
@@ -1056,7 +1056,7 @@ static bool lcl_PutString(
 
         if ( nFound == 1 )
         {
-            //  try to break one number (without separators) into date fields
+            
 
             sal_Int32 nDateStart = nStart[0];
             sal_Int32 nDateLen = nEnd[0] + 1 - nDateStart;
@@ -1064,9 +1064,9 @@ static bool lcl_PutString(
             if ( nDateLen >= 5 && nDateLen <= 8 &&
                     ScGlobal::pCharClass->isNumeric( rStr.copy( nDateStart, nDateLen ) ) )
             {
-                //  6 digits: 2 each for day, month, year
-                //  8 digits: 4 for year, 2 each for day and month
-                //  5 or 7 digits: first field is shortened by 1
+                
+                
+                
 
                 bool bLongYear = ( nDateLen >= 7 );
                 bool bShortFirst = ( nDateLen == 5 || nDateLen == 7 );
@@ -1074,11 +1074,11 @@ static bool lcl_PutString(
                 sal_uInt16 nFieldStart = nDateStart;
                 for (sal_uInt16 nPos=0; nPos<3; nPos++)
                 {
-                    sal_uInt16 nFieldEnd = nFieldStart + 1;     // default: 2 digits
+                    sal_uInt16 nFieldEnd = nFieldStart + 1;     
                     if ( bLongYear && nPos == nYP )
-                        nFieldEnd += 2;                     // 2 extra digits for long year
+                        nFieldEnd += 2;                     
                     if ( bShortFirst && nPos == 0 )
-                        --nFieldEnd;                        // first field shortened?
+                        --nFieldEnd;                        
 
                     nStart[nPos] = nFieldStart;
                     nEnd[nPos]   = nFieldEnd;
@@ -1102,7 +1102,7 @@ static bool lcl_PutString(
                 static const OUString aSepShortened( "SEP" );
                 uno::Sequence< i18n::CalendarItem2 > xMonths;
                 sal_Int32 i, nMonthCount;
-                //  first test all month names from local international
+                
                 xMonths = rCalendar.getMonths();
                 nMonthCount = xMonths.getLength();
                 for (i=0; i<nMonthCount && !nMonth; i++)
@@ -1113,12 +1113,12 @@ static bool lcl_PutString(
                     else if ( i == 8 && rTransliteration.isEqual( aSeptCorrect,
                                 xMonths[i].AbbrevName ) &&
                             rTransliteration.isEqual( aMStr, aSepShortened ) )
-                    {   // correct English abbreviation is SEPT,
-                        // but data mostly contains SEP only
+                    {   
+                        
                         nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                     }
                 }
-                //  if none found, then test english month names
+                
                 if ( !nMonth && pSecondCalendar && pSecondTransliteration )
                 {
                     xMonths = pSecondCalendar->getMonths();
@@ -1133,8 +1133,8 @@ static bool lcl_PutString(
                         }
                         else if ( i == 8 && pSecondTransliteration->isEqual(
                                     aMStr, aSepShortened ) )
-                        {   // correct English abbreviation is SEPT,
-                            // but data mostly contains SEP only
+                        {   
+                            
                             nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                             bSecondCal = true;
                         }
@@ -1155,8 +1155,8 @@ static bool lcl_PutString(
                 pCalendar->setValue( i18n::CalendarFieldIndex::MONTH, nMonth );
                 pCalendar->setValue( i18n::CalendarFieldIndex::YEAR, nYear );
                 sal_Int16 nHour, nMinute, nSecond, nMilli;
-                // #i14974# The imported value should have no fractional value, so set the
-                // time fields to zero (ICU calendar instance defaults to current date/time)
+                
+                
                 nHour = nMinute = nSecond = nMilli = 0;
                 if (nFound > 3)
                     nHour = (sal_Int16) rStr.copy( nStart[3], nEnd[3]+1-nStart[3]).toInt32();
@@ -1182,18 +1182,18 @@ static bool lcl_PutString(
                 {
                     double fDiff = DateTime(*pDocFormatter->GetNullDate()) -
                         pCalendar->getEpochStart();
-                    // #i14974# must use getLocalDateTime to get the same
-                    // date values as set above
+                    
+                    
                     double fDays = pCalendar->getLocalDateTime();
                     fDays -= fDiff;
 
                     LanguageType eLatin, eCjk, eCtl;
                     pDoc->GetLanguage( eLatin, eCjk, eCtl );
-                    LanguageType eDocLang = eLatin;     //! which language for date formats?
+                    LanguageType eDocLang = eLatin;     
 
                     short nType = (nFound > 3 ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE);
                     sal_uLong nFormat = pDocFormatter->GetStandardFormat( nType, eDocLang );
-                    // maybe there is a special format including seconds or milliseconds
+                    
                     if (nFound > 5)
                         nFormat = pDocFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
 
@@ -1201,13 +1201,13 @@ static bool lcl_PutString(
                     rDocImport.setNumericCell(aPos, fDays);
                     pDoc->SetNumberFormat(aPos, nFormat);
 
-                    return bMultiLine;     // success
+                    return bMultiLine;     
                 }
             }
         }
     }
 
-    // Standard or date not determined -> SetString / EditCell
+    
     if( rStr.indexOf( '\n' ) == -1 )
     {
         ScSetStringParam aParam;
@@ -1300,7 +1300,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eDocLang);
     bool bDetectNumFormat = pExtOptions->IsDetectSpecialNumber();
 
-    // For date recognition
+    
     ::utl::TransliterationWrapper aTransliteration(
         comphelper::getProcessComponentContext(), SC_TRANSLITERATION_IGNORECASE );
     aTransliteration.loadModuleIfNeeded( eDocLang );
@@ -1326,19 +1326,19 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     while(--nSkipLines>0)
     {
-        aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr); // content is ignored
+        aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr); 
         if ( rStrm.IsEof() )
             break;
     }
 
-    // Determine range for Undo.
-    // TODO: we don't need this during import of a file to a new sheet or
-    // document, could set bDetermineRange=false then.
+    
+    
+    
     bool bDetermineRange = true;
 
-    // Row heights don't need to be adjusted on the fly if EndPaste() is called
-    // afterwards, which happens only if bDetermineRange. This variable also
-    // survives the toggle of bDetermineRange down at the end of the do{} loop.
+    
+    
+    
     bool bRangeIsDetermined = bDetermineRange;
 
     bool bQuotedAsText = pExtOptions && pExtOptions->IsQuotedAsText();
@@ -1359,19 +1359,19 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             sal_Int32 nLineLen = aLine.getLength();
             SCCOL nCol = nStartCol;
             bool bMultiLine = false;
-            if ( bFixed )               //  Feste Satzlaenge
+            if ( bFixed )               
             {
-                // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
-                // overflow if there is really data following to be put behind
-                // the last column, which doesn't happen if info is
-                // SC_COL_SKIP.
+                
+                
+                
+                
                 for ( i=0; i<nInfoCount && nCol <= MAXCOL+1; i++ )
                 {
                     sal_uInt8 nFmt = pColFormat[i];
-                    if (nFmt != SC_COL_SKIP)        // sonst auch nCol nicht hochzaehlen
+                    if (nFmt != SC_COL_SKIP)        
                     {
                         if (nCol > MAXCOL)
-                            bOverflowCol = true;    // display warning on import
+                            bOverflowCol = true;    
                         else if (!bDetermineRange)
                         {
                             sal_Int32 nStart = pColStart[i];
@@ -1390,15 +1390,15 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     }
                 }
             }
-            else                        //  Nach Trennzeichen suchen
+            else                        
             {
                 SCCOL nSourceCol = 0;
                 sal_uInt16 nInfoStart = 0;
                 const sal_Unicode* p = aLine.getStr();
-                // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
-                // overflow if there is really data following to be put behind
-                // the last column, which doesn't happen if info is
-                // SC_COL_SKIP.
+                
+                
+                
+                
                 while (*p && nCol <= MAXCOL+1)
                 {
                     bool bIsQuoted = false;
@@ -1408,17 +1408,17 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     sal_uInt8 nFmt = SC_COL_STANDARD;
                     for ( i=nInfoStart; i<nInfoCount; i++ )
                     {
-                        if ( pColStart[i] == nSourceCol + 1 )       // pColStart ist 1-basiert
+                        if ( pColStart[i] == nSourceCol + 1 )       
                         {
                             nFmt = pColFormat[i];
-                            nInfoStart = i + 1;     // ColInfos sind in Reihenfolge
-                            break;  // for
+                            nInfoStart = i + 1;     
+                            break;  
                         }
                     }
                     if ( nFmt != SC_COL_SKIP )
                     {
                         if (nCol > MAXCOL)
-                            bOverflowCol = true;    // display warning on import
+                            bOverflowCol = true;    
                         else if (!bDetermineRange)
                         {
                             if (bIsQuoted && bQuotedAsText)
@@ -1436,7 +1436,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 }
             }
             if (nEndCol < nCol)
-                nEndCol = nCol;     //! points to the next free or even MAXCOL+2
+                nEndCol = nCol;     
 
             if (!bDetermineRange)
             {
@@ -1447,11 +1447,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             ++nRow;
             if ( nRow > MAXROW )
             {
-                bOverflowRow = true;    // display warning on import
-                break;  // for
+                bOverflowRow = true;    
+                break;  
             }
         }
-        // so far nRow/nEndCol pointed to the next free
+        
         if (nRow > nStartRow)
             --nRow;
         if (nEndCol > nStartCol)
@@ -1481,11 +1481,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             }
         }
 
-        bDetermineRange = !bDetermineRange;     // toggle
+        bDetermineRange = !bDetermineRange;     
     } while (!bDetermineRange);
     aDocImport.finalize();
 
-    xProgress.reset();    // make room for AdjustRowHeight progress
+    xProgress.reset();    
     if (bRangeIsDetermined)
         EndPaste(false);
 
@@ -1500,13 +1500,13 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
 void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
 {
-    // A nasty workaround for data with embedded NULL characters. As long as we
-    // can't handle them properly as cell content (things assume 0-terminated
-    // strings at too many places) simply strip all NULL characters from raw
-    // data. Excel does the same. See fdo#57841 for sample data.
+    
+    
+    
+    
 
-    // The normal case is no embedded NULL, check first before de-/allocating
-    // ustring stuff.
+    
+    
     sal_Unicode cNull = 0;
     if (rStr.indexOf( cNull) >= 0)
     {
@@ -1524,24 +1524,24 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     const sal_Unicode cBlank = ' ';
     if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
     {
-        // Cope with broken generators that put leading blanks before a quoted
-        // field, like "field1", "field2", "..."
-        // NOTE: this is not in conformance with http://tools.ietf.org/html/rfc4180
+        
+        
+        
         const sal_Unicode* pb = p;
         while (*pb == cBlank)
             ++pb;
         if (*pb == cStr)
             p = pb;
     }
-    if ( *p == cStr )           // String in quotes
+    if ( *p == cStr )           
     {
         rbIsQuoted = true;
         const sal_Unicode* p1;
         p1 = p = lcl_ScanString( p, rField, pSeps, cStr, DQM_ESCAPE, rbOverflowCell );
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
-        // Append remaining unquoted and undelimited data (dirty, dirty) to
-        // this field.
+        
+        
         if (p > p1)
         {
             if (!lcl_appendLineData( rField, p1, p))
@@ -1550,7 +1550,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         if( *p )
             p++;
     }
-    else                        // up to delimiter
+    else                        
     {
         const sal_Unicode* p0 = p;
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
@@ -1560,7 +1560,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         if( *p )
             p++;
     }
-    if ( bMergeSeps )           // skip following delimiters
+    if ( bMergeSeps )           
     {
         while ( *p && ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
@@ -1583,14 +1583,14 @@ bool hasLineBreaksOrSeps( const OUString& rStr, sal_Unicode cSep )
     {
         sal_Unicode c = *p;
         if (c == cSep)
-            // separator found.
+            
             return true;
 
         switch (c)
         {
             case '\n':
             case '\r':
-                // line break found.
+                
                 return true;
             default:
                 ;
@@ -1713,7 +1713,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     bool bMyDoc = false;
     SylkVersion eVersion = SYLK_OTHER;
 
-    // US-English separators for StringToDouble
+    
     sal_Unicode cDecSep = '.';
     sal_Unicode cGrpSep = ',';
 
@@ -1740,14 +1740,14 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         rStrm.Seek( nOldPos );
         for( ;; )
         {
-            //! allow unicode
+            
             rStrm.ReadLine( aByteLine );
             aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
             if( rStrm.IsEof() )
                 break;
             const sal_Unicode* p = aLine.getStr();
             sal_Unicode cTag = *p++;
-            if( cTag == 'C' )       // Content
+            if( cTag == 'C' )       
             {
                 if( *p++ != ';' )
                     return false;
@@ -1797,7 +1797,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             while( *q && *q != ';' )
                                 q++;
                             if ( !(*q == ';' && *(q+1) == 'I') )
-                            {   // don't ignore value
+                            {   
                                 if( bText )
                                 {
                                     pDoc->EnsureTable(aRange.aStart.Tab());
@@ -1856,7 +1856,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                         pDoc, aPos, *pCode, eGrammar, MM_NONE);
                                 pDoc->SetFormulaCell(aPos, pFCell);
                             }
-                            delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
+                            delete pCode;   
                         }
                         break;
                     }
@@ -1866,7 +1866,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         p++;
                 }
             }
-            else if( cTag == 'F' )      // Format
+            else if( cTag == 'F' )      
             {
                 if( *p++ != ';' )
                     return false;
@@ -1886,9 +1886,9 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'P' :
                             if ( bData )
                             {
-                                // F;P<n> sets format code of P;P<code> at
-                                // current position, or at ;X;Y if specified.
-                                // Note that ;X;Y may appear after ;P
+                                
+                                
+                                
                                 const sal_Unicode* p0 = p;
                                 while( *p && *p != ';' )
                                     p++;
@@ -1921,9 +1921,9 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                 if ( bData && *p == ';' && *(p+1) == 'P' )
                 {
                     OUString aCode( p+2 );
-                    // unescape doubled semicolons
+                    
                     aCode = aCode.replaceAll(";;", ";");
-                    // get rid of Xcl escape characters
+                    
                     aCode = aCode.replaceAll(OUString(static_cast<sal_Unicode>(0x1b)), OUString());
                     sal_Int32 nCheckPos;
                     short nType;
@@ -1944,7 +1944,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     eVersion = SYLK_SCALC3;
                 bMyDoc = (eVersion <= SYLK_OWN);
             }
-            else if( cTag == 'E' )                      // Ende
+            else if( cTag == 'E' )                      
                 break;
         }
         if( !bData )
@@ -2049,7 +2049,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         if ( pFCell->GetMatrixFlag() != MM_NONE &&
                                 aCellStr.startsWith("{") &&
                                 aCellStr.endsWith("}") )
-                        {   // cut off matrix {} characters
+                        {   
                             aCellStr = aCellStr.copy(1, aCellStr.getLength()-2);
                         }
                         if ( aCellStr[0] == '=' )
@@ -2058,7 +2058,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         switch ( pFCell->GetMatrixFlag() )
                         {
                             case MM_FORMULA :
-                            {   // diff expression with 'M' M$-extension
+                            {   
                                 SCCOL nC;
                                 SCROW nR;
                                 pFCell->GetMatColsRows( nC, nR );
@@ -2072,7 +2072,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             }
                             break;
                             case MM_REFERENCE :
-                            {   // diff expression with 'I' M$-extension
+                            {   
                                 ScAddress aPos;
                                 pFCell->GetMatrixOrigin( aPos );
                                 aPrefix = ";I;R";
@@ -2082,7 +2082,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             }
                             break;
                             default:
-                                // formula Expression
+                                
                                 aPrefix = ";E";
                         }
                         lcl_WriteSimpleString( rStrm, aPrefix );
@@ -2094,7 +2094,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 
                 default:
                 {
-                    // added to avoid warnings
+                    
                 }
             }
         }
@@ -2107,7 +2107,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 
 bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 {
-    // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
+    
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars );
     return rStrm.GetError() == SVSTREAM_OK;
@@ -2115,7 +2115,7 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 
 bool ScImportExport::Doc2RTF( SvStream& rStrm )
 {
-    //  rtl_TextEncoding is ignored in ScExportRTF
+    
     ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
     return rStrm.GetError() == SVSTREAM_OK;
 }
@@ -2123,7 +2123,7 @@ bool ScImportExport::Doc2RTF( SvStream& rStrm )
 
 bool ScImportExport::Doc2Dif( SvStream& rStrm )
 {
-    // for DIF in the clipboard, IBM_850 is always used
+    
     ScFormatFilter::Get().ScExportDif( rStrm, pDoc, aRange, RTL_TEXTENCODING_IBM_850 );
     return true;
 }
@@ -2135,13 +2135,13 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
-    // for DIF in the clipboard, IBM_850 is always used
+    
     ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc, aRange.aStart, RTL_TEXTENCODING_IBM_850 );
 
     SCCOL nEndCol;
     SCROW nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
-    // if there are no cells in the imported content, nEndCol/nEndRow may be before the start
+    
     if ( nEndCol < aRange.aStart.Col() )
         nEndCol = aRange.aStart.Col();
     if ( nEndRow < aRange.aStart.Row() )
@@ -2195,8 +2195,8 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
     bool bOk = StartPaste();
     if (bOk)
     {
-        // ScHTMLImport may call ScDocument::InitDrawLayer, resulting in
-        // a Draw Layer but no Draw View -> create Draw Layer and View here
+        
+        
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
@@ -2205,14 +2205,14 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
         if (pExtOptions)
         {
-            // Pick up import options if available.
+            
             LanguageType eLang = pExtOptions->GetLanguage();
             SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
             bool bSpecialNumber = pExtOptions->IsDetectSpecialNumber();
             pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber);
         }
         else
-            // Regular import, with no options.
+            
             pImp->WriteToDocument();
 
         EndPaste();
@@ -2293,8 +2293,8 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
     return *plugin;
 }
 
-// Precondition: pStr is guaranteed to be non-NULL and points to a 0-terminated
-// array.
+
+
 static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
         sal_Unicode c )
 {
@@ -2339,14 +2339,14 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                             bFieldStart = false;
                             eQuoteState = FIELDSTART_QUOTE;
                         }
-                        // Do not detect a FIELDSTART_QUOTE if not in
-                        // bFieldStart mode, in which case for unquoted content
-                        // we are in FIELDEND_QUOTE state.
+                        
+                        
+                        
                         else if (eQuoteState != FIELDEND_QUOTE)
                         {
                             eQuoteState = lcl_isEscapedOrFieldEndQuote( nQuotes, p, pSeps, cFieldQuote);
-                            // DONTKNOW_QUOTE is an embedded unescaped quote we
-                            // don't count for pairing.
+                            
+                            
                             if (eQuoteState != DONTKNOW_QUOTE)
                                 ++nQuotes;
                         }
@@ -2354,9 +2354,9 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                     else if (eQuoteState == FIELDEND_QUOTE)
                     {
                         if (bFieldStart)
-                            // If blank is a separator it starts a field, if it
-                            // is not and thus maybe leading before quote we
-                            // are still at start of field regarding quotes.
+                            
+                            
+                            
                             bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != NULL);
                         else
                             bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != NULL);
@@ -2372,25 +2372,25 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                     }
                     else if (eQuoteState == FIELDEND_QUOTE)
                     {
-                        // This also skips leading blanks at beginning of line
-                        // if followed by a quote. It's debatable whether we
-                        // actually want that or not, but congruent with what
-                        // ScanNextFieldFromString() does.
+                        
+                        
+                        
+                        
                         if (bFieldStart)
                             bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != NULL);
                         else
                             bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != NULL);
                     }
                 }
-                // A quote character inside a field content does not start
-                // a quote.
+                
+                
                 ++p;
             }
 
             if (nQuotes % 2 == 0)
-                // We still have a (theoretical?) problem here if due to
-                // nArbitraryLineLengthLimit we split a string right between a
-                // doubled quote pair.
+                
+                
+                
                 break;
             else
             {

@@ -181,12 +181,12 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
             const SfxItemSet& rSet, Any& rAny ) const
                         throw(RuntimeException)
 {
-    // get the SfxPoolItem
+    
     const SfxPoolItem* pItem = 0;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
-    // return item values as uno::Any
+    
     if(eState >= SFX_ITEM_DEFAULT && pItem)
     {
         pItem->QueryValue( rAny, rEntry.nMemberId );
@@ -205,7 +205,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     }
 
 
-    // convert general SfxEnumItem values to specific values
+    
     if( rEntry.aType.getTypeClass() == TypeClass_ENUM &&
          rAny.getValueTypeClass() == TypeClass_LONG )
     {
@@ -218,7 +218,7 @@ void SfxItemPropertySet::getPropertyValue( const OUString &rName,
                                            const SfxItemSet& rSet, Any& rAny ) const
     throw(RuntimeException, UnknownPropertyException)
 {
-    // detect which-id
+    
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
         throw UnknownPropertyException();
@@ -240,7 +240,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     throw(RuntimeException,
           IllegalArgumentException)
 {
-    // get the SfxPoolItem
+    
     const SfxPoolItem* pItem = 0;
     SfxPoolItem *pNewItem = 0;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
@@ -267,7 +267,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
             DELETEZ(pNewItem);
             throw IllegalArgumentException();
         }
-        // apply new item
+        
         rSet.Put( *pNewItem, rEntry.nWID );
         delete pNewItem;
     }
@@ -294,9 +294,9 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     sal_uInt16 nWhich = rEntry.nWID;
 
-    // item state holen
+    
     SfxItemState eState = rSet.GetItemState( nWhich, false );
-    // item-Wert als UnoAny zurueckgeben
+    
     if(eState == SFX_ITEM_DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
     else if(eState < SFX_ITEM_DEFAULT)
@@ -309,7 +309,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
 
-    // which-id ermitteln
+    
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if( !pEntry || !pEntry->nWID )
     {
@@ -317,12 +317,12 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     }
     sal_uInt16 nWhich = pEntry->nWID;
 
-    // item holen
+    
     const SfxPoolItem* pItem = 0;
     SfxItemState eState = rSet.GetItemState( nWhich, false, &pItem );
     if(!pItem && nWhich != rSet.GetPool()->GetSlotId(nWhich))
         pItem = &rSet.GetPool()->GetDefaultItem(nWhich);
-    // item-Wert als UnoAny zurueckgeben
+    
     if(eState == SFX_ITEM_DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
     else if(eState < SFX_ITEM_DEFAULT)

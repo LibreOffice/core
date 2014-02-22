@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <vcl/builder.hxx>
@@ -17,7 +17,7 @@
 
 namespace global{
 
-/// Default values
+/
 sal_Int64 aDefLimitAry[] =
 {
     5,
@@ -66,10 +66,10 @@ void LimitBox::Reformat()
     {
         SetValue( ALL_INT );
     }
-    ///Reformat only when text is not All
+    
     else
     {
-        ///Not allow user to type in -1
+        
         if( GetText() == "-1" )
         {
             Undo();
@@ -81,7 +81,7 @@ void LimitBox::Reformat()
 
 void LimitBox::ReformatAll()
 {
-    ///First entry is All, which do not need numeric reformat
+    
     if ( GetEntryCount() > 0 )
     {
         RemoveEntryAt( 0 );
@@ -99,7 +99,7 @@ Size LimitBox::GetOptimalSize() const
     return CalcBlockSize(10,1);
 }
 
-///Initialize entries
+
 void LimitBox::LoadDefaultLimits()
 {
     InsertValue( ALL_INT );
@@ -119,6 +119,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLimitBox( Window *pParent, 
 }
 
 
-} ///dbaui namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

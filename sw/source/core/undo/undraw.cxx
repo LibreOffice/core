@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,7 +55,7 @@ struct SwUndoGroupObjImpl
 };
 
 
-// Draw-Objecte
+
 
 IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
 {
@@ -112,7 +112,7 @@ OUString SwSdrUndo::GetComment() const
     return pSdrUndo->GetComment();
 }
 
-//--------------------------------------------
+
 
 static void lcl_SendRemoveToUno( SwFmt& rFmt )
 {
@@ -135,15 +135,15 @@ static void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
         {
             nCntntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
 
-            // destroy TextAttribute
+            
             SwTxtNode *pTxtNd = pFmt->GetDoc()->GetNodes()[ rNodePos ]->GetTxtNode();
             OSL_ENSURE( pTxtNd, "No text node found!" );
             SwTxtFlyCnt* pAttr = static_cast<SwTxtFlyCnt*>(
                 pTxtNd->GetTxtAttrForCharAt( nCntntPos, RES_TXTATR_FLYCNT ));
-            // attribute still in text node, delete
+            
             if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFmt )
             {
-                // just set pointer to 0, don't delete
+                
                 ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
                 SwIndex aIdx( pTxtNd, nCntntPos );
                 pTxtNd->EraseText( aIdx, 1 );
@@ -215,22 +215,22 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 {
     bDelFmt = sal_False;
 
-    // save group object
+    
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
     SwDrawContact* pDrawContact = (SwDrawContact*)pFmt->FindContactObj();
     SdrObject* pObj = pDrawContact->GetMaster();
     pObjArr->pObj = pObj;
 
-    // object will destroy itself
+    
     pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
 
-    // notify UNO objects to decouple
+    
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // remove from array
+    
     SwDoc* pDoc = pFmt->GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
@@ -246,9 +246,9 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->ConnectToLayout();
-        // #i45718# - follow-up of #i35635# move object to visible layer
+        
         pContact->MoveObjToVisibleLayer( pObj );
-        // #i45952# - notify that position attributes are already set
+        
         OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
@@ -262,7 +262,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 {
     bDelFmt = sal_True;
 
-    // remove from array
+    
     SwDoc* pDoc = pObjArr->pFmt->GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     SdrObject* pObj;
@@ -275,28 +275,28 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
-        // object will destroy itself
+        
         pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
         pObj->SetUserCall( 0 );
 
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
 
-        // notify UNO objects to decouple
+        
         ::lcl_SendRemoveToUno( *rSave.pFmt );
 
         rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), rSave.pFmt ));
     }
 
-    // re-insert group object
+    
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
     rFlyFmts.push_back( pObjArr->pFmt );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
-    // #i26791# - correction: connect object to layout
+    
     pContact->ConnectToLayout();
-    // #i45718# - follow-up of #i35635# move object to visible layer
+    
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
-    // #i45952# - notify that position attributes are already set
+    
     OSL_ENSURE( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
@@ -312,10 +312,10 @@ void SwUndoDrawGroup::AddObj( sal_uInt16 nPos, SwDrawFrmFmt* pFmt, SdrObject* pO
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
-       // notify UNO objects to decouple
+       
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // remove from array
+    
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 }
@@ -327,7 +327,7 @@ void SwUndoDrawGroup::SetGroupFmt( SwDrawFrmFmt* pFmt )
 }
 
 
-// ------------------------------
+
 
 SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     : SwUndo( UNDO_DRAWUNGROUP ), bDelFmt( sal_False )
@@ -341,16 +341,16 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     pObjArr->pObj = pObj;
     pObjArr->pFmt = pFmt;
 
-    // object will destroy itself
+    
     pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
 
-       // notify UNO objects to decouple
+       
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // remove from array
+    
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 }
@@ -376,28 +376,28 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
 
-    // remove from array
+    
     for( sal_uInt16 n = 1; n < nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
 
-           // notify UNO objects to decouple
+           
         ::lcl_SendRemoveToUno( *rSave.pFmt );
 
         rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), rSave.pFmt ));
     }
 
-    // re-insert group object
+    
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
     rFlyFmts.push_back( pObjArr->pFmt );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     pContact->ConnectToLayout();
-    // #i45718# - follow-up of #i35635# move object to visible layer
+    
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
-    // #i45952# - notify that position attributes are already set
+    
     OSL_ENSURE( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
@@ -410,21 +410,21 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 {
     bDelFmt = sal_False;
 
-    // save group object
+    
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
     SwDrawContact* pContact = (SwDrawContact*)pFmt->FindContactObj();
 
-        // object will destroy itself
+        
     pContact->Changed( *pObjArr->pObj, SDRUSERCALL_DELETE,
         pObjArr->pObj->GetLastBoundRect() );
     pObjArr->pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
 
-       // notify UNO objects to decouple
+       
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // remove from array
+    
     SwDoc* pDoc = pFmt->GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
@@ -436,7 +436,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
         rFlyFmts.push_back( rSave.pFmt );
 
-        // #i45952# - notify that position attributes are already set
+        
         OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
@@ -474,8 +474,8 @@ SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
                 "<SwUndoDrawUnGroupConnectToLayout::Undo(..)> -- missing SwDrawContact instance" );
         if ( pDrawContact )
         {
-            // deletion of instance <pDrawContact> and thus disconnection from
-            // the Writer layout.
+            
+            
             pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
             pObj->SetUserCall( 0 );
         }
@@ -503,7 +503,7 @@ void SwUndoDrawUnGroupConnectToLayout::AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
             std::pair< SwDrawFrmFmt*, SdrObject* >( pDrawFrmFmt, pDrawObject ) );
 }
 
-//-------------------------------------
+
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt )
     : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFmt( sal_True )
@@ -536,9 +536,9 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, NULL );
-        // #i45718# - follow-up of #i35635# move object to visible layer
+        
         pContact->MoveObjToVisibleLayer( pObj );
-        // #i45952# - notify that position attributes are already set
+        
         OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
@@ -560,11 +560,11 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
 
-        // object will destroy itself
+        
         pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
         pObj->SetUserCall( 0 );
 
-           // notify UNO objects to decouple
+           
         ::lcl_SendRemoveToUno( *pFmt );
 
         rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
@@ -580,10 +580,10 @@ void SwUndoDrawDelete::AddObj( sal_uInt16 , SwDrawFrmFmt* pFmt,
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
-       // notify UNO objects to decouple
+       
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // remove from array
+    
     SwDoc* pDoc = pFmt->GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));

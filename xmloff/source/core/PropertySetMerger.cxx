@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -42,7 +42,7 @@ public:
     PropertySetMergerImpl( const Reference< XPropertySet > rPropSet1, const Reference< XPropertySet > rPropSet2 );
     virtual ~PropertySetMergerImpl();
 
-    // XPropertySet
+    
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
     virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
@@ -51,19 +51,19 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
 
-    // XPropertyState
+    
     virtual PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException);
     virtual Sequence< PropertyState > SAL_CALL getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException);
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException);
     virtual Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
 
-    // XPropertySetInfo
+    
     virtual Sequence< Property > SAL_CALL getProperties(  ) throw(RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw(UnknownPropertyException, RuntimeException);
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(RuntimeException);
 };
 
-// Interface implementation
+
 
 PropertySetMergerImpl::PropertySetMergerImpl( Reference< XPropertySet > rPropSet1, Reference< XPropertySet > rPropSet2 )
 : mxPropSet1( rPropSet1 )
@@ -79,7 +79,7 @@ PropertySetMergerImpl::~PropertySetMergerImpl()
 {
 }
 
-// XPropertySet
+
 Reference< XPropertySetInfo > SAL_CALL PropertySetMergerImpl::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return this;
@@ -125,7 +125,7 @@ void SAL_CALL PropertySetMergerImpl::removeVetoableChangeListener( const OUStrin
 {
 }
 
-// XPropertyState
+
 PropertyState SAL_CALL PropertySetMergerImpl::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
     if( mxPropSet1Info->hasPropertyByName( PropertyName ) )
@@ -201,7 +201,7 @@ Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropert
     }
 }
 
-// XPropertySetInfo
+
 Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties() throw(RuntimeException)
 {
     Sequence< Property > aProps1( mxPropSet1Info->getProperties() );

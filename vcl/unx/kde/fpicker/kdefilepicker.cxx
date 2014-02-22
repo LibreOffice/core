@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstddef>
@@ -50,7 +50,7 @@
 #include <tdemessagebox.h>
 #include <tdetempfile.h>
 
-#else // ENABLE_TDE
+#else 
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -76,22 +76,22 @@
 #include <kmessagebox.h>
 #include <ktempfile.h>
 
-#endif // ENABLE_TDE
+#endif 
 
 #if ENABLE_TDE
 #define QCheckBox_String    "TQCheckBox"
 #define QComboBox_String    "TQComboBox"
-#else // ENABLE_TDE
+#else 
 #define QCheckBox_String    "QCheckBox"
 #define QComboBox_String    "QComboBox"
-#endif // ENABLE_TDE
+#endif 
 
 #include <algorithm>
 #include <iostream>
 
-//////////////////////////////////////////////////////////////////////////
-// KDEFileDialog
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
         QWidget *parent, const char *name )
@@ -108,10 +108,10 @@ KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
 #if ENABLE_TDE
     connect( this, SIGNAL( fileHighlighted( const TQString & ) ),
              this, SLOT( fileHighlightedCommand( const TQString & ) ) );
-#else // ENABLE_TDE
+#else 
     connect( this, SIGNAL( fileHighlighted( const QString & ) ),
              this, SLOT( fileHighlightedCommand( const QString & ) ) );
-#endif // ENABLE_TDE
+#endif 
 
     connect( this, SIGNAL( selectionChanged() ),
              this, SLOT( selectionChangedCommand() ) );
@@ -151,9 +151,9 @@ void KDEFileDialog::updateCustomWidgetLayout()
     nLeft -= KDialog::spacingHint();
     nRight -= KDialog::spacingHint();
     m_pLabels->setFixedWidth( ( nLeft > 0 )? nLeft: 80 );
-    // FIXME The following call sets the width of m_pPushButtons all right,
-    // but it also increases the width of m_pComboBoxes rapidly. Can we do
-    // anything about it?
+    
+    
+    
     m_pPushButtons->setFixedWidth( ( nRight > 0 )? nRight: 100 );
 }
 
@@ -203,7 +203,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                 {
                     appendFilter( (*pStringList)[0], (*pStringList)[1] );
 
-                    // update the filters widget
+                    
                     setFilter( filters() );
                 }
                 break;
@@ -211,7 +211,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                 if ( nListSize >= 1 )
                 {
                     QStringList::const_iterator it = pStringList->begin();
-                    ++it; // We ignore the filter group name
+                    ++it; 
 
                     while ( it != pStringList->end() )
                     {
@@ -224,7 +224,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                         }
                     }
 
-                    // update the filters widget
+                    
                     setFilter( filters() );
                 }
                 break;
@@ -244,7 +244,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                 {
                     QString qDirectory = baseURL().url();
                     if ( qDirectory.startsWith( "file:/" ) && qDirectory.mid( 6, 1 ) != "/" )
-                        qDirectory.replace( "file:/", "file:///" );
+                        qDirectory.replace( "file:/", "file:
                     sendCommand( "currentDirectory " + escapeString( qDirectory ) );
                 }
                 break;
@@ -269,7 +269,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                     }
                     else
                     {
-                        // we have to return the selected files anyway
+                        
                         const KFileItemList *pItems = ops->selectedItems();
                         for ( KFileItemListIterator it( *pItems ); it.current(); ++it )
                             appendURL( qString, (*it)->url() );
@@ -373,7 +373,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                 break;
         }
 
-        // FIXME Some cleanup of pEvent? delete something, etc.?
+        
     }
 }
 
@@ -471,9 +471,9 @@ void KDEFileDialog::getValue( const QString &rId, const QString &rAction )
                 qString.append( " int " );
                 qString.append( QString().setNum( pComboBox->currentItem() ) );
             }
-            // TODO getHelpURL
+            
         }
-        // TODO push button
+        
     }
 
     sendCommand( qString );
@@ -519,19 +519,19 @@ void KDEFileDialog::setValue( const QString &rId, const QString &rAction, const 
                 if ( !rValue.isEmpty() )
                     pComboBox->setCurrentItem( rValue.front().toInt() );
             }
-            // FIXME setHelpURL is ignored
+            
         }
-        // TODO push button
+        
     }
 }
 
 void KDEFileDialog::appendFilter( const QString &rTitle, const QString &rFilter )
 {
-    // Filters are separated by ';'
+    
     QString qFilter( rFilter );
     qFilter.replace( QChar( ';' ), QChar( ' ' ) ).replace( "*.*", "*" );
 
-    // Workaround for too wide <All formats> (*.bmp;...) entry
+    
     QString qTitle( rTitle );
     qTitle.replace( QRegExp( "^<([^>]*)> \\(.*" ), "<\\1>" );
 
@@ -567,11 +567,11 @@ QString KDEFileDialog::addExtension( const QString &rFileName ) const
 
     QString qExtension;
 
-    QWidget *pExtensionWidget = findControl( "100" ); // CHECKBOX_AUTOEXTENSION
+    QWidget *pExtensionWidget = findControl( "100" ); 
     QCheckBox *pExtensionCB = pExtensionWidget? static_cast< QCheckBox* >( pExtensionWidget->qt_cast( QCheckBox_String ) ): NULL;
     if ( pExtensionCB && pExtensionCB->isChecked() )
     {
-        // FIXME: qFilter can be a MIME; we ignore it now...
+        
         QStringList qFilterList = QStringList::split( " ", currentFilter() );
         for ( QStringList::const_iterator it = qFilterList.begin();
               qExtension.isEmpty() && it != qFilterList.end();
@@ -597,7 +597,7 @@ QString KDEFileDialog::addExtension( const QString &rFileName ) const
 
 bool KDEFileDialog::isSupportedProtocol( const QString &rProtocol ) const
 {
-    // TODO Get this information directly from OOo
+    
     const char * pOOoProtocols[] = { "", "smb", "ftp", "http", "file", "mailto",
         "vnd.sun.star.webdav", "news", "private", "vnd.sun.star.help",
         "https", "slot", "macro", "javascript", "imap", "pop3", "data",
@@ -613,7 +613,7 @@ bool KDEFileDialog::isSupportedProtocol( const QString &rProtocol ) const
             return true;
     }
 
-    // TODO gnome-vfs bits here
+    
 
     return false;
 }
@@ -626,7 +626,7 @@ KURL KDEFileDialog::mostLocalURL( const KURL &rURL ) const
         return qMostLocalURL;
     else
     {
-        // Terrible hack to get even non-existing media:// files right
+        
         qMostLocalURL.cd( ".." );
         KURL qMostLocalPath( KIO::NetAccess::mostLocalURL( qMostLocalURL, const_cast<KDEFileDialog*>( this ) ) );
         if ( qMostLocalPath.isLocalFile() )
@@ -642,7 +642,7 @@ KURL KDEFileDialog::mostLocalURL( const KURL &rURL ) const
 
 QString KDEFileDialog::localCopy( const QString &rFileName ) const
 {
-    // 106 == MIB enum for UTF-8
+    
     KURL qLocalURL = mostLocalURL( KURL( rFileName, 106 ) );
     if ( qLocalURL.isLocalFile() )
         return qLocalURL.url();
@@ -668,9 +668,9 @@ QString KDEFileDialog::localCopy( const QString &rFileName ) const
 
 #if ENABLE_TDE
 void KDEFileDialog::fileHighlightedCommand( const TQString & )
-#else // ENABLE_TDE
+#else 
 void KDEFileDialog::fileHighlightedCommand( const QString & )
-#endif // ENABLE_TDE
+#endif 
 {
     if ( canNotifySelection() )
     {
@@ -694,26 +694,26 @@ void KDEFileDialog::sendCommand( const QString &rCommand )
     ::std::cerr << "kdefilepicker sent: " << rCommand.latin1() << ::std::endl;
 #endif
 
-    //m_aOutputStream << rCommand << endl;
+    
     ::std::cout << rCommand.utf8() << ::std::endl;
 }
 
 void KDEFileDialog::appendURL( QString &rBuffer, const KURL &rURL )
 {
-    // From Martin Kretzschmar:
-    // file:///path/to/test%E0.odt is not a valid URL from OOo's point of
-    // view. (?Most modern parts of?) OOo assume(s) that the URL contains only
-    // ASCII characters (which test%E0.odt does) and is UTF-8 after unescaping
-    // (which file:///path/test%E0.odt is not).
-    // Cf. the comment in sal/inc/osl/file.h.
-    // 106 == MIB enum for UTF-8
+    
+    
+    
+    
+    
+    
+    
     QString qUrlStr = addExtension( rURL.url( 0, 106 ) );
 
     if ( !isExecuting() && !isSupportedProtocol( rURL.protocol() ) )
         qUrlStr = localCopy( qUrlStr );
 
     if ( qUrlStr.startsWith( "file:/" ) && qUrlStr.mid( 6, 1 ) != "/" )
-        qUrlStr.replace( "file:/", "file:///" );
+        qUrlStr.replace( "file:/", "file:
 
     rBuffer.append( " " );
     if ( !qUrlStr.isEmpty() )
@@ -743,7 +743,7 @@ void KDEFileDialog::appendEscaped( QString &rBuffer, const QString &rString )
 QString KDEFileDialog::escapeString( const QString &rString )
 {
     QString qString;
-    qString.reserve( 2*rString.length() + 2 ); // every char escaped + quotes
+    qString.reserve( 2*rString.length() + 2 ); 
 
     appendEscaped( qString, rString );
 
@@ -756,7 +756,7 @@ void KDEFileFilterComboHack::setCurrentFilter( const QString& filter )
     setCurrentText( filter );
     filterChanged();
 
-    // Workaround for 'Filter name (*.blah)' vs. 'Filter name'
+    
     if ( currentText() != text( currentItem() ) )
     {
         int nItem = 0;

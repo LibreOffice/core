@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ucbhelper/std_inputstream.hxx"
@@ -134,7 +134,7 @@ namespace ucbhelper
     void SAL_CALL StdInputStream::closeInput( )
         throw( io::NotConnectedException, io::IOException, uno::RuntimeException)
     {
-        // No need to implement this for an istream
+        
     }
 
     void SAL_CALL StdInputStream::seek( sal_Int64 location )
@@ -152,7 +152,7 @@ namespace ucbhelper
 
         try
         {
-            m_pStream->clear( ); // may be needed to rewind the stream
+            m_pStream->clear( ); 
             m_pStream->seekg( location, ios_base::beg );
         }
         catch ( const ios_base::failure& e )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -34,7 +34,7 @@
 using namespace com::sun::star;
 
 
-// Forward declarations of the factories.
+
 
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory, const sal_uInt64 _nCreationFlags );
 extern OUString SdDrawingDocument_getImplementationName() throw( uno::RuntimeException );
@@ -200,9 +200,9 @@ using namespace ::sd::sidebar;
 
 
 
-// ----------------------------------------------------------------------------
-// Declaration and initialization of a map from service names to locally
-// unique factory identifiers.
+
+
+
 
 enum FactoryId
 {
@@ -265,7 +265,7 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
     }
     return spFactoryMap;
 };
-} // end of anonymous namespace
+} 
 
 
 extern "C"
@@ -472,6 +472,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
     return pRet;
 }
 
-} // end of extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

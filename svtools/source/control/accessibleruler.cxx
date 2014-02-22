@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <svtools/accessibleruler.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::accessibility;
 DBG_NAME( SvtRulerAccessible )
 
 
-//=====  internal  ============================================================
+
 
 SvtRulerAccessible::SvtRulerAccessible(
     const uno::Reference< XAccessible >& rxParent, Ruler& rRepr, const OUString& rName ) :
@@ -66,23 +66,23 @@ SvtRulerAccessible::~SvtRulerAccessible()
     if( IsAlive() )
     {
         osl_incrementInterlockedCount( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all childs
+        dispose();      
     }
 }
 
-//=====  XAccessible  =========================================================
+
 
 uno::Reference< XAccessibleContext > SAL_CALL SvtRulerAccessible::getAccessibleContext( void ) throw( RuntimeException )
 {
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
+
 
 sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
-    // no guard -> done in getBounds()
-//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
+    
+
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
@@ -100,25 +100,25 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint(
 
 awt::Rectangle SAL_CALL SvtRulerAccessible::getBounds() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     return AWTRectangle( GetBoundingBox() );
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocation() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     return AWTPoint( GetBoundingBox().TopLeft() );
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocationOnScreen() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBoxOnScreen()
+    
     return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
 }
 
 awt::Size SAL_CALL SvtRulerAccessible::getSize() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
@@ -141,7 +141,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::isFocusTraversable() throw( RuntimeExcepti
     return sal_True;
 }
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleChildCount( void ) throw( RuntimeException )
 {
@@ -168,9 +168,9 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent( 
 sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    //  Use a simple but slow solution for now.  Optimize later.
+    
 
-    //  Iterate over all the parent's children and search for this object.
+    
     if( mxParent.is() )
     {
         uno::Reference< XAccessibleContext >        xParentContext( mxParent->getAccessibleContext() );
@@ -186,8 +186,8 @@ sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent( void ) throw(
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+   
+   
    return -1;
 }
 
@@ -261,7 +261,7 @@ lang::Locale SAL_CALL SvtRulerAccessible::getLocale( void ) throw( IllegalAccess
             return xParentContext->getLocale();
     }
 
-    //  No parent.  Therefore throw exception to indicate this cluelessness.
+    
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -287,10 +287,10 @@ void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Refe
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
             mnClientId = 0;
         }
@@ -339,7 +339,7 @@ void SAL_CALL SvtRulerAccessible::grabFocus() throw( RuntimeException )
 
 Any SAL_CALL SvtRulerAccessible::getAccessibleKeyBinding() throw( RuntimeException )
 {
-    // here is no implementation, because here are no KeyBindings for every object
+    
     return Any();
 }
 
@@ -362,7 +362,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
     return mpRepr->GetControlBackground().GetColor();
 }
 
-//=====  XServiceInfo  ========================================================
+
 OUString SAL_CALL SvtRulerAccessible::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvtRulerAccessible" ) );
@@ -379,7 +379,7 @@ Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames( void
     return Sequence< OUString >( &sServiceName, 1 );
 }
 
-//=====  XTypeProvider  =======================================================
+
 Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId( void ) throw( RuntimeException )
 {
     return getUniqueId();
@@ -391,14 +391,14 @@ void SAL_CALL SvtRulerAccessible::disposing()
     {
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
-            mpRepr = NULL;      // object dies with representation
+            mpRepr = NULL;      
 
         }
 
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
 
-            // Send a disposing to all listeners.
+            
             if ( mnClientId )
             {
                 comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );

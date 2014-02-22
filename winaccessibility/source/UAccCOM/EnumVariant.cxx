@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stdafx.h"
@@ -27,8 +27,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumVariant
+
+
 
 
 
@@ -52,7 +52,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     if (pcElementFetched != NULL)
         *pcElementFetched = 0;
 
-    // Retrieve the next cElements.
+    
     for (l1=m_lCurrent, l2=0; l1<m_pXAccessibleSelection->getSelectedAccessibleChildCount() &&
             l2<cElements; l1++, l2++)
     {
@@ -78,7 +78,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
             }
         }
     }
-    // Set count of elements retrieved.
+    
     if (pcElementFetched != NULL)
         *pcElementFetched = l2;
     m_lCurrent = l1;
@@ -190,7 +190,7 @@ long CEnumVariant::GetCountOfElements()
    */
 STDMETHODIMP CEnumVariant::ClearEnumeration()
 {
-    // internal IEnumVariant - no mutex meeded
+    
 
     pUNOInterface = NULL;
     m_pXAccessibleSelection = NULL;
@@ -229,7 +229,7 @@ static Reference<XAccessibleSelection> GetXAccessibleSelection(XAccessible* pXAc
    */
 STDMETHODIMP CEnumVariant::PutSelection(hyper pXSelection)
 {
-    // internal IEnumVariant - no mutex meeded
+    
 
     pUNOInterface = reinterpret_cast<XAccessible*>(pXSelection);
     m_pXAccessibleSelection = GetXAccessibleSelection(pUNOInterface);

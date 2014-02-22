@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/orienthelper.hxx"
@@ -27,7 +27,7 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 struct OrientationHelper_Impl
 {
@@ -52,7 +52,7 @@ struct OrientationHelper_Impl
     DECL_LINK( ClickHdl, void* );
 };
 
-// ----------------------------------------------------------------------------
+
 
 OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
     mrCtrlDial( rCtrlDial ),
@@ -82,11 +82,11 @@ void OrientationHelper_Impl::EnableWindow( Window& rWindow, TriState eDisableIfS
     bool bDisableOnStacked = false;
     switch( eDisableIfStacked )
     {
-        // STATE_CHECK: Disable window, if stacked text is turned on or "don't know".
+        
         case STATE_CHECK:   bDisableOnStacked = (mrCbStacked.GetState() != STATE_NOCHECK);  break;
-        // STATE_NOCHECK: Disable window, if stacked text is turned off or "don't know".
+        
         case STATE_NOCHECK: bDisableOnStacked = (mrCbStacked.GetState() != STATE_CHECK);    break;
-        default: ;//prevent warning
+        default: ;
     }
     rWindow.Enable( mbEnabled && !bDisableOnStacked );
 }
@@ -103,7 +103,7 @@ IMPL_LINK_NOARG(OrientationHelper_Impl, ClickHdl)
     return 0L;
 }
 
-// ============================================================================
+
 
 OrientationHelper::OrientationHelper( DialControl& rCtrlDial, NumericField& rNfRotation, CheckBox& rCbStacked ) :
     mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
@@ -153,7 +153,7 @@ void OrientationHelper::EnableStackedTriState( bool bEnable )
     mpImpl->mrCbStacked.EnableTriState( bEnable );
 }
 
-// ============================================================================
+
 
 OrientStackedWrapper::OrientStackedWrapper( OrientationHelper& rOrientHlp ) :
     SingleControlWrapperType( rOrientHlp )
@@ -181,8 +181,8 @@ void OrientStackedWrapper::SetControlValue( bool bValue )
     GetControl().SetStackedState( bValue ? STATE_CHECK : STATE_NOCHECK );
 }
 
-// ============================================================================
 
-} // namespace svx
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

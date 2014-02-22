@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/vclxwindows.hxx>
@@ -115,8 +115,8 @@ namespace toolkit
             _rColorValue >>= nBackgroundColor;
             aStyleSettings.SetFaceColor( nBackgroundColor );
 
-            // for the real background (everything except the buttons and the thumb),
-            // use an average between the desired color and "white"
+            
+            
             Color aWhite( COL_WHITE );
             Color aBackground( nBackgroundColor );
             aBackground.SetRed( ( aBackground.GetRed() + aWhite.GetRed() ) / 2 );
@@ -199,9 +199,9 @@ namespace toolkit
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXGraphicControl
-//  ----------------------------------------------------
+
+
+
 
 void VCLXGraphicControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -328,9 +328,9 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
     return aProp;
 }
 
-//--------------------------------------------------------------------
-//  class VCLXButton
-//  ----------------------------------------------------
+
+
+
 
 void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -460,7 +460,7 @@ void VCLXButton::setActionCommand( const OUString& rCommand ) throw(::com::sun::
     if ( pButton )
     {
         Size aMinSz = pButton->CalcMinimumSize();
-        // no text, thus image
+        
         if ( pButton->GetText().isEmpty() )
         {
             if ( aSz.Width() < aMinSz.Width() )
@@ -572,9 +572,9 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_BUTTON_CLICK:
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-                // since we call listeners below, there is a potential that we will be destroyed
-                // during the listener call. To prevent the resulting crashs, we keep us
-                // alive as long as we're here
+                
+                
+                
 
             if ( maActionListeners.getLength() )
             {
@@ -613,9 +613,9 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXImageControl
-//  ----------------------------------------------------
+
+
+
 
 void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -704,7 +704,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
 
         case BASEPROPERTY_SCALEIMAGE:
         {
-            // this is for compatibility only, nowadays, the ImageScaleMode property should be used
+            
             sal_Bool bScaleImage = sal_False;
             if ( pImageControl && ( Value >>= bScaleImage ) )
             {
@@ -744,9 +744,9 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXCheckBox
-//  ----------------------------------------------------
+
+
+
 
 
 void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -782,7 +782,7 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXCheckBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -791,7 +791,7 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox>* ) NULL ),
@@ -869,10 +869,10 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
         }
         pCheckBox->SetState( eState );
 
-        // #105198# call C++ click listeners (needed for accessibility)
-        // pCheckBox->GetClickHdl().Call( pCheckBox );
+        
+        
 
-        // #107218# Call same virtual methods and listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pCheckBox->Toggle();
         pCheckBox->Click();
@@ -1014,9 +1014,9 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_CHECKBOX_TOGGLE:
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-                // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
-                // alive as long as we're here
+                
+                
+                
 
             CheckBox* pCheckBox = (CheckBox*)GetWindow();
             if ( pCheckBox )
@@ -1046,9 +1046,9 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXRadioButton
-//  ----------------------------------------------------
+
+
+
 void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1083,7 +1083,7 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXRadioButton::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -1092,7 +1092,7 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRadioButton>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
@@ -1232,11 +1232,11 @@ void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::Runtim
     if ( pRadioButton)
     {
         pRadioButton->Check( b );
-        // #102717# item listeners are called, but not C++ click listeners in StarOffice code => call click hdl
-        // But this is needed in old code because Accessibility API uses it.
-        // pRadioButton->GetClickHdl().Call( pRadioButton );
+        
+        
+        
 
-        // #107218# Call same virtual methods and listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pRadioButton->Click();
         SetSynthesizingVCLEvent( sal_False );
@@ -1287,9 +1287,9 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-        // since we call listeners below, there is a potential that we will be destroyed
-        // in during the listener call. To prevent the resulting crashs, we keep us
-        // alive as long as we're here
+        
+        
+        
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -1316,8 +1316,8 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 
 void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
 {
-    // In the formulars, RadioChecked is not enabled, call itemStateChanged only for click
-    // In the dialog editor, RadioChecked is enabled, call itemStateChanged only for bToggled
+    
+    
     RadioButton* pRadioButton = (RadioButton*)GetWindow();
     if ( pRadioButton && ( pRadioButton->IsRadioCheckEnabled() == bToggled ) && ( bToggled || pRadioButton->IsStateChanged() ) && maItemListeners.getLength() )
     {
@@ -1329,9 +1329,9 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXSpinField
-//  ----------------------------------------------------
+
+
+
 void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1344,7 +1344,7 @@ VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXSpinField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -1352,7 +1352,7 @@ VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
     return (aRet.hasValue() ? aRet : VCLXEdit::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXSpinField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinField>* ) NULL ),
     VCLXEdit::getTypes()
@@ -1432,9 +1432,9 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_SPINFIELD_LAST:
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-                // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
-                // alive as long as we're here
+                
+                
+                
 
             if ( maSpinListeners.getLength() )
             {
@@ -1463,9 +1463,9 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXListBox
-//  ----------------------------------------------------
+
+
+
 void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1563,7 +1563,7 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& aI
             if ( (sal_uInt16)nP == 0xFFFF )
             {
                 OSL_FAIL( "VCLXListBox::addItems: too many entries!" );
-                // skip remaining entries, list cannot hold them, anyway
+                
                 break;
             }
 
@@ -1682,10 +1682,10 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com:
     {
         pBox->SelectEntryPos( nPos, bSelect );
 
-        // VCL doesn't call select handler after API call.
-        // ImplCallItemListeners();
+        
+        
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pBox->Select();
         SetSynthesizingVCLEvent( sal_False );
@@ -1712,10 +1712,10 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
 
         if ( bChanged )
         {
-            // VCL doesn't call select handler after API call.
-            // ImplCallItemListeners();
+            
+            
 
-            // #107218# Call same listeners like VCL would do after user interaction
+            
             SetSynthesizingVCLEvent( sal_True );
             pBox->Select();
             SetSynthesizingVCLEvent( sal_False );
@@ -1788,9 +1788,9 @@ void VCLXListBox::makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::R
 void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-        // since we call listeners below, there is a potential that we will be destroyed
-        // in during the listener call. To prevent the resulting crashs, we keep us
-        // alive as long as we're here
+        
+        
+        
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -1803,7 +1803,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
                 if ( bDropDown && !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
-                    // Call ActionListener on DropDown event
+                    
                     ::com::sun::star::awt::ActionEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
                     aEvent.ActionCommand = pListBox->GetSelectEntry();
@@ -2044,7 +2044,7 @@ void VCLXListBox::ImplCallItemListeners()
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.Highlighted = sal_False;
 
-        // Set to 0xFFFF on multiple selection, selected entry ID otherwise
+        
         aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectEntryPos() : 0xFFFF;
 
         maItemListeners.itemStateChanged( aEvent );
@@ -2111,7 +2111,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) thr
     ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
         "VCLXListBox::listItemModified: illegal (inconsistent) item position!" );
 
-    // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
+    
 
     const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
@@ -2168,13 +2168,13 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
 
 void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
 {
-    // just disambiguate
+    
     VCLXWindow::disposing( i_rEvent );
 }
 
-//  ----------------------------------------------------
-//  class VCLXMessageBox
-//  ----------------------------------------------------
+
+
+
 
 void VCLXMessageBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -2189,7 +2189,7 @@ VCLXMessageBox::~VCLXMessageBox()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXMessageBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -2197,7 +2197,7 @@ VCLXMessageBox::~VCLXMessageBox()
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXMessageBox )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox>* ) NULL ),
     VCLXTopWindow::getTypes()
@@ -2257,9 +2257,9 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
     return ::com::sun::star::awt::Size( 250, 100 );
 }
 
-//  ----------------------------------------------------
-//  class VCLXDialog
-//  ----------------------------------------------------
+
+
+
 void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
@@ -2275,7 +2275,7 @@ VCLXDialog::~VCLXDialog()
     OSL_TRACE ("%s", __FUNCTION__);
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -2284,7 +2284,7 @@ VCLXDialog::~VCLXDialog()
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
@@ -2353,8 +2353,8 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 
         nRet = pDlg->Execute();
 
-        // set the parent back only in case no new parent was set from outside
-        // in other words, revert only own changes
+        
+        
         if ( pOldParent && pDlg->GetParent() == pSetParent )
             pDlg->SetParent( pOldParent );
     }
@@ -2443,9 +2443,9 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXTabPage
-//  ----------------------------------------------------
+
+
+
 VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
 {
     OSL_TRACE("VCLXMultiPage::VCLXMultiPage()" );
@@ -2493,12 +2493,12 @@ throw(::com::sun::star::uno::RuntimeException)
     return ( aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ) );
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXMultiPage )
     VCLXContainer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// ::com::sun::star::awt::XView
+
 void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2518,7 +2518,7 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-// ::com::sun::star::awt::XDevice,
+
 ::com::sun::star::awt::DeviceInfo SAL_CALL VCLXMultiPage::getInfo()
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2569,8 +2569,8 @@ throw(::com::sun::star::uno::RuntimeException)
                 OSL_TRACE("***MULTIPAGE VALUE");
                 sal_Int32 nId(0);
                 Value >>= nId;
-                // when the multipage is created we attempt to set the activepage
-                // but no pages created
+                
+                
                 if ( nId && nId <= getWindows().getLength() )
                     activateTab( nId );
             }
@@ -2728,9 +2728,9 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     };
 }
 
-//  ----------------------------------------------------
-//  class VCLXTabPage
-//  ----------------------------------------------------
+
+
+
 VCLXTabPage::VCLXTabPage()
 {
 }
@@ -2766,12 +2766,12 @@ throw(::com::sun::star::uno::RuntimeException)
     return VCLXContainer::queryInterface( rType );
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXTabPage )
     VCLXContainer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// ::com::sun::star::awt::XView
+
 void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2791,7 +2791,7 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-// ::com::sun::star::awt::XDevice,
+
 ::com::sun::star::awt::DeviceInfo SAL_CALL VCLXTabPage::getInfo()
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2862,9 +2862,9 @@ TabPage *VCLXTabPage::getTabPage() const throw (uno::RuntimeException)
     throw uno::RuntimeException();
 }
 
-//  ----------------------------------------------------
-//  class VCLXFixedHyperlink
-//  ----------------------------------------------------
+
+
+
 
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
 
@@ -2877,7 +2877,7 @@ VCLXFixedHyperlink::~VCLXFixedHyperlink()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXFixedHyperlink::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -2895,7 +2895,7 @@ void VCLXFixedHyperlink::dispose() throw(::com::sun::star::uno::RuntimeException
         VCLXWindow::dispose();
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXFixedHyperlink )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedHyperlink>* ) NULL ),
     VCLXWindow::getTypes()
@@ -2915,7 +2915,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             }
             else
             {
-                // open the URL
+                
                 OUString sURL;
                 FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
                 if ( pBase )
@@ -2926,7 +2926,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 {
                     try
                     {
-                        // start browser
+                        
                         xSystemShellExecute->execute(
                             sURL, OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
                     }
@@ -3154,9 +3154,9 @@ void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
-//  ----------------------------------------------------
-//  class VCLXFixedText
-//  ----------------------------------------------------
+
+
+
 void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -3191,7 +3191,7 @@ VCLXFixedText::~VCLXFixedText()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXFixedText::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3199,7 +3199,7 @@ VCLXFixedText::~VCLXFixedText()
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXFixedText )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText>* ) NULL ),
     VCLXWindow::getTypes()
@@ -3297,9 +3297,9 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
 }
 
-//  ----------------------------------------------------
-//  class VCLXScrollBar
-//  ----------------------------------------------------
+
+
+
 void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -3333,7 +3333,7 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXScrollBar::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3341,7 +3341,7 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXScrollBar )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XScrollBar>* ) NULL ),
     VCLXWindow::getTypes()
@@ -3352,7 +3352,7 @@ IMPL_XTYPEPROVIDER_END
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-// ::com::sun::star::lang::XComponent
+
 void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3363,7 +3363,7 @@ void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
     VCLXWindow::dispose();
 }
 
-// ::com::sun::star::awt::XScrollbar
+
 void VCLXScrollBar::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3528,7 +3528,7 @@ sal_Int32 VCLXScrollBar::getOrientation() throw(::com::sun::star::uno::RuntimeEx
 
 }
 
-// ::com::sun::star::awt::VclWindowPeer
+
 void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3630,8 +3630,8 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
 
             case BASEPROPERTY_BACKGROUNDCOLOR:
             {
-                // the default implementation of the base class doesn't work here, since our
-                // interpretation for this property is slightly different
+                
+                
                 ::toolkit::setButtonLikeFaceColor( pScrollBar, Value);
             }
             break;
@@ -3698,8 +3698,8 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_BACKGROUNDCOLOR:
             {
-                // the default implementation of the base class doesn't work here, since our
-                // interpretation for this property is slightly different
+                
+                
                 aProp = ::toolkit::getButtonLikeFaceColor( pScrollBar );
             }
             break;
@@ -3720,9 +3720,9 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_SCROLLBAR_SCROLL:
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-                // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
-                // alive as long as we're here
+                
+                
+                
 
             if ( maAdjustmentListeners.getLength() )
             {
@@ -3734,7 +3734,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.Source = (::cppu::OWeakObject*)this;
                     aEvent.Value = pScrollBar->GetThumbPos();
 
-                    // set adjustment type
+                    
                     ScrollType aType = pScrollBar->GetType();
                     if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
                     {
@@ -3774,9 +3774,9 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXEdit
-//  ----------------------------------------------------
+
+
+
 
 void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -3817,7 +3817,7 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXEdit::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3827,7 +3827,7 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXEdit )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextEditField>* ) NULL ),
@@ -3871,7 +3871,7 @@ void VCLXEdit::setText( const OUString& aText ) throw(::com::sun::star::uno::Run
     {
         pEdit->SetText( aText );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pEdit->SetModifyFlag();
         pEdit->Modify();
@@ -3889,7 +3889,7 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const O
         pEdit->SetSelection( Selection( rSel.Min, rSel.Max ) );
         pEdit->ReplaceSelected( aText );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pEdit->SetModifyFlag();
         pEdit->Modify();
@@ -4132,9 +4132,9 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_EDIT_MODIFY:
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-                // since we call listeners below, there is a potential that we will be destroyed
-                // during the listener call. To prevent the resulting crashs, we keep us
-                // alive as long as we're here
+                
+                
+                
 
             if ( GetTextListeners().getLength() )
             {
@@ -4151,9 +4151,9 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXComboBox
-//  ----------------------------------------------------
+
+
+
 
 void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4183,9 +4183,9 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
-    // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box
-    // #i92690# / 2008-08-12 / frank.schoenheit@sun.com
-    // VCLXEdit::ImplGetPropertyIds( rIds );
+    
+    
+    
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
@@ -4265,7 +4265,7 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& a
             if ( nP == 0xFFFF )
             {
                 OSL_FAIL( "VCLXComboBox::addItems: too many entries!" );
-                // skip remaining entries, list cannot hold them, anyway
+                
                 break;
             }
         }
@@ -4380,7 +4380,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
             {
                 VCLXEdit::setProperty( PropertyName, Value );
 
-                // #109385# SetBorderStyle is not virtual
+                
                 if ( nPropType == BASEPROPERTY_BORDER )
                 {
                     sal_uInt16 nBorder = sal_uInt16();
@@ -4436,9 +4436,9 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
 void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
-        // since we call listeners below, there is a potential that we will be destroyed
-        // during the listener call. To prevent the resulting crashs, we keep us
-        // alive as long as we're here
+        
+        
+        
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -4454,7 +4454,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                         aEvent.Source = (::cppu::OWeakObject*)this;
                         aEvent.Highlighted = sal_False;
 
-                        // Set to 0xFFFF on multiple selection, selected entry ID otherwise
+                        
                         aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
 
                         maItemListeners.itemStateChanged( aEvent );
@@ -4468,7 +4468,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-//              aEvent.ActionCommand = ...;
+
                 maActionListeners.actionPerformed( aEvent );
             }
             break;
@@ -4579,7 +4579,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) th
     ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pComboBox->GetEntryCount() ) ),
         "VCLXComboBox::listItemModified: illegal (inconsistent) item position!" );
 
-    // VCL's ComboBox does not support changing an entry's text or image, so remove and re-insert
+    
 
     const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pComboBox->GetEntry( i_rEvent.ItemPosition ) );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pComboBox->GetEntryImage( i_rEvent.ItemPosition  ) );
@@ -4611,7 +4611,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-    // bool localize = xPSI->hasPropertyByName("ResourceResolver");
+    
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
     if ( xPSI->hasPropertyByName("ResourceResolver") )
     {
@@ -4637,18 +4637,18 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
 }
 void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
 {
-    // just disambiguate
+    
     VCLXEdit::disposing( i_rEvent );
 }
 
-//  ----------------------------------------------------
-//  class VCLXFormattedSpinField
-//  ----------------------------------------------------
+
+
+
 void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
-    // Interestingly in the UnoControl API this is
-    // - not derived from XEdit ultimately, (correct ?) - so cut this here ...
-//    VCLXSpinField::ImplGetPropertyIds( rIds );
+    
+    
+
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
@@ -4746,9 +4746,9 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const ::
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXDateField
-//  ----------------------------------------------------
+
+
+
 
 void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4795,7 +4795,7 @@ VCLXDateField::~VCLXDateField()
 {
 }
 
-//change the window type here to match the role
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
 {
     Window* pWindow = GetWindow();
@@ -4806,7 +4806,7 @@ VCLXDateField::~VCLXDateField()
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXDateField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -4814,7 +4814,7 @@ VCLXDateField::~VCLXDateField()
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXDateField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDateField>* ) NULL ),
     VCLXFormattedSpinField::getTypes()
@@ -4944,7 +4944,7 @@ void VCLXDateField::setDate( const util::Date& aDate ) throw(::com::sun::star::u
     {
         pDateField->SetDate( aDate );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pDateField->SetModifyFlag();
         pDateField->Modify();
@@ -5069,7 +5069,7 @@ void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
     {
         pDateField->SetEmptyDate();
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pDateField->SetModifyFlag();
         pDateField->Modify();
@@ -5096,9 +5096,9 @@ sal_Bool VCLXDateField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXTimeField
-//  ----------------------------------------------------
+
+
+
 
 void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5143,7 +5143,7 @@ VCLXTimeField::~VCLXTimeField()
 {
 }
 
-//change the window type here to match the role
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
 {
     Window* pWindow = GetWindow();
@@ -5154,7 +5154,7 @@ VCLXTimeField::~VCLXTimeField()
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXTimeField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -5162,7 +5162,7 @@ VCLXTimeField::~VCLXTimeField()
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXTimeField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTimeField>* ) NULL ),
     VCLXFormattedSpinField::getTypes()
@@ -5177,7 +5177,7 @@ void VCLXTimeField::setTime( const util::Time& aTime ) throw(::com::sun::star::u
     {
         pTimeField->SetTime( aTime );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         SetSynthesizingVCLEvent( sal_True );
         pTimeField->SetModifyFlag();
         pTimeField->Modify();
@@ -5405,9 +5405,9 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXNumericField
-//  ----------------------------------------------------
+
+
+
 
 void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5453,7 +5453,7 @@ VCLXNumericField::~VCLXNumericField()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXNumericField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -5461,7 +5461,7 @@ VCLXNumericField::~VCLXNumericField()
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXNumericField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XNumericField>* ) NULL ),
     VCLXFormattedSpinField::getTypes()
@@ -5474,13 +5474,13 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
     {
-        // shift long value using decimal digits
-        // (e.g., input 105 using 2 digits returns 1,05)
-        // Thus, to set a value of 1,05, insert 105 and 2 digits
+        
+        
+        
         pNumericFormatter->SetValue(
             (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         Edit* pEdit = (Edit*)GetWindow();
         if ( pEdit )
         {
@@ -5749,9 +5749,9 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
 }
 
 
-//    ----------------------------------------------------
-//    class VCLXMetricField
-//    ----------------------------------------------------
+
+
+
 
 void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5810,7 +5810,7 @@ MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::Runt
     return pField;
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXMetricField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -5818,13 +5818,13 @@ MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::Runt
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXMetricField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMetricField>* ) NULL ),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// FIXME: later ...
+
 #define MetricUnitUnoToVcl(a) ((FieldUnit)(a))
 
 #define METRIC_MAP_PAIR(method,parent) \
@@ -5858,10 +5858,10 @@ METRIC_MAP_PAIR(Last,  Field)
     return GetMetricFormatter()->GetCorrectedValue( MetricUnitUnoToVcl( nUnit ) );
 }
 
-// FIXME: acute cut/paste evilness - move this to the parent Edit class ?
+
 void VCLXMetricField::CallListeners()
 {
-    // #107218# Call same listeners like VCL would do after user interaction
+    
     Edit* pEdit = (Edit*)GetWindow();
     if ( pEdit )
     {
@@ -5999,9 +5999,9 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXCurrencyField
-//  ----------------------------------------------------
+
+
+
 
 void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6049,7 +6049,7 @@ VCLXCurrencyField::~VCLXCurrencyField()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXCurrencyField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -6057,7 +6057,7 @@ VCLXCurrencyField::~VCLXCurrencyField()
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXCurrencyField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCurrencyField>* ) NULL ),
     VCLXFormattedSpinField::getTypes()
@@ -6070,13 +6070,13 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     if ( pCurrencyFormatter )
     {
-        // shift long value using decimal digits
-        // (e.g., input 105 using 2 digits returns 1,05)
-        // Thus, to set a value of 1,05, insert 105 and 2 digits
+        
+        
+        
         pCurrencyFormatter->SetValue(
             ImplCalcLongValue( Value, pCurrencyFormatter->GetDecimalDigits() ) );
 
-        // #107218# Call same listeners like VCL would do after user interaction
+        
         Edit* pEdit = (Edit*)GetWindow();
         if ( pEdit )
         {
@@ -6356,9 +6356,9 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXPatternField
-//  ----------------------------------------------------
+
+
+
 
 void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6398,7 +6398,7 @@ VCLXPatternField::~VCLXPatternField()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXPatternField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -6406,7 +6406,7 @@ VCLXPatternField::~VCLXPatternField()
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXPatternField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPatternField>* ) NULL ),
     VCLXFormattedSpinField::getTypes()
@@ -6530,9 +6530,9 @@ void VCLXPatternField::setProperty( const OUString& PropertyName, const ::com::s
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXToolBox
-//  ----------------------------------------------------
+
+
+
 VCLXToolBox::VCLXToolBox()
 {
 }
@@ -6546,9 +6546,9 @@ VCLXToolBox::~VCLXToolBox()
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-//  ----------------------------------------------------
-//  class VCLXFrame
-//  ----------------------------------------------------
+
+
+
 VCLXFrame::VCLXFrame()
 {
 }
@@ -6580,12 +6580,12 @@ throw(::com::sun::star::uno::RuntimeException)
     return VCLXContainer::queryInterface( rType );
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXFrame )
     VCLXContainer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// ::com::sun::star::awt::XView
+
 void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -6605,7 +6605,7 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-// ::com::sun::star::awt::XDevice,
+
 ::com::sun::star::awt::DeviceInfo SAL_CALL VCLXFrame::getInfo()
 throw(::com::sun::star::uno::RuntimeException)
 {

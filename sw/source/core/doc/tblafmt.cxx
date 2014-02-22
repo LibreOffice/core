@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/resid.hxx>
@@ -49,37 +49,37 @@
 
 using ::editeng::SvxBorderLine;
 
-// until SO5PF
+
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
 const sal_uInt16 AUTOFORMAT_ID_358      = 9601;
 const sal_uInt16 AUTOFORMAT_DATA_ID_X   = 9502;
 
-// from SO5
-//! In follow-up versions these IDs' values need to increase
+
+
 const sal_uInt16 AUTOFORMAT_ID_504      = 9801;
 const sal_uInt16 AUTOFORMAT_DATA_ID_504 = 9802;
 
 const sal_uInt16 AUTOFORMAT_DATA_ID_552 = 9902;
 
-// --- from 641 on: CJK and CTL font settings
+
 const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 
-// --- from 680/dr14 on: diagonal frame lines
+
 const sal_uInt16 AUTOFORMAT_ID_680DR14      = 10011;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
-// --- from 680/dr25 on: store strings as UTF-8
+
 const sal_uInt16 AUTOFORMAT_ID_680DR25      = 10021;
 
-// --- from DEV300/overline2 on: overline
+
 const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
 const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
-// --- Bug fix to fdo#31005: Table Autoformats does not save/apply all properties (Writer and Calc)
+
 const sal_uInt16 AUTOFORMAT_ID_31005      = 10041;
 const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
 
-// current version
+
 const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
@@ -90,18 +90,18 @@ SwBoxAutoFmt* SwTableAutoFmt::pDfltBoxAutoFmt = 0;
 
 namespace
 {
-    /// Begins a writer-specific data block. Call before serializing any writer-specific properties.
+    
     sal_uInt64 BeginSwBlock(SvStream& rStream)
     {
-        // We need to write down the offset of the end of the writer-specific data, so that
-        // calc can skip it. We'll only have that value after writing the data, so we
-        // write a placeholder value first, write the data, then jump back and write the
-        // real offset.
+        
+        
+        
+        
 
-        // Note that we explicitly use sal_uInt64 instead of sal_Size (which can be 32
-        // or 64 depending on platform) to ensure 64-bit portability on this front. I don't
-        // actually know if autotbl.fmt as a whole is portable, since that requires all serialization
-        // logic to be written with portability in mind.
+        
+        
+        
+        
         sal_uInt64 whereToWriteEndOfSwBlock = rStream.Tell();
 
         sal_uInt64 endOfSwBlock = 0;
@@ -110,8 +110,8 @@ namespace
         return whereToWriteEndOfSwBlock;
     }
 
-    /// Ends a writer-specific data block. Call after serializing writer-specific properties.
-    /// Closes a corresponding BeginSwBlock call.
+    
+    
     void EndSwBlock(SvStream& rStream, sal_uInt64 whereToWriteEndOfSwBlock)
     {
         sal_uInt64 endOfSwBlock = rStream.Tell();
@@ -144,18 +144,18 @@ namespace
         sal_uInt64 _whereToWriteEndOfBlock;
     };
 
-    /// Checks whether a writer-specific block exists (i.e. size is not zero)
+    
     bool WriterSpecificBlockExists(SvStream &stream)
     {
         sal_uInt64 endOfSwBlock = 0;
         stream.ReadUInt64( endOfSwBlock );
 
-        // end-of-block pointing to itself indicates a zero-size block.
+        
         return endOfSwBlock != stream.Tell();
     }
 }
 
-// Struct with version numbers of the Items
+
 
 struct SwAfVersions
 {
@@ -293,9 +293,9 @@ SwBoxAutoFmt::SwBoxAutoFmt()
     aLinebreak( 0 ),
     aRotateAngle( 0 ),
 
-// FIXME - add attribute IDs for the diagonal line items
-//    aTLBR( RES_... ),
-//    aBLTR( RES_... ),
+
+
+
     aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
     eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
@@ -406,7 +406,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     READ( aHeight,      SvxFontHeightItem  , rVersions.nFontHeightVersion)
     READ( aWeight,      SvxWeightItem      , rVersions.nWeightVersion)
     READ( aPosture,     SvxPostureItem     , rVersions.nPostureVersion)
-    // --- from 641 on: CJK and CTL font settings
+    
     if( AUTOFORMAT_DATA_ID_641 <= nVer )
     {
         READ( aCJKFont,                        SvxFontItem         , rVersions.nFontVersion)
@@ -430,7 +430,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
 
     READ( aBox,         SvxBoxItem         , rVersions.nBoxVersion)
 
-    // --- from 680/dr14 on: diagonal frame lines
+    
     if( nVer >= AUTOFORMAT_DATA_ID_680DR14 )
     {
         READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
@@ -472,13 +472,13 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     if( 0 == rVersions.nNumFmtVersion )
     {
         sal_uInt16 eSys, eLge;
-        // --- from 680/dr25 on: store strings as UTF-8
+        
         rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         sNumFmtString = rStream.ReadUniOrByteString( eCharSet );
         rStream.ReadUInt16( eSys ).ReadUInt16( eLge );
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
-        if ( eSysLanguage == LANGUAGE_SYSTEM )      // from old versions (Calc)
+        if ( eSysLanguage == LANGUAGE_SYSTEM )      
             eSysLanguage = ::GetAppLanguage();
     }
 
@@ -529,11 +529,11 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     aOrientation.Store( rStream, aOrientation.GetVersion(fileVersion) );
     aMargin.Store( rStream, aMargin.GetVersion(fileVersion) );
     aLinebreak.Store( rStream, aLinebreak.GetVersion(fileVersion) );
-    // Calc Rotation from SO5
+    
     aRotateAngle.Store( rStream, aRotateAngle.GetVersion(fileVersion) );
     aRotateMode.Store( rStream, aRotateMode.GetVersion(fileVersion) );
 
-    // --- from 680/dr25 on: store strings as UTF-8
+    
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, sNumFmtString,
         RTL_TEXTENCODING_UTF8);
     rStream.WriteUInt16( (sal_uInt16)eSysLanguage ).WriteUInt16( (sal_uInt16)eNumFmtLanguage );
@@ -575,7 +575,7 @@ sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion 
     rStream.WriteUInt16( aRotateAngle.GetVersion( fileVersion ) );
     rStream.WriteUInt16( aRotateMode.GetVersion( fileVersion ) );
 
-    rStream.WriteUInt16( (sal_uInt16)0 );       // NumberFormat
+    rStream.WriteUInt16( (sal_uInt16)0 );       
 
     return 0 == rStream.GetError();
 }
@@ -622,9 +622,9 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
             delete aBoxAutoFmt[ n ];
 
         SwBoxAutoFmt* pFmt = rNew.aBoxAutoFmt[ n ];
-        if( pFmt )      // if is set -> copy
+        if( pFmt )      
             aBoxAutoFmt[ n ] = new SwBoxAutoFmt( *pFmt );
-        else            // else default
+        else            
             aBoxAutoFmt[ n ] = 0;
     }
 
@@ -662,9 +662,9 @@ void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
     OSL_ENSURE( nPos < 16, "wrong area" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // if is set -> copy
+    if( pFmt )      
         *aBoxAutoFmt[ nPos ] = rNew;
-    else            // else set anew
+    else            
         aBoxAutoFmt[ nPos ] = new SwBoxAutoFmt( rNew );
 }
 
@@ -673,11 +673,11 @@ const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
     OSL_ENSURE( nPos < 16, "wrong area" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // if is set -> copy
+    if( pFmt )      
         return *pFmt;
-    else            // else return the default
+    else            
     {
-        // If it doesn't exist yet:
+        
         if( !pDfltBoxAutoFmt )
             pDfltBoxAutoFmt = new SwBoxAutoFmt;
         return *pDfltBoxAutoFmt;
@@ -692,7 +692,7 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
     OSL_ENSURE( nPos < 16, "wrong area" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( !pFmt )     // if is set -> copy
+    if( !pFmt )     
     {
         pFmt = new SwBoxAutoFmt;
         aBoxAutoFmt[ nPos ] = pFmt;
@@ -723,9 +723,9 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
     if( UPDATE_BOX & eFlags )
     {
         pFmt->SetBox( (SvxBoxItem&)rSet.Get( RES_BOX ) );
-// FIXME - add attribute IDs for the diagonal line items
-//        pFmt->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
-//        pFmt->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
+
+
+
         pFmt->SetBackground( (SvxBrushItem&)rSet.Get( RES_BACKGROUND ) );
         pFmt->SetTextOrientation(static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR)));
         pFmt->SetVerticalAlignment(static_cast<const SwFmtVertOrient&>(rSet.Get(RES_VERT_ORIENT)));
@@ -740,13 +740,13 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
                                     ::GetAppLanguage());
         else
         {
-            // default
+            
             pFmt->SetValueFormat( OUString(), LANGUAGE_SYSTEM,
                                   ::GetAppLanguage() );
         }
     }
 
-    // we cannot handle the rest, that's specific to StarCalc
+    
 }
 
 void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
@@ -762,7 +762,7 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetHeight() );
             rSet.Put( rChg.GetWeight() );
             rSet.Put( rChg.GetPosture() );
-            // do not insert empty CJK font
+            
             const SvxFontItem& rCJKFont = rChg.GetCJKFont();
             if (!rCJKFont.GetStyleName().isEmpty())
             {
@@ -777,7 +777,7 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
                 rSet.Put( rChg.GetWeight(), RES_CHRATR_CJK_WEIGHT );
                 rSet.Put( rChg.GetPosture(), RES_CHRATR_CJK_POSTURE );
             }
-            // do not insert empty CTL font
+            
             const SvxFontItem& rCTLFont = rChg.GetCTLFont();
             if (!rCTLFont.GetStyleName().isEmpty())
             {
@@ -808,9 +808,9 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
         if( IsFrame() )
         {
             rSet.Put( rChg.GetBox() );
-// FIXME - uncomment the lines to put the diagonal line items
-//            rSet.Put( rChg.GetTLBR() );
-//            rSet.Put( rChg.GetBLTR() );
+
+
+
         }
         if( IsBackground() )
             rSet.Put( rChg.GetBackground() );
@@ -837,7 +837,7 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
         }
     }
 
-    // we cannot handle the rest, that's specific to StarCalc
+    
 }
 
 void SwTableAutoFmt::RestoreTableProperties(SwTable &table) const
@@ -907,7 +907,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
     {
         sal_Bool b;
-        // --- from 680/dr25 on: store strings as UTF-8
+        
         rtl_TextEncoding eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         m_aName = rStream.ReadUniOrByteString( eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
@@ -965,7 +965,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     sal_Bool b;
     rStream.WriteUInt16( nVal );
-    // --- from 680/dr25 on: store strings as UTF-8
+    
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
     rStream.WriteUInt16( nStrResId );
@@ -991,9 +991,9 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     for( int i = 0; bRet && i < 16; ++i )
     {
         SwBoxAutoFmt* pFmt = aBoxAutoFmt[ i ];
-        if( !pFmt )     // if not set -> write default
+        if( !pFmt )     
         {
-            // If it doesn't exist yet:
+            
             if( !pDfltBoxAutoFmt )
                 pDfltBoxAutoFmt = new SwBoxAutoFmt;
             pFmt = pDfltBoxAutoFmt;
@@ -1061,13 +1061,13 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     for( i = 0; i < 4; ++i )
         pNew->SetBoxFmt( aNew, i );
 
-    // 70% gray
+    
     aBrushItem.SetColor( RGB_COLORDATA( 0x4d, 0x4d, 0x4d ) );
     aNew.SetBackground( aBrushItem );
     for( i = 4; i <= 12; i += 4 )
         pNew->SetBoxFmt( aNew, i );
 
-    // 20% gray
+    
     aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
     aNew.SetBackground( aBrushItem );
     aColor.SetColor( COL_BLACK );
@@ -1129,7 +1129,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
     sal_Bool bRet = 0 == rStream.GetError();
     if (bRet)
     {
-        // Attention: We need to read a general Header here
+        
         sal_uInt16 nVal = 0;
         rStream.ReadUInt16( nVal );
         bRet = 0 == rStream.GetError();
@@ -1138,7 +1138,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
         {
             SwAfVersions aVersions;
 
-            // Default version is 5.0, unless we detect an old format ID.
+            
             sal_uInt16 nFileVers = SOFFICE_FILEFORMAT_50;
             if(nVal < AUTOFORMAT_ID_31005)
                 nFileVers = SOFFICE_FILEFORMAT_40;
@@ -1161,7 +1161,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                aVersions.Load( rStream, nVal );        // Item versions
+                aVersions.Load( rStream, nVal );        
 
                 SwTableAutoFmt* pNew;
                 sal_uInt16 nAnz = 0;
@@ -1200,15 +1200,15 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
     {
         rStream.SetVersion(AUTOFORMAT_FILE_VERSION);
 
-        // Attention: We need to save a general Header here
+        
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream.WriteUInt16( nVal )
-               .WriteUChar( (sal_uInt8)2 ) // Character count of the Header including this value
+               .WriteUChar( (sal_uInt8)2 ) 
                .WriteUChar( (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
 
         bRet = 0 == rStream.GetError();
 
-        // Write this version number for all attributes
+        
         m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
                 rStream, AUTOFORMAT_FILE_VERSION);
 

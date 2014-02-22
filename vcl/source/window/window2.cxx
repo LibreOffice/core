@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,23 +48,23 @@
 
 using namespace com::sun::star;
 
-// =======================================================================
+
 
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
 
-// =======================================================================
+
 
 struct ImplFocusDelData : public ImplDelData
 {
     Window*         mpFocusWin;
 };
 
-// =======================================================================
+
 
 bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
 {
-    // check for overlapping window
+    
     pTestWindow = pTestWindow->ImplGetFirstOverlapWindow();
     const Window* pTempWindow = pTestWindow;
     const Window* pThisWindow = ImplGetFirstOverlapWindow();
@@ -90,7 +90,7 @@ bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
     }
     while ( pTempWindow );
 
-    // move window to same level
+    
     if ( pThisWindow->mpWindowImpl->mpOverlapWindow != pTestWindow->mpWindowImpl->mpOverlapWindow )
     {
         sal_uInt16 nThisLevel = 0;
@@ -136,7 +136,7 @@ bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
         }
     }
 
-    // if TestWindow is before ThisWindow, it is in front
+    
     pTempWindow = pTestWindow;
     do
     {
@@ -149,7 +149,7 @@ bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
     return false;
 }
 
-// =======================================================================
+
 
 void Window::ImplSaveOverlapBackground()
 {
@@ -192,7 +192,7 @@ void Window::ImplSaveOverlapBackground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
 {
@@ -233,7 +233,7 @@ bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplDeleteOverlapBackground()
 {
@@ -248,7 +248,7 @@ void Window::ImplDeleteOverlapBackground()
             mpWindowImpl->mpOverlapData->mpSaveBackRgn = NULL;
         }
 
-        // remove window from the list
+        
         if ( mpWindowImpl->mpFrameData->mpFirstBackWin == this )
             mpWindowImpl->mpFrameData->mpFirstBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
         else
@@ -262,15 +262,15 @@ void Window::ImplDeleteOverlapBackground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
     Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
     while ( pWindow )
     {
-        // remember next window here already, as this window could
-        // be removed within the next if clause from the list
+        
+        
         Window* pNext = pWindow->mpWindowImpl->mpOverlapData->mpNextBackWin;
 
         if ( ImplIsWindowInFront( pWindow ) )
@@ -295,7 +295,7 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ShowFocus( const Rectangle& rRect )
 {
@@ -305,7 +305,7 @@ void Window::ShowFocus( const Rectangle& rRect )
 
     ImplWinData* pWinData = ImplGetWinData();
 
-    // native themeing suggest not to use focus rects
+    
     if( ! ( mpWindowImpl->mbUseNativeFocus &&
             IsNativeWidgetEnabled() ) )
     {
@@ -342,7 +342,7 @@ void Window::ShowFocus( const Rectangle& rRect )
     mpWindowImpl->mbInShowFocus = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::HideFocus()
 {
@@ -351,7 +351,7 @@ void Window::HideFocus()
         return;
     mpWindowImpl->mbInHideFocus = true;
 
-    // native themeing can suggest not to use focus rects
+    
     if( ! ( mpWindowImpl->mbUseNativeFocus &&
             IsNativeWidgetEnabled() ) )
     {
@@ -377,7 +377,7 @@ void Window::HideFocus()
     mpWindowImpl->mbInHideFocus = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -391,7 +391,7 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
         return;
     aRect.Justify();
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !pOutDev->ImplGetGraphics() )
@@ -412,7 +412,7 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
 {
@@ -427,7 +427,7 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     OutputDevice *pOutDev = GetOutDev();
     Polygon aPoly( pOutDev->ImplLogicToDevicePixel( rPoly ) );
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !pOutDev->ImplGetGraphics() )
@@ -449,7 +449,7 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -477,7 +477,7 @@ void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     mpWindowImpl->mbTrackVisible              = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::HideTracking()
 {
@@ -490,7 +490,7 @@ void Window::HideTracking()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -508,7 +508,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
         if ( !IsDeviceOutputNecessary() )
             return;
 
-        // we need a graphics
+        
         if ( !mpGraphics )
         {
             if ( !pOutDev->ImplGetGraphics() )
@@ -554,7 +554,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
 {
@@ -574,7 +574,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
         if ( !IsDeviceOutputNecessary() )
             return;
 
-        // we need a graphics
+        
         if ( !mpGraphics )
         {
             if ( !pOutDev->ImplGetGraphics() )
@@ -607,21 +607,21 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Bei Button-Repeat muessen wir den Timeout umsetzen
+    
     if ( pSVData->maWinData.mnTrackFlags & STARTTRACK_BUTTONREPEAT )
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
 
-    // Tracking-Event erzeugen
+    
     Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
     if( ImplIsAntiparallel() )
     {
-        // - RTL - re-mirror frame pos at pChild
+        
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aMousePos );
     }
@@ -634,7 +634,7 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::StartTracking( sal_uInt16 nFlags )
 {
@@ -663,7 +663,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
     CaptureMouse();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::EndTracking( sal_uInt16 nFlags )
 {
@@ -671,8 +671,8 @@ void Window::EndTracking( sal_uInt16 nFlags )
 
     if ( pSVData->maWinData.mpTrackWin == this )
     {
-        // due to DbgChkThis in brackets, as the window could be destroyed
-        // in the handler
+        
+        
         {
 
         if ( pSVData->maWinData.mpTrackTimer )
@@ -686,13 +686,13 @@ void Window::EndTracking( sal_uInt16 nFlags )
         ReleaseMouse();
         }
 
-        // call EndTracking if required
+        
         if ( !(nFlags & ENDTRACK_DONTCALLHDL) )
         {
             Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
             if( ImplIsAntiparallel() )
             {
-                // - RTL - re-mirror frame pos at pChild
+                
                 const OutputDevice *pOutDev = GetOutDev();
                 pOutDev->ReMirror( aMousePos );
             }
@@ -706,14 +706,14 @@ void Window::EndTracking( sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Window::IsTracking() const
 {
     return (ImplGetSVData()->maWinData.mpTrackWin == this);
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::StartAutoScroll( sal_uInt16 nFlags )
 {
@@ -730,7 +730,7 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
     pSVData->maAppData.mpWheelWindow = new ImplWheelWindow( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::EndAutoScroll()
 {
@@ -746,7 +746,7 @@ void Window::EndAutoScroll()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
                              const Point& rDestOff, VirtualDevice& rSaveDevice )
@@ -765,10 +765,10 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
             const Point     aPixOffset( rSaveDevice.LogicToPixel( rDestOff ) );
             const bool      bMap = rSaveDevice.IsMapModeEnabled();
 
-            // move clip region to have the same distance to DestOffset
+            
             aClip.Move( aPixOffset.X() - aPixPos.X(), aPixOffset.Y() - aPixPos.Y() );
 
-            // set pixel clip region
+            
             rSaveDevice.EnableMapMode( false );
             rSaveDevice.SetClipRegion( aClip );
             rSaveDevice.EnableMapMode( bMap );
@@ -780,7 +780,7 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uIntPtr Window::SaveFocus()
 {
@@ -796,7 +796,7 @@ sal_uIntPtr Window::SaveFocus()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
 {
@@ -819,7 +819,7 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetZoom( const Fraction& rZoom )
 {
@@ -830,14 +830,14 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 inline long WinFloatRound( double fVal )
 {
     return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetZoomedPointFont( const Font& rFont )
 {
@@ -857,8 +857,8 @@ void Window::SetZoomedPointFont( const Font& rFont )
         aFont.SetSize( aSize );
         SetPointFont( aFont );
 
-        // Use another font if the representation is to be scaled,
-        // and the actual font is not scalable
+        
+        
         FontMetric aMetric = GetFontMetric();
         long       nFontDiff = std::abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
         if ( (aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2) )
@@ -877,7 +877,7 @@ void Window::SetZoomedPointFont( const Font& rFont )
         SetPointFont( rFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 long Window::CalcZoom( long nCalc ) const
 {
@@ -893,7 +893,7 @@ long Window::CalcZoom( long nCalc ) const
     return nCalc;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlFont()
 {
@@ -905,7 +905,7 @@ void Window::SetControlFont()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlFont( const Font& rFont )
 {
@@ -927,7 +927,7 @@ void Window::SetControlFont( const Font& rFont )
     StateChanged( STATE_CHANGE_CONTROLFONT );
 }
 
-// -----------------------------------------------------------------------
+
 
 Font Window::GetControlFont() const
 {
@@ -940,7 +940,7 @@ Font Window::GetControlFont() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlForeground()
 {
@@ -952,7 +952,7 @@ void Window::SetControlForeground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlForeground( const Color& rColor )
 {
@@ -976,7 +976,7 @@ void Window::SetControlForeground( const Color& rColor )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlBackground()
 {
@@ -988,7 +988,7 @@ void Window::SetControlBackground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlBackground( const Color& rColor )
 {
@@ -1012,7 +1012,7 @@ void Window::SetControlBackground( const Color& rColor )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Window::CalcWindowSize( const Size& rOutSz ) const
 {
@@ -1022,7 +1022,7 @@ Size Window::CalcWindowSize( const Size& rOutSz ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Window::CalcOutputSize( const Size& rWinSz ) const
 {
@@ -1032,7 +1032,7 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
 {
@@ -1044,7 +1044,7 @@ Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
     return aFont;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
 {
@@ -1060,7 +1060,7 @@ long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
     return nP;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyByLineSize )
 {
@@ -1074,7 +1074,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyBy
             nNewPos -= pScrl->GetPageSize();
         else
         {
-            // allowing both chunked and continuous scrolling
+            
             if(isMultiplyByLineSize){
                 nN*=pScrl->GetLineSize();
             }
@@ -1157,7 +1157,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                     }
                     else
                     {
-                        // Mobile / touch scrolling section
+                        
                         const Point & deltaPoint = rCmd.GetMousePosPixel();
 
                         double deltaXInPixels = double(deltaPoint.X());
@@ -1169,9 +1169,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             double visSizeX = double(pHScrl->GetVisibleSize());
                             double ratioX = deltaXInPixels / double(winSize.getWidth());
                             long deltaXInLogic = long(visSizeX * ratioX);
-                            // Touch need to work by pixels. Did not apply this to
-                            // Android, as android code may require adaptations
-                            // to work with this scrolling code
+                            
+                            
+                            
 #ifndef IOS
                             long lineSizeX = pHScrl->GetLineSize();
 
@@ -1201,9 +1201,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             double ratioY = deltaYInPixels / double(winSize.getHeight());
                             long deltaYInLogic = long(visSizeY * ratioY);
 
-                            // Touch need to work by pixels. Did not apply this to
-                            // Android, as android code may require adaptations
-                            // to work with this scrolling code
+                            
+                            
+                            
 #ifndef IOS
                             long lineSizeY = pVScrl->GetLineSize();
                             if(lineSizeY)
@@ -1252,15 +1252,15 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
 
 
 
-// Note that when called for COMMAND_WHEEL above, despite its name,
-// pVScrl isn't necessarily the vertical scroll bar. Depending on
-// whether the scroll is horizontal or vertical, it is either the
-// horizontal or vertical scroll bar. nY is correspondingly either
-// the horizontal or vertical scroll amount.
+
+
+
+
+
+
 
 void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
                                ScrollBar* pVScrl, long nY )
@@ -1276,7 +1276,7 @@ DockingManager* Window::GetDockingManager()
 
 void Window::EnableDocking( bool bEnable )
 {
-    // update list of dockable windows
+    
     if( bEnable )
         ImplGetDockingManager()->AddWindow( this );
     else
@@ -1284,7 +1284,7 @@ void Window::EnableDocking( bool bEnable )
 }
 
 
-// retrieves the list of owner draw decorated windows for this window hiearchy
+
 ::std::vector<Window *>& Window::ImplGetOwnerDrawList()
 {
     return ImplGetTopmostFrameWindow()->mpWindowImpl->mpFrameData->maOwnerDrawList;
@@ -1318,7 +1318,7 @@ const OString& Window::GetUniqueId() const
     return mpWindowImpl->maUniqId;
 }
 
-// --------- old inline methods ---------------
+
 
 Window* Window::ImplGetWindow()
 {
@@ -1755,9 +1755,9 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
                         rNewSize.Height()+mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder ) );
 }
 
-//When a widget wants to renegotiate layout, get toplevel parent dialog and call
-//resize on it. Mark all intermediate containers (or container-alike) widgets
-//as dirty for the size remains unchanged, but layout changed circumstances
+
+
+
 namespace
 {
     bool queue_ungrouped_resize(Window *pOrigWindow)
@@ -1802,8 +1802,8 @@ void Window::queue_resize()
 
     if (bSomeoneCares)
     {
-        //fdo#57090 force a resync of the borders of the borderwindow onto this
-        //window in case they have changed
+        
+        
         Window* pBorderWindow = ImplGetBorderWindow();
         if (pBorderWindow)
             pBorderWindow->Resize();
@@ -2001,7 +2001,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "use-markup")
     {
-        //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
+        
         SAL_WARN_IF(toBool(rValue), "vcl.layout", "Use pango attributes instead of mark-up");
     }
     else
@@ -2328,7 +2328,7 @@ void Window::set_non_homogeneous(bool bNonHomogeneous)
 void Window::add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
-    //To-Do, multiple groups
+    
     pWindowImpl->m_xSizeGroup = xGroup;
     pWindowImpl->m_xSizeGroup->insert(this);
     if (VCL_SIZE_GROUP_NONE != pWindowImpl->m_xSizeGroup->get_mode())
@@ -2338,7 +2338,7 @@ void Window::add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup)
 void Window::remove_from_all_size_groups()
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
-    //To-Do, multiple groups
+    
     if (pWindowImpl->m_xSizeGroup)
     {
         if (VCL_SIZE_GROUP_NONE != pWindowImpl->m_xSizeGroup->get_mode())

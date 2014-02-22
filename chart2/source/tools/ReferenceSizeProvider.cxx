@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ReferenceSizeProvider.hxx"
@@ -79,7 +79,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
         bool bHasOldRefSize(
             xTitleProp->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
 
-        // set from auto-resize on to off -> adapt font sizes at XFormattedStrings
+        
         if( bHasOldRefSize && ! useAutoScale())
         {
             uno::Sequence< uno::Reference< XFormattedString > > aStrSeq(
@@ -104,7 +104,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
 {
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ));
 
-    // DataSeries/Points
+    
     ::std::vector< Reference< XDataSeries > > aSeries(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
@@ -114,7 +114,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
         Reference< beans::XPropertySet > xSeriesProp( *aIt, uno::UNO_QUERY );
         if( xSeriesProp.is())
         {
-            // data points
+            
             Sequence< sal_Int32 > aPointIndexes;
             try
             {
@@ -130,7 +130,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
                 ASSERT_EXCEPTION( ex );
             }
 
-            //it is important to correct the datapoint properties first as they do reference the series properties
+            
             setValuesAtPropertySet( xSeriesProp );
         }
     }
@@ -162,7 +162,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
             {
                 xProp->setPropertyValue( aRefSizeName, uno::Any());
 
-                // adapt font sizes
+                
                 if( bAdaptFontSizes )
                     RelativeSizeHelper::adaptFontSizes( xProp, aOldRefSize, aRefSize );
             }
@@ -192,12 +192,12 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
         }
         catch (const uno::Exception&)
         {
-            // unknown property -> state stays unknown
+            
         }
     }
 
-    // curent state unknown => nothing changes.  Otherwise if current state
-    // differs from state so far, we have an ambiguity
+    
+    
     if( rInOutState == AUTO_RESIZE_UNKNOWN )
     {
         rInOutState = eSingleState;
@@ -234,33 +234,33 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
 {
     AutoResizeState eResult = AUTO_RESIZE_UNKNOWN;
 
-    // Main Title
+    
     Reference< XTitled > xDocTitled( xChartDoc, uno::UNO_QUERY );
     if( xDocTitled.is())
         impl_getAutoResizeFromTitled( xDocTitled, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 
-    // diagram is needed by the rest of the objects
+    
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ), uno::UNO_QUERY );
     if( ! xDiagram.is())
         return eResult;
 
-    // Sub Title
+    
     Reference< XTitled > xDiaTitled( xDiagram, uno::UNO_QUERY );
     if( xDiaTitled.is())
         impl_getAutoResizeFromTitled( xDiaTitled, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 
-    // Legend
+    
     Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
     if( xLegendProp.is())
         getAutoResizeFromPropSet( xLegendProp, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 
-    // Axes (incl. Axis Titles)
+    
     Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
     {
@@ -276,7 +276,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         }
     }
 
-    // DataSeries/Points
+    
     ::std::vector< Reference< XDataSeries > > aSeries(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
@@ -290,7 +290,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
             if( eResult == AUTO_RESIZE_AMBIGUOUS )
                 return eResult;
 
-            // data points
+            
             Sequence< sal_Int32 > aPointIndexes;
             try
             {
@@ -327,23 +327,23 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
 {
     m_bUseAutoScale = (eNewState == AUTO_RESIZE_YES);
 
-    // Main Title
+    
     impl_setValuesAtTitled( Reference< XTitled >( m_xChartDoc, uno::UNO_QUERY ));
 
-    // diagram is needed by the rest of the objects
+    
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ), uno::UNO_QUERY );
     if( ! xDiagram.is())
         return;
 
-    // Sub Title
+    
     impl_setValuesAtTitled( Reference< XTitled >( xDiagram, uno::UNO_QUERY ));
 
-    // Legend
+    
     Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
     if( xLegendProp.is())
         setValuesAtPropertySet( xLegendProp );
 
-    // Axes (incl. Axis Titles)
+    
     Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
     {
@@ -353,13 +353,13 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
         impl_setValuesAtTitled( Reference< XTitled >( aAxes[i], uno::UNO_QUERY ));
     }
 
-    // DataSeries/Points
+    
     setValuesAtAllDataSeries();
 
-    // recalculate new state (in case it stays unknown or is ambiguous
+    
     m_bUseAutoScale = (getAutoResizeState( m_xChartDoc ) == AUTO_RESIZE_YES);
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

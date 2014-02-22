@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -148,7 +148,7 @@ void MetadatableTest::test()
 
     m1.m_bInUndo = true;
     try {
-        m2.SetMetadataReference(id1); // steal!
+        m2.SetMetadataReference(id1); 
     } catch (lang::IllegalArgumentException &) {
         CPPUNIT_FAIL("set duplicate to undo failed");
     }
@@ -177,12 +177,12 @@ void MetadatableTest::test()
     CPPUNIT_ASSERT_MESSAGE("duplicate from undo",
             m3.GetMetadataReference().Second.isEmpty());
 
-    m4.EnsureMetadataReference(); // new!
+    m4.EnsureMetadataReference(); 
     beans::StringPair m4id(m4.GetMetadataReference());
     CPPUNIT_ASSERT_MESSAGE("ensure on duplicate",
             !m4id.Second.isEmpty() && !(m4id == id1));
 
-    MockMetadatable mc1(*pRegClip, true); // in clipboard
+    MockMetadatable mc1(*pRegClip, true); 
     MockMetadatable mc2(*pRegClip, true);
     MockMetadatable mc3(*pRegClip, true);
     MockMetadatable mc4(*pRegClip, true);
@@ -211,21 +211,21 @@ void MetadatableTest::test()
     CPPUNIT_ASSERT_MESSAGE("remove failed",
             mc2.GetMetadataReference().Second.isEmpty());
 
-    // set up mc2 as copy of m2 and mc3 as copy of m3
+    
     mc3.RegisterAsCopyOf(m3);
     CPPUNIT_ASSERT_MESSAGE("copy to clipboard (latent)",
             mc3.GetMetadataReference().Second.isEmpty() );
     mc2.RegisterAsCopyOf(m2);
     CPPUNIT_ASSERT_MESSAGE("copy to clipboard (non-latent)",
             mc2.GetMetadataReference() == id1);
-    // paste mc2 to m2p and mc3 to m3p
+    
     m2p.RegisterAsCopyOf(mc2);
     CPPUNIT_ASSERT_MESSAGE("paste from clipboard (non-latent)",
             m2p.GetMetadataReference().Second.isEmpty() );
     m3p.RegisterAsCopyOf(mc3);
     CPPUNIT_ASSERT_MESSAGE("paste from clipboard (latent)",
             m3p.GetMetadataReference().Second.isEmpty() );
-    // delete m2, m2p, m3
+    
     m2.RemoveMetadataReference();
     CPPUNIT_ASSERT_MESSAGE("remove failed",
             m2.GetMetadataReference().Second.isEmpty());
@@ -241,18 +241,18 @@ void MetadatableTest::test()
             m3.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("paste-remove (latent)",
             m3p.GetMetadataReference() == id1);
-    // delete mc2
+    
     mc2.SetMetadataReference(beans::StringPair());
     CPPUNIT_ASSERT_MESSAGE("in clipboard becomes non-latent",
             mc3.GetMetadataReference().Second.isEmpty() );
-    // paste mc2
+    
     m2p.RegisterAsCopyOf(mc2);
     CPPUNIT_ASSERT_MESSAGE("remove-paste",
             m2p.GetMetadataReference().Second.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("remove-paste (stolen)",
             m3p.GetMetadataReference() == id1);
 
-    // auto-detect stream
+    
     m5.SetMetadataReference(id3e);
     CPPUNIT_ASSERT_MESSAGE("auto-detect (content)",
             m5.GetMetadataReference() == id3);

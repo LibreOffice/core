@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mysqlc_general.hxx"
@@ -187,11 +187,11 @@ void SAL_CALL OPreparedStatement::close()
         clearParameters();
         OCommonStatement::close();
     } catch (const SQLException &) {
-        // If we get an error, ignore
+        
     }
 
-    // Remove this Statement object from the Connection object's
-    // list
+    
+    
 }
 /* }}} */
 
@@ -648,7 +648,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             break;
         }
     }
-    // run through
+    
 
     case DataType::CHAR:
     case DataType::VARCHAR:
@@ -675,7 +675,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             break;
         }
     }
-    // run through if we couldn't set a float value
+    
 
     case DataType::DOUBLE:
     {

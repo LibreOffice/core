@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cassert>
@@ -123,8 +123,8 @@ static bool ImpIsEmptyURL( const OUString& rURL )
     if( rURL.isEmpty() )
         return true;
 
-    // #i13140# Also compare against 'toplevel' URLs. which also
-    // result in empty filename strings.
+    
+    
     if( rURL.equalsAscii( "#./" ) )
         return true;
 
@@ -170,7 +170,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
 {
     SvXMLImportContext * pContext = NULL;
 
-    // #i68101#
+    
     if( p_nPrefix == XML_NAMESPACE_SVG &&
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
@@ -186,7 +186,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     }
     else if( p_nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_THUMBNAIL ) )
     {
-        // search attributes for xlink:href
+        
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
         {
@@ -206,7 +206,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     }
     else
     {
-        // create text cursor on demand
+        
         if( !mxCursor.is() )
         {
             uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
@@ -221,14 +221,14 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
                     xTxtImport->SetCursor( mxCursor );
                 }
 
-                // remember old list item and block (#91964#) and reset them
-                // for the text frame
+                
+                
                 xTxtImport->PushListContext();
                 mbListContextPushed = true;
             }
         }
 
-        // if we have a text cursor, lets  try to import some text
+        
         if( mxCursor.is() )
         {
             pContext = GetImport().GetTextImport()->CreateTextChildContext(
@@ -236,7 +236,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
         }
     }
 
-    // call parent for content
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
 
@@ -245,7 +245,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
 
 void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    // get the glue points container for this shape if its not already there
+    
     if( !mxGluePoints.is() )
     {
         uno::Reference< drawing::XGluePointsSupplier > xSupplier( mxShape, uno::UNO_QUERY );
@@ -268,7 +268,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
 
     sal_Int32 nId = -1;
 
-    // read attributes for the 3DScene
+    
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
@@ -339,20 +339,20 @@ void SdXMLShapeContext::EndElement()
 {
     if(mxCursor.is())
     {
-        // delete addition newline
+        
         const OUString aEmpty;
         mxCursor->gotoEnd( sal_False );
         mxCursor->goLeft( 1, sal_True );
         mxCursor->setString( aEmpty );
 
-        // reset cursor
+        
         GetImport().GetTextImport()->ResetCursor();
     }
 
     if(mxOldCursor.is())
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
 
-    // reinstall old list item (if necessary) #91964#
+    
     if (mbListContextPushed) {
         GetImport().GetTextImport()->PopListContext();
     }
@@ -395,7 +395,7 @@ void SdXMLShapeContext::EndElement()
         }
         else
         {
-            // in draw use the Bookmark property
+            
             Reference< beans::XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
             xSet->setPropertyValue( sBookmark, Any( msHyperlink ) );
             xSet->setPropertyValue("OnClick", Any( ::com::sun::star::presentation::ClickAction_DOCUMENT ) );
@@ -414,7 +414,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 {
     if(xShape.is())
     {
-        // set shape local
+        
         mxShape = xShape;
 
         if(!maShapeName.isEmpty())
@@ -448,7 +448,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             OSL_FAIL( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
 
-        // #107848#
+        
         if(!mbTemporaryShape && (!GetImport().HasTextImport()
             || !GetImport().GetTextImport()->IsInsideDeleteContext()))
         {
@@ -461,10 +461,10 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             GetImport().getInterfaceToIdentifierMapper().registerReference( maShapeId, xRef );
         }
 
-        // #91065# count only if counting for shape import is enabled
+        
         if(GetImport().GetShapeImport()->IsHandleProgressBarEnabled())
         {
-            // #80365# increment progress bar at load once for each draw object
+            
             GetImport().GetProgressBarHelper()->Increment();
         }
     }
@@ -534,37 +534,37 @@ void SdXMLShapeContext::SetTransformation()
 
             if(maSize.Width != 1 || maSize.Height != 1)
             {
-                // take care there are no zeros used by error
+                
                 if(0 == maSize.Width)
                     maSize.Width = 1;
                 if(0 == maSize.Height)
                     maSize.Height = 1;
 
-                // set global size. This should always be used.
+                
                 maUsedTransformation.scale(maSize.Width, maSize.Height);
             }
 
             if(maPosition.X != 0 || maPosition.Y != 0)
             {
-                // if global position is used, add it to transformation
+                
                 maUsedTransformation.translate(maPosition.X, maPosition.Y);
             }
 
             if(mnTransform.NeedsAction())
             {
-                // transformation is used, apply to object.
-                // NOTICE: The transformation is applied AFTER evtl. used
-                // global positioning and scaling is used, so any shear or
-                // rotate used herein is applied around the (0,0) position
-                // of the PAGE object !!!
+                
+                
+                
+                
+                
                 ::basegfx::B2DHomMatrix aMat;
                 mnTransform.GetFullTransform(aMat);
 
-                // now add to transformation
+                
                 maUsedTransformation *= aMat;
             }
 
-            // now set transformation for this object
+            
             uno::Any aAny;
             drawing::HomogenMatrix3 aMatrix;
 
@@ -600,7 +600,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
         {
             XMLPropStyleContext* pDocStyle = NULL;
 
-            // set style on shape
+            
             if(maDrawStyleName.isEmpty())
                 break;
 
@@ -664,7 +664,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             }
                             else
                             {
-                                // get graphics familie
+                                
                                 xFamilies->getByName("graphics") >>= xFamily;
                                 aStyleName = GetImport().GetStyleDisplayName(
                                     XML_STYLE_FAMILY_SD_GRAPHICS_ID,
@@ -686,7 +686,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             {
                 try
                 {
-                    // set style on object
+                    
                     uno::Any aAny;
                     aAny <<= xStyle;
                     xPropSet->setPropertyValue("Style", aAny);
@@ -697,19 +697,19 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
             }
 
-            // if this is an auto style, set its properties
+            
             if(bAutoStyle && pDocStyle)
             {
-                // set PropertySet on object
+                
                 pDocStyle->FillPropertySet(xPropSet);
             }
 
         } while(false);
 
-        // try to set text auto style
+        
         do
         {
-            // set style on shape
+            
             if( maTextStyleName.isEmpty() )
                 break;
 
@@ -717,11 +717,11 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 break;
 
             const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
-            XMLPropStyleContext* pStyle = PTR_CAST( XMLPropStyleContext, pTempStyle ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+            XMLPropStyleContext* pStyle = PTR_CAST( XMLPropStyleContext, pTempStyle ); 
             if( pStyle == NULL )
                 break;
 
-            // set PropertySet on object
+            
             pStyle->FillPropertySet(xPropSet);
 
         } while(false);
@@ -769,8 +769,8 @@ void SdXMLShapeContext::SetThumbnail()
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sProperty ) )
         {
-            // load the thumbnail graphic and export it to a wmf stream so we can set
-            // it at the api
+            
+            
 
             const OUString aInternalURL( GetImport().ResolveGraphicObjectURL( maThumbnailURL, sal_False ) );
             xPropSet->setPropertyValue( sProperty, uno::makeAny( aInternalURL ) );
@@ -781,7 +781,7 @@ void SdXMLShapeContext::SetThumbnail()
     }
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( (XML_NAMESPACE_DRAW == nPrefix) || (XML_NAMESPACE_DRAW_EXT == nPrefix) )
@@ -874,12 +874,12 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         }
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
-            // because of #85127# take svg:transform into account and hanle like
-            // draw:transform for compatibility
+            
+            
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
 
-        // #i68101#
+        
         else if( IsXMLToken( rLocalName, XML_TITLE ) )
         {
             maShapeTitle = rValue;
@@ -924,7 +924,7 @@ void SdXMLShapeContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImport
 
     if(!mxGluePoints.is() && pCandidate)
     {
-        // try to rescue GluePoints from rCandidate to local if we not yet have GluePoints by copying them
+        
         uno::Reference< drawing::XGluePointsSupplier > xSourceSupplier( pCandidate->getShape(), uno::UNO_QUERY );
         if( !xSourceSupplier.is() )
             return;
@@ -939,7 +939,7 @@ void SdXMLShapeContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImport
 
         if(nSourceCount)
         {
-            // rCandidate has GluePoints; prepare the GluePoint container for the local shape
+            
             uno::Reference< drawing::XGluePointsSupplier > xSupplier( mxShape, uno::UNO_QUERY );
             if( !xSupplier.is() )
                 return;
@@ -955,20 +955,20 @@ void SdXMLShapeContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImport
             {
                 const sal_Int32 nSourceIdentifier = aSourceIdSequence[nSourceIndex];
 
-                // loop over GluePoints which are UserDefined (avoid the auto mapped ones)
+                
                 if((xSourceGluePoints->getByIdentifier( nSourceIdentifier ) >>= aSourceGluePoint)
                     && aSourceGluePoint.IsUserDefined)
                 {
-                    // get original mappingID back, this is the draw:id imported with a draw:glue-point
+                    
                     const sal_Int32 nDestinnationId = xSourceShapeImportHelper->findGluePointMapping(
                         pCandidate->getShape(),
                         nSourceIdentifier );
 
                     if(-1 != nSourceIdentifier)
                     {
-                        // if we got that we are able to add a copy of that GluePoint to the local
-                        // context and xShape since we have all information that the source shape
-                        // and context had at import time
+                        
+                        
+                        
                         try
                         {
                             const sal_Int32 nInternalId = mxGluePoints->insert( uno::makeAny( aSourceGluePoint ) );
@@ -1003,7 +1003,7 @@ SdXMLRectShapeContext::~SdXMLRectShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
@@ -1021,15 +1021,15 @@ void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
 void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create rectangle shape
+    
     AddShape("com.sun.star.drawing.RectangleShape");
     if(mxShape.is())
     {
-        // Add, set Style and properties from base shape
+        
         SetStyle();
         SetLayer();
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         if(mnRadius)
@@ -1072,7 +1072,7 @@ SdXMLLineShapeContext::~SdXMLLineShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_SVG == nPrefix )
@@ -1108,19 +1108,19 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
 void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // #85920# use SetTransformation() to handle import of simple lines.
-    // This is necessary to kake into account all anchor positions and
-    // other things. All shape imports use the same import schemata now.
-    // create necessary shape (Line Shape)
+    
+    
+    
+    
     AddShape("com.sun.star.drawing.PolyLineShape");
 
     if(mxShape.is())
     {
-        // Add, set Style and properties from base shape
+        
         SetStyle();
         SetLayer();
 
-        // get sizes and offsets
+        
         awt::Point aTopLeft(mnX1, mnY1);
         awt::Point aBottomRight(mnX2, mnY2);
 
@@ -1136,7 +1136,7 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             aBottomRight.Y = mnY1;
         }
 
-        // set local parameters on shape
+        
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
@@ -1155,13 +1155,13 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 OUString("Geometry"), aAny);
         }
 
-        // set sizes for transformation
+        
         maSize.Width = aBottomRight.X - aTopLeft.X;
         maSize.Height = aBottomRight.Y - aTopLeft.Y;
         maPosition.X = aTopLeft.X;
         maPosition.Y = aTopLeft.Y;
 
-        // set pos, size, shear and rotate and get copy of matrix
+        
         SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
@@ -1192,7 +1192,7 @@ SdXMLEllipseShapeContext::~SdXMLEllipseShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_SVG == nPrefix )
@@ -1223,7 +1223,7 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
         }
         if( IsXMLToken( rLocalName, XML_R ) )
         {
-            // single radius, it's a circle and both radii are the same
+            
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     mnRX, rValue);
             mnRY = mnRX;
@@ -1262,24 +1262,24 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
 void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create rectangle shape
+    
     AddShape("com.sun.star.drawing.EllipseShape");
     if(mxShape.is())
     {
-        // Add, set Style and properties from base shape
+        
         SetStyle();
         SetLayer();
 
         if(mnCX != 0 || mnCY != 0 || mnRX != 1 || mnRY != 1)
         {
-            // #i121972# center/radius is used, put to pos and size
+            
             maSize.Width = 2 * mnRX;
             maSize.Height = 2 * mnRY;
             maPosition.X = mnCX - mnRX;
             maPosition.Y = mnCY - mnRY;
         }
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         if( meKind != drawing::CircleKind_FULL )
@@ -1316,7 +1316,7 @@ SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_SVG == nPrefix )
@@ -1345,7 +1345,7 @@ SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 
 void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // Add, set Style and properties from base shape
+    
     if(mbClosed)
         AddShape("com.sun.star.drawing.PolyPolygonShape");
     else
@@ -1356,18 +1356,18 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set local parameters on shape
+        
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            // set polygon
+            
             if(!maPoints.isEmpty() && !maViewBox.isEmpty())
             {
                 const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
                 basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
 
-                // Is this correct? It overrides ViewBox stuff; OTOH it makes no
-                // sense to have the geometry content size different from object size
+                
+                
                 if(maSize.Width != 0 && maSize.Height != 0)
                 {
                     aSize = basegfx::B2DVector(maSize.Width, maSize.Height);
@@ -1405,7 +1405,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             }
         }
 
-        // set pos, size, shear and rotate and get copy of matrix
+        
         SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
@@ -1429,7 +1429,7 @@ SdXMLPathShapeContext::~SdXMLPathShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_SVG == nPrefix )
@@ -1451,14 +1451,14 @@ void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
 void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create polygon shape
+    
     if(!maD.isEmpty())
     {
         const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
         basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
 
-        // Is this correct? It overrides ViewBox stuff; OTOH it makes no
-        // sense to have the geometry content size different from object size
+        
+        
         if(maSize.Width != 0 && maSize.Height != 0)
         {
             aSize = basegfx::B2DVector(maSize.Width, maSize.Height);
@@ -1485,7 +1485,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                             aTargetRange));
                 }
 
-                // create shape
+                
                 OUString service;
 
                 if(aPolyPolygon.areControlPointsUsed())
@@ -1511,25 +1511,25 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                     }
                 }
 
-                // Add, set Style and properties from base shape
+                
                 AddShape(service);
 
-                // #89344# test for mxShape.is() and not for mxShapes.is() to support
-                // shape import helper classes WITHOUT XShapes (member mxShapes). This
-                // is used by the writer.
+                
+                
+                
                 if( mxShape.is() )
                 {
                     SetStyle();
                     SetLayer();
 
-                    // set local parameters on shape
+                    
                     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
 
                     if(xPropSet.is())
                     {
                         uno::Any aAny;
 
-                        // set polygon data
+                        
                         if(aPolyPolygon.areControlPointsUsed())
                         {
                             drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
@@ -1552,7 +1552,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                         xPropSet->setPropertyValue(OUString("Geometry"), aAny);
                     }
 
-                    // set pos, size, shear and rotate
+                    
                     SetTransformation();
 
                     SdXMLShapeContext::StartElement(xAttrList);
@@ -1580,7 +1580,7 @@ SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
@@ -1598,7 +1598,7 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
 void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
-    // create textbox shape
+    
     sal_Bool bIsPresShape = sal_False;
     bool bClearText = false;
 
@@ -1606,51 +1606,51 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
     if( isPresentationShape() )
     {
-        // check if the current document supports presentation shapes
+        
         if( GetImport().GetShapeImport()->IsPresentationShapesSupported() )
         {
             if( IsXMLToken( maPresentationClass, XML_PRESENTATION_SUBTITLE ))
             {
-                // XmlShapeTypePresSubtitleShape
+                
                 service = "com.sun.star.presentation.SubtitleShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
             {
-                // XmlShapeTypePresOutlinerShape
+                
                 service = "com.sun.star.presentation.OutlinerShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_NOTES ) )
             {
-                // XmlShapeTypePresNotesShape
+                
                 service = "com.sun.star.presentation.NotesShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_HEADER ) )
             {
-                // XmlShapeTypePresHeaderShape
+                
                 service = "com.sun.star.presentation.HeaderShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_FOOTER ) )
             {
-                // XmlShapeTypePresFooterShape
+                
                 service = "com.sun.star.presentation.FooterShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_PAGE_NUMBER ) )
             {
-                // XmlShapeTypePresSlideNumberShape
+                
                 service = "com.sun.star.presentation.SlideNumberShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_DATE_TIME ) )
             {
-                // XmlShapeTypePresDateTimeShape
+                
                 service = "com.sun.star.presentation.DateTimeShape";
                 bClearText = true;
             }
-            else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
+            else 
             {
-                // XmlShapeTypePresTitleTextShape
+                
                 service = "com.sun.star.presentation.TitleTextShape";
             }
             bIsPresShape = sal_True;
@@ -1659,11 +1659,11 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
     if( service.isEmpty() )
     {
-        // normal text shape
+        
         service = "com.sun.star.drawing.TextShape";
     }
 
-    // Add, set Style and properties from base shape
+    
     AddShape(service);
 
     if( mxShape.is() )
@@ -1695,17 +1695,17 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             xText->setString( aEmpty );
         }
 
-        // set parameters on shape
-//A AW->CL: Eventually You need to strip scale and translate from the transformation
-//A to reach the same goal again.
-//A     if(!bIsPresShape || mbIsUserTransformed)
-//A     {
-//A         // set pos and size on shape, this should remove binding
-//A         // to pres object on masterpage
-//A         SetSizeAndPosition();
-//A     }
+        
 
-        // set pos, size, shear and rotate
+
+
+
+
+
+
+
+
+        
         SetTransformation();
 
         if(mnRadius)
@@ -1745,7 +1745,7 @@ SdXMLControlShapeContext::~SdXMLControlShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
@@ -1762,8 +1762,8 @@ void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
 void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create Control shape
-    // add, set style and properties from base shape
+    
+    
     AddShape("com.sun.star.drawing.ControlShape");
     if( mxShape.is() )
     {
@@ -1786,7 +1786,7 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
@@ -1834,7 +1834,7 @@ bool SvXMLImport::needFixPositionAfterZ() const
 }
 
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     switch( nPrefix )
@@ -1887,7 +1887,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
             SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
             return;
         }
-        // #121965# draw:transform may be used in ODF1.2, e.g. exports from MS seem to use these
+        
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
@@ -1946,10 +1946,10 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
 
 void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // #107928#
-    // For security reasons, do not add empty connectors. There may have been an error in EA2
-    // that created empty, far set off connectors (e.g. 63 meters below top of document). This
-    // is not guaranteed, but it's definitely safe to not add empty connectors.
+    
+    
+    
+    
     sal_Bool bDoAdd(sal_True);
 
     if(    maStartShapeId.isEmpty()
@@ -1966,16 +1966,16 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
     if(bDoAdd)
     {
-        // create Connector shape
-        // add, set style and properties from base shape
+        
+        
         AddShape("com.sun.star.drawing.ConnectorShape");
         if(mxShape.is())
         {
-            // #121965# if draw:transform is used, apply directly to the start
-            // and end positions before using these
+            
+            
             if(mnTransform.NeedsAction())
             {
-                // transformation is used, apply to object.
+                
                 ::basegfx::B2DHomMatrix aMat;
                 mnTransform.GetFullTransform(aMat);
 
@@ -1994,7 +1994,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
                 }
             }
 
-            // add connection ids
+            
             if( !maStartShapeId.isEmpty() )
                 GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, maStartShapeId, mnStartGlueId );
             if( !maEndShapeId.isEmpty() )
@@ -2027,10 +2027,10 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
             if ( maPath.hasValue() )
             {
-                // #i115492#
-                // Ignore svg:d attribute for text documents created by OpenOffice.org
-                // versions before OOo 3.3, because these OOo versions are storing
-                // svg:d values not using the correct unit.
+                
+                
+                
+                
                 bool bApplySVGD( true );
                 if ( uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
                 {
@@ -2039,11 +2039,11 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
                     const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
                     if ( GetImport().IsTextDocInOOoFileFormat() ||
                          ( bBuildIdFound &&
-                           ( ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
-                             ( nUPD == 680 ) ||                     // OOo 2.x
-                             ( nUPD == 300 ) ||                     // OOo 3.0 - OOo 3.0.1
-                             ( nUPD == 310 ) ||                     // OOo 3.1 - OOo 3.1.1
-                             ( nUPD == 320 ) ) ) )                  // OOo 3.2 - OOo 3.2.1
+                           ( ( nUPD == 641 ) || ( nUPD == 645 ) ||  
+                             ( nUPD == 680 ) ||                     
+                             ( nUPD == 300 ) ||                     
+                             ( nUPD == 310 ) ||                     
+                             ( nUPD == 320 ) ) ) )                  
                     {
                         bApplySVGD = false;
                     }
@@ -2080,7 +2080,7 @@ SdXMLMeasureShapeContext::~SdXMLMeasureShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     switch( nPrefix )
@@ -2119,8 +2119,8 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
 void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create Measure shape
-    // add, set style and properties from base shape
+    
+    
     AddShape("com.sun.star.drawing.MeasureShape");
     if(mxShape.is())
     {
@@ -2138,7 +2138,7 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             xProps->setPropertyValue("EndPosition", aAny );
         }
 
-        // delete pre created fields
+        
         uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
         if( xText.is() )
         {
@@ -2154,7 +2154,7 @@ void SdXMLMeasureShapeContext::EndElement()
 {
     do
     {
-        // delete pre created fields
+        
         uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
         if( !xText.is() )
             break;
@@ -2191,7 +2191,7 @@ SdXMLPageShapeContext::~SdXMLPageShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
@@ -2208,11 +2208,11 @@ void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
 void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create Page shape
-    // add, set style and properties from base shape
+    
+    
 
-    // #86163# take into account which type of PageShape needs to
-    // be constructed. It's an pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
+    
+    
     sal_Bool bIsPresentation = !maPresentationClass.isEmpty() &&
            GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
@@ -2245,7 +2245,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         SetStyle();
         SetLayer();
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -2271,7 +2271,7 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    // #86616# for correct edge rounding import mnRadius needs to be initialized
+    
     mnRadius( 0L )
 {
 }
@@ -2282,8 +2282,8 @@ SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext()
 
 void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create Caption shape
-    // add, set style and properties from base shape
+    
+    
     AddShape("com.sun.star.drawing.CaptionShape");
     if( mxShape.is() )
     {
@@ -2292,11 +2292,11 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
 
-        // SJ: If AutoGrowWidthItem is set, SetTransformation will lead to the wrong SnapRect
-        // because NbcAdjustTextFrameWidthAndHeight() is called (text is set later and center alignment
-        // is the default setting, so the top left reference point that is used by the caption point is
-        // no longer correct) There are two ways to solve this problem, temporarily disabling the
-        // autogrowwith as we are doing here or to apply the CaptionPoint after setting text
+        
+        
+        
+        
+        
         sal_Bool bIsAutoGrowWidth = sal_False;
         if ( xProps.is() )
         {
@@ -2307,7 +2307,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( sal_False ) );
         }
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
         if( xProps.is() )
             xProps->setPropertyValue("CaptionPoint", uno::makeAny( maCaptionPoint ) );
@@ -2335,7 +2335,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
@@ -2376,7 +2376,7 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_XLINK == nPrefix )
@@ -2393,7 +2393,7 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
 
 void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
-    // create graphic object shape
+    
     OUString service;
 
     if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) && GetImport().GetShapeImport()->IsPresentationShapesSupported() )
@@ -2415,8 +2415,8 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
         uno::Reference< beans::XPropertySet > xPropset(mxShape, uno::UNO_QUERY);
         if(xPropset.is())
         {
-            // since OOo 1.x had no line or fill style for graphics, but may create
-            // documents with them, we have to override them here
+            
+            
             sal_Int32 nUPD, nBuildId;
             if( GetImport().getBuildIds( nUPD, nBuildId ) && (nUPD == 645) ) try
             {
@@ -2463,7 +2463,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
             }
         }
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         SdXMLShapeContext::StartElement(mxAttrList);
@@ -2515,7 +2515,7 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
         }
     }
 
-    // delegate to parent class if no context could be created
+    
     if ( NULL == pContext )
         pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName,
                                                          xAttrList);
@@ -2601,7 +2601,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
             }
         }
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
@@ -2651,17 +2651,17 @@ SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
 
 void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
-    // #96717# in theorie, if we don't have a url we shouldn't even
-    // export this ole shape. But practical its to risky right now
-    // to change this so we better dispose this on load
-    //if( !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
-    //  return;
+    
+    
+    
+    
+    
 
-    // #100592# this BugFix prevents that a shape is created. CL
-    // is thinking about an alternative.
-    // #i13140# Check for more than empty string in maHref, there are
-    // other possibilities that maHref results in empty container
-    // storage names
+    
+    
+    
+    
+    
     if( !(GetImport().getImportFlags() & IMPORT_EMBEDDED) && !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
         return;
 
@@ -2728,14 +2728,14 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
                 }
                 else
                 {
-                    // this is OOo link object
+                    
                     xProps->setPropertyValue("LinkURL",
                                               uno::makeAny( aPersistName ) );
                 }
             }
         }
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         SetStyle();
@@ -2749,12 +2749,12 @@ void SdXMLObjectShapeContext::EndElement()
     if (GetImport().isGeneratorVersionOlderThan(
                 SvXMLImport::OOo_34x, SvXMLImport::LO_4x))
     {
-        // #i118485#
-        // If it's an old file from us written before OOo3.4, we need to correct
-        // FillStyle and LineStyle for OLE2 objects. The error was that the old paint
-        // implementations just ignored added fill/linestyles completely, thus
-        // those objects need to be corrected to not show blue and hairline which
-        // always was the default, but would be shown now
+        
+        
+        
+        
+        
+        
         uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
 
         if( xProps.is() )
@@ -2764,7 +2764,7 @@ void SdXMLObjectShapeContext::EndElement()
         }
     }
 
-    // #100592#
+    
     if( mxBase64Stream.is() )
     {
         OUString aPersistName( GetImport().ResolveEmbeddedObjectURLFromBase64() );
@@ -2780,7 +2780,7 @@ void SdXMLObjectShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     switch( nPrefix )
@@ -2808,7 +2808,7 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    // #100592#
+    
     SvXMLImportContext* pContext = NULL;
 
     if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))
@@ -2842,7 +2842,7 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
         pContext = pEContext;
     }
 
-    // delegate to parent class if no context could be created
+    
     if(!pContext)
         pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
@@ -2873,13 +2873,13 @@ void SdXMLAppletShapeContext::StartElement( const ::com::sun::star::uno::Referen
     {
         SetLayer();
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
         GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
     }
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLAppletShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     switch( nPrefix )
@@ -2922,7 +2922,7 @@ void SdXMLAppletShapeContext::EndElement()
 
         if ( maSize.Width && maSize.Height )
         {
-            // the visual area for applet must be set on loading
+            
             awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
             aAny <<= aRect;
             xProps->setPropertyValue("VisibleArea", aAny );
@@ -2974,7 +2974,7 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_n
     {
         OUString aParamName, aParamValue;
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        // now parse the attribute list and look for draw:name and draw:value
+        
         for(sal_Int16 a(0); a < nAttrCount; a++)
         {
             const OUString& rAttrName = xAttrList->getNameByIndex(a);
@@ -3029,7 +3029,7 @@ SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
 
 void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
-    // watch for MimeType attribute to see if we have a media object
+    
     for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
     {
         OUString    aLocalName;
@@ -3040,7 +3040,7 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
             if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
                 mbMedia = true;
 
-            // leave this loop
+            
             n = nAttrCount - 1;
         }
     }
@@ -3088,7 +3088,7 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
             }
         }
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
         GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
     }
@@ -3107,7 +3107,7 @@ lcl_GetMediaReference(SvXMLImport const& rImport, OUString const& rURL)
     }
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     switch( nPrefix )
@@ -3145,7 +3145,7 @@ void SdXMLPluginShapeContext::EndElement()
             uno::Reference< beans::XPropertySetInfo > aXPropSetInfo( xProps->getPropertySetInfo() );
             if ( !aXPropSetInfo.is() || aXPropSetInfo->hasPropertyByName( sVisibleArea ) )
             {
-                // the visual area for a plugin must be set on loading
+                
                 awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
                 aAny <<= aRect;
                 xProps->setPropertyValue( sVisibleArea, aAny );
@@ -3154,7 +3154,7 @@ void SdXMLPluginShapeContext::EndElement()
 
         if( !mbMedia )
         {
-            // in case we have a plugin object
+            
             if( maParams.getLength() )
             {
                 aAny <<= maParams;
@@ -3175,7 +3175,7 @@ void SdXMLPluginShapeContext::EndElement()
         }
         else
         {
-            // in case we have a media object
+            
             xProps->setPropertyValue(
                     OUString("MediaURL"),
                     uno::makeAny(maHref));
@@ -3248,7 +3248,7 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_n
     {
         OUString aParamName, aParamValue;
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        // now parse the attribute list and look for draw:name and draw:value
+        
         for(sal_Int16 a(0); a < nAttrCount; a++)
         {
             const OUString& rAttrName = xAttrList->getNameByIndex(a);
@@ -3308,7 +3308,7 @@ void SdXMLFloatingFrameShapeContext::StartElement( const ::com::sun::star::uno::
     {
         SetLayer();
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
@@ -3335,7 +3335,7 @@ void SdXMLFloatingFrameShapeContext::StartElement( const ::com::sun::star::uno::
     }
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLFloatingFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     switch( nPrefix )
@@ -3367,7 +3367,7 @@ void SdXMLFloatingFrameShapeContext::EndElement()
     {
         if ( maSize.Width && maSize.Height )
         {
-            // the visual area for a floating frame must be set on loading
+            
             awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
             uno::Any aAny;
             aAny <<= aRect;
@@ -3420,10 +3420,10 @@ void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportCon
 
                 if(xParent.is())
                 {
-                    // remove from parent
+                    
                     xParent->remove(pSdXMLGraphicObjectShapeContext->getShape());
 
-                    // dispose
+                    
                     uno::Reference< lang::XComponent > xComp(pSdXMLGraphicObjectShapeContext->getShape(), UNO_QUERY);
 
                     if(xComp.is())
@@ -3457,7 +3457,7 @@ OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImpor
 
                 if(!aRetval.getLength())
                 {
-                    // it maybe a link, try GraphicURL
+                    
                     xPropSet->getPropertyValue("GraphicURL") >>= aRetval;
                 }
             }
@@ -3485,7 +3485,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
 
         pContext = pShapeContext;
 
-        // propagate the hyperlink to child context
+        
         if ( !msHyperlink.isEmpty() )
             pShapeContext->setHyperlink( msHyperlink );
 
@@ -3500,7 +3500,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
     }
     else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
     {
-        // read another image
+        
         pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList);
         mxImplContext = pContext;
@@ -3514,7 +3514,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
              XML_NAMESPACE_DRAW == nPrefix &&
              IsXMLToken( rLocalName, XML_IMAGE ) )
     {
-        // read replacement image
+        
         SvXMLImportContext *pImplContext = &mxImplContext;
         SdXMLShapeContext *pSContext =
             PTR_CAST( SdXMLShapeContext, pImplContext );
@@ -3531,7 +3531,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         }
     }
     else if(
-            ( nPrefix == XML_NAMESPACE_SVG &&   // #i68101#
+            ( nPrefix == XML_NAMESPACE_SVG &&   
                 (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) ) ||
              (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) ) ||
              (nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken( rLocalName, XML_GLUE_POINT ) ||
@@ -3554,7 +3554,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         }
     }
 
-    // call parent for content
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
@@ -3563,19 +3563,19 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
 
 void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
-    // ignore
+    
 }
 
 void SdXMLFrameShapeContext::EndElement()
 {
-    // solve if multiple image child contexts were imported
+    
     SvXMLImportContextRef const pSelectedContext(solveMultipleImages());
     const SdXMLGraphicObjectShapeContext* pShapeContext(
         dynamic_cast<const SdXMLGraphicObjectShapeContext*>(&pSelectedContext));
     if ( pShapeContext && !maShapeId.isEmpty() )
     {
-        // fdo#64512 and fdo#60075 - make sure *this* shape is
-        // registered for given ID
+        
+        
         assert( mxImplContext.Is() );
         const uno::Reference< uno::XInterface > xShape( pShapeContext->getShape() );
         GetImport().getInterfaceToIdentifierMapper().registerReferenceAlways( maShapeId, xShape );
@@ -3583,7 +3583,7 @@ void SdXMLFrameShapeContext::EndElement()
 
     if( !mxImplContext.Is() )
     {
-        // now check if this is an empty presentation object
+        
         sal_Int16 nAttrCount = mxAttrList.is() ? mxAttrList->getLength() : 0;
         for(sal_Int16 a(0); a < nAttrCount; a++)
         {
@@ -3678,7 +3678,7 @@ SdXMLCustomShapeContext::~SdXMLCustomShapeContext()
 {
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
@@ -3699,15 +3699,15 @@ void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
 
 void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // create rectangle shape
+    
     AddShape("com.sun.star.drawing.CustomShape");
     if ( mxShape.is() )
     {
-        // Add, set Style and properties from base shape
+        
         SetStyle();
         SetLayer();
 
-        // set pos, size, shear and rotate
+        
         SetTransformation();
 
         try
@@ -3739,11 +3739,11 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 
 void SdXMLCustomShapeContext::EndElement()
 {
-    // for backward compatibility, the above SetTransformation() may alraedy have
-    // applied a call to SetMirroredX/SetMirroredY. This is not yet added to the
-    // beans::PropertyValues in maCustomShapeGeometry. When applying these now, this
-    // would be lost again.
-    // TTTT: Remove again after aw080
+    
+    
+    
+    
+    
     if(!maUsedTransformation.isIdentity())
     {
         basegfx::B2DVector aScale, aTranslate;
@@ -3756,7 +3756,7 @@ void SdXMLCustomShapeContext::EndElement()
 
         if(bFlippedX && bFlippedY)
         {
-            // when both are used it is the same as 180 degree rotation; reset
+            
             bFlippedX = bFlippedY = false;
         }
 
@@ -3785,7 +3785,7 @@ void SdXMLCustomShapeContext::EndElement()
     {
         const OUString sCustomShapeGeometry    (  "CustomShapeGeometry"  );
 
-        // converting the vector to a sequence
+        
         uno::Sequence< beans::PropertyValue > aSeq( maCustomShapeGeometry.size() );
         beans::PropertyValue* pValues = aSeq.getArray();
         std::vector< beans::PropertyValue >::const_iterator aIter( maCustomShapeGeometry.begin() );
@@ -3839,7 +3839,7 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
                 pContext = new XMLEnhancedCustomShapeContext( GetImport(), mxShape, nPrefix, rLocalName, maCustomShapeGeometry );
         }
     }
-    // delegate to parent class if no context could be created
+    
     if ( NULL == pContext )
         pContext = SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName,
                                                          xAttrList);
@@ -3954,12 +3954,12 @@ void SdXMLTableShapeContext::EndElement()
 
     if( mxShape.is() )
     {
-        // set pos, size, shear and rotate
+        
         SetTransformation();
     }
 }
 
-// this is called from the parent group for each unparsed attribute in the attribute list
+
 void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( nPrefix == XML_NAMESPACE_TABLE )

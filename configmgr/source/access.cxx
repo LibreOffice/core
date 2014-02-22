@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -324,12 +324,12 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
         return mapType(
             static_cast< LocalizedPropertyNode * >(p.get())->getStaticType());
     case Node::KIND_GROUP:
-        //TODO: Should a specific type be returned for a non-extensible group
-        // with homogeneous members or for an extensible group that currently
-        // has only homegeneous members?
+        
+        
+        
         return cppu::UnoType< cppu::UnoVoidType >::get();
     case Node::KIND_SET:
-        return cppu::UnoType< cppu::UnoVoidType >::get(); //TODO: correct?
+        return cppu::UnoType< cppu::UnoVoidType >::get(); 
     default:
         assert(false);
         throw css::uno::RuntimeException(
@@ -341,7 +341,7 @@ sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return !getAllChildren().empty(); //TODO: optimize
+    return !getAllChildren().empty(); 
 }
 
 css::uno::Any Access::getByName(OUString const & aName)
@@ -416,7 +416,7 @@ void Access::replaceByHierarchicalName(
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    //TODO: Actually support sets and combine with replaceByName:
+    
     assert(thisIs(IS_UPDATE));
     Broadcaster bc;
     {
@@ -447,7 +447,7 @@ void Access::replaceByHierarchicalName(
                  " changing component " + aName),
                 static_cast< cppu::OWeakObject * >(this), 0);
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
@@ -541,8 +541,8 @@ OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    // For backwards compatibility, return an absolute path representation where
-    // available:
+    
+    
     OUString rootPath;
     rtl::Reference< RootAccess > root(getRootAccess());
     if (root.is()) {
@@ -616,34 +616,34 @@ void Access::setName(OUString const & aName)
                             rtl::Reference< ChildAccess > childAccess(
                                 static_cast< ChildAccess * >(this));
                             localMods.add(getRelativePath());
-                            // unbind() modifies the parent chain that
-                            // markChildAsModified() walks, so order is
-                            // important:
+                            
+                            
+                            
                             parent->markChildAsModified(childAccess);
-                                //TODO: must not throw
-                            childAccess->unbind(); // must not throw
+                                
+                            childAccess->unbind(); 
                             if (other.is()) {
-                                other->unbind(); // must not throw
+                                other->unbind(); 
                             }
                             childAccess->bind(root, parent, aName);
-                                // must not throw
+                                
                             parent->markChildAsModified(childAccess);
-                                //TODO: must not throw
+                                
                             localMods.add(getRelativePath());
                             break;
                         }
                     }
                 }
             }
-            // fall through
+            
         case Node::KIND_LOCALIZED_PROPERTY:
-            // renaming a property could only work for an extension property,
-            // but a localized property is never an extension property
+            
+            
             throw css::uno::RuntimeException(
                 "configmgr setName inappropriate node",
                 static_cast< cppu::OWeakObject * >(this));
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
@@ -776,7 +776,7 @@ void Access::addVetoableChangeListener(
         checkKnownProperty(PropertyName);
         if (!disposed_) {
             vetoableChangeListeners_[PropertyName].insert(aListener);
-            //TODO: actually call vetoableChangeListeners_
+            
             return;
         }
     }
@@ -1093,13 +1093,13 @@ void Access::replaceByName(
                     getFreeSetMember(aElement));
                 rtl::Reference< RootAccess > root(getRootAccess());
                 localMods.add(child->getRelativePath());
-                child->unbind(); // must not throw
-                freeAcc->bind(root, this, aName); // must not throw
-                markChildAsModified(freeAcc); //TODO: must not throw
+                child->unbind(); 
+                freeAcc->bind(root, this, aName); 
+                markChildAsModified(freeAcc); 
             }
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
@@ -1145,13 +1145,13 @@ void Access::insertByName(
             {
                 rtl::Reference< ChildAccess > freeAcc(
                     getFreeSetMember(aElement));
-                freeAcc->bind(getRootAccess(), this, aName); // must not throw
-                markChildAsModified(freeAcc); //TODO: must not throw
+                freeAcc->bind(getRootAccess(), this, aName); 
+                markChildAsModified(freeAcc); 
                 localMods.add(freeAcc->getRelativePath());
             }
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
@@ -1187,9 +1187,9 @@ void Access::removeByName(OUString const & aName)
         }
         Modifications localMods;
         localMods.add(child->getRelativePath());
-        // unbind() modifies the parent chain that markChildAsModified() walks,
-        // so order is important:
-        markChildAsModified(child); //TODO: must not throw
+        
+        
+        markChildAsModified(child); 
         child->unbind();
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
@@ -1285,7 +1285,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
             i->get(),
             css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
     }
-    //TODO: iterate over children w/ listeners (incl. unmodified ones):
+    
     for (ModifiedChildren::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
@@ -1302,7 +1302,7 @@ void Access::clearListeners() throw() {
     propertyChangeListeners_.clear();
     vetoableChangeListeners_.clear();
     propertiesChangeListeners_.clear();
-    //TODO: iterate over children w/ listeners (incl. unmodified ones):
+    
     for (ModifiedChildren::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
@@ -1408,8 +1408,8 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             ("access best-matching localized property value via \"*<locale>\""
              " with empty <locale>; falling back to defaults"));
         if (!locale.isEmpty()) {
-            // Find best match using an adaption of RFC 4647 lookup matching
-            // rules, removing "-" or "_" delimited segments from the end:
+            
+            
             for (;;) {
                 rtl::Reference< ChildAccess > child(getChild(locale));
                 if (child.is()) {
@@ -1424,10 +1424,10 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
                 }
                 locale = locale.copy(0, i);
             }
-            // As a workaround for broken xcu data that does not use shortest
-            // xml:lang attributes, look for the first entry with the same first
-            // segment as the requested language tag before falling back to
-            // defaults (see fdo#33638):
+            
+            
+            
+            
             assert(
                 !locale.isEmpty() && locale.indexOf('-') == -1 &&
                 locale.indexOf('_') == -1);
@@ -1447,9 +1447,9 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
                 }
             }
         }
-        // Defaults are the "en-US" locale, the "en" locale, the empty string
-        // locale, the first child (if any), or a null ChildAccess, in that
-        // order:
+        
+        
+        
         rtl::Reference< ChildAccess > child(getChild("en-US"));
         if (child.is()) {
             return child;
@@ -1498,7 +1498,7 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
     switch (type) {
     case TYPE_NIL:
         assert(false);
-        // fall through (cannot happen)
+        
     case TYPE_ERROR:
         ok = false;
         break;
@@ -1506,7 +1506,7 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
         switch (getDynamicType(value)) {
         case TYPE_ANY:
             assert(false);
-            // fall through (cannot happen)
+            
         case TYPE_ERROR:
             ok = false;
             break;
@@ -1556,9 +1556,9 @@ void Access::reportChildChanges(
         if (child.is()) {
             child->reportChildChanges(changes);
             changes->push_back(css::util::ElementChange());
-                //TODO: changed value and/or inserted node
+                
         } else {
-            changes->push_back(css::util::ElementChange()); //TODO: removed node
+            changes->push_back(css::util::ElementChange()); 
         }
     }
 }
@@ -1574,16 +1574,16 @@ void Access::commitChildChanges(
         if (child.is()) {
             childValid = childValid && !child->isFinalized();
             child->commitChanges(childValid, globalModifications);
-                //TODO: currently, this is called here for directly inserted
-                // children as well as for children whose sub-children were
-                // modified (and should never be called for directly removed
-                // children); clarify what exactly should happen here for
-                // directly inserted children
+                
+                
+                
+                
+                
         }
         NodeMap & members = getNode()->getMembers();
         NodeMap::iterator j(members.find(i->first));
         if (child.is()) {
-            // Inserted:
+            
             if (j != members.end()) {
                 childValid = childValid &&
                     j->second->getFinalized() == Data::NO_LAYER;
@@ -1595,7 +1595,7 @@ void Access::commitChildChanges(
                 members[i->first] = child->getNode();
             }
         } else {
-            // Removed:
+            
             childValid = childValid && j != members.end() &&
                 j->second->getFinalized() == Data::NO_LAYER &&
                 j->second->getMandatory() == Data::NO_LAYER;
@@ -1633,11 +1633,11 @@ void Access::initBroadcasterAndChanges(
                     if (Components::allLocales(getRootAccess()->getLocale())) {
                         child->initBroadcasterAndChanges(
                             i->second, broadcaster, allChanges);
-                            //TODO: if allChanges==0, recurse only into children
-                            // w/ listeners
+                            
+                            
                     } else {
-                        //TODO: filter child mods that are irrelevant for
-                        // locale:
+                        
+                        
                         for (ContainerListeners::iterator j(
                                  containerListeners_.begin());
                              j != containerListeners_.end(); ++j)
@@ -1650,7 +1650,7 @@ void Access::initBroadcasterAndChanges(
                                             this),
                                         css::uno::makeAny(i->first),
                                         css::uno::Any(), css::uno::Any()));
-                                //TODO: non-void Element, ReplacedElement
+                                
                         }
                         PropertyChangeListeners::iterator j(
                             propertyChangeListeners_.find(i->first));
@@ -1689,7 +1689,7 @@ void Access::initBroadcasterAndChanges(
                                     css::uno::makeAny(
                                         child->getRelativePathRepresentation()),
                                     css::uno::Any(), css::uno::Any()));
-                                //TODO: non-void Element, ReplacedElement
+                                
                         }
                         if (collectPropChanges) {
                             propChanges.push_back(
@@ -1700,7 +1700,7 @@ void Access::initBroadcasterAndChanges(
                         }
                     }
                 }
-                // else: spurious Modifications::Node not representing a change
+                
                 break;
             case Node::KIND_LOCALIZED_VALUE:
                 assert(Components::allLocales(getRootAccess()->getLocale()));
@@ -1714,7 +1714,7 @@ void Access::initBroadcasterAndChanges(
                             static_cast< cppu::OWeakObject * >(this),
                             css::uno::makeAny(i->first), child->asValue(),
                             css::uno::Any()));
-                        //TODO: distinguish add/modify; non-void ReplacedElement
+                        
                 }
                 if (allChanges != 0) {
                     allChanges->push_back(
@@ -1722,7 +1722,7 @@ void Access::initBroadcasterAndChanges(
                             css::uno::makeAny(
                                 child->getRelativePathRepresentation()),
                             child->asValue(), css::uno::Any()));
-                        //TODO: non-void ReplacedElement
+                        
                 }
                 assert(!collectPropChanges);
                 break;
@@ -1738,8 +1738,8 @@ void Access::initBroadcasterAndChanges(
                                 static_cast< cppu::OWeakObject * >(this),
                                 css::uno::makeAny(i->first), child->asValue(),
                                 css::uno::Any()));
-                            //TODO: distinguish add/remove/modify; non-void
-                            // ReplacedElement
+                            
+                            
                     }
                     PropertyChangeListeners::iterator j(
                         propertyChangeListeners_.find(i->first));
@@ -1776,7 +1776,7 @@ void Access::initBroadcasterAndChanges(
                                 css::uno::makeAny(
                                     child->getRelativePathRepresentation()),
                                 child->asValue(), css::uno::Any()));
-                            //TODO: non-void ReplacedElement
+                            
                     }
                     if (collectPropChanges) {
                         propChanges.push_back(
@@ -1810,26 +1810,26 @@ void Access::initBroadcasterAndChanges(
                                     css::uno::makeAny(
                                         child->getRelativePathRepresentation()),
                                     css::uno::Any(), css::uno::Any()));
-                                //TODO: non-void Element, ReplacedElement
+                                
                         }
                     }
-                    // else: spurious Modifications::Node not representing a
-                    // change
+                    
+                    
                 } else {
                     child->initBroadcasterAndChanges(
                         i->second, broadcaster, allChanges);
-                        //TODO: if allChanges==0, recurse only into children w/
-                        // listeners
+                        
+                        
                 }
                 break;
             case Node::KIND_ROOT:
-                assert(false); // this cannot happen
+                assert(false); 
                 break;
             }
         } else {
             switch (getNode()->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
-                // Removed localized property value:
+                
                 assert(Components::allLocales(getRootAccess()->getLocale()));
                 for (ContainerListeners::iterator j(
                          containerListeners_.begin());
@@ -1841,7 +1841,7 @@ void Access::initBroadcasterAndChanges(
                             static_cast< cppu::OWeakObject * >(this),
                             css::uno::makeAny(i->first), css::uno::Any(),
                             css::uno::Any()));
-                        //TODO: non-void ReplacedElement
+                        
                 }
                 if (allChanges != 0) {
                     OUStringBuffer path(getRelativePathRepresentation());
@@ -1853,13 +1853,13 @@ void Access::initBroadcasterAndChanges(
                         css::util::ElementChange(
                             css::uno::makeAny(path.makeStringAndClear()),
                             css::uno::Any(), css::uno::Any()));
-                        //TODO: non-void ReplacedElement
+                        
                 }
                 assert(!collectPropChanges);
                 break;
             case Node::KIND_GROUP:
                 {
-                    // Removed (non-localized) extension property:
+                    
                     for (ContainerListeners::iterator j(
                              containerListeners_.begin());
                          j != containerListeners_.end(); ++j)
@@ -1870,7 +1870,7 @@ void Access::initBroadcasterAndChanges(
                                 static_cast< cppu::OWeakObject * >(this),
                                 css::uno::makeAny(i->first), css::uno::Any(),
                                 css::uno::Any()));
-                            //TODO: non-void ReplacedElement
+                            
                     }
                     PropertyChangeListeners::iterator j(
                         propertyChangeListeners_.find(i->first));
@@ -1912,7 +1912,7 @@ void Access::initBroadcasterAndChanges(
                             css::util::ElementChange(
                                 css::uno::makeAny(path.makeStringAndClear()),
                                 css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void ReplacedElement
+                            
                     }
                     if (collectPropChanges) {
                         propChanges.push_back(
@@ -1924,7 +1924,7 @@ void Access::initBroadcasterAndChanges(
                 }
                 break;
             case Node::KIND_SET:
-                // Removed set member:
+                
                 if (i->second.children.empty()) {
                     for (ContainerListeners::iterator j(
                              containerListeners_.begin());
@@ -1936,7 +1936,7 @@ void Access::initBroadcasterAndChanges(
                                 static_cast< cppu::OWeakObject * >(this),
                                 css::uno::makeAny(i->first),
                                 css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void ReplacedElement
+                            
                     }
                     if (allChanges != 0) {
                         OUStringBuffer path(
@@ -1949,13 +1949,13 @@ void Access::initBroadcasterAndChanges(
                             css::util::ElementChange(
                                 css::uno::makeAny(path.makeStringAndClear()),
                                 css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void ReplacedElement
+                            
                     }
                 }
-                // else: spurious Modifications::Node not representing a change
+                
                 break;
             default:
-                assert(false); // this cannot happen
+                assert(false); 
                 break;
             }
         }
@@ -2006,7 +2006,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
     if (i != cachedChildren_.end()) {
         rtl::Reference< ChildAccess > child;
         if (i->second->acquireCounting() > 1) {
-            child.set(i->second); // must not throw
+            child.set(i->second); 
         }
         i->second->releaseNondeleting();
         if (child.is()) {
@@ -2022,7 +2022,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
 
 rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
     sal_Int32 i = 0;
-    // For backwards compatibility, allow absolute paths where meaningful:
+    
     if( path.startsWith("/") ) {
         ++i;
         if (!getRootAccess().is()) {
@@ -2087,8 +2087,8 @@ rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
                 return rtl::Reference< ChildAccess >();
             }
         }
-        // For backwards compatibility, ignore a final slash after non-value
-        // nodes:
+        
+        
         if (child->isValue()) {
             return i == path.getLength()
                 ? child : rtl::Reference< ChildAccess >();
@@ -2134,11 +2134,11 @@ css::beans::Property Access::asProperty() {
                 static_cast< LocalizedPropertyNode *>(p.get());
             if (Components::allLocales(getRootAccess()->getLocale())) {
                 type = cppu::UnoType< css::uno::XInterface >::get();
-                    //TODO: correct?
+                    
                 removable = false;
             } else {
                 type = mapType(locprop->getStaticType());
-                removable = false; //TODO ???
+                removable = false; 
             }
             nillable = locprop->isNillable();
         }
@@ -2149,11 +2149,11 @@ css::beans::Property Access::asProperty() {
                 static_cast< LocalizedPropertyNode * >(getParentNode().get());
             type = mapType(locprop->getStaticType());
             nillable = locprop->isNillable();
-            removable = false; //TODO ???
+            removable = false; 
         }
         break;
     default:
-        type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
+        type = cppu::UnoType< css::uno::XInterface >::get(); 
         nillable = false;
         rtl::Reference< Node > parent(getParentNode());
         removable = parent.is() && parent->kind() == Node::KIND_SET;
@@ -2161,13 +2161,13 @@ css::beans::Property Access::asProperty() {
     }
     return css::beans::Property(
         getNameInternal(), -1, type,
-        (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
+        (css::beans::PropertyAttribute::BOUND | 
          css::beans::PropertyAttribute::CONSTRAINED |
          (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |
          (getRootAccess()->isUpdate() && removable
           ? css::beans::PropertyAttribute::REMOVABLE : 0) |
          (!getRootAccess()->isUpdate() || p->getFinalized() != Data::NO_LAYER
-          ? css::beans::PropertyAttribute::READONLY : 0))); //TODO: MAYBEDEFAULT
+          ? css::beans::PropertyAttribute::READONLY : 0))); 
 }
 
 void Access::checkFinalized() {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
@@ -46,11 +46,11 @@ namespace slideshow
     namespace internal
     {
 
-        //////////////////////////////////////////////////////////////////////
+        
         //
-        // Private methods
+        
         //
-        //////////////////////////////////////////////////////////////////////
+        
 
         void DrawShapeSubsetting::ensureInitializedNodeTree() const
         {
@@ -58,41 +58,41 @@ namespace slideshow
                               "DrawShapeSubsetting::ensureInitializedNodeTree(): Invalid mtf" );
 
             if( mbNodeTreeInitialized )
-                return; // done, already initialized.
+                return; 
 
-            // init doctree vector
+            
             maActionClassVector.clear();
             maActionClassVector.reserve( mpMtf->GetActionSize() );
 
-            // search metafile for text output
+            
             MetaAction* pCurrAct;
 
             sal_Int32 nActionIndex(0);
             sal_Int32 nLastTextActionIndex(0);
             for( pCurrAct = mpMtf->FirstAction(); pCurrAct; pCurrAct = mpMtf->NextAction() )
             {
-                // check for one of our special text doctree comments
+                
                 switch( pCurrAct->GetType() )
                 {
                     case META_COMMENT_ACTION:
                     {
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
-                        // skip comment if not a special XTEXT... comment
+                        
                         if( pAct->GetComment().matchIgnoreAsciiCase( OString("XTEXT"), 0 ) )
                         {
-                            // fill classification vector with NOOPs,
-                            // then insert corresponding classes at
-                            // the given index
+                            
+                            
+                            
                             maActionClassVector.resize( nActionIndex+1, CLASS_NOOP );
 
                             if( pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_EOC") )
                             {
-                                // special, because can happen
-                                // in-between of portions - set
-                                // character-end classificator at
-                                // given index (relative to last text
-                                // action).
+                                
+                                
+                                
+                                
+                                
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
                                 ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
@@ -102,11 +102,11 @@ namespace slideshow
                             }
                             else if( pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_EOW") )
                             {
-                                // special, because can happen
-                                // in-between of portions - set
-                                // word-end classificator at given
-                                // index (relative to last text
-                                // action).
+                                
+                                
+                                
+                                
+                                
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
                                 ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
@@ -116,11 +116,11 @@ namespace slideshow
                             }
                             else if( pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_EOS") )
                             {
-                                // special, because can happen
-                                // in-between of portions - set
-                                // sentence-end classificator at given
-                                // index (relative to last text
-                                // action).
+                                
+                                
+                                
+                                
+                                
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
                                 ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
@@ -163,10 +163,10 @@ namespace slideshow
                                            nActionIndex );
                         }
 #endif
-                        // fallthrough intended
+                        
                     default:
-                        // comment action and all actions not
-                        // explicitly handled here:
+                        
+                        
                         nActionIndex += getNextActionOffset(pCurrAct);
                         break;
                 }
@@ -177,7 +177,7 @@ namespace slideshow
 
         void DrawShapeSubsetting::updateSubsetBounds( const SubsetEntry& rSubsetEntry )
         {
-            // TODO(F1): This removes too much from non-contiguous subsets
+            
             mnMinSubsetActionIndex = ::std::min(
                 mnMinSubsetActionIndex,
                 rSubsetEntry.mnStartActionIndex );
@@ -194,8 +194,8 @@ namespace slideshow
             {
                 if( maSubset.isEmpty() )
                 {
-                    // non-subsetted node, with some child subsets
-                    // that subtract from it
+                    
+                    
                     maCurrentSubsets.push_back( DocTreeNode( 0,
                                                              mnMinSubsetActionIndex,
                                                              DocTreeNode::NODETYPE_INVALID ) );
@@ -205,8 +205,8 @@ namespace slideshow
                 }
                 else
                 {
-                    // subsetted node, from which some further child
-                    // subsets subtract content
+                    
+                    
                     maCurrentSubsets.push_back( DocTreeNode( maSubset.getStartIndex(),
                                                              mnMinSubsetActionIndex,
                                                              DocTreeNode::NODETYPE_INVALID ) );
@@ -217,20 +217,20 @@ namespace slideshow
             }
             else
             {
-                // no further child subsets, simply add our subset (if any)
+                
                 if( !maSubset.isEmpty() )
                 {
-                    // subsetted node, without any subset children
+                    
                     maCurrentSubsets.push_back( maSubset );
                 }
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
+        
         //
-        // Public methods
+        
         //
-        //////////////////////////////////////////////////////////////////////
+        
 
         DrawShapeSubsetting::DrawShapeSubsetting() :
             maActionClassVector(),
@@ -283,9 +283,9 @@ namespace slideshow
 
         void DrawShapeSubsetting::initCurrentSubsets()
         {
-            // only add subset to vector, if it's not empty - that's
-            // because the vector's content is later literally used
-            // for e.g. painting.
+            
+            
+            
             if( !maSubset.isEmpty() )
                 maCurrentSubsets.push_back( maSubset );
         }
@@ -299,7 +299,7 @@ namespace slideshow
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::getSubsetShape()" );
 
-            // subset shape already created for this DocTreeNode?
+            
             SubsetEntry aEntry;
 
             aEntry.mnStartActionIndex   = rTreeNode.getStartIndex();
@@ -308,7 +308,7 @@ namespace slideshow
             ShapeSet::const_iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) != maSubsetShapes.end() )
             {
-                // already created, return found entry
+                
                 return aIter->mpShape;
             }
 
@@ -319,7 +319,7 @@ namespace slideshow
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::addSubsetShape()" );
 
-            // subset shape already created for this DocTreeNode?
+            
             SubsetEntry aEntry;
             const DocTreeNode& rEffectiveSubset( rShape->getSubsetNode() );
 
@@ -329,21 +329,21 @@ namespace slideshow
             ShapeSet::const_iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) != maSubsetShapes.end() )
             {
-                // already created, increment use count and return
+                
 
-                // safe cast, since set order does not depend on
-                // mnSubsetQueriedCount
+                
+                
                 const_cast<SubsetEntry&>(*aIter).mnSubsetQueriedCount++;
             }
             else
             {
-                // not yet created, init entry
+                
                 aEntry.mnSubsetQueriedCount = 1;
                 aEntry.mpShape = rShape;
 
                 maSubsetShapes.insert( aEntry );
 
-                // update cached subset borders
+                
                 updateSubsetBounds( aEntry );
                 updateSubsets();
             }
@@ -353,7 +353,7 @@ namespace slideshow
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::revokeSubsetShape()" );
 
-            // lookup subset shape
+            
             SubsetEntry aEntry;
             const DocTreeNode& rEffectiveSubset( rShape->getSubsetNode() );
 
@@ -362,13 +362,13 @@ namespace slideshow
 
             ShapeSet::iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) == maSubsetShapes.end() )
-                return false; // not found, subset was never queried
+                return false; 
 
-            // last client of the subset revoking?
+            
             if( aIter->mnSubsetQueriedCount > 1 )
             {
-                // no, still clients out there. Just decrement use count
-                // safe cast, since order does not depend on mnSubsetQueriedCount
+                
+                
                 const_cast<SubsetEntry&>(*aIter).mnSubsetQueriedCount--;
 
                 VERBOSE_TRACE( "Subset summary: shape 0x%X, %d open subsets, revoked subset has refcount %d",
@@ -376,7 +376,7 @@ namespace slideshow
                                maSubsetShapes.size(),
                                aIter->mnSubsetQueriedCount );
 
-                return false; // not the last client
+                return false; 
             }
 
             VERBOSE_TRACE( "Subset summary: shape 0x%X, %d open subsets, cleared subset has range [%d,%d]",
@@ -385,24 +385,24 @@ namespace slideshow
                            aEntry.mnStartActionIndex,
                            aEntry.mnEndActionIndex );
 
-            // yes, remove from set
+            
             maSubsetShapes.erase( aIter );
 
 
-            // update currently active subset for _our_ shape (the
-            // part of this shape that is visible, i.e. not displayed
-            // in subset shapes)
-            // ======================================================
+            
+            
+            
+            
 
-            // init bounds
+            
             mnMinSubsetActionIndex = SAL_MAX_INT32;
             mnMaxSubsetActionIndex = 0;
 
-            // TODO(P2): This is quite expensive, when
-            // after every subset effect end, we have to scan
-            // the whole shape set
+            
+            
+            
 
-            // determine new subset range
+            
             ::std::for_each( maSubsetShapes.begin(),
                              maSubsetShapes.end(),
                              ::boost::bind(&DrawShapeSubsetting::updateSubsetBounds,
@@ -477,10 +477,10 @@ namespace slideshow
                 DrawShapeSubsetting::IndexClassificatorVector::const_iterator aCurr( rBegin );
                 while( aCurr != rEnd )
                 {
-                    // aNext will hold an iterator to the next element
-                    // (or the past-the-end iterator, if aCurr
-                    // references the last element). Used to pass a
-                    // valid half-open range to the functors.
+                    
+                    
+                    
+                    
                     aNext = aCurr;
                     ++aNext;
 
@@ -490,14 +490,14 @@ namespace slideshow
                             ENSURE_OR_THROW( false,
                                               "Unexpected type in iterateDocShapes()" );
                         case DrawShapeSubsetting::CLASS_NOOP:
-                            // ignore NOOP actions
+                            
                             break;
 
                         case DrawShapeSubsetting::CLASS_SHAPE_START:
-                            // regardless of ending action
-                            // classifications before: a new shape
-                            // always also starts contained elements
-                            // anew
+                            
+                            
+                            
+                            
                             aLastShapeStart    =
                             aLastParaStart     =
                             aLastLineStart     =
@@ -516,8 +516,8 @@ namespace slideshow
                             }
 
                             ++nCurrShapeCount;
-                            // FALLTHROUGH intended: shape end also
-                            // ends lines
+                            
+                            
                         case DrawShapeSubsetting::CLASS_PARAGRAPH_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_PARAGRAPH_END,
                                               nCurrParaCount,
@@ -529,8 +529,8 @@ namespace slideshow
 
                             ++nCurrParaCount;
                             aLastParaStart = aNext;
-                            // FALLTHROUGH intended: para end also
-                            // ends line
+                            
+                            
                         case DrawShapeSubsetting::CLASS_LINE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_LINE_END,
                                               nCurrLineCount,
@@ -545,19 +545,19 @@ namespace slideshow
 
                             if( *aCurr == DrawShapeSubsetting::CLASS_LINE_END )
                             {
-                                // DON'T fall through here, as a line
-                                // does NOT end neither a sentence,
-                                // nor a word. OTOH, all parent
-                                // structures (paragraph and shape),
-                                // which itself fall through to this
-                                // code, DO end word, sentence and
-                                // character cell.
+                                
+                                
+                                
+                                
+                                
+                                
+                                
 
-                                // TODO(F1): Maybe a line should end a
-                                // character cell, OTOH?
+                                
+                                
                                 break;
                             }
-                            // FALLTHROUGH intended
+                            
                         case DrawShapeSubsetting::CLASS_SENTENCE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_SENTENCE_END,
                                               nCurrSentenceCount,
@@ -569,7 +569,7 @@ namespace slideshow
 
                             ++nCurrSentenceCount;
                             aLastSentenceStart = aNext;
-                            // FALLTHROUGH intended
+                            
                         case DrawShapeSubsetting::CLASS_WORD_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_WORD_END,
                                               nCurrWordCount,
@@ -581,7 +581,7 @@ namespace slideshow
 
                             ++nCurrWordCount;
                             aLastWordStart = aNext;
-                            // FALLTHROUGH intended
+                            
                         case DrawShapeSubsetting::CLASS_CHARACTER_CELL_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_CHARACTER_CELL_END,
                                               nCurrCharCount,
@@ -605,13 +605,13 @@ namespace slideshow
                 switch( eNodeType )
                 {
                     case DocTreeNode::NODETYPE_INVALID:
-                        // FALLTHROUGH intended
+                        
                     default:
                         SAL_WARN( "slideshow", "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;
 
                     case DocTreeNode::NODETYPE_LOGICAL_SHAPE:
-                        // FALLTHROUGH intended
+                        
                     case DocTreeNode::NODETYPE_FORMATTING_SHAPE:
                         return DrawShapeSubsetting::CLASS_SHAPE_END;
 
@@ -632,7 +632,7 @@ namespace slideshow
                 };
             }
 
-            /// Counts number of class occurrences
+            
             class CountClassFunctor
             {
             public:
@@ -650,7 +650,7 @@ namespace slideshow
                     if( eCurrElemClassification == meClass )
                         ++mnCurrCount;
 
-                    return true; // never stop, count all occurrences
+                    return true; 
                 }
 
                 sal_Int32 getCount() const
@@ -671,11 +671,11 @@ namespace slideshow
             const IndexClassificator eRequestedClass(
                 mapDocTreeNode( eNodeType ) );
 
-            // create a counting functor for the requested class of
-            // actions
+            
+            
             CountClassFunctor aFunctor( eRequestedClass );
 
-            // count all occurrences in the given range
+            
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return aFunctor.getCount();
@@ -725,12 +725,12 @@ namespace slideshow
                         mrLastBegin = rCurrElemBegin;
                         mrLastEnd = rCurrElemEnd;
 
-                        return false; // abort iteration, we've
-                                      // already found what we've been
-                                      // looking for
+                        return false; 
+                                      
+                                      
                     }
 
-                    return true; // keep on truckin'
+                    return true; 
                 }
 
             private:
@@ -764,14 +764,14 @@ namespace slideshow
             DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastBegin(rEnd);
             DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastEnd(rEnd);
 
-            // create a nth element functor for the requested class of
-            // actions, and nNodeIndex as the target index
+            
+            
             FindNthElementFunctor aFunctor( nNodeIndex,
                                             aLastBegin,
                                             aLastEnd,
                                             eRequestedClass );
 
-            // find given index in the given range
+            
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return makeTreeNode( maActionClassVector.begin(),
@@ -795,7 +795,7 @@ namespace slideshow
         {
             ensureInitializedNodeTree();
 
-            // convert from vector indices to vector iterators
+            
             const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aBegin( maActionClassVector.begin() );
             const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentBegin( aBegin + rParentNode.getStartIndex() );
             const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentEnd( aBegin + rParentNode.getEndIndex() );
@@ -811,7 +811,7 @@ namespace slideshow
         {
             ensureInitializedNodeTree();
 
-            // convert from vector indices to vector iterators
+            
             const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aBegin( maActionClassVector.begin() );
             const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentBegin( aBegin + rParentNode.getStartIndex() );
             const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentEnd( aBegin + rParentNode.getEndIndex() );

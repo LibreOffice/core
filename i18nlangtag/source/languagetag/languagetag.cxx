@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <config_folders.h>
@@ -19,7 +19,7 @@
 #include <boost/unordered_set.hpp>
 #include <map>
 
-//#define erDEBUG
+
 
 #if defined(ENABLE_LIBLANGTAG)
 #include <liblangtag/langtag.h>
@@ -35,7 +35,7 @@
 using namespace com::sun::star;
 
 
-// Helper to ensure lt_error_t is free'd
+
 struct myLtError
 {
     lt_error_t* p;
@@ -43,7 +43,7 @@ struct myLtError
     ~myLtError() { if (p) lt_error_unref( p); }
 };
 
-// "statics" to be returned as const reference to an empty locale and string.
+
 namespace {
 struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
 struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
@@ -67,9 +67,9 @@ static const KnownTagSet & getKnowns()
             for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aDefined.begin());
                     it != aDefined.end(); ++it)
             {
-                // Do not use the BCP47 string here to initialize the
-                // LanguageTag because then canonicalize() would call this
-                // getKnowns() again..
+                
+                
+                
                 ::std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings( true));
                 for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
                 {
@@ -133,7 +133,7 @@ static LanguageType getNextOnTheFlyLanguage()
 }
 
 
-// static
+
 bool LanguageTag::isOnTheFlyID( LanguageType nLang )
 {
     LanguageType nPri = MsLangId::getPrimaryLanguage( nLang);
@@ -164,7 +164,7 @@ public:
             teardown();
     }
 private:
-    OString maDataPath;   // path to liblangtag data, "|" if system
+    OString maDataPath;   
     sal_uInt32   mnRef;
 
     void setupDataPath();
@@ -184,7 +184,7 @@ LiblantagDataRef::LiblantagDataRef()
 
 LiblantagDataRef::~LiblantagDataRef()
 {
-    // When destructed we're tearing down unconditionally.
+    
     if (mnRef)
         mnRef = 1;
     decRef();
@@ -196,7 +196,7 @@ void LiblantagDataRef::setup()
     if (maDataPath.isEmpty())
         setupDataPath();
     lt_db_initialize();
-    // Hold ref eternally.
+    
     mnRef = SAL_MAX_UINT32;
 }
 
@@ -208,12 +208,12 @@ void LiblantagDataRef::teardown()
 
 void LiblantagDataRef::setupDataPath()
 {
-    // maDataPath is assumed to be empty here.
+    
     OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/liblangtag");
-    rtl::Bootstrap::expandMacros(aURL); //TODO: detect failure
+    rtl::Bootstrap::expandMacros(aURL); 
 
-    // Check if data is in our own installation, else assume system
-    // installation.
+    
+    
     OUString aData( aURL);
     aData += "/language-subtag-registry.xml";
     osl::DirectoryItem aDirItem;
@@ -224,7 +224,7 @@ void LiblantagDataRef::setupDataPath()
             maDataPath = OUStringToOString( aPath, RTL_TEXTENCODING_UTF8);
     }
     if (maDataPath.isEmpty())
-        maDataPath = "|";   // assume system
+        maDataPath = "|";   
     else
         lt_db_set_datadir( maDataPath.getStr());
 }
@@ -263,16 +263,16 @@ private:
 
     mutable com::sun::star::lang::Locale    maLocale;
     mutable OUString                        maBcp47;
-    mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
-    mutable OUString                        maCachedScript;     ///< cache getScript()
-    mutable OUString                        maCachedCountry;    ///< cache getCountry()
-    mutable OUString                        maCachedVariants;   ///< cache getVariants()
-    mutable lt_tag_t*                       mpImplLangtag;      ///< liblangtag pointer
+    mutable OUString                        maCachedLanguage;   
+    mutable OUString                        maCachedScript;     
+    mutable OUString                        maCachedCountry;    
+    mutable OUString                        maCachedVariants;   
+    mutable lt_tag_t*                       mpImplLangtag;      
     mutable LanguageType                    mnLangID;
     mutable Decision                        meIsValid;
     mutable Decision                        meIsIsoLocale;
     mutable Decision                        meIsIsoODF;
-    mutable Decision                        meIsLiblangtagNeeded;   ///< whether processing with liblangtag needed
+    mutable Decision                        meIsLiblangtagNeeded;   
             bool                            mbSystemLocale      : 1;
     mutable bool                            mbInitializedBcp47  : 1;
     mutable bool                            mbInitializedLocale : 1;
@@ -473,8 +473,8 @@ LanguageTag::LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize
     if (bCanonicalize)
     {
         getImpl()->canonicalize();
-        // Registration itself may already have canonicalized, so do an
-        // unconditional sync.
+        
+        
         syncFromImpl();
     }
 
@@ -636,13 +636,13 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
         pImpl = (*it).second;
         if (pImpl.get() != this)
         {
-            // Could happen for example if during registerImpl() the tag was
-            // changed via canonicalize() and the result was already present in
-            // the map before, for example 'bn-Beng' => 'bn'. This specific
-            // case is now taken care of in registerImpl() and doesn't reach
-            // here. However, use the already existing impl if it matches.
+            
+            
+            
+            
+            
             SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: using other impl for this '" << maBcp47 << "'");
-            *this = *pImpl;     // ensure consistency
+            *this = *pImpl;     
             bOtherImpl = true;
         }
     }
@@ -659,10 +659,10 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
             nRegisterID = getNextOnTheFlyLanguage();
         else
         {
-            // Accept a suggested ID only if it is not mapped yet to something
-            // different, otherwise we would end up with ambiguous assignments
-            // of different language tags, for example for the same primary
-            // LangID with "no", "nb" and "nn".
+            
+            
+            
+            
             const MapLangID& rMapLangID = theMapLangID::get();
             MapLangID::const_iterator itID( rMapLangID.find( nRegisterID));
             if (itID != rMapLangID.end())
@@ -683,7 +683,7 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
         }
         if (!nRegisterID)
         {
-            // out of IDs, nothing to register
+            
             return pImpl;
         }
         pImpl->mnLangID = nRegisterID;
@@ -712,7 +712,7 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
     return pImpl;
 }
 
-// static
+
 void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
 {
     if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_SYSTEM)
@@ -724,8 +724,8 @@ void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
     }
     SAL_INFO( "i18nlangtag", "LanguageTag::setConfiguredSystemLanguage: setting to 0x" << ::std::hex << nLang);
     MsLangId::LanguageTagAccess::setConfiguredSystemLanguage( nLang);
-    // Resest system locale to none and let registerImpl() do the rest to
-    // initialize a new one.
+    
+    
     theSystemLocale::get().reset();
     LanguageTag aLanguageTag( LANGUAGE_SYSTEM);
     aLanguageTag.registerImpl();
@@ -740,11 +740,11 @@ static bool lcl_isKnownOnTheFlyID( LanguageType nLang )
 
 LanguageTag::ImplPtr LanguageTag::registerImpl() const
 {
-    // XXX NOTE: Do not use non-static LanguageTag::convert...() member methods
-    // here as they access getImpl() and syncFromImpl() and would lead to
-    // recursion. Also do not use the static LanguageTag::convertTo...()
-    // methods as they may create temporary LanguageTag instances. Only
-    // LanguageTagImpl::convertToBcp47(Locale) is ok.
+    
+    
+    
+    
+    
 
     ImplPtr pImpl;
 
@@ -754,8 +754,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCalls << " calls");
 #endif
 
-    // Do not register unresolved system locale, also force LangID if system
-    // and take the system locale shortcut if possible.
+    
+    
     if (mbSystemLocale)
     {
         pImpl = theSystemLocale::get();
@@ -780,9 +780,9 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     {
         if (mnLangID == LANGUAGE_DONTKNOW)
         {
-            // Heavy usage of LANGUAGE_DONTKNOW, make it an own Impl for all the
-            // conversion attempts. At the same time provide a central breakpoint
-            // to inspect such places.
+            
+            
+            
             LanguageTag::ImplPtr& rDontKnow = theDontKnow::get();
             if (!rDontKnow)
                 rDontKnow.reset( new LanguageTagImpl( *this));
@@ -796,7 +796,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         }
         else
         {
-            // A great share are calls for a system equal locale.
+            
             pImpl = theSystemLocale::get();
             if (pImpl && pImpl->mnLangID == mnLangID)
             {
@@ -811,7 +811,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         }
     }
 
-    // Force Bcp47 if not LangID.
+    
     if (!mbInitializedLangID && !mbInitializedBcp47 && mbInitializedLocale)
     {
         maBcp47 = LanguageTagImpl::convertToBcp47( maLocale);
@@ -820,7 +820,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 
     if (mbInitializedBcp47)
     {
-        // A great share are calls for a system equal locale.
+        
         pImpl = theSystemLocale::get();
         if (pImpl && pImpl->maBcp47 == maBcp47)
         {
@@ -843,15 +843,15 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 
 #if OSL_DEBUG_LEVEL > 0
     static long nRunning = 0;
-    // Entering twice here is ok, which is needed for fallback init in
-    // getKnowns() in canonicalize() via pImpl->convertBcp47ToLocale() below,
-    // everything else is suspicious.
+    
+    
+    
     SAL_WARN_IF( nRunning > 1, "i18nlangtag", "LanguageTag::registerImpl: re-entered for '"
             << maBcp47 << "' 0x" << ::std::hex << mnLangID );
     struct Runner { Runner() { ++nRunning; } ~Runner() { --nRunning; } } aRunner;
 #endif
 
-    // Prefer LangID map as find+insert needs less comparison work.
+    
     if (mbInitializedLangID)
     {
         MapLangID& rMap = theMapLangID::get();
@@ -866,11 +866,11 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for 0x" << ::std::hex << mnLangID);
             pImpl.reset( new LanguageTagImpl( *this));
             rMap.insert( ::std::make_pair( mnLangID, pImpl));
-            // Try round-trip.
+            
             if (!pImpl->mbInitializedLocale)
                 pImpl->convertLangToLocale();
             LanguageType nLang = MsLangId::Conversion::convertLocaleToLanguage( pImpl->maLocale);
-            // If round-trip is identical cross-insert to Bcp47 map.
+            
             if (nLang == pImpl->mnLangID)
             {
                 if (!pImpl->mbInitializedBcp47)
@@ -912,8 +912,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for '" << maBcp47 << "'");
             pImpl.reset( new LanguageTagImpl( *this));
             ::std::pair< MapBcp47::iterator, bool > insOrig( rMap.insert( ::std::make_pair( maBcp47, pImpl)));
-            // If changed after canonicalize() also add the resulting tag to
-            // the map.
+            
+            
             if (pImpl->synCanonicalize())
             {
                 SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: canonicalized to '" << pImpl->maBcp47 << "'");
@@ -921,14 +921,14 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                         rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl)));
                 SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << (insCanon.second ? "" : "not ")
                         << "inserted '" << pImpl->maBcp47 << "'");
-                // If the canonicalized tag already existed (was not inserted)
-                // and impls are different, make this impl that impl and skip
-                // the rest if that LangID is present as well. The existing
-                // entry may or may not be different, it may even be strictly
-                // identical to this if it differs only in case (e.g. ko-kr =>
-                // ko-KR) which was corrected in canonicalize() hence also in
-                // the map entry but comparison is case insensitive and found
-                // it again.
+                
+                
+                
+                
+                
+                
+                
+                
                 if (!insCanon.second && (*insCanon.first).second != pImpl)
                 {
                     (*insOrig.first).second = pImpl = (*insCanon.first).second;
@@ -938,27 +938,27 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             }
             if (!pImpl->mbInitializedLangID)
             {
-                // Try round-trip Bcp47->Locale->LangID->Locale->Bcp47.
+                
                 if (!pImpl->mbInitializedLocale)
                     pImpl->convertBcp47ToLocale();
                 if (!pImpl->mbInitializedLangID)
                     pImpl->convertLocaleToLang( true);
-                // Unconditionally insert (round-trip is possible) for
-                // on-the-fly IDs and (generated or not) suggested IDs.
+                
+                
                 bool bInsert = lcl_isKnownOnTheFlyID( pImpl->mnLangID);
                 OUString aBcp47;
                 if (!bInsert)
                 {
                     if (pImpl->mnLangID != LANGUAGE_DONTKNOW)
                     {
-                        // May have involved canonicalize(), so compare with
-                        // pImpl->maBcp47 instead of maBcp47!
+                        
+                        
                         aBcp47 = LanguageTagImpl::convertToBcp47(
                                 MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
                         bInsert = (aBcp47 == pImpl->maBcp47);
                     }
                 }
-                // If round-trip is identical cross-insert to Bcp47 map.
+                
                 if (bInsert)
                 {
                     ::std::pair< MapLangID::const_iterator, bool > res(
@@ -990,8 +990,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         pImpl.reset( new LanguageTagImpl( *this));
     }
 
-    // If we reach here for mbSystemLocale we didn't have theSystemLocale
-    // above, so add it.
+    
+    
     if (mbSystemLocale && mbInitializedLangID)
     {
         theSystemLocale::get() = pImpl;
@@ -1038,8 +1038,8 @@ LanguageTag & LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCano
     if (bCanonicalize)
     {
         getImpl()->canonicalize();
-        // Registration itself may already have canonicalized, so do an
-        // unconditional sync.
+        
+        
         syncFromImpl();
     }
     return *this;
@@ -1078,7 +1078,7 @@ LanguageTag & LanguageTag::reset( const rtl_Locale & rLocale )
 bool LanguageTagImpl::canonicalize()
 {
 #ifdef erDEBUG
-    // dump once
+    
     struct dumper
     {
         lt_tag_t** mpp;
@@ -1090,14 +1090,14 @@ bool LanguageTagImpl::canonicalize()
 
     bool bChanged = false;
 
-    // Side effect: have maBcp47 in any case, resolved system.
-    // Some methods calling canonicalize() (or not calling it due to
-    // meIsLiblangtagNeeded==DECISION_NO) rely on this! Hence do not set
-    // meIsLiblangtagNeeded anywhere else than hereafter.
+    
+    
+    
+    
     getBcp47();
 
-    // The simple cases and known locales don't need liblangtag processing,
-    // which also avoids loading liblangtag data on startup.
+    
+    
     if (meIsLiblangtagNeeded == DECISION_DONTKNOW)
     {
         bool bTemporaryLocale = false;
@@ -1111,17 +1111,17 @@ bool LanguageTagImpl::canonicalize()
             }
             else
             {
-                // Now this is getting funny.. we only have some BCP47 string
-                // and want to determine if parsing it would be possible
-                // without using liblangtag just to see if it is a simple known
-                // locale or could fall back to one.
+                
+                
+                
+                
                 OUString aLanguage, aScript, aCountry, aVariants;
                 Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry, aVariants);
                 if (eExt != EXTRACTED_NONE)
                 {
                     if (eExt == EXTRACTED_LSC || eExt == EXTRACTED_LV)
                     {
-                        // Rebuild bcp47 with proper casing of tags.
+                        
                         OUStringBuffer aBuf( aLanguage.getLength() + 1 + aScript.getLength() +
                                 1 + aCountry.getLength() + 1 + aVariants.getLength());
                         aBuf.append( aLanguage);
@@ -1156,18 +1156,18 @@ bool LanguageTagImpl::canonicalize()
         }
         if (mbInitializedLangID && !mbInitializedLocale)
         {
-            // Do not call getLocale() here because that prefers
-            // convertBcp47ToLocale() which would end up in recursion via
-            // isIsoLocale()!
+            
+            
+            
 
-            // Prepare to verify that we have a known locale, not just an
-            // arbitrary MS-LangID.
+            
+            
             convertLangToLocale();
         }
         if (mbInitializedLocale)
         {
             if (maLocale.Variant.isEmpty())
-                meIsLiblangtagNeeded = DECISION_NO;     // per definition ll[l][-CC]
+                meIsLiblangtagNeeded = DECISION_NO;     
             else
             {
                 if (!mbInitializedLangID)
@@ -1177,15 +1177,15 @@ bool LanguageTagImpl::canonicalize()
                         bTemporaryLangID = true;
                 }
                 if (mnLangID != LANGUAGE_DONTKNOW && mnLangID != LANGUAGE_SYSTEM)
-                    meIsLiblangtagNeeded = DECISION_NO; // known locale
+                    meIsLiblangtagNeeded = DECISION_NO; 
                 else
                 {
                     const KnownTagSet& rKnowns = getKnowns();
                     if (rKnowns.find( maBcp47) != rKnowns.end())
-                        meIsLiblangtagNeeded = DECISION_NO; // known fallback
+                        meIsLiblangtagNeeded = DECISION_NO; 
                 }
             }
-            // We may have an internal override "canonicalization".
+            
             lang::Locale aNew( MsLangId::Conversion::getOverride( maLocale));
             if (!aNew.Language.isEmpty() &&
                     (aNew.Language != maLocale.Language ||
@@ -1196,7 +1196,7 @@ bool LanguageTagImpl::canonicalize()
                 bChanged = true;
                 meIsIsoLocale = DECISION_DONTKNOW;
                 meIsIsoODF = DECISION_DONTKNOW;
-                meIsLiblangtagNeeded = DECISION_NO; // known locale
+                meIsLiblangtagNeeded = DECISION_NO; 
             }
         }
         if (bTemporaryLocale)
@@ -1212,8 +1212,8 @@ bool LanguageTagImpl::canonicalize()
     }
     if (meIsLiblangtagNeeded == DECISION_NO)
     {
-        meIsValid = DECISION_YES;   // really, known must be valid ...
-        return bChanged;            // that's it
+        meIsValid = DECISION_YES;   
+        return bChanged;            
     }
 
     meIsLiblangtagNeeded = DECISION_YES;
@@ -1234,8 +1234,8 @@ bool LanguageTagImpl::canonicalize()
         if (pTag)
         {
             OUString aNew( OUString::createFromAscii( pTag));
-            // Make the lt_tag_t follow the new string if different, which
-            // removes default script and such.
+            
+            
             if (maBcp47 != aNew)
             {
                 maBcp47 = aNew;
@@ -1300,7 +1300,7 @@ void LanguageTag::syncFromImpl()
 void LanguageTag::syncVarsFromImpl() const
 {
     if (!mpImpl)
-        getImpl();      // with side effect syncVarsFromRawImpl()
+        getImpl();      
     else
         syncVarsFromRawImpl();
 }
@@ -1308,12 +1308,12 @@ void LanguageTag::syncVarsFromImpl() const
 
 void LanguageTag::syncVarsFromRawImpl() const
 {
-    // Do not use getImpl() here.
+    
     LanguageTagImpl* pImpl = mpImpl.get();
     if (!pImpl)
         return;
 
-    // Obviously only mutable variables.
+    
     mbInitializedBcp47  = pImpl->mbInitializedBcp47;
     maBcp47             = pImpl->maBcp47;
     mbInitializedLocale = pImpl->mbInitializedLocale;
@@ -1339,15 +1339,15 @@ void LanguageTagImpl::convertLocaleToBcp47()
 
     if (maLocale.Language.isEmpty())
     {
-        // Do not call LanguageTag::convertToBcp47(Locale) that for an empty
-        // locale via LanguageTag::convertToBcp47(LanguageType) and
-        // LanguageTag::convertToLocale(LanguageType) would instanciate another
-        // LanguageTag.
+        
+        
+        
+        
         maLocale = MsLangId::Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, true);
     }
     if (maLocale.Language.isEmpty())
     {
-        maBcp47 = OUString();   // bad luck
+        maBcp47 = OUString();   
     }
     else if (maLocale.Language == I18NLANGTAG_QLT)
     {
@@ -1382,14 +1382,14 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
         {
             if (isValidBcp47())
             {
-                // For language-only (including script) look if we know some
-                // locale of that language and if so try to use the primary
-                // language ID of that instead of generating an on-the-fly ID.
+                
+                
+                
                 if (getCountry().isEmpty() && isIsoODF())
                 {
                     lang::Locale aLoc( MsLangId::Conversion::lookupFallbackLocale( maLocale));
-                    // 'en-US' is last resort, do not use except when looking
-                    // for 'en'.
+                    
+                    
                     if (aLoc.Language != "en" || getLanguage() == "en")
                     {
                         mnLangID = MsLangId::Conversion::convertLocaleToLanguage( aLoc);
@@ -1473,7 +1473,7 @@ void LanguageTagImpl::convertLangToLocale()
         mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
         mbInitializedLangID = true;
     }
-    // Resolve system here! The original is remembered as mbSystemLocale.
+    
     maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID, true);
     mbInitializedLocale = true;
 }
@@ -1504,16 +1504,16 @@ void LanguageTag::convertLangToBcp47()
 
 void LanguageTag::convertFromRtlLocale()
 {
-    // The rtl_Locale follows the Open Group Base Specification,
-    // 8.2 Internationalization Variables
-    // language[_territory][.codeset][@modifier]
-    // On GNU/Linux systems usually being glibc locales.
-    // sal/osl/unx/nlsupport.c _parse_locale() parses them into
-    // Language: language               2 or 3 alpha code
-    // Country: [territory]             2 alpha code
-    // Variant: [.codeset][@modifier]
-    // Variant effectively contains anything that follows the territory, not
-    // looking for '.' dot delimiter or '@' modifier content.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if (!maLocale.Variant.isEmpty())
     {
         OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
@@ -1532,7 +1532,7 @@ void LanguageTag::convertFromRtlLocale()
         if (mnLangID == LANGUAGE_DONTKNOW)
         {
             SAL_WARN( "i18nlangtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
-            mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
+            mnLangID = LANGUAGE_ENGLISH_US;     
         }
         mbInitializedLangID = true;
 #endif
@@ -1607,7 +1607,7 @@ OUString LanguageTagImpl::getScriptFromLangtag()
     if (mpImplLangtag)
     {
         const lt_script_t* pScriptT = lt_tag_get_script( mpImplLangtag);
-        // pScriptT==NULL is valid for default scripts
+        
         if (!pScriptT)
             return aScript;
         const char* pScript = lt_script_get_tag( pScriptT);
@@ -1633,10 +1633,10 @@ OUString LanguageTagImpl::getRegionFromLangtag()
     if (mpImplLangtag)
     {
         const lt_region_t* pRegionT = lt_tag_get_region( mpImplLangtag);
-        // pRegionT==NULL is valid for language only tags, rough check here
-        // that does not take sophisticated tags into account that actually
-        // should have a region, check for ll, lll, ll-Ssss and lll-Ssss so
-        // that ll-CC and lll-CC actually fail.
+        
+        
+        
+        
         SAL_WARN_IF( !pRegionT &&
                 maBcp47.getLength() != 2 && maBcp47.getLength() != 3 &&
                 maBcp47.getLength() != 7 && maBcp47.getLength() != 8,
@@ -1737,8 +1737,8 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
 
 void LanguageTag::getIsoLanguageScriptCountry( OUString& rLanguage, OUString& rScript, OUString& rCountry ) const
 {
-    // Calling isIsoODF() first is a predicate for getLanguage(), getScript()
-    // and getCountry() to work correctly in this context.
+    
+    
     if (isIsoODF())
     {
         rLanguage = getLanguage();
@@ -1770,7 +1770,7 @@ inline bool isUpperAscii( sal_Unicode c )
 }
 
 
-// static
+
 bool LanguageTag::isIsoLanguage( const OUString& rLanguage )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
@@ -1787,7 +1787,7 @@ bool LanguageTag::isIsoLanguage( const OUString& rLanguage )
 }
 
 
-// static
+
 bool LanguageTag::isIsoCountry( const OUString& rRegion )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
@@ -1800,7 +1800,7 @@ bool LanguageTag::isIsoCountry( const OUString& rRegion )
 }
 
 
-// static
+
 bool LanguageTag::isIsoScript( const OUString& rScript )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
@@ -1994,8 +1994,8 @@ bool LanguageTagImpl::isIsoLocale() const
     if (meIsIsoLocale == DECISION_DONTKNOW)
     {
         const_cast<LanguageTagImpl*>(this)->synCanonicalize();
-        // It must be at most ll-CC or lll-CC
-        // Do not use getCountry() here, use getRegion() instead.
+        
+        
         meIsIsoLocale = ((maBcp47.isEmpty() ||
                     (maBcp47.getLength() <= 6 && LanguageTag::isIsoLanguage( getLanguage()) &&
                      LanguageTag::isIsoCountry( getRegion()))) ? DECISION_YES : DECISION_NO);
@@ -2019,12 +2019,12 @@ bool LanguageTagImpl::isIsoODF() const
         const_cast<LanguageTagImpl*>(this)->synCanonicalize();
         if (!LanguageTag::isIsoScript( getScript()))
             return ((meIsIsoODF = DECISION_NO) == DECISION_YES);
-        // The usual case is lll-CC so simply check that first.
+        
         if (isIsoLocale())
             return ((meIsIsoODF = DECISION_YES) == DECISION_YES);
-        // If this is not ISO locale for which script must not exist it can
-        // still be ISO locale plus ISO script lll-Ssss-CC, but not ll-vvvv ...
-        // ll-vvvvvvvv
+        
+        
+        
         meIsIsoODF = ((maBcp47.getLength() <= 11 && LanguageTag::isIsoLanguage( getLanguage()) &&
                     LanguageTag::isIsoCountry( getRegion()) && LanguageTag::isIsoScript( getScript()) &&
                     getVariants().isEmpty()) ? DECISION_YES : DECISION_NO);
@@ -2079,15 +2079,15 @@ LanguageTag & LanguageTag::makeFallback()
         {
             if (rLocale1.Language != "en" && aLocale2.Language == "en" && aLocale2.Country == "US")
             {
-                // "en-US" is the last resort fallback, try if we get a better
-                // one for the fallback hierarchy of a non-"en" locale.
+                
+                
                 ::std::vector< OUString > aFallbacks( getFallbackStrings( false));
                 for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
                 {
                     lang::Locale aLocale3( LanguageTag( *it).getLocale());
                     aLocale2 = MsLangId::Conversion::lookupFallbackLocale( aLocale3);
                     if (aLocale2.Language != "en" || aLocale2.Country != "US")
-                        break;  // for, success
+                        break;  
                 }
             }
             SAL_INFO( "i18nlangtag", "LanguageTag::makeFallback - for (" <<
@@ -2119,8 +2119,8 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( aLanguage + "-" + aCountry);
             if (aLanguage == "zh")
             {
-                // For zh-HK or zh-MO also list zh-TW, for all other zh-XX also
-                // list zh-CN.
+                
+                
                 if (aCountry == "HK" || aCountry == "MO")
                     aVec.push_back( aLanguage + "-TW");
                 else if (aCountry != "CN")
@@ -2129,12 +2129,12 @@ LanguageTag & LanguageTag::makeFallback()
             }
             else if (aLanguage == "sh")
             {
-                // Manual list instead of calling
-                // LanguageTag( "sr-Latn-" + aCountry).getFallbackStrings( true)
-                // that would also include "sh-*" again.
+                
+                
+                
                 aVec.push_back( "sr-Latn-" + aCountry);
                 aVec.push_back( "sr-Latn");
-                aVec.push_back( "sh");  // legacy with script, before default script with country
+                aVec.push_back( "sh");  
                 aVec.push_back( "sr-" + aCountry);
                 aVec.push_back( "sr");
             }
@@ -2142,7 +2142,7 @@ LanguageTag & LanguageTag::makeFallback()
             {
                 ::std::vector< OUString > aRep( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
                 aVec.insert( aVec.end(), aRep.begin(), aRep.end());
-                // Already includes 'ca' language fallback.
+                
             }
             else if (aLanguage == "ku")
             {
@@ -2172,7 +2172,7 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( "ku-Arab-" + aCountry);
                 aVec.push_back( "ku-" + aCountry);
                 aVec.push_back( aLanguage);
-                // not 'ku' only, that was used for Latin script
+                
             }
             else
                 aVec.push_back( aLanguage);
@@ -2188,7 +2188,7 @@ LanguageTag & LanguageTag::makeFallback()
             }
             else if (aLanguage == "pli")
             {
-                // a special case for Pali dictionary, see fdo#41599
+                
                 aVec.push_back( "pi-Latn");
                 aVec.push_back( "pi");
             }
@@ -2196,7 +2196,7 @@ LanguageTag & LanguageTag::makeFallback()
         return aVec;
     }
 
-    getBcp47();     // have maBcp47 now
+    getBcp47();     
     if (bIncludeFullBcp47)
         aVec.push_back( maBcp47);
     OUString aScript;
@@ -2213,8 +2213,8 @@ LanguageTag & LanguageTag::makeFallback()
                 aTmp = aLanguage + "-" + aScript + "-" + aCountry + "-" + aVariants;
                 if (aTmp != maBcp47)
                     aVec.push_back( aTmp);
-                // Language with variant but without country before language
-                // without variant but with country.
+                
+                
                 aTmp = aLanguage + "-" + aScript + "-" + aVariants;
                 if (aTmp != maBcp47)
                     aVec.push_back( aTmp);
@@ -2225,7 +2225,7 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( aTmp);
             if (aLanguage == "sr" && aScript == "Latn")
             {
-                // sr-Latn-CS => sr-Latn-YU, sh-CS, sh-YU
+                
                 if (aCountry == "CS")
                 {
                     aVec.push_back( "sr-Latn-YU");
@@ -2236,7 +2236,7 @@ LanguageTag & LanguageTag::makeFallback()
                     aVec.push_back( "sh-" + aCountry);
             }
             else if (aLanguage == "pi" && aScript == "Latn")
-                aVec.push_back( "pli");     // a special case for Pali dictionary, see fdo#41599
+                aVec.push_back( "pli");     
             else if (aLanguage == "krm" && aScript == "Latn" && (aCountry == "TR" || aCountry == "SY"))
                 aVec.push_back( "ku-" + aCountry);
         }
@@ -2250,13 +2250,13 @@ LanguageTag & LanguageTag::makeFallback()
         if (aTmp != maBcp47)
             aVec.push_back( aTmp);
 
-        // 'sh' actually denoted a script, so have it here instead of appended
-        // at the end as language-only.
+        
+        
         if (aLanguage == "sr" && aScript == "Latn")
             aVec.push_back( "sh");
         else if (aLanguage == "ku" && aScript == "Arab")
             aVec.push_back( "ckb");
-        // 'ku' only denoted Latin script
+        
         else if (aLanguage == "krm" && aScript == "Latn" && aCountry.isEmpty())
             aVec.push_back( "ku");
     }
@@ -2270,11 +2270,11 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( aTmp);
             if (maBcp47 == "ca-ES-valencia")
                 aVec.push_back( "ca-XV");
-            // Language with variant but without country before language
-            // without variant but with country.
-            // But only if variant is not from a grandfathered tag that
-            // wouldn't match the rules, i.e. "de-1901" is fine but "en-oed" is
-            // not.
+            
+            
+            
+            
+            
             if (aVariants.getLength() >= 5 ||
                     (aVariants.getLength() == 4 && '0' <= aVariants[0] && aVariants[0] <= '9'))
             {
@@ -2290,8 +2290,8 @@ LanguageTag & LanguageTag::makeFallback()
     }
     if (!aVariants.isEmpty() && !bHaveLanguageVariant)
     {
-        // Only if variant is not from a grandfathered tag that wouldn't match
-        // the rules, i.e. "de-1901" is fine but "en-oed" is not.
+        
+        
         if (aVariants.getLength() >= 5 ||
                 (aVariants.getLength() == 4 && '0' <= aVariants[0] && aVariants[0] <= '9'))
         {
@@ -2301,15 +2301,15 @@ LanguageTag & LanguageTag::makeFallback()
         }
     }
 
-    // Insert legacy fallbacks with country before language-only, but only
-    // default script, script was handled already above.
+    
+    
     if (!aCountry.isEmpty())
     {
         if (aLanguage == "sr" && aCountry == "CS")
             aVec.push_back( "sr-YU");
     }
 
-    // Original language-only.
+    
     if (aLanguage != maBcp47)
         aVec.push_back( aLanguage);
 
@@ -2319,12 +2319,12 @@ LanguageTag & LanguageTag::makeFallback()
 
 bool LanguageTag::equals( const LanguageTag & rLanguageTag, bool bResolveSystem ) const
 {
-    // If SYSTEM is not to be resolved or either both are SYSTEM or none, we
-    // can use the operator==() optimization.
+    
+    
     if (!bResolveSystem || isSystemLocale() == rLanguageTag.isSystemLocale())
         return operator==( rLanguageTag);
 
-    // Compare full language tag strings.
+    
     return getBcp47( bResolveSystem) == rLanguageTag.getBcp47( bResolveSystem);
 }
 
@@ -2332,16 +2332,16 @@ bool LanguageTag::equals( const LanguageTag & rLanguageTag, bool bResolveSystem 
 bool LanguageTag::operator==( const LanguageTag & rLanguageTag ) const
 {
     if (isSystemLocale() && rLanguageTag.isSystemLocale())
-        return true;    // both SYSTEM
+        return true;    
 
-    // No need to convert to BCP47 if both Lang-IDs are available.
+    
     if (mbInitializedLangID && rLanguageTag.mbInitializedLangID)
     {
-        // Equal if same ID and no SYSTEM is involved or both are SYSTEM.
+        
         return mnLangID == rLanguageTag.mnLangID && isSystemLocale() == rLanguageTag.isSystemLocale();
     }
 
-    // Compare full language tag strings but SYSTEM unresolved.
+    
     return getBcp47( false) == rLanguageTag.getBcp47( false);
 }
 
@@ -2358,7 +2358,7 @@ bool LanguageTag::operator<( const LanguageTag & rLanguageTag ) const
 }
 
 
-// static
+
 LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp47,
         OUString& rLanguage, OUString& rScript, OUString& rCountry, OUString& rVariants )
 {
@@ -2368,17 +2368,17 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     sal_Int32 nHyph2 = (nHyph1 < 0 ? -1 : rBcp47.indexOf( '-', nHyph1 + 1));
     sal_Int32 nHyph3 = (nHyph2 < 0 ? -1 : rBcp47.indexOf( '-', nHyph2 + 1));
     sal_Int32 nHyph4 = (nHyph3 < 0 ? -1 : rBcp47.indexOf( '-', nHyph3 + 1));
-    if (nLen == 1 && rBcp47[0] == '*')              // * the dreaded jolly joker
+    if (nLen == 1 && rBcp47[0] == '*')              
     {
-        // It's f*d up but we need to recognize this.
+        
         eRet = EXTRACTED_X_JOKER;
     }
-    else if (nHyph1 == 1 && rBcp47[0] == 'x')       // x-... privateuse
+    else if (nHyph1 == 1 && rBcp47[0] == 'x')       
     {
-        // x-... privateuse tags MUST be known to us by definition.
+        
         eRet = EXTRACTED_X;
     }
-    else if (nLen == 2 || nLen == 3)                // ll or lll
+    else if (nLen == 2 || nLen == 3)                
     {
         if (nHyph1 < 0)
         {
@@ -2387,8 +2387,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LSC;
         }
     }
-    else if (  (nHyph1 == 2 && nLen == 5)           // ll-CC
-            || (nHyph1 == 3 && nLen == 6))          // lll-CC
+    else if (  (nHyph1 == 2 && nLen == 5)           
+            || (nHyph1 == 3 && nLen == 6))          
     {
         if (nHyph2 < 0)
         {
@@ -2398,15 +2398,15 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LSC;
         }
     }
-    else if (  (nHyph1 == 2 && nLen ==  7)          // ll-Ssss or ll-vvvv
-            || (nHyph1 == 3 && nLen ==  8))         // lll-Ssss or lll-vvvv
+    else if (  (nHyph1 == 2 && nLen ==  7)          
+            || (nHyph1 == 3 && nLen ==  8))         
     {
         if (nHyph2 < 0)
         {
             sal_Unicode c = rBcp47[nHyph1+1];
             if ('0' <= c && c <= '9')
             {
-                // (DIGIT 3ALNUM) vvvv variant instead of Ssss script
+                
                 rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
                 rScript   = rCountry = OUString();
                 rVariants = rBcp47.copy( nHyph1 + 1);
@@ -2422,8 +2422,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             }
         }
     }
-    else if (  (nHyph1 == 2 && nHyph2 == 7 && nLen == 10)   // ll-Ssss-CC
-            || (nHyph1 == 3 && nHyph2 == 8 && nLen == 11))  // lll-Ssss-CC
+    else if (  (nHyph1 == 2 && nHyph2 == 7 && nLen == 10)   
+            || (nHyph1 == 3 && nHyph2 == 8 && nLen == 11))  
     {
         if (nHyph3 < 0)
         {
@@ -2434,8 +2434,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LSC;
         }
     }
-    else if (  (nHyph1 == 2 && nHyph2 == 7 && nHyph3 == 10 && nLen >= 15)   // ll-Ssss-CC-vvvv[vvvv][-...]
-            || (nHyph1 == 3 && nHyph2 == 8 && nHyph3 == 11 && nLen >= 16))  // lll-Ssss-CC-vvvv[vvvv][-...]
+    else if (  (nHyph1 == 2 && nHyph2 == 7 && nHyph3 == 10 && nLen >= 15)   
+            || (nHyph1 == 3 && nHyph2 == 8 && nHyph3 == 11 && nLen >= 16))  
     {
         if (nHyph4 < 0)
             nHyph4 = rBcp47.getLength();
@@ -2448,8 +2448,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LV;
         }
     }
-    else if (  (nHyph1 == 2 && nHyph2 == 5 && nLen >= 10)   // ll-CC-vvvv[vvvv][-...]
-            || (nHyph1 == 3 && nHyph2 == 6 && nLen >= 11))  // lll-CC-vvvv[vvvv][-...]
+    else if (  (nHyph1 == 2 && nHyph2 == 5 && nLen >= 10)   
+            || (nHyph1 == 3 && nHyph2 == 6 && nLen >= 11))  
     {
         if (nHyph3 < 0)
             nHyph3 = rBcp47.getLength();
@@ -2462,8 +2462,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LV;
         }
     }
-    else if (  (nHyph1 == 2 && nLen >= 8)                   // ll-vvvvv[vvv][-...]
-            || (nHyph1 == 3 && nLen >= 9))                  // lll-vvvvv[vvv][-...]
+    else if (  (nHyph1 == 2 && nLen >= 8)                   
+            || (nHyph1 == 3 && nLen >= 9))                  
     {
         if (nHyph2 < 0)
             nHyph2 = rBcp47.getLength();
@@ -2476,9 +2476,9 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         }
         else
         {
-            // Known and handled grandfathered; ugly but effective ...
-            // Note that nLen must have matched above.
-            // Strictly not a variant, but so far we treat it as such.
+            
+            
+            
             if (rBcp47.equalsIgnoreAsciiCase( "en-GB-oed"))
             {
                 rLanguage = "en";
@@ -2498,7 +2498,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
 }
 
 
-// static
+
 ::std::vector< OUString >::const_iterator LanguageTag::getFallback(
         const ::std::vector< OUString > & rList, const OUString & rReference )
 {
@@ -2507,11 +2507,11 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
 
     ::std::vector< OUString >::const_iterator it;
 
-    // Try the simple case first without constructing fallbacks.
+    
     for (it = rList.begin(); it != rList.end(); ++it)
     {
         if (*it == rReference)
-            return it;  // exact match
+            return it;  
     }
 
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
@@ -2535,18 +2535,18 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         for (it = rList.begin(); it != rList.end(); ++it)
         {
             if (*it == *fb)
-                return it;  // fallback found
+                return it;  
         }
     }
 
-    // Did not find anything so return something of the list, the first value
-    // will do as well as any other as none did match any of the possible
-    // fallbacks.
+    
+    
+    
     return rList.begin();
 }
 
 
-// static
+
 ::std::vector< com::sun::star::lang::Locale >::const_iterator LanguageTag::getMatchingFallback(
         const ::std::vector< com::sun::star::lang::Locale > & rList,
         const com::sun::star::lang::Locale & rReference )
@@ -2556,16 +2556,16 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
 
     ::std::vector< lang::Locale >::const_iterator it;
 
-    // Try the simple case first without constructing fallbacks.
+    
     for (it = rList.begin(); it != rList.end(); ++it)
     {
         if (    (*it).Language == rReference.Language &&
                 (*it).Country  == rReference.Country  &&
                 (*it).Variant  == rReference.Variant)
-            return it;  // exact match
+            return it;  
     }
 
-    // Now for each reference fallback test the fallbacks of the list in order.
+    
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
     size_t i = 0;
@@ -2587,7 +2587,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         }
     }
 
-    // No match found.
+    
     return rList.end();
 }
 
@@ -2596,8 +2596,8 @@ static bool lcl_isSystem( LanguageType nLangID )
 {
     if (nLangID == LANGUAGE_SYSTEM)
         return true;
-    // There are some special values that simplify to SYSTEM,
-    // getRealLanguage() catches and resolves them.
+    
+    
     LanguageType nNewLangID = MsLangId::getRealLanguage( nLangID);
     if (nNewLangID != nLangID)
         return true;
@@ -2605,7 +2605,7 @@ static bool lcl_isSystem( LanguageType nLangID )
 }
 
 
-// static
+
 com::sun::star::lang::Locale LanguageTag::convertToLocale( LanguageType nLangID, bool bResolveSystem )
 {
     if (!bResolveSystem && lcl_isSystem( nLangID))
@@ -2615,7 +2615,7 @@ com::sun::star::lang::Locale LanguageTag::convertToLocale( LanguageType nLangID,
 }
 
 
-// static
+
 LanguageType LanguageTag::convertToLanguageType( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem )
 {
     if (rLocale.Language.isEmpty() && !bResolveSystem)
@@ -2625,13 +2625,13 @@ LanguageType LanguageTag::convertToLanguageType( const com::sun::star::lang::Loc
 }
 
 
-// static
+
 OUString LanguageTagImpl::convertToBcp47( const com::sun::star::lang::Locale& rLocale )
 {
     OUString aBcp47;
     if (rLocale.Language.isEmpty())
     {
-        // aBcp47 stays empty
+        
     }
     else if (rLocale.Language == I18NLANGTAG_QLT)
     {
@@ -2653,7 +2653,7 @@ OUString LanguageTagImpl::convertToBcp47( const com::sun::star::lang::Locale& rL
 }
 
 
-// static
+
 OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem )
 {
     OUString aBcp47;
@@ -2661,7 +2661,7 @@ OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocal
     {
         if (bResolveSystem)
             aBcp47 = LanguageTag::convertToBcp47( LANGUAGE_SYSTEM, true);
-        // else aBcp47 stays empty
+        
     }
     else
     {
@@ -2671,24 +2671,24 @@ OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocal
 }
 
 
-// static
+
 OUString LanguageTag::convertToBcp47( LanguageType nLangID, bool bResolveSystem )
 {
-    // Catch this first so we don't need the rest.
+    
     if (!bResolveSystem && lcl_isSystem( nLangID))
         return OUString();
 
     lang::Locale aLocale( LanguageTag::convertToLocale( nLangID, bResolveSystem));
-    // If system for some reason (should not happen.. haha) could not be
-    // resolved DO NOT CALL LanguageTag::convertToBcp47(Locale) because that
-    // would recurse into this method here!
+    
+    
+    
     if (aLocale.Language.isEmpty() && bResolveSystem)
-        return OUString();      // bad luck, bail out
+        return OUString();      
     return LanguageTagImpl::convertToBcp47( aLocale);
 }
 
 
-// static
+
 com::sun::star::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp47, bool bResolveSystem )
 {
     if (rBcp47.isEmpty() && !bResolveSystem)
@@ -2698,7 +2698,7 @@ com::sun::star::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp4
 }
 
 
-// static
+
 LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bResolveSystem )
 {
     if (rBcp47.isEmpty() && !bResolveSystem)
@@ -2708,14 +2708,14 @@ LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bR
 }
 
 
-// static
+
 LanguageType LanguageTag::convertToLanguageTypeWithFallback( const OUString& rBcp47 )
 {
     return LanguageTag( rBcp47).makeFallback().getLanguageType( true);
 }
 
 
-// static
+
 com::sun::star::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUString& rBcp47 )
 {
     return LanguageTag( rBcp47).makeFallback().getLocale( true);

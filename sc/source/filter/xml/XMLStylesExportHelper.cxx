@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLStylesExportHelper.hxx"
@@ -147,7 +147,7 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
                 aValidation.aOperator = xCondition->getOperator();
                 aValidation.aBaseCell = xCondition->getSourcePosition();
             }
-            //ScMyValidationRange aValidationRange;
+            
             bool bEqualFound(false);
             sal_Int32 i(0);
             sal_Int32 nCount(aValidationVec.size());
@@ -186,7 +186,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
     {
         switch (aValidation.aValidationType)
         {
-            //case sheet::ValidationType_CUSTOM
+            
             case sheet::ValidationType_DATE :
                 sCondition += "cell-content-is-date()";
             break;
@@ -211,7 +211,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         if (aValidation.aValidationType != sheet::ValidationType_LIST &&
@@ -249,7 +249,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                     break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
                 sCondition += aValidation.sFormula1;
@@ -406,7 +406,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     case sheet::ValidationAlertStyle_MACRO :
                     {
                         {
-                            //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
+                            
                             if (aItr->bShowErrorMessage)
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
                             else
@@ -414,9 +414,9 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, true, true);
                         }
                         {
-                            // #i47525# for a script URL the type and the property name for the URL
-                            // are both "Script", for a simple macro name the type is "StarBasic"
-                            // and the property name is "MacroName".
+                            
+                            
+                            
                             bool bScriptURL = SfxApplication::IsXScriptURL( aItr->sErrorTitle );
 
                             uno::Sequence<beans::PropertyValue> aSeq(3);
@@ -428,14 +428,14 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             pArr[2].Name = bScriptURL ? sScript : sMacroName;
                             pArr[2].Value <<= aItr->sErrorTitle;
 
-                            // 2) export the sequence
+                            
                             rExport.GetEventExport().ExportSingleEvent( aSeq, sOnError);
                         }
                     }
                     break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
             }
@@ -450,7 +450,7 @@ const OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nInd
     return aValidationVec[nIndex].sName;
 }
 
-//==============================================================================
+
 
 sal_Int32 ScMyDefaultStyles::GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
     const sal_Int32 nTable, const sal_Int32 nPos,
@@ -686,7 +686,7 @@ void ScRowFormatRanges::Sort()
     aRowFormatRanges.sort();
 }
 
-// ============================================================================
+
 ScMyFormatRange::ScMyFormatRange()
     : nStyleNameIndex(-1),
     nValidationIndex(-1),
@@ -990,7 +990,7 @@ void ScFormatRangeStyles::Sort()
             aTables[i]->sort();
 }
 
-//===========================================================================
+
 
 ScColumnRowStylesBase::ScColumnRowStylesBase()
     : aStyleNames()
@@ -1043,7 +1043,7 @@ OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
 {
     if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
     {
-        // should no longer happen, use first style then
+        
         OSL_FAIL("GetStyleNameByIndex: invalid index");
         return aStyleNames[0];
     }
@@ -1051,7 +1051,7 @@ OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
     return aStyleNames[nIndex];
 }
 
-//===========================================================================
+
 
 ScColumnStyles::ScColumnStyles()
     : ScColumnRowStylesBase(),
@@ -1109,7 +1109,7 @@ OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 n
     return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField, bTemp));
 }
 
-//===========================================================================
+
 
 ScRowStyles::Cache::Cache() :
     mnTable(-1), mnStart(-1), mnEnd(-1), mnStyle(-1) {}
@@ -1145,7 +1145,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
         return -1;
 
     if (maCache.hasCache(nTable, nField))
-        // Cache hit !
+        
         return maCache.mnStyle;
 
     StylesType& r = aTables[nTable];
@@ -1155,7 +1155,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
     sal_Int32 nStart(0), nEnd(0);
     if (r.search_tree(nField, nStyle, &nStart, &nEnd).second)
     {
-        // Cache this value for better performance.
+        
         maCache.mnTable = nTable;
         maCache.mnStart = nStart;
         maCache.mnEnd = nEnd;

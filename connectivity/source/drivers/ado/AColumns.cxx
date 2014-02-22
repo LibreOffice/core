@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/AColumns.hxx"
@@ -47,25 +47,25 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
     return new OAdoColumn(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
 
-// -------------------------------------------------------------------------
+
 void OColumns::impl_refresh() throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OColumns::createDescriptor()
 {
     return new OAdoColumn(isCaseSensitive(),m_pConnection);
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
     Reference< XPropertySet > xColumn;
     if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
     {
-        // m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
+        
         pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
         xColumn = pColumn;
         ::comphelper::copyProperties(descriptor,xColumn);
@@ -87,7 +87,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 
     const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
     ::comphelper::UStringMixEqual aCase(sal_False);
-    // search for typeinfo where the typename is equal sTypeName
+    
     OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                         pTypeInfoMap->end(),
                                                         ::o3tl::compose1(
@@ -99,7 +99,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 
                                                 );
 
-    if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
+    if ( aFind != pTypeInfoMap->end() ) 
         aColumn.put_Type(aFind->first);
 
     if ( SUCCEEDED(((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize())) )
@@ -112,7 +112,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
             if ( bAutoIncrement )
                 OTools::putValue( aAddedColumn.get_Properties(), OUString("Autoincrement"), bAutoIncrement );
 
-            if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
+            if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) 
                 aColumn.put_Type(aFind->first);
             aAddedColumn.put_Precision(aColumn.get_Precision());
             aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
@@ -125,14 +125,14 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 
     return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OColumns::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
-// -----------------------------------------------------------------------------
+
 
 
 

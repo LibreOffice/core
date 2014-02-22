@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textbodycontext.hxx"
@@ -33,9 +33,9 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// --------------------------------------------------------------------
 
-// CT_TextParagraph
+
+
 class TextParagraphContext : public ContextHandler2
 {
 public:
@@ -47,7 +47,7 @@ protected:
     TextParagraph& mrParagraph;
 };
 
-// --------------------------------------------------------------------
+
 TextParagraphContext::TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara )
 : ContextHandler2( rParent )
 , mrParagraph( rPara )
@@ -55,28 +55,28 @@ TextParagraphContext::TextParagraphContext( ContextHandler2Helper& rParent, Text
     mbEnableTrimSpace = false;
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    // EG_TextRun
+    
     switch( aElementToken )
     {
-    case A_TOKEN( r ):      // "CT_RegularTextRun" Regular Text Run.
+    case A_TOKEN( r ):      
     case OOX_TOKEN( doc, r ):
     {
         TextRunPtr pRun( new TextRun );
         mrParagraph.addRun( pRun );
         return new RegularTextRunContext( *this, pRun );
     }
-    case A_TOKEN( br ): // "CT_TextLineBreak" Soft return line break (vertical tab).
+    case A_TOKEN( br ): 
     {
         TextRunPtr pRun( new TextRun );
         pRun->setLineBreak();
         mrParagraph.addRun( pRun );
         return new RegularTextRunContext( *this, pRun );
     }
-    case A_TOKEN( fld ):    // "CT_TextField" Text Field.
+    case A_TOKEN( fld ):    
     {
         TextFieldPtr pField( new TextField );
         mrParagraph.addRun( pField );
@@ -94,7 +94,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
 
     return 0;
 }
-// --------------------------------------------------------------------
+
 
 RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, TextRunPtr pRunPtr )
 : ContextHandler2( rParent )
@@ -103,7 +103,7 @@ RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, Te
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void RegularTextRunContext::onEndElement( )
 {
@@ -123,7 +123,7 @@ void RegularTextRunContext::onEndElement( )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void RegularTextRunContext::onCharacters( const OUString& aChars )
 {
@@ -133,16 +133,16 @@ void RegularTextRunContext::onCharacters( const OUString& aChars )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs)
 {
     switch( aElementToken )
     {
-    case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
+    case A_TOKEN( rPr ):    
     case OOX_TOKEN( doc, rPr ):
         return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
-    case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
+    case A_TOKEN( t ):      
     case OOX_TOKEN( doc, t ):
         mbIsInText = true;
         break;
@@ -154,7 +154,7 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     return this;
 }
 
-// --------------------------------------------------------------------
+
 
 TextBodyContext::TextBodyContext( ContextHandler2Helper& rParent, TextBody& rTextBody )
 : ContextHandler2( rParent )
@@ -162,17 +162,17 @@ TextBodyContext::TextBodyContext( ContextHandler2Helper& rParent, TextBody& rTex
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
-    case A_TOKEN( bodyPr ):     // CT_TextBodyPropertyBag
+    case A_TOKEN( bodyPr ):     
         return new TextBodyPropertiesContext( *this, rAttribs, mrTextBody.getTextProperties() );
-    case A_TOKEN( lstStyle ):   // CT_TextListStyle
+    case A_TOKEN( lstStyle ):   
         return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
-    case A_TOKEN( p ):          // CT_TextParagraph
+    case A_TOKEN( p ):          
     case OOX_TOKEN( doc, p ):
         return new TextParagraphContext( *this, mrTextBody.addParagraph() );
     case OOX_TOKEN( doc, sdt ):
@@ -188,7 +188,7 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 } }
 

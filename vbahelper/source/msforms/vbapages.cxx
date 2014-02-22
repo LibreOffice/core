@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbapages.hxx"
 
@@ -28,7 +28,7 @@ ScVbaPages::ScVbaPages( const uno::Reference< XHelperInterface >& xParent, const
 uno::Type SAL_CALL
 ScVbaPages::getElementType() throw (uno::RuntimeException)
 {
-    // return cppu::UnoType<msforms::XPage>::get();
+    
     return cppu::UnoType<uno::XInterface>::get();
 }
 
@@ -47,7 +47,7 @@ ScVbaPages::getServiceImplName()
 uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaPages::createEnumeration() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return uno::Reference< container::XEnumeration >();
 }
 

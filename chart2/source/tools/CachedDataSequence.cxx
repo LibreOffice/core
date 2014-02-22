@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CachedDataSequence.hxx"
@@ -38,7 +38,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// necessary for MS compiler
+
 using ::comphelper::OPropertyContainer;
 using ::comphelper::OMutexAndBroadcastHelper;
 using ::comphelper::OPropertyArrayUsageHelper;
@@ -50,11 +50,11 @@ static const OUString lcl_aServiceName( "com.sun.star.comp.chart.CachedDataSeque
 
 enum
 {
-//     PROP_SOURCE_IDENTIFIER,
+
     PROP_NUMBERFORMAT_KEY,
     PROP_PROPOSED_ROLE
 };
-}  // anonymous namespace
+}  
 
 namespace chart
 {
@@ -120,13 +120,13 @@ void CachedDataSequence::registerProperties()
 {
     registerProperty( "NumberFormatKey",
                       PROP_NUMBERFORMAT_KEY,
-                      0,   // PropertyAttributes
+                      0,   
                       & m_nNumberFormatKey,
                       ::getCppuType( & m_nNumberFormatKey ) );
 
     registerProperty( "Role",
                       PROP_PROPOSED_ROLE,
-                      0,   // PropertyAttributes
+                      0,   
                       & m_sRole,
                       ::getCppuType( & m_sRole ) );
 }
@@ -236,33 +236,33 @@ Sequence< OUString > CachedDataSequence::getSupportedServiceNames_Static()
 IMPLEMENT_FORWARD_XINTERFACE2( CachedDataSequence, CachedDataSequence_Base, OPropertyContainer )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( CachedDataSequence, CachedDataSequence_Base, OPropertyContainer )
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySetInfo()
     throw(uno::RuntimeException)
 {
     return Reference< beans::XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
 }
 
-// ____ ::comphelper::OPropertySetHelper ____
+
 ::cppu::IPropertyArrayHelper& CachedDataSequence::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-// ____ ::comphelper::OPropertyArrayHelper ____
+
 ::cppu::IPropertyArrayHelper* CachedDataSequence::createArrayHelper() const
 {
     Sequence< beans::Property > aProps;
-    // describes all properties which have been registered in the ctor
+    
     describeProperties( aProps );
 
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( CachedDataSequence, lcl_aServiceName )
 
-// ________ XNumericalDataSequence ________
+
 Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
     throw (uno::RuntimeException)
 {
@@ -274,7 +274,7 @@ Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
         return Impl_getNumericalData();
 }
 
-// ________ XTextualDataSequence ________
+
 Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
     throw (uno::RuntimeException)
 {
@@ -286,7 +286,7 @@ Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
         return Impl_getTextualData();
 }
 
-// ________ XDataSequence  ________
+
 Sequence< Any > SAL_CALL CachedDataSequence::getData()
     throw (uno::RuntimeException)
 {
@@ -303,7 +303,7 @@ OUString SAL_CALL CachedDataSequence::getSourceRangeRepresentation()
 Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::LabelOrigin  /*eLabelOrigin*/ )
     throw (uno::RuntimeException)
 {
-    // return empty label, as we have no range representaions to determine something useful
+    
     return Sequence< OUString >();
 }
 
@@ -350,7 +350,7 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
     }
 }
 
-// lang::XInitialization:
+
 void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
@@ -370,6 +370,6 @@ void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _
         }
     }
 }
-}  // namespace chart
+}  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

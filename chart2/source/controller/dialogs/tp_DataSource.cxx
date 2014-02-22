@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_DataSource.hxx"
@@ -36,7 +36,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 
-// for RET_OK
+
 #include <vcl/msgbox.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -130,7 +130,7 @@ OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
 }
 
 static long lcl_pRoleListBoxTabs[] =
-    {   3,        // Number of Tabs
+    {   3,        
         0, 0, 75
     };
 
@@ -165,7 +165,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 
     for( sal_Int32 i=0; i<aSequences.getLength(); ++i )
     {
-        // no values are set but a label exists
+        
         if( ! aSequences[i]->getValues().is() &&
             aSequences[i]->getLabel().is())
         {
@@ -177,7 +177,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
     return xResult;
 }
 
-} //  anonymous namespace
+} 
 
 namespace chart
 {
@@ -225,7 +225,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_aFixedTextRange = OUString( m_pFT_RANGE->GetText() );
     this->SetText( SCH_RESSTR( STR_OBJECT_DATASERIES_PLURAL ) );
 
-    // set handlers
+    
     m_pLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
 
     m_pLB_ROLE->SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
@@ -244,33 +244,33 @@ DataSourceTabPage::DataSourceTabPage(
     m_pEDT_RANGE->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
     m_pEDT_CATEGORIES->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
 
-    // #i75179# enable setting the background to a different color
+    
     m_pEDT_RANGE->SetStyle( m_pEDT_RANGE->GetStyle() | WB_FORCECTRLBACKGROUND );
     m_pEDT_CATEGORIES->SetStyle( m_pEDT_CATEGORIES->GetStyle() | WB_FORCECTRLBACKGROUND );
 
-    // mapped properties
+    
     m_pBtn_AddMapping->SetClickHdl( LINK( this, DataSourceTabPage, AddMappingHdl ));
 
-    // set symbol font for arrows
-    // note: StarSymbol is substituted to OpenSymbol for OOo
+    
+    
     Font aSymbolFont( m_pBTN_UP->GetFont());
     aSymbolFont.SetName( "StarSymbol" );
     m_pBTN_UP->SetControlFont( aSymbolFont );
     m_pBTN_DOWN->SetControlFont( aSymbolFont );
 
-    // set button text
+    
     sal_Unicode cBlackUpPointingTriangle( 0x25b2 );
     sal_Unicode cBlackDownPointingTriangle( 0x25bc );
     m_pBTN_UP->SetText( OUString( cBlackUpPointingTriangle ));
     m_pBTN_DOWN->SetText( OUString( cBlackDownPointingTriangle ));
 
-    // init controls
+    
     m_pLB_ROLE->SetTabs( lcl_pRoleListBoxTabs, MAP_APPFONT );
     m_pLB_ROLE->Show();
 
     updateControlsFromDialogModel();
 
-    // select first series
+    
     if( m_pLB_SERIES->First())
         m_pLB_SERIES->Select( m_pLB_SERIES->First());
     m_pLB_SERIES->GrabFocus();
@@ -305,11 +305,11 @@ void DataSourceTabPage::commitPage()
 
 sal_Bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    //ranges may have been edited in the meanwhile (dirty is true in that case here)
+    
     if( isValid() )
     {
         updateModelFromControl( 0 /*update all*/ );
-        return sal_True;//return false if this page should not be left
+        return sal_True;
     }
     else
         return sal_False;
@@ -365,11 +365,11 @@ void DataSourceTabPage::setDirty()
 
 void DataSourceTabPage::updateControlsFromDialogModel()
 {
-    // series
+    
     fillSeriesListBox();
     SeriesSelectionChangedHdl( 0 );
 
-    // categories
+    
     m_pEDT_CATEGORIES->SetText( m_rDialogModel.getCategoriesRange() );
 
     updateControlState();
@@ -402,7 +402,7 @@ void DataSourceTabPage::fillSeriesListBox()
             {
                 OUString aResString(::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX ).toString());
 
-                // replace index of unnamed series
+                
                 const OUString aReplacementStr( "%NUMBER" );
                 sal_Int32 nIndex = aResString.indexOf( aReplacementStr );
                 if( nIndex != -1 )
@@ -450,7 +450,7 @@ void DataSourceTabPage::fillRoleListBox()
                 lcl_GetSequenceNameForLabel( pSeriesEntry ),
                 pSeriesEntry->m_xChartType ));
 
-        // fill role list
+        
         m_pLB_ROLE->SetUpdateMode( sal_False );
         m_pLB_ROLE->Clear();
         m_pLB_ROLE->RemoveSelection();
@@ -461,7 +461,7 @@ void DataSourceTabPage::fillRoleListBox()
             m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aIt->first, aIt->second ));
         }
 
-        // series may contain no roles, check listbox size before selecting entries
+        
         if( m_pLB_ROLE->GetEntryCount() > 0 )
         {
             if( nRoleIndex >= m_pLB_ROLE->GetEntryCount())
@@ -536,7 +536,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
         OUString aSelectedRoleUI = lcl_GetSelectedRole( *m_pLB_ROLE, true );
         OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_pLB_ROLE );
 
-        // replace role in fixed text label
+        
         const OUString aReplacementStr( "%VALUETYPE" );
         sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
         if( nIndex != -1 )
@@ -570,7 +570,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
     {
         OUString aUIStr(SCH_RESSTR(STR_DATA_SELECT_RANGE_FOR_SERIES));
 
-        // replace role
+        
         OUString aReplacement( "%VALUETYPE" );
         sal_Int32 nIndex = aUIStr.indexOf( aReplacement );
         if( nIndex != -1 )
@@ -578,7 +578,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
             aUIStr = aUIStr.replaceAt( nIndex, aReplacement.getLength(),
                                        lcl_GetSelectedRole( *m_pLB_ROLE, true ));
         }
-        // replace series name
+        
         aReplacement = "%SERIESNAME";
         nIndex = aUIStr.indexOf( aReplacement );
         if( nIndex != -1 )
@@ -638,7 +638,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl)
     setDirty();
 
     fillSeriesListBox();
-    // note the box was cleared and refilled, so pEntry is invalid now
+    
     SvTreeListEntry * pSelEntry = m_pLB_SERIES->FirstSelected();
     if( pSelEntry )
     {
@@ -674,8 +674,8 @@ IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl)
         m_pLB_SERIES->RemoveSelection();
         fillSeriesListBox();
 
-        // select previous or next series
-        //@improve: see methods GetModel()->GetAbsPos()/GetEntry() for absolute list positions
+        
+        
         if( xNewSelSeries.is())
         {
             pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->First());
@@ -734,7 +734,7 @@ IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )
     if( isRangeFieldContentValid( *pEdit ))
         setDirty();
 
-    // enable/disable OK button
+    
     isValid();
 
     return 0;
@@ -742,7 +742,7 @@ IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )
 
 IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
 {
-    // note: isValid sets the color of the edit field
+    
     if( isRangeFieldContentValid( *pEdit ))
     {
         setDirty();
@@ -753,7 +753,7 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
                 fillSeriesListBox();
         }
     }
-    // enable/disable OK button
+    
     isValid();
 
     return 0;
@@ -772,15 +772,15 @@ IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
 void DataSourceTabPage::listeningFinished(
     const OUString & rNewRange )
 {
-    // rNewRange becomes invalid after removing the listener
+    
     OUString aRange( rNewRange );
 
     m_rDialogModel.startControllerLockTimer();
 
-    // stop listening
+    
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening();
 
-    // change edit field
+    
     ToTop();
     GrabFocus();
     if( m_pCurrentRangeChoosingField )
@@ -822,7 +822,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
 
     ControllerLockGuardUNO aLockedControllers( m_rDialogModel.getChartModel() );
 
-    // @todo: validity check of field content
+    
     bool bResult = true;
     bool bAll = (pField == 0);
     Reference< data::XDataProvider > xDataProvider( m_rDialogModel.getDataProvider());
@@ -835,7 +835,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
             OUString aRange( m_pEDT_CATEGORIES->GetText());
             if( !aRange.isEmpty())
             {
-                // create or change categories
+                
                 if( !xLabeledSeq.is())
                 {
                     xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
@@ -847,13 +847,13 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 }
                 catch( const uno::Exception & ex )
                 {
-                    // should work as validation should have happened before
+                    
                     ASSERT_EXCEPTION( ex );
                 }
             }
             else if( xLabeledSeq.is())
             {
-                // clear existing categories
+                
                 xLabeledSeq.set(0);
                 m_rDialogModel.setCategories( xLabeledSeq );
             }
@@ -888,11 +888,11 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                     {
                         if( ! xLabeledSeq.is())
                         {
-                            // check if there is already an "orphan" label sequence
+                            
                             xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
                             if( ! xLabeledSeq.is())
                             {
-                                // no corresponding labeled data sequence for label found
+                                
                                 xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                                 lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                             }
@@ -908,14 +908,14 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 }
                                 catch( const uno::Exception & ex )
                                 {
-                                    // should work as validation should have happened before
+                                    
                                     ASSERT_EXCEPTION( ex );
                                 }
                                 if( xNewSeq.is())
                                 {
-                                    // update range name by the full string provided
-                                    // by the data provider. E.g. "a1" might become
-                                    // "$Sheet1.$A$1"
+                                    
+                                    
+                                    
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
                                     xProp->setPropertyValue( "Role" , uno::makeAny( lcl_aLabelRole ));
@@ -939,14 +939,14 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                             }
                             catch( const uno::Exception & ex )
                             {
-                                // should work as validation should have happened before
+                                
                                 ASSERT_EXCEPTION( ex );
                             }
                             if( xNewSeq.is())
                             {
-                                // update range name by the full string provided
-                                // by the data provider. E.g. "a1:e1" might become
-                                // "$Sheet1.$A$1:$E$1"
+                                
+                                
+                                
                                 aRange = xNewSeq->getSourceRangeRepresentation();
 
                                 Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
@@ -977,8 +977,8 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
         }
     }
 
-    // update View
-    // @todo remove this when automatic view updates from calc, writer and own data sequences are available
+    
+    
     if( bResult )
     {
         try
@@ -1001,6 +1001,6 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
     return bResult;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -106,8 +106,8 @@ ScEditShell::~ScEditShell()
     {
         pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), false );
 
-        //  The listener may just now be waiting for the SolarMutex and call the link
-        //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
+        
+        
         pClipEvtLstnr->ClearCallbackLink();
 
         pClipEvtLstnr->release();
@@ -138,7 +138,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->GetUndoManager().EnterListAction( aName, aName );
 
     rEditView.RemoveAttribs(true);
-    pEngine->RepeatDefaults();      // paragraph attributes from cell formats must be preserved
+    pEngine->RepeatDefaults();      
 
     pEngine->GetUndoManager().LeaveListAction();
 
@@ -163,7 +163,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
     ScInputHandler* pHdl = GetMyInputHdl();
     OSL_ENSURE(pHdl,"kein ScInputHandler");
 
-    EditView* pTopView   = pHdl->GetTopView();      // hat Eingabezeile den Focus?
+    EditView* pTopView   = pHdl->GetTopView();      
     EditView* pTableView = pHdl->GetTableView();
 
     OSL_ENSURE(pTableView,"no EditView :-(");
@@ -184,7 +184,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-        case FID_INS_CELL_CONTENTS: // Insert-Taste, weil als Acc definiert
+        case FID_INS_CELL_CONTENTS: 
             bIsInsertMode = !pTableView->IsInsertMode();
             pTableView->SetInsertMode( bIsInsertMode );
             if (pTopView)
@@ -237,7 +237,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 pTopView->DeleteSelected();
             break;
 
-        case SID_CELL_FORMAT_RESET:                 // "Standard"
+        case SID_CELL_FORMAT_RESET:                 
             lcl_RemoveAttribs( *pTableView );
             if ( pTopView )
                 lcl_RemoveAttribs( *pTopView );
@@ -284,7 +284,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     DELETEZ(pDlg);
                 }
 
-                // while the dialog was open, edit mode may have been stopped
+                
                 if (!SC_MOD()->IsInputMode())
                     return;
 
@@ -355,7 +355,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if ( pFontItem )
                     {
                         OUString aFontName(pFontItem->GetValue());
-                        Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+                        Font aFont(aFontName, Size(1,1)); 
                         aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
                                     aFont.GetCharSet(), ATTR_FONT  );
@@ -367,14 +367,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 {
                     ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame(), aNewItem, aString );
 
-                    // while the dialog was open, edit mode may have been stopped
+                    
                     if (!SC_MOD()->IsInputMode())
                         return;
                 }
 
                 if ( !aString.isEmpty() )
                 {
-                    //  if string contains WEAK characters, set all fonts
+                    
                     sal_uInt8 nSetScript;
                     ScDocument* pDoc = pViewData->GetDocument();
                     if ( pDoc->HasStringWeakCharacters( aString ) )
@@ -387,7 +387,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     aSetItem.PutItemForScriptType( nSetScript, aNewItem );
                     aSet.Put( aSetItem.GetItemSet(), false );
 
-                    //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
+                    
                     pTableView->GetEditEngine()->QuickSetAttribs( aSet, pTableView->GetSelection() );
                     pTableView->InsertText(aString);
                     if (pTopView)
@@ -415,9 +415,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell(), false );
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
-                // pDlg is needed below
+                
 
-                // while the dialog was open, edit mode may have been stopped
+                
                 if (!SC_MOD()->IsInputMode())
                 {
                     delete pDlg;
@@ -465,9 +465,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);
                 }
                 short nRet = pDlg->Execute();
-                // pDlg is needed below
+                
 
-                // while the dialog was open, edit mode may have been stopped
+                
                 if (!SC_MOD()->IsInputMode())
                 {
                     delete pDlg;
@@ -488,7 +488,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     OUString aText = pEngine->GetText();
-                    ESelection aSel = pEditView->GetSelection();    // aktuelle View
+                    ESelection aSel = pEditView->GetSelection();    
 
                     ScDocument* pDoc = pViewData->GetDocument();
                     ScRefFinder aFinder(aText, pViewData->GetCurPos(), pDoc, pDoc->GetAddressConvention());
@@ -505,7 +505,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->SetSelection( aNewSel );
                         }
 
-                        //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
+                        
                         bSetSelIsRef = sal_True;
                     }
                 }
@@ -530,7 +530,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         const SvxURLField* pURLField = GetURLField();
                         if ( pURLField )
                         {
-                            //  altes Feld selektieren
+                            
 
                             ESelection aSel = pTableView->GetSelection();
                             aSel.Adjust();
@@ -538,15 +538,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             aSel.nEndPos = aSel.nStartPos + 1;
                             pTableView->SetSelection( aSel );
 
-                            //  neues Feld einfuegen
+                            
 
                             SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
                             aURLField.SetTargetFrame( rTarget );
                             SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                             pTableView->InsertField( aURLItem );
-                            pTableView->SetSelection( aSel );       // select inserted field
+                            pTableView->SetSelection( aSel );       
 
-                            //  jetzt doch auch Felder in der Top-View
+                            
 
                             if ( pTopView )
                             {
@@ -555,7 +555,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                                 aSel.nEndPos = aSel.nStartPos + 1;
                                 pTopView->SetSelection( aSel );
                                 pTopView->InsertField( aURLItem );
-                                pTopView->SetSelection( aSel );     // select inserted field
+                                pTopView->SetSelection( aSel );     
                             }
 
                             bDone = sal_True;
@@ -567,8 +567,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         pViewData->GetViewShell()->
                             InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
 
-                        //  InsertURL an der ViewShell schaltet bei "Button"
-                        //  die EditShell ab, darum sofort return
+                        
+                        
 
                         return;
                     }
@@ -583,7 +583,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
                     return;
                 }
-                //break;
+                
 
         case FN_INSERT_SOFT_HYPHEN:
             lclInsertCharacter( pTableView, pTopView, CHAR_SHY );
@@ -634,7 +634,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         pHdl->SetSelIsRef(true);
 }
 
-static void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
+static void lcl_DisableAll( SfxItemSet& rSet )    
 {
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -647,9 +647,9 @@ static void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
 
 void ScEditShell::GetState( SfxItemSet& rSet )
 {
-    // When deactivating the view, edit mode is stopped, but the EditShell is left active
-    // (a shell can't be removed from within Deactivate). In that state, the EditView isn't inserted
-    // into the EditEngine, so it can have an invalid selection and must not be used.
+    
+    
+    
     if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )
     {
         lcl_DisableAll( rSet );
@@ -665,20 +665,20 @@ void ScEditShell::GetState( SfxItemSet& rSet )
     {
         switch (nWhich)
         {
-            case SID_ATTR_INSERT:   // Statuszeile
+            case SID_ATTR_INSERT:   
                 {
                     if ( pActiveView )
                         rSet.Put( SfxBoolItem( nWhich, pActiveView->IsInsertMode() ) );
                     else
                     {
-                        // Here the code used to pass the value 42 and it used
-                        // to "work" without warnings because the SfxBoolItem
-                        // was based on 'sal_Bool', which is actually 'unsigned
-                        // char'. But now it uses actual 'bool', and passing 42
-                        // for a 'bool' parameter causes a warning at least with
-                        // MSVC.  So use 'true'. I really really hope there is
-                        // not code somewhere that retrieves this "boolean" item
-                        // and checks it value for the magic value 42...
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         rSet.Put( SfxBoolItem( nWhich,  true) );
                     }
                 }
@@ -696,7 +696,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     }
                     else if ( pActiveView )
                     {
-                        // use selected text as name for urls
+                        
                         OUString sReturn = pActiveView->GetSelected();
                         sReturn = sReturn.copy(0, std::min(sReturn.getLength(), static_cast<sal_Int32>(255)));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
@@ -730,7 +730,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, *pActiveView );
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
-                    // disable thesaurus context menu entry if there is nothing to look up
+                    
                     sal_Bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
                     if (!bIsLookUpWord || !bCanDoThesaurus)
                         rSet.DisableItem( SID_THES );
@@ -782,13 +782,13 @@ void ScEditShell::GetClipState( SfxItemSet& rSet )
 {
     if ( !pClipEvtLstnr )
     {
-        // create listener
+        
         pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScEditShell, ClipboardChanged ) );
         pClipEvtLstnr->acquire();
         Window* pWin = pViewData->GetActiveWin();
         pClipEvtLstnr->AddRemoveListener( pWin, sal_True );
 
-        // get initial state
+        
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
         bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
     }
@@ -849,7 +849,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    // #i78017 establish the same behaviour as in Writer
+                    
                     sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
                     if (nSlot == SID_ATTR_CHAR_FONT)
                     {
@@ -877,11 +877,11 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             }
             break;
 
-        //  Toggles
+        
 
         case SID_ATTR_CHAR_WEIGHT:
             {
-                // #i78017 establish the same behaviour as in Writer
+                
                 sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
@@ -904,7 +904,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_POSTURE:
             {
-                // #i78017 establish the same behaviour as in Writer
+                
                 sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
@@ -1035,7 +1035,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     }
 
     //
-    //  anwenden
+    
     //
 
     EditEngine* pEngine = pEditView->GetEditEngine();
@@ -1055,7 +1055,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
 void ScEditShell::GetAttrState(SfxItemSet &rSet)
 {
-    if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
+    if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )    
     {
         lcl_DisableAll( rSet );
         return;
@@ -1064,12 +1064,12 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     SfxItemSet aAttribs = pEditView->GetAttribs();
     rSet.Put( aAttribs );
 
-    //  choose font info according to selection script type
+    
 
     sal_uInt16 nScript = pEditView->GetSelectedScriptType();
     if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
-    // #i55929# input-language-dependent script type (depends on input language if nothing selected)
+    
     sal_uInt16 nInputScript = nScript;
     if ( !pEditView->GetSelection().HasRange() )
     {
@@ -1078,7 +1078,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
             nInputScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
     }
 
-    // #i55929# according to spec, nInputScript is used for font and font height only
+    
     if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTINFO, nInputScript );
     if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
@@ -1088,7 +1088,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     if ( rSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_ITALIC, nScript );
 
-    //  Unterstreichung
+    
 
     SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE, true );
     if ( eState == SFX_ITEM_DONTCARE )
@@ -1114,10 +1114,10 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
         rSet.Put( SfxBoolItem( nId, true ) );
     }
 
-    //! Testen, ob Klammer-Hervorhebung aktiv ist !!!!
+    
     ScInputHandler* pHdl = GetMyInputHdl();
     if ( pHdl && pHdl->IsFormulaMode() )
-        rSet.ClearItem( EE_CHAR_WEIGHT );   // hervorgehobene Klammern hier nicht
+        rSet.ClearItem( EE_CHAR_WEIGHT );   
 
     SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
                     aAttribs.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
@@ -1136,7 +1136,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     pViewData->GetBindings().Invalidate( SID_ATTR_CHAR_KERNING );
     if ( eState == SFX_ITEM_DONTCARE )
     {
-    //  rSet.InvalidateItem( SID_ATTR_CHAR_KERNING );
+    
         rSet.InvalidateItem(EE_CHAR_KERNING);
     }
 }
@@ -1145,7 +1145,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
 {
     OUString aStrSelection;
 
-    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
+    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )    
     {
         if ( bWholeWord )
         {
@@ -1168,7 +1168,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
 
 void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 {
-    //  Undo must be handled here because it's called for both EditViews
+    
 
     ScInputHandler* pHdl = GetMyInputHdl();
     OSL_ENSURE(pHdl,"no ScInputHandler");
@@ -1217,7 +1217,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 
 void ScEditShell::GetUndoState(SfxItemSet &rSet)
 {
-    //  Undo state is taken from normal ViewFrame state function
+    
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if ( pViewFrm && GetUndoManager() )
@@ -1231,7 +1231,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
         }
     }
 
-    //  disable if no action in input line EditView
+    
 
     ScInputHandler* pHdl = GetMyInputHdl();
     OSL_ENSURE(pHdl,"no ScInputHandler");

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "SvXMLAttrCollection.hxx"
@@ -120,7 +120,7 @@ const OUString SvXMLAttrCollection::GetAttrNamespace( size_t i ) const
 {
     OUString sRet;
     sal_uInt16 nPos = GetPrefixPos( i );
-    //Does this point to a valid namespace entry?
+    
     if( USHRT_MAX != nPos )
         sRet = aNamespaceMap.GetNameByIndex( nPos );
     return sRet;
@@ -130,7 +130,7 @@ const OUString SvXMLAttrCollection::GetAttrPrefix( size_t i ) const
 {
     OUString sRet;
     sal_uInt16 nPos = GetPrefixPos( i );
-    //Does this point to a valid namespace entry?
+    
     if( USHRT_MAX != nPos )
         sRet = aNamespaceMap.GetPrefixByIndex( nPos );
     return sRet;
@@ -158,8 +158,8 @@ sal_uInt16 SvXMLAttrCollection::GetNextNamespaceIndex( sal_uInt16 nIdx ) const
 
 sal_uInt16 SvXMLAttrCollection::GetPrefixPos( size_t i ) const
 {
-//  DBG_ASSERT( i >= 0 && i < aAttrs.size(),
-//              "SvXMLAttrCollection::GetPrefixPos: illegal index" );
+
+
     return aAttrs[i].getPrefixPos();
 }
 

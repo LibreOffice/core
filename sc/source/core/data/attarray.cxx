@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "attarray.hxx"
@@ -46,9 +46,9 @@
 #include "editutil.hxx"
 #include <rtl/strbuf.hxx>
 
-// STATIC DATA -----------------------------------------------------------
 
-//------------------------------------------------------------------------
+
+
 using ::editeng::SvxBorderLine;
 
 ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
@@ -60,10 +60,10 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
     pData(new ScAttrEntry[1])
 {
     pData[0].nRow = MAXROW;
-    pData[0].pPattern = pDocument->GetDefPattern(); // no put
+    pData[0].pPattern = pDocument->GetDefPattern(); 
 }
 
-//------------------------------------------------------------------------
+
 
 ScAttrArray::~ScAttrArray()
 {
@@ -78,7 +78,7 @@ ScAttrArray::~ScAttrArray()
     delete[] pData;
 }
 
-//------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 1
 void ScAttrArray::TestData() const
 {
@@ -107,7 +107,7 @@ void ScAttrArray::TestData() const
 }
 #endif
 
-//------------------------------------------------------------------------
+
 
 void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 {
@@ -118,7 +118,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 
     for (SCSIZE i=0; i<nCount; i++)
     {
-        // ensure that attributing changes text width of cell
+        
         pOldPattern = pData[i].pPattern;
         bool bNumFormatChanged;
         if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
@@ -179,7 +179,7 @@ bool ScAttrArray::Concat(SCSIZE nPos)
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
@@ -342,7 +342,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
 
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool )
 {
@@ -364,8 +364,8 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
         if (pDataArray)
             pOldData = aCell.mpEditText->Clone();
 
-        // Direct modification of cell content - something to watch out for if
-        // we decide to share edit text instances in the future.
+        
+        
         ScEditUtil::RemoveCharAttribs(const_cast<EditTextObject&>(*aCell.mpEditText), *pPattern);
 
         if (pDataArray)
@@ -422,12 +422,12 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
             ScAddress       aAdrStart( nCol, 0, nTab );
             ScAddress       aAdrEnd  ( nCol, 0, nTab );
 
-            SCSIZE ni = 0;      // number of entries in beginning
-            SCSIZE nx = 0;      // track position
-            SCROW ns = 0;      // start row of track position
+            SCSIZE ni = 0;      
+            SCSIZE nx = 0;      
+            SCROW ns = 0;      
             if ( nStartRow > 0 )
             {
-                // skip beginning
+                
                 SCSIZE nIndex;
                 Search( nStartRow, nIndex );
                 ni = nIndex;
@@ -439,8 +439,8 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 }
             }
 
-            // ensure that attributing changes text width of cell
-            // otherwise, conditional formats need to be reset or deleted
+            
+            
             while ( ns <= nEndRow )
             {
                 const SfxItemSet& rNewSet = pPattern->GetItemSet();
@@ -458,9 +458,9 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 nx++;
             }
 
-            // continue modifying data array
+            
 
-            SCSIZE nInsert;     // insert position (MAXROWCOUNT := no insert)
+            SCSIZE nInsert;     
             bool bCombined = false;
             bool bSplit = false;
             if ( nStartRow > 0 )
@@ -469,8 +469,8 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 if ( pData[ni].pPattern != pPattern )
                 {
                     if ( ni == 0 || (pData[ni-1].nRow < nStartRow - 1) )
-                    {   // may be a split or a simple insert or just a shrink,
-                        // row adjustment is done further down
+                    {   
+                        
                         if ( pData[ni].nRow > nEndRow )
                             bSplit = true;
                         ni++;
@@ -480,7 +480,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                         nInsert = ni;
                 }
                 if ( ni > 0 && pData[ni-1].pPattern == pPattern )
-                {   // combine
+                {   
                     pData[ni-1].nRow = nEndRow;
                     nInsert = MAXROWCOUNT;
                     bCombined = true;
@@ -489,56 +489,56 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
             else
                 nInsert = 0;
 
-            SCSIZE nj = ni;     // stop position of range to replace
+            SCSIZE nj = ni;     
             while ( nj < nCount && pData[nj].nRow <= nEndRow )
                 nj++;
             if ( !bSplit )
             {
                 if ( nj < nCount && pData[nj].pPattern == pPattern )
-                {   // combine
+                {   
                     if ( ni > 0 )
                     {
                         if ( pData[ni-1].pPattern == pPattern )
-                        {   // adjacent entries
+                        {   
                             pData[ni-1].nRow = pData[nj].nRow;
                             nj++;
                         }
                         else if ( ni == nInsert )
-                            pData[ni-1].nRow = nStartRow - 1;   // shrink
+                            pData[ni-1].nRow = nStartRow - 1;   
                     }
                     nInsert = MAXROWCOUNT;
                     bCombined = true;
                 }
                 else if ( ni > 0 && ni == nInsert )
-                    pData[ni-1].nRow = nStartRow - 1;   // shrink
+                    pData[ni-1].nRow = nStartRow - 1;   
             }
             ScDocumentPool* pDocPool = pDocument->GetPool();
             if ( bSplit )
-            {   // duplicate splitted entry in pool
+            {   
                 pDocPool->Put( *pData[ni-1].pPattern );
             }
             if ( ni < nj )
-            {   // remove middle entries
+            {   
                 for ( SCSIZE nk=ni; nk<nj; nk++)
-                {   // remove entries from pool
+                {   
                     pDocPool->Remove( *pData[nk].pPattern );
                 }
                 if ( !bCombined )
-                {   // replace one entry
+                {   
                     pData[ni].nRow = nEndRow;
                     pData[ni].pPattern = pPattern;
                     ni++;
                     nInsert = MAXROWCOUNT;
                 }
                 if ( ni < nj )
-                {   // remove entries
+                {   
                     memmove( pData + ni, pData + nj, (nCount - nj) * sizeof(ScAttrEntry) );
                     nCount -= nj - ni;
                 }
             }
 
             if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
-            {   // insert or append new entry
+            {   
                 if ( nInsert <= nCount )
                 {
                     if ( !bSplit )
@@ -557,8 +557,8 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 pData[nInsert].nRow = nEndRow;
                 pData[nInsert].pPattern = pPattern;
 
-                // Remove character attributes from these cells if the pattern
-                // is applied during normal session.
+                
+                
                 if (pDataArray)
                     RemoveCellCharAttribs(nStartRow, nEndRow, pPattern, pDataArray);
 
@@ -602,8 +602,8 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
 
             if ( *pNewPattern == *pOldPattern )
             {
-                // keep the original pattern (might be default)
-                // pNewPattern is deleted below
+                
+                
                 nPos++;
             }
             else if ( nY1 < nStartRow || nY2 > nEndRow )
@@ -615,8 +615,8 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
             }
             else
             {
-                // ensure attributing changes text width of cell; otherwise
-                // there aren't (yet) template format changes
+                
+                
                 const SfxItemSet& rNewSet = pNewPattern->GetItemSet();
                 const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
 
@@ -651,7 +651,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
 }
 
 
-    // const cast, otherwise it will be too inefficient/complicated
+    
 #define SET_LINECOLOR(dest,c)                    \
     if ((dest))                                  \
     {                                            \
@@ -704,7 +704,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 SvxLineItem*    pNewTLBRItem = pTLBRItem ? (SvxLineItem*)pTLBRItem->Clone() : 0;
                 SvxLineItem*    pNewBLTRItem = pBLTRItem ? (SvxLineItem*)pBLTRItem->Clone() : 0;
 
-                // fetch line and update attributes with parameters
+                
 
                 if ( !pLine )
                 {
@@ -767,7 +767,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 }
                 else
                 {
-                    // remove from pool ?
+                    
                     pDocument->GetPool()->Remove(*pData[nPos].pPattern);
                     pData[nPos].pPattern = (const ScPatternAttr*)
                                 &pDocument->GetPool()->Put(*pNewPattern);
@@ -836,7 +836,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                 }
                 else
                 {
-                    // ensure attributing changes text-width of cell
+                    
 
                     const SfxItemSet& rNewSet = pNewPattern->GetItemSet();
                     const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
@@ -894,7 +894,7 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
     const SfxPoolItem* pOldItem;
     for (sal_uInt16 nId=ATTR_PATTERN_START; nId<=ATTR_PATTERN_END; nId++)
     {
-        //  pMergeSet has no parent
+        
         SfxItemState eOldState = rMergeSet.GetItemState( nId, false, &pOldItem );
 
         if ( eOldState == SFX_ITEM_DEFAULT )
@@ -906,21 +906,21 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
                     rMergeSet.InvalidateItem( nId );
             }
         }
-        else if ( eOldState == SFX_ITEM_SET )               // Item gesetzt
+        else if ( eOldState == SFX_ITEM_SET )               
         {
             SfxItemState eNewState = rSource.GetItemState( nId, true, &pNewItem );
             if ( eNewState == SFX_ITEM_SET )
             {
-                if ( pNewItem != pOldItem )                 // beide gepuhlt
+                if ( pNewItem != pOldItem )                 
                     rMergeSet.InvalidateItem( nId );
             }
-            else            // Default
+            else            
             {
                 if ( *pOldItem != rSource.GetPool()->GetDefaultItem(nId) )
                     rMergeSet.InvalidateItem( nId );
             }
         }
-        // Dontcare remains Dontcare
+        
     }
 }
 
@@ -940,7 +940,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
 
         do
         {
-            // similar patterns must not be repeated
+            
 
             const ScPatternAttr* pPattern = pData[nPos].pPattern;
             if ( pPattern != rState.pOld1 && pPattern != rState.pOld2 )
@@ -955,7 +955,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                 }
                 else
                 {
-                    // first pattern - copied from parent
+                    
                     rState.pItemSet = new SfxItemSet( *rThisSet.GetPool(), rThisSet.GetRanges() );
                     rState.pItemSet->Set( rThisSet, bDeep );
                 }
@@ -973,19 +973,19 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
 
 
 
-// assemble border
+
 
 static bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
                             sal_uInt8& rModified, const SvxBorderLine*& rpNew )
 {
     if (rModified == SC_LINE_DONTCARE)
-        return false;               // don't go again
+        return false;               
 
     if (rModified == SC_LINE_EMPTY)
     {
         rModified = SC_LINE_SET;
         rpNew = pNewLine;
-        return true;                // initial value
+        return true;                
     }
 
     if (pOldLine == pNewLine)
@@ -1003,7 +1003,7 @@ static bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pN
 
     rModified = SC_LINE_DONTCARE;
     rpNew = NULL;
-    return true;              // another line -> don't care
+    return true;              
 }
 
 
@@ -1011,7 +1011,7 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
                                 ScLineFlags& rFlags, const ScPatternAttr* pPattern,
                                 bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
-    // right/bottom border set when connected together
+    
     const ScMergeAttr& rMerge = (const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
     if ( rMerge.GetColMerge() == nDistRight + 1 )
         nDistRight = 0;
@@ -1097,7 +1097,7 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
             pPattern = (ScPatternAttr*) pData[i].pPattern;
             lcl_MergeToFrame( pLineOuter, pLineInner, rFlags, pPattern, bLeft, nDistRight, false,
                             nEndRow - std::min( pData[i].nRow, (SCROW)(nEndRow-1) ) );
-            // nDistBottom here always > 0
+            
         }
 
         pPattern = GetPattern( nEndRow );
@@ -1106,10 +1106,10 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
 }
 
 //
-// apply border
+
 //
 
-// ApplyFrame - on an entry into the array
+
 
 bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
                               const SvxBoxInfoItem* pBoxInfoItem,
@@ -1122,7 +1122,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
     const SvxBoxItem* pOldFrame = (const SvxBoxItem*)
                                   &pPattern->GetItemSet().Get( ATTR_BORDER );
 
-    // right/bottom border set when connected together
+    
     const ScMergeAttr& rMerge = (const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
     if ( rMerge.GetColMerge() == nDistRight + 1 )
         nDistRight = 0;
@@ -1131,7 +1131,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
 
     SvxBoxItem aNewFrame( *pOldFrame );
     bool bRTL=pDocument->IsLayoutRTL(nTab);
-    // fdo#37464 check if the sheet are RTL then replace right <=> left
+    
     if (bRTL)
     {
         if( bLeft && nDistRight==0)
@@ -1171,7 +1171,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
 
     if (aNewFrame == *pOldFrame)
     {
-        // nothing to do
+        
         return false;
     }
     else
@@ -1194,7 +1194,7 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
         ApplyFrame( pLineOuter, pLineInner, nStartRow, nStartRow, bLeft, nDistRight,
                         true, nEndRow-nStartRow );
 
-        if ( nEndRow > nStartRow+1 )     // inner part available?
+        if ( nEndRow > nStartRow+1 )     
         {
             SCSIZE nStartIndex;
             SCSIZE nEndIndex;
@@ -1222,7 +1222,7 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
     }
 }
 
-// Test if field contains specific attribute
+
 
 bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
 {
@@ -1304,10 +1304,10 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
                     }
                     else
                     {
-                        // well it is not true that we found one
-                        // but existing one + cell where conditional
-                        // formatting does not remove it
-                        // => we should use the existing protection settting
+                        
+                        
+                        
+                        
                         bFoundCond = bFoundTemp;
                     }
                 }
@@ -1321,8 +1321,8 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         {
             const SfxInt32Item* pRotate =
                     (const SfxInt32Item*) &pPattern->GetItem( ATTR_ROTATE_VALUE );
-            // 90 or 270 degrees is former SvxOrientationItem - only look for other values
-            // (see ScPatternAttr::GetCellOrientation)
+            
+            
             sal_Int32 nAngle = pRotate->GetValue();
             if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
                 bFound = true;
@@ -1363,7 +1363,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         }
         if ( nMask & HASATTR_RIGHTORCENTER )
         {
-            //  called only if the sheet is LTR, so physical=logical alignment can be assumed
+            
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
                     ((const SvxHorJustifyItem&) pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
             if ( eHorJust == SVX_HOR_JUSTIFY_RIGHT || eHorJust == SVX_HOR_JUSTIFY_CENTER )
@@ -1384,7 +1384,7 @@ bool ScAttrArray::IsMerged( SCROW nRow ) const
     return rItem.IsMerged();
 }
 
-// Area around any given summaries expand and adapt any MergeFlag (bRefresh)
+
 bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh )
@@ -1426,7 +1426,7 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                     pDocument->ApplyFlagsTab( nThisCol+1, nThisRow+1, nMergeEndCol, nMergeEndRow,
                                 nTab, SC_MF_HOR | SC_MF_VER );
 
-                Search( nThisRow, i );    // Data changed
+                Search( nThisRow, i );    
                 Search( nStartRow, nStartIndex );
                 Search( nEndRow, nEndIndex );
             }
@@ -1472,7 +1472,7 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             SCCOL nMergeEndCol = nThisCol + nCountX - 1;
             SCROW nMergeEndRow = nThisEnd + nCountY - 1;
 
-            // ApplyAttr for areas
+            
 
             for (SCROW nThisRow = nThisStart; nThisRow <= nThisEnd; nThisRow++)
                 pDocument->ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
@@ -1484,20 +1484,20 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
                                                 nTab, *pNewPattern );
             delete pNewPattern;
 
-            Search( nThisEnd, nIndex );    // data changed
+            Search( nThisEnd, nIndex );    
         }
 
         ++nIndex;
         if ( nIndex < nCount )
             nThisStart = pData[nIndex-1].nRow+1;
         else
-            nThisStart = MAXROW+1;   // End
+            nThisStart = MAXROW+1;   
     }
 
     return bFound;
 }
 
-// Remove field, but leave MergeFlags
+
 
 void ScAttrArray::DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow)
 {
@@ -1521,7 +1521,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = pData[nIndex].pPattern;
-        if (pOldPattern != pWantedPattern)                          //! else-Zweig ?
+        if (pOldPattern != pWantedPattern)                          
         {
             if (nThisRow < nStartRow) nThisRow = nStartRow;
             nRow = pData[nIndex].nRow;
@@ -1530,10 +1530,10 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
 
             if (pItem->IsOverlapped() || pItem->HasAutoFilter())
             {
-                //  default-constructing a ScPatternAttr for DeleteArea doesn't work
-                //  because it would have no cell style information.
-                //  Instead, the document's GetDefPattern is copied. Since it is passed as
-                //  pWantedPattern, no special treatment of default is needed here anymore.
+                
+                
+                
+                
                 ScPatternAttr*  pNewPattern = new ScPatternAttr( *pWantedPattern );
                 SfxItemSet*     pSet = &pNewPattern->GetItemSet();
                 pSet->Put( *pItem );
@@ -1547,13 +1547,13 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                     if (bFirstUse)
                         bFirstUse = false;
                     else
-                        // it's in the pool
+                        
                         pDocument->GetPool()->Put( *pWantedPattern );
                 }
                 SetPatternArea( nThisRow, nAttrRow, pWantedPattern );
             }
 
-            Search( nThisRow, nIndex );   // data changed
+            Search( nThisRow, nIndex );   
         }
 
         ++nIndex;
@@ -1587,7 +1587,7 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
             ScPatternAttr aNewPattern(*pOldPattern);
             aNewPattern.GetItemSet().Put( ScMergeFlagAttr( nOldValue | nFlags ) );
             SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
-            Search( nThisRow, nIndex );  // data changed
+            Search( nThisRow, nIndex );  
             bChanged = true;
         }
 
@@ -1624,7 +1624,7 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags 
             ScPatternAttr aNewPattern(*pOldPattern);
             aNewPattern.GetItemSet().Put( ScMergeFlagAttr( nOldValue & ~nFlags ) );
             SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
-            Search( nThisRow, nIndex );  // data changed
+            Search( nThisRow, nIndex );  
             bChanged = true;
         }
 
@@ -1659,7 +1659,7 @@ void ScAttrArray::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* 
             nRow = pData[nIndex].nRow;
             SCROW nAttrRow = std::min( (SCROW)nRow, (SCROW)nEndRow );
             SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
-            Search( nThisRow, nIndex );  // data changed
+            Search( nThisRow, nIndex );  
         }
 
         ++nIndex;
@@ -1686,7 +1686,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
                                ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
         sal_uInt16 nOldValue = ((const SfxUInt16Item&)rOldSet.Get( ATTR_INDENT )).GetValue();
         sal_uInt16 nNewValue = nOldValue;
-        //to keep Increment indent from running outside the cell1659
+        
         long nColWidth = (long)pDocument->GetColWidth(nCol,nTab);
         if ( bIncrement )
         {
@@ -1719,7 +1719,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
             SetPatternArea( nThisStart, nAttrRow, &aNewPattern, true );
 
             nThisStart = nThisEnd + 1;
-            Search( nThisStart, nIndex ); // data changed
+            Search( nThisStart, nIndex ); 
         }
         else
         {
@@ -1743,7 +1743,7 @@ SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, bool bUp ) const
             if (bUp)
             {
                 if (nIndex==0)
-                    return -1;   // not found
+                    return -1;   
                 --nIndex;
                 nRet = pData[nIndex].nRow;
             }
@@ -1752,7 +1752,7 @@ SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, bool bUp ) const
                 nRet = pData[nIndex].nRow+1;
                 ++nIndex;
                 if (nIndex>=nCount)
-                    return MAXROW+1; // not found
+                    return MAXROW+1; 
             }
         }
     }
@@ -1786,7 +1786,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
                 if (Concat(nPos))
                 {
                     Search(nStart, nPos);
-                    --nPos;   // because ++ at end
+                    --nPos;   
                 }
             }
         }
@@ -1843,13 +1843,13 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
     bool bFound = false;
     SCSIZE nStart = 0;
 
-    // Skip first entry if more than 1 row.
-    // Entries at the end are not skipped, GetFirstVisibleAttr may be larger than GetLastVisibleAttr.
+    
+    
 
     SCSIZE nVisStart = 1;
     while ( nVisStart < nCount && pData[nVisStart].pPattern->IsVisibleEqual(*pData[nVisStart-1].pPattern) )
         ++nVisStart;
-    if ( nVisStart >= nCount || pData[nVisStart-1].nRow > 0 )   // more than 1 row?
+    if ( nVisStart >= nCount || pData[nVisStart-1].nRow > 0 )   
         nStart = nVisStart;
 
     while ( nStart < nCount && !bFound )
@@ -1866,8 +1866,8 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
     return bFound;
 }
 
-// size (rows) of a range of attributes after cell content where the search is stopped
-// (more than a default page size, 2*42 because it's as good as any number)
+
+
 
 const SCROW SC_VISATTR_STOP = 84;
 
@@ -1875,18 +1875,18 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
 {
     OSL_ENSURE( nCount, "nCount == 0" );
 
-    //  #i30830# changed behavior:
-    //  ignore all attributes starting with the first run of SC_VISATTR_STOP equal rows
-    //  below the last content cell
+    
+    
+    
 
     if ( nLastData == MAXROW )
     {
-        rLastRow = MAXROW;      // can't look for attributes below MAXROW
+        rLastRow = MAXROW;      
         return true;
     }
 
-    // Quick check: last data row in or immediately preceding a run that is the
-    // last attribution down to the end, e.g. default style or column style.
+    
+    
     SCSIZE nPos = nCount - 1;
     SCROW nStartRow = (nPos ? pData[nPos-1].nRow + 1 : 0);
     if (nStartRow <= nLastData + 1)
@@ -1898,19 +1898,19 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
         }
         else
         {
-            // Ignore here a few rows if data happens to end within
-            // SC_VISATTR_STOP rows before MAXROW.
+            
+            
             rLastRow = nLastData;
             return false;
         }
     }
 
-    // Find a run below last data row.
+    
     bool bFound = false;
     Search( nLastData, nPos );
     while ( nPos < nCount )
     {
-        // find range of visually equal formats
+        
         SCSIZE nEndPos = nPos;
         while ( nEndPos < nCount-1 &&
                 pData[nEndPos].pPattern->IsVisibleEqual( *pData[nEndPos+1].pPattern))
@@ -1920,7 +1920,7 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
             nAttrStartRow = nLastData + 1;
         SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
         if ( nAttrSize >= SC_VISATTR_STOP && !bFullFormattedArea )
-            break;  // while, ignore this range and below
+            break;  
         else if ( pData[nEndPos].pPattern->IsVisible() )
         {
             rLastRow = pData[nEndPos].nRow;
@@ -1991,7 +1991,7 @@ bool ScAttrArray::IsVisibleEqual( const ScAttrArray& rOther,
 
 bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW nEndRow ) const
 {
-    // summarised with IsVisibleEqual
+    
 
     bool bEqual = true;
     SCSIZE nThisPos = 0;
@@ -2028,8 +2028,8 @@ bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW 
 
 bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 {
-    // Horizontal aggregate are not allowed to be moved out; if whole summary,
-    // here is not recognized
+    
+    
 
     bool bTest = true;
     if (!IsEmpty())
@@ -2043,10 +2043,10 @@ bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
             if ( ((const ScMergeFlagAttr&)pData[nIndex].pPattern->
                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped() )
             {
-                bTest = false;  // may not be pushed out
+                bTest = false;  
                 break;
             }
-            if ( pData[nIndex].nRow >= nEndRow ) // end of range
+            if ( pData[nIndex].nRow >= nEndRow ) 
                 break;
         }
     }
@@ -2056,9 +2056,9 @@ bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 
 bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
 {
-    // if 1st row pushed out is vertically overlapped, summary would be broken
+    
 
-    // MAXROW + 1 - nSize   = 1st row pushed out
+    
 
     SCSIZE nFirstLost = nCount-1;
     while ( nFirstLost && pData[nFirstLost-1].nRow >= sal::static_int_cast<SCROW>(MAXROW + 1 - nSize) )
@@ -2077,11 +2077,11 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     if (!pData)
         return;
 
-    SCROW nSearch = nStartRow > 0 ? nStartRow - 1 : 0;  // expand predecessor
+    SCROW nSearch = nStartRow > 0 ? nStartRow - 1 : 0;  
     SCSIZE nIndex;
     Search( nSearch, nIndex );
 
-    // set ScMergeAttr may not be extended (so behind delete again)
+    
 
     bool bDoMerge = ((const ScMergeAttr&) pData[nIndex].pPattern->GetItem(ATTR_MERGE)).IsMerged();
 
@@ -2090,33 +2090,33 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     for (i = nIndex; i < nCount-1; i++)
     {
         SCROW nNew = pData[i].nRow + nSize;
-        if ( nNew >= MAXROW )    // at end?
+        if ( nNew >= MAXROW )    
         {
             nNew = MAXROW;
             if (!nRemove)
-                nRemove = i+1;  // remove the following?
+                nRemove = i+1;  
         }
         pData[i].nRow = nNew;
     }
 
-    // Remove entries at end ?
+    
 
     if (nRemove && nRemove < nCount)
         DeleteRange( nRemove, nCount-1 );
 
-    if (bDoMerge)   // extensively repair (again) ScMergeAttr
+    if (bDoMerge)   
     {
-            //  ApplyAttr for areas
+            
 
         const SfxPoolItem& rDef = pDocument->GetPool()->GetDefaultItem( ATTR_MERGE );
         for (SCSIZE nAdd=0; nAdd<nSize; nAdd++)
             pDocument->ApplyAttr( nCol, nStartRow+nAdd, nTab, rDef );
 
-        // reply inserts in this area not summarized
+        
     }
 
-    // Don't duplicate the merge flags in the inserted row.
-    // #i108488# SC_MF_SCENARIO has to be allowed.
+    
+    
     RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO | SC_MF_BUTTON );
 }
 
@@ -2163,8 +2163,8 @@ void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         if (pData[i].nRow >= nStartRow)
             pData[i].nRow -= nSize;
 
-    // Below does not follow the pattern to detect pressure ranges;
-    // instead, only remove merge flags.
+    
+    
     RemoveFlags( MAXROW-nSize+1, MAXROW, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
 }
 
@@ -2182,12 +2182,12 @@ void ScAttrArray::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex )
 
 void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
 {
-    RemoveAreaMerge( nStartRow, nEndRow );  // remove from combined flags
+    RemoveAreaMerge( nStartRow, nEndRow );  
 
     if ( !HasAttrib( nStartRow, nEndRow, HASATTR_OVERLAPPED | HASATTR_AUTOFILTER) )
         SetPatternArea( nStartRow, nEndRow, pDocument->GetDefPattern() );
     else
-        DeleteAreaSafe( nStartRow, nEndRow );  // leave merge flags
+        DeleteAreaSafe( nStartRow, nEndRow );  
 }
 
 
@@ -2208,7 +2208,7 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
     {
         pOldPattern = pData[nIndex].pPattern;
 
-        if ( pOldPattern->GetItemSet().Count() )  // hard attributes ?
+        if ( pOldPattern->GetItemSet().Count() )  
         {
             nRow = pData[nIndex].nRow;
             SCROW nAttrRow = std::min( (SCROW)nRow, (SCROW)nEndRow );
@@ -2224,7 +2224,7 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
             else
                 SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
 
-            Search( nThisRow, nIndex );  // data changed
+            Search( nThisRow, nIndex );  
         }
 
         ++nIndex;
@@ -2233,7 +2233,7 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
 }
 
 
-// move within a document
+
 
 void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray)
 {
@@ -2242,7 +2242,7 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
     {
         if ((pData[i].nRow >= nStartRow) && ((i==0) ? true : pData[i-1].nRow < nEndRow))
         {
-            // copy (bPutToPool=TRUE)
+            
             rAttrArray.SetPatternArea( nStart, std::min( (SCROW)pData[i].nRow, (SCROW)nEndRow ),
                                         pData[i].pPattern, true );
         }
@@ -2252,12 +2252,12 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
 }
 
 
-// copy between documents (Clipboard)
+
 
 void ScAttrArray::CopyArea(
     SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags) const
 {
-    nStartRow -= nDy;   // Source
+    nStartRow -= nDy;   
     nEndRow -= nDy;
 
     SCROW nDestStart = std::max((long)((long)nStartRow + nDy), (long) 0);
@@ -2276,7 +2276,7 @@ void ScAttrArray::CopyArea(
 
             if (IsDefaultItem( pOldPattern ))
             {
-                // default: nothing changed
+                
 
                 pNewPattern = (const ScPatternAttr*)
                                 &pDestDocPool->GetDefaultItem( ATTR_PATTERN );
@@ -2312,19 +2312,19 @@ void ScAttrArray::CopyArea(
                             std::min((SCROW)(pData[i].nRow + nDy), nDestEnd), pNewPattern);
         }
 
-        // when pasting from clipboard and skipping filtered rows, the adjusted
-        // end position can be negative
+        
+        
         nDestStart = std::max((long)nDestStart, (long)(pData[i].nRow + nDy + 1));
     }
 }
 
 
-// leave flags
-// summarized with CopyArea
+
+
 
 void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray )
 {
-    nStartRow -= nDy;  // Source
+    nStartRow -= nDy;  
     nEndRow -= nDy;
 
     SCROW nDestStart = std::max((long)((long)nStartRow + nDy), (long) 0);
@@ -2356,8 +2356,8 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
                             std::min((SCROW)(pData[i].nRow + nDy), nDestEnd), pNewPattern, false);
         }
 
-        // when pasting from clipboard and skipping filtered rows, the adjusted
-        // end position can be negative
+        
+        
         nDestStart = std::max((long)nDestStart, (long)(pData[i].nRow + nDy + 1));
     }
 }

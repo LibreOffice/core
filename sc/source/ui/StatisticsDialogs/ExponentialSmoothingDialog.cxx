@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -56,19 +56,19 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
-    // Smoothing factor
+    
     double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
 
-    // Alpha
+    
     output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
     output.nextRow();
 
-    // Alpha Value
+    
     ScAddress aSmoothingFactorAddress = output.current();
     output.writeValue(aSmoothingFactor);
     output.nextRow();
 
-    // Exponential Smoothing
+    
     output.push();
 
     boost::scoped_ptr<DataRangeIterator> pIterator;
@@ -83,7 +83,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
 
         ScRange aCurrentRange = pIterator->get();
 
-        // Write column label
+        
         if (mGroupedBy == BY_COLUMN)
             aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
@@ -92,7 +92,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
         output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();
 
-        // Initial value
+        
         if (false)
         {
             aTemplate.setTemplate("=AVERAGE(%RANGE%)");

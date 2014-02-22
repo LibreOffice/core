@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/addonstoolbarwrapper.hxx>
@@ -63,7 +63,7 @@ AddonsToolBarWrapper::~AddonsToolBarWrapper()
 {
 }
 
-// XComponent
+
 void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
@@ -80,7 +80,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException )
     m_bDisposed = sal_True;
 }
 
-// XInitialization
+
 void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -105,7 +105,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
         Reference< XFrame > xFrame( m_xWeakFrame );
         if ( xFrame.is() && m_aConfigData.getLength() > 0 )
         {
-            // Create VCL based toolbar which will be filled with settings data
+            
             ToolBox* pToolBar = 0;
             AddonsToolBarManager* pToolBarManager = 0;
             {
@@ -125,7 +125,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             {
                 if (( m_aConfigData.getLength() > 0 ) && pToolBar && pToolBarManager )
                 {
-                    // Fill toolbar with container contents
+                    
                     pToolBarManager->FillToolbar( m_aConfigData );
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
                     pToolBar->EnableCustomize( true );
@@ -142,7 +142,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
     }
 }
 
-// XUIElement interface
+
 Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -160,7 +160,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
     return Reference< XInterface >();
 }
 
-// allow late population of images for add-on toolbars
+
 void AddonsToolBarWrapper::populateImages()
 {
     ResetableGuard aLock( m_aLock );
@@ -180,6 +180,6 @@ void AddonsToolBarWrapper::populateImages()
 }
 
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

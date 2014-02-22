@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,10 +23,10 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -35,10 +35,10 @@ namespace svx
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::runtime;
 
-    //====================================================================
-    //= OSingleFeatureDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OSingleFeatureDispatcher::OSingleFeatureDispatcher( const URL& _rFeatureURL, const sal_Int16 _nFormFeature,
             const Reference< XFormOperations >& _rxFormOperations, ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
@@ -51,7 +51,7 @@ namespace svx
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void OSingleFeatureDispatcher::getUnoState( FeatureStateEvent& /* [out] */ _rState ) const
     {
         _rState.Source = *const_cast< OSingleFeatureDispatcher* >( this );
@@ -64,7 +64,7 @@ namespace svx
         _rState.State = aState.State;
     }
 
-    //--------------------------------------------------------------------
+    
     void OSingleFeatureDispatcher::updateAllListeners()
     {
         ::osl::ClearableMutexGuard aGuard( m_rMutex );
@@ -81,7 +81,7 @@ namespace svx
         notifyStatus( NULL, aGuard );
     }
 
-    //--------------------------------------------------------------------
+    
     void OSingleFeatureDispatcher::notifyStatus( const Reference< XStatusListener >& _rxListener, ::osl::ClearableMutexGuard& _rFreeForNotification )
     {
         FeatureStateEvent aUnoState;
@@ -123,7 +123,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OSingleFeatureDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_rMutex );
@@ -135,7 +135,7 @@ namespace svx
         if ( !m_xFormOperations->isEnabled( m_nFormFeature ) )
             return;
 
-        // release our mutex before executing the command
+        
         sal_Int16 nFormFeature( m_nFormFeature );
         Reference< XFormOperations > xFormOperations( m_xFormOperations );
         aGuard.clear();
@@ -147,7 +147,7 @@ namespace svx
                 xFormOperations->execute( nFormFeature );
             }
             else
-            {   // at the moment we only support one parameter
+            {   
                 ::comphelper::NamedValueCollection aArgs( _rArguments );
                 xFormOperations->executeWithArguments( nFormFeature, aArgs.getNamedValues() );
             }
@@ -162,7 +162,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OSingleFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
         (void)_rURL;
@@ -182,11 +182,11 @@ namespace svx
 
         m_aStatusListeners.addInterface( _rxControl );
 
-        // initially update the status
+        
         notifyStatus( _rxControl, aGuard );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OSingleFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
         (void)_rURL;
@@ -201,15 +201,15 @@ namespace svx
         m_aStatusListeners.removeInterface( _rxControl );
     }
 
-    //--------------------------------------------------------------------
+    
     void OSingleFeatureDispatcher::checkAlive() const SAL_THROW((DisposedException))
     {
         if ( m_bDisposed )
             throw DisposedException( OUString(), *const_cast< OSingleFeatureDispatcher* >( this ) );
     }
 
-//........................................................................
-}   // namespace svx
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -68,7 +68,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
     {
-        // ========================= LATEST VERSION =========================
+        
         OUString aGetEnvName( COMPONENT_GETENV );
         oslGenericFunction pSym =
             osl_getFunctionSymbol( lib, aGetEnvName.pData );
@@ -85,7 +85,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
             }
 
-            // create vm access
+            
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = UNO_LB_JAVA;
@@ -160,7 +160,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
     {
-        // ========================= LATEST VERSION =========================
+        
         OUString aGetEnvName( COMPONENT_GETENV );
         oslGenericFunction pSym =
             osl_getFunctionSymbol( lib, aGetEnvName.pData );
@@ -178,7 +178,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                 uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
             }
 
-            // create vm access
+            
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = UNO_LB_JAVA;

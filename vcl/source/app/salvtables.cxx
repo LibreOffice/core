@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,30 +29,30 @@
 #include <salobj.hxx>
 #include <salmenu.hxx>
 
-// this file contains the virtual destructors of the sal interface
-// compilers ususally put their vtables where the destructor is
+
+
 
 SalFrame::~SalFrame()
 {
 }
 
-// -----------------------------------------------------------------------
 
-// default to full-frame flushes
-// on ports where partial-flushes are much cheaper this method should be overridden
+
+
+
 void SalFrame::Flush( const Rectangle& )
 {
     Flush();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SalFrame::SetRepresentedURL( const OUString& )
 {
-    // currently this is Mac only functionality
+    
 }
 
-// -----------------------------------------------------------------------
+
 
 SalInstance::~SalInstance()
 {
@@ -60,12 +60,12 @@ SalInstance::~SalInstance()
 
 void SalInstance::FillFontPathList( std::list< OString >& )
 {
-    // do nothing
+    
 }
 
 SalMenu* SalInstance::CreateMenu( sal_Bool, Menu* )
 {
-    // default: no native menus
+    
     return NULL;
 }
 

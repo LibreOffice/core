@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -108,11 +108,11 @@ static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< conta
             _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
     }
 }
-//==================================================================
-// class FmFieldWinListBox
-//==================================================================
+
+
+
 DBG_NAME(FmFieldWinListBox)
-//------------------------------------------------------------------------------
+
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_BORDER )
     ,pTabWin( pParent )
@@ -123,25 +123,25 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     SetHighlightRange( );
 }
 
-//------------------------------------------------------------------------------
+
 FmFieldWinListBox::~FmFieldWinListBox()
 {
     DBG_DTOR(FmFieldWinListBox,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int8 FmFieldWinListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmFieldWinListBox::DoubleClickHdl()
 {
     if ( pTabWin->createSelectionControls() )
@@ -150,12 +150,12 @@ sal_Bool FmFieldWinListBox::DoubleClickHdl()
     return SvTreeListBox::DoubleClickHdl();
 }
 
-//------------------------------------------------------------------------------
+
 void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     SvTreeListEntry* pSelected = FirstSelected();
     if (!pSelected)
-        // no drag without a field
+        
         return;
 
     ::svx::ODataAccessDescriptor aDescriptor;
@@ -177,27 +177,27 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     }
 }
 
-//========================================================================
-// class FmFieldWinData
-//========================================================================
+
+
+
 DBG_NAME(FmFieldWinData);
-//-----------------------------------------------------------------------
+
 FmFieldWinData::FmFieldWinData()
 {
     DBG_CTOR(FmFieldWinData,NULL);
 }
 
-//-----------------------------------------------------------------------
+
 FmFieldWinData::~FmFieldWinData()
 {
     DBG_DTOR(FmFieldWinData,NULL);
 }
 
-//========================================================================
-// class FmFieldWin
-//========================================================================
+
+
+
 DBG_NAME(FmFieldWin);
-//-----------------------------------------------------------------------
+
 FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent)
             :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
             ,SfxControllerItem(SID_FM_FIELDS_CONTROL, *_pBindings)
@@ -216,21 +216,21 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 }
 
-//-----------------------------------------------------------------------
+
 FmFieldWin::~FmFieldWin()
 {
     if (m_pChangeListener)
     {
         m_pChangeListener->dispose();
         m_pChangeListener->release();
-        //  delete m_pChangeListener;
+        
     }
     delete pListBox;
     delete pData;
     DBG_DTOR(FmFieldWin,NULL);
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::GetFocus()
 {
     if ( pListBox )
@@ -239,13 +239,13 @@ void FmFieldWin::GetFocus()
         SfxFloatingWindow::GetFocus();
 }
 
-//-----------------------------------------------------------------------
+
 sal_Bool FmFieldWin::createSelectionControls( )
 {
     SvTreeListEntry* pSelected = pListBox->FirstSelected();
     if ( pSelected )
     {
-        // build a descriptor for the currently selected field
+        
         ODataAccessDescriptor aDescr;
         aDescr.setDataSource(GetDatabaseName());
 
@@ -254,23 +254,23 @@ sal_Bool FmFieldWin::createSelectionControls( )
         aDescr[ daCommand ]     <<= GetObjectName();
         aDescr[ daCommandType ] <<= GetObjectType();
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
-        aDescr[ daColumnName ]  <<= pInfo->sColumnName;//OUString( pListBox->GetEntryText( pSelected) );
+        aDescr[ daColumnName ]  <<= pInfo->sColumnName;
 
-        // transfer this to the SFX world
+        
         SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );
         const SfxPoolItem* pArgs[] =
         {
             &aDescriptorItem, NULL
         };
 
-        // execute the create slot
+        
         GetBindings().Execute( SID_FM_CREATE_FIELDCONTROL, pArgs );
     }
 
     return NULL != pSelected;
 }
 
-//-----------------------------------------------------------------------
+
 bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
 {
     if ( EVENT_KEYINPUT == _rNEvt.GetType() )
@@ -286,20 +286,20 @@ bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
     return SfxFloatingWindow::PreNotify( _rNEvt );
 }
 
-//-----------------------------------------------------------------------
+
 bool FmFieldWin::Close()
 {
     return SfxFloatingWindow::Close();
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::_propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(evt.Source, ::com::sun::star::uno::UNO_QUERY);
     UpdateContent(xForm);
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     if (!pState  || SID_FM_FIELDS_CONTROL != nSID)
@@ -314,7 +314,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
         UpdateContent(NULL);
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::UpdateContent(FmFormShell* pShell)
 {
     pListBox->Clear();
@@ -329,12 +329,12 @@ void FmFieldWin::UpdateContent(FmFormShell* pShell)
         UpdateContent( xForm );
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm)
 {
     try
     {
-        // ListBox loeschen
+        
         pListBox->Clear();
         OUString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
         SetText(aTitle);
@@ -349,17 +349,17 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
         m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
 
-        // get the connection of the form
+        
         OStaticDataAccessTools aTools;
         m_aConnection.reset(
             aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), sal_True ),
             SharedConnection::NoTakeOwnership
         );
-        // TODO: When incompatible changes (such as extending the "virtualdbtools" interface by ensureRowSetConnection)
-        // are allowed, again, we should change this: dbtools should consistently use SharedConnection all over
-        // the place, and connectRowset should be replaced with ensureRowSetConnection
+        
+        
+        
 
-        // get the fields of the object
+        
 
         if ( m_aConnection.is() && !m_aObjectName.isEmpty() )
         {
@@ -369,7 +369,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
                 lcl_addToList(*pListBox,xColumns);
         }
 
-        // Prefix setzen
+        
         OUString  aPrefix;
         StringListResource aPrefixes( SVX_RES( RID_RSC_TABWIN_PREFIX ) );
 
@@ -386,7 +386,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
                 break;
         }
 
-        // an dem PropertySet nach Aenderungen der ControlSource lauschen
+        
         if (m_pChangeListener)
         {
             m_pChangeListener->dispose();
@@ -398,7 +398,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         m_pChangeListener->addProperty(FM_PROP_COMMAND);
         m_pChangeListener->addProperty(FM_PROP_COMMANDTYPE);
 
-        // Titel setzen
+        
         aTitle = aTitle + " " + aPrefix + " " + OUString(m_aObjectName.getStr());
         SetText( aTitle );
     }
@@ -408,16 +408,16 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
     }
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::Resize()
 {
     SfxFloatingWindow::Resize();
 
     Size aOutputSize( GetOutputSizePixel() );
 
-    //////////////////////////////////////////////////////////////////////
+    
 
-    // Groesse der ::com::sun::star::form::ListBox anpassen
+    
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
     Size aLBSize( aOutputSize );
     aLBSize.Width() -= (2*LISTBOX_BORDER);
@@ -426,16 +426,16 @@ void FmFieldWin::Resize()
     pListBox->SetPosSizePixel( aLBPos, aLBSize );
 }
 
-//-----------------------------------------------------------------------
+
 void FmFieldWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
 }
 
-//-----------------------------------------------------------------------
+
 SFX_IMPL_FLOATINGWINDOW(FmFieldWinMgr, SID_FM_ADD_FIELD)
 
-//-----------------------------------------------------------------------
+
 FmFieldWinMgr::FmFieldWinMgr(Window* _pParent, sal_uInt16 _nId,
                SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)

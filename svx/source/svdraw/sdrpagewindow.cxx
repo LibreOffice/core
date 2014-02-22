@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdrpagewindow.hxx>
@@ -36,12 +36,12 @@
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
 {
@@ -55,13 +55,13 @@ using namespace ::com::sun::star;
             Window& rWindow = dynamic_cast< Window& >( rPaintWindow.GetOutputDevice() );
             const_cast< SdrPageWindow* >( this )->mxControlContainer = VCLUnoHelper::CreateControlContainer( &rWindow );
 
-            // #100394# xC->setVisible triggers window->Show() and this has
-            // problems when the view is not completely constructed which may
-            // happen when loading. This leads to accessibility broadcasts which
-            // throw asserts due to the not finished view. All this chain can be avoided
-            // since xC->setVisible is here called only for the side effect in
-            // UnoControlContainer::setVisible(...) which calls createPeer(...).
-            // This will now be called directly from here.
+            
+            
+            
+            
+            
+            
+            
 
             uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
             if(xControl.is())
@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
         }
         else
         {
-            // Printer and VirtualDevice, or rather: no OutDev
+            
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance("com.sun.star.awt.UnoControlContainer"), uno::UNO_QUERY);
             uno::Reference< awt::XControlModel > xModel(xFactory->createInstance("com.sun.star.awt.UnoControlContainerModel"), uno::UNO_QUERY);
@@ -110,31 +110,31 @@ SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindo
 
 SdrPageWindow::~SdrPageWindow()
 {
-    // #i26631#
+    
     ResetObjectContact();
 
     if (mxControlContainer.is())
     {
         SdrView& rView = GetPageView().GetView();
 
-        // notify derived views
+        
         FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
         if ( pViewAsFormView )
             pViewAsFormView->RemoveControlContainer(mxControlContainer);
 
-        // dispose the control container
+        
         uno::Reference< lang::XComponent > xComponent(mxControlContainer, uno::UNO_QUERY);
         xComponent->dispose();
     }
 }
 
-// ObjectContact section
+
 sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 {
     return new sdr::contact::ObjectContactOfPageView(*this);
 }
 
-// OVERLAY MANAGER
+
 rtl::Reference< ::sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
@@ -158,7 +158,7 @@ void SdrPageWindow::unpatchPaintWindow()
 
 void SdrPageWindow::PrePaint()
 {
-    // give OC the chance to do ProcessDisplay preparations
+    
     if(HasObjectContact())
     {
         GetObjectContact().PrepareProcessDisplay();
@@ -167,19 +167,19 @@ void SdrPageWindow::PrePaint()
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
 {
-    // give OC the chance to do ProcessDisplay preparations
+    
     if(HasObjectContact())
     {
         GetObjectContact().PrepareProcessDisplay();
     }
 
-    // if necessary, remember changed RedrawArea at PaintWindow for usage with
-    // overlay and PreRenderDevice stuff
+    
+    
     GetPaintWindow().SetRedrawRegion(rReg);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// clip test
+
+
 #ifdef CLIPPER_TEST
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -189,7 +189,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 
-// for ::std::sort
+
 #include <algorithm>
 
 namespace
@@ -248,8 +248,8 @@ namespace
 
                 if(aPolyA.count() && aPolyA.isClosed() && aPolyB.count())
                 {
-                    // poly A is the clipregion, clip poly b against it. Algo depends on
-                    // poly b being closed.
+                    
+                    
                     basegfx::B2DPolyPolygon aResult(basegfx::tools::clipPolyPolygonOnPolyPolygon(aPolyB, aPolyA));
 
                     for(sal_uInt32 a(0L); a < aResult.count(); a++)
@@ -261,115 +261,115 @@ namespace
             }
         }
     }
-} // end of anonymous namespace
-#endif // CLIPPER_TEST
+} 
+#endif 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
-    // set Redirector
+    
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
 
-    // set PaintingPageView
+    
     const SdrView& rView = mrPageView.GetView();
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
-    // get to be processed layers
+    
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
-    // create PaintInfoRec; use Rectangle only temporarily
+    
     const Region& rRegion = GetPaintWindow().GetRedrawRegion();
 
-    // create processing data
+    
     sdr::contact::DisplayInfo aDisplayInfo;
 
-    // Draw all layers. do NOT draw form layer from CompleteRedraw, this is done separately
-    // as a single layer paint
+    
+    
     const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
     const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
     aProcessLayers.Clear(nControlLayerId);
 
-    // still something to paint?
+    
     if(!aProcessLayers.IsEmpty())
     {
         aDisplayInfo.SetProcessLayers(aProcessLayers);
 
-        // Set region as redraw area
+        
         aDisplayInfo.SetRedrawArea(rRegion);
 
-        // Draw/Impress
-        aDisplayInfo.SetPageProcessingActive(rView.IsPagePaintingAllowed()); // #i72889#
+        
+        aDisplayInfo.SetPageProcessingActive(rView.IsPagePaintingAllowed()); 
 
-        // paint page
+        
         GetObjectContact().ProcessDisplay(aDisplayInfo);
     }
 
-    // reset redirector
+    
     GetObjectContact().SetViewObjectContactRedirector(0L);
 
-    // LineClip test
+    
 #ifdef CLIPPER_TEST
     if(true)
     {
         impTryTest(GetPageView(), GetPaintWindow().GetOutputDevice());
     }
-#endif // CLIPPER_TEST
+#endif 
 }
 
 void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
-    // set redirector
+    
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
 
-    // set PaintingPageView
+    
     const SdrView& rView = mrPageView.GetView();
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
-    // get the layers to process
+    
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
-    // is the given layer visible at all?
+    
     if(aProcessLayers.IsSet(*pId))
     {
-        // find out if we are painting the ControlLayer
+        
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
         const bool bControlLayerProcessingActive(nControlLayerId == *pId);
 
-        // create PaintInfoRec, use Rectangle only temporarily
+        
         const Region& rRegion = GetPaintWindow().GetRedrawRegion();
 
-        // create processing data
+        
         sdr::contact::DisplayInfo aDisplayInfo;
 
-        // is it the control layer? If Yes, set flag
+        
         aDisplayInfo.SetControlLayerProcessingActive(bControlLayerProcessingActive);
 
-        // Draw just the one given layer
+        
         aProcessLayers.ClearAll();
         aProcessLayers.Set(*pId);
 
         aDisplayInfo.SetProcessLayers(aProcessLayers);
 
-        // Set region as redraw area
+        
         aDisplayInfo.SetRedrawArea(rRegion);
 
-        // Writer or calc, coming from original RedrawOneLayer.
-        // #i72889# no page painting for layer painting
+        
+        
         aDisplayInfo.SetPageProcessingActive(false);
 
-        // paint page
+        
         GetObjectContact().ProcessDisplay(aDisplayInfo);
     }
 
-    // reset redirector
+    
     GetObjectContact().SetViewObjectContactRedirector(0L);
 }
 
-// Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
+
 void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 {
     if(GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
@@ -381,8 +381,8 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 
         if(aDrawinglayerOpt.IsAntiAliasing())
         {
-            // invalidate one discrete unit more under the assumption that AA
-            // needs one pixel more
+            
+            
             aDiscreteRange.grow(1.0);
         }
 
@@ -397,7 +397,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
     }
 }
 
-// ObjectContact section
+
 sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 {
     if(!mpObjectContact)
@@ -413,7 +413,7 @@ bool SdrPageWindow::HasObjectContact() const
     return ( mpObjectContact != NULL );
 }
 
-// #i26631#
+
 void SdrPageWindow::ResetObjectContact()
 {
     if(mpObjectContact)

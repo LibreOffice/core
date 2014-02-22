@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <tubes/manager.hxx>
@@ -53,7 +53,7 @@ struct InfoLogger
 #define INFO_LOGGER_F(s)    InfoLogger aLogger(0,(s))
 #else
 #define INFO_LOGGER_F(s)
-#endif // SAL_LOG_INFO
+#endif 
 
 using namespace rtl;
 using namespace osl;
@@ -140,7 +140,7 @@ static void TeleManager_DBusChannelHandler(
     }
 }
 
-// - TeleManager -
+
 
 void TeleManager::addConference( TeleConference* pConference )
 {
@@ -235,7 +235,7 @@ void TeleManager::setCurrentUuid( const OString& rUuid )
     pImpl->msCurrentUUID = rUuid;
 }
 
-// FIXME: should be static and not used in conference.cxx
+
 void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid )
 {
     SAL_INFO( "tubes", "TeleManager_fileReceived: incoming file: " << rStr );
@@ -261,7 +261,7 @@ void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid )
     }
     catch ( const css::uno::Exception& e )
     {
-        // Expected to happen for unit test
+        
         SAL_WARN( "tubes", "TeleManager_fileReceived: exception when loading: " << e.Message );
     }
 }
@@ -302,7 +302,7 @@ static void lcl_IncomingHandlerReady (
      * of whatever URI got passed to ::sendFile()
      */
     const char* pFileName = empathy_ft_handler_get_filename( pHandler);
-    char* pLocalUri = g_strdup_printf( "file:///tmp/LibreOffice-collab-%s", pFileName);
+    char* pLocalUri = g_strdup_printf( "file:
     GFile *pDestination = g_file_new_for_uri( pLocalUri);
     g_free( pLocalUri);
 
@@ -360,7 +360,7 @@ static void TeleManager_FileTransferHandler(
     }
 }
 
-// - TeleManagerImpl -
+
 
 void TeleManagerImpl::ChannelReadyHandler(
         GObject*        pSourceObject,
@@ -383,7 +383,7 @@ void TeleManagerImpl::ChannelReadyHandler(
             pChannelRequest, pResult, NULL, &pError);
     if (!pChannel)
     {
-        // "account isn't Enabled" means just that..
+        
         /* FIXME: detect and handle, domain=132, code=3 */
         SAL_WARN( "tubes", "TeleManagerImpl::ChannelReadyHandler: no channel: " << pError->message);
         g_error_free( pError);
@@ -415,7 +415,7 @@ void TeleManagerImpl::AccountManagerReadyHandler(
     mbAccountManagerReadyHandlerInvoked = true;
 }
 
-// - TeleManager -
+
 
 bool TeleManager::init( bool bListen )
 {
@@ -508,20 +508,20 @@ bool TeleManager::registerClients()
         return true;
 
     pImpl->mpClient = tp_simple_handler_new_with_factory(
-            pImpl->mpFactory,               // factory
-            FALSE,                          // bypass_approval
-            FALSE,                          // requests
-            getFullClientName().getStr(),   // name
-            FALSE,                          // uniquify
-            TeleManager_DBusChannelHandler, // callback
-            NULL,                           // user_data
-            NULL                            // destroy
+            pImpl->mpFactory,               
+            FALSE,                          
+            FALSE,                          
+            getFullClientName().getStr(),   
+            FALSE,                          
+            TeleManager_DBusChannelHandler, 
+            NULL,                           
+            NULL                            
             );
     SAL_WARN_IF( !pImpl->mpClient, "tubes", "TeleManager::registerClients: no client");
     if (!pImpl->mpClient)
         return false;
 
-    // Setup client handler for buddy channels with our service.
+    
     tp_base_client_take_handler_filter( pImpl->mpClient,
             tp_asv_new(
                 TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE,
@@ -531,7 +531,7 @@ bool TeleManager::registerClients()
 
     /* TODO: setup filters for LibreOfficeCalc, LibreOfficeWriter, ... */
 
-    // Setup client handler for MUC channels with our service.
+    
     tp_base_client_take_handler_filter( pImpl->mpClient,
             tp_asv_new(
                 TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE,
@@ -556,14 +556,14 @@ bool TeleManager::registerClients()
      * user isn't prompted before the channel gets passed to us.
      */
     pImpl->mpFileTransferClient = tp_simple_handler_new_with_factory (
-            pImpl->mpFactory,                               // factory
-            TRUE,                                           // bypass_approval
-            FALSE,                                          // requests
-            getFullClientName().getStr(),                   // name
-            TRUE,                                           // uniquify to get a different bus name to the main client, above
-            TeleManager_FileTransferHandler,                // callback
-            NULL,                                           // user_data
-            NULL                                            // destroy
+            pImpl->mpFactory,                               
+            TRUE,                                           
+            FALSE,                                          
+            getFullClientName().getStr(),                   
+            TRUE,                                           
+            TeleManager_FileTransferHandler,                
+            NULL,                                           
+            NULL                                            
             );
     tp_base_client_take_handler_filter( pImpl->mpFileTransferClient,
             tp_asv_new(
@@ -603,7 +603,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     OString aSessionId( TeleManager::createUuid());
 
     /* FIXME: does this work at all _creating_ a MUC? */
-    // Use conference and server if given, else create conference.
+    
     OString aConferenceRoom( OUStringToOString( rUConferenceRoom, RTL_TEXTENCODING_UTF8));
     OString aConferenceServer( OUStringToOString( rUConferenceServer, RTL_TEXTENCODING_UTF8));
     OStringBuffer aBuf(64);
@@ -621,7 +621,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     SAL_INFO( "tubes", "TeleManager::startGroupSession: creating channel request from "
             << tp_account_get_path_suffix( pAccount ) << " to " << aTarget.getStr() );
 
-    // MUC request
+    
     GHashTable* pRequest = tp_asv_new(
             TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE,
             TP_PROP_CHANNEL_TARGET_HANDLE_TYPE, TP_TYPE_HANDLE, TP_HANDLE_TYPE_ROOM,
@@ -660,7 +660,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
 static void lcl_ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
 {
     /* This is a workaround for a Telepathy bug.
-     * <https://bugs.libreoffice.org/show_bug.cgi?id=47760>. The first time you
+     * <https:
      * request a tube to a contact on an account, you actually get two channels
      * back: the tube you asked for, along with a legacy Channel.Type.Tubes
      * object. This breaks create_and_handle_channel_async(), which expects to
@@ -861,7 +861,7 @@ void TeleManager::addSuffixToNames( const char* pName )
     pImpl->msNameSuffix = pName;
 }
 
-// - TeleManagerImpl -
+
 
 TeleManagerImpl::TeleManagerImpl()
     :
@@ -877,8 +877,8 @@ TeleManagerImpl::TeleManagerImpl()
 
 TeleManagerImpl::~TeleManagerImpl()
 {
-    // There may be unused conferences left opened, so close them.
-    // It should not make a problem to close already closed conference.
+    
+    
     for (MapStringConference::iterator it = maAcceptedConferences.begin();
             it != maAcceptedConferences.end(); ++it)
         it->second->close();

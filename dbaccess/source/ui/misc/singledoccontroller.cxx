@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dbaccess/dbaundomanager.hxx>
@@ -49,7 +49,7 @@ namespace dbaui
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::EventObject;
 
-    // OSingleDocumentController_Data
+    
     struct OSingleDocumentController_Data
     {
         ::boost::scoped_ptr< UndoManager >  m_pUndoManager;
@@ -60,7 +60,7 @@ namespace dbaui
         }
     };
 
-    // OSingleDocumentController
+    
     OSingleDocumentController::OSingleDocumentController( const Reference< XComponentContext >& _rxORB )
         :OSingleDocumentController_Base( _rxORB )
         ,m_pData( new OSingleDocumentController_Data( *this, getMutex() ) )
@@ -80,7 +80,7 @@ namespace dbaui
 
     void SAL_CALL OSingleDocumentController::disposing( const EventObject& i_event ) throw( RuntimeException )
     {
-        // simply disambiguate
+        
         OSingleDocumentController_Base::disposing( i_event );
     }
 
@@ -96,13 +96,13 @@ namespace dbaui
 
     void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
     {
-        // add undo action
+        
         GetUndoManager().AddUndoAction( _pAction );
 
-        // when we add an undo action the controller was modified
+        
         setModified( sal_True );
 
-        // now inform me that or states changed
+        
         InvalidateFeature( ID_BROWSER_UNDO );
         InvalidateFeature( ID_BROWSER_REDO );
     }
@@ -167,6 +167,6 @@ namespace dbaui
         InvalidateFeature(_nId);
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

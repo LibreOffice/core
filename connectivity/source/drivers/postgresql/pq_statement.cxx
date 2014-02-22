@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -247,7 +247,7 @@ Sequence< sal_Int8> Statement::getImplementationId() throw ( RuntimeException )
 
 void Statement::close(  ) throw (SQLException, RuntimeException)
 {
-    // let the connection die without acquired mutex !
+    
     Reference< XConnection > r;
     Reference< XCloseable > resultSet;
     {
@@ -341,8 +341,8 @@ static void raiseSQLException(
 }
 
 
-// returns the elements of the primary key of the given table
-// static Sequence< Reference< com::sun::star::beans::XPropertySet > > lookupKeys(
+
+
 static Sequence< OUString > lookupKeys(
     const Reference< com::sun::star::container::XNameAccess > &tables,
     const OUString & table,
@@ -358,7 +358,7 @@ static Sequence< OUString > lookupKeys(
         tables->getByName( table ) >>= keySupplier;
     else if( -1 == table.indexOf( '.' ) )
     {
-        // it wasn't a fully qualified name. Now need to skip through all tables.
+        
         Reference< XEnumerationAccess > enumerationAccess =
             Reference< XEnumerationAccess > ( tables, UNO_QUERY );
 
@@ -369,20 +369,20 @@ static Sequence< OUString > lookupKeys(
             Reference< XPropertySet > set;
             enumeration->nextElement() >>= set;
             OUString name;
-//             OUString schema;
+
 
             if( set->getPropertyValue( st.NAME ) >>= name )
             {
-//                 printf( "searching %s %s\n",
-//                         OUStringToOString( schema, RTL_TEXTENCODING_ASCII_US ).getStr(),
-//                         OUStringToOString( name, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
+
+
                 if( name == table )
                 {
 
                     if( keySupplier.is() )
                     {
-                        // is ambigous, as I don't know postgresql searchpath,
-                        // I can't continue here, as I may write to a different table
+                        
+                        
                         keySupplier.clear();
                         if( isLog( pSettings, LogLevel::INFO ) )
                         {
@@ -433,17 +433,17 @@ static Sequence< OUString > lookupKeys(
 
                 int length = indexAccess->getCount();
                 ret.realloc( length );
-//                 printf( "primary key for Table %s is ",
-//                         OUStringToOString( table, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
+
                 for( int i = 0 ; i < length ; i ++ )
                 {
                     indexAccess->getByIndex( i ) >>= set;
                     OUString name;
                     set->getPropertyValue( st.NAME ) >>= name;
                     ret[i] = name;
-//                     printf( "%s," , OUStringToOString( name, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
                 }
-//                 printf( "\n" );
+
             }
         }
         if( ! ret.getLength() )
@@ -485,11 +485,11 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         *(data->pMultipleResultUpdateCount) = atoi( PQcmdTuples( result ) );
         *(data->pMultipleResultAvailable) = sal_False;
 
-        // in case an oid value is available, we retrieve it
+        
         *(data->pLastOidInserted) = PQoidValue( result );
 
-        // in case it was a single insert, extract the name of the table,
-        // otherwise the table name is empty
+        
+        
         *(data->pLastTableInserted) =
             extractTableFromInsert( OStringToOUString( cmd, pSettings->encoding ) );
         if( isLog( pSettings, LogLevel::SQL ) )
@@ -516,11 +516,11 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         PQclear( result );
         break;
     }
-    case PGRES_TUPLES_OK: // success
+    case PGRES_TUPLES_OK: 
     {
-        // In case it is a single table, it has a primary key and all columns
-        // belonging to the primary key are in the result set, allow updateable result sets
-        // otherwise, don't
+        
+        
+        
         OUString table, schema;
         Sequence< OUString > sourceTableKeys;
         OStringVector vec;
@@ -543,7 +543,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     &table,
                     pSettings);
 
-                // check, whether the columns are in the result set (required !)
+                
                 int i;
                 for( i = 0 ; i < sourceTableKeys.getLength() ;  i ++ )
                 {
@@ -611,8 +611,8 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     log( pSettings, LogLevel::ERROR,  aReason.getStr());
                 }
 
-                // TODO: How to react here correctly ?
-                // remove this piece of code
+                
+                
                 *(data->pLastResultset) =
                     new FakedUpdateableResultSet(
                         data->refMutex, data->owner,
@@ -672,9 +672,9 @@ static Sequence< OUString > getPrimaryKeyColumnNames(
     Int2StringMap mapIndex2Name;
     fillAttnum2attnameMap( mapIndex2Name, connection, schemaName, tableName );
 
-    // retrieve the primary key ...
+    
     Reference< XPreparedStatement > stmt = connection->prepareStatement(
-            "SELECT conkey "              // 7
+            "SELECT conkey "              
             "FROM pg_constraint INNER JOIN pg_class ON conrelid = pg_class.oid "
                       "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                       "LEFT JOIN pg_class AS class2 ON confrelid = class2.oid "
@@ -708,8 +708,8 @@ static void getAutoValues(
                   "WHERE pg_attribute.attrelid = pg_class.oid AND "
                         "pg_class.relnamespace = pg_namespace.oid AND "
                         "pg_namespace.nspname = ? AND "
-                  // LEM TODO: this is weird; why "LIKE" and not "="?
-                  // Most probably gives problems if tableName contains '%'
+                  
+                  
                         "pg_class.relname LIKE ? AND "
                         "pg_attrdef.adsrc != ''"
             );
@@ -754,27 +754,27 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
     }
     else if ( lastTableInserted.getLength() && lastQuery.getLength() )
     {
-        // extract nameValue Pairs
+        
         String2StringMap namedValues;
         extractNameValuePairsFromInsert( namedValues, lastQuery );
 
-        // debug ...
-//         OStringBuffer buf( 128);
-//         buf.append( "extracting name/value from '" );
-//         buf.append( lastQuery.getStr() );
-//         buf.append( "' to [" );
-//         for( String2StringMap::iterator ii = namedValues.begin() ; ii != namedValues.end() ; ++ii )
-//         {
-//             buf.append( ii->first.getStr() );
-//             buf.append( "=" );
-//             buf.append( ii->second.getStr() );
-//             buf.append( "," );
-//         }
-//         buf.append( "]\n" );
-//         printf( "%s", buf.makeStringAndClear() );
+        
 
-        // TODO: make also unqualified tables names work here. Have a look at 2.8.3. The Schema Search Path
-        //       in postgresql doc
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
 
         Sequence< OUString > keyColumnNames = getPrimaryKeyColumnNames( connection, schemaName, tableName );
         if( keyColumnNames.getLength() )
@@ -799,7 +799,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                     }
                 }
 
-                // check, if a column of the primary key was not inserted explicitly,
+                
                 if( ii == namedValues.end() )
                 {
 
@@ -807,21 +807,21 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                     {
                         getAutoValues( autoValues, connection, schemaName, tableName );
                     }
-                    // this could mean, that the column is a default or auto value, check this ...
+                    
                     String2StringMap::iterator j = autoValues.begin();
                     for( ; j != autoValues.end() ; ++j )
                     {
                         if( columnName.equalsIgnoreAsciiCase( j->first ) )
                         {
-                            // it is indeed an auto value.
+                            
                             value = OStringToOUString(j->second, RTL_TEXTENCODING_ASCII_US );
-                            // check, whether it is a sequence
+                            
 
                             if( rtl_str_shortenedCompare_WithLength(
                                     j->second.getStr(), j->second.getLength(),
                                     RTL_CONSTASCII_STRINGPARAM( "nextval(" ), 8 ) == 0 )
                             {
-                                // retrieve current sequence value:
+                                
                                 OUStringBuffer myBuf(128 );
                                 myBuf.append( "SELECT currval(" );
                                 myBuf.appendAscii( &(j->second.getStr()[8]));
@@ -832,8 +832,8 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                     }
                     if( j == autoValues.end() )
                     {
-                        // it even was no autovalue, no sense to continue as we can't query the
-                        // inserted row
+                        
+                        
                         buf = OUStringBuffer();
                         break;
                     }

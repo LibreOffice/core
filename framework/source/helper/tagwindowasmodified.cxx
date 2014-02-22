@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <helper/tagwindowasmodified.hxx>
@@ -42,18 +42,18 @@
 namespace framework{
 
 
-//*****************************************************************************************************************
+
 TagWindowAsModified::TagWindowAsModified()
     : ThreadHelpBase          (&Application::GetSolarMutex())
 {
 }
 
-//*****************************************************************************************************************
+
 TagWindowAsModified::~TagWindowAsModified()
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -66,21 +66,21 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
     if ( ! xFrame.is ())
         return;
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
     m_xFrame = xFrame ;
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     xFrame->addFrameActionListener(this);
     impl_update (xFrame);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     css::uno::Reference< css::util::XModifiable > xModel (m_xModel.get (), css::uno::UNO_QUERY);
@@ -93,11 +93,11 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
         return;
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     ::sal_Bool bModified = xModel->isModified ();
 
-    // SYNCHRONIZED ->
+    
     SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
@@ -113,10 +113,10 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
         pWindow->SetExtendedStyle(WB_EXT_DOCMODIFIED);
     else
         pWindow->SetExtendedStyle(0);
-    // <- SYNCHRONIZED
+    
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -126,7 +126,7 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
        )
         return;
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
@@ -137,16 +137,16 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
         return;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     impl_update (xFrame);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
@@ -170,10 +170,10 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
     }
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//*****************************************************************************************************************
+
 void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if ( ! xFrame.is ())
@@ -191,20 +191,20 @@ void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XF
        )
         return;
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
-    // Note: frame was set as member outside ! we have to refresh connections
-    // regarding window and model only here.
+    
+    
     m_xWindow = xWindow;
     m_xModel  = xModel ;
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::util::XModifyBroadcaster > xModifiable(xModel, css::uno::UNO_QUERY);
     if (xModifiable.is ())
         xModifiable->addModifyListener (this);
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/main.h>
@@ -56,7 +56,7 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 
 
-//==================================================================================================
+
 class OInterfaceA : public WeakImplHelper1< XInterfaceA >
 {
 public:
@@ -70,7 +70,7 @@ public:
         { return Sequence< StructB >(); }
 };
 
-//==================================================================================================
+
 static inline bool uik_equals( const Uik & rUik1, const Uik & rUik2 )
 {
     return (rUik1.m_Data1 == rUik2.m_Data1 &&
@@ -79,7 +79,7 @@ static inline bool uik_equals( const Uik & rUik1, const Uik & rUik2 )
             rUik1.m_Data4 == rUik2.m_Data4 &&
             rUik1.m_Data5 == rUik2.m_Data5);
 }
-//==================================================================================================
+
 static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 {
     Reference< XIdlClass > xClass;
@@ -98,7 +98,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstLong")) == aConstLong, "test_RegCoreReflection(): error 4k");
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstULong")) == aConstULong, "test_RegCoreReflection(): error 4m");
 
-    // Enums
+    
 
     xClass = xRefl->forName("ModuleA.ModuleB.EnumA");
 
@@ -117,7 +117,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         "test_RegCoreReflection(): error 6");
 
 
-    // Interface
+    
 
     Reference< XIdlClass > xA = xRefl->forName("ModuleC.XInterfaceB");
 
@@ -185,7 +185,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[2]->getType()->getTypeClass() == TypeClass_INTERFACE, "test_RegCoreReflection(): error 46");
     OSL_ENSURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[2]->getType()->getName() == "ModuleA.XInterface1", "test_RegCoreReflection(): error 47");
 
-    // SequenceReflections
+    
 
     OSL_ENSURE(xRefl->forName("[]ModuleA.StructA")->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 48");
     OSL_ENSURE(xRefl->forName("[]ModuleA.StructA")->getComponentType().is(), "test_RegCoreReflection(): error 49");

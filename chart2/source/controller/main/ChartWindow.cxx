@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartWindow.hxx"
@@ -37,7 +37,7 @@ namespace
     aResult.setHeight( rAWTRect.Height );
     return aResult;
 }
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -50,11 +50,11 @@ ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, 
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
-    // chart does not depend on exact pixel painting => enable antialiased drawing
+    
     SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | GetAntialiasing() );
     EnableRTL( false );
     if( pParent )
-        pParent->EnableRTL( false );// #i96215# necessary for a correct position of the context menu in rtl mode
+        pParent->EnableRTL( false );
 }
 
 ChartWindow::~ChartWindow()
@@ -69,7 +69,7 @@ void ChartWindow::clear()
 
 void ChartWindow::PrePaint()
 {
-    // forward VCLs PrePaint window event to DrawingLayer
+    
     if( m_pWindowController )
     {
         m_pWindowController->PrePaint();
@@ -199,7 +199,7 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
     if( ( rHEvt.GetMode() & HELPMODE_QUICK ) &&
         m_pWindowController )
     {
-//         Point aLogicHitPos = PixelToLogic( rHEvt.GetMousePosPixel()); // old chart: GetPointerPosPixel()
+
         Point aLogicHitPos = PixelToLogic( GetPointerPosPixel());
         OUString aQuickHelpText;
         awt::Rectangle aHelpRect;
@@ -237,23 +237,23 @@ void ChartWindow::ForceInvalidate()
 }
 void ChartWindow::Invalidate( sal_uInt16 nFlags )
 {
-    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
+    if( m_bInPaint ) 
         return;
     ::Window::Invalidate( nFlags );
 }
 void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
+    if( m_bInPaint ) 
         return;
     ::Window::Invalidate( rRect, nFlags );
 }
 void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
 {
-    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
+    if( m_bInPaint ) 
         return;
     ::Window::Invalidate( rRegion, nFlags );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

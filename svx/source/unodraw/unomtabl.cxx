@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,29 +65,29 @@ public:
 
     void dispose();
 
-    // SfxListener
+    
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
     void SAL_CALL ImplInsertByName( const OUString& aName, const uno::Any& aElement );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 
-    // XNameContainer
+    
     virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
     virtual void SAL_CALL removeByName( const  OUString& Name ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
-    // XNameReplace
+    
     virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
-    // XNameAccess
+    
     virtual uno::Any SAL_CALL getByName( const  OUString& aName ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
     virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException);
 };
@@ -120,7 +120,7 @@ void SvxUnoMarkerTable::dispose()
     maItemSetVector.clear();
 }
 
-// SfxListener
+
 void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
@@ -165,7 +165,7 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
     mpInSet->Put( aStartMarker, XATTR_LINESTART );
 }
 
-// XNameContainer
+
 void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -184,8 +184,8 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
-    // a little quickfix for 2.0 to let applications clear api
-    // created items that are not used
+    
+    
     if ( aApiName == "~clear~" )
     {
         dispose();
@@ -216,7 +216,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
         throw container::NoSuchElementException();
 }
 
-// XNameReplace
+
 void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -252,7 +252,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         ++aIter;
     }
 
-    // if it is not in our own sets, modify the pool!
+    
     bool bFound = false;
 
     sal_uInt32 nSurrogate;
@@ -304,7 +304,7 @@ static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool* pPool, 
     return false;
 }
 
-// XNameAccess
+
 uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -355,10 +355,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
 
     std::set< OUString > aNameSet;
 
-    // search model pool for line starts
+    
     createNamesForPool( mpModelPool, XATTR_LINESTART, aNameSet );
 
-    // search model pool for line ends
+    
     createNamesForPool( mpModelPool, XATTR_LINEEND, aNameSet );
 
     uno::Sequence< OUString > aSeq( aNameSet.size() );
@@ -409,7 +409,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     return sal_False;
 }
 
-// XElementAccess
+
 uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
     throw( uno::RuntimeException )
 {

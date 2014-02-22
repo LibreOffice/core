@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,7 +57,7 @@ SdUnoSlideView::~SdUnoSlideView (void) throw()
 
 
 
-//----- XSelectionSupplier ----------------------------------------------------
+
 
 sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
       throw(lang::IllegalArgumentException, RuntimeException)
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
                 Any aNumber = xSet->getPropertyValue("Number");
                 sal_Int32 nPageNumber = 0;
                 aNumber >>= nPageNumber;
-                nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
+                nPageNumber -=1; 
                 rSelector.SelectPage(nPageNumber);
             }
             catch (const RuntimeException&)
@@ -142,7 +142,7 @@ void SAL_CALL SdUnoSlideView::removeSelectionChangeListener (
 
 
 
-//----- XDrawView -------------------------------------------------------------
+
 
 void SAL_CALL SdUnoSlideView::setCurrentPage (
     const css::uno::Reference<css::drawing::XDrawPage>& rxDrawPage)
@@ -174,7 +174,7 @@ css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
 
 
 
-//----- XFastPropertySet ------------------------------------------------------
+
 
 void SdUnoSlideView::setFastPropertyValue (
     sal_Int32 nHandle,
@@ -209,7 +209,7 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
 }
 
 
-// XServiceInfo
+
 OUString SAL_CALL SdUnoSlideView::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.SdUnoSlideView" );
@@ -227,6 +227,6 @@ Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  ) throw
     return aSeq;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

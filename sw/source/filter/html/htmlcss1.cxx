@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -63,15 +63,15 @@
 using namespace ::com::sun::star;
 
 
-// Wie viele Zeilen/Zeichen sind fuer DropCaps erlaubt?
-// (Gibt es vielleicht woanders entsprechende Werte?)
+
+
 #define MAX_DROPCAP_LINES 9
 #define MAX_DROPCAP_CHARS 9
 
 static void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc );
 
 
-// Implementierung des SwCSS1Parsers (eigentlich swcss1.cxx)
+
 static struct SwCSS1ItemIds
 {
     sal_uInt16 nFmtBreak;
@@ -133,7 +133,7 @@ SwCSS1Parser::~SwCSS1Parser()
 
 
 
-// Feature: PrintExt
+
 sal_Bool SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
                                 const SvxCSS1PropertyInfo& rPropInfo )
 {
@@ -166,7 +166,7 @@ sal_Bool SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
     case SVX_CSS1_PBREAK_ALWAYS:
     case SVX_CSS1_PBREAK_LEFT:
     case SVX_CSS1_PBREAK_RIGHT:
-        // LEFT/RIGHT koennte man auch am Absatz davor setzen
+        
         eBreak = SVX_BREAK_PAGE_AFTER;
         bSetBreak = sal_True;
         break;
@@ -189,7 +189,7 @@ sal_Bool SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
 
     return bSetBreak;
 }
-// /Feature: PrintExt
+
 
 static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 {
@@ -202,7 +202,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
                                                    &pItem ) &&
             ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
         {
-            // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
+            
             rItemSet.ClearItem( aWhichIds[i] );
         }
     }
@@ -211,8 +211,8 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
-        // Ein Brush-Item mit RES_BACKGROUND muss noch in eines mit
-        // RES_CHRATR_BACKGROUND gewandelt werden
+        
+        
 
         SvxBrushItem aBrushItem( *(const SvxBrushItem *)pItem );
         aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
@@ -286,7 +286,7 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
     const SfxItemSet& rCollItemSet = pColl->GetAttrSet();
     const SfxPoolItem *pCollItem, *pItem;
 
-    // linker, rechter Rand und Erstzeilen-Einzug
+    
     if( (rPropInfo.bLeftMargin || rPropInfo.bRightMargin ||
          rPropInfo.bTextIndent) &&
         (!rPropInfo.bLeftMargin || !rPropInfo.bRightMargin ||
@@ -307,7 +307,7 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
         rItemSet.Put( aLRItem );
     }
 
-    // oberer und unterer Rand
+    
     if( (rPropInfo.bTopMargin || rPropInfo.bBottomMargin) &&
         (!rPropInfo.bTopMargin || !rPropInfo.bBottomMargin) &&
         SFX_ITEM_SET == rCollItemSet.GetItemState(RES_UL_SPACE,true,
@@ -333,14 +333,14 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
                                                    &pItem ) &&
             ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
         {
-            // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
+            
             rItemSet.ClearItem( aWhichIds[i] );
         }
     }
 
-// Feature: PrintExt
+
     pCSS1Parser->SetFmtBreak( rItemSet, rPropInfo );
-// /Feature: PrintExt
+
 
     pColl->SetFmtAttr( rItemSet );
 }
@@ -365,7 +365,7 @@ void SwCSS1Parser::SetTableTxtColl( sal_Bool bHeader )
 
     SwTxtFmtColl *pColl = 0;
 
-    // The following entries will never be used again and may be changed.
+    
     SvxCSS1MapEntry *pStyleEntry = GetTag( sTag );
     if( pStyleEntry )
     {
@@ -406,7 +406,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
-            // ein Hintergrund wird gesetzt
+            
             aBrushItem = *((const SvxBrushItem *)pItem);
             pItemSet2->ClearItem( RES_BACKGROUND );
             bSetBrush = sal_True;
@@ -414,7 +414,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
 
         if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BOX, false, &pItem ) )
         {
-            // eine Umrandung wird gesetzt
+            
             aBoxItem = *((const SvxBoxItem *)pItem);
             pItemSet2->ClearItem( RES_BOX );
             bSetBox = sal_True;
@@ -422,7 +422,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
 
         if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_FRAMEDIR, false, &pItem ) )
         {
-            // eine Umrandung wird gesetzt
+            
             aFrmDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
             pItemSet2->ClearItem( RES_FRAMEDIR );
             bSetFrmDir = sal_True;
@@ -453,7 +453,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     }
 }
 
-// Feature: PrintExt
+
 void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
                                      SfxItemSet& rItemSet,
                                      const SvxCSS1PropertyInfo& rPropInfo )
@@ -467,7 +467,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     const SfxPoolItem *pPageItem, *pItem;
     sal_Bool bChanged = sal_False;
 
-    // linker, rechter Rand und Erstzeilen-Einzug
+    
     if( (rPropInfo.bLeftMargin || rPropInfo.bRightMargin) &&
         SFX_ITEM_SET == rItemSet.GetItemState(RES_LR_SPACE,false,&pItem) )
     {
@@ -492,7 +492,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
         bChanged = sal_True;
     }
 
-    // oberer und unterer Rand
+    
     if( (rPropInfo.bTopMargin || rPropInfo.bBottomMargin) &&
         SFX_ITEM_SET == rItemSet.GetItemState(RES_UL_SPACE,false,&pItem) )
     {
@@ -517,7 +517,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
         bChanged = sal_True;
     }
 
-    // die Groesse
+    
     if( rPropInfo.eSizeType != SVX_CSS1_STYPE_NONE )
     {
         if( rPropInfo.eSizeType == SVX_CSS1_STYPE_TWIP )
@@ -528,10 +528,10 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
         }
         else
         {
-            // Bei "size: auto|portrait|landscape" bleibt die bisherige
-            // Groesse der Vorlage erhalten. Bei "landscape" und "portrait"
-            // wird das Landscape-Flag gesetzt und evtl. die Breite/Hoehe
-            // vertauscht.
+            
+            
+            
+            
             SwFmtFrmSize aFrmSz( rMaster.GetFrmSize() );
             sal_Bool bLandscape = aNewPageDesc.GetLandscape();
             if( ( bLandscape &&
@@ -549,10 +549,10 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
         }
     }
 
-    // Geht das wirklich?
+    
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
-        // eine Umrandung wird gesetzt
+        
         rMaster.SetFmtAttr( *pItem );
         rItemSet.ClearItem( RES_BACKGROUND );
         bChanged = sal_True;
@@ -561,7 +561,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     if( bChanged )
         ChgPageDesc( pPageDesc, aNewPageDesc );
 }
-// /Feature: PrintExt
+
 
 const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
 {
@@ -752,18 +752,18 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         CSS1_SELTYPE_ELEM_CLASS != eSelType)
         return sal_True;
 
-    // Token und Class zu dem Selektor holen
+    
     OUString aToken2;
     OUString aClass;
     sal_uInt16 nScript;
     eSelType = GetTokenAndClass( pSelector, aToken2, aClass, nScript );
     int nToken2 = GetHTMLToken( aToken2 );
 
-    // und noch ein ganz par Infos zum naechsten Element
+    
     CSS1SelectorType eNextType = pNext ? pNext->GetType()
                                        : CSS1_SELTYPE_ELEMENT;
 
-    // Erstmal ein par Spezialfaelle
+    
     if( CSS1_SELTYPE_ELEMENT==eSelType )
     {
         switch( nToken2 )
@@ -776,7 +776,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             }
             else if( pNext && CSS1_SELTYPE_PSEUDO == eNextType )
             {
-                // vielleicht A:visited oder A:link
+                
 
                 OUString aPseudo( pNext->GetString() );
                 aPseudo = aPseudo.toAsciiLowerCase();
@@ -816,32 +816,32 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         case HTML_BODY_ON:
             if( !pNext )
             {
-                // BODY
+                
 
-                // Den Hintergrund muessen wir vor dem Setzen abfragen,
-                // denn in SetPageDescAttrs wird er geloescht.
+                
+                
                 const SfxPoolItem *pItem;
                 if( SFX_ITEM_SET==rItemSet.GetItemState(RES_BACKGROUND,false,&pItem) )
                 {
                     const SvxBrushItem *pBrushItem =
                         (const SvxBrushItem *)pItem;
 
-                    /// Body has a background color, if it is not "no fill"/"auto fill"
+                    /
                     if( pBrushItem->GetColor() != COL_TRANSPARENT )
                         bBodyBGColorSet = sal_True;
                     if( GPOS_NONE != pBrushItem->GetGraphicPos() )
                         bBodyBackgroundSet = sal_True;
                 }
 
-                // Border and Padding
+                
                 rPropInfo.SetBoxItem( rItemSet, MIN_BORDER_DIST );
 
-                // Ein par Attribute muessen an der Seitenvorlage gesetzt werden,
-                // und zwar die, die nicht vererbt werden
+                
+                
                 SetPageDescAttrs( 0, &rItemSet );
 
-                // alle noch uebrigen Optionen koennen an der Standard-Vorlage
-                // gesetzt werden und gelten dann automatisch als defaults
+                
+                
                 if( SFX_ITEM_SET==rItemSet.GetItemState(RES_CHRATR_COLOR,false) )
                     bBodyTextSet = sal_True;
                 SetTxtCollAttrs(
@@ -879,8 +879,8 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         }
     }
 
-    // Jetzt werden die Selektoren verarbeitet, die zu einer Absatz-Vorlage
-    // gehoehren
+    
+    
     sal_uInt16 nPoolCollId = 0;
     switch( nToken2 )
     {
@@ -947,7 +947,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                  (CSS1_SELTYPE_ELEMENT==eNextType ||
                   CSS1_SELTYPE_ELEM_CLASS==eNextType) )
         {
-            // nicht TH und TD, aber TH P und TD P
+            
             OUString aSubToken, aSubClass;
             GetTokenAndClass( pNext, aSubToken, aSubClass, nScript );
             if( HTML_PARABREAK_ON == GetHTMLToken( aSubToken ) )
@@ -994,10 +994,10 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
              pNext->GetString().equalsIgnoreAsciiCase( "first-letter" ) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
         {
-            // Entweder kein zusammengesetzter Selektor oder
-            // ein X:first-line { float: left; ... }
+            
+            
 
-            // Die Vorlage Suchen bzw. Anlegen
+            
             SwTxtFmtColl *pColl = GetTxtFmtColl( nPoolCollId, aEmptyOUStr );
             SwTxtFmtColl* pParentColl = 0;
             if( !aClass.isEmpty() )
@@ -1012,7 +1012,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             }
             if( !pNext )
             {
-                // nur die Attribute an der Vorlage setzen
+                
                 const SfxPoolItem *pItem;
                 const SvxBoxItem *pBoxItem = 0;
                 if( SFX_ITEM_SET ==
@@ -1033,11 +1033,11 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             }
             else
             {
-                // ein Drop-Cap-Attribut basteln
+                
                 SwFmtDrop aDrop( pColl->GetDrop() );
                 aDrop.GetChars() = 1;
 
-                // die Attribute in das DropCap-Attribut einfuegen
+                
                 if( CSS1_SCRIPT_ALL == nScript )
                 {
                     OUString sName(pColl->GetName());
@@ -1071,10 +1071,10 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     FillDropCap( aDrop, aScriptItemSet, &sName );
                 }
 
-                // Das Attribut nur setzen, wenn float: left angegeben wurde
-                // und das Initial ueber mehrere Zeilen geht. Sonst wird die
-                // ggf. angelegte Zeichen-Vorlage spaeter ueber den Namen
-                // gesucht und gesetzt.
+                
+                
+                
+                
                 if( aDrop.GetLines() > 1 &&
                     (SVX_ADJUST_LEFT == rPropInfo.eFloat  ||
                      CSS1_SCRIPT_ALL == nScript) )
@@ -1089,8 +1089,8 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         return sal_True;
     }
 
-    // Jetzt werden die Selektoten verarbeitet, die zu einer Zechenvorlage
-    // gehoehren. Zusammengesetzte gibt es hier allerdings nich nicht.
+    
+    
     if( pNext )
         return sal_True;
 
@@ -1152,7 +1152,7 @@ const FontList *SwCSS1Parser::GetFontList() const
 
 SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const OUString& rClass ) const
 {
-    // die entsprechende Vorlage suchen
+    
     sal_uInt16 nPoolId = 0;
     const sal_Char* sName = 0;
     switch( nToken2 )
@@ -1177,11 +1177,11 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const OUString& rClass )
     case HTML_DELETEDTEXT_ON:   sName = OOO_STRING_SVTOOLS_HTML_deletedtext;    break;
     }
 
-    // die Vorlage suchen oder anlegen (geht nur mit Namen)
+    
     if( !nPoolId && !sName )
         return 0;
 
-    // Die Vorlage (ohne Class) suchen oder anlegen
+    
     SwCharFmt *pCFmt = 0;
     if( nPoolId )
     {
@@ -1200,8 +1200,8 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const OUString& rClass )
 
     OSL_ENSURE( pCFmt, "Keine Zeichen-Vorlage???" );
 
-    // Wenn es eine Klasse gibt, die Klassen-Vorlage suchen aber nicht
-    // neu anlegen.
+    
+    
     OUString aClass( rClass );
     GetScriptFromClass( aClass, sal_False );
     if( !aClass.isEmpty() )
@@ -1288,7 +1288,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
         }
     }
 
-    if( USER_FMT & nTxtColl )       // eine vom Reader angelegte
+    if( USER_FMT & nTxtColl )       
     {
         OSL_ENSURE( !this, "Wo kommt die Benutzer-Vorlage her?" );
         pColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
@@ -1309,9 +1309,9 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
             (nTxtColl==RES_POOLCOLL_TABLE ||
              nTxtColl==RES_POOLCOLL_TABLE_HDLN) )
         {
-            // Wenn dieser Fall eintritt, dann wurde ein <TD><P CLASS=foo>
-            // gelesen, aber die TD.foo Vorlage nicht gefunden. Dann muessen
-            // wir P.foo nehmen, wenn es sie gibt.
+            
+            
+            
             SwTxtFmtColl* pCollText =
                 GetTxtCollFromPool( RES_POOLCOLL_TEXT );
             aTmp = pCollText->GetName();
@@ -1372,49 +1372,49 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreat
     const SwPageDesc *pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
     if( !pPageDesc && bCreate )
     {
-        // Die erste Seite wird aus der rechten Seite erzeugt, wenn es die
-        // gibt.
+        
+        
         SwPageDesc *pMasterPageDesc = 0;
         if( RES_POOLPAGE_FIRST == nPoolId )
             pMasterPageDesc = FindPageDesc( pDoc, RES_POOLPAGE_RIGHT, nPage );
         if( !pMasterPageDesc )
             pMasterPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
-        // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
+        
         SwPageDesc *pNewPageDesc = pDoc->
             GetPageDescFromPool( nPoolId, false );
 
-        // dazu brauchen wir auch die Nummer der neuen Vorlage
+        
         pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
         OSL_ENSURE( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
 
         pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, false );
 
-        // Die Vorlagen an ihren neuen Zweck anpassen.
+        
         const SwPageDesc *pFollow = 0;
         sal_Bool bSetFollowFollow = sal_False;
         switch( nPoolId )
         {
         case RES_POOLPAGE_FIRST:
-            // Wenn es schon eine linke Seite gibt, dann ist das die
-            // Folge-Vorlage, sonst ist es die HTML-Vorlage.
+            
+            
             pFollow = GetLeftPageDesc();
             if( !pFollow )
                 pFollow = pMasterPageDesc;
             break;
 
         case RES_POOLPAGE_RIGHT:
-            // Wenn die linke Vorlage schon angelegt ist, passiert hier gar
-            // nichts. Sonst wird die linke Vorlage angelegt und sorgt auch
-            // fuer die richtige Verkettung mit der rechten Voralge.
+            
+            
+            
             GetLeftPageDesc( sal_True );
             break;
 
         case RES_POOLPAGE_LEFT:
-            // Die rechte Vorlage wird angelegt, wenn sie noch nicht existiert.
-            // Es findet aber keine Verkettung statt.
-            // Wenn schon eine erste Seitenvorlage existiert, wird die linke
-            // Vorlage die Folge-Vorlage der ersten Seite.
+            
+            
+            
+            
             pFollow = GetRightPageDesc( sal_True );
             bSetFollowFollow = sal_True;
             {
@@ -1452,18 +1452,18 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreat
 sal_Bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                     sal_Bool bAutoWidth )
 {
-    // abs-pos
-    // left/top none    auto    twip    perc
+    
+    
     //
-    // none     Z       Z       -       -
-    // auto     Z       Z       -       -
-    // twip     Z       Z       S/R     -
-    // perc     -       -       -       -
+    
+    
+    
+    
     //
-    // - das Tag wird absolut positioniert und left/top sind beide
-    //   gegeben und enthalten auch keine %-Angabe, oder
-    // - das Tag soll fliessen, und
-    // - es wurde eine Breite angegeben (in beiden Faellen noetig)
+    
+    
+    
+    
     return ( ( SVX_CSS1_POS_ABSOLUTE     == rPropInfo.ePosition &&
                SVX_CSS1_LTYPE_PERCENTAGE != rPropInfo.eLeftType &&
                SVX_CSS1_LTYPE_PERCENTAGE != rPropInfo.eTopType &&
@@ -1489,8 +1489,8 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
                                 SfxItemSet& rItemSet,
                                 const OUString *pName )
 {
-    // die Anzahl der Zeilen entspricht in etwa einer %-Angabe
-    // fuer die Hoehe (was passiert mit absoluten Hoehen???)
+    
+    
     sal_uInt8 nLines = rDrop.GetLines();
     const SfxPoolItem *pItem;
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) )
@@ -1502,8 +1502,8 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         else if( nLines > MAX_DROPCAP_LINES )
             nLines = MAX_DROPCAP_LINES;
 
-        // Nur wenn nLines>1 ist, wird das Attribut auch gesetzt. Dann
-        // brauchen wir die Font-Hoehe aber auch nicht in der Zeichen-Vorlage.
+        
+        
         if( nLines > 1 )
         {
             rItemSet.ClearItem( RES_CHRATR_FONTSIZE );
@@ -1512,14 +1512,14 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         }
     }
 
-    // Bei harter Attributierung (pName==0) koennen wir aufhoehren, wenn
-    // das Initial nur ueber eine Zeile geht.
+    
+    
     if( nLines<=1 )
         return;
 
     rDrop.GetLines() = nLines;
 
-    // ein rechter Rand wird der Abstand zum Text!
+    
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, false, &pItem ) )
     {
         rDrop.GetDistance() = static_cast< sal_uInt16 >(
@@ -1527,7 +1527,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         rItemSet.ClearItem( RES_LR_SPACE );
     }
 
-    // Fuer alle anderen Attribute eine Zeichen-Vorlage anlegen
+    
     if( rItemSet.Count() )
     {
         SwCharFmt *pCFmt = 0;
@@ -1554,19 +1554,19 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         }
         SetCharFmtAttrs( pCFmt, rItemSet );
 
-        // Die Zeichenvorlage braucht nur im Attribut gesetzt werden, wenn
-        // auch das Attribut gesetzt wird.
+        
+        
         if( nLines > 1 )
             rDrop.SetCharFmt( pCFmt );
     }
 }
 
 
-// CSS1-sezifisches des SwHTMLParsers
+
 
 _HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
 {
-    // den zu dem Item gehoehrenden Tabellen-Eintrag ermitteln ...
+    
     _HTMLAttr **ppAttr = 0;
     switch( nWhich )
     {
@@ -1720,10 +1720,10 @@ void SwHTMLParser::EndStyle()
 sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
                                  OUString& rStr )
 {
-    // View wegschmeissen (wegen Reschedule)
+    
     SwViewShell *pOldVSh = CallEndAction();
 
-    // Ein Medium anlegen
+    
     SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
 
     SvStream* pStream = aDLMedium.GetInStream();
@@ -1738,16 +1738,16 @@ sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
     }
 
 
-    // wurde abgebrochen?
+    
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         || 1 == pDoc->getReferenceCount() )
     {
-        // wurde der Import vom SFX abgebrochen?
+        
         eState = SVPAR_ERROR;
         pStream = 0;
     }
 
-    // recreate View
+    
     SwViewShell *const pVSh = CallStartAction( pOldVSh );
     OSL_ENSURE( pOldVSh == pVSh, "FileDownload: SwViewShell changed on us" );
     (void) pVSh;
@@ -1798,25 +1798,25 @@ void SwHTMLParser::InsertLink()
         {
             if( GetMedium() )
             {
-                // Download des Style-Source starten
+                
                 StartFileDownload(sHRef);
                 if( IsParserWorking() )
                 {
-                    // Der Style wurde synchron geladen und wir koennen
-                    // es direkt aufrufen.
+                    
+                    
                     bFinishDownload = sal_True;
                 }
                 else
                 {
-                    // Der Style wird asynchron geladen und ist erst beim
-                    // naechsten Continue-Aufruf da. Wir muessen deshalb einen
-                    // Pending-Stack anlegen, damit wir hierher zurueckkehren
+                    
+                    
+                    
                     pPendStack = new SwPendingStack( HTML_LINK, pPendStack );
                 }
             }
             else
             {
-                // File synchron holen
+                
                 OUString sSource;
                 if( FileDownload( sHRef, sSource ) )
                     pCSS1Parser->ParseStyleSheet( sSource );
@@ -1843,13 +1843,13 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
     SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyOUStr, false );
     if( pPageEntry )
     {
-        // @page (wirkt auf alle Seiten, die es schon gibt
+        
 
         SetPageDescAttrs( pMasterPageDesc, pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
 
-        // Fuer alle anderen Seiten-Vorlagen, die es schon gibt,
-        // muessen die Attribute auch noch gesetzt werden
+        
+        
 
         SetPageDescAttrs( GetFirstPageDesc(), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
@@ -1981,9 +1981,9 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         if( SVX_CSS1_LTYPE_TWIP == rPropInfo.eLeftType &&
             SVX_CSS1_LTYPE_TWIP == rPropInfo.eTopType )
         {
-            // Absolut positionierte Objekte sind seitengebunden, wenn
-            // sie nicht schon in einem Rahmen stehen und sonst
-            // Rahmengebunden.
+            
+            
+            
             const SwStartNode *pFlySttNd =
                 pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
             if( pFlySttNd )
@@ -2015,16 +2015,16 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
             else
             {
                 eHoriOri = text::HoriOrientation::LEFT;
-                eHoriRel = text::RelOrientation::FRAME;   // wird noch umgeschossen
+                eHoriRel = text::RelOrientation::FRAME;   
             }
         }
     }
     else
     {
-        // fliessende Objekte werden Absatzgebunden eingefuegt, wenn
-        // der Absatz noch leer ist und sonst auto-gebunden.
-        // Auto-gebundene Rahmen werden zunaechst an der Position davor
-        // eingefuegt und erst spaeter verschoben.
+        
+        
+        
+        
         const sal_Int32 nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
@@ -2064,7 +2064,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
     }
     rFrmItemSet.Put( aAnchor );
 
-    // Absolut Positioniert mit Durchlauf
+    
     rFrmItemSet.Put( SwFmtHoriOrient( nHoriPos, eHoriOri, eHoriRel ) );
     rFrmItemSet.Put( SwFmtVertOrient( nVertPos, eVertOri, eVertRel ) );
     rFrmItemSet.Put( SwFmtSurround( eSurround ) );
@@ -2097,8 +2097,8 @@ void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
         nPrcHeight = rPropInfo.nHeight > 0 ? (sal_uInt8)rPropInfo.nHeight : 1;
         break;
     case SVX_CSS1_LTYPE_TWIP:
-        // Netscape und MS-IE interpretieren die Hoehe regelwiedrig
-        // als Mindest-Hoehe, also machwn wir das auch so.
+        
+        
         nHeight = rPropInfo.nHeight > MINFLY ? rPropInfo.nHeight : MINFLY;
         break;
     default:
@@ -2123,7 +2123,7 @@ void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
         if( (nFlags & HTML_FF_PADDING) == 0 )
         {
             SvxBoxItem aBoxItem( *(const SvxBoxItem *)pItem );
-            // Alle 4 Seiten gleichzeitig auf 0 setzen
+            
             aBoxItem.SetDistance( 0 );
             rFrmItemSet.Put( aBoxItem );
         }
@@ -2161,7 +2161,7 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit
     sal_Bool bFound = 0==nToken;
     if( nToken )
     {
-        // Stack-Eintrag zu dem Token suchen
+        
         while( nPos > nContextStMin )
         {
             sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -2170,7 +2170,7 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit
                 bFound = sal_True;
                 break;
             }
-            else if( nCntxtToken == nLimit ) // 0 als Token kommt nicht vor
+            else if( nCntxtToken == nLimit ) 
             {
                 break;
             }
@@ -2279,9 +2279,9 @@ void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, sal_Bool bRemove
 
         if( RES_PARATR_DROP==pAttr->GetItem().Which() )
         {
-            // Fuer DropCaps noch die Anzahl der Zeichen anpassen. Wenn
-            // es am Ende 0 sind, wird das Attribut invalidiert und dann
-            // von _SetAttr gar nicht erst gesetzt.
+            
+            
+            
             sal_Int32 nChars = pPam->GetPoint()->nContent.GetIndex();
             if( nChars < 1 )
                 pAttr->Invalidate();
@@ -2304,7 +2304,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
     const SfxPoolItem *pItem = aIter.FirstItem();
     while( pItem )
     {
-        // den zu dem Item gehoehrenden Tabellen-Eintrag ermitteln ...
+        
         sal_uInt16 nWhich = pItem->Which();
         _HTMLAttr **ppAttr = GetAttrTabEntry( nWhich );
 
@@ -2352,7 +2352,7 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
     {
         if( bIsNewDoc )
         {
-            // Set new encoding as pool default
+            
             static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                            RES_CHRATR_CTL_FONT };
             sal_uInt16 i;
@@ -2368,12 +2368,12 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
                 pDoc->SetDefault( aFont );
             }
 
-            // Change all paragraph styles that do specify a font.
+            
             sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->size();
             for( i=1; i<nArrLen; i++ )
                 lcl_swcss1_setEncoding( *(*pDoc->GetTxtFmtColls())[i], eEnc );
 
-            // Change all character styles that do specify a font.
+            
             nArrLen = pDoc->GetCharFmts()->size();
             for( i=1; i<nArrLen; i++ )
                 lcl_swcss1_setEncoding( *(*pDoc->GetCharFmts())[i], eEnc );

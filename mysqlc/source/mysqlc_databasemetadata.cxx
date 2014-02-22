@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "mysqlc_databasemetadata.hxx"
 #include <boost/scoped_ptr.hpp>
@@ -55,7 +55,7 @@ using mysqlc_sdbc_driver::getStringFromAny;
 static std::string wild("%");
 
 
-// -----------------------------------------------------------------------------
+
 void lcl_setRows_throw(const Reference< XResultSet >& _xResultSet,sal_Int32 _nType,const std::vector< std::vector< Any > >& _rRows)
 {
     Reference< XInitialization> xIni(_xResultSet,UNO_QUERY);
@@ -1610,7 +1610,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
             bool informationSchema = false;
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 sql::SQLString columnStringValue = rset->getString(i);
-                if (i == 1) {   // TABLE_SCHEM
+                if (i == 1) {   
                     informationSchema = (0 == columnStringValue.compare("information_schema"));
                 }
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(columnStringValue, encoding)));
@@ -1703,7 +1703,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         while (rset->next()) {
             std::vector< Any > aRow(1);
             for (sal_uInt32 i = 1; i <= columns; i++) {
-                if (i == 5) { // ColumnType
+                if (i == 5) { 
                     sal_Int32 sdbc_type = mysqlc_sdbc_driver::mysqlToOOOType(atoi(rset->getString(i).c_str()));
                     aRow.push_back(makeAny(sdbc_type));
                 } else {
@@ -1764,7 +1764,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             bool informationSchema = false;
             for (sal_uInt32 i = 1; (i <= columns) && !informationSchema; ++i) {
                 sql::SQLString columnStringValue = rset->getString(i);
-                if (i == 2) {   // TABLE_SCHEM
+                if (i == 2) {   
                     informationSchema = ( 0 == columnStringValue.compare("information_schema"));
                 }
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(columnStringValue, encoding)));
@@ -1796,7 +1796,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("ODatabaseMetaData::getProcedureColumns");
-    // Currently there is no information available
+    
     return NULL;
 }
 /* }}} */
@@ -2097,13 +2097,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             for (size_t i = 0; i < SAL_N_ELEMENTS( allPrivileges ); ++i) {
                 std::vector< Any > aRow;
                 aRow.push_back(makeAny( sal_Int32( i ) ));
-                aRow.push_back(catalog);                                                          // TABLE_CAT
-                aRow.push_back(makeAny( schemaPattern ));                                         // TABLE_SCHEM
-                aRow.push_back(makeAny( tableNamePattern ));                                      // TABLE_NAME
-                aRow.push_back(Any());                                                            // GRANTOR
-                aRow.push_back(userName);                                                         // GRANTEE
-                aRow.push_back(makeAny( OUString::createFromAscii( allPrivileges[i] ) ));  // PRIVILEGE
-                aRow.push_back(Any());                                                            // IS_GRANTABLE
+                aRow.push_back(catalog);                                                          
+                aRow.push_back(makeAny( schemaPattern ));                                         
+                aRow.push_back(makeAny( tableNamePattern ));                                      
+                aRow.push_back(Any());                                                            
+                aRow.push_back(userName);                                                         
+                aRow.push_back(makeAny( OUString::createFromAscii( allPrivileges[i] ) ));  
+                aRow.push_back(Any());                                                            
 
                 rRows.push_back(aRow);
             }

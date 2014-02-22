@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,14 +52,14 @@ private:
     void                        setDateAcceptancePatternsConfig();
 };
 
-// -----------------------------------------------------------------------
+
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
     pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() );
     setDateAcceptancePatternsConfig();
 
-    // listen for further changes
+    
     aSysLocaleOptions.AddListener( this );
 }
 
@@ -98,7 +98,7 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
 {
     OUString aStr( aSysLocaleOptions.GetDatePatternsConfigString());
     if (aStr.isEmpty())
-        pLocaleData->setDateAcceptancePatterns( uno::Sequence<OUString>());     // reset
+        pLocaleData->setDateAcceptancePatterns( uno::Sequence<OUString>());     
     else
     {
         ::std::vector< OUString > aVec;
@@ -115,7 +115,7 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
     }
 }
 
-// ====================================================================
+
 
 SvtSysLocale::SvtSysLocale()
 {
@@ -137,7 +137,7 @@ SvtSysLocale::~SvtSysLocale()
 }
 
 
-// static
+
 Mutex& SvtSysLocale::GetMutex()
 {
     static Mutex* pMutex = NULL;
@@ -146,9 +146,9 @@ Mutex& SvtSysLocale::GetMutex()
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if( !pMutex )
         {
-            // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svl library.
-            // Otherwise the dtor would use a destructed mutex!!
+            
+            
+            
             pMutex = new Mutex;
         }
     }
@@ -194,24 +194,24 @@ const LanguageTag& SvtSysLocale::GetUILanguageTag() const
     return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }
 
-//------------------------------------------------------------------------
 
-// static
+
+
 rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
 {
     const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
             osl_getThreadTextEncoding() );
     if ( !pCharSet )
     {
-        // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
-        // language if possible.
+        
+        
         SvtSysLocale aSysLocale;
         const LanguageTag& rLanguageTag = aSysLocale.GetUILanguageTag();
-        // Converting blindly to Locale and then to rtl_Locale may feed the
-        // 'qlt' to rtl_locale_register() and the underlying system locale
-        // stuff, which doesn't know about it nor about BCP47 in the Variant
-        // field. So use the real language and for non-pure ISO cases hope for
-        // the best.. the fallback to UTF-8 should solve these cases nowadays.
+        
+        
+        
+        
+        
         /* FIXME-BCP47: the script needs to go in here as well, so actually
          * we'd need some variant fiddling or glibc locale string and tweak
          * rtl_locale_register() to know about it! But then again the Windows

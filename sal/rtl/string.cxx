@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
+#pragma warning(disable:4738) 
 #endif
 
 #include <cassert>
@@ -348,7 +348,7 @@ void rtl_string_newReplaceFirst(
             std::abort();
         }
         sal_Int32 n = str->length - fromLength + toLength;
-        rtl_string_acquire(str); // in case *newStr == str
+        rtl_string_acquire(str); 
         rtl_string_new_WithLength(newStr, n);
         if (n != 0) {
             (*newStr)->length = n;

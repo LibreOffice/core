@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/style.hxx>
@@ -69,7 +69,7 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 }
 
 
-//----------------------------------------------------------------------
+
 
 
 SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
@@ -131,7 +131,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     else
     {
         const SwFtnInfo &rInf = pSh->GetFtnInfo();
-        // set position (page, chapter)
+        
         if ( rInf.ePos == FTNPOS_PAGE )
         {
             m_pPosPageBox->Check();
@@ -145,19 +145,19 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
             m_pNumCountBox->RemoveEntry(aNumChapter);
             bPosDoc = true;
         }
-            // reference tests
+            
         m_pContEdit->SetText(rInf.aQuoVadis);
         m_pContFromEdit->SetText(rInf.aErgoSum);
 
-            // collected
+            
         SelectNumbering(rInf.eNum);
     }
 
-        // numbering
-        // art
+        
+        
     m_pNumViewBox->SelectNumberingType( pInf->aFmt.GetNumberingType());
     m_pOffsetFld->SetValue(pInf->nFtnOffset + 1);
-    m_pPrefixED->SetText(pInf->GetPrefix().replaceAll("\t", "\\t")); // fdo#65666
+    m_pPrefixED->SetText(pInf->GetPrefix().replaceAll("\t", "\\t")); 
     m_pSuffixED->SetText(pInf->GetSuffix().replaceAll("\t", "\\t"));
 
     const SwCharFmt* pCharFmt = pInf->GetCharFmt(
@@ -169,8 +169,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     m_pFtnCharAnchorTemplBox->SelectEntry( pCharFmt->GetName() );
     m_pFtnCharAnchorTemplBox->SaveValue();
 
-        // styles   special regions
-        // paragraph
+        
+        
     SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
     pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SWSTYLEBIT_EXTRA);
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
@@ -188,7 +188,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
     SwTxtFmtColl* pColl = pInf->GetFtnTxtColl();
     if( !pColl )
-        m_pParaTemplBox->SelectEntry( sStr );      // Default
+        m_pParaTemplBox->SelectEntry( sStr );      
     else
     {
         OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
@@ -202,7 +202,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         }
     }
 
-        // page
+        
     for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
         m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, OUString() ));
 
@@ -266,7 +266,7 @@ int SwEndNoteOptionPage::GetNumbering() const
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;
-    // collect character templates
+    
     m_pFtnCharTextTemplBox->Clear();
     m_pFtnCharAnchorTemplBox->Clear();
     ::FillCharStyleListBox(*m_pFtnCharTextTemplBox,
@@ -371,7 +371,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     pInf->SetAnchorCharFmt( lcl_GetCharFormat( pSh,
                         m_pFtnCharAnchorTemplBox->GetSelectEntry() ) );
 
-    // paragraph template
+    
     sal_uInt16 nPos = m_pParaTemplBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -381,7 +381,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
         pInf->SetFtnTxtColl(*pColl);
     }
 
-    // page template
+    
     pInf->ChgPageDesc( pSh->FindPageDescByName(
                                 m_pPageTemplBox->GetSelectEntry(), sal_True ) );
 

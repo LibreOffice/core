@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -142,7 +142,7 @@ using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
 
-//=========================================================================
+
 void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     if (!xModel.is())
@@ -161,28 +161,28 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     }
 }
 
-//=========================================================================
+
 
 sal_Bool SfxObjectShell::Save()
 {
     return SaveChildren();
 }
 
-//--------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 {
     return SaveAsChildren( rMedium );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
 {
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
@@ -210,7 +210,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
                                             OUString aURL,
                                             const uno::Reference< embed::XStorage >& xDocStorage,
@@ -260,14 +260,14 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
     }
     catch( uno::Exception& )
     {
-        // TODO/LATER: handle the error depending on exception
+        
         SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
     }
 
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
 {
     OUString aTempURL = ::utl::TempFile().GetURL();
@@ -280,10 +280,10 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
             uno::Reference< embed::XStorage > xTempStorage =
                 ::comphelper::OStorageHelper::GetStorageFromURL( aTempURL, embed::ElementModes::READWRITE );
 
-            // the password will be transferred from the xStorage to xTempStorage by storage implementation
+            
             xStorage->copyToStorage( xTempStorage );
 
-            // the temporary storage was commited by the previous method and it will die by refcount
+            
         }
         catch ( uno::Exception& )
         {
@@ -292,7 +292,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
 
             aTempURL = OUString();
 
-            // TODO/LATER: may need error code setting based on exception
+            
             SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
         }
     }
@@ -300,7 +300,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
     return aTempURL;
 }
 
-//-------------------------------------------------------------------------
+
 SvGlobalName SfxObjectShell::GetClassName() const
 {
     return GetFactory().GetClassId();
@@ -335,7 +335,7 @@ sal_uInt32 GetChartVersion( sal_Int32 nVersion, bool bTemplate )
 
 }
 
-//-------------------------------------------------------------------------
+
 void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage,
                                    sal_Int32 nVersion, sal_Bool bTemplate, bool bChart ) const
 {
@@ -354,9 +354,9 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
         if ( nClipFormat )
         {
-            // basic doesn't have a ClipFormat
-            // without MediaType the storage is not really usable, but currently the BasicIDE still
-            // is an SfxObjectShell and so we can't take this as an error
+            
+            
+            
             datatransfer::DataFlavor aDataFlavor;
             SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
             if ( !aDataFlavor.MimeType.isEmpty() )
@@ -377,7 +377,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 aEncryptionAlgs[0].Name = "StartKeyGenerationAlgorithm";
                 aEncryptionAlgs[1].Name = "EncryptionAlgorithm";
                 aEncryptionAlgs[2].Name = "ChecksumAlgorithm";
-                // the default values, that should be used for ODF1.1 and older formats
+                
                 aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA1;
                 aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
                 aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA1_1K;
@@ -386,7 +386,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 {
                     try
                     {
-                        // older versions can not have this property set, it exists only starting from ODF1.2
+                        
                         xProps->setPropertyValue("Version", uno::makeAny( ODFVER_012_TEXT ) );
                     }
                     catch( uno::Exception& )
@@ -404,9 +404,9 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
                 try
                 {
-                    // set the encryption algorithms accordingly;
-                    // the setting does not trigger encryption,
-                    // it just provides the format for the case that contents should be encrypted
+                    
+                    
+                    
                     uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
                     xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
                 }
@@ -420,16 +420,16 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SfxObjectShell::PrepareSecondTryLoad_Impl()
 {
-    // only for internal use
+    
     pImp->m_xDocStorage = uno::Reference< embed::XStorage >();
     pImp->m_bIsInit = sal_False;
     ResetError();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                             sal_Bool bTypeMustBeSetAlready )
 {
@@ -439,7 +439,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
     pImp->m_bIsInit = sal_True;
     if ( xStorage.is() )
     {
-        // no notification is required the storage is set the first time
+        
         pImp->m_xDocStorage = xStorage;
 
         try {
@@ -468,13 +468,13 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::InitNew( const uno::Reference< embed::XStorage >& xStorage )
 {
     return GeneralInit_Impl( xStorage, sal_False );
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
 {
     return GeneralInit_Impl( rMedium.GetStorage(), sal_True );
@@ -483,7 +483,7 @@ sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
 bool SfxObjectShell::DoInitUnitTest()
 {
     pMedium = new SfxMedium;
-    return true; // always a success!
+    return true; 
 }
 
 sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
@@ -519,7 +519,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
     if ( InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
     {
-        // empty documents always get their macros from the user, so there is no reason to restrict access
+        
         pImp->aMacroMode.allowMacroExecution();
         if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
             SetTitle(SfxResId(STR_NONAME).toString());
@@ -545,7 +545,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
                     const uno::Reference< io::XStream >& xStream,
@@ -592,7 +592,7 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
         else
         {
 
-            // allow the subfilter to reinit the model
+            
             if ( pImp->m_bIsInit )
                 pImp->m_bIsInit = sal_False;
 
@@ -607,8 +607,8 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
             }
         }
 
-        // now the medium can be disconnected from the storage
-        // the medium is not allowed to dispose the storage so CloseStorage() can be used
+        
+        
         pMedium->CloseStorage();
     }
     catch( uno::Exception& )
@@ -618,7 +618,7 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 {
@@ -662,7 +662,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pImp->nLoadedFlags = 0;
     pImp->bModelInitialized = sal_False;
 
-    //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
+    
     sal_Bool bOwnStorageFormat = IsOwnStorageFormat_Impl( *pMedium );
     sal_Bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );
     if ( pMedium->GetFilter() )
@@ -693,18 +693,18 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 sal_Bool bWarnMediaTypeFallback = sal_False;
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairPackageItem, SfxBoolItem, SID_REPAIRPACKAGE, false);
 
-                // treat the package as broken if the mediatype was retrieved as a fallback
+                
                 uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
                 xStorProps->getPropertyValue("MediaTypeFallbackUsed")
                                                                     >>= bWarnMediaTypeFallback;
 
                 if ( pRepairPackageItem && pRepairPackageItem->GetValue() )
                 {
-                    // the macros in repaired documents should be disabled
+                    
                     pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::NEVER_EXECUTE ) );
 
-                    // the mediatype was retrieved by using fallback solution but this is a repairing mode
-                    // so it is acceptable to open the document if there is no contents that required manifest.xml
+                    
+                    
                     bWarnMediaTypeFallback = sal_False;
                 }
 
@@ -713,11 +713,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
             catch( uno::Exception& )
             {
-                // TODO/LATER: may need error code setting based on exception
+                
                 SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
             }
 
-            // Load
+            
             if ( !GetError() )
             {
                 pImp->nLoadedFlags = 0;
@@ -725,7 +725,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 bOk = xStorage.is() && LoadOwnFormat( *pMed );
                 if ( bOk )
                 {
-                    // the document loaded from template has no name
+                    
                     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, false);
                     if ( !pTemplateItem || !pTemplateItem->GetValue() )
                         bHasName = sal_True;
@@ -739,7 +739,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
     else if ( GetError() == ERRCODE_NONE && InitNew(0) )
     {
-        // Name vor ConvertFrom setzen, damit GetSbxObject() schon funktioniert
+        
         bHasName = sal_True;
         SetName( SfxResId(STR_NONAME).toString() );
 
@@ -833,7 +833,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
         }
 
-        // If not loaded asynchronously call FinishedLoading
+        
         if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
             ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
             )
@@ -861,7 +861,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         const SfxBoolItem* pDdeReconnectItem = static_cast<const SfxBoolItem*>(
             SfxRequest::GetItem(pMedium->GetItemSet(), SID_DDE_RECONNECT_ONLOAD, false, TYPE(SfxBoolItem)));
 
-        bool bReconnectDde = true; // by default, we try to auto-connect DDE connections.
+        bool bReconnectDde = true; 
         if (pDdeReconnectItem)
             bReconnectDde = pDdeReconnectItem->GetValue();
 
@@ -915,7 +915,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                 com::sun::star::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
                                 if( rHandler.is() )
                                 {
-                                    // we need some properties in the media descriptor, so we have to make sure that they are in
+                                    
                                     Any aStreamAny;
                                     aStreamAny <<= pMedium->GetInputStream();
                                     if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
@@ -967,13 +967,13 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 
                 if( bAbort )
                 {
-                    // filter options were not entered
+                    
                     nError = ERRCODE_ABORT;
                 }
             }
             catch( NoSuchElementException& )
             {
-                // the filter name is unknown
+                
                 nError = ERRCODE_IO_INVALIDPARAMETER;
             }
             catch( Exception& )
@@ -986,31 +986,31 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
     return nError;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 {
-    return !rMedium.GetFilter() || // Embedded
+    return !rMedium.GetFilter() || 
            ( rMedium.GetFilter()->IsOwnFormat() &&
              rMedium.GetFilter()->UsesStorage() &&
              rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) const
 {
-    return !rMedium.GetFilter() || // Embedded
+    return !rMedium.GetFilter() || 
            ( rMedium.GetFilter()->UsesStorage() &&
              rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSave()
-// DoSave is only invoked for OLE. Save your own documents in the SFX through
-// DoSave_Impl order to allow for the creation of backups.
-// Save in your own format again.
+
+
+
 {
     sal_Bool bOk = sal_False ;
     {
@@ -1025,7 +1025,7 @@ sal_Bool SfxObjectShell::DoSave()
             {
                 try
                 {
-                    //TODO/MBA: GetOutputStorage?! Special mode, because it's "Save"?!
+                    
                     ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( GetMedium()->GetStorage(), aEncryptionData );
                     bOk = sal_True;
                 }
@@ -1043,8 +1043,8 @@ sal_Bool SfxObjectShell::DoSave()
             {
                 try
                 {
-                    // The basic and dialogs related contents are still not able to proceed with save operation ( saveTo only )
-                    // so since the document storage is locked a workaround has to be used
+                    
+                    
 
                     uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
                     DBG_ASSERT( xTmpStorage.is(), "If a storage can not be created an exception must be thrown!\n" );
@@ -1060,13 +1060,13 @@ sal_Bool SfxObjectShell::DoSave()
 
                     GetBasicManager();
 
-                    // disconnect from the current storage
+                    
                     pImp->pBasicManager->setStorage( xTmpStorage );
 
-                    // store to the current storage
+                    
                     pImp->pBasicManager->storeLibrariesToStorage( GetMedium()->GetStorage() );
 
-                    // connect to the current storage back
+                    
                     pImp->pBasicManager->setStorage( GetMedium()->GetStorage() );
                 }
                 catch( uno::Exception& )
@@ -1099,11 +1099,11 @@ void Lock_Impl( SfxObjectShell* pDoc, sal_Bool bLock )
 
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::SaveTo_Impl
 (
-     SfxMedium &rMedium, // Medium, in which it will be stored
+     SfxMedium &rMedium, 
      const SfxItemSet* pSet
 )
 
@@ -1127,8 +1127,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     const SfxFilter *pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
-        // if no filter was set, use the default filter
-        // this should be changed in the feature, it should be an error!
+        
+        
         SAL_WARN( "sfx.doc","No filter set!");
         pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
         rMedium.SetFilter(pFilter);
@@ -1139,8 +1139,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bOwnSource = IsOwnStorageFormat_Impl( *pMedium );
     sal_Bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
 
-    // Examine target format to determine whether to query if any password
-    // protected libraries exceed the size we can handler
+    
+    
     if ( bOwnTarget && !QuerySaveSizeExceededModules_Impl( rMedium.GetInteractionHandler() ) )
     {
         SetError( ERRCODE_IO_ABORT, OUString( OSL_LOG_PREFIX  ) );
@@ -1151,9 +1151,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     sal_Bool bStoreToSameLocation = sal_False;
 
-    // the detection whether the script is changed should be done before saving
+    
     sal_Bool bTryToPreserveScriptSignature = sal_False;
-    // no way to detect whether a filter is oasis format, have to wait for saving process
+    
     sal_Bool bNoPreserveForOasis = sal_False;
     if ( bOwnSource && bOwnTarget
       && ( pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
@@ -1162,13 +1162,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         AddLog( OUString( OSL_LOG_PREFIX "MacroSignaturePreserving"  ) );
 
-        // the checking of the library modified state iterates over the libraries, should be done only when required
-        // currently the check is commented out since it is broken, we have to check the signature every time we save
-        // TODO/LATER: let isAnyContainerModified() work!
-        bTryToPreserveScriptSignature = sal_True; // !pImp->pBasicManager->isAnyContainerModified();
+        
+        
+        
+        bTryToPreserveScriptSignature = sal_True; 
         if ( bTryToPreserveScriptSignature )
         {
-            // check that the storage format stays the same
+            
             SvtSaveOptions aSaveOpt;
             SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
 
@@ -1181,7 +1181,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             catch( uno::Exception& )
             {}
 
-            // preserve only if the same filter has been used
+            
             bTryToPreserveScriptSignature = pMedium->GetFilter() && pFilter && pMedium->GetFilter()->GetFilterName() == pFilter->GetFilterName();
 
             bNoPreserveForOasis = (
@@ -1200,7 +1200,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     (pSaveToItem && pSaveToItem->GetValue());
     }
 
-    // use UCB for case sensitive/insensitive file name comparison
+    
     if ( pMedium
       && !pMedium->GetName().equalsIgnoreAsciiCase("private:stream")
       && !rMedium.GetName().equalsIgnoreAsciiCase("private:stream")
@@ -1214,13 +1214,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
-            // export to the same location is forbidden
+            
             SetError( ERRCODE_IO_CANTWRITE, OUString( OSL_LOG_PREFIX  ) );
         }
         else
         {
-            // before we overwrite the original file, we will make a backup if there is a demand for that
-            // if the backup is not created here it will be created internally and will be removed in case of successful saving
+            
+            
             const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
             if ( bDoBackup )
             {
@@ -1235,22 +1235,22 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             if ( bStorageBasedSource && bStorageBasedTarget )
             {
-                // The active storage must be switched. The simple saving is not enough.
-                // The problem is that the target medium contains target MediaDescriptor.
+                
+                
 
-                    // In future the switch of the persistance could be done on stream level:
-                    // a new wrapper service will be implemented that allows to exchange
-                    // persistance on the fly. So the real persistance will be set
-                    // to that stream only after successful commit of the storage.
-                    // TODO/LATER:
-                    // create wrapper stream based on the URL
-                    // create a new storage based on this stream
-                    // store to this new storage
-                    // commit the new storage
-                    // call saveCompleted based with this new storage ( get rid of old storage and "frees" URL )
-                    // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
-                    // if the last step is failed the stream should stay to be transacted and should be commited on any flush
-                    // so we can forget the stream in any way and the next storage commit will flush it
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 
                 AddLog( OUString( OSL_LOG_PREFIX "Save: Own to Own"  ) );
 
@@ -1261,19 +1261,19 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 {
                     pMedium->CloseAndRelease();
 
-                    // TODO/LATER: for now the medium must be closed since it can already contain streams from old medium
-                    //             in future those streams should not be copied in case a valid target url is provided,
-                    //             if the url is not provided ( means the document is based on a stream ) this code is not
-                    //             reachable.
+                    
+                    
+                    
+                    
                     rMedium.CloseAndRelease();
                     rMedium.GetOutputStorage();
                 }
             }
             else if ( !bStorageBasedSource && !bStorageBasedTarget )
             {
-                // the source and the target formats are alien
-                // just disconnect the stream from the source format
-                // so that the target medium can use it
+                
+                
+                
 
                 AddLog( OUString( OSL_LOG_PREFIX "Save: Alien to Alien"  ) );
 
@@ -1284,9 +1284,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
             else if ( !bStorageBasedSource && bStorageBasedTarget )
             {
-                // the source format is an alien one but the target
-                // format is an own one so just disconnect the source
-                // medium
+                
+                
+                
 
                 AddLog( OUString( OSL_LOG_PREFIX "Save: Alien to Own"  ) );
 
@@ -1294,11 +1294,11 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 rMedium.CloseAndRelease();
                 rMedium.GetOutputStorage();
             }
-            else // means if ( bStorageBasedSource && !bStorageBasedTarget )
+            else 
             {
-                // the source format is an own one but the target is
-                // an alien format, just connect the source to temporary
-                // storage
+                
+                
+                
 
                 AddLog( OUString( OSL_LOG_PREFIX "Save: Own to Alien"  ) );
 
@@ -1317,10 +1317,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     }
     else
     {
-        // This is SaveAs or export action, prepare the target medium
-        // the alien filters still might write directly to the file, that is of course a bug,
-        // but for now the framework has to be ready for it
-        // TODO/LATER: let the medium be prepared for alien formats as well
+        
+        
+        
+        
 
         AddLog( OUString( OSL_LOG_PREFIX "SaveAs/Export"  ) );
 
@@ -1331,7 +1331,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
     }
 
-    // TODO/LATER: error handling
+    
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
         return sal_False;
 
@@ -1344,9 +1344,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         if ( rMedium.GetErrorCode() )
             return sal_False;
 
-        // If the filter is a "cross export" filter ( f.e. a filter for exporting an impress document from
-        // a draw document ), the ClassId of the destination storage is different from the ClassId of this
-        // document. It can be retrieved from the default filter for the desired target format
+        
+        
+        
         long nFormat = rMedium.GetFilter()->GetFormat();
         SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
         const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
@@ -1374,18 +1374,18 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
     }
 
-    // TODO/LATER: error handling
+    
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
         return sal_False;
 
     sal_Bool bOldStat = pImp->bForbidReload;
     pImp->bForbidReload = sal_True;
 
-    // lock user interface while saving the document
+    
     Lock_Impl( this, sal_True );
 
     sal_Bool bOk = sal_False;
-    // TODO/LATER: get rid of bOk
+    
 
     if( bOwnTarget && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
@@ -1393,14 +1393,14 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
         if ( !xMedStorage.is() )
         {
-            // no saving without storage, unlock UI and return
+            
             Lock_Impl( this, sal_False );
             pImp->bForbidReload = bOldStat;
             AddLog( OUString( OSL_LOG_PREFIX "Storing failed, still no error set."  ) );
             return sal_False;
         }
 
-        // transfer password from the parameters to the storage
+        
         uno::Sequence< beans::NamedValue > aEncryptionData;
         sal_Bool bPasswdProvided = sal_False;
         if ( GetEncryptionData_Impl( rMedium.GetItemSet(), aEncryptionData ) )
@@ -1428,17 +1428,17 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         if ( bOk )
         {
             bOk = sal_False;
-            // currently the case that the storage is the same should be impossible
+            
             if ( xMedStorage == GetStorage() )
             {
                 OSL_ENSURE( !pVersionItem, "This scenario is impossible currently!\n" );
                 AddLog( OUString( OSL_LOG_PREFIX "Should be impossible."  ) );
-                // usual save procedure
+                
                 bOk = Save();
             }
             else
             {
-                // save to target
+                
                 AddLog( OUString( OSL_LOG_PREFIX "Save as own format."  ) );
                 bOk = SaveAsOwnFormat( rMedium );
                 if ( bOk && pVersionItem )
@@ -1453,14 +1453,14 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         if ( bOk && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bPasswdProvided )
         {
-            // store the thumbnail representation image
-            // the thumbnail is not stored in case of encrypted document
+            
+            
             AddLog( OUString( OSL_LOG_PREFIX "Thumbnail creation."  ) );
             if ( !GenerateAndStoreThumbnail( bPasswdProvided,
                                             pFilter->IsOwnTemplateFormat(),
                                             xMedStorage ) )
             {
-                // TODO: error handling
+                
                 SAL_WARN( "sfx.doc", "Couldn't store thumbnail representation!" );
             }
         }
@@ -1475,7 +1475,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     Sequence < util::RevisionTag > aVersions = rMedium.GetVersionList();
                     if ( aVersions.getLength() )
                     {
-                        // copy the version streams
+                        
                         OUString aVersionsName( "Versions"  );
                         uno::Reference< embed::XStorage > xNewVerStor = xMedStorage->openStorageElement(
                                                         aVersionsName,
@@ -1502,25 +1502,25 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     AddLog( OUString( OSL_LOG_PREFIX "Preserve versions has failed."  ) );
                     SAL_WARN( "sfx.doc", "Couldn't copy versions!" );
                     bOk = sal_False;
-                    // TODO/LATER: a specific error could be set
+                    
                 }
             }
 
             if ( bOk && pVersionItem && !rMedium.IsInCheckIn() )
             {
-                // store a version also
+                
                 const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
                     SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, false, TYPE(SfxStringItem) ) : NULL;
 
-                // version comment
+                
                 util::RevisionTag aInfo;
                 aInfo.Comment = pVersionItem->GetValue();
 
-                // version author
+                
                 if ( pAuthorItem )
                     aInfo.Author = pAuthorItem->GetValue();
                 else
-                    // if not transferred as a parameter, get it from user settings
+                    
                     aInfo.Author = SvtUserOptions().GetFullName();
 
                 DateTime aTime( DateTime::SYSTEM );
@@ -1533,8 +1533,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
                 if ( bOk )
                 {
-                    // add new version information into the versionlist and save the versionlist
-                    // the version list must have been transferred from the "old" medium before
+                    
+                    
                     rMedium.AddVersion_Impl( aInfo );
                     rMedium.SaveVersionList_Impl( sal_True );
                     bOk = PutURLContentsToVersionStream_Impl( aTmpVersionURL, xMedStorage, aInfo.Identifier );
@@ -1552,28 +1552,28 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     else
     {
         AddLog( OUString( OSL_LOG_PREFIX "Storing in alien format."  ) );
-        // it's a "SaveAs" in an alien format
+        
         if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
             bOk = ExportTo( rMedium );
         else
             bOk = ConvertTo( rMedium );
 
-        // after saving the document, the temporary object storage must be updated
-        // if the old object storage was not a temporary one, it will be updated also, because it will be used
-        // as a source for copying the objects into the new temporary storage that will be created below
-        // updating means: all child objects must be stored into it
-        // ( same as on loading, where these objects are copied to the temporary storage )
-        // but don't commit these changes, because in the case when the old object storage is not a temporary one,
-        // all changes will be written into the original file !
+        
+        
+        
+        
+        
+        
+        
 
         if( bOk && !bCopyTo )
-            // we also don't touch any graphical replacements here
+            
             bOk = SaveChildren( sal_True );
     }
 
     if ( bOk )
     {
-        // if ODF version of oasis format changes on saving the signature should not be preserved
+        
         if ( bOk && bTryToPreserveScriptSignature && bNoPreserveForOasis )
             bTryToPreserveScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
 
@@ -1582,12 +1582,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         {
             AddLog( OUString( OSL_LOG_PREFIX "Copying scripting signature."  ) );
 
-            // if the scripting code was not changed and it is signed the signature should be preserved
-            // unfortunately at this point we have only information whether the basic code has changed or not
-            // so the only way is to check the signature if the basic was not changed
+            
+            
+            
             try
             {
-                // get the ODF version of the new medium
+                
                 OUString aVersion;
                 try
                 {
@@ -1606,8 +1606,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 {
                     pMedium->Close();
 
-                    // target medium is still not commited, it should not be closed
-                    // commit the package storage and close it, but leave the streams open
+                    
+                    
                     rMedium.StorageCommit_Impl();
                     rMedium.CloseStorage();
 
@@ -1635,7 +1635,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
                         xTargetMetaInf->dispose();
 
-                        // now check the copied signature
+                        
                         uno::Sequence< security::DocumentSignatureInformation > aInfos =
                             xDDSigns->verifyScriptingContentSignatures( xTarget,
                                                                         uno::Reference< io::XInputStream >() );
@@ -1645,15 +1645,15 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         {
                             rMedium.SetCachedSignatureState_Impl( nState );
 
-                            // commit the ZipStorage from target medium
+                            
                             xTransact.set( xTarget, uno::UNO_QUERY );
                             if ( xTransact.is() )
                                 xTransact->commit();
                         }
                         else
                         {
-                            // it should not happen, the copies signature is invalid!
-                            // throw the changes away
+                            
+                            
                             SAL_WARN( "sfx.doc", "An invalid signature was copied!" );
                         }
                     }
@@ -1680,15 +1680,15 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         {
             AddLog( OUString( OSL_LOG_PREFIX "Storing is successful."  ) );
 
-            // if the target medium is an alien format and the "old" medium was an own format and the "old" medium
-            // has a name, the object storage must be exchanged, because now we need a new temporary storage
-            // as object storage
+            
+            
+            
             if ( !bCopyTo && bStorageBasedSource && !bStorageBasedTarget )
             {
                 if ( bStoreToSameLocation )
                 {
-                    // if the old medium already disconnected from document storage, the storage still must
-                    // be switched if backup file is used
+                    
+                    
                     if ( bNeedsDisconnectionOnFail )
                         ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
                 }
@@ -1696,7 +1696,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                   || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
                 {
                     OSL_ENSURE(!pMedium->GetName().isEmpty(), "Fallback is used, the medium without name should not dispose the storage!\n");
-                    // copy storage of old medium to new temporary storage and take this over
+                    
                     if( !ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
                     {
                         AddLog( OUString( OSL_LOG_PREFIX "Process after storing has failed."  ) );
@@ -1709,13 +1709,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         {
             AddLog( OUString( OSL_LOG_PREFIX "Storing has failed."  ) );
 
-            // in case the document storage was connected to backup temporarely it must be disconnected now
+            
             if ( bNeedsDisconnectionOnFail )
                 ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
         }
     }
 
-    // unlock user interface
+    
     Lock_Impl( this, sal_False );
     pImp->bForbidReload = bOldStat;
 
@@ -1763,12 +1763,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     return bOk;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
 {
     SAL_INFO( "sfx.doc", "SfxObjectShell::DisconnectStorage_Impl" );
 
-    // this method disconnects the storage from source medium, and attaches it to the backup created by the target medium
+    
 
     uno::Reference< embed::XStorage > xStorage = rSrcMedium.GetStorage();
 
@@ -1781,24 +1781,24 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
             OUString aBackupURL = rTargetMedium.GetBackup_Impl();
             if ( aBackupURL.isEmpty() )
             {
-                // the backup could not be created, try to disconnect the storage and close the source SfxMedium
-                // in this case the optimization is not possible, connect storage to a temporary file
+                
+                
                 rTargetMedium.ResetError();
                 xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
                 rSrcMedium.CanDisposeStorage_Impl( sal_False );
                 rSrcMedium.Close();
 
-                // now try to create the backup
+                
                 rTargetMedium.GetBackup_Impl();
             }
             else
             {
-                // the following call will only compare stream sizes
-                // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
-                // contents, the storag will be broken
+                
+                
+                
                 xOptStorage->attachToURL( aBackupURL, sal_True );
 
-                // the storage is successfully attached to backup, thus it it owned by the document not by the medium
+                
                 rSrcMedium.CanDisposeStorage_Impl( sal_False );
                 bResult = sal_True;
             }
@@ -1810,7 +1810,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
     const uno::Reference< embed::XStorage >& xStorage,
@@ -1832,11 +1832,11 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
     {
         try
         {
-            // the empty argument means that the storage will create temporary stream itself
+            
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
 
-            // the storage is successfully disconnected from the original sources, thus the medium must not dispose it
+            
             if ( pMediumArg )
                 pMediumArg->CanDisposeStorage_Impl( sal_False );
 
@@ -1846,7 +1846,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
         {
         }
 
-        // if switching of the storage does not work for any reason ( nonroot storage for example ) use the old method
+        
         if ( !bResult ) try
         {
             uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
@@ -1855,8 +1855,8 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             if ( !xTmpStorage.is() )
                 throw uno::RuntimeException();
 
-            // TODO/LATER: may be it should be done in SwitchPersistence also
-            // TODO/LATER: find faster way to copy storage; perhaps sharing with backup?!
+            
+            
             xStorage->copyToStorage( xTmpStorage );
             bResult = SaveCompleted( xTmpStorage );
 
@@ -1864,7 +1864,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             {
                 pImp->pBasicManager->setStorage( xTmpStorage );
 
-                // Get rid of this workaround after issue i113914 is fixed
+                
                 try
                 {
                     uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
@@ -1886,7 +1886,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
 
         if ( !bResult )
         {
-            // TODO/LATER: may need error code setting based on exception
+            
             SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
         }
     }
@@ -1894,7 +1894,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
 {
@@ -1936,17 +1936,17 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
     return bOk;
 }
 
-//-------------------------------------------------------------------------
-// TODO/LATER: may be the call must be removed completelly
+
+
 sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 {
-    // here only root storages are included, which are stored via temp file
+    
     rMedium.CreateTempFileNoCopy();
     SetError(rMedium.GetErrorCode(), OUString( OSL_LOG_PREFIX  ) );
     if ( GetError() )
         return sal_False;
 
-    // copy version list from "old" medium to target medium, so it can be used on saving
+    
     if ( pImp->bPreserveVersions )
         rMedium.TransferVersionList_Impl( *pMedium );
 
@@ -1956,7 +1956,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
@@ -1967,7 +1967,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
     DBG_ASSERT( !pNewMed || pNewMed->GetError() == ERRCODE_NONE, "DoSaveCompleted: Medium has error!" );
 
-    // delete Medium (and Storage!) after all notifications
+    
     SfxMedium* pOld = pMedium;
     if ( bMedChanged )
     {
@@ -1992,22 +1992,22 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         {
             uno::Reference < embed::XStorage > xOld = GetStorage();
 
-            // when the package based medium is broken and has no storage or if the storage
-            // is the same as the document storage the current document storage should be preserved
+            
+            
             xStorage = pMedium->GetStorage();
             bOk = SaveCompleted( xStorage );
             if ( bOk && xStorage.is() && xOld != xStorage
               && (!pOld || !pOld->HasStorage_Impl() || xOld != pOld->GetStorage() ) )
             {
-                // old own storage was not controlled by old Medium -> dispose it
+                
                 try {
                     xOld->dispose();
                 } catch( uno::Exception& )
                 {
-                    // the storage is disposed already
-                    // can happen during reload scenario when the medium has
-                    // disposed it during the closing
-                    // will be fixed in one of the next milestones
+                    
+                    
+                    
+                    
                 }
             }
         }
@@ -2018,11 +2018,11 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             xStorage = GetStorage();
         }
 
-        // TODO/LATER: may be this code will be replaced, but not sure
-        // Set storage in document library containers
+        
+        
         pImp->pBasicManager->setStorage( xStorage );
 
-        // Get rid of this workaround after issue i113914 is fixed
+        
         try
         {
             uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
@@ -2050,7 +2050,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             else
                 bOk = SaveCompleted( NULL );
         }
-        // either Save or ConvertTo
+        
         else
             bOk = SaveCompleted( NULL );
     }
@@ -2075,25 +2075,25 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 {}
             }
 
-            // before the title regenerated the document must loose the signatures
+            
             pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
             pImp->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
             OSL_ENSURE( pImp->nScriptingSignatureState != SIGNATURESTATE_SIGNATURES_BROKEN, "The signature must not be broken at this place" );
             pImp->bSignatureErrorIsShown = sal_False;
 
-            // TODO/LATER: in future the medium must control own signature state, not the document
-            pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); // set the default value back
+            
+            pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); 
 
-            // Set new title
+            
             if (!pNewMed->GetName().isEmpty() && SFX_CREATE_MODE_EMBEDDED != eCreateMode)
                 InvalidateName();
-            SetModified(sal_False); // reset only by set medium
+            SetModified(sal_False); 
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
 
-            // this is the end of the saving process, it is possible that
-            // the file was changed
-            // between medium commit and this step (attributes change and so on)
-            // so get the file date again
+            
+            
+            
+            
             if ( pNewMed->DocNeedsFileDateCheck() )
                 pNewMed->GetInitFileDate( sal_True );
         }
@@ -2120,7 +2120,7 @@ void SfxObjectShell::AddToRecentlyUsedList()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ConvertFrom
 (
@@ -2160,7 +2160,7 @@ sal_Bool SfxObjectShell::ConvertFrom
             xStream->SetBufferSize(4096);
             *xStream >> ...;
 
-            // Do not call 'rMedium.CloseInStream()'! Keep File locked!
+            
             return SVSTREAM_OK == rMedium.GetError();
         }
 
@@ -2216,7 +2216,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     }
     if ( xLoader.is() )
     {
-        // it happens that xLoader does not support xImporter!
+        
         try{
         uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
@@ -2268,8 +2268,8 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             aArgs[nEnd-1].Value <<= xInsertPosition;
         }
 
-        // #i119492# During loading, some OLE objects like chart will be set
-        // modified flag, so needs to reset the flag to false after loading
+        
+        
         sal_Bool bRtn = xLoader->filter( aArgs );
         uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( sal_Int32 n = 0; n < aNames.getLength(); ++n )
@@ -2280,7 +2280,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             if ( xObj.is() )
             {
                 sal_Int32 nState = xObj->getCurrentState();
-                if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
+                if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    
                 {
                     uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xModifiable.is() )
@@ -2362,7 +2362,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
         com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
 
-        // put in the REAL file name, and copy all PropertyValues
+        
         const OUString sOutputStream ( "OutputStream"  );
         const OUString sStream ( "StreamForOutput"  );
         sal_Bool bHasOutputStream = sal_False;
@@ -2391,7 +2391,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
         }
 
-        // add stream as well, for OOX export and maybe others
+        
         if ( !bHasStream )
         {
             aArgs.realloc ( ++nEnd );
@@ -2414,7 +2414,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ConvertTo
 (
@@ -2455,7 +2455,7 @@ sal_Bool SfxObjectShell::ConvertTo
             xStream->SetBufferSize(4096);
             *xStream << ...;
 
-            rMedium.CloseOutStream(); // opens the InStream automatically
+            rMedium.CloseOutStream(); 
             return SVSTREAM_OK == rMedium.GetError();
         }
         return sal_False ;
@@ -2471,20 +2471,20 @@ sal_Bool SfxObjectShell::ConvertTo
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 {
     SfxMedium* pRetrMedium = GetMedium();
     const SfxFilter* pFilter = pRetrMedium->GetFilter();
 
-    // copy the original itemset, but remove the "version" item, because pMediumTmp
-    // is a new medium "from scratch", so no version should be stored into it
+    
+    
     SfxItemSet* pSet = new SfxAllItemSet(*pRetrMedium->GetItemSet());
     pSet->ClearItem( SID_VERSION );
     pSet->ClearItem( SID_DOC_BASEURL );
 
-    // copy the version comment and major items for the checkin only
+    
     if ( pRetrMedium->IsInCheckIn( ) )
     {
         const SfxPoolItem* pMajor = pArgs->GetItem( SID_DOCINFO_MAJOR );
@@ -2496,9 +2496,9 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
             pSet->Put( *pComments );
     }
 
-    // create a medium as a copy; this medium is only for writingm, because it
-    // uses the same name as the original one writing is done through a copy,
-    // that will be transferred to the target (of course after calling HandsOff)
+    
+    
+    
     SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pFilter, pSet );
     pMediumTmp->SetInCheckIn( pRetrMedium->IsInCheckIn( ) );
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
@@ -2509,11 +2509,11 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         return sal_False;
     }
 
-    // copy version list from "old" medium to target medium, so it can be used on saving
+    
     pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
 
-    // an interaction handler here can aquire only in case of GUI Saving
-    // and should be removed after the saving is done
+    
+    
     com::sun::star::uno::Reference< XInteractionHandler > xInteract;
     SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, false );
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
@@ -2540,10 +2540,10 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     }
     else
     {
-        // transfer error code from medium to objectshell
+        
         SetError( pMediumTmp->GetError(), OUString( OSL_LOG_PREFIX  ) );
 
-        // reconnect to object storage
+        
         DoSaveCompleted( 0 );
 
         if( pRetrMedium->GetItemSet() )
@@ -2559,7 +2559,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     return bSaved;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
 {
@@ -2600,7 +2600,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     return bSaved;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::CommonSaveAs_Impl
 (
@@ -2617,7 +2617,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
     if ( aURL != INetURLObject( OUString( "private:stream"  ) ) )
     {
-        // Is there already a Document with this name?
+        
         SfxObjectShell* pDoc = 0;
         for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
                 pTmp && !pDoc;
@@ -2632,7 +2632,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         }
         if ( pDoc )
         {
-            // Then error message: "already opened"
+            
             SetError(ERRCODE_SFX_ALREADYOPEN, OUString( OSL_LOG_PREFIX  ));
             return sal_False;
         }
@@ -2684,7 +2684,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,aParams))
     {
-        // Update Data on media
+        
         SfxItemSet *pSet = GetMedium()->GetItemSet();
         pSet->ClearItem( SID_INTERACTIONHANDLER );
         pSet->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
@@ -2722,15 +2722,15 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
             if ( IsDocShared() && !aTempFileURL.isEmpty() )
             {
-                // this is a shared document that has to be disconnected from the old location
+                
                 FreeSharedFile( aTempFileURL );
 
                 if ( pFilter->IsOwnFormat()
                   && pFilter->UsesStorage()
                   && pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60 )
                 {
-                    // the target format is the own format
-                    // the target document must be shared
+                    
+                    
                     SwitchToShared( sal_True, sal_False );
                 }
             }
@@ -2746,7 +2746,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 (
@@ -2755,14 +2755,14 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     SfxItemSet*       pParams
 )
 {
-    // copy all items stored in the itemset of the current medium
+    
     SfxAllItemSet* pMergedParams = new SfxAllItemSet( *pMedium->GetItemSet() );
 
-    // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
+    
     pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
     pMergedParams->ClearItem( SID_PASSWORD );
-    // #i119366# - As the SID_ENCRYPTIONDATA and SID_PASSWORD are using for setting password together, we need to clear them both.
-    // Also, ( maybe the new itemset contains new values, otherwise they will be empty )
+    
+    
     pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
 
@@ -2774,11 +2774,11 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
     pMergedParams->ClearItem( SID_REPAIRPACKAGE );
 
-    // "SaveAs" will never store any version information - it's a complete new file !
+    
     pMergedParams->ClearItem( SID_VERSION );
 
-    // merge the new parameters into the copy
-    // all values present in both itemsets will be overwritten by the new parameters
+    
+    
     if( pParams )
         pMergedParams->Put( *pParams );
 
@@ -2787,16 +2787,16 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         SAL_WARN( "sfx.doc","Salvage item present in Itemset, check the parameters!");
 #endif
 
-    // should be unnecessary - too hot to handle!
+    
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
-    // take over the new merged itemset
+    
     pParams = pMergedParams;
 
-    // create a medium for the target URL
+    
     SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, 0, pParams );
 
-    // set filter; if no filter is given, take the default filter of the factory
+    
     if ( !aFilterName.isEmpty() )
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
     else
@@ -2804,33 +2804,33 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
     if ( pNewFile->GetErrorCode() != ERRCODE_NONE )
     {
-        // creating temporary file failed ( f.e. floppy disk not inserted! )
+        
         SetError( pNewFile->GetError(), OUString( OSL_LOG_PREFIX  ) );
         delete pNewFile;
         return sal_False;
     }
 
-    // check if a "SaveTo" is wanted, no "SaveAs"
+    
     SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, false );
     sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
 
-    // distinguish between "Save" and "SaveAs"
+    
     pImp->bIsSaving = sal_False;
 
-    // copy version list from "old" medium to target medium, so it can be used on saving
+    
     if ( pImp->bPreserveVersions )
         pNewFile->TransferVersionList_Impl( *pMedium );
 
-    // Save the document ( first as temporary file, then transfer to the target URL by committing the medium )
+    
     sal_Bool bOk = sal_False;
     if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL ) )
     {
         bOk = sal_True;
 
-        // transfer a possible error from the medium to the document
+        
         SetError( pNewFile->GetErrorCode(), OUString( OSL_LOG_PREFIX  ) );
 
-        // notify the document that saving was done successfully
+        
         if ( !bCopyTo )
         {
             bOk = DoSaveCompleted( pNewFile );
@@ -2845,24 +2845,24 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         }
         else
         {
-            // TODO/LATER: the code below must be dead since the storage commit makes all the stuff
-            //       and the DoSaveCompleted call should not be able to fail in general
+            
+            
 
             DBG_ASSERT( !bCopyTo, "Error while reconnecting to medium, can't be handled!");
             SetError( pNewFile->GetErrorCode(), OUString( OSL_LOG_PREFIX  ) );
 
             if ( !bCopyTo )
             {
-                // reconnect to the old medium
+                
                 sal_Bool bRet( sal_False );
                 bRet = DoSaveCompleted( pMedium );
                 DBG_ASSERT( bRet, "Error in DoSaveCompleted, can't be handled!");
                 (void)bRet;
             }
 
-            // TODO/LATER: disconnect the new file from the storage for the case when pure saving is done
-            //       if storing has corrupted the file, probably it must be restored either here or
-            //       by the storage
+            
+            
+            
             DELETEZ( pNewFile );
         }
     }
@@ -2870,7 +2870,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     {
         SetError( pNewFile->GetErrorCode(), OUString( OSL_LOG_PREFIX  ) );
 
-        // reconnect to the old storage
+        
         DoSaveCompleted( 0 );
 
         DELETEZ( pNewFile );
@@ -2884,7 +2884,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     return bOk;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 {
@@ -2892,7 +2892,7 @@ sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::IsInformationLost()
 {
     Sequence< PropertyValue > aProps = GetModel()->getArgs();
@@ -2906,8 +2906,8 @@ sal_Bool SfxObjectShell::IsInformationLost()
             aProps[nInd].Value >>= aPreusedFilterName;
     }
 
-    // if current filter can lead to information loss and it was used
-    // for the latest store then the user should be asked to store in own format
+    
+    
     if ( !aFilterName.isEmpty() && aFilterName.equals( aPreusedFilterName ) )
     {
         const SfxFilter *pFilt = GetMedium()->GetFilter();
@@ -2918,7 +2918,7 @@ sal_Bool SfxObjectShell::IsInformationLost()
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::CanReload_Impl()
 
 /*  [Description]
@@ -2931,7 +2931,7 @@ sal_Bool SfxObjectShell::CanReload_Impl()
     return pMedium && HasName() && !IsInModalMode() && !pImp->bForbidReload;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
 {
@@ -2978,7 +2978,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Windo
             break;
         }
         default:
-            assert(false); // this cannot happen
+            assert(false); 
     }
 
     if ( SvtSecurityOptions().IsOptionSet( eOption ) )
@@ -3044,7 +3044,7 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
     if ( xStorage.is() )
     {
-        // Password
+        
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, false );
         if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )
         {
@@ -3053,16 +3053,16 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
             {
                 try
                 {
-                    // the following code must throw an exception in case of failure
+                    
                     ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xStorage, aEncryptionData );
                 }
                 catch( uno::Exception& )
                 {
-                    // TODO/LATER: handle the error code
+                    
                 }
             }
 
-            // load document
+            
             return Load( rMedium );
         }
         return sal_False;
@@ -3078,7 +3078,7 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
     {
         sal_Int32 nVersion = rMedium.GetFilter()->GetVersion();
 
-        // OASIS templates have own mediatypes ( SO7 also actually, but it is to late to use them here )
+        
         sal_Bool bTemplate = ( rMedium.GetFilter()->IsOwnTemplateFormat() && nVersion > SOFFICE_FILEFORMAT_60 );
 
         const SfxFilter* pFilter = rMedium.GetFilter();
@@ -3090,10 +3090,10 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 #ifndef DISABLE_SCRIPTING
         if ( HasBasic() )
         {
-            // Initialize Basic
+            
             GetBasicManager();
 
-            // Save dialog/script container
+            
             pImp->pBasicManager->storeLibrariesToStorage( xStorage );
         }
 #endif
@@ -3108,7 +3108,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
     {
         OSL_ENSURE( pImp->m_bCreateTempStor, "The storage must exist already!\n" );
         try {
-            // no notification is required the storage is set the first time
+            
             pImp->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
             OSL_ENSURE( pImp->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
 
@@ -3118,7 +3118,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
         }
         catch( uno::Exception& )
         {
-            // TODO/LATER: error handling?
+            
             DBG_UNHANDLED_EXCEPTION();
         }
     }
@@ -3192,7 +3192,7 @@ sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
                     }
                     catch( uno::Exception& )
                     {
-                        // TODO/LATER: error handling
+                        
                         bResult = sal_False;
                         break;
                     }
@@ -3211,7 +3211,7 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
 
     if ( !xStorage.is() )
     {
-        // TODO/LATER: error handling
+        
         return sal_False;
     }
 
@@ -3223,7 +3223,7 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
     return bResult;
 }
 
-// Never call this method directly, always use the DoSaveCompleted call
+
 sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xStorage )
 {
     SAL_INFO( "sfx.doc", "SfxObjectShell::SaveCompleted" );
@@ -3233,13 +3233,13 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     uno::Reference< embed::XStorage > xOldStorageHolder;
 
 #ifdef DBG_UTIL
-    // check for wrong creation of object container
+    
     bool bHasContainer = ( pImp->mpObjectContainer != 0 );
 #endif
 
     if ( !xStorage.is() || xStorage == GetStorage() )
     {
-        // no persistence change
+        
         bResult = SaveCompletedChildren( sal_False );
     }
     else
@@ -3254,8 +3254,8 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     {
         if ( xStorage.is() && pImp->m_xDocStorage != xStorage )
         {
-            // make sure that until the storage is assigned the object
-            // container is not created by accident!
+            
+            
             DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
             xOldStorageHolder = pImp->m_xDocStorage;
             pImp->m_xDocStorage = xStorage;
@@ -3270,7 +3270,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
         if ( pImp->mpObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( pImp->m_xDocStorage );
 
-        // let already successfully connected objects be switched back
+        
         SwitchChildrenPersistance( pImp->m_xDocStorage, sal_True );
     }
 
@@ -3328,8 +3328,8 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
                     bGotMediaType = ( xProps->getPropertyValue( aMediaTypePropName ) >>= aMediaType );
                 }
 
-                // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
-                //             probably it should be placed in the MimeType-ClassID table or in standalone table
+                
+                
                 if ( !aMediaType.isEmpty()
                   && aMediaType != "application/vnd.sun.star.oleobject" )
                 {
@@ -3382,7 +3382,7 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
 
     sal_Bool bResult = sal_False;
 #ifdef DBG_UTIL
-    // check for wrong creation of object container
+    
     bool bHasContainer = ( pImp->mpObjectContainer != 0 );
 #endif
     if ( xStorage.is() )
@@ -3391,20 +3391,20 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
         bResult = SwitchChildrenPersistance( xStorage );
 
-        // TODO/LATER: substorages that have unknown mimetypes probably should be copied to the target storage here
+        
         OSL_ENSURE( StoragesOfUnknownMediaTypeAreCopied_Impl( pImp->m_xDocStorage, xStorage ),
                     "Some of substorages with unknown mimetypes is lost!" );
     }
 
     if ( bResult )
     {
-        // make sure that until the storage is assigned the object container is not created by accident!
+        
         DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
         if ( pImp->m_xDocStorage != xStorage )
             DoSaveCompleted( new SfxMedium( xStorage, GetMedium()->GetBaseURL() ) );
 
         if ( IsEnableSetModified() )
-            SetModified( sal_True ); // ???
+            SetModified( sal_True ); 
     }
 
     return bResult;
@@ -3415,7 +3415,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
 {
     SAL_INFO( "sfx.doc", "SfxObjectShell::CopyStoragesOfUnknownMediaType" );
 
-    // This method does not commit the target storage and should not do it
+    
     sal_Bool bResult = sal_True;
 
     try
@@ -3425,7 +3425,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
         {
             if ( aSubElements[nInd] == "Configurations" )
             {
-                // The workaround for compatibility with SO7, "Configurations" substorage must be preserved
+                
                 if ( xSource->isStorageElement( aSubElements[nInd] ) )
                 {
                     OSL_ENSURE( !xTarget->hasByName( aSubElements[nInd] ),
@@ -3459,9 +3459,9 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
 
                     if ( !xSubStorage.is() )
                     {
-                        // TODO/LATER: as optimization in future a substorage of target storage could be used
-                        //             instead of the temporary storage; this substorage should be removed later
-                        //             if the MimeType is wrong
+                        
+                        
+                        
                         xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
                         xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
                     }
@@ -3470,8 +3470,8 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
                     bGotMediaType = ( xProps->getPropertyValue( aMediaTypePropName ) >>= aMediaType );
                 }
 
-                // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
-                //             probably it should be placed in the MimeType-ClassID table or in standalone table
+                
+                
                 if ( !aMediaType.isEmpty()
                   && aMediaType != "application/vnd.sun.star.oleobject" )
                 {
@@ -3517,7 +3517,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
     catch( uno::Exception& )
     {
         bResult = sal_False;
-        // TODO/LATER: a specific error could be provided
+        
     }
 
     return bResult;
@@ -3529,7 +3529,7 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
 {
     SAL_INFO( "sfx.doc", "SfxObjectShell::GenerateAndStoreThumbnail" );
 
-    bIsInGenerateThumbnail = sal_True;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bIsInGenerateThumbnail = sal_True;
 
     sal_Bool bResult = sal_False;
 
@@ -3555,7 +3555,7 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
     {
     }
 
-    bIsInGenerateThumbnail = sal_False;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bIsInGenerateThumbnail = sal_False;
 
     return bResult;
 }
@@ -3608,7 +3608,7 @@ void SfxObjectShell::UpdateLinks()
 
 bool SfxObjectShell::LoadExternal( SfxMedium& )
 {
-    // Not implemented. It's an error if the code path ever comes here.
+    
     assert(false);
     return false;
 }
@@ -3616,14 +3616,14 @@ bool SfxObjectShell::LoadExternal( SfxMedium& )
 bool SfxObjectShell::InsertGeneratedStream(SfxMedium&,
         uno::Reference<text::XTextRange> const&)
 {
-    // Not implemented. It's an error if the code path ever comes here.
+    
     assert(false);
     return false;
 }
 
 void SfxObjectShell::CheckConfigOptions()
 {
-    // not handled.  Each app's shell needs to overwrite this method to add handler.
+    
     SetConfigOptionsChecked(true);
 }
 
@@ -3659,10 +3659,10 @@ sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference
         }
     }
 #endif
-    // No interaction handler, default is to continue to save
+    
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< task::XInteractionHandler > SfxObjectShell::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet;

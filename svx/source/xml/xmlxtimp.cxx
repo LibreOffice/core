@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -74,11 +74,11 @@ sal_Char const sXML_np__draw_ooo[] = "___draw";
 sal_Char const sXML_np__ooo[] = "__ooo";
 sal_Char const sXML_np__xlink[] = "__xlink";
 
-///////////////////////////////////////////////////////////////////////
+
 
 enum SvxXMLTableImportContextEnum { stice_unknown, stice_color, stice_marker, stice_dash, stice_hatch, stice_gradient, stice_bitmap };
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
@@ -105,7 +105,7 @@ private:
     bool mbOOoFormat;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
@@ -324,9 +324,9 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
     }
 }
 
-///////////////////////////////////////////////////////////////////////
 
-// #110680#
+
+
 SvxXMLXTableImport::SvxXMLXTableImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const uno::Reference< XNameContainer > & rTable,
@@ -341,7 +341,7 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     GetNamespaceMap().Add( OUString( sXML_np__draw ), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
     GetNamespaceMap().Add( OUString( sXML_np__xlink ), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
 
-    // OOo namespaces for reading OOo 1.1 files
+    
     GetNamespaceMap().Add( OUString( sXML_np__office_ooo ),
                         GetXMLToken(XML_N_OFFICE_OOO),
                         XML_NAMESPACE_OFFICE );
@@ -378,7 +378,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
     SvXMLGraphicHelper* pGraphicHelper = 0;
 
     INetURLObject aURLObj( rPath );
-    bool bUseStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
+    bool bUseStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; 
 
     try
     {
@@ -402,7 +402,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
             else
                 aParserInput.aInputStream = aMedium.GetInputStream();
         }
-        else // relative URL into a storage
+        else 
         {
             uno::Reference< embed::XStorage > xSubStorage;
             try
@@ -450,11 +450,11 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
     }
     catch (const uno::Exception&)
     {
-//      thrown each time you load a document with property tables that are not
-//      on the current machine. FIXME: would be better to check a file exists
-//      before importing ...
-//        fprintf (stderr, "parsing etc. exception '%s'\n",
-//                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+
+
+
+
+
         bRet = false;
     }
 

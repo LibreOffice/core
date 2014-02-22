@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
@@ -53,8 +53,8 @@
 #include "scresid.hxx"
 #include "document.hxx"
 
-//========================================================================
-// AutoFormat-Dialog:
+
+
 
 ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
                                   ScAutoFormat*             pAutoFormat,
@@ -99,14 +99,14 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
+
 
 ScAutoFormatDlg::~ScAutoFormatDlg()
 {
     delete pWndPreview;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFormatDlg::Init()
 {
@@ -155,7 +155,7 @@ void ScAutoFormatDlg::Init()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFormatDlg::UpdateChecks()
 {
@@ -169,9 +169,9 @@ void ScAutoFormatDlg::UpdateChecks()
     aBtnAdjust   .Check( pData->GetIncludeWidthHeight() );
 }
 
-//------------------------------------------------------------------------
-// Handler:
-//---------
+
+
+
 
 IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 {
@@ -185,7 +185,7 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 {
@@ -197,7 +197,7 @@ IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
@@ -228,7 +228,7 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 {
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
@@ -372,8 +372,8 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
                 }
                 if (it == itEnd)
                 {
-                    // Format mit dem Namen noch nicht vorhanden, also
-                    // umbenennen
+                    
+                    
 
                     aLbFormat.RemoveEntry(nIndex );
                     const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
@@ -427,7 +427,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 {
@@ -451,7 +451,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScAutoFormatDlg::GetCurrFormatName()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,10 +27,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
 
-//............................................................................
+
 namespace svxform
 {
-//............................................................................
+
 
     DataListener::DataListener( DataNavigatorWindow* pNaviWin ) :
 
@@ -44,7 +44,7 @@ namespace svxform
     {
     }
 
-    // XContainerListener
+    
     void SAL_CALL DataListener::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
@@ -60,7 +60,7 @@ namespace svxform
         m_pNaviWin->NotifyChanges();
     }
 
-    // XFrameActionListener
+    
     void SAL_CALL DataListener::frameAction( const FrameActionEvent& rActionEvt ) throw (RuntimeException)
     {
         if ( FrameAction_COMPONENT_ATTACHED == rActionEvt.Action ||
@@ -70,20 +70,20 @@ namespace svxform
         }
     }
 
-    // xml::dom::events::XEventListener
+    
     void SAL_CALL DataListener::handleEvent( const Reference< XEvent >& /*evt*/ ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    // lang::XEventListener
+    
     void SAL_CALL DataListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
         SAL_WARN( "svx.form", "disposing" );
     }
 
-//............................................................................
-}   // namespace svxform
-//............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

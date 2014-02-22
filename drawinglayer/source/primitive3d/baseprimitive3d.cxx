@@ -66,8 +66,8 @@ namespace drawinglayer
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aViewInformation));
         }
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -98,34 +98,34 @@ namespace drawinglayer
 
             return getBuffered3DDecomposition();
         }
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
-// tooling
+
 
 namespace drawinglayer
 {
     namespace primitive3d
     {
-        // get range3D from a given Primitive3DReference
+        
         basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation)
         {
             basegfx::B3DRange aRetval;
 
             if(rCandidate.is())
             {
-                // try to get C++ implementation base
+                
                 const BasePrimitive3D* pCandidate(dynamic_cast< BasePrimitive3D* >(rCandidate.get()));
 
                 if(pCandidate)
                 {
-                    // use it if possible
+                    
                     aRetval.expand(pCandidate->getB3DRange(aViewInformation));
                 }
                 else
                 {
-                    // use UNO API call instead
+                    
                     const uno::Sequence< beans::PropertyValue >& rViewParameters(aViewInformation.getViewInformationSequence());
                     aRetval.expand(basegfx::unotools::b3DRectangleFromRealRectangle3D(rCandidate->getRange(rViewParameters)));
                 }
@@ -134,7 +134,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // get range3D from a given Primitive3DSequence
+        
         basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation)
         {
             basegfx::B3DRange aRetval;
@@ -215,7 +215,7 @@ namespace drawinglayer
             return true;
         }
 
-        // concatenate sequence
+        
         void appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource)
         {
             if(rSource.hasElements())
@@ -249,7 +249,7 @@ namespace drawinglayer
             }
         }
 
-        // concatenate single Primitive3D
+        
         void appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource)
         {
             if(rSource.is())
@@ -260,7 +260,7 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

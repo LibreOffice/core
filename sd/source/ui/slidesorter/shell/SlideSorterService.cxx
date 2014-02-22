@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,7 +56,7 @@ namespace {
 
 
 
-//===== Service ===============================================================
+
 
 Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -85,7 +85,7 @@ Sequence<OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (void)
 
 
 
-//===== SlideSorterService ==========================================================
+
 
 SlideSorterService::SlideSorterService (const Reference<XComponentContext>& rxContext)
     : SlideSorterServiceInterfaceBase(m_aMutex),
@@ -118,7 +118,7 @@ void SAL_CALL SlideSorterService::disposing (void)
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     throw (Exception, RuntimeException)
@@ -131,10 +131,10 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
         {
             mxViewId = Reference<XResourceId>(rArguments[0], UNO_QUERY_THROW);
 
-            // Get the XController.
+            
             Reference<frame::XController> xController (rArguments[1], UNO_QUERY_THROW);
 
-            // Tunnel through the controller to obtain a ViewShellBase.
+            
             ViewShellBase* pBase = NULL;
             Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
             ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
@@ -142,7 +142,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
             if (pController != NULL)
                 pBase = pController->GetViewShellBase();
 
-            // Get the parent window.
+            
             mxParentWindow = Reference<awt::XWindow>(rArguments[2], UNO_QUERY_THROW);
             ::Window* pParentWindow = VCLUnoHelper::GetWindow(mxParentWindow);
 
@@ -171,7 +171,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
 
 
 
-//----- XView -----------------------------------------------------------------
+
 
 Reference<XResourceId> SAL_CALL SlideSorterService::getResourceId (void)
     throw (RuntimeException)
@@ -191,7 +191,7 @@ sal_Bool SAL_CALL SlideSorterService::isAnchorOnly (void)
 
 
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL SlideSorterService::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
@@ -236,7 +236,7 @@ void SAL_CALL SlideSorterService::windowHidden (const lang::EventObject& rEvent)
 
 
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL SlideSorterService::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -248,7 +248,7 @@ void SAL_CALL SlideSorterService::disposing (const lang::EventObject& rEvent)
 
 
 
-//----- XDrawView -------------------------------------------------------------
+
 
 void SAL_CALL SlideSorterService::setCurrentPage(const Reference<drawing::XDrawPage>& rxSlide)
     throw (RuntimeException)
@@ -275,7 +275,7 @@ Reference<drawing::XDrawPage> SAL_CALL SlideSorterService::getCurrentPage (void)
 
 
 
-//----- attributes ------------------------------------------------------------
+
 
 
 Reference<container::XIndexAccess> SAL_CALL SlideSorterService::getDocumentSlides (void)
@@ -599,7 +599,7 @@ void SAL_CALL SlideSorterService::setIsUIReadOnly (sal_Bool bIsUIReadOnly)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void SlideSorterService::Resize (void)
 {
@@ -626,6 +626,6 @@ void SlideSorterService::ThrowIfDisposed (void)
 }
 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

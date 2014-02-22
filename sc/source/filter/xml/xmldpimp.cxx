@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmldpimp.hxx"
@@ -53,7 +53,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-//------------------------------------------------------------------
+
 
 ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -62,7 +62,7 @@ ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    // has no Attributes
+    
     rImport.LockSolarMutex();
 }
 
@@ -377,7 +377,7 @@ void ScXMLDataPilotTableContext::SetButtons()
 
                 if (bPageDim)
                 {
-                    // Page dimension needs 2 buttons.
+                    
 
                     pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), SC_MF_BUTTON);
 
@@ -391,11 +391,11 @@ void ScXMLDataPilotTableContext::SetButtons()
                     sal_Int16 nMFlag = SC_MF_BUTTON;
                     if (bDataLayout)
                     {
-                        // Data layout dimension only has a plain button with no popup.
+                        
                     }
                     else if (bDimension)
                     {
-                        // Normal dimension has a popup arrow button.
+                        
                         if (bHasHidden)
                             nMFlag |= SC_MF_HIDDEN_MEMBER;
 
@@ -424,8 +424,8 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
         if (pDim->IsDataLayout())
             mnDataLayoutType = pDim->GetOrientation();
 
-        //  if a dimension with that name has already been inserted,
-        //  mark the new one as duplicate
+        
+        
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
             pDim->SetDupFlag(true);
@@ -520,7 +520,7 @@ void ScXMLDataPilotTableContext::EndElement()
             {
                 ScSheetSourceDesc aSheetDesc(pDoc);
                 if (!sSourceRangeName.isEmpty())
-                    // Range name takes precedence.
+                    
                     aSheetDesc.SetRangeName(sSourceRangeName);
                 else
                     aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
@@ -534,9 +534,9 @@ void ScXMLDataPilotTableContext::EndElement()
     pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
     pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
     if (!maRowGrandTotal.maDisplayName.isEmpty())
-        // TODO: Right now, we only support one grand total name for both
-        // column and row totals.  Take the value from the row total for
-        // now.
+        
+        
+        
         pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
 
     pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
@@ -549,9 +549,9 @@ void ScXMLDataPilotTableContext::EndElement()
 
     ScDPCollection* pDPCollection = pDoc->GetDPCollection();
 
-    // #i94570# Names have to be unique, or the tables can't be accessed by API.
+    
     if ( pDPCollection->GetByName(pDPObject->GetName()) )
-        pDPObject->SetName( OUString() );     // ignore the invalid name, create a new name in AfterXMLLoading
+        pDPObject->SetName( OUString() );     
 
     ProcessSelectedPages();
 
@@ -561,7 +561,7 @@ void ScXMLDataPilotTableContext::EndElement()
 
 void ScXMLDataPilotTableContext::ProcessSelectedPages()
 {
-    // Set selected pages after building all dimension members.
+    
     if (!pDPObject)
         return;
 
@@ -1112,7 +1112,7 @@ void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
     {
         pDim->AddMember(pMember);
         if (!pMember->GetIsVisible())
-            // This member is hidden.
+            
             mbHasHiddenMember = true;
     }
     else
@@ -1180,7 +1180,7 @@ void ScXMLDataPilotFieldContext::EndElement()
                 }
                 pDataPilotTable->AddGroupDim(aGroupDim);
             }
-            else //NumGroup
+            else 
             {
                 ScDPSaveNumGroupDimension aNumGroupDim(sName, aInfo);
                 if (nGroupPart)
@@ -1484,7 +1484,7 @@ ScXMLDataPilotSubTotalsContext::ScXMLDataPilotSubTotalsContext( ScXMLImport& rIm
     pFunctions(NULL)
 {
 
-    // has no attributes
+    
 }
 
 ScXMLDataPilotSubTotalsContext::~ScXMLDataPilotSubTotalsContext()
@@ -1609,7 +1609,7 @@ ScXMLDataPilotMembersContext::ScXMLDataPilotMembersContext( ScXMLImport& rImport
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotField(pTempDataPilotField)
 {
-    // has no attributes
+    
 }
 
 ScXMLDataPilotMembersContext::~ScXMLDataPilotMembersContext()
@@ -1710,7 +1710,7 @@ SvXMLImportContext *ScXMLDataPilotMemberContext::CreateChildContext( sal_uInt16 
 
 void ScXMLDataPilotMemberContext::EndElement()
 {
-    if (bHasName)   // #i53407# don't check sName, empty name is allowed
+    if (bHasName)   
     {
         ScDPSaveMember* pMember = new ScDPSaveMember(sName);
         if (!maDisplayName.isEmpty())
@@ -1748,7 +1748,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         OUString sValue = xAttrList->getValueByIndex( i );
 
-        (void)nPrefix;  //! compare below!
+        (void)nPrefix;  
 
         if (IsXMLToken(aLocalName, XML_SOURCE_FIELD_NAME))
                 sGroupSource = sValue;

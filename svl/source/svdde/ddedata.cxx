@@ -18,10 +18,10 @@
  */
 
 
-// ACHTUNG: es wird angenommen, dass StarView-Clipboard-Foamatnummern
-// und Windows-Formatnummern identisch sind! Ist dies einmal nicht der
-// Fall, muessen die Routinen hier angepasst werden. Die Implementation
-// verwendet die hier defineirten Konversionen.
+
+
+
+
 
 #define UNICODE
 
@@ -31,7 +31,7 @@
 
 #include <osl/thread.h>
 
-// --- DdeData::DdeData() ------------------------------------------
+
 
 DdeData::DdeData()
 {
@@ -42,7 +42,7 @@ DdeData::DdeData()
     pImp->nFmt  = CF_TEXT;
 }
 
-// --- DdeData::DdeData() ------------------------------------------
+
 
 DdeData::DdeData( const void* p, long n, sal_uLong f )
 {
@@ -53,7 +53,7 @@ DdeData::DdeData( const void* p, long n, sal_uLong f )
     pImp->nFmt  = f;
 }
 
-// --- DdeData::DdeData() ------------------------------------------
+
 
 DdeData::DdeData( const OUString& s )
 {
@@ -64,7 +64,7 @@ DdeData::DdeData( const OUString& s )
     pImp->nFmt  = CF_TEXT;
 }
 
-// --- DdeData::DdeData() ------------------------------------------
+
 
 DdeData::DdeData( const DdeData& rData )
 {
@@ -76,7 +76,7 @@ DdeData::DdeData( const DdeData& rData )
     Lock();
 }
 
-// --- DdeData::~DdeData() -----------------------------------------
+
 
 DdeData::~DdeData()
 {
@@ -85,7 +85,7 @@ DdeData::~DdeData()
     delete pImp;
 }
 
-// --- DdeData::Lock() ---------------------------------------------
+
 
 void DdeData::Lock()
 {
@@ -93,7 +93,7 @@ void DdeData::Lock()
         pImp->pData = DdeAccessData( pImp->hData, (LPDWORD) &pImp->nData );
 }
 
-// --- DdeData::GetFormat() ----------------------------------------
+
 
 sal_uLong DdeData::GetFormat() const
 {
@@ -105,21 +105,21 @@ void DdeData::SetFormat( sal_uLong nFmt )
     pImp->nFmt = nFmt;
 }
 
-// --- DdeData::operator const char*() -----------------------------
+
 
 DdeData::operator const void*() const
 {
     return pImp->pData;
 }
 
-// --- DdeData::operator long() ------------------------------------
+
 
 DdeData::operator long() const
 {
     return pImp->nData;
 }
 
-// --- DdeData::operator =() ---------------------------------------
+
 
 DdeData& DdeData::operator = ( const DdeData& rData )
 {

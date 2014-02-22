@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "jvmaccess/virtualmachine.hxx"
@@ -60,7 +60,7 @@ VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                                JNIEnv * pMainThreadEnv):
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
-    (void) pMainThreadEnv; // avoid warnings
+    (void) pMainThreadEnv; 
     OSL_ENSURE(pVm != 0 && nVersion >= JNI_VERSION_1_2 && pMainThreadEnv != 0,
                "bad parameter");
 }
@@ -69,10 +69,10 @@ VirtualMachine::~VirtualMachine()
 {
     if (m_bDestroy)
     {
-        // Do not destroy the VM.  Under Java 1.3, the AWT event loop thread is
-        // not a daemon thread and is never terminated, so that calling
-        // DestroyJavaVM (waiting for all non-daemon threads to terminate) hangs
-        // forever.
+        
+        
+        
+        
 /*
         jint n = m_pVm->DestroyJavaVM();
         OSL_ENSURE(n == JNI_OK, "JNI: DestroyJavaVM failed");
@@ -95,8 +95,8 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 #ifndef ANDROID
              reinterpret_cast< void ** >(&pEnv),
 #else
-             // The Android <jni.h> has AttachCurrentThread() taking a
-             // JNIEnv** and not void **
+             
+             
              &pEnv,
 #endif
              0)

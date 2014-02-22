@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/docfile.hxx>
@@ -35,7 +35,7 @@ SdPageListControl::SdPageListControl(
     const ResId& rResId )
     : SvTreeListBox(pParent, rResId)
 {
-    // add lines to tree listbox
+    
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  WB_HASLINESATROOT |
                             WB_HSCROLL |
@@ -82,7 +82,7 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 
     pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
                                        0, m_pCheckButton));
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // otherwise boom!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rPageName ) );
 
     GetModel()->Insert( pEntry );
@@ -94,7 +94,7 @@ void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const OUString& r
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) );
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // otherwise boom!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
     GetModel()->Insert( pEntry,pParent );
 }
@@ -116,7 +116,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
             SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
             if(!pTO)
             {
-                // determines the SdrTextObject with the layout text of this page
+                
                 const sal_uLong nObjectCount = pPage->GetObjCount();
                 for (sal_uLong nObject = 0; nObject < nObjectCount; nObject++)
                 {

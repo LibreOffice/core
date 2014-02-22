@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -44,9 +44,9 @@
 #include "txtfld.hxx"
 #include "ndtxt.hxx"
 
-//really used ids from old sw3ids.hxx
-#define SWG_INETBROWSER 0x000e      // URL-Grf-Nodes, Browse-Flag, Format-Ums.
-#define SWG_NEWFIELDS   0x0200      // Felder mit Numberformatter-Zahlenformat
+
+#define SWG_INETBROWSER 0x000e      
+#define SWG_NEWFIELDS   0x0200      
 
 using namespace nsSwDocInfoSubType;
 
@@ -58,118 +58,118 @@ struct OldFormats
 
 static const OldFormats aOldDateFmt40[] =
 {
-    // Datumsfelder:
-    { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     // Kurzes Systemdatum
-    { NF_DATE_SYSTEM_LONG,          DFF_LSYS },     // Langes Systemdatum
-    { NF_DATE_SYS_DDMMYY,               DFF_DMY },        // 06.10.64
-    { NF_DATE_SYS_DDMMYYYY,         DFF_DMYY },     // 06.10.1964
-    { NF_DATE_SYS_DMMMYY,               DFF_DMMY },     // 06. Okt 64
-    { NF_DATE_SYS_DMMMYYYY,         DFF_DMMYY },        // 06. Okt 1964
-    { NF_DATE_DIN_DMMMMYYYY,            DFF_DMMMYY },       // 06. Oktober 1964
-    { NF_DATE_DIN_DMMMMYYYY,            DFF_DMMMY },        // 06. Oktober 64
-    { NF_DATE_SYS_NNDMMMYY,         DFF_DDMMY },        // Di, 06. Okt 64
-    { NF_DATE_SYS_NNDMMMMYYYY,      DFF_DDMMMY },       // Di, 06. Oktober 64
-    { NF_DATE_SYS_NNDMMMMYYYY,      DFF_DDMMMYY },  // Di, 06. Oktober 1964
-    { NF_DATE_SYS_NNNNDMMMMYYYY,        DFF_DDDMMMYY }, // Dienstag, 06. Oktober 1964
-    { NF_DATE_SYS_NNNNDMMMMYYYY,        DFF_DDDMMMY },  // Dienstag, 06. Oktober 64
-    { NF_DATE_SYS_MMYY,             DFF_MY },           // 10.64
-    { NF_DATE_DIN_MMDD,             DFF_MD },           // 10-06
-    { NF_DATE_DIN_YYMMDD,               DFF_YMD },      // 64-10-06
-    { NF_DATE_DIN_YYYYMMDD,         DFF_YYMD },     // 1964-10-06
+    
+    { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     
+    { NF_DATE_SYSTEM_LONG,          DFF_LSYS },     
+    { NF_DATE_SYS_DDMMYY,               DFF_DMY },        
+    { NF_DATE_SYS_DDMMYYYY,         DFF_DMYY },     
+    { NF_DATE_SYS_DMMMYY,               DFF_DMMY },     
+    { NF_DATE_SYS_DMMMYYYY,         DFF_DMMYY },        
+    { NF_DATE_DIN_DMMMMYYYY,            DFF_DMMMYY },       
+    { NF_DATE_DIN_DMMMMYYYY,            DFF_DMMMY },        
+    { NF_DATE_SYS_NNDMMMYY,         DFF_DDMMY },        
+    { NF_DATE_SYS_NNDMMMMYYYY,      DFF_DDMMMY },       
+    { NF_DATE_SYS_NNDMMMMYYYY,      DFF_DDMMMYY },  
+    { NF_DATE_SYS_NNNNDMMMMYYYY,        DFF_DDDMMMYY }, 
+    { NF_DATE_SYS_NNNNDMMMMYYYY,        DFF_DDDMMMY },  
+    { NF_DATE_SYS_MMYY,             DFF_MY },           
+    { NF_DATE_DIN_MMDD,             DFF_MD },           
+    { NF_DATE_DIN_YYMMDD,               DFF_YMD },      
+    { NF_DATE_DIN_YYYYMMDD,         DFF_YYMD },     
 
-    { NF_NUMERIC_START,             0  }                // Tabellenende
+    { NF_NUMERIC_START,             0  }                
 };
 
 static const OldFormats aOldDateFmt30[] =
 {
-    // Datumsfelder:
-    { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     // Kurzes Systemdatum
-    { NF_DATE_SYSTEM_LONG,          DFF_LSYS },     // Langes Systemdatum
-    { NF_DATE_SYS_DDMMYY,               DFF_DMY },        // 06.10.64
-    { NF_DATE_SYS_DDMMYYYY,         DFF_DMYY },     // 06.10.1964
-    { NF_DATE_SYS_DMMMYY,               DFF_DMMY },     // 06. Okt 64
-    { NF_DATE_SYS_DMMMYYYY,         4 /*DFF_DMMYY*/ },  // 06. Okt 1964
-    { NF_DATE_DIN_DMMMMYYYY,            5 /*DFF_DMMMYY*/ }, // 06. Oktober 1964
-    { NF_DATE_DIN_DMMMMYYYY,            5 /*DFF_DMMMY*/ },  // 06. Oktober 64
-    { NF_DATE_SYS_NNDMMMMYYYY,      6 /*DFF_DDMMMYY*/ },    // Di, 06. Oktober 1964
-    { NF_DATE_SYS_NNDMMMYY,         6 /*DFF_DDMMY*/ },  // Di, 06. Okt 64
-    { NF_DATE_SYS_NNDMMMMYYYY,      6 /*DFF_DDMMMY*/ }, // Di, 06. Oktober 64
-    { NF_DATE_SYS_NNNNDMMMMYYYY,        7 /*DFF_DDDMMMYY*/ },   // Dienstag, 06. Oktober 1964
-    { NF_DATE_SYS_NNNNDMMMMYYYY,        7 /*DFF_DDDMMMY*/ },    // Dienstag, 06. Oktober 64
-    { NF_DATE_SYS_MMYY,             2 /*DFF_MY*/ },     // 10.64
-    { NF_DATE_DIN_MMDD,             DFF_MD },           // 10-06
-    { NF_DATE_DIN_YYMMDD,               DFF_YMD },      // 64-10-06
-    { NF_DATE_DIN_YYYYMMDD,         DFF_YYMD },     // 1964-10-06
+    
+    { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     
+    { NF_DATE_SYSTEM_LONG,          DFF_LSYS },     
+    { NF_DATE_SYS_DDMMYY,               DFF_DMY },        
+    { NF_DATE_SYS_DDMMYYYY,         DFF_DMYY },     
+    { NF_DATE_SYS_DMMMYY,               DFF_DMMY },     
+    { NF_DATE_SYS_DMMMYYYY,         4 /*DFF_DMMYY*/ },  
+    { NF_DATE_DIN_DMMMMYYYY,            5 /*DFF_DMMMYY*/ }, 
+    { NF_DATE_DIN_DMMMMYYYY,            5 /*DFF_DMMMY*/ },  
+    { NF_DATE_SYS_NNDMMMMYYYY,      6 /*DFF_DDMMMYY*/ },    
+    { NF_DATE_SYS_NNDMMMYY,         6 /*DFF_DDMMY*/ },  
+    { NF_DATE_SYS_NNDMMMMYYYY,      6 /*DFF_DDMMMY*/ }, 
+    { NF_DATE_SYS_NNNNDMMMMYYYY,        7 /*DFF_DDDMMMYY*/ },   
+    { NF_DATE_SYS_NNNNDMMMMYYYY,        7 /*DFF_DDDMMMY*/ },    
+    { NF_DATE_SYS_MMYY,             2 /*DFF_MY*/ },     
+    { NF_DATE_DIN_MMDD,             DFF_MD },           
+    { NF_DATE_DIN_YYMMDD,               DFF_YMD },      
+    { NF_DATE_DIN_YYYYMMDD,         DFF_YYMD },     
 
-    { NF_NUMERIC_START,             0  }                // Tabellenende
+    { NF_NUMERIC_START,             0  }                
 };
 
 static const OldFormats aOldTimeFmt[] =
 {
-    // Zeitfelder:
-    { NF_TIME_HHMMSS,                   TF_SYSTEM },        // Systemzeit
-    { NF_TIME_HHMM,                 TF_SSMM_24 },       // 23:25
-    { NF_TIME_HHMMAMPM,             TF_SSMM_12 },       // 11:25 PM
+    
+    { NF_TIME_HHMMSS,                   TF_SYSTEM },        
+    { NF_TIME_HHMM,                 TF_SSMM_24 },       
+    { NF_TIME_HHMMAMPM,             TF_SSMM_12 },       
 
-    { NF_NUMERIC_START,             0 }             // Tabellenende
+    { NF_NUMERIC_START,             0 }             
 };
 
 static const OldFormats aOldGetSetExpFmt40[] =
 {
-    { NF_TEXT,                      VVF_CMD },      // Kommando anzeigen
-    { NF_TEXT,                      VVF_INVISIBLE },    // unsichtbar
-    { NF_PERCENT_INT,                   VVF_XXP },      // 1234%
-    { NF_PERCENT_DEC2,              VVF_XX_XXP },       // 1.234,56%
-    { NF_TEXT,                      VVF_CLEAR },        // ???
+    { NF_TEXT,                      VVF_CMD },      
+    { NF_TEXT,                      VVF_INVISIBLE },    
+    { NF_PERCENT_INT,                   VVF_XXP },      
+    { NF_PERCENT_DEC2,              VVF_XX_XXP },       
+    { NF_TEXT,                      VVF_CLEAR },        
 
-    { NF_NUMBER_SYSTEM,             VVF_SYS },      // Zahlenformat aus der
-                                                    // Systemeinstellung
-    { NF_NUMBER_INT,                    VVF_X },            // 1234
-    { NF_NUMBER_DEC2,                   VVF_X_X },          // 1234,5
-    { NF_NUMBER_DEC2,                   VVF_X_XX },     // 1245,56
-    { NF_NUMBER_1000DEC2,               VVF_XX_XX },    // 1.234,56
-    { NF_NUMBER_1000DEC2,               VVF_XX_X },     // 1.234,5
-    { NF_NUMBER_1000DEC2,               VVF_XX_XXX },       // 1.234,567
-    { NF_CURRENCY_1000DEC2,         VVF_SYS_CUR },  // W?hrungsformat aus der
-                                                    // Systemeinstellung
-                                                    // (1.234,00 DM)
-    { NF_CURRENCY_1000INT,          VVF_X_CUR },        // 1234 DM
-    { NF_CURRENCY_1000DEC2,         VVF_XX_XX_CUR },  // 1234,56 DM 1234,00 DM
-    { NF_CURRENCY_1000DEC2_DASHED,  VVF_XX_X0_CUR },  // 1234,56 DM 1234,-- DM
-    { NF_CURRENCY_1000INT,          VVF_CUR_X },    // DM 1234
-    { NF_CURRENCY_1000DEC2,         VVF_CUR_XX_XX },  // DM 1234,56 DM 1234,00
-    { NF_CURRENCY_1000DEC2_DASHED,  VVF_CUR_XX_X0 },  // DM 1234,56 DM 1234,--
+    { NF_NUMBER_SYSTEM,             VVF_SYS },      
+                                                    
+    { NF_NUMBER_INT,                    VVF_X },            
+    { NF_NUMBER_DEC2,                   VVF_X_X },          
+    { NF_NUMBER_DEC2,                   VVF_X_XX },     
+    { NF_NUMBER_1000DEC2,               VVF_XX_XX },    
+    { NF_NUMBER_1000DEC2,               VVF_XX_X },     
+    { NF_NUMBER_1000DEC2,               VVF_XX_XXX },       
+    { NF_CURRENCY_1000DEC2,         VVF_SYS_CUR },  
+                                                    
+                                                    
+    { NF_CURRENCY_1000INT,          VVF_X_CUR },        
+    { NF_CURRENCY_1000DEC2,         VVF_XX_XX_CUR },  
+    { NF_CURRENCY_1000DEC2_DASHED,  VVF_XX_X0_CUR },  
+    { NF_CURRENCY_1000INT,          VVF_CUR_X },    
+    { NF_CURRENCY_1000DEC2,         VVF_CUR_XX_XX },  
+    { NF_CURRENCY_1000DEC2_DASHED,  VVF_CUR_XX_X0 },  
 
-    { NF_NUMERIC_START,                 0  }                // Tabellenende
+    { NF_NUMERIC_START,                 0  }                
 };
 
 static const OldFormats aOldGetSetExpFmt30[] =
 {
-    { NF_TEXT,                      VVF_CMD },      // Kommando anzeigen
-    { NF_TEXT,                      VVF_INVISIBLE },    // unsichtbar
-    { NF_PERCENT_INT,                   VVF_XXP },      // 1234%
-    { NF_PERCENT_DEC2,              VVF_XX_XXP },       // 1.234,56%
-    { NF_TEXT,                      VVF_CLEAR },        // ???
+    { NF_TEXT,                      VVF_CMD },      
+    { NF_TEXT,                      VVF_INVISIBLE },    
+    { NF_PERCENT_INT,                   VVF_XXP },      
+    { NF_PERCENT_DEC2,              VVF_XX_XXP },       
+    { NF_TEXT,                      VVF_CLEAR },        
 
-    { NF_NUMBER_SYSTEM,             0x0020 },       // Zahlenformat aus der
-                                                    // Systemeinstellung
-    { NF_NUMBER_INT,                    0x0080 },           // 1234
-    { NF_NUMBER_1000DEC2,               0x0100 },           // 1.234,56
-    { NF_NUMBER_DEC2,                   0x0100 },           // 1234,5
-    { NF_NUMBER_DEC2,                   0x0100 },       // 1245,56
-    { NF_NUMBER_1000DEC2,               0x0100 },           // 1.234,5
-    { NF_NUMBER_1000DEC2,               0x0100 },           // 1.234,567
-    { NF_CURRENCY_1000DEC2,         0x0200 },           // W?hrungsformat aus der
-                                                    // Systemeinstellung
-                                                    // (1.234,00 DM)
-    { NF_CURRENCY_1000INT,          0x1000 },           // 1234 DM
-    { NF_CURRENCY_1000DEC2,         0x1000 },       // 1234,56 DM 1234,00 DM
-    { NF_CURRENCY_1000DEC2_DASHED,  0x1000 },       // 1234,56 DM 1234,-- DM
-    { NF_CURRENCY_1000INT,          0x1000 },           // DM 1234
-    { NF_CURRENCY_1000DEC2,         0x1000 },       // DM 1234,56 DM 1234,00
-    { NF_CURRENCY_1000DEC2_DASHED,  0x1000 },       // DM 1234,56 DM 1234,--
+    { NF_NUMBER_SYSTEM,             0x0020 },       
+                                                    
+    { NF_NUMBER_INT,                    0x0080 },           
+    { NF_NUMBER_1000DEC2,               0x0100 },           
+    { NF_NUMBER_DEC2,                   0x0100 },           
+    { NF_NUMBER_DEC2,                   0x0100 },       
+    { NF_NUMBER_1000DEC2,               0x0100 },           
+    { NF_NUMBER_1000DEC2,               0x0100 },           
+    { NF_CURRENCY_1000DEC2,         0x0200 },           
+                                                    
+                                                    
+    { NF_CURRENCY_1000INT,          0x1000 },           
+    { NF_CURRENCY_1000DEC2,         0x1000 },       
+    { NF_CURRENCY_1000DEC2_DASHED,  0x1000 },       
+    { NF_CURRENCY_1000INT,          0x1000 },           
+    { NF_CURRENCY_1000DEC2,         0x1000 },       
+    { NF_CURRENCY_1000DEC2_DASHED,  0x1000 },       
 
-    { NF_NUMERIC_START,                 0  }                // Tabellenende
+    { NF_NUMERIC_START,                 0  }                
 };
 
 SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
@@ -232,10 +232,10 @@ SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
                 }
                 else
                 {
-                    // Kleiner Hack: Bei Numernkreisen wird das
-                    // unkonvertierte Format noch benoetigt. Wir merken es
-                    // uns voruebergehend mal im Subtyp, sofern es
-                    // ueberhaupt als entsprechendes Format in Frage kommt.
+                    
+                    
+                    
+                    
                     if( RES_SETEXPFLD==rWhich &&
                         /*rFmt >= (sal_uInt16)SVX_NUM_CHARS_UPPER_LETTER && always true*/
                         rFmt <= (sal_uInt16)SVX_NUM_BITMAP )

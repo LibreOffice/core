@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "chartpos.hxx"
@@ -28,7 +28,7 @@ namespace
         bool bReturn = false;
         if (pDocument->HasValueData( nCol, nRow, nTab ))
         {
-            //treat dates like text #i25706#
+            
             sal_uInt32 nNumberFormat = pDocument->GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
             short nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
             bool bIsDate = (nType & NUMBERFORMAT_DATE);
@@ -114,7 +114,7 @@ void ScChartPositioner::GlueState()
             if ( pR->aStart.Tab() == pR->aEnd.Tab() )
                 eGlue = SC_CHARTGLUE_NONE;
             else
-                eGlue = SC_CHARTGLUE_COLS;  // several tables column by column
+                eGlue = SC_CHARTGLUE_COLS;  
             nStartCol = pR->aStart.Col();
             nStartRow = pR->aStart.Row();
         }
@@ -135,9 +135,9 @@ void ScChartPositioner::GlueState()
     nMaxCols = nEndCol = 0;
     nMaxRows = nEndRow = 0;
 
-    // <= so 1 extra pass after last item
+    
     for ( size_t i = 1, nRanges = aRangeListRef->size(); i <= nRanges; ++i )
-    {   // detect spanning/surrounding area etc.
+    {   
         SCCOLROW nTmp, n1, n2;
         if ( (n1 = pR->aStart.Col()) < nStartCol ) nStartCol = static_cast<SCCOL>(n1  );
         if ( (n2 = pR->aEnd.Col()  ) > nEndCol   ) nEndCol   = static_cast<SCCOL>(n2  );
@@ -146,7 +146,7 @@ void ScChartPositioner::GlueState()
         if ( (n2 = pR->aEnd.Row()  ) > nEndRow   ) nEndRow   = static_cast<SCROW>(n2  );
         if ( (nTmp = n2 - n1 + 1   ) > nMaxRows  ) nMaxRows  = static_cast<SCROW>(nTmp);
 
-        // in last pass; i = nRanges so don't use at()
+        
         if ( i < nRanges )
             pR = (*aRangeListRef)[i];
     }
@@ -183,7 +183,7 @@ void ScChartPositioner::GlueState()
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
-    {   // mark selections as used in 2D
+    {   
         pR = (*aRangeListRef)[i];
         nCol1 = pR->aStart.Col() - nStartCol;
         nCol2 = pR->aEnd.Col() - nStartCol;
@@ -200,16 +200,16 @@ void ScChartPositioner::GlueState()
 
     sal_Bool bGlueCols = false;
     for ( nCol = 0; bGlue && nCol < nC; nCol++ )
-    {   // iterate columns and try to mark as unused
+    {   
         p = pA + (sal_uLong)nCol * nR;
         for ( nRow = 0; bGlue && nRow < nR; nRow++, p++ )
         {
             if ( *p == nOccu )
-            {   // If there's one right in the middle, we can't combine.
-                // If it were at the edge, we could combine, if in this Column
-                // in every set line, one is set.
+            {   
+                
+                
                 if ( nRow > 0 && nCol > 0 )
-                    bGlue = false; // nCol==0 can be DummyUpperLeft
+                    bGlue = false; 
                 else
                     nRow = nR;
             }
@@ -217,22 +217,22 @@ void ScChartPositioner::GlueState()
                 *p = nFree;
         }
         if ( bGlue && *(p = (pA + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
-        {   // mark column as totally unused
+        {   
             *p = nGlue;
-            bGlueCols = sal_True; // one unused column at least
+            bGlueCols = sal_True; 
         }
     }
 
     sal_Bool bGlueRows = false;
     for ( nRow = 0; bGlue && nRow < nR; nRow++ )
-    {   // iterate rows and try to mark as unused
+    {   
         p = pA + nRow;
         for ( nCol = 0; bGlue && nCol < nC; nCol++, p+=nR )
         {
             if ( *p == nOccu )
             {
                 if ( nCol > 0 && nRow > 0 )
-                    bGlue = false; // nRow==0 can be DummyUpperLeft
+                    bGlue = false; 
                 else
                     nCol = nC;
             }
@@ -240,17 +240,17 @@ void ScChartPositioner::GlueState()
                 *p = nFree;
         }
         if ( bGlue && *(p = (pA + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
-        {   // mark row as totally unused
+        {   
             *p = nGlue;
-            bGlueRows = sal_True; // one unused row at least
+            bGlueRows = sal_True; 
         }
     }
 
-    // If n=1: The upper left corner could be automagically pulled in for labeling
+    
     p = pA + 1;
     for ( sal_uLong n = 1; bGlue && n < nCR; n++, p++ )
-    {   // An untouched field means we could neither reach it through rows nor columns,
-        // thus we can't combine anything
+    {   
+        
         if ( *p == nHole )
             bGlue = false;
     }
@@ -313,8 +313,8 @@ void ScChartPositioner::CheckColRowHeaders()
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
             sal_Bool bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
-            {   // NONE or ROWS: RowStrings in every selection possible
-                // COLS or BOTH: only from first column
+            {   
+                
                 if ( nCol1 <= nCol2 )
                     for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
                     {
@@ -323,7 +323,7 @@ void ScChartPositioner::CheckColRowHeaders()
                     }
             }
             if ( bColStrings && bTopRow )
-            {   // ColStrings only from first row
+            {   
                 if ( nRow1 <= nRow2 )
                     for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
                     {
@@ -363,7 +363,7 @@ void ScChartPositioner::CreatePositionMap()
     SCTAB nTab, nTab1, nTab2;
 
     //
-    //  real size (without hidden rows/columns)
+    
     //
 
     SCSIZE nColCount = 0;
@@ -380,7 +380,7 @@ void ScChartPositioner::CreatePositionMap()
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
-            // nTab in ColKey to allow to have the same col/row in another tabe
+            
             sal_uLong nInsCol = (static_cast<sal_uLong>(nTab) << 16) | (bNoGlue ? 0 :
                     static_cast<sal_uLong>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
@@ -395,8 +395,8 @@ void ScChartPositioner::CreatePositionMap()
                 else
                     pCol = it->second;
 
-                // in other table a new ColKey already was created,
-                // the rows must be equal to be filled with Dummy
+                
+                
                 sal_uLong nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
                 for ( nRow = nRow1; nRow <= nRow2; nRow++, nInsRow++ )
                 {
@@ -407,17 +407,17 @@ void ScChartPositioner::CreatePositionMap()
                 }
             }
         }
-        // For NoGlue: associated tables will be rendered as ColGlue
+        
         nNoGlueRow += nRow2 - nRow1 + 1;
     }
 
-    // count of data
+    
     nColCount = static_cast< SCSIZE >( pCols->size());
     if ( !pCols->empty() )
     {
         RowMap* pCol = pCols->begin()->second;
         if ( bDummyUpperLeft )
-            (*pCol)[ 0 ] = NULL; // Dummy for labeling
+            (*pCol)[ 0 ] = NULL; 
         nRowCount = static_cast< SCSIZE >( pCol->size());
     }
     else
@@ -428,7 +428,7 @@ void ScChartPositioner::CreatePositionMap()
         nRowCount -= nRowAdd;
 
     if ( nColCount==0 || nRowCount==0 )
-    {   // create an entry without data
+    {   
         RowMap* pCol;
         if ( !pCols->empty() )
             pCol = pCols->begin()->second;
@@ -439,7 +439,7 @@ void ScChartPositioner::CreatePositionMap()
         }
         nColCount = 1;
         if ( !pCol->empty() )
-        {   // cannot be if nColCount==0 || nRowCount==0
+        {   
             ScAddress* pPos = pCol->begin()->second;
             if ( pPos )
             {
@@ -457,7 +457,7 @@ void ScChartPositioner::CreatePositionMap()
     else
     {
         if ( bNoGlue )
-        {   // fill gaps with Dummies, first column is master
+        {   
             RowMap* pFirstCol = pCols->begin()->second;
             sal_uLong nCount = pFirstCol->size();
             RowMap::const_iterator it1 = pFirstCol->begin();
@@ -465,7 +465,7 @@ void ScChartPositioner::CreatePositionMap()
             {
                 sal_uLong nKey = it1->first;
                 for (ColumnMap::const_iterator it2 = ++pCols->begin(); it2 != pCols->end(); ++it2 )
-                    it2->second->insert( RowMap::value_type( nKey, (ScAddress *)NULL )); // no data
+                    it2->second->insert( RowMap::value_type( nKey, (ScAddress *)NULL )); 
             }
         }
     }
@@ -473,9 +473,9 @@ void ScChartPositioner::CreatePositionMap()
     pPositionMap = new ScChartPositionMap( static_cast<SCCOL>(nColCount), static_cast<SCROW>(nRowCount),
         static_cast<SCCOL>(nColAdd), static_cast<SCROW>(nRowAdd), *pCols );
 
-    //  cleanup
+    
     for (ColumnMap::const_iterator it = pCols->begin(); it != pCols->end(); ++it )
-    {   // Only delete tables, not the ScAddress*!
+    {   
         delete it->second;
     }
     delete pCols;
@@ -497,12 +497,12 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
     RowMap* pCol1 = pColIter->second;
     RowMap::const_iterator pPos1Iter;
 
-    // row header
+    
     pPos1Iter = pCol1->begin();
     if ( nRowAdd )
         ++pPos1Iter;
     if ( nColAdd )
-    {   // independent
+    {   
         SCROW nRow = 0;
         for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
@@ -513,7 +513,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
             ppRowHeader[ nRow ] = NULL;
     }
     else
-    {   // copy
+    {   
         SCROW nRow = 0;
         for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
@@ -529,7 +529,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         ++pColIter;
     }
 
-    // data column by column and column-header
+    
     sal_uLong nIndex = 0;
     for ( SCCOL nCol = 0; nCol < nColCount; nCol++ )
     {
@@ -541,7 +541,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
             {
                 if ( nRowAdd )
                 {
-                    ppColHeader[ nCol ] = pPosIter->second; // independent
+                    ppColHeader[ nCol ] = pPosIter->second; 
                     ++pPosIter;
                 }
                 else

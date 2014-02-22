@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svsys.h>
@@ -27,36 +27,36 @@
 #endif
 
 
-// =======================================================================
 
-// maximum period
+
+
 #define MAX_SYSPERIOD     65533
 
-// =======================================================================
+
 
 void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
 {
     SalData* pSalData = GetSalData();
 
-    // Remember the time of the timer
+    
     pSalData->mnTimerMS = nMS;
     if ( !bMutex )
         pSalData->mnTimerOrgMS = nMS;
 
-    // duration has to fit into Window's sal_uInt16
+    
     if ( nMS > MAX_SYSPERIOD )
         nMS = MAX_SYSPERIOD;
 
-    // kill timer if it exists
+    
     if ( pSalData->mnTimerId )
         KillTimer( 0, pSalData->mnTimerId );
 
-    // Make a new timer with new period
+    
     pSalData->mnTimerId = SetTimer( 0, 0, (UINT)nMS, SalTimerProc );
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalTimer::~WinSalTimer()
 {
@@ -64,7 +64,7 @@ WinSalTimer::~WinSalTimer()
 
 void WinSalTimer::Start( sal_uLong nMS )
 {
-    // switch to main thread
+    
     SalData* pSalData = GetSalData();
     if ( pSalData->mpFirstInstance )
     {
@@ -81,7 +81,7 @@ void WinSalTimer::Stop()
 {
     SalData* pSalData = GetSalData();
 
-    // If we have a timer, than
+    
     if ( pSalData->mnTimerId )
     {
         KillTimer( 0, pSalData->mnTimerId );
@@ -90,7 +90,7 @@ void WinSalTimer::Stop()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 {
@@ -107,14 +107,14 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
         SalData* pSalData = GetSalData();
         ImplSVData* pSVData = ImplGetSVData();
 
-        // Test for MouseLeave
+        
         SalTestMouseLeave();
 
         bool bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
         if ( pSVData->mpSalTimer && ! bRecursive )
         {
-            // Try to aquire the mutex. If we don't get the mutex then we
-            // try this a short time later again.
+            
+            
             if ( ImplSalYieldMutexTryToAcquire() )
             {
                 bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
@@ -125,8 +125,8 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
                     pSalData->mbInTimerProc = FALSE;
                     ImplSalYieldMutexRelease();
 
-                    // Run the timer in the correct time, if we start this
-                    // with a small timeout, because we don't get the mutex
+                    
+                    
                     if ( pSalData->mnTimerId &&
                         (pSalData->mnTimerMS != pSalData->mnTimerOrgMS) )
                         ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );

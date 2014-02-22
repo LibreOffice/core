@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,7 +25,7 @@
 #include <algorithm>
 #include <com/sun/star/script/ModuleType.hpp>
 
-// nInc is the increment size of the buffers
+
 
 SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
          : rMod( r ), aCode( p, nInc )
@@ -42,7 +42,7 @@ sal_uInt32 SbiCodeGen::GetPC()
     return aCode.GetSize();
 }
 
-// memorize the statement
+
 
 void SbiCodeGen::Statement()
 {
@@ -54,12 +54,12 @@ void SbiCodeGen::Statement()
     nLine = pParser->GetLine();
     nCol  = pParser->GetCol1();
 
-    // #29955 Store the information of the for-loop-layer
-    // in the uppper Byte of the column
+    
+    
     nCol = (nCol & 0xff) + 0x100 * nForLevel;
 }
 
-// Mark the beginning of a statement
+
 
 void SbiCodeGen::GenStmnt()
 {
@@ -73,8 +73,8 @@ void SbiCodeGen::GenStmnt()
     }
 }
 
-// The Gen-Routines return the offset of the 1. operand,
-// so that jumps can sink their backchain there.
+
+
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
@@ -123,7 +123,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
     return n;
 }
 
-// Storing of the created image in the module
+
 
 void SbiCodeGen::Save()
 {
@@ -132,9 +132,9 @@ void SbiCodeGen::Save()
 
     SbiImage* p = new SbiImage;
     rMod.StartDefinitions();
-    // OPTION BASE-Value:
+    
     p->nDimBase = pParser->nBase;
-    // OPTION take over the EXPLICIT-Flag
+    
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
 
@@ -166,7 +166,7 @@ void SbiCodeGen::Save()
     else
     {
         GetSbData()->pClassFac->RemoveClassModule( &rMod );
-        // Only a ClassModule can revert to Normal
+        
         if ( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
         {
             rMod.mnType = com::sun::star::script::ModuleType::NORMAL;
@@ -174,12 +174,12 @@ void SbiCodeGen::Save()
         rMod.bIsProxyModule = false;
     }
 
-    // GlobalCode-Flag
+    
     if( pParser->HasGlobalCode() )
     {
         p->SetFlag( SBIMG_INITCODE );
     }
-    // Die Entrypoints:
+    
     for( SbiSymDef* pDef = pParser->aPublics.First(); pDef;
          pDef = pParser->aPublics.Next() )
     {
@@ -197,7 +197,7 @@ void SbiCodeGen::Save()
                 OUString aPropPrefix;
                 if( nPropPrefixFound == 0 )
                 {
-                    aPropPrefix = aProcName.copy( 0, 13 );      // 13 == Len( "Property ?et " )
+                    aPropPrefix = aProcName.copy( 0, 13 );      
                     aPureProcName = aProcName.copy( 13 );
                 }
                 for( int i = 0 ; i < nIfaceCount ; i++ )
@@ -235,8 +235,8 @@ void SbiCodeGen::Save()
                         break;
                     case PROPERTY_MODE_LET:
                     {
-                        // type == type of first parameter
-                        ePropType = SbxVARIANT;     // Default
+                        
+                        ePropType = SbxVARIANT;     
                         SbiSymPool* pPool = &pProc->GetParams();
                         if( pPool->GetSize() > 1 )
                         {
@@ -276,7 +276,7 @@ void SbiCodeGen::Save()
                     {
                         pMeth->SetFlag( SBX_PRIVATE );
                     }
-                    // Declare? -> Hidden
+                    
                     if( !pProc->GetLib().isEmpty())
                     {
                         pMeth->SetFlag( SBX_HIDDEN );
@@ -284,22 +284,22 @@ void SbiCodeGen::Save()
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
                     pMeth->nLine2 = pProc->GetLine2();
-                    // The parameter:
+                    
                     SbxInfo* pInfo = pMeth->GetInfo();
                     OUString aHelpFile, aComment;
                     sal_uIntPtr nHelpId = 0;
                     if( pInfo )
                     {
-                        // Rescue the additional data
+                        
                         aHelpFile = pInfo->GetHelpFile();
                         aComment  = pInfo->GetComment();
                         nHelpId   = pInfo->GetHelpId();
                     }
-                    // And reestablish the parameter list
+                    
                     pInfo = new SbxInfo( aHelpFile, nHelpId );
                     pInfo->SetComment( aComment );
                     SbiSymPool* pPool = &pProc->GetParams();
-                    // The first element is always the value of the function!
+                    
                     for( sal_uInt16 i = 1; i < pPool->GetSize(); i++ )
                     {
                         SbiSymDef* pPar = pPool->Get( i );
@@ -312,7 +312,7 @@ void SbiCodeGen::Save()
                         {
                             t = (SbxDataType) ( t | SbxARRAY );
                         }
-                        // #33677 hand-over an Optional-Info
+                        
                         sal_uInt16 nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                         {
@@ -342,13 +342,13 @@ void SbiCodeGen::Save()
                     }
                     pMeth->SetInfo( pInfo );
                 }
-            }   // for( iPass...
+            }   
         }
     }
-    // The code
+    
     p->AddCode( aCode.GetBuffer(), aCode.GetSize() );
 
-    // The global StringPool. 0 is not occupied.
+    
     SbiStringPool* pPool = &pParser->aGblStrings;
     sal_uInt16 nSize = pPool->GetSize();
     p->MakeStrings( nSize );
@@ -357,13 +357,13 @@ void SbiCodeGen::Save()
     {
         p->AddString( pPool->Find( i ) );
     }
-    // Insert types
+    
     sal_uInt16 nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
     {
          p->AddType((SbxObject *)pParser->rTypeArray->Get(i));
     }
-    // Insert enum objects
+    
     nCount = pParser->rEnumArray->Count();
     for (i = 0; i < nCount; i++)
     {
@@ -529,9 +529,9 @@ public:
     }
     virtual bool processParams(){ return true; }
     virtual void end() {}
-    // yeuch, careful here, you can only call
-    // GetBuffer on the returned SbiBuffer once, also
-    // you (as the caller) get to own the memory
+    
+    
+    
     SbiBuffer& buffer()
     {
         return m_ConvertedBuf;

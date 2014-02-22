@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterUIPainter.hxx"
@@ -39,12 +39,12 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
 {
     if (PresenterGeometryHelper::AreRectanglesDisjoint(rRepaintBox, rBoundingBox))
     {
-        // The bounding box lies completely outside the repaint area.
-        // Nothing has to be repainted.
+        
+        
         return;
     }
 
-    // Get bitmap sizes.
+    
     geometry::IntegerSize2D aLeftBitmapSize;
     if (rxLeftBitmap.is())
         aLeftBitmapSize = rxLeftBitmap->getSize();
@@ -55,7 +55,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
     if (rxRightBitmap.is())
         aRightBitmapSize = rxRightBitmap->getSize();
 
-    // Prepare painting.
+    
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL);
@@ -66,7 +66,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
-    // Paint the left bitmap once.
+    
     if (rxLeftBitmap.is())
     {
         const awt::Rectangle aLeftBoundingBox (
@@ -84,7 +84,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
         rxCanvas->drawBitmap(rxLeftBitmap, aViewState, aRenderState);
     }
 
-    // Paint the right bitmap once.
+    
     if (rxRightBitmap.is())
     {
         const awt::Rectangle aRightBoundingBox (
@@ -103,7 +103,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
         rxCanvas->drawBitmap(rxRightBitmap, aViewState, aRenderState);
     }
 
-    // Paint the center bitmap to fill the remaining space.
+    
     if (rxRepeatableCenterBitmap.is())
     {
         const awt::Rectangle aCenterBoundingBox (
@@ -141,12 +141,12 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
 {
     if (PresenterGeometryHelper::AreRectanglesDisjoint(rRepaintBox, rBoundingBox))
     {
-        // The bounding box lies completely outside the repaint area.
-        // Nothing has to be repainted.
+        
+        
         return;
     }
 
-    // Get bitmap sizes.
+    
     geometry::IntegerSize2D aTopBitmapSize;
     if (rxTopBitmap.is())
         aTopBitmapSize = rxTopBitmap->getSize();
@@ -157,7 +157,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     if (rxBottomBitmap.is())
         aBottomBitmapSize = rxBottomBitmap->getSize();
 
-    // Prepare painting.
+    
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL);
@@ -168,7 +168,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
-    // Paint the top bitmap once.
+    
     if (rxTopBitmap.is())
     {
         const awt::Rectangle aTopBoundingBox (
@@ -186,7 +186,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
         rxCanvas->drawBitmap(rxTopBitmap, aViewState, aRenderState);
     }
 
-    // Paint the bottom bitmap once.
+    
     if (rxBottomBitmap.is())
     {
         const sal_Int32 nBBoxHeight (::std::min(aBottomBitmapSize.Height, rBoundingBox.Height));
@@ -206,7 +206,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
         rxCanvas->drawBitmap(rxBottomBitmap, aViewState, aRenderState);
     }
 
-    // Paint the center bitmap to fill the remaining space.
+    
     if (rxRepeatableCenterBitmap.is())
     {
         const awt::Rectangle aCenterBoundingBox (
@@ -234,6 +234,6 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     }
 }
 
-} } // end of namespace sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

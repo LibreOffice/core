@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 namespace comphelper
 {
 
-// ----------------------------------------------------------
+
 OSimpleLogRing::OSimpleLogRing()
 : m_aMessages( SIMPLELOGRING_SIZE )
 , m_bInitialized( false )
@@ -40,12 +40,12 @@ OSimpleLogRing::OSimpleLogRing()
 {
 }
 
-// ----------------------------------------------------------
+
 OSimpleLogRing::~OSimpleLogRing()
 {
 }
 
-// ----------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
 {
     uno::Sequence< OUString > aResult( 1 );
@@ -53,32 +53,32 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_stat
     return aResult;
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
 {
     return OUString( "com.sun.star.comp.logging.SimpleLogRing" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OSimpleLogRing::getSingletonName_static()
 {
     return OUString( "com.sun.star.logging.DocumentIOLogRing" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OSimpleLogRing::getServiceName_static()
 {
     return OUString( "com.sun.star.logging.SimpleLogRing" );
 }
 
-// ----------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >& )
 {
     return static_cast< cppu::OWeakObject* >( new OSimpleLogRing );
 }
 
-// XSimpleLogRing
-// ----------------------------------------------------------
+
+
 void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -90,11 +90,11 @@ void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::
         m_bFull = true;
     }
 
-    // if used once then default initialized
+    
     m_bInitialized = true;
 }
 
-// ----------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -106,14 +106,14 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno:
     for ( sal_Int32 nInd = 0; nInd < nResLen; nInd++ )
         aResult[nInd] = m_aMessages[ ( nStart + nInd ) % m_aMessages.getLength() ];
 
-    // if used once then default initialized
+    
     m_bInitialized = true;
 
     return aResult;
 }
 
-// XInitialization
-// ----------------------------------------------------------
+
+
 void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -121,7 +121,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
         throw frame::DoubleInitializationException();
 
     if ( !m_refCount )
-        throw uno::RuntimeException(); // the object must be refcounted already!
+        throw uno::RuntimeException(); 
 
     if (aArguments.hasElements())
     {
@@ -138,7 +138,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
     m_bInitialized = true;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_static();
@@ -154,7 +154,7 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() th
     return getSupportedServiceNames_static();
 }
 
-} // namespace comphelper
+} 
 
 void createRegistryInfo_OSimpleLogRing()
 {

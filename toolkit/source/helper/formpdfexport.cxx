@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,10 +40,10 @@
 #include <functional>
 #include <algorithm>
 
-//........................................................................
+
 namespace toolkitform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -58,7 +58,7 @@ namespace toolkitform
 
     namespace
     {
-        //--------------------------------------------------------------------
+        
         /** determines the FormComponentType of a form control
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel ) SAL_THROW(( Exception ))
@@ -77,7 +77,7 @@ namespace toolkitform
             return nControlType;
         }
 
-        //--------------------------------------------------------------------
+        
         /** (default-)creates a PDF widget according to a given FormComponentType
         */
         ::vcl::PDFWriter::AnyWidget* createDefaultWidget( sal_Int16 _nFormComponentType )
@@ -107,7 +107,7 @@ namespace toolkitform
             return NULL;
         }
 
-        //--------------------------------------------------------------------
+        
         /** determines a unique number for the radio group which the given radio
             button model belongs to
 
@@ -124,15 +124,15 @@ namespace toolkitform
         {
             OSL_ENSURE( classifyFormControl( _rxRadioModel ) == FormComponentType::RADIOBUTTON,
                 "determineRadioGroupId: this *is* no radio button model!" );
-            // The fact that radio button groups need to be unique within the complete
-            // host document makes it somewhat difficult ...
-            // Problem is that two form radio buttons belong to the same group if
-            // - they have the same parent
-            // - AND they have the same name
-            // This implies that we need some knowledge about (potentially) *all* radio button
-            // groups in the document.
+            
+            
+            
+            
+            
+            
+            
 
-            // get the root-level container
+            
             Reference< XChild > xChild( _rxRadioModel, UNO_QUERY );
             Reference< XForm > xParentForm( xChild.is() ? xChild->getParent() : Reference< XInterface >(), UNO_QUERY );
             OSL_ENSURE( xParentForm.is(), "determineRadioGroupId: no parent form -> group id!" );
@@ -149,7 +149,7 @@ namespace toolkitform
             if ( !xRoot.is() )
                 return -1;
 
-            // count the leafs in the hierarchy, until we encounter radio button
+            
             ::std::vector< Reference< XIndexAccess > > aAncestors;
             ::std::vector< sal_Int32 >                 aPath;
 
@@ -168,13 +168,13 @@ namespace toolkitform
                     return -1;
 
                 if ( nStartWithChild == 0 )
-                {   // we encounter this container the first time. In particular, we did not
-                    // just step up
+                {   
+                    
                     nGroupsEncountered += xElementNameAccess->getElementNames().getLength();
-                        // this is way too much: Not all of the elements in the current container
-                        // may form groups, especially if they're forms. But anyway, this number is
-                        // sufficient for our purpose. Finally, the container contains *at most*
-                        // that much groups
+                        
+                        
+                        
+                        
                 }
 
                 sal_Int32 nCount = xCurrentContainer->getCount();
@@ -191,18 +191,18 @@ namespace toolkitform
                     Reference< XIndexAccess > xNewContainer( xElement, UNO_QUERY );
                     if ( xNewContainer.is() )
                     {
-                        // step down the hierarchy
+                        
                         aAncestors.push_back( xCurrentContainer );
                         xCurrentContainer = xNewContainer;
                         aPath.push_back( i );
                         nStartWithChild = 0;
                         break;
-                            // out of the inner loop, but continue with the outer loop
+                            
                     }
 
                     if ( xElement.get() == xNormalizedLookup.get() )
                     {
-                        // look up the name of the radio group in the list of all element names
+                        
                         Sequence< OUString > aElementNames( xElementNameAccess->getElementNames() );
                         const OUString* pElementNames = aElementNames.getConstArray();
                         const OUString* pElementNamesEnd = pElementNames + aElementNames.getLength();
@@ -225,8 +225,8 @@ namespace toolkitform
 
                 if ( !( i < nCount ) )
                 {
-                    // the loop terminated because there were no more elements
-                    // -> step up, if possible
+                    
+                    
                     if ( aAncestors.empty() )
                         break;
 
@@ -238,7 +238,7 @@ namespace toolkitform
             return -1;
         }
 
-        //--------------------------------------------------------------------
+        
         /** copies a StringItemList to a PDF widget's list
         */
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
@@ -251,7 +251,7 @@ namespace toolkitform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     /** creates a PDF compatible control descriptor for the given control
     */
     void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
@@ -268,20 +268,20 @@ namespace toolkitform
             sal_Int16 nControlType = classifyFormControl( xModelProps );
             _rpDescriptor.reset( createDefaultWidget( nControlType ) );
             if ( !_rpDescriptor.get() )
-                // no PDF widget available for this
+                
                 return;
 
             Reference< XPropertySetInfo > xPSI( xModelProps->getPropertySetInfo() );
             Reference< XServiceInfo > xSI( xModelProps, UNO_QUERY );
             OSL_ENSURE( xSI.is(), "describePDFControl: no service info!" );
-                // if we survived classifyFormControl, then it's a real form control, and they all have
-                // service infos
+                
+                
 
-            // ================================
-            // set the common widget properties
+            
+            
 
-            // --------------------------------
-            // Name, Description, Text
+            
+            
             OSL_VERIFY( xModelProps->getPropertyValue( OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
             static const OUString FM_PROP_HELPTEXT("HelpText");
             OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= _rpDescriptor->Description );
@@ -295,14 +295,14 @@ namespace toolkitform
             if ( aText.hasValue() )
                 OSL_VERIFY( aText >>= _rpDescriptor->Text );
 
-            // --------------------------------
-            // readonly
+            
+            
             static const OUString FM_PROP_READONLY("ReadOnly");
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= _rpDescriptor->ReadOnly );
 
-            // --------------------------------
-            // border
+            
+            
             {
                 static const OUString FM_PROP_BORDER("Border");
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
@@ -323,8 +323,8 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
-            // background color
+            
+            
             static const OUString FM_PROP_BACKGROUNDCOLOR("BackgroundColor");
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
@@ -334,8 +334,8 @@ namespace toolkitform
                 _rpDescriptor->BackgroundColor = Color( nBackColor );
             }
 
-            // --------------------------------
-            // text color
+            
+            
             static const OUString FM_PROP_TEXTCOLOR("TextColor");
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
@@ -344,13 +344,13 @@ namespace toolkitform
                 _rpDescriptor->TextColor = Color( nTextColor );
             }
 
-            // --------------------------------
-            // text style
+            
+            
             _rpDescriptor->TextStyle = 0;
-            // ............................
-            // multi line and word break
-            // The MultiLine property of the control is mapped to both the "MULTILINE" and
-            // "WORDBREAK" style flags
+            
+            
+            
+            
             static const OUString FM_PROP_MULTILINE("MultiLine");
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
@@ -359,15 +359,15 @@ namespace toolkitform
                 if ( bMultiLine )
                     _rpDescriptor->TextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
             }
-            // ............................
-            // horizontal alignment
+            
+            
             static const OUString FM_PROP_ALIGN("Align");
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
             {
                 sal_Int16 nAlign = awt::TextAlign::LEFT;
                 xModelProps->getPropertyValue( FM_PROP_ALIGN ) >>= nAlign;
-                // TODO: when the property is VOID - are there situations/UIs where this
-                // means something else than LEFT?
+                
+                
                 switch ( nAlign )
                 {
                 case awt::TextAlign::LEFT:  _rpDescriptor->TextStyle |= TEXT_DRAW_LEFT; break;
@@ -377,8 +377,8 @@ namespace toolkitform
                     OSL_FAIL( "describePDFControl: invalid text align!" );
                 }
             }
-            // ............................
-            // vertical alignment
+            
+            
             {
                 OUString sVertAlignPropertyName( "VerticalAlign" );
                 if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
@@ -396,7 +396,7 @@ namespace toolkitform
                 }
             }
 
-            // font
+            
             static const OUString FM_PROP_FONT("FontDescriptor");
             if ( xPSI->hasPropertyByName( FM_PROP_FONT ) )
             {
@@ -405,7 +405,7 @@ namespace toolkitform
                 _rpDescriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, Font() );
             }
 
-            // tab order
+            
             OUString aTabIndexString( "TabIndex" );
             if ( xPSI->hasPropertyByName( aTabIndexString ) )
             {
@@ -414,18 +414,18 @@ namespace toolkitform
                 _rpDescriptor->TabOrder = nIndex;
             }
 
-            // ================================
-            // special widget properties
-            // --------------------------------
-            // edits
+            
+            
+            
+            
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::Edit )
             {
                 ::vcl::PDFWriter::EditWidget* pEditWidget = static_cast< ::vcl::PDFWriter::EditWidget* >( _rpDescriptor.get() );
-                // ............................
-                // multiline (already flagged in the TextStyle)
+                
+                
                 pEditWidget->MultiLine = ( _rpDescriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
-                // ............................
-                // password input
+                
+                
                 OUString sEchoCharPropName( "EchoChar" );
                 if ( xPSI->hasPropertyByName( sEchoCharPropName ) )
                 {
@@ -433,27 +433,27 @@ namespace toolkitform
                     if ( ( xModelProps->getPropertyValue( sEchoCharPropName ) >>= nEchoChar ) && ( nEchoChar != 0 ) )
                         pEditWidget->Password = true;
                 }
-                // ............................
-                // file select
+                
+                
                 static const OUString FM_SUN_COMPONENT_FILECONTROL("com.sun.star.form.component.FileControl");
                 if ( xSI->supportsService( FM_SUN_COMPONENT_FILECONTROL ) )
                     pEditWidget->FileSelect = true;
-                // ............................
-                // maximum text length
+                
+                
                 static const OUString FM_PROP_MAXTEXTLEN("MaxTextLen");
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
                 {
                     sal_Int16 nMaxTextLength = 0;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_MAXTEXTLEN ) >>= nMaxTextLength );
                     if ( nMaxTextLength <= 0 )
-                        // "-1" has a special meaning for database-bound controls
+                        
                         nMaxTextLength = 0;
                     pEditWidget->MaxLen = nMaxTextLength;
                 }
             }
 
-            // --------------------------------
-            // buttons
+            
+            
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::PushButton )
             {
                 ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( _rpDescriptor.get() );
@@ -462,7 +462,7 @@ namespace toolkitform
                 static const OUString FM_PROP_TARGET_URL("TargetURL");
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
-                    // if a button is a submit button, then it uses the URL at it's parent form
+                    
                     Reference< XChild > xChild( xModelProps, UNO_QUERY );
                     Reference < XPropertySet > xParentProps;
                     if ( xChild.is() )
@@ -487,10 +487,10 @@ namespace toolkitform
                     const bool bDocumentLocalTarget = sURL.startsWith("#");
                     if ( bDocumentLocalTarget )
                     {
-                        // Register the destination for for future handling ...
+                        
                         pButtonWidget->Dest = i_pdfExportData.RegisterDest();
 
-                        // and put it into the bookmarks, to ensure the future handling really happens
+                        
                         ::std::vector< ::vcl::PDFExtOutDevBookmarkEntry >& rBookmarks( i_pdfExportData.GetBookmarks() );
                         ::vcl::PDFExtOutDevBookmarkEntry aBookmark;
                         aBookmark.nDestId = pButtonWidget->Dest;
@@ -503,21 +503,21 @@ namespace toolkitform
                     pButtonWidget->Submit = false;
                 }
 
-               // TODO:
-                // In PDF files, buttons are either reset, url or submit buttons. So if we have a simple PUSH button
-                // in a document, then this means that we do not export a SubmitToURL, which means that in PDF,
-                // the button is used as reset button.
-                // Is this desired? If no, we would have to reset _rpDescriptor to NULL here, in case eButtonType
-                // != FormButtonType_SUBMIT && != FormButtonType_RESET
+               
+                
+                
+                
+                
+                
 
-                // the PDF exporter defaults the text style, if 0. To prevent this, we have to transfer the UNO
-                // defaults to the PDF widget
+                
+                
                 if ( !pButtonWidget->TextStyle )
                     pButtonWidget->TextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
             }
 
-            // --------------------------------
-            // check boxes
+            
+            
             static const OUString FM_PROP_STATE("State");
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::CheckBox )
             {
@@ -527,8 +527,8 @@ namespace toolkitform
                 pCheckBoxWidget->Checked = ( nState != 0 );
             }
 
-            // --------------------------------
-            // radio buttons
+            
+            
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::RadioButton )
             {
                 ::vcl::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< ::vcl::PDFWriter::RadioButtonWidget* >( _rpDescriptor.get() );
@@ -547,26 +547,26 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
-            // list boxes
+            
+            
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ListBox )
             {
                 ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( _rpDescriptor.get() );
-                // ............................
-                // drop down
+                
+                
                 static const OUString FM_PROP_DROPDOWN("Dropdown");
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
-                // ............................
-                // multi selection
+                
+                
                 OSL_VERIFY( xModelProps->getPropertyValue("MultiSelection") >>= pListWidget->MultiSelect );
-                // ............................
-                // entries
+                
+                
                 getStringItemVector( xModelProps, pListWidget->Entries );
-                // since we explicitly list the entries in the order in which they appear, they should not be
-                // resorted by the PDF viewer
+                
+                
                 pListWidget->Sort = false;
 
-                // get selected items
+                
                 Sequence< sal_Int16 > aSelectIndices;
                 OSL_VERIFY( xModelProps->getPropertyValue("SelectedItems") >>= aSelectIndices );
                 if( aSelectIndices.getLength() > 0 )
@@ -581,23 +581,23 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
-            // combo boxes
+            
+            
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ComboBox )
             {
                 ::vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< ::vcl::PDFWriter::ComboBoxWidget* >( _rpDescriptor.get() );
-                // ............................
-                // entries
+                
+                
                 getStringItemVector( xModelProps, pComboWidget->Entries );
-                // same reasoning as above
+                
                 pComboWidget->Sort = false;
             }
 
-            // ================================
-            // some post-processing
-            // --------------------------------
-            // text line ends
-            // some controls may (always or dependent on other settings) return UNIX line ends
+            
+            
+            
+            
+            
             _rpDescriptor->Text = convertLineEnd(_rpDescriptor->Text, LINEEND_CRLF);
         }
         catch( const Exception& )
@@ -606,8 +606,8 @@ namespace toolkitform
         }
     }
 
-//........................................................................
-} // namespace toolkitform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

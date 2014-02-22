@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/anytostring.hxx"
@@ -36,7 +36,7 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 
-// CT_SlideLayout
+
 
 LayoutFragmentHandler::LayoutFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr )
     throw()
@@ -54,9 +54,9 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
 {
     switch( aElementToken )
     {
-        case PPT_TOKEN( sldLayout ):        // CT_SlideLayout
+        case PPT_TOKEN( sldLayout ):        
         {
-            mpSlidePersistPtr->setLayoutValueToken( rAttribs.getToken( XML_type, 0 ) ); // CT_SlideLayoutType
+            mpSlidePersistPtr->setLayoutValueToken( rAttribs.getToken( XML_type, 0 ) ); 
 
             OptValue< bool > aShowMasterShapes = rAttribs.getBool( XML_showMasterSp );
             if( aShowMasterShapes.has() && !aShowMasterShapes.get() ) {
@@ -64,7 +64,7 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
             }
         break;
         }
-        case PPT_TOKEN( hf ):               // CT_HeaderFooter
+        case PPT_TOKEN( hf ):               
             return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );
         default:
             return SlideFragmentHandler::onCreateContext( aElementToken, rAttribs );

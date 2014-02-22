@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -81,13 +81,13 @@ using namespace com::sun::star::sdbc;
 
 
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// Content Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
@@ -119,18 +119,18 @@ FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
 
 
 
-//=========================================================================
+
 
 FTPContent::~FTPContent()
 {
 }
 
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_6( FTPContent,
                    XTypeProvider,
@@ -140,11 +140,11 @@ XINTERFACE_IMPL_6( FTPContent,
                    XContentCreator,
                    XChild);
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_6( FTPContent,
                           XTypeProvider,
@@ -154,13 +154,13 @@ XTYPEPROVIDER_IMPL_6( FTPContent,
                       XContentCreator,
                       XChild);
 
-//=========================================================================
-//
-// XServiceInfo methods.
-//
-//=========================================================================
 
-// needed, because the service shall not be creatable!!
+//
+
+//
+
+
+
 #undef XSERVICEINFO_CREATE_INSTANCE_IMPL
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )
 
@@ -170,13 +170,13 @@ XSERVICEINFO_IMPL_1( FTPContent,
 
 
 
-//=========================================================================
-//
-// XContent methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 OUString SAL_CALL FTPContent::getContentType()
     throw( RuntimeException )
 {
@@ -184,14 +184,14 @@ OUString SAL_CALL FTPContent::getContentType()
 }
 
 
-//=========================================================================
+
 //
-// XCommandProcessor methods.
+
 //
-//=========================================================================
 
 
-//virtual
+
+
 void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
     throw( RuntimeException )
 {
@@ -248,11 +248,11 @@ public:
 
 
 
-//=========================================================================
+
 //
-// XCommandProcessor methods.
+
 //
-//=========================================================================
+
 
 enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
@@ -264,7 +264,7 @@ enum ACTION { NOACTION,
               THROWGENERAL };
 
 
-// virtual
+
 Any SAL_CALL FTPContent::execute(
     const Command& aCommand,
     sal_Int32 /*CommandId*/,
@@ -283,7 +283,7 @@ Any SAL_CALL FTPContent::execute(
     while(true)
         try {
             if(action == THROWAUTHENTICATIONREQUEST) {
-                // try to get a continuation first
+                
                 OUString aRealm,aPassword,aAccount;
                 m_pFCP->forHost(m_aFTPURL.host(),
                                 m_aFTPURL.port(),
@@ -293,7 +293,7 @@ Any SAL_CALL FTPContent::execute(
                 rtl::Reference<ucbhelper::SimpleAuthenticationRequest>
                     p( new ucbhelper::SimpleAuthenticationRequest(
                         m_aFTPURL.ident(false, false),
-                        m_aFTPURL.host(),      // ServerName
+                        m_aFTPURL.host(),      
                         ucbhelper::SimpleAuthenticationRequest::ENTITY_NA,
                         aRealm,
                         ucbhelper::SimpleAuthenticationRequest
@@ -331,20 +331,20 @@ Any SAL_CALL FTPContent::execute(
                 aRet = p->getRequest();
             }
 
-//              if(aCommand.Name.equalsAscii(
-//                  "getPropertyValues") &&
-//                 action != NOACTION) {
-//                  // It is not allowed to throw if
-//                  // command is getPropertyValues
-//                  rtl::Reference<ucbhelper::PropertyValueSet> xRow =
-//                      new ucbhelper::PropertyValueSet(m_xSMgr);
-//                  Sequence<Property> Properties;
-//                  aCommand.Argument >>= Properties;
-//                  for(int i = 0; i < Properties.getLength(); ++i)
-//                      xRow->appendVoid(Properties[i]);
-//                  aRet <<= Reference<XRow>(xRow.get());
-//                  return aRet;
-//              }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             switch (action)
             {
@@ -444,11 +444,11 @@ Any SAL_CALL FTPContent::execute(
                 aRet <<= setPropertyValues(propertyValues);
             }
             else if(aCommand.Name.equalsAscii("getCommandInfo")) {
-                // Note: Implemented by base class.
+                
                 aRet <<= getCommandInfo(Environment);
             }
             else if(aCommand.Name.equalsAscii("getPropertySetInfo")) {
-                // Note: Implemented by base class.
+                
                 aRet <<= getPropertySetInfo(Environment);
             }
             else if(aCommand.Name.equalsAscii( "insert" ))
@@ -479,7 +479,7 @@ Any SAL_CALL FTPContent::execute(
                 }
 
                 if(aOpenCommand.Mode == OpenMode::DOCUMENT) {
-                    // Open as a document
+                    
                     Reference<XActiveDataSink>
                         xActiveDataSink(aOpenCommand.Sink,UNO_QUERY);
                     Reference< XOutputStream >
@@ -493,7 +493,7 @@ Any SAL_CALL FTPContent::execute(
                         Reference<XInputStream> xStream(
                             new ucbhelper::FdInputStream(m_aFTPURL.open()));
                         Sequence<sal_Int8> byte_seq(4096);
-                        sal_Int32 n = 1000; // value does not matter here
+                        sal_Int32 n = 1000; 
                         for (;;) {
                             n = xStream->readBytes(byte_seq,4096);
                             if (n == 0) {
@@ -556,7 +556,7 @@ Any SAL_CALL FTPContent::execute(
                         OpenMode::DOCUMENT_SHARE_DENY_NONE ||
                         aOpenCommand.Mode ==
                         OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
-                    // Unsupported OpenMode
+                    
                     aRet <<= UnsupportedOpenModeException(
                         OUString(),
                         static_cast< cppu::OWeakObject * >(this),
@@ -581,7 +581,7 @@ Any SAL_CALL FTPContent::execute(
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1)),
                         Environment);
-                    // Unreachable
+                    
                 }
                 aRet <<= createNewContent(aArg);
             } else {
@@ -609,7 +609,7 @@ Any SAL_CALL FTPContent::execute(
             else if(e.code() == CURLE_FTP_COULDNT_RETR_FILE)
                 action = THROWNOFILE;
             else
-                // nothing known about the cause of the error
+                
                 action = THROWGENERAL;
         }
 }
@@ -625,7 +625,7 @@ FTPContent::queryCreatableContentsInfo(  )
     return queryCreatableContentsInfo_Static();
 }
 
-// static
+
 Sequence<ContentInfo >
 FTPContent::queryCreatableContentsInfo_Static(  )
     throw (RuntimeException)
@@ -644,7 +644,7 @@ FTPContent::queryCreatableContentsInfo_Static(  )
         | PropertyAttribute::BOUND );
     seq[0].Properties = props;
 
-    // folder
+    
     seq[1].Type       = FTP_FOLDER;
     seq[1].Attributes = ContentInfoAttribute::KIND_FOLDER;
     seq[1].Properties = props;
@@ -702,7 +702,7 @@ public:
         : m_xInputStream(xInputStream) { }
     virtual ~InsertData() {}
 
-    // returns the number of bytes actually read
+    
     virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested);
 
 private:
@@ -759,7 +759,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
     } catch(const curl_exception& e) {
         if(e.code() == FILE_EXIST_DURING_INSERT ||
            e.code() == FOLDER_EXIST_DURING_INSERT) {
-            // Deprecated, not used anymore:
+            
             NameClashException excep;
             excep.Name = m_aFTPURL.child();
             Any aAny;
@@ -767,13 +767,13 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             ucbhelper::cancelCommandExecution(aAny,Env);
         } else if(e.code() == FOLDER_MIGHT_EXIST_DURING_INSERT ||
                   e.code() == FILE_MIGHT_EXIST_DURING_INSERT) {
-            // Interact
+            
             Reference<XInteractionHandler> xInt;
             if(Env.is())
                 xInt = Env->getInteractionHandler();
 
             UnsupportedNameClashException excep;
-            excep.NameClash = 0; //NameClash::ERROR;
+            excep.NameClash = 0; 
 
             if(!xInt.is()) {
                 Any aAny;
@@ -796,8 +796,8 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             throw;
     }
 
-    // May not be reached, because both mkdir and insert can throw curl-
-    // exceptions
+    
+    
     m_bInserted = false;
     inserted();
 }
@@ -893,8 +893,8 @@ Sequence<Any> FTPContent::setPropertyValues(
                     evt[0].NewValue <<= Title;
                 } catch(const curl_exception&) {
                     InteractiveIOException excep;
-                    // any better possibility here?
-                    // ( the error code is always CURLE_FTP_QUOTE_ERROR )
+                    
+                    
                     excep.Code = IOErrorCode_ACCESS_DENIED;
                     ret[i] <<= excep;
                 }
@@ -902,15 +902,15 @@ Sequence<Any> FTPContent::setPropertyValues(
             Sequence<Property> props =
                 getProperties(Reference<XCommandEnvironment>(0));
 
-            // either unknown or read-only
+            
             ret[i] <<= UnknownPropertyException();
             for(sal_Int32 j = 0; j < props.getLength(); ++j)
                 if(props[j].Name == seqPropVal[i].Name) {
                     ret[i] <<= IllegalAccessException(
                         OUString( "Property is read-only!"),
-                            //props[j].Attributes & PropertyAttribute::READONLY
-                            //    ? "Property is read-only!"
-                            //    : "Access denied!"),
+                            
+                            
+                            
                         static_cast< cppu::OWeakObject * >( this ));
                     break;
                 }
@@ -918,7 +918,7 @@ Sequence<Any> FTPContent::setPropertyValues(
     }
 
     if(evt.getLength()) {
-        // title has changed
+        
         notifyPropertiesChange(evt);
         exchange(new FTPContentIdentifier(m_aFTPURL.ident(false,false)));
     }

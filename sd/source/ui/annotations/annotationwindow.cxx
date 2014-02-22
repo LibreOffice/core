@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -167,7 +167,7 @@ void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
         long aOldHeight = mpAnnotationWindow->GetPostItTextHeight();
         bool bDone = false;
 
-        /// HACK: need to switch off processing of Undo/Redo in Outliner
+        
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
             bool bIsProtected = mpAnnotationWindow->IsProtected();
@@ -200,7 +200,7 @@ void AnnotationTextWindow::MouseButtonDown( const MouseEvent& rMEvt )
     GrabFocus();
     if ( mpOutlinerView )
         mpOutlinerView->MouseButtonDown( rMEvt );
-    // todo mpOutlinerView->DocView()->GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    
 }
 
 void AnnotationTextWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -296,19 +296,19 @@ AnnotationWindow::~AnnotationWindow()
 
 void AnnotationWindow::InitControls()
 {
-    // actual window which holds the user text
+    
     mpTextWindow = new AnnotationTextWindow(this, WB_NODIALOGCONTROL);
     mpTextWindow->SetPointer(Pointer(POINTER_TEXT));
 
-    // window control for author and date
+    
     mpMeta = new MultiLineEdit(this,0);
     mpMeta->SetReadOnly();
     mpMeta->SetRightToLeft(Application::GetSettings().GetLayoutRTL());
     mpMeta->AlwaysDisableInput(true);
     mpMeta->SetCallHandlersOnInputDisabled(true);
 
-    // we should leave this setting alone, but for this we need a better layout algo
-    // with variable meta size height
+    
+    
     AllSettings aSettings = mpMeta->GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
     Font aFont = aStyleSettings.GetFieldFont();
@@ -334,7 +334,7 @@ void AnnotationWindow::InitControls()
     mpTextWindow->SetOutlinerView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
-    //create Scrollbars
+    
     mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
@@ -394,7 +394,7 @@ void AnnotationWindow::DoResize()
     long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
 
     if( aTextHeight > aHeight )
-    {   // we need vertical scrollbars and have to reduce the width
+    {   
         aWidth -= GetScrollbarWidth();
         mpVScrollbar->Show();
     }
@@ -413,7 +413,7 @@ void AnnotationWindow::DoResize()
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     if (!mpVScrollbar->IsVisible())
-    {   // if we do not have a scrollbar anymore, we want to see the complete text
+    {   
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
     mpVScrollbar->setPosSizePixel( 0 + aWidth, 0, GetScrollbarWidth(), aHeight );
@@ -518,7 +518,7 @@ SvxLanguageItem AnnotationWindow::GetLanguage(void)
     return SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE );
 }
 
-// --------------------------------------------------------------------
+
 
 TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
 {
@@ -530,7 +530,7 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation, bool bGrabFocus )
 {
@@ -613,7 +613,7 @@ void AnnotationWindow::SetColor()
     AllSettings aSettings2 = mpVScrollbar->GetSettings();
     StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
     aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-    aStyleSettings2.SetCheckedColor(maColorLight); //hintergund
+    aStyleSettings2.SetCheckedColor(maColorLight); 
     aStyleSettings2.SetShadowColor(maColorDark);
     aStyleSettings2.SetFaceColor(maColor);
     aSettings2.SetStyleSettings(aStyleSettings2);
@@ -624,7 +624,7 @@ void AnnotationWindow::Deactivate()
 {
     Reference< XAnnotation > xAnnotation( mxAnnotation );
 
-    // write changed text back to annotation
+    
     if ( Engine()->IsModified() )
     {
         TextApiObject* pTextApi = getTextApiObject( xAnnotation );
@@ -640,7 +640,7 @@ void AnnotationWindow::Deactivate()
                 pTextApi->SetText( *pOPO );
                 delete pOPO;
 
-                // set current time to changed annotation
+                
                 xAnnotation->setDateTime( getCurrentDateTime() );
 
                 if( mpDoc->IsUndoEnabled() )
@@ -663,7 +663,7 @@ void AnnotationWindow::Paint( const Rectangle& rRect)
     if(mpMeta->IsVisible() && !mbReadonly)
     {
         const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        //draw left over space
+        
         if ( bHighContrast )
             SetFillColor(COL_BLACK);
         else
@@ -673,26 +673,26 @@ void AnnotationWindow::Paint( const Rectangle& rRect)
 
         if ( bHighContrast )
         {
-            //draw rect around button
+            
             SetFillColor(COL_BLACK);
             SetLineColor(COL_WHITE);
         }
         else
         {
-            //draw button
+            
             Gradient aGradient;
             if (mbMouseOverButton)
                 aGradient = Gradient(GradientStyle_LINEAR,ColorFromAlphaColor(80,maColorDark,maColor),ColorFromAlphaColor(15,maColorDark,maColor));
             else
                 aGradient = Gradient(GradientStyle_LINEAR,ColorFromAlphaColor(15,maColorDark,maColor),ColorFromAlphaColor(80,maColorDark,maColor));
             DrawGradient(maRectMetaButton,aGradient);
-            //draw rect around button
+            
             SetFillColor();
             SetLineColor(ColorFromAlphaColor(90,maColorDark,maColor));
         }
         DrawRect(maRectMetaButton);
 
-        //draw arrow
+        
         if( bHighContrast )
             SetFillColor(COL_WHITE);
         else
@@ -729,7 +729,7 @@ void AnnotationWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!mbReadonly && maRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
     {
-        // context menu
+        
         Rectangle aRect(LogicToPixel(maRectMetaButton.BottomLeft()),LogicToPixel(maRectMetaButton.BottomLeft()));
         mrManager.ExecuteAnnotationContextMenu( mxAnnotation, (::Window*)this, aRect, true );
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "index.hxx"
@@ -26,9 +26,9 @@
 
 TYPEINIT0(SwIndexReg);
 
-// -------
-// SwIndex
-// -------
+
+
+
 
 SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
@@ -60,9 +60,9 @@ void SwIndex::Init(sal_Int32 const nIdx)
 {
     if (!m_pIndexReg)
     {
-        m_nIndex = 0; // always 0 if no IndexReg
+        m_nIndex = 0; 
     }
-    else if (!m_pIndexReg->m_pFirst) // first Index?
+    else if (!m_pIndexReg->m_pFirst) 
     {
         assert(!m_pIndexReg->m_pLast);
         m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
@@ -84,10 +84,10 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     assert(m_pIndexReg == rIdx.m_pIndexReg);
     if (!m_pIndexReg)
     {
-        return *this; // no IndexReg => no list to sort into; m_nIndex is 0
+        return *this; 
     }
     SwIndex* pFnd = const_cast<SwIndex*>(&rIdx);
-    if (rIdx.m_nIndex > nNewValue) // move forwards
+    if (rIdx.m_nIndex > nNewValue) 
     {
         SwIndex* pPrv;
         while ((0 != (pPrv = pFnd->m_pPrev)) && (pPrv->m_nIndex > nNewValue))
@@ -95,7 +95,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
 
         if( pFnd != this )
         {
-            // remove from list at old position
+            
             Remove();
 
             m_pNext = pFnd;
@@ -115,7 +115,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
 
         if( pFnd != this )
         {
-            // remove from list at old position
+            
             Remove();
 
             m_pPrev = pFnd;
@@ -129,14 +129,14 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     }
     else if( pFnd != this )
     {
-        // remove from list at old position
+        
         Remove();
 
-        m_pPrev = pFnd; // == &rIdx here
+        m_pPrev = pFnd; 
         m_pNext = rIdx.m_pNext;
         m_pPrev->m_pNext = this;
 
-        if (!m_pNext) // last in the list
+        if (!m_pNext) 
             m_pIndexReg->m_pLast = this;
         else
             m_pNext->m_pPrev = this;
@@ -182,7 +182,7 @@ void SwIndex::Remove()
 SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 {
     bool bEqual;
-    if (rIdx.m_pIndexReg != m_pIndexReg) // unregister!
+    if (rIdx.m_pIndexReg != m_pIndexReg) 
     {
         Remove();
         m_pIndexReg = rIdx.m_pIndexReg;
@@ -199,7 +199,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 
 SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
 {
-    if (pArr != m_pIndexReg) // unregister!
+    if (pArr != m_pIndexReg) 
     {
         Remove();
         m_pIndexReg = pArr;
@@ -213,9 +213,9 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
     return *this;
 }
 
-// ----------
-// SwIndexReg
-// ----------
+
+
+
 
 SwIndexReg::SwIndexReg()
     : m_pFirst( 0 ), m_pLast( 0 )
@@ -224,7 +224,7 @@ SwIndexReg::SwIndexReg()
 
 SwIndexReg::~SwIndexReg()
 {
-    assert(!m_pFirst && !m_pLast); // There are still indices registered
+    assert(!m_pFirst && !m_pLast); 
 }
 
 void SwIndexReg::Update( SwIndex const & rIdx, const sal_Int32 nDiff,
@@ -287,9 +287,9 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
 
 #ifdef DBG_UTIL
 
-// -------
-// SwIndex
-// -------
+
+
+
 
 sal_Int32 SwIndex::operator++(int)
 {
@@ -349,28 +349,28 @@ sal_Int32 SwIndex::operator-=( const SwIndex & rIndex )
 
 bool SwIndex::operator< ( const SwIndex & rIndex ) const
 {
-    // Attempt to compare indices into different arrays
+    
     assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex < rIndex.m_nIndex;
 }
 
 bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
-    // Attempt to compare indices into different arrays
+    
     assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex <= rIndex.m_nIndex;
 }
 
 bool SwIndex::operator> ( const SwIndex & rIndex ) const
 {
-    // Attempt to compare indices into different arrays
+    
     assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex > rIndex.m_nIndex;
 }
 
 bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
-    // Attempt to compare indices into different arrays
+    
     assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex >= rIndex.m_nIndex;
 }

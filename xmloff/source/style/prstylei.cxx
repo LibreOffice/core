@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -333,14 +333,14 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 {
     if( mxStyle.is() && (IsNew() || bOverwrite) )
     {
-        // The families cintaner must exist
+        
         Reference < XNameContainer > xFamilies =
             ((SvXMLStylesContext *)&mxStyles)->GetStylesContainer( GetFamily() );
         DBG_ASSERT( xFamilies.is(), "Families lost" );
         if( !xFamilies.is() )
             return;
 
-        // connect parent
+        
         OUString sParent( GetParentName() );
         if( !sParent.isEmpty() )
             sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
@@ -349,26 +349,26 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 
         if( sParent != mxStyle->getParentStyle() )
         {
-            // this may except if setting the parent style forms a
-            // circle in the style depencies; especially if the parent
-            // style is the same as the current style
+            
+            
+            
             try
             {
                 mxStyle->setParentStyle( sParent );
             }
             catch(const uno::Exception& e)
             {
-                // according to the API definition, I would expect a
-                // container::NoSuchElementException. But it throws an
-                // uno::RuntimeException instead. I catch
-                // uno::Exception in order to process both of them.
+                
+                
+                
+                
 
-                // We can't set the parent style. For a proper
-                // Error-Message, we should pass in the name of the
-                // style, as well as the desired parent style.
+                
+                
+                
                 Sequence<OUString> aSequence(2);
 
-                // getName() throws no non-Runtime exception:
+                
                 aSequence[0] = mxStyle->getName();
                 aSequence[1] = sParent;
 
@@ -378,7 +378,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
             }
         }
 
-        // connect follow
+        
         OUString sFollow( GetFollow() );
         if( !sFollow.isEmpty() )
             sFollow = GetImport().GetStyleDisplayName( GetFamily(), sFollow );

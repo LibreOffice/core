@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@ namespace factory {
 typedef ::cppu::WeakComponentImplHelper1<
     deployment::XPackageManagerFactory > t_pmfac_helper;
 
-//==============================================================================
+
 class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
 {
     Reference<XComponentContext> m_xComponentContext;
@@ -60,21 +60,21 @@ public:
     PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 
-    // XPackageManagerFactory
+    
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
         OUString const & context ) throw (RuntimeException);
 };
 
-//==============================================================================
+
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageManagerFactoryImpl> servicePMFI;
 extern sdecl::ServiceDecl const serviceDecl(
     servicePMFI,
-    // a private one:
+    
     "com.sun.star.comp.deployment.PackageManagerFactory",
     "com.sun.star.comp.deployment.PackageManagerFactory" );
 
-//______________________________________________________________________________
+
 PackageManagerFactoryImpl::PackageManagerFactoryImpl(
     Reference<XComponentContext> const & xComponentContext )
     : t_pmfac_helper( getMutex() ),
@@ -82,12 +82,12 @@ PackageManagerFactoryImpl::PackageManagerFactoryImpl(
 {
 }
 
-//______________________________________________________________________________
+
 PackageManagerFactoryImpl::~PackageManagerFactoryImpl()
 {
 }
 
-//______________________________________________________________________________
+
 inline void PackageManagerFactoryImpl::check()
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -99,17 +99,17 @@ inline void PackageManagerFactoryImpl::check()
     }
 }
 
-//______________________________________________________________________________
+
 void PackageManagerFactoryImpl::disposing()
 {
-    // dispose all managers:
+    
     ::osl::MutexGuard guard( getMutex() );
     t_string2weakref::const_iterator iPos( m_managers.begin() );
     t_string2weakref::const_iterator const iEnd( m_managers.end() );
     for ( ; iPos != iEnd; ++iPos )
         try_dispose( iPos->second );
     m_managers = t_string2weakref();
-    // the below are already disposed:
+    
     m_xUserMgr.clear();
     m_xSharedMgr.clear();
     m_xBundledMgr.clear();
@@ -117,8 +117,8 @@ void PackageManagerFactoryImpl::disposing()
     m_xBakMgr.clear();
 }
 
-// XPackageManagerFactory
-//______________________________________________________________________________
+
+
 Reference<deployment::XPackageManager>
 PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     throw (RuntimeException)
@@ -141,7 +141,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     if (insertion.second)
     {
         OSL_ASSERT( insertion.first->second.get() == xRet );
-        // hold user, shared mgrs for whole process: live deployment
+        
         if ( context == "user" )
             m_xUserMgr = xRet;
         else if ( context == "shared" )
@@ -171,7 +171,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     return xRet;
 }
 
-} // namespace factory
-} // namespace dp_manager
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

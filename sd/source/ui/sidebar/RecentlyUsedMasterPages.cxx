@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RecentlyUsedMasterPages.hxx"
@@ -83,7 +83,7 @@ public:
     };
 };
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -180,7 +180,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
         OUString sURL;
         OUString sName;
 
-        // Read the names and URLs of the master pages.
+        
         Sequence<OUString> aKeys (xSet->getElementNames());
         mpMasterPages->clear();
         mpMasterPages->reserve(aKeys.getLength());
@@ -205,12 +205,12 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                         new TemplatePageObjectProvider(sURL)),
                     ::boost::shared_ptr<PreviewProvider>(
                         new TemplatePreviewProvider(sURL))));
-                // For user supplied templates we use a different
-                // preview provider: The preview in the document shows
-                // not only shapes on the master page but also shapes on
-                // the foreground.  This is misleading and therefore
-                // these previews are discarded and created directly
-                // from the page objects.
+                
+                
+                
+                
+                
+                
                 if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
                     pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
                         new PagePreviewProvider());
@@ -223,7 +223,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
     }
     catch (Exception&)
     {
-        // Ignore exception.
+        
     }
 }
 
@@ -243,13 +243,13 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
         if ( ! xSet.is())
             return;
 
-        // Clear the set.
+        
         Sequence<OUString> aKeys (xSet->getElementNames());
         sal_Int32 i;
         for (i=0; i<aKeys.getLength(); i++)
             xSet->removeByName (aKeys[i]);
 
-        // Fill it with the URLs of this object.
+        
         const OUString sURLMemberName("URL");
         const OUString sNameMemberName("Name");
         Any aValue;
@@ -263,7 +263,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
                 iDescriptor!=mpMasterPages->end();
                 ++iDescriptor,++nIndex)
         {
-            // Create new child.
+            
             OUString sKey ("index_");
             sKey += OUString::number(nIndex);
             Reference<container::XNameReplace> xChild(
@@ -280,12 +280,12 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
             }
         }
 
-        // Write the data back to disk.
+        
         aConfiguration.CommitChanges();
     }
     catch (Exception&)
     {
-        // Ignore exception.
+        
     }
 }
 
@@ -363,9 +363,9 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
             break;
 
         case MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED:
-            // Do not change the list of recently master pages (the deleted
-            // page was recently used) but tell the listeners.  They may want
-            // to update their lists.
+            
+            
+            
             SendEvent();
             break;
     }
@@ -389,7 +389,7 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
                 break;
 
             default:
-                // Ignored.
+                
                 break;
         }
     return 0;
@@ -402,9 +402,9 @@ void RecentlyUsedMasterPages::AddMasterPage (
     MasterPageContainer::Token aToken,
     bool bMakePersistent)
 {
-    // For the page to be inserted the token has to be valid and the page
-    // has to have a valid URL.  This excludes master pages that do not come
-    // from template files.
+    
+    
+    
     if (aToken != MasterPageContainer::NIL_TOKEN
         && !mpContainer->GetURLForToken(aToken).isEmpty())
     {
@@ -414,8 +414,8 @@ void RecentlyUsedMasterPages::AddMasterPage (
                 Descriptor::TokenComparator(aToken)));
         if (aIterator != mpMasterPages->end())
         {
-            // When an entry for the given token already exists then remove
-            // it now and insert it later at the head of the list.
+            
+            
             mpMasterPages->erase (aIterator);
         }
 
@@ -425,7 +425,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
                 mpContainer->GetURLForToken(aToken),
                 mpContainer->GetStyleNameForToken(aToken)));
 
-        // Shorten list to maximal size.
+        
         while (mpMasterPages->size() > mnMaxListSize)
         {
             mpMasterPages->pop_back ();
@@ -469,6 +469,6 @@ void RecentlyUsedMasterPages::ResolveList (void)
 }
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

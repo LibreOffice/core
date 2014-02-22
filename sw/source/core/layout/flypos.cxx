@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "doc.hxx"
@@ -28,7 +28,7 @@ bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& 
 {
     if(rA->GetNdIndex() == rB->GetNdIndex())
     {
-        // In this case, the order number decides!
+        
         return rA->GetOrdNum() < rB->GetOrdNum();
     }
 
@@ -49,7 +49,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
     {
         if( RES_FLYFRMFMT == pFmt->Which() )
         {
-            // Let's see if we have an SdrObject for this
+            
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*pFmt);
             if( pFly )
             {
@@ -59,7 +59,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
         }
         else if( RES_DRAWFRMFMT == pFmt->Which() )
         {
-            // Let's see if we have an SdrObject for this
+            
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement(*pFmt);
             if( pContact )
             {

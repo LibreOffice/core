@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "precompile.h"
@@ -106,7 +106,7 @@ int detect_hwp_version(const char *str)
     return 0;
 }
 
-// HIODev wrapper
+
 
 int HWPFile::Open(HStream & stream)
 {
@@ -210,7 +210,7 @@ HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
 }
 
 
-// end of HIODev wrapper
+
 
 bool HWPFile::InfoRead(void)
 {
@@ -433,8 +433,8 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
 
 void HWPFile::AddBox(FBox * box)
 {
-// LATER if we don't use box->next(),
-// AddBox() and GetBoxHead() are useless;
+
+
     if (!blist.empty())
     {
         box->prev = blist.back();

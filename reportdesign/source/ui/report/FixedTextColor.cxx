@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,9 +37,9 @@
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
 
-// DBG_*
+
 #include <tools/debug.hxx>
-// DBG_UNHANDLED_EXCEPTION
+
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
@@ -55,11 +55,11 @@ namespace rptui
     {
     }
 
-    //--------------------------------------------------------------------
+    
     FixedTextColor::~FixedTextColor()
     {
     }
-    // -----------------------------------------------------------------------------
+    
 
     void FixedTextColor::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
@@ -80,19 +80,19 @@ namespace rptui
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     void FixedTextColor::setPropertyTextColor(const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nTextColor)
     {
         _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::makeAny(sal_Int32(_nTextColor)));
     }
 
-    // -----------------------------------------------------------------------------
+    
     void FixedTextColor::notifyElementInserted( const uno::Reference< uno::XInterface >& _rxElement )
     {
         handle(_rxElement);
     }
 
-// -----------------------------------------------------------------------------
+
     void FixedTextColor::handle( const uno::Reference< uno::XInterface >& _rxElement )
     {
         uno::Reference< report::XFixedText > xFixedText( _rxElement, uno::UNO_QUERY );
@@ -112,7 +112,7 @@ namespace rptui
                 sal_Bool bSectionBackColorIsTransparent = xSection->getBackTransparent();
                 if (bSectionBackColorIsTransparent)
                 {
-                    // Label Transparent, Section Transparent set LabelTextColor
+                    
                     const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
                     Color aWindowColor  = aStyleSettings.GetWindowColor();
                     bIsDark = aWindowColor.IsDark();
@@ -151,8 +151,8 @@ namespace rptui
     }
 
 
-// -----------------------------------------------------------------------------
-    // XPropertyChangeListener
+
+    
     uno::Reference<awt::XControl> FixedTextColor::getXControl(const uno::Reference< report::XFixedText >& _xFixedText) throw(uno::RuntimeException)
     {
 
@@ -170,13 +170,13 @@ namespace rptui
                 {
                     SdrObject *pObject = pPage->GetObj(nIndex);
                     OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObject);
-                    if ( pUnoObj ) // this doesn't need to be done for shapes
+                    if ( pUnoObj ) 
                     {
                         ::boost::shared_ptr<OSectionWindow> pSectionWindow = pController->getSectionWindow(xSection);
                         if (pSectionWindow != 0)
                         {
-                            OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
-                            OSectionView& aSdrView = aOutputDevice.getSectionView(); // SdrView
+                            OReportSection& aOutputDevice = pSectionWindow->getReportSection(); 
+                            OSectionView& aSdrView = aOutputDevice.getSectionView(); 
                             xControl = pUnoObj->GetUnoControl(aSdrView, aOutputDevice);
                         }
                     }
@@ -185,7 +185,7 @@ namespace rptui
         return xControl;
     }
 
-// -----------------------------------------------------------------------------
+
     uno::Reference<awt::XVclWindowPeer> FixedTextColor::getVclWindowPeer(const uno::Reference< report::XFixedText >& _xComponent) throw(uno::RuntimeException)
     {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;

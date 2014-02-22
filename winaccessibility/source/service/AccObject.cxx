@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Sequence.h>
@@ -42,13 +42,13 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleRole;
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
-//Role mapping table,left side is UNO role, right side is MSAA role
+
 const short ROLE_TABLE[][2] =
     {
         {UNKNOWN,                  IA2_ROLE_UNKNOWN},
         {ALERT ,                   ROLE_SYSTEM_DIALOG},
         {COLUMN_HEADER ,           ROLE_SYSTEM_COLUMNHEADER},
-        //{CANVAS ,                  ROLE_SYSTEM_CLIENT},
+        
         {CANVAS ,                  IA2_ROLE_CANVAS},
         {CHECK_BOX ,               ROLE_SYSTEM_CHECKBUTTON},
         {CHECK_MENU_ITEM ,         IA2_ROLE_CHECK_MENU_ITEM},
@@ -67,7 +67,7 @@ const short ROLE_TABLE[][2] =
         {FONT_CHOOSER,             IA2_ROLE_FONT_CHOOSER},
         {FOOTER,                   IA2_ROLE_FOOTER},
         {FOOTNOTE,                 IA2_ROLE_FOOTNOTE},
-        //{FRAME,                      IA2_ROLE_FRAME},
+        
         {FRAME,                    ROLE_SYSTEM_DIALOG},
         {GLASS_PANE ,              IA2_ROLE_GLASS_PANE},
         {GRAPHIC ,                 ROLE_SYSTEM_GRAPHIC},
@@ -81,7 +81,7 @@ const short ROLE_TABLE[][2] =
         {LAYERED_PANE ,            IA2_ROLE_LAYERED_PANE},
         {LIST ,                    ROLE_SYSTEM_LIST},
         {LIST_ITEM ,               ROLE_SYSTEM_LISTITEM},
-        //{MENU ,                    ROLE_SYSTEM_MENUPOPUP},
+        
         {MENU,                ROLE_SYSTEM_MENUITEM},
         {MENU_BAR,                 ROLE_SYSTEM_MENUBAR},
         {MENU_ITEM,                ROLE_SYSTEM_MENUITEM},
@@ -110,7 +110,7 @@ const short ROLE_TABLE[][2] =
         {TABLE_CELL ,              ROLE_SYSTEM_CELL},
         {TEXT,                     ROLE_SYSTEM_TEXT},
         {TEXT_FRAME ,              IA2_ROLE_TEXT_FRAME},
-        //for change toggle button to push button for jaws
+        
         {TOGGLE_BUTTON,            ROLE_SYSTEM_PUSHBUTTON},
 
         {TOOL_BAR,                 ROLE_SYSTEM_TOOLBAR},
@@ -263,13 +263,13 @@ void  AccObject::UpdateName( )
 
     if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=NULL )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
         m_pIMAcc->Put_XAccName( m_pParentObj->m_xAccContextRef->getAccessibleName().getStr() );
-    //IAccessibility2 Implementation 2009-----
+    
     if ( PARAGRAPH == m_accRole)
     {
         ::rtl::OUString emptyStr("");
         m_pIMAcc->Put_XAccName(emptyStr.getStr());
     }
-    //-----IAccessibility2 Implementation 2009
+    
     else
         m_pIMAcc->Put_XAccName(m_xAccContextRef->getAccessibleName().getStr());
 
@@ -382,7 +382,7 @@ void  AccObject::SetValue( Any pAny )
     switch(m_accRole)
     {
     case SPIN_BOX:
-        // 3. date editor's msaa value should be the same as spinbox
+        
     case DATE_EDITOR:
     case TEXT:
     case PARAGRAPH:
@@ -395,14 +395,14 @@ void  AccObject::SetValue( Any pAny )
         m_pIMAcc->Put_XAccValue( val.getStr() );
         break;
     case TREE_ITEM:
-    //case CHECK_BOX:   //Commented by Li Xing to disable the value for general checkbox
+    
     case COMBO_BOX:
     case TABLE_CELL:
     case NOTE:
     case SCROLL_BAR:
         m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
         break ;
-    // Added by Li Xing, only the checkbox in tree should have the value.
+    
     case CHECK_BOX:
         if( ( m_pParentObj !=NULL ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
             m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
@@ -621,9 +621,9 @@ DWORD AccObject::GetMSAAStateFromUNO(short xState)
             }
         }
         break;
-    //Remove the SENSITIVE state mapping. There is no corresponding MSAA state.
-    //case  SENSITIVE:
-    //    IState = STATE_SYSTEM_PROTECTED;
+    
+    
+    
     case EDITABLE:
         if( m_pIMAcc )
         {
@@ -766,7 +766,7 @@ void AccObject::UpdateActionDesc()
                       Role == EDIT_BAR || Role == PASSWORD_TEXT || Role == TEXT))
                 {
                     pXString = m_xAccActionRef->getAccessibleActionDescription( 0 );
-                    //Solution:If string length is more than zero,action will will be set.
+                    
                     if( pXString.getLength() > 0)
                         m_pIMAcc->Put_ActionDescription( pXString.getStr() );
                 }
@@ -873,7 +873,7 @@ void AccObject::UpdateState()
             m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
             break;
         case TEXT:
-            // 2. editable combobox -> readonly ------ bridge
+            
         case EMBEDDED_OBJECT:
         case END_NOTE:
         case FOOTER:
@@ -882,7 +882,7 @@ void AccObject::UpdateState()
         case HEADER:
         case HEADING:
 
-            //Image Map
+            
         case PARAGRAPH:
         case PASSWORD_TEXT:
         case SHAPE:
@@ -1137,14 +1137,14 @@ void AccObject::SetParentObj(AccObject* pParentAccObj)
         }
     }
 }
-//ResID means ChildID in MSAA
+
 void AccObject::SetResID(long id)
 {
     m_resID = id;
     if(m_pIMAcc)
         m_pIMAcc->Put_XAccChildID(m_resID);
 }
-//return COM interface in acc object
+
 IMAccessible*  AccObject::GetIMAccessible()
 {
     return m_pIMAcc;

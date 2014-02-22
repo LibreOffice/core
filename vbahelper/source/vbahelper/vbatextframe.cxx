@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <vbahelper/helperdecl.hxx>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -32,9 +32,9 @@ VbaTextFrame::VbaTextFrame( const uno::Reference< XHelperInterface >& xParent, c
 void
 VbaTextFrame::setAsMSObehavior()
 {
-    //set property TextWordWrap default as False.
-    // TextFitToSize control the text content. it seems we should set the default as False.
-    // com.sun.star.drawing.TextFitToSizeType.NONE
+    
+    
+    
     m_xPropertySet->setPropertyValue( "TextWordWrap", uno::makeAny( sal_False ) );
     m_xPropertySet->setPropertyValue( "TextFitToSize", uno::makeAny( drawing::TextFitToSizeType_NONE ) );
 }
@@ -53,13 +53,13 @@ void VbaTextFrame::setMargin( OUString sMarginType, float fMargin )
     m_xPropertySet->setPropertyValue( sMarginType, uno::makeAny( nMargin ) );
 }
 
-// Attributes
+
 sal_Bool SAL_CALL
 VbaTextFrame::getAutoSize() throw (uno::RuntimeException)
 {
-    // I don't know why, but in OOo, TextAutoGrowHeight is the property control autosize. not TextFitToSize.
-    // TextFitToSize control the text content.
-    // and in mso, there isnot option TextWordWrap which means auto wrap. the default is False.
+    
+    
+    
     sal_Bool bAutosize = sal_False;
     uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( "TextAutoGrowHeight" );
     aTextAutoGrowHeight >>= bAutosize;
@@ -130,7 +130,7 @@ VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException)
 }
 
 
-// Methods
+
 uno::Any SAL_CALL
 VbaTextFrame::Characters() throw (uno::RuntimeException)
 {

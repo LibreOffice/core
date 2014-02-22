@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,14 +65,14 @@ using namespace ::com::sun::star::xml::sax;
 #define ATTRIBUTE_XLINK_TYPE        "xlink:type"
 #define ATTRIBUTE_XLINK_TYPE_VALUE  "simple"
 
-#define XMLNS_IMAGE                 "http://openoffice.org/2001/image"
-#define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
+#define XMLNS_IMAGE                 "http:
+#define XMLNS_XLINK                 "http:
 #define XMLNS_IMAGE_PREFIX          "image:"
 #define XMLNS_XLINK_PREFIX          "xlink:"
 
 #define XMLNS_FILTER_SEPARATOR      "^"
 
-#define IMAGES_DOCTYPE  "<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">"
+#define IMAGES_DOCTYPE  "<!DOCTYPE image:imagecontainer PUBLIC \"-
 
 namespace framework
 {
@@ -113,7 +113,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_nHashMaskModeBitmap   = OUString( ATTRIBUTE_MASKMODE_BITMAP ).hashCode();
     m_nHashMaskModeColor    = OUString( ATTRIBUTE_MASKMODE_COLOR ).hashCode();
 
-    // create hash map to speed up lookup
+    
     for ( int i = 0; i < (int)IMG_XML_ENTRY_COUNT; i++ )
     {
         OUStringBuffer temp( 20 );
@@ -128,7 +128,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
         m_aImageMap.insert( ImageHashMap::value_type( temp.makeStringAndClear(), (Image_XML_Entry)i ) );
     }
 
-    // reset states
+    
     m_bImageContainerStartFound     = sal_False;
     m_bImageContainerEndFound       = sal_False;
     m_bImagesStartFound             = sal_False;
@@ -143,7 +143,7 @@ OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
 {
 }
 
-// XDocumentHandler
+
 void SAL_CALL OReadImagesDocumentHandler::startDocument(void)
 throw ( SAXException, RuntimeException )
 {
@@ -178,7 +178,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
         {
             case IMG_ELEMENT_IMAGECONTAINER:
             {
-                // image:imagecontainer element (container element for all further image elements)
+                
                 if ( m_bImageContainerStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
@@ -231,7 +231,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
                                 if ( aColor.startsWith("#") )
                                 {
-                                    // the color value is given as #rrggbb and used the hexadecimal system!!
+                                    
                                     sal_uInt32 nColor = aColor.copy( 1 ).toUInt32( 16 );
 
                                     m_pImages->aMaskColor = Color( COLORDATA_RGB( nColor ) );
@@ -280,7 +280,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                                               break;
                         }
                     }
-                } // for
+                } 
 
                 if ( m_pImages->aURL.isEmpty() )
                 {
@@ -296,7 +296,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
             case IMG_ELEMENT_ENTRY:
             {
-                // Check that image:entry is embeded into image:images!
+                
                 if ( !m_bImagesStartFound )
                 {
                     delete m_pImages;
@@ -312,11 +312,11 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
                 m_bImageStartFound = sal_True;
 
-                // Create new image item descriptor
+                
                 ImageItemDescriptor* pItem = new ImageItemDescriptor;
                 pItem->nIndex = -1;
 
-                // Read attributes for this image definition
+                
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
@@ -342,7 +342,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     }
                 }
 
-                // Check required attribute "bitmap-index"
+                
                 if ( pItem->nIndex < 0 )
                 {
                     delete pItem;
@@ -354,7 +354,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                // Check required attribute "command"
+                
                 if ( pItem->aCommandURL.isEmpty() )
                 {
                     delete pItem;
@@ -373,7 +373,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
             case IMG_ELEMENT_EXTERNALIMAGES:
             {
-                // Check that image:externalimages is embeded into image:imagecontainer
+                
                 if ( !m_bImageContainerStartFound )
                 {
                     delete m_pImages;
@@ -384,7 +384,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                // Check that image:externalentry is NOT embeded into image:externalentry
+                
                 if ( m_bExternalImagesStartFound )
                 {
                     delete m_pImages;
@@ -395,7 +395,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                // Create unique external image container
+                
                 m_bExternalImagesStartFound = sal_True;
                 m_pExternalImages = new ExternalImageItemListDescriptor;
             }
@@ -431,7 +431,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
                 ExternalImageItemDescriptor* pItem = new ExternalImageItemDescriptor;
 
-                // Read attributes for this external image definition
+                
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
@@ -457,7 +457,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     }
                 }
 
-                // Check required attribute "command"
+                
                 if ( pItem->aCommandURL.isEmpty() )
                 {
                     delete pItem;
@@ -471,7 +471,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                // Check required attribute "href"
+                
                 if ( pItem->aURL.isEmpty() )
                 {
                     delete pItem;
@@ -601,9 +601,9 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
 }
 
 
-//_________________________________________________________________________________________________________________
-//  OWriteImagesDocumentHandler
-//_________________________________________________________________________________________________________________
+
+
+
 
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     const ImageListsDescriptor& aItems,
@@ -632,7 +632,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
 
     m_xWriteDocumentHandler->startDocument();
 
-    // write DOCTYPE line!
+    
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
@@ -676,9 +676,9 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-//_________________________________________________________________________________________________________________
-//  protected member functions
-//_________________________________________________________________________________________________________________
+
+
+
 
 void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor* pImageList ) throw
 ( SAXException, RuntimeException )
@@ -686,7 +686,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    // save required attributes
+    
     pList->AddAttribute( m_aAttributeXlinkType,
                          m_aAttributeType,
                          m_aAttributeValueSimple );
@@ -794,7 +794,7 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    // save required attributes
+    
     pList->AddAttribute( m_aAttributeXlinkType,
                          m_aAttributeType,
                          m_aAttributeValueSimple );
@@ -820,7 +820,7 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
-} // namespace framework
+} 
 
 
 

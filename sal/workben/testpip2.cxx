@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ int main (void)
 
     rtl_uString_newFromAscii(&ustrPipeName,pszPipeName);
 
-    // erzeuge die Pipe
+    
     Pipe = osl_createPipe( ustrPipeName, osl_Pipe_OPEN, 0 );
 
     if( !Pipe )
@@ -58,7 +58,7 @@ int main (void)
               osl_getLastPipeError(NULL));
 
 
-    // empfange Daten vom Server
+    
     nChars = osl_receivePipe( Pipe, szBuffer, 256 );
 
     if( nChars < 0 )
@@ -74,7 +74,7 @@ int main (void)
         fail( "unable to write on pipe.\n",
               osl_getLastPipeError( Pipe ) );
 
-    // schliesse die Pipe
+    
     osl_releasePipe( Pipe );
 
     printf( "TestPipe Client: test passed.\n" );

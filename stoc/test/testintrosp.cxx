@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,12 +61,12 @@ typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
 #define DEFAULT_INDEX_ACCESS_COUNT  10
 #define DEFAULT_NAME_ACCESS_COUNT   5
 
-// Auxiliary function, in order to get from one type XIdlClass
+
 Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiServiceFactory > & xMgr )
 {
     static Reference< XIdlReflection > xRefl;
 
-    // register void as default class
+    
     Reference<XIdlClass> xRetClass;
     typelib_TypeDescription * pTD = 0;
     rType.getDescription( &pTD );
@@ -85,9 +85,9 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
 }
 
 
-// Helper function to convert Any to UString
-// TODO: This code could be moved to a more central place.
-//       Currently it's used only for simple data types.
+
+
+
 
 OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference< XMultiServiceFactory > & xMgr )
 {
@@ -174,7 +174,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     return aRetStr;
 }
 
-// XPropertySetInfo for test class
+
 
 class ImplPropertySetInfo : public ImplPropertySetInfoHelper
 {
@@ -186,7 +186,7 @@ public:
     ImplPropertySetInfo( const Reference< XMultiServiceFactory > & xMgr )
         : mxMgr( xMgr ) {}
 
-    // Methods of XPropertySetInfo
+    
     virtual Sequence< Property > SAL_CALL getProperties(  )
         throw(RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName )
@@ -203,7 +203,7 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
 
     if( !pSeq )
     {
-        // Create information for the properties "Width", "Height" and "Name"
+        
         pSeq = new Sequence<Property>( 3 );
         Property * pAry = pSeq->getArray();
 
@@ -222,7 +222,7 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
         pAry[2].Type = getCppuType( (OUString*) NULL );
         pAry[2].Attributes = TRANSIENT;
     }
-    // Return information about all three properties
+    
     return *pSeq;
 }
 
@@ -237,7 +237,7 @@ Property ImplPropertySetInfo::getPropertyByName(const OUString& Name)
         if( pAry[i].Name == Name )
             return pAry[i];
     }
-    // Property unknown, also return empty ones
+    
     return Property();
 }
 
@@ -252,18 +252,18 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
         if( pAry[i].Name == Name )
             return sal_True;
     }
-    // Property unknown, also return empty ones
+    
     return sal_False;
 }
 
-//*****************************************************************
+
 class ImplIntroTest : public ImplIntroTestHelper
 {
       Reference< XMultiServiceFactory > mxMgr;
 
     friend class ImplPropertySetInfo;
 
-    // Properties for the PropertySet
+    
     Any aAnyArray[10];
 
     Reference< XPropertySetInfo > m_xMyInfo;
@@ -283,18 +283,18 @@ class ImplIntroTest : public ImplIntroTestHelper
     Sequence< Sequence< Sequence< sal_Int16 > > > aMultSeq;
     Reference< XIntroTest > m_xIntroTest;
 
-    // Data for NameAccess
+    
     Reference< XIntroTest >* pNameAccessTab;
 
-    // Data for IndexAccess
+    
     Reference< XIntroTest >* pIndexAccessTab;
     sal_Int16 iIndexAccessCount;
 
-    // struct properties
+    
     Property m_aFirstStruct;
     PropertyValue m_aSecondStruct;
 
-    // remember listener (one listener per property)
+    
     Reference< XPropertyChangeListener > aPropChangeListener;
     OUString aPropChangeListenerStr;
     Reference< XVetoableChangeListener > aVetoPropChangeListener;
@@ -309,8 +309,8 @@ public:
         Init();
     }
 
-    // despite virtual inline, to simplify coding (testing only)
-    // XPropertySet
+    
+    
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
         throw(RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue )
@@ -330,8 +330,8 @@ public:
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
 
-    // XIntroTest methods
-    // Attributes
+    
+    
     virtual OUString SAL_CALL getObjectName() throw(RuntimeException)
         { return m_ObjectName; }
     virtual void SAL_CALL setObjectName( const OUString& _objectname ) throw(RuntimeException)
@@ -355,7 +355,7 @@ public:
     virtual void SAL_CALL setSecondStruct( const PropertyValue& _secondstruct ) throw(RuntimeException)
         { m_aSecondStruct = _secondstruct; }
 
-    // Methods
+    
     virtual void SAL_CALL writeln( const OUString& Text )
         throw(RuntimeException);
     virtual sal_Int32 SAL_CALL getDroenk(  ) throw(RuntimeException)
@@ -397,14 +397,14 @@ public:
         throw(RuntimeException);
 
 
-    // Methods of XElementAccess
+    
     virtual Type SAL_CALL getElementType(  )
         throw(RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  )
         throw(RuntimeException);
 
-    // XNameAccess methods
-    // Methods
+    
+    
     virtual Any SAL_CALL getByName( const OUString& aName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException);
     virtual Sequence< OUString > SAL_CALL getElementNames(  )
@@ -412,8 +412,8 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(RuntimeException);
 
-    // XIndexAccess methods
-    // Methods
+    
+    
     virtual sal_Int32 SAL_CALL getCount(  )
         throw(RuntimeException);
     virtual Any SAL_CALL getByIndex( sal_Int32 Index )
@@ -422,20 +422,20 @@ public:
 
 void ImplIntroTest::Init( void )
 {
-    // set unique name
+    
     static sal_Int32 nObjCount = 0;
     OUString aName( "IntroTest-Obj Nr. " );
     aName += OUString::valueOf( nObjCount );
     setObjectName( aName );
 
-    // initialize properties
+    
     aAnyArray[0] <<= 3.14;
     aAnyArray[1] <<= (sal_Int32)42;
     aAnyArray[2] <<= OUString( "Hallo" );
 
-    // fetch PropertySetInfo once for internal use
+    
     m_xMyInfo = getPropertySetInfo();
-    m_xMyInfo->acquire();       // otherwise it could crash at shutdown
+    m_xMyInfo->acquire();       
 
     m_nMarkusAge = 33;
     m_nMarkusChildrenCount = 2;
@@ -447,26 +447,26 @@ void ImplIntroTest::Init( void )
     m_nLaber = 1;
     eTypeClass = TypeClass_INTERFACE;
 
-    // string sequence initialization
+    
     aStringSeq.realloc( 3 );
     aStringSeq[ 0 ] = "String 0";
     aStringSeq[ 1 ] = "String 1";
     aStringSeq[ 2 ] = "String 2";
 
-    // structs initialization
+    
     m_aFirstStruct.Name = "FirstStruct-Name";
     m_aFirstStruct.Handle = 77777;
-    //XIdlClassRef Type;
+    
     m_aFirstStruct.Attributes = -222;
 
-    //XInterfaceRef Source;
+    
     Any Value;
     Value <<= 2.718281828459;
     m_aSecondStruct.Value = Value;
-    //XIdlClassRef ListenerType;
+    
     m_aSecondStruct.State = PropertyState_DIRECT_VALUE;
 
-    // IndexAccess
+    
     iIndexAccessCount = DEFAULT_INDEX_ACCESS_COUNT;
     pIndexAccessTab = NULL;
     pNameAccessTab = NULL;
@@ -476,8 +476,8 @@ Reference< XPropertySetInfo > ImplIntroTest::getPropertySetInfo()
     throw(RuntimeException)
 {
     static ImplPropertySetInfo aInfo( mxMgr );
-    // All objects have the same Properties, so
-    // the Info is the same for all
+    
+    
     return &aInfo;
 }
 
@@ -547,11 +547,11 @@ Reference< XIntroTest > ImplIntroTest::getIntroTest()
     return m_xIntroTest;
 }
 
-// Methods of XElementAccess
+
 Type ImplIntroTest::getElementType(  )
     throw(RuntimeException)
 {
-    // TODO
+    
     Type aRetType;
     return aRetType;
 }
@@ -562,13 +562,13 @@ sal_Bool ImplIntroTest::hasElements(  )
     return sal_True;
 }
 
-// XNameAccess methods
+
 sal_Int32 getIndexForName( const OUString& ItemName )
 {
     OUString aLeftStr = ItemName.copy( 0, 4 );
     if( aLeftStr == "Item" )
     {
-        // TODO
+        
         OUString aNumStr = ItemName.copy( 4 );
     }
     return -1;
@@ -621,7 +621,7 @@ sal_Bool ImplIntroTest::hasByName( const OUString& aName )
     return ( getIndexForName( aName ) != -1 );
 }
 
-// XIndexAccess methods
+
 sal_Int32 ImplIntroTest::getCount(  )
     throw(RuntimeException)
 {
@@ -672,11 +672,11 @@ struct DefItem
     sal_Int32 nConcept;
 };
 
-// special value for method concept, to mark "normal" functions
+
 #define  MethodConcept_NORMAL_IMPL      0x80000000
 
 
-// return test object
+
 Any getIntrospectionTestObject( const Reference< XMultiServiceFactory > & xMgr )
 {
     Any aObjAny;
@@ -844,12 +844,12 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
     OString aErrorStr;
 
-    //******************************************************
+    
 
-    // create test object
+    
     Any aObjAny = getIntrospectionTestObject( xMgr );
 
-    // inspect introspection service
+    
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     xAccess = xIntrospection->inspect( aObjAny );
     xAccess = xIntrospection->inspect( aObjAny );
@@ -857,23 +857,23 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     if( !xAccess.is() )
         return sal_False;
 
-    // check result of introspection
+    
 
-    // determine XPropertySet-UIK
+    
     Type aType = getCppuType( (Reference< XPropertySet >*) NULL );
 
     Reference< XInterface > xPropSetIface = xAccess->queryAdapter( aType );
     Reference< XPropertySet > xPropSet( xPropSetIface, UNO_QUERY );
     OSL_ENSURE( xPropSet.is(), "Could not get XPropertySet by queryAdapter()" );
 
-    // XExactName
+    
     Reference< XExactName > xExactName( xAccess, UNO_QUERY );
     OSL_ENSURE( xExactName.is(), "Introspection unterstuetzt kein ExactName" );
 
-    // loop over all concept combinations
+    
     for( sal_Int32 nConcepts = 0 ; nConcepts < 16 ; nConcepts++ )
     {
-        // how many properties should this be
+        
         sal_Int32 nDemandedPropCount = 0;
         sal_Int32 iList = 0;
         while( pPropertyDefs[ iList ].pName )
@@ -904,7 +904,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             {
                 const Property aProp = pProps[ i ];
 
-                // search for next suitable method in the list
+                
                 while( pPropertyDefs[ iList ].pName )
                 {
                     if( pPropertyDefs[ iList ].nConcept & nConcepts )
@@ -937,7 +937,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "<";
                 OSL_ENSURE( aTypeNameStr == aDemandedTypeNameStr, aErrorStr.getStr() );
 
-                // read and report value of property
+                
                 aPropVal = xPropSet->getPropertyValue( aPropName );
 
                 OString aValStr = OUStringToOString( AnyToString( aPropVal, sal_False, xMgr ), RTL_TEXTENCODING_ASCII_US );
@@ -951,7 +951,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "<";
                 OSL_ENSURE( aValStr == aDemandedValStr, aErrorStr.getStr() );
 
-                // check value and modify it according to its type
+                
                 TypeClass eType = aPropVal.getValueType().getTypeClass();
                 Any aNewVal;
                 sal_Bool bModify = sal_True;
@@ -991,11 +991,11 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                         break;
                 }
 
-                // modify only in the last iteration
+                
                 if( nConcepts == 15 )
                 {
-                    // check XExactName, switch everything to upper case
-                    // (introspection uses lower case)
+                    
+                    
                     OUString aUpperUStr = aPropName.toAsciiUpperCase();
                     OUString aExactName = xExactName->getExactName( aUpperUStr );
                     if( aExactName != aPropName )
@@ -1013,10 +1013,10 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     bModify = sal_False;
                 }
 
-                // set new value, then read and return value
+                
                 if( bModify )
                 {
-                    // catch UnknownPropertyException for ReadOnly properties
+                    
                     try
                     {
                         xPropSet->setPropertyValue( aPropName, aNewVal );
@@ -1040,7 +1040,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     OSL_ENSURE( aModifiedValStr == aDemandedModifiedValStr, aErrorStr.getStr() );
                 }
 
-                // check whether all properties can be found individually
+                
                 aErrorStr  = "property \"";
                 aErrorStr += aDemandedName;
                 aErrorStr += "\" not found with hasProperty()";
@@ -1067,15 +1067,15 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         }
     }
 
-    // loop over all concept combinations
+    
     for( sal_Int32 nConcepts = 0 ; nConcepts < 128 ; nConcepts++ )
     {
-        // Das 2^6-Bit steht fuer "den Rest"
+        
         sal_Int32 nRealConcepts = nConcepts;
         if( nConcepts & 0x40 )
             nRealConcepts |= (0xFFFFFFFF - 0x3F);
 
-        // Wieviele Methoden sollten es sein
+        
         sal_Int32 nDemandedMethCount = 0;
         sal_Int32 iList = 0;
         while( pMethodDefs[ iList ].pName )
@@ -1085,7 +1085,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             iList++;
         }
 
-        // Methoden-Array ausgeben
+        
         Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( nRealConcepts );
         sal_Int32 nLen = aMethodSeq.getLength();
 
@@ -1101,14 +1101,14 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
         for( i = 0 ; i < nLen ; i++ )
         {
-            // Methode ansprechen
+            
             const Reference< XIdlMethod >& rxMethod = pMethods[i];
 
-            // Methode ausgeben
+            
             OUString aMethName = rxMethod->getName();
             OString aNameStr = OUStringToOString(aMethName, RTL_TEXTENCODING_ASCII_US );
 
-            // Naechste Passende Methode in der Liste suchen
+            
             while( pMethodDefs[ iList ].pName )
             {
                 if( pMethodDefs[ iList ].nConcept & nRealConcepts )
@@ -1125,7 +1125,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += "\"";
             OSL_ENSURE( aNameStr == aDemandedName, aErrorStr.getStr() );
 
-            // Checken, ob alle Methoden auch einzeln gefunden werden
+            
             aErrorStr  = "method \"";
             aErrorStr += aDemandedName;
             aErrorStr += "\" not found with hasMethod()";
@@ -1151,17 +1151,17 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         }
     }
 
-    // print listener class
+    
     Sequence< Type > aClassSeq = xAccess->getSupportedListeners();
     sal_Int32 nLen = aClassSeq.getLength();
 
     const Type* pListeners = aClassSeq.getConstArray();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
     {
-        // Methode ansprechen
+        
         const Type& aListenerType = pListeners[i];
 
-        // get name
+        
         OUString aListenerClassName = aListenerType.getTypeName();
     }
 
@@ -1180,7 +1180,7 @@ SAL_IMPLEMENT_MAIN()
             xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-        // Register services
+        
         OUString libName( "reflection.uno" SAL_DLLEXTENSION );
         fprintf(stderr, "1\n" );
         xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
@@ -1189,7 +1189,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< XIdlReflection > xRefl( xMgr->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
-        // Introspection
+        
         libName = OUString( "introspection.uno" SAL_DLLEXTENSION);
         fprintf(stderr, "3\n" );
         xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),

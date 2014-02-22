@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "filter/msfilter/countryid.hxx"
@@ -22,15 +22,15 @@
 #include <algorithm>
 #include <sal/macros.h>
 
-// ----------------------------------------------------------------------------
+
 
 namespace msfilter {
 
-// Mapping table ==============================================================
+
 
 namespace {
 
-// ----------------------------------------------------------------------------
+
 
 /** Table entry for Windows country ID <-> language type conversion.
 
@@ -52,12 +52,12 @@ namespace {
  */
 struct CountryEntry
 {
-    CountryId                   meCountry;      /// Windows country ID.
-    LanguageType                meLanguage;     /// Corresponding language type.
-    bool                        mbUseSubLang;   /// false = Primary only, true = Primary and sub language.
+    CountryId                   meCountry;      
+    LanguageType                meLanguage;     
+    bool                        mbUseSubLang;   
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Table for Windows country ID <-> language type conversion.
 
@@ -198,7 +198,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_MONACO,               LANGUAGE_FRENCH_MONACO,                 true    },
     { COUNTRY_UKRAINE,              LANGUAGE_UKRAINIAN,                     false   },
     { COUNTRY_SERBIA,               LANGUAGE_SERBIAN_LATIN_SAM,             false   },
-    { COUNTRY_CROATIA,              LANGUAGE_CROATIAN,                      true    },  // sub type of LANGUAGE_SERBIAN
+    { COUNTRY_CROATIA,              LANGUAGE_CROATIAN,                      true    },  
     { COUNTRY_SLOVENIA,             LANGUAGE_SLOVENIAN,                     false   },
     { COUNTRY_MACEDONIA,            LANGUAGE_MACEDONIAN,                    false   },
     { COUNTRY_CZECH,                LANGUAGE_CZECH,                         false   },
@@ -276,22 +276,22 @@ struct CountryEntryPred_Language
 
 inline bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) const
 {
-    //  rCmp.mbUseSubLang==true  -> compare full language type
-    //  rCmp.mbUseSubLang==false -> compare primary language only
+    
+    
     return rCmp.mbUseSubLang ? (meLanguage == rCmp.meLanguage) :
                 ((meLanguage & 0x03FF) == (rCmp.meLanguage & 0x03FF));
 }
 
-} // namespace
+} 
 
-// Country ID <-> Language type conversion ====================================
+
 
 CountryId ConvertLanguageToCountry( LanguageType eLanguage )
 {
-    // country of a found primary language type
+    
     CountryId ePrimCountry = COUNTRY_DONTKNOW;
 
-    // find an exact match and a primary-language-only match, in one pass
+    
     const CountryEntry* pEntry = pTable;
     do
     {
@@ -299,10 +299,10 @@ CountryId ConvertLanguageToCountry( LanguageType eLanguage )
         if( pEntry != pEnd )
         {
             if( pEntry->mbUseSubLang )
-                return pEntry->meCountry;       // exact match found -> return
+                return pEntry->meCountry;       
             if( ePrimCountry == COUNTRY_DONTKNOW )
                 ePrimCountry = pEntry->meCountry;
-            ++pEntry;   // one entry forward for next find_if() call
+            ++pEntry;   
         }
     }
     while( pEntry != pEnd );
@@ -312,11 +312,11 @@ CountryId ConvertLanguageToCountry( LanguageType eLanguage )
 
 LanguageType ConvertCountryToLanguage( CountryId eCountry )
 {
-    // just find the first occurrence of eCountry and return the language type
+    
     const CountryEntry* pEntry = std::find_if( pTable, pEnd, CountryEntryPred_Country( eCountry ) );
     return (pEntry != pEnd) ? pEntry->meLanguage : LANGUAGE_DONTKNOW;
 }
 
-} // namespace svx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

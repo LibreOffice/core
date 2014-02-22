@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -41,7 +41,7 @@ public:
             get(reason_, "reason_bibliography_install");
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
         }
         reason_->Show();
         btnYes_->SetClickHdl(LINK(this, RestartDialog, hdlYes));

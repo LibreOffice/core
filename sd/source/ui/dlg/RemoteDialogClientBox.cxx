@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svtools/controldims.hrc"
@@ -34,37 +34,37 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-//------------------------------------------------------------------------------
-//                          struct ClientBoxEntry
-//------------------------------------------------------------------------------
+
+
+
 ClientBoxEntry::ClientBoxEntry( ClientInfo* pClientInfo ) :
     m_bActive( false ),
     m_pClientInfo( pClientInfo )
 {
 }
 
-//------------------------------------------------------------------------------
+
 ClientBoxEntry::~ClientBoxEntry()
 {}
 
 
-//------------------------------------------------------------------------------
-// ClientRemovedListener
-//------------------------------------------------------------------------------
+
+
+
 void ClientRemovedListener::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
     (void) rEvt;
 }
 
-//------------------------------------------------------------------------------
+
 ClientRemovedListener::~ClientRemovedListener()
 {
 }
 
-//------------------------------------------------------------------------------
-// ClientBox
-//------------------------------------------------------------------------------
+
+
+
 ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
     Control( pParent, nStyle ),
     m_bHasScrollBar( false ),
@@ -95,9 +95,9 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
         m_nStdHeight = nIconHeight;
     m_nStdHeight += GetTextHeight() + TOP_OFFSET;
 
-//     nIconHeight = ICON_HEIGHT + 2*TOP_OFFSET + 1;
-//     if ( m_nStdHeight < nIconHeight )
-//         m_nStdHeight = nIconHeight;
+
+
+
 
     m_nActiveHeight = m_nStdHeight;
 
@@ -126,7 +126,7 @@ Size ClientBox::GetOptimalSize() const
     return LogicToPixel(Size(200, 140), MAP_APPFONT);
 }
 
-//------------------------------------------------------------------------------
+
 ClientBox::~ClientBox()
 {
     if ( ! m_bInDelete )
@@ -138,7 +138,7 @@ ClientBox::~ClientBox()
 
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
-//         (*iIndex)->m_xPackage->removeEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
+
     }
 
     m_vEntries.clear();
@@ -146,14 +146,14 @@ ClientBox::~ClientBox()
     m_xRemoveListener.clear();
 }
 
-//------------------------------------------------------------------------------
-// Title + description
+
+
 void ClientBox::CalcActiveHeight( const long nPos )
 {
     (void) nPos;
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
-    // get title height
+    
     long aTextHeight;
     long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
     long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
@@ -162,7 +162,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     else
         aTextHeight = nIconHeight;
 
-    // Text entry height
+    
     Size aSize = GetOutputSizePixel();
     if ( m_bHasScrollBar )
         aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
@@ -179,7 +179,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     m_nActiveHeight = aTextHeight + 2;
 }
 
-//------------------------------------------------------------------------------
+
 Rectangle ClientBox::GetEntryRect( const long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
@@ -201,7 +201,7 @@ Rectangle ClientBox::GetEntryRect( const long nPos ) const
     return Rectangle( aPos, aSize );
 }
 
-//------------------------------------------------------------------------------
+
 void ClientBox::DeleteRemoved()
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
@@ -224,16 +224,16 @@ long ClientBox::GetActiveEntryIndex()
         return -1;
 }
 
-//------------------------------------------------------------------------------
-//This function may be called with nPos < 0
+
+
 void ClientBox::selectEntry( const long nPos )
 {
-    //ToDo whe should not use the guard at such a big scope here.
-    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be
-    //modified in this function.
-    //It would be probably best to always use a copy of m_vEntries
-    //and some other state variables from ClientBox for
-    //the whole painting operation. See issue i86993
+    
+    
+    
+    
+    
+    
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
 
     if ( m_bInCheckMode )
@@ -269,7 +269,7 @@ void ClientBox::selectEntry( const long nPos )
     guard.clear();
 }
 
-// -----------------------------------------------------------------------
+
 void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -296,28 +296,28 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         Erase( rRect );
     }
 
-    // FIXME: draw bluetooth or wifi icon
+    
      Point aPos( rRect.TopLeft() );
-//     aPos += Point( TOP_OFFSET, TOP_OFFSET );
-//     Image aImage;
-//     if ( ! pEntry->m_aIcon )
-//         aImage = m_aDefaultImage;
-//     else
-//         aImage = pEntry->m_aIcon;
-//     Size aImageSize = aImage.GetSizePixel();
-//     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
-//         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
-//     else
-//         DrawImage( aPos, Size( ICON_WIDTH, ICON_HEIGHT ), aImage );
 
-    // Setup fonts
+
+
+
+
+
+
+
+
+
+
+
+    
     Font aStdFont( GetFont() );
     Font aBoldFont( aStdFont );
     aBoldFont.SetWeight( WEIGHT_BOLD );
     SetFont( aBoldFont );
     long aTextHeight = GetTextHeight();
 
-    // Get max title width
+    
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
 
@@ -361,13 +361,13 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 
 
 
-//         long nExtraHeight = 0;
+
 //
-//         if ( pEntry->m_bHasButtons )
-//             nExtraHeight = m_nExtraHeight;
+
+
 //
-//         DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
-//                   sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+
+
     }
     else
     {
@@ -377,7 +377,7 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
 }
 
-// -----------------------------------------------------------------------
+
 void ClientBox::RecalcAll()
 {
     if ( m_bHasActive )
@@ -393,15 +393,15 @@ void ClientBox::RecalcAll()
         {
             m_bAdjustActive = false;
 
-            // If the top of the selected entry isn't visible, make it visible
+            
             if ( aEntryRect.Top() < 0 )
             {
                 m_nTopIndex += aEntryRect.Top();
                 aEntryRect.Move( 0, -aEntryRect.Top() );
             }
 
-            // If the bottom of the selected entry isn't visible, make it visible even if now the top
-            // isn't visible any longer ( the buttons are more important )
+            
+            
             Size aOutputSize = GetOutputSizePixel();
             if ( aEntryRect.Bottom() > aOutputSize.Height() )
             {
@@ -409,8 +409,8 @@ void ClientBox::RecalcAll()
                 aEntryRect.Move( 0, -( aEntryRect.Bottom() - aOutputSize.Height() ) );
             }
 
-            // If there is unused space below the last entry but all entries don't fit into the box,
-            // move the content down to use the whole space
+            
+            
             const long nTotalHeight = GetTotalHeight();
             if ( m_bHasScrollBar && ( aOutputSize.Height() + m_nTopIndex > nTotalHeight ) )
             {
@@ -428,13 +428,13 @@ void ClientBox::RecalcAll()
     m_bNeedsRecalc = false;
 }
 
-// -----------------------------------------------------------------------
+
 bool ClientBox::HandleTabKey( bool )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
 {
     if ( m_vEntries.empty() )
@@ -461,7 +461,7 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
         else if ( nKeyCode == KEY_PAGEDOWN )
             nSelect = m_nActive + nPageSize - 1;
     }
-    else // when there is no selected entry, we will select the first or the last.
+    else 
     {
         if ( ( nKeyCode == KEY_DOWN ) || ( nKeyCode == KEY_PAGEDOWN ) || ( nKeyCode == KEY_HOME ) )
             nSelect = 0;
@@ -479,7 +479,7 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
 {
     if ( !m_bInDelete )
@@ -506,7 +506,7 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
     }
 }
 
-// -----------------------------------------------------------------------
+
 long ClientBox::GetTotalHeight() const
 {
     long nHeight = m_vEntries.size() * m_nStdHeight;
@@ -519,7 +519,7 @@ long ClientBox::GetTotalHeight() const
     return nHeight;
 }
 
-// -----------------------------------------------------------------------
+
 void ClientBox::SetupScrollBar()
 {
     const Size aSize = GetOutputSizePixel();
@@ -552,13 +552,13 @@ void ClientBox::SetupScrollBar()
     m_bHasScrollBar = bNeedsScrollBar;
 }
 
-// -----------------------------------------------------------------------
+
 void ClientBox::Resize()
 {
     RecalcAll();
 }
 
-//------------------------------------------------------------------------------
+
 long ClientBox::PointToPos( const Point& rPos )
 {
     long nPos = ( rPos.Y() + m_nTopIndex ) / m_nStdHeight;
@@ -579,7 +579,7 @@ OUString ClientBox::getPin()
     return OUString::number( m_aPinBox.GetValue() );
 }
 
-//------------------------------------------------------------------------------
+
 void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     long nPos = PointToPos( rMEvt.GetPosPixel() );
@@ -587,13 +587,13 @@ void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() )
     {
         if ( rMEvt.IsMod1() && m_bHasActive )
-            selectEntry( m_vEntries.size() );   // Selecting an not existing entry will deselect the current one
+            selectEntry( m_vEntries.size() );   
         else
             selectEntry( nPos );
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool ClientBox::Notify( NotifyEvent& rNEvt )
 {
     if ( !m_bInDelete )
@@ -638,12 +638,12 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
 }
 
 
-//------------------------------------------------------------------------------
+
 long ClientBox::addEntry( ClientInfo* pClientInfo )
 {
     long         nPos = 0;
-//     PackageState eState = m_pManager->getPackageState( xPackage );
-//     bool         bLocked = m_pManager->isReadOnly( xPackage );
+
+
 
     TClientBoxEntry pEntry( new ClientBoxEntry( pClientInfo ) );
 
@@ -657,36 +657,36 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
     }
     else
     {
-//         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
-//         {
+
+
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
             bNewEntryInserted = true;
-//         }
-//         else if ( !m_bInCheckMode )
-//         {
-//             OSL_FAIL( "ClientBox::addEntry(): Will not add duplicate entries"  );
-//         }
+
+
+
+
+
     }
 
-    //Related: rhbz#702833 Only add a Listener if we're adding a new entry, to
-    //keep in sync with removeEventListener logic
+    
+    
     if (bNewEntryInserted)
     {
 
-        //         pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
+        
     }
 
 
-//     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-//     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
-//     pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
-//     pEntry->m_bNew        = m_bInCheckMode;
-//     pEntry->m_bMissingLic = bLicenseMissing;
 
-//     if ( bLicenseMissing )
-//         pEntry->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_MISSING_LICENSE );
 
-    //access to m_nActive must be guarded
+
+
+
+
+
+
+
+    
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
         m_nActive += 1;
 
@@ -700,7 +700,7 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 void ClientBox::DoScroll( long nDelta )
 {
     m_nTopIndex += nDelta;
@@ -713,7 +713,7 @@ void ClientBox::DoScroll( long nDelta )
     m_aScrollBar.SetPosPixel( aNewSBPt );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )
 {
     DoScroll( pScrBar->GetDelta() );
@@ -721,6 +721,6 @@ IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )
     return 1;
 }
 
-} //namespace dp_gui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

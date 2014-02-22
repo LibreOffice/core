@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,7 +52,7 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-    // XInitialization
+    
 
     virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
@@ -77,7 +77,7 @@ public:
         : PresentationViewInterfaceBase(maMutex),mxResourceId(rxViewId) {};
     virtual ~PresentationView (void) {};
 
-    // XView
+    
 
     virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException)
     { return mxResourceId; };
@@ -90,12 +90,12 @@ private:
     Reference<XResourceId> mxResourceId;
 };
 
-} // end of anonymous namespace.
+} 
 
 
 
 
-//===== PresentationFactoryProvider service ===================================
+
 
 Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -124,7 +124,7 @@ Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames
 
 
 
-//===== PresentationFactory ===================================================
+
 
 const OUString PresentationFactory::msPresentationViewURL("private:resource/view/Presentation");
 
@@ -137,7 +137,7 @@ PresentationFactory::PresentationFactory (
 {
     try
     {
-        // Get the XController from the first argument.
+        
         Reference<XControllerManager> xControllerManager(rxController, UNO_QUERY_THROW);
         mxConfigurationController = xControllerManager->getConfigurationController();
     }
@@ -165,7 +165,7 @@ void SAL_CALL PresentationFactory::disposing (void)
 
 
 
-//----- XViewFactory ----------------------------------------------------------
+
 
 Reference<XResource> SAL_CALL PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
@@ -207,7 +207,7 @@ void SAL_CALL PresentationFactory::releaseResource (
 
 
 
-//===== XConfigurationChangeListener ==========================================
+
 
 void SAL_CALL PresentationFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -219,7 +219,7 @@ void SAL_CALL PresentationFactory::notifyConfigurationChange (
 
 
 
-//===== lang::XEventListener ==================================================
+
 
 void SAL_CALL PresentationFactory::disposing (
     const lang::EventObject& rEventObject)
@@ -232,7 +232,7 @@ void SAL_CALL PresentationFactory::disposing (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PresentationFactory::ThrowIfDisposed (void) const
     throw (lang::DisposedException)
@@ -248,7 +248,7 @@ void PresentationFactory::ThrowIfDisposed (void) const
 
 namespace {
 
-//===== PresentationFactoryProvider ===========================================
+
 
 PresentationFactoryProvider::PresentationFactoryProvider (
     const Reference<XComponentContext>& rxContext)
@@ -274,7 +274,7 @@ void PresentationFactoryProvider::disposing (void)
 
 
 
-// XInitialization
+
 
 void SAL_CALL PresentationFactoryProvider::initialize(
     const Sequence<Any>& aArguments)
@@ -284,7 +284,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
     {
         try
         {
-            // Get the XController from the first argument.
+            
             Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
             Reference<XControllerManager> xCM (xController, UNO_QUERY_THROW);
             Reference<XConfigurationController> xCC (xCM->getConfigurationController());
@@ -302,9 +302,9 @@ void SAL_CALL PresentationFactoryProvider::initialize(
 
 
 
-} // end of anonymous namespace.
+} 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

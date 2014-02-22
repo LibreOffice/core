@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tabprotection.hxx"
@@ -26,14 +26,14 @@
 
 #define DEBUG_TAB_PROTECTION 0
 
-#define URI_SHA1 "http://www.w3.org/2000/09/xmldsig#sha1"
-#define URI_XLS_LEGACY "http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"
+#define URI_SHA1 "http:
+#define URI_XLS_LEGACY "http:
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
-// ============================================================================
+
 
 bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2)
 {
@@ -49,7 +49,7 @@ bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash
     {
         const ScTableProtection* p = rDoc.GetTabProtection(i);
         if (!p || !p->isProtected())
-            // Sheet not protected.  Skip it.
+            
             continue;
 
         if (!p->isPasswordEmpty() && !p->hasPasswordHash(eHash1, eHash2))
@@ -83,13 +83,13 @@ ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
     return PASSHASH_UNSPECIFIED;
 }
 
-// ============================================================================
+
 
 ScPassHashProtectable::~ScPassHashProtectable()
 {
 }
 
-// ============================================================================
+
 
 class ScTableProtectionImpl
 {
@@ -150,7 +150,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(
     if (!rPassHash.getLength() || eHash == PASSHASH_UNSPECIFIED)
         return rPassHash;
 
-    // TODO: Right now, we only support double-hash by SHA1.
+    
     if (eHash == PASSHASH_SHA1)
     {
         vector<sal_Char> aChars;
@@ -203,16 +203,16 @@ bool ScTableProtectionImpl::isProtectedWithPass() const
 void ScTableProtectionImpl::setProtected(bool bProtected)
 {
     mbProtected = bProtected;
-    // We need to keep the old password even when the protection is off.  So,
-    // don't erase the password data here.
+    
+    
 }
 
 void ScTableProtectionImpl::setPassword(const OUString& aPassText)
 {
-    // We can't hash it here because we don't know whether this document will
-    // get saved to Excel or ODF, depending on which we will need to use a
-    // different hashing algorithm.  One alternative is to hash it using all
-    // hash algorithms that we support, and store them all.
+    
+    
+    
+    
 
     maPassText = aPassText;
     mbEmptyPass = aPassText.isEmpty();
@@ -238,7 +238,7 @@ bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash
     if (meHash1 == eHash)
     {
         if (meHash2 == PASSHASH_UNSPECIFIED)
-            // single hash.
+            
             return true;
 
         return meHash2 == eHash2;
@@ -253,37 +253,37 @@ Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(
     Sequence<sal_Int8> aPassHash;
 
     if (mbEmptyPass)
-        // Flaged as empty.
+        
         return aPassHash;
 
     if (!maPassText.isEmpty())
     {
-        // Cleartext password exists.  Hash it.
+        
         aPassHash = hashPassword(maPassText, eHash);
         if (eHash2 != PASSHASH_UNSPECIFIED)
-            // Double-hash it.
+            
             aPassHash = hashPassword(aPassHash, eHash2);
 
         return aPassHash;
     }
     else
     {
-        // No clear text password.  Check if we have a hash value of the right hash type.
+        
         if (meHash1 == eHash)
         {
             aPassHash = maPassHash;
 
             if (meHash2 == eHash2)
-                // Matching double-hash requested.
+                
                 return aPassHash;
             else if (meHash2 == PASSHASH_UNSPECIFIED)
-                // primary hashing type match.  Double hash it by the requested
-                // double-hash type.
+                
+                
                 return hashPassword(aPassHash, eHash2);
         }
     }
 
-    // failed.
+    
     return Sequence<sal_Int8>();
 }
 
@@ -314,7 +314,7 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
         return aPassText.isEmpty();
 
     if (!maPassText.isEmpty())
-        // Clear text password exists, and this one takes precedence.
+        
         return aPassText == maPassText;
 
     Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash1);
@@ -352,7 +352,7 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
     maOptions[nOptId] = bEnabled;
 }
 
-// ============================================================================
+
 
 ScDocProtection::ScDocProtection() :
     mpImpl(new ScTableProtectionImpl(static_cast<SCSIZE>(ScDocProtection::NONE)))
@@ -383,9 +383,9 @@ void ScDocProtection::setProtected(bool bProtected)
 {
     mpImpl->setProtected(bProtected);
 
-    // Currently Calc doesn't support document protection options.  So, let's
-    // assume that when the document is protected, its structure is protected.
-    // We need to do this for Excel export.
+    
+    
+    
     mpImpl->setOption(ScDocProtection::STRUCTURE, bProtected);
 }
 
@@ -430,12 +430,12 @@ void ScDocProtection::setOption(Option eOption, bool bEnabled)
     mpImpl->setOption(eOption, bEnabled);
 }
 
-// ============================================================================
+
 
 ScTableProtection::ScTableProtection() :
     mpImpl(new ScTableProtectionImpl(static_cast<SCSIZE>(ScTableProtection::NONE)))
 {
-    // Set default values for the options.
+    
     mpImpl->setOption(SELECT_LOCKED_CELLS,   true);
     mpImpl->setOption(SELECT_UNLOCKED_CELLS, true);
 }

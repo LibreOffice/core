@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CandleStickChart.hxx"
@@ -52,7 +52,7 @@ CandleStickChart::~CandleStickChart()
     delete m_pMainPosHelper;
 }
 
-// MinimumAndMaximumSupplier
+
 
 bool CandleStickChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
@@ -71,13 +71,13 @@ drawing::Direction3D CandleStickChart::getPreferredDiagramAspectRatio() const
 
 void CandleStickChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 xSlot, sal_Int32 ySlot )
 {
-    //ignore y stacking for candle stick chart
+    
     VSeriesPlotter::addSeries( pSeries, 0, xSlot, ySlot );
 }
 
 void CandleStickChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if( m_aZSlots.begin() == m_aZSlots.end() ) 
         return;
 
     if( m_nDimension!=2 )
@@ -87,9 +87,9 @@ void CandleStickChart::createShapes()
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
-    //the text labels should be always on top of the other series shapes
-    //therefore create an own group for the texts to move them to front
-    //(because the text group is created after the series group the texts are displayed on top)
+    
+    
+    
 
     uno::Reference< drawing::XShapes > xSeriesTarget(
         createGroupShape( m_xLogicTarget,OUString() ));
@@ -102,10 +102,10 @@ void CandleStickChart::createShapes()
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
-    //check necessary here that different Y axis can not be stacked in the same group? ... hm?
+    
 
-    bool bJapaneseStyle=true;//@todo is this the correct default?
-    bool bShowFirst = true;//is only important if bJapaneseStyle == false
+    bool bJapaneseStyle=true;
+    bool bShowFirst = true;
     tNameSequence aWhiteBox_Names, aBlackBox_Names;
     tAnySequence  aWhiteBox_Values, aBlackBox_Values;
     try
@@ -134,11 +134,11 @@ void CandleStickChart::createShapes()
         ASSERT_EXCEPTION( e );
     }
 
-    //(@todo maybe different iteration for breaks in axis ?)
+    
     sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
-    double fLogicZ = 1.5;//as defined
-    //iterate through all x values per indices
+    double fLogicZ = 1.5;
+    
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
@@ -153,31 +153,31 @@ void CandleStickChart::createShapes()
             if( aXSlotIter != aXSlotEnd )
             {
                 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
-                //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
+                
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper;
             }
             PlotterBase::m_pPosHelper = pPosHelper;
 
-            //update/create information for current group
+            
             pPosHelper->updateSeriesCount( aZSlotIter->size() );
-            //iterate through all x slots in this category
+            
             for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-                //iterate through all series in this x slot
+                
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
-                    //collect data point information (logic coordinates, style ):
+                    
                     double fUnscaledX = (*aSeriesIter)->getXValue( nIndex );
                     if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
                         fUnscaledX = DateHelper::RasterizeDateValue( fUnscaledX, m_aNullDate, m_nTimeResolution );
                     if(fUnscaledX<pPosHelper->getLogicMinX() || fUnscaledX>pPosHelper->getLogicMaxX())
-                        continue;//point not visible
+                        continue;
                     double fScaledX = pPosHelper->getScaledSlotPos( fUnscaledX, fSlotX );
 
                     double fUnscaledY_First = (*aSeriesIter)->getY_First( nIndex );
@@ -193,7 +193,7 @@ void CandleStickChart::createShapes()
                     }
                     if(fUnscaledY_Max<fUnscaledY_Min)
                         std::swap(fUnscaledY_Min,fUnscaledY_Max);
-                    //transformation 3) -> 4)
+                    
                     double fHalfScaledWidth = pPosHelper->getScaledSlotWidth()/2.0;
 
                     double fScaledY_First(fUnscaledY_First);
@@ -228,7 +228,7 @@ void CandleStickChart::createShapes()
                         xPointGroupShape_Shapes = createGroupShape(xSeriesGroupShape_Shapes,aPointCID);
                     }
 
-                    //create min-max line
+                    
                     if( isValidPosition(aPosMiddleMinimum) && isValidPosition(aPosMiddleMaximum) )
                     {
                         drawing::PolyPolygonShape3D aPoly;
@@ -242,12 +242,12 @@ void CandleStickChart::createShapes()
                         this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
-                    //create first-last shape
+                    
                     if(bJapaneseStyle && isValidPosition(aPosLeftFirst) && isValidPosition(aPosRightLast) )
                     {
                         drawing::Direction3D aDiff = aPosRightLast-aPosLeftFirst;
                         awt::Size aAWTSize( Direction3DToAWTSize( aDiff ));
-                        // workaround for bug in drawing: if height is 0 the box gets infinitely large
+                        
                         if( aAWTSize.Height == 0 )
                             aAWTSize.Height = 1;
 
@@ -299,7 +299,7 @@ void CandleStickChart::createShapes()
                         }
                     }
 
-                    //create data point label
+                    
                     if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                     {
                         if(isValidPosition(aPosMiddleFirst))
@@ -315,12 +315,12 @@ void CandleStickChart::createShapes()
                             this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                         , fUnscaledY_Max, 1.0, Position3DToAWTPoint(aPosMiddleMaximum), LABEL_ALIGN_TOP );
                     }
-                }//next series in x slot (next y slot)
-            }//next x slot
-        }//next z slot
-    }//next category
+                }
+            }
+        }
+    }
     /* @todo remove series shapes if empty
-    //remove and delete point-group-shape if empty
+    
     if(!xSeriesGroupShape_Shapes->getCount())
     {
         (*aSeriesIter)->m_xShape.set(NULL);
@@ -328,11 +328,11 @@ void CandleStickChart::createShapes()
     }
     */
 
-    //remove and delete series-group-shape if empty
+    
 
-    //... todo
+    
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

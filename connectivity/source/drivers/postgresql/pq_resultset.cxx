@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -91,16 +91,16 @@ ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_table( table ),
       m_ppSettings( ppSettings )
 {
-    // LEM TODO: shouldn't these things be inherited from the statement or something like that?
+    
     sal_Bool b = sal_False;
-    // Positioned update/delete not supported, so no cursor name
-    // Fetch direction and size are cursor-specific things, so not used now.
-    // Fetch size not set
+    
+    
+    
     m_props[ BASERESULTSET_FETCH_DIRECTION ] = makeAny(
         com::sun::star::sdbc::FetchDirection::UNKNOWN);
-    // No escape processing for now
+    
     m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = Any( &b, getBooleanCppuType() );
-    // Bookmarks not implemented for now
+    
     m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = Any( &b, getBooleanCppuType() );
     m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = makeAny(
         com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY );
@@ -189,7 +189,7 @@ static bool isNumber( const char * data, sal_Int32 len )
             {
                 if( data[i] == '-' && i != 0 && i != len-1 )
                 {
-                    // no number, maybe a date
+                    
                     ret = false;
                     break;
                 }
@@ -217,7 +217,7 @@ static bool isInteger( const char * data, sal_Int32 len )
             {
                 if( data[i] == '-' && i != 0 && i != len-1 )
                 {
-                    // no number, maybe a date
+                    
                     ret = false;
                     break;
                 }
@@ -260,7 +260,7 @@ static bool isTimestamp( const char * data, sal_Int32 len )
 
 sal_Int32 ResultSet::guessDataType( sal_Int32 column )
 {
-    // we don't look into more than 100 rows ...
+    
     sal_Int32 ret = com::sun::star::sdbc::DataType::INTEGER;
 
     int maxRows = ( m_rowCount > 100 ? 100 : m_rowCount );

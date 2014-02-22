@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CurrentMasterPagesSelector.hxx"
@@ -78,8 +78,8 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
-    // For this master page selector only we change the default action for
-    // left clicks.
+    
+    
     mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
 
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
@@ -135,8 +135,8 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 {
     sal_uInt16 nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     SdPage* pMasterPage;
-    // Remember the names of the master pages that have been inserted to
-    // avoid double insertion.
+    
+    
     ::std::set<OUString> aMasterPageNames;
     for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
     {
@@ -144,14 +144,14 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
         if (pMasterPage == NULL)
             continue;
 
-        // Use the name of the master page to avoid duplicate entries.
+        
         OUString sName (pMasterPage->GetName());
         if (aMasterPageNames.find(sName)!=aMasterPageNames.end())
             continue;
         aMasterPageNames.insert (sName);
 
-        // Look up the master page in the container and, when it is not yet
-        // in it, insert it.
+        
+        
         MasterPageContainer::Token aToken = mpContainer->GetTokenForPageObject(pMasterPage);
         if (aToken == MasterPageContainer::NIL_TOKEN)
         {
@@ -184,8 +184,8 @@ ResId CurrentMasterPagesSelector::GetContextMenuResId (void) const
 
 void CurrentMasterPagesSelector::UpdateSelection (void)
 {
-    // Iterate over all pages and for the selected ones put the name of
-    // their master page into a set.
+    
+    
     sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
     SdPage* pPage;
     ::std::set<OUString> aNames;
@@ -198,12 +198,12 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
         {
             if ( ! pPage->TRG_HasMasterPage())
             {
-                // One of the pages has no master page.  This is an
-                // indicator for that this method is called in the middle of
-                // a document change and that the model is not in a valid
-                // state.  Therefore we stop update the selection and wait
-                // for another call to UpdateSelection when the model is
-                // valid again.
+                
+                
+                
+                
+                
+                
                 bLoop = false;
             }
             else
@@ -216,7 +216,7 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
         }
     }
 
-    // Find the items for the master pages in the set.
+    
     sal_uInt16 nItemCount (PreviewValueSet::GetItemCount());
     for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
     {
@@ -235,14 +235,14 @@ void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
 {
     if (nCommandId == SID_DELETE_MASTER_PAGE)
     {
-        // Check once again that the master page can safely be deleted,
-        // i.e. is not used.
+        
+        
         SdPage* pMasterPage = GetSelectedMasterPage();
         if (pMasterPage != NULL
             && mrDocument.GetMasterPageUserCount(pMasterPage) == 0)
         {
-            // Removing the precious flag so that the following call to
-            // RemoveUnnessesaryMasterPages() will remove this master page.
+            
+            
             pMasterPage->SetPrecious(false);
             mrDocument.RemoveUnnecessaryMasterPages(pMasterPage, sal_False, sal_True);
         }
@@ -256,7 +256,7 @@ void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
 
 void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
-    // Disable the SID_DELTE_MASTER slot when there is only one master page.
+    
     if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
     {
         if (rMenu.GetItemPos(SID_DELETE_MASTER_PAGE) != MENU_ITEM_NOTFOUND)
@@ -295,13 +295,13 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
                 break;
 
             case sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER:
-                // This is tricky.  If a master page is removed, moved, or
-                // added we have to wait until both the notes master page
-                // and the standard master page have been removed, moved,
-                // or added.  We do this by looking at the number of master
-                // pages which has to be odd in the consistent state (the
-                // handout master page is always present).  If the number is
-                // even we ignore the hint.
+                
+                
+                
+                
+                
+                
+                
                 if (mrBase.GetDocument()->GetMasterPageCount()%2 == 1)
                     MasterPagesSelector::Fill();
                 break;
@@ -317,6 +317,6 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
     return 0;
 }
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

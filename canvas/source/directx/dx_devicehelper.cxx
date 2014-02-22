@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,7 +64,7 @@ namespace dxcanvas
 
     void DeviceHelper::disposing()
     {
-        // release all references
+        
         mnHDC = 0;
         mpDevice = NULL;
     }
@@ -72,7 +72,7 @@ namespace dxcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
         if( !mpDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
         HDC hDC = getHDC();
         ENSURE_OR_THROW( hDC,
@@ -90,7 +90,7 @@ namespace dxcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
         HDC hDC=getHDC();
         ENSURE_OR_THROW( hDC,
@@ -110,7 +110,7 @@ namespace dxcanvas
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         if( !mpDevice )
-            return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
+            return uno::Reference< rendering::XLinePolyPolygon2D >(); 
 
         return uno::Reference< rendering::XLinePolyPolygon2D >(
             new LinePolyPolygon(
@@ -122,7 +122,7 @@ namespace dxcanvas
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         if( !mpDevice )
-            return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
+            return uno::Reference< rendering::XBezierPolyPolygon2D >(); 
 
         return uno::Reference< rendering::XBezierPolyPolygon2D >(
             new LinePolyPolygon(
@@ -134,14 +134,14 @@ namespace dxcanvas
         const geometry::IntegerSize2D&                      size )
     {
         if( !mpDevice )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         DXBitmapSharedPtr pBitmap(
             new DXBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D(size),
                 false));
 
-        // create a 24bit RGB system memory surface
+        
         return uno::Reference< rendering::XBitmap >(new CanvasBitmap(pBitmap,mpDevice));
     }
 
@@ -157,14 +157,14 @@ namespace dxcanvas
         const geometry::IntegerSize2D&                      size )
     {
         if( !mpDevice )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         DXBitmapSharedPtr pBitmap(
             new DXBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D(size),
                 true));
 
-        // create a 32bit ARGB system memory surface
+        
         return uno::Reference< rendering::XBitmap >(new CanvasBitmap(pBitmap,mpDevice));
     }
 
@@ -201,8 +201,8 @@ namespace dxcanvas
 
     uno::Any DeviceHelper::getSurfaceHandle() const
     {
-        // TODO(F1): expose DirectDraw object
-        //return mpBackBuffer->getBitmap().get();
+        
+        
         return uno::Any();
     }
 
@@ -220,7 +220,7 @@ namespace dxcanvas
 
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
     {
-        // always the same
+        
         return DeviceColorSpace::get();
     }
 }

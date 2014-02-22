@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,11 +40,11 @@
 using namespace ::com::sun::star;
 
 
-// the undo array should never grow beyond this limit:
+
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
 
 
-// UndoManager ///////////////////////////////////////////////////////////
+
 
 namespace sw {
 
@@ -62,8 +62,8 @@ UndoManager::UndoManager(boost::shared_ptr<SwNodes> xUndoNodes,
     ,   m_UndoSaveMark(MARK_INVALID)
 {
     OSL_ASSERT(m_xUndoNodes.get());
-    // writer expects it to be disabled initially
-    // Undo is enabled by SwEditShell constructor
+    
+    
     SdrUndoManager::EnableUndo(false);
 }
 
@@ -240,7 +240,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
     int const nCount = LeaveListAction();
 
-    if (nCount) // otherwise: empty list action not inserted!
+    if (nCount) 
     {
         OSL_ASSERT(pLastUndo);
         OSL_ASSERT(UNDO_START != eUndoId);
@@ -254,7 +254,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
             {
                 OSL_ENSURE(pListAction->GetId() == eUndoId,
                         "EndUndo(): given ID different from StartUndo()");
-                // comment set by caller of EndUndo
+                
                 OUString comment = SW_RES(UNDO_BASE + eUndoId);
                 if (pRewriter)
                 {
@@ -264,14 +264,14 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
             }
             else if ((UNDO_START != pListAction->GetId()))
             {
-                // comment set by caller of StartUndo: nothing to do here
+                
             }
             else if (pLastUndo)
             {
-                // comment was not set at StartUndo or EndUndo:
-                // take comment of last contained action
-                // (note that this works recursively, i.e. the last contained
-                // action may be a list action created by StartUndo/EndUndo)
+                
+                
+                
+                
                 OUString const comment(pLastUndo->GetComment());
                 pListAction->SetComment(comment);
             }
@@ -289,8 +289,8 @@ bool
 UndoManager::GetLastUndoInfo(
         OUString *const o_pStr, SwUndoId *const o_pId) const
 {
-    // this is actually expected to work on the current level,
-    // but that was really not obvious from the previous implementation...
+    
+    
     if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
     {
         return false;
@@ -386,7 +386,7 @@ SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
     {
         return nRepeatId;
     }
-    if (o_pStr) // not repeatable -> clear comment
+    if (o_pStr) 
     {
         *o_pStr = OUString();
     }
@@ -411,12 +411,12 @@ SwUndo * UndoManager::RemoveLastUndo()
     return dynamic_cast<SwUndo *>(pLastUndo);
 }
 
-// svl::IUndoManager /////////////////////////////////////////////////////
+
 
 void UndoManager::EnableUndo(bool bEnable)
 {
-    // SdrUndoManager does not have a counter anymore, but reverted to the old behavior of
-    // having a simple boolean flag for locking. So, simply forward.
+    
+    
     SdrUndoManager::EnableUndo(bEnable);
 }
 
@@ -431,7 +431,7 @@ void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
         }
     }
     SdrUndoManager::AddUndoAction(pAction, bTryMerge);
-    // if the undo nodes array is too large, delete some actions
+    
     while (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
     {
         RemoveOldestUndoActions(1);
@@ -447,7 +447,7 @@ public:
     {
         if (m_bSaveCursor)
         {
-            m_rShell.Push(); // prevent modification of current cursor
+            m_rShell.Push(); 
         }
     }
     ~CursorGuard()
@@ -466,7 +466,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
 {
     SwDoc & rDoc(*GetUndoNodes().GetDoc());
 
-    UnoActionContext c(& rDoc); // exception-safe StartAllAction/EndAllAction
+    UnoActionContext c(& rDoc); 
 
     SwEditShell *const pEditShell( rDoc.GetEditShell() );
 
@@ -476,13 +476,13 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
         throw uno::RuntimeException();
     }
 
-    // in case the model has controllers locked, the Undo should not
-    // change the view cursors!
+    
+    
     bool const bSaveCursors(pEditShell->CursorsLocked());
     CursorGuard aCursorGuard(*pEditShell, bSaveCursors);
     if (!bSaveCursors)
     {
-        // (in case Undo was called via API) clear the cursors:
+        
         pEditShell->KillPams();
         pEditShell->SetMark();
         pEditShell->ClearMark();
@@ -492,7 +492,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
 
     ::sw::UndoRedoContext context(rDoc, *pEditShell);
 
-    // N.B. these may throw!
+    
     if (UNDO == undoOrRedo)
     {
         bRet = SdrUndoManager::UndoWithContext(context);
@@ -504,7 +504,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
 
     if (bRet)
     {
-        // if we are at the "last save" position, the document is not modified
+        
         if (SdrUndoManager::HasTopUndoActionMark(m_UndoSaveMark))
         {
             m_rState.ResetModified();
@@ -577,12 +577,12 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     }
 
     SwPaM *const pFirstCursor(& rContext.GetRepeatPaM());
-    do {    // iterate over ring
+    do {    
         for (sal_uInt16 nRptCnt = nRepeatCount; nRptCnt > 0; --nRptCnt)
         {
             pRepeatAction->Repeat(rContext);
         }
-        rContext.m_bDeleteRepeated = false; // reset for next PaM
+        rContext.m_bDeleteRepeated = false; 
         rContext.m_pCurrentPaM =
             static_cast<SwPaM*>(rContext.m_pCurrentPaM->GetNext());
     } while (pFirstCursor != & rContext.GetRepeatPaM());
@@ -594,6 +594,6 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     return true;
 }
 
-} // namespace sw
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

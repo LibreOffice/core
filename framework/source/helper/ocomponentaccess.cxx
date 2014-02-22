@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <helper/ocomponentaccess.hxx>
@@ -36,45 +36,45 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwner )
-        //  Init baseclasses first
+        
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        // Init member
+        
         ,   m_xOwner        ( xOwner                        )
 {
-    // Safe impossible cases
+    
     SAL_WARN_IF( !impldbg_checkParameter_OComponentAccessCtor( xOwner ), "fwk", "OComponentAccess::OComponentAccess(): Invalid parameter detected!" );
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 OComponentAccess::~OComponentAccess()
 {
 }
 
-//*****************************************************************************************************************
-//  XEnumerationAccess
-//*****************************************************************************************************************
+
+
+
 css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
 
-    // Set default return value, if method failed.
-    // If no desktop exist and there is no task container - return an empty enumeration!
+    
+    
     css::uno::Reference< XEnumeration > xReturn = css::uno::Reference< XEnumeration >();
 
-    // Try to "lock" the desktop for access to task container.
+    
     css::uno::Reference< XInterface > xLock = m_xOwner.get();
     if ( xLock.is() )
     {
-        // Desktop exist => pointer to task container must be valid.
-        // Initialize a new enumeration ... if some tasks and his components exist!
-        // (OTasksEnumeration will make an assert, if we initialize the new instance without valid values!)
+        
+        
+        
 
         Sequence< css::uno::Reference< XComponent > > seqComponents;
         impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
@@ -82,56 +82,56 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
         xReturn = css::uno::Reference< XEnumeration >( (OWeakObject*)pEnumeration, UNO_QUERY );
     }
 
-    // Return result of this operation.
+    
     return xReturn;
 }
 
-//*****************************************************************************************************************
-//  XElementAccess
-//*****************************************************************************************************************
+
+
+
 Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
 {
-    // Elements in list an enumeration are components!
-    // Return the uno-type of XComponent.
+    
+    
     return ::getCppuType((const css::uno::Reference< XComponent >*)NULL);
 }
 
-//*****************************************************************************************************************
-//  XElementAccess
-//*****************************************************************************************************************
+
+
+
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
 
-    // Set default return value, if method failed.
+    
     sal_Bool bReturn = sal_False;
 
-    // Try to "lock" the desktop for access to task container.
+    
     css::uno::Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
     if ( xLock.is() )
     {
-        // Ask container of owner for existing elements.
+        
         bReturn = xLock->getFrames()->hasElements();
     }
 
-    // Return result of this operation.
+    
     return bReturn;
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Reference< XFramesSupplier >&         xNode           ,
                                                                  Sequence< css::uno::Reference< XComponent > >& seqComponents   )
 {
-    // If valid node was given ...
+    
     if( xNode.is() )
     {
-        // ... continue collection at these.
+        
 
-        // Get the container of current node, collect the components of existing child frames
-        // and go down to next level in tree (recursive!).
+        
+        
 
         sal_Int32 nComponentCount = seqComponents.getLength();
 
@@ -150,35 +150,35 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
             }
         }
     }
-    // ... otherwise break a recursive path and go back at current stack!
+    
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
 {
-    // Set default return value, if method failed.
+    
     css::uno::Reference< XComponent > xComponent = css::uno::Reference< XComponent >();
-    // Does no controller exists?
+    
     css::uno::Reference< XController > xController = xFrame->getController();
     if ( !xController.is() )
     {
-        // Controller not exist - use the VCL-component.
+        
         xComponent = css::uno::Reference< XComponent >( xFrame->getComponentWindow(), UNO_QUERY );
     }
     else
     {
-        // Does no model exists?
+        
         css::uno::Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
         if ( xModel.is() )
         {
-            // Model exist - use the model as component.
+            
             xComponent = css::uno::Reference< XComponent >( xModel, UNO_QUERY );
         }
         else
         {
-            // Model not exist - use the controller as component.
+            
             xComponent = css::uno::Reference< XComponent >( xController, UNO_QUERY );
         }
     }
@@ -186,9 +186,9 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     return xComponent;
 }
 
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
+
+
+
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
@@ -200,12 +200,12 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-//*****************************************************************************************************************
+
 sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
 {
     return xOwner.is();
 }
 
-}       //  namespace framework
+}       
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

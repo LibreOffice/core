@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/templateremoteview.hxx>
@@ -65,12 +65,12 @@ TemplateRemoteView::~TemplateRemoteView ()
 
 void TemplateRemoteView::showRootRegion()
 {
-    //TODO:
+    
 }
 
 void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
 {
-    //TODO:
+    
 }
 
 bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefresh)
@@ -129,7 +129,7 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
             {
                 bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
 
-                // don't show hidden files or anything besides documents
+                
                 if ( !bIsHidden || xRow->wasNull() )
                 {
                     OUString aContentURL = xContentAccess->queryContentIdentifierString();
@@ -171,7 +171,7 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
 
 sal_uInt16 TemplateRemoteView::createRegion(const OUString &/*rName*/)
 {
-    // TODO: Create new folder in current remote repository
+    
     return 0;
 }
 

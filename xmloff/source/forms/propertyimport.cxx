@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "propertyimport.hxx"
@@ -48,14 +48,14 @@ namespace xmloff
     using namespace ::com::sun::star::xml;
     using ::com::sun::star::xml::sax::XAttributeList;
 
-    // NO using namespace ...util !!!
-    // need a tools Date/Time/DateTime below, which would conflict with the uno types then
+    
+    
 
 #define TYPE_DATE       1
 #define TYPE_TIME       2
 #define TYPE_DATETIME   3
 
-//= PropertyConversion
+
 namespace
 {
     ::com::sun::star::util::Time lcl_getTime(double _nValue)
@@ -90,7 +90,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
     sal_Bool bEnumAsInt = sal_False;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:     
         {
             bool bValue;
         #if OSL_DEBUG_LEVEL > 0
@@ -104,10 +104,10 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             aReturn = ::cppu::bool2any(_bInvertBoolean ? !bValue : bValue);
         }
         break;
-        case TypeClass_SHORT:       // sal_Int16
-        case TypeClass_LONG:        // sal_Int32
+        case TypeClass_SHORT:       
+        case TypeClass_LONG:        
             if (!_pEnumMap)
-            {   // it's a real int32/16 property
+            {   
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -124,7 +124,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                 break;
             }
             bEnumAsInt = sal_True;
-            // NO BREAK! handle it as enum
+            
         case TypeClass_ENUM:
         {
             sal_uInt16 nEnumValue(0);
@@ -176,7 +176,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
 
             if ( nType )
             {
-                // first extract the double
+                
                 double nValue = 0;
             #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -187,7 +187,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                     append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                     append("\" into a double!").getStr());
 
-                // then convert it into the target type
+                
                 switch (nType)
                 {
                     case TYPE_DATE:
@@ -254,7 +254,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
     return aUnoType;
 }
 
-//= OPropertyImport
+
 OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName)
     :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
     ,m_rContext(_rImport)
@@ -284,8 +284,8 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
     OSL_ENSURE(_rxAttrList.is(), "OPropertyImport::StartElement: invalid attribute list!");
     const sal_Int32 nAttributeCount = _rxAttrList->getLength();
 
-    // assume the 'worst' case: all attributes describe properties. This should save our property array
-    // some reallocs
+    
+    
     m_aValues.reserve(nAttributeCount);
 
     const SvXMLNamespaceMap& rMap = m_rContext.getGlobalContext().GetNamespaceMap();
@@ -300,9 +300,9 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
             m_aEncounteredAttributes.insert(sLocalName);
     }
 
-    // TODO: create PropertyValues for all the attributes which were not present, because they were implied
-    // this is necessary as soon as we have properties where the XML default is different from the property
-    // default
+    
+    
+    
 }
 
 sal_Bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) const
@@ -317,7 +317,7 @@ _rChars
 #endif
 )
 {
-    // ignore them (should be whitespaces only)
+    
     OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
 }
 
@@ -326,16 +326,16 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
     const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
     if (pProperty)
     {
-        // create and store a new PropertyValue
+        
         PropertyValue aNewValue;
         aNewValue.Name = pProperty->sPropertyName;
 
-        // convert the value string into the target type
+        
         aNewValue.Value = PropertyConversion::convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
         implPushBackPropertyValue( aNewValue );
         return true;
     }
-    if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
+    if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
@@ -350,7 +350,7 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
     return true;
 }
 
-//= OPropertyElementsContext
+
 OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
         const OPropertyImportRef& _rPropertyImporter)
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
@@ -393,7 +393,7 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
 
 #endif
 
-//= OSinglePropertyContext
+
 OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
         const OPropertyImportRef& _rPropertyImporter)
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
@@ -412,8 +412,8 @@ SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPref
 
 void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
 {
-    ::com::sun::star::beans::PropertyValue aPropValue;      // the property the instance imports currently
-    ::com::sun::star::uno::Type aPropType;          // the type of the property the instance imports currently
+    ::com::sun::star::beans::PropertyValue aPropValue;      
+    ::com::sun::star::uno::Type aPropType;          
 
     OUString sType, sValue;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
@@ -446,10 +446,10 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
         }
     }
 
-    // the name of the property
+    
     OSL_ENSURE(!aPropValue.Name.isEmpty(), "OSinglePropertyContext::StartElement: invalid property name!");
 
-    // needs to be translated into a ::com::sun::star::uno::Type
+    
     aPropType = PropertyConversion::xmlTypeToUnoType( sType );
     if( TypeClass_VOID == aPropType.getTypeClass() )
     {
@@ -462,12 +462,12 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
                                            sValue);
     }
 
-    // now that we finally have our property value, add it to our parent object
+    
     if( !aPropValue.Name.isEmpty() )
         m_xPropertyImporter->implPushBackGenericPropertyValue(aPropValue);
 }
 
-//= OListPropertyContext
+
 OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
     const OPropertyImportRef& _rPropertyImporter )
     :SvXMLImportContext( _rImport, _nPrefix, _rName )
@@ -548,7 +548,7 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
     }
 }
 
-//= OListValueContext
+
 OListValueContext::OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName, OUString& _rListValueHolder )
     :SvXMLImportContext( _rImport, _nPrefix, _rName )
     ,m_rListValueHolder( _rListValueHolder )
@@ -583,6 +583,6 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
     }
 }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MediaDescriptorHelper.hxx"
@@ -70,7 +70,7 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
     m_aModelProperties.realloc(rMediaDescriptor.getLength());
     sal_Int32 nModelCount = 0;
 
-    //read given rMediaDescriptor and store in internal structures:
+    
     for( sal_Int32 i= rMediaDescriptor.getLength();i--;)
     {
         const beans::PropertyValue& rProp = rMediaDescriptor[i];
@@ -137,11 +137,11 @@ void MediaDescriptorHelper::impl_init()
     ISSET_CharacterSet = sal_False;
     ISSET_Comment = sal_False;
 
-//  ::com::sun::star::uno::Any  ComponentData;
+
     ISSET_ComponentData = sal_False;
     ISSET_FileName = sal_False;
 
-//  ::com::sun::star::uno::Any  FilterData;
+
     ISSET_FilterData = sal_False;
     ISSET_FilterName = sal_False;
     ISSET_FilterFlags = sal_False;
@@ -163,10 +163,10 @@ void MediaDescriptorHelper::impl_init()
     ISSET_Overwrite = sal_False;
     ISSET_Password = sal_False;
 
-//  ::com::sun::star::awt::Rectangle PosSize;
+
     ISSET_PosSize = sal_False;
 
-//  ::com::sun::star::uno::Sequence< sal_Int8 > PostData;
+
     ISSET_PostData = sal_False;
     ISSET_PostString = sal_False;
     Preview = sal_False;
@@ -185,7 +185,7 @@ void MediaDescriptorHelper::impl_init()
     Version = 0;
     ISSET_Version = sal_False;
 
-//  ::com::sun::star::uno::Any ViewData;
+
     ISSET_ViewData = sal_False;
     ViewId = 0;
     ISSET_ViewId = sal_False;

@@ -90,7 +90,7 @@ sal_Int32 SAL_CALL WrappedResultSet::hashBookmark( const Any& bookmark ) throw(S
     return m_xRowLocate->hashBookmark(bookmark);
 }
 
-// ::com::sun::star::sdbcx::XDeleteRows
+
 Sequence< sal_Int32 > SAL_CALL WrappedResultSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "WrappedResultSet::deleteRows" );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -83,7 +83,7 @@
 #include <sehandler.hxx>
 #endif
 
-// =======================================================================
+
 
 void SalAbort( const OUString& rErrorText, bool )
 {
@@ -91,28 +91,28 @@ void SalAbort( const OUString& rErrorText, bool )
 
     if ( rErrorText.isEmpty() )
     {
-        // make sure crash reporter is triggered
+        
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
         FatalAppExitW( 0, L"Application Error" );
     }
     else
     {
-        // make sure crash reporter is triggered
+        
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
         FatalAppExitW( 0, reinterpret_cast<LPCWSTR>(rErrorText.getStr()) );
     }
 }
 
-// =======================================================================
+
 
 LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-// =======================================================================
+
 
 class SalYieldMutex : public vcl::SolarMutexObject
 {
-public: // for ImplSalYield()
+public: 
     WinSalInstance*             mpInstData;
     sal_uLong                       mnCount;
     DWORD                       mnThreadId;
@@ -127,7 +127,7 @@ public:
     sal_uLong                       GetAcquireCount( sal_uLong nThreadId );
 };
 
-// -----------------------------------------------------------------------
+
 
 SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
 {
@@ -136,7 +136,7 @@ SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
     mnThreadId  = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SalYieldMutex::acquire()
 {
@@ -145,7 +145,7 @@ void SalYieldMutex::acquire()
     mnThreadId = GetCurrentThreadId();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SalYieldMutex::release()
 {
@@ -159,8 +159,8 @@ void SalYieldMutex::release()
         {
             if ( mnCount == 1 )
             {
-                // If we don't call these message, the Output from the
-                // Java clients doesn't come in the right order
+                
+                
                 GdiFlush();
 
                 mpInstData->mpSalWaitMutex->acquire();
@@ -187,7 +187,7 @@ void SalYieldMutex::release()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SalYieldMutex::tryToAcquire()
 {
@@ -201,7 +201,7 @@ bool SalYieldMutex::tryToAcquire()
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
 {
@@ -211,7 +211,7 @@ sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalYieldMutexAcquireWithWait()
 {
@@ -219,15 +219,15 @@ void ImplSalYieldMutexAcquireWithWait()
     if ( !pInst )
         return;
 
-    // If we are the main thread, then we must wait with wait, because
-    // in if we don't reschedule, then we create deadlocks if a Windows
-    // Function is called from another thread. If we aren't the main thread,
-    // than we call acquire directly.
+    
+    
+    
+    
     DWORD nThreadId = GetCurrentThreadId();
     SalData* pSalData = GetSalData();
     if ( pSalData->mnAppThreadId == nThreadId )
     {
-        // wait till we get the Mutex
+        
         sal_Bool bAcquire = FALSE;
         do
         {
@@ -259,7 +259,7 @@ void ImplSalYieldMutexAcquireWithWait()
         pInst->mpSalYieldMutex->acquire();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplSalYieldMutexTryToAcquire()
 {
@@ -270,7 +270,7 @@ sal_Bool ImplSalYieldMutexTryToAcquire()
         return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalYieldMutexAcquire()
 {
@@ -279,7 +279,7 @@ void ImplSalYieldMutexAcquire()
         pInst->mpSalYieldMutex->acquire();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalYieldMutexRelease()
 {
@@ -291,7 +291,7 @@ void ImplSalYieldMutexRelease()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong ImplSalReleaseYieldMutex()
 {
@@ -311,7 +311,7 @@ sal_uLong ImplSalReleaseYieldMutex()
     return nCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalAcquireYieldMutex( sal_uLong nCount )
 {
@@ -327,7 +327,7 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalInstance::CheckYieldMutex()
 {
@@ -340,7 +340,7 @@ bool WinSalInstance::CheckYieldMutex()
     return true;
 }
 
-// =======================================================================
+
 
 void SalData::initKeyCodeMap()
 {
@@ -366,40 +366,40 @@ void SalData::initKeyCodeMap()
     initKey( ';', KEY_SEMICOLON );
 }
 
-// =======================================================================
-// -------
-// SalData
-// -------
+
+
+
+
 
 SalData::SalData()
 {
-    mhInst = 0;                 // default instance handle
-    mhPrevInst = 0;             // previous instance handle
-    mnCmdShow = 0;              // default frame show style
-    mhDitherPal = 0;            // dither palette
-    mhDitherDIB = 0;            // dither memory handle
-    mpDitherDIB = 0;            // dither memory
-    mpDitherDIBData = 0;        // beginning of DIB data
-    mpDitherDiff = 0;           // Dither mapping table
-    mpDitherLow = 0;            // Dither mapping table
-    mpDitherHigh = 0;           // Dither mapping table
-    mnTimerMS = 0;              // Current Time (in MS) of the Timer
-    mnTimerOrgMS = 0;           // Current Original Time (in MS)
+    mhInst = 0;                 
+    mhPrevInst = 0;             
+    mnCmdShow = 0;              
+    mhDitherPal = 0;            
+    mhDitherDIB = 0;            
+    mpDitherDIB = 0;            
+    mpDitherDIBData = 0;        
+    mpDitherDiff = 0;           
+    mpDitherLow = 0;            
+    mpDitherHigh = 0;           
+    mnTimerMS = 0;              
+    mnTimerOrgMS = 0;           
     mnNextTimerTime = 0;
     mnLastEventTime = 0;
-    mnTimerId = 0;              // windows timer id
-    mbInTimerProc = FALSE;      // timer event is currently being dispatched
-    mhSalObjMsgHook = 0;        // hook to get interesting msg for SalObject
-    mhWantLeaveMsg = 0;         // window handle, that want a MOUSELEAVE message
-    mpMouseLeaveTimer = 0;      // Timer for MouseLeave Test
-    mpFirstInstance = 0;        // pointer of first instance
-    mpFirstFrame = 0;           // pointer of first frame
-    mpFirstObject = 0;          // pointer of first object window
-    mpFirstVD = 0;              // first VirDev
-    mpFirstPrinter = 0;         // first printing printer
-    mpHDCCache = 0;             // Cache for three DC's
-    mh50Bmp = 0;                // 50% Bitmap
-    mh50Brush = 0;              // 50% Brush
+    mnTimerId = 0;              
+    mbInTimerProc = FALSE;      
+    mhSalObjMsgHook = 0;        
+    mhWantLeaveMsg = 0;         
+    mpMouseLeaveTimer = 0;      
+    mpFirstInstance = 0;        
+    mpFirstFrame = 0;           
+    mpFirstObject = 0;          
+    mpFirstVD = 0;              
+    mpFirstPrinter = 0;         
+    mpHDCCache = 0;             
+    mh50Bmp = 0;                
+    mh50Brush = 0;              
     int i;
     for(i=0; i<MAX_STOCKPEN; i++)
     {
@@ -411,22 +411,22 @@ SalData::SalData()
         maStockBrushColorAry[i] = 0;
         mhStockBrushAry[i] = 0;
     }
-    mnStockPenCount = 0;        // count of static pens
-    mnStockBrushCount = 0;      // count of static brushes
-    mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
-    mnCacheDCInUse = 0;         // count of CacheDC in use
-    mbObjClassInit = FALSE;     // is SALOBJECTCLASS initialised
-    mbInPalChange = FALSE;      // is in WM_QUERYNEWPALETTE
-    mnAppThreadId = 0;          // Id from Applikation-Thread
-    mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
-    mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == not available)
-    mpSageEnableProc = 0;       // funktion to deactivate the system agent
-    mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
+    mnStockPenCount = 0;        
+    mnStockBrushCount = 0;      
+    mnSalObjWantKeyEvt = 0;     
+    mnCacheDCInUse = 0;         
+    mbObjClassInit = FALSE;     
+    mbInPalChange = FALSE;      
+    mnAppThreadId = 0;          
+    mbScrSvrEnabled = FALSE;    
+    mnSageStatus = 0;           
+    mpSageEnableProc = 0;       
+    mpFirstIcon = 0;            
     mpTempFontItem = 0;
-    mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
+    mbThemeChanged = FALSE;     
     mbThemeMenuSupport = FALSE;
 
-    // init with NULL
+    
     gdiplusToken = 0;
     maDwmLib     = 0;
     mpDwmIsCompositionEnabled = 0;
@@ -446,9 +446,9 @@ SalData::~SalData()
 void InitSalData()
 {
     SalData* pSalData = new SalData;
-    CoInitialize(0); // put main thread in Single Threaded Apartment (STA)
+    CoInitialize(0); 
 
-    // init GDIPlus
+    
     static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&pSalData->gdiplusToken, &gdiplusStartupInput, NULL);
 }
@@ -459,7 +459,7 @@ void DeInitSalData()
     CoUninitialize();
     SalData* pSalData = GetSalData();
 
-    // deinit GDIPlus
+    
     if(pSalData)
     {
         Gdiplus::GdiplusShutdown(pSalData->gdiplusToken);
@@ -468,13 +468,13 @@ void DeInitSalData()
     delete pSalData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void InitSalMain()
 {
-    // remember data, copied from WinMain
+    
     SalData* pData = GetSalData();
-    if ( pData )    // Im AppServer NULL
+    if ( pData )    
     {
         STARTUPINFO aSI;
         aSI.cb = sizeof( aSI );
@@ -485,24 +485,24 @@ void InitSalMain()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalInstance* CreateSalInstance()
 {
     SalData* pSalData = GetSalData();
 
-    // determine the windows version
+    
     aSalShlData.mbWXP        = 0;
     aSalShlData.mbW7         = 0;
     memset( &aSalShlData.maVersionInfo, 0, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
     {
-        // Windows XP ?
+        
         if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
            ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
             aSalShlData.mbWXP = 1;
-    // Windows 7 ?
+    
     if ( aSalShlData.maVersionInfo.dwMajorVersion > 6 ||
        ( aSalShlData.maVersionInfo.dwMajorVersion == 6 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
         aSalShlData.mbW7 = 1;
@@ -510,7 +510,7 @@ SalInstance* CreateSalInstance()
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
 
-    // register frame class
+    
     if ( !pSalData->mhPrevInst )
     {
         WNDCLASSEXW aWndClassEx;
@@ -535,7 +535,7 @@ SalInstance* CreateSalInstance()
         if ( !RegisterClassExW( &aWndClassEx ) )
             return NULL;
 
-        // shadow effect for popups on XP
+        
         if( aSalShlData.mbWXP )
             aWndClassEx.style       |= CS_DROPSHADOW;
         aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
@@ -558,35 +558,35 @@ SalInstance* CreateSalInstance()
 
     WinSalInstance* pInst = new WinSalInstance;
 
-    // init instance (only one instance in this version !!!)
+    
     pSalData->mpFirstInstance   = pInst;
     pInst->mhInst    = pSalData->mhInst;
     pInst->mhComWnd  = hComWnd;
 
-    // init static GDI Data
+    
     ImplInitSalGDI();
 
     return pInst;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DestroySalInstance( SalInstance* pInst )
 {
     SalData* pSalData = GetSalData();
 
-    //  (only one instance in this version !!!)
+    
 
     ImplFreeSalGDI();
 
-    // reset instance
+    
     if ( pSalData->mpFirstInstance == pInst )
         pSalData->mpFirstInstance = NULL;
 
     delete pInst;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalInstance::WinSalInstance()
 {
@@ -598,7 +598,7 @@ WinSalInstance::WinSalInstance()
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalInstance::~WinSalInstance()
 {
@@ -609,28 +609,28 @@ WinSalInstance::~WinSalInstance()
     DestroyWindow( mhComWnd );
 }
 
-// -----------------------------------------------------------------------
+
 
 comphelper::SolarMutex* WinSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong WinSalInstance::ReleaseYieldMutex()
 {
     return ImplSalReleaseYieldMutex();
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     ImplSalAcquireYieldMutex( nCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalDispatchMessage( MSG* pMsg )
 {
@@ -645,7 +645,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
 {
@@ -676,7 +676,7 @@ void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
@@ -692,16 +692,16 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     if ( pSalData->mnAppThreadId != nCurThreadId )
     {
-        // #97739# A SendMessage call blocks until the called thread (here: the main thread)
-        // returns. During a yield however, messages are processed in the main thread that might
-        // result in a new message loop due to opening a dialog. Thus, SendMessage would not
-        // return which will block this thread!
-        // Solution: just give up the time slice and hope that messages are processed
-        // by the main thread anyway (where all windows are created)
-        // If the mainthread is not currently handling messages, then our SendMessage would
-        // also do nothing, so this seems to be reasonable.
+        
+        
+        
+        
+        
+        
+        
+        
 
-        // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
+        
         if( ImplGetSVData()->maAppData.mnModalMode )
             Sleep(1);
         else
@@ -727,7 +727,7 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -744,9 +744,9 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             ImplSalYield( (sal_Bool)wParam, (sal_Bool)lParam );
             rDef = FALSE;
             break;
-        // If we get this message, because another GetMessage() call
-        // has received this message, we must post this message to
-        // us again, because in the other case we wait forever.
+        
+        
+        
         case SAL_MSG_RELEASEWAITYIELD:
             {
             WinSalInstance* pInst = GetSalData()->mpFirstInstance;
@@ -776,13 +776,13 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYHWND:
-            //We only destroy the native window here. We do NOT destroy the SalFrame contained
-            //in the structure (GetWindowPtr()).
+            
+            
             if (DestroyWindow((HWND)lParam) == 0)
             {
                 OSL_FAIL("DestroyWindow failed!");
-                //Failure: We remove the SalFrame from the window structure. So we avoid that
-                // the window structure may contain an invalid pointer, once the SalFrame is deleted.
+                
+                
                SetWindowPtr((HWND)lParam, 0);
             }
             rDef = FALSE;
@@ -873,7 +873,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalInstance::AnyInput( sal_uInt16 nType )
 {
@@ -881,8 +881,8 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
     if ( (nType & (VCL_INPUT_ANY)) == (VCL_INPUT_ANY) )
     {
-        // revert bugfix for #108919# which never reported timeouts when called from the timer handler
-        // which made the application completely unresponsive during background formatting
+        
+        
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
             return true;
     }
@@ -890,7 +890,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
     {
         if ( nType & VCL_INPUT_MOUSE )
         {
-            // Test for mouse input
+            
             if ( ImplPeekMessage( &aMsg, 0, WM_MOUSEFIRST, WM_MOUSELAST,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
@@ -898,7 +898,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
         if ( nType & VCL_INPUT_KEYBOARD )
         {
-            // Test for key input
+            
             if ( ImplPeekMessage( &aMsg, 0, WM_KEYDOWN, WM_KEYDOWN,
                                   PM_NOREMOVE | PM_NOYIELD ) )
             {
@@ -913,7 +913,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
         if ( nType & VCL_INPUT_PAINT )
         {
-            // Test for paint input
+            
             if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
@@ -937,7 +937,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
         if ( nType & VCL_INPUT_TIMER )
         {
-            // Test for timer input
+            
             if ( ImplPeekMessage( &aMsg, 0, WM_TIMER, WM_TIMER,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
@@ -946,7 +946,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
         if ( nType & VCL_INPUT_OTHER )
         {
-            // Test for any input
+            
             if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
         }
@@ -955,11 +955,11 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SalTimer::Start( sal_uLong nMS )
 {
-    // to switch to Main-Thread
+    
     SalData* pSalData = GetSalData();
     if ( pSalData->mpFirstInstance )
     {
@@ -972,19 +972,19 @@ void SalTimer::Start( sal_uLong nMS )
         ImplSalStartTimer( nMS, FALSE );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
-    // to switch to Main-Thread
+    
     return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
-    // to switch to Main-Thread
+    
     HWND hWndParent;
     if ( pParent )
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
@@ -993,31 +993,31 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSty
     return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 {
     ImplSendMessage( mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
-                                         SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
+                                         SystemWindowData* /*pWindowData*/, 
                                          sal_Bool /*bShow*/ )
 {
-    // to switch to Main-Thread
+    
     return (SalObject*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalInstance::DestroyObject( SalObject* pObject )
 {
     ImplSendMessage( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, (LPARAM)pObject );
 }
 
-// -----------------------------------------------------------------------
+
 
 void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
@@ -1026,7 +1026,7 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return const_cast<char *>("");
 }
 
-// -----------------------------------------------------------------------
+
 
 /** Add a file to the system shells recent document list if there is any.
       This function may have no effect under Unix because there is no
@@ -1103,19 +1103,19 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                 }
             }
         }
-        // For whatever reason, we could not use the SHARD_APPIDINFO semantics
+        
         SHAddToRecentDocs(SHARD_PATHW, (PCWSTR) system_path.getStr());
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalTimer* WinSalInstance::CreateSalTimer()
 {
     return new WinSalTimer();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalBitmap* WinSalInstance::CreateSalBitmap()
 {
@@ -1128,8 +1128,8 @@ class WinImeStatus : public SalI18NImeStatus
     WinImeStatus() {}
     virtual ~WinImeStatus() {}
 
-    // asks whether there is a status window available
-    // to toggle into menubar
+    
+    
     virtual bool canToggle() { return false; }
     virtual void toggle() {}
 };
@@ -1139,7 +1139,7 @@ SalI18NImeStatus* WinSalInstance::CreateI18NImeStatus()
     return new WinImeStatus();
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& SalGetDesktopEnvironment()
 {
@@ -1153,14 +1153,14 @@ SalSession* WinSalInstance::CreateSalSession()
 }
 
 #if !defined ( __MINGW32__ ) || defined ( _WIN64 )
-// -----------------------------------------------------------------------
+
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
 {
-    // Decide if an exception is a c++ (mostly UNO) exception or a process violation.
-    // Depending on this information we pass process violations directly to our signal handler ...
-    // and c++ (UNO) exceptions are sended to the following code on the current stack.
-    // Problem behind: user32.dll sometime consumes exceptions/process violations .-)
-    // see also #112221#
+    
+    
+    
+    
+    
 
     static DWORD EXCEPTION_MSC_CPP_EXCEPTION = 0xE06D7363;
 

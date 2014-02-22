@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -106,7 +106,7 @@ private:
 
 
 
-// Here are some test for the parsing of an url.
+
 
 #define TESTURL \
 {  \
@@ -123,13 +123,13 @@ int test_ftpurl(void) {
     FTPHandleProviderI prov;
     char* ascii,*n,*p;
 
-    ascii = "ftp://abi:psswd@host/eins/../drei", n = "abi", p = "psswd";
+    ascii = "ftp:
     TESTURL;
 
-    ascii = "ftp://:psswd@host:22/eins/../drei", n = "anonymous", p = "psswd";
+    ascii = "ftp:
     TESTURL;
 
-    ascii = "ftp://host/bla/../../test/", n = "anonymous", p = "";
+    ascii = "ftp:
     TESTURL;
 
     if(number_of_errors)
@@ -147,7 +147,7 @@ int test_ftplist(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        OUString( "ftp://abi:psswd@abi-1/dir"),
+        OUString( "ftp:
         &provider);
 
     std::vector<ftp::FTPDirentry> vec =
@@ -184,24 +184,24 @@ int test_ftpparent(void) {
     OUString urlStr;
     char *ascii,*expect;
 
-    ascii = "ftp://abi:psswd@abi-1/file";
-    expect = "ftp://abi:psswd@abi-1/";
+    ascii = "ftp:
+    expect = "ftp:
     TESTPARENT;
 
-    ascii = "ftp://abi:psswd@abi-1/dir/../file";
-    expect = "ftp://abi:psswd@abi-1/";
+    ascii = "ftp:
+    expect = "ftp:
     TESTPARENT;
 
-    ascii = "ftp://abi:psswd@abi-1/..";
-    expect = "ftp://abi:psswd@abi-1/../..";
+    ascii = "ftp:
+    expect = "ftp:
     TESTPARENT;
 
-    ascii = "ftp://abi:psswd@abi-1/../../dir";
-    expect = "ftp://abi:psswd@abi-1/../..";
+    ascii = "ftp:
+    expect = "ftp:
     TESTPARENT;
 
-    ascii = "ftp://abi:psswd@abi-1/";
-    expect = "ftp://abi:psswd@abi-1/..";
+    ascii = "ftp:
+    expect = "ftp:
     TESTPARENT;
 
     if(number_of_errors)
@@ -217,7 +217,7 @@ int test_ftpproperties(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        OUString( "ftp://abi:psswd@abi-1/file"),
+        OUString( "ftp:
         &provider);
 
     ftp::FTPDirentry ade(url.direntry());
@@ -240,7 +240,7 @@ int test_ftpopen(void)
 
     FTPHandleProviderI provider;
     ftp::FTPURL url(
-        OUString( "ftp://abi:psswd@abi-1/file"),
+        OUString( "ftp:
         &provider);
 
     FILE* file = url.open();

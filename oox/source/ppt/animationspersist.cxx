@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/animationspersist.hxx"
@@ -59,12 +59,12 @@ namespace oox { namespace ppt {
                 switch(mnRangeType)
                 {
                 case XML_charRg:
-                    // TODO calculate the corresponding paragraph for the text range....
+                    
                     SAL_INFO("oox.ppt", "OOX: TODO calculate the corresponding paragraph for the text range..." );
                     break;
                 case XML_pRg:
                     aParaTarget.Paragraph = static_cast< sal_Int16 >( maRange.start );
-                    // TODO what to do with more than one.
+                    
                     SAL_INFO("oox.ppt", "OOX: TODO what to do with more than one" );
                     break;
                 }
@@ -81,15 +81,15 @@ namespace oox { namespace ppt {
     Any AnimTargetElement::convert(const SlidePersistPtr & pSlide, sal_Int16 & nSubType) const
     {
         Any aTarget;
-        // see sd/source/files/ppt/pptinanimations.cxx:3191 (in importTargetElementContainer())
+        
         switch(mnType)
         {
         case XML_inkTgt:
-            // TODO
+            
             SAL_INFO("oox.ppt", "OOX: TODO inkTgt" );
             break;
         case XML_sldTgt:
-            // TODO
+            
             SAL_INFO("oox.ppt", "OOX: TODO sldTgt" );
             break;
         case XML_sndTgt:
@@ -99,7 +99,7 @@ namespace oox { namespace ppt {
         {
             OUString sShapeName = msValue;
 
-            // bnc#705982 - catch referenced diagram fallback shapes
+            
             if( maShapeTarget.mnType == XML_dgm )
                 sShapeName = maShapeTarget.msSubShapeId;
 
@@ -126,7 +126,7 @@ namespace oox { namespace ppt {
     }
 
 
-// BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.cxx
+
 /** this adds an any to another any.
     if rNewValue is empty, rOldValue is returned.
     if rOldValue is empty, rNewValue is returned.
@@ -161,7 +161,7 @@ namespace oox { namespace ppt {
             return makeAny( aNewSeq );
         }
     }
-// END
+
 
     Any AnimationCondition::convert(const SlidePersistPtr & pSlide) const
     {

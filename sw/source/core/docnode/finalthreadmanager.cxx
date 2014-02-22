@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <finalthreadmanager.hxx>
@@ -254,7 +254,7 @@ FinalThreadManager::~FinalThreadManager()
 
     if ( mpTerminateOfficeThread != 0 )
     {
-        mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
+        mpTerminateOfficeThread->StopOfficeTermination(); 
         mpTerminateOfficeThread = 0;
     }
 
@@ -276,7 +276,7 @@ FinalThreadManager::~FinalThreadManager()
     }
 }
 
-// com.sun.star.uno.XServiceInfo:
+
 OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_FinalThreadManager::_getImplementationName();
@@ -292,7 +292,7 @@ css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceN
     return comp_FinalThreadManager::_getSupportedServiceNames();
 }
 
-// ::com::sun::star::util::XJobManager:
+
 void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(maMutex);
@@ -346,14 +346,14 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
     }
 }
 
-// ::com::sun::star::frame::XTerminateListener
+
 void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject& ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(maMutex);
 
     cancelAllJobs();
-    // Sleep 1 second to give the thread for job cancellation some time.
-    // Probably, all started threads have already finished its work.
+    
+    
     if ( mpCancelJobsThread != 0 &&
          !mpCancelJobsThread->allJobsCancelled() )
     {
@@ -369,7 +369,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
         if ( mpTerminateOfficeThread != 0 )
         {
             if ( mpTerminateOfficeThread->isRunning() )
-                mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
+                mpTerminateOfficeThread->StopOfficeTermination(); 
             else
                 delete mpTerminateOfficeThread;
 
@@ -407,7 +407,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     if ( mpTerminateOfficeThread != 0 )
     {
         if ( mpTerminateOfficeThread->isRunning() )
-            mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
+            mpTerminateOfficeThread->StopOfficeTermination(); 
         else
             delete mpTerminateOfficeThread;
 
@@ -425,19 +425,19 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
         mpCancelJobsThread = 0;
     }
 
-    // get reference of this
+    
     css::uno::Reference< css::uno::XInterface > aOwnRef( static_cast< cppu::OWeakObject* >( this ));
-    // notify <SwThreadJoiner> to release its reference
+    
     SwThreadJoiner::ReleaseThreadJoiner();
 }
 
-// ::com::sun:star::lang::XEventListener (inherited via com::sun::star::frame::XTerminateListener)
+
 void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
 {
-    // nothing to do, because instance doesn't hold any references of observed objects
+    
 }
 
-// component helper namespace
+
 namespace comp_FinalThreadManager {
 
     OUString SAL_CALL _getImplementationName()
@@ -459,6 +459,6 @@ namespace comp_FinalThreadManager {
         return static_cast< ::cppu::OWeakObject * >(new FinalThreadManager(context));
     }
 
-} // closing component helper namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

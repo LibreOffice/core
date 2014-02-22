@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,12 +60,12 @@ void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab, const bool b )
     TabRangeType::iterator itr = maTabRanges.find(nTab);
     if (itr == maTabRanges.end())
     {
-        // No entry for this table yet.  Insert a new one.
+        
         std::pair<TabRangeType::iterator, bool> r =
             maTabRanges.insert(nTab, new RangeListType);
 
         if (!r.second)
-            // Insertion failed.
+            
             return;
 
         itr = r.first;
@@ -79,7 +79,7 @@ void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab, bool b )
 
     if( b )
     {
-        // ignore 3D ranges
+        
         if (a.aStart.Tab() != a.aEnd.Tab())
             return;
 
@@ -108,7 +108,7 @@ void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab, bool b )
         else if (a.aEnd.Row() < 0)
             a.aEnd.SetRow(0);
     }
-#if 0 // no members 'Ref1' or 'Ref2' in 'ScRange'
+#if 0 
     else
     {
         OSL_ENSURE( ValidTab(a.Ref1.nTab),
@@ -130,12 +130,12 @@ void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab, bool b )
     TabRangeType::iterator itr = maTabRanges.find(nTab);
     if (itr == maTabRanges.end())
     {
-        // No entry for this table yet.  Insert a new one.
+        
         std::pair<TabRangeType::iterator, bool> r =
             maTabRanges.insert(nTab, new RangeListType);
 
         if (!r.second)
-            // Insertion failed.
+            
             return;
 
         itr = r.first;
@@ -149,7 +149,7 @@ const ScRange* _ScRangeListTabs::First( SCTAB n )
 
     TabRangeType::iterator itr = maTabRanges.find(n);
     if (itr == maTabRanges.end())
-        // No range list exists for this table.
+        
         return NULL;
 
     const RangeListType& rList = *itr->second;

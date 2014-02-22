@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/toolbarsmenucontroller.hxx>
@@ -56,9 +56,9 @@
 #include <unotools/cmdoptions.hxx>
 #include <svtools/miscopt.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -212,7 +212,7 @@ Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const 
         return Reference< XDispatch >();
 }
 
-// private function
+
 OUString ToolbarsMenuController::getUINameFromCommand( const OUString& rCommandURL )
 {
     OUString aLabel;
@@ -280,7 +280,7 @@ static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::Prop
     }
 }
 
-// private function
+
 Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager )
 {
     std::vector< ToolBarInfo > aToolBarArray;
@@ -351,7 +351,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
     m_aCommandVector.clear();
 
-    // Retrieve layout manager for additional information
+    
     OUString aEmptyString;
     Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( m_xFrame ));
 
@@ -414,7 +414,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 {
                 }
 
-                // Check if we have to enable/disable "Reset" menu item
+                
                 if ( bContextSensitive && !bVisible )
                     m_bResetActive = sal_True;
 
@@ -433,7 +433,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             ++pIter;
         }
 
-        // sort toolbars
+        
         std::sort( aSortedTbs.begin(), aSortedTbs.end(), CompareToolBarEntry );
 
         sal_Int16 nIndex( 1 );
@@ -453,7 +453,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
             }
 
-            // use VCL popup menu pointer to set vital information that are not part of the awt implementation
+            
             OUStringBuffer aStrBuf( aStaticCmdPart );
 
             sal_Int32 n = aSortedTbs[i].aCommand.lastIndexOf( '/' );
@@ -462,13 +462,13 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
             OUString aCmd( aStrBuf.makeStringAndClear() );
 
-            // Store complete uno-command so it can also be dispatched. This is necessary to support
-            // the test tool!
+            
+            
             rPopupMenu->setCommand( nIndex, aCmd );
             ++nIndex;
         }
 
-        // Create commands for non-toolbars
+        
         if ( m_aModuleIdentifier == "com.sun.star.text.TextDocument" ||
              m_aModuleIdentifier == "com.sun.star.text.WebDocument" ||
              m_aModuleIdentifier == "com.sun.star.text.GlobalDocument" ||
@@ -498,7 +498,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         if ( bAddCommand )
         {
-            // Create command for configure
+            
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
                 sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
@@ -508,10 +508,10 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             addCommand( m_xPopupMenu, aConfigureToolbar, aEmptyString );
         }
 
-        // Add separator if no configure has been added
+        
         if ( !bAddCommand )
         {
-            // Create command for configure
+            
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
                 sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
@@ -525,7 +525,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     }
 }
 
-// XEventListener
+
 void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -542,12 +542,12 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( Ru
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
-    // All other status events will be processed here
+    
     sal_Bool bSetCheckmark      = sal_False;
     sal_Bool bCheckmark         = sal_False;
 
@@ -570,10 +570,10 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
             OUString aCmd = pVCLPopupMenu->GetItemCommand( nId );
             if ( aCmd == aFeatureURL )
             {
-                // Enable/disable item
+                
                 pVCLPopupMenu->EnableItem( nId, Event.IsEnabled );
 
-                // Checkmark
+                
                 if ( Event.State >>= bCheckmark )
                     bSetCheckmark = sal_True;
 
@@ -591,7 +591,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     }
 }
 
-// XMenuListener
+
 void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
@@ -619,7 +619,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
             if ( aCmd.startsWith( STATIC_INTERNAL_CMD_PART ) )
             {
-                // Command to restore the visibility of all context sensitive toolbars
+                
                 Reference< XNameReplace > xNameReplace( xPersistentWindowState, UNO_QUERY );
                 if ( xPersistentWindowState.is() && xNameReplace.is() )
                 {
@@ -654,7 +654,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
 
                                     if ( !bVisible && bContextSensitive && nVisibleIndex >= 0 )
                                     {
-                                        // Default is: Every context sensitive toolbar is visible
+                                        
                                         aWindowState[nVisibleIndex].Value <<= sal_True;
                                         xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
                                         bRefreshToolbars = true;
@@ -723,7 +723,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                 Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( xFrame ));
                 if ( xLayoutManager.is() )
                 {
-                    // Extract toolbar name from the combined uno-command.
+                    
                     sal_Int32 nIndex = aCmd.indexOf( '=' );
                     if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
                     {
@@ -739,8 +739,8 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                         }
                         else
                         {
-                            // closing means:
-                            // hide and destroy element
+                            
+                            
                             xLayoutManager->hideElement( aToolBarResName );
                             xLayoutManager->destroyElement( aToolBarResName );
                         }
@@ -762,7 +762,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
         aCmdVector = m_aCommandVector;
     }
 
-    // Update status for all commands inside our toolbars popup menu
+    
     const sal_uInt32 nCount = aCmdVector.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -782,7 +782,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
         }
         else if ( aCmdVector[i] == CMD_RESTOREVISIBILITY )
         {
-            // Special code to determine the enable/disable state of this command
+            
             FeatureStateEvent aFeatureStateEvent;
             aFeatureStateEvent.FeatureURL.Complete = aCmdVector[i];
             aFeatureStateEvent.IsEnabled = isContextSensitiveToolbarNonVisible();
@@ -791,7 +791,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
     }
 }
 
-// XPopupMenuController
+
 void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );
@@ -800,7 +800,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
-        // Create popup menu on demand
+        
         SolarMutexGuard aSolarMutexGuard;
 
         m_xPopupMenu = xPopupMenu;
@@ -809,7 +809,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
     }
 }
 
-// XInitialization
+
 void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );
@@ -823,7 +823,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
             Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::theWindowStateConfiguration::get( m_xContext );
 
-            // Retrieve persistent window state reference for our module
+            
             OUString aModuleIdentifier;
             try
             {
@@ -857,9 +857,9 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInf
 {
     try
     {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         if ( pExecuteInfo->xDispatch.is() )
         {
             pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );

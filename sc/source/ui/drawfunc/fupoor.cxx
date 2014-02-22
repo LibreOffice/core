@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
     aSfxRequest(rReq),
     pDialog(NULL),
     bIsInDragMode(false),
-    // remember MouseButton state
+    
     mnCode(0)
 {
     aScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, ScrollHdl) );
@@ -132,27 +132,27 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
-    // use remembered MouseButton state to create correct
-    // MouseEvents for this artifical MouseMove.
+    
+    
     MouseMove(MouseEvent(aPosPixel, 1, 0, GetMouseButtonCode()));
 
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
-// moved from inline to *.cxx
+
 bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return false;
 }
 
-// moved from inline to *.cxx
+
 bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return false;
@@ -164,7 +164,7 @@ bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-//  WriteStatus gibt's nicht mehr
+
 
 /*************************************************************************
 |*
@@ -184,9 +184,9 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
-        //!!! sollte Joe eigentlich machen:
-        // nur, wenn im Outliner was selektiert ist, darf
-        // Command sal_True zurueckliefern:
+        
+        
+        
 
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
@@ -203,7 +203,7 @@ void FuPoor::DoCut()
 {
     if (pView)
     {
-//!     pView->DoCut(pWindow);
+
     }
 }
 
@@ -217,7 +217,7 @@ void FuPoor::DoCopy()
 {
     if (pView)
     {
-//!     pView->DoCopy(pWindow);
+
     }
 }
 
@@ -225,7 +225,7 @@ void FuPoor::DoPaste()
 {
     if (pView)
     {
-//!     pView->DoPaste(pWindow);
+
     }
 }
 
@@ -237,12 +237,12 @@ void FuPoor::DoPaste()
 
 IMPL_LINK_NOARG(FuPoor, DragTimerHdl)
 {
-    //  ExecuteDrag (und das damit verbundene Reschedule) direkt aus dem Timer
-    //  aufzurufen, bringt die VCL-Timer-Verwaltung durcheinander, wenn dabei
-    //  (z.B. im Drop) wieder ein Timer gestartet wird (z.B. ComeBack-Timer der
-    //  DrawView fuer Solid Handles / ModelHasChanged) - der neue Timer laeuft
-    //  dann um die Dauer des Drag&Drop zu spaet ab.
-    //  Darum Drag&Drop aus eigenem Event:
+    
+    
+    
+    
+    
+    
 
     Application::PostUserEvent( LINK( this, FuPoor, DragHdl ) );
     return 0;
@@ -257,13 +257,13 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
         pWindow->ReleaseMouse();
         bIsInDragMode = true;
 
-//      pView->BeginDrag(pWindow, aMDPos);
+
         pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
     }
     return 0;
 }
 
-//  Detektiv-Linie
+
 
 bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
@@ -305,7 +305,7 @@ void FuPoor::StopDragTimer()
 
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& /* rRectangle */)
 {
-    // empty base implementation
+    
     return 0L;
 }
 
@@ -325,7 +325,7 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
     }
 }
 
-// #i33136#
+
 bool FuPoor::doConstructOrthogonal() const
 {
     return false;

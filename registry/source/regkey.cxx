@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,8 +26,8 @@
 #include "keyimpl.hxx"
 
 
-//*********************************************************************
-//  acquireKey
+
+
 //
 void REGISTRY_CALLTYPE acquireKey(RegKeyHandle hKey)
 {
@@ -40,8 +40,8 @@ void REGISTRY_CALLTYPE acquireKey(RegKeyHandle hKey)
 }
 
 
-//*********************************************************************
-//  releaseKey
+
+
 //
 void REGISTRY_CALLTYPE releaseKey(RegKeyHandle hKey)
 {
@@ -54,8 +54,8 @@ void REGISTRY_CALLTYPE releaseKey(RegKeyHandle hKey)
 }
 
 
-//*********************************************************************
-//  isKeyReadOnly
+
+
 //
 sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
 {
@@ -64,8 +64,8 @@ sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
 }
 
 
-//*********************************************************************
-//  getKeyName
+
+
 //
 RegError REGISTRY_CALLTYPE getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName)
 {
@@ -82,8 +82,8 @@ RegError REGISTRY_CALLTYPE getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName)
 }
 
 
-//*********************************************************************
-//  createKey
+
+
 //
 RegError REGISTRY_CALLTYPE createKey(RegKeyHandle hKey,
                                      rtl_uString* keyName,
@@ -104,8 +104,8 @@ RegError REGISTRY_CALLTYPE createKey(RegKeyHandle hKey,
     return pKey->createKey(keyName, phNewKey);
 }
 
-//*********************************************************************
-//  openKey
+
+
 //
 RegError REGISTRY_CALLTYPE openKey(RegKeyHandle hKey,
                                    rtl_uString* keyName,
@@ -123,8 +123,8 @@ RegError REGISTRY_CALLTYPE openKey(RegKeyHandle hKey,
     return pKey->openKey(keyName, phOpenKey);
 }
 
-//*********************************************************************
-//  openSubKeys
+
+
 //
 RegError REGISTRY_CALLTYPE openSubKeys(RegKeyHandle hKey,
                                        rtl_uString* keyName,
@@ -144,8 +144,8 @@ RegError REGISTRY_CALLTYPE openSubKeys(RegKeyHandle hKey,
     return pKey->openSubKeys(keyName, pphSubKeys, pnSubKeys);
 }
 
-//*********************************************************************
-//  closeSubKeys
+
+
 //
 RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle* phSubKeys,
                                         sal_uInt32 nSubKeys)
@@ -163,8 +163,8 @@ RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle* phSubKeys,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  deleteKey
+
+
 //
 RegError REGISTRY_CALLTYPE deleteKey(RegKeyHandle hKey,
                                      rtl_uString* keyName)
@@ -182,8 +182,8 @@ RegError REGISTRY_CALLTYPE deleteKey(RegKeyHandle hKey,
     return pKey->deleteKey(keyName);
 }
 
-//*********************************************************************
-//  closeKey
+
+
 //
 RegError REGISTRY_CALLTYPE closeKey(RegKeyHandle hKey)
 {
@@ -194,8 +194,8 @@ RegError REGISTRY_CALLTYPE closeKey(RegKeyHandle hKey)
     return pKey->closeKey(hKey);
 }
 
-//*********************************************************************
-//  setValue
+
+
 //
 RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
                                        rtl_uString* keyName,
@@ -237,8 +237,8 @@ RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
     return pKey->setValue(valueName, valueType, pData, valueSize);
 }
 
-//*********************************************************************
-//  setLongValueList
+
+
 //
 RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
                                                   rtl_uString* keyName,
@@ -279,8 +279,8 @@ RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
     return pKey->setLongListValue(valueName, pValueList, len);
 }
 
-//*********************************************************************
-//  setStringValueList
+
+
 //
 RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
                                                    rtl_uString* keyName,
@@ -321,8 +321,8 @@ RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
     return pKey->setStringListValue(valueName, pValueList, len);
 }
 
-//*********************************************************************
-//  setUnicodeValueList
+
+
 //
 RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle hKey,
                                                      rtl_uString* keyName,
@@ -363,8 +363,8 @@ RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle hKey,
     return pKey->setUnicodeListValue(valueName, pValueList, len);
 }
 
-//*********************************************************************
-//  getValueInfo
+
+
 //
 RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
                                         rtl_uString* keyName,
@@ -416,8 +416,8 @@ RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  getValueInfo
+
+
 //
 RegError REGISTRY_CALLTYPE getValue(RegKeyHandle hKey,
                                     rtl_uString* keyName,
@@ -451,8 +451,8 @@ RegError REGISTRY_CALLTYPE getValue(RegKeyHandle hKey,
     return pKey->getValue(valueName, pValue);
 }
 
-//*********************************************************************
-//  getLongValueList
+
+
 //
 RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
                                             rtl_uString* keyName,
@@ -490,8 +490,8 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
     return pKey->getLongListValue(valueName, pValueList, pLen);
 }
 
-//*********************************************************************
-//  getStringValueList
+
+
 //
 RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
                                               rtl_uString* keyName,
@@ -529,8 +529,8 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
     return pKey->getStringListValue(valueName, pValueList, pLen);
 }
 
-//*********************************************************************
-//  getUnicodeListValue
+
+
 //
 RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
                                                rtl_uString* keyName,
@@ -568,8 +568,8 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
     return pKey->getUnicodeListValue(valueName, pValueList, pLen);
 }
 
-//*********************************************************************
-//  freeValueList
+
+
 //
 RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
                                               RegValue pValueList,
@@ -612,27 +612,27 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  createLink
+
+
 //
 RegError REGISTRY_CALLTYPE createLink(
     SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*,
     SAL_UNUSED_PARAMETER rtl_uString*)
 {
-    return REG_INVALID_LINK; // links are no longer supported
+    return REG_INVALID_LINK; 
 }
 
-//*********************************************************************
-//  deleteLink
+
+
 //
 RegError REGISTRY_CALLTYPE deleteLink(
     SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*)
 {
-    return REG_INVALID_LINK; // links are no longer supported
+    return REG_INVALID_LINK; 
 }
 
-//*********************************************************************
-//  getKeyType
+
+
 //
 RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
                                       rtl_uString* keyName,
@@ -648,18 +648,18 @@ RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
     return pKey->getKeyType(keyName, pKeyType);
 }
 
-//*********************************************************************
-//  getLinkTarget
+
+
 //
 RegError REGISTRY_CALLTYPE getLinkTarget(
     SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*,
     SAL_UNUSED_PARAMETER rtl_uString**)
 {
-    return REG_INVALID_LINK; // links are no longer supported
+    return REG_INVALID_LINK; 
 }
 
-//*********************************************************************
-//  getName
+
+
 //
 RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
                                               rtl_uString* keyName,
@@ -680,8 +680,8 @@ RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
     return _ret;
 }
 
-//*********************************************************************
-//  getKeyNames
+
+
 //
 RegError REGISTRY_CALLTYPE getKeyNames(RegKeyHandle hKey,
                                        rtl_uString* keyName,
@@ -698,8 +698,8 @@ RegError REGISTRY_CALLTYPE getKeyNames(RegKeyHandle hKey,
     return pKey->getKeyNames(keyName, pSubKeyNames, pnSubKeys);
 }
 
-//*********************************************************************
-//  freeKeyNames
+
+
 //
 RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString** pKeyNames,
                                           sal_uInt32 nKeys)
@@ -714,12 +714,12 @@ RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString** pKeyNames,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  C API
+
+
 //
 
-//*********************************************************************
-//  reg_createKey
+
+
 //
 RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
@@ -731,8 +731,8 @@ RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
     return createKey(hKey, keyName, phNewKey);
 }
 
-//*********************************************************************
-//  reg_openKey
+
+
 //
 RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
                                        rtl_uString* keyName,
@@ -744,8 +744,8 @@ RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
     return openKey(hKey, keyName, phOpenKey);
 }
 
-//*********************************************************************
-//  reg_openSubKeys
+
+
 //
 RegError REGISTRY_CALLTYPE reg_openSubKeys(RegKeyHandle hKey,
                                            rtl_uString* keyName,
@@ -758,8 +758,8 @@ RegError REGISTRY_CALLTYPE reg_openSubKeys(RegKeyHandle hKey,
     return openSubKeys(hKey, keyName, pphSubKeys, pnSubKeys);
 }
 
-//*********************************************************************
-//  reg_closeSubKeys
+
+
 //
 RegError REGISTRY_CALLTYPE reg_closeSubKeys(RegKeyHandle* pphSubKeys,
                                             sal_uInt32 nSubKeys)
@@ -770,8 +770,8 @@ RegError REGISTRY_CALLTYPE reg_closeSubKeys(RegKeyHandle* pphSubKeys,
     return closeSubKeys(pphSubKeys, nSubKeys);
 }
 
-//*********************************************************************
-//  reg_deleteKey
+
+
 //
 RegError REGISTRY_CALLTYPE reg_deleteKey(RegKeyHandle hKey,
                                          rtl_uString* keyName)
@@ -782,8 +782,8 @@ RegError REGISTRY_CALLTYPE reg_deleteKey(RegKeyHandle hKey,
     return deleteKey(hKey, keyName);
 }
 
-//*********************************************************************
-//  reg_closeKey
+
+
 //
 RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey)
 {
@@ -794,8 +794,8 @@ RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey)
 }
 
 
-//*********************************************************************
-//  reg_getKeyName
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName)
 {
@@ -810,8 +810,8 @@ RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyN
     }
 }
 
-//*********************************************************************
-//  reg_setValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_setValue(RegKeyHandle hKey,
                                         rtl_uString* keyName,
@@ -825,8 +825,8 @@ RegError REGISTRY_CALLTYPE reg_setValue(RegKeyHandle hKey,
     return setValue(hKey, keyName, valueType, pData, valueSize);
 }
 
-//*********************************************************************
-//  reg_setLongListValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
                                                       rtl_uString* keyName,
@@ -839,8 +839,8 @@ RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
     return setLongListValue(hKey, keyName, pValueList, len);
 }
 
-//*********************************************************************
-//  reg_setStringListValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKey,
                                                           rtl_uString* keyName,
@@ -853,8 +853,8 @@ RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKey,
     return setStringListValue(hKey, keyName, pValueList, len);
 }
 
-//*********************************************************************
-//  reg_setUnicodeListValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_setUnicodeListValue(RegKeyHandle hKey,
                                                             rtl_uString* keyName,
@@ -867,8 +867,8 @@ RegError REGISTRY_CALLTYPE reg_setUnicodeListValue(RegKeyHandle hKey,
     return setUnicodeListValue(hKey, keyName, pValueList, len);
 }
 
-//*********************************************************************
-//  reg_getValueInfo
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getValueInfo(RegKeyHandle hKey,
                                             rtl_uString* keyName,
@@ -881,8 +881,8 @@ RegError REGISTRY_CALLTYPE reg_getValueInfo(RegKeyHandle hKey,
     return getValueInfo(hKey, keyName, pValueType, pValueSize);
 }
 
-//*********************************************************************
-//  reg_getValueInfo
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getValue(RegKeyHandle hKey,
                                         rtl_uString* keyName,
@@ -894,8 +894,8 @@ RegError REGISTRY_CALLTYPE reg_getValue(RegKeyHandle hKey,
     return getValue(hKey, keyName, pData);
 }
 
-//*********************************************************************
-//  reg_getLongListValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
                                                       rtl_uString* keyName,
@@ -908,8 +908,8 @@ RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
     return getLongListValue(hKey, keyName, pValueList, pLen);
 }
 
-//*********************************************************************
-//  reg_getStringListValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKey,
                                                        rtl_uString* keyName,
@@ -922,8 +922,8 @@ RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKey,
     return getStringListValue(hKey, keyName, pValueList, pLen);
 }
 
-//*********************************************************************
-//  reg_getUnicodeListValue
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getUnicodeListValue(RegKeyHandle hKey,
                                                          rtl_uString* keyName,
@@ -936,8 +936,8 @@ RegError REGISTRY_CALLTYPE reg_getUnicodeListValue(RegKeyHandle hKey,
     return getUnicodeListValue(hKey, keyName, pValueList, pLen);
 }
 
-//*********************************************************************
-//  reg_freeValueList
+
+
 //
 RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
                                                   RegValue pValueList,
@@ -949,8 +949,8 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
         return REG_INVALID_VALUE;
 }
 
-//*********************************************************************
-//  reg_getKeyType
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
                                           rtl_uString* keyName,
@@ -962,8 +962,8 @@ RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
     return getKeyType(hKey, keyName, pKeyType);
 }
 
-//*********************************************************************
-//  reg_getResolvedKeyName
+
+
 //
 RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
                                                     rtl_uString* keyName,

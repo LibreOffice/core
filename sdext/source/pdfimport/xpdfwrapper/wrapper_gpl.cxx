@@ -61,18 +61,18 @@ int main(int argc, char **argv)
     if( argc != 3 )
         return 1;
 
-    // read config file
+    
     globalParams = new GlobalParams();
     globalParams->setErrQuiet(gTrue);
 #if defined(_MSC_VER)
     globalParams->setupBaseFonts(NULL);
 #endif
 
-    // try to read a possible open password form stdin
+    
     char aPwBuf[129];
     aPwBuf[128] = 0;
     if( ! fgets( aPwBuf, sizeof(aPwBuf)-1, stdin ) )
-        aPwBuf[0] = 0; // mark as empty
+        aPwBuf[0] = 0; 
     else
     {
         for( unsigned int i = 0; i < sizeof(aPwBuf); i++ )
@@ -85,11 +85,11 @@ int main(int argc, char **argv)
         }
     }
 
-    // PDFDoc takes over ownership for all strings below
+    
     GooString* pFileName    = new GooString(argv[1]);
     GooString* pErrFileName = new GooString(argv[2]);
 
-    // check for password string(s)
+    
     GooString* pOwnerPasswordStr( aPwBuf[0] != 0
                                  ? new GooString( aPwBuf )
                                  : (ownerPassword[0] != '\001'
@@ -102,8 +102,8 @@ int main(int argc, char **argv)
         g_binary_out = fopen(outputFile,"wb");
 
 #ifdef WNT
-    // Win actually modifies output for O_TEXT file mode, so need to
-    // revert to binary here
+    
+    
     _setmode( _fileno( g_binary_out ), _O_BINARY );
 #endif
 
@@ -116,20 +116,20 @@ int main(int argc, char **argv)
                  pUserPasswordStr );
 
 
-   // Check various permissions.
+   
    if ( !aDoc.isOk() )
    {
         pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
 
         const int nPages = aErrDoc.isOk() ? aErrDoc.getNumPages() : 0;
 
-        // tell receiver early - needed for proper progress calculation
+        
         pOutDev->setPageNum( nPages );
 
-        // virtual resolution of the PDF OutputDev in dpi
+        
         static const int PDFI_OUTDEV_RESOLUTION=7200;
 
-       // do the conversion
+       
        for( int i=1; i<=nPages; ++i )
        {
           aErrDoc.displayPage( pOutDev,
@@ -144,13 +144,13 @@ int main(int argc, char **argv)
    {
       pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
 
-      // tell receiver early - needed for proper progress calculation
+      
       pOutDev->setPageNum( aDoc.getNumPages() );
 
-      // virtual resolution of the PDF OutputDev in dpi
+      
       static const int PDFI_OUTDEV_RESOLUTION=7200;
 
-      // do the conversion
+      
       const int nPages = aDoc.getNumPages();
       for( int i=1; i<=nPages; ++i )
       {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "comphelper/propertysetinfo.hxx"
 #include "comphelper/propertysethelper.hxx"
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::rtl;
 using namespace ::comphelper;
@@ -55,7 +55,7 @@ PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) co
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw()
 {
@@ -76,7 +76,7 @@ PropertySetHelper::~PropertySetHelper() throw()
     delete mp;
 }
 
-// XPropertySet
+
 Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return mp->mpInfo;
@@ -113,25 +113,25 @@ Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
 
 void SAL_CALL PropertySetHelper::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL PropertySetHelper::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL PropertySetHelper::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL PropertySetHelper::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
-// XMultiPropertySet
+
 void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -199,20 +199,20 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< O
 
 void SAL_CALL PropertySetHelper::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw(RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL PropertySetHelper::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& ) throw(RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL PropertySetHelper::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw(RuntimeException)
 {
-    // todo
+    
 }
 
-// XPropertyState
+
 PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
     PropertyMapEntry const * aEntries[2];

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@ namespace {
         const ::boost::function<double(double)> maAccelerationFunction;
     };
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -140,14 +140,14 @@ void VisibleAreaManager::MakeVisible (void)
     if ( ! aNewVisibleTopLeft)
         return;
 
-    // We now know what the visible area shall be.  Scroll accordingly
-    // unless that is not already the visible area or a running scroll
-    // animation has it as its target area.
+    
+    
+    
     if (mnScrollAnimationId!=Animator::NotAnAnimationId
         && maRequestedVisibleTopLeft==aNewVisibleTopLeft)
         return;
 
-    // Stop a running animation.
+    
     if (mnScrollAnimationId != Animator::NotAnAnimationId)
         mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(mnScrollAnimationId);
 
@@ -166,7 +166,7 @@ void VisibleAreaManager::MakeVisible (void)
     }
     else
     {
-        // Execute the animation at its final value.
+        
         aAnimation(1.0);
     }
     meRequestedAnimationMode = Animator::AM_Immediate;
@@ -181,7 +181,7 @@ void VisibleAreaManager::MakeVisible (void)
     if ( ! pWindow)
         return ::boost::optional<Point>();
 
-    // Get the currently visible area and the model area.
+    
     const Rectangle aVisibleArea (pWindow->PixelToLogic(
         Rectangle(
             Point(0,0),
@@ -193,7 +193,7 @@ void VisibleAreaManager::MakeVisible (void)
     sal_Int32 nVisibleLeft (aVisibleArea.Left());
     const sal_Int32 nVisibleHeight (aVisibleArea.GetHeight());
 
-    // Find the longest run of boxes whose union fits into the visible area.
+    
     for (::std::vector<Rectangle>::const_iterator
              iBox(maVisibleRequests.begin()),
              iEnd(maVisibleRequests.end());
@@ -210,7 +210,7 @@ void VisibleAreaManager::MakeVisible (void)
         if (nVisibleLeft > iBox->Left())
             nVisibleLeft = iBox->Left();
 
-        // Make sure the visible area does not move outside the model area.
+        
         if (nVisibleTop + nVisibleHeight > aModelArea.Bottom())
             nVisibleTop = aModelArea.Bottom() - nVisibleHeight;
         if (nVisibleTop < aModelArea.Top())
@@ -232,7 +232,7 @@ void VisibleAreaManager::MakeVisible (void)
 
 
 
-//===== VisibleAreaManager::TemporaryDisabler =================================
+
 
 VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter& rSlideSorter)
     : mrVisibleAreaManager(rSlideSorter.GetController().GetVisibleAreaManager())
@@ -250,7 +250,7 @@ VisibleAreaManager::TemporaryDisabler::~TemporaryDisabler (void)
 
 
 
-//===== VerticalVisibleAreaScroller ===========================================
+
 
 namespace {
 
@@ -267,9 +267,9 @@ VisibleAreaScroller::VisibleAreaScroller (
           controller::AnimationParametricFunction(
               controller::AnimationBezierFunction (0.1,0.6)))
 {
-    // When the distance to scroll is larger than a threshold then first
-    // jump to within this distance of the final value and start the
-    // animation from there.
+    
+    
+    
     if (abs(aStart.X()-aEnd.X()) > gnMaxScrollDistance)
     {
         if (aStart.X() < aEnd.X())
@@ -298,8 +298,8 @@ void VisibleAreaScroller::operator() (const double nTime)
             sal_Int32 (0.5 + maStart.Y() * (1.0 - nLocalTime) + maEnd.Y() * nLocalTime)));
 }
 
-} // end of anonymous namespace
+} 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <epptbase.hxx>
@@ -122,8 +122,8 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     else
     {
         rSt.WriteUInt16( rLev.mnAsianOrComplexFont )
-           .WriteUInt16( (sal_uInt16)0xffff )       // unknown
-           .WriteUInt16( (sal_uInt16)0xffff )       // unknown
+           .WriteUInt16( (sal_uInt16)0xffff )       
+           .WriteUInt16( (sal_uInt16)0xffff )       
            .WriteUInt16( rLev.mnFontHeight )
            .WriteUInt32( nFontColor )
            .WriteUInt16( rLev.mnEscapement );
@@ -236,7 +236,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     if ( aParagraphObj.meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
     {
         sal_Int16 nLineSpacing = aParagraphObj.mnLineSpacing;
-        if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
+        if ( nLineSpacing > 0 ) 
         {
             sal_Bool bFixedLineSpacing = sal_False;
             uno::Any aAny = rXPropSet->getPropertyValue("FontIndependentLineSpacing");
@@ -249,7 +249,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         }
         else
         {
-            if ( rCharLevel.mnFontHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+            if ( rCharLevel.mnFontHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) 
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
                 if ( pDesc )
@@ -282,7 +282,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     if ( aParagraphObj.meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         rLev.mnBiDi = aParagraphObj.mnBiDi;
 
-    rLev.mbIsBullet = aParagraphObj.mbIsBullet; //( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
+    rLev.mbIsBullet = aParagraphObj.mbIsBullet; 
 
     if ( !nLevel )
     {
@@ -327,7 +327,7 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
         {
             rOut.WriteUInt32( (sal_uInt32)( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
                 .WriteUInt32( (sal_uInt32)( 5 * 16 + 2 ) )
-                .WriteUInt16( (sal_uInt16)5 );              // depth
+                .WriteUInt16( (sal_uInt16)5 );              
         }
         sal_uInt16 nBulletId = rLev.mnBulletId;
         if ( rLev.mnNumberingType != SVX_NUM_BITMAP )
@@ -471,26 +471,26 @@ sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const
     return 24;
 }
 
-// the TxCFStyleAtom stores the text properties that are used
-// when creating new objects in PowerPoint.
+
+
 
 void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
 {
     const PPTExCharLevel& rCharStyle = mpCharSheet[ EPP_TEXTTYPE_Other ]->maCharLevel[ 0 ];
 
-    sal_uInt16 nFlags = 0x60        // ??
-                      | 0x02        // fontsize;
-                      | 0x04;       // fontcolor
+    sal_uInt16 nFlags = 0x60        
+                      | 0x02        
+                      | 0x04;       
 
     sal_uInt32 nCharFlags = rCharStyle.mnFlags;
     nCharFlags &= CharAttr_Italic | CharAttr_Bold | CharAttr_Underline | CharAttr_Shadow;
 
-    rSt.WriteUInt32( (sal_uInt32)( EPP_TxCFStyleAtom << 16 ) )  // recordheader
+    rSt.WriteUInt32( (sal_uInt32)( EPP_TxCFStyleAtom << 16 ) )  
        .WriteUInt32( SizeOfTxCFStyleAtom() - 8 )
        .WriteUInt16( (sal_uInt16)( 0x80 | nCharFlags ) )
        .WriteUInt16( (sal_uInt16)nFlags )
        .WriteUInt16( (sal_uInt16)nCharFlags )
-       .WriteInt32( (sal_Int32)-1 )                            // ?
+       .WriteInt32( (sal_Int32)-1 )                            
        .WriteUInt16( rCharStyle.mnFontHeight )
        .WriteUInt32( rCharStyle.mnFontColor );
 }

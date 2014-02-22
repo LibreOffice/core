@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -102,7 +102,7 @@ using ::com::sun::star::util::SearchOptions;
 
 #define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))
 
-// Printing margins -> like Basic - Ide
+
 #define LMARGPRN        1700
 #define RMARGPRN         900
 #define TMARGPRN        2000
@@ -143,7 +143,7 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
 
     long nFontHeight = rOutDev.GetTextHeight();
 
-    // 1.Border => Line, 2+3 Border = Space.
+    
     long nYTop = TMARGPRN-3*nBorder-nFontHeight;
 
     long nXLeft = nLeftMargin-nBorder;
@@ -205,7 +205,7 @@ static OUString lcl_ConvertTabsToSpaces( OUString sLine )
             {
                 break;
             }
-            // Not 4 blanks, but on 4th TabPos:
+            
             const sal_Int32 nPadLen = 4 - (nPos % 4);
             sLine = sLine.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
             nPos += nPadLen;
@@ -256,8 +256,8 @@ void SwSrcView::Init()
     SetName(OUString("Source"));
     SetWindow( &aEditWin );
     SwDocShell* pDocShell = GetDocShell();
-    // If the doc is still loading, then the DocShell must fire up
-    // the Load if the loading is completed.
+    
+    
     if(!pDocShell->IsLoading())
         Load(pDocShell);
     else
@@ -294,19 +294,19 @@ void SwSrcView::Execute(SfxRequest& rReq)
         case SID_SAVEASDOC:
         {
             SvtPathOptions aPathOpt;
-            // filesave dialog with autoextension
+            
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
             uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
-            // search for an html filter for export
+            
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
             const SfxFilter* pFilter =
                 pFilterCont->GetFilter4Extension( OUString("html"), SFX_FILTER_EXPORT );
             if ( pFilter )
             {
-                // filter found -> use its uiname and wildcard
+                
                 const OUString& rUIName = pFilter->GetUIName();
                 const WildCard& rCard = pFilter->GetWildcard();
                 xFltMgr->appendFilter( rUIName, rCard.getGlob() );
@@ -314,7 +314,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             }
             else
             {
-                // filter not found
+                
                 OUString sHtml("HTML");
                 xFltMgr->appendFilter( sHtml, OUString("*.html;*.htm") );
                 xFltMgr->setCurrentFilter( sHtml ) ;
@@ -694,10 +694,10 @@ sal_Int32 SwSrcView::PrintSource(
     if (!pOutDev || nPage <= 0)
         return 0;
 
-    //! This algorithm for printing the n-th page is very poor since it
-    //! needs to go over the text of all previous pages to get to the correct one.
-    //! But since HTML source code is expected to be just a small number of pages
-    //! even this poor algorithm should be enough...
+    
+    
+    
+    
 
     pOutDev->Push();
 
@@ -712,14 +712,14 @@ sal_Int32 SwSrcView::PrintSource(
 
     OUString aTitle( GetViewFrame()->GetWindow().GetText() );
 
-    sal_uInt16 nLineHeight = (sal_uInt16) pOutDev->GetTextHeight(); // slightly more
+    sal_uInt16 nLineHeight = (sal_uInt16) pOutDev->GetTextHeight(); 
     sal_uInt16 nParaSpace = 10;
 
     Size aPaperSz = pOutDev->GetOutputSize();
     aPaperSz.Width() -= (LMARGPRN + RMARGPRN);
     aPaperSz.Height() -= (TMARGPRN + BMARGPRN);
 
-    // nLinepPage is not true, if lines have to be wrapped...
+    
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height() / nLineHeight);
     const sal_Int32 nCharspLine =
         static_cast<sal_Int32>(aPaperSz.Width() / pOutDev->GetTextWidth("X"));
@@ -728,7 +728,7 @@ sal_Int32 SwSrcView::PrintSource(
     sal_uInt16 nPages = (sal_uInt16) (nParas / nLinespPage + 1 );
     sal_uInt16 nCurPage = 1;
 
-    // Print header...
+    
     if (!bCalcNumPagesOnly && nPage == nCurPage)
         lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
     const Point aStartPos( LMARGPRN, TMARGPRN );
@@ -776,7 +776,7 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             )
        )
     {
-        // Broadcast only comes once!
+        
         const SwDocShell* pDocSh = GetDocShell();
         const sal_Bool bReadonly = pDocSh->IsReadOnly();
         aEditWin.SetReadonly(bReadonly);
@@ -866,8 +866,8 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     eLoadEncoding = eDestEnc;
 
     if(bDocModified)
-        pDocShell->SetModified();// The flag will be reset in between times.
-    // Disable AutoLoad
+        pDocShell->SetModified();
+    
     pDocShell->SetAutoLoad(INetURLObject(), 0, sal_False);
     OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Why no WebDocShell?");
     sal_uInt16 nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();

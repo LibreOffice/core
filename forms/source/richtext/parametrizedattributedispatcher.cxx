@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "parametrizedattributedispatcher.hxx"
@@ -27,10 +27,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -38,23 +38,23 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
-    //= OParametrizedAttributeDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OParametrizedAttributeDispatcher::OParametrizedAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL, IMultiAttributeDispatcher* _pMasterDispatcher )
         :OAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     OParametrizedAttributeDispatcher::~OParametrizedAttributeDispatcher()
     {
         acquire();
         dispose();
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         static SfxSlotId lcl_normalizeLatinScriptSlotId( SfxSlotId _nSlotId )
@@ -71,7 +71,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void OParametrizedAttributeDispatcher::fillFeatureEventFromAttributeState( FeatureStateEvent& _rEvent, const AttributeState& _rState ) const
     {
         OSL_ENSURE( getEditView(), "OParametrizedAttributeDispatcher::notifyState: already disposed!" );
@@ -91,11 +91,11 @@ namespace frm
             OAttributeDispatcher::fillFeatureEventFromAttributeState( _rEvent, _rState );
     }
 
-    //--------------------------------------------------------------------
+    
     const SfxPoolItem* OParametrizedAttributeDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
-        // get the real slot id. This may differ from our attribute id: for instance, both
-        // SID_ATTR_CHAR_HEIGHT and SID_ATTR_CHAR_LATIN_HEIGHT are mapped to the same which id
+        
+        
         SfxSlotId nSlotId = lcl_normalizeLatinScriptSlotId( (SfxSlotId)m_nAttributeId );
 
         SfxAllItemSet aParameterSet( getEditView()->GetEmptyItemSet() );
@@ -113,7 +113,7 @@ namespace frm
         return pArgument;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OParametrizedAttributeDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -126,8 +126,8 @@ namespace frm
         }
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

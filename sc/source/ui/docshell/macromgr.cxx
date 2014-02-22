@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "macromgr.hxx"
@@ -36,7 +36,7 @@ using ::std::list;
 using ::std::for_each;
 using ::std::pair;
 
-// ============================================================================
+
 
 /**
  * A simple container to keep track of cells that depend on basic modules
@@ -55,7 +55,7 @@ public:
                 ModuleCellMap::value_type(rModuleName, list<ScFormulaCell*>()));
 
             if (!r.second)
-                // insertion failed.
+                
                 return;
 
             itr = r.first;
@@ -78,10 +78,10 @@ public:
 
         list<ScFormulaCell*>& rCellList = itr->second;
 
-        // Remove duplicates.
+        
         rCellList.sort();
         rCellList.unique();
-        // exception safe copy
+        
         list<ScFormulaCell*> temp(rCellList);
         rCells.swap(temp);
     }
@@ -92,7 +92,7 @@ private:
 };
 
 
-// ============================================================================
+
 
 ScMacroManager::ScMacroManager(ScDocument* pDoc) :
     mpDepTracker(new ScUserMacroDepTracker),
@@ -111,10 +111,10 @@ class VBAProjectListener : public ContainerListenerHelper
     ScMacroManager* mpMacroMgr;
 public:
     VBAProjectListener( ScMacroManager* pMacroMgr ) : mpMacroMgr( pMacroMgr ) {}
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw(RuntimeException) {}
 
-    // XContainerListener
+    
     virtual void SAL_CALL elementInserted( const container::ContainerEvent& /*Event*/ ) throw(RuntimeException){}
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& Event ) throw(RuntimeException)
     {
@@ -130,7 +130,7 @@ public:
 
 void ScMacroManager::InitUserFuncData()
 {
-    // Clear boost::unordered_map
+    
     mhFuncToVolatile.clear();
     OUString sProjectName("Standard");
 
@@ -147,10 +147,10 @@ void ScMacroManager::InitUserFuncData()
 
         if ( xModuleContainer.is() )
         {
-            // remove old listener ( if there was one )
+            
             if ( mxContainerListener.is() )
                 xModuleContainer->removeContainerListener( mxContainerListener );
-            // Create listener
+            
             mxContainerListener = new VBAProjectListener( this );
             xModuleContainer->addContainerListener( mxContainerListener );
         }
@@ -191,10 +191,10 @@ void ScMacroManager::BroadcastModuleUpdate(const OUString& aModuleName)
     for (; itr != itrEnd; ++itr)
     {
         ScFormulaCell* pCell = *itr;
-        mpDoc->PutInFormulaTree(pCell); // for F9 recalc
+        mpDoc->PutInFormulaTree(pCell); 
 
-        // for recalc on cell value change.  If the cell is not volatile, the
-        // cell stops listening right away after it gets re-interpreted.
+        
+        
         mpDoc->StartListeningArea(BCA_LISTEN_ALWAYS, pCell);
     }
 }

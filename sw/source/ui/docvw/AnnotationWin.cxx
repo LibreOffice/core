@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,19 +77,19 @@ SwAnnotationWin::~SwAnnotationWin()
 
 void SwAnnotationWin::SetPostItText()
 {
-    //If the cursor was visible, then make it visible again after
-    //changing text, e.g. fdo#33599
+    
+    
     Cursor *pCursor = GetOutlinerView()->GetEditView().GetCursor();
     bool bCursorVisible = pCursor ? pCursor->IsVisible() : false;
 
-    //If the new text is the same as the old text, keep the same insertion
-    //point .e.g. fdo#33599
+    
+    
     mpFld = static_cast<SwPostItField*>(mpFmtFld->GetField());
     OUString sNewText = mpFld->GetPar2();
     bool bTextUnchanged = sNewText.equals(Engine()->GetEditEngine().GetText());
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
 
-    // get text from SwPostItField and insert into our textview
+    
     Engine()->SetModifyHdl( Link() );
     Engine()->EnableUndo( sal_False );
     if( mpFld->GetTextObject() )
@@ -133,9 +133,9 @@ void SwAnnotationWin::UpdateData()
             rUndoRedo.AppendUndo(
                 new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
         }
-        // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
+        
         Mgr().SetLayout();
-        // #i98686# if we have several views, all notes should update their text
+        
         mpFmtFld->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED));
         DocView().GetDocShell()->SetModified();
     }
@@ -146,7 +146,7 @@ void SwAnnotationWin::UpdateData()
 void SwAnnotationWin::Delete()
 {
     SwSidebarWin::Delete();
-    // we delete the field directly, the Mgr cleans up the PostIt by listening
+    
     DocView().GetWrtShellPtr()->GotoField(*mpFmtFld);
     GrabFocusToDocument();
     DocView().GetWrtShellPtr()->DelRight();
@@ -159,14 +159,14 @@ void SwAnnotationWin::GotoPos()
 
 sal_uInt32 SwAnnotationWin::MoveCaret()
 {
-    // if this is an answer, do not skip over all following ones, but insert directly behind the current one
-    // but when just leaving a note, skip all following ones as well to continue typing
+    
+    
     return Mgr().IsAnswer()
            ? 1
            : 1 + CountFollowing();
 }
 
-//returns true, if there is another note right before this note
+
 bool SwAnnotationWin::CalcFollow()
 {
     SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
@@ -180,10 +180,10 @@ bool SwAnnotationWin::CalcFollow()
     return pFld && (pFld->Which()== RES_POSTITFLD);
 }
 
-// counts how many SwPostItField we have right after the current one
+
 sal_uInt32 SwAnnotationWin::CountFollowing()
 {
-    sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
+    sal_uInt32 aCount = 1;  
     SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
     SwPosition aPosition( pTxtFld->GetTxtNode() );
     aPosition.nContent = *pTxtFld->GetStart();
@@ -223,7 +223,7 @@ MenuButton* SwAnnotationWin::CreateMenuButton()
 
 void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 {
-    //collect our old meta data
+    
     SwSidebarWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
@@ -235,8 +235,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
             + "): \"";
     GetOutlinerView()->InsertText(aText,false);
 
-    // insert old, selected text or "..."
-    // TODO: iterate over all paragraphs, not only first one to find out if it is empty
+    
+    
     if (!pText->GetTextObject().GetText(0).isEmpty())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
@@ -250,11 +250,11 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     GetOutlinerView()->SetAttribs(aAnswerSet);
     GetOutlinerView()->SetSelection(ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
 
-    //remove all attributes and reset our standard ones
+    
     GetOutlinerView()->GetEditView().RemoveAttribsKeepLanguages(true);
     GetOutlinerView()->SetAttribs(DefaultItem());
-    // lets insert an undo step so the initial text can be easily deleted
-    // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
+    
+    
     Engine()->SetModifyHdl( Link() );
     IDocumentUndoRedo & rUndoRedo(
         DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
@@ -280,7 +280,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 
 SvxLanguageItem SwAnnotationWin::GetLanguage(void)
 {
-    // set initial language for outliner
+    
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
     sal_uInt16 nLangWhichId = 0;
     switch (nScriptType)
@@ -315,6 +315,6 @@ Time SwAnnotationWin::GetTime()
     return mpFld->GetTime();
 }
 
-} } // end of namespace sw::annotation
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

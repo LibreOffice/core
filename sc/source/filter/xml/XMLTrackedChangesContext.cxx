@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLChangeInfoContext : public SvXMLImportContext
 {
@@ -69,7 +69,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLBigRangeContext : public SvXMLImportContext
 {
@@ -93,7 +93,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
@@ -132,7 +132,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLDependenceContext : public SvXMLImportContext
 {
@@ -156,7 +156,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLDependingsContext : public SvXMLImportContext
 {
@@ -180,7 +180,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLChangeDeletionContext : public SvXMLImportContext
 {
@@ -204,7 +204,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLDeletionsContext : public SvXMLImportContext
 {
@@ -228,7 +228,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLChangeCellContext;
 
@@ -264,7 +264,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLChangeCellContext : public SvXMLImportContext
 {
@@ -307,7 +307,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLPreviousContext : public SvXMLImportContext
 {
@@ -343,7 +343,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLContentChangeContext : public SvXMLImportContext
 {
@@ -367,7 +367,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLInsertionContext : public SvXMLImportContext
 {
@@ -390,7 +390,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLInsertionCutOffContext : public SvXMLImportContext
 {
@@ -413,7 +413,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLMovementCutOffContext : public SvXMLImportContext
 {
@@ -436,7 +436,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLCutOffsContext : public SvXMLImportContext
 {
@@ -459,7 +459,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLDeletionContext : public SvXMLImportContext
 {
@@ -482,7 +482,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLMovementContext : public SvXMLImportContext
 {
@@ -507,7 +507,7 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
+
 
 class ScXMLRejectionContext : public SvXMLImportContext
 {
@@ -530,7 +530,7 @@ public:
     virtual void EndElement();
 };
 
-//------------------------------------------------------------------
+
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
@@ -900,7 +900,7 @@ ScXMLDependingsContext::ScXMLDependingsContext(  ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
-    // here are no attributes
+    
 }
 
 ScXMLDependingsContext::~ScXMLDependingsContext()
@@ -916,7 +916,7 @@ SvXMLImportContext *ScXMLDependingsContext::CreateChildContext( sal_uInt16 nPref
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
-        // #i80033# read both old (dependence) and new (dependency) elements
+        
         if (IsXMLToken(rLocalName, XML_DEPENDENCE) || IsXMLToken(rLocalName, XML_DEPENDENCY))
             pContext = new ScXMLDependenceContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
     }
@@ -982,7 +982,7 @@ ScXMLDeletionsContext::ScXMLDeletionsContext(  ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
-    // here are no attributes
+    
 }
 
 ScXMLDeletionsContext::~ScXMLDeletionsContext()
@@ -1028,7 +1028,7 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
     pTextPContext(NULL),
     nPrefix(nPrfx)
 {
-    // here are no attributes
+    
 }
 
 ScXMLChangeTextPContext::~ScXMLChangeTextPContext()
@@ -1272,7 +1272,7 @@ void ScXMLChangeCellContext::EndElement()
         {
             if (GetImport().GetTextImport()->GetCursor().is())
             {
-                //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+                
                 if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
                 {
                     OUString sEmpty;
@@ -1282,7 +1282,7 @@ void ScXMLChangeCellContext::EndElement()
                 }
             }
 
-            // The cell will own the text object instance.
+            
             mrOldCell.meType = CELLTYPE_EDIT;
             mrOldCell.mpEditText = pEditTextObj->CreateTextObject();
             GetScImport().GetTextImport()->ResetCursor();
@@ -1688,7 +1688,7 @@ ScXMLCutOffsContext::ScXMLCutOffsContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
-    // here are no attributes
+    
 }
 
 ScXMLCutOffsContext::~ScXMLCutOffsContext()

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "drawingfragment.hxx"
@@ -59,9 +59,9 @@ using ::com::sun::star::awt::Size;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::XControlModel;
-// no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
-// ============================================================================
+
+
 
 ShapeMacroAttacher::ShapeMacroAttacher( const OUString& rMacroName, const Reference< XShape >& rxShape ) :
     VbaMacroAttacherBase( rMacroName ),
@@ -87,7 +87,7 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
     }
 }
 
-// ============================================================================
+
 
 Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, const sal_Char* pcServiceName ) :
     ::oox::drawingml::Shape( pcServiceName ),
@@ -120,7 +120,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
     }
 }
 
-// ============================================================================
+
 
 GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent,
         const WorksheetHelper& rHelper, const ShapePtr& rxParentShape, const ShapePtr& rxShape ) :
@@ -176,7 +176,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext(
     return xContext.get() ? xContext.get() : ShapeGroupContext::onCreateContext( nElement, rAttribs );
 }
 
-// ============================================================================
+
 
 DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
@@ -230,7 +230,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
                 case XDR_TOKEN( col ):
                 case XDR_TOKEN( row ):
                 case XDR_TOKEN( colOff ):
-                case XDR_TOKEN( rowOff ):       return this;    // collect index in onCharacters()
+                case XDR_TOKEN( rowOff ):       return this;    
             }
         break;
     }
@@ -259,21 +259,21 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( twoCellAnchor ):
             if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
             {
-                // Rotation is decided by orientation of shape determined
-                // by the anchor position given by 'twoCellAnchor'
+                
+                
                 if ( getCurrentElement() == XDR_TOKEN( twoCellAnchor ) )
                     mxShape->setRotation(0);
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
-                    // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
+                    
                     Rectangle aShapeRectEmu32(
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
 
-                    // Make sure to set the position and size *before* calling addShape().
+                    
                     mxShape->setPosition(Point(aShapeRectEmu.X, aShapeRectEmu.Y));
                     mxShape->setSize(Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
 
@@ -286,7 +286,7 @@ void DrawingFragment::onEndElement()
                         convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
                         convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
-                    // set cell Anchoring
+                    
                     if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ABSOLUTE )
                     {
                         SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape->getXShape() );
@@ -303,9 +303,9 @@ void DrawingFragment::onEndElement()
     }
 }
 
-// ============================================================================
-// VML
-// ============================================================================
+
+
+
 
 namespace {
 
@@ -320,7 +320,7 @@ private:
     sal_Int32           mnRow;
 };
 
-// ----------------------------------------------------------------------------
+
 
 VmlFindNoteFunc::VmlFindNoteFunc( const CellAddress& rPos ) :
     mnCol( rPos.Column ),
@@ -334,9 +334,9 @@ bool VmlFindNoteFunc::operator()( const ::oox::vml::ShapeBase& rShape ) const
     return pClientData && (pClientData->mnCol == mnCol) && (pClientData->mnRow == mnRow);
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 VmlControlMacroAttacher::VmlControlMacroAttacher( const OUString& rMacroName,
         const Reference< XIndexContainer >& rxCtrlFormIC, sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle ) :
@@ -354,7 +354,7 @@ void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
     aEventDesc.ScriptType = "Script";
     aEventDesc.ScriptCode = rMacroUrl;
 
-    // editable drop downs are treated like edit boxes
+    
     bool bEditDropDown = (mnCtrlType == XML_Drop) && (mnDropStyle == XML_ComboEdit);
     sal_Int32 nCtrlType = bEditDropDown ? XML_Edit : mnCtrlType;
 
@@ -401,14 +401,14 @@ void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
     }
 }
 
-// ============================================================================
+
 
 VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     ::oox::vml::Drawing( rHelper.getOoxFilter(), rHelper.getDrawPage(), ::oox::vml::VMLDRAWING_EXCEL ),
     WorksheetHelper( rHelper ),
     maControlConv( rHelper.getBaseFilter().getModel(), rHelper.getBaseFilter().getGraphicHelper() )
 {
-    // default font for legacy listboxes and dropdowns: Tahoma, 8pt
+    
     maListBoxFont.moName = "Tahoma";
     maListBoxFont.moColor = "auto";
     maListBoxFont.monSize = 160;
@@ -462,7 +462,7 @@ bool VmlDrawing::convertClientAnchor( Rectangle& orShapeRect, const OUString& rS
 Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::ShapeBase& rShape,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    // simulate the legacy drawing controls with OLE form controls
+    
     OUString aShapeName = rShape.getShapeName();
     const ::oox::vml::ClientData* pClientData = rShape.getClientData();
     if( !aShapeName.isEmpty() && pClientData )
@@ -600,7 +600,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
 
             case XML_Dialog:
             {
-                // fake with a group box
+                
                 AxFrameModel& rAxModel = aControl.createModel< AxFrameModel >();
                 convertControlText( rAxModel.maFontData, rAxModel.mnTextColor, rAxModel.maCaption, pTextBox, XML_Left );
                 rAxModel.mnBorderStyle = AX_BORDERSTYLE_SINGLE;
@@ -611,13 +611,13 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
 
         if( ControlModelBase* pAxModel = aControl.getModel() )
         {
-            // create the control shape
+            
             pAxModel->maSize.first = aShapeRect.Width;
             pAxModel->maSize.second = aShapeRect.Height;
             sal_Int32 nCtrlIndex = -1;
             Reference< XShape > xShape = createAndInsertXControlShape( aControl, rxShapes, aShapeRect, nCtrlIndex );
 
-            // control shape macro
+            
             if( xShape.is() && (nCtrlIndex >= 0) && !pClientData->maFmlaMacro.isEmpty() )
             {
                 OUString aMacroName = getFormulaParser().importMacroName( pClientData->maFmlaMacro );
@@ -639,24 +639,24 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
 void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
         const Rectangle& rShapeRect, const ::oox::vml::ShapeBase& rShape, bool bGroupChild )
 {
-    // collect all shape positions in the WorksheetHelper base class (but not children of group shapes)
+    
     if( !bGroupChild )
         extendShapeBoundingBox( rShapeRect );
 
-    // convert settings from VML client data
+    
     if( const ::oox::vml::ClientData* pClientData = rShape.getClientData() )
     {
-        // specific settings for embedded form controls
+        
         try
         {
             Reference< XControlShape > xCtrlShape( rxShape, UNO_QUERY_THROW );
             Reference< XControlModel > xCtrlModel( xCtrlShape->getControl(), UNO_SET_THROW );
             PropertySet aPropSet( xCtrlModel );
 
-            // printable
+            
             aPropSet.setProperty( PROP_Printable, pClientData->mbPrintObject );
 
-            // control source links
+            
             if( !pClientData->maFmlaLink.isEmpty() || !pClientData->maFmlaRange.isEmpty() )
                 maControlConv.bindToSources( xCtrlModel, pClientData->maFmlaLink, pClientData->maFmlaRange, getSheetIndex() );
         }
@@ -666,21 +666,21 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) const
 {
-    // color attribute not present or 'auto' - use passed default color
+    
     if( rTextColor.isEmpty() || rTextColor.equalsIgnoreAsciiCase( "auto" ) )
         return AX_SYSCOLOR_WINDOWTEXT;
 
     if( rTextColor[ 0 ] == '#' )
     {
-        // RGB colors in the format '#RRGGBB'
+        
         if( rTextColor.getLength() == 7 )
             return OleHelper::encodeOleColor( rTextColor.copy( 1 ).toUInt32( 16 ) );
 
-        // RGB colors in the format '#RGB'
+        
         if( rTextColor.getLength() == 4 )
         {
             sal_Int32 nR = rTextColor.copy( 1, 1 ).toUInt32( 16 ) * 0x11;
@@ -705,7 +705,7 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
     if( nRgbValue != API_RGB_TRANSPARENT )
         return OleHelper::encodeOleColor( nRgbValue );
 
-    // try palette color
+    
     return OleHelper::encodeOleColor( rGraphicHelper.getPaletteColor( rTextColor.toInt32() ) );
 }
 
@@ -714,10 +714,10 @@ void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rn
     if( rFontModel.moName.has() )
         rAxFontData.maFontName = rFontModel.moName.get();
 
-    // font height: convert from twips to points, then to internal representation of AX controls
+    
     rAxFontData.setHeightPoints( static_cast< sal_Int16 >( (rFontModel.monSize.get( 200 ) + 10) / 20 ) );
 
-    // font effects
+    
     rAxFontData.mnFontEffects = 0;
     setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_BOLD, rFontModel.mobBold.get( false ) );
     setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_ITALIC, rFontModel.mobItalic.get( false ) );
@@ -726,7 +726,7 @@ void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rn
     setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, nUnderline != XML_none );
     rAxFontData.mbDblUnderline = nUnderline == XML_double;
 
-    // font color
+    
     rnOleTextColor = convertControlTextColor( rFontModel.moColor.get( OUString() ) );
 }
 
@@ -764,7 +764,7 @@ void VmlDrawing::convertControlBackground( AxMorphDataModelBase& rAxModel, const
     }
 }
 
-// ============================================================================
+
 
 VmlDrawingFragment::VmlDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     ::oox::vml::DrawingFragment( rHelper.getOoxFilter(), rFragmentPath, rHelper.getVmlDrawing() ),
@@ -778,9 +778,9 @@ void VmlDrawingFragment::finalizeImport()
     getVmlDrawing().convertAndInsert();
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

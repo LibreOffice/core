@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
 {
     mpParent->ImplIncAnimCount();
 
-    // Mirrored horizontally?
+    
     if( mbHMirr )
     {
         maDispPt.X() = maPt.X() + maSz.Width() + 1L;
@@ -57,7 +57,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         maDispSz.Width() = maSz.Width();
     }
 
-    // Mirrored vertically?
+    
     if( mbVMirr )
     {
         maDispPt.Y() = maPt.Y() + maSz.Height() + 1L;
@@ -70,7 +70,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         maDispSz.Height() = maSz.Height();
     }
 
-    // save background
+    
     mpBackground->SetOutputSizePixel( maSzPix );
 
     if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
@@ -84,10 +84,10 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
     else
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
-    // Initialize drawing to actual position
+    
     ImplDrawToPos( mpParent->ImplGetCurPos() );
 
-    // If first frame OutputDevice is set, update variables now for real OutputDevice
+    
     if( pFirstFrameOutDev )
         maClip = ( mpOut = pOut )->GetClipRegion();
 }
@@ -122,13 +122,13 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
                       rAnm.aPosPix.Y() + rAnm.aSizePix.Height() - 1L );
     double      fFactX, fFactY;
 
-    // calculate x scaling
+    
     if( rAnmSize.Width() > 1L )
         fFactX = (double) ( maSzPix.Width() - 1L ) / ( rAnmSize.Width() - 1L );
     else
         fFactX = 1.0;
 
-    // calculate y scaling
+    
     if( rAnmSize.Height() > 1L )
         fFactY = (double) ( maSzPix.Height() - 1L ) / ( rAnmSize.Height() - 1L );
     else
@@ -143,11 +143,11 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
     rSizePix.Width() = aPt2.X() - rPosPix.X() + 1L;
     rSizePix.Height() = aPt2.Y() - rPosPix.Y() + 1L;
 
-    // Mirrored horizontally?
+    
     if( mbHMirr )
         rPosPix.X() = maSzPix.Width() - 1L - aPt2.X();
 
-    // Mirrored vertically?
+    
     if( mbVMirr )
         rPosPix.Y() = maSzPix.Height() - 1L - aPt2.Y();
 }
@@ -184,7 +184,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     Rectangle aOutRect( mpOut->PixelToLogic( Point() ), mpOut->GetOutputSize() );
 
-    // check, if output lies out of display
+    
     if( aOutRect.Intersection( Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
         ImplSetMarked( true );
     else if( !mbPause )
@@ -199,7 +199,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
         ImplGetPosSize( rAnm, aPosPix, aSizePix );
 
-        // Mirrored horizontally?
+        
         if( mbHMirr )
         {
             aBmpPosPix.X() = aPosPix.X() + aSizePix.Width() - 1L;
@@ -211,7 +211,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
             aBmpSizePix.Width() = aSizePix.Width();
         }
 
-        // Mirrored vertically?
+        
         if( mbVMirr )
         {
             aBmpPosPix.Y() = aPosPix.Y() + aSizePix.Height() - 1L;
@@ -223,7 +223,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
             aBmpSizePix.Height() = aSizePix.Height();
         }
 
-        // get output device
+        
         if( !pVDev )
         {
             pDev = new VirtualDevice;
@@ -233,7 +233,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         else
             pDev = pVDev;
 
-        // restore background after each run
+        
         if( !nPos )
         {
             meLastDisposal = DISPOSE_BACK;
@@ -241,7 +241,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
             maRestSz = maSzPix;
         }
 
-        // restore
+        
         if( ( DISPOSE_NOT != meLastDisposal ) && maRestSz.Width() && maRestSz.Height() )
         {
             if( DISPOSE_BACK == meLastDisposal )
@@ -254,9 +254,9 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         maRestPt = aPosPix;
         maRestSz = aSizePix;
 
-        // What do we need to restore the next time?
-        // Put it into a bitmap if needed, else delete
-        // SaveBitmap to conserve memory
+        
+        
+        
         if( ( meLastDisposal == DISPOSE_BACK ) || ( meLastDisposal == DISPOSE_NOT ) )
             mpRestore->SetOutputSizePixel( Size( 1, 1 ), false );
         else

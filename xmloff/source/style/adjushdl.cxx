@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <adjushdl.hxx>
@@ -34,7 +34,7 @@ SvXMLEnumMapEntry const pXML_Para_Adjust_Enum[] =
     { XML_END,          style::ParagraphAdjust_RIGHT },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
     { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
-    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
+    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, 
     { XML_LEFT,         style::ParagraphAdjust_LEFT },
     { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
     { XML_TOKEN_INVALID, 0 }
@@ -45,17 +45,17 @@ SvXMLEnumMapEntry const pXML_Para_Align_Last_Enum[] =
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
     { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
-    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
+    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, 
     { XML_TOKEN_INVALID, 0 }
 };
 
 //
-// class XMLParaAdjustPropHdl
+
 //
 
 XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -85,12 +85,12 @@ bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 }
 
 //
-// class XMLLastLineAdjustPropHdl
+
 //
 
 XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const

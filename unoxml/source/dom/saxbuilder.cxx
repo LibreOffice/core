@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #ifdef _MSC_VER
 #pragma warning(disable : 4701)
@@ -122,8 +122,8 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        // start a new document fragment and push it onto the stack
-        // we have to be in a clean state to do this
+        
+        
         if (m_aState != SAXDocumentBuilderState_READY)
             throw RuntimeException();
 
@@ -139,7 +139,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        // there should only be the document left on the node stack
+        
         if (m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw RuntimeException();
 
@@ -150,14 +150,14 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_FRAGMENT_FINISHED;
     }
 
-    // document handler
+    
 
     void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (RuntimeException, SAXException)
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        // start a new document and push it onto the stack
-        // we have to be in a clean state to do this
+        
+        
         if (m_aState != SAXDocumentBuilderState_READY)
             throw SAXException();
 
@@ -172,7 +172,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        // there should only be the document left on the node stack
+        
         if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT)
             throw SAXException();
 
@@ -194,12 +194,12 @@ namespace DOM
             throw SAXException();
         }
 
-        // start with mappings in effect for last level
+        
         NSMap aNSMap;
         if (!m_aNSStack.empty())
             aNSMap = NSMap(m_aNSStack.top());
 
-        // handle xmlns: attributes and add to mappings
+        
         OUString attr_qname;
         OUString attr_value;
         OUString newprefix;
@@ -210,7 +210,7 @@ namespace DOM
         {
             attr_qname = attribs->getNameByIndex(i);
             attr_value = attribs->getValueByIndex(i);
-            // new prefix mapping
+            
             if (attr_qname.startsWith("xmlns:"))
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
@@ -218,7 +218,7 @@ namespace DOM
             }
             else if ( attr_qname == "xmlns" )
             {
-                // new default prefix
+                
                 aNSMap.insert(NSMap::value_type(OUString(), attr_value));
             }
             else
@@ -227,7 +227,7 @@ namespace DOM
             }
         }
 
-        // does the element have a prefix?
+        
         OUString aPrefix;
         OUString aURI;
         Reference< XElement > aElement;
@@ -242,13 +242,13 @@ namespace DOM
         NSMap::const_iterator result = aNSMap.find(aPrefix);
         if ( result != aNSMap.end())
         {
-            // found a URI for prefix
-            // qualified name
+            
+            
             aElement = m_aDocument->createElementNS( result->second, aName);
         }
         else
         {
-            // no URI for prefix
+            
             aElement = m_aDocument->createElement(aName);
         }
         aElement = Reference< XElement > (
@@ -256,7 +256,7 @@ namespace DOM
             UNO_QUERY);
         m_aNodeStack.push(aElement);
 
-        // set non xmlns attributes
+        
         aPrefix = OUString();
         aURI = OUString();
         AttrMap::const_iterator a = aAttrMap.begin();
@@ -273,12 +273,12 @@ namespace DOM
             result = aNSMap.find(aPrefix);
             if (result != aNSMap.end())
             {
-                // set attribute with namespace
+                
                 aElement->setAttributeNS(result->second, attr_qname, attr_value);
             }
             else
             {
-                // set attribute without namespace
+                
                 aElement->setAttribute(attr_qname, attr_value);
             }
             ++a;
@@ -291,7 +291,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        // pop the current element from the stack
+        
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
@@ -307,10 +307,10 @@ namespace DOM
             aRefName = aPrefix + ":" + aElement->getTagName();
         else
             aRefName = aElement->getTagName();
-        if (aRefName != aName) // consistency check
+        if (aRefName != aName) 
             throw SAXException();
 
-        // pop it
+        
         m_aNodeStack.pop();
         m_aNSStack.pop();
     }
@@ -320,7 +320,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        //  append text node to the current top element
+        
          if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
@@ -334,7 +334,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        //  ignore ignorable whitespace
+        
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
@@ -345,7 +345,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        //  append PI node to the current top
+        
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
@@ -360,7 +360,7 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        // set the document locator...
+        
         m_aLocator = aLocator;
     }
 }

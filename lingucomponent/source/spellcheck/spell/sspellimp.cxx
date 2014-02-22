@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,10 +57,10 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-// XML-header of SPELLML queries
+
 #define SPELLML_HEADER "<?xml?>"
 
-///////////////////////////////////////////////////////////////////////////
+
 
 SpellChecker::SpellChecker() :
     aDicts(NULL),
@@ -101,7 +101,7 @@ PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
         pPropHelper = new PropertyHelper_Spelling( (XSpellChecker *) this, xPropSet );
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        pPropHelper->AddAsPropListener();   
     }
     return *pPropHelper;
 }
@@ -112,16 +112,16 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // this routine should return the locales supported by the installed
-    // dictionaries.
+    
+    
 
     if (!numdict)
     {
         SvtLinguConfig aLinguCfg;
 
-        // get list of extension dictionaries-to-use
-        // (or better speaking: the list of dictionaries using the
-        // new configuration entries).
+        
+        
+        
         std::list< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "SpellCheckers",
@@ -134,20 +134,20 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
 
-        //!! for compatibility with old dictionaries (the ones not using extensions
-        //!! or new configuration entries, but still using the dictionary.lst file)
-        //!! Get the list of old style spell checking dictionaries to use...
+        
+        
+        
         std::vector< SvtLinguConfigDictionaryEntry > aOldStyleDics(
                 GetOldStyleDics( "DICT" ) );
 
-        // to prefer dictionaries with configuration entries we will only
-        // use those old style dictionaries that add a language that
-        // is not yet supported by the list od new style dictionaries
+        
+        
+        
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
         if (!aDics.empty())
         {
-            // get supported locales from the dictionaries-to-use...
+            
             sal_Int32 k = 0;
             std::set< OUString, lt_rtl_OUString > aLocaleNamesSet;
             std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
@@ -160,7 +160,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     aLocaleNamesSet.insert( aLocaleNames[k] );
                 }
             }
-            // ... and add them to the resulting sequence
+            
             aSuppLocales.realloc( aLocaleNamesSet.size() );
             std::set< OUString, lt_rtl_OUString >::const_iterator aItB;
             k = 0;
@@ -170,16 +170,16 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! For each dictionary and each locale we need a separate entry.
-            //! If this results in more than one dictionary per locale than (for now)
-            //! it is undefined which dictionary gets used.
-            //! In the future the implementation should support using several dictionaries
-            //! for one locale.
+            
+            
+            
+            
+            
             numdict = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
                 numdict = numdict + aDictIt->aLocaleNames.getLength();
 
-            // add dictionary information
+            
             aDicts  = new Hunspell* [numdict];
             aDEncs  = new rtl_TextEncoding [numdict];
             aDLocs  = new Locale [numdict];
@@ -193,17 +193,17 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                     sal_Int32 nLocales = aLocaleNames.getLength();
 
-                    // currently only one language per dictionary is supported in the actual implementation...
-                    // Thus here we work-around this by adding the same dictionary several times.
-                    // Once for each of it's supported locales.
+                    
+                    
+                    
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         aDicts[k]  = NULL;
                         aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aDLocs[k]  = LanguageTag::convertToLocale( aLocaleNames[i] );
-                        // also both files have to be in the same directory and the
-                        // file names must only differ in the extension (.aff/.dic).
-                        // Thus we use the first location only and strip the extension part.
+                        
+                        
+                        
                         OUString aLocation = aDictIt->aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
@@ -263,12 +263,12 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
     Hunspell * pMS = NULL;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
-    // initialize a myspell object for each dictionary once
-    // (note: mutex is held higher up in isValid)
+    
+    
 
     sal_Int16 nRes = -1;
 
-    // first handle smart quotes both single and double
+    
     OUStringBuffer rBuf(rWord);
     sal_Int32 n = rBuf.getLength();
     sal_Unicode c;
@@ -282,9 +282,9 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
         else if ((c == 0x2018) || (c == 0x2019))
             rBuf[ix] = (sal_Unicode)0x0027;
 
-// recognize words with Unicode ligatures and ZWNJ/ZWJ characters (only
-// with 8-bit encoded dictionaries. For UTF-8 encoded dictionaries
-// set ICONV and IGNORE aff file options, if needed.)
+
+
+
 
         else if ((c == 0x200C) || (c == 0x200D) ||
             ((c >= 0xFB00) && (c <= 0xFB04)))
@@ -313,10 +313,10 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 
 #if defined(WNT)
-                    // workaround for Windows specific problem that the
-                    // path length in calls to 'fopen' is limted to somewhat
-                    // about 120+ characters which will usually be exceed when
-                    // using dictionaries as extensions.
+                    
+                    
+                    
+                    
                     aTmpaff = Win_GetShortPathName( aff );
                     aTmpdict = Win_GetShortPathName( dict );
 #endif
@@ -332,10 +332,10 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
 
             if (pMS)
             {
-                // we don't want to work with a default text encoding since following incorrect
-                // results may occur only for specific text and thus may be hard to notice.
-                // Thus better always make a clean exit here if the text encoding is in question.
-                // Hopefully something not working at all will raise proper attention quickly. ;-)
+                
+                
+                
+                
                 DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
                 if (eEnc == RTL_TEXTENCODING_DONTKNOW)
                     return -1;
@@ -388,15 +388,15 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     if (!hasLocale( rLocale ))
         return sal_True;
 
-    // return sal_False to process SPELLML requests (they are longer than the header)
+    
     if (rWord.match(SPELLML_HEADER, 0) && (rWord.getLength() > 10)) return sal_False;
 
-    // Get property values to be used.
-    // These are be the default values set in the SN_LINGU_PROPERTIES
-    // PropertySet which are overridden by the supplied ones from the
-    // last argument.
-    // You'll probably like to use a simplier solution than the provided
-    // one using the PropertyHelper_Spell.
+    
+    
+    
+    
+    
+    
 
     PropertyHelper_Spelling& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     if (nFailure != -1 && !rWord.match(SPELLML_HEADER, 0))
     {
         sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
-        // postprocess result for errors that should be ignored
+        
         const bool bIgnoreError =
                 (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang )) ||
                 (!rHelper.IsSpellWithDigits() && HasDigits( rWord )) ||
@@ -421,17 +421,17 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
 Reference< XSpellAlternatives >
     SpellChecker::GetProposals( const OUString &rWord, const Locale &rLocale )
 {
-    // Retrieves the return values for the 'spell' function call in case
-    // of a misspelled word.
-    // Especially it may give a list of suggested (correct) words:
+    
+    
+    
 
     Reference< XSpellAlternatives > xRes;
-    // note: mutex is held by higher up by spell which covers both
+    
 
     Hunspell* pMS = NULL;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
-    // first handle smart quotes (single and double)
+    
     OUStringBuffer rBuf(rWord);
     sal_Int32 n = rBuf.getLength();
     sal_Unicode c;
@@ -484,7 +484,7 @@ Reference< XSpellAlternatives >
             }
         }
 
-        // now return an empty alternative for no suggestions or the list of alternatives if some found
+        
         OUString aTmp(rWord);
         xRes = SpellAlternatives::CreateSpellAlternatives( aTmp, nLang, SpellFailure::SPELLING_ERROR, aStr );
         return xRes;
@@ -575,14 +575,14 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
         {
             Reference< XLinguProperties >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
-            //rArguments.getConstArray()[1] >>= xDicList;
+            
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            
+            
+            
+            
             pPropHelper = new PropertyHelper_Spelling( (XSpellChecker *) this, xPropSet );
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            pPropHelper->AddAsPropListener();   
         }
         else {
             OSL_FAIL( "wrong number of arguments in sequence" );
@@ -631,7 +631,7 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
 }
 
 
-// Service specific part
+
 OUString SAL_CALL SpellChecker::getImplementationName()
         throw(RuntimeException)
 {
@@ -659,7 +659,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 ); 
     aSNS.getArray()[0] = SN_SPELLCHECKER;
     return aSNS;
 }
@@ -676,7 +676,7 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
                 SpellChecker::getImplementationName_Static(),
                 SpellChecker_CreateInstance,
                 SpellChecker::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }
@@ -684,6 +684,6 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

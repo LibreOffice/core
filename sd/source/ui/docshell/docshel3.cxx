@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DrawDocShell.hxx"
@@ -62,7 +62,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 {
     if(mpViewShell && SlideShow::IsRunning( mpViewShell->GetViewShellBase() ))
     {
-        // during a running presentation no slot will be executed
+        
         return;
     }
 
@@ -77,7 +77,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 const SvxSearchItem* pSearchItem =
                 (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
 
-                // would be nice to have an an assign operation at SearchItem
+                
                 SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                 delete pAppSearchItem;
                 pAppSearchItem = (SvxSearchItem*) pSearchItem->Clone();
@@ -90,7 +90,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case FID_SEARCH_ON:
         {
-            // no action needed
+            
             rReq.Done();
         }
         break;
@@ -99,7 +99,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
             {
-                // End Search&Replace in all docshells
+                
                 SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
                 SfxObjectShell* pShell = pFirstShell;
 
@@ -145,7 +145,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem =
                     (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
 
-                    // would be nice to have an an assign operation at SearchItem
+                    
                     SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                     delete pAppSearchItem;
                     pAppSearchItem = (SvxSearchItem*)pSearchItem->Clone();
@@ -215,6 +215,6 @@ void DrawDocShell::SetDocShellFunction( const rtl::Reference<FuPoor>& xFunction 
     mxDocShellFunction = xFunction;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -101,17 +101,17 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     const OUString &rName = pOpt->GetCategory();
 
-    // Is there a pool template with the same name?
+    
     SwWrtShell &rSh = GetWrtShell();
     if(!rName.isEmpty())
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
             rSh.GetTxtCollFromPool(nPoolId);
-            // Pool template does not exist: Does it exist on the document?
+            
         else if( !rSh.GetParaStyle(rName) )
         {
-            // It also does not exist in the document: generate
+            
             SwTxtFmtColl* pDerivedFrom = rSh.GetTxtCollFromPool(RES_POOLCOLL_LABEL);
             rSh.MakeTxtFmtColl(rName, pDerivedFrom);
         }
@@ -132,7 +132,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
             (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
     if (!pFldType && !rName.isEmpty() )
     {
-        // Create new field types
+        
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
         aMgr.InsertFldType(aSwSetExpFieldType);
         pFldType = (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
@@ -173,7 +173,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
                                 nID,
                                 pOpt->GetCharacterStyle(),
                                 pOpt->CopyAttributes() );
-    // Set Number Format
+    
     if(pType)
         ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
 
@@ -187,7 +187,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         rSh.EnterSelFrmMode();
     }
 
-    // rember category
+    
     if (eType & nsSelectionType::SEL_GRF)
         SetOldGrfCat(rName);
     else if( eType & nsSelectionType::SEL_TBL)

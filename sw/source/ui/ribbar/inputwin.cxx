@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -45,7 +45,7 @@
 #include "helpid.h"
 #include "access.hrc"
 
-// Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
+
 #include "pam.hxx"
 
 #include "swundo.hxx"
@@ -111,7 +111,7 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     aSize.Height() = aSizeTbx.Height();
     SetSizePixel( aSize );
 
-    // align edit and item vcentered
+    
     Size    aPosSize = aPos.GetSizePixel();
     aPosSize.Height()  = nMaxHeight;
     aEditSize.Height() = nMaxHeight;
@@ -129,7 +129,7 @@ SwInputWindow::~SwInputWindow()
 {
     SfxImageManager::GetImageManager( SW_MOD() )->ReleaseToolBox(this);
 
-    // wake rulers
+    
     if(pView)
     {
         pView->GetHRuler().SetActive( sal_True );
@@ -152,7 +152,7 @@ void SwInputWindow::CleanupUglyHackWithUndo()
         {
             pWrtShell->Undo();
         }
-        m_bResetUndo = false; // #i117122# once is enough :)
+        m_bResetUndo = false; 
     }
 }
 
@@ -160,7 +160,7 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        // update item images
+        
         SwModule *pMod  = SW_MOD();
         SfxImageManager *pImgMgr = SfxImageManager::GetImageManager( pMod );
         SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC   ));
@@ -187,14 +187,14 @@ void SwInputWindow::Resize()
 void SwInputWindow::ShowWin()
 {
     bIsTable = sal_False;
-    // stop rulers
+    
     if(pView)
     {
         pView->GetHRuler().SetActive( sal_False );
         pView->GetVRuler().SetActive( sal_False );
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
-        // Cursor in table
+        
         bIsTable = pWrtShell->IsCrsrInTbl() ? sal_True : sal_False;
 
         if( bFirst )
@@ -213,11 +213,11 @@ void SwInputWindow::ShowWin()
         else
             aPos.SetText(SW_RESSTR(STR_TBL_FORMULA));
 
-        // Edit current field
+        
         OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
         pMgr = new SwFldMgr;
 
-        // Formular should always begin with "=" , so set here
+        
         OUString sEdit('=');
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
@@ -263,7 +263,7 @@ void SwInputWindow::ShowWin()
 
         if( bFirst )
         {
-            // Set WrtShell flags correctly
+            
             pWrtShell->SttSelect();
             pWrtShell->EndSelect();
         }
@@ -279,7 +279,7 @@ void SwInputWindow::ShowWin()
         aEdit.Invalidate();
         aEdit.Update();
         aEdit.GrabFocus();
-        // For input cut the UserInterface
+        
 
         pView->GetEditWin().LockKeyInput(sal_True);
         pView->GetViewFrame()->GetDispatcher()->Lock(sal_True);
@@ -331,7 +331,7 @@ static const char * const aStrArr[] = {
 IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
 {
     sal_uInt16 nCurID = GetCurItemId();
-    EndSelection(); // reset back CurItemId !
+    EndSelection(); 
     switch ( nCurID )
     {
         case FN_FORMULA_CALC :
@@ -349,7 +349,7 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
 void SwInputWindow::Click( )
 {
     sal_uInt16 nCurID = GetCurItemId();
-    EndSelection(); // reset back CurItemId !
+    EndSelection(); 
     switch ( nCurID )
     {
         case FN_FORMULA_CANCEL:
@@ -372,7 +372,7 @@ void  SwInputWindow::ApplyFormula()
     CleanupUglyHackWithUndo();
     pWrtShell->Pop( sal_False );
 
-    // Formular should always begin with "=", so remove it here again
+    
     OUString sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
     if( !sEdit.isEmpty() && '=' == sEdit[0] )
         sEdit = sEdit.copy( 1 );
@@ -428,9 +428,9 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 
         if( sNew != sOldFml )
         {
-            // The WrtShell is in the table selection,
-            // then cancel the table selection otherwise, the cursor is
-            // positioned "in the forest" and the live update does not work!
+            
+            
+            
             pWrtShell->StartAllAction();
 
             SwPaM aPam( *pWrtShell->GetStkCrsr()->GetPoint() );
@@ -529,8 +529,8 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     aBoxes += rBoxes;
     Selection aSelection(GetSelection());
     sal_uInt16 nSel = (sal_uInt16) aSelection.Len();
-    // OS: The following expression ensures that in the overwrite mode,
-    // the selected closing parenthesis will be not deleted.
+    
+    
     if( nSel && ( nSel > 1 ||
                   GetText()[ (sal_uInt16)aSelection.Min() ] != cClose ))
         Cut();
@@ -578,14 +578,14 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
                 }
                 ++nEndPos;
             }
-            // Only if the current position lies in the range or right behind.
+            
             if( bFound && !( nStartPos < (sal_uInt16)aSelection.Max() &&
                              (sal_uInt16)aSelection.Max() <= nEndPos + 1 ))
                 bFound = false;
         }
         if( bFound )
         {
-            nPos = ++nStartPos + 1; // We want behind
+            nPos = ++nStartPos + 1; 
             aActText = aActText.replaceAt( nStartPos, nEndPos - nStartPos, aBoxes );
             nPos = nPos + aBoxes.getLength();
         }

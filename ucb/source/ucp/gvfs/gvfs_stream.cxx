@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "gvfs_stream.hxx"
@@ -61,9 +61,9 @@ Any Stream::queryInterface( const Type &type )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( type );
 }
 
-// -------------------------------------------------------------------
-//                            XStream
-// -------------------------------------------------------------------
+
+
+
 
 com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
 Stream::getInputStream(  )
@@ -87,9 +87,9 @@ Stream::getOutputStream(  )
     return Reference< XOutputStream >( this );
 }
 
-// -------------------------------------------------------------------
-//                            XInputStream
-// -------------------------------------------------------------------
+
+
+
 
 sal_Int32 SAL_CALL Stream::readBytes(
     Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -139,8 +139,8 @@ sal_Int32 SAL_CALL Stream::readSomeBytes(
                IOException,
                RuntimeException )
 {
-    // Again - having 2 methods here just sucks; cf. filinpstr.cxx
-    // This can never be an effective non-blocking API - so why bother ?
+    
+    
     return readBytes( aData, nMaxBytesToRead );
 }
 
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL Stream::available(  )
                IOException,
                RuntimeException )
 {
-    return 0; // cf. filinpstr.cxx
+    return 0; 
 }
 
 void SAL_CALL Stream::closeInput( void )
@@ -184,9 +184,9 @@ void SAL_CALL Stream::closeInput( void )
         closeStream();
 }
 
-// -------------------------------------------------------------------
-//                            XSeekable
-// -------------------------------------------------------------------
+
+
+
 
 void SAL_CALL Stream::seek( sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,
@@ -227,7 +227,7 @@ sal_Int64 SAL_CALL Stream::getPosition()
 sal_Int64 SAL_CALL Stream::getLength()
     throw( IOException, RuntimeException )
 {
-    // FIXME: so this sucks; it may be stale but ...
+    
     if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_SIZE)
         return m_info.size;
     else {
@@ -236,9 +236,9 @@ sal_Int64 SAL_CALL Stream::getLength()
     }
 }
 
-// -------------------------------------------------------------------
-//                            XTruncate
-// -------------------------------------------------------------------
+
+
+
 
 void SAL_CALL Stream::truncate( void )
     throw( com::sun::star::io::IOException,
@@ -250,9 +250,9 @@ void SAL_CALL Stream::truncate( void )
     throwOnError( gnome_vfs_truncate_handle( m_handle, 0 ) );
 }
 
-// -------------------------------------------------------------------
-//                            XOutputStream
-// -------------------------------------------------------------------
+
+
+
 
 void SAL_CALL Stream::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData )
     throw( com::sun::star::io::NotConnectedException,
@@ -298,9 +298,9 @@ void SAL_CALL Stream::closeOutput( void )
         closeStream();
 }
 
-// -------------------------------------------------------------------
-//                            Misc.
-// -------------------------------------------------------------------
+
+
+
 
 void Stream::closeStream( void )
     throw( ::com::sun::star::io::NotConnectedException,

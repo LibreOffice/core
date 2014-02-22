@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cuihyperdlg.hxx"
@@ -49,14 +49,14 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
     mbMarkWndOpen   ( sal_False )
 {
-    // Disable display of bitmap names.
+    
     maBtBrowse.EnableTextDisplay (false);
     maBtFileopen.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();
 
-    // Init URL-Box (pos&size, Open-Handler)
+    
     maCbbPath.SetPosSizePixel ( LogicToPixel( Point( COL_2, 15 ), MAP_APPFONT ),
                                 LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
@@ -66,7 +66,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
 
     SetExchangeSupport ();
 
-    // overload handlers
+    
     maBtFileopen.SetClickHdl ( LINK ( this, SvxHyperlinkDocTp, ClickFileopenHdl_Impl ) );
     maBtBrowse.SetClickHdl   ( LINK ( this, SvxHyperlinkDocTp, ClickTargetHdl_Impl ) );
     maCbbPath.SetModifyHdl   ( LINK ( this, SvxHyperlinkDocTp, ModifiedPathHdl_Impl ) );
@@ -94,10 +94,10 @@ SvxHyperlinkDocTp::~SvxHyperlinkDocTp ()
 void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 {
     sal_Int32 nPos = rStrURL.indexOf(sHash);
-    // path
+    
     maCbbPath.SetText ( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );
 
-    // set target in document at editfield
+    
     OUString aStrMark;
     if ( nPos != -1 && nPos < rStrURL.getLength()-1 )
         aStrMark = rStrURL.copy( nPos+1, rStrURL.getLength() );
@@ -114,7 +114,7 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 
 OUString SvxHyperlinkDocTp::GetCurrentURL ()
 {
-    // get data from dialog-controls
+    
     OUString aStrURL;
     OUString aStrPath ( maCbbPath.GetText() );
     const OUString aBaseURL ( maCbbPath.GetBaseURL() );
@@ -123,12 +123,12 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
     if ( aStrPath != aEmptyStr )
     {
         INetURLObject aURL( aStrPath );
-        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )    // maybe the path is already a valid
-            aStrURL = aStrPath;                             // hyperlink, then we can use this path directly
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )    
+            aStrURL = aStrPath;                             
         else
             utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
 
-        //#105788# always create a URL even if it is not valid
+        
         if( aStrURL == aEmptyStr )
             aStrURL = aStrPath;
     }
@@ -152,7 +152,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
                                             OUString& aStrIntName, OUString& aStrFrame,
                                             SvxLinkInsertMode& eMode )
 {
-    // get data from standard-fields
+    
     rStrURL = GetCurrentURL();
 
     if( rStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
@@ -191,7 +191,7 @@ void SvxHyperlinkDocTp::SetInitFocus()
 
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 {
-    // Open Fileopen-Dialog
+    
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0,
         GetParent() );

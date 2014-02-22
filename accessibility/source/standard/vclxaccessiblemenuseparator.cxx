@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessiblemenuseparator.hxx>
@@ -28,31 +28,31 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
-// class VCLXAccessibleMenuSeparator
-// -----------------------------------------------------------------------------
+
+
+
 
 VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
     :OAccessibleMenuItemComponent( pParent, nItemPos, pMenu )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenuSeparator::~VCLXAccessibleMenuSeparator()
 {
 }
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleMenuSeparator::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleMenuSeparator" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -61,9 +61,9 @@ Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames() thr
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleContext
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -72,6 +72,6 @@ sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole(  ) throw (RuntimeExcep
     return AccessibleRole::SEPARATOR;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

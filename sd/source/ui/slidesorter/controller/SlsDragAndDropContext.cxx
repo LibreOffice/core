@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,13 +45,13 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     : mpTargetSlideSorter(&rSlideSorter),
       mnInsertionIndex(-1)
 {
-    // No Drag-and-Drop for master pages.
+    
     if (rSlideSorter.GetModel().GetEditMode() != EM_PAGE)
         return;
 
-    // For poperly handling transferables created by the navigator we
-    // need additional information.  For this a user data object is
-    // created that contains the necessary information.
+    
+    
+    
     SdTransferable* pTransferable = SD_MOD()->pTransferDrag;
     SdPageObjsTLB::SdPageObjsTransferable* pTreeListBoxTransferable
         = dynamic_cast<SdPageObjsTLB::SdPageObjsTransferable*>(pTransferable);
@@ -94,9 +94,9 @@ void DragAndDropContext::UpdatePosition (
     if (mpTargetSlideSorter->GetProperties()->IsUIReadOnly())
         return;
 
-    // Convert window coordinates into model coordinates (we need the
-    // window coordinates for auto-scrolling because that remains
-    // constant while scrolling.)
+    
+    
+    
     SharedSdWindow pWindow (mpTargetSlideSorter->GetContentWindow());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
     ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler (
@@ -112,7 +112,7 @@ void DragAndDropContext::UpdatePosition (
     {
         pInsertionIndicatorHandler->UpdatePosition(aMouseModelPosition, eMode);
 
-        // Remember the new insertion index.
+        
         mnInsertionIndex = pInsertionIndicatorHandler->GetInsertionPageIndex();
         if (pInsertionIndicatorHandler->IsInsertionTrivial(mnInsertionIndex, eMode))
             mnInsertionIndex = -1;
@@ -149,6 +149,6 @@ void DragAndDropContext::SetTargetSlideSorter (
 }
 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

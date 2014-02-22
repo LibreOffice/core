@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formbrowsertools.hxx"
@@ -25,21 +25,21 @@
 #include "modulepcr.hxx"
 #include "formstrings.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //------------------------------------------------------------------------
+    
     OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     {
         PcrClient aResourceAccess;
-            // this ensures that we have our resource file loaded
+            
 
         OUString sClassName;
         switch (nClassId)
@@ -50,13 +50,13 @@ namespace pcr
                 aUnoObj >>= xIFace;
                 sClassName = PcrRes(RID_STR_PROPTITLE_EDIT).toString();
                 if (xIFace.is())
-                {   // we have a chance to check if it's a formatted field model
+                {   
                     Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                     if (xInfo.is() && (xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD)))
                         sClassName = PcrRes(RID_STR_PROPTITLE_FORMATTED).toString();
                     else if (!xInfo.is())
                     {
-                        // couldn't distinguish between formatted and edit with the service name, so try with the properties
+                        
                         Reference< XPropertySet >  xProps(xIFace, UNO_QUERY);
                         if (xProps.is())
                         {
@@ -113,7 +113,7 @@ namespace pcr
         return sClassName;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int16 classifyComponent( const Reference< XInterface >& _rxComponent )
     {
         Reference< XPropertySet > xComponentProps( _rxComponent, UNO_QUERY_THROW );
@@ -127,8 +127,8 @@ namespace pcr
         return nControlType;
     }
 
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

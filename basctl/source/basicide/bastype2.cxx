@@ -180,8 +180,8 @@ bool EntryDescriptor::operator == (EntryDescriptor const& rDesc) const
 }
 
 //
-// TreeListBox
-// ===========
+
+
 //
 
 TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)
@@ -202,7 +202,7 @@ void TreeListBox::Init()
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
-    nMode = 0xFF;   // everything
+    nMode = 0xFF;   
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
@@ -218,7 +218,7 @@ TreeListBox::~TreeListBox ()
 {
     m_aNotifier.dispose();
 
-    // destroy user data
+    
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
@@ -233,12 +233,12 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
     if ( !rDocument.isAlive() )
         return;
 
-    // can be called multiple times for updating!
+    
 
-    // actually test if basic's in the tree already?!
+    
     SetUpdateMode(false);
 
-    // level 1: BasicManager (application, document, ...)
+    
     SvTreeListEntry* pDocumentRootEntry = FindRootEntry( rDocument, eLocation );
     if ( pDocumentRootEntry && IsExpanded( pDocumentRootEntry ) )
         ImpCreateLibEntries( pDocumentRootEntry, rDocument, eLocation );
@@ -259,7 +259,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
 
 void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    // get a sorted list of library names
+    
     Sequence< OUString > aLibNames( rDocument.getLibraryNames() );
     sal_Int32 nLibCount = aLibNames.getLength();
     const OUString* pLibNames = aLibNames.getConstArray();
@@ -270,14 +270,14 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
 
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
-            // check, if the module library is loaded
+            
             bool bModLibLoaded = false;
             OUString aOULibName( aLibName );
             Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
                 bModLibLoaded = true;
 
-            // check, if the dialog library is loaded
+            
             bool bDlgLibLoaded = false;
             Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
@@ -285,7 +285,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
 
             bool bLoaded = bModLibLoaded || bDlgLibLoaded;
 
-            // if only one of the libraries is loaded, load also the other
+            
             if ( bLoaded )
             {
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
@@ -295,7 +295,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
                     xDlgLibContainer->loadLibrary( aOULibName );
             }
 
-            // create tree list box entry
+            
             sal_uInt16 nId;
             if ( ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES ) )
                 nId = bLoaded ? RID_IMG_DLGLIB : RID_IMG_DLGLIBNOTLOADED;
@@ -322,7 +322,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
 
 void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
-    // modules
+    
     if ( nMode & BROWSEMODE_MODULES )
     {
         Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
@@ -335,7 +335,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                     ImpCreateLibSubEntriesInVBAMode( pLibRootEntry, rDocument, rLibName );
                 else
                 {
-                    // get a sorted list of module names
+                    
                     Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
                     sal_Int32 nModCount = aModNames.getLength();
                     const OUString* pModNames = aModNames.getConstArray();
@@ -353,7 +353,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                                 pLibRootEntry, false, &e);
                         }
 
-                        // methods
+                        
                         if ( nMode & BROWSEMODE_SUBS )
                         {
                             Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
@@ -385,7 +385,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
         }
     }
 
-    // dialogs
+    
     if ( nMode & BROWSEMODE_DIALOGS )
     {
          Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
@@ -394,7 +394,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
          {
             try
             {
-                // get a sorted list of dialog names
+                
                 Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
                 sal_Int32 nDlgCount = aDlgNames.getLength();
                 const OUString* pDlgNames = aDlgNames.getConstArray();
@@ -461,7 +461,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
 
     try
     {
-        // get a sorted list of module names
+        
         Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
         sal_Int32 nModCount = aModNames.getLength();
         const OUString* pModNames = aModNames.getConstArray();
@@ -491,8 +491,8 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             if( eType != eCurrentType )
                 continue;
 
-            // display a nice friendly name in the ObjectModule tab,
-               // combining the objectname and module name, e.g. Sheet1 ( Financials )
+            
+               
             OUString aEntryName = aModName;
             if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
             {
@@ -513,7 +513,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
                     pLibSubRootEntry, false, &e);
             }
 
-            // methods
+            
             if ( nMode & BROWSEMODE_SUBS )
             {
                 Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
@@ -568,17 +568,17 @@ void TreeListBox::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
 
 void TreeListBox::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void TreeListBox::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void TreeListBox::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void TreeListBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
@@ -589,26 +589,26 @@ void TreeListBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
 void TreeListBox::onDocumentClosed( const ScriptDocument& rDocument )
 {
     UpdateEntries();
-    // The document is not yet actually deleted, so we need to remove its entry
-    // manually.
+    
+    
     RemoveEntry(rDocument);
 }
 
 void TreeListBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void TreeListBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void TreeListBox::UpdateEntries()
 {
     EntryDescriptor aCurDesc( GetEntryDescriptor( FirstSelected() ) );
 
-    // removing the invalid entries
+    
     SvTreeListEntry* pLastValid = 0;
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
@@ -625,19 +625,19 @@ void TreeListBox::UpdateEntries()
     SetCurrentEntry( aCurDesc );
 }
 
-// Removes the entry from the tree.
+
 void TreeListBox::RemoveEntry (SvTreeListEntry* pEntry)
 {
-    // removing the associated user data
+    
     delete static_cast<Entry*>(pEntry->GetUserData());
-    // removing the entry
+    
     GetModel()->Remove( pEntry );
 }
 
-// Removes the entry of rDocument.
+
 void TreeListBox::RemoveEntry (ScriptDocument const& rDocument)
 {
-    // finding the entry of rDocument
+    
     for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
         if (rDocument == GetEntryDescriptor(pEntry).GetDocument())
         {
@@ -677,7 +677,7 @@ SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUStrin
 
 bool TreeListBox::ExpandingHdl()
 {
-    // expanding or collapsing?
+    
     bool bOK = true;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {
@@ -694,7 +694,7 @@ bool TreeListBox::ExpandingHdl()
 
             if ( !aLibName.isEmpty() && aLibSubName.isEmpty() && aName.isEmpty() && aMethodName.isEmpty() )
             {
-                // check password, if library is password protected and not verified
+                
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
@@ -816,7 +816,7 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
         }
         else
         {
-            // default icon
+            
             rImage = Image( IDEResId( RID_IMG_DOCUMENT ) );
         }
     }
@@ -949,6 +949,6 @@ void TreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

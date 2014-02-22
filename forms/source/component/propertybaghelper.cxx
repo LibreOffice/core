@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "propertybaghelper.hxx"
@@ -35,10 +35,10 @@
 
 #define NEW_HANDLE_BASE 10000
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Sequence;
@@ -57,12 +57,12 @@ namespace frm
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    
+    
+    
     namespace
     {
-        //----------------------------------------------------------------
+        
         static ::comphelper::IPropertyInfoService& lcl_getPropertyInfos()
         {
             static ConcreteInfoService s_aPropInfos;
@@ -70,10 +70,10 @@ namespace frm
         }
     }
 
-    //====================================================================
-    //= PropertyBagHelper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     PropertyBagHelper::PropertyBagHelper( IPropertyBagHelperContext& _rContext )
         :m_rContext( _rContext )
         ,m_pPropertyArrayHelper( NULL )
@@ -81,42 +81,42 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     PropertyBagHelper::~PropertyBagHelper()
     {
         delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBagHelper::dispose()
     {
         m_bDisposed = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBagHelper::impl_nts_checkDisposed_throw() const
     {
         if ( m_bDisposed )
             throw DisposedException();
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBagHelper::impl_nts_invalidatePropertySetInfo()
     {
         delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 PropertyBagHelper::impl_findFreeHandle( const OUString& _rPropertyName )
     {
         ::comphelper::OPropertyArrayAggregationHelper& rPropInfo( impl_ts_getArrayHelper() );
 
-        // check the preferred handle
+        
         sal_Int32 nHandle = lcl_getPropertyInfos().getPreferredPropertyId( _rPropertyName );
         if ( ( nHandle != -1 ) && rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
             nHandle = -1;
 
-        // seach a free handle in <math>F_1009</math>
+        
         if ( nHandle == -1 )
         {
             sal_Int32 nPrime = 1009;
@@ -126,7 +126,7 @@ namespace frm
             {
                 if ( !rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nNum + NEW_HANDLE_BASE ) )
                 {
-                    // handle not used, yet
+                    
                     nHandle = nNum + NEW_HANDLE_BASE;
                     break;
                 }
@@ -134,7 +134,7 @@ namespace frm
             }
         }
 
-        // search a free handle greater NEW_HANDLE_BASE
+        
         if ( nHandle == -1 )
         {
             nHandle = NEW_HANDLE_BASE + 1009;
@@ -145,7 +145,7 @@ namespace frm
         return nHandle;
     }
 
-    //--------------------------------------------------------------------
+    
     ::comphelper::OPropertyArrayAggregationHelper& PropertyBagHelper::impl_ts_getArrayHelper() const
     {
         OPropertyArrayAggregationHelper* p = m_pPropertyArrayHelper;
@@ -155,12 +155,12 @@ namespace frm
             p = m_pPropertyArrayHelper;
             if ( !p )
             {
-                // our own fixed and our aggregate's properties
+                
                 Sequence< Property > aFixedProps;
                 Sequence< Property > aAggregateProps;
                 m_rContext.describeFixedAndAggregateProperties( aFixedProps, aAggregateProps );
 
-                // our dynamic properties
+                
                 Sequence< Property > aDynamicProps;
                 m_aDynamicProperties.describeProperties( aDynamicProps );
 
@@ -171,7 +171,7 @@ namespace frm
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 const_cast< PropertyBagHelper* >( this )->m_pPropertyArrayHelper = p;
             }
-        } // if ( !p )
+        } 
         else
         {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
@@ -179,40 +179,40 @@ namespace frm
         return *p;
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBagHelper::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
-        //----------------------------------------------
-        // check name sanity
+        
+        
         ::comphelper::OPropertyArrayAggregationHelper& aPropInfo( impl_ts_getArrayHelper() );
         if ( aPropInfo.hasPropertyByName( _rName ) )
             throw PropertyExistException( _rName, m_rContext.getPropertiesInterface() );
 
-        //----------------------------------------------
-        // normalize the REMOVABLE attribute - the FormComponent service
-        // requires that all dynamic properties are REMOVABLE
+        
+        
+        
         _nAttributes |= PropertyAttribute::REMOVABLE;
 
-        //----------------------------------------------
-        // find a free handle
+        
+        
         sal_Int32 nHandle = impl_findFreeHandle( _rName );
 
-        //----------------------------------------------
-        // register the property, and invalidate our property meta data
+        
+        
         m_aDynamicProperties.addProperty( _rName, nHandle, _nAttributes, _rInitialValue );
         impl_nts_invalidatePropertySetInfo();
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBagHelper::removeProperty( const OUString& _rName )
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
-        // check whether it's removable at all
+        
         Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );
         Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), UNO_QUERY_THROW );
         Property aProperty( xPSI->getPropertyByName( _rName ) );
@@ -223,28 +223,28 @@ namespace frm
         impl_nts_invalidatePropertySetInfo();
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //----------------------------------------------------------------
+        
         struct SelectNameOfProperty : public ::std::unary_function< Property, OUString >
         {
             const OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
         };
 
-        //----------------------------------------------------------------
+        
         struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, OUString >
         {
             const OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
         };
 
-        //----------------------------------------------------------------
+        
         struct SelectValueOfPropertyValue : public ::std::unary_function< PropertyValue, Any >
         {
             const Any& operator()( const PropertyValue& _rProp ) const { return _rProp.Value; }
         };
 
-        //----------------------------------------------------------------
+        
         struct PropertyValueLessByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
         {
             bool operator()( const PropertyValue& _lhs, const PropertyValue _rhs ) const
@@ -254,7 +254,7 @@ namespace frm
         };
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< PropertyValue > PropertyBagHelper::getPropertyValues()
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
@@ -296,7 +296,7 @@ namespace frm
         return aPropertyValues;
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBagHelper::setPropertyValues( const Sequence< PropertyValue >& _rProps )
     {
         ::osl::ClearableMutexGuard aGuard( m_rContext.getMutex() );
@@ -304,14 +304,14 @@ namespace frm
 
         sal_Int32 nPropertyValues = _rProps.getLength();
 
-        // XMultiPropertySet::setPropertyValues expects its arguments to be sorted by name
-        // while XPropertyAccess::setPropertyValues doesn't. So first of all, sort.
+        
+        
         Sequence< PropertyValue > aSortedProps( _rProps );
         ::std::sort( aSortedProps.getArray(), aSortedProps.getArray() + nPropertyValues, PropertyValueLessByName() );
 
-        // also, XPropertyAccess::setPropertyValues is expected to throw an UnknownPropertyException
-        // for unsupported properties, while XMultiPropertySet::setPropertyValues is expected to ignore
-        // those. So, check for unsupported properties first.
+        
+        
+        
         ::comphelper::OPropertyArrayAggregationHelper& rArrayHelper( impl_ts_getArrayHelper() );
         for (   const PropertyValue* pProperties = aSortedProps.getConstArray();
                 pProperties != aSortedProps.getConstArray() + nPropertyValues;
@@ -322,8 +322,8 @@ namespace frm
                 throw UnknownPropertyException( pProperties->Name, m_rContext.getPropertiesInterface() );
         }
 
-        // Now finally split into a Name and a Value sequence, and forward to
-        // XMultiPropertySet::setPropertyValues
+        
+        
         Sequence< OUString > aNames( nPropertyValues );
         ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
             aNames.getArray(), SelectNameOfPropertyValue() );
@@ -338,8 +338,8 @@ namespace frm
         xMe->setPropertyValues( aNames, aValues );
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

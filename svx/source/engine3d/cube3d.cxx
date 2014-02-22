@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,8 +26,8 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <svx/sdr/contact/viewcontactofe3dcube.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
+
 
 sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
 {
@@ -39,17 +39,17 @@ TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
 :   E3dCompoundObject(rDefault)
 {
-    // Set Defaults
+    
     SetDefaultAttributes(rDefault);
 
-    aCubePos = aPos; // position centre or left, bottom, back (dependent on bPosIsCenter)
+    aCubePos = aPos; 
     aCubeSize = r3DSize;
 }
 
 E3dCubeObj::E3dCubeObj()
 :   E3dCompoundObject()
 {
-    // Set Defaults
+    
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -67,7 +67,7 @@ sal_uInt16 E3dCubeObj::GetObjIdentifier() const
     return E3D_CUBEOBJ_ID;
 }
 
-// Convert the object into a group object consisting of 6 polygons
+
 
 SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
@@ -79,7 +79,7 @@ E3dCubeObj* E3dCubeObj::Clone() const
     return CloneHelper< E3dCubeObj >();
 }
 
-// Set local parameters with geometry re-creating
+
 
 void E3dCubeObj::SetCubePos(const basegfx::B3DPoint& rNew)
 {
@@ -108,7 +108,7 @@ void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
     }
 }
 
-// Get the name of the object (singular)
+
 
 OUString E3dCubeObj::TakeObjNameSingul() const
 {
@@ -125,7 +125,7 @@ OUString E3dCubeObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-// Get the name of the object (plural)
+
 
 OUString E3dCubeObj::TakeObjNamePlural() const
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "User.hxx"
@@ -41,11 +41,11 @@ Users::Users(const uno::Reference< XDatabaseMetaData >& rMetaData,
 {
 }
 
-//----- OCollection -----------------------------------------------------------
+
 void Users::impl_refresh()
     throw(RuntimeException)
 {
-    // TODO: IMPLEMENT ME
+    
 }
 
 ObjectType Users::createObject(const OUString& rName)
@@ -55,17 +55,17 @@ ObjectType Users::createObject(const OUString& rName)
 
 uno::Reference< XPropertySet > Users::createDescriptor()
 {
-    // There is some internal magic so that the same class can be used as either
-    // a descriptor or as a normal user. See VUser.cxx for the details. In our
-    // case we just need to ensure we use the correct constructor.
+    
+    
+    
     return new User(m_xMetaData->getConnection());
 }
 
-//----- XAppend ---------------------------------------------------------------
+
 ObjectType Users::appendObject(const OUString& rName,
                                 const uno::Reference< XPropertySet >& rDescriptor)
 {
-    // TODO: set sSql as appropriate
+    
     (void) rName;
     (void) rDescriptor;
     OUString sSql;
@@ -74,7 +74,7 @@ ObjectType Users::appendObject(const OUString& rName,
     return createObject(rName);
 }
 
-//----- XDrop -----------------------------------------------------------------
+
 void Users::dropObject(sal_Int32 nPosition, const OUString sName)
 {
     uno::Reference< XPropertySet > xUser(getObject(nPosition));
@@ -82,7 +82,7 @@ void Users::dropObject(sal_Int32 nPosition, const OUString sName)
     if (!ODescriptor::isNew(xUser))
     {
         (void) sName;
-        // TODO: drop me
+        
     }
 }
 

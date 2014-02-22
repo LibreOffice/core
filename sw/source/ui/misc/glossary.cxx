@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -225,7 +225,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     m_pNameED->GrabFocus();
     m_pCategoryBox->SetStyle(m_pCategoryBox->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     m_pCategoryBox->GetModel()->SetSortMode(SortAscending);
-    m_pCategoryBox->SetHighlightRange();   // select over full width
+    m_pCategoryBox->SetHighlightRange();   
     m_pCategoryBox->SetNodeDefaultImages( );
 
     Init();
@@ -251,7 +251,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         + OUString(GLOS_DELIM)
         + OUString::number(pGroupData->nPathIdx));
     pGlossaryHdl->SetCurGroup(::GetCurrGlosGroup());
-    // set current text block
+    
     bReadOnly = pGlossaryHdl->IsReadOnly();
     EnableShortName( !bReadOnly );
     m_pEditBtn->Enable(!bReadOnly);
@@ -267,13 +267,13 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     }
     else
         ShowAutoText(aEmptyOUStr, aEmptyOUStr);
-    // update controls
+    
     NameModify(m_pShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
         OUString sTemp(::GetCurrGlosGroup());
-        // the zeroth path is not being recorded!
+        
         if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
             sTemp = sTemp.getToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
@@ -293,7 +293,7 @@ void SwGlossaryDlg::Apply()
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
         OUString sTemp(::GetCurrGlosGroup());
-        // the zeroth path is not being recorded!
+        
         if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
             sTemp = sTemp.getToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, sTemp));
@@ -314,7 +314,7 @@ void SwGlossaryDlg::EnableShortName(sal_Bool bOn)
 SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
                 const OUString& rShort)
 {
-    // look for possible entry in TreeListBox
+    
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
     if(pEntry)
     {
@@ -350,7 +350,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     const bool bNotFound = !DoesBlockExist(aName, bNameED ? OUString() : pEdit->GetText());
     if(bNameED)
     {
-            // did the text get in to the Listbbox in the Edit with a click?
+            
         if(bNotFound)
         {
             m_pShortNameEdit->SetText( lcl_GetValidShortCut( aName ) );
@@ -365,7 +365,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     }
     else
     {
-        //ShortNameEdit
+        
         if(!bNotFound)
         {
             bool bEnable = !bNotFound;
@@ -446,13 +446,13 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             pChild->SetUserData(new OUString(aShortName));
             m_pNameED->SetText(aStr);
             m_pShortNameEdit->SetText(aShortName);
-            NameModify(m_pNameED);       // for toggling the buttons
+            NameModify(m_pNameED);       
 
             if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
             {
                 SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
                 OUString sTemp(::GetCurrGlosGroup());
-                // the zeroth path is not being recorded!
+                
                 if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
                     sTemp = sTemp.getToken(0, GLOS_DELIM);
                 aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
@@ -542,7 +542,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     }
     else if (sItemIdent == "import")
     {
-        // call the FileOpenDialog do find WinWord - Files with templates
+        
         FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
         uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
@@ -592,7 +592,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         pGloss->ShowError();
     else
     {
-        //check if at least one glossary path is write enabled
+        
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
         sal_uInt16 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
@@ -626,7 +626,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
             if ( RET_OK == pDlg->Execute() )
             {
                 Init();
-                //if new groups were created - select one of them
+                
                 const OUString sNewGroup = pDlg->GetCreatedGroupName();
                 SvTreeListEntry* pEntry = m_pCategoryBox->First();
                 while (!sNewGroup.isEmpty() && pEntry)
@@ -667,12 +667,12 @@ void SwGlossaryDlg::Init()
 {
     m_pCategoryBox->SetUpdateMode( sal_False );
     m_pCategoryBox->Clear();
-    // display text block regions
+    
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvTreeListEntry* pSelEntry = 0;
     const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
     const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32());
-    // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
+    
     const OUString sMyAutoTextEnglish("My AutoText");
     const OUString sMyAutoTextTranslated(SW_RES(STR_MY_AUTOTEXT));
     for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
@@ -697,7 +697,7 @@ void SwGlossaryDlg::Init()
         if(sSelStr == pData->sGroupName && nSelPath == nPath)
             pSelEntry = pEntry;
 
-        // fill entries for the groups
+        
         {
             pGlossaryHdl->SetCurGroup(sGroupName, sal_False, sal_True);
             const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
@@ -709,10 +709,10 @@ void SwGlossaryDlg::Init()
             }
         }
     }
-        // set current group and display text blocks
+        
     if(!pSelEntry)
     {
-        //find a non-readonly group
+        
         SvTreeListEntry* pSearch = m_pCategoryBox->First();
         while(pSearch)
         {
@@ -737,10 +737,10 @@ void SwGlossaryDlg::Init()
         m_pCategoryBox->MakeVisible(pSelEntry);
         GrpSelect(m_pCategoryBox);
     }
-    //JP 16.11.99: the SvxTreeListBox has a Bug. The Box dont recalc the
-    //      outputsize, when all entries are insertet. The result is, that
-    //      the Focus/Highlight rectangle is to large and paintet over the
-    //      HScrollbar. -> Fix: call the resize
+    
+    
+    
+    
     m_pCategoryBox->Resize();
 
     m_pCategoryBox->GetModel()->Resort();
@@ -758,7 +758,7 @@ void SwGlossaryDlg::Init()
 
 IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
 {
-// EndDialog must not be called in MenuHdl
+
     if (m_pEditBtn->GetCurItemIdent() == "edit")
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
@@ -856,7 +856,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
     SvTreeListEntry* pEntry = GetEntry( aPos );
-    // there's only help for groups' names
+    
     if(pEntry)
     {
         SvLBoxTab* pTab;
@@ -929,7 +929,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
 
 sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 {
-    // TODO: Readonly - check still missing!
+    
     SvTreeListEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;
     SvTreeListEntry* pDestParent =
         GetParent(pDragEntry ) ? GetParent(pDragEntry ) : pDragEntry ;
@@ -961,9 +961,9 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
     bool              bIsMove)
 {
     pDragEntry = 0;
-    // 1. move in different groups?
-    // 2. allowed to write to both groups?
-    if(!pTarget) // move to the beginning
+    
+    
+    if(!pTarget) 
     {
         pTarget = GetEntry(0);
     }
@@ -1002,7 +1002,7 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
             }
         }
     }
-    return sal_False; // otherwise the entry is being set automatically
+    return sal_False; 
 }
 
 OUString SwGlossaryDlg::GetCurrGrpName() const
@@ -1050,7 +1050,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl)
 
 void SwGlossaryDlg::ShowPreview()
 {
-    //create example
+    
     if (!pExampleFrame)
     {
         Link aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
@@ -1072,7 +1072,7 @@ void SwGlossaryDlg::ShowAutoText(const OUString& rGroup, const OUString& rShortN
     if(m_pExampleWIN->IsVisible())
     {
         SetResumeData(rGroup, rShortName);
-        //try to make an Undo()
+        
         pExampleFrame->ClearDocument( sal_True );
     }
 }
@@ -1085,7 +1085,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
     {
         if(!m_xAutoText.is())
         {
-            //now the AutoText ListBoxes have to be filled
+            
             m_xAutoText = text::AutoTextContainer::create( comphelper::getProcessComponentContext() );
         }
 

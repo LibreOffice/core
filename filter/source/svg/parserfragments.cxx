@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "parserfragments.hxx"
@@ -133,7 +133,7 @@ namespace
                 int_parser<sal_uInt8,10,1,3> byte_p;
                 colorExpression =
                     (
-                        // the #rrggbb form
+                        
                         ('#' >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
                                                                    boost::ref(self.m_rColor.r),_1,_2)]
                              >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
@@ -141,7 +141,7 @@ namespace
                              >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
                                                                    boost::ref(self.m_rColor.b),_1,_2)])
                         |
-                        // the #rgb form
+                        
                         ('#' >> xdigit_p[boost::bind(&setFourBitColor,
                                                      boost::ref(self.m_rColor.r),_1)]
                              >> xdigit_p[boost::bind(&setFourBitColor,
@@ -149,11 +149,11 @@ namespace
                              >> xdigit_p[boost::bind(&setFourBitColor,
                                                      boost::ref(self.m_rColor.b),_1)])
                         |
-                        // rgb() form
+                        
                         (str_p("rgb")
                             >> '(' >>
                             (
-                                // rgb(int,int,int)
+                                
                                 (byte_p[boost::bind(&setIntColor,
                                                     boost::ref(self.m_rColor.r),_1)] >> ',' >>
                                  byte_p[boost::bind(&setIntColor,
@@ -161,12 +161,12 @@ namespace
                                  byte_p[boost::bind(&setIntColor,
                                                     boost::ref(self.m_rColor.b),_1)])
                              |
-                                // rgb(double,double,double)
+                                
                                 (real_p[assign_a(self.m_rColor.r)] >> ',' >>
                                  real_p[assign_a(self.m_rColor.g)] >> ',' >>
                                  real_p[assign_a(self.m_rColor.b)])
                              |
-                                // rgb(percent,percent,percent)
+                                
                                 (real_p[boost::bind(&setPercentColor,
                                                     boost::ref(self.m_rColor.r),_1)] >> "%," >>
                                  real_p[boost::bind(&setPercentColor,
@@ -190,16 +190,16 @@ bool parseColor( const char* sColor, ARGBColor& rColor  )
               ColorGrammar(rColor) >> end_p,
               space_p).full )
     {
-        // free-form color found & parsed
+        
         return true;
     }
 
-    // no free-form color - maybe a color name?
-    // trim white space before
+    
+    
     while( *sColor &&
            (*sColor==' ' || *sColor=='\t' || *sColor=='\r' || *sColor=='\n') )
         ++sColor;
-    // trim white space after
+    
     int nLen=strlen(sColor)-1;
     while( nLen &&
            (sColor[nLen]==' ' || sColor[nLen]=='\t' || sColor[nLen]=='\r' || sColor[nLen]=='\n') )
@@ -355,7 +355,7 @@ bool parseColor( const char* sColor, ARGBColor& rColor  )
         case XML_YELLOWGREEN: rColor = ARGBColor(154,205,50); return true;
 
         default:
-            return false; // no color at all, I'd guess.
+            return false; 
     }
 }
 
@@ -364,11 +364,11 @@ bool parseOpacity (const char* sOpacity, ARGBColor& rColor )
     using namespace ::boost::spirit::classic;
 
     if( parse(sOpacity,
-              // Begin grammar
+              
               (
                   real_p[assign_a(rColor.a)]
                   ) >> end_p,
-              // End grammar
+              
               space_p).full )
     {
         return true;
@@ -376,7 +376,7 @@ bool parseOpacity (const char* sOpacity, ARGBColor& rColor )
     return false;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
 {
@@ -395,12 +395,12 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
     aCurrTransform = aIdentityTransform;
 
     const bool bRes = parse(sTransform,
-        //  Begin grammar
+        
         (
-            // identity transform
+            
             str_p("none")
           |
-            // the ref() form
+            
             (str_p("ref")
              >> '('
              >> str_p("svg")[assign_a(bRefTransform,true)]
@@ -408,10 +408,10 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                   real_p[assign_a(fRefOffsetY)])
              >> ')')
           |
-            // the transform-list form
+            
             (list_p(
                (
-                 // matrix(a,b,c,d,e,f)
+                 
                  (str_p("matrix")
                   >> '('
                   >> real_p[assign_a(aCurrTransform.m00)] >> (',' | eps_p)
@@ -422,7 +422,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                   >> real_p[assign_a(aCurrTransform.m12)]
                   >> ')')[push_back_a(aTransforms,aCurrTransform)]
                |
-                 // translate(x,[y])
+                 
                  (str_p("translate")
                   >> '('
                   >> real_p[boost::bind(&assign_twice,
@@ -431,7 +431,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                   >> !((',' | eps_p) >> real_p[assign_a(aCurrTransform.m12)])
                   >> ')')[push_back_a(aTransforms,aCurrTransform)]
                |
-                 // scale(x,[y])
+                 
                  (str_p("scale")
                   >> '('
                   >> real_p[boost::bind(&assign_twice,
@@ -440,7 +440,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                   >> !((',' | eps_p) >> real_p[assign_a(aCurrTransform.m11)])
                   >> ')')[push_back_a(aTransforms,aCurrTransform)]
                |
-                 // rotate(phi,[cx, cy])
+                 
                  (str_p("rotate")
                   >> '('
                   >> real_p[assign_a(fRotationAngle)]
@@ -451,7 +451,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                                       boost::ref(aCurrTransform),
                                       boost::cref(fRotationAngle))]
                |
-                 // skewX(phi)
+                 
                  (str_p("skewX")
                   >> '('
                   >> real_p[assign_a(fSkewAngle)]
@@ -459,25 +459,25 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                                       boost::ref(aTransforms),
                                       boost::cref(fSkewAngle))]
                |
-                 // skewY(phi)
+                 
                  (str_p("skewY")
                   >> '('
                   >> real_p[assign_a(fSkewAngle)]
                   >> ')')[boost::bind(&calcSkewY,
                                       boost::ref(aTransforms),
                                       boost::cref(fSkewAngle))]
-                 // reset current transform after every push
+                 
                )[assign_a(aCurrTransform,aIdentityTransform)],
-                 // list delimiter is either ',' or space
+                 
                ',' | eps_p ))
         ) >> end_p,
-        //  End grammar
+        
         space_p).full;
 
     if( !bRes )
         return false;
 
-    // fold all transformations into one
+    
     const geometry::AffineMatrix2D aTotalTransform(
         std::accumulate(aTransforms.begin(),
                         aTransforms.end(),
@@ -488,11 +488,11 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
         rTransform,
         aTotalTransform);
 
-    // TODO(F1): handle the ref case
+    
     return bRes;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
 {
@@ -501,15 +501,15 @@ bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
     double x=0.0,y=0.0,w=0.0,h=0.0;
 
     const bool bRes = parse(sViewbox,
-        //  Begin grammar
+        
         (
-            // either comma- or space-delimited list of four doubles
+            
             real_p[assign_a(x)] >> (',' | eps_p) >>
             real_p[assign_a(y)] >> (',' | eps_p) >>
             real_p[assign_a(w)] >> (',' | eps_p) >>
             real_p[assign_a(h)] >> end_p
         ),
-        //  End grammar
+        
         space_p).full;
 
     if( !bRes )
@@ -520,7 +520,7 @@ bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
     return true;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector )
 {
@@ -528,23 +528,23 @@ bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector 
 
     rOutputVector.clear();
     return parse(sDashArray,
-        //  Begin grammar
+        
         (
-            // parse comma-delimited list of doubles (have to use the
-            // 'direct' variant, as otherwise spirit refactors our
-            // parser to push both real num and comma to push_back_a)
+            
+            
+            
             list_p.direct
             (
                 real_p[push_back_a(rOutputVector)],
-                // list delimiter is either ',' or space
+                
                 ',' | eps_p
             )
         ) >> end_p,
-        //  End grammar
+        
         space_p).full;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
                     std::pair<ARGBColor,bool>&          io_rColor,
@@ -553,7 +553,7 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
     using namespace ::boost::spirit::classic;
 
     const bool bRes = parse(sPaintUri,
-        //  Begin grammar
+        
         (
             str_p("url(") >> !( str_p("'") | str_p("\"") ) >> ("#") >>
             (+alnum_p)[assign_a(o_rPaintUri)] >>
@@ -561,16 +561,16 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
             *( str_p("none")[assign_a(io_rColor.second,false)] |
                str_p("currentColor")[assign_a(io_rColor.second,true)] |
                ColorGrammar(io_rColor.first)
-               // TODO(F1): named color
+               
              )
         ) >> end_p,
-        //  End grammar
+        
         space_p).full;
 
     return bRes;
 }
 
-//////////////////////////////////////////////////////////////
+
 
 bool parseXlinkHref( const char* sXlinkHref, std::string& data )
 {
@@ -582,7 +582,7 @@ bool parseXlinkHref( const char* sXlinkHref, std::string& data )
 
     if (!sLink.compare(0,5,"data:"))
     {
-        // the inplace "data" uri
+        
         size_t position = sLink.rfind(',');
         if (position > 0 && position < std::string::npos)
         {
@@ -595,6 +595,6 @@ bool parseXlinkHref( const char* sXlinkHref, std::string& data )
     return false;
 }
 
-} // namespace svgi
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

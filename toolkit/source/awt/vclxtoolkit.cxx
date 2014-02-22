@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -192,11 +192,11 @@ public:
     VCLXToolkit();
     ~VCLXToolkit();
 
-    // css::awt::XToolkitExperimental
+    
     css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
 (css::uno::RuntimeException);
 
-    // css::awt::XToolkit
+    
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException);
     css::awt::Rectangle                                        SAL_CALL getWorkArea(  ) throw(css::uno::RuntimeException);
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL createWindow( const css::awt::WindowDescriptor& Descriptor ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
@@ -205,24 +205,24 @@ public:
 (css::uno::RuntimeException);
     css::uno::Reference< css::awt::XRegion >      SAL_CALL createRegion(  ) throw(css::uno::RuntimeException);
 
-    // css::awt::XSystemChildFactory
+    
     css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(css::uno::RuntimeException);
 
-    // css::awt::XMessageBoxFactory
+    
     virtual css::uno::Reference< css::awt::XMessageBox > SAL_CALL createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) throw (css::uno::RuntimeException);
 
-    // css::awt::XDataTransfer
+    
     css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException);
     css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException);
     css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException);
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& clipboardName ) throw(css::uno::RuntimeException);
 
-    // css::lang::XServiceInfo
+    
     OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
     sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException);
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException);
 
-    // css::awt::XExtendedToolkit:
+    
 
     virtual ::sal_Int32 SAL_CALL getTopWindowCount()
         throw (css::uno::RuntimeException);
@@ -275,7 +275,7 @@ public:
         css::uno::XInterface > const & source)
         throw (css::uno::RuntimeException);
 
-    // css::awt::XReschedule:
+    
     virtual void SAL_CALL reschedule()
         throw (css::uno::RuntimeException);
 };
@@ -349,10 +349,10 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
         nWinBits |= WB_CLIPCHILDREN;
     if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::GROUP )
         nWinBits |= WB_GROUP;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::NOLABEL ) //added for issue79712
+    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::NOLABEL ) 
         nWinBits |= WB_NOLABEL;
 
-    // These bits are not uniqe
+    
     if ( bMessBox )
     {
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::OK )
@@ -389,8 +389,8 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
     {
         if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::NODECORATION )
         {
-            // No decoration removes several window attributes and must
-            // set WB_NOBORDER!
+            
+            
             nWinBits &= ~WB_BORDER;
             nWinBits &= ~WB_SIZEABLE;
             nWinBits &= ~WB_MOVEABLE;
@@ -625,7 +625,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 }
 }
 
-// contructor, which might initialize VCL
+
 VCLXToolkit::VCLXToolkit():
     cppu::WeakComponentImplHelper2<
     ::com::sun::star::awt::XToolkitExperimental,
@@ -645,7 +645,7 @@ VCLXToolkit::VCLXToolkit():
     nVCLToolkitInstanceCount++;
     if( ( nVCLToolkitInstanceCount == 1 ) && ( !Application::IsInMain() ) )
     {
-        // setup execute thread
+        
         CreateMainLoopThread( ToolkitWorkerFunction, this );
         getInitCondition().wait();
     }
@@ -701,7 +701,7 @@ void SAL_CALL VCLXToolkit::disposing()
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
-    // 07/00: AppWindow doesn't exist anymore...
+    
     return xRef;
 }
 
@@ -780,8 +780,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     }
     if ( !pParent )
     {
-        // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
-        // spaeter mal ::com::sun::star::uno::Exception...
+        
+        
         bool bException = true;
         if  (   ( nType == WINDOW_DIALOG )
             ||  ( nType == WINDOW_MODALDIALOG )
@@ -887,8 +887,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 {
                                     GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
                                     *ppNewComp = new VCLXFrame;
-                                    // Frame control needs to receive
-                                    // Mouse events
+                                    
+                                    
                                     pGroupBox->SetMouseTransparent( false );
                                 }
                         }
@@ -938,13 +938,13 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_MODALDIALOG:
             case WINDOW_MODELESSDIALOG:
             {
-                // Modal/Modeless nur durch Show/Execute
+                
                 if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
                     pParent = DIALOG_NO_PARENT;
                 pNewWindow = new toolkit::ScrollableWrapper<Dialog>( pParent, nWinBits );
-                // #i70217# Don't always create a new component object. It's possible that VCL has called
-                // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
-                // which creates a component object.
+                
+                
+                
                 css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( sal_False );
                 if ( xWinPeer.is() )
                     *ppNewComp = dynamic_cast< VCLXDialog* >( xWinPeer.get() );
@@ -993,15 +993,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new RadioButton( pParent, nWinBits );
                 *ppNewComp = new VCLXRadioButton;
 
-                // by default, disable RadioCheck
-                // Since the VCLXRadioButton really cares for it's RadioCheck settings, this is important:
-                // if we enable it, the VCLXRadioButton will use RadioButton::Check instead of RadioButton::SetState
-                // This leads to a strange behaviour if the control is newly created: when settings the initial
-                // state to "checked", the RadioButton::Check (called because RadioCheck=sal_True) will uncheck
-                // _all_other_ radio buttons in the same group. However, at this moment the grouping of the controls
-                // is not really valid: the controls are grouped after they have been created, but we're still in
-                // the creation process, so the RadioButton::Check relies on invalid grouping information.
-                // 07.08.2001 - #87254# - frank.schoenheit@sun.com
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( false );
             break;
             case WINDOW_SCROLLBAR:
@@ -1077,7 +1077,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     {
                         if ((pParent == NULL) && rDescriptor.Parent.is())
                         {
-                            // try to get a system dependent window handle
+                            
                             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, ::com::sun::star::uno::UNO_QUERY);
 
                             if (xSystemDepParent.is())
@@ -1090,8 +1090,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
-                                // use sal_Int64 here to accommodate all int types
-                                // uno::Any shift operator whill upcast if necessary
+                                
+                                
                                 sal_Int64 nWindowHandle = 0;
                                 sal_Bool bXEmbed = sal_False;
 
@@ -1122,9 +1122,9 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     #if defined MACOSX
                                     aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
                                     #elif defined ANDROID
-                                    // Nothing
+                                    
                                     #elif defined IOS
-                                    // Nothing
+                                    
                                     #elif defined UNX
                                     aParentData.aWindow = nWindowHandle;
                                     aParentData.bXEmbedSupport = bXEmbed;
@@ -1206,8 +1206,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
 
-        // #103939# Don't throw assertion, may be it's a system dependend window, used in ImplCreateWindow.
-        // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
+        
+        
 
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
@@ -1219,10 +1219,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     VCLXWindow* pNewComp = NULL;
 
     Window* pNewWindow = NULL;
-    // Try to create the window with SvTools
-    // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
-    // and we need to stay compatible)
-    // try to load the lib
+    
+    
+    
+    
     if ( !fnSvtCreateWindow
 #ifndef DISABLE_DYNLOADING
          && !hSvToolsLib
@@ -1248,11 +1248,11 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         fnSvtCreateWindow = CreateWindow;
 #endif
     }
-    // ask the SvTool creation function
+    
     if ( fnSvtCreateWindow )
         pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
 
-    // if SvTools could not provide a window, create it ourself
+    
     if ( !pNewWindow )
         pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
 
@@ -1262,7 +1262,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if ( pNewWindow )
     {
         pNewWindow->SetCreatedWithToolkit( true );
-        //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
+        
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )
         {
@@ -1281,7 +1281,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
         if ( !pNewComp )
         {
-            // Default-Interface
+            
             xRef = pNewWindow->GetComponentInterface( sal_True );
         }
         else
@@ -1319,14 +1319,14 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return aSeq;
 }
 
-// ::com::sun::star::awt::XSystemChildFactory
+
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
     Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
-        // use sal_Int64 here to accommodate all int types
-        // uno::Any shift operator whill upcast if necessary
+        
+        
         sal_Int64 nWindowHandle = 0;
         sal_Bool bXEmbed = sal_False;
 
@@ -1357,9 +1357,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             #if defined MACOSX
             aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
             #elif defined ANDROID
-            // Nothing
+            
             #elif defined IOS
-            // Nothing
+            
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;
@@ -1373,7 +1373,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             }
             catch ( const ::com::sun::star::uno::RuntimeException & rEx )
             {
-                // system child window could not be created
+                
                 OSL_TRACE(
                     "VCLXToolkit::createSystemChild: caught %s\n",
                     OUStringToOString(
@@ -1400,7 +1400,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return xPeer;
 }
 
-// ::com::sun::star::awt::XMessageBoxFactory
+
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent,
     ::com::sun::star::awt::MessageBoxType eType,
@@ -1412,7 +1412,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     sal_Int32 nWindowAttributes = css::awt::WindowAttribute::BORDER|css::awt::WindowAttribute::MOVEABLE|css::awt::WindowAttribute::CLOSEABLE;
 
-    // Map button definitions to window attributes
+    
     if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_OK )
         nWindowAttributes |= css::awt::VclWindowPeerAttribute::OK;
     else if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_OK_CANCEL )
@@ -1424,7 +1424,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     else if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_RETRY_CANCEL )
         nWindowAttributes |= css::awt::VclWindowPeerAttribute::RETRY_CANCEL;
 
-    // Map default button definitions to window attributes
+    
     if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_OK )
         nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_OK;
     else if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_CANCEL )
@@ -1436,8 +1436,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     else if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_RETRY )
         nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_RETRY;
 
-    // No more bits for VclWindowPeerAttribute possible. Mapping must be
-    // done explicitly using VCL methods
+    
+    
     WinBits nAddWinBits( 0 );
     if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_ABORT_IGNORE_RETRY )
         nAddWinBits |= WB_ABORT_RETRY_IGNORE;
@@ -1505,7 +1505,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     {
         if( !mxClipboard.is() )
         {
-            // remember clipboard here
+            
             mxClipboard = css::datatransfer::clipboard::SystemClipboard::create(
                 comphelper::getProcessComponentContext());
         }
@@ -1521,7 +1521,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >();
 }
 
-// XServiceInfo
+
 OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
     return OUString("stardiv.Toolkit.VCLXToolkit");
@@ -1538,29 +1538,29 @@ sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(::co
     return ::com::sun::star::uno::Sequence< OUString >( &aServiceName, 1);
 }
 
-// css::awt::XExtendedToolkit:
 
-// virtual
+
+
 ::sal_Int32 SAL_CALL VCLXToolkit::getTopWindowCount()
     throw (css::uno::RuntimeException)
 {
     return static_cast< ::sal_Int32 >(::Application::GetTopWindowCount());
-        // XXX  numeric overflow
+        
 }
 
-// virtual
+
 css::uno::Reference< css::awt::XTopWindow > SAL_CALL
 VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
     throw (css::uno::RuntimeException)
 {
     ::Window * p = ::Application::GetTopWindow(static_cast< long >(nIndex));
-        // XXX  numeric overflow
+        
     return css::uno::Reference< css::awt::XTopWindow >(
         p == 0 ? 0 : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
         css::uno::UNO_QUERY);
 }
 
-// virtual
+
 css::uno::Reference< css::awt::XTopWindow > SAL_CALL
 VCLXToolkit::getActiveTopWindow() throw (css::uno::RuntimeException)
 {
@@ -1570,7 +1570,7 @@ VCLXToolkit::getActiveTopWindow() throw (css::uno::RuntimeException)
         css::uno::UNO_QUERY);
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::addTopWindowListener(
     css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
     throw (css::uno::RuntimeException)
@@ -1592,7 +1592,7 @@ void SAL_CALL VCLXToolkit::addTopWindowListener(
     }
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::removeTopWindowListener(
     css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
     throw (css::uno::RuntimeException)
@@ -1607,7 +1607,7 @@ void SAL_CALL VCLXToolkit::removeTopWindowListener(
     }
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::addKeyHandler(
     css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
     throw (css::uno::RuntimeException)
@@ -1628,7 +1628,7 @@ void SAL_CALL VCLXToolkit::addKeyHandler(
     }
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::removeKeyHandler(
     css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
     throw (css::uno::RuntimeException)
@@ -1642,7 +1642,7 @@ void SAL_CALL VCLXToolkit::removeKeyHandler(
     }
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::addFocusListener(
     css::uno::Reference< css::awt::XFocusListener > const & rListener)
     throw (css::uno::RuntimeException)
@@ -1664,7 +1664,7 @@ void SAL_CALL VCLXToolkit::addFocusListener(
     }
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::removeFocusListener(
     css::uno::Reference< css::awt::XFocusListener > const & rListener)
     throw (css::uno::RuntimeException)
@@ -1679,7 +1679,7 @@ void SAL_CALL VCLXToolkit::removeFocusListener(
     }
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::fireFocusGained(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::uno::XInterface > const &)
@@ -1687,7 +1687,7 @@ void SAL_CALL VCLXToolkit::fireFocusGained(
 {
 }
 
-// virtual
+
 void SAL_CALL VCLXToolkit::fireFocusLost(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::uno::XInterface > const &)
@@ -1795,7 +1795,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
     {
         ::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
 
-        // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
+        
         ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
             static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
         css::awt::KeyEvent aAwtEvent(
@@ -1844,9 +1844,9 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
               aListeners(m_aFocusListeners.getElements());
         if (aListeners.hasElements())
         {
-            // Ignore the interior of compound controls when determining the
-            // window that gets the focus next (see implementation in
-            // vclxwindow.cxx for mapping between VCL and UNO AWT event):
+            
+            
+            
             css::uno::Reference< css::uno::XInterface > xNext;
             ::Window * pFocus = ::Application::GetFocusWindow();
             for (::Window * p = pFocus; p != 0; p = p->GetParent())
@@ -1881,7 +1881,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
     }
 }
 
-// css::awt::XReschedule:
+
 
 void SAL_CALL VCLXToolkit::reschedule()
     throw (::com::sun::star::uno::RuntimeException)

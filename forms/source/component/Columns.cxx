@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -43,10 +43,10 @@
 #include "frm_resource.hrc"
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -63,7 +63,7 @@ const sal_uInt16 ALIGN              = 0x0002;
 const sal_uInt16 OLD_HIDDEN         = 0x0004;
 const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
-//------------------------------------------------------------------------------
+
 const StringSequence& getColumnTypes()
 {
     static StringSequence aColumnTypes(10);
@@ -84,7 +84,7 @@ const StringSequence& getColumnTypes()
     return aColumnTypes;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
     const OUString aModelPrefix ("com.sun.star.form.component.");
@@ -124,7 +124,7 @@ const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
     return theOGridColumnImplementationId::get().getSeq();
 }
 
-//------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdentifier) throw(RuntimeException)
 {
     sal_Int64 nReturn(0);
@@ -144,23 +144,23 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
     return nReturn;
 }
 
-//------------------------------------------------------------------
+
 Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
-//------------------------------------------------------------------
+
 Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 {
     TypeBag aTypes( OGridColumn_BASE::getTypes() );
-    // erase the types which we do not support
+    
     aTypes.removeType( cppu::UnoType<XFormComponent>::get() );
     aTypes.removeType( cppu::UnoType<XServiceInfo>::get() );
     aTypes.removeType( cppu::UnoType<XBindableValue>::get() );
     aTypes.removeType( cppu::UnoType<XPropertyContainer>::get() );
 
-    // but re-add their base class(es)
+    
     aTypes.addType( cppu::UnoType<XChild>::get() );
 
     Reference< XTypeProvider > xProv;
@@ -174,11 +174,11 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
     return aTypes.getTypes();
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
     Any aReturn;
-    // some functionality at our aggregate cannot be reasonably fullfilled here.
+    
     if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))
@@ -198,7 +198,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
@@ -206,8 +206,8 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
     ,m_aModelName(_sModelName)
 {
 
-    // Create the UnoControlModel
-    if ( !m_aModelName.isEmpty() ) // is there a to-be-aggregated model?
+    
+    if ( !m_aModelName.isEmpty() ) 
     {
         increment( m_refCount );
 
@@ -217,16 +217,16 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
         }
 
         if ( m_xAggregate.is() )
-        {   // don't omit those brackets - they ensure that the following temporary is properly deleted
+        {   
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
 
-        // Set refcount back to zero
+        
         decrement( m_refCount );
     }
 }
 
-//------------------------------------------------------------------------------
+
 OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
@@ -246,14 +246,14 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
         }
 
         if ( m_xAggregate.is() )
-        {   // don't omit this brackets - they ensure that the following temporary is properly deleted
+        {   
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
     }
     decrement( m_refCount );
 }
 
-//------------------------------------------------------------------------------
+
 OGridColumn::~OGridColumn()
 {
     if (!OGridColumn_BASE::rBHelper.bDisposed)
@@ -262,7 +262,7 @@ OGridColumn::~OGridColumn()
         dispose();
     }
 
-    // Free the aggregate
+    
     if (m_xAggregate.is())
     {
         InterfaceRef  xIface;
@@ -271,8 +271,8 @@ OGridColumn::~OGridColumn()
 
 }
 
-// XEventListener
-//------------------------------------------------------------------------------
+
+
 void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeException)
 {
     OPropertySetAggregationHelper::disposing(_rSource);
@@ -282,8 +282,8 @@ void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeE
         xEvtLstner->disposing(_rSource);
 }
 
-// OGridColumn_BASE
-//-----------------------------------------------------------------------------
+
+
 void OGridColumn::disposing()
 {
     OGridColumn_BASE::disposing();
@@ -294,10 +294,10 @@ void OGridColumn::disposing()
         xComp->dispose();
 }
 
-//------------------------------------------------------------------------------
+
 void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_Bool bAllowDropDown )
 {
-    // some properties are not to be exposed to the outer world
+    
     ::std::set< OUString > aForbiddenProperties;
     aForbiddenProperties.insert( PROPERTY_ALIGN );
     aForbiddenProperties.insert( PROPERTY_AUTOCOMPLETE );
@@ -354,7 +354,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     _rProps = aNewProps;
 }
 
-//------------------------------------------------------------------------------
+
 void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 {
     aDescriptor.realloc(5);
@@ -366,8 +366,8 @@ void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
     DECL_PROP1(COLUMNSERVICENAME,   OUString,    READONLY);
 }
 
-// Reference<XPropertySet>
-//------------------------------------------------------------------------------
+
+
 void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -392,7 +392,7 @@ void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
 {
@@ -407,8 +407,8 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
             break;
         case PROPERTY_ID_ALIGN:
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aAlign, ::getCppuType( (const sal_Int32*)NULL ) );
-            // strange enough, css.awt.TextAlign is a 32-bit integer, while the Align property (both here for grid controls
-            // and for ordinary toolkit controls) is a 16-bit integer. So, allow for 32 bit, but normalize it to 16 bit
+            
+            
             if ( bModified )
             {
                 sal_Int32 nAlign( 0 );
@@ -423,7 +423,7 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -445,8 +445,8 @@ void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any
 }
 
 
-// XPropertyState
-//------------------------------------------------------------------------------
+
+
 Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -461,19 +461,19 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     }
 }
 
-// XCloneable
-//------------------------------------------------------------------------------
+
+
 Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeException)
 {
     OGridColumn* pNewColumn = createCloneColumn();
     return pNewColumn;
 }
 
-// XPersistObject
-//------------------------------------------------------------------------------
+
+
 void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    // 1. Write the UnoControl
+    
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     sal_Int32 nMark = xMark->createMark();
 
@@ -484,14 +484,14 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
     if (query_aggregation(m_xAggregate, xPersist))
         xPersist->write(_rxOutStream);
 
-    // Calculate the length
+    
     nLen = xMark->offsetToMark(nMark) - 4;
     xMark->jumpToMark(nMark);
     _rxOutStream->writeLong(nLen);
     xMark->jumpToFurthest();
     xMark->deleteMark(nMark);
 
-    // 2. Write a version number
+    
     _rxOutStream->writeShort(0x0002);
 
     sal_uInt16 nAnyMask = 0;
@@ -510,18 +510,18 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
     if (nAnyMask & ALIGN)
         _rxOutStream->writeShort(getINT16(m_aAlign));
 
-    // Name
+    
     _rxOutStream << m_aLabel;
 
-    // the new place for the hidden flag : after m_aLabel, so older office version read the correct label, too
+    
     if (nAnyMask & COMPATIBLE_HIDDEN)
         _rxOutStream->writeBoolean(getBOOL(m_aHidden));
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
 {
-    // 1. Read the UnoControl
+    
     sal_Int32 nLen = _rxInStream->readLong();
     if (nLen)
     {
@@ -536,7 +536,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
         xMark->deleteMark(nMark);
     }
 
-    // 2. Write a version number
+    
     sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
     sal_uInt16 nAnyMask = _rxInStream->readShort();
 
@@ -557,7 +557,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
         m_aHidden <<= (sal_Bool)bValue;
     }
 
-    // Name
+    
     _rxInStream >> m_aLabel;
 
     if (nAnyMask & COMPATIBLE_HIDDEN)
@@ -567,7 +567,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
     }
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_COLUMN(TextFieldColumn,        FRM_SUN_COMPONENT_TEXTFIELD,        sal_False);
 IMPL_COLUMN(PatternFieldColumn,     FRM_SUN_COMPONENT_PATTERNFIELD,     sal_False);
 IMPL_COLUMN(DateFieldColumn,        FRM_SUN_COMPONENT_DATEFIELD,        sal_True);
@@ -579,8 +579,8 @@ IMPL_COLUMN(ComboBoxColumn,         FRM_SUN_COMPONENT_COMBOBOX,         sal_Fals
 IMPL_COLUMN(ListBoxColumn,          FRM_SUN_COMPONENT_LISTBOX,          sal_False);
 IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   sal_False);
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

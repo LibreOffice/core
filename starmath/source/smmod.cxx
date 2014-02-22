@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/globname.hxx>
@@ -55,7 +55,7 @@ SmResId::SmResId( sal_uInt16 nId )
 {
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :
     Resource( SmResId(RID_LOCALIZED_NAMES) ),
@@ -156,7 +156,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     return aRes;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 {
@@ -204,7 +204,7 @@ void SmModule::_CreateVirtualDev() const
 
 void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
-    //invalidate all graphic and edit windows
+    
     const TypeId aSmViewTypeId = TYPE(SmViewShell);
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -275,7 +275,7 @@ SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
     if(nId == SID_SM_EDITOPTIONS)
     {
         pRet = new SfxItemSet(GetPool(),
-                             //TP_SMPRINT
+                             
                              SID_PRINTSIZE,         SID_PRINTSIZE,
                              SID_PRINTZOOM,         SID_PRINTZOOM,
                              SID_PRINTTITLE,        SID_PRINTTITLE,

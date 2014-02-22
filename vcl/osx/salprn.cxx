@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/bind.hpp>
@@ -45,7 +45,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 
 
-// =======================================================================
+
 
 AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics( 0 ),
@@ -90,7 +90,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalInfoPrinter::~AquaSalInfoPrinter()
 {
@@ -101,7 +101,7 @@ AquaSalInfoPrinter::~AquaSalInfoPrinter()
         CFRelease( mrContext );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 {
@@ -109,34 +109,34 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
     {
         if( mpPrintInfo )
         {
-            // FIXME: get printer resolution
+            
             long nDPIX = 720, nDPIY = 720;
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
             NSRect aImageRect = [mpPrintInfo imageablePageBounds];
             if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
-                // move mirrored CTM back into paper
+                
                 double dX = 0, dY = aPaperSize.height;
-                // move CTM to reflect imageable area
+                
                 dX += aImageRect.origin.x;
                 dY -= aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
-                // scale to be top/down and reflect our "virtual" DPI
+                
                 CGContextScaleCTM( i_rContext, 72.0/double(nDPIX), -(72.0/double(nDPIY)) );
             }
             else
             {
-                // move CTM to reflect imageable area
+                
                 double dX = aImageRect.origin.x, dY = aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
                 CGContextTranslateCTM( i_rContext, -dX, -dY );
-                // turn by 90 degree
+                
                 CGContextRotateCTM( i_rContext, M_PI/2 );
-                // move turned CTM back into paper
+                
                 dX = aPaperSize.height;
                 dY = -aPaperSize.width;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
-                // scale to be top/down and reflect our "virtual" DPI
+                
                 CGContextScaleCTM( i_rContext, -(72.0/double(nDPIY)), (72.0/double(nDPIX)) );
             }
             mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY );
@@ -146,7 +146,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalInfoPrinter::GetGraphics()
 {
@@ -155,40 +155,40 @@ SalGraphics* AquaSalInfoPrinter::GetGraphics()
     return pGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
-    // FIXME: implement driver data
+    
     if( io_pSetupData && io_pSetupData->mpDriverData )
         return SetData( ~0, io_pSetupData );
 
 
     sal_Bool bSuccess = sal_True;
 
-    // set system type
+    
     io_pSetupData->mnSystem = JOBSETUP_SYSTEM_MAC;
 
-    // get paper format
+    
     if( mpPrintInfo )
     {
         NSSize aPaperSize = [mpPrintInfo paperSize];
         double width = aPaperSize.width, height = aPaperSize.height;
-        // set paper
+        
         PaperInfo aInfo( PtTo10Mu( width ), PtTo10Mu( height ) );
         aInfo.doSloppyFit();
         io_pSetupData->mePaperFormat = aInfo.getPaper();
@@ -203,7 +203,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
             io_pSetupData->mnPaperHeight = 0;
         }
 
-        // set orientation
+        
         io_pSetupData->meOrientation = mePageOrientation;
 
         io_pSetupData->mnPaperBin = 0;
@@ -217,7 +217,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation )
 {
@@ -235,11 +235,11 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
         NSSize aPaperSize = { static_cast<CGFloat>(TenMuToPt(i_nWidth)), static_cast<CGFloat>(TenMuToPt(i_nHeight)) };
         [mpPrintInfo setPaperSize: aPaperSize];
     }
-    // this seems counterintuitive
+    
     mePageOrientation = i_eSetOrientation;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
 {
@@ -254,11 +254,11 @@ bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupDat
 
         if( (i_nFlags & SAL_JOBSET_PAPERSIZE) !=  0)
         {
-            // set paper format
+            
             long width = 21000, height = 29700;
             if( io_pSetupData->mePaperFormat == PAPER_USER )
             {
-                // #i101108# sanity check
+                
                 if( io_pSetupData->mnPaperWidth && io_pSetupData->mnPaperHeight )
                 {
                     width = io_pSetupData->mnPaperWidth;
@@ -279,21 +279,21 @@ bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupDat
     return mpPrintInfo != nil;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
 {
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i_nType )
 {
@@ -327,7 +327,7 @@ sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& o_rOutWidth, long& o_rOutHeight,
@@ -394,14 +394,14 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     PrintAccessoryViewState aAccViewState;
     sal_Int32 nAllPages = 0;
 
-    // reset IsLastPage
+    
     i_rController.setLastPage( false );
 
-    // update job data
+    
     if( i_pSetupData )
         SetData( ~0, i_pSetupData );
 
-    // do we want a progress panel ?
+    
     sal_Bool bShowProgressPanel = sal_True;
     beans::PropertyValue* pMonitor = i_rController.getValue( OUString( "MonitorVisible" ) );
     if( pMonitor )
@@ -409,7 +409,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     if( ! i_rController.isShowDialogs() )
         bShowProgressPanel = sal_False;
 
-    // possibly create one job for collated output
+    
     sal_Bool bSinglePrintJobs = sal_False;
     beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
@@ -417,8 +417,8 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
         pSingleValue->Value >>= bSinglePrintJobs;
     }
 
-    // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
-    // how do I know when that might be ?
+    
+    
     i_rController.jobStarted();
 
 
@@ -451,13 +451,13 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 aCurSize = getPageSize( i_rController, mnCurPageRangeStart );
                 Size aNextSize( aCurSize );
 
-                // print pages up to a different size
+                
                 while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
                 {
                     aNextSize = getPageSize( i_rController, mnCurPageRangeStart + mnCurPageRangeCount );
-                    if( aCurSize == aNextSize // same page size
+                    if( aCurSize == aNextSize 
                         ||
-                        (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
+                        (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) 
                         )
                     {
                         mnCurPageRangeCount++;
@@ -469,24 +469,24 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             else
                 mnCurPageRangeCount = 0;
 
-            // now for the current run
+            
             mnStartPageOffsetX = mnStartPageOffsetY = 0;
-            // setup the paper size and orientation
-            // do this on our associated Printer object, since that is
-            // out interface to the applications which occasionally rely on the paper
-            // information (e.g. brochure printing scales to the found paper size)
-            // also SetPaperSizeUser has the advantage that we can share a
-            // platform independent paper matching algorithm
+            
+            
+            
+            
+            
+            
             boost::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
             pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
             pPrinter->SetPaperSizeUser( aCurSize, true );
 
-            // create view
+            
             NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
 
             NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
 
-            // set filename
+            
             if( i_pFileName )
             {
                 [mpPrintInfo setJobDisposition: NSPrintSaveJob];
@@ -500,13 +500,13 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 [pPrintDict setObject: [[NSNumber numberWithBool: pPrinter->IsCollateCopy()] autorelease] forKey: NSPrintMustCollate];
             [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
             [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
-            // #i103253# weird: for some reason, autoreleasing the value below like the others above
-            // leads do a double free malloc error. Why this value should behave differently from all the others
-            // is a mystery.
+            
+            
+            
             [pPrintDict setObject: [NSNumber numberWithInt: mnCurPageRangeCount] forKey: NSPrintLastPage];
 
 
-            // create print operation
+            
             NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
 
             if( pPrintOperation )
@@ -519,11 +519,11 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
                 [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 
-                // set job title (since MacOSX 10.5)
+                
                 if( [pPrintOperation respondsToSelector: @selector(setJobTitle:)] )
                     [pPrintOperation performSelector: @selector(setJobTitle:) withObject: [CreateNSString( i_rJobName ) autorelease]];
 
-                if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) // only the first range of pages (in the first job) gets the accesory view
+                if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) 
                     pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
 
                 bSuccess = sal_True;
@@ -542,9 +542,9 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
         } while( aAccViewState.bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
     }
 
-    // inform application that it can release its data
-    // this is awkward, but the XRenderable interface has no method for this,
-    // so we need to call XRenderadble::render one last time with IsLastPage = sal_True
+    
+    
+    
     i_rController.setLastPage( true );
     GDIMetaFile aPageFile;
     if( mrContext )
@@ -560,7 +560,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool AquaSalInfoPrinter::EndJob()
 {
@@ -569,17 +569,17 @@ sal_Bool AquaSalInfoPrinter::EndJob()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool AquaSalInfoPrinter::AbortJob()
 {
     mbJob = false;
 
-    // FIXME: implementation
+    
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
 {
@@ -593,7 +593,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool AquaSalInfoPrinter::EndPage()
 {
@@ -601,27 +601,27 @@ sal_Bool AquaSalInfoPrinter::EndPage()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInfoPrinter::GetErrorCode() const
 {
     return 0;
 }
 
-// =======================================================================
+
 
 AquaSalPrinter::AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter ) :
     mpInfoPrinter( i_pInfoPrinter )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalPrinter::~AquaSalPrinter()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
@@ -632,7 +632,7 @@ bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
     return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                const OUString& /*i_rJobName*/,
@@ -646,35 +646,35 @@ bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::EndJob()
 {
     return mpInfoPrinter->EndJob();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::AbortJob()
 {
     return mpInfoPrinter->AbortJob();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::EndPage()
 {
     return mpInfoPrinter->EndPage();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalPrinter::GetErrorCode()
 {
@@ -697,7 +697,7 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
                 for( unsigned int i = 0; i < nPapers; i++ )
                 {
                     NSString* pPaper = [pPaperNames objectAtIndex: i];
-                    // first try to match the name
+                    
                     OString aPaperName( [pPaper UTF8String] );
                     Paper ePaper = PaperInfo::fromPSName( aPaperName );
                     if( ePaper != PAPER_USER )

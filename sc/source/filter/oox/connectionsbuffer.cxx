@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectionsbuffer.hxx"
@@ -25,12 +25,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -66,9 +66,9 @@ const sal_uInt8 BIFF12_WEBPR_HAS_POSTMETHOD             = 0x01;
 const sal_uInt8 BIFF12_WEBPR_HAS_EDITPAGE               = 0x02;
 const sal_uInt8 BIFF12_WEBPR_HAS_URL                    = 0x04;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 WebPrModel::WebPrModel() :
     mnHtmlFormat( XML_none ),
@@ -84,7 +84,7 @@ WebPrModel::WebPrModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ConnectionModel::ConnectionModel() :
     mnId( -1 ),
@@ -110,7 +110,7 @@ WebPrModel& ConnectionModel::createWebPr()
     return *mxWebPr;
 }
 
-// ----------------------------------------------------------------------------
+
 
 Connection::Connection( const WorkbookHelper& rHelper, sal_Int32 nConnId ) :
     WorkbookHelper( rHelper )
@@ -126,7 +126,7 @@ void Connection::importConnection( const AttributeList& rAttribs )
     maModel.maSourceConnFile  = rAttribs.getXString( XML_odcFile, OUString() );
     maModel.maSsoId           = rAttribs.getXString( XML_singleSignOnId, OUString() );
     maModel.mnId              = rAttribs.getInteger( XML_id, -1 );
-    // type and reconnectionMethod are using the BIFF12 constants instead of XML tokens
+    
     maModel.mnType            = rAttribs.getInteger( XML_type, BIFF12_CONNECTION_UNKNOWN );
     maModel.mnReconnectMethod = rAttribs.getInteger( XML_reconnectionMethod, BIFF12_RECONNECT_AS_REQUIRED );
     maModel.mnCredentials     = rAttribs.getToken( XML_credentials, XML_integrated );
@@ -277,7 +277,7 @@ void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId 
     }
 }
 
-// ============================================================================
+
 
 ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -314,9 +314,9 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
     }
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

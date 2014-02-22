@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,10 +29,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -54,9 +54,9 @@ namespace frm
 
     namespace ResultSetType = ::com::sun::star::sdbc::ResultSetType;
 
-    //====================================================================
-    //= CachedRowSet_Data
-    //====================================================================
+    
+    
+    
     struct CachedRowSet_Data
     {
         OUString                 sCommand;
@@ -74,22 +74,22 @@ namespace frm
         }
     };
 
-    //====================================================================
-    //= CachedRowSet
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     CachedRowSet::CachedRowSet()
         :m_pData( new CachedRowSet_Data )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     CachedRowSet::~CachedRowSet()
     {
         dispose();
     }
 
-    //--------------------------------------------------------------------
+    
     void CachedRowSet::setCommand( const OUString& _rCommand )
     {
         if ( m_pData->sCommand == _rCommand )
@@ -99,7 +99,7 @@ namespace frm
         m_pData->bStatementDirty = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void CachedRowSet::setCommandFromQuery( const OUString& _rQueryName )
     {
         Reference< XQueriesSupplier > xSupplyQueries( m_pData->xConnection, UNO_QUERY_THROW );
@@ -115,7 +115,7 @@ namespace frm
         setCommand( sCommand );
     }
 
-    //--------------------------------------------------------------------
+    
     void CachedRowSet::setEscapeProcessing ( const sal_Bool _bEscapeProcessing )
     {
         if ( m_pData->bEscapeProcessing == _bEscapeProcessing )
@@ -125,7 +125,7 @@ namespace frm
         m_pData->bStatementDirty = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void CachedRowSet::setConnection( const Reference< XConnection >& _rxConnection )
     {
         if ( m_pData->xConnection == _rxConnection )
@@ -135,7 +135,7 @@ namespace frm
         m_pData->bStatementDirty = true;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XResultSet > CachedRowSet::execute()
     {
         Reference< XResultSet > xResult;
@@ -164,13 +164,13 @@ namespace frm
         return xResult;
     }
 
-    //--------------------------------------------------------------------
+    
     bool CachedRowSet::isDirty() const
     {
         return m_pData->bStatementDirty;
     }
 
-    //--------------------------------------------------------------------
+    
     void CachedRowSet::dispose()
     {
         try
@@ -183,8 +183,8 @@ namespace frm
         }
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

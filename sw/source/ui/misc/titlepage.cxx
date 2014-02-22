@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/viewfrm.hxx>
@@ -59,7 +59,7 @@ namespace
         sal_uInt16 nDontCare;
         lcl_GetPageDesc(pSh, nDontCare, &pPageFmtDesc);
 
-        // If we want a new number then set it, otherwise reuse the existing one
+        
         sal_uInt16 nPgNo;
         if (nNewNumber)
         {
@@ -85,7 +85,7 @@ namespace
             }
         }
 
-        // If we want a new descriptior then set it, otherwise reuse the existing one
+        
         if (!pNewDesc)
         {
             SwFmtPageDesc aPageFmtDesc(pPageFmtDesc ? *pPageFmtDesc : &rCurrentDesc);

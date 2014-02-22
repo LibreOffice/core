@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPageContainerProviders.hxx"
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 namespace sd { namespace sidebar {
 
 
-//===== PagePreviewProvider ===================================================
+
 
 PagePreviewProvider::PagePreviewProvider (void)
 {
@@ -57,8 +57,8 @@ Image PagePreviewProvider::operator () (
 
     if (pPage != NULL)
     {
-        // Use the given renderer to create a preview of the given page
-        // object.
+        
+        
         aPreview = rRenderer.RenderPage(
             pPage,
             nWidth,
@@ -88,7 +88,7 @@ bool PagePreviewProvider::NeedsPageObject (void)
 
 
 
-//===== TemplatePreviewProvider ===============================================
+
 
 TemplatePreviewProvider::TemplatePreviewProvider (const OUString& rsURL)
     : msURL(rsURL)
@@ -103,7 +103,7 @@ Image TemplatePreviewProvider::operator() (
     SdPage* pPage,
     ::sd::PreviewRenderer& rRenderer)
 {
-    // Unused parameters.
+    
     (void)nWidth;
     (void)pPage;
     (void)rRenderer;
@@ -130,7 +130,7 @@ bool TemplatePreviewProvider::NeedsPageObject (void)
 
 
 
-//===== TemplatePageObjectProvider =============================================
+
 
 TemplatePageObjectProvider::TemplatePageObjectProvider (const OUString& rsURL)
     : msURL(rsURL),
@@ -143,7 +143,7 @@ TemplatePageObjectProvider::TemplatePageObjectProvider (const OUString& rsURL)
 
 SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocument)
 {
-    // Unused parameters.
+    
     (void)pContainerDocument;
 
     SdPage* pPage = NULL;
@@ -152,7 +152,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     ::sd::DrawDocShell* pDocumentShell = NULL;
     try
     {
-        // Load the template document and return its first page.
+        
         pDocumentShell = LoadDocument (msURL);
         if (pDocumentShell != NULL)
         {
@@ -160,9 +160,9 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
             if (pDocument != NULL)
             {
                 pPage = pDocument->GetMasterSdPage(0, PK_STANDARD);
-                // In order to make the newly loaded master page deletable
-                // when copied into documents it is marked as no "precious".
-                // When it is modified then it is marked as "precious".
+                
+                
+                
                 if (pPage != NULL)
                     pPage->SetPrecious(false);
             }
@@ -218,7 +218,7 @@ bool TemplatePageObjectProvider::operator== (const PageObjectProvider& rProvider
 
 
 
-//===== DefaultPageObjectProvider ==============================================
+
 
 DefaultPageObjectProvider::DefaultPageObjectProvider (void)
 {
@@ -265,7 +265,7 @@ bool DefaultPageObjectProvider::operator== (const PageObjectProvider& rProvider)
 
 
 
-//===== ExistingPageProvider ==================================================
+
 
 ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
     : mpPage(pPage)
@@ -277,7 +277,7 @@ ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
 
 SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
 {
-    (void)pDocument; // Unused parameter.
+    (void)pDocument; 
 
     return mpPage;
 }
@@ -304,6 +304,6 @@ bool ExistingPageProvider::operator== (const PageObjectProvider& rProvider)
 }
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

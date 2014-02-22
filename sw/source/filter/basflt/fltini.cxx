@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -66,8 +66,8 @@ SwRead ReadAscii = 0, ReadHTML = 0, ReadXML = 0;
 Reader* GetRTFReader();
 Reader* GetWW8Reader();
 
-// Note: if editing, please don't forget to modify also the enum
-// ReaderWriterEnum and aFilterDetect in shellio.hxx
+
+
 SwReaderWriterEntry aReaderWriter[] =
 {
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  sal_True  ),
@@ -103,7 +103,7 @@ void SwReaderWriterEntry::GetWriter( const OUString& rNm, const OUString& rBaseU
         xWrt = WriterRef(0);
 }
 
-SwRead SwGetReaderXML() // SW_DLLPUBLIC
+SwRead SwGetReaderXML() 
 {
         return ReadXML;
 }
@@ -137,7 +137,7 @@ Filters::Filters()
 
 Filters::~Filters()
 {
-    // die Reader vernichten
+    
     for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
     {
         SwReaderWriterEntry& rEntry = aReaderWriter[n];
@@ -188,7 +188,7 @@ SwRead GetReader( const OUString& rFltName )
         if ( aFilterDetect[n].IsFilter( rFltName ) )
         {
             pRead = aReaderWriter[n].GetReader();
-            // fuer einige Reader noch eine Sonderbehandlung:
+            
             if ( pRead )
                     pRead->SetFltName( rFltName );
             break;
@@ -196,7 +196,7 @@ SwRead GetReader( const OUString& rFltName )
     return pRead;
 }
 
-} // namespace SwReaderWriter
+} 
 
 void Writer::SetVersion( const OUString&, long ) {}
 
@@ -221,9 +221,9 @@ sal_Bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOp
 
 
 
-//-----------------------------------------------------------------------
-// Filter Flags lesen, wird von WW8 / W4W / EXCEL / LOTUS benutzt.
-//-----------------------------------------------------------------------
+
+
+
 
 /*
 <FilterFlags>
@@ -336,9 +336,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                         aSz = (SwFmtFrmSize&)(*pItem);
 
                 SwTwips nWidth;
-                // dann die Breite des Flys selbst bestimmen. Ist eine Tabelle
-                // defininiert, dann benutze deren Breite, sonst die Breite der
-                // Seite
+                
+                
+                
                 const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
                 if( pTblNd )
                         nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
@@ -364,7 +364,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                                 pFirstTxtNd = pTxtNd;
                                         else if( pFirstTxtNd != pTxtNd )
                                         {
-                                                // forget it
+                                                
                                                 bOnlyOneNode = false;
                                                 break;
                                         }
@@ -380,8 +380,8 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                         {
                                 if( nMinFrm < MINLAY && pFirstTxtNd )
                                 {
-                                        // if the first node dont contained any content, then
-                                        // insert one char in it calc again and delete once again
+                                        
+                                        
                                         SwIndex aNdIdx( pFirstTxtNd );
                                         pFirstTxtNd->InsertText(OUString("MM"), aNdIdx);
                                         sal_uLong nAbsMinCnts;
@@ -391,7 +391,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                     pFirstTxtNd->EraseText( aNdIdx, 2 );
                 }
 
-                                // Umrandung und Abstand zum Inhalt beachten
+                                
                                 const SvxBoxItem& rBoxItem = (SvxBoxItem&)rFlySet.Get( RES_BOX );
                                 sal_uInt16 nLine = BOX_LINE_LEFT;
                                 for( int i = 0; i < 2; ++i )
@@ -407,7 +407,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                         nLine = BOX_LINE_RIGHT;
                                 }
 
-                                // Mindestbreite fuer Inhalt einhalten
+                                
                                 if( nMinFrm < MINLAY )
                                         nMinFrm = MINLAY;
                                 if( nMaxFrm < MINLAY )
@@ -542,7 +542,7 @@ const CharSetNameMap *GetCharSetNameMap()
         IMPLENTRY(UCS4),
         IMPLENTRY(UCS2),
         IMPLENTRY(UNICODE),
-        {0,0}       //Last
+        {0,0}       
     };
     return &aMapArr[0];
 }
@@ -593,14 +593,14 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 
 }
 
-// for the automatic conversion (mail/news/...)
-// The user data contains the options for the ascii import/export filter.
-// The format is:
-//      1. CharSet - as ascii chars
-//      2. LineEnd - as CR/LR/CRLF
-//      3. Fontname
-//      4. Language
-// the delimiter character is ","
+
+
+
+
+
+
+
+
 //
 
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
@@ -613,10 +613,10 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
         {
             switch( nCnt )
             {
-            case 0:         // CharSet
+            case 0:         
                 eCharSet = CharSetFromName(sToken);
                 break;
-            case 1:         // LineEnd
+            case 1:         
                 if (sToken.equalsIgnoreAsciiCase("CRLF"))
                     eCRLF_Flag = LINEEND_CRLF;
                 else if (sToken.equalsIgnoreAsciiCase("LF"))
@@ -624,10 +624,10 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
                 else
                     eCRLF_Flag = LINEEND_CR;
                 break;
-            case 2:         // fontname
+            case 2:         
                 sFont = sToken;
                 break;
-            case 3:         // Language
+            case 3:         
                 nLanguage = LanguageTag::convertToLanguageTypeWithFallback( sToken );
                 break;
             }
@@ -638,10 +638,10 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
 
 void SwAsciiOptions::WriteUserData(OUString& rStr)
 {
-    // 1. charset
+    
     rStr = NameFromCharSet(eCharSet) + ",";
 
-    // 2. LineEnd
+    
     switch(eCRLF_Flag)
     {
     case LINEEND_CRLF:
@@ -656,10 +656,10 @@ void SwAsciiOptions::WriteUserData(OUString& rStr)
     }
     rStr += ",";
 
-    // 3. Fontname
+    
     rStr += sFont + ",";
 
-    // 4. Language
+    
     if (nLanguage)
     {
         rStr += LanguageTag::convertToBcp47(nLanguage);

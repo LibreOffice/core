@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -38,7 +38,7 @@
 #include "scresid.hxx"
 
 #include "scabstdlg.hxx"
-//------------------------------------------------------------------------
+
 
 bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)
@@ -81,9 +81,9 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                             0 );
     aNewAttr.Put( rArgs );
 
-    // Die Werte sind erst einmal uebernommen worden, um den Dialog anzuzeigen.
-    // Muss natuerlich noch geaendert werden
-    // aNewAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
+    
+    
+    
 
     aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );
     aNewAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, SID_ATTR_PARA_PAGEBREAK ) );
@@ -124,7 +124,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 
     sal_uLong nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
-    //! test if outliner view is still valid
+    
 
     if (nFormat > 0)
     {

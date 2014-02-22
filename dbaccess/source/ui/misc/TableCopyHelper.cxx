@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableCopyHelper.hxx"
@@ -245,7 +245,7 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     if ( _bCheck )
         pImport->enableCheckOnly();
 
-    //set the selected tablename
+    
     pImport->setSTableName(_rDesc.sDefaultTableName);
 
     pImport->setStream(pStream);
@@ -281,7 +281,7 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
         bRet = ( !_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage.Is() );
         if ( bRet )
         {
-            // now we need to copy the stream
+            
             ::utl::TempFile aTmp;
             aTmp.EnableKillingFile(false);
             _rAsyncDrop.aUrl = aTmp.GetURL();
@@ -305,7 +305,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     {
         copyTagTable(_rDesc,sal_False,_xConnection);
         _rDesc.aHtmlRtfStorage = NULL;
-        // we now have to delete the temp file created in executeDrop
+        
         INetURLObject aURL;
         aURL.SetURL(_rDesc.aUrl);
         ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
@@ -316,6 +316,6 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
         m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

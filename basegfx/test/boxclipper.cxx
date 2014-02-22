@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -42,12 +42,12 @@ extern double getRandomOrdinal( const ::std::size_t n );
 
 namespace basegfx2d
 {
-/// Gets a random ordinal [0,n)
+
 double getRandomOrdinal( const ::std::size_t n )
 {
-    // use this one when displaying polygons in OOo, which still sucks
-    // great rocks when trying to import non-integer svg:d attributes
-    // return sal_Int64(double(n) * rand() / (RAND_MAX + 1.0));
+    
+    
+    
     return double(n) * rand() / (RAND_MAX + 1.0);
 }
 
@@ -78,7 +78,7 @@ private:
     B2DPolyRange aRandomIntersections;
 
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
         B2DRange aCenter(100, 100, -100, -100);
@@ -217,11 +217,11 @@ public:
             aRes.append(aTmp);
         }
 
-        // boxclipper & generic clipper disagree slightly on area-less
-        // polygons (one or two points only)
+        
+        
         aRes = tools::stripNeutralPolygons(aRes);
 
-        // now, sort all polygons with increasing 0th point
+        
         std::sort(aRes.begin(),
                   aRes.end(),
                   boost::bind(
@@ -407,19 +407,19 @@ public:
         validatePoly("intersectionSE", aIntersectionSE);
         validatePoly("intersectionSW", aIntersectionSW);
         validatePoly("intersectionNW", aIntersectionNW);
-        // subtle differences on Solaris Intel, comparison not smart enough
-        // (due to floating point inaccuracies)
-        //validatePoly("ringIntersection", aRingIntersection);
-        //validatePoly("ringIntersection2", aRingIntersection2);
-        //validatePoly("ringIntersectExtraStrip", aRingIntersectExtraStrip);
-        // generic clipper buggy here, likely
-        //validatePoly("complexIntersections", aComplexIntersections);
-        //validatePoly("randomIntersections", aRandomIntersections);
+        
+        
+        
+        
+        
+        
+        
+        
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(boxclipper);
     CPPUNIT_TEST(validatePoly);
@@ -428,8 +428,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::boxclipper);
-} // namespace basegfx2d
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

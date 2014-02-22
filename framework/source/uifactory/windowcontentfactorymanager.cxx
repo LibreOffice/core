@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -70,7 +70,7 @@ public:
         return aSeq;
     }
 
-    // XSingleComponentFactory
+    
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
 
@@ -103,13 +103,13 @@ void SAL_CALL WindowContentFactoryManager::disposing()
 
     if (m_pConfigAccess)
     {
-        // reduce reference count
+        
         m_pConfigAccess->release();
         m_pConfigAccess = 0;
     }
 }
 
-// XSingleComponentFactory
+
 uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithContext(
     const uno::Reference< uno::XComponentContext >& /*xContext*/ )
 throw (uno::Exception, uno::RuntimeException)
@@ -138,7 +138,7 @@ throw (uno::Exception, uno::RuntimeException)
         }
     }
 
-    // Determine the module identifier
+    
     OUString aType;
     OUString aName;
     OUString aModuleId;
@@ -161,9 +161,9 @@ throw (uno::Exception, uno::RuntimeException)
         OUString                   aImplementationName;
         uno::Reference< uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
 
-        // Detetmine the implementation name of the window content factory dependent on the
-        // module identifier, user interface element type and name
-        { // SAFE
+        
+        
+        { 
         osl::MutexGuard g(rBHelper.rMutex);
         if ( !m_bConfigRead )
         {
@@ -171,7 +171,7 @@ throw (uno::Exception, uno::RuntimeException)
             m_pConfigAccess->readConfigurationData();
         }
         aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
-        } // SAFE
+        } 
 
         if ( !aImplementationName.isEmpty() )
         {
@@ -182,7 +182,7 @@ throw (uno::Exception, uno::RuntimeException)
                     xServiceManager->createInstance( aImplementationName ), uno::UNO_QUERY );
                 if ( xFactory.is() )
                 {
-                    // Be careful: We call external code. Therefore here we have to catch all exceptions
+                    
                     try
                     {
                         xWindow = xFactory->createInstanceWithArgumentsAndContext( Arguments, Context );
@@ -196,10 +196,10 @@ throw (uno::Exception, uno::RuntimeException)
         }
     }
 
-    // UNSAFE
+    
     if ( !xWindow.is())
     {
-        // Fallback: Use internal factory code to create a toolkit dialog as a content window
+        
         xWindow = createInstanceWithContext(Context);
     }
 

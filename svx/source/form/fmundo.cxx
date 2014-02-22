@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -83,10 +83,10 @@ public:
     {
 
     }
-    // XEventListener
+    
     virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException ){}
 
-    // XScriptListener
+    
     virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)
     {
         attemptListenerCreation();
@@ -122,7 +122,7 @@ private:
                     "ooo.vba.EventListener", context),
                 UNO_QUERY_THROW);
             Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
-            // SfxObjectShellRef is good here since the model controls the lifetime of the shell
+            
             SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();
             ENSURE_OR_THROW( xObjectShell.Is(), "no object shell!" );
             xListenerProps->setPropertyValue("Model", makeAny( xObjectShell->GetModel() ) );
@@ -141,23 +141,23 @@ private:
 
 };
 
-//------------------------------------------------------------------------------
-// some helper structs for caching property infos
-//------------------------------------------------------------------------------
+
+
+
 struct PropertyInfo
 {
-    sal_Bool    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
-    sal_Bool    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
-                                            // as if it's transient or persistent
+    sal_Bool    bIsTransientOrReadOnly  : 1;    
+    sal_Bool    bIsValueProperty        : 1;    
+                                            
 };
 
 struct PropertySetInfo
 {
     typedef std::map<OUString, PropertyInfo> AllProperties;
 
-    AllProperties   aProps;                 // all properties of this set which we know so far
-    sal_Bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
-                                            // sal_False -> the set has _no_ such property or it's value isn't empty
+    AllProperties   aProps;                 
+    sal_Bool            bHasEmptyControlSource; 
+                                            
 };
 
 sal_Bool operator < (const Reference< XPropertySet >& lhs,
@@ -168,12 +168,12 @@ sal_Bool operator < (const Reference< XPropertySet >& lhs,
 
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
-//------------------------------------------------------------------------------
+
 
 OUString static_STR_UNDO_PROPERTY;
-//------------------------------------------------------------------------------
+
 DBG_NAME(FmXUndoEnvironment)
-//------------------------------------------------------------------------------
+
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
                    ,m_pPropertySetCache( NULL )
@@ -192,18 +192,18 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
     }
 }
 
-//------------------------------------------------------------------------------
+
 FmXUndoEnvironment::~FmXUndoEnvironment()
 {
     DBG_DTOR(FmXUndoEnvironment,NULL);
-    if ( !m_bDisposed )   // i120746, call FormScriptingEnvironment::dispose to avoid memory leak
+    if ( !m_bDisposed )   
         m_pScriptingEnv->dispose();
 
     if (m_pPropertySetCache)
         delete static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::dispose()
 {
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::dispose: disposed twice?" );
@@ -251,7 +251,7 @@ void FmXUndoEnvironment::dispose()
     m_bDisposed = true;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::ModeChanged()
 {
     OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::ModeChanged: no object shell anymore!" );
@@ -294,7 +294,7 @@ void FmXUndoEnvironment::ModeChanged()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(SdrHint))
@@ -343,7 +343,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 }
 
-//------------------------------------------------------------------
+
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
     if (pObj->GetObjInventor() == FmFormInventor)
@@ -359,7 +359,7 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
     }
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     sal_Bool lcl_searchElement(const Reference< XIndexAccess>& xCont, const Reference< XInterface >& xElement)
@@ -395,19 +395,19 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 {
     DBG_ASSERT( pObj, "FmXUndoEnvironment::Inserted: invalid object!" );
     if ( !pObj )
         return;
 
-    // ist das Control noch einer Form zugeordnet
+    
     Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is() && pObj->GetPage())
     {
-        // if the component doesn't belong to a form, yet, find one to insert into
+        
         if (!xContent->getParent().is())
         {
             try
@@ -422,8 +422,8 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 sal_Int32 nPos = -1;
                 if ( lcl_searchElement( xForms, xObjectParent ) )
                 {
-                    // the form which was the parent of the object when it was removed is still
-                    // part of the form component hierachy of the current page
+                    
+                    
                     xNewParent = xObjectParent;
                     xForm.set( xNewParent, UNO_QUERY_THROW );
                     nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
@@ -447,17 +447,17 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
             }
         }
 
-        // FormObject zuruecksetzen
+        
         pObj->ClearObjEnv();
     }
 }
 
-//------------------------------------------------------------------
+
 void FmXUndoEnvironment::Removed(SdrObject* pObj)
 {
     if ( pObj->IsVirtualObj() )
-        // for virtual objects, we've already been notified of the removal of the master
-        // object, which is sufficient here
+        
+        
         return;
 
     if (pObj->GetObjInventor() == FmFormInventor)
@@ -473,28 +473,28 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 {
     DBG_ASSERT( pObj, "FmXUndoEnvironment::Removed: invalid object!" );
     if ( !pObj )
         return;
 
-    // ist das Control noch einer Form zugeordnet
+    
     Reference< XFormComponent >  xContent(pObj->GetUnoControlModel(), UNO_QUERY);
     if (xContent.is())
     {
-        // das Object wird aus einer Liste herausgenommen
-        // existiert ein Vater wird das Object beim beim Vater entfernt und
-        // am FormObject gemerkt!
+        
+        
+        
 
-        // wird das Object wieder eingefuegt und ein Parent existiert, so wird dieser
-        // Parent wiederum gesetzt
+        
+        
         Reference< XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
         if (xForm.is())
         {
             Reference< XIndexAccess >  xIndexAccess((XIndexContainer*)xForm.get());
-            // Feststellen an welcher Position sich das Kind befunden hat
+            
             const sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
             if (nPos >= 0)
             {
@@ -518,11 +518,11 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
     }
 }
 
-//  XEventListener
-//------------------------------------------------------------------------------
+
+
 void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
-    // check if it's an object we have cached information about
+    
     if (m_pPropertySetCache)
     {
         Reference< XPropertySet > xSourceSet(e.Source, UNO_QUERY);
@@ -536,8 +536,8 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
     }
 }
 
-// XPropertyChangeListener
-//------------------------------------------------------------------------------
+
+
 void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -548,7 +548,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         if (!xSet.is())
             return;
 
-        // if it's a "default value" property of a control model, set the according "value" property
+        
         static const OUString pDefaultValueProperties[] = {
             OUString(FM_PROP_DEFAULT_TEXT), OUString(FM_PROP_DEFAULTCHECKED), OUString(FM_PROP_DEFAULT_DATE), OUString(FM_PROP_DEFAULT_TIME),
             OUString(FM_PROP_DEFAULT_VALUE), OUString(FM_PROP_DEFAULT_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_DEFAULT)
@@ -575,21 +575,21 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             }
         }
 
-        // no Undo for transient and readonly props. But unfortunately "transient" is not only that the
-        // "transient" flag is set for the property in question, instead is is somewhat more complex
-        // Transience criterions are:
-        // - the "transient" flag is set for the property
-        // - OR the control has a non-empty COntrolSource property, i.e. is intended to be bound
-        //   to a database column. Note that it doesn't matter here whether the control actually
-        //   *is* bound to a column
-        // - OR the control is bound to an external value via XBindableValue/XValueBinding
-        //   which does not have a "ExternalData" property being <TRUE/>
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         if (!m_pPropertySetCache)
             m_pPropertySetCache = new PropertySetInfoCache;
         PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
 
-        // let's see if we know something about the set
+        
         PropertySetInfoCache::iterator aSetPos = pCache->find(xSet);
         if (aSetPos == pCache->end())
         {
@@ -614,26 +614,26 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
         else
-        {   // is it the DataField property ?
+        {   
             if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
             {
                 aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || ::comphelper::getString(evt.NewValue).isEmpty();
             }
         }
 
-        // now we have access to the cached info about the set
-        // let's see what we know about the property
+        
+        
         PropertySetInfo::AllProperties& rPropInfos = aSetPos->second.aProps;
         PropertySetInfo::AllProperties::iterator aPropertyPos = rPropInfos.find(evt.PropertyName);
         if (aPropertyPos == rPropInfos.end())
-        {   // nothing 'til now ... have to change this ....
+        {   
             PropertyInfo aNewEntry;
 
-            // the attributes
+            
             sal_Int32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
             aNewEntry.bIsTransientOrReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
-            // check if it is the special "DataFieldProperty"
+            
             aNewEntry.bIsValueProperty = sal_False;
             try
             {
@@ -651,27 +651,27 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 DBG_UNHANDLED_EXCEPTION();
             }
 
-            // insert the new entry
+            
             aPropertyPos = rPropInfos.insert(PropertySetInfo::AllProperties::value_type(evt.PropertyName,aNewEntry)).first;
             DBG_ASSERT(aPropertyPos != rPropInfos.end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
 
-        // now we have access to the cached info about the property affected
-        // and are able to decide whether or not we need an undo action
+        
+        
 
         bool bAddUndoAction = rModel.IsUndoEnabled();
-        // no UNDO for transient/readonly properties
+        
         if ( bAddUndoAction && aPropertyPos->second.bIsTransientOrReadOnly )
             bAddUndoAction = false;
 
         if ( bAddUndoAction && aPropertyPos->second.bIsValueProperty )
         {
-            // no UNDO when the "value" property changes, but the ControlSource is non-empty
-            // (in this case the control is intended to be bound to a database column)
+            
+            
             if ( !aSetPos->second.bHasEmptyControlSource )
                 bAddUndoAction = false;
 
-            // no UNDO if the control is currently bound to an external value
+            
             if ( bAddUndoAction )
             {
                 Reference< XBindableValue > xBindable( evt.Source, UNO_QUERY );
@@ -685,8 +685,8 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     xBindingProps.set( xBinding, UNO_QUERY );
                 if ( xBindingProps.is() )
                     xBindingPropsPSI = xBindingProps->getPropertySetInfo();
-                // TODO: we should cache all those things, else this might be too expensive.
-                // However, this requires we're notified of changes in the value binding
+                
+                
 
                 static const OUString s_sExternalData( "ExternalData" );
                 if ( xBindingPropsPSI.is() && xBindingPropsPSI->hasPropertyByName( s_sExternalData ) )
@@ -704,15 +704,15 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         {
             Reference< XListEntrySink > xSink( evt.Source, UNO_QUERY );
             if ( xSink.is() && xSink->getListEntrySource().is() )
-                // #i41029# / 2005-01-31 / frank.schoenheit@sun.com
+                
                 bAddUndoAction = false;
         }
 
         if ( bAddUndoAction )
         {
             aGuard.clear();
-            // TODO: this is a potential race condition: two threads here could in theory
-            // add their undo actions out-of-order
+            
+            
 
             SolarMutexGuard aSolarGuard;
             rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
@@ -720,7 +720,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
     }
     else
     {
-        // if it's the DataField property we may have to adjust our cache
+        
         if (m_pPropertySetCache && evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
         {
             Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
@@ -731,14 +731,14 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
     }
 }
 
-// XContainerListener
-//------------------------------------------------------------------------------
+
+
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // neues Object zum lauschen
+    
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementInserted: invalid container notification!");
@@ -747,7 +747,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) thr
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::implSetModified()
 {
     if ( !IsLocked() && rModel.GetObjectShell() )
@@ -756,7 +756,7 @@ void FmXUndoEnvironment::implSetModified()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -773,7 +773,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -786,13 +786,13 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) thro
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
 {
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
@@ -800,7 +800,7 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
     UnLock();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
@@ -808,10 +808,10 @@ void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
     UnLock();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
 {
-    // am Container horchen
+    
     Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {
@@ -835,7 +835,7 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
 }
 
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
@@ -844,8 +844,8 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
 
     try
     {
-        // if it's an EventAttacherManager, then we need to listen for
-        // script events
+        
+        
         Reference< XEventAttacherManager > xManager( _rxContainer, UNO_QUERY );
         if ( xManager.is() )
         {
@@ -863,7 +863,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
             }
         }
 
-        // also handle all children of this element
+        
         sal_uInt32 nCount = _rxContainer->getCount();
         Reference< XInterface > xInterface;
         for ( sal_uInt32 i = 0; i < nCount; ++i )
@@ -875,7 +875,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
                 RemoveElement( xInterface );
         }
 
-        // be notified of any changes in the container elements
+        
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
         OSL_ENSURE( xSimpleContainer.is(), "FmXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
@@ -892,7 +892,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxObject.is(), "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
@@ -926,12 +926,12 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::AddElement: not when I'm already disposed!" );
 
-    // am Container horchen
+    
     Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );
     if ( xContainer.is() )
         switchListening( xContainer, true );
@@ -939,7 +939,7 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
     switchListening( _rxElement, true );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
 {
     if ( m_bDisposed )
@@ -949,16 +949,16 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
 
     if (!bReadOnly)
     {
-        // reset the ActiveConnection if the form is to be removed. This will (should) free the resources
-        // associated with this connection
-        // 86299 - 05/02/2001 - frank.schoenheit@germany.sun.com
+        
+        
+        
         Reference< XForm > xForm( _rxElement, UNO_QUERY );
         Reference< XPropertySet > xFormProperties( xForm, UNO_QUERY );
         if ( xFormProperties.is() )
             if ( !::svxform::OStaticDataAccessTools().isEmbeddedInDatabase( _rxElement ) )
-                // (if there is a connection in the context of the component, setting
-                // a new connection would be vetoed, anyway)
-                // #i34196#
+                
+                
+                
                 xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
     }
 
@@ -968,7 +968,7 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
 }
 
 
-//------------------------------------------------------------------------------
+
 FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyChangeEvent& evt)
                      :SdrUndoAction(rNewMod)
                      ,xObj(evt.Source, UNO_QUERY)
@@ -983,7 +983,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 }
 
 
-//------------------------------------------------------------------------------
+
 void FmUndoPropertyAction::Undo()
 {
     FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
@@ -1003,7 +1003,7 @@ void FmUndoPropertyAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoPropertyAction::Redo()
 {
     FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
@@ -1023,7 +1023,7 @@ void FmUndoPropertyAction::Redo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmUndoPropertyAction::GetComment() const
 {
     OUString aStr(static_STR_UNDO_PROPERTY);
@@ -1034,7 +1034,7 @@ OUString FmUndoPropertyAction::GetComment() const
 
 
 DBG_NAME(FmUndoContainerAction);
-//------------------------------------------------------------------------------
+
 FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                                              Action _eAction,
                                              const Reference< XIndexContainer > & xCont,
@@ -1046,13 +1046,13 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                       ,m_eAction( _eAction )
 {
     OSL_ENSURE( nIdx >= 0, "FmUndoContainerAction::FmUndoContainerAction: invalid index!" );
-        // some old code suggested this could be a valid argument. However, this code was
-        // buggy, and it *seemed* that nobody used it - so it was removed.
+        
+        
 
     DBG_CTOR(FmUndoContainerAction,NULL);
     if ( xCont.is() && xElem.is() )
     {
-        // normalize
+        
         m_xElement = m_xElement.query( xElem );
         if ( m_eAction == Removed )
         {
@@ -1065,41 +1065,41 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
             else
                 m_xElement = NULL;
 
-            // we now own the element
+            
             m_xOwnElement = m_xElement;
         }
     }
 }
 
-//------------------------------------------------------------------------------
+
 FmUndoContainerAction::~FmUndoContainerAction()
 {
-    // if we own the object ....
+    
     DisposeElement( m_xOwnElement );
     DBG_DTOR(FmUndoContainerAction,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 
 void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xElem )
 {
     Reference< XComponent > xComp( xElem, UNO_QUERY );
     if ( xComp.is() )
     {
-        // and the object does not have a parent
+        
         Reference< XChild >  xChild( xElem, UNO_QUERY );
         if ( xChild.is() && !xChild->getParent().is() )
-            // -> dispose it
+            
             xComp->dispose();
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
     if ( m_xContainer->getCount() >= m_nIndex )
     {
-        // insert the element
+        
         Any aVal;
         if ( m_xContainer->getElementType() == ::getCppuType( static_cast< const Reference< XFormComponent >* >( NULL ) ) )
         {
@@ -1113,17 +1113,17 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 
         OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
 
-        // register the events
+        
         Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
         if ( xManager.is() )
             xManager->registerScriptEvents( m_nIndex, m_aEvents );
 
-        // we don't own the object anymore
+        
         m_xOwnElement = NULL;
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
     Reference< XInterface > xElement;
@@ -1132,8 +1132,8 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 
     if ( xElement != m_xElement )
     {
-        // the indexes in the container changed. Okay, so go the long way and
-        // manually determine the index
+        
+        
         m_nIndex = getElementPos( m_xContainer.get(), m_xElement );
         if ( m_nIndex != -1 )
             xElement = m_xElement;
@@ -1146,12 +1146,12 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
         if ( xManager.is() )
             m_aEvents = xManager->getScriptEvents( m_nIndex );
         m_xContainer->removeByIndex( m_nIndex );
-        // from now on, we own this object
+        
         m_xOwnElement = m_xElement;
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::Undo()
 {
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
@@ -1180,7 +1180,7 @@ void FmUndoContainerAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::Redo()
 {
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
@@ -1208,7 +1208,7 @@ void FmUndoContainerAction::Redo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj* _pObject, const Reference< XControlModel > & _xReplaced)
     :SdrUndoAction(_rMod)
     ,m_xReplaced(_xReplaced)
@@ -1216,14 +1216,14 @@ FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj
 {
 }
 
-//------------------------------------------------------------------------------
+
 FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 {
-    // dispose our element if nobody else is responsible for
+    
     DisposeElement(m_xReplaced);
 }
 
-//------------------------------------------------------------------------------
+
 
 void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced )
 {
@@ -1236,14 +1236,14 @@ void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Refe
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoModelReplaceAction::Undo()
 {
     try
     {
         Reference< XControlModel > xCurrentModel( m_pObject->GetUnoControlModel() );
 
-        // replace the model within the parent
+        
         Reference< XChild > xCurrentAsChild( xCurrentModel, UNO_QUERY );
         Reference< XNameContainer > xCurrentsParent;
         if ( xCurrentAsChild.is() )
@@ -1252,7 +1252,7 @@ void FmUndoModelReplaceAction::Undo()
 
         if ( xCurrentsParent.is() )
         {
-            // the form container works with FormComponents
+            
             Reference< XFormComponent > xComponent( m_xReplaced, UNO_QUERY );
             DBG_ASSERT( xComponent.is(), "FmUndoModelReplaceAction::Undo: the new model is no form component !" );
 
@@ -1275,7 +1275,7 @@ void FmUndoModelReplaceAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmUndoModelReplaceAction::GetComment() const
 {
     return SVX_RESSTR(RID_STR_UNDO_MODEL_REPLACE);

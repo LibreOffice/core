@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <svtools/PlaceEditDialog.hxx>
@@ -32,8 +32,8 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent ) :
 
     m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
 
-    // This constructor is called when user request a place creation, so
-    // delete button is hidden.
+    
+    
     m_pBTDelete->Hide();
 
     m_pLBServerType->SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
@@ -63,7 +63,7 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent, const boost::shared_ptr<Place
 
     m_pEDServerName->SetText( pPlace->GetName() );
 
-    // Fill the boxes with the URL parts
+    
     bool bSuccess = false;
     for ( size_t i = 0 ; i < m_aDetailsContainers.size( ) && !bSuccess; ++i )
     {
@@ -74,7 +74,7 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent, const boost::shared_ptr<Place
             m_pLBServerType->SelectEntryPos( i );
             SelectTypeHdl( m_pLBServerType );
 
-            // Fill the Username field
+            
             if ( rUrl.HasUserData( ) )
                 m_pEDUsername->SetText( rUrl.GetUser( ) );
         }
@@ -109,7 +109,7 @@ boost::shared_ptr<Place> PlaceEditDialog::GetPlace()
 
 void PlaceEditDialog::InitDetails( )
 {
-    // Create WebDAV / FTP / SSH details control
+    
     shared_ptr< DetailsContainer > pDavDetails( new DavDetailsContainer( this ) );
     pDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back( pDavDetails );
@@ -122,17 +122,17 @@ void PlaceEditDialog::InitDetails( )
     pSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back( pSshDetails );
 
-    // Create Windows Share control
+    
     shared_ptr< DetailsContainer > pSmbDetails( new SmbDetailsContainer( this ) );
     pSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back( pSmbDetails );
 
-    // Create CMIS control
+    
     shared_ptr< DetailsContainer > pCmisDetails( new CmisDetailsContainer( this ) );
     pCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back( pCmisDetails );
 
-    // Set default to first value
+    
     m_pLBServerType->SelectEntryPos( 0 );
     SelectTypeHdl( m_pLBServerType );
 }
@@ -145,7 +145,7 @@ IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, EMPTYARG )
 
 IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
 {
-    // ReUsing existing symbols...
+    
     EndDialog( RET_NO );
     return 1;
 }

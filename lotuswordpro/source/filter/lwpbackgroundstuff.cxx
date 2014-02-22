@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -107,17 +107,17 @@ LwpColor* LwpBackgroundStuff::GetFillColor()
 
 XFBGImage* LwpBackgroundStuff::GetFillPattern()
 {
-    // not pattern fill?
+    
     if (!this->IsPatternFill())
     {
         return NULL;
     }
 
-    // get pattern array from pattern table
+    
     sal_uInt8* pPttnArray = new sal_uInt8 [32];
     this->GetPattern(m_nID, pPttnArray);
 
-    // create bitmap object from the pattern array
+    
     Bitmap aBmp( Size(8, 8), 1 );
     BitmapWriteAccess* pWA = aBmp.AcquireWriteAccess();
     sal_uInt8* pBuf = pWA->GetBuffer();
@@ -130,12 +130,12 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
         pPttnArray = NULL;
     }
 
-    // create XOBitmap object from bitmap object
+    
     XOBitmap aXOBitmap( aBmp );
     aXOBitmap.Bitmap2Array();
     aXOBitmap.SetBitmapType( XBITMAP_8X8 );
 
-    // set back/fore-ground colors
+    
     if (m_aFillColor.IsValidColor() && m_aPatternColor.IsValidColor())
     {
         Color aBackColor(static_cast<sal_uInt8>(m_aFillColor.GetRed()),
@@ -157,7 +157,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
         }
     }
 
-    // transfer image data from XOBitmap->SvStream->BYTE-Array
+    
     SvMemoryStream aPicMemStream;
     aXOBitmap.Array2Bitmap();
     WriteDIB(aXOBitmap.GetBitmap(), aPicMemStream, true, true);
@@ -165,7 +165,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     sal_uInt8* pImageBuff = new sal_uInt8 [nSize];
     memcpy(pImageBuff, aPicMemStream.GetData(), nSize);
 
-    // create XFBGImage object.
+    
     XFBGImage* pXFBGImage = new XFBGImage();
     pXFBGImage->SetImageData(pImageBuff, nSize);
 
@@ -174,7 +174,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
 
 
     pXFBGImage->SetRepeate();
-    // end of add
+    
 
     return pXFBGImage;
 }

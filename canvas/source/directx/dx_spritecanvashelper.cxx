@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,20 +51,20 @@ namespace dxcanvas
                                 const ::basegfx::B2IRange&      rOutputArea,
                                 const DXSurfaceBitmapSharedPtr& rBackBuffer )
         {
-            // TODO(E1): Use numeric_cast to catch overflow here
+            
             ::basegfx::B2IRange aActualArea( 0, 0,
                                              static_cast<sal_Int32>(rOutputArea.getWidth()),
                                              static_cast<sal_Int32>(rOutputArea.getHeight()) );
             aActualArea.intersect( fround( rUpdateArea ) );
 
-            // repaint the given area of the screen with background content
+            
             rBackBuffer->draw(aActualArea);
         }
 
         void spriteRedraw( const ::canvas::Sprite::Reference& rSprite )
         {
-            // downcast to derived dxcanvas::Sprite interface, which
-            // provides the actual redraw methods.
+            
+            
             ::boost::polymorphic_downcast< Sprite* >(
                 rSprite.get() )->redraw();
         }
@@ -73,8 +73,8 @@ namespace dxcanvas
         {
             if( rSprite.is() )
             {
-                // downcast to derived dxcanvas::Sprite interface, which
-                // provides the actual redraw methods.
+                
+                
                 ::boost::polymorphic_downcast< Sprite* >(
                     rSprite.get() )->redraw();
             }
@@ -84,8 +84,8 @@ namespace dxcanvas
         {
             if( rComponent.second.getSprite().is() )
             {
-                // downcast to derived dxcanvas::Sprite interface, which
-                // provides the actual redraw methods.
+                
+                
                 ::boost::polymorphic_downcast< Sprite* >(
                     rComponent.second.getSprite().get() )->redraw();
             }
@@ -103,7 +103,7 @@ namespace dxcanvas
         mbShowSpriteBounds( false )
     {
 #if OSL_DEBUG_LEVEL > 2
-        // inverse default for verbose debug mode
+        
         mbShowSpriteBounds = true;
 #endif
     }
@@ -115,7 +115,7 @@ namespace dxcanvas
                                    const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
                                    const ::basegfx::B2ISize&                        rOutputOffset )
     {
-        // init base
+        
         setDevice( rParent );
         setTarget( rBackBuffer, rOutputOffset );
 
@@ -136,7 +136,7 @@ namespace dxcanvas
         mpRedrawManager = NULL;
         mpSpriteSurface = NULL;
 
-        // forward to base
+        
         CanvasHelper::disposing();
     }
 
@@ -156,7 +156,7 @@ namespace dxcanvas
     uno::Reference< rendering::XCustomSprite > SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
     {
         if( !mpRedrawManager )
-            return uno::Reference< rendering::XCustomSprite >(); // we're disposed
+            return uno::Reference< rendering::XCustomSprite >(); 
 
         return uno::Reference< rendering::XCustomSprite >(
             new CanvasCustomSprite( spriteSize,
@@ -179,7 +179,7 @@ namespace dxcanvas
             !mpRenderModule ||
             !mpBackBuffer )
         {
-            return sal_False; // disposed, or otherwise dysfunctional
+            return sal_False; 
         }
 
 #if defined(DX_DEBUG_IMAGES)
@@ -188,65 +188,65 @@ namespace dxcanvas
 # endif
 #endif
 
-        // store current output area (need to tunnel that to the
-        // background, scroll, opaque and general sprite repaint
-        // routines)
+        
+        
+        
         maScrapRect = rCurrArea;
 
-        // clear area that needs to be blitted to screen beforehand
+        
         maUpdateRect.reset();
 
-        // TODO(P1): Might be worthwile to track areas of background
-        // changes, too.
+        
+        
 
-        // TODO(P2): Might be worthwhile to use page-flipping only if
-        // a certain percentage of screen area has changed - and
-        // compose directly to the front buffer otherwise.
+        
+        
+        
         if( !bUpdateAll && !io_bSurfaceDirty )
         {
-            // background has not changed, so we're free to optimize
-            // repaint to areas where a sprite has changed
+            
+            
 
-            // process each independent area of overlapping sprites
-            // separately.
+            
+            
             mpRedrawManager->forEachSpriteArea( *this );
 
-            // flip primary surface to screen
-            // ==============================
+            
+            
 
-            // perform buffer flipping
+            
             mpRenderModule->flip( maUpdateRect,
                                   rCurrArea );
         }
         else
         {
-            // limit update to parent window area (ignored for fullscreen)
-            // TODO(E1): Use numeric_cast to catch overflow here
+            
+            
             const ::basegfx::B2IRectangle aUpdateArea( 0,0,
                                                        static_cast<sal_Int32>(rCurrArea.getWidth()),
                                                        static_cast<sal_Int32>(rCurrArea.getHeight()) );
 
-            // background has changed, or called requested full
-            // update, or we're performing double buffering via page
-            // flipping, so we currently have no choice but repaint
-            // everything
+            
+            
+            
+            
 
-            // repaint the whole screen with background content
+            
             mpBackBuffer->draw(aUpdateArea);
 
-            // redraw sprites
+            
             mpRedrawManager->forEachSprite(::std::ptr_fun( &spriteRedraw ) );
 
-            // flip primary surface to screen
-            // ==============================
+            
+            
 
-            // perform buffer flipping
+            
             mpRenderModule->flip( aUpdateArea,
                                   rCurrArea );
         }
 
-        // change record vector must be cleared, for the next turn of
-        // rendering and sprite changing
+        
+        
         mpRedrawManager->clearChangeRecords();
 
         io_bSurfaceDirty = false;
@@ -273,28 +273,28 @@ namespace dxcanvas
                           mpBackBuffer,
                           "SpriteCanvasHelper::scrollUpdate(): NULL device pointer " );
 
-        // round rectangles to integer pixel. Note: have to be
-        // extremely careful here, to avoid off-by-one errors for
-        // the destination area: otherwise, the next scroll update
-        // would copy pixel that are not supposed to be part of
-        // the sprite.
+        
+        
+        
+        
+        
         const ::basegfx::B2IRange& rDestRect(
             ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
 
-        // not much sense in really implementing scrollUpdate here,
-        // since outputting a sprite only partially would result in
-        // expensive clipping. Furthermore, we cannot currently render
-        // 3D directly to the front buffer, thus, would have to blit
-        // the full sprite area, anyway. But at least optimized in the
-        // sense that unnecessary background paints behind the sprites
-        // are avoided.
+        
+        
+        
+        
+        
+        
+        
         ::std::for_each( rUpdateArea.maComponentList.begin(),
                          rUpdateArea.maComponentList.end(),
                          ::std::ptr_fun( &spriteRedrawStub2 ) );
 
-        // repaint uncovered areas from backbuffer - take the
-        // _rounded_ rectangles from above, to have the update
-        // consistent with the scroll above.
+        
+        
+        
         ::std::vector< ::basegfx::B2DRange > aUncoveredAreas;
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
@@ -306,13 +306,13 @@ namespace dxcanvas
                                         ::boost::cref(maScrapRect),
                                         ::boost::cref(mpBackBuffer) ) );
 
-        // TODO(E1): Use numeric_cast to catch overflow here
+        
         ::basegfx::B2IRange aActualArea( 0, 0,
                                          static_cast<sal_Int32>(maScrapRect.getWidth()),
                                          static_cast<sal_Int32>(maScrapRect.getHeight()) );
         aActualArea.intersect( fround( rUpdateArea.maTotalBounds ) );
 
-        // add given update area to the 'blit to foreground' rect
+        
         maUpdateRect.expand( aActualArea );
     }
 
@@ -323,20 +323,20 @@ namespace dxcanvas
                           mpBackBuffer,
                           "SpriteCanvasHelper::opaqueUpdate(): NULL device pointer " );
 
-        // TODO(P2): optimize this by truly rendering to the front
-        // buffer. Currently, we've the 3D device only for the back
-        // buffer.
+        
+        
+        
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::std::ptr_fun( &spriteRedrawStub ) );
 
-        // TODO(E1): Use numeric_cast to catch overflow here
+        
         ::basegfx::B2IRange aActualArea( 0, 0,
                                          static_cast<sal_Int32>(maScrapRect.getWidth()),
                                          static_cast<sal_Int32>(maScrapRect.getHeight()) );
         aActualArea.intersect( fround( rTotalArea ) );
 
-        // add given update area to the 'blit to foreground' rect
+        
         maUpdateRect.expand( aActualArea );
     }
 
@@ -347,26 +347,26 @@ namespace dxcanvas
                           mpBackBuffer,
                           "SpriteCanvasHelper::genericUpdate(): NULL device pointer " );
 
-        // paint background
-        // ================
+        
+        
 
-        // TODO(E1): Use numeric_cast to catch overflow here
+        
         ::basegfx::B2IRange aActualArea( 0, 0,
                                          static_cast<sal_Int32>(maScrapRect.getWidth()),
                                          static_cast<sal_Int32>(maScrapRect.getHeight()) );
         aActualArea.intersect( fround( rTotalArea ) );
 
-        // repaint the given area of the screen with background content
+        
         mpBackBuffer->draw(aActualArea);
 
-        // paint sprite
-        // ============
+        
+        
 
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::std::ptr_fun( &spriteRedrawStub ) );
 
-        // add given update area to the 'blit to foreground' rect
+        
         maUpdateRect.expand( aActualArea );
     }
 }

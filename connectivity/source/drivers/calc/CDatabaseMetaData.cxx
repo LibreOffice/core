@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "calc/CDatabaseMetaData.hxx"
@@ -46,20 +46,20 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 
-// -------------------------------------------------------------------------
+
 
 OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::OCalcDatabaseMetaData" );
 }
 
-// -------------------------------------------------------------------------
+
 
 OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
 {
 }
 
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::impl_getTypeInfo_throw" );
@@ -83,7 +83,7 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value()); // ORowSetValue((sal_Int32)ColumnValue::NULLABLE)
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value()); 
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::CHAR));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
@@ -139,7 +139,7 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
     return xRef;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
@@ -193,13 +193,13 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
                     aRow[5] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                     aRow[6] = new ORowSetValueDecorator(::comphelper::getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
                     aRow[7] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))));
-                    //  aRow[8] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    
                     aRow[9] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                     aRow[11] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))));
-                    //  aRow[12] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    
                     aRow[13] = new ORowSetValueDecorator(::comphelper::getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
-                    //  aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    //  aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    
+                    
                     switch(sal_Int32(aRow[5]->getValue()))
                     {
                     case DataType::CHAR:
@@ -237,7 +237,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     return xRef;
 }
 
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
@@ -247,7 +247,7 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
     return OUString("sdbc:calc:") + m_pConnection->getURL();
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
@@ -255,33 +255,33 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQ
     return SAL_MAX_INT32;
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxCharLiteralLength" );
     return SAL_MAX_INT32;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnNameLength" );
     return SAL_MAX_INT32;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnsInIndex" );
     return 1;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnsInTable" );
     return 256;
 }
 
-// -------------------------------------------------------------------------
+
 
 static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const OUString& rName )
 {
@@ -289,7 +289,7 @@ static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, co
     Reference<XSpreadsheet> xSheet;
     if ( aAny >>= xSheet )
     {
-        //  test if sheet is hidden
+        
 
         Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
         if (xProp.is())
@@ -298,23 +298,23 @@ static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, co
             Any aVisAny = xProp->getPropertyValue("IsVisible");
             if ( aVisAny >>= bVisible )
                 if (!bVisible)
-                    return sal_True;                // hidden
+                    return sal_True;                
         }
 
-        //  use the same data area as in OCalcTable to test for empty table
+        
 
         Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
         Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
         if ( xRange.is() )
         {
-            xCursor->collapseToSize( 1, 1 );        // single (first) cell
-            xCursor->collapseToCurrentRegion();     // contiguous data area
+            xCursor->collapseToSize( 1, 1 );        
+            xCursor->collapseToCurrentRegion();     
 
             CellRangeAddress aRangeAddr = xRange->getRangeAddress();
             if ( aRangeAddr.StartColumn == aRangeAddr.EndColumn &&
                  aRangeAddr.StartRow == aRangeAddr.EndRow )
             {
-                //  single cell -> check content
+                
                 Reference<XCell> xCell = xCursor->getCellByPosition( 0, 0 );
                 if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
                     return sal_True;
@@ -345,7 +345,7 @@ static sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const 
             }
             catch ( UnknownPropertyException& )
             {
-                // optional property
+                
             }
         }
     }
@@ -353,7 +353,7 @@ static sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const 
     return bUnnamed;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
@@ -366,8 +366,8 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xRef = pResult;
 
-    // check if ORowSetValue type is given
-    // when no types are given then we have to return all tables e.g. TABLE
+    
+    
 
     OUString aTable("TABLE");
 
@@ -391,7 +391,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     if(!bTableFound)
         return xRef;
 
-    // get the sheet names from the document
+    
 
     OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
     Reference<XSpreadsheetDocument> xDoc = aDocHodler.getDoc();
@@ -418,7 +418,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         }
     }
 
-    // also use database ranges
+    
 
     Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
     if ( xDocProp.is() )
@@ -449,7 +449,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     return xRef;
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

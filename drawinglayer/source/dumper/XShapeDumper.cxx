@@ -31,15 +31,15 @@ XShapeDumper::XShapeDumper()
 
 namespace {
 
-// FUNCTION DECLARATIONS
 
-// auxiliary functions
+
+
 void dumpGradientProperty(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonBezierCoords(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
 void dumpPointSequenceSequence(com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence, uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
 void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter);
 
-// FillProperties.idl
+
 void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
@@ -63,7 +63,7 @@ void dumpFillBitmapModeAsAttribute(com::sun::star::drawing::BitmapMode eBitmapMo
 void dumpFillBitmapStretchAsAttribute(sal_Bool bBitmapStretch, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWriter);
 
-// LineProperties.idl
+
 void dumpLineStyleAsAttribute(com::sun::star::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
 void dumpLineDashAsElement(com::sun::star::drawing::LineDash aLineDash, xmlTextWriterPtr xmlWriter);
 void dumpLineDashNameAsAttribute(OUString sLineDashName, xmlTextWriterPtr xmlWriter);
@@ -80,16 +80,16 @@ void dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr x
 void dumpLineEndCenterAsAttribute(sal_Bool bLineEndCenter, xmlTextWriterPtr xmlWriter);
 void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWriter);
 
-// PolyPolygonDescriptor.idl
+
 void dumpPolygonKindAsAttribute(com::sun::star::drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonAsElement(com::sun::star::drawing::PointSequenceSequence aPolyPolygon, xmlTextWriterPtr xmlWriter);
 void dumpGeometryAsElement(com::sun::star::drawing::PointSequenceSequence aGeometry, xmlTextWriterPtr xmlWriter);
 
-// CharacterProperties.idl
+
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter);
 void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 
-// TextProperties.idl
+
 void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter);
 void dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter);
 void dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter);
@@ -114,7 +114,7 @@ void dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside,
 void dumpTextAnimationStopInsideAsAttribute(sal_Bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter);
 void dumpTextWritingModeAsAttribute(com::sun::star::text::WritingMode eWritingMode, xmlTextWriterPtr xmlWriter);
 
-// ShadowProperties.idl
+
 void dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter);
 void dumpShadowColorAsAttribute(sal_Int32 aShadowColor, xmlTextWriterPtr xmlWriter);
 void dumpShadowTransparenceAsAttribute(sal_Int32 aShadowTransparence, xmlTextWriterPtr xmlWriter);
@@ -136,17 +136,17 @@ void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr
 void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter);
 void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGrabBag, xmlTextWriterPtr xmlWriter);
 
-// CustomShape.idl
+
 void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeDataAsAttribute(OUString sCustomShapeData, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeGeometryAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeReplacementURLAsAttribute(OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
 
-// XShape.idl
+
 void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
 void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
 
-// the rest
+
 void dumpShapeDescriptorAsAttribute( com::sun::star::uno::Reference< com::sun::star::drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter );
 void dumpXShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
 void dumpXShapes( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
@@ -174,9 +174,9 @@ int closeCallback(void* )
 
 bool m_bNameDumped;
 
-// ----------------------------------------
-// ---------- FillProperties.idl ----------
-// ----------------------------------------
+
+
+
 void dumpFillStyleAsAttribute(drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter)
 {
     switch(eFillStyle)
@@ -431,9 +431,9 @@ void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWri
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "false");
 }
 
-// ----------------------------------------
-// ---------- LineProperties.idl ----------
-// ----------------------------------------
+
+
+
 
 void dumpLineStyleAsAttribute(drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter)
 {
@@ -583,9 +583,9 @@ void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWr
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
 }
 
-// -----------------------------------------------
-// ---------- PolyPolygonDescriptor.idl ----------
-// -----------------------------------------------
+
+
+
 
 void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter)
 {
@@ -625,7 +625,7 @@ void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriter
 
 void dumpPointSequenceSequence(drawing::PointSequenceSequence aPointSequenceSequence, uno::Sequence<uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
 {
-    // LibreOffice proudly presents - The Sequenception
+    
     uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPointSequenceSequence;
     sal_Int32 nPointsSequence = pointSequenceSequence.getLength();
 
@@ -687,7 +687,7 @@ void dumpGeometryAsElement(drawing::PointSequenceSequence aGeometry, xmlTextWrit
     xmlTextWriterEndElement( xmlWriter );
 }
 
-// CharacterProperties.idl
+
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontHeight"), "%f", fHeight );
@@ -698,9 +698,9 @@ void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fontColor"), "%06x", (unsigned int) aColor);
 }
 
-// ----------------------------------------
-// ---------- TextProperties.idl ----------
-// ----------------------------------------
+
+
+
 
 void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter)
 {
@@ -931,9 +931,9 @@ void dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextW
     }
 }
 
-// ------------------------------------------
-// ---------- ShadowProperties.idl ----------
-// ------------------------------------------
+
+
+
 
 void dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
 {
@@ -963,9 +963,9 @@ void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
 }
 
-// -------------------------------
-// ---------- Shape.idl ----------
-// -------------------------------
+
+
+
 
 void dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter)
 {
@@ -1070,9 +1070,9 @@ void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGr
     xmlTextWriterEndElement( xmlWriter );
 }
 
-// --------------------------------
-// ---------- XShape.idl ----------
-// --------------------------------
+
+
+
 
 void dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
 {
@@ -1092,9 +1092,9 @@ void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor >
         OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
-// -------------------------------------
-// ---------- CustomShape.idl ----------
-// -------------------------------------
+
+
+
 
 void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
 {
@@ -1173,10 +1173,10 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
         xmlTextWriterEndElement(xmlWriter);
     }
 
-    // TODO: Add here dumping of XDocument for future OOX Smart-Art
-    // properties.
+    
+    
 
-    // TODO more, if necessary
+    
 
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, rPropertyValue.Handle);
 
@@ -1214,7 +1214,7 @@ void dumpCustomShapeReplacementURLAsAttribute(OUString sCustomShapeReplacementUR
         OUStringToOString(sCustomShapeReplacementURL, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-// methods dumping whole services
+
 
 void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
 {
@@ -1233,7 +1233,7 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
         if(anotherAny >>= aColor)
             dumpCharColorAsAttribute(aColor, xmlWriter);
     }
-    // TODO - more properties from CharacterProperties.idl (similar to above)
+    
 
     if(xInfo->hasPropertyByName("IsNumbering"))
     {
@@ -1818,7 +1818,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     uno::Reference< drawing::XShapeDescriptor > xDescr(xShape, uno::UNO_QUERY_THROW);
     dumpShapeDescriptorAsAttribute(xDescr, xmlWriter);
 
-    // uno::Sequence<beans::Property> aProperties = xPropSetInfo->getProperties();
+    
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
 
@@ -1874,7 +1874,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     if(xServiceInfo->supportsService("com.sun.star.drawing.CustomShape"))
         dumpCustomShapeService(xPropSet, xmlWriter);
 
-    // EnhancedShapeDumper used
+    
 
     if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeExtrusion"))
     {
@@ -1901,7 +1901,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpEnhancedCustomShapeTextPathService(xPropSet);
     }
-    }   // end of the 'try' block
+    }   
     catch (const beans::UnknownPropertyException& e)
     {
         std::cout << "Exception caught in XShapeDumper.cxx: " << e.Message << std::endl;

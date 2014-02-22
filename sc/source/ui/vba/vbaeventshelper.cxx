@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbaeventshelper.hxx"
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -57,7 +57,7 @@ SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nInde
 {
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );
 
-    // first try to extract a sheet index
+    
     sal_Int32 nTab = -1;
     if( rArgs[ nIndex ] >>= nTab )
     {
@@ -66,23 +66,23 @@ SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nInde
         return static_cast< SCTAB >( nTab );
     }
 
-    // try VBA Range object
+    
     uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
     if( xVbaRange.is() )
     {
         uno::Reference< XHelperInterface > xVbaHelper( xVbaRange, uno::UNO_QUERY_THROW );
-        // TODO: in the future, the parent may be an excel::XChart (chart sheet) -> will there be a common base interface?
+        
         uno::Reference< excel::XWorksheet > xVbaSheet( xVbaHelper->getParent(), uno::UNO_QUERY_THROW );
-        // VBA sheet index is 1-based
+        
         return static_cast< SCTAB >( xVbaSheet->getIndex() - 1 );
     }
 
-    // try single UNO range object
+    
     uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable = getXSomethingFromArgs< sheet::XCellRangeAddressable >( rArgs, nIndex );
     if( xCellRangeAddressable.is() )
         return xCellRangeAddressable->getRangeAddress().Sheet;
 
-    // at last, try UNO range list
+    
     uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
     if( xRanges.is() )
     {
@@ -108,13 +108,13 @@ uno::Reference< awt::XWindow > lclGetWindowForController( const uno::Reference< 
     return 0;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 typedef ::cppu::WeakImplHelper4< awt::XTopWindowListener, awt::XWindowListener, frame::XBorderResizeListener, util::XChangesListener > ScVbaEventListener_BASE;
 
-// This class is to process Workbook window related event
+
 class ScVbaEventListener : public ScVbaEventListener_BASE
 {
 public :
@@ -126,7 +126,7 @@ public :
     /** Stops listening to the passed document controller. */
     void stopControllerListening( const uno::Reference< frame::XController >& rxController );
 
-    // XTopWindowListener
+    
     virtual void SAL_CALL windowOpened( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL windowClosing( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL windowClosed( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
@@ -135,19 +135,19 @@ public :
     virtual void SAL_CALL windowActivated( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL windowDeactivated( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
 
-    // XWindowListener
+    
     virtual void SAL_CALL windowResized( const awt::WindowEvent& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL windowMoved( const awt::WindowEvent& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL windowShown( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL windowHidden( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
 
-    // XBorderResizeListener
+    
     virtual void SAL_CALL borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) throw (uno::RuntimeException);
 
-    // XChangesListener
+    
     virtual void SAL_CALL changesOccurred( const util::ChangesEvent& rEvent ) throw (uno::RuntimeException);
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException);
 
 private:
@@ -173,14 +173,14 @@ private:
     ScVbaEventsHelper&  mrVbaEvents;
     uno::Reference< frame::XModel > mxModel;
     ScDocShell*         mpDocShell;
-    WindowControllerMap maControllers;          /// Maps VCL top windows to their controllers.
-    Window*             mpActiveWindow;         /// Currently activated window, to prevent multiple (de)activation.
-    bool                mbWindowResized;        /// True = window resize system event processed.
-    bool                mbBorderChanged;        /// True = borders changed system event processed.
+    WindowControllerMap maControllers;          
+    Window*             mpActiveWindow;         
+    bool                mbWindowResized;        
+    bool                mbBorderChanged;        
     bool                mbDisposed;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaEventListener::ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell ) :
     mrVbaEvents( rVbaEvents ),
@@ -282,13 +282,13 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
-        // do not fire activation event multiple time for the same window
+        
         if( pWindow && (pWindow != mpActiveWindow) )
         {
-            // if another window is active, fire deactivation event first
+            
             if( mpActiveWindow )
                 processWindowActivateEvent( mpActiveWindow, false );
-            // fire activation event for the new window
+            
             processWindowActivateEvent( pWindow, true );
             mpActiveWindow = pWindow;
         }
@@ -304,10 +304,10 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
-        // do not fire the deactivation event, if the window is not active (prevent multiple deactivation)
+        
         if( pWindow && (pWindow == mpActiveWindow) )
             processWindowActivateEvent( pWindow, false );
-        // forget pointer to the active window
+        
         mpActiveWindow = 0;
     }
 }
@@ -425,7 +425,7 @@ void SAL_CALL ScVbaEventListener::disposing( const lang::EventObject& rEvent ) t
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 void ScVbaEventListener::startModelListening()
 {
@@ -470,11 +470,11 @@ void ScVbaEventListener::processWindowActivateEvent( Window* pWindow, bool bActi
 
 void ScVbaEventListener::postWindowResizeEvent( Window* pWindow )
 {
-    // check that the passed window is still alive (it must be registered in maControllers)
+    
     if( pWindow && (maControllers.count( pWindow ) > 0) )
     {
         mbWindowResized = mbBorderChanged = false;
-        acquire();  // ensure we don't get deleted before the timer fires
+        acquire();  
         Application::PostUserEvent( LINK( this, ScVbaEventListener, processWindowResizeEvent ), pWindow );
     }
 }
@@ -493,7 +493,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, Window*, EMPTYARG pWind
         maControllers contains pWindow ensures that the window is still alive. */
     if( !mbDisposed && pWindow && (maControllers.count( pWindow ) > 0) )
     {
-        // do not fire event unless all mouse buttons have been released
+        
         Window::PointerState aPointerState = pWindow->GetPointerState();
         if( (aPointerState.mnState & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)) == 0 )
         {
@@ -502,7 +502,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, Window*, EMPTYARG pWind
             {
                 uno::Sequence< uno::Any > aArgs( 1 );
                 aArgs[ 0 ] <<= xController;
-                // #163419# do not throw exceptions into application core
+                
                 mrVbaEvents.processVbaEventNoThrow( WORKBOOK_WINDOWRESIZE, aArgs );
             }
         }
@@ -511,13 +511,13 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, Window*, EMPTYARG pWind
     return 0;
 }
 
-// ============================================================================
+
 
 ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& xContext ) :
     VbaEventsHelperBase( rArgs, xContext ),
     mbOpened( false )
 {
-    mpDocShell = dynamic_cast< ScDocShell* >( mpShell ); // mpShell from base class
+    mpDocShell = dynamic_cast< ScDocShell* >( mpShell ); 
     mpDoc = mpDocShell ? mpDocShell->GetDocument() : 0;
 
     if( !mxModel.is() || !mpDocShell || !mpDoc )
@@ -533,11 +533,11 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, co
     REGISTER_EVENT( WORKSHEET_##eventid, script::ModuleType::DOCUMENT, "Worksheet", eventname, cancelindex, true ); \
     REGISTER_EVENT( (USERDEFINED_START + WORKSHEET_##eventid), script::ModuleType::DOCUMENT, "Workbook", "Sheet" eventname, (((cancelindex) >= 0) ? ((cancelindex) + 1) : -1), false )
 
-    // global
+    
     REGISTER_AUTO_EVENT( OPEN,  "Open" );
     REGISTER_AUTO_EVENT( CLOSE, "Close" );
 
-    // Workbook
+    
     REGISTER_WORKBOOK_EVENT( ACTIVATE,            "Activate",           -1 );
     REGISTER_WORKBOOK_EVENT( DEACTIVATE,          "Deactivate",         -1 );
     REGISTER_WORKBOOK_EVENT( OPEN,                "Open",               -1 );
@@ -550,7 +550,7 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, co
     REGISTER_WORKBOOK_EVENT( WINDOWDEACTIVATE,    "WindowDeactivate",   -1 );
     REGISTER_WORKBOOK_EVENT( WINDOWRESIZE,        "WindowResize",       -1 );
 
-    // Worksheet events. All events have a corresponding workbook event.
+    
     REGISTER_WORKSHEET_EVENT( ACTIVATE,           "Activate",           -1 );
     REGISTER_WORKSHEET_EVENT( DEACTIVATE,         "Deactivate",         -1 );
     REGISTER_WORKSHEET_EVENT( BEFOREDOUBLECLICK,  "BeforeDoubleClick",  1 );
@@ -574,7 +574,7 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
 {
     static const uno::Sequence< uno::Any > saEmptyArgs;
     if( (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC )) ||
-        (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CREATEDOC )) )  // CREATEDOC triggered e.g. during VBA Workbooks.Add
+        (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CREATEDOC )) )  
     {
         processVbaEventNoThrow( WORKBOOK_OPEN, saEmptyArgs );
     }
@@ -624,12 +624,12 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
     VbaEventsHelperBase::notifyEvent( rEvent );
 }
 
-// protected ------------------------------------------------------------------
+
 
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs ) throw (uno::RuntimeException)
 {
-    // document and document shell are needed during event processing
+    
     if( !mpShell || !mpDoc )
         throw uno::RuntimeException();
 
@@ -640,34 +640,34 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         AUTO_CLOSE are always enabled. */
     bool bExecuteEvent = (rInfo.mnModuleType != script::ModuleType::DOCUMENT) || ScVbaApplication::getDocumentEventsEnabled();
 
-    // framework and Calc fire a few events before 'OnLoad', ignore them
+    
     if( bExecuteEvent )
         bExecuteEvent = (rInfo.mnEventId == WORKBOOK_OPEN) ? !mbOpened : mbOpened;
 
-    // special handling for some events
+    
     if( bExecuteEvent ) switch( rInfo.mnEventId )
     {
         case WORKBOOK_OPEN:
         {
-            // execute delayed Activate event too (see above)
+            
             rEventQueue.push_back( WORKBOOK_ACTIVATE );
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= mxModel->getCurrentController();
             rEventQueue.push_back( EventQueueEntry( WORKBOOK_WINDOWACTIVATE, aArgs ) );
             rEventQueue.push_back( AUTO_OPEN );
-            // remember initial selection
+            
             maOldSelection <<= mxModel->getCurrentSelection();
         }
         break;
         case WORKSHEET_SELECTIONCHANGE:
-            // if selection is not changed, then do not fire the event
+            
             bExecuteEvent = isSelectionChanged( rArgs, 0 );
         break;
     }
 
     if( bExecuteEvent )
     {
-        // add workbook event associated to a sheet event
+        
         bool bSheetEvent = false;
         if( (rInfo.maUserData >>= bSheetEvent) && bSheetEvent )
             rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
@@ -679,73 +679,73 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
 uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& rInfo,
         const uno::Sequence< uno::Any >& rArgs ) throw (lang::IllegalArgumentException)
 {
-    // fill arguments for workbook events associated to sheet events according to sheet events, sheet will be added below
+    
     bool bSheetEventAsBookEvent = rInfo.mnEventId > USERDEFINED_START;
     sal_Int32 nEventId = bSheetEventAsBookEvent ? (rInfo.mnEventId - USERDEFINED_START) : rInfo.mnEventId;
 
     uno::Sequence< uno::Any > aVbaArgs;
     switch( nEventId )
     {
-        // *** Workbook ***
+        
 
-        // no arguments
+        
         case WORKBOOK_ACTIVATE:
         case WORKBOOK_DEACTIVATE:
         case WORKBOOK_OPEN:
         break;
-        // 1 arg: cancel
+        
         case WORKBOOK_BEFORECLOSE:
         case WORKBOOK_BEFOREPRINT:
             aVbaArgs.realloc( 1 );
-            // current cancel state will be inserted by caller
+            
         break;
-        // 2 args: saveAs, cancel
+        
         case WORKBOOK_BEFORESAVE:
             aVbaArgs.realloc( 2 );
             checkArgumentType< bool >( rArgs, 0 );
             aVbaArgs[ 0 ] = rArgs[ 0 ];
-            // current cancel state will be inserted by caller
+            
         break;
-        // 1 arg: success
+        
         case WORKBOOK_AFTERSAVE:
             aVbaArgs.realloc( 1 );
             checkArgumentType< bool >( rArgs, 0 );
             aVbaArgs[ 0 ] = rArgs[ 0 ];
         break;
-        // 1 arg: window
+        
         case WORKBOOK_WINDOWACTIVATE:
         case WORKBOOK_WINDOWDEACTIVATE:
         case WORKBOOK_WINDOWRESIZE:
             aVbaArgs.realloc( 1 );
             aVbaArgs[ 0 ] = createWindow( rArgs, 0 );
         break;
-        // 1 arg: worksheet
+        
         case WORKBOOK_NEWSHEET:
             aVbaArgs.realloc( 1 );
             aVbaArgs[ 0 ] = createWorksheet( rArgs, 0 );
         break;
 
-        // *** Worksheet ***
+        
 
-        // no arguments
+        
         case WORKSHEET_ACTIVATE:
         case WORKSHEET_CALCULATE:
         case WORKSHEET_DEACTIVATE:
         break;
-        // 1 arg: range
+        
         case WORKSHEET_CHANGE:
         case WORKSHEET_SELECTIONCHANGE:
             aVbaArgs.realloc( 1 );
             aVbaArgs[ 0 ] = createRange( rArgs, 0 );
         break;
-        // 2 args: range, cancel
+        
         case WORKSHEET_BEFOREDOUBLECLICK:
         case WORKSHEET_BEFORERIGHTCLICK:
             aVbaArgs.realloc( 2 );
             aVbaArgs[ 0 ] = createRange( rArgs, 0 );
-            // current cancel state will be inserted by caller
+            
         break;
-        // 1 arg: hyperlink
+        
         case WORKSHEET_FOLLOWHYPERLINK:
             aVbaArgs.realloc( 1 );
             aVbaArgs[ 0 ] = createHyperlink( rArgs, 0 );
@@ -774,7 +774,7 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
     {
         case WORKBOOK_OPEN:
             mbOpened = true;
-            // register the listeners
+            
             if( !mxListener.is() )
                 mxListener = new ScVbaEventListener( *this, mxModel, mpDocShell );
         break;
@@ -804,7 +804,7 @@ OUString ScVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& r
     return aCodeName;
 }
 
-// private --------------------------------------------------------------------
+
 
 namespace {
 
@@ -812,21 +812,21 @@ namespace {
     selections that refer to different sheets (returns false in this case). */
 bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 {
-    // one of the range lists empty? -> return false, if both lists empty
+    
     bool bLeftEmpty = rLeft.empty();
     bool bRightEmpty = rRight.empty();
     if( bLeftEmpty || bRightEmpty )
         return !(bLeftEmpty && bRightEmpty);
 
-    // check sheet indexes of the range lists (assuming that all ranges in a list are on the same sheet)
+    
     if (rLeft[0]->aStart.Tab() != rRight[0]->aStart.Tab())
         return false;
 
-    // compare all ranges
+    
     return rLeft != rRight;
 }
 
-} // namespace
+} 
 
 bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -842,7 +842,7 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
 uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // extract sheet index, will throw, if parameter is invalid
+    
     SCTAB nTab = lclGetTabFromArgs( rArgs, nIndex );
     return uno::Any( excel::getUnoSheetModuleObj( mxModel, nTab ) );
 }
@@ -850,7 +850,7 @@ uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rA
 uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // it is possible to pass an existing VBA Range object
+    
     uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
     if( !xVbaRange.is() )
     {

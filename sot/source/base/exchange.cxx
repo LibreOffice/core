@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
@@ -50,7 +50,7 @@ struct DataFlavorRepresentation
     const ::com::sun::star::uno::Type*  pType;
 };
 
-// -----------------------------------------------------------------------------
+
 
 namespace
 {
@@ -212,7 +212,7 @@ namespace
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
 }
 
-//-----------------------------------------------------------------------
+
 
 static tDataFlavorList& InitFormats_Impl()
 {
@@ -231,15 +231,15 @@ static tDataFlavorList& InitFormats_Impl()
 sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    // teste zuerst die Standard - Name
+    
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( rName.equalsAscii( pFormatArray_Impl[ i ].pName ) )
             return i;
 
-    // BM: the chart format 105 ("StarChartDocument 5.0") was written
-    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
-    // The registry only contains the entry for the 42 format id.
+    
+    
+    
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
         if( rName.equalsAscii( pFormatArray_Impl[ i ].pName ) )
@@ -247,7 +247,7 @@ sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
                      ? SOT_FORMATSTR_ID_STARCHART_50
                      : i );
 
-    // dann in der dynamischen Liste
+    
     tDataFlavorList& rL = InitFormats_Impl();
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
@@ -256,7 +256,7 @@ sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
-    // nMax ist der neue Platz
+    
     DataFlavor* pNewFlavor = new DataFlavor;
 
     pNewFlavor->MimeType = rName;
@@ -271,7 +271,7 @@ sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
 sal_uLong SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    // teste zuerst die Standard - Name
+    
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
@@ -282,7 +282,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
-    // dann in der dynamischen Liste
+    
     tDataFlavorList& rL = InitFormats_Impl();
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
@@ -291,7 +291,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
-    // nMax ist der neue Platz
+    
     DataFlavor* pNewFlavor = new DataFlavor;
 
     pNewFlavor->MimeType = rMimeType;
@@ -405,9 +405,9 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const OUString& rMimeType )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
-    // BM: the chart format 105 ("StarChartDocument 5.0") was written
-    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
-    // The registry only contains the entry for the 42 format id.
+    
+    
+    
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
@@ -415,7 +415,7 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const OUString& rMimeType )
                      ? SOT_FORMATSTR_ID_STARCHART_50
                      : i );
 
-    // dann in der dynamischen Liste
+    
     tDataFlavorList& rL = InitFormats_Impl();
 
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
@@ -436,7 +436,7 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const OUString& rMimeType )
 *************************************************************************/
 sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
-    // teste zuerst die Standard - Name
+    
     const OUString& rMimeType = rFlavor.MimeType;
 
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
@@ -445,9 +445,9 @@ sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
-    // BM: the chart format 105 ("StarChartDocument 5.0") was written
-    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
-    // The registry only contains the entry for the 42 format id.
+    
+    
+    
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
@@ -455,7 +455,7 @@ sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
                      ? SOT_FORMATSTR_ID_STARCHART_50
                      : i );
 
-    // dann in der dynamischen Liste
+    
     tDataFlavorList& rL = InitFormats_Impl();
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {

@@ -53,17 +53,17 @@ namespace connectivity
         }
     }
 }
-// --------------------------------------------------------------------------------
+
 SkeletonDriver::SkeletonDriver()
     : ODriver_BASE(m_aMutex)
 {
 }
-// --------------------------------------------------------------------------------
+
 void SkeletonDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // when driver will be destroied so all our connections have to be destroied as well
+    
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -75,19 +75,19 @@ void SkeletonDriver::disposing()
     ODriver_BASE::disposing();
 }
 
-// static ServiceInfo
-//------------------------------------------------------------------------------
+
+
 rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return rtl::OUString("com.sun.star.comp.sdbc.SkeletonDriver");
-        // this name is referenced in the configuration and in the skeleton.xml
-        // Please take care when changing it.
+        
+        
 }
 
 Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
+    
+    
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
     return aSNS;
@@ -110,46 +110,46 @@ Sequence< ::rtl::OUString > SAL_CALL SkeletonDriver::getSupportedServiceNames(  
 
 Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    // create a new connection with the given properties and append it to our vector
+    
     OConnection* pCon = new OConnection(this);
-    Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
+    Reference< XConnection > xCon = pCon;   
+    pCon->construct(url,info);              
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    // here we have to look if we support this url format
-    // change the URL format to your needs, but please aware that the first on who accepts the URl wins.
+    
+    
     return url.startsWith("sdbc:skeleton:");
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL SkeletonDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    // if you have something special to say, return it here :-)
+    
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SkeletonDriver::getMajorVersion(  ) throw(RuntimeException)
 {
-    return 0; // depends on you
+    return 0; 
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SkeletonDriver::getMinorVersion(  ) throw(RuntimeException)
 {
-    return 1; // depends on you
+    return 1; 
 }
-// --------------------------------------------------------------------------------
 
-//.........................................................................
+
+
 namespace connectivity
 {
     namespace skeleton
     {
-//.........................................................................
+
 
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
@@ -162,7 +162,7 @@ void release(oslInterlockedCount& _refCount,
 
         if (!rBHelper.bDisposed && !rBHelper.bInDispose)
         {
-            // remember the parent
+            
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
             {
                 ::osl::MutexGuard aGuard( rBHelper.rMutex );
@@ -170,13 +170,13 @@ void release(oslInterlockedCount& _refCount,
                 _xInterface = NULL;
             }
 
-            // First dispose
+            
             _pObject->dispose();
 
-            // only the alive ref holds the object
+            
             OSL_ASSERT( _refCount == 1 );
 
-            // release the parent in the ~
+            
             if (xParent.is())
             {
                 ::osl::MutexGuard aGuard( rBHelper.rMutex );
@@ -194,9 +194,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         throw DisposedException();
 
 }
-//.........................................................................
+
     }
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -87,7 +87,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
             {
                 uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
-                // doc export
+                
                 uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
                 xDocSrc->setOutputStream( xOut );
 
@@ -141,7 +141,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
     return SvxDrawingLayerExport( pModel, xOut, xComponent );
 }
 
-//-////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent )
 {
@@ -169,13 +169,13 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
 
     try
     {
-        // Get service factory
+        
         Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
         if ( xTargetModel.is() )
             xTargetModel->lockControllers();
 
-        // -------------------------------------
+        
 
         pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
         xGraphicResolver = pGraphicHelper;
@@ -189,40 +189,40 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             xObjectResolver = pObjectHelper;
         }
 
-        // -------------------------------------
+        
 
         if( 0 == nRet )
         {
 
-            // parse
-            // prepare ParserInputSrouce
+            
+            
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = xInputStream;
 
-            // get parser
+            
             Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
-            // prepare filter arguments
+            
             Sequence<Any> aFilterArgs( 2 );
             Any *pArgs = aFilterArgs.getArray();
             *pArgs++ <<= xGraphicResolver;
             *pArgs++ <<= xObjectResolver;
 
-            // get filter
+            
             Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
             DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
 
             nRet = 1;
             if( xParser.is() && xFilter.is() )
             {
-                // connect parser and filter
+                
                 xParser->setDocumentHandler( xFilter );
 
-                // connect model and filter
+                
                 uno::Reference < document::XImporter > xImporter( xFilter, UNO_QUERY );
                 xImporter->setTargetDocument( xTargetDocument );
 
-                // finally, parser the stream
+                
                 xParser->parseStream( aParserInput );
 
                 nRet = 0;

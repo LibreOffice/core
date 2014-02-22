@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,11 +25,11 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/AccessibleStringWrap.hxx>
 
-//------------------------------------------------------------------------
+
 //
-// AccessibleStringWrap implementation
+
 //
-//------------------------------------------------------------------------
+
 
 AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText ) :
     mrDev( rDev ),
@@ -45,11 +45,11 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
 
     mrFont.SetPhysFont( &mrDev );
 
-    // #108900# Handle virtual position one-past-the end of the string
+    
     if( nIndex >= maText.getLength() )
     {
-        // create a caret bounding rect that has the height of the
-        // current font and is one pixel wide.
+        
+        
         rRect.Left() = mrDev.GetTextWidth(maText);
         rRect.Top() = 0;
         rRect.SetSize( Size(mrDev.GetTextHeight(), 1) );
@@ -66,7 +66,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
 
     if( mrFont.IsVertical() )
     {
-        // #101701# Rotate to vertical
+        
         rRect = Rectangle( Point(-rRect.Top(), rRect.Left()),
                            Point(-rRect.Bottom(), rRect.Right()));
     }
@@ -74,7 +74,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
 
 sal_Int32 AccessibleStringWrap::GetIndexAtPoint( const Point& rPoint )
 {
-    // search for character bounding box containing given point
+    
     Rectangle aRect;
     sal_Int32 i, nLen = maText.getLength();
     for( i=0; i<nLen; ++i )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/scoped_disposing_ptr.hxx>
@@ -69,8 +69,8 @@ public:
     ExtraData* GetExtraData ();
 };
 
-// Holds a basctl::Dll and release it on exit, or dispose of the
-//default XComponent, whichever comes first
+
+
 class DllInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>
 {
 public:
@@ -80,7 +80,7 @@ public:
 
 struct theDllInstance : public rtl::Static<DllInstance, theDllInstance> { };
 
-} // namespace
+} 
 
 void EnsureIde ()
 {
@@ -134,7 +134,7 @@ Dll::Dll () :
 
     Module::Get() = new Module( pMgr, &DocShell::Factory() );
 
-    GetExtraData(); // to cause GlobalErrorHdl to be set
+    GetExtraData(); 
 
     SfxModule* pMod = Module::Get();
 
@@ -153,11 +153,11 @@ ExtraData* Dll::GetExtraData ()
     return m_pExtraData.get();
 }
 
-} // namespace
+} 
 
 //
-// basctl::ExtraData
-// ===================
+
+
 //
 
 ExtraData::ExtraData () :
@@ -171,13 +171,13 @@ ExtraData::ExtraData () :
 
 ExtraData::~ExtraData ()
 {
-    // Resetting ErrorHdl is cleaner indeed but this instance is destroyed
-    // pretty late, after the last Basic, anyway.
-    // Due to the call there is AppData created then though and not
-    // destroyed anymore => MLK's at Purify
-//  StarBASIC::SetGlobalErrorHdl( Link() );
-//  StarBASIC::SetGlobalBreakHdl( Link() );
-//  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
+    
+    
+    
+    
+
+
+
 }
 
 void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
@@ -192,10 +192,10 @@ IMPL_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
     {
         if (BasicManager* pBasMgr = FindBasicManager(pBasic))
         {
-            // I do get here twice if Step into protected Basic
-            // => bad, if password query twice, also you don't see
-            // the lib in the PasswordDlg...
-            // => start no password query at this point
+            
+            
+            
+            
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             OSL_ENSURE( aDocument.isValid(), "basctl::ExtraData::GlobalBasicBreakHdl: no document for the basic manager!" );
             if ( aDocument.isValid() )
@@ -207,7 +207,7 @@ IMPL_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
-                           // a step-out should get me out of the protected area...
+                           
                         nRet = SbDEBUG_STEPOUT;
                     }
                     else
@@ -223,6 +223,6 @@ IMPL_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -121,7 +121,7 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( OUString( "Office.Common/Help" ) )
@@ -134,7 +134,7 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     EnableNotification( aNames );
 }
 
-// -----------------------------------------------------------------------
+
 static int lcl_MapPropertyName( const OUString rCompare,
                 const uno::Sequence< OUString>& aInternalPropertyNames)
 {
@@ -215,7 +215,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtHelpOptions_Impl::Commit()
 {
@@ -251,7 +251,7 @@ void SvtHelpOptions_Impl::Commit()
     PutProperties( aNames, aValues );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtHelpOptions_Impl::Notify( const Sequence<OUString>& aPropertyNames )
 {
@@ -260,7 +260,7 @@ void SvtHelpOptions_Impl::Notify( const Sequence<OUString>& aPropertyNames )
 
 SvtHelpOptions::SvtHelpOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( SvtHelpOptions_Impl::getInitMutex() );
     ++nRefCount;
     if ( !pOptions )
@@ -272,11 +272,11 @@ SvtHelpOptions::SvtHelpOptions()
     pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtHelpOptions::~SvtHelpOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( SvtHelpOptions_Impl::getInitMutex() );
     if ( !--nRefCount )
     {
@@ -306,7 +306,7 @@ bool SvtHelpOptions::IsHelpTips() const
     return pImp->IsHelpTips();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtHelpOptions::SetWelcomeScreen( sal_Bool b )
 {

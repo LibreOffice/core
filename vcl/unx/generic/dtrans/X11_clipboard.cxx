@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -71,7 +71,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 X11Clipboard::~X11Clipboard()
 {
@@ -90,7 +90,7 @@ X11Clipboard::~X11Clipboard()
 }
 
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::fireChangedContentsEvent()
 {
@@ -111,30 +111,30 @@ void X11Clipboard::fireChangedContentsEvent()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::clearContents()
 {
     ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
-    // protect against deletion during outside call
+    
     Reference< XClipboard > xThis( static_cast<XClipboard*>(this));
-    // copy member references on stack so they can be called
-    // without having the mutex
+    
+    
     Reference< XClipboardOwner > xOwner( m_aOwner );
     Reference< XTransferable > xTrans( m_aContents );
-    // clear members
+    
     m_aOwner.clear();
     m_aContents.clear();
 
-    // release the mutex
+    
     aGuard.clear();
 
-    // inform previous owner of lost ownership
+    
     if ( xOwner.is() )
         xOwner->lostOwnership(xThis, m_aContents);
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     throw(RuntimeException)
@@ -146,14 +146,14 @@ Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     return m_aContents;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL X11Clipboard::setContents(
     const Reference< XTransferable >& xTrans,
     const Reference< XClipboardOwner >& xClipboardOwner )
     throw(RuntimeException)
 {
-    // remember old values for callbacks before setting the new ones.
+    
     ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
 
     Reference< XClipboardOwner > oldOwner( m_aOwner );
@@ -164,7 +164,7 @@ void SAL_CALL X11Clipboard::setContents(
 
     aGuard.clear();
 
-    // for now request ownership for both selections
+    
     if( m_aSelection != None )
         m_rSelectionManager.requestOwnership( m_aSelection );
     else
@@ -173,15 +173,15 @@ void SAL_CALL X11Clipboard::setContents(
         m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( OUString("CLIPBOARD") ) );
     }
 
-    // notify old owner on loss of ownership
+    
     if( oldOwner.is() )
         oldOwner->lostOwnership(static_cast < XClipboard * > (this), oldContents);
 
-    // notify all listeners on content changes
+    
     fireChangedContentsEvent();
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SAL_CALL X11Clipboard::getName()
     throw(RuntimeException)
@@ -189,7 +189,7 @@ OUString SAL_CALL X11Clipboard::getName()
     return m_rSelectionManager.getString( m_aSelection );
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
     throw(RuntimeException)
@@ -198,7 +198,7 @@ sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
 }
 
 
-// ------------------------------------------------------------------------
+
 void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
@@ -206,7 +206,7 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
     m_aListeners.push_back( listener );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
@@ -216,35 +216,35 @@ void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboard
 }
 
 
-// ------------------------------------------------------------------------
+
 
 Reference< XTransferable > X11Clipboard::getTransferable()
 {
     return getContents();
 }
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::clearTransferable()
 {
     clearContents();
 }
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::fireContentsChanged()
 {
     fireChangedContentsEvent();
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > X11Clipboard::getReference() throw()
 {
     return Reference< XInterface >( static_cast< OWeakObject* >(this) );
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
     throw(RuntimeException)

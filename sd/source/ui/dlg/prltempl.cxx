@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/outliner.hxx>
@@ -65,7 +65,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 {
     if( IS_OUTLINE(ePO))
     {
-        // Unfortunately, the Itemsets of our style sheets are not discreet..
+        
         const sal_uInt16* pPtr = pOrgSet->GetRanges();
         sal_uInt16 p1, p2;
         while( *pPtr )
@@ -73,7 +73,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             p1 = pPtr[0];
             p2 = pPtr[1];
 
-            // first, we make it discreet
+            
             while(pPtr[2] && (pPtr[2] - p2 == 1))
             {
                 p2 = pPtr[3];
@@ -85,7 +85,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         aInputSet.Put( rStyleBase.GetItemSet() );
 
-        // need parent-relationship
+        
         const SfxItemSet* pParentItemSet = rStyleBase.GetItemSet().GetParent();
         if( pParentItemSet )
             aInputSet.SetParent( pParentItemSet );
@@ -95,8 +95,8 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         const SfxPoolItem *pItem = NULL;
 
-        // If there is no bullet item in this stylesheet, we get it
-        // from 'Outline 1' style sheet.
+        
+        
         if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, false, &pItem ))
         {
             OUString aStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
@@ -107,7 +107,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                     aInputSet.Put( *pItem );
         }
 
-        // preselect selected layer in dialog
+        
         aInputSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, 1<<GetOutlineLevel()));
 
         SetInputSet( &aInputSet );
@@ -171,7 +171,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
     }
 
-    // set title and add corresponding pages to dialog
+    
     OUString aTitle;
 
     switch( ePO )
@@ -211,7 +211,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     }
     SetText( aTitle );
 
-    nDlgType = 1; // template dialog
+    nDlgType = 1; 
     nPageType = 0;
     nPos = 0;
 
@@ -221,14 +221,14 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     nHatchingListState = CT_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 {
     delete pOutSet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -299,8 +299,8 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         return SfxTabDialog::GetOutputItemSet();
 }
 
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
+
+
 sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
 {
     switch( ePO )

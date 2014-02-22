@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "NetChartTypeTemplate.hxx"
@@ -37,7 +37,7 @@ using ::osl::MutexGuard;
 namespace
 {
 static const OUString lcl_aServiceName( "com.sun.star.chart2.NetChartTypeTemplate" );
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -87,7 +87,7 @@ void SAL_CALL NetChartTypeTemplate::applyStyle(
     }
 }
 
-// ____ XChartTypeTemplate ____
+
 sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
     sal_Bool bAdaptProperties )
@@ -100,13 +100,13 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
 
     if( bResult )
     {
-        //filled net chart?:
+        
         if( m_bHasFilledArea )
             return sal_True;
 
-        // check symbol-style
-        // for a template with symbols it is ok, if there is at least one series
-        // with symbols, otherwise an unknown template is too easy to achieve
+        
+        
+        
         bool bSymbolFound = false;
         bool bLineFound = false;
 
@@ -207,9 +207,9 @@ Sequence< OUString > NetChartTypeTemplate::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( NetChartTypeTemplate, lcl_aServiceName );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

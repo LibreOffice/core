@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ Reference<XInvocation> getComObject( OUString progId)
 {
     HRESULT hr= S_OK;
     Reference< XInvocation > ret;
-//  Reference<XMultiServiceFactory> fac;
+
     if(  ! objectFactory.is())
     {   Reference<XMultiServiceFactory> mgr= getMultiServiceFactory();
         Reference<XInterface> xInt= mgr->createInstance(
@@ -119,13 +119,13 @@ bool checkOutArgs(const Sequence<Any> & outArgs,
 {
     if (values.getLength() != outArgs.getLength())
         return false;
-    //iterate over all parameters. i represents the parameter index
+    
     for (int i = 0; i < values.getLength(); i++)
     {
         if (values[i].getValueType() == getVoidCppuType())
             continue;
-        //out parameter
-        //Based on the parameter index find the correspondent out value
+        
+        
         int indexOutSeq = -1;
         for (int iIndices = indices.getLength() - 1; iIndices >= 0; iIndices --)
         {
@@ -246,11 +246,11 @@ bool equalSequences(const Any& orig, const Any& returned)
             }
         case TypeClass_SEQUENCE:
             {
-                //Sequence<sal_Unicode> seq;
-                //orig >>= seq;
-                //Sequence<Any> seq2;
-                //returned >>= seq2;
-                //return equalSequences(seq, seq2);
+                
+                
+                
+                
+                
                 break;
             }
         case TypeClass_INTERFACE:
@@ -288,9 +288,9 @@ bool equalSequences(const Sequence<T>& seqIn, const Sequence<Any> & seqOut)
 void printSequence( Sequence<Any>& val)
 {
 
-//  typelib_TypeDescription* desc;
-//  val.getValueTypeDescription( &desc);
-//  typelib_typedescription_release( desc);
+
+
+
 
     USES_CONVERSION;
     char buff[1024];
@@ -324,7 +324,7 @@ void printSequence( Sequence<Any>& val)
              break;
         case TypeClass_INTERFACE:
             {
-            // we assume that the interface is XInvocation of a AxTestControls.Basic component.
+            
             Reference<XInvocation> inv;
             elem>>= inv;
             if( inv.is())

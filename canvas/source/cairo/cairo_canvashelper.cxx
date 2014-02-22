@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -227,9 +227,9 @@ namespace cairocanvas
             cairo_save( mpCairo.get() );
 
             cairo_identity_matrix( mpCairo.get() );
-            // this does not really differ from all-zero, as cairo
-            // internally converts to premultiplied alpha. but anyway,
-            // this keeps it consistent with the other canvas impls
+            
+            
+            
             if( mbHaveAlpha )
                 cairo_set_source_rgba( mpCairo.get(), 1.0, 1.0, 1.0, 0.0 );
             else
@@ -323,14 +323,14 @@ namespace cairocanvas
 
     static ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
     {
-        // TODO(F1): Add support for floating point bitmap formats
+        
         uno::Reference<rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap,
                                                                   uno::UNO_QUERY_THROW);
         ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap(xIntBmp);
         if( !!aBmpEx )
             return aBmpEx;
 
-        // TODO(F1): extract pixel from XBitmap interface
+        
         ENSURE_OR_THROW( false,
                          "bitmapExFromXBitmap(): could not extract BitmapEx" );
 
@@ -347,7 +347,7 @@ namespace cairocanvas
         else
         {
             nTemp = rColor.GetBlue();
-            // greyscale expected here, or what would non-grey colors mean?
+            
             assert(rColor.GetRed() == nTemp && rColor.GetGreen() == nTemp);
         }
         return nTemp;
@@ -424,9 +424,9 @@ namespace cairocanvas
             ::BitmapEx aBmpEx = bitmapExFromXBitmap(xBitmap);
             ::Bitmap aBitmap = aBmpEx.GetBitmap();
 
-            // there's no pixmap for alpha bitmap. we might still
-            // use rgb pixmap and only access alpha pixels the
-            // slow way. now we just speedup rgb bitmaps
+            
+            
+            
             if( !aBmpEx.IsTransparent() && !aBmpEx.IsAlpha() )
             {
                 pSurface = rSurfaceProvider->createSurface( aBitmap );
@@ -622,8 +622,8 @@ namespace cairocanvas
                         {
                             aColor = pBitmapReadAcc->GetColor( nY, nX );
 
-                            // cairo need premultiplied color values
-                            // TODO(rodo) handle endianess
+                            
+                            
 #ifdef OSL_BIGENDIAN
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff++ ];
@@ -684,7 +684,7 @@ namespace cairocanvas
             else if( rColor.getLength() == 4 )
             {
                 double alpha = rColor[3];
-                // cairo expects premultiplied alpha
+                
                 cairo_pattern_add_color_stop_rgba( pPattern, stop, rColor[0]*alpha, rColor[1]*alpha, rColor[2]*alpha, alpha );
             }
         }
@@ -784,7 +784,7 @@ namespace cairocanvas
                             cairo_matrix_multiply( &aScaledTextureMatrix, &aTextureMatrix, &aScaleMatrix );
                             cairo_matrix_invert( &aScaledTextureMatrix );
 
-                            // we don't care about repeat mode yet, so the workaround is disabled for now
+                            
                             pPattern = cairo_pattern_create_for_surface( pSurface->getCairoSurface().get() );
 
                             if( aTexture.RepeatModeX == rendering::TexturingMode::REPEAT &&
@@ -832,10 +832,10 @@ namespace cairocanvas
                         SAL_INFO( "canvas.cairo", "gradient fill" );
                         if( xRef.is() && xRef->getImplementationName() == PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME )
                         {
-                            // TODO(Q1): Maybe use dynamic_cast here
+                            
 
-                            // TODO(E1): Return value
-                            // TODO(F1): FillRule
+                            
+                            
                             SAL_INFO( "canvas.cairo", "known implementation" );
 
                             ::canvas::ParametricPolyPolygon* pPolyImpl = static_cast< ::canvas::ParametricPolyPolygon* >( aTexture.Gradient.get() );
@@ -847,11 +847,11 @@ namespace cairocanvas
                                                aTransform.m11, aTransform.m02, aTransform.m12);
                             if( pPolyImpl->getValues().meType == canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR )
                             {
-                                // no general path gradient yet in cairo; emulate then
+                                
                                 cairo_save( pCairo );
                                 cairo_clip( pCairo );
 
-                                // fill bound rect with start color
+                                
                                 cairo_rectangle( pCairo, rBounds.getMinX(), rBounds.getMinY(),
                                                  rBounds.getWidth(), rBounds.getHeight() );
                                 setColor(pCairo,pPolyImpl->getValues().maColors[0]);
@@ -859,16 +859,16 @@ namespace cairocanvas
 
                                 cairo_transform( pCairo, &aTextureMatrix );
 
-                                // longest line in gradient bound rect
+                                
                                 const unsigned int nGradientSize(
                                     static_cast<unsigned int>(
                                         ::basegfx::B2DVector(rBounds.getMinimum() - rBounds.getMaximum()).getLength() + 1.0 ) );
 
-                                // typical number for pixel of the same color (strip size)
+                                
                                 const unsigned int nStripSize( nGradientSize < 50 ? 2 : 4 );
 
-                                // use at least three steps, and at utmost the number of color
-                                // steps
+                                
+                                
                                 const unsigned int nStepCount(
                                     ::std::max(
                                         3U,
@@ -980,8 +980,8 @@ namespace cairocanvas
         {
             ::basegfx::B2DPolygon aPolygon( aPolyPolygon.getB2DPolygon( nPolygonIndex ) );
             const sal_uInt32 nPointCount( aPolygon.count() );
-            // to correctly render closed curves, need to output first
-            // point twice (so output one additional point)
+            
+            
             const sal_uInt32 nExtendedPointCount( nPointCount +
                                                   int(aPolygon.isClosed() && aPolygon.areControlPointsUsed()) );
 
@@ -1096,7 +1096,7 @@ namespace cairocanvas
 
         if(bNoLineJoin && Stroke == aOperation)
         {
-            // emulate rendering::PathJoinType::NONE by painting single edges
+            
             for(sal_uInt32 a(0); a < rPolyPoly.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(rPolyPoly.getB2DPolygon(a));
@@ -1122,7 +1122,7 @@ namespace cairocanvas
                                                      mpSurfaceProvider,
                                                      xPolyPolygon->getFillRule() );
 
-                        // prepare next step
+                        
                         aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
                     }
                 }
@@ -1193,7 +1193,7 @@ namespace cairocanvas
 
             cairo_set_miter_limit( mpCairo.get(), strokeAttributes.MiterLimit );
 
-            // FIXME: cairo doesn't handle end cap so far (rodo)
+            
             switch( strokeAttributes.StartCapType )
             {
                 case rendering::PathCapType::BUTT:
@@ -1211,7 +1211,7 @@ namespace cairocanvas
 
             switch( strokeAttributes.JoinType )
             {
-                // cairo doesn't have join type NONE so we use MITER as it's pretty close
+                
                 case rendering::PathJoinType::NONE:
                     bNoLineJoin = true;
                 case rendering::PathJoinType::MITER:
@@ -1234,7 +1234,7 @@ namespace cairocanvas
                 delete[] pDashArray;
             }
 
-            // TODO(rodo) use LineArray of strokeAttributes
+            
 
             doPolyPolygonPath( xPolyPolygon, Stroke, bNoLineJoin );
 
@@ -1247,7 +1247,7 @@ namespace cairocanvas
         mxDevice->stopPerfTrace( &aTimer, "strokePolyPolygon" );
 #endif
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -1258,7 +1258,7 @@ namespace cairocanvas
                                                                                            const uno::Sequence< rendering::Texture >&           /*textures*/,
                                                                                            const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -1270,7 +1270,7 @@ namespace cairocanvas
                                                                                                 const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
                                                                                                 const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -1280,7 +1280,7 @@ namespace cairocanvas
                                                                                    const rendering::RenderState&                        /*renderState*/,
                                                                                    const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
@@ -1339,7 +1339,7 @@ namespace cairocanvas
                                                                                               const uno::Sequence< rendering::Texture >&            /*textures*/,
                                                                                               const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
-        // TODO
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -1387,7 +1387,7 @@ namespace cairocanvas
                 CairoSharedPtr pCairo = pScaledSurface->getCairo();
 
                 cairo_set_operator( pCairo.get(), CAIRO_OPERATOR_SOURCE );
-                // add 0.5px to size to avoid rounding errors in cairo, leading sometimes to random data on the image right/bottom borders
+                
                 cairo_scale( pCairo.get(), (dWidth+0.5)/rSize.Width, (dHeight+0.5)/rSize.Height );
                 cairo_set_source_surface( pCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
                 cairo_paint( pCairo.get() );
@@ -1399,10 +1399,10 @@ namespace cairocanvas
 
                 rv = uno::Reference< rendering::XCachedPrimitive >(
                     new CachedBitmap( pSurface, viewState, renderState,
-                                      // cast away const, need to
-                                      // change refcount (as this is
-                                      // ~invisible to client code,
-                                      // still logically const)
+                                      
+                                      
+                                      
+                                      
                                       const_cast< rendering::XCanvas* >(pCanvas)) );
             }
 
@@ -1416,8 +1416,8 @@ namespace cairocanvas
                 cairo_matrix_transform_point( &aMatrix, &x, &y );
                 cairo_matrix_transform_distance( &aMatrix, &width, &height );
 
-                // in case the bitmap doesn't have alpha and covers whole area
-                // we try to change surface to plain rgb
+                
+                
                 SAL_INFO( "canvas.cairo","chance to change surface to rgb, " << x << ", " << y << ", " << width << " x " << height << " (" << maSize.getX() << " x " << maSize.getY() << ")" );
                 if( x <= 0 && y <= 0 && x + width >= maSize.getX() && y + height >= maSize.getY() )
                 {
@@ -1428,9 +1428,9 @@ namespace cairocanvas
                         if( pNewSurface )
                             setSurface( pNewSurface, false );
 
-                        // set state to new mpCairo.get()
+                        
                         useStates( viewState, renderState, true );
-                        // use the possibly modified matrix
+                        
                         cairo_set_matrix( mpCairo.get(), &aMatrix );
                     }
                 }
@@ -1458,7 +1458,7 @@ namespace cairocanvas
         else
             SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");
 
-        return rv; // uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return rv; 
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   pCanvas,
@@ -1541,13 +1541,13 @@ namespace cairocanvas
                                  const rendering::ViewState&                        /*destViewState*/,
                                  const rendering::RenderState&                      /*destRenderState*/ )
     {
-        // TODO(F2): copyRect NYI
+        
     }
 
     geometry::IntegerSize2D CanvasHelper::getSize()
     {
         if( !mpSurfaceProvider )
-            geometry::IntegerSize2D(1, 1); // we're disposed
+            geometry::IntegerSize2D(1, 1); 
 
         return ::basegfx::unotools::integerSize2DFromB2ISize( maSize );
     }
@@ -1649,8 +1649,8 @@ namespace cairocanvas
                                                                         const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                   uno::RuntimeException)
             {
-                // TODO(P3): if we know anything about target
-                // colorspace, this can be greatly sped up
+                
+                
                 uno::Sequence<rendering::ARGBColor> aIntermediate(
                     convertToARGB(deviceColor));
                 return targetColorSpace->convertFromARGB(aIntermediate);
@@ -1766,7 +1766,7 @@ namespace cairocanvas
                 return aRes;
             }
 
-            // XIntegerBitmapColorSpace
+            
             virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException)
             {
                 return 32;
@@ -1804,8 +1804,8 @@ namespace cairocanvas
                 }
                 else
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertIntegerToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
@@ -1817,13 +1817,13 @@ namespace cairocanvas
             {
                 if( dynamic_cast<CairoColorSpace*>(targetColorSpace.get()) )
                 {
-                    // it's us, so simply pass-through the data
+                    
                     return deviceColor;
                 }
                 else
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertIntegerToARGB(deviceColor));
                     return targetColorSpace->convertIntegerFromARGB(aIntermediate);
@@ -2006,8 +2006,8 @@ namespace cairocanvas
                                                                         const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                   uno::RuntimeException)
             {
-                // TODO(P3): if we know anything about target
-                // colorspace, this can be greatly sped up
+                
+                
                 uno::Sequence<rendering::ARGBColor> aIntermediate(
                     convertToARGB(deviceColor));
                 return targetColorSpace->convertFromARGB(aIntermediate);
@@ -2066,7 +2066,7 @@ namespace cairocanvas
                     *pColors++ = pIn->Blue;
                     *pColors++ = pIn->Green;
                     *pColors++ = pIn->Red;
-                    *pColors++ = 1.0; // the value does not matter
+                    *pColors++ = 1.0; 
                     ++pIn;
                 }
                 return aRes;
@@ -2083,7 +2083,7 @@ namespace cairocanvas
                     *pColors++ = pIn->Blue;
                     *pColors++ = pIn->Green;
                     *pColors++ = pIn->Red;
-                    *pColors++ = 1.0; // the value does not matter
+                    *pColors++ = 1.0; 
                     ++pIn;
                 }
                 return aRes;
@@ -2097,7 +2097,7 @@ namespace cairocanvas
                 return impl_convertFromARGB( rgbColor );
             }
 
-            // XIntegerBitmapColorSpace
+            
             virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException)
             {
                 return 32;
@@ -2129,14 +2129,14 @@ namespace cairocanvas
                         *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                         *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                         *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                        *pOut++ = 1.0; // the value does not matter
+                        *pOut++ = 1.0; 
                     }
                     return aRes;
                 }
                 else
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertIntegerToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
@@ -2148,13 +2148,13 @@ namespace cairocanvas
             {
                 if( dynamic_cast<CairoNoAlphaColorSpace*>(targetColorSpace.get()) )
                 {
-                    // it's us, so simply pass-through the data
+                    
                     return deviceColor;
                 }
                 else
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertIntegerToARGB(deviceColor));
                     return targetColorSpace->convertIntegerFromARGB(aIntermediate);
@@ -2224,7 +2224,7 @@ namespace cairocanvas
                     *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
                     *pColors++ = vcl::unotools::toByteColor(pIn->Green);
                     *pColors++ = vcl::unotools::toByteColor(pIn->Red);
-                    *pColors++ = -1; // the value does not matter
+                    *pColors++ = -1; 
                     ++pIn;
                 }
                 return aRes;
@@ -2252,7 +2252,7 @@ namespace cairocanvas
                     *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
                     *pColors++ = vcl::unotools::toByteColor(pIn->Green);
                     *pColors++ = vcl::unotools::toByteColor(pIn->Red);
-                    *pColors++ = -1; // the value does not matter
+                    *pColors++ = -1; 
                     ++pIn;
                 }
                 return aRes;
@@ -2298,7 +2298,7 @@ namespace cairocanvas
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
         if( !mpCairo )
-            return rendering::IntegerBitmapLayout(); // we're disposed
+            return rendering::IntegerBitmapLayout(); 
 
         const geometry::IntegerSize2D aSize(getSize());
 

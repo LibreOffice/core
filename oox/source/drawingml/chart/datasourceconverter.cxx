@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/datasourceconverter.hxx"
@@ -28,12 +28,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 DataSequenceConverter::DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel ) :
     ConverterBase< DataSequenceModel >( rParent, rModel )
@@ -46,13 +46,13 @@ DataSequenceConverter::~DataSequenceConverter()
 
 Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUString& rRole )
 {
-    // create data sequence from data source model (virtual call at chart converter)
+    
     Reference< XDataSequence > xDataSeq;
     if( getChartConverter() )
     {
-        // the internal data table does not support complex labels
-        // this is only supported in Calc!!!
-        // merge the labels into a single one
+        
+        
+        
         if(rRole == "label")
         {
             mrModel.mnPointCount = std::min<sal_Int32>(mrModel.mnPointCount, 1);
@@ -80,14 +80,14 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
         }
         xDataSeq = getChartConverter()->createDataSequence( getChartDocument()->getDataProvider(), mrModel );
 
-        // set sequen   ce role
+        
         PropertySet aSeqProp( xDataSeq );
         aSeqProp.setProperty( PROP_Role, rRole );
     }
     return xDataSeq;
 }
 
-// ============================================================================
+
 
 DataSourceConverter::DataSourceConverter( const ConverterRoot& rParent, DataSourceModel& rModel ) :
     ConverterBase< DataSourceModel >( rParent, rModel )
@@ -109,10 +109,10 @@ Reference< XDataSequence > DataSourceConverter::createDataSequence( const OUStri
     return xDataSeq;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

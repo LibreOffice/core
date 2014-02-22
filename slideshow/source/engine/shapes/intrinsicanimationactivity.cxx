@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -96,7 +96,7 @@ namespace slideshow
             bool                                    mbIsActive;
         };
 
-        //////////////////////////////////////////////////////////////////////
+        
 
         class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
                                            private boost::noncopyable
@@ -114,7 +114,7 @@ namespace slideshow
             IntrinsicAnimationActivity& mrActivity;
         };
 
-        //////////////////////////////////////////////////////////////////////
+        
 
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                                                 const DrawShapeSharedPtr&       rDrawShape,
@@ -176,17 +176,17 @@ namespace slideshow
             DrawShapeSharedPtr pDrawShape( mpDrawShape.lock() );
             if( !pDrawShape || !mpWakeupEvent )
             {
-                // event or draw shape vanished, no sense living on ->
-                // commit suicide.
+                
+                
                 dispose();
                 return false;
             }
 
-            // mnNumLoops == 0 means infinite looping
+            
             if( mnNumLoops != 0 &&
                 mnLoopCount >= mnNumLoops )
             {
-                // #i55294# After finishing the loops, display the first frame
+                
                 pDrawShape->setIntrinsicAnimationFrame( 0 );
                 maContext.mpSubsettableShapeManager->notifyShapeUpdate( pDrawShape );
 
@@ -231,8 +231,8 @@ namespace slideshow
             maContext.mpSubsettableShapeManager->notifyShapeUpdate( pDrawShape );
             mnCurrIndex = nNewIndex;
 
-            return false; // don't reinsert, WakeupEvent will perform
-                          // that after the given timeout
+            return false; 
+                          
         }
 
         bool IntrinsicAnimationActivity::isActive() const
@@ -242,12 +242,12 @@ namespace slideshow
 
         void IntrinsicAnimationActivity::dequeued()
         {
-            // not used here
+            
         }
 
         void IntrinsicAnimationActivity::end()
         {
-            // there is no dedicated end state, just become inactive:
+            
             mbIsActive = false;
         }
 
@@ -258,7 +258,7 @@ namespace slideshow
                 shared_from_this() );
         }
 
-        //////////////////////////////////////////////////////////////////////
+        
 
         ActivitySharedPtr createIntrinsicAnimationActivity(
             const SlideShowContext&         rContext,

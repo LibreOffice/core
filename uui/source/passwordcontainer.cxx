@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/processfactory.hxx"
@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 namespace {
 
-//=========================================================================
+
 bool fillContinuation(
     bool bUseSystemCredentials,
     const ucb::AuthenticationRequest & rRequest,
@@ -50,8 +50,8 @@ bool fillContinuation(
 {
     if ( bUseSystemCredentials )
     {
-        // "use system creds" record found.
-        // Wants client that we use it?
+        
+        
         if ( xSupplyAuthentication2.is() && bCanUseSystemCredentials )
         {
             xSupplyAuthentication2->setUseSystemCredentials( sal_True );
@@ -63,16 +63,16 @@ bool fillContinuation(
     {
         if (aRec.UserList[0].Passwords.getLength() == 0)
         {
-            // Password sequence can be empty, for instance if master
-            // password was not given (e.g. master pw dialog canceled)
-            // pw container does not throw NoMasterException in this case.
-            // bug???
+            
+            
+            
+            
             return false;
         }
 
-        // "user/pass" record found.
+        
         if (!bCheckForEqualPasswords || !rRequest.HasPassword
-            || rRequest.Password != aRec.UserList[0].Passwords[0]) // failed login attempt?
+            || rRequest.Password != aRec.UserList[0].Passwords[0]) 
         {
             if (xSupplyAuthentication->canSetUserName())
                 xSupplyAuthentication->
@@ -105,17 +105,17 @@ bool fillContinuation(
     return false;
 }
 
-} // namespace
+} 
 
 namespace uui {
 
-//=========================================================================
+
 PasswordContainerHelper::PasswordContainerHelper(
     uno::Reference< uno::XComponentContext > const & xContext ):
     m_xPasswordContainer(task::PasswordContainer::create(xContext))
 {}
 
-//=========================================================================
+
 bool PasswordContainerHelper::handleAuthenticationRequest(
     ucb::AuthenticationRequest const & rRequest,
     uno::Reference< ucb::XInteractionSupplyAuthentication > const &
@@ -126,8 +126,8 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 {
     uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
 
-    // Is continuation even a XInteractionSupplyAuthentication2, which
-    // is derived from XInteractionSupplyAuthentication?
+    
+    
     uno::Reference< ucb::XInteractionSupplyAuthentication2 >
         xSupplyAuthentication2(xSupplyAuthentication, uno::UNO_QUERY);
 
@@ -142,7 +142,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 
     if ( bCanUseSystemCredentials )
     {
-        // Runtime / Persistent info avail for current auth request?
+        
 
         OUString aResult = m_xPasswordContainer->findUrl(
             rURL.isEmpty() ? rRequest.ServerName : rURL );
@@ -161,7 +161,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
         }
     }
 
-    // m_xPasswordContainer works with userName passwdSequences pairs:
+    
     if (rRequest.HasUserName && rRequest.HasPassword)
     {
         try
@@ -174,7 +174,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 
                 if ( aRec.UserList.getLength() == 0 )
                 {
-                    // compat: try server name.
+                    
                     aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH1);
                 }
 
@@ -198,7 +198,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 
                 if ( aRec.UserList.getLength() == 0 )
                 {
-                    // compat: try server name.
+                    
                     aRec = m_xPasswordContainer->findForName(
                         rRequest.ServerName, rRequest.UserName, xIH1);
                 }
@@ -216,12 +216,12 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
             }
         }
         catch (task::NoMasterException const &)
-        {} // user did not enter master password
+        {} 
     }
     return false;
 }
 
-//=========================================================================
+
 bool PasswordContainerHelper::addRecord(
     OUString const & rURL,
     OUString const & rUsername,
@@ -243,8 +243,8 @@ bool PasswordContainerHelper::addRecord(
 
             if ( bPersist )
             {
-                // If persistent storing of passwords is not yet
-                // allowed, enable it.
+                
+                
                 if ( !m_xPasswordContainer->isPersistentStoringAllowed() )
                     m_xPasswordContainer->allowPersistentStoring( sal_True );
 
@@ -266,15 +266,15 @@ bool PasswordContainerHelper::addRecord(
     }
     catch ( task::NoMasterException const & )
     {
-        // user did not enter master password
+        
         return false;
     }
     return true;
 }
 
-//=========================================================================
-//=========================================================================
-//=========================================================================
+
+
+
 
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
     const uno::Reference< uno::XComponentContext >& xContext )
@@ -282,19 +282,19 @@ PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
 {
 }
 
-//=========================================================================
-//
-// XServiceInfo methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 OUString SAL_CALL
 PasswordContainerInteractionHandler::getImplementationName()
     throw ( uno::RuntimeException )
@@ -302,8 +302,8 @@ PasswordContainerInteractionHandler::getImplementationName()
     return getImplementationName_Static();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL
 PasswordContainerInteractionHandler::supportsService(
         const OUString& ServiceName )
@@ -312,8 +312,8 @@ PasswordContainerInteractionHandler::supportsService(
     return cppu::supportsService(this, ServiceName);
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
     throw ( uno::RuntimeException )
@@ -321,16 +321,16 @@ PasswordContainerInteractionHandler::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-//=========================================================================
-// static
+
+
 OUString
 PasswordContainerInteractionHandler::getImplementationName_Static()
 {
     return OUString( "com.sun.star.comp.uui.PasswordContainerInteractionHandler" );
 }
 
-//=========================================================================
-// static
+
+
 uno::Sequence< OUString >
 PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
 {
@@ -340,13 +340,13 @@ PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//=========================================================================
-//
-// XInteractionHandler2 methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL
 PasswordContainerInteractionHandler::handle(
         const uno::Reference< task::XInteractionRequest >& rRequest )
@@ -355,7 +355,7 @@ PasswordContainerInteractionHandler::handle(
     handleInteractionRequest( rRequest );
 }
 
-// virtual
+
 sal_Bool SAL_CALL
 PasswordContainerInteractionHandler::handleInteractionRequest(
         const uno::Reference< task::XInteractionRequest >& rRequest )
@@ -393,29 +393,29 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     if ( !xSupplyAuthentication.is() )
         return false;
 
-    // Try to obtain credentials from password container.
+    
     if ( m_aPwContainerHelper.
              handleAuthenticationRequest( aAuthenticationRequest,
                                           xSupplyAuthentication,
                                           aURL,
-                                          // @@@ FIXME: this not able to
-                                          // handle master pw request!
-                                          // master pw request is never
-                                          // solvable without UI!
+                                          
+                                          
+                                          
+                                          
                                           this ) )
     {
-        // successfully handled
+        
         xSupplyAuthentication->select();
         return true;
     }
     return false;
 }
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 static uno::Reference< uno::XInterface > SAL_CALL
 PasswordContainerInteractionHandler_CreateInstance(
@@ -427,8 +427,8 @@ PasswordContainerInteractionHandler_CreateInstance(
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
-//=========================================================================
-// static
+
+
 uno::Reference< lang::XSingleServiceFactory >
 PasswordContainerInteractionHandler::createServiceFactory(
     const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
@@ -441,6 +441,6 @@ PasswordContainerInteractionHandler::createServiceFactory(
             PasswordContainerInteractionHandler::getSupportedServiceNames_Static() ) );
 }
 
-} // namespace uui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

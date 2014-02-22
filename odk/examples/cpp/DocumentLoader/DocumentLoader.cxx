@@ -70,7 +70,7 @@ using namespace com::sun::star::registry;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-//============================================================================
+
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     OUString sConnectionString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
@@ -80,7 +80,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (nCount < 1)
     {
         printf("using: DocumentLoader -env:URE_MORE_TYPES=<office_types_rdb_url> <file_url> [<uno_connection_url>]\n\n"
-               "example: DocumentLoader -env:URE_MORE_TYPES=\"file:///.../program/offapi.rdb\" \"file:///e:/temp/test.odt\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
+               "example: DocumentLoader -env:URE_MORE_TYPES=\"file:
         exit(1);
     }
      if (nCount == 2)
@@ -107,7 +107,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
 
-    // Resolves the component context from the office, on the uno URL given by argv[1].
+    
     try
     {
         xInterface = Reference< XInterface >(
@@ -121,11 +121,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    // gets the server component context as property of the office component factory
+    
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
     xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
 
-    // gets the service manager from the office
+    
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
 
@@ -148,7 +148,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         sAbsoluteDocUrl, OUString( "_blank" ), 0,
         Sequence < ::com::sun::star::beans::PropertyValue >() );
 
-    // dispose the local service manager
+    
     Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();
 
     return 0;

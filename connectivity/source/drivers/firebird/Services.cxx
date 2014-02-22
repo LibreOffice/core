@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Driver.hxx"
@@ -40,13 +40,13 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount* _pTemp
         );
 
-//***************************************************************************************
-//
-// The required C-Api must be provided!
-// It contains of 3 special functions that have to be exported.
+
 //
 
-//---------------------------------------------------------------------------------------
+
+//
+
+
 void REGISTER_PROVIDER(
         const OUString& aServiceImplName,
         const Sequence< OUString>& Services,
@@ -62,7 +62,7 @@ void REGISTER_PROVIDER(
 }
 
 
-//---------------------------------------------------------------------------------------
+
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
@@ -102,7 +102,7 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
-//---------------------------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL firebird_sdbc_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

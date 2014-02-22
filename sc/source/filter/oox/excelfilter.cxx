@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excelfilter.hxx"
@@ -33,7 +33,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -43,7 +43,7 @@ using namespace ::oox::core;
 
 using ::oox::drawingml::table::TableStyleListPtr;
 
-// ============================================================================
+
 
 OUString ExcelFilter_getImplementationName()
 {
@@ -64,7 +64,7 @@ Reference< XInterface > ExcelFilter_create(
     return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),
@@ -96,10 +96,10 @@ void ExcelFilter::unregisterWorkbookGlobals()
 bool ExcelFilter::importDocument() throw()
 {
     /*  To activate the XLSX/XLSB dumper, insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/xlsbdumper.ini
+        file:
         into the environment variable OOO_XLSBDUMPER and start the office with
         this variable (nonpro only). */
-    //OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
+    
 
     OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "officeDocument" ) );
     if( aWorkbookPath.isEmpty() )
@@ -198,7 +198,7 @@ OUString ExcelFilter::implGetImplementationName() const
     return ExcelFilter_getImplementationName();
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgtextnode.hxx>
@@ -26,7 +26,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -54,16 +54,16 @@ namespace svgio
 
         void SvgTextNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // read text position attributes
+            
             maSvgTextPositions.parseTextPositionAttributes(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -99,13 +99,13 @@ namespace svgio
 
                 if(pAttributes)
                 {
-                    // add text with taking all Fill/Stroke attributes into account
+                    
                     pAttributes->add_text(rTarget, rSource);
                 }
                 else
                 {
-                    // should not happen, every subnode from SvgTextNode will at least
-                    // return the attributes from SvgTextNode. Nonetheless, add text
+                    
+                    
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, rSource);
                 }
             }
@@ -117,25 +117,25 @@ namespace svgio
             {
                 case SVGTokenCharacter:
                 {
-                    // direct SvgTextPathNode derivates, decompose them
+                    
                     const SvgCharacterNode& rSvgCharacterNode = static_cast< const SvgCharacterNode& >(rCandidate);
                     rSvgCharacterNode.decomposeText(rTarget, rSvgTextPosition);
                     break;
                 }
                 case SVGTokenTextPath:
                 {
-                    // direct TextPath decompose
+                    
                     const SvgTextPathNode& rSvgTextPathNode = static_cast< const SvgTextPathNode& >(rCandidate);
                     const SvgNodeVector& rChildren = rSvgTextPathNode.getChildren();
                     const sal_uInt32 nCount(rChildren.size());
 
                     if(nCount && rSvgTextPathNode.isValid())
                     {
-                        // remember original TextStart to later detect hor/ver offsets
+                        
                         const basegfx::B2DPoint aTextStart(rSvgTextPosition.getPosition());
                         drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                        // decompose to regular TextPrimitives
+                        
                         for(sal_uInt32 a(0); a < nCount; a++)
                         {
                             DecomposeChild(*rChildren[a], aNewTarget, rSvgTextPosition);
@@ -146,7 +146,7 @@ namespace svgio
                             const drawinglayer::primitive2d::Primitive2DSequence aPathContent(aNewTarget);
                             aNewTarget.realloc(0);
 
-                            // dismantle TextPrimitives and map them on curve/path
+                            
                             rSvgTextPathNode.decomposePathNode(aPathContent, aNewTarget, aTextStart);
                         }
 
@@ -160,7 +160,7 @@ namespace svgio
                 }
                 case SVGTokenTspan:
                 {
-                    // Tspan may have children, call recursively
+                    
                     const SvgTspanNode& rSvgTspanNode = static_cast< const SvgTspanNode& >(rCandidate);
                     const SvgNodeVector& rChildren = rSvgTspanNode.getChildren();
                     const sal_uInt32 nCount(rChildren.size());
@@ -225,8 +225,8 @@ namespace svgio
 
         void SvgTextNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced`*/) const
         {
-            // text has a group of child nodes, allowed are SVGTokenCharacter, SVGTokenTspan,
-            // SVGTokenTref and SVGTokenTextPath. These increase a given current text position
+            
+            
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
             if(pStyle && !getChildren().empty())
@@ -262,10 +262,10 @@ namespace svgio
                 }
             }
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

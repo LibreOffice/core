@@ -50,7 +50,7 @@ using namespace ::com::sun::star::util;
 namespace dbaui
 {
 
-// OJoinDesignView
+
 OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController,const Reference< XComponentContext >& _rxContext)
     :ODataView( _pParent, _rController, _rxContext )
     ,m_pTableView(NULL)
@@ -90,7 +90,7 @@ void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
 {
     m_pScrollWindow->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 
-    // just for completeness: there is no space left, we occupied it all ...
+    
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
@@ -112,6 +112,6 @@ void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
         ODataView::KeyInput(rEvt);
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

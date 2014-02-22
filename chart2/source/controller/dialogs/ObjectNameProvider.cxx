@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ObjectNameProvider.hxx"
@@ -104,8 +104,8 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
-    sal_Int32 nLabelColor = 0;//dummy
-    bool bColorChanged;//dummy
+    sal_Int32 nLabelColor = 0;
+    bool bColorChanged;
 
     for(sal_Int32 nN = aDataSequences.getLength();nN--;)
     {
@@ -196,7 +196,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
     return aRet;
 }
 
-} //end anonymous namespace
+} 
 
 OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
 {
@@ -218,7 +218,7 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
                 aRet=SCH_RESSTR(STR_OBJECT_LEGEND);
                 break;
         case OBJECTTYPE_LEGEND_ENTRY:
-                aRet=SCH_RESSTR(STR_OBJECT_LEGEND_SYMBOL);//@todo change string if we do differenciate symbol and legend entry in future
+                aRet=SCH_RESSTR(STR_OBJECT_LEGEND_SYMBOL);
                 break;
         case OBJECTTYPE_DIAGRAM:
                 aRet=SCH_RESSTR(STR_OBJECT_DIAGRAM);
@@ -238,10 +238,10 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
             }
                 break;
         case OBJECTTYPE_AXIS_UNITLABEL:
-                aRet=SCH_RESSTR(STR_OBJECT_LABEL);//@todo maybe a more concrete name
+                aRet=SCH_RESSTR(STR_OBJECT_LABEL);
                 break;
         case OBJECTTYPE_GRID:
-        case OBJECTTYPE_SUBGRID: //maybe todo: different names for subgrids
+        case OBJECTTYPE_SUBGRID: 
             {
                 if(bPlural)
                     aRet=SCH_RESSTR(STR_OBJECT_GRIDS);
@@ -302,7 +302,7 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
         case OBJECTTYPE_DATA_CURVE_EQUATION:
                 aRet=SCH_RESSTR(STR_OBJECT_CURVE_EQUATION);
                 break;
-        default: //OBJECTTYPE_UNKNOWN
+        default: 
             ;
     }
     return aRet;
@@ -323,22 +323,22 @@ OUString ObjectNameProvider::getAxisName( const OUString& rObjectCID
 
     switch(nDimensionIndex)
     {
-        case 0://x-axis
+        case 0:
             if( nAxisIndex == 0 )
                 aRet=SCH_RESSTR(STR_OBJECT_AXIS_X);
             else
                 aRet=SCH_RESSTR(STR_OBJECT_SECONDARY_X_AXIS);
             break;
-        case 1://y-axis
+        case 1:
             if( nAxisIndex == 0 )
                 aRet=SCH_RESSTR(STR_OBJECT_AXIS_Y);
             else
                 aRet=SCH_RESSTR(STR_OBJECT_SECONDARY_Y_AXIS);
             break;
-        case 2://z-axis
+        case 2:
             aRet=SCH_RESSTR(STR_OBJECT_AXIS_Z);
             break;
-        default://axis
+        default:
             aRet=SCH_RESSTR(STR_OBJECT_AXIS);
             break;
     }
@@ -421,16 +421,16 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
     {
         switch(nDimensionIndex)
         {
-            case 0://x-axis
+            case 0:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID_MAJOR_X);
                 break;
-            case 1://y-axis
+            case 1:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID_MAJOR_Y);
                 break;
-            case 2://z-axis
+            case 2:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID_MAJOR_Z);
                 break;
-            default://axis
+            default:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID);
                 break;
         }
@@ -439,16 +439,16 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
     {
         switch(nDimensionIndex)
         {
-            case 0://x-axis
+            case 0:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID_MINOR_X);
                 break;
-            case 1://y-axis
+            case 1:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID_MINOR_Y);
                 break;
-            case 2://z-axis
+            case 2:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID_MINOR_Z);
                 break;
-            default://axis
+            default:
                 aRet=SCH_RESSTR(STR_OBJECT_GRID);
                 break;
         }
@@ -503,7 +503,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         {
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
 
-            //replace data point index
+            
             OUString aWildcard(  "%POINTNUMBER" );
             sal_Int32 nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
@@ -511,7 +511,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::number(nPointIndex+1) );
             }
 
-            //replace data series index
+            
             aWildcard =  "%SERIESNUMBER";
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
@@ -531,14 +531,14 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), aReplacement );
             }
 
-            //replace point values
+            
             aWildcard =  "%POINTVALUES";
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataPointValueText(
                 xSeries,nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartModel ) );
 
-            //replace series name
+            
             aWildcard = "%SERIESNAME";
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
@@ -578,22 +578,22 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, 2);
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
-                        // change text for Moving Average
+                        
                         OUString aWildcard( "%PERIOD" );
                         sal_Int32 nIndex = xCalculator->getRepresentation().indexOf( aWildcard );
                         if( nIndex != -1 )
-                        {  // replace period
+                        {  
                                 aRet = xCalculator->getRepresentation();
                                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::number(aPeriod) );
                         }
 
-                        // replace formula
+                        
                         aWildcard = "%FORMULA";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                             aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), xCalculator->getRepresentation());
 
-                        // replace r^2
+                        
                         aWildcard = "%RSQUARED";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
@@ -653,7 +653,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
 
                         OUString aWildcard( "%AVERAGE_VALUE" );
                         sal_Int32 nIndex = aRet.indexOf( aWildcard );
-                        // as the curve is constant, the value at any x-value is ok
+                        
                         if( nIndex != -1 )
                         {
                             const double fMeanValue( xCalculator->getCurveValue( 0.0 ));
@@ -663,7 +663,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                                     fMeanValue, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
                         }
 
-                        // replace standard deviation
+                        
                         aWildcard = "%STD_DEVIATION";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
@@ -684,7 +684,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         }
         else
         {
-            // non-verbose
+            
             aRet = ObjectNameProvider::getName( eObjectType, false );
         }
     }
@@ -711,10 +711,10 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
         {
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
 
-            // replace data point index
+            
             replaceParamterInString( aRet, "%POINTNUMBER", OUString::number( nPointIndex + 1 ));
 
-            // replace data series index
+            
             {
                 ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
                     DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
@@ -727,14 +727,14 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
                 replaceParamterInString( aRet, "%SERIESNUMBER", OUString::number( nSeriesIndex + 1 ) );
             }
 
-            // replace point value
+            
             replaceParamterInString( aRet, "%POINTVALUES", lcl_getDataPointValueText(
                 xSeries, nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartModel ) );
         }
     }
     else
     {
-        // use the verbose text including the formula for trend lines
+        
         const bool bVerbose( OBJECTTYPE_DATA_CURVE == eObjectType || OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType );
         const OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
         if( !aHelpText.isEmpty())
@@ -848,6 +848,6 @@ OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType 
     return aRet;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

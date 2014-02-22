@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <algorithm>
 #include <vector>
@@ -38,15 +38,15 @@ Communicator::~Communicator()
 {
 }
 
-/// Close the underlying socket from another thread to force
-/// an early exit / termination
+
+
 void Communicator::forceClose()
 {
     if( mpSocket )
         mpSocket->close();
 }
 
-// Run as a thread
+
 void Communicator::execute()
 {
     pTransmitter = new Transmitter( mpSocket );
@@ -101,7 +101,7 @@ void Communicator::execute()
         aRet = mpSocket->readLine( aLine );
         if ( aRet == 0 )
         {
-            break; // I.e. transmission finished.
+            break; 
         }
         if ( aLine.getLength() )
         {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -87,8 +87,8 @@ GlobalEditData::GlobalEditData()
 
 GlobalEditData::~GlobalEditData()
 {
-    // Destroy DefItems...
-    // Or simply keep them, since at end of excecution?!
+    
+    
     if ( ppDefItems )
         SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, true );
 }
@@ -99,7 +99,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
     {
         ppDefItems = new SfxPoolItem*[EDITITEMCOUNT];
 
-        // Paragraph attributes:
+        
         SvxNumRule aDefaultNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE,
                                     SVX_MAX_NUM, sal_False );
 
@@ -122,7 +122,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[16] = new SvxJustifyMethodItem( SVX_JUSTIFY_METHOD_AUTO, EE_PARA_JUST_METHOD );
         ppDefItems[17] = new SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD, EE_PARA_VER_JUST );
 
-        // Character attributes:
+        
         ppDefItems[18] = new SvxColorItem( Color( COL_AUTO ), EE_CHAR_COLOR );
         ppDefItems[19] = new SvxFontItem( EE_CHAR_FONTINFO );
         ppDefItems[20] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
@@ -155,7 +155,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[47] = new SvxOverlineItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
         ppDefItems[48] = new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP );
 
-        // Features
+        
         ppDefItems[49] = new SfxVoidItem( EE_FEATURE_TAB );
         ppDefItems[50] = new SfxVoidItem( EE_FEATURE_LINEBR );
         ppDefItems[51] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
@@ -163,7 +163,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
 
         DBG_ASSERT( EDITITEMCOUNT == 53, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
 
-        // Init DefFonts:
+        
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],
                          *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START],
                          *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START] );

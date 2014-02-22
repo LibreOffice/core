@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -99,7 +99,7 @@ void LwpPageLayout::Read()
 
     if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
-        // read PreRevBLayout...
+        
     }
 
     m_nPrinterBin = m_pObjStrm->QuickReaduInt16();
@@ -118,12 +118,12 @@ void LwpPageLayout::Read()
 
 void LwpPageLayout::Parse(IXFStream* pOutputStream)
 {
-    //Only parse this layout
+    
     LwpObject* pStory = m_Content.obj();
     if(pStory)
     {
         pStory->SetFoundry(m_pFoundry);
-        pStory->Parse(pOutputStream);   //Do not parse the next story
+        pStory->Parse(pOutputStream);   
     }
 }
 
@@ -263,7 +263,7 @@ void LwpPageLayout::ParseBackColor(XFPageMaster* pm1)
 */
 void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
 {
-    //Get the footnoteoptions for the root document
+    
     LwpDocument* pDocument = m_pFoundry->GetDocument();
     if(pDocument)
     {
@@ -273,7 +273,7 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
         if(pFootnoteOpts)
         {
             LwpFootnoteSeparatorOptions* pFootnoteSep = pFootnoteOpts->GetFootnoteSeparator();
-            //set length
+            
             sal_uInt32 nLengthPercent = 100;
             double fWidth = 0;
             if(pFootnoteSep->HasSeparator())
@@ -292,7 +292,7 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
             enumXFAlignType eAlignType = enumXFAlignStart;
             if(pFootnoteSep->GetIndent() > 0)
             {
-                //SODC don't support indent
+                
                 sal_uInt32 nIndentPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(pFootnoteSep->GetIndent())/GetMarginWidth());
                 if(nIndentPercent + nLengthPercent >= 100)
                     eAlignType = enumXFAlignEnd;
@@ -316,13 +316,13 @@ void LwpPageLayout::RegisterStyle()
     m_pXFPageMaster = pm1;
 
     ParseGeometry( pm1 );
-    //Does not process LayoutScale, for watermark is not supported in SODC.
+    
     ParseWaterMark( pm1);
     ParseMargins( pm1);
     ParseColumns(pm1);
     ParseBorders(pm1);
     ParseShadow(pm1);
-//  ParseBackColor(pm1);
+
     ParseBackGround(pm1);
     ParseFootNoteSeparator(pm1);
     pm1->SetTextDir(GetTextDirection());
@@ -333,19 +333,19 @@ void LwpPageLayout::RegisterStyle()
         pm1->SetPageUsage(enumXFPageUsageMirror);
     }
 
-    //Add the page master to stylemanager
+    
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_pXFPageMaster = pm1 = (XFPageMaster*)pXFStyleManager->AddStyle(pm1);
     OUString pmname = pm1->GetStyleName();
 
-    //Add master page
+    
     XFMasterPage* mp1 = new XFMasterPage();
     mp1->SetStyleName(GetName()->str());
     mp1->SetPageMaster(pmname);
     mp1 = (XFMasterPage*)pXFStyleManager->AddStyle(mp1);
     m_StyleName = mp1->GetStyleName();
 
-    //Set footer style
+    
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
     if(pLayoutFooter)
     {
@@ -354,7 +354,7 @@ void LwpPageLayout::RegisterStyle()
         pLayoutFooter->RegisterStyle(mp1);
     }
 
-    //Set header style
+    
     LwpHeaderLayout* pLayoutHeader = GetHeaderLayout();
     if(pLayoutHeader)
     {
@@ -362,7 +362,7 @@ void LwpPageLayout::RegisterStyle()
         pLayoutHeader->RegisterStyle(pm1);
         pLayoutHeader->RegisterStyle(mp1);
     }
-    //register child layout style for mirror page and frame
+    
     RegisterChildStyle();
 }
 
@@ -381,9 +381,9 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     ParseColumns(pm1);
     ParseBorders(pm1);
     ParseShadow(pm1);
-//  ParseBackColor(pm1);
+
     ParseBackGround(pm1);
-    //ParseFootNoteSeparator(pm1);
+    
     pm1->SetTextDir(GetTextDirection());
 
     LwpUseWhen* pUseWhen = GetUseWhen();
@@ -392,17 +392,17 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
         pm1->SetPageUsage(enumXFPageUsageMirror);
     }
 
-    //Add the page master to stylemanager
+    
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_pXFPageMaster = pm1 = (XFPageMaster*)pXFStyleManager->AddStyle(pm1);
     OUString pmname = pm1->GetStyleName();
 
-    //Add master page
+    
     XFMasterPage* mp1 = new XFMasterPage();
     mp1->SetStyleName(A2OUSTR("Endnote"));
     mp1->SetPageMaster(pmname);
 
-    //Set footer style
+    
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
     if(pLayoutFooter)
     {
@@ -411,7 +411,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
         pLayoutFooter->RegisterStyle(mp1);
     }
 
-    //Set header style
+    
     LwpHeaderLayout* pLayoutHeader = GetHeaderLayout();
     if(pLayoutHeader)
     {
@@ -443,10 +443,10 @@ sal_Bool LwpPageLayout::HasFillerPageText(LwpFoundry* pFoundry)
     LwpLayout::UseWhenType eWhenType = GetUseWhenType();
     if(eWhenType==LwpLayout::StartOnOddPage||eWhenType==LwpLayout::StartOnEvenPage)
     {
-        //get pagenumber
+        
         sal_uInt16 nPageNumber = 0;
 
-        //get the page number that current page layout inserted
+        
         nPageNumber = GetPageNumber(FIRST_LAYOUTPAGENO)-1;
 
         if(nPageNumber>0)
@@ -477,12 +477,12 @@ void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
 {
     if(HasFillerPageText(m_pFoundry))
     {
-        //get filerpage story from division info
+        
         LwpDocument* pDoc = m_pFoundry->GetDocument();
         LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID()->obj());
         LwpStory* pStory = dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID()->obj());
 
-        //parse fillerpage story
+        
         if(pStory)
         {
             pStory->XFConvert(pCont);
@@ -580,7 +580,7 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
     LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID()->obj());
     if(!pHeadTail) return nPageNumber;
 
-    //get first pagehint
+    
     LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetHead()->obj());
     while(pPageHint)
     {
@@ -589,23 +589,23 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
             sal_uInt16 nNumber = pPageHint->GetPageNumber();
             if(nLayoutNumber==FIRST_LAYOUTPAGENO && pPageHint->GetLayoutPageNumber()==1)
             {
-                //get the first page number
+                
                 nPageNumber = nNumber;
                 break;
             }
             else if( nLayoutNumber ==LAST_LAYOUTPAGENO && nNumber >nPageNumber )
             {
-                //get the last page number
+                
                 nPageNumber = nNumber;
                 if(pPageHint->GetNext()->IsNull())
                 {
-                    //if is last page number of entire document, reture directly
+                    
                     return nPageNumber + pDoc->GetNumberOfPagesBefore();
                 }
             }
             else if(nLayoutNumber > 0 && pPageHint->GetLayoutPageNumber() == nLayoutNumber)
             {
-                //get specified page number
+                
                 nPageNumber = nNumber;
                 break;
             }
@@ -626,7 +626,7 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
 */
 void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
 {
-    //use customized size
+    
     LwpLayoutGeometry* pLayoutGeo = GetGeometry();
     if(pLayoutGeo)
     {
@@ -636,26 +636,26 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
 
     if(GetUsePrinterSettings())
     {
-        //replaced by printer paper size
+        
         Printer aPrinter;
         sal_Bool bScreen = aPrinter.IsDisplayPrinter();
-        if (!bScreen)//Printer available
+        if (!bScreen)
         {
             Size aPaperSize = aPrinter.GetPaperSize();
             aPaperSize = aPrinter.PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
-            fWidth = static_cast<double>(aPaperSize.Width())/100;   //cm unit
+            fWidth = static_cast<double>(aPaperSize.Width())/100;   
             fHeight = static_cast<double>(aPaperSize.Height())/100;
         }
     }
 
-    //Follow the former design of Lotus WordPro filter, some default will be given:
-    //Page Width: 8.5 Inch -> 21.59 cm
-    //Page Height: 11 Inch -> 27.94 cm
+    
+    
+    
     if (fWidth < 4.39)
         fWidth = 21.59;
     if (fHeight < 4.49)
         fHeight = 27.94;
-    //End of modification, by ZF
+    
 }
 
 /**
@@ -691,7 +691,7 @@ sal_Bool LwpPageLayout::operator<(LwpPageLayout& Other)
     {
         if(pThisPara == pOtherPara)
         {
-            //If the two layouts in the same para, compare which layout is earlied according to frib order
+            
             return pThisPara->ComparePagePosition(this, &Other);
         }
         else
@@ -715,7 +715,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
     LwpPara* pPara = dynamic_cast<LwpPara*>(GetPosition()->obj());
     if(pPara)
         return pPara;
-    //Get the position from its related section
+    
     LwpSection* pSection = NULL;
     LwpFoundry* pFoundry = GetFoundry();
     if(pFoundry)
@@ -754,26 +754,26 @@ void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
 {
     XFHeaderStyle* pHeaderStyle = new XFHeaderStyle();
 
-    //Modify page top margin
-    //page top maring: from top of header to the top edge
+    
+    
     double top = GetMarginsValue(MARGIN_TOP);
     pm1->SetMargins(-1, -1, top, -1);
 
     ParseMargins(pHeaderStyle);
     ParseBorder(pHeaderStyle);
     ParseShadow(pHeaderStyle);
-//  ParseBackColor(pHeaderStyle);
+
     ParseBackGround(pHeaderStyle);
 
     ParseWaterMark(pHeaderStyle);
-    //End by
+    
 
     pm1->SetHeaderStyle(pHeaderStyle);
 }
 
 void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
 {
-    //Set height: from top of header to top of body, including the spacing between header and body
+    
     double height = GetGeometryHeight()- GetMarginsValue(MARGIN_TOP);
     if( IsAutoGrowDown() )
     {
@@ -784,23 +784,23 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
         ph1->SetHeight(height);
     }
 
-    //Set left,right,bottom margins
+    
     LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*> (GetParent()->obj());
-    //left margin in SODC: the space from the left edge of body to the left edge of header
+    
     double left = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
-    if(left<=0) //The left margin in SODC can not be minus value
+    if(left<=0) 
     {
         left = -1;
     }
-    //left margin in SODC: the space from the right edge of header to the right edge of body
+    
     double right = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
-    if(right<=0)//The right margin in SODC can not be minus value
+    if(right<=0)
     {
         right = -1;
     }
     ph1->SetMargins( left, right, GetMarginsValue(MARGIN_BOTTOM));
 
-    //Word Pro has no dynamic spacing, should be set to false
+    
     ph1->SetDynamicSpace(sal_False);
 }
 
@@ -868,7 +868,7 @@ void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle * pHeaderStyle)
         pHeaderStyle->SetBackImage(pXFBGImage);
     }
 }
-//End by
+
 
 void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 {
@@ -880,13 +880,13 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
         pChangeMgr->SetHeadFootFribMap(sal_True);
 
-        //Call the RegisterStyle first to register the styles in header paras, and then XFConvert()
+        
         pStory->SetFoundry(m_pFoundry);
         pStory->RegisterStyle();
-        //, 06/27/2005
-        //register child layout style for framelayout,
+        
+        
         RegisterChildStyle();
-        //End
+        
         pChangeMgr->SetHeadFootChange(pHeader);
         pStory->XFConvert(pHeader);
 
@@ -919,8 +919,8 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
 {
     XFFooterStyle* pFooterStyle = new XFFooterStyle();
 
-    //Modify page bottom margin
-    //page bottom maring: from bottom of footer to the bottom edge
+    
+    
     double bottom = GetMarginsValue(MARGIN_BOTTOM);
     pm1->SetMargins(-1, -1, -1, bottom);
 
@@ -928,10 +928,10 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
     ParseBorder(pFooterStyle);
     ParseShadow(pFooterStyle);
     ParseBackGround(pFooterStyle);
-//  ParseBackColor(pFooterStyle);
+
 
     ParseWaterMark(pFooterStyle);
-    //End by
+    
 
     pm1->SetFooterStyle(pFooterStyle);
 }
@@ -939,7 +939,7 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
 void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
 {
 
-    //Set height: from top of header to top of body, including the spacing between header and body
+    
     double height = GetGeometryHeight() - GetMarginsValue(MARGIN_BOTTOM);
     if( IsAutoGrowUp() )
     {
@@ -950,21 +950,21 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
         pFooterStyle->SetHeight(height);
     }
 
-    //Set left,right,top margins
+    
     LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*> (GetParent()->obj());
     double left = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
-    if(left<=0) //The left margin in SODC can not be minus value
+    if(left<=0) 
     {
         left = -1;
     }
     double right = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
-    if(right<=0)//The left margin in SODC can not be minus value
+    if(right<=0)
     {
         right = -1;
     }
     pFooterStyle->SetMargins( left, right, GetMarginsValue(MARGIN_TOP));
 
-    //Word Pro has no dynamic spacing, should be set to false
+    
     pFooterStyle->SetDynamicSpace(sal_False);
 }
 
@@ -1026,7 +1026,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 {
     XFFooter* pFooter = new XFFooter();
     LwpObject* pStory = m_Content.obj(VO_STORY);
-    //Call the RegisterStyle first to register the styles in footer paras, and then XFConvert()
+    
     if(pStory)
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
@@ -1035,12 +1035,12 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 
         pStory->SetFoundry(m_pFoundry);
         pStory->RegisterStyle();
-        //, 06/27/2005
-        //register child layout style for framelayout,
+        
+        
         RegisterChildStyle();
-        //End
+        
 
-        pChangeMgr->SetHeadFootChange(pFooter);//add by ,7/6
+        pChangeMgr->SetHeadFootChange(pFooter);
 
         pStory->XFConvert(pFooter);
 
@@ -1058,6 +1058,6 @@ void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)
         pFooterStyle->SetBackImage(pXFBGImage);
     }
 }
-//End by
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

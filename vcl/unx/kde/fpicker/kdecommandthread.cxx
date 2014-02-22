@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstddef>
@@ -26,18 +26,18 @@
 #if ENABLE_TDE
 #include <tqstringlist.h>
 #include <tdeapplication.h>
-#else // ENABLE_TDE
+#else 
 #include <qstringlist.h>
 #include <kapplication.h>
-#endif // ENABLE_TDE
+#endif 
 
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// CommandEvent
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringList )
     : QCustomEvent( TypeId, pStringList ),
@@ -73,9 +73,9 @@ KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringL
     m_eCommand = pIdx->eType;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CommandThread
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 KDECommandThread::KDECommandThread( QWidget *pObject )
     : m_pObject( pObject )
@@ -140,9 +140,9 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
 
 QStringList* KDECommandThread::tokenize( const QString &rString )
 {
-    // Commands look like:
-    // command arg1 arg2 arg3 ...
-    // Args may be enclosed in '"', if they contain spaces.
+    
+    
+    
 
     QStringList *pList = new QStringList();
 

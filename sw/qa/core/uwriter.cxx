@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -98,9 +98,9 @@ void SwDocTest::testPageDescName()
 
     std::vector<OUString> aResults;
 
-    //These names must be unique for each different combination, otherwise
-    //duplicate page description names may exist, which will causes lookup
-    //by name to be incorrect, and so the corresponding export to .odt
+    
+    
+    
     aResults.push_back(aShellResources.GetPageDescName(1, ShellResource::NORMAL_PAGE));
     aResults.push_back(aShellResources.GetPageDescName(1, ShellResource::FIRST_PAGE));
     aResults.push_back(aShellResources.GetPageDescName(1, ShellResource::FOLLOW_PAGE));
@@ -111,11 +111,11 @@ void SwDocTest::testPageDescName()
     CPPUNIT_ASSERT_MESSAGE("GetPageDescName results must be unique", aResults.size() == 3);
 }
 
-//See https://bugs.libreoffice.org/show_bug.cgi?id=32463
+
 void SwDocTest::testFileNameFields()
 {
-    //Here's a file name with some chars in it that will be %% encoded, when expanding
-    //SwFileNameFields we want to restore the original readable filename
+    
+    
     utl::TempFile aTempFile(OUString("demo [name]"));
     aTempFile.EnableKillingFile();
 
@@ -161,7 +161,7 @@ void SwDocTest::testFileNameFields()
         OUString sResult(aNameField.Expand(FF_NAME_NOEXT));
         OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
             true,INetURLObject::DECODE_WITH_CHARSET));
-        //Chop off .tmp
+        
         sExpected = sExpected.copy(0, sExpected.getLength() - 4);
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
@@ -169,9 +169,9 @@ void SwDocTest::testFileNameFields()
     m_xDocShRef->DoInitNew(0);
 }
 
-//See http://lists.freedesktop.org/archives/libreoffice/2011-August/016666.html
-//Remove unnecessary parameter to IDocumentStatistics::UpdateDocStat for
-//motivation
+
+
+
 void SwDocTest::testDocStat()
 {
     CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
@@ -192,22 +192,22 @@ void SwDocTest::testDocStat()
     CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->GetDocStat().nChar == nLen);
 }
 
-//For UI character counts we should follow UAX#29 and display the user
-//perceived characters, not the number of codepoints, nor the number of code
-//units http://unicode.org/reports/tr29/
+
+
+
 void SwDocTest::testUserPerceivedCharCount()
 {
     SwBreakIt *pBreakIter = SwBreakIt::Get();
 
-    //Grapheme example, two different unicode code-points perceived by the user as a single
-    //glyph
+    
+    
     const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
     OUString sALEF_QAMATS(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
     sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(sALEF_QAMATS);
     CPPUNIT_ASSERT_MESSAGE("Grapheme Count should be 1", nGraphemeCount == 1);
 
-    //Surrogate pair example, one single unicode code-point (U+1D11E)
-    //represented as two code units in UTF-16
+    
+    
     const sal_Unicode GCLEF[] = { 0xD834, 0xDD1E };
     OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
@@ -234,26 +234,26 @@ void SwDocTest::testModelToViewHelper()
         m_pDoc->InsertString(aPaM, OUString(" DDDDD"));
         CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
 
-        //set start of selection to first B
+        
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
         aPaM.SetMark();
-        //set end of selection to last C
+        
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
-        //set character attribute hidden on range
+        
         SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
         m_pDoc->InsertPoolItem(aPaM, aHidden, 0 );
 
-        //turn on red-lining and show changes
+        
         m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
         CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
         CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
 
-        //set start of selection to last A
+        
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 4);
         aPaM.SetMark();
-        //set end of selection to second last B
+        
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
-        m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
+        m_pDoc->DeleteAndJoin(aPaM);    
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
@@ -319,10 +319,10 @@ void SwDocTest::testSwScanner()
 
     CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=40449
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=39365
-    //Use a temporary OUString as the arg, as that's the trouble behind
-    //fdo#40449 and fdo#39365
+    
+    
+    
+    
     {
         SwScanner aScanner(*pTxtNode,
             OUString("Hello World"),
@@ -342,7 +342,7 @@ void SwDocTest::testSwScanner()
             rWorld == "World");
     }
 
-    //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
+    
     {
         const sal_Unicode IDEOGRAPHICFULLSTOP_D[] = { 0x3002, 'D' };
 
@@ -399,8 +399,8 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("128 characters", aDocStat.nChar == 128);
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=89042
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=53399
+    
+    
     {
         SwDocStat aDocStat;
 
@@ -417,13 +417,13 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
 
         const sal_Unicode aShouldBeFive[] = {
-            // f    r       e       n       c       h       space
+            
             0x0046, 0x0072, 0x0065, 0x006E, 0x0063, 0x0068, 0x0020,
-            // <<   nbsp    s       a       v       o       i
+            
             0x00AB, 0x00A0, 0x0073, 0x0061, 0x0076, 0x006F, 0x0069,
-            // r    nnbsp   c       a       l       c       u
+            
             0x0072, 0x202f, 0x0063, 0x0061, 0x006C, 0x0063, 0x0075,
-            // l    e       r       idspace >>
+            
             0x006C, 0x0065, 0x0072, 0x3000, 0x00BB
         };
 
@@ -435,7 +435,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
     }
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
+    
     {
         SwDocStat aDocStat;
 
@@ -447,7 +447,7 @@ void SwDocTest::testSwScanner()
         aFtn.SetNumStr(OUString("banana"));
         SwTxtAttr* pTA = pTxtNode->InsertItem(aFtn, nPos, nPos);
         CPPUNIT_ASSERT(pTA);
-        CPPUNIT_ASSERT(pTxtNode->Len() == 6); //Apple + 0x02
+        CPPUNIT_ASSERT(pTxtNode->Len() == 6); 
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("footnote should be expanded", aDocStat.nChar == 11);
@@ -484,7 +484,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
     }
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=46757
+    
     {
         SwDocStat aDocStat;
 
@@ -495,32 +495,32 @@ void SwDocTest::testSwScanner()
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
 
-        //turn on red-lining and show changes
+        
         m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
         CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
         CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
 
-        //delete everything except the first word
-        aPaM.SetMark(); //set start of selection to current pos
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 5);   //set end of selection to fifth char of current node
-        m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
-        //"real underlying text should be the same"
+        
+        aPaM.SetMark(); 
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 5);   
+        m_pDoc->DeleteAndJoin(aPaM);    
+        
         CPPUNIT_ASSERT_EQUAL(pTxtNode->GetTxt(), OUString(aString));
 
         aDocStat.Reset();
         pTxtNode->SetWordCountDirty(true);
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); 
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
 
         pTxtNode->SetWordCountDirty(true);
 
-        //keep red-lining on but hide changes
+        
         m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON);
         CPPUNIT_ASSERT_MESSAGE("redlining should be still on", m_pDoc->IsRedlineOn());
         CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
 
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); 
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
 
         OUString sLorem = pTxtNode->GetTxt();
@@ -534,19 +534,19 @@ void SwDocTest::testSwScanner()
         SwNodeIndex* pNodeIdx = rTbl[0]->GetContentIdx();
         CPPUNIT_ASSERT(pNodeIdx);
 
-        pTxtNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTxtNode();        //first deleted txtnode
+        pTxtNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTxtNode();        
         CPPUNIT_ASSERT(pTxtNode);
 
         OUString sIpsum = pTxtNode->GetTxt();
         CPPUNIT_ASSERT(sIpsum == " ipsum");
 
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); 
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(0));
         CPPUNIT_ASSERT_EQUAL(aDocStat.nChar, static_cast<sal_uLong>(0));
     }
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=38983
+    
     {
         SwDocStat aDocStat;
 
@@ -624,8 +624,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        //But default configuration should, msword-alike treak emdash
-        //and endash as word separators for word-counting
+        
+        
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2013));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
@@ -657,7 +657,7 @@ void SwDocTest::testSwScanner()
     }
 }
 
-//See https://bugs.libreoffice.org/show_bug.cgi?id=40599
+
 void SwDocTest::testGraphicAnchorDeletion()
 {
     CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
@@ -677,7 +677,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
 
-    //Insert a graphic at X of >>X<< in paragraph 2
+    
     SfxItemSet aFlySet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
     SwFmtAnchor aAnchor(FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
@@ -687,7 +687,7 @@ void SwDocTest::testGraphicAnchorDeletion()
 
     CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
 
-    //Delete >X<
+    
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(),
         RTL_CONSTASCII_LENGTH("graphic anchor>><")+1);
@@ -708,9 +708,9 @@ void SwDocTest::testGraphicAnchorDeletion()
 
     CPPUNIT_ASSERT_MESSAGE("Should be 0 graphics", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 0);
 
-    //Now, if instead we swap FLY_AS_CHAR (inline graphic) to FLY_AT_CHAR (anchored to character)
-    //and repeat the above, graphic is *not* deleted, i.e. it belongs to the paragraph, not the
-    //range to which its anchored, which is annoying.
+    
+    
+    
 }
 
 static int
@@ -730,7 +730,7 @@ getRandString()
     OUString aRet(aText.copy(s, j));
     if (!getRand(5))
         aRet += OUString('\n');
-//    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
+
     return aRet;
 }
 
@@ -768,7 +768,7 @@ void SwDocTest::randomTest()
     {
         m_pDoc->ClearDoc();
 
-        // setup redlining
+        
         m_pDoc->SetRedlineMode(modes[rlm]);
         SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[0]));
 
@@ -779,23 +779,23 @@ void SwDocTest::randomTest()
             aCrs.SetMark();
 
             switch (getRand (i < 50 ? 3 : 6)) {
-            // insert ops first
+            
             case 0: {
                 if (!m_pDoc->InsertString(aCrs, getRandString())) {
-//                    fprintf (stderr, "failed to insert string !\n");
+
                 }
                 break;
             }
             case 1:
                 break;
-            case 2: { // switch author
+            case 2: { 
                 int a = getRand(SAL_N_ELEMENTS(authors));
                 SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[a]));
                 break;
             }
 
-            // movement / deletion ops later
-            case 3: // deletion
+            
+            case 3: 
                 switch (getRand(6)) {
                 case 0:
                     m_pDoc->DelFullPara(aCrs);
@@ -812,10 +812,10 @@ void SwDocTest::randomTest()
                     break;
                 }
                 break;
-            case 4: { // movement
+            case 4: { 
                 IDocumentContentOperations::SwMoveFlags nFlags =
                     (IDocumentContentOperations::SwMoveFlags)
-                        (getRand(1) ? // FIXME: puterb this more ?
+                        (getRand(1) ? 
                          IDocumentContentOperations::DOC_MOVEDEFAULT :
                          IDocumentContentOperations::DOC_MOVEALLFLYS |
                          IDocumentContentOperations::DOC_CREATEUNDOOBJ |
@@ -829,13 +829,13 @@ void SwDocTest::randomTest()
             case 5:
                 break;
 
-            // undo / redo ?
+            
             default:
                 break;
             }
         }
 
-// Debug / verify the produced document has real content
+
 #if 0
         OStringBuffer aBuffer("nodes-");
         aBuffer.append(sal_Int32(rlm));
@@ -862,7 +862,7 @@ translitTest(SwDoc & rDoc, SwPaM & rPaM, sal_uInt32 const nType)
 
 void SwDocTest::testTransliterate()
 {
-    // just some simple test to see if it's totally broken
+    
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
     m_pDoc->InsertString(aPaM, OUString("foobar"));

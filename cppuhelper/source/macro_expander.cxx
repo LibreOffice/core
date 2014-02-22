@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -132,10 +132,10 @@ public:
     virtual ~Bootstrap_MacroExpander()
         SAL_THROW(());
 
-    // XMacroExpander impl
+    
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
         throw (lang::IllegalArgumentException);
-    // XServiceInfo impl
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
@@ -144,42 +144,42 @@ public:
         throw (RuntimeException);
 };
 
-//__________________________________________________________________________________________________
+
 void Bootstrap_MacroExpander::disposing()
 {}
-//__________________________________________________________________________________________________
+
 Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW(())
 {}
 
-// XServiceInfo impl
-//__________________________________________________________________________________________________
+
+
 OUString Bootstrap_MacroExpander::getImplementationName()
     throw (RuntimeException)
 {
     return s_impl_name();
 }
-//__________________________________________________________________________________________________
+
 sal_Bool Bootstrap_MacroExpander::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, serviceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return s_get_service_names();
 }
 
-// XMacroExpander impl
-//__________________________________________________________________________________________________
+
+
 OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
     throw (lang::IllegalArgumentException)
 {
     return cppuhelper::detail::expandMacros( exp );
 }
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL service_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     SAL_THROW( (RuntimeException) )

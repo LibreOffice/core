@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/SystemPointer.hpp>
@@ -49,8 +49,8 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
     return *pMutex;
 }
 
-// Window
-// ------------------------------------------------------------------------------
+
+
 
 Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
     mxMgr( rxMgr ),
@@ -66,8 +66,8 @@ Window::~Window()
 {
 }
 
-// XPlayerWindow
-// ------------------------------------------------------------------------------
+
+
 
 void SAL_CALL Window::update(  )
     throw (uno::RuntimeException)
@@ -105,8 +105,8 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
     mnPointerType = nPointerType;
 }
 
-// XWindow
-// ------------------------------------------------------------------------------
+
+
 
 void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
     throw (uno::RuntimeException)
@@ -200,8 +200,8 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
 {
 }
 
-// XComponent
-// ------------------------------------------------------------------------------
+
+
 
 void SAL_CALL Window::dispose(  )
     throw (uno::RuntimeException)
@@ -218,8 +218,8 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 {
 }
 
-// XServiceInfo
-// ------------------------------------------------------------------------------
+
+
 
 OUString SAL_CALL Window::getImplementationName(  )
     throw (uno::RuntimeException)
@@ -242,7 +242,7 @@ uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace gstreamer
-} // namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TextObjectBar.hxx"
@@ -148,7 +148,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
-                        aAttr.Put( aTmpSet, false ); // sal_False= InvalidItems is not default, handle it as "holes"
+                        aAttr.Put( aTmpSet, false ); 
                         const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                         SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
@@ -181,10 +181,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
             else
             {
-                // the following code could be enabled, if I get a correct
-                // DontCare status from JOE.
+                
+                
 
-                // gets enabled, through it doesn't really work (see above)
+                
                 SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
                 mpView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_AVAILABLE )
@@ -222,7 +222,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             rReq.Done();
 
             Invalidate();
-            // to refresh preview (in outline mode), slot has to be invalidated:
+            
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;
@@ -233,9 +233,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustDepth( -1 );
 
-                // Ensure bold/italic etc. icon state updates
+                
                 Invalidate();
-                // trigger preview refresh
+                
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -248,9 +248,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustDepth( 1 );
 
-                // Ensure bold/italic etc. icon state updates
+                
                 Invalidate();
-                // trigger preview refresh
+                
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -279,7 +279,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( -1 );
 
-                // trigger preview refresh
+                
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -292,7 +292,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( 1 );
 
-                // trigger preview refresh
+                
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -340,7 +340,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     mpView->SetAttributes( aNewAttrs );
                 }
                 Invalidate();
-                // to refresh preview (in outline mode), slot has to be invalidated:
+                
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -366,7 +366,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             if( !pArgs )
             {
-                //aNewAttr.InvalidateAllItems(); <- produces problems (#35465#)
+                
 
                 switch ( nSlot )
                 {
@@ -501,7 +501,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     }
                     break;
 
-                    // attributes for TextObjectBar
+                    
                     case SID_ATTR_CHAR_FONT:
                     {
                         if( pArgs )
@@ -532,7 +532,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
-// #i35937# removed need for FN_NUM_BULLET_ON handling
+
                 }
 
                 rReq.Done( aNewAttr );
@@ -570,7 +570,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_CHAR_POSTURE    ||
                       nSlot == SID_ATTR_CHAR_WEIGHT )
             {
-                // #i78017 establish the same behaviour as in Writer
+                
                 sal_uInt16 nScriptType = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
                 if (nSlot == SID_ATTR_CHAR_FONT)
                     nScriptType = mpView->GetScriptType();
@@ -650,11 +650,11 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             mpView->SetAttributes(*pArgs);
 
-            // invalidate entire shell because of performance and
-            // extension reasons
+            
+            
             Invalidate();
 
-            // to refresh preview (in outline mode), slot has to be invalidated:
+            
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;
@@ -666,6 +666,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     Invalidate( SID_OUTLINE_DOWN );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

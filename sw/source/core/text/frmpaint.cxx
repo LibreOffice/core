@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@
 #include <numrule.hxx>
 #include <SwGrammarMarkUp.hxx>
 
-// #i12836# enhanced pdf export
+
 #include <EnhancedPDFExportHelper.hxx>
 
 #include <IDocumentStylePoolAccess.hxx>
@@ -58,7 +58,7 @@
 
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////
+
 
 static bool bInitFont = true;
 
@@ -188,18 +188,18 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
 
 void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
 {
-  // Line number is stronger than the divider
+  
     const OUString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
                                 : rLineInf.GetDivider() );
 
-    // Get script type of line numbering:
+    
     pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, 0 ) );
 
     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.getLength() );
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( NULL );
     aDrawInf.SetGrammarCheck( NULL );
-    aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
+    aDrawInf.SetSmartTags( NULL ); 
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
     aDrawInf.SetFrm( pTxtFrm );
@@ -230,7 +230,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
         Size aSize = pTmpFnt->_GetTxtSize( aDrawInf );
         if( bGoLeft )
             aTmpPos.X() -= aSize.Width();
-        // calculate rectangle containing the line number
+        
         SwRect aRct( Point( aTmpPos.X(),
                          aTmpPos.Y() - pTmpFnt->GetAscent( pSh, *pSh->GetOut() )
                           ), aSize );
@@ -316,7 +316,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( false );
 
-        // #i16816# tagged pdf support
+        
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
@@ -333,7 +333,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             aLayoutModeModifier.Modify( false );
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
-            bool bNoDummy = !aLine.GetNext(); // Only one empty line!
+            bool bNoDummy = !aLine.GetNext(); 
 
             while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
             {
@@ -417,7 +417,7 @@ SwRect SwTxtFrm::Paint()
     (void)nDbgY;
 #endif
 
-    // finger layout
+    
     OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
     SwRect aRet( Prt() );
@@ -425,12 +425,12 @@ SwRect SwTxtFrm::Paint()
         aRet += Frm().Pos();
     else
     {
-        // We return the right paint rect. Use the calculated PaintOfst as the
-        // left margin
+        
+        
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
+        
+        if ( IsVertLR() ) 
             pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
 
         if( pRepaint->GetOfst() )
@@ -534,7 +534,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     GETGRID( FindPageFrm() )
                     if ( pGrid )
                     {
-                        // center character in grid line
+                        
                         aPos.Y() += ( pGrid->GetBaseHeight() -
                                       pFnt->GetHeight( pSh, *pSh->GetOut() ) ) / 2;
 
@@ -543,7 +543,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     }
                 }
 
-                // Don't show the paragraph mark for collapsed paragraphs, when they are hidden
+                
                 if ( EmptyHeight( ) > 1 )
                 {
                     const OUString aTmp( CH_PAR );
@@ -555,7 +555,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetKanaComp( 0 );
                     aDrawInf.SetWrong( NULL );
                     aDrawInf.SetGrammarCheck( NULL );
-                    aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
+                    aDrawInf.SetSmartTags( NULL ); 
                     aDrawInf.SetFrm( this );
                     aDrawInf.SetFont( pFnt );
                     aDrawInf.SetSnapToGrid( false );
@@ -578,7 +578,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
-    // #i16816# tagged pdf support
+    
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
@@ -597,13 +597,13 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
-        // It can happen that the IdleCollector withdrew my cached information
+        
         if( !HasPara() )
         {
             OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
-            // #i29062# pass info that we are currently
-            // painting.
+            
+            
             ((SwTxtFrm*)this)->GetFormatted( true );
             if( IsEmpty() )
             {
@@ -617,23 +617,23 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
         }
 
-        // We don't want to be interrupted while painting.
-        // Do that after thr Format()!
+        
+        
         SwTxtFrmLocker aLock((SwTxtFrm*)this);
 
-        // We only paint the part of the TxtFrm which changed, is within the
-        // range and was requested to paint.
-        // One could think that the area rRect _needs_ to be painted, although
-        // rRepaint is set. Indeed, we cannot avoid this problem from a formal
-        // perspective. Luckily we can assume rRepaint to be empty when we need
-        // paint the while Frm.
+        
+        
+        
+        
+        
+        
         SwTxtLineAccess aAccess( (SwTxtFrm*)this );
         SwParaPortion *pPara = aAccess.GetPara();
 
         SwRepaint &rRepaint = *(pPara->GetRepaint());
 
-        // Switch off recycling when in the FlyCntFrm.
-        // A DrawRect is called for repainting the line anyways.
+        
+        
         if( rRepaint.GetOfst() )
         {
             const SwFlyFrm *pFly = FindFlyFrm();
@@ -641,9 +641,9 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 rRepaint.SetOfst( 0 );
         }
 
-        // Ge the String for painting. The length is of special interest.
+        
 
-        // Rectangle
+        
         OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
         SwRect aOldRect( rRect );
 
@@ -658,12 +658,12 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
         aInf.SetGrammarCheckList( ( (SwTxtNode*)GetTxtNode() )->GetGrammarCheck() );
-        aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );  // SMARTTAGS
+        aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );  
         aInf.GetTxtFly()->SetTopRule();
 
         SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
-        // Optimization: if no free flying Frm overlaps into our line, the
-        // SwTxtFly just switches off
+        
+        
         aInf.GetTxtFly()->Relax();
 
         OutputDevice* pOut = aInf.GetOut();
@@ -671,9 +671,9 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
         SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
 
-        // Output loop: For each Line ... (which is still visible) ...
-        //   adapt rRect (Top + 1, Bottom - 1)
-        // Because the Iterator attaches the Lines without a gap to each other
+        
+        
+        
         aLine.TwipsToLine( rRect.Top() + 1 );
         long nBottom = rRect.Bottom();
 
@@ -693,7 +693,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             } while( aLine.Next() && aLine.Y() <= nBottom );
         }
 
-        // Once is enough:
+        
         if( aLine.IsPaintDrop() )
             aLine.PaintDropPortion();
 

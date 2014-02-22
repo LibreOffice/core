@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -93,14 +93,14 @@ SwDropSave::~SwDropSave()
     pInf->Y( nY );
 }
 
-// SwDropPortionPart DTor
+
 SwDropPortionPart::~SwDropPortionPart()
 {
     delete pFollow;
     delete pFnt;
 }
 
-// SwDropPortion CTor, DTor
+
 SwDropPortion::SwDropPortion( const MSHORT nLineCnt,
                               const KSHORT nDrpHeight,
                               const KSHORT nDrpDescent,
@@ -123,7 +123,7 @@ SwDropPortion::~SwDropPortion()
         pBlink->Delete( this );
 }
 
-// nWishLen = 0 indicates that we want a whole word
+
 MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
 {
     sal_Int32 nEnd = GetTxt().getLength();
@@ -132,7 +132,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
 
     if ( ! nWishLen && g_pBreakIt->GetBreakIter().is() )
     {
-        // find first word
+        
         const SwAttrSet& rAttrSet = GetSwAttrSet();
         const sal_uInt16 nTxtScript = g_pBreakIt->GetRealScriptOfText( GetTxt(), 0 );
 
@@ -186,18 +186,18 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
     const SwAttrSet& rSet = GetSwAttrSet();
     const SwFmtDrop& rDrop = rSet.GetDrop();
 
-    // Return (0,0) if there is no drop cap at this paragraph
+    
     if( 1 >= rDrop.GetLines() ||
         ( !rDrop.GetChars() && !rDrop.GetWholeWord() ) )
     {
         return false;
     }
 
-    // get text frame
+    
     SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
     for( SwTxtFrm* pLastFrm = aIter.First(); pLastFrm; pLastFrm = aIter.Next() )
     {
-        // Only (master-) text frames can have a drop cap.
+        
         if ( !pLastFrm->IsFollow() )
         {
 
@@ -246,7 +246,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
 }
 
 
-// Manipulate the width, otherwise the chars are being stretched
+
 void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 {
     OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
@@ -260,7 +260,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     ((SwTxtPaintInfo&)rInf).Y( nBasePosY + nY );
     ((SwDropPortion*)this)->SetAscent( nOldAscent + nY );
     SwDropSave aSave( rInf );
-    // for text inside drop portions we let vcl handle the text directions
+    
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
 
@@ -297,11 +297,11 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
 void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
 {
-    // normal output is being done during the normal painting
+    
     if( ! nDropHeight || ! pPart || nLines == 1 )
         return;
 
-    // set the lying values
+    
     const KSHORT nOldHeight = Height();
     const KSHORT nOldWidth  = Width();
     const KSHORT nOldAscent = GetAscent();
@@ -310,19 +310,19 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     const SwParaPortion *pPara = rInf.GetParaPortion();
     const Point aOutPos( nOldPosX + nX, nOldPosY - pPara->GetAscent()
                          - pPara->GetRealHeight() + pPara->Height() );
-    // make good for retouching
+    
 
-    // Set baseline
+    
     ((SwTxtPaintInfo&)rInf).Y( aOutPos.Y() + nDropHeight );
 
-    // for background
+    
     ((SwDropPortion*)this)->Height( nDropHeight + nDropDescent );
     ((SwDropPortion*)this)->Width( Width() - nX );
     ((SwDropPortion*)this)->SetAscent( nDropHeight );
 
-    // adapt Clipregion to us
-    // Und zwar immer, und nie mit dem bestehenden ClipRect
-    // verrechnen, weil dies auf die Zeile eingestellt sein koennte.
+    
+    
+    
 
     SwRect aClipRect;
     if ( rInf.OnWin() )
@@ -332,10 +332,10 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     }
     SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
     aClip.ChgClip( aClipRect, rInf.GetTxtFrm() );
-    // Das machen, was man sonst nur macht ...
+    
     PaintTxt( rInf );
 
-    // save old values
+    
     ((SwDropPortion*)this)->Height( nOldHeight );
     ((SwDropPortion*)this)->Width( nOldWidth );
     ((SwDropPortion*)this)->SetAscent( nOldAscent );
@@ -344,14 +344,14 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
 
 void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // normal output is being done here
+    
     if( ! nDropHeight || ! pPart || 1 == nLines )
     {
         if ( rInf.OnWin() &&
             !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()       )
             rInf.DrawBackground( *this );
 
-        // make sure that font is not rotated
+        
         SwFont* pTmpFont = 0;
         if ( rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() ) )
         {
@@ -360,7 +360,7 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
 
         SwFontSave aFontSave( rInf, pTmpFont );
-        // for text inside drop portions we let vcl handle the text directions
+        
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
         aLayoutModeModifier.SetAuto();
 
@@ -376,7 +376,7 @@ bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
     if (!SwTxtPortion::Format( rInf ))
         return false;
 
-    // looks like shit, but what can we do?
+    
     rInf.SetUnderFlow( 0 );
     Truncate();
     SetLen( nOldLen );
@@ -391,7 +391,7 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 
     const SwDropPortionPart* pCurrPart = GetPart();
 
-    // skip parts
+    
     while ( pCurrPart && nIdx + pCurrPart->GetLen() < rInf.GetLen() )
     {
         nMyX = nMyX + pCurrPart->GetWidth();
@@ -411,7 +411,7 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
         const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
     }
 
-    // robust
+    
     SwFontSave aFontSave( rInf, pCurrPart ? &pCurrPart->GetFont() : 0 );
     SwPosSize aPosSize( SwTxtPortion::GetTxtSize( rInf ) );
     aPosSize.Width( aPosSize.Width() + nMyX );
@@ -450,7 +450,7 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
             break;
     }
 
-    // If we have only one line we return 0
+    
     if( GetNext() || GetDropLines() == 1 )
     {
         for( ; nDropLns < nLines; nDropLns++ )
@@ -465,12 +465,12 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
             }
             if ( !Next() )
             {
-                nDropLns++; // Fix: 11356
+                nDropLns++; 
                 break;
             }
         }
 
-        // In der letzten Zeile plumpsen wir auf den Zeilenascent!
+        
         nDropHght = nDropHght - nHeight;
         nDropHght = nDropHght + nAscent;
         Top();
@@ -479,7 +479,7 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
     SetDropDescent( nHeight - nAscent );
     SetDropHeight( nDropHght );
     SetDropLines( nDropLns );
-    // Alte Stelle wiederfinden!
+    
     while( pOldCurr != GetCurr() )
     {
         if( !Next() )
@@ -527,7 +527,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 
     SwDropPortion *pDropPor = 0;
 
-    // first or second round?
+    
     if ( !( GetDropHeight() || IsOnceMore() ) )
     {
         if ( GetNext() )
@@ -536,7 +536,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
             GuessDropHeight( pDropFmt->GetLines() );
     }
 
-    // the DropPortion
+    
     if( GetDropHeight() )
         pDropPor = new SwDropPortion( GetDropLines(), GetDropHeight(),
                                       GetDropDescent(), pDropFmt->GetDistance() );
@@ -545,17 +545,17 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 
     pDropPor->SetLen( nPorLen );
 
-    // If it was not possible to create a proper drop cap portion
-    // due to avoiding endless loops. We return a drop cap portion
-    // with an empty SwDropCapPart. For these portions the current
-    // font is used.
+    
+    
+    
+    
     if ( GetDropLines() < 2 )
     {
         ((SwTxtFormatter*)this)->SetPaintDrop( true );
         return pDropPor;
     }
 
-    // build DropPortionParts:
+    
     OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
     sal_Int32 nNextChg = 0;
     const SwCharFmt* pFmt = pDropFmt->GetCharFmt();
@@ -563,10 +563,10 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 
     while ( nNextChg  < nPorLen )
     {
-        // check for attribute changes and if the portion has to split:
+        
         Seek( nNextChg );
 
-        // the font is deleted in the destructor of the drop portion part
+        
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
         if ( pFmt )
         {
@@ -574,10 +574,10 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
             pTmpFnt->SetDiffFnt( &rSet, pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         }
 
-        // we do not allow a vertical font for the drop portion
+        
         pTmpFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
 
-        // find next attribute change / script change
+        
         const sal_Int32 nTmpIdx = nNextChg;
         sal_Int32 nNextAttr = std::min( static_cast<sal_Int32>(GetNextAttr()), rInf.GetTxt().getLength() );
         nNextChg = pScriptInfo->NextScriptChg( nTmpIdx );
@@ -617,11 +617,11 @@ void SwTxtPainter::PaintDropPortion()
     GetInfo().SetKanaComp( pCurr->GetpKanaComp() );
     GetInfo().ResetKanaIdx();
 
-    // 8047: Drops and Dummies
+    
     while( !pCurr->GetLen() && Next() )
         ;
 
-    // MarginPortion und Adjustment!
+    
     const SwLinePortion *pPor = pCurr->GetFirstPortion();
     KSHORT nX = 0;
     while( pPor && !pPor->IsDropPortion() )
@@ -667,7 +667,7 @@ public:
     void CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf );
 };
 
-// SwDropCapCache Ctor / Dtor
+
 SwDropCapCache::SwDropCapCache() : nIndex( 0 )
 {
     memset( &aMagicNo, 0, sizeof(aMagicNo) );
@@ -709,10 +709,10 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             ++nTmpIdx;
     }
 
-    // we have to calculate a new font scaling factor if
-    // 1. we did not find a scaling factor in the cache or
-    // 2. we are not allowed to use the cache because the drop portion
-    //    consists of more than one part
+    
+    
+    
+    
     if( nTmpIdx >= DROP_CACHE_SIZE || ! bUseCache )
     {
         ++nIndex;
@@ -721,7 +721,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
         long nWishedHeight = pDrop->GetDropHeight();
 
-        // find out biggest font size for initial scaling factor
+        
         long nMaxFontHeight = 0;
         while ( pCurrPart )
         {
@@ -737,17 +737,17 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
         if ( bUseCache )
         {
-            // save keys for cache
+            
             aMagicNo[ nTmpIdx ] = sal_IntPtr(pFntNo);
             aTxt[ nTmpIdx ] = aStr;
             aWishedHeight[ nTmpIdx ] = KSHORT(nWishedHeight);
-            // save initial scaling factor
+            
             aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
         }
 
         bool bGrow = ( pDrop->GetLen() != 0 );
 
-        // for growing controll
+        
         long nMax = KSHRT_MAX;
         long nMin = 0;
 #if OSL_DEBUG_LEVEL > 1
@@ -766,7 +766,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
         while( bGrow )
         {
-            // reset pCurrPart to first part
+            
             pCurrPart = pDrop->GetPart();
             bool bFirstGlyphRect = true;
             bool bHaveGlyphRect = false;
@@ -774,14 +774,14 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
             while ( pCurrPart )
             {
-                // current font
+                
                 SwFont& rFnt = pCurrPart->GetFont();
 
-                // Get height including proportion
+                
                 const sal_uInt16 nCurrHeight =
                          (sal_uInt16)rFnt.GetHeight( rFnt.GetActual() );
 
-                // Get without proportion
+                
                 const sal_uInt8 nOldProp = rFnt.GetPropr();
                 rFnt.SetProportion( 100 );
                 Size aOldSize = Size( 0, rFnt.GetHeight( rFnt.GetActual() ) );
@@ -792,15 +792,15 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
                 nAscent = rFnt.GetAscent( rInf.GetVsh(), *pOut );
 
-                // we get the rectangle that covers all chars
+                
                 bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
                                      nIdx, pCurrPart->GetLen() ) &&
                                  ! aRect.IsEmpty();
 
                 if ( ! bHaveGlyphRect )
                 {
-                    // getting glyph boundaries failed for some reason,
-                    // we take the window for calculating sizes
+                    
+                    
                     if ( pWin )
                     {
                         if ( ! bWinUsed )
@@ -822,22 +822,22 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                         nAscent = (KSHORT) aWinMet.GetAscent();
                     }
                     else
-                    // We do not have a window or our window could not
-                    // give us glyph boundaries.
+                    
+                    
                         aRect = Rectangle( Point( 0, 0 ), Size( 0, nAscent ) );
                 }
 
-                // Now we (hopefully) have a bounding rectangle for the
-                // glyphs of the current portion and the ascent of the current
-                // font
+                
+                
+                
 
-                // reset font size and proportion
+                
                 rFnt.SetSize( aOldSize, rFnt.GetActual() );
                 rFnt.SetProportion( nOldProp );
 
-                // Modify the bounding rectangle with the borders
-                // Robust: If the padding is so big as drop cap letter has no enough space than
-                // remove all padding.
+                
+                
+                
                 if( rFnt.GetTopBorderSpace() + rFnt.GetBottomBorderSpace() >= nWishedHeight )
                 {
                     rFnt.SetTopBorderDist(0);
@@ -869,10 +869,10 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 pCurrPart = pCurrPart->GetFollow();
             }
 
-            // now we have a union ( aCommonRect ) of all glyphs with
-            // respect to a common baseline : 0
+            
+            
 
-            // get descent and ascent from union
+            
             if ( rInf.GetTxtFrm()->IsVertical() )
             {
                 nDescent = aCommonRect.Left();
@@ -915,7 +915,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
         if ( bWinUsed )
         {
-            // reset window if it has been used
+            
             pWin->SetMapMode( aOldMap );
             pWin->SetFont( aOldFnt );
         }
@@ -926,7 +926,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
     pCurrPart = pDrop->GetPart();
 
-    // did made any new calculations or did we use the cache?
+    
     if ( -1 == nFactor )
     {
         nFactor = aFactor[ nTmpIdx ];
@@ -937,7 +937,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
     while ( pCurrPart )
     {
-        // scale current font
+        
         SwFont& rFnt = pCurrPart->GetFont();
         Size aNewSize( 0, ( nFactor * rFnt.GetHeight( rFnt.GetActual() ) ) / 1000 );
 
@@ -964,7 +964,7 @@ bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
         if( !pDropCapCache )
             pDropCapCache = new SwDropCapCache();
 
-        // adjust font sizes to fit into the rectangle
+        
         pDropCapCache->CalcFontSize( this, rInf );
 
         const long nOldX = rInf.X();
@@ -991,10 +991,10 @@ bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
                         Width() + CalcSpacing( rInf.GetSpaceAdd(), rInf ) :
                         Width();
 
-                // set values
+                
                 pCurrPart->SetWidth( (sal_uInt16)nTmpWidth );
 
-                // Move
+                
                 rInf.SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
                 rInf.X( rInf.X() + nTmpWidth );
                 pCurrPart = pCurrPart->GetFollow();
@@ -1004,25 +1004,25 @@ bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
             Width( (sal_uInt16)(rInf.X() - nOldX) );
         }
 
-        // reset my length
+        
         SetLen( rInf.GetLen() );
 
-        // 7631, 7633: bei Ueberlappungen mit Flys ist Schluss.
+        
         if( ! bFull )
             bFull = lcl_IsDropFlyInter( rInf, Width(), nDropHeight );
 
         if( bFull )
         {
-            // Durch FormatTxt kann nHeight auf 0 gesetzt worden sein
+            
             if ( !Height() )
                 Height( rInf.GetTxtHeight() );
 
-            // Jetzt noch einmal der ganze Spass
+            
             nDropHeight = nLines = 0;
             delete pPart;
             pPart = NULL;
 
-            // meanwhile use normal formatting
+            
             bFull = SwTxtPortion::Format( rInf );
         }
         else

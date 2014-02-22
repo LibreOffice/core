@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,7 +63,7 @@ class SwXBookmark::Impl
 {
 private:
     SwXBookmark & m_rThis;
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
@@ -80,12 +80,12 @@ public:
         , m_pDoc(pDoc)
         , m_pRegisteredBookmark(0)
     {
-        // DO NOT registerInMark here! (because SetXBookmark would delete rThis)
+        
     }
 
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
 protected:
-    // SwClient
+    
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
@@ -155,19 +155,19 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
     SwDoc & rDoc,
     ::sw::mark::IMark & rBookmark)
 {
-    // #i105557#: do not iterate over the registered clients: race condition
+    
     ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(&rBookmark));
     OSL_ENSURE(pMarkBase, "CreateXBookmark: no MarkBase?");
     if (!pMarkBase) { return 0; }
     uno::Reference<text::XTextContent> xBookmark(pMarkBase->GetXBookmark());
     if (!xBookmark.is())
     {
-        // FIXME: These belong in XTextFieldsSupplier
-        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
-        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
-        //else
+        
+        
+        
+        
+        
+        
         OSL_ENSURE(
             dynamic_cast< ::sw::mark::IBookmark* >(&rBookmark) || IDocumentMarkAccess::GetType(rBookmark) == IDocumentMarkAccess::ANNOTATIONMARK,
             "<SwXBookmark::GetObject(..)>"
@@ -257,10 +257,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
             aPam, m_pImpl->m_sMarkName, eType));
-    // #i81002#
-    // Check, if bookmark has been created.
-    // E.g., the creation of a cross-reference bookmark is suppress,
-    // if the PaM isn't a valid one for cross-reference bookmarks.
+    
+    
+    
+    
     if (!m_pImpl->m_pRegisteredBookmark)
     {
         OSL_FAIL("<SwXBookmark::attachToRange(..)>"
@@ -312,7 +312,7 @@ void SAL_CALL SwXBookmark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -320,7 +320,7 @@ void SAL_CALL SwXBookmark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -401,7 +401,7 @@ SwXBookmark::getSupportedServiceNames() throw (uno::RuntimeException)
             g_nServicesBookmark, g_ServicesBookmark);
 }
 
-// MetadatableMixin
+
 ::sfx2::Metadatable* SwXBookmark::GetCoreObject()
 {
     return dynamic_cast< ::sfx2::Metadatable* >(m_pImpl->m_pRegisteredBookmark);
@@ -436,7 +436,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    // nothing to set here
+    
     throw lang::IllegalArgumentException("Property is read-only: "
             + PropertyName, static_cast< cppu::OWeakObject * >(this), 0 );
 }
@@ -639,7 +639,7 @@ uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
 uno::Reference<text::XTextContent>
 SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
 {
-    // #i105557#: do not iterate over the registered clients: race condition
+    
     ::sw::mark::MarkBase *const pMarkBase(
         dynamic_cast< ::sw::mark::MarkBase * >(&rMark));
     OSL_ENSURE(pMarkBase, "CreateXBookmark: no MarkBase?");
@@ -647,7 +647,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
     uno::Reference<text::XTextContent> xMark(pMarkBase->GetXBookmark());
     if (!xMark.is())
     {
-        // FIXME: These belong in XTextFieldsSupplier
+        
         SwXFieldmark* pXBkmk = NULL;
         if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rMark))
             pXBkmk = new SwXFieldmark(false, &rMark, &rDoc);
@@ -666,17 +666,17 @@ SwXFieldmark::getCheckboxFieldmark()
     ::sw::mark::ICheckboxFieldmark* pCheckboxFm = NULL;
     if ( getFieldType() == ODF_FORMCHECKBOX )
     {
-        // evil #TODO #FIXME casting away the const-ness
+        
         pCheckboxFm = const_cast<sw::mark::ICheckboxFieldmark*>(dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark()));
         OSL_ASSERT( GetBookmark() == 0 || pCheckboxFm != 0 );
-            // unclear to me whether GetBookmark() can be null here
+            
     }
     return  pCheckboxFm;
 
 }
 
-// support 'hidden' "Checked" property ( note: this property is just for convenience to support
-// docx import filter thus not published via PropertySet info )
+
+
 
 void SAL_CALL
 SwXFieldmark::setPropertyValue(const OUString& PropertyName,
@@ -700,8 +700,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         SwXFieldmark_Base::setPropertyValue( PropertyName, rValue );
 }
 
-// support 'hidden' "Checked" property ( note: this property is just for convenience to support
-// docx import filter thus not published via PropertySet info )
+
+
 
 uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,

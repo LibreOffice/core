@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -25,7 +25,7 @@
 using namespace http_dav_ucp;
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 struct UCBDeadPropertyValueParseContext
 {
@@ -36,7 +36,7 @@ struct UCBDeadPropertyValueParseContext
     ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
 };
 
-// static
+
 const OUString UCBDeadPropertyValue::aTypeString
     = OUString( "string" );
 const OUString UCBDeadPropertyValue::aTypeLong
@@ -56,7 +56,7 @@ const OUString UCBDeadPropertyValue::aTypeFloat
 const OUString UCBDeadPropertyValue::aTypeDouble
     = OUString( "double" );
 
-// static
+
 const OUString UCBDeadPropertyValue::aXMLPre
     = OUString( "<ucbprop><type>" );
 const OUString UCBDeadPropertyValue::aXMLMid
@@ -71,7 +71,7 @@ const OUString UCBDeadPropertyValue::aXMLEnd
 #define STATE_VALUE     (STATE_TOP + 2)
 
 /*
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int UCBDeadPropertyValue_startelement_callback(
     void *,
     int parent,
@@ -99,7 +99,7 @@ extern "C" int UCBDeadPropertyValue_startelement_callback(
     return NE_XML_DECLINE;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int UCBDeadPropertyValue_chardata_callback(
     void *userdata,
     int state,
@@ -127,10 +127,10 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
                 = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             break;
     }
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 extern "C" int UCBDeadPropertyValue_endelement_callback(
     void *userdata,
     int state,
@@ -144,38 +144,38 @@ extern "C" int UCBDeadPropertyValue_endelement_callback(
     {
         case STATE_TYPE:
             if ( !pCtx->pType )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_VALUE:
             if ( !pCtx->pValue )
-                return 1; // abort
+                return 1; 
             break;
 
         case STATE_UCBPROP:
             if ( !pCtx->pType || ! pCtx->pValue )
-                return 1; // abort
+                return 1; 
             break;
     }
-    return 0; // zero to continue, non-zero to abort parsing
+    return 0; 
 }
 */
 
-//////////////////////////////////////////////////////////////////////////
+
 static OUString encodeValue( const OUString & rValue )
 {
-    // Note: I do not use the usual &amp; + &lt; + &gt; encoding, because
-    //       I want to prevent any XML parser from trying to 'understand'
-    //       the value. This caused problems:
+    
+    
+    
     //
-    //       Example:
-    //       - Unencoded property value: x<z
-    //       PROPPATCH:
-    //       - Encoded property value: x&lt;z
-    //       - UCBDeadPropertyValue::toXML result:
-    //              <ucbprop><type>string</type><value>x&lt;z</value></ucbprop>
-    //       PROPFIND:
-    //       - parser replaces &lt; by > ==> error (not well formed)
+    
+    
+    
+    
+    
+    
+    
+    
 
     OUStringBuffer aResult;
     const sal_Unicode * pValue = rValue.getStr();
@@ -198,7 +198,7 @@ static OUString encodeValue( const OUString & rValue )
 }
 
 /*
-//////////////////////////////////////////////////////////////////////////
+
 static OUString decodeValue( const OUString & rValue )
 {
     OUStringBuffer aResult;
@@ -226,7 +226,7 @@ static OUString decodeValue( const OUString & rValue )
 
             if ( 'p' == c )
             {
-                // %per;
+                
 
                 if ( nPos > nEnd - 4 )
                 {
@@ -253,7 +253,7 @@ static OUString decodeValue( const OUString & rValue )
             }
             else if ( 'l' == c )
             {
-                // %lt;
+                
 
                 if ( nPos > nEnd - 3 )
                 {
@@ -278,7 +278,7 @@ static OUString decodeValue( const OUString & rValue )
             }
             else if ( 'g' == c )
             {
-                // %gt;
+                
 
                 if ( nPos > nEnd - 3 )
                 {
@@ -318,8 +318,8 @@ static OUString decodeValue( const OUString & rValue )
 }
 */
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 {
     if ( ( rType != getCppuType( static_cast< const OUString * >( 0 ) ) )
@@ -346,8 +346,8 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
                                           uno::Any & /*rOutData*/ )
 {
@@ -374,7 +374,7 @@ bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
         {
             if ( aCtx.pType && aCtx.pValue )
             {
-                // Decode aCtx.pValue! It may contain XML reserved chars.
+                
                 OUString aStringValue = decodeValue( *aCtx.pValue );
                 if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeString ) )
                 {
@@ -432,14 +432,14 @@ bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
     return success;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static
+
+
 bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
                                   OUString & rOutData )
 {
-    // <ucbprop><type>the_type</type><value>the_value</value></ucbprop>
+    
 
-    // Check property type. Extract type and value as string.
+    
 
     const uno::Type& rType = rInData.getValueType();
     OUString aStringValue;
@@ -447,13 +447,13 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
 
     if ( rType == getCppuType( static_cast< const OUString * >( 0 ) ) )
     {
-        // string
+        
         rInData >>= aStringValue;
         aStringType = aTypeString;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
     {
-        // long
+        
         sal_Int32 nValue = 0;
         rInData >>= nValue;
         aStringValue = OUString::valueOf( nValue );
@@ -461,7 +461,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
     {
-        // short
+        
         sal_Int32 nValue = 0;
         rInData >>= nValue;
         aStringValue = OUString::valueOf( nValue );
@@ -469,7 +469,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuBooleanType() )
     {
-        // boolean
+        
         sal_Bool bValue = false;
         rInData >>= bValue;
         aStringValue = OUString::valueOf( bValue );
@@ -477,7 +477,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuCharType() )
     {
-        // char
+        
         sal_Unicode cValue = 0;
         rInData >>= cValue;
         aStringValue = OUString::valueOf( cValue );
@@ -485,7 +485,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
     {
-        // byte
+        
         sal_Int8 nValue = 0;
         rInData >>= nValue;
         aStringValue = OUString::valueOf( sal_Unicode( nValue ) );
@@ -493,7 +493,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
     {
-        // hyper
+        
         sal_Int64 nValue = 0;
         rInData >>= nValue;
         aStringValue = OUString::valueOf( nValue );
@@ -501,7 +501,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
     {
-        // float
+        
         float nValue = 0;
         rInData >>= nValue;
         aStringValue = OUString::valueOf( nValue );
@@ -509,7 +509,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
     {
-        // double
+        
         double nValue = 0;
         rInData >>= nValue;
         aStringValue = OUString::valueOf( nValue );
@@ -523,7 +523,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         return false;
     }
 
-    // Encode value! It must not contain XML reserved chars!
+    
     aStringValue = encodeValue( aStringValue );
 
     rOutData =  aXMLPre;

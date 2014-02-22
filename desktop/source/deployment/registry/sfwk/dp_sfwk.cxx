@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dp_sfwk.hrc"
@@ -45,7 +45,7 @@ namespace backend
 namespace sfwk
 {
 
-//==============================================================================
+
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class PackageImpl : public ::dp_registry::backend::Package
@@ -57,7 +57,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         void initPackageHandler();
 
-        // Package
+        
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -74,13 +74,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<BackendImpl> const & myBackend,
             OUString const & url, OUString const & libType, bool bRemoved,
             OUString const & identifier);
-        // XPackage
+        
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
         virtual OUString SAL_CALL getLicenseText() throw (RuntimeException);
     };
     friend class PackageImpl;
 
-    // PackageRegistryBackend
+    
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
@@ -94,7 +94,7 @@ public:
         Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext );
 
-    // XPackageRegistry
+    
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
@@ -107,15 +107,15 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
     {
-        //May throw a DisposedException
+        
         check();
-        //We should never get here...
+        
         throw RuntimeException("Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
     if (m_descr.isEmpty())
@@ -124,13 +124,13 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
         return m_descr;
 }
 
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException)
 {
     return Package::getDescription();
 }
 
-//______________________________________________________________________________
+
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
     OUString const & url, OUString const & libType, bool bRemoved,
@@ -147,7 +147,7 @@ BackendImpl::PackageImpl::PackageImpl(
     sal_Int32 segmStart = (url.lastIndexOf( '/', segmEnd ) + 1);
     if (segmStart < 0)
         segmStart = 0;
-    // name and display name default the same:
+    
     m_displayName = ::rtl::Uri::decode(
         url.copy( segmStart, segmEnd - segmStart ),
         rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
@@ -156,7 +156,7 @@ BackendImpl::PackageImpl::PackageImpl(
     dp_misc::TRACE("PakageImpl displayName is " + m_displayName);
 }
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -174,8 +174,8 @@ BackendImpl::BackendImpl(
 
 
 
-// XPackageRegistry
-//______________________________________________________________________________
+
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -188,8 +188,8 @@ void BackendImpl::packageRemoved(OUString const & /*url*/, OUString const & /*me
 {
 }
 
-// PackageRegistryBackend
-//______________________________________________________________________________
+
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -197,12 +197,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString mediaType( mediaType_ );
     if (mediaType.isEmpty())
     {
-        // detect media-type:
+        
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ) &&
             ucbContent.isFolder())
         {
-            // probe for parcel-descriptor.xml:
+            
             if (create_ucb_content(
                     0, makeURL( url, "parcel-descriptor.xml" ),
                     xCmdEnv, false /* no throw */ ))
@@ -256,7 +256,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 }
 
                 OUString sfwkLibType = getResourceString( RID_STR_SFWK_LIB );
-                // replace %MACRONAME placeholder with language name
+                
                 OUString MACRONAME( "%MACROLANG" );
                 sal_Int32 startOfReplace = sfwkLibType.indexOf( MACRONAME );
                 sal_Int32 charsToReplace = MACRONAME.getLength();
@@ -299,7 +299,7 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     else
     {
         OSL_ASSERT( false );
-        // NOT supported at the momemtn // TODO
+        
     }
 
     Reference< provider::XScriptProviderFactory > xFac =
@@ -310,11 +310,11 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     {
         m_xNameCntrPkgHandler.set( xName );
     }
-    // TODO what happens if above fails??
+    
 }
 
-// Package
-//______________________________________________________________________________
+
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -329,7 +329,7 @@ BackendImpl::PackageImpl::isRegistered_(
             false /* IsAmbiguous */ ) );
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
@@ -346,11 +346,11 @@ void BackendImpl::PackageImpl::processPackage_(
 
     if (doRegisterPackage)
     {
-        // will throw if it fails
+        
         m_xNameCntrPkgHandler->insertByName( m_url, makeAny( Reference< XPackage >(this) ) );
 
     }
-    else // revokePackage()
+    else 
     {
         m_xNameCntrPkgHandler->removeByName( m_url );
     }
@@ -363,8 +363,8 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace sfwk
-} // namespace backend
-} // namespace dp_registry
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbarevisions.hxx"
 #include "vbarevision.hxx"
@@ -54,10 +54,10 @@ class RevisionCollectionHelper : public RevisionCollectionHelper_BASE
 public:
 RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) throw (uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<beans::XPropertySet>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( !mRevisionMap.empty() ); }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException) { return mRevisionMap.size(); }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
     {
@@ -67,7 +67,7 @@ RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const u
         return uno::makeAny( mRevisionMap[ Index ] );
 
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return new RedlinesEnumeration( mRevisionMap );
@@ -112,7 +112,7 @@ SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParen
 {
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaRevisions::getElementType() throw (uno::RuntimeException)
 {
@@ -134,8 +134,8 @@ SwVbaRevisions::createCollectionObject( const css::uno::Any& aSource )
 
 void SAL_CALL SwVbaRevisions::AcceptAll(  ) throw (css::uno::RuntimeException)
 {
-    // First we need to put all the redline into a vector, because if the redline is accepted,
-    // it will auto delete in the document.
+    
+    
     std::vector< uno::Reference< word::XRevision > > aRevisions;
     uno::Reference< container::XEnumeration > xEnumeration = createEnumeration();
     while( xEnumeration->hasMoreElements() )

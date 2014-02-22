@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,7 +56,7 @@ XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
         bTabPositionOK(sal_False),
         bTabRightAligned(sal_False),
         bLeaderCharOK(sal_False),
-        bWithTab(sal_True) // #i21237#
+        bWithTab(sal_True) 
 {
 }
 
@@ -67,7 +67,7 @@ XMLIndexTabStopEntryContext::~XMLIndexTabStopEntryContext()
 void XMLIndexTabStopEntryContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // process three attributes: type, position, leader char
+    
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
@@ -80,9 +80,9 @@ void XMLIndexTabStopEntryContext::StartElement(
         {
             if ( IsXMLToken( sLocalName, XML_TYPE ) )
             {
-                // if it's neither left nor right, value is
-                // ignored. Since left is default, we only need to
-                // check for right
+                
+                
+                
                 bTabRightAligned = IsXMLToken( sAttr, XML_RIGHT );
             }
             else if ( IsXMLToken( sLocalName, XML_POSITION ) )
@@ -98,45 +98,45 @@ void XMLIndexTabStopEntryContext::StartElement(
             else if ( IsXMLToken( sLocalName, XML_LEADER_CHAR ) )
             {
                 sLeaderChar = sAttr;
-                // valid only, if we have a char!
+                
                 bLeaderCharOK = !sAttr.isEmpty();
             }
-            // #i21237#
+            
             else if ( IsXMLToken( sLocalName, XML_WITH_TAB ) )
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, sAttr))
                     bWithTab = bTmp;
             }
-            // else: unknown style: attribute -> ignore
+            
         }
-        // else: no style attribute -> ignore
+        
     }
 
-    // how many entries? #i21237#
+    
     nValues += 2 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
 
-    // now try parent class (for character style)
+    
     XMLIndexSimpleEntryContext::StartElement( xAttrList );
 }
 
 void XMLIndexTabStopEntryContext::FillPropertyValues(
     Sequence<PropertyValue> & rValues)
 {
-    // fill vlues from parent class (type + style name)
+    
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
-    // get values array and next entry to be written;
+    
     sal_Int32 nNextEntry = bCharStyleNameOK ? 2 : 1;
     PropertyValue* pValues = rValues.getArray();
 
-    // right aligned?
+    
     pValues[nNextEntry].Name = rTemplateContext.sTabStopRightAligned;
     pValues[nNextEntry].Value.setValue( &bTabRightAligned,
                                         ::getBooleanCppuType());
     nNextEntry++;
 
-    // position
+    
     if (bTabPositionOK)
     {
         pValues[nNextEntry].Name = rTemplateContext.sTabStopPosition;
@@ -144,7 +144,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
         nNextEntry++;
     }
 
-    // leader char
+    
     if (bLeaderCharOK)
     {
         pValues[nNextEntry].Name = rTemplateContext.sTabStopFillCharacter;
@@ -152,13 +152,13 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
         nNextEntry++;
     }
 
-    // tab character #i21237#
+    
      pValues[nNextEntry].Name = "WithTab";
     pValues[nNextEntry].Value.setValue( &bWithTab,
                                         ::getBooleanCppuType());
     nNextEntry++;
 
-    // check whether we really filled all elements of the sequence
+    
     DBG_ASSERT( nNextEntry == rValues.getLength(),
                 "length incorrectly precumputed!" );
 }

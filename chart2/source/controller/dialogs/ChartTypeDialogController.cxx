@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartTypeDialogController.hxx"
@@ -34,9 +34,9 @@
 
 #include <svtools/controldims.hrc>
 #include <svtools/valueset.hxx>
-// header for class Image
+
 #include <vcl/image.hxx>
-// header for class Bitmap
+
 #include <vcl/bitmap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -150,8 +150,8 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
         }
         catch( uno::Exception & ex )
         {
-            //not all templates need to support CurveStyle, CurveResolution or SplineOrder
-            ex.Context.is();//to have debug information without compilation warnings
+            
+            ex.Context.is();
         }
 
         try
@@ -160,8 +160,8 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
         }
         catch( uno::Exception& ex )
         {
-            //not all templates need to support CGeometry3D
-            ex.Context.is();//to have debug information without compilation warnings
+            
+            ex.Context.is();
         }
     }
     return aRet;
@@ -206,7 +206,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
         {
             if( rParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
             {
-                //remind some values
+                
                 ThreeDLookScheme aScheme = rParameter.eThreeDLookScheme;
                 sal_Int32        nCurveResolution = rParameter.nCurveResolution;
                 sal_Int32        nSplineOrder = rParameter.nSplineOrder;
@@ -216,7 +216,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
 
                 rParameter = (*aIter).second;
 
-                //some values should not be changed with charttype
+                
                 rParameter.eThreeDLookScheme = aScheme;
                 rParameter.nCurveResolution = nCurveResolution;
                 rParameter.nSplineOrder =nSplineOrder;
@@ -287,8 +287,8 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 }
                 catch( uno::Exception & ex )
                 {
-                    //not all templates need to support CurveStyle, CurveResolution or SplineOrder
-                    ex.Context.is();//to have debug information without compilation warnings
+                    
+                    ex.Context.is();
                 }
                 try
                 {
@@ -296,8 +296,8 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 }
                 catch( uno::Exception & ex )
                 {
-                    //not all templates need to support Geometry3D
-                    ex.Context.is();//to have debug information without compilation warnings
+                    
+                    ex.Context.is();
                 }
                 try
                 {
@@ -322,7 +322,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     {
         uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY);
 
-        // locked controllers
+        
         ControllerLockGuardUNO aCtrlLockGuard( xModel );
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         DiagramHelper::tTemplateWithServiceName aTemplateWithService(
@@ -335,7 +335,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         if( rParameter.b3DLook )
             ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
 
-        //SortByXValues
+        
         {
             uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
             if( xDiaProp.is() )
@@ -468,7 +468,7 @@ void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const
                 rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_PYRAMID_3D_3))));
                 rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_PYRAMID_3D_4))));
             break;
-            default: //DataPointGeometry3D::CUBOID:
+            default: 
                 rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_COLUMNS_3D_1))));
                 rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_COLUMNS_3D_2))));
                 rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_COLUMNS_3D_3))));
@@ -543,7 +543,7 @@ void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
                 rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_PYRAMIDQ_3D_3))));
                 rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_PYRAMIDQ_3D_4))));
             break;
-            default: //DataPointGeometry3D::CUBOID:
+            default: 
                 rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_BARS_3D_1))));
                 rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_BARS_3D_2))));
                 rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_BARS_3D_3))));
@@ -700,8 +700,8 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
                 rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_STACKED_STEPPED))));
             }
             break;
-        default: // includes CurveStyle_LINES
-            //direct lines
+        default: 
+            
             if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
             {
                 rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XCATEGORY))));
@@ -824,7 +824,7 @@ void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Cha
             rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XVALUES_STEPPED))));
             break;
         }
-        default: // includes CurveStyle_LINES
+        default: 
             rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XVALUES))));
             rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XVALUES))));
             rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XVALUES))));
@@ -975,7 +975,7 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    //@todo need templates with symbols only
+    
     ( "com.sun.star.chart2.template.NetSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
     ( "com.sun.star.chart2.template.StackedNetSymbol" ,       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
     ( "com.sun.star.chart2.template.PercentStackedNetSymbol" ,ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false) )
@@ -1278,6 +1278,6 @@ void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& 
     rParameter.b3DLook = false;
     rParameter.eStackMode = GlobalStackMode_NONE;
 }
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

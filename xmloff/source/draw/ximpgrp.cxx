@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include"xmloff/xmlnmspe.hxx"
@@ -49,7 +49,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
 {
     SvXMLImportContext* pContext = 0L;
 
-    // #i68101#
+    
     if( nPrefix == XML_NAMESPACE_SVG &&
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
@@ -65,12 +65,12 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
     }
     else
     {
-        // call GroupChildContext function at common ShapeImport
+        
         pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
-    // call parent when no own context was created
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext(
         nPrefix, rLocalName, xAttrList);
@@ -80,8 +80,8 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
 
 void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
-    // create new group shape and add it to rShapes, use it
-    // as base for the new group import
+    
+    
     AddShape( "com.sun.star.drawing.GroupShape" );
 
     if(mxShape.is())

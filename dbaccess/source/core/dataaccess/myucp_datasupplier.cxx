@@ -35,14 +35,14 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
 
-// @@@ Adjust namespace name.
+
 using namespace dbaccess;
 
-// @@@ Adjust namespace name.
+
 namespace dbaccess
 {
 
-// struct ResultListEntry.
+
 struct ResultListEntry
 {
     OUString                       aId;
@@ -54,10 +54,10 @@ struct ResultListEntry
     ResultListEntry( const ContentProperties& rEntry ) : rData( rEntry ) {}
 };
 
-// ResultList.
+
 typedef std::vector< ResultListEntry* > ResultList;
 
-// struct DataSupplier_Impl.
+
 struct DataSupplier_Impl
 {
     osl::Mutex                                   m_aMutex;
@@ -88,7 +88,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 }
 
-// DataSupplier Implementation.
+
 
 DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent,
                             sal_Int32 nOpenMode )
@@ -111,7 +111,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() )
         {
-            // Already cached.
+            
             return aId;
         }
     }
@@ -141,7 +141,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         Reference< XContentIdentifier > xId = m_pImpl->m_aResults[ nIndex ]->xId;
         if ( xId.is() )
         {
-            // Already cached.
+            
             return xId;
         }
     }
@@ -166,7 +166,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
         Reference< XContent > xContent = m_pImpl->m_aResults[ _nIndex ]->xContent.get();
         if ( xContent.is() )
         {
-            // Already cached.
+            
             return xContent;
         }
     }
@@ -200,22 +200,22 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
     {
-        // Result already present.
+        
         return true;
     }
 
-    // Result not (yet) present.
+    
 
     if ( m_pImpl->m_bCountFinal )
         return false;
 
-    // Try to obtain result...
+    
 
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
     bool bFound = false;
     sal_uInt32 nPos = nOldCount;
 
-    // @@@ Obtain data and put it into result list...
+    
     Sequence< OUString> aSeq = m_pImpl->m_xContent->getElementNames();
     if ( nIndex < sal::static_int_cast< sal_uInt32 >( aSeq.getLength() ) )
     {
@@ -228,7 +228,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( nPos == nIndex )
             {
-                // Result obtained.
+                
                 bFound = true;
                 break;
             }
@@ -241,7 +241,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
     {
-        // Callbacks follow!
+        
         aGuard.clear();
 
         if ( (size_t)nOldCount < m_pImpl->m_aResults.size() )
@@ -264,7 +264,7 @@ sal_uInt32 DataSupplier::totalCount()
 
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
 
-    // @@@ Obtain data and put it into result list...
+    
     Sequence< OUString> aSeq = m_pImpl->m_xContent->getElementNames();
     const OUString* pIter = aSeq.getConstArray();
     const OUString* pEnd   = pIter + aSeq.getLength();
@@ -277,7 +277,7 @@ sal_uInt32 DataSupplier::totalCount()
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
     {
-        // Callbacks follow!
+        
         aGuard.clear();
 
         if ( (size_t)nOldCount < m_pImpl->m_aResults.size() )
@@ -310,7 +310,7 @@ DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
         Reference< XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
-            // Already cached.
+            
             return xRow;
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -157,7 +157,7 @@ void SwHTMLParser::NewDivision( int nToken )
             pHdFtFmt = (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt();
             if( !pHdFtFmt )
             {
-                // noch keine Header, dann erzeuge einen.
+                
                 rPageFmt.SetFmtAttr( SwFmtHeader( sal_True ));
                 pHdFtFmt = (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt();
                 bNew = sal_True;
@@ -169,7 +169,7 @@ void SwHTMLParser::NewDivision( int nToken )
             pHdFtFmt = (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
             if( !pHdFtFmt )
             {
-                // noch keine Footer, dann erzeuge einen.
+                
                 rPageFmt.SetFmtAttr( SwFmtFooter( sal_True ));
                 pHdFtFmt = (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
                 bNew = sal_True;
@@ -188,12 +188,12 @@ void SwHTMLParser::NewDivision( int nToken )
         }
         else
         {
-            // Einen neuen Node zu Beginn der Section anlegen
+            
             SwNodeIndex aSttIdx( rCntntStIdx, 1 );
             pCNd = pDoc->GetNodes().MakeTxtNode( aSttIdx,
                             pCSS1Parser->GetTxtCollFromPool(RES_POOLCOLL_TEXT));
 
-            // Den bisherigen Inhalt der Section loeschen
+            
             SwPaM aDelPam( aSttIdx );
             aDelPam.SetMark();
 
@@ -203,7 +203,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
             pDoc->DelFullPara( aDelPam );
 
-            // Die Seitenvorlage aktualisieren
+            
             for( sal_uInt16 i=0; i < pDoc->GetPageDescCnt(); i++ )
             {
                 if( RES_POOLPAGE_HTML == pDoc->GetPageDesc(i).GetPoolFmtId() )
@@ -241,16 +241,16 @@ void SwHTMLParser::NewDivision( int nToken )
         }
     }
 
-    // Bereiche fuegen wir in Rahmen nur dann ein, wenn der Bereich gelinkt ist.
+    
     if( (!aId.isEmpty() && !bPositioned) || !aHRef.isEmpty()  )
     {
-        // Bereich einfuegen (muss vor dem Setzten von Attributen erfolgen,
-        // weil die Section vor der PaM-Position eingefuegt.
+        
+        
 
-        // wenn wir im ersten Node einer Section stehen, wir die neue
-        // Section nicht in der aktuellen, sondern vor der aktuellen
-        // Section eingefuegt. Deshalb muessen wir dann einen Node
-        // einfuegen. UND IN LOESCHEN!!!
+        
+        
+        
+        
         if( !bAppended )
         {
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
@@ -263,7 +263,7 @@ void SwHTMLParser::NewDivision( int nToken )
         _HTMLAttrs *pPostIts = bAppended ? 0 : new _HTMLAttrs;
         SetAttr( sal_True, sal_True, pPostIts );
 
-        // Namen der Section eindeutig machen
+        
         const OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
 
         if( !aHRef.isEmpty() )
@@ -335,7 +335,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         pDoc->InsertSwSection( *pPam, aSection, 0, &aFrmItemSet, false );
 
-        // ggfs. einen Bereich anspringen
+        
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )
         {
             bChkJumpMark = true;
@@ -347,16 +347,16 @@ void SwHTMLParser::NewDivision( int nToken )
 
         pPam->Move( fnMoveBackward );
 
-        // PageDesc- und SwFmtBreak Attribute vom aktuellen Node in den
-        // (ersten) Node des Bereich verschieben.
+        
+        
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
                                sal_True  );
 
         if( pPostIts )
         {
-            // noch vorhandene PostIts in den ersten Absatz
-            // der Tabelle setzen
+            
+            
             InsertAttrs( *pPostIts );
             delete pPostIts;
             pPostIts = 0;
@@ -364,7 +364,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         pCntxt->SetSpansSection( sal_True );
 
-        // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
+        
         if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
             aPropInfo.aId = "";
     }
@@ -378,7 +378,7 @@ void SwHTMLParser::NewDivision( int nToken )
         InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), pCntxt );
     }
 
-    // Style parsen
+    
     if( bStyleParsed )
         InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
 
@@ -387,8 +387,8 @@ void SwHTMLParser::NewDivision( int nToken )
 
 void SwHTMLParser::EndDivision( int /*nToken*/ )
 {
-    // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
-    // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
+    
+    
     _HTMLAttrContext *pCntxt = 0;
     sal_uInt16 nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
@@ -405,9 +405,9 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
 
     if( pCntxt )
     {
-        // Attribute beenden
+        
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  
 
         delete pCntxt;
     }
@@ -445,12 +445,12 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
             ((const SvxULSpaceItem&)pTxtNode
                 ->SwCntntNode::GetAttr( RES_UL_SPACE ));
 
-        // Der untere Absatz-Abstand wird zum Abstand zur
-        // Kopf- oder Fusszeile
+        
+        
         nSpace = rULSpace.GetLower();
 
-        // und anschliessend auf einen vernuenftigen Wert
-        // gesetzt
+        
+        
         const SvxULSpaceItem& rCollULSpace =
             pTxtNode->GetAnyFmtColl().GetULSpace();
         if( rCollULSpace.GetUpper() == rULSpace.GetUpper() )
@@ -478,13 +478,13 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
             ((const SvxULSpaceItem&)pTxtNode
                 ->SwCntntNode::GetAttr( RES_UL_SPACE ));
 
-        // Der obere Absatz-Abstand wird zum Abstand zur
-        // Kopf- oder Fusszeile, wenn er groesser ist als
-        // der untere vom Absatz davor
+        
+        
+        
         if( rULSpace.GetUpper() > nSpace )
             nSpace = rULSpace.GetUpper();
 
-        // und anschliessend auf einen vernuenftigen Wert gesetzt
+        
         const SvxULSpaceItem& rCollULSpace =
             pTxtNode->GetAnyFmtColl().GetULSpace();
         if( rCollULSpace.GetLower() == rULSpace.GetLower() )
@@ -510,7 +510,7 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
                             ->GetEndNode();
     if( pEndNd && pEndNd->StartOfSectionNode()->IsSectionNode() )
     {
-        // den Bereich beenden
+        
         if( !bLFStripped )
             StripTrailingPara();
         pPam->Move( fnMoveForward );
@@ -587,14 +587,14 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_MULTICOL_ON );
 
-    //.is the multicol elememt contained in a container? That may be the
-    // case for 5.0 documents.
+    
+    
     sal_Bool bInCntnr = sal_False;
     sal_uInt16 i = aContexts.size();
     while( !bInCntnr && i > nContextStMin )
         bInCntnr = 0 != aContexts[--i]->GetFrmItemSet();
 
-    // Parse style sheets, but don't position anything by now.
+    
     sal_Bool bStyleParsed = sal_False;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -602,7 +602,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         bStyleParsed = ParseStyleOptions( aStyle, aId, aClass,
                                           aItemSet, aPropInfo, &aLang, &aDir );
 
-    // Calculate width.
+    
     sal_uInt8 nPrcWidth = bPrcWidth ? (sal_uInt8)nWidth : 0;
     sal_uInt16 nTwipWidth = 0;
     if( !bPrcWidth && nWidth && Application::GetDefaultDevice() )
@@ -615,7 +615,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     if( !nPrcWidth && nTwipWidth < MINFLY )
         nTwipWidth = MINFLY;
 
-    // Do positioning.
+    
     sal_Bool bPositioned = sal_False;
     if( bInCntnr || pCSS1Parser->MayBePositioned( aPropInfo, sal_True ) )
     {
@@ -627,21 +627,21 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, aItemSet, aPropInfo,
                                 aFrmItemSet );
 
-        // The width is either the WIDTH attribute's value or contained
-        // in some style option.
+        
+        
         SetVarSize( aItemSet, aPropInfo, aFrmItemSet, nTwipWidth, nPrcWidth );
 
         SetSpace( Size(0,0), aItemSet, aPropInfo, aFrmItemSet );
 
-        // Set some other frame attributes. If the background is set, its
-        // it will be cleared here. That for, it won't be set at the section,
-        // too.
+        
+        
+        
         SetFrmFmtAttrs( aItemSet, aPropInfo,
                         HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_PADDING|HTML_FF_DIRECTION,
                         aFrmItemSet );
 
-        // Insert fly frame. If the are columns, the fly frame's name is not
-        // the sections name but a generated one.
+        
+        
         OUString aFlyName( aEmptyOUStr );
         if( nCols < 2 )
         {
@@ -669,14 +669,14 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
     }
 
-    // If there are less then 2 columns, no section is inserted.
+    
     if( nCols >= 2 )
     {
         if( !bAppended )
         {
-            // If the pam is at the start of a section, a additional text
-            // node must be inserted. Otherwise, the new section will be
-            // inserted in front of the old one.
+            
+            
+            
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
@@ -687,7 +687,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         _HTMLAttrs *pPostIts = bAppended ? 0 : new _HTMLAttrs;
         SetAttr( sal_True, sal_True, pPostIts );
 
-        // Make section name unique.
+        
         OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
         SwSectionData aSection( CONTENT_SECTION, aName );
 
@@ -724,7 +724,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
         pDoc->InsertSwSection( *pPam, aSection, 0, &aFrmItemSet, false );
 
-        // Jump to section, if this is requested.
+        
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )
         {
             bChkJumpMark = true;
@@ -736,15 +736,15 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         pPam->Move( fnMoveBackward );
 
-        // Move PageDesc and SwFmtBreak attributes of the current node
-        // to the section's first node.
+        
+        
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
                                sal_True  );
 
         if( pPostIts )
         {
-            // Move pending PostIts into the section.
+            
             InsertAttrs( *pPostIts );
             delete pPostIts;
             pPostIts = 0;
@@ -752,12 +752,12 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         pCntxt->SetSpansSection( sal_True );
 
-        // Insert a bookmark if its name differs from the section's name only.
+        
         if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
             aPropInfo.aId = "";
     }
 
-    // Additional attributes must be set as hard ones.
+    
     if( bStyleParsed )
         InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
 
@@ -773,10 +773,10 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     RndStdIds eAnchorId =
         ((const SwFmtAnchor&)rItemSet.Get( RES_ANCHOR )).GetAnchorId();
 
-    // Den Rahmen anlegen
+    
     SwFlyFrmFmt* pFlyFmt = pDoc->MakeFlySection( eAnchorId, pPam->GetPoint(),
                                                     &rItemSet );
-    // Ggf. den Namen setzen
+    
     if( !rName.isEmpty() )
         pFlyFmt->SetName( rName );
 

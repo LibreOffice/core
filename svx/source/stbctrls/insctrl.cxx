@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -30,7 +30,7 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
-// class SvxInsertStatusBarControl ---------------------------------------
+
 
 SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
                                                       sal_uInt16 _nId,
@@ -41,13 +41,13 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )
@@ -69,7 +69,7 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::Click()
 {
@@ -90,14 +90,14 @@ void SvxInsertStatusBarControl::Click()
     execute( aArgs );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 {
     DrawItemText_Impl();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {

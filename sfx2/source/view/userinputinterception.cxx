@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,10 +28,10 @@
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -114,59 +114,59 @@ namespace sfx2
 
     }
 
-    //====================================================================
-    //= UserInputInterception
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     UserInputInterception::UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex )
         :m_pData( new UserInputInterception_Data( _rControllerImpl, _rMutex ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     UserInputInterception::~UserInputInterception()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void UserInputInterception::addKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
     {
         if ( _rxHandler.is() )
             m_pData->m_aKeyHandlers.addInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     void UserInputInterception::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
     {
         m_pData->m_aKeyHandlers.removeInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     void UserInputInterception::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
     {
         if ( _rxHandler.is() )
             m_pData->m_aMouseClickHandlers.addInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     void UserInputInterception::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
     {
         m_pData->m_aMouseClickHandlers.removeInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     bool UserInputInterception::hasKeyHandlers() const
     {
         return m_pData->m_aKeyHandlers.getLength() > 0;
     }
 
-    //--------------------------------------------------------------------
+    
     bool UserInputInterception::hasMouseClickListeners() const
     {
         return m_pData->m_aMouseClickHandlers.getLength() > 0;
     }
 
-    //--------------------------------------------------------------------
+    
     bool UserInputInterception::handleNotifyEvent( const NotifyEvent& _rEvent )
     {
         Reference < XInterface > xHoldAlive( m_pData->m_rControllerImpl );
@@ -260,8 +260,8 @@ namespace sfx2
         return bHandled;
     }
 
-//........................................................................
-} // namespace sfx2
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zforlist.hxx>
@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
 {
-    // no need to look at empty cells - just use ScCellIterator
+    
     ScCellIterator aIter( pDoc, rRange );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
@@ -44,7 +44,7 @@ static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
         if (pCell->GetErrCode() != 0)
             return true;
     }
-    return false;   // no error found
+    return false;   
 }
 
 static long lcl_DoubleToLong( double fVal )
@@ -54,7 +54,7 @@ static long lcl_DoubleToLong( double fVal )
     if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
         return (long)fInt;
     else
-        return 0;       // out of range
+        return 0;       
 }
 
 bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
@@ -267,7 +267,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
 
             if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetErrCode() != 0)
             {
-                // if NV is allowed, leave empty for errors
+                
                 bHasErrors = true;
             }
             else if (aCell.hasNumeric())
@@ -331,7 +331,7 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
     o_eClass = rAny.getValueTypeClass();
     switch (o_eClass)
     {
-        //! extract integer values
+        
         case uno::TypeClass_ENUM:
         case uno::TypeClass_BOOLEAN:
         case uno::TypeClass_CHAR:
@@ -346,7 +346,7 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
             bRet = true;
             break;
         default:
-            ;   // nothing, avoid warning
+            ;   
     }
     if (!bRet)
         o_fVal = 0.0;
@@ -403,7 +403,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                     }
                     else
                     {
-                        // Try string, else use empty as last resort.
+                        
 
                         if ( pColArr[nCol] >>= aUStr )
                         {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/presentation/FadeEffect.hpp>
@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 
 
-//========================================================================
-// SdPagesField
-//========================================================================
+
+
+
 
 SdPagesField::SdPagesField( Window* pParent,
                             const uno::Reference< frame::XFrame >& rFrame,
@@ -51,14 +51,14 @@ SdPagesField::SdPagesField( Window* pParent,
     OUString aStr( SD_RESSTR( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
 
-    // set size
+    
     aStr += "XXX";
     Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
 
 
     SetSizePixel( aSize );
 
-    // set parameter of MetricFields
+    
     SetUnit( FUNIT_CUSTOM );
     SetMin( 1 );
     SetFirst( 1 );
@@ -69,13 +69,13 @@ SdPagesField::SdPagesField( Window* pParent,
     Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 SdPagesField::~SdPagesField()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
@@ -92,7 +92,7 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
         SetText( OUString() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPagesField::Modify()
 {
@@ -113,13 +113,13 @@ SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox&
 {
 }
 
-//========================================================================
+
 
 SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 {
 }
 
-//========================================================================
+
 
 void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
                 SfxItemState eState, const SfxPoolItem* pState )
@@ -147,7 +147,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     }
 }
 
-//========================================================================
+
 
 Window* SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
 {

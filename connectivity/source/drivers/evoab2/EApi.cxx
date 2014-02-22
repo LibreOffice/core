@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
@@ -22,14 +22,14 @@
 #define  DECLARE_FN_POINTERS 1
 #include "EApi.h"
 static const char *eBookLibNames[] = {
-    "libebook-1.2.so.14", // bumped again (evolution-3.6)
-    "libebook-1.2.so.13", // bumped again (evolution-3.4)
-    "libebook-1.2.so.12", // bumped again
-    "libebook-1.2.so.10", // bumped again
-    "libebook-1.2.so.9",  // evolution-2.8
-    "libebook-1.2.so.5",  // evolution-2.4 and 2.6+
-    "libebook-1.2.so.3",  // evolution-2.2
-    "libebook.so.8"       // evolution-2.0
+    "libebook-1.2.so.14", 
+    "libebook-1.2.so.13", 
+    "libebook-1.2.so.12", 
+    "libebook-1.2.so.10", 
+    "libebook-1.2.so.9",  
+    "libebook-1.2.so.5",  
+    "libebook-1.2.so.3",  
+    "libebook.so.8"       
 };
 
 typedef void (*SymbolFunc) (void);
@@ -63,7 +63,7 @@ static const ApiMap aCommonApiMap[] =
     SYM_MAP( e_book_query_field_exists )
 };
 
-//< 3.6 api
+
 static const ApiMap aOldApiMap[] =
 {
     SYM_MAP( e_book_get_addressbooks ),
@@ -76,7 +76,7 @@ static const ApiMap aOldApiMap[] =
     SYM_MAP( e_source_group_peek_sources )
 };
 
-//>= 3.6 api
+
 static const ApiMap aNewApiMap[] =
 {
     SYM_MAP( e_source_registry_list_sources ),
@@ -93,13 +93,13 @@ static const ApiMap aNewApiMap[] =
     SYM_MAP( e_client_util_free_object_slist )
 };
 
-//== indirect read access (3.6 only)
+
 static const ApiMap aClientApiMap36[] =
 {
     SYM_MAP( e_book_client_new )
 };
 
-//>= direct read access API (>= 3.8)
+
 static const ApiMap aClientApiMap38[] =
 {
     SYM_MAP( e_book_client_connect_direct_sync )

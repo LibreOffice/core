@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fupage.hxx"
 
 #include <sfx2/viewfrm.hxx>
 
-// arrange Tab-Page
+
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -71,8 +71,8 @@ namespace sd {
 
 class Window;
 
-// 50 cm 28350
-// adapted from writer
+
+
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
@@ -88,7 +88,7 @@ void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
         p1 = pPtr[0];
         p2 = pPtr[1];
 
-        // make ranges discret
+        
         while(pPtr[2] && (pPtr[2] - p2 == 1))
         {
             p2 = pPtr[3];
@@ -134,14 +134,14 @@ void FuPage::DoExecute( SfxRequest& )
 
     if( mpPage )
     {
-        // if there are no arguments given, open the dialog
+        
         if( !mpArgs )
         {
             mpView->SdrEndTextEdit();
             mpArgs = ExecuteDialog(mpWindow);
         }
 
-        // if we now have arguments, apply them to current page
+        
         if( mpArgs )
             ApplyItemSet( mpArgs );
     }
@@ -174,8 +174,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                         0);
 
-    ///////////////////////////////////////////////////////////////////////
-    // Retrieve additional data for dialog
+    
+    
 
     SvxShadowItem aShadowItem(SID_ATTR_BORDER_SHADOW);
     aNewAttr.Put( aShadowItem );
@@ -186,8 +186,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         mpDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP,
         EE_PARA_WRITINGDIR ) );
 
-    ///////////////////////////////////////////////////////////////////////
-    // Retrieve page-data for dialog
+    
+    
 
     SvxPageItem aPageItem( SID_ATTR_PAGE );
     aPageItem.SetDescName( mpPage->GetName() );
@@ -196,16 +196,16 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
     aPageItem.SetNumType( mpDoc->GetPageNumType() );
     aNewAttr.Put( aPageItem );
 
-    // size
+    
     maSize = mpPage->GetSize();
     SvxSizeItem aSizeItem( SID_ATTR_PAGE_SIZE, maSize );
     aNewAttr.Put( aSizeItem );
 
-    // Max size
+    
     SvxSizeItem aMaxSizeItem( SID_ATTR_PAGE_MAXSIZE, Size( MAXWIDTH, MAXHEIGHT ) );
     aNewAttr.Put( aMaxSizeItem );
 
-    // paperbin
+    
     SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, (const sal_uInt8)mpPage->GetPaperBin() );
     aNewAttr.Put( aPaperBinItem );
 
@@ -215,7 +215,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
     SvxULSpaceItem aULSpaceItem( (sal_uInt16)mpPage->GetUppBorder(), (sal_uInt16)mpPage->GetLwrBorder(), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
     aNewAttr.Put( aULSpaceItem );
 
-    // Applikation
+    
     bool bScale = mpDoc->GetDocumentType() != DOCUMENT_TYPE_DRAW;
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ? sal_True : sal_False ) );
 
@@ -224,8 +224,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
 
-    ///////////////////////////////////////////////////////////////////////
-    // Merge ItemSet for dialog
+    
+    
 
     const sal_uInt16* pPtr = aNewAttr.GetRanges();
     sal_uInt16 p1 = pPtr[0], p2 = pPtr[1];
@@ -240,7 +240,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
     SdStyleSheet* pStyleSheet = mpPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
 
-    // merge page background filling to the dialogs input set
+    
     if( mbDisplayBackgroundTabPage )
     {
         if( mbMasterPage )
@@ -250,12 +250,12 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         }
         else
         {
-            // Only this page, get attributes for background fill
+            
             const SfxItemSet& rBackgroundAttributes = mpPage->getSdrPageProperties().GetItemSet();
 
             if(XFILL_NONE != ((const XFillStyleItem&)rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
             {
-                // page attributes are used, take them
+                
                 aMergedAttr.Put(rBackgroundAttributes);
             }
             else
@@ -263,13 +263,13 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 if(pStyleSheet
                     && XFILL_NONE != ((const XFillStyleItem&)pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
                 {
-                    // if the page has no fill style, use the settings from the
-                    // background stylesheet (if used)
+                    
+                    
                     mergeItemSetsImpl(aMergedAttr, pStyleSheet->GetItemSet());
                 }
                 else
                 {
-                    // no fill style from page, start with no fill style
+                    
                     aMergedAttr.Put(XFillStyleItem(XFILL_NONE));
                 }
             }
@@ -292,7 +292,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
                 pTempSet->Put( XFillStyleItem( XFILL_BITMAP ) );
 
-                // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
+                
                 SfxItemSet aMigrateSet( mpDoc->GetPool(), XATTR_FILLBITMAP, XATTR_FILLBITMAP );
                 aMigrateSet.Put(XFillBitmapItem(OUString("background"), aGraphic));
                 mpDoc->MigrateItemSet( &aMigrateSet, pTempSet.get(), NULL );
@@ -304,7 +304,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
     }
     else
     {
-        // create the dialog
+        
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         std::auto_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(NULL, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : 0 );
         if( pDlg.get() && pDlg->Execute() == RET_OK )
@@ -317,8 +317,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
         if( mbDisplayBackgroundTabPage )
         {
-            // if some fillstyle-items are not set in the dialog, then
-            // try to use the items before
+            
+            
             sal_Bool bChanges = sal_False;
             for( sal_uInt16 i=XATTR_FILL_FIRST; i<XATTR_FILL_LAST; i++ )
             {
@@ -332,7 +332,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 }
             }
 
-            // if the background for this page was set to invisible, the background-object has to be deleted, too.
+            
             if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
                 ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
                     ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
@@ -340,11 +340,11 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             bool bSetToAllPages = false;
 
-            // Ask, whether the setting are for the background-page or for the current page
+            
             if( !mbMasterPage && bChanges )
             {
-                // But don't ask in notice-view, because we can't change the background of
-                // notice-masterpage (at the moment)
+                
+                
                 if( ePageKind != PK_NOTES )
                 {
                     MessBox aQuestionBox (
@@ -363,7 +363,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
                     if(!mpPage->IsMasterPage())
                     {
-                        // on normal pages, switch off fill attribute usage
+                        
                         SdrPageProperties& rPageProperties = mpPage->getSdrPageProperties();
                         rPageProperties.ClearItem( XATTR_FILLBITMAP );
                         rPageProperties.ClearItem( XATTR_FILLGRADIENT );
@@ -394,7 +394,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
                 pUndoGroup->SetComment(aComment);
 
-                //Set background on all master pages
+                
                 sal_uInt16 nMasterPageCount = mpDoc->GetMasterSdPageCount(ePageKind);
                 for (sal_uInt16 i = 0; i < nMasterPageCount; ++i)
                 {
@@ -409,7 +409,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     pStyle->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                 }
 
-                //Remove background from all pages to reset to the master bg
+                
                 sal_uInt16 nPageCount(mpDoc->GetSdPageCount(ePageKind));
                 for(sal_uInt16 i=0; i<nPageCount; ++i)
                 {
@@ -436,7 +436,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             }
 
-            // if background filling is set to master pages then clear from page set
+            
             if( mbMasterPage || bSetToAllPages )
             {
                 for( sal_uInt16 nWhich = XATTR_FILL_FIRST; nWhich <= XATTR_FILL_LAST; nWhich++ )
@@ -455,7 +455,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             mpDoc->SetChanged(true);
 
-            // BackgroundFill of Masterpage: no hard attributes allowed
+            
             SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();
             OSL_ENSURE(rUsedMasterPage.IsMasterPage(), "No MasterPage (!)");
             rUsedMasterPage.getSdrPageProperties().ClearItem();
@@ -479,8 +479,8 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( !pArgs )
         return;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Set new page-attributes
+    
+    
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
     const SfxPoolItem*  pPoolItem;
     sal_Bool                bSetPageSizeAndBorder = sal_False;
@@ -547,7 +547,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = sal_True;
     }
 
-    // Paper Bin
+    
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SFX_ITEM_SET )
     {
         nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
@@ -572,19 +572,19 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( bSetPageSizeAndBorder || !mbMasterPage )
         mpDrawViewShell->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
 
-    ////////////////////////////////////////////////////////////////////////////////
+    
     //
-    // if bMasterPage==sal_False then create a background-object for this page with the
-    // properties set in the dialog before, but if mbPageBckgrdDeleted==sal_True then
-    // the background of this page was set to invisible, so it would be a mistake
-    // to create a new background-object for this page !
+    
+    
+    
+    
     //
 
     if( mbDisplayBackgroundTabPage )
     {
         if( !mbMasterPage && !mbPageBckgrdDeleted )
         {
-            // Only this page
+            
             delete mpBackgroundObjUndoAction;
             mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction(
                 *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet());
@@ -595,23 +595,23 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         }
     }
 
-    // add undo action for background object
+    
     if( mpBackgroundObjUndoAction )
     {
-        // set merge flag, because a SdUndoGroupAction could have been inserted before
+        
         mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction, true );
         mpBackgroundObjUndoAction = 0;
     }
 
-    // Objects can not be bigger than ViewSize
+    
     Size aPageSize = mpDoc->GetSdPage(0, ePageKind)->GetSize();
     Size aViewSize = Size(aPageSize.Width() * 3, aPageSize.Height() * 2);
     mpDoc->SetMaxObjSize(aViewSize);
 
-    // if necessary, we tell Preview the new context
+    
     mpDrawViewShell->UpdatePreview( mpDrawViewShell->GetActualPage() );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

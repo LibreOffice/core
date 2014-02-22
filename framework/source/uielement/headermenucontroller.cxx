@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/headermenucontroller.hxx>
@@ -39,9 +39,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -74,7 +74,7 @@ HeaderMenuController::~HeaderMenuController()
 {
 }
 
-// private function
+
 void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::frame::XModel >& rModel, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -150,7 +150,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                                 pVCLPopupMenu->CheckItem( nId, true );
                             ++nId;
 
-                            // Check if all entries have the same state
+                            
                             if( bAllOneState && n && bHeaderIsOn != bLastCheck )
                                 bAllOneState = sal_False;
                             bLastCheck = bHeaderIsOn;
@@ -161,13 +161,13 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 
                 if ( bAllOneState && ( nCount > 1 ))
                 {
-                    // Insert special item for all command
+                    
                     pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwlResId(STR_MENU_HEADFOOTALL).toString(), 0, OString(), 0 );
 
                     OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.appendAscii( "?On:bool=" );
 
-                    // Command depends on check state of first menu item entry
+                    
                     if ( !bFirstChecked )
                         aStrBuf.appendAscii( "true" );
                     else
@@ -184,7 +184,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
     }
 }
 
-// XEventListener
+
 void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -198,7 +198,7 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( Runt
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     Reference< com::sun::star::frame::XModel > xModel;
@@ -212,7 +212,7 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
     }
 }
 
-// XMenuListener
+
 void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;

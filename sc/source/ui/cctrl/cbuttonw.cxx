@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,9 +25,9 @@
 #include <vcl/settings.hxx>
 #include "cbutton.hxx"
 
-//========================================================================
-//  class ScDDComboBoxButton
-//========================================================================
+
+
+
 
 ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     :   pOut( pOutputDevice )
@@ -35,29 +35,29 @@ ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     SetOptSizePixel();
 }
 
-// -------------------------------------------------------------------------
+
 
 ScDDComboBoxButton::~ScDDComboBoxButton()
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::SetOutputDevice( OutputDevice* pOutputDevice )
 {
     pOut = pOutputDevice;
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::SetOptSizePixel()
 {
     aBtnSize = pOut->LogicToPixel( Size(0,11), MAP_APPFONT );
-    //aBtnSize.Width() = GetSystemMetrics( SM_CXVSCROLL ) - 1; // Win SDK-Funktion
+    
     aBtnSize.Width() = pOut->GetSettings().GetStyleSettings().GetScrollBarSize();
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize,
@@ -65,9 +65,9 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
                                bool         bBtnIn  /* = false */ )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
-        return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
+        return;     
 
-    // save old state
+    
     sal_Bool        bHadFill   = pOut->IsFillColor();
     Color       aOldFill   = pOut->GetFillColor();
     sal_Bool        bHadLine   = pOut->IsLineColor();
@@ -82,7 +82,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     DecorationView aDecoView( pOut);
 
     sal_uInt16 nButtonStyle = BUTTON_DRAW_DEFAULT;
-    if( bBtnIn )    // gedrueckt?
+    if( bBtnIn )    
     {
         nButtonStyle = BUTTON_DRAW_PRESSED;
     }
@@ -104,7 +104,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     ImpDrawArrow( aInnerRect, bState );
 
 
-    // restore old state
+    
     pOut->EnableMapMode( bOldEnable );
     if (bHadLine)
         pOut->SetLineColor(aOldLine);
@@ -116,12 +116,12 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
         pOut->SetFillColor();
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
                                        bool             bState )
 {
-    // no need to save old line and fill color here (is restored after the call)
+    
 
     Rectangle   aPixRect = rRect;
     Point       aCenter  = aPixRect.Center();

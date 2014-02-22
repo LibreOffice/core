@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sqlmessage.hxx"
@@ -177,7 +177,7 @@ namespace
 
     };
 
-    /// a stripped version of the SQLException, packed for displaying
+    
     struct ExceptionDisplayInfo
     {
         SQLExceptionInfo::TYPE                  eType;
@@ -205,7 +205,7 @@ namespace
 
     typedef ::std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
 
-    /// strips the [OOoBase] vendor identifier from the given error message, if applicable
+    
     OUString lcl_stripOOoBaseVendor( const OUString& _rErrorMessage )
     {
         OUString sErrorMessage( _rErrorMessage );
@@ -213,9 +213,9 @@ namespace
         const OUString sVendorIdentifier( ::connectivity::SQLError::getMessagePrefix() );
         if ( sErrorMessage.startsWith( sVendorIdentifier ) )
         {
-            // characters to strip
+            
             sal_Int32 nStripLen( sVendorIdentifier.getLength() );
-            // usually, there should be a whitespace between the vendor and the real message
+            
             while   (   ( sErrorMessage.getLength() > nStripLen )
                     &&  ( sErrorMessage[nStripLen] == ' ' )
                     )
@@ -236,13 +236,13 @@ namespace
         SQLExceptionIteratorHelper iter( _rErrorInfo );
         while ( iter.hasMoreElements() )
         {
-            // current chain element
+            
             SQLExceptionInfo aCurrentElement;
             iter.next( aCurrentElement );
 
             const SQLException* pCurrentError = (const SQLException*)aCurrentElement;
             OSL_ENSURE( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
-                // hasMoreElements should not have returned <TRUE/> in this case
+                
 
             ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );
 
@@ -350,8 +350,8 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         bHave22018 = loop->sSQLState.equalsAscii( "22018" );
     }
 
-    // if the error has the code 22018, then add an additional explanation
-    // #i24021#
+    
+    
     if ( bHave22018 )
     {
         ProviderFactory aProviderFactory;
@@ -409,14 +409,14 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
     return 0L;
 }
 
-// SQLMessageBox_Impl
+
 struct SQLMessageBox_Impl
 {
     ExceptionDisplayChain   aDisplayInfo;
 
     SQLMessageBox_Impl( const SQLExceptionInfo& _rExceptionInfo )
     {
-        // transform the exception chain to a form more suitable for displaying it here
+        
         ProviderFactory aProviderFactory;
         lcl_buildExceptionChain( _rExceptionInfo, aProviderFactory, aDisplayInfo );
     }
@@ -463,14 +463,14 @@ void OSQLMessageBox::impl_positionControls()
         pSecondInfo = &m_pImpl->aDisplayInfo[1];
     OUString sPrimary, sSecondary;
     sPrimary = rFirstInfo.sMessage;
-    // one or two texts to display?
+    
     if ( pSecondInfo )
     {
-        // we show two elements in the main dialog if and only if one of
-        // - the first element in the chain is an SQLContext, and the second
-        //   element denotes its sub entry
-        // - the first and the second element are both independent (i.e. the second
-        //   is no sub entry), and none of them is a context.
+        
+        
+        
+        
+        
         bool bFirstElementIsContext = ( rFirstInfo.eType == SQLExceptionInfo::SQL_CONTEXT );
         bool bSecondElementIsContext = ( pSecondInfo->eType == SQLExceptionInfo::SQL_CONTEXT );
 
@@ -480,11 +480,11 @@ void OSQLMessageBox::impl_positionControls()
             sSecondary = pSecondInfo->sMessage;
     }
 
-    // image
+    
     lcl_positionInAppFont( *this, m_aInfoImage, OUTER_MARGIN, OUTER_MARGIN, IMAGE_SIZE, IMAGE_SIZE );
     m_aInfoImage.Show();
 
-    // primary text
+    
     lcl_positionInAppFont( *this, m_aTitle, TEXT_POS_X, OUTER_MARGIN, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 16 );
     sPrimary = lcl_stripOOoBaseVendor( sPrimary );
     m_aTitle.SetText( sPrimary );
@@ -492,7 +492,7 @@ void OSQLMessageBox::impl_positionControls()
 
     Rectangle aPrimaryRect( m_aTitle.GetPosPixel(), m_aTitle.GetSizePixel() );
 
-    // secondary text (if applicable)
+    
     m_aMessage.SetStyle( m_aMessage.GetStyle() | WB_NOLABEL );
     sSecondary = lcl_stripOOoBaseVendor( sSecondary );
     m_aMessage.SetText( sSecondary );
@@ -502,35 +502,35 @@ void OSQLMessageBox::impl_positionControls()
 
     bool bHaveSecondaryText = !sSecondary.isEmpty();
 
-    // determine which space the secondary text would occupy
+    
     if ( bHaveSecondaryText )
         aSecondaryRect = GetTextRect( aSecondaryRect, sSecondary, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT );
     else
         aSecondaryRect.Bottom() = aSecondaryRect.Top() - 1;
 
-    // adjust secondary control height accordingly
+    
     m_aMessage.SetSizePixel( aSecondaryRect.GetSize() );
     m_aMessage.Show( aSecondaryRect.GetHeight() > 0 );
 
-    // if there's no secondary text ...
+    
     if ( !bHaveSecondaryText )
-    {   // then give the primary text as much horizontal space as it needs
+    {   
         Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_CENTER ) );
         aPrimaryRect.Right() = aPrimaryRect.Left() + aSuggestedRect.GetWidth();
         aPrimaryRect.Bottom() = aPrimaryRect.Top() + aSuggestedRect.GetHeight();
-        // and center it horizontally
+        
         m_aTitle.SetStyle( ( m_aTitle.GetStyle() & ~WB_LEFT ) | WB_CENTER );
 
         Rectangle aInfoRect( m_aInfoImage.GetPosPixel(), m_aInfoImage.GetSizePixel() );
-        // also, if it's not as high as the image ...
+        
         if ( aPrimaryRect.GetHeight() < m_aInfoImage.GetSizePixel().Height() )
-        {   // ... make it fit the image height
+        {   
             aPrimaryRect.Bottom() += aInfoRect.GetHeight() - aPrimaryRect.GetHeight();
-            // and center it vertically
+            
             m_aTitle.SetStyle( m_aTitle.GetStyle() | WB_VCENTER );
         }
         else
-        {   // ... otherwise, center the image vertically, relative to the primary text
+        {   
             aInfoRect.Move( 0, ( aPrimaryRect.GetHeight() - aInfoRect.GetHeight() ) / 2 );
             m_aInfoImage.SetPosSizePixel( aInfoRect.TopLeft(), aInfoRect.GetSize() );
         }
@@ -538,7 +538,7 @@ void OSQLMessageBox::impl_positionControls()
         m_aTitle.SetPosSizePixel( aPrimaryRect.TopLeft(), aPrimaryRect.GetSize() );
     }
 
-    // adjust dialog size accordingly
+    
     const Rectangle& rBottomTextRect( bHaveSecondaryText ? aSecondaryRect : aPrimaryRect );
     Size aBorderSize = LogicToPixel( Size( OUTER_MARGIN, OUTER_MARGIN ), MAP_APPFONT );
     Size aDialogSize( LogicToPixel( Size( DIALOG_WIDTH, 30 ), MAP_APPFONT ) );
@@ -622,8 +622,8 @@ void OSQLMessageBox::impl_addDetailsButton()
     bool bMoreDetailsAvailable = m_pImpl->aDisplayInfo.size() > nFirstPageVisible;
     if ( !bMoreDetailsAvailable )
     {
-        // even if the text fits into what we can display, we might need to details button
-        // if there is more non-trivial information in the errors than the mere messages
+        
+        
         for (   ExceptionDisplayChain::const_iterator error = m_pImpl->aDisplayInfo.begin();
                 error != m_pImpl->aDisplayInfo.end();
                 ++error
@@ -653,10 +653,10 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
         utl::ConfigManager::getProductName() +
         OUString( " Base" ) );
 
-    // position and size the controls and the dialog, depending on whether we have one or two texts to display
+    
     impl_positionControls();
 
-    // init the image
+    
     MessageType eType( _eImage );
     if ( eType == AUTO )
     {
@@ -670,7 +670,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
     }
     impl_initImage( eType );
 
-    // create buttons
+    
     impl_createStandardButtons( _nStyle );
     impl_addDetailsButton();
 }
@@ -714,20 +714,20 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
     return 0;
 }
 
-// OSQLWarningBox
+
 OSQLWarningBox::OSQLWarningBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
 }
 
-// OSQLErrorBox
+
 OSQLErrorBox::OSQLErrorBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_ERROR ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
 {
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

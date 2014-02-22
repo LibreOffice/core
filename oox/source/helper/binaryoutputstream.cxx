@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/binaryoutputstream.hxx"
@@ -26,7 +26,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -35,9 +35,9 @@ namespace {
 
 const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 BinaryXOutputStream::BinaryXOutputStream( const Reference< XOutputStream >& rxOutStrm, bool bAutoClose ) :
     BinaryStreamBase( Reference< XSeekable >( rxOutStrm, UNO_QUERY ).is() ),
@@ -118,7 +118,7 @@ BinaryOutputStream::writeUnicodeArray( const OUString& rString, bool bAllowNulCh
     if( !bAllowNulChars )
         sBuf = sBuf.replace( '\0', '?' );
 #ifdef OSL_BIGENDIAN
-    // need a non-const buffer for swapping byte order
+    
     sal_Unicode notConst[sBuf.getLength()];
     memcpy( notConst, sBuf.getStr(), sizeof(sal_Unicode)*sBuf.getLength() );
     writeArray( notConst, sBuf.getLength() );
@@ -131,13 +131,13 @@ void
 BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars )
 {
     if ( bCompressed )
-         // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH
+         
         writeCharArrayUC( rString, RTL_TEXTENCODING_ISO_8859_1, bAllowNulChars );
     else
         writeUnicodeArray( rString, bAllowNulChars );
 }
 
-// ============================================================================
+
 
 SequenceOutputStream::SequenceOutputStream( StreamDataSequence& rData ) :
     BinaryStreamBase( true ),
@@ -162,8 +162,8 @@ void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size
     }
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /* system headers */
@@ -428,7 +428,7 @@ void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* /* pExcPtrs */)
         case EXCEPTION_INVALID_DISPOSITION:      pSEHName = "SEH Exception: INVALID DISPOSITION"; break;
         case EXCEPTION_GUARD_PAGE:               pSEHName = "SEH Exception: GUARD PAGE"; break;
         case EXCEPTION_INVALID_HANDLE:           pSEHName = "SEH Exception: INVALID HANDLE"; break;
-//      case EXCEPTION_POSSIBLE_DEADLOCK:        pSEHName = "SEH Exception: POSSIBLE DEADLOCK"; break;
+
         default:                                 pSEHName = "Unknown SEH Exception"; break;
     }
 
@@ -441,9 +441,9 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
     sal_Bool bOld = bErrorReportingEnabled;
     bErrorReportingEnabled = bEnable;
 
-    if( !bEnable) // if the crash reporter is disabled
+    if( !bEnable) 
     {
-        // fall back to handle Window's SEH events as C++ exceptions
+        
         _set_se_translator( win_seh_translator);
     }
 

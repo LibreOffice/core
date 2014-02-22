@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -55,7 +55,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-// Globals ******************************************************************
+
 
 static sal_uInt16 aPageRg[] = {
     RES_PARATR_DROP, RES_PARATR_DROP,
@@ -76,13 +76,13 @@ class SwDropCapsPict : public Control
     sal_uInt16      mnDistance;
     Printer*        mpPrinter;
     bool            mbDelPrinter;
-    /// The _ScriptInfo structure holds information on where we change from one
-    /// script to another.
+    
+    
     struct _ScriptInfo
     {
-        sal_uLong  textWidth;   ///< Physical width of this segment.
-        sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
-        sal_Int32 changePos;   ///< Character position where the script changes.
+        sal_uLong  textWidth;   
+        sal_uInt16 scriptType;  
+        sal_Int32 changePos;   
         _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_Int32 position)
             : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
         bool operator<(_ScriptInfo other) { return changePos < other.changePos; }
@@ -121,7 +121,7 @@ public:
 
     ~SwDropCapsPict();
 
-    void UpdatePaintSettings( void );       // also invalidates control!
+    void UpdatePaintSettings( void );       
 
     virtual void Resize();
     virtual Size GetOptimalSize() const;
@@ -213,10 +213,10 @@ SwDropCapsPict::~SwDropCapsPict()
          delete mpPrinter;
 }
 
-/// Get the details of the first script change.
-/// @param[out] start      The character position of the start of the segment.
-/// @param[out] end        The character position of the end of the segment.
-/// @param[out] scriptType The script type (Latin, Asian, Complex etc.)
+
+
+
+
 void SwDropCapsPict::GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType)
 {
     start = 0;
@@ -232,12 +232,12 @@ void SwDropCapsPict::GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal
     }
 }
 
-/// Get the details of the first script change.
-/// @param[in,out] nIdx       Index of the current script change.
-/// @param[out]    start      The character position of the start of the segment.
-/// @param[in,out] end        The character position of the end of the segment.
-/// @param[out]    scriptType The script type (Latin, Asian, Complex etc.)
-/// @returns True if there was a next segment, false if not.
+
+
+
+
+
+
 bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType)
 {
     if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.getLength())
@@ -268,7 +268,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     maBackColor = GetSettings().GetStyleSettings().GetWindowColor();
     maTextLineColor = Color( COL_LIGHTGRAY );
 
-    // gray lines
+    
     mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;
     mnLineH = mnTotLineH - 2;
 
@@ -277,20 +277,20 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     {
         if (!mpPage->m_pTemplateBox->GetSelectEntryPos())
         {
-            // query the Font at paragraph's beginning
+            
             mpPage->rSh.SttCrsrMove();
             mpPage->rSh.Push();
             mpPage->rSh.ClearMark();
             SwWhichPara pSwuifnParaCurr = GetfnParaCurr();
             SwPosPara pSwuifnParaStart = GetfnParaStart();
             mpPage->rSh.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
-            // normal
+            
             GetFontSettings( *mpPage, aFont, RES_CHRATR_FONT );
 
-            // CJK
+            
             GetFontSettings( *mpPage, maCJKFont, RES_CHRATR_CJK_FONT );
 
-            // CTL
+            
             GetFontSettings( *mpPage, maCTLFont, RES_CHRATR_CTL_FONT );
 
             mpPage->rSh.Pop(sal_False);
@@ -298,7 +298,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
         }
         else
         {
-            // query Font at character template
+            
             SwCharFmt *pFmt = mpPage->rSh.GetCharStyle(
                                     mpPage->m_pTemplateBox->GetSelectEntry(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
@@ -372,7 +372,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
     for (sal_uInt16 i = 0; i < LINES; ++i)
         DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH), Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
 
-    // Text background with gap (240 twips ~ 1 line height)
+    
     sal_uLong lDistance = mnDistance;
     sal_uInt16 nDistW = (sal_uInt16) (sal_uLong) (((lDistance * 100) / 240) * mnTotLineH) / 100;
     SetFillColor( maBackColor );
@@ -382,7 +382,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
         aTextSize.Width() += nDistW;
         DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
 
-        // draw Text
+        
         DrawPrev( Point( BORDER, nY0 ) );
     }
 
@@ -557,16 +557,16 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
     sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
-    // In the template dialog the text is not influenceable
+    
     m_pTextText->Enable( !bFormat );
     m_pTextEdit->Enable( !bFormat );
 
-    // Metrics
+    
     SetMetric( *m_pDistanceField, GetDfltMetric(bHtmlMode) );
 
     m_pPict->SetBorderStyle( WINDOW_BORDER_MONO );
 
-    // Install handler
+    
     Link aLk = LINK(this, SwDropCapsPage, ModifyHdl);
     m_pDropCapsField->SetModifyHdl( aLk );
     m_pLinesField->SetModifyHdl( aLk );
@@ -618,7 +618,7 @@ Page: Reset-Overload
 
 void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 {
-    // Characters, lines, gap and text
+    
     SwFmtDrop aFmtDrop((SwFmtDrop &) rSet.Get(RES_PARATR_DROP));
     if (aFmtDrop.GetLines() > 1)
     {
@@ -638,12 +638,12 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 
     m_pTemplateBox->InsertEntry(SW_RESSTR(SW_STR_NONE), 0);
 
-    // Reset format
+    
     m_pTemplateBox->SelectEntryPos(0);
     if (aFmtDrop.GetCharFmt())
         m_pTemplateBox->SelectEntry(aFmtDrop.GetCharFmt()->GetName());
 
-    // Enable controls
+    
     m_pDropCapsBox->Check(aFmtDrop.GetLines() > 1);
     const sal_uInt16 nVal = sal_uInt16(m_pDropCapsField->GetValue());
     if (bFormat)
@@ -655,7 +655,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
         m_pTextText->Enable();
     }
 
-    // Preview
+    
     m_pPict->SetValues( m_pTextEdit->GetText(),
                         sal_uInt8( m_pLinesField->GetValue() ),
                         sal_uInt16( m_pDistanceField->Denormalize( m_pDistanceField->GetValue( FUNIT_TWIP ) ) ) );
@@ -725,7 +725,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 {
     OUString sPreview;
 
-    // set text if applicable
+    
     if (pEdit == m_pDropCapsField)
     {
         sal_uInt16 nVal;
@@ -755,7 +755,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         if (bSetText)
             m_pTextEdit->SetText(sPreview);
     }
-    else if (pEdit == m_pTextEdit)   // set quantity if applicable
+    else if (pEdit == m_pTextEdit)   
     {
         sal_Int32 nTmp = m_pTextEdit->GetText().getLength();
         m_pDropCapsField->SetValue(std::max((sal_uInt16)1, (sal_uInt16)nTmp));
@@ -763,7 +763,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         sPreview = m_pTextEdit->GetText().copy(0, nTmp);
     }
 
-    // adjust image
+    
     if (pEdit == m_pDropCapsField || pEdit == m_pTextEdit)
         m_pPict->SetText (sPreview);
     else if (pEdit == m_pLinesField)
@@ -803,13 +803,13 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         sal_Bool bOn = m_pDropCapsBox->IsChecked();
         if(bOn)
         {
-            // quantity, lines, gap
+            
             aFmt.GetChars()     = (sal_uInt8) m_pDropCapsField->GetValue();
             aFmt.GetLines()     = (sal_uInt8) m_pLinesField->GetValue();
             aFmt.GetDistance()  = (sal_uInt16) m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP));
             aFmt.GetWholeWord() = m_pWholeWordCB->IsChecked();
 
-            // template
+            
             if (m_pTemplateBox->GetSelectEntryPos())
                 aFmt.SetCharFmt(rSh.GetCharStyle(m_pTemplateBox->GetSelectEntry()));
         }
@@ -820,14 +820,14 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             aFmt.GetDistance() = 0;
         }
 
-        // set attributes
+        
         const SfxPoolItem* pOldItem;
         if(0 == (pOldItem = GetOldItem( rSet, FN_FORMAT_DROPCAPS )) ||
                     aFmt != *pOldItem )
             rSet.Put(aFmt);
 
-        // hard text formatting
-        // Bug 24974: in designer/template catalog this doesn't make sense!!
+        
+        
         if( !bFormat && m_pDropCapsBox->IsChecked() )
         {
             OUString sText(m_pTextEdit->GetText());

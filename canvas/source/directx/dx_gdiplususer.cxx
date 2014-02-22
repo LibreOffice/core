@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ namespace dxcanvas
         ::osl::Mutex*   p_gdiPlusUsageCountMutex( osl::Mutex::getGlobalMutex() );
         int             n_gdiPlusUsageCount( 0 );
 
-        ULONG_PTR       a_GdiPlusToken;     // GDI+ handle. Owned by this object
+        ULONG_PTR       a_GdiPlusToken;     
     }
 
     GDIPlusUserSharedPtr GDIPlusUser::createInstance()
@@ -55,10 +55,10 @@ namespace dxcanvas
 
         if( n_gdiPlusUsageCount == 0 )
         {
-            // Setup GDI+
+            
 
-            // No extras here, simply taking GdiplusStartupInput's
-            // default constructor
+            
+            
             Gdiplus::GdiplusStartupInput gdiPlusStartupInput;
 
             Gdiplus::GdiplusStartup( &a_GdiPlusToken,

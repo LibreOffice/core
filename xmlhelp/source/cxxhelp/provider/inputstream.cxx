@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,15 +91,15 @@ XInputStream_impl::readBytes(
         throw io::IOException();
 
     aData.realloc(nBytesToRead);
-    //TODO! translate memory exhaustion (if it were detectable...) into
-    // io::BufferSizeExceededException
+    
+    
 
     sal_uInt64 nrc;
     m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc );
 
-    // Shrink aData in case we read less than nBytesToRead (XInputStream
-    // documentation does not tell whether this is required, and I do not know
-    // if any code relies on this, so be conservative---SB):
+    
+    
+    
     if (nrc != sal::static_int_cast<sal_uInt64>( nBytesToRead) )
         aData.realloc(sal_Int32(nrc));
     return ( sal_Int32 ) nrc;

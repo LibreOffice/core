@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <i18nlangtag/mslangid.hxx>
@@ -102,9 +102,9 @@ DefaultFontConfiguration::DefaultFontConfiguration()
 {
     try
     {
-        // get service provider
+        
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
+        
         try
         {
             m_xConfigProvider = theDefaultProvider::get( xContext );
@@ -121,12 +121,12 @@ DefaultFontConfiguration::DefaultFontConfiguration()
             if( m_xConfigAccess.is() )
             {
                 Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
-                // fill config hash with empty interfaces
+                
                 int nLocales = aLocales.getLength();
                 const OUString* pLocaleStrings = aLocales.getConstArray();
                 for( int i = 0; i < nLocales; i++ )
                 {
-                    // Feed through LanguageTag for casing.
+                    
                     OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
                     m_aConfig[ aLoc ] = LocaleAccess();
                     m_aConfig[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
@@ -135,7 +135,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         }
         catch (const Exception&)
         {
-            // configuration is awry
+            
             m_xConfigProvider.clear();
             m_xConfigAccess.clear();
         }
@@ -153,11 +153,11 @@ DefaultFontConfiguration::DefaultFontConfiguration()
 
 DefaultFontConfiguration::~DefaultFontConfiguration()
 {
-    // release all nodes
+    
     m_aConfig.clear();
-    // release top node
+    
     m_xConfigAccess.clear();
-    // release config provider
+    
     m_xConfigProvider.clear();
 }
 
@@ -212,7 +212,7 @@ OUString DefaultFontConfiguration::tryLocale( const OUString& rBcp47, const OUSt
 OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageTag, int nType ) const
 {
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
-    // Try the simple cases first without constructing fallbacks.
+    
     OUString aRet = tryLocale( rLanguageTag.getBcp47(), aType );
     if (aRet.isEmpty())
     {
@@ -251,7 +251,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     if( !aUIFont.isEmpty() )
         return aUIFont;
 
-    // fallback mechanism (either no configuration or no entry in configuration
+    
 
     #define FALLBACKFONT_UI_SANS "Andale Sans UI;Albany;Albany AMT;Tahoma;Arial Unicode MS;Arial;Nimbus Sans L;Bitstream Vera Sans;gnu-unifont;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
     #define FALLBACKFONT_UI_SANS_LATIN2 "Andale Sans UI;Albany;Albany AMT;Tahoma;Arial Unicode MS;Arial;Nimbus Sans L;Luxi Sans;Bitstream Vera Sans;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
@@ -265,7 +265,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
 
     const OUString aLanguage( aLanguageTag.getLanguage());
 
-    // optimize font list for some locales, as long as Andale Sans UI does not support them
+    
     if( aLanguage == "ar" || aLanguage == "he" || aLanguage == "iw"  )
     {
         return OUString(FALLBACKFONT_UI_SANS_ARABIC);
@@ -276,7 +276,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     }
     else if ( aLanguage == "ko" )
     {
-        // we need localized names for korean fonts
+        
         const sal_Unicode aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
         const sal_Unicode aBaekmukGulim[] = { 0xBC31, 0xBC35, 0xAD74, 0xB9BC, 0 };
 
@@ -303,7 +303,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     }
     else if ( aLanguage == "ja" )
     {
-        // we need localized names for japanese fonts
+        
         const sal_Unicode aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
         const sal_Unicode aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
         const sal_Unicode aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
@@ -339,7 +339,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     return OUString(FALLBACKFONT_UI_SANS);
 }
 
-// ------------------------------------------------------------------------------------
+
 
 /*
  *  FontSubstConfigItem::get
@@ -367,9 +367,9 @@ FontSubstConfiguration::FontSubstConfiguration() :
 {
     try
     {
-        // get service provider
+        
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
+        
         try
         {
             m_xConfigProvider = theDefaultProvider::get( xContext );
@@ -386,12 +386,12 @@ FontSubstConfiguration::FontSubstConfiguration() :
             if( m_xConfigAccess.is() )
             {
                 Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
-                // fill config hash with empty interfaces
+                
                 int nLocales = aLocales.getLength();
                 const OUString* pLocaleStrings = aLocales.getConstArray();
                 for( int i = 0; i < nLocales; i++ )
                 {
-                    // Feed through LanguageTag for casing.
+                    
                     OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
                     m_aSubst[ aLoc ] = LocaleSubst();
                     m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
@@ -400,7 +400,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
         }
         catch (const Exception&)
         {
-            // configuration is awry
+            
             m_xConfigProvider.clear();
             m_xConfigAccess.clear();
         }
@@ -422,16 +422,16 @@ FontSubstConfiguration::FontSubstConfiguration() :
 
 FontSubstConfiguration::~FontSubstConfiguration()
 {
-    // release config access
+    
     m_xConfigAccess.clear();
-    // release config provider
+    
     m_xConfigProvider.clear();
 }
 
 /*
  *  FontSubstConfigItem::getMapName
  */
-// =======================================================================
+
 
 static const char* const aImplKillLeadingList[] =
 {
@@ -456,7 +456,7 @@ static const char* const aImplKillLeadingList[] =
     NULL
 };
 
-// -----------------------------------------------------------------------
+
 
 static const char* const aImplKillTrailingList[] =
 {
@@ -471,14 +471,14 @@ static const char* const aImplKillTrailingList[] =
     "ms",
     "mt",
     "clm",
-    // Scripts, for compatibility with older versions
+    
     "we",
     "cyr",
     "tur",
     "wt",
     "greek",
     "wl",
-    // CJK extensions
+    
     "gb",
     "big5",
     "pro",
@@ -488,7 +488,7 @@ static const char* const aImplKillTrailingList[] =
     "z13",
     "b01",
     "w3x12",
-    // Old Printer Fontnames
+    
     "5cpi",
     "6cpi",
     "7cpi",
@@ -508,7 +508,7 @@ static const char* const aImplKillTrailingList[] =
     NULL
 };
 
-// -----------------------------------------------------------------------
+
 
 static const char* const aImplKillTrailingWithExceptionsList[] =
 {
@@ -517,7 +517,7 @@ static const char* const aImplKillTrailingWithExceptionsList[] =
     NULL
 };
 
-// -----------------------------------------------------------------------
+
 
 struct ImplFontAttrWeightSearchData
 {
@@ -527,8 +527,8 @@ struct ImplFontAttrWeightSearchData
 
 static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {
-// the attribute names are ordered by "first match wins"
-// e.g. "semilight" should wins over "semi"
+
+
 {   "extrablack",           WEIGHT_BLACK },
 {   "ultrablack",           WEIGHT_BLACK },
 {   "ultrabold",            WEIGHT_ULTRABOLD },
@@ -545,7 +545,7 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   NULL,                   WEIGHT_DONTKNOW },
 };
 
-// -----------------------------------------------------------------------
+
 
 struct ImplFontAttrWidthSearchData
 {
@@ -638,7 +638,7 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   NULL,                   0 },
 };
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
 {
@@ -659,8 +659,8 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
         }
     }
 
-    // special case for Baekmuk
-    // TODO: allow non-ASCII KillLeading list
+    
+    
     const sal_Unicode* pNameStr = rName.getStr();
     if( (pNameStr[0]==0xBC31) && (pNameStr[1]==0xBC35) )
     {
@@ -672,7 +672,7 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
 {
@@ -689,7 +689,7 @@ static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
     return nStrLen;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
 {
@@ -706,7 +706,7 @@ static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* ppStr )
 {
@@ -715,7 +715,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
         sal_Int32 nTrailLen = ImplIsTrailing( rName, *ppStr );
         if( nTrailLen )
         {
-            // check string match against string exceptions
+            
             while( *++ppStr )
                 if( ImplIsTrailing( rName, *ppStr ) )
                     return false;
@@ -725,7 +725,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
         }
         else
         {
-            // skip exception strings
+            
             while( *++ppStr ) ;
         }
     }
@@ -733,7 +733,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {
@@ -748,7 +748,7 @@ static bool ImplFindAndErase( OUString& rName, const char* pStr )
     return true;
 }
 
-// =======================================================================
+
 
 void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rShortName,
                                          OUString& rFamilyName, FontWeight& rWeight,
@@ -756,20 +756,20 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
 {
     rShortName = rOrgName;
 
-    // TODO: get rid of the crazy O(N*strlen) searches below
-    // they should be possible in O(strlen)
+    
+    
 
-    // Kill leading vendor names and other unimportant data
+    
     ImplKillLeading( rShortName, aImplKillLeadingList );
 
-    // Kill trailing vendor names and other unimportant data
+    
     ImplKillTrailing( rShortName, aImplKillTrailingList );
     ImplKillTrailingWithExceptions( rShortName, aImplKillTrailingWithExceptionsList );
 
     rFamilyName = rShortName;
 
-    // Kill attributes from the name and update the data
-    // Weight
+    
+    
     const ImplFontAttrWeightSearchData* pWeightList = aImplWeightAttrSearchList;
     while ( pWeightList->mpStr )
     {
@@ -782,7 +782,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
         pWeightList++;
     }
 
-    // Width
+    
     const ImplFontAttrWidthSearchData* pWidthList = aImplWidthAttrSearchList;
     while ( pWidthList->mpStr )
     {
@@ -795,7 +795,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
         pWidthList++;
     }
 
-    // Type
+    
     rType = 0;
     const ImplFontAttrTypeSearchData* pTypeList = aImplTypeAttrSearchList;
     while ( pTypeList->mpStr )
@@ -805,8 +805,8 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
         pTypeList++;
     }
 
-    // Remove numbers
-    // TODO: also remove localized and fullwidth digits
+    
+    
     sal_Int32 i = 0;
     OUStringBuffer sBuff(rFamilyName);
     while ( i < sBuff.getLength() )
@@ -916,14 +916,14 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
             {
                 const sal_Unicode* pStr = pLine->getStr();
                 sal_Int32 nTokens = 0;
-                // count tokens
+                
                 while( nLength-- )
                 {
                     if( *pStr++ == ';' )
                         nTokens++;
                 }
                 rSubstVector.clear();
-                // optimize performance, heap fragmentation
+                
                 rSubstVector.reserve( nTokens );
                 sal_Int32 nIndex = 0;
                 while( nIndex != -1 )
@@ -1075,10 +1075,10 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                 Sequence< OUString > aFonts = xNode->getElementNames();
                 int nFonts = aFonts.getLength();
                 const OUString* pFontNames = aFonts.getConstArray();
-                // improve performance, heap fragmentation
+                
                 it->second.aSubstAttributes.reserve( nFonts );
 
-                // strings for subst retrieval, construct only once
+                
                 OUString aSubstFontsStr     ( "SubstFonts" );
                 OUString aSubstFontsMSStr   ( "SubstFontsMS" );
                 OUString aSubstFontsPSStr   ( "SubstFontsPS" );
@@ -1110,7 +1110,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                     }
 
                     FontNameAttr aAttr;
-                    // read subst attributes from config
+                    
                     aAttr.Name = pFontNames[i];
                     fillSubstVector( xFont, aSubstFontsStr, aAttr.Substitutions );
                     fillSubstVector( xFont, aSubstFontsMSStr, aAttr.MSSubstitutions );
@@ -1120,7 +1120,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                     aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
                     aAttr.Type = getSubstType( xFont, aSubstTypeStr );
 
-                    // finally insert this entry
+                    
                     it->second.aSubstAttributes.push_back( aAttr );
                 }
                 std::sort( it->second.aSubstAttributes.begin(), it->second.aSubstAttributes.end(), StrictStringSort() );
@@ -1135,8 +1135,8 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     if( rFontName.isEmpty() )
         return NULL;
 
-    // search if a  (language dep.) replacement table for the given font exists
-    // fallback is english
+    
+    
     OUString aSearchFont( rFontName.toAsciiLowerCase() );
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
@@ -1157,14 +1157,14 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
         {
             if( ! lang->second.bConfigRead )
                 readLocaleSubst( *fb );
-            // try to find an exact match
-            // because the list is sorted this will also find fontnames of the form searchfontname*
+            
+            
             std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
             if( it != lang->second.aSubstAttributes.end())
             {
                 const FontNameAttr& rFoundAttr = *it;
-                // a search for "abcblack" may match with an entry for "abc"
-                // the reverse is not a good idea (e.g. #i112731# alba->albani)
+                
+                
                 if( rFoundAttr.Name.getLength() <= aSearchFont.getLength() )
                     if( aSearchFont.startsWith( rFoundAttr.Name))
                         return &rFoundAttr;

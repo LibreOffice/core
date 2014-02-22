@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -126,7 +126,7 @@ AtkStateType mapAtkState( sal_Int16 nState )
 {
     AtkStateType type = ATK_STATE_INVALID;
 
-    // A perfect / complete mapping ...
+    
     switch( nState )
     {
 #define MAP_DIRECT( a ) \
@@ -162,7 +162,7 @@ AtkStateType mapAtkState( sal_Int16 nState )
         MAP_DIRECT( TRANSIENT );
         MAP_DIRECT( VERTICAL );
         MAP_DIRECT( VISIBLE );
-        // a spelling error ...
+        
         case accessibility::AccessibleStateType::DEFUNC:
             type = ATK_STATE_DEFUNCT; break;
         case accessibility::AccessibleStateType::MULTI_SELECTABLE:
@@ -198,24 +198,24 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_COMBO_BOX,
         ATK_ROLE_DATE_EDITOR,
         ATK_ROLE_DESKTOP_ICON,
-        ATK_ROLE_DESKTOP_FRAME,   // ? pane
+        ATK_ROLE_DESKTOP_FRAME,   
         ATK_ROLE_DIRECTORY_PANE,
         ATK_ROLE_DIALOG,
-        ATK_ROLE_UNKNOWN,         // DOCUMENT - registered below
-        ATK_ROLE_UNKNOWN,         // EMBEDDED_OBJECT - registered below
-        ATK_ROLE_UNKNOWN,         // END_NOTE - registered below
+        ATK_ROLE_UNKNOWN,         
+        ATK_ROLE_UNKNOWN,         
+        ATK_ROLE_UNKNOWN,         
         ATK_ROLE_FILE_CHOOSER,
         ATK_ROLE_FILLER,
         ATK_ROLE_FONT_CHOOSER,
         ATK_ROLE_FOOTER,
-        ATK_ROLE_TEXT,            // FOOTNOTE - registered below
+        ATK_ROLE_TEXT,            
         ATK_ROLE_FRAME,
         ATK_ROLE_GLASS_PANE,
-        ATK_ROLE_IMAGE,           // GRAPHIC
-        ATK_ROLE_UNKNOWN,         // GROUP_BOX - registered below
+        ATK_ROLE_IMAGE,           
+        ATK_ROLE_UNKNOWN,         
         ATK_ROLE_HEADER,
-        ATK_ROLE_HEADING,         // HEADING - registered below
-        ATK_ROLE_TEXT,            // HYPER_LINK - registered below
+        ATK_ROLE_HEADING,         
+        ATK_ROLE_TEXT,            
         ATK_ROLE_ICON,
         ATK_ROLE_INTERNAL_FRAME,
         ATK_ROLE_LABEL,
@@ -240,44 +240,44 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_ROOT_PANE,
         ATK_ROLE_SCROLL_BAR,
         ATK_ROLE_SCROLL_PANE,
-        ATK_ROLE_UNKNOWN,        // SHAPE - registered below
+        ATK_ROLE_UNKNOWN,        
         ATK_ROLE_SEPARATOR,
         ATK_ROLE_SLIDER,
-        ATK_ROLE_SPIN_BUTTON,    // SPIN_BOX ?
+        ATK_ROLE_SPIN_BUTTON,    
         ATK_ROLE_SPLIT_PANE,
         ATK_ROLE_STATUSBAR,
         ATK_ROLE_TABLE,
         ATK_ROLE_TABLE_CELL,
         ATK_ROLE_TEXT,
-        ATK_ROLE_INTERNAL_FRAME, // TEXT_FRAME - registered below
+        ATK_ROLE_INTERNAL_FRAME, 
         ATK_ROLE_TOGGLE_BUTTON,
         ATK_ROLE_TOOL_BAR,
         ATK_ROLE_TOOL_TIP,
         ATK_ROLE_TREE,
         ATK_ROLE_VIEWPORT,
         ATK_ROLE_WINDOW,
-        ATK_ROLE_PUSH_BUTTON,   // BUTTON_DROPDOWN
-        ATK_ROLE_PUSH_BUTTON,   // BUTTON_MENU
-        ATK_ROLE_UNKNOWN,       // CAPTION - registered below
-        ATK_ROLE_UNKNOWN,       // CHART - registered below
-        ATK_ROLE_UNKNOWN,       // EDIT_BAR - registered below
-        ATK_ROLE_UNKNOWN,       // FORM - registered below
-        ATK_ROLE_UNKNOWN,       // IMAGE_MAP - registered below
-        ATK_ROLE_UNKNOWN,       // NOTE - registered below
-        ATK_ROLE_UNKNOWN,       // PAGE - registered below
+        ATK_ROLE_PUSH_BUTTON,   
+        ATK_ROLE_PUSH_BUTTON,   
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
         ATK_ROLE_RULER,
-        ATK_ROLE_UNKNOWN,       // SECTION - registered below
-        ATK_ROLE_UNKNOWN,       // TREE_ITEM - registered below
+        ATK_ROLE_UNKNOWN,       
+        ATK_ROLE_UNKNOWN,       
         ATK_ROLE_TREE_TABLE,
-        ATK_ROLE_SCROLL_PANE,   // COMMENT - mapped to atk_role_scroll_pane
-        ATK_ROLE_UNKNOWN        // COMMENT_END - mapped to atk_role_unknown
+        ATK_ROLE_SCROLL_PANE,   
+        ATK_ROLE_UNKNOWN        
 #if defined(ATK_CHECK_VERSION)
-        //older ver that doesn't define ATK_CHECK_VERSION doesn't have the following
+        
         , ATK_ROLE_DOCUMENT_PRESENTATION
         , ATK_ROLE_DOCUMENT_SPREADSHEET
         , ATK_ROLE_DOCUMENT_TEXT
 #else
-        //older version should fallback to DOCUMENT_FRAME role
+        
         , ATK_ROLE_DOCUMENT_FRAME
         , ATK_ROLE_DOCUMENT_FRAME
         , ATK_ROLE_DOCUMENT_FRAME
@@ -288,7 +288,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
 
     if( ! initialized )
     {
-        // re-use strings from ATK library
+        
         roleMap[accessibility::AccessibleRole::EDIT_BAR] = registerRole("edit bar");
         roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = registerRole("embedded component");
         roleMap[accessibility::AccessibleRole::CHART] = registerRole("chart");
@@ -301,7 +301,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         roleMap[accessibility::AccessibleRole::GROUP_BOX] = registerRole("grouping");
         roleMap[accessibility::AccessibleRole::COMMENT] = registerRole("comment");
 
-        // these don't exist in ATK yet
+        
         roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("end note");
         roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("foot note");
         roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("hyper link");
@@ -417,7 +417,7 @@ wrapper_ref_child( AtkObject *atk_obj,
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     AtkObject* child = NULL;
 
-    // see comments above atk_object_wrapper_remove_child
+    
     if( -1 < i && obj->index_of_child_about_to_be_removed == i )
     {
         g_object_ref( obj->child_about_to_be_removed );
@@ -535,7 +535,7 @@ wrapper_ref_state_set( AtkObject *atk_obj )
                 for( sal_Int32 n = 0; n < aStates.getLength(); n++ )
                     atk_state_set_add_state( pSet, mapAtkState( aStates[n] ) );
 
-                // We need to emulate FOCUS state for menus, menu-items etc.
+                
                 if( atk_obj == atk_get_focus_object() )
                     atk_state_set_add_state( pSet, ATK_STATE_FOCUSED );
 /* FIXME - should we do this ?
@@ -584,10 +584,10 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
 
   parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
-  // GObject methods
+  
   gobject_class->finalize = atk_object_wrapper_finalize;
 
-  // AtkObject methods
+  
   atk_class->get_name = wrapper_get_name;
   atk_class->get_description = wrapper_get_description;
   atk_class->get_n_children = wrapper_get_n_children;
@@ -612,7 +612,7 @@ atk_object_wrapper_init (AtkObjectWrapper      *wrapper,
    wrapper->mpValue = NULL;
 }
 
-} // extern "C"
+} 
 
 GType
 atk_object_wrapper_get_type (void)
@@ -666,7 +666,7 @@ const struct {
         GetGIfaceType        aGetGIfaceType;
         const uno::Type &  (*aGetUnoType) ();
 } aTypeTable[] = {
-// re-location heaven:
+
     {
         "Comp", (GInterfaceInitFunc) componentIfaceInit,
         atk_component_get_type,
@@ -712,8 +712,8 @@ const struct {
         atk_selection_get_type,
         cppu::UnoType<accessibility::XAccessibleSelection>::get
     }
-    // AtkDocument is a nastily broken interface (so far)
-    //  we could impl. get_document_type perhaps though.
+    
+    
 };
 
 const int aTypeTableSize = G_N_ELEMENTS( aTypeTable );
@@ -825,7 +825,7 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
                 atk_obj->accessible_parent = atk_object_wrapper_ref( xParent );
         }
 
-        // Attach a listener to the UNO object if it's not TRANSIENT
+        
         uno::Reference< accessibility::XAccessibleStateSet > xStateSet( xContext->getAccessibleStateSet() );
         if( xStateSet.is() && ! xStateSet->contains( accessibility::AccessibleStateType::TRANSIENT ) )
         {

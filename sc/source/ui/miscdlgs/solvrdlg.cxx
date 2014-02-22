@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rangelst.hxx"
@@ -74,13 +74,13 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     Init();
 }
 
-//----------------------------------------------------------------------------
+
 
 ScSolverDlg::~ScSolverDlg()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::Init()
 {
@@ -107,14 +107,14 @@ void ScSolverDlg::Init()
     pEdActive = m_pEdFormulaCell;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::SetActive()
 {
@@ -131,7 +131,7 @@ void ScSolverDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -155,7 +155,7 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::RaiseError( ScSolverErr eError )
 {
@@ -183,14 +183,14 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScSolverDlg::IsRefInputMode() const
 {
     return pEdActive != NULL;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
 {
@@ -200,8 +200,8 @@ bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
     return pDoc->GetFormatTable()->IsNumberFormat( rStrVal, n1, n2 );
 }
 
-//----------------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
 {
@@ -209,10 +209,10 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
     {
         theTargetValStr = m_pEdTargetVal->GetText();
 
-        // Zu ueberpruefen:
-        // 1. enthalten die Strings korrekte Tabellenkoordinaten/def.Namen?
-        // 2. verweist die Formel-Koordinate wirklich auf eine Formelzelle?
-        // 3. wurde ein korrekter Zielwert eingegeben
+        
+        
+        
+        
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         sal_uInt16  nRes1 = theFormulaCell .Parse( m_pEdFormulaCell->GetText(),  pDoc, eConv );
@@ -261,7 +261,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
 {
@@ -281,7 +281,7 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl)
 {

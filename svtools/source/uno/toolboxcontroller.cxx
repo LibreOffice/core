@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/toolboxcontroller.hxx>
@@ -131,7 +131,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     return xLayoutManager;
 }
 
-// XInterface
+
 Any SAL_CALL ToolboxController::queryInterface( const Type& rType )
 throw ( RuntimeException )
 {
@@ -228,11 +228,11 @@ throw ( RuntimeException )
             throw DisposedException();
     }
 
-    // Bind all registered listeners to their dispatch objects
+    
     bindListener();
 }
 
-// XComponent
+
 void SAL_CALL ToolboxController::dispose()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -286,7 +286,7 @@ throw ( RuntimeException )
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), aListener );
 }
 
-// XEventListener
+
 void SAL_CALL ToolboxController::disposing( const EventObject& Source )
 throw ( RuntimeException )
 {
@@ -300,7 +300,7 @@ throw ( RuntimeException )
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
     {
-        // Compare references and release dispatch references if they are equal.
+        
         Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
         if ( xSource == xIfac )
             pIter->second.clear();
@@ -312,14 +312,14 @@ throw ( RuntimeException )
         m_xFrame.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL ToolboxController::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )
 {
-    // must be implemented by sub class
+    
 }
 
-// XToolbarController
+
 void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -352,7 +352,7 @@ throw (::com::sun::star::uno::RuntimeException)
             com::sun::star::util::URL aTargetURL;
             Sequence<PropertyValue>   aArgs( 1 );
 
-            // Provide key modifier information to dispatch function
+            
             aArgs[0].Name   = "KeyModifier";
             aArgs[0].Value  = makeAny( KeyModifier );
 
@@ -399,21 +399,21 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
         SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
-        // Already in the list of status listener. Do nothing.
+        
         if ( pIter != m_aListenerMap.end() )
             return;
 
-        // Check if we are already initialized. Implementation starts adding itself as status listener when
-        // intialize is called.
+        
+        
         if ( !m_bInitialized )
         {
-            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
+            
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
         else
         {
-            // Add status listener directly as intialize has already been called.
+            
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xContext.is() && xDispatchProvider.is() )
             {
@@ -444,7 +444,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
         }
     }
 
-    // Call without locked mutex as we are called back from dispatch implementation
+    
     try
     {
         if ( xDispatch.is() )
@@ -493,7 +493,7 @@ void ToolboxController::bindListener()
         if ( !m_bInitialized )
             return;
 
-        // Collect all registered command URL's and store them temporary
+        
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
@@ -509,8 +509,8 @@ void ToolboxController::bindListener()
                 Reference< XDispatch > xDispatch( pIter->second );
                 if ( xDispatch.is() )
                 {
-                    // We already have a dispatch object => we have to requery.
-                    // Release old dispatch object and remove it as listener
+                    
+                    
                     try
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -523,7 +523,7 @@ void ToolboxController::bindListener()
                 pIter->second.clear();
                 xDispatch.clear();
 
-                // Query for dispatch object. Old dispatch will be released with this, too.
+                
                 try
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
@@ -540,7 +540,7 @@ void ToolboxController::bindListener()
         }
     }
 
-    // Call without locked mutex as we are called back from dispatch implementation
+    
     if ( xStatusListener.is() )
     {
         try
@@ -554,9 +554,9 @@ void ToolboxController::bindListener()
                 {
                     try
                     {
-                        // Send status changed for the main URL, if we cannot get a valid dispatch object.
-                        // UI disables the button. Catch exception as we release our mutex, it is possible
-                        // that someone else already disposed this instance!
+                        
+                        
+                        
                         FeatureStateEvent aFeatureStateEvent;
                         aFeatureStateEvent.IsEnabled = sal_False;
                         aFeatureStateEvent.FeatureURL = rListener.aURL;
@@ -582,7 +582,7 @@ void ToolboxController::unbindListener()
     if ( !m_bInitialized )
         return;
 
-    // Collect all registered command URL's and store them temporary
+    
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     if ( m_xContext.is() && xDispatchProvider.is() )
     {
@@ -598,8 +598,8 @@ void ToolboxController::unbindListener()
             Reference< XDispatch > xDispatch( pIter->second );
             if ( xDispatch.is() )
             {
-                // We already have a dispatch object => we have to requery.
-                // Release old dispatch object and remove it as listener
+                
+                
                 try
                 {
                     xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -645,7 +645,7 @@ void ToolboxController::updateStatus( const OUString aCommandURL )
         if ( !m_bInitialized )
             return;
 
-        // Try to find a dispatch object for the requested command URL
+        
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
@@ -659,10 +659,10 @@ void ToolboxController::updateStatus( const OUString aCommandURL )
 
     if ( xDispatch.is() && xStatusListener.is() )
     {
-        // Catch exception as we release our mutex, it is possible that someone else
-        // has already disposed this instance!
-        // Add/remove status listener to get a update status information from the
-        // requested command.
+        
+        
+        
+        
         try
         {
             xDispatch->addStatusListener( xStatusListener, aTargetURL );
@@ -707,19 +707,19 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 }
 
 //
-//-------------------------------------------------------------------------
+
 com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-//-------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& ToolboxController::getInfoHelper()
 {
         return *const_cast<ToolboxController*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
 {
         com::sun::star::uno::Sequence< Property > aProps;
@@ -769,7 +769,7 @@ throw( com::sun::star::uno::Exception)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( ToolboxController, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
 {
@@ -816,8 +816,8 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 
     return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == 0) || (*ppToolBox != 0) );
 }
-//end
 
-} // svt
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

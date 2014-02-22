@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -142,14 +142,14 @@ namespace cppu_ifcontainer
             int i;
             Reference<XEventListener> xRefs[nTests * 2];
 
-            // add these interfaces
+            
             for (i = 0; i < nTests * 2; i++)
             {
                 xRefs[i] = new ContainerListener(&aStats);
                 pContainer->addInterface(pTypes[i / 2], xRefs[i]);
             }
 
-            // check it is all there
+            
             for (i = 0; i < nTests; i++)
             {
                 cppu::OInterfaceContainerHelper *pHelper;
@@ -163,11 +163,11 @@ namespace cppu_ifcontainer
                 CPPUNIT_ASSERT_MESSAGE("match", aSeq[1] == xRefs[i*2+1]);
             }
 
-            // remove every other interface
+            
             for (i = 0; i < nTests; i++)
                 pContainer->removeInterface(pTypes[i], xRefs[i*2+1]);
 
-            // check it is half there
+            
             for (i = 0; i < nTests; i++)
             {
                 cppu::OInterfaceContainerHelper *pHelper;
@@ -180,11 +180,11 @@ namespace cppu_ifcontainer
                 CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
             }
 
-            // remove the 1st half of the rest
+            
             for (i = 0; i < nTests / 2; i++)
                 pContainer->removeInterface(pTypes[i], xRefs[i*2]);
 
-            // check it is half there
+            
             for (i = 0; i < nTests / 2; i++)
             {
                 cppu::OInterfaceContainerHelper *pHelper;
@@ -247,7 +247,7 @@ namespace cppu_ifcontainer
             doContainerTest< StrContainer, const char *> (pTypes);
         }
 
-        // Automatic registration code
+        
         CPPUNIT_TEST_SUITE(IfTest);
         CPPUNIT_TEST(testCreateDispose);
         CPPUNIT_TEST(testEnumerate);
@@ -256,7 +256,7 @@ namespace cppu_ifcontainer
         CPPUNIT_TEST(testOMultiTypeInterfaceContainerHelperInt32);
         CPPUNIT_TEST_SUITE_END();
     };
-} // namespace cppu_ifcontainer
+} 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(cppu_ifcontainer::IfTest);
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "optimizerdialog.hxx"
 
-// -------------------
-// - OptimizerDialog -
-// -------------------
+
+
+
 #include "pppoptimizer.hxx"
 #include "graphiccollector.hxx"
 #include "pagecollector.hxx"
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
-// -----------------------------------------------------------------------------
+
 
 void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
 {
@@ -58,7 +58,7 @@ void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, sal_Int32 nOrientation,
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
@@ -89,7 +89,7 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, sal_Bool bEnabled, PPPOptimizerTokenEnum nResID, sal_Int16 nPushButtonType )
@@ -126,7 +126,7 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Bool bBold, sal_Int16 nTabIndex )
@@ -162,7 +162,7 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XItemListener > xItemListener, const OUString& rLabel,
@@ -199,7 +199,7 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
         const Reference< XTextListener > xTextListener, const Reference< XSpinListener > xSpinListener, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth,
@@ -247,7 +247,7 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XTextListener > xTextListener, const sal_Bool bEnabled, const Sequence< OUString >& rItemList,
@@ -288,7 +288,7 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener > xItemListener,
     const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
@@ -324,7 +324,7 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XActionListener > xActionListener, const sal_Bool bEnabled, const Sequence< OUString >& rItemList,
@@ -367,7 +367,7 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InitNavigationBar()
 {
@@ -387,7 +387,7 @@ void OptimizerDialog::InitNavigationBar()
     setControlProperty( "btnNavNext", "DefaultButton", Any( sal_True ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage0()
 {
@@ -395,7 +395,7 @@ void OptimizerDialog::UpdateControlStatesPage0()
     short nSelectedItem = -1;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
-    if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
+    if ( rList.size() > 1 ) 
     {
         aItemList.realloc( rList.size() - 1 );
         for ( i = 1; i < rList.size(); i++ )
@@ -414,7 +414,7 @@ void OptimizerDialog::UpdateControlStatesPage0()
     {
         aSelectedItems.realloc( 1 );
         aSelectedItems[ 0 ] = nSelectedItem;
-        if ( nSelectedItem > 2 )    // only allowing to delete custom themes, the first can|t be deleted
+        if ( nSelectedItem > 2 )    
             bRemoveButtonEnabled = sal_True;
     }
     setControlProperty( "ListBox0Pg0", "StringItemList", Any( aItemList ) );
@@ -436,7 +436,7 @@ void OptimizerDialog::InitPage0()
     UpdateControlStatesPage0();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage1()
 {
@@ -476,7 +476,7 @@ void OptimizerDialog::InitPage1()
     UpdateControlStatesPage1();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage2()
 {
@@ -541,7 +541,7 @@ void OptimizerDialog::InitPage2()
     UpdateControlStatesPage2();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage3()
 {
@@ -583,7 +583,7 @@ void OptimizerDialog::InitPage3()
     UpdateControlStatesPage3();
 }
 
-// -----------------------------------------------------------------------------
+
 
 static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = '.' )
 {
@@ -619,7 +619,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     sal_uInt32 w;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
-    if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
+    if ( rList.size() > 1 ) 
     {
         aItemList.realloc( rList.size() - 1 );
         for ( w = 1; w < rList.size(); w++ )
@@ -627,9 +627,9 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     setControlProperty( "ComboBox0Pg4", "StringItemList", Any( aItemList ) );
 
-    // now check if it is sensible to enable the combo box
+    
     sal_Bool bSaveSettingsEnabled = sal_True;
-    if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
+    if ( rList.size() > 1 ) 
     {
         for ( w = 1; w < rList.size(); w++ )
         {
@@ -647,7 +647,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
     std::vector< OUString > aSummaryStrings;
 
-    // taking care of deleted slides
+    
     sal_Int32 nDeletedSlides = 0;
     OUString aCustomShowName;
     if ( getControlProperty( "CheckBox3Pg3", "State" ) >>= nInt16 )
@@ -741,7 +741,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         aSummaryStrings.push_back( aStr );
     }
 
-// generating graphic compression info
+
     sal_Int32 nGraphics = 0;
     sal_Bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
     sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
@@ -835,7 +835,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
 void OptimizerDialog::InitPage4()
 {
-    {   // creating progress bar:
+    {   
         OUString pNames[] = {
             OUString("Height"),
             OUString("Name"),
@@ -868,7 +868,7 @@ void OptimizerDialog::InitPage4()
     Sequence< OUString > aItemList;
     std::vector< OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, "FixedText0Pg4", getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
-//  aControlList.push_back( InsertSeparator( *this, "Separator0Pg4", 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ) );
+
 
     aControlList.push_back( InsertFixedText( *this, "FixedText4Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText5Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
@@ -891,7 +891,7 @@ void OptimizerDialog::InitPage4()
     maControlPages.push_back( aControlList );
     DeactivatePage( 4 );
 
-    // creating a default session name that hasn't been used yet
+    
     OUString aSettingsName;
     OUString aDefault( getString( STR_MY_SETTINGS ) );
     sal_Int32 nSession = 1;
@@ -917,7 +917,7 @@ void OptimizerDialog::InitPage4()
     UpdateControlStatesPage4();
 }
 
-// -----------------------------------------------------------------------------
+
 void OptimizerDialog::EnablePage( sal_Int16 nStep )
 {
     std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );

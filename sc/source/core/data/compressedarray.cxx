@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -127,8 +127,8 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
             Reset( rValue);
         else
         {
-            // Create a temporary copy in case we got a reference passed that
-            // points to a part of the array to be reallocated.
+            
+            
             D aNewVal( rValue);
             size_t nNeeded = nCount + 2;
             if (nLimit < nNeeded)
@@ -142,21 +142,21 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                 pData = pNewData;
             }
 
-            size_t ni;          // number of leading entries
-            size_t nInsert;     // insert position (nMaxAccess+1 := no insert)
+            size_t ni;          
+            size_t nInsert;     
             bool bCombined = false;
             bool bSplit = false;
             if (nStart > 0)
             {
-                // skip leading
+                
                 ni = this->Search( nStart);
 
                 nInsert = nMaxAccess+1;
                 if (!(pData[ni].aValue == aNewVal))
                 {
                     if (ni == 0 || (pData[ni-1].nEnd < nStart - 1))
-                    {   // may be a split or a simple insert or just a shrink,
-                        // row adjustment is done further down
+                    {   
+                        
                         if (pData[ni].nEnd > nEnd)
                             bSplit = true;
                         ni++;
@@ -166,7 +166,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                         nInsert = ni;
                 }
                 if (ni > 0 && pData[ni-1].aValue == aNewVal)
-                {   // combine
+                {   
                     pData[ni-1].nEnd = nEnd;
                     nInsert = nMaxAccess+1;
                     bCombined = true;
@@ -178,40 +178,40 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                 ni = 0;
             }
 
-            size_t nj = ni;     // stop position of range to replace
+            size_t nj = ni;     
             while (nj < nCount && pData[nj].nEnd <= nEnd)
                 nj++;
             if (!bSplit)
             {
                 if (nj < nCount && pData[nj].aValue == aNewVal)
-                {   // combine
+                {   
                     if (ni > 0)
                     {
                         if (pData[ni-1].aValue == aNewVal)
-                        {   // adjacent entries
+                        {   
                             pData[ni-1].nEnd = pData[nj].nEnd;
                             nj++;
                         }
                         else if (ni == nInsert)
-                            pData[ni-1].nEnd = nStart - 1;   // shrink
+                            pData[ni-1].nEnd = nStart - 1;   
                     }
                     nInsert = nMaxAccess+1;
                     bCombined = true;
                 }
                 else if (ni > 0 && ni == nInsert)
-                    pData[ni-1].nEnd = nStart - 1;   // shrink
+                    pData[ni-1].nEnd = nStart - 1;   
             }
             if (ni < nj)
-            {   // remove middle entries
+            {   
                 if (!bCombined)
-                {   // replace one entry
+                {   
                     pData[ni].nEnd = nEnd;
                     pData[ni].aValue = aNewVal;
                     ni++;
                     nInsert = nMaxAccess+1;
                 }
                 if (ni < nj)
-                {   // remove entries
+                {   
                     memmove( pData + ni, pData + nj,
                             (nCount - nj) * sizeof(DataEntry));
                     nCount -= nj - ni;
@@ -219,7 +219,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
             }
 
             if (nInsert < static_cast<size_t>(nMaxAccess+1))
-            {   // insert or append new entry
+            {   
                 if (nInsert <= nCount)
                 {
                     if (!bSplit)
@@ -268,19 +268,19 @@ template< typename A, typename D >
 const D& ScCompressedArray<A,D>::Insert( A nStart, size_t nAccessCount )
 {
     size_t nIndex = this->Search( nStart);
-    // No real insertion is needed, simply extend the one entry and adapt all
-    // following. In case nStart points to the start row of an entry, extend
-    // the previous entry (inserting before nStart).
+    
+    
+    
     if (nIndex > 0 && pData[nIndex-1].nEnd+1 == nStart)
         --nIndex;
-    const D& rValue = pData[nIndex].aValue; // the value "copied"
+    const D& rValue = pData[nIndex].aValue; 
     do
     {
         pData[nIndex].nEnd += nAccessCount;
         if (pData[nIndex].nEnd >= nMaxAccess)
         {
             pData[nIndex].nEnd = nMaxAccess;
-            nCount = nIndex + 1;    // discard trailing entries
+            nCount = nIndex + 1;    
         }
     } while (++nIndex < nCount);
     return rValue;
@@ -292,17 +292,17 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
 {
     A nEnd = nStart + nAccessCount - 1;
     size_t nIndex = this->Search( nStart);
-    // equalize/combine/remove all entries in between
+    
     if (nEnd > pData[nIndex].nEnd)
         this->SetValue( nStart, nEnd, pData[nIndex].aValue);
-    // remove an exactly matching entry by shifting up all following by one
+    
     if ((nStart == 0 || (nIndex > 0 && nStart == pData[nIndex-1].nEnd+1)) &&
             pData[nIndex].nEnd == nEnd && nIndex < nCount-1)
     {
-        // In case removing an entry results in two adjacent entries with
-        // identical data, combine them into one. This is also necessary to
-        // make the algorithm used in SetValue() work correctly, it relies on
-        // the fact that consecutive values actually differ.
+        
+        
+        
+        
         size_t nRemove;
         if (nIndex > 0 && pData[nIndex-1].aValue == pData[nIndex+1].aValue)
         {
@@ -315,7 +315,7 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
                         nRemove)) * sizeof(DataEntry));
         nCount -= nRemove;
     }
-    // adjust end rows, nIndex still being valid
+    
     do
     {
         pData[nIndex].nEnd -= nAccessCount;
@@ -324,7 +324,7 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
 }
 
 
-// === ScBitMaskCompressedArray ==============================================
+
 
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
@@ -342,11 +342,11 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             this->SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
             if (nE >= nEnd)
-                break;  // while
+                break;  
             nIndex = this->Search( nE + 1);
         }
         else if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
+            break;  
         else
             ++nIndex;
     } while (nIndex < this->nCount);
@@ -369,11 +369,11 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             this->SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
             if (nE >= nEnd)
-                break;  // while
+                break;  
             nIndex = this->Search( nE + 1);
         }
         else if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
+            break;  
         else
             ++nIndex;
     } while (nIndex < this->nCount);
@@ -413,7 +413,7 @@ A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
             return ::std::max( nFound, nStart);
         }
         if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
+            break;  
         ++nIndex;
     } while (nIndex < this->nCount);
     return ::std::numeric_limits<A>::max();
@@ -430,7 +430,7 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
         if ((this->pData[nIndex].aValue & rBitMask) != 0)
         {
             nEnd = this->pData[nIndex].nEnd;
-            break;  // while
+            break;  
         }
         else
         {
@@ -438,18 +438,18 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
             {
                 --nIndex;
                 if (this->pData[nIndex].nEnd < nStart)
-                    break;  // while
+                    break;  
             }
             else
-                break;  // while
+                break;  
         }
     }
     return nEnd;
 }
 
-// === Force instantiation of specializations ================================
 
-template class ScCompressedArray< SCROW, sal_uInt8>;             // flags, base class
-template class ScBitMaskCompressedArray< SCROW, sal_uInt8>;      // flags
+
+template class ScCompressedArray< SCROW, sal_uInt8>;             
+template class ScBitMaskCompressedArray< SCROW, sal_uInt8>;      
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

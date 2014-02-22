@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
@@ -68,7 +68,7 @@ namespace dbaccess
         return s_sNodeName;
     }
 
-    // DatabaseRegistrations - declaration
+    
     typedef ::cppu::WeakAggImplHelper1  <   XDatabaseRegistrations
                                         >   DatabaseRegistrations_Base;
     class DatabaseRegistrations :public ::cppu::BaseMutex
@@ -125,7 +125,7 @@ namespace dbaccess
         ::cppu::OInterfaceContainerHelper   m_aRegistrationListeners;
     };
 
-    // DatabaseRegistrations - implementation
+    
     DatabaseRegistrations::DatabaseRegistrations( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
         ,m_aConfigurationRoot()
@@ -178,7 +178,7 @@ namespace dbaccess
             aNewNodeName.appendAscii( "org.openoffice." );
             aNewNodeName.append( _rName );
 
-            // make unique
+            
             OUStringBuffer aReset( aNewNodeName );
             sNewNodeName = aNewNodeName.makeStringAndClear();
             sal_Int32 i=2;
@@ -263,15 +263,15 @@ namespace dbaccess
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        // check
+        
         impl_checkValidLocation_throw( _Location );
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw( _Name, false );
 
-        // register
+        
         aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( _Location ) );
         m_aConfigurationRoot.commit();
 
-        // notify
+        
         DatabaseRegistrationEvent aEvent( *this, _Name, OUString(), _Location );
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::registeredDatabaseLocation, aEvent );
@@ -281,14 +281,14 @@ namespace dbaccess
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        // check
+        
         ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw( _Name, true );
 
-        // obtain properties for notification
+        
         OUString sLocation;
         OSL_VERIFY( aNodeForName.getNodeValue( getLocationNodeName() ) >>= sLocation );
 
-        // revoke
+        
         if  (   aNodeForName.isReadonly()
             ||  !m_aConfigurationRoot.removeNode( aNodeForName.getLocalName() )
             )
@@ -296,7 +296,7 @@ namespace dbaccess
 
         m_aConfigurationRoot.commit();
 
-        // notify
+        
         DatabaseRegistrationEvent aEvent( *this, _Name, sLocation, OUString() );
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::revokedDatabaseLocation, aEvent );
@@ -306,22 +306,22 @@ namespace dbaccess
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        // check
+        
         impl_checkValidLocation_throw( _NewLocation );
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw( _Name, true );
 
         if  ( aDataSourceRegistration.isReadonly() )
             throw IllegalAccessException( OUString(), *this );
 
-        // obtain properties for notification
+        
         OUString sOldLocation;
         OSL_VERIFY( aDataSourceRegistration.getNodeValue( getLocationNodeName() ) >>= sOldLocation );
 
-        // change
+        
         aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( _NewLocation ) );
         m_aConfigurationRoot.commit();
 
-        // notify
+        
         DatabaseRegistrationEvent aEvent( *this, _Name, sOldLocation, _NewLocation );
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::changedDatabaseLocation, aEvent );
@@ -346,12 +346,12 @@ namespace dbaccess
             m_aRegistrationListeners.removeInterface( _Listener );
     }
 
-    // DatabaseRegistrations - factory
+    
     Reference< XAggregation > createDataSourceRegistrations( const Reference<XComponentContext> & _rxContext )
     {
         return new DatabaseRegistrations( _rxContext );
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

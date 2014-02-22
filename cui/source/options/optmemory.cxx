@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -68,8 +68,8 @@ using namespace ::rtl;
 using namespace ::sfx2;
 
 
-#define NF2BYTES        104857.6                        // 2^20/10, used for M_pNfGraphicObjectCache-unit -> Byte
-#define BYTES2NF        (1.0/NF2BYTES)                  // 10/2^20
+#define NF2BYTES        104857.6                        
+#define BYTES2NF        (1.0/NF2BYTES)                  
 
 
 sal_Int32 OfaMemoryOptionsPage::GetNfGraphicCacheVal() const
@@ -109,7 +109,7 @@ int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", rSet)
@@ -128,7 +128,7 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
 #endif
     m_pQuickLaunchCB->Show();
 
-    //Only available in Win or if building the gtk systray
+    
 #if !defined(WNT) && ! ENABLE_GTK
     m_pQuickStarterFrame->Hide();
 #endif
@@ -140,20 +140,20 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     m_pNfGraphicCache->SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaMemoryOptionsPage( pParent, rAttrSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -166,7 +166,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
         officecfg::Office::Common::Undo::Steps::set(
             m_pUndoEdit->GetValue(), batch);
 
-    // GraphicCache
+    
     sal_Int32 totalCacheSize = GetNfGraphicCacheVal();
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(
         totalCacheSize, batch);
@@ -180,7 +180,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::set(
         objectReleaseTime, batch);
 
-    // create a dummy graphic object to get access to the common GraphicManager
+    
     GraphicObject       aDummyObject;
     GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
 
@@ -188,7 +188,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     rGrfMgr.SetMaxObjCacheSize(objectCacheSize, true);
     rGrfMgr.SetCacheTimeout(objectReleaseTime);
 
-    // OLECache
+    
     officecfg::Office::Common::Cache::Writer::OLE_Objects::set(
         m_pNfOLECache->GetValue(), batch);
     officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::set(
@@ -205,7 +205,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 {
@@ -214,7 +214,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     m_pUndoEdit->SetValue(officecfg::Office::Common::Undo::Steps::get());
     m_pUndoEdit->SaveValue();
 
-    // GraphicCache
+    
     long n =
         officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
     SetNfGraphicCacheVal( n );
@@ -232,7 +232,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
     GraphicCacheConfigHdl(m_pNfGraphicCache);
 
-    // OLECache
+    
     m_pNfOLECache->SetValue(
         std::max(
             officecfg::Office::Common::Cache::Writer::OLE_Objects::get(),
@@ -244,14 +244,14 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
         m_pQuickLaunchCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
     else if ( SFX_ITEM_DISABLED == eState )
     {
-        // quickstart not installed
+        
         m_pQuickStarterFrame->Hide();
     }
 
     m_pQuickLaunchCB->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VLegendSymbolFactory.hxx"
@@ -70,7 +70,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
     sal_Int32 nLineWidth = 0;
     if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
     {
-        // use legend entry height as upper limit for line width
+        
         sal_Int32 nMaxLineWidthForLegend = aMaxSymbolExtent.Height;
         if( nLineWidth>nMaxLineWidthForLegend )
             *pLineWidthAny = uno::makeAny( nMaxLineWidthForLegend );
@@ -92,7 +92,7 @@ void lcl_setPropetiesToShape(
     ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -117,11 +117,11 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     if( ! xResultGroup.is())
         return xResult;
 
-    // add an invisible square box to maintain aspect ratio
+    
     Reference< drawing::XShape > xBound( pShapeFactory->createInvisibleRectangle(
                 xResultGroup, rEntryKeyAspectRatio  ));
 
-    // create symbol
+    
     try
     {
         if( eStyle == LegendSymbolStyle_LINE )
@@ -144,9 +144,9 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 AbstractShapeFactory* pFactory = AbstractShapeFactory::getOrCreateShapeFactory( xShapeFactory );
                 if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                 {
-                    // take series color as fill color
+                    
                     xLegendEntryProperties->getPropertyValue( "Color") >>= aSymbol.FillColor;
-                    // border of symbols always same as fill color
+                    
                     aSymbol.BorderColor = aSymbol.FillColor;
 
                     xSymbol.set( pFactory->createSymbol2D(
@@ -179,16 +179,16 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ));
             if( xShape.is() )
             {
-                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
+                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); 
             }
         }
-        else // eStyle == LegendSymbolStyle_BOX
+        else 
         {
             tNameSequence aPropNames;
             tAnySequence aPropValues;
 
             getPropNamesAndValues( xLegendEntryProperties, aPropNames, aPropValues,
-                    ePropertyType );// PROP_TYPE_FILLED_SERIES
+                    ePropertyType );
 
             Reference< drawing::XShape > xShape =
                 pShapeFactory->createRectangle( xResultGroup,
@@ -204,6 +204,6 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     return xResult;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

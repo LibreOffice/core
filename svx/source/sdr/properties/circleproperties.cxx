@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/circleproperties.hxx>
@@ -26,29 +26,29 @@
 #include <svx/sxcikitm.hxx>
 #include <svx/sxciaitm.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return *(new SfxItemSet(rPool,
 
-                // range from SdrAttrObj
+                
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // range from SdrCircObj
+                
                 SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST,
 
-                // range from SdrTextObj
+                
                 EE_ITEMS_START, EE_ITEMS_END,
 
-                // end
+                
                 0, 0));
         }
 
@@ -75,10 +75,10 @@ namespace sdr
         {
             SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
 
-            // call parent
+            
             RectangleProperties::ItemSetChanged(rSet);
 
-            // local changes
+            
             rObj.ImpSetAttrToCircInfo();
         }
 
@@ -86,13 +86,13 @@ namespace sdr
         {
             SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
 
-            // local changes
+            
             rObj.SetXPolyDirty();
 
-            // call parent
+            
             RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
-            // local changes
+            
             rObj.ImpSetAttrToCircInfo();
         }
 
@@ -117,7 +117,7 @@ namespace sdr
 
             if(eKindA != SDRCIRC_FULL)
             {
-                // force ItemSet
+                
                 GetObjectItemSet();
 
                 mpItemSet->Put(SdrCircKindItem(eKindA));
@@ -133,13 +133,13 @@ namespace sdr
                 }
             }
 
-            // call parent after SetObjectItem(SdrCircKindItem())
-            // because ForceDefaultAttr() will call
-            // ImpSetAttrToCircInfo() which needs a correct
-            // SdrCircKindItem
+            
+            
+            
+            
             RectangleProperties::ForceDefaultAttributes();
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

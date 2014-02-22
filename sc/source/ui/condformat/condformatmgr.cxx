@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "condformatmgr.hxx"
@@ -39,7 +39,7 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument
     static long nTabs[] = {2, 0, nTabSize };
     Size aHeadSize( maHeaderBar.GetSizePixel() );
 
-    //pParent->SetFocusControl( this );
+    
     SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
     SetTabs( &nTabs[0], MAP_PIXEL );
 
@@ -109,7 +109,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerWindow, HeaderEndDragHdl)
     long aTableSize = maHeaderBar.GetSizePixel().Width();
     long aItemRangeSize = maHeaderBar.GetItemSize(ITEMID_RANGE);
 
-    //calculate column size based on user input and minimum size
+    
     long aItemCondSize = aTableSize - aItemRangeSize;
 
     Size aSz;

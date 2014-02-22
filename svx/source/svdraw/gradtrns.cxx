@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,11 +25,11 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/helpers.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, const SdrObject* pObj)
 {
-    // handle start color
+    
     rV.aCol1 = rG.aGradient.GetStartColor();
     if(100 != rG.aGradient.GetStartIntens())
     {
@@ -37,7 +37,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
         rV.aCol1 = Color(rV.aCol1.getBColor() * fFact);
     }
 
-    // handle end color
+    
     rV.aCol2 = rG.aGradient.GetEndColor();
     if(100 != rG.aGradient.GetEndIntens())
     {
@@ -45,7 +45,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
         rV.aCol2 = Color(rV.aCol2.getBColor() * fFact);
     }
 
-    // calc the basic positions
+    
     const Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
     const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
     const basegfx::B2DPoint aCenter(aRange.getCenter());
@@ -171,20 +171,20 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
         }
     }
 
-    // set values for vector positions now
+    
     rV.maPositionA = aStartPos;
     rV.maPositionB = aEndPos;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
     bool bMoveSingle, bool bMoveFirst)
 {
-    // fill old gradient to new gradient to have a base
+    
     rG = rGOld;
 
-    // handle color changes
+    
     if(rV.aCol1 != rGOld.aGradient.GetStartColor())
     {
         rG.aGradient.SetStartColor(rV.aCol1);
@@ -196,7 +196,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
         rG.aGradient.SetEndIntens(100);
     }
 
-    // calc the basic positions
+    
     const Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
     const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
     const basegfx::B2DPoint aCenter(aRange.getCenter());
@@ -223,7 +223,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
-                // clip
+                
                 while(fNewFullAngle < 0.0)
                 {
                     fNewFullAngle += 3600.0;
@@ -234,7 +234,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     fNewFullAngle -= 3600.0;
                 }
 
-                // to int and set
+                
                 sal_Int32 nNewAngle = FRound(fNewFullAngle);
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
@@ -254,7 +254,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
                 sal_Int32 nNewBorder(100L - FRound(fNewBorder));
 
-                // clip
+                
                 if(nNewBorder < 0L)
                 {
                     nNewBorder = 0L;
@@ -265,7 +265,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     nNewBorder = 100L;
                 }
 
-                // set
+                
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
                     rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
@@ -285,7 +285,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
                 sal_Int32 nNewBorder = 100 - FRound(fNewBorder);
 
-                // clip
+                
                 if(nNewBorder < 0L)
                 {
                     nNewBorder = 0L;
@@ -296,7 +296,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     nNewBorder = 100L;
                 }
 
-                // set
+                
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
                     rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
@@ -308,7 +308,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
-                // clip
+                
                 while(fNewFullAngle < 0.0)
                 {
                     fNewFullAngle += 3600.0;
@@ -319,7 +319,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     fNewFullAngle -= 3600.0;
                 }
 
-                // to int and set
+                
                 const sal_Int32 nNewAngle(FRound(fNewFullAngle));
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
@@ -340,7 +340,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewXOffset(FRound((aOffset.getX() * 100.0) / aRange.getWidth()));
                 sal_Int32 nNewYOffset(FRound((aOffset.getY() * 100.0) / aRange.getHeight()));
 
-                // clip
+                
                 if(nNewXOffset < 0L)
                 {
                     nNewXOffset = 0L;
@@ -379,7 +379,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
                 sal_Int32 nNewBorder(100L - FRound(fNewBorder));
 
-                // clip
+                
                 if(nNewBorder < 0L)
                 {
                     nNewBorder = 0L;
@@ -390,21 +390,21 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     nNewBorder = 100L;
                 }
 
-                // set
+                
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
                     rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
                 }
 
-                // angle is not definitely necessary for these modes, but it makes
-                // controlling more fun for the user
+                
+                
                 aFullVec.normalize();
                 double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
                 fNewFullAngle /= F_PI180;
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
-                // clip
+                
                 while(fNewFullAngle < 0.0)
                 {
                     fNewFullAngle += 3600.0;
@@ -415,7 +415,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     fNewFullAngle -= 3600.0;
                 }
 
-                // to int and set
+                
                 const sal_Int32 nNewAngle(FRound(fNewFullAngle));
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
@@ -436,7 +436,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewXOffset(FRound((aOffset.getX() * 100.0) / aRange.getWidth()));
                 sal_Int32 nNewYOffset(FRound((aOffset.getY() * 100.0) / aRange.getHeight()));
 
-                // clip
+                
                 if(nNewXOffset < 0L)
                 {
                     nNewXOffset = 0L;
@@ -475,7 +475,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
                 sal_Int32 nNewBorder(100L - FRound(fNewBorder));
 
-                // clip
+                
                 if(nNewBorder < 0L)
                 {
                     nNewBorder = 0L;
@@ -486,21 +486,21 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     nNewBorder = 100L;
                 }
 
-                // set
+                
                 if(nNewBorder != rG.aGradient.GetBorder())
                 {
                     rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
                 }
 
-                // angle is not definitely necessary for these modes, but it makes
-                // controlling more fun for the user
+                
+                
                 aFullVec.normalize();
                 double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
                 fNewFullAngle /= F_PI180;
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
-                // clip
+                
                 while(fNewFullAngle < 0.0)
                 {
                     fNewFullAngle += 3600.0;
@@ -511,7 +511,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                     fNewFullAngle -= 3600.0;
                 }
 
-                // to int and set
+                
                 const sal_Int32 nNewAngle(FRound(fNewFullAngle));
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -43,11 +43,11 @@
 
 #include "globstr.hrc"
 
-extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
+extern const ScFormulaCell* pLastFormulaTreeTop;    
 
-// STATIC DATA -----------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 void ScDocument::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener
@@ -69,10 +69,10 @@ void ScDocument::EndListeningArea( const ScRange& rRange,
 void ScDocument::Broadcast( const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;    // Clipboard or Undo
+        return ;    
     if ( !bHardRecalcState )
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM);     
         bool bIsBroadcasted = false;
         SvtBroadcaster* pBC = GetBroadcaster(rHint.GetAddress());
         if ( pBC )
@@ -84,7 +84,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    
     for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
     {
         if(!maTabs[nTab])
@@ -132,10 +132,10 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
 void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;    // Clipboard or Undo
+        return ;    
     if ( !bHardRecalcState )
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM);     
         if ( pBASM->AreaBroadcast( rHint ) )
             TrackFormulas( rHint.GetId() );
     }
@@ -155,16 +155,16 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
 void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;    // Clipboard or Undo
+        return ;    
     if ( !bHardRecalcState )
     {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM);     
         if ( pBASM->AreaBroadcastInRange( rRange, rHint ) )
             TrackFormulas( rHint.GetId() );
     }
 
-    // Repaint for conditional formats containing relative references.
-    //! This is _THE_ bottle neck!
+    
+    
     TableContainer::iterator itr = maTabs.begin();
     for(; itr != maTabs.end(); ++itr)
     {
@@ -262,11 +262,11 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "PutInFormulaTree: pCell Null" );
     RemoveFromFormulaTree( pCell );
-    // anhaengen
+    
     if ( pEOFormulaTree )
         pEOFormulaTree->SetNext( pCell );
     else
-        pFormulaTree = pCell;               // kein Ende, kein Anfang..
+        pFormulaTree = pCell;               
     pCell->SetPrevious( pEOFormulaTree );
     pCell->SetNext( 0 );
     pEOFormulaTree = pCell;
@@ -278,18 +278,18 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPrevious();
-    // wenn die Zelle die erste oder sonstwo ist
+    
     if ( pPrev || pFormulaTree == pCell )
     {
         ScFormulaCell* pNext = pCell->GetNext();
         if ( pPrev )
-            pPrev->SetNext( pNext );        // gibt Vorlaeufer
+            pPrev->SetNext( pNext );        
         else
-            pFormulaTree = pNext;           // ist erste Zelle
+            pFormulaTree = pNext;           
         if ( pNext )
-            pNext->SetPrevious( pPrev );    // gibt Nachfolger
+            pNext->SetPrevious( pPrev );    
         else
-            pEOFormulaTree = pPrev;         // ist letzte Zelle
+            pEOFormulaTree = pPrev;         
         pCell->SetPrevious( 0 );
         pCell->SetNext( 0 );
         sal_uInt16 nRPN = pCell->GetCode()->GetCodeLen();
@@ -318,7 +318,7 @@ bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSetAllDirty )
 {
     OSL_ENSURE( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
-    // never ever recurse into this, might end up lost in infinity
+    
     if ( IsCalculatingFormulaTree() )
         return ;
 
@@ -329,8 +329,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     bool bOldIdleEnabled = IsIdleEnabled();
     EnableIdle(false);
     bool bOldAutoCalc = GetAutoCalc();
-    //! _nicht_ SetAutoCalc( true ) weil das evtl. CalcFormulaTree( true )
-    //! aufruft, wenn vorher disabled war und bHasForcedFormulas gesetzt ist
+    
+    
     bAutoCalc = true;
     if ( bHardRecalcState )
         CalcAll();
@@ -340,20 +340,20 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         while ( pCell )
         {
             if ( pCell->GetDirty() )
-                pCell = pCell->GetNext();       // alles klar
+                pCell = pCell->GetNext();       
             else
             {
                 if ( pCell->GetCode()->IsRecalcModeAlways() )
                 {
-                    // pCell wird im SetDirty neu angehaengt!
+                    
                     ScFormulaCell* pNext = pCell->GetNext();
                     pCell->SetDirty();
-                    // falls pNext==0 und neue abhaengige hinten angehaengt
-                    // wurden, so macht das nichts, da die alle bDirty sind
+                    
+                    
                     pCell = pNext;
                 }
                 else
-                {   // andere simpel berechnen
+                {   
                     if( bSetAllDirty )
                         pCell->SetDirtyVar();
                     pCell = pCell->GetNext();
@@ -368,8 +368,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         ScFormulaCell* pLastNoGood = 0;
         while ( pCell )
         {
-            // Interpret setzt bDirty zurueck und callt Remove, auch der referierten!
-            // bei RECALCMODE_ALWAYS bleibt die Zelle
+            
+            
             if ( bOnlyForced )
             {
                 if ( pCell->GetCode()->IsRecalcModeForced() )
@@ -380,7 +380,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                 pCell->Interpret();
             }
             if ( pCell->GetPrevious() || pCell == pFormulaTree )
-            {   // (IsInFormulaTree(pCell)) kein Remove gewesen => next
+            {   
                 pLastNoGood = pCell;
                 pCell = pCell->GetNext();
             }
@@ -395,7 +395,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                     }
                     else
                     {
-                        // IsInFormulaTree(pLastNoGood)
+                        
                         if ( pLastNoGood && (pLastNoGood->GetPrevious() ||
                                 pLastNoGood == pFormulaTree) )
                             pCell = pLastNoGood->GetNext();
@@ -443,13 +443,13 @@ void ScDocument::ClearFormulaTree()
 void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "AppendToFormulaTrack: pCell Null" );
-    // Zelle kann nicht in beiden Listen gleichzeitig sein
+    
     RemoveFromFormulaTrack( pCell );
     RemoveFromFormulaTree( pCell );
     if ( pEOFormulaTrack )
         pEOFormulaTrack->SetNextTrack( pCell );
     else
-        pFormulaTrack = pCell;              // kein Ende, kein Anfang..
+        pFormulaTrack = pCell;              
     pCell->SetPreviousTrack( pEOFormulaTrack );
     pCell->SetNextTrack( 0 );
     pEOFormulaTrack = pCell;
@@ -461,18 +461,18 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "RemoveFromFormulaTrack: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
-    // wenn die Zelle die erste oder sonstwo ist
+    
     if ( pPrev || pFormulaTrack == pCell )
     {
         ScFormulaCell* pNext = pCell->GetNextTrack();
         if ( pPrev )
-            pPrev->SetNextTrack( pNext );       // gibt Vorlaeufer
+            pPrev->SetNextTrack( pNext );       
         else
-            pFormulaTrack = pNext;              // ist erste Zelle
+            pFormulaTrack = pNext;              
         if ( pNext )
-            pNext->SetPreviousTrack( pPrev );   // gibt Nachfolger
+            pNext->SetPreviousTrack( pPrev );   
         else
-            pEOFormulaTrack = pPrev;            // ist letzte Zelle
+            pEOFormulaTrack = pPrev;            
         pCell->SetPreviousTrack( 0 );
         pCell->SetNextTrack( 0 );
         --nFormulaTrackCount;
@@ -497,7 +497,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
 
     if ( pFormulaTrack )
     {
-        // outside the loop, check if any sheet has a "calculate" event script
+        
         bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
@@ -510,7 +510,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
             if (pBC)
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
-            //  Repaint fuer bedingte Formate mit relativen Referenzen:
+            
             TableContainer::iterator itr = maTabs.begin();
             for(; itr != maTabs.end(); ++itr)
             {
@@ -520,7 +520,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
                 if ( pCondFormList )
                     pCondFormList->SourceChanged( pTrack->aPos );
             }
-            // for "calculate" event, keep track of which sheets are affected by tracked formulas
+            
             if ( bCalcEvent )
                 SetCalcNotification( pTrack->aPos.Tab() );
             pTrack = pTrack->GetNextTrack();

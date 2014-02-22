@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -186,24 +186,24 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pModuleConfig = new SwModuleOptions;
 
-    // We need them anyways
+    
     pToolbarConfig = new SwToolbarConfigItem( false );
     pWebToolbarConfig = new SwToolbarConfigItem( true );
 
     pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new std::vector<OUString>;  // All Redlining-Authors
+    pAuthorNames = new std::vector<OUString>;  
 
-    // replace SvxAutocorrect with SwAutocorrect
+    
     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
     const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
     rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
 
     StartListening( *SFX_APP() );
 
-    // OD 14.02.2003 #107424# - init color configuration
-    // member <pColorConfig> is created and the color configuration is applied
-    // at the view options.
+    
+    
+    
     GetColorConfig();
 }
 uno::Reference< scanner::XScannerManager2 >
@@ -239,8 +239,8 @@ void SwModule::CreateLngSvcEvtListener()
 
 void SwDLL::RegisterFactories()
 {
-    // These Id's must not be changed. Through these Id's the View (resume Documentview)
-    // is created by Sfx.
+    
+    
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 

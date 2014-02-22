@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <jobs/configaccess.hxx>
@@ -49,7 +49,7 @@ using namespace framework;
 
 namespace {
 
-//_______________________________________
+
 /**
     @short  implements a dispatch object for jobs
     @descr  Such dispatch object will be used by the generic dispatch mechanism if
@@ -65,7 +65,7 @@ class JobDispatch : private ThreadHelpBase
                             css::lang::XServiceInfo
                           , css::lang::XInitialization
                           , css::frame::XDispatchProvider
-                          , css::frame::XNotifyingDispatch >      // => XDispatch
+                          , css::frame::XNotifyingDispatch >      
 {
 private:
 
@@ -78,8 +78,8 @@ private:
     /** name of module (writer, impress etc.) the frame is for */
     OUString m_sModuleIdentifier;
 
-//___________________________________
-// native interface methods
+
+
 
 public:
 
@@ -117,22 +117,22 @@ public:
         return aSeq;
     }
 
-    // Xinitialization
+    
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments ) throw(css::uno::Exception       ,
                                                                                                     css::uno::RuntimeException);
 
-    // XDispatchProvider
+    
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                          const OUString&                                      sTargetFrameName ,
                                                                                                                sal_Int32                                             nSearchFlags     ) throw(css::uno::RuntimeException);
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor      ) throw(css::uno::RuntimeException);
 
-    // XNotifyingDispatch
+    
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException);
 
-    // XDispatch
+    
     virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL      ,
                                                 const css::uno::Sequence< css::beans::PropertyValue >&    lArgs     ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
@@ -141,7 +141,7 @@ public:
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
 };
 
-//________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance.
@@ -155,19 +155,19 @@ JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::uno::XComponent
 {
 }
 
-//________________________________
+
 /**
     @short  let this instance die
     @descr  We have to release all used resources and free used memory.
 */
 JobDispatch::~JobDispatch()
 {
-    // release all used resources
+    
     m_xContext.clear();
     m_xFrame.clear();
 }
 
-//________________________________
+
 /**
     @short  implementation of XInitalization
     @descr  A protocol handler can provide this functionality, if it wish to get additional information
@@ -204,7 +204,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  implementation of XDispatchProvider::queryDispatches()
     @descr  Every protocol handler will be asked for his agreement, if an URL was queried
@@ -235,7 +235,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch
     return xDispatch;
 }
 
-//________________________________
+
 /**
     @short  implementation of XDispatchProvider::queryDispatches()
     @descr  It's an optimized access for remote, so you can ask for
@@ -250,7 +250,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch
 */
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobDispatch::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw(css::uno::RuntimeException)
 {
-    // don't pack resulting list!
+    
     sal_Int32 nCount = lDescriptor.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches(nCount);
 
@@ -261,7 +261,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
     return lDispatches;
 }
 
-//________________________________
+
 /**
     @short  implementation of XNotifyingDispatch::dispatchWithNotification()
     @descr  It creates the job service implementation and call execute on it.
@@ -305,7 +305,7 @@ void SAL_CALL JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL
     }
 }
 
-//________________________________
+
 /**
     @short  dispatch an event
     @descr  We search all registered jobs for this event and execute it.
@@ -326,9 +326,9 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
                                       /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
-    // get list of all enabled jobs
-    // The called static helper methods read it from the configuration and
-    // filter disabled jobs using it's time stamp values.
+    
+    
+    
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
@@ -337,11 +337,11 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
-    // no jobs ... no execution
-    // But a may given listener will know something ...
-    // I think this operaton was finished successfully.
-    // It's not really an error, if no registered jobs could be located.
-    // Step over all found jobs and execute it
+    
+    
+    
+    
+    
     int nExecutedJobs=0;
     for (int j=0; j<lJobs.getLength(); ++j)
     {
@@ -368,11 +368,11 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
         if (!bIsEnabled)
             continue;
 
-        // Special mode for listener.
-        // We dont notify it directly here. We delegate that
-        // to the job implementation. But we must set ourself there too.
-        // Because this job must fake the source address of the event.
-        // Otherwise the listener may ignore it.
+        
+        
+        
+        
+        
         if (xListener.is())
             pJob->setDispatchResultFake(xListener, xThis);
         pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
@@ -388,7 +388,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     }
 }
 
-//________________________________
+
 /**
     @short  dispatch a service
     @descr  We use the given name only to create and if possible to initialize
@@ -430,17 +430,17 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
-    // Special mode for listener.
-    // We dont notify it directly here. We delegate that
-    // to the job implementation. But we must set ourself there too.
-    // Because this job must fake the source address of the event.
-    // Otherwise the listener may ignore it.
+    
+    
+    
+    
+    
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
     pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
 }
 
-//________________________________
+
 /**
     @short  dispatch an alias
     @descr  We use this alias to locate a job inside the configuration
@@ -481,17 +481,17 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
-    // Special mode for listener.
-    // We dont notify it directly here. We delegate that
-    // to the job implementation. But we must set ourself there too.
-    // Because this job must fake the source address of the event.
-    // Otherwise the listener may ignore it.
+    
+    
+    
+    
+    
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
     pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
 }
 
-//________________________________
+
 /**
     @short  implementation of XDispatch::dispatch()
     @descr  Because the methods dispatch() and dispatchWithNotification() are different in her parameters
@@ -511,7 +511,7 @@ void SAL_CALL JobDispatch::dispatch( /*IN*/ const css::util::URL&               
     dispatchWithNotification(aURL, lArgs, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-//________________________________
+
 /**
     @short  not supported
 */
@@ -520,7 +520,7 @@ void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< 
 {
 }
 
-//________________________________
+
 /**
     @short  not supported
 */

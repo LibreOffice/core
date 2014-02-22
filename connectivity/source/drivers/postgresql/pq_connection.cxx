@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -102,8 +102,8 @@ namespace pq_sdbc_driver
 {
 
 
-// ______________________________________________________________________________
-// Helper class for statement lifetime management
+
+
 class ClosableReference : public cppu::WeakImplHelper1< com::sun::star::uno::XReference >
 {
     Connection *m_conn;
@@ -222,7 +222,7 @@ void Connection::close() throw ( SQLException, RuntimeException )
     DisposeableList lstDispose;
     {
         MutexGuard guard( m_refMutex->mutex );
-        // silently ignore, if the connection has been closed already
+        
         if( m_settings.pConnection )
         {
             log( &m_settings, LogLevel::INFO, "closing connection" );
@@ -247,11 +247,11 @@ void Connection::close() throw ( SQLException, RuntimeException )
         }
     }
 
-    // close all created statements
+    
     for( CloseableList::iterator ii = lst.begin(); ii != lst.end() ; ++ii )
         ii->get()->close();
 
-    // close all created statements
+    
     for( DisposeableList::iterator iiDispose = lstDispose.begin();
          iiDispose != lstDispose.end() ; ++iiDispose )
     {
@@ -263,7 +263,7 @@ void Connection::close() throw ( SQLException, RuntimeException )
 
 void Connection::removeFromWeakMap( const ::rtl::ByteSequence & id )
 {
-    // shrink the list !
+    
     MutexGuard guard( m_refMutex->mutex );
     WeakHashMap::iterator ii = m_myStatements.find( id );
     if( ii != m_myStatements.end() )
@@ -318,23 +318,23 @@ OUString Connection::nativeSQL( const OUString& sql )
 
 void Connection::setAutoCommit( sal_Bool ) throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
 }
 
 sal_Bool Connection::getAutoCommit() throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
     return sal_True;
 }
 
 void Connection::commit() throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
 }
 
 void Connection::rollback() throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
 }
 
 sal_Bool Connection::isClosed() throw (SQLException, RuntimeException)
@@ -354,20 +354,20 @@ Reference< XDatabaseMetaData > Connection::getMetaData()
 
 void  Connection::setReadOnly( sal_Bool ) throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
 
 }
 
 sal_Bool Connection::isReadOnly() throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
     return sal_False;
 }
 
 void Connection::setCatalog( const OUString& )
         throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
 }
 
 OUString Connection::getCatalog() throw (SQLException, RuntimeException)
@@ -385,12 +385,12 @@ OUString Connection::getCatalog() throw (SQLException, RuntimeException)
 void Connection::setTransactionIsolation( sal_Int32 )
         throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
 }
 
 sal_Int32 Connection::getTransactionIsolation() throw (SQLException, RuntimeException)
 {
-    // UNSUPPORTED
+    
     return 0;
 }
 
@@ -445,9 +445,9 @@ public:
         values.push_back(s);
         acquired.push_back(true);
     }
-    // This const_cast is there for compatibility with PostgreSQL <= 9.1;
-    // PostgreSQL >= 9.2 has the right const qualifiers in the headers
-    // for a return type of "char const*const*".
+    
+    
+    
     char const** c_array() const { return const_cast <const char**>(&values[0]); }
 };
 
@@ -457,10 +457,10 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
                                cstr_vector &keywords,
                                cstr_vector &values)
 {
-    // LEM TODO: can we just blindly take all properties?
-    // I.e. they are prefiltered to have only relevant ones?
-    // Else, at least support all keywords from
-    // http://www.postgresql.org/docs/9.0/interactive/libpq-connect.html
+    
+    
+    
+    
 
     static const char* keyword_list[] = {
         "password",
@@ -494,7 +494,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         }
         else
         {
-            // ignore for now
+            
             OSL_TRACE("sdbc-postgresql: unknown argument '%s'", OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -564,8 +564,8 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 buf.append( url );
                 buf.appendAscii( "':\n" );
                 buf.append( errorMessage );
-                // HY092 is "Invalid attribute/option identifier."
-                // Just the most likely error; the error might be  HY024 "Invalid attribute value".
+                
+                
                 throw SQLException( buf.makeStringAndClear(), *this, OUString("HY092"), 5, Any() );
             }
 
@@ -641,7 +641,7 @@ Reference< XNameAccess > Connection::getTables()
     if( !m_settings.tables.is() )
         m_settings.tables = Tables::create( m_refMutex, this, &m_settings , &m_settings.pTablesImpl);
     else
-        // TODO: how to overcome the performance problem ?
+        
         Reference< com::sun::star::util::XRefreshable > ( m_settings.tables, UNO_QUERY )->refresh();
     return m_settings.tables;
 }
@@ -657,7 +657,7 @@ Reference< XNameAccess > Connection::getViews()
     if( !m_settings.views.is() )
         m_settings.views = Views::create( m_refMutex, this, &m_settings, &(m_settings.pViewsImpl) );
     else
-        // TODO: how to overcome the performance problem ?
+        
         Reference< com::sun::star::util::XRefreshable > ( m_settings.views, UNO_QUERY )->refresh();
     return m_settings.views;
 }

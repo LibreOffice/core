@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 void Ww1Sprm::Stop( Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-        for(short i=Count()-1;i>=0;i--){    // backwards
+        for(short i=Count()-1;i>=0;i--){    
             sal_uInt8 nId;
             sal_uInt16 nSize;
             sal_uInt8* pSprm;
@@ -89,13 +89,13 @@ void Ww1SingleSprm::Start(
 void Ww1SingleSprm::Stop(
     Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&)
 {
-// OSL_ENSURE(FALSE, "Unknown Sprm");
+
 }
 
-// STOP
-// The following defines are used for implementing the SingleSprm
-// classes' Stop() members, because they normally merely put
-// EndItem(s) into the shell.
+
+
+
+
 #define STOP1(Class, Code) \
     void Class::Stop( \
      Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) { \
@@ -105,12 +105,12 @@ void Ww1SingleSprm::Stop(
      Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) { \
         rOut.EndItem(Code1).EndItem(Code2); }
 
-// SingleSprmXxxxx
-// This starts the evaluation of the actual sprms. Each sprmtyp has
-// its own class implementing the virtual methods start and stop. The
-// classes are referenced from the sprm table, a static member of
-// Ww1Sprm. When an sprm is encountered in the document, the virtual
-// methods will be called at the formatting boundaries.
+
+
+
+
+
+
 void Ww1SingleSprmPDxaLeft::Start(
     Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
@@ -119,7 +119,7 @@ void Ww1SingleSprmPDxaLeft::Start(
     if(nPara < 0)
         nPara = 0;
     if(aLR.GetTxtFirstLineOfst() < -nPara)
-        aLR.SetTxtFirstLineOfst(-nPara); // otherwise SetTxtLeft() refuses to work
+        aLR.SetTxtFirstLineOfst(-nPara); 
     aLR.SetTxtLeft(nPara);
     rOut << aLR;
 }
@@ -197,7 +197,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
         switch(pBrc->dxpLine1WidthGet())
         {
         default: OSL_FAIL("unknown linewidth");
-        case 0: return 0;                           // no line
+        case 0: return 0;                           
         case 1: nCode = DEF_LINE_WIDTH_0; break;
         case 2: nCode = DEF_LINE_WIDTH_1; break;
         case 3: nCode = DEF_LINE_WIDTH_2; break;
@@ -244,7 +244,7 @@ void Ww1SingleSprmPBrc::Start(
 #endif
     if(pBrc->dxpSpaceGet())
         aBox.SetDistance(10 + 20 * pBrc->dxpSpaceGet());
-            //??? Why 10+... ????
+            
 
     if( rOut.IsInFly() )
         rOut.SetFlyFrmAttr( aBox );
@@ -253,9 +253,9 @@ void Ww1SingleSprmPBrc::Start(
 
     if(pBrc->fShadowGet())
     {
-        Color aBlack(COL_BLACK); // black...
+        Color aBlack(COL_BLACK); 
         SvxShadowItem aS(RES_SHADOW,(const Color*)&aBlack, 32,
-                         SVX_SHADOW_BOTTOMRIGHT); // 1.6 tw wide
+                         SVX_SHADOW_BOTTOMRIGHT); 
         if( rOut.IsInFly() )
             rOut.SetFlyFrmAttr( aS );
         else
@@ -315,10 +315,10 @@ void Ww1SingleSprmPDyaLine::Start(
     if(nSpace < 0)
         nSpace = -nSpace;
     SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
-    {// MultilineSpace(proportional)
-        long n = nSpace * 100 / 240;    // W1: 240 = 100%, SW: 100 = 100%
+    {
+        long n = nSpace * 100 / 240;    
         if(n>200)
-            n = 200; // SW_UI-Maximum
+            n = 200; 
         aLSpc.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
         aLSpc.SetPropLineSpace((sal_uInt8)n);
     }
@@ -329,14 +329,14 @@ void Ww1SingleSprmPChgTabsPapx::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
 
-    short nLeftPMgn = 0;    // Coordinates approximately equal ??
+    short nLeftPMgn = 0;    
 
     short i;
     sal_uInt8 nDel = pSprm[1];
-    sal_uInt8* pDel = pSprm + 2;                        // Del - Array
+    sal_uInt8* pDel = pSprm + 2;                        
     sal_uInt8 nIns = pSprm[nDel*2+2];
-    sal_uInt8* pIns = pSprm + 2*nDel + 3;           // Ins - Array
-    W1_TBD* pTyp = (W1_TBD*)(pSprm + 2*nDel + 2*nIns + 3);// Typ - Array
+    sal_uInt8* pIns = pSprm + 2*nDel + 3;           
+    W1_TBD* pTyp = (W1_TBD*)(pSprm + 2*nDel + 2*nIns + 3);
 
     SvxTabStopItem aAttr( (SvxTabStopItem&)rOut.GetNodeOrStyAttr( RES_PARATR_TABSTOP ));
 
@@ -358,7 +358,7 @@ void Ww1SingleSprmPChgTabsPapx::Start(
         case 1: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER; break;
         case 2: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT; break;
         case 3: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL; break;
-        case 4: continue;                   // ignore Bar
+        case 4: continue;                   
         }
 
         switch( pTyp[i].tlcGet() ){
@@ -371,7 +371,7 @@ void Ww1SingleSprmPChgTabsPapx::Start(
 
         sal_uInt16 nPos2 = aAttr.GetPos( nPos );
         if( nPos2 != SVX_TAB_NOTFOUND )
-            aAttr.Remove( nPos2, 1 );       // otherwise Insert() refuses to work
+            aAttr.Remove( nPos2, 1 );       
 
         aAttr.Insert( aTabStop );
     }
@@ -389,8 +389,8 @@ void Ww1SingleSprmSGprfIhdt::Start(
 void Ww1SingleSprmSColumns::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
-    short nColSpace = 708; // default 1,25 cm
-    short nNettoWidth = -1; //~ mdt: dxaLeft/Right missing...
+    short nColSpace = 708; 
+    short nNettoWidth = -1; 
     short nCols = SVBT16ToShort(pSprm);
     nCols++;
     if (nCols < 2)
@@ -403,9 +403,9 @@ void Ww1SingleSprmSColumns::Start(
 void Ww1SingleSprmPTtp::Start(
     Ww1Shell& /*rOut*/, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager& rMan)
 {
-    rMan.SetInTtp( true );      // Special case: will be reset at
-                                // InTable::Stop instead of InTtp::Stop,
-                                // because evaluation happens in InTable
+    rMan.SetInTtp( true );      
+                                
+                                
 }
 
 void Ww1SingleSprmPTtp::Stop(
@@ -446,36 +446,36 @@ void Ww1SingleSprmTDefTable10::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 nSize, Ww1Manager& /*rMan*/)
 {
     sal_uInt16 i;
-    sal_uInt8 *p = pSprm + 2;   // skip length word
+    sal_uInt8 *p = pSprm + 2;   
     sal_uInt8 nCount = *p;
     p++;
     nSize -= 3;
-// Still missing:
-// - GapHalf
-// - potential thinning of cell borders
+
+
+
 
     if( nCount < 1 || nCount > 32 || nSize < ( nCount + 1 ) * 2  )
         return;
 
-// Let's read the cell positions for starters
-    short nPos = SVBT16ToShort( p );    // signed, can be negative !!!
+
+    short nPos = SVBT16ToShort( p );    
 
     {
         short nWholeWidth = SVBT16ToShort( p + 2 * nCount ) - nPos;
-        rOut.SetTableWidth( (sal_uInt16)nWholeWidth );  // set table width
+        rOut.SetTableWidth( (sal_uInt16)nWholeWidth );  
 
-// Set table position
-        long nMidTab = nPos + nWholeWidth / 2;      // table center
+
+        long nMidTab = nPos + nWholeWidth / 2;      
         const SwFrmFmt &rFmt = rOut.GetPageDesc().GetMaster();
         const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
         long nRight = rFmt.GetFrmSize().GetWidth()
                       - rLR.GetLeft() - rLR.GetRight();
 
         sal_Int16 eOri = text::HoriOrientation::LEFT;
-        if( nPos > MINLAY ){                        // positioned by twiddling
-            if ( nMidTab <= nRight / 3 )            // 1/3rd of page
+        if( nPos > MINLAY ){                        
+            if ( nMidTab <= nRight / 3 )            
                 eOri = text::HoriOrientation::LEFT;
-            else if ( nMidTab <= 2 * nRight / 3 )   // 2/3rd of page
+            else if ( nMidTab <= 2 * nRight / 3 )   
                 eOri = text::HoriOrientation::CENTER;
             else
                 eOri = text::HoriOrientation::RIGHT;
@@ -485,28 +485,28 @@ void Ww1SingleSprmTDefTable10::Start(
 
     sal_uInt8* pEndPos = p+2;
     sal_uInt8* pTc0 = ( nSize >= nCount * 10 ) ? pEndPos + 2 * nCount : 0;
-    sal_uInt16 nCellsDeleted = 0;       // for merged cells
+    sal_uInt16 nCellsDeleted = 0;       
 
     for( i = 0; i < nCount; i++ ){
-// Collect info
+
         W1_TC* pTc = (W1_TC*)pTc0;
         sal_Bool bMerged = (pTc) ? pTc->fMergedGet() : sal_False;
 
-// set cell widths
+
         sal_uInt16 nPos1 = SVBT16ToShort( pEndPos );
         if( !bMerged )
             rOut.SetCellWidth( nPos1 - nPos, i - nCellsDeleted );
-                                        // set cell width
-                                        // Interaction with GapHalf still missing
-                                        // ( GapHalf is being ignored for now )
+                                        
+                                        
+                                        
         pEndPos+=2;
         nPos = nPos1;
 
-        if( pTc0 ){                     // are there actually TCs ?
+        if( pTc0 ){                     
             W1_TC* pTc2 = (W1_TC*)pTc0;
             sal_Bool bMerged2 = pTc2->fMergedGet();
             if( !bMerged2 ){
-// and now the borders
+
                 SvxBoxItem aBox( (SvxBoxItem&)rOut.GetCellAttr( RES_BOX ));
                 SvxBorderLine aLine;
                 W1_BRC10* pBrc = pTc2->rgbrcGet();
@@ -517,11 +517,11 @@ void Ww1SingleSprmTDefTable10::Start(
                 }
                 rOut.SetCellBorder( aBox, i - nCellsDeleted );
             }else{
-// remove merged cells
+
                 rOut.DeleteCell( i - nCellsDeleted );
                 nCellsDeleted++;
             }
-            pTc0+=sizeof(W1_TC);    // 10
+            pTc0+=sizeof(W1_TC);    
         }
     }
 }
@@ -534,32 +534,32 @@ void Ww1SingleSprmTDyaRowHeight::Start(
     rOut.SetCellHeight(nSpace);
 }
 
-// I don't need Fastsave attributes as dummies
+
 
 void Ww1SingleSprmPpc::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& rMan)
 {
     sal_uInt8 nPpc = *pSprm;
 
-    if (rOut.IsInTable())                       // PMW does not know Flys in tables
+    if (rOut.IsInTable())                       
         return;
 
-    RndStdIds eAnchor;          // binding
+    RndStdIds eAnchor;          
 
-    switch ( ( nPpc & 0x30 ) >> 4 )     // Y binding determines Sw binding
+    switch ( ( nPpc & 0x30 ) >> 4 )     
     {
         case 0:
-            eAnchor = FLY_AT_PARA;      // Vert Margin
+            eAnchor = FLY_AT_PARA;      
             break;
         default:
-            eAnchor = FLY_AT_PAGE;      // Vert Page or unknown
-            break;                          // 2=Vert. Paragraph, 3=Use Default
+            eAnchor = FLY_AT_PAGE;      
+            break;                          
     }
 
     if( !rOut.IsInFly() && rMan.IsInStyle() ){
-        rOut.BeginFly( eAnchor );           // start StyleFly
+        rOut.BeginFly( eAnchor );           
     }else{
-        rOut.SetFlyAnchor( eAnchor );       // set anchor
+        rOut.SetFlyAnchor( eAnchor );       
     }
 }
 
@@ -569,20 +569,20 @@ void Ww1SingleSprmPDxaAbs::Start(
     short nXPos = SVBT16ToShort(pSprm);
 
     if( rMan.IsInStyle() && !rOut.IsInFly() ){
-        rOut.BeginFly();                    // Fly ohne PPc-Attribut
+        rOut.BeginFly();                    
     }
 
     sal_Int16 eHRel = text::RelOrientation::FRAME;
     sal_Int16 eHAlign = text::HoriOrientation::NONE;
 
-    switch( nXPos ){                        // Special x positions ?
+    switch( nXPos ){                        
     case 0:
-    case -12: eHAlign = text::HoriOrientation::NONE; nXPos = 0; break;   // Cheat: inside -> left
-                            // actually text::HoriOrientation::LEFT, but then
-                            // an outer margin moves the Fly
+    case -12: eHAlign = text::HoriOrientation::NONE; nXPos = 0; break;   
+                            
+                            
     case -4:  eHAlign = text::HoriOrientation::CENTER; nXPos = 0; break;
-    case -8:                                           // right
-    case -16: eHAlign = text::HoriOrientation::RIGHT; nXPos = 0; break;  // Cheat: outside -> right
+    case -8:                                           
+    case -16: eHAlign = text::HoriOrientation::RIGHT; nXPos = 0; break;  
 
     }
     rOut.SetFlyXPos( nXPos, eHRel, eHAlign );
@@ -595,7 +595,7 @@ void Ww1SingleSprmPDyaAbs::Start(
     sal_Int16 eVRel = text::RelOrientation::FRAME;
     sal_Int16 eVAlign = text::VertOrientation::NONE;
 
-    switch( nYPos ){                            // special y positions ?
+    switch( nYPos ){                            
     case -4:  eVAlign = text::VertOrientation::TOP; nYPos = 0; break;
     case -8:  eVAlign = text::VertOrientation::CENTER; nYPos = 0; break;
     case -12: eVAlign = text::VertOrientation::BOTTOM; nYPos = 0; break;
@@ -614,9 +614,9 @@ void Ww1SingleSprmPDxaWidth::Start(
 void Ww1SingleSprmPFromText::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
-    if( rOut.IsInFly() ){   // Appears outside of Fly as well, but then it
-                            // obviously has no meaning. It definitely does
-                            // not implicitly start a new Fly
+    if( rOut.IsInFly() ){   
+                            
+                            
         short nFromText = SVBT16ToShort(pSprm);
 
         SvxLRSpaceItem aLR( RES_LR_SPACE );

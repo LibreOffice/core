@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <shell/kde_headers.h>
@@ -72,11 +72,11 @@ SalKDEDisplay::SalKDEDisplay( Display* pDisp )
 
 SalKDEDisplay::~SalKDEDisplay()
 {
-    // in case never a frame opened
+    
     static_cast<KDEXLib*>(GetXLib())->doStartup();
-    // clean up own members
+    
     doDestruct();
-    // prevent SalDisplay from closing KApplication's display
+    
     pDisp_ = NULL;
 }
 
@@ -86,18 +86,18 @@ SalKDEDisplay::~SalKDEDisplay()
 
 KDEXLib::~KDEXLib()
 {
-    // on 64 bit linux using libXRandr.so.2 will crash in
-    // XCloseDisplay when freeing extension data
-    // no known work around, therefor currently leak. Hopefully
-    // this does not make problems since we're shutting down anyway
-    // should we ever get a real kde plugin that uses the KDE event loop
-    // we should use kde's method to signal screen changes similar
-    // to the gtk plugin
+    
+    
+    
+    
+    
+    
+    
     #if ! defined USE_RANDR || ! (defined LINUX && defined X86_64)
-    // properly deinitialize KApplication
+    
     delete (VCLKDEApplication*)m_pApplication;
     #endif
-    // free the faked cmdline arguments no longer needed by KApplication
+    
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
         free( m_pFreeCmdLineArgs[i] );
     delete [] m_pFreeCmdLineArgs;
@@ -117,12 +117,12 @@ void KDEXLib::Init()
             KAboutData::License_File,
             I18N_NOOP( "Copyright (C) 2000, 2014 LibreOffice contributors" ),
             I18N_NOOP( "LibreOffice is an office suite.\n" ),
-            "http://libreoffice.org",
+            "http:
             "libreoffice@lists.freedesktop.org");
     kAboutData->addAuthor( "Jan Holesovsky",
             I18N_NOOP( "Original author and maintainer of the KDE NWF." ),
             "kendy@artax.karlin.mff.cuni.cz",
-            "http://artax.karlin.mff.cuni.cz/~kendy" );
+            "http:
 
     m_nFakeCmdLineArgs = 1;
     sal_uInt16 nIdx;
@@ -152,9 +152,9 @@ void KDEXLib::Init()
     OString aExec = OUStringToOString( aBin, osl_getThreadTextEncoding() );
     m_pFreeCmdLineArgs[0] = strdup( aExec.getStr() );
 
-    // make a copy of the string list for freeing it since
-    // KApplication manipulates the pointers inside the argument vector
-    // note: KApplication bad !
+    
+    
+    
     m_pAppCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
         m_pAppCmdLineArgs[i] = m_pFreeCmdLineArgs[i];
@@ -232,7 +232,7 @@ extern "C" {
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
         SAL_INFO( "vcl.kde", "created KDESalInstance " << &pInstance );
 
-        // initialize SalData
+        
         KDEData *pSalData = new KDEData( pInstance );
         pSalData->Init();
         pInstance->SetLib( pSalData->GetLib() );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -67,19 +67,19 @@
 
 using namespace ::com::sun::star;
 
-/// go to next/previous point on the same level
+
 bool SwCrsrShell::GotoNextNum()
 {
     bool bRet = GetDoc()->GotoNextNum( *m_pCurCrsr->GetPoint() );
     if( bRet )
     {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
         if( !ActionPend() )
         {
             SET_CURR_SHELL( this );
-            // try to set cursor onto this position, at half of the char-
-            // SRectangle's height
+            
+            
             Point aPt( m_pCurCrsr->GetPtPos() );
             SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
                                                         m_pCurCrsr->GetPoint() );
@@ -112,13 +112,13 @@ bool SwCrsrShell::GotoPrevNum()
     bool bRet = GetDoc()->GotoPrevNum( *m_pCurCrsr->GetPoint() );
     if( bRet )
     {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
         if( !ActionPend() )
         {
             SET_CURR_SHELL( this );
-            // try to set cursor onto this position, at half of the char-
-            // SRectangle's height
+            
+            
             Point aPt( m_pCurCrsr->GetPtPos() );
             SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
                                                         m_pCurCrsr->GetPoint() );
@@ -146,21 +146,21 @@ bool SwCrsrShell::GotoPrevNum()
     return bRet;
 }
 
-/// jump from content to header
+
 sal_Bool SwCrsrShell::GotoHeaderTxt()
 {
     const SwFrm* pFrm = GetCurrFrm()->FindPageFrm();
     while( pFrm && !pFrm->IsHeaderFrm() )
         pFrm = pFrm->GetLower();
-    // found header, search 1. content frame
+    
     while( pFrm && !pFrm->IsCntntFrm() )
         pFrm = pFrm->GetLower();
 
     if( pFrm )
     {
         SET_CURR_SHELL( this );
-        // get header frame
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        
+        SwCallLink aLk( *this ); 
         SwCursor *pTmpCrsr = getShellCrsr( true );
         SwCrsrSaveState aSaveState( *pTmpCrsr );
         pFrm->Calc();
@@ -174,7 +174,7 @@ sal_Bool SwCrsrShell::GotoHeaderTxt()
     return 0 != pFrm;
 }
 
-/// jump from content to footer
+
 sal_Bool SwCrsrShell::GotoFooterTxt()
 {
     const SwPageFrm* pFrm = GetCurrFrm()->FindPageFrm();
@@ -184,7 +184,7 @@ sal_Bool SwCrsrShell::GotoFooterTxt()
 
         while( pLower && !pLower->IsFooterFrm() )
             pLower = pLower->GetLower();
-        // found footer, search 1. content frame
+        
         while( pLower && !pLower->IsCntntFrm() )
             pLower = pLower->GetLower();
 
@@ -192,8 +192,8 @@ sal_Bool SwCrsrShell::GotoFooterTxt()
         {
             SwCursor *pTmpCrsr = getShellCrsr( true );
             SET_CURR_SHELL( this );
-            // get position in footer
-            SwCallLink aLk( *this ); // watch Crsr-Moves
+            
+            SwCallLink aLk( *this ); 
             SwCrsrSaveState aSaveState( *pTmpCrsr );
             pLower->Calc();
             Point aPt( pLower->Frm().Pos() + pLower->Prt().Pos() );
@@ -220,7 +220,7 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
 
     if( USHRT_MAX == nDescNo )
     {
-        // take the current one
+        
         const SwPageFrm* pPage = GetCurrFrm()->FindPageFrm();
         if( pPage )
             for( sal_uInt16 i = 0; i < pMyDoc->GetPageDescCnt(); ++i )
@@ -233,13 +233,13 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
 
     if( USHRT_MAX != nDescNo && nDescNo < pMyDoc->GetPageDescCnt() )
     {
-        // check if the attribute exists
+        
         const SwPageDesc& rDesc = const_cast<const SwDoc *>(pMyDoc)
             ->GetPageDesc( nDescNo );
         const SwFmtCntnt* pCnt = 0;
         if( bInHeader )
         {
-            // mirrored pages? ignore for now
+            
             const SwFmtHeader& rHd = rDesc.GetMaster().GetHeader();
             if( rHd.GetHeaderFmt() )
                 pCnt = &rHd.GetHeaderFmt()->GetCntnt();
@@ -262,8 +262,8 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
 
             if( pCNd && 0 != pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) )
             {
-                // then we can set the cursor in here
-                SwCallLink aLk( *this ); // watch Crsr-Moves
+                
+                SwCallLink aLk( *this ); 
                 SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
                 ClearMark();
@@ -282,7 +282,7 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
     return bRet;
 }
 
-/// jump to the next index
+
 sal_Bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
 {
     sal_Bool bRet = sal_False;
@@ -322,7 +322,7 @@ sal_Bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
     }
     if( pFnd )
     {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
         m_pCurCrsr->GetPoint()->nNode = *pFnd;
         m_pCurCrsr->GetPoint()->nContent.Assign( pFnd, 0 );
@@ -333,7 +333,7 @@ sal_Bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
     return bRet;
 }
 
-/// jump to previous index
+
 sal_Bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
 {
     sal_Bool bRet = sal_False;
@@ -374,7 +374,7 @@ sal_Bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
 
     if( pFnd )
     {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
         m_pCurCrsr->GetPoint()->nNode = *pFnd;
         m_pCurCrsr->GetPoint()->nContent.Assign( pFnd, 0 );
@@ -385,7 +385,7 @@ sal_Bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
     return bRet;
 }
 
-/// jump to index of TOXMark
+
 sal_Bool SwCrsrShell::GotoTOXMarkBase()
 {
     sal_Bool bRet = sal_False;
@@ -394,8 +394,8 @@ sal_Bool SwCrsrShell::GotoTOXMarkBase()
     sal_uInt16 nCnt = GetDoc()->GetCurTOXMark( *m_pCurCrsr->GetPoint(), aMarks );
     if( nCnt )
     {
-        // Take the 1. and get the index type. Search in its dependency list
-        // for the actual index
+        
+        
         const SwTOXType* pType = aMarks[0]->GetTOXType();
         SwIterator<SwTOXBase,SwTOXType> aIter( *pType );
         const SwSectionNode* pSectNd;
@@ -417,7 +417,7 @@ sal_Bool SwCrsrShell::GotoTOXMarkBase()
                     0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
                     ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
                 {
-                    SwCallLink aLk( *this ); // watch Crsr-Moves
+                    SwCallLink aLk( *this ); 
                     SwCrsrSaveState aSaveState( *m_pCurCrsr );
                     m_pCurCrsr->GetPoint()->nNode = *pCNd;
                     m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
@@ -433,8 +433,8 @@ sal_Bool SwCrsrShell::GotoTOXMarkBase()
     return bRet;
 }
 
-/// Jump to next/previous table formula
-/// Optionally it is possible to also jump to broken formulas
+
+
 sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors )
 {
     if( IsTableMode() )
@@ -461,7 +461,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
     }
 
     if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
-        // also at collection use only the first frame
+        
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),
                                 &aPt, &rPos, sal_False ) );
     {
@@ -500,7 +500,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
     if( bFnd )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
         aFndGEF.GetPosOfContent( rPos );
@@ -514,7 +514,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
     return bFnd;
 }
 
-/// jump to next/previous index marker
+
 sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
 {
     if( IsTableMode() )
@@ -530,7 +530,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
     _SetGetExpFld aFndGEF( aFndPos ), aCurGEF( rPos );
 
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
-        // also at collection use only the first frame
+        
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
                         GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
 
@@ -549,7 +549,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
                 0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False )) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
-                SwNodeIndex aNdIndex( *pTxtNd ); // UNIX needs this object
+                SwNodeIndex aNdIndex( *pTxtNd ); 
                 _SetGetExpFld aCmp( aNdIndex, *pTxtTOX, 0 );
                 aCmp.SetBodyPos( *pCFrm );
 
@@ -565,7 +565,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
     if( bFnd )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
         aFndGEF.GetPosOfContent( rPos );
@@ -578,17 +578,17 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
     return bFnd;
 }
 
-/// traveling between marks
+
 const SwTOXMark& SwCrsrShell::GotoTOXMark( const SwTOXMark& rStart,
                                             SwTOXSearch eDir )
 {
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
     const SwTOXMark& rNewMark = GetDoc()->GotoTOXMark( rStart, eDir,
                                                     IsReadOnlyAvailable() );
-    // set position
+    
     SwPosition& rPos = *GetCrsr()->GetPoint();
     rPos.nNode = rNewMark.GetTxtTOXMark()->GetTxtNode();
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(),
@@ -601,14 +601,14 @@ const SwTOXMark& SwCrsrShell::GotoTOXMark( const SwTOXMark& rStart,
     return rNewMark;
 }
 
-/// jump to next/previous field type
+
 void lcl_MakeFldLst(
     _SetGetExpFlds& rLst,
     const SwFieldType& rFldType,
     const bool bInReadOnly,
     const bool bChkInpFlag = false )
 {
-    // always search the 1. frame
+    
     Point aPt;
     SwTxtFld* pTxtFld = NULL;
     SwIterator<SwFmtFld,SwFieldType> aIter(rFldType);
@@ -639,7 +639,7 @@ sal_Bool SwCrsrShell::MoveFldType(
     const sal_uInt16 nResType,
     const bool bAddSetExpressionFldsToInputFlds )
 {
-    // sorted list of all fields
+    
     _SetGetExpFlds aSrtLst;
 
     if ( pFldType )
@@ -649,12 +649,12 @@ sal_Bool SwCrsrShell::MoveFldType(
             return sal_False;
         }
 
-        // found Modify object, add all fields to array
+        
         ::lcl_MakeFldLst( aSrtLst, *pFldType, ( IsReadOnlyAvailable() ? true : false ) );
 
         if( RES_INPUTFLD == pFldType->Which() && bAddSetExpressionFldsToInputFlds )
         {
-            // there are hidden input fields in the set exp. fields
+            
             const SwFldTypes& rFldTypes = *mpDoc->GetFldTypes();
             const size_t nSize = rFldTypes.size();
             for( size_t i=0; i < nSize; ++i )
@@ -681,16 +681,16 @@ sal_Bool SwCrsrShell::MoveFldType(
         }
     }
 
-    // found no fields?
+    
     if( aSrtLst.empty() )
         return sal_False;
 
     _SetGetExpFlds::const_iterator it;
     SwCursor* pCrsr = getShellCrsr( true );
     {
-        // (1998): Always use field for search so that the right one is found as
-        // well some are in frames that are anchored to a paragraph that has a
-        // field
+        
+        
+        
         const SwPosition& rPos = *pCrsr->GetPoint();
 
         SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
@@ -700,7 +700,7 @@ sal_Bool SwCrsrShell::MoveFldType(
         const bool bDelFld = ( pTxtFld == NULL );
         if( bDelFld )
         {
-            // create dummy for the search
+            
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
                 (SwDateTimeFieldType*)mpDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
@@ -712,7 +712,7 @@ sal_Bool SwCrsrShell::MoveFldType(
         _SetGetExpFld aSrch( rPos.nNode, pTxtFld, &rPos.nContent );
         if( rPos.nNode.GetIndex() < mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
         {
-            // also at collection use only the first frame
+            
             Point aPt;
             aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
         }
@@ -724,21 +724,21 @@ sal_Bool SwCrsrShell::MoveFldType(
             delete pTxtFld;
         }
 
-        if( it != aSrtLst.end() && **it == aSrch ) // found
+        if( it != aSrtLst.end() && **it == aSrch ) 
         {
             if( bNext )
             {
                 if( ++it == aSrtLst.end() )
-                    return sal_False; // already at the end
+                    return sal_False; 
             }
             else
             {
                 if( it == aSrtLst.begin() )
-                    return sal_False; // no more steps backward possible
+                    return sal_False; 
                 --it;
             }
         }
-        else // not found
+        else 
         {
             if( bNext )
             {
@@ -748,7 +748,7 @@ sal_Bool SwCrsrShell::MoveFldType(
             else
             {
                 if( it == aSrtLst.begin() )
-                    return sal_False; // no more steps backward possible
+                    return sal_False; 
                 --it;
             }
         }
@@ -757,7 +757,7 @@ sal_Bool SwCrsrShell::MoveFldType(
 
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *pCrsr );
 
     rFnd.GetPosOfContent( *pCrsr->GetPoint() );
@@ -774,7 +774,7 @@ sal_Bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
     if( rFld.GetTxtFld() )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
 
         SwCursor* pCrsr = getShellCrsr( true );
         SwCrsrSaveState aSaveState( *pCrsr );
@@ -836,7 +836,7 @@ SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
     SwPaM* pCrsr = GetCrsr();
     if ( pCrsr->GetNext() != pCrsr )
     {
-        // multi selection not handled.
+        
         return NULL;
     }
 
@@ -844,7 +844,7 @@ SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
     if ( pCurFld != NULL
          && RES_TABLEFLD == pCurFld->GetTyp()->Which() )
     {
-        // TabellenFormel ? wandel internen in externen Namen um
+        
         const SwTableNode* pTblNd = IsCrsrInTbl();
         ((SwTblField*)pCurFld)->PtrToBoxNm( pTblNd ? &pTblNd->GetTable() : 0 );
     }
@@ -918,7 +918,7 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
     SwCursor* pCrsr = getShellCrsr( true );
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *pCrsr );
 
     const SwNodes& rNds = GetDoc()->GetNodes();
@@ -935,7 +935,7 @@ bool SwCrsrShell::GotoOutline( const OUString& rName )
     SwCursor* pCrsr = getShellCrsr( true );
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *pCrsr );
 
     bool bRet = false;
@@ -947,7 +947,7 @@ bool SwCrsrShell::GotoOutline( const OUString& rName )
     return bRet;
 }
 
-/// jump to next node with outline num.
+
 sal_Bool SwCrsrShell::GotoNextOutline()
 {
     SwCursor* pCrsr = getShellCrsr( true );
@@ -964,7 +964,7 @@ sal_Bool SwCrsrShell::GotoNextOutline()
     pNd = rNds.GetOutLineNds()[ nPos ];
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *pCrsr );
     pCrsr->GetPoint()->nNode = *pNd;
     pCrsr->GetPoint()->nContent.Assign( (SwTxtNode*)pNd, 0 );
@@ -975,7 +975,7 @@ sal_Bool SwCrsrShell::GotoNextOutline()
     return bRet;
 }
 
-/// jump to previous node with outline num.
+
 sal_Bool SwCrsrShell::GotoPrevOutline()
 {
     SwCursor* pCrsr = getShellCrsr( true );
@@ -988,14 +988,14 @@ sal_Bool SwCrsrShell::GotoPrevOutline()
     sal_Bool bRet = sal_False;
     if( nPos )
     {
-        --nPos; // before
+        --nPos; 
 
         pNd = rNds.GetOutLineNds()[ nPos ];
         if( pNd->GetIndex() > pCrsr->GetPoint()->nNode.GetIndex() )
             return sal_False;
 
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *pCrsr );
         pCrsr->GetPoint()->nNode = *pNd;
         pCrsr->GetPoint()->nContent.Assign( (SwTxtNode*)pNd, 0 );
@@ -1007,7 +1007,7 @@ sal_Bool SwCrsrShell::GotoPrevOutline()
     return bRet;
 }
 
-/// search "outline position" before previous outline node at given level
+
 sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
 {
     SwPaM* pCrsr = getShellCrsr( true );
@@ -1016,9 +1016,9 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     SwNode* pNd = pCrsr->GetNode();
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
-        nPos++; // is at correct position; take next for while
+        nPos++; 
 
-    while( nPos-- ) // check the one in front of the current
+    while( nPos-- ) 
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
@@ -1026,7 +1026,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
             return nPos;
 
     }
-    return USHRT_MAX; // no more left
+    return USHRT_MAX; 
 }
 
 sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
@@ -1038,9 +1038,9 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
         return sal_False;
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
 
-    if( nSttPos > nEndPos ) // parameters switched?
+    if( nSttPos > nEndPos ) 
     {
         OSL_ENSURE( !this, "Start > End for array access" );
         sal_uInt16 nTmp = nSttPos;
@@ -1059,40 +1059,40 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
             pEndNd = rOutlNds[ nEndPos ];
             const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;
             if( nNxtLevel <= nLevel )
-                break; // EndPos is now on the next one
+                break; 
         }
     }
-    // if without children then set onto next one
+    
     else if( ++nEndPos < rOutlNds.size() )
         pEndNd = rOutlNds[ nEndPos ];
 
-    if( nEndPos == rOutlNds.size() ) // no end found
+    if( nEndPos == rOutlNds.size() ) 
         pEndNd = &rNds.GetEndOfContent();
 
     KillPams();
 
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
-    // set end to the end of the previous content node
+    
     m_pCurCrsr->GetPoint()->nNode = *pSttNd;
     m_pCurCrsr->GetPoint()->nContent.Assign( pSttNd->GetCntntNode(), 0 );
     m_pCurCrsr->SetMark();
     m_pCurCrsr->GetPoint()->nNode = *pEndNd;
-    m_pCurCrsr->Move( fnMoveBackward, fnGoNode ); // end of predecessor
+    m_pCurCrsr->Move( fnMoveBackward, fnGoNode ); 
 
-    // and everything is already selected
+    
     sal_Bool bRet = !m_pCurCrsr->IsSelOvr();
     if( bRet )
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return bRet;
 }
 
-/// jump to reference marker
+
 sal_Bool SwCrsrShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
     sal_Int32 nPos = -1;
@@ -1206,7 +1206,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         if( bRet && bSetCrsr )
                         {
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
+                            SwCallLink aLk( *this ); 
                             m_pCurCrsr->DeleteMark();
                             *m_pCurCrsr->GetPoint() = aPos;
                             if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
@@ -1245,14 +1245,14 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                         if( bSetCrsr )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
+                            SwCallLink aLk( *this ); 
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
                             m_pCurCrsr->DeleteMark();
                             *m_pCurCrsr->GetPoint() = aPos;
                             if( m_pCurCrsr->IsSelOvr() )
                             {
-                                // allow click fields in protected sections
-                                // only placeholder is not possible
+                                
+                                
                                 if( SwContentAtPos::SW_FIELD & rCntntAtPos.eCntntAtPos
                                     || RES_JUMPEDITFLD == pFld->Which() )
                                     pFld = 0;
@@ -1263,10 +1263,10 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         else if( RES_TABLEFLD == pFld->Which() &&
                             ((SwTblField*)pFld)->IsIntrnlName() )
                         {
-                            // create from internal (for CORE) the external
-                            // (for UI) formula
+                            
+                            
                             const SwTableNode* pTblNd = pTxtNd->FindTableNode();
-                            if( pTblNd )        // steht in einer Tabelle
+                            if( pTblNd )        
                                 ((SwTblField*)pFld)->PtrToBoxNm( &pTblNd->GetTable() );
                         }
                     }
@@ -1295,7 +1295,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 {
                     if( aTmpState.bFtnNoInfo )
                     {
-                        // over the footnote's char
+                        
                         bRet = sal_True;
                         if( bSetCrsr )
                         {
@@ -1312,7 +1312,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         bRet = sal_True;
                         if( bSetCrsr )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
+                            SwCallLink aLk( *this ); 
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
                             m_pCurCrsr->GetPoint()->nNode = *((SwTxtFtn*)pTxtAttr)->GetStartNode();
                             SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection(
@@ -1355,7 +1355,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             pTxtNd->GetTxtAttrsAt(
                                aPos.nContent.GetIndex(), RES_TXTATR_TOXMARK));
                         if (marks.size())
-                        {   // hmm... can only return 1 here
+                        {   
                             pTxtAttr = *marks.begin();
                         }
                     }
@@ -1367,7 +1367,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             pTxtNd->GetTxtAttrsAt(
                                aPos.nContent.GetIndex(), RES_TXTATR_REFMARK));
                         if (marks.size())
-                        {   // hmm... can only return 1 here
+                        {   
                             pTxtAttr = *marks.begin();
                         }
                     }
@@ -1377,7 +1377,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         bRet = sal_True;
                         if( bSetCrsr )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
+                            SwCallLink aLk( *this ); 
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
                             m_pCurCrsr->DeleteMark();
                             *m_pCurCrsr->GetPoint() = aPos;
@@ -1416,14 +1416,14 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 {
                     pTxtAttr = pTxtNd->GetTxtAttrAt(
                             aPos.nContent.GetIndex(), RES_TXTATR_INETFMT);
-                    // "detect" only INetAttrs with URLs
+                    
                     if( pTxtAttr && !pTxtAttr->GetINetFmt().GetValue().isEmpty() )
                     {
                         bRet = sal_True;
                         if( bSetCrsr )
                         {
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
+                            SwCallLink aLk( *this ); 
                             m_pCurCrsr->DeleteMark();
                             *m_pCurCrsr->GetPoint() = aPos;
                             if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
@@ -1492,7 +1492,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     SwFrm* pF = pTxtNd->getLayoutFrm( GetLayout(), &aPt );
                     if( pF )
                     {
-                        // then the CellFrame
+                        
                         pFrm = (SwCntntFrm*)pF;
                         while( pF && !pF->IsCellFrm() )
                             pF = pF->GetUpper();
@@ -1506,10 +1506,10 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     else if( !pF )
                         pF = pFrm;
 
-                    if( pF ) // only then it is valid
+                    if( pF ) 
                     {
-                        // create from internal (for CORE) the external
-                        // (for UI) formula
+                        
+                        
                         rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXFML;
 #ifdef DBG_UTIL
                         if( RES_BOXATR_VALUE == pItem->Which() )
@@ -1521,7 +1521,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         bRet = sal_True;
                         if( bSetCrsr )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
+                            SwCallLink aLk( *this ); 
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
                             *m_pCurCrsr->GetPoint() = aPos;
                             if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
@@ -1557,7 +1557,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     {
                         const SwTxtAttr* pHt = pTxtNd->GetSwpHints()[i];
                         const sal_Int32 nAttrStart = *pHt->GetStart();
-                        if( nAttrStart > n ) // over the section
+                        if( nAttrStart > n ) 
                             break;
 
                         if( 0 != pHt->End() && (
@@ -1574,9 +1574,9 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         pTxtNd->GetpSwAttrSet()->Count() )
                     {
                         SfxItemSet aFmtSet( pTxtNd->GetSwAttrSet() );
-                        // remove all from format set that are also in TextSet
+                        
                         aFmtSet.Differentiate( aSet );
-                        // now merge all together
+                        
                         aSet.Put( aFmtSet );
                     }
                 }
@@ -1588,11 +1588,11 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 rCntntAtPos.sStr += ":";
                 rCntntAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
                 rCntntAtPos.sStr += ")";
-                rCntntAtPos.sStr += "\nAbs.Vorl.: "; // translation *might be* "paragraph template"
+                rCntntAtPos.sStr += "\nAbs.Vorl.: "; 
                 rCntntAtPos.sStr += pTxtNd->GetFmtColl()->GetName();
                 if( pTxtNd->GetCondFmtColl() )
                 {
-                     // translation *might be* "conditional template"
+                     
                     rCntntAtPos.sStr += "\nBed.Vorl.: " + pTxtNd->GetCondFmtColl()->GetName();
                 }
 
@@ -1639,7 +1639,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
     return bRet;
 }
 
-// #i90516#
+
 const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
 {
     const SwPostItField* pPostItFld = 0;
@@ -1662,7 +1662,7 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
     return pPostItFld;
 }
 
-/// is the node in a protected section?
+
 bool SwContentAtPos::IsInProtectSect() const
 {
     const SwTxtNode* pNd = 0;
@@ -1791,7 +1791,7 @@ bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
         SwCursor* pCrsr = getShellCrsr( true );
 
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *pCrsr );
 
         pCrsr->GetPoint()->nNode = *rAttr.GetpTxtNode();
@@ -1828,7 +1828,7 @@ sal_Bool SwCrsrShell::GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
         if( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState ) &&
             !aPos.nNode.GetNode().IsProtect())
         {
-            // start position in protected section?
+            
             rRect = aFPos.aCrsr;
             rOrient = aFPos.eOrient;
             bRet = sal_True;
@@ -1853,13 +1853,13 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
 
         if( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState ) )
         {
-            SwCallLink aLk( *this ); // watch Crsr-Moves
+            SwCallLink aLk( *this ); 
             StartAction();
 
             SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
             SwUndoId nUndoId = UNDO_INS_FROM_SHADOWCRSR;
-            // If only the paragraph attributes "Adjust" or "LRSpace" are set,
-            // then the following should not delete those again.
+            
+            
             if( 0 == aFPos.nParaCnt + aFPos.nColumnCnt &&
                 ( FILL_INDENT == aFPos.eMode ||
                   ( text::HoriOrientation::NONE != aFPos.eOrient &&
@@ -1943,7 +1943,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if (!sInsert.isEmpty())
                         GetDoc()->InsertString( *m_pCurCrsr, sInsert.makeStringAndClear());
                 }
-                // no break - still need to set orientation
+                
             case FILL_MARGIN:
                 if( text::HoriOrientation::NONE != aFPos.eOrient )
                 {
@@ -1979,7 +1979,7 @@ const SwRangeRedline* SwCrsrShell::SelNextRedline()
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
         pFnd = GetDoc()->SelNextRedline( *m_pCurCrsr );
@@ -1997,7 +1997,7 @@ const SwRangeRedline* SwCrsrShell::SelPrevRedline()
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
         pFnd = GetDoc()->SelPrevRedline( *m_pCurCrsr );
@@ -2012,7 +2012,7 @@ const SwRangeRedline* SwCrsrShell::SelPrevRedline()
 const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect )
 {
     const SwRangeRedline* pFnd = 0;
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
     pFnd = GetDoc()->GetRedlineTbl()[ nArrPos ];
@@ -2101,8 +2101,8 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSe
 
                 if( pTmp && bCheck )
                 {
-                    // Check for overlaps. These can happen when FmtColl-
-                    // Redlines were streched over a whole paragraph
+                    
+                    
                     SwPaM* pCur = m_pCurCrsr;
                     SwPaM* pNextPam = (SwPaM*)pCur->GetNext();
                     SwPosition* pCStt = pCur->Start(), *pCEnd = pCur->End();
@@ -2115,7 +2115,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSe
                         switch( ::ComparePosition( *pCStt, *pCEnd,
                                                    *pNStt, *pNEnd ))
                         {
-                        case POS_INSIDE:         // Pos1 is completely in Pos2
+                        case POS_INSIDE:         
                             if( !pCur->HasMark() )
                             {
                                 pCur->SetMark();
@@ -2126,16 +2126,16 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSe
                             *pCEnd = *pNEnd;
                             break;
 
-                        case POS_OUTSIDE:        // Pos2 is completely in Pos1
-                        case POS_EQUAL:          // Pos1 has same size as Pos2
+                        case POS_OUTSIDE:        
+                        case POS_EQUAL:          
                             break;
 
-                        case POS_OVERLAP_BEFORE: // Pos1 overlaps Pos2 at beginning
+                        case POS_OVERLAP_BEFORE: 
                             if( !pCur->HasMark() )
                                 pCur->SetMark();
                             *pCEnd = *pNEnd;
                             break;
-                        case POS_OVERLAP_BEHIND: // Pos1 overlaps Pos2 at end
+                        case POS_OVERLAP_BEHIND: 
                             if( !pCur->HasMark() )
                             {
                                 pCur->SetMark();
@@ -2151,7 +2151,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSe
 
                         if( bDel )
                         {
-                            // not needed anymore
+                            
                             SwPaM* pPrevPam = (SwPaM*)pNextPam->GetPrev();
                             delete pNextPam;
                             pNextPam = pPrevPam;
@@ -2169,7 +2169,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSe
                 {
                     if( pTmp )
                     {
-                        // create new cursor
+                        
                         CreateCrsr();
                         bCheck = true;
                     }
@@ -2204,7 +2204,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
             aCurPos.SetBodyPos( *pFrm );
     }
 
-    // check first all the hyperlink fields
+    
     {
         const SwTxtNode* pTxtNd;
         const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
@@ -2241,7 +2241,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         }
     }
 
-    // then check all the Flys with a URL or imapge map
+    
     {
         const SwFrmFmts* pFmts = GetDoc()->GetSpzFrmFmts();
         for( sal_uInt16 n = 0, nEnd = pFmts->size(); n < nEnd; ++n )
@@ -2266,7 +2266,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         }
     }
 
-    // found any URL ?
+    
     bool bRet = false;
     const SwTxtINetFmt* pFndAttr = aCmpPos.GetINetFmt();
     const SwFlyFrmFmt* pFndFmt = aCmpPos.GetFlyFmt();
@@ -2275,7 +2275,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this );
 
-        // found a text attribute ?
+        
         if( pFndAttr )
         {
             SwCrsrSaveState aSaveState( *m_pCurCrsr );
@@ -2292,7 +2292,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
                 bRet = true;
             }
         }
-        // found a draw object ?
+        
         else if( RES_DRAWFRMFMT == pFndFmt->Which() )
         {
             const SdrObject* pSObj = pFndFmt->FindSdrObject();
@@ -2300,7 +2300,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
             MakeSelVisible();
             bRet = true;
         }
-        else // then is it a fly
+        else 
         {
             SwFlyFrm* pFly = pFndFmt->GetFrm(&aPt, sal_False );
             if( pFly )

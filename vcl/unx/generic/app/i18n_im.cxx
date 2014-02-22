@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,12 +48,12 @@ using namespace vcl;
 extern "C" char * XSetIMValues(XIM im, ...);
 #endif
 
-// ------------------------------------------------------------------------------------
+
 //
-// kinput2 IME needs special key handling since key release events are filtered in
-// preeditmode and XmbResetIC does not work
+
+
 //
-// ------------------------------------------------------------------------------------
+
 
 bool
 IMServerKinput2 ()
@@ -143,13 +143,13 @@ XKeyEventOp::match (const XKeyEvent &rEvent) const
             && same_screen == rEvent.same_screen;
 }
 
-// -------------------------------------------------------------------------
-//
-// locale handling
-//
-// -------------------------------------------------------------------------
 
-//  Locale handling of the operating system layer
+//
+
+//
+
+
+
 
 static char*
 SetSystemLocale( const char* p_inlocale )
@@ -190,7 +190,7 @@ IsPosixLocale( const char* p_locale )
     return False;
 }
 
-//  Locale handling of the X Window System layer
+
 
 static Bool
 IsXWindowCompatibleLocale( const char* p_locale )
@@ -207,20 +207,20 @@ IsXWindowCompatibleLocale( const char* p_locale )
     return True;
 }
 
-// Set the operating system locale prior to trying to open an
-// XIM InputMethod.
-// Handle the cases where the current locale is either not supported by the
-// operating system (LANG=gaga) or by the XWindow system (LANG=aa_ER@saaho)
-// by providing a fallback.
-// Upgrade "C" or "POSIX" to "en_US" locale to allow umlauts and accents
-// see i8988, i9188, i8930, i16318
-// on Solaris the environment needs to be set equivalent to the locale (#i37047#)
+
+
+
+
+
+
+
+
 
 bool
 SalI18N_InputMethod::SetLocale( const char* pLocale )
 {
-    // check whether we want an Input Method engine, if we don't we
-    // do not need to set the locale
+    
+    
     if ( mbUseable )
     {
         char *locale = SetSystemLocale( pLocale );
@@ -242,7 +242,7 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
             }
         }
 
-        // must not fail if mbUseable since XSupportsLocale() asserts success
+        
         if ( mbUseable && XSetLocaleModifiers("") == NULL )
         {
             fprintf (stderr, "I18N: Can't set X modifiers for locale \"%s\"\n",
@@ -262,11 +262,11 @@ SalI18N_InputMethod::PosixLocale()
     return False;
 }
 
-// ------------------------------------------------------------------------
+
 //
-// Constructor / Destructor / Initialisation
+
 //
-// ------------------------------------------------------------------------
+
 
 SalI18N_InputMethod::SalI18N_InputMethod( ) : mbUseable( bUseInputMethodDefault ),
                                               maMethod( (XIM)NULL ),
@@ -287,8 +287,8 @@ SalI18N_InputMethod::~SalI18N_InputMethod()
 }
 
 //
-// XXX
-// debug routine: lets have a look at the provided method styles
+
+
 //
 
 #if OSL_DEBUG_LEVEL > 1
@@ -353,8 +353,8 @@ PrintInputStyle( XIMStyles *pStyle )
 #endif
 
 //
-// this is the real constructing routine, since locale setting has to be done
-// prior to xopendisplay, the xopenim call has to be delayed
+
+
 //
 
 bool
@@ -402,7 +402,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 }
 
 //
-// give IM the opportunity to look at the event, and possibly hide it
+
 //
 
 bool
@@ -446,16 +446,16 @@ SalI18N_InputMethod::HandleDestroyIM()
     maMethod        = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 //
-// add a connection watch into the SalXLib yieldTable to allow iiimp
-// connection processing: soffice waits in select() not in XNextEvent(), so
-// there may be requests pending on the iiimp internal connection that will
-// not be processed until XNextEvent is called the next time. If we do not
-// have the focus because the atok12 lookup choice aux window has it we stay
-// deaf and dump otherwise.
+
+
+
+
+
+
 //
-// ------------------------------------------------------------------------
+
 
 int
 InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)

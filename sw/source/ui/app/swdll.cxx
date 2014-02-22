@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -50,8 +50,8 @@ using namespace com::sun::star;
 
 namespace
 {
-    //Holds a SwDLL and release it on exit, or dispose of the
-    //default XComponent, whichever comes first
+    
+    
     class SwDLLInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<SwDLL>
     {
     public:
@@ -78,7 +78,7 @@ namespace SwGlobals
 
 SwDLL::SwDLL()
 {
-    // the SdModule must be created
+    
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     if ( *ppShlPtr )
         return;
@@ -105,50 +105,50 @@ SwDLL::SwDLL()
         pDocFact->SetDocumentServiceName(OUString("com.sun.star.text.TextDocument"));
     }
 
-    // register SvDraw-Fields
+    
     SdrRegisterFieldClasses();
 
-    // register 3D-Objekt-Factory
+    
     E3dObjFactory();
 
-    // register form::component::Form-Objekt-Factory
+    
     FmFormObjFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
     SAL_INFO( "sw.ui", "Init Core/UI/Filter" );
-    // Initialisation of Statics
+    
     ::_InitCore();
     filters_.reset(new sw::Filters);
     ::_InitUI();
 
     pModule->InitAttrPool();
-    // now SWModule can create its Pool
+    
 
-    // register your view-factories here
+    
     RegisterFactories();
 
 #if HAVE_FEATURE_DESKTOP
-    // register your shell-interfaces here
+    
     RegisterInterfaces();
 
-    // register your controllers here
+    
     RegisterControls();
 #endif
 }
 
 SwDLL::~SwDLL()
 {
-    // Pool has to be deleted before statics are
+    
     SW_MOD()->RemoveAttrPool();
 
     ::_FinitUI();
     filters_.reset();
     ::_FinitCore();
-    // sign out Objekt-Factory
+    
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
 #if 0
-    // the SwModule must be destroyed
+    
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;

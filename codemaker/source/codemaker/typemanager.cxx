@@ -157,7 +157,7 @@ codemaker::UnoType::Sort TypeManager::getSort(
     case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
         return codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON;
     default:
-        for (;;) { std::abort(); } // this cannot happen
+        for (;;) { std::abort(); } 
     }
 }
 
@@ -190,7 +190,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 }
                 break;
             }
-            // fall through
+            
         case codemaker::UnoType::SORT_VOID:
         case codemaker::UnoType::SORT_BOOLEAN:
         case codemaker::UnoType::SORT_BYTE:
@@ -253,8 +253,8 @@ codemaker::UnoType::Sort TypeManager::decompose(
             return
                 codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE;
         case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-            assert(false); // this cannot happen
-            // fall through
+            assert(false); 
+            
         default:
             throw CannotDumpException(
                 "unexpected \"" + n + "\" resolved from \"" + name

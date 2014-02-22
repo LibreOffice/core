@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,10 +53,10 @@
 #include <algorithm>
 #include <map>
 
-// .......................................................................
+
 namespace svt
 {
-// .......................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -82,7 +82,7 @@ namespace svt
             OUString selectedDataSource = _dataSourceCombo.GetText();
             if ( _dataSourceCombo.GetEntryPos( selectedDataSource ) == LISTBOX_ENTRY_NOTFOUND )
             {
-                // none of the pre-selected entries -> assume a path to a database document
+                
                 OFileNotation aFileNotation( selectedDataSource, OFileNotation::N_SYSTEM );
                 selectedDataSource = aFileNotation.get( OFileNotation::N_URL );
             }
@@ -90,18 +90,18 @@ namespace svt
         }
     }
 
-    // ===================================================================
-    // = IAssigmentData
-    // ===================================================================
+    
+    
+    
     class IAssigmentData
     {
     public:
         virtual ~IAssigmentData();
 
-        /// the data source to use for the address book
+        
         virtual OUString getDatasourceName() const = 0;
 
-        /// the command to use for the address book
+        
         virtual OUString getCommand() const = 0;
 
         /** the command type to use for the address book
@@ -110,28 +110,28 @@ namespace svt
         */
         virtual sal_Int32       getCommandType() const = 0;
 
-        /// checks whether or not there is an assignment for a given logical field
+        
         virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) = 0;
-        /// retrieves the assignment for a given logical field
+        
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) = 0;
 
-        /// set the assignment for a given logical field
+        
         virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) = 0;
-        /// clear the assignment for a given logical field
+        
         virtual void            clearFieldAssignment(const OUString& _rLogicalName) = 0;
 
         virtual void    setDatasourceName(const OUString& _rName) = 0;
         virtual void    setCommand(const OUString& _rCommand) = 0;
     };
 
-    // -------------------------------------------------------------------
+    
     IAssigmentData::~IAssigmentData()
     {
     }
 
-    // ===================================================================
-    // = AssigmentTransientData
-    // ===================================================================
+    
+    
+    
     class AssigmentTransientData : public IAssigmentData
     {
     protected:
@@ -148,7 +148,7 @@ public:
             const Sequence< AliasProgrammaticPair >& _rFields
         );
 
-        // IAssigmentData overridables
+        
         virtual OUString getDatasourceName() const;
         virtual OUString getCommand() const;
         virtual sal_Int32       getCommandType() const;
@@ -162,7 +162,7 @@ public:
         virtual void    setCommand(const OUString& _rCommand);
     };
 
-    // -------------------------------------------------------------------
+    
     AssigmentTransientData::AssigmentTransientData( const Reference< XDataSource >& _rxDataSource,
             const OUString& _rDataSourceName, const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields )
@@ -170,8 +170,8 @@ public:
         ,m_sDSName( _rDataSourceName )
         ,m_sTableName( _rTableName )
     {
-        // fill our aliases structure
-        // first collect all known programmatic names
+        
+        
         StringBag aKnownNames;
 
         OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
@@ -183,7 +183,7 @@ public:
         }
         while ( nIndex >= 0);
 
-        // loop through the given names
+        
         const AliasProgrammaticPair* pFields = _rFields.getConstArray();
         const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
         for (;pFields != pFieldsEnd; ++pFields)
@@ -204,25 +204,25 @@ public:
         }
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssigmentTransientData::getDatasourceName() const
     {
         return m_sDSName;
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssigmentTransientData::getCommand() const
     {
         return m_sTableName;
     }
 
-    // -------------------------------------------------------------------
+    
     sal_Int32 AssigmentTransientData::getCommandType() const
     {
         return CommandType::TABLE;
     }
 
-    // -------------------------------------------------------------------
+    
     sal_Bool AssigmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         MapString2String::const_iterator aPos = m_aAliases.find( _rLogicalName );
@@ -230,7 +230,7 @@ public:
             &&  ( !aPos->second.isEmpty() );
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssigmentTransientData::getFieldAssignment(const OUString& _rLogicalName)
     {
         OUString sReturn;
@@ -241,13 +241,13 @@ public:
         return sReturn;
     }
 
-    // -------------------------------------------------------------------
+    
     void AssigmentTransientData::setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment)
     {
         m_aAliases[ _rLogicalName ] = _rAssignment;
     }
 
-    // -------------------------------------------------------------------
+    
     void AssigmentTransientData::clearFieldAssignment(const OUString& _rLogicalName)
     {
         MapString2String::iterator aPos = m_aAliases.find( _rLogicalName );
@@ -255,21 +255,21 @@ public:
             m_aAliases.erase( aPos );
     }
 
-    // -------------------------------------------------------------------
+    
     void AssigmentTransientData::setDatasourceName(const OUString&)
     {
         OSL_FAIL( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
-    // -------------------------------------------------------------------
+    
     void AssigmentTransientData::setCommand(const OUString&)
     {
         OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
-    // ===================================================================
-    // = AssignmentPersistentData
-    // ===================================================================
+    
+    
+    
     class AssignmentPersistentData
             :public ::utl::ConfigItem
             ,public IAssigmentData
@@ -294,7 +294,7 @@ public:
         AssignmentPersistentData();
         ~AssignmentPersistentData();
 
-        // IAssigmentData overridables
+        
         virtual OUString getDatasourceName() const;
         virtual OUString getCommand() const;
         virtual sal_Int32       getCommandType() const;
@@ -320,7 +320,7 @@ void AssignmentPersistentData::Commit()
 {
 }
 
-    // -------------------------------------------------------------------
+    
     AssignmentPersistentData::AssignmentPersistentData()
         :ConfigItem( OUString( "Office.DataAccess/AddressBook" ))
     {
@@ -330,18 +330,18 @@ void AssignmentPersistentData::Commit()
             m_aStoredFields.insert(*pStoredNames);
     }
 
-    // -------------------------------------------------------------------
+    
     AssignmentPersistentData::~AssignmentPersistentData()
     {
     }
 
-    // -------------------------------------------------------------------
+    
     sal_Bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         return (m_aStoredFields.end() != m_aStoredFields.find(_rLogicalName));
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssignmentPersistentData::getFieldAssignment(const OUString& _rLogicalName)
     {
         OUString sAssignment;
@@ -355,13 +355,13 @@ void AssignmentPersistentData::Commit()
         return sAssignment;
     }
 
-    // -------------------------------------------------------------------
+    
     Any AssignmentPersistentData::getProperty(const sal_Char* _pLocalName) const
     {
         return getProperty(OUString::createFromAscii(_pLocalName));
     }
 
-    // -------------------------------------------------------------------
+    
     Any AssignmentPersistentData::getProperty(const OUString& _rLocalName) const
     {
         Sequence< OUString > aProperties(&_rLocalName, 1);
@@ -370,7 +370,7 @@ void AssignmentPersistentData::Commit()
         return aValues[0];
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssignmentPersistentData::getStringProperty(const OUString& _rLocalName) const
     {
         OUString sReturn;
@@ -378,7 +378,7 @@ void AssignmentPersistentData::Commit()
         return sReturn;
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
     {
         OUString sReturn;
@@ -386,7 +386,7 @@ void AssignmentPersistentData::Commit()
         return sReturn;
     }
 
-    // -------------------------------------------------------------------
+    
     sal_Int32 AssignmentPersistentData::getInt32Property(const sal_Char* _pLocalName) const
     {
         sal_Int32 nReturn = 0;
@@ -394,7 +394,7 @@ void AssignmentPersistentData::Commit()
         return nReturn;
     }
 
-    // -------------------------------------------------------------------
+    
     void AssignmentPersistentData::setStringProperty(const sal_Char* _pLocalName, const OUString& _rValue)
     {
         Sequence< OUString > aNames(1);
@@ -404,36 +404,36 @@ void AssignmentPersistentData::Commit()
         PutProperties(aNames, aValues);
     }
 
-    // -------------------------------------------------------------------
+    
     void AssignmentPersistentData::setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment)
     {
         if (_rAssignment.isEmpty())
         {
             if (hasFieldAssignment(_rLogicalName))
             {
-                // the assignment exists but it should be reset
+                
                 clearFieldAssignment(_rLogicalName);
             }
             return;
         }
 
-        // Fields
+        
         OUString sDescriptionNodePath("Fields");
 
-        // Fields/<field>
+        
         OUString sFieldElementNodePath(sDescriptionNodePath);
         sFieldElementNodePath += "/";
         sFieldElementNodePath += _rLogicalName;
 
         Sequence< PropertyValue > aNewFieldDescription(2);
-        // Fields/<field>/ProgrammaticFieldName
+        
         aNewFieldDescription[0].Name = sFieldElementNodePath + "/ProgrammaticFieldName";
         aNewFieldDescription[0].Value <<= _rLogicalName;
-        // Fields/<field>/AssignedFieldName
+        
         aNewFieldDescription[1].Name = sFieldElementNodePath + "/AssignedFieldName";
         aNewFieldDescription[1].Value <<= _rAssignment;
 
-        // just set the new value
+        
 #ifdef DBG_UTIL
         sal_Bool bSuccess =
 #endif
@@ -441,11 +441,11 @@ void AssignmentPersistentData::Commit()
         DBG_ASSERT(bSuccess, "AssignmentPersistentData::setFieldAssignment: could not commit the changes a field!");
     }
 
-    // -------------------------------------------------------------------
+    
     void AssignmentPersistentData::clearFieldAssignment(const OUString& _rLogicalName)
     {
         if (!hasFieldAssignment(_rLogicalName))
-            // nothing to do
+            
             return;
 
         OUString sDescriptionNodePath("Fields");
@@ -453,66 +453,66 @@ void AssignmentPersistentData::Commit()
         ClearNodeElements(sDescriptionNodePath, aNames);
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssignmentPersistentData::getDatasourceName() const
     {
         return getStringProperty( "DataSourceName" );
     }
 
-    // -------------------------------------------------------------------
+    
     OUString AssignmentPersistentData::getCommand() const
     {
         return getStringProperty( "Command" );
     }
 
-    // -------------------------------------------------------------------
+    
     void AssignmentPersistentData::setDatasourceName(const OUString& _rName)
     {
         setStringProperty( "DataSourceName", _rName );
     }
 
-    // -------------------------------------------------------------------
+    
     void AssignmentPersistentData::setCommand(const OUString& _rCommand)
     {
         setStringProperty( "Command", _rCommand );
     }
 
-    // -------------------------------------------------------------------
+    
     sal_Int32 AssignmentPersistentData::getCommandType() const
     {
         return getInt32Property( "CommandType" );
     }
 
-    // ===================================================================
-    // = AddressBookSourceDialogData
-    // ===================================================================
+    
+    
+    
     struct AddressBookSourceDialogData
     {
         FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
         ListBox*        pFields[FIELD_PAIRS_VISIBLE * 2];
 
-        /// when working transient, we need the data source
+        
         Reference< XDataSource >
                         m_xTransientDataSource;
-        /// current scroll pos in the field list
+        
         sal_Int32       nFieldScrollPos;
-        /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
+        
         sal_Int32       nLastVisibleListIndex;
-        /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
+        
         sal_Bool        bOddFieldNumber : 1;
-        /// indicates that we're working with the real persistent configuration
+        
         sal_Bool        bWorkingPersistent : 1;
 
-        /// the strings to use as labels for the field selection listboxes
+        
         StringArray     aFieldLabels;
-        // the current field assignment
+        
         StringArray     aFieldAssignments;
-        /// the logical field names
+        
         StringArray     aLogicalFieldNames;
 
         IAssigmentData* pConfigData;
 
-        // ................................................................
+        
         AddressBookSourceDialogData( )
             :nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
@@ -522,7 +522,7 @@ void AssignmentPersistentData::Commit()
         {
         }
 
-        // ................................................................
+        
         AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
             const OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
             :m_xTransientDataSource( _rxTransientDS )
@@ -541,11 +541,11 @@ void AssignmentPersistentData::Commit()
 
     };
 
-    // ===================================================================
-    // = AddressBookSourceDialog
-    // ===================================================================
+    
+    
+    
 
-    // -------------------------------------------------------------------
+    
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
             const Reference< XComponentContext >& _rxORB )
         : ModalDialog(_pParent, "AddressTemplateDialog", "svt/ui/addresstemplatedialog.ui")
@@ -556,7 +556,7 @@ void AssignmentPersistentData::Commit()
         implConstruct();
     }
 
-    // -------------------------------------------------------------------
+    
     AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XComponentContext >& _rxORB,
         const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
         const OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
@@ -568,7 +568,7 @@ void AssignmentPersistentData::Commit()
         implConstruct();
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::implConstruct()
     {
         get(m_pDatasource, "datasource");
@@ -582,9 +582,9 @@ void AssignmentPersistentData::Commit()
         {
             for (sal_Int32 column=0; column<2; ++column)
             {
-                // the label
+                
                 m_pImpl->pFieldLabels[row * 2 + column] = get<FixedText>(OString("label") + OString::number(row * 2 + column));
-                // the listbox
+                
                 m_pImpl->pFields[row * 2 + column] = get<ListBox>(OString("box") + OString::number(row * 2 + column));
                 m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
@@ -594,14 +594,14 @@ void AssignmentPersistentData::Commit()
 
         initializeDatasources();
 
-        // for the moment, we have a hard coded list of all known fields.
-        // A better solution would be to store all known field translations in the configuration, which could be
-        // extensible by the user in an arbitrary way.
-        // But for the moment we need a quick solution ...
-        // (the main thing would be to store the translations to use here in the user interface, besides that, the code
-        // should be adjustable with a rather small effort.)
+        
+        
+        
+        
+        
+        
 
-        // initialize the strings for the field labels
+        
         m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_FIRSTNAME ));
         m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_LASTNAME ));
         m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_COMPANY));
@@ -650,22 +650,22 @@ void AssignmentPersistentData::Commit()
         }
 
 
-        // force a even number of known fields
+        
         m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
         if (m_pImpl->bOddFieldNumber)
             m_pImpl->aFieldLabels.push_back( OUString() );
 
-        // limit the scrollbar range accordingly
+        
         sal_Int32 nOverallFieldPairs = m_pImpl->aFieldLabels.size() / 2;
         m_pFieldScroller->SetRange( Range(0, nOverallFieldPairs - FIELD_PAIRS_VISIBLE) );
         m_pFieldScroller->SetLineSize(1);
         m_pFieldScroller->SetPageSize(FIELD_PAIRS_VISIBLE);
 
-        // reset the current field assignments
+        
         m_pImpl->aFieldAssignments.resize(m_pImpl->aFieldLabels.size());
-            // (empty strings mean "no assignment")
+            
 
-        // some knittings
+        
         m_pFieldScroller->SetScrollHdl(LINK(this, AddressBookSourceDialog, OnFieldScroll));
         m_pAdministrateDatasources->SetClickHdl(LINK(this, AddressBookSourceDialog, OnAdministrateDatasources));
         m_pDatasource->EnableAutocomplete(true);
@@ -678,13 +678,13 @@ void AssignmentPersistentData::Commit()
         m_pDatasource->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
         get<OKButton>("ok")->SetClickHdl(LINK(this, AddressBookSourceDialog, OnOkClicked));
 
-        // initialize the field controls
+        
         resetFields();
         m_pFieldScroller->SetThumbPos(0);
         m_pImpl->nFieldScrollPos = -1;
         implScrollFields(0, sal_False, sal_False);
 
-        // the logical names
+        
         OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
@@ -694,8 +694,8 @@ void AssignmentPersistentData::Commit()
             m_pImpl->aLogicalFieldNames.push_back(comphelper::string::getToken(sLogicalFieldNames, i, ';'));
 
         PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize));
-            // so the dialog will at least show up before we do the loading of the
-            // configuration data and the (maybe time consuming) analysis of the data source/table to select
+            
+            
 
         if ( !m_pImpl->bWorkingPersistent )
         {
@@ -714,7 +714,7 @@ void AssignmentPersistentData::Commit()
         }
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::getFieldMapping(Sequence< AliasProgrammaticPair >& _rMapping) const
     {
         _rMapping.realloc( m_pImpl->aLogicalFieldNames.size() );
@@ -729,7 +729,7 @@ void AssignmentPersistentData::Commit()
             sCurrent = *aProgrammatic;
             if ( m_pImpl->pConfigData->hasFieldAssignment( sCurrent ) )
             {
-                // the user gave us an assignment for this field
+                
                 pPair->ProgrammaticName = *aProgrammatic;
                 pPair->Alias = m_pImpl->pConfigData->getFieldAssignment( *aProgrammatic );
                 ++pPair;
@@ -739,7 +739,7 @@ void AssignmentPersistentData::Commit()
         _rMapping.realloc( pPair - _rMapping.getArray() );
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::loadConfiguration()
     {
         OUString sName = m_pImpl->pConfigData->getDatasourceName();
@@ -752,10 +752,10 @@ void AssignmentPersistentData::Commit()
 
         m_pDatasource->SetText(sName);
         m_pTable->SetText(m_pImpl->pConfigData->getCommand());
-        // we ignore the CommandType: only tables are supported
+        
 
-        // the logical names for the fields
-        // AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!
+        
+        
         assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
         StringArray::const_iterator aLogical = m_pImpl->aLogicalFieldNames.begin();
@@ -767,13 +767,13 @@ void AssignmentPersistentData::Commit()
             *aAssignment = m_pImpl->pConfigData->getFieldAssignment(*aLogical);
     }
 
-    // -------------------------------------------------------------------
+    
     AddressBookSourceDialog::~AddressBookSourceDialog()
     {
         delete m_pImpl;
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::initializeDatasources()
     {
         if (!m_xDatabaseContext.is())
@@ -796,7 +796,7 @@ void AssignmentPersistentData::Commit()
         }
         m_pDatasource->Clear();
 
-        // fill the datasources listbox
+        
         Sequence< OUString > aDatasourceNames;
         try
         {
@@ -812,14 +812,14 @@ void AssignmentPersistentData::Commit()
             m_pDatasource->InsertEntry(*pDatasourceNames);
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK(AddressBookSourceDialog, OnFieldScroll, ScrollBar*, _pScrollBar)
     {
         implScrollFields( _pScrollBar->GetThumbPos(), sal_True, sal_True );
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::resetTables()
     {
         if (!m_xDatabaseContext.is())
@@ -827,10 +827,10 @@ void AssignmentPersistentData::Commit()
 
         WaitObject aWaitCursor(this);
 
-        // no matter what we do here, we handled the currently selected data source (no matter if successful or not)
+        
         m_pDatasource->SaveValue();
 
-        // create an interaction handler (may be needed for connecting)
+        
         Reference< XInteractionHandler > xHandler;
         try
         {
@@ -846,14 +846,14 @@ void AssignmentPersistentData::Commit()
             return;
         }
 
-        // the currently selected table
+        
         OUString sOldTable = m_pTable->GetText();
 
         m_pTable->Clear();
 
         m_xCurrentDatasourceTables= NULL;
 
-        // get the tables of the connection
+        
         Sequence< OUString > aTableNames;
         Any aException;
         try
@@ -863,7 +863,7 @@ void AssignmentPersistentData::Commit()
             {
                 OUString sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
 
-                // get the data source the user has chosen and let it build a connection
+                
                 INetURLObject aURL( sSelectedDS );
                 if ( aURL.GetProtocol() != INET_PROT_NOT_VALID || m_xDatabaseContext->hasByName(sSelectedDS) )
                     m_xDatabaseContext->getByName( sSelectedDS ) >>= xDS;
@@ -873,12 +873,12 @@ void AssignmentPersistentData::Commit()
                 xDS = xDS.query( m_pImpl->m_xTransientDataSource );
             }
 
-            // build the connection
+            
             Reference< XConnection > xConn;
             if (xDS.is())
                 xConn = xDS->connectWithCompletion(xHandler);
 
-            // get the table names
+            
             Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
             if (xSupplTables.is())
             {
@@ -907,7 +907,7 @@ void AssignmentPersistentData::Commit()
         }
 
         sal_Bool bKnowOldTable = sal_False;
-        // fill the table list
+        
         const OUString* pTableNames = aTableNames.getConstArray();
         const OUString* pEnd = pTableNames + aTableNames.getLength();
         for (;pTableNames != pEnd; ++pTableNames)
@@ -917,7 +917,7 @@ void AssignmentPersistentData::Commit()
                 bKnowOldTable = sal_True;
         }
 
-        // set the old table, if the new data source knows a table with this name, too. Else reset the tables edit field.
+        
         if (!bKnowOldTable)
             sOldTable = OUString();
         m_pTable->SetText(sOldTable);
@@ -925,12 +925,12 @@ void AssignmentPersistentData::Commit()
         resetFields();
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::resetFields()
     {
         WaitObject aWaitCursor(this);
 
-        // no matter what we do here, we handled the currently selected table (no matter if successful or not)
+        
         m_pDatasource->SaveValue();
 
         OUString sSelectedTable = m_pTable->GetText();
@@ -939,7 +939,7 @@ void AssignmentPersistentData::Commit()
         {
             if (m_xCurrentDatasourceTables.is())
             {
-                // get the table and the columns
+                
                 Reference< XColumnsSupplier > xSuppTableCols;
                 if (m_xCurrentDatasourceTables->hasByName(sSelectedTable))
                     ::cppu::extractInterface(xSuppTableCols, m_xCurrentDatasourceTables->getByName(sSelectedTable));
@@ -959,7 +959,7 @@ void AssignmentPersistentData::Commit()
         const OUString* pColumnNames = aColumnNames.getConstArray();
         const OUString* pEnd = pColumnNames + aColumnNames.getLength();
 
-        // for quicker access
+        
         ::std::set< OUString > aColumnNameSet;
         for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
             aColumnNameSet.insert(*pColumnNames);
@@ -974,29 +974,29 @@ void AssignmentPersistentData::Commit()
 
             (*pListbox)->Clear();
 
-            // the one entry for "no selection"
+            
             (*pListbox)->InsertEntry(m_sNoFieldSelection, 0);
-            // as it's entry data, set the index of the list box in our array
+            
             (*pListbox)->SetEntryData(0, reinterpret_cast<void*>(i));
 
-            // the field names
+            
             for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
                 (*pListbox)->InsertEntry(*pColumnNames);
 
             if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))
-                // we can select the entry as specified in our field assignment array
+                
                 (*pListbox)->SelectEntry(*aInitialSelection);
             else
-                // try to restore the selection
+                
                 if (aColumnNameSet.end() != aColumnNameSet.find(sSaveSelection))
-                    // the old selection is a valid column name
+                    
                     (*pListbox)->SelectEntry(sSaveSelection);
                 else
-                    // select the <none> entry
+                    
                     (*pListbox)->SelectEntryPos(0);
         }
 
-        // adjust m_pImpl->aFieldAssignments
+        
         for (   StringArray::iterator aAdjust = m_pImpl->aFieldAssignments.begin();
                 aAdjust != m_pImpl->aFieldAssignments.end();
                 ++aAdjust
@@ -1006,53 +1006,53 @@ void AssignmentPersistentData::Commit()
                     (*aAdjust) = "";
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK(AddressBookSourceDialog, OnFieldSelect, ListBox*, _pListbox)
     {
-        // the index of the affected list box in our array
+        
         sal_IntPtr nListBoxIndex = reinterpret_cast<sal_IntPtr>(_pListbox->GetEntryData(0));
         DBG_ASSERT(nListBoxIndex >= 0 && nListBoxIndex < FIELD_CONTROLS_VISIBLE,
             "AddressBookSourceDialog::OnFieldScroll: invalid list box entry!");
 
-        // update the array where we remember the field selections
+        
         if (0 == _pListbox->GetSelectEntryPos())
-            // it's the "no field selection" entry
+            
             m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = "";
         else
-            // it's a regular field entry
+            
             m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = _pListbox->GetSelectEntry();
 
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar)
     {
         if (_nPos == m_pImpl->nFieldScrollPos)
-            // nothing to do
+            
             return;
 
-        // loop through our field control rows and do some adjustments
-        // for the new texts
+        
+        
         FixedText** pLeftLabelControl = m_pImpl->pFieldLabels;
         FixedText** pRightLabelControl = pLeftLabelControl + 1;
         StringArray::const_iterator pLeftColumnLabel = m_pImpl->aFieldLabels.begin() + 2 * _nPos;
         StringArray::const_iterator pRightColumnLabel = pLeftColumnLabel + 1;
 
-        // for the focus movement and the selection scroll
+        
         ListBox** pLeftListControl = m_pImpl->pFields;
         ListBox** pRightListControl = pLeftListControl + 1;
 
-        // for the focus movement
+        
         sal_Int32 nOldFocusRow = -1;
         sal_Int32 nOldFocusColumn = 0;
 
-        // for the selection scroll
+        
         StringArray::const_iterator pLeftAssignment = m_pImpl->aFieldAssignments.begin() + 2 * _nPos;
         StringArray::const_iterator pRightAssignment = pLeftAssignment + 1;
 
         m_pImpl->nLastVisibleListIndex = -1;
-        // loop
+        
         for (sal_Int32 i=0; i<FIELD_PAIRS_VISIBLE; ++i)
         {
             if ((*pLeftListControl)->HasChildPathFocus())
@@ -1066,32 +1066,32 @@ void AssignmentPersistentData::Commit()
                 nOldFocusColumn = 1;
             }
 
-            // the new texts of the label controls
+            
             (*pLeftLabelControl)->SetText(*pLeftColumnLabel);
             (*pRightLabelControl)->SetText(*pRightColumnLabel);
 
-            // we may have to hide the controls in the right column, if we have no label text for it
-            // (which means we have an odd number of fields, though we forced our internal arrays to
-            // be even-sized for easier handling)
-            // (If sometimes we support an arbitrary number of field assignments, we would have to care for
-            // an invisible left hand side column, too. But right now, the left hand side controls are always
-            // visible)
+            
+            
+            
+            
+            
+            
             sal_Bool bHideRightColumn = pRightColumnLabel->isEmpty();
             (*pRightLabelControl)->Show(!bHideRightColumn);
             (*pRightListControl)->Show(!bHideRightColumn);
-            // the new selections of the listboxes
+            
             implSelectField(*pLeftListControl, *pLeftAssignment);
             implSelectField(*pRightListControl, *pRightAssignment);
 
-            // the index of the last visible list box
-            ++m_pImpl->nLastVisibleListIndex;   // the left hand side box is always visible
+            
+            ++m_pImpl->nLastVisibleListIndex;   
             if (!bHideRightColumn)
                 ++m_pImpl->nLastVisibleListIndex;
 
-            // increment ...
+            
             if ( i < FIELD_PAIRS_VISIBLE - 1 )
-            {   // (not in the very last round, here the +=2 could result in an invalid
-                // iterator position, which causes an abort in a non-product version
+            {   
+                
                 pLeftLabelControl += 2;
                 pRightLabelControl += 2;
                 pLeftColumnLabel += 2;
@@ -1105,14 +1105,14 @@ void AssignmentPersistentData::Commit()
         }
 
         if (_bAdjustFocus && (nOldFocusRow >= 0))
-        {   // we have to adjust the focus and one of the list boxes has the focus
+        {   
             sal_Int32 nDelta = m_pImpl->nFieldScrollPos - _nPos;
-            // the new row for the focus
+            
             sal_Int32 nNewFocusRow = nOldFocusRow + nDelta;
-            // normalize
+            
             nNewFocusRow = std::min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
             nNewFocusRow = std::max(nNewFocusRow, (sal_Int32)0, ::std::less< sal_Int32 >());
-            // set the new focus (in the same column)
+            
             m_pImpl->pFields[nNewFocusRow * 2 + nOldFocusColumn]->GrabFocus();
         }
 
@@ -1122,24 +1122,24 @@ void AssignmentPersistentData::Commit()
             m_pFieldScroller->SetThumbPos(m_pImpl->nFieldScrollPos);
     }
 
-    // -------------------------------------------------------------------
+    
     void AddressBookSourceDialog::implSelectField(ListBox* _pBox, const OUString& _rText)
     {
         if (!_rText.isEmpty())
-            // a valid field name
+            
             _pBox->SelectEntry(_rText);
         else
-            // no selection for this item
+            
             _pBox->SelectEntryPos(0);
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(AddressBookSourceDialog, OnDelayedInitialize)
     {
-        // load the initial data from the configuration
+        
         loadConfiguration();
         resetTables();
-            // will reset the tables/fields implicitly
+            
 
         if ( !m_pImpl->bWorkingPersistent )
             if ( m_pImpl->pFields[0] )
@@ -1148,7 +1148,7 @@ void AssignmentPersistentData::Commit()
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK(AddressBookSourceDialog, OnComboSelect, ComboBox*, _pBox)
     {
         if (_pBox == m_pDatasource)
@@ -1158,14 +1158,14 @@ void AssignmentPersistentData::Commit()
         return 0;
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK(AddressBookSourceDialog, OnComboGetFocus, ComboBox*, _pBox)
     {
         _pBox->SaveValue();
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK(AddressBookSourceDialog, OnComboLoseFocus, ComboBox*, _pBox)
     {
         if (_pBox->GetSavedValue() != _pBox->GetText())
@@ -1178,7 +1178,7 @@ void AssignmentPersistentData::Commit()
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(AddressBookSourceDialog, OnOkClicked)
     {
         OUString sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
@@ -1188,10 +1188,10 @@ void AssignmentPersistentData::Commit()
             m_pImpl->pConfigData->setCommand(m_pTable->GetText());
         }
 
-        // AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!
+        
         assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
-        // set the field assignments
+        
         StringArray::const_iterator aLogical = m_pImpl->aLogicalFieldNames.begin();
         StringArray::const_iterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
@@ -1205,10 +1205,10 @@ void AssignmentPersistentData::Commit()
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(AddressBookSourceDialog, OnAdministrateDatasources)
     {
-        // create the dialog object
+        
         Reference< XExecutableDialog > xAdminDialog;
         try
         {
@@ -1221,7 +1221,7 @@ void AssignmentPersistentData::Commit()
             return 1L;
         }
 
-        // excute the dialog
+        
         try
         {
             if ( xAdminDialog->execute() == RET_OK )
@@ -1243,7 +1243,7 @@ void AssignmentPersistentData::Commit()
                     m_pImpl->pConfigData = new AssignmentPersistentData();
                     loadConfiguration();
                     resetTables();
-                    // will reset the fields implicitly
+                    
                 }
             }
         }
@@ -1252,15 +1252,15 @@ void AssignmentPersistentData::Commit()
             OSL_FAIL("AddressBookSourceDialog::OnAdministrateDatasources: an error occurred while executing the administration dialog!");
         }
 
-        // re-fill the data source list
-        // try to preserve the current selection
+        
+        
 
-//      initializeDatasources();
+
 
         return 0L;
     }
 
-    // -------------------------------------------------------------------
+    
     bool AddressBookSourceDialog::PreNotify( NotifyEvent& _rNEvt )
     {
         switch (_rNEvt.GetType())
@@ -1274,33 +1274,33 @@ void AssignmentPersistentData::Commit()
                 sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
 
                 if (KEY_TAB == nCode)
-                {   // somebody pressed the tab key
+                {   
                     if (!bAlt && !bCtrl && !bShift)
-                    {   // it's really the only the key (no modifiers)
+                    {   
                         if (m_pImpl->pFields[m_pImpl->nLastVisibleListIndex]->HasChildPathFocus())
-                            // the last of our visible list boxes has the focus
+                            
                             if (m_pImpl->nFieldScrollPos < m_pFieldScroller->GetRangeMax())
-                            {   // we can still scroll down
+                            {   
                                 sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
-                                // -> scroll down
+                                
                                 implScrollFields(m_pImpl->nFieldScrollPos + 1, sal_False, sal_True);
-                                // give the left control in the "next" line the focus
+                                
                                 m_pImpl->pFields[nNextFocusList]->GrabFocus();
-                                // return saying "have handled this"
+                                
                                 return true;
                             }
                     }
                     else if (!bAlt && !bCtrl && bShift)
-                    {   // it's shift-tab
+                    {   
                         if (m_pImpl->pFields[0]->HasChildPathFocus())
-                            // our first list box has the focus
+                            
                             if (m_pImpl->nFieldScrollPos > 0)
-                            {   // we can still scroll up
-                                // -> scroll up
+                            {   
+                                
                                 implScrollFields(m_pImpl->nFieldScrollPos - 1, sal_False, sal_True);
-                                // give the right control in the "prebious" line the focus
+                                
                                 m_pImpl->pFields[0 - 1 + 2]->GrabFocus();
-                                // return saying "have handled this"
+                                
                                 return true;
                             }
                     }
@@ -1311,8 +1311,8 @@ void AssignmentPersistentData::Commit()
         return ModalDialog::PreNotify(_rNEvt);
     }
 
-// .......................................................................
-}   // namespace svt
-// .......................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

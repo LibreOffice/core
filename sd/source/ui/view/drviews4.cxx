@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -99,7 +99,7 @@ void DrawViewShell::DeleteActualLayer()
     const OUString& rName = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
     OUString aString(SD_RESSTR(STR_ASK_DELETE_LAYER));
 
-    // replace placeholder
+    
     aString = aString.replaceFirst("$", rName);
 
     if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
@@ -109,9 +109,9 @@ void DrawViewShell::DeleteActualLayer()
 
         /* in order to redraw TabBar and Window; should be initiated later on by
            a hint from Joe (as by a change if the layer order). */
-        // ( View::Notify() --> ViewShell::ResetActualLayer() )
+        
 
-        mbIsLayerModeActive = false;    // so that ChangeEditMode() does something
+        mbIsLayerModeActive = false;    
         ChangeEditMode(GetEditMode(), true);
     }
 }
@@ -128,7 +128,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             && rKEvt.GetKeyCode().IsMod1()
             && GetView()->IsTextEdit())
         {
-            // this should be used for cursor travelling.
+            
             SdPage* pActualPage = GetActualPage();
             const SdrMarkList& rMarkList = GetView()->GetMarkedObjectList();
             SdrTextObj* pCandidate = 0L;
@@ -137,13 +137,13 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
 
-                // remember which object was the text in edit mode
+                
                 SdrObject* pOldObj = pMark->GetMarkedSdrObj();
 
-                // end text edit now
+                
                 GetView()->SdrEndTextEdit();
 
-                // look for a new candidate, a successor of pOldObj
+                
                 SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
                 sal_Bool bDidVisitOldObject(sal_False);
 
@@ -173,7 +173,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
             if(pCandidate)
             {
-                // set the new candidate to text edit mode
+                
                 GetView()->UnMarkAll();
                 GetView()->MarkObj(pCandidate, GetView()->GetSdrPageView());
 
@@ -182,7 +182,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             }
             else
             {
-                // insert a new page with the same page layout
+                
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
             }
@@ -190,8 +190,8 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
         else
         {
             bRet = ViewShell::KeyInput(rKEvt, pWin);
-            //If object is marked , the corresponding entry is set true , else
-            //the corresponding entry is set false .
+            
+            
             if(KEY_TAB == rKEvt.GetKeyCode().GetCode())
             {
                FreshNavigatrTree();
@@ -220,7 +220,7 @@ void DrawViewShell::StartRulerDrag (
     }
     else
     {
-        // #i34536# if no guide-lines are visible yet, that show them
+        
         if( ! mpDrawView->IsHlplVisible())
             mpDrawView->SetHlplVisible( true );
 
@@ -238,8 +238,8 @@ void DrawViewShell::StartRulerDrag (
     }
 }
 
-//If object is marked , the corresponding entry is set true ,
-//else the corresponding entry is set false .
+
+
 void DrawViewShell::FreshNavigatrEntry()
 {
     sal_uInt16 nId = SID_NAVIGATOR;
@@ -267,12 +267,12 @@ void DrawViewShell::FreshNavigatrTree()
 void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     ::sd::Window* pWin)
 {
-    // We have to check if a context menu is shown and we have an UI
-    // active inplace client. In that case we have to ignore the mouse
-    // button down event. Otherwise we would crash (context menu has been
-    // opened by inplace client and we would deactivate the inplace client,
-    // the contex menu is closed by VCL asynchronously which in the end
-    // would work on deleted objects or the context menu has no parent anymore)
+    
+    
+    
+    
+    
+    
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
@@ -283,8 +283,8 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     {
         ViewShell::MouseButtonDown(rMEvt, pWin);
 
-        //If object is marked , the corresponding entry is set true ,
-        //else the corresponding entry is set false .
+        
+        
         FreshNavigatrTree();
         if ( mbPipette )
             ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->PipetteClicked();
@@ -331,9 +331,9 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                  pWin->CaptureMouse();
         }
 
-        // Since the next MouseMove may execute a IsSolidDraggingNow() in
-        // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
-        // is needed it is necessary to set it here.
+        
+        
+        
         if(mpDrawView!=NULL && GetDoc()!=NULL)
         {
             svtools::ColorConfig aColorConfig;
@@ -437,8 +437,8 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         }
         else
             ViewShell::MouseButtonUp(rMEvt, pWin);
-        //If object is marked , the corresponding entry is set true ,
-        //else the corresponding entry is set false .
+        
+        
         FreshNavigatrTree();
     }
 }
@@ -446,15 +446,15 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
 void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
-    // The command event is send to the window after a possible context
-    // menu from an inplace client is closed. Now we have the chance to
-    // deactivate the inplace client without any problem regarding parent
-    // windows and code on the stack.
+    
+    
+    
+    
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
     {
-        // Deactivate OLE object
+        
         mpDrawView->UnmarkAll();
         SelectionHasChanged();
         return;
@@ -498,38 +498,38 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bNativeShow &&
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
-            sal_uInt16 nSdResId = 0;          // ResourceID for popup menu
+            sal_uInt16 nSdResId = 0;          
             sal_Bool bGraphicShell = this->ISA(GraphicViewShell);
 
-            // is there a snap object under the cursor?
+            
             SdrPageView* pPV;
             Point   aMPos = pWin->PixelToLogic( maMousePos );
             sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
                 Size(FuPoor::HITPIX, 0 ) ).Width();
             sal_uInt16  nHelpLine;
-            // for glue points
+            
             SdrObject*  pObj = NULL;
             sal_uInt16      nPickId = 0;
-            // for field command
+            
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
             const SvxFieldItem* pFldItem = NULL;
             if( pOLV )
                 pFldItem = pOLV->GetFieldAtSelection();
 
-            // helper line
+            
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
                 ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
                 return;
             }
-            // is glue point under cursor marked?
+            
             else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
                      mpDrawView->IsGluePointMarked( pObj, nPickId ) )
             {
                 nSdResId = RID_DRAW_GLUEPOINT_POPUP;
             }
-            // field command?
+            
             else if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
                                  pFldItem->GetField()->ISA( SvxExtTimeField ) ||
                                  pFldItem->GetField()->ISA( SvxExtFileField ) ||
@@ -537,7 +537,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             {
                 LanguageType eLanguage( LANGUAGE_SYSTEM );
 
-                // Format popup with outliner language, if possible
+                
                 if( pOLV->GetOutliner() )
                 {
                     ESelection aSelection( pOLV->GetSelection() );
@@ -556,7 +556,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                    // select field, so that it will be deleted on insert
+                    
                     ESelection aSel = pOLV->GetSelection();
                     sal_Bool bSel = sal_True;
                     if( aSel.nStartPos == aSel.nEndPos )
@@ -568,7 +568,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                     pOLV->InsertField( aFieldItem );
 
-                    // reset selection back to original state
+                    
                     if( !bSel )
                         aSel.nEndPos--;
                     pOLV->SetSelection( aSel );
@@ -578,7 +578,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
             else
             {
-                // is something selected?
+                
                 if (mpDrawView->AreObjectsMarked() &&
                     mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
                 {
@@ -599,19 +599,19 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                                 {
-                                    // Popup for Online-Spelling now handled by DrawDocShell
+                                    
                                     Link aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
                                     if( !rCEvt.IsMouseEvent() )
                                     {
                                         aPos = GetActiveWindow()->LogicToPixel( pOutlinerView->GetEditView().GetCursor()->GetPos() );
                                     }
-                                    // While showing the spell context menu
-                                    // we lock the input so that another
-                                    // context menu can not be opened during
-                                    // that time (crash #i43235#).  In order
-                                    // to not lock the UI completely we
-                                    // first release the mouse.
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     GetActiveWindow()->ReleaseMouse();
                                     LockInput();
                                     pOutlinerView->ExecuteSpellPopup(aPos, &aLink);
@@ -658,7 +658,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
 
                                     case OBJ_FREELINE:
-                                    case OBJ_EDGE:      // Connector
+                                    case OBJ_EDGE:      
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_EDGEOBJ_POPUP :
                                                                     RID_DRAW_EDGEOBJ_POPUP;
                                         break;
@@ -737,7 +737,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     }
                 }
 
-                // multiple selection
+                
                 else if (mpDrawView->AreObjectsMarked() &&
                     mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
                 {
@@ -745,14 +745,14 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                                 RID_DRAW_MULTISELECTION_POPUP;
                 }
 
-                // nothing selected
+                
                 else
                 {
                     nSdResId = bGraphicShell ? RID_GRAPHIC_NOSEL_POPUP :
                                                 RID_DRAW_NOSEL_POPUP;
                 }
             }
-            // show Popup-Menu
+            
             if (nSdResId)
             {
                 GetActiveWindow()->ReleaseMouse();
@@ -761,20 +761,20 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
                 else
                 {
-                    //don't open contextmenu at mouse position if not opened via mouse
+                    
 
-                    //middle of the window if nothing is marked
+                    
                     Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
                             ,GetActiveWindow()->GetSizePixel().Height()/2);
 
-                    //middle of the bounding rect if something is marked
+                    
                     if( mpDrawView->AreObjectsMarked() && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
                     {
                         Rectangle aMarkRect;
                         mpDrawView->GetMarkedObjectList().TakeBoundRect(NULL,aMarkRect);
                         aMenuPos = GetActiveWindow()->LogicToPixel( aMarkRect.Center() );
 
-                        //move the point into the visible window area
+                        
                         if( aMenuPos.X() < 0 )
                             aMenuPos.X() = 0;
                         if( aMenuPos.Y() < 0 )
@@ -785,7 +785,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             aMenuPos.Y() = GetActiveWindow()->GetSizePixel().Height();
                     }
 
-                    //open context menu at that point
+                    
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aMenuPos);
                 }
                 mbMousePosFreezed = sal_False;
@@ -849,7 +849,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
             mpVerticalRuler->SetLines(nCnt, pVLines);
     }
 
-    // display with coordinates in StatusBar
+    
     OSL_ASSERT (GetViewShell()!=NULL);
     if ( !GetViewShell()->GetUIActiveClient() )
     {
@@ -944,6 +944,6 @@ void DrawViewShell::ShowSnapLineContextMenu (
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

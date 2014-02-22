@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/processfactory.hxx"
@@ -203,8 +203,8 @@ handleAuthenticationRequest_(
     if (xSupplyAuthentication.is())
         xSupplyAuthentication2.set(xSupplyAuthentication, uno::UNO_QUERY);
 
-    //////////////////////////
-    // First, try to obtain credentials from password container service.
+    
+    
     uui::PasswordContainerHelper aPwContainerHelper(xContext);
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
                                                        xSupplyAuthentication,
@@ -215,8 +215,8 @@ handleAuthenticationRequest_(
         return;
     }
 
-    //////////////////////////
-    // Second, try to obtain credentials from user via password dialog.
+    
+    
     ucb::RememberAuthentication eDefaultRememberMode
         = ucb::RememberAuthentication_SESSION;
     ucb::RememberAuthentication ePreferredRememberMode
@@ -288,7 +288,7 @@ handleAuthenticationRequest_(
 
             if (ePreferredRememberMode != eAlternateRememberMode)
             {
-                // user had the choice.
+                
                 if (aInfo.GetIsRememberPassword())
                     xSupplyAuthentication->setRememberPassword(
                         ePreferredRememberMode);
@@ -298,7 +298,7 @@ handleAuthenticationRequest_(
             }
             else
             {
-                // user had no choice.
+                
                 xSupplyAuthentication->setRememberPassword(
                     ePreferredRememberMode);
             }
@@ -318,8 +318,8 @@ handleAuthenticationRequest_(
             xSupplyAuthentication->select();
         }
 
-        //////////////////////////
-        // Third, store credentials in password container.
+        
+        
 
           if ( aInfo.GetIsUseSystemCredentials() )
           {
@@ -327,7 +327,7 @@ handleAuthenticationRequest_(
               {
                   if (!aPwContainerHelper.addRecord(
                           !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          OUString(), // empty u/p -> sys creds
+                          OUString(), 
                           uno::Sequence< OUString >(),
                           xIH,
                           ePreferredRememberMode
@@ -342,7 +342,7 @@ handleAuthenticationRequest_(
               {
                   if (!aPwContainerHelper.addRecord(
                           !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          OUString(), // empty u/p -> sys creds
+                          OUString(), 
                           uno::Sequence< OUString >(),
                           xIH,
                           false /* SESSION */))
@@ -352,7 +352,7 @@ handleAuthenticationRequest_(
                   }
               }
           }
-          // Empty user name can not be valid:
+          
           else if (!aInfo.GetUserName().isEmpty())
           {
               uno::Sequence< OUString >
@@ -476,7 +476,7 @@ handleMasterPasswordRequest_(
     getContinuations(rContinuations, &xRetry, &xAbort, &xSupplyAuthentication);
     LoginErrorInfo aInfo;
 
-    // in case of master password a hash code is returned
+    
     executeMasterPasswordDialog(pParent, aInfo, nMode);
 
     switch (aInfo.GetResult())
@@ -532,7 +532,7 @@ executePasswordDialog(
             }
             else
             {
-                const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
+                const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   
 
                 VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
                 AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
@@ -544,7 +544,7 @@ executePasswordDialog(
                 rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
             }
         }
-        else // enter password or reenter password
+        else 
         {
             boost::scoped_ptr< PasswordDialog > pDialog(
                 new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
@@ -618,7 +618,7 @@ handlePasswordRequest_(
     }
 }
 
-} // namespace
+} 
 
 bool
 UUIInteractionHelper::handleAuthenticationRequest(
@@ -676,7 +676,7 @@ UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
     SAL_THROW((uno::RuntimeException))
 {
-    // parameters to be filled for the call to handlePasswordRequest_
+    
     Window * pParent = getParentProperty();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();

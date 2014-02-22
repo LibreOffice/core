@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -134,7 +134,7 @@ OUString showDirection(
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT:
         return OUString("[inout]");
     default:
-        assert(false); for (;;) { std::abort(); } // this cannot happen
+        assert(false); for (;;) { std::abort(); } 
     }
 }
 
@@ -192,7 +192,7 @@ void checkMap(
             }
             switch (entA->getSort()) {
             case unoidl::Entity::SORT_MODULE:
-                assert(false); // this cannot happen
+                assert(false); 
             case unoidl::Entity::SORT_ENUM_TYPE:
                 {
                     rtl::Reference<unoidl::EnumTypeEntity> ent2A(
@@ -480,12 +480,12 @@ void checkMap(
                                 << (i->bound ? OUString("bound ") : OUString())
                                 << (i->readOnly
                                     ? OUString("read-only ") : OUString())
-                                << i->type << " " << i->name //TODO: exceptions
+                                << i->type << " " << i->name 
                                 << " to "
                                 << (j->bound ? OUString("bound ") : OUString())
                                 << (j->readOnly
                                     ? OUString("read-only ") : OUString())
-                                << j->type << " " << j->name //TODO: exceptions
+                                << j->type << " " << j->name 
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -513,8 +513,8 @@ void checkMap(
                                 << " direct method #"
                                 << i - ent2A->getDirectMethods().begin() + 1
                                 << " changed from "
-                                << i->returnType << " " << i->name //TODO: exceptions
-                                << " to " << j->returnType << " " << j->name //TODO: exceptions
+                                << i->returnType << " " << i->name 
+                                << " to " << j->returnType << " " << j->name 
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -655,10 +655,10 @@ void checkMap(
                                 << i - ent2A->getConstructors().begin() + 1
                                 << " changed from "
                                 << (i->defaultConstructor
-                                    ? OUString("default ") : i->name) //TODO: parameters, exceptions
+                                    ? OUString("default ") : i->name) 
                                 << " to "
                                 << (j->defaultConstructor
-                                    ? OUString("default ") : j->name) //TODO: parameters, exceptions
+                                    ? OUString("default ") : j->name) 
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -828,9 +828,9 @@ void checkMap(
                                 << " direct property #"
                                 << i - ent2A->getDirectProperties().begin() + 1
                                 << " changed from "
-                                << i->type << " " << i->name //TODO: attributes
+                                << i->type << " " << i->name 
                                 << " to "
-                                << j->type << " " << j->name //TODO: attributes
+                                << j->type << " " << j->name 
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }

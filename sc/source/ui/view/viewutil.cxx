@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -53,13 +53,13 @@
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 sal_uInt16 nWhichId, sal_uInt16 nScript )
 {
-    //  take the effective item from rCoreSet according to nScript
-    //  and put in rShellSet under the (base) nWhichId
+    
+    
 
     SfxItemPool& rPool = *rShellSet.GetPool();
     SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
-    //  use PutExtended with eDefaultAs = SFX_ITEM_SET, so defaults from rCoreSet
-    //  (document pool) are read and put into rShellSet (MessagePool)
+    
+    
     aSetItem.GetItemSet().PutExtended( rCoreSet, SFX_ITEM_DONTCARE, SFX_ITEM_SET );
     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
     if (pI)
@@ -70,7 +70,7 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
 
 sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
-    //  used for thesaurus
+    
 
     sal_uInt8 nScript = pDoc->GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
     sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
@@ -81,7 +81,7 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     if (pLangIt)
     {
         eLnge = (LanguageType) pLangIt->GetValue();
-        if (eLnge == LANGUAGE_DONTKNOW)                 //! can this happen?
+        if (eLnge == LANGUAGE_DONTKNOW)                 
         {
             LanguageType eLatin, eCjk, eCtl;
             pDoc->GetLanguage( eLatin, eCjk, eCtl );
@@ -92,7 +92,7 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     else
         eLnge = LANGUAGE_ENGLISH_US;
     if ( eLnge == LANGUAGE_SYSTEM )
-        eLnge = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
+        eLnge = Application::GetSettings().GetLanguageTag().getLanguageType();   
 
     return eLnge;
 }
@@ -137,8 +137,8 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument )
 {
-    // discarded are displayed as inverted accepted action, because of this
-    // order of ShowRejected/ShowAccepted is important
+    
+    
 
     if ( !rSettings.IsShowRejected() && rAction.IsRejecting() )
         return false;
@@ -150,7 +150,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     {
         if ( rSettings.IsEveryoneButMe() )
         {
-            // GetUser() at ChangeTrack is the current user
+            
             ScChangeTrack* pTrack = rDocument.GetChangeTrack();
             if ( !pTrack || rAction.GetUser().equals(pTrack->GetUser()) )
                 return false;
@@ -183,7 +183,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         const DateTime& rFirst = rSettings.GetTheFirstDateTime();
         const DateTime& rLast  = rSettings.GetTheLastDateTime();
         switch ( rSettings.GetTheDateMode() )
-        {   // corresponds with ScHighlightChgDlg::OKBtnHdl
+        {   
             case SCDM_DATE_BEFORE:
                 if ( aDateTime > rFirst )
                     return false;
@@ -216,7 +216,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
 
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -257,8 +257,8 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
             SCROW nLastRow = nRow;
             if (pDoc->RowFiltered(nRow, nTab, NULL, &nLastRow))
             {
-                // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
-                // (visible in repaint for indentation)
+                
+                
                 rMark.SetMultiMarkArea(
                     ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
                 bChanged = true;
@@ -278,7 +278,7 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_
 {
     SCTAB nTab = rRange.aStart.Tab();
     bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
-    // Always fit the range on its first sheet.
+    
     OSL_ENSURE( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, MAXROW, nTab);

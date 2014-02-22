@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -191,13 +191,13 @@ PreparedStatement::PreparedStatement(
     for( int i = 0, max = m_splittedStatement.size(); i < max ; i ++ )
     {
         const OString &str = m_splittedStatement[i];
-        // ignore quoted strings ....
+        
         if( ! isQuoted( str ) )
         {
-            // the ':' cannot be the first or the last part of the
-            // token,
-            // the ? cannot be the first part of the token , so we start
-            // at one
+            
+            
+            
+            
             for( int index = 1 ; index < str.getLength() ; index ++ )
             {
                 if( str[index] == '?' ||
@@ -302,7 +302,7 @@ Sequence< sal_Int8> PreparedStatement::getImplementationId() throw ( RuntimeExce
 
 void PreparedStatement::close(  ) throw (SQLException, RuntimeException)
 {
-    // let the connection die without acquired mutex !
+    
     Reference< XConnection > r;
     Reference< XCloseable > resultSet;
     {
@@ -376,12 +376,12 @@ sal_Bool PreparedStatement::execute( )
     OStringVector::size_type vars = 0;
     for( OStringVector::size_type i = 0 ; i < m_splittedStatement.size() ; ++i )
     {
-        // LEM TODO: instead of this manual mucking with SQL
-        // could we use PQexecParams / PQExecPrepared / ...?
-        // Only snafu is giving the types of the parameters and
-        // that it needs $1, $2, etc instead of "?"
+        
+        
+        
+        
         const OString &str = m_splittedStatement[i];
-//         printf( "Splitted %d %s\n" , i , str.getStr() );
+
         if( isQuoted( str ) )
         {
             buf.append( str );
@@ -405,7 +405,7 @@ sal_Bool PreparedStatement::execute( )
                         buf.append( str.getStr()+start, index -start );
                         buf.append( m_vars[vars] );
 
-                        // skip to the end of the named parameter
+                        
                         while (   index < str.getLength()
                                && !(   isWhitespace(str[index])
                                     || isOperator  (str[index])))
@@ -417,10 +417,10 @@ sal_Bool PreparedStatement::execute( )
                     }
                 }
             }
-//             if( index +1 >= str.getLength() )
-//             {
+
+
             buf.append( str.getStr() + start, index -start );
-//             }
+
         }
     }
 
@@ -442,7 +442,7 @@ sal_Bool PreparedStatement::execute( )
     data.tableSupplier = Reference< com::sun::star::sdbcx::XTablesSupplier >( m_connection, UNO_QUERY );
     data.concurrency = extractIntProperty( this, getStatics().RESULT_SET_CONCURRENCY );
 
-    return executePostgresCommand( m_executedStatement , &data );   // see pq_statement.cxx
+    return executePostgresCommand( m_executedStatement , &data );   
 }
 
 Reference< XConnection > PreparedStatement::getConnection(  )
@@ -507,7 +507,7 @@ void PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x )
 void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
     throw (SQLException, RuntimeException)
 {
-//     printf( "setString %d %d\n ",  parameterIndex, x);
+
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -560,8 +560,8 @@ void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
 void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
     throw (SQLException, RuntimeException)
 {
-//     printf( "setString %d %s\n ", parameterIndex,
-//             OUStringToOString( x , RTL_TEXTENCODING_ASCII_US ).getStr());
+
+
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -678,7 +678,7 @@ void PreparedStatement::setObjectWithInfo(
         }
         if( !myString.isEmpty() )
         {
-//              printf( "setObjectWithInfo %s\n", OUStringToOString(myString,RTL_TEXTENCODING_ASCII_US).getStr());
+
             setString( parameterIndex, myString );
         }
         else

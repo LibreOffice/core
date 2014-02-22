@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <iostream>
 #include "mediawindow_impl.hxx"
@@ -40,22 +40,22 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
 
-// ----------------------
-// - MediaWindowControl -
-// ----------------------
+
+
+
 
 MediaWindowControl::MediaWindowControl( Window* pParent ) :
     MediaControl( pParent, MEDIACONTROLSTYLE_MULTILINE )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaWindowControl::~MediaWindowControl()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowControl::update()
 {
@@ -65,29 +65,29 @@ void MediaWindowControl::update()
     setState( aItem );
 }
 
-// ---------------------------------------------------------------------
+
 
 void  MediaWindowControl::execute( const MediaItem& rItem )
 {
     static_cast< MediaWindowImpl* >( GetParent() )->executeMediaItem( rItem );
 }
 
-// --------------------
-// - MediaChildWindow -
-// --------------------
+
+
+
 
 MediaChildWindow::MediaChildWindow( Window* pParent ) :
     SystemChildWindow( pParent, WB_CLIPCHILDREN )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaChildWindow::~MediaChildWindow()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -98,7 +98,7 @@ void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
     GetParent()->MouseMove( aTransformedEvent );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -109,7 +109,7 @@ void MediaChildWindow::MouseButtonDown( const MouseEvent& rMEvt )
     GetParent()->MouseButtonDown( aTransformedEvent );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -120,7 +120,7 @@ void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
     GetParent()->MouseButtonUp( aTransformedEvent );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -128,7 +128,7 @@ void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
     GetParent()->KeyInput( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
 {
@@ -136,7 +136,7 @@ void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
     GetParent()->KeyUp( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::Command( const CommandEvent& rCEvt )
 {
@@ -147,9 +147,9 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
     GetParent()->Command( aTransformedEvent );
 }
 
-// ----------------------
-// - MediaWindowImpl -
-// ----------------------
+
+
+
 
 MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bool bInternalMediaControl ) :
     Control( pParent ),
@@ -173,7 +173,7 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaWindowImpl::~MediaWindowImpl()
 {
@@ -193,7 +193,7 @@ MediaWindowImpl::~MediaWindowImpl()
     }
 
     uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
-    if( xComponent.is() ) // this stops the player
+    if( xComponent.is() ) 
         xComponent->dispose();
 
     mxPlayer.clear();
@@ -217,8 +217,8 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& 
     static const char * aServiceManagers[] = {
         AVMEDIA_MANAGER_SERVICE_PREFERRED,
         AVMEDIA_MANAGER_SERVICE_NAME,
-// a fallback path just for gstreamer which has
-// two significant versions deployed at once ...
+
+
 #ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
         AVMEDIA_MANAGER_SERVICE_NAME_OLD
 #endif
@@ -339,11 +339,11 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
 {
     const sal_uInt32 nMaskSet = rItem.getMaskSet();
 
-    // set URL first
+    
     if( nMaskSet & AVMEDIA_SETMASK_URL )
         setURL( rItem.getURL(), rItem.getTempURL(), rItem.getReferer() );
 
-    // set different states next
+    
     if( nMaskSet & AVMEDIA_SETMASK_TIME )
         setMediaTime( ::std::min( rItem.getTime(), getDuration() ) );
 
@@ -359,7 +359,7 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
     if( nMaskSet & AVMEDIA_SETMASK_ZOOM )
         setZoom( rItem.getZoom() );
 
-    // set play state at last
+    
     if( nMaskSet & AVMEDIA_SETMASK_STATE )
     {
         switch( rItem.getState() )
@@ -497,7 +497,7 @@ void MediaWindowImpl::onURLChanged()
         }
         catch( uno::RuntimeException )
         {
-            // happens eg, on MacOSX where Java frames cannot be created from X11 window handles
+            
         }
 
         mxPlayerWindow = xPlayerWindow;
@@ -527,14 +527,14 @@ void MediaWindowImpl::onURLChanged()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 {
     SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::setPointer( const Pointer& rPointer )
 {
@@ -559,7 +559,7 @@ void MediaWindowImpl::setPointer( const Pointer& rPointer )
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::Resize()
 {
@@ -583,13 +583,13 @@ void MediaWindowImpl::Resize()
     maChildWindow.SetPosSizePixel( Point( 0, 0 ), aPlayerWindowSize );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::StateChanged( StateChangedType eType )
 {
     if( mxPlayerWindow.is() )
     {
-        // stop playing when going disabled or hidden
+        
         switch( eType )
         {
             case STATE_CHANGE_VISIBLE:
@@ -612,7 +612,7 @@ void MediaWindowImpl::StateChanged( StateChangedType eType )
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::Paint( const Rectangle& )
 {
@@ -668,13 +668,13 @@ void MediaWindowImpl::Paint( const Rectangle& )
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::GetFocus()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::MouseMove( const MouseEvent& rMEvt )
 {
@@ -682,7 +682,7 @@ void MediaWindowImpl::MouseMove( const MouseEvent& rMEvt )
         mpMediaWindow->MouseMove( rMEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -690,7 +690,7 @@ void MediaWindowImpl::MouseButtonDown( const MouseEvent& rMEvt )
         mpMediaWindow->MouseButtonDown( rMEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -698,7 +698,7 @@ void MediaWindowImpl::MouseButtonUp( const MouseEvent& rMEvt )
         mpMediaWindow->MouseButtonUp( rMEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::KeyInput( const KeyEvent& rKEvt )
 {
@@ -706,7 +706,7 @@ void MediaWindowImpl::KeyInput( const KeyEvent& rKEvt )
         mpMediaWindow->KeyInput( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::KeyUp( const KeyEvent& rKEvt )
 {
@@ -714,7 +714,7 @@ void MediaWindowImpl::KeyUp( const KeyEvent& rKEvt )
         mpMediaWindow->KeyUp( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::Command( const CommandEvent& rCEvt )
 {
@@ -722,21 +722,21 @@ void MediaWindowImpl::Command( const CommandEvent& rCEvt )
         mpMediaWindow->Command( rCEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 sal_Int8 MediaWindowImpl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return( mpMediaWindow ? mpMediaWindow->AcceptDrop( rEvt ) : 0 );
 }
 
-// ---------------------------------------------------------------------
+
 
 sal_Int8 MediaWindowImpl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return( mpMediaWindow ? mpMediaWindow->ExecuteDrop( rEvt ) : 0 );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
@@ -744,7 +744,7 @@ void MediaWindowImpl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         mpMediaWindow->StartDrag( nAction, rPosPixel );
 }
 
-} // namespace priv
-} // namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

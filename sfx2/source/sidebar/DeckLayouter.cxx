@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DeckLayouter.hxx"
@@ -62,7 +62,7 @@ void DeckLayouter::LayoutDeck (
 
     if ( ! rPanels.empty())
     {
-        // Prepare the layout item container.
+        
         ::std::vector<LayoutItem> aLayoutItems;
         aLayoutItems.resize(rPanels.size());
         for (sal_Int32 nIndex(0),nCount(rPanels.size()); nIndex<nCount; ++nIndex)
@@ -98,16 +98,16 @@ Rectangle DeckLayouter::LayoutPanels (
 
     const sal_Int32 nWidth (aBox.GetWidth());
 
-    // Get the requested heights of the panels and the available
-    // height that is left when all panel titles and separators are
-    // taken into account.
+    
+    
+    
     sal_Int32 nAvailableHeight (aBox.GetHeight());
     GetRequestedSizes(rLayoutItems, nAvailableHeight, rMinimalWidth, aBox);
     const sal_Int32 nTotalDecorationHeight (aBox.GetHeight() - nAvailableHeight);
 
-    // Analyze the requested heights.
-    // Determine the height that is available for panel content
-    // and count the different layouts.
+    
+    
+    
     sal_Int32 nTotalPreferredHeight (0);
     sal_Int32 nTotalMinimumHeight (0);
     IterateLayoutItems(iItem,rLayoutItems)
@@ -119,9 +119,9 @@ Rectangle DeckLayouter::LayoutPanels (
     if (nTotalMinimumHeight > nAvailableHeight
         && ! bShowVerticalScrollBar)
     {
-        // Not enough space, even when all panels are shrunk to their
-        // minimum height.
-        // Show a vertical scrollbar.
+        
+        
+        
         return LayoutPanels(
             aContentArea,
             rMinimalWidth,
@@ -132,16 +132,16 @@ Rectangle DeckLayouter::LayoutPanels (
             true);
     }
 
-    // We are now in one of three modes.
-    // - The preferred height fits into the available size:
-    //   Use the preferred size, distribute the remaining height bei
-    //   enlarging panels.
-    // - The total minimum height fits into the available size:
-    //   Use the minimum size, distribute the remaining height bei
-    //   enlarging panels.
-    // - The total minimum height does not fit into the available
-    //   size:
-    //   Use the unmodified preferred height for all panels.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     LayoutMode eMode (MinimumOrLarger);
     if (bShowVerticalScrollBar)
@@ -162,9 +162,9 @@ Rectangle DeckLayouter::LayoutPanels (
             eMode==MinimumOrLarger);
     }
 
-    // Set position and size of the mpScrollClipWindow to the available
-    // size.  Its child, the mpScrollContainer, may have a bigger
-    // height.
+    
+    
+    
     rScrollClipWindow.setPosSizePixel(aBox.Left(), aBox.Top(), aBox.GetWidth(), aBox.GetHeight());
 
     const sal_Int32 nContentHeight (
@@ -203,7 +203,7 @@ sal_Int32 DeckLayouter::PlacePanels (
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
     sal_Int32 nY (0);
 
-    // Assign heights and places.
+    
     IterateLayoutItems(iItem,rLayoutItems)
     {
         if (iItem->mpPanel == 0)
@@ -211,11 +211,11 @@ sal_Int32 DeckLayouter::PlacePanels (
 
         Panel& rPanel (*iItem->mpPanel);
 
-        // Separator above the panel title bar.
+        
         aSeparators.push_back(nY);
         nY += nDeckSeparatorHeight;
 
-        // Place the title bar.
+        
         PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
         if (pTitleBar != NULL)
         {
@@ -237,8 +237,8 @@ sal_Int32 DeckLayouter::PlacePanels (
         {
             rPanel.Show();
 
-            // Determine the height of the panel depending on layout
-            // mode and distributed heights.
+            
+            
             sal_Int32 nPanelHeight (0);
             switch(eMode)
             {
@@ -256,7 +256,7 @@ sal_Int32 DeckLayouter::PlacePanels (
                     break;
             }
 
-            // Place the panel.
+            
             rPanel.setPosSizePixel(0, nY, nWidth, nPanelHeight);
             rPanel.Invalidate();
 
@@ -266,11 +266,11 @@ sal_Int32 DeckLayouter::PlacePanels (
         {
             rPanel.Hide();
 
-            // Add a separator below the collapsed panel, if it is the
-            // last panel in the deck.
+            
+            
             if (iItem == rLayoutItems.end()-1)
             {
-                // Separator below the panel title bar.
+                
                 aSeparators.push_back(nY);
                 nY += nDeckSeparatorHeight;
             }
@@ -306,15 +306,15 @@ void DeckLayouter::GetRequestedSizes (
             if (rLayoutItems.size() == 1
                 && iItem->mpPanel->IsTitleBarOptional())
             {
-                // There is only one panel and its title bar is
-                // optional => hide it.
+                
+                
                 rAvailableHeight -= nDeckSeparatorHeight;
                 iItem->mbShowTitleBar = false;
             }
             else
             {
-                // Show the title bar and a separator above and below
-                // the title bar.
+                
+                
                 const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * iItem->mpPanel->GetDPIScaleFactor());
 
                 rAvailableHeight -= nPanelTitleBarHeight;
@@ -354,8 +354,8 @@ void DeckLayouter::DistributeHeights (
 
     sal_Int32 nRemainingHeightToDistribute (nHeightToDistribute);
 
-    // Compute the weights as difference between panel base height
-    // (either its minimum or preferred height) and the container height.
+    
+    
     sal_Int32 nTotalWeight (0);
     sal_Int32 nNoMaximumCount (0);
     IterateLayoutItems(iItem,rLayoutItems)
@@ -379,7 +379,7 @@ void DeckLayouter::DistributeHeights (
     if (nTotalWeight == 0)
         return;
 
-    // First pass of height distribution.
+    
     IterateLayoutItems(iItem,rLayoutItems)
     {
         const sal_Int32 nBaseHeight (
@@ -400,17 +400,17 @@ void DeckLayouter::DistributeHeights (
         return;
     OSL_ASSERT(nRemainingHeightToDistribute > 0);
 
-    // It is possible that not all of the height could be distributed
-    // because of Maximum heights being smaller than expected.
-    // Distribute the remaining height between the panels that have no
-    // Maximum (ie Maximum==-1).
+    
+    
+    
+    
     if (nNoMaximumCount == 0)
     {
-        // There are no panels with unrestricted height.
+        
         return;
     }
     const sal_Int32 nAdditionalHeightPerPanel (nRemainingHeightToDistribute / nNoMaximumCount);
-    // Handle rounding error.
+    
     sal_Int32 nAdditionalHeightForFirstPanel (nRemainingHeightToDistribute
         - nNoMaximumCount*nAdditionalHeightPerPanel);
     IterateLayoutItems(iItem,rLayoutItems)
@@ -434,7 +434,7 @@ Rectangle DeckLayouter::PlaceDeckTitle (
 {
     if (static_cast<DockingWindow*>(rDeckTitleBar.GetParent()->GetParent())->IsFloatingMode())
     {
-        // When the side bar is undocked then the outer system window displays the deck title.
+        
         rDeckTitleBar.Hide();
         return rAvailableSpace;
     }
@@ -509,20 +509,20 @@ void DeckLayouter::UpdateFiller (
 {
     if (rBox.GetHeight() > 0)
     {
-        // Show the filler.
+        
         rFiller.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
         rFiller.SetPosSizePixel(rBox.TopLeft(), rBox.GetSize());
         rFiller.Show();
     }
     else
     {
-        // Hide the filler.
+        
         rFiller.Hide();
     }
 }
 
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

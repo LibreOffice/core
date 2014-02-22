@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <printdata.hxx>
@@ -36,7 +36,7 @@ extern bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLs
 
 using namespace ::com::sun::star;
 
-// SwRenderData
+
 
 SwRenderData::SwRenderData()
 {
@@ -54,9 +54,9 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     m_pPostItFields.reset(new _SetGetExpFlds);
     sw_GetPostIts( pDoc, m_pPostItFields.get() );
 
-    //!! Disable spell and grammar checking in the temporary document.
-    //!! Otherwise the grammar checker might process it and crash if we later on
-    //!! simply delete this document while he is still at it.
+    
+    
+    
     SwViewOption  aViewOpt( *pViewOpt );
     aViewOpt.SetOnlineSpell( sal_False );
 
@@ -67,7 +67,7 @@ void SwRenderData::DeletePostItData()
 {
     if (HasPostItData())
     {
-        // printer needs to remain at the real document
+        
         m_pPostItShell->GetDoc()->setPrinter( 0, false, false );
         m_pPostItShell.reset();
         m_pPostItFields.reset();
@@ -126,12 +126,12 @@ void SwRenderData::MakeSwPrtOptions(
     m_pPrtOptions.reset(new SwPrintData);
     SwPrintData & rOptions(*m_pPrtOptions);
 
-    // get default print options
+    
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
     sal_Bool bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
     ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
-    // get print options to use from provided properties
+    
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
     rOptions.bPrintTable            = pOpt->IsPrintTables();
     rOptions.bPrintDraw             = pOpt->IsPrintDrawings();
@@ -140,25 +140,25 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.bPrintRightPages       = pOpt->IsPrintRightPages();
     rOptions.bPrintPageBackground   = pOpt->IsPrintPageBackground();
     rOptions.bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
-    // bUpdateFieldsInPrinting  <-- not set here; mail merge only
+    
     rOptions.bPaperFromSetup        = pOpt->IsPaperFromSetup();
     rOptions.bPrintReverse          = pOpt->IsPrintReverse();
     rOptions.bPrintProspect         = pOpt->IsPrintProspect();
     rOptions.bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
-    // bPrintSingleJobs         <-- not set here; mail merge and or configuration
-    // bModified                <-- not set here; mail merge only
+    
+    
     rOptions.bPrintBlackFont        = pOpt->IsPrintWithBlackTextColor();
     rOptions.bPrintHiddenText       = pOpt->IsPrintHiddenText();
     rOptions.bPrintTextPlaceholder  = pOpt->IsPrintTextPlaceholders();
     rOptions.nPrintPostIts          = pOpt->GetPrintPostItsType();
 
-    //! needs to be set after MakeOptions since the assignment operation in that
-    //! function will destroy the pointers
+    
+    
     rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( this );
 }
 
-// SwPrintUIOptions
+
 
 SwPrintUIOptions::SwPrintUIOptions(
     sal_uInt16 nCurrentPage,
@@ -173,49 +173,49 @@ SwPrintUIOptions::SwPrintUIOptions(
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
     OSL_ENSURE( aLocalizedStrings.Count() >= 30, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 30 ) // bad resource ?
+    if( aLocalizedStrings.Count() < 30 ) 
         return;
 
-    // printing HTML sources does not have any valid UI options.
-    // Its just the source code that gets printed ...
+    
+    
     if (bSwSrcView)
     {
         m_aUIProperties.realloc( 0 );
         return;
     }
 
-    // check if CTL is enabled
+    
     SvtLanguageOptions aLangOpt;
     bool bCTL = aLangOpt.IsCTLFontEnabled();
 
-    // create sequence of print UI options
-    // (5 options are not available for Writer-Web)
+    
+    
     const int nCTLOpts = bCTL ? 1 : 0;
     const int nNumProps = nCTLOpts + (bWeb ? 15 : 21);
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
-    // load the writer PrinterOptions into the custom tab
+    
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
     m_aUIProperties[nIdx++].Value <<= OUString("modules/swriter/ui/printeroptions.ui");
 
-    // create "writer" section (new tab page in dialog)
+    
     SvtModuleOptions aModOpt;
     OUString aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname = aAppGroupname.replaceFirst( "%s", aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
     m_aUIProperties[ nIdx++ ].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
-    // create sub section for Contents
+    
     m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt("contents", aLocalizedStrings.GetString(1), OUString());
 
-    // create a bool option for background
+    
     bool bDefaultVal = rDefaultPrintData.IsPrintPageBackground();
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("pagebackground", aLocalizedStrings.GetString( 2 ),
                                                         ".HelpID:vcl:PrintDialog:PrintPageBackground:CheckBox",
                                                         "PrintPageBackground",
                                                         bDefaultVal);
 
-    // create a bool option for pictures/graphics AND OLE and drawing objects as well
+    
     bDefaultVal = rDefaultPrintData.IsPrintGraphic() || rDefaultPrintData.IsPrintDraw();
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("pictures", aLocalizedStrings.GetString( 3 ),
                                                         ".HelpID:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox",
@@ -223,14 +223,14 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                          bDefaultVal);
     if (!bWeb)
     {
-        // create a bool option for hidden text
+        
         bDefaultVal = rDefaultPrintData.IsPrintHiddenText();
         m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("hiddentext", aLocalizedStrings.GetString( 4 ),
                                                             ".HelpID:vcl:PrintDialog:PrintHiddenText:CheckBox",
                                                             "PrintHiddenText",
                                                             bDefaultVal);
 
-        // create a bool option for place holder
+        
         bDefaultVal = rDefaultPrintData.IsPrintTextPlaceholder();
         m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("placeholders", aLocalizedStrings.GetString( 5 ),
                                                             ".HelpID:vcl:PrintDialog:PrintTextPlaceholder:CheckBox",
@@ -238,17 +238,17 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                             bDefaultVal);
     }
 
-    // create a bool option for controls
+    
     bDefaultVal = rDefaultPrintData.IsPrintControl();
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("formcontrols", aLocalizedStrings.GetString( 6 ),
                                                         ".HelpID:vcl:PrintDialog:PrintControls:CheckBox",
                                                         "PrintControls",
                                                         bDefaultVal);
 
-    // create sub section for Color
+    
     m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt("color", aLocalizedStrings.GetString(7), OUString());
 
-    // create a bool option for printing text with black font color
+    
     bDefaultVal = rDefaultPrintData.IsPrintBlackFont();
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("textinblack", aLocalizedStrings.GetString( 8 ),
                                                         ".HelpID:vcl:PrintDialog:PrintBlackFonts:CheckBox",
@@ -257,10 +257,10 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     if (!bWeb)
     {
-        // create subgroup for misc options
+        
         m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt("pages", OUString(aLocalizedStrings.GetString(9)), OUString());
 
-        // create a bool option for printing automatically inserted blank pages
+        
         bDefaultVal = rDefaultPrintData.IsPrintEmptyPages();
         m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("autoblankpages", aLocalizedStrings.GetString( 10 ),
                                                             ".HelpID:vcl:PrintDialog:PrintEmptyPages:CheckBox",
@@ -268,7 +268,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                             bDefaultVal);
     }
 
-    // create a bool option for paper tray
+    
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
     vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
     aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup";
@@ -278,7 +278,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         bDefaultVal,
                                                         aPaperTrayOpt);
 
-    // print range selection
+    
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
     aPrintRangeOpt.mbInternalOnly = true;
@@ -286,7 +286,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            OUString(),
                                                            aPrintRangeOpt);
 
-    // create a choice for the content to create
+    
     OUString aPrintRangeName( "PrintContent" );
     uno::Sequence< OUString > aChoices( 3 );
     uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
@@ -308,19 +308,19 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         aHelpIds, aPrintRangeName,
                                                         aChoices, 0 /* always default to 'All pages' */,
                                                         aChoicesDisabled);
-    // show an Edit dependent on "Pages" selected
+    
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange",
                                                       OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
-    // print content selection
+    
     vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
     aContentsOpt.maGroupHint = "JobPage";
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("extrawriterprintoptions", OUString(aLocalizedStrings.GetString(12)),
                                                            OUString(), aContentsOpt);
-    // create a list box for notes content
+    
     const sal_Int16 nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
     aChoices.realloc( 4 );
     aChoices[0] = aLocalizedStrings.GetString( 13 );
@@ -341,7 +341,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            uno::Sequence< sal_Bool >(),
                                                            aAnnotOpt);
 
-    // create subsection for Page settings
+    
     vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
     aPageSetOpt.maGroupHint = "LayoutPage";
 
@@ -355,10 +355,10 @@ SwPrintUIOptions::SwPrintUIOptions(
         aRLChoices[2] = aLocalizedStrings.GetString( 21 );
         uno::Sequence< OUString > aRLHelp( 1 );
         aRLHelp[0] = ".HelpID:vcl:PrintDialog:PrintLeftRightPages:ListBox";
-        // create a choice option for all/left/right pages
-        // 0 : all pages (left & right)
-        // 1 : left pages
-        // 2 : right pages
+        
+        
+        
+        
         OSL_ENSURE( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
                 "unexpected value combination" );
         sal_Int16 nPagesChoice = 0;
@@ -374,7 +374,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                    nPagesChoice);
     }
 
-    // create a bool option for brochure
+    
     bDefaultVal = rDefaultPrintData.IsPrintProspect();
     OUString aBrochurePropertyName( "PrintProspect" );
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("brochure", aLocalizedStrings.GetString( 23 ),
@@ -385,7 +385,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     if (bCTL)
     {
-        // create a bool option for brochure RTL dependent on brochure
+        
         uno::Sequence< OUString > aBRTLChoices( 2 );
         aBRTLChoices[0] = aLocalizedStrings.GetString( 24 );
         aBRTLChoices[1] = aLocalizedStrings.GetString( 25 );
@@ -393,9 +393,9 @@ SwPrintUIOptions::SwPrintUIOptions(
         uno::Sequence< OUString > aBRTLHelpIds( 1 );
         aBRTLHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox";
         aBrochureRTLOpt.maGroupHint = "LayoutPage";
-        // RTL brochure choices
-        //      0 : left-to-right
-        //      1 : right-to-left
+        
+        
+        
         const sal_Int16 nBRTLChoice = rDefaultPrintData.IsPrintProspectRTL() ? 1 : 0;
         m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("scriptdirection",
                                                                OUString(),
@@ -416,12 +416,12 @@ SwPrintUIOptions::~SwPrintUIOptions()
 
 bool SwPrintUIOptions::IsPrintLeftPages() const
 {
-    // take care of different property names for the option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+    
+    
 
-    // 0: left and right pages
-    // 1: left pages only
-    // 2: right pages only
+    
+    
+    
     sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 /* default: all */ );
     bool bRes = nLRPages == 0 || nLRPages == 1;
     bRes = getBoolValue( "PrintLeftPages", bRes /* <- default value if property is not found */ );
@@ -430,8 +430,8 @@ bool SwPrintUIOptions::IsPrintLeftPages() const
 
 bool SwPrintUIOptions::IsPrintRightPages() const
 {
-    // take care of different property names for the option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+    
+    
 
     sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 /* default: all */ );
     bool bRes = nLRPages == 0 || nLRPages == 2;
@@ -441,7 +441,7 @@ bool SwPrintUIOptions::IsPrintRightPages() const
 
 bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
 {
-    // take care of different property names for the option.
+    
 
     bool bRes = bIsPDFExport ?
             !getBoolValue( "IsSkipEmptyPages", true ) :
@@ -451,17 +451,17 @@ bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
 
 bool SwPrintUIOptions::IsPrintTables() const
 {
-    // take care of different property names currently in use for this option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+    
+    
 
-    // for now it was decided that tables should always be printed
+    
     return true;
 }
 
 bool SwPrintUIOptions::IsPrintGraphics() const
 {
-    // take care of different property names for the option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+    
+    
 
     bool bRes = getBoolValue( "PrintPicturesAndObjects", true );
     bRes = getBoolValue( "PrintGraphics", bRes );
@@ -470,8 +470,8 @@ bool SwPrintUIOptions::IsPrintGraphics() const
 
 bool SwPrintUIOptions::IsPrintDrawings() const
 {
-    // take care of different property names for the option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+    
+    
 
     bool bRes = getBoolValue( "PrintPicturesAndObjects", true );
     bRes = getBoolValue( "PrintDrawings", bRes );

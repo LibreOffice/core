@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,12 +65,12 @@ namespace {
 
 class ScrollTextAnimNode
 {
-    sal_uInt32  mnDuration; // single duration
-    sal_uInt32  mnRepeat; // 0 -> endless
+    sal_uInt32  mnDuration; 
+    sal_uInt32  mnRepeat; 
     double      mfStart;
     double      mfStop;
-    sal_uInt32  mnFrequency; // in ms
-    // forth and back change at mnRepeat%2:
+    sal_uInt32  mnFrequency; 
+    
     bool        mbAlternate;
 
 public:
@@ -97,13 +97,13 @@ public:
 double ScrollTextAnimNode::GetStateAtRelativeTime(
     sal_uInt32 nRelativeTime) const
 {
-    // Avoid division by zero.
+    
     if( mnDuration == 0 )
         return mfStop;
 
     if(mnRepeat)
     {
-        // ending
+        
         const sal_uInt32 nRepeatCount(nRelativeTime / mnDuration);
         sal_uInt32 nFrameTime(nRelativeTime - (nRepeatCount * mnDuration));
 
@@ -115,7 +115,7 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
     }
     else
     {
-        // endless
+        
         sal_uInt32 nFrameTime(nRelativeTime % mnDuration);
 
         if(DoAlternate())
@@ -144,9 +144,9 @@ public:
 
     bool enableAnimations();
 
-    // Disposable:
+    
     virtual void dispose();
-    // Activity:
+    
     virtual double calcTimeLag() const;
     virtual bool perform();
     virtual bool isActive() const;
@@ -157,42 +157,42 @@ private:
     void updateShapeAttributes( double fTime,
                                 basegfx::B2DRectangle const& parentBounds );
 
-    // Access to VisibleWhenSTarted flags
+    
     sal_Bool IsVisibleWhenStarted() const { return mbVisibleWhenStarted; }
     sal_Bool IsVisibleWhenStopped() const { return mbVisibleWhenStopped; }
 
-    // scroll horizontal? if sal_False, scroll is vertical.
+    
     bool ScrollHorizontal() const {
         return (drawing::TextAnimationDirection_LEFT == meDirection ||
                 drawing::TextAnimationDirection_RIGHT == meDirection);
     }
 
-    // Access to StepWidth in logical units
+    
     sal_uInt32 GetStepWidthLogic() const;
 
-    // is the animation direction opposite?
+    
     bool DoScrollForward() const {
         return (drawing::TextAnimationDirection_RIGHT == meDirection ||
                 drawing::TextAnimationDirection_DOWN == meDirection);
     }
 
-    // do alternate text directions?
+    
     bool DoAlternate() const { return mbAlternate; }
 
-    // do scroll in?
+    
     bool DoScrollIn() const { return mbScrollIn; }
 
-    // Scroll helper methods
+    
     void ImpForceScrollTextAnimNodes();
     ScrollTextAnimNode* ImpGetScrollTextAnimNode(
         sal_uInt32 nTime, sal_uInt32& rRelativeTime );
     sal_uInt32 ImpRegisterAgainScrollTextMixerState(
         sal_uInt32 nTime);
 
-    // calculate the MixerState value for given time
+    
     double GetMixerState(sal_uInt32 nTime);
 
-    ////////////////////////////////////////////////////////////////////
+    
 
     SlideShowContext                            maContext;
     boost::shared_ptr<WakeupEvent>              mpWakeupEvent;
@@ -208,42 +208,42 @@ private:
     bool                                        mbIsActive;
     drawing::TextAnimationKind                  meAnimKind;
 
-    // The blink frequency in ms
+    
     sal_uInt32                                  mnFrequency;
 
-    // The repeat count, init to 0L which means endless
+    
     sal_uInt32                                  mnRepeat;
 
-    // Flag to decide if text will be shown when animation has ended
+    
     bool                                        mbVisibleWhenStopped;
     bool                                        mbVisibleWhenStarted;
 
-    // Flag decides if TextScroll alternates. Default is sal_False.
+    
     bool                                        mbAlternate;
 
-    // Flag to remember if this is a simple scrollin text
+    
     bool                                        mbScrollIn;
 
-    // start time for this animation
+    
     sal_uInt32                                  mnStartTime;
 
-    // The AnimationDirection
+    
     drawing::TextAnimationDirection             meDirection;
 
-    // Get width per Step. Negative means pixel, positive logical units
+    
     sal_Int32                                   mnStepWidth;
 
-    // The single anim steps
+    
     std::vector< ScrollTextAnimNode >           maVector;
 
-    // the scroll rectangle
+    
     Rectangle                                   maScrollRectangleLogic;
 
-    // the paint rectangle
+    
     Rectangle                                   maPaintRectangleLogic;
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
                                    private boost::noncopyable
@@ -261,13 +261,13 @@ private:
     ActivityImpl& mrActivity;
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 double ActivityImpl::GetMixerState( sal_uInt32 nTime )
 {
     if( meAnimKind == drawing::TextAnimationKind_BLINK )
     {
-        // from AInfoBlinkText:
+        
         double fRetval(0.0);
         sal_Bool bDone(sal_False);
         const sal_uInt32 nLoopTime(2 * mnFrequency);
@@ -297,7 +297,7 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
     }
     else
     {
-        // from AInfoScrollText:
+        
         double fRetval(0.0);
         ImpForceScrollTextAnimNodes();
 
@@ -309,12 +309,12 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
 
             if(pNode)
             {
-                // use node
+                
                 fRetval = pNode->GetStateAtRelativeTime(nRelativeTime);
             }
             else
             {
-                // end of animation, take last entry's end
+                
                 fRetval = maVector[maVector.size() - 1L].GetStop();
             }
         }
@@ -323,32 +323,32 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
     }
 }
 
-// Access to StepWidth in logical units
+
 sal_uInt32 ActivityImpl::GetStepWidthLogic() const
 {
-    // #i69847# Assuming higher DPI
+    
     sal_uInt32 const PIXEL_TO_LOGIC = 30;
 
     sal_uInt32 nRetval(0L);
 
     if(mnStepWidth < 0L)
     {
-        // is in pixels, convert to logical units
+        
         nRetval = (-mnStepWidth * PIXEL_TO_LOGIC);
     }
     else if(mnStepWidth > 0L)
     {
-        // is in logical units
+        
         nRetval = mnStepWidth;
     }
 
     if(0L == nRetval)
     {
-        // step 1 pixel, canned value
+        
 
-        // with very high DPIs like in PDF export, this can
-        // still get zero.  for that cases, set a default, too (taken
-        // from ainfoscrolltext.cxx)
+        
+        
+        
         nRetval = 100L;
     }
 
@@ -359,7 +359,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 {
     if(maVector.empty())
     {
-        // prepare values
+        
         sal_uInt32 nLoopTime;
         double fZeroLogic, fOneLogic, fInitLogic, fDistanceLogic;
         double fZeroLogicAlternate = 0.0, fOneLogicAlternate = 0.0;
@@ -425,7 +425,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
         if(mnStartTime)
         {
-            // Start time loop
+            
             ScrollTextAnimNode aStartNode(
                 mnStartTime, 1L, 0.0, 0.0, mnStartTime, false);
             maVector.push_back(aStartNode);
@@ -452,7 +452,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
             nLoopTime = FRound(fNumberSteps * mnFrequency);
 
-            // init loop
+            
             ScrollTextAnimNode aInitNode(
                 nLoopTime, 1L,
                 fRelativeStartValue, fRelativeEndValue,
@@ -460,7 +460,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
             maVector.push_back(aInitNode);
         }
 
-        // prepare main loop values
+        
         {
             double fRelativeStartValue, fRelativeEndValue, fRelativeDistance;
 
@@ -485,7 +485,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
             {
                 if(!DoScrollIn())
                 {
-                    // endless main loop
+                    
                     ScrollTextAnimNode aMainNode(
                         nLoopTime, 0L,
                         fRelativeStartValue, fRelativeEndValue,
@@ -500,7 +500,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 if(DoAlternate() && (nNumRepeat + 1L) % 2L)
                     nNumRepeat += 1L;
 
-                // ending main loop
+                
                 ScrollTextAnimNode aMainNode(
                     nLoopTime, nNumRepeat,
                     fRelativeStartValue, fRelativeEndValue,
@@ -530,7 +530,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
             nLoopTime = FRound(fNumberSteps * mnFrequency);
 
-            // exit loop
+            
             ScrollTextAnimNode aExitNode(
                 nLoopTime, 1L,
                 fRelativeStartValue, fRelativeEndValue, mnFrequency, false);
@@ -554,17 +554,17 @@ ScrollTextAnimNode* ActivityImpl::ImpGetScrollTextAnimNode(
             ScrollTextAnimNode & rNode = maVector[a];
             if(!rNode.GetRepeat())
             {
-                // endless loop, use it
+                
                 pRetval = &rNode;
             }
             else if(rNode.GetFullTime() > rRelativeTime)
             {
-                // ending node
+                
                 pRetval = &rNode;
             }
             else
             {
-                // look at next
+                
                 rRelativeTime -= rNode.GetFullTime();
             }
         }
@@ -585,13 +585,13 @@ sal_uInt32 ActivityImpl::ImpRegisterAgainScrollTextMixerState(sal_uInt32 nTime)
 
         if(pNode)
         {
-            // take register time
+            
             nRetval = pNode->GetFrequency();
         }
     }
     else
     {
-        // #i38135# not initialized, return default
+        
         nRetval = mnFrequency;
     }
 
@@ -610,19 +610,19 @@ void ActivityImpl::updateShapeAttributes(
 
     if( meAnimKind == drawing::TextAnimationKind_BLINK )
     {
-        // show/hide text:
+        
         maShapeAttrLayer.get()->setVisibility( fMixerState < 0.5 );
     }
-    else if(mpMetaFile) // scroll mode:
+    else if(mpMetaFile) 
     {
         //
-        // keep care: the below code is highly sensible to changes...
+        
         //
 
-        // rectangle of the pure text:
+        
         double const fPaintWidth = maPaintRectangleLogic.GetWidth();
         double const fPaintHeight = maPaintRectangleLogic.GetHeight();
-        // rectangle where the scrolling takes place (-> clipping):
+        
         double const fScrollWidth = maScrollRectangleLogic.GetWidth();
         double const fScrollHeight = maScrollRectangleLogic.GetHeight();
 
@@ -638,13 +638,13 @@ void ActivityImpl::updateShapeAttributes(
             clipPos.setX( -pos.getX() );
             clipPos.setY( -pos.getY() );
 
-            // #i69844# Compensation for text-wider-than-shape case
+            
             if( fPaintWidth > fScrollWidth )
                 pos.setX( pos.getX() + (fPaintWidth-fScrollWidth) / 2.0 );
         }
         else
         {
-            // scroll vertical:
+            
             double const fOneEquiv( fScrollHeight );
             double const fZeroEquiv( -fPaintHeight );
 
@@ -653,7 +653,7 @@ void ActivityImpl::updateShapeAttributes(
             clipPos.setX( -pos.getX() );
             clipPos.setY( -pos.getY() );
 
-            // #i69844# Compensation for text-higher-than-shape case
+            
             if( fPaintHeight > fScrollHeight )
                 pos.setY( pos.getY() + (fPaintHeight-fScrollHeight) / 2.0 );
         }
@@ -670,7 +670,7 @@ void ActivityImpl::updateShapeAttributes(
             maShapeAttrLayer.get()->setRotationAngle( mfRotationAngle );
             double const fRotate = (mfRotationAngle * M_PI / 180.0);
             basegfx::B2DHomMatrix aTransform;
-            // position:
+            
             aTransform.rotate( fRotate );
             pos *= aTransform;
         }
@@ -692,18 +692,18 @@ bool ActivityImpl::perform()
 
     DrawShapeSharedPtr const pParentDrawShape( mpParentDrawShape );
     if( !pParentDrawShape )
-        return false; // parent has vanished
+        return false; 
 
     if( pParentDrawShape->isVisible() )
     {
         if( !mbIsShapeAnimated )
         {
-            mpDrawShape->setVisibility(true); // shape may be initially hidden
+            mpDrawShape->setVisibility(true); 
             maContext.mpSubsettableShapeManager->enterAnimationMode( mpDrawShape );
             maTimer.reset();
             mbIsShapeAnimated = true;
         }
-        // update attributes related to current time:
+        
         basegfx::B2DRectangle const parentBounds(
             pParentDrawShape->getBounds() );
 
@@ -724,16 +724,16 @@ bool ActivityImpl::perform()
             if( mpDrawShape->isContentChanged() )
                 maContext.mpSubsettableShapeManager->notifyShapeUpdate( mpDrawShape );
         }
-        // else: finished, not need to wake up again.
+        
     }
     else
     {
-        // busy-wait, until parent shape gets visible
+        
         mpWakeupEvent->start();
         mpWakeupEvent->setNextTimeout( 2.0 );
     }
 
-    // don't reinsert, WakeupEvent will perform that after the given timeout:
+    
     return false;
 }
 
@@ -755,23 +755,23 @@ ActivityImpl::ActivityImpl(
       mbVisibleWhenStarted(false),
       mnStartTime(0L)
 {
-    // get doctreenode:
+    
     sal_Int32 const nNodes = pParentDrawShape->getNumberOfTreeNodes(
         DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH );
 
     DocTreeNode scrollTextNode(
         pParentDrawShape->getTreeNode(
             0, DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ));
-    // xxx todo: remove this hack
+    
     if( nNodes > 1 )
         scrollTextNode.setEndIndex(
             pParentDrawShape->getTreeNode(
                 nNodes - 1,
                 DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ).getEndIndex());
 
-    // TODO(Q3): Doing this manually, instead of using
-    // ShapeSubset. This is because of lifetime issues (ShapeSubset
-    // generates circular references to parent shape)
+    
+    
+    
     mpDrawShape = boost::dynamic_pointer_cast<DrawShape>(
         maContext.mpSubsettableShapeManager->getSubsetShape(
             pParentDrawShape,
@@ -779,7 +779,7 @@ ActivityImpl::ActivityImpl(
 
     mpMetaFile = mpDrawShape->forceScrollTextMetaFile();
 
-    // make scroll text invisible for slide transition bitmaps
+    
     mpDrawShape->setVisibility(false);
 
     basegfx::B2DRectangle aScrollRect, aPaintRect;
@@ -804,15 +804,15 @@ ActivityImpl::ActivityImpl(
     mbAlternate = (meAnimKind == drawing::TextAnimationKind_ALTERNATE);
     mbScrollIn = (meAnimKind == drawing::TextAnimationKind_SLIDE);
 
-    // adopted from in AInfoBlinkText::ImplInit():
+    
     sal_Int16 nRepeat(0);
     getPropertyValue( nRepeat, xProps, "TextAnimationCount" );
     mnRepeat = nRepeat;
 
     if(mbAlternate)
     {
-        // force visible when started for scroll-forth-and-back, because
-        // slide has been coming in with visible text in the middle:
+        
+        
         mbVisibleWhenStarted = true;
     }
     else
@@ -821,39 +821,39 @@ ActivityImpl::ActivityImpl(
                           "TextAnimationStartInside" );
     }
 
-    // set visible when stopped
+    
     getPropertyValue( mbVisibleWhenStopped, xProps,
                       "TextAnimatiogonStopInside" );
-    // rotation:
+    
     getPropertyValue( mfRotationAngle, xProps,
                       "RotateAngle" );
-    mfRotationAngle /= -100.0; // (switching direction)
+    mfRotationAngle /= -100.0; 
 
-    // set frequency
+    
     sal_Int16 nDelay(0);
     getPropertyValue( nDelay, xProps, "TextAnimationDelay" );
-    // set delay if not automatic
+    
     mnFrequency = (nDelay ? nDelay :
-                   // default:
+                   
                    meAnimKind == drawing::TextAnimationKind_BLINK
                    ? 250L : 50L );
 
-    // adopted from in AInfoScrollText::ImplInit():
+    
 
-    // If it is a simple m_bScrollIn, reset some parameters
+    
     if( DoScrollIn() )
     {
-        // most parameters are set correctly from the dialog logic, but
-        // eg VisisbleWhenStopped is grayed out and needs to be corrected here.
+        
+        
         mbVisibleWhenStopped = true;
         mbVisibleWhenStarted = false;
         mnRepeat = 0L;
     }
 
-    // Get animation direction
+    
     getPropertyValue( meDirection, xProps, "TextAnimationDirection" );
 
-    // Get step width. Negative means pixel, positive logical units
+    
     getPropertyValue( mnStepWidth, xProps, "TextAnimationAmount" );
 
     maContext.mpSubsettableShapeManager->addIntrinsicAnimationHandler(
@@ -877,16 +877,16 @@ void ActivityImpl::dispose()
     {
         end();
 
-        // only remove subset here, since end() is called on slide end
-        // (and we must not spoil the slide preview bitmap with scroll
-        // text)
+        
+        
+        
         maShapeAttrLayer.reset();
         if( mpDrawShape )
         {
-            // TODO(Q3): Doing this manually, instead of using
-            // ShapeSubset. This is because of lifetime issues
-            // (ShapeSubset generates circular references to parent
-            // shape)
+            
+            
+            
+            
             DrawShapeSharedPtr pParent( mpParentDrawShape.lock() );
             if( pParent )
                 maContext.mpSubsettableShapeManager->revokeSubset(
@@ -918,12 +918,12 @@ bool ActivityImpl::isActive() const
 
 void ActivityImpl::dequeued()
 {
-    // not used here
+    
 }
 
 void ActivityImpl::end()
 {
-    // not used here
+    
     mbIsActive = false;
 
     if( mbIsShapeAnimated )
@@ -933,7 +933,7 @@ void ActivityImpl::end()
     }
 }
 
-} // anon namespace
+} 
 
 namespace slideshow {
 namespace internal {
@@ -958,7 +958,7 @@ boost::shared_ptr<Activity> createDrawingLayerAnimActivity(
     }
     catch( uno::Exception& )
     {
-        // translate any error into empty factory product.
+        
         OSL_FAIL( OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -967,7 +967,7 @@ boost::shared_ptr<Activity> createDrawingLayerAnimActivity(
     return pActivity;
 }
 
-} // namespace internal
-} // namespace presentation
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

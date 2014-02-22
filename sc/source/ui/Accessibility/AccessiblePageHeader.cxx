@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::accessibility;
 
 const sal_uInt8     MAX_AREAS = 3;
 
-//=====  internal  ============================================================
+
 struct Acquire
 {
     void operator() (ScAccessiblePageHeaderArea* pArea)
@@ -101,7 +101,7 @@ ScAccessiblePageHeader::~ScAccessiblePageHeader()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -120,14 +120,14 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
     ScAccessibleContextBase::disposing();
 }
 
-//=====  SfxListener  =====================================================
+
 
 void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA( SfxSimpleHint ) )
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        // only notify if child exist, otherwise it is not necessary
+        
         if ((rRef.GetId() == SC_HINT_DATACHANGED))
         {
             ScHFAreas aOldAreas(maAreas);
@@ -146,7 +146,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         aEvent.Source = uno::Reference< XAccessibleContext >(this);
                         aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
 
-                        CommitChange(aEvent); // child gone - event
+                        CommitChange(aEvent); 
                         aOldAreas[i]->dispose();
                     }
                     if (maAreas[i] && maAreas[i]->GetEditTextObject())
@@ -156,7 +156,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         aEvent.Source = uno::Reference< XAccessibleContext >(this);
                         aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i]));
 
-                        CommitChange(aEvent); // new child - event
+                        CommitChange(aEvent); 
                     }
                 }
             }
@@ -174,7 +174,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
-//=====  XAccessibleComponent  ============================================
+
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPoint( const awt::Point& aPoint )
                                 throw (uno::RuntimeException)
@@ -186,11 +186,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
         SolarMutexGuard aGuard;
         IsObjectValid();
 
-        sal_Int32 nCount(getAccessibleChildCount()); // fill the areas
+        sal_Int32 nCount(getAccessibleChildCount()); 
 
         if (nCount)
         {
-            // return the first with content, because they have all the same Bounding Box
+            
             sal_uInt8 i(0);
             while(!xRet.is() && i < MAX_AREAS)
             {
@@ -217,7 +217,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
     }
 }
 
-//=====  XAccessibleContext  ==============================================
+
 
 sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno::RuntimeException)
 {
@@ -230,7 +230,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
         ScDocument* pDoc = mpViewShell->GetDocument();
         if (pDoc)
         {
-            // find out how many regions (left,center, right) are with content
+            
 
             SfxStyleSheetBase* pStyle = pDoc->GetStyleSheetPool()->Find(pDoc->GetPageStyle(mpViewShell->GetLocationData().GetPrintTab()), SFX_STYLE_FAMILY_PAGE);
             if (pStyle)
@@ -314,7 +314,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
     return pStateSet;
 }
 
-//=====  XServiceInfo  ====================================================
+
 
 OUString SAL_CALL ScAccessiblePageHeader::getImplementationName() throw(uno::RuntimeException)
 {
@@ -333,7 +333,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
     return aSequence;
 }
 
-//====  internal  =========================================================
+
 
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
@@ -376,7 +376,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
         else
             rData.GetFooterPosition( aRect );
 
-        // the Rectangle could contain negative coordinates so it should be cliped
+        
         Rectangle aClipRect(Point(0, 0), aRect.GetSize());
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)

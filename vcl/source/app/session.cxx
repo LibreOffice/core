@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -108,23 +108,23 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( *this );
-        // reset listener states
+        
         for( std::list< Listener >::iterator it = m_aListeners.begin();
              it != m_aListeners.end(); ++it )
         {
             it->m_bSaveDone = it->m_bInteractionRequested = it->m_bInteractionDone = false;
         }
 
-        // copy listener list since calling a listener may remove it.
+        
         aListeners = m_aListeners;
-        // set back interaction state
+        
         m_bSaveDone = false;
         m_bInteractionDone = false;
-        // without session we assume UI is always possible,
-        // so it was reqeusted and granted
+        
+        
         m_bInteractionRequested = m_bInteractionGranted = !m_pSession;
 
-        // answer the session manager even if no listeners available anymore
+        
         DBG_ASSERT( ! aListeners.empty(), "saveRequested but no listeners !" );
         if( aListeners.empty() )
         {
@@ -145,14 +145,14 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( *this );
-        // copy listener list since calling a listener may remove it.
+        
         for( std::list< Listener >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
             if( it->m_bInteractionRequested )
                 aListeners.push_back( *it );
 
         m_bInteractionGranted = bInteractionGranted;
 
-        // answer the session manager even if no listeners available anymore
+        
         DBG_ASSERT( ! aListeners.empty(), "interactionGranted but no listeners !" );
         if( aListeners.empty() )
         {
@@ -174,9 +174,9 @@ void VCLSession::callShutdownCancelled()
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( *this );
-        // copy listener list since calling a listener may remove it.
+        
         aListeners = m_aListeners;
-        // set back interaction state
+        
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
@@ -191,9 +191,9 @@ void VCLSession::callQuit()
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( *this );
-        // copy listener list since calling a listener may remove it.
+        
         aListeners = m_aListeners;
-        // set back interaction state
+        
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
@@ -332,7 +332,7 @@ sal_Bool SAL_CALL VCLSession::cancelShutdown() throw( RuntimeException )
     return m_pSession && m_pSession->cancelShutdown();
 }
 
-// service implementation
+
 
 OUString SAL_CALL vcl_session_getImplementationName()
 {

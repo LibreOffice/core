@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -52,7 +52,7 @@ void ScFormulaOptions::SetDefaults()
     meOOXMLRecalc = RECALC_ASK;
     meODFRecalc = RECALC_ASK;
 
-    // unspecified means use the current formula syntax.
+    
     aCalcConfig.reset();
 
     ResetFormulaSeparators();
@@ -66,7 +66,7 @@ void ScFormulaOptions::ResetFormulaSeparators()
 void ScFormulaOptions::GetDefaultFormulaSeparators(
     OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
 {
-    // Defaults to the old separator values.
+    
     rSepArg = ";";
     rSepArrayCol = ";";
     rSepArrayRow = "|";
@@ -74,8 +74,8 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
     if (rLang == "ru")
-        // Don't do automatic guess for these languages, and fall back to
-        // the old separator set.
+        
+        
         return;
 
     const LocaleDataWrapper& rLocaleData = GetLocaleDataWrapper();
@@ -83,31 +83,31 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     const OUString& rListSep = rLocaleData.getListSep();
 
     if (rDecSep.isEmpty() || rListSep.isEmpty())
-        // Something is wrong.  Stick with the default separators.
+        
         return;
 
     sal_Unicode cDecSep  = rDecSep[0];
     sal_Unicode cListSep = rListSep[0];
 
-    // Excel by default uses system's list separator as the parameter
-    // separator, which in English locales is a comma.  However, OOo's list
-    // separator value is set to ';' for all English locales.  Because of this
-    // discrepancy, we will hardcode the separator value here, for now.
+    
+    
+    
+    
     if (cDecSep == '.')
         cListSep = ',';
 
-    // Special case for de_CH locale.
+    
     if (rLocale.Language == "de" && rLocale.Country == "CH")
         cListSep = ';';
 
-    // by default, the parameter separator equals the locale-specific
-    // list separator.
+    
+    
     rSepArg = OUString(cListSep);
 
     if (cDecSep == cListSep && cDecSep != ';')
-        // if the decimal and list separators are equal, set the
-        // parameter separator to be ';', unless they are both
-        // semicolon in which case don't change the decimal separator.
+        
+        
+        
         rSepArg = ";";
 
     rSepArrayCol = ",";
@@ -205,18 +205,18 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Syntax/Grammar",                // SCFORMULAOPT_GRAMMAR
-        "Syntax/EnglishFunctionName",    // SCFORMULAOPT_ENGLISH_FUNCNAME
-        "Syntax/SeparatorArg",           // SCFORMULAOPT_SEP_ARG
-        "Syntax/SeparatorArrayRow",      // SCFORMULAOPT_SEP_ARRAY_ROW
-        "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
-        "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
-        "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO
-        "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
-        "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
-        "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
-        "Calculation/OpenCLAutoSelect",  // SCFORMULAOPT_OPENCL_AUTOSELECT
-        "Calculation/OpenCLDevice"   // SCFORMULAOPT_OPENCL_DEVICE
+        "Syntax/Grammar",                
+        "Syntax/EnglishFunctionName",    
+        "Syntax/SeparatorArg",           
+        "Syntax/SeparatorArrayRow",      
+        "Syntax/SeparatorArrayCol",      
+        "Syntax/StringRefAddressSyntax", 
+        "Syntax/EmptyStringAsZero",      
+        "Load/OOXMLRecalcMode",          
+        "Load/ODFRecalcMode",            
+        "Calculation/OpenCL",            
+        "Calculation/OpenCLAutoSelect",  
+        "Calculation/OpenCLDevice"   
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -264,24 +264,24 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 {
                 case SCFORMULAOPT_GRAMMAR:
                 {
-                    // Get default value in case this option is not set.
+                    
                     ::formula::FormulaGrammar::Grammar eGram = GetFormulaSyntax();
 
                     do
                     {
                         if (!(pValues[nProp] >>= nIntVal))
-                            // extractino failed.
+                            
                             break;
 
                         switch (nIntVal)
                         {
-                            case 0: // Calc A1
+                            case 0: 
                                 eGram = ::formula::FormulaGrammar::GRAM_NATIVE;
                             break;
-                            case 1: // Excel A1
+                            case 1: 
                                 eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
                             break;
-                            case 2: // Excel R1C1
+                            case 2: 
                                 eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
                             break;
                             default:
@@ -322,27 +322,27 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_STRING_REF_SYNTAX:
                 {
-                    // Get default value in case this option is not set.
+                    
                     ::formula::FormulaGrammar::AddressConvention eConv = GetCalcConfig().meStringRefAddressSyntax;
 
                     do
                     {
                         if (!(pValues[nProp] >>= nIntVal))
-                            // extractino failed.
+                            
                             break;
 
                         switch (nIntVal)
                         {
-                            case -1: // Same as the formula grammar.
+                            case -1: 
                                 eConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
                             break;
-                            case 0: // Calc A1
+                            case 0: 
                                 eConv = formula::FormulaGrammar::CONV_OOO;
                             break;
-                            case 1: // Excel A1
+                            case 1: 
                                 eConv = formula::FormulaGrammar::CONV_XL_A1;
                             break;
-                            case 2: // Excel R1C1
+                            case 2: 
                                 eConv = formula::FormulaGrammar::CONV_XL_R1C1;
                             break;
                             default:
@@ -412,8 +412,8 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 {
                     sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
                     pValues[nProp] >>= bVal;
-#if 0 // Don't remove please.
-      // The intent here is that tml when running CppunitTest_sc_opencl_test turns this on.
+#if 0 
+      
                     bVal = sal_True;
 #endif
                     GetCalcConfig().mbOpenCLEnabled = bVal;

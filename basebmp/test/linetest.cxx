@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppunit/TestAssert.h>
@@ -116,8 +116,8 @@ private:
                                countPixel( rDevice, aCol ) == 9);
     }
 
-    // test pixel rounding (should always tend towards start point of
-    // the line)
+    
+    
     void implTestTieBreaking(const BitmapDeviceSharedPtr& rDevice)
     {
         rDevice->clear(Color(0));
@@ -207,17 +207,17 @@ public:
         implTestBasicVerticalLines( mpDevice32bpp );
     }
 
-    // test pixel rounding (should always tend towards start point of
-    // the line)
+    
+    
     void testTieBreaking()
     {
         implTestTieBreaking( mpDevice1bpp );
         implTestTieBreaking( mpDevice32bpp );
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(LineTest);
     CPPUNIT_TEST(testCornerCases);

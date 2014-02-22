@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TokenWriter.hxx"
@@ -112,7 +112,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     osl_atomic_decrement( &m_refCount );
 }
 
-// import data
+
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
     :m_bBookmarkSelection( sal_False )
@@ -153,7 +153,7 @@ ODatabaseImportExport::~ODatabaseImportExport()
 void ODatabaseImportExport::dispose()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
-    // remove me as listener
+    
     Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
     if (xComponent.is())
     {
@@ -198,7 +198,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         m_sDataSourceName = _aDataDescriptor.getDataSource();
         _aDataDescriptor[daCommandType] >>= m_nCommandType;
         _aDataDescriptor[daCommand]     >>= m_sName;
-        // some additional information
+        
         if(_aDataDescriptor.has(daConnection))
         {
             Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );
@@ -259,7 +259,7 @@ void ODatabaseImportExport::initialize()
     m_bNeedToReInitialize = false;
 
     if ( !m_xConnection.is() )
-    {   // we need a connection
+    {   
         OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
         Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(m_xContext), UNO_QUERY_THROW);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
@@ -277,7 +277,7 @@ void ODatabaseImportExport::initialize()
     {
         case CommandType::TABLE:
             {
-                // only for tables
+                
                 Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
                 if(xSup.is())
                     xNameAccess = xSup->getTables();
@@ -304,7 +304,7 @@ void ODatabaseImportExport::initialize()
             if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
                 m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
 
-            // the result set may be already set with the datadescriptor
+            
             if ( !m_xResultSet.is() )
             {
                 m_xResultSet.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.sdb.RowSet", m_xContext), UNO_QUERY );
@@ -408,7 +408,7 @@ sal_Bool ORTFImportExport::Write()
     }
     m_pStream->WriteChar( '}' ) ;
     m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-    // write the rtf color table
+    
     m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
     m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetRed()));
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
@@ -449,7 +449,7 @@ sal_Bool ORTFImportExport::Write()
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
-        // column description
+        
         m_pStream->WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
         m_pStream->WriteCharPtr( aTRRH );
 
@@ -479,11 +479,11 @@ sal_Bool ORTFImportExport::Write()
                 default:pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
             }
 
-            pHorzChar[i-1] = pChar; // to avoid to always rummage in the ITEMSET later on
+            pHorzChar[i-1] = pChar; 
 
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
             m_pStream->WriteChar( '{' );
-            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );   // column header always centered
+            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );   
 
             if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
             if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
@@ -532,7 +532,7 @@ sal_Bool ORTFImportExport::Write()
         }
         else
         {
-            m_xResultSet->beforeFirst(); // set back before the first row
+            m_xResultSet->beforeFirst(); 
             while(m_xResultSet->next())
             {
                 appendRow(pHorzChar,nCount,k,kk);
@@ -640,7 +640,7 @@ sal_Int16 OHTMLImportExport::nFontSize[SBA_HTML_FONTSIZES] = { 0 };
 const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
 const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-// Macros for HTML-Export
+
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
 #define OUT_LF()            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() )
@@ -658,7 +658,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
 #endif
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::OHTMLImportExport" );
-    // set HTML configuration
+    
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     m_eDestEnc = rHtmlOptions.GetTextEncoding();
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
@@ -730,7 +730,7 @@ void OHTMLImportExport::WriteBody()
 
     m_pStream->WriteCharPtr( sMyBegComment ); OUT_LF();
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( sFontFamily ).WriteChar( '"' ).WriteCharPtr( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() ).WriteChar( '\"' );
-        // TODO : think about the encoding of the font name
+        
     m_pStream->WriteCharPtr( "; " ).WriteCharPtr( sFontSize );
     m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
     m_pStream->WriteChar( '}' );
@@ -740,7 +740,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
     OUT_LF();
 
-    // default Textcolour black
+    
     m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteChar( '=' );
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -810,13 +810,13 @@ void OHTMLImportExport::WriteTables()
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
     m_pStream->WriteCharPtr( OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr() );
-        // TODO : think about the encoding of the name
+        
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
 
     FontOff();
     OUT_LF();
-    // </FONT>
+    
 
     IncIndent(1);
     TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_thead );
@@ -834,7 +834,7 @@ void OHTMLImportExport::WriteTables()
         sal_Int32 nHeight = 0;
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
 
-        // 1. writing the column description
+        
         const OUString* pIter = aNames.getConstArray();
         const OUString* pEnd = pIter + aNames.getLength();
 
@@ -872,11 +872,11 @@ void OHTMLImportExport::WriteTables()
         IncIndent(1);
         TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
 
-        // 2. and now the data
+        
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 j=1;
         sal_Int32 kk=0;
-        m_xResultSet->beforeFirst(); // set back before the first row
+        m_xResultSet->beforeFirst(); 
         while(m_xResultSet->next())
         {
             IncIndent(1);
@@ -939,14 +939,14 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     nWidthPixel  = nWidthPixel  ? nWidthPixel   : 86;
     nHeightPixel = nHeightPixel ? nHeightPixel  : 17;
 
-    // despite the <TABLE COLS=n> and <COL WIDTH=x> designation necessary,
-    // as Netscape is not paying attention to them.
-    // column width
+    
+    
+    
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_width;
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + OString::number(nWidthPixel);
-    // line height
+    
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_height;
     aStrTD = aStrTD + "=";
@@ -990,7 +990,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
 
     if ( rValue.isEmpty() )
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // no completely empty cell
+        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 
@@ -1011,7 +1011,7 @@ void OHTMLImportExport::FontOn()
         m_bCheckFont = sal_True;
 #endif
 
-    // <FONT FACE="xxx">
+    
     OString aStrOut  = "<";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_font;
     aStrOut  = aStrOut + " ";
@@ -1019,7 +1019,7 @@ void OHTMLImportExport::FontOn()
     aStrOut  = aStrOut + "=";
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + OUStringToOString(m_aFont.Name,osl_getThreadTextEncoding());
-        // TODO : think about the encoding of the font name
+        
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + " ";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_color;

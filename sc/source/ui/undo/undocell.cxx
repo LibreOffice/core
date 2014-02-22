@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "undocell.hxx"
@@ -106,9 +106,9 @@ ScUndoCursorAttr::~ScUndoCursorAttr()
 
 OUString ScUndoCursorAttr::GetComment() const
 {
-    //! own text for automatic attribution
+    
 
-    sal_uInt16 nId = STR_UNDO_CURSORATTR;        // "Attribute"
+    sal_uInt16 nId = STR_UNDO_CURSORATTR;        
     return ScGlobal::GetRscString( nId );
 }
 
@@ -155,8 +155,8 @@ void ScUndoCursorAttr::Undo()
 
     if ( bIsAutomatic )
     {
-        // if automatic formatting is reversed, then
-        // automatic formatting should also not continue to be done
+        
+        
 
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -204,12 +204,12 @@ ScUndoEnterData::~ScUndoEnterData() {}
 
 OUString ScUndoEnterData::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
+    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); 
 }
 
 void ScUndoEnterData::DoChange() const
 {
-    // only when needed (old or new Edit cell, or Attribute)?
+    
     for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
         pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), maOldValues[i].mnTab);
 
@@ -239,7 +239,7 @@ void ScUndoEnterData::SetChangeTrack()
             pChangeTrack->AppendContent(aPos, maOldValues[i].maCell, nFormat);
         }
         if ( mnEndChangeAction > pChangeTrack->GetActionMax() )
-            mnEndChangeAction = 0;       // nothing is appended
+            mnEndChangeAction = 0;       
     }
     else
         mnEndChangeAction = 0;
@@ -294,7 +294,7 @@ void ScUndoEnterData::Redo()
         {
             ScAddress aPos = maPos;
             aPos.SetTab(nTab);
-            // edit text wil be cloned.
+            
             pDoc->SetEditText(aPos, *mpNewEditData, NULL);
         }
         else
@@ -343,7 +343,7 @@ ScUndoEnterValue::~ScUndoEnterValue()
 
 OUString ScUndoEnterValue::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
+    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); 
 }
 
 void ScUndoEnterValue::SetChangeTrack()
@@ -355,7 +355,7 @@ void ScUndoEnterValue::SetChangeTrack()
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
         pChangeTrack->AppendContent(aPos, maOldCell);
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nothing is appended
+            nEndChangeAction = 0;       
     }
     else
         nEndChangeAction = 0;
@@ -394,7 +394,7 @@ void ScUndoEnterValue::Redo()
 
 void ScUndoEnterValue::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    // makes no sense
+    
 }
 
 bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -435,7 +435,7 @@ void ScUndoSetCell::Redo()
 
 void ScUndoSetCell::Repeat( SfxRepeatTarget& /*rTarget*/ )
 {
-    // Makes no sense.
+    
 }
 
 bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
@@ -445,7 +445,7 @@ bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 
 OUString ScUndoSetCell::GetComment() const
 {
-    return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
+    return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); 
 }
 
 void ScUndoSetCell::SetChangeTrack()
@@ -459,7 +459,7 @@ void ScUndoSetCell::SetChangeTrack()
         pChangeTrack->AppendContent(maPos, maOldValue);
 
         if (mnEndChangeAction > pChangeTrack->GetActionMax())
-            mnEndChangeAction = 0;       // Nothing is appended
+            mnEndChangeAction = 0;       
     }
     else
         mnEndChangeAction = 0;
@@ -472,7 +472,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
     switch (rVal.meType)
     {
         case CELLTYPE_NONE:
-            // empty cell
+            
             pDoc->SetEmptyCell(maPos);
         break;
         case CELLTYPE_VALUE:
@@ -514,7 +514,7 @@ ScUndoPageBreak::~ScUndoPageBreak()
 
 OUString ScUndoPageBreak::GetComment() const
 {
-    //"Column break" | "Row break"  "insert" | "delete"
+    
     return OUString ( bColumn ?
         ( bInsert ?
             ScGlobal::GetRscString( STR_UNDO_INSCOLBREAK ) :
@@ -682,7 +682,7 @@ ScUndoThesaurus::~ScUndoThesaurus()
 
 OUString ScUndoThesaurus::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    // "Thesaurus"
+    return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    
 }
 
 void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
@@ -693,7 +693,7 @@ void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
         pChangeTrack->AppendContent(ScAddress(nCol, nRow, nTab), rOldCell);
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nothing is appended
+            nEndChangeAction = 0;       
     }
     else
         nEndChangeAction = 0;
@@ -715,14 +715,14 @@ void ScUndoThesaurus::DoChange( bool bUndo, const OUString& rStr,
 
     if (pTObj)
     {
-        // This is edit text.
+        
         if (pDoc->GetCellType(aPos) == CELLTYPE_EDIT)
         {
             ScCellValue aOldCell;
             if (!bUndo)
                 aOldCell.assign(*pDoc, aPos);
 
-            // A copy of pTObj will be stored in the cell.
+            
             pDoc->SetEditText(aPos, *pTObj, pDoc->GetEditPool());
 
             if ( !bUndo )
@@ -735,7 +735,7 @@ void ScUndoThesaurus::DoChange( bool bUndo, const OUString& rStr,
     }
     else
     {
-        // This is simple unformatted string.
+        
         ScCellValue aOldCell;
         if (!bUndo)
             aOldCell.assign(*pDoc, aPos);
@@ -966,7 +966,7 @@ void ScUndoDetective::Undo()
     }
     else
     {
-        // Remove entry from list
+        
 
         ScDetOpList* pList = pDoc->GetDetOpList();
         if (pList && pList->Count())
@@ -984,7 +984,7 @@ void ScUndoDetective::Undo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->RecalcPPT();    //! use broadcast instead?
+        pViewShell->RecalcPPT();    
 
     EndUndo();
 }
@@ -1004,14 +1004,14 @@ void ScUndoDetective::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->RecalcPPT();    //! use broadcast instead?
+        pViewShell->RecalcPPT();    
 
     EndRedo();
 }
 
 void ScUndoDetective::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    // makes no sense
+    
 }
 
 bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -1042,7 +1042,7 @@ OUString ScUndoRangeNames::GetComment() const
 void ScUndoRangeNames::DoChange( bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->CompileNameFormula( true );   // CreateFormulaString
+    pDoc->CompileNameFormula( true );   
 
     if ( bUndo )
     {
@@ -1059,7 +1059,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
             pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
     }
 
-    pDoc->CompileNameFormula( false );  // CompileFormulaString
+    pDoc->CompileNameFormula( false );  
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }
@@ -1080,7 +1080,7 @@ void ScUndoRangeNames::Redo()
 
 void ScUndoRangeNames::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    // makes no sense
+    
 }
 
 bool ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const

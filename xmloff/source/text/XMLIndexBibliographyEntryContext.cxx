@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLIndexBibliographyEntryContext.hxx"
@@ -65,7 +65,7 @@ const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },
     { XML_AUTHOR,               BibliographyDataField::AUTHOR },
     { XML_BIBLIOGRAPHY_TYPE,    BibliographyDataField::BIBILIOGRAPHIC_TYPE },
-    // #96658#: also read old documents (bib*i*liographic...)
+    
     { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
     { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
     { XML_CHAPTER,              BibliographyDataField::CHAPTER },
@@ -100,7 +100,7 @@ const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
 void XMLIndexBibliographyEntryContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // handle both, style name and bibliography info
+    
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
@@ -129,19 +129,19 @@ void XMLIndexBibliographyEntryContext::StartElement(
         }
     }
 
-    // if we have a style name, set it!
+    
     if (bCharStyleNameOK)
     {
         nValues++;
     }
 
-    // always bibliography; else element is not valid
+    
     nValues++;
 }
 
 void XMLIndexBibliographyEntryContext::EndElement()
 {
-    // only valid, if we have bibliography info
+    
     if (bBibliographyInfoOK)
     {
         XMLIndexSimpleEntryContext::EndElement();
@@ -152,10 +152,10 @@ void XMLIndexBibliographyEntryContext::FillPropertyValues(
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue> & rValues)
 {
-    // entry name and (optionally) style name in parent class
+    
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
-    // bibliography data field
+    
     sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
     rValues[nIndex].Name = rTemplateContext.sBibliographyDataField;
     Any aAny;

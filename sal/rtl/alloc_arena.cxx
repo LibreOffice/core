@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "alloc_arena.hxx"
@@ -114,7 +114,7 @@ rtl_arena_segment_destructor (void * obj)
         obj);
     assert(QUEUE_STARTED_NAMED(segment, s));
     assert(QUEUE_STARTED_NAMED(segment, f));
-    (void) segment; // avoid warnings
+    (void) segment; 
 }
 
 /* ================================================================= */
@@ -292,14 +292,14 @@ rtl_arena_hash_rescale (
         old_table = arena->m_hash_table;
         old_size  = arena->m_hash_size;
 
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_arena_hash_rescale(" << arena->m_name << "): nseg: "
-        //      << (arena->m_stats.m_alloc - arena->m_stats.m_free) << " (ave: "
-        //      << ((arena->m_stats.m_alloc - arena->m_stats.m_free)
-        //          >> arena->m_hash_shift)
-        //      << "), frees: " << arena->m_stats.m_free << " [old_size: "
-        //      << old_size << ", new_size: " << new_size << ']');
+        
+        
+        
+        
+        
+        
+        
+        
 
         arena->m_hash_table = new_table;
         arena->m_hash_size  = new_size;
@@ -380,11 +380,11 @@ rtl_arena_hash_remove (
         segpp = &(segment->m_fnext);
     }
 
-    assert(segment != 0); // bad free
+    assert(segment != 0); 
     if (segment != 0)
     {
         assert(segment->m_size == size);
-        (void) size; // avoid warnings
+        (void) size; 
 
         arena->m_stats.m_free      += 1;
         arena->m_stats.m_mem_alloc -= segment->m_size;
@@ -769,22 +769,22 @@ rtl_arena_deactivate (
     }
 
     /* check for leaked segments */
-    // SAL_INFO(
-    //  "sal.rtl",
-    //  "rtl_arena_deactivate(" << arena->m_name << "): allocs: "
-    //      << arena->m_stats.m_alloc << ", frees: " << arena->m_stats.m_free
-    //      << "; total: " << arena->m_stats.m_mem_total << ", used: "
-    //      << arena->m_stats.m_mem_alloc);
+    
+    
+    
+    
+    
+    
     if (arena->m_stats.m_alloc > arena->m_stats.m_free)
     {
         sal_Size i, n;
 
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_arena_deactivate(" << arena->m_name << "): cleaning up "
-        //      << (arena->m_stats.m_alloc - arena->m_stats.m_free)
-        //      << " leaked segment(s) [" << arena->m_stats.m_mem_alloc
-        //      << " bytes]");
+        
+        
+        
+        
+        
+        
 
         /* cleanup still used segment(s) */
         for (i = 0, n = arena->m_hash_size; i < n; i++)
@@ -861,7 +861,7 @@ rtl_arena_deactivate (
     }
 }
 
-} //namespace
+} 
 /* ================================================================= *
  *
  * arena implementation.
@@ -1211,7 +1211,7 @@ rtl_machdep_pagesize()
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
-} //namespace
+} 
 
 /* ================================================================= *
  *
@@ -1279,7 +1279,7 @@ rtl_arena_init()
         );
         assert(gp_arena_arena != 0);
     }
-    // SAL_INFO("sal.rtl", "rtl_arena_init completed");
+    
 }
 
 /* ================================================================= */
@@ -1296,17 +1296,17 @@ rtl_arena_fini()
 
         for (arena = head->m_arena_next; arena != head; arena = arena->m_arena_next)
         {
-            // SAL_INFO(
-            //  "sal.rtl",
-            //  "rtl_arena_fini(" << arena->m_name << "): allocs: "
-            //      << arena->m_stats.m_alloc << ", frees: "
-            //      << arena->m_stats.m_free << "; total: "
-            //      << arena->m_stats.m_mem_total << ", used: "
-            //      << arena->m_stats.m_mem_alloc);
+            
+            
+            
+            
+            
+            
+            
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
     }
-    // SAL_INFO("sal.rtl", "rtl_arena_fini completed");
+    
 }
 
 /* ================================================================= */

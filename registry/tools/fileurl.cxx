@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fileurl.hxx"
@@ -43,9 +43,9 @@ namespace tools
 OUString convertToFileUrl(char const * filename, sal_Int32 length)
 {
     OUString const uFileName(filename, length, osl_getThreadTextEncoding());
-    if (strncmp(filename, "file://", 7) == 0)
+    if (strncmp(filename, "file:
     {
-        // already a FileUrl.
+        
         return uFileName;
     }
 
@@ -54,7 +54,7 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
     {
         if ((filename[0] == '.') || (filename[0] != SEPARATOR))
         {
-            // relative path name.
+            
             OUString uWorkingDir;
             if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
             {
@@ -67,7 +67,7 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
         }
         else
         {
-            // absolute path name.
+            
             if (FileBase::getFileURLFromSystemPath(uFileName, uFileUrl) != FileBase::E_None)
             {
                 OSL_ASSERT(false);
@@ -77,7 +77,7 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
     return uFileUrl;
 }
 
-} // namespace tools
-} // namespace registry
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

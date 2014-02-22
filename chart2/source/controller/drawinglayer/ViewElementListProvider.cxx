@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ViewElementListProvider.hxx"
@@ -27,34 +27,34 @@
 #include <svx/unofill.hxx>
 #include <svx/unoapi.hxx>
 
-// header for class NameOrIndex
+
 #include <svx/xit.hxx>
-// header for class XFillBitmapItem
+
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflgrit.hxx>
-// header for class XLineStartItem
+
 #include <svx/xlnstit.hxx>
-// header for class XLineEndItem
+
 #include <svx/xlnedit.hxx>
 
-//oldChartModelWrapper
 
-// header for class SfxItemPool
+
+
 #include <svl/itempool.hxx>
-// header for class FontList
+
 #include <svtools/ctrltool.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
-// header for class SdrObject
+
 #include <svx/svdobj.hxx>
 
-//for creation of a symbol Graphic
-// header for class VirtualDevice
+
+
 #include <vcl/virdev.hxx>
-// header for class SdrView
+
 #include <svx/svdview.hxx>
 
 namespace chart
@@ -114,25 +114,25 @@ XBitmapListRef   ViewElementListProvider::GetBitmapList() const
     return XBitmapListRef();
 }
 
-//create chartspecific symbols for linecharts
+
 SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
     SdrObjList* m_pSymbolList = NULL;
-    uno::Reference< drawing::XShapes > m_xSymbols(NULL);//@todo this keeps the first drawinglayer alive ...
+    uno::Reference< drawing::XShapes > m_xSymbols(NULL);
     try
     {
         if(!m_pSymbolList || !m_pSymbolList->GetObjCount())
         {
-            //@todo use mutex
+            
 
-            //get shape factory
+            
             uno::Reference< lang::XMultiServiceFactory > xShapeFactory( m_pDrawModelWrapper->getShapeFactory() );
 
-            //get hidden draw page (target):
+            
             uno::Reference<drawing::XShapes> xTarget( m_pDrawModelWrapper->getHiddenDrawPage(), uno::UNO_QUERY );
 
-            //create symbols via uno and convert to native sdr objects
-            drawing::Direction3D aSymbolSize(220,220,0); // should be 250, but 250 -> 280 ??
+            
+            drawing::Direction3D aSymbolSize(220,220,0); 
             m_xSymbols =  DataPointSymbolSupplier::create2DSymbolList( xShapeFactory, xTarget, aSymbolSize );
 
             SdrObject* pSdrObject = DrawViewWrapper::getSdrObject( uno::Reference< drawing::XShape >( m_xSymbols, uno::UNO_QUERY ) );
@@ -193,8 +193,8 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
 
 FontList* ViewElementListProvider::getFontList() const
 {
-    //was old chart:
-    //SvxFontListItem* SfxObjectShell::.GetItem(SID_ATTR_CHAR_FONTLIST)
+    
+    
 
     if(!m_pFontList)
     {
@@ -206,6 +206,6 @@ FontList* ViewElementListProvider::getFontList() const
     }
     return m_pFontList;
 }
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

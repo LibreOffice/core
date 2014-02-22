@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartDropTargetHelper.hxx"
@@ -54,7 +54,7 @@ namespace
     return aResult;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -84,7 +84,7 @@ sal_Int8 ChartDropTargetHelper::AcceptDrop( const AcceptDropEvent& rEvt )
         satisfiesPrerequisites() &&
         IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) )
     {
-        // @todo: check if the data is suitable. Is this possible without XTransferable?
+        
         nResult = rEvt.mnAction;
     }
 
@@ -118,9 +118,9 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                             m_xChartDocument.is())
                         {
                             bool bDataComesFromParent = true;
-                            // @todo: get the title somehow and compare it to
-                            // aDocName if successful (the document is the
-                            // parent)
+                            
+                            
+                            
                             if( bDataComesFromParent )
                             {
                                 Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
@@ -146,14 +146,14 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                     }
                                     if( pCellRange )
                                     {
-                                        // copy means add ranges, move means replace
+                                        
                                         if( rEvt.mnAction == DND_ACTION_COPY )
                                         {
-                                            // @todo: using implcit knowledge that ranges can be
-                                            // merged with ";". This should be done more general
+                                            
+                                            
                                             pCellRange->Value <<= (aOldRange + ";" + aRangeString );
                                         }
-                                        // move means replace range
+                                        
                                         else
                                         {
                                             pCellRange->Value <<= aRangeString;
@@ -162,7 +162,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                         xDataSource.set( xDataProvider->createDataSource( aArguments ));
                                         xDiagram->setDiagramData( xDataSource, aArguments );
 
-                                        // always return copy state to avoid deletion of the dragged range
+                                        
                                         nResult = DND_ACTION_COPY;
                                     }
                                 }
@@ -176,6 +176,6 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nResult;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

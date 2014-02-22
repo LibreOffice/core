@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "workbooksettings.hxx"
@@ -34,7 +34,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sheet;
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::util;
 
 using ::oox::core::CodecHelper;
 
-// ============================================================================
+
 
 namespace {
 
@@ -58,14 +58,14 @@ const sal_uInt16 BIFF12_CALCPR_CALCONSAVE       = 0x0020;
 const sal_uInt16 BIFF12_CALCPR_CONCURRENT       = 0x0040;
 const sal_uInt16 BIFF12_CALCPR_MANUALPROC       = 0x0080;
 
-// no predefined constants for show objects mode
-const sal_Int16 API_SHOWMODE_SHOW               = 0;        /// Show drawing objects.
-const sal_Int16 API_SHOWMODE_HIDE               = 1;        /// Hide drawing objects.
-const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        /// Show placeholders for drawing objects.
 
-} // namespace
+const sal_Int16 API_SHOWMODE_SHOW               = 0;        
+const sal_Int16 API_SHOWMODE_HIDE               = 1;        
+const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        
 
-// ============================================================================
+} 
+
+
 
 FileSharingModel::FileSharingModel() :
     mnPasswordHash( 0 ),
@@ -73,7 +73,7 @@ FileSharingModel::FileSharingModel() :
 {
 }
 
-// ============================================================================
+
 
 WorkbookSettingsModel::WorkbookSettingsModel() :
     mnShowObjectMode( XML_all ),
@@ -91,7 +91,7 @@ void WorkbookSettingsModel::setBiffObjectMode( sal_uInt16 nObjMode )
     mnShowObjectMode = STATIC_ARRAY_SELECT( spnObjModes, nObjMode, XML_all );
 }
 
-// ============================================================================
+
 
 CalcSettingsModel::CalcSettingsModel() :
     mfIterateDelta( 0.001 ),
@@ -109,7 +109,7 @@ CalcSettingsModel::CalcSettingsModel() :
 {
 }
 
-// ============================================================================
+
 
 WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -159,7 +159,7 @@ void WorkbookSettings::importWorkbookPr( SequenceInputStream& rStrm )
     sal_uInt32 nFlags;
     rStrm >> nFlags >> maBookSettings.mnDefaultThemeVer >> maBookSettings.maCodeName;
     maBookSettings.setBiffObjectMode( extractValue< sal_uInt16 >( nFlags, 13, 2 ) );
-    // set flag means: strip external link values
+    
     maBookSettings.mbSaveExtLinkValues = !getFlag( nFlags, BIFF12_WORKBOOKPR_STRIPEXT );
     setDateMode( getFlag( nFlags, BIFF12_WORKBOOKPR_DATE1904 ) );
 }
@@ -183,20 +183,20 @@ void WorkbookSettings::importCalcPr( SequenceInputStream& rStrm )
 
 void WorkbookSettings::finalizeImport()
 {
-    // default settings
+    
     PropertySet aPropSet( getDocument() );
     switch( getFilterType() )
     {
         case FILTER_OOXML:
         case FILTER_BIFF:
-            aPropSet.setProperty( PROP_IgnoreCase,          true );     // always in Excel
-            aPropSet.setProperty( PROP_RegularExpressions,  false );    // not supported in Excel
+            aPropSet.setProperty( PROP_IgnoreCase,          true );     
+            aPropSet.setProperty( PROP_RegularExpressions,  false );    
         break;
         case FILTER_UNKNOWN:
         break;
     }
 
-    // write protection
+    
     if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) ) try
     {
         getBaseFilter().getMediaDescriptor()[ "ReadOnly" ] <<= true;
@@ -206,14 +206,14 @@ void WorkbookSettings::finalizeImport()
         PropertySet aSettingsProp( xDocumentSettings );
         if( maFileSharing.mbRecommendReadOnly )
             aSettingsProp.setProperty( PROP_LoadReadonly, true );
-//        if( maFileSharing.mnPasswordHash != 0 )
-//            aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+
+
     }
     catch( Exception& )
     {
     }
 
-    // calculation settings
+    
     css::util::Date aNullDate = getNullDate();
 
     aPropSet.setProperty( PROP_NullDate,           aNullDate );
@@ -234,7 +234,7 @@ void WorkbookSettings::finalizeImport()
     if( xCalculatable.is() )
         xCalculatable->enableAutomaticCalculation( (maCalcSettings.mnCalcMode == XML_auto) || (maCalcSettings.mnCalcMode == XML_autoNoTable) );
 
-    // VBA code name
+    
     aPropSet.setProperty( PROP_CodeName, maBookSettings.maCodeName );
 }
 
@@ -244,7 +244,7 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
     {
         case XML_all:           return API_SHOWMODE_SHOW;
         case XML_none:          return API_SHOWMODE_HIDE;
-        // #i80528# placeholders not supported anymore, but this is handled internally in Calc
+        
         case XML_placeholders:  return API_SHOWMODE_PLACEHOLDER;
     }
     return API_SHOWMODE_SHOW;
@@ -276,9 +276,9 @@ void WorkbookSettings::setDateMode( bool bDateMode1904, bool bDateCompatibility 
     getUnitConverter().finalizeNullDate( getNullDate() );
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,10 +38,10 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::task::XInteractionHandler;
@@ -67,9 +67,9 @@ namespace sfx2
 
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 
-    //====================================================================
-    //= DocumentMacroMode_Data
-    //====================================================================
+    
+    
+    
     struct DocumentMacroMode_Data
     {
         IMacroDocumentAccess&       m_rDocumentAccess;
@@ -84,12 +84,12 @@ namespace sfx2
         }
     };
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    
+    
+    
     namespace
     {
-        //................................................................
+        
         void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, const sal_Int32 nSfxErrorCode, sal_Bool& rbAlreadyShown )
         {
             if ( rbAlreadyShown )
@@ -102,13 +102,13 @@ namespace sfx2
             rbAlreadyShown = sal_True;
         }
 
-        //................................................................
+        
         void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
         {
             lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_MACROS_SUPPORT_DISABLED, rbAlreadyShown );
         }
 
-        //................................................................
+        
         void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
         {
 #ifdef MACOSX
@@ -118,7 +118,7 @@ namespace sfx2
 #endif
         }
 
-        //................................................................
+        
         sal_Bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
             const OUString& rDocumentLocation )
         {
@@ -128,47 +128,47 @@ namespace sfx2
         }
     }
 
-    //====================================================================
-    //= DocumentMacroMode
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
         :m_pData( new DocumentMacroMode_Data( rDocumentAccess ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     DocumentMacroMode::~DocumentMacroMode()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::allowMacroExecution()
     {
         m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::disallowMacroExecution()
     {
         m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
     {
         sal_uInt16 nMacroExecutionMode = m_pData->m_rDocumentAccess.getCurrentMacroExecMode();
 
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
-            // no macro should be executed at all
+            
             lcl_showMacrosDisabledError( rxInteraction, m_pData->m_bMacroDisabledMessageShown );
             return disallowMacroExecution();
         }
 
-        // get setting from configuration if required
+        
         enum AutoConfirmation
         {
             eNoAutoConfirm,
@@ -218,8 +218,8 @@ namespace sfx2
         {
             OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
 
-            // get document location from medium name and check whether it is a trusted one
-            // the service is created ohne document version, since it is not of interest here
+            
+            
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
             INetURLObject aURLReferer( sReferrer );
 
@@ -232,23 +232,23 @@ namespace sfx2
                 return allowMacroExecution();
             }
 
-            // at this point it is clear that the document is not in the secure location
+            
             if ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
             {
                 lcl_showDocumentMacrosDisabledError( rxInteraction, m_pData->m_bDocMacroDisabledMessageShown );
                 return disallowMacroExecution();
             }
 
-            // check whether the document is signed with trusted certificate
+            
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
-                // the trusted macro check will also retrieve the signature state ( small optimization )
+                
                 sal_Bool bHasTrustedMacroSignature = m_pData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
 
                 sal_uInt16 nSignatureState = m_pData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
                 {
-                    // the signature is broken, no macro execution
+                    
                     if ( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                         m_pData->m_rDocumentAccess.showBrokenSignatureWarning( rxInteraction );
 
@@ -256,18 +256,18 @@ namespace sfx2
                 }
                 else if ( bHasTrustedMacroSignature )
                 {
-                    // there is trusted macro signature, allow macro execution
+                    
                     return allowMacroExecution();
                 }
                 else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK
                        || nSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
                 {
-                    // there is valid signature, but it is not from the trusted author
+                    
                     return disallowMacroExecution();
                 }
             }
 
-            // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
+            
             if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
                 )
@@ -289,7 +289,7 @@ namespace sfx2
             }
         }
 
-        // conformation is required
+        
         sal_Bool bSecure = sal_False;
 
         if ( eAutoConfirm == eNoAutoConfirm )
@@ -308,13 +308,13 @@ namespace sfx2
         return ( bSecure ? allowMacroExecution() : disallowMacroExecution() );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::isMacroExecutionDisallowed() const
     {
         return m_pData->m_rDocumentAccess.getCurrentMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::containerHasBasicMacros( const Reference< XLibraryContainer >& xContainer )
     {
         sal_Bool bHasMacroLib = sal_False;
@@ -322,10 +322,10 @@ namespace sfx2
         {
             if ( xContainer.is() )
             {
-                // a library container exists; check if it's empty
+                
 
-                // if there are libraries except the "Standard" library
-                // we assume that they are not empty (because they have been created by the user)
+                
+                
                 if ( !xContainer->hasElements() )
                     bHasMacroLib = sal_False;
                 else
@@ -361,7 +361,7 @@ namespace sfx2
         return bHasMacroLib;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::hasMacroLibrary() const
     {
         sal_Bool bHasMacroLib = sal_False;
@@ -383,7 +383,7 @@ namespace sfx2
         return bHasMacroLib;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& rxStorage )
     {
         sal_Bool bHasMacros = sal_False;
@@ -410,13 +410,13 @@ namespace sfx2
         return bHasMacros;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction )
     {
         sal_Bool bAllow = sal_False;
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
-            // no macro should be executed at all
+            
             bAllow = disallowMacroExecution();
         }
         else
@@ -427,15 +427,15 @@ namespace sfx2
             }
             else if ( !isMacroExecutionDisallowed() )
             {
-                // if macros will be added by the user later, the security check is obsolete
+                
                 bAllow = allowMacroExecution();
             }
         }
         return bAllow;
     }
 
-//........................................................................
-} // namespace sfx2
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

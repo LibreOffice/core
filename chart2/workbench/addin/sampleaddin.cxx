@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "sampleaddin.hxx"
 
@@ -30,7 +30,7 @@
 
 using namespace com::sun::star;
 
-// code for creating instances of SampleAddIn
+
 
 extern "C" {
 
@@ -87,9 +87,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}   
 
-// class SampleAddIn
+
 
 SampleAddIn::SampleAddIn()
 {
@@ -99,7 +99,7 @@ SampleAddIn::SampleAddIn()
 SampleAddIn::~SampleAddIn()
 {}
 
-// this functionality should be provided by the chart API some day
+
 sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAxis,
                                           double fValue,
                                           sal_Bool bVertical,
@@ -133,7 +133,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
                     if( bVertical )
                     {
                         aOutPosition.X = aPos.X;
-                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));    // y scale goes from top to bottom
+                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));    
                     }
                     else
                     {
@@ -145,7 +145,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
             }
             catch( const beans::UnknownPropertyException& )
             {
-                // the shape xAxis was no chart axis
+                
             }
         }
     }
@@ -178,13 +178,13 @@ uno::Reference< uno::XInterface > SAL_CALL SampleAddIn_CreateInstance(
     return xInst;
 }
 
-// implementation of interface methods
 
-// XInitialization
+
+
 void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
 {
-    // first argument should be the XChartDocument
+    
     OSL_ENSURE( aArguments.getLength() > 0, "Please initialize Chart AddIn with ChartDocument!" );
 
     if( aArguments.getLength())
@@ -192,7 +192,7 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
         aArguments[ 0 ] >>= mxChartDoc;
         OSL_ENSURE( mxChartDoc.is(), "First argument in initialization is not an XChartDocument!" );
 
-        // set XY chart as base type to be drawn
+        
         uno::Reference< beans::XPropertySet > xDocProp( mxChartDoc, uno::UNO_QUERY );
         if( xDocProp.is())
         {
@@ -206,7 +206,7 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
             {}
         }
 
-        // change background of plot area to light blue
+        
         uno::Reference< chart::X3DDisplay > xWallSupplier( mxChartDoc->getDiagram(), uno::UNO_QUERY );
         if( xWallSupplier.is())
         {
@@ -224,7 +224,7 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 }
 
-// XRefreshable
+
 /********************************************************************************
  *
  * The method refresh is the most important method - here all objects that
@@ -239,7 +239,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
     if( ! mxChartDoc.is())
         return;
 
-    // first of all get the draw page
+    
     uno::Reference< drawing::XDrawPageSupplier > xPageSupp( mxChartDoc, uno::UNO_QUERY );
     uno::Reference< lang::XMultiServiceFactory > xFactory( mxChartDoc, uno::UNO_QUERY );
     if( xPageSupp.is() &&
@@ -248,19 +248,19 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
         uno::Reference< drawing::XDrawPage > xPage = xPageSupp->getDrawPage();
         if( xPage.is())
         {
-            // now we have the page to insert objects
+            
 
-            // add a horizontal line at the middle value of the first series
+            
 
-            // get the logical position from the coordinate
-            // get x- and y-axis
+            
+            
             uno::Reference< drawing::XShape > xYAxisShape( getYAxis(), uno::UNO_QUERY );
             uno::Reference< drawing::XShape > xXAxisShape( getXAxis(), uno::UNO_QUERY );
 
             if( xXAxisShape.is() &&
                 xYAxisShape.is() )
             {
-                // create line first time
+                
                 if( ! mxMyRedLine.is())
                 {
                     mxMyRedLine = uno::Reference< drawing::XShape >(
@@ -268,13 +268,13 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                         uno::UNO_QUERY );
                     xPage->add( mxMyRedLine );
 
-                    // make line red and thick
+                    
                     uno::Reference< beans::XPropertySet > xShapeProp( mxMyRedLine, uno::UNO_QUERY );
                     if( xShapeProp.is())
                     {
                         uno::Any aColor, aWidth;
                         aColor <<= (sal_Int32)(0xe01010);
-                        aWidth <<= (sal_Int32)(50);         // 0.5 mm
+                        aWidth <<= (sal_Int32)(50);         
                         try
                         {
                             xShapeProp->setPropertyValue( "LineColor" , aColor );
@@ -284,7 +284,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                         {}
                     }
                 }
-                // create text object first time
+                
                 if( ! mxMyText.is())
                 {
                     mxMyText = uno::Reference< drawing::XShape >(
@@ -292,7 +292,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                         uno::UNO_QUERY );
                     xPage->add( mxMyText );
 
-                    // change text
+                    
                     OUString aText( "Little Example" );
                     uno::Reference< beans::XPropertySet > xTextProp( mxMyText, uno::UNO_QUERY );
                     if( xTextProp.is())
@@ -314,23 +314,23 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     }
                 }
 
-                // position line and text
+                
 
-                // get the array. Note: the first dimension is the length
-                // of each series and the second one is the number of series
-                // this should be changed in the future
+                
+                
+                
                 uno::Sequence< uno::Sequence< double > > aData;
                 uno::Reference< chart::XChartData > xData = mxChartDoc->getData();
                 uno::Reference< chart::XChartDataArray > xDataArray( xData, uno::UNO_QUERY );
                 if( xDataArray.is())
                     aData = xDataArray->getData();
 
-                // get row count == length of each series
+                
                 sal_Int32 nSize = aData.getLength();
                 sal_Int32 nMiddle = nSize / 2;
-                // get value for first series
-                double fMiddleVal = xData->getNotANumber();     // set to NaN
-                if( aData[ nMiddle ].getLength())               // we have at least one series
+                
+                double fMiddleVal = xData->getNotANumber();     
+                if( aData[ nMiddle ].getLength())               
                     fMiddleVal = aData[ nMiddle ][ 0 ];
 
                 awt::Point aPos;
@@ -357,7 +357,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 }
                 if( mxMyText.is())
                 {
-                    // put the text centered below the red line
+                    
                     aPos.X += ( aSize.Width - mxMyRedLine->getPosition().X ) / 2;
                     aPos.Y += 1000;
                     aPos.Y += static_cast<sal_Int32>(0.1 * xYAxisShape->getSize().Height);
@@ -371,24 +371,24 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
 void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )
     throw( uno::RuntimeException )
 {
-    // not implemented - this is not necessary
-    // (this method exists just because the interface requires it)
+    
+    
 }
 
 void SAL_CALL SampleAddIn::removeRefreshListener( const uno::Reference< util::XRefreshListener >&  )
     throw( uno::RuntimeException )
 {
-    // not implemented - this is not necessary
-    // (this method exists just because the interface requires it)
+    
+    
 }
 
-// XDiagram
+
 OUString SAL_CALL SampleAddIn::getDiagramType() throw( uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleDiagram";
 }
 
-// the following methods just delegate to the "parent diagram" (which in the future might no longer exist)
+
 
 uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDataRowProperties( sal_Int32 nRow )
     throw( lang::IndexOutOfBoundsException,
@@ -418,7 +418,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDataPointProperti
     return uno::Reference< beans::XPropertySet >();
 }
 
-// XShape ( ::XDiagram )
+
 awt::Size SAL_CALL SampleAddIn::getSize()
     throw( uno::RuntimeException )
 {
@@ -467,13 +467,13 @@ void SAL_CALL SampleAddIn::setPosition( const awt::Point& aPos )
     }
 }
 
-// XShapeDescriptor ( ::XShape ::XDiagram )
+
 OUString SAL_CALL SampleAddIn::getShapeType() throw( com::sun::star::uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddinShape";
 }
 
-// XAxisXSupplier
+
 uno::Reference< drawing::XShape > SAL_CALL SampleAddIn::getXAxisTitle()
     throw( uno::RuntimeException )
 {
@@ -526,7 +526,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXHelpGrid()
     return uno::Reference< beans::XPropertySet >();
 }
 
-// XAxisYSupplier
+
 uno::Reference< drawing::XShape > SAL_CALL SampleAddIn::getYAxisTitle()
     throw( uno::RuntimeException )
 {
@@ -579,7 +579,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYHelpGrid()
     return uno::Reference< beans::XPropertySet >();
 }
 
-// XStatisticDisplay
+
 uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getUpBar()
     throw( uno::RuntimeException )
 {
@@ -619,13 +619,13 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getMinMaxLine()
     return uno::Reference< beans::XPropertySet >();
 }
 
-// XServiceName
+
 OUString SAL_CALL SampleAddIn::getServiceName() throw( uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddIn";
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SampleAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -643,7 +643,7 @@ uno::Sequence< OUString > SAL_CALL SampleAddIn::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-// XLocalizable
+
 void SAL_CALL SampleAddIn::setLocale( const lang::Locale& eLocale )
     throw( uno::RuntimeException )
 {

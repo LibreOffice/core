@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fumorph.hxx"
@@ -40,7 +40,7 @@
 
 #include "sdabstdlg.hxx"
 
-// #i48168#
+
 #include <svx/svditer.hxx>
 
 #include <basegfx/color/bcolor.hxx>
@@ -80,17 +80,17 @@ void FuMorph::DoExecute( SfxRequest& )
 
     if(rMarkList.GetMarkCount() == 2)
     {
-        // create clones
+        
         SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
         SdrObject*  pCloneObj1 = pObj1->Clone();
         SdrObject*  pCloneObj2 = pObj2->Clone();
 
-        // delete text at clone, otherwise we do net get a correct PathObj
+        
         pCloneObj1->SetOutlinerParaObject(NULL);
         pCloneObj2->SetOutlinerParaObject(NULL);
 
-        // create path objects
+        
         SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
         SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -103,8 +103,8 @@ void FuMorph::DoExecute( SfxRequest& )
 
             pDlg->SaveSettings();
 
-            // #i48168# Not always is the pPolyObj1/pPolyObj2 a SdrPathObj, it may also be a group object
-            // containing SdrPathObjs. To get the polygons, i add two iters here
+            
+            
             SdrObjListIter aIter1(*pPolyObj1);
             SdrObjListIter aIter2(*pPolyObj2);
 
@@ -122,7 +122,7 @@ void FuMorph::DoExecute( SfxRequest& )
                     aPolyPoly2.append(((SdrPathObj*)pObj)->GetPathPoly());
             }
 
-            // perform morphing
+            
             if(aPolyPoly1.count() && aPolyPoly2.count())
             {
                 aPolyPoly1 = ::basegfx::tools::correctOrientations(aPolyPoly1);
@@ -133,21 +133,21 @@ void FuMorph::DoExecute( SfxRequest& )
                 aPolyPoly2.removeDoublePoints();
                 ::basegfx::B2VectorOrientation eIsClockwise2(::basegfx::tools::getOrientation(aPolyPoly2.getB2DPolygon(0L)));
 
-                // set same orientation
+                
                 if(eIsClockwise1 != eIsClockwise2)
                     aPolyPoly2.flip();
 
-                // force same poly count
+                
                 if(aPolyPoly1.count() < aPolyPoly2.count())
                     ImpAddPolys(aPolyPoly1, aPolyPoly2);
                 else if(aPolyPoly2.count() < aPolyPoly1.count())
                     ImpAddPolys(aPolyPoly2, aPolyPoly1);
 
-                // use orientation flag from dialog
+                
                 if(!pDlg->IsOrientationFade())
                     aPolyPoly2.flip();
 
-                // force same point counts
+                
                 for( sal_uInt32 a(0L); a < aPolyPoly1.count(); a++ )
                 {
                     ::basegfx::B2DPolygon aSub1(aPolyPoly1.getB2DPolygon(a));
@@ -193,7 +193,7 @@ void FuMorph::DoExecute( SfxRequest& )
 {
     if(rCandidate.count() && nNum && rCandidate.count() != nNum)
     {
-        // length of step in dest poly
+        
         ::basegfx::B2DPolygon aRetval;
         const double fStep(::basegfx::tools::getLength(rCandidate) / (double)(rCandidate.isClosed() ? nNum : nNum - 1L));
         double fDestPos(0.0);
@@ -204,7 +204,7 @@ void FuMorph::DoExecute( SfxRequest& )
 
         for(sal_uInt32 b(0L); b < nNum; b++)
         {
-            // calc fDestPos in source
+            
             while(fSrcPos + fNextSrcLen < fDestPos)
             {
                 fSrcPos += fNextSrcLen;
@@ -213,14 +213,14 @@ void FuMorph::DoExecute( SfxRequest& )
                 fNextSrcLen = ::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength();
             }
 
-            // fDestPos is between fSrcPos and (fSrcPos + fNextSrcLen)
+            
             const double fLenA((fDestPos - fSrcPos) / fNextSrcLen);
             const ::basegfx::B2DPoint aOld1(rCandidate.getB2DPoint(nSrcPos));
             const ::basegfx::B2DPoint aOld2(rCandidate.getB2DPoint(nSrcPosNext));
             ::basegfx::B2DPoint aNewPoint(basegfx::interpolate(aOld1, aOld2, fLenA));
             aRetval.append(aNewPoint);
 
-            // next step
+            
             fDestPos += fStep;
         }
 
@@ -245,11 +245,11 @@ void FuMorph::ImpEqualizePolyPointCount(
     const ::basegfx::B2DPolygon& rBig
 )
 {
-    // create poly with equal point count
+    
     const sal_uInt32 nCnt(rBig.count());
     ::basegfx::B2DPolygon aPoly1(ImpGetExpandedPolygon(rSmall, nCnt));
 
-    // create transformation for rBig to do the compare
+    
     const ::basegfx::B2DRange aSrcSize(::basegfx::tools::getRange(rBig));
     const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
     const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmall));
@@ -259,7 +259,7 @@ void FuMorph::ImpEqualizePolyPointCount(
     aTrans.scale(aDstSize.getWidth() / aSrcSize.getWidth(), aDstSize.getHeight() / aSrcSize.getHeight());
     aTrans.translate(aDstPos.getX(), aDstPos.getY());
 
-    // transpose points to have smooth linear blending
+    
     ::basegfx::B2DPolygon aPoly2;
     aPoly2.append(::basegfx::B2DPoint(), nCnt);
     sal_uInt32 nInd(ImpGetNearestIndex(aPoly1, aTrans * rBig.getB2DPoint(0L)));
@@ -407,7 +407,7 @@ void FuMorph::ImpInsertPolygons(
             const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *rPolyPolyList3D[ i ];
             SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
 
-            // line color
+            
             if ( bLineColor )
             {
                 const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
@@ -416,7 +416,7 @@ void FuMorph::ImpInsertPolygons(
             else if ( bIgnoreLine )
                 aSet.Put( XLineStyleItem( XLINE_NONE ) );
 
-            // fill color
+            
             if ( bFillColor )
             {
                 const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
@@ -425,7 +425,7 @@ void FuMorph::ImpInsertPolygons(
             else if ( bIgnoreFill )
                 aSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-            // line width
+            
             if ( bLineWidth )
                 aSet.Put( XLineWidthItem( nStartLineWidth + (long) ( fFactor * fDelta + 0.5 ) ) );
 
@@ -514,6 +514,6 @@ sal_Bool FuMorph::ImpMorphPolygons(
     return sal_True;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

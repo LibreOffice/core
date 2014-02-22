@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itemprop.hxx>
@@ -28,7 +28,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =
@@ -54,7 +54,7 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
                 const OUString& aPropertyName, const uno::Any& aValue )
 {
-    //! use map (with new identifiers)
+    
 
     const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName(aPropertyName );
     if( !pEntry || !pEntry->nWID )
@@ -179,7 +179,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
     return aRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDocOptionsObj::ScDocOptionsObj( const ScDocOptions& rOpt ) :
     ScModelObj( NULL ),

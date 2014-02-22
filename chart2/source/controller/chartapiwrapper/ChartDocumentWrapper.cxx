@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartDocumentWrapper.hxx"
@@ -160,22 +160,22 @@ void lcl_AddPropertiesToVector(
         Property( "HasMainTitle",
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasSubTitle",
                   PROP_DOCUMENT_HAS_SUB_TITLE,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasLegend",
                   PROP_DOCUMENT_HAS_LEGEND,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // really needed?
+    
     rOutProperties.push_back(
         Property( "DataSourceLabelsInFirstRow",
                   PROP_DOCUMENT_LABELS_IN_FIRST_ROW,
@@ -186,10 +186,10 @@ void lcl_AddPropertiesToVector(
         Property( "DataSourceLabelsInFirstColumn",
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //add-in
+    
     rOutProperties.push_back(
         Property( "AddIn",
                   PROP_DOCUMENT_ADDIN,
@@ -213,10 +213,10 @@ void lcl_AddPropertiesToVector(
         Property( "RefreshAddInAllowed",
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::TRANSIENT ));
 
-    // table:null-date // i99104
+    
     rOutProperties.push_back(
         Property( "NullDate",
                   PROP_DOCUMENT_NULL_DATE,
@@ -227,13 +227,13 @@ void lcl_AddPropertiesToVector(
         Property( "DisableComplexChartTypes",
                   PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
                   ::getBooleanCppuType(),
-                  //#i112666# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
     rOutProperties.push_back(
         Property( "DisableDataTableDialog",
                   PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
                   ::getBooleanCppuType(),
-                  //#i112666# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
 }
 
@@ -262,14 +262,14 @@ struct StaticChartDocumentWrapperPropertyArray : public rtl::StaticAggregate< Se
 {
 };
 
-} //  anonymous namespace
+} 
 
 namespace chart
 {
 namespace wrapper
 {
 
-//PROP_DOCUMENT_LABELS_IN_FIRST_ROW
+
 class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 {
 public:
@@ -285,7 +285,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -367,7 +367,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
     return aRet;
 }
 
-//PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN
+
 class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 {
 public:
@@ -383,7 +383,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
@@ -465,7 +465,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
     return aRet;
 }
 
-//PROP_DOCUMENT_HAS_LEGEND
+
 class WrappedHasLegendProperty : public WrappedProperty
 {
 public:
@@ -481,7 +481,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
 
@@ -549,7 +549,7 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
     return aRet;
 }
 
-//PROP_DOCUMENT_HAS_MAIN_TITLE
+
 class WrappedHasMainTitleProperty : public WrappedProperty
 {
 public:
@@ -565,7 +565,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
 
@@ -622,7 +622,7 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
     return aRet;
 }
 
-//PROP_DOCUMENT_HAS_SUB_TITLE
+
 class WrappedHasSubTitleProperty : public WrappedProperty
 {
 public:
@@ -638,7 +638,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-private: //member
+private: 
     ::boost::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
 
@@ -708,18 +708,18 @@ ChartDocumentWrapper::~ChartDocumentWrapper()
     stopAllComponentListening();
 }
 
-// ____ XInterface (for new interfaces) ____
+
 uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException)
 {
     if( m_xDelegator.is())
-        // calls queryAggregation if the delegator doesn't know aType
+        
         return m_xDelegator->queryInterface( aType );
     else
         return queryAggregation( aType );
 }
 
-// ____ chart::XChartDocument (old API wrapper) ____
+
 Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
     throw (uno::RuntimeException)
 {
@@ -794,9 +794,9 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
     }
     else if( xDiagram.is() && xDiagram != m_xDiagram )
     {
-        // set new wrapped diagram at new chart.  This requires the old
-        // diagram given as parameter to implement the new interface.  If
-        // this is not possible throw an exception
+        
+        
+        
         Reference< chart2::XDiagramProvider > xNewDiaProvider( xDiagram, uno::UNO_QUERY_THROW );
         Reference< chart2::XDiagram > xNewDia( xNewDiaProvider->getDiagram());
 
@@ -805,7 +805,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
             Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
             if( xChartDoc.is() )
             {
-                // set the new diagram
+                
                 xChartDoc->setFirstDiagram( xNewDia );
                 m_xDiagram = xDiagram;
             }
@@ -824,7 +824,7 @@ Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
     {
         m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact ) );
     }
-    //@todo: check hasInternalDataProvider also in else?
+    
 
     return m_xChartData;
 }
@@ -835,13 +835,13 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
     if( !xNewData.is() )
         return;
 
-    // /-- locked controllers
+    
     ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
     m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact, xNewData ) );
-    // \-- locked controllers
+    
 }
 
-// ____ XModel ____
+
 sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
     const OUString& URL,
     const Sequence< beans::PropertyValue >& Arguments )
@@ -941,7 +941,7 @@ Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection(
     return 0;
 }
 
-// ____ XComponent ____
+
 void SAL_CALL ChartDocumentWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -977,7 +977,7 @@ void SAL_CALL ChartDocumentWrapper::dispose()
         }
         catch (const lang::DisposedException&)
         {
-            // this is ok, don't panic
+            
         }
     }
     catch (const uno::Exception &ex)
@@ -995,7 +995,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
     {
         try
         {
-            //make sure that the add-in does not hold a refernce to us anymore:
+            
             Reference< lang::XComponent > xComp( xAddIn, uno::UNO_QUERY );
             if( xComp.is())
                 xComp->dispose();
@@ -1051,7 +1051,7 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     impl_resetAddIn();
     m_xAddIn = xAddIn;
-    // initialize AddIn with this as chart document
+    
     uno::Reference< lang::XInitialization > xInit( m_xAddIn, uno::UNO_QUERY );
     if( xInit.is() )
     {
@@ -1074,7 +1074,7 @@ sal_Bool ChartDocumentWrapper::getUpdateAddIn() const
 
 Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 {
-    // get additional non-chart shapes for XML export
+    
     uno::Reference< drawing::XShapes > xFoundShapes;
     uno::Reference< drawing::XDrawPage > xDrawPage( this->impl_getDrawPage() );
 
@@ -1084,8 +1084,8 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 
     uno::Reference<drawing::XShapes> xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
 
-    // iterate 'flat' over all top-level objects
-    // and determine all that are no chart objects
+    
+    
     ::std::vector< uno::Reference< drawing::XShape > > aShapeVector;
     sal_Int32 nSubCount = xDrawPageShapes->getCount();
     uno::Reference< drawing::XShape > xShape;
@@ -1100,7 +1100,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 
     if( !aShapeVector.empty() )
     {
-        // create a shape collection
+        
         xFoundShapes = uno::Reference< drawing::XShapes >( drawing::ShapeCollection::create(
                     comphelper::getProcessComponentContext()), uno::UNO_QUERY );
 
@@ -1132,7 +1132,7 @@ void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::
         xModel->removeEventListener( aListener );
 }
 
-// ____ XDrawPageSupplier ____
+
 uno::Reference< drawing::XDrawPage > SAL_CALL ChartDocumentWrapper::getDrawPage()
     throw (uno::RuntimeException)
 {
@@ -1145,7 +1145,7 @@ uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() co
     return m_spChart2ModelContact->getDrawPage();
 }
 
-// ____ XMultiServiceFactory ____
+
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     const OUString& aServiceSpecifier )
     throw (uno::Exception,
@@ -1182,8 +1182,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             case SERVICE_NAME_BAR_DIAGRAM:
                 if( xManagerFact.is())
                 {
-                    // this is for bar and column (the latter is the default if
-                    // no "Vertical=false" property was set)
+                    
+                    
                     xTemplate.set(
                         xManagerFact->createInstance("com.sun.star.chart2.template.Column"),
                                 uno::UNO_QUERY );
@@ -1293,7 +1293,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
                 if( xDia.is())
                 {
-                    // locked controllers
+                    
                     Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
                     ControllerLockGuardUNO aCtrlLockGuard( xModel );
                     Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
@@ -1302,7 +1302,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
                         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
                     if( aTemplateWithService.first.is())
-                        aTemplateWithService.first->resetStyles( xDiagram );//#i109371#
+                        aTemplateWithService.first->resetStyles( xDiagram );
                     xTemplate->changeDiagram( xDiagram );
                     if( Application::GetSettings().GetMathLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
@@ -1310,7 +1310,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 }
                 else
                 {
-                    // locked controllers
+                    
                     ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
                     xDia.set( xTemplate->createDiagramByDataSource(
                                   uno::Reference< chart2::data::XDataSource >(),
@@ -1369,7 +1369,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     }
     else
     {
-        // try to create a shape
+        
         try
         {
             if( !m_xShapeFactory.is() && m_xChartView.is() )
@@ -1391,11 +1391,11 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         }
         catch (const uno::Exception&)
         {
-            // couldn't create shape
+            
         }
     }
 
-    // finally, try to create an addin
+    
     if( !bServiceFound )
     {
         try
@@ -1415,7 +1415,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         }
         catch (const uno::Exception&)
         {
-            // couldn't create service
+            
         }
     }
 
@@ -1448,7 +1448,7 @@ uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceName
 
 }
 
-// ____ XAggregation ____
+
 void SAL_CALL ChartDocumentWrapper::setDelegator(
     const uno::Reference< uno::XInterface >& rDelegator )
     throw (uno::RuntimeException)
@@ -1469,7 +1469,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     }
     else
     {
-        // this is a sort of dispose() from the new model,so release resources here
+        
         try
         {
             this->dispose();
@@ -1487,7 +1487,7 @@ uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType
     return ChartDocumentWrapper_Base::queryInterface( rType );
 }
 
-// ____ ::utl::OEventListenerAdapter ____
+
 void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 {
     if( rSource.Source == m_xTitle )
@@ -1508,7 +1508,7 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
         m_xChartView.set( 0 );
 }
 
-// WrappedPropertySet
+
 Reference< beans::XPropertySet > ChartDocumentWrapper::getInnerPropertySet()
 {
     return 0;
@@ -1530,7 +1530,7 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedBaseDiagramProperty( *this ) );
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); 
     aWrappedProperties.push_back( new WrappedIgnoreProperty("DisableComplexChartTypes", uno::makeAny( sal_False ) ) );
     aWrappedProperties.push_back( new WrappedIgnoreProperty("DisableDataTableDialog", uno::makeAny( sal_False ) ) );
 
@@ -1547,10 +1547,10 @@ uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames_Static(
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ChartDocumentWrapper, CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

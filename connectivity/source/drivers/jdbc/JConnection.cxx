@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -105,33 +105,33 @@ bool getLocalFromWeakRef( jweak& _weak, LocalRef< T >& _inout_local )
     return true;
 }
 
-// Load a class.  A map from pairs of (classPath, name) to pairs of weak Java
-// references to (ClassLoader, Class) is maintained, so that a class is only
-// loaded once.
+
+
+
 //
-// It may happen that the weak reference to the ClassLoader becomes null while
-// the reference to the Class remains non-null (in case the Class was actually
-// loaded by some parent of the ClassLoader), in which case the ClassLoader is
-// resurrected (which cannot cause any classes to be loaded multiple times, as
-// the ClassLoader is no longer reachable, so no classes it has ever loaded are
-// still reachable).
+
+
+
+
+
+
 //
-// Similarly, it may happen that the weak reference to the Class becomes null
-// while the reference to the ClassLoader remains non-null, in which case the
-// Class is simply re-loaded.
+
+
+
 //
-// This code is close to the implementation of jvmaccess::ClassPath::loadClass
-// in jvmaccess/classpath.hxx, but not close enough to avoid the duplication.
+
+
 //
-// If false is returned, a (still pending) JNI exception occurred.
+
 bool loadClass(
     Reference< XComponentContext > const & context, JNIEnv& environment,
     OUString const & classPath, OUString const & name,
     LocalRef< jobject > * classLoaderPtr, LocalRef< jclass > * classPtr)
 {
     OSL_ASSERT(classLoaderPtr != NULL);
-    // For any jweak entries still present in the map upon destruction,
-    // DeleteWeakGlobalRef is not called (which is a leak):
+    
+    
     ClassMapData * d =
         rtl_Instance< ClassMapData, ClassMapDataInit, osl::MutexGuard,
         osl::GetGlobalMutex >::create(
@@ -140,8 +140,8 @@ bool loadClass(
     ClassMap::iterator i(d->map.begin());
     LocalRef< jobject > cloader(environment);
     LocalRef< jclass > cl(environment);
-    // Prune dangling weak references from the list while searching for a match,
-    // so that the list cannot grow unbounded:
+    
+    
     for (; i != d->map.end();)
     {
         LocalRef< jobject > classLoader( environment );
@@ -171,12 +171,12 @@ bool loadClass(
     {
         if ( i == d->map.end() )
         {
-            // Push a new ClassMapEntry (which can potentially fail) before
-            // loading the class, so that it never happens that a class is
-            // loaded but not added to the map (which could have effects on the
-            // JVM that are not easily undone).  If the pushed ClassMapEntry is
-            // not used after all (return false, etc.) it will be pruned on next
-            // call because its classLoader/classObject are null:
+            
+            
+            
+            
+            
+            
             d->map.push_front( ClassMapEntry( classPath, name ) );
             i = d->map.begin();
         }
@@ -249,12 +249,12 @@ bool loadClass(
 
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
-//------------------------------------------------------------------------------
-//**************************************************************
-//************ Class: java.sql.Connection
-//**************************************************************
+
+
+
+
 jclass java_sql_Connection::theClass = 0;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
@@ -271,7 +271,7 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_bIgnoreCurrency(sal_False)
 {
 }
-// -----------------------------------------------------------------------------
+
 java_sql_Connection::~java_sql_Connection()
 {
     ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM();
@@ -291,12 +291,12 @@ java_sql_Connection::~java_sql_Connection()
         t.releaseRef();
     }
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::release() throw()
 {
     relase_ChildImpl();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Connection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -312,16 +312,16 @@ void java_sql_Connection::disposing()
         callVoidMethod("close",mID);
     }
 }
-// -------------------------------------------------------------------------
+
 jclass java_sql_Connection::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    
     if( !theClass )
         theClass = findMyClass("java/sql/Connection");
     return theClass;
 }
 
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -330,7 +330,7 @@ OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, Runtim
     static jmethodID mID(NULL);
     return callStringMethod("getCatalog",mID);
 }
-// -------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -352,18 +352,18 @@ Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) thr
 
     return xMetaData;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::close(  ) throw(SQLException, RuntimeException)
 {
     dispose();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::commit(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethod("commit",mID);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -371,7 +371,7 @@ sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeE
     static jmethodID mID(NULL);
     return callBooleanMethod( "isClosed", mID ) && java_sql_Connection_BASE::rBHelper.bDisposed;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -379,37 +379,37 @@ sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, Runtim
     static jmethodID mID(NULL);
     return callBooleanMethod( "isReadOnly", mID );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithStringArg("setCatalog",mID,catalog);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::rollback(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethod("rollback",mID);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return callBooleanMethod( "getAutoCommit", mID );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithBoolArg("setReadOnly",mID,readOnly);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithBoolArg("setAutoCommit",mID,autoCommit);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -418,10 +418,10 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
-    // WARNING: the caller becomes the owner of the returned pointer
+    
     return 0;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -430,7 +430,7 @@ void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -439,7 +439,7 @@ sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLExc
     static jmethodID mID(NULL);
     return callIntMethod("getTransactionIsolation",mID);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -448,7 +448,7 @@ void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) th
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setTransactionIsolation",mID,level);
 }
-// -------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -463,7 +463,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     m_aLogger.log( LogLevel::FINE, STR_LOG_CREATED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xStmt;
 }
-// -----------------------------------------------------------------------------
+
 OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
 {
     OUString sSqlStatement = _sSQL;
@@ -476,7 +476,7 @@ OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
             OUString sNewSql;
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
             if(pNode)
-            {   // special handling for parameters
+            {   
                 OSQLParseNode::substituteParameterNames(pNode);
                 pNode->parseNodeToStr( sNewSql, this );
                 delete pNode;
@@ -489,7 +489,7 @@ OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
     }
     return sSqlStatement;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -507,7 +507,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xReturn;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -525,7 +525,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_CALL_ID, pStatement->getStatementObjectID() );
     return xStmt;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -535,31 +535,31 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
 
-        // initialize temporary Variable
+        
         static const char * cSignature = "(Ljava/lang/String;)Ljava/lang/String;";
         static const char * cMethodName = "nativeSQL";
-        // Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Convert Parameter
+        
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
         jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
         aStr = JavaString2String(t.pEnv, (jstring)out );
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
-    } //t.pEnv
+    } 
 
     m_aLogger.log( LogLevel::FINER, STR_LOG_NATIVE_SQL, sql, aStr );
 
     return aStr;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethod("clearWarnings",mID);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -568,13 +568,13 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", mID);
-    // WARNING: the caller becomes the owner of the returned pointer
+    
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base(t.pEnv, out);
         SQLException aAsException( static_cast< starsdbc::SQLException >( java_sql_SQLWarning( warn_base, *this ) ) );
 
-        // translate to warning
+        
         SQLWarning aWarning;
         aWarning.Context = aAsException.Context;
         aWarning.Message = aAsException.Message;
@@ -588,7 +588,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     return Any();
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getDriverLoadErrorMessage( const ::connectivity::SharedResources& _aResource,const OUString& _rDriverClass, const OUString& _rDriverClassPath )
@@ -604,24 +604,24 @@ namespace
                 "$classpath$", _rDriverClassPath
              ) );
             sError1 += sError2;
-        } // if ( _rDriverClassPath.getLength() )
+        } 
         return sError1;
     }
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     bool lcl_setSystemProperties_nothrow( const java::sql::ConnectionLog& _rLogger,
         JNIEnv& _rEnv, const Sequence< NamedValue >& _rSystemProperties )
     {
         if ( _rSystemProperties.getLength() == 0 )
-            // nothing to do
+            
             return true;
 
         LocalRef< jclass > systemClass( _rEnv );
         jmethodID nSetPropertyMethodID = 0;
-        // retrieve the java.lang.System class
+        
         systemClass.set( _rEnv.FindClass( "java/lang/System" ) );
         if ( systemClass.is() )
         {
@@ -655,16 +655,16 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClass, const OUString& _sDriverClassPath,
     const Sequence< NamedValue >& _rSystemProperties )
 {
-    // contains the statement which should be used when query for automatically generated values
+    
     OUString     sGeneratedValueStatement;
-    // set to <TRUE/> when we should allow to query for generated values
+    
     sal_Bool            bAutoRetrievingEnabled = sal_False;
 
-    // first try if the jdbc driver is already registered at the driver manager
+    
     SDBThreadAttach t;
     try
     {
@@ -675,7 +675,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
 
             m_pDriverClassLoader.reset();
 
-            // here I try to find the class for jdbc driver
+            
             java_sql_SQLException_BASE::st_getMyClass();
             java_lang_Throwable::st_getMyClass();
 
@@ -690,11 +690,11 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
             else
             {
                 m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, _sDriverClass );
-                // the driver manager holds the class of the driver for later use
+                
                 boost::scoped_ptr< java_lang_Class > pDrvClass;
                 if ( _sDriverClassPath.isEmpty() )
                 {
-                    // if forName didn't find the class it will throw an exception
+                    
                     pDrvClass.reset(java_lang_Class::forName(_sDriverClass));
                 }
                 else
@@ -755,7 +755,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
     enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
     setAutoRetrievingStatement( sGeneratedValueStatement );
 }
-// -----------------------------------------------------------------------------
+
 OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString& _sDriverClass)
 {
     static const OUString s_sNodeName("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths");
@@ -769,22 +769,22 @@ OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString
     }
     return sURL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool java_sql_Connection::construct(const OUString& url,
                                     const Sequence< PropertyValue >& info)
 {
-    { // initialize the java vm
+    { 
         ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM(m_xContext);
         if ( !xTest.is() )
             throwGenericSQLException(STR_NO_JAVA,*this);
     }
     SDBThreadAttach t;
-    t.addRef();      // will be released in dtor
+    t.addRef();      
     if ( !t.pEnv )
         throwGenericSQLException(STR_NO_JAVA,*this);
 
-    OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
+    OUString     sGeneratedValueStatement; 
+    sal_Bool            bAutoRetrievingEnabled = sal_False; 
     OUString sDriverClassPath,sDriverClass;
     Sequence< NamedValue > aSystemProperties;
 
@@ -809,17 +809,17 @@ sal_Bool java_sql_Connection::construct(const OUString& url,
 
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
-        // initialize temporary Variable
+        
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
-        // Java-Call
+        
         jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
         if ( mID )
         {
             jvalue args[2];
-            // convert Parameter
+            
             args[0].l = convertwchar_tToJavaString(t.pEnv,url);
             java_util_Properties* pProps = createStringPropertyArray(info);
             args[1].l = pProps->getJavaObject();
@@ -827,19 +827,19 @@ sal_Bool java_sql_Connection::construct(const OUString& url,
             LocalRef< jobject > ensureDelete( t.env(), args[0].l );
 
             jobject out = NULL;
-            // In some cases (e.g.,
-            // connectivity/source/drivers/hsqldb/HDriver.cxx:1.24
-            // l. 249) the JavaDriverClassPath contains multiple jars,
-            // as creating the JavaDriverClass instance requires
-            // (reflective) access to those other jars.  Now, if the
-            // JavaDriverClass is actually loaded by some parent class
-            // loader (e.g., because its jar is also on the global
-            // class path), it would still not have access to the
-            // additional jars on the JavaDriverClassPath.  Hence, the
-            // JavaDriverClassPath class loader is pushed as context
-            // class loader around the JavaDriverClass instance
-            // creation:
-            // #i82222# / 2007-10-15
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             {
                 ContextClassLoaderScope ccl( t.env(), getDriverClassLoader(), getLogger(), *this );
                 out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
@@ -857,10 +857,10 @@ sal_Bool java_sql_Connection::construct(const OUString& url,
                 m_aLogger.log( LogLevel::INFO, STR_LOG_GOT_JDBC_CONNECTION, url );
 
             m_aConnectionInfo = info;
-        } //mID
-    } //t.pEnv
+        } 
+    } 
      return object != NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

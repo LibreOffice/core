@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Chart2ModelContact.hxx"
@@ -109,7 +109,7 @@ uno::Reference< lang::XUnoTunnel > Chart2ModelContact::getChartView() const
 {
     if(!m_xChartView.is())
     {
-        // get the chart view
+        
         Reference<frame::XModel> xModel(m_xChartModel);
         uno::Reference< lang::XMultiServiceFactory > xFact( xModel, uno::UNO_QUERY );
         if( xFact.is() )
@@ -124,7 +124,7 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
     if(!m_xChartView.is())
         return 0;
 
-    //obtain the ExplicitValueProvider from the chart view
+    
     ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(m_xChartView->getSomething(
         ExplicitValueProvider::getUnoTunnelId() ));
     return pProvider;
@@ -193,7 +193,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 {
     awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
 
-    //add axis title sizes to the diagram size
+    
     aRect = ExplicitValueProvider::addAxisTitleSizes(
         *mpModel, getChartView(), aRect );
 
@@ -310,7 +310,7 @@ awt::Point Chart2ModelContact::GetAxisPosition( const uno::Reference<
     return aPoint;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

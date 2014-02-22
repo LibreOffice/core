@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ EditSpellWrapper::EditSpellWrapper( Window* _pWin,
     SvxSpellWrapper( _pWin, xChecker, bIsStart, bIsAllRight )
 {
     SAL_WARN_IF( !pView, "editeng", "One view has to be abandoned!" );
-    // Keep IgnoreList, delete ReplaceList...
+    
     if (SvxGetChangeAllList().is())
         SvxGetChangeAllList()->clear();
     pEditView = pView;
@@ -60,9 +60,9 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 
     if ( eArea == SVX_SPELL_BODY_START )
     {
-        // Is called when
-        // a) Spell-Forward has arrived at the end and should restart at the top
-        // IsEndDone() returns also true, when backward-spelling is started at the end!
+        
+        
+        
         if ( IsEndDone() )
         {
             pSpellInfo->bSpellToEnd = false;
@@ -79,9 +79,9 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     }
     else if ( eArea == SVX_SPELL_BODY_END )
     {
-        // Is called when
-        // a) Spell-Forward is launched
-        // IsStartDone() return also true, when forward-spelling is started at the beginning!
+        
+        
+        
         if ( !IsStartDone() )
         {
             pSpellInfo->bSpellToEnd = true;
@@ -98,7 +98,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     }
     else if ( eArea == SVX_SPELL_BODY )
     {
-        ;   // Is handled by the App through SpellNextDocument
+        ;   
     }
     else
     {
@@ -114,7 +114,7 @@ sal_Bool EditSpellWrapper::SpellContinue()
 
 void EditSpellWrapper::SpellEnd()
 {
-    // Base class will show language errors...
+    
     SvxSpellWrapper::SpellEnd();
 }
 
@@ -135,8 +135,8 @@ sal_Bool EditSpellWrapper::SpellMore()
         SetCurTextObj( pEE->GetCurTextObj() );
         if ( bMore )
         {
-            // The text has been entered into the engine, when backwords then
-            // it must be behind the selection.
+            
+            
             pEditView->GetImpEditView()->SetEditSelection(
                         pEE->GetEditDoc().GetStartPaM() );
         }
@@ -146,15 +146,15 @@ sal_Bool EditSpellWrapper::SpellMore()
 
 void EditSpellWrapper::ScrollArea()
 {
-    // No further action needed ...
-    // Except for, that the area is to be scrolled in the center, and not stand
-    // still anywhere.
+    
+    
+    
 }
 
 void EditSpellWrapper::ReplaceAll( const OUString &rNewText,
             sal_Int16 )
 {
-    // Is called when the word is in ReplaceList of the spell checker
+    
     pEditView->InsertText( rNewText );
     CheckSpellTo();
 }
@@ -162,11 +162,11 @@ void EditSpellWrapper::ReplaceAll( const OUString &rNewText,
 void EditSpellWrapper::ChangeWord( const OUString& rNewWord,
             const sal_uInt16 )
 {
-    // Will be called when Word Button Change
-    // or internally by me ChangeAll
+    
+    
 
-    // If there is a dot Punkt after the word, this dot will be stripped away.
-    // If '"' => PreStripped.
+    
+    
     OUString aNewWord( rNewWord );
     pEditView->InsertText( aNewWord );
     CheckSpellTo();
@@ -190,8 +190,8 @@ void EditSpellWrapper::CheckSpellTo()
     EPaM aEPaM = pImpEE->CreateEPaM( aPaM );
     if ( aEPaM.nPara == pSpellInfo->aSpellTo.nPara )
     {
-        // Check if SpellToEnd still has a valid Index, if replace has been
-        // performed in the paragraph.
+        
+        
         if ( pSpellInfo->aSpellTo.nIndex > aPaM.GetNode()->Len() )
             pSpellInfo->aSpellTo.nIndex = aPaM.GetNode()->Len();
     }
@@ -267,37 +267,37 @@ void WrongList::TextInserted( sal_Int32 nPos, sal_Int32 nLength, bool bPosIsSep 
         bool bRefIsValid = true;
         if (rWrong.mnEnd >= nPos)
         {
-            // Move all Wrongs after the insert position...
+            
             if (rWrong.mnStart > nPos)
             {
                 rWrong.mnStart += nLength;
                 rWrong.mnEnd += nLength;
             }
-            // 1: Starts before and goes until nPos...
+            
             else if (rWrong.mnEnd == nPos)
             {
-                // Should be halted at a blank!
+                
                 if ( !bPosIsSep )
                     rWrong.mnEnd += nLength;
             }
-            // 2: Starts before and goes until after nPos...
+            
             else if ((rWrong.mnStart < nPos) && (rWrong.mnEnd > nPos))
             {
                 rWrong.mnEnd += nLength;
-                // When a separator remove and re-examine the Wrong
+                
                 if ( bPosIsSep )
                 {
-                    // Split Wrong...
+                    
                     editeng::MisspellRange aNewWrong(rWrong.mnStart, nPos);
                     rWrong.mnStart = nPos + 1;
                     maRanges.insert(maRanges.begin() + i, aNewWrong);
-                    // Reference no longer valid after Insert, the other
-                    // was inserted in front of this position
+                    
+                    
                     bRefIsValid = false;
-                    ++i; // Not this again...
+                    ++i; 
                 }
             }
-            // 3: Attribute starts at position ..
+            
             else if (rWrong.mnStart == nPos)
             {
                 rWrong.mnEnd += nLength;
@@ -340,26 +340,26 @@ void WrongList::TextDeleted( sal_Int32 nPos, sal_Int32 nLength )
         bool bDelWrong = false;
         if (i->mnEnd >= nPos)
         {
-            // Move all Wrongs after the insert position...
+            
             if (i->mnStart >= nEndPos)
             {
                 i->mnStart -= nLength;
                 i->mnEnd -= nLength;
             }
-            // 1. Delete Internal Wrongs ...
+            
             else if (i->mnStart >= nPos && i->mnEnd <= nEndPos)
             {
                 bDelWrong = true;
             }
-            // 2. Wrong begins before, ends inside or behind it ...
+            
             else if (i->mnStart <= nPos && i->mnEnd > nPos)
             {
-                if (i->mnEnd <= nEndPos)   // ends inside
+                if (i->mnEnd <= nEndPos)   
                     i->mnEnd = nPos;
                 else
-                    i->mnEnd -= nLength; // ends after
+                    i->mnEnd -= nLength; 
             }
-            // 3. Wrong begins inside, ending after ...
+            
             else if (i->mnStart >= nPos && i->mnEnd > nEndPos)
             {
                 i->mnStart = nEndPos - nLength;
@@ -434,10 +434,10 @@ void WrongList::ClearWrongs( sal_Int32 nStart, sal_Int32 nEnd,
     {
         if ((i->mnEnd > nStart) && (i->mnStart < nEnd))
         {
-            if (i->mnEnd > nEnd) // Runs out
+            if (i->mnEnd > nEnd) 
             {
                 i->mnStart = nEnd;
-                // Blanks?
+                
                 while (i->mnStart < pNode->Len() &&
                        (pNode->GetChar(i->mnStart) == ' ' ||
                         pNode->IsFeature(i->mnStart)))
@@ -449,7 +449,7 @@ void WrongList::ClearWrongs( sal_Int32 nStart, sal_Int32 nEnd,
             else
             {
                 i = maRanges.erase(i);
-                // no increment here
+                
             }
         }
         else
@@ -470,10 +470,10 @@ void WrongList::InsertWrong( sal_Int32 nStart, sal_Int32 nEnd )
         {
             nPos = i;
             {
-                // It can really only happen that the Wrong starts exactly here
-                // and runs along, but not that there are several ranges ...
-                // Exactly in the range is no one allowed to be, otherwise this
-                // Method can not be called!
+                
+                
+                
+                
                 SAL_WARN_IF((i->mnStart != nStart || i->mnEnd <= nEnd) && i->mnStart <= nEnd, "editeng", "InsertWrong: RangeMismatch!");
                 if (i->mnStart == nStart && i->mnEnd > nEnd)
                     i->mnStart = nEnd + 1;
@@ -501,10 +501,10 @@ WrongList* WrongList::Clone() const
     return new WrongList(*this);
 }
 
-// #i102062#
+
 bool WrongList::operator==(const WrongList& rCompare) const
 {
-    // cleck direct members
+    
     if(GetInvalidStart() != rCompare.GetInvalidStart()
         || GetInvalidEnd() != rCompare.GetInvalidEnd()
         || maRanges.size() != rCompare.maRanges.size())
@@ -564,16 +564,16 @@ WrongList::const_iterator WrongList::end() const
 
 bool WrongList::DbgIsBuggy() const
 {
-    // Check if the ranges overlap.
+    
     bool bError = false;
     for (WrongList::const_iterator i = begin(); !bError && (i != end()); ++i)
     {
         for (WrongList::const_iterator j = i + 1; !bError && (j != end()); ++j)
         {
-            // 1) Start before, End after the second Start
+            
             if (i->mnStart <= j->mnStart && i->mnEnd >= j->mnStart)
                 bError = true;
-            // 2) Start after the second Start, but still before the second End
+            
             else if (i->mnStart >= j->mnStart && i->mnStart <= j->mnEnd)
                 bError = true;
         }
@@ -581,7 +581,7 @@ bool WrongList::DbgIsBuggy() const
     return bError;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 EdtAutoCorrDoc::EdtAutoCorrDoc(
     EditEngine* pE, ContentNode* pN, sal_uInt16 nCrsr, sal_Unicode cIns) :
@@ -630,12 +630,12 @@ sal_Bool EdtAutoCorrDoc::Replace(sal_Int32 nPos, const OUString& rTxt)
 
 sal_Bool EdtAutoCorrDoc::ReplaceRange(sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt)
 {
-    // Actually a Replace introduce => corresponds to UNDO
+    
     sal_uInt16 nEnd = nPos+nSourceLength;
     if ( nEnd > pCurNode->Len() )
         nEnd = pCurNode->Len();
 
-    // #i5925# First insert new text behind to be deleted text, for keeping attributes.
+    
     mpEditEngine->InsertText(EditSelection(EditPaM(pCurNode, nEnd)), rTxt);
     mpEditEngine->DeleteSelection(
         EditSelection(EditPaM(pCurNode, nPos), EditPaM(pCurNode, nEnd)));
@@ -670,7 +670,7 @@ sal_Bool EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
         aSet.Put( rItem );
 
         EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
-        aSel.Max().SetIndex( nEnd );    // ???
+        aSel.Max().SetIndex( nEnd );    
         mpEditEngine->SetAttribs( aSel, aSet, ATTRSPECIAL_EDGE );
         bAllowUndoAction = false;
     }
@@ -680,7 +680,7 @@ sal_Bool EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
 sal_Bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
             const OUString& rURL)
 {
-    // Turn the Text into a command field ...
+    
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
     OUString aText = mpEditEngine->GetSelected(aSel);
     aSel = mpEditEngine->DeleteSelection(aSel);
@@ -698,21 +698,21 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
 
 OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
 {
-    // Return previous paragraph, so that it can be determined,
-    // whether the current word is at the beginning of a sentence.
+    
+    
 
-    bAllowUndoAction = false;   // Not anymore ...
+    bAllowUndoAction = false;   
 
     EditDoc& rNodes = mpEditEngine->GetEditDoc();
     sal_Int32 nPos = rNodes.GetPos( pCurNode );
 
-    // Special case: Bullet => Paragraph start => simply return NULL...
+    
     const SfxBoolItem& rBulletState = (const SfxBoolItem&)
             mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE );
     bool bBullet = rBulletState.GetValue() ? true : false;
     if ( !bBullet && (mpEditEngine->GetControlWord() & EE_CNTRL_OUTLINER) )
     {
-        // The Outliner has still a Bullet at Level 0.
+        
         const SfxInt16Item& rLevel = (const SfxInt16Item&)
                 mpEditEngine->GetParaAttrib( nPos, EE_PARA_OUTLLEVEL );
         if ( rLevel.GetValue() == 0 )
@@ -736,9 +736,9 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
             sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
             OUString* pPara )
 {
-    // Paragraph-start or a blank found, search for the word
-    // shortcut in Auto
-    bAllowUndoAction = false;   // Not anymore ...
+    
+    
+    bAllowUndoAction = false;   
 
     OUString aShort( pCurNode->Copy( rSttPos, nEndPos - rSttPos ) );
     bool bRet = false;
@@ -751,7 +751,7 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
             pCurNode->GetString(), rSttPos, nEndPos, *this, aLanguageTag);
     if( pFnd && pFnd->IsTextOnly() )
     {
-        // then replace
+        
         EditSelection aSel( EditPaM( pCurNode, rSttPos ),
                             EditPaM( pCurNode, nEndPos ) );
         aSel = mpEditEngine->DeleteSelection(aSel);

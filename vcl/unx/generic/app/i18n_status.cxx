@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,7 +75,7 @@ void StatusWindow::setPosition( SalFrame* )
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 namespace vcl {
 
@@ -85,14 +85,14 @@ class XIMStatusWindow : public StatusWindow
     SalFrame*               m_pLastParent;
     Size                    m_aWindowSize;
     bool                    m_bAnchoredAtRight;
-        // true if the right edge (instead of the left edge) should stay at a
-        // fixed position when re-sizing the window
+        
+        
 
-    // for delayed showing
+    
     bool                    m_bDelayedShow;
     I18NStatus::ShowReason  m_eDelayedReason;
     sal_uLong                   m_nDelayedEvent;
-    // for toggling
+    
     bool                    m_bOn;
 
     Point updatePosition();
@@ -110,7 +110,7 @@ public:
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
     virtual void toggle( bool bOn );
 
-    // overload WorkWindow::DataChanged
+    
     virtual void DataChanged( const DataChangedEvent& rEvt );
 };
 
@@ -208,18 +208,18 @@ Point XIMStatusWindow::updatePosition()
                                &x, &y,
                                &aChild );
 
-        // TODO:  Currently, place the status window to the (physical) left of
-        // the cursor iff in vertical mode (assuming that the columns in
-        // vertical mode are always written from right to left, this causes the
-        // status window to keep out of the text already written).  This
-        // heuristic would break if there is ever a vertical mode in which the
-        // columns are written from left to right.  Also, more elaborate
-        // positioning for (both horizontal and vertical) left-to-right and
-        // right-to-left text would be possible.
+        
+        
+        
+        
+        
+        
+        
+        
         bool bLeft = aPosEvent.mbVertical;
-            // true if status window is to the left of the cursor
+            
 
-        int const nGap = 4; // between cursor and status window
+        int const nGap = 4; 
         if (aPosEvent.mbVertical)
         {
             aRet.X() = x + aPosEvent.mnX + (bLeft
@@ -301,7 +301,7 @@ OUString XIMStatusWindow::getText() const
     return m_aStatusText.GetText();
 }
 
-// --------------------------------------------------------------------------
+
 
 namespace vcl {
 
@@ -318,7 +318,7 @@ class IIIMPStatusWindow : public StatusWindow
     void show();
 
 public:
-    IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
+    IIIMPStatusWindow( SalFrame* pParent, bool bOn ); 
     virtual ~IIIMPStatusWindow();
 
     virtual void setText( const OUString & );
@@ -327,9 +327,9 @@ public:
     virtual void toggle( bool bOn );
     void layout();
 
-    // overload Window focus handler
+    
     virtual void        GetFocus();
-    // overload WorkWindow::DataChanged
+    
     virtual void DataChanged( const DataChangedEvent& rEvt );
 };
 
@@ -410,7 +410,7 @@ OUString IIIMPStatusWindow::getText() const
 
 void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
-    // hide IIIMPStatusWindow only in presentations
+    
     if( ! bShow
         && eReason != I18NStatus::presentation
         )
@@ -470,7 +470,7 @@ void IIIMPStatusWindow::GetFocus()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
 {
@@ -484,7 +484,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
                           XNUnicodeCharacterSubset,
                           rChoices[nIndex].pData,
                           NULL);
-            // FIXME: get rid of X11SalFrame
+            
             X11SalFrame* pParent = static_cast<X11SalFrame*>(I18NStatus::get().getParent());
             if( pParent && pParent->isMapped() )
             {
@@ -516,14 +516,14 @@ I18NStatus& I18NStatus::get()
     return *pInstance;
 }
 
-// --------------------------------------------------------------------------
+
 
 bool I18NStatus::exists()
 {
     return pInstance != NULL;
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::free()
 {
@@ -531,7 +531,7 @@ void I18NStatus::free()
         delete pInstance, pInstance = NULL;
 }
 
-// --------------------------------------------------------------------------
+
 
 I18NStatus::I18NStatus() :
         m_pParent( NULL ),
@@ -539,7 +539,7 @@ I18NStatus::I18NStatus() :
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 I18NStatus::~I18NStatus()
 {
@@ -549,7 +549,7 @@ I18NStatus::~I18NStatus()
         pInstance = NULL;
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::setParent( SalFrame* pParent )
 {
@@ -567,7 +567,7 @@ void I18NStatus::setParent( SalFrame* pParent )
     m_pStatusWindow->setPosition( m_pParent );
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::show( bool bShow, ShowReason eReason )
 {
@@ -578,7 +578,7 @@ void I18NStatus::show( bool bShow, ShowReason eReason )
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::setStatusText( const OUString& rText )
 {
@@ -615,14 +615,14 @@ void I18NStatus::setStatusText( const OUString& rText )
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::changeIM( const OUString& rIM )
 {
     m_aCurrentIM = rIM;
 }
 
-// --------------------------------------------------------------------------
+
 
 SalFrame* I18NStatus::getStatusFrame() const
 {
@@ -650,7 +650,7 @@ bool I18NStatus::getStatusWindowMode()
 {
     switch (ImplGetSVData()->maAppData.meShowImeStatusWindow)
     {
-    default: // ImplSVAppData::ImeStatusWindowMode_UNKNOWN
+    default: 
         return Application::GetShowImeStatusWindowDefault();
     case ImplSVAppData::ImeStatusWindowMode_HIDE:
         return false;

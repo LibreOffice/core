@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -93,12 +93,12 @@ void ForAllRectangles (const Region& rRegion, ::boost::function<void(const Recta
             aFunction(*aRectIter);
         }
 
-        //Region aMutableRegionCopy (rRegion);
-        //RegionHandle aHandle(aMutableRegionCopy.BeginEnumRects());
-        //Rectangle aBox;
-        //while (aMutableRegionCopy.GetEnumRects(aHandle, aBox))
-        //    aFunction(aBox);
-        //aMutableRegionCopy.EndEnumRects(aHandle);
+        
+        
+        
+        
+        
+        
     }
 }
 
@@ -131,7 +131,7 @@ private:
 typedef ::boost::shared_ptr<Layer> SharedLayer;
 
 
-} // end of anonymous namespace
+} 
 
 
 class LayeredDevice::LayerContainer : public ::std::vector<SharedLayer>
@@ -144,7 +144,7 @@ public:
 
 
 
-//===== LayeredDevice =========================================================
+
 
 LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
     : mpTargetWindow(rpTargetWindow),
@@ -215,7 +215,7 @@ void LayeredDevice::RegisterPainter (
         return;
     }
 
-    // Provide the layers.
+    
     if (sal_uInt32(nLayer) >= mpLayers->size())
     {
         const sal_Int32 nOldLayerCount (mpLayers->size());
@@ -255,7 +255,7 @@ void LayeredDevice::RemovePainter (
 
     (*mpLayers)[nLayer]->RemovePainter(rpPainter);
 
-    // Remove top most layers that do not contain any painters.
+    
     while ( ! mpLayers->empty() && ! mpLayers->back()->HasPainter())
         mpLayers->erase(mpLayers->end()-1);
 }
@@ -265,7 +265,7 @@ void LayeredDevice::RemovePainter (
 
 void LayeredDevice::Repaint (const Region& rRepaintRegion)
 {
-    // Validate the contents of all layers (that have their own devices.)
+    
     ::std::for_each(
         mpLayers->begin(),
         mpLayers->end(),
@@ -283,14 +283,14 @@ void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
         return;
     else if (mpLayers->size() == 1)
     {
-        // Just copy the main layer into the target device.
+        
         (*mpLayers)[0]->Repaint(*mpTargetWindow, rRepaintRectangle);
     }
     else
     {
-        // Paint all layers first into the back buffer (to avoid flickering
-        // due to synchronous paints) and then copy that into the target
-        // device.
+        
+        
+        
         mpBackBuffer->SetMapMode(mpTargetWindow->GetMapMode());
         ::std::for_each(
             mpLayers->begin(),
@@ -335,20 +335,20 @@ bool LayeredDevice::HandleMapModeChange (void)
         || maSavedMapMode.GetScaleY() != rMapMode.GetScaleY()
         || maSavedMapMode.GetMapUnit() != rMapMode.GetMapUnit())
     {
-        // When the scale has changed then we have to paint everything.
+        
         InvalidateAllLayers(aLogicWindowBox);
     }
     else if (maSavedMapMode.GetOrigin() != rMapMode.GetOrigin())
     {
-        // Window has been scrolled.  Adapt contents of backbuffers and
-        // layer devices.
+        
+        
         const Point aDelta (rMapMode.GetOrigin() - maSavedMapMode.GetOrigin());
         mpBackBuffer->CopyArea(
             aLogicWindowBox.TopLeft(),
             mpTargetWindow->PixelToLogic(Point(0,0), maSavedMapMode),
             aLogicWindowBox.GetSize());
 
-        // Invalidate the area(s) that have been exposed.
+        
         const Rectangle aWindowBox (Point(0,0), mpTargetWindow->GetSizePixel());
         if (aDelta.Y() < 0)
             InvalidateAllLayers(mpTargetWindow->PixelToLogic(Rectangle(
@@ -377,7 +377,7 @@ bool LayeredDevice::HandleMapModeChange (void)
     }
     else
     {
-        // Can this happen?  Lets trigger a warning when it does.
+        
         OSL_ASSERT(false);
     }
 
@@ -389,7 +389,7 @@ bool LayeredDevice::HandleMapModeChange (void)
 
 
 
-//===== Layer =================================================================
+
 
 Layer::Layer (void)
     : mpLayerDevice(),
@@ -555,6 +555,6 @@ void Layer::Dispose (void)
 }
 
 
-} } } // end of namespace ::sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

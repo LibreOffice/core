@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
@@ -56,7 +56,7 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
     sal_Bool bNegative = aPageSize.Width() < 0;
     if ( bNegative )
     {
-        //  make everything positive temporarily
+        
         aPageSize.Width() = -aPageSize.Width();
         rPos.X() = -rPos.X() - rSize.Width();
     }
@@ -89,10 +89,10 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
         rPos.Y() = aPageSize.Height() - rSize.Height();
 
     if ( bNegative )
-        rPos.X() = -rPos.X() - rSize.Width();       // back to real position
+        rPos.X() = -rPos.X() - rSize.Width();       
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
@@ -100,17 +100,17 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 {
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
 
-    // #i123922# check if an existing object is selected; if yes, evtl. replace
-    // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
-    // style for other objects
+    
+    
+    
     if(pDrawView && 1 == pDrawView->GetMarkedObjectCount())
     {
         SdrObject* pPickObj = pDrawView->GetMarkedObjectByIndex(0);
 
         if(pPickObj)
         {
-            //sal_Int8 nAction(DND_ACTION_MOVE);
-            //Point aPos;
+            
+            
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
             const OUString aEmpty;
 
@@ -123,16 +123,16 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
             if(pResult)
             {
-                // we are done; mark the modified/new object
+                
                 pDrawView->MarkObj(pResult, pDrawView->GetSdrPageView());
                 return;
             }
         }
     }
 
-    //  set the size so the graphic has its original pixel size
-    //  at 100% view scale (as in SetMarkedOriginalSize),
-    //  instead of respecting the current view scale
+    
+    
+    
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
     MapMode aDestMap( MAP_100TH_MM );
     if ( aSourceMap.GetMapUnit() == MAP_PIXEL && pDrawView )
@@ -145,7 +145,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     Size aLogicSize = pWindow->LogicToLogic(
                             rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
-    //  Limit size
+    
 
     SdrPageView* pPV  = pView->GetSdrPageView();
     SdrPage* pPage = pPV->GetPage();
@@ -153,7 +153,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     ScViewData* pData = pViewSh->GetViewData();
     if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-        aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
+        aInsertPos.X() -= aLogicSize.Width();       
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
@@ -161,26 +161,26 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
 
-    // calling SetGraphicLink here doesn't work
+    
 
-    //  Path is no longer used as name for the graphics object
+    
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-    OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
+    OUString aName = pLayer->GetNewGraphicName();                 
     pObj->SetName(aName);
 
-    //  don't select if from (dispatch) API, to allow subsequent cell operations
+    
     sal_uLong nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
     pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
-    // SetGraphicLink has to be used after inserting the object,
-    // otherwise an empty graphic is swapped in and the contact stuff crashes.
-    // See #i37444#.
+    
+    
+    
     if ( bAsLink )
         pObj->SetGraphicLink( rFileName, ""/*TODO?*/, rFilterName );
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
@@ -222,7 +222,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
 
-    pObj->SetModel(pData->GetDocument()->GetDrawLayer()); // set before setURL
+    pObj->SetModel(pData->GetDocument()->GetDrawLayer()); 
     pObj->setURL( realURL, ""/*TODO?*/ );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
@@ -276,17 +276,17 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                 OUString aFilterName = aDlg.GetCurrentFilter();
                 sal_Bool bAsLink = aDlg.IsAsLink();
 
-                // really store as link only?
+                
                 if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
                 {
                     SvxLinkWarningDialog aWarnDlg(pWin,aFileName);
                     if( aWarnDlg.Execute() != RET_OK )
-                        bAsLink = false; // don't store as link
+                        bAsLink = false; 
                 }
 
                 lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView );
 
-                //  append items for recording
+                
                 rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
                 rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
                 rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -294,7 +294,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             }
             else
             {
-                //  error is handled in SvxOpenGraphicDialog::GetGraphic
+                
             }
         }
     }

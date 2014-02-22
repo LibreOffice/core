@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ogl_canvasfont.hxx"
@@ -45,7 +45,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< double >();
     }
 
@@ -53,7 +53,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< beans::PropertyValue >();
     }
 
@@ -68,7 +68,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::FontMetrics();
     }
 

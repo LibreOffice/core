@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -40,7 +40,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 
-//-----------------------------------------------------------------------------
+
 using namespace utl;
 using namespace com::sun::star;
 
@@ -82,7 +82,7 @@ public:
 
     void                            Load(const OUString& rScheme);
     void                            CommitCurrentSchemeName();
-    //changes the name of the current scheme but doesn't load it!
+    
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
     sal_Bool                        ExistsScheme(const OUString& _sSchemeName);
     virtual void                    Commit();
@@ -131,7 +131,7 @@ public:
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
 
-    // #100822#
+    
     DECL_LINK( DataChangedEventListener, VclWindowEvent* );
 };
 
@@ -147,12 +147,12 @@ uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const OUStri
     }
     return aNames;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ExtendedColorConfig_Impl::GetComponentCount() const
 {
     return m_aConfigValues.size();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ExtendedColorConfig_Impl::GetComponentColorCount(const OUString& _sName) const
 {
     sal_Int32 nSize = 0;
@@ -163,7 +163,7 @@ sal_Int32 ExtendedColorConfig_Impl::GetComponentColorCount(const OUString& _sNam
     }
     return nSize;
 }
-// -----------------------------------------------------------------------------
+
 ExtendedColorConfigValue ExtendedColorConfig_Impl::GetComponentColorConfigValue(const OUString& _sName,sal_uInt32 _nPos) const
 {
     TComponents::const_iterator aFind = m_aConfigValues.find(_sName);
@@ -176,7 +176,7 @@ ExtendedColorConfigValue ExtendedColorConfig_Impl::GetComponentColorConfigValue(
     }
     return ExtendedColorConfigValue();
 }
-// -----------------------------------------------------------------------------
+
 OUString ExtendedColorConfig_Impl::GetComponentDisplayName(const OUString& _sComponentName) const
 {
     OUString sRet;
@@ -185,7 +185,7 @@ OUString ExtendedColorConfig_Impl::GetComponentDisplayName(const OUString& _sCom
         sRet = aFind->second;
     return sRet;
 }
-// -----------------------------------------------------------------------------
+
 OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
 {
     OUString sRet;
@@ -203,35 +203,35 @@ ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(sal_Bool bEditMode) :
 {
     if(!m_bEditMode)
     {
-        //try to register on the root node - if possible
+        
         uno::Sequence < OUString > aNames(1);
         EnableNotification( aNames );
     }
     Load(OUString());
 
-    // #100822#
+    
     ::Application::AddEventListener( LINK(this, ExtendedColorConfig_Impl, DataChangedEventListener) );
 
 }
 
 ExtendedColorConfig_Impl::~ExtendedColorConfig_Impl()
 {
-    // #100822#
+    
     ::Application::RemoveEventListener( LINK(this, ExtendedColorConfig_Impl, DataChangedEventListener) );
 }
-// -----------------------------------------------------------------------------
+
 void ExtendedColorConfig_Impl::DisableBroadcast()
 {
     if ( ExtendedColorConfig::m_pImpl )
         ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void ExtendedColorConfig_Impl::EnableBroadcast()
 {
     if ( ExtendedColorConfig::m_pImpl )
         ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ExtendedColorConfig_Impl::IsEnableBroadcast()
 {
     return ExtendedColorConfig::m_pImpl ? ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled : sal_False;
@@ -244,14 +244,14 @@ void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
     for(;pIter != pEnd;++pIter)
         *pIter += _sAdd;
 }
-// -----------------------------------------------------------------------------
+
 void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 {
     m_aComponentDisplayNames.clear();
     m_aConfigValuesPos.clear();
     m_aConfigValues.clear();
 
-    // fill display names
+    
     TDisplayNames aDisplayNameMap;
     OUString sEntryNames("EntryNames");
     uno::Sequence < OUString > aComponentNames = GetPropertyNames(sEntryNames);
@@ -291,17 +291,17 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
         }
     }
 
-    // load color settings
+    
     OUString sScheme(rScheme);
 
     if(sScheme.isEmpty())
     {
-        //detect current scheme name
+        
         uno::Sequence < OUString > aCurrent(1);
         aCurrent.getArray()[0] = "ExtendedColorScheme/CurrentColorScheme";
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
-    } // if(!sScheme.getLength())
+    } 
 
     m_sLoadedScheme = sScheme;
     OUString sBase("ExtendedColorScheme/ColorSchemes/");
@@ -333,7 +333,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
         CommitCurrentSchemeName();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
     const OUString sColorEntries("/Entries");
@@ -394,14 +394,14 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _
                     ExtendedColorConfigValue aValue(sName,sDisplayName,nColor,nDefaultColor);
                     aConfigValuesPos.push_back(aConfigValues.insert(TConfigValues::value_type(sName,aValue)).first);
                 }
-            } // for(int i = 0; pColorIter != pColorEnd; ++pColorIter ,++i)
+            } 
         }
     }
 }
 
 void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rPropertyNames*/)
 {
-    //loading via notification always uses the default setting
+    
     Load(OUString());
 
     SolarMutexGuard aVclGuard;
@@ -436,7 +436,7 @@ void ExtendedColorConfig_Impl::Commit()
             OUString sNode = sBase;
             sNode += s_sSep;
             sNode += aIter->first;
-            //ConfigItem::AddNode(sNode, sColorEntries);
+            
             sNode += s_sSep;
             sNode += sColorEntries;
 
@@ -450,7 +450,7 @@ void ExtendedColorConfig_Impl::Commit()
                 ConfigItem::AddNode(sNode, aConIter->first);
                 pPropValues->Name += sColor;
                 pPropValues->Value <<= aConIter->second.getColor();
-                // the default color will never be changed
+                
             }
             OUString s("ExtendedColorScheme/ColorSchemes");
             SetSetProperties(s, aPropValues);
@@ -462,14 +462,14 @@ void ExtendedColorConfig_Impl::Commit()
 
 void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 {
-    //save current scheme name
+    
     uno::Sequence < OUString > aCurrent(1);
     aCurrent.getArray()[0] = "ExtendedColorScheme/CurrentColorScheme";
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ExtendedColorConfig_Impl::ExistsScheme(const OUString& _sSchemeName)
 {
     OUString sBase("ExtendedColorScheme/ColorSchemes");
@@ -558,9 +558,9 @@ IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, 
         return 0L;
 }
 
-// ---------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
+
+
 
 ExtendedColorConfig::ExtendedColorConfig()
 {
@@ -586,27 +586,27 @@ ExtendedColorConfigValue ExtendedColorConfig::GetColorValue(const OUString& _sCo
 {
     return m_pImpl->GetColorConfigValue(_sComponentName,_sName);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ExtendedColorConfig::GetComponentCount() const
 {
     return m_pImpl->GetComponentCount();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ExtendedColorConfig::GetComponentColorCount(const OUString& _sName) const
 {
     return m_pImpl->GetComponentColorCount(_sName);
 }
-// -----------------------------------------------------------------------------
+
 ExtendedColorConfigValue ExtendedColorConfig::GetComponentColorConfigValue(const OUString& _sName,sal_uInt32 _nPos) const
 {
     return m_pImpl->GetComponentColorConfigValue(_sName,_nPos);
 }
-// -----------------------------------------------------------------------------
+
 OUString ExtendedColorConfig::GetComponentName(sal_uInt32 _nPos) const
 {
     return m_pImpl->GetComponentName(_nPos);
 }
-// -----------------------------------------------------------------------------
+
 OUString ExtendedColorConfig::GetComponentDisplayName(const OUString& _sComponentName) const
 {
     return m_pImpl->GetComponentDisplayName(_sComponentName);
@@ -654,12 +654,12 @@ sal_Bool EditableExtendedColorConfig::LoadScheme(const OUString& rScheme )
         m_pImpl->Commit();
     m_bModified = sal_False;
     m_pImpl->Load(rScheme);
-    //the name of the loaded scheme has to be committed separately
+    
     m_pImpl->CommitCurrentSchemeName();
     return sal_True;
 }
 
-// Changes the name of the current scheme but doesn't load it!
+
 void EditableExtendedColorConfig::SetCurrentSchemeName(const OUString& rScheme)
 {
     m_pImpl->SetCurrentSchemeName(rScheme);
@@ -687,36 +687,36 @@ void EditableExtendedColorConfig::Commit()
         m_pImpl->Commit();
     m_bModified = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void EditableExtendedColorConfig::DisableBroadcast()
 {
     m_pImpl->DisableBroadcast();
 }
-// -----------------------------------------------------------------------------
+
 void EditableExtendedColorConfig::EnableBroadcast()
 {
     m_pImpl->EnableBroadcast();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 EditableExtendedColorConfig::GetComponentCount() const
 {
     return m_pImpl->GetComponentCount();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 EditableExtendedColorConfig::GetComponentColorCount(const OUString& _sName) const
 {
     return m_pImpl->GetComponentColorCount(_sName);
 }
-// -----------------------------------------------------------------------------
+
 ExtendedColorConfigValue EditableExtendedColorConfig::GetComponentColorConfigValue(const OUString& _sName,sal_uInt32 _nPos) const
 {
     return m_pImpl->GetComponentColorConfigValue(_sName,_nPos);
 }
-// -----------------------------------------------------------------------------
+
 OUString EditableExtendedColorConfig::GetComponentName(sal_uInt32 _nPos) const
 {
     return m_pImpl->GetComponentName(_nPos);
 }
-}//namespace svtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/strbuf.hxx>
@@ -29,7 +29,7 @@
 namespace stoc_corefl
 {
 
-//==================================================================================================
+
 class IdlCompFieldImpl
     : public IdlMemberImpl
     , public XIdlField
@@ -45,29 +45,29 @@ public:
         , _nOffset( nOffset )
         {}
 
-    // XInterface
+    
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
-    // XTypeProvider
+    
     virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
-    // XIdlMember
+    
     virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    // XIdlField
+    
     virtual Reference< XIdlClass > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
     virtual FieldAccessMode SAL_CALL getAccessMode() throw(::com::sun::star::uno::RuntimeException);
     virtual Any SAL_CALL get( const Any & rObj ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-    // XIdlField2: getType, getAccessMode and get are equal to XIdlField
+    
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
 };
 
-// XInterface
-//__________________________________________________________________________________________________
+
+
 Any IdlCompFieldImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -76,19 +76,19 @@ Any IdlCompFieldImpl::queryInterface( const Type & rType )
                                       static_cast< XIdlField2 * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
-//__________________________________________________________________________________________________
+
 void IdlCompFieldImpl::acquire() throw()
 {
     IdlMemberImpl::acquire();
 }
-//__________________________________________________________________________________________________
+
 void IdlCompFieldImpl::release() throw()
 {
     IdlMemberImpl::release();
 }
 
-// XTypeProvider
-//__________________________________________________________________________________________________
+
+
 Sequence< Type > IdlCompFieldImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -107,7 +107,7 @@ Sequence< Type > IdlCompFieldImpl::getTypes()
     }
     return s_pTypes->getTypes();
 }
-//__________________________________________________________________________________________________
+
 Sequence< sal_Int8 > IdlCompFieldImpl::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -124,8 +124,8 @@ Sequence< sal_Int8 > IdlCompFieldImpl::getImplementationId()
     return s_pId->getImplementationId();
 }
 
-// XIdlMember
-//__________________________________________________________________________________________________
+
+
 Reference< XIdlClass > IdlCompFieldImpl::getDeclaringClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -153,27 +153,27 @@ Reference< XIdlClass > IdlCompFieldImpl::getDeclaringClass()
     }
     return _xDeclClass;
 }
-//__________________________________________________________________________________________________
+
 OUString IdlCompFieldImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return IdlMemberImpl::getName();
 }
 
-// XIdlField
-//__________________________________________________________________________________________________
+
+
 Reference< XIdlClass > IdlCompFieldImpl::getType()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return getReflection()->forType( getTypeDescr() );
 }
-//__________________________________________________________________________________________________
+
 FieldAccessMode IdlCompFieldImpl::getAccessMode()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return FieldAccessMode_READWRITE;
 }
-//__________________________________________________________________________________________________
+
 Any IdlCompFieldImpl::get( const Any & rObj )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -206,7 +206,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         OUString("illegal object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
-//__________________________________________________________________________________________________
+
 void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
@@ -243,7 +243,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         (XWeak *)(OWeakObject *)this, 0 );
 }
 
-//__________________________________________________________________________________________________
+
 void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
@@ -280,18 +280,18 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
         (XWeak *)(OWeakObject *)this, 0 );
 }
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
 
 
-//__________________________________________________________________________________________________
+
+
+
+
 CompoundIdlClassImpl::~CompoundIdlClassImpl()
 {
     delete _pFields;
 }
 
-//__________________________________________________________________________________________________
+
 sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -315,7 +315,7 @@ sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & 
     }
     return sal_False;
 }
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlClass > > CompoundIdlClassImpl::getSuperclasses()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -334,12 +334,12 @@ Sequence< Reference< XIdlClass > > CompoundIdlClassImpl::getSuperclasses()
     else
         return Sequence< Reference< XIdlClass > >();
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlField > CompoundIdlClassImpl::getField( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     if (! _pFields)
-        getFields(); // init fields
+        getFields(); 
 
     const OUString2Field::const_iterator iFind( _aName2Field.find( rName ) );
     if (iFind != _aName2Field.end())
@@ -347,7 +347,7 @@ Reference< XIdlField > CompoundIdlClassImpl::getField( const OUString & rName )
     else
         return Reference< XIdlField >();
 }
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
     throw(::com::sun::star::uno::RuntimeException)
 {

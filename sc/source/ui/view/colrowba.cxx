@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdtrans.hxx>
@@ -29,9 +29,9 @@
 #include "globstr.hrc"
 #include "markdata.hxx"
 
-// STATIC DATA -----------------------------------------------------------
 
-//==================================================================
+
+
 
 static OUString lcl_MetricString( long nTwips, const OUString& rText )
 {
@@ -53,7 +53,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     }
 }
 
-//==================================================================
+
 
 ScColBar::ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
@@ -100,7 +100,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize < 10) nNewSize = 10; // pixels
+    if (nNewSize < 10) nNewSize = 10; 
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -169,7 +169,7 @@ void ScColBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();           // Appear and SetViewFrame
+    pViewSh->SetActive();           
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
@@ -217,12 +217,12 @@ OUString ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-bool ScColBar::IsLayoutRTL() const        // overloaded only for columns
+bool ScColBar::IsLayoutRTL() const        
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
 
-//==================================================================
+
 
 ScRowBar::ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
@@ -264,7 +264,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize < 10) nNewSize = 10; // pixels
+    if (nNewSize < 10) nNewSize = 10; 
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -333,7 +333,7 @@ void ScRowBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();           // Appear and SetViewFrame
+    pViewSh->SetActive();           
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
@@ -381,14 +381,14 @@ OUString ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
-SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const   // overloaded only for rows
+SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const   
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-bool ScRowBar::IsMirrored() const         // overloaded only for rows
+bool ScRowBar::IsMirrored() const         
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }

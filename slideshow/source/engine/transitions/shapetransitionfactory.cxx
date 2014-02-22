@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,16 +61,16 @@ public:
 
     ~ClippingAnimation();
 
-    // Animation interface
-    // -------------------
+    
+    
     virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
                            const ShapeAttributeLayerSharedPtr& rAttrLayer );
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
                         const ShapeAttributeLayerSharedPtr& rAttrLayer );
     virtual void end();
 
-    // NumberAnimation interface
-    // -----------------------
+    
+    
     virtual bool operator()( double nValue );
     virtual double getUnderlyingValue() const;
 
@@ -169,7 +169,7 @@ bool ClippingAnimation::operator()( double nValue )
         mpAttrLayer && mpShape,
         "ClippingAnimation::operator(): Invalid ShapeAttributeLayer" );
 
-    // set new clip
+    
     mpAttrLayer->setClip( maClippingFunctor( nValue,
                                              mpShape->getDomBounds().getRange() ) );
 
@@ -185,13 +185,13 @@ double ClippingAnimation::getUnderlyingValue() const
         mpAttrLayer,
         "ClippingAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
-    return 0.0;     // though this should be used in concert with
-                    // ActivitiesFactory::createSimpleActivity, better
-                    // explicitly name our start value.
-                    // Permissible range for operator() above is [0,1]
+    return 0.0;     
+                    
+                    
+                    
 }
 
-} // anon namespace
+} 
 
 
 AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
@@ -241,12 +241,12 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 
             case TransitionInfo::TRANSITION_CLIP_POLYPOLYGON:
             {
-                // generate parametric poly-polygon
+                
                 ParametricPolyPolygonSharedPtr pPoly(
                     ParametricPolyPolygonFactory::createClipPolyPolygon(
                         nType, nSubType ) );
 
-                // create a clip activity from that
+                
                 pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                     rParms,
                     NumberAnimationSharedPtr(
@@ -266,8 +266,8 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                 {
                     case animations::TransitionType::RANDOM:
                     {
-                        // select randomly one of the effects from the
-                        // TransitionFactoryTable
+                        
+                        
 
                         const TransitionInfo* pRandomTransitionInfo( getRandomTransitionInfo() );
 
@@ -277,7 +277,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                         ENSURE_OR_THROW( pRandomTransitionInfo->mnTransitionType != animations::TransitionType::RANDOM,
                                           "TransitionFactory::createShapeTransition(): Got random again for random input!" );
 
-                        // and recurse
+                        
                         pGeneratedActivity = createShapeTransition( rParms,
                                                                     rShape,
                                                                     rShapeManager,
@@ -288,13 +288,13 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                     }
                     break;
 
-                    // TODO(F3): Implement slidewipe for shape
+                    
                     case animations::TransitionType::SLIDEWIPE:
                     {
                         sal_Int16 nBarWipeSubType(0);
                         bool      bDirectionForward(true);
 
-                        // map slidewipe to BARWIPE, for now
+                        
                         switch( nSubType )
                         {
                             case animations::TransitionSubType::FROMLEFT:
@@ -323,13 +323,13 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                                 break;
                         }
 
-                        // generate parametric poly-polygon
+                        
                         ParametricPolyPolygonSharedPtr pPoly(
                             ParametricPolyPolygonFactory::createClipPolyPolygon(
                                 animations::TransitionType::BARWIPE,
                                 nBarWipeSubType ) );
 
-                        // create a clip activity from that
+                        
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
                             NumberAnimationSharedPtr(
@@ -346,11 +346,11 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 
                     default:
                     {
-                        // TODO(F1): Check whether there's anything left, anyway,
-                        // for _shape_ transitions. AFAIK, there are no special
-                        // effects for shapes...
+                        
+                        
+                        
 
-                        // for now, map all to fade effect
+                        
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
                             AnimationFactory::createNumberPropertyAnimation(
@@ -369,8 +369,8 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 
     if( !pGeneratedActivity )
     {
-        // No animation generated, maybe no table entry for given
-        // transition?
+        
+        
         OSL_TRACE(
             "TransitionFactory::createShapeTransition(): Unknown type/subtype (%d/%d) "
             "combination encountered",

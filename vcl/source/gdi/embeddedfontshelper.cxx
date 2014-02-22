@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <config_folders.h>
@@ -32,8 +32,8 @@ extern "C"
 namespace libeot
 {
 #include <libeot/libeot.h>
-} // namespace libeot
-} // extern "C"
+} 
+} 
 #endif
 
 using namespace com::sun::star;
@@ -73,9 +73,9 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
     switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
     {
         case osl::File::E_None:
-            break; // ok
+            break; 
         case osl::File::E_EXIST:
-            return true; // Assume it's already been added correctly.
+            return true; 
         default:
             SAL_WARN( "vcl.fonts", "Cannot open file for temporary font" );
             return false;
@@ -91,7 +91,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
              pos < read && keyPos < key.size();
              ++pos )
             buffer[ pos ] ^= key[ keyPos++ ];
-        // if eot, don't write the file out yet, since we need to unpack it first.
+        
         if( !eot && read > 0 )
         {
             sal_uInt64 writtenTotal = 0;
@@ -151,9 +151,9 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
     }
     if( !sufficientFontRights )
     {
-        // It would be actually better to open the document in read-only mode in this case,
-        // warn the user about this, and provide a button to drop the font(s) in order
-        // to switch to editing.
+        
+        
+        
         SAL_INFO( "vcl.fonts", "Ignoring embedded font that is not usable for editing" );
         osl::File::remove( fileUrl );
         return false;
@@ -174,7 +174,7 @@ OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName,
         filename += OUString::number( uniqueCounter++ );
     else
         filename += OStringToOUString( extra, RTL_TEXTENCODING_ASCII_US );
-    filename += ".ttf"; // TODO is it always ttf?
+    filename += ".ttf"; 
     return path + filename;
 }
 
@@ -185,11 +185,11 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
     pDevice->ImplUpdateAllFontData( true );
 }
 
-// Check if it's (legally) allowed to embed the font file into a document
-// (ttf has a flag allowing this). PhysicalFontFace::IsEmbeddable() appears
-// to have a different meaning (guessing from code, IsSubsettable() might
-// possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
-// So just try to open the data as ttf and see.
+
+
+
+
+
 bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, long size, FontRights rights )
 {
     TrueTypeFont* font;
@@ -198,19 +198,19 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, long size, Font
         TTGlobalFontInfo info;
         GetTTGlobalFontInfo( font, &info );
         CloseTTFont( font );
-        // http://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+        
         int copyright = info.typeFlags & TYPEFLAG_COPYRIGHT_MASK;
         switch( rights )
         {
             case ViewingAllowed:
-                // Embedding not restricted completely.
+                
                 return ( copyright & 0x02 ) != 0x02;
             case EditingAllowed:
-                // Font is installable or editable.
+                
                 return copyright == 0 || ( copyright & 0x08 );
         }
     }
-    return true; // no known restriction
+    return true; 
 }
 
 OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
@@ -222,11 +222,11 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     osl::Directory::createPath( path );
     OUString filename = familyName + "_" + OUString::number( family ) + "_" + OUString::number( italic )
         + "_" + OUString::number( weight ) + "_" + OUString::number( pitch );
-    filename += ".ttf"; // TODO is it always ttf?
+    filename += ".ttf"; 
     OUString url = path + filename;
-    if( osl::File( url ).open( osl_File_OpenFlag_Read ) == osl::File::E_None ) // = exists()
+    if( osl::File( url ).open( osl_File_OpenFlag_Read ) == osl::File::E_None ) 
     {
-        // File with contents of the font file already exists, assume it's been created by a previous call.
+        
         return url;
     }
     bool ok = false;
@@ -242,16 +242,16 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
         PhysicalFontFace* f = fontInfo->Get( i );
         if( f->GetFamilyName() == familyName )
         {
-            // Ignore comparing text encodings, at least for now. They cannot be trivially compared
-            // (e.g. UCS2 and UTF8 are technically the same characters, just have different encoding,
-            // and just having a unicode font doesn't say what glyphs it actually contains).
-            // It is possible that it still may be needed to do at least some checks here
-            // for some encodings (can one font have more font files for more encodings?).
+            
+            
+            
+            
+            
             if(( family == FAMILY_DONTKNOW || f->GetFamilyType() == family )
                 && ( italic == ITALIC_DONTKNOW || f->GetSlant() == italic )
                 && ( weight == WEIGHT_DONTKNOW || f->GetWeight() == weight )
                 && ( pitch == PITCH_DONTKNOW || f->GetPitch() == pitch ))
-            { // Exact match, return it immediately.
+            { 
                 selected = f;
                 break;
             }
@@ -259,7 +259,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
                 && ( f->GetSlant() == ITALIC_DONTKNOW || italic == ITALIC_DONTKNOW || f->GetSlant() == italic )
                 && ( f->GetWeight() == WEIGHT_DONTKNOW || weight == WEIGHT_DONTKNOW || f->GetWeight() == weight )
                 && ( f->GetPitch() == PITCH_DONTKNOW || pitch == PITCH_DONTKNOW || f->GetPitch() == pitch ))
-            { // Some fonts specify 'DONTKNOW' for some things, still a good match, if we don't find a better one.
+            { 
                 selected = f;
             }
         }
@@ -270,7 +270,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
         for( int i = 0;
              i < 256;
              ++i )
-            unicodes[ i ] = 'A'; // Just something, not needed, but GetEmbedFontData() needs it.
+            unicodes[ i ] = 'A'; 
         sal_Int32 widths[ 256 ];
         FontSubsetInfo info;
         long size;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "subcomponentloader.hxx"
@@ -48,7 +48,7 @@ namespace dbaccess
     using ::com::sun::star::frame::XController2;
     using ::com::sun::star::lang::XComponent;
 
-    // SubComponentLoader
+    
     struct DBACCESS_DLLPRIVATE SubComponentLoader_Data
     {
         const Reference< XCommandProcessor >    xDocDefCommands;
@@ -68,7 +68,7 @@ namespace dbaccess
         }
     };
 
-    // helper
+    
     namespace
     {
         void lcl_onWindowShown_nothrow( const SubComponentLoader_Data& i_rData )
@@ -98,12 +98,12 @@ namespace dbaccess
         }
     }
 
-    // SubComponentLoader
+    
     SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
             const Reference< XCommandProcessor >& i_rSubDocumentDefinition )
         :m_pData( new SubComponentLoader_Data( i_rSubDocumentDefinition ) )
     {
-        // add as window listener to the controller's container window, so we get notified when it is shown
+        
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
         m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
 
@@ -118,7 +118,7 @@ namespace dbaccess
             const Reference< XComponent >& i_rNonDocumentComponent )
         :m_pData( new SubComponentLoader_Data( i_rNonDocumentComponent ) )
     {
-        // add as window listener to the controller's container window, so we get notified when it is shown
+        
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
         m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
 
@@ -136,13 +136,13 @@ namespace dbaccess
 
     void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent ) throw (RuntimeException)
     {
-        // not interested in
+        
         (void)i_rEvent;
     }
 
     void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& i_rEvent ) throw (RuntimeException)
     {
-        // not interested in
+        
         (void)i_rEvent;
     }
 
@@ -156,16 +156,16 @@ namespace dbaccess
 
     void SAL_CALL SubComponentLoader::windowHidden( const EventObject& i_rEvent ) throw (RuntimeException)
     {
-        // not interested in
+        
         (void)i_rEvent;
     }
 
     void SAL_CALL SubComponentLoader::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
     {
-        // not interested in
+        
         (void)i_rEvent;
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,7 +54,7 @@ class ImpRemap3DDepth
     sal_uInt32                  mnOrdNum;
     double                      mfMinimalDepth;
 
-    // bit field
+    
     bool                        mbIsScene : 1;
 
 public:
@@ -62,7 +62,7 @@ public:
     ImpRemap3DDepth(sal_uInt32 nOrdNum);
     ~ImpRemap3DDepth();
 
-    // for ::std::sort
+    
     bool operator<(const ImpRemap3DDepth& rComp) const;
 
     sal_uInt32 GetOrdNum() const { return mnOrdNum; }
@@ -106,7 +106,7 @@ bool ImpRemap3DDepth::operator<(const ImpRemap3DDepth& rComp) const
     }
 }
 
-// typedefs for a vector of ImpRemap3DDepths
+
 typedef ::std::vector< ImpRemap3DDepth > ImpRemap3DDepthVector;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ public:
 
 Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
 {
-    // only called when rScene.GetSubList() and nObjCount > 1L
+    
     SdrObjList* pList = rScene.GetSubList();
     const sal_uInt32 nObjCount(pList->GetObjCount());
 
@@ -136,22 +136,22 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
         {
             if(pCandidate->ISA(E3dCompoundObject))
             {
-                // single 3d object, calc depth
+                
                 const double fMinimalDepth(getMinimalDepthInViewCoordinates(static_cast< const E3dCompoundObject& >(*pCandidate)));
                 ImpRemap3DDepth aEntry(a, fMinimalDepth);
                 maVector.push_back(aEntry);
             }
             else
             {
-                // scene, use standard entry for scene
+                
                 ImpRemap3DDepth aEntry(a);
                 maVector.push_back(aEntry);
             }
         }
     }
 
-    // now, we need to sort the maVector by it's members minimal depth. The
-    // smaller, the nearer to the viewer.
+    
+    
     ::std::sort(maVector.begin(), maVector.end());
 }
 
@@ -170,7 +170,7 @@ sal_uInt32 Imp3DDepthRemapper::RemapOrdNum(sal_uInt32 nOrdNum) const
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// BaseProperties section
+
 
 sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
 {
@@ -178,7 +178,7 @@ sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
 
 sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
 {
@@ -195,7 +195,7 @@ E3dScene::E3dScene()
     mp3DDepthRemapper(0L),
     bDrawOnlySelected(false)
 {
-    // Set defaults
+    
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -206,25 +206,25 @@ E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
     mp3DDepthRemapper(0L),
     bDrawOnlySelected(false)
 {
-    // Set defaults
+    
     SetDefaultAttributes(rDefault);
 }
 
 void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 {
-    // For WIN95/NT turn off the FP-Exceptions
+    
 #if defined(WNT)
     _control87( _MCW_EM, _MCW_EM );
 #endif
 
-    // Set defaults
+    
     aCamera.SetViewWindow(-2, -2, 4, 4);
     aCameraSet.SetDeviceRectangle(-2, 2, -2, 2);
     aCamera.SetDeviceWindow(Rectangle(0, 0, 10, 10));
     Rectangle aRect(0, 0, 10, 10);
     aCameraSet.SetViewportRectangle(aRect);
 
-    // set defaults for Camera from ItemPool
+    
     aCamera.SetProjection(GetPerspective());
     basegfx::B3DPoint aActualPosition(aCamera.GetPosition());
     double fNew = GetDistance();
@@ -296,12 +296,12 @@ void E3dScene::SetBoundRectDirty()
 
     if(pScene == this)
     {
-        // avoid resetting aOutRect which in case of a 3D scene used as 2d object
-        // is model data,not re-creatable view data
+        
+        
     }
     else
     {
-        // if not the outmost scene it is used as group in 3d, call parent
+        
         E3dObject::SetBoundRectDirty();
     }
 }
@@ -331,34 +331,34 @@ void E3dScene::NbcResize(const Point& rRef, const Fraction& rXFact,
     NbcSetSnapRect(aNewSnapRect);
 }
 
-// Set new camera, and thus mark the scene and if possible the bound volume
-// as changed
+
+
 
 void E3dScene::SetCamera(const Camera3D& rNewCamera)
 {
-    // Set old camera
+    
     aCamera = rNewCamera;
     ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
 
     SetRectsDirty();
 
-    // Fill new camera from old
+    
     Camera3D& rCam = (Camera3D&)GetCamera();
 
-    // Turn off ratio
+    
     if(rCam.GetAspectMapping() == AS_NO_MAPPING)
         GetCameraSet().SetRatio(0.0);
 
-    // Set Imaging geometry
+    
     basegfx::B3DPoint aVRP(rCam.GetViewPoint());
     basegfx::B3DVector aVPN(aVRP - rCam.GetVRP());
     basegfx::B3DVector aVUV(rCam.GetVUV());
 
-    // use SetViewportValues() to set VRP, VPN and VUV as vectors, too.
-    // Else these values would not be exported/imported correctly.
+    
+    
     GetCameraSet().SetViewportValues(aVRP, aVPN, aVUV);
 
-    // Set perspective
+    
     GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
     GetCameraSet().SetViewportRectangle((Rectangle&)rCam.GetDeviceWindow());
 
@@ -375,7 +375,7 @@ void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
     ImpCleanup3DDepthMapper();
 }
 
-// Inform parent of changes of a child
+
 
 void E3dScene::StructureChanged()
 {
@@ -383,16 +383,16 @@ void E3dScene::StructureChanged()
 
     if(!GetModel() || !GetModel()->isLocked())
     {
-        // #i123539# optimization for 3D chart object generation: do not reset
-        // already calculated scene projection data every time an object gets
-        // initialized
+        
+        
+        
         SetRectsDirty();
     }
 
     ImpCleanup3DDepthMapper();
 }
 
-// Determine the overall scene object
+
 
 E3dScene* E3dScene::GetScene() const
 {
@@ -418,15 +418,15 @@ void E3dScene::removeAllNonSelectedObjects()
             {
                 E3dScene* pScene = (E3dScene*)pObj;
 
-                // iterate over this sub-scene
+                
                 pScene->removeAllNonSelectedObjects();
 
-                // check object count. Empty scenes can be deleted
+                
                 const sal_uInt32 nObjCount(pScene->GetSubList() ? pScene->GetSubList()->GetObjCount() : 0);
 
                 if(!nObjCount)
                 {
-                    // all objects removed, scene can be removed, too
+                    
                     bRemoveObject = true;
                 }
             }
@@ -473,31 +473,31 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
 
     ImpCleanup3DDepthMapper();
 
-    // #i101941#
-    // After a Scene as model object is cloned, the used
-    // ViewContactOfE3dScene is created and partially used
-    // to calculate Bound/SnapRects, but - since quite some
-    // values are buffered at the VC - not really well
-    // initialized. It would be possible to always watch for
-    // preconditions of buffered data, but this would be expensive
-    // and would create a lot of short living data structures.
-    // It is currently better to flush that data, e.g. by using
-    // ActionChanged at the VC which will for this class
-    // flush that cached data and initalize it's valid reconstruction
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     GetViewContact().ActionChanged();
     return *this;
 }
 
-// Rebuild Light- and label- object lists rebuild (after loading, allocation)
+
 
 void E3dScene::RebuildLists()
 {
-    // first delete
+    
     SdrLayerID nCurrLayerID = GetLayer();
 
     SdrObjListIter a3DIterator(maSubList, IM_FLAT);
 
-    // then examine all the objects in the scene
+    
     while ( a3DIterator.IsMore() )
     {
         E3dObject* p3DObj = (E3dObject*) a3DIterator.Next();
@@ -520,13 +520,13 @@ void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
 {
-    // #i94832# removed E3DModifySceneSnapRectUpdater here.
-    // It should not be needed, is already part of E3dObject::RestGeoData
+    
+    
     E3dObject::RestGeoData (rGeo);
     SetCamera (((E3DSceneGeoData &) rGeo).aCamera);
 }
 
-// Something was changed in the style sheet, so change scene
+
 
 void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
 {
@@ -546,30 +546,30 @@ void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double
     long dyOutRectHalf = labs(UpperLeft.Y() - LowerRight.Y());
     dyOutRectHalf /= 2;
 
-        // Only the center is moved. The corners are moved by NbcMove. For the
-        // rotation a cartesian coordinate system is used in which the pivot
-        // point is the origin, and the y-axis increases upward, the X-axis to
-        // the right. This must be especially noted for the Y-values.
-        // (When considering a flat piece of paper the Y-axis pointing downwards
+        
+        
+        
+        
+        
     Center.X() = (UpperLeft.X() + dxOutRectHalf) - rRef.X();
     Center.Y() = -((UpperLeft.Y() + dyOutRectHalf) - rRef.Y());
-                  // A few special cases has to be dealt with first (n * 90 degrees n integer)
-    if (sn==1.0 && cs==0.0) { // 90deg
+                  
+    if (sn==1.0 && cs==0.0) { 
         NewCenter.X() = -Center.Y();
         NewCenter.Y() = -Center.X();
-    } else if (sn==0.0 && cs==-1.0) { // 180deg
+    } else if (sn==0.0 && cs==-1.0) { 
         NewCenter.X() = -Center.X();
         NewCenter.Y() = -Center.Y();
-    } else if (sn==-1.0 && cs==0.0) { // 270deg
+    } else if (sn==-1.0 && cs==0.0) { 
         NewCenter.X() =  Center.Y();
         NewCenter.Y() = -Center.X();
     }
-    else          // Here it is rotated to any angle in the mathematically
-                  // positive direction!
-    {             // xnew = x * cos(alpha) - y * sin(alpha)
-                  // ynew = x * sin(alpha) + y * cos(alpha)
-                  // Bottom Right is not rotated: the pages of aOutRect must
-                  // remain parallel to the coordinate axes.
+    else          
+                  
+    {             
+                  
+                  
+                  
         NewCenter.X() = (long) (Center.X() * cs - Center.Y() * sn);
         NewCenter.Y() = (long) (Center.X() * sn + Center.Y() * cs);
     }
@@ -577,8 +577,8 @@ void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double
     Size Differenz;
     Point DiffPoint = (NewCenter - Center);
     Differenz.Width() = DiffPoint.X();
-    Differenz.Height() = -DiffPoint.Y();  // Note that the Y-axis is counted ad positive downward.
-    NbcMove (Differenz);  // Actually executes the coordinate transformation.
+    Differenz.Height() = -DiffPoint.Y();  
+    NbcMove (Differenz);  
 }
 
 OUString E3dScene::TakeObjNameSingul() const
@@ -601,15 +601,15 @@ OUString E3dScene::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralScene3d);
 }
 
-// The NbcRotate routine overloads the one of the SdrObject. The idea is
-// to be able to rotate the scene relative to the position of the scene
-// and then the objects in the scene
+
+
+
 
 void E3dScene::NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix)
 {
     if(maTransformation != rMatrix)
     {
-        // call parent
+        
         E3dObject::NbcSetTransform(rMatrix);
     }
 }
@@ -618,36 +618,36 @@ void E3dScene::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
 {
     if(rMatrix != maTransformation)
     {
-        // call parent
+        
         E3dObject::SetTransform(rMatrix);
     }
 }
 
 void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    // So currently the glue points are defined relative to the scene aOutRect.
-    // Before turning the glue points are defined relative to the page. They
-    // take no part in the rotation of the scene. To ensure this, there is the
-    // SetGlueReallyAbsolute(sal_True);
+    
+    
+    
+    
 
-    // So that was the scene, now the objects used in the scene
-    // 3D objects, if there is only one it can still have multiple surfaces but
-    // the surfaces do not hve to be connected. This allows you to access child
-    // objects. So going through the entire list and rotate around the Z axis
-    // through the enter of aOutRect's (Steiner's theorem), so RotateZ
+    
+    
+    
+    
+    
 
-    RotateScene (rRef, nWink, sn, cs);  // Rotates the scene
+    RotateScene (rRef, nWink, sn, cs);  
     double fWinkelInRad = nWink/100 * F_PI180;
 
     basegfx::B3DHomMatrix aRotation;
     aRotation.rotate(0.0, 0.0, fWinkelInRad);
     NbcSetTransform(aRotation * GetTransform());
 
-    SetRectsDirty();    // This forces a recalculation of all BoundRects
-    NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotate the glue points (who still
-                                            // have coordinates relative to the
-                                            // original page)
-    SetGlueReallyAbsolute(false);  // from now they are again relative to BoundRect (that is defined as aOutRect)
+    SetRectsDirty();    
+    NbcRotateGluePoints(rRef,nWink,sn,cs);  
+                                            
+                                            
+    SetGlueReallyAbsolute(false);  
     SetRectsDirty();
 }
 
@@ -657,22 +657,22 @@ void E3dScene::RecalcSnapRect()
 
     if(pScene == this)
     {
-        // The Scene is used as a 2D-Objekt, take the SnapRect from the
-        // 2D Display settings
+        
+        
         Camera3D& rCam = (Camera3D&)pScene->GetCamera();
         maSnapRect = rCam.GetDeviceWindow();
     }
     else
     {
-        // The Scene itself is a member of another scene, get the SnapRect
-        // as a composite object
+        
+        
         E3dObject::RecalcSnapRect();
     }
 }
 
 bool E3dScene::IsBreakObjPossible()
 {
-    // Break scene, if all members are able to break
+    
     SdrObjListIter a3DIterator(maSubList, IM_DEEPWITHGROUPS);
 
     while ( a3DIterator.IsMore() )

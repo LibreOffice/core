@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -132,7 +132,7 @@ namespace psp
         com::sun::star::lang::Locale aLoc( i_rLocale );
         if( bInsertDefault && aLoc.Language.isEmpty() )
         {
-            // empty locale requested, fill in application UI locale
+            
             aLoc = Application::GetSettings().GetUILanguageTag().getLocale();
 
             #if OSL_DEBUG_LEVEL > 1
@@ -276,7 +276,7 @@ class PPDDecompressStream
     SvMemoryStream*     mpMemStream;
     OUString       maFileName;
 
-    // forbid copying
+    
     PPDDecompressStream( const PPDDecompressStream& );
     PPDDecompressStream& operator=(const PPDDecompressStream& );
 
@@ -321,17 +321,17 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
     mpFileStream->ReadLine( aLine );
     mpFileStream->Seek( 0 );
 
-    // check for compress'ed or gzip'ed file
+    
     sal_uLong nCompressMethod = 0;
     if( aLine.getLength() > 1 && static_cast<unsigned char>(aLine[0]) == 0x1f )
     {
-        if( static_cast<unsigned char>(aLine[1]) == 0x8b ) // check for gzip
+        if( static_cast<unsigned char>(aLine[1]) == 0x8b ) 
             nCompressMethod = ZCODEC_DEFAULT | ZCODEC_GZ_LIB;
     }
 
     if( nCompressMethod != 0 )
     {
-        // so let's try to decompress the stream
+        
         mpMemStream = new SvMemoryStream( 4096, 4096 );
         ZCodec aCodec;
         aCodec.BeginCompression( nCompressMethod );
@@ -339,13 +339,13 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
         aCodec.EndCompression();
         if( nComp < 0 )
         {
-            // decompression failed, must be an uncompressed stream after all
+            
             delete mpMemStream, mpMemStream = NULL;
             mpFileStream->Seek( 0 );
         }
         else
         {
-            // compression successful, can get rid of file stream
+            
             delete mpFileStream, mpFileStream = NULL;
             mpMemStream->Seek( 0 );
         }
@@ -431,7 +431,7 @@ void PPDParser::scanPPDDir( const OUString& rDir )
                         INetURLObject aPPDFile = aPPDDir;
                         aPPDFile.Append( aFileName );
 
-                        // match extension
+                        
                         for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
                         {
                             if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
@@ -463,7 +463,7 @@ void PPDParser::initPPDFiles()
 
     rPPDCache.pAllPPDFiles = new boost::unordered_map< OUString, OUString, OUStringHash >();
 
-    // check installation directories
+    
     std::list< OUString > aPathList;
     psp::getPrinterPathList( aPathList, PRINTER_PPDDIR );
     for( std::list< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
@@ -473,7 +473,7 @@ void PPDParser::initPPDFiles()
     }
     if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() )
     {
-        // last try: search in directory of executable (mainly for setup)
+        
         OUString aExe;
         if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
         {
@@ -510,7 +510,7 @@ void PPDParser::getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRef
 OUString PPDParser::getPPDFile( const OUString& rFile )
 {
     INetURLObject aPPD( rFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-    // someone might enter a full qualified name here
+    
     PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )
     {
@@ -521,8 +521,8 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
         do
         {
             initPPDFiles();
-            // some PPD files contain dots beside the extension, so try name first
-            // and cut of points after that
+            
+            
             OUString aBase( rFile );
             sal_Int32 nLastIndex = aBase.lastIndexOf( '/' );
             if( nLastIndex >= 0 )
@@ -537,11 +537,11 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
 
             if( it == rPPDCache.pAllPPDFiles->end() && bRetry )
             {
-                // a new file ? rehash
+                
                 delete rPPDCache.pAllPPDFiles; rPPDCache.pAllPPDFiles = NULL;
                 bRetry = false;
-                // note this is optimized for office start where
-                // no new files occur and initPPDFiles is called only once
+                
+                
             }
         } while( ! rPPDCache.pAllPPDFiles );
 
@@ -557,8 +557,8 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
             aRet = aStream.GetFileName();
         else
         {
-            // our *Include hack does usually not begin
-            // with *PPD-Adobe, so try some lines for *Include
+            
+            
             int nLines = 10;
             while (aLine.indexOf("*Include") != 0 && --nLines)
                 aLine = aStream.ReadLine();
@@ -575,7 +575,7 @@ OUString PPDParser::getPPDPrinterName( const OUString& rFile )
     OUString aPath = getPPDFile( rFile );
     OUString aName;
 
-    // read in the file
+    
     PPDDecompressStream aStream( aPath );
     if( aStream.IsOpen() )
     {
@@ -646,10 +646,10 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     }
     if( pNewParser )
     {
-        // this may actually be the SGENPRT parser,
-        // so ensure uniquness here
+        
+        
         rPPDCache.aAllParsers.remove( pNewParser );
-        // insert new parser to list
+        
         rPPDCache.aAllParsers.push_front( pNewParser );
     }
     return pNewParser;
@@ -672,7 +672,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pFontList( NULL ),
         m_pTranslator( new PPDTranslator() )
 {
-    // read in the file
+    
     std::list< OString > aLines;
     PPDDecompressStream aStream( m_aFile );
     if( aStream.IsOpen() )
@@ -701,7 +701,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
                 else if( ! bLanguageEncoding &&
                          aCurLine.matchIgnoreAsciiCase(OString("*languageencoding")) )
                 {
-                    bLanguageEncoding = true; // generally only the first one counts
+                    bLanguageEncoding = true; 
                     OString aLower = aCurLine.toAsciiLowerCase();
                     if( aLower.indexOf("isolatin1", 17 ) != -1 ||
                         aLower.indexOf("windowsansi", 17 ) != -1 )
@@ -723,7 +723,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     }
     aStream.Close();
 
-    // now get the Values
+    
     parse( aLines );
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("vcl.unx.print", "acquired " << m_aKeys.size()
@@ -777,7 +777,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     }
 #endif
 
-    // fill in shortcuts
+    
     const PPDKey* pKey;
 
     m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
@@ -847,7 +847,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    // fill in direct values
+    
     if( (pKey = getKey( OUString( "ModelName" ) )) )
         m_aPrinterName = pKey->getValue( 0 )->m_aValue;
     if( (pKey = getKey( OUString( "NickName" ) )) )
@@ -962,7 +962,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         sal_Int32 nPos = aKey.indexOf('/');
         if (nPos != -1)
             aKey = aKey.copy(0, nPos);
-        aKey = aKey.copy(1); // remove the '*'
+        aKey = aKey.copy(1); 
 
         if ((aKey == "CloseUI") ||
             (aKey == "JCLCloseUI") ||
@@ -989,12 +989,12 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         else if (aKey == "UIConstraints" ||
                  aKey == "NonUIConstraints")
         {
-            continue; // parsed in pass 2
+            continue; 
         }
-        else if( aKey == "CustomPageSize" ) // currently not handled
+        else if( aKey == "CustomPageSize" ) 
             continue;
 
-        // default values are parsed in pass 2
+        
         if (aKey.startsWith("Default"))
             continue;
 
@@ -1006,7 +1006,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         }
 
         OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
-        // handle CUPS extension for globalized PPDs
+        
         /* FIXME-BCP47: really only ISO 639-1 two character language codes?
          * goodnight.. */
         bool bIsGlobalizedLine = false;
@@ -1045,21 +1045,21 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         OUString aValueTranslation;
         if( nPos != -1 )
         {
-            // found a colon, there may be an option
+            
             OString aLine = aCurrentLine.copy( 1, nPos-1 );
             aLine = WhitespaceToSpace( aLine );
             sal_Int32 nTransPos = aLine.indexOf('/');
             if (nTransPos != -1)
                 aOptionTranslation = handleTranslation( aLine.copy(nTransPos+1), bIsGlobalizedLine );
 
-            // read in more lines if necessary for multiline values
+            
             aLine = aCurrentLine.copy( nPos+1 );
             if (!aLine.isEmpty())
             {
                 OStringBuffer aBuffer(aLine);
                 while (line != rLines.end() && oddDoubleQuoteCount(aBuffer))
                 {
-                    // copy the newlines also
+                    
                     aBuffer.append('\n');
                     aBuffer.append(*line);
                     ++line;
@@ -1068,7 +1068,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             }
             aLine = WhitespaceToSpace( aLine );
 
-            // #i100644# handle a missing value (actually a broken PPD)
+            
             if( aLine.isEmpty() )
             {
                 if( !aOption.isEmpty() &&
@@ -1077,7 +1077,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                 else
                     eType = eQuoted;
             }
-            // check for invocation or quoted value
+            
             else if(aLine[0] == '"')
             {
                 aLine = aLine.copy(1);
@@ -1085,19 +1085,19 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
                 aValue = OStringToOUString(aLine.copy(0, nTransPos), RTL_TEXTENCODING_MS_1252);
-                // after the second doublequote can follow a / and a translation
+                
                 if (nTransPos < aLine.getLength() - 2)
                 {
                     aValueTranslation = handleTranslation( aLine.copy( nTransPos+2 ), bIsGlobalizedLine );
                 }
-                // check for quoted value
+                
                 if( !aOption.isEmpty() &&
                     !aUniKey.startsWith( "JCL" ) )
                     eType = eInvocation;
                 else
                     eType = eQuoted;
             }
-            // check for symbol value
+            
             else if(aLine[0] == '^')
             {
                 aLine = aLine.copy(1);
@@ -1106,11 +1106,11 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             }
             else
             {
-                // must be a string value then
-                // strictly this is false because string values
-                // can contain any whitespace which is reduced
-                // to one space by now
-                // who cares ...
+                
+                
+                
+                
+                
                 nTransPos = aLine.indexOf('/');
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
@@ -1121,17 +1121,17 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             }
         }
 
-        // handle globalized PPD entries
+        
         if( bIsGlobalizedLine )
         {
-            // handle main key translations of form:
-            // *ll_CC.Translation MainKeyword/translated text: ""
+            
+            
             if( aUniKey.equalsAscii( "Translation" ) )
             {
                 m_pTranslator->insertKey( aOption, aOptionTranslation, aTransLocale );
             }
-            // handle options translations of for:
-            // *ll_CC.MainKeyword OptionKeyword/translated text: ""
+            
+            
             else
             {
                 m_pTranslator->insertOption( aUniKey, aOption, aOptionTranslation, aTransLocale );
@@ -1162,7 +1162,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         if( !aValueTranslation.isEmpty() )
             m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
-        // eventually update query and remove from option list
+        
         if( bQuery && !pKey->m_bQueryValue )
         {
             pKey->m_aQueryValue = *pValue;
@@ -1171,7 +1171,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         }
     }
 
-    // second pass: fill in defaults
+    
     for( line = rLines.begin(); line != rLines.end(); ++line )
     {
         OString aLine(*line);
@@ -1195,10 +1195,10 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                 }
                 else
                 {
-                    // some PPDs contain defaults for keys that
-                    // do not exist otherwise
-                    // (example: DefaultResolution)
-                    // so invent that key here and have a default value
+                    
+                    
+                    
+                    
                     PPDKey* pKey = new PPDKey( aKey );
                     pKey->insertValue( aOption, eInvocation /*or what ?*/ );
                     insertKey( aKey, pKey );
@@ -1265,7 +1265,7 @@ void PPDParser::parseOrderDependency(const OString& rLine)
     OString aSetup = GetCommandLineToken( 1, aLine );
     OUString aKey(OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey[ 0 ] != '*' )
-        return; // invalid order depency
+        return; 
     aKey = aKey.replaceAt( 0, 1, "" );
 
     PPDKey* pKey;
@@ -1327,12 +1327,12 @@ void PPDParser::parseConstraint( const OString& rLine )
                     bFailed = true;
             }
             else
-                // constraint for nonexistent keys; this happens
-                // e.g. in HP4PLUS3
+                
+                
                 bFailed = true;
         }
     }
-    // there must be two keywords
+    
     if( ! aConstraint.m_pKey1 || ! aConstraint.m_pKey2 || bFailed )
     {
         SAL_INFO("vcl.unx.print",
@@ -1431,7 +1431,7 @@ OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
         {
             fNewSort =
                 (1.0-PDWidth)*(1.0-PDWidth) + (1.0-PDHeight)*(1.0-PDHeight);
-            if( fNewSort == 0.0 ) // perfect match
+            if( fNewSort == 0.0 ) 
                 return m_pPaperDimensions->getValue( i )->m_aOption;
 
             if( fNewSort < fSort )
@@ -1445,7 +1445,7 @@ OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
     static bool bDontSwap = false;
     if( nPDim == -1 && ! bDontSwap )
     {
-        // swap portrait/landscape and try again
+        
         bDontSwap = true;
         OUString rRet = matchPaper( nHeight, nWidth );
         bDontSwap = false;
@@ -1530,20 +1530,20 @@ PPDKey::PPDKey( const OUString& rKey ) :
 {
 }
 
-// -------------------------------------------------------------------
+
 
 PPDKey::~PPDKey()
 {
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
     return ((unsigned int)n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : NULL;
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDKey::getValue( const OUString& rOption ) const
 {
@@ -1551,7 +1551,7 @@ const PPDValue* PPDKey::getValue( const OUString& rOption ) const
     return it != m_aValues.end() ? &it->second : NULL;
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
 {
@@ -1566,7 +1566,7 @@ const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDKey::eraseValue( const OUString& rOption )
 {
@@ -1585,7 +1585,7 @@ void PPDKey::eraseValue( const OUString& rOption )
     m_aValues.erase( it );
 }
 
-// -------------------------------------------------------------------
+
 
 PPDValue* PPDKey::insertValue( const OUString& rOption, PPDValueType eType )
 {
@@ -1601,7 +1601,7 @@ PPDValue* PPDKey::insertValue( const OUString& rOption, PPDValueType eType )
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 /*
  * PPDContext
@@ -1612,7 +1612,7 @@ PPDContext::PPDContext( const PPDParser* pParser ) :
 {
 }
 
-// -------------------------------------------------------------------
+
 
 PPDContext& PPDContext::operator=( const PPDContext& rCopy )
 {
@@ -1621,13 +1621,13 @@ PPDContext& PPDContext::operator=( const PPDContext& rCopy )
     return *this;
 }
 
-// -------------------------------------------------------------------
+
 
 PPDContext::~PPDContext()
 {
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
@@ -1637,7 +1637,7 @@ const PPDKey* PPDContext::getModifiedKey( int n ) const
     return it != m_aCurrentValues.end() ? it->first : NULL;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDContext::setParser( const PPDParser* pParser )
 {
@@ -1648,7 +1648,7 @@ void PPDContext::setParser( const PPDParser* pParser )
     }
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
 {
@@ -1670,19 +1670,19 @@ const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue, bool bDontCareForConstraints )
 {
     if( ! m_pParser || ! pKey )
         return NULL;
 
-    // pValue can be NULL - it means ignore this option
+    
 
     if( ! m_pParser->hasKey( pKey ) )
         return NULL;
 
-    // check constraints
+    
     if( pValue )
     {
         if( bDontCareForConstraints )
@@ -1693,7 +1693,7 @@ const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue
         {
             m_aCurrentValues[ pKey ] = pValue;
 
-            // after setting this value, check all constraints !
+            
             hash_type::iterator it = m_aCurrentValues.begin();
             while(  it != m_aCurrentValues.end() )
             {
@@ -1720,18 +1720,18 @@ const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pValue )
 {
     if( ! m_pParser || ! pKey || ! pValue )
         return false;
 
-    // ensure that this key is already in the list if it exists at all
+    
     if( m_aCurrentValues.find( pKey ) != m_aCurrentValues.end() )
         return checkConstraints( pKey, pValue, false );
 
-    // it is not in the list, insert it temporarily
+    
     bool bRet = false;
     if( m_pParser->hasKey( pKey ) )
     {
@@ -1744,7 +1744,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pValue )
     return bRet;
 }
 
-// -------------------------------------------------------------------
+
 
 bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
 {
@@ -1762,22 +1762,22 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
     return bRet;
 }
 
-// -------------------------------------------------------------------
+
 
 bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue, bool bDoReset )
 {
     if( ! pNewValue )
         return true;
 
-    // sanity checks
+    
     if( ! m_pParser )
         return false;
 
     if( pKey->getValue( pNewValue->m_aOption ) != pNewValue )
         return false;
 
-    // None / False and the default can always be set, but be careful !
-    // setting them might influence constrained values
+    
+    
     if( pNewValue->m_aOption.equalsAscii( "None" ) || pNewValue->m_aOption.equalsAscii( "False" ) ||
         pNewValue == pKey->getDefaultValue() )
         return true;
@@ -1794,7 +1794,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
         const PPDValue* pOtherKeyOption = pKey == pLeft ? it->m_pOption2 : it->m_pOption1;
         const PPDValue* pKeyOption = pKey == pLeft ? it->m_pOption1 : it->m_pOption2;
 
-        // syntax *Key1 option1 *Key2 option2
+        
         if( pKeyOption && pOtherKeyOption )
         {
             if( pNewValue != pKeyOption )
@@ -1804,20 +1804,20 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
                 return false;
             }
         }
-        // syntax *Key1 option *Key2  or  *Key1 *Key2 option
+        
         else if( pOtherKeyOption || pKeyOption )
         {
             if( pKeyOption )
             {
                 if( ! ( pOtherKeyOption = getValue( pOtherKey ) ) )
-                    continue; // this should not happen, PPD broken
+                    continue; 
 
                 if( pKeyOption == pNewValue &&
                     ! pOtherKeyOption->m_aOption.equalsAscii( "None" ) &&
                     ! pOtherKeyOption->m_aOption.equalsAscii( "False" ) )
                 {
-                    // check if the other value can be reset and
-                    // do so if possible
+                    
+                    
                     if( bDoReset && resetValue( pOtherKey ) )
                         continue;
 
@@ -1833,10 +1833,10 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
             }
             else
             {
-                // this should not happen, PPD is broken
+                
             }
         }
-        // syntax *Key1 *Key2
+        
         else
         {
             const PPDValue* pOtherValue = getValue( pOtherKey );
@@ -1850,7 +1850,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
     return true;
 }
 
-// -------------------------------------------------------------------
+
 
 char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 {
@@ -1862,7 +1862,7 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     {
         OString aCopy(OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
         rBytes += aCopy.getLength();
-        rBytes += 1; // for ':'
+        rBytes += 1; 
         if( it->second )
         {
             aCopy = OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
@@ -1870,7 +1870,7 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
         }
         else
             rBytes += 4;
-        rBytes += 1; // for '\0'
+        rBytes += 1; 
     }
     rBytes += 1;
     char* pBuffer = new char[ rBytes ];
@@ -1896,7 +1896,7 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     return pBuffer;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
 {
@@ -1932,11 +1932,11 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
     }
 }
 
-// -------------------------------------------------------------------
+
 
 int PPDContext::getRenderResolution() const
 {
-    // initialize to reasonable default, if parser is not set
+    
     int nDPI = 300;
     if( m_pParser )
     {
@@ -1958,11 +1958,11 @@ int PPDContext::getRenderResolution() const
     return  nDPI;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) const
 {
-    // initialize to reasonable default, if parser is not set
+    
     rPaper  = "A4";
     rWidth  = 595;
     rHeight = 842;

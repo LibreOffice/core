@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -78,7 +78,7 @@ namespace treeview {
             if( parent )
                 return parent;
             else
-                return const_cast<TVDom*>(this);    // I am my own parent, if I am the root
+                return const_cast<TVDom*>(this);    
         }
 
         enum Kind {
@@ -141,7 +141,7 @@ namespace treeview {
 
                 OUStringBuffer strBuff( 22 + len + id.getLength() );
                 strBuff.appendAscii(
-                                    "vnd.sun.star.help://"
+                                    "vnd.sun.star.help:
                                     ).append(id);
 
                 targetURL = strBuff.makeStringAndClear();
@@ -229,7 +229,7 @@ void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
     }
 }
 
-// XInterface
+
 
 void SAL_CALL
 TVBase::acquire(
@@ -262,7 +262,7 @@ TVBase::queryInterface(
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-// XTypeProvider methods.
+
 
 XTYPEPROVIDER_IMPL_5( TVBase,
                          XTypeProvider,
@@ -271,7 +271,7 @@ XTYPEPROVIDER_IMPL_5( TVBase,
                       XChangesNotifier,
                       XComponent );
 
-// TVRead
+
 
 TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
 {
@@ -295,7 +295,7 @@ TVRead::~TVRead()
 {
 }
 
-// XNameAccess
+
 
 Any SAL_CALL
 TVRead::getByName( const OUString& aName )
@@ -348,7 +348,7 @@ TVRead::hasByName( const OUString& aName )
     return false;
 }
 
-// XHierarchicalNameAccess
+
 
 Any SAL_CALL
 TVRead::getByHierarchicalName( const OUString& aName )
@@ -463,7 +463,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
     while( j )
     {
         len = configData.vFileLen[--j];
-        char* s = new char[ int(len) ];  // the buffer to hold the installed files
+        char* s = new char[ int(len) ];  
         osl::File aFile( configData.vFileURL[j] );
         aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s,len,ret );
@@ -475,7 +475,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
                                end_handler );
         XML_SetCharacterDataHandler( parser,
                                      data_handler);
-        XML_SetUserData( parser,&pTVDom ); // does not return this
+        XML_SetUserData( parser,&pTVDom ); 
 
         XML_Status const parsed = XML_Parse(parser, s, int(len), j==0);
         SAL_WARN_IF(XML_STATUS_ERROR == parsed, "xmlhelp",
@@ -486,7 +486,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
 
         Check(pTVDom);
     }
-    // now TVDom holds the relevant information
+    
 
     Elements.resize( tvDom.children.size() );
     for( unsigned i = 0; i < Elements.size(); ++i )
@@ -540,7 +540,7 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
     for(i = tvDom->children.begin(); i!=tvDom->children.end(); ++i)
         if (!((*i)->isLeaf()) &&
             ((*i)->id.getLength() == p->id.getLength()) &&
-            (p->id.replaceAt((*i)->parent->id.getLength(), p->id.getLength()-(*i)->parent->id.getLength(), OUString("")) == (*i)->parent->id))      //prefix check
+            (p->id.replaceAt((*i)->parent->id.getLength(), p->id.getLength()-(*i)->parent->id.getLength(), OUString("")) == (*i)->parent->id))      
         {
             h = true;
             c_int = (*i)->id.toInt32();
@@ -609,7 +609,7 @@ TVChildTarget::hasByName( const OUString& aName )
     return true;
 }
 
-// XHierarchicalNameAccess
+
 
 Any SAL_CALL
 TVChildTarget::getByHierarchicalName( const OUString& aName )
@@ -668,10 +668,10 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     sal_Bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
-      // try to determine path from default
+      
       instPath = "$(instpath)/help";
 
-    // replace anything like $(instpath);
+    
     subst( instPath );
 
     /**********************************************************************/
@@ -694,7 +694,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         aParam.Value <<= OUString("/org.openoffice.Setup/Product");
         lParams[0] = uno::makeAny(aParam);
 
-        // open it
+        
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
                     OUString("com.sun.star.configuration.ConfigurationAccess"),
                     lParams) );
@@ -713,7 +713,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                                   setupextension );
     OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
 
-    // Determine fileurl from url and locale
+    
     OUString url;
     osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
     if( errFile != osl::FileBase::E_None ) return configData;
@@ -736,9 +736,9 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         }
     url = url + ret;
 
-    // first of all, try do determine whether there are any *.tree files present
+    
 
-    // Start with extensions to set them at the end of the list
+    
     TreeFileIterator aTreeIt( locale );
     OUString aTreeFile;
     sal_Int32 nFileSize;
@@ -780,8 +780,8 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                 osl::File aFile( aFileUrl );
                 if( osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
                 {
-                    // use the file size, not aFileStatus size, in case the
-                    // tree file is a symlink
+                    
+                    
                     sal_uInt64 nSize;
                     aFile.getSize( nSize );
                     configData.vFileLen.push_back( nSize );
@@ -800,7 +800,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     configData.m_vAdd[4] = 12;
     configData.m_vReplacement[0] = utl::ConfigManager::getProductName();
     configData.m_vReplacement[1] = productVersion;
-    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
+    
 
        configData.system = system;
     configData.locale = locale;
@@ -912,7 +912,7 @@ void TVChildTarget::subst( OUString& instpath ) const
     instpath = aOptions.SubstituteVariable( instpath );
 }
 
-// class ExtensionIteratorBase
+
 
 static OUString aHelpMediaType("application/vnd.sun.star.help");
 
@@ -952,7 +952,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     if( !xPackage.is() )
         return xHelpPackage;
 
-    // Check if parent package is registered
+    
     beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
         ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
     bool bRegistered = false;
@@ -1012,7 +1012,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+        m_eState = SHARED_EXTENSIONS;       
     }
     else
     {
@@ -1109,7 +1109,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
             {
                 OUString aPureEntry = aEntry.copy( nLastSlash + 1 );
 
-                // Check language sceme
+                
                 int nLen = aPureEntry.getLength();
                 const sal_Unicode* pc = aPureEntry.getStr();
                 bool bStartCanBeLanguage = ( nLen >= 2 && isLetter( pc[0] ) && isLetter( pc[1] ) );
@@ -1122,7 +1122,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     }
 }
 
-// class TreeFileIterator
+
 
 OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xistring.hxx"
@@ -22,12 +22,12 @@
 #include "xistream.hxx"
 #include "xiroot.hxx"
 
-// Byte/Unicode strings =======================================================
+
 
 /** All allowed flags for import. */
 const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS | EXC_STR_SEPARATEFORMATS;
 
-// ----------------------------------------------------------------------------
+
 
 XclImpString::XclImpString()
 {
@@ -58,13 +58,13 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
         case EXC_BIFF3:
         case EXC_BIFF4:
         case EXC_BIFF5:
-            // no integrated formatting in BIFF2-BIFF7
+            
             maString = rStrm.ReadByteString( b16BitLen );
         break;
 
         case EXC_BIFF8:
         {
-            // --- string header ---
+            
             sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
             sal_uInt8 nFlagField = 0;
             if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
@@ -74,16 +74,16 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
             sal_uInt16 nRunCount;
             sal_uInt32 nExtInf;
             rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
-            // ignore the flags, they may be wrong
+            
 
-            // --- character array ---
+            
             maString = rStrm.ReadRawUniString( nChars, b16Bit );
 
-            // --- formatting ---
+            
             if( nRunCount > 0 )
                 ReadFormats( rStrm, nRunCount );
 
-            // --- extended (FarEast) information ---
+            
             rStrm.Ignore( nExtInf );
         }
         break;
@@ -95,7 +95,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
 
 void XclImpString::AppendFormat( XclFormatRunVec& rFormats, sal_uInt16 nChar, sal_uInt16 nFontIdx )
 {
-    // #i33341# real life -- same character index may occur several times
+    
     OSL_ENSURE( rFormats.empty() || (rFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
     if( rFormats.empty() || (rFormats.back().mnChar < nChar) )
         rFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
@@ -138,7 +138,7 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, 
 
 void XclImpString::ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nFormatSize )
 {
-    // number of formatting runs, each takes 8 bytes
+    
     sal_uInt16 nRunCount = nFormatSize / 8;
     rFormats.clear();
     rFormats.reserve( nRunCount );
@@ -151,7 +151,7 @@ void XclImpString::ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormat
     }
 }
 
-// String iterator ============================================================
+
 
 XclImpStringIterator::XclImpStringIterator( const XclImpString& rString ) :
     mrText( rString.GetText() ),
@@ -162,10 +162,10 @@ XclImpStringIterator::XclImpStringIterator( const XclImpString& rString ) :
     mnFormatsBeg( 0 ),
     mnFormatsEnd( 0 )
 {
-    // first portion is formatted, adjust vector index to next portion
+    
     if( !mrFormats.empty() && (mrFormats.front().mnChar == 0) )
         ++mnFormatsEnd;
-    // find end position of the first portion
+    
     mnTextEnd = (mnFormatsEnd < mrFormats.size() ?
         mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength() );
 }
@@ -187,12 +187,12 @@ XclImpStringIterator& XclImpStringIterator::operator++()
         ++mnPortion;
         do
         {
-            // indexes into vector of formatting runs
+            
             if( mnFormatsBeg < mnFormatsEnd )
                 ++mnFormatsBeg;
             if( mnFormatsEnd < mrFormats.size() )
                 ++mnFormatsEnd;
-            // character positions of next portion
+            
             mnTextBeg = mnTextEnd;
             mnTextEnd = (mnFormatsEnd < mrFormats.size()) ?
                 mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength();
@@ -202,6 +202,6 @@ XclImpStringIterator& XclImpStringIterator::operator++()
     return *this;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

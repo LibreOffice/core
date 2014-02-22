@@ -22,20 +22,20 @@
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxPostItAuthorItem, SfxStringItem, new SvxPostItAuthorItem(0));
 TYPEINIT1_FACTORY(SvxPostItDateItem, SfxStringItem, new SvxPostItDateItem(0));
 TYPEINIT1_FACTORY(SvxPostItTextItem, SfxStringItem, new SvxPostItTextItem(0));
 
-// class SvxPostItAuthorItem ---------------------------------------------
+
 
 SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
                                           sal_uInt16 _nWhich ) :
@@ -43,7 +43,7 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostItAuthorItem::GetPresentation
 (
@@ -69,21 +69,21 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItAuthorItem( *this );
 }
 
-// class SvxPostItDateItem -----------------------------------------------
+
 
 SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich ) :
 
@@ -91,7 +91,7 @@ SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich 
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostItDateItem::GetPresentation
 (
@@ -117,21 +117,21 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
 }
 
-// class SvxPostItTextItem -----------------------------------------------
+
 
 SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich ) :
 
@@ -139,7 +139,7 @@ SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich 
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostItTextItem::GetPresentation
 (
@@ -165,7 +165,7 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
 {

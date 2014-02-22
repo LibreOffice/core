@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
     refStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     WW8Fib aWwFib(*refStrm, nVersion);
 
-    if (aWwFib.nFibBack >= 0x6A)   //Word97
+    if (aWwFib.nFibBack >= 0x6A)   
     {
         xTableStream = pStg->OpenSotStream(OUString::createFromAscii(
             aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
@@ -82,8 +82,8 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     bool bSaveRelFile, const std::vector<OUString>& rStrings,
     const std::vector<ww::bytes>& rExtra)
 {
-    // this code will be called after reading all text into the
-    // empty sections
+    
+    
     const OUString aOldURL( rBlocks.GetBaseURL() );
     bool bRet=false;
     if( bSaveRelFile )
@@ -99,7 +99,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     SwNodeIndex aDocEnd( pD->GetNodes().GetEndOfContent() );
     SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode(), 1 );
 
-    // search the first NormalStartNode
+    
     while( !( aStart.GetNode().IsStartNode() && SwNormalStartNode ==
            aStart.GetNode().GetStartNode()->GetStartNodeType()) &&
             aStart < aDocEnd )
@@ -137,11 +137,11 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             }
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-            // now we have the right selection for one entry.  Copy this to
-            // the definied TextBlock, but only if it is not an autocorrection
-            // entry (== -1) otherwise the group indicates the group in the
-            // sttbfglsystyle list that this entry belongs to. Unused at the
-            // moment
+            
+            
+            
+            
+            
             const ww::bytes &rData = rExtra[nGlosEntry];
             sal_uInt16 n = SVBT16ToShort( &(rData[2]) );
             if(n != 0xFFFF)
@@ -151,18 +151,18 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
                 OUString sShortcut = rLNm;
 
-                // Need to check make sure the shortcut is not already being used
+                
                 sal_Int32 nStart = 0;
                 sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
                 sal_Int32 nLen = sShortcut.getLength();
                 while( (sal_uInt16)-1 != nCurPos )
                 {
                     sShortcut = sShortcut.copy( 0, nLen );
-                    sShortcut += OUString::number(++nStart);    // add an Number to it
+                    sShortcut += OUString::number(++nStart);    
                     nCurPos = rBlocks.GetIndex( sShortcut );
                 }
 
-                if( rBlocks.BeginPutDoc( sShortcut, sShortcut ))    // Make the shortcut and the name the same
+                if( rBlocks.BeginPutDoc( sShortcut, sShortcut ))    
 
                 {
                     SwDoc* pGlDoc = rBlocks.GetDoc();
@@ -182,7 +182,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
         bRet=true;
     }
 
-// this code will be called after reading all text into the empty sections
+
 
     rBlocks.SetBaseURL( aOldURL );
     return bRet;
@@ -194,7 +194,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     bool bRet=false;
     if (pGlossary && pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
     {
-        //read the names of the autotext entries
+        
         std::vector<OUString> aStrings;
         std::vector<ww::bytes> aData;
 
@@ -241,7 +241,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
 bool WW8GlossaryFib::IsGlossaryFib()
 {
-    // fGlsy will indicate whether this has AutoText or not
+    
     return fGlsy;
 }
 
@@ -250,7 +250,7 @@ sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
                                              const WW8Fib &rFib)
 {
     sal_uInt32 nGlossaryFibOffset = 0;
-    if ( rFib.fDot ) // it's a template
+    if ( rFib.fDot ) 
     {
         if ( rFib.pnNext  )
             nGlossaryFibOffset = ( rFib.pnNext * 512 );

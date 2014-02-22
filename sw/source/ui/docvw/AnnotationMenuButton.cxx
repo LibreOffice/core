@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <AnnotationMenuButton.hxx>
@@ -98,7 +98,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
                 sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
             }
         }
-        // do not allow to reply to ourself and no answer possible if this note is in a protected section
+        
         if ( sAuthor == mrSidebarWin.GetAuthor() )
         {
             pButtonPopup->EnableItem( FN_REPLY, false );
@@ -124,13 +124,13 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
 
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        //draw rect around button
+        
         SetFillColor(COL_BLACK);
         SetLineColor(COL_WHITE);
     }
     else
     {
-        //draw button
+        
         Gradient aGradient;
         if ( IsMouseOver() )
             aGradient = Gradient( GradientStyle_LINEAR,
@@ -142,7 +142,7 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
                                   ColorFromAlphaColor( 80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ));
         DrawGradient( aRect, aGradient );
 
-        //draw rect around button
+        
         SetFillColor();
         SetLineColor( ColorFromAlphaColor( 90, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ));
     }
@@ -165,14 +165,14 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
     else
     {
         Rectangle aSymbolRect( aRect );
-        // 25% distance to the left and right button border
+        
         const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
         aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
         aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
-        // 40% distance to the top button border
+        
         const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*400)+500)/1000;
         aSymbolRect.Top()+=nBorderDistanceTop;
-        // 15% distance to the bottom button border
+        
         const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*150)+500)/1000;
         aSymbolRect.Bottom()-=nBorderDistanceBottom;
         DecorationView aDecoView( this );
@@ -198,6 +198,6 @@ void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
     }
 }
 
-} } // end of namespace sw::annotation
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

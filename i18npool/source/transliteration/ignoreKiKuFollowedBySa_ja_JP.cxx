@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,8 +33,8 @@ OUString SAL_CALL
 ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
-    // Create a string buffer which can hold nCount + 1 characters.
-    // The reference count is 1 now.
+    
+    
     rtl_uString * newStr = rtl_uString_alloc(nCount);
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
@@ -42,7 +42,7 @@ ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos
     sal_Int32 *p = 0;
     sal_Int32 position = 0;
     if (useOffset) {
-        // Allocate nCount length to offset argument.
+        
         offset.realloc( nCount );
         p = offset.getArray();
         position = startPos;
@@ -52,19 +52,19 @@ ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos
     sal_Unicode previousChar = *src ++;
     sal_Unicode currentChar;
 
-    // Translation
+    
     while (-- nCount > 0) {
         currentChar = *src ++;
 
-        // KU + Sa-So --> KI + Sa-So
-        if (previousChar == 0x30AF ) { // KATAKANA LETTER KU
-            if (0x30B5 <= currentChar && // KATAKANA LETTER SA
-                    currentChar <= 0x30BE) { // KATAKANA LETTER ZO
+        
+        if (previousChar == 0x30AF ) { 
+            if (0x30B5 <= currentChar && 
+                    currentChar <= 0x30BE) { 
                 if (useOffset) {
                     *p ++ = position++;
                     *p ++ = position++;
                 }
-                *dst ++ = 0x30AD;          // KATAKANA LETTER KI
+                *dst ++ = 0x30AD;          
                 *dst ++ = currentChar;
                 previousChar = *src ++;
                 nCount --;
@@ -89,7 +89,7 @@ ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos
     newStr->length = sal_Int32(dst - newStr->buffer);
     if (useOffset)
         offset.realloc(newStr->length);
-    return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
+    return OUString(newStr, SAL_NO_ACQUIRE); 
 }
 
 } } } }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------
-// testcomponent - Loads a service and its testcomponent from dlls performs a test.
-// Expands the dll-names depending on the actual environment.
-// Example : testcomponent com.sun.star.io.Pipe stm
+
+
+
+
 //
-// Therefor the testcode must exist in teststm and the testservice must be named test.com.sun.star.uno.io.Pipe
+
 //
 
 #include <stdio.h>
@@ -87,7 +87,7 @@ public:
     virtual void SAL_CALL skipBytes( sal_Int32 /* nBytesToSkip */ )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
         {
-            // not implemented
+            
         }
     virtual sal_Int32 SAL_CALL available(  )
         throw(NotConnectedException, IOException, RuntimeException)
@@ -97,15 +97,15 @@ public:
     virtual void SAL_CALL closeInput(  )
         throw(NotConnectedException, IOException, RuntimeException)
         {
-            // not needed
+            
         }
     Sequence< sal_Int8> m_seq;
     sal_Int32 nPos;
 };
 
-//-------------------------------
-// Helper : create an input stream from a file
-//------------------------------
+
+
+
 Reference< XInputStream > createStreamFromFile(
     const char *pcFile )
 {
@@ -126,10 +126,10 @@ Reference< XInputStream > createStreamFromFile(
     return r;
 }
 
-//-----------------------------------------
-// The document handler, which is needed for the saxparser
-// The Documenthandler for reading sax
-//-----------------------------------------
+
+
+
+
 class TestDocumentHandler :
     public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
@@ -138,7 +138,7 @@ public:
     {
     }
 
-public: // Error handler
+public: 
     virtual void SAL_CALL error(const Any& aSAXParseException) throw (SAXException, RuntimeException)
     {
         printf( "Error !\n" );
@@ -157,7 +157,7 @@ public: // Error handler
     }
 
 
-public: // ExtendedDocumentHandler
+public: 
 
     virtual void SAL_CALL startDocument(void) throw (SAXException, RuntimeException)
     {
@@ -184,7 +184,7 @@ public: // ExtendedDocumentHandler
 
     virtual void SAL_CALL endElement(const OUString& /* aName */) throw (SAXException,RuntimeException)
     {
-        // ignored
+        
     }
 
     virtual void SAL_CALL characters(const OUString& aChars) throw (SAXException,RuntimeException)
@@ -198,13 +198,13 @@ public: // ExtendedDocumentHandler
 
     virtual void SAL_CALL processingInstruction(const OUString& /* aTarget */, const OUString& /* aData */) throw (SAXException,RuntimeException)
     {
-        // ignored
+        
     }
 
     virtual void SAL_CALL setDocumentLocator(const Reference< XLocator> & /* xLocator */)
         throw (SAXException,RuntimeException)
     {
-        // ignored
+        
     }
 
     virtual InputSource SAL_CALL resolveEntity(
@@ -247,10 +247,10 @@ public:
     int m_iCharCount;
 };
 
-//--------------------------------------
-// helper implementation for writing
-// implements an XAttributeList
-//-------------------------------------
+
+
+
+
 struct AttributeListImpl_impl;
 class AttributeListImpl : public WeakImplHelper1< XAttributeList >
 {
@@ -299,7 +299,7 @@ struct AttributeListImpl_impl
 {
     AttributeListImpl_impl()
     {
-        // performance improvement during adding
+        
         vecAttribute.reserve(20);
     }
     vector<struct TagAttribute> vecAttribute;
@@ -397,13 +397,13 @@ void AttributeListImpl::clear()
 }
 
 
-//--------------------------------------
-// helper function for writing
-// ensures that linebreaks are inserted
-// when writing a long text.
-// Note: this implementation may be a bit slow,
-// but it shows, how the SAX-Writer handles the allowLineBreak calls.
-//--------------------------------------
+
+
+
+
+
+
+
 void writeParagraphHelper(
     const  Reference< XExtendedDocumentHandler > &r ,
     const OUString & s)
@@ -427,10 +427,10 @@ void writeParagraphHelper(
 }
 
 
-//---------------------------------
-// helper implementation for SAX-Writer
-// writes data to a file
-//--------------------------------
+
+
+
+
 class OFileWriter :
         public WeakImplHelper1< XOutputStream >
 {
@@ -477,7 +477,7 @@ void OFileWriter::closeOutput(void)
 
 
 
-// Needed to switch on solaris threads
+
 #ifdef SOLARIS
 extern "C" void ChangeGlobalInit();
 #endif
@@ -489,18 +489,18 @@ int main (int argc, char **argv)
         exit( 0 );
     }
 #ifdef SOLARIS
-    // switch on threads in solaris
+    
     ChangeGlobalInit();
 #endif
 
-    // create service manager
+    
     Reference< XMultiServiceFactory > xSMgr = createRegistryServiceFactory(
         OUString(  "applicat.rdb" ) );
 
     Reference < XImplementationRegistration > xReg;
     try
     {
-        // Create registration service
+        
         Reference < XInterface > x = xSMgr->createInstance(
             OUString("com.sun.star.registry.ImplementationRegistration") );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
@@ -513,7 +513,7 @@ int main (int argc, char **argv)
     OString sTestName;
     try
     {
-        // Load dll for the tested component
+        
         OUString aDllName( "sax.uno" SAL_DLLEXTENSION );
         xReg->registerImplementation(
             OUString("com.sun.star.loader.SharedLibrary"),
@@ -528,17 +528,17 @@ int main (int argc, char **argv)
     }
 
 
-    //--------------------------------
-    // parser demo
-    // read xml from a file and count elements
-    //--------------------------------
+    
+    
+    
+    
     Reference< XInterface > x = xSMgr->createInstance(
         OUString("com.sun.star.xml.sax.Parser") );
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );
 
-        // create and connect the document handler to the parser
+        
         TestDocumentHandler *pDocHandler = new TestDocumentHandler( );
 
         Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
@@ -547,14 +547,14 @@ int main (int argc, char **argv)
         rParser->setDocumentHandler( rDocHandler );
         rParser->setEntityResolver( rEntityResolver );
 
-        // create the input stream
+        
         InputSource source;
         source.aInputStream = createStreamFromFile( argv[1] );
         source.sSystemId    = OUString::createFromAscii( argv[1] );
 
         try
         {
-            // start parsing
+            
             rParser->parseStream( source );
         }
 
@@ -570,9 +570,9 @@ int main (int argc, char **argv)
     }
 
 
-    //----------------------
-    // The SAX-Writer demo
-    //----------------------
+    
+    
+    
     x= xSMgr->createInstance("com.sun.star.xml.sax.Writer");
     if( x.is() )
     {
@@ -596,7 +596,7 @@ int main (int argc, char **argv)
                              OUString( "foo2") );
 
         r->startElement( OUString( "tag1")  , rList );
-        // tells the writer to insert a linefeed
+        
         r->ignorableWhitespace( OUString() );
 
         r->characters( OUString( "huhu") );
@@ -605,11 +605,11 @@ int main (int argc, char **argv)
         r->startElement( OUString( "hi") , rList );
         r->ignorableWhitespace( OUString() );
 
-        // the enpassant must be converted & -> &amp;
+        
         r->characters( OUString( "&#252;") );
         r->ignorableWhitespace( OUString() );
 
-        // '>' must not be converted
+        
         r->startCDATA();
         r->characters( OUString( " > foo < ")  );
         r->endCDATA();

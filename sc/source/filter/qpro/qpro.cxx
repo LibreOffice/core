@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,7 +52,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     {
         switch( getId() )
         {
-            case 0x000f:{ // Label cell
+            case 0x000f:{ 
                 OUString aLabel;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadUChar( nDummy );
                 sal_uInt16 nLen = getLength();
@@ -69,17 +69,17 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 }
                 break;
 
-            case 0x00cb: // End of sheet
+            case 0x00cb: 
                 bEndOfSheet = true;
                 break;
 
-            case 0x000c: // Blank cell
+            case 0x000c: 
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
                 break;
 
-            case 0x000d:{ // Integer cell
+            case 0x000d:{ 
                 sal_Int16 nValue;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadInt16( nValue );
                 nStyle = nStyle >> 3;
@@ -89,7 +89,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 }
                 break;
 
-            case 0x000e:{ // Floating point cell
+            case 0x000e:{ 
                 double nValue;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue );
                 nStyle = nStyle >> 3;
@@ -99,7 +99,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 }
                 break;
 
-            case 0x0010:{ // Formula cell
+            case 0x0010:{ 
                 double nValue;
                 sal_uInt16 nState, nLen;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue ).ReadUInt16( nState ).ReadUInt16( nLen );
@@ -153,11 +153,11 @@ FltError ScQProReader::import( ScDocument *pDoc )
     {
         switch( getId() )
         {
-            case 0x0000: // Begginning of file
+            case 0x0000: 
                 mpStream->ReadUInt16( nVersion );
                 break;
 
-            case 0x00ca: // Beginning of sheet
+            case 0x00ca: 
                 if( nTab <= MAXTAB )
                 {
                     if( nTab < 26 )
@@ -174,11 +174,11 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 }
                 break;
 
-            case 0x0001: // End of file
+            case 0x0001: 
                 SetEof( true );
                 break;
 
-            case 0x00ce:{ // Attribute cell
+            case 0x00ce:{ 
                 sal_uInt8 nFormat, nAlign, nFont;
                 sal_Int16 nColor;
                 mpStream->ReadUChar( nFormat ).ReadUChar( nAlign ).ReadInt16( nColor ).ReadUChar( nFont );
@@ -188,7 +188,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 }
                 break;
 
-            case 0x00cf:{ // Font description
+            case 0x00cf:{ 
                 sal_uInt16 nPtSize, nFontAttr;
                 OUString aLabel;
                 mpStream->ReadUInt16( nPtSize ).ReadUInt16( nFontAttr );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -66,7 +66,7 @@ DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     return this;
 }
 
-///////////////////
+
 
 DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
@@ -104,7 +104,7 @@ DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     return this;
 }
 
-///////////////////////
+
 
 DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFilter,
                                                               const OUString& rFragmentPath,
@@ -128,9 +128,9 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
 ::oox::core::ContextHandlerRef DiagramQStylesFragmentHandler::onCreateContext( sal_Int32 nElement,
                                                                                const AttributeList& rAttribs )
 {
-    // state-table like way of navigating the color fragment. we
-    // currently ignore everything except styleLbl in the colorsDef
-    // element
+    
+    
+    
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
@@ -143,16 +143,16 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
         {
             switch( nElement )
             {
-                case DGM_TOKEN(lnRef) :     // CT_StyleMatrixReference
+                case DGM_TOKEN(lnRef) :     
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maLineStyle);
-                case DGM_TOKEN(fillRef) :   // CT_StyleMatrixReference
+                case DGM_TOKEN(fillRef) :   
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maFillStyle);
-                case DGM_TOKEN(effectRef) : // CT_StyleMatrixReference
+                case DGM_TOKEN(effectRef) : 
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maEffectStyle);
-                case DGM_TOKEN(fontRef) :   // CT_FontRe    ference
+                case DGM_TOKEN(fontRef) :   
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maTextStyle);
             }
@@ -173,7 +173,7 @@ void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttrib
     }
 }
 
-/////////////////////
+
 
 void DiagramQStylesFragmentHandler::onEndElement( )
 {
@@ -193,9 +193,9 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
 ::oox::core::ContextHandlerRef ColorFragmentHandler::onCreateContext( sal_Int32 nElement,
                                                                       const AttributeList& /*rAttribs*/ )
 {
-    // state-table like way of navigating the color fragment. we
-    // currently ignore everything except styleLbl in the colorsDef
-    // element
+    
+    
+    
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
@@ -210,11 +210,11 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
                     (nElement == DGM_TOKEN(txFillClrLst)) ||
                     (nElement == DGM_TOKEN(txEffectClrLst))) ? this : NULL;
 
-        // the actual colors - defer to color fragment handlers.
+        
 
-        // TODO(F1): well, actually, there might be *several* color
-        // definitions in it, after all it's called list. but
-        // apparently colorChoiceContext doesn't handle that anyway...
+        
+        
+        
         case DGM_TOKEN(fillClrLst):
             return new ColorContext( *this, maColorEntry.maFillColor );
         case DGM_TOKEN(linClrLst):

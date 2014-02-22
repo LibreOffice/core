@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -56,10 +56,10 @@ static OUString createPath(
 
 static boost::shared_ptr< SvStream > wrapFile(osl::File & file)
 {
-    // This could use SvInputStream instead if that did not have a broken
-    // SeekPos implementation for an XInputStream that is not also XSeekable
-    // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
-    // l. 593):
+    
+    
+    
+    
     boost::shared_ptr< SvStream > s(new SvMemoryStream);
     for (;;) {
         void *data[2048];
@@ -77,10 +77,10 @@ static boost::shared_ptr< SvStream > wrapFile(osl::File & file)
 static boost::shared_ptr< SvStream > wrapStream(
     css::uno::Reference< css::io::XInputStream > const & stream)
 {
-    // This could use SvInputStream instead if that did not have a broken
-    // SeekPos implementation for an XInputStream that is not also XSeekable
-    // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
-    // l. 593):
+    
+    
+    
+    
     OSL_ASSERT(stream.is());
     boost::shared_ptr< SvStream > s(new SvMemoryStream);
     for (;;) {
@@ -120,8 +120,8 @@ bool ImplImageTree::checkStyle(OUString const & style)
 {
     bool exists;
 
-    // using cache because setStyle is an expensive operation
-    // setStyle calls resetPaths => closes any opened zip files with icons, cleans the icon cache, ...
+    
+    
     if (checkStyleCacheLookup(style, exists)) {
         return exists;
     }
@@ -195,7 +195,7 @@ bool ImplImageTree::doLoadImage(
     if (localized) {
         sal_Int32 pos = name.lastIndexOf('/');
         if (pos != -1) {
-            // find() uses a reverse iterator, so push in reverse order.
+            
             std::vector< OUString > aFallbacks( Application::GetSettings().GetUILanguageTag().getFallbackStrings( true));
             for (std::vector< OUString >::reverse_iterator it( aFallbacks.rbegin());
                     it != aFallbacks.rend(); ++it)
@@ -220,14 +220,14 @@ bool ImplImageTree::doLoadImage(
 
 void ImplImageTree::shutDown() {
     m_style = OUString();
-        // for safety; empty m_style means "not initialized"
+        
     m_iconCache.clear();
     m_checkStyleCache.clear();
     m_linkHash.clear();
 }
 
 void ImplImageTree::setStyle(OUString const & style) {
-    OSL_ASSERT(!style.isEmpty()); // empty m_style means "not initialized"
+    OSL_ASSERT(!style.isEmpty()); 
     if (style != m_style) {
         m_style = style;
         resetPaths();

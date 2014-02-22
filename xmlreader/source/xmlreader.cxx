@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -60,7 +60,7 @@ XmlReader::XmlReader(char const *sStr, size_t nLength)
     , fileSize_(0)
     , fileAddress_(0)
 {
-    namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
+    namespaceIris_.push_back(Span("http:
     namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
     pos_ = sStr;
     end_ = pos_ + nLength;
@@ -104,7 +104,7 @@ XmlReader::XmlReader(OUString const & fileUrl)
             "cannot mmap " + fileUrl_ + " (" + OUString::number(e) + ")",
             css::uno::Reference< css::uno::XInterface >());
     }
-    namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
+    namespaceIris_.push_back(Span("http:
     namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
@@ -132,12 +132,12 @@ XmlReader::~XmlReader() {
 int XmlReader::registerNamespaceIri(Span const & iri) {
     int id = toNamespaceId(namespaceIris_.size());
     namespaceIris_.push_back(iri);
-    if (iri.equals("http://www.w3.org/2001/XMLSchema-instance")) {
-        // Old user layer .xcu files used the xsi namespace prefix without
-        // declaring a corresponding namespace binding, see issue 77174; reading
-        // those files during migration would fail without this hack that can be
-        // removed once migration is no longer relevant (see
-        // configmgr::Components::parseModificationLayer):
+    if (iri.equals("http:
+        
+        
+        
+        
+        
         namespaces_.push_back(NamespaceData(Span("xsi"), id));
     }
     return id;
@@ -162,7 +162,7 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
     case STATE_EMPTY_ELEMENT_TAG:
         handleElementEnd();
         return RESULT_END;
-    default: // STATE_DONE
+    default: 
         return RESULT_DONE;
     }
 }
@@ -277,12 +277,12 @@ void XmlReader::skipProcessingInstruction() {
 }
 
 void XmlReader::skipDocumentTypeDeclaration() {
-    // Neither is it checked that the doctypedecl is at the correct position in
-    // the document, nor that it is well-formed:
+    
+    
     for (;;) {
         char c = read();
         switch (c) {
-        case '\0': // i.e., EOF
+        case '\0': 
             throw css::uno::RuntimeException(
                 "premature end (within DTD) of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
@@ -305,7 +305,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
             for (;;) {
                 c = read();
                 switch (c) {
-                case '\0': // i.e., EOF
+                case '\0': 
                     throw css::uno::RuntimeException(
                         "premature end (within DTD) of " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
@@ -324,7 +324,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                     break;
                 case '<':
                     switch (read()) {
-                    case '\0': // i.e., EOF
+                    case '\0': 
                         throw css::uno::RuntimeException(
                             "premature end (within DTD) of " + fileUrl_,
                             css::uno::Reference< css::uno::XInterface >());
@@ -381,7 +381,7 @@ bool XmlReader::scanName(char const ** nameColon) {
     assert(nameColon != 0 && *nameColon == 0);
     for (char const * begin = pos_;; ++pos_) {
         switch (peek()) {
-        case '\0': // i.e., EOF
+        case '\0': 
         case '\x09':
         case '\x0A':
         case '\x0D':
@@ -432,7 +432,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
                 } else {
                     break;
                 }
-                if (val > 0x10FFFF) { // avoid overflow
+                if (val > 0x10FFFF) { 
                     throw css::uno::RuntimeException(
                         "'&#x...' too large in " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
@@ -447,7 +447,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
                 } else {
                     break;
                 }
-                if (val > 0x10FFFF) { // avoid overflow
+                if (val > 0x10FFFF) { 
                     throw css::uno::RuntimeException(
                         "'&#...' too large in " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
@@ -538,8 +538,8 @@ Span XmlReader::handleAttributeValue(
         }
         char const * p = begin;
         enum Space { SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
-            // a single true space character can go into the current span,
-            // everything else breaks the span
+            
+            
         Space space = SPACE_NONE;
         while (p != end) {
             switch (*p) {
@@ -795,7 +795,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
     pad_.clear();
     for (char const * begin = pos_;;) {
         switch (peek()) {
-        case '\0': // i.e., EOF
+        case '\0': 
             throw css::uno::RuntimeException(
                 "premature end of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
@@ -856,12 +856,12 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
     char const * flowBegin = pos_;
     char const * flowEnd = pos_;
     enum Space { SPACE_START, SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
-        // a single true space character can go into the current flow,
-        // everything else breaks the flow
+        
+        
     Space space = SPACE_START;
     for (;;) {
         switch (peek()) {
-        case '\0': // i.e., EOF
+        case '\0': 
             throw css::uno::RuntimeException(
                 "premature end of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
@@ -921,9 +921,9 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 } else {
                     Span cdata(scanCdataSection());
                     if (cdata.is()) {
-                        // CDATA is not normalized (similar to character
-                        // references; it keeps the code simple), but it might
-                        // arguably be better to normalize it:
+                        
+                        
+                        
                         switch (space) {
                         case SPACE_START:
                             break;

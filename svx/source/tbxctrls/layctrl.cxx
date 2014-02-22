@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string>
@@ -33,7 +33,7 @@
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-// namespaces
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::frame;
 SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
 SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 
-// class TableWindow -----------------------------------------------------
+
 
 class TableWindow : public SfxPopupWindow
 {
@@ -98,7 +98,7 @@ private:
 const long TableWindow::TABLE_CELLS_HORIZ = 10;
 const long TableWindow::TABLE_CELLS_VERT = 15;
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TableWindow, SelectHdl)
 {
@@ -106,7 +106,7 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText,
                           ToolBox& rParentTbx, const Reference< XFrame >& rFrame )
@@ -154,20 +154,20 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 33 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 TableWindow::~TableWindow()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* TableWindow::Clone() const
 {
     return new TableWindow( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -181,7 +181,7 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
     Update( nNewCol, nNewLine );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -233,7 +233,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
         }
         if ( bHandled )
         {
-            //make sure that a table can initially be created
+            
             if(bInitialKeyInput)
             {
                 bInitialKeyInput = false;
@@ -255,7 +255,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
         SfxPopupWindow::KeyInput(rKEvt);
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -263,21 +263,21 @@ void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
     EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::Paint( const Rectangle& )
 {
     const long nSelectionWidth = mnTablePosX + nCol*mnTableCellWidth;
     const long nSelectionHeight = mnTablePosY + nLine*mnTableCellHeight;
 
-    // the non-selected parts of the table
+    
     SetLineColor( aLineColor );
     SetFillColor( aFillColor );
     DrawRect( Rectangle( nSelectionWidth, mnTablePosY, mnTableWidth, nSelectionHeight ) );
     DrawRect( Rectangle( mnTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight ) );
     DrawRect( Rectangle( nSelectionWidth, nSelectionHeight, mnTableWidth, mnTableHeight ) );
 
-    // the selection
+    
     if ( nCol > 0 && nLine > 0 )
     {
         SetFillColor( aHighlightFillColor );
@@ -285,7 +285,7 @@ void TableWindow::Paint( const Rectangle& )
                     nSelectionWidth, nSelectionHeight ) );
     }
 
-    // lines inside of the table
+    
     SetLineColor( aLineColor );
     for ( long i = 1; i < TABLE_CELLS_VERT; ++i )
         DrawLine( Point( mnTablePosX, mnTablePosY + i*mnTableCellHeight ),
@@ -295,7 +295,7 @@ void TableWindow::Paint( const Rectangle& )
         DrawLine( Point( mnTablePosX + i*mnTableCellWidth, mnTablePosY ),
                   Point( mnTablePosX + i*mnTableCellWidth, mnTableHeight ) );
 
-    // the text near the mouse cursor telling the table dimensions
+    
     if ( nCol && nLine )
     {
         OUString aText;
@@ -325,7 +325,7 @@ void TableWindow::Paint( const Rectangle& )
         DrawRect( Rectangle ( nTextX - 2*nTipBorder, nTextY - 2*nTipBorder,
                     nTextX + aTextSize.Width() + nTipBorder, nTextY + aTextSize.Height() + nTipBorder ) );
 
-        // #i95350# force RTL output
+        
         if ( IsRTLEnabled() )
             aText = OUString(0x202D) + aText;
 
@@ -333,7 +333,7 @@ void TableWindow::Paint( const Rectangle& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::PopupModeEnd()
 {
@@ -351,7 +351,7 @@ void TableWindow::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::Update( long nNewCol, long nNewLine )
 {
@@ -369,7 +369,7 @@ void TableWindow::Update( long nNewCol, long nNewLine )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 {
@@ -391,18 +391,18 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TableWindow::CloseAndShowTableDialog()
 {
-    // close the toolbar tool
+    
     EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
-    // and open the table dialog instead
+    
     TableDialog( Sequence< PropertyValue >() );
 }
 
-// class ColumnsWindow ---------------------------------------------------
+
 
 class ColumnsWindow : public SfxPopupWindow
 {
@@ -437,7 +437,7 @@ public:
     sal_uInt16                  GetColCount() const { return (sal_uInt16)nCol; }
 };
 
-// -----------------------------------------------------------------------
+
 
 ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
@@ -474,14 +474,14 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUStri
     StartCascading();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* ColumnsWindow::Clone() const
 {
     return new ColumnsWindow( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -512,7 +512,7 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
 void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 {
     Size    aWinSize = GetOutputSizePixel();
-    Point   aWinPos;// = GetPosPixel();
+    Point   aWinPos;
 
     if ( nWidth <= nNewCol )
     {
@@ -561,7 +561,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
     }
     Update();
 }
-// -----------------------------------------------------------------------
+
 
 void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -601,7 +601,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
                     EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL);
                 break;
             }
-            //make sure that a table can initially be created
+            
             if(bInitialKeyInput)
             {
                 bInitialKeyInput = false;
@@ -622,7 +622,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
         SfxPopupWindow::KeyInput(rKEvt);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -633,7 +633,7 @@ void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
         EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColumnsWindow::Paint( const Rectangle& )
 {
@@ -689,7 +689,7 @@ void ColumnsWindow::Paint( const Rectangle& )
     DrawRect( Rectangle( 0, 0, aSize.Width() - 1, aSize.Height() - nTextHeight + 1 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColumnsWindow::PopupModeEnd()
 {
@@ -714,7 +714,7 @@ void ColumnsWindow::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
 }
 
-// class SvxTableToolBoxControl ------------------------------------------
+
 
 SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -724,20 +724,20 @@ SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 n
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTableToolBoxControl::~SvxTableToolBoxControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxTableToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONTIMEOUTANDMOVE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
 {
@@ -752,7 +752,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 {
@@ -761,7 +761,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -781,7 +781,7 @@ void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, cons
         ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
 }
 
-// class SvxColumnsToolBoxControl ------------------------------------------
+
 
 SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -790,20 +790,20 @@ SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxColumnsToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONTIMEOUTANDMOVE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
 {
@@ -818,7 +818,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
     return pWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
 {

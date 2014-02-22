@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,21 +47,21 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 using ::comphelper::DocumentInfo;
 
-//=========================================================================
-//=========================================================================
-//
-// OfficeDocumentsCloseListener Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
-// util::XCloseListener
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
+
+//
+
+//
+
+
+
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
          const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ )
     throw ( util::CloseVetoException,
@@ -69,7 +69,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing
 {
 }
 
-//=========================================================================
+
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosing(
          const lang::EventObject& Source )
     throw ( uno::RuntimeException )
@@ -80,26 +80,26 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
     m_pManager->notifyEvent( aDocEvent );
 }
 
-//=========================================================================
-//
-// lang::XEventListener (base of util::XCloseListener)
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
         const lang::EventObject& /*Source*/ )
     throw ( uno::RuntimeException )
 {
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// OfficeDocumentsManager Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 OfficeDocumentsManager::OfficeDocumentsManager(
             const uno::Reference< uno::XComponentContext > & rxContext,
@@ -109,37 +109,37 @@ OfficeDocumentsManager::OfficeDocumentsManager(
   m_pDocEventListener( pDocEventListener ),
   m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
 {
-    // Order is important (multithreaded environment)
+    
     uno::Reference< document::XEventBroadcaster >(
         m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->addEventListener( this );
     buildDocumentsList();
 }
 
-//=========================================================================
-// virtual
+
+
 OfficeDocumentsManager::~OfficeDocumentsManager()
 {
-    //OSL_ENSURE( m_aDocs.empty(), "document list not empty!" );
-    // no need to assert this: Normal shutdown of OOo could already trigger it, since the order in which
-    // objects are actually released/destroyed upon shutdown is not defined. And when we arrive *here*,
-    // OOo *is* shutting down currently, since we're held by the TDOC provider, which is disposed
-    // upon shutdown.
+    
+    
+    
+    
+    
 }
 
-//=========================================================================
+
 void OfficeDocumentsManager::destroy()
 {
     uno::Reference< document::XEventBroadcaster >(
         m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->removeEventListener( this );
 }
 
-//=========================================================================
+
 static OUString
 getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 {
     OUString aId;
 
-    // Try to get the UID directly from the document.
+    
     uno::Reference< beans::XPropertySet > xPropSet( xDoc, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -151,7 +151,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         }
         catch ( beans::UnknownPropertyException const & )
         {
-            // Not actually an error. Property is optional.
+            
         }
         catch ( lang::WrappedTargetException const & )
         {
@@ -161,10 +161,10 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 
     if ( aId.isEmpty() )
     {
-        // fallback: generate UID from document's this pointer.
-        // normalize the interface pointer first. Else, calls with different
-        // interfaces to the same object (say, XFoo and XBar) will produce
-        // different IDs
+        
+        
+        
+        
         uno::Reference< uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
         sal_Int64 nId = reinterpret_cast< sal_Int64 >( xNormalizedIFace.get() );
         aId = OUString::number( nId );
@@ -174,13 +174,13 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
     return aId;
 }
 
-//=========================================================================
-//
-// document::XEventListener
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL OfficeDocumentsManager::notifyEvent(
         const document::EventObject & Event )
     throw ( uno::RuntimeException )
@@ -189,8 +189,8 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
     Events documentation: OOo Developer's Guide / Writing UNO Components / Jobs
 */
 
-    if ( Event.EventName == "OnLoadFinished" // document loaded
-      || Event.EventName == "OnCreate" )     // document created
+    if ( Event.EventName == "OnLoadFinished" 
+      || Event.EventName == "OnCreate" )     
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -205,7 +205,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             {
                 if ( (*it).second.xModel == xModel )
                 {
-                    // already known.
+                    
                     break;
                 }
                 ++it;
@@ -213,7 +213,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
             if ( it == m_aDocs.end() )
             {
-                // new document
+                
 
                 uno::Reference< document::XStorageBasedDocument >
                     xDoc( Event.Source, uno::UNO_QUERY );
@@ -237,7 +237,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 if ( xCloseBroadcaster.is() )
                     xCloseBroadcaster->addCloseListener( m_xDocCloseListener );
 
-                // Propagate document closure.
+                
                 OSL_ENSURE( m_pDocEventListener,
                     "OnLoadFinished/OnCreate event: no owner for insert event propagation!" );
 
@@ -250,13 +250,13 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
     {
         if ( isOfficeDocument( Event.Source ) )
         {
-            // Document has been closed (unloaded)
+            
 
-            // #163732# - Official event "OnUnload" does not work here. Event
-            // gets fired to early. Other OnUnload listeners called after this
-            // listener may still need TDOC access to the document. Remove the
-            // document from TDOC docs list on XCloseListener::notifyClosing.
-            // See OfficeDocumentsManager::OfficeDocumentsListener::notifyClosing.
+            
+            
+            
+            
+            
 
             osl::MutexGuard aGuard( m_aMtx );
 
@@ -269,7 +269,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             {
                 if ( (*it).second.xModel == xModel )
                 {
-                    // Propagate document closure.
+                    
                     OSL_ENSURE( m_pDocEventListener,
                         "OnUnload event: no owner for close event propagation!" );
 
@@ -315,7 +315,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             {
                 if ( (*it).second.xModel == xModel )
                 {
-                    // Storage gets exchanged while saving.
+                    
                     uno::Reference< document::XStorageBasedDocument >
                         xDoc( Event.Source, uno::UNO_QUERY );
                     OSL_ENSURE( xDoc.is(),
@@ -350,7 +350,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             {
                 if ( (*it).second.xModel == xModel )
                 {
-                    // Storage gets exchanged while saving.
+                    
                     uno::Reference< document::XStorageBasedDocument >
                         xDoc( Event.Source, uno::UNO_QUERY );
                     OSL_ENSURE( xDoc.is(),
@@ -362,7 +362,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
                     (*it).second.xStorage = xStorage;
 
-                    // Adjust title.
+                    
                     (*it).second.aTitle = DocumentInfo::getDocumentTitle( xModel );
                     break;
                 }
@@ -388,11 +388,11 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             {
                 if ( (*it).second.xModel == xModel )
                 {
-                    // Adjust title.
+                    
                     rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
                     (*it).second.aTitle = aTitle;
 
-                    // Adjust storage.
+                    
                     uno::Reference< document::XStorageBasedDocument >
                         xDoc( Event.Source, uno::UNO_QUERY );
                     OSL_ENSURE( xDoc.is(), "Got no document::XStorageBasedDocument!" );
@@ -409,40 +409,40 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 ++it;
             }
 
-//            OSL_ENSURE( it != m_aDocs.end(),
-//                        "TitleChanged event notified for unknown document!" );
-            // TODO: re-enable this assertion. It has been disabled for now, since it breaks the assertion-free smoketest,
-            // and the fix is more difficult than what can be done now.
-            // The problem is that at the moment, when you close a SFX-based document via API, it will first
-            // fire the notifyClosing event, which will make the OfficeDocumentsManager remove the doc from its list.
-            // Then, it will notify an OnTitleChanged, then an OnUnload. Documents closed via call the notifyClosing
-            // *after* OnUnload and all other On* events.
-            // In agreement with MBA, the implementation for SfxBaseModel::Close should be changed to also send notifyClosing
-            // as last event. When this happens, the assertion here must be enabled, again.
-            // There is no bug for this, yet - IZ is currently down due to the Kenai migration.
-            // 2011-02-23 / frank.schoenheit@sun.com
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
     }
 }
 
-//=========================================================================
-//
-// lang::XEventListener (base of document::XEventListener)
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL OfficeDocumentsManager::disposing(
         const lang::EventObject& /*Source*/ )
     throw ( uno::RuntimeException )
 {
 }
 
-//=========================================================================
+
 //
-// Non-interface.
+
 //
-//=========================================================================
+
 
 void OfficeDocumentsManager::buildDocumentsList()
 {
@@ -454,8 +454,8 @@ void OfficeDocumentsManager::buildDocumentsList()
     while ( xEnum->hasMoreElements() )
     {
         uno::Any aValue = xEnum->nextElement();
-        // container::NoSuchElementException
-        // lang::WrappedTargetException
+        
+        
 
         try
         {
@@ -471,7 +471,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                     {
                         if ( (*it).second.xModel == xModel )
                         {
-                            // already known.
+                            
                             break;
                         }
                         ++it;
@@ -479,7 +479,7 @@ void OfficeDocumentsManager::buildDocumentsList()
 
                     if ( it == m_aDocs.end() )
                     {
-                        // new document
+                        
                         OUString aDocId = getDocumentId( xModel );
                         OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
 
@@ -508,13 +508,13 @@ void OfficeDocumentsManager::buildDocumentsList()
         }
         catch ( lang::DisposedException const & )
         {
-            // Note: Due to race conditions the XEnumeration can
-            //       contains docs that already have been closed
+            
+            
         }
     }
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 OfficeDocumentsManager::queryStorage( const OUString & rDocId )
 {
@@ -527,14 +527,14 @@ OfficeDocumentsManager::queryStorage( const OUString & rDocId )
     return (*it).second.xStorage;
 }
 
-//=========================================================================
+
 OUString OfficeDocumentsManager::queryDocumentId(
     const uno::Reference< frame::XModel > & xModel )
 {
     return getDocumentId( xModel );
 }
 
-//=========================================================================
+
 uno::Reference< frame::XModel >
 OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
 {
@@ -547,7 +547,7 @@ OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
     return (*it).second.xModel;
 }
 
-//=========================================================================
+
 uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 {
     osl::MutexGuard aGuard( m_aMtx );
@@ -565,7 +565,7 @@ uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
     return aRet;
 }
 
-//=========================================================================
+
 OUString
 OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
 {
@@ -578,7 +578,7 @@ OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
     return (*it).second.aTitle;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isDocumentPreview(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -591,7 +591,7 @@ bool OfficeDocumentsManager::isDocumentPreview(
     return bIsPreview;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isHelpDocument(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -599,13 +599,13 @@ bool OfficeDocumentsManager::isHelpDocument(
         return false;
 
     OUString sURL( xModel->getURL() );
-    if ( sURL.match( "vnd.sun.star.help://" ) )
+    if ( sURL.match( "vnd.sun.star.help:
         return true;
 
     return false;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isWithoutOrInTopLevelFrame(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -620,8 +620,8 @@ bool OfficeDocumentsManager::isWithoutOrInTopLevelFrame(
             = xController->getFrame();
         if ( xFrame.is() )
         {
-            // don't use XFrame::isTop here. This nowadays excludes
-            // "sub documents" such as forms embedded in database documents
+            
+            
             uno::Reference< awt::XTopWindow > xFrameContainer(
                 xFrame->getContainerWindow(), uno::UNO_QUERY );
             if ( !xFrameContainer.is() )
@@ -632,7 +632,7 @@ bool OfficeDocumentsManager::isWithoutOrInTopLevelFrame(
     return true;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isBasicIDE(
         const uno::Reference< frame::XModel > & xModel )
 {
@@ -647,7 +647,7 @@ bool OfficeDocumentsManager::isBasicIDE(
             }
             catch ( uno::Exception const & )
             {
-                // handled below.
+                
             }
 
             OSL_ENSURE( m_xModuleMgr .is(),
@@ -673,7 +673,7 @@ bool OfficeDocumentsManager::isBasicIDE(
 
         if ( !aModule.isEmpty() )
         {
-            // Filter unwanted items, that are no real documents.
+            
             if ( aModule == "com.sun.star.script.BasicIDE" )
             {
                 return true;
@@ -684,7 +684,7 @@ bool OfficeDocumentsManager::isBasicIDE(
     return false;
 }
 
-//=========================================================================
+
 bool OfficeDocumentsManager::isOfficeDocument(
         const uno::Reference< uno::XInterface > & xDoc )
 {

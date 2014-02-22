@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "adtabdlg.hxx"
@@ -41,7 +41,7 @@
 #include "cppuhelper/basemutex.hxx"
 #include <algorithm>
 
-// slot ids
+
 using namespace dbaui;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -79,7 +79,7 @@ private:
     virtual void    updateTableObjectList( bool _bAllowViews );
     virtual OUString  getSelectedName( OUString& _out_rAliasName ) const;
     virtual bool    isLeafSelected() const;
-    // OContainerListener
+    
     virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -179,7 +179,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
                 sViews = xViews->getElementNames();
         }
 
-        // if no views are allowed remove the views also out the table name filter
+        
         if ( !_bAllowViews )
         {
             const OUString* pTableBegin  = sTables.getConstArray();
@@ -240,7 +240,7 @@ private:
     virtual void    updateTableObjectList( bool _bAllowViews );
     virtual OUString  getSelectedName( OUString& _out_rAliasName ) const;
     virtual bool    isLeafSelected() const;
-    // OContainerListener
+    
     virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -344,7 +344,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
 
     m_pTableList->EnableInplaceEditing( false );
     m_pTableList->SetStyle(m_pTableList->GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
-    m_pTableList->EnableCheckButton( NULL ); // do not show any buttons
+    m_pTableList->EnableCheckButton( NULL ); 
     m_pTableList->SetSelectionMode( SINGLE_SELECTION );
     m_pTableList->notifyHiContrastChanged();
     m_pTableList->suppressEmptyFolders();
@@ -419,10 +419,10 @@ IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
         impl_addTable();
         if ( !impl_isAddAllowed() )
             Close();
-        return 1L;  // handled
+        return 1L;  
     }
 
-    return 0L;  // not handled
+    return 0L;  
 }
 
 IMPL_LINK( OAddTableDlg, TableListSelectHdl, void*, /*EMPTY_ARG*/ )

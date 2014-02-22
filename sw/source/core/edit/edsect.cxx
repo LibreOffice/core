@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editsh.hxx>
@@ -154,7 +154,7 @@ void SwEditShell::DelSectionFmt( sal_uInt16 nFmt )
 {
     StartAllAction();
     GetDoc()->DelSectionFmt( GetDoc()->GetSections()[ nFmt ] );
-    // Call the AttrChangeNotify on the UI page.
+    
     CallChgLnk();
     EndAllAction();
 }
@@ -164,7 +164,7 @@ void SwEditShell::UpdateSection(sal_uInt16 const nSect,
 {
     StartAllAction();
     GetDoc()->UpdateSection( nSect, rNewData, pAttr );
-    // Call the AttrChangeNotify on the UI page.
+    
     CallChgLnk();
     EndAllAction();
 }
@@ -181,7 +181,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
         _SetSectionAttr( *pSectFmt, rSet );
     else
     {
-        // for all section in the selection
+        
 
         FOREACHPAM_START(GetCrsr())
 
@@ -241,7 +241,7 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
     else
         GetDoc()->SetAttr( rSet, rSectFmt );
 
-    // Call the AttrChangeNotify on the UI page.
+    
     CallChgLnk();
     EndAllAction();
 }
@@ -258,7 +258,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
         const SwPosition* pStt = PCURCRSR->Start(),
                         * pEnd = PCURCRSR->End();
         const SwCntntNode* pCNd;
-        // check the selection, if Start at Node begin and End at Node end
+        
         if( pStt->nContent.GetIndex() ||
             ( 0 == ( pCNd = pEnd->nNode.GetNode().GetCntntNode() )) ||
             pCNd->Len() != pEnd->nContent.GetIndex() )
@@ -267,11 +267,11 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
             break;
         }
 
-// !!!
-// what about table at start or end ?
-//      There is no selection possible!
-// What about only a table inside the section ?
-//      There is only a table selection possible!
+
+
+
+
+
 
         SwNodeIndex aSIdx( pStt->nNode, -1 ), aEIdx( pEnd->nNode, +1 );
         if( !aSIdx.GetNode().IsSectionNode() ||
@@ -308,37 +308,37 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 {
     const SwNode* pReturn = NULL;
 
-    // the current position
+    
     OSL_ENSURE( pCurrentPos != NULL, "Strange, we have no position!" );
     const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
 
-    // find innermost section or table.  At the end of this scope,
-    // pInntermostNode contain the section/table before/after which we should
-    // insert our empty paragraph, or it will be NULL if none is found.
+    
+    
+    
     const SwNode* pInnermostNode = NULL;
     {
         const SwNode* pTableNode = rCurrentNode.FindTableNode();
         const SwNode* pSectionNode = rCurrentNode.FindSectionNode();
 
-        // find the table/section which is close
+        
         if( pTableNode == NULL )
             pInnermostNode = pSectionNode;
         else if ( pSectionNode == NULL )
             pInnermostNode = pTableNode;
         else
         {
-            // compare and choose the larger one
+            
             pInnermostNode =
                 ( pSectionNode->GetIndex() > pTableNode->GetIndex() )
                 ? pSectionNode : pTableNode;
         }
     }
 
-    // The previous version had a check to skip empty read-only sections. Those
-    // shouldn't occur, so we only need to check whether our pInnermostNode is
-    // inside a protected area.
+    
+    
+    
 
-    // Now, pInnermostNode is NULL or the innermost section or table node.
+    
     if( (pInnermostNode != NULL) && !pInnermostNode->IsProtect() )
     {
         OSL_ENSURE( pInnermostNode->IsTableNode() ||
@@ -347,11 +347,11 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
                     ( pInnermostNode->EndOfSectionNode()->GetIndex() >=
                       rCurrentNode.GetIndex() ), "wrong node found" );
 
-        // we now need to find the possible start/end positions
+        
 
-        // we found a start if
-        // - we're at or just before a start node
-        // - there are only start nodes between the current and pInnermostNode
+        
+        
+        
         SwNodeIndex aBegin( pCurrentPos->nNode );
         if( rCurrentNode.IsCntntNode() &&
             (pCurrentPos->nContent.GetIndex() == 0))
@@ -361,10 +361,10 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             aBegin--;
         bool bStart = ( aBegin == pInnermostNode->GetIndex() );
 
-        // we found an end if
-        // - we're at or just before an end node
-        // - there are only end nodes between the current node and
-        //   pInnermostNode's end node
+        
+        
+        
+        
         SwNodeIndex aEnd( pCurrentPos->nNode );
         if( rCurrentNode.IsCntntNode() &&
             ( pCurrentPos->nContent.GetIndex() ==
@@ -375,7 +375,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             ++aEnd;
         bool bEnd = ( aEnd == pInnermostNode->EndOfSectionNode()->GetIndex() );
 
-        // evalutate result: if both start + end, end is preferred
+        
         if( bEnd )
             pReturn = pInnermostNode->EndOfSectionNode();
         else if ( bStart )
@@ -403,24 +403,24 @@ bool SwEditShell::DoSpecialInsert()
 {
     bool bRet = false;
 
-    // get current node
+    
     SwPosition* pCursorPos = GetCrsr()->GetPoint();
     const SwNode* pInsertNode = lcl_SpecialInsertNode( pCursorPos );
     if( pInsertNode != NULL )
     {
         StartAllAction();
 
-        // adjust insert position to insert before start nodes and after end
-        // nodes
+        
+        
         SwNodeIndex aInsertIndex( *pInsertNode,
                                   pInsertNode->IsStartNode() ? -1 : 0 );
         SwPosition aInsertPos( aInsertIndex );
 
-        // insert a new text node, and set the cursor
+        
         bRet = GetDoc()->AppendTxtNode( aInsertPos );
         *pCursorPos = aInsertPos;
 
-        // call AttrChangeNotify for the UI
+        
         CallChgLnk();
 
         EndAllAction();

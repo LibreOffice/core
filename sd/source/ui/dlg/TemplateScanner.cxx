@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,11 +50,11 @@ const char TARGET_DIR_URL[] = "TargetDirURL";
 const char DESCRIPTION[] = "TypeDescription";
 const char TARGET_URL[] = "TargetURL";
 
-//  These strings are used to find impress templates in the tree of
-//  template files.  Should probably be determined dynamically.
+
+
 const char IMPRESS_BIN_TEMPLATE[] = "application/vnd.stardivision.impress";
 const char IMPRESS_XML_TEMPLATE[] = MIMETYPE_VND_SUN_XML_IMPRESS_ASCII;
-// The following id comes from the bugdoc in #i2764#.
+
 const char IMPRESS_XML_TEMPLATE_B[] = "Impress 2.0";
 const char IMPRESS_XML_TEMPLATE_OASIS[] = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII;
 
@@ -78,7 +78,7 @@ public:
     OUString msTitle;
     OUString msTargetDir;
     OUString msContentIdentifier;
-    //    Reference<sdbc::XResultSet> mxFolderResultSet;
+    
     Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
 
     class Comparator
@@ -116,15 +116,15 @@ int Classify (const OUString&, const OUString& rsURL)
     }
     else
     {
-        // All other folders are taken for user supplied and have the
-        // highest priority.
+        
+        
         nPriority = 10;
     }
 
     return nPriority;
 }
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -185,7 +185,7 @@ TemplateScanner::TemplateScanner (void)
       mxFolderResultSet(),
       mxEntryResultSet()
 {
-    //  empty;
+    
 }
 
 
@@ -195,8 +195,8 @@ TemplateScanner::~TemplateScanner (void)
 {
     mpFolderDescriptors.reset();
 
-    // Delete all entries of the template list that have not been
-    // transferred to another object.
+    
+    
     std::vector<TemplateDir*>::iterator I;
     for (I=maFolderList.begin(); I!=maFolderList.end(); ++I)
         if (*I != NULL)
@@ -228,14 +228,14 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
     {
         mxEntryEnvironment = Reference<com::sun::star::ucb::XCommandEnvironment>();
 
-        //  We are interested only in three properties: the entry's name,
-        //  its URL, and its content type.
+        
+        
         Sequence<OUString> aProps (3);
         aProps[0] = OUString(TITLE);
         aProps[1] = OUString(TARGET_URL);
         aProps[2] = OUString(DESCRIPTION);
 
-        //  Create a cursor to iterate over the templates in this folders.
+        
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
         mxEntryResultSet = Reference<com::sun::star::sdbc::XResultSet>(
             maFolderContent.createCursor(aProps, eInclude));
@@ -268,9 +268,9 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment, comphelper::getProcessComponentContext());
             if (aContent.isDocument ())
             {
-                //  Check whether the entry is an impress template.  If so
-                //  add a new entry to the resulting list (which is created
-                //  first if necessary).
+                
+                
+                
                 if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE_OASIS)
                     ||  (sContentType == IMPRESS_BIN_TEMPLATE)
@@ -284,7 +284,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                 }
             }
 
-            // Continue scanning entries.
+            
             eNextState = SCAN_ENTRY;
         }
         else
@@ -300,7 +300,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                 maFolderList.push_back(mpTemplateDirectory);
             }
 
-            // Continue with scanning the next folder.
+            
             eNextState = SCAN_FOLDER;
         }
     }
@@ -319,16 +319,16 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
 
     try
     {
-        //  Create content for template folders.
+        
         mxFolderEnvironment = Reference<com::sun::star::ucb::XCommandEnvironment>();
         ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment, comphelper::getProcessComponentContext());
 
-        //  Define the list of properties we are interested in.
+        
         Sequence<OUString> aProps (2);
         aProps[0] = OUString(TITLE);
         aProps[1] = OUString(TARGET_DIR_URL);
 
-        //  Create an cursor to iterate over the template folders.
+        
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
         mxFolderResultSet = Reference<sdbc::XResultSet>(
             aTemplateDir.createCursor(aProps, eInclude));
@@ -397,13 +397,13 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
         maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment, comphelper::getProcessComponentContext());
         if (maFolderContent.isFolder())
         {
-            // Scan the folder and insert it into the list of template
-            // folders.
+            
+            
             mpTemplateDirectory = new TemplateDir (sTitle, sTargetDir);
             if (mpTemplateDirectory != NULL)
             {
                 mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
-                // Continue with scanning all entries in the folder.
+                
                 eNextState = INITIALIZE_ENTRY_SCAN;
             }
         }

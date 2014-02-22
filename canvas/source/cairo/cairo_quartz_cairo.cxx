@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined MACOSX || defined IOS
@@ -37,7 +37,7 @@ namespace cairo
 {
     bool IsCairoWorking( OutputDevice* )
     {
-        // trivially true for Mac
+        
         return true;
     }
 
@@ -56,8 +56,8 @@ namespace cairo
             mpView(NULL),
             mpSurface( pSurface )
     {
-        // Necessary, context is lost otherwise
-        CGContextRetain( getCGContext() ); //  == NULL for non-native surfaces
+        
+        CGContextRetain( getCGContext() ); 
     }
 
     /**
@@ -79,17 +79,17 @@ namespace cairo
     {
         OSL_TRACE("Canvas::cairo::Surface(NSView*, x:%d, y:%d, w:%d, h:%d): New Surface for window", x, y, width, height);
 
-        // on Mac OS X / Quartz we are not drawing directly to the screen, but via regular CGContextRef.
-        // The actual drawing to NSView (i.e. screen) is done in QuartzSurface::flush()
+        
+        
 
-        // HACK: currently initial size for windowsurface is 0x0, which is not possible for us.
+        
         if (width == 0 || height == 0) {
             width = [mpView bounds].size.width;
             height = [mpView bounds].size.height;
             OSL_TRACE("Canvas::cairo::Surface(): BUG!! size is ZERO! fixing to %d x %d...", width, height);
         }
 
-        // create a generic surface, NSView/Window is ARGB32.
+        
         mpSurface.reset(
             cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height),
             &cairo_surface_destroy);
@@ -112,9 +112,9 @@ namespace cairo
             mpSurface()
     {
         OSL_TRACE("Canvas::cairo::Surface(CGContext:%p, x:%d, y:%d, w:%d, h:%d): New Surface.", rContext, x, y, width, height);
-        // create surface based on CGContext
+        
 
-        // ensure kCGBitmapByteOrder32Host flag, otherwise Cairo breaks (we are practically always using CGBitmapContext)
+        
         OSL_ASSERT ((CGBitmapContextGetBitsPerPixel(rContext) != 32) ||
                     (CGBitmapContextGetBitmapInfo(rContext) & kCGBitmapByteOrderMask) == kCGBitmapByteOrder32Host);
 
@@ -123,7 +123,7 @@ namespace cairo
 
         cairo_surface_set_device_offset( mpSurface.get(), x, y );
 
-        // Necessary, context is lost otherwise
+        
         CGContextRetain(rContext);
     }
 
@@ -188,7 +188,7 @@ namespace cairo
      **/
     void QuartzSurface::flush() const
     {
-        // can only flush surfaces with NSView
+        
         if( !mpView )
             return;
 
@@ -208,7 +208,7 @@ namespace cairo
          */
         CGContextRef rViewContext = reinterpret_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
 #else
-        // Just guessing for now...
+        
         CGContextRef rViewContext = UIGraphicsGetCurrentContext();
 #endif
         CGImageRef xImage = CGBitmapContextCreateImage(mrContext);
@@ -343,10 +343,10 @@ namespace cairo
         return SurfaceSharedPtr();
     }
 
-}  // namespace cairo
+}  
 
-#endif   // CAIRO_HAS_QUARTZ_SURFACE
+#endif   
 
-#endif   // QUARTZ
+#endif   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

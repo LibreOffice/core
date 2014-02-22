@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 
-// OHierarchyHolder_Impl
+
 
 uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
@@ -52,7 +52,7 @@ void OHierarchyHolder_Impl::RemoveStreamHierarchically( OStringList_Impl& aListP
     m_xChild->RemoveStreamHierarchically( aListPath );
 }
 
-// static
+
 OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const OUString& aPath )
 {
     OStringList_Impl aResult;
@@ -70,7 +70,7 @@ OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const OUString& a
     return aResult;
 }
 
-// OHierarchyElement_Impl
+
 
 uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
@@ -110,8 +110,8 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
         uno::Reference< embed::XTransactedObject > xTransact( xResult, uno::UNO_QUERY );
         if ( xTransact.is() )
         {
-            // the existance of the transacted object means that the stream is opened for writing also
-            // so the whole chain must be commited
+            
+            
             uno::Reference< embed::XTransactionBroadcaster > xTrBroadcast( xTransact, uno::UNO_QUERY_THROW );
             xTrBroadcast->addTransactionListener( static_cast< embed::XTransactionListener* >( this ) );
         }
@@ -152,7 +152,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
         }
     }
 
-    // the subelement was opened successfully, remember the storage to let it be locked
+    
     m_xOwnStorage = xOwnStor;
 
     return xResult;
@@ -239,7 +239,7 @@ void OHierarchyElement_Impl::TestForClosing()
         {
             if ( m_rParent.is() )
             {
-                // only the root storage should not be disposed, other storages can be disposed
+                
                 if ( m_xOwnStorage.is() )
                 {
                     try
@@ -280,7 +280,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
     }
     catch( uno::Exception& )
     {
-        throw uno::RuntimeException(); // no exception must happen here, usually an exception means disaster
+        throw uno::RuntimeException(); 
     }
 }
 
@@ -301,7 +301,7 @@ void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyEl
     TestForClosing();
 }
 
-// XTransactionListener
+
 void SAL_CALL OHierarchyElement_Impl::preCommit( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {

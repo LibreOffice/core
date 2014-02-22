@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DragMethod_Base.hxx"
@@ -25,7 +25,7 @@
 #include "ObjectNameProvider.hxx"
 #include "ObjectIdentifier.hxx"
 #include <rtl/math.hxx>
-//header for class SdrPageView
+
 #include <svx/svdpagv.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -75,6 +75,6 @@ Pointer DragMethod_Base::GetSdrDragPointer() const
     else
         return Pointer(POINTER_MOVE);
 }
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

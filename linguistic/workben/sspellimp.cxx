@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.h>
@@ -75,7 +75,7 @@ PropertyHelper_Spell & SpellChecker::GetPropHelper_Impl()
 
         pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
         xPropHelper = pPropHelper;
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        pPropHelper->AddAsPropListener();   
     }
     return *pPropHelper;
 }
@@ -123,12 +123,12 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 
 sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale & )
 {
-    // Checks whether a word is OK in a given language (Locale) or not, and
-    // provides a failure type for the incorrect ones.
-    // - words with "liss" (case sensitiv) as substring will be negative.
-    // - words with 'x' or 'X' will have incorrect spelling.
-    // - words with 's' or 'S' as first letter will have the wrong caption.
-    // - all other words will be OK.
+    
+    
+    
+    
+    
+    
 
     sal_Int16 nRes = -1;
 
@@ -173,12 +173,12 @@ sal_Bool SAL_CALL
         return sal_True;
 #endif
 
-    // Get property values to be used.
-    // These are be the default values set in the SN_LINGU_PROPERTIES
-    // PropertySet which are overridden by the supplied ones from the
-    // last argument.
-    // You'll probably like to use a simplier solution than the provided
-    // one using the PropertyHelper_Spell.
+    
+    
+    
+    
+    
+    
     PropertyHelper_Spell &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
@@ -186,7 +186,7 @@ sal_Bool SAL_CALL
     if (nFailure != -1)
     {
         sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
-        // postprocess result for errors that should be ignored
+        
         if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
             || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
             || (!rHelper.IsSpellCapitalization()
@@ -201,13 +201,13 @@ sal_Bool SAL_CALL
 Reference< XSpellAlternatives >
     SpellChecker::GetProposals( const OUString &rWord, const Locale &rLocale )
 {
-    // Retrieves the return values for the 'spell' function call in case
-    // of a misspelled word.
-    // Especially it may give a list of suggested (correct) words:
-    // - a "liss" substring will be replaced by "liz".
-    // - 'x' or 'X' will be replaced by 'u' or 'U' for the first proposal
-    //   and they will be removed from the word for the second proposal.
-    // - 's' or 'S' as first letter will be changed to the other caption.
+    
+    
+    
+    
+    
+    
+    
 
     Reference< XSpellAlternatives > xRes;
 
@@ -352,13 +352,13 @@ void SAL_CALL
             Reference< XPropertySet >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            
+            
+            
+            
             pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
             xPropHelper = pPropHelper;
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            pPropHelper->AddAsPropListener();   
         }
         else
             OSL_FAIL( "wrong number of arguments in sequence" );
@@ -403,7 +403,7 @@ void SAL_CALL
 }
 
 
-// Service specific part
+
 
 OUString SAL_CALL SpellChecker::getImplementationName()
         throw(RuntimeException)
@@ -432,7 +432,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // more than 1 service possible
+    Sequence< OUString > aSNS( 1 ); 
     aSNS.getArray()[0] = SN_SPELLCHECKER;
     return aSNS;
 }
@@ -474,7 +474,7 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
                 SpellChecker::getImplementationName_Static(),
                 SpellChecker_CreateInstance,
                 SpellChecker::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }

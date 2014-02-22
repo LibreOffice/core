@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/srchitem.hxx>
@@ -54,37 +54,37 @@ using namespace com::sun::star::util;
 #define SRCH_PARA_CONTENT   "Content"
 #define SRCH_PARA_ASIANOPT  "AsianOptions"
 
-// STATIC DATA -----------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
 
-// -----------------------------------------------------------------------
+
 
 static Sequence< OUString > lcl_GetNotifyNames()
 {
-    // names of transliteration relevant properties
+    
     static const char* aTranslitNames[] =
     {
-        "IsMatchCase",                          //  0
-        "Japanese/IsMatchFullHalfWidthForms",   //  1
-        "Japanese/IsMatchHiraganaKatakana",     //  2
-        "Japanese/IsMatchContractions",         //  3
-        "Japanese/IsMatchMinusDashCho-on",      //  4
-        "Japanese/IsMatchRepeatCharMarks",      //  5
-        "Japanese/IsMatchVariantFormKanji",     //  6
-        "Japanese/IsMatchOldKanaForms",         //  7
-        "Japanese/IsMatch_DiZi_DuZu",           //  8
-        "Japanese/IsMatch_BaVa_HaFa",           //  9
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 10
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 11
-        "Japanese/IsMatch_SeShe_ZeJe",          // 12
-        "Japanese/IsMatch_IaIya",               // 13
-        "Japanese/IsMatch_KiKu",                // 14
-        "Japanese/IsIgnorePunctuation",         // 15
-        "Japanese/IsIgnoreWhitespace",          // 16
-        "Japanese/IsIgnoreProlongedSoundMark",  // 17
-        "Japanese/IsIgnoreMiddleDot",           // 18
-        "IsIgnoreDiacritics_CTL"                // 19
+        "IsMatchCase",                          
+        "Japanese/IsMatchFullHalfWidthForms",   
+        "Japanese/IsMatchHiraganaKatakana",     
+        "Japanese/IsMatchContractions",         
+        "Japanese/IsMatchMinusDashCho-on",      
+        "Japanese/IsMatchRepeatCharMarks",      
+        "Japanese/IsMatchVariantFormKanji",     
+        "Japanese/IsMatchOldKanaForms",         
+        "Japanese/IsMatch_DiZi_DuZu",           
+        "Japanese/IsMatch_BaVa_HaFa",           
+        "Japanese/IsMatch_TsiThiChi_DhiZi",     
+        "Japanese/IsMatch_HyuIyu_ByuVyu",       
+        "Japanese/IsMatch_SeShe_ZeJe",          
+        "Japanese/IsMatch_IaIya",               
+        "Japanese/IsMatch_KiKu",                
+        "Japanese/IsIgnorePunctuation",         
+        "Japanese/IsIgnoreWhitespace",          
+        "Japanese/IsIgnoreProlongedSoundMark",  
+        "Japanese/IsIgnoreMiddleDot",           
+        "IsIgnoreDiacritics_CTL"                
     };
 
     const int nCount = SAL_N_ELEMENTS( aTranslitNames );
@@ -96,7 +96,7 @@ static Sequence< OUString > lcl_GetNotifyNames()
     return aNames;
 }
 
-// -----------------------------------------------------------------------
+
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
@@ -185,7 +185,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
@@ -209,28 +209,28 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     EnableNotification( lcl_GetNotifyNames() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSearchItem::~SvxSearchItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 {
     return new SvxSearchItem(*this);
 }
 
-// -----------------------------------------------------------------------
 
-//! used below
+
+
 static bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
            rItem1.searchString          == rItem2.searchString  &&
            rItem1.replaceString         == rItem2.replaceString &&
-           //rItem1.Locale              == rItem2.Locale        &&
+           
            rItem1.changedChars          == rItem2.changedChars  &&
            rItem1.deletedChars          == rItem2.deletedChars  &&
            rItem1.insertedChars         == rItem2.insertedChars &&
@@ -273,8 +273,8 @@ SfxItemPresentation SvxSearchItem::GetPresentation
 
 void SvxSearchItem::Notify( const Sequence< OUString > & )
 {
-    // applies transliteration changes in the configuration database
-    // to the current SvxSearchItem
+    
+    
     SetTransliterationFlags( SvtSearchOptions().GetTransliterationFlags() );
 }
 
@@ -446,7 +446,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {

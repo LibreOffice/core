@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hldocntp.hxx"
@@ -66,8 +66,8 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OU
     if ( bIsValidURL )
     {
         aURLObject.SetURL( rPath );
-        if ( aURLObject.GetProtocol() == INET_PROT_NOT_VALID )      // test if the source is already a valid url
-        {                                                           // if not we have to create a url from a physical file name
+        if ( aURLObject.GetProtocol() == INET_PROT_NOT_VALID )      
+        {                                                           
             bool wasAbs;
             INetURLObject base(rBase);
             base.setFinalSlash();
@@ -110,7 +110,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maFtDocTypes    ( this, CUI_RES (FT_DOCUMENT_TYPES) ),
     maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
-    // Set HC bitmaps and disable display of bitmap names.
+    
     maBtCreate.EnableTextDisplay (false);
 
     InitStdControls();
@@ -123,7 +123,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maCbbPath.Show();
     maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
 
-    // set defaults
+    
     maRbtEditNow.Check();
 
     maBtCreate.SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
@@ -180,23 +180,23 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
             else if ( rDynamicMenuEntry[e].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
                 rDynamicMenuEntry[e].Value >>= aTargetName;
         }
-        //#i96822# business cards, labels and database should not be inserted here
+        
         if( aDocumentUrl == "private:factory/swriter?slot=21051" ||
             aDocumentUrl == "private:factory/swriter?slot=21052" ||
             aDocumentUrl == "private:factory/sdatabase?Interactive" )
             continue;
 
-        // Insert into listbox
+        
         if ( !aDocumentUrl.isEmpty() )
         {
-            if ( aDocumentUrl == "private:factory/simpress?slot=6686" )              // SJ: #106216# do not start
-                aDocumentUrl = "private:factory/simpress"; // the AutoPilot for impress
+            if ( aDocumentUrl == "private:factory/simpress?slot=6686" )              
+                aDocumentUrl = "private:factory/simpress"; 
 
-            // insert private-url and default-extension as user-data
+            
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );
             if ( pFilter )
             {
-                // insert doc-name and image
+                
                 OUString aTitleName( aTitle );
                 aTitleName = aTitleName.replaceFirst( "~", "" );
 
@@ -222,7 +222,7 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
                                                OUString& aStrIntName, OUString& aStrFrame,
                                                SvxLinkInsertMode& eMode )
 {
-    // get data from dialog-controls
+    
     rStrURL = maCbbPath.GetText();
     INetURLObject aURL;
     if ( ImplGetURLObject( rStrURL, maCbbPath.GetBaseURL(), aURL ) )
@@ -283,21 +283,21 @@ void SvxHyperlinkNewDocTp::DoApply ()
 {
     EnterWait();
 
-    // get data from dialog-controls
+    
     OUString aStrNewName = maCbbPath.GetText();
 
     if ( aStrNewName == aEmptyStr )
         aStrNewName = maStrInitURL;
 
-    ///////////////////////////////////////////////////////
-    // create a real URL-String
+    
+    
 
     INetURLObject aURL;
     if ( ImplGetURLObject( aStrNewName, maCbbPath.GetBaseURL(), aURL ) )
     {
 
-        ///////////////////////////////////////////////////////
-        // create Document
+        
+        
 
         aStrNewName = aURL.GetURLPath( INetURLObject::NO_DECODE );
         SfxViewFrame *pViewFrame = NULL;
@@ -305,7 +305,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
         {
             bool bCreate = true;
 
-            // check if file exists, warn before we overwrite it
+            
             {
                 com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
                 SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
@@ -324,19 +324,19 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
             if( bCreate )
             {
-                // current document
+                
                 SfxViewFrame* pCurrentDocFrame = SfxViewFrame::Current();
 
                 if ( aStrNewName != aEmptyStr )
                 {
-                    // get private-url
+                    
                     sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     OUString aStrDocName ( ( ( DocumentTypeData* )
                                          maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
 
-                    // create items
+                    
                     SfxStringItem aName( SID_FILE_NAME, aStrDocName );
                     SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
                     SfxStringItem aFrame( SID_TARGETNAME, OUString("_blank") );
@@ -348,15 +348,15 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     }
                     SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
 
-                    // open url
+                    
                     const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
                                                                            SFX_CALLMODE_SYNCHRON,
                                                                            &aName, &aFlags,
                                                                            &aFrame, &aReferer, 0L );
 
-                    // save new doc
-                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );  // SJ: pReturn is NULL if the Hyperlink
-                    if ( pItem )                                                            // creation is cancelled #106216#
+                    
+                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );  
+                    if ( pItem )                                                            
                     {
                         pViewFrame = pItem->GetFrame();
                         if (pViewFrame)
@@ -408,8 +408,8 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 
     OUString            aStrPath = aStrURL;
     sal_Bool            bZeroPath = aStrPath.isEmpty();
-    sal_Bool            bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
-                                                        //  as file name, otherwise we do not yet know
+    sal_Bool            bHandleFileName = bZeroPath;    
+                                                        
 
     if( bZeroPath )
         aStrPath = SvtPathOptions().GetWorkPath();
@@ -435,7 +435,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         if( aStrTmp[ aStrTmp.getLength() - 1 ] != sSlash[0] )
             aStrTmp += OUString( sSlash );
 
-        // append old file name
+        
         if( bHandleFileName )
             aStrTmp += aStrName;
 
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         if( !aStrName.isEmpty() && !aNewURL.getExtension().isEmpty() &&
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
-            // get private-url
+            
             sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
             aNewURL.setExtension( ( ( DocumentTypeData* ) maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
         }

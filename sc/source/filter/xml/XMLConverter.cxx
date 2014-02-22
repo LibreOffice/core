@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 
-//___________________________________________________________________
+
 
 ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
@@ -47,7 +47,7 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
 }
 
 
-//___________________________________________________________________
+
 sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
@@ -105,7 +105,7 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
@@ -130,7 +130,7 @@ void ScXMLConverter::GetStringFromFunction(
         case sheet::GeneralFunction_VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
@@ -155,7 +155,7 @@ void ScXMLConverter::GetStringFromFunction(
         case SUBTOTAL_FUNC_STDP:    sFuncStr = GetXMLToken( XML_STDEVP );       break;
         case SUBTOTAL_FUNC_SUM:     sFuncStr = GetXMLToken( XML_SUM );          break;
         case SUBTOTAL_FUNC_SELECTION_COUNT:                                     break;
-        // it is not needed as it is only a UI value and not document content
+        
 
         case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
         case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
@@ -164,7 +164,7 @@ void ScXMLConverter::GetStringFromFunction(
 }
 
 
-//___________________________________________________________________
+
 
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
     const OUString& rString )
@@ -181,7 +181,7 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::GetStringFromOrientation(
     OUString& rString,
@@ -208,14 +208,14 @@ void ScXMLConverter::GetStringFromOrientation(
         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     ScRangeStringConverter::AssignString( rString, sOrientStr, bAppendStr );
 }
 
 
-//___________________________________________________________________
+
 
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
 {
@@ -246,7 +246,7 @@ bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUSt
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::GetStringFromDetObjType(
         OUString& rString,
@@ -267,7 +267,7 @@ void ScXMLConverter::GetStringFromDetObjType(
         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
@@ -301,7 +301,7 @@ void ScXMLConverter::GetStringFromDetOpType(
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 {
@@ -335,7 +335,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 }
 
 
-//_____________________________________________________________________
+
 
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {
@@ -363,18 +363,18 @@ void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, D
     rDateTime = aTempDateTime;
 }
 
-// ============================================================================
+
 
 namespace {
 
 /** Enumerates different types of condition tokens. */
 enum ScXMLConditionTokenType
 {
-    XML_COND_TYPE_KEYWORD,          /// Simple keyword without parentheses, e.g. 'and'.
-    XML_COND_TYPE_COMPARISON,       /// Comparison rule, e.g. 'cell-content()<=2'.
-    XML_COND_TYPE_FUNCTION0,        /// Function without parameters, e.g. 'cell-content-is-whole-number()'.
-    XML_COND_TYPE_FUNCTION1,        /// Function with 1 parameter, e.g. 'is-true-formula(1+1=2)'.
-    XML_COND_TYPE_FUNCTION2         /// Function with 2 parameters, e.g. 'cell-content-is-between(1,2)'.
+    XML_COND_TYPE_KEYWORD,          
+    XML_COND_TYPE_COMPARISON,       
+    XML_COND_TYPE_FUNCTION0,        
+    XML_COND_TYPE_FUNCTION1,        
+    XML_COND_TYPE_FUNCTION2         
 };
 
 struct ScXMLConditionInfo
@@ -418,7 +418,7 @@ const ScXMLConditionInfo* lclGetConditionInfo( const sal_Unicode*& rpcString, co
     while( (rpcString < pcEnd) && (((*rpcString >= 'a') && (*rpcString <= 'z')) || (*rpcString == '-')) ) ++rpcString;
     sal_Int32 nLength = static_cast< sal_Int32 >( rpcString - pcIdStart );
 
-    // search the table for an entry
+    
     if( nLength > 0 )
         for( const ScXMLConditionInfo* pInfo = spConditionInfos; pInfo < STATIC_ARRAY_END( spConditionInfos ); ++pInfo )
             if( (nLength == pInfo->mnIdentLength) && (::rtl_ustr_ascii_shortenedCompare_WithLength( pcIdStart, nLength, pInfo->mpcIdentifier, nLength ) == 0) )
@@ -429,7 +429,7 @@ const ScXMLConditionInfo* lclGetConditionInfo( const sal_Unicode*& rpcString, co
 
 sheet::ConditionOperator lclGetConditionOperator( const sal_Unicode*& rpcString, const sal_Unicode* pcEnd )
 {
-    // check for double-char operators
+    
     if( (rpcString + 1 < pcEnd) && (rpcString[ 1 ] == '=') )
     {
         sheet::ConditionOperator eOperator = sheet::ConditionOperator_NONE;
@@ -446,7 +446,7 @@ sheet::ConditionOperator lclGetConditionOperator( const sal_Unicode*& rpcString,
         }
     }
 
-    // check for single-char operators
+    
     if( rpcString < pcEnd )
     {
         sheet::ConditionOperator eOperator = sheet::ConditionOperator_NONE;
@@ -558,9 +558,9 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
     return false;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 void ScXMLConditionHelper::parseCondition(
         ScXMLConditionParseResult& rParseResult, const OUString& rAttribute, sal_Int32 nStartIndex )
@@ -568,25 +568,25 @@ void ScXMLConditionHelper::parseCondition(
     rParseResult.meToken = XML_COND_INVALID;
     if( (nStartIndex < 0) || (nStartIndex >= rAttribute.getLength()) ) return;
 
-    // try to find an identifier
+    
     const sal_Unicode* pcBegin = rAttribute.getStr();
     const sal_Unicode* pcString = pcBegin + nStartIndex;
     const sal_Unicode* pcEnd = pcBegin + rAttribute.getLength();
     if( const ScXMLConditionInfo* pCondInfo = lclGetConditionInfo( pcString, pcEnd ) )
     {
-        // insert default values into parse result (may be changed below)
+        
         rParseResult.meValidation = pCondInfo->meValidation;
         rParseResult.meOperator = pCondInfo->meOperator;
-        // continue parsing dependent on token type
+        
         switch( pCondInfo->meType )
         {
             case XML_COND_TYPE_KEYWORD:
-                // nothing specific has to follow, success
+                
                 rParseResult.meToken = pCondInfo->meToken;
             break;
 
             case XML_COND_TYPE_COMPARISON:
-                // format is <condition>()<operator><expression>
+                
                 if( lclSkipEmptyParentheses( pcString, pcEnd ) )
                 {
                     rParseResult.meOperator = lclGetConditionOperator( pcString, pcEnd );
@@ -596,7 +596,7 @@ void ScXMLConditionHelper::parseCondition(
                         if( pcString < pcEnd )
                         {
                             rParseResult.meToken = pCondInfo->meToken;
-                            // comparison must be at end of attribute, remaining text is the formula
+                            
                             rParseResult.maOperand1 = OUString( pcString, static_cast< sal_Int32 >( pcEnd - pcString ) );
                         }
                     }
@@ -604,13 +604,13 @@ void ScXMLConditionHelper::parseCondition(
             break;
 
             case XML_COND_TYPE_FUNCTION0:
-                // format is <condition>()
+                
                 if( lclSkipEmptyParentheses( pcString, pcEnd ) )
                     rParseResult.meToken = pCondInfo->meToken;
             break;
 
             case XML_COND_TYPE_FUNCTION1:
-                // format is <condition>(<expression>)
+                
                 if( (pcString < pcEnd) && (*pcString == '(') )
                 {
                     rParseResult.maOperand1 = getExpression( ++pcString, pcEnd, ')' );
@@ -620,7 +620,7 @@ void ScXMLConditionHelper::parseCondition(
             break;
 
             case XML_COND_TYPE_FUNCTION2:
-                // format is <condition>(<expression1>,<expression2>)
+                
                 if( (pcString < pcEnd) && (*pcString == '(') )
                 {
                     rParseResult.maOperand1 = getExpression( ++pcString, pcEnd, ',' );
@@ -650,6 +650,6 @@ OUString ScXMLConditionHelper::getExpression( const sal_Unicode*& rpcString, con
     return aExp;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

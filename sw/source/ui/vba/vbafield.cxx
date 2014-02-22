@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbafield.hxx"
 #include "vbarange.hxx"
@@ -48,7 +48,7 @@ sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException)
     return sal_False;
 }
 
-// XHelperInterface
+
 OUString
 SwVbaField::getServiceImplName()
 {
@@ -67,9 +67,9 @@ SwVbaField::getServiceNames()
     return aServiceNames;
 }
 
-// SwVbaReadFieldParams
-// FIXME? copy and paste code
-// the codes are copied from ww8par5.cxx
+
+
+
 class SwVbaReadFieldParams
 {
 private:
@@ -92,9 +92,9 @@ public:
 SwVbaReadFieldParams::SwVbaReadFieldParams( const OUString& _rData )
     : aData( _rData ), nLen( _rData.getLength() ), nNext( 0 )
 {
-    // First search for an opening parenthesis or a space or a quotation mark
-    // or a backslash, so that the field command
-    // (thus INCLUDEPICTURE or ...) is ignored.
+    
+    
+    
     while( (nLen > nNext) && (aData[ nNext ] == ' ') )
         ++nNext;
 
@@ -124,10 +124,10 @@ OUString SwVbaReadFieldParams::GetResult() const
             : aData.copy( nFnd, (nSavPtr - nFnd) );
 }
 
-// ret: -2: NOT a '\' parameter but normal Text
+
 long SwVbaReadFieldParams::SkipToNextToken()
 {
-    long nRet = -1;     // end
+    long nRet = -1;     
     if (
          (-1 != nNext) && (nLen > nNext) &&
          -1 != (nFnd = FindNextStringPiece(nNext))
@@ -138,7 +138,7 @@ long SwVbaReadFieldParams::SkipToNextToken()
         if ('\\' == aData[nFnd] && '\\' != aData[nFnd + 1])
         {
             nRet = aData[++nFnd];
-            nNext = ++nFnd;             // and set behind
+            nNext = ++nFnd;             
         }
         else
         {
@@ -158,57 +158,57 @@ long SwVbaReadFieldParams::SkipToNextToken()
     return nRet;
 }
 
-// FindNextPara is searching for the next Backslash-Parameter or the next string
-// until blank or the next "\" or until the closing quotation mark
-// or until the string end of pStr.
+
+
+
 //
-// Output ppNext (if ppNext != 0) beginning of the search for the next parameter or 0
+
 //
-// Return value: 0 if String-End reached, otherwise begin of the paramater or the string
+
 
 sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
-    sal_Int32  n = ( -1 == nStart ) ? nFnd : nStart;  // Start
-    sal_Int32 n2;          // End
+    sal_Int32  n = ( -1 == nStart ) ? nFnd : nStart;  
+    sal_Int32 n2;          
 
-    nNext = -1;        // Default for not found
+    nNext = -1;        
 
     while( (nLen > n) && (aData[ n ] == ' ') )
         ++n;
 
     if( nLen == n )
-        return -1;     // String End reached!
+        return -1;     
 
-    if(     (aData[ n ] == '"')     // quotation marks are in front of parenthesis?
+    if(     (aData[ n ] == '"')     
         ||  (aData[ n ] == 0x201c)
         ||  (aData[ n ] == 132) )
     {
-        n++;                        // ignore quotation marks
-        n2 = n;                     // From here search for the end
+        n++;                        
+        n2 = n;                     
         while(     (nLen > n2)
                 && (aData[ n2 ] != '"')
                 && (aData[ n2 ] != 0x201d)
                 && (aData[ n2 ] != 147) )
-            n2++;                   // Search for the end of the parenthesis
+            n2++;                   
     }
-    else                        // no quotation marks
+    else                        
     {
-        n2 = n;                     // from here search for the end
-        while( (nLen > n2) && (aData[ n2 ] != ' ') ) // Search for the end of the parenthesis
+        n2 = n;                     
+        while( (nLen > n2) && (aData[ n2 ] != ' ') ) 
         {
             if( aData[ n2 ] == '\\' )
             {
                 if( aData[ n2+1 ] == '\\' )
-                    n2 += 2;        // double-backslash -> OK
+                    n2 += 2;        
                 else
                 {
                     if( n2 > n )
                         n2--;
-                    break;          // single-backslash -> End
+                    break;          
                 }
             }
             else
-                n2++;               // no backslash -> OK
+                n2++;               
         }
     }
     if( nLen > n2 )
@@ -219,7 +219,7 @@ sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
     return n;
 }
 
-// SwVbaFields
+
 
 static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Any& aSource )
 {
@@ -266,10 +266,10 @@ public:
         uno::Reference< text::XTextFieldsSupplier > xSupp( xModel, uno::UNO_QUERY_THROW );
         mxEnumerationAccess.set( xSupp->getTextFields(), uno::UNO_QUERY_THROW );
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  mxEnumerationAccess->getElementType(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return mxEnumerationAccess->hasElements(); }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         uno::Reference< container::XEnumeration > xEnumeration =  mxEnumerationAccess->createEnumeration();
@@ -298,7 +298,7 @@ public:
         }
         throw lang::IndexOutOfBoundsException();
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         uno::Reference< container::XEnumeration > xEnumeration =  mxEnumerationAccess->createEnumeration();
@@ -364,7 +364,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
                     nFileFormat = text::FilenameDisplayFormat::FULL;
                     break;
                 case '*':
-                    //Skip over MERGEFORMAT
+                    
                     aReadParam.SkipToNextToken();
                     break;
                 default:
@@ -431,7 +431,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
                     aDocProperty = aReadParam.GetResult();
                 break;
             case '*':
-                //Skip over MERGEFORMAT
+                
                 aReadParam.SkipToNextToken();
                 break;
         }
@@ -445,7 +445,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
 
     bool bCustom = true;
     OUString sFieldService;
-    // find the build in document properties
+    
     for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != NULL; pTable++ )
     {
         if( aDocProperty.equalsIgnoreAsciiCaseAscii( pTable->sDocPropertyName ) )
@@ -485,7 +485,7 @@ SwVbaFields::createEnumeration() throw (uno::RuntimeException)
     return xEnumerationAccess->createEnumeration();
 }
 
-// ScVbaCollectionBaseImpl
+
 uno::Any
 SwVbaFields::createCollectionObject( const uno::Any& aSource )
 {
@@ -509,14 +509,14 @@ sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException)
     return nUpdate;
 }
 
-// XHelperInterface
+
 OUString
 SwVbaFields::getServiceImplName()
 {
     return OUString("SwVbaFields");
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL
 SwVbaFields::getElementType() throw (uno::RuntimeException)
 {

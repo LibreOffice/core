@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -156,7 +156,7 @@ namespace rptui
 {
 using namespace ::com::sun::star;
 using namespace formula;
-// -----------------------------------------------------------------------------
+
 void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32 _nPos)
 {
     OSL_ENSURE(_xGroup.is(),"Group is NULL -> GPF");
@@ -174,7 +174,7 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
         _xGroup->getFooter()->setName(sName);
     }
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener(const uno::Reference< report::XReportDefinition >& _xReportDefinition,::comphelper::OPropertyChangeListener* _pListener)
 {
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> pRet = NULL;
@@ -193,10 +193,10 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
     return pRet;
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
-    // -------------------------------------------------------------------------
+    
     Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont ,sal_uInt16 _nWichFont)
     {
         if ( !_rxReportControlFormat.is() )
@@ -220,17 +220,17 @@ namespace
         return VCLUnoHelper::CreateFont( _out_rControlFont, aDefaultFont );
     }
 
-    // -------------------------------------------------------------------------
+    
     Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,sal_uInt16 _nWhich )
     {
         awt::FontDescriptor aAwtFont;
         return lcl_getReportControlFont( _rxReportControlFormat, aAwtFont, _nWhich );
     }
-    // -------------------------------------------------------------------------
+    
     const Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         SfxItemSet& _rItemSet,sal_uInt16 _nWhich,sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nLanguage,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
-        // fill it
+        
         awt::FontDescriptor aControlFont;
         const Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont,_nWhich ) );
 
@@ -309,7 +309,7 @@ namespace
                             _xShape->setPropertyValue(aIt->sName, aValue);
                         }
                         catch(uno::Exception&)
-                        { // shapes have a bug so we ignore this one.
+                        { 
                         }
                     }
                 }
@@ -317,7 +317,7 @@ namespace
             ++aIt;
         }
     }
-    // -------------------------------------------------------------------------
+    
     void lcl_CharPropertiesToItems( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         SfxItemSet& _rItemSet )
     {
@@ -326,7 +326,7 @@ namespace
 
         uno::Reference< beans::XPropertySet > xSet(_rxReportControlFormat,uno::UNO_QUERY_THROW);
 
-        // fill it
+        
         const Font aFont( lcl_setFont(_rxReportControlFormat, _rItemSet,WESTERN,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_LANGUAGE,ITEMID_POSTURE,ITEMID_WEIGHT ) );
 
         _rItemSet.Put(SvxShadowedItem(_rxReportControlFormat->getCharShadowed(),ITEMID_SHADOWED));
@@ -365,7 +365,7 @@ namespace
         lcl_setFont(_rxReportControlFormat, _rItemSet,COMPLEX,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_LANGUAGE_COMPLEX,ITEMID_POSTURE_COMPLEX,ITEMID_WEIGHT_COMPLEX );
     }
 
-    // -------------------------------------------------------------------------
+    
     void lcl_pushBack( uno::Sequence< beans::NamedValue >& _out_rProperties, const OUString& _sName, const uno::Any& _rValue )
     {
         sal_Int32 nLen( _out_rProperties.getLength() );
@@ -373,7 +373,7 @@ namespace
         _out_rProperties[ nLen ] = beans::NamedValue( _sName, _rValue );
     }
 
-    // -------------------------------------------------------------------------
+    
     void lcl_initAwtFont( const Font& _rOriginalFont, const SfxItemSet& _rItemSet, awt::FontDescriptor& _out_rAwtFont,
         sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
@@ -438,12 +438,12 @@ namespace
         _out_rAwtFont = VCLUnoHelper::CreateFontDescriptor( aNewFont );
     }
 
-    // -------------------------------------------------------------------------
+    
     void lcl_itemsToCharProperties( const Font& _rOriginalControlFont,const Font& _rOriginalControlFontAsian,const Font& _rOriginalControlFontComplex, const SfxItemSet& _rItemSet, uno::Sequence< beans::NamedValue >& _out_rProperties )
     {
         const SfxPoolItem* pItem( NULL );
 
-        // create an AWT font
+        
         awt::FontDescriptor aAwtFont;
         lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
         lcl_pushBack( _out_rProperties, OUString("Font"), uno::makeAny( aAwtFont ) );
@@ -452,7 +452,7 @@ namespace
         lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
         lcl_pushBack( _out_rProperties, OUString("FontComplex"), uno::makeAny( aAwtFont ) );
 
-        // properties which cannot be represented in an AWT font need to be preserved directly
+        
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_SHADOWED,true,&pItem) && pItem->ISA(SvxShadowedItem))
         {
             const SvxShadowedItem* pFontItem = static_cast<const SvxShadowedItem*>(pItem);
@@ -559,7 +559,7 @@ namespace
         }
     }
 
-    // -------------------------------------------------------------------------
+    
     template< class ATTRIBUTE_TYPE >
     void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const sal_Char* _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
@@ -570,7 +570,7 @@ namespace
             (_rxReportControlFormat.get()->*pSetter)( aAttributeValue );
     }
 
-    // -------------------------------------------------------------------------
+    
     void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const sal_Char* _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         void (SAL_CALL report::XReportControlFormat::*pSetter)( const OUString& ) )
@@ -580,7 +580,7 @@ namespace
             (_rxReportControlFormat.get()->*pSetter)( aAttributeValue );
     }
 
-    // -------------------------------------------------------------------------
+    
     void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const sal_Char* _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         void (SAL_CALL report::XReportControlFormat::*pSetter)( const lang::Locale& ) )
@@ -591,7 +591,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         const uno::Reference< awt::XWindow>& _rxParentWindow, uno::Sequence< beans::NamedValue >& _out_rNewValues )
 {
@@ -601,8 +601,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     _out_rNewValues = uno::Sequence< beans::NamedValue >();
 
-    // ------------
-    // UNO->ItemSet
+    
+    
     static SfxItemInfo aItemInfos[] =
     {
         { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },
@@ -633,13 +633,13 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEM_POOLABLE },
         { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },
 
-        // Asian
+        
         { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },
-        // Complex
+        
         { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },
@@ -682,13 +682,13 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxBrushItem(ITEMID_BRUSH),
         new SvxHorJustifyItem(ITEMID_HORJUSTIFY),
         new SvxVerJustifyItem(ITEMID_VERJUSTIFY),
-// Asian
+
         new SvxFontItem(ITEMID_FONT_ASIAN),
         new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_ASIAN),
         new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_ASIAN),
         new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_ASIAN),
         new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_ASIAN),
-// Complex
+
         new SvxFontItem(ITEMID_FONT_COMPLEX),
         new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_COMPLEX),
         new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_COMPLEX),
@@ -706,8 +706,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
 
     SfxItemPool* pPool( new SfxItemPool(OUString("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
-    // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+    
+    pPool->FreezeIdRanges();                        
     bool bSuccess = false;
     try
     {
@@ -716,7 +716,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         SAL_WNODEPRECATED_DECLARATIONS_POP
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
-        {   // want the dialog to be destroyed before our set
+        {   
             ORptPageDialog aDlg(pParent, pDescriptor.get(), "CharDialog");
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
@@ -741,7 +741,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     return bSuccess;
 }
-// -----------------------------------------------------------------------------
+
 bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::Reference< awt::XWindow>& _rxParentWindow )
 {
     OSL_PRECOND( _xShape.is() && _rxParentWindow.is(), "openAreaDialog: invalid parameters!" );
@@ -761,7 +761,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
         SAL_WNODEPRECATED_DECLARATIONS_POP
         lcl_fillShapeToItems(_xShape,*pDescriptor);
 
-        {   // want the dialog to be destroyed before our set
+        {   
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get() ));
@@ -778,7 +778,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------------
+
 void applyCharacterSettings( const uno::Reference< report::XReportControlFormat >& _rxReportControlFormat, const uno::Sequence< beans::NamedValue >& _rSettings )
 {
     ::comphelper::NamedValueCollection aSettings( _rSettings );
@@ -789,21 +789,21 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
         if ( aSettings.get( "Font" ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = OUString(); // hack to
+            aAwtFont.Name = OUString(); 
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
         }
         if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = OUString(); // hack to
+            aAwtFont.Name = OUString(); 
             _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
             _rxReportControlFormat->setCharFontNameAsian( sTemp );
         }
         if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = OUString(); // hack to
+            aAwtFont.Name = OUString(); 
             _rxReportControlFormat->setFontDescriptorComplex( aAwtFont );
             _rxReportControlFormat->setCharFontNameComplex( sTemp );
         }
@@ -837,7 +837,7 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
@@ -847,7 +847,7 @@ void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem
         _rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
     }
 }
-// -----------------------------------------------------------------------------
+
 SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
 {
     SdrObject* pOverlappedObj = NULL;
@@ -875,7 +875,7 @@ SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, boo
     }
     return pOverlappedObj;
 }
-// -----------------------------------------------------------------------------
+
 bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
 {
     for(int i=0;i<_nListLength;i++)
@@ -913,11 +913,11 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
     return pOverlappedObj;
 }
 
-//----------------------------------------------------------------------------
+
 SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMarkedObjects)
 {
     SdrObject* pOverlappedObj = NULL;
-    if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL) // this doesn't need to be done for shapes
+    if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL) 
     {
         Rectangle aRect = _pObj->GetCurrentBoundRect();
         pOverlappedObj = isOver(aRect,_rPage,_rView,_bUnMarkedObjects,_pObj);
@@ -925,7 +925,7 @@ SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMark
     return pOverlappedObj;
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet >& _rxRowSet )
 {
     uno::Sequence< OUString > aNames;
@@ -956,7 +956,7 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
 
     return aNames;
 }
-// -----------------------------------------------------------------------------
+
 Rectangle getRectangleFromControl(SdrObject* _pControl)
 {
     if (_pControl)
@@ -972,8 +972,8 @@ Rectangle getRectangleFromControl(SdrObject* _pControl)
     }
     return Rectangle();
 }
-// -----------------------------------------------------------------------------
-// check overlapping
+
+
 void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,bool _bInsert)
 {
     OSectionView& rSectionView = _aReportSection.getSectionView();
@@ -992,10 +992,10 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
             xComponent->setPositionY(aRect.Top());
         }
     }
-    if ( !bOverlapping && _bInsert ) // now insert objects
+    if ( !bOverlapping && _bInsert ) 
         rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(),SDRINSERT_ADDMARK);
 }
-// -----------------------------------------------------------------------------
+
 void setZoomFactor(const Fraction& _aZoom,Window& _rWindow)
 {
     MapMode aMapMode( _rWindow.GetMapMode() );
@@ -1003,7 +1003,7 @@ void setZoomFactor(const Fraction& _aZoom,Window& _rWindow)
     aMapMode.SetScaleY(_aZoom);
     _rWindow.SetMapMode(aMapMode);
 }
-// -----------------------------------------------------------------------------
+
 bool openDialogFormula_nothrow( OUString& _in_out_rFormula
                                , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
                                , const uno::Reference< awt::XWindow>& _xInspectorWindow
@@ -1054,8 +1054,8 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
 
     return bSuccess;
 }
-// -----------------------------------------------------------------------------
-} // namespace rptui
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DrawViewShell.hxx"
@@ -58,9 +58,9 @@ namespace sd {
  */
 void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 {
-    // Status of menu entries (Buttons,...)
+    
 
-    // Single selection
+    
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
@@ -71,7 +71,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ENTER_GROUP ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAME_GROUP ) ||
 
-            // #i68101#
+            
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
 
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
@@ -119,7 +119,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SdrObjTransformInfoRec aInfoRec;
             pObj->TakeObjInfo( aInfoRec );
 
-            // don't show original size entry if not possible
+            
             if(pSdrOle2Obj)
             {
                 if (pSdrOle2Obj->GetObjRef().is() &&
@@ -141,7 +141,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_ENTER_GROUP );
             }
 
-            // If it is not a group object, we disable "ungroup"
+            
             if (!(pObj->ISA(SdrObjGroup) && nInv == SdrInventor))
             {
                 rSet.DisableItem(SID_UNGROUP);
@@ -166,13 +166,13 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 nId == OBJ_PATHLINE ||
                 nId == OBJ_FREELINE ))
             {
-                //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // remove again!
+                
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
                 rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
                 rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }
-            if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) // As long as JOE handles it incorrectly!
-            { // JOE: a group object may can be converted into a PathObj
+            if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) 
+            { 
                 rSet.DisableItem( SID_LINEEND_POLYGON );
             }
             if(nInv == SdrInventor &&
@@ -293,18 +293,18 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_POLY_INTERSECT);
         rSet.DisableItem( SID_CONNECT );
     }
-    // multi-selection
+    
     else if( nMarkCount > 1 )
     {
-        // distribure dialog for 3+n objects
+        
         if(nMarkCount <= 2)
             rSet.DisableItem(SID_DISTRIBUTE_DLG);
 
         rSet.DisableItem( SID_LINEEND_POLYGON );
         rSet.DisableItem( SID_ENTER_GROUP );
-        // Now names for objects have to be unique
+        
         rSet.DisableItem( SID_NAME_GROUP );
-        // #i68101#
+        
         rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
         rSet.DisableItem( SID_MODIFY_FIELD );
 
@@ -317,7 +317,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             sal_Bool b3dObj = sal_False;
             bool bTable = false;
             sal_Bool bMeasureObj = sal_False;
-            sal_Bool bEdgeObj = sal_False; // Connector
+            sal_Bool bEdgeObj = sal_False; 
             sal_Bool bE3dCompoundObject = sal_False;
 
             for( sal_uLong i = 0;
@@ -459,7 +459,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             rSet.DisableItem( SID_UNGROUP );
         }
     }
-    // select no object
+    
     else
     {
         rSet.DisableItem( SID_ENTER_GROUP );
@@ -494,7 +494,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_UNGROUP );
         rSet.DisableItem( SID_NAME_GROUP );
 
-        // #i68101#
+        
         rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
 
         rSet.DisableItem( SID_DISMANTLE );
@@ -513,6 +513,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

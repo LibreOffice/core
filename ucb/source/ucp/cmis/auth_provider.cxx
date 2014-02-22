@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
@@ -43,7 +43,7 @@ namespace cmis
 
                 if ( xSelection.is() )
                 {
-                    // Handler handled the request.
+                    
                     uno::Reference< task::XInteractionAbort > xAbort(
                         xSelection.get(), uno::UNO_QUERY );
                     if ( !xAbort.is() )

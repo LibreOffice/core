@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ OEvoabPreparedStatement::OEvoabPreparedStatement( OEvoabConnection* _pConnection
 {
 }
 
-// -----------------------------------------------------------------------------
+
 void OEvoabPreparedStatement::construct( const OUString& _sql )
 {
     m_sSqlStatement = _sql;
@@ -59,30 +59,30 @@ void OEvoabPreparedStatement::construct( const OUString& _sql )
     ENSURE_OR_THROW( m_aQueryData.getQuery(), "no EBookQuery" );
     ENSURE_OR_THROW( m_aQueryData.xSelectColumns.is(), "no SelectColumn" );
 
-    // create our meta data
+    
     OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( m_aQueryData.sTable );
     m_xMetaData = pMeta;
     pMeta->setEvoabFields( m_aQueryData.xSelectColumns );
 }
 
-// -----------------------------------------------------------------------------
+
 OEvoabPreparedStatement::~OEvoabPreparedStatement()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabPreparedStatement::acquire() throw()
 {
     OCommonStatement::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabPreparedStatement::release() throw()
 {
     OCommonStatement::release();
 }
 
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OCommonStatement::queryInterface(rType);
@@ -90,23 +90,23 @@ Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType ) throw
         aRet = OPreparedStatement_BASE::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OEvoabPreparedStatement::getTypes(  ) throw(RuntimeException)
 {
     return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OCommonStatement::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
-    // the meta data should have been created at construction time
+    
     ENSURE_OR_THROW( m_xMetaData.is(), "internal error: no meta data" );
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
@@ -114,17 +114,17 @@ void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeExce
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
     free_column_resources();
-    // Reset last warning message
+    
     try {
         clearWarnings ();
         OCommonStatement::close();
     }
     catch (SQLException &) {
-        // If we get an error, ignore
+        
     }
 
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
@@ -134,7 +134,7 @@ sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, Runti
     Reference< XResultSet> xRS = impl_executeQuery_throw( m_aQueryData );
     return xRS.is();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
@@ -143,13 +143,13 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException
     ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setString", *this );
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
@@ -158,7 +158,7 @@ Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  ) thr
 
     return impl_getConnection();
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
@@ -167,104 +167,104 @@ Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw
 
     return impl_executeQuery_throw( m_aQueryData );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setBoolean", *this );
 
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setByte", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setDate", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const Time& /*aVal*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setTime", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setTimestamp", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setDouble", *this );
 }
 
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setFloat", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setInt", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setLong", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setNull", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setClob", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setBlob", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setArray", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setRef", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectWithInfo", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectNull", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
@@ -277,51 +277,51 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
         ::dbtools::throwGenericSQLException(sError,*this);
     }
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setShort", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setBytes", *this );
 }
-// -------------------------------------------------------------------------
+
 
 
 void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setCharacterStream", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setBinaryStream", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OEvoabPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

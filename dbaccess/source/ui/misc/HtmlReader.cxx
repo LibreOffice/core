@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "HtmlReader.hxx"
@@ -65,9 +65,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-#define DBAUI_HTML_FONTSIZES    8       // like export, HTML-Options
+#define DBAUI_HTML_FONTSIZES    8       
 
-// OHTMLReader
+
 OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -83,7 +83,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
-    // If the file starts with a BOM, switch to UCS2.
+    
     SetSwitchToUCS2( sal_True );
 }
 
@@ -105,7 +105,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
-    // If the file starts with a BOM, switch to UCS2.
+    
     SetSwitchToUCS2( sal_True );
 }
 
@@ -126,18 +126,18 @@ SvParserState OHTMLReader::CallParser()
 void OHTMLReader::NextToken( int nToken )
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::NextToken" );
-    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
+    if(m_bError || !m_nRows) 
         return;
     if ( nToken ==  HTML_META )
         setTextEncoding();
 
-    if(m_xConnection.is())    // names, which CTOR was called and hence, if a table should be created
+    if(m_xConnection.is())    
     {
         switch(nToken)
         {
             case HTML_TABLE_ON:
                 ++m_nTableCount;
-                {   // can also be TD or TH, if there was no TABLE before
+                {   
                     const HTMLOptions& rHtmlOptions = GetOptions();
                     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
                     {
@@ -145,7 +145,7 @@ void OHTMLReader::NextToken( int nToken )
                         switch( rOption.GetToken() )
                         {
                             case HTML_O_WIDTH:
-                            {   // percentage: of document width respectively outer cell
+                            {   
                                 m_nColumnWidth = GetWidthPixel( rOption );
                             }
                             break;
@@ -155,9 +155,9 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
                 {
-                    sal_uInt32 nTell = rInput.Tell(); // perhaps alters position of the stream
+                    sal_uInt32 nTell = rInput.Tell(); 
                     if ( !m_xTable.is() )
-                    {// use first line as header
+                    {
                         m_bError = !CreateTable(nToken);
                         if ( m_bAppendFirstLine )
                             rInput.Seek(nTell);
@@ -175,10 +175,10 @@ void OHTMLReader::NextToken( int nToken )
                 {
                     try
                     {
-                        m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
+                        m_pUpdateHelper->moveToInsertRow(); 
                     }
                     catch(SQLException& e)
-                    // handling update failure
+                    
                     {
                         showErrorDialog(e);
                     }
@@ -188,7 +188,7 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl ) //&& !m_bSDNum ) // important, as otherwise we also get the names of the fonts
+                if ( m_bInTbl ) 
                     m_sTextToken += aToken;
                 break;
             case HTML_PARABREAK_OFF:
@@ -209,7 +209,7 @@ void OHTMLReader::NextToken( int nToken )
                         insertValueIntoColumn();
                     }
                     catch(SQLException& e)
-                    // handling update failure
+                    
                     {
                         showErrorDialog(e);
                     }
@@ -228,12 +228,12 @@ void OHTMLReader::NextToken( int nToken )
                 try
                 {
                     m_nRowCount++;
-                    if (m_bIsAutoIncrement) // if bSetAutoIncrement then I have to set the autoincrement
+                    if (m_bIsAutoIncrement) 
                         m_pUpdateHelper->updateInt(1,m_nRowCount);
                     m_pUpdateHelper->insertRow();
                 }
                 catch(SQLException& e)
-                // handling update failure
+                
                 {
                     showErrorDialog(e);
                 }
@@ -241,13 +241,13 @@ void OHTMLReader::NextToken( int nToken )
                 break;
         }
     }
-    else // branch only valid for type checking
+    else 
     {
         switch(nToken)
         {
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
-                // The head of the column is not included
+                
                 if(m_bHead)
                 {
                     do
@@ -262,7 +262,7 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl ) // && !m_bSDNum ) // important, as otherwise we also get the names of the fonts
+                if ( m_bInTbl ) 
                     m_sTextToken += aToken;
                 break;
             case HTML_PARABREAK_OFF:
@@ -366,7 +366,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                 sal_Int32 nPos = 0;
                 while( nPos != -1 )
                 {
-                    // list fo fonts, VCL: semicolon as separator, HTML: comma
+                    
                     OUString aFName = rFace.getToken( 0, ',', nPos );
                     aFName = comphelper::string::strip(aFName, ' ');
                     if( !aFontName.isEmpty() )
@@ -397,19 +397,19 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     SAL_INFO("dbaccess.ui", "OHTMLReader::GetWidthPixel" );
     const OUString& rOptVal = rOption.GetString();
     if ( rOptVal.indexOf('%') != -1 )
-    {   // percentage
+    {   
         OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((rOption.GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
         if ( rOptVal.indexOf('*') != -1 )
-        {   // relativ to what?!?
-//TODO: collect ColArray of all relevant values and then MakeCol
+        {   
+
             return 0;
         }
         else
-            return (sal_Int16)rOption.GetNumber();  // pixel
+            return (sal_Int16)rOption.GetNumber();  
     }
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dptabdat.hxx"
@@ -38,7 +38,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
 
-// ---------------------------------------------------------------------------
+
 
 ScDPTableData::CalcInfo::CalcInfo() :
     pInitState( NULL ),
@@ -48,14 +48,14 @@ ScDPTableData::CalcInfo::CalcInfo() :
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 ScDPTableData::ScDPTableData(ScDocument* pDoc) :
     mpDoc(pDoc)
 {
-    nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
+    nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      
 
-    //! reset before new calculation (in case the base date is changed)
+    
 }
 
 ScDPTableData::~ScDPTableData()
@@ -73,7 +73,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     if ( nDateVal == nLastDateVal && nHierarchy == nLastHier && nLevel == nLastLevel )
         return nLastRet;
 
-    Date aDate( 30,12,1899 );                   //! get from source data (and cache here)
+    Date aDate( 30,12,1899 );                   
     aDate += nDateVal;
 
     long nRet = 0;
@@ -93,8 +93,8 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
         case SC_DAPI_HIERARCHY_WEEK:
             switch (nLevel)
             {
-                //! use settings for different definitions
-                case 0: nRet = aDate.GetYear();                 break;      //!...
+                
+                case 0: nRet = aDate.GetYear();                 break;      
                 case 1: nRet = aDate.GetWeekOfYear();           break;
                 case 2: nRet = (long)aDate.GetDayOfWeek();      break;
                 default:
@@ -120,22 +120,22 @@ bool ScDPTableData::IsRepeatIfEmpty()
 
 sal_uLong ScDPTableData::GetNumberFormat(long)
 {
-    return 0;           // default format
+    return 0;           
 }
 
 bool ScDPTableData::IsBaseForGroup(long) const
 {
-    return false;       // always false
+    return false;       
 }
 
 long ScDPTableData::GetGroupBase(long) const
 {
-    return -1;          // always none
+    return -1;          
 }
 
 bool ScDPTableData::IsNumOrDateGroup(long) const
 {
-    return false;       // always false
+    return false;       
 }
 
 bool ScDPTableData::IsInGroup( const ScDPItemData&, long,
@@ -154,13 +154,13 @@ bool ScDPTableData::HasCommonElement( const ScDPItemData&, long,
 void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFilteredCache& rCacheTable,
                                         const CalcInfo& rInfo, CalcRowData& rData)
 {
-    // column dimensions
+    
     GetItemData(rCacheTable, nRow, rInfo.aColLevelDims, rData.aColData);
 
-    // row dimensions
+    
     GetItemData(rCacheTable, nRow, rInfo.aRowLevelDims, rData.aRowData);
 
-    // page dimensions
+    
     GetItemData(rCacheTable, nRow, rInfo.aPageDims, rData.aPageData);
 
     long nCacheColumnCount = rCacheTable.getCache()->GetColumnCount();
@@ -169,8 +169,8 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFiltered
     {
         long nDim = rInfo.aDataSrcCols[i];
         rData.aValues.push_back( ScDPValue() );
-        // #i111435# GetItemData needs dimension indexes including groups,
-        // so the index must be checked here (groups aren't useful as data fields).
+        
+        
         if ( nDim < nCacheColumnCount )
         {
             ScDPValue& rVal = rData.aValues.back();
@@ -185,7 +185,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bo
     {
         LateInitParams aColParams(rInfo.aColDims, rInfo.aColLevels, false);
         LateInitParams aRowParams(rInfo.aRowDims, rInfo.aRowLevels, true);
-        // root always init child
+        
         aColParams.SetInitChild(true);
         aColParams.SetInitAllChildren( false);
         aRowParams.SetInitChild(true);
@@ -198,7 +198,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bo
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
          ( !rInfo.pRowRoot->GetChildDimension() || rInfo.pRowRoot->GetChildDimension()->IsValidEntry(rData.aRowData) ) )
     {
-        //! single process method with ColMembers, RowMembers and data !!!
+        
         if (rInfo.pColRoot->GetChildDimension())
         {
             vector<SCROW> aEmptyData;
@@ -251,7 +251,7 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long ScDPTableData::GetMembersCount( long nDim )
 {

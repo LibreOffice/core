@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -168,7 +168,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( pClassData->aRefId.IsId() )
     {
-        //Erhoehen und abfragen um Endlosrekusion zu vermeiden
+        
         nDeep++;
         if( nDeep > nRefDeep )
             aError = ERR_REFTODEEP;
@@ -220,17 +220,17 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
             if( aError.IsOk() )
             {
-                // RscClass wird uebersprungen
+                
                 aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
             };
 
             /*
-            // Definition der Struktur, aus denen die Resource aufgebaut ist
+            
             struct RSHEADER_TYPE{
-                RESOURCE_TYPE   nRT;        // Resource Typ
-                sal_uInt32          nRT;        // Resource Typ
-                sal_uInt32          nGlobOff;   // Globaler Offset
-                sal_uInt32          nLocalOff;  // Lokaler Offset
+                RESOURCE_TYPE   nRT;        
+                sal_uInt32          nRT;        
+                sal_uInt32          nGlobOff;   
+                sal_uInt32          nLocalOff;  
             };
             */
             sal_uInt32 nID = rId;
@@ -291,17 +291,17 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
 
     while( aTmpI.IsInst() && (nDeep < nRefDeep) && aError.IsOk() )
     {
-        // Referenz holen
+        
         aTmpI.pClass->GetRef( aTmpI, &aId );
-        // Referenziertes Objekt holen
+        
         pObjNode = aTmpI.pClass->GetObjNode( aId );
-        // Referenzierte Objekt gefunden ?
+        
         if( pObjNode )
         {
             aTmpI.pData = pObjNode->GetRscObj();
             nDeep++;
         }
-        else //aTmpI.IsInst() wird false, Schleife beenden
+        else 
             aTmpI.pData = NULL;
     }
 
@@ -329,9 +329,9 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
     else
     {
         pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-        aOldId = pClassData->aRefId;// Alten Wert merken
-        pClassData->aRefId = rRefId;// vorher eintragen,
-                                    // sonst Fehler bei rekursion
+        aOldId = pClassData->aRefId;
+        pClassData->aRefId = rRefId;
+                                    
 
 
         aError = IsToDeep( rInst );

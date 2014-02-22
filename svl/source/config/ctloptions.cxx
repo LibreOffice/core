@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 
 #define CFG_READONLY_DEFAULT false
 
-// SvtCJKOptions_Impl ----------------------------------------------------------
+
 
 class SvtCTLOptions_Impl : public utl::ConfigItem
 {
@@ -133,13 +133,13 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
     if ( IsModified() )
         Commit();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
     NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions_Impl::Commit()
 {
     Sequence< OUString > &rPropertyNames = PropertyNames::get();
@@ -228,10 +228,10 @@ void SvtCTLOptions_Impl::Commit()
     aNames.realloc(nRealCount);
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
-    //broadcast changes
+    
     NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions_Impl::Load()
 {
     Sequence< OUString >& rPropertyNames = PropertyNames::get();
@@ -287,7 +287,7 @@ void SvtCTLOptions_Impl::Load()
     if (!m_bCTLFontEnabled)
     {
         sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
-        //system locale is CTL
+        
         bool bAutoEnableCTL = (nScriptType & SCRIPTTYPE_COMPLEX);
 
         LanguageType eSystemLanguage = LANGUAGE_SYSTEM;
@@ -296,7 +296,7 @@ void SvtCTLOptions_Impl::Load()
         {
             SvtSystemLanguageOptions aSystemLocaleSettings;
 
-            //windows secondary system locale is CTL
+            
             eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
             if (eSystemLanguage != LANGUAGE_SYSTEM)
             {
@@ -304,7 +304,7 @@ void SvtCTLOptions_Impl::Load()
                 bAutoEnableCTL = (nWinScript & SCRIPTTYPE_COMPLEX);
             }
 
-            //CTL keyboard is installed
+            
             if (!bAutoEnableCTL)
                 bAutoEnableCTL = aSystemLocaleSettings.isCTLKeyboardLayoutInstalled();
         }
@@ -313,7 +313,7 @@ void SvtCTLOptions_Impl::Load()
         {
             m_bCTLFontEnabled = true;
             sal_uInt16 nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
-            //enable sequence checking for the appropriate languages
+            
             m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
                 (MsLangId::needsSequenceChecking( nLanguage) ||
                  MsLangId::needsSequenceChecking( eSystemLanguage));
@@ -377,17 +377,17 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
         NotifyListeners(0);
     }
 }
-// global ----------------------------------------------------------------
+
 
 static SvtCTLOptions_Impl*  pCTLOptions = NULL;
 static sal_Int32            nCTLRefCount = 0;
 namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
 
-// class SvtCTLOptions --------------------------------------------------
+
 
 SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( CTLMutex::get() );
     if ( !pCTLOptions )
     {
@@ -402,95 +402,95 @@ SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
     m_pImp->AddListener(this);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtCTLOptions::~SvtCTLOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( CTLMutex::get() );
 
     m_pImp->RemoveListener(this);
     if ( !--nCTLRefCount )
         DELETEZ( pCTLOptions );
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLFontEnabled( _bEnabled );
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLFontEnabled() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLFontEnabled();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLSequenceChecking(_bEnabled);
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLSequenceChecking() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceChecking();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLSequenceCheckingRestricted(_bEnable);
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLSequenceCheckingRestricted( void ) const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceCheckingRestricted();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLSequenceCheckingTypeAndReplace(_bEnable);
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLCursorMovement( _eMovement );
 }
-// -----------------------------------------------------------------------------
+
 SvtCTLOptions::CursorMovement SvtCTLOptions::GetCTLCursorMovement() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->GetCTLCursorMovement();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLTextNumerals( _eNumerals );
 }
-// -----------------------------------------------------------------------------
+
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->GetCTLTextNumerals();
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsReadOnly(EOption eOption) const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsReadOnly(eOption);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

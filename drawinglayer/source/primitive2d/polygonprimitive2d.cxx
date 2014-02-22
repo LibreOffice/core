@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -27,11 +27,11 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -61,13 +61,13 @@ namespace drawinglayer
 
         basegfx::B2DRange PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // this is a hairline, thus the line width is view-dependent. Get range of polygon
-            // as base size
+            
+            
             basegfx::B2DRange aRetval(getB2DPolygon().getB2DRange());
 
             if(!aRetval.isEmpty())
             {
-                // Calculate view-dependent hairline width
+                
                 const basegfx::B2DVector aDiscreteSize(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
                 const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
@@ -77,17 +77,17 @@ namespace drawinglayer
                 }
             }
 
-            // return range
+            
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(PolygonHairlinePrimitive2D, PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -95,13 +95,13 @@ namespace drawinglayer
     {
         Primitive2DSequence PolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // calculate logic DashLength
+            
             const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
             const double fLogicDashLength(aDashVector.getX());
 
             if(fLogicDashLength > 0.0 && !getRGBColorA().equal(getRGBColorB()))
             {
-                // apply dashing; get line and gap snippets
+                
                 ::std::vector< double > aDash;
                 basegfx::B2DPolyPolygon aDashedPolyPolyA;
                 basegfx::B2DPolyPolygon aDashedPolyPolyB;
@@ -110,7 +110,7 @@ namespace drawinglayer
                 aDash.push_back(fLogicDashLength);
                 basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength);
 
-                // prepare return value
+                
                 Primitive2DSequence aRetval(2);
 
                 aRetval[0] = Primitive2DReference(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyA, getRGBColorA()));
@@ -156,13 +156,13 @@ namespace drawinglayer
 
         basegfx::B2DRange PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // this is a hairline, thus the line width is view-dependent. Get range of polygon
-            // as base size
+            
+            
             basegfx::B2DRange aRetval(getB2DPolygon().getB2DRange());
 
             if(!aRetval.isEmpty())
             {
-                // Calculate view-dependent hairline width
+                
                 const basegfx::B2DVector aDiscreteSize(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
                 const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
@@ -172,7 +172,7 @@ namespace drawinglayer
                 }
             }
 
-            // return range
+            
             return aRetval;
         }
 
@@ -191,28 +191,28 @@ namespace drawinglayer
 
             if(bNeedNewDecomposition)
             {
-                // conditions of last local decomposition have changed, delete
+                
                 const_cast< PolygonMarkerPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
             if(!getBuffered2DDecomposition().hasElements())
             {
-                // remember last used InverseObjectToViewTransformation
+                
                 PolygonMarkerPrimitive2D* pThat = const_cast< PolygonMarkerPrimitive2D* >(this);
                 pThat->maLastInverseObjectToViewTransformation = rViewInformation.getInverseObjectToViewTransformation();
             }
 
-            // use parent implementation
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(PolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -222,18 +222,18 @@ namespace drawinglayer
         {
             if(getB2DPolygon().count())
             {
-                // #i102241# try to simplify before usage
+                
                 const basegfx::B2DPolygon aB2DPolygon(basegfx::tools::simplifyCurveSegments(getB2DPolygon()));
                 basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
                 if(getStrokeAttribute().isDefault() || 0.0 == getStrokeAttribute().getFullDotDashLen())
                 {
-                    // no line dashing, just copy
+                    
                     aHairLinePolyPolygon.append(aB2DPolygon);
                 }
                 else
                 {
-                    // apply LineStyle
+                    
                     basegfx::tools::applyLineDashing(
                         aB2DPolygon, getStrokeAttribute().getDotDashArray(),
                         &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
@@ -243,7 +243,7 @@ namespace drawinglayer
 
                 if(!getLineAttribute().isDefault() && getLineAttribute().getWidth())
                 {
-                    // create fat line data
+                    
                     const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
                     const com::sun::star::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
@@ -251,7 +251,7 @@ namespace drawinglayer
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
-                        // New version of createAreaGeometry; now creates bezier polygons
+                        
                         aAreaPolyPolygon.append(basegfx::tools::createAreaGeometry(
                             aHairLinePolyPolygon.getB2DPolygon(a),
                             fHalfLineWidth,
@@ -259,15 +259,15 @@ namespace drawinglayer
                             aLineCap));
                     }
 
-                    // prepare return value
+                    
                     Primitive2DSequence aRetval(aAreaPolyPolygon.count());
 
-                    // create primitive
+                    
                     for(sal_uInt32 b(0L); b < aAreaPolyPolygon.count(); b++)
                     {
-                        // put into single polyPolygon primitives to make clear that this is NOT meant
-                        // to be painted as a single PolyPolygon (XORed as fill rule). Alternatively, a
-                        // melting process may be used here one day.
+                        
+                        
+                        
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
                         static bool bTestByUsingRandomColor(false);
                         const basegfx::BColor aColor(bTestByUsingRandomColor
@@ -281,7 +281,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // prepare return value
+                    
                     const Primitive2DReference xRef(
                         new PolyPolygonHairlinePrimitive2D(
                             aHairLinePolyPolygon,
@@ -341,43 +341,43 @@ namespace drawinglayer
 
                 if(basegfx::B2DLINEJOIN_MITER == getLineAttribute().getLineJoin())
                 {
-                    // if line is mitered, use parent call since mitered line
-                    // geometry may use more space than the geometry grown by half line width
+                    
+                    
                     bUseDecomposition = true;
                 }
 
                 if(!bUseDecomposition && com::sun::star::drawing::LineCap_SQUARE == getLineAttribute().getLineCap())
                 {
-                    // when drawing::LineCap_SQUARE is used the below method to grow the polygon
-                    // range by half line width will not work, so use decomposition. Interestingly,
-                    // the grow method below works perfectly for LineCap_ROUND since the grow is in
-                    // all directions and the rounded cap needs the same grow in all directions independent
-                    // from it's orientation. Unfortunately this is not the case for drawing::LineCap_SQUARE
+                    
+                    
+                    
+                    
+                    
                     bUseDecomposition = true;
                 }
 
                 if(bUseDecomposition)
                 {
-                    // get correct range by using the decomposition fallback, reasons see above cases
+                    
                     aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
                 }
                 else
                 {
-                    // for all other B2DLINEJOIN_* get the range from the base geometry
-                    // and expand by half the line width
+                    
+                    
                     aRetval = getB2DPolygon().getB2DRange();
                     aRetval.grow(getLineAttribute().getWidth() * 0.5);
                 }
             }
             else
             {
-                // this is a hairline, thus the line width is view-dependent. Get range of polygon
-                // as base size
+                
+                
                 aRetval = getB2DPolygon().getB2DRange();
 
                 if(!aRetval.isEmpty())
                 {
-                    // Calculate view-dependent hairline width
+                    
                     const basegfx::B2DVector aDiscreteSize(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
                     const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
@@ -391,13 +391,13 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(PolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -414,14 +414,14 @@ namespace drawinglayer
 
                 if(bHasWidth && bHasHeight)
                 {
-                    // create waveline curve
+                    
                     const basegfx::B2DPolygon aWaveline(basegfx::tools::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
                     const Primitive2DReference xRef(new PolygonStrokePrimitive2D(aWaveline, getLineAttribute(), getStrokeAttribute()));
                     aRetval = Primitive2DSequence(&xRef, 1);
                 }
                 else
                 {
-                    // flat waveline, decompose to simple line primitive
+                    
                     const Primitive2DReference xRef(new PolygonStrokePrimitive2D(getB2DPolygon(), getLineAttribute(), getStrokeAttribute()));
                     aRetval = Primitive2DSequence(&xRef, 1);
                 }
@@ -486,16 +486,16 @@ namespace drawinglayer
 
         basegfx::B2DRange PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // get range of parent
+            
             basegfx::B2DRange aRetval(PolygonStrokePrimitive2D::getB2DRange(rViewInformation));
 
-            // if WaveHeight, grow by it
+            
             if(basegfx::fTools::more(getWaveHeight(), 0.0))
             {
                 aRetval.grow(getWaveHeight());
             }
 
-            // if line width, grow by it
+            
             if(basegfx::fTools::more(getLineAttribute().getWidth(), 0.0))
             {
                 aRetval.grow(getLineAttribute().getWidth() * 0.5);
@@ -504,13 +504,13 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(PolygonWavePrimitive2D, PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -518,7 +518,7 @@ namespace drawinglayer
     {
         Primitive2DSequence PolygonStrokeArrowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // copy local polygon, it may be changed
+            
             basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
             aLocalPolygon.removeDoublePoints();
             basegfx::B2DPolyPolygon aArrowA;
@@ -526,7 +526,7 @@ namespace drawinglayer
 
             if(!aLocalPolygon.isClosed() && aLocalPolygon.count() > 1)
             {
-                // apply arrows
+                
                 const double fPolyLength(basegfx::tools::getLength(aLocalPolygon));
                 double fStart(0.0);
                 double fEnd(0.0);
@@ -535,39 +535,39 @@ namespace drawinglayer
 
                 if(!getStart().isDefault() && getStart().isActive())
                 {
-                    // create start arrow primitive and consume
+                    
                     aArrowA = basegfx::tools::createAreaGeometryForLineStartEnd(
                         aLocalPolygon, getStart().getB2DPolyPolygon(), true, getStart().getWidth(),
                         fPolyLength, getStart().isCentered() ? 0.5 : 0.0, &fStart);
 
-                    // create some overlapping, compromise between straight and peaked markers
-                    // for marker width 0.3cm and marker line width 0.02cm
+                    
+                    
                     fStartOverlap = getStart().getWidth() / 15.0;
                 }
 
                 if(!getEnd().isDefault() && getEnd().isActive())
                 {
-                    // create end arrow primitive and consume
+                    
                     aArrowB = basegfx::tools::createAreaGeometryForLineStartEnd(
                         aLocalPolygon, getEnd().getB2DPolyPolygon(), false, getEnd().getWidth(),
                         fPolyLength, getEnd().isCentered() ? 0.5 : 0.0, &fEnd);
 
-                    // create some overlapping
+                    
                     fEndOverlap = getEnd().getWidth() / 15.0;
                 }
 
                 if(0.0 != fStart || 0.0 != fEnd)
                 {
-                    // build new poly, consume something from old poly
+                    
                     aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart-fStartOverlap, fPolyLength - fEnd + fEndOverlap, fPolyLength);
                 }
             }
 
-            // prepare return value
+            
             Primitive2DSequence aRetval(1L + (aArrowA.count() ? 1L : 0L) + (aArrowB.count() ? 1L : 0L));
             sal_uInt32 nInd(0L);
 
-            // add shaft
+            
             const Primitive2DReference xRefShaft(new
                 PolygonStrokePrimitive2D(
                     aLocalPolygon, getLineAttribute(), getStrokeAttribute()));
@@ -634,20 +634,20 @@ namespace drawinglayer
 
             if(getStart().isActive() || getEnd().isActive())
             {
-                // use decomposition when line start/end is used
+                
                 return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {
-                // get range from parent
+                
                 return PolygonStrokePrimitive2D::getB2DRange(rViewInformation);
             }
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(PolygonStrokeArrowPrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

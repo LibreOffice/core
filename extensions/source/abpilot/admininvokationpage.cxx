@@ -42,57 +42,57 @@ namespace abp
         m_aInvokeAdminDialog.SetClickHdl( LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog) );
     }
 
-    //---------------------------------------------------------------------
+    
     void AdminDialogInvokationPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
         m_aInvokeAdminDialog.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     void AdminDialogInvokationPage::implUpdateErrorMessage()
     {
         const sal_Bool bIsConnected = getDialog()->getDataSource().isConnected();
         m_aErrorMessage.Show( !bIsConnected );
     }
 
-    //---------------------------------------------------------------------
+    
     void AdminDialogInvokationPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
         m_aErrorMessage.Hide();
-            // if we're entering this page, we assume we had no connection trial with this data source
+            
     }
 
-    //---------------------------------------------------------------------
+    
     void AdminDialogInvokationPage::implTryConnect()
     {
         getDialog()->connectToDataSource( sal_True );
 
-        // show our error message if and only if we could not connect
+        
         implUpdateErrorMessage();
 
-        // the status of the next button may have changed
+        
         updateDialogTravelUI();
 
-        // automatically go to the next page (if successfully connected)
+        
         if ( canAdvance() )
             getDialog()->travelNext();
     }
 
-    //---------------------------------------------------------------------
+    
     bool AdminDialogInvokationPage::canAdvance() const
     {
         return AddressBookSourcePage::canAdvance() && getDialog()->getDataSource().isConnected();
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
         if ( aInvokation.invokeAdministration( AST_LDAP == getSettings().eType ) )
         {
-            // try to connect to this data source
+            
             implTryConnect();
         }
 
@@ -100,7 +100,7 @@ namespace abp
     }
 
 //.........................................................................
-}   // namespace abp
+}   
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

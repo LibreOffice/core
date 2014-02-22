@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,9 +45,9 @@
 
 FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
-    // check the passed Calc document
+    
     OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
-    if( !pDocument ) return eERR_INTERN;        // should not happen
+    if( !pDocument ) return eERR_INTERN;        
 
     /*  Import all BIFF versions regardless on eFormat, needed for import of
         external cells (file type detection returns Excel4.0). */
@@ -57,15 +57,15 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         return eERR_FORMAT;
     }
 
-    // check the input stream from medium
+    
     SvStream* pMedStrm = rMedium.GetInStream();
     OSL_ENSURE( pMedStrm, "::ScImportExcel - medium without input stream" );
-    if( !pMedStrm ) return eERR_OPEN;           // should not happen
+    if( !pMedStrm ) return eERR_OPEN;           
 
-    SvStream* pBookStrm = 0;            // The "Book"/"Workbook" stream containing main data.
-    XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
+    SvStream* pBookStrm = 0;            
+    XclBiff eBiff = EXC_BIFF_UNKNOWN;   
 
-    // try to open an OLE storage
+    
     SotStorageRef xRootStrg;
     SotStorageStreamRef xStrgStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
@@ -75,18 +75,18 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
             xRootStrg = 0;
     }
 
-    // try to open "Book" or "Workbook" stream in OLE storage
+    
     if( xRootStrg.Is() )
     {
-        // try to open the "Book" stream
+        
         SotStorageStreamRef xBookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
         XclBiff eBookBiff = xBookStrm.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm ) : EXC_BIFF_UNKNOWN;
 
-        // try to open the "Workbook" stream
+        
         SotStorageStreamRef xWorkbookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
         XclBiff eWorkbookBiff = xWorkbookStrm.Is() ?  XclImpStream::DetectBiffVersion( *xWorkbookStrm ) : EXC_BIFF_UNKNOWN;
 
-        // decide which stream to use
+        
         if( (eWorkbookBiff != EXC_BIFF_UNKNOWN) && ((eBookBiff == EXC_BIFF_UNKNOWN) || (eWorkbookBiff > eBookBiff)) )
         {
             /*  Only "Workbook" stream exists; or both streams exist,
@@ -105,7 +105,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         pBookStrm = xStrgStrm;
     }
 
-    // no "Book" or "Workbook" stream found, try plain input stream from medium (even for BIFF5+)
+    
     if( !pBookStrm )
     {
         eBiff = XclImpStream::DetectBiffVersion( *pMedStrm );
@@ -113,11 +113,11 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
             pBookStrm = pMedStrm;
     }
 
-    // try to import the file
+    
     FltError eRet = eERR_UNKN_BIFF;
     if( pBookStrm )
     {
-        pBookStrm->SetBufferSize( 0x8000 );     // still needed?
+        pBookStrm->SetBufferSize( 0x8000 );     
 
         XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pDocument, RTL_TEXTENCODING_MS_1252 );
         ::std::auto_ptr< ImportExcel > xFilter;
@@ -145,11 +145,11 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         SvStream* pMedStrm, sal_Bool bBiff8, rtl_TextEncoding eNach )
 {
-    // try to open an OLE storage
+    
     SotStorageRef xRootStrg = new SotStorage( pMedStrm, false );
     if( xRootStrg->GetError() ) return eERR_OPEN;
 
-    // create BIFF dependent strings
+    
     OUString aStrmName, aClipName, aClassName;
     if( bBiff8 )
     {
@@ -164,11 +164,11 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         aClassName = "Microsoft Excel 5.0-Tabelle";
     }
 
-    // open the "Book"/"Workbook" stream
+    
     SotStorageStreamRef xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
     if( !xStrgStrm.Is() || xStrgStrm->GetError() ) return eERR_OPEN;
 
-    xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
+    xStrgStrm->SetBufferSize( 0x8000 );     
 
     FltError eRet = eERR_UNKN_BIFF;
     XclExpRootData aExpData( bBiff8 ? EXC_BIFF8 : EXC_BIFF5, rMedium, xRootStrg, *pDocument, eNach );
@@ -202,14 +202,14 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
     if( eFormat != ExpBiff5 && eFormat != ExpBiff8 )
         return eERR_NI;
 
-    // check the passed Calc document
+    
     OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
-    if( !pDocument ) return eERR_INTERN;        // should not happen
+    if( !pDocument ) return eERR_INTERN;        
 
-    // check the output stream from medium
+    
     SvStream* pMedStrm = rMedium.GetOutStream();
     OSL_ENSURE( pMedStrm, "::ScExportExcel5 - medium without output stream" );
-    if( !pMedStrm ) return eERR_OPEN;           // should not happen
+    if( !pMedStrm ) return eERR_OPEN;           
 
     FltError eRet = eERR_UNKN_BIFF;
     if( eFormat == ExpBiff5 || eFormat == ExpBiff8 )

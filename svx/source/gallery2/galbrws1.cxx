@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -39,12 +39,12 @@
 
 #include <svx/svxdlg.hxx>
 
-// - Namespaces -
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// - GalleryButton -
+
 
 GalleryButton::GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits ) :
     PushButton( pParent, nWinBits )
@@ -61,7 +61,7 @@ void GalleryButton::KeyInput( const KeyEvent& rKEvt )
         PushButton::KeyInput( rKEvt );
 }
 
-// - GalleryThemeListBox -
+
 
 GalleryThemeListBox::GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits ) :
     ListBox( pParent, nWinBits )
@@ -110,7 +110,7 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
     return( nDone || ListBox::PreNotify( rNEvt ) );
 }
 
-// - GalleryBrowser1 -
+
 
 GalleryBrowser1::GalleryBrowser1(
     Window* pParent,
@@ -137,7 +137,7 @@ GalleryBrowser1::GalleryBrowser1(
     maNewTheme.SetText( GAL_RESSTR(RID_SVXSTR_GALLERY_CREATETHEME));
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
-    // disable creation of new themes if a writable directory is not available
+    
     if( mpGallery->GetUserURL().GetProtocol() == INET_PROT_NOT_VALID )
         maNewTheme.Disable();
 
@@ -326,7 +326,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
         mpGallery->RemoveTheme( aThemeName );
     }
 
-    // destroy mpThemeProps asynchronously
+    
     Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog );
 }
 

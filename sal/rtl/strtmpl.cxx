@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /* ======================================================================= */
@@ -876,8 +876,8 @@ namespace {
         {
             nDiv = std::numeric_limits<T>::min() / nRadix;
             nMod = std::numeric_limits<T>::min() % nRadix;
-            // Cater for C++03 implementations that round the quotient down
-            // instead of truncating towards zero as mandated by C++11:
+            
+            
             if ( nMod > 0 )
             {
                 --nDiv;
@@ -945,7 +945,7 @@ namespace {
         while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
             ++pStr;
 
-        // skip optional explicit sign
+        
         if ( *pStr == '+' )
             ++pStr;
 
@@ -1228,7 +1228,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppT
     }
     if ( count < 0 || beginIndex < 0 || beginIndex + count > pFrom->length )
     {
-        assert(false); // fail fast at least in debug builds
+        assert(false); 
         IMPL_RTL_STRINGNAME( newFromLiteral )( ppThis, "!!br0ken!!", 10, 0 );
         return;
     }
@@ -1238,7 +1238,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppT
 
 /* ----------------------------------------------------------------------- */
 
-// Used when creating from string literals.
+
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThis,
                                                      const sal_Char* pCharStr,
                                                      sal_Int32 nLen,
@@ -1258,7 +1258,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
     assert( *ppThis != NULL );
     if ( (*ppThis) )
     {
-        (*ppThis)->length = nLen; // fix after possible allocExtra != 0
+        (*ppThis)->length = nLen; 
         (*ppThis)->buffer[nLen] = 0;
         IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
         sal_Int32 nCount;
@@ -1355,10 +1355,10 @@ void SAL_CALL IMPL_RTL_STRINGNAME( ensureCapacity )( IMPL_RTL_STRINGDATA** ppThi
     IMPL_RTL_STRINGDATA* const pOrg = *ppThis;
     if ( pOrg->refCount == 1 && pOrg->length >= size )
         return;
-    assert( pOrg->length <= size ); // do not truncate
+    assert( pOrg->length <= size ); 
     IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( size );
     rtl_str_ImplCopy( pTempStr->buffer, pOrg->buffer, pOrg->length );
-    // right now the length is still the same as of the original
+    
     pTempStr->length = pOrg->length;
     pTempStr->buffer[ pOrg->length ] = '\0';
     *ppThis = pTempStr;
@@ -1677,8 +1677,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
     sal_Int32               nLen            = pStr->length-nIndex;
     sal_Int32               nTokCount       = 0;
 
-    // Set ppThis to an empty string and return -1 if either nToken or nIndex is
-    // negative:
+    
+    
     if (nIndex < 0)
         nToken = -1;
 

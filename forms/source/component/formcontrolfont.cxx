@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formcontrolfont.hxx"
@@ -28,10 +28,10 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::comphelper;
     using namespace ::com::sun::star::uno;
@@ -39,7 +39,7 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //------------------------------------------------------------------------------
+    
     namespace
     {
         Any lcl_extractFontDescriptorAggregate( sal_Int32 _nHandle, const FontDescriptor& _rFont )
@@ -119,10 +119,10 @@ namespace frm
         }
     }
 
-    //=====================================================================
-    //= FontControlModel
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
         :m_nFontRelief( FontRelief::NONE )
         ,m_nFontEmphasis( FontEmphasisMark::NONE )
@@ -130,7 +130,7 @@ namespace frm
     {
     }
 
-    //---------------------------------------------------------------------
+    
     FontControlModel::FontControlModel( const FontControlModel* _pOriginal )
     {
         m_aFont = _pOriginal->m_aFont;
@@ -141,7 +141,7 @@ namespace frm
         m_bToolkitCompatibleDefaults = _pOriginal->m_bToolkitCompatibleDefaults;
     }
 
-    //---------------------------------------------------------------------
+    
     bool FontControlModel::isFontRelatedProperty( sal_Int32 _nPropertyHandle ) const
     {
         return isFontAggregateProperty( _nPropertyHandle )
@@ -152,7 +152,7 @@ namespace frm
             || ( _nPropertyHandle == PROPERTY_ID_TEXTCOLOR );
     }
 
-    //---------------------------------------------------------------------
+    
     bool FontControlModel::isFontAggregateProperty( sal_Int32 _nPropertyHandle ) const
     {
         return ( _nPropertyHandle == PROPERTY_ID_FONT_CHARWIDTH )
@@ -173,7 +173,7 @@ namespace frm
             || ( _nPropertyHandle == PROPERTY_ID_FONT_TYPE );
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int32 FontControlModel::getTextColor( ) const
     {
         sal_Int32 nColor = COL_TRANSPARENT;
@@ -181,7 +181,7 @@ namespace frm
         return nColor;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int32 FontControlModel::getTextLineColor( ) const
     {
         sal_Int32 nColor = COL_TRANSPARENT;
@@ -189,7 +189,7 @@ namespace frm
         return nColor;
     }
 
-    //------------------------------------------------------------------------------
+    
     void FontControlModel::describeFontRelatedProperties( Sequence< Property >& /* [out] */ _rProps ) const
     {
         sal_Int32 nPos = _rProps.getLength();
@@ -220,7 +220,7 @@ namespace frm
         DECL_BOOL_PROP1 ( FONT_WORDLINEMODE,                    MAYBEDEFAULT );
     }
 
-    //---------------------------------------------------------------------
+    
     void FontControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch( _nHandle )
@@ -251,7 +251,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool FontControlModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
                 sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
@@ -351,7 +351,7 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------------------
+    
     static void setFastPropertyValue_NoBroadcast_implimpl(
             FontDescriptor & rFont,
             sal_Int32 nHandle, const Any& rValue) throw (Exception)
@@ -431,7 +431,7 @@ namespace frm
         break;
 
         default:
-            assert(false); // isFontAggregateProperty
+            assert(false); 
         }
     }
 
@@ -442,17 +442,17 @@ namespace frm
     {
         if (isFontAggregateProperty(nHandle))
         {
-            // need to fire a event for PROPERTY_ID_FONT too apparently, so:
+            
             FontDescriptor font(getFont());
 
-            // first set new value on backup copy
+            
             setFastPropertyValue_NoBroadcast_implimpl(font, nHandle, rValue);
 
-            // then set that as the actual property - will eventually call
-            // this method recursively again...
+            
+            
             (rBase.*pSet)(PROPERTY_ID_FONT, makeAny(font));
 #ifndef NDEBUG
-            // verify that the nHandle property has the new value
+            
             Any tmp;
             getFastPropertyValue(tmp, nHandle);
             assert(tmp == rValue || PROPERTY_ID_FONT_HEIGHT == nHandle /*rounded*/);
@@ -488,18 +488,18 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     Any FontControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aReturn;
-        // some defaults which are the same, not matter if we have toolkit-compatible
-        // defaults or not
+        
+        
         bool bHandled = false;
         switch( _nHandle )
         {
         case PROPERTY_ID_TEXTCOLOR:
         case PROPERTY_ID_TEXTLINECOLOR:
-            // void
+            
             bHandled = true;
             break;
 
@@ -571,8 +571,8 @@ namespace frm
         return aReturn;
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

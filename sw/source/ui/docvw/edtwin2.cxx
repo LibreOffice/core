@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -65,7 +65,7 @@
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 
-// #i104300#
+
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
@@ -138,7 +138,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
         {
-            sal_uInt16 nStyle = 0; // style of quick help
+            sal_uInt16 nStyle = 0; 
             switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
@@ -164,7 +164,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
-                //#i63832# remove the link target type
+                
                 sal_Int32 nFound = sTxt.indexOf(cMarkSeparator);
                 if( nFound != -1 && (++nFound) < sTxt.getLength() )
                 {
@@ -178,8 +178,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix == "ole" )
                     sTxt = sTxt.copy( 0, nFound - 1);
                 }
-                // #i104300#
-                // special handling if target is a cross-reference bookmark
+                
+                
                 {
                     OUString sTmpSearchStr = sTxt.copy( 1 );
                     IDocumentMarkAccess* const pMarkAccess =
@@ -210,7 +210,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                     }
                 }
-                // #i80029#
+                
                 sal_Bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
@@ -299,7 +299,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             {
                                 break;
                             }
-                        case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
+                        case RES_INPUTFLD:  
                             bBalloon = sal_True;
                             /* no break */
                         case RES_JUMPEDITFLD:
@@ -324,7 +324,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                         case RES_GETREFFLD:
                         {
-                            // #i85090#
+                            
                             const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
                             OSL_ENSURE( pRefFld,
                                     "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
@@ -363,7 +363,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sTxt );
                 else
                 {
-                    // the show the help
+                    
                     Rectangle aRect( aFldRect.SVRect() );
                     Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
                     aRect.Left()   = aPt.X();
@@ -391,7 +391,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABROW_VERT:
                     nTabRes = STR_TABLE_ROW_ADJUST;
                     break;
-                // #i32329# Enhanced table selection
+                
                 case SW_TABSEL_HORI:
                 case SW_TABSEL_HORI_RTL:
                 case SW_TABSEL_VERT:
@@ -427,7 +427,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if ((pField = aVEvt.pURLField) != 0)
         {
-            // hit an URL field
+            
             if (pField)
             {
                 pObj = aVEvt.pObj;
@@ -438,7 +438,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
         if (bContinue && eHit == SDRHIT_TEXTEDIT)
         {
-            // look for URL field in DrawText object that is opened for editing
+            
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
 
@@ -501,15 +501,15 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     if( m_pShadCrsr )
     {
         Rectangle aRect( m_pShadCrsr->GetRect());
-        // fully resides inside?
+        
         if( rRect.IsInside( aRect ) )
-            // dann aufheben
+            
             delete m_pShadCrsr, m_pShadCrsr = 0;
         else if( rRect.IsOver( aRect ))
         {
-            // resides somewhat above, then everything is clipped outside
-            // and we have to make the "inner part" at the end of the
-            // Paint visible again. Otherwise Paint errors occur!
+            
+            
+            
             bPaintShadowCrsr = true;
         }
     }

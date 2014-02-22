@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/xmlmultiimagehelper.hxx>
@@ -28,7 +28,7 @@ namespace
     {
         sal_uInt32 nRetval(0);
 
-        // pixel formats first
+        
         if(rString.endsWithAsciiL(".bmp", 4))
         {
             return 10;
@@ -46,7 +46,7 @@ namespace
             return 40;
         }
 
-        // vector formats, prefer always
+        
         if(rString.endsWithAsciiL(".svm", 4))
         {
             return 1000;
@@ -88,8 +88,8 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
     SvXMLImportContextRef pContext;
     if(maImplContextVector.size() > 1)
     {
-        // multiple child contexts were imported, decide which is the most valuable one
-        // and remove the rest
+        
+        
         sal_uInt32 nIndexOfPreferred(maImplContextVector.size());
         sal_uInt32 nBestQuality(0), a(0);
 
@@ -105,27 +105,27 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
             }
         }
 
-        // correct if needed, default is to use the last entry
+        
         if(nIndexOfPreferred >= maImplContextVector.size())
         {
             nIndexOfPreferred = maImplContextVector.size() - 1;
         }
 
-        // Take out the most valuable one
+        
         const std::vector< SvXMLImportContextRef* >::iterator aRemove(maImplContextVector.begin() + nIndexOfPreferred);
         pContext = **aRemove;
         delete *aRemove;
         maImplContextVector.erase(aRemove);
 
-        // remove the rest from parent
+        
         for(a = 0; a < maImplContextVector.size(); a++)
         {
             SvXMLImportContext& rCandidate = **maImplContextVector[a];
 
             if(pContext)
             {
-                // #i124143# evtl. copy imported GluePoints before deprecating
-                // this graphic and context
+                
+                
                 pContext->onDemandRescueUsefulDataFromTemporary(rCandidate);
             }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -61,17 +61,17 @@ namespace drawinglayer
 
             if(aBitmapSize.Width() && aBitmapSize.Height() && basegfx::fTools::more(getDiscreteUnit(), 0.0))
             {
-                // calculate back from internal bitmap's extreme coordinates (the edges)
-                // to logical coordinates. Only use a unified scaling value (getDiscreteUnit(),
-                // the prepared one which expresses how many logic units form a discrete unit)
-                // for this step. This primitive is to be displayed always unscaled (in it's pixel size)
-                // and unrotated, more like a marker
+                
+                
+                
+                
+                
                 const double fLeft((0.0 - getCenterX()) * getDiscreteUnit());
                 const double fTop((0.0 - getCenterY()) * getDiscreteUnit());
                 const double fRight((aBitmapSize.getWidth() - getCenterX()) * getDiscreteUnit());
                 const double fBottom((aBitmapSize.getHeight() - getCenterY()) * getDiscreteUnit());
 
-                // create a BitmapPrimitive2D using those positions
+                
                 basegfx::B2DHomMatrix aTransform;
 
                 aTransform.set(0, 0, fRight - fLeft);
@@ -79,19 +79,19 @@ namespace drawinglayer
                 aTransform.set(0, 2, fLeft);
                 aTransform.set(1, 2, fTop);
 
-                // if shearX is used, apply it, too
+                
                 if(!basegfx::fTools::equalZero(getShearX()))
                 {
                     aTransform.shearX(getShearX());
                 }
 
-                // if rotation is used, apply it, too
+                
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
                     aTransform.rotate(getRotation());
                 }
 
-                // add BasePosition
+                
                 aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
                 const Primitive2DReference aPrimitive(new BitmapPrimitive2D(getBitmapEx(), aTransform));
@@ -120,10 +120,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayBitmapExPrimitive, PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -143,7 +143,7 @@ namespace drawinglayer
 
         Primitive2DSequence OverlayCrosshairPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // use the prepared Viewport information accessible using getViewport()
+            
             Primitive2DSequence aRetval;
 
             if(!getViewport().isEmpty())
@@ -193,10 +193,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayCrosshairPrimitive, PRIMITIVE2D_ID_OVERLAYCROSSHAIRPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -227,11 +227,11 @@ namespace drawinglayer
             {
                 basegfx::B2DRange aOuterRange(getObjectRange());
 
-                // grow/shrink inner/outer polygons
+                
                 aOuterRange.grow(getDiscreteUnit() * getDiscreteGrow());
                 aInnerRange.grow(getDiscreteUnit() * -getDiscreteShrink());
 
-                // convert to polygons
+                
                 const double fFullGrow(getDiscreteGrow() + getDiscreteShrink());
                 const double fRelativeRadiusX(fFullGrow / aOuterRange.getWidth());
                 const double fRelativeRadiusY(fFullGrow / aOuterRange.getHeight());
@@ -244,7 +244,7 @@ namespace drawinglayer
                     basegfx::tools::createPolygonFromRect(
                         aInnerRange));
 
-                // apply evtl. existing rotation
+                
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
                     const basegfx::B2DHomMatrix aTransform(basegfx::tools::createRotateAroundPoint(
@@ -254,7 +254,7 @@ namespace drawinglayer
                     aInnerPolygon.transform(aTransform);
                 }
 
-                // create filled primitive
+                
                 basegfx::B2DPolyPolygon aPolyPolygon;
 
                 aPolyPolygon.append(aOuterPolygon);
@@ -262,7 +262,7 @@ namespace drawinglayer
 
                 if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
                 {
-                    // for high contrast, use hatch
+                    
                     const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetFontColor().getBColor());
                     const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
                     const double fHatchRotation(45 * F_PI180);
@@ -272,7 +272,7 @@ namespace drawinglayer
                         fDiscreteHatchDistance * getDiscreteUnit(),
                         fHatchRotation - getRotation(),
                         aHighContrastLineColor,
-                        3, // same default as VCL, a minimum of three discrete units (pixels) offset
+                        3, 
                         false);
                     const Primitive2DReference aHatch(
                         new PolyPolygonHatchPrimitive2D(
@@ -284,7 +284,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // create fill primitive
+                    
                     const Primitive2DReference aFill(
                         new PolyPolygonColorPrimitive2D(
                             aPolyPolygon,
@@ -292,7 +292,7 @@ namespace drawinglayer
 
                     aRetval = Primitive2DSequence(&aFill, 1);
 
-                    // embed filled to transparency (if used)
+                    
                     if(getTransparence() > 0.0)
                     {
                         const Primitive2DReference aFillTransparent(
@@ -327,10 +327,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -352,7 +352,7 @@ namespace drawinglayer
 
         Primitive2DSequence OverlayHelplineStripedPrimitive::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // use the prepared Viewport information accessible using getViewport()
+            
             Primitive2DSequence aRetval;
 
             if(!getViewport().isEmpty())
@@ -393,7 +393,7 @@ namespace drawinglayer
                         break;
                     }
 
-                    default: // case HELPLINESTYLE_POINT :
+                    default: 
                     {
                         const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
                         aRetval.realloc(2);
@@ -445,10 +445,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayHelplineStripedPrimitive, PRIMITIVE2D_ID_OVERLAYHELPLINESTRIPEDPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -468,7 +468,7 @@ namespace drawinglayer
 
         Primitive2DSequence OverlayRollingRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // use the prepared Viewport information accessible using getViewport()
+            
             Primitive2DSequence aRetval;
 
             if(!getViewport().isEmpty())
@@ -476,7 +476,7 @@ namespace drawinglayer
                 basegfx::B2DPolygon aLine;
                 aRetval.realloc(8);
 
-                // Left lines
+                
                 aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getRollingRectangle().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMinY()));
                 aRetval[0] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
@@ -486,7 +486,7 @@ namespace drawinglayer
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMaxY()));
                 aRetval[1] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
-                // Right lines
+                
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMinY()));
                 aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getRollingRectangle().getMinY()));
@@ -497,7 +497,7 @@ namespace drawinglayer
                 aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getRollingRectangle().getMaxY()));
                 aRetval[3] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
-                // Top lines
+                
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getViewport().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMinY()));
@@ -508,7 +508,7 @@ namespace drawinglayer
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMinY()));
                 aRetval[5] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
 
-                // Bottom lines
+                
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getViewport().getMaxY()));
@@ -540,7 +540,7 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayRollingRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

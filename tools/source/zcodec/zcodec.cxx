@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -28,7 +28,7 @@
 #define PZSTREAM ((z_stream*) mpsC_Stream)
 
 /* gzip flag byte */
-//      GZ_ASCII_FLAG   0x01 /* bit 0 set: file probably ascii text */
+
 #define GZ_HEAD_CRC     0x02 /* bit 1 set: header CRC present */
 #define GZ_EXTRA_FIELD  0x04 /* bit 2 set: extra field present */
 #define GZ_ORIG_NAME    0x08 /* bit 3 set: original file name present */
@@ -82,7 +82,7 @@ long ZCodec::EndCompression()
 
     if ( mbInit != 0 )
     {
-        if ( mbInit & 2 )   // 1->decompress, 3->compress
+        if ( mbInit & 2 )   
         {
             do
             {
@@ -206,7 +206,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
     sal_uIntPtr nInToRead;
 
     if ( mbFinish )
-        return 0;           // PZSTREAM->total_out;
+        return 0;           
 
     mpIStm = &rIStm;
     if ( mbInit == 0 )
@@ -231,7 +231,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
         err = inflate( PZSTREAM, Z_NO_FLUSH );
         if ( err < 0 )
         {
-            // Accept Z_BUF_ERROR as EAGAIN or EWOULDBLOCK.
+            
             mbStatus = (err == Z_BUF_ERROR);
             break;
         }
@@ -251,7 +251,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
     sal_uIntPtr nInToRead;
 
     if ( mbFinish )
-        return 0;           // PZSTREAM->total_out;
+        return 0;           
 
     if ( mbInit == 0 )
     {
@@ -273,7 +273,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
             if ( ( nMaxPos - nStreamPos ) < nInToRead )
             {
                 rIStm.SetError( ERRCODE_IO_PENDING );
-                err= int(!Z_STREAM_END); // TODO What is appropriate code for this?
+                err= int(!Z_STREAM_END); 
                 break;
             }
 
@@ -288,7 +288,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
         err = inflate( PZSTREAM, Z_NO_FLUSH );
         if ( err < 0 )
         {
-            // Accept Z_BUF_ERROR as EAGAIN or EWOULDBLOCK.
+            
             mbStatus = (err == Z_BUF_ERROR);
             break;
         }
@@ -345,7 +345,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
             if ( mbStatus && ( mnCompressMethod & ZCODEC_GZ_LIB ) )
             {
                 sal_uInt8 n1, n2, j, nMethod, nFlags;
-                for ( int i = 0; i < 2; i++ )   // gz - magic number
+                for ( int i = 0; i < 2; i++ )   
                 {
                     mpIStm->ReadUChar( j );
                     if ( j != gz_magic[ i ] )

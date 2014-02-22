@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 
-///////////////////////////////////////////////////////////////////////////
+
 
 namespace {
 template < typename T >
@@ -71,7 +71,7 @@ SmToken::SmToken(SmTokenType eTokenType,
     nCol = nRow = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 static const SmTokenTableEntry aTokenTable[] =
@@ -128,7 +128,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "dlarrow" , TDLARROW, MS_DLARROW, TGSTANDALONE, 5},
     { "dlrarrow" , TDLRARROW, MS_DLRARROW, TGSTANDALONE, 5},
     { "dot", TDOT, MS_DOT, TGATTRIBUT, 5},
-    { "dotsaxis", TDOTSAXIS, MS_DOTSAXIS, TGSTANDALONE, 5}, // 5 to continue expression
+    { "dotsaxis", TDOTSAXIS, MS_DOTSAXIS, TGSTANDALONE, 5}, 
     { "dotsdiag", TDOTSDIAG, MS_DOTSUP, TGSTANDALONE, 5},   //
     { "dotsdown", TDOTSDOWN, MS_DOTSDOWN, TGSTANDALONE, 5},  //
     { "dotslow", TDOTSLOW, MS_DOTSLOW, TGSTANDALONE, 5},    //
@@ -191,7 +191,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "magenta", TMAGENTA, '\0', TGCOLOR, 0},
     { "matrix", TMATRIX, '\0', 0, 5},
     { "minusplus", TMINUSPLUS, MS_MINUSPLUS, TGUNOPER | TGSUM, 5},
-    { "mline", TMLINE, MS_VERTLINE, 0, 0},      //! not in TGRBRACES, Level 0
+    { "mline", TMLINE, MS_VERTLINE, 0, 0},      
     { "nabla", TNABLA, MS_NABLA, TGSTANDALONE, 5},
     { "nbold", TNBOLD, '\0', TGFONTATTR, 5},
     { "ndivides", TNDIVIDES, MS_NDIVIDES, TGRELATION, 0},
@@ -231,16 +231,16 @@ static const SmTokenTableEntry aTokenTable[] =
     { "nprec", TNOTPRECEDES, MS_NOTPRECEDES, TGRELATION, 0 },
     { "prod", TPROD, MS_PROD, TGOPER, 5},
     { "prop", TPROP, MS_PROP, TGRELATION, 0},
-    { "rangle", TRANGLE, MS_RMATHANGLE, TGRBRACES, 0},  //! 0 to terminate expression
+    { "rangle", TRANGLE, MS_RMATHANGLE, TGRBRACES, 0},  
     { "rbrace", TRBRACE, MS_RBRACE, TGRBRACES, 0},  //
     { "rceil", TRCEIL, MS_RCEIL, TGRBRACES, 0}, //
     { "rdbracket", TRDBRACKET, MS_RDBRACKET, TGRBRACES, 0}, //
     { "rdline", TRDLINE, MS_DVERTLINE, TGRBRACES, 0},   //
     { "red", TRED, '\0', TGCOLOR, 0},
-    { "rfloor", TRFLOOR, MS_RFLOOR, TGRBRACES, 0},  //! 0 to terminate expression
+    { "rfloor", TRFLOOR, MS_RFLOOR, TGRBRACES, 0},  
     { "right", TRIGHT, '\0', 0, 0},
     { "rightarrow" , TRIGHTARROW, MS_RIGHTARROW, TGSTANDALONE, 5},
-    { "rline", TRLINE, MS_VERTLINE, TGRBRACES, 0},  //! 0 to terminate expression
+    { "rline", TRLINE, MS_VERTLINE, TGRBRACES, 0},  
     { "rsub", TRSUB, '\0', TGPOWER, 0},
     { "rsup", TRSUP, '\0', TGPOWER, 0},
     { "sans", TSANS, '\0', TGFONT, 0},
@@ -314,7 +314,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -323,20 +323,20 @@ static const sal_Unicode aDelimiterTable[] =
     ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
     '%',    '\\',   '"',    '~',    '`',    '>',    '<',    '&',    '|',    '(',
     ')',    '{',    '}',    '[',    ']',    '^',    '_',
-    '\0'    // end of list symbol
+    '\0'    
 };
 
 bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
-    // returns 'true' iff cChar is '\0' or a delimiter
+    
 {
-    assert(nPos <= rTxt.getLength()); //index out of range
+    assert(nPos <= rTxt.getLength()); 
 
     if (nPos == rTxt.getLength())
         return true;
 
     sal_Unicode cChar = rTxt[nPos];
 
-    // check if 'cChar' is in the delimiter table
+    
     const sal_Unicode *pDelim = &aDelimiterTable[0];
     for ( ;  *pDelim != 0;  pDelim++)
         if (*pDelim == cChar)
@@ -374,22 +374,22 @@ void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
 }
 
 
-// First character may be any alphabetic
+
 const sal_Int32 coStartFlags =
         KParseTokens::ANY_LETTER |
         KParseTokens::IGNORE_LEADING_WS;
 
-// Continuing characters may be any alphabetic
+
 const sal_Int32 coContFlags =
     (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS)
     | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
-// First character for numbers, may be any numeric or dot
+
 const sal_Int32 coNumStartFlags =
         KParseTokens::ASC_DIGIT |
         KParseTokens::ASC_DOT |
         KParseTokens::IGNORE_LEADING_WS;
-// Continuing characters for numbers, may be any numeric or dot.
+
 const sal_Int32 coNumContFlags =
     coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS;
 
@@ -404,14 +404,14 @@ void SmParser::NextToken()
     CharClass   aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
     do
     {
-        // skip white spaces
+        
         while (UnicodeType::SPACE_SEPARATOR ==
                         aCC.getType( m_aBufferString, m_nBufferIndex ))
            ++m_nBufferIndex;
 
-        // Try to parse a number. This should be independent from the locale
-        // setting, so temporarily set the language to English.
-        // See https://issues.apache.org/ooo/show_bug.cgi?id=45779
+        
+        
+        
         LanguageTag aOldLoc(aCC.getLanguageTag());
         aCC.setLanguageTag(LanguageTag(m_aDotLoc));
         aRes = aCC.parsePredefinedToken(KParseType::ASC_NUMBER,
@@ -422,7 +422,7 @@ void SmParser::NextToken()
 
         if (aRes.TokenType == 0)
         {
-            // Try again with the default token parsing.
+            
             aRes = aCC.parseAnyToken(m_aBufferString, m_nBufferIndex,
                                      coStartFlags, aEmptyStr,
                                      coContFlags, aEmptyStr);
@@ -436,7 +436,7 @@ void SmParser::NextToken()
                 nRealStart < nBufLen &&
                 '\n' == m_aBufferString[ nRealStart ] )
         {
-            // keep data needed for tokens row and col entry up to date
+            
             ++m_Row;
             m_nBufferIndex = m_nColOff = nRealStart + 1;
             bCont = true;
@@ -445,7 +445,7 @@ void SmParser::NextToken()
         {
             if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
             {
-                //SkipComment
+                
                 m_nBufferIndex = nRealStart + 2;
                 while (m_nBufferIndex < nBufLen  &&
                     '\n' != m_aBufferString[ m_nBufferIndex ])
@@ -456,7 +456,7 @@ void SmParser::NextToken()
 
     } while (bCont);
 
-    // set index of current token
+    
     m_nTokenIndex = m_nBufferIndex;
 
     m_aCurToken.nRow   = m_Row;
@@ -642,13 +642,13 @@ void SmParser::NextToken()
             {
                 case '%':
                     {
-                        //! modifies aRes.EndPos
+                        
 
                         OSL_ENSURE( rnEndPos >= nBufLen  ||
                                     '%' != m_aBufferString[ rnEndPos ],
                                 "unexpected comment start" );
 
-                        // get identifier of user-defined character
+                        
                         ParseResult aTmpRes = aCC.parseAnyToken(
                                 m_aBufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
@@ -658,9 +658,9 @@ void SmParser::NextToken()
 
                         sal_Int32 nTmpStart = rnEndPos + aTmpRes.LeadingWhiteSpace;
 
-                        // default setting for the case that no identifier
-                        // i.e. a valid symbol-name is following the '%'
-                        // character
+                        
+                        
+                        
                         m_aCurToken.eType      = TTEXT;
                         m_aCurToken.cMathChar  = '\0';
                         m_aCurToken.nGroup     = 0;
@@ -684,9 +684,9 @@ void SmParser::NextToken()
                                 ++rnEndPos;
                         }
 
-                        // if no symbol-name was found we start-over with
-                        // finding the next token right afer the '%' sign.
-                        // I.e. we leave rnEndPos unmodified.
+                        
+                        
+                        
                     }
                     break;
                 case '[':
@@ -806,7 +806,7 @@ void SmParser::NextToken()
                         m_aCurToken.eType    = TLPARENT;
                         m_aCurToken.cMathChar = MS_LPARENT;
                         m_aCurToken.nGroup       = TGLBRACES;
-                        m_aCurToken.nLevel       = 5;     //! 0 to continue expression
+                        m_aCurToken.nLevel       = 5;     
                         m_aCurToken.aText = "(";
                     }
                     break;
@@ -815,7 +815,7 @@ void SmParser::NextToken()
                         m_aCurToken.eType    = TRPARENT;
                         m_aCurToken.cMathChar = MS_RPARENT;
                         m_aCurToken.nGroup       = TGRBRACES;
-                        m_aCurToken.nLevel       = 0;     //! 0 to terminate expression
+                        m_aCurToken.nLevel       = 0;     
                         m_aCurToken.aText = ")";
                     }
                     break;
@@ -874,12 +874,12 @@ void SmParser::NextToken()
                     break;
                 case '.':
                     {
-                        // Only one character? Then it can't be a number.
+                        
                         if (m_nBufferIndex < m_aBufferString.getLength() - 1)
                         {
-                            // for compatibility with SO5.2
-                            // texts like .34 ...56 ... h ...78..90
-                            // will be treated as numbers
+                            
+                            
+                            
                             m_aCurToken.eType     = TNUMBER;
                             m_aCurToken.cMathChar = '\0';
                             m_aCurToken.nGroup       = 0;
@@ -942,8 +942,8 @@ void SmParser::NextToken()
 }
 
 
-////////////////////////////////////////
-// grammar
+
+
 //
 
 
@@ -978,7 +978,7 @@ void SmParser::Table()
 
 
 void SmParser::Align()
-    // parse alignment info (if any), then go on with rest of expression
+    
 {
     SmStructureNode *pSNode = 0;
 
@@ -988,7 +988,7 @@ void SmParser::Align()
 
         NextToken();
 
-        // allow for just one align statement in 5.0
+        
         if (TokenInGroup(TGALIGN))
         {
             Error(PE_DOUBLE_ALIGN);
@@ -1014,9 +1014,9 @@ void SmParser::Line()
 
     ExpressionArray.resize(n);
 
-    // start with single expression that may have an alignment statement
-    // (and go on with expressions that must not have alignment
-    // statements in 'while' loop below. See also 'Expression()'.)
+    
+    
+    
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
     {   Align();
         ExpressionArray.resize(++n);
@@ -1030,9 +1030,9 @@ void SmParser::Line()
         ExpressionArray[n - 1] = lcl_popOrZero(m_aNodeStack);
     }
 
-    //If there's no expression, add an empty one.
-    //this is to avoid a formula tree without any caret
-    //positions, in visual formula editor.
+    
+    
+    
     if(ExpressionArray.empty())
     {
         SmToken aTok = SmToken();
@@ -1056,7 +1056,7 @@ void SmParser::Expression()
         if (pNode->GetToken().eType == TNOSPACE)
             bUseExtraSpaces = false;
         else
-            m_aNodeStack.push(pNode);  // push the node from above again (now to be used as argument to this current 'nospace' node)
+            m_aNodeStack.push(pNode);  
     }
 
     sal_uInt16       n = 0;
@@ -1083,7 +1083,7 @@ void SmParser::Expression()
     }
     else
     {
-        // This expression has only one node so just push this node.
+        
         m_aNodeStack.push(RelationArray[0]);
     }
 }
@@ -1151,7 +1151,7 @@ void SmParser::Product()
 
                 NextToken();
 
-                //Let the glyph node know it's a binary operation
+                
                 m_aCurToken.eType = TBOPER;
                 m_aCurToken.nGroup = TGPRODUCT;
 
@@ -1192,7 +1192,7 @@ void SmParser::Product()
 
         if (bSwitchArgs)
         {
-            //! vgl siehe SmBinDiagonalNode::Arrange
+            
             pSNode->SetSubNodes(pFirst, lcl_popOrZero(m_aNodeStack), pOper);
         }
         else
@@ -1210,36 +1210,36 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
                "Sm: wrong token group");
 
     if (!TokenInGroup(nActiveGroup))
-        // already finish
+        
         return;
 
     SmSubSupNode *pNode = new SmSubSupNode(m_aCurToken);
-    //! Of course 'm_aCurToken' is just the first sub-/supscript token.
-    //! It should be of no further interest. The positions of the
-    //! sub-/supscripts will be identified by the corresponding subnodes
-    //! index in the 'aSubNodes' array (enum value from 'SmSubSup').
+    
+    
+    
+    
 
     pNode->SetUseLimits(nActiveGroup == TGLIMIT);
 
-    // initialize subnodes array
+    
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
     aSubNodes[0] = lcl_popOrZero(m_aNodeStack);
     for (sal_uInt16 i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
-    // process all sub-/supscripts
+    
     int  nIndex = 0;
     while (TokenInGroup(nActiveGroup))
     {   SmTokenType  eType (m_aCurToken.eType);
 
-        // skip sub-/supscript token
+        
         NextToken();
 
-        // get sub-/supscript node on top of stack
+        
         if (eType == TFROM  ||  eType == TTO)
         {
-            // parse limits in old 4.0 and 5.0 style
+            
             Relation();
         }
         else
@@ -1261,7 +1261,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
         OSL_ENSURE(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
                    "SmParser::Power() : sub-/supscript index falsch");
 
-        // set sub-/supscript if not already done
+        
         if (aSubNodes[nIndex] != NULL)
             Error(PE_DOUBLE_SUBSUPSCRIPT);
         aSubNodes[nIndex] = lcl_popOrZero(m_aNodeStack);
@@ -1274,11 +1274,11 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
 
 void SmParser::OpSubSup()
 {
-    // push operator symbol
+    
     m_aNodeStack.push(new SmMathSymbolNode(m_aCurToken));
-    // skip operator token
+    
     NextToken();
-    // get sub- supscripts if any
+    
     if (TokenInGroup(TGPOWER))
         SubSup(TGPOWER);
 }
@@ -1286,7 +1286,7 @@ void SmParser::OpSubSup()
 
 void SmParser::Power()
 {
-    // get body for sub- supscripts on top of stack
+    
     Term(false);
 
     SubSup(TGPOWER);
@@ -1304,7 +1304,7 @@ void SmParser::Blank()
         NextToken();
     }
 
-    // Blanks am Zeilenende ignorieren wenn die entsprechende Option gesetzt ist
+    
     if ( m_aCurToken.eType == TNEWLINE ||
              (m_aCurToken.eType == TEND && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()) )
     {
@@ -1327,24 +1327,24 @@ void SmParser::Term(bool bGroupNumberIdent)
         case TLGROUP :
         {
             bool bNoSpace = m_aCurToken.eType == TNOSPACE;
-            if (bNoSpace)   // push 'no space' node and continue to parse expression
+            if (bNoSpace)   
             {
                 m_aNodeStack.push(new SmExpressionNode(m_aCurToken));
                 NextToken();
             }
             if (m_aCurToken.eType != TLGROUP)
             {
-                m_aNodeStack.pop();    // get rid of the 'no space' node pushed above
+                m_aNodeStack.pop();    
                 Term(false);
             }
             else
             {
                 NextToken();
 
-                // allow for empty group
+                
                 if (m_aCurToken.eType == TRGROUP)
                 {
-                    if (bNoSpace)   // get rid of the 'no space' node pushed above
+                    if (bNoSpace)   
                         m_aNodeStack.pop();
                     SmStructureNode *pSNode = new SmExpressionNode(m_aCurToken);
                     pSNode->SetSubNodes(NULL, NULL);
@@ -1352,7 +1352,7 @@ void SmParser::Term(bool bGroupNumberIdent)
 
                     NextToken();
                 }
-                else    // go as usual
+                else    
                 {
                     Align();
                     if (m_aCurToken.eType != TRGROUP)
@@ -1394,19 +1394,19 @@ void SmParser::Term(bool bGroupNumberIdent)
             }
             else
             {
-                // Some people want to be able to write "x_2n" for "x_{2n}"
-                // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
-                // The tokenizer skips whitespaces so we need some additional
-                // work to distinguish from "x_2 n".
-                // See https://issues.apache.org/ooo/show_bug.cgi?id=11752 and
-                // https://www.libreoffice.org/bugzilla/show_bug.cgi?id=55853
+                
+                
+                
+                
+                
+                
                 sal_Int32 nBufLen = m_aBufferString.getLength();
                 CharClass aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
                 sal_Int32 nTokens = 1;
 
-                // We need to be careful to call NextToken() only after having
-                // tested for a whitespace separator (otherwise it will be
-                // skipped!)
+                
+                
+                
                 bool moveToNextToken = true;
                 while (m_nBufferIndex < nBufLen &&
                        aCC.getType(m_aBufferString, m_nBufferIndex) !=
@@ -1416,8 +1416,8 @@ void SmParser::Term(bool bGroupNumberIdent)
                     if (m_aCurToken.eType != TNUMBER &&
                         m_aCurToken.eType != TIDENT)
                     {
-                        // Neither a number nor an indentifier. We just moved to
-                        // the next token, so no need to do that again.
+                        
+                        
                         moveToNextToken = false;
                         break;
                     }
@@ -1431,8 +1431,8 @@ void SmParser::Term(bool bGroupNumberIdent)
                 if (moveToNextToken) NextToken();
                 if (nTokens > 1)
                 {
-                    // We have several concatenated identifiers and numbers.
-                    // Let's group them into one SmExpressionNode.
+                    
+                    
                     SmNodeArray nodeArray;
                     nodeArray.resize(nTokens);
                     while (nTokens > 0)
@@ -1537,7 +1537,7 @@ void SmParser::Term(bool bGroupNumberIdent)
 
                     SmNode* pTmp = lcl_popOrZero(m_aNodeStack);
 
-                    // check if casting in following line is ok
+                    
                     OSL_ENSURE(pTmp && !pTmp->IsVisible(), "Sm : Ooops...");
 
                     aArray[n] = (SmStructureNode *) pTmp;
@@ -1607,14 +1607,14 @@ void SmParser::Operator()
     if (TokenInGroup(TGOPER))
     {   SmStructureNode *pSNode = new SmOperNode(m_aCurToken);
 
-        // put operator on top of stack
+        
         Oper();
 
         if (TokenInGroup(TGLIMIT) || TokenInGroup(TGPOWER))
             SubSup(m_aCurToken.nGroup);
         SmNode *pOperator = lcl_popOrZero(m_aNodeStack);
 
-        // get argument
+        
         Power();
 
         pSNode->SetSubNodes(pOperator, lcl_popOrZero(m_aNodeStack));
@@ -1710,7 +1710,7 @@ void SmParser::UnOper()
 
         case TUOPER :
             NextToken();
-            //Let the glyph know what it is...
+            
             m_aCurToken.eType = TUOPER;
             m_aCurToken.nGroup = TGUNOPER;
             GlyphSpecial();
@@ -1731,7 +1731,7 @@ void SmParser::UnOper()
             Error(PE_UNOPER_EXPECTED);
     }
 
-    // get argument
+    
     Power();
     pArg = lcl_popOrZero(m_aNodeStack);
 
@@ -1739,9 +1739,9 @@ void SmParser::UnOper()
     {   pSNode = new SmBraceNode(aNodeToken);
         pSNode->SetScaleMode(SCALE_HEIGHT);
 
-        // build nodes for left & right lines
-        // (text, group, level of the used token are of no interrest here)
-        // we'll use row & column of the keyword for abs
+        
+        
+        
         aNodeToken.eType = TABS;
         //
         aNodeToken.cMathChar = MS_VERTLINE;
@@ -1763,7 +1763,7 @@ void SmParser::UnOper()
         if (bIsPostfix)
             pSNode->SetSubNodes(pArg, pOper);
         else
-            // prefix operator
+            
             pSNode->SetSubNodes(pOper, pArg);
     }
 
@@ -1779,7 +1779,7 @@ void SmParser::Attribut()
     SmNode      *pAttr;
     SmScaleMode  eScaleMode = SCALE_NONE;
 
-    // get appropriate node for the attribut itself
+    
     switch (m_aCurToken.eType)
     {   case TUNDERLINE :
         case TOVERLINE :
@@ -1844,7 +1844,7 @@ void SmParser::Color()
 {
     OSL_ENSURE(m_aCurToken.eType == TCOLOR, "Sm : Ooops...");
 
-    // last color rules, get that one
+    
     SmToken  aToken;
     do
     {   NextToken();
@@ -1865,7 +1865,7 @@ void SmParser::Font()
 {
     OSL_ENSURE(m_aCurToken.eType == TFONT, "Sm : Ooops...");
 
-    // last font rules, get that one
+    
     SmToken  aToken;
     do
     {   NextToken();
@@ -1882,8 +1882,8 @@ void SmParser::Font()
 }
 
 
-// gets number used as arguments in Math formulas (e.g. 'size' command)
-// Format: no negative numbers, must start with a digit, no exponent notation, ...
+
+
 static bool lcl_IsNumber(const OUString& rText)
 {
     bool bPoint = false;
@@ -1938,7 +1938,7 @@ void SmParser::FontSize()
         }
     }
 
-    // get number argument
+    
     Fraction  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
@@ -1947,11 +1947,11 @@ void SmParser::FontSize()
         {
             aValue = fTmp;
 
-            //!! keep the numerator and denominator from being to large
-            //!! otherwise ongoing multiplications may result in overflows
-            //!! (for example in SmNode::SetFontSize the font size calculated
-            //!! may become 0 because of this!!! Happens e.g. for ftmp = 2.9 with Linux
-            //!! or ftmp = 1.11111111111111111... (11/9) on every platform.)
+            
+            
+            
+            
+            
             if (aValue.GetDenominator() > 1000)
             {
                 long nNum   = aValue.GetNumerator();
@@ -1990,7 +1990,7 @@ void SmParser::Brace()
 
         eScaleMode = SCALE_HEIGHT;
 
-        // check for left bracket
+        
         if (TokenInGroup(TGLBRACES) || TokenInGroup(TGRBRACES))
         {
             pLeft = new SmMathSymbolNode(m_aCurToken);
@@ -2002,7 +2002,7 @@ void SmParser::Brace()
             if (m_aCurToken.eType == TRIGHT)
             {   NextToken();
 
-                // check for right bracket
+                
                 if (TokenInGroup(TGLBRACES) || TokenInGroup(TGRBRACES))
                 {
                     pRight = new SmMathSymbolNode(m_aCurToken);
@@ -2078,7 +2078,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
     SmNodeArray      aNodes;
     sal_uInt16           nNum = 0;
 
-    // get body if any
+    
     if (bIsLeftRight)
     {
         do
@@ -2118,7 +2118,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
         } while (m_aCurToken.eType != TEND  &&  !TokenInGroup(TGRBRACES));
     }
 
-    // build argument vector in parsing order
+    
     aNodes.resize(nNum);
     for (sal_uInt16 i = 0;  i < nNum;  i++)
     {
@@ -2136,8 +2136,8 @@ void SmParser::Function()
     switch (m_aCurToken.eType)
     {
         case TFUNC:
-            NextToken();    // skip "FUNC"-statement
-            // fall through
+            NextToken();    
+            
 
         case TSIN :
         case TCOS :
@@ -2218,8 +2218,8 @@ void SmParser::Stack()
 
         NextToken();
 
-        //We need to let the table node know it context
-        //it's used in SmNodeToTextVisitor
+        
+        
         SmToken aTok = m_aCurToken;
         aTok.eType = TSTACK;
         SmStructureNode *pSNode = new SmTableNode(aTok);
@@ -2300,9 +2300,9 @@ void SmParser::Special()
     OUString &rName = m_aCurToken.aText;
     OUString aNewName;
 
-    // conversion of symbol names for 6.0 (XML) file format
-    // (name change on import / export.
-    // UI uses localized names XML file format does not.)
+    
+    
+    
     if( rName.startsWith("%") )
     {
         if (IsImportSymbolNames())
@@ -2328,7 +2328,7 @@ void SmParser::Special()
         rName = aNewName;
     }
 
-    // add symbol name to list of used symbols
+    
     const OUString aSymbolName(m_aCurToken.aText.copy(1));
     if (!aSymbolName.isEmpty())
         AddToUsedSymbols( aSymbolName );
@@ -2351,9 +2351,9 @@ void SmParser::Error(SmParseError eError)
     SmErrorNode     *pErr   = new SmErrorNode(eError, m_aCurToken);
     pSNode->SetSubNodes(pErr, 0);
 
-    //! put a structure node on the stack (instead of the error node itself)
-    //! because sometimes such a node is expected in order to attach some
-    //! subnodes
+    
+    
+    
     m_aNodeStack.push(pSNode);
 
     AddError(eError, pSNode);
@@ -2362,7 +2362,7 @@ void SmParser::Error(SmParseError eError)
 }
 
 
-// end gramar
+
 
 
 SmParser::SmParser()

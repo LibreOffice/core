@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "layouter.hxx"
@@ -26,9 +26,9 @@
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 
-// #i28701#
+
 #include <movedfwdfrmsbyobjpos.hxx>
-// #i35911#
+
 #include <objstmpconsiderwrapinfl.hxx>
 
 #define LOOP_DETECT 250
@@ -79,7 +79,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
 
     if( pFtn->GetUpper() )
     {
-        // pFtn is the master, he incorporates its follows
+        
         SwFtnFrm *pNxt = pFtn->GetFollow();
         while ( pNxt )
         {
@@ -118,7 +118,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
         }
     }
     if( !pEndArr )
-        pEndArr = new SwFtnFrms;  // deleted from the SwLayouter
+        pEndArr = new SwFtnFrms;  
     pEndArr->push_back( pFtn );
 }
 
@@ -188,7 +188,7 @@ void SwLooping::Control( SwPageFrm* pPage )
         if( bNoLouie )
             return;
 
-        // FME 2007-08-30 #i81146# new loop control
+        
         OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
         OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
         OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
@@ -208,9 +208,9 @@ void SwLooping::Control( SwPageFrm* pPage )
 SwLayouter::SwLayouter()
         : pEndnoter( NULL ),
           pLooping( NULL ),
-          // #i28701#
+          
           mpMovedFwdFrms( 0L ),
-          // #i35911#
+          
           mpObjsTmpConsiderWrapInfl( 0L )
 {
 }
@@ -219,10 +219,10 @@ SwLayouter::~SwLayouter()
 {
     delete pEndnoter;
     delete pLooping;
-    // #i28701#
+    
     delete mpMovedFwdFrms;
     mpMovedFwdFrms = 0L;
-    // #i35911#
+    
     delete mpObjsTmpConsiderWrapInfl;
     mpObjsTmpConsiderWrapInfl = 0L;
 }
@@ -315,9 +315,9 @@ sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
             pDoc->GetLayouter()->StartLooping( pPage );
 }
 
-// #i28701#
-// methods to manage text frames, which are moved forward by the positioning
-// of its anchored objects
+
+
+
 void SwLayouter::ClearMovedFwdFrms( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() &&
@@ -346,7 +346,7 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
                                                  _nToPageNum );
 }
 
-// #i40155#
+
 void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                     const SwTxtFrm& _rTxtFrm )
 {
@@ -378,7 +378,7 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
     }
 }
 
-// #i26945#
+
 bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                             const SwRowFrm& _rRowFrm )
 {
@@ -397,7 +397,7 @@ bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
     }
 }
 
-// #i35911#
+
 void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() &&
@@ -436,7 +436,7 @@ void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
     }
 }
 
-// #i65250#
+
 bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
                                     const SwFlowFrm& p_rFlowFrm,
                                     const SwLayoutFrm& p_rNewUpperFrm )
@@ -448,7 +448,7 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
         const_cast<SwDoc&>(p_rDoc).SetLayouter( new SwLayouter() );
     }
 
-    // create hash map key
+    
     tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo;
     aMoveBwdLayoutInfo.mnFrmId = p_rFlowFrm.GetFrm()->GetFrmId();
     aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrm.Frm().Pos().X();
@@ -466,7 +466,7 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
             ? (pLastLower->Frm().*fnRect->fnBottomDist)( (p_rNewUpperFrm.*fnRect->fnGetPrtBottom)() )
             : (p_rNewUpperFrm.Frm().*fnRect->fnGetHeight)();
 
-    // check for moving backward suppress threshold
+    
     const sal_uInt16 cMoveBwdCountSuppressThreshold = 20;
     if ( ++const_cast<SwDoc&>(p_rDoc).GetLayouter()->maMoveBwdLayoutInfo[ aMoveBwdLayoutInfo ] >
                                                 cMoveBwdCountSuppressThreshold )

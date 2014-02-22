@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,10 +36,10 @@
 #include <vcl/button.hxx>
 #include <vcl/msgbox.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Reference;
@@ -50,9 +50,9 @@ namespace svx
 
     namespace TemplateDescription = ::com::sun::star::ui::dialogs::TemplateDescription;
 
-    //====================================================================
-    //= DatabaseLocationInputController_Impl
-    //====================================================================
+    
+    
+    
     class DatabaseLocationInputController_Impl
     {
     public:
@@ -84,7 +84,7 @@ namespace svx
         bool                                    m_bNeedExistenceCheck;
     };
 
-    //--------------------------------------------------------------------
+    
     DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
         :m_xContext( _rContext )
@@ -96,7 +96,7 @@ namespace svx
     {
         impl_initFilterProperties_nothrow();
 
-        // forward the allowed extensions to the input control
+        
         OUStringBuffer aExtensionList;
         for (   const OUString* pExtension = m_aFilterExtensions.getConstArray();
                 pExtension != m_aFilterExtensions.getConstArray() + m_aFilterExtensions.getLength();
@@ -112,21 +112,21 @@ namespace svx
         m_rLocationInput.AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
     }
 
-    //--------------------------------------------------------------------
+    
     DatabaseLocationInputController_Impl::~DatabaseLocationInputController_Impl()
     {
         m_rBrowseButton.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
         m_rLocationInput.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseLocationInputController_Impl::prepareCommit()
     {
         OUString sURL( impl_getCurrentURL() );
         if ( sURL.isEmpty() )
             return false;
 
-        // check if the name exists
+        
         if ( m_bNeedExistenceCheck )
         {
             if ( ::utl::UCBContentHelper::Exists( sURL ) )
@@ -140,25 +140,25 @@ namespace svx
         return true;
     }
 
-    //--------------------------------------------------------------------
+    
     void DatabaseLocationInputController_Impl::setURL( const OUString& _rURL )
     {
         ::svt::OFileNotation aTransformer( _rURL );
         m_rLocationInput.SetText( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString DatabaseLocationInputController_Impl::getURL() const
     {
         return impl_getCurrentURL();
     }
 
-    //--------------------------------------------------------------------
+    
     void DatabaseLocationInputController_Impl::impl_initFilterProperties_nothrow()
     {
         try
         {
-            // get the name of the default filter for database documents
+            
             ::utl::OConfigurationTreeRoot aConfig(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_xContext,
@@ -167,14 +167,14 @@ namespace svx
             OUString sDatabaseFilter;
             OSL_VERIFY( aConfig.getNodeValue( "ooSetupFactoryActualFilter" ) >>= sDatabaseFilter );
 
-            // get the type this filter is responsible for
+            
             Reference< XNameAccess > xFilterFactory(
                 m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
                 UNO_QUERY_THROW );
             ::comphelper::NamedValueCollection aFilterProperties( xFilterFactory->getByName( sDatabaseFilter ) );
             OUString sDocumentType = aFilterProperties.getOrDefault( "Type", OUString() );
 
-            // get the extension(s) for this type
+            
             Reference< XNameAccess > xTypeDetection(
                 m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
                 UNO_QUERY_THROW );
@@ -188,7 +188,7 @@ namespace svx
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // ensure we have at least one extension
+        
         OSL_ENSURE( m_aFilterExtensions.getLength(),
             "DatabaseLocationInputController_Impl::impl_initFilterProperties_nothrow: unable to determine the file extension(s)!" );
         if ( m_aFilterExtensions.getLength() == 0 )
@@ -198,7 +198,7 @@ namespace svx
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     IMPL_LINK( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent*, _pEvent )
     {
         if  (   ( _pEvent->GetWindow() == &m_rBrowseButton )
@@ -218,7 +218,7 @@ namespace svx
         return 0L;
     }
 
-    // -----------------------------------------------------------------------------
+    
     OUString DatabaseLocationInputController_Impl::impl_getCurrentURL() const
     {
         OUString sCurrentFile( m_rLocationInput.GetText() );
@@ -230,7 +230,7 @@ namespace svx
         return sCurrentFile;
     }
 
-    // -----------------------------------------------------------------------------
+    
     void DatabaseLocationInputController_Impl::impl_onBrowseButtonClicked()
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -251,53 +251,53 @@ namespace svx
                 ::svt::OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                 m_rLocationInput.SetText( aFileNotation.get( ::svt::OFileNotation::N_SYSTEM ) );
                 m_rLocationInput.GetModifyHdl().Call( &m_rLocationInput );
-                // the dialog already checked for the file's existence, so we don't need to, again
+                
                 m_bNeedExistenceCheck = false;
             }
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     void DatabaseLocationInputController_Impl::impl_onLocationModified()
     {
         m_bNeedExistenceCheck = true;
     }
 
-    //====================================================================
-    //= DatabaseLocationInputController
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
         :m_pImpl( new DatabaseLocationInputController_Impl( _rContext, _rLocationInput, _rBrowseButton ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     DatabaseLocationInputController::~DatabaseLocationInputController()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseLocationInputController::prepareCommit()
     {
         return m_pImpl->prepareCommit();
     }
 
-    //--------------------------------------------------------------------
+    
     void DatabaseLocationInputController::setURL( const OUString& _rURL )
     {
         m_pImpl->setURL( _rURL );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString DatabaseLocationInputController::getURL() const
     {
         return m_pImpl->getURL();
     }
 
-//........................................................................
-} // namespace svx
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

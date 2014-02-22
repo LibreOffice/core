@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLExportIterator.hxx"
@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-//==============================================================================
+
 
 ScMyIteratorBase::ScMyIteratorBase()
 {
@@ -58,7 +58,7 @@ void ScMyIteratorBase::UpdateAddress( table::CellAddress& rCellAddress )
 }
 
 
-//==============================================================================
+
 
 bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
@@ -182,7 +182,7 @@ void ScMyNoteShapesContainer::Sort()
     aNoteShapeList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 {
@@ -274,7 +274,7 @@ void ScMyMergedRangesContainer::Sort()
     aRangeList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
 {
@@ -356,7 +356,7 @@ void ScMyAreaLinksContainer::Sort()
     aAreaLinkList.sort();
 }
 
-//==============================================================================
+
 
 ScMyCellRangeAddress::ScMyCellRangeAddress(const table::CellRangeAddress& rRange)
     : table::CellRangeAddress(rRange)
@@ -436,7 +436,7 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
     aDatabaseList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
 {
@@ -474,10 +474,10 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SC
             ScUnoConversion::FillApiAddress( aDetObj.aPosition, rPosition );
         ScUnoConversion::FillApiRange( aDetObj.aSourceRange, rSourceRange );
 
-        // #111064#; take the sheet where the object is found and not the sheet given in the ranges, because they are not always true
+        
         if (eObjType != SC_DETOBJ_FROMOTHERTAB)
         {
-            // if the ObjType == SC_DETOBJ_FROMOTHERTAB then the SourceRange is not used and so it has not to be tested and changed
+            
             OSL_ENSURE(aDetObj.aPosition.Sheet == aDetObj.aSourceRange.Sheet, "It seems to be possible to have different sheets");
             aDetObj.aSourceRange.Sheet = nSheet;
         }
@@ -524,7 +524,7 @@ void ScMyDetectiveObjContainer::Sort()
     aDetectiveObjList.sort();
 }
 
-//==============================================================================
+
 
 bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
 {
@@ -590,7 +590,7 @@ void ScMyDetectiveOpContainer::Sort()
     aDetectiveOpList.sort();
 }
 
-//==============================================================================
+
 
 ScMyCell::ScMyCell() :
     aShapeList(),
@@ -614,7 +614,7 @@ ScMyCell::~ScMyCell()
 {
 }
 
-//==============================================================================
+
 
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
     : pShapes(NULL),
@@ -739,8 +739,8 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
 
 void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 {
-    // Skip entries for a sheet that is copied instead of saving normally.
-    // Cells are handled separately in SetCurrentTable.
+    
+    
 
     if( pShapes )
         pShapes->SkipTable(nSkip);
@@ -800,7 +800,7 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
 
         HasAnnotation( aCell );
         bool bIsAutoStyle;
-        // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
+        
         sal_Int32 nRemoveBeforeRow = aLastAddress.Row;
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
             aCell.aCellAddress.Column, aCell.aCellAddress.Row,
@@ -808,7 +808,7 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
         aLastAddress = aCell.aCellAddress;
         aCell.bIsAutoStyle = bIsAutoStyle;
 
-        //#102799#; if the cell is in a DatabaseRange which should saved empty, the cell should have the type empty
+        
         if (aCell.bHasEmptyDatabase)
             aCell.nType = table::CellContentType_EMPTY;
     }

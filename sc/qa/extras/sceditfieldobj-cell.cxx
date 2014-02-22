@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -43,19 +43,19 @@ public:
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Cell);
 
-    // XPropertySet
+    
     CPPUNIT_TEST(testGetPropertySetInfo);
     CPPUNIT_TEST(testGetPropertyValue);
     CPPUNIT_TEST(testSetPropertyValue);
 
-    // XTextField
+    
     CPPUNIT_TEST(testGetPresentation);
 
-    // XTextContent
+    
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
 
-    // Tests specific to this service implementation.
+    
     CPPUNIT_TEST(testEditFieldProperties);
 
     CPPUNIT_TEST_SUITE_END();
@@ -100,7 +100,7 @@ uno::Reference<text::XTextField> getNewField(const uno::Reference<lang::XMultiSe
         xSM->createInstance("com.sun.star.text.TextField.URL"), UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xField, UNO_QUERY_THROW);
     xPropSet->setPropertyValue("Representation", uno::makeAny(OUString("LibreOffice")));
-    xPropSet->setPropertyValue("URL", uno::makeAny(OUString("http://www.libreoffice.org/")));
+    xPropSet->setPropertyValue("URL", uno::makeAny(OUString("http:
     return xField;
 }
 
@@ -108,23 +108,23 @@ uno::Reference<text::XTextField> getNewField(const uno::Reference<lang::XMultiSe
 
 uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
 {
-    // Return a field that's already in the cell.
+    
     if (!mxField.is())
     {
         if (!mxComponent.is())
-            // Load an empty document.
+            
             mxComponent = loadFromDesktop("private:factory/scalc");
 
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
-        // Create a new URL field object, and populate it with name and URL.
+        
         mxField = getNewField(xSM);
 
-        // Insert this field into a cell.
+        
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
         uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
         uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
-        // Use cell A1 for this.
+        
         uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
         uno::Reference<text::XText> xText(xCell, UNO_QUERY_THROW);
 
@@ -138,14 +138,14 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
 
 uno::Reference<text::XTextContent> ScEditFieldObj_Cell::getTextContent()
 {
-    // Return a field object that's not yet inserted.
+    
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
     return uno::Reference<text::XTextContent>(getNewField(xSM), UNO_QUERY_THROW);
 }
 
 uno::Reference<text::XTextRange> ScEditFieldObj_Cell::getTextRange()
 {
-    // Use cell A2 for this.
+    
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
@@ -163,7 +163,7 @@ void ScEditFieldObj_Cell::testEditFieldProperties()
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
     {
-        // Test properties of date time field.
+        
         uno::Reference<text::XTextField> xField(
             xSM->createInstance("com.sun.star.text.textfield.DateTime"), UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet(xField, UNO_QUERY_THROW);
@@ -176,7 +176,7 @@ void ScEditFieldObj_Cell::testEditFieldProperties()
     }
 
     {
-        // Test properties of document title field.
+        
         uno::Reference<text::XTextField> xField(
             xSM->createInstance("com.sun.star.text.textfield.docinfo.Title"), UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet(xField, UNO_QUERY_THROW);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -66,7 +66,7 @@ void TestString::testDecimalStringToNumber()
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)1234, comphelper::string::decimalStringToNumber(s1));
     s1 += OUString(static_cast<sal_Unicode>(0x07C6));
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)12346, comphelper::string::decimalStringToNumber(s1));
-    // Codepoints on 2 16bits words
+    
     sal_uInt32 utf16String[] = { 0x1D7FE /* 8 */, 0x1D7F7 /* 1 */};
     s1 = OUString(utf16String, 2);
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)81, comphelper::string::decimalStringToNumber(s1));
@@ -220,40 +220,40 @@ void TestString::testNatural()
     uno::Reference< i18n::XCollator > xCollator(new testCollator);
     uno::Reference< i18n::XBreakIterator > xBI(new testBreakIterator);
 
-// --- Some generic tests to ensure we do not alter original behavior
-// outside what we want
+
+
     CPPUNIT_ASSERT(
         compareNatural("ABC", "ABC", xCollator, xBI, lang::Locale()) == 0
     );
-    // Case sensitivity
+    
     CPPUNIT_ASSERT(
         compareNatural("ABC", "abc", xCollator, xBI, lang::Locale()) < 0
     );
-    // Reverse
+    
     CPPUNIT_ASSERT(
         compareNatural("abc", "ABC", xCollator, xBI, lang::Locale()) > 0
     );
-    // First shorter
+    
     CPPUNIT_ASSERT(
         compareNatural("alongstring", "alongerstring", xCollator, xBI, lang::Locale()) > 0
     );
-    // Second shorter
+    
     CPPUNIT_ASSERT(
         compareNatural("alongerstring", "alongstring", xCollator, xBI, lang::Locale()) < 0
     );
-// -- Here we go on natural order, each one is followed by classic compare and the reverse comparison
-    // That's why we originally made the patch
+
+    
     CPPUNIT_ASSERT(
         compareNatural("Heading 9", "Heading 10", xCollator, xBI, lang::Locale()) < 0
     );
-    // Original behavior
+    
     CPPUNIT_ASSERT(
         OUString("Heading 9").compareTo("Heading 10") > 0
     );
     CPPUNIT_ASSERT(
         compareNatural("Heading 10", "Heading 9", xCollator, xBI, lang::Locale()) > 0
     );
-    // Harder
+    
     CPPUNIT_ASSERT(
         compareNatural("July, the 4th", "July, the 10th", xCollator, xBI, lang::Locale()) < 0
     );
@@ -263,7 +263,7 @@ void TestString::testNatural()
     CPPUNIT_ASSERT(
         compareNatural("July, the 10th", "July, the 4th", xCollator, xBI, lang::Locale()) > 0
     );
-    // Hardest
+    
     CPPUNIT_ASSERT(
         compareNatural("abc08", "abc010", xCollator, xBI, lang::Locale()) < 0
     );

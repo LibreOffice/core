@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cmdid.h"
@@ -48,7 +48,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
-        // alignment
+        
         const SvxPageItem* pPage = (const SvxPageItem*)&rSet.Get( nWhich );
 
         if ( pPage )
@@ -59,14 +59,14 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
-        // orientation and size from PageItem
+        
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
-        // set left and right border
+        
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
 
         SetLeft( rLRSpace.GetLeft() );
@@ -82,7 +82,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
-        // set upper and lower border
+        
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
 
         SetTop( rULSpace.GetUpper() );
@@ -95,7 +95,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     }
 
 
-    // evaluate header-attributes
+    
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
             false, &pItem ) )
@@ -205,7 +205,7 @@ void SwColExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // rotate for mirrored
+            
             nL = GetRight();
             nR = GetLeft();
         }
@@ -229,7 +229,7 @@ void SwColExample::DrawPage( const Point& rOrg,
         else
             SetFillColor( GetColor() );
 
-        // #97495# make sure that the automatic column width's are always equal
+        
         sal_Bool bAutoWidth = pColMgr->IsAutoWidth();
         sal_Int32 nAutoColWidth = 0;
         if(bAutoWidth)
@@ -269,7 +269,7 @@ void SwColExample::DrawPage( const Point& rOrg,
                         aUp.Y() += nLength / 2;
                         aDown.Y() -= nLength / 2;
                     break;
-                    default:; // prevent warning
+                    default:; 
                 }
             }
 
@@ -308,7 +308,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(Window* pParent)
 
     SetBorderStyle( WINDOW_BORDER_MONO );
 
-    m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
+    m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);
     ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());
 
     long nHeight = m_aFrmSize.Height();
@@ -345,7 +345,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
                 (aLogSize.Height() - m_aFrmSize.Height()) / 2);
     Rectangle aRect(aTL, m_aFrmSize);
 
-    //draw a shadow rectangle
+    
     SetFillColor( Color(COL_GRAY) );
     Rectangle aShadowRect(aRect);
     aShadowRect.Move(aTL.Y(), aTL.Y());
@@ -356,7 +356,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     SetFillColor( aGrayColor );
 
-    //column separator?
+    
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
@@ -377,7 +377,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
                         aUp.Y() += nLength / 2;
                         aDown.Y() -= nLength / 2;
                 break;
-                default:; //prevent warning
+                default:; 
             }
         }
 
@@ -393,7 +393,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
         for(sal_uInt16 i = 0; i < nColCount; i++)
         {
             const SwColumn* pCol = &rCols[i];
-            aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
+            aFrmRect.Left()    = nSum + pCol->GetLeft();
             nSum              += pCol->GetWishWidth();
             aFrmRect.Right()   = nSum - pCol->GetRight();
             DrawRect(aFrmRect);
@@ -436,7 +436,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         nRight /= nWishSum;
         pCol->SetRight((sal_uInt16)nRight);
     }
-    // #97495# make sure that the automatic column width's are always equal
+    
     if(nColCount && m_aCols.IsOrtho())
     {
         sal_Int32 nColumnWidthSum = 0;
@@ -473,7 +473,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
     SwPageExample::DrawPage(rOrg, bSecond, bEnabled);
     if(pGridItem && pGridItem->GetGridType())
     {
-        //paint the grid now
+        
         Color aLineColor = pGridItem->GetColor();
         if(aLineColor.GetColor() == COL_AUTO)
         {
@@ -486,7 +486,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // rotate for mirrored
+            
             nL = GetRight();
             nR = GetLeft();
         }
@@ -499,11 +499,11 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
                         - GetFtHeight() - GetFtDist();
 
-        //increase the values to get a 'viewable' preview
+        
         sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
         sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
 
-        //detect height of rectangles
+        
         Rectangle aRubyRect(aRect.TopLeft(),
                     m_bVertical ?
                     Size(nRubyHeight, aRect.GetHeight()) :
@@ -515,12 +515,12 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         sal_Int32 nLineHeight = nBaseHeight + nRubyHeight;
 
-        //detect count of rectangles
+        
         sal_Int32 nLines = (m_bVertical ? aRect.GetWidth(): aRect.GetHeight()) / nLineHeight;
         if(nLines > pGridItem->GetLines())
             nLines = pGridItem->GetLines();
 
-        // determine start position
+        
         if(m_bVertical)
         {
             sal_Int16 nXStart = static_cast< sal_Int16 >(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
@@ -539,7 +539,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         else
             m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
 
-        //vertical lines
+        
         bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
         SetFillColor( Color( COL_TRANSPARENT ) );
         sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
@@ -570,7 +570,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
-    //get the grid information
+    
     if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, true))
         pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR, true ))

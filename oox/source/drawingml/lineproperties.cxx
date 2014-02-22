@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/lineproperties.hxx"
@@ -45,7 +45,7 @@ using ::com::sun::star::container::XNameContainer;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 namespace {
 
@@ -101,7 +101,7 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
         return;
     }
 
-    // count dashes and dots (stops equal or less than 2 are assumed to be dots)
+    
     sal_Int16 nDots = 0;
     sal_Int32 nDotLen = 0;
     sal_Int16 nDashes = 0;
@@ -168,7 +168,7 @@ sal_Int32 lclGetArrowSize( sal_Int32 nToken )
     return OOX_ARROWSIZE_MEDIUM;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         const LineArrowProperties& rArrowProps, sal_Int32 nLineWidth, bool bLineEnd )
@@ -227,7 +227,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
             case OOX_ARROWSIZE_MEDIUM:  fArrowWidth = (bIsArrow ? 4.5 : 3.0);  break;
             case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 6.0 : 5.0);  break;
         }
-        // set arrow width relative to line width
+        
         sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 70 );
         nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nBaseLineWidth );
 
@@ -237,7 +237,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
             TODO: this can be optimized by using a map. */
         if( !rPropMap.hasNamedLineMarkerInTable( aMarkerName ) )
         {
-// pass X and Y as percentage to OOX_ARROW_POINT
+
 #define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
 
             ::std::vector< awt::Point > aPoints;
@@ -315,7 +315,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         }
     }
 
-    // push the properties (filled aNamedMarker.Name indicates valid marker)
+    
     if( !aNamedMarker.Name.isEmpty() )
     {
         if( bLineEnd )
@@ -333,9 +333,9 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
 {
@@ -344,7 +344,7 @@ void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
     moArrowLength.assignIfUsed( rSourceProps.moArrowLength );
 }
 
-// ============================================================================
+
 
 void LineProperties::assignUsed( const LineProperties& rSourceProps )
 {
@@ -363,28 +363,28 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
 void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
-    // line fill type must exist, otherwise ignore other properties
+    
     if( maLineFill.moFillType.has() )
     {
-        // line style (our core only supports none and solid)
+        
         drawing::LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? drawing::LineStyle_NONE : drawing::LineStyle_SOLID;
 
-        // convert line width from EMUs to 1/100mm
+        
         sal_Int32 nLineWidth = getLineWidth();
 
-        // create line dash from preset dash token (not for invisible line)
+        
         if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || !maCustomDash.empty()) )
         {
             LineDash aLineDash;
             aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
 
-            // convert preset dash or custom dash
+            
             if( moPresetDash.differsFrom( XML_solid ) )
                 lclConvertPresetDash( aLineDash, moPresetDash.get() );
             else
                 lclConvertCustomDash( aLineDash, maCustomDash );
 
-            // convert relative dash/dot length to absolute length
+            
             sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
             aLineDash.DotLen *= nBaseLineWidth;
             aLineDash.DashLen *= nBaseLineWidth;
@@ -394,17 +394,17 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 eLineStyle = drawing::LineStyle_DASH;
         }
 
-        // set final line style property
+        
         rPropMap.setProperty( SHAPEPROP_LineStyle, eLineStyle );
 
-        // line joint type
+        
         if( moLineJoint.has() )
             rPropMap.setProperty( SHAPEPROP_LineJoint, lclGetLineJoint( moLineJoint.get() ) );
 
-        // line width in 1/100mm
+        
         rPropMap.setProperty( SHAPEPROP_LineWidth, nLineWidth );
 
-        // line color and transparence
+        
         Color aLineColor = maLineFill.getBestSolidColor();
         if( aLineColor.isUsed() )
         {
@@ -413,7 +413,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 rPropMap.setProperty( SHAPEPROP_LineTransparency, aLineColor.getTransparency() );
         }
 
-        // line markers
+        
         lclPushMarkerProperties( rPropMap, maStartArrow, nLineWidth, false );
         lclPushMarkerProperties( rPropMap, maEndArrow,   nLineWidth, true );
     }
@@ -421,7 +421,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
 drawing::LineStyle LineProperties::getLineStyle() const
 {
-    // rules to calculate the line style inferred from the code in LineProperties::pushToPropMap
+    
     return (maLineFill.moFillType.get() == XML_noFill) ?
             drawing::LineStyle_NONE :
             (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) ?
@@ -442,9 +442,9 @@ sal_Int32 LineProperties::getLineWidth() const
     return convertEmuToHmm( moLineWidth.get( 0 ) );
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

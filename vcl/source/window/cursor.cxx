@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -28,23 +28,23 @@
 #include <tools/poly.hxx>
 
 
-// =======================================================================
+
 
 struct ImplCursorData
 {
-    AutoTimer       maTimer;            // Timer
-    Point           maPixPos;           // Pixel-Position
-    Point           maPixRotOff;        // Pixel-Offset-Position
-    Size            maPixSize;          // Pixel-Size
-    long            mnPixSlant;         // Pixel-Slant
-    short           mnOrientation;      // Pixel-Orientation
-    unsigned char   mnDirection;        // indicates writing direction
-    sal_uInt16          mnStyle;            // Cursor-Style
-    bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
-    Window*         mpWindow;           // Zugeordnetes Windows
+    AutoTimer       maTimer;            
+    Point           maPixPos;           
+    Point           maPixRotOff;        
+    Size            maPixSize;          
+    long            mnPixSlant;         
+    short           mnOrientation;      
+    unsigned char   mnDirection;        
+    sal_uInt16          mnStyle;            
+    bool            mbCurVisible;       
+    Window*         mpWindow;           
 };
 
-// =======================================================================
+
 
 static void ImplCursorInvert( ImplCursorData* pData )
 {
@@ -63,7 +63,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
         Polygon aPoly( aRect );
         if( aPoly.GetSize() == 5 )
         {
-            aPoly[1].X() += 1;  // include the right border
+            aPoly[1].X() += 1;  
             aPoly[2].X() += 1;
             if ( pData->mnPixSlant )
             {
@@ -76,14 +76,14 @@ static void ImplCursorInvert( ImplCursorData* pData )
                 aPoly.SetPoint( aPoint, 1 );
             }
 
-            // apply direction flag after slant to use the correct shape
+            
             if ( pData->mnDirection )
             {
                 Point pAry[7];
                 int delta = 3*aRect.getWidth()+1;
                 if( pData->mnDirection == CURSOR_DIRECTION_LTR )
                 {
-                    // left-to-right
+                    
                     pAry[0] = aPoly.GetPoint( 0 );
                     pAry[1] = aPoly.GetPoint( 1 );
                     pAry[2] = pAry[1];
@@ -96,7 +96,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
                 }
                 else if( pData->mnDirection == CURSOR_DIRECTION_RTL )
                 {
-                    // right-to-left
+                    
                     pAry[0] = aPoly.GetPoint( 0 );
                     pAry[1] = aPoly.GetPoint( 1 );
                     pAry[2] = aPoly.GetPoint( 2 );
@@ -120,13 +120,13 @@ static void ImplCursorInvert( ImplCursorData* pData )
     pWindow->EnableMapMode( bMapMode );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::ImplDraw()
 {
     if ( mpData && mpData->mpWindow && !mpData->mbCurVisible )
     {
-        // SAL_DEBUG("Cursor::ImplDraw");
+        
         Window* pWindow         = mpData->mpWindow;
         mpData->maPixPos        = pWindow->LogicToPixel( maPos );
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
@@ -135,28 +135,28 @@ void Cursor::ImplDraw()
         mpData->mnDirection     = mnDirection;
         long nOffsetY           = pWindow->LogicToPixel( Size( 0, mnOffsetY ) ).Height();
 
-        // correct the position with the offset
+        
         mpData->maPixPos.Y() -= nOffsetY;
         mpData->maPixRotOff = mpData->maPixPos;
         mpData->maPixRotOff.Y() += nOffsetY;
 
-        // use width (as set in Settings) if size is 0,
+        
         if ( !mpData->maPixSize.Width() )
             mpData->maPixSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
 
-        // calculate output area and display
+        
         ImplCursorInvert( mpData );
         mpData->mbCurVisible = true;
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::ImplRestore()
 {
     if ( mpData && mpData->mbCurVisible )
     {
-        // SAL_DEBUG("Cursor::ImplRestore");
+        
         ImplCursorInvert( mpData );
         mpData->mbCurVisible = false;
     }
@@ -171,8 +171,8 @@ void Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             pWindow = mpWindow;
         else
         {
-            // show the cursor, if there is an active window and the cursor
-            // has been selected in this window
+            
+            
             pWindow = Application::GetFocusWindow();
             if ( !pWindow || (pWindow->mpWindowImpl->mpCursor != this) || pWindow->mpWindowImpl->mbInPaint
                 || !pWindow->mpWindowImpl->mpFrameData->mbHasFocus )
@@ -260,7 +260,7 @@ void Cursor::ImplNew()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
 {
@@ -271,7 +271,7 @@ IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
     return 0;
 }
 
-// =======================================================================
+
 
 Cursor::Cursor()
 {
@@ -285,7 +285,7 @@ Cursor::Cursor()
     mbVisible       = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 Cursor::Cursor( const Cursor& rCursor ) :
     maSize( rCursor.maSize ),
@@ -300,7 +300,7 @@ Cursor::Cursor( const Cursor& rCursor ) :
     mbVisible       = rCursor.mbVisible;
 }
 
-// -----------------------------------------------------------------------
+
 
 Cursor::~Cursor()
 {
@@ -313,7 +313,7 @@ Cursor::~Cursor()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetStyle( sal_uInt16 nStyle )
 {
@@ -324,7 +324,7 @@ void Cursor::SetStyle( sal_uInt16 nStyle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::Show()
 {
@@ -335,7 +335,7 @@ void Cursor::Show()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::Hide()
 {
@@ -346,7 +346,7 @@ void Cursor::Hide()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetWindow( Window* pWindow )
 {
@@ -357,7 +357,7 @@ void Cursor::SetWindow( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetPos( const Point& rPoint )
 {
@@ -368,7 +368,7 @@ void Cursor::SetPos( const Point& rPoint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetSize( const Size& rSize )
 {
@@ -379,7 +379,7 @@ void Cursor::SetSize( const Size& rSize )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetWidth( long nNewWidth )
 {
@@ -390,7 +390,7 @@ void Cursor::SetWidth( long nNewWidth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetOrientation( short nNewOrientation )
 {
@@ -401,7 +401,7 @@ void Cursor::SetOrientation( short nNewOrientation )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetDirection( unsigned char nNewDirection )
 {
@@ -412,7 +412,7 @@ void Cursor::SetDirection( unsigned char nNewDirection )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Cursor& Cursor::operator=( const Cursor& rCursor )
 {
@@ -427,7 +427,7 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Cursor::operator==( const Cursor& rCursor ) const
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,7 +82,7 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         }
         else if (err == ::osl::File::E_NOENT)
         {
-            //Create a new document and insert some basic stuff
+            
             m_doc = xDocBuilder->newDocument();
             const Reference<css::xml::dom::XElement> rootNode =
                 m_doc->createElementNS(getDbNSName(), getNSPrefix() +
@@ -125,7 +125,7 @@ void BackendDb::removeElement(OUString const & sXPathExpression)
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
+        
         const Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sXPathExpression);
 
@@ -136,7 +136,7 @@ void BackendDb::removeElement(OUString const & sXPathExpression)
         }
 
 #if    OSL_DEBUG_LEVEL > 0
-        //There must not be any other entry with the same url
+        
         const Reference<css::xml::dom::XNode> nextNode =
             xpathApi->selectSingleNode(root, sXPathExpression);
         OSL_ASSERT(! nextNode.is());
@@ -194,7 +194,7 @@ bool BackendDb::activateEntry(OUString const & url)
         Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
-            //no attribute "active" means it is active, that is, registered.
+            
             entry->removeAttribute("revoked");
             save();
             ret = true;
@@ -263,7 +263,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
     }
 }
 
-//Only writes the data if there is at least one entry
+
 void BackendDb::writeVectorOfPair(
     ::std::vector< ::std::pair< OUString, OUString > > const & vecPairs,
     OUString const & sVectorTagName,
@@ -381,7 +381,7 @@ BackendDb::readVectorOfPair(
     }
 }
 
-//Only writes the data if there is at least one entry
+
 void BackendDb::writeSimpleList(
     ::std::list< OUString> const & list,
     OUString const & sListTagName,
@@ -426,8 +426,8 @@ void BackendDb::writeSimpleList(
     }
 }
 
-//Writes only the element if is has a value.
-//The prefix is automatically added to the element name
+
+
 void BackendDb::writeSimpleElement(
     OUString const & sElementName, OUString const & value,
     Reference<css::xml::dom::XNode> const & xParent)
@@ -472,13 +472,13 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
-        //Check if there are an entry with the same url. This can be the case if the
-        //the status of an XPackage is ambiguous. In this case a call to activateExtension
-        //(dp_extensionmanager.cxx), will register the package again. See also
-        //Package::processPackage_impl in dp_backend.cxx.
-        //A package can become
-        //invalid after its successful registration, for example if a second extension with
-        //the same service is installed.
+        
+        
+        
+        
+        
+        
+        
         const OUString sExpression(
             sPrefix + ":" + sElementName + "[@url = \"" + url + "\"]");
         const Reference<css::xml::dom::XNode> existingNode =
@@ -486,7 +486,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         if (existingNode.is())
         {
             OSL_ASSERT(false);
-            //replace the existing entry.
+            
             removeEntry(url);
         }
 
@@ -631,7 +631,7 @@ void RegisteredDb::addEntry(OUString const & url)
             Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
 #if    OSL_DEBUG_LEVEL > 0
-            //There must not be yet an entry with the same url
+            
             OUString sExpression(
                 sPrefix + ":" + sEntry + "[@url = \"" + url + "\"]");
             Reference<css::xml::dom::XNode> _extensionNode =
@@ -685,7 +685,7 @@ bool RegisteredDb::getEntry(OUString const & url)
     }
 }
 
-} // namespace backend
-} // namespace dp_registry
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

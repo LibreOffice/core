@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -86,7 +86,7 @@ xmlDocPtr HelpCompiler::compactXhpForJar( xmlDocPtr doc )
 
 void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
 {
-    //save processed xhp document in ziptmp<module>_<lang>/text directory
+    
 #ifdef WNT
     std::string pathSep = "\\";
 #else
@@ -95,7 +95,7 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
     const std::string& sourceXhpPath = filePath.native_file_string();
     std::string zipdirPath = zipdir.native_file_string();
     const std::string srcdirPath( src.native_file_string() );
-    // srcdirPath contains trailing /, but we want the file path with / at the beginning
+    
     std::string jarXhpPath = sourceXhpPath.substr( srcdirPath.length() - 1 );
     std::string xhpFileName = jarXhpPath.substr( jarXhpPath.rfind( pathSep ) + 1 );
     jarXhpPath = jarXhpPath.substr( 0, jarXhpPath.rfind( pathSep ) );
@@ -161,8 +161,8 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
     return res;
 }
 
-// returns a node representing the whole stuff compiled for the current
-// application.
+
+
 xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
 {
     xmlNodePtr root = xmlCopyNode(node, 2);
@@ -299,7 +299,7 @@ void trim(std::string& str)
 
 void myparser::traverse( xmlNodePtr parentNode )
 {
-    // traverse all nodes that belong to the parent
+    
     xmlNodePtr test ;
     for (test = parentNode->xmlChildrenNode; test; test = test->next)
     {
@@ -336,7 +336,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                 if (index != std::string::npos)
                 {
                     hid = branch.substr(1 + index);
-                    // one shall serve as a documentId
+                    
                     if (documentId.empty())
                         documentId = hid;
                     extendedHelpText.push_back(hid);
@@ -388,7 +388,7 @@ void myparser::traverse( xmlNodePtr parentNode )
             }
             else if (branch.compare("contents") == 0)
             {
-                // currently not used
+                
             }
         }
         else if (!strcmp((const char*)test->name, "ahelp"))
@@ -405,20 +405,20 @@ void myparser::traverse( xmlNodePtr parentNode )
             }
             extendedHelpText.clear();
         }
-        // traverse children
+        
         traverse(test);
     }
 }
 
 bool HelpCompiler::compile( void ) throw( HelpProcessingException )
 {
-    // we now have the jaroutputstream, which will contain the document.
-    // now determine the document as a dom tree in variable docResolved
+    
+    
 
     xmlDocPtr docResolvedOrg = getSourceDocument(inputFile);
 
-    // now add path to the document
-    // resolve the dom
+    
+    
 
     if (!docResolvedOrg)
     {
@@ -435,7 +435,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
     std::string documentId;
     std::string fileName;
     std::string title;
-    // returns a clone of the document with switch-cases resolved
+    
     std::string appl = module.substr(1);
     for (unsigned int i = 0; i < appl.length(); ++i)
     {

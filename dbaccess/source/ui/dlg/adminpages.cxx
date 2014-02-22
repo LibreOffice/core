@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "adminpages.hxx"
@@ -57,7 +57,7 @@ namespace dbaui
     {
     }
 
-    // OGenericAdministrationPage
+    
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
         ,m_abEnableRoadmap(sal_False)
@@ -129,12 +129,12 @@ namespace dbaui
     }
     sal_Bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn,OUString& _sCurr)
     {
-        // collect all ODBC data source names
+        
         StringBag aOdbcDatasources;
         OOdbcEnumeration aEnumeration;
         if (!aEnumeration.isLoaded())
         {
-            // show an error message
+            
             OUString sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
             ErrorBox aDialog(this, WB_OK, sError);
@@ -144,7 +144,7 @@ namespace dbaui
         else
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
-            // execute the select dialog
+            
             ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources);
             if (!_sCurr.isEmpty())
                 aSelector.Select(_sCurr);
@@ -156,7 +156,7 @@ namespace dbaui
 
     void OGenericAdministrationPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
@@ -287,7 +287,7 @@ namespace dbaui
         SetControlFontWeight(m_pFT_HeaderText);
     }
 
-    // LayoutHelper
+    
     void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl, const ControlRelation _eRelation,
         const long _nIndentAppFont )
     {
@@ -318,6 +318,6 @@ namespace dbaui
         }
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

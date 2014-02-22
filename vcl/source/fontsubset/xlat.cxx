@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rtl/textcvt.h"
 #include <tools/debug.hxx>
 
-namespace { // anonymous namespace
+namespace { 
 
-// ====================================================================
+
 
 #define MAX_CVT_SELECT 6
 
@@ -40,7 +40,7 @@ private:
     rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
 };
 
-// ====================================================================
+
 
 ConverterCache::ConverterCache( void)
 {
@@ -51,7 +51,7 @@ ConverterCache::ConverterCache( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 ConverterCache::~ConverterCache( void)
 {
@@ -64,18 +64,18 @@ ConverterCache::~ConverterCache( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void ConverterCache::ensureConverter( int nSelect )
 {
-    // DBG_ASSERT( (2<=nSelect) && (nSelect<=MAX_CVT_SELECT)), "invalid XLAT.Converter requested" );
+    
     rtl_UnicodeToTextContext aContext = maContexts[ nSelect ];
     if( !aContext )
     {
         rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
         switch( nSelect )
         {
-            default: nSelect = 1; // fall through to unicode recoding
+            default: nSelect = 1; 
             case 1: eRecodeFrom = RTL_TEXTENCODING_UNICODE; break;
             case 2: eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS; break;
             case 3: eRecodeFrom = RTL_TEXTENCODING_GB_2312; break;
@@ -93,7 +93,7 @@ void ConverterCache::ensureConverter( int nSelect )
     rtl_resetUnicodeToTextContext( maConverterCache[ nSelect ], aContext );
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
 {
@@ -104,7 +104,7 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
     sal_Size nTempSize;
     sal_uInt32 nCvtInfo;
 
-    // TODO: use direct unicode->mbcs converter should there ever be one
+    
     int nCodeLen = rtl_convertUnicodeToText(
             maConverterCache[ nSelect ], maContexts[ nSelect ],
             &aUCS2Char, 1, aTempArray, sizeof(aTempArray),
@@ -118,7 +118,7 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
     return aCode;
 }
 
-// --------------------------------------------------------------------
+
 
 void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount )
 {
@@ -132,8 +132,8 @@ void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt1
         sal_Size nTempSize;
         sal_uInt32 nCvtInfo;
 
-        // assume that non-unicode-fonts do not support codepoints >U+FFFF
-        // TODO: use direct unicode->mbcs converter should there ever be one
+        
+        
         int nCodeLen = rtl_convertUnicodeToText(
             maConverterCache[ nSelect ], maContexts[ nSelect ],
             &aUCS2Char, 1, aTempArray, sizeof(aTempArray),
@@ -148,9 +148,9 @@ void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt1
     }
 }
 
-} // anonymous namespace
+} 
 
-// ====================================================================
+
 
 #include "xlat.hxx"
 
@@ -209,6 +209,6 @@ void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
     aCC.convertStr( 6, src, dst, n);
 }
 
-} // namespace vcl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -94,7 +94,7 @@ void generateCompFunctions(std::ostream & o, const OString & classname)
 
 void generateXServiceInfoBodies(std::ostream& o)
 {
-    o << "    // com.sun.star.lang.XServiceInfo:\n";
+    o << "    
     o << "    public String getImplementationName() {\n"
       << "         return m_implementationName;\n    }\n\n";
 
@@ -111,7 +111,7 @@ void generateXServiceInfoBodies(std::ostream& o)
 
 void generateXPropertySetBodies(std::ostream& o)
 {
-    o << "    // com.sun.star.beans.XPropertySet:\n";
+    o << "    
     o << "    public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()\n"
       "    {\n        return m_prophlp.getPropertySetInfo();\n    }\n\n";
 
@@ -156,7 +156,7 @@ void generateXPropertySetBodies(std::ostream& o)
 
 void generateXFastPropertySetBodies(std::ostream& o)
 {
-    o << "    // com.sun.star.beans.XFastPropertySet:\n";
+    o << "    
 
     o << "    public void setFastPropertyValue(int nHandle, Object "
         "aValue) throws com.sun.star.beans.UnknownPropertyException, "
@@ -173,7 +173,7 @@ void generateXFastPropertySetBodies(std::ostream& o)
 
 void generateXPropertyAccessBodies(std::ostream& o)
 {
-    o << "    // com.sun.star.beans.XPropertyAccess:\n";
+    o << "    
 
     o << "    public com.sun.star.beans.PropertyValue[] getPropertyValues()\n"
         " {\n        return m_prophlp.getPropertyValues();\n    }\n\n";
@@ -279,22 +279,22 @@ void registerProperties(std::ostream& o,
 }
 
 void generateXLocalizableBodies(std::ostream& o) {
-    // com.sun.star.lang.XLocalizable:
-    // setLocale
-    o << "    // com.sun.star.lang.XLocalizable:\n"
+    
+    
+    o << "    
         "    public void setLocale(com.sun.star.lang.Locale eLocale)\n    {\n"
         "        m_locale = eLocale;\n    }\n\n";
 
-    // getLocale
+    
     o << "    public com.sun.star.lang.Locale getLocale()\n    {\n"
         "        return m_locale;\n    }\n\n";
 }
 
 void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
 {
-    // com.sun.star.sheet.XAddIn:
-    // getProgrammaticFuntionName
-    o << "    // com.sun.star.sheet.XAddIn:\n"
+    
+    
+    o << "    
         "    public String getProgrammaticFuntionName(String "
         "aDisplayName)\n    {\n"
         "        try {\n"
@@ -315,19 +315,19 @@ void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
         "        catch ( com.sun.star.uno.Exception e ) {\n        }\n\n"
         "        return \"\";\n    }\n\n";
 
-    // getDisplayFunctionName
+    
     o << "    public String getDisplayFunctionName(String "
         "aProgrammaticName)\n    {\n"
         "        return getAddinProperty(aProgrammaticName, \"\", sDISPLAYNAME);\n"
         "    }\n\n";
 
-    // getFunctionDescription
+    
     o << "    public String getFunctionDescription(String "
         "aProgrammaticName)\n    {\n"
         "        return getAddinProperty(aProgrammaticName, \"\", sDESCRIPTION);\n"
         "    }\n\n";
 
-    // getDisplayArgumentName
+    
     o << "    public String getDisplayArgumentName(String "
         "aProgrammaticFunctionName, int nArgument)\n    {\n";
     o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
@@ -336,7 +336,7 @@ void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
         "nArgument),\n"
         "                                sDISPLAYNAME);\n    }\n\n";
 
-    // getArgumentDescription
+    
     o << "    public String getArgumentDescription(String "
         "aProgrammaticFunctionName, int nArgument)\n    {\n";
     o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
@@ -345,13 +345,13 @@ void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
         "nArgument),\n"
         "                                sDESCRIPTION);\n    }\n\n";
 
-    // getProgrammaticCategoryName
+    
     o << "    public String getProgrammaticCategoryName(String "
         "aProgrammaticFunctionName)\n    {\n"
         "        return getAddinProperty(aProgrammaticFunctionName, \"\", "
         "sCATEGORY);\n    }\n\n";
 
-    // getDisplayCategoryName
+    
     o << "    public String getDisplayCategoryName(String "
         "aProgrammaticFunctionName)\n    {\n"
         "        return getAddinProperty(aProgrammaticFunctionName, \"\", "
@@ -360,7 +360,7 @@ void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
 
 void generateXCompatibilityNamesBodies(std::ostream& o)
 {
-    o << "    // com.sun.star.sheet.XCompatibilityNames:\n"
+    o << "    
         "    public com.sun.star.sheet.LocalizedName[] getCompatibilityNames("
         "String aProgrammaticName)\n    {\n"
         "        com.sun.star.sheet.LocalizedName[] seqLocalizedNames =\n"
@@ -410,7 +410,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o)
 
 void generateXInitializationBodies(std::ostream& o)
 {
-    o << "    // com.sun.star.lang.XInitialization:\n"
+    o << "    
         "    public void initialize( Object[] object )\n"
         "        throws com.sun.star.uno.Exception\n    {\n"
         "        if ( object.length > 0 )\n        {\n"
@@ -420,9 +420,9 @@ void generateXInitializationBodies(std::ostream& o)
 
 void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
 {
-    // com.sun.star.frame.XDispatch
-    // dispatch
-    o << "    // com.sun.star.frame.XDispatch:\n"
+    
+    
+    o << "    
         "     public void dispatch( com.sun.star.util.URL aURL,\n"
         "                           com.sun.star.beans.PropertyValue[] aArguments )\n    {\n";
 
@@ -434,7 +434,7 @@ void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
         for (std::vector< OString >::const_iterator i = (*iter).second.begin();
              i != (*iter).second.end(); ++i) {
             o << "            if ( aURL.Path.compareTo(\"" << (*i) << "\") == 0 )\n"
-                "            {\n                // add your own code here\n"
+                "            {\n                
                 "                return;\n            }\n";
         }
 
@@ -443,22 +443,22 @@ void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
     }
     o << "    }\n\n";
 
-    // addStatusListener
+    
     o << "    public void addStatusListener( com.sun.star.frame.XStatusListener xControl,\n"
         "                                    com.sun.star.util.URL aURL )\n    {\n"
-        "        // add your own code here\n    }\n\n";
+        "        
 
-    // com.sun.star.frame.XDispatch
+    
     o << "    public void removeStatusListener( com.sun.star.frame.XStatusListener xControl,\n"
         "                                       com.sun.star.util.URL aURL )\n    {\n"
-        "        // add your own code here\n    }\n\n";
+        "        
 }
 
 void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & options)
 {
-    // com.sun.star.frame.XDispatchProvider
-    // queryDispatch
-    o << "    // com.sun.star.frame.XDispatchProvider:\n"
+    
+    
+    o << "    
         "    public com.sun.star.frame.XDispatch queryDispatch( com.sun.star.util.URL aURL,\n"
         "                                                       String sTargetFrameName,\n"
         "                                                       int iSearchFlags )\n    {\n";
@@ -479,8 +479,8 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
     }
     o << "        return null;\n    }\n\n";
 
-    // queryDispatches
-    o << "    // com.sun.star.frame.XDispatchProvider:\n"
+    
+    o << "    
         "    public com.sun.star.frame.XDispatch[] queryDispatches(\n"
         "         com.sun.star.frame.DispatchDescriptor[] seqDescriptors )\n    {\n"
         "        int nCount = seqDescriptors.length;\n"
@@ -510,7 +510,7 @@ void generateMethodBodies(std::ostream& o,
         } else {
             if (options.componenttype == 2) {
                 if (type.equals("com.sun.star.lang.XServiceName")) {
-                    o << "    // com.sun.star.lang.XServiceName:\n"
+                    o << "    
                         "    public String getServiceName() {\n"
                         "        return sADDIN_SERVICENAME;\n    }\n";
                     generated.add(u2b(type));
@@ -519,7 +519,7 @@ void generateMethodBodies(std::ostream& o,
                     generateXAddInBodies(o, options);
                     generated.add(u2b(type));
 
-                    // special handling of XLocalizable -> parent of XAddIn
+                    
                     if (!generated.contains("com.sun.star.lang.XLocalizable")) {
                         generateXLocalizableBodies(o);
                         generated.add("com.sun.star.lang.XLocalizable");
@@ -557,10 +557,10 @@ void generateMethodBodies(std::ostream& o,
 }
 
 static const char* propcomment=
-"        // use the last parameter of the PropertySetMixin constructor\n"
-"        // for your optional attributes if necessary. See the documentation\n"
-"        // of the PropertySetMixin helper for further information.\n"
-"        // Ensure that your attributes are initialized correctly!\n";
+"        
+"        
+"        
+"        
 
 
 void generateAddinConstructorAndHelper(std::ostream& o,
@@ -573,14 +573,14 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "new com.sun.star.lang.Locale();\n";
 
     if (!options.backwardcompatible) {
-        // Constructor
+        
         o << "\n    public " << classname << "( XComponentContext context )\n"
             "    {\n        m_xContext = context;\n    }\n\n";
         return;
     }
 
 
-    // get the one and only add-in service for later use
+    
     std::set< OUString >::const_iterator iter = services.begin();
     OUString sAddinService = *iter;
     if (sAddinService == "com.sun.star.sheet.AddIn") {
@@ -588,7 +588,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
     }
 
 
-    // add-in specific fields
+    
     o << "\n    private static final String sADDIN_SERVICENAME = \""
       << sAddinService << "\";\n\n";
     o << "    private static final String sDISPLAYNAME = "
@@ -606,7 +606,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
     o << "    private java.util.Hashtable<\n        String, "
         "java.util.Hashtable< Integer, String> > m_functionMap = null;\n\n";
 
-    // Constructor
+    
     o << "\n    public " << classname << "( XComponentContext context )\n    {\n"
         "        m_xContext = context;\n\n"
         "        try {\n";
@@ -632,7 +632,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "        sPath.append(sADDIN_SERVICENAME);\n"
         "        sPath.append(\"/AddInFunctions\");\n\n";
 
-    o << "        // create arguments: nodepath\n"
+    o << "        
         "         com.sun.star.beans.PropertyValue aArgument = \n"
         "             new com.sun.star.beans.PropertyValue();\n"
         "         aArgument.Name = \"nodepath\";\n"
@@ -644,7 +644,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         " new com.sun.star.uno.Type(\n"
         "            com.sun.star.beans.PropertyValue.class), aArgument);\n\n";
 
-    o << "        // create the default view using default UI locale\n"
+    o << "        
         "         Object xIface = \n"
         "             xProvider.createInstanceWithArguments(sReadOnlyView, "
         "aArguments);\n\n";
@@ -654,8 +654,8 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "                 com.sun.star.container.XHierarchicalNameAccess.class, "
         "xIface);\n\n";
 
-    o << "        // extends arguments to create a view for all locales to get "
-        "simple\n        // access to the compatibilityname property\n"
+    o << "        
+        "simple\n        
         "        aArguments = new Object[2];\n"
         "        aArguments[0] = new com.sun.star.uno.Any( "
         "new com.sun.star.uno.Type(\n"
@@ -667,7 +667,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         " new com.sun.star.uno.Type(\n"
         "            com.sun.star.beans.PropertyValue.class), aArgument);\n\n";
 
-    o << "        // create view for all locales\n"
+    o << "        
         "        xIface = xProvider.createInstanceWithArguments(sReadOnlyView, "
         "aArguments);\n\n"
         "        m_xCompAccess = (com.sun.star.container.XHierarchicalNameAccess)\n"
@@ -676,8 +676,8 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "xIface);\n        }\n"
         "        catch ( com.sun.star.uno.Exception e ) {\n        }\n    }\n\n";
 
-    // add-in helper function
-    o << "    // addin configuration property helper function:\n"
+    
+    o << "    
         "    String getAddinProperty(String funcName, "
         "String paramName, String propName)\n    {\n"
         "        try {\n            StringBuffer buf = "
@@ -734,12 +734,12 @@ void generateClassDefinition(std::ostream& o,
 
     o << "    private final XComponentContext m_xContext;\n";
 
-    // additional member for add-ons
+    
     if (options.componenttype == 3) {
         o << "    private com.sun.star.frame.XFrame m_xFrame;\n";
     }
 
-    // check property helper
+    
     if (propertyhelper.getLength() > 1)
         o << "    private final PropertySetMixin m_prophlp;\n";
 
@@ -759,11 +759,11 @@ void generateClassDefinition(std::ostream& o,
         }
     }
 
-    // attribute/property members
+    
     if (!properties.empty()) {
         AttributeInfo::const_iterator iter =
             properties.begin();
-        o << "    // properties\n";
+        o << "    
         while (iter != properties.end()) {
             o << "    protected ";
             printType(o, options, manager, iter->type, false, false);
@@ -773,7 +773,7 @@ void generateClassDefinition(std::ostream& o,
     } else if (!attributes.empty()) {
         AttributeInfo::const_iterator iter =
             attributes.begin();
-        o << "    // attributes\n";
+        o << "    
         while (iter != attributes.end()) {
             o << "    private ";
             printType(o, options, manager, iter->type, false, false);
@@ -784,7 +784,7 @@ void generateClassDefinition(std::ostream& o,
         }
     }
 
-    // special handling of calc add-ins
+    
     if (options.componenttype == 2)
     {
         generateAddinConstructorAndHelper(o, options, manager, classname,
@@ -812,7 +812,7 @@ void generateClassDefinition(std::ostream& o,
     generateMethodBodies(o, options, manager, interfaces,
                          "    ", propertyhelper.getLength() > 1);
 
-    // end of class definition
+    
     o << "}\n";
 }
 
@@ -835,10 +835,10 @@ void generateSkeleton(ProgramOptions const & options,
     }
 
     if (options.componenttype == 3) {
-        // the Protocolhandler service is mandatory for an protocol handler add-on,
-        // so it is defaulted. The XDispatchProvider provides Dispatch objects for
-        // certain functions and the generated impl object implements XDispatch
-        // directly for simplicity reasons.
+        
+        
+        
+        
         checkType(manager, "com.sun.star.frame.ProtocolHandler",
                   interfaces, services, properties);
         checkType(manager, "com.sun.star.frame.XDispatch",
@@ -852,18 +852,18 @@ void generateSkeleton(ProgramOptions const & options,
                 "necessary! Please reference a valid type with the '-t' option.");
         }
 
-        // if backwardcompatible==true the AddIn service needs to be added to the
-        // suported service list, the necessary intefaces are mapped to the add-in
-        // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
-        // take form the configuration from Calc directly, this simplifies the
-        // add-in code
+        
+        
+        
+        
+        
         if (options.backwardcompatible) {
             checkType(manager, "com.sun.star.sheet.AddIn",
                       interfaces, services, properties);
         } else {
-            // special case for the optional XLocalization interface. It should be
-            // implemented always. But it is parent of the XAddIn and we need it only
-            // if backwardcompatible is false.
+            
+            
+            
             if (interfaces.find("com.sun.star.lang.XLocalizable") == interfaces.end()) {
                 interfaces.insert("com.sun.star.lang.XLocalizable");
             }
@@ -871,7 +871,7 @@ void generateSkeleton(ProgramOptions const & options,
     }
 
 
-    // check if service object or simple UNO object
+    
     if (!services.empty())
         serviceobject = true;
 
@@ -924,12 +924,12 @@ void generateSkeleton(ProgramOptions const & options,
                 ((std::ofstream*)pofs)->close();
                 delete pofs;
             }
-            // remove existing type file if something goes wrong to ensure
-            // consistency
+            
+            
             if (fileExists(compFileName))
                 removeTypeFile(compFileName);
 
-            // remove tmp file if something goes wrong
+            
             removeTypeFile(tmpFileName);
         }
     }

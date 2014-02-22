@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,9 +66,9 @@ XInteractionApproveImpl::queryInterface( const Type& rType )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  XTypeProvider
-//////////////////////////////////////////////////////////////////////////////
+
+
+
 
 XTYPEPROVIDER_IMPL_2( XInteractionApproveImpl,
                       XTypeProvider,
@@ -88,7 +88,7 @@ bool XInteractionApproveImpl::isSelected() const
 }
 
 
-// XInteractionDisapproveImpl
+
 
 XInteractionDisapproveImpl::XInteractionDisapproveImpl()
     : m_bSelected(false)
@@ -125,9 +125,9 @@ XInteractionDisapproveImpl::queryInterface( const Type& rType )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  XTypeProvider
-//////////////////////////////////////////////////////////////////////////////
+
+
+
 
 XTYPEPROVIDER_IMPL_2( XInteractionDisapproveImpl,
                       XTypeProvider,
@@ -142,7 +142,7 @@ void SAL_CALL XInteractionDisapproveImpl::select()
 }
 
 
-// XInteractionRequestImpl
+
 
 XInteractionRequestImpl::XInteractionRequestImpl(const OUString& aName)
     : p1( new XInteractionApproveImpl ),
@@ -185,9 +185,9 @@ XInteractionRequestImpl::queryInterface( const Type& rType )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  XTypeProvider
-/////////////////////////////////////////////////////////////////////////////
+
+
+
 
 XTYPEPROVIDER_IMPL_2( XInteractionRequestImpl,
                       XTypeProvider,

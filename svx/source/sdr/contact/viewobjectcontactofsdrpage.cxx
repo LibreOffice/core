@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,11 +32,11 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -88,13 +88,13 @@ namespace sdr
 
         bool ViewObjectContactOfPageSubObject::isPrimitiveGhosted(const DisplayInfo& /*rDisplayInfo*/) const
         {
-            // suppress ghosted for page parts
+            
             return false;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -116,7 +116,7 @@ namespace sdr
                 return false;
             }
 
-            // no page background for preview renderers
+            
             if(GetObjectContact().IsPreviewRenderer())
             {
                 return false;
@@ -127,9 +127,9 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
         {
-            // Initialize background. Dependent of IsPageVisible, use ApplicationBackgroundColor or ApplicationDocumentColor. Most
-            // old renderers for export (html, pdf, gallery, ...) set the page to not visible (SetPageVisible(false)). They expect the
-            // given OutputDevice to be initialized with the ApplicationDocumentColor then.
+            
+            
+            
             const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
@@ -153,7 +153,7 @@ namespace sdr
                     }
                 }
 
-                // init background with InitColor
+                
                 xRetval.realloc(1);
                 const basegfx::BColor aRGBColor(aInitColor.getBColor());
                 xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor));
@@ -161,10 +161,10 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -186,9 +186,9 @@ namespace sdr
                 return false;
             }
 
-            // this object is only used for MasterPages. When not the MasterPage is
-            // displayed as a page, but another page is using it as sub-object, the
-            // geometry needs to be hidden
+            
+            
+            
             if(rDisplayInfo.GetSubContentActive())
             {
                 return false;
@@ -196,10 +196,10 @@ namespace sdr
 
             return true;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -259,7 +259,7 @@ namespace sdr
                     aPageFillColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
                 }
 
-                // create and add primitive
+                
                 xRetval.realloc(1);
                 const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
                 xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
@@ -267,10 +267,10 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -304,13 +304,13 @@ namespace sdr
                 return false;
             }
 
-            // no page shadow for preview renderers
+            
             if(GetObjectContact().IsPreviewRenderer())
             {
                 return false;
             }
 
-            // no page shadow for high contrast mode
+            
             if(GetObjectContact().isDrawModeHighContrast())
             {
                 return false;
@@ -318,10 +318,10 @@ namespace sdr
 
             return true;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -359,10 +359,10 @@ namespace sdr
 
             return true;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -403,7 +403,7 @@ namespace sdr
                 return false;
             }
 
-            // no inner page border for preview renderers
+            
             if(GetObjectContact().IsPreviewRenderer())
             {
                 return false;
@@ -411,10 +411,10 @@ namespace sdr
 
             return true;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -433,7 +433,7 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            // process local sub-hierarchy
+            
             const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
 
             if(nSubHierarchyCount)
@@ -442,15 +442,15 @@ namespace sdr
 
                 if(xRetval.hasElements())
                 {
-                    // get ranges
+                    
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                     const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
                     const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
-                    // check geometrical visibility
+                    
                     if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
                     {
-                        // not visible, release
+                        
                         xRetval.realloc(0);
                     }
                 }
@@ -458,10 +458,10 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -497,7 +497,7 @@ namespace sdr
                 return false;
             }
 
-            // no page grid for preview renderers
+            
             if(GetObjectContact().IsPreviewRenderer())
             {
                 return false;
@@ -544,10 +544,10 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -583,7 +583,7 @@ namespace sdr
                 return false;
             }
 
-            // no helplines for preview renderers
+            
             if(GetObjectContact().IsPreviewRenderer())
             {
                 return false;
@@ -621,7 +621,7 @@ namespace sdr
 
                         switch(rHelpLine.GetKind())
                         {
-                            default : // SDRHELPLINE_POINT
+                            default : 
                             {
                                 xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                                     aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_POINT,
@@ -649,10 +649,10 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -671,7 +671,7 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            // process local sub-hierarchy
+            
             const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
 
             if(nSubHierarchyCount)
@@ -686,20 +686,20 @@ namespace sdr
                     rDisplayInfo.ClearGhostedDrawMode();
                 }
 
-                // create object hierarchy
+                
                 xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
 
                 if(xRetval.hasElements())
                 {
-                    // get ranges
+                    
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                     const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
                     const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
-                    // check geometrical visibility
+                    
                     if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
                     {
-                        // not visible, release
+                        
                         xRetval.realloc(0);
                     }
                 }
@@ -712,7 +712,7 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

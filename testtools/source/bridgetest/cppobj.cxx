@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -61,14 +61,14 @@ using namespace test::testtools::bridgetest;
 namespace bridge_object
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
 
-//==================================================================================================
+
 static void assign( TestElement & rData,
                     sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
@@ -95,7 +95,7 @@ static void assign( TestElement & rData,
     rData.Interface = xTest;
     rData.Any = rAny;
 }
-//==================================================================================================
+
 static void assign( TestData & rData,
                     sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
@@ -113,7 +113,7 @@ static void assign( TestData & rData,
     rData.Sequence = rSequence;
 }
 
-//==================================================================================================
+
 class Test_Impl :
     public osl::DebugBase<Test_Impl>,
     public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
@@ -162,12 +162,12 @@ public:
         OWeakObject::release();
      }
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
-    // XLBTestBase
+    
     virtual void SAL_CALL setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                                      sal_Int16 nShort, sal_uInt16 nUShort,
                                      sal_Int32 nLong, sal_uInt32 nULong,
@@ -374,7 +374,7 @@ public:
     virtual OUString SAL_CALL testMulti(Reference< XMulti > const & multi)
         throw (RuntimeException);
 
-public: // XBridgeTest
+public: 
     virtual TestData SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
@@ -385,7 +385,7 @@ public: // XBridgeTest
     virtual sal_Int32 SAL_CALL getRuntimeException() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XBridgeTest2
+    
     virtual Sequence< sal_Bool > SAL_CALL setSequenceBool(
         const Sequence< sal_Bool >& aSeq ) throw (RuntimeException);
     virtual Sequence< sal_Unicode > SAL_CALL setSequenceChar(
@@ -471,7 +471,7 @@ public:
     virtual void SAL_CALL callRecursivly( const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//Dummy class for XComponent implementation
+
 class Dummy : public osl::DebugBase<Dummy>,
               public WeakComponentImplHelperBase
 {
@@ -479,13 +479,13 @@ public:
      Dummy(): WeakComponentImplHelperBase(*Mutex::getGlobalMutex()){}
 
 };
-//__________________________________________________________________________________________________
+
 Any Test_Impl::transportAny( const Any & value ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     return value;
 }
 
-//__________________________________________________________________________________________________
+
 
 namespace {
 
@@ -513,7 +513,7 @@ void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::su
     m_nLastCallId = nCallId;
 }
 
-//__________________________________________________________________________________________________
+
 void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::com::sun::star::uno::RuntimeException)
 {
     wait(nWaitMUSEC);
@@ -521,13 +521,13 @@ void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::
     m_nLastCallId = nCallId;
 }
 
-//__________________________________________________________________________________________________
+
 sal_Bool Test_Impl::sequenceOfCallTestPassed() throw (::com::sun::star::uno::RuntimeException)
 {
     return m_bSequenceOfCallTestPassed;
 }
 
-//__________________________________________________________________________________________________
+
 void SAL_CALL Test_Impl::startRecursiveCall(
     const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
     throw(::com::sun::star::uno::RuntimeException)
@@ -564,7 +564,7 @@ OUString Test_Impl::testMulti(Reference< XMulti > const & multi)
     return testtools::bridgetest::testMulti(multi);
 }
 
-//__________________________________________________________________________________________________
+
 void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            sal_Int16 nShort, sal_uInt16 nUShort,
                            sal_Int32 nLong, sal_uInt32 nULong,
@@ -582,7 +582,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
             eEnum, rStr, xTest, rAny, rSequence );
     _aStructData = rStruct;
 }
-//__________________________________________________________________________________________________
+
 TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                 sal_Int16& nShort, sal_uInt16& nUShort,
                                 sal_Int32& nLong, sal_uInt32& nULong,
@@ -606,7 +606,7 @@ TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& n
 
     return _aStructData;
 }
-//__________________________________________________________________________________________________
+
 TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                sal_Int16& nShort, sal_uInt16& nUShort,
                                sal_Int32& nLong, sal_uInt32& nULong,
@@ -638,7 +638,7 @@ TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nB
     rStruct = _aStructData;
     return _aStructData;
 }
-//__________________________________________________________________________________________________
+
 TestData Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xContext )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -665,9 +665,9 @@ void dothrow2( RuntimeException e )
 void dothrow( RuntimeException const & e )
 {
 #if defined _MSC_VER
-    // currently only for MSVC:
-    // just to test whether all bridges fall back to a RuntimeException
-    // in case of a thrown non-UNO exception:
+    
+    
+    
     try
     {
         throw ::std::bad_alloc();
@@ -683,7 +683,7 @@ void dothrow( RuntimeException const & e )
                 OUStringToOString(
                     exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        catch (...) // never throws anything
+        catch (...) 
         {
             fprintf( stderr, "\ngetCaughtException() failed!\n" );
             exit( 1 );
@@ -692,7 +692,7 @@ void dothrow( RuntimeException const & e )
 #endif
     dothrow2( e );
 }
-//______________________________________________________________________________
+
 sal_Int32 Test_Impl::getRuntimeException()
     throw (RuntimeException)
 {
@@ -705,9 +705,9 @@ sal_Int32 Test_Impl::getRuntimeException()
         Any a( getCaughtException() );
         throwException( a );
     }
-    return 0; // for dummy
+    return 0; 
 }
-//__________________________________________________________________________________________________
+
 void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
@@ -716,7 +716,7 @@ void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::Ru
     throwException( makeAny( aExc ) );
 }
 
-// XBridgeTest2 -------------------------------------------------------------
+
 Sequence< sal_Bool > SAL_CALL Test_Impl::setSequenceBool(
         const Sequence< sal_Bool >& aSeq ) throw (RuntimeException)
 {
@@ -1144,29 +1144,29 @@ Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
     return new testtools::bridgetest::CurrentContextChecker;
 }
 
-// XServiceInfo
-//__________________________________________________________________________________________________
+
+
 OUString Test_Impl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( IMPLNAME );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool Test_Impl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > Test_Impl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return bridge_object::getSupportedServiceNames();
 }
 
-// ...
 
-//==================================================================================================
+
+
 static Reference< XInterface > SAL_CALL Test_Impl_create(
     SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <shell/kde_headers.h>
@@ -54,7 +54,7 @@
 #define QProgressBar_String     "TQProgressBar"
 #define QMotifStyle_String      "TQMotifStyle"
 #define QWindowsStyle_String    "TQWindowsStyle"
-#else // ENABLE_TDE
+#else 
 #define QPushButton_String      "QPushButton"
 #define QRadioButton_String     "QRadioButton"
 #define QCheckBox_String        "QCheckBox"
@@ -74,7 +74,7 @@
 #define QProgressBar_String     "QProgressBar"
 #define QMotifStyle_String      "QMotifStyle"
 #define QWindowsStyle_String    "QWindowsStyle"
-#endif // ENABLE_TDE
+#endif 
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -227,7 +227,7 @@ class WidgetPainter
       */
     QProgressBar *m_pProgressBar;
 
-    // TODO other widgets
+    
 
     public:
     /** Implicit constructor.
@@ -374,7 +374,7 @@ class WidgetPainter
     */
     QProgressBar *progressBar( const Rectangle& rControlRegion );
 
-    // TODO other widgets
+    
 
     protected:
     /** Style conversion function.
@@ -444,10 +444,10 @@ WidgetPainter::~WidgetPainter( void )
     delete m_pEditableComboBox, m_pEditableComboBox = NULL;
     delete m_pLineEdit, m_pLineEdit = NULL;
     delete m_pSpinWidget, m_pSpinWidget = NULL;
-    m_pSpinEdit = NULL; // Deleted in m_pSpinWidget's destructor
+    m_pSpinEdit = NULL; 
     delete m_pTabAlone, m_pTabAlone = NULL;
     delete m_pTabBarParent, m_pTabBarParent = NULL;
-    m_pTabBar = NULL;    // Deleted in m_pTabBarParent's destructor
+    m_pTabBar = NULL;    
     m_pTabLeft = NULL;
     m_pTabMiddle = NULL;
     m_pTabRight = NULL;
@@ -471,32 +471,32 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     if ( !pWidget )
         return false;
 
-    // Normalize the widget
+    
     QPoint   qWidgetPos( pWidget->pos() );
     pWidget->move( 0, 0 );
 
-    // Enable/disable the widget
+    
     pWidget->setEnabled( nState & CTRL_STATE_ENABLED );
 
-    // Create pixmap to paint to
+    
     QPixmap  qPixmap( pWidget->width(), pWidget->height() );
     QPainter qPainter( &qPixmap );
     QRect    qRect( 0, 0, pWidget->width(), pWidget->height() );
 
-    // Use the background of the widget
+    
     qPixmap.fill( pWidget, QPoint(0, 0) );
 
-    // Convert the flags
+    
     QStyle::SFlags nStyle = vclStateValue2SFlags( nState, aValue );
 
-    // Store the widget class
+    
     const char *pClassName = pWidget->className();
 
-    // Draw the widget to the pixmap
+    
     if ( strcmp( QPushButton_String, pClassName ) == 0 )
     {
-        // Workaround for the Platinum style.
-        // Platinum takes the state directly from the widget, not from SFlags.
+        
+        
         QPushButton *pPushButton = static_cast<QPushButton *>( pWidget->qt_cast( QPushButton_String ) );
         if ( pPushButton )
         {
@@ -511,8 +511,8 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( QRadioButton_String, pClassName ) == 0 )
     {
-        // Bitblt from the screen, because the radio buttons are usually not
-        // rectangular, and there could be a bitmap under them
+        
+        
         GC aTmpGC = XCreateGC( dpy, qPixmap.handle(), 0, NULL );
         X11SalGraphics::CopyScreenArea(
             dpy,
@@ -539,7 +539,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
 
-        // Editable combo box uses the background of the associated edit box
+        
         QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( QComboBox_String ) );
         if ( pComboBox && pComboBox->editable() && pComboBox->lineEdit() )
         {
@@ -561,7 +561,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         const SpinbuttonValue* pValue = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
 
-        // Is any of the buttons pressed?
+        
         QStyle::SCFlags eActive = QStyle::SC_None;
         if ( pValue )
         {
@@ -570,7 +570,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             else if ( pValue->mnLowerState & CTRL_STATE_PRESSED )
                 eActive = QStyle::SC_SpinWidgetDown;
 
-            // Update the enable/disable state of the widget
+            
             if ( ( nState & CTRL_STATE_ENABLED ) ||
                 ( pValue->mnUpperState & CTRL_STATE_ENABLED ) ||
                 ( pValue->mnLowerState & CTRL_STATE_ENABLED ) )
@@ -581,13 +581,13 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             else
                 pWidget->setEnabled( false );
 
-            // Mouse-over effect
+            
             if ( (pValue->mnUpperState & CTRL_STATE_ROLLOVER) ||
                 (pValue->mnLowerState & CTRL_STATE_ROLLOVER) )
             nStyle |= QStyle::Style_MouseOver;
         }
 
-        // Spin widget uses the background of the associated edit box
+        
         QSpinWidget *pSpinWidget = static_cast<QSpinWidget *>( pWidget->qt_cast( QSpinWidget_String ) );
         if ( pSpinWidget && pSpinWidget->editWidget() )
         {
@@ -599,7 +599,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                 pSpinWidget->editWidget()->colorGroup().brush( eColorRole ) );
         }
 
-        // Adjust the frame (needed for Motif Plus style)
+        
         QRect qFrameRect = kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
             pWidget, QStyle::SC_SpinWidgetFrame );
 
@@ -653,8 +653,8 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     QStyle::SCFlags eActive = QStyle::SC_None;
     if ( pValue )
     {
-        // Workaround for Style_MouseOver-aware themes.
-        // Quite ugly, but I do not know about a better solution.
+        
+        
         const char *pStyleName = kapp->style().className();
         if ( strcmp( QMotifPlusStyle_String, pStyleName ) == 0 )
         {
@@ -684,7 +684,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         else if ( pValue->mnPage2State & CTRL_STATE_PRESSED )
             eActive = QStyle::SC_ScrollBarAddPage;
 
-        // Update the enable/disable state of the widget
+        
         if ( ( nState & CTRL_STATE_ENABLED ) ||
             ( pValue->mnButton1State & CTRL_STATE_ENABLED ) ||
             ( pValue->mnButton2State & CTRL_STATE_ENABLED ) ||
@@ -699,7 +699,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             pWidget->setEnabled( false );
     }
 
-    // Is it a horizontal scroll bar?
+    
     QScrollBar *pScrollBar = static_cast<QScrollBar *> ( pWidget->qt_cast( QScrollBar_String ) );
     QStyle::StyleFlags eHoriz = QStyle::Style_Default;
     if ( pScrollBar && pScrollBar->orientation() == Qt::Horizontal )
@@ -734,9 +734,9 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             QRect qThumbRect = region2QRect( pValue->maGripRect );
             qThumbRect.moveBy( -qWidgetPos.x(), -qWidgetPos.y() );
             if ( bIsHorizontal )
-                qThumbRect.addCoords( 0, 2, 0, -3 );    // make the thumb a bit nicer
+                qThumbRect.addCoords( 0, 2, 0, -3 );    
             else
-                qThumbRect.addCoords( 2, 0, -3, 0 );    // make the thumb a bit nicer
+                qThumbRect.addCoords( 2, 0, -3, 0 );    
 
             if ( kapp->style().inherits( "HighColorStyle" ) ||
                  kapp->style().inherits( "HighContrastStyle" ) ||
@@ -744,7 +744,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                  kapp->style().inherits( "KThemeStyle" ) ||
                  kapp->style().inherits( "ThinKeramikStyle" ) )
             {
-                // Workaround for the workaround in KStyle::drawPrimitive()
+                
                 KStyle *pStyle = static_cast< KStyle * >( &kapp->style() );
                 pStyle->drawKStylePrimitive( KStyle::KPE_ToolBarHandle,
                         &qPainter, pToolBar, qThumbRect,
@@ -819,7 +819,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     else
         return false;
 
-    // Bitblt it to the screen
+    
     X11SalGraphics::CopyScreenArea(
         dpy, qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
         drawable, nXScreen, nDepth,
@@ -827,7 +827,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         0, 0, qRect.width(), qRect.height(),
         qWidgetPos.x(), qWidgetPos.y() );
 
-    // Restore widget's position
+    
     pWidget->move( qWidgetPos );
 
     return true;
@@ -841,10 +841,10 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
 
     QRect qRect = region2QRect( rControlRegion );
 
-    // Workaround for broken styles which do not add
-    // QStyle::PM_ButtonDefaultIndicator to the size of the default button
-    // (for example Keramik)
-    // FIXME Fix Keramik style to be consistant with Qt built-in styles. Aargh!
+    
+    
+    
+    
     if ( bDefault )
     {
         QSize qContentsSize( 50, 50 );
@@ -877,8 +877,8 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
 
     QRect qRect = region2QRect( rControlRegion );
 
-    // Workaround for broken themes which do not honor the given size.
-    // Quite ugly, but I do not know about a better solution.
+    
+    
     const char *pStyleName = kapp->style().className();
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
@@ -906,8 +906,8 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
 
     QRect qRect = region2QRect( rControlRegion );
 
-    // Workaround for broken themes which do not honor the given size.
-    // Quite ugly, but I do not know about a better solution.
+    
+    
     const char *pStyleName = kapp->style().className();
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
@@ -1179,7 +1179,7 @@ QStyle::SFlags WidgetPainter::vclStateValue2SFlags( ControlState nState,
     ( (nState & CTRL_STATE_PRESSED)?  QStyle::Style_Down:          QStyle::Style_Raised )  |
     ( (nState & CTRL_STATE_SELECTED)? QStyle::Style_Selected :     QStyle::Style_Default ) |
     ( (nState & CTRL_STATE_ROLLOVER)? QStyle::Style_MouseOver:     QStyle::Style_Default );
-    //TODO ( (nState & CTRL_STATE_HIDDEN)?   QStyle::Style_: QStyle::Style_Default ) |
+    
 
     switch ( aValue.getTristateVal() )
     {
@@ -1245,14 +1245,14 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     ( (nType == CTRL_EDITBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
     ( (nType == CTRL_LISTBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW || nPart == HAS_BACKGROUND_TEXTURE ) ) ||
     ( (nType == CTRL_SPINBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    // no CTRL_SPINBUTTONS for KDE
+    
     ( (nType == CTRL_TAB_ITEM)    && (nPart == PART_ENTIRE_CONTROL) ) ||
     ( (nType == CTRL_TAB_PANE)    && (nPart == PART_ENTIRE_CONTROL) ) ||
-    // no CTRL_TAB_BODY for KDE
+    
     ( (nType == CTRL_SCROLLBAR)   && (nPart == PART_ENTIRE_CONTROL || nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) ) ||
-    ( (nType == CTRL_SCROLLBAR)   && (nPart == HAS_THREE_BUTTONS) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
-    // CTRL_GROUPBOX not supported
-    // CTRL_FIXEDLINE not supported
+    ( (nType == CTRL_SCROLLBAR)   && (nPart == HAS_THREE_BUTTONS) ) || 
+    
+    
     ( (nType == CTRL_TOOLBAR)     && (nPart == PART_ENTIRE_CONTROL ||
                                       nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
                                       nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||
@@ -1276,7 +1276,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 {
     if ( nType == CTRL_SCROLLBAR )
     {
-    // make position relative to rControlRegion
+    
     Point aPos = rPos - rControlRegion.TopLeft();
     rIsInside = false;
 
@@ -1289,14 +1289,14 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     QRect qRectAddLine = kapp->style().querySubControlMetrics(
         QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarAddLine );
 
-    // There are 2 buttons on the right/bottom side of the scrollbar
+    
     bool bTwoSubButtons = false;
 
-    // It is a Platinum style scroll bar
+    
     bool bPlatinumStyle = false;
 
-    // Workaround for Platinum and 3 button style scroll bars.
-    // It makes the right/down button bigger.
+    
+    
     if ( bHorizontal )
     {
         qRectAddLine.setLeft( kapp->style().querySubControlMetrics(
@@ -1354,7 +1354,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
 
-        // cases PART_TRACK_HORZ_AREA and PART_TRACK_VERT_AREA
+        
         default:
         return false;
     }
@@ -1386,7 +1386,7 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 
     Display *dpy = GetXDisplay();
     XLIB_Window drawable = GetDrawable();
-    GC gc = SelectPen(); //SelectFont(); // GC with current clipping region set
+    GC gc = SelectPen(); 
 
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
@@ -1534,7 +1534,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     QWidget *pWidget = NULL;
     switch ( nType )
     {
-    // Metrics of the push button
+    
     case CTRL_PUSHBUTTON:
         pWidget = pWidgetPainter->pushButton( rControlRegion, ( nState & CTRL_STATE_DEFAULT ) );
 
@@ -1555,7 +1555,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         }
         break;
 
-        // Metrics of the radio button
+        
         case CTRL_RADIOBUTTON:
             pWidget = pWidgetPainter->radioButton( rControlRegion );
 
@@ -1568,7 +1568,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             }
             break;
 
-        // Metrics of the check box
+        
         case CTRL_CHECKBOX:
             pWidget = pWidgetPainter->checkBox( rControlRegion );
 
@@ -1581,7 +1581,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             }
             break;
 
-    // Metrics of the combo box
+    
     case CTRL_COMBOBOX:
     case CTRL_LISTBOX:
         pWidget = pWidgetPainter->comboBox( rControlRegion, ( nType == CTRL_COMBOBOX ) );
@@ -1606,7 +1606,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         }
         break;
 
-    // Metrics of the spin box
+    
     case CTRL_SPINBOX:
         pWidget = pWidgetPainter->spinWidget( rControlRegion );
         switch ( nPart )
@@ -1634,7 +1634,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         }
         break;
 
-    // Metrics of the scroll bar
+    
     case CTRL_SCROLLBAR:
         pWidget = pWidgetPainter->scrollBar( rControlRegion,
             ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT ),
@@ -1646,8 +1646,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_ScrollBar, pWidget, QStyle::SC_ScrollBarSubLine );
 
-            // Workaround for Platinum style scroll bars. It makes the
-            // left/up button invisible.
+            
+            
             if ( nPart == PART_BUTTON_LEFT )
             {
             if ( qRect.left() > kapp->style().querySubControlMetrics(
@@ -1679,8 +1679,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_ScrollBar, pWidget, QStyle::SC_ScrollBarAddLine );
 
-            // Workaround for Platinum and 3 button style scroll bars.
-            // It makes the right/down button bigger.
+            
+            
             if ( nPart == PART_BUTTON_RIGHT )
                 qRect.setLeft( kapp->style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
@@ -1698,15 +1698,15 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             break;
     }
 
-    // Fill rNativeBoundingRegion and rNativeContentRegion
+    
     if ( bReturn )
     {
-    // Bounding region
+    
     Point aBPoint( qBoundingRect.x(), qBoundingRect.y() );
     Size aBSize( qBoundingRect.width(), qBoundingRect.height() );
     rNativeBoundingRegion = Rectangle( aBPoint, aBSize );
 
-    // Region of the content
+    
     Point aPoint( qRect.x(), qRect.y() );
     Size  aSize( qRect.width(), qRect.height() );
     rNativeContentRegion = Rectangle( aPoint, aSize );
@@ -1715,9 +1715,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     return bReturn;
 }
 
-// -----------------------------------------------------------------------
-// KDESalFrame implementation
-// -----------------------------------------------------------------------
+
+
+
 
 KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
     X11SalFrame( pParent, nStyle )
@@ -1764,13 +1764,13 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
 
-    // set family name
+    
     aInfo.m_aFamilyName = OUString( rQFont.family().utf8(), strlen( rQFont.family().utf8() ), RTL_TEXTENCODING_UTF8 );
 
-    // set italic
+    
     aInfo.m_eItalic = ( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );
 
-    // set weight
+    
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
         aInfo.m_eWeight = WEIGHT_LIGHT;
@@ -1783,7 +1783,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     else
         aInfo.m_eWeight = WEIGHT_ULTRABOLD;
 
-    // set width
+    
     int nStretch = rQFont.stretch();
     if ( nStretch <= QFont::UltraCondensed )
         aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
@@ -1806,19 +1806,19 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 
     SAL_INFO( "vcl.kde", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"" );
 
-    // match font to e.g. resolve "Sans"
+    
     psp::PrintFontManager::get().matchFont( aInfo, rLocale );
 
     SAL_INFO( "vcl.kde", "font match " <<
               (aInfo.m_nID != 0 ? "succeeded" : "failed") <<
               ", name AFTER: \"" << aInfo.m_aFamilyName << "\"" );
 
-    // font height
+    
     int nPointHeight = qFontInfo.pointSize();
     if ( nPointHeight <= 0 )
         nPointHeight = rQFont.pointSize();
 
-    // Create the font
+    
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
         aFont.SetWeight( aInfo.m_eWeight );
@@ -1841,7 +1841,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
-    // WM settings
+    
     KConfig *pConfig = KGlobal::config();
     if ( pConfig )
     {
@@ -1887,7 +1887,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetPreferredIconTheme( readEntryUntranslated( pConfig, pKey ) );
     }
 
-    // General settings
+    
     QColorGroup qColorGroup = kapp->palette().active();
 
     Color aFore = toColor( qColorGroup.foreground() );
@@ -1895,53 +1895,53 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     Color aText = toColor( qColorGroup.text() );
     Color aBase = toColor( qColorGroup.base() );
 
-    // Foreground
+    
     aStyleSettings.SetRadioCheckTextColor( aFore );
     aStyleSettings.SetLabelTextColor( aFore );
     aStyleSettings.SetInfoTextColor( aFore );
     aStyleSettings.SetDialogTextColor( aFore );
     aStyleSettings.SetGroupTextColor( aFore );
 
-    // Text
+    
     aStyleSettings.SetFieldTextColor( aText );
     aStyleSettings.SetFieldRolloverTextColor( aText );
     aStyleSettings.SetWindowTextColor( aText );
     aStyleSettings.SetHelpTextColor( aText );
 
-    // Base
+    
     aStyleSettings.SetFieldColor( aBase );
     aStyleSettings.SetHelpColor( aBase );
     aStyleSettings.SetWindowColor( aBase );
     aStyleSettings.SetActiveTabColor( aBase );
 
-    // Buttons
+    
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
     aStyleSettings.SetButtonRolloverTextColor( toColor( qColorGroup.buttonText() ) );
 
-    // Disable color
+    
     aStyleSettings.SetDisableColor( toColor( qColorGroup.mid() ) );
 
-    // Workspace
+    
     aStyleSettings.SetWorkspaceColor( toColor( qColorGroup.mid() ) );
 
-    // Background
+    
     aStyleSettings.Set3DColors( aBack );
     aStyleSettings.SetFaceColor( aBack );
     aStyleSettings.SetInactiveTabColor( aBack );
     aStyleSettings.SetDialogColor( aBack );
     aStyleSettings.SetCheckedColorSpecialCase( );
 
-    // Selection
+    
     aStyleSettings.SetHighlightColor( toColor( qColorGroup.highlight() ) );
     aStyleSettings.SetHighlightTextColor( toColor( qColorGroup.highlightedText() ) );
 
-    // Font
+    
     Font aFont = toFont( kapp->font(), rSettings.GetUILanguageTag().getLocale() );
 
     aStyleSettings.SetAppFont( aFont );
     aStyleSettings.SetHelpFont( aFont );
-    aStyleSettings.SetMenuFont( aFont ); // will be changed according to pMenuBar
-    aStyleSettings.SetToolFont( aFont ); // will be changed according to pToolBar
+    aStyleSettings.SetMenuFont( aFont ); 
+    aStyleSettings.SetToolFont( aFont ); 
     aStyleSettings.SetLabelFont( aFont );
     aStyleSettings.SetInfoFont( aFont );
     aStyleSettings.SetRadioCheckFont( aFont );
@@ -1959,17 +1959,17 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
 
     KMainWindow qMainWindow;
-    qMainWindow.createGUI( "/dev/null" ); // hack
+    qMainWindow.createGUI( "/dev/null" ); 
 
-    // Menu
+    
     aStyleSettings.SetSkipDisabledInMenus( true );
     KMenuBar *pMenuBar = qMainWindow.menuBar();
     if ( pMenuBar )
     {
-        // Color
+        
         QColorGroup qMenuCG = pMenuBar->colorGroup();
 
-        // Menu text and background color, theme specific
+        
         Color aMenuFore = toColor( qMenuCG.foreground() );
         Color aMenuBack = toColor( qMenuCG.background() );
         if ( kapp->style().inherits( "LightStyleV2" ) ||
@@ -1987,7 +1987,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuBarColor( aMenuBack );
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
 
-        // Menu items higlight text color, theme specific
+        
         if ( kapp->style().inherits( "HighContrastStyle" ) ||
              kapp->style().inherits( "KeramikStyle" ) ||
              kapp->style().inherits( QWindowsStyle_String ) ||
@@ -1999,13 +1999,13 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         else
             aStyleSettings.SetMenuHighlightTextColor( aMenuFore );
 
-        // set special menubar higlight text color
+        
         if ( kapp->style().inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
         else
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
-        // set menubar rollover color
+        
         if ( kapp->style().styleHint( QStyle::SH_MenuBar_MouseTracking ) )
         {
             aStyleSettings.SetMenuBarRolloverColor( toColor ( qMenuCG.highlight() ) );
@@ -2017,12 +2017,12 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetMenuBarRolloverTextColor( aMenuFore );
         }
 
-        // Font
+        
         aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
         aStyleSettings.SetMenuFont( aFont );
     }
 
-    // Tool bar
+    
     KToolBar *pToolBar = qMainWindow.toolBar();
     if ( pToolBar )
     {
@@ -2030,7 +2030,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetToolFont( aFont );
     }
 
-    // Scroll bar size
+    
     aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
 
     rSettings.SetStyleSettings( aStyleSettings );
@@ -2089,9 +2089,9 @@ KDESalFrame::GraphicsHolder::~GraphicsHolder()
     delete pGraphics;
 }
 
-// -----------------------------------------------------------------------
-// KDESalInstance implementation
-// -----------------------------------------------------------------------
+
+
+
 
 SalFrame *
 KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nStyle )
@@ -2106,17 +2106,17 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
                 new UnxFilePicker( xMSF ) );
 }
 
-// -----------------------------------------------------------------------
-// KDESalData pieces
-// -----------------------------------------------------------------------
 
-// Create the widget painter so we have some control over
-// the destruction sequence, so Qt doesn't die in action.
+
+
+
+
+
 
 void KDEData::initNWF()
 {
     ImplSVData *pSVData = ImplGetSVData();
-    // draw toolbars on separate lines
+    
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
 
     pWidgetPainter = new WidgetPainter();
@@ -2127,7 +2127,7 @@ void KDEData::deInitNWF()
     delete pWidgetPainter;
     pWidgetPainter = NULL;
 
-    // We have to destroy the style early
+    
     kapp->setStyle( NULL );
 }
 

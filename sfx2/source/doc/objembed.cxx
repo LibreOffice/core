@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XChild.hpp>
@@ -39,8 +39,8 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------
-// TODO/LATER: this workaround must be replaced by API in future if possible
+
+
 SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
 {
     SfxObjectShell* pResult = NULL;
@@ -60,13 +60,13 @@ SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
     }
     catch( uno::Exception& )
     {
-        // TODO: error handling
+        
     }
 
     return pResult;
 }
 
-// -----------------------------------------------------------------------
+
 Printer* SfxObjectShell::GetDocumentPrinter()
 {
     SfxObjectShell* pParent = GetParentShellByModel_Impl();
@@ -75,7 +75,7 @@ Printer* SfxObjectShell::GetDocumentPrinter()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 OutputDevice* SfxObjectShell::GetDocumentRefDev()
 {
     SfxObjectShell* pParent = GetParentShellByModel_Impl();
@@ -84,13 +84,13 @@ OutputDevice* SfxObjectShell::GetDocumentRefDev()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::OnDocumentPrinterChanged( Printer* /*pNewPrinter*/ )
 {
-    // virtual method
+    
 }
 
-// -----------------------------------------------------------------------
+
 Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if( nAspect == ASPECT_CONTENT )
@@ -105,14 +105,14 @@ Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
     return Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 const Rectangle& SfxObjectShell::GetVisArea() const
 {
     pImp->m_aVisArea = GetVisArea( ASPECT_CONTENT );
     return pImp->m_aVisArea;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
 {
     if( pImp->m_aVisArea != rVisArea )
@@ -128,31 +128,31 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::SetVisAreaSize( const Size & rVisSize )
 {
     SetVisArea( Rectangle( GetVisArea().TopLeft(), rVisSize ) );
 }
 
-// -----------------------------------------------------------------------
+
 sal_uIntPtr SfxObjectShell::GetMiscStatus() const
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 MapUnit SfxObjectShell::GetMapUnit() const
 {
     return pImp->m_nMapUnit;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::SetMapUnit( MapUnit nMapUnit )
 {
     pImp->m_nMapUnit = nMapUnit;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const
 {
     sal_uInt32 nClipFormat;
@@ -167,7 +167,7 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     rDesc.mbCanLink = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::DoDraw( OutputDevice* pDev,
                             const Point & rObjPos,
                             const Size & rSize,
@@ -187,7 +187,7 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const Point & rViewPos,
                                const Fraction & rScaleX,
@@ -196,20 +196,20 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                sal_uInt16 nAspect )
 {
     Rectangle aVisArea  = GetVisArea( nAspect );
-    // MapUnit des Ziels
+    
     MapMode aMapMode( GetMapUnit() );
     aMapMode.SetScaleX( rScaleX );
     aMapMode.SetScaleY( rScaleY );
 
-    // Target in Pixels
+    
     Point aOrg   = pDev->LogicToLogic( rViewPos, NULL, &aMapMode );
     Point aDelta = aOrg - aVisArea.TopLeft();
 
-    // Origin moved according to the viewable area
-    // Origin set with Scale
+    
+    
     aMapMode.SetOrigin( aDelta );
 
-    // Secure the Device settings
+    
     pDev->Push();
 
     Region aRegion;
@@ -238,7 +238,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 
     Draw( pDev, rSetup, nAspect );
 
-    // Restore Device settings
+    
     pDev->Pop();
 
 }
@@ -252,7 +252,7 @@ comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer(
 
 void SfxObjectShell::ClearEmbeddedObjects()
 {
-    // frees alle space taken by embedded objects
+    
     DELETEZ( pImp->mpObjectContainer );
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,7 +64,7 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 {
     bool const bCrsrIsVisible(m_pWrtShell->IsCrsrVisible());
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
-    // fdo#40465 force the cursor to stay in view whilst zooming
+    
     if (bCrsrIsVisible)
         m_pWrtShell->ShowCrsr();
 }
@@ -98,7 +98,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         Size aPageSize( aPageRect.SSize() );
         Size aRootSize( aRootRect.SSize() );
 
-        //mod #i6193# added sidebar width
+        
         SwPostItMgr* pPostItMgr = GetPostItMgr();
         if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
             aPageSize.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
@@ -106,7 +106,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         const MapMode aTmpMap( MAP_TWIP );
         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // mirrored pages
+        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
             aPageSize.Width() += std::abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
@@ -145,7 +145,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     SwViewOption aOpt( *pOpt );
     if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
-        //Update MasterUsrPrefs and after that update the ViewOptions of the current View.
+        
         if ( !bViewOnly &&
                 (sal_uInt16(nFac)      != pUsrPref->GetZoom() ||
                 sal_uInt8  (eZoomType) != pUsrPref->GetZoomType()) )
@@ -171,8 +171,8 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 aPos.Y() = m_pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
             else
             {
-                // Make sure that the cursor is in the visible range, so that
-                // the scrolling will be performed only once.
+                
+                
                 aPos.X() = lLeftMargin;
                 const SwRect &rCharRect = m_pWrtShell->GetCharRect();
                 if ( rCharRect.Top() > GetVisArea().Bottom() ||
@@ -183,10 +183,10 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             }
             SetVisArea( aPos );
         }
-        // Compromise solution - Under certain circumstances SetZoom is called
-        // in CalcVisAreas again and thus be set wrong values.
+        
+        
         ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
-        CalcVisArea( rEditSize );   // for the recalculation of the viewable area
+        CalcVisArea( rEditSize );   
     }
     else if ( sal_uInt16(nFac) != pOpt->GetZoom() )
     {
@@ -221,7 +221,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
         const sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
-        // Update MasterUsrPrefs and after that update the ViewOptions of the current View.
+        
         if ( nColumns  != pUsrPref->GetViewLayoutColumns() ||
              bBookMode != pUsrPref->IsViewLayoutBookMode() )
         {
@@ -259,7 +259,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
     rBnd.Invalidate( SID_ATTR_ZOOMSLIDER);
 }
 
-// Scrollbar - Handler
+
 
 IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
@@ -310,8 +310,8 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
     if(GetWindow())
         InvalidateBorder();
 
-    // The scrollbar has to be tested again, as in InvalidateBorder possibly
-    // the scrollbar has been deleted.
+    
+    
     if ( !m_bShowAtResize && (*ppScrollbar))
         (*ppScrollbar)->ExtendedShow();
 
@@ -391,11 +391,11 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_MARK:
         {
-            // unselect
+            
             rSh.MoveCrsr();
             rSh.EnterStdMode();
 
-            // collect navigator reminders
+            
             IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
             ::std::vector< const ::sw::mark::IMark* > vNavMarks;
             for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
@@ -406,7 +406,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
                     vNavMarks.push_back(ppMark->get());
             }
 
-            // move
+            
             if(!vNavMarks.empty())
             {
                 if(bNext)
@@ -435,7 +435,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
                 if ( rSh.MoveFldType( pFldType, bNext ) )
                     pThis->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                 else
-                    //first/last item
+                    
                     pThis->GetPostItMgr()->SetActiveSidebarWin(pPostIt);
             }
             break;

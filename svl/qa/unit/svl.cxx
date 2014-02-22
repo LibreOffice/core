@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #ifdef WNT
@@ -83,9 +83,9 @@ Test::Test()
     uno::Reference<lang::XMultiComponentFactory> xFactory(m_xContext->getServiceManager());
     uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
 
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
+    
+    
+    
     comphelper::setProcessServiceFactory(xSM);
 }
 
@@ -132,15 +132,15 @@ void Test::testNumberFormat()
         "# \?/\?",
         "# \?\?/\?\?",
 #if 0
-// TODO: Followings aren't in range of NF_FRACTION_START and NF_FRACTION_END
-// see enum NfIndexTableOffset in svl/inc/svl/zforlist.hxx
+
+
         "# \?/4",
         "# \?\?/100",
 #endif
         0
     };
 
-#if 0 // TODO: Find out why on some systems the last two currency format codes differ.
+#if 0 
     const char* pCurrency[] = {
         "$#,##0;[RED]-$#,##0",
         "$#,##0.00;[RED]-$#,##0.00",
@@ -152,7 +152,7 @@ void Test::testNumberFormat()
     };
 #endif
 
-#if 0 // TODO: This currently fails
+#if 0 
     const char* pDate[] = {
         "MM/DD/YY",
         "MM/DD/YYYY",
@@ -190,7 +190,7 @@ void Test::testNumberFormat()
         0
     };
 
-#if 0 // TODO: This currently fails
+#if 0 
     const char* pDateTime[] = {
         "MM/DD/YY HH:MM AM/PM",
         "MM/DD/YY HH:MM AM/PM",
@@ -218,14 +218,14 @@ void Test::testNumberFormat()
         { NF_SCIENTIFIC_START, NF_SCIENTIFIC_END, 2, pScientific },
         { NF_PERCENT_START, NF_PERCENT_END, 2, pPercent },
         { NF_FRACTION_START, NF_FRACTION_END, 2, pFraction },
-#if 0 // TODO: Find out why on some systems the last two currency format codes differ.
+#if 0 
         { NF_CURRENCY_START, NF_CURRENCY_END, 6, pCurrency },
 #endif
-#if 0 // TODO: This currently fails
+#if 0 
         { NF_DATE_START, NF_DATE_END, 21, pDate },
 #endif
         { NF_TIME_START, NF_TIME_END, 7, pTime },
-#if 0 // TODO: This currently fails
+#if 0 
         { NF_DATETIME_START, NF_DATETIME_END, 2, pDateTime },
 #endif
         { NF_BOOLEAN, NF_BOOLEAN, 1, pBoolean },
@@ -259,21 +259,21 @@ void Test::testNumberFormat()
     short nType = NUMBERFORMAT_DEFINED;
     sal_uInt32 nKey;
     OUString aCode;
-    // Thai date format (implicit locale).
+    
     aCode = "[$-1070000]d/mm/yyyy;@";
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-1070000]d/mm/yyyy;@'", false);
     }
 
-    // Thai date format (explicit locale)
+    
     aCode = "[$-107041E]d/mm/yyyy;@";
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-107041E]d/mm/yyyy;@'", false);
     }
 
-    // Thai date format (using buddhist calendar type).
+    
     aCode = "[~buddhist]D MMMM YYYY";
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
@@ -283,7 +283,7 @@ void Test::testNumberFormat()
 
 void Test::testSharedString()
 {
-    // Use shared string as normal, non-shared string, which is allowed.
+    
     SharedString aSS1("Test"), aSS2("Test");
     CPPUNIT_ASSERT_MESSAGE("Equality check should return true.", aSS1 == aSS2);
     SharedString aSS3("test");
@@ -310,7 +310,7 @@ void Test::testSharedStringPool()
     CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be NULL.", p2.getData());
     CPPUNIT_ASSERT_EQUAL(p1.getData(), p2.getData());
 
-    // Test case insensitive string ID's.
+    
     OUString aAndyLower("andy"), aAndyUpper("ANDY");
     p1 = aPool.intern(aAndy);
     p2 = aPool.intern(aAndyLower);
@@ -334,13 +334,13 @@ void Test::testSharedStringPoolPurge()
     CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 3);
     CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 1);
 
-    // Since no string objects referencing the pooled strings exist, purging
-    // the pool should empty it.
+    
+    
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 
-    // Now, create string objects on the heap.
+    
     boost::scoped_ptr<OUString> pStr1(new OUString("Andy"));
     boost::scoped_ptr<OUString> pStr2(new OUString("andy"));
     boost::scoped_ptr<OUString> pStr3(new OUString("ANDY"));
@@ -353,30 +353,30 @@ void Test::testSharedStringPoolPurge()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // This shouldn't purge anything.
+    
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // Delete one heap string object, and purge. That should purge one string.
+    
     pStr1.reset();
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // Ditto...
+    
     pStr3.reset();
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // Again.
+    
     pStr2.reset();
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCountIgnoreCase());
 
-    // Delete 'Bruce' and purge.
+    
     pStr4.reset();
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
@@ -401,7 +401,7 @@ void Test::testFdo60915()
 {
     LanguageType eLang = LANGUAGE_THAI;
     OUString sCode, sExpected;
-    double fPreviewNumber = 36486; // equals 1999-11-22 (2542 B.E.)
+    double fPreviewNumber = 36486; 
     SvNumberFormatter aFormatter(m_xContext, eLang);
     {
         sCode = "[~buddhist]D/MM/YYYY";
@@ -437,43 +437,43 @@ void Test::testFdo60915()
     }
 }
 
-// https://issues.apache.org/ooo/show_bug.cgi?id=116701
+
 void Test::testI116701()
 {
     LanguageType eLang = LANGUAGE_CHINESE_TRADITIONAL;
     OUString sCode, sExpected;
-    double fPreviewNumber = 40573; // equals 30/01/2011
+    double fPreviewNumber = 40573; 
     SvNumberFormatter aFormatter(m_xContext, eLang);
-    // DateFormatskey25 in i18npool/source/localedata/data/zh_TW.xml
+    
     sal_Unicode CODE1[] =
     {
-        0x0047, 0x0047, 0x0047, 0x0045, 0x0045, // GGGEE
+        0x0047, 0x0047, 0x0047, 0x0045, 0x0045, 
         0x0022, 0x5E74, 0x0022,
-        0x004D, // M
+        0x004D, 
         0x0022, 0x6708, 0x0022,
-        0x0044, // D
+        0x0044, 
         0x0022, 0x65E5, 0x0022
     };
     sCode = OUString(CODE1, SAL_N_ELEMENTS(CODE1));
     sal_Unicode EXPECTED[] =
     {
         0x4E2D, 0x83EF, 0x6C11, 0x570B,
-        0x0031, 0x0030, 0x0030, // 100
+        0x0031, 0x0030, 0x0030, 
         0x5E74,
-        0x0031, // 1
+        0x0031, 
         0x6708,
-        0x0033, 0x0030, // 30
+        0x0033, 0x0030, 
         0x65E5
     };
     sExpected = OUString(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     sal_Unicode CODE2[] =
     {
-        0x0047, 0x0047, 0x0047, 0x0045, // GGGE
+        0x0047, 0x0047, 0x0047, 0x0045, 
         0x0022, 0x5E74, 0x0022,
-        0x004D, // M
+        0x004D, 
         0x0022, 0x6708, 0x0022,
-        0x0044, // D
+        0x0044, 
         0x0022, 0x65E5, 0x0022
     };
     sCode = OUString(CODE2, SAL_N_ELEMENTS(CODE2));

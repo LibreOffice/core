@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//////////////////////////////////////////////////////////////////////
-// AccActionBase.cpp: implementation of the CAccActionBase class.
-//////////////////////////////////////////////////////////////////////
+
+
+
 #include "stdafx.h"
 
 #include "AccActionBase.h"
@@ -41,9 +41,9 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+
+
+
 
 CAccActionBase::CAccActionBase()
 {}
@@ -59,7 +59,7 @@ CAccActionBase::~CAccActionBase()
  */
 void GetDfActionByUNORole(XAccessibleContext* pRContext, BSTR* pRet)
 {
-    // #CHECK#
+    
     if(pRContext == NULL || pRet == NULL)
     {
         return;
@@ -113,7 +113,7 @@ STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if( pRXAct.is() && nActions != NULL )
     {
         *nActions = GetXInterface()->getAccessibleActionCount();
@@ -158,16 +158,16 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(description == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXAct.is())
         return E_FAIL;
 
     ::rtl::OUString ouStr = GetXInterface()->getAccessibleActionDescription(actionIndex);
-    // #CHECK#
+    
 
     SAFE_SYSFREESTRING(*description);
     *description = SysAllocString((OLECHAR*)ouStr.getStr());
@@ -223,7 +223,7 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
 
     *keyBinding = (BSTR*)::CoTaskMemAlloc(nCount*sizeof(BSTR));
 
-    // #CHECK Memory Allocation#
+    
     if(*keyBinding == NULL)
         return E_FAIL;
 
@@ -248,13 +248,13 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
  */
 STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);
 
-    //special query.
+    
     if(pUNOInterface == NULL)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
@@ -279,7 +279,7 @@ STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
  */
 void CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > &keySet, OLECHAR* pString )
 {
-    // #CHECK#
+    
     if(pString == NULL)
         return;
 

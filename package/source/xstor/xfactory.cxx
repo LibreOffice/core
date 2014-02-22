@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -52,12 +52,12 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
         sal_Int32 nRead = xInputStream->readBytes( aData, 4 );
         xSeekable->seek( 0 );
 
-        // TODO/LATER: should the disk spanned files be supported?
-        // 0x50, 0x4b, 0x07, 0x08
+        
+        
         return ( nRead == 4 && aData[0] == 0x50 && aData[1] == 0x4b && aData[2] == 0x03 && aData[3] == 0x04 );
     }
     else
-        return sal_True; // allow to create a storage based on empty stream
+        return sal_True; 
 }
 
 uno::Sequence< OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
@@ -83,7 +83,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
     throw ( uno::Exception,
             uno::RuntimeException )
 {
-    // TODO: reimplement TempStream service to support XStream interface
+    
     uno::Reference < io::XStream > xTempStream(
                         io::TempFile::create(m_xContext),
                         uno::UNO_QUERY_THROW );
@@ -102,12 +102,12 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     throw ( uno::Exception,
             uno::RuntimeException )
 {
-    // The request for storage can be done with up to three arguments
+    
 
-    // The first argument specifies a source for the storage
-    // it can be URL, XStream, XInputStream.
-    // The second value is a mode the storage should be open in.
-    // And the third value is a media descriptor.
+    
+    
+    
+    
 
     sal_Int32 nArgNum = aArguments.getLength();
     OSL_ENSURE( nArgNum < 4, "Wrong parameter number" );
@@ -115,25 +115,25 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     if ( !nArgNum )
         return createInstance();
 
-    // first try to retrieve storage open mode if any
-    // by default the storage will be open in readonly mode
+    
+    
     sal_Int32 nStorageMode = embed::ElementModes::READ;
     if ( nArgNum >= 2 )
     {
         if( !( aArguments[1] >>= nStorageMode ) )
         {
             OSL_FAIL( "Wrong second argument!\n" );
-            throw lang::IllegalArgumentException(); // TODO:
+            throw lang::IllegalArgumentException(); 
         }
-        // it's always possible to read written storage in this implementation
+        
         nStorageMode |= embed::ElementModes::READ;
     }
 
     if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE
       && ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE )
-        throw lang::IllegalArgumentException(); // TODO:
+        throw lang::IllegalArgumentException(); 
 
-    // retrieve storage source stream
+    
     OUString aURL;
     uno::Reference< io::XStream > xStream;
     uno::Reference< io::XInputStream > xInputStream;
@@ -143,13 +143,13 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( aURL.isEmpty() )
         {
             OSL_FAIL( "Empty URL is provided!\n" );
-            throw lang::IllegalArgumentException(); // TODO:
+            throw lang::IllegalArgumentException(); 
         }
 
         if ( aURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:") )
         {
-            OSL_FAIL( "Packages URL's are not valid for storages!\n" ); // ???
-            throw lang::IllegalArgumentException(); // TODO:
+            OSL_FAIL( "Packages URL's are not valid for storages!\n" ); 
+            throw lang::IllegalArgumentException(); 
         }
 
         uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
@@ -164,10 +164,10 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     else if ( !( aArguments[0] >>= xStream ) && !( aArguments[0] >>= xInputStream ) )
     {
         OSL_FAIL( "Wrong first argument!\n" );
-        throw uno::Exception(); // TODO: Illegal argument
+        throw uno::Exception(); 
     }
 
-    // retrieve mediadescriptor and set storage properties
+    
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
 
@@ -190,7 +190,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                   || aDescr[nInd].Name == "Password"
                   || aDescr[nInd].Name == "RepairPackage"
                   || aDescr[nInd].Name == "StatusIndicator" )
-                  // || aDescr[nInd].Name == "Unpacked" ) // TODO:
+                  
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
@@ -230,27 +230,27 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         else
         {
             OSL_FAIL( "Wrong third argument!\n" );
-            throw uno::Exception(); // TODO: Illegal argument
+            throw uno::Exception(); 
         }
 
     }
 
-    // create storage based on source
+    
     if ( xInputStream.is() )
     {
-        // if xInputStream is set the storage should be open from it
+        
         if ( ( nStorageMode & embed::ElementModes::WRITE ) )
-              throw uno::Exception(); // TODO: access denied
+              throw uno::Exception(); 
 
         uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY );
         if ( !xSeekable.is() )
         {
-            // TODO: wrap stream to let it be seekable
+            
             OSL_FAIL( "Nonseekable streams are not supported for now!\n" );
         }
 
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
-            throw io::IOException(); // TODO: this is not a package file
+            throw io::IOException(); 
 
         return uno::Reference< uno::XInterface >(
                     static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xContext, nStorageType ) ),
@@ -260,24 +260,24 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
                if ( ( ( nStorageMode & embed::ElementModes::WRITE ) && !xStream->getOutputStream().is() )
           || !xStream->getInputStream().is() )
-              throw uno::Exception(); // TODO: access denied
+              throw uno::Exception(); 
 
         uno::Reference< io::XSeekable > xSeekable( xStream, uno::UNO_QUERY );
         if ( !xSeekable.is() )
         {
-            // TODO: wrap stream to let it be seekable
+            
             OSL_FAIL( "Nonseekable streams are not supported for now!\n" );
         }
 
         if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )
-            throw io::IOException(); // TODO: this is not a package file
+            throw io::IOException(); 
 
         return uno::Reference< uno::XInterface >(
                     static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xContext, nStorageType ) ),
                     uno::UNO_QUERY );
     }
 
-    throw uno::Exception(); // general error during creation
+    throw uno::Exception(); 
 }
 
 OUString SAL_CALL OStorageFactory::getImplementationName()

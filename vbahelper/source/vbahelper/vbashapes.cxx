@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -65,9 +65,9 @@ public:
 
 void ScVbaShapes::initBaseCollection()
 {
-    if ( m_xNameAccess.is() ) // already has NameAccess
+    if ( m_xNameAccess.is() ) 
         return;
-    // no NameAccess then use ShapeCollectionHelper
+    
     XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec mShapes;
     sal_Int32 nLen = m_xIndexAccess->getCount();
     mShapes.reserve( nLen );
@@ -153,11 +153,11 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
         {
             sal_Int32 nIndex = 0;
             sIndices[ index ] >>= nIndex;
-            // adjust for 1 based mso indexing
+            
             xShape.set( m_xIndexAccess->getByIndex( nIndex - 1 ), uno::UNO_QUERY );
 
         }
-        // populate map with drawing::XShapes
+        
         if ( xShape.is() )
             mShapes.push_back( xShape );
     }
@@ -168,12 +168,12 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
 uno::Any SAL_CALL
 ScVbaShapes::Item( const uno::Any& Index, const uno::Any& Index2 ) throw (uno::RuntimeException)
 {
-    // I don't think we need to support Array of indices for shapes
+    
 /*
     if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
         uno::Reference< container::XIndexAccess > xIndexAccess( getShapesByArrayIndices( Index ) );
-        // return new collection instance
+        
         uno::Reference< XCollection > xShapesCollection(  new ScVbaShapes( this->getParent(), mxContext, xIndexAccess ) );
         return uno::makeAny( xShapesCollection );
     }
@@ -184,13 +184,13 @@ ScVbaShapes::Item( const uno::Any& Index, const uno::Any& Index2 ) throw (uno::R
 uno::Reference< msforms::XShapeRange > SAL_CALL
 ScVbaShapes::Range( const uno::Any& shapes ) throw (css::uno::RuntimeException)
 {
-    // shapes, can be an index or an array of indices
+    
     uno::Reference< container::XIndexAccess > xShapes;
     if ( shapes.getValueTypeClass() == uno::TypeClass_SEQUENCE )
         xShapes = getShapesByArrayIndices( shapes );
     else
     {
-        // wrap single index into a sequence
+        
         uno::Sequence< uno::Any > sIndices(1);
         sIndices[ 0 ] = shapes;
         uno::Any aIndex;
@@ -208,9 +208,9 @@ ScVbaShapes::SelectAll() throw (uno::RuntimeException)
     {
         xSelectSupp->select( uno::makeAny( m_xShapes ) );
     }
-    // viewuno.cxx ScTabViewObj::select will throw IllegalArgumentException
-    // if one of the shapes is no 'markable' e.g. a button
-    // the method still works
+    
+    
+    
     catch(const lang::IllegalArgumentException&)
     {
     }
@@ -269,13 +269,13 @@ ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidt
     m_xShapes->add( xShape );
 
     awt::Point aMovePositionIfRange( 0, 0 );
-    //TODO helperapi using a writer document
+    
     /*
     XDocument xDocument = (XDocument)getParent();
     if (AnyConverter.isVoid(_aRange))
     {
         _aRange = xDocument.Range(new Integer(0), new Integer(1));
-        // Top&Left in Word is Top&Left of the paper and not the writeable area.
+        
         aMovePositionIfRange = calculateTopLeftMargin((HelperInterfaceAdaptor)xDocument);
     }
 
@@ -300,7 +300,7 @@ ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidt
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
-//helpeapi calc
+
 uno::Any SAL_CALL
 ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) throw (uno::RuntimeException)
 {
@@ -393,10 +393,10 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, 
     xShapeProps->setPropertyValue( "VertOrient", uno::makeAny( text::VertOrientation::NONE ) );
     xShapeProps->setPropertyValue( "VertOrientPosition", uno::makeAny( nYPos ) );
 
-    // set to visible
+    
     drawing::LineStyle aLineStyle = drawing::LineStyle_SOLID;
     xShapeProps->setPropertyValue( "LineStyle", uno::makeAny( aLineStyle ) );
-    // set to font
+    
     sal_Int16 nLayerId = 1;
     OUString sLayerName("Heaven");
     xShapeProps->setPropertyValue( "LayerID", uno::makeAny( nLayerId ) );
@@ -414,8 +414,8 @@ ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape
     xPropertySet->setPropertyValue( "FillStyle", uno::makeAny( OUString("SOLID") ) );
     xPropertySet->setPropertyValue( "FillColor", uno::makeAny( sal_Int32(0xFFFFFF) )  );
     xPropertySet->setPropertyValue( "TextWordWrap", uno::makeAny( text::WrapTextMode_THROUGHT )  );
-    //not find in OOo2.3
-    //xPropertySet->setPropertyValue("Opaque", uno::makeAny( sal_True )  );
+    
+    
 }
 
 void

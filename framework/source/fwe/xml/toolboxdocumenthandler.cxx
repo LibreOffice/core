@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,12 +44,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 
 
-#define TOOLBAR_DOCTYPE             "<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">"
+#define TOOLBAR_DOCTYPE             "<!DOCTYPE toolbar:toolbar PUBLIC \"-
 
 namespace framework
 {
 
-// Property names of a menu/menu item ItemDescriptor
+
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_TOOLTIP[]     = "Tooltip";
@@ -153,7 +153,7 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     OUString aNamespaceXLink( XMLNS_XLINK );
     OUString aSeparator( XMLNS_FILTER_SEPARATOR );
 
-    // create hash map
+    
     for ( int i = 0; i < (int)TB_XML_ENTRY_COUNT; i++ )
     {
         if ( ToolBoxEntries[i].nNamespace == TB_NS_TOOLBAR )
@@ -172,7 +172,7 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
         }
     }
 
-    // pre-calculate a hash code for all style strings to speed up xml read process
+    
     m_nHashCode_Style_Radio         = OUString( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
     m_nHashCode_Style_Auto          = OUString( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
     m_nHashCode_Style_Left          = OUString( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
@@ -195,7 +195,7 @@ OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
 {
 }
 
-// XDocumentHandler
+
 void SAL_CALL OReadToolBoxDocumentHandler::startDocument(void)
 throw ( SAXException, RuntimeException )
 {
@@ -236,7 +236,7 @@ throw(  SAXException, RuntimeException )
                 }
                         else
                         {
-                            // Check if we have a UI name set in our XML file
+                            
                             OUString aUIName;
                             for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                       {
@@ -256,7 +256,7 @@ throw(  SAXException, RuntimeException )
 
                             if ( !aUIName.isEmpty() )
                             {
-                                // Try to set UI name as a container property
+                                
                                 Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
                                 if ( xPropSet.is() )
                                 {
@@ -366,7 +366,7 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_STYLE:
                             {
-                                // read space separated item style list
+                                
                                 OUString aTemp = xAttribs->getValueByIndex( n );
                                 sal_Int32 nIndex = 0;
 
@@ -403,7 +403,7 @@ throw(  SAXException, RuntimeException )
                             break;
                         }
                     }
-                } // for
+                } 
 
                 if ( !bAttributeURL )
                 {
@@ -423,8 +423,8 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[5].Name = m_aIsVisible;
                     aToolbarItemProp[6].Name = m_aTooltip;
 
-                    //fix for fdo#39370
-                    /// check whether RTL interface or not
+                    
+                    
                     if(Application::GetSettings().GetLayoutRTL()){
                         if (aCommandURL == ".uno:ParaLeftToRight")
                             aCommandURL = ".uno:ParaRightToLeft";
@@ -656,9 +656,9 @@ OUString OReadToolBoxDocumentHandler::getErrorLineString()
 }
 
 
-//_________________________________________________________________________________________________________________
-//  OWriteToolBoxDocumentHandler
-//_________________________________________________________________________________________________________________
+
+
+
 
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     const Reference< XIndexAccess >& rItemAccess,
@@ -685,7 +685,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
 
     m_xWriteDocumentHandler->startDocument();
 
-    // write DOCTYPE line!
+    
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
@@ -761,9 +761,9 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-//_________________________________________________________________________________________________________________
-//  protected member functions
-//_________________________________________________________________________________________________________________
+
+
+
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rCommandURL,
@@ -784,7 +784,7 @@ throw ( SAXException, RuntimeException )
         m_aAttributeURL += OUString( ATTRIBUTE_URL );
     }
 
-    // save required attribute (URL)
+    
     pList->AddAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
 
     if ( !rLabel.isEmpty() )
@@ -874,6 +874,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxSeparator() throw
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBARSEPARATOR ) );
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

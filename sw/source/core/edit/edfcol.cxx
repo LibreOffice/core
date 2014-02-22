@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -47,7 +47,7 @@ SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
 
-// #i62675#
+
 void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
                                  bool bResetListAttrs )
 {
@@ -61,7 +61,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     FOREACHPAM_START(GetCrsr())
 
         if( !PCURCRSR->HasReadonlySel(
-                    // Formular view
+                    
                     GetViewOptions()->IsFormView() ) )
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
@@ -96,11 +96,11 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {
-        // JP 05.10.98: Special treatment if one of the attribues Break/PageDesc/NumRule(auto) is
-        //      in the ItemSet. Otherwise there will be too much or wrong processing (NumRules!)
-        //      Bug 57568
+        
+        
+        
 
-        // Do NOT copy AutoNumRules into the template
+        
         const SfxPoolItem* pItem;
         const SwNumRule* pRule = 0;
         if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false ) ||

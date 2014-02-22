@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-// ----------------------------------------------------------------------
+
 ShareControlFile::ShareControlFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, OUString( ".~sharing."  ) )
 {
@@ -61,7 +61,7 @@ ShareControlFile::ShareControlFile( const OUString& aOrigURL )
         throw io::NotConnectedException();
 }
 
-// ----------------------------------------------------------------------
+
 ShareControlFile::~ShareControlFile()
 {
     try
@@ -72,10 +72,10 @@ ShareControlFile::~ShareControlFile()
     {}
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::OpenStream()
 {
-    // if it is called outside of constructor the mutex must be locked already
+    
 
     if ( !m_xStream.is() && !m_aURL.isEmpty() )
     {
@@ -84,13 +84,13 @@ void ShareControlFile::OpenStream()
 
         uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
         if ( !xContId.is() || xContId->getContentProviderScheme() != "file" )
-            throw io::IOException(); // the implementation supports only local files for now
+            throw io::IOException(); 
 
         uno::Reference< io::XStream > xStream;
 
-        // Currently the locking of the original document is intended to be used.
-        // That means that the shared file should be accessed only when the original document is locked and only by user who has locked the document.
-        // TODO/LATER: should the own file locking be used?
+        
+        
+        
 
         try
         {
@@ -100,7 +100,7 @@ void ShareControlFile::OpenStream()
         {
             if ( e.Code == ucb::IOErrorCode_NOT_EXISTING )
             {
-                // Create file...
+                
                 SvMemoryStream aStream(0,0);
                 uno::Reference< io::XInputStream > xInput( new ::utl::OInputStreamWrapper( aStream ) );
                 ucb::InsertCommandArgument aInsertArg;
@@ -108,12 +108,12 @@ void ShareControlFile::OpenStream()
                 aInsertArg.ReplaceExisting = sal_False;
                 aContent.executeCommand( OUString("insert"), uno::makeAny( aInsertArg ) );
 
-                // try to let the file be hidden if possible
+                
                 try {
                     aContent.setPropertyValue("IsHidden", uno::makeAny( sal_True ) );
                 } catch( uno::Exception& ) {}
 
-                // Try to open one more time
+                
                 xStream = aContent.openWriteableStreamNoLock();
             }
             else
@@ -128,10 +128,10 @@ void ShareControlFile::OpenStream()
     }
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::Close()
 {
-    // if it is called outside of destructor the mutex must be locked
+    
 
     if ( m_xStream.is() )
     {
@@ -154,7 +154,7 @@ void ShareControlFile::Close()
     }
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -191,7 +191,7 @@ uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
     return m_aUsersData;
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence< OUString > >& aUsersData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -227,7 +227,7 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
     m_aUsersData = aUsersData;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -273,7 +273,7 @@ uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
     return aNewEntry;
 }
 
-// ----------------------------------------------------------------------
+
 bool ShareControlFile::HasOwnEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -300,7 +300,7 @@ bool ShareControlFile::HasOwnEntry()
     return false;
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -336,12 +336,12 @@ void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
 
     if ( !nNewInd )
     {
-        // try to remove the file if it is empty
+        
         RemoveFile();
     }
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::RemoveFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -355,6 +355,6 @@ void ShareControlFile::RemoveFile()
     xSimpleFileAccess->kill( m_aURL );
 }
 
-} // namespace svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

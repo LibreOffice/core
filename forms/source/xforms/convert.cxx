@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,26 +55,26 @@ Convert::Convert()
 
 namespace
 {
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_OUString( const Any& rAny )
     { OUString sStr; rAny >>= sStr; return sStr; }
 
-    // ------------------------------------------------------------------------
+    
     Any lcl_toAny_OUString( const OUString& rStr )
     { Any aAny; aAny <<= rStr; return aAny; }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_bool( const Any& rAny )
     { bool b = false; rAny >>= b; return b ? OUString("true") : OUString("false"); }
 
-    // ------------------------------------------------------------------------
+    
     Any lcl_toAny_bool( const OUString& rStr )
     {
         bool b = ( rStr == "true"  ||  rStr == "1" );
         return makeAny( b );
     }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_double( const Any& rAny )
     {
         double f = 0.0;
@@ -87,7 +87,7 @@ namespace
             : OUString();
     }
 
-    // ------------------------------------------------------------------------
+    
     Any lcl_toAny_double( const OUString& rString )
     {
         rtl_math_ConversionStatus eStatus;
@@ -96,7 +96,7 @@ namespace
         return ( eStatus == rtl_math_ConversionStatus_Ok ) ? makeAny( f ) : Any();
     }
 
-    // ------------------------------------------------------------------------
+    
     void lcl_appendInt32ToBuffer( const sal_Int32 _nValue, OUStringBuffer& _rBuffer, sal_Int16 _nMinDigits )
     {
         if ( ( _nMinDigits >= 4 ) && ( _nValue < 1000 ) )
@@ -108,7 +108,7 @@ namespace
         _rBuffer.append( _nValue );
     }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_UNODate_typed( const UNODate& rDate )
     {
 
@@ -122,7 +122,7 @@ namespace
         return sInfo.makeStringAndClear();
     }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_UNODate( const Any& rAny )
     {
         UNODate aDate;
@@ -130,14 +130,14 @@ namespace
         return lcl_toXSD_UNODate_typed( aDate );
     }
 
-    // ------------------------------------------------------------------------
+    
     UNODate lcl_toUNODate( const OUString& rString )
     {
         UNODate aDate( 1, 1, 1900 );
 
         bool bWellformed = ISO8601parseDate(rString, aDate);
 
-        // sanity checks
+        
         if ( ( aDate.Year > 9999 ) || ( aDate.Month < 1 ) || ( aDate.Month > 12 ) || ( aDate.Day < 1 ) || ( aDate.Day > 31 ) )
             bWellformed = false;
         else
@@ -147,20 +147,20 @@ namespace
                 bWellformed = false;
         }
 
-        // all okay?
+        
         if ( !bWellformed )
             return UNODate( 1, 1, 1900 );
 
         return aDate;
     }
 
-    // ------------------------------------------------------------------------
+    
     Any lcl_toAny_UNODate( const OUString& rString )
     {
         return makeAny( lcl_toUNODate( rString ) );
     }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_UNOTime_typed( const UNOTime& rTime )
     {
 
@@ -184,7 +184,7 @@ namespace
         return sInfo.makeStringAndClear();
     }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_UNOTime( const Any& rAny )
     {
         UNOTime aTime;
@@ -192,16 +192,16 @@ namespace
         return lcl_toXSD_UNOTime_typed( aTime );
     }
 
-    // ------------------------------------------------------------------------
+    
     UNOTime lcl_toUNOTime( const OUString& rString )
     {
         UNOTime aTime;
 
         bool bWellformed = ISO8601parseTime(rString, aTime);
 
-        // sanity checks
-        // note that Seconds == 60 denotes leap seconds. Normally, they're not allowed everywhere,
-        // but we accept them all the time for simplicity reasons
+        
+        
+        
         if  (  ( aTime.Hours > 24 )
             || ( aTime.Minutes > 59 )
             || ( aTime.Seconds > 60 )
@@ -217,20 +217,20 @@ namespace
             )
             bWellformed = false;
 
-        // all okay?
+        
         if ( !bWellformed )
             return UNOTime();
 
         return aTime;
     }
 
-    // ------------------------------------------------------------------------
+    
     Any lcl_toAny_UNOTime( const OUString& rString )
     {
         return makeAny( lcl_toUNOTime( rString ) );
     }
 
-    // ------------------------------------------------------------------------
+    
     OUString lcl_toXSD_UNODateTime( const Any& rAny )
     {
         UNODateTime aDateTime;
@@ -247,10 +247,10 @@ namespace
         return sRet;
     }
 
-    // ------------------------------------------------------------------------
+    
     Any lcl_toAny_UNODateTime( const OUString& rString )
     {
-        // separate the date from the time part
+        
         sal_Int32 nDateTimeSep = rString.indexOf( 'T' );
         if ( nDateTimeSep == -1 )
             nDateTimeSep = rString.indexOf( 't' );
@@ -258,7 +258,7 @@ namespace
         UNODate aDate;
         UNOTime aTime;
         if ( nDateTimeSep == -1 )
-        {   // no time part
+        {   
             aDate = lcl_toUNODate( rString );
         }
         else
@@ -274,7 +274,7 @@ namespace
     }
 }
 
-// ============================================================================
+
 void Convert::init()
 {
     ADD_ENTRY( this, OUString );
@@ -288,7 +288,7 @@ void Convert::init()
 
 Convert& Convert::get()
 {
-    // create our Singleton instance on demand
+    
     static Convert* pConvert = NULL;
     if( pConvert == NULL )
         pConvert = new Convert();
@@ -323,7 +323,7 @@ Convert::Any_t Convert::toAny( const OUString& rValue,
     return aIter != maMap.end() ? aIter->second.second( rValue ) : Any_t();
 }
 
-//------------------------------------------------------------------------
+
 OUString Convert::collapseWhitespace( const OUString& _rString )
 {
     sal_Int32 nLength = _rString.getLength();

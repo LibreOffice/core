@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -107,7 +107,7 @@ void PADialog::updateSettings()
 
 void PADialog::Init()
 {
-    // #i79787# initially ensure printer discovery has ended
+    
     m_rPIManager.checkPrintersChanged( true );
     m_aCUPSCB.Check( m_rPIManager.isCUPSDisabled() );
 
@@ -127,8 +127,8 @@ void PADialog::Init()
     m_aDevicesLB.setDelPressedLink( LINK( this, PADialog, DelPressedHdl ) );
     m_aCUPSCB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
 
-    // at this point no actual changes will be  written
-    // but the write will have checked whether any writeable config exists
+    
+    
     if( ! m_rPIManager.writePrinterConfig() )
     {
         m_aAddPB.Enable( false );
@@ -172,7 +172,7 @@ void PADialog::DataChanged( const DataChangedEvent& rEv )
         (rEv.GetFlags() & SETTINGS_STYLE) )
     {
         updateSettings();
-        // push the new images into the listbox
+        
         UpdateDevice();
     }
 }
@@ -263,7 +263,7 @@ void PADialog::UpdateText()
         m_aComment.SetText( rInfo.m_aComment );
         m_aLocation.SetText( rInfo.m_aLocation );
     }
-    else // nothing selected
+    else 
     {
         OUString aEmpty;
         m_aDriver.SetText( aEmpty );
@@ -278,19 +278,19 @@ static Point project( const Point& rPoint )
     const double angle_x = M_PI / 6.0;
     const double angle_z = M_PI / 6.0;
 
-    // transform planar coordinates to 3d
+    
     double x = rPoint.X();
     double y = rPoint.Y();
-    //double z = 0;
+    
 
-    // rotate around X axis
+    
     double x1 = x;
     double y1 = y * cos( angle_x );
     double z1 = y * sin( angle_x );
 
-    // rotate around Z axis
+    
     double x2 = x1 * cos( angle_z ) + y1 * sin( angle_z );
-    //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
+    
     double z2 = z1;
 
     return Point( (sal_Int32)x2, (sal_Int32)z2 );
@@ -300,7 +300,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
     sal_uInt8 nDiff;
-    // approach red
+    
     if( rFrom.GetRed() < rTo.GetRed() )
     {
         nDiff = rTo.GetRed() - rFrom.GetRed();
@@ -314,7 +314,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     else
         aColor.SetRed( rFrom.GetRed() );
 
-    // approach Green
+    
     if( rFrom.GetGreen() < rTo.GetGreen() )
     {
         nDiff = rTo.GetGreen() - rFrom.GetGreen();
@@ -328,7 +328,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     else
         aColor.SetGreen( rFrom.GetGreen() );
 
-    // approach blue
+    
     if( rFrom.GetBlue() < rTo.GetBlue() )
     {
         nDiff = rTo.GetBlue() - rFrom.GetBlue();
@@ -526,7 +526,7 @@ void SpaPrinterController::printPage( int ) const
         aLineColor = approachColor( aLineColor, aApproachColor );
         pPrinter->SetLineColor( aLineColor );
 
-        // switch aproach color
+        
         if( aApproachColor.IsRGBEqual( aLineColor ) )
         {
             if( aApproachColor.GetRed() )
@@ -595,7 +595,7 @@ void PADialog::RemDevice()
 {
     OUString aPrinter( getSelectedDevice() );
     OUString aDefPrinter( m_rPIManager.getDefaultPrinter() );
-    // do not remove the default printer
+    
     if( aPrinter.equals( aDefPrinter ) )
         return;
 

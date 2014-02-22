@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -37,7 +37,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-//===== local includes ========================================================
+
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include "GraphCtlAccessibleContext.hxx"
@@ -50,7 +50,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
-//=====  namespaces ===========================================================
+
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 
-//=====  internal  ============================================================
+
 
 /** initialize this component and set default values */
 SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
@@ -90,8 +90,8 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
         if( mpModel == NULL || mpPage == NULL || mpView == NULL )
         {
             mbDisposed = true;
-            // Set all the pointers to NULL just in case they are used as
-            // a disposed flag.
+            
+            
             mpModel = NULL;
             mpPage = NULL;
             mpView = NULL;
@@ -123,7 +123,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     maTreeInfo.SetViewForwarder( const_cast<SvxGraphCtrlAccessibleContext*>(this) );
 }
 
-//-----------------------------------------------------------------------------
+
 
 /** on destruction, this component is disposed and all dispose listeners
     are called, except if this component was already disposed */
@@ -132,7 +132,7 @@ SvxGraphCtrlAccessibleContext::~SvxGraphCtrlAccessibleContext()
     disposing();
 }
 
-//-----------------------------------------------------------------------------
+
 
 /** returns the XAccessible interface for a given SdrObject.
     Multiple calls for the same SdrObject return the same XAccessible.
@@ -143,34 +143,34 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
 
     if( pObj )
     {
-        // see if we already created an XAccessible for the given SdrObject
+        
         ShapesMapType::iterator iter = mxShapes.find( pObj );
 
         if( iter != mxShapes.end() )
         {
-            // if we already have one, return it
+            
             xAccessibleShape = (*iter).second;
         }
         else
         {
-            // create a new one and remember in our internal map
+            
             Reference< XShape > xShape( Reference< XShape >::query( (const_cast<SdrObject*>(pObj))->getUnoShape() ) );
 
             AccessibleShapeInfo aShapeInfo (xShape,mxParent);
-            // Create accessible object that corresponds to the descriptor's shape.
+            
             AccessibleShape* pAcc = ShapeTypeHandler::Instance().CreateAccessibleObject(
                 aShapeInfo, maTreeInfo);
             xAccessibleShape = pAcc;
             if (pAcc != NULL)
             {
                 pAcc->acquire();
-                // Now that we acquired the new accessible shape we can
-                // safely call its Init() method.
+                
+                
                 pAcc->Init ();
             }
             mxShapes[pObj] = pAcc;
 
-            // Create event and inform listeners of the object creation.
+            
             CommitChange( AccessibleEventId::CHILD, makeAny( xAccessibleShape ), makeAny( Reference<XAccessible>() ) );
         }
     }
@@ -178,18 +178,18 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
     return xAccessibleShape;
 }
 
-//=====  XAccessible  =========================================================
+
 
 Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleContext( void ) throw( RuntimeException )
 {
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
+
 
 sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
-    // no guard -> done in getSize()
+    
     awt::Size aSize (getSize());
     return (rPoint.X >= 0)
         && (rPoint.X < aSize.Width)
@@ -197,7 +197,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point
         && (rPoint.Y < aSize.Height);
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
@@ -228,11 +228,11 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
     return xAccessible;
 }
 
-//-----------------------------------------------------------------------------
+
 
 awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     Rectangle           aCoreBounds( GetBoundingBox() );
     awt::Rectangle      aBounds;
     aBounds.X = aCoreBounds.getX();
@@ -242,35 +242,35 @@ awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( Runtim
     return aBounds;
 }
 
-//-----------------------------------------------------------------------------
+
 
 awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     Rectangle   aRect( GetBoundingBox() );
     return awt::Point( aRect.getX(), aRect.getY() );
 }
 
-//-----------------------------------------------------------------------------
+
 
 awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBoxOnScreen()
+    
     Rectangle   aRect( GetBoundingBoxOnScreen() );
     return awt::Point( aRect.getX(), aRect.getY() );
 }
 
-//-----------------------------------------------------------------------------
+
 
 awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     Rectangle   aRect( GetBoundingBox() );
     return awt::Size( aRect.getWidth(), aRect.getHeight() );
 }
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException )
 {
@@ -282,7 +282,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount( void 
     return mpPage->GetObjCount();
 }
 
-//-----------------------------------------------------------------------------
+
 
 /** returns the SdrObject at index nIndex from the model of this graph */
 SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int32 nIndex )
@@ -299,7 +299,7 @@ SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int32 nIndex )
     return mpPage->GetObj( nIndex );
 }
 
-//-----------------------------------------------------------------------------
+
 
 /** sends an AccessibleEventObject to all added XAccessibleEventListeners */
 void SvxGraphCtrlAccessibleContext::CommitChange (
@@ -323,7 +323,7 @@ void SvxGraphCtrlAccessibleContext::FireEvent (const AccessibleEventObject& aEve
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
     throw( RuntimeException, lang::IndexOutOfBoundsException )
@@ -333,21 +333,21 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleCh
     return getAccessible( getSdrObject( nIndex ) );
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleParent( void ) throw( RuntimeException )
 {
     return mxParent;
 }
 
-//-----------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( void ) throw( RuntimeException )
 {
     ::SolarMutexGuard aGuard;
-    //  Use a simple but slow solution for now.  Optimize later.
+    
 
-    //  Iterate over all the parent's children and search for this object.
+    
     if( mxParent.is() )
     {
         Reference< XAccessibleContext > xParentContext( mxParent->getAccessibleContext() );
@@ -367,19 +367,19 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( vo
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+   
+   
    return -1;
 }
 
-//-----------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRole( void ) throw( RuntimeException )
 {
     return AccessibleRole::PANEL;
 }
 
-//-----------------------------------------------------------------------------
+
 
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
@@ -387,7 +387,7 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleDescription( void 
     return msDescription;
 }
 
-//-----------------------------------------------------------------------------
+
 
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
 {
@@ -395,7 +395,7 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName( void ) throw
     return msName;
 }
 
-//-----------------------------------------------------------------------------
+
 
 /** Return empty reference to indicate that the relation set is not
     supported.
@@ -405,7 +405,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxGraphCtrlAccessibleContext::getA
     return Reference< XAccessibleRelationSet >();
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet( void ) throw( RuntimeException )
 {
@@ -430,7 +430,7 @@ Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAcce
     return pStateSetHelper;
 }
 
-//-----------------------------------------------------------------------------
+
 
 lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( IllegalAccessibleComponentStateException, RuntimeException )
 {
@@ -443,11 +443,11 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( Il
             return xParentContext->getLocale();
     }
 
-    //  No parent.  Therefore throw exception to indicate this cluelessness.
+    
     throw IllegalAccessibleComponentStateException();
 }
 
-//=====  XAccessibleEventListener  ============================================
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
@@ -461,7 +461,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const R
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
@@ -473,17 +473,17 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::removeAccessibleEventListener( cons
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
             mnClientId = 0;
         }
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& xListener )
     throw( RuntimeException )
@@ -498,7 +498,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addFocusListener( const Reference< 
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& xListener )
     throw (RuntimeException)
@@ -513,7 +513,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::removeFocusListener( const Referenc
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException )
 {
@@ -525,11 +525,11 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException
     mpControl->GrabFocus();
 }
 
-//-----------------------------------------------------------------------------
+
 
 Any SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleKeyBinding() throw( RuntimeException )
 {
-    // here is no implementation, because here are no KeyBindings for every object
+    
     return Any();
 }
 
@@ -556,7 +556,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
 }
 
 
-//=====  XServiceInfo  ========================================================
+
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext" );
@@ -578,21 +578,21 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
     return aSNs;
 }
 
-//=====  XTypeProvider  =======================================================
+
 Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( void ) throw( RuntimeException )
 {
     ::SolarMutexGuard aGuard;
     return getUniqueId();
 }
 
-//=====  XServiceName  ========================================================
+
 
 OUString SvxGraphCtrlAccessibleContext::getServiceName( void ) throw( RuntimeException )
 {
     return OUString( "com.sun.star.accessibility.AccessibleContext" );
 }
 
-//=====  XAccessibleSelection =============================================
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
@@ -607,7 +607,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nI
         mpView->MarkObj( pObj, mpView->GetSdrPageView());
 }
 
-//-----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
@@ -619,7 +619,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_
     return mpView->IsObjMarked( getSdrObject( nIndex ) );
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection() throw( RuntimeException )
 {
@@ -631,7 +631,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection() throw( R
     mpView->UnmarkAllObj();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException )
 {
@@ -643,7 +643,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren() throw
     mpView->MarkAllObj();
 }
 
-//-----------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount() throw( RuntimeException )
 {
@@ -656,7 +656,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
     return rList.GetMarkCount();
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChild( sal_Int32 nIndex )
     throw( lang::IndexOutOfBoundsException, RuntimeException )
@@ -675,7 +675,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
     return xAccessible;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
@@ -706,7 +706,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
     }
 }
 
-//=====  internals ========================================================
+
 
 void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection( long nIndex ) throw( lang::IndexOutOfBoundsException )
 {
@@ -734,8 +734,8 @@ void SvxGraphCtrlAccessibleContext::setModelAndView (
     {
         mbDisposed = true;
 
-        // Set all the pointers to NULL just in case they are used as
-        // a disposed flag.
+        
+        
         mpModel = NULL;
         mpPage = NULL;
         mpView = NULL;
@@ -746,7 +746,7 @@ void SvxGraphCtrlAccessibleContext::setModelAndView (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 {
@@ -757,7 +757,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 
     mbDisposed = sal_True;
 
-    mpControl = NULL;       // object dies with representation
+    mpControl = NULL;       
     mpView = NULL;
     mpPage = NULL;
 
@@ -777,7 +777,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
         mxShapes.clear();
     }
 
-    // Send a disposing to all listeners.
+    
     if ( mnClientId )
     {
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
@@ -785,7 +785,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( RuntimeException )
 {
@@ -800,7 +800,7 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( R
         mpControl->GetSizePixel() );
 }
 
-//-----------------------------------------------------------------------------
+
 
 /** Calculate the relative coordinates of the bounding box as difference
     between the absolute coordinates of the bounding boxes of this control
@@ -829,11 +829,11 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox( void ) throw( RuntimeEx
     return aBounds;
 }
 
-//-----------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SvxGraphCtrlAccessibleContext::getUniqueId( void )
 {
-    // no guard because it's private -> has to guarded when using it!
+    
     static OImplementationId*   pId = 0;
     if( !pId )
     {
@@ -847,7 +847,7 @@ Sequence< sal_Int8 > SvxGraphCtrlAccessibleContext::getUniqueId( void )
     return pId->getImplementationId();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
@@ -863,7 +863,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
 
                     if( iter != mxShapes.end() )
                     {
-                        // if we already have one, return it
+                        
                         AccessibleShape* pShape = (*iter).second;
 
                         if( NULL != pShape )
@@ -889,7 +889,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     {
         const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
 
-        // Has our SdDrawDocument just died?
+        
         if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
         {
             dispose();
@@ -897,14 +897,14 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     }
 }
 
-//=====  IAccessibleViewforwarder  ========================================
+
 
 bool SvxGraphCtrlAccessibleContext::IsValid (void) const
 {
     return true;
 }
 
-//-----------------------------------------------------------------------------
+
 
 Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea (void) const
 {
@@ -919,7 +919,7 @@ Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea (void) const
     return aVisArea;
 }
 
-//-----------------------------------------------------------------------------
+
 
 Point SvxGraphCtrlAccessibleContext::LogicToPixel (const Point& rPoint) const
 {
@@ -934,7 +934,7 @@ Point SvxGraphCtrlAccessibleContext::LogicToPixel (const Point& rPoint) const
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 Size SvxGraphCtrlAccessibleContext::LogicToPixel (const Size& rSize) const
 {
@@ -944,7 +944,7 @@ Size SvxGraphCtrlAccessibleContext::LogicToPixel (const Size& rSize) const
         return rSize;
 }
 
-//-----------------------------------------------------------------------------
+
 
 Point SvxGraphCtrlAccessibleContext::PixelToLogic (const Point& rPoint) const
 {
@@ -954,7 +954,7 @@ Point SvxGraphCtrlAccessibleContext::PixelToLogic (const Point& rPoint) const
         return rPoint;
 }
 
-//-----------------------------------------------------------------------------
+
 
 Size SvxGraphCtrlAccessibleContext::PixelToLogic (const Size& rSize) const
 {

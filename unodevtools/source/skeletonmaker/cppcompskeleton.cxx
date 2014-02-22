@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -76,7 +76,7 @@ short generateNamespace(std::ostream & o,
     short count=0;
     sal_Int32 index = implname.lastIndexOf('.');
     if (serviceobject) {
-        o << "\n\n// component helper namespace\n";
+        o << "\n\n
     } else {
         o << "\n";
     }
@@ -121,8 +121,8 @@ OString generateCompHelperDeclaration(std::ostream & o,
 
     o << "namespace css = ::com::sun::star;\n\n";
 
-    // generate component/service helper functions
-    o << "// component and service helper functions:\n"
+    
+    o << "
         "::rtl::OUString SAL_CALL _getImplementationName();\n"
         "css::uno::Sequence< ::rtl::OUString > SAL_CALL "
         "_getSupportedServiceNames();\n"
@@ -130,10 +130,10 @@ OString generateCompHelperDeclaration(std::ostream & o,
         " css::uno::Reference< css::uno::XComponentContext > const & "
         "context );\n\n";
 
-    // close namepsace
+    
     for (short i=0; i < nbrackets; i++)
         o << "} ";
-    o << "// closing component helper namespace\n\n";
+    o << "
 
     return nm;
 }
@@ -170,10 +170,10 @@ void generateCompHelperDefinition(std::ostream & o,
       << "    return static_cast< ::cppu::OWeakObject * >(new "
       << classname <<  "(context));\n}\n\n";
 
-    // close namepsace
+    
     for (short j=0; j < nbrackets; j++)
         o << "} ";
-    o << "// closing component helper namespace\n\n";
+    o << "
 
 }
 
@@ -201,7 +201,7 @@ void generateXPropertySetBodies(std::ostream& o,
                                 const OString & classname,
                                 const OString & propertyhelper)
 {
-    o << "// com.sun.star.beans.XPropertySet:\n";
+    o << "
 
     o << "css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL "
       << classname << "getPropertySetInfo() throw ("
@@ -260,7 +260,7 @@ void generateXFastPropertySetBodies(std::ostream& o,
                                     const OString & classname,
                                     const OString & propertyhelper)
 {
-    o << "// com.sun.star.beans.XFastPropertySet:\n";
+    o << "
 
     o << "void SAL_CALL " << classname << "setFastPropertyValue( ::sal_Int32 "
         "nHandle, const css::uno::Any& aValue ) throw ("
@@ -281,7 +281,7 @@ void generateXPropertyAccessBodies(std::ostream& o,
                                    const OString & classname,
                                    const OString & propertyhelper)
 {
-    o << "    // com.sun.star.beans.XPropertyAccess:\n";
+    o << "    
 
     o << "css::uno::Sequence< css::beans::PropertyValue > SAL_CALL "
       << classname << "getPropertyValues(  ) throw ("
@@ -300,7 +300,7 @@ void generateXPropertyAccessBodies(std::ostream& o,
 
 void generateXLocalizable(std::ostream& o, const OString & classname)
 {
-    o << "// css::lang::XLocalizable:\n"
+    o << "
         "void SAL_CALL " << classname << "setLocale(const css::lang::"
         "Locale & eLocale) throw (css::uno::RuntimeException)\n{\n"
         "     m_locale = eLocale;\n}\n\n"
@@ -310,7 +310,7 @@ void generateXLocalizable(std::ostream& o, const OString & classname)
 
 void generateXAddInBodies(std::ostream& o, const OString & classname)
 {
-    o << "// css::sheet::XAddIn:\n";
+    o << "
 
     o << "::rtl::OUString SAL_CALL " << classname << "getProgrammaticFuntionName("
         "const ::rtl::OUString & aDisplayName) throw (css::uno::RuntimeException)"
@@ -365,7 +365,7 @@ void generateXAddInBodies(std::ostream& o, const OString & classname)
 
 void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classname)
 {
-    o << "// css::sheet::XCompatibilityNames:\n"
+    o << "
         "css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL " << classname
       << "getCompatibilityNames(const ::rtl::OUString & aProgrammaticName) throw "
         "(css::uno::RuntimeException)\n{\n    css::uno::Sequence< "
@@ -405,7 +405,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classnam
 
 void generateXInitialization(std::ostream& o, const OString & classname)
 {
-    o << "// css::lang::XInitialization:\n"
+    o << "
         "void SAL_CALL " << classname << "initialize( const css::uno::Sequence< "
         "css::uno::Any >& aArguments ) "
         "throw (css::uno::Exception, css::uno::RuntimeException)\n{\n"
@@ -418,9 +418,9 @@ void generateXDispatch(std::ostream& o,
                        const OString & classname,
                        const ProtocolCmdMap & protocolCmdMap)
 {
-    // com.sun.star.frame.XDispatch
-    // dispatch
-    o << "// css::frame::XDispatch:\n"
+    
+    
+    o << "
         "void SAL_CALL " << classname << "dispatch( const css::util::URL& aURL, const "
         "css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw"
         "(css::uno::RuntimeException)\n{\n";
@@ -433,7 +433,7 @@ void generateXDispatch(std::ostream& o,
         for (std::vector< OString >::const_iterator i = (*iter).second.begin();
              i != (*iter).second.end(); ++i) {
             o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") )\n"
-                "        {\n                // add your own code here\n"
+                "        {\n                
                 "                return;\n        }\n";
         }
 
@@ -442,17 +442,17 @@ void generateXDispatch(std::ostream& o,
     }
     o << "}\n\n";
 
-    // addStatusListener
+    
     o << "void SAL_CALL " << classname << "addStatusListener( const css::uno::Reference< "
         "css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) "
         "throw (css::uno::RuntimeException)\n{\n"
-        "    // add your own code here\n}\n\n";
+        "    
 
-    // removeStatusListener
+    
     o << "void SAL_CALL " << classname << "removeStatusListener( const css::uno::Reference"
         "< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) "
         "throw (css::uno::RuntimeException)\n{\n"
-        "    // add your own code here\n}\n\n";
+        "    
 }
 
 void generateXDispatchProvider(std::ostream& o,
@@ -460,9 +460,9 @@ void generateXDispatchProvider(std::ostream& o,
                                const ProtocolCmdMap & protocolCmdMap)
 {
 
-    // com.sun.star.frame.XDispatchProvider
-    // queryDispatch
-    o << "// css::frame::XDispatchProvider:\n"
+    
+    
+    o << "
         "css::uno::Reference< css::frame::XDispatch > SAL_CALL " << classname
       << "queryDispatch( const css::util::URL& aURL,"
         " const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags ) "
@@ -486,7 +486,7 @@ void generateXDispatchProvider(std::ostream& o,
     }
     o << "    return xRet;\n}\n\n";
 
-    // queryDispatches
+    
     o << "css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL "
       << classname << "queryDispatches( const css::uno::Sequence< "
         "css::frame::DispatchDescriptor >& seqDescripts ) throw("
@@ -528,14 +528,14 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
             "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
             "        sPath.appendAscii(\"/AddInFunctions\");\n\n"
-            "        // create arguments: nodepath\n"
+            "        
             "        css::beans::PropertyValue aArgument;\n"
             "        aArgument.Name = ::rtl::OUString(\"nodepath\");\n"
             "        aArgument.Value <<= sPath.makeStringAndClear();\n\n"
             "        css::uno::Sequence< css::uno::Any > aArguments(1);\n"
             "        aArguments[0] <<= aArgument;\n\n";
 
-        o << "        // create the default view using default UI locale\n"
+        o << "        
             "        css::uno::Reference< css::uno::XInterface > xIface =\n"
             "            xProvider->createInstanceWithArguments(sReadOnlyView, "
             "aArguments);\n\n"
@@ -543,13 +543,13 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);"
             "\n\n";
 
-        o << "        // extend arguments to create a view for all locales to get "
-            "simple\n        // access to the compatibilityname property\n"
+        o << "        
+            "simple\n        
             "        aArgument.Name = ::rtl::OUString(\"locale\");\n"
             "        aArgument.Value <<= ::rtl::OUString(\"*\");\n"
             "        aArguments.realloc(2);\n"
             "        aArguments[1] <<= aArgument;\n\n"
-            "        // create view for all locales\n"
+            "        
             "        xIface = xProvider->createInstanceWithArguments(sReadOnlyView, "
             "aArguments);\n\n"
             "        m_xCompAccess = css::uno::Reference<\n            "
@@ -557,7 +557,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
         o << "    }\n    catch ( css::uno::Exception & ) {\n    }\n}\n\n";
 
-        o << "// addin configuration property helper function:\n::rtl::OUString "
+        o << "
             "SAL_CALL " << classname << "::getAddinProperty(const ::rtl::OUString &"
             " funcName, const ::rtl::OUString & paramName, const char * propName) "
             "throw (css::uno::RuntimeException)\n{\n"
@@ -660,18 +660,18 @@ OString generateClassDefinition(std::ostream& o,
       << "    explicit " << classname << "("
       << "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
 
-    // generate component/service helper functions
-//     o << "    // component and service helper functions:\n"
-//       << "    static ::rtl::OUString SAL_CALL _getImplementationName();\n"
-//       << "    static css::uno::Sequence< ::rtl::OUString > SAL_CALL "
-//       << "_getSupportedServiceNames();\n"
-//       << "    static css::uno::Reference< css::uno::XInterface > SAL_CALL _create("
-//       << "\n        css::uno::Reference< css::uno::XComponentContext > const & "
-//       << "context);\n\n";
+    
 
-    // overload queryInterface
+
+
+
+
+
+
+
+    
     if (propertyhelper.getLength() > 1) {
-        o << "    // css::uno::XInterface:\n"
+        o << "    
             "    virtual css::uno::Any SAL_CALL queryInterface("
             "css::uno::Type const & type) throw ("
             "css::uno::RuntimeException);\n";
@@ -705,9 +705,9 @@ OString generateClassDefinition(std::ostream& o,
         ++it;
     }
 
-    o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
-      << "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n"
-      << "    // destructor is private and will be called indirectly by the release call"
+    o << "private:\n    " << classname << "(const " << classname << " &); 
+      << "    " << classname << "& operator=(const " << classname << " &); 
+      << "    
       << "    virtual ~" << classname << "() {}\n\n";
 
     if (options.componenttype == 2) {
@@ -721,19 +721,19 @@ OString generateClassDefinition(std::ostream& o,
     }
 
     if (supportxcomponent) {
-        o << "    // overload WeakComponentImplHelperBase::disposing()\n"
-            "    // This function is called upon disposing the component,\n"
-            "    // if your component needs special work when it becomes\n"
-            "    // disposed, do it here.\n"
+        o << "    
+            "    
+            "    
+            "    
             "    virtual void SAL_CALL disposing();\n\n";
     }
 
-    // members
+    
     o << "    css::uno::Reference< css::uno::XComponentContext > m_xContext;\n";
     if (!supportxcomponent && !attributes.empty())
         o << "   mutable ::osl::Mutex m_aMutex;\n";
 
-    // additional member for add-ons
+    
     if (options.componenttype == 3) {
         o << "    css::uno::Reference< css::frame::XFrame > m_xFrame;\n";
     }
@@ -752,34 +752,34 @@ OString generateClassDefinition(std::ostream& o,
     generateMemberDeclaration(o, options, manager, properties);
     generateMemberDeclaration(o, options, manager, attributes);
 
-//     if (!properties.empty())
-//     {
-//         AttributeInfo::const_iterator iter = properties.begin();
-//         while (iter != properties.end())
-//         {
-//             o << "    ";
-//             printType(o, options, manager, iter->second.first.replace('.','/'),
-//                       1, false);
-//             o << " m_" << iter->first << ";\n";
-//             iter++;
-//         }
-//     }
-//     if (!attributes.empty())
-//     {
-//         AttributeInfo::const_iterator iter = attributes.begin();
-//         while (iter != attributes.end())
-//         {
-//             o << "    ";
-//             printType(o, options, manager, iter->second.first.replace('.','/'),
-//                       1, false);
-//             o << " m_" << iter->first << ";\n";
-//             iter++;
-//         }
-//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     o << "};\n\n";
 
-    // generate constructor
+    
     if (options.componenttype == 2) {
         generateAddinConstructorAndHelper(o, options, manager,
                                           classname, interfaces);
@@ -832,14 +832,14 @@ OString generateClassDefinition(std::ostream& o,
         o << "\n{}\n\n";
     }
 
-    // generate service/component helper function implementations
-//     generateServiceHelper(o, options.implname, classname, services);
+    
+
 
     if (supportxcomponent) {
-        o << "// overload WeakComponentImplHelperBase::disposing()\n"
-            "// This function is called upon disposing the component,\n"
-            "// if your component needs special work when it becomes\n"
-            "// disposed, do it here.\n"
+        o << "
+            "
+            "
+            "
             "void SAL_CALL " << classname << "::disposing()\n{\n\n}\n\n";
     }
 
@@ -850,7 +850,7 @@ void generateXServiceInfoBodies(std::ostream& o,
                                 OString const & classname,
                                 OString const & comphelpernamespace)
 {
-    o << "// com.sun.star.uno.XServiceInfo:\n"
+    o << "
       << "::rtl::OUString SAL_CALL " << classname << "getImplementationName() "
       << "throw (css::uno::RuntimeException)\n{\n    "
       << "return " << comphelpernamespace << "::_getImplementationName();\n}\n\n";
@@ -946,7 +946,7 @@ void generateSkeleton(ProgramOptions const & options,
                       rtl::Reference< TypeManager > const & manager,
                       std::vector< OString > const & types)
 {
-    // special handling of calc add-ins
+    
     if (options.componenttype == 2) {
         generateCalcAddin(options, manager, types);
         return;
@@ -967,17 +967,17 @@ void generateSkeleton(ProgramOptions const & options,
     }
 
     if (options.componenttype == 3) {
-        // the Protocolhandler service is mandatory for an protocol handler add-on,
-        // so it is defaulted. The XDispatchProvider provides Dispatch objects for
-        // certain functions and the generated impl object implements XDispatch
-        // directly for simplicity reasons.
+        
+        
+        
+        
         checkType(manager, "com.sun.star.frame.ProtocolHandler",
                   interfaces, services, properties);
         checkType(manager, "com.sun.star.frame.XDispatch",
                   interfaces, services, properties);
     }
 
-    // check if service object or simple UNO object
+    
     if (!services.empty())
         serviceobject = true;
 
@@ -1012,7 +1012,7 @@ void generateSkeleton(ProgramOptions const & options,
             *pofs << "#include \"com/sun/star/frame/XFrame.hpp\"\n";
         }
 
-        // namespace
+        
         OString nmspace;
         short nm = 0;
 
@@ -1020,7 +1020,7 @@ void generateSkeleton(ProgramOptions const & options,
             nmspace = generateCompHelperDeclaration(*pofs, options.implname);
 
             *pofs <<
-                "\n\n/// anonymous implementation namespace\nnamespace {\n\n"
+                "\n\n
                 "namespace css = ::com::sun::star;\n\n";
         } else {
             nm = generateNamespace(*pofs, options.implname, false, nmspace);
@@ -1044,17 +1044,17 @@ void generateSkeleton(ProgramOptions const & options,
                              nmspace, propertyhelper);
 
         if (serviceobject) {
-            // close namepsace
-            *pofs << "} // closing anonymous implementation namespace\n\n";
+            
+            *pofs << "} 
 
             generateCompHelperDefinition(*pofs, options.implname,
                                          classname, services);
             generateCompFunctions(*pofs, nmspace);
         } else {
-            // close namepsace
+            
             for (short i=0; i < nm; i++)
                 *pofs << "} ";
-            *pofs << (nm > 0 ? "// closing namespace\n\n" : "\n");
+            *pofs << (nm > 0 ? "
         }
 
         if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
@@ -1069,12 +1069,12 @@ void generateSkeleton(ProgramOptions const & options,
                 ((std::ofstream*)pofs)->close();
                 delete pofs;
             }
-            // remove existing type file if something goes wrong to ensure
-            // consistency
+            
+            
             if (fileExists(compFileName))
                 removeTypeFile(compFileName);
 
-            // remove tmp file if something goes wrong
+            
             removeTypeFile(tmpFileName);
         }
     }
@@ -1107,25 +1107,25 @@ void generateCalcAddin(ProgramOptions const & options,
     }
 
 
-    // get the one and only add-in service for later use
+    
     std::set< OUString >::const_iterator iter2 = services.begin();
     sAddinService = *iter2;
     if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
         sAddinService = *(++iter2);
     }
 
-    // if backwardcompatible==true the AddIn service needs to be added to the
-    // suported service list, the necessary intefaces are mapped to the add-in
-    // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
-    // take form the configuration from Calc directly, this simplifies the
-    // add-in code
+    
+    
+    
+    
+    
     if (options.backwardcompatible) {
         checkType(manager, "com.sun.star.sheet.AddIn",
                   interfaces, services, properties);
     } else {
-        // special case for the optional XLocalization interface. It should be
-        // implemented always. But it is parent of the XAddIn and we need it only
-        // if backwardcompatible is false.
+        
+        
+        
         if (interfaces.find("com.sun.star.lang.XLocalizable") == interfaces.end()) {
             interfaces.insert("com.sun.star.lang.XLocalizable");
         }
@@ -1146,7 +1146,7 @@ void generateCalcAddin(ProgramOptions const & options,
             "only (limitation of the UNO implementation helpers)!");
     }
 
-    // check if service object or simple UNO object
+    
     if (!services.empty())
         serviceobject = true;
 
@@ -1178,11 +1178,11 @@ void generateCalcAddin(ProgramOptions const & options,
             "#include <boost/unordered_map.hpp>\n"
             "#include <set>\n";
 
-        // namespace
+        
         OString nmspace(generateCompHelperDeclaration(*pofs, options.implname));
 
         *pofs <<
-            "\n\n// anonymous implementation namespace\nnamespace {\n\n"
+            "\n\n
             "namespace css = ::com::sun::star;\n\n";
 
         sal_Int32 index = 0;
@@ -1212,8 +1212,8 @@ void generateCalcAddin(ProgramOptions const & options,
         generateMethodBodies(*pofs, options, manager, interfaces, classname,
                              nmspace, propertyhelper);
 
-        // close namepsace
-        *pofs << "} // closing anonymous implementation namespace\n\n";
+        
+        *pofs << "} 
 
         generateCompHelperDefinition(*pofs, options.implname, classname,
                                      services);
@@ -1232,12 +1232,12 @@ void generateCalcAddin(ProgramOptions const & options,
                 ((std::ofstream*)pofs)->close();
                 delete pofs;
             }
-            // remove existing type file if something goes wrong to ensure
-            // consistency
+            
+            
             if (fileExists(compFileName))
                 removeTypeFile(compFileName);
 
-            // remove tmp file if something goes wrong
+            
             removeTypeFile(tmpFileName);
         }
     }

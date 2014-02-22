@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CategoryPositionHelper.hxx"
@@ -53,8 +53,8 @@ double CategoryPositionHelper::getScaledSlotWidth() const
 
 double CategoryPositionHelper::getScaledSlotPos( double fScaledXPos, double fSeriesNumber ) const
 {
-    //the returned position is in the middle of the rect
-    //fSeriesNumber 0...n-1
+    
+    
     double fPos = fScaledXPos
            - (m_fCategoryWidth/2.0)
            + (m_fOuterDistance/2.0 + fSeriesNumber*(1.0+m_fInnerDistance)) * getScaledSlotWidth()
@@ -85,6 +85,6 @@ void CategoryPositionHelper::setCategoryWidth( double fCategoryWidth )
     m_fCategoryWidth = fCategoryWidth;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

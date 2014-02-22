@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "odfserializer.hxx"
@@ -102,13 +102,13 @@ void SAL_CALL ODFSerializer::characters( const OUString& aChars ) throw (xml::sa
     std::copy(pStr,pStr+nLen,m_aBuf.getArray());
 
     m_xOutStream->writeBytes(m_aBuf);
-    // TODO(F1): Make pretty printing configurable
+    
     m_xOutStream->writeBytes(m_aLineFeed);
 }
 
 void SAL_CALL ODFSerializer::ignorableWhitespace( const OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
-    // TODO(F1): Make pretty printing configurable
+    
     characters(aWhitespaces);
 }
 

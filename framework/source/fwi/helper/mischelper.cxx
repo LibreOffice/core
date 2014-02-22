@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,7 +75,7 @@ OUString RetrieveLabelFromCommand(
 {
     OUString aLabel;
 
-    // Retrieve popup menu labels
+    
     if ( !_xUICommandLabels.is() )
     {
       try
@@ -147,12 +147,12 @@ void FillLangItems( std::set< OUString > &rLangItems,
 {
     rLangItems.clear();
 
-    //1--add current language
+    
     if( !rCurLang.isEmpty() &&
         LANGUAGE_DONTKNOW != rLanguageTable.GetType( rCurLang ))
         rLangItems.insert( rCurLang );
 
-    //2--System
+    
     const AllSettings& rAllSettings = Application::GetSettings();
     LanguageType rSystemLanguage = rAllSettings.GetLanguageTag().getLanguageType();
     if( rSystemLanguage != LANGUAGE_DONTKNOW )
@@ -161,7 +161,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
             rLangItems.insert( OUString( rLanguageTable.GetString( rSystemLanguage )) );
     }
 
-    //3--UI
+    
     LanguageType rUILanguage = rAllSettings.GetUILanguageTag().getLanguageType();
     if( rUILanguage != LANGUAGE_DONTKNOW )
     {
@@ -169,7 +169,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
             rLangItems.insert( OUString( rLanguageTable.GetString( rUILanguage )) );
     }
 
-    //4--guessed language
+    
     uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( rLangGuessHelper.GetGuesser() );
     if ( xLangGuesser.is() && !rGuessedTextLang.isEmpty())
     {
@@ -180,14 +180,14 @@ void FillLangItems( std::set< OUString > &rLangItems,
             rLangItems.insert( rLanguageTable.GetString( nLang ));
     }
 
-    //5--keyboard language
+    
     if( !rKeyboardLang.isEmpty() )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rLanguageTable.GetType( rKeyboardLang )))
             rLangItems.insert( rKeyboardLang );
     }
 
-    //6--all languages used in current document
+    
     Reference< com::sun::star::frame::XModel > xModel;
     if ( rxFrame.is() )
     {
@@ -219,7 +219,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 }
 
-} // namespace framework
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

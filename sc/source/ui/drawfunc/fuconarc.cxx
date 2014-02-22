@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
 
-// Create default drawing objects via keyboard
+
 #include <svx/svdocirc.hxx>
 #include <svx/sxciaitm.hxx>
 
@@ -57,7 +57,7 @@ FuConstArc::~FuConstArc()
 
 bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
@@ -65,10 +65,10 @@ bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        // Hack  to align object to nearest grid position where object
-        // would be anchored ( if it were cell anchored )
-        // Get grid offset for current position ( note: aPnt is
-        // also adjusted )
+        
+        
+        
+        
         Point aGridOff = CurrentGridSyncOffsetAndPos( aPnt );
         pWindow->CaptureMouse();
         pView->BegCreateObj( aPnt );
@@ -97,7 +97,7 @@ bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
 
 bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = false;
@@ -177,12 +177,12 @@ void FuConstArc::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// Create default drawing objects via keyboard
+
 SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_ARC:
-    // case SID_DRAW_PIE:
-    // case SID_DRAW_CIRCLECUT:
+    
+    
+    
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
@@ -196,7 +196,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
 
             if(SID_DRAW_ARC == nID || SID_DRAW_CIRCLECUT == nID)
             {
-                // force quadratic
+                
                 ImpForceQuadratic(aRect);
             }
 

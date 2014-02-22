@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "imp_share.hxx"
@@ -56,7 +56,7 @@ void LibElementBase::ignorableWhitespace(
 void LibElementBase::characters( OUString const & /*rChars*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // not used, all characters ignored
+    
 }
 
 void LibElementBase::processingInstruction(
@@ -111,7 +111,7 @@ LibElementBase::~LibElementBase()
 #endif
 }
 
-// XRoot
+
 
 void LibraryImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
@@ -177,7 +177,7 @@ LibraryImport::~LibraryImport()
 #endif
 }
 
-// libraries
+
 Reference< xml::input::XElement > LibrariesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -187,7 +187,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // library
+    
     else if ( rLocalName == "library" )
     {
         LibDescriptor aDesc;
@@ -221,7 +221,7 @@ void LibrariesElement::endElement()
     }
 }
 
-// library
+
 Reference< xml::input::XElement > LibraryElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -231,7 +231,7 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // library
+    
     else if ( rLocalName == "element" )
     {
         OUString aValue( xAttributes->getValueByUidName(_pImport->XMLNS_LIBRARY_UID, "name" ) );

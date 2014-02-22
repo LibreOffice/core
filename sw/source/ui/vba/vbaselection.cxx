@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaselection.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -86,7 +86,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange() throw ( un
         uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
         if( xTextRanges->getCount() > 0 )
         {
-            // if there are multipul selection, just return the last selected Range.
+            
             xTextRange.set( xTextRanges->getByIndex( xTextRanges->getCount()-1 ), uno::UNO_QUERY_THROW );
         }
     }
@@ -120,7 +120,7 @@ SwVbaSelection::setText( const OUString& rText ) throw ( uno::RuntimeException )
 void SAL_CALL
 SwVbaSelection::TypeText( const OUString& rText ) throw ( uno::RuntimeException )
 {
-    // FIXME: handle the property Options.ReplaceSelection, the default value is sal_True
+    
     setText( rText );
 }
 
@@ -137,9 +137,9 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
     {
         case word::WdUnits::wdStory:
         {
-            // go to the valid text first so that the current view cursor is valid to call gotoRange.
+            
             word::gotoSelectedObjectAnchor(mxModel);
-            // go to the begin of the document
+            
             uno::Reference< text::XText > xCurrentText = word::getCurrentXText( mxModel );
             uno::Reference< text::XTextRange > xFirstRange = word::getFirstObjectPosition( xCurrentText );
             mxTextViewCursor->gotoRange( xFirstRange, bExtend );
@@ -147,7 +147,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
         }
         case word::WdUnits::wdLine:
         {
-            // go to the begin of the Line
+            
             uno::Reference< view::XLineCursor > xLineCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             xLineCursor->gotoStartOfLine( bExtend );
             break;
@@ -172,9 +172,9 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
     {
         case word::WdUnits::wdStory:
         {
-            // go to the valid text first so that the current view cursor is valid to call gotoRange.
+            
             word::gotoSelectedObjectAnchor(mxModel);
-            // go to the end of the document
+            
             uno::Reference< text::XText > xCurrentText = word::getCurrentXText( mxModel );
             uno::Reference< text::XTextRange > xEnd = xCurrentText->getEnd();
             mxTextViewCursor->gotoRange( xEnd, bExtend );
@@ -182,7 +182,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
         }
         case word::WdUnits::wdLine:
         {
-            // go to the end of the Line
+            
             uno::Reference< view::XLineCursor > xLineCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             xLineCursor->gotoEndOfLine( bExtend );
             break;
@@ -280,8 +280,8 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             uno::Reference< view::XViewCursor > xViewCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             if( eDirection == word::MOVE_LEFT )
             {
-                // if current select is a cellrange or table,
-                // the first count of move should move to the first selected cell.
+                
+                
                 uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY );
                 if ( xTextTableCursor.is() )
                 {
@@ -364,7 +364,7 @@ void SwVbaSelection::NextCell( sal_Int32 nCount, word::E_DIRECTION eDirection ) 
     OUString aCellName;
     xCellProps->getPropertyValue("CellName") >>= aCellName;
     uno::Reference< text::XTextTableCursor > xTextTableCursor = xTextTable->createCursorByCellName( aCellName );
-    // move the table cursor
+    
     switch( eDirection )
     {
         case word::MOVE_LEFT:
@@ -393,7 +393,7 @@ void SwVbaSelection::NextCell( sal_Int32 nCount, word::E_DIRECTION eDirection ) 
             return;
         }
     }
-    // move the view cursor
+    
     xCell = xTextTable->getCellByName( xTextTableCursor->getRangeName() );
     mxTextViewCursor->gotoRange( uno::Reference< text::XTextRange >( xCell, uno::UNO_QUERY_THROW ), sal_False );
 }
@@ -480,8 +480,8 @@ SwVbaSelection::MoveUp( const uno::Any& _unit, const uno::Any& _count, const uno
 void SAL_CALL
 SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException )
 {
-    // #FIXME: if the selection is an entire paragraph, it's replaced
-    // by the new paragraph
+    
+    
     sal_Bool isCollapsed = mxTextViewCursor->isCollapsed();
     InsertParagraph();
     if( isCollapsed )
@@ -491,7 +491,7 @@ SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException )
 void SAL_CALL
 SwVbaSelection::InsertParagraph() throw ( uno::RuntimeException )
 {
-    // #FIME: the selection should include the new paragraph.
+    
     getRange()->InsertParagraph();
 }
 
@@ -635,7 +635,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
             {
                case word::WdGoToDirection::wdGoToAbsolute:
                {
-                    // currently only support this type
+                    
                     if( nCount == 1 )
                         nPage = 1;
                     break;
@@ -707,27 +707,27 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
             {
                 case word::WdSeekView::wdSeekMainDocument:
                 {
-                    nHeaderFooterType = -1; // not in a header or footer
+                    nHeaderFooterType = -1; 
                     break;
                 }
                 case word::WdSeekView::wdSeekEvenPagesHeader:
                 {
-                    nHeaderFooterType = 0; // even page header
+                    nHeaderFooterType = 0; 
                     break;
                 }
                 case word::WdSeekView::wdSeekPrimaryHeader:
                 {
-                    nHeaderFooterType = 1; // odd page header
+                    nHeaderFooterType = 1; 
                     break;
                 }
                 case word::WdSeekView::wdSeekEvenPagesFooter:
                 {
-                    nHeaderFooterType = 2; // even page footer
+                    nHeaderFooterType = 2; 
                     break;
                 }
                 case word::WdSeekView::wdSeekPrimaryFooter:
                 {
-                    nHeaderFooterType = 3; // odd page footer
+                    nHeaderFooterType = 3; 
                     break;
                 }
                 case word::WdSeekView::wdSeekFirstPageHeader:
@@ -777,9 +777,9 @@ void SAL_CALL SwVbaSelection::InsertBreak( const uno::Any& _breakType ) throw (u
 uno::Any SAL_CALL
 SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    // Hacky implementation due to missing api ( and lack of knowledge )
-    // we can only support a selection that is a single table
-    if ( !aIndex.hasValue() ) // currently we can't support multiple tables in a selection
+    
+    
+    if ( !aIndex.hasValue() ) 
        throw uno::RuntimeException();
 
     sal_Int32 nIndex = 0;
@@ -801,7 +801,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException)
             return aRet;
     }
 
-    // if the current selection is a XTextTableCursor and the index is 1 then we can service this request, otherwise we just have to throw
+    
     uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY );
 
     if ( !xTextTableCursor.is() )
@@ -1047,7 +1047,7 @@ void SAL_CALL SwVbaSelection::Copy(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SwVbaSelection::CopyAsPicture(  ) throw (uno::RuntimeException)
 {
-    // seems not support in Writer
+    
     Copy();
 }
 
@@ -1069,7 +1069,7 @@ void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction ) throw (uno::
     uno::Reference< text::XTextViewCursor > xTextViewCursor = word::getXTextViewCursor( mxModel );
     if( nDirection == word::WdCollapseDirection::wdCollapseStart )
     {
-        // it is inaccurate if current seleciton is multipul cells, so it needs to go to start
+        
         uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getStart();
         xTextViewCursor->gotoRange( xTextRange, sal_False );
         xTextViewCursor->collapseToStart();
@@ -1089,8 +1089,8 @@ void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction ) throw (uno::
 void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
 {
     uno::Reference< text::XText > xText = word::getCurrentXText( mxModel );
-    // FIXME: for i#7747,if the first line is a table, it fails to select all the contents in the story.
-    // Temporary solution, insert an empty line before the table so that it could select all the contents.
+    
+    
     uno::Reference< container::XEnumerationAccess > xParaAccess( xText, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration> xParaEnum = xParaAccess->createEnumeration();
     if( xParaEnum->hasMoreElements() )
@@ -1098,7 +1098,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
         uno::Reference< text::XTextTable > xTextTable( xParaEnum->nextElement(), uno::UNO_QUERY );
         if( xTextTable.is() )
         {
-            // insert an empty line
+            
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
             mxTextViewCursor->gotoRange( xFirstCellRange, sal_False );
             OUString url = ".uno:InsertPara";
@@ -1135,9 +1135,9 @@ void SAL_CALL SwVbaSelection::SplitTable(  ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    // Hacky implementation due to missing api ( and lack of knowledge )
-    // we can only support a selection that is a single paragraph
-    if ( !aIndex.hasValue() ) // currently we can't support multiple paragraphs in a selection
+    
+    
+    if ( !aIndex.hasValue() ) 
        throw uno::RuntimeException();
 
     sal_Int32 nIndex = 0;

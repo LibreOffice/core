@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -54,7 +54,7 @@ using namespace comphelper;
 
 #define CFG_PAGE_AND_GROUP          OUString("General"), OUString("LoadSave")
 
-// ----------------------------------------------------------------------
+
 
 struct SvxSaveTabPage_Impl
 {
@@ -79,7 +79,7 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 {
 }
 
-// class SvxSaveTabPage --------------------------------------------------
+
 
 SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, "OptSavePage", "cui/ui/optsavepage.ui", rCoreSet ),
@@ -106,10 +106,10 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     get(aODFWarningFT, "odfwarning_label");
 
 
-    aODFVersionLB->SetEntryData(0, (void*)2         ); // 1.0/1.1
-    aODFVersionLB->SetEntryData(1, (void*)4         ); // 1.2
-    aODFVersionLB->SetEntryData(2, (void*)8         ); // 1.2 Extended (compat mode)
-    aODFVersionLB->SetEntryData(3, (void*)0x7fffffff); // 1.2 Extended (recommended)
+    aODFVersionLB->SetEntryData(0, (void*)2         ); 
+    aODFVersionLB->SetEntryData(1, (void*)4         ); 
+    aODFVersionLB->SetEntryData(2, (void*)8         ); 
+    aODFVersionLB->SetEntryData(3, (void*)0x7fffffff); 
 
     aDocTypeLB->SetEntryData(0, (void*)APP_WRITER       );
     aDocTypeLB->SetEntryData(1, (void*)APP_WRITER_WEB   );
@@ -196,14 +196,14 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     DetectHiddenControls();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSaveTabPage::~SfxSaveTabPage()
 {
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
@@ -211,20 +211,20 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 void SfxSaveTabPage::DetectHiddenControls()
 {
     SvtOptionsDialogOptions aOptionsDlgOpt;
 
     if ( aOptionsDlgOpt.IsOptionHidden( "Backup", CFG_PAGE_AND_GROUP ) )
     {
-        // hide controls of "Backup"
+        
         aBackupCB->Hide();
     }
 
     if ( aOptionsDlgOpt.IsOptionHidden( "AutoSave", CFG_PAGE_AND_GROUP ) )
     {
-        // hide controls of "AutoSave"
+        
         aAutoSaveCB->Hide();
         aAutoSaveEdit->Hide();
         aMinuteFT->Hide();
@@ -232,12 +232,12 @@ void SfxSaveTabPage::DetectHiddenControls()
 
     if ( aOptionsDlgOpt.IsOptionHidden( "UserAutoSave", CFG_PAGE_AND_GROUP ) )
     {
-        // hide controls of "UserAutoSave"
+        
         aUserAutoSaveCB->Hide();
     }
 
 }
-// -----------------------------------------------------------------------
+
 sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
@@ -296,7 +296,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
                                aUserAutoSaveCB->IsChecked() ) );
         bModified |= sal_True;
     }
-    // save relatively
+    
     if ( TriState(aRelativeFsysCB->IsChecked()) != aRelativeFsysCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
@@ -343,7 +343,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool isODFFormat( OUString sFilter )
 {
@@ -473,7 +473,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
 
     aAutoSaveEdit->SetValue( aSaveOpt.GetAutoSaveTime() );
 
-    // save relatively
+    
     aRelativeFsysCB->Check( aSaveOpt.IsSaveRelFSys() );
 
     aRelativeInetCB->Check( aSaveOpt.IsSaveRelINet() );
@@ -497,7 +497,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aODFVersionLB->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 {

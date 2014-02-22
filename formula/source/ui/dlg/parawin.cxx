@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -34,7 +34,7 @@
 #define PAIRED_VAR_ARGS (VAR_ARGS + VAR_ARGS)
 namespace formula
 {
-//============================================================================
+
 
 ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     TabPage         (pParent,ModuleRes(RID_FORMULATAB_PARAMETER)),
@@ -208,8 +208,8 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
 
 ParaWin::~ParaWin()
 {
-    // #i66422# if the focus changes during destruction of the controls,
-    // don't call the focus handlers
+    
+    
     Link aEmptyLink;
     aBtnFx1.SetGetFocusHdl( aEmptyLink );
     aBtnFx2.SetGetFocusHdl( aEmptyLink );
@@ -321,7 +321,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         aEdArg3.SetHelpId( sHelpId );
         aEdArg4.SetHelpId( sHelpId );
 
-        //  Unique-IDs muessen gleich bleiben fuer Automatisierung
+        
         SetUniqueId( HID_FORMULA_FAP_PAGE );
         aEdArg1.SetUniqueId( HID_FORMULA_FAP_EDIT1 );
         aEdArg2.SetUniqueId( HID_FORMULA_FAP_EDIT2 );
@@ -617,6 +617,6 @@ IMPL_LINK( ParaWin, ModifyHdl, ArgInput*, pPtr )
 
 
 
-} // formula
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

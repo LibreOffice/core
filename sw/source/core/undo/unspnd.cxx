@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UndoSplitMove.hxx>
@@ -32,8 +32,8 @@
 #include "docary.hxx"
 #include <IShellCursorSupplier.hxx>
 
-//------------------------------------------------------------------
-// SPLITNODE
+
+
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
                                     sal_Bool bChkTable )
@@ -51,7 +51,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         if( !pHistory->Count() )
             DELETEZ( pHistory );
     }
-    // consider Redline
+    
     if( pDoc->IsRedlineOn() )
     {
         pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
@@ -74,7 +74,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
     rPam.DeleteMark();
     if( bTblFlag )
     {
-        // than a TextNode was added directly before the current table
+        
         SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
         rIdx = nNode;
         SwTxtNode* pTNd;
@@ -83,7 +83,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pCurrNd->IsCntntNode() && pTblNd &&
             0 != ( pTNd = pDoc->GetNodes()[ pTblNd->GetIndex()-1 ]->GetTxtNode() ))
         {
-            // move break attributes
+            
             SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
             const SfxItemSet* pNdSet = pTNd->GetpSwAttrSet();
             if( pNdSet )
@@ -98,7 +98,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                     pTableFmt->SetFmtAttr( *pItem );
             }
 
-            // than delete it again
+            
             SwNodeIndex aDelNd( *pTblNd, -1 );
             rPam.GetPoint()->nContent.Assign( (SwCntntNode*)pCurrNd, 0 );
             RemoveIdxRel( aDelNd.GetIndex(), *rPam.GetPoint() );
@@ -140,7 +140,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    // also set the cursor onto undo section
+    
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = nNode;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nCntnt );

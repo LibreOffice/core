@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -85,9 +85,9 @@ namespace dbtools
         const sal_Char* getPROPERTY_ID_ACTIVE_CONNECTION()  { return    "ActiveConnection"; }
         const sal_Char* getPROPERTY_ID_LABEL()              { return    "Label"; }
 
-    //============================================================
-    //= error messages
-    //============================================================
+    
+    
+    
         const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
         const sal_Char* getSTR_DELIMITER()                  { return    "/"; }
 
@@ -100,7 +100,7 @@ namespace dbtools
                 if(aIter->second)
                     rtl_uString_release(aIter->second);
         }
-        // ------------------------------------------------------------------------------
+        
         OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
         {
             OUString sRet;
@@ -111,7 +111,7 @@ namespace dbtools
                 sRet = aIter->second;
             return sRet;
         }
-        // ------------------------------------------------------------------------------
+        
         OUString OPropertyMap::fillValue(sal_Int32 _nIndex)
         {
             rtl_uString* pStr = NULL;
@@ -127,7 +127,7 @@ namespace dbtools
                 case PROPERTY_ID_FETCHSIZE:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_FETCHSIZE()                ); break;   }
                 case PROPERTY_ID_ESCAPEPROCESSING:          { rtl_uString_newFromAscii(&pStr,getPROPERTY_ESCAPEPROCESSING()     ); break; }
                 case PROPERTY_ID_USEBOOKMARKS:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_USEBOOKMARKS()         ); break; }
-                // Column
+                
                 case PROPERTY_ID_NAME:                      { rtl_uString_newFromAscii(&pStr,getPROPERTY_NAME()             ); break; }
                 case PROPERTY_ID_TYPE:                      { rtl_uString_newFromAscii(&pStr,getPROPERTY_TYPE()             ); break; }
                 case PROPERTY_ID_TYPENAME:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_TYPENAME()         ); break; }

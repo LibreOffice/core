@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -96,17 +96,17 @@ class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNam
     OUString msThisDocumentCodeName;
 public:
     SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
-        // XCodeNameQuery
+        
 
     OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) throw( uno::RuntimeException )
     {
-        // not implemented...
+        
         return OUString();
     }
 
     OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
-        // Initialise the code name
+        
         if ( msThisDocumentCodeName.isEmpty() )
         {
             try
@@ -141,7 +141,7 @@ public:
         if ( mpDocShell )
         {
             OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
-            // need to find the page ( and index )  for this control
+            
             uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
 
@@ -150,7 +150,7 @@ public:
             {
                 uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
                 uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-                // get the www-standard container
+                
                 uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
                 sal_Int32 nCntrls = xFormControls->getCount();
                 for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
@@ -168,7 +168,7 @@ public:
             {
             }
         }
-        // Probably should throw here ( if !bMatched )
+        
         return sCodeName;
     }
 };
@@ -222,9 +222,9 @@ public:
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
-        insertByName( aName, aElement ); // insert will overwrite
+        insertByName( aName, aElement ); 
     }
-    // XElemenAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return ::getCppuType((const OUString*)0);
@@ -243,13 +243,13 @@ class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container
 public:
     SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
-        // #FIXME #TODO is the code name for ThisDocument read anywhere?
+        
     }
 
     virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
-        // #FIXME #TODO we really need to be checking against the codename for
-        // ThisDocument
+        
+        
         if ( aName == "ThisDocument" )
             return sal_True;
         return sal_False;
@@ -271,7 +271,7 @@ public:
         uno::Sequence< OUString > aNames;
         return aNames;
     }
-    // XElemenAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException){ return uno::Type(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException ) { return sal_True; }
 
@@ -285,7 +285,7 @@ struct  ProvNamesId_Type
     sal_uInt16      nType;
 };
 
-// note: this thing is indexed as an array, so do not insert/remove entries!
+
 const ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.text.TextTable",                          SW_SERVICE_TYPE_TEXTTABLE },
@@ -403,7 +403,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "ooo.vba.VBAProjectNameProvider",                       SW_SERVICE_VBAPROJECTNAMEPROVIDER },
     { "ooo.vba.VBAGlobals",                       SW_SERVICE_VBAGLOBALS },
 
-    // case-correct versions of the service names (see #i67811)
+    
     { CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME },
     { CSS_TEXT_TEXTFIELD_USER,                        SW_SERVICE_FIELDTYPE_USER },
     { CSS_TEXT_TEXTFIELD_SET_EXPRESSION,              SW_SERVICE_FIELDTYPE_SET_EXP },
@@ -597,7 +597,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 xProjProv = new SwVbaProjectNameProvider;
                             pDoc->SetVBATemplateToProjectCache( xProjProv );
                         }
-            //xRet =  (cppu::OWeakObject*)xProjProv;
+            
             xRet = xProjProv;
         }
 #endif
@@ -712,11 +712,11 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet = (cppu::OWeakObject*)pNewStyle;
         }
         break;
-//      SW_SERVICE_DUMMY_5
-//      SW_SERVICE_DUMMY_6
-//      SW_SERVICE_DUMMY_7
-//      SW_SERVICE_DUMMY_8
-//      SW_SERVICE_DUMMY_9
+
+
+
+
+
         case SW_SERVICE_FIELDTYPE_DATETIME:
         case SW_SERVICE_FIELDTYPE_USER:
         case SW_SERVICE_FIELDTYPE_SET_EXP:
@@ -823,10 +823,10 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet = SvUnoImageMapPolygonObject_createInstance( sw_GetSupportedMacroItems() );
         break;
         case SW_SERVICE_CHART2_DATA_PROVIDER :
-            // #i64497# If a chart is in a temporary document during clipoard
-            // paste, there should be no data provider, so that own data is used
-            // This should not happen during copy/paste, as this will unlink
-            // charts using table data.
+            
+            
+            
+            
             OSL_ASSERT( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED );
             if( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 xRet = (cppu::OWeakObject*) pDoc->GetChartDataProvider( true /* create - if not yet available */ );
@@ -846,7 +846,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
 /******************************************************************
  * SwXTextTables
  ******************************************************************/
-//SMART_UNO_IMPLEMENTATION( SwXTextTables, UsrObject );
+
 SwXTextTables::SwXTextTables(SwDoc* pDc) :
         SwUnoCollection(pDc)
 {
@@ -1045,7 +1045,7 @@ namespace
         return uno::makeAny(xFrm);
     }
 
-    // runtime adapter for lcl_UnoWrapFrame
+    
     static uno::Any lcl_UnoWrapFrame(SwFrmFmt* pFmt, FlyCntType eType) throw(uno::RuntimeException())
     {
         switch(eType)
@@ -1073,11 +1073,11 @@ namespace
         public:
             SwXFrameEnumeration(const SwDoc* const pDoc);
 
-            //XEnumeration
+            
             virtual sal_Bool SAL_CALL hasMoreElements(void) throw( RuntimeException );
             virtual Any SAL_CALL nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException );
 
-            //XServiceInfo
+            
             virtual OUString SAL_CALL getImplementationName(void) throw( RuntimeException );
             virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException );
             virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( RuntimeException );
@@ -1092,16 +1092,16 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     const SwFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
     if(pFmts->empty())
         return;
-    // #i104937#
-//    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
+    
+
     const sal_uInt16 nSize = pFmts->size();
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
-    // #i104937#
+    
     SwFrmFmt* pFmt( 0 );
     for( sal_uInt16 i = 0; i < nSize; ++i )
-//    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
+
     {
-        // #i104937#
+        
         pFmt = (*pFmts)[i];
         if(pFmt->Which() != RES_FLYFRMFMT)
             continue;
@@ -1564,7 +1564,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& rName)
     }
     else
     {
-        //Sonderbehandlung der dbg_ - Methoden
+        
         if( !rName.startsWith("dbg_"))
             throw uno::RuntimeException();
     }
@@ -1635,7 +1635,7 @@ sal_Int32 SwXBookmarks::getCount(void)
         if (IDocumentMarkAccess::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
-            ++count; // only count real bookmarks
+            ++count; 
         }
     }
     return count;
@@ -1667,7 +1667,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
                 aRet <<= xRef;
                 return aRet;
             }
-            ++count; // only count real bookmarks
+            ++count; 
         }
     }
     throw IndexOutOfBoundsException();
@@ -1708,7 +1708,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
         if (IDocumentMarkAccess::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
-            ret.push_back((*ppMark)->GetName()); // only add real bookmarks
+            ret.push_back((*ppMark)->GetName()); 
         }
     }
     return ret.getAsConstList();

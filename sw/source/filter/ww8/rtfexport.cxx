@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_version.h>
@@ -69,8 +69,8 @@ using namespace ::com::sun::star;
 
 using sw::mark::IMark;
 
-// the default text encoding for the export, if it doesn't fit unicode will
-// be used
+
+
 #define DEF_ENCODING            RTL_TEXTENCODING_ASCII_US
 
 AttributeOutputBase& RtfExport::AttrOutput() const
@@ -90,11 +90,11 @@ RtfSdrExport& RtfExport::SdrExporter() const
 
 bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
 {
-    // FIXME is this actually true for rtf? - this is copied from DOCX
+    
     if ( nScript == i18n::ScriptType::ASIAN )
     {
-        // for asian in ww8, there is only one fontsize
-        // and one fontstyle (posture/weight)
+        
+        
         switch ( nWhich )
         {
             case RES_CHRATR_FONTSIZE:
@@ -107,8 +107,8 @@ bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
     }
     else if ( nScript != i18n::ScriptType::COMPLEX )
     {
-        // for western in ww8, there is only one fontsize
-        // and one fontstyle (posture/weight)
+        
+        
         switch ( nWhich )
         {
             case RES_CHRATR_CJK_FONTSIZE:
@@ -191,10 +191,10 @@ void RtfExport::AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos
     m_pAttrOutput->WriteAnnotationMarks_Impl( aStarts, aEnds );
 }
 
-//For i120928,to export graphic of bullet for RTF filter
+
 void RtfExport::ExportGrfBullet(const SwTxtNode&)
 {
-    // Noop, would be too late, see WriteNumbering() instead.
+    
 }
 
 void RtfExport::WriteChar( sal_Unicode )
@@ -252,7 +252,7 @@ void RtfExport::WriteNumbering()
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
     if ( !pUsedNumTbl )
-        return; // no numbering is used
+        return; 
 
     Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LISTTABLE );
 
@@ -282,7 +282,7 @@ void RtfExport::WriteRevTab()
     if (nRevAuthors < 1)
         return;
 
-    // RTF always seems to use Unknown as the default first entry
+    
     GetRedline(OUString("Unknown"));
 
     for( sal_uInt16 i = 0; i < pDoc->GetRedlineTbl().size(); ++i )
@@ -292,7 +292,7 @@ void RtfExport::WriteRevTab()
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
 
-    // Now write the table
+    
     Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_REVTBL ).WriteChar( ' ' );
     for(sal_uInt16 i = 0; i < m_aRedlineTbl.size(); ++i)
     {
@@ -310,7 +310,7 @@ void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // headers
+    
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
         WriteHeaderFooter( rLeftFmt, true, OOO_STRING_SVTOOLS_RTF_HEADERL );
 
@@ -320,7 +320,7 @@ void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, true, OOO_STRING_SVTOOLS_RTF_HEADERF, true );
 
-    // footers
+    
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
         WriteHeaderFooter( rLeftFmt, false, OOO_STRING_SVTOOLS_RTF_FOOTERL );
 
@@ -356,7 +356,7 @@ void RtfExport::DoComboBox(const OUString& /*rName*/,
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
+    
 }
 
 void RtfExport::DoFormText(const SwInputField* pFld )
@@ -390,8 +390,8 @@ sal_uLong RtfExport::ReplaceCr( sal_uInt8 )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // Completely unused for Rtf export... only here for code sharing
-    // purpose with binary export
+    
+    
 
     return 0;
 }
@@ -413,7 +413,7 @@ void RtfExport::WriteStyles()
 void RtfExport::WriteFootnoteSettings()
 {
     const SwPageFtnInfo& rFtnInfo = pDoc->GetPageDesc(0).GetFtnInfo();
-    // Request a separator only in case the width is larger than zero.
+    
     bool bSeparator = double(rFtnInfo.GetWidth()) > 0;
 
     Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FTNSEP );
@@ -477,8 +477,8 @@ void RtfExport::WriteInfo()
     Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COMMENT ).WriteCharPtr( " " );
     Strm().WriteCharPtr( OUStringToOString( utl::ConfigManager::getProductName(), eCurrentEncoding).getStr() ).WriteCharPtr( "}{" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_VERN );
 
-// The convention that we follow is that the version number
-// should be a non-negative 32-bit int
+
+
 #if LIBO_VERSION_MAJOR > 127
 #error Major version number must be less than 128
 #elif LIBO_VERSION_MINOR > 255 || LIBO_VERSION_MICRO > 255 || LIBO_VERSION_PATCH > 255
@@ -493,7 +493,7 @@ void RtfExport::WritePageDescTable()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // Write page descriptions (page styles)
+    
     sal_uInt16 nSize = pDoc->GetPageDescCnt();
     if( !nSize )
         return;
@@ -511,7 +511,7 @@ void RtfExport::WritePageDescTable()
 
         OutPageDescription( rPageDesc, false, false );
 
-        // search for the next page description
+        
         sal_uInt16 i = nSize;
         while( i  )
             if( rPageDesc.GetFollow() == &pDoc->GetPageDesc( --i ) )
@@ -523,58 +523,58 @@ void RtfExport::WritePageDescTable()
     Strm().WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
     bOutPageDescs = false;
 
-    // reset table infos, otherwise the depth of the cells will be incorrect,
-    // in case the page style (header or footer) had tables
+    
+    
     mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 }
 
 void RtfExport::ExportDocument_Impl()
 {
-    // Make the header
+    
     Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF ).WriteChar( '1' )
        .WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI );
     Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DEFF );
     OutULong( maFontHelper.GetId( (SvxFontItem&)pDoc->GetAttrPool().GetDefaultItem(
                     RES_CHRATR_FONT ) ));
-    // If this not exist, MS don't understand our ansi characters (0x80-0xff).
+    
     Strm().WriteCharPtr( "\\adeflang1025" );
 
-    // Font table
+    
     WriteFonts();
 
     pStyles = new MSWordStyles( *this );
-    // Color and stylesheet table
+    
     WriteStyles();
 
-    // List table
+    
     BuildNumbering();
     WriteNumbering();
 
     WriteRevTab();
 
     WriteInfo();
-    // Default TabSize
+    
     Strm().WriteCharPtr( m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() ).WriteCharPtr( SAL_NEWLINE_STRING );
-    // Zoom
+    
     SwViewShell *pViewShell(pDoc->GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
     {
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_VIEWSCALE );
         OutULong(pViewShell->GetViewOptions()->GetZoom());
     }
-    // Record changes?
+    
     if (nsRedlineMode_t::REDLINE_ON & mnRedlineMode)
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_REVISIONS );
-    // Init sections
+    
     m_pSections = new MSWordSections( *this );
 
-    // Page description
+    
     WritePageDescTable();
 
-    // Enable form protection by default if needed, as there is no switch to
-    // enable it on a per-section basis. OTOH don't always enable it as it
-    // breaks moving of drawings - so write it only in case there is really a
-    // protected section in the document.
+    
+    
+    
+    
     {
         const SfxItemPool& rPool = pDoc->GetAttrPool();
         sal_uInt32 const nMaxItem = rPool.GetItemCount2(RES_PROTECT);
@@ -589,13 +589,13 @@ void RtfExport::ExportDocument_Impl()
         }
     }
 
-    // enable form field shading
+    
     Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FORMSHADE );
 
-    // size and empty margins of the page
+    
     if( pDoc->GetPageDescCnt() )
     {
-        // Seeking the first SwFmtPageDesc. If no set, the default is valid
+        
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
             const SwNode& rSttNd = *pDoc->GetNodes()[
@@ -634,8 +634,8 @@ void RtfExport::ExportDocument_Impl()
                 Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LANDSCAPE );
 
             const SwFmtFrmSize& rSz = rFmtPage.GetFrmSize();
-            // Clipboard document is always created without a printer, then
-            // the size will be always LONG_MAX! Solution then is to use A4
+            
+            
             if( LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth() )
             {
                 Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAPERH );
@@ -666,24 +666,24 @@ void RtfExport::ExportDocument_Impl()
         }
 
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECTD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SBKNONE );
-        // All sections are unlocked by default
+        
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED );
         OutLong(1);
-        OutPageDescription( rPageDesc, false, true );   // Changed bCheckForFirstPage to sal_True so headers
-                                                            // following title page are correctly added - i13107
+        OutPageDescription( rPageDesc, false, true );   
+                                                            
         if( pSttPgDsc )
         {
             pAktPageDesc = &rPageDesc;
         }
     }
 
-    // line numbering
+    
     const SwLineNumberInfo& rLnNumInfo = pDoc->GetLineNumberInfo();
     if ( rLnNumInfo.IsPaintLineNumbers() )
         AttrOutput().SectionLineNumbering( 0, rLnNumInfo );
 
     {
-        // write the footnotes and endnotes-out Info
+        
         const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
 
         const char* pOut = FTNPOS_CHAPTER == rFtnInfo.ePos
@@ -758,7 +758,7 @@ void RtfExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     else if ( pNewPgDesc )
         m_pSections->AppendSection( pNewPgDesc, rNd, pFmt, nLnNm );
 
-    // Don't insert a page break, when we're changing page style just because the next page has to be a different one.
+    
     if (!m_pAttrOutput->m_pPrevPageDesc || m_pAttrOutput->m_pPrevPageDesc->GetFollow() != pNewPgDesc)
         AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 }
@@ -775,7 +775,7 @@ bool RtfExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
         {
             if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
-                // Level 9 disables the outline
+                
                 Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LEVEL ).WriteInt32( sal_Int32(9) );
 
                 bRet = true;
@@ -837,13 +837,13 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
       m_nCurrentNodeIndex(0)
 {
     mbExportModeRTF = true;
-    // the attribute output for the document
+    
     m_pAttrOutput = new RtfAttributeOutput( *this );
-    // that just causes problems for RTF
+    
     bSubstituteBullets = false;
-    // needed to have a complete font table
+    
     maFontHelper.bLoadAllFonts = true;
-    // the related SdrExport
+    
     m_pSdrExport = new RtfSdrExport( *this );
 
     if (!m_pWriter)
@@ -913,18 +913,18 @@ void RtfExport::InsColor( const Color& rCol )
     bool bAutoColorInTable = false;
     for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); ++it )
         if ((*it).second == rCol)
-            return; // Already in the table
+            return; 
         else if ((*it).second == COL_AUTO)
             bAutoColorInTable = true;
     if (rCol.GetColor() == COL_AUTO)
-        // COL_AUTO gets value 0
+        
         n = 0;
     else
     {
-        // other colors get values >0
+        
         n = m_aColTbl.size();
         if (!bAutoColorInTable)
-            // reserve value "0" for COL_AUTO (if COL_AUTO wasn't inserted until now)
+            
             n++;
     }
     m_aColTbl.insert(std::pair<sal_uInt16,Color>( n, rCol ));
@@ -945,12 +945,12 @@ void RtfExport::InsColorLine( const SvxBoxItem& rBox )
 }
 void RtfExport::OutColorTable()
 {
-    // Build the table from rPool since the colors provided to
-    // RtfAttributeOutput callbacks are too late.
+    
+    
     sal_uInt32 nMaxItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
 
-    // char color
+    
     {
         const SvxColorItem* pCol = (const SvxColorItem*)GetDfltAttr(
                                                 RES_CHRATR_COLOR );
@@ -988,7 +988,7 @@ void RtfExport::OutColorTable()
 
     }
 
-    // background color
+    
     static const sal_uInt16 aBrushIds[] = {
                                 RES_BACKGROUND, RES_CHRATR_BACKGROUND, 0 };
 
@@ -1012,7 +1012,7 @@ void RtfExport::OutColorTable()
     }
     }
 
-    // shadow color
+    
     {
         const SvxShadowItem* pShadow = (const SvxShadowItem*)GetDfltAttr(
                                                             RES_SHADOW );
@@ -1033,7 +1033,7 @@ void RtfExport::OutColorTable()
     }
     }
 
-    // frame border color
+    
     {
         const SvxBoxItem* pBox;
         if( 0 != ( pBox = (const SvxBoxItem*)rPool.GetPoolDefaultItem(
@@ -1129,12 +1129,12 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
     if( pAktPageDesc->GetLandscape() )
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LNDSCPSXN );
 
-    const SwFmt *pFmt = &pAktPageDesc->GetMaster(); //GetLeft();
+    const SwFmt *pFmt = &pAktPageDesc->GetMaster(); 
     bOutPageDescs = true;
     OutputFormat(*pFmt, true, false);
     bOutPageDescs = false;
 
-    // normal header / footer (without a style)
+    
     const SfxPoolItem* pItem;
     if( pAktPageDesc->GetLeft().GetAttrSet().GetItemState( RES_HEADER, false,
                 &pItem ) == SFX_ITEM_SET)
@@ -1143,7 +1143,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
                 &pItem ) == SFX_ITEM_SET)
         WriteHeaderFooter(*pItem, false);
 
-    // title page
+    
     if( pAktPageDesc != &rPgDsc )
     {
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TITLEPG );
@@ -1156,7 +1156,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
             WriteHeaderFooter(*pItem, false);
     }
 
-    // numbering type
+    
     AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), boost::none);
 
     pAktPageDesc = pSave;
@@ -1203,7 +1203,7 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
-/// Glue class to call RtfExport as an internal filter, needed by copy&paste support.
+
 class SwRTFWriter : public Writer
 {
     private:
@@ -1219,7 +1219,7 @@ SwRTFWriter::SwRTFWriter( const OUString& rFltName, const OUString & rBaseURL )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
-    // export outline nodes, only (send outline to clipboard/presentation)
+    
     m_bOutOutlineOnly = rFltName.startsWith("O");
 }
 

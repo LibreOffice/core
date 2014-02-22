@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -79,7 +79,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
 
-        // height=width for more consistent preview (analog to edit region)
+        
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -133,14 +133,14 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         const sal_Bool bProtect = SFX_ITEM_SET ==
             pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
-        // #114856# edit in readonly sections
+        
         const sal_Bool bEditInReadonly = SFX_ITEM_SET ==
             pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
 
         aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);
-        // #114856# edit in readonly sections
+        
         aSection.SetEditInReadonlyFlag(bEditInReadonly);
 
         if(SFX_ITEM_SET ==
@@ -194,7 +194,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         pThis->CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-        // height=width for more consistent preview (analog to edit region)
+        
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");

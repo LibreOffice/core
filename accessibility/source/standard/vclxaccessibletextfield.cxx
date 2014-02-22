@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
@@ -73,7 +73,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleTextField, VCLXAccessibleTextCompone
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleTextField, VCLXAccessibleTextComponent, VCLXAccessible_BASE)
 
 
-//=====  XAccessible  =========================================================
+
 
 Reference<XAccessibleContext> SAL_CALL
     VCLXAccessibleTextField::getAccessibleContext (void)
@@ -83,7 +83,7 @@ Reference<XAccessibleContext> SAL_CALL
 }
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount (void)
     throw (RuntimeException)
@@ -121,7 +121,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 
 
 
-//===== XServiceInfo ==========================================================
+
 
 OUString VCLXAccessibleTextField::getImplementationName (void)
     throw (RuntimeException)

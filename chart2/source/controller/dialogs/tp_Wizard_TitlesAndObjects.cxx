@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_Wizard_TitlesAndObjects.hxx"
@@ -62,19 +62,19 @@ void TitlesAndObjectsTabPage::initializePage()
 {
     m_bCommitToModel = false;
 
-    //init titles
+    
     {
         TitleDialogData aTitleInput;
         aTitleInput.readFromModel( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
         m_xTitleResources->writeToResources( aTitleInput );
     }
 
-    //init legend
+    
     {
         m_xLegendPositionResources->writeToResources( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
     }
 
-    //init grid checkboxes
+    
     {
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
         uno::Sequence< sal_Bool > aPossibilityList;
@@ -94,9 +94,9 @@ void TitlesAndObjectsTabPage::initializePage()
 
 sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    if( m_xTitleResources->IsModified() ) //titles may have changed in the meanwhile
+    if( m_xTitleResources->IsModified() ) 
         commitToModel();
-    return sal_True;//return false if this page should not be left
+    return sal_True;
 }
 
 void TitlesAndObjectsTabPage::commitToModel()
@@ -106,7 +106,7 @@ void TitlesAndObjectsTabPage::commitToModel()
 
     ControllerLockGuardUNO aLockedControllers( xModel );
 
-    //commit title changes to model
+    
     {
         TitleDialogData aTitleOutput;
         m_xTitleResources->readFromResources( aTitleOutput );
@@ -114,12 +114,12 @@ void TitlesAndObjectsTabPage::commitToModel()
         m_xTitleResources->ClearModifyFlag();
     }
 
-    //commit legend changes to model
+    
     {
         m_xLegendPositionResources->writeToModel( xModel );
     }
 
-    //commit grid changes to model
+    
     {
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         uno::Sequence< sal_Bool > aOldExistenceList;
@@ -145,6 +145,6 @@ bool TitlesAndObjectsTabPage::canAdvance() const
     return false;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

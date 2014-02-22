@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -44,12 +44,12 @@ using namespace ::com::sun::star::xml::sax;
 static const sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OASIS_GRAPHIC_ATTR_ACTIONS,
-    PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,               // DRAWING_PAGE
+    PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,               
     PROP_OASIS_PAGE_LAYOUT_ATTR_ACTIONS,
     PROP_OASIS_HEADER_FOOTER_ATTR_ACTIONS,
     PROP_OASIS_TEXT_ATTR_ACTIONS,
     PROP_OASIS_PARAGRAPH_ATTR_ACTIONS,
-    MAX_OASIS_PROP_ACTIONS,             // RUBY
+    MAX_OASIS_PROP_ACTIONS,             
     PROP_OASIS_SECTION_ATTR_ACTIONS,
     PROP_OASIS_TABLE_ATTR_ACTIONS,
     PROP_OASIS_TABLE_COLUMN_ATTR_ACTIONS,
@@ -152,7 +152,7 @@ void XMLPropertiesTContext_Impl::StartElement(
         double fIntervalMajor = 0.0;
         sal_Int32 nIntervalMinorDivisor = 0;
 
-        // #i25616#
+        
         OUString aOpacityValueRemember;
         OUString aImageOpacityValueRemember;
 
@@ -311,7 +311,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_INTERPOLATION:
                     {
-                        // 0: none (default)
+                        
                         sal_Int32 nSplineType = 0;
                         if( IsXMLToken( rAttrValue, XML_CUBIC_SPLINE ))
                             nSplineType = 1;
@@ -335,8 +335,8 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_SYMBOL_TYPE:
                     {
-                        // if symbol_type is "named-symbol" the "symbol"
-                        // property is set in the action XML_OPTACTION_SYMBOL_NAME
+                        
+                        
                         sal_Int32 nSymbolType = 0;
                         if( IsXMLToken( rAttrValue, XML_NONE ))
                             nSymbolType = -3;
@@ -355,9 +355,9 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_SYMBOL_NAME:
                     {
-                        // assume "symbol-type" == "named-symbol"
-                        sal_Int32 nSymbolType = -3; // NONE
-                        // "square" just has an awkward token-name
+                        
+                        sal_Int32 nSymbolType = -3; 
+                        
                         if( IsXMLToken( rAttrValue, XML_GRADIENTSTYLE_SQUARE ))
                             nSymbolType = 0;
                         else if( IsXMLToken( rAttrValue, XML_DIAMOND ))
@@ -397,13 +397,13 @@ void XMLPropertiesTContext_Impl::StartElement(
                                 OUString::number( nSymbolType ));
                     }
                     break;
-                // #i25616#
+                
                 case XML_OPTACTION_OPACITY:
                     aOpacityValueRemember = rAttrValue;
                     GetTransformer().NegPercent(aOpacityValueRemember);
                     break;
 
-                // #i25616#
+                
                 case XML_OPTACTION_IMAGE_OPACITY:
                     aImageOpacityValueRemember = rAttrValue;
                     GetTransformer().NegPercent(aImageOpacityValueRemember);
@@ -491,10 +491,10 @@ void XMLPropertiesTContext_Impl::StartElement(
                     }
                     break;
 
-                case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
+                case XML_ATACTION_DRAW_MIRROR_OASIS: 
                     {
-                        // keep original for writer graphic objects
-                        // Adapts attribute values (#i49139#)
+                        
+                        
                         OUString aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;
@@ -520,14 +520,14 @@ void XMLPropertiesTContext_Impl::StartElement(
                         }
                         pAttrList->AddAttribute( rAttrName, aNewAttrValue );
 
-                        // create old draw:mirror for drawing graphic objects
+                        
                         OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );
                         pAttrList->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                     XML_NAMESPACE_DRAW,
                                     GetXMLToken( XML_MIRROR )), aAttrValue );
                     }
                     break;
-                case XML_ATACTION_GAMMA_OASIS:       // converts percentage value to double
+                case XML_ATACTION_GAMMA_OASIS:       
                     {
                         sal_Int32 nValue;
                         ::sax::Converter::convertPercent( nValue, rAttrValue );
@@ -592,7 +592,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 aBuf.makeStringAndClear());
         }
 
-        // #i25616#
+        
         if(!aOpacityValueRemember.isEmpty() || !aImageOpacityValueRemember.isEmpty())
         {
             pAttrList->AddAttribute(
@@ -779,7 +779,7 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
             XMLPropertiesTContext_Impl::GetPropType( rLocalName );
         if( XML_PROP_TYPE_END != ePropType )
         {
-            // if no properties context exist start a new one.
+            
             if( !m_xPropContext.is() )
                 m_xPropContext = new XMLPropertiesTContext_Impl(
                     GetTransformer(), rQName, ePropType, m_aStyleFamily, m_bControlStyle );
@@ -790,7 +790,7 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
     }
     if( !pContext )
     {
-        // if a properties context exist close it
+        
         if( m_xPropContext.is() && !m_bPersistent )
         {
             m_xPropContext->Export();
@@ -919,7 +919,7 @@ void XMLStyleOASISTContext::EndElement()
     }
     else
     {
-        // if a properties context exist close it
+        
         if( m_xPropContext.is() )
         {
             m_xPropContext->Export();
@@ -931,7 +931,7 @@ void XMLStyleOASISTContext::EndElement()
 
 void XMLStyleOASISTContext::Characters( const OUString& )
 {
-    // element content only:
+    
 }
 
 void XMLStyleOASISTContext::ExportContent()

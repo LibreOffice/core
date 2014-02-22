@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itemset.hxx>
@@ -65,7 +65,7 @@ void SdPresLayoutDlg::Reset()
     const SfxPoolItem *pPoolItem = NULL;
     long nName;
 
-    // replace master page
+    
     if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, false, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
@@ -73,7 +73,7 @@ void SdPresLayoutDlg::Reset()
         m_pCbxMasterPage->Check( bMasterPage );
     }
 
-    // remove not used master pages
+    
     m_pCbxCheckMasters->Check(false);
 
     if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, true, &pPoolItem) == SFX_ITEM_SET)
@@ -91,7 +91,7 @@ void SdPresLayoutDlg::Reset()
     }
     DBG_ASSERT(nName < mnLayoutCount, "Layout not found");
 
-    m_pVS->SelectItem((sal_uInt16)nName + 1);  // Indices of the ValueSets start at 1
+    m_pVS->SelectItem((sal_uInt16)nName + 1);  
 
 }
 
@@ -114,7 +114,7 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     {
         aLayoutName = maLayoutNames[ nId - 1 ];
         if( aLayoutName == maStrNone )
-            aLayoutName = ""; // that way we encode "- nothing -" (see below)
+            aLayoutName = ""; 
     }
 
     rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aLayoutName ) );
@@ -181,7 +181,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
     }
 
     sal_uInt16 nResult = pDlg->Execute();
-    // Inserted update to force repaint
+    
     Update();
 
     sal_Bool   bCancel = sal_False;
@@ -196,7 +196,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             }
             else
             {
-                // that way we encode "- nothing -"
+                
                 maName = "";
             }
         }
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 
     if( !bCancel )
     {
-        // check if template already ecists
+        
         sal_Bool bExists = sal_False;
         OUString aCompareStr(maName);
         if (aCompareStr.isEmpty())
@@ -222,17 +222,17 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             if( aCompareStr == *it )
             {
                 bExists = sal_True;
-                // select template
+                
                 m_pVS->SelectItem( aPos + 1 );
             }
         }
 
         if( !bExists )
         {
-            // load document in order to determine preview bitmap (if template is selected)
+            
             if (!maName.isEmpty())
             {
-                // determine document in order to call OpenBookmarkDoc
+                
                 SdDrawDocument* pDoc = mpDocSh->GetDoc();
                 SdDrawDocument* pTemplDoc  = pDoc->OpenBookmarkDoc( maName );
 
@@ -265,7 +265,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             }
             else
             {
-                // empty layout
+                
                 maLayoutNames.push_back(maStrNone);
                 m_pVS->InsertItem( (sal_uInt16) maLayoutNames.size(),
                         Image(Bitmap(SdResId(BMP_FOIL_NONE))), maStrNone );
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 
             if (!bCancel)
             {
-                // select template
+                
                 m_pVS->SelectItem( (sal_uInt16) maLayoutNames.size() );
             }
         }

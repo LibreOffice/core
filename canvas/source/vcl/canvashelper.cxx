@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -132,8 +132,8 @@ namespace vclcanvas
                              bool                           bProtect,
                              bool                           bHaveAlpha )
     {
-        // cast away const, need to change refcount (as this is
-        // ~invisible to client code, still logically const)
+        
+        
         mpDevice    = &rDevice;
         mbHaveAlpha = bHaveAlpha;
 
@@ -160,7 +160,7 @@ namespace vclcanvas
 
     void CanvasHelper::clear()
     {
-        // are we disposed?
+        
         if( mpOutDev )
         {
             OutputDevice& rOutDev( mpOutDev->getOutDev() );
@@ -197,16 +197,16 @@ namespace vclcanvas
                                   const rendering::ViewState&   viewState,
                                   const rendering::RenderState& renderState )
     {
-        // are we disposed?
+        
         if( mpOutDev )
         {
-            // nope, render
+            
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const Point aOutPoint( tools::mapRealPoint2D( aPoint,
                                                           viewState, renderState ) );
-            // TODO(F1): alpha
+            
             mpOutDev->getOutDev().DrawPixel( aOutPoint );
 
             if( mp2ndOutDev )
@@ -220,10 +220,10 @@ namespace vclcanvas
                                  const rendering::ViewState&    viewState,
                                  const rendering::RenderState&  renderState )
     {
-        // are we disposed?
+        
         if( mpOutDev )
         {
-            // nope, render
+            
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
@@ -231,7 +231,7 @@ namespace vclcanvas
                                                             viewState, renderState ) );
             const Point aEndPoint( tools::mapRealPoint2D( aEndRealPoint2D,
                                                           viewState, renderState ) );
-            // TODO(F2): alpha
+            
             mpOutDev->getOutDev().DrawLine( aStartPoint, aEndPoint );
 
             if( mp2ndOutDev )
@@ -272,7 +272,7 @@ namespace vclcanvas
             aPoly.SetPoint( rEndPoint, 3 );
             aPoly.SetFlags( 3, POLY_NORMAL );
 
-            // TODO(F2): alpha
+            
             mpOutDev->getOutDev().DrawPolygon( aPoly );
             if( mp2ndOutDev )
                 mp2ndOutDev->getOutDev().DrawPolygon( aPoly );
@@ -305,13 +305,13 @@ namespace vclcanvas
             }
             else
             {
-                // mixed open/closed state. Cannot render open polygon
-                // via DrawPolyPolygon(), since that implicitley
-                // closed every polygon. OTOH, no need to distinguish
-                // further and render closed polygons via
-                // DrawPolygon(), and open ones via DrawPolyLine():
-                // closed polygons will simply already contain the
-                // closing segment.
+                
+                
+                
+                
+                
+                
+                
                 sal_uInt16 nSize( aPolyPoly.Count() );
 
                 for( sal_uInt16 i=0; i<nSize; ++i )
@@ -324,7 +324,7 @@ namespace vclcanvas
             }
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -353,11 +353,11 @@ namespace vclcanvas
 
             if( aPolyPoly.areControlPointsUsed() )
             {
-                // AW: Not needed for ApplyLineDashing anymore; should be removed
+                
                 aPolyPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
             }
 
-            // apply dashing, if any
+            
             if( strokeAttributes.DashArray.getLength() )
             {
                 const ::std::vector<double>& aDashArray(
@@ -367,11 +367,11 @@ namespace vclcanvas
 
                 for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
                 {
-                    // AW: new interface; You may also get gaps in the same run now
+                    
                     basegfx::tools::applyLineDashing(aPolyPoly.getB2DPolygon(i), aDashArray, &aDashedPolyPoly);
-                    //aDashedPolyPoly.append(
-                    //    ::basegfx::tools::applyLineDashing( aPolyPoly.getB2DPolygon(i),
-                    //                                        aDashArray ) );
+                    
+                    
+                    
                 }
 
                 aPolyPoly = aDashedPolyPoly;
@@ -380,54 +380,54 @@ namespace vclcanvas
             ::basegfx::B2DPolyPolygon aStrokedPolyPoly;
             if( aLinePixelSize.getLength() < 1.42 )
             {
-                // line width < 1.0 in device pixel, thus, output as a
-                // simple hairline poly-polygon
+                
+                
                 setupOutDevState( viewState, renderState, LINE_COLOR );
 
                 aStrokedPolyPoly = aPolyPoly;
             }
             else
             {
-                // render as a 'thick' line
+                
                 setupOutDevState( viewState, renderState, FILL_COLOR );
 
                 for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
                 {
-                    // TODO(F2): Use MiterLimit from StrokeAttributes,
-                    // need to convert it here to angle.
+                    
+                    
 
-                    // TODO(F2): Also use Cap settings from
-                    // StrokeAttributes, the
-                    // createAreaGeometryForLineStartEnd() method does not
-                    // seem to fit very well here
+                    
+                    
+                    
+                    
 
-                    // AW: New interface, will create bezier polygons now
+                    
                     aStrokedPolyPoly.append(basegfx::tools::createAreaGeometry(
                         aPolyPoly.getB2DPolygon(i),
                         strokeAttributes.StrokeWidth*0.5,
                         b2DJoineFromJoin(strokeAttributes.JoinType),
                         unoCapeFromCap(strokeAttributes.StartCapType)
                         ));
-                    //aStrokedPolyPoly.append(
-                    //    ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
-                    //                                                    strokeAttributes.StrokeWidth*0.5,
-                    //                                                    b2DJoineFromJoin(strokeAttributes.JoinType) ) );
+                    
+                    
+                    
+                    
                 }
             }
 
-            // transform only _now_, all the StrokeAttributes are in
-            // user coordinates.
+            
+            
             aStrokedPolyPoly.transform( aMatrix );
 
             const PolyPolygon aVCLPolyPoly( aStrokedPolyPoly );
 
-            // TODO(F2): When using alpha here, must handle that via
-            // temporary surface or somesuch.
+            
+            
 
-            // Note: the generated stroke poly-polygon is NOT free of
-            // self-intersections. Therefore, if we would render it
-            // via OutDev::DrawPolyPolygon(), on/off fill would
-            // generate off areas on those self-intersections.
+            
+            
+            
+            
             sal_uInt16 nSize( aVCLPolyPoly.Count() );
 
             for( sal_uInt16 i=0; i<nSize; ++i )
@@ -454,7 +454,7 @@ namespace vclcanvas
             }
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -503,7 +503,7 @@ namespace vclcanvas
             const int nTransparency( setupOutDevState( viewState, renderState, FILL_COLOR ) );
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
-            aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
+            aB2DPolyPoly.setClosed(true); 
             const PolyPolygon aPolyPoly( tools::mapPolyPolygon(
                                              aB2DPolyPoly,
                                              viewState, renderState ) );
@@ -514,16 +514,16 @@ namespace vclcanvas
             }
             else
             {
-                const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
+                const int nTransPercent( (nTransparency * 100 + 128) / 255 );  
                 mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
             }
 
             if( mp2ndOutDev )
             {
-                // HACK. Normally, CanvasHelper does not care about
-                // actually what mp2ndOutDev is...  well, here we do &
-                // assume a 1bpp target - everything beyond 97%
-                // transparency is fully transparent
+                
+                
+                
+                
                 if( nTransparency < 253 )
                 {
                     mp2ndOutDev->getOutDev().SetFillColor( COL_BLACK );
@@ -532,7 +532,7 @@ namespace vclcanvas
             }
         }
 
-        // TODO(P1): Provide caching here.
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -553,7 +553,7 @@ namespace vclcanvas
     {
         if( mpOutDev && mpDevice )
         {
-            // TODO(F2): font properties and font matrix
+            
             return uno::Reference< rendering::XCanvasFont >(
                     new CanvasFont(fontRequest, extraFontProperties, fontMatrix,
                                    *mpDevice, mpOutDev) );
@@ -566,7 +566,7 @@ namespace vclcanvas
                                                                             const rendering::FontInfo&                      ,
                                                                             const uno::Sequence< beans::PropertyValue >&     )
     {
-        // TODO(F2)
+        
         return uno::Sequence< rendering::FontInfo >();
     }
 
@@ -586,15 +586,15 @@ namespace vclcanvas
 
             ::Point aOutpos;
             if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
-                return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                return uno::Reference< rendering::XCachedPrimitive >(NULL); 
 
-            // change text direction and layout mode
+            
             sal_uIntPtr nLayoutMode(0);
             switch( textDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_LTR;
-                    // FALLTHROUGH intended
+                    
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
                     nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_LEFT;
@@ -602,14 +602,14 @@ namespace vclcanvas
 
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
-                    // FALLTHROUGH intended
+                    
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
                     nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_RIGHT;
                     break;
             }
 
-            // TODO(F2): alpha
+            
             mpOutDev->getOutDev().SetLayoutMode( nLayoutMode );
             mpOutDev->getOutDev().DrawText( aOutpos,
                                             text.Text,
@@ -645,17 +645,17 @@ namespace vclcanvas
             {
                 tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
-                // TODO(T3): Race condition. We're taking the font
-                // from xLayoutedText, and then calling draw() at it,
-                // without exclusive access. Move setupTextOutput(),
-                // e.g. to impltools?
+                
+                
+                
+                
 
                 ::Point aOutpos;
                 if( !setupTextOutput( aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
-                    return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                    return uno::Reference< rendering::XCachedPrimitive >(NULL); 
 
-                // TODO(F2): What about the offset scalings?
-                // TODO(F2): alpha
+                
+                
                 pTextLayout->draw( mpOutDev->getOutDev(), aOutpos, viewState, renderState );
 
                 if( mp2ndOutDev )
@@ -699,22 +699,22 @@ namespace vclcanvas
 
             BitmapEx aBmpEx( tools::bitmapExFromXBitmap(xBitmap) );
 
-            // TODO(F2): Implement modulation again for other color
-            // channels (currently, works only for alpha). Note: this
-            // is already implemented in transformBitmap()
+            
+            
+            
             if( bModulateColors &&
                 renderState.DeviceColor.getLength() > 3 )
             {
-                // optimize away the case where alpha modulation value
-                // is 1.0 - we then simply switch off modulation at all
+                
+                
                 bModulateColors = !::rtl::math::approxEqual(
                     renderState.DeviceColor[3], 1.0);
             }
 
-            // check whether we can render bitmap as-is: must not
-            // modulate colors, matrix must either be the identity
-            // transform (that's clear), _or_ contain only
-            // translational components.
+            
+            
+            
+            
             if( !bModulateColors &&
                 (aMatrix.isIdentity() ||
                  (::basegfx::fTools::equalZero( aMatrix.get(0,1) ) &&
@@ -722,17 +722,17 @@ namespace vclcanvas
                   ::rtl::math::approxEqual(aMatrix.get(0,0), 1.0) &&
                   ::rtl::math::approxEqual(aMatrix.get(1,1), 1.0)) ) )
             {
-                // optimized case: identity matrix, or only
-                // translational components.
+                
+                
                 mpOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
                                                     aBmpEx );
 
                 if( mp2ndOutDev )
                 {
-                    // HACK. Normally, CanvasHelper does not care about
-                    // actually what mp2ndOutDev is...  well, here we do &
-                    // assume a 1bpp target - everything beyond 97%
-                    // transparency is fully transparent
+                    
+                    
+                    
+                    
                     if( aBmpEx.IsAlpha() )
                     {
                         Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
@@ -748,15 +748,15 @@ namespace vclcanvas
                                                            aBmpEx );
                 }
 
-                // Returning a cache object is not useful, the XBitmap
-                // itself serves this purpose
+                
+                
                 return uno::Reference< rendering::XCachedPrimitive >(NULL);
             }
             else
             {
-                // Matrix contains non-trivial transformation (or
-                // color modulation is requested), decompose to check
-                // whether GraphicObject suffices
+                
+                
+                
                 ::basegfx::B2DVector aScale;
                 double               nRotate;
                 double               nShearX;
@@ -767,20 +767,20 @@ namespace vclcanvas
 
                 ::Size aBmpSize( aBmpEx.GetSizePixel() );
 
-                // setup alpha modulation
+                
                 if( bModulateColors )
                 {
                     const double nAlphaModulation( renderState.DeviceColor[3] );
 
-                    // TODO(F1): Note that the GraphicManager has a
-                    // subtle difference in how it calculates the
-                    // resulting alpha value: it's using the inverse
-                    // alpha values (i.e. 'transparency'), and
-                    // calculates transOrig + transModulate, instead
-                    // of transOrig + transModulate -
-                    // transOrig*transModulate (which would be
-                    // equivalent to the origAlpha*modulateAlpha the
-                    // DX canvas performs)
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     aGrfAttr.SetTransparency(
                         static_cast< sal_uInt8 >(
                             ::basegfx::fround( 255.0*( 1.0 - nAlphaModulation ) ) ) );
@@ -788,18 +788,18 @@ namespace vclcanvas
 
                 if( ::basegfx::fTools::equalZero( nShearX ) )
                 {
-                    // no shear, GraphicObject is enough (the
-                    // GraphicObject only supports scaling, rotation
-                    // and translation)
+                    
+                    
+                    
 
-                    // #i75339# don't apply mirror flags, having
-                    // negative size values is enough to make
-                    // GraphicObject flip the bitmap
+                    
+                    
+                    
 
-                    // The angle has to be mapped from radian to tenths of
-                    // degress with the orientation reversed: [0,2Pi) ->
-                    // (3600,0].  Note that the original angle may have
-                    // values outside the [0,2Pi) interval.
+                    
+                    
+                    
+                    
                     const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
                     aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
@@ -807,9 +807,9 @@ namespace vclcanvas
                 }
                 else
                 {
-                    // modify output position, to account for the fact
-                    // that transformBitmap() always normalizes its output
-                    // bitmap into the smallest enclosing box.
+                    
+                    
+                    
                     ::basegfx::B2DRectangle aDestRect;
                     ::canvas::tools::calcTransformedRectBounds( aDestRect,
                                                                 ::basegfx::B2DRectangle(0,
@@ -821,8 +821,8 @@ namespace vclcanvas
                     aOutputPos.setX( aDestRect.getMinX() );
                     aOutputPos.setY( aDestRect.getMinY() );
 
-                    // complex transformation, use generic affine bitmap
-                    // transformation
+                    
+                    
                     aBmpEx = tools::transformBitmap( aBmpEx,
                                                      aMatrix,
                                                      renderState.DeviceColor,
@@ -830,15 +830,15 @@ namespace vclcanvas
 
                     pGrfObj.reset( new GraphicObject( aBmpEx ) );
 
-                    // clear scale values, generated bitmap already
-                    // contains scaling
+                    
+                    
                     aScale.setX( 1.0 ); aScale.setY( 1.0 );
 
-                    // update bitmap size, bitmap has changed above.
+                    
                     aBmpSize = aBmpEx.GetSizePixel();
                 }
 
-                // output GraphicObject
+                
                 const ::Point aPt( ::vcl::unotools::pointFromB2DPoint( aOutputPos ) );
                 const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
                                    ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
@@ -854,9 +854,9 @@ namespace vclcanvas
                                    aSz,
                                    &aGrfAttr );
 
-                // created GraphicObject, which possibly cached
-                // display bitmap - return cache object, to retain
-                // that information.
+                
+                
+                
                 return uno::Reference< rendering::XCachedPrimitive >(
                     new CachedBitmap( pGrfObj,
                                       aPt,
@@ -864,15 +864,15 @@ namespace vclcanvas
                                       aGrfAttr,
                                       viewState,
                                       renderState,
-                                      // cast away const, need to
-                                      // change refcount (as this is
-                                      // ~invisible to client code,
-                                      // still logically const)
+                                      
+                                      
+                                      
+                                      
                                       const_cast< rendering::XCanvas* >(pCanvas)) );
             }
         }
 
-        // Nothing rendered
+        
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
@@ -902,8 +902,8 @@ namespace vclcanvas
 
     uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()
     {
-        // cast away const, need to change refcount (as this is
-        // ~invisible to client code, still logically const)
+        
+        
         return uno::Reference< rendering::XGraphicDevice >(mpDevice);
     }
 
@@ -916,13 +916,13 @@ namespace vclcanvas
                                  const rendering::ViewState&                        ,
                                  const rendering::RenderState&                       )
     {
-        // TODO(F1)
+        
     }
 
     geometry::IntegerSize2D CanvasHelper::getSize()
     {
         if( !mpOutDev.get() )
-            return geometry::IntegerSize2D(); // we're disposed
+            return geometry::IntegerSize2D(); 
 
         return ::vcl::unotools::integerSize2DFromSize( mpOutDev->getOutDev().GetOutputSizePixel() );
     }
@@ -931,7 +931,7 @@ namespace vclcanvas
                                                                         sal_Bool                    beFast )
     {
         if( !mpOutDev.get() || !mpDevice )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
@@ -939,7 +939,7 @@ namespace vclcanvas
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
-        // TODO(F2): Support alpha vdev canvas here
+        
         const Point aEmptyPoint(0,0);
         const Size  aBmpSize( rOutDev.GetOutputSizePixel() );
 
@@ -956,11 +956,11 @@ namespace vclcanvas
                                                      const geometry::IntegerRectangle2D& rect )
     {
         if( !mpOutDev.get() )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return uno::Sequence< sal_Int8 >(); 
 
         rLayout = getMemoryLayout();
 
-        // TODO(F2): Support alpha canvas here
+        
         const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
@@ -1007,7 +1007,7 @@ namespace vclcanvas
                                 const geometry::IntegerRectangle2D&     rect )
     {
         if( !mpOutDev.get() )
-            return; // we're disposed
+            return; 
 
         const rendering::IntegerBitmapLayout aRefLayout( getMemoryLayout() );
         ENSURE_ARG_OR_THROW( aRefLayout.PlaneStride != aLayout.PlaneStride ||
@@ -1029,10 +1029,10 @@ namespace vclcanvas
 
         if( nBitCount <= 8 )
         {
-            // TODO(Q1): Extract this to a common place, e.g. GraphicDevice
+            
 
-            // try to determine palette from output device (by
-            // extracting a 1,1 bitmap, and querying it)
+            
+            
             const Point aEmptyPoint;
             const Size  aSize(1,1);
             Bitmap aTmpBitmap( rOutDev.GetBitmap( aEmptyPoint,
@@ -1043,18 +1043,18 @@ namespace vclcanvas
             pPalette = &pReadAccess->GetPalette();
         }
 
-        // TODO(F2): Support alpha canvas here
+        
         Bitmap aBitmap( aRect.GetSize(), nBitCount, pPalette );
 
-        bool bCopyBack( false ); // only copy something back, if we
-                                 // actually changed some pixel
+        bool bCopyBack( false ); 
+                                 
         {
             Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
 
             ENSURE_OR_THROW( pWriteAccess.get() != NULL,
                              "Could not acquire write access to OutDev bitmap" );
 
-            // for the time being, always read as RGB
+            
             const sal_Int32 nWidth( rect.X2 - rect.X1 );
             const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
             int x, y, nCurrPos(0);
@@ -1125,11 +1125,11 @@ namespace vclcanvas
             bCopyBack = true;
         }
 
-        // copy back only here, since the BitmapAccessors must be
-        // destroyed beforehand
+        
+        
         if( bCopyBack )
         {
-            // TODO(F2): Support alpha canvas here
+            
             rOutDev.DrawBitmap(aRect.TopLeft(), aBitmap);
         }
     }
@@ -1139,7 +1139,7 @@ namespace vclcanvas
                                  const geometry::IntegerPoint2D&        pos )
     {
         if( !mpOutDev.get() )
-            return; // we're disposed
+            return; 
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
@@ -1163,7 +1163,7 @@ namespace vclcanvas
                              aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
                              "Mismatching memory layout" );
 
-        // TODO(F2): Support alpha canvas here
+        
         rOutDev.DrawPixel( ::vcl::unotools::pointFromIntegerPoint2D( pos ),
                            ::canvas::tools::stdIntSequenceToColor( color ));
     }
@@ -1172,7 +1172,7 @@ namespace vclcanvas
                                                       const geometry::IntegerPoint2D& pos )
     {
         if( !mpOutDev.get() )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return uno::Sequence< sal_Int8 >(); 
 
         rLayout = getMemoryLayout();
         rLayout.ScanLines = 1;
@@ -1192,7 +1192,7 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
                              "Y coordinate out of bounds" );
 
-        // TODO(F2): Support alpha canvas here
+        
         return ::canvas::tools::colorToStdIntSequence(
             rOutDev.GetPixel(
                 ::vcl::unotools::pointFromIntegerPoint2D( pos )));
@@ -1201,7 +1201,7 @@ namespace vclcanvas
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
         if( !mpOutDev.get() )
-            return rendering::IntegerBitmapLayout(); // we're disposed
+            return rendering::IntegerBitmapLayout(); 
 
         rendering::IntegerBitmapLayout xBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );
         if ( !mbHaveAlpha )
@@ -1234,11 +1234,11 @@ namespace vclcanvas
 
         int nTransparency(0);
 
-        // TODO(P2): Don't change clipping all the time, maintain current clip
-        // state and change only when update is necessary
+        
+        
 
-        // accumulate non-empty clips into one region
-        // ==========================================
+        
+        
 
         Region aClipRegion(true);
 
@@ -1249,7 +1249,7 @@ namespace vclcanvas
 
             if( aClipPoly.count() )
             {
-                // setup non-empty clipping
+                
                 ::basegfx::B2DHomMatrix aMatrix;
                 aClipPoly.transform(
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
@@ -1259,7 +1259,7 @@ namespace vclcanvas
             }
             else
             {
-                // clip polygon is empty
+                
                 aClipRegion.SetEmpty();
             }
         }
@@ -1277,23 +1277,23 @@ namespace vclcanvas
 
             if( aClipPoly.count() )
             {
-                // setup non-empty clipping
+                
                 Region aRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
                 aClipRegion.Intersect( aRegion );
             }
             else
             {
-                // clip polygon is empty
+                
                 aClipRegion.SetEmpty();
             }
         }
 
-        // setup accumulated clip region. Note that setting an
-        // empty clip region denotes "clip everything" on the
-        // OutputDevice (which is why we translate that into
-        // SetClipRegion() here). When both view and render clip
-        // are empty, aClipRegion remains default-constructed,
-        // i.e. empty, too.
+        
+        
+        
+        
+        
+        
         if( aClipRegion.IsNull() )
         {
             rOutDev.SetClipRegion();
@@ -1317,8 +1317,8 @@ namespace vclcanvas
                 renderState.DeviceColor );
         }
 
-        // extract alpha, and make color opaque
-        // afterwards. Otherwise, OutputDevice won't draw anything
+        
+        
         nTransparency = aColor.GetTransparency();
         aColor.SetTransparency(0);
 
@@ -1394,11 +1394,11 @@ namespace vclcanvas
                 renderState.DeviceColor );
         }
 
-        // setup font color
+        
         aVCLFont.SetColor( aColor );
         aVCLFont.SetFillColor( aColor );
 
-        // no need to replicate this for mp2ndOutDev, we're modifying only aVCLFont here.
+        
         if( !tools::setupFontTransform( o_rOutPos, aVCLFont, viewState, renderState, rOutDev ) )
             return false;
 
@@ -1421,7 +1421,7 @@ namespace vclcanvas
                           "Invalid Graphic" );
 
         if( !mpOutDev )
-            return false; // disposed
+            return false; 
         else
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
@@ -1430,7 +1430,7 @@ namespace vclcanvas
             if( !rGrf->Draw( &mpOutDev->getOutDev(), rPt, rSz, &rAttr ) )
                 return false;
 
-            // #i80779# Redraw also into mask outdev
+            
             if( mp2ndOutDev )
                 return rGrf->Draw( &mp2ndOutDev->getOutDev(), rPt, rSz, &rAttr );
 
@@ -1442,15 +1442,15 @@ namespace vclcanvas
     {
         if( mpOutDev && mpOutDev->getOutDev().GetOutDevType() == OUTDEV_WINDOW )
         {
-            // TODO(Q3): Evil downcast. And what's more, Window::Flush is
-            // not even const. Wah.
+            
+            
             static_cast<Window&>(mpOutDev->getOutDev()).Flush();
         }
 
         if( mp2ndOutDev && mp2ndOutDev->getOutDev().GetOutDevType() == OUTDEV_WINDOW )
         {
-            // TODO(Q3): Evil downcast. And what's more, Window::Flush is
-            // not even const. Wah.
+            
+            
             static_cast<Window&>(mp2ndOutDev->getOutDev()).Flush();
         }
     }

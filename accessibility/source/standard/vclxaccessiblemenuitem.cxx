@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessiblemenuitem.hxx>
@@ -45,36 +45,36 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
-// class VCLXAccessibleMenuItem
-// -----------------------------------------------------------------------------
+
+
+
 
 VCLXAccessibleMenuItem::VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
     :OAccessibleMenuItemComponent( pParent, nItemPos, pMenu )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenuItem::~VCLXAccessibleMenuItem()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::IsFocused()
 {
     return IsHighlighted();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::IsSelected()
 {
     return IsHighlighted();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::IsChecked()
 {
@@ -90,7 +90,7 @@ sal_Bool VCLXAccessibleMenuItem::IsChecked()
     return bChecked;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::IsHighlighted()
 {
@@ -102,7 +102,7 @@ sal_Bool VCLXAccessibleMenuItem::IsHighlighted()
     return bHighlighted;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenuItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -122,23 +122,23 @@ void VCLXAccessibleMenuItem::FillAccessibleStateSet( utl::AccessibleStateSetHelp
         rStateSet.AddState( AccessibleStateType::CHECKED );
 }
 
-// -----------------------------------------------------------------------------
-// OCommonAccessibleText
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleMenuItem::implGetText()
 {
     return m_sItemText;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Locale VCLXAccessibleMenuItem::implGetLocale()
 {
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenuItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
 {
@@ -146,28 +146,28 @@ void VCLXAccessibleMenuItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
     nEndIndex = 0;
 }
 
-// -----------------------------------------------------------------------------
-// XInterface
-// -----------------------------------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleMenuItem, OAccessibleMenuItemComponent, VCLXAccessibleMenuItem_BASE )
 
-// -----------------------------------------------------------------------------
-// XTypeProvider
-// -----------------------------------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenuItem, OAccessibleMenuItemComponent, VCLXAccessibleMenuItem_BASE )
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleMenuItem::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleMenuItem" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -176,15 +176,15 @@ Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() throw (R
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleContext
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int16 VCLXAccessibleMenuItem::getAccessibleRole(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-    // IA2 CWS. MT: We had the aditional roles in UAA for ever, but never used them anywhere.
-    // Looks reasonable, but need to verify in Orca and VoiceOver.
+    
+    
     sal_Int16 nRole = AccessibleRole::MENU_ITEM;
     if ( m_pParent )
     {
@@ -198,9 +198,9 @@ sal_Int16 VCLXAccessibleMenuItem::getAccessibleRole(  ) throw (RuntimeException)
     return nRole;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleText
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleMenuItem::getCaretPosition() throw (RuntimeException)
 {
@@ -209,7 +209,7 @@ sal_Int32 VCLXAccessibleMenuItem::getCaretPosition() throw (RuntimeException)
     return -1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -222,7 +222,7 @@ sal_Bool VCLXAccessibleMenuItem::setCaretPosition( sal_Int32 nIndex ) throw (Ind
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Unicode VCLXAccessibleMenuItem::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -231,7 +231,7 @@ sal_Unicode VCLXAccessibleMenuItem::getCharacter( sal_Int32 nIndex ) throw (Inde
     return OCommonAccessibleText::getCharacter( nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -249,7 +249,7 @@ Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_In
         .GetCharacterAttributes( aRequestedAttributes );
 }
 
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleMenuItem::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -271,7 +271,7 @@ awt::Rectangle VCLXAccessibleMenuItem::getCharacterBounds( sal_Int32 nIndex ) th
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleMenuItem::getCharacterCount() throw (RuntimeException)
 {
@@ -280,7 +280,7 @@ sal_Int32 VCLXAccessibleMenuItem::getCharacterCount() throw (RuntimeException)
     return OCommonAccessibleText::getCharacterCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleMenuItem::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
 {
@@ -301,7 +301,7 @@ sal_Int32 VCLXAccessibleMenuItem::getIndexAtPoint( const awt::Point& aPoint ) th
     return nIndex;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenuItem::getSelectedText() throw (RuntimeException)
 {
@@ -310,7 +310,7 @@ OUString VCLXAccessibleMenuItem::getSelectedText() throw (RuntimeException)
     return OCommonAccessibleText::getSelectedText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleMenuItem::getSelectionStart() throw (RuntimeException)
 {
@@ -319,7 +319,7 @@ sal_Int32 VCLXAccessibleMenuItem::getSelectionStart() throw (RuntimeException)
     return OCommonAccessibleText::getSelectionStart();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleMenuItem::getSelectionEnd() throw (RuntimeException)
 {
@@ -328,7 +328,7 @@ sal_Int32 VCLXAccessibleMenuItem::getSelectionEnd() throw (RuntimeException)
     return OCommonAccessibleText::getSelectionEnd();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -340,7 +340,7 @@ sal_Bool VCLXAccessibleMenuItem::setSelection( sal_Int32 nStartIndex, sal_Int32 
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenuItem::getText() throw (RuntimeException)
 {
@@ -349,7 +349,7 @@ OUString VCLXAccessibleMenuItem::getText() throw (RuntimeException)
     return OCommonAccessibleText::getText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -358,7 +358,7 @@ OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 
     return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleMenuItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -367,7 +367,7 @@ OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleMenuItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -376,7 +376,7 @@ OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleMenuItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -385,7 +385,7 @@ OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -421,9 +421,9 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleAction
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleMenuItem::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -432,7 +432,7 @@ sal_Int32 VCLXAccessibleMenuItem::getAccessibleActionCount( ) throw (RuntimeExce
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -446,7 +446,7 @@ sal_Bool VCLXAccessibleMenuItem::doAccessibleAction ( sal_Int32 nIndex ) throw (
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenuItem::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -458,7 +458,7 @@ OUString VCLXAccessibleMenuItem::getAccessibleActionDescription ( sal_Int32 nInd
     return TK_RES_STRING( RID_STR_ACC_ACTION_SELECT );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -472,11 +472,11 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
 
     if ( m_pParent )
     {
-        // create auto mnemonics
+        
         if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( m_pParent->GetMenuFlags() & MENU_FLAG_NOAUTOMNEMONICS ) )
             m_pParent->CreateAutoMnemonics();
 
-        // activation key
+        
         KeyEvent aKeyEvent = m_pParent->GetActivationKey( m_pParent->GetItemId( m_nItemPos ) );
         KeyCode aKeyCode = aKeyEvent.GetKeyCode();
         Sequence< awt::KeyStroke > aSeq1(1);
@@ -493,7 +493,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         aSeq1[0].KeyFunc = static_cast< sal_Int16 >( aKeyCode.GetFunction() );
         pKeyBindingHelper->AddKeyBinding( aSeq1 );
 
-        // complete menu activation key sequence
+        
         Sequence< awt::KeyStroke > aSeq;
         if ( xParent.is() )
         {
@@ -512,7 +512,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         Sequence< awt::KeyStroke > aSeq2 = ::comphelper::concatSequences( aSeq, aSeq1 );
         pKeyBindingHelper->AddKeyBinding( aSeq2 );
 
-        // accelerator key
+        
         KeyCode aAccelKeyCode = m_pParent->GetAccelKey( m_pParent->GetItemId( m_nItemPos ) );
         if ( aAccelKeyCode.GetCode() != 0 )
         {
@@ -535,9 +535,9 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
     return xKeyBinding;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleValue
-// -----------------------------------------------------------------------------
+
+
+
 
 Any VCLXAccessibleMenuItem::getCurrentValue(  ) throw (RuntimeException)
 {
@@ -552,7 +552,7 @@ Any VCLXAccessibleMenuItem::getCurrentValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuItem::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
 {
@@ -576,7 +576,7 @@ sal_Bool VCLXAccessibleMenuItem::setCurrentValue( const Any& aNumber ) throw (Ru
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleMenuItem::getMaximumValue(  ) throw (RuntimeException)
 {
@@ -588,7 +588,7 @@ Any VCLXAccessibleMenuItem::getMaximumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleMenuItem::getMinimumValue(  ) throw (RuntimeException)
 {
@@ -600,6 +600,6 @@ Any VCLXAccessibleMenuItem::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

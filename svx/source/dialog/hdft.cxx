@@ -46,14 +46,14 @@
 #include <editeng/boxitem.hxx>
 
 #include <svx/svxdlg.hxx>
-// static ----------------------------------------------------------------
 
-// Word 97 incompatibility (#i19922#)
-static const long MINBODY = 56;  // 1mm in twips rounded
 
-// default distance to Header or footer
-static const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
-static const long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
+
+static const long MINBODY = 56;  
+
+
+static const long DEF_DIST_WRITER = 500;    
+static const long DEF_DIST_CALC = 250;      
 
 static sal_uInt16 pRanges[] =
 {
@@ -104,7 +104,7 @@ namespace svx {
     }
 }
 
-// returns the Which values to the range
+
 
 
 sal_uInt16* SvxHeaderPage::GetRanges()
@@ -112,28 +112,28 @@ sal_uInt16* SvxHeaderPage::GetRanges()
     return pRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxHeaderPage( pParent, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxFooterPage::GetRanges()
 {
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxFooterPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxFooterPage( pParent, rSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxHeaderPage::SvxHeaderPage( Window* pParent, const SfxItemSet& rAttr ) :
 
@@ -142,7 +142,7 @@ SvxHeaderPage::SvxHeaderPage( Window* pParent, const SfxItemSet& rAttr ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
@@ -151,7 +151,7 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
 
@@ -194,11 +194,11 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     InitHandler();
     m_pBspWin->EnableRTL( false );
 
-    // This Page needs ExchangeSupport
+    
     SetExchangeSupport();
 
 
-    // Set metrics
+    
     FieldUnit eFUnit = GetModuleFieldUnit( rSet );
     SetFieldUnit( *m_pDistEdit, eFUnit );
     SetFieldUnit( *m_pHeightEdit, eFUnit );
@@ -206,14 +206,14 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     SetFieldUnit( *m_pRMEdit, eFUnit );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxHFPage::~SvxHFPage()
 {
     delete pBBSet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -248,7 +248,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     SfxMapUnit          eUnit       = pPool->GetMetric( nWSize );
     SfxItemSet          aSet        ( *pPool, aWhichTab );
 
-    //--------------------------------------------------------------------
+    
 
     aSet.Put( SfxBoolItem( nWOn,      m_pTurnOnBox->IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, m_pHeightDynBtn->IsChecked() ) );
@@ -263,18 +263,18 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         delete pBoolItem;
     }
 
-    // Size
+    
     SvxSizeItem aSizeItem( (const SvxSizeItem&)rOldSet.Get( nWSize ) );
     Size        aSize( aSizeItem.GetSize() );
     long        nDist = GetCoreValue( *m_pDistEdit, eUnit );
     long        nH    = GetCoreValue( *m_pHeightEdit, eUnit );
 
-    nH += nDist; // add distance
+    nH += nDist; 
     aSize.Height() = nH;
     aSizeItem.SetSize( aSize );
     aSet.Put( aSizeItem );
 
-    // Margins
+    
     SvxLRSpaceItem aLR( nWLRSpace );
     aLR.SetLeft( (sal_uInt16)GetCoreValue( *m_pLMEdit, eUnit ) );
     aLR.SetRight( (sal_uInt16)GetCoreValue( *m_pRMEdit, eUnit ) );
@@ -287,7 +287,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         aUL.SetUpper( (sal_uInt16)nDist );
     aSet.Put( aUL );
 
-    // Background and border?
+    
     if ( pBBSet )
         aSet.Put( *pBBSet );
     else
@@ -311,14 +311,14 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    // Flush the SetItem
+    
     SvxSetItem aSetItem( GetWhich( nId ), aSet );
     rSet.Put( aSetItem );
 
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 void SvxHFPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage( rSet );
@@ -336,7 +336,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         bIsCalc = true;
     m_pCntSharedFirstBox->Show(!bIsCalc);
 
-    // Evaluate header-/footer- attributes
+    
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), false,
@@ -372,12 +372,12 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
 
             if ( nId == SID_ATTR_PAGE_HEADERSET )
-            {   // Header
+            {   
                 SetMetricValue( *m_pDistEdit, rUL.GetLower(), eUnit );
                 SetMetricValue( *m_pHeightEdit, rSize.GetSize().Height() - rUL.GetLower(), eUnit );
             }
             else
-            {   // Footer
+            {   
                 SetMetricValue( *m_pDistEdit, rUL.GetUpper(), eUnit );
                 SetMetricValue( *m_pHeightEdit, rSize.GetSize().Height() - rUL.GetUpper(), eUnit );
             }
@@ -396,7 +396,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        // defaults for distance and height
+        
         long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
         SetMetricValue( *m_pDistEdit, nDefaultDist, SFX_MAPUNIT_100TH_MM );
         SetMetricValue( *m_pHeightEdit, 500, SFX_MAPUNIT_100TH_MM );
@@ -545,13 +545,13 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 {
     if ( !pBBSet )
     {
-        // Use only the necessary items for border and background
+        
         sal_uInt16 nBrush = GetWhich( SID_ATTR_BRUSH );
         sal_uInt16 nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
         sal_uInt16 nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
         sal_uInt16 nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
 
-        // Create an empty set
+        
         pBBSet = new SfxItemSet( *GetItemSet().GetPool(), nBrush, nBrush,
                                  nOuter, nOuter, nInner, nInner,
                                  nShadow, nShadow, 0 );
@@ -559,18 +559,18 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 
         if ( SFX_ITEM_SET ==
              GetItemSet().GetItemState( GetWhich( nId ), false, &pItem ) )
-            // if there is one that is already set, then use this
+            
             pBBSet->Put( ( (SvxSetItem*)pItem)->GetItemSet() );
 
         if ( SFX_ITEM_SET ==
              GetItemSet().GetItemState( nInner, false, &pItem ) )
-            // The set InfoItem is always required
+            
             pBBSet->Put( *pItem );
     }
 
     if ( svx::ShowBorderBackgroundDlg( this, pBBSet, bEnableBackgroundSelector ) )
     {
-        //----------------------------------------------------------------
+        
 
         sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
                 m_pBspWin->SetFtColor( rItem.GetColor() );
         }
 
-        //----------------------------------------------------------------
+        
 
         nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
 
@@ -716,7 +716,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // Set left and right margins
+        
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)*pItem;
 
         m_pBspWin->SetLeft( rLRSpace.GetLeft() );
@@ -732,7 +732,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // Set top and bottom margins
+        
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)*pItem;
 
         m_pBspWin->SetTop( rULSpace.GetUpper() );
@@ -763,13 +763,13 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // Orientation and Size from the PageItem
+        
         const SvxSizeItem& rSize = (const SvxSizeItem&)*pItem;
-        // if the size is already swapped (Landscape)
+        
         m_pBspWin->SetSize( rSize.GetSize() );
     }
 
-    // Evaluate Header attribute
+    
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
         nFDist   = nDist;
     }
 
-    // Current values of the side edges
+    
     long nBT = m_pBspWin->GetTop();
     long nBB = m_pBspWin->GetBottom();
     long nBL = m_pBspWin->GetLeft();
@@ -913,33 +913,33 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     long nH  = m_pBspWin->GetSize().Height();
     long nW  = m_pBspWin->GetSize().Width();
 
-    // Borders
+    
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
-        // Header
-        nMin = ( nH - nBB - nBT ) / 5; // 20%
+        
+        nMin = ( nH - nBB - nBT ) / 5; 
         nMax = std::max( nH - nMin - nHDist - nFDist - nFHeight - nBB - nBT,
                     nMin );
         m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
-        nMin = ( nH - nBB - nBT ) / 5; // 20%
+        nMin = ( nH - nBB - nBT ) / 5; 
         nDist = std::max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
                      long(0) );
         m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
     }
     else
     {
-        // Footer
-        nMin = ( nH - nBT - nBB ) / 5; // 20%
+        
+        nMin = ( nH - nBT - nBB ) / 5; 
         nMax = std::max( nH - nMin - nFDist - nHDist - nHHeight - nBT - nBB,
                     nMin );
         m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
-        nMin = ( nH - nBT - nBB ) / 5; // 20%
+        nMin = ( nH - nBT - nBB ) / 5; 
         nDist = std::max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
                      long(0) );
         m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
     }
 
-    // Limit Indentation
+    
     nMax = nW - nBL - nBR -
            static_cast<long>(m_pRMEdit->Denormalize( m_pRMEdit->GetValue( FUNIT_TWIP ) )) - MINBODY;
     m_pLMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FUNIT_TWIP );

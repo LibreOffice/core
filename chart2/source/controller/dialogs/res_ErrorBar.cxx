@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "res_ErrorBar.hxx"
 #include "ResId.hxx"
 #include "Bitmaps.hrc"
 #include "RangeSelectionHelper.hxx"
-// for RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR
+
 #include "TabPageNotifiable.hxx"
 #include "macros.hxx"
 
@@ -52,7 +52,7 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
     sal_uInt16 nResult = 0;
     switch( eErrorKind )
     {
-        // for these cases select the default in the list box
+        
         case CHERROR_NONE:
         case CHERROR_PERCENT:
         case CHERROR_CONST:
@@ -74,7 +74,7 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
     }
     return nResult;
 }
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -191,7 +191,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     }
     m_apRangeSelectionHelper.reset( new RangeSelectionHelper( xChartDocument ));
 
-    // has internal data provider => rename "cell range" to "from data"
+    
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( m_bHasInternalDataProvider )
     {
@@ -213,7 +213,7 @@ void ErrorBarResources::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorS
     sal_Int32 nExponent = static_cast< sal_Int32 >( ::rtl::math::approxFloor( log10( fMinorStepWidth )));
     if( nExponent <= 0 )
     {
-        // one digit precision more
+        
         m_nConstDecimalDigits = static_cast< sal_uInt16 >( (-nExponent) + 1 );
         m_nConstSpinSize = 10;
     }
@@ -226,11 +226,11 @@ void ErrorBarResources::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorS
 
 void ErrorBarResources::UpdateControlStates()
 {
-    // function
+    
     bool bIsFunction = m_pRbFunction->IsChecked();
     m_pLbFunction->Enable( bIsFunction );
 
-    // range buttons
+    
     m_pRbRange->Enable( !m_bHasInternalDataProvider || !m_bDisableDataTableDialog );
     bool bShowRange = ( m_pRbRange->IsChecked());
     bool bCanChooseRange =
@@ -241,7 +241,7 @@ void ErrorBarResources::UpdateControlStates()
     m_pMfPositive->Show( ! bShowRange );
     m_pMfNegative->Show( ! bShowRange );
 
-    // use range but without range chooser => hide controls
+    
     m_pEdRangePositive->Show( bShowRange && ! m_bHasInternalDataProvider );
     m_pIbRangePositive->Show( bCanChooseRange );
     m_pEdRangeNegative->Show( bShowRange && ! m_bHasInternalDataProvider );
@@ -250,7 +250,7 @@ void ErrorBarResources::UpdateControlStates()
     bool bShowPosNegAndSync = ! (bShowRange && m_bHasInternalDataProvider);
     m_pFlParameters->Show( bShowPosNegAndSync );
 
-    // unit for metric fields
+    
     bool bIsErrorMargin(
         ( m_pRbFunction->IsChecked()) &&
         ( m_pLbFunction->GetSelectEntryPos() == CHART_LB_FUNCTION_ERROR_MARGIN ));
@@ -275,17 +275,17 @@ void ErrorBarResources::UpdateControlStates()
     m_pMfPositive->SetCustomUnitText( aCustomUnit );
     m_pMfNegative->SetCustomUnitText( aCustomUnit );
 
-    // positive and negative value fields
+    
     bool bPosEnabled = ( m_pRbPositive->IsChecked() || m_pRbBoth->IsChecked());
     bool bNegEnabled = ( m_pRbNegative->IsChecked() || m_pRbBoth->IsChecked());
     if( !( bPosEnabled || bNegEnabled ))
     {
-        // all three controls are not checked -> ambiguous state
+        
         bPosEnabled = true;
         bNegEnabled = true;
     }
 
-    // functions with only one parameter
+    
     bool bOneParameterCategory =
         bIsErrorMargin || m_pRbPercent->IsChecked();
     if( bOneParameterCategory )
@@ -299,14 +299,14 @@ void ErrorBarResources::UpdateControlStates()
         bNegEnabled = false;
     }
 
-    // all functions except error margin take no arguments
+    
     if( m_pRbFunction->IsChecked() &&  ( m_pLbFunction->GetSelectEntryPos() != CHART_LB_FUNCTION_ERROR_MARGIN ))
     {
         bPosEnabled = false;
         bNegEnabled = false;
     }
 
-    // enable/disable pos/neg fields
+    
     m_pBxPositive->Enable( bPosEnabled );
     m_pBxNegative->Enable( bNegEnabled );
     if( bShowRange )
@@ -324,7 +324,7 @@ void ErrorBarResources::UpdateControlStates()
 
     m_pCbSyncPosNeg->Enable( !bOneParameterCategory &&  ( bPosEnabled || bNegEnabled ));
 
-    // mark invalid entries in the range fields
+    
     if( bShowRange && ! m_bHasInternalDataProvider )
     {
         isRangeFieldContentValid( *m_pEdRangePositive );
@@ -372,7 +372,7 @@ IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
         m_bErrorKindUnique = false;
     }
 
-    // changed to range
+    
     if( m_eErrorKind == CHERROR_RANGE &&
         eOldError != CHERROR_RANGE )
     {
@@ -380,7 +380,7 @@ IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
             (!m_pEdRangePositive->GetText().isEmpty()) &&
             m_pEdRangePositive->GetText() == m_pEdRangeNegative->GetText());
     }
-    // changed from range
+    
     else if( m_eErrorKind != CHERROR_RANGE &&
         eOldError == CHERROR_RANGE )
     {
@@ -486,7 +486,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     const SfxPoolItem *pPoolItem = NULL;
     SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    // category
+    
      m_eErrorKind = CHERROR_NONE;
     aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, true, &pPoolItem );
     m_bErrorKindUnique = ( aState != SFX_ITEM_DONTCARE );
@@ -528,7 +528,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
         m_pRbFunction->Check( false );
     }
 
-    // parameters
+    
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, true, &pPoolItem );
     m_bPlusUnique = ( aState != SFX_ITEM_DONTCARE );
     double fPlusValue = 0.0;
@@ -552,7 +552,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
             m_pCbSyncPosNeg->Check();
     }
 
-    // indicator
+    
     aState = rInAttrs.GetItemState( SCHATTR_STAT_INDICATE, true, &pPoolItem );
     m_bIndicatorUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET)
@@ -563,9 +563,9 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
         switch( m_eIndicate )
         {
             case CHINDICATE_NONE :
-                // no longer used, use both as default
+                
                 m_eIndicate = CHINDICATE_BOTH;
-                // fall-through intended to BOTH
+                
             case CHINDICATE_BOTH :
                 m_pRbBoth->Check(); break;
             case CHINDICATE_UP :
@@ -581,7 +581,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
         m_pRbNegative->Check( false );
     }
 
-    // ranges
+    
     aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_POS, true, &pPoolItem );
     m_bRangePosUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
@@ -620,8 +620,8 @@ sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
             OUString aNegRange;
             if( m_bHasInternalDataProvider )
             {
-                // the strings aPosRange/aNegRange have to be set to a non-empty
-                // arbitrary string to generate error-bar sequences
+                
+                
                 aPosRange = "x";
                 aNegRange = aPosRange;
             }
@@ -686,18 +686,18 @@ void ErrorBarResources::listeningFinished(
     if( ! m_apRangeSelectionHelper.get())
         return;
 
-    // rNewRange becomes invalid after removing the listener
+    
     OUString aRange( rNewRange );
 
-    // stop listening
+    
     m_apRangeSelectionHelper->stopRangeListening();
 
-    // change edit field
-//     if( m_pParentWindow )
-//     {
-//         m_pParentWindow->ToTop();
-//         m_pParentWindow->GrabFocus();
-//     }
+    
+
+
+
+
+
 
     if( m_pCurrentRangeChoosingField )
     {
@@ -742,6 +742,6 @@ bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
     return bIsValid;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

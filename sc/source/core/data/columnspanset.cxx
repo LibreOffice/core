@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "columnspanset.hxx"
@@ -121,7 +121,7 @@ void ColumnSpanSet::executeAction(Action& ac) const
                 nRow2 = it->first-1;
                 ac.execute(ScAddress(nCol, nRow1, nTab), nRow2-nRow1+1, bVal);
 
-                nRow1 = nRow2+1; // for the next iteration.
+                nRow1 = nRow2+1; 
                 bVal = it->second;
             }
         }
@@ -147,7 +147,7 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
 
             if (!ValidCol(nCol))
             {
-                // End the loop.
+                
                 nCol = rTab.size();
                 continue;
             }
@@ -164,7 +164,7 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
                 nRow2 = it->first-1;
                 ac.execute(nRow1, nRow2, bVal);
 
-                nRow1 = nRow2+1; // for the next iteration.
+                nRow1 = nRow2+1; 
                 bVal = it->second;
             }
         }
@@ -185,7 +185,7 @@ public:
             return;
 
         size_t nRow = node.position + nOffset;
-        size_t nEndRow = nRow + nDataSize; // Last row of current block plus 1
+        size_t nEndRow = nRow + nDataSize; 
         mrRanges.insert_back(nRow, nEndRow, true);
     }
 };
@@ -201,7 +201,7 @@ void SingleColumnSpanSet::scan(const ScColumn& rColumn)
     SCROW nCurRow = 0;
     for (;it != itEnd; ++it)
     {
-        SCROW nEndRow = nCurRow + it->size; // Last row of current block plus 1.
+        SCROW nEndRow = nCurRow + it->size; 
         if (it->type != sc::element_type_empty)
             maSpans.insert_back(nCurRow, nEndRow, true);
 
@@ -227,7 +227,7 @@ void SingleColumnSpanSet::scan(
 void SingleColumnSpanSet::scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol)
 {
     if (!rMark.GetTableSelect(nTab))
-        // This table is not selected. Nothing to scan.
+        
         return;
 
     ScRangeList aRanges = rMark.GetMarkedRanges();
@@ -235,7 +235,7 @@ void SingleColumnSpanSet::scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol)
     {
         const ScRange* p = aRanges[i];
         if (nCol < p->aStart.Col() || p->aEnd.Col() < nCol)
-            // This column is not in this range. Skip it.
+            
             continue;
 
         maSpans.insert_back(p->aStart.Row(), p->aEnd.Row()+1, true);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,19 +14,19 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "ppt97animations.hxx"
 
-// header for class SdrObject
+
 #include <svx/svdobj.hxx>
-// header for class SdPage
+
 #include "sdpage.hxx"
-// header for define DBG_ERROR
+
 #include <tools/debug.hxx>
-// header for define GetXShapeForSdrObject
+
 #include <svx/unoapi.hxx>
 #include "EffectMigration.hxx"
 #include <CustomAnimationPreset.hxx>
@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-//---------------------------------------------------------------------------------------
+
 
 void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {
@@ -57,7 +57,7 @@ void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
     rIn.ReadUChar( nUnknown2 );
 }
 
-//---------------------------------------------------------------------------------------
+
 
 #define MEMBER_CONSTRUCTOR_LIST() \
     m_aAtom() \
@@ -208,14 +208,14 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
 {
     if( !bAnimate )
     {
-        //the appear effect cannot be animated without text
+        
         if( this->GetPresetId() == "ooo-entrance-appear" )
             return;
-        //the random effect may be the appear effect and than has the same problem
+        
         if( this->GetPresetId() == "ooo-entrance-random" )
         {
-            //this case is not 100% correct -> feel free to complete
-            //i consider this case as seldom and not that problematic and a simple correct fix is not in sight
+            
+            
             DBG_WARNING("you tried to deselect the animation of the form for random animation-> this has been refused");
             return;
         }
@@ -230,7 +230,7 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
     }
 }
 
-sal_Int16 Ppt97Animation::GetEffectNodeType() const //see com::sun::star::presentation::EffectNodeType
+sal_Int16 Ppt97Animation::GetEffectNodeType() const 
 {
     sal_Int16 nRet = presentation::EffectNodeType::ON_CLICK;
     if( m_aAtom.nFlags & 0x04 )
@@ -289,37 +289,37 @@ void Ppt97Animation::UpdateCacheData() const
     switch( m_aAtom.nFlyMethod )
     {
         case 0x0:
-            m_aPresetId = "ooo-entrance-appear";                  // --- appear ---
+            m_aPresetId = "ooo-entrance-appear";                  
         break;
         case 0x01:
-            m_aPresetId = "ooo-entrance-random";                  // --- random ---
+            m_aPresetId = "ooo-entrance-random";                  
         break;
-        case 0x02:                                                                                  // --- blinds effect ---
+        case 0x02:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
                     m_aPresetId = "ooo-entrance-venetian-blinds";
-                    m_aSubType = "horizontal";                    // horizontal
+                    m_aSubType = "horizontal";                    
                 break;
                 case 0x1:
                     m_aPresetId = "ooo-entrance-venetian-blinds";
-                    m_aSubType = "vertical";                      // vertical
+                    m_aSubType = "vertical";                      
                 break;
             }
         }
         break;
-        case 0x03:                                                                                  // --- (hor/ver) shifted appear ---
+        case 0x03:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
                     m_aPresetId = "ooo-entrance-checkerboard";
-                    m_aSubType = "across";                        // vertical ???
+                    m_aSubType = "across";                        
                 break;
                 case 0x1:
                     m_aPresetId = "ooo-entrance-checkerboard";
-                    m_aSubType = "downward";                      // horizontal ???
+                    m_aSubType = "downward";                      
                 break;
             }
         }
@@ -327,83 +327,83 @@ void Ppt97Animation::UpdateCacheData() const
         case 0x05:
             m_aPresetId = "ooo-entrance-dissolve-in";
         break;
-        case 0x08:                                                                                  // --- (hor/ver) lines ---
+        case 0x08:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
                     m_aPresetId = "ooo-entrance-random-bars";
-                    m_aSubType = "vertical";                      // horizontal ???
+                    m_aSubType = "vertical";                      
                 break;
                 case 0x1:
                     m_aPresetId = "ooo-entrance-random-bars";
-                    m_aSubType = "horizontal";                      // vertical ???
+                    m_aSubType = "horizontal";                      
                 break;
             }
         }
         break;
-        case 0x09:                                                                                  // --- diagonal ---
+        case 0x09:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x4:
                     m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "left-to-top";                     // to left top
+                    m_aSubType = "left-to-top";                     
                 break;
                 case 0x5:
                     m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "right-to-top";                    // to right top
+                    m_aSubType = "right-to-top";                    
                 break;
                 case 0x6:
                     m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "left-to-bottom";                  // to left bottom
+                    m_aSubType = "left-to-bottom";                  
                 break;
                 case 0x7:
                     m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "right-to-bottom";                 // to right bottom
+                    m_aSubType = "right-to-bottom";                 
                 break;
             }
         }
         break;
-        case 0x0a:                                                                                  // --- roll/wipe ---
+        case 0x0a:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
                     m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-right";                      // from right
+                    m_aSubType = "from-right";                      
                 break;
                 case 0x1:
                     m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-bottom";                     // from bottom
+                    m_aSubType = "from-bottom";                     
                 break;
                 case 0x2:
                     m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-left";                       // from left
+                    m_aSubType = "from-left";                       
                 break;
                 case 0x3:
                     m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-top";                        // from top
+                    m_aSubType = "from-top";                        
                 break;
             }
         }
         break;
-        case 0x0b:                                                                                  //--- fade in ---
+        case 0x0b:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
                     m_aPresetId = "ooo-entrance-box";
-                    m_aSubType = "out";                             // from center
+                    m_aSubType = "out";                             
                 break;
                 case 0x1:
                     m_aPresetId = "ooo-entrance-box";
-                    m_aSubType = "in";                              // to center
+                    m_aSubType = "in";                              
                 break;
             }
         }
         break;
-        case 0x0c:                                                                                  // --- text effects ---
+        case 0x0c:                                                                                  
         {
             switch ( m_aAtom.nFlyDirection )
             {
@@ -440,7 +440,7 @@ void Ppt97Animation::UpdateCacheData() const
                     m_aPresetId = "ooo-entrance-fly-in";
                     m_aSubType = "from-bottom-right";
                 break;
-                case 0x8:                                                                               // -- short text effects --
+                case 0x8:                                                                               
                     m_aPresetId = "ooo-entrance-peek-in";
                     m_aSubType = "from-left";
                 break;
@@ -456,7 +456,7 @@ void Ppt97Animation::UpdateCacheData() const
                     m_aPresetId = "ooo-entrance-peek-in";
                     m_aSubType = "from-top";
                 break;
-                case 0xc:                                                                               // -- slow text effects --
+                case 0xc:                                                                               
                 {
                     m_aPresetId = "ooo-entrance-fly-in-slow";
                     m_aSubType = "from-left";
@@ -480,7 +480,7 @@ void Ppt97Animation::UpdateCacheData() const
                     m_aSubType = "from-bottom";
                 }
                 break;
-                case 0x10:                                                                              // --- zoom ---
+                case 0x10:                                                                              
                     m_aPresetId = "ooo-entrance-zoom";
                     m_aSubType = "in";
                 break;
@@ -504,7 +504,7 @@ void Ppt97Animation::UpdateCacheData() const
                     m_aPresetId = "ooo-entrance-zoom";
                     m_aSubType = "out-from-screen-center";
                 break;
-                case 0x16:                                                                              // --- stretch ---
+                case 0x16:                                                                              
                     m_aPresetId = "ooo-entrance-stretchy";
                     m_aSubType = "across";
                 break;
@@ -524,53 +524,53 @@ void Ppt97Animation::UpdateCacheData() const
                     m_aPresetId = "ooo-entrance-stretchy";
                     m_aSubType = "from-bottom";
                 break;
-                case 0x1b:                                                                              // --- rotate ---
+                case 0x1b:                                                                              
                     m_aPresetId = "ooo-entrance-swivel";
                     m_aSubType = "vertical";
                 break;
-                case 0x1c:                                                                              // --- spirale ---
+                case 0x1c:                                                                              
                     m_aPresetId = "ooo-entrance-spiral-in";
                 break;
             }
         }
         break;
-        case 0x0d:                                                                                      // --- open/close ---
+        case 0x0d:                                                                                      
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
                     m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "horizontal-out";                      //horizontal open
+                    m_aSubType = "horizontal-out";                      
                 break;
                 case 0x1:
                     m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "horizontal-in";                       //horizontal close
+                    m_aSubType = "horizontal-in";                       
                 break;
                 case 0x2:
                     m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "vertical-out";                        // vertical open
+                    m_aSubType = "vertical-out";                        
                 break;
                 case 0x3:
                     m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "vertical-in";                         // vertical close
+                    m_aSubType = "vertical-in";                         
                 break;
             }
         }
         break;
-        case 0x0e:                                                                                      // --- blink ---
+        case 0x0e:                                                                                      
         {
             m_aPresetId = "ooo-entrance-flash-once";
             switch ( m_aAtom.nFlyDirection )
             {
-                case 0x0: //fast
+                case 0x0: 
                     m_fDurationInSeconds = 0.075;
                     m_bHasSpecialDuration = true;
                 break;
-                case 0x1: //medium
+                case 0x1: 
                     m_fDurationInSeconds = 0.5;
                     m_bHasSpecialDuration = true;
                 break;
-                case 0x2: //slow
+                case 0x2: 
                     m_fDurationInSeconds = 1.0;
                     m_bHasSpecialDuration = true;
                 break;
@@ -619,9 +619,9 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         return;
     }
 
-    //--------------start doing something
+    
 
-    //1. ------ create an effect from the presets ------
+    
     ::sd::CustomAnimationEffectPtr pEffect( new ::sd::CustomAnimationEffect( pPreset->create( this->GetPresetSubType() ) ) );
     if( !pEffect.get() )
     {
@@ -629,19 +629,19 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         return;
     }
 
-    //2. ------ adapt the created effect ------
+    
 
-    // set the shape targeted by this effect
+    
     pEffect->setTarget( makeAny( xShape ) );
 
     pEffect->setBegin( this->GetDelayTimeInSeconds() );
 
-    // some effects need a different duration than that of the mapped preset effect
-    double fDurationInSeconds = 1.0;//in secunden
+    
+    double fDurationInSeconds = 1.0;
     if( this->GetSpecialDuration( fDurationInSeconds ) )
         pEffect->setDuration( fDurationInSeconds );
 
-    // set after effect
+    
     if( this->HasAfterEffect() )
     {
         pEffect->setHasAfterEffect( sal_True );
@@ -651,42 +651,42 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
             pEffect->setAfterEffectOnNext( this->HasAfterEffect_DimAtNextEffect() );
     }
 
-    // set sound effect
+    
     if( this->HasSoundEffect() )
         pEffect->createAudio( uno::makeAny( m_aSoundFileUrl ) );
 
-    // text iteration
+    
     pEffect->setIterateType( this->GetTextAnimationType() );
 
-    // some effects need a different delay between text iteration than that of the mapped preset effect
+    
     double fTextIterationDelay = 1.0;
     if( this->GetSpecialTextIterationDelay( fTextIterationDelay ) )
         pEffect->setIterateInterval( fTextIterationDelay );
 
-    // is the effect started on click or after the last effect (Another possible value is EffectNodeType::WITH_PREVIOUS )
+    
     pEffect->setNodeType( this->GetEffectNodeType() );
 
-    //set stop sound effect
+    
     if( this->HasStopPreviousSound() )
         pEffect->setStopAudio();
 
-    // append the effect to the main sequence
+    
     if( !this->HasParagraphEffect() )
     {
-        // TODO: !this->HasAnimateAssociatedShape() can possibly have this set to ONLY_TEXT - see i#42737
+        
         pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::AS_WHOLE );
     }
 
-    //3. ------ put the created effect to the model and do some last changes fro paragraph effects ------
+    
     pMainSequence->append( pEffect );
     if( this->HasParagraphEffect() )
     {
         sal_Int32 nParagraphLevel = this->GetParagraphLevel();
         double fDelaySeconds = this->GetDelayTimeInSeconds();
-        sal_Bool bAnimateAssociatedShape = this->HasAnimateAssociatedShape();//or only text
+        sal_Bool bAnimateAssociatedShape = this->HasAnimateAssociatedShape();
         sal_Bool bTextReverse = this->HasReverseOrder();
 
-        // now create effects for each paragraph
+        
         ::sd::CustomAnimationTextGroupPtr pGroup = pMainSequence->
             createTextGroup( pEffect, nParagraphLevel, fDelaySeconds, bAnimateAssociatedShape, bTextReverse );
 
@@ -701,8 +701,8 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
             {
                 ::sd::CustomAnimationEffectPtr pGroupEffect(*aIter);
 
-                ////todo? if( nIndex > 1 && pLastEffect && this->HasSoundEffect() )
-                ////          pLastEffect->setStopAudio();
+                
+                
                 if( nIndex < 2  )
                 {
                     pGroupEffect->setNodeType( this->GetEffectNodeType() );

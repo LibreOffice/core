@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@ namespace canvas
     {
         if( !mxClipPoly.is() )
         {
-            // empty clip polygon -> everything is visible now
+            
             maCurrClipBounds.reset();
             mbIsCurrClipRectangle = true;
         }
@@ -52,15 +52,15 @@ namespace canvas
         {
             const sal_Int32 nNumClipPolygons( mxClipPoly->getNumberOfPolygons() );
 
-            // clip is not empty - determine actual update area
+            
             ::basegfx::B2DPolyPolygon aClipPath(
                 polyPolygonFromXPolyPolygon2D( mxClipPoly ) );
 
-            // apply sprite transformation also to clip!
+            
             aClipPath.transform( maTransform );
 
-            // clip which is about to be set, expressed as a
-            // b2drectangle
+            
+            
             const ::basegfx::B2DRectangle& rClipBounds(
                 ::basegfx::tools::getRange( aClipPath ) );
 
@@ -68,64 +68,64 @@ namespace canvas
                                                    maSize.getX(),
                                                    maSize.getY() );
 
-            // rectangular area which is actually covered by the sprite.
-            // coordinates are relative to the sprite origin.
+            
+            
             ::basegfx::B2DRectangle aSpriteRectPixel;
             ::canvas::tools::calcTransformedRectBounds( aSpriteRectPixel,
                                                         aBounds,
                                                         maTransform );
 
-            // aClipBoundsA = new clip bound rect, intersected
-            // with sprite area
+            
+            
             ::basegfx::B2DRectangle aClipBoundsA(rClipBounds);
             aClipBoundsA.intersect( aSpriteRectPixel );
 
             if( nNumClipPolygons != 1 )
             {
-                // clip cannot be a single rectangle -> cannot
-                // optimize update
+                
+                
                 mbIsCurrClipRectangle = false;
                 maCurrClipBounds = aClipBoundsA;
             }
             else
             {
-                // new clip could be a single rectangle - check
-                // that now:
+                
+                
                 const bool bNewClipIsRect(
                     ::basegfx::tools::isRectangle( aClipPath.getB2DPolygon(0) ) );
 
-                // both new and old clip are truly rectangles
-                // - can now take the optimized path
+                
+                
                 const bool bUseOptimizedUpdate( bNewClipIsRect &&
                                                 mbIsCurrClipRectangle );
 
                 const ::basegfx::B2DRectangle aOldBounds( maCurrClipBounds );
 
-                // store new current clip type
+                
                 maCurrClipBounds = aClipBoundsA;
                 mbIsCurrClipRectangle = bNewClipIsRect;
 
                 if( mbActive &&
                     bUseOptimizedUpdate  )
                 {
-                    // aClipBoundsB = maCurrClipBounds, i.e. last
-                    // clip, intersected with sprite area
+                    
+                    
                     typedef ::std::vector< ::basegfx::B2DRectangle > VectorOfRects;
                     VectorOfRects aClipDifferences;
 
-                    // get all rectangles covered by exactly one
-                    // of the polygons (aka XOR)
+                    
+                    
                     ::basegfx::computeSetDifference(aClipDifferences,
                                                     aClipBoundsA,
                                                     aOldBounds);
 
-                    // aClipDifferences now contains the final
-                    // update areas, coordinates are still relative
-                    // to the sprite origin. before submitting
-                    // this area to 'updateSprite()' we need to
-                    // translate this area to the final position,
-                    // coordinates need to be relative to the
-                    // spritecanvas.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     VectorOfRects::const_iterator       aCurr( aClipDifferences.begin() );
                     const VectorOfRects::const_iterator aEnd( aClipDifferences.end() );
                     while( aCurr != aEnd )
@@ -139,13 +139,13 @@ namespace canvas
                         ++aCurr;
                     }
 
-                    // update calls all done
+                    
                     return true;
                 }
             }
         }
 
-        // caller needs to perform update calls
+        
         return false;
     }
 
@@ -178,9 +178,9 @@ namespace canvas
 
         mpSpriteCanvas = rOwningSpriteCanvas;
         maSize.setX( ::std::max( 1.0,
-                                 ceil( rSpriteSize.Width ) ) ); // round up to nearest int,
-                                                                 // enforce sprite to have at
-                                                                 // least (1,1) pixel size
+                                 ceil( rSpriteSize.Width ) ) ); 
+                                                                 
+                                                                 
         maSize.setY( ::std::max( 1.0,
                                  ceil( rSpriteSize.Height ) ) );
     }
@@ -192,7 +192,7 @@ namespace canvas
 
     void CanvasCustomSpriteHelper::clearingContent( const Sprite::Reference& /*rSprite*/ )
     {
-        // about to clear content to fully transparent
+        
         mbIsContentFullyOpaque = false;
     }
 
@@ -201,8 +201,8 @@ namespace canvas
                                                     const rendering::ViewState&                 viewState,
                                                     const rendering::RenderState&               renderState )
     {
-        // check whether bitmap is non-alpha, and whether its
-        // transformed size covers the whole sprite.
+        
+        
         if( !xBitmap->hasAlpha() )
         {
             const geometry::IntegerSize2D& rInputSize(
@@ -222,8 +222,8 @@ namespace canvas
                                                                  viewState,
                                                                  renderState) ) )
             {
-                // bitmap is opaque and will fully cover the sprite,
-                // set flag appropriately
+                
+                
                 mbIsContentFullyOpaque = true;
             }
         }
@@ -233,7 +233,7 @@ namespace canvas
                                              double                     alpha )
     {
         if( !mpSpriteCanvas.get() )
-            return; // we're disposed
+            return; 
 
         if( alpha != mfAlpha )
         {
@@ -256,14 +256,14 @@ namespace canvas
                                          const rendering::RenderState&  renderState )
     {
         if( !mpSpriteCanvas.get() )
-            return; // we're disposed
+            return; 
 
         ::basegfx::B2DHomMatrix aTransform;
         ::canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                      viewState,
                                                      renderState);
 
-        // convert position to device pixel
+        
         ::basegfx::B2DPoint aPoint(
             ::basegfx::unotools::b2DPointFromRealPoint2D(aNewPos) );
         aPoint *= aTransform;
@@ -294,7 +294,7 @@ namespace canvas
 
         if( maTransform != aMatrix )
         {
-            // retrieve bounds before and after transformation change.
+            
             const ::basegfx::B2DRectangle& rPrevBounds( getUpdateArea() );
 
             maTransform = aMatrix;
@@ -317,9 +317,9 @@ namespace canvas
     void CanvasCustomSpriteHelper::clip( const Sprite::Reference&                           rSprite,
                                          const uno::Reference< rendering::XPolyPolygon2D >& xClip )
     {
-        // NULL xClip explicitly allowed here (to clear clipping)
+        
 
-        // retrieve bounds before and after clip change.
+        
         const ::basegfx::B2DRectangle& rPrevBounds( getUpdateArea() );
 
         mxClipPoly = xClip;
@@ -342,7 +342,7 @@ namespace canvas
                                                 double                      nPriority )
     {
         if( !mpSpriteCanvas.get() )
-            return; // we're disposed
+            return; 
 
         if( nPriority != mfPriority )
         {
@@ -362,15 +362,15 @@ namespace canvas
     void CanvasCustomSpriteHelper::show( const Sprite::Reference& rSprite )
     {
         if( !mpSpriteCanvas.get() )
-            return; // we're disposed
+            return; 
 
         if( !mbActive )
         {
             mpSpriteCanvas->showSprite( rSprite );
             mbActive = true;
 
-            // TODO(P1): if clip is the NULL clip (nothing visible),
-            // also save us the update call.
+            
+            
 
             if( mfAlpha != 0.0 )
             {
@@ -386,15 +386,15 @@ namespace canvas
     void CanvasCustomSpriteHelper::hide( const Sprite::Reference& rSprite )
     {
         if( !mpSpriteCanvas.get() )
-            return; // we're disposed
+            return; 
 
         if( mbActive )
         {
             mpSpriteCanvas->hideSprite( rSprite );
             mbActive = false;
 
-            // TODO(P1): if clip is the NULL clip (nothing visible),
-            // also save us the update call.
+            
+            
 
             if( mfAlpha != 0.0 )
             {
@@ -407,25 +407,25 @@ namespace canvas
         }
     }
 
-    // Sprite interface
+    
     bool CanvasCustomSpriteHelper::isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const
     {
         if( !mbIsCurrClipRectangle ||
             !mbIsContentFullyOpaque ||
             !::rtl::math::approxEqual(mfAlpha, 1.0) )
         {
-            // sprite either transparent, or clip rect does not
-            // represent exact bounds -> update might not be fully
-            // opaque
+            
+            
+            
             return false;
         }
         else
         {
-            // make sure sprite rect fully covers update area -
-            // although the update area originates from the sprite,
-            // it's by no means guaranteed that it's limited to this
-            // sprite's update area - after all, other sprites might
-            // have been merged, or this sprite is moving.
+            
+            
+            
+            
+            
             return getUpdateArea().isInside( rUpdateArea );
         }
     }
@@ -442,13 +442,13 @@ namespace canvas
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getUpdateArea( const ::basegfx::B2DRange& rBounds ) const
     {
-        // Internal! Only call with locked object mutex!
+        
         ::basegfx::B2DHomMatrix aTransform( maTransform );
         aTransform.translate( maPosition.getX(),
                               maPosition.getY() );
 
-        // transform bounds at origin, as the sprite transformation is
-        // formulated that way
+        
+        
         ::basegfx::B2DRectangle aTransformedBounds;
         return ::canvas::tools::calcTransformedRectBounds( aTransformedBounds,
                                                            rBounds,
@@ -457,10 +457,10 @@ namespace canvas
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getUpdateArea() const
     {
-        // Internal! Only call with locked object mutex!
+        
 
-        // return effective sprite rect, i.e. take active clip into
-        // account
+        
+        
         if( maCurrClipBounds.isEmpty() )
             return getUpdateArea( ::basegfx::B2DRectangle( 0.0, 0.0,
                                                            maSize.getX(),
@@ -478,7 +478,7 @@ namespace canvas
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getFullSpriteRect() const
     {
-        // Internal! Only call with locked object mutex!
+        
         return getUpdateArea( ::basegfx::B2DRectangle( 0.0, 0.0,
                                                        maSize.getX(),
                                                        maSize.getY() ) );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <shapeattributelayer.hxx>
@@ -80,30 +80,30 @@ namespace slideshow
                                                                  bool (ShapeAttributeLayer::*pIsValid)() const,
                                                                  T   (ShapeAttributeLayer::*pGetValue)() const ) const
         {
-            // deviated from the (*shared_ptr).*mpFuncPtr notation
-            // here, since gcc does not seem to parse that as a member
-            // function call anymore.
+            
+            
+            
             const bool bChildInstanceValueValid( haveChild() ? (mpChild.get()->*pIsValid)() : false );
 
             if( bThisInstanceValid )
             {
                 if( bChildInstanceValueValid )
                 {
-                    // merge with child value
+                    
                     switch( mnAdditiveMode )
                     {
                         default:
-                            // FALTHROUGH intended
+                            
                         case animations::AnimationAdditiveMode::NONE:
-                            // FALTHROUGH intended
+                            
                         case animations::AnimationAdditiveMode::BASE:
-                            // FALTHROUGH intended
+                            
                         case animations::AnimationAdditiveMode::REPLACE:
-                            // TODO(F2): reverse-engineer the semantics of these
-                            // values
+                            
+                            
 
-                            // currently, treat them the same and replace
-                            // the child value by our own
+                            
+                            
                             return rCurrValue;
 
                         case animations::AnimationAdditiveMode::SUM:
@@ -115,8 +115,8 @@ namespace slideshow
                 }
                 else
                 {
-                    // this object is the only one defining
-                    // the value, so take it
+                    
+                    
                     return rCurrValue;
                 }
             }
@@ -124,9 +124,9 @@ namespace slideshow
             {
                 return bChildInstanceValueValid ?
                     ((*mpChild).*pGetValue)() :
-                    T();            // pass on child value, regardless
-                                    // if it's valid or not. If not, it's
-                                    // a default anyway
+                    T();            
+                                    
+                                    
             }
         }
 
@@ -205,20 +205,20 @@ namespace slideshow
                                "ShapeAttributeLayer::revokeChildLayer(): Will not remove NULL child" );
 
             if( !haveChild() )
-                return false; // no children, nothing to revoke.
+                return false; 
 
             if( mpChild == rChildLayer )
             {
-                // we have it - replace by removed child's sibling.
+                
                 mpChild = rChildLayer->getChildLayer();
 
-                // if we're now the first one, defensively increment _all_
-                // state ids: possibly all underlying attributes have now
-                // changed to default
+                
+                
+                
                 if( !haveChild() )
                 {
-                    // TODO(P1): Check whether it pays off to check more
-                    // detailed, which attributes really change
+                    
+                    
                     ++mnTransformationState;
                     ++mnClipState;
                     ++mnAlphaState;
@@ -229,12 +229,12 @@ namespace slideshow
             }
             else
             {
-                // we don't have it - pass on the request
+                
                 if( !mpChild->revokeChildLayer( rChildLayer ) )
-                    return false; // nobody has it - bail out
+                    return false; 
             }
 
-            // something might have changed - update ids.
+            
             updateStateIds();
 
             return true;
@@ -249,11 +249,11 @@ namespace slideshow
         {
             if( mnAdditiveMode != nMode )
             {
-                // TODO(P1): Check whether it pays off to check more
-                // detailed, which attributes really change
+                
+                
 
-                // defensively increment all states - possibly each of them
-                // will change with different additive mode
+                
+                
                 ++mnTransformationState;
                 ++mnClipState;
                 ++mnAlphaState;
@@ -479,7 +479,7 @@ namespace slideshow
 
         ::basegfx::B2DPolyPolygon ShapeAttributeLayer::getClip() const
         {
-            // TODO(F1): Implement polygon algebra for additive modes
+            
             if( mbClipValid )
                 return maClip;
             else if( haveChild() )
@@ -562,8 +562,8 @@ namespace slideshow
 
         sal_Int16 ShapeAttributeLayer::getFillStyle() const
         {
-            // mnAdditiveMode is ignored, cannot combine strings in
-            // any sensible way
+            
+            
             if( mbFillStyleValid )
                 return sal::static_int_cast<sal_Int16>(meFillStyle);
             else if( haveChild() )
@@ -574,7 +574,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setFillStyle( const sal_Int16& rStyle )
         {
-            // TODO(Q1): Check range here.
+            
             meFillStyle = (drawing::FillStyle)rStyle;
             mbFillStyleValid = true;
             ++mnContentState;
@@ -587,8 +587,8 @@ namespace slideshow
 
         sal_Int16 ShapeAttributeLayer::getLineStyle() const
         {
-            // mnAdditiveMode is ignored, cannot combine strings in
-            // any sensible way
+            
+            
             if( mbLineStyleValid )
                 return sal::static_int_cast<sal_Int16>(meLineStyle);
             else if( haveChild() )
@@ -599,7 +599,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setLineStyle( const sal_Int16& rStyle )
         {
-            // TODO(Q1): Check range here.
+            
             meLineStyle = (drawing::LineStyle)rStyle;
             mbLineStyleValid = true;
             ++mnContentState;
@@ -612,14 +612,14 @@ namespace slideshow
 
         bool ShapeAttributeLayer::getVisibility() const
         {
-            // mnAdditiveMode is ignored, SMIL spec requires to not combine
-            // bools in any sensible way
+            
+            
             if( mbVisibilityValid )
                 return mbVisibility;
             else if( haveChild() )
                 return mpChild->getVisibility();
             else
-                return true; // default is always visible
+                return true; 
         }
 
         void ShapeAttributeLayer::setVisibility( const bool& bVisible )
@@ -679,8 +679,8 @@ namespace slideshow
 
         double ShapeAttributeLayer::getCharWeight() const
         {
-            // mnAdditiveMode is ignored, cannot combine strings in
-            // any sensible way
+            
+            
             if( mbCharWeightValid )
                 return mnCharWeight;
             else if( haveChild() )
@@ -691,7 +691,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setCharWeight( const double& rValue )
         {
-            // TODO(Q1): Check range here.
+            
             mnCharWeight = rValue;
             mbCharWeightValid = true;
             ++mnContentState;
@@ -704,19 +704,19 @@ namespace slideshow
 
         sal_Int16 ShapeAttributeLayer::getUnderlineMode() const
         {
-            // mnAdditiveMode is ignored, SMIL spec requires to not combine
-            // bools in any sensible way
+            
+            
             if( mbUnderlineModeValid )
                 return mnUnderlineMode;
             else if( haveChild() )
                 return mpChild->getUnderlineMode();
             else
-                return awt::FontUnderline::NONE; // default is no underline
+                return awt::FontUnderline::NONE; 
         }
 
         void ShapeAttributeLayer::setUnderlineMode( const sal_Int16& rUnderlineMode )
         {
-            // TODO(Q1): Check range here.
+            
             mnUnderlineMode = rUnderlineMode;
             mbUnderlineModeValid = true;
             ++mnContentState;
@@ -729,8 +729,8 @@ namespace slideshow
 
         OUString ShapeAttributeLayer::getFontFamily() const
         {
-            // mnAdditiveMode is ignored, cannot combine strings in
-            // any sensible way
+            
+            
             if( mbFontFamilyValid )
                 return maFontFamily;
             else if( haveChild() )
@@ -753,8 +753,8 @@ namespace slideshow
 
         sal_Int16 ShapeAttributeLayer::getCharPosture() const
         {
-            // mnAdditiveMode is ignored, cannot combine strings in
-            // any sensible way
+            
+            
             if( mbCharPostureValid )
                 return sal::static_int_cast<sal_Int16>(meCharPosture);
             else if( haveChild() )
@@ -765,7 +765,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setCharPosture( const sal_Int16& rStyle )
         {
-            // TODO(Q1): Check range here.
+            
             meCharPosture = (awt::FontSlant)rStyle;
             mbCharPostureValid = true;
             ++mnContentState;

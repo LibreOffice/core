@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -126,7 +126,7 @@ SvStream& ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch )
     sal_Int32       nTmp32(0);
 
     rIStm.ReadUInt16( nTmp16 ); rImplHatch.meStyle = (HatchStyle) nTmp16;
-    //#fdo39428 SvStream no longer supports operator>>(long&)
+    
     ReadColor( rIStm, rImplHatch.maColor ).ReadInt32( nTmp32 ).ReadUInt16( rImplHatch.mnAngle );
     rImplHatch.mnDistance = nTmp32;
 
@@ -139,7 +139,7 @@ SvStream& WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch )
 
     rOStm.WriteUInt16( (sal_uInt16) rImplHatch.meStyle );
     WriteColor( rOStm, rImplHatch.maColor );
-    //#fdo39428 SvStream no longer supports operator<<(long)
+    
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rImplHatch.mnDistance) ).WriteUInt16( rImplHatch.mnAngle );
 
     return rOStm;

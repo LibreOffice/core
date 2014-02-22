@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "columniterator.hxx"
@@ -39,17 +39,17 @@ void ScColumnTextWidthIterator::next()
 
     if (miDataCur != miDataEnd)
     {
-        // Stil in the same block. We're good.
+        
         checkEndRow();
         return;
     }
 
-    // Move to the next block.
+    
     for (++miBlockCur; miBlockCur != miBlockEnd; ++miBlockCur)
     {
         if (miBlockCur->type != sc::element_type_celltextattr)
         {
-            // We don't iterator over this block.
+            
             mnCurPos += miBlockCur->size;
             continue;
         }
@@ -59,7 +59,7 @@ void ScColumnTextWidthIterator::next()
         return;
     }
 
-    // Reached the end.
+    
     OSL_ASSERT(miBlockCur == miBlockEnd);
 }
 
@@ -93,26 +93,26 @@ void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
 
     size_t nStart = static_cast<size_t>(nStartRow);
 
-    // Locate the start row position.
+    
     size_t nBlockStart = 0, nBlockEnd = 0;
     for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
     {
-        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
+        nBlockEnd = nBlockStart + miBlockCur->size; 
         if (nBlockStart <= nStart && nStart < nBlockEnd)
         {
-            // Initial block is found!
+            
             break;
         }
     }
 
     if (miBlockCur == miBlockEnd)
-        // Initial block not found for whatever reason... Bail out.
+        
         return;
 
-    // Locate the initial row position within this block.
+    
     if (miBlockCur->type == sc::element_type_celltextattr)
     {
-        // This block stores text widths for non-empty cells.
+        
         size_t nOffsetInBlock = nStart - nBlockStart;
         mnCurPos = nStart;
         getDataIterators(nOffsetInBlock);
@@ -120,25 +120,25 @@ void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
         return;
     }
 
-    // Current block is not of ushort type.  Skip to the next block.
+    
     nBlockStart = nBlockEnd;
     ++miBlockCur;
 
-    // Look for the first ushort block.
+    
     for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
     {
-        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
+        nBlockEnd = nBlockStart + miBlockCur->size; 
         if (miBlockCur->type != sc::element_type_celltextattr)
             continue;
 
-        // Found!
+        
         mnCurPos = nBlockStart;
         getDataIterators(0);
         checkEndRow();
         return;
     }
 
-    // Not found.
+    
     OSL_ASSERT(miBlockCur == miBlockEnd);
 }
 
@@ -146,7 +146,7 @@ void ScColumnTextWidthIterator::getDataIterators(size_t nOffsetInBlock)
 {
     OSL_ENSURE(miBlockCur != miBlockEnd, "block is at end position");
 #if 0
-    // Does not compile
+    
     OSL_ENSURE(miBlockCur->type == sc::celltextattr_block,
                "wrong block type - unsigned short block expected.");
 #endif
@@ -159,10 +159,10 @@ void ScColumnTextWidthIterator::getDataIterators(size_t nOffsetInBlock)
 void ScColumnTextWidthIterator::checkEndRow()
 {
     if (mnCurPos <= mnEnd)
-        // We're still good.
+        
         return;
 
-    // We're below the end position. End the iteration.
+    
     miBlockCur = miBlockEnd;
 }
 

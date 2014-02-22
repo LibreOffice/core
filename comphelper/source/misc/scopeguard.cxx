@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@ ScopeGuard::~ScopeGuard()
                 m_func();
             }
             catch (com::sun::star::uno::Exception & exc) {
-                (void) exc; // avoid warning about unused variable
+                (void) exc; 
                 OSL_FAIL(
                     OUStringToOString( "UNO exception occurred: " +
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -63,6 +63,6 @@ FlagRestorationGuard::~FlagRestorationGuard()
 {
 }
 
-} // namespace comphelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

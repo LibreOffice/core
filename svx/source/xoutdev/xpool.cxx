@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/xtable.hxx>
@@ -31,18 +31,18 @@ XOutdevItemPool::XOutdevItemPool(
     sal_Bool bLoadRefCounts)
 :   SfxItemPool("XOutdevItemPool", nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
 {
-    // prepare some defaults
+    
     const OUString aNullStr;
     const Graphic aNullGraphic;
     const basegfx::B2DPolyPolygon aNullPol;
-    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
-    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
+    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); 
+    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); 
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
     const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
     const XHatch aNullHatch(aNullLineCol);
 
-    // get master pointer, evtl. add myself to the end of the pools
+    
     if(!_pMaster)
     {
         _pMaster = this;
@@ -59,7 +59,7 @@ XOutdevItemPool::XOutdevItemPool(
         pParent->SetSecondaryPool(this);
     }
 
-    // prepare PoolDefaults
+    
     mppLocalPoolDefaults = new SfxPoolItem*[GetLastWhich() - GetFirstWhich() + 1];
 
     mppLocalPoolDefaults[XATTR_LINESTYLE          -XATTR_START] = new XLineStyleItem;
@@ -108,13 +108,13 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FORMTXTHIDEFORM    -XATTR_START] = new XFormTextHideFormItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWTRANSP  -XATTR_START] = new XFormTextShadowTranspItem;
 
-    // create SetItems
+    
     SfxItemSet* pSet=new SfxItemSet(*_pMaster, XATTR_LINE_FIRST, XATTR_LINE_LAST);
     mppLocalPoolDefaults[XATTRSET_LINE - XATTR_START] = new XLineAttrSetItem(pSet);
     pSet=new SfxItemSet(*_pMaster, XATTR_FILL_FIRST, XATTR_FILL_LAST);
     mppLocalPoolDefaults[XATTRSET_FILL - XATTR_START] = new XFillAttrSetItem(pSet);
 
-    // create ItemInfos
+    
     mpLocalItemInfos = new SfxItemInfo[GetLastWhich() - GetFirstWhich() + 1];
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)
     {
@@ -149,14 +149,14 @@ XOutdevItemPool::XOutdevItemPool(
     mpLocalItemInfos[XATTR_FORMTXTSHDWYVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWYVAL;
     mpLocalItemInfos[XATTR_FORMTXTHIDEFORM  -XATTR_START]._nSID = SID_FORMTEXT_HIDEFORM;
 
-    // associate new slots for panels with known items
+    
     mpLocalItemInfos[XATTR_FILLTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_TRANSPARENCE;
     mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_FLOATTRANSPARENCE;
     mpLocalItemInfos[XATTR_LINETRANSPARENCE - XATTR_START]._nSID = SID_ATTR_LINE_TRANSPARENCE;
     mpLocalItemInfos[XATTR_LINEJOINT - XATTR_START]._nSID = SID_ATTR_LINE_JOINT;
     mpLocalItemInfos[XATTR_LINECAP - XATTR_START]._nSID = SID_ATTR_LINE_CAP;
 
-    // if it's my own creation level, set Defaults and ItemInfos
+    
     if(XATTR_START == GetFirstWhich() && XATTR_END == GetLastWhich())
     {
         SetDefaults(mppLocalPoolDefaults);
@@ -164,7 +164,7 @@ XOutdevItemPool::XOutdevItemPool(
     }
 }
 
-// copy ctor, clones all static defaults
+
 XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
 :   SfxItemPool(rPool, true),
     mppLocalPoolDefaults(0L),
@@ -181,13 +181,13 @@ XOutdevItemPool::~XOutdevItemPool()
 {
     Delete();
 
-    // remove own static defaults
+    
     if(mppLocalPoolDefaults)
     {
         SfxPoolItem** ppDefaultItem = mppLocalPoolDefaults;
         for(sal_uInt16 i(GetLastWhich() - GetFirstWhich() + 1); i; --i, ++ppDefaultItem)
         {
-            if ( *ppDefaultItem ) // these parts might be already cleaned up from a derived class
+            if ( *ppDefaultItem ) 
             {
                 SetRefCount( **ppDefaultItem, 0 );
                 delete *ppDefaultItem;

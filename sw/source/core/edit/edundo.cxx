@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdview.hxx>
@@ -45,7 +45,7 @@ bool SwEditShell::CursorsLocked() const
 
 void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
 {
-    // do nothing if somebody has locked controllers!
+    
     if (CursorsLocked())
     {
         return;
@@ -55,7 +55,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     SdrMarkList * pMarkList(0);
     rContext.GetSelections(pSelFmt, pMarkList);
 
-    if (pSelFmt) // select frame
+    if (pSelFmt) 
     {
         if (RES_DRAWFRMFMT == pSelFmt->Which())
         {
@@ -70,8 +70,8 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
                 static_cast<SwFlyFrmFmt*>(pSelFmt)->GetFrm(& aPt, false);
             if (pFly)
             {
-                // fdo#36681: Invalidate the content and layout to refresh
-                // the picture anchoring properly
+                
+                
                 SwPageFrm* pPageFrm = pFly->FindPageFrmOfAnchor();
                 pPageFrm->InvalidateFlyLayout();
                 pPageFrm->InvalidateCntnt();
@@ -86,8 +86,8 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     }
     else if (GetCrsr()->GetNext() != GetCrsr())
     {
-        // current cursor is the last one:
-        // go around the ring, to the first cursor
+        
+        
         GoNextCrsr();
     }
 }
@@ -96,20 +96,20 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    // current undo state was not saved
+    
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
     bool bRet = false;
 
     StartAllAction();
     {
-        // Actually it should be enough to just work on the current Cursor, i.e. if there is a cycle
-        // cancel the latter temporarily, so that an insert during Undo is not done in all areas.
+        
+        
         KillPams();
-        SetMark();          // Bound1 and Bound2 in the same Node
+        SetMark();          
         ClearMark();
 
-        // Keep Cursor - so that we're able to set it at
-        // the same position for autoformat or autocorrection
+        
+        
         SwUndoId nLastUndoId(UNDO_EMPTY);
         GetLastUndoInfo(0, & nLastUndoId);
         const bool bRestoreCrsr = nCount == 1
@@ -118,7 +118,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
                                        || UNDO_SETDEFTATTR == nLastUndoId );
         Push();
 
-        // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
+        
         ClearTblBoxCntnt();
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
@@ -136,15 +136,15 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         }
 
         if (bRestoreCrsr)
-        {   // fdo#39003 Pop does not touch the rest of the cursor ring
-            KillPams(); // so call this first to get rid of unwanted cursors
+        {   
+            KillPams(); 
         }
         Pop( !bRestoreCrsr );
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        // automatic detection of the new "Box"
+        
         SaveTblBoxCntnt();
     }
     EndAllAction();
@@ -158,16 +158,16 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
 
     bool bRet = false;
 
-    // undo state was not saved
+    
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
 
     StartAllAction();
 
     {
-        // Actually it should be enough to just work on the current Cursor, i.e. if there is a cycle
-        // cancel the latter temporarily, so that an insert during Undo is not done in all areas.
+        
+        
         KillPams();
-        SetMark();          // Bound1 and Bound2 in the same Node
+        SetMark();          
         ClearMark();
 
         SwUndoId nFirstRedoId(UNDO_EMPTY);
@@ -175,7 +175,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         const bool bRestoreCrsr = nCount == 1 && UNDO_SETDEFTATTR == nFirstRedoId;
         Push();
 
-        // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
+        
         ClearTblBoxCntnt();
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
@@ -197,7 +197,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        // automatic detection of the new "Box"
+        
         SaveTblBoxCntnt();
     }
 
@@ -247,9 +247,9 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
             }
         }
 
-        // the old implementation would always unselect
-        // objects, even if no new ones were selected. If this
-        // is a problem, we need to re-work this a little.
+        
+        
+        
         OSL_ENSURE( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
     }
 }

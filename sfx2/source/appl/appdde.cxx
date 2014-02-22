@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/wrkwin.hxx>
@@ -44,7 +44,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
-//========================================================================
+
 
 OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {
@@ -74,7 +74,7 @@ public:
     virtual bool SysTopicExecute( const OUString* pStr );
 };
 
-//--------------------------------------------------------------------
+
 namespace
 {
     sal_Bool lcl_IsDocument( const OUString& rContent )
@@ -113,14 +113,14 @@ namespace
 
 bool ImplDdeService::MakeTopic( const OUString& rNm )
 {
-    // Workaround for Event after Main() under OS/2
-    // happens when exiting starts the App again
+    
+    
     if ( !Application::IsInExecute() )
         return false;
 
-    // The Topic rNm is sought, do we have it?
-    // First only loop over the ObjectShells to find those
-    // with the specific name:
+    
+    
+    
     sal_Bool bRet = sal_False;
     OUString sNm( rNm.toAsciiLowerCase() );
     TypeId aType( TYPE(SfxObjectShell) );
@@ -144,7 +144,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
         if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
              lcl_IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
-            // File exists? then try to load it:
+            
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
 
@@ -253,24 +253,24 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
         sal_Int32 start = sEvent.getLength();
         if ( rCmd.getLength() - start >= 2 )
         {
-            // Transform into the ApplicationEvent Format
-            //TODO: I /assume/ that rCmd should match the syntax of
-            // <http://msdn.microsoft.com/en-us/library/ms648995.aspx>
-            // "WM_DDE_EXECUTE message" but does not (handle commands enclosed
-            // in [...]; handle commas separating multiple arguments; handle
-            // double "", ((, )), [[, ]] in quoted arguments); see also the mail
-            // thread starting at <http://lists.freedesktop.org/archives/
-            // libreoffice/2013-July/054779.html> "DDE on Windows."
+            
+            
+            
+            
+            
+            
+            
+            
             std::vector<OUString> aData;
             for ( sal_Int32 n = start; n < rCmd.getLength() - 1; )
             {
-                // Resiliently read arguments either starting with " and
-                // spanning to the next " (if any; TODO: do we need to undo any
-                // escaping within the string?) or with neither " nor SPC and
-                // spanning to the next SPC (if any; TODO: is this from not
-                // wrapped in "..." relevant? it would have been parsed by the
-                // original code even if that was only by accident, so I left it
-                // in), with runs of SPCs treated like single ones:
+                
+                
+                
+                
+                
+                
+                
                 switch ( rCmd[n] )
                 {
                 case '"':
@@ -318,13 +318,13 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
     relevant SfxApplication subclass in BASIC syntax. Return values can
     not be transferred, unfortunately.
 */
-long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
+long SfxApplication::DdeExecute( const OUString&   rCmd )  
 {
-    // Print or Open-Event?
+    
     if ( !( SfxAppEvent_Impl( rCmd, "Print", ApplicationEvent::TYPE_PRINT ) ||
             SfxAppEvent_Impl( rCmd, "Open", ApplicationEvent::TYPE_OPEN ) ) )
     {
-        // all others are BASIC
+        
         StarBASIC* pBasic = GetBasic();
         DBG_ASSERT( pBasic, "Where is the Basic???" );
         SbxVariable* pRet = pBasic->Execute( rCmd );
@@ -346,7 +346,7 @@ long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 
     The base implementation does nothing and returns 0.
 */
-long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
+long SfxObjectShell::DdeExecute( const OUString&   rCmd )  
 {
 #ifdef DISABLE_SCRIPTING
     (void) rCmd;
@@ -363,7 +363,7 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
     return 1;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -372,14 +372,14 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 
     The base implementation provides no data and returns false.
 */
-bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be addressed
-                                 const OUString&,              // in: Format
-                                 ::com::sun::star::uno::Any& )// out: requested data
+bool SfxObjectShell::DdeGetData( const OUString&,              
+                                 const OUString&,              
+                                 ::com::sun::star::uno::Any& )
 {
     return false;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -388,9 +388,9 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
 
     The base implementation is not receiving any data and returns false.
 */
-bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item to be addressed
-                                 const OUString&,                    // in: Format
-                                 const ::com::sun::star::uno::Any& )// out: requested data
+bool SfxObjectShell::DdeSetData( const OUString&,                    
+                                 const OUString&,                    
+                                 const ::com::sun::star::uno::Any& )
 {
     return false;
 }
@@ -402,7 +402,7 @@ bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item
 
     The base implementation is not generate a link and returns 0.
 */
-::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource( const OUString& ) // the Item to be addressed
+::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource( const OUString& ) 
 {
     return 0;
 }
@@ -434,7 +434,7 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
     and the relevant SfxApplication subclass in BASIC syntax. Return
     values can not be transferred, unfortunately.
 */
-long SfxViewFrame::DdeExecute( const OUString&   rCmd ) // Expressed in our BASIC-Syntax
+long SfxViewFrame::DdeExecute( const OUString&   rCmd ) 
 {
     if ( GetObjectShell() )
         return GetObjectShell()->DdeExecute( rCmd );
@@ -449,9 +449,9 @@ long SfxViewFrame::DdeExecute( const OUString&   rCmd ) // Expressed in our BASI
 
     The base implementation provides no data and returns false.
 */
-bool SfxViewFrame::DdeGetData( const OUString&,            // the Item to be addressed
-                               const OUString&,            // in: Format
-                               ::com::sun::star::uno::Any& )// out: requested data
+bool SfxViewFrame::DdeGetData( const OUString&,            
+                               const OUString&,            
+                               ::com::sun::star::uno::Any& )
 {
     return false;
 }
@@ -463,9 +463,9 @@ bool SfxViewFrame::DdeGetData( const OUString&,            // the Item to be add
 
     The base implementation is not receiving any data and returns false.
 */
-bool SfxViewFrame::DdeSetData( const OUString&,                  // the Item to be addressed
-                               const OUString&,                  // in: Format
-                               const ::com::sun::star::uno::Any& )// out: requested data
+bool SfxViewFrame::DdeSetData( const OUString&,                  
+                               const OUString&,                  
+                               const ::com::sun::star::uno::Any& )
 {
     return false;
 }
@@ -477,7 +477,7 @@ bool SfxViewFrame::DdeSetData( const OUString&,                  // the Item to 
 
     The base implementation is not generate a link and returns 0.
 */
-::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource( const OUString&  )// the Item to be addressed
+::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource( const OUString&  )
 {
     return 0;
 }
@@ -495,10 +495,10 @@ sal_Bool SfxApplication::InitializeDde()
     {
         pAppData_Impl->pDocTopics = new SfxDdeDocTopics_Impl;
 
-        // we certainly want to support RTF!
+        
         pAppData_Impl->pDdeService->AddFormat( FORMAT_RTF );
 
-        // Config path as a topic becauseof multiple starts
+        
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
         aOfficeLockFile.insertName( "soffice.lck" );
         OUString aService( SfxDdeServiceName_Impl(
@@ -524,18 +524,18 @@ void SfxAppData_Impl::DeInitDDE()
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
     DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
-    //OV: DDE is disconnected in server mode!
+    
     if( !pAppData_Impl->pDocTopics )
         return;
 
-    // prevent double submit
+    
     OUString sShellNm;
     sal_Bool bFnd = sal_False;
     for (size_t n = pAppData_Impl->pDocTopics->size(); n;)
     {
         if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
         {
-            // If the document is untitled, is still a new Topic is created!
+            
             if( !bFnd )
             {
                 bFnd = sal_True;
@@ -556,7 +556,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
     DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
-    //OV: DDE is disconnected in server mode!
+    
     if( !pAppData_Impl->pDocTopics )
         return;
 
@@ -582,14 +582,14 @@ DdeService* SfxApplication::GetDdeService()
     return pAppData_Impl->pDdeService;
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxDdeTriggerTopic_Impl::Execute( const OUString* )
 {
     return true;
 }
 
-//--------------------------------------------------------------------
+
 DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
@@ -639,7 +639,7 @@ bool SfxDdeDocTopic_Impl::StartAdviseLoop()
     ::sfx2::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
     if( pNewObj )
     {
-        // then we also establish a corresponding SvBaseLink
+        
         OUString sNm, sTmp( Application::GetAppName() );
         ::sfx2::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
         new ::sfx2::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );

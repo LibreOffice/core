@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/errcode.hxx>
@@ -70,7 +70,7 @@ double ImpGetDouble( const SbxValues* p )
             {
                 nRes = 0;
 #ifndef DISABLE_SCRIPTING
-                if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
+                if ( SbiRuntime::isVBAEnabled() )
                     SbxBase::SetError( SbxERR_CONVERSION );
 #endif
             }
@@ -82,7 +82,7 @@ double ImpGetDouble( const SbxValues* p )
                 {
                     nRes = 0;
 #ifndef DISABLE_SCRIPTING
-                    if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
+                    if ( SbiRuntime::isVBAEnabled() )
                         SbxBase::SetError( SbxERR_CONVERSION );
 #endif
                 }
@@ -140,7 +140,7 @@ void ImpPutDouble( SbxValues* p, double n, bool bCoreString )
 start:
     switch( +p->eType )
     {
-        // Here are tests necessary
+        
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -181,7 +181,7 @@ start:
             p->nInt64 = ImpDoubleToCurrency( n );
             break;
 
-            // from here on no longer
+            
         case SbxSALINT64:
             p->nInt64 = ImpDoubleToSalInt64( n ); break;
         case SbxSALUINT64:

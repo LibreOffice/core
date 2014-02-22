@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,20 +38,20 @@ using namespace ::com::sun::star::ucb;
 namespace dp_misc
 {
 
-//==============================================================================
+
 bool create_ucb_content(
     ::ucbhelper::Content * ret_ucbContent, OUString const & url,
     Reference<XCommandEnvironment> const & xCmdEnv,
     bool throw_exc )
 {
     try {
-        // Existense check...
-        // content ctor/isFolder() will throw exception in case the resource
-        // does not exist.
+        
+        
+        
 
-        // dilemma: no chance to use the given iahandler here, because it would
-        //          raise no such file dialogs, else no interaction for
-        //          passwords, ...? xxx todo
+        
+        
+        
         ::ucbhelper::Content ucbContent(
             url, Reference<XCommandEnvironment>(),
             comphelper::getProcessComponentContext() );
@@ -75,7 +75,7 @@ bool create_ucb_content(
     return false;
 }
 
-//==============================================================================
+
 bool create_folder(
     ::ucbhelper::Content * ret_ucb_content, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv, bool throw_exc )
@@ -92,15 +92,15 @@ bool create_folder(
     }
 
     OUString url( url_ );
-    // xxx todo: find parent
+    
     sal_Int32 slash = url.lastIndexOf( '/' );
     if (slash < 0) {
-        // fallback:
+        
         url = expandUnoRcUrl( url );
         slash = url.lastIndexOf( '/' );
     }
     if (slash < 0) {
-        // invalid: has to be at least "auth:/..."
+        
         if (throw_exc)
             throw ContentCreationException(
                 "Cannot create folder (invalid path): " + url,
@@ -118,11 +118,11 @@ bool create_folder(
         parentContent.queryCreatableContentsInfo() );
     for ( sal_Int32 pos = 0; pos < infos.getLength(); ++pos )
     {
-        // look KIND_FOLDER:
+        
         ContentInfo const & info = infos[ pos ];
         if ((info.Attributes & ContentInfoAttribute::KIND_FOLDER) != 0)
         {
-            // make sure the only required bootstrap property is "Title":
+            
             Sequence<beans::Property> const & rProps = info.Properties;
             if ( rProps.getLength() != 1 || rProps[ 0 ].Name != "Title" )
                 continue;
@@ -142,8 +142,8 @@ bool create_folder(
                 throw;
             }
             catch (const CommandFailedException &) {
-                // Interaction Handler already handled the error
-                // that has occurred...
+                
+                
             }
             catch (const Exception &) {
                 if (throw_exc)
@@ -159,7 +159,7 @@ bool create_folder(
     return false;
 }
 
-//==============================================================================
+
 bool erase_path( OUString const & url,
                  Reference<XCommandEnvironment> const & xCmdEnv,
                  bool throw_exc )
@@ -183,7 +183,7 @@ bool erase_path( OUString const & url,
     return true;
 }
 
-//==============================================================================
+
 ::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content )
 {
     ::rtl::ByteSequence bytes;
@@ -196,11 +196,11 @@ bool erase_path( OUString const & url,
     return bytes;
 }
 
-//==============================================================================
+
 bool readLine( OUString * res, OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc )
 {
-    // read whole file:
+    
     ::rtl::ByteSequence bytes( readFile( ucb_content ) );
     OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
                    bytes.getLength(), textenc );
@@ -215,21 +215,21 @@ bool readLine( OUString * res, OUString const & startingWith,
             for (;;)
             {
                 pos = file.indexOf( LF, pos );
-                if (pos < 0) { // EOF
+                if (pos < 0) { 
                     buf.append( file.copy( start ) );
                 }
                 else
                 {
                     if (pos > 0 && file[ pos - 1 ] == CR)
                     {
-                        // consume extra CR
+                        
                         buf.append( file.copy( start, pos - start - 1 ) );
                         ++pos;
                     }
                     else
                         buf.append( file.copy( start, pos - start ) );
-                    ++pos; // consume LF
-                    // check next line:
+                    ++pos; 
+                    
                     if (pos < file.getLength() &&
                         (file[ pos ] == ' ' || file[ pos ] == '\t'))
                     {
@@ -244,9 +244,9 @@ bool readLine( OUString * res, OUString const & startingWith,
             *res = buf.makeStringAndClear();
             return true;
         }
-        // next line:
+        
         sal_Int32 next_lf = file.indexOf( LF, pos );
-        if (next_lf < 0) // EOF
+        if (next_lf < 0) 
             break;
         pos = next_lf + 1;
     }
@@ -256,7 +256,7 @@ bool readLine( OUString * res, OUString const & startingWith,
 bool readProperties( ::std::list< ::std::pair< OUString, OUString> > & out_result,
                      ::ucbhelper::Content & ucb_content )
 {
-    // read whole file:
+    
     ::rtl::ByteSequence bytes( readFile( ucb_content ) );
     OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
                    bytes.getLength(), RTL_TEXTENCODING_UTF8);
@@ -270,14 +270,14 @@ bool readProperties( ::std::list< ::std::pair< OUString, OUString> > & out_resul
 
         bool bEOF = false;
         pos = file.indexOf( LF, pos );
-        if (pos < 0) { // EOF
+        if (pos < 0) { 
             buf.append( file.copy( start ) );
             bEOF = true;
         }
         else
         {
             if (pos > 0 && file[ pos - 1 ] == CR)
-                // consume extra CR
+                
                 buf.append( file.copy( start, pos - start - 1 ) );
             else
                 buf.append( file.copy( start, pos - start ) );

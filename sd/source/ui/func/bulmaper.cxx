@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <svx/svxids.hrc>
 
-//-> Fonts & Items
+
 #include <vcl/font.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -31,7 +31,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 
-//<- Fonts & Items
+
 #include <editeng/bulletitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
@@ -56,9 +56,9 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         if(rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::CHAR_SPECIAL &&
            rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::NUMBER_NONE )
         {
-            // if enumeration instead bullet is chosen, adjust bullet font to template font
+            
 
-            // to be implemented if module supports CJK
+            
             long nFontID = SID_ATTR_CHAR_FONT;
             long nFontHeightID = SID_ATTR_CHAR_FONTHEIGHT;
             long nWeightID = SID_ATTR_CHAR_WEIGHT;

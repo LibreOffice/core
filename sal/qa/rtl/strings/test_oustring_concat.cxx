@@ -4,10 +4,10 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
-// activate support for detecting errors instead of getting compile errors
+
 #define RTL_STRING_UNITTEST_CONCAT
 extern bool rtl_string_unittest_invalid_concat;
 
@@ -32,7 +32,7 @@ operator <<(
 {
     return stream << info.name();
 }
-} // namespace
+} 
 
 namespace test { namespace oustring {
 
@@ -59,7 +59,7 @@ CPPUNIT_TEST_SUITE_END();
 #endif
 void test::oustring::StringConcat::checkConcat()
 {
-// All the extra () are to protect commas against being treated as separators of macro arguments.
+
     CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + OUString( "bar" )));
     TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "foo" ) + OUString( "bar" )));
@@ -84,7 +84,7 @@ void test::oustring::StringConcat::checkEnsureCapacity()
     CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
 
     rtl_uString* oldStr = str;
-    rtl_uString_ensureCapacity( &str, 4 ); // should be no-op
+    rtl_uString_ensureCapacity( &str, 4 ); 
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
     CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
     CPPUNIT_ASSERT( oldStr == str );
@@ -94,7 +94,7 @@ void test::oustring::StringConcat::checkEnsureCapacity()
     rtl_uString_ensureCapacity( &str, 4 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
     CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
-    // a copy was forced because of refcount
+    
     CPPUNIT_ASSERT( oldStr != str );
     CPPUNIT_ASSERT( rtl_ustr_compare( oldStr->buffer, str->buffer ) == 0 );
     CPPUNIT_ASSERT_EQUAL( 1, int( oldStr->refCount ));
@@ -103,12 +103,12 @@ void test::oustring::StringConcat::checkEnsureCapacity()
 
     rtl_uString_acquire( oldStr );
     rtl_uString_ensureCapacity( &str, 1024 );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length ); // size is still 4
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length ); 
     CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
     CPPUNIT_ASSERT( oldStr != str );
     CPPUNIT_ASSERT( rtl_ustr_compare( oldStr->buffer, str->buffer ) == 0 );
     CPPUNIT_ASSERT_EQUAL( 1, int( oldStr->refCount ));
-    // but there should be extra capacity
+    
     for( int i = 0;
          i < 20;
          ++i )
@@ -154,7 +154,7 @@ void test::oustring::StringConcat::checkInvalid()
 
 }
 
-}} // namespace
+}} 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StringConcat);
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/extended/accessibletabbarpagelist.hxx>
@@ -31,10 +31,10 @@
 #include <toolkit/helper/convert.hxx>
 
 
-//.........................................................................
+
 namespace accessibility
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;
@@ -42,9 +42,9 @@ namespace accessibility
     using namespace ::com::sun::star;
     using namespace ::comphelper;
 
-    // -----------------------------------------------------------------------------
-    // class AccessibleTabBarPageList
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     AccessibleTabBarPageList::AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent )
         :AccessibleTabBarBase( pTabBar )
@@ -54,13 +54,13 @@ namespace accessibility
             m_aAccessibleChildren.assign( m_pTabBar->GetPageCount(), Reference< XAccessible >() );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     AccessibleTabBarPageList::~AccessibleTabBarPageList()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::UpdateEnabled( sal_Int32 i, sal_Bool bEnabled )
     {
@@ -76,7 +76,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::UpdateShowing( sal_Bool bShowing )
     {
@@ -92,7 +92,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::UpdateSelected( sal_Int32 i, sal_Bool bSelected )
     {
@@ -110,7 +110,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::UpdatePageText( sal_Int32 i )
     {
@@ -132,16 +132,16 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::InsertChild( sal_Int32 i )
     {
         if ( i >= 0 && i <= (sal_Int32)m_aAccessibleChildren.size() )
         {
-            // insert entry in child list
+            
             m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
 
-            // send accessible child event
+            
             Reference< XAccessible > xChild( getAccessibleChild( i ) );
             if ( xChild.is() )
             {
@@ -152,19 +152,19 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::RemoveChild( sal_Int32 i )
     {
         if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
         {
-            // get the accessible of the removed page
+            
             Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
 
-            // remove entry in child list
+            
             m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
 
-            // send accessible child event
+            
             if ( xChild.is() )
             {
                 Any aOldValue, aNewValue;
@@ -178,7 +178,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::MoveChild( sal_Int32 i, sal_Int32 j )
     {
@@ -188,18 +188,18 @@ namespace accessibility
             if ( i < j )
                 --j;
 
-            // get the accessible of the moved page
+            
             Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
 
-            // remove entry in child list at old position
+            
             m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
 
-            // insert entry in child list at new position
+            
             m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + j, xChild );
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
@@ -261,7 +261,7 @@ namespace accessibility
             break;
             case VCLEVENT_TABBAR_PAGESELECTED:
             {
-                // do nothing
+                
             }
             break;
             case VCLEVENT_TABBAR_PAGEACTIVATED:
@@ -346,7 +346,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
     {
@@ -365,9 +365,9 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // OCommonAccessibleComponent
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     awt::Rectangle AccessibleTabBarPageList::implGetBounds() throw (RuntimeException)
     {
@@ -378,27 +378,27 @@ namespace accessibility
         return aBounds;
     }
 
-    // -----------------------------------------------------------------------------
-    // XInterface
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPageList, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPageList_BASE )
 
-    // -----------------------------------------------------------------------------
-    // XTypeProvider
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPageList, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPageList_BASE )
 
-    // -----------------------------------------------------------------------------
-    // XComponent
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     void AccessibleTabBarPageList::disposing()
     {
         AccessibleTabBarBase::disposing();
 
-        // dispose all children
+        
         for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
@@ -408,23 +408,23 @@ namespace accessibility
         m_aAccessibleChildren.clear();
     }
 
-    // -----------------------------------------------------------------------------
-    // XServiceInfo
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     OUString AccessibleTabBarPageList::getImplementationName() throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTabBarPageList" );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool AccessibleTabBarPageList::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< OUString > AccessibleTabBarPageList::getSupportedServiceNames() throw (RuntimeException)
     {
@@ -433,9 +433,9 @@ namespace accessibility
         return aNames;
     }
 
-    // -----------------------------------------------------------------------------
-    // XAccessible
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Reference< XAccessibleContext > AccessibleTabBarPageList::getAccessibleContext(  ) throw (RuntimeException)
     {
@@ -444,9 +444,9 @@ namespace accessibility
         return this;
     }
 
-    // -----------------------------------------------------------------------------
-    // XAccessibleContext
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     sal_Int32 AccessibleTabBarPageList::getAccessibleChildCount() throw (RuntimeException)
     {
@@ -455,7 +455,7 @@ namespace accessibility
         return m_aAccessibleChildren.size();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< XAccessible > AccessibleTabBarPageList::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -473,7 +473,7 @@ namespace accessibility
 
                 xChild = new AccessibleTabBarPage( m_pTabBar, nPageId, this );
 
-                // insert into child list
+                
                 m_aAccessibleChildren[i] = xChild;
             }
         }
@@ -481,7 +481,7 @@ namespace accessibility
         return xChild;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< XAccessible > AccessibleTabBarPageList::getAccessibleParent(  ) throw (RuntimeException)
     {
@@ -494,7 +494,7 @@ namespace accessibility
         return xParent;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int32 AccessibleTabBarPageList::getAccessibleIndexInParent(  ) throw (RuntimeException)
     {
@@ -503,7 +503,7 @@ namespace accessibility
         return m_nIndexInParent;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int16 AccessibleTabBarPageList::getAccessibleRole(  ) throw (RuntimeException)
     {
@@ -512,7 +512,7 @@ namespace accessibility
         return AccessibleRole::PAGE_TAB_LIST;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     OUString AccessibleTabBarPageList::getAccessibleDescription( ) throw (RuntimeException)
     {
@@ -521,7 +521,7 @@ namespace accessibility
         return OUString();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     OUString AccessibleTabBarPageList::getAccessibleName(  ) throw (RuntimeException)
     {
@@ -530,7 +530,7 @@ namespace accessibility
         return OUString();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< XAccessibleRelationSet > AccessibleTabBarPageList::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
@@ -541,7 +541,7 @@ namespace accessibility
         return xSet;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< XAccessibleStateSet > AccessibleTabBarPageList::getAccessibleStateSet(  ) throw (RuntimeException)
     {
@@ -562,7 +562,7 @@ namespace accessibility
         return xSet;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Locale AccessibleTabBarPageList::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
     {
@@ -571,9 +571,9 @@ namespace accessibility
         return Application::GetSettings().GetLanguageTag().getLocale();
     }
 
-    // -----------------------------------------------------------------------------
-    // XAccessibleComponent
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Reference< XAccessible > AccessibleTabBarPageList::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
     {
@@ -602,14 +602,14 @@ namespace accessibility
         return xChild;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::grabFocus(  ) throw (RuntimeException)
     {
-        // no focus
+        
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int32 AccessibleTabBarPageList::getForeground(  ) throw (RuntimeException)
     {
@@ -627,7 +627,7 @@ namespace accessibility
         return nColor;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int32 AccessibleTabBarPageList::getBackground(  ) throw (RuntimeException)
     {
@@ -645,9 +645,9 @@ namespace accessibility
         return nColor;
     }
 
-    // -----------------------------------------------------------------------------
-    // XAccessibleExtendedComponent
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Reference< awt::XFont > AccessibleTabBarPageList::getFont(  ) throw (RuntimeException)
     {
@@ -665,7 +665,7 @@ namespace accessibility
         return xFont;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     OUString AccessibleTabBarPageList::getTitledBorderText(  ) throw (RuntimeException)
     {
@@ -674,7 +674,7 @@ namespace accessibility
         return OUString();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     OUString AccessibleTabBarPageList::getToolTipText(  ) throw (RuntimeException)
     {
@@ -683,9 +683,9 @@ namespace accessibility
         return OUString();
     }
 
-    // -----------------------------------------------------------------------------
-    // XAccessibleSelection
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     void AccessibleTabBarPageList::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -703,7 +703,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool AccessibleTabBarPageList::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -719,14 +719,14 @@ namespace accessibility
         return bSelected;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::clearAccessibleSelection(  ) throw (RuntimeException)
     {
-        // This method makes no sense in a TabBar, and so does nothing.
+        
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
@@ -735,7 +735,7 @@ namespace accessibility
         selectAccessibleChild( 0 );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int32 AccessibleTabBarPageList::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
@@ -744,7 +744,7 @@ namespace accessibility
         return 1;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< XAccessible > AccessibleTabBarPageList::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -767,7 +767,7 @@ namespace accessibility
         return xChild;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void AccessibleTabBarPageList::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -776,13 +776,13 @@ namespace accessibility
         if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
             throw IndexOutOfBoundsException();
 
-        // This method makes no sense in a TabBar, and so does nothing.
+        
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-//.........................................................................
-}   // namespace accessibility
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

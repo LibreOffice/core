@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formnavigation.hxx"
@@ -27,10 +27,10 @@
 #include <tools/debug.hxx>
 
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -39,10 +39,10 @@ namespace frm
     using namespace ::com::sun::star::frame;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-    //==================================================================
-    //= OFormNavigationHelper
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_nConnectedFeatures( 0 )
@@ -50,51 +50,51 @@ namespace frm
         m_pFeatureInterception.reset( new ControlFeatureInterception( m_xORB ) );
     }
 
-    //------------------------------------------------------------------
+    
     OFormNavigationHelper::~OFormNavigationHelper()
     {
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OFormNavigationHelper::dispose( ) throw( RuntimeException )
     {
         m_pFeatureInterception->dispose();
         disconnectDispatchers();
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::interceptorsChanged( )
     {
         updateDispatches();
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::featureStateChanged( sal_Int16 /*_nFeatureId*/, sal_Bool /*_bEnabled*/ )
     {
-        // not interested in
+        
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::allFeatureStatesChanged( )
     {
-        // not interested in
+        
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OFormNavigationHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OFormNavigationHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OFormNavigationHelper::statusChanged( const FeatureStateEvent& _rState ) throw (RuntimeException)
     {
         for (   FeatureMap::iterator aFeature = m_aSupportedFeatures.begin();
@@ -108,24 +108,24 @@ namespace frm
                     || ( aFeature->second.aCachedAdditionalState != _rState.State )
                     )
                 {
-                    // change the cached state
+                    
                     aFeature->second.bCachedState           = _rState.IsEnabled;
                     aFeature->second.aCachedAdditionalState = _rState.State;
-                    // tell derivees what happened
+                    
                     featureStateChanged( aFeature->first, _rState.IsEnabled );
                 }
                 return;
             }
         }
 
-        // unreachable
+        
         OSL_FAIL( "OFormNavigationHelper::statusChanged: huh? An invalid/unknown URL?" );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OFormNavigationHelper::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
-        // was it one of our external dispatchers?
+        
         if ( m_nConnectedFeatures )
         {
             for (   FeatureMap::iterator aFeature = m_aSupportedFeatures.begin();
@@ -148,11 +148,11 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::updateDispatches()
     {
         if ( !m_nConnectedFeatures )
-        {   // we don't have any dispatchers yet -> do the initial connect
+        {   
             connectDispatchers();
             return;
         }
@@ -173,7 +173,7 @@ namespace frm
             xCurrentDispatcher = aFeature->second.xDispatcher;
             if ( xNewDispatcher != xCurrentDispatcher )
             {
-                // the dispatcher for this particular URL changed
+                
                 if ( xCurrentDispatcher.is() )
                     xCurrentDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), aFeature->second.aURL );
 
@@ -189,15 +189,15 @@ namespace frm
                 aFeature->second.bCachedState = sal_False;
         }
 
-        // notify derivee that (potentially) all features changed their state
+        
         allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::connectDispatchers()
     {
         if ( m_nConnectedFeatures )
-        {   // already connected -> just do an update
+        {   
             updateDispatches();
             return;
         }
@@ -221,11 +221,11 @@ namespace frm
             }
         }
 
-        // notify derivee that (potentially) all features changed their state
+        
         allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::disconnectDispatchers()
     {
         if ( m_nConnectedFeatures )
@@ -246,16 +246,16 @@ namespace frm
             m_nConnectedFeatures = 0;
         }
 
-        // notify derivee that (potentially) all features changed their state
+        
         allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::initializeSupportedFeatures( )
     {
         if ( m_aSupportedFeatures.empty() )
         {
-            // ask the derivee which feature ids it wants us to support
+            
             ::std::vector< sal_Int16 > aFeatureIds;
             getSupportedFeatures( aFeatureIds );
 
@@ -273,19 +273,19 @@ namespace frm
                 DBG_ASSERT( bKnownId, "OFormNavigationHelper::initializeSupportedFeatures: unknown feature id!" );
 
                 if ( bKnownId )
-                    // add to our map
+                    
                     m_aSupportedFeatures.insert( FeatureMap::value_type( *aLoop, aFeatureInfo ) );
             }
         }
     }
 
-    //------------------------------------------------------------------
+    
     Reference< XDispatch > OFormNavigationHelper::queryDispatch( const URL& _rURL )
     {
         return m_pFeatureInterception->queryDispatch( _rURL );
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamAsciiName,
         const Any& _rParamValue ) const
     {
@@ -303,7 +303,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::dispatch( sal_Int16 _nFeatureId ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -317,7 +317,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     bool OFormNavigationHelper::isEnabled( sal_Int16 _nFeatureId ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -327,7 +327,7 @@ namespace frm
         return false;
     }
 
-    //------------------------------------------------------------------
+    
     bool OFormNavigationHelper::getBooleanState( sal_Int16 _nFeatureId ) const
     {
         sal_Bool bState = sal_False;
@@ -339,7 +339,7 @@ namespace frm
         return (bool)bState;
     }
 
-    //------------------------------------------------------------------
+    
     OUString OFormNavigationHelper::getStringState( sal_Int16 _nFeatureId ) const
     {
         OUString sState;
@@ -351,7 +351,7 @@ namespace frm
         return sState;
     }
 
-    //------------------------------------------------------------------
+    
     sal_Int32 OFormNavigationHelper::getIntegerState( sal_Int16 _nFeatureId ) const
     {
         sal_Int32 nState = 0;
@@ -363,33 +363,33 @@ namespace frm
         return nState;
     }
 
-    //------------------------------------------------------------------
+    
     void OFormNavigationHelper::invalidateSupportedFeaturesSet()
     {
         disconnectDispatchers( );
-        // no supported features anymore:
+        
         FeatureMap aEmpty;
         m_aSupportedFeatures.swap( aEmpty );
     }
 
-    //==================================================================
-    //= OFormNavigationMapper
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OFormNavigationMapper::OFormNavigationMapper( const Reference< XComponentContext >& _rxORB )
     {
         m_pUrlTransformer.reset( new UrlTransformer( _rxORB ) );
     }
 
-    //------------------------------------------------------------------
+    
     OFormNavigationMapper::~OFormNavigationMapper( )
     {
     }
 
-    //------------------------------------------------------------------
+    
     bool OFormNavigationMapper::getFeatureURL( sal_Int16 _nFeatureId, URL& /* [out] */ _rURL )
     {
-        // get the ascii version of the URL
+        
         const char* pAsciiURL = getFeatureURLAscii( _nFeatureId );
         if ( pAsciiURL )
             _rURL = m_pUrlTransformer->getStrictURLFromAscii( pAsciiURL );
@@ -397,7 +397,7 @@ namespace frm
         return ( pAsciiURL != NULL );
     }
 
-    //------------------------------------------------------------------
+    
     namespace
     {
         struct FeatureURL
@@ -440,7 +440,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     const char* OFormNavigationMapper::getFeatureURLAscii( sal_Int16 _nFeatureId )
     {
         const FeatureURL* pFeatures = lcl_getFeatureTable();
@@ -453,7 +453,7 @@ namespace frm
         return NULL;
     }
 
-    //------------------------------------------------------------------
+    
     sal_Int16 OFormNavigationMapper::getFeatureId( const OUString& _rCompleteURL )
     {
         const FeatureURL* pFeatures = lcl_getFeatureTable();
@@ -466,8 +466,8 @@ namespace frm
         return -1;
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

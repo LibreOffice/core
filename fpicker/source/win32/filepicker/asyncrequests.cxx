@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "asyncrequests.hxx"
@@ -71,11 +71,11 @@ AsyncRequests::AsyncRequests(const RequestHandlerRef& rHandler)
 
 AsyncRequests::~AsyncRequests()
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     m_bFinish = sal_True;
     aLock.clear();
-    // <- SYNCHRONIZED
+    
 
     join();
 }
@@ -90,22 +90,22 @@ void AsyncRequests::triggerJobExecution()
 
 void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     m_lRequests.push(rRequest);
     aLock.clear();
-    // <- SYNCHRONIZED
+    
 
     rRequest->waitProcessMessages();
 }
 
 void AsyncRequests::triggerRequestBlocked(const RequestRef& rRequest)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     m_lRequests.push(rRequest);
     aLock.clear();
-    // <- SYNCHRONIZED
+    
 
     triggerJobExecution();
 
@@ -114,22 +114,22 @@ void AsyncRequests::triggerRequestBlocked(const RequestRef& rRequest)
 
 void AsyncRequests::triggerRequestNonBlocked(const RequestRef& rRequest)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     m_lRequests.push(rRequest);
     aLock.clear();
-    // <- SYNCHRONIZED
+    
 
     triggerJobExecution();
 }
 
 void AsyncRequests::triggerRequestDirectly(const RequestRef& rRequest)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     RequestHandlerRef rHandler = m_rHandler;
     aLock.clear();
-    // <- SYNCHRONIZED
+    
 
     if (rHandler != NULL)
         rHandler->doRequest(rRequest);
@@ -154,19 +154,19 @@ void SAL_CALL AsyncRequests::run()
 {
     static const ::sal_Int32 TIME_TO_WAIT_FOR_NEW_REQUESTS = 250;
 
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     RequestHandlerRef rHandler  = m_rHandler;
     ::sal_Bool        bFinished = m_bFinish;
     aLock.clear();
-    // <- SYNCHRONIZED
+    
 
     if (rHandler != NULL)
         rHandler->before();
 
     while ( ! bFinished)
     {
-        // SYNCHRONIZED ->
+        
         aLock.reset();
 
         RequestRef rRequest;
@@ -178,7 +178,7 @@ void SAL_CALL AsyncRequests::run()
         bFinished = m_bFinish;
 
         aLock.clear();
-        // <- SYNCHRONIZED
+        
 
         if (rRequest == NULL)
         {
@@ -198,8 +198,8 @@ void SAL_CALL AsyncRequests::run()
         rHandler->after();
 }
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

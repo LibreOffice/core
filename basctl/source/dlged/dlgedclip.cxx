@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlgedclip.hxx"
@@ -33,32 +33,22 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
-
-
-//----------------------------------------------------------------------------
-
 DlgEdTransferableImpl::DlgEdTransferableImpl( const Sequence< DataFlavor >& aSeqFlavors, const Sequence< Any >& aSeqData )
 {
     m_SeqFlavors = aSeqFlavors;
     m_SeqData = aSeqData;
 }
-
-//----------------------------------------------------------------------------
-
 DlgEdTransferableImpl::~DlgEdTransferableImpl()
 {
 }
-
-//----------------------------------------------------------------------------
-
 sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
-    // compare mime content types
+    
     Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
     Reference< datatransfer::XMimeContentTypeFactory >
         xMCntTypeFactory = MimeContentTypeFactory::create(xContext);;
 
-    // compare full media types
+    
     Reference< datatransfer::XMimeContentType > xLType = xMCntTypeFactory->createMimeContentType( lFlavor.MimeType );
     Reference< datatransfer::XMimeContentType > xRType = xMCntTypeFactory->createMimeContentType( rFlavor.MimeType );
 
@@ -70,8 +60,6 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
     return bRet;
 }
 
-// XTransferable
-//----------------------------------------------------------------------------
 
 Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException)
 {
@@ -93,18 +81,12 @@ Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor )
 
     return aData;
 }
-
-//----------------------------------------------------------------------------
-
 Sequence< DataFlavor > SAL_CALL DlgEdTransferableImpl::getTransferDataFlavors(  ) throw(RuntimeException)
 {
     const SolarMutexGuard aGuard;
 
     return m_SeqFlavors;
 }
-
-//----------------------------------------------------------------------------
-
 sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor ) throw(RuntimeException)
 {
     const SolarMutexGuard aGuard;
@@ -115,8 +97,6 @@ sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor
     return false;
 }
 
-// XClipboardOwner
-//----------------------------------------------------------------------------
 
 void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& ) throw(RuntimeException)
 {
@@ -125,8 +105,6 @@ void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard 
     m_SeqFlavors = Sequence< DataFlavor >();
     m_SeqData = Sequence< Any >();
 }
-
-
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

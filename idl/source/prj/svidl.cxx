@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,7 +29,7 @@
 #define BR 0x8000
 sal_Bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, sal_Bool bImmerVerschieben )
 {
-    //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
+    
     sal_uLong nC1 = 0;
     sal_uLong nC2 = 1;
     if( !bImmerVerschieben )
@@ -64,13 +64,13 @@ sal_Bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, sal_Bo
     OUString fileURL2;
     osl::FileBase::getFileURLFromSystemPath( rFile2, fileURL2 );
     if( nC1 != nC2 )
-    {// something has changed
+    {
         OUString fileURL1;
         osl::FileBase::getFileURLFromSystemPath( rFile1, fileURL1 );
-        // move file
+        
         if( osl::FileBase::E_None != osl::File::move( fileURL2, fileURL1 ) )
         {
-            // delete both files
+            
             osl::File::remove( fileURL1 );
             osl::File::remove( fileURL2 );
             return sal_False;
@@ -80,8 +80,8 @@ sal_Bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, sal_Bo
     return osl::FileBase::E_None == osl::File::remove( fileURL2 );
 }
 
-//This function gets a system path to a file [fname], creates a temp file in
-//the same folder as [fname] and returns the system path of the temp file.
+
+
 inline OUString tempFileHelper(OUString const & fname)
 {
     OUString aTmpFile;
@@ -321,7 +321,7 @@ int main ( int argc, char ** argv)
         {
             if( !aCommand.aTargetFile.isEmpty() )
             {
-                // stamp file, because idl passed through correctly
+                
                 SvFileStream aOutStm( aCommand.aTargetFile,
                                 STREAM_READWRITE | STREAM_TRUNC );
             }

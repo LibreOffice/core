@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/container/XNamed.hpp>
@@ -90,7 +90,7 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
         aPropertyValue.Value <<= sal_Int32(100);
         aRet.push_back(aPropertyValue);
     }
-    // See the spec, new-style frame default margins are specified in EMUs.
+    
     aPropertyValue.Name = "LeftBorderDistance";
     aPropertyValue.Value <<= sal_Int32(bNew ? (91440 / 360) : 0);
     aRet.push_back(aPropertyValue);
@@ -187,8 +187,8 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
         bFilled = aValue.toInt32() == 1;
     else if (aKey == "rotation")
     {
-        // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
-        // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
+        
+        
         sal_Int32 nRotation = aValue.toInt32()*100/65536;
         xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(nRotation * -1))));
     }
@@ -220,28 +220,28 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
-    // Create this early, as custom shapes may have properties before the type arrives.
+    
     createShape("com.sun.star.drawing.CustomShape", xShape, xPropertySet);
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
     std::vector<beans::PropertyValue> aPathPropVec;
-    // Default line color is black in Word, blue in Writer.
+    
     uno::Any aLineColor = uno::makeAny(COL_BLACK);
-    // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
+    
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
     text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-    // Groupshape support
+    
     boost::optional<sal_Int32> oGroupLeft, oGroupTop, oGroupRight, oGroupBottom;
     boost::optional<sal_Int32> oRelLeft, oRelTop, oRelRight, oRelBottom;
 
-    // Importing these are not trivial, let the VML import do the hard work.
-    oox::vml::FillModel aFillModel; // Gradient.
-    oox::vml::ShadowModel aShadowModel; // Shadow.
+    
+    oox::vml::FillModel aFillModel; 
+    oox::vml::ShadowModel aShadowModel; 
 
     bool bOpaque = true;
 
-    // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
+    
     if (std::find_if(rShape.aProperties.begin(),
                 rShape.aProperties.end(),
                 boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
@@ -261,7 +261,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     break;
                 case ESCHER_ShpInst_Rectangle:
                 case ESCHER_ShpInst_TextBox:
-                    // If we're inside a groupshape, can't use text frames.
+                    
                     if (!bClose && m_aParents.size() == 1)
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
@@ -278,8 +278,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     break;
             }
 
-            // Defaults
-            aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
+            
+            aAny <<= (sal_uInt32)0xffffff; 
             if (xPropertySet.is() && !m_bTextFrame)
                 xPropertySet->setPropertyValue("FillColor", aAny);
         }
@@ -308,16 +308,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             else
                 xPropertySet->setPropertyValue("FillColor", aAny);
 
-            // fillType will decide, possible it'll be the start color of a gradient.
+            
             aFillModel.moColor.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(aAny.get<sal_Int32>()), RTL_TEXTENCODING_UTF8));
         }
         else if ( i->first == "fillBackColor" )
-            // fillType will decide, possible it'll be the end color of a gradient.
+            
             aFillModel.moColor2.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
         else if (i->first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
         else if ( i->first == "lineBackColor" )
-            ; // Ignore: complementer of lineColor
+            ; 
         else if (i->first == "txflTextFlow" && xPropertySet.is())
         {
             if (i->second.toInt32() == 1)
@@ -336,10 +336,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-            sal_Int32 nSize = 0; // Size of a token (it's value is hardwired in the exporter)
-            sal_Int32 nCount = 0; // Number of tokens
-            sal_Int32 nCharIndex = 0; // Character index
-            sal_Int32 nIndex = 0; // Array index
+            sal_Int32 nSize = 0; 
+            sal_Int32 nCount = 0; 
+            sal_Int32 nCharIndex = 0; 
+            sal_Int32 nIndex = 0; 
             do
             {
                 OUString aToken = i->second.getToken(0, ';', nCharIndex);
@@ -352,7 +352,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                 }
                 else
                 {
-                    // The coordinates are in an (x,y) form.
+                    
                     aToken = aToken.copy(1, aToken.getLength() - 2);
                     sal_Int32 nI = 0;
                     boost::optional<sal_Int32> oX;
@@ -404,32 +404,32 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
                     switch (nSeg)
                     {
-                        case 0x0001: // lineto
+                        case 0x0001: 
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                             aSegments[nIndex].Count = sal_Int32(1);
                             break;
-                        case 0x4000: // moveto
+                        case 0x4000: 
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
                             aSegments[nIndex].Count = sal_Int32(1);
                             break;
-                        case 0x2000: // curveto
+                        case 0x2000: 
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
                             aSegments[nIndex].Count = sal_Int32(nPoints);
                             break;
-                        case 0xb300: // arcto
+                        case 0xb300: 
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
                             aSegments[nIndex].Count = sal_Int32(0);
                             break;
                         case 0xac00:
-                        case 0xaa00: // nofill
-                        case 0xab00: // nostroke
-                        case 0x6001: // close
+                        case 0xaa00: 
+                        case 0xab00: 
+                        case 0x6001: 
                             break;
-                        case 0x8000: // end
+                        case 0x8000: 
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
                             aSegments[nIndex].Count = sal_Int32(0);
                             break;
-                        default: // given number of lineto elements
+                        default: 
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                             aSegments[nIndex].Count = nSeg;
                             break;
@@ -452,11 +452,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             aViewBox.Height = i->second.toInt32();
         else if ( i->first == "dhgt" )
         {
-            // dhgt is Word 2007, \shpz is Word 97-2003, the later has priority.
+            
             if (!rShape.oZ)
                 resolveDhgt(xPropertySet, i->second.toInt32());
         }
-        // These are in EMU, convert to mm100.
+        
         else if (i->first == "dxTextLeft")
             xPropertySet->setPropertyValue("LeftBorderDistance", uno::makeAny(i->second.toInt32() / 360));
         else if (i->first == "dyTextTop")
@@ -477,7 +477,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         {
             switch (i->second.toInt32())
             {
-                case 7: // Shade using the fillAngle
+                case 7: 
                     aFillModel.moType.set(oox::XML_gradient);
                 break;
                 default:
@@ -486,7 +486,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             }
         }
         else if (i->first == "fillFocus")
-            aFillModel.moFocus.set(i->second.toDouble() / 100); // percent
+            aFillModel.moFocus.set(i->second.toDouble() / 100); 
         else if (i->first == "fShadow" && xPropertySet.is())
         {
             if (i->second.toInt32() == 1)
@@ -495,7 +495,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if (i->first == "shadowColor")
             aShadowModel.moColor.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
         else if (i->first == "shadowOffsetX")
-            // EMUs to points
+            
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
         else if (i->first == "posh" || i->first == "posv" || i->first == "fFitShapeToText" || i->first == "fFilled" || i->first == "rotation")
             applyProperty(xShape, i->first, i->second);
@@ -566,13 +566,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         if (rShape.oZ)
             resolveDhgt(xPropertySet, *rShape.oZ);
         if (m_bTextFrame)
-            // Writer textframes implement text::WritingMode2, which is a different data type.
+            
             xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));
         else
             xPropertySet->setPropertyValue("TextWritingMode", uno::makeAny(eWritingMode));
     }
 
-    if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
+    if (nType == ESCHER_ShpInst_PictureFrame) 
     {
         if (bPib)
             m_rImport.resolvePict(false);
@@ -587,13 +587,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         xDefaulter->createCustomShapeDefaults(OUString::number(nType));
     }
 
-    // Creating Path property
+    
     uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
     beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
     for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
         *pPathValues++ = *i;
 
-    // Creating CustomShapeGeometry property
+    
     std::vector<beans::PropertyValue> aGeomPropVec;
     if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
     {
@@ -616,7 +616,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     if (aGeomPropSeq.getLength() && xPropertySet.is())
         xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeomPropSeq));
 
-    // Set position and size
+    
     if (xShape.is())
     {
         sal_Int32 nLeft = rShape.nLeft;
@@ -626,7 +626,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             && oRelLeft && oRelTop && oRelRight && oRelBottom;
         if (bInShapeGroup)
         {
-            // See lclGetAbsPoint() in the VML import: rShape is the group shape, oGroup is its coordinate system, oRel is the relative child shape.
+            
             sal_Int32 nShapeWidth = rShape.nRight - rShape.nLeft;
             sal_Int32 nShapeHeight = rShape.nBottom - rShape.nTop;
             sal_Int32 nCoordSysWidth = *oGroupRight - *oGroupLeft;
@@ -661,7 +661,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         {
             oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);
             aFillModel.pushToPropMap(aPropMap, m_rImport.getGraphicHelper());
-            // Sets the FillStyle and FillGradient UNO properties.
+            
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
 
@@ -669,7 +669,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         {
             oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);
             aShadowModel.pushToPropMap(aPropMap, m_rImport.getGraphicHelper());
-            // Sets the ShadowFormat UNO property.
+            
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
         xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
@@ -688,7 +688,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         return;
     }
 
-    // Send it to dmapper
+    
     m_rImport.Mapper().startShape(xShape);
     if (bClose)
     {
@@ -714,7 +714,7 @@ void RTFSdrImport::appendGroupProperty(OUString aKey, OUString aValue)
         applyProperty(xShape, aKey, aValue);
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::frame;
 
 class SvxPopupWindowListBox;
 
-/////////////////////////////////////////////////////////////////
+
 
 class SvxPopupWindowListBox : public SfxPopupWindow
 {
@@ -61,18 +61,18 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     bool            bUserSel;
     sal_uInt16          nTbxId;
     OUString   maCommandURL;
-    // disallow copy-constructor and assignment-operator
+    
 
     SvxPopupWindowListBox(const int& );
     SvxPopupWindowListBox & operator = (const int& );
 
-//  SvxPopupWindowListBox( sal_uInt16 nSlotId, ToolBox& rTbx, sal_uInt16 nTbxItemId );
+
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
     virtual ~SvxPopupWindowListBox();
 
-    // SfxPopupWindow
+    
     virtual SfxPopupWindow *    Clone() const;
     virtual void                PopupModeEnd();
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
@@ -85,7 +85,7 @@ public:
     /*virtual*/Window*                     GetPreferredKeyInputWindow();
 };
 
-/////////////////////////////////////////////////////////////////
+
 
 SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
@@ -119,7 +119,7 @@ void SvxPopupWindowListBox::PopupModeEnd()
 {
     rToolBox.EndSelection();
     SfxPopupWindow::PopupModeEnd();
-    //FloatingWindow::PopupModeEnd();
+    
 
     if( SfxViewShell::Current() )
     {
@@ -139,12 +139,12 @@ void SvxPopupWindowListBox::StateChanged(
 
 Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 {
-    // allows forwarding key events in the correct window
-    // without setting the focus
+    
+    
     return pListBox->GetPreferredKeyInputWindow();
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -203,7 +203,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
 
-//    ListBox &rListBox = pPopupWin->GetListBox();
+
 
     sal_uInt16 nId;
     if (nCount == 1)
@@ -222,7 +222,7 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
 {
     if (pPopupWin)
     {
-        //pPopupWin->SetUserSelected( false );
+        
 
         ListBox &rListBox = pPopupWin->GetListBox();
         if (rListBox.IsTravelSelect())
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 
@@ -311,10 +311,10 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
                                   RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS);
     Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
-    // move focus in floating window without
-    // closing it (GrabFocus() would close it!)
+    
+    
     pPopupWin->StartPopupMode( &rBox, FLOATWIN_POPUPMODE_GRABFOCUS );
-    //pPopupWin->GetListBox().GrabFocus();
+    
 
     return pPopupWin;
 }

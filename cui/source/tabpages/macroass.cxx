@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "macroass.hxx"
@@ -57,7 +57,7 @@ public:
     sal_Bool                            bReadOnly;
     Timer                           maFillGroupTimer;
     sal_Bool                            bGotEvents;
-    bool m_bDummyActivated; ///< has this tab page already been activated
+    bool m_bDummyActivated; 
 };
 
 _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl()
@@ -79,14 +79,14 @@ static sal_uInt16 aPageRg[] = {
     0
 };
 
-// attention, this array is indexed directly (0, 1, ...) in the code
+
 static long nTabs[] =
     {
-        2, // Number of Tabs
+        2, 
         0, 90
     };
 
-// IDs for items in HeaderBar of EventLB
+
 #define ITEMID_EVENT        1
 #define ITMEID_ASSMACRO     2
 
@@ -117,11 +117,11 @@ OUString ConvertToUIName_Impl( SvxMacro *pMacro )
 
 void _SfxMacroTabPage::EnableButtons()
 {
-    // don't do anything as long as the eventbox is empty
+    
     const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
-        // get bound macro
+        
         const SvxMacro* pM = aTbl.Get( (sal_uInt16)(sal_uLong) pE->GetUserData() );
         mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
@@ -151,7 +151,7 @@ void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventI
     OUString sTmp( rEventName );
     sTmp += "\t";
 
-    // if the table is valid already
+    
     SvxMacro* pM = aTbl.Get( nEventId );
     if( pM )
     {
@@ -165,7 +165,7 @@ void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventI
 
 void _SfxMacroTabPage::ScriptChanged()
 {
-    // get new areas and their functions
+    
     mpImpl->pGroupFrame->Show();
     mpImpl->pMacroFrame->Show();
 
@@ -199,8 +199,8 @@ void _SfxMacroTabPage::LaunchFillGroup()
 
 void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
 {
-    // fdo#57553 lazily init script providers, because it is annoying if done
-    // on dialog open (SfxTabDialog::Start_Impl activates all tab pages once!)
+    
+    
     if (!mpImpl->m_bDummyActivated)
     {
         mpImpl->m_bDummyActivated = true;
@@ -310,7 +310,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
     const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
-    // remove from the table
+    
     sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();
     pThis->aTbl.Erase( nEvent );
 
@@ -344,9 +344,9 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
 {
-    // FillMacroList() can take a long time -> show wait cursor and disable input
+    
     SfxTabDialog* pTabDlg = pThis->GetTabDialog();
-    // perhaps the tabpage is part of a SingleTabDialog then pTabDlg == NULL
+    
     if ( pTabDlg )
     {
         pTabDlg->EnterWait();
@@ -379,7 +379,7 @@ void _SfxMacroTabPage::InitAndSetHandler()
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
-    aSize.Width() = 1764;       // don't know what, so 42^2 is best to use...
+    aSize.Width() = 1764;       
     rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
@@ -409,7 +409,7 @@ void _SfxMacroTabPage::FillEvents()
 
     sal_uLong       nEntryCnt = rListBox.GetEntryCount();
 
-    // get events from the table and fill the EventListBox respectively
+    
     for( sal_uLong n = 0 ; n < nEntryCnt ; ++n )
     {
         SvTreeListEntry*    pE = rListBox.GetEntry( n );

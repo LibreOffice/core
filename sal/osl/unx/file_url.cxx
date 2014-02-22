@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "file_url.h"
@@ -94,7 +94,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         return osl_File_E_INVAL;
     }
 
-    /* Check for non file:// protocols */
+    /* Check for non file:
 
     nIndex = rtl_ustr_indexOfStr_WithLength( ustrFileURL->buffer, ustrFileURL->length, protocolDelimiter, 3 );
     if ( -1 != nIndex && (4 != nIndex || 0 != rtl_ustr_ascii_shortenedCompare_WithLength( ustrFileURL->buffer, ustrFileURL->length,"file", 4 ) ) )
@@ -154,13 +154,13 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         /* protocol is case insensitive */
         rtl_ustr_toAsciiLowerCase_WithLength( pProtocol->buffer, pProtocol->length );
 
-        if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pProtocol->buffer, pProtocol->length,"file://", 7 ) )
+        if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pProtocol->buffer, pProtocol->length,"file:
             nIndex = 7;
 
         rtl_uString_release( pProtocol );
     }
 
-    /* skip "localhost" or "127.0.0.1" if "file://" is specified */
+    /* skip "localhost" or "127.0.0.1" if "file:
     /* FIXME: use rtl_ustr_ascii_shortenedCompareIgnoreCase_WithLength when available */
     if( nIndex && ( 10 <= pTmp->length - nIndex ) )
     {
@@ -196,7 +196,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
             osl_getHomeDir( pSecurity , &pTmp2 );
             osl_freeSecurityHandle( pSecurity );
 
-            /* remove "file://" prefix */
+            /* remove "file:
             rtl_uString_newFromStr_WithLength( &pTmp2, pTmp2->buffer + 7, pTmp2->length - 7 );
 
             /* replace '~' in original string */
@@ -231,7 +231,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file:", 5 ) )
     {
     /*
-        if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file://", 7 ) )
+        if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file:
         {
             OSL_FAIL( "osl_getFileURLFromSystemPath: input is already file URL" );
             rtl_uString_assign( pustrFileURL, ustrSystemPath );
@@ -242,7 +242,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 
             OSL_FAIL( "osl_getFileURLFromSystemPath: input is wrong file URL" );
             rtl_uString_newFromStr_WithLength( pustrFileURL, ustrSystemPath->buffer + 5, ustrSystemPath->length - 5 );
-            rtl_uString_newFromAscii( &pTmp2, "file://" );
+            rtl_uString_newFromAscii( &pTmp2, "file:
             rtl_uString_newConcat( pustrFileURL, *pustrFileURL, pTmp2 );
             rtl_uString_release( pTmp2 );
         }
@@ -263,7 +263,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
             osl_getHomeDir( pSecurity , &pTmp );
             osl_freeSecurityHandle( pSecurity );
 
-            /* remove "file://" prefix */
+            /* remove "file:
             rtl_uString_newFromStr_WithLength( &pTmp, pTmp->buffer + 7, pTmp->length - 7 );
 
             /* replace '~' in original string */
@@ -291,7 +291,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         /* adapt index to pTmp */
         nIndex += pTmp->length - ustrSystemPath->length;
 
-        /* remove all occurrences of '//' */
+        /* remove all occurrences of '
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
         {
             if( ('/' == pTmp->buffer[nSrcIndex]) && ('/' == pTmp->buffer[nIndex]) )
@@ -312,12 +312,12 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 
     rtl_uString_release( pTmp );
 
-    /* absolute urls should start with 'file://' */
+    /* absolute urls should start with 'file:
     if( '/' == (*pustrFileURL)->buffer[0] )
     {
         rtl_uString *pProtocol = NULL;
 
-        rtl_uString_newFromAscii( &pProtocol, "file://" );
+        rtl_uString_newFromAscii( &pProtocol, "file:
         rtl_uString_newConcat( pustrFileURL, pProtocol, *pustrFileURL );
         rtl_uString_release( pProtocol );
     }
@@ -395,8 +395,8 @@ namespace
         */
         sal_Unicode* p = ustrtoend(aPath) - 2;
 
-        // move back to the next path separator
-        // or to the start of the string
+        
+        
         while ((p > aPath) && (*p != '/'))
             p--;
 
@@ -455,7 +455,7 @@ namespace
 
     oslFileError osl_getAbsoluteFileURL_impl_(const rtl::OUString& unresolved_path, rtl::OUString& resolved_path)
     {
-        // the given unresolved path must not exceed PATH_MAX
+        
         if (unresolved_path.getLength() >= (PATH_MAX - 2))
             return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
 
@@ -463,13 +463,13 @@ namespace
         const sal_Unicode* punresolved = unresolved_path.getStr();
         sal_Unicode*       presolvedsf = path_resolved_so_far;
 
-        // reserve space for leading '/' and trailing '\0'
-        // do not exceed this limit
+        
+        
         sal_Unicode* sentinel = path_resolved_so_far + PATH_MAX - 2;
 
-        // if realpath fails with error ENOTDIR, EACCES or ENOENT
-        // we will not call it again, because _osl_realpath should also
-        // work with non existing directories etc.
+        
+        
+        
         bool realpath_failed = false;
         oslFileError ferr;
 
@@ -477,7 +477,7 @@ namespace
 
         while (*punresolved != '\0')
         {
-            // ignore '/.' , skip one part back when '/..'
+            
 
             if (('.' == *punresolved) && ('/' == *presolvedsf))
             {
@@ -504,7 +504,7 @@ namespace
 
                     continue;
                 }
-                else // a file or directory name may start with '.'
+                else 
                 {
                     if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
                         return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
@@ -547,7 +547,7 @@ namespace
                     }
                 }
             }
-            else // any other character
+            else 
             {
                 if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
                     return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
@@ -579,14 +579,14 @@ namespace
 
 oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL)
 {
-    // Work around the below call to getSystemPathFromFileURL rejecting input
-    // that starts with "/" (for whatever reason it behaves that way; but
-    // changing that would start to break lots of tests at least):
+    
+    
+    
     rtl::OUString relUrl(ustrRelativeURL);
-    if (relUrl.startsWith("//")) {
+    if (relUrl.startsWith("
         relUrl = "file:" + relUrl;
     } else if (relUrl.startsWith("/")) {
-        relUrl = "file://" + relUrl;
+        relUrl = "file:
     }
 
     FileBase::RC  rc;
@@ -679,7 +679,7 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
     FileBase::RC  rc;
     rtl::OUString file_path;
 
-    // try to interpret search path as file url else assume it's a system path list
+    
     rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrFilePath), file_path);
     if (FileBase::E_INVAL == rc)
         file_path = ustrFilePath;

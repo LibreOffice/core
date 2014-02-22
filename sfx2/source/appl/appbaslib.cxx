@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@ using namespace ::com::sun::star::embed;
 using ::osl::MutexGuard;
 using ::osl::Mutex;
 
-//============================================================================
+
 SfxBasicManagerHolder::SfxBasicManagerHolder()
     :mpBasicManager( NULL )
 {
@@ -49,11 +49,11 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 #ifdef DISABLE_SCRIPTING
     (void) _pBasicManager;
 #else
-    // Note: we do not delete the old BasicManager. BasicManager instances are
-    // nowadays obtained from the BasicManagerRepository, and the ownership is with
-    // the repository.
-    // @see basic::BasicManagerRepository::getApplicationBasicManager
-    // @see basic::BasicManagerRepository::getDocumentBasicManager
+    
+    
+    
+    
+    
     mpBasicManager = _pBasicManager;
 
     if ( mpBasicManager )
@@ -153,8 +153,8 @@ SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sMo
     return sal_True;
 }
 
-//============================================================================
-// Service for application library container
+
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
@@ -165,8 +165,8 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     return SFX_APP()->GetDialogContainer();
 }
 
-//============================================================================
-// Service for application library container
+
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(

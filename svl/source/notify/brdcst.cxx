@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <assert.h>
@@ -32,13 +32,13 @@ DBG_NAME(SfxBroadcaster)
 TYPEINIT0(SfxBroadcaster);
 
 
-// broadcast immediately
+
 
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
 
-    // notify all registered listeners exactly once
+    
     for (size_t n = 0; n < m_Listeners.size(); ++n)
     {
         SfxListener *const pListener = m_Listeners[n];
@@ -48,7 +48,7 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
     }
 }
 
-// unregister all listeners
+
 
 SfxBroadcaster::~SfxBroadcaster()
 {
@@ -56,7 +56,7 @@ SfxBroadcaster::~SfxBroadcaster()
 
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
-    // remove all still registered listeners
+    
     for (size_t nPos = 0; nPos < m_Listeners.size(); ++nPos)
     {
         SfxListener *const pListener = m_Listeners[nPos];
@@ -67,7 +67,7 @@ SfxBroadcaster::~SfxBroadcaster()
 }
 
 
-// simple ctor of class SfxBroadcaster
+
 
 SfxBroadcaster::SfxBroadcaster()
 {
@@ -75,7 +75,7 @@ SfxBroadcaster::SfxBroadcaster()
 }
 
 
-// copy ctor of class SfxBroadcaster
+
 
 
 SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
@@ -92,7 +92,7 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 }
 
 
-// add a new SfxListener to the list
+
 
 void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
@@ -100,7 +100,7 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
 
     for (size_t i = 0; i < m_Listeners.size(); ++i)
     {
-        if (!m_Listeners[i]) // removed by RemoveListener?
+        if (!m_Listeners[i]) 
         {
             m_Listeners[i] = &rListener;
             return;
@@ -110,7 +110,7 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
 }
 
 
-// called, if no more listeners exists
+
 
 void SfxBroadcaster::ListenersGone()
 {
@@ -118,7 +118,7 @@ void SfxBroadcaster::ListenersGone()
 }
 
 
-// forward a notification to all registered listeners
+
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -132,16 +132,16 @@ void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 }
 
 
-// remove one SfxListener from the list
+
 
 void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     {DBG_CHKTHIS(SfxBroadcaster, 0);}
     SfxListenerArr_Impl::iterator aIter = std::find(
             m_Listeners.begin(), m_Listeners.end(), &rListener);
-    assert(aIter != m_Listeners.end()); // "RemoveListener: Listener unknown"
-    // DO NOT erase the listener, set the pointer to 0
-    // because the current continuation may contain this->Broadcast
+    assert(aIter != m_Listeners.end()); 
+    
+    
     *aIter = 0;
 
     if ( !HasListeners() )

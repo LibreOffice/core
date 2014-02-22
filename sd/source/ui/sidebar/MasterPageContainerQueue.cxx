@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPageContainerQueue.hxx"
@@ -31,7 +31,7 @@ const sal_Int32 MasterPageContainerQueue::snMasterPagePriorityBoost (5);
 const sal_Int32 MasterPageContainerQueue::snWaitForMoreRequestsPriorityThreshold (-10);
 sal_uInt32 MasterPageContainerQueue::snWaitForMoreRequestsCount(15);
 
-//===== MasterPageContainerQueue::PreviewCreationRequest ======================
+
 
 class MasterPageContainerQueue::PreviewCreationRequest
 {
@@ -49,13 +49,13 @@ public:
         {
             if (r1.mnPriority != r2.mnPriority)
             {
-                // Prefer requests with higher priority.
+                
                 return r1.mnPriority > r2.mnPriority;
             }
             else
             {
-                // Prefer tokens that have been earlier created (those with lower
-                // value).
+                
+                
                 return r1.mpDescriptor->maToken < r2.mpDescriptor->maToken;
             }
         }
@@ -73,7 +73,7 @@ public:
 
 
 
-//===== MasterPageContainerQueue::RequestQueue ================================
+
 
 class MasterPageContainerQueue::RequestQueue
     : public ::std::set<PreviewCreationRequest,PreviewCreationRequest::Compare>
@@ -85,7 +85,7 @@ public:
 
 
 
-//===== MasterPageContainerQueue ==============================================
+
 
 MasterPageContainerQueue* MasterPageContainerQueue::Create (
     const ::boost::weak_ptr<ContainerAdapter>& rpContainer)
@@ -122,7 +122,7 @@ MasterPageContainerQueue::~MasterPageContainerQueue (void)
 
 void MasterPageContainerQueue::LateInit (void)
 {
-    // Set up the timer for the delayed creation of preview bitmaps.
+    
     maDelayedPreviewCreationTimer.SetTimeout (snDelayedCreationTimeout);
     Link aLink (LINK(this,MasterPageContainerQueue,DelayedPreviewCreation));
     maDelayedPreviewCreationTimer.SetTimeoutHdl(aLink);
@@ -139,13 +139,13 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
     {
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
 
-        // Add a new or replace an existing request.
+        
         RequestQueue::iterator iRequest (::std::find_if(
             mpRequestQueue->begin(),
             mpRequestQueue->end(),
             PreviewCreationRequest::CompareToken(rpDescriptor->maToken)));
-        // When a request for the same token exists then the lowest of the
-        // two priorities is used.
+        
+        
         if (iRequest != mpRequestQueue->end())
             if (iRequest->mnPriority < nPriority)
             {
@@ -153,7 +153,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
                 iRequest = mpRequestQueue->end();
             }
 
-        // Add a new request when none exists (or has just been erased).
+        
         if (iRequest == mpRequestQueue->end())
         {
             mpRequestQueue->insert(PreviewCreationRequest(rpDescriptor,nPriority));
@@ -172,7 +172,7 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
 {
     sal_Int32 nPriority;
 
-    // The cost is used as a starting value.
+    
     int nCost (0);
     if (rpDescriptor->mpPreviewProvider.get() != NULL)
     {
@@ -182,15 +182,15 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
                 nCost += rpDescriptor->mpPageObjectProvider->GetCostIndex();
     }
 
-    // Its negative value is used so that requests with a low cost are
-    // preferred over those with high costs.
+    
+    
     nPriority = -nCost;
 
-    // Add a term that introduces an order based on the appearance in the
-    // AllMasterPagesSelector.
+    
+    
     nPriority -= rpDescriptor->maToken / 3;
 
-    // Process requests for the CurrentMasterPagesSelector first.
+    
     if (rpDescriptor->meOrigin == MasterPageContainer::MASTERPAGE)
         nPriority += snMasterPagePriorityBoost;
 
@@ -210,7 +210,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         if (mpRequestQueue->empty())
             break;
 
-        // First check whether the system is idle.
+        
         sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
         if (nIdleState != tools::IdleDetection::IDET_IDLE)
         {
@@ -221,17 +221,17 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
 
         PreviewCreationRequest aRequest (*mpRequestQueue->begin());
 
-        // Check if the request should really be processed right now.
-        // Reasons to not do it are when its cost is high and not many other
-        // requests have been inserted into the queue that would otherwise
-        // be processed first.
+        
+        
+        
+        
         if (aRequest.mnPriority < snWaitForMoreRequestsPriorityThreshold
             && (mnRequestsServedCount+mpRequestQueue->size() < snWaitForMoreRequestsCount))
         {
-            // Wait for more requests before this one is processed.  Note
-            // that the queue processing is not started anew when this
-            // method is left.  That is done when the next request is
-            // inserted.
+            
+            
+            
+            
             bWaitForMoreRequests = true;
             break;
         }
@@ -294,6 +294,6 @@ void MasterPageContainerQueue::ProcessAllRequests (void)
 }
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

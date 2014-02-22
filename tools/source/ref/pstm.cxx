@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -39,10 +39,10 @@ SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
     return i == aAssocTable.end() ? 0 : i->second;
 }
 
-// SvRttiBase
+
 TYPEINIT0( SvRttiBase );
 
-// SvPersistBaseMemberList
+
 
 #define PERSIST_LIST_VER        (sal_uInt8)0
 #define PERSIST_LIST_DBGUTIL    (sal_uInt8)0x80
@@ -60,19 +60,19 @@ void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList
     sal_uIntPtr  nCountPos = rStm.Tell();
     sal_uInt32 nWriteCount = 0;
     rStm.WriteUInt32( nCountMember );
-    // Don't change the list, as it causes side-effects while saving
+    
     for( sal_uIntPtr n = 0; n < nCountMember; n++ )
     {
         SvPersistBase * pObj = rList.GetPersistBase( n );
         if( !bOnlyStreamed || rStm.IsStreamed( pObj ) )
-        { // Object should be stored
+        { 
             WriteSvPersistBase(rStm, pObj);
             nWriteCount++;
         }
     }
     if( nWriteCount != nCountMember )
     {
-        // Didn't write all members, adjust count
+        
         sal_uIntPtr nPos = rStm.Tell();
         rStm.Seek( nCountPos );
         rStm.WriteUInt32( nWriteCount );
@@ -332,9 +332,9 @@ void SvPersistStream::WriteCompressed( SvStream & rStm, sal_uInt32 nVal )
     }
     else if( nVal < 0x20000000 )
     {
-        // highest sal_uInt8
+        
         rStm.WriteUChar( (sal_uInt8)(LEN_4 | (nVal >> 24)) );
-        // 2nd highest sal_uInt8
+        
         rStm.WriteUChar( (sal_uInt8)(nVal >> 16) );
         rStm.WriteUInt16( (sal_uInt16)(nVal) );
     }
@@ -353,7 +353,7 @@ void SvPersistStream::WriteCompressed( SvStream & rStm, sal_uInt32 nVal )
     @code
     sal_uInt32 nObjPos = rStm.WriteDummyLen();
     ...
-    // write data
+    
     ...
     rStm.WriteLen( nObjPos );
     @endcode
@@ -369,8 +369,8 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     sal_uInt32 nPos = Tell();
 #endif
     sal_uInt32 n0 = 0;
-    WriteUInt32( n0 ); // Because of Sun sp
-    // Don't assert on stream error
+    WriteUInt32( n0 ); 
+    
     DBG_ASSERT( GetError() != SVSTREAM_OK
                   || (sizeof( sal_uInt32 ) == Tell() -nPos),
                 "No 4 byte as length parameter" );
@@ -386,10 +386,10 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     @code
     sal_uInt32 nObjPos = rStm.WriteDummyLen();
     ...
-    // write data
+    
     ...
     rStm.WriteLen( nObjPos );
-    // write more data
+    
     @endcode
 
     @param nObjPos Position+4, on which length is written to
@@ -401,9 +401,9 @@ void SvPersistStream::WriteLen( sal_uInt32 nObjPos )
 {
     sal_uInt32 nPos = Tell();
     sal_uInt32 nLen = nPos - nObjPos;
-    // Length in stream must be 4 Bytes
+    
     Seek( nObjPos - sizeof( sal_uInt32 ) );
-    // write length
+    
     WriteUInt32( nLen );
     Seek( nPos );
 }
@@ -424,7 +424,7 @@ sal_uInt32 SvPersistStream::ReadLen( sal_uInt32 * pTestPos )
     return nLen;
 }
 
-// File format backward-compatible
+
 #ifdef STOR_NO_OPTIMIZE
 #define P_VER       (sal_uInt8)0x00
 #else
@@ -456,12 +456,12 @@ static void WriteId
     if( nHdr & P_ID )
     {
         if( (nHdr & P_OBJ) || nId != 0 )
-        { // Id set only for pointers or DBGUTIL
+        { 
             rStm.WriteUChar( (sal_uInt8)(nHdr) );
             SvPersistStream::WriteCompressed( rStm, nId );
         }
         else
-        { // NULL Pointer
+        { 
             rStm.WriteUChar( (sal_uInt8)(nHdr | P_ID_0) );
             return;
         }
@@ -470,8 +470,8 @@ static void WriteId
         rStm.WriteUChar( nHdr );
 
     if( (nHdr & P_DBGUTIL) || (nHdr & P_OBJ) )
-        // Objects always have a class id
-        // Pointers only for DBG_UTIL and != NULL
+        
+        
         SvPersistStream::WriteCompressed( rStm, nClassId );
 }
 
@@ -513,7 +513,7 @@ void SvPersistStream::WriteObj
 #ifdef STOR_NO_OPTIMIZE
     sal_uInt32 nObjPos = 0;
     if( nHdr & P_DBGUTIL )
-        // remember position for length value
+        
         nObjPos = WriteDummyLen();
 #endif
     pObj->Save( *this );
@@ -546,7 +546,7 @@ SvPersistStream& SvPersistStream::WritePointer
             WriteObj( nP, pObj );
     }
     else
-    { // NULL Pointer
+    { 
         WriteId( *this, nP | P_ID, 0, 0 );
     }
     return *this;
@@ -562,10 +562,10 @@ sal_uInt32 SvPersistStream::ReadObj
     sal_uInt32  nId = 0;
     sal_uInt16  nClassId;
 
-    rpObj = NULL; // specification: 0 in case of error
+    rpObj = NULL; 
     ReadId( *this, nHdr, nId, nClassId );
 
-    // get version nummer through masking
+    
     if( P_VER < (nHdr & P_VER_MASK) )
     {
         SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -575,7 +575,7 @@ sal_uInt32 SvPersistStream::ReadObj
     if( !(nHdr & P_ID_0) && GetError() == SVSTREAM_OK )
     {
         if( P_OBJ & nHdr )
-        { // read object, nId only set for P_DBGUTIL
+        { 
             DBG_ASSERT( !(nHdr & P_DBGUTIL) || NULL == aPUIdx.Get( nId ),
                         "object already exist" );
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
@@ -597,14 +597,14 @@ sal_uInt32 SvPersistStream::ReadObj
                 return 0;
             }
             pFunc( &rpObj );
-            // Save reference
+            
             rpObj->AddRef();
 
             if( bRegister )
             {
-                // insert into table
+                
                 sal_uIntPtr nNewId = aPUIdx.Insert( rpObj );
-                // in order to restore state after saving
+                
                 aPTable[ rpObj ] = nNewId;
                 DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
                             "read write id conflict: not the same" );
@@ -670,7 +670,7 @@ SvStream& WriteSvPersistStream
     rThis.SetStream( &rStm );
 
     sal_uInt8 bTmp = 0;
-    rThis.WriteUChar( bTmp );    // Version
+    rThis.WriteUChar( bTmp );    
     sal_uInt32 nCount = (sal_uInt32)rThis.aPUIdx.Count();
     rThis.WriteUInt32( nCount );
     sal_uIntPtr aIndex = rThis.aPUIdx.FirstIndex();
@@ -696,7 +696,7 @@ SvStream& operator >>
     rThis.SetStream( &rStm );
 
     sal_uInt8 nVers;
-    rThis.ReadUChar( nVers ); // Version
+    rThis.ReadUChar( nVers ); 
     if( 0 == nVers )
     {
         sal_uInt32 nCount = 0;
@@ -704,12 +704,12 @@ SvStream& operator >>
         for( sal_uInt32 i = 0; i < nCount; i++ )
         {
             SvPersistBase * pEle;
-            // read, but don't insert into table
+            
             sal_uIntPtr nId = rThis.ReadObj( pEle, false );
             if( rThis.GetError() )
                 break;
 
-            // Id of object is never modified
+            
             rThis.aPUIdx.Insert( nId, pEle );
             rThis.aPTable[ pEle ] = nId;
         }

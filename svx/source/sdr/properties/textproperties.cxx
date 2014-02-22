@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/textproperties.hxx>
@@ -36,7 +36,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/svdpool.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -46,15 +46,15 @@ namespace sdr
         {
             return *(new SfxItemSet(rPool,
 
-                // range from SdrAttrObj
+                
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // range from SdrTextObj
+                
                 EE_ITEMS_START, EE_ITEMS_END,
 
-                // end
+                
                 0, 0));
         }
 
@@ -85,7 +85,7 @@ namespace sdr
             const svx::ITextProvider& rTextProvider(getTextProvider());
             sal_Int32 nText = rTextProvider.getTextCount();
 
-            // #i101556# ItemSet has changed -> new version
+            
             maVersion++;
 
             while( --nText >= 0 )
@@ -98,7 +98,7 @@ namespace sdr
                 {
                     const bool bTextEdit = rObj.IsTextEditActive() && (rObj.getActiveText() == pText);
 
-                    // handle outliner attributes
+                    
                     GetObjectItemSet();
                     Outliner* pOutliner = rObj.GetTextEditOutliner();
 
@@ -121,7 +121,7 @@ namespace sdr
                     {
                         if(nParaCount)
                         {
-                            // force ItemSet
+                            
                             GetObjectItemSet();
 
                             SfxItemSet aNewSet(pOutliner->GetParaAttribs(0L));
@@ -136,15 +136,15 @@ namespace sdr
                 }
             }
 
-            // Extra-Repaint for radical layout changes (#43139#)
+            
             if(SFX_ITEM_SET == rSet.GetItemState(SDRATTR_TEXT_CONTOURFRAME))
             {
-                // Here only repaint wanted
+                
                 rObj.ActionChanged();
-                //rObj.BroadcastObjectChange();
+                
             }
 
-            // call parent
+            
             AttributeProperties::ItemSetChanged(rSet);
         }
 
@@ -152,7 +152,7 @@ namespace sdr
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
 
-            // #i25616#
+            
             sal_Int32 nOldLineWidth(0L);
 
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
@@ -166,7 +166,7 @@ namespace sdr
                 rObj.SetVerticalWriting(bVertical);
             }
 
-            // #95501# reset to default
+            
             if(!pNewItem && !nWhich && rObj.HasText() )
             {
                 SdrOutliner& rOutliner = rObj.ImpGetDrawOutliner();
@@ -196,10 +196,10 @@ namespace sdr
                 }
             }
 
-            // call parent
+            
             AttributeProperties::ItemChange( nWhich, pNewItem );
 
-            // #i25616#
+            
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {
                 const sal_Int32 nNewLineWidth(((const XLineWidthItem&)GetItem(XATTR_LINEWIDTH)).GetValue());
@@ -234,10 +234,10 @@ namespace sdr
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
 
-            // call parent
+            
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
-            // #i101556# StyleSheet has changed -> new version
+            
             maVersion++;
 
             if( rObj.GetModel() /*&& !rObj.IsTextEditActive()*/ && !rObj.IsLinkedText() )
@@ -255,7 +255,7 @@ namespace sdr
                     if( !pParaObj )
                         continue;
 
-                    // apply StyleSheet to all paragraphs
+                    
                     rOutliner.SetText(*pParaObj);
                     sal_Int32 nParaCount(rOutliner.GetParagraphCount());
 
@@ -265,10 +265,10 @@ namespace sdr
                         {
                             SfxItemSet* pTempSet = 0L;
 
-                            // since setting the stylesheet removes all para attributes
+                            
                             if(bDontRemoveHardAttr)
                             {
-                                // we need to remember them if we want to keep them
+                                
                                 pTempSet = new SfxItemSet(rOutliner.GetParaAttribs(nPara));
                             }
 
@@ -298,7 +298,7 @@ namespace sdr
                             }
                             else
                             {
-                                // remove StyleSheet
+                                
                                 rOutliner.SetStyleSheet(nPara, 0L);
                             }
 
@@ -306,7 +306,7 @@ namespace sdr
                             {
                                 if(pTempSet)
                                 {
-                                    // restore para attributes
+                                    
                                     rOutliner.SetParaAttribs(nPara, *pTempSet);
                                 }
                             }
@@ -314,9 +314,9 @@ namespace sdr
                             {
                                 if(pNewStyleSheet)
                                 {
-                                    // remove all hard paragraph attributes
-                                    // which occur in StyleSheet, take care of
-                                    // parents (!)
+                                    
+                                    
+                                    
                                     SfxItemIter aIter(pNewStyleSheet->GetItemSet());
                                     const SfxPoolItem* pItem = aIter.FirstItem();
 
@@ -364,12 +364,12 @@ namespace sdr
                 const sal_uInt16 nSdrObjKind = rObj.GetObjIdentifier();
 
                 if( nSdrObjKind == OBJ_TITLETEXT || nSdrObjKind == OBJ_OUTLINETEXT )
-                    return; // no defaults for presentation objects
+                    return; 
             }
 
             bool bTextFrame(rObj.IsTextFrame());
 
-            // force ItemSet
+            
             GetObjectItemSet();
 
             if(bTextFrame)
@@ -388,15 +388,15 @@ namespace sdr
 
         void TextProperties::ForceStyleToHardAttributes()
         {
-            // #i61284# call parent first to get the hard ObjectItemSet
+            
             AttributeProperties::ForceStyleToHardAttributes();
 
-            // #i61284# push hard ObjectItemSet to OutlinerParaObject attributes
-            // using existing functionality
-            GetObjectItemSet(); // force ItemSet
+            
+            
+            GetObjectItemSet(); 
             ItemSetChanged(*mpItemSet);
 
-            // now the standard TextProperties stuff
+            
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
 
             if(rObj.GetModel()
@@ -519,7 +519,7 @@ namespace sdr
                                 }
 
                                 pOutliner->SetParaAttribs(nPara, aSet);
-                                bBurnIn = true; // #i51163# Flag was set wrong
+                                bBurnIn = true; 
                             }
                         }
 
@@ -545,7 +545,7 @@ namespace sdr
 
         void TextProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         {
-            // call parent
+            
             AttributeProperties::Notify(rBC, rHint);
 
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
@@ -572,12 +572,12 @@ namespace sdr
 
                         if(rObj.IsTextFrame() && rObj.NbcAdjustTextFrameWidthAndHeight())
                         {
-                            // here only repaint wanted
+                            
                             rObj.ActionChanged();
-                            //rObj.BroadcastObjectChange();
+                            
                         }
 
-                        // #i101556# content of StyleSheet has changed -> new version
+                        
                         maVersion++;
                     }
 
@@ -619,12 +619,12 @@ namespace sdr
             }
         }
 
-        // #i101556# Handout version information
+        
         sal_uInt32 TextProperties::getVersion() const
         {
             return maVersion;
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

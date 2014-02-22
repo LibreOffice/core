@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "options.hxx"
@@ -36,7 +36,7 @@ Options::Options (char const * program)
 Options::~Options()
 {}
 
-// static
+
 bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg, size_t len)
 {
     bool result = ((arg != 0) && (len > 0));
@@ -50,7 +50,7 @@ bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg,
             result = len > 1;
             if (result)
             {
-                // "@<cmdfile>"
+                
                 result = Options::checkCommandFile(rArgs, &(arg[1]));
             }
             break;
@@ -58,12 +58,12 @@ bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg,
             result = len > 1;
             if (result)
             {
-                // "-<option>"
+                
                 std::string option (&(arg[0]), 2);
                 rArgs.push_back(option);
                 if (len > 2)
                 {
-                    // "-<option><param>"
+                    
                     std::string param(&(arg[2]), len - 2);
                     rArgs.push_back(param);
                 }
@@ -77,7 +77,7 @@ bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg,
     return (result);
 }
 
-// static
+
 bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * filename)
 {
     FILE * fp = fopen(filename, "r");
@@ -109,7 +109,7 @@ bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * 
                 {
                     if (!checkArgument(rArgs, buffer.c_str(), buffer.size()))
                     {
-                        // failure.
+                        
                         (void) fclose(fp);
                         return false;
                     }
@@ -118,7 +118,7 @@ bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * 
                 break;
             }
         default:
-            // quoted white-space fall through
+            
             buffer.push_back(sal::static_int_cast<char>(c));
             break;
         }
@@ -143,7 +143,7 @@ bool Options::printUsage() const
     return false;
 }
 
-} // namespace tools
-} // namespace registry
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

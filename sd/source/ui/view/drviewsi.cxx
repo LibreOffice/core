@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -127,41 +127,41 @@ void DrawViewShell::AssignFrom3DWindow()
                     0, 0);
                 p3DWin->GetAttr( aSet );
 
-                // own UNDO-compounding also around transformation in 3D
+                
                 GetView()->BegUndo(SD_RESSTR(STR_UNDO_APPLY_3D_FAVOURITE));
 
                 if(GetView()->IsConvertTo3DObjPossible())
                 {
-                    // assign only text-attribute
+                    
                     SfxItemSet aTextSet( GetDoc()->GetPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
                     aTextSet.Put( aSet, false );
                     GetView()->SetAttributes( aTextSet );
 
-                    // transform text into 3D
+                    
                     sal_uInt16 nSId = SID_CONVERT_TO_3D;
                     SfxBoolItem aItem( nSId, true );
                     GetViewFrame()->GetDispatcher()->Execute(
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-                    // Determine if a FILL attribute is set.
-                    // If not, hard set a fill attribut
+                    
+                    
                     XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
                     if(eFillStyle == XFILL_NONE)
                         aSet.Put(XFillStyleItem (XFILL_SOLID));
 
-                    // remove some 3DSCENE attributes since these were
-                    // created by convert to 3D and may not be changed
-                    // to the defaults again.
+                    
+                    
+                    
                     aSet.ClearItem(SDRATTR_3DSCENE_DISTANCE);
                     aSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
                     aSet.ClearItem(SDRATTR_3DOBJ_DEPTH);
                 }
 
-                // assign attribute
+                
                 GetView()->Set3DAttributes( aSet );
 
-                // end UNDO
+                
                 GetView()->EndUndo();
             }
             else
@@ -172,7 +172,7 @@ void DrawViewShell::AssignFrom3DWindow()
                 aInfoBox.Execute();
             }
 
-            // get focus back
+            
             GetActiveWindow()->GrabFocus();
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -30,7 +30,7 @@
  */
 
 #if defined(SOLARIS)
-  // The procfs may only be used without LFS in 32bits.
+  
 # ifdef _FILE_OFFSET_BITS
 #   undef   _FILE_OFFSET_BITS
 # endif
@@ -148,7 +148,7 @@ static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
     return osl_Process_E_NotFound;
 }
 
-} //Anonymous namespace
+} 
 
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
@@ -309,8 +309,8 @@ static void ChildStatusProc(void *pData)
                 if (stdError[1] != -1) close( stdError[1] );
             }
 
-            // No need to check the return value of execv. If we return from
-            // it, an error has occurred.
+            
+            
             execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
         }
 
@@ -438,9 +438,9 @@ static void ChildStatusProc(void *pData)
             if (stdOutput[0] != -1) close( stdOutput[0] );
             if (stdError[0] != -1) close( stdError[0] );
 
-            //if pid > 0 then a process was created, even if it later failed
-            //e.g. bash searching for a command to execute, and we still
-            //need to clean it up to avoid "defunct" processes
+            
+            
+            
             if (pid > 0)
             {
                 pid_t child_pid;

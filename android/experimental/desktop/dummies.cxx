@@ -4,12 +4,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
-// Dummy implementations of the callback functions in the UI layer
-// that the LO layer calls. As this experimental Android app doesn't
-// handle any of that, these do nothing.
+
+
+
 
 #include <android/log.h>
 

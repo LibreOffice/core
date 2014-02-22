@@ -48,7 +48,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
 {
     Initialize(rxComponentContext);
 
-    // Get access to the configuration.
+    
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
         "org.openoffice.Office.PresenterScreen",
@@ -81,8 +81,8 @@ void PresenterBitmapContainer::Initialize (
 {
     if ( ! mxPresenterHelper.is())
     {
-        // Create an object that is able to load the bitmaps in a format that is
-        // supported by the canvas.
+        
+        
         Reference<lang::XMultiComponentFactory> xFactory (
             rxComponentContext->getServiceManager(), UNO_QUERY);
         if ( ! xFactory.is())
@@ -123,7 +123,7 @@ void PresenterBitmapContainer::LoadBitmaps (
 
     try
     {
-        // Load all button bitmaps.
+        
         if (rxBitmapList.is())
         {
             PresenterConfigurationAccess::ForAll(
@@ -200,7 +200,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
 
     OUString sFileName;
 
-    // Load bitmaps.
+    
     if (PresenterConfigurationAccess::GetProperty(rxProperties, "NormalFileName") >>= sFileName)
         try
         {
@@ -408,6 +408,6 @@ void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

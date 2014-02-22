@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swtypes.hxx>
@@ -79,7 +79,7 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet )
         m_pChapterLevelLB->InsertEntry(OUString::number(i));
 
     m_pChapterLevelLB->SelectEntryPos(0);
-    //enable 'active' language selection
+    
     m_pNumFormatLB->SetShowLanguageControl(sal_True);
 }
 
@@ -91,7 +91,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 {
     SavePos(m_pTypeLB);
 
-    Init(); // general initialisation
+    Init(); 
 
     m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
@@ -100,7 +100,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 
     if (!IsFldEdit())
     {
-        // initialise TypeListBox
+        
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         for (short i = rRg.nStart; i < rRg.nEnd; ++i)
@@ -130,7 +130,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
         }
     }
 
-    // select old Pos
+    
     RestorePos(m_pTypeLB);
 
     m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFldVarPage, InsertHdl));
@@ -182,10 +182,10 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 
 IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
 {
-    // save old ListBoxPos
+    
     const sal_uInt16 nOld = GetTypeSel();
 
-    // current ListBoxPos
+    
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -204,7 +204,7 @@ IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
         }
 
         m_pValueED->SetDropEnable(false);
-        UpdateSubType();    // initialise selection-listboxes
+        UpdateSubType();    
     }
 
     bInit = sal_False;
@@ -247,7 +247,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     {
         case TYP_USERFLD:
         {
-            // change or create user type
+            
             SwUserFieldType* pType = (SwUserFieldType*)
                 GetFldMgr().GetFldType(RES_USERFLD, nSelPos);
 
@@ -255,7 +255,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             {
                 if (!IsFldEdit())
                 {
-                    if (pBox || (bInit && !IsRefresh()))    // only when interacting via mouse
+                    if (pBox || (bInit && !IsRefresh()))    
                     {
                         m_pNameED->SetText(pType->GetName());
 
@@ -273,7 +273,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             }
             else
             {
-                if (pBox)   // only when interacting via mouse
+                if (pBox)   
                 {
                     m_pNameED->SetText(OUString());
                     m_pValueED->SetText(OUString());
@@ -299,8 +299,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 m_pNumFormatLB->SetEntryData(nPos, (void *)ULONG_MAX);
                 m_pNumFormatLB->SelectEntryPos(0);
             }
-            // is there a corresponding SetField
-            if (IsFldEdit() || pBox)    // only when interacting via mouse
+            
+            if (IsFldEdit() || pBox)    
             {
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
@@ -318,18 +318,18 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                                     pSh->GetFldType(RES_SETEXPFLD, sName);
 
                             if (pSetTyp && pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)
-                                m_pNumFormatLB->SelectEntryPos(0); // textual
+                                m_pNumFormatLB->SelectEntryPos(0); 
                         }
                     }
                 }
             }
             if (IsFldEdit())
             {
-                // GetFormula leads to problems with date formats because
-                // only the numeric value without formatting is returned.
-                // It must be used though because otherwise in GetPar2 only
-                // the value calculated by Kalkulator would be displayed
-                // (instead of test2 = test + 1)
+                
+                
+                
+                
+                
                 m_pValueED->SetText(((SwSetExpField*)GetCurField())->GetFormula());
             }
             m_pValueED->SetDropEnable(true);
@@ -358,7 +358,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     if (!IsFldEdit())
                         m_pNameED->SetText(sName);
 
-                    // is there a corresponding SetField
+                    
                     SwWrtShell *pSh = GetWrtShell();
                     if(!pSh)
                         pSh = ::GetActiveWrtShell();
@@ -369,9 +369,9 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                         if(pSetTyp)
                         {
-                            if (pSetTyp->GetType() & nsSwGetSetExpType::GSE_STRING)    // textual?
+                            if (pSetTyp->GetType() & nsSwGetSetExpType::GSE_STRING)    
                                 bFormat = sal_True;
-                            else                    // numeric
+                            else                    
                                 bNumFmt = sal_True;
                         }
                     }
@@ -395,19 +395,19 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 sName = m_pSelectionLB->GetSelectEntry();
                 m_pNameED->SetText( sName );
 
-                // User- or SetField ?
+                
                 sal_uInt16 nInpType = 0;
                 nInpType = static_cast< sal_uInt16 >(GetFldMgr().GetFldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
 
-                if (nInpType)   // SETEXPFLD
+                if (nInpType)   
                 {
-                    // is there a corresponding SetField
+                    
                     SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
                                 GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
 
                     if(pSetTyp)
                     {
-                        if (pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)    // textual?
+                        if (pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)    
                         {
                             m_pNumFormatLB->Clear();
 
@@ -419,7 +419,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     if (IsFldEdit() && (!pBox || bInit) )
                         m_pValueED->SetText(((SwSetExpField*)GetCurField())->GetPromptText());
                 }
-                else    // USERFLD
+                else    
                     bFormat = bNumFmt = sal_False;
             }
             break;
@@ -427,7 +427,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
         case TYP_DDEFLD:
             m_pValueFT->SetText(SW_RESSTR(STR_DDE_CMD));
 
-            if (IsFldEdit() || pBox)    // only when interacting via mouse
+            if (IsFldEdit() || pBox)    
             {
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
@@ -438,8 +438,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     {
                         m_pNameED->SetText(pType->GetName());
 
-                        //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
-                        //              That's not considered here yet
+                        
+                        
                         OUString sCmd( pType->GetCmd() );
                         sal_Int32 nTmpPos = 0;
                         sCmd = sCmd.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &nTmpPos );
@@ -474,7 +474,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     m_pValueED->SetText( ((SwSetExpField*)GetCurField())->
                                         GetFormula() );
 
-                if( IsFldEdit() || pBox )   // only when interacting via mouse
+                if( IsFldEdit() || pBox )   
                     m_pNameED->SetText( m_pSelectionLB->GetSelectEntry() );
 
                 if( pFldTyp )
@@ -496,12 +496,12 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 bValue = sal_False;
                 m_pValueFT->SetText( SW_RESSTR( STR_OFFSET ));
 
-                if (IsFldEdit() || pBox)    // only when interacting via mouse
+                if (IsFldEdit() || pBox)    
                     m_pNameED->SetText(OUString());
 
                 if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    bValue = sal_True;      // SubType OFF - knows no Offset
+                    bValue = sal_True;      
                     if (IsFldEdit())
                         m_pValueED->SetText(OUString::number(((SwRefPageSetField*)GetCurField())->GetOffset()));
                 }
@@ -530,7 +530,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     m_pChapterFrame->Show(bShowChapterFrame);
     m_pInvisibleCB->Enable(bInvisible);
 
-    ModifyHdl();    // apply/insert/delete status update
+    ModifyHdl();    
 
     m_pNumFormatLB->SetUpdateMode(true);
     m_pFormatLB->SetUpdateMode(true);
@@ -573,7 +573,7 @@ void SwFldVarPage::UpdateSubType()
     if(GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pSelectionLB->GetEntry(GetSelectionSel());
 
-    // fill Selection-Listbox
+    
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 
@@ -626,7 +626,7 @@ void SwFldVarPage::UpdateSubType()
                             (!((SwRefPageSetField*)GetCurField())->IsOn() && !i))
                             sOldSel = aList[i];
 
-                        // allow all entries for selection:
+                        
                         nPos = m_pSelectionLB->InsertEntry(aList[i]);
                         m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
                         break;
@@ -656,7 +656,7 @@ void SwFldVarPage::UpdateSubType()
         if (!m_pSelectionLB->GetSelectEntryCount())
         {
             m_pSelectionLB->SelectEntryPos(0);
-            pLB = m_pSelectionLB;    // newly initialise all controls
+            pLB = m_pSelectionLB;    
         }
     }
 
@@ -682,7 +682,7 @@ sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         nOldNumFormat = m_pNumFormatLB->GetFormat();
     }
 
-    // fill Format-Listbox
+    
     m_pFormatLB->Clear();
     m_pNumFormatLB->Clear();
     sal_Bool bSpecialFmt = sal_False;
@@ -820,19 +820,19 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
             nLen = sName.getLength();
             Selection aSel(m_pNameED->GetSelection());
             m_pNameED->SetText( sName );
-            m_pNameED->SetSelection( aSel );   // restore Cursorpos
+            m_pNameED->SetSelection( aSel );   
         }
         break;
     }
 
 
-    // check buttons
+    
     switch (nTypeId)
     {
     case TYP_DDEFLD:
         if( nLen )
         {
-            // is there already a corrensponding type
+            
             bInsert = bApply = true;
 
             SwFieldType* pType = GetFldMgr().GetFldType(RES_DDEFLD, sName);
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
     case TYP_USERFLD:
         if( nLen )
         {
-            // is there already a corresponding type
+            
             SwFieldType* pType = GetFldMgr().GetFldType(RES_USERFLD, sName);
 
             SwWrtShell *pSh = GetWrtShell();
@@ -858,10 +858,10 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
                 bDelete = !pSh->IsUsed( *pType );
 
             pType = GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
-            if (!pType) // no name conflict with variables
+            if (!pType) 
             {
-                // user fields can also be inserted without content!
-                // Bug #56845
+                
+                
                 bInsert = bApply = true;
             }
         }
@@ -980,7 +980,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
         if (nFormat != LISTBOX_ENTRY_NOTFOUND)
             nFormat = (sal_uLong)m_pFormatLB->GetEntryData((sal_uInt16)nFormat);
 
-        if (pType)  // change
+        if (pType)  
         {
             SwWrtShell *pSh = GetWrtShell();
             if(!pSh)
@@ -995,9 +995,9 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         sal_uLong nFmt = nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat();
                         if (nFmt)
-                        {   // Switch language to office-language because Kalkulator expects
-                            // String in office format and it should be fed into dialog like
-                            // that
+                        {   
+                            
+                            
                             nFmt = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nFmt);
                         }
                         ((SwUserFieldType*)pType)->SetContent(m_pValueED->GetText(), nFmt);
@@ -1009,8 +1009,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                 {
                     if (nFormat != LISTBOX_ENTRY_NOTFOUND)
                     {
-                        // DDE-Topics/-Items can have blanks in their names!
-                        //  That's not being considered here yet.
+                        
+                        
                         sal_Int32 nTmpPos = 0;
                         sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                         sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
@@ -1023,7 +1023,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                 pSh->EndAllAction();
             }
         }
-        else        // new
+        else        
         {
             if(nTypeId == TYP_USERFLD)
             {
@@ -1040,7 +1040,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                         aType.SetContent( sValue, nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat() );
                         m_pSelectionLB->InsertEntry(sName);
                         m_pSelectionLB->SelectEntry(sName);
-                        GetFldMgr().InsertFldType( aType ); // Userfld new
+                        GetFldMgr().InsertFldType( aType ); 
                     }
                 }
             }
@@ -1048,8 +1048,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
             {
                 if (nFormat != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    // DDE-Topics/-Items can have blanks in their names!
-                    //  That's not being considered here yet.
+                    
+                    
                     sal_Int32 nTmpPos = 0;
                     sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                     sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
@@ -1057,12 +1057,12 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     SwDDEFieldType aType(sName, sValue, (sal_uInt16)nFormat);
                     m_pSelectionLB->InsertEntry(sName);
                     m_pSelectionLB->SelectEntry(sName);
-                    GetFldMgr().InsertFldType(aType);   // DDE-Field new
+                    GetFldMgr().InsertFldType(aType);   
                 }
             }
         }
         if (IsFldEdit())
-            GetFldMgr().GetCurFld();    // update FieldManager
+            GetFldMgr().GetCurFld();    
 
         UpdateSubType();
     }
@@ -1120,9 +1120,9 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
 
         if (nFormat && nFormat != ULONG_MAX && m_pNumFormatLB->IsAutomaticLanguage())
         {
-            // Switch language to office language because Kalkulator expects
-            // String in office format and it should be fed into the dialog
-            // like that
+            
+            
+            
             SwWrtShell *pSh = GetWrtShell();
             if(!pSh)
                 pSh = ::GetActiveWrtShell();
@@ -1270,7 +1270,7 @@ bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
     {
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
 
-        if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))  // Alt or Ctrl
+        if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))  
             bCallAddSelection = true;
     }
 

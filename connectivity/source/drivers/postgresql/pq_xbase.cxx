@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -89,7 +89,7 @@ sal_Bool ReflectionBase::convertFastPropertyValue(
 {
 
     rOldValue = m_values[nHandle];
-    rConvertedValue = rValue;     // TODO !!! implement correct conversion !
+    rConvertedValue = rValue;     
     m_values[nHandle] = rValue;
     return sal_True;
 }
@@ -115,10 +115,10 @@ void ReflectionBase::setFastPropertyValue_NoBroadcast(
     const ::com::sun::star::uno::Any& rValue )
     throw (::com::sun::star::uno::Exception)
 {
-//     OUString s;
-//     rValue >>= s;
-//     printf( "setting value (handle %d):%s\n" ,
-//             nHandle, OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
+
+
+
+
     m_values[nHandle] = rValue;
 }
 
@@ -127,10 +127,10 @@ void ReflectionBase::getFastPropertyValue(
     sal_Int32 nHandle ) const
 {
     rValue = m_values[nHandle];
-//     OUString s;
-//     rValue >>= s;
-//     printf( "getting value (handle %d):%s\n" ,
-//             nHandle, OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
+
+
+
+
 
 }
 
@@ -244,7 +244,7 @@ void ReflectionBase::setName( const OUString& /* aName */ )
     throw RuntimeException(
         OUString( "pq_sdbc::ReflectionBase::setName not implemented" ),
         *this );
-    //setPropertyValue( getStatics().NAME , makeAny( aName ) );
+    
 }
 
 

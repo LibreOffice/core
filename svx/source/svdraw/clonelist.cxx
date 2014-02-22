@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// #i13033#
-// New mechanism to hold a ist of all original and cloned objects for later
-// re-creating the connections for contained connectors
+
+
+
 #include <clonelist.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/scene3d.hxx>
@@ -30,7 +30,7 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     maOriginalList.push_back(pOriginal);
     maCloneList.push_back(pClone);
 
-    // look for subobjects, too.
+    
     bool bOriginalIsGroup(pOriginal->IsGroupObject());
     bool bCloneIsGroup(pClone->IsGroupObject());
 
@@ -50,7 +50,7 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
         {
             for(sal_uInt32 a(0); a < pOriginalList->GetObjCount(); a++)
             {
-                // recursive call
+                
                 AddPair(pOriginalList->GetObj(a), pCloneList->GetObj(a));
             }
         }

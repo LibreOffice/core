@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@ namespace comphelper{
 
 static const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
 
-//-----------------------------------------------
+
 NumberedCollection::NumberedCollection()
     : ::cppu::BaseMutex ()
     , m_sUntitledPrefix ()
@@ -36,39 +36,39 @@ NumberedCollection::NumberedCollection()
 {
 }
 
-//-----------------------------------------------
+
 NumberedCollection::~NumberedCollection()
 {
 }
 
-//-----------------------------------------------
+
 void NumberedCollection::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         m_xOwner = xOwner;
 
-    // <- SYNCHRONIZED
+    
 }
 
-//-----------------------------------------------
+
 void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         m_sUntitledPrefix = sPrefix;
 
-    // <- SYNCHRONIZED
+    
 }
 
-//-----------------------------------------------
+
 ::sal_Int32 SAL_CALL NumberedCollection::leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         if ( ! xComponent.is ())
@@ -77,19 +77,19 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
         sal_IntPtr pComponent = (sal_IntPtr) xComponent.get ();
         TNumberedItemHash::const_iterator pIt = m_lComponents.find (pComponent);
 
-        // a) component already exists - return it's number directly
+        
         if (pIt != m_lComponents.end())
             return pIt->second.nNumber;
 
-        // b) component must be added new to this container
+        
 
-        // b1) collection is full - no further components possible
-        //     -> return INVALID_NUMBER
+        
+        
         ::sal_Int32 nFreeNumber = impl_searchFreeNumber();
         if (nFreeNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
             return css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
-        // b2) add component to collection and return its number
+        
         TNumberedItem aItem;
         aItem.xItem   = css::uno::WeakReference< css::uno::XInterface >(xComponent);
         aItem.nNumber = nFreeNumber;
@@ -97,15 +97,15 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 
         return nFreeNumber;
 
-    // <- SYNCHRONIZED
+    
 }
 
-//-----------------------------------------------
+
 void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if (nNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
@@ -136,15 +136,15 @@ void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
 
     impl_cleanUpDeadItems(m_lComponents, lDeadItems);
 
-    // <- SYNCHRONIZED
+    
 }
 
-//-----------------------------------------------
+
 void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         if ( ! xComponent.is ())
@@ -153,29 +153,29 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
         sal_IntPtr pComponent = (sal_IntPtr) xComponent.get ();
         TNumberedItemHash::iterator pIt = m_lComponents.find (pComponent);
 
-        // a) component exists and will be removed
+        
         if (pIt != m_lComponents.end())
             m_lComponents.erase(pIt);
 
-        // else
-        // b) component does not exists - nothing todo here (ignore request!)
+        
+        
 
-    // <- SYNCHRONIZED
+    
 }
 
-//-----------------------------------------------
+
 OUString SAL_CALL NumberedCollection::getUntitledPrefix()
     throw (css::uno::RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         return m_sUntitledPrefix;
 
-    // <- SYNCHRONIZED
+    
 }
 
-//-----------------------------------------------
+
 /** create an ordered list of all possible numbers ...
     e.g. {1,2,3,...,N} Max size of these list will be
     current size of component list + 1 .
@@ -190,19 +190,19 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
  */
 ::sal_Int32 NumberedCollection::impl_searchFreeNumber ()
 {
-    // create ordered list of all possible numbers.
+    
     ::std::vector< ::sal_Int32 > lPossibleNumbers;
     ::sal_Int32                  c = (::sal_Int32)m_lComponents.size ();
     ::sal_Int32                  i = 1;
 
-    // c cant be less then 0 ... otherwise hash.size() has an error :-)
-    // But we need at least n+1 numbers here.
+    
+    
     c += 1;
 
     for (i=1; i<=c; ++i)
         lPossibleNumbers.push_back (i);
 
-    // SYNCHRONIZED ->
+    
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         TDeadItemList                     lDeadItems;
@@ -228,14 +228,14 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 
         impl_cleanUpDeadItems(m_lComponents, lDeadItems);
 
-        // a) non free numbers ... return INVALID_NUMBER
+        
         if (lPossibleNumbers.size () < 1)
             return css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
-        // b) return first free number
+        
         return *(lPossibleNumbers.begin ());
 
-    // <- SYNCHRONIZED
+    
 }
 
 void NumberedCollection::impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
@@ -252,6 +252,6 @@ void NumberedCollection::impl_cleanUpDeadItems (      TNumberedItemHash& lItems 
     }
 }
 
-} // namespace comphelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

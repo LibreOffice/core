@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WNameMatch.hxx"
@@ -30,7 +30,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;
-// OWizColumnSelect
+
 OWizNameMatching::OWizNameMatching( Window* pParent)
         :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING     ) )
         ,m_FT_TABLE_LEFT(       this, ModuleRes( FT_TABLE_LEFT          ) )
@@ -76,11 +76,11 @@ OWizNameMatching::~OWizNameMatching()
 
 void OWizNameMatching::Reset()
 {
-    // urspr"unglichen zustand wiederherstellen
-    // the left tree contains bitmaps so i need to resize the right one
+    
+    
     if(m_bFirstTime)
     {
-        m_CTRL_RIGHT.SetReadOnly(); // sets autoinc to readonly
+        m_CTRL_RIGHT.SetReadOnly(); 
         m_CTRL_RIGHT.SetEntryHeight(m_CTRL_LEFT.GetEntryHeight());
         m_CTRL_RIGHT.SetIndent(m_CTRL_LEFT.GetIndent());
         m_CTRL_RIGHT.SetSpaceBetweenEntries(m_CTRL_LEFT.GetSpaceBetweenEntries());
@@ -93,13 +93,13 @@ void OWizNameMatching::Reset()
 void OWizNameMatching::ActivatePage( )
 {
 
-    // set source table name
+    
     OUString aName = m_sSourceText;
     aName += m_pParent->m_sSourceName;
 
     m_FT_TABLE_LEFT.SetText(aName);
 
-    // set dest table name
+    
     aName = m_sDestText;
     aName += m_pParent->m_sName;
     m_FT_TABLE_RIGHT.SetText(aName);
@@ -317,7 +317,7 @@ IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton )
     return 0;
 }
 
-// class OColumnString
+
 class OColumnString : public SvLBoxString
 {
     sal_Bool m_bReadOnly;

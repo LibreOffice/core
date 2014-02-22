@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mysqlc_propertyids.hxx"
@@ -154,7 +154,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        // find the first column with the name columnName
+        
         sql::ResultSetMetaData * meta = m_result->getMetaData();
         for (sal_uInt32 i = 1; i <= fieldCount; i++) {
             if (columnName.equalsIgnoreAsciiCaseAscii(meta->getColumnName(i).c_str())) {
@@ -235,7 +235,7 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -309,7 +309,7 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0.0; // fool compiler
+    return 0.0; 
 }
 /* }}} */
 
@@ -327,7 +327,7 @@ float SAL_CALL OResultSet::getFloat(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0.0; // fool compiler
+    return 0.0; 
 }
 /* }}} */
 
@@ -345,7 +345,7 @@ sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -362,7 +362,7 @@ sal_Int32 SAL_CALL OResultSet::getRow()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -380,7 +380,7 @@ sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -489,7 +489,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -513,7 +513,7 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -589,7 +589,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -606,7 +606,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -623,7 +623,7 @@ sal_Bool SAL_CALL OResultSet::isFirst()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -640,7 +640,7 @@ sal_Bool SAL_CALL OResultSet::isLast()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -705,7 +705,7 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -722,7 +722,7 @@ sal_Bool SAL_CALL OResultSet::last()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -756,7 +756,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -773,7 +773,7 @@ sal_Bool SAL_CALL OResultSet::previous()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -838,7 +838,7 @@ sal_Bool SAL_CALL OResultSet::next()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -855,7 +855,7 @@ sal_Bool SAL_CALL OResultSet::wasNull()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return sal_False; 
 }
 /* }}} */
 
@@ -894,7 +894,7 @@ void SAL_CALL OResultSet::insertRow()
     OSL_TRACE("OResultSet::insertRow");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    // you only have to implement this if you want to insert new rows
+    
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::insertRow", *this);
 }
 /* }}} */
@@ -907,7 +907,7 @@ void SAL_CALL OResultSet::updateRow()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    // only when you allow updates
+    
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateRow", *this);
 }
 /* }}} */
@@ -942,7 +942,7 @@ void SAL_CALL OResultSet::moveToInsertRow()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    // only when you allow insert's
+    
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::moveToInsertRow", *this);
 }
 /* }}} */
@@ -1174,7 +1174,7 @@ void SAL_CALL OResultSet::updateNumericObject(sal_Int32 column, const Any& /* x 
 }
 /* }}} */
 
-// XRowLocate
+
 /* {{{ OResultSet::getBookmark() -U- */
 Any SAL_CALL OResultSet::getBookmark()
     throw(SQLException, RuntimeException)
@@ -1184,7 +1184,7 @@ Any SAL_CALL OResultSet::getBookmark()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     Any aRet = Any();
 
-    // if you don't want to support bookmark you must remove the XRowLocate interface
+    
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBookmark", *this);
 
     return aRet;
@@ -1249,7 +1249,7 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark(const Any& /* bookmark */)
 }
 /* }}} */
 
-// XDeleteRows
+
 /* {{{ OResultSet::deleteRows() -U- */
 Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows(const Sequence< Any >& /* rows */)
     throw(SQLException, RuntimeException)

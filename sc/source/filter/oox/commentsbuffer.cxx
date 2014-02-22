@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <oox/token/properties.hxx>
@@ -44,7 +44,7 @@ using ::com::sun::star::text::XTextRange;
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::sheet;
@@ -83,7 +83,7 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
     }
 }
 
-// ============================================================================
+
 
 CommentModel::CommentModel() :
     mnAuthorId( -1 ),
@@ -92,7 +92,7 @@ CommentModel::CommentModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 Comment::Comment( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -102,7 +102,7 @@ Comment::Comment( const WorksheetHelper& rHelper ) :
 void Comment::importComment( const AttributeList& rAttribs )
 {
     maModel.mnAuthorId = rAttribs.getInteger( XML_authorId, -1 );
-    // cell range will be checked while inserting the comment into the document
+    
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
 }
 
@@ -121,7 +121,7 @@ void Comment::importComment( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> maModel.mnAuthorId >> aBinRange;
-    // cell range will be checked while inserting the comment into the document
+    
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, getSheetIndex() );
 }
 
@@ -133,7 +133,7 @@ RichStringRef Comment::createText()
 
 void Comment::finalizeImport()
 {
-    // BIFF12 stores cell range instead of cell address, use first cell of this range
+    
     OSL_ENSURE( (maModel.maRange.StartColumn == maModel.maRange.EndColumn) &&
         (maModel.maRange.StartRow == maModel.maRange.EndRow),
         "Comment::finalizeImport - comment anchor should be a single cell" );
@@ -142,22 +142,22 @@ void Comment::finalizeImport()
     {
         Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
         Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
-        // non-empty string required by note implementation (real text will be added below)
+        
         xAnnos->insertNew( aNotePos, OUString( ' ' ) );
 
-        // receive created note from cell (insertNew does not return the note)
+        
         Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
         Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
         Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
         Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
 
-        // convert shape formatting and visibility
+        
         sal_Bool bVisible = sal_True;
         switch( getFilterType() )
         {
             case FILTER_OOXML:
                 {
-                    // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
+                    
                     PropertySet aCommentPr( xAnnoShape );
                     aCommentPr.setProperty( PROP_TextFitToSize, maModel.mbAutoScale );
                     aCommentPr.setProperty( PROP_MoveProtect, maModel.mbLocked );
@@ -169,12 +169,12 @@ void Comment::finalizeImport()
                         xAnnoShape->setSize( css::awt::Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
                     }
 
-                    // convert shape formatting and visibility
+                    
                     if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
                     {
-                        // position and formatting
+                        
                         pNoteShape->convertFormatting( xAnnoShape );
-                        // visibility
+                        
                         bVisible = pNoteShape->getTypeModel().mbVisible;
                     }
                 }
@@ -187,7 +187,7 @@ void Comment::finalizeImport()
         }
         xAnno->setIsVisible( bVisible );
 
-        // insert text and convert text formatting
+        
         maModel.mxText->finalizeImport();
         Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
         maModel.mxText->convert( xAnnoText, true );
@@ -197,7 +197,7 @@ void Comment::finalizeImport()
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 CommentsBuffer::CommentsBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -221,9 +221,9 @@ void CommentsBuffer::finalizeImport()
     maComments.forEachMem( &Comment::finalizeImport );
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,7 +32,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-// =======================================================================
+
 
 void TabPage::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -43,13 +43,13 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
 
     ImplInitSettings();
 
-    // if the tabpage is drawn (ie filled) by a native widget, make sure all contols will have transparent background
-    // otherwise they will paint with a wrong background
+    
+    
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
         EnableChildTransparentMode( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::ImplInitSettings()
 {
@@ -74,7 +74,7 @@ void TabPage::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 TabPage::TabPage( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_TABPAGE )
@@ -82,7 +82,7 @@ TabPage::TabPage( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 TabPage::TabPage( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_TABPAGE )
@@ -103,7 +103,7 @@ TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDesc
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::StateChanged( StateChangedType nType )
 {
@@ -113,7 +113,7 @@ void TabPage::StateChanged( StateChangedType nType )
     {
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
-        // FIXME: no layouting, workaround some clipping issues
+        
         ImplAdjustNWFSizes();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
@@ -123,7 +123,7 @@ void TabPage::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -137,11 +137,11 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::Paint( const Rectangle& )
 {
-    // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
+    
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
     {
         const ImplControlValue aControlValue;
@@ -153,15 +153,15 @@ void TabPage::Paint( const Rectangle& )
         if ( HasFocus() )
             nState |= CTRL_STATE_FOCUSED;
         Point aPoint;
-        // pass the whole window region to NWF as the tab body might be a gradient or bitmap
-        // that has to be scaled properly, clipping makes sure that we do not paint too much
+        
+        
         Rectangle aCtrlRegion( aPoint, GetOutputSizePixel() );
         DrawNativeControl( CTRL_TAB_BODY, part, aCtrlRegion, nState,
                 aControlValue, OUString() );
     }
 }
 
-// -----------------------------------------------------------------------
+
 void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
     Point aPos = pDev->LogicToPixel( rPos );
@@ -189,13 +189,13 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::ActivatePage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::DeactivatePage()
 {

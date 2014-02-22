@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swdlgfact.hxx"
@@ -149,7 +149,7 @@ void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 
-//From class Window.
+
 void AbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
@@ -612,7 +612,7 @@ long AbstractMailMergeWizard_Impl::GetResult()
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDialog )
 {
     OSL_ENSURE( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
-    (void) pDialog; // unused in non-debug
+    (void) pDialog; 
 
     aEndDlgHdl.Call( this );
     aEndDlgHdl = Link();
@@ -1135,7 +1135,7 @@ GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc()
     return SwGlossaryDlg::SetActGroup;
 }
 
-//------------------ Factories for TabPages
+
 CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
     CreateTabPage pRet = 0;
@@ -1197,8 +1197,8 @@ GetTabPageRanges SwAbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 
 {
     switch ( nId )
     {
-    case 1 : //RID_SVXPAGE_TEXTANIMATION :
-            //return SvxTextAnimationPage::GetRanges;
+    case 1 : 
+            
             break;
         default:
             break;

@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -103,8 +103,8 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     }
     Sequence< Sequence< Any > > data( rowCount );
 
-    // copy all the data into unicode strings (also binaries, as we yet
-    // don't know, what a binary is and what not!)
+    
+    
     for( int row = 0 ; row < rowCount ; row ++ )
     {
         Sequence< Any > aRow( columnCount );
@@ -124,11 +124,11 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     UpdateableResultSet *pRS =  new UpdateableResultSet(
         mutex, owner, columnNames, data, ppSettings, schema, table , primaryKey );
 
-    Reference <XCloseable > ret = pRS; // give it an refcount
+    Reference <XCloseable > ret = pRS; 
 
     pRS->m_meta = new ResultSetMetaData( mutex, pRS,0, ppSettings, result, schema, table );
 
-    PQclear( result ); // we don't need it anymore
+    PQclear( result ); 
 
     return ret;
 }
@@ -245,10 +245,10 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
             columns ++;
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
 
-//             OUString val;
-//             m_updateableField[i].value >>= val;
-//             buf.append( val );
-//                 OStringToOUString(val, (*m_ppSettings)->encoding ) );
+
+
+
+
         }
     }
 
@@ -259,7 +259,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
     DisposeGuard dispGuard( stmt );
     stmt->executeUpdate( buf.makeStringAndClear() );
 
-    // reflect the changes !
+    
     m_rowCount ++;
     m_data.realloc( m_rowCount );
     m_data[m_rowCount-1] = Sequence< Any > ( m_fieldCount );
@@ -277,16 +277,16 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
                 if( field >= 1 )
                 {
                     m_data[m_rowCount-1][i] <<=  xRow->getString( field );
-//                     printf( "adding %s %s\n" ,
-//                             OUStringToOString( m_columnNames[i], RTL_TEXTENCODING_ASCII_US).getStr(),
-//                             OUStringToOString( xRow->getString( field ), RTL_TEXTENCODING_ASCII_US).getStr() );
+
+
+
 
                 }
             }
         }
         else
         {
-            // do the best we can ( DEFAULT and AUTO increment values fail ! )
+            
             for( int i = 0 ; i < m_fieldCount ; i ++ )
             {
                 if( m_updateableField[i].isTouched )
@@ -295,7 +295,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         }
     }
 
-    // cleanup
+    
     m_updateableField = UpdateableFieldVector();
 }
 
@@ -328,10 +328,10 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
             buf.append( m_columnNames[i] );
             buf.append( " = " );
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
-//             OUString val;
-//             m_updateableField[i].value >>= val;
-//             bufferQuoteConstant( buf, val ):
-//             buf.append( val );
+
+
+
+
         }
     }
     buf.append( buildWhereClause() );
@@ -340,7 +340,7 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
     DisposeGuard dispGuard( stmt );
     stmt->executeUpdate( buf.makeStringAndClear() );
 
-    // reflect the changes !
+    
     for( int i = 0 ; i < m_fieldCount ; i ++ )
     {
         if( m_updateableField[i].isTouched  )
@@ -379,7 +379,7 @@ void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException)
 
     stmt->executeUpdate( buf.makeStringAndClear() );
 
-    // reflect the changes !
+    
     for( int i = m_row + 1; i < m_row ; i ++ )
     {
         m_data[i-1] = m_data[i];
@@ -444,11 +444,11 @@ void UpdateableResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
 void UpdateableResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw (SQLException, RuntimeException)
 {
     updateLong( columnIndex, x );
-//     MutexGuard guard( m_refMutex->mutex );
-//     checkClosed();
-//     checkUpdate( columnIndex );
 
-//     m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
+
+
+
+
 
 }
 
@@ -458,10 +458,10 @@ void UpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw
     checkClosed();
     checkUpdate( columnIndex );
 
-//     OStringBuffer buf( 20 );
-//     buf.append( "'" );
-//     buf.append( (sal_Int64) x );
-//     buf.append( "'" );
+
+
+
+
     m_updateableField[columnIndex-1].value <<= OUString::number( x );
 }
 
@@ -508,7 +508,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
             "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
-//     buf.append( (const sal_Char *)escapedString, len -1 );
+
 
     m_updateableField[columnIndex-1].value <<=
         OUString( (sal_Char*) escapedString, len, RTL_TEXTENCODING_ASCII_US );
@@ -561,7 +561,7 @@ Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
         cppu::OTypeCollection collection(
             getCppuType( (Reference< XResultSetUpdate> *) 0 ),
             getCppuType( (Reference< XRowUpdate> *) 0 ),
-//             getCppuType( (Reference< com::sun::star::sdbcx::XRowLocate > *) 0 ),
+
             getStaticTypes( false /* updateable */ ) );
         return collection.getTypes();
     }
@@ -576,7 +576,7 @@ Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
             getCppuType( (Reference< XPropertySet >*) 0 ),
             getCppuType( (Reference< XFastPropertySet > *) 0 ),
             getCppuType( (Reference< XMultiPropertySet > *) 0 ),
-            getCppuType( (const Reference< com::sun::star::lang::XComponent > *)0 ),  // OComponentHelper
+            getCppuType( (const Reference< com::sun::star::lang::XComponent > *)0 ),  
             getCppuType( (const Reference< com::sun::star::lang::XTypeProvider > *)0 ),
             getCppuType( (const Reference< com::sun::star::uno::XAggregation > *)0 ),
             getCppuType( (const Reference< com::sun::star::uno::XWeak > *)0 ) );

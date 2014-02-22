@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "inspagob.hxx"
@@ -47,7 +47,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
     m_pLbTree->SetSelectHdl( LINK( this, SdInsertPagesObjsDlg, SelectObjectHdl ) );
 
-    // insert text
+    
     if( !pMedium )
         SetText( SD_RESSTR( STR_INSERT_TEXT ) );
 
@@ -69,7 +69,7 @@ void SdInsertPagesObjsDlg::Reset()
     {
         m_pLbTree->SetSelectionMode( MULTIPLE_SELECTION );
 
-        // transfer ownership of Medium
+        
         m_pLbTree->Fill( mpDoc, pMedium, rName );
     }
     else
@@ -85,15 +85,15 @@ void SdInsertPagesObjsDlg::Reset()
 
 std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
 {
-    // With Draw documents, we have to return NULL on selection of the document
+    
     if( pMedium )
     {
-        // to ensure that bookmarks are opened
-        // (when the whole document is selected)
+        
+        
         m_pLbTree->GetBookmarkDoc();
 
-        // If the document is selected (too) or nothing is selected,
-        // the whole document is inserted (but not more!)
+        
+        
         if( m_pLbTree->GetSelectionCount() == 0 ||
             ( m_pLbTree->IsSelected( m_pLbTree->First() ) ) )
             return std::vector<OUString>();

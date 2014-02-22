@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -172,7 +172,7 @@ bool parseSchemeSpecificPart(OUString const & part) {
         return true;
     }
     for (;;) {
-        ++i; // skip '?' or '&'
+        ++i; 
         if (parsePart(part, false, &i).isEmpty() || i == len
             || part[i] != '=')
         {
@@ -281,8 +281,8 @@ public:
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
 private:
-    UrlReference(UrlReference &); // not implemented
-    void operator =(UrlReference); // not implemented
+    UrlReference(UrlReference &); 
+    void operator =(UrlReference); 
 
     virtual ~UrlReference() {}
 
@@ -352,7 +352,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     newPath.append(encodeNameOrParamFragment(value));
     if (bExistent) {
         /*oldValue = */
-        parsePart(m_base.m_path, false, &i); // skip key
+        parsePart(m_base.m_path, false, &i); 
         newPath.append(m_base.m_path.copy(i));
     }
 
@@ -361,18 +361,18 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
 
 sal_Int32 UrlReference::findParameter(OUString const & key) {
     sal_Int32 i = 0;
-    parsePart(m_base.m_path, true, &i); // skip name
+    parsePart(m_base.m_path, true, &i); 
     for (;;) {
         if (i == m_base.m_path.getLength()) {
             return -1;
         }
-        ++i; // skip '?' or '&'
+        ++i; 
         OUString k = parsePart(m_base.m_path, false, &i);
-        ++i; // skip '='
+        ++i; 
         if (k == key) {
             return i;
         }
-        parsePart(m_base.m_path, false, &i); // skip value
+        parsePart(m_base.m_path, false, &i); 
     }
 }
 
@@ -397,8 +397,8 @@ public:
         throw (css::uno::RuntimeException, std::exception);
 
 private:
-    Parser(Parser &); // not implemented
-    void operator =(Parser); // not implemented
+    Parser(Parser &); 
+    void operator =(Parser); 
 
     virtual ~Parser() {}
 };
@@ -444,7 +444,7 @@ css::uno::Reference< css::uno::XInterface > create(
         const &)
     SAL_THROW((css::uno::Exception))
 {
-    //TODO: single instance
+    
     return static_cast< cppu::OWeakObject * >(new Parser);
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
@@ -52,7 +52,7 @@ ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xPar
 {
 }
 
-// Methods
+
 void SAL_CALL
 ScVbaShapeRange::Select(  ) throw (uno::RuntimeException)
 {
@@ -376,8 +376,8 @@ uno::Any
 ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< drawing::XShape > xShape( aSource, uno::UNO_QUERY_THROW );
-    // #TODO  #FIXME Shape parent should always be the sheet the shapes belong
-    // to
+    
+    
     uno::Reference< msforms::XShape > xVbShape( new ScVbaShape( uno::Reference< XHelperInterface >(), mxContext, xShape, getShapes(), m_xModel, ScVbaShape::getType( xShape ) ) );
         return uno::makeAny( xVbShape );
 }

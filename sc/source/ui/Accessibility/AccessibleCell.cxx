@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleCell.hxx"
@@ -86,9 +86,9 @@ ScAccessibleCell::~ScAccessibleCell()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
-        // call dispose to inform object which have a weak reference to this object
+        
         dispose();
     }
 }
@@ -103,7 +103,7 @@ void ScAccessibleCell::Init()
 void SAL_CALL ScAccessibleCell::disposing()
 {
     SolarMutexGuard aGuard;
-    // dispose in AccessibleStaticTextBase
+    
     Dispose();
 
     if (mpViewShell)
@@ -116,15 +116,15 @@ void SAL_CALL ScAccessibleCell::disposing()
     ScAccessibleCellBase::disposing();
 }
 
-    //=====  XInterface  =====================================================
+    
 
 IMPLEMENT_FORWARD_XINTERFACE3( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase, ScAccessibleCellAttributeImpl )
 
-    //=====  XTypeProvider  ===================================================
+    
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER3( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase, ScAccessibleCellAttributeImpl )
 
-    //=====  XAccessibleComponent  ============================================
+    
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
         const awt::Point& rPoint )
@@ -208,7 +208,7 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
     return aCellRect;
 }
 
-    //=====  XAccessibleContext  ==============================================
+    
 
 sal_Int32 SAL_CALL
     ScAccessibleCell::getAccessibleChildCount(void)
@@ -297,7 +297,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     return pRelationSet;
 }
 
-    //=====  XServiceInfo  ====================================================
+    
 
 OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
         throw (uno::RuntimeException)
@@ -318,7 +318,7 @@ uno::Sequence< OUString> SAL_CALL
     return aSequence;
 }
 
-    //====  internal  =========================================================
+    
 
 bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
@@ -334,7 +334,7 @@ bool ScAccessibleCell::IsEditable(
     if (rxParentStates.is() && !rxParentStates->contains(AccessibleStateType::EDITABLE) &&
         mpDoc)
     {
-        // here I have to test whether the protection of the table should influence this cell.
+        
         const ScProtectionAttr* pItem = (const ScProtectionAttr*)mpDoc->GetAttr(
             maCellAddress.Col(), maCellAddress.Row(),
             maCellAddress.Tab(), ATTR_PROTECTION);
@@ -347,7 +347,7 @@ bool ScAccessibleCell::IsEditable(
 bool ScAccessibleCell::IsOpaque(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-    // test whether there is a background color
+    
     bool bOpaque(true);
     if (mpDoc)
     {
@@ -524,9 +524,9 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
         strFor += ";Note:";
         strFor += ReplaceFourChar(GetAllDisplayNote());
         strFor += ";";
-        strFor += getShadowAttrs();//the string returned contains the spliter ";"
-        strFor += getBorderAttrs();//the string returned contains the spliter ";"
-        //end of cell attributes
+        strFor += getShadowAttrs();
+        strFor += getBorderAttrs();
+        
         if( mpDoc )
         {
             strFor += "isdropdown:";
@@ -541,7 +541,7 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
     return strRet;
 }
 
-// cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
+
 uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -611,7 +611,7 @@ bool ScAccessibleCell::IsDropdown()
                 ScRange aRange = *aRanges[i];
                 mpDoc->ExtendTotalMerge( aRange );
                 sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
-                // MT IA2: Not used: sal_Bool bIsInScen = sal_False;
+                
                 if ( bTextBelow )
                 {
                     bHasScenario = (aRange.aStart.Col() == nPosX && aRange.aEnd.Row() == nPosY-1);

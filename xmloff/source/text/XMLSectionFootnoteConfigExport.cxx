@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLSectionFootnoteConfigExport.hxx"
@@ -54,7 +54,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
     ,
     const UniReference<XMLPropertySetMapper> & rMapper)
 {
-    // store and initialize the values
+    
     sal_Bool bNumOwn = sal_False;
     sal_Bool bNumRestart = sal_False;
     sal_Int16 nNumRestartAt = 0;
@@ -63,7 +63,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
     OUString sNumSuffix;
     sal_Bool bEnd = sal_False;
 
-    // find entries in property states vector
+    
     sal_uInt32 nCount = pProperties->size();
     for(sal_uInt32 i = 0; i < nCount; i++)
     {
@@ -130,17 +130,17 @@ void XMLSectionFootnoteConfigExport::exportXML(
         }
     }
 
-    // we only make an element if we have an own footnote/endnote numbering
+    
     if (bEnd)
     {
         rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
                                  GetXMLToken( bEndnote ? XML_ENDNOTE
                                                          : XML_FOOTNOTE ) );
-        // start numbering
+        
         OUStringBuffer sBuf;
         if (bNumRestart)
         {
-            // restart number is stored as 0.., but interpreted as 1..
+            
             ::sax::Converter::convertNumber(sBuf,
                                               (sal_Int32)(nNumRestartAt+1));
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
@@ -149,7 +149,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
 
         if (bNumOwn)
         {
-            // prefix and suffix
+            
             if (!sNumPrefix.isEmpty())
             {
                     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
@@ -161,13 +161,13 @@ void XMLSectionFootnoteConfigExport::exportXML(
                                      sNumSuffix);
             }
 
-            // number type: num format
+            
             rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
                                                               nNumberingType );
             rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                  sBuf.makeStringAndClear());
 
-            // and letter sync, if applicable
+            
             rExport.GetMM100UnitConverter().convertNumLetterSync(
                 sBuf, nNumberingType );
             if (!sBuf.isEmpty())
@@ -178,7 +178,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
             }
         }
 
-        // and finally, the element
+        
         SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
                                  XML_NOTES_CONFIGURATION,
                                  sal_True, sal_True);

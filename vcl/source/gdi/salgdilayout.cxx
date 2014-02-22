@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -45,13 +45,13 @@
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 
-// ----------------------------------------------------------------------------
-// The only common SalFrame method
-// ----------------------------------------------------------------------------
+
+
+
 
 SalFrameGeometry SalFrame::GetGeometry()
 {
-    // mirror frame coordinates at parent
+    
     SalFrame *pParent = GetParent();
     if( pParent && Application::GetSettings().GetLayoutRTL() )
     {
@@ -64,13 +64,13 @@ SalFrameGeometry SalFrame::GetGeometry()
         return maGeometry;
 }
 
-// ----------------------------------------------------------------------------
+
 
 SalGraphics::SalGraphics()
 :   m_nLayout( 0 ),
     m_bAntiAliasB2DDraw(false)
 {
-    // read global RTL settings
+    
     if( Application::GetSettings().GetLayoutRTL() )
         m_nLayout = SAL_LAYOUT_BIDI_RTL;
 }
@@ -79,7 +79,7 @@ SalGraphics::~SalGraphics()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& /* rNull */,
@@ -88,11 +88,11 @@ bool SalGraphics::drawTransformedBitmap(
     const SalBitmap& /* rSourceBitmap */,
     const SalBitmap* /* pAlphaBitmap */)
 {
-    // here direct support for transformed bitmaps can be impemented
+    
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
@@ -107,10 +107,10 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
-            // mirror this window back
+            
             if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
             {
-                long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+                long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   
                 if( bBack )
                     x = x - devX + pOutDevRef->GetOutOffXPixel();
                 else
@@ -118,7 +118,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
             }
             else
             {
-                long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+                long devX = pOutDevRef->GetOutOffXPixel();   
                 if( bBack )
                     x = devX + (pOutDevRef->GetOutputWidthPixel() + devX) - (x + 1);
                 else
@@ -143,10 +143,10 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
-            // mirror this window back
+            
             if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
             {
-                long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+                long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   
                 if( bBack )
                     x = x - devX + pOutDevRef->GetOutOffXPixel();
                 else
@@ -154,7 +154,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
             }
             else
             {
-                long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+                long devX = pOutDevRef->GetOutOffXPixel();   
                 if( bBack )
                     x = devX + (pOutDevRef->GetOutputWidthPixel() + devX) - (x + nWidth);
                 else
@@ -182,16 +182,16 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
-            // mirror this window back
+            
             if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
             {
-                long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+                long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   
                 if( bBack )
                 {
                     for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                     {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                        
+                        
                         pPtAry2[j].mnX = pOutDevRef->GetOutOffXPixel() + (pPtAry[i].mnX - devX);
                         pPtAry2[j].mnY = pPtAry[i].mnY;
                     }
@@ -200,8 +200,8 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
                 {
                     for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                     {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                        
+                        
                         pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
                         pPtAry2[j].mnY = pPtAry[i].mnY;
                     }
@@ -209,13 +209,13 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
             }
             else
             {
-                long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+                long devX = pOutDevRef->GetOutOffXPixel();   
                 if( bBack )
                 {
                     for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                     {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                        
+                        
                         pPtAry2[j].mnX = pPtAry[i].mnX - pOutDevRef->GetOutputWidthPixel() + devX - pOutDevRef->GetOutOffXPixel() + 1;
                         pPtAry2[j].mnY = pPtAry[i].mnY;
                     }
@@ -224,8 +224,8 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
                 {
                     for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                     {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                        
+                        
                         pPtAry2[j].mnX = pOutDevRef->GetOutputWidthPixel() - (pPtAry[i].mnX - devX) + pOutDevRef->GetOutOffXPixel() - 1;
                         pPtAry2[j].mnY = pPtAry[i].mnY;
                     }
@@ -266,20 +266,20 @@ void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack 
             rRgn.Union(*aRectIter);
         }
 
-        //ImplRegionInfo        aInfo;
-        //bool              bRegionRect;
-        //Region              aMirroredRegion;
-        //long nX, nY, nWidth, nHeight;
+        
+        
+        
+        
         //
-        //bRegionRect = rRgn.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-        //while ( bRegionRect )
-        //{
-        //    Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
-        //    mirror( aRect, pOutDev, bBack );
-        //    aMirroredRegion.Union( aRect );
-        //    bRegionRect = rRgn.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-        //}
-        //rRgn = aMirroredRegion;
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 }
 
@@ -309,8 +309,8 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
         if( i_pOutDev && !i_pOutDev->IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*)i_pOutDev;
-            // mirror this window back
-            double devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+            
+            double devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   
             if( i_bBack )
                 aRet.setX( i_rPoint.getX() - devX + pOutDevRef->GetOutOffXPixel() );
             else
@@ -376,7 +376,7 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool SalGraphics::SetClipRegion( const Region& i_rClip, const OutputDevice *pOutDev )
 {
@@ -447,7 +447,7 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        // TODO: optimize, reduce new/delete calls
+        
         SalPoint **pPtAry2 = new SalPoint*[nPoly];
         sal_uLong i;
         for(i=0; i<nPoly; i++)
@@ -516,7 +516,7 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     bool bRet = false;
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
-        // TODO: optimize, reduce new/delete calls
+        
         SalPoint **pPtAry2 = new SalPoint*[i_nPoly];
         sal_uLong i;
         for(i=0; i<i_nPoly; i++)

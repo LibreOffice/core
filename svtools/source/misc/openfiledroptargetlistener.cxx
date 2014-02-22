@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/openfiledroptargetlistener.hxx>
@@ -34,7 +34,7 @@
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 
-// Create a new task or recycle an existing one
+
 const char SPECIALTARGET_DEFAULT[] = "_default";
 
 OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -45,7 +45,7 @@ OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Referenc
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 OpenFileDropTargetListener::~OpenFileDropTargetListener()
 {
@@ -55,7 +55,7 @@ OpenFileDropTargetListener::~OpenFileDropTargetListener()
     m_pFormats = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
@@ -63,7 +63,7 @@ void SAL_CALL OpenFileDropTargetListener::disposing( const css::lang::EventObjec
     m_xContext.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw( css::uno::RuntimeException )
 {
@@ -77,7 +77,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
             sal_Bool bFormatFound = sal_False;
             FileList aFileList;
 
-            // at first check filelist format
+            
             if ( aHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList ) )
             {
                 sal_uLong i, nCount = aFileList.Count();
@@ -86,7 +86,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
                 bFormatFound = sal_True;
             }
 
-            // then, if necessary, the file format
+            
             OUString aFilePath;
             if ( !bFormatFound && aHelper.GetString( SOT_FORMAT_FILE, aFilePath ) )
                 implts_OpenFile( aFilePath );
@@ -98,7 +98,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw( css::uno::RuntimeException )
 {
@@ -113,7 +113,7 @@ void SAL_CALL OpenFileDropTargetListener::dragEnter( const css::datatransfer::dn
     dragOver( dtdee );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw( css::uno::RuntimeException )
 {
@@ -126,7 +126,7 @@ void SAL_CALL OpenFileDropTargetListener::dragExit( const css::datatransfer::dnd
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw( css::uno::RuntimeException )
 {
@@ -145,7 +145,7 @@ void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& ) throw( css::uno::RuntimeException )
 {
@@ -203,7 +203,7 @@ void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
         ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )
             aFileURL = aStatus.getFileURL();
 
-    // open file
+    
     /* SAFE { */
     SolarMutexGuard aGuard;
 

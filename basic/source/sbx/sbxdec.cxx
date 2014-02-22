@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/errcode.hxx>
@@ -25,7 +25,7 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
 
-// Implementation SbxDecimal
+
 SbxDecimal::SbxDecimal( void )
 {
     setInt( 0 );
@@ -196,7 +196,7 @@ bool SbxDecimal::setString( OUString* pOUString )
 {
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
-    // Convert delimiter
+    
     sal_Unicode cDecimalSep;
     sal_Unicode cThousandSep;
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
@@ -279,7 +279,7 @@ bool SbxDecimal::getDouble( double& rVal )
 }
 
 #else
-// !WIN32
+
 
 bool SbxDecimal::operator -= ( const SbxDecimal &r )
 {
@@ -359,7 +359,7 @@ bool SbxDecimal::getString( OUString& rString )
         bRet = ( hResult == S_OK );
         if( bRet )
         {
-            // Convert delimiter
+            
             sal_Unicode cDecimalSep;
             sal_Unicode cThousandSep;
             ImpGetIntntlSep( cDecimalSep, cThousandSep );
@@ -501,7 +501,7 @@ start:
         case SbxBYREF | SbxUSHORT:
             pnDecRes->setUShort( *p->pUShort ); break;
 
-        // from here on had to be tested
+        
         case SbxBYREF | SbxSINGLE:
             aTmp.nSingle = *p->pSingle; goto ref;
         case SbxBYREF | SbxDATE:
@@ -531,7 +531,7 @@ void ImpPutDecimal( SbxValues* p, SbxDecimal* pDec )
 start:
     switch( +p->eType )
     {
-        // here had to be tested
+        
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -556,7 +556,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // from here on no longer
+        
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
         {

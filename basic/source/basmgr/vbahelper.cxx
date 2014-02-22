@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@ namespace vba {
 
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 
 namespace {
 
@@ -48,7 +48,7 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
     return frame::ModuleManager::create(xContext);
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Implementation of an enumeration of all open documents of the same type.
  */
@@ -98,7 +98,7 @@ uno::Any SAL_CALL DocumentsEnumeration::nextElement() throw (container::NoSuchEl
     return uno::Any( *maModelIt++ );
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Locks or unlocks the controllers of the specified document model.
  */
@@ -116,7 +116,7 @@ void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, sal_Boo
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Enables or disables the container windows of all controllers of the
     specified document model.
@@ -127,7 +127,7 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
     {
         uno::Reference< frame::XModel2 > xModel2( rxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > xControllersEnum( xModel2->getControllers(), uno::UNO_SET_THROW );
-        // iterate over all controllers
+        
         while( xControllersEnum->hasMoreElements() )
         {
             try
@@ -147,7 +147,7 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, sal_Bool );
 
@@ -157,7 +157,7 @@ typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, sal_
 void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Reference< frame::XModel >& rxModel, sal_Bool bModificator )
 {
     uno::Reference< container::XEnumeration > xDocumentsEnum( new DocumentsEnumeration( rxModel ) );
-    // iterate over all open documents
+    
     while( xDocumentsEnum->hasMoreElements() ) try
     {
         uno::Reference< frame::XModel > xCurrModel( xDocumentsEnum->nextElement(), uno::UNO_QUERY_THROW );
@@ -168,7 +168,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 struct CurrDirPool
 {
@@ -178,23 +178,23 @@ struct CurrDirPool
 
 struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool > {};
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 void lockControllersOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bLockControllers )
 {
     lclIterateDocuments( &lclLockControllers, rxModel, bLockControllers );
 }
 
-// ============================================================================
+
 
 void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bEnableWindows )
 {
     lclIterateDocuments( &lclEnableContainerWindows, rxModel, bEnableWindows );
 }
 
-// ============================================================================
+
 
 void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, const OUString& rPath )
 {
@@ -215,9 +215,9 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
     }
 }
 
-// ============================================================================
 
-} // namespace vba
-} // namespace basic
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

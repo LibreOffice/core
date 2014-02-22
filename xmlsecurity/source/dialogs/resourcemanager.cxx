@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,7 +59,7 @@ namespace XmlSec
 
     OUString GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        // String with date and time information (#i20172#)
+        
         DateTime aDT( GetDateTime( _rDT ) );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
 
@@ -137,42 +137,42 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
             {
                 if (!bInEscape)
                 {
-                    //If this is the quote is the first of the couple which enclose the
-                    //whole value, because the value contains special characters
-                    //then we just drop it. That is, this character must be followed by
-                    //a character which is not '"'.
+                    
+                    
+                    
+                    
                     if ( i + 1 < length && rRawString[i+1] == '"')
                         bInEscape = true;
                     else
-                        bInValue = !bInValue; //value is enclosed in " "
+                        bInValue = !bInValue; 
                 }
                 else
                 {
-                    //This quote is escaped by a preceding quote and therefore is
-                    //part of the value
+                    
+                    
                     sbufValue.append(c);
                     bInEscape = false;
                 }
             }
             else if (c == ',' || c == '+')
             {
-                //The comma separate the attribute value pairs.
-                //If the comma is not part of a value (the value would then be enclosed in '"'),
-                //then we have reached the end of the value
+                
+                
+                
                 if (!bInValue)
                 {
                     OSL_ASSERT(!sType.isEmpty());
                     retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
                     sType = OUString();
-                    //The next char is the start of the new type
+                    
                     nTypeNameStart = i + 1;
                     bInType = true;
                 }
                 else
                 {
-                    //The whole string is enclosed because it contains special characters.
-                    //The enclosing '"' are not part of certificate but will be added by
-                    //the function (Windows or NSS) which retrieves DN
+                    
+                    
+                    
                     sbufValue.append(c);
                 }
             }
@@ -193,7 +193,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
     {
         vector< pair<OUString, OUString> > retVal;
-        //bInEscape == true means that the preceding character is an escape character
+        
         bool bInEscape = false;
         bool bInValue = false;
         bool bInType = true;
@@ -226,14 +226,14 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                     bInEscape = true;
                 }
                 else
-                { // bInEscape is true
+                { 
                     sbufValue.append(c);
                     bInEscape = false;
                 }
             }
             else if (c == '"')
             {
-                //an unescaped '"' is either at the beginning or end of the value
+                
                 if (!bInEscape)
                 {
                     if ( !bInValue)
@@ -243,31 +243,31 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 }
                 else
                 {
-                    //This quote is escaped by a preceding quote and therefore is
-                    //part of the value
+                    
+                    
                     sbufValue.append(c);
                     bInEscape = false;
                 }
             }
             else if (c == ',' || c == '+')
             {
-                //The comma separate the attribute value pairs.
-                //If the comma is not part of a value (the value would then be enclosed in '"'),
-                //then we have reached the end of the value
+                
+                
+                
                 if (!bInValue)
                 {
                     OSL_ASSERT(!sType.isEmpty());
                     retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
                     sType = OUString();
-                    //The next char is the start of the new type
+                    
                     nTypeNameStart = i + 1;
                     bInType = true;
                 }
                 else
                 {
-                    //The whole string is enclosed because it contains special characters.
-                    //The enclosing '"' are not part of certificate but will be added by
-                    //the function (Windows or NSS) which retrieves DN
+                    
+                    
+                    
                     sbufValue.append(c);
                 }
             }
@@ -328,7 +328,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         {
             nNum = sal_uInt8( pSerNumSeq[ i ] );
 
-            // exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
+            
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;
             pBuffer[ 0 ] = pHexDigs[ nNum ];
@@ -366,8 +366,8 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         n += _nXOffset;
         aPos.X() = n;
         n = aPos.Y();
-        n += aSize.Height() / 2;                    // y-position is in the middle of the image
-        n -= _rCtrl.GetSizePixel().Height() / 2;    // center Control
+        n += aSize.Height() / 2;                    
+        n -= _rCtrl.GetSizePixel().Height() / 2;    
         aPos.Y() = n;
         _rCtrl.SetPosPixel( aPos );
     }

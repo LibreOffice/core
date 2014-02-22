@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -67,7 +67,7 @@
 
 XFParaStyle::XFParaStyle()
 {
-    //init member variables:
+    
     m_nFlag = 0;
     m_eAlignType = enumXFAlignNone;
     m_eLastLineAlign = enumXFAlignNone;
@@ -134,10 +134,10 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other) : XFStyle(other)
 
 XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
 {
-    // Check for self-assignment
+    
     if (this != &other)
     {
-        // first , clean member
+        
         delete(m_pBGImage);
         m_aTabs.Reset();
 
@@ -279,11 +279,11 @@ void    XFParaStyle::SetLineHeight(enumLHType type, double value)
     case enumLHLeast:
         m_aLineHeight.SetLeastHeight(value);
         break;
-    case enumLHPercent: //perhaps i should redesign the interface here,ohm..
+    case enumLHPercent: 
         m_aLineHeight.SetPercent((sal_Int32)value);
         break;
     case enumLHSpace:
-        m_aLineHeight.SetSpace(value*0.5666);   //don't known why,just suspect.
+        m_aLineHeight.SetSpace(value*0.5666);   
         break;
     default:
         break;
@@ -326,35 +326,35 @@ sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
         return sal_False;
     if( m_bKeepWithNext != pOther->m_bKeepWithNext )
         return sal_False;
-    //line number:
+    
     if( m_bNumberLines != pOther->m_bNumberLines )
         return sal_False;
     if( m_nLineNumberRestart != pOther->m_nLineNumberRestart )
         return sal_False;
-    //align:
+    
     if( m_eAlignType != pOther->m_eAlignType )
         return sal_False;
-    //last line align:
+    
     if( m_eLastLineAlign != pOther->m_eLastLineAlign )
         return sal_False;
 
-    //shadow:
+    
     if( m_aShadow != pOther->m_aShadow )
         return sal_False;
-    //margin:
+    
     if( m_aMargin != pOther->m_aMargin )
         return sal_False;
 
     if( m_aPadding != pOther->m_aPadding )
         return sal_False;
 
-    //dropcap:
+    
     if( m_aDropcap != pOther->m_aDropcap )
         return sal_False;
-    //line height:
+    
     if( m_aLineHeight != pOther->m_aLineHeight )
         return sal_False;
-    //breaks:
+    
     if( m_aBreaks != pOther->m_aBreaks )
         return sal_False;
     if( m_nPageNumber != pOther->m_nPageNumber )
@@ -362,7 +362,7 @@ sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
     if( m_aTabs != pOther->m_aTabs )
         return sal_False;
 
-    //font:
+    
     if( m_pFont )
     {
         if( !pOther->m_pFont )
@@ -373,7 +373,7 @@ sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
     else if( pOther->m_pFont )
         return sal_False;
 
-    //border:
+    
     if( m_pBorders )
     {
         if( !pOther->m_pBorders )
@@ -392,9 +392,9 @@ sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
             return sal_False;
     }
     else if( pOther->m_pBGImage )
-        return sal_False;//add end
+        return sal_False;
 
-    //number right
+    
     if (    m_bNumberRight  != pOther->m_bNumberRight)
         return sal_False;
 
@@ -417,32 +417,32 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute(A2OUSTR("style:master-page-name"),m_strMasterPage);
     pStrm->StartElement(A2OUSTR("style:style"));
 
-    //Paragraph properties:
+    
     pAttrList->Clear();
 
-    //text indent:
+    
     if( m_fTextIndent )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:text-indent"), DoubleToOUString(m_fTextIndent) + A2OUSTR("cm") );
     }
-    //padding:
+    
     m_aPadding.ToXml(pStrm);
-    //margin:
+    
     m_aMargin.ToXml(pStrm);
 
-    //text align:
+    
     if( m_eAlignType != enumXFAlignNone )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:text-align"), GetAlignName(m_eAlignType) );
     }
-    //last line align:
+    
     if( m_eLastLineAlign != enumXFAlignNone )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:fo:text-align-last"), GetAlignName(m_eLastLineAlign) );
         if( m_bJustSingleWord )
             pAttrList->AddAttribute(A2OUSTR("style:justify-single-word"), A2OUSTR("true") );
     }
-    //line number:
+    
     if( m_bNumberLines )
     {
         pAttrList->AddAttribute( A2OUSTR("text:number-lines"), A2OUSTR("true") );
@@ -455,27 +455,27 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:line-number"), A2OUSTR("0") );
     }
 
-    //shadow:
+    
     m_aShadow.ToXml(pStrm);
-    //borders:
+    
     if( m_pBorders )
         m_pBorders->ToXml(pStrm);
-    //line height:
+    
     m_aLineHeight.ToXml(pStrm);
 
-    //background color:
+    
     if( m_nFlag&XFPARA_FLAG_BACKCOLOR && m_aBackColor.IsValid() )
     {
         pAttrList->AddAttribute(A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
     }
-    //Font properties:
+    
     if( m_pFont )
         m_pFont->ToXml(pStrm);
 
-    //page number:
+    
     if( m_nPageNumber )
         pAttrList->AddAttribute(A2OUSTR("fo:page-number"), Int32ToOUString(m_nPageNumber) );
-    //page breaks:
+    
     m_aBreaks.ToXml(pStrm);
 
     if( m_bKeepWithNext )
@@ -483,10 +483,10 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement(A2OUSTR("style:properties"));
 
-    //dropcap:
+    
     m_aDropcap.ToXml(pStrm);
 
-    //tabs:
+    
     if( m_aTabs.GetCount() > 0 )
     {
         pAttrList->Clear();
@@ -495,7 +495,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
         pStrm->EndElement( A2OUSTR("style:tab-stops") );
     }
 
-    //background color:
+    
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 
@@ -522,7 +522,7 @@ void XFDefaultParaStyle::ToXml(IXFStream * pStrm)
     pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("paragraph"));
     pStrm->StartElement(A2OUSTR("style:default-style"));
 
-    //Paragraph properties:
+    
     pAttrList->Clear();
 
     pAttrList->AddAttribute(A2OUSTR("style:tab-stop-distance"), DoubleToOUString(m_fTabDistance) + A2OUSTR("cm") );

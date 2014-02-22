@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlcelli.hxx"
@@ -165,7 +165,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     mbEditEngineHasText(false),
     mbHasFormatRuns(false)
 {
-    rtl::math::setNan(&fValue); // NaN by default
+    rtl::math::setNan(&fValue); 
 
     rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
@@ -230,9 +230,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     ::sax::Converter::convertDouble(fValue, sValue);
                     bIsEmpty = false;
 
-                    //if office:value="0", let's get the text:p in case this is
-                    //a special case in HasSpecialCaseFormulaText(). If it
-                    //turns out not to be a special case, we'll use the 0 value.
+                    
+                    
+                    
                     if(fValue == 0.0)
                         bFormulaTextResult = true;
                 }
@@ -304,9 +304,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             bFormulaTextResult = true;
         if(nCellType == util::NumberFormat::DATETIME)
             nCellType = util::NumberFormat::UNDEFINED;
-        //if bIsEmpty is true at this point, then there is no office value.
-        //we must get the text:p (even if it is empty) in case this a special
-        //case in HasSpecialCaseFormulaText().
+        
+        
+        
         if(bIsEmpty)
             bFormulaTextResult = true;
     }
@@ -363,7 +363,7 @@ void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData, const OUS
     Field& rField = maFields.back();
 
     sal_Int32 nPos = maParagraph.getLength();
-    maParagraph.append('\1'); // Placeholder text for inserted field item.
+    maParagraph.append('\1'); 
     rField.maSelection.nStartPara = mnCurParagraph;
     rField.maSelection.nEndPara = mnCurParagraph;
     rField.maSelection.nStartPos = nPos;
@@ -377,22 +377,22 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     if (rStyleName.isEmpty())
         return;
 
-    // Get the style information from xmloff.
+    
     UniReference<XMLPropertySetMapper> xMapper = GetImport().GetTextImport()->GetTextImportPropertySetMapper()->getPropertySetMapper();
     if (!xMapper.is())
-        // We can't do anything without the mapper.
+        
         return;
 
     sal_Int32 nEntryCount = xMapper->GetEntryCount();
 
     SvXMLStylesContext* pAutoStyles = GetImport().GetAutoStyles();
 
-    // Style name for text span corresponds with the name of an automatic style.
+    
     const XMLPropStyleContext* pStyle = dynamic_cast<const XMLPropStyleContext*>(
         pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_TEXT, rStyleName));
 
     if (!pStyle)
-        // No style by that name found.
+        
         return;
 
     const std::vector<XMLPropertyState>& rProps = pStyle->GetProperties();
@@ -408,7 +408,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     rFmt.maSelection.nStartPos = nBegin;
     rFmt.maSelection.nEndPos = nEnd;
 
-    // Store the used text styles for export.
+    
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     pSheetData->AddTextStyle(rStyleName, aCellPos, rFmt.maSelection);
@@ -429,7 +429,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
 
         if (nLastItemID != pEntry->mnItemID && pPoolItem)
         {
-            // Flush the last item when the item ID changes.
+            
             rFmt.maItemSet.Put(*pPoolItem);
             pPoolItem.reset();
         }
@@ -440,7 +440,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
             case EE_CHAR_FONTINFO_CJK:
             case EE_CHAR_FONTINFO_CTL:
             {
-                // Font properties need to be consolidated into a single item.
+                
                 if (!pPoolItem)
                     pPoolItem.reset(new SvxFontItem(pEntry->mnItemID));
 
@@ -635,13 +635,13 @@ void ScXMLTableRowCellContext::PushParagraphFieldURL(
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
 {
-    // EditEngine always has at least one paragraph even when its content is empty.
+    
 
     if (mbEditEngineHasText)
     {
         if (maFirstParagraph)
         {
-            // Flush the cached first paragraph first.
+            
             mpEditEngine->Clear();
             mpEditEngine->SetText(*maFirstParagraph);
             maFirstParagraph.reset();
@@ -789,7 +789,7 @@ ScValidErrorStyle validAlertToValidError( const sheet::ValidationAlertStyle eVAl
         case sheet::ValidationAlertStyle_WARNING:       eVErrStyle = SC_VALERR_WARNING;   break;
         case sheet::ValidationAlertStyle_MACRO:         eVErrStyle = SC_VALERR_MACRO;     break;
         default:                                        eVErrStyle = SC_VALERR_INFO;      break;
-        //should INFO be the default?  seems to be the most unobtrusive choice.
+        
     }
     return eVErrStyle;
 }
@@ -816,7 +816,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
             aScValidationData.SetIgnoreBlank( aValidation.bIgnoreBlanks );
             aScValidationData.SetListType( aValidation.nShowList );
 
-            // set strings for error / input even if disabled (and disable afterwards)
+            
             aScValidationData.SetInput( aValidation.sImputTitle, aValidation.sImputMessage );
             if( !aValidation.bShowImputMessage )
                 aScValidationData.ResetInput();
@@ -831,21 +831,21 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
 
             ScPatternAttr aPattern( pDoc->GetPool() );
             aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
-            if( rScRange.aStart == rScRange.aEnd )  //for a single cell
+            if( rScRange.aStart == rScRange.aEnd )  
             {
                 pDoc->ApplyPattern( rScRange.aStart.Col(), rScRange.aStart.Row(),
                                     rScRange.aStart.Tab(), aPattern );
             }
-            else  //for repeating cells
+            else  
             {
                 pDoc->ApplyPatternAreaTab( rScRange.aStart.Col(), rScRange.aStart.Row(),
                                        rScRange.aEnd.Col(), rScRange.aEnd.Row(),
                                        rScRange.aStart.Tab(), aPattern );
             }
 
-            // is the below still needed?
-            // For now, any sheet with validity is blocked from stream-copying.
-            // Later, the validation names could be stored along with the style names.
+            
+            
+            
             ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
             pSheetData->BlockSheet( GetScImport().GetTables().GetCurrentSheet() );
         }
@@ -886,17 +886,17 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
             {
                 OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
-                // create the cell note with the caption object
+                
                 pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, rPos, *pCaption, true );
-                // forget pointer to object (do not create note again below)
+                
                 pObject = 0;
             }
         }
 
-        // drawing object has not been used to create a note -> use shape data
+        
         if( pObject )
         {
-            // rescue settings from drawing object before the shape is removed
+            
             ::std::auto_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
             ::std::auto_ptr< OutlinerParaObject > xOutlinerObj;
             if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
@@ -904,17 +904,17 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             Rectangle aCaptionRect;
             if( mxAnnotationData->mbUseShapePos )
                 aCaptionRect = pObject->GetLogicRect();
-            // remove the shape from the drawing page, this invalidates pObject
+            
             mxAnnotationData->mxShapes->remove( mxAnnotationData->mxShape );
             pObject = 0;
-            // update current number of existing objects
+            
             if( xShapesIA.is() )
                 nOldShapeCount = xShapesIA->getCount();
 
-            // an outliner object is required (empty note captions not allowed)
+            
             if( xOutlinerObj.get() )
             {
-                // create cell note with all data from drawing object
+                
                 pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
                     xItemSet.release(), xOutlinerObj.release(),
                     aCaptionRect, mxAnnotationData->mbShown, false );
@@ -923,12 +923,12 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     }
     else if( !mxAnnotationData->maSimpleText.isEmpty() )
     {
-        // create note from simple text
+        
         pNote = ScNoteUtil::CreateNoteFromString( *pDoc, rPos,
             mxAnnotationData->maSimpleText, mxAnnotationData->mbShown, false );
     }
 
-    // set author and date
+    
     if( pNote )
     {
         double fDate;
@@ -943,14 +943,14 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         pNote->SetAuthor( mxAnnotationData->maAuthor );
     }
 
-    // register a shape that has been newly created in the ScNoteUtil functions
+    
     if( xShapesIA.is() && (nOldShapeCount < xShapesIA->getCount()) )
     {
         uno::Reference< drawing::XShape > xShape;
         rXMLImport.GetShapeImport()->shapeWithZIndexAdded( xShape, xShapesIA->getCount() );
     }
 
-    // store the style names for stream copying
+    
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
     pSheetData->HandleNoteStyles( mxAnnotationData->maStyleName, mxAnnotationData->maTextStyle, rPos );
 
@@ -963,14 +963,14 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     }
 }
 
-// core implementation
+
 void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 {
     if( cellExists(rPosition) && pDetectiveObjVec && pDetectiveObjVec->size() )
     {
         LockSolarMutex();
         ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Tab() );
-        uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
+        uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); 
         ScMyImpDetectiveObjVec::iterator aItr(pDetectiveObjVec->begin());
         ScMyImpDetectiveObjVec::iterator aEndItr(pDetectiveObjVec->end());
         while(aItr != aEndItr)
@@ -987,7 +987,7 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
     }
 }
 
-// core implementation
+
 void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
 {
     if( cellExists(rPosition) && pCellRangeSource  && !pCellRangeSource->sSourceStr.isEmpty() &&
@@ -1016,8 +1016,8 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     {
         if(mbErrorValue)
         {
-            // don't do anything here
-            // we need to recalc anyway
+            
+            
         }
         else if( bFormulaTextResult && maStringValue )
         {
@@ -1039,8 +1039,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         const SCCOL nCurrentCol, const ::boost::optional< OUString >& pOUText )
 {
     bool bDoIncrement = true;
-    //matrix reference cells that contain text formula results;
-    //cell was already put in document, just need to set text here.
+    
+    
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         bDoIncrement = rXMLImport.GetDocument()->GetCellType(rCurrentPos) == CELLTYPE_FORMULA;
@@ -1081,7 +1081,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             }
         }
     }
-    else //regular text cells
+    else 
     {
         ScDocumentImport& rDoc = rXMLImport.GetDoc();
         if (maStringValue)
@@ -1093,12 +1093,12 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         {
             if (maFirstParagraph)
             {
-                // This is a normal text without format runs.
+                
                 rDoc.setStringCell(rCurrentPos, *maFirstParagraph);
             }
             else
             {
-                // This text either has format runs, has field(s), or consists of multiple lines.
+                
                 {
                     ParaFormatsType::const_iterator it = maFormats.begin(), itEnd = maFormats.end();
                     for (; it != itEnd; ++it)
@@ -1111,9 +1111,9 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                         mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpData, EE_FEATURE_FIELD), it->maSelection);
                 }
 
-                // This edit engine uses the SfxItemPool instance returned
-                // from pDoc->GetEditPool() to create the text object, which
-                // is a prerequisite for using this constructor of ScEditCell.
+                
+                
+                
                 rDoc.setEditCell(rCurrentPos, mpEditEngine->CreateTextObject());
             }
             bDoIncrement = true;
@@ -1127,18 +1127,18 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             bDoIncrement = false;
     }
 
-    // #i56027# This is about setting simple text, not edit cells,
-    // so ProgressBarIncrement must be called with bEditCell = FALSE.
-    // Formatted text that is put into the cell by the child context
-    // is handled in AddCellsToTable() (bIsEmpty is true then).
+    
+    
+    
+    
     if (bDoIncrement)
         rXMLImport.ProgressBarIncrement(false);
 }
 
 void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
 {
-    //matrix reference cells that contain value formula results;
-    //cell was already put in document, just need to set value here.
+    
+    
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         if (rXMLImport.GetDocument()->GetCellType(rCurrentPos) == CELLTYPE_FORMULA)
@@ -1148,11 +1148,11 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
             pFCell->SetNeedNumberFormat( true );
         }
     }
-    else  //regular value cell
+    else  
     {
-        // #i62435# Initialize the value cell's script type if the default
-        // style's number format is latin-only. If the cell uses a different
-        // format, the script type will be reset when the style is applied.
+        
+        
+        
 
         rXMLImport.GetDoc().setNumericCell(rCurrentPos, fValue);
     }
@@ -1178,8 +1178,8 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
     {
         rCurrentPos.SetCol( rCellPos.Col() + i );
 
-        // it makes no sense to import data after the last supported column
-        // fdo#58539 & gnome#627150
+        
+        
         if(rCurrentPos.Col() > MAXCOL)
             break;
 
@@ -1191,8 +1191,8 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
             {
                 rCurrentPos.SetRow( rCellPos.Row() + j );
 
-                // it makes no sense to import data after last supported row
-                // fdo#58539 & gnome#627150
+                
+                
                 if(rCurrentPos.Row() > MAXROW)
                     break;
 
@@ -1272,7 +1272,7 @@ bool ScXMLTableRowCellContext::CellsAreRepeated() const
 
 namespace {
 
-// from ScCellObj::GetOutputString_Imp().  all of it may not be necessary.
+
 OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
 {
     if (!pDoc)
@@ -1285,8 +1285,8 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
             return OUString();
         case CELLTYPE_EDIT:
         {
-            //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-            //  hier werden die Umbrueche aber gebraucht
+            
+            
             const EditTextObject* pData = pDoc->GetEditText(aCellPos);
             if (pData)
             {
@@ -1294,13 +1294,13 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
                 rEngine.SetText(*pData);
                 return rEngine.GetText(LINEEND_LF);
             }
-            //  Edit-Zellen auch nicht per NumberFormatter formatieren
-            //  (passend zur Ausgabe)
+            
+            
         }
         break;
         default:
         {
-            //  wie in GetString am Dokument (column)
+            
             Color* pColor;
             sal_uLong nNumFmt = pDoc->GetNumberFormat(aCellPos);
             return ScCellFormat::GetString(
@@ -1364,7 +1364,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     {
         if ( aText[0] == '=' && aText.getLength() > 1 )
         {
-            // temporary formula string as string tokens
+            
             boost::scoped_ptr<ScTokenArray> pCode(new ScTokenArray);
             pCode->AddStringXML( aText );
             if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !aFormulaNmsp.isEmpty() )
@@ -1378,8 +1378,8 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
-            //  for bEnglish, "'" at the beginning is always interpreted as text
-            //  marker and stripped
+            
+            
             rDoc.setStringCell(rCellPos, aText.copy(1));
         }
         else
@@ -1389,8 +1389,8 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             double fVal;
             if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
                 rDoc.setNumericCell(rCellPos, fVal);
-            //the (english) number format will not be set
-            //search matching local format and apply it
+            
+            
             else
                 rDoc.setStringCell(rCellPos, aText);
         }
@@ -1405,22 +1405,22 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
         SAL_WARN_IF((nColsRepeated != 1) || (nRepeatedRows != 1), "sc", "repeated cells with formula not possible now");
         rXMLImport.GetStylesImportHelper()->AddCell(rCellPos);
 
-        //add matrix
+        
         if(bIsMatrix)
         {
             if (nMatrixCols > 0 && nMatrixRows > 0)
             {
-                //matrix cells are put in the document, but we must set the
-                //value/text of each matrix cell later
+                
+                
                 rXMLImport.GetTables().AddMatrixRange(
                         rCellPos.Col(), rCellPos.Row(),
                         std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, MAXCOL),
                         std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, MAXROW),
                         maFormula->first, maFormula->second, eGrammar);
 
-                // Set the value/text of the top-left matrix position in its
-                // cached result.  For import, we only need to set the correct
-                // matrix geometry and the value type of the top-left element.
+                
+                
+                
 
                 ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCellPos);
 
@@ -1459,14 +1459,14 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
     }
 }
 
-//There are cases where a formula cell is exported with an office:value of 0 or
-//no office:value at all, but the formula cell will have a text:p value which
-//contains the intended formula result.
-//These cases include when a formula result:
-// - is blank
-// - has a constant error value beginning with "#" (such as "#VALUE!" or "#N/A")
-// - has an "Err:[###]" (where "[###]" is an error number)
-// Libreoffice 4.1+ with ODF1.2 extended write however calcext:value-type="error" in that case
+
+
+
+
+
+
+
+
 void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
     if (!mbEditEngineHasText || mbNewValueType)
@@ -1510,7 +1510,7 @@ void ScXMLTableRowCellContext::EndElement()
     else
         AddNonFormulaCell(aCellPos);
 
-    UnlockSolarMutex(); //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex
+    UnlockSolarMutex(); 
 
     bIsMerged = false;
     nMergedCols = 1;

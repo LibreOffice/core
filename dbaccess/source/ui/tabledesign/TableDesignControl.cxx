@@ -31,7 +31,7 @@ using namespace ::svt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-//--- Defines
+
 #define HANDLE_ID 0
 
 OTableRowView::OTableRowView(Window* pParent)
@@ -61,12 +61,12 @@ void OTableRowView::Init()
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
 
-    // Font fuer die Ueberschriften auf Light setzen
+    
     aFont = GetFont();
     aFont.SetWeight( WEIGHT_LIGHT );
     SetFont(aFont);
 
-    // HandleColumn, fuer maximal fuenf Ziffern einrichten
+    
     InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
@@ -81,7 +81,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
 {
     if (IsDeleteAllowed(0))
     {
-        if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&    // Delete rows
+        if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&    
             !rEvt.GetKeyCode().IsShift() &&
             !rEvt.GetKeyCode().IsMod1())
         {

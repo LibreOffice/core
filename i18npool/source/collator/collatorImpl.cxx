@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <collatorImpl.hxx>
@@ -39,7 +39,7 @@ CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) :
 
 CollatorImpl::~CollatorImpl()
 {
-    // Clear lookuptable
+    
     for (size_t l = 0; l < lookupTable.size(); l++)
         delete lookupTable[l];
     lookupTable.clear();
@@ -78,8 +78,8 @@ CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collato
         if (imp[i].isDefault)
             return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
 
-    throw RuntimeException(); // not default is defined
-    //return 0;
+    throw RuntimeException(); 
+    
 }
 
 sal_Int32 SAL_CALL
@@ -92,7 +92,7 @@ CollatorImpl::loadCollatorAlgorithm(const OUString& impl, const lang::Locale& rL
     if (cachedItem)
         cachedItem->xC->loadCollatorAlgorithm(cachedItem->algorithm, nLocale = rLocale, collatorOptions);
     else
-        throw RuntimeException(); // impl could not be loaded
+        throw RuntimeException(); 
 
     return 0;
 }
@@ -115,7 +115,7 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale ) throw(Runtim
     Sequence< OUString > list(imp.getLength());
 
     for (sal_Int32 i = 0; i < imp.getLength(); i++) {
-        //if the current algorithm is default and the position is not on the first one, then switch
+        
         if (imp[i].isDefault && i) {
             list[i] = list[0];
             list[0] = imp[i].unoID;
@@ -147,7 +147,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
 {
     for (size_t l = 0; l < lookupTable.size(); l++) {
         cachedItem = lookupTable[l];
-        if (cachedItem->service.equals(serviceName)) {// cross locale sharing
+        if (cachedItem->service.equals(serviceName)) {
             lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
             return sal_True;
         }
@@ -180,8 +180,8 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     bool bLoaded = false;
     if (!rSortAlgorithm.isEmpty())
     {
-        // Load service with name <base>_<lang>_<country>_<algorithm> or
-        // <base>_<bcp47>_<algorithm> and fallbacks.
+        
+        
         bLoaded = createCollator( rLocale,
                 LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_" + rSortAlgorithm, rSortAlgorithm);
         if (!bLoaded)
@@ -195,19 +195,19 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
             }
             if (!bLoaded)
             {
-                // load service with name <base>_<algorithm>
+                
                 bLoaded = createCollator( rLocale, rSortAlgorithm, rSortAlgorithm);
             }
         }
     }
     if (!bLoaded)
     {
-        // load default service with name <base>_Unicode
+        
         bLoaded = createCollator( rLocale, "Unicode", rSortAlgorithm);
         if (!bLoaded)
         {
             cachedItem = NULL;
-            throw RuntimeException();   // could not load any service
+            throw RuntimeException();   
         }
     }
 }

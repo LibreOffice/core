@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,8 +50,8 @@ using namespace ::com::sun::star;
 #define CHAPTER_FILENAME "chapter.cfg"
 
 
-// SwNumRulesWithName ----------------------------------------------------
-// PUBLIC METHODES -------------------------------------------------------
+
+
 /*------------------------------------------------------------------------
  Description:   Saving a rule
  Parameter:     rCopy -- the rule to save
@@ -110,12 +110,12 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
         *pNumRules[nIdx] = rCopy;
 }
 
-// PROTECTED METHODS ----------------------------------------------------
+
 sal_Bool SwBaseNumRules::Store(SvStream &rStream)
 {
     rStream.WriteUInt16( ACT_NUM_VERSION );
-        // Write, what positions are occupied by a rule
-        // Then write each of the rules
+        
+        
     for(sal_uInt16 i = 0; i < nMaxRules; ++i)
     {
         if(pNumRules[i])
@@ -135,8 +135,8 @@ int SwBaseNumRules::Load(SvStream &rStream)
 
     rStream.ReadUInt16( nVersion );
 
-    // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
-    // #55402#
+    
+    
     if(VERSION_40A == nVersion)
     {
         OSL_FAIL("Version 364 is not clear #55402#");
@@ -230,8 +230,8 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
     {
         if( VERSION_30B == nVersion )
             c = 1;
-        // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
-        // #55402#
+        
+        
         else if(nVersion < VERSION_40A && n > 5)
             c = 0;
         else
@@ -246,7 +246,7 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 
 void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
-    // #i89178#
+    
     rChg = SwNumRule( maName, numfunc::GetDefaultPositionAndSpaceMode() );
     rChg.SetAutoRule( sal_False );
     _SwNumFmtGlobal* pFmt;
@@ -280,7 +280,7 @@ void SwNumRulesWithName::Store( SvStream &rStream )
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
     : aFmt( rFmt ), nCharPoolId( USHRT_MAX )
 {
-    // relative gaps?????
+    
 
     SwCharFmt* pFmt = rFmt.GetCharFmt();
     if( pFmt )
@@ -351,7 +351,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             rStream.ReadInt32( nL );          aFmt.SetLSpace( lNumIndent );
             rStream.ReadInt32( nL );          aFmt.SetFirstLineOffset( (short)nL );
         }
-        else                // old start-value was a Byte
+        else                
         {
             rStream.ReadUInt16( nUS );         aFmt.SetStart( nUS );
             sStr = rStream.ReadUniOrByteString(eEncoding);
@@ -481,7 +481,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
                .WriteInt16( aFmt.GetFirstLineOffset() )
                .WriteInt16( aFmt.GetCharTextDistance() )
                .WriteInt16( aFmt.GetLSpace() )
-               .WriteUChar( sal_False );//aFmt.IsRelLSpace();
+               .WriteUChar( sal_False );
         rStream.WriteUniOrByteString( aName, eEncoding );
         rStream.WriteUInt16( nFamily )
                .WriteUInt16( nCharSet )
@@ -504,7 +504,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
         pItem->Store( rStream, nIVers );
     }
 
-    // Extensions for 40A
+    
 
     if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
@@ -535,13 +535,13 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
     SwCharFmt* pFmt = 0;
     if( !sCharFmtName.isEmpty() )
     {
-        // at first, look for the name
+        
         sal_uInt16 nArrLen = rSh.GetCharFmtCount();
         for( sal_uInt16 i = 1; i < nArrLen; ++i )
         {
             pFmt = &rSh.GetCharFmt( i );
             if (pFmt->GetName()==sCharFmtName)
-                // exists, so leave attributes as they are!
+                
                 break;
             pFmt = 0;
         }
@@ -556,7 +556,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
-            if( !pFmt->GetDepends() )       // set attributes
+            if( !pFmt->GetDepends() )       
                 for( sal_uInt16 n = aItems.size(); n; )
                     pFmt->SetFmtAttr( aItems[ --n ] );
         }

@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <svx/sidebar/ColorControl.hxx>
 
@@ -102,7 +102,7 @@ void ParaPropertyPanel::HandleContextChange (
 {
     if (maContext == aContext)
     {
-        // Nothing to do.
+        
         return;
     }
 
@@ -239,13 +239,13 @@ void ParaPropertyPanel::EndSpacingPopupMode (void)
 
 void ParaPropertyPanel::EndBulletsPopupMode (void)
 {
-    //i122054, Missed following line, for collapse the bullets popup
+    
     maBulletsPopup.Hide();
 }
 
 void ParaPropertyPanel::EndNumberingPopupMode (void)
 {
-    //i122054, Missed following line, for collapse the numbering popup
+    
     maNumberingPopup.Hide();
 }
 
@@ -332,11 +332,11 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     mpTopDist->SetAccessibleName(mpTopDist->GetQuickHelpText());
     mpBottomDist->SetAccessibleName(mpBottomDist->GetQuickHelpText());
 
-    // Use a form of image loading that can handle both .uno:<command>
-    // and private:graphirepository... syntax.  This is necessary to
-    // handle the workaround for accessing the images of commands
-    // ParaspaceIncrease and ParaspaceDecrease.
-    // See issue 122446 for more details.
+    
+    
+    
+    
+    
 
     const sal_uInt16 nIdParaSpaceInc = mpTbxUL_IncDec->GetItemId(UNO_PARASPACEINC);
     const sal_uInt16 nIdParaSpaceDec = mpTbxUL_IncDec->GetItemId(UNO_PARASPACEDEC);
@@ -356,7 +356,7 @@ void ParaPropertyPanel::InitToolBoxLineSpacing()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ClickLineSPDropDownHdl_Impl );
     mpLineSPTbx->SetDropdownClickHdl( aLink );
-    mpLineSPTbx->SetSelectHdl( aLink );     //support keyinput "ENTER"
+    mpLineSPTbx->SetSelectHdl( aLink );     
 
     const sal_uInt16 nIdSpacing = mpLineSPTbx->GetItemId(UNO_LINESPACING);
     mpLineSPTbx->SetItemBits( nIdSpacing, mpLineSPTbx->GetItemBits( nIdSpacing ) | TIB_DROPDOWNONLY );
@@ -365,7 +365,7 @@ void ParaPropertyPanel::InitToolBoxLineSpacing()
 
 void ParaPropertyPanel::initial()
 {
-    //toolbox
+    
     InitToolBoxIndent();
     InitToolBoxBGColor();
     InitToolBoxBulletsNumbering();
@@ -390,7 +390,7 @@ void ParaPropertyPanel::initial()
 #endif
 }
 
-//===========================for Numbering & Bullet================================================
+
 
 
 
@@ -437,7 +437,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
 }
 
 
-//==================================for Background color=====================
+
 
 IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
 {
@@ -479,7 +479,7 @@ void ParaPropertyPanel::SetBGColor (
     maColor = aColor;
 }
 
-//==================================for Paragraph Indent=====================
+
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
@@ -597,7 +597,7 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
 
     return( 0L );
 }
-//==================================for Paragraph Line Spacing=====================
+
 
 IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
 {
@@ -613,7 +613,7 @@ IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
     return (0L);
 }
 
-//==================================for Paragraph Spacing=====================
+
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
@@ -676,7 +676,7 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
     return( 0L );
 }
 
-//==================================for Paragraph State change=====================
+
 void ParaPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
@@ -875,7 +875,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         else
             mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
 
-        //      maTbxProDemote->Disable();
+        
         mpTbxProDemote->EnableItem(nIdHangingIndent2, false);
     }
     else
@@ -983,8 +983,8 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
            || maContext.GetCombinedContext_DI() ==  CombinedEnumContext(Application_WriterVariants, Context_Table) )
          && ( nSID == SID_INC_INDENT || nSID == SID_DEC_INDENT ) )
     {
-        // Writer's text shell is the only one which provides reasonable states for Slots SID_INC_INDENT and SID_DEC_INDENT
-        // - namely SFX_ITEM_UNKNOWN and SFX_ITEM_DISABLED
+        
+        
         const sal_uInt16 nIdIncrIndent = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
         const sal_uInt16 nIdDecrIndent = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
 
@@ -995,7 +995,7 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
 }
 
 
-// Add toggle state for numbering and bullet icons
+
 void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)) )
@@ -1057,7 +1057,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
         SfxObjectShell* pSh = NULL;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
-        if ( pSh )  //the object shell is not always available during reload
+        if ( pSh )  
         {
             SfxModule* pModule = pSh->GetModule();
             if ( pModule )
@@ -1098,7 +1098,7 @@ namespace
     {
         return COL_TRANSPARENT;
     }
-} // end of anonymous namespace
+} 
 
 PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pParent)
 {
@@ -1164,12 +1164,12 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maBGColorPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBGColorPopupControl, this, _1)),
       mxSidebar(rxSidebar)
 {
-    //Alignment
+    
     get(mpTBxVertAlign, "verticalalignment");
-    //NumBullet&Backcolor
+    
     get(mpTBxNumBullet, "numberbullet");
     get(mpTBxBackColor, "backgroundcolor");
-    //Paragraph spacing
+    
     get(mpTopDist,      "aboveparaspacing");
     mpTopDist->set_width_request(mpTopDist->get_preferred_size().Width());
     get(mpBottomDist,   "belowparaspacing");
@@ -1189,4 +1189,4 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
     initial();
 }
 
-} } // end of namespace svx::sidebar
+} } 

@@ -42,7 +42,7 @@ class RtlConstAsciiMacro
 #endif
         enum { isPPCallback = true };
     private:
-        map< SourceLocation, SourceLocation > expansions; // start location -> end location
+        map< SourceLocation, SourceLocation > expansions; 
         bool searchingForString;
         bool suitableString;
     };
@@ -85,43 +85,43 @@ bool RtlConstAsciiMacro::VisitCXXConstructExpr( CXXConstructExpr* expr )
         return true;
     if( expr->getNumArgs() != 4 )
         return true;
-    // The last argument should be the default one when the macro is used.
+    
     if( dyn_cast< CXXDefaultArgExpr >( expr->getArg( 3 )) == NULL )
         return true;
     if( expr->getConstructor()->getQualifiedNameAsString() != "rtl::OUString::OUString" )
         return true;
     const SourceManager& src = compiler.getSourceManager();
     SourceLocation start = src.getExpansionLoc( expr->getArg( 0 )->getLocStart());
-    // Macro fills in the first 3 arguments, so they must all come from the same expansion.
+    
     if( start != src.getExpansionLoc( expr->getArg( 2 )->getLocEnd()))
         return true;
     if( expansions.find( start ) == expansions.end())
         return true;
     SourceLocation end = expansions[ start ];
-    // Remove the location, since sometimes the same code may be processed more than once
-    // (e.g. non-trivial default arguments).
+    
+    
     expansions.erase( start );
-    // Check if the string argument to the macro is suitable.
+    
     searchingForString = true;
     suitableString = false;
     TraverseStmt( expr->getArg( 0 ));
     searchingForString = false;
     if( !suitableString )
         return true;
-    // Seach for '(' (don't just remove a given length to handle possible whitespace).
+    
     const char* text = compiler.getSourceManager().getCharacterData( start );
     const char* pos = text;
     while( *pos != '(' )
         ++pos;
     ++pos;
     if( text[ -1 ] == ' ' && *pos == ' ' )
-        ++pos; // do not leave two spaces
+        ++pos; 
     removeText( start, pos - text, RemoveLineIfEmpty );
     const char* textend = compiler.getSourceManager().getCharacterData( end );
     if( textend[ -1 ] == ' ' && textend[ 1 ] == ' ' )
-        removeText( end, 2, RemoveLineIfEmpty ); // Remove ') '.
+        removeText( end, 2, RemoveLineIfEmpty ); 
     else
-        removeText( end, 1, RemoveLineIfEmpty ); // Remove ')'.
+        removeText( end, 1, RemoveLineIfEmpty ); 
     return true;
     }
 
@@ -134,13 +134,13 @@ bool RtlConstAsciiMacro::VisitStringLiteral( const StringLiteral* literal )
     {
     if( !searchingForString )
         return true;
-    if( suitableString ) // two string literals?
+    if( suitableString ) 
         {
         report( DiagnosticsEngine::Warning, "cannot analyze RTL_CONSTASCII_USTRINGPARAM (plugin needs fixing)" )
             << literal->getSourceRange();
         return true;
         }
-    if( !literal->isAscii()) // ignore
+    if( !literal->isAscii()) 
         return true;
     if( !literal->containsNonAsciiOrNull())
         suitableString = true;
@@ -149,6 +149,6 @@ bool RtlConstAsciiMacro::VisitStringLiteral( const StringLiteral* literal )
 
 static Plugin::Registration< RtlConstAsciiMacro > X( "rtlconstasciimacro" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

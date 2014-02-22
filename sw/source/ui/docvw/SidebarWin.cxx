@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -201,7 +201,7 @@ void SwSidebarWin::Paint( const Rectangle& rRect)
 
     if (mpMetadataAuthor->IsVisible() )
     {
-        //draw left over space
+        
         if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         {
             SetFillColor(COL_BLACK);
@@ -280,13 +280,13 @@ void SwSidebarWin::InitControls()
 {
     AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
-    // actual window which holds the user text
+    
     mpSidebarTxtControl = new SidebarTxtControl( *this,
                                                  WB_NODIALOGCONTROL,
                                                  mrView, mrMgr );
     mpSidebarTxtControl->SetPointer(Pointer(POINTER_TEXT));
 
-    // window controls for author and date
+    
     mpMetadataAuthor = new Edit( this, 0 );
     mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->EnableRTL(Application::GetSettings().GetLayoutRTL());
@@ -294,8 +294,8 @@ void SwSidebarWin::InitControls()
     mpMetadataAuthor->AlwaysDisableInput(true);
     mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
     mpMetadataAuthor->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-    // we should leave this setting alone, but for this we need a better layout algo
-    // with variable meta size height
+    
+    
     {
         AllSettings aSettings = mpMetadataAuthor->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -313,8 +313,8 @@ void SwSidebarWin::InitControls()
     mpMetadataDate->AlwaysDisableInput(true);
     mpMetadataDate->SetCallHandlersOnInputDisabled(true);
     mpMetadataDate->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-    // we should leave this setting alone, but for this we need a better layout algo
-    // with variable meta size height
+    
+    
     {
         AllSettings aSettings = mpMetadataDate->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -340,7 +340,7 @@ void SwSidebarWin::InitControls()
 
     mpOutlinerView->SetAttribs(DefaultItem());
 
-    //create Scrollbars
+    
     mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
@@ -350,8 +350,8 @@ void SwSidebarWin::InitControls()
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     sal_uLong nCntrl = mpOutliner->GetControlWord();
-    // TODO: crash when AUTOCOMPLETE enabled
-    nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE; // | EE_CNTRL_AUTOCOMPLETE;
+    
+    nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE; 
     if (pVOpt->IsFieldShadings())
         nCntrl |= EE_CNTRL_MARKFIELDS;
     else
@@ -548,7 +548,7 @@ void SwSidebarWin::SetPosAndSize()
     {
         if (IsFollow() && !HasChildPathFocus())
         {
-            // #i111964#
+            
             if ( mpAnchor )
             {
                 mpAnchor->SetAnchorState(AS_END);
@@ -556,13 +556,13 @@ void SwSidebarWin::SetPosAndSize()
         }
         else
         {
-            // #i111964#
+            
             if ( mpAnchor )
             {
                 mpAnchor->SetAnchorState(AS_ALL);
             }
             SwSidebarWin* pWin = GetTopReplyNote();
-            // #i111964#
+            
             if ( pWin && pWin->Anchor() )
             {
                 pWin->Anchor()->SetAnchorState(AS_END);
@@ -570,7 +570,7 @@ void SwSidebarWin::SetPosAndSize()
         }
     }
 
-    // text range overlay
+    
     if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
          && mrSidebarItem.maLayoutInfo.mnStartContent != -1 )
     {
@@ -661,7 +661,7 @@ void SwSidebarWin::DoResize()
     mpSidebarTxtControl->SetQuickHelpText(OUString());
 
     if ((aTextHeight > aHeight) && !IsPreview())
-    {   // we need vertical scrollbars and have to reduce the width
+    {   
         aWidth -= GetScrollbarWidth();
         mpVScrollbar->Show();
     }
@@ -685,7 +685,7 @@ void SwSidebarWin::DoResize()
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
     if (!mpVScrollbar->IsVisible())
-    {   // if we do not have a scrollbar anymore, we want to see the complete text
+    {   
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
@@ -709,7 +709,7 @@ void SwSidebarWin::DoResize()
     SetScrollbar();
     mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
 
-    //calculate rects for meta- button
+    
     const Fraction& fx( GetMapMode().GetScaleX() );
     const Fraction& fy( GetMapMode().GetScaleY() );
 
@@ -762,7 +762,7 @@ void SwSidebarWin::ResizeIfNecessary(long aOldHeight, long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {
-        //check for lower border or next note
+        
         long aBorder = mrMgr.GetNextBorder();
         if (aBorder != -1)
         {
@@ -825,7 +825,7 @@ void SwSidebarWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnch
         AllSettings aSettings2 = mpVScrollbar->GetSettings();
         StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
         aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-        aStyleSettings2.SetCheckedColor(mColorLight); // backgound
+        aStyleSettings2.SetCheckedColor(mColorLight); 
         aStyleSettings2.SetShadowColor(mColorAnchor);
         aStyleSettings2.SetFaceColor(mColorDark);
         aSettings2.SetStyleSettings(aStyleSettings2);
@@ -861,11 +861,11 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     sal_uLong nCntrl = Engine()->GetControlWord();
-    // turn off
+    
     nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     Engine()->SetControlWord(nCntrl);
 
-    //turn back on
+    
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
@@ -936,7 +936,7 @@ void SwSidebarWin::ActivatePostIt()
 
 void SwSidebarWin::DeactivatePostIt()
 {
-    // remove selection, #i87073#
+    
     if (GetOutlinerView()->GetEditView().HasSelection())
     {
         ESelection aSelection = GetOutlinerView()->GetEditView().GetSelection();
@@ -948,7 +948,7 @@ void SwSidebarWin::DeactivatePostIt()
     mpOutliner->CompleteOnlineSpelling();
 
     SetViewState(VS_NORMAL);
-    // write the visible text back into the SwField
+    
     UpdateData();
 
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -965,11 +965,11 @@ void SwSidebarWin::ToggleInsMode()
 {
     if (!mrView.GetWrtShell().IsRedlineOn())
     {
-        //change outliner
+        
         mpOutlinerView->GetEditView().SetInsertMode(!mpOutlinerView->GetEditView().IsInsertMode());
-        //change document
+        
         mrView.GetWrtShell().ToggleInsMode();
-        //update statusbar
+        
         SfxBindings &rBnd = mrView.GetViewFrame()->GetBindings();
         rBnd.Invalidate(SID_ATTR_INSERT);
         rBnd.Update(SID_ATTR_INSERT);
@@ -985,8 +985,8 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_POSTIT:
         case FN_REPLY:
         {
-            // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
-            // will be created
+            
+            
             if (!Engine()->GetEditEngine().GetText().isEmpty())
             {
                 OutlinerParaObject* pPara = new OutlinerParaObject(*GetOutlinerView()->GetEditView().CreateTextObject());
@@ -1000,18 +1000,18 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         }
         case FN_DELETE_COMMENT:
 
-                //Delete(); // do not kill the parent of our open popup menu
+                
                 mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
             break;
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
-            // not possible as slot as this would require that "this" is the active postit
+            
             mrView.GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SFX_CALLMODE_ASYNCHRON );
             break;
         case FN_DELETE_NOTE_AUTHOR:
         case FN_HIDE_NOTE_AUTHOR:
         {
-            // not possible as slot as this would require that "this" is the active postit
+            
             SfxStringItem aItem( nSlot, GetAuthor() );
             const SfxPoolItem* aItems[2];
             aItems[0] = &aItem;
@@ -1095,7 +1095,7 @@ void SwSidebarWin::Delete()
     if ( mrMgr.GetActiveSidebarWin() == this)
     {
         mrMgr.SetActiveSidebarWin(0);
-        // if the note is empty, the previous line will send a delete event, but we are already there
+        
         if (mnEventId)
         {
             Application::RemoveUserEvent( mnEventId );
@@ -1187,7 +1187,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             {
                 mpAnchor->SetAnchorState(AS_ALL);
                 SwSidebarWin* pWin = GetTopReplyNote();
-                // #i111964#
+                
                 if ( pWin && pWin->Anchor() )
                 {
                     pWin->Anchor()->SetAnchorState(AS_END);
@@ -1222,14 +1222,14 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             {
                 if (IsFollow())
                 {
-                    // if there is no visible parent note, we want to see the complete anchor ??
-                    //if (IsAnyStackParentVisible())
+                    
+                    
                     mpAnchor->SetAnchorState(AS_END);
                     SwSidebarWin* pTopWinSelf = GetTopReplyNote();
                     SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
                                                   : 0;
-                    // #i111964#
+                    
                     if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
                          pTopWinSelf->Anchor() )
                     {
@@ -1349,6 +1349,6 @@ css::uno::Reference< css::accessibility::XAccessible > SwSidebarWin::CreateAcces
     return xAcc;
 }
 
-} } // eof of namespace sw::sidebarwindows
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

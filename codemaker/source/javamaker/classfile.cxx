@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -99,9 +99,9 @@ void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
     BOOST_STATIC_ASSERT(
         sizeof (std::vector< unsigned char >::size_type)
         <= sizeof (sal_uInt64));
-        // both unsigned integral, so sizeof is a practically sufficient
-        // approximation of std::numeric_limits<T1>::max() <=
-        // std::numeric_limits<T2>::max()
+        
+        
+        
     if (n != 0) {
         write(file, &stream[0], static_cast< sal_uInt64 >(n));
     }
@@ -112,39 +112,39 @@ void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
 ClassFile::Code::~Code() {}
 
 void ClassFile::Code::instrAastore() {
-    // aastore:
+    
     appendU1(m_code, 0x53);
 }
 
 void ClassFile::Code::instrAconstNull() {
-    // aconst_null:
+    
     appendU1(m_code, 0x01);
 }
 
 void ClassFile::Code::instrAnewarray(OString const & type) {
-    // anewarray <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xBD);
     appendU2(m_code, m_classFile.addClassInfo(type));
 }
 
 void ClassFile::Code::instrAreturn() {
-    // areturn:
+    
     appendU1(m_code, 0xB0);
 }
 
 void ClassFile::Code::instrAthrow() {
-    // athrow:
+    
     appendU1(m_code, 0xBF);
 }
 
 void ClassFile::Code::instrCheckcast(OString const & type) {
-    // checkcast <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xC0);
     appendU2(m_code, m_classFile.addClassInfo(type));
 }
 
 void ClassFile::Code::instrDup() {
-    // dup:
+    
     appendU1(m_code, 0x59);
 }
 
@@ -152,13 +152,13 @@ void ClassFile::Code::instrGetstatic(
     OString const & type, OString const & name,
     OString const & descriptor)
 {
-    // getstatic <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xB2);
     appendU2(m_code, m_classFile.addFieldrefInfo(type, name, descriptor));
 }
 
 ClassFile::Code::Branch ClassFile::Code::instrIfAcmpne() {
-    // if_acmpne <branchbyte1> <branchbyte2>:
+    
     Branch branch = m_code.size();
     appendU1(m_code, 0xA6);
     appendU2(m_code, 0);
@@ -166,7 +166,7 @@ ClassFile::Code::Branch ClassFile::Code::instrIfAcmpne() {
 }
 
 ClassFile::Code::Branch ClassFile::Code::instrIfeq() {
-    // ifeq <branchbyte1> <branchbyte2>:
+    
     Branch branch = m_code.size();
     appendU1(m_code, 0x99);
     appendU2(m_code, 0);
@@ -174,7 +174,7 @@ ClassFile::Code::Branch ClassFile::Code::instrIfeq() {
 }
 
 ClassFile::Code::Branch ClassFile::Code::instrIfnull() {
-    // ifnull <branchbyte1> <branchbyte2>:
+    
     Branch branch = m_code.size();
     appendU1(m_code, 0xC6);
     appendU2(m_code, 0);
@@ -182,7 +182,7 @@ ClassFile::Code::Branch ClassFile::Code::instrIfnull() {
 }
 
 void ClassFile::Code::instrInstanceof(OString const & type) {
-    // instanceof <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xC1);
     appendU2(m_code, m_classFile.addClassInfo(type));
 }
@@ -191,7 +191,7 @@ void ClassFile::Code::instrInvokeinterface(
     OString const & type, OString const & name,
     OString const & descriptor, sal_uInt8 args)
 {
-    // invokeinterface <indexbyte1> <indexbyte2> <nargs> 0:
+    
     appendU1(m_code, 0xB9);
     appendU2(
         m_code, m_classFile.addInterfaceMethodrefInfo(type, name, descriptor));
@@ -203,7 +203,7 @@ void ClassFile::Code::instrInvokespecial(
     OString const & type, OString const & name,
     OString const & descriptor)
 {
-    // invokespecial <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xB7);
     appendU2(m_code, m_classFile.addMethodrefInfo(type, name, descriptor));
 }
@@ -212,7 +212,7 @@ void ClassFile::Code::instrInvokestatic(
     OString const & type, OString const & name,
     OString const & descriptor)
 {
-    // invokestatic <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xB8);
     appendU2(m_code, m_classFile.addMethodrefInfo(type, name, descriptor));
 }
@@ -221,7 +221,7 @@ void ClassFile::Code::instrInvokevirtual(
     OString const & type, OString const & name,
     OString const & descriptor)
 {
-    // invokevirtual <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xB6);
     appendU2(m_code, m_classFile.addMethodrefInfo(type, name, descriptor));
 }
@@ -230,9 +230,9 @@ void ClassFile::Code::instrLookupswitch(
     Code const * defaultBlock,
     std::list< std::pair< sal_Int32, Code * > > const & blocks)
 {
-    // lookupswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
-    // <defaultbyte4> <npairs1> <npairs2> <npairs3> <npairs4>
-    // <match--offset pairs...>:
+    
+    
+    
     std::list< std::pair< sal_Int32, Code * > >::size_type size = blocks.size();
     if (size > SAL_MAX_INT32) {
         throw CannotDumpException("Lookup-switch too large for Java class file format");
@@ -243,9 +243,9 @@ void ClassFile::Code::instrLookupswitch(
     for (int i = 0; i < pad; ++i) {
         appendU1(m_code, 0);
     }
-    Position pos2 = pos1 + 1 + pad + 8 + blocks.size() * 8; //FIXME: overflow
-    appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1)); //FIXME: overflow
-    pos2 += defaultBlock->m_code.size(); //FIXME: overflow
+    Position pos2 = pos1 + 1 + pad + 8 + blocks.size() * 8; 
+    appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1)); 
+    pos2 += defaultBlock->m_code.size(); 
     appendU4(m_code, static_cast< sal_uInt32 >(size));
     for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
              blocks.begin());
@@ -253,8 +253,8 @@ void ClassFile::Code::instrLookupswitch(
     {
         appendU4(m_code, static_cast< sal_uInt32 >(i->first));
         appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
-            //FIXME: overflow
-        pos2 += i->second->m_code.size(); //FIXME: overflow
+            
+        pos2 += i->second->m_code.size(); 
     }
     appendStream(m_code, defaultBlock->m_code);
     for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
@@ -266,7 +266,7 @@ void ClassFile::Code::instrLookupswitch(
 }
 
 void ClassFile::Code::instrNew(OString const & type) {
-    // new <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xBB);
     appendU2(m_code, m_classFile.addClassInfo(type));
 }
@@ -275,7 +275,7 @@ void ClassFile::Code::instrNewarray(codemaker::UnoType::Sort sort) {
     OSL_ASSERT(
         sort >= codemaker::UnoType::SORT_BOOLEAN
         && sort <= codemaker::UnoType::SORT_CHAR);
-    // newarray <atype>:
+    
     appendU1(m_code, 0xBC);
     static sal_uInt8 const atypes[codemaker::UnoType::SORT_CHAR] = {
         0x04, 0x08, 0x09, 0x09, 0x0A, 0x0A, 0x0B, 0x0B, 0x06, 0x07, 0x05 };
@@ -283,7 +283,7 @@ void ClassFile::Code::instrNewarray(codemaker::UnoType::Sort sort) {
 }
 
 void ClassFile::Code::instrPop() {
-    // pop:
+    
     appendU1(m_code, 0x57);
 }
 
@@ -291,7 +291,7 @@ void ClassFile::Code::instrPutfield(
     OString const & type, OString const & name,
     OString const & descriptor)
 {
-    // putfield <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xB5);
     appendU2(m_code, m_classFile.addFieldrefInfo(type, name, descriptor));
 }
@@ -300,18 +300,18 @@ void ClassFile::Code::instrPutstatic(
     OString const & type, OString const & name,
     OString const & descriptor)
 {
-    // putstatic <indexbyte1> <indexbyte2>:
+    
     appendU1(m_code, 0xB3);
     appendU2(m_code, m_classFile.addFieldrefInfo(type, name, descriptor));
 }
 
 void ClassFile::Code::instrReturn() {
-    // return:
+    
     appendU1(m_code, 0xB1);
 }
 
 void ClassFile::Code::instrSwap() {
-    // swap:
+    
     appendU1(m_code, 0x5F);
 }
 
@@ -319,9 +319,9 @@ void ClassFile::Code::instrTableswitch(
     Code const * defaultBlock, sal_Int32 low,
     std::list< Code * > const & blocks)
 {
-    // tableswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
-    // <defaultbyte4> <lowbyte1> <lowbyte2> <lowbyte3> <lowbyte4> <highbyte1>
-    // <highbyte2> <highbyte3> <highbyte4> <jump offsets...>:
+    
+    
+    
     Position pos1 = m_code.size();
     appendU1(m_code, 0xAA);
     int pad = (pos1 + 1) % 4;
@@ -329,11 +329,11 @@ void ClassFile::Code::instrTableswitch(
         appendU1(m_code, 0);
     }
     std::list< Code * >::size_type size = blocks.size();
-    Position pos2 = pos1 + 1 + pad + 12 + size * 4; //FIXME: overflow
+    Position pos2 = pos1 + 1 + pad + 12 + size * 4; 
     sal_uInt32 defaultOffset = static_cast< sal_uInt32 >(pos2 - pos1);
-        //FIXME: overflow
+        
     appendU4(m_code, defaultOffset);
-    pos2 += defaultBlock->m_code.size(); //FIXME: overflow
+    pos2 += defaultBlock->m_code.size(); 
     appendU4(m_code, static_cast< sal_uInt32 >(low));
     appendU4(m_code, static_cast< sal_uInt32 >(low + (size - 1)));
     for (std::list< Code * >::const_iterator i(blocks.begin());
@@ -343,8 +343,8 @@ void ClassFile::Code::instrTableswitch(
             appendU4(m_code, defaultOffset);
         } else {
             appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
-                //FIXME: overflow
-            pos2 += (*i)->m_code.size(); //FIXME: overflow
+                
+            pos2 += (*i)->m_code.size(); 
         }
     }
     appendStream(m_code, defaultBlock->m_code);
@@ -359,14 +359,14 @@ void ClassFile::Code::instrTableswitch(
 
 void ClassFile::Code::loadIntegerConstant(sal_Int32 value) {
     if (value >= -1 && value <= 5) {
-        // iconst_<i>:
+        
         appendU1(m_code, static_cast< sal_uInt8 >(0x02 + value + 1));
     } else if (value >= -128 && value <= 127) {
-        // bipush <byte>:
+        
         appendU1(m_code, 0x10);
         appendU1(m_code, static_cast< sal_uInt8 >(value));
     } else if (value >= -32768 && value <= 32767) {
-        // sipush <byte1> <byte2>:
+        
         appendU1(m_code, 0x11);
         appendU2(m_code, static_cast< sal_uInt16 >(value));
     } else {
@@ -379,27 +379,27 @@ void ClassFile::Code::loadStringConstant(OString const & value) {
 }
 
 void ClassFile::Code::loadLocalInteger(sal_uInt16 index) {
-    accessLocal(index, 0x1A, 0x15); // iload_<n>, iload
+    accessLocal(index, 0x1A, 0x15); 
 }
 
 void ClassFile::Code::loadLocalLong(sal_uInt16 index) {
-    accessLocal(index, 0x1E, 0x16); // load_<n>, load
+    accessLocal(index, 0x1E, 0x16); 
 }
 
 void ClassFile::Code::loadLocalFloat(sal_uInt16 index) {
-    accessLocal(index, 0x22, 0x17); // load_<n>, load
+    accessLocal(index, 0x22, 0x17); 
 }
 
 void ClassFile::Code::loadLocalDouble(sal_uInt16 index) {
-    accessLocal(index, 0x26, 0x18); // load_<n>, load
+    accessLocal(index, 0x26, 0x18); 
 }
 
 void ClassFile::Code::loadLocalReference(sal_uInt16 index) {
-    accessLocal(index, 0x2A, 0x19); // aload_<n>, aload
+    accessLocal(index, 0x2A, 0x19); 
 }
 
 void ClassFile::Code::storeLocalReference(sal_uInt16 index) {
-    accessLocal(index, 0x4B, 0x3A); // astore_<n>, astore
+    accessLocal(index, 0x4B, 0x3A); 
 }
 
 void ClassFile::Code::branchHere(Branch branch) {
@@ -419,11 +419,11 @@ void ClassFile::Code::addException(
     }
     ++m_exceptionTableLength;
     appendU2(m_exceptionTable, static_cast< sal_uInt16 >(start));
-        //FIXME: overflow
+        
     appendU2(m_exceptionTable, static_cast< sal_uInt16 >(end));
-        //FIXME: overflow
+        
     appendU2(m_exceptionTable, static_cast< sal_uInt16 >(handler));
-        //FIXME: overflow
+        
     appendU2(m_exceptionTable, m_classFile.addClassInfo(type));
 }
 
@@ -440,11 +440,11 @@ ClassFile::Code::Code(ClassFile & classFile)
 
 void ClassFile::Code::ldc(sal_uInt16 index) {
     if (index <= 0xFF) {
-        // ldc <index>:
+        
         appendU1(m_code, 0x12);
         appendU1(m_code, static_cast< sal_uInt8 >(index));
     } else {
-        // ldc_w <indexbyte1> <indexbyte2>:
+        
         appendU1(m_code, 0x13);
         appendU2(m_code, index);
     }
@@ -454,14 +454,14 @@ void ClassFile::Code::accessLocal(
     sal_uInt16 index, sal_uInt8 fastOp, sal_uInt8 normalOp)
 {
     if (index <= 3) {
-        // ...load/store_<n>:
+        
         appendU1(m_code, static_cast< sal_uInt8 >(fastOp + index));
     } else if (index <= 0xFF) {
-        // ...load/store <index>:
+        
         appendU1(m_code, normalOp);
         appendU1(m_code, static_cast< sal_uInt8 >(index));
     } else {
-        // wide ...load/store <indexbyte1> <indexbyte2>:
+        
         appendU1(m_code, 0xC4);
         appendU1(m_code, normalOp);
         appendU2(m_code, index);
@@ -653,7 +653,7 @@ void ClassFile::addMethod(
 void ClassFile::write(FileStream & file) const {
     writeU4(file, 0xCAFEBABE);
     writeU2(file, 0);
-    writeU2(file, 49); // class file version of JRE 1.5
+    writeU2(file, 49); 
     writeU2(file, m_constantPoolCount);
     writeStream(file, m_constantPool);
     writeU2(file, static_cast< sal_uInt16 >(m_accessFlags));

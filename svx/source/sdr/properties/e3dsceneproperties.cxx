@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/e3dsceneproperties.hxx>
@@ -24,7 +24,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/svditer.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -51,16 +51,16 @@ namespace sdr
 
         const SfxItemSet& E3dSceneProperties::GetObjectItemSet() const
         {
-            //DBG_ASSERT(sal_False, "E3dSceneProperties::GetObjectItemSet() maybe the wrong call (!)");
+            
             return E3dProperties::GetObjectItemSet();
         }
 
         const SfxItemSet& E3dSceneProperties::GetMergedItemSet() const
         {
-            // prepare ItemSet
+            
             if(mpItemSet)
             {
-                // filter for SDRATTR_3DSCENE_ items, only keep those items
+                
                 SfxItemSet aNew(*mpItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
                 aNew.Put(*mpItemSet);
                 mpItemSet->ClearItem();
@@ -68,11 +68,11 @@ namespace sdr
             }
             else
             {
-                // No ItemSet yet, force local ItemSet
+                
                 GetObjectItemSet();
             }
 
-            // collect all ItemSets of contained 3d objects
+            
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
@@ -88,8 +88,8 @@ namespace sdr
 
                     while(nWhich)
                     {
-                        // Leave out the SDRATTR_3DSCENE_ range, this would only be double
-                        // and always equal.
+                        
+                        
                         if(nWhich <= SDRATTR_3DSCENE_FIRST || nWhich >= SDRATTR_3DSCENE_LAST)
                         {
                             if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, false))
@@ -107,20 +107,20 @@ namespace sdr
                 }
             }
 
-            // call parent
+            
             return E3dProperties::GetMergedItemSet();
         }
 
         void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
         {
-            // Set SDRATTR_3DOBJ_ range at contained objects.
+            
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
             if(nCount)
             {
-                // Generate filtered ItemSet which contains all but the SDRATTR_3DSCENE items.
-                // #i50808# Leak fix, Clone produces a new instance and we get ownership here
+                
+                
                 SfxItemSet* pNewSet = rSet.Clone(sal_True);
                 DBG_ASSERT(pNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
 
@@ -137,7 +137,7 @@ namespace sdr
 
                         if(pObj && pObj->ISA(E3dCompoundObject))
                         {
-                            // set merged ItemSet at contained 3d object.
+                            
                             pObj->SetMergedItemSet(*pNewSet, bClearAllItems);
                         }
                     }
@@ -146,7 +146,7 @@ namespace sdr
                 delete pNewSet;
             }
 
-            // call parent. This will set items on local object, too.
+            
             E3dProperties::SetMergedItemSet(rSet, bClearAllItems);
         }
 
@@ -160,7 +160,7 @@ namespace sdr
                 pSub->GetObj(a)->SetMergedItem(rItem);
             }
 
-            // #i43809# call parent. This will set items on local object, too.
+            
             E3dProperties::SetMergedItem(rItem);
         }
 
@@ -174,16 +174,16 @@ namespace sdr
                 pSub->GetObj(a)->ClearMergedItem(nWhich);
             }
 
-            // #i43809# call parent. This will clear items on local object, too.
+            
             E3dProperties::ClearMergedItem(nWhich);
         }
 
         void E3dSceneProperties::PostItemChange(const sal_uInt16 nWhich)
         {
-            // call parent
+            
             E3dProperties::PostItemChange(nWhich);
 
-            // local changes
+            
             E3dScene& rObj = (E3dScene&)GetSdrObject();
             rObj.StructureChanged();
 
@@ -193,20 +193,20 @@ namespace sdr
                 case SDRATTR_3DSCENE_DISTANCE               :
                 case SDRATTR_3DSCENE_FOCAL_LENGTH           :
                 {
-                    // #83387#, #83391#
-                    // one common function for the camera attributes
-                    // since SetCamera() sets all three back to the ItemSet
+                    
+                    
+                    
                     Camera3D aSceneCam(rObj.GetCamera());
                     bool bChange(false);
 
-                    // for SDRATTR_3DSCENE_PERSPECTIVE:
+                    
                     if(aSceneCam.GetProjection() != rObj.GetPerspective())
                     {
                         aSceneCam.SetProjection(rObj.GetPerspective());
                         bChange = true;
                     }
 
-                    // for SDRATTR_3DSCENE_DISTANCE:
+                    
                     basegfx::B3DPoint aActualPosition(aSceneCam.GetPosition());
                     double fNew = rObj.GetDistance();
 
@@ -216,7 +216,7 @@ namespace sdr
                         bChange = true;
                     }
 
-                    // for SDRATTR_3DSCENE_FOCAL_LENGTH:
+                    
                     fNew = rObj.GetFocalLength() / 100.0;
 
                     if(aSceneCam.GetFocalLength() != fNew)
@@ -225,7 +225,7 @@ namespace sdr
                         bChange = true;
                     }
 
-                    // for all
+                    
                     if(bChange)
                     {
                         rObj.SetCamera(aSceneCam);
@@ -262,7 +262,7 @@ namespace sdr
                 {
                     if(pCandidate != pRetval)
                     {
-                        // different StyleSheelts, return none
+                        
                         return 0L;
                     }
                 }
@@ -279,10 +279,10 @@ namespace sdr
         {
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
             {
-                // call parent
+                
                 E3dProperties::MoveToItemPool(pSrcPool, pDestPool, pNewModel);
 
-                // own reaction, but only with outmost scene
+                
                 E3dScene& rObj = (E3dScene&)GetSdrObject();
                 const SdrObjList* pSubList = rObj.GetSubList();
 
@@ -302,22 +302,22 @@ namespace sdr
 
         void E3dSceneProperties::SetSceneItemsFromCamera()
         {
-            // force ItemSet
+            
             GetObjectItemSet();
 
             E3dScene& rObj = (E3dScene&)GetSdrObject();
             Camera3D aSceneCam(rObj.GetCamera());
 
-            // ProjectionType
+            
             mpItemSet->Put(Svx3DPerspectiveItem((sal_uInt16)aSceneCam.GetProjection()));
 
-            // CamPos
+            
             mpItemSet->Put(Svx3DDistanceItem((sal_uInt32)(aSceneCam.GetPosition().getZ() + 0.5)));
 
-            // FocalLength
+            
             mpItemSet->Put(Svx3DFocalLengthItem((sal_uInt32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

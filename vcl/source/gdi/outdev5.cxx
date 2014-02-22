@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,10 +31,10 @@
 #include <outdata.hxx>
 #include <outdev.h>
 
-// =======================================================================
 
 
-// =======================================================================
+
+
 
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              sal_uLong nHorzRound, sal_uLong nVertRound )
@@ -54,7 +54,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     nHorzRound = ImplLogicWidthToDevicePixel( nHorzRound );
     nVertRound = ImplLogicHeightToDevicePixel( nVertRound );
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )
@@ -92,7 +92,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
@@ -107,7 +107,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     if ( aRect.IsEmpty() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )
@@ -140,7 +140,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
         mpAlphaVDev->DrawEllipse( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
@@ -156,7 +156,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if ( aRect.IsEmpty() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )
@@ -185,7 +185,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
         mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
@@ -201,7 +201,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     if ( aRect.IsEmpty() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )
@@ -237,7 +237,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
         mpAlphaVDev->DrawPie( rRect, rStartPt, rEndPt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )
@@ -253,7 +253,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     if ( aRect.IsEmpty() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )

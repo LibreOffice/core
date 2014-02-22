@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -76,7 +76,7 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false));
-    context_values.push_back( //TODO: from services.rdb?
+    context_values.push_back( 
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.util.theMacroExpander",
             css::uno::makeAny(

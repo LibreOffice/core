@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <bookmrk.hxx>
@@ -41,7 +41,7 @@ namespace
 {
     static void lcl_FixPosition(SwPosition& rPos)
     {
-        // make sure the position has 1) the proper node, and 2) a proper index
+        
         SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
         if(pTxtNode == NULL && rPos.nContent.GetIndex() > 0)
         {
@@ -142,9 +142,9 @@ namespace sw { namespace mark
         }
     }
 
-    // For fieldmarks, the CH_TXT_ATR_FIELDSTART and CH_TXT_ATR_FIELDEND
-    // themselves are part of the covered range. This is guaranteed by
-    // TextFieldmark::InitDoc/lcl_AssureFieldMarksSet.
+    
+    
+    
     bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
     {
         return GetMarkStart() <= rPos && rPos < GetMarkEnd();
@@ -192,7 +192,7 @@ namespace sw { namespace mark
                 sUniquePostfix = OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
                 nCount = 0;
             }
-            // putting the counter in front of the random parts will speed up string comparisons
+            
             return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
         }
     }
@@ -201,12 +201,12 @@ namespace sw { namespace mark
     {
         NotifyClients(pOld, pNew);
         if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-        {   // invalidate cached uno object
+        {   
             SetXBookmark(uno::Reference<text::XTextContent>(0));
         }
     }
 
-    // TODO: everything else uses MarkBase::GenerateNewName ?
+    
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
         : MarkBase(rPaM, OUString("__NavigatorReminder__"))
     { }
@@ -319,8 +319,8 @@ namespace sw { namespace mark
 
     void Fieldmark::Invalidate( )
     {
-        // TODO: Does exist a better solution to trigger a format of the
-        //       fieldmark portion? If yes, please use it.
+        
+        
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }
@@ -347,8 +347,8 @@ namespace sw { namespace mark
     {
         lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
 
-        // For some reason the end mark is moved from 1 by the Insert: we don't
-        // want this for checkboxes
+        
+        
         this->GetMarkEnd( ).nContent--;
     }
 
@@ -363,7 +363,7 @@ namespace sw { namespace mark
         if ( IsChecked() != checked )
         {
             (*GetParameters())[OUString(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
-            // mark document as modified
+            
             SwDoc *const pDoc( GetMarkPos().GetDoc() );
             if ( pDoc )
                 pDoc->SetModified();

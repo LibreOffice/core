@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cmdid.h"
@@ -92,7 +92,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                         pSh->LeaveSelFrmMode();
                         pSh->NoEdit();
                     }
-                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
+                    GetView().AttrChangedNotify(pSh); 
                 }
             }
             break;
@@ -105,13 +105,13 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                 if ( pSh->IsDrawCreate() )
                 {
                     GetView().GetDrawFuncPtr()->BreakCreate();
-                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
+                    GetView().AttrChangedNotify(pSh); 
                 }
                 else if ( pSh->HasSelection() || GetView().IsDrawMode() )
                 {
                     GetView().LeaveDrawCreate();
                     pSh->EnterStdMode();
-                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
+                    GetView().AttrChangedNotify(pSh); 
                 }
             }
             break;
@@ -196,8 +196,8 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                     {
                         SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                         pSdrView->UnmarkAllPoints();
-                        // Size aDist(GetView().GetEditWin().PixelToLogic(Size(8,8)));
-                        pPathObj->ToggleClosed(); // aDist.Width());
+                        
+                        pPathObj->ToggleClosed(); 
                         break;
                     }
 
@@ -264,9 +264,9 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                     switch (eSegm)
                     {
                         case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                        case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,false)); break; // Button pressed = curve
+                        case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,false)); break; 
                         case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,true));  break;
-                        default:; //prevent warning
+                        default:; 
                     }
                 }
                 break;
@@ -311,7 +311,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                         case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
                         case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,false)); break;
                         case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,true)); break;
-                        default:; //prevent warning
+                        default:; 
                     }
                 }
                 break;

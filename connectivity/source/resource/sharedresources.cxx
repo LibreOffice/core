@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "resource/sharedresources.hxx"
@@ -27,18 +27,18 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
-    //= SharedResources_Impl
-    //====================================================================
+    
+    
+    
     class SharedResources_Impl
     {
     private:
@@ -68,11 +68,11 @@ namespace connectivity
         }
     };
 
-    //--------------------------------------------------------------------
+    
     SharedResources_Impl*   SharedResources_Impl::s_pInstance( NULL );
     oslInterlockedCount     SharedResources_Impl::s_nClients( 0 );
 
-    //--------------------------------------------------------------------
+    
     SharedResources_Impl::SharedResources_Impl()
     {
         try
@@ -87,24 +87,24 @@ namespace connectivity
         }
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SharedResources_Impl::getResourceString( ResourceId _nId )
     {
         if ( m_pResourceBundle.get() == NULL )
-            // this should never happen, but we gracefully ignore it. It has been reported
-            // in the constructor in non-product builds.
+            
+            
             return OUString();
 
         return m_pResourceBundle->loadString( _nId );
     }
 
-    //--------------------------------------------------------------------
+    
     void SharedResources_Impl::registerClient()
     {
         osl_atomic_increment( &s_nClients );
     }
 
-    //--------------------------------------------------------------------
+    
     void SharedResources_Impl::revokeClient()
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -115,7 +115,7 @@ namespace connectivity
         }
     }
 
-    //--------------------------------------------------------------------
+    
     SharedResources_Impl& SharedResources_Impl::getInstance()
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -127,9 +127,9 @@ namespace connectivity
         return *s_pInstance;
     }
 
-    //====================================================================
-    //= helpers
-    //====================================================================
+    
+    
+    
     namespace
     {
         size_t lcl_substitute( OUString& _inout_rString,
@@ -149,28 +149,28 @@ namespace connectivity
         }
     }
 
-    //====================================================================
-    //= SharedResources
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     SharedResources::SharedResources()
     {
         SharedResources_Impl::registerClient();
     }
 
-    //--------------------------------------------------------------------
+    
     SharedResources::~SharedResources()
     {
         SharedResources_Impl::revokeClient();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SharedResources::getResourceString( ResourceId _nResId ) const
     {
         return SharedResources_Impl::getInstance().getResourceString( _nResId );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
@@ -179,7 +179,7 @@ namespace connectivity
         return sString;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
@@ -190,7 +190,7 @@ namespace connectivity
         return sString;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
@@ -202,7 +202,7 @@ namespace connectivity
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace3, _rStringToSubstitute3 ) );
         return sString;
     }
-    //--------------------------------------------------------------------
+    
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                     const ::std::list< ::std::pair<const sal_Char* , OUString > > _aStringToSubstitutes) const
     {
@@ -215,8 +215,8 @@ namespace connectivity
         return sString;
     }
 
-//........................................................................
-} // namespace connectivity
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

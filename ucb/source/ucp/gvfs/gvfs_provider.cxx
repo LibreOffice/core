@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,70 +27,70 @@
 using namespace com::sun::star;
 using namespace gvfs;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ContentProvider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ContentProvider::ContentProvider(
     const uno::Reference< uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
-// sdafas
-//=========================================================================
-// virtual
+
+
+
 ContentProvider::~ContentProvider()
 {
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    com::sun::star::ucb::XContentProvider );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       com::sun::star::ucb::XContentProvider );
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.GnomeVFSContentProvider" ),
                      OUString( "com.sun.star.ucb.GnomeVFSContentProvider" ) );
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
+
 //
-// XContentProvider methods.
+
 //
-//=========================================================================
+
 
 uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
@@ -107,7 +107,7 @@ ContentProvider::queryContent(
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    // Check, if a content with given id already exists...
+    
     uno::Reference< com::sun::star::ucb::XContent > xContent
         = queryExistingContent( Identifier ).get();
     if ( xContent.is() )
@@ -130,7 +130,7 @@ ContentProvider::queryContent(
 }
 
 
-//============================ shlib entry points =============================================
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgvfs1_component_getFactory( const sal_Char *pImplName,
               void           *pServiceManager,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <pam.hxx>
@@ -27,10 +27,10 @@
 #include <swerror.h>
 #include <statstr.hrc>
 
-// Initialisieren der Feld-FilterFlags
+
 static sal_uLong WW1_Read_FieldIniFlags()
 {
-    // sal_uInt16 i;
+    
     static const sal_Char* aNames[ 1 ] = { "WinWord/WW1F" };
     sal_uInt32 aVal[ 1 ];
     SwFilterOptions aOpt( 1, aNames, aVal );
@@ -46,26 +46,26 @@ static sal_uLong WW1_Read_FieldIniFlags()
     return nFieldFlags;
 }
 
-// StarWriter-Interface
-// Eine Methode liefern die call-Schnittstelle fuer den Writer.
-// Read() liest eine Datei. hierzu werden zwei Objekte erzeugt, die Shell,
-// die die Informationen aufnimmt und der Manager der sie aus der Datei liest.
-// Diese werden dann einfach per Pipe 'uebertragen'.
+
+
+
+
+
 sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString& /*cName*/)
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
-        sal_Bool bNew = !bInsertMode;           // New Doc ( kein Einfuegen )
+        sal_Bool bNew = !bInsertMode;           
 
-        // erstmal eine shell konstruieren: die ist schnittstelle
-        // zum writer-dokument
+        
+        
         sal_uLong nFieldFlags = WW1_Read_FieldIniFlags();
         Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, rBaseURL, bNew, nFieldFlags );
         if( pRdr )
         {
-            // dann den manager, der liest die struktur des word-streams
+            
             Ww1Manager* pMan = new Ww1Manager( *pStrm, nFieldFlags );
             if( pMan )
             {
@@ -74,24 +74,24 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
                     ::StartProgress( STR_STATSTR_W4WREAD, 0, 100,
                                         rDoc.GetDocShell() );
                     ::SetProgressState( 0, rDoc.GetDocShell() );
-                    // jetzt nur noch alles rueberschieben
+                    
                     *pRdr << *pMan;
                     if( !pMan->GetError() )
-                        // und nur hier, wenn kein fehler auftrat
-                        // fehlerfreiheit melden
-                        nRet = 0; // besser waere: WARN_SWG_FEATURES_LOST;
+                        
+                        
+                        nRet = 0; 
                     ::EndProgress( rDoc.GetDocShell() );
                 }
                 else
                 {
                     if( pMan->GetFib().GetFIB().fComplexGet() )
-                        // Attention: hier muss eigentlich ein Error
-                        // wegen Fastsave kommen, das der PMW-Filter
-                        // das nicht unterstuetzt. Stattdessen temporaer
-                        // nur eine Warnung, bis die entsprechende
-                        // Meldung und Behandlung weiter oben eingebaut ist.
-                        // nRet = WARN_WW6_FASTSAVE_ERR;
-                        // Zum Einchecken mit neuem String:
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         nRet = ERR_WW6_FASTSAVE_ERR;
                 }
             }
@@ -103,11 +103,11 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
     return nRet;
 }
 
-// Die Shell ist die Schnittstelle vom Filter zum Writer. Sie ist
-// abgeleitet von der mit ww-filter gemeinsam benutzten Shell
-// SwFltShell und enthaelt alle fuer ww1 noetigen Erweiterungen. Wie
-// in einen Stream werden alle Informationen, die aus der Datei
-// gelesen werden, in die shell ge'piped'.
+
+
+
+
+
 Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {

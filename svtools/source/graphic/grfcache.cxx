@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <salhelper/timer.hxx>
@@ -152,7 +152,7 @@ private:
     Animation*          mpAnimation;
     bool                mbSwappedAll;
 
-    // SvgData support
+    
     SvgDataPtr          maSvgData;
 
     bool                ImplInit( const GraphicObject& rObj );
@@ -260,7 +260,7 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
 
 void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
 {
-    // create substitute for graphic;
+    
     const Size          aPrefSize( rSubstitute.GetPrefSize() );
     const MapMode       aPrefMapMode( rSubstitute.GetPrefMapMode() );
     const Link          aAnimationNotifyHdl( rSubstitute.GetAnimationNotifyHdl() );
@@ -366,10 +366,10 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
     if( mbSwappedAll )
     {
         delete mpBmpEx, mpBmpEx = NULL;
-        mpMtf = NULL; // No need to delete it as it has already been dereferenced
+        mpMtf = NULL; 
         delete mpAnimation, mpAnimation = NULL;
 
-        // #119176# also reset SvgData
+        
         maSvgData.reset();
     }
 }
@@ -458,12 +458,12 @@ public:
     sal_Bool                        Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
                                 {
-                                    // #i46805# Additional match
-                                    // criteria: outdev draw mode and
-                                    // bit count. One cannot reuse
-                                    // this cache object, if it's
-                                    // e.g. generated for
-                                    // DRAWMODE_GRAYBITMAP.
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     return( ( pCacheEntry == mpRefCacheEntry ) &&
                                             ( maAttr == rAttr ) &&
                                             ( ( maOutSizePix == rSzPixel ) || ( !maOutSizePix.Width() && !maOutSizePix.Height() ) ) &&
@@ -474,8 +474,8 @@ public:
     void                        Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const;
 };
 
-// This whole function is based on checkMetadataBitmap() from grfmgr2.cxx, see that one for details.
-// If you do changes here, change the original function too.
+
+
 static void checkMetadataBitmap( const BitmapEx& rBmpEx,
                                  Point    /*rSrcPoint*/,
                                  Size     rSrcSize,
@@ -496,27 +496,27 @@ static void checkMetadataBitmap( const BitmapEx& rBmpEx,
     {    if( rBmpEx.GetSizePixel().Width() > 100 && rBmpEx.GetSizePixel().Height() > 100
             && abs( rDestSize.Width() - rRefSize.Width()) < 5
             && abs( rDestSize.Height() - rRefSize.Height()) < 5 )
-            ; // ok, assume it's close enough
+            ; 
         else
-        {  // fall back to mtf rendering
+        {  
             o_rbNonBitmapActionEncountered = true;
             return;
         }
     }
 }
 
-// This function is based on GraphicManager::ImplCreateOutput(), in fact it mostly copies
-// it, the difference is that this one does not create anything, it only checks if
-// ImplCreateOutput() would use the optimization of using the single bitmap.
-// If you do changes here, change the original function too.
+
+
+
+
 bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
     OutputDevice* pOut, const Size& rSz )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
     GDIMetaFile rOutMtf = rMtf;
 
-    // Count bitmap actions, and flag actions that paint, but
-    // are no bitmaps.
+    
+    
     sal_Int32   nNumBitmaps(0);
     bool        bNonBitmapActionEncountered(false);
     if( aNewSize.Width() && aNewSize.Height() && rSz.Width() && rSz.Height() )
@@ -532,38 +532,38 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
             switch( pAct->GetType() )
             {
                 case META_FONT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_NULL_ACTION:
-                    // FALLTHROUGH intended
+                    
 
-                    // OutDev state changes (which don't affect bitmap
-                    // output)
+                    
+                    
                 case META_LINECOLOR_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_FILLCOLOR_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTCOLOR_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTFILLCOLOR_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTALIGN_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTLINECOLOR_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTLINE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_PUSH_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_POP_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_LAYOUTMODE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTLANGUAGE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_COMMENT_ACTION:
                     break;
 
-                    // bitmap output methods
+                    
                 case META_BMP_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
@@ -670,84 +670,84 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     ++nNumBitmaps;
                     break;
 
-                    // these actions actually output something (that's
-                    // different from a bitmap)
+                    
+                    
                 case META_RASTEROP_ACTION:
                     if( ((MetaRasterOpAction*)pAct)->GetRasterOp() == ROP_OVERPAINT )
                         break;
-                    // FALLTHROUGH intended
+                    
                 case META_PIXEL_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_POINT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_LINE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_RECT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_ROUNDRECT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_ELLIPSE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_ARC_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_PIE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_CHORD_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_POLYLINE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_POLYGON_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_POLYPOLYGON_ACTION:
-                    // FALLTHROUGH intended
+                    
 
                 case META_TEXT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTARRAY_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_STRETCHTEXT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_TEXTRECT_ACTION:
-                    // FALLTHROUGH intended
+                    
 
                 case META_MASK_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_MASKSCALE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_MASKSCALEPART_ACTION:
-                    // FALLTHROUGH intended
+                    
 
                 case META_GRADIENT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_HATCH_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_WALLPAPER_ACTION:
-                    // FALLTHROUGH intended
+                    
 
                 case META_TRANSPARENT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_EPS_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_FLOATTRANSPARENT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_GRADIENTEX_ACTION:
-                    // FALLTHROUGH intended
+                    
 
-                    // OutDev state changes that _do_ affect bitmap
-                    // output
+                    
+                    
                 case META_CLIPREGION_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_ISECTRECTCLIPREGION_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_ISECTREGIONCLIPREGION_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_MOVECLIPREGION_ACTION:
-                    // FALLTHROUGH intended
+                    
 
                 case META_MAPMODE_ACTION:
-                    // FALLTHROUGH intended
+                    
                 case META_REFPOINT_ACTION:
-                    // FALLTHROUGH intended
+                    
                 default:
                     bNonBitmapActionEncountered = true;
                     break;
@@ -903,9 +903,9 @@ void GraphicCache::AddGraphicObject(
                     {
                         (*it)->TryToSwapIn();
 
-                        // since pEntry->TryToSwapIn can modify our current list, we have to
-                        // iterate from beginning to add a reference to the appropriate
-                        // CacheEntry object; after this, quickly jump out of the outer iteration
+                        
+                        
+                        
                         for( GraphicCacheEntryList::iterator jt = maGraphicCache.begin();
                              !bInserted && jt != maGraphicCache.end();
                              ++jt
@@ -948,7 +948,7 @@ void GraphicCache::AddGraphicObject(
 
 void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 {
-    // Release cached object
+    
     bool    bRemoved = false;
     GraphicCacheEntryList::iterator it = maGraphicCache.begin();
     while (!bRemoved && it != maGraphicCache.end())
@@ -957,8 +957,8 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 
         if( bRemoved && (0 == (*it)->GetGraphicObjectReferenceCount()) )
         {
-            // if graphic cache entry has no more references,
-            // the corresponding display cache object can be removed
+            
+            
             GraphicDisplayCacheEntryList::iterator it2 = maDisplayCache.begin();
             while( it2 != maDisplayCache.end() )
             {
@@ -973,7 +973,7 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
                     ++it2;
             }
 
-            // delete graphic cache entry
+            
             delete *it;
             it = maGraphicCache.erase( it );
         }
@@ -986,8 +986,8 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 
 void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
-    // notify cache that rObj is swapped out (and can thus be pruned
-    // from the cache)
+    
+    
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
 
     if( pEntry )
@@ -1105,11 +1105,11 @@ OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
     OString aRet;
     GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
 
-    // ensure that the entry is correctly initialized (it has to be read at least once)
+    
     if( pEntry && pEntry->GetID().IsEmpty() )
         pEntry->TryToSwapIn();
 
-    // do another call to ImplGetCacheEntry in case of modified entry list
+    
     pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
 
     if( pEntry )
@@ -1199,7 +1199,7 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
         {
             ::salhelper::TTimeValue aReleaseTime;
 
-            // put found object at last used position
+            
             it = maDisplayCache.erase( it );
             maDisplayCache.push_back( pDisplayCacheEntry );
 

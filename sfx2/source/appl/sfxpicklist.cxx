@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -32,7 +32,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-// ----------------------------------------------------------------------------
+
 
 #include <sfx2/app.hxx>
 #include "sfxpicklist.hxx"
@@ -52,13 +52,13 @@
 
 #include <algorithm>
 
-// ----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-// ----------------------------------------------------------------------------
+
 
 class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
 {
@@ -66,7 +66,7 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
         StringLength() {}
         virtual ~StringLength() {}
 
-        // XStringWidth
+        
         sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
             throw (::com::sun::star::uno::RuntimeException)
         {
@@ -95,8 +95,8 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
-        // Do handle file URL differently => convert it to a system
-        // path and abbreviate it with a special function:
+        
+        
         OUString aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
         OUString aSystemPath( aFileSystemPath );
@@ -118,7 +118,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     }
     else
     {
-        // Use INetURLObject to abbreviate all other URLs
+        
         OUString aShortURL;
         aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
         aPickEntry.append(aShortURL);
@@ -126,7 +126,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         aAccessibleName += aURLString;
     }
 
-    // Set menu item text, tip help and accessible name
+    
     pMenu->SetItemText( nItemId, aPickEntry.toString() );
     pMenu->SetTipHelpText( nItemId, aTipHelpText );
     pMenu->SetAccessibleName( nItemId, aAccessibleName );
@@ -162,12 +162,12 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if( !pMed )
         return;
 
-    // Unnamed Documents and embedded-Documents not in Picklist
+    
     if ( !pDocSh->HasName() ||
             SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
         return;
 
-    // Help not in History
+    
     INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : OUString( pMed->GetOrigURL() ) );
     if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
         return;
@@ -175,12 +175,12 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( !pMed->IsUpdatePickList() )
         return;
 
-    // add no document that forbids this (for example Message-Body)
+    
     SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, false );
     if ( pPicklistItem && !pPicklistItem->GetValue() )
         return;
 
-    // ignore hidden documents
+    
     if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
         return;
 
@@ -190,12 +190,12 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
-    // generate a thumbnail
+    
     OUString aThumbnail;
-    // don't generate thumbnail when in headless mode
+    
     if (!pDocSh->IsModified() && !Application::IsHeadlessModeRequested())
     {
-        // not modified => the document matches what is in the shell
+        
         boost::shared_ptr<GDIMetaFile> pMetaFile = pDocSh->GetPreviewMetaFile();
         BitmapEx aResultBitmap;
         if (pMetaFile->CreateThumbnail(aResultBitmap))
@@ -212,7 +212,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
         }
     }
 
-    // add to svtool history options
+    
     SvtHistoryOptions().AppendItem( ePICKLIST,
             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
             aFilter,
@@ -249,7 +249,7 @@ void SfxPickList::CreatePickListEntries()
 {
     RemovePickListEntries();
 
-    // Reading the pick list
+    
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
 
     sal_uInt32 nCount   = seqPicklist.getLength();
@@ -295,7 +295,7 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
 
     static sal_Bool bPickListMenuInitializing = sal_False;
 
-    if ( bPickListMenuInitializing ) // method is not reentrant!
+    if ( bPickListMenuInitializing ) 
         return;
 
     bPickListMenuInitializing = sal_True;
@@ -371,7 +371,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.IsA( TYPE( SfxEventHint )))
     {
         SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
-        // only ObjectShell-related events with media interest
+        
         SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
             return;
@@ -422,10 +422,10 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if (!pMedium)
                     return;
 
-                // We're starting a "Save As". Add the current document (if it's
-                // not a "new" document) to the "Recent Documents" list before we
-                // switch to the new path.
-                // If the current document is new, path will be empty.
+                
+                
+                
+                
                 OUString path = pMedium->GetOrigURL();
                 if (!path.isEmpty())
                 {

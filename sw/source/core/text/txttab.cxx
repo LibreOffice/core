@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 #include "itrform2.hxx"
 #include "txtfrm.hxx"
 #include <numrule.hxx>
-// #i89179#
+
 #include <porfld.hxx>
 
 
@@ -41,7 +41,7 @@
  *                    SwLineInfo::GetTabStop()
  *************************************************************************/
 
-//#i24363# tab stops relative to indent
+
 /* Return the first tab stop that is > nSearchPos.
  * If the tab stop is outside the print area, we
  * return 0 if it is not the first tab stop.*/
@@ -82,10 +82,10 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     bool bAutoTabStop = true;
     {
         const bool bRTL = pFrm->IsRightToLeft();
-        // #i24363# tab stops relative to indent
-        // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
+        
+        
         //
-        // #i91133#
+        
         const bool bTabsRelativeToIndent =
             pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
         const SwTwips nTabLeft = bRTL
@@ -95,7 +95,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
 
         //
-        // nLinePos: The absolute position, where we started the line formatting.
+        
         //
         SwTwips nLinePos = GetLeftMargin();
         if ( bRTL )
@@ -106,7 +106,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
 
         //
-        // nTabPos: The current position, relative to the line start.
+        
         //
         SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
         if( nTabPos < rInf.X() )
@@ -115,13 +115,13 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
 
         //
-        // nCurrentAbsPos: The current position in absolute coordinates.
+        
         //
         const SwTwips nCurrentAbsPos = bRTL ?
                                        nLinePos - nTabPos :
                                        nLinePos + nTabPos;
 
-       //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+       
         SwTwips nMyRight;
         if ( pFrm->IsVertLR() )
            nMyRight = Left();
@@ -137,18 +137,18 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 
         SwTwips nNextPos = 0;
 
-        // #i24363# tab stops relative to indent
-        // nSearchPos: The current position relative to the tabs origin.
+        
+        
         //
         const SwTwips nSearchPos = bRTL ?
                                    nTabLeft - nCurrentAbsPos :
                                    nCurrentAbsPos - nTabLeft;
 
         //
-        // First, we examine the tab stops set at the paragraph style or
-        // any hard set tab stops:
-        // Note: If there are no user defined tab stops, there is always a
-        // default tab stop.
+        
+        
+        
+        
         //
         const SvxTabStop* pTabStop = aLineInf.GetTabStop( nSearchPos, nMyRight );
         if ( pTabStop )
@@ -159,7 +159,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nNextPos = pTabStop->GetTabPos();
             if(!bTabsRelativeToIndent && eAdj == SVX_TAB_ADJUST_DEFAULT && nSearchPos < 0)
             {
-                //calculate default tab position of default tabs in negative indent
+                
                 nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
             }
             bAutoTabStop = false;
@@ -180,7 +180,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             }
             SwTwips nCount = nSearchPos;
 
-            // Minimum tab stop width is 1
+            
             if (nDefTabDist <= 0)
                 nDefTabDist = 1;
 
@@ -188,7 +188,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nNextPos = ( nCount < 0 || ( !nCount && nSearchPos <= 0 ) )
                        ? ( nCount * nDefTabDist )
                        : ( ( nCount + 1 ) * nDefTabDist );
-            // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
+            
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
                  ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
@@ -199,13 +199,13 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             eAdj = SVX_TAB_ADJUST_LEFT;
         }
 
-        // #i115705# - correction and refactoring:
-        // overrule determined next tab stop position in order to apply
-        // a tab stop at the left margin under the following conditions:
-        // - the new tab portion is inside the hanging indent
-        // - a tab stop at the left margin is allowed
-        // - the determined next tab stop is a default tab stop position OR
-        //   the determined next tab stop is beyond the left margin
+        
+        
+        
+        
+        
+        
+        
         {
             long nLeftMarginTabPos = 0;
             {
@@ -240,16 +240,16 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                              : nCurrentAbsPos < nTabLeft + nLeftMarginTabPos;
             if ( bNewTabPortionInsideHangingIndent )
             {
-                // If the paragraph is not inside a list having a list tab stop following
-                // the list label or no further tab stop found in such a paragraph or
-                // the next tab stop position does not equal the list tab stop,
-                // a tab stop at the left margin can be applied. If this condition is
-                // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
+                
+                
+                
+                
+                
                 const bool bTabAtLeftMarginAllowed =
                     ( !aLineInf.IsListTabStopIncluded() ||
                       !pTabStop ||
                       nNextPos != aLineInf.GetListTabStopPosition() ) ||
-                    // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+                    
                     pFrm->GetTxtNode()->getIDocumentSettingAccess()->
                         get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
                 if ( bTabAtLeftMarginAllowed )
@@ -274,7 +274,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     if ( bAuto )
     {
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
-             // #127428#
+             
              1 == aLineInf.NumberOfTabStops() )
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
     }
@@ -314,7 +314,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
  *                SwTabPortion::SwTabPortion()
  *************************************************************************/
 
-// Die Basisklasse wird erstmal ohne alles initialisiert.
+
 
 
 SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
@@ -363,21 +363,21 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
-    // Here we settle down ...
+    
     Fix( static_cast<sal_uInt16>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
     const bool bTabOverflow = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVERFLOW);
 
-    // The minimal width of a tab is one blank at least.
-    // #i37686# In compatibility mode, the minimum width
-    // should be 1, even for non-left tab stops.
+    
+    
+    
     sal_uInt16 nMinimumTabWidth = 1;
     if ( !bTabCompat )
     {
-        // #i89179#
-        // tab portion representing the list tab of a list label gets the
-        // same font as the corresponding number portion
+        
+        
+        
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< SwFontSave > pSave( 0 );
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -395,13 +395,13 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     }
     PrtWidth( nMinimumTabWidth );
 
-    // Break tab stop to next line if:
-    // 1. Minmal width does not fit to line anymore.
-    // 2. An underflow event was called for the tab portion.
+    
+    
+    
     bool bFull = ( bTabCompat && rInf.IsUnderFlow() ) ||
                      ( rInf.Width() <= rInf.X() + PrtWidth() && rInf.X() <= rInf.Width() ) ;
 
-    // #95477# Rotated tab stops get the width of one blank
+    
     const sal_uInt16 nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
 
     if( ! bFull && 0 == nDir )
@@ -424,9 +424,9 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                 PrtWidth( static_cast<sal_uInt16>(GetTabPos() - rInf.X()) );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
-                // In tabulator compatibility mode, we reset the bFull flag
-                // if the tabulator is at the end of the paragraph and the
-                // tab stop position is outside the frame:
+                
+                
+                
                 bool bAtParaEnd = rInf.GetIdx() + GetLen() == rInf.GetTxt().getLength();
                 if ( bFull && bTabCompat &&
                      ( ( bTabOverflow && ( rInf.IsTabOverflow() || !IsAutoTabStop() ) ) || bAtParaEnd ) &&
@@ -445,10 +445,10 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 
     if( bFull )
     {
-        // We have to look for endless loops, if the width is smaller than one blank
+        
         if( rInf.GetIdx() == rInf.GetLineStart() &&
-            // #119175# TabStop should be forced to current
-            // line if there is a fly reducing the line width:
+            
+            
             !rInf.GetFly() )
         {
             PrtWidth( static_cast<sal_uInt16>(rInf.Width() - rInf.X()) );
@@ -460,14 +460,14 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             Width( 0 );
             SetLen( 0 );
             SetAscent( 0 );
-            SetPortion( NULL ); //?????
+            SetPortion( NULL ); 
         }
         return true;
     }
     else
     {
-        // A trick with impact: The new Tabportions now behave like
-        // FlyFrms, located in the line - including adjustment !
+        
+        
         SetFixWidth( PrtWidth() );
         return false;
     }
@@ -482,8 +482,8 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 {
     const bool bTabOverMargin = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN);
-    // If the tab position is larger than the right margin, it gets scaled down by default.
-    // However, if compat mode enabled, we allow tabs to go over the margin: the rest of the paragraph is not broken into lines.
+    
+    
     const KSHORT nRight = bTabOverMargin ? GetTabPos() : std::min(GetTabPos(), rInf.Width());
     const SwLinePortion *pPor = GetPortion();
 
@@ -498,12 +498,12 @@ bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     OSL_ENSURE( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
-    // #127428# Abandon dec. tab position if line is full
+    
     if ( bTabCompat && POR_TABDECIMAL == nWhich )
     {
         KSHORT nPrePorWidth = static_cast<const SwTabDecimalPortion*>(this)->GetWidthOfPortionsUpToDecimalPosition();
 
-        // no value was set => no decimal character was found
+        
         if ( USHRT_MAX != nPrePorWidth )
         {
             if ( nPrePorWidth && nPorWidth - nPrePorWidth > rInf.Width() - nRight )
@@ -517,8 +517,8 @@ bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
     if( POR_TABCENTER == nWhich )
     {
-        // centered tabs are problematic:
-        // We have to detect how much fits into the line.
+        
+        
         KSHORT nNewWidth = nPorWidth /2;
         if( nNewWidth > rInf.Width() - nRight )
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
@@ -533,13 +533,13 @@ bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
         const KSHORT nAdjDiff = nDiffWidth - nPorWidth;
         if( nAdjDiff > GetFixWidth() )
             PrtWidth( nAdjDiff );
-        // Dont be afraid: we have to move rInf further.
-        // The right-tab till now only had the width of one blank.
-        // Now that we stretched, the difference had to be added to rInf.X() !
+        
+        
+        
         rInf.X( rInf.X() + PrtWidth() - nOldWidth );
     }
     SetFixWidth( PrtWidth() );
-    // reset last values
+    
     rInf.SetLastTab(0);
     if( POR_TABDECIMAL == nWhich )
         rInf.SetTabDecimal(0);
@@ -556,7 +556,7 @@ bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
 #if OSL_DEBUG_LEVEL > 1
-    // We want to view the fixed width
+    
     if( rInf.OnWin() && OPTDBG( rInf ) &&
         !rInf.GetOpt().IsPagePreview() && \
         !rInf.GetOpt().IsReadonly() && \
@@ -569,9 +569,9 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 #endif
 
-    // #i89179#
-    // tab portion representing the list tab of a list label gets the
-    // same font as the corresponding number portion
+    
+    
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< SwFontSave > pSave( 0 );
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -594,29 +594,29 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( !bAfterNumbering )
         rInf.DrawBorder( *this );
 
-    // do we have to repaint a post it portion?
+    
     if( rInf.OnWin() && pPortion && !pPortion->Width() )
         pPortion->PrePaint( rInf, this );
 
-    // display special characters
+    
     if( rInf.OnWin() && rInf.GetOpt().IsTab() )
     {
-        // filled tabs are shaded in gray
+        
         if( IsFilled() )
             rInf.DrawViewOpt( *this, POR_TAB );
         else
             rInf.DrawTab( *this );
     }
 
-    // 6842: Tabs should be underlined at once.
+    
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        // tabs with filling / filled tabs
+        
         const KSHORT nCharWidth = rInf.GetTxtSize(OUString(' ')).Width();
-        // robust:
+        
         if( nCharWidth )
         {
-            // 6864: always with kerning, also on printer!
+            
             KSHORT nChar = Width() / nCharWidth;
             OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, ' ');
@@ -624,19 +624,19 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
     }
 
-    // Display fill characters
+    
     if( IsFilled() )
     {
-        // tabs with filling / filled tabs
+        
         const KSHORT nCharWidth = rInf.GetTxtSize(OUString(cFill)).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
-        // robust:
+        
         if( nCharWidth )
         {
-            // 6864: always with kerning, also on printer!
+            
             KSHORT nChar = Width() / nCharWidth;
             if ( cFill == '_' )
-                ++nChar; // to avoid gaps (Bug 13430)
+                ++nChar; 
             OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, cFill);
             rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, true);

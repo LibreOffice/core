@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,12 +22,12 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxItemIter);
 
 
-// --------------------------------------------------------------------------
+
 
 
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
@@ -45,12 +45,12 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     {
         SfxItemArray ppFnd = _rSet._aItems;
 
-        // suche das 1. gesetzte Item
+        
         for ( _nStt = 0; !*(ppFnd + _nStt ); ++_nStt )
-            ; // empty loop
+            ; 
         if ( 1 < _rSet.Count() )
             for( _nEnd = _rSet.TotalCount(); !*( ppFnd + --_nEnd);  )
-                ; // empty loop
+                ; 
         else
             _nEnd = _nStt;
     }
@@ -58,7 +58,7 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     _nAkt = _nStt;
 }
 
-// --------------------------------------------------------------------------
+
 
 
 SfxItemIter::~SfxItemIter()
@@ -66,7 +66,7 @@ SfxItemIter::~SfxItemIter()
     DBG_DTOR(SfxItemIter, 0);
 }
 
-// --------------------------------------------------------------------------
+
 
 
 const SfxPoolItem* SfxItemIter::NextItem()

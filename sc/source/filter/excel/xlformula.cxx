@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xlformula.hxx"
@@ -31,7 +31,7 @@
 
 using namespace ::formula;
 
-// Function data ==============================================================
+
 
 OUString XclFunctionInfo::GetMacroFuncName() const
 {
@@ -47,12 +47,12 @@ OUString XclFunctionInfo::GetAddInEquivalentFuncName() const
     return OUString();
 }
 
-// abbreviations for function return token class
+
 const sal_uInt8 R = EXC_TOKCLASS_REF;
 const sal_uInt8 V = EXC_TOKCLASS_VAL;
 const sal_uInt8 A = EXC_TOKCLASS_ARR;
 
-// abbreviations for parameter infos
+
 #define RO   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_ORG, false }
 #define RA   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_ARR, false }
 #define RR   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_RPT, false }
@@ -66,8 +66,8 @@ const sal_uInt8 A = EXC_TOKCLASS_ARR;
 #define VR_E { EXC_PARAM_EXCELONLY, EXC_PARAMCONV_RPT, true  }
 #define C    { EXC_PARAM_CALCONLY,  EXC_PARAMCONV_ORG, false }
 
-const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF/OOBIN function identifier available.
-const sal_uInt8 MX    = 30;                 /// Maximum parameter count.
+const sal_uInt16 NOID = SAL_MAX_UINT16;     
+const sal_uInt8 MX    = 30;                 
 
 #define EXC_FUNCNAME( ascii )       "_xlfn." ascii
 #define EXC_FUNCNAME_ODF( ascii )   "_xlfnodf." ascii
@@ -223,11 +223,11 @@ static const XclFunctionInfo saFuncTable_2[] =
 /** Functions new in BIFF3. */
 static const XclFunctionInfo saFuncTable_3[] =
 {
-    { ocRGP,                49,     1,  4,  A, { RA, RA, VV }, 0, 0 },          // BIFF2: 1-2, BIFF3: 1-4
-    { ocTrend,              50,     1,  4,  A, { RA, RA, RA, VV }, 0, 0 },      // BIFF2: 1-3, BIFF3: 1-4
-    { ocRKP,                51,     1,  4,  A, { RA, RA, VV }, 0, 0 },          // BIFF2: 1-2, BIFF3: 1-4
-    { ocGrowth,             52,     1,  4,  A, { RA, RA, RA, VV }, 0, 0 },      // BIFF2: 1-3, BIFF3: 1-4
-    { ocTrunc,              197,    1,  2,  V, { VR }, 0, 0 },                  // BIFF2: 1,   BIFF3: 1-2
+    { ocRGP,                49,     1,  4,  A, { RA, RA, VV }, 0, 0 },          
+    { ocTrend,              50,     1,  4,  A, { RA, RA, RA, VV }, 0, 0 },      
+    { ocRKP,                51,     1,  4,  A, { RA, RA, VV }, 0, 0 },          
+    { ocGrowth,             52,     1,  4,  A, { RA, RA, RA, VV }, 0, 0 },      
+    { ocTrunc,              197,    1,  2,  V, { VR }, 0, 0 },                  
     { ocAddress,            219,    2,  5,  V, { VR }, 0, 0 },
     { ocGetDiffDate360,     220,    2,  2,  V, { VR, VR, C }, 0, 0 },
     { ocGetActDate,         221,    0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE, 0 },
@@ -251,7 +251,7 @@ static const XclFunctionInfo saFuncTable_3[] =
 /** Functions new in BIFF4. */
 static const XclFunctionInfo saFuncTable_4[] =
 {
-    { ocFixed,              14,     1,  3,  V, { VR }, 0, 0 },                  // BIFF2-3: 1-2, BIFF4: 1-3
+    { ocFixed,              14,     1,  3,  V, { VR }, 0, 0 },                  
     { ocAsc,                214,    1,  1,  V, { VR }, 0, 0 },
     { ocJis,                215,    1,  1,  V, { VR }, 0, 0 },
     { ocRank,               216,    2,  3,  V, { VR, RO, VR }, 0, 0 },
@@ -322,12 +322,12 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocModalValue,         330,    1,  MX, V, { VA }, 0, 0 },
     { ocTrimMean,           331,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocTInv,               332,    2,  2,  V, { VR }, 0, 0 },
-    // Functions equivalent to add-in functions, use same parameters as
-    // ocExternal but add programmatical function name (here without
-    // "com.sun.star.sheet.addin.") so it can be looked up and stored as
-    // add-in, as older Excel versions only know them as add-in.
-    // These are the functions flagged as AddInMap::bMapDupToInternal=true in
-    // sc/source/core/tool/odffmap.cxx
+    
+    
+    
+    
+    
+    
     { ocIsEven,             255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIseven" ) },
     { ocIsOdd,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIsodd" ) },
     { ocGCD,                255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getGcd" ) },
@@ -341,10 +341,10 @@ static const XclFunctionInfo saFuncTable_4[] =
 /** Functions new in BIFF5/BIFF7. Unsupported functions: DATESTRING, NUMBERSTRING. */
 static const XclFunctionInfo saFuncTable_5[] =
 {
-    { ocGetDayOfWeek,       70,     1,  2,  V, { VR }, 0, 0 },                  // BIFF2-4: 1, BIFF5: 1-2
-    { ocHLookup,            101,    3,  4,  V, { VV, RO, RO, VV }, 0, 0 },      // BIFF2-4: 3, BIFF5: 3-4
-    { ocVLookup,            102,    3,  4,  V, { VV, RO, RO, VV }, 0, 0 },      // BIFF2-4: 3, BIFF5: 3-4
-    { ocGetDiffDate360,     220,    2,  3,  V, { VR }, 0, 0 },                  // BIFF3-4: 2, BIFF5: 2-3
+    { ocGetDayOfWeek,       70,     1,  2,  V, { VR }, 0, 0 },                  
+    { ocHLookup,            101,    3,  4,  V, { VV, RO, RO, VV }, 0, 0 },      
+    { ocVLookup,            102,    3,  4,  V, { VV, RO, RO, VV }, 0, 0 },      
+    { ocGetDiffDate360,     220,    2,  3,  V, { VR }, 0, 0 },                  
     { ocMacro,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocConcat,             336,    0,  MX, V, { VR }, 0, 0 },
@@ -357,8 +357,8 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocCountEmptyCells,    347,    1,  1,  V, { RO }, 0, 0 },
     { ocISPMT,              350,    4,  4,  V, { VR }, 0, 0 },
     { ocGetDateDif,         351,    3,  3,  V, { VR }, 0, 0 },
-    { ocNoName,             352,    1,  1,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // DATESTRING
-    { ocNoName,             353,    2,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // NUMBERSTRING
+    { ocNoName,             352,    1,  1,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    
+    { ocNoName,             353,    2,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    
     { ocRoman,              354,    1,  2,  V, { VR }, 0, 0 }
 };
 
@@ -367,7 +367,7 @@ static const XclFunctionInfo saFuncTable_8[] =
 {
     { ocGetPivotData,       358,    2,  MX, V, { RR, RR, VR }, 0, 0 },
     { ocHyperLink,          359,    1,  2,  V, { VV, VO }, 0, 0 },
-    { ocNoName,             360,    1,  1,  V, { RO }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // PHONETIC
+    { ocNoName,             360,    1,  1,  V, { RO }, EXC_FUNCFLAG_IMPORTONLY, 0 },    
     { ocAverageA,           361,    1,  MX, V, { RX }, 0, 0 },
     { ocMaxA,               362,    1,  MX, V, { RX }, 0, 0 },
     { ocMinA,               363,    1,  MX, V, { RX }, 0, 0 },
@@ -411,7 +411,7 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { opcode, NOID, minparam,     maxparam,     V, { RO },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
 
-// implicit maxparam=MX
+
 #define EXC_FUNCENTRY_V_RX( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     MX,           V, { RX },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
     { opcode,  255, (minparam)+1, MX,           V, { RO_E, RX }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
@@ -422,7 +422,7 @@ static const XclFunctionInfo saFuncTable_Oox[] =
 
 /** Functions new in Excel 2010.
 
-    See http://office.microsoft.com/en-us/excel-help/what-s-new-changes-made-to-excel-functions-HA010355760.aspx
+    See http:
     A lot of statistical functions have been renamed (the 'old' function names still exist).
 
     @See sc/source/filter/oox/formulabase.cxx saFuncTable2010 for V,VR,RO,...
@@ -482,7 +482,7 @@ static const XclFunctionInfo saFuncTable_2010[] =
 
 /** Functions new in Excel 2013.
 
-    See http://office.microsoft.com/en-us/excel-help/new-functions-in-excel-2013-HA103980604.aspx
+    See http:
     Most functions apparently were added for ODF1.2 ODFF / OpenFormula
     compatibility.
 
@@ -521,9 +521,9 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocGetDiffDate,   2,  2,  0,  "DAYS" ),
     EXC_FUNCENTRY_V_VR(         ocDecimal,       2,  2,  0,  "DECIMAL" ),
     EXC_FUNCENTRY_V_VR(         ocNoName,        1,  1,  0,  "ENCODEURL" ),
-    // NOTE: this FDIST is not our LEGACY.FDIST
+    
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  4,  0,  "FDIST" ),
-    // NOTE: this FINV is not our LEGACY.FINV
+    
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  3,  0,  "FINV" ),
     EXC_FUNCENTRY_V_VR(         ocFilterXML,     2,  2,  0,  "FILTERXML" ),
     /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
@@ -534,8 +534,8 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocGauss,         1,  1,  0,  "GAUSS" ),
     {                           ocIfNA,       NOID,  2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFNA" ) },
     {                           ocIfNA,        255,  3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFNA" ) },
-    // IMCOSH, IMCOT, IMCSC, IMCSCH, IMSEC, IMSECH, IMSINH and IMTAN are
-    // implemented in the Analysis Add-In.
+    
+    
     EXC_FUNCENTRY_V_RO(         ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
     EXC_FUNCENTRY_V_VR(         ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
     EXC_FUNCENTRY_A_VR(         ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
@@ -582,7 +582,7 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
 
 #undef EXC_FUNCENTRY_OOO
 
-// ----------------------------------------------------------------------------
+
 
 XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
 {
@@ -612,7 +612,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const
 {
-    // only in import filter allowed
+    
     OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclFunc - wrong filter" );
     XclFuncMap::const_iterator aIt = maXclFuncMap.find( nXclFunc );
     return (aIt == maXclFuncMap.end()) ? 0 : aIt->second;
@@ -620,7 +620,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 n
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const OUString& rXclMacroName ) const
 {
-    // only in import filter allowed, but do not test maXclMacroNameMap, it may be empty for old BIFF versions
+    
     OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
     XclMacroNameMap::const_iterator aIt = maXclMacroNameMap.find( rXclMacroName );
     return (aIt == maXclMacroNameMap.end()) ? 0 : aIt->second;
@@ -628,7 +628,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const O
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromOpCode( OpCode eOpCode ) const
 {
-    // only in export filter allowed
+    
     OSL_ENSURE( !maScFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromOpCode - wrong filter" );
     ScFuncMap::const_iterator aIt = maScFuncMap.find( eOpCode );
     return (aIt == maScFuncMap.end()) ? 0 : aIt->second;
@@ -655,7 +655,7 @@ void XclFunctionProvider::FillScFuncMap( const XclFunctionInfo* pBeg, const XclF
             maScFuncMap[ pIt->meOpCode ] = pIt;
 }
 
-// Token array ================================================================
+
 
 XclTokenArray::XclTokenArray( bool bVolatile ) :
     mbVolatile( bVolatile )
@@ -747,7 +747,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr 
     return rStrm;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclTokenArrayIterator::XclTokenArrayIterator() :
     mppScTokenBeg( 0 ),
@@ -802,7 +802,7 @@ void XclTokenArrayIterator::SkipSpaces()
             NextRawToken();
 }
 
-// strings and string lists ---------------------------------------------------
+
 
 bool XclTokenArrayHelper::GetTokenString( OUString& rString, const FormulaToken& rScToken )
 {
@@ -814,7 +814,7 @@ bool XclTokenArrayHelper::GetTokenString( OUString& rString, const FormulaToken&
 bool XclTokenArrayHelper::GetString( OUString& rString, const ScTokenArray& rScTokArr )
 {
     XclTokenArrayIterator aIt( rScTokArr, true );
-    // something is following the string token -> error
+    
     return aIt.Is() && GetTokenString( rString, *aIt ) && !++aIt;
 }
 
@@ -864,7 +864,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
     }
 }
 
-// multiple operations --------------------------------------------------------
+
 
 namespace {
 
@@ -881,7 +881,7 @@ inline bool lclGetAddress( ScAddress& rAddress, const FormulaToken& rToken, cons
     return bIsSingleRef;
 }
 
-} // namespace
+} 
 
 bool XclTokenArrayHelper::GetMultipleOpRefs(
     XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr, const ScAddress& rScPos )
@@ -892,7 +892,7 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
         stBegin, stTableOp, stOpen, stFormula, stFormulaSep,
         stColFirst, stColFirstSep, stColRel, stColRelSep,
         stRowFirst, stRowFirstSep, stRowRel, stClose, stError
-    } eState = stBegin;     // last read token
+    } eState = stBegin;     
     for( XclTokenArrayIterator aIt( rScTokArr, true ); aIt.Is() && (eState != stError); ++aIt )
     {
         OpCode eOpCode = aIt->GetOpCode();
@@ -943,6 +943,6 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
     return eState == stClose;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

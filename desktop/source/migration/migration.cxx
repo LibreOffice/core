@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -174,7 +174,7 @@ bool MigrationImpl::alreadyMigrated()
     OUString MIGRATION_STAMP_NAME("/MIGRATED4");
     OUString aStr = m_aInfo.userdata + MIGRATION_STAMP_NAME;
     File aFile(aStr);
-    // create migration stamp, and/or check its existence
+    
     bool bRet = aFile.open (osl_File_OpenFlag_Write | osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock) == FileBase::E_EXIST;
     OSL_TRACE( "File '%s' exists? %d\n",
              OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr(),
@@ -189,7 +189,7 @@ bool MigrationImpl::initializeMigration()
     if (!checkMigrationCompleted()) {
         readAvailableMigrations(m_vMigrationsAvailable);
         sal_Int32 nIndex = findPreferredMigrationProcess(m_vMigrationsAvailable);
-        // m_aInfo is now set to the preferred migration source
+        
         if ( nIndex >= 0 ) {
             if (alreadyMigrated())
                 return false;
@@ -235,10 +235,10 @@ MigrationImpl::~MigrationImpl()
 {
 }
 
-// The main entry point for migrating settings
+
 sal_Bool MigrationImpl::doMigration()
 {
-    // compile file list for migration
+    
     m_vrFileList = compileFileList();
 
     sal_Bool result = sal_False;
@@ -305,11 +305,11 @@ sal_Bool MigrationImpl::doMigration()
             m_aNewVersionItemsHashMap.clear();
         }
 
-        // execute the migration items from Setup.xcu
+        
         copyConfig();
 
-        // execute custom migration services from Setup.xcu
-        // and refresh the cache
+        
+        
         runServices();
         refresh();
 
@@ -324,7 +324,7 @@ sal_Bool MigrationImpl::doMigration()
                 << "\" data \"" << m_aInfo.userdata << "\"");
     }
 
-    // prevent running the migration multiple times
+    
     setMigrationCompleted();
     return result;
 }
@@ -346,7 +346,7 @@ void MigrationImpl::setMigrationCompleted()
     }
     catch (...)
     {
-        // fail silently
+        
     }
 }
 
@@ -360,14 +360,14 @@ bool MigrationImpl::checkMigrationCompleted()
 
         if( !bMigrationCompleted && getenv("SAL_DISABLE_USERMIGRATION" ) )
         {
-            // migration prevented - fake it's success
+            
             setMigrationCompleted();
             bMigrationCompleted = sal_True;
         }
     }
     catch (const Exception&)
     {
-        // just return false...
+        
     }
     OSL_TRACE( "Migration %s", bMigrationCompleted ? "already completed" : "not done" );
 
@@ -384,7 +384,7 @@ static void insertSorted(migrations_available& rAvailableMigrations, supported_m
         {
             rAvailableMigrations.insert(pIter, aSupportedMigration );
             bInserted = true;
-            break; // i111193: insert invalidates iterator!
+            break; 
         }
         ++pIter;
     }
@@ -394,7 +394,7 @@ static void insertSorted(migrations_available& rAvailableMigrations, supported_m
 
 bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigrations)
 {
-    // get supported version names
+    
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > seqSupportedVersions = aMigrationAccess->getElementNames();
 
@@ -424,12 +424,12 @@ bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
 
 migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 {
-    // get migration access
+    
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
     uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
 
-    // get migration description from from org.openoffice.Setup/Migration
-    // and build vector of migration steps
+    
+    
     OUString aMigrationSteps( "MigrationSteps" );
     uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(aMigrationSteps), uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
@@ -439,12 +439,12 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
     migrations_vr vrMigrations(new migrations_v);
     for (sal_Int32 i = 0; i < seqMigrations.getLength(); i++)
     {
-        // get current migration step
+        
         theNameAccess->getByName(seqMigrations[i]) >>= tmpAccess;
         migration_step tmpStep;
         tmpStep.name = seqMigrations[i];
 
-        // read included files from current step description
+        
         OUString aSeqEntry;
         if (tmpAccess->getByName("IncludedFiles") >>= tmpSeq)
         {
@@ -455,35 +455,35 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
             }
         }
 
-        // exluded files...
+        
         if (tmpAccess->getByName("ExcludedFiles") >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.excludeFiles.push_back(tmpSeq[j]);
         }
 
-        // included nodes...
+        
         if (tmpAccess->getByName("IncludedNodes") >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.includeConfig.push_back(tmpSeq[j]);
         }
 
-        // excluded nodes...
+        
         if (tmpAccess->getByName("ExcludedNodes") >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.excludeConfig.push_back(tmpSeq[j]);
         }
 
-        // included extensions...
+        
         if (tmpAccess->getByName("IncludedExtensions") >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.includeExtensions.push_back(tmpSeq[j]);
         }
 
-        // excluded extensions...
+        
         if (tmpAccess->getByName("ExcludedExtensions") >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
@@ -493,7 +493,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
             }
         }
 
-        // generic service
+        
         tmpAccess->getByName("MigrationService") >>= tmpStep.service;
 
         vrMigrations->push_back(tmpStep);
@@ -523,25 +523,25 @@ OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
     OUString aPreXDGConfigPath;
     const char* pXDGCfgHome = getenv("XDG_CONFIG_HOME");
 
-    // cater for XDG_CONFIG_HOME change
-    // If XDG_CONFIG_HOME is set then we;
-    // assume the user knows what they are doing ( room for improvement here, we could
-    // of course search the default config dir etc. also  - but this is more complex,
-    // we would need to weigh results from the current config dir against matches in
-    // the 'old' config dir etc. ) - currently we just use the returned config dir.
-    // If XDG_CONFIG_HOME is NOT set;
-    // assume then we should now using the default $HOME/,config config location for
-    // our user profiles, however *all* previous libreoffice and openoffice.org
-    // configurations will be in the 'old' config directory and that's where we need
-    // to search - we convert the returned config dir to the 'old' dir
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if ( !pXDGCfgHome && rConfigDir.endsWithAsciiL( XDG_CONFIG_PART, sizeof( XDG_CONFIG_PART ) - 1 )  )
-        // remove trailing '.config/' but leave the terminating '/'
+        
         aPreXDGConfigPath = rConfigDir.copy( 0, rConfigDir.getLength() - sizeof(  XDG_CONFIG_PART ) + 2 );
     else
         aPreXDGConfigPath = rConfigDir;
 
-    // the application-specific config dir is not longer prefixed by '.' because it is hidden under ".config"
-    // we have to add the '.' for the pre-XDG directory names
+    
+    
     aPreXDGConfigPath += ".";
 
    return aPreXDGConfigPath;
@@ -597,7 +597,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
         {
             setInstallInfoIfExist(aInfo, aTopConfigDir + aProfileName, aVersion);
 #if defined UNX && ! defined MACOSX
-            //try preXDG path if the new one does not exist
+            
             if ( aInfo.userdata.isEmpty())
                 setInstallInfoIfExist(aInfo, aPreXDGTopConfigDir + aProfileName, aVersion);
 #endif
@@ -643,8 +643,8 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
     strings_v::const_iterator i_pat = vPatterns.begin();
     while (i_pat != vPatterns.end())
     {
-        // find matches for this pattern in input set
-        // and copy them to the result
+        
+        
         SearchParam param(*i_pat, SearchParam::SRCH_REGEXP);
         TextSearch ts(param, LANGUAGE_DONTKNOW);
         i_set = vSet.begin();
@@ -667,14 +667,14 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
     using namespace osl;
     strings_vr vrResult(new strings_v);
 
-    // get sub dirs
+    
     Directory dir(baseURL);
     if (dir.open() == FileBase::E_None)
     {
         strings_v vSubDirs;
         strings_vr vrSubResult;
 
-        // work through directory contents...
+        
         DirectoryItem item;
         FileStatus fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
         while (dir.getNextItem(item) == FileBase::E_None)
@@ -688,7 +688,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
             }
         }
 
-        // recurse subfolders
+        
         strings_v::const_iterator i = vSubDirs.begin();
         while (i != vSubDirs.end())
         {
@@ -702,7 +702,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
 
 namespace {
 
-// removes elements of vector 2 in vector 1
+
 strings_v subtract(strings_v const & va, strings_v const & vb) {
     strings_v a(va);
     std::sort(a.begin(), a.end());
@@ -724,10 +724,10 @@ strings_vr MigrationImpl::compileFileList()
     strings_vr vrInclude;
     strings_vr vrExclude;
 
-    // get a list of all files:
+    
     strings_vr vrFiles = getAllFiles(m_aInfo.userdata);
 
-    // get a file list result for each migration step
+    
     migrations_v::const_iterator i_migr = m_vrMigrations->begin();
     while (i_migr != m_vrMigrations->end())
     {
@@ -803,7 +803,7 @@ void MigrationImpl::copyConfig() {
         }
     }
 
-    // check if the shared registrymodifications.xcu file exists
+    
     bool bRegistryModificationsXcuExists = false;
     OUString regFilePath(m_aInfo.userdata);
     regFilePath += "/user/registrymodifications.xcu";
@@ -817,9 +817,9 @@ void MigrationImpl::copyConfig() {
     for (Components::const_iterator i(comps.begin()); i != comps.end(); ++i) {
         if (!i->second.includedPaths.empty()) {
             if (!bRegistryModificationsXcuExists) {
-                // shared registrymodifications.xcu does not exists
-                // the configuration is split in many registry files
-                // determine the file names from the first element in included paths
+                
+                
+                
                 OUStringBuffer buf(m_aInfo.userdata);
                 buf.appendAscii("/user/registry/data");
                 sal_Int32 n = 0;
@@ -875,7 +875,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
 
-        // access the provider
+        
         uno::Sequence< uno::Any > theArgs(1);
         theArgs[ 0 ] <<= sConfigURL;
         xNameAccess = uno::Reference< XNameAccess > (
@@ -902,19 +902,19 @@ void MigrationImpl::copyFiles()
     {
         while (i_file != m_vrFileList->end())
         {
-            // remove installation prefix from file
+            
             localName = i_file->copy(m_aInfo.userdata.getLength());
             if (localName.endsWith( "/autocorr/acor_.dat"))
             {
-                // Previous versions used an empty language tag for
-                // LANGUAGE_DONTKNOW with the "[All]" autocorrection entry.
-                // As of LibreOffice 4.0 it is 'und' for LANGUAGE_UNDETERMINED
-                // so the file name is "acor_und.dat".
+                
+                
+                
+                
                 localName = localName.copy( 0, localName.getLength() - 4) + "und.dat";
             }
             destName = userInstall + localName;
             INetURLObject aURL(destName);
-            // check whether destination directory exists
+            
             aURL.removeSegment();
             _checkAndCreateDirectory(aURL);
             FileBase::RC copyResult = File::copy(*i_file, destName);
@@ -936,7 +936,7 @@ void MigrationImpl::copyFiles()
 
 void MigrationImpl::runServices()
 {
-    // Build argument array
+    
     uno::Sequence< uno::Any > seqArguments(3);
     seqArguments[0] = uno::makeAny(NamedValue("Productname",
         uno::makeAny(m_aInfo.productname)));
@@ -944,8 +944,8 @@ void MigrationImpl::runServices()
         uno::makeAny(m_aInfo.userdata)));
 
 
-    // create an instance of every migration service
-    // and execute the migration job
+    
+    
     uno::Reference< XJob > xMigrationJob;
 
     uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
@@ -957,7 +957,7 @@ void MigrationImpl::runServices()
 
             try
             {
-                // set black list for extension migration
+                
                 uno::Sequence< OUString > seqExtBlackList;
                 sal_uInt32 nSize = i_mig->excludeExtensions.size();
                 if ( nSize > 0 )
@@ -1387,6 +1387,6 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     }
 }
 
-} // namespace desktop
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

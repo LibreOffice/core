@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hyperlinkcontext.hxx"
@@ -51,7 +51,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
         }
         else
         {
-            // not sure if we also need to set sHref to the internal target
+            
             sURL = getRelations().getInternalTargetFromRelId( aRelId );
         }
     }
@@ -64,21 +64,21 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
     OUString aAction = rAttribs.getString( XML_action ).get();
     if ( !aAction.isEmpty() )
     {
-        // reserved values of the unrestricted string aAction:
-        // ppaction://customshow?id=SHOW_ID             // custom presentation
-        // ppaction://hlinkfile                         // external file via r:id
-        // ppaction://hlinkpres?slideindex=SLIDE_NUM    // external presentation via r:id
-        // ppaction://hlinkshowjump?jump=endshow
-        // ppaction://hlinkshowjump?jump=firstslide
-        // ppaction://hlinkshowjump?jump=lastslide
-        // ppaction://hlinkshowjump?jump=lastslideviewed
-        // ppaction://hlinkshowjump?jump=nextslide
-        // ppaction://hlinkshowjump?jump=previousslide
-        // ppaction://hlinksldjump
-        // ppaction://macro?name=MACRO_NAME
-        // ppaction://program
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        const OUString sPPAction( "ppaction://" );
+        const OUString sPPAction( "ppaction:
         if ( aAction.matchIgnoreAsciiCase( sPPAction, 0 ) )
         {
             OUString aPPAct( aAction.copy( sPPAction.getLength() ) );
@@ -129,7 +129,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
                             sURL = "#Slide " + OUString::number( nPageNumber );
                         else if ( aSlideType.match( sNotesSlide ) )
                             sURL = "#Notes " + OUString::number( nPageNumber );
-//                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
+
                     }
                 }
             }
@@ -138,11 +138,11 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
     if ( !sURL.isEmpty() )
         maProperties[ PROP_URL ] <<= sURL;
 
-    // TODO unhandled
-    // XML_invalidUrl
-    // XML_history
-    // XML_highlightClick
-    // XML_endSnd
+    
+    
+    
+    
+    
 }
 
 HyperLinkContext::~HyperLinkContext()
@@ -165,7 +165,7 @@ ContextHandlerRef HyperLinkContext::onCreateContext(
     return this;
 }
 
-} // namespace drawingml
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.h>
@@ -65,7 +65,7 @@ LRESULT AWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     m_xDragSource=0;
 
 
-     // Remove the subclass from the edit control.
+     
     ::SetWindowLong(m_hwndEdit, GWL_WNDPROC,
                 (LONG) wpOrigEditProc);
 
@@ -75,34 +75,34 @@ LRESULT AWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
 LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Prepare the EDIT control
+    
     m_hwndEdit = CreateWindowA(
-        "EDIT",     // predefined class
-        NULL,       // no window title
+        "EDIT",     
+        NULL,       
         WS_CHILD | WS_VISIBLE | WS_VSCROLL |
             ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
-        0, 0, 0, 0, // set size in WM_SIZE message
-        m_hWnd,       // parent window
-        (HMENU) NULL, // edit control ID
+        0, 0, 0, 0, 
+        m_hWnd,       
+        (HMENU) NULL, 
         (HINSTANCE) GetWindowLong( GWL_HINSTANCE),
         NULL);
 
-    // the map is used in the window procedure for the edit window to associate the
-    // it to the right main window ( AWindow)
+    
+    
     mapEditToMainWnd[m_hwndEdit]= m_hWnd;
-    // Superclass the edit window, because we want to process mouse messages
+    
     wpOrigEditProc = (WNDPROC) ::SetWindowLongA(m_hwndEdit,
                 GWL_WNDPROC, (LONG) EditSubclassProc);
 
 
-    // Add text to the window.
+    
     if( m_isMTA)
         ::SendMessageA(m_hwndEdit, WM_SETTEXT, 0, (LPARAM) szMTAWin);
     else
         ::SendMessageA(m_hwndEdit, WM_SETTEXT, 0, (LPARAM) szSTAWin);
 
 
-    // create the DragSource
+    
     Reference< XInterface> xint= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDragSource"));
     m_xDragSource= Reference<XDragSource>( xint, UNO_QUERY);
     Reference<XInitialization> xInit( xint, UNO_QUERY);
@@ -111,7 +111,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     ar[1]<<= (sal_uInt32)m_hWnd;
     xInit->initialize( Sequence<Any>( ar, 2) );
 
-    //create the DropTarget
+    
     Reference< XInterface> xintTarget= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDropTarget"));
     m_xDropTarget= Reference<XDropTarget>( xintTarget, UNO_QUERY);
     Reference<XInitialization> xInitTarget( xintTarget, UNO_QUERY);
@@ -123,13 +123,13 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
     m_xDropTarget->addDropTargetListener( static_cast<XDropTargetListener*>
         ( new DropTargetListener( m_hwndEdit)) );
-//  // make this window tho a drop target
+
     m_xDropTarget->setActive(sal_True);
 
     return 0;
 }
 
-// When the mouse is dragged for a second than a drag is initiated
+
 LRESULT AWindow::OnMouseAction(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if( uMsg== WM_LBUTTONDOWN)
@@ -153,7 +153,7 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     if(m_xDragSource.is())
     {
 
-        //Get the Text out of the Edit window
+        
         int length= (int)::SendMessageA( m_hwndEdit, WM_GETTEXTLENGTH, 0, 0);
         char * pBuffer= new char[length + 1];
         ZeroMemory( pBuffer, length + 1);
@@ -175,12 +175,12 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
             medium.hGlobal= mem;
             medium.pUnkForRelease= NULL;
 
-            pData->SetData( &format,  &medium, TRUE); // releases HGLOBAL eventually
+            pData->SetData( &format,  &medium, TRUE); 
 
             Reference<XTransferable> xTrans= m_aDataConverter.createTransferableFromDataObj(
                                                 MultiServiceFactory, pData);
 
-            // call XDragSource::executeDrag from an MTA
+            
             if( m_isMTA )
             {
                 DWORD mtaThreadId;
@@ -191,7 +191,7 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
                 data.evtThreadReady= CreateEvent( NULL, FALSE, FALSE, NULL);
 
                 HANDLE hThread= CreateThread( NULL, 0, MTAFunc, &data, 0, &mtaThreadId);
-                // We must wait until the thread copied the ThreadData structure
+                
                 WaitForSingleObject( data.evtThreadReady, INFINITE);
                 CloseHandle( data.evtThreadReady);
 
@@ -216,13 +216,13 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
 LRESULT AWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Make the edit control the size of the window's
-    // client area.
+    
+    
     ::MoveWindow(m_hwndEdit,
-        0, 0,           // starting x- and y-coordinates
-        LOWORD(lParam), // width of client area
-        HIWORD(lParam), // height of client area
-        TRUE);          // repaint window
+        0, 0,           
+        LOWORD(lParam), 
+        HIWORD(lParam), 
+        TRUE);          
 
     return 0;
 }
@@ -234,7 +234,7 @@ LRESULT AWindow::OnFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
 
 
-// Subclass procedure for EDIT window
+
 LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
 

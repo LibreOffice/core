@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -30,14 +30,14 @@ namespace drawinglayer
         class ImpFillHatchAttribute
         {
         public:
-            // data definitions
+            
             HatchStyle                              meStyle;
             double                                  mfDistance;
             double                                  mfAngle;
             basegfx::BColor                         maColor;
             sal_uInt32                              mnMinimalDiscreteDistance;
 
-            // bitfield
+            
             bool                                    mbFillBackground : 1;
 
             ImpFillHatchAttribute(
@@ -61,12 +61,12 @@ namespace drawinglayer
                 mfDistance(0.0),
                 mfAngle(0.0),
                 maColor(basegfx::BColor()),
-                mnMinimalDiscreteDistance(3), // same as VCL
+                mnMinimalDiscreteDistance(3), 
                 mbFillBackground(false)
             {
             }
 
-            // data read access
+            
             HatchStyle getStyle() const { return meStyle; }
             double getDistance() const { return mfDistance; }
             double getAngle() const { return mfAngle; }
@@ -134,7 +134,7 @@ namespace drawinglayer
             return rCandidate.mpFillHatchAttribute == mpFillHatchAttribute;
         }
 
-        // data read access
+        
         HatchStyle FillHatchAttribute::getStyle() const
         {
             return mpFillHatchAttribute->getStyle();
@@ -165,7 +165,7 @@ namespace drawinglayer
             return mpFillHatchAttribute->isFillBackground();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

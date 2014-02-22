@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <typeinfo>
@@ -85,7 +85,7 @@ std::type_info * createFake_class_type_info(char const * name) {
 #endif
     *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Base));
-        // copy __cxxabiv1::__class_type_info vtable into place
+        
     Fake_class_type_info * fake = reinterpret_cast<Fake_class_type_info *>(buf);
     fake->name = name;
 #ifdef _LIBCPP_NONUNIQUE_RTTI_BIT
@@ -106,7 +106,7 @@ std::type_info * createFake_si_class_type_info(
 #endif
     *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Derived));
-        // copy __cxxabiv1::__si_class_type_info vtable into place
+        
     Fake_si_class_type_info * fake
         = reinterpret_cast<Fake_si_class_type_info *>(buf);
     fake->name = name;
@@ -126,15 +126,15 @@ void dummy_can_throw_anything( char const * )
 
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
-    // example: N3com3sun4star4lang24IllegalArgumentExceptionE
+    
 
     OUStringBuffer buf( 64 );
     assert( 'N' == *p );
-    ++p; // skip N
+    ++p; 
 
     while ('E' != *p)
     {
-        // read chars count
+        
         long n = (*p++ - '0');
         while ('0' <= *p && '9' >= *p)
         {
@@ -172,16 +172,16 @@ public:
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
-    // Insert commonly needed type_infos to avoid dlsym() calls
-    // Ideally we should insert all needed ones, and we actually must,
-    // for arm64, as the dynamically generated type_infos don't seem
-    // to work correctly. Luckily it seems that quite few types of
-    // exceptions are thrown through the C++/UNO bridge at least in
-    // the TiledLibreOffice test app.
+    
+    
+    
+    
+    
+    
 
-    // (As no Java, Basic or Python is supported in LO code on iOS, we
-    // can know the set of types of exceptions throws a priori, so
-    // keeping this list complete should be possible.)
+    
+    
+    
 
     m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
                                             (std::type_info*) &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
@@ -204,7 +204,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
     if (iFind == m_rttis.end())
     {
-        // RTTI symbol
+        
         OStringBuffer buf( 64 );
         buf.append( "_ZTIN" );
         sal_Int32 index = 0;
@@ -234,13 +234,13 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
         {
             SAL_INFO( "bridges.ios", "getRTTI: dlsym() could NOT find type_info for " << unoName << ": " << symName );
 
-            // try to lookup the symbol in the generated rtti map
+            
             t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
             if (iFind2 == m_generatedRttis.end())
             {
-                // we must generate it !
-                // symbol and rtti-name is nearly identical,
-                // the symbol is prefixed with _ZTI
+                
+                
+                
                 char * rttiName = strdup(symName.getStr() + 4);
                 if (rttiName == 0) {
                     throw std::bad_alloc();
@@ -250,7 +250,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
 
                 if (pTypeDescr->pBaseTypeDescription)
                 {
-                    // ensure availability of base
+                    
                     std::type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
                     rtti = createFake_si_class_type_info(rttiName, base_rtti);
@@ -266,7 +266,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
                              "bridges",
                              "inserting new generated rtti failed" );
             }
-            else // taking already generated rtti
+            else 
             {
                 rtti = iFind2->second;
             }
@@ -302,7 +302,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     std::type_info * rtti;
 
     {
-    // construct cpp exception object
+    
     typelib_TypeDescription * pTypeDescr = 0;
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
     OSL_ASSERT( pTypeDescr );
@@ -317,9 +317,9 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
-    // destruct uno exception
+    
     ::uno_any_destruct( pUnoExc, 0 );
-    // avoiding locked counts
+    
     static RTTI * s_rtti = 0;
     if (! s_rtti)
     {
@@ -385,7 +385,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
     }
     else
     {
-        // construct uno exception any
+        
         uno_any_constructAndConvert( pUnoExc, header->adjustedPtr, pExcTypeDescr, pCpp2Uno );
         typelib_typedescription_release( pExcTypeDescr );
     }

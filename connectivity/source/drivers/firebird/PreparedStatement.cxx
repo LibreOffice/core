@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Connection.hxx"
@@ -95,7 +95,7 @@ void OPreparedStatement::ensurePrepared()
     {
         SAL_WARN("connectivity.firebird", "isc_dsql_describe_bind failed");
     }
-    else if (m_pInSqlda->sqld > m_pInSqlda->sqln) // Not large enough
+    else if (m_pInSqlda->sqld > m_pInSqlda->sqln) 
     {
         short nItems = m_pInSqlda->sqld;
         free(m_pInSqlda);
@@ -200,7 +200,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
 
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
 
-    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+    int dtype = (pVar->sqltype & ~1); 
 
     if (str.getLength() > pVar->sqllen)
         str = str.copy(0, pVar->sqllen);
@@ -209,20 +209,20 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     case SQL_VARYING:
     {
         const sal_Int32 max_varchar_len = 0xFFFF;
-        // First 2 bytes indicate string size
+        
         if (str.getLength() > max_varchar_len)
         {
             str = str.copy(0, max_varchar_len);
         }
         const short nLength = str.getLength();
         memcpy(pVar->sqldata, &nLength, 2);
-        // Actual data
+        
         memcpy(pVar->sqldata + 2, str.getStr(), str.getLength());
         break;
     }
     case SQL_TEXT:
         memcpy(pVar->sqldata, str.getStr(), str.getLength());
-        // Fill remainder with spaces
+        
         memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
         break;
     default:
@@ -255,13 +255,13 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     ISC_STATUS aErr;
 
-    if (m_xResultSet.is()) // Checks whether we have already run the statement.
+    if (m_xResultSet.is()) 
     {
         disposeResultSet();
-        // Closes the cursor from the last run.
-        // This doesn't actually free the statement -- using DSQL_close closes
-        // the cursor and keeps the statement, using DSQL_drop frees the statement
-        // (and associated cursors).
+        
+        
+        
+        
         aErr = isc_dsql_free_statement(m_statusVector,
                                        &m_aStatementHandle,
                                        DSQL_close);
@@ -292,7 +292,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
         m_pConnection->notifyDatabaseModified();
 
     return m_xResultSet.is();
-    // TODO: implement handling of multiple ResultSets.
+    
 }
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
@@ -309,7 +309,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     return m_xResultSet;
 }
 
-//----- XParameters -----------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType*/)
     throw(SQLException, RuntimeException)
 {
@@ -323,7 +323,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType
 void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 /*nIndex*/, sal_Bool /*bValue*/)
     throw(SQLException, RuntimeException)
 {
-    // FIREBIRD3: will need to be implemented.
+    
     ::dbtools::throwFunctionNotSupportedException("XParameters::setBoolean", *this);
 }
 
@@ -384,7 +384,7 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 nIndex, float nValue)
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
     throw(SQLException, RuntimeException)
 {
-    setValue< double >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
+    setValue< double >(nIndex, nValue, SQL_DOUBLE); 
 }
 
 void SAL_CALL OPreparedStatement::setDate(sal_Int32 nIndex, const Date& rDate)
@@ -431,9 +431,9 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime&
 
     setValue< ISC_TIMESTAMP >(nIndex, aISCTimestamp, SQL_TIMESTAMP);
 }
-// -------------------------------------------------------------------------
 
-// void OPreaparedStatement::set
+
+
 void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QUAD& rBlobId)
 {
     ISC_STATUS aErr;
@@ -443,8 +443,8 @@ void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QU
                             &m_pConnection->getTransaction(),
                             &rBlobHandle,
                             &rBlobId,
-                            0, // Blob parameter buffer length
-                            0); // Blob parameter buffer handle
+                            0, 
+                            0); 
 
     if (aErr)
     {
@@ -491,8 +491,8 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 
     openBlobForWriting(aBlobHandle, aBlobId);
 
-    // Max segment size is 2^16 == SAL_MAX_UINT16
-    // LEM TODO: SAL_MAX_UINT16 is 2^16-1; this mixup is probably innocuous; to be checked
+    
+    
     sal_uInt64 nDataWritten = 0;
     ISC_STATUS aErr = 0;
     while (xBlob->length() - nDataWritten > 0)
@@ -511,8 +511,8 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 
     }
 
-    // We need to make sure we close the Blob even if their are errors, hence evaluate
-    // errors after closing.
+    
+    
     closeBlobAfterWriting(aBlobHandle);
 
     if (aErr)
@@ -526,7 +526,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
 
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
 {
@@ -536,7 +536,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
 {
@@ -546,7 +546,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
@@ -558,7 +558,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     ::osl::MutexGuard aGuard( m_aMutex );
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
@@ -569,7 +569,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
@@ -592,7 +592,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
     openBlobForWriting(aBlobHandle, aBlobId);
 
-    // Max segment size is 2^16 == SAL_MAX_UINT16
+    
     sal_uInt64 nDataWritten = 0;
     ISC_STATUS aErr = 0;
     while (xBytes.getLength() - nDataWritten > 0)
@@ -609,8 +609,8 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
             break;
     }
 
-    // We need to make sure we close the Blob even if their are errors, hence evaluate
-    // errors after closing.
+    
+    
     closeBlobAfterWriting(aBlobHandle);
 
     if (aErr)
@@ -623,7 +623,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
     setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
-// -------------------------------------------------------------------------
+
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -635,7 +635,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
@@ -646,32 +646,32 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
 }
 
-// ---- Batch methods -- unsupported -----------------------------------------
+
 void SAL_CALL OPreparedStatement::clearBatch()
     throw(SQLException, RuntimeException)
 {
-    // Unsupported
+    
 }
 
 void SAL_CALL OPreparedStatement::addBatch()
     throw(SQLException, RuntimeException)
 {
-    // Unsupported by firebird
+    
 }
 
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch()
     throw(SQLException, RuntimeException)
 {
-    // Unsupported by firebird
+    
     return Sequence< sal_Int32 >();
 }
-// -------------------------------------------------------------------------
+
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     switch(nHandle)

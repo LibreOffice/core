@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/util/xreplaceable.hxx>
@@ -38,11 +38,11 @@ void XReplaceable::testReplaceAll()
     uno::Reference< util::XSearchDescriptor > xSearchDescr = xReplaceable->createSearchDescriptor();
     xSearchDescr->setSearchString(maSearchString);
 
-    //check that at least one object is there that will be replaced
+    
     uno::Reference< uno::XInterface > xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
-    //check that there is none object with the replace string
+    
     xSearchDescr->setSearchString(maReplaceString);
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(!xElement.is());
@@ -52,7 +52,7 @@ void XReplaceable::testReplaceAll()
 
     xReplaceable->replaceAll(uno::Reference< util::XSearchDescriptor >(xReplaceDescr, UNO_QUERY_THROW));
 
-    //check that now at least one element is found
+    
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
@@ -60,17 +60,17 @@ void XReplaceable::testReplaceAll()
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(!xElement.is());
 
-    //redo the whole thing
+    
     xReplaceDescr->setSearchString(maReplaceString);
     xReplaceDescr->setReplaceString(maSearchString);
 
     xReplaceable->replaceAll(uno::Reference< util::XSearchDescriptor >(xReplaceDescr, UNO_QUERY_THROW));
 
-    //check that it works
+    
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
-    //check that there is none object with the replace string
+    
     xSearchDescr->setSearchString(maReplaceString);
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(!xElement.is());

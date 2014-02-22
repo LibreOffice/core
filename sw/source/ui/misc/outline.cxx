@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -78,7 +78,7 @@ public:
     sal_uInt16 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
 
-// remember selected entry
+
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 {
     m_pFormEdit->SetText(pBox->GetSelectEntry());
@@ -108,7 +108,7 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
     SelectHdl(m_pFormBox);
 }
 
-// unlock OK-Button when text is in Edit
+
 IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
     m_pOKBtn->Enable(!pBox->GetText().isEmpty());
@@ -116,7 +116,7 @@ IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 
-// DoubleClickHdl
+
 IMPL_LINK_NOARG_INLINE_START(SwNumNamesDlg, DoubleClickHdl)
 {
     EndDialog(RET_OK);
@@ -171,14 +171,14 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent, const SfxItemSet* pSwIte
 
     for( i = 0; i < MAXLEVEL; ++i )
     {
-        // if the style wasn't created yet, it's still at this position
+        
         if( !rWrtSh.GetParaStyle( sHeadline =
             SwStyleNameMapper::GetUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                           sHeadline )) )
             aCollNames[i] = sHeadline;
     }
 
-    // query the text templates' outlining levels
+    
     const sal_uInt16 nCount = rWrtSh.GetTxtFmtCollCount();
     for(i = 0; i < nCount; ++i )
     {
@@ -223,7 +223,7 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl)
 IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
 {
     PopupMenu *pFormMenu = get_menu("form");
-    // fill PopupMenu
+    
     for( sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i )
     {
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
@@ -321,12 +321,12 @@ sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFmtName) const
 short SwOutlineTabDialog::Ok()
 {
     SfxTabDialog::Ok();
-    // set levels for all created templates; has to be done in order to
-    // delete possibly cancelled assignments again.
+    
+    
 
-    // #130443#
-    // encapsulate changes into a action to avoid effects on the current cursor
-    // position during the changes.
+    
+    
+    
     rWrtSh.StartAction();
 
     const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
@@ -398,7 +398,7 @@ short SwOutlineTabDialog::Ok()
 
     rWrtSh.SetOutlineNumRule( *pNumRule);
 
-    // #i30443#
+    
     rWrtSh.EndAction();
 
     return RET_OK;
@@ -441,7 +441,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent,
 
 void    SwOutlineSettingsTabPage::Update()
 {
-        // if a template was already selected for this level, select it in the ListBox
+        
     m_pCollBox->Enable(USHRT_MAX != nActLevel);
     if(USHRT_MAX == nActLevel)
     {
@@ -595,7 +595,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     sal_uInt8 i;
 
     const OUString aCollName(pBox->GetSelectEntry());
-    //0xFFFF not allowed here (disable)
+    
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     OUString sOldName( pCollNames[nTmpLevel] );
 
@@ -607,13 +607,13 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     else
     {
         pCollNames[nTmpLevel] = aCollName;
-                // template already in use?
+                
         for( i = 0; i < MAXLEVEL; ++i)
             if(i != nTmpLevel && pCollNames[i] == aCollName )
                 pCollNames[i] = OUString();
     }
 
-    // search the oldname and put it into the current entries
+    
     if( !sOldName.isEmpty() )
         for( i = 0; i < MAXLEVEL; ++i)
             if( aSaveCollNames[ i ] == sOldName && i != nTmpLevel &&
@@ -625,7 +625,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
                         break;
 
                 if( MAXLEVEL == n )
-                    // it was a outline leveld name and the current entries is zero.
+                    
                     pCollNames[ i ] = sOldName;
             }
 
@@ -747,18 +747,18 @@ SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
 void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {
     pSh = pShell;
-    // query this document's NumRules
+    
     pNumRule = ((SwOutlineTabDialog*)GetTabDialog())->GetNumRule();
     pCollNames = ((SwOutlineTabDialog*)GetTabDialog())->GetCollNames();
 
     m_pPreviewWIN->SetNumRule(pNumRule);
     m_pPreviewWIN->SetOutlineNames(pCollNames);
-    // set start value - nActLevel must be 1 here
+    
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     const SwNumFmt& rNumFmt = pNumRule->Get( nTmpLevel );
     m_pStartEdit->SetValue( rNumFmt.GetStart() );
 
-    // create pool formats for headlines
+    
     sal_uInt16 i;
     for( i = 0; i < MAXLEVEL; ++i )
     {
@@ -770,7 +770,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     sStr += OUString::number(MAXLEVEL);
     m_pLevelLB->InsertEntry( sStr );
 
-    // query the texttemplates' outlining levels
+    
     const sal_uInt16 nCount = pSh->GetTxtFmtCollCount();
     for( i = 0; i < nCount; ++i )
     {
@@ -792,11 +792,11 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     }
     m_pLevelLB->SelectEntryPos(nTmp-1);
 
-    // collect char styles
+    
     m_pCharFmtLB->Clear();
     m_pCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
 
-    // char styles
+    
     ::FillCharStyleListBox(*m_pCharFmtLB,
                         pSh->GetView().GetDocShell());
     Update();
@@ -889,7 +889,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pP
     return new NumberingPreview(pParent);
 }
 
-// paint numbering's preview
+
 void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
@@ -899,7 +899,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 
-    // #101524# OJ
+    
     pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
     pVDev->SetLineColor( GetSettings().GetStyleSettings().GetButtonTextColor() );
     pVDev->DrawRect(aRect);
@@ -916,9 +916,9 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 nWidthRelation = nWidthRelation / 4;
         }
         else
-            nWidthRelation = 30; // chapter dialog
+            nWidthRelation = 30; 
 
-        // height per level
+        
         sal_uInt16 nXStep = sal_uInt16(aSize.Width() / (3 * MAXLEVEL));
         if(MAXLEVEL < 10)
             nXStep /= 2;
@@ -927,7 +927,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
         aStdFont = OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_UI_SANS, GetAppLanguage(),
                                     DEFAULTFONT_FLAGS_ONLYONE, this );
-        // #101524# OJ
+        
         aStdFont.SetColor( SwViewOption::GetFontColor() );
 
         sal_uInt16 nFontHeight = nYStep * 6 / 10;
@@ -945,7 +945,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             {
                 nStart++;
             }
-            if(nStart) // so that possible predecessors and successors are showed
+            if(nStart) 
                 nStart--;
 
             SwNumberTree::tNumberVector aNumVector;
@@ -1001,7 +1001,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    // #128041#
+                    
                     OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = (sal_uInt16)pVDev->GetTextWidth(aText);
@@ -1051,7 +1051,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 }
 
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
-                pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() ); // Color( COL_BLACK ) );
+                pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() ); 
                 pVDev->DrawRect( aRect1 );
 
                 Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2 ), Size(aSize.Width() / 2, 2));
@@ -1105,7 +1105,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    // #128041#
+                    
                     OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = (sal_uInt16)pVDev->GetTextWidth(aText);

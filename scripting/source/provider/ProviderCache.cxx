@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/implementationentry.hxx>
@@ -36,8 +36,8 @@ namespace func_provider
 ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext )
     throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext )
 {
-    // initialise m_hProviderDetailsCache with details of ScriptProviders
-    // will use createContentEnumeration
+    
+    
 
     m_xMgr = m_xContext->getServiceManager();
     ENSURE_OR_THROW( m_xMgr.is(), "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
@@ -49,8 +49,8 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
     throw ( RuntimeException ) : m_sBlackList( blackList ), m_Sctx( scriptContext ), m_xContext( xContext )
 
 {
-    // initialise m_hProviderDetailsCache with details of ScriptProviders
-    // will use createContentEnumeration
+    
+    
 
     m_xMgr = m_xContext->getServiceManager();
     ENSURE_OR_THROW( m_xMgr.is(), "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
@@ -75,7 +75,7 @@ ProviderCache::getProvider( const OUString& providerName )
         }
     else
     {
-        // need to create provider and insert into hash
+        
             provider = createProvider( h_it->second );
     }
     }
@@ -86,13 +86,13 @@ Sequence < Reference< provider::XScriptProvider > >
 ProviderCache::getAllProviders() throw ( RuntimeException )
 {
     Sequence < Reference< provider::XScriptProvider > > providers (  m_hProviderDetailsCache.size() );
-    // need to create providers that haven't been created already
-    // so check what providers exist and what ones don't
+    
+    
 
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     ProviderDetails_hash::iterator h_itEnd =  m_hProviderDetailsCache.end();
     ProviderDetails_hash::iterator h_it = m_hProviderDetailsCache.begin();
-    // should assert if size !>  0
+    
     if (  m_hProviderDetailsCache.size() )
     {
         sal_Int32 providerIndex = 0;
@@ -106,7 +106,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
             }
             else
             {
-                // create provider
+                
                 try
                 {
                     xScriptProvider  = createProvider( h_it->second );
@@ -135,7 +135,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
 void
 ProviderCache::populateCache() throw ( RuntimeException )
 {
-    // wrong name in services.rdb
+    
     OUString serviceName;
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     try
@@ -196,6 +196,6 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
 
     return details.provider;
 }
-} //end namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

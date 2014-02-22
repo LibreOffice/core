@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -26,9 +26,9 @@
 
 #include "juhx-export-types.hxx"
 
-// In retrospect, the reason to create a juh wrapper around the juhx library was
-// probably because java.lang.System.loadLibrary uses RTLD_LOCAL, so uniqueness
-// of GCC RTTI symbols needed for exception handling would not be guaranteed.
+
+
+
 
 #if ! defined SAL_DLLPREFIX
 #define SAL_DLLPREFIX ""
@@ -45,7 +45,7 @@ static bool s_inited = false;
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-//--------------------------------------------------------------------------------------------------
+
 static bool inited_juhx( JNIEnv * jni_env )
 {
     if (s_inited)
@@ -89,7 +89,7 @@ static bool inited_juhx( JNIEnv * jni_env )
     return true;
 }
 
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT jboolean JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr,
@@ -100,7 +100,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             pJEnv, jClass, jLibName, jSMgr, jRegKey, loader );
     return JNI_FALSE;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName,
@@ -111,7 +111,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             pJEnv, jClass, jLibName, jImplName, jSMgr, jRegKey, loader );
     return 0;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs,

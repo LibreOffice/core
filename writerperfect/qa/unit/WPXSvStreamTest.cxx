@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <algorithm>
@@ -101,7 +101,7 @@ void WPXSvStreamTest::testRead()
     const unsigned char* const pTextOrig = reinterpret_cast<const unsigned char*>(aText);
     const unsigned char* pText = pTextOrig;
 
-    // reading by small pieces
+    
     pData = pInput->read(1UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(1UL, nReadBytes);
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
@@ -126,7 +126,7 @@ void WPXSvStreamTest::testRead()
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
     CPPUNIT_ASSERT(pInput->atEOS());
 
-    // reading everything at once
+    
     pInput->seek(0, WPX_SEEK_SET);
     pText = pTextOrig;
 
@@ -135,7 +135,7 @@ void WPXSvStreamTest::testRead()
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
     CPPUNIT_ASSERT(pInput->atEOS());
 
-    // trying to read too much
+    
     pInput->seek(0, WPX_SEEK_SET);
     pText = pTextOrig;
 
@@ -144,7 +144,7 @@ void WPXSvStreamTest::testRead()
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
     CPPUNIT_ASSERT(pInput->atEOS());
 
-    // trying to read nothing
+    
     pInput->seek(0, WPX_SEEK_SET);
     pText = pTextOrig;
 
@@ -160,11 +160,11 @@ void WPXSvStreamTest::testSeekSet()
     const shared_ptr<WPXInputStream> pInput(lcl_createStream());
     const long nLen = sizeof aText;
 
-    // check initial state
+    
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->atEOS());
 
-    // valid seeks
+    
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, WPX_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->atEOS());
@@ -177,14 +177,14 @@ void WPXSvStreamTest::testSeekSet()
     CPPUNIT_ASSERT(nLen == pInput->tell());
     CPPUNIT_ASSERT(pInput->atEOS());
 
-    // go back to the beginning
+    
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, WPX_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
-    // invalid seeks
+    
     CPPUNIT_ASSERT(0 != pInput->seek(-1, WPX_SEEK_SET));
-    // Okay, this is not defined. But it is what the WPXSvInputStream
-    // does ATM and it is reasonable.
+    
+    
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->atEOS());
 
@@ -198,11 +198,11 @@ void WPXSvStreamTest::testSeekCur()
     const shared_ptr<WPXInputStream> pInput(lcl_createStream());
     const long nLen = sizeof aText;
 
-    // check initial state
+    
     CPPUNIT_ASSERT(!pInput->atEOS());
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
-    // valid seeks
+    
 
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, WPX_SEEK_CUR));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
@@ -216,11 +216,11 @@ void WPXSvStreamTest::testSeekCur()
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->atEOS());
 
-    // go back to the beginning
+    
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, WPX_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
-    // invalid seeks
+    
     CPPUNIT_ASSERT(0 != pInput->seek(-1, WPX_SEEK_CUR));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->atEOS());
@@ -235,11 +235,11 @@ void WPXSvStreamTest::testSeekEnd()
     const shared_ptr<WPXInputStream> pInput(lcl_createStream());
     const long nLen = sizeof aText;
 
-    // check initial state
+    
     CPPUNIT_ASSERT(!pInput->atEOS());
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
-    // valid seeks
+    
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, WPX_SEEK_END));
     CPPUNIT_ASSERT(nLen == pInput->tell());
     CPPUNIT_ASSERT(pInput->atEOS());
@@ -252,11 +252,11 @@ void WPXSvStreamTest::testSeekEnd()
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->atEOS());
 
-    // go back to the beginning
+    
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, WPX_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
-    // invalid seeks
+    
     CPPUNIT_ASSERT(0 != pInput->seek(1, WPX_SEEK_END));
     CPPUNIT_ASSERT(nLen == pInput->tell());
     CPPUNIT_ASSERT(pInput->atEOS());
@@ -268,7 +268,7 @@ void WPXSvStreamTest::testSeekEnd()
 
 void WPXSvStreamTest::testStructured()
 {
-    // OLE2
+    
     {
         const shared_ptr<WPXInputStream> pInput(lcl_createStreamForURL(getURLFromSrc(aOLEFile)));
         assert(bool(pInput));
@@ -280,7 +280,7 @@ void WPXSvStreamTest::testStructured()
         CPPUNIT_ASSERT(!pSubStream);
     }
 
-    // Zip
+    
     {
         const shared_ptr<WPXInputStream> pInput(lcl_createStreamForURL(getURLFromSrc(aZipFile)));
         assert(bool(pInput));
@@ -292,7 +292,7 @@ void WPXSvStreamTest::testStructured()
         CPPUNIT_ASSERT(!pSubStream);
     }
 
-    // not structured
+    
     {
         const shared_ptr<WPXInputStream> pInput(lcl_createStream());
 

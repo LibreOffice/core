@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dsselect.hxx"
@@ -62,7 +62,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
     get(m_pManageDatasources, "organize");
     m_pManageDatasources->Show();
 
-    // allow ODBC datasource managenment
+    
     m_pManageDatasources->Show();
     m_pManageDatasources->Enable();
     m_pManageDatasources->SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
@@ -99,7 +99,7 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
 
     if ( !m_pODBCManagement->manageDataSources_async() )
     {
-        // TODO: error message
+        
         m_pDatasource->GrabFocus();
         m_pManageDatasources->Disable();
         return 1L;
@@ -136,7 +136,7 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
     if (m_pDatasource->GetEntryCount())
          sSelected = m_pDatasource->GetSelectEntry();
     m_pDatasource->Clear();
-    // fill the list
+    
     for (   StringBag::const_iterator aDS = _rDatasources.begin();
             aDS != _rDatasources.end();
             ++aDS
@@ -149,11 +149,11 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
     {
         if (!sSelected.isEmpty())
             m_pDatasource->SelectEntry(sSelected);
-        else        // select the first entry
+        else        
             m_pDatasource->SelectEntryPos(0);
     }
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

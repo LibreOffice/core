@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/bindablecontrolhelper.hxx>
@@ -31,10 +31,10 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
 using namespace ::com::sun::star;
 
@@ -51,7 +51,7 @@ bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XM
     }
     catch( uno::Exception& /*e*/ )
     {
-        // do nothing
+        
     }
     if ( xReferrer.is() )
     {
@@ -69,7 +69,7 @@ bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XM
 void
 BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab )
 {
-// XBindable etc.
+
     uno::Reference< lang::XMultiServiceFactory > xFac;
     if ( xModel.is() )
         xFac.set( xModel, uno::UNO_QUERY );
@@ -77,16 +77,16 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
     if (  xFac.is() && rsCtrlSource.getLength() && xBindable.is() )
     {
 
-         // OOo address structures
-         // RefCell - convert from XL
-         // pretend we converted the imported string address into the
-         // appropriate address structure
+         
+         
+         
+         
          uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellAddressConversion"), uno::UNO_QUERY );
          table::CellAddress aAddress;
          if ( xConvertor.is() )
          {
-             // we need this service to properly convert XL notation also
-             // Should be easy to extend
+             
+             
              xConvertor->setPropertyValue( "ReferenceSheet", uno::makeAny( nRefTab ) );
              xConvertor->setPropertyValue( "XLA1Representation", uno::makeAny( rsCtrlSource ) );
              xConvertor->getPropertyValue( "Address" ) >>= aAddress;
@@ -102,24 +102,24 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
          uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), uno::UNO_QUERY );
          xBindable->setValueBinding( xBinding );
     }
-    else if ( xBindable.is() ) // reset it
+    else if ( xBindable.is() ) 
         xBindable->setValueBinding( uno::Reference< form::binding::XValueBinding >() );
     uno::Reference< form::binding::XListEntrySink > xListEntrySink( rObj, uno::UNO_QUERY );
     if (  xFac.is() && rsRowSource.getLength() && xListEntrySink.is() )
     {
 
-         // OOo address structures
-         // RefCell - convert from XL
-         // pretend we converted the imported string address into the
-         // appropriate address structure
+         
+         
+         
+         
          uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellRangeAddressConversion"), uno::UNO_QUERY );
          table::CellRangeAddress aAddress;
          if ( xConvertor.is() )
          {
              if ( !lcl_isNamedRange( rsRowSource, xModel, aAddress ) )
              {
-                 // we need this service to properly convert XL notation also
-                 // Should be easy to extend
+                 
+                 
                  xConvertor->setPropertyValue( "ReferenceSheet", uno::makeAny( nRefTab ) );
                  xConvertor->setPropertyValue( "XLA1Representation", uno::makeAny( rsRowSource ) );
                  xConvertor->getPropertyValue( "Address" ) >>= aAddress;
@@ -136,13 +136,13 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
          uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), uno::UNO_QUERY );
          xListEntrySink->setListEntrySource( xSource );
     }
-    else if (  xListEntrySink.is() ) // reset
+    else if (  xListEntrySink.is() ) 
          xListEntrySink->setListEntrySource( uno::Reference< form::binding::XListEntrySource >()  );
 
 }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -81,26 +81,26 @@ public:
     return (m_pCount != 0) ? *m_pCount == count : false;
   }
 
-  friend void swap<> (SharedCount & lhs, SharedCount & rhs); // nothrow
+  friend void swap<> (SharedCount & lhs, SharedCount & rhs); 
 
-  SharedCount (SharedCount const & rhs); // nothrow
-  SharedCount & operator= (SharedCount const & rhs); // nothrow
+  SharedCount (SharedCount const & rhs); 
+  SharedCount & operator= (SharedCount const & rhs); 
 };
 
 template<>
-inline void swap (SharedCount & lhs, SharedCount & rhs) // nothrow
+inline void swap (SharedCount & lhs, SharedCount & rhs) 
 {
     swap<long*>(lhs.m_pCount, rhs.m_pCount);
 }
 
-SharedCount::SharedCount (SharedCount const & rhs) // nothrow
+SharedCount::SharedCount (SharedCount const & rhs) 
     : m_pCount (rhs.m_pCount)
 {
     if (m_pCount != 0) ++(*m_pCount);
 }
 
 SharedCount &
-SharedCount::operator= (SharedCount const & rhs) // nothrow
+SharedCount::operator= (SharedCount const & rhs) 
 {
     SharedCount tmp(rhs);
     swap<SharedCount>(tmp, *this);
@@ -119,13 +119,13 @@ SharedCount::Allocator::Allocator()
     m_cache = rtl_cache_create (
         "store_shared_count_cache",
         sizeof(long),
-        0, // objalign
-        0, // constructor
-        0, // destructor
-        0, // reclaim
-        0, // userarg
-        0, // default source
-        0  // flags
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0  
         );
 }
 
@@ -225,7 +225,7 @@ public:
 
     ~PageAllocator()
     {
-        // NYI
+        
         if (m_refcount == 1)
         {
         }
@@ -279,7 +279,7 @@ public:
     {
         if ((m_refcount == 1) && (m_pagedata != 0) && m_allocator.is())
         {
-            // free pagedata.
+            
             m_allocator->deallocate (m_pagedata);
         }
     }
@@ -290,28 +290,28 @@ public:
     PageData * operator->() { return m_pagedata; }
     PageData const * operator->() const { return m_pagedata; }
 
-    friend void swap<> (PageHolder & lhs, PageHolder & rhs); // nothrow
+    friend void swap<> (PageHolder & lhs, PageHolder & rhs); 
 
-    PageHolder (PageHolder const & rhs); // nothrow
-    PageHolder & operator= (PageHolder const & rhs); // nothrow
+    PageHolder (PageHolder const & rhs); 
+    PageHolder & operator= (PageHolder const & rhs); 
 };
 
 template<>
-inline void swap (PageHolder & lhs, PageHolder & rhs) // nothrow
+inline void swap (PageHolder & lhs, PageHolder & rhs) 
 {
     swap<SharedCount>(lhs.m_refcount, rhs.m_refcount);
     swap<PageData*>(lhs.m_pagedata, rhs.m_pagedata);
     swap<PageHolder::allocator_type>(lhs.m_allocator, rhs.m_allocator);
 }
 
-PageHolder::PageHolder (PageHolder const & rhs) // nothrow
+PageHolder::PageHolder (PageHolder const & rhs) 
     : m_refcount (rhs.m_refcount),
       m_pagedata (rhs.m_pagedata),
       m_allocator(rhs.m_allocator)
 {}
 
 PageHolder &
-PageHolder::operator= (PageHolder const & rhs) // nothrow
+PageHolder::operator= (PageHolder const & rhs) 
 {
     PageHolder tmp (rhs);
     swap<PageHolder>(tmp, *this);
@@ -506,22 +506,22 @@ public:
 
     storeError allocate (PageHolder & rxPage, ...)
     {
-        // NYI: PageObject.save(nAddr, *this);
-        (void)rxPage; // NYI
-        return store_E_Unknown; // NYI
+        
+        (void)rxPage; 
+        return store_E_Unknown; 
     }
 
     storeError loadAt (PageHolder & rPage, sal_uInt32 nOffset)
     {
-        (void)rPage; // NYI
-        (void)nOffset; // NYI
-        return store_E_Unknown; // NYI
+        (void)rPage; 
+        (void)nOffset; 
+        return store_E_Unknown; 
     }
     storeError saveAt (PageHolder const & rPage, sal_uInt32 nOffset)
     {
-        (void)rPage; // NYI
-        (void)nOffset; // NYI
-        return store_E_Unknown; // NYI
+        (void)rPage; 
+        (void)nOffset; 
+        return store_E_Unknown; 
     }
 
     template< class T >
@@ -535,14 +535,14 @@ public:
 
     storeError lookupAt (PageHolder & rPage, sal_uInt32 nOffset)
     {
-        (void)rPage; // NYI
-        (void)nOffset; // NYI
+        (void)rPage; 
+        (void)nOffset; 
         return store_E_NotExists;
     }
     storeError replaceAt (PageHolder const & rPage, sal_uInt32 nOffset)
     {
-        (void)rPage; // NYI
-        (void)nOffset; // NYI
+        (void)rPage; 
+        (void)nOffset; 
         return store_E_None;
     }
 };
@@ -561,7 +561,7 @@ struct TestData : public PageData
     void guard()
     {
         base::guard();
-        // self::m_aGuard = ...;
+        
     }
     storeError verify() const
     {
@@ -616,7 +616,7 @@ public:
 
     storeError loadAt (sal_uInt32 nOffset, TestBIOS & rBIOS)
     {
-        storeError result = rBIOS.lookupAt (m_xPage, nOffset); // cache lookup
+        storeError result = rBIOS.lookupAt (m_xPage, nOffset); 
         if (result == store_E_NotExists)
         {
             result = rBIOS.loadAt (m_xPage, nOffset);
@@ -627,7 +627,7 @@ public:
             if (result != store_E_None)
                 return result;
 
-            result = rBIOS.replaceAt (m_xPage, nOffset); // cache insert
+            result = rBIOS.replaceAt (m_xPage, nOffset); 
         }
         return result;
     }
@@ -635,7 +635,7 @@ public:
     {
         if (!m_xPage.get())
             return store_E_InvalidAccess;
-        m_xPage->m_aDescr.m_nAddr = store::htonl(nOffset); // m_xPage->location (nOffset);
+        m_xPage->m_aDescr.m_nAddr = store::htonl(nOffset); 
 
         storeError result = PageHolderObject< TestData >::guard (m_xPage);
         if (result != store_E_None)
@@ -645,7 +645,7 @@ public:
         if (result != store_E_None)
             return result;
 
-        return rBIOS.replaceAt (m_xPage, nOffset); // cache update
+        return rBIOS.replaceAt (m_xPage, nOffset); 
     }
 };
 
@@ -716,7 +716,7 @@ public:
     }
     storeError writePageAt (PageHolder const & rPage, sal_uInt32 nOffset)
     {
-        // [SECURITY:ValInput]
+        
         PageData const * pagedata = rPage.get();
         OSL_PRECOND(!(pagedata == 0), "invalid Page");
         if (pagedata == 0)
@@ -736,7 +736,7 @@ public:
 
     storeError peekAt (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes)
     {
-        // [SECURITY:ValInput]
+        
         sal_uInt8 * dst_lo = static_cast<sal_uInt8*>(pBuffer);
         if (!(dst_lo != 0))
             return store_E_InvalidParameter;
@@ -754,7 +754,7 @@ public:
 
     storeError pokeAt (sal_uInt32 nOffset, void const * pBuffer, sal_uInt32 nBytes)
     {
-        // [SECURITY:ValInput]
+        
         sal_uInt8 const * src_lo = static_cast<sal_uInt8 const*>(pBuffer);
         if (!(src_lo != 0))
             return store_E_InvalidParameter;
@@ -847,19 +847,19 @@ struct FileHandle
 
   oslFileError initialize (rtl_uString * pFilename, sal_uInt32 nFlags)
   {
-    // Verify arguments.
+    
     if (!pFilename || !nFlags)
       return osl_File_E_INVAL;
 
-    // Convert into FileUrl.
+    
     OUString aFileUrl;
     if (osl_getFileURLFromSystemPath (pFilename, &(aFileUrl.pData)) != osl_File_E_None)
     {
-      // Not system path. Maybe a file url, already.
+      
       rtl_uString_assign (&(aFileUrl.pData), pFilename);
     }
 
-    // Acquire handle.
+    
     return osl_openFile (aFileUrl.pData, &m_handle, nFlags);
   }
 
@@ -869,7 +869,7 @@ struct FileHandle
     {
       if (rFile.m_handle != 0)
       {
-    // Release handle.
+    
     (void) osl_closeFile (rFile.m_handle);
     rFile.m_handle = 0;
       }
@@ -892,14 +892,14 @@ struct FileMapping
 
   oslFileError initialize (oslFileHandle hFile)
   {
-    // Determine mapping size.
+    
     oslFileError result = osl_getFileSize (hFile, &m_uSize);
     if (result != osl_File_E_None)
       return result;
     if (m_uSize > SAL_MAX_UINT32)
       return osl_File_E_OVERFLOW;
 
-    // Acquire mapping.
+    
     return osl_mapFile (hFile, &m_pAddr, m_uSize, 0, 0);
   }
 
@@ -909,7 +909,7 @@ struct FileMapping
     {
       if ((rMapping.m_pAddr != 0) && (rMapping.m_uSize != 0))
       {
-    // Release mapping.
+    
     (void) osl_unmapFile (rMapping.m_pAddr, rMapping.m_uSize);
     rMapping.m_pAddr = 0, rMapping.m_uSize = 0;
       }
@@ -955,9 +955,9 @@ private:
 
 storeError FilePageAccess::initialize (storeAccessMode eAccessMode, sal_uInt16 nPageSize)
 {
-  (void) eAccessMode;     // UNUSED
-  (void) nPageSize;       // UNUSED
-  return store_E_Unknown; // NYI
+  (void) eAccessMode;     
+  (void) nPageSize;       
+  return store_E_Unknown; 
 }
 FilePageAccess::~FilePageAccess()
 {
@@ -1058,10 +1058,10 @@ sal_uInt32 FilePageAccess::MODE_TO_NATIVE(storeAccessMode eAccessMode)
   case store_AccessCreate:
   case store_AccessReadCreate:
     nMode |= osl_File_OpenFlag_Create;
-    // fall through
+    
   case store_AccessReadWrite:
     nMode |= osl_File_OpenFlag_Write;
-    // fall through
+    
   case store_AccessReadOnly:
     nMode |= osl_File_OpenFlag_Read;
     break;
@@ -1125,15 +1125,15 @@ private:
 
 storeError MemoryPageAccess::initialize (storeAccessMode eAccessMode, sal_uInt16 nPageSize)
 {
-  (void) eAccessMode;     // UNUSED
-  (void) nPageSize;       // UNUSED
-  return store_E_Unknown; // NYI
+  (void) eAccessMode;     
+  (void) nPageSize;       
+  return store_E_Unknown; 
 }
 MemoryPageAccess::~MemoryPageAccess()
 {
   if (m_destructor != 0)
   {
-    // release resource.
+    
     (*m_destructor)(m_pData, m_nSize);
   }
 }
@@ -1154,7 +1154,7 @@ storeError MemoryPageAccess::writePageAt_Impl (PageHolder const & rPage, sal_uIn
 }
 storeError MemoryPageAccess::peekAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes)
 {
-  // [SECURITY:ValInput]
+  
   sal_uInt8 * dst_lo = static_cast<sal_uInt8*>(pBuffer);
   if (!(dst_lo != 0))
     return store_E_InvalidParameter;
@@ -1163,7 +1163,7 @@ storeError MemoryPageAccess::peekAt_Impl (sal_uInt32 nOffset, void * pBuffer, sa
   if (!(dst_lo <= dst_hi))
     return store_E_InvalidParameter;
 
-  // ...
+  
   sal_uInt8 const * src_lo = m_pData + nOffset;
   if (!(src_lo <= m_pData + m_nSize))
     return store_E_CantSeek;
@@ -1172,13 +1172,13 @@ storeError MemoryPageAccess::peekAt_Impl (sal_uInt32 nOffset, void * pBuffer, sa
   if (!(src_hi <= m_pData + m_nSize))
     return store_E_CantRead;
 
-  // copy.
+  
   memcpy (pBuffer, src_lo, (src_hi - src_lo));
   return store_E_None;
 }
 storeError MemoryPageAccess::pokeAt_Impl (sal_uInt32 nOffset, void const * pBuffer, sal_uInt32 nBytes)
 {
-  // [SECURITY:ValInput]
+  
   sal_uInt8 const * src_lo = static_cast<sal_uInt8 const*>(pBuffer);
   if (!(src_lo != 0))
     return store_E_InvalidParameter;
@@ -1191,10 +1191,10 @@ storeError MemoryPageAccess::pokeAt_Impl (sal_uInt32 nOffset, void const * pBuff
   if (uSize > SAL_MAX_UINT32)
     return store_E_CantSeek;
 
-  // ...
+  
   if (uSize > m_nSize)
   {
-    // increase size.
+    
     storeError eErrCode = setSize (sal::static_int_cast<sal_uInt32>(uSize));
     if (eErrCode != store_E_None)
       return eErrCode;
@@ -1208,7 +1208,7 @@ storeError MemoryPageAccess::pokeAt_Impl (sal_uInt32 nOffset, void const * pBuff
   if (!(dst_hi <= m_pData + m_nSize))
     return store_E_CantWrite;
 
-  // copy.
+  
   memcpy (dst_lo, src_lo, (src_hi - src_lo));
   return store_E_None;
 }
@@ -1328,7 +1328,7 @@ int SAL_CALL main (int argc, char ** argv)
         rtl_uString_newFromAscii (&pFilename, argv[1]);
         storeAccessMode eAccessMode = store_AccessReadOnly;
 
-        // Acquire file handle.
+        
         ResourceHolder<FileHandle> h1;
         oslFileError result = h1.get().initialize (pFilename, FilePageAccess::MODE_TO_NATIVE(eAccessMode));
         if (result == osl_File_E_None)
@@ -1342,7 +1342,7 @@ int SAL_CALL main (int argc, char ** argv)
                 result = m1.get().initialize (h1.get());
 
                 const sal_uInt32 nSize = sal::static_int_cast<sal_uInt32>(m1.get().m_uSize);
-                (void) nSize; // UNUSED
+                (void) nSize; 
 
                 ResourceHolder<FileMapping> m2 (m1);
                 m1 = m2;

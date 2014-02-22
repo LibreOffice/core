@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "ParaLineSpacingControl.hxx"
 #include "ParaPropertyPanel.hrc"
@@ -87,7 +87,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(Window* pParent, svx::sidebar::Pa
     initial();
     FreeResource();
     mpBindings = mrParaPropertyPanel.GetBindings();
-//  m_eLNSpaceUnit = mrParaPropertyPanel.maLNSpaceControl.GetCoreMetric();
+
     m_eLNSpaceUnit = SFX_MAPUNIT_100TH_MM;
 }
 ParaLineSpacingControl::~ParaLineSpacingControl()
@@ -162,8 +162,8 @@ void ParaLineSpacingControl::PopupModeEndCallback()
 {
     if( mbUseLineSPCustom )
     {
-        //maLinePos = mpLineSPPage->maPos;
-        //maLineValue = mpLineSPPage->maValue;
+        
+        
 
         SvtViewOptions aWinOpt( E_WINDOW, LSP_POS_GLOBAL_VALUE );
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
@@ -257,15 +257,15 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 
     SetFieldUnit( aLineDistAtMetricBox, currMetricUnit );
 
-//  mpLineSPPage->SetAllNoSel();
+
     aLineDist.Enable();
     pActLineDistFld->Enable();
     pActLineDistFld->SetText( "" );
-    //bool bValueSetFocus = sal_False;        //wj
+    
 
     if( eState >= SFX_ITEM_AVAILABLE )
     {
-    //  SfxMapUnit eUnit = maLNSpaceControl.GetCoreMetric();
+    
         SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM;
         m_eLNSpaceUnit = eUnit;
 
@@ -286,7 +286,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                         if ( LINESPACE_1 == currSPItem->GetPropLineSpace() )
                         {
                             maLineSpacing.SelectItem(1);
-                            //bValueSetFocus = sal_True;  //wj
+                            
                         }
                     }
                     break;
@@ -300,7 +300,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                             pActLineDistFld->SetText( "" );
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(1);
-                            //bValueSetFocus = sal_True;  //wj
+                            
                             break;
                         }
                         if ( LINESPACE_15 == currSPItem->GetPropLineSpace() )
@@ -311,7 +311,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(3);
-                            //bValueSetFocus = sal_True;  //wj
+                            
                             break;
                         }
                         if ( LINESPACE_2 == currSPItem->GetPropLineSpace() )
@@ -322,7 +322,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(4);
-                            //bValueSetFocus = sal_True;  //wj
+                            
                             break;
                         }
 
@@ -350,7 +350,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                         {
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(2);
-                            //bValueSetFocus = sal_True;  //wj
+                            
                         }
                         else
                         {
@@ -710,10 +710,10 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
                 {
                     if(!(mbLineSPDisable))
                     {
-                        //maPos = mrParaPropertyPanel.maLinePos;
+                        
                         aLineDist.SelectEntryPos( maPos ) ;
                         aLineDist.SaveValue();
-                        //maValue = mrParaPropertyPanel.maLineValue;
+                        
 
                         SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
                         switch(maPos)
@@ -777,5 +777,5 @@ void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEnt
     maLineSpacing.SetNoSelection();
 }
 
-}} // end of namespace sidebar
+}} 
 

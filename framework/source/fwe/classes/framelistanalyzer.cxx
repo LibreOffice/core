@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "framework/framelistanalyzer.hxx"
@@ -71,18 +71,18 @@ FrameListAnalyzer::~FrameListAnalyzer()
 
 void FrameListAnalyzer::impl_analyze()
 {
-    // reset all members to get a consistent state
+    
     m_bReferenceIsHidden  = sal_False;
     m_bReferenceIsHelp    = sal_False;
     m_bReferenceIsBacking = sal_False;
     m_xHelp               = css::uno::Reference< css::frame::XFrame >();
     m_xBackingComponent   = css::uno::Reference< css::frame::XFrame >();
 
-    // try to get the task container by using the given supplier
+    
     css::uno::Reference< css::container::XIndexAccess > xFrameContainer(m_xSupplier->getFrames(), css::uno::UNO_QUERY);
 
-    // All return list get an initial size to include all possible frames.
-    // They will be packed at the end of this method ... using the actual step positions then.
+    
+    
     sal_Int32 nVisibleStep = 0;
     sal_Int32 nHiddenStep  = 0;
     sal_Int32 nModelStep   = 0;
@@ -92,10 +92,10 @@ void FrameListAnalyzer::impl_analyze()
     m_lOtherHiddenFrames.realloc(nCount);
     m_lModelFrames.realloc(nCount);
 
-    // ask for the model of the given reference frame.
-    // It must be compared with the model of every frame of the container
-    // to sort it into the list of frames with the same model.
-    // Supress this step, if right detect mode isn't set.
+    
+    
+    
+    
     css::uno::Reference< css::frame::XModel > xReferenceModel;
     if ((m_eDetectMode & E_MODEL) == E_MODEL )
     {
@@ -106,8 +106,8 @@ void FrameListAnalyzer::impl_analyze()
             xReferenceModel = xReferenceController->getModel();
     }
 
-    // check, if the reference frame is in hidden mode.
-    // But look, if this analyze step is really needed.
+    
+    
     css::uno::Reference< css::beans::XPropertySet > xSet(m_xReferenceFrame, css::uno::UNO_QUERY);
     if (
         ((m_eDetectMode & E_HIDDEN) == E_HIDDEN) &&
@@ -117,8 +117,8 @@ void FrameListAnalyzer::impl_analyze()
         xSet->getPropertyValue(FRAME_PROPNAME_ISHIDDEN) >>= m_bReferenceIsHidden;
     }
 
-    // check, if the reference frame includes the backing component.
-    // But look, if this analyze step is really needed.
+    
+    
     if (((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT) && m_xReferenceFrame.is() )
     {
         try
@@ -137,8 +137,8 @@ void FrameListAnalyzer::impl_analyze()
         }
     }
 
-    // check, if the reference frame includes the help module.
-    // But look, if this analyze step is really needed.
+    
+    
     if (
         ((m_eDetectMode & E_HELP)     == E_HELP                ) &&
         (m_xReferenceFrame.is()                                ) &&
@@ -150,12 +150,12 @@ void FrameListAnalyzer::impl_analyze()
 
     try
     {
-        // Step over all frames of the desktop frame container and analyze it.
+        
         for (sal_Int32 i=0; i<nCount; ++i)
         {
-            // Ignore invalid items ... and of course the reference frame.
-            // It will be a member of the given frame list too - but it was already
-            // analyzed before!
+            
+            
+            
             css::uno::Reference< css::frame::XFrame > xFrame;
             if (
                 !(xFrameContainer->getByIndex(i) >>= xFrame) ||
@@ -175,9 +175,9 @@ void FrameListAnalyzer::impl_analyze()
                 SAL_INFO("fwk", "FrameListAnalyzer::impl_analyze(): ZOMBIE!");
             }
 
-            // -------------------------------------------------
-            // a) Is it the special help task?
-            //    Return it separated from any return list.
+            
+            
+            
             if (
                 ((m_eDetectMode & E_HELP) == E_HELP      ) &&
                 (xFrame->getName()==SPECIALTARGET_HELPTASK)
@@ -187,11 +187,11 @@ void FrameListAnalyzer::impl_analyze()
                 continue;
             }
 
-            // -------------------------------------------------
-            // b) Or is includes this task the special backing component?
-            //    Return it separated from any return list.
-            //    But check if the reference task itself is the backing frame.
-            //    Our user mst know it to decide right.
+            
+            
+            
+            
+            
             if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)
             {
                 try
@@ -210,9 +210,9 @@ void FrameListAnalyzer::impl_analyze()
                 }
             }
 
-            // -------------------------------------------------
-            // c) Or is it the a task, which uses the specified model?
-            //    Add it to the list of "model frames".
+            
+            
+            
             if ((m_eDetectMode & E_MODEL) == E_MODEL)
             {
                 css::uno::Reference< css::frame::XController > xController = xFrame->getController();
@@ -227,11 +227,11 @@ void FrameListAnalyzer::impl_analyze()
                 }
             }
 
-            // -------------------------------------------------
-            // d) Or is it the a task, which use another or no model at all?
-            //    Add it to the list of "other frames". But look for it's
-            //    visible state ... if it's allowed to do so.
-            // -------------------------------------------------
+            
+            
+            
+            
+            
             sal_Bool bHidden = sal_False;
             if ((m_eDetectMode & E_HIDDEN) == E_HIDDEN )
             {
@@ -256,19 +256,19 @@ void FrameListAnalyzer::impl_analyze()
     }
     catch (const css::lang::IndexOutOfBoundsException&)
     {
-        // stop copying if index seems to be wrong.
-        // This interface can't really guarantee its count for multithreaded
-        // environments. So it can occur!
+        
+        
+        
     }
 
-    // Pack both lists by using the actual step positions.
-    // All empty or ignorable items should exist at the end of these lists
-    // behind the position pointers. So they will be removed by a reallocation.
+    
+    
+    
     m_lOtherVisibleFrames.realloc(nVisibleStep);
     m_lOtherHiddenFrames.realloc(nHiddenStep);
     m_lModelFrames.realloc(nModelStep);
 }
 
-} //  namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AllMasterPagesSelector.hxx"
@@ -67,7 +67,7 @@ public:
     }
 };
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -184,11 +184,11 @@ void AllMasterPagesSelector::AddItem (MasterPageContainer::Token aToken)
     {
         case MasterPageContainer::DEFAULT:
         case MasterPageContainer::TEMPLATE:
-            // Templates are added only when coming from the
-            // MasterPageContainerFiller so that they have an id which
-            // defines their place in the list.  Templates (pre) loaded from
-            // RecentlyUsedMasterPages are ignored (they will be loaded
-            // later by the MasterPageContainerFiller.)
+            
+            
+            
+            
+            
             if (mpContainer->GetTemplateIndexForToken(aToken) >= 0)
                 mpSortedMasterPages->insert(mpContainer->GetDescriptorForToken(aToken));
             break;
@@ -214,7 +214,7 @@ void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
 
 void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
 {
-    //    MasterPagesSelector::GetState(rItemSet);
+    
 
     if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_AVAILABLE)
         rItemSet.DisableItem(SID_TP_EDIT_MASTER);
@@ -223,6 +223,6 @@ void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
 
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -242,7 +242,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
 {
     Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
 
-    // get transformed BoundVolume of the new object
+    
     basegfx::B3DRange aBoundVol;
     basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
     aObjVol.transform(p3DObj->GetTransform());
@@ -328,7 +328,7 @@ sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
-            // extract LineStyle
+            
             aAttr.Put(XLineStyleItem (XLINE_NONE));
 
             pObj->SetMergedItemSet(aAttr);
@@ -391,8 +391,8 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
 
     E3dCompoundObject* p3DObj = ImpCreateBasic3DShape();
 
-    // E3dView::SetCurrent3DObj part
-    // get transformed BoundVolume of the object
+    
+    
     basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
     aObjVol.transform(p3DObj->GetTransform());
     basegfx::B3DRange aVolume(aObjVol);
@@ -401,7 +401,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     Rectangle a3DRect(0, 0, (long)fW, (long)fH);
     E3dScene* pScene = new E3dPolyScene(mpView->Get3DDefaultAttributes());
 
-    // copied code from E3dView::InitScene
+    
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
     Camera3D aCam(pScene->GetCamera());
     aCam.SetAutoAdjustProjection(false);
@@ -425,10 +425,10 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     aAttr.Put(XLineStyleItem (XLINE_NONE));
     p3DObj->SetMergedItemSet(aAttr);
 
-    // make object interactive at once
+    
     pScene->SetRectsDirty();
 
-    // Take care of restrictions for the rectangle
+    
     Rectangle aRect(rRectangle);
 
     switch(nID)
@@ -437,7 +437,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
         case SID_3D_SPHERE:
         case SID_3D_TORUS:
         {
-            // force quadratic
+            
             ImpForceQuadratic(aRect);
             break;
         }
@@ -445,7 +445,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
         case SID_3D_SHELL:
         case SID_3D_HALF_SPHERE:
         {
-            // force horizontal layout
+            
             break;
         }
 
@@ -453,17 +453,17 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
-            // force vertical layout
+            
             break;
         }
     }
 
-    // use changed rectangle, not original one
+    
     pScene->SetLogicRect(aRect);
 
     return pScene;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

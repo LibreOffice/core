@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,13 +31,13 @@
 
 bool SdrTextObj::HasTextEdit() const
 {
-    // linked text objects may be changed (no automatic reload)
+    
     return true;
 }
 
 sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=NULL) return sal_False; // Textedit might already run in another View!
+    if (pEdtOutl!=NULL) return sal_False; 
     pEdtOutl=&rOutl;
 
     mbInEditMode = sal_True;
@@ -69,21 +69,21 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
 
-    // if necessary, set frame attributes for the first (new) paragraph of the
-    // outliner
+    
+    
     if( !HasTextImpl( &rOutl ) )
     {
-        // Outliner has no text so we must set some
-        // empty text so the outliner initialise itself
+        
+        
         rOutl.SetText( "", rOutl.GetParagraph( 0 ) );
 
         if(GetStyleSheet())
             rOutl.SetStyleSheet( 0, GetStyleSheet());
 
-        // When setting the "hard" attributes for first paragraph, the Parent
-        // pOutlAttr (i. e. the template) has to be removed temporarily. Else,
-        // at SetParaAttribs(), all attributes contained in the parent become
-        // attributed hard to the paragraph.
+        
+        
+        
+        
         const SfxItemSet& rSet = GetObjectItemSet();
         SfxItemSet aFilteredSet(*rSet.GetPool(), EE_ITEMS_START, EE_ITEMS_END);
         aFilteredSet.Put(rSet);
@@ -107,7 +107,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     {
         if(aGeo.nDrehWink || IsFontwork())
         {
-            // only repaint here, no real objectchange
+            
             BroadcastObjectChange();
         }
     }
@@ -133,7 +133,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }
     Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
+    aAnkSiz.Width()--; aAnkSiz.Height()--; 
     Size aMaxSiz(1000000,1000000);
     if (pModel!=NULL) {
         Size aTmpSiz(pModel->GetMaxObjSize());
@@ -141,7 +141,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
     }
 
-    // Done earlier since used in else tree below
+    
     SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());
     SdrTextVertAdjust eVAdj(GetTextVerticalAdjust());
 
@@ -176,12 +176,12 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
             if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {
-                // ticker text uses an unlimited paper size
+                
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
             }
 
-            // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
+            
             if(IsVerticalWriting())
             {
                 nMaxWdt = 1000000;
@@ -203,8 +203,8 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
     else
     {
-        // aPaperMin needs to be set to object's size if full width is activated
-        // for hor or ver writing respectively
+        
+        
         if((SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
             || (SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting()))
         {
@@ -228,7 +228,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         else { pViewMin->Top()+=nYFree/2; pViewMin->Bottom()=pViewMin->Top()+aPaperMin.Height(); }
     }
 
-    // PaperSize should grow automatically in most cases
+    
     if(IsVerticalWriting())
         aPaperMin.Width() = 0;
     else
@@ -238,7 +238,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aPaperMin.Width()=0;
     }
 
-    // For complete vertical adjustment support, set paper min height to 0, here.
+    
     if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
     {
         aPaperMin.Height() = 0;
@@ -255,15 +255,15 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     {
         OutlinerParaObject* pNewText = NULL;
 
-        // to make the gray field background vanish again
+        
         rOutl.UpdateFields();
 
         sal_Int32 nParaAnz = rOutl.GetParagraphCount();
         pNewText = rOutl.CreateParaObject( 0, nParaAnz );
 
-        // need to end edit mode early since SetOutlinerParaObject already
-        // uses GetCurrentBoundRect() which needs to take the text into account
-        // to work correct
+        
+        
+        
         mbInEditMode = sal_False;
         SetOutlinerParaObject(pNewText);
     }

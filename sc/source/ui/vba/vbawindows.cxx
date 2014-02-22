@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbawindows.hxx"
 
@@ -43,14 +43,14 @@ static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno:
 uno::Any ComponentToWindow( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
-    // !! TODO !! iterate over all controllers
+    
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext, aApplication ), xContext, xModel, xController ) );
     return uno::makeAny( xWin );
 }
 
 typedef std::vector < uno::Reference< sheet::XSpreadsheetDocument > > Components;
-// #TODO more or less the same as class in workwindows ( code sharing needed )
+
 class WindowComponentEnumImpl : public EnumerationHelper_BASE
 {
 protected:
@@ -76,7 +76,7 @@ public:
         }
         m_it = m_components.begin();
     }
-    // XEnumeration
+    
     virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
     {
         return m_it != m_components.end();
@@ -125,10 +125,10 @@ public:
             if ( xNext.is() )
             {
                 m_windows.push_back( xNext );
-                uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
-                // !! TODO !! iterate over all controllers
+                uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); 
+                
                 uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
-                uno::Reference< XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
+                uno::Reference< XHelperInterface > xTemp;  
                 ScVbaWindow window( xTemp, m_xContext, xModel, xController );
                 OUString sCaption;
                 window.getCaption() >>= sCaption;
@@ -138,12 +138,12 @@ public:
 
     }
 
-    //XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return new WindowComponentEnumImpl( m_xContext, m_windows );
     }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return m_windows.size();
@@ -153,10 +153,10 @@ public:
         if ( Index < 0
             || static_cast< Components::size_type >( Index ) >= m_windows.size() )
             throw lang::IndexOutOfBoundsException();
-        return makeAny( m_windows[ Index ] ); // returns xspreadsheetdoc
+        return makeAny( m_windows[ Index ] ); 
     }
 
-    //XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
         return cppu::UnoType<sheet::XSpreadsheetDocument>::get();
@@ -167,7 +167,7 @@ public:
         return ( !m_windows.empty() );
     }
 
-    //XNameAccess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
@@ -221,7 +221,7 @@ ScVbaWindows::getElementType() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWorkbook*/, const uno::Any& /*SyncHorizontal*/, const uno::Any& /*SyncVertical*/ ) throw (uno::RuntimeException)
 {
-    //#TODO #FIXME see what can be done for an implementation here
+    
 }
 
 

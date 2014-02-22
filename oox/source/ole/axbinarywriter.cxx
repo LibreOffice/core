@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "oox/ole/axbinarywriter.hxx"
 
@@ -13,15 +13,15 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 namespace {
 
 const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 AxAlignedOutputStream::AxAlignedOutputStream( BinaryOutputStream& rOutStrm ) :
     BinaryStreamBase( false ),
@@ -73,11 +73,11 @@ void AxAlignedOutputStream::writeMemory( const void* opMem, sal_Int32 nBytes, si
 
 void AxAlignedOutputStream::pad( sal_Int32 nBytes, size_t nAtomSize )
 {
-   //PRESUMABELY we need to pad with 0's here as appropriate
+   
    com::sun::star::uno::Sequence< sal_Int8 > aData( nBytes );
-   // ok we could be padding with rubbish here, but really that shouldn't matter
-   // set to 0(s), easier to not get fooled by 0's when looking at
-   // binary content......
+   
+   
+   
    memset( static_cast<void*>( aData.getArray() ), 0, nBytes );
    mpOutStrm->writeData( aData, nAtomSize );
    mnStrmPos = mpOutStrm->tell() - mnWrappedBeginPos;
@@ -88,7 +88,7 @@ void AxAlignedOutputStream::align( size_t nSize )
     pad( static_cast< sal_Int32 >( (nSize - (mnStrmPos % nSize)) % nSize ) );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -98,9 +98,9 @@ void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString& rValue, sal_uInt
     rOutStrm.writeCompressedUnicodeArray( rValue, bCompressed || bArrayString );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty()
 {
@@ -118,7 +118,7 @@ bool AxBinaryPropertyWriter::StringProperty::writeProperty( AxAlignedOutputStrea
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bool b64BitPropFlags ) :
     maOutStrm( rOutStrm ),
@@ -128,7 +128,7 @@ AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bo
 {
     sal_uInt16 nId( 0x0200 );
     maOutStrm << nId;
-    mnBlockSize = 0; // will be filled in the finalize method
+    mnBlockSize = 0; 
 
     maOutStrm << nId;
     mnPropFlagsStart = maOutStrm.tell();
@@ -142,7 +142,7 @@ AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bo
 
 void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue, bool bReverse )
 {
-    // orbValue == bReverse false then we want to set the bit, e.g. don't skip
+    
     startNextProperty( orbValue == bReverse );
 }
 
@@ -166,7 +166,7 @@ void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue, bool bCompr
 
 bool AxBinaryPropertyWriter::finalizeExport()
 {
-    // write large properties
+    
     maOutStrm.align( 4 );
     if( !maLargeProps.empty() )
     {
@@ -179,7 +179,7 @@ bool AxBinaryPropertyWriter::finalizeExport()
 
     mnBlockSize = maOutStrm.tell() - mnPropFlagsStart;
 
-    // write stream properties (no stream alignment between properties!)
+    
     if( !maStreamProps.empty() )
         for( ComplexPropVector::iterator aIt = maStreamProps.begin(), aEnd = maStreamProps.end(); ensureValid() && (aIt != aEnd); ++aIt )
            (*aIt)->writeProperty( maOutStrm );
@@ -206,15 +206,15 @@ bool AxBinaryPropertyWriter::ensureValid( bool bCondition )
 
 bool AxBinaryPropertyWriter::startNextProperty( bool bSkip )
 {
-    // if we are skipping then we clear the flag
+    
     setFlag( mnPropFlags, mnNextProp, !bSkip );
     mnNextProp <<= 1;
     return true;
 }
 
-// ============================================================================
 
-} // namespace exp
-} // namespace ole
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

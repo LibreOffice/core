@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// include PropertyMap.hxx with this define
-// to create the maps
+
+
 #ifndef _PROPERTYMAP_HXX_
 #define XML_SCH_CREATE_GLOBAL_MAPS
 #include "PropertyMap.hxx"
@@ -56,7 +56,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 
-// header for any2enum
+
 #include <comphelper/extract.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -67,13 +67,13 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-// the following class implementations are in this file:
+
 //
-// * XMLChartPropHdlFactory
-// * XMLChartPropertySetMapper
-// * XMLChartExportPropertyMapper
-// * XMLChartImportPropertyMapper
-// * SchXMLStyleExport
+
+
+
+
+
 
 XMLChartPropHdlFactory::~XMLChartPropHdlFactory()
 {
@@ -109,7 +109,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_ERROR_BAR_STYLE:
-                // here we have a constant rather than an enum
+                
                 pHdl = new XMLErrorBarStylePropertyHdl( aXMLChartErrorBarStyleEnumMap,
                                                ::getCppuType((const sal_Int32*)0) );
                 break;
@@ -122,12 +122,12 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_SOLID_TYPE:
-                // here we have a constant rather than an enum
+                
                 pHdl = new XMLEnumPropertyHdl( aXMLChartSolidTypeEnumMap,
                                                ::getCppuType((const sal_Int32*)0) );
                 break;
             case XML_SCH_TYPE_LABEL_PLACEMENT_TYPE:
-                // here we have a constant rather than an enum
+                
                 pHdl = new XMLEnumPropertyHdl( aXMLChartDataLabelPlacementEnumMap,
                                                 ::getCppuType((const sal_Int32*)0) );
                 break;
@@ -179,10 +179,10 @@ XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< 
         msFalse( GetXMLToken( XML_FALSE )),
         mrExport( rExport )
 {
-    // chain draw properties
+    
     ChainExportMapper( XMLShapeExport::CreateShapePropMapper( rExport ));
 
-    // chain text properties
+    
     ChainExportMapper( XMLTextParagraphExport::CreateParaExtPropMapper( rExport ));
 }
 
@@ -198,16 +198,16 @@ void XMLChartExportPropertyMapper::ContextFilter(
     OUString aAutoPropName;
     bool bCheckAuto = false;
 
-    // filter properties
+    
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
          ++property )
     {
-        // find properties with context
-        // to prevent writing this property set mnIndex member to -1
+        
+        
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
         {
-            // if Auto... is set the corresponding properties mustn't be exported
+            
             case XML_SCH_CONTEXT_MIN:
                 bCheckAuto = true;
                 aAutoPropName = "AutoMin";
@@ -230,18 +230,18 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 aAutoPropName = "AutoOrigin";
                 break;
 
-            // the following property is deprecated
-            // elemet-item symbol-image is used now
+            
+            
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 property->mnIndex = -1;
                 break;
 
             case XML_SCH_CONTEXT_STOCK_WITH_VOLUME:
             case XML_SCH_CONTEXT_LINES_USED:
-                // note this avoids export of the properties in OASIS format,
-                // but also for the OOo XML Flat format (used by binfilter),
-                // because there, the transformation to OOo is done after the
-                // complete export of the chart in OASIS format.
+                
+                
+                
+                
                 if( mrExport.getExportFlags() & EXPORT_OASIS )
                     property->mnIndex = -1;
                 break;
@@ -283,8 +283,8 @@ void XMLChartExportPropertyMapper::handleElementItem(
                 OUString aURLStr;
                 rProperty.maValue >>= aURLStr;
 
-                // export as XLink reference into the package
-                // if embedding is off
+                
+                
                 OUString sTempURL( mrExport.AddEmbeddedGraphicObject( aURLStr ));
                 if( !sTempURL.isEmpty() )
                 {
@@ -297,14 +297,14 @@ void XMLChartExportPropertyMapper::handleElementItem(
 
                 {
                     sal_uInt32 nPropIndex = rProperty.mnIndex;
-                    // this is the element that has to live until the next statement
+                    
                     SvXMLElementExport aElem( mrExport,
                                               getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                                               getPropertySetMapper()->GetEntryXMLName( nPropIndex ),
                                               sal_True, sal_True );
 
-                    // export as Base64 embedded graphic
-                    // if embedding is on
+                    
+                    
                     if( !aURLStr.isEmpty())
                         mrExport.AddEmbeddedGraphicObjectAsBase64( aURLStr );
                 }
@@ -330,7 +330,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
             break;
 
         default:
-            // call parent
+            
             SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty,
                                                           nFlags, pProperties, nIdx );
             break;
@@ -392,7 +392,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION:
                 {
-                    // convert from 100th degrees to degrees (double)
+                    
                     rProperty.maValue >>= nValue;
                     double fVal = (double)(nValue) / 100.0;
                     ::sax::Converter::convertDouble( sValueBuffer, fVal );
@@ -445,7 +445,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 
             case XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT:
                 {
-                    // just for import
+                    
                     break;
                 }
 
@@ -490,7 +490,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 
     if( !bHandled )
     {
-        // call parent
+        
         SvXMLExportPropertyMapper::handleSpecialItem( rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
     }
 }
@@ -505,20 +505,20 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
         SvXMLImportPropertyMapper( rMapper, const_cast< SvXMLImport & >( _rImport )),
         mrImport( const_cast< SvXMLImport & > ( _rImport ))
 {
-    // chain shape mapper for drawing properties
+    
 
-    // give an empty model. It is only used for numbering rules that don't exist in chart
+    
     uno::Reference< frame::XModel > xEmptyModel;
     ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel, mrImport ));
 
-    //#i14365# save and load writing-mode for chart elements
-    //The property TextWritingMode is mapped wrongly in the underlying draw mapper, but for draw it is necessary
-    //We remove that property here only for chart thus the chart can use the correct mapping from the writer paragraph settings (attribute 'writing-mode' <-> property 'WritingMode')
+    
+    
+    
     sal_Int32 nUnwantedWrongEntry = maPropMapper->FindEntryIndex( "TextWritingMode", XML_NAMESPACE_STYLE, GetXMLToken(XML_WRITING_MODE) );
     maPropMapper->RemoveEntry(nUnwantedWrongEntry);
 
-    // do not chain text properties: on import this is done by shape mapper
-    // to import old documents
+    
+    
 }
 
 XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
@@ -545,7 +545,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
                 ::sax::Converter::convertBool( bValue, rValue );
-                // modify old value
+                
                 rProperty.maValue >>= nValue;
                 if( bValue )
                     SCH_XML_SETFLAG( nValue, chart::ChartAxisMarks::INNER );
@@ -556,7 +556,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
                 ::sax::Converter::convertBool( bValue, rValue );
-                // modify old value
+                
                 rProperty.maValue >>= nValue;
                 if( bValue )
                     SCH_XML_SETFLAG( nValue, chart::ChartAxisMarks::OUTER );
@@ -566,7 +566,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION:
                 {
-                    // convert from degrees (double) to 100th degrees (integer)
+                    
                     double fVal;
                     ::sax::Converter::convertDouble( fVal, rValue );
                     nValue = (sal_Int32)( fVal * 100.0 );
@@ -575,7 +575,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
                 {
-                    // modify old value
+                    
                     rProperty.maValue >>= nValue;
                     if( IsXMLToken( rValue, XML_NONE ))
                         SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
@@ -583,7 +583,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                         SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
                     else if( IsXMLToken( rValue, XML_VALUE ) )
                         SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE );
-                    else // must be XML_PERCENTAGE
+                    else 
                         SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::PERCENT );
                     rProperty.maValue <<= nValue;
                 }
@@ -626,7 +626,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 }
                 break;
 
-            // deprecated from 6.0 beta on
+            
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
                 break;
@@ -654,10 +654,10 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
         }
     }
 
-    // if we didn't handle it, the parent should
+    
     if( !bRet )
     {
-        // call parent
+        
         bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty, rProperties, rValue, rUnitConverter, rNamespaceMap );
     }
 

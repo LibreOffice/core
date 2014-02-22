@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,29 +14,29 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/fileurlbox.hxx>
 #include <osl/file.h>
 #include "svl/filenotation.hxx"
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
-    //= FileURLBox
-    //=====================================================================
-    //---------------------------------------------------------------------
+
+    
+    
+    
+    
     FileURLBox::FileURLBox( Window* _pParent, WinBits _nStyle )
         :SvtURLBox( _pParent, _nStyle, INET_PROT_FILE )
     {
         DisableHistory();
     }
 
-    //---------------------------------------------------------------------
+    
     void FileURLBox::DisplayURL( const OUString& _rURL )
     {
         OUString sOldText = GetText();
@@ -51,7 +51,7 @@ namespace svt
         UpdatePickList();
     }
 
-    //---------------------------------------------------------------------
+    
     bool FileURLBox::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
@@ -73,7 +73,7 @@ namespace svt
         return SvtURLBox::PreNotify(_rNEvt);
     }
 
-    //---------------------------------------------------------------------
+    
     bool FileURLBox::Notify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
@@ -94,8 +94,8 @@ namespace svt
         return SvtURLBox::Notify(_rNEvt);
     }
 
-//.........................................................................
-}   // namespace svt
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

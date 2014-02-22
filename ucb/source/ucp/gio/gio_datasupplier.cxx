@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vector>
@@ -105,7 +105,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         OUString aId = maResults[ nIndex ]->aId;
         if ( aId.getLength() )
         {
-            // Already cached.
+            
             return aId;
         }
     }
@@ -141,7 +141,7 @@ uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( 
         uno::Reference< ucb::XContentIdentifier > xId = maResults[ nIndex ]->xId;
         if ( xId.is() )
         {
-            // Already cached.
+            
             return xId;
         }
     }
@@ -164,7 +164,7 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
         uno::Reference< ucb::XContent > xContent = maResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
-            // Already cached.
+            
             return xContent;
         }
     }
@@ -187,7 +187,7 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
 
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
-    if ( maResults.size() > nIndex ) // Result already present.
+    if ( maResults.size() > nIndex ) 
         return true;
 
     if ( getData() && maResults.size() > nIndex )
@@ -219,7 +219,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
         uno::Reference< sdbc::XRow > xRow = maResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
-            // Already cached.
+            
             return xRow;
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formcontroller.hxx"
@@ -30,17 +30,17 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_FormController()
 {
     ::pcr::OAutoRegistration< ::pcr::FormController > aFormControllerRegistration;
     ::pcr::OAutoRegistration< ::pcr::DialogController > aDialogControllerRegistration;
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::TypeClass_INTERFACE;
@@ -69,10 +69,10 @@ namespace pcr
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
-    //= FormController
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FormController::FormController( const Reference< XComponentContext >& _rxContext, ServiceDescriptor _aServiceDescriptor,
             bool _bUseFormFormComponentHandlers )
         :OPropertyBrowserController( _rxContext )
@@ -90,15 +90,15 @@ namespace pcr
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------
+    
     FormController::~FormController()
     {
     }
 
-    //------------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( FormController, OPropertyBrowserController, FormController_PropertyBase1 )
 
-    //------------------------------------------------------------------------
+    
     Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
     {
         ::cppu::OTypeCollection aTypes(
@@ -109,16 +109,16 @@ namespace pcr
         return aTypes.getTypes();
     }
 
-    //------------------------------------------------------------------------
+    
     IMPLEMENT_GET_IMPLEMENTATION_ID( FormController )
 
-    //------------------------------------------------------------------------
+    
     OUString SAL_CALL FormController::getImplementationName(  ) throw(RuntimeException)
     {
         return m_aServiceDescriptor.GetImplementationName();
     }
 
-    //------------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
@@ -127,13 +127,13 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+    
     OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.FormController");
     }
 
-    //------------------------------------------------------------------------
+    
     Sequence< OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -141,7 +141,7 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL FormController::Create(const Reference< XComponentContext >& _rxContext )
     {
         ServiceDescriptor aService;
@@ -150,19 +150,19 @@ namespace pcr
         return *(new FormController( _rxContext, aService, true ) );
     }
 
-    //------------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > SAL_CALL FormController::getPropertySetInfo(  ) throw(RuntimeException)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
     }
 
-    //------------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& SAL_CALL FormController::getInfoHelper()
     {
         return *getArrayHelper();
     }
 
-    //------------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper* FormController::createArrayHelper( ) const
     {
         Sequence< Property > aProps( 2 );
@@ -181,7 +181,7 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Bool SAL_CALL FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
     {
         switch ( nHandle )
@@ -201,7 +201,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+    
     void SAL_CALL FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
     {
         switch ( _nHandle )
@@ -237,7 +237,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void SAL_CALL FormController::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
     {
         switch ( nHandle )
@@ -252,16 +252,16 @@ namespace pcr
         }
     }
 
-    //====================================================================
-    //= DialogController
-    //====================================================================
-    //------------------------------------------------------------------------
+    
+    
+    
+    
     OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.DialogController");
     }
 
-    //------------------------------------------------------------------------
+    
     Sequence< OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -269,7 +269,7 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL DialogController::Create(const Reference< XComponentContext >& _rxContext)
     {
         ServiceDescriptor aService;
@@ -278,8 +278,8 @@ namespace pcr
         return *(new FormController( _rxContext, aService, false ) );
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

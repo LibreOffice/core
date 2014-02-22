@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <svx/numinf.hxx>
@@ -43,7 +43,7 @@
 #include <editeng/flstitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
-//==================================================================
+
 
 ScStyleDlg::ScStyleDlg( Window*             pParent,
                         SfxStyleSheetBase&  rStyleBase,
@@ -75,7 +75,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
     OSL_ENSURE(pFact, "Dialogdiet fail!");
     switch ( nRscId )
     {
-        case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen
+        case RID_SCDLG_STYLES_PAR:  
             {
                 SvtCJKOptions aCJKOptions;
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
@@ -108,7 +108,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
             }
             break;
 
-        case RID_SCDLG_STYLES_PAGE: // Seitenvorlagen
+        case RID_SCDLG_STYLES_PAGE: 
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
@@ -130,7 +130,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
@@ -182,7 +182,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* ScStyleDlg::GetRefreshedSet()
 {

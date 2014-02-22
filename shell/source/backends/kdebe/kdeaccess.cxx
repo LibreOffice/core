@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -98,18 +98,18 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aFTPProxy;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
+        case KProtocolManager::ManualProxy: 
             aFTPProxy = KProtocolManager::proxyFor( "FTP" );
             break;
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
-// In such cases, the proxy address is not stored in KDE, but determined dynamically.
-// The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-// The best we can do here is to ask the current value for a given address.
-            aFTPProxy = KProtocolManager::proxyForURL( "ftp://ftp.openoffice.org" );
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
+
+
+
+            aFTPProxy = KProtocolManager::proxyForURL( "ftp:
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aFTPProxy.isEmpty() )
@@ -124,18 +124,18 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aFTPProxy;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
+        case KProtocolManager::ManualProxy: 
             aFTPProxy = KProtocolManager::proxyFor( "FTP" );
             break;
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
-// In such cases, the proxy address is not stored in KDE, but determined dynamically.
-// The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-// The best we can do here is to ask the current value for a given address.
-            aFTPProxy = KProtocolManager::proxyForURL( "ftp://ftp.openoffice.org" );
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
+
+
+
+            aFTPProxy = KProtocolManager::proxyForURL( "ftp:
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aFTPProxy.isEmpty() )
@@ -150,18 +150,18 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aHTTPProxy;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
+        case KProtocolManager::ManualProxy: 
             aHTTPProxy = KProtocolManager::proxyFor( "HTTP" );
             break;
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
-// In such cases, the proxy address is not stored in KDE, but determined dynamically.
-// The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-// The best we can do here is to ask the current value for a given address.
-            aHTTPProxy = KProtocolManager::proxyForURL( "http://http.openoffice.org" );
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
+
+
+
+            aHTTPProxy = KProtocolManager::proxyForURL( "http:
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aHTTPProxy.isEmpty() )
@@ -176,18 +176,18 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aHTTPProxy;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
+        case KProtocolManager::ManualProxy: 
             aHTTPProxy = KProtocolManager::proxyFor( "HTTP" );
             break;
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
-// In such cases, the proxy address is not stored in KDE, but determined dynamically.
-// The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-// The best we can do here is to ask the current value for a given address.
-            aHTTPProxy = KProtocolManager::proxyForURL( "http://http.openoffice.org" );
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
+
+
+
+            aHTTPProxy = KProtocolManager::proxyForURL( "http:
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aHTTPProxy.isEmpty() )
@@ -202,18 +202,18 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aHTTPSProxy;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
+        case KProtocolManager::ManualProxy: 
             aHTTPSProxy = KProtocolManager::proxyFor( "HTTPS" );
             break;
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
-// In such cases, the proxy address is not stored in KDE, but determined dynamically.
-// The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-// The best we can do here is to ask the current value for a given address.
-            aHTTPSProxy = KProtocolManager::proxyForURL( "https://https.openoffice.org" );
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
+
+
+
+            aHTTPSProxy = KProtocolManager::proxyForURL( "https:
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aHTTPSProxy.isEmpty() )
@@ -228,18 +228,18 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aHTTPSProxy;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
+        case KProtocolManager::ManualProxy: 
             aHTTPSProxy = KProtocolManager::proxyFor( "HTTPS" );
             break;
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
-// In such cases, the proxy address is not stored in KDE, but determined dynamically.
-// The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-// The best we can do here is to ask the current value for a given address.
-            aHTTPSProxy = KProtocolManager::proxyForURL( "https://https.openoffice.org" );
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
+
+
+
+            aHTTPSProxy = KProtocolManager::proxyForURL( "https:
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aHTTPSProxy.isEmpty() )
@@ -253,13 +253,13 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         QString aNoProxyFor;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
+        case KProtocolManager::ManualProxy: 
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
             aNoProxyFor = KProtocolManager::noProxyFor();
             break;
-        default:                            // No proxy is used
+        default:                            
             break;
         }
         if ( !aNoProxyFor.isEmpty() )
@@ -275,19 +275,19 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         int nProxyType;
         switch ( KProtocolManager::proxyType() )
         {
-        case KProtocolManager::ManualProxy: // Proxies are manually configured
-        case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
-        case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
-        case KProtocolManager::EnvVarProxy: // Use the proxy values set through environment variables
+        case KProtocolManager::ManualProxy: 
+        case KProtocolManager::PACProxy:    
+        case KProtocolManager::WPADProxy:   
+        case KProtocolManager::EnvVarProxy: 
             nProxyType = 1;
             break;
-        default:                            // No proxy is used
+        default:                            
             nProxyType = 0;
         }
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( (sal_Int32) nProxyType ) );
     } else {
-        OSL_ASSERT(false); // this cannot happen
+        OSL_ASSERT(false); 
     }
     return css::beans::Optional< css::uno::Any >();
 }

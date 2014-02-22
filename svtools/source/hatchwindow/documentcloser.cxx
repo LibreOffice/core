@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -42,14 +42,14 @@ using namespace ::com::sun::star;
 
 namespace {
 
-// the service is implemented as a wrapper to be able to die by refcount
-// the disposing mechanics is required for java related scenarios
+
+
 class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XComponent,
                                                         ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; 
 
     sal_Bool m_bDisposed;
 
@@ -57,12 +57,12 @@ public:
     ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
     ~ODocumentCloser();
 
-// XComponent
+
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-// XServiceInfo
+
     virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -82,14 +82,14 @@ class MainThreadFrameCloserRequest
         static void Start( MainThreadFrameCloserRequest* pRequest );
 };
 
-// --------------------------------------------------------
+
 void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTRequest )
 {
     if ( pMTRequest )
     {
         if ( Application::GetMainThreadIdentifier() == osl::Thread::getCurrentIdentifier() )
         {
-            // this is the main thread
+            
             worker( NULL, pMTRequest );
         }
         else
@@ -97,15 +97,15 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
     }
 }
 
-// --------------------------------------------------------
+
 IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest*, pMTRequest )
 {
-    (void) pThis; // unused
+    (void) pThis; 
     if ( pMTRequest )
     {
         if ( pMTRequest->m_xFrame.is() )
         {
-            // this is the main thread, the solar mutex must be locked
+            
             SolarMutexGuard aGuard;
 
             try
@@ -115,7 +115,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
 
                 xWindow->setVisible( sal_False );
 
-                // reparent the window
+                
                 xWinPeer->setProperty( OUString( "PluginParent" ),
                                         uno::makeAny( (sal_Int64) 0 ) );
 
@@ -125,7 +125,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
             }
             catch( uno::Exception& )
             {
-                // ignore all the errors
+                
             }
 
             try
@@ -135,7 +135,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
             }
             catch( uno::Exception& )
             {
-                // ignore all the errors
+                
             }
         }
 
@@ -151,7 +151,7 @@ ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArg
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_refCount )
-        throw uno::RuntimeException(); // the object must be refcounted already!
+        throw uno::RuntimeException(); 
 
     sal_Int32 nLen = aArguments.getLength();
     if ( nLen != 1 )
@@ -167,7 +167,7 @@ ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArg
                 0 );
 }
 
-// --------------------------------------------------------
+
 ODocumentCloser::~ODocumentCloser()
 {
     if ( m_pListenersContainer )
@@ -177,8 +177,8 @@ ODocumentCloser::~ODocumentCloser()
     }
 }
 
-// XComponent
-// --------------------------------------------------------
+
+
 void SAL_CALL ODocumentCloser::dispose()
     throw (uno::RuntimeException)
 {
@@ -191,10 +191,10 @@ void SAL_CALL ODocumentCloser::dispose()
     if ( m_pListenersContainer )
         m_pListenersContainer->disposeAndClear( aSource );
 
-    // TODO: trigger a main thread execution to close the frame
+    
     if ( m_xFrame.is() )
     {
-        // the created object will be deleted after thread execution
+        
         MainThreadFrameCloserRequest* pCloser = new MainThreadFrameCloserRequest( m_xFrame );
         MainThreadFrameCloserRequest::Start( pCloser );
     }
@@ -202,13 +202,13 @@ void SAL_CALL ODocumentCloser::dispose()
     m_bDisposed = sal_True;
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( !m_pListenersContainer )
         m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
@@ -216,7 +216,7 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
     m_pListenersContainer->addInterface( xListener );
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -225,7 +225,7 @@ void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::
         m_pListenersContainer->removeInterface( xListener );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
     throw (uno::RuntimeException)
 {

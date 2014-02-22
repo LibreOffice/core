@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "WPXSvStream.hxx"
@@ -38,7 +38,7 @@ namespace
 
 class PositionHolder
 {
-    // disable copying
+    
     PositionHolder(const PositionHolder &);
     PositionHolder &operator=(const PositionHolder &);
 
@@ -65,7 +65,7 @@ catch (...)
 {
 }
 
-} // anonymous namespace
+} 
 
 typedef struct
 {
@@ -135,10 +135,10 @@ private:
     SotStorageStreamRef createStream(const rtl::OUString &rPath);
 
 public:
-    SotStorageRefWrapper mxRootStorage; //< root storage of the OLE2
-    OLEStorageMap_t maStorageMap; //< map of all sub storages by name
-    ::std::vector< OLEStreamData > maStreams; //< list of streams and their names
-    NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
+    SotStorageRefWrapper mxRootStorage; 
+    OLEStorageMap_t maStorageMap; 
+    ::std::vector< OLEStreamData > maStreams; 
+    NameMap_t maNameMap; 
     bool mbInitialized;
 };
 
@@ -173,9 +173,9 @@ SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
 {
     NameMap_t::iterator aIt = maNameMap.find(rPath);
 
-    // For the while don't return stream in this situation.
-    // Later, given how libcdr's zip stream implementation behaves,
-    // return the first stream in the storage if there is one.
+    
+    
+    
     if (maNameMap.end() == aIt)
         return SotStorageStreamRef();
 
@@ -213,7 +213,7 @@ void OLEStorageImpl::traverse(const SotStorageRef &rStorage, const rtl::OUString
             xStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), STREAM_STD_READ);
             maStorageMap[aPath] = xStorage;
 
-            // deep-first traversal
+            
             traverse(xStorage.ref, aPath);
         }
         else
@@ -235,8 +235,8 @@ SotStorageStreamRef OLEStorageImpl::createStream(const rtl::OUString &rPath)
 
     const OLEStorageMap_t::const_iterator aIt = maStorageMap.find(aDir);
 
-    // We can only get there for paths that are present in the OLE.
-    // Which means the storage must exist.
+    
+    
     assert(maStorageMap.end() != aIt);
 
     return aIt->second.ref->OpenSotStream(aName, STREAM_STD_READ);
@@ -287,9 +287,9 @@ private:
     Reference<XInputStream> createStream(const rtl::OUString &rPath);
 
 public:
-    Reference<container::XNameAccess> mxContainer; //< root of the Zip
-    ::std::vector< ZipStreamData > maStreams; //< list of streams and their names
-    NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
+    Reference<container::XNameAccess> mxContainer; 
+    ::std::vector< ZipStreamData > maStreams; 
+    NameMap_t maNameMap; 
     bool mbInitialized;
 };
 
@@ -319,9 +319,9 @@ Reference<XInputStream> ZipStorageImpl::getStream(const rtl::OUString &rPath)
 {
     NameMap_t::iterator aIt = maNameMap.find(rPath);
 
-    // For the while don't return stream in this situation.
-    // Later, given how libcdr's zip stream implementation behaves,
-    // return the first stream in the storage if there is one.
+    
+    
+    
     if (maNameMap.end() == aIt)
         return Reference<XInputStream>();
 
@@ -347,7 +347,7 @@ void ZipStorageImpl::traverse(const Reference<container::XNameAccess> &rxContain
 
     for (sal_Int32 n = 0; n < lNames.getLength(); ++n)
     {
-        if (!lNames[n].endsWithAsciiL("/", 1)) // skip dirs
+        if (!lNames[n].endsWithAsciiL("/", 1)) 
         {
             maStreams.push_back(ZipStreamData(rtl::OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8)));
             maNameMap[lNames[n]] = maStreams.size() - 1;
@@ -371,7 +371,7 @@ Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString &rPath)
     }
     catch (const Exception &)
     {
-        // nothing needed
+        
     }
 
     return xStream;
@@ -655,7 +655,7 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
         }
         catch (const Exception &)
         {
-            // nothing needed
+            
         }
     }
 
@@ -695,7 +695,7 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
         }
         catch (const Exception &)
         {
-            // nothing needed
+            
         }
     }
     return 0;
@@ -765,7 +765,7 @@ bool WPXSvInputStreamImpl::isZip()
         }
         catch (const Exception &)
         {
-            // ignore
+            
         }
 
         mbCheckedZip = true;
@@ -824,7 +824,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
     }
 
     unsigned long curpos = (unsigned long) mpImpl->tell();
-    if (curpos == (unsigned long)-1)  // returned ERROR
+    if (curpos == (unsigned long)-1)  
         return 0;
 
     if ((curpos + numBytes < curpos) /*overflow*/ ||

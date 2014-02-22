@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -100,7 +100,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
         nEncoding != RTL_TEXTENCODING_JAVA_UTF8 &&
         nEncoding != RTL_TEXTENCODING_MS_1252 &&
         nEncoding != RTL_TEXTENCODING_UTF8);
-        // handled by Impl_getTextEncodingData
+        
     static ImplTextEncodingData const * const aData[]
         = { NULL, /* DONTKNOW */
             NULL, /* MS_1252, see above */
@@ -198,7 +198,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplPT154TextEncodingData, /* PT154 */
             &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
 
-    //update table above if a new encoding is added
+    
     BOOST_STATIC_ASSERT(
         SAL_N_ELEMENTS(aData) == RTL_TEXTENCODING_ADOBE_DINGBATS + 1);
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLIndexTOCStylesContext.hxx"
@@ -63,7 +63,7 @@ XMLIndexTOCStylesContext::~XMLIndexTOCStylesContext()
 void XMLIndexTOCStylesContext::StartElement(
     const Reference<XAttributeList> & xAttrList )
 {
-    // find text:outline-level attribute
+    
     sal_Int16 nCount = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
     {
@@ -80,7 +80,7 @@ void XMLIndexTOCStylesContext::StartElement(
                     GetImport().GetTextImport()->GetChapterNumbering()->
                                                                 getCount()))
             {
-                // API numbers 0..9, we number 1..10
+                
                 nOutlineLevel = nTmp-1;
             }
         }
@@ -89,10 +89,10 @@ void XMLIndexTOCStylesContext::StartElement(
 
 void XMLIndexTOCStylesContext::EndElement()
 {
-    // if valid...
+    
     if (nOutlineLevel >= 0)
     {
-        // copy vector into sequence
+        
         const sal_Int32 nCount = aStyleNames.size();
         Sequence<OUString> aStyleNamesSequence(nCount);
         for(sal_Int32 i = 0; i < nCount; i++)
@@ -102,12 +102,12 @@ void XMLIndexTOCStylesContext::EndElement()
                                aStyleNames[i] );
         }
 
-        // get index replace
+        
         Any aAny = rTOCPropertySet->getPropertyValue(sLevelParagraphStyles);
         Reference<XIndexReplace> xIndexReplace;
         aAny >>= xIndexReplace;
 
-        // set style names
+        
         aAny <<= aStyleNamesSequence;
         xIndexReplace->replaceByIndex(nOutlineLevel, aAny);
     }
@@ -118,11 +118,11 @@ SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    // check for index-source-style
+    
     if ( (XML_NAMESPACE_TEXT == p_nPrefix) &&
          IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLE ) )
     {
-        // find text:style-name attribute and record in aStyleNames
+        
         sal_Int16 nCount = xAttrList->getLength();
         for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
         {
@@ -138,7 +138,7 @@ SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
         }
     }
 
-    // always return default context; we already got the interesting info
+    
     return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
                                                   xAttrList);
 }

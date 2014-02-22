@@ -39,19 +39,19 @@ Renderable::Renderable (BaseWindow* pWin)
 {
     ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );
     DBG_ASSERT( aStrings.Count() >= 3, "resource incomplete" );
-    if( aStrings.Count() < 3 ) // bad resource ?
+    if( aStrings.Count() < 3 ) 
         return;
 
     m_aUIProperties.realloc( 3 );
 
-    // show Subgroup for print range
+    
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
         OUString(aStrings.GetString(0)), OUString(), aPrintRangeOpt);
 
-    // create a choice for the range to print
+    
     OUString aPrintContentName( "PrintContent" );
     Sequence< OUString > aChoices( 2 );
     Sequence< OUString > aHelpIds( 2 );
@@ -66,7 +66,7 @@ Renderable::Renderable (BaseWindow* pWin)
                                                    aHelpIds, aPrintContentName,
                                                    aChoices, 0);
 
-    // create a an Edit dependent on "Pages" selected
+    
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
     m_aUIProperties[2].Value = setEditControlOpt("pagerange", OUString(),
                                                  OUString(), "PageRange",
@@ -131,9 +131,9 @@ Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
     processProperties( i_xOptions );
 
     Sequence< beans::PropertyValue > aVals;
-    // insert page size here
+    
     Printer* pPrinter = getPrinter();
-    // no renderdevice is legal; the first call is to get our print ui options
+    
     if( pPrinter )
     {
         Size aPageSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
@@ -188,6 +188,6 @@ void SAL_CALL Renderable::render (
     }
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

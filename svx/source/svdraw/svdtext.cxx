@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/svdotext.hxx"
@@ -45,16 +45,16 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 {
     if(!mbPortionInfoChecked)
     {
-        // #i102062# no action when the Outliner is the HitTestOutliner,
-        // this will remove WrongList info at the OPO
+        
+        
         if(mpModel && &rOutliner == &mpModel->GetHitTestOutliner())
             return;
 
-        // TODO: optimization: we could create a BigTextObject
+        
         mbPortionInfoChecked=true;
         if(mpOutlinerParaObject!=NULL && rOutliner.ShouldCreateBigTextObject())
         {
-            // #i102062# MemoryLeak closed
+            
             delete mpOutlinerParaObject;
             mpOutlinerParaObject = rOutliner.CreateParaObject();
         }
@@ -78,7 +78,7 @@ void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
     {
         if( mpModel )
         {
-            // Update HitTestOutliner
+            
             const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
             if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject )
                 mpModel->GetHitTestOutliner().SetTextObj( 0 );
@@ -102,7 +102,7 @@ OutlinerParaObject* SdrText::RemoveOutlinerParaObject()
 {
     if( mpModel )
     {
-        // Update HitTestOutliner
+        
         const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
         if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject )
             mpModel->GetHitTestOutliner().SetTextObj( 0 );
@@ -131,21 +131,21 @@ void SdrText::SetModel( SdrModel* pNewModel )
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());
         bool bScaleUnitChanged=aNewUnit!=aOldUnit;
-        // Now move the OutlinerParaObject into a new Pool.
-        // TODO: We should compare the DefTab and RefDevice of both Models to
-        // see whether we need to use AutoGrow!
+        
+        
+        
         sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
         sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
         bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
         bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem)
         {
-            // fix the value of HeightItem, so
-            // 1. it remains and
-            // 2. DoStretchChars gets the right value
+            
+            
+            
             SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
         }
-        // now use the Outliner, etc. so the above SetAttr can work at all
+        
         SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
         rOutliner.SetText(*mpOutlinerParaObject);
         delete mpOutlinerParaObject;
@@ -156,7 +156,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
             if (bSetHgtItem)
             {
-                // Now correct the frame attribute
+                
                 nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
                 SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
             }

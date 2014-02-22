@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbahyperlinks.hxx"
@@ -28,7 +28,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 
 namespace {
 
@@ -45,7 +45,7 @@ bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRan
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Functor to decide whether the anchors of two Hyperlink objects are equal. */
 struct EqualAnchorFunctor
@@ -100,9 +100,9 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 namespace detail {
 
@@ -117,11 +117,11 @@ public:
         Hyperlink object with the same anchor as the passed Hyperlink object. */
     void insertHyperlink( const uno::Reference< excel::XHyperlink >& rxHlink ) throw (uno::RuntimeException);
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
 
@@ -130,11 +130,11 @@ private:
     HyperlinkVector     maHlinks;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaHlinkContainer::ScVbaHlinkContainer() throw (uno::RuntimeException)
 {
-    // TODO FIXME: fill with existing hyperlinks
+    
 }
 
 ScVbaHlinkContainer::ScVbaHlinkContainer( const ScVbaHlinkContainerRef& rxSheetContainer,
@@ -185,7 +185,7 @@ sal_Bool SAL_CALL ScVbaHlinkContainer::hasElements() throw (uno::RuntimeExceptio
     return !maHlinks.empty();
 }
 
-// ============================================================================
+
 
 ScVbaHlinkContainerMember::ScVbaHlinkContainerMember( ScVbaHlinkContainer* pContainer ) :
     mxContainer( pContainer )
@@ -196,9 +196,9 @@ ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
 {
 }
 
-} // namespace detail
+} 
 
-// ============================================================================
+
 
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext ) throw (uno::RuntimeException) :
@@ -220,7 +220,7 @@ ScVbaHyperlinks::~ScVbaHyperlinks()
 {
 }
 
-// XHyperlinks ----------------------------------------------------------------
+
 
 uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
     const uno::Any& rAnchor, const uno::Any& rAddress, const uno::Any& rSubAddress,
@@ -235,7 +235,7 @@ uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
     if( mxSheetHlinks.is() )
         return mxSheetHlinks->Add( rAnchor, rAddress, rSubAddress, rScreenTip, rTextToDisplay );
 
-    // get anchor object (can be a Range or a Shape object)
+    
     uno::Reference< XHelperInterface > xAnchor( rAnchor, uno::UNO_QUERY_THROW );
 
     /*  Create the Hyperlink object, this tries to insert the hyperlink into
@@ -251,36 +251,36 @@ uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
 
 void SAL_CALL ScVbaHyperlinks::Delete() throw (uno::RuntimeException)
 {
-    // FIXME not implemented
+    
     throw uno::RuntimeException();
 }
 
-// XEnumerationAccess ---------------------------------------------------------
+
 
 uno::Reference< container::XEnumeration > SAL_CALL ScVbaHyperlinks::createEnumeration() throw (uno::RuntimeException)
 {
     return new SimpleIndexAccessToEnumeration( m_xIndexAccess );
 }
 
-// XElementAccess -------------------------------------------------------------
+
 
 uno::Type SAL_CALL ScVbaHyperlinks::getElementType() throw (uno::RuntimeException)
 {
     return cppu::UnoType<excel::XHyperlink>::get();
 }
 
-// ScVbaCollectionBase --------------------------------------------------------
+
 
 uno::Any ScVbaHyperlinks::createCollectionObject( const uno::Any& rSource )
 {
-    // container stores XHyperlink objects, just return the passed object
+    
     return rSource;
 }
 
-// XHelperInterface -----------------------------------------------------------
+
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlinks, "ooo.vba.excel.Hyperlinks" )
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

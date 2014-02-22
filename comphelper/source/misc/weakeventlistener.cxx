@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,37 +14,37 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/weakeventlistener.hxx>
 #include <osl/diagnose.h>
 
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
-    //= OWeakListenerAdapter
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OWeakListenerAdapterBase::~OWeakListenerAdapterBase()
     {
     }
 
-    //=====================================================================
-    //= OWeakEventListenerAdapter
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OWeakEventListenerAdapter::OWeakEventListenerAdapter( Reference< XWeak > _rxListener, Reference< XComponent > _rxBroadcaster )
         :OWeakEventListenerAdapter_Base( _rxListener, _rxBroadcaster )
     {
-        // add ourself as listener to the broadcaster
+        
         OSL_ENSURE( _rxBroadcaster.is(), "OWeakEventListenerAdapter::OWeakEventListenerAdapter: invalid broadcaster!" );
         if ( _rxBroadcaster.is() )
         {
@@ -54,16 +54,16 @@ namespace comphelper
             }
             osl_atomic_decrement( &m_refCount );
             OSL_ENSURE( m_refCount > 0, "OWeakEventListenerAdapter::OWeakEventListenerAdapter: oops - not to be used with implementations which hold their listeners weak!" );
-                // the one and only reason for this adapter class (A) is to add as listener to a component (C) which
-                // holds its listeners hard, and forward all calls then to another listener (L) which is
-                // held weak by A.
-                // Now if C holds listeners weak, then we do not need A, we can add L directly to C.
+                
+                
+                
+                
         }
 
         OSL_ENSURE( getListener().is(), "OWeakEventListenerAdapter::OWeakEventListenerAdapter: invalid listener (does not support the XEventListener interface)!" );
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OWeakEventListenerAdapter::disposing( )
     {
         Reference< XComponent > xBroadcaster( getBroadcaster( ), UNO_QUERY );
@@ -76,9 +76,9 @@ namespace comphelper
         resetListener();
     }
 
-//.........................................................................
-}   // namespace comphelper
-//.........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

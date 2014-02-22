@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "file/FCatalog.hxx"
@@ -29,15 +29,15 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity::file;
-// -------------------------------------------------------------------------
+
 OFileCatalog::OFileCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::OFileCatalog" );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OFileCatalog::disposing()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::disposing" );
@@ -47,13 +47,13 @@ void SAL_CALL OFileCatalog::disposing()
 m_xMetaData.clear();
     OFileCatalog_BASE::disposing();
 }
-// -----------------------------------------------------------------------------
+
 OUString OFileCatalog::buildName(const Reference< XRow >& _xRow)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::buildName" );
     return _xRow->getString(3);
 }
-// -------------------------------------------------------------------------
+
 void OFileCatalog::refreshTables()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::refreshTables" );
@@ -69,7 +69,7 @@ void OFileCatalog::refreshTables()
         m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::queryInterface" );
@@ -82,7 +82,7 @@ Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeExc
     typedef sdbcx::OCatalog OFileCatalog_BASE;
     return OFileCatalog_BASE::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::getTypes" );
@@ -105,7 +105,7 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
     const Type *pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

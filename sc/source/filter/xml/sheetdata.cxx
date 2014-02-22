@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -24,7 +24,7 @@
 
 #include "sheetdata.hxx"
 
-// -----------------------------------------------------------------------
+
 
 ScSheetSaveData::ScSheetSaveData() :
     mnStartTab( -1 ),
@@ -60,14 +60,14 @@ void ScSheetSaveData::AddTableStyle( const OUString& rName, const ScAddress& rCe
 
 void ScSheetSaveData::HandleNoteStyles( const OUString& rStyleName, const OUString& rTextName, const ScAddress& rCellPos )
 {
-    // only consecutive duplicates (most common case) are filtered out here,
-    // the others are found when the styles are created
+    
+    
 
     if ( rStyleName == maPreviousNote.maStyleName &&
          rTextName  == maPreviousNote.maTextStyle &&
          rCellPos.Tab() == maPreviousNote.maCellPos.Tab() )
     {
-        // already stored for the same sheet - ignore
+        
         return;
     }
 
@@ -92,7 +92,7 @@ void ScSheetSaveData::AddTextStyle( const OUString& rName, const ScAddress& rCel
 void ScSheetSaveData::BlockSheet( SCTAB nTab )
 {
     if ( nTab >= static_cast<SCTAB>(maBlocked.size()) )
-        maBlocked.resize( nTab + 1, false );        // fill vector with "false" entries
+        maBlocked.resize( nTab + 1, false );        
 
     maBlocked[nTab] = true;
 }
@@ -171,8 +171,8 @@ void ScSheetSaveData::UseSaveEntries()
 
 void ScSheetSaveData::StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespaces )
 {
-    // the initial namespaces are just removed from the list of loaded namespaces,
-    // so only a boost::unordered_map of the prefixes is needed.
+    
+    
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
     NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
@@ -185,13 +185,13 @@ void ScSheetSaveData::StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespac
 
 void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespaces )
 {
-    // store the loaded namespaces, so the prefixes in copied stream fragments remain valid
+    
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
     NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
     while (aIter != aEnd)
     {
-        // ignore the initial namespaces
+        
         if ( maInitialPrefixes.find( aIter->first ) == maInitialPrefixes.end() )
         {
             const NameSpaceEntry& rEntry = *(aIter->second);
@@ -211,15 +211,15 @@ static bool lcl_NameInHash( const NameSpaceHash& rNameHash, const OUString& rNam
 
         ++aIter;
     }
-    return false;   // not found
+    return false;   
 }
 
 bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) const
 {
-    // Add the loaded namespaces to the name space map.
+    
 
-    // first loop: only look for conflicts
-    // (if the loaded namespaces were added first, this might not be necessary)
+    
+    
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
     std::vector<ScLoadedNamespaceEntry>::const_iterator aIter = maLoadedNamespaces.begin();
     std::vector<ScLoadedNamespaceEntry>::const_iterator aEnd = maLoadedNamespaces.end();
@@ -230,21 +230,21 @@ bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) cons
         {
             if ( lcl_NameInHash( rNameHash, aIter->maName ) )
             {
-                // a second prefix for the same name would confuse SvXMLNamespaceMap lookup,
-                // so this is also considered a conflict
+                
+                
                 return false;
             }
         }
         else if ( aHashIter->second->sName != aIter->maName )
         {
-            // same prefix, but different name: loaded namespaces can't be used
+            
             return false;
         }
         ++aIter;
     }
 
-    // only if there were no conflicts, add the entries that aren't in the map already
-    // (the key is needed if the same namespace is added later within an element)
+    
+    
     aIter = maLoadedNamespaces.begin();
     while (aIter != aEnd)
     {
@@ -254,7 +254,7 @@ bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) cons
         ++aIter;
     }
 
-    return true;    // success
+    return true;    
 }
 
 bool ScSheetSaveData::IsInSupportedSave() const

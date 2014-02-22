@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -48,10 +48,10 @@ namespace
     void testDataType();
     void testHexOctal();
 
-    // Adds code needed to register the test suite
+    
     CPPUNIT_TEST_SUITE(ScannerTest);
 
-    // Declares the method as a test to call
+    
     CPPUNIT_TEST(testBlankLines);
     CPPUNIT_TEST(testOperators);
     CPPUNIT_TEST(testAlphanum);
@@ -63,7 +63,7 @@ namespace
     CPPUNIT_TEST(testDataType);
     CPPUNIT_TEST(testHexOctal);
 
-    // End of test suite definition
+    
     CPPUNIT_TEST_SUITE_END();
   };
 
@@ -264,7 +264,7 @@ namespace
 
     symbols = getSymbols(source2);
     CPPUNIT_ASSERT(symbols.size() == 3);
-    CPPUNIT_ASSERT(symbols[0].text.isEmpty()); // Can't start symbol with a digit
+    CPPUNIT_ASSERT(symbols[0].text.isEmpty()); 
     CPPUNIT_ASSERT(symbols[0].number == 1);
     CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[1].text == OUString("asfdasfd"));
@@ -304,7 +304,7 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].text == OUString("joxclk_"));
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
-    CPPUNIT_ASSERT(source7 == OUString("joxclk ")); // Change the trailing '_' to a ' '
+    CPPUNIT_ASSERT(source7 == OUString("joxclk ")); 
     CPPUNIT_ASSERT(symbols[1].text == cr);
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
 
@@ -695,9 +695,9 @@ namespace
     CPPUNIT_ASSERT(symbols[0].number == 1);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
-    // This error is from a "buffer overflow" which is stupid because
-    // the buffer is artificially constrained by the scanner.
-    CPPUNIT_ASSERT(errors == 1); // HACK
+    
+    
+    CPPUNIT_ASSERT(errors == 1); 
 
     double fInf = 0.0;
     rtl::math::setInf( &fInf, false);
@@ -706,7 +706,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].number == fInf);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
-    CPPUNIT_ASSERT(errors == 1);    // math error, overflow
+    CPPUNIT_ASSERT(errors == 1);    
   }
 
   void ScannerTest::testDataType()
@@ -836,8 +836,8 @@ namespace
 
     symbols = getSymbols(source8);
     CPPUNIT_ASSERT(symbols.size() == 2);
-    // TODO: this line fails on 64 bit systems!!!
-    //    CPPUNIT_ASSERT(symbols[0].number == -1744830464);
+    
+    
     CPPUNIT_ASSERT(symbols[0].text == OUString());
     CPPUNIT_ASSERT(symbols[1].text == cr);
 
@@ -852,9 +852,9 @@ namespace
     CPPUNIT_ASSERT(symbols[2].text == cr);
   }
 
-  // Put the test suite in the registry
+  
   CPPUNIT_TEST_SUITE_REGISTRATION(ScannerTest);
-} // namespace
+} 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

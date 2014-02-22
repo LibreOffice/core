@@ -62,7 +62,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 
-// OColumn
+
 OColumn::OColumn( const bool _bNameIsReadOnly )
         :OColumnBase( m_aMutex )
         ,::comphelper::OPropertyContainer( OColumnBase::rBHelper )
@@ -76,7 +76,7 @@ OColumn::~OColumn()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< Type > OColumn::getTypes() throw (RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -85,10 +85,10 @@ Sequence< Type > OColumn::getTypes() throw (RuntimeException)
     );
 }
 
-// com::sun::star::uno::XInterface
+
 IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyContainer )
 
-// ::com::sun::star::lang::XServiceInfo
+
 OUString OColumn::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdb.OColumn");
@@ -106,13 +106,13 @@ Sequence< OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeExcepti
     return aSNS;
 }
 
-// OComponentHelper
+
 void OColumn::disposing()
 {
     OPropertyContainer::disposing();
 }
 
-// com::sun::star::beans::XPropertySet
+
 Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
@@ -148,7 +148,7 @@ void OColumn::registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHand
     ::comphelper::OPropertyContainer::registerPropertyNoMember( _rName, _nHandle, _nAttributes, _rType, _pInitialValue );
 }
 
-// OColumns
+
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
@@ -192,7 +192,7 @@ OColumns::~OColumns()
 {
 }
 
-// XServiceInfo
+
 OUString OColumns::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdb.OColumns");
@@ -219,7 +219,7 @@ void OColumns::append( const OUString& _rName, OColumn* _pColumn )
 
     _pColumn->m_sName = _rName;
 
-    // now really insert the column
+    
     insertElement( _rName, _pColumn );
 }
 
@@ -352,7 +352,7 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
     return aRet;
 }
 
-// XAppend
+
 sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     sdbcx::ObjectType xReturn;
@@ -390,7 +390,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Refer
     return xReturn;
 }
 
-// XDrop
+
 void OColumns::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XDrop > xDrop( m_xDrvColumns, UNO_QUERY );

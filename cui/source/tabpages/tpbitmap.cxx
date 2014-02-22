@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/wrkwin.hxx>
@@ -84,22 +84,22 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
     get(m_pBtnLoad,"BTN_LOAD");
     get(m_pBtnSave,"BTN_SAVE");
 
-    // size of the bitmap listbox
+    
     Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbBitmaps->set_width_request(aSize.Width());
     m_pLbBitmaps->set_height_request(aSize.Height());
 
-    // size of the bitmap display
+    
     Size aSize2 = getDrawPreviewOptimalSize(this);
     m_pCtlPreview->set_width_request(aSize2.Width());
     m_pCtlPreview->set_height_request(aSize2.Height());
 
     m_pBitmapCtl = new SvxBitmapCtl(this, aSize2);
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
-    // setting the output device
+    
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXBitmapItem );
 
@@ -122,7 +122,7 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
     delete m_pBitmapCtl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::Construct()
 {
@@ -132,45 +132,45 @@ void SvxBitmapTabPage::Construct()
     m_pLbBitmaps->Fill( pBitmapList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 {
     sal_uInt16 nPos;
     sal_uInt16 nCount;
 
-    if( nDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) 
     {
         *pbAreaTP = sal_False;
 
         if( pColorList.is() )
         {
-            // ColorList
+            
             if( *pnColorListState & CT_CHANGED ||
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
                     pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
-                // LbColor
+                
                 nPos = m_pLbColor->GetSelectEntryPos();
                 m_pLbColor->Clear();
                 m_pLbColor->Fill( pColorList );
                 nCount = m_pLbColor->GetEntryCount();
                 if( nCount == 0 )
-                    ; // this case should not occur
+                    ; 
                 else if( nCount <= nPos )
                     m_pLbColor->SelectEntryPos( 0 );
                 else
                     m_pLbColor->SelectEntryPos( nPos );
 
-                // LbColorBackground
+                
                 nPos = m_pLbBackgroundColor->GetSelectEntryPos();
                 m_pLbBackgroundColor->Clear();
                 m_pLbBackgroundColor->CopyEntries( *m_pLbColor );
                 nCount = m_pLbBackgroundColor->GetEntryCount();
                 if( nCount == 0 )
-                    ; // this case should not occur
+                    ; 
                 else if( nCount <= nPos )
                     m_pLbBackgroundColor->SelectEntryPos( 0 );
                 else
@@ -180,8 +180,8 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
                 ChangeBackgrndColorHdl_Impl( this );
             }
 
-            // determining (possibly cutting) the name and
-            // displaying it in the GroupBox
+            
+            
             OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString         += ": ";
             INetURLObject   aURL( pBitmapList->GetPath() );
@@ -201,7 +201,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
             {
                 m_pLbBitmaps->SelectEntryPos( *pPos );
             }
-            // colors could have been deleted
+            
             ChangeBitmapHdl_Impl( this );
 
             *pPageType = PT_BITMAP;
@@ -210,7 +210,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 {
@@ -223,11 +223,11 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 {
-    if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
+    if( nDlgType == 0 && *pbAreaTP == sal_False ) 
     {
         if(PT_BITMAP == *pPageType)
         {
@@ -252,18 +252,18 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::Reset( const SfxItemSet&  )
 {
-    // aLbBitmaps.SelectEntryPos( 0 );
+    
 
     m_pBitmapCtl->SetLines( m_pCtlPixel->GetLineCount() );
     m_pBitmapCtl->SetPixelColor( m_pLbColor->GetSelectEntryColor() );
     m_pBitmapCtl->SetBackgroundColor( m_pLbBackgroundColor->GetSelectEntryColor() );
     m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
 
-    // get bitmap and display it
+    
     const XFillBitmapItem aBmpItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx()));
     rXFSet.Put( aBmpItem );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
@@ -271,7 +271,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
 
     ChangeBitmapHdl_Impl( this );
 
-    // determine button state
+    
     if( pBitmapList.is() && pBitmapList->Count() )
     {
         m_pBtnAdd->Enable();
@@ -287,7 +287,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
                 const SfxItemSet& rSet )
@@ -295,7 +295,7 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
     return new SvxBitmapTabPage( pWindow, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
@@ -348,24 +348,24 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
             m_pBtnModify->Enable();
             m_pBtnAdd->Enable();
 
-            // setting the pixel control
+            
 
             m_pCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
 
             Color aPixelColor = aFront;
             Color aBackColor = aBack;
 
-            // #i123564# This causes the wrong color to be selected
-            // as foreground color when the 1st bitmap in the bitmap
-            // list is selected. I see no reason why this is done,
-            // thus I will take it out
+            
+            
+            
+            
             //
-            //if( 0 == m_pLbBitmaps->GetSelectEntryPos() )
-            //{
-            //  m_pLbColor->SelectEntry( Color( COL_BLACK ) );
-            //  ChangePixelColorHdl_Impl( this );
-            //}
-            //else
+            
+            
+            
+            
+            
+            
 
             m_pLbColor->SelectEntry( aPixelColor );
 
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
                 m_pLbBackgroundColor->SelectEntry( aBackColor );
             }
 
-            // update m_pBitmapCtl, rXFSet and m_pCtlPreview
+            
             m_pBitmapCtl->SetPixelColor( aPixelColor );
             m_pBitmapCtl->SetBackgroundColor( aBackColor );
             rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
@@ -401,7 +401,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
         m_pCtlPixel->Invalidate();
 
-        // display bitmap
+        
         const XFillBitmapItem aXBmpItem(OUString(), *pGraphicObject);
         rXFSet.Put( aXBmpItem );
 
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxBitmapTabPage::CheckChanges_Impl()
 {
@@ -463,7 +463,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 {
@@ -533,7 +533,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
             pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
         }
-        else // it must be a not existing imported bitmap
+        else 
         {
             const SfxPoolItem* pPoolItem = 0;
 
@@ -558,7 +558,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         }
     }
 
-    // determine button state
+    
     if( pBitmapList->Count() )
     {
         m_pBtnModify->Enable();
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 /******************************************************************************/
 
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
             OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
             MessageDialog*    pWarnBox = NULL;
 
-            // convert file URL to UI name
+            
             OUString        aName;
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -648,7 +648,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
             }
         }
         else
-            // graphic couldn't be loaded
+            
             MessageDialog( GetParentDialog()
                           ,"NoLoadedFileDialog"
                           ,"cui/ui/querynoloadedfiledialog.ui").Execute();
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 {
@@ -698,7 +698,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 
                 const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
-                // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                
                 XBitmapEntry* pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
                 delete pBitmapList->Replace(pEntry, nPos);
 
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 {
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
             *pnBitmapListState |= CT_MODIFIED;
         }
     }
-    // determine button state
+    
     if( !pBitmapList->Count() )
     {
         m_pBtnModify->Disable();
@@ -756,7 +756,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 {
@@ -790,7 +790,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            // save table
+            
             XBitmapListRef pBmpList = XPropertyList::CreatePropertyList(
                 XBITMAP_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsBitmapList();
             pBmpList->SetName( aURL.getName() );
@@ -805,8 +805,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
                 pBitmapList->SetName( aURL.getName() );
 
-                // determining (possibly cutting) the name
-                // displaying it in the GroupBox
+                
+                
                 OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                 aString += ": ";
 
@@ -832,7 +832,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
         }
     }
 
-    // determine button state
+    
     if( pBitmapList->Count() )
     {
         m_pBtnModify->Enable();
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 {
@@ -881,8 +881,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 
         if( pBitmapList->Save() )
         {
-            // determining (possibly cutting) the name
-            // displaying it in the GroupBox
+            
+            
             OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString += ": ";
 
@@ -908,7 +908,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
 {
@@ -917,7 +917,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
 
     m_pBitmapCtl->SetPixelColor( m_pLbColor->GetSelectEntryColor() );
 
-    // get bitmap and display it
+    
     rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
@@ -927,7 +927,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
 {
@@ -936,7 +936,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
 
     m_pBitmapCtl->SetBackgroundColor( m_pLbBackgroundColor->GetSelectEntryColor() );
 
-    // get bitmap and display it
+    
     rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
@@ -946,7 +946,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
 {
@@ -954,7 +954,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
     {
         m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
 
-        // get bitmap and display it
+        
         rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();

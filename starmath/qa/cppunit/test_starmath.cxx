@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -37,11 +37,11 @@ namespace {
 class Test : public test::BootstrapFixture
 {
 public:
-    // init
+    
     virtual void setUp();
     virtual void tearDown();
 
-    // tests
+    
     void editUndoRedo();
     void editMarker();
     void editFailure();
@@ -269,8 +269,8 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_MESSAGE("Should be optimal zoom", nFinalZoom == nOptimalZoom);
     }
 
-//To-Do: investigate GetPrinter logic of SVX_ZOOM_PAGEWIDTH/SVX_ZOOM_WHOLEPAGE to ensure
-//consistent value regardless of
+
+
 #if 0
     {
         SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());

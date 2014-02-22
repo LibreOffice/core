@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "StockChartTypeTemplate.hxx"
@@ -151,7 +151,7 @@ struct StaticStockChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Refe
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -181,7 +181,7 @@ StockChartTypeTemplate::StockChartTypeTemplate(
 
 StockChartTypeTemplate::~StockChartTypeTemplate()
 {}
-// ____ OPropertySet ____
+
 uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -197,7 +197,7 @@ uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticStockChartTypeTemplateInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -206,14 +206,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPr
 
 sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 {
-    // one x-axis
+    
     if( nDimension <= 0 )
         return 1;
-    // no further axes
+    
     if( nDimension >= 2 )
         return 0;
 
-    // one or two y-axes depending on volume
+    
     OSL_ASSERT( nDimension == 1 );
     bool bHasVolume = false;
     getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
@@ -246,12 +246,12 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
 
         if( bHasVolume && nChartTypeIndex==0 )
         {
-            //switch lines off for volume bars
+            
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
         }
         else
         {
-            //ensure that lines are on
+            
             if( xProp.is() )
             {
                 drawing::LineStyle eStyle = drawing::LineStyle_NONE;
@@ -343,10 +343,10 @@ void StockChartTypeTemplate::createChartTypes(
         sal_Int32 nSeriesIndex = 0;
 
         std::vector< Reference< chart2::XChartType > > aChartTypeVec;
-        // Bars (Volume)
+        
         if( bHasVolume )
         {
-            // chart type
+            
             Reference< XChartType > xCT(
                 xFact->createInstance(
                     CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
@@ -382,7 +382,7 @@ void StockChartTypeTemplate::createChartTypes(
         }
         ++nSeriesIndex;
 
-        // Lines (remaining series)
+        
         if( aSeriesSeq.getLength() > nSeriesIndex &&
             aSeriesSeq[ nSeriesIndex ].getLength() > 0 )
         {
@@ -404,7 +404,7 @@ void StockChartTypeTemplate::createChartTypes(
     }
 }
 
-// ____ XChartTypeTemplate ____
+
 sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
     sal_Bool /* bAdaptProperties */ )
@@ -464,7 +464,7 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
         {
             bResult = true;
 
-            // check for japanese style
+            
             Reference< beans::XPropertySet > xCTProp( xCandleStickChartType, uno::UNO_QUERY );
             if( xCTProp.is())
             {
@@ -472,7 +472,7 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
                 xCTProp->getPropertyValue( "Japanese") >>= bJapaneseProp;
                 bResult = bResult && ( bHasJapaneseStyle == bJapaneseProp );
 
-                // in old chart japanese == showFirst
+                
                 sal_Bool bShowFirstProp = sal_False;
                 xCTProp->getPropertyValue( "ShowFirst") >>= bShowFirstProp;
                 bResult = bResult && ( bHasOpenValue == bShowFirstProp );
@@ -526,12 +526,12 @@ Sequence< OUString > StockChartTypeTemplate::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( StockChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( StockChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( StockChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

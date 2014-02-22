@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "StatisticsItemConverter.hxx"
@@ -98,7 +98,7 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
 
 uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
 {
-    // todo: use a valid context
+    
     return uno::Reference< beans::XPropertySet >(
         ::chart::createErrorBar( uno::Reference< uno::XComponentContext >()));
 }
@@ -143,7 +143,7 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
 {
     bool bEquationExists = true;
 
-    // ensure that a trendline is on
+    
     if( pItemSet )
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
@@ -174,7 +174,7 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
 {
     bool bExists = true;
 
-    // ensure that a trendline is on
+    
     if( pItemSet )
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
@@ -247,7 +247,7 @@ void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::R
 }
 
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -282,7 +282,7 @@ StatisticsItemConverter::~StatisticsItemConverter()
 
 const sal_uInt16 * StatisticsItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nStatWhichPairs;
 }
 
@@ -322,9 +322,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
         }
         break;
 
-        // Attention !!! This case must be passed before SCHATTR_STAT_PERCENT,
-        // SCHATTR_STAT_BIGERROR, SCHATTR_STAT_CONSTPLUS,
-        // SCHATTR_STAT_CONSTMINUS and SCHATTR_STAT_INDICATE
+        
+        
+        
         case SCHATTR_STAT_KIND_ERROR:
         {
             bool bYError =
@@ -339,7 +339,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
             if( !xErrorBarProp.is() && eErrorKind == CHERROR_NONE)
             {
-                //nothing to do
+                
             }
             else
             {
@@ -614,7 +614,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                                 xErrorBarSource, bIsPositiveValue, bYError ));
                         if( ! xSeq.is())
                         {
-                            // no data range for error bars yet => create
+                            
                             uno::Reference< chart2::XInternalDataProvider > xIntDataProvider( xDataProvider, uno::UNO_QUERY );
                             OSL_ASSERT( xIntDataProvider.is());
                             if( xIntDataProvider.is())
@@ -878,7 +878,7 @@ void StatisticsItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

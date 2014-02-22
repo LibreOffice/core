@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper_module.hxx"
@@ -47,7 +47,7 @@ public:
     {
         m_rCollator = Collator::create( xContext );
         m_rCollator->loadDefaultCollator( rLocale,
-                                          0 ); //???
+                                          0 ); 
     }
 
     virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw(RuntimeException);
@@ -63,19 +63,19 @@ public:
     AnyCompareFactory( Reference< XComponentContext > xContext ) : m_rContext( xContext )
     {}
 
-    // XAnyCompareFactory
+    
     virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
             throw ( Exception, RuntimeException );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
-    // XServiceInfo - static versions (used for component registration)
+    
     static OUString SAL_CALL getImplementationName_static();
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
@@ -98,8 +98,8 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
 
 Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    // for now only OUString properties compare is implemented
-    // so no check for the property name is done
+    
+    
 
     if( aPropertyName == "Title" )
         return m_rAnyCompare;

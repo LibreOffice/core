@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -119,7 +119,7 @@ void SwXTextView::Invalidate()
         DELETEZ(pxTextViewCursor);
     }
 
-    m_refCount++; //prevent second d'tor call
+    m_refCount++; 
 
     {
         uno::Reference<uno::XInterface> const xInt(static_cast<
@@ -247,7 +247,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
     {
         uno::Reference<awt::XControl> xControl;
         SdrObject *const pSdrObject = GetControl(xCtrlModel, xControl);
-        if (pSdrObject) // hmm... needs view to verify it's in right doc...
+        if (pSdrObject) 
         {
             sdrObjects.push_back(pSdrObject);
         }
@@ -265,7 +265,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         {
             rSh.EnterStdMode();
             rSh.SetSelection(*pPaM);
-            // the pPaM has been copied - delete it
+            
             while (pPaM->GetNext() != pPaM)
                 delete pPaM->GetNext();
             delete pPaM;
@@ -300,7 +300,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
             rSh.GotoMark(pMark);
             return sal_True;
         }
-        // sdrObjects handled below
+        
     }
     sal_Bool bRet(sal_False);
     if (sdrObjects.size())
@@ -315,7 +315,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         for (size_t i = 0; i < sdrObjects.size(); ++i)
         {
             SdrObject *const pSdrObject(sdrObjects[i]);
-            // GetSelectableFromAny did not check pSdrObject is in right doc!
+            
             if (pPV && pSdrObject->GetPage() == pPV->GetPage())
             {
                 pDrawView->MarkObj(pSdrObject, pPV);
@@ -333,9 +333,9 @@ uno::Any SwXTextView::getSelection()
     uno::Reference< uno::XInterface >  aRef;
     if(GetView())
     {
-        //force immediat shell update
+        
         m_pView->StopShellTimer();
-        //Generating an interface from the current selection.
+        
         SwWrtShell& rSh = m_pView->GetWrtShell();
         ShellModes  eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
@@ -352,8 +352,8 @@ uno::Any SwXTextView::getSelection()
                 }
 
             }
-            //Without a table selection the text will be delivered.
-            //break;
+            
+            
             case SHELL_MODE_LIST_TEXT       :
             case SHELL_MODE_TABLE_LIST_TEXT:
             case SHELL_MODE_TEXT            :
@@ -366,12 +366,12 @@ uno::Any SwXTextView::getSelection()
             case SHELL_MODE_GRAPHIC         :
             case SHELL_MODE_OBJECT          :
             {
-                //Get FlyFrameFormat; for UI-Macro connection to flys
+                
                 const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
                 if (pFmt)
                 {
                     SwXFrame* pxFrame = SwIterator<SwXFrame,SwFmt>::FirstElement(*pFmt);
-                    if(pxFrame)                //The only common interface for all frames.
+                    if(pxFrame)                
                     {
                         aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
                     }
@@ -423,7 +423,7 @@ uno::Any SwXTextView::getSelection()
                 aRef = uno::Reference< uno::XInterface >(xShCol, uno::UNO_QUERY);
             }
             break;
-            default:;//prevent warning
+            default:;
         }
     }
     uno::Any aRet(&aRef, ::getCppuType((uno::Reference<uno::XInterface>*)0));
@@ -661,12 +661,12 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     SfxObjectShellLock xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     SwDoc *const pTempDoc( pDocSh->GetDoc() );
-    // #i103634#, #i112425#: do not expand numbering and fields on PDF export
+    
     pTempDoc->SetClipBoard(true);
     rOldSh.FillPrtDoc(pTempDoc,  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
-    pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//So that SelectShell is called.
+    pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
 
     IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
@@ -679,7 +679,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     if( pIDDA_old->getPrinter( false ) )
     {
         pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
-        //#69563# if it isn't the same printer then the pointer has been invalidated!
+        
         pTempPrinter = pIDDA->getPrinter( true );
     }
 
@@ -747,7 +747,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
         switch (pEntry->nWID)
         {
             case WID_IS_HIDE_SPELL_MARKS :
-                // deprecated #i91949
+                
             break;
             case WID_IS_CONSTANT_SPELLCHECK :
             {
@@ -789,20 +789,20 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
             case WID_PAGE_COUNT :
             case WID_LINE_COUNT :
             {
-                // format document completely in order to get meaningful
-                // values for page count and line count
+                
+                
                 m_pView->GetWrtShell().CalcLayout();
 
                 sal_Int32 nCount = -1;
                 if (nWID == WID_PAGE_COUNT)
                     nCount = m_pView->GetWrtShell().GetPageCount();
-                else // WID_LINE_COUNT
+                else 
                     nCount = m_pView->GetWrtShell().GetLineCount( sal_False /*of whole document*/ );
                 aRet <<= nCount;
             }
             break;
             case WID_IS_HIDE_SPELL_MARKS :
-                // deprecated #i91949
+                
             break;
             case WID_IS_CONSTANT_SPELLCHECK :
             {
@@ -883,14 +883,14 @@ SwXTextViewCursor::~SwXTextViewCursor()
 {
 }
 
-// used to determine if there is a text selction or not.
-// If there is no text selection the functions that need a working
-// cursor will be disabled (throw RuntimeException). This will be the case
-// for the following interfaces:
-// - XViewCursor
-// - XTextCursor
-// - XTextRange
-// - XLineCursor
+
+
+
+
+
+
+
+
 sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 {
 
@@ -898,8 +898,8 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
     OSL_ENSURE(m_pView, "m_pView is NULL ???");
     if(m_pView)
     {
-        //! m_pView->GetShellMode() will only work after the shell
-        //! has already changed and thus can not be used here!
+        
+        
         SelectionType eSelType = m_pView->GetWrtShell().GetSelectionType();
         bRes =  ( (nsSelectionType::SEL_TXT & eSelType) ||
                   (nsSelectionType::SEL_NUM & eSelType) )  &&
@@ -1066,7 +1066,7 @@ void SwXTextViewCursor::gotoRange(
 
         ShellModes  eSelMode = m_pView->GetShellMode();
         SwWrtShell& rSh = m_pView->GetWrtShell();
-        // call EnterStdMode in non-text selections only
+        
         if(!bExpand ||
            (eSelMode != SHELL_MODE_TABLE_TEXT &&
             eSelMode != SHELL_MODE_LIST_TEXT &&
@@ -1131,7 +1131,7 @@ void SwXTextViewCursor::gotoRange(
         }
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
-        //Skip SectionNodes
+        
         while(pTmp && pTmp->IsSectionNode())
         {
             pTmp = pTmp->StartOfSectionNode();
@@ -1140,8 +1140,8 @@ void SwXTextViewCursor::gotoRange(
         {
             pOwnStartNode = pOwnStartNode->StartOfSectionNode();
         }
-        //Without Expand it is allowed to jump out with the ViewCursor everywhere,
-        //with Expand only in the same environment
+        
+        
         if(bExpand &&
             (pOwnStartNode != pTmp ||
             (eSelMode != SHELL_MODE_TABLE_TEXT &&
@@ -1150,16 +1150,16 @@ void SwXTextViewCursor::gotoRange(
                 eSelMode != SHELL_MODE_TEXT)))
             throw uno::RuntimeException();
 
-        //Now, the selection must be expanded.
+        
         if(bExpand)
         {
-            // The cursor should include everything that has been included
-            // by him and the transfered Range.
+            
+            
             SwPosition aOwnLeft(*aOwnPaM.Start());
             SwPosition aOwnRight(*aOwnPaM.End());
             SwPosition* pParamLeft = rDestPam.Start();
             SwPosition* pParamRight = rDestPam.End();
-            // Now four SwPositions are there, two of them are needed, but which?
+            
             if(aOwnRight > *pParamRight)
                 *aOwnPaM.GetPoint() = aOwnRight;
             else
@@ -1172,7 +1172,7 @@ void SwXTextViewCursor::gotoRange(
         }
         else
         {
-            //The cursor shall match the passed range.
+            
             *aOwnPaM.GetPoint() = *rDestPam.GetPoint();
             if(rDestPam.HasMark())
             {
@@ -1431,10 +1431,10 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
         ShellModes  eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
         {
-            //! since setString for SEL_TABLE_TEXT (with possible
-            //! multi selection of cells) would not work properly we
-            //! will ignore this case for both
-            //! functions (setString AND getString) because of symmetrie.
+            
+            
+            
+            
 
             case SHELL_MODE_LIST_TEXT       :
             case SHELL_MODE_TABLE_LIST_TEXT:
@@ -1444,7 +1444,7 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
                 SwPaM* pShellCrsr = rSh.GetCrsr();
                 SwUnoCursorHelper::GetTextFromPam(*pShellCrsr, uRet);
             }
-            default:;//prevent warning
+            default:;
         }
     }
     return uRet;
@@ -1461,10 +1461,10 @@ void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeEx
         ShellModes  eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
         {
-            //! since setString for SEL_TABLE_TEXT (with possible
-            //! multi selection of cells) would not work properly we
-            //! will ignore this case for both
-            //! functions (setString AND getString) because of symmetrie.
+            
+            
+            
+            
 
             case SHELL_MODE_LIST_TEXT       :
             case SHELL_MODE_TABLE_LIST_TEXT :
@@ -1474,7 +1474,7 @@ void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeEx
                 SwCursor* pShellCrsr = rSh.GetSwCrsr();
                 SwUnoCursorHelper::SetString(*pShellCrsr, aString);
             }
-            default:;//prevent warning
+            default:;
         }
     }
 }
@@ -1739,7 +1739,7 @@ const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
     return theSwXTextViewCursorUnoTunnelId::get().getSeq();
 }
 
-//XUnoTunnel
+
 sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
         throw(uno::RuntimeException)
@@ -1783,7 +1783,7 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
 {
     SolarMutexGuard aGuard;
 
-    //force immediat shell update
+    
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
     if ( GetView()->GetShellMode() == SHELL_MODE_DRAWTEXT )
@@ -1796,7 +1796,7 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     {
         SwTransferable* pTransfer = new SwTransferable( rSh );
         const sal_Bool bLockedView = rSh.IsViewLocked();
-        rSh.LockView( sal_True );    //lock visible section
+        rSh.LockView( sal_True );    
         pTransfer->PrepareForCopy();
         rSh.LockView( bLockedView );
         return uno::Reference< datatransfer::XTransferable >( pTransfer );
@@ -1807,7 +1807,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
 {
     SolarMutexGuard aGuard;
 
-    //force immediat shell update
+    
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
     if ( GetView()->GetShellMode() == SHELL_MODE_DRAWTEXT )

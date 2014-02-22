@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/servicehandler.hxx>
@@ -32,8 +32,8 @@ namespace framework{
 #define PROTOCOL_VALUE      "service:"
 #define PROTOCOL_LENGTH     8
 
-//_________________________________________________________________________________________________________________
-// XInterface, XTypeProvider, XServiceInfo
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE(ServiceHandler                   ,
                                  ::cppu::OWeakObject              ,
@@ -50,7 +50,7 @@ DEFINE_INIT_SERVICE(ServiceHandler,
                     }
                    )
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard ctor
@@ -60,14 +60,14 @@ DEFINE_INIT_SERVICE(ServiceHandler,
                 reference to uno servicemanager for creation of new services
 */
 ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
+        
         : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
+        
         , m_xFactory    ( xFactory                      )
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard dtor
@@ -78,7 +78,7 @@ ServiceHandler::~ServiceHandler()
     m_xFactory = NULL;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
@@ -99,7 +99,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
@@ -119,7 +119,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch URL with arguments
@@ -134,14 +134,14 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
 void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                                  aURL       ,
                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
-    // So we should hold us self alive till this call ends.
+    
+    
     css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     implts_dispatch(aURL,lArguments);
-    // No notification for status listener!
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch with guaranteed notifications about success
@@ -159,9 +159,9 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
 {
-    // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
-    // we can run into some problems. So we hold us self alive till this method ends.
-    // Another reason: We can use this reference as source of sending event at the end too.
+    
+    
+    
     css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::uno::XInterface > xService = implts_dispatch(aURL,lArguments);
@@ -172,14 +172,14 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
             aEvent.State = css::frame::DispatchResultState::SUCCESS;
         else
             aEvent.State = css::frame::DispatchResultState::FAILURE;
-        aEvent.Result <<= xService; // may NULL for state=FAILED!
+        aEvent.Result <<= xService; 
         aEvent.Source = xThis;
 
         xListener->dispatchFinished( aEvent );
     }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      threadsafe helper for dispatch calls
@@ -208,8 +208,8 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     if (!xFactory.is())
         return css::uno::Reference< css::uno::XInterface >();
 
-    // extract service name and may optional given parameters from given URL
-    // and use it to create and start the component
+    
+    
     OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
     OUString sServiceName;
     OUString sArguments  ;
@@ -218,7 +218,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     if (nArgStart!=-1)
     {
         sServiceName = sServiceAndArguments.copy(0,nArgStart);
-        ++nArgStart; // ignore '?'!
+        ++nArgStart; 
         sArguments   = sServiceAndArguments.copy(nArgStart);
     }
     else
@@ -229,23 +229,23 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     if (sServiceName.isEmpty())
         return css::uno::Reference< css::uno::XInterface >();
 
-    // If a service doesn't support an optional job executor interface - he can't get
-    // any given parameters!
-    // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
+    
+    
+    
 
     css::uno::Reference< css::uno::XInterface > xService;
     try
     {
-        // => a) a service starts running inside his own ctor and we create it only
+        
         xService = xFactory->createInstance(sServiceName);
-        // or b) he implements the right interface and starts there (may with optional parameters)
+        
         css::uno::Reference< css::task::XJobExecutor > xExecuteable(xService, css::uno::UNO_QUERY);
         if (xExecuteable.is())
             xExecuteable->trigger(sArguments);
     }
-    // ignore all errors - inclusive runtime errors!
-    // E.g. a script based service (written in phyton) could not be executed
-    // because it contains syntax errors, which was detected at runtime ...
+    
+    
+    
     catch(const css::uno::Exception& e)
     {
         SAL_WARN(
@@ -256,7 +256,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     return xService;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      add/remove listener for state events
@@ -272,17 +272,17 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                  const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
-    // not suported yet
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                     const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
-    // not suported yet
+    
 }
 
-}       //  namespace framework
+}       
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

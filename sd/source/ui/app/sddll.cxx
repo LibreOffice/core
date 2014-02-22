@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <avmedia/mediaplayer.hxx>
@@ -105,7 +105,7 @@ namespace sd { namespace ui { namespace table {
     extern void RegisterInterfaces( SfxModule* pMod );
 } } }
 
-// Register all Factorys
+
 void SdDLL::RegisterFactorys()
 {
     if (SvtModuleOptions().IsImpress())
@@ -125,51 +125,51 @@ void SdDLL::RegisterFactorys()
     }
 }
 
-// Register all Interfaces
+
 
 void SdDLL::RegisterInterfaces()
 {
-    // Module
+    
     SfxModule* pMod = SD_MOD();
     SdModule::RegisterInterface(pMod);
 
-    // View shell base.
+    
     ::sd::ViewShellBase::RegisterInterface(pMod);
 
-    // DocShells
+    
     ::sd::DrawDocShell::RegisterInterface(pMod);
     ::sd::GraphicDocShell::RegisterInterface(pMod);
 
-    // Impress ViewShells
+    
     ::sd::DrawViewShell::RegisterInterface(pMod);
     ::sd::OutlineViewShell::RegisterInterface(pMod);
     ::sd::PresentationViewShell::RegisterInterface(pMod);
 
-    // Draw ViewShell
+    
     ::sd::GraphicViewShell::RegisterInterface(pMod);
 
-    // Impress ObjectShells
+    
     ::sd::BezierObjectBar::RegisterInterface(pMod);
     ::sd::TextObjectBar::RegisterInterface(pMod);
     ::sd::GraphicObjectBar::RegisterInterface(pMod);
 
-    // Media ObjectShell
+    
     ::sd::MediaObjectBar::RegisterInterface(pMod);
 
-    // Table ObjectShell
+    
     ::sd::ui::table::RegisterInterfaces(pMod);
 
-    // View shells for the side panes.
+    
     ::sd::slidesorter::SlideSorterViewShell::RegisterInterface (pMod);
 }
 
-// Register all Controllers
+
 
 void SdDLL::RegisterControllers()
 {
     SfxModule* pMod = SD_MOD();
 
-    // ToolBoxControls registrieren
+    
     SdTbxControl::RegisterControl( SID_OBJECT_ALIGN, pMod );
     SdTbxControl::RegisterControl( SID_ZOOM_TOOLBOX, pMod );
     SdTbxControl::RegisterControl( SID_OBJECT_CHOOSE_MODE, pMod );
@@ -241,13 +241,13 @@ void SdDLL::RegisterControllers()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
-    // register StatusBarControls
+    
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pMod );
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
-    // MenuControls for PopupMenu
+    
     SvxFontMenuControl::RegisterControl( SID_ATTR_CHAR_FONT, pMod );
     SvxFontSizeMenuControl::RegisterControl( SID_ATTR_CHAR_FONTHEIGHT, pMod );
 
@@ -255,7 +255,7 @@ void SdDLL::RegisterControllers()
     SfxMenuControl::RegisterControl( SID_DELETE_SNAPITEM, pMod );
     SfxMenuControl::RegisterControl( SID_BEZIER_CLOSE, pMod );
 
-    // #UndoRedo#
+    
     SvxUndoRedoControl::RegisterControl( SID_UNDO , pMod );
     SvxUndoRedoControl::RegisterControl( SID_REDO , pMod );
 
@@ -291,12 +291,12 @@ void SdDLL::Init()
     if (SvtModuleOptions().IsDraw())
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
-    // the SdModule must be created
+    
      SdModule** ppShlPtr = (SdModule**) GetAppData(SHL_DRAW);
 
-     // #i46427#
-     // The SfxModule::SfxModule stops when the first given factory
-     // is 0, so we must not give a 0 as first factory
+     
+     
+     
      if( pImpressFact )
      {
         (*ppShlPtr) = new SdModule( pImpressFact, pDrawFact );
@@ -308,7 +308,7 @@ void SdDLL::Init()
 
     if (SvtModuleOptions().IsImpress())
     {
-        // Register the Impress shape types in order to make the shapes accessible.
+        
         ::accessibility::RegisterImpressShapeTypes ();
         ::sd::DrawDocShell::Factory().SetDocumentServiceName( "com.sun.star.presentation.PresentationDocument" );
     }
@@ -318,28 +318,28 @@ void SdDLL::Init()
         ::sd::GraphicDocShell::Factory().SetDocumentServiceName( "com.sun.star.drawing.DrawingDocument" );
     }
 
-    // register your view-factories here
+    
     RegisterFactorys();
 
-    // register your shell-interfaces here
+    
     RegisterInterfaces();
 
-    // register your controllers here
+    
     RegisterControllers();
 
-    // register SvDraw-Fields
+    
     SdrRegisterFieldClasses();
 
-    // register 3D-Objekt-Factory
+    
     E3dObjFactory();
 
-    // register ::com::sun::star::form::component::Form-Object-Factory
+    
     FmFormObjFactory();
 
-    // register Object-Factory
+    
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
 
-    // register your exotic remote controlls here
+    
 #ifdef ENABLE_SDREMOTE
     if ( !Application::IsHeadlessModeRequested() )
         RegisterRemotes();

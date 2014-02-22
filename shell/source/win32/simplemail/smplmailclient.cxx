@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -104,7 +104,7 @@ namespace /* private */
         if (senddocUrl.isEmpty())
         {
             senddocUrl = ( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc.exe");
-            rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
+            rtl::Bootstrap::expandMacros(senddocUrl); 
         }
         return senddocUrl;
     }
@@ -150,7 +150,7 @@ namespace /* private */
         osl_freeProcessHandle(proc);
         return (procInfo.Code == SUCCESS_SUCCESS);
     }
-} // namespace private
+} 
 
 Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage()
     throw (RuntimeException)
@@ -275,14 +275,14 @@ void CSmplMailClient::validateParameter(
 
     OSL_ENSURE(!(aFlag & NO_LOGON_DIALOG), "Flag NO_LOGON_DIALOG has currently no effect");
 
-    // check the flags, the allowed range is 0 - (2^n - 1)
+    
     if (aFlag < 0 || aFlag > 3)
         throw IllegalArgumentException(
             OUString("Invalid flag value"),
             static_cast<XSimpleMailClient*>(this),
             2);
 
-    // check if a recipient is specified of the flags NO_USER_INTERFACE is specified
+    
     if ((aFlag & NO_USER_INTERFACE) && !xSimpleMailMessage->getRecipient().getLength())
         throw IllegalArgumentException(
             OUString("No recipient specified"),

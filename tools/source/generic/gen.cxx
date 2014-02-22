@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -25,7 +25,7 @@ SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Pair::>> - Solar-Version not set on rIStream" );
 
-    //39428 SvStream no longer supports operator>>(long&)
+    
     sal_Int32 nTmpA(0), nTmpB(0);
     rIStream.ReadInt32( nTmpA ).ReadInt32( nTmpB );
     rPair.nA = nTmpA;
@@ -38,7 +38,7 @@ SvStream& WritePair( SvStream& rOStream, const Pair& rPair )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Pair::<< - Solar-Version not set on rOStream" );
 
-    //39428 SvStream no longer supports operator<<(long)
+    
     rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rPair.nA) ).WriteInt32( sal::static_int_cast<sal_Int32>(rPair.nB) );
 
     return rOStream;
@@ -89,18 +89,18 @@ Rectangle& Rectangle::Intersection( const Rectangle& rRect )
         return *this;
     }
 
-    // Justify rectangle
+    
     Rectangle aTmpRect( rRect );
     Justify();
     aTmpRect.Justify();
 
-    // Perform intersection
+    
     nLeft  = std::max( nLeft, aTmpRect.nLeft );
     nRight = std::min( nRight, aTmpRect.nRight );
     nTop   = std::max( nTop, aTmpRect.nTop );
     nBottom= std::min( nBottom, aTmpRect.nBottom );
 
-    // Determine if intersection is empty
+    
     if ( nRight < nLeft || nBottom < nTop )
         *this = Rectangle();
 
@@ -165,7 +165,7 @@ bool Rectangle::IsInside( const Rectangle& rRect ) const
 
 bool Rectangle::IsOver( const Rectangle& rRect ) const
 {
-    // If there's no intersection, they don't overlap
+    
     return !GetIntersection( rRect ).IsEmpty();
 }
 
@@ -173,7 +173,7 @@ SvStream& ReadRectangle( SvStream& rIStream, Rectangle& rRect )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Rectangle::>> - Solar-Version not set on rIStream" );
 
-    //fdo#39428 SvStream no longer supports operator>>(long&)
+    
     sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
 
     rIStream.ReadInt32( nTmpL ).ReadInt32( nTmpT ).ReadInt32( nTmpR ).ReadInt32( nTmpB );
@@ -190,7 +190,7 @@ SvStream& WriteRectangle( SvStream& rOStream, const Rectangle& rRect )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Rectangle::<< - Solar-Version not set on rOStream" );
 
-    //fdo#39428 SvStream no longer supports operator<<(long)
+    
     rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rRect.nLeft) )
             .WriteInt32( sal::static_int_cast<sal_Int32>(rRect.nTop) )
             .WriteInt32( sal::static_int_cast<sal_Int32>(rRect.nRight) )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableWindowListBox.hxx"
@@ -39,7 +39,7 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
 
 const sal_uLong SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
-// class OTableWindowListBox
+
 OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
     ,m_aMousePos( Point(0,0) )
@@ -58,9 +58,9 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
 
 void OTableWindowListBox::dragFinished( )
 {
-    // first show the error msg when existing
+    
     m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccurredError());
-    // second look for ui activities which should happen after d&d
+    
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
     m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl));
@@ -79,7 +79,7 @@ OTableWindowListBox::~OTableWindowListBox()
 
 SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )
 {
-    // iterate through the list
+    
     SvTreeList* pTreeList = GetModel();
     SvTreeListEntry* pEntry = pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
@@ -119,11 +119,11 @@ void OTableWindowListBox::NotifyScrolled()
 void OTableWindowListBox::NotifyEndScroll()
 {
     if (m_bReallyScrolled)
-        // connections of this table, if any,  should be redrawn
+        
         m_pTabWin->getTableView()->Invalidate(INVALIDATE_NOCHILDREN);
 
-        // without INVALIDATE_NOCHILDREN all tables would be redrawn,
-        // so: flickering
+        
+        
     m_bReallyScrolled = sal_False;
 }
 
@@ -196,12 +196,12 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
-        // asterisk was not allowed to be copied to selection browsebox
+        
         sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
         EndSelection();
-        // create a description of the source
+        
         OJoinExchangeData jxdSource(this);
-        // put it into a exchange object
+        
         OJoinExchObj* pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
         Reference< XTransferable > xEnsureDelete(pJoin);
         pJoin->StartDrag(this, DND_ACTION_LINK, this);
@@ -211,29 +211,29 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
 sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
-    // check the format
-    if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
+    
+    if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) 
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
-    {   // don't drop into the window if it's the drag source itself
+    {   
 
-        // remove the selection if the dragging operation is leaving the window
+        
         if (_rEvt.mbLeaving)
             SelectAll(sal_False);
         else
         {
-            // hit test
+            
             m_aMousePos = _rEvt.maPosPixel;
             Size aOutputSize = GetOutputSizePixel();
             SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
             if( !pEntry )
                 return DND_ACTION_NONE;
 
-            // Scrolling Areas
+            
             Rectangle aBottomScrollArea( Point(0, aOutputSize.Height()-LISTBOX_SCROLLING_AREA),
                                          Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
             Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
 
-             // scroll up if the pointer is on the upper scroll area
+             
             if( aBottomScrollArea.IsInside(m_aMousePos) )
             {
                 if( !m_aScrollTimer.IsActive() )
@@ -243,7 +243,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 }
             }
 
-           // scroll down if the pointer is on the lower scroll area
+           
            else if( aTopScrollArea.IsInside(m_aMousePos) )
             {
                 if( !m_aScrollTimer.IsActive() )
@@ -258,12 +258,12 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                     m_aScrollTimer.Stop();
             }
 
-            // automatically select right entry when dragging
+            
             if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
                 SelectAll(sal_False);
             Select(pEntry, sal_True);
 
-            // one cannot drop on the first (*) entry
+            
             if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
                 nDND_Action = DND_ACTION_LINK;
         }
@@ -280,7 +280,7 @@ IMPL_LINK( OTableWindowListBox, LookForUiHdl, void *, /*EMPTY_ARG*/)
 
 IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
 {
-    // create the connection
+    
     m_nDropEvent = 0;
     OSL_ENSURE(m_pTabWin,"No TableWindow!");
     try
@@ -291,7 +291,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
     }
     catch(const SQLException& e)
     {
-        // remember the exception so that we can show them later when d&d is finished
+        
         m_pTabWin->getDesignView()->getController().setErrorOccurred(::dbtools::SQLExceptionInfo(e));
     }
     return 0L;
@@ -301,7 +301,7 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     if ( OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
-    {   // don't drop into the window if it's the drag source itself
+    {   
         m_aDropInfo.aSource = OJoinExchangeData(this);
         m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
 
@@ -342,7 +342,7 @@ void OTableWindowListBox::GetFocus()
 
 IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
-    // tell my parent
+    
     Window* pParent = Window::GetParent();
     OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 

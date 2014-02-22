@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "gridcolumnproptranslator.hxx"
@@ -66,9 +66,9 @@ namespace xmloff
         }
         AlignmentTranslations[] =
         {
-            // note that order matters:
-            // valueAlignToParaAdjust and valueParaAdjustToAlign search this map from the _beginning_
-            // and use the first matching entry
+            
+            
+            
             { ParagraphAdjust_LEFT,             awt::TextAlign::LEFT     },
             { ParagraphAdjust_CENTER,           awt::TextAlign::CENTER   },
             { ParagraphAdjust_RIGHT,            awt::TextAlign::RIGHT    },
@@ -112,7 +112,7 @@ namespace xmloff
             OSL_FAIL( "valueParaAdjustToAlign: unreachable!" );
         }
 
-        //= OMergedPropertySetInfo
+        
         typedef ::cppu::WeakAggImplHelper1  <   XPropertySetInfo
                                             >   OMergedPropertySetInfo_Base;
         class OMergedPropertySetInfo : public OMergedPropertySetInfo_Base
@@ -126,7 +126,7 @@ namespace xmloff
         protected:
             virtual ~OMergedPropertySetInfo();
 
-            // XPropertySetInfo
+            
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
             virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (::com::sun::star::uno::RuntimeException);
@@ -144,7 +144,7 @@ namespace xmloff
 
         Sequence< Property > SAL_CALL OMergedPropertySetInfo::getProperties(  ) throw (RuntimeException)
         {
-            // add a "ParaAdjust" property to the master properties
+            
             Sequence< Property > aProperties;
             if ( m_xMasterInfo.is() )
                 aProperties = m_xMasterInfo->getProperties();
@@ -180,7 +180,7 @@ namespace xmloff
         }
     }
 
-    //= OGridColumnPropertyTranslator
+    
     OGridColumnPropertyTranslator::OGridColumnPropertyTranslator( const Reference< XMultiPropertySet >& _rxGridColumn )
         :m_xGridColumn( _rxGridColumn )
     {
@@ -201,8 +201,8 @@ namespace xmloff
 
     void SAL_CALL OGridColumnPropertyTranslator::setPropertyValue( const OUString& _rPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
-        // we implement this by delegating it to setPropertyValues, which is to ignore unknown properties. On the other hand, our
-        // contract requires us to throw a UnknownPropertyException for unknown properties, so check this first.
+        
+        
 
         if ( !getPropertySetInfo()->hasPropertyByName( _rPropertyName ) )
             throw UnknownPropertyException( _rPropertyName, *this );
@@ -247,8 +247,8 @@ namespace xmloff
         if ( !m_xGridColumn.is() )
             return;
 
-        // if there's ever the need for more than one property being translated, then we should
-        // certainly have a more clever implementation than this ...
+        
+        
 
         Sequence< OUString > aTranslatedNames( aPropertyNames );
         Sequence< Any >             aTranslatedValues( aValues );
@@ -296,6 +296,6 @@ namespace xmloff
         OSL_FAIL( "OGridColumnPropertyTranslator::firePropertiesChangeEvent: not implemented - this should not be needed!" );
     }
 
-} // namespace xmloff
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

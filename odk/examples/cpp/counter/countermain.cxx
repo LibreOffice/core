@@ -53,7 +53,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 
-// generated c++ interfaces
+
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <foo/XCountable.hpp>
@@ -67,7 +67,7 @@ using namespace com::sun::star::lang;
 using namespace ::rtl;
 
 
-//=======================================================================
+
 SAL_IMPLEMENT_MAIN()
 {
     try {

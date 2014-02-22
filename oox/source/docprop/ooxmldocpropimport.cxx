@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ooxmldocpropimport.hxx"
@@ -96,14 +96,14 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
     return ContainerHelper::vectorToSequence( aResult );
 }
 
-} // namespace
+} 
 
 DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentContext >& rxContext ) :
     mxContext( rxContext )
 {
 }
 
-// XServiceInfo
+
 OUString SAL_CALL DocumentPropertiesImport::getImplementationName() throw (RuntimeException)
 {
     return DocumentPropertiesImport_getImplementationName();
@@ -119,7 +119,7 @@ Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames
     return DocumentPropertiesImport_getSupportedServiceNames();
 }
 
-// XOOXMLDocumentPropertiesImporter
+
 void SAL_CALL DocumentPropertiesImport::importProperties(
         const Reference< XStorage >& rxSource, const Reference< XDocumentProperties >& rxDocumentProperties )
         throw (RuntimeException, IllegalArgumentException, SAXException, Exception)
@@ -131,7 +131,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         throw IllegalArgumentException();
 
     Sequence< InputSource > aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "metadata/core-properties" ) );
-    // MS Office seems to have a bug, so we have to do similar handling
+    
     if( !aCoreStreams.hasElements() )
         aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_PACKAGE_RELATION_TYPE( "metadata/core-properties" ) );
 
@@ -161,9 +161,9 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     }
 }
 
-// ============================================================================
 
-} // namespace docprop
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

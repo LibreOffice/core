@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/pathoptions.hxx>
@@ -65,7 +65,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
     SFX_STATUSBAR_REGISTRATION(SdResId(RID_DRAW_STATUSBAR));
 }
 
-// Ctor
+
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 :   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
                   pFact1, pFact2, NULL ),
@@ -79,7 +79,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     bWaterCan(sal_False),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
-    SetName( OUString( "StarDraw" ) );  // Do not translate!
+    SetName( OUString( "StarDraw" ) );  
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
@@ -89,16 +89,16 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
                                          ERRCODE_AREA_SD_END,
                                          GetResMgr() );
 
-    // Create a new ref device and (by calling SetReferenceDevice())
-    // set its resolution to 600 DPI.  This leads to a visually better
-    // formatting of text in small sizes (6 point and below.)
+    
+    
+    
     VirtualDevice* pDevice = new VirtualDevice;
     mpVirtualRefDevice = pDevice;
     pDevice->SetMapMode( MAP_100TH_MM );
     pDevice->SetReferenceDevice ( VirtualDevice::REFDEV_MODE06 );
 }
 
-// Dtor
+
 SdModule::~SdModule()
 {
     delete pSearchItem;
@@ -112,14 +112,14 @@ SdModule::~SdModule()
         ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
         if (pViewShell)
         {
-            // Removing our event listener
+            
             Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
         }
     }
 
     mpResourceContainer.reset();
 
-    // Mark the module in the global AppData structure as deleted.
+    
     SdModule** ppShellPointer = (SdModule**)GetAppData(SHL_DRAW);
     if (ppShellPointer != NULL)
         (*ppShellPointer) = NULL;
@@ -128,7 +128,7 @@ SdModule::~SdModule()
     delete static_cast< VirtualDevice* >( mpVirtualRefDevice );
 }
 
-/// get notifications
+
 void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxSimpleHint ) &&
@@ -139,7 +139,7 @@ void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-/// Return options
+
 SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 {
     SdOptions* pOptions = NULL;

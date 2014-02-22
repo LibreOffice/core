@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -91,7 +91,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     if (nGlobStrId)
@@ -112,12 +112,12 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
                 aStr += "0";
             else
             {
-                // Number in the standard format, the other on the cursor position
+                
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_uInt32 nNumFmt = 0;
                 if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 && eFunc != SUBTOTAL_FUNC_SELECTION_COUNT)
                 {
-                    //  Zahlformat aus Attributen oder Formel
+                    
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                 }
 
@@ -137,12 +137,12 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 
 
 
-//  Functions that are disabled, depending on the selection
-//  Default:
-//      SID_DELETE,
-//      SID_DELETE_CONTENTS,
-//      FID_DELETE_CELL
-//      FID_VALIDATION
+
+
+
+
+
+
 
 
 void ScTabViewShell::GetState( SfxItemSet& rSet )
@@ -192,7 +192,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_DELETE_PRINTAREA:
                 if ( nTabSelCount > 1 )
                 {
-                    // #i22589# also take "Print Entire Sheet" into account here
+                    
                     bool bHas = false;
                     for (SCTAB i=0; !bHas && i<nTabCount; i++)
                         bHas = rMark.GetTableSelect(i) && (pDoc->GetPrintRangeCount(i) || pDoc->IsPrintEntireSheet(i));
@@ -214,8 +214,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_SEARCH_ITEM:
             {
-                SvxSearchItem aItem(ScGlobal::GetSearchItem()); // make a copy.
-                // Search on current selection if a range is marked.
+                SvxSearchItem aItem(ScGlobal::GetSearchItem()); 
+                
                 aItem.SetSelection(rMark.IsMarked());
                 rSet.Put(aItem);
                 break;
@@ -223,10 +223,10 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_SEARCH_OPTIONS:
                 {
-                    // Anything goes
+                    
                     sal_uInt16 nOptions = 0xffff;
 
-                    // No replacement if ReadOnly
+                    
                     if (GetViewData()->GetDocShell()->IsReadOnly())
                         nOptions &= ~( SEARCH_OPTIONS_REPLACE | SEARCH_OPTIONS_REPLACE_ALL );
                     rSet.Put( SfxUInt16Item( nWhich, nOptions ) );
@@ -244,7 +244,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_CURRENTTAB:
-                // Table for Basic is 1-based
+                
                 rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData()->GetTabNo()) + 1 ) );
                 break;
 
@@ -273,7 +273,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_RESET_PRINTZOOM:
                 {
-                    // disable if already set to default
+                    
 
                     OUString aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -343,7 +343,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_NORMALVIEWMODE:
             case FID_PAGEBREAKMODE:
-                // always handle both slots - they exclude each other
+                
                 if ( bOle )
                 {
                     rSet.DisableItem( FID_NORMALVIEWMODE );
@@ -442,13 +442,13 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_FORMATPAGE:
-                // in protected tables
+                
                 if ( pDocShell && ( pDocShell->IsReadOnly() || pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_PRINTPREVIEW:
-                // Toggle slot needs a State
+                
                 rSet.Put( SfxBoolItem( nWhich, false ) );
                 break;
 
@@ -458,15 +458,15 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_TAB_DESELECTALL:
                 if ( nTabSelCount == 1 )
-                    rSet.DisableItem( nWhich );     // enabled only if several sheets are selected
+                    rSet.DisableItem( nWhich );     
                 break;
 
-        } // switch ( nWitch )
+        } 
         nWhich = aIter.NextWhich();
-    } // while ( nWitch )
+    } 
 }
 
-//------------------------------------------------------------------
+
 void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
     ScDocument*             pDoc    = GetViewData()->GetDocument();
@@ -480,7 +480,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
     boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
-    // We only allow these border line types.
+    
     std::vector<sal_Int32> aBorderStyles;
     aBorderStyles.reserve(5);
     aBorderStyles.push_back(table::BorderLineStyle::SOLID);
@@ -493,9 +493,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_STYLES);
     pOldSet->Put(aBorderStylesItem);
 
-    // Get border items and put them in the set:
+    
     GetSelectionFrame( aLineOuter, aLineInner );
-    //Fix border incorrect for RTL fdo#62399
+    
     if( pDoc->IsLayoutRTL( GetViewData()->GetTabNo() ) )
     {
         SvxBoxItem     aNewFrame( aLineOuter );
@@ -516,7 +516,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     pOldSet->Put( aLineInner );
 
-    // Generate NumberFormat Value from Value and Language and box it.
+    
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
         pOldAttrs->GetNumberFormat( pDoc->GetFormatTable() ) ) );
 
@@ -553,7 +553,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     }
 }
 
-//------------------------------------------------------------------
+
 
 bool ScTabViewShell::IsRefInputMode() const
 {
@@ -600,7 +600,7 @@ bool ScTabViewShell::IsRefInputMode() const
     return false;
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteInputDirect()
 {
@@ -614,7 +614,7 @@ void ScTabViewShell::ExecuteInputDirect()
     }
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
 {
@@ -674,10 +674,10 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                 pDoc->GetInputString( nPosX, nPosY, nTab, aString );
                 if (eType == CELLTYPE_STRING)
                 {
-                    //  Bei Bedarf ein ' vorneweg, damit der String nicht ungewollt
-                    //  als Zahl interpretiert wird, und um dem Benutzer zu zeigen,
-                    //  dass es ein String ist (#35060#).
-                    //! Auch bei Zahlformat "Text"? -> dann beim Editieren wegnehmen
+                    
+                    
+                    
+                    
 
                     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                     sal_uInt32 nNumFmt;
@@ -695,15 +695,15 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                                 aString,
                                 pObject );
 
-        //  if using the view's local input handler, this view can always be set
-        //  as current view inside NotifyChange.
+        
+        
         ScTabViewShell* pSourceSh = pInputHandler ? this : NULL;
 
         pHdl->NotifyChange( &aState, bForce, pSourceSh, bStopEditing );
     }
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_STATUS_SUM );         // immer zusammen mit Eingabezeile
+    rBindings.Invalidate( SID_STATUS_SUM );         
     rBindings.Invalidate( SID_ATTR_SIZE );
     rBindings.Invalidate( SID_TABLE_CELL );
 }
@@ -714,13 +714,13 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
         pHdl->UpdateCellAdjust( eJust );
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
-    // only SID_SAVEDOC / SID_SAVEASDOC
+    
 
-    // Finish entering in any case, even if a formula is being processed
+    
     SC_MOD()->InputEnterHandler();
 
     if ( GetViewData()->GetDocShell()->IsDocShared() )
@@ -728,7 +728,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
         GetViewData()->GetDocShell()->SetDocumentModified();
     }
 
-    // otherwise as normal
+    
     GetViewData()->GetDocShell()->ExecuteSlot( rReq );
 }
 
@@ -742,7 +742,7 @@ void ScTabViewShell::GetSaveState( SfxItemSet& rSet )
     {
         if ( nWhich != SID_SAVEDOC || !GetViewData()->GetDocShell()->IsDocShared() )
         {
-            // get state from DocShell
+            
             pDocSh->GetSlotState( nWhich, NULL, &rSet );
         }
         nWhich = aIter.NextWhich();

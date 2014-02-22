@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlexternaltabi.hxx"
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-// ============================================================================
+
 
 ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -101,10 +101,10 @@ static bool lcl_isValidRelativeURL(const OUString& rUrl)
     {
         sal_Unicode c = p[i];
         if (i < 2 && c != '.')
-            // the path must begin with '..'
+            
             return false;
         else if (i == 2 && c != '/')
-            // a '/' path separator must follow
+            
             return false;
     }
     return true;
@@ -122,7 +122,7 @@ void ScXMLExternalRefTabSourceContext::EndElement()
     pRefMgr->setFilterData(mrExternalRefInfo.mnFileId, maFilterName, maFilterOptions);
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -140,8 +140,8 @@ ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
 SvXMLImportContext* ScXMLExternalRefRowsContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
-    // #i101319# row elements inside group, rows or header-rows
-    // are treated like row elements directly in the table element
+    
+    
 
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowsElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -165,7 +165,7 @@ void ScXMLExternalRefRowsContext::EndElement()
 {
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -218,9 +218,9 @@ void ScXMLExternalRefRowContext::EndElement()
 
     for (sal_Int32 i = 1; i < mnRepeatRowCount; ++i)
     {
-        // Performance: duplicates of a non-existent row will still not exist.
-        // Don't find that out for every cell.
-        // External references often are a sparse matrix.
+        
+        
+        
         if (i == 1 && !pTab->hasRow( mrExternalRefInfo.mnRow))
         {
             mrExternalRefInfo.mnRow += mnRepeatRowCount;
@@ -242,7 +242,7 @@ void ScXMLExternalRefRowContext::EndElement()
     mrExternalRefInfo.mnRow += mnRepeatRowCount;
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
@@ -391,7 +391,7 @@ void ScXMLExternalRefCellContext::SetCellString(const OUString& rStr)
     maCellString = rStr;
 }
 
-// ============================================================================
+
 
 ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
     ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,

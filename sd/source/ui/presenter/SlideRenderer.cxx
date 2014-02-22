@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
+
 
 Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -60,7 +60,7 @@ Sequence<OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
 
 
 
-//===== SlideRenderer ==========================================================
+
 
 SlideRenderer::SlideRenderer (const Reference<XComponentContext>& rxContext)
     : SlideRendererInterfaceBase(m_aMutex),
@@ -86,7 +86,7 @@ void SAL_CALL SlideRenderer::disposing (void)
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
     throw (Exception, RuntimeException)
@@ -103,7 +103,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
 
 
 
-//----- XSlideRenderer --------------------------------------------------------
+
 
 Reference<awt::XBitmap> SlideRenderer::createPreview (
     const Reference<drawing::XDrawPage>& rxSlide,
@@ -170,7 +170,7 @@ awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 BitmapEx SlideRenderer::CreatePreview (
     const Reference<drawing::XDrawPage>& rxSlide,
@@ -184,35 +184,35 @@ BitmapEx SlideRenderer::CreatePreview (
             static_cast<XWeak*>(this),
             0);
 
-    // Determine the size of the current slide and its aspect ratio.
+    
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
         throw lang::IllegalArgumentException("SlideRenderer::createPreview() called with invalid size",
             static_cast<XWeak*>(this),
             1);
 
-    // Compare with the aspect ratio of the window (which rMaximalSize
-    // assumed to be) and calculate the size of the preview so that it
-    // a) will have the aspect ratio of the page and
-    // b) will be as large as possible.
+    
+    
+    
+    
     awt::Size aPreviewSize (calculatePreviewSize(
         double(aPageSize.Width()) / double(aPageSize.Height()),
         rMaximalSize));
     if (aPreviewSize.Width <= 0 || aPreviewSize.Height <= 0)
         return BitmapEx();
 
-    // Make sure that the super sample factor has a sane value.
+    
     sal_Int16 nFactor (nSuperSampleFactor);
     if (nFactor < 1)
         nFactor = 1;
     else if (nFactor > 10)
         nFactor = 10;
 
-    // Create the preview.  When the super sample factor n is greater than 1
-    // then a preview is created in size (n*width, n*height) and then scaled
-    // down to (width, height).  This is a poor mans antialiasing for the
-    // time being.  When we have true antialiasing support this workaround
-    // can be removed.
+    
+    
+    
+    
+    
     const Image aPreview = maPreviewRenderer.RenderPage (
         pPage,
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
@@ -243,6 +243,6 @@ void SlideRenderer::ThrowIfDisposed (void)
 }
 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

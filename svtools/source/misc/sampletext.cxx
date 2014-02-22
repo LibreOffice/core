@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <svtools/sampletext.hxx>
 #include <vcl/font.hxx>
@@ -57,13 +57,13 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
         bool bHasCharMap = rDevice.GetFontCharMap(aFontCharMap);
         if( bHasCharMap )
         {
-            // use some sample characters available in the font
+            
             sal_Unicode aText[8];
 
-            // start just above the PUA used by most symbol fonts
+            
             sal_uInt32 cNewChar = 0xFF00;
 #ifdef MACOSX
-            // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
+            
             if( !bOpenSymbol )
                 cNewChar = 0x0192;
 #endif
@@ -81,7 +81,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
                     cNewChar = aFontCharMap.GetPrevChar( cNewChar );
                 if( cOldChar == cNewChar )
                     break;
-                aText[ i ] = static_cast<sal_Unicode>(cNewChar); // TODO: support UCS4 samples
+                aText[ i ] = static_cast<sal_Unicode>(cNewChar); 
                 aText[ i+1 ] = 0;
             }
 
@@ -99,16 +99,16 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
     return bHasSampleTextGlyphs ? sSampleText : OUString();
 }
 
-//These ones are typically for use in the font dropdown box beside the
-//fontname, so say things roughly like "Script/Alphabet/Name-Of-Major-Language"
+
+
 //
-//Here we don't always know the language of course, only the script that can be
-//written with the font. Often that's one single language written in that
-//script, or a handful of related languages where the name of the script is the
-//same between languages, or the name in the major language is known by most
-//readers of the minor languages, e.g. Yiddish is written with the HEBREW
-//script as well, the vast majority of Yiddish readers will be able to read
-//Hebrew as well.
+
+
+
+
+
+
+
 OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
 {
     OUString sSampleText;
@@ -423,7 +423,7 @@ OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_SIMPLIFIED_HAN:
         case USCRIPT_HAN:
         {
-            //Three Character Classic
+            
             const sal_Unicode aZh[] = {
                 0x4EBA, 0x4E4B, 0x521D, 0x0020, 0x6027, 0x672C, 0x5584
             };
@@ -432,7 +432,7 @@ OUString makeRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_JAPANESE:
         {
-            //'Beautiful Japanese'
+            
             const sal_Unicode aJa[] = {
                 0x7F8E, 0x3057, 0x3044, 0x65E5, 0x672C, 0x8A9E
             };
@@ -442,7 +442,7 @@ OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_KOREAN:
         case USCRIPT_HANGUL:
         {
-            //The essential condition for...
+            
             const sal_Unicode aKo[] = {
                 0xD0A4, 0xC2A4, 0xC758, 0x0020, 0xACE0, 0xC720, 0xC870,
                 0xAC74, 0xC740
@@ -491,14 +491,14 @@ OUString makeMinimalTextForScript(UScriptCode eScript)
     return makeShortMinimalTextForScript(eScript);
 }
 
-//These ones are typically for use in the font preview window in format
-//character
+
+
 //
-//There we generally know the language. Though its possible for the language to
-//be "none".
+
+
 //
-//Currently we fall back to makeShortRepresentativeTextForScript when we don't
-//have suitable strings
+
+
 OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 {
     OUString sRet;
@@ -975,35 +975,35 @@ namespace
         return aMask;
     }
 
-    //false for all bits considered "Latin" by LibreOffice
+    
     boost::dynamic_bitset<sal_uInt32> getLatinMask()
     {
         static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::LATIN));
         return aMask;
     }
 
-    //false for all bits considered "Asian" by LibreOffice
+    
     boost::dynamic_bitset<sal_uInt32> getCJKMask()
     {
         static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::ASIAN));
         return aMask;
     }
 
-    //false for all bits considered "Complex" by LibreOffice
+    
     boost::dynamic_bitset<sal_uInt32> getCTLMask()
     {
         static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::COMPLEX));
         return aMask;
     }
 
-    //false for all bits considered "WEAK" by LibreOffice
+    
     boost::dynamic_bitset<sal_uInt32> getWeakMask()
     {
         static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::WEAK));
         return aMask;
     }
 
-    //Nearly every font supports some basic Latin
+    
     boost::dynamic_bitset<sal_uInt32> getCommonLatnSubsetMask()
     {
         boost::dynamic_bitset<sal_uInt32> aMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
@@ -1030,7 +1030,7 @@ namespace
             aMasked.set(vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_A, false);
             aMasked.set(vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_B, false);
             aMasked.set(vcl::UnicodeCoverage::NKO, false);
-            //Probably strongly tuned for Arabic
+            
             if (aMasked.count() == 1)
                 return USCRIPT_ARABIC;
             if (aMasked.count() == 2 && aMasked[vcl::UnicodeCoverage::SYRIAC])
@@ -1040,7 +1040,7 @@ namespace
         if (aMasked[vcl::UnicodeCoverage::DEVANAGARI])
         {
             aMasked.set(vcl::UnicodeCoverage::DEVANAGARI, false);
-            //Probably strongly tuned for a single Indic script
+            
             if (aMasked.count() == 1)
                 return otCoverageToScript(static_cast<UnicodeCoverageEnum>(aMasked.find_first()));
         }
@@ -1052,7 +1052,7 @@ namespace
 
         if (aMasked[vcl::UnicodeCoverage::CYRILLIC])
         {
-            //Probably strongly tuned for Georgian
+            
             if (aMasked.count() == 2 && aMasked[vcl::UnicodeCoverage::GEORGIAN])
                 return USCRIPT_GEORGIAN;
         }
@@ -1064,7 +1064,7 @@ namespace
         aMasked.set(vcl::UnicodeCoverage::DESERET, false);
         aMasked.set(vcl::UnicodeCoverage::PHAGS_PA, false);
 
-        //So, possibly a CJK font
+        
         if (!aMasked.count() && !rFontCapabilities.maCodePageRange.empty())
         {
             boost::dynamic_bitset<sal_uInt32> aCJKCodePageMask(vcl::CodePageCoverage::MAX_CP_ENUM);
@@ -1075,7 +1075,7 @@ namespace
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP1361);
             boost::dynamic_bitset<sal_uInt32> aMaskedCodePage =
                 rFontCapabilities.maCodePageRange & aCJKCodePageMask;
-            //fold Korean
+            
             if (aMaskedCodePage[vcl::CodePageCoverage::CP1361])
             {
                 aMaskedCodePage.set(vcl::CodePageCoverage::CP949);
@@ -1106,7 +1106,7 @@ namespace
 {
     UScriptCode attemptToDisambiguateHan(UScriptCode eScript, OutputDevice &rDevice)
     {
-        //If we're a CJK font, see if we seem to be tuned for C, J or K
+        
         if (eScript == USCRIPT_HAN)
         {
             const Font &rFont = rDevice.GetFont();
@@ -1141,7 +1141,7 @@ namespace
                 eScript = USCRIPT_TRADITIONAL_HAN;
             else if (bHans && !bHant && !bKore && !bJpan)
                 eScript = USCRIPT_SIMPLIFIED_HAN;
-            //otherwise fall-through as USCRIPT_HAN and expect a combind Hant/Hans preview
+            
         }
         return eScript;
     }
@@ -1162,9 +1162,9 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
 
     aFontCapabilities.maUnicodeRange &= getCommonLatnSubsetMask();
 
-    //If this font is probably tuned to display a single non-Latin
-    //script and the font name is itself in Latin, then show a small
-    //chunk of representative text for that script
+    
+    
+    
     UScriptCode eScript = getScript(aFontCapabilities);
     if (eScript == USCRIPT_COMMON)
         return OUString();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
@@ -42,8 +42,8 @@ namespace slideshow
     {
         bool EventQueue::EventEntry::operator<( const EventEntry& rEvent ) const
         {
-            // negate comparison, we want priority queue to be sorted
-            // in increasing order of activation times
+            
+            
             return this->nTime > rEvent.nTime;
         }
 
@@ -60,7 +60,7 @@ namespace slideshow
 
         EventQueue::~EventQueue()
         {
-            // add in all that have been added explicitly for this round:
+            
             EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
             for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
                   iPos != iEnd; ++iPos )
@@ -69,7 +69,7 @@ namespace slideshow
             }
             EventEntryVector().swap( maNextEvents );
 
-            // dispose event queue
+            
             while( !maEvents.empty() )
             {
                 try
@@ -99,15 +99,15 @@ namespace slideshow
             ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
-            // prepare entry
+            
 
-            // A seemingly obvious optimization cannot be used here,
-            // because it breaks assumed order of notification: zero
-            // timeout events could be fired() immediately, but that
-            // would not unwind the stack and furthermore changes
-            // order of notification
+            
+            
+            
+            
+            
 
-            // add entry
+            
             maEvents.push( EventEntry( rEvent, rEvent->getActivationTime(
                                            mpTimer->getElapsedTime()) ) );
             return true;
@@ -171,7 +171,7 @@ namespace slideshow
         {
             VERBOSE_TRACE( "EventQueue: heartbeat" );
 
-            // add in all that have been added explicitly for this round:
+            
             EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
             for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
                   iPos != iEnd; ++iPos ) {
@@ -179,13 +179,13 @@ namespace slideshow
             }
             EventEntryVector().swap( maNextEvents );
 
-            // perform topmost, ready-to-execute event
-            // =======================================
+            
+            
 
             const double nCurrTime( mpTimer->getElapsedTime() );
 
-            // When maEvents does not contain any events that are due now
-            // then process one event from maNextNextEvents.
+            
+            
             if (!maNextNextEvents.empty()
                 && !bFireAllEvents
                 && (maEvents.empty() || maEvents.top().nTime > nCurrTime))
@@ -195,23 +195,23 @@ namespace slideshow
                 maEvents.push(aEvent);
             }
 
-            // process ready/elapsed events. Note that the 'perceived'
-            // current time remains constant for this loop, thus we're
-            // processing only those events which where ready when we
-            // entered this method.
+            
+            
+            
+            
             while( !maEvents.empty() &&
                    (bFireAllEvents || maEvents.top().nTime <= nCurrTime) )
             {
                 EventEntry event( maEvents.top() );
                 maEvents.pop();
 
-                // only process event, if it is still 'charged',
-                // i.e. the fire() call effects something. This is
-                // used when e.g. having events registered at multiple
-                // places, which should fire only once: after the
-                // initial fire() call, those events become inactive
-                // and return false on isCharged. This frees us from
-                // the need to prune queues of those inactive shells.
+                
+                
+                
+                
+                
+                
+                
                 if( event.pEvent->isCharged() )
                 {
                     try
@@ -234,32 +234,32 @@ namespace slideshow
                     }
                     catch( uno::Exception& )
                     {
-                        // catch anything here, we don't want
-                        // to leave this scope under _any_
-                        // circumstance. Although, do _not_
-                        // reinsert an activity that threw
-                        // once.
+                        
+                        
+                        
+                        
+                        
 
-                        // NOTE: we explicitly don't catch(...) here,
-                        // since this will also capture segmentation
-                        // violations and the like. In such a case, we
-                        // still better let our clients now...
+                        
+                        
+                        
+                        
                         OSL_FAIL( OUStringToOString(
                                         comphelper::anyToString( cppu::getCaughtException() ),
                                         RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                     catch( SlideShowException& )
                     {
-                        // catch anything here, we don't want
-                        // to leave this scope under _any_
-                        // circumstance. Although, do _not_
-                        // reinsert an activity that threw
-                        // once.
+                        
+                        
+                        
+                        
+                        
 
-                        // NOTE: we explicitly don't catch(...) here,
-                        // since this will also capture segmentation
-                        // violations and the like. In such a case, we
-                        // still better let our clients now...
+                        
+                        
+                        
+                        
                         OSL_TRACE( "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
                     }
                 }
@@ -285,7 +285,7 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            // return time for next entry (if any)
+            
             double nTimeout (::std::numeric_limits<double>::max());
             const double nCurrentTime (mpTimer->getElapsedTime());
             if ( ! maEvents.empty())
@@ -302,8 +302,8 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            // TODO(P1): Maybe a plain vector and vector.swap will
-            // be faster here. Profile.
+            
+            
             maEvents = ImplQueueType();
 
             maNextEvents.clear();

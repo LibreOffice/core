@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
@@ -68,7 +68,7 @@ bool BaseContainerNode::init_children()
 {
     mnFinishedChildren = 0;
 
-    // initialize all children
+    
     return (std::count_if(
                 maChildren.begin(), maChildren.end(),
                 boost::mem_fn(&AnimationNode::init) ) ==
@@ -77,23 +77,23 @@ bool BaseContainerNode::init_children()
 
 void BaseContainerNode::deactivate_st( NodeState eDestState )
 {
-    mnLeftIterations = 0; // in order to make skip effect work correctly
+    mnLeftIterations = 0; 
     if (eDestState == FROZEN) {
-        // deactivate all children that are not FROZEN or ENDED:
+        
         forEachChildNode( boost::mem_fn(&AnimationNode::deactivate),
                           ~(FROZEN | ENDED) );
     }
     else {
-        // end all children that are not ENDED:
+        
         forEachChildNode( boost::mem_fn(&AnimationNode::end), ~ENDED );
     }
 }
 
 bool BaseContainerNode::hasPendingAnimation() const
 {
-    // does any of our children returns "true" on
-    // AnimationNode::hasPendingAnimation()?
-    // If yes, we, too, return true
+    
+    
+    
     VectorOfNodes::const_iterator const iEnd( maChildren.end() );
     return (std::find_if(
                 maChildren.begin(), iEnd,
@@ -105,9 +105,9 @@ void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
     if (! checkValidNode())
         return;
 
-    // register derived classes as end listeners at all children.
-    // this is necessary to control the children animation
-    // sequence, and to determine our own end event
+    
+    
+    
     if (pNode->registerDeactivatingListener( getSelf() )) {
         maChildren.push_back( pNode );
     }
@@ -115,7 +115,7 @@ void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
 
 bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
 {
-    // find given notifier in child vector
+    
     VectorOfNodes::const_iterator const iEnd( maChildren.end() );
     VectorOfNodes::const_iterator const iFind(
         std::find( maChildren.begin(), iEnd, pNode ) );
@@ -127,7 +127,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
 {
     OSL_ASSERT( pChildNode->getState() == FROZEN ||
                 pChildNode->getState() == ENDED );
-    // early exit on invalid nodes
+    
     OSL_ASSERT( getState() != INVALID );
     if( getState() == INVALID )
         return false;
@@ -142,10 +142,10 @@ bool BaseContainerNode::notifyDeactivatedChild(
     ++mnFinishedChildren;
     bool bFinished = (mnFinishedChildren >= nSize);
 
-    // all children finished, and we've got indefinite duration?
-    // think of ParallelTimeContainer::notifyDeactivating()
-    // if duration given, we will be deactivated by some end event
-    // @see fillCommonParameters()
+    
+    
+    
+    
     if (bFinished && isDurationIndefinite()) {
         if( mnLeftIterations >= 1.0 )
         {
@@ -196,7 +196,7 @@ void BaseContainerNode::showState() const
 }
 #endif
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svxids.hrc>
@@ -81,11 +81,11 @@ SdActionDlg::SdActionDlg (
         "modules/simpress/ui/interactiondialog.ui")
     , rOutAttrs(*pAttr)
 {
-    // FreeResource();
+    
     SfxTabPage* pNewPage = SdTPAction::Create(get_content_area(), rOutAttrs);
-    assert(pNewPage); //Unable to create page
+    assert(pNewPage); 
 
-    // formerly in PageCreated
+    
     ( (SdTPAction*) pNewPage )->SetView( pView );
     ( (SdTPAction*) pNewPage )->Construct();
 
@@ -124,7 +124,7 @@ SdTPAction::SdTPAction(Window* pWindow, const SfxItemSet& rInAttrs)
     m_pBtnSearch->SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
     m_pBtnSeek->SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
     m_pLbAction->SetSelectHdl( LINK( this, SdTPAction, ClickActionHdl ) );
@@ -132,7 +132,7 @@ SdTPAction::SdTPAction(Window* pWindow, const SfxItemSet& rInAttrs)
     m_pEdtDocument->SetLoseFocusHdl( LINK( this, SdTPAction, CheckFileHdl ) );
     m_pEdtMacro->SetLoseFocusHdl( LINK( this, SdTPAction, CheckFileHdl ) );
 
-    //Lock to initial max size
+    
     Size aSize(get_preferred_size());
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
@@ -140,19 +140,19 @@ SdTPAction::SdTPAction(Window* pWindow, const SfxItemSet& rInAttrs)
     ClickActionHdl( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTPAction::~SdTPAction()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTPAction::SetView( const ::sd::View* pSdView )
 {
     mpView = pSdView;
 
-    // get ColorTable and fill ListBox
+    
     ::sd::DrawDocShell* pDocSh = static_cast<const ::sd::View*>(mpView)->GetDocSh();
     if( pDocSh && pDocSh->GetViewShell() )
     {
@@ -171,11 +171,11 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTPAction::Construct()
 {
-    // fill OLE-Actionlistbox
+    
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
     sal_Bool        bOLEAction = sal_False;
@@ -254,7 +254,7 @@ void SdTPAction::Construct()
     maCurrentActions.push_back( presentation::ClickAction_MACRO );
     maCurrentActions.push_back( presentation::ClickAction_STOPPRESENTATION );
 
-    // fill Action-Listbox
+    
     for (size_t nAction = 0, n = maCurrentActions.size(); nAction < n; nAction++)
     {
         sal_uInt16 nRId = GetClickActionSdResId( maCurrentActions[ nAction ] );
@@ -263,7 +263,7 @@ void SdTPAction::Construct()
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -308,14 +308,14 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::Reset( const SfxItemSet& rAttrs )
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
     OUString aFileName;
 
-    // m_pLbAction
+    
     if( rAttrs.GetItemState( ATTR_ACTION ) != SFX_ITEM_DONTCARE )
     {
         eCA = (presentation::ClickAction) ( ( const SfxAllEnumItem& ) rAttrs.
@@ -325,7 +325,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     else
         m_pLbAction->SetNoSelection();
 
-    // m_pEdtSound
+    
     if( rAttrs.GetItemState( ATTR_ACTION_FILENAME ) != SFX_ITEM_DONTCARE )
     {
             aFileName = ( ( const SfxStringItem& ) rAttrs.Get( ATTR_ACTION_FILENAME ) ).GetValue();
@@ -357,13 +357,13 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     m_pEdtSound->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTPAction::ActivatePage( const SfxItemSet& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
 {
@@ -373,7 +373,7 @@ int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTPAction::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -381,23 +381,23 @@ SfxTabPage* SdTPAction::Create( Window* pWindow,
     return( new SdTPAction( pWindow, rAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::UpdateTree()
 {
     if( !bTreeUpdated && mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
     {
-        //m_pLbTree->Clear();
+        
         m_pLbTree->Fill( mpDoc, sal_True, mpDoc->GetDocSh()->GetMedium()->GetName() );
         bTreeUpdated = sal_True;
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::OpenFileDialog()
 {
-    // Soundpreview only for interaction with sound
+    
     presentation::ClickAction eCA = GetActualClickAction();
     sal_Bool bSound = ( eCA == presentation::ClickAction_SOUND );
     sal_Bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
@@ -407,7 +407,7 @@ void SdTPAction::OpenFileDialog()
 
     if( bPage )
     {
-        // search in the TreeLB for the specified object
+        
         m_pLbTree->SelectEntry( GetEditText() );
     }
     else
@@ -434,7 +434,7 @@ void SdTPAction::OpenFileDialog()
             Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
 
-            // choose macro dialog
+            
             OUString aScriptURL = SfxApplication::ChooseScript();
 
             if ( !aScriptURL.isEmpty() )
@@ -454,10 +454,10 @@ void SdTPAction::OpenFileDialog()
 
             aFileDialog.SetDisplayDirectory( aFile );
 
-            // The following is a workarround for #i4306#:
-            // The addition of the implicitely existing "all files"
-            // filter makes the (Windows system) open file dialog follow
-            // links on the desktop to directories.
+            
+            
+            
+            
             aFileDialog.AddFilter (
                 SFX2_RESSTR(STR_SFX_FILTERNAME_ALL),
                 OUString("*.*"));
@@ -474,7 +474,7 @@ void SdTPAction::OpenFileDialog()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
 {
@@ -483,13 +483,13 @@ IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
 {
     presentation::ClickAction eCA = GetActualClickAction();
 
-    // hide controls we don't need
+    
     switch( eCA )
     {
         case presentation::ClickAction_NONE:
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             break;
     }
 
-    // show controls we do need
+    
     switch( eCA )
     {
         case presentation::ClickAction_NONE:
@@ -589,7 +589,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
         case presentation::ClickAction_FIRSTPAGE:
         case presentation::ClickAction_LASTPAGE:
         case presentation::ClickAction_STOPPRESENTATION:
-            // none
+            
             break;
 
         case presentation::ClickAction_SOUND:
@@ -660,7 +660,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
 {
@@ -668,7 +668,7 @@ IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 {
@@ -676,7 +676,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 
     if( aFile != aLastFile )
     {
-        // check if it is a valid draw file
+        
         SfxMedium aMedium( aFile,
                     STREAM_READ | STREAM_NOCREATE );
 
@@ -684,8 +684,8 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
         {
             WaitObject aWait( GetParentDialog() );
 
-            // is it a draw file?
-            // open with READ, otherwise the Storages might write into the file!
+            
+            
             uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
             DBG_ASSERT( xStorage.is(), "No storage!" );
 
@@ -718,7 +718,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 presentation::ClickAction SdTPAction::GetActualClickAction()
 {
@@ -730,7 +730,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
     return( eCA );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
@@ -741,38 +741,38 @@ void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
         m_pLbAction->SelectEntryPos( pIter-maCurrentActions.begin() );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::SetEditText( OUString const & rStr )
 {
     presentation::ClickAction   eCA = GetActualClickAction();
     OUString                    aText(rStr);
 
-    // possibly convert URI back to system path
+    
     switch( eCA )
     {
         case presentation::ClickAction_DOCUMENT:
             if( comphelper::string::getTokenCount(rStr, DOCUMENT_TOKEN) == 2 )
                 aText = rStr.getToken( 0, DOCUMENT_TOKEN );
 
-            // fallthrough inteded
+            
         case presentation::ClickAction_SOUND:
         case presentation::ClickAction_PROGRAM:
             {
                 INetURLObject aURL( aText );
 
-                // try to convert to system path
+                
                 OUString aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
 
                 if( !aTmpStr.isEmpty() )
-                    aText = aTmpStr;    // was a system path
+                    aText = aTmpStr;    
             }
             break;
         default:
             break;
     }
 
-    // set the string to the corresponding control
+    
     switch( eCA )
     {
         case presentation::ClickAction_SOUND:
@@ -804,7 +804,7 @@ void SdTPAction::SetEditText( OUString const & rStr )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
 {
@@ -843,7 +843,7 @@ OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
             break;
     }
 
-    // validate file URI
+    
     INetURLObject aURL( aStr );
     OUString aBaseURL;
     if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
@@ -852,7 +852,7 @@ OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
     if( !aStr.isEmpty() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
         aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
 
-    // get adjusted file name
+    
     aStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     if( bFullDocDestination &&
@@ -871,7 +871,7 @@ OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
     return( aStr );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
 {

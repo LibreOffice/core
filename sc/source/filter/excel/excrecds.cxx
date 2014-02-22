@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excrecds.hxx"
@@ -85,41 +85,41 @@ using namespace ::oox;
 
 using ::com::sun::star::uno::Sequence;
 
-//--------------------------------------------------------- class ExcDummy_00 -
+
 const sal_uInt8     ExcDummy_00::pMyData[] = {
-    0x5c, 0x00, 0x20, 0x00, 0x04, 'C',  'a',  'l',  'c',    // WRITEACCESS
+    0x5c, 0x00, 0x20, 0x00, 0x04, 'C',  'a',  'l',  'c',    
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 };
 const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
-//-------------------------------------------------------- class ExcDummy_04x -
+
 const sal_uInt8     ExcDummy_040::pMyData[] = {
-    0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
-    0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
+    0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     
+    0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     
 };
 const sal_Size ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
 
 const sal_uInt8     ExcDummy_041::pMyData[] = {
-    0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
-    0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
+    0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     
+    0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      
 };
 const sal_Size ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
-//-------------------------------------------------------- class ExcDummy_02a -
+
 const sal_uInt8      ExcDummy_02a::pMyData[] = {
-    0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,                     // CALCMODE
-    0x0c, 0x00, 0x02, 0x00, 0x64, 0x00,                     // CALCCOUNT
-    0x0f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // REFMODE
-    0x11, 0x00, 0x02, 0x00, 0x00, 0x00,                     // ITERATION
-    0x10, 0x00, 0x08, 0x00, 0xfc, 0xa9, 0xf1, 0xd2, 0x4d,   // DELTA
+    0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,                     
+    0x0c, 0x00, 0x02, 0x00, 0x64, 0x00,                     
+    0x0f, 0x00, 0x02, 0x00, 0x01, 0x00,                     
+    0x11, 0x00, 0x02, 0x00, 0x00, 0x00,                     
+    0x10, 0x00, 0x08, 0x00, 0xfc, 0xa9, 0xf1, 0xd2, 0x4d,   
     0x62, 0x50, 0x3f,
-    0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
+    0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      
 };
 const sal_Size ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
 
-//----------------------------------------------------------- class ExcRecord -
+
 
 void ExcRecord::Save( XclExpStream& rStrm )
 {
@@ -141,7 +141,7 @@ void ExcRecord::SaveXml( XclExpXmlStream& /*rStrm*/ )
 }
 
 
-//--------------------------------------------------------- class ExcEmptyRec -
+
 
 void ExcEmptyRec::Save( XclExpStream& /*rStrm*/ )
 {
@@ -159,11 +159,11 @@ sal_Size ExcEmptyRec::GetLen() const
     return 0;
 }
 
-//--------------------------------------------------------- class ExcDummyRec -
+
 
 void ExcDummyRec::Save( XclExpStream& rStrm )
 {
-    rStrm.Write( GetData(), GetLen() );        // raw write mode
+    rStrm.Write( GetData(), GetLen() );        
 }
 
 
@@ -172,7 +172,7 @@ sal_uInt16 ExcDummyRec::GetNum( void ) const
     return 0x0000;
 }
 
-//------------------------------------------------------- class ExcBoolRecord -
+
 
 void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
@@ -188,17 +188,17 @@ sal_Size ExcBoolRecord::GetLen( void ) const
 
 
 
-//--------------------------------------------------------- class ExcBof_Base -
+
 
 ExcBof_Base::ExcBof_Base() :
-    nRupBuild( 0x096C ),    // copied from Excel
-    nRupYear( 0x07C9 )      // copied from Excel
+    nRupBuild( 0x096C ),    
+    nRupYear( 0x07C9 )      
 {
 }
 
 
 
-//-------------------------------------------------------------- class ExcBof -
+
 
 ExcBof::ExcBof( void )
 {
@@ -226,7 +226,7 @@ sal_Size ExcBof::GetLen( void ) const
 
 
 
-//------------------------------------------------------------- class ExcBofW -
+
 
 ExcBofW::ExcBofW( void )
 {
@@ -256,7 +256,7 @@ sal_Size ExcBofW::GetLen( void ) const
 
 
 
-//-------------------------------------------------------------- class ExcEof -
+
 
 sal_uInt16 ExcEof::GetNum( void ) const
 {
@@ -271,7 +271,7 @@ sal_Size ExcEof::GetLen( void ) const
 
 
 
-//--------------------------------------------------------- class ExcDummy_00 -
+
 
 sal_Size ExcDummy_00::GetLen( void ) const
 {
@@ -286,7 +286,7 @@ const sal_uInt8* ExcDummy_00::GetData( void ) const
 
 
 
-//-------------------------------------------------------- class ExcDummy_04x -
+
 
 sal_Size ExcDummy_040::GetLen( void ) const
 {
@@ -315,7 +315,7 @@ const sal_uInt8* ExcDummy_041::GetData( void ) const
 
 
 
-//------------------------------------------------------------- class Exc1904 -
+
 
 Exc1904::Exc1904( ScDocument& rDoc )
 {
@@ -352,7 +352,7 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 
 
 
-//------------------------------------------------------ class ExcBundlesheet -
+
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
     nStrPos( STREAM_SEEK_TO_END ),
@@ -401,9 +401,9 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
 void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
     nOwnPos = rStrm.GetSvStreamPos();
-    rStrm   << (sal_uInt32) 0x00000000              // dummy (stream position of the sheet)
+    rStrm   << (sal_uInt32) 0x00000000              
             << nGrbit;
-    rStrm.WriteByteString(aName);             // 8 bit length, max 255 chars
+    rStrm.WriteByteString(aName);             
 }
 
 
@@ -413,7 +413,7 @@ sal_Size ExcBundlesheet::GetLen() const
 }
 
 
-//--------------------------------------------------------- class ExcDummy_02 -
+
 
 sal_Size ExcDummy_02a::GetLen( void ) const
 {
@@ -424,7 +424,7 @@ const sal_uInt8* ExcDummy_02a::GetData( void ) const
 {
     return pMyData;
 }
-//--------------------------------------------------------- class ExcDummy_02 -
+
 
 XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_COUNTRY, 4 )
@@ -440,7 +440,7 @@ void XclExpCountry::WriteBody( XclExpStream& rStrm )
     rStrm << mnUICountry << mnDocCountry;
 }
 
-// XclExpWsbool ===============================================================
+
 
 XclExpWsbool::XclExpWsbool( bool bFitToPages, SCTAB nScTab, XclExpFilterManager* pManager )
     : XclExpUInt16Record( EXC_ID_WSBOOL, EXC_WSBOOL_DEFAULTFLAGS )
@@ -455,26 +455,26 @@ void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetPr,
-            // OOXTODO: XML_syncHorizontal,
-            // OOXTODO: XML_syncVertical,
-            // OOXTODO: XML_syncRef,
-            // OOXTODO: XML_transitionEvaluation,
-            // OOXTODO: XML_transitionEntry,
-            // OOXTODO: XML_published,
-            // OOXTODO: XML_codeName,
+            
+            
+            
+            
+            
+            
+            
             XML_filterMode, mpManager ? XclXmlUtils::ToPsz( mpManager->HasFilterMode( mnScTab ) ) : NULL,
-            // OOXTODO: XML_enableFormatConditionsCalculation,
+            
             FSEND );
-    // OOXTODO: elements XML_tabColor, XML_outlinePr
+    
     rWorksheet->singleElement( XML_pageSetUpPr,
-            // OOXTODO: XML_autoPageBreaks,
+            
             XML_fitToPage,  XclXmlUtils::ToPsz( GetValue() & EXC_WSBOOL_FITTOPAGE ),
             FSEND );
     rWorksheet->endElement( XML_sheetPr );
 }
 
 
-// XclExpWindowProtection ===============================================================
+
 
 XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
     XclExpBoolRecord(EXC_ID_WINDOWPROTECT, bValue)
@@ -488,7 +488,7 @@ void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-// XclExpDocProtection ===============================================================
+
 
 XclExpProtection::XclExpProtection(bool bValue) :
     XclExpBoolRecord(EXC_ID_PROTECT, bValue)
@@ -538,7 +538,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
     }
 }
-// ============================================================================
+
 
 XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
     XclExpRecord(EXC_ID_PASSWORD, 2),
@@ -560,14 +560,14 @@ void XclExpPassHash::WriteBody(XclExpStream& rStrm)
     rStrm << mnHash;
 }
 
-// ============================================================================
+
 
 XclExpFiltermode::XclExpFiltermode() :
     XclExpEmptyRecord( EXC_ID_FILTERMODE )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol ) :
     XclExpUInt16Record( EXC_ID_AUTOFILTERINFO, static_cast< sal_uInt16 >( nScCol ) ),
@@ -575,7 +575,7 @@ XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nS
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
@@ -673,7 +673,7 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
     XclExpRecord( EXC_ID_AUTOFILTER, 24 ),
@@ -742,19 +742,19 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
             break;
             default:
             {
-                //nothing
+                
             }
         }
     }
 
     bool bLen = sText.getLength() > 0;
 
-    // empty/nonempty fields
+    
     if (rEntry.IsQueryByEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
     else if(rEntry.IsQueryByNonEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
-    // other conditions
+    
     else
     {
         double  fVal    = 0.0;
@@ -763,7 +763,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         OUString* pText;
         (bIsNum) ? pText = NULL : pText = &sText;
 
-        // top10 flags
+        
         sal_uInt16 nNewFlags = 0x0000;
         switch( rEntry.eOp )
         {
@@ -792,7 +792,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                 if( fVal >= 501 )   fVal = 500;
                 nFlags |= (nNewFlags | (sal_uInt16)(fVal) << 7);
             }
-            // normal condition
+            
             else
             {
                 sal_uInt8 nType = bIsNum ? EXC_AFTYPE_DOUBLE : EXC_AFTYPE_STRING;
@@ -852,8 +852,8 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_filterColumn,
             XML_colId,          OString::number(  nCol ).getStr(),
-            // OOXTODO: XML_hiddenButton,   AutoFilter12 fHideArrow?
-            // OOXTODO: XML_showButton,
+            
+            
             FSEND );
 
     switch (meType)
@@ -866,7 +866,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                         XML_top,        XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
                         XML_percent,    XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
                         XML_val,        OString::number(  (nFlags >> 7 ) ).getStr(),
-                        // OOXTODO: XML_filterVal,
+                        
                         FSEND );
             }
 
@@ -876,8 +876,8 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             aCond[ 0 ].SaveXml( rStrm );
             aCond[ 1 ].SaveXml( rStrm );
             rWorksheet->endElement( XML_customFilters );
-            // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
-            // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+            
+            
         }
         break;
         case MultiValue:
@@ -896,7 +896,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_filterColumn );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
@@ -926,17 +926,17 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 
         maRef = aRange;
 
-        // #i2394# built-in defined names must be sorted by containing sheet name
+        
         rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
 
-        // advanced filter
+        
         if( bAdvanced )
         {
-            // filter criteria, excel allows only same table
+            
             if( aAdvRange.aStart.Tab() == nTab )
                 rNameMgr.InsertBuiltInName( EXC_BUILTIN_CRITERIA, aAdvRange );
 
-            // filter destination range, excel allows only same table
+            
             if( !aParam.bInplace )
             {
                 ScRange aDestRange( aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
@@ -947,7 +947,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 
             pFilterMode = new XclExpFiltermode;
         }
-        // AutoFilter
+        
         else
         {
             sal_Bool    bConflict   = false;
@@ -955,7 +955,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             bool        bHasOr      = false;
             SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
 
-            // create AUTOFILTER records for filtered columns
+            
             for( SCSIZE nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
             {
                 const ScQueryEntry& rEntry  = aParam.GetEntry( nEntry );
@@ -977,7 +977,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
                 }
             }
 
-            // additional tests for conflicts
+            
             for( size_t nPos = 0, nSize = maFilterList.GetSize(); !bConflict && (nPos < nSize); ++nPos )
             {
                 XclExpAutofilterRef xFilter = maFilterList.GetRecord( nPos );
@@ -1057,7 +1057,7 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElement( XML_autoFilter,
             XML_ref,    XclXmlUtils::ToOString( maRef ).getStr(),
             FSEND );
-    // OOXTODO: XML_extLst, XML_sortState
+    
     if( !maFilterList.IsEmpty() )
         maFilterList.SaveXml( rStrm );
     rWorksheet->endElement( XML_autoFilter );
@@ -1068,7 +1068,7 @@ bool ExcAutoFilterRecs::HasFilterMode() const
     return pFilterMode != NULL;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -1103,6 +1103,6 @@ bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
     return false;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

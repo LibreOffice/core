@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <comphelper/expandmacro.hxx>
@@ -25,13 +25,13 @@ namespace comphelper
 
         if( aFilename.startsWith( "vnd.sun.star.expand:" ) )
         {
-            // cut protocol
+            
             rtl::OUString aMacro( aFilename.copy( sizeof ( "vnd.sun.star.expand:" ) -1 ) );
 
-            // decode uric class chars
+            
             aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 
-            // expand macro string
+            
             rtl::Bootstrap::expandMacros( aMacro);
 
             aFilename = aMacro;

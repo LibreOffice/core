@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -53,10 +53,10 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
 sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw ( uno::Exception );
 
-//========================================================
-// Dummy interaction handler
-//========================================================
-//--------------------------------------------------------
+
+
+
+
 class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
 {
 public:
@@ -67,22 +67,22 @@ public:
             throw( uno::RuntimeException );
 };
 
-//--------------------------------------------------------
+
 DummyHandler_Impl::~DummyHandler_Impl()
 {
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
         throw( uno::RuntimeException )
 {
     return;
 }
 
-//========================================================
-// Object viewer
-//========================================================
-//--------------------------------------------------------
+
+
+
+
 OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                             const uno::Reference< io::XInputStream >& xInputStream )
 : m_xFactory( xFactory )
@@ -95,7 +95,7 @@ OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& 
     m_aTempFileURL = GetNewFilledTempFile_Impl( xInputStream, m_xFactory );
 }
 
-//--------------------------------------------------------
+
 OwnView_Impl::~OwnView_Impl()
 {
     try {
@@ -108,7 +108,7 @@ OwnView_Impl::~OwnView_Impl()
     } catch( uno::Exception& ) {}
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 {
     sal_Bool bResult = sal_False;
@@ -177,7 +177,7 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
     return bResult;
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
 {
     sal_Bool bResult = sal_False;
@@ -192,7 +192,7 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
     return bResult;
 }
 
-//--------------------------------------------------------
+
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                                                     const OUString& aNameWithExtention,
@@ -210,7 +210,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     if ( !aNameWithExtention.isEmpty() )
     {
         OUString aURLToAnalyze =
-                ( OUString( "file:///" ) + aNameWithExtention );
+                ( OUString( "file:
         aTypeName = xTypeDetection->queryTypeByURL( aURLToAnalyze );
     }
 
@@ -234,7 +234,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
 
     if ( aFilterName.isEmpty() && !aTypeName.isEmpty() )
     {
-        // get the default filter name for the type
+        
         uno::Reference< container::XNameAccess > xNameAccess( xTypeDetection, uno::UNO_QUERY_THROW );
         uno::Sequence< beans::PropertyValue > aTypes;
 
@@ -254,14 +254,14 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     return aFilterName;
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XInputStream >& xInStream,
                                                         sal_Bool bParseHeader )
 {
     uno::Reference< io::XSeekable > xSeekable( xInStream, uno::UNO_QUERY_THROW );
     xSeekable->seek( 0 );
 
-    // create m_aNativeTempURL
+    
     OUString aNativeTempURL;
     uno::Reference < beans::XPropertySet > xNativeTempFile(
             io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
@@ -287,15 +287,15 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     if ( bParseHeader )
     {
         uno::Sequence< sal_Int8 > aReadSeq( 4 );
-        // read the complete size of the Object Package
+        
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return sal_False;
-        // read the first header ( have no idea what does this header mean )
+        
         if ( xInStream->readBytes( aReadSeq, 2 ) != 2 || aReadSeq[0] != 2 || aReadSeq[1] != 0 )
             return sal_False;
 
-        // read file name
-        // only extension is interesting so only subset of symbols is accepted
+        
+        
         do
         {
             if ( xInStream->readBytes( aReadSeq, 1 ) != 1 )
@@ -313,19 +313,19 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
 
         } while( aReadSeq[0] );
 
-        // skip url
+        
         do
         {
             if ( xInStream->readBytes( aReadSeq, 1 ) != 1 )
                 return sal_False;
         } while( aReadSeq[0] );
 
-        // check the next header
+        
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4
           || aReadSeq[0] || aReadSeq[1] || aReadSeq[2] != 3 || aReadSeq[3] )
             return sal_False;
 
-        // get the size of the next entry
+        
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return sal_False;
 
@@ -337,7 +337,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
 
         xSeekable->seek( nTargetPos );
 
-        // get the size of stored data
+        
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return sal_False;
 
@@ -378,12 +378,12 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
           && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1
           && ( aData[4] == 2 || aData[4] == 3 ) && aData[5] == 0 && aData[6] == 0 && aData[7] == 0 )
         {
-            // the header has to be removed
+            
             xSeekable->seek( 40 );
         }
         else
         {
-            // the usual Ole10Native format
+            
             xSeekable->seek( 4 );
         }
 
@@ -392,7 +392,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
 
     xNativeOutTemp->closeOutput();
 
-    // The temporary native file is created, now the filter must be detected
+    
     if ( !bFailed )
     {
         m_aFilterName = GetFilterNameFromExtentionAndInStream( m_xFactory, aFileSuffix, xNativeInTemp );
@@ -402,7 +402,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     return !bFailed;
 }
 
-//--------------------------------------------------------
+
 void OwnView_Impl::CreateNative()
 {
     if ( !m_aNativeTempURL.isEmpty() )
@@ -443,7 +443,7 @@ void OwnView_Impl::CreateNative()
 
                 if ( MimeConfigurationHelper::ClassIDsEqual( aPackageClassID, aStorClassID ) )
                 {
-                    // the storage represents Object Package
+                    
 
                     bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), sal_True );
 
@@ -468,14 +468,14 @@ void OwnView_Impl::CreateNative()
         }
         else
         {
-            // TODO/LATER: No native stream, needs a new solution
+            
         }
     }
     catch( uno::Exception& )
     {}
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::Open()
 {
     sal_Bool bResult = sal_False;
@@ -519,10 +519,10 @@ sal_Bool OwnView_Impl::Open()
 
         if ( !bResult && !m_bUseNative )
         {
-            // the original storage can not be recognized
+            
             if ( m_aNativeTempURL.isEmpty() )
             {
-                // create a temporary file for the native representation if there is no
+                
                 CreateNative();
             }
 
@@ -540,7 +540,7 @@ sal_Bool OwnView_Impl::Open()
     return bResult;
 }
 
-//--------------------------------------------------------
+
 void OwnView_Impl::Close()
 {
     uno::Reference< frame::XModel > xModel;
@@ -580,7 +580,7 @@ void OwnView_Impl::Close()
     m_bBusy = sal_False;
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
         throw ( uno::RuntimeException )
 {
@@ -591,7 +591,7 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( aEvent.Source == m_xModel && aEvent.EventName == "OnSaveAsDone" )
         {
-            // SaveAs operation took place, so just forget the model and deregister listeners
+            
             xModel = m_xModel;
             m_xModel = uno::Reference< frame::XModel >();
         }
@@ -617,14 +617,14 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
     }
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject&, sal_Bool )
         throw ( util::CloseVetoException,
                 uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
         throw ( uno::RuntimeException )
 {
@@ -633,7 +633,7 @@ void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
         m_xModel = uno::Reference< frame::XModel >();
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::disposing( const lang::EventObject& Source )
         throw (uno::RuntimeException)
 {

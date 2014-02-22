@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/editeng.hxx>
@@ -123,7 +123,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // Get current filename, not the one stored in the old field
+                
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -141,7 +141,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxAuthorFormat) ( m_pLbFormat->GetSelectEntryPos() );
 
-            // Get current state of address, not the old one
+            
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
@@ -163,23 +163,23 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxDateField* pDateField = (const SvxDateField*) pField;
         SvxDateField aDateField( *pDateField );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // not used
-        //SVXDATEFORMAT_SYSTEM,         // not used
+        
+        
         m_pLbFormat->InsertEntry( SD_RESSTR( STR_STANDARD_SMALL ) );
         m_pLbFormat->InsertEntry( SD_RESSTR( STR_STANDARD_BIG ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
+        aDateField.SetFormat( SVXDATEFORMAT_A );    
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
+        aDateField.SetFormat( SVXDATEFORMAT_B );    
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
+        aDateField.SetFormat( SVXDATEFORMAT_C );    
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_D );    
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_E );    
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_F );    
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
         m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pDateField->GetFormat() - 2 ) );
@@ -189,26 +189,26 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
         SvxExtTimeField aTimeField( *pTimeField );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // not used
-        //SVXTIMEFORMAT_SYSTEM,         // not used
+        
+        
         m_pLbFormat->InsertEntry( SD_RESSTR( STR_STANDARD_NORMAL ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
-        //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
-        //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
+        
+        
+        
 
         m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pTimeField->GetFormat() - 2 ) );
     }

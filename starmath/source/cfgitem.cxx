@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -38,7 +38,7 @@ static const char aRootName[] = "Office.Math";
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
 
-/////////////////////////////////////////////////////////////////
+
 
 
 static Sequence< OUString > lcl_GetFontPropertyNames()
@@ -65,7 +65,7 @@ static Sequence< OUString > lcl_GetFontPropertyNames()
     return aNames;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 
 static Sequence< OUString > lcl_GetSymbolPropertyNames()
@@ -90,7 +90,7 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
     return aNames;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 static const char * aMathPropNames[] =
 {
@@ -107,8 +107,8 @@ static const char * aMathPropNames[] =
 };
 
 
-//! Beware of order according to *_BEGIN *_END defines in format.hxx !
-//! see respective load/save routines here
+
+
 static const char * aFormatPropNames[] =
 {
     "StandardFormat/Textmode",
@@ -180,7 +180,7 @@ static Sequence< OUString > GetOtherPropertyNames()
     return lcl_GetPropertyNames( aMathPropNames, SAL_N_ELEMENTS( aMathPropNames ) );
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 struct SmCfgOther
 {
@@ -209,7 +209,7 @@ SmCfgOther::SmCfgOther()
     bFormulaCursor      = bIsSaveOnlyUsedSymbols = true;
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 
 SmFontFormat::SmFontFormat()
@@ -258,7 +258,7 @@ bool SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
 }
 
 
-/////////////////////////////////////////////////////////////////
+
 
 SmFntFmtListEntry::SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt ) :
     aId     (rId),
@@ -300,12 +300,12 @@ void SmFontFormatList::AddFontFormat( const OUString &rFntFmtId,
 void SmFontFormatList::RemoveFontFormat( const OUString &rFntFmtId )
 {
 
-    // search for entry
+    
     for (size_t i = 0;  i < aEntries.size();  ++i)
     {
         if (aEntries[i].aId == rFntFmtId)
         {
-            // remove entry if found
+            
             aEntries.erase( aEntries.begin() + i );
             SetModified( true );
             break;
@@ -381,7 +381,7 @@ const OUString SmFontFormatList::GetFontFormatId( size_t nPos ) const
 
 const OUString SmFontFormatList::GetNewFontFormatId() const
 {
-    // returns first unused FormatId
+    
 
     OUString aPrefix("Id");
     sal_Int32 nCnt = GetCount();
@@ -396,7 +396,7 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
     return OUString();
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SmMathConfig::SmMathConfig() :
     ConfigItem(OUString(aRootName))
@@ -595,12 +595,12 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 
         const OUString *pName = pNames;
 
-        // Char
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= static_cast< sal_UCS4 >( rSymbol.GetCharacter() );
         pVal++;
-        // Set
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         OUString aTmp( rSymbol.GetSymbolSetName() );
@@ -608,12 +608,12 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
             aTmp = GetExportSymbolSetName( aTmp );
         pVal->Value <<= aTmp;
         pVal++;
-        // Predefined
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= (sal_Bool) rSymbol.IsPredefined();
         pVal++;
-        // FontFormatId
+        
         SmFontFormat aFntFmt( rSymbol.GetFace() );
         OUString aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt, true ) );
         OSL_ENSURE( !aFntFmtId.isEmpty(), "FontFormatId not found" );
@@ -701,7 +701,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
             bOK = false;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            rFontFormat.nCharSet = nTmp16; // 6.0 file-format GetSOLoadTextEncoding not needed
+            rFontFormat.nCharSet = nTmp16; 
         else
             bOK = false;
         ++pValue;
@@ -761,32 +761,32 @@ void SmMathConfig::SaveFontFormatList()
 
         const OUString *pName = aNames.getConstArray();
 
-        // Name
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= OUString( aFntFmt.aName );
         pVal++;
-        // CharSet
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= (sal_Int16) aFntFmt.nCharSet; // 6.0 file-format GetSOStoreTextEncoding not needed
+        pVal->Value <<= (sal_Int16) aFntFmt.nCharSet; 
         pVal++;
-        // Family
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= (sal_Int16) aFntFmt.nFamily;
         pVal++;
-        // Pitch
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= (sal_Int16) aFntFmt.nPitch;
         pVal++;
-        // Weight
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= (sal_Int16) aFntFmt.nWeight;
         pVal++;
-        // Italic
+        
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= (sal_Int16) aFntFmt.nItalic;
@@ -803,8 +803,8 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
 {
     size_t i;
 
-    // build list of used font-formats only
-    //!! font-format IDs may be different !!
+    
+    
     SmFontFormatList aUsedList;
     for (i = 0;  i < rSymbols.size();  ++i)
     {
@@ -817,7 +817,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
         aUsedList.GetFontFormatId( SmFontFormat( rStdFmt.GetFont( i ) ) , true );
     }
 
-    // remove unused font-formats from list
+    
     SmFontFormatList &rFntFmtList = GetFontFormatList();
     size_t nCnt = rFntFmtList.GetCount();
     SmFontFormat *pTmpFormat = new SmFontFormat[ nCnt ];
@@ -857,43 +857,43 @@ void SmMathConfig::LoadOther()
         sal_Int16   nTmp16 = 0;
         bool    bTmp = false;
 
-        // Print/Title
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bPrintTitle = bTmp;
         ++pVal;
-        // Print/FormulaText
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bPrintFormulaText = bTmp;
         ++pVal;
-        // Print/Frame
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bPrintFrame = bTmp;
         ++pVal;
-        // Print/Size
+        
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pOther->ePrintSize = (SmPrintSize) nTmp16;
         ++pVal;
-        // Print/ZoomFactor
+        
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pOther->nPrintZoomFactor = nTmp16;
         ++pVal;
-        // LoadSave/IsSaveOnlyUsedSymbols
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bIsSaveOnlyUsedSymbols = bTmp;
         ++pVal;
-        // Misc/IgnoreSpacesRight
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bIgnoreSpacesRight = bTmp;
         ++pVal;
-        // View/ToolboxVisible
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bToolboxVisible = bTmp;
         ++pVal;
-        // View/AutoRedraw
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bAutoRedraw = bTmp;
         ++pVal;
-        // View/FormulaCursor
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bFormulaCursor = bTmp;
         ++pVal;
@@ -916,25 +916,25 @@ void SmMathConfig::SaveOther()
     Any *pValues = aValues.getArray();
     Any *pValue  = pValues;
 
-    // Print/Title
+    
     *pValue++ <<= (sal_Bool) pOther->bPrintTitle;
-    // Print/FormulaText
+    
     *pValue++ <<= (sal_Bool) pOther->bPrintFormulaText;
-    // Print/Frame
+    
     *pValue++ <<= (sal_Bool) pOther->bPrintFrame;
-    // Print/Size
+    
     *pValue++ <<= (sal_Int16) pOther->ePrintSize;
-    // Print/ZoomFactor
+    
     *pValue++ <<= (sal_Int16) pOther->nPrintZoomFactor;
-    // LoadSave/IsSaveOnlyUsedSymbols
+    
     *pValue++ <<= (sal_Bool) pOther->bIsSaveOnlyUsedSymbols;
-    // Misc/IgnoreSpacesRight
+    
     *pValue++ <<= (sal_Bool) pOther->bIgnoreSpacesRight;
-    // View/ToolboxVisible
+    
     *pValue++ <<= (sal_Bool) pOther->bToolboxVisible;
-    // View/AutoRedraw
+    
     *pValue++ <<= (sal_Bool) pOther->bAutoRedraw;
-    // View/FormulaCursor
+    
     *pValue++ <<= (sal_Bool) pOther->bFormulaCursor;
 
     OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
@@ -962,23 +962,23 @@ void SmMathConfig::LoadFormat()
         sal_Int16       nTmp16 = 0;
         bool        bTmp = false;
 
-        // StandardFormat/Textmode
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pFormat->SetTextmode( bTmp );
         ++pVal;
-        // StandardFormat/GreekCharStyle
+        
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pFormat->SetGreekCharStyle( nTmp16 );
         ++pVal;
-        // StandardFormat/ScaleNormalBracket
+        
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pFormat->SetScaleNormalBrackets( bTmp );
         ++pVal;
-        // StandardFormat/HorizontalAlignment
+        
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pFormat->SetHorAlign( (SmHorAlign) nTmp16 );
         ++pVal;
-        // StandardFormat/BaseSize
+        
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pFormat->SetBaseSize( Size(0, SmPtsTo100th_mm( nTmp16 )) );
         ++pVal;
@@ -1043,15 +1043,15 @@ void SmMathConfig::SaveFormat()
     Any *pValues = aValues.getArray();
     Any *pValue  = pValues;
 
-    // StandardFormat/Textmode
+    
     *pValue++ <<= (sal_Bool) pFormat->IsTextmode();
-    // StandardFormat/GreekCharStyle
+    
     *pValue++ <<= (sal_Int16) pFormat->GetGreekCharStyle();
-    // StandardFormat/ScaleNormalBracket
+    
     *pValue++ <<= (sal_Bool) pFormat->IsScaleNormalBrackets();
-    // StandardFormat/HorizontalAlignment
+    
     *pValue++ <<= (sal_Int16) pFormat->GetHorAlign();
-    // StandardFormat/BaseSize
+    
     *pValue++ <<= (sal_Int16) SmRoundFraction( Sm100th_mmToPts(
                                     pFormat->GetBaseSize().Height() ) );
 
@@ -1103,7 +1103,7 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFor
 
         if (bSaveFontFormatList)
         {
-            // needed for SmFontTypeDialog's DefaultButtonClickHdl
+            
             SetFontFormatListModified( true );
             SaveFontFormatList();
         }
@@ -1273,6 +1273,6 @@ void SmMathConfig::SetShowFormulaCursor( bool bVal )
 void SmMathConfig::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {}
 
-/////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

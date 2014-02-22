@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BubbleChart.hxx"
@@ -52,7 +52,7 @@ BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_fMaxLogicBubbleSize( 0.0 )
         , m_fBubbleSizeFactorToScreen( 1.0 )
 {
-    // We only support 2 dimensional bubble charts
+    
     assert(nDimensionCount == 2);
 
     if( !m_pMainPosHelper )
@@ -116,7 +116,7 @@ void BubbleChart::calculateBubbleSizeScalingFactor()
     sal_Int32 nHeight = abs( aScreenMaxPos.Y - aScreenMinPos.Y );
 
     sal_Int32 nMinExtend = std::min( nWidth, nHeight );
-    m_fBubbleSizeFactorToScreen = nMinExtend * 0.25;//max bubble size is 25 percent of diagram size
+    m_fBubbleSizeFactorToScreen = nMinExtend * 0.25;
 }
 
 drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize )
@@ -170,7 +170,7 @@ void BubbleChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xS
     VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );
 }
 
-//better performance for big data
+
 struct FormerPoint
 {
     FormerPoint( double fX, double fY, double fZ )
@@ -190,29 +190,29 @@ struct FormerPoint
 
 void BubbleChart::createShapes()
 {
-    if( m_aZSlots.empty() ) //no series
+    if( m_aZSlots.empty() ) 
         return;
 
     OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BubbleChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
-    //therefore create an own group for the texts and the error bars to move them to front
-    //(because the text group is created after the series group the texts are displayed on top)
+    
+    
     uno::Reference< drawing::XShapes > xSeriesTarget(
         createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
-    //update/create information for current group
-    double fLogicZ = 1.0;//as defined
+    
+    double fLogicZ = 1.0;
 
-    sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
+    sal_Int32 nStartIndex = 0; 
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     if(nEndIndex<=0)
         nEndIndex=1;
 
-    //better performance for big data
+    
     std::map< VDataSeries*, FormerPoint > aSeriesFormerPointMap;
     m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
@@ -224,7 +224,7 @@ void BubbleChart::createShapes()
     if( m_fMaxLogicBubbleSize <= 0 || m_fBubbleSizeFactorToScreen <= 0 )
         return;
 
-    //iterate through all x values per indices
+    
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
@@ -241,7 +241,7 @@ void BubbleChart::createShapes()
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
-                //iterate through all series
+                
                 for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
@@ -259,7 +259,7 @@ void BubbleChart::createShapes()
                         pPosHelper = m_pMainPosHelper;
                     PlotterBase::m_pPosHelper = pPosHelper;
 
-                    //collect data point information (logic coordinates, style ):
+                    
                     double fLogicX = pSeries->getXValue(nIndex);
                     double fLogicY = pSeries->getYValue(nIndex);
                     double fBubbleSize = pSeries->getBubble_Size( nIndex );
@@ -280,10 +280,10 @@ void BubbleChart::createShapes()
                     drawing::Position3D aScaledLogicPosition(aUnscaledLogicPosition);
                     pPosHelper->doLogicScaling( aScaledLogicPosition );
 
-                    //transformation 3) -> 4)
+                    
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
-                    //better performance for big data
+                    
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
@@ -297,11 +297,11 @@ void BubbleChart::createShapes()
                     }
                     aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
 
-                    //create a single datapoint if point is visible
+                    
                     if( !bIsVisible )
                         continue;
 
-                    //create a group shape for this point and add to the series shape:
+                    
                     OUString aPointCID = ObjectIdentifier::createPointCID(
                         pSeries->getPointCID_Stub(), nIndex );
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
@@ -312,7 +312,7 @@ void BubbleChart::createShapes()
                     {
                         nCreatedPoints++;
 
-                        //create data point
+                        
                         drawing::Direction3D aSymbolSize = transformToScreenBubbleSize( fBubbleSize );
                         uno::Reference<drawing::XShape> xShape;
                         xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
@@ -337,7 +337,7 @@ void BubbleChart::createShapes()
 
                         m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
 
-                        //create data point label
+                        
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
@@ -379,23 +379,23 @@ void BubbleChart::createShapes()
                                 .transformSceneToScreenPosition( aScenePosition3D ) );
                             sal_Int32 nOffset = 0;
                             if(LABEL_ALIGN_CENTER!=eAlignment)
-                                nOffset = 100;//add some spacing //@todo maybe get more intelligent values
+                                nOffset = 100;
                             this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                             , fBubbleSize, fBubbleSize, aScreenPosition2D, eAlignment, nOffset );
                         }
                     }
 
-                    //remove PointGroupShape if empty
+                    
                     if(!xPointGroupShape_Shapes->getCount())
                         xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
 
-                }//next series in x slot (next y slot)
-            }//next x slot
-        }//next z slot
-    }//next category
+                }
+            }
+        }
+    }
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< area chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

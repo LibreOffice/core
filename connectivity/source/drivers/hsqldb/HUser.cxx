@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hsqldb/HUser.hxx"
@@ -35,13 +35,13 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(sal_True)
                 ,m_xConnection(_xConnection)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                 const OUString& _Name
             ) : connectivity::sdbcx::OUser(_Name,sal_True)
@@ -49,34 +49,34 @@ OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OHSQLUser::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 OUserExtend::OUserExtend(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : OHSQLUser(_xConnection)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OUserExtend::construct()
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 {
     return *OUserExtend_PROP::getArrayHelper();
 }
 typedef connectivity::sdbcx::OUser_BASE OUser_BASE_RBHELPER;
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OHSQLUser::getPrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -86,11 +86,11 @@ sal_Int32 SAL_CALL OHSQLUser::getPrivileges( const OUString& objName, sal_Int32 
     findPrivilegesAndGrantPrivileges(objName,objType,nRights,nRightsWithGrant);
     return nRights;
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(SQLException, RuntimeException)
 {
     nRightsWithGrant = nRights = 0;
-    // first we need to create the sql stmt to select the privs
+    
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
@@ -200,7 +200,7 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_In
         ::comphelper::disposeComponent(xRes);
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OHSQLUser::getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -210,7 +210,7 @@ sal_Int32 SAL_CALL OHSQLUser::getGrantablePrivileges( const OUString& objName, s
     findPrivilegesAndGrantPrivileges(objName,objType,nRights,nRightsWithGrant);
     return nRightsWithGrant;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OHSQLUser::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     if ( objType != PrivilegeObject::TABLE )
@@ -218,7 +218,7 @@ void SAL_CALL OHSQLUser::grantPrivileges( const OUString& objName, sal_Int32 obj
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(STR_PRIVILEGE_NOT_GRANTED));
         ::dbtools::throwGenericSQLException(sError,*this);
-    } // if ( objType != PrivilegeObject::TABLE )
+    } 
 
 
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -237,7 +237,7 @@ void SAL_CALL OHSQLUser::grantPrivileges( const OUString& objName, sal_Int32 obj
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OHSQLUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     if ( objType != PrivilegeObject::TABLE )
@@ -245,7 +245,7 @@ void SAL_CALL OHSQLUser::revokePrivileges( const OUString& objName, sal_Int32 ob
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(STR_PRIVILEGE_NOT_REVOKED));
         ::dbtools::throwGenericSQLException(sError,*this);
-    } // if ( objType != PrivilegeObject::TABLE )
+    } 
 
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
@@ -263,8 +263,8 @@ void SAL_CALL OHSQLUser::revokePrivileges( const OUString& objName, sal_Int32 ob
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
-// XUser
+
+
 void SAL_CALL OHSQLUser::changePassword( const OUString& /*oldPassword*/, const OUString& newPassword ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -287,7 +287,7 @@ void SAL_CALL OHSQLUser::changePassword( const OUString& /*oldPassword*/, const 
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString OHSQLUser::getPrivilegeString(sal_Int32 nRights) const
 {
     OUString sPrivs;
@@ -331,6 +331,6 @@ OUString OHSQLUser::getPrivilegeString(sal_Int32 nRights) const
 
     return sPrivs;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

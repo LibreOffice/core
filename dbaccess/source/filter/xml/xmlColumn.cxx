@@ -146,7 +146,7 @@ void OXMLColumn::EndElement()
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(xProp);
-                        // we also have to do this on the table to import text-properties
+                        
                         pAutoStyle->FillPropertySet(m_xTable);
                     }
                 }
@@ -162,7 +162,7 @@ void OXMLColumn::EndElement()
             OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
             if ( pAutoStyle )
             {
-                // we also have to do this on the table to import text-properties
+                
                 pAutoStyle->FillPropertySet(m_xTable);
             }
         }
@@ -174,6 +174,6 @@ ODBFilter& OXMLColumn::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-} // namespace dbaxml
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

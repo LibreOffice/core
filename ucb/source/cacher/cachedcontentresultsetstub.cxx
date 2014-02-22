@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,8 +38,8 @@ CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > 
                 , m_bColumnCountCached( sal_False )
                 , m_bNeedToPropagateFetchSize( sal_True )
                 , m_bFirstFetchSizePropagationDone( sal_False )
-                , m_nLastFetchSize( 1 )//this value is not important at all
-                , m_bLastFetchDirection( sal_True )//this value is not important at all
+                , m_nLastFetchSize( 1 )
+                , m_bLastFetchDirection( sal_True )
                 , m_aPropertyNameForFetchSize( OUString("FetchSize") )
                 , m_aPropertyNameForFetchDirection( OUString("FetchDirection") )
 {
@@ -51,16 +51,16 @@ CachedContentResultSetStub::~CachedContentResultSetStub()
     impl_deinit();
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
+
+
+
 XINTERFACE_COMMON_IMPL( CachedContentResultSetStub )
 
 Any SAL_CALL CachedContentResultSetStub
     ::queryInterface( const Type&  rType )
     throw ( RuntimeException )
 {
-    //list all interfaces inclusive baseclasses of interfaces
+    
 
     Any aRet = ContentResultSetWrapper::queryInterface( rType );
     if( aRet.hasValue() )
@@ -76,19 +76,19 @@ Any SAL_CALL CachedContentResultSetStub
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//--------------------------------------------------------------------------
-// own methods.  ( inherited )
-//--------------------------------------------------------------------------
 
-//virtual
+
+
+
+
 void SAL_CALL CachedContentResultSetStub
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
 
-    //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
-    //because it will ignore them anyway and we can save this remote calls
+    
+    
     if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
         || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
         return;
@@ -101,7 +101,7 @@ void SAL_CALL CachedContentResultSetStub
 }
 
 
-//virtual
+
 void SAL_CALL CachedContentResultSetStub
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
     throw( PropertyVetoException,
@@ -109,8 +109,8 @@ void SAL_CALL CachedContentResultSetStub
 {
     impl_EnsureNotDisposed();
 
-    //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
-    //because it will ignore them anyway and we can save this remote calls
+    
+    
     if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
         || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
         return;
@@ -122,12 +122,12 @@ void SAL_CALL CachedContentResultSetStub
     impl_notifyVetoableChangeListeners( aEvt );
 }
 
-//--------------------------------------------------------------------------
-// XTypeProvider methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
-//list all interfaces exclusive baseclasses
+
 Sequence< Type > SAL_CALL CachedContentResultSetStub
     ::getTypes()
     throw( RuntimeException )
@@ -157,17 +157,17 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
     return *pTypes;
 }
 
-//--------------------------------------------------------------------------
-// XServiceInfo methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
                         OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
                         OUString( CACHED_CRS_STUB_SERVICE_NAME ) );
 
-//-----------------------------------------------------------------
-// XFetchProvider methods.
-//-----------------------------------------------------------------
+
+
+
 
 #define FETCH_XXX( impl_loadRow, loadInterface ) \
 impl_EnsureNotDisposed(); \
@@ -341,12 +341,12 @@ void SAL_CALL CachedContentResultSetStub
     ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, sal_Bool bFetchDirection )
         throw ( RuntimeException )
 {
-    //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResulSets
+    
 
-    //we do not propagate the property 'FetchSize' or 'FetchDirection' via 'setPropertyValue' from the above CachedContentResultSet to save remote calls
+    
 
-    //if the underlying ResultSet has a property FetchSize and FetchDirection,
-    //we will set these properties, if the new given parameters are different from the last ones
+    
+    
 
     if( !m_bNeedToPropagateFetchSize )
         return;
@@ -371,7 +371,7 @@ void SAL_CALL CachedContentResultSetStub
 
         if(!bFirstPropagationDone)
         {
-            //check whether the properties 'FetchSize' and 'FetchDirection' do exist
+            
 
             Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
             sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
@@ -422,9 +422,9 @@ void SAL_CALL CachedContentResultSetStub
     }
 }
 
-//-----------------------------------------------------------------
-// XFetchProviderForContentAccess methods.
-//-----------------------------------------------------------------
+
+
+
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContentIdentifierString( Any& rAny
@@ -450,7 +450,7 @@ void SAL_CALL CachedContentResultSetStub
      rAny <<= xContentAccess->queryContent();
 }
 
-//virtual
+
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
@@ -460,7 +460,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
 }
 
-//virtual
+
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
@@ -470,7 +470,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
 }
 
-//virtual
+
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
@@ -480,11 +480,11 @@ FetchResult SAL_CALL CachedContentResultSetStub
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// class CachedContentResultSetStubFactory
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
+
+
+
 
 CachedContentResultSetStubFactory::CachedContentResultSetStubFactory(
         const Reference< XMultiServiceFactory > & rSMgr )
@@ -496,43 +496,43 @@ CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
 {
 }
 
-//--------------------------------------------------------------------------
-// CachedContentResultSetStubFactory XInterface methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XINTERFACE_IMPL_3( CachedContentResultSetStubFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XCachedContentResultSetStubFactory );
 
-//--------------------------------------------------------------------------
-// CachedContentResultSetStubFactory XTypeProvider methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XCachedContentResultSetStubFactory );
 
-//--------------------------------------------------------------------------
-// CachedContentResultSetStubFactory XServiceInfo methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
                      OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
                      OUString( CACHED_CRS_STUB_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
-// Service factory implementation.
-//--------------------------------------------------------------------------
+
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetStubFactory );
 
-//--------------------------------------------------------------------------
-// CachedContentResultSetStubFactory XCachedContentResultSetStubFactory methods.
-//--------------------------------------------------------------------------
 
-    //virtual
+
+
+
+    
 Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
     ::createCachedContentResultSetStub(
             const Reference< XResultSet > & xSource )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,10 +28,10 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -52,9 +52,9 @@ namespace frm
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::frame::theUICommandDescription;
 
-    //====================================================================
-    //= DefaultCommandDescriptionProvider
-    //====================================================================
+    
+    
+    
     class DefaultCommandDescriptionProvider : public ICommandDescriptionProvider
     {
     public:
@@ -67,7 +67,7 @@ namespace frm
         {
         }
 
-        // ICommandDescriptionProvider
+        
         virtual OUString getCommandDescription( const OUString& _rCommandURL ) const;
 
     private:
@@ -78,7 +78,7 @@ namespace frm
     };
 
 
-    //--------------------------------------------------------------------
+    
     void DefaultCommandDescriptionProvider::impl_init_nothrow( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DefaultCommandDescriptionProvider::impl_init_nothrow: no document => no command descriptions!" );
@@ -99,7 +99,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     OUString DefaultCommandDescriptionProvider::getCommandDescription( const OUString& _rCommandURL ) const
     {
         if ( !m_xCommandAccess.is() )
@@ -118,7 +118,7 @@ namespace frm
         return OUString();
     }
 
-    //--------------------------------------------------------------------
+    
     PCommandDescriptionProvider createDocumentCommandDescriptionProvider(
         const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument )
     {
@@ -126,8 +126,8 @@ namespace frm
         return pDescriptionProvider;
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

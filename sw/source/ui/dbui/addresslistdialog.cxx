@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swtypes.hxx>
@@ -85,7 +85,7 @@ struct AddressUserData_Impl
     uno::Reference< XColumnsSupplier>       xColumnsSupplier;
     uno::Reference< sdbc::XResultSet>       xResultSet;
     OUString                    sFilter;
-    OUString                    sURL; // data is editable
+    OUString                    sURL; 
     sal_Int32                          nCommandType;
     sal_Int32                          nTableAndQueryCount;
     AddressUserData_Impl() :
@@ -127,7 +127,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
                 if(sCharSet.equalsAscii( cUTF8 ))
                 {
                     sURL = sDBURL.copy(10);
-                    //#i97577# at this point the 'URL' can also be a file name!
+                    
                     sURL = URIHelper::SmartRel2Abs( INetURLObject(), sURL );
                     sURL += "/";
                     sURL += aFilters[0];
@@ -246,14 +246,14 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
             pUserData->xColumnsSupplier = rConfigItem.GetColumnsSupplier();
             pUserData->xResultSet = rConfigItem.GetResultSet();
             pUserData->sFilter = rConfigItem.GetFilter();
-            //is the data source editable (csv, Unicode, single table)
+            
             uno::Reference<beans::XPropertySet> xSourceProperties;
             try
             {
                 m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
                 pUserData->sURL = lcl_getFlatURL( xSourceProperties );
                 bEnableEdit = !pUserData->sURL.isEmpty() &&
-                    SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
+                    SWUnoHelper::UCB_IsFile( pUserData->sURL ) && 
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
             }
             catch (const uno::Exception&)
@@ -359,7 +359,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
                     m_pAddressPage->GetWizard()->GetConfigItem()));
     if(RET_OK == pDlg->Execute())
     {
-        //register the URL a new datasource
+        
         OUString sURL = pDlg->GetURL();
         try
         {
@@ -367,7 +367,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             uno::Reference<XInterface> xNewInstance = xFact->createInstance();
             INetURLObject aURL( sURL );
             OUString sNewName = aURL.getBase();
-            //find a unique name if sNewName already exists
+            
             OUString sFind(sNewName);
             sal_Int32 nIndex = 0;
             while(m_xDBContext->hasByName(sFind))
@@ -378,14 +378,14 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             uno::Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
 
             OUString sDBURL("sdbc:flat:");
-            //only the 'path' has to be added
+            
             INetURLObject aTempURL(aURL);
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             Any aAny(&sDBURL, ::getCppuType(&sDBURL));
             xDataProperties->setPropertyValue("URL", aAny);
-            //set the filter to the file name without extension
+            
             uno::Sequence<OUString> aFilters(1);
             aFilters[0] = sNewName;
             aAny <<= aFilters;
@@ -398,7 +398,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             pInfo[1].Name = "StringDelimiter";
             pInfo[1].Value <<= OUString('"');
             pInfo[2].Name = "Extension";
-            pInfo[2].Value <<= OUString(aURL.getExtension());//"csv";
+            pInfo[2].Value <<= OUString(aURL.getExtension());
             pInfo[3].Name = "CharSet";
             pInfo[3].Value <<= OUString::createFromAscii(cUTF8);
             aAny <<= aInfo;
@@ -419,7 +419,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 
             uno::Reference<XNamingService> xNaming(m_xDBContext, UNO_QUERY);
             xNaming->registerObject( sFind, xNewInstance );
-            //now insert the new source into the ListBox
+            
             OUString sEntry(sFind);
             sEntry += "\t";
             sEntry += aFilters[0];
@@ -456,7 +456,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         pUserData->xSource.clear();
         pUserData->xColumnsSupplier.clear();
         pUserData->xConnection.clear();
-            // will automatically close if it was the las reference
+            
         boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
                 new SwCreateAddressListDialog(
                         pButton,
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
 
 IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*, pSelect)
 {
-    //prevent nested calls of the select handler
+    
     if(pThis->m_bInSelectHdl)
         return 0;
     pThis->EnterWait();
@@ -491,7 +491,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
         if(sTable.isEmpty())
         {
             pThis->m_pListLB->SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
-            // allow painting of the new entry
+            
             pThis->m_pListLB->Window::Invalidate(INVALIDATE_UPDATE);
             for (sal_uInt16 i = 0; i < 10; i++)
                 Application::Reschedule();
@@ -516,7 +516,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
         }
         else
         {
-            //otherwise set the selected db-data
+            
             pThis->m_aDBData.sDataSource = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1);
             pThis->m_aDBData.sCommand = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
             pThis->m_aDBData.nCommandType = pUserData->nCommandType;
@@ -527,15 +527,15 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
            pThis->m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
     }
     pThis->m_pEditPB->Enable(pUserData && !pUserData->sURL.isEmpty() &&
-                    SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
+                    SWUnoHelper::UCB_IsFile( pUserData->sURL ) && 
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
     pThis->m_bInSelectHdl = false;
     pThis->LeaveWait();
     return 0;
 }
 
-// detect the number of tables for a data source
-// if only one is available then set it at the entry
+
+
 void SwAddressListDialog::DetectTablesAndQueries(
         SvTreeListEntry* pSelect,
         bool bWidthDialog)
@@ -576,7 +576,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             pUserData->nTableAndQueryCount = nTables;
             if(nTables > 1 && bWidthDialog)
             {
-                //now call the table select dialog - if more than one table exists
+                
                 boost::scoped_ptr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
                 OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
@@ -613,7 +613,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
                                     m_aDBData.sCommand,
                                     m_aDBData.nCommandType == CommandType::TABLE ?
                                             SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
-            //#i97577#
+            
             if( pUserData->xColumnsSupplier.is() )
                 m_pListLB->SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
             else
@@ -638,8 +638,8 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
-        //only call the table select dialog if tables have not been searched for or there
-        //are more than 1
+        
+        
         OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if( pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {

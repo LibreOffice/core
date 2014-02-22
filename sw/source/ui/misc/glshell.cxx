@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -149,11 +149,11 @@ void SwGlosDocShell::GetState( SfxItemSet& rSet )
 
 sal_Bool SwGlosDocShell::Save()
 {
-    // In case of an API object which holds this document, it is possible that the WrtShell is already
-    // dead. For instance, if the doc is modified via this API object, and then, upon office shutdown,
-    // the document's view is closed (by the SFX framework) _before_ the API object is release and
-    // tries to save the doc, again.
-    // 96380 - 2002-03-03 - fs@openoffice.org
+    
+    
+    
+    
+    
     if ( GetWrtShell() )
         return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
     else
@@ -185,7 +185,7 @@ void SwWebGlosDocShell::GetState( SfxItemSet& rSet )
 
 sal_Bool SwWebGlosDocShell::Save()
 {
-    // same comment as in SwGlosDocShell::Save - see there
+    
     if ( GetWrtShell() )
         return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
     else
@@ -204,7 +204,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
     SwTextBlocks* pGroup = GetGroupDoc( rGroup );
     if( pGroup && pGroup->GetCount() )
     {
-        // query which view is registered. In WebWriter there is no normal view
+        
         sal_uInt16 nViewId = 0 != &SwView::Factory() ? 2 : 6;
         const OUString sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
@@ -227,7 +227,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
             pDocSh->SetGroupName( rGroup );
         }
 
-        // set document title
+        
         SfxViewFrame* pFrame = bShow ? SfxViewFrame::LoadDocument( *xDocSh, nViewId ) : SfxViewFrame::LoadHiddenDocument( *xDocSh, nViewId );
         const OUString aDocTitle(SW_RESSTR( STR_GLOSSARY ) + " " + sLongName);
 
@@ -238,8 +238,8 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
         if( !xDocSh->GetDoc()->getPrinter( false ) )
         {
-            // we create a default SfxPrinter.
-            // ItemSet is deleted by Sfx!
+            
+            
             SfxItemSet *pSet = new SfxItemSet( xDocSh->GetDoc()->GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
@@ -247,14 +247,14 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
                         0 );
             SfxPrinter* pPrinter = new SfxPrinter( pSet );
 
-            // and append it to the document.
+            
             xDocSh->GetDoc()->setPrinter( pPrinter, true, true );
         }
 
         xDocSh->SetTitle( aDocTitle );
         try
         {
-            // set the UI-title
+            
             uno::Reference< frame::XTitle > xTitle( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
             xTitle->setTitle( aDocTitle );
         }

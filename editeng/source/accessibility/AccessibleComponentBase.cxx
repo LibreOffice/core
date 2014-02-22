@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/AccessibleComponentBase.hxx>
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
+
 
 AccessibleComponentBase::AccessibleComponentBase (void)
 {
@@ -51,7 +51,7 @@ AccessibleComponentBase::~AccessibleComponentBase (void)
 
 
 
-//=====  XAccessibleComponent  ================================================
+
 
 sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
         const ::com::sun::star::awt::Point& aPoint)
@@ -121,7 +121,7 @@ void SAL_CALL AccessibleComponentBase::addFocusListener (
     ::com::sun::star::awt::XFocusListener >& /*xListener*/)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // Ignored
+    
 }
 
 
@@ -131,7 +131,7 @@ void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::st
     ::com::sun::star::awt::XFocusListener >& /*xListener*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // Ignored
+    
 }
 
 
@@ -145,7 +145,7 @@ void SAL_CALL AccessibleComponentBase::grabFocus (void)
         xContext->getAccessibleParent(), uno::UNO_QUERY);
     if (xSelection.is())
     {
-        // Do a single selection on this object.
+        
         xSelection->clearAccessibleSelection();
         xSelection->selectAccessibleChild (xContext->getAccessibleIndexInParent());
     }
@@ -172,7 +172,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 
 
 
-//=====  XAccessibleExtendedComponent  ========================================
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
         AccessibleComponentBase::getFont (void)
@@ -200,15 +200,15 @@ OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
 
 
 
-//=====  XTypeProvider  ===================================================
+
 
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleComponentBase::getTypes (void)
     throw (uno::RuntimeException)
 {
-    // Get list of types from the context base implementation...
+    
     uno::Sequence<uno::Type> aTypeList (2);
-    // ...and add the additional type for the component.
+    
     const uno::Type aComponentType =
          ::getCppuType((const uno::Reference<XAccessibleComponent>*)0);
     const uno::Type aExtendedComponentType =
@@ -220,6 +220,6 @@ uno::Sequence<uno::Type> SAL_CALL
 }
 
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

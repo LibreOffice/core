@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /*
@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star::accessibility;
 
-// Drag&Drop
+
 static SvTreeListBox* pDDSource = NULL;
 static SvTreeListBox* pDDTarget = NULL;
 
@@ -56,7 +56,7 @@ DBG_NAME(SvInplaceEdit2)
 #define SVLBOX_ACC_RETURN 1
 #define SVLBOX_ACC_ESCAPE 2
 
-// ***************************************************************
+
 
 class MyEdit_Impl : public Edit
 {
@@ -274,9 +274,9 @@ OUString SvInplaceEdit2::GetText() const
     return pEdit->GetText();
 }
 
-// ***************************************************************
-// class SvLBoxTab
-// ***************************************************************
+
+
+
 
 DBG_NAME(SvLBoxTab);
 
@@ -324,15 +324,15 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
     {
         if( nFlags & SV_LBOXTAB_FORCE )
         {
-            // correct implementation of centering
+            
             nOffset = ( nTabWidth - nItemWidth ) / 2;
             if( nOffset < 0 )
                 nOffset = 0;
         }
         else
         {
-            // historically grown, wrong calculation of tabs which is needed by
-            // Abo-Tabbox, Tools/Options/Customize etc.
+            
+            
             nItemWidth++;
             nOffset = -( nItemWidth / 2 );
         }
@@ -340,9 +340,9 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
     return nOffset;
 }
 
-// ***************************************************************
-// class SvLBoxItem
-// ***************************************************************
+
+
+
 
 DBG_NAME(SvLBoxItem);
 
@@ -467,7 +467,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTreeListBox(Window *pPare
 void SvTreeListBox::Clear()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pModel->Clear();  // Model calls SvTreeListBox::ModelHasCleared()
+    pModel->Clear();  
 }
 
 void SvTreeListBox::EnableEntryMnemonics( bool _bEnable )
@@ -543,31 +543,31 @@ sal_Bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 n
     if ( pSource == this )
     {
         if ( !(nDragDropMode & (SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY) ) )
-            return sal_False; // D&D locked within list
+            return sal_False; 
         if( DND_ACTION_MOVE == nAction )
         {
             if ( !(nDragDropMode & SV_DRAGDROP_CTRL_MOVE) )
-                 return sal_False; // no local move
+                 return sal_False; 
         }
         else
         {
             if ( !(nDragDropMode & SV_DRAGDROP_CTRL_COPY))
-                return sal_False; // no local copy
+                return sal_False; 
         }
     }
     else
     {
         if ( !(nDragDropMode & SV_DRAGDROP_APP_DROP ) )
-            return sal_False; // no drop
+            return sal_False; 
         if ( DND_ACTION_MOVE == nAction )
         {
             if ( !(nDragDropMode & SV_DRAGDROP_APP_MOVE) )
-                return sal_False; // no global move
+                return sal_False; 
         }
         else
         {
             if ( !(nDragDropMode & SV_DRAGDROP_APP_COPY))
-                return sal_False; // no global copy
+                return sal_False; 
         }
     }
     return sal_True;
@@ -597,18 +597,18 @@ void SvTreeListBox::NotifyRemoving( SvTreeListEntry* )
 */
 #ifdef DBG_UTIL
 sal_Bool SvTreeListBox::NotifyMoving(
-    SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
-    SvTreeListEntry*  pEntry,        // entry that we want to move, from
-                                 // GetSourceListBox()->GetModel()
-    SvTreeListEntry*& rpNewParent,   // new target parent
-    sal_uLong&        rNewChildPos)  // position in childlist of target parent
+    SvTreeListEntry*  pTarget,       
+    SvTreeListEntry*  pEntry,        
+                                 
+    SvTreeListEntry*& rpNewParent,   
+    sal_uLong&        rNewChildPos)  
 #else
 sal_Bool SvTreeListBox::NotifyMoving(
-    SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
-    SvTreeListEntry*,                // entry that we want to move, from
-                                 // GetSourceListBox()->GetModel()
-    SvTreeListEntry*& rpNewParent,   // new target parent
-    sal_uLong&        rNewChildPos)  // position in childlist of target parent
+    SvTreeListEntry*  pTarget,       
+    SvTreeListEntry*,                
+                                 
+    SvTreeListEntry*& rpNewParent,   
+    sal_uLong&        rNewChildPos)  
 #endif
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -621,7 +621,7 @@ sal_Bool SvTreeListBox::NotifyMoving(
     }
     if ( !pTarget->HasChildren() && !pTarget->HasChildrenOnDemand() )
     {
-        // case 1
+        
         rpNewParent = GetParent( pTarget );
         rNewChildPos = pModel->GetRelPos( pTarget ) + 1;
         rNewChildPos += nCurEntrySelPos;
@@ -629,7 +629,7 @@ sal_Bool SvTreeListBox::NotifyMoving(
     }
     else
     {
-        // cases 2 & 3
+        
         rpNewParent = pTarget;
         if( IsExpanded(pTarget))
             rNewChildPos = 0;
@@ -640,11 +640,11 @@ sal_Bool SvTreeListBox::NotifyMoving(
 }
 
 sal_Bool SvTreeListBox::NotifyCopying(
-    SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
-    SvTreeListEntry*  pEntry,        // entry that we want to move, from
-                                 // GetSourceListBox()->GetModel()
-    SvTreeListEntry*& rpNewParent,   // new target parent
-    sal_uLong&        rNewChildPos)  // position in childlist of target parent
+    SvTreeListEntry*  pTarget,       
+    SvTreeListEntry*  pEntry,        
+                                 
+    SvTreeListEntry*& rpNewParent,   
+    sal_uLong&        rNewChildPos)  
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
@@ -665,23 +665,23 @@ SvTreeListEntry* SvTreeListBox::PrevSibling( SvTreeListEntry* pEntry ) const
     return pModel->PrevSibling(pEntry);
 }
 
-// return: all entries copied
+
 sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
+    nCurEntrySelPos = 0; 
     sal_Bool bSuccess = sal_True;
     std::vector<SvTreeListEntry*> aList;
     sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
 
-    // cache selection to simplify iterating over the selection when doing a D&D
-    // exchange within the same listbox
+    
+    
     SvTreeListEntry* pSourceEntry = pSource->FirstSelected();
     while ( pSourceEntry )
     {
-        // children are copied automatically
+        
         pSource->SelectChildren( pSourceEntry, sal_False );
         aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
@@ -711,14 +711,14 @@ sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* 
         else
             bSuccess = sal_False;
 
-        if( bOk == (sal_Bool)2 )  // HACK: make visible moved entry?
+        if( bOk == (sal_Bool)2 )  
             MakeVisible( pSourceEntry );
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
 }
 
-// return: all entries were moved
+
 sal_Bool SvTreeListBox::MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
 {
     return MoveSelectionCopyFallbackPossible( pSource, pTarget, sal_False );
@@ -727,7 +727,7 @@ sal_Bool SvTreeListBox::MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* 
 sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, sal_Bool bAllowCopyFallback )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
+    nCurEntrySelPos = 0; 
     sal_Bool bSuccess = sal_True;
     std::vector<SvTreeListEntry*> aList;
     sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
@@ -738,7 +738,7 @@ sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSourc
     SvTreeListEntry* pSourceEntry = pSource->FirstSelected();
     while ( pSourceEntry )
     {
-        // children are automatically moved
+        
         pSource->SelectChildren( pSourceEntry, sal_False );
         aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
@@ -778,7 +778,7 @@ sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSourc
         else
             bSuccess = sal_False;
 
-        if( bOk == (sal_Bool)2 )  // HACK: make moved entry visible?
+        if( bOk == (sal_Bool)2 )  
             MakeVisible( pSourceEntry );
     }
     pModel->SetCloneLink( aCloneLink );
@@ -789,14 +789,14 @@ void SvTreeListBox::RemoveSelection()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     std::vector<const SvTreeListEntry*> aList;
-    // cache selection, as the implementation deselects everything on the first
-    // remove
+    
+    
     SvTreeListEntry* pEntry = FirstSelected();
     while ( pEntry )
     {
         aList.push_back( pEntry );
         if ( pEntry->HasChildren() )
-            // remove deletes all children automatically
+            
             SelectChildren(pEntry, false);
         pEntry = NextSelected( pEntry );
     }
@@ -938,13 +938,13 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
 
-    //if _pParent is 0, then pEntry is the first child of the root.
+    
     SvTreeListEntry* pEntry = FirstChild( _pParent );
 
-    if( !pEntry )//there is only root, root don't have children
+    if( !pEntry )
         return 0;
 
-    if( !_pParent )//root and children of root
+    if( !_pParent )
         return pEntry->pParent->maChildren.size();
 
     return _pParent->maChildren.size();
@@ -1037,9 +1037,9 @@ void SvTreeListBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWit
     }
 }
 
-// ******************************************************************
-// InplaceEditing
-// ******************************************************************
+
+
+
 
 void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     const Selection& rSel )
@@ -1065,7 +1065,7 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
 IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if ( nImpFlags & SVLBOX_EDTEND_CALLED ) // avoid nesting
+    if ( nImpFlags & SVLBOX_EDTEND_CALLED ) 
         return 0;
     nImpFlags |= SVLBOX_EDTEND_CALLED;
     OUString aStr;
@@ -1075,12 +1075,12 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
         aStr = pEdCtrl->GetSavedValue();
     if ( IsEmptyTextAllowed() || !aStr.isEmpty() )
         EditedText( aStr );
-    // Hide may only be called after the new text was put into the entry, so
-    // that we don't call the selection handler in the GetFocus of the listbox
-    // with the old entry text.
+    
+    
+    
     pEdCtrl->Hide();
-    // delete pEdCtrl;
-    // pEdCtrl = 0;
+    
+    
     nImpFlags &= (~SVLBOX_IN_EDT);
     GrabFocus();
     return 0;
@@ -1179,12 +1179,12 @@ void SvTreeListBox::SelectSearchEntry( const void* _pEntry )
 
 void SvTreeListBox::ExecuteSearchEntry( const void* /*_pEntry*/ ) const
 {
-    // nothing to do here, we have no "execution"
+    
 }
 
 ::vcl::StringEntryIdentifier SvTreeListBox::CurrentEntry( OUString& _out_entryText ) const
 {
-    // always accept the current entry if there is one
+    
     SvTreeListEntry* pCurrentEntry( GetCurEntry() );
     if ( pCurrentEntry )
     {
@@ -1241,7 +1241,7 @@ sal_Bool SvTreeListBox::EditingCanceled() const
 }
 
 
-//JP 28.3.2001: new Drag & Drop API
+
 sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -1274,7 +1274,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
             }
         }
 
-        // **** draw emphasis ****
+        
         if( DND_ACTION_NONE == nRet )
                ImplShowTargetEmphasis( pTargetEntry, sal_False );
         else if( pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS) )
@@ -1318,7 +1318,7 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
 
         ReadDragServerInfo( rEvt.maPosPixel, &aDDInfo );
 
-        SvTreeListEntry* pTarget = pTargetEntry; // may be 0!
+        SvTreeListEntry* pTarget = pTargetEntry; 
 
         if( DND_ACTION_COPY == rEvt.mnAction )
         {
@@ -1359,7 +1359,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
 
     ReleaseMouse();
 
-    SvTreeListEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
+    SvTreeListEntry* pEntry = GetEntry( rPosPixel ); 
     if( !pEntry )
     {
         DragFinished( DND_ACTION_NONE );
@@ -1383,7 +1383,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     aDDInfo.pApp = GetpApp();
     aDDInfo.pSource = this;
     aDDInfo.pDDStartEntry = pEntry;
-    // let derived views do their thing
+    
     WriteDragServerInfo( rPosPixel, &aDDInfo );
 
     pContainer->CopyAnyData( SOT_FORMATSTR_ID_TREELISTBOX,
@@ -1396,10 +1396,10 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     Update();
     Control::SetUpdateMode( bOldUpdateMode );
 
-    // Disallow using the selection and its children as drop targets.
-    // Important: If the selection of the SourceListBox is changed in the
-    // DropHandler, the entries have to be allowed as drop targets again:
-    // (GetSourceListBox()->EnableSelectionAsDropTarget( sal_True, sal_True );)
+    
+    
+    
+    
     EnableSelectionAsDropTarget( sal_False, sal_True /* with children */ );
 
     pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
@@ -1441,12 +1441,12 @@ sal_Bool SvTreeListBox::NotifyAcceptDrop( SvTreeListEntry* )
     return sal_True;
 }
 
-// Handler and methods for Drag - finished handler.
-// The with get GetDragFinishedHdl() get link can set on the
-// TransferDataContainer. This link is a callback for the DragFinished
-// call. AddBox method is called from the GetDragFinishedHdl() and the
-// remove is called in link callback and in the destructor. So it can't
-// called to a deleted object.
+
+
+
+
+
+
 
 namespace
 {
@@ -1552,12 +1552,12 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
     SvLBoxItem* pItem;
     while( nCur < nCount )
     {
-        // MT: SV_ITEM_ID_EXTENDRLBOXSTRING / GetExtendText() was in use in IA2 cws, but only used in sc: ScSolverOptionsString. Needed?
+        
         pItem = pEntry->GetItem( nCur );
         if ( (pItem->GetType() == SV_ITEM_ID_LBOXSTRING ) &&
              !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
         {
-            //want the column header
+            
             if (!headString.isEmpty())
             {
                 sal_Int32 nEnd = headString.indexOf('\t');
@@ -1594,7 +1594,7 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
                 sRet += static_cast<SvLBoxString*>( pItem )->GetText();
                 sRet += ",";
             }
-            //end want to the column header
+            
         }
         nCur++;
     }
@@ -1646,7 +1646,7 @@ void SvTreeListBox::SetModel( SvTreeList* pNewModel )
 
 void SvTreeListBox::SetBaseModel( SvTreeList* pNewModel )
 {
-    // does the CleanUp
+    
     SvListView::SetModel( pNewModel );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
     SvTreeListEntry* pEntry = First();
@@ -1661,7 +1661,7 @@ void SvTreeListBox::DisconnectFromModel()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvTreeList* pNewModel = new SvTreeList;
-    pNewModel->SetRefCount( 0 );    // else this will never be deleted
+    pNewModel->SetRefCount( 0 );    
     SvListView::SetModel( pNewModel );
 
     pImp->SetModel( GetModel() );
@@ -1723,7 +1723,7 @@ void SvTreeListBox::Resize()
 
 #define TAB_STARTPOS    2
 
-// take care of GetTextOffset when doing changes
+
 void SvTreeListBox::SetTabs()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -1738,8 +1738,8 @@ void SvTreeListBox::SetTabs()
     long nStartPos = TAB_STARTPOS;
     long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
 
-    // pCheckButtonData->Width() knows nothing about the native checkbox width,
-    // so we have mnCheckboxItemWidth which becomes valid when something is added.
+    
+    
     long nCheckWidth = 0;
     if( nTreeFlags & TREEFLAG_CHKBTN )
         nCheckWidth = mnCheckboxItemWidth;
@@ -1767,12 +1767,12 @@ void SvTreeListBox::SetTabs()
     switch( nCase )
     {
         case NO_BUTTONS :
-            nStartPos += nContextWidthDIV2;  // because of centering
+            nStartPos += nContextWidthDIV2;  
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
-            // only set a distance if there are bitmaps
+            nStartPos += nContextWidthDIV2;  
+            
             if( nContextBmpWidthMax )
-                nStartPos += 5; // distance context bitmap to text
+                nStartPos += 5; 
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
@@ -1782,10 +1782,10 @@ void SvTreeListBox::SetTabs()
             else
                 nStartPos += nContextWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
-            // only set a distance if there are bitmaps
+            nStartPos += nContextWidthDIV2;  
+            
             if( nContextBmpWidthMax )
-                nStartPos += 5; // distance context bitmap to text
+                nStartPos += 5; 
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
@@ -1795,28 +1795,28 @@ void SvTreeListBox::SetTabs()
             else
                 nStartPos += nCheckWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CHECKBTN );
-            nStartPos += nCheckWidthDIV2;  // right edge of CheckButton
-            nStartPos += 3;  // distance CheckButton to context bitmap
-            nStartPos += nContextWidthDIV2;  // center of context bitmap
+            nStartPos += nCheckWidthDIV2;  
+            nStartPos += 3;  
+            nStartPos += nContextWidthDIV2;  
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
-            // only set a distance if there are bitmaps
+            nStartPos += nContextWidthDIV2;  
+            
             if( nContextBmpWidthMax )
-                nStartPos += 5; // distance context bitmap to text
+                nStartPos += 5; 
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
         case CHECK_BUTTONS :
             nStartPos += nCheckWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CHECKBTN );
-            nStartPos += nCheckWidthDIV2;  // right edge of CheckButton
-            nStartPos += 3;  // distance CheckButton to context bitmap
-            nStartPos += nContextWidthDIV2;  // center of context bitmap
+            nStartPos += nCheckWidthDIV2;  
+            nStartPos += 3;  
+            nStartPos += nContextWidthDIV2;  
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
-            // only set a distance if there are bitmaps
+            nStartPos += nContextWidthDIV2;  
+            
             if( nContextBmpWidthMax )
-                nStartPos += 5; // distance context bitmap to text
+                nStartPos += 5; 
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
     }
@@ -2125,10 +2125,10 @@ void SvTreeListBox::CheckButtonHdl()
 }
 
 //
-// TODO: Currently all data is cloned so that they conform to the default tree
-// view format. Actually, the model should be used as a reference here. This
-// leads to us _not_ calling SvTreeListEntry::Clone, but only its base class
-// SvTreeListEntry.
+
+
+
+
 //
 
 SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
@@ -2268,7 +2268,7 @@ void SvTreeListBox::EnableInplaceEditing( bool bOn )
 void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    // under OS/2, we get key up/down even while editing
+    
     if( IsEditingActive() )
         return;
 
@@ -2308,7 +2308,7 @@ void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 void SvTreeListBox::GetFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    //If there is no item in the tree, draw focus.
+    
     if( !First())
     {
         Invalidate();
@@ -2334,7 +2334,7 @@ void SvTreeListBox::GetFocus()
 void SvTreeListBox::LoseFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    //If there is no item in the tree, delete visual focus.
+    
     if( !First())
     {
         Invalidate();
@@ -2346,7 +2346,7 @@ void SvTreeListBox::LoseFocus()
 void SvTreeListBox::ModelHasCleared()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pImp->pCursor = 0; // else we crash in GetFocus when editing in-place
+    pImp->pCursor = 0; 
     delete pEdCtrl;
     pEdCtrl = NULL;
     pImp->Clear();
@@ -2383,7 +2383,7 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     NotifyBeginScroll();
     if( nDeltaEntries < 0 )
     {
-        // move window up
+        
         nDeltaEntries *= -1;
         long nVis = pImp->aVerSBar.GetVisibleSize();
         long nTemp = nThumb + nVis;
@@ -2535,10 +2535,10 @@ sal_Bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
         nFlags = pParent->GetFlags();
         nFlags |= SV_ENTRYFLAG_NO_NODEBMP;
         pParent->SetFlags( nFlags );
-        GetModel()->InvalidateEntry( pParent ); // repaint
+        GetModel()->InvalidateEntry( pParent ); 
     }
 
-    // #i92103#
+    
     if ( bExpanded )
     {
         pImp->CallEventListeners( VCLEVENT_ITEM_EXPANDED, pParent );
@@ -2564,7 +2564,7 @@ sal_Bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
         ExpandedHdl();
     }
 
-    // #i92103#
+    
     if ( bCollapsed )
     {
         pImp->CallEventListeners( VCLEVENT_ITEM_COLLAPSED, pParent );
@@ -2616,8 +2616,8 @@ void SvTreeListBox::SelectAll( sal_Bool bSelect, sal_Bool )
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SelAllDestrAnch(
         bSelect,
-        true,       // delete anchor,
-        true );     // even when using SINGLE_SELECTION, deselect the cursor
+        true,       
+        true );     
 }
 
 void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
@@ -2712,7 +2712,7 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc( const Font& rFont )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     AdjustEntryHeight( rFont );
-    // always invalidate, else things go wrong in SetEntryHeight
+    
     RecalcViewData();
 }
 
@@ -2723,7 +2723,7 @@ void SvTreeListBox::Paint( const Rectangle& rRect )
     if( nTreeFlags & TREEFLAG_RECALCTABS )
         SetTabs();
     pImp->Paint( rRect );
-    //Add visual focus draw
+    
     if( !First() )
     {
         if( HasFocus() )
@@ -2820,7 +2820,7 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
 
-    // reinitialize the separate items of the entries
+    
     sal_uInt16 nCount = ((SvTreeListEntry*)pEntry)->ItemCount();
     for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
     {
@@ -2828,7 +2828,7 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
         pItem->InitViewData( this, (SvTreeListEntry*)pEntry, 0 );
     }
 
-    // repaint
+    
     pImp->InvalidateEntry( (SvTreeListEntry*)pEntry );
 }
 
@@ -2865,7 +2865,7 @@ void SvTreeListBox::EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
             aSize.Width() = nRight - aPos.X();
     }
     Point aOrigin( GetMapMode().GetOrigin() );
-    aPos += aOrigin; // convert to win coordinates
+    aPos += aOrigin; 
     aSize.Width() -= aOrigin.X();
     Rectangle aRect( aPos, aSize );
     EditText( pItem->GetText(), aRect, rSelection );
@@ -2942,7 +2942,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
 
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if(pEdEntry) // we have to check if this entry is null that means that it is removed while editing
+    if(pEdEntry) 
     {
         if( EditedEntry( pEdEntry, rStr ) )
         {
@@ -2959,7 +2959,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
 SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    // scroll
+    
     if( rPos.Y() < 12 )
     {
         ImplShowTargetEmphasis(pTargetEntry, false);
@@ -2976,7 +2976,7 @@ SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
     }
 
     SvTreeListEntry* pTarget = pImp->GetEntry( rPos );
-    // when dropping in a vacant space, use the last entry
+    
     if( !pTarget )
         return (SvTreeListEntry*)LastVisible();
     else if( (GetDragDropMode() & SV_DRAGDROP_ENABLE_TOP) &&
@@ -3056,7 +3056,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
 {
     DBG_CHKTHIS(SvTreeListBox,0);
 
-    Rectangle aRect; // multi purpose
+    Rectangle aRect; 
 
     sal_Bool bHorSBar = pImp->HasHorScrollBar();
     PreparePaint( pEntry );
@@ -3069,13 +3069,13 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     short nTempEntryHeight = GetEntryHeight();
     long nWidth = pImp->GetOutputSize().Width();
 
-    // Did we turn on the scrollbar within PreparePaints? If yes, we have to set
-    // the ClipRegion anew.
+    
+    
     if( !bHorSBar && pImp->HasHorScrollBar() )
         SetClipRegion( Region(pImp->GetClipRegionRect()) );
 
     Point aEntryPos( GetMapMode().GetOrigin() );
-    aEntryPos.X() *= -1; // conversion document coordinates
+    aEntryPos.X() *= -1; 
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
     Color aBackupTextColor( GetTextColor() );
@@ -3084,7 +3084,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
 
     bool bCurFontIsSel = false;
     sal_Bool bInUse = pEntry->HasInUseEmphasis();
-    // if a ClipRegion was set from outside, we don't have to reset it
+    
     const WinBits nWindowStyle = GetStyle();
     const bool bResetClipRegion = !bHasClipRegion;
     const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
@@ -3132,7 +3132,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
 
         long nX;
         if( pTab->nFlags & SV_LBOXTAB_ADJUST_RIGHT )
-            // avoid cutting the right edge off the tab separation
+            
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos-SV_TAB_BORDER-1) -nTabPos);
         else
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos-nTabPos);
@@ -3147,7 +3147,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
             aEntryPos.X() = nX;
             aEntryPos.Y() = nLine;
 
-            // set background pattern/color
+            
 
             Wallpaper aWallpaper = GetBackground();
 
@@ -3159,12 +3159,12 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                 Color aNewWallColor = rSettings.GetHighlightColor();
                 if ( !bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP )
                 {
-                    // if the face color is bright then the deactive color is also bright
-                    // -> so you can't see any deactive selection
+                    
+                    
                     if ( bHideSelection && !rSettings.GetFaceColor().IsBright() &&
                          aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright() )
                         aNewWallColor = rSettings.GetDeactiveColor();
-                    // set font color to highlight
+                    
                     if ( !bCurFontIsSel )
                     {
                         SetTextColor( aHighlightTextColor );
@@ -3174,7 +3174,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                 }
                 aWallpaper.SetColor( aNewWallColor );
             }
-            else  // no selection
+            else  
             {
                 if( bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP )
                     aWallpaper.SetColor( rSettings.GetFieldColor() );
@@ -3186,22 +3186,22 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                 }
             }
 
-            // draw background
+            
             if( !(nTreeFlags & TREEFLAG_USESEL))
             {
-                // only draw the area that is used by the item
+                
                 aRectSize.Width() = aSize.Width();
                 aRect.SetPos( aEntryPos );
                 aRect.SetSize( aRectSize );
             }
             else
             {
-                // draw from the current to the next tab
+                
                 if( nCurTab != 0 )
                     aRect.Left() = nTabPos;
                 else
-                    // if we're in the 0th tab, always draw from column 0 --
-                    // else we get problems with centered tabs
+                    
+                    
                     aRect.Left() = 0;
                 aRect.Top() = nLine;
                 aRect.Bottom() = nLine + nTempEntryHeight - 1;
@@ -3216,24 +3216,24 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                 else
                     aRect.Right() = nMaxRight;
             }
-            // A custom selection that starts at a tab position > 0, do not fill
-            // the background of the 0th item, else e.g. we might not be able to
-            // realize tab listboxes with lines.
+            
+            
+            
             if( !(nCurTab==0 && (nTreeFlags & TREEFLAG_USESEL) && nFirstSelTab) )
             {
                 SetFillColor( aWallpaper.GetColor() );
-                // this case may occur for smaller horizontal resizes
+                
                 if( aRect.Left() < aRect.Right() )
                     DrawRect( aRect );
             }
-            // draw item
-            // center vertically
+            
+            
             aEntryPos.Y() += ( nTempEntryHeight - aSize.Height() ) / 2;
             pItem->Paint(aEntryPos, *this, pViewDataEntry, pEntry);
 
-            // division line between tabs
+            
             if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
-                // not at the right edge of the window!
+                
                 aRect.Right() < nMaxRight)
             {
                 aRect.Left() = aRect.Right() - SV_TAB_BORDER;
@@ -3247,7 +3247,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     }
     if( pViewDataEntry->IsCursored() && !HasFocus() )
     {
-        // cursor emphasis
+        
         SetFillColor();
         Color aOldLineColor = GetLineColor();
         SetLineColor( Color( COL_BLACK ) );
@@ -3270,14 +3270,14 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     long nDynTabPos = GetTabPos( pEntry, pFirstDynamicTab );
     nDynTabPos += pImp->nNodeBmpTabDistance;
     nDynTabPos += pImp->nNodeBmpWidth / 2;
-    nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
-                     // to the next tab
+    nDynTabPos += 4; 
+                     
 
     if( (!(pEntry->GetFlags() & SV_ENTRYFLAG_NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
         ( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() ) )
     {
-        // find first tab and check if the node bitmap extends into it
+        
         sal_uInt16 nNextTab = nFirstDynTabPos;
         SvLBoxTab* pNextTab;
         do
@@ -3312,7 +3312,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                 if ( !IsEnabled() )
                     nStyle |= IMAGE_DRAW_DISABLE;
 
-                //native
+                
                 sal_Bool bNativeOK = sal_False;
                 if ( IsNativeControlSupported( CTRL_LISTNODE, PART_ENTIRE_CONTROL) )
                 {
@@ -3323,7 +3323,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                     if ( IsEnabled() )  nState |= CTRL_STATE_ENABLED;
 
                     if ( IsExpanded(pEntry) )
-                        aControlValue.setTristateVal( BUTTONVALUE_ON );//expanded node
+                        aControlValue.setTristateVal( BUTTONVALUE_ON );
                     else
                     {
                         if( (!pEntry->HasChildren() )                              &&
@@ -3331,9 +3331,9 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                              (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
                             pImp->GetDontKnowNodeBmp().GetSizePixel().Width()
                         )
-                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //dont know
+                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); 
                         else
-                            aControlValue.setTristateVal( BUTTONVALUE_OFF ); //collapsed node
+                            aControlValue.setTristateVal( BUTTONVALUE_OFF ); 
                     }
 
                     bNativeOK = DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL,
@@ -3350,7 +3350,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
 
     if( bHasClipRegion && bResetClipRegion )
         SetClipRegion();
-    return 0; // nRowLen;
+    return 0; 
 }
 
 void SvTreeListBox::PreparePaint( SvTreeListEntry* )
@@ -3395,11 +3395,11 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
             aSize.Width() = pItem->GetSize( this, pEntry ).Width();
             if( !aSize.Width() )
                 aSize.Width() = 15;
-            long nX = nTabPos; //GetTabPos( pEntry, pTab );
-            // alignment
+            long nX = nTabPos; 
+            
             nX += pTab->CalcOffset( aSize.Width(), nNextTabPos - nTabPos );
             aRect.Left() = nX;
-            // make sure that first and last letter aren't cut off slightly
+            
             aRect.SetSize( aSize );
             if( aRect.Left() > 0 )
                 aRect.Left()--;
@@ -3408,20 +3408,20 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
     }
     else
     {
-        // if SelTab != 0, we have to calculate also
+        
         if( nFocusWidth == -1 || nFirstSelTab )
         {
             sal_uInt16 nLastTab;
             SvLBoxTab* pLastTab = GetLastTab(SV_LBOXTAB_SHOW_SELECTION,nLastTab);
             nLastTab++;
-            if( nLastTab < aTabs.size() ) // is there another one?
+            if( nLastTab < aTabs.size() ) 
                 pLastTab = aTabs[ nLastTab ];
             else
-                pLastTab = 0;  // select whole width
+                pLastTab = 0;  
             aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
             nFocusWidth = (short)aSize.Width();
             if( pTab )
-                nFocusWidth = nFocusWidth - (short)nTabPos; //pTab->GetPos();
+                nFocusWidth = nFocusWidth - (short)nTabPos; 
         }
         else
         {
@@ -3431,10 +3431,10 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
                 if( nCurTab )
                     aSize.Width() += nTabPos;
                 else
-                    aSize.Width() += pTab->GetPos(); // Tab0 always from the leftmost position
+                    aSize.Width() += pTab->GetPos(); 
             }
         }
-        // if selection starts with 0th tab, draw from column 0 on
+        
         if( nCurTab != 0 )
         {
             aRect.Left() = nTabPos;
@@ -3442,7 +3442,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
         }
         aRect.SetSize( aSize );
     }
-    // adjust right edge because of clipping
+    
     if( aRect.Right() >= nRealWidth )
     {
         aRect.Right() = nRealWidth-1;
@@ -3597,8 +3597,8 @@ void SvTreeListBox::AddTab(long nTabPos,sal_uInt16 nFlags,void* pUserData )
         if( nPos >= nFirstSelTab && nPos <= nLastSelTab )
             pTab->nFlags |= SV_LBOXTAB_SHOW_SELECTION;
         else
-            // string items usually have to be selected -- turn this off
-            // explicitly
+            
+            
             pTab->nFlags &= ~SV_LBOXTAB_SHOW_SELECTION;
     }
 }
@@ -3687,8 +3687,8 @@ void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( nFocusWidth == -1 )
-        // to make sure that the control doesn't show the wrong focus rectangle
-        // after painting
+        
+        
         pImp->RecalcFocusRect();
     NotifyInvalidating();
     Control::Invalidate( nInvalidateFlags );
@@ -3699,8 +3699,8 @@ void SvTreeListBox::Invalidate( const Rectangle& rRect, sal_uInt16 nInvalidateFl
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( nFocusWidth == -1 )
-        // to make sure that the control doesn't show the wrong focus rectangle
-        // after painting
+        
+        
         pImp->RecalcFocusRect();
     NotifyInvalidating();
     Control::Invalidate( rRect, nInvalidateFlags );
@@ -3719,7 +3719,7 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
         nStart = nEnd;
         nEnd = nTemp;
     }
-    // select all tabs that lie within the area
+    
     nTreeFlags |= TREEFLAG_RECALCTABS;
     nFirstSelTab = nStart;
     nLastSelTab = nEnd;
@@ -3729,7 +3729,7 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
 void SvTreeListBox::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    // FIXME gnumake2 resync to DEV300_m84
+    
     pImp->Command( rCEvt );
 }
 
@@ -3846,7 +3846,7 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pE
             break;
 
         case LISTACTION_RESORTED:
-            // after a selection: show first entry and also keep the selection
+            
             MakeVisible( (SvTreeListEntry*)pModel->First(), sal_True );
             SetUpdateMode( sal_True );
             break;
@@ -3933,8 +3933,8 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        nEntryHeight = 0;   // _together_ with sal_True of 1. par (bFont) of InitSettings() a zero-height
-                            //  forces complete recalc of heights!
+        nEntryHeight = 0;   
+                            
         InitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
@@ -3974,7 +3974,7 @@ void SvTreeListBox::InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bB
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    // always try to re-create default-SvLBoxButtonData
+    
     if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )
         pCheckButtonData->SetDefaultImages( this );
 }
@@ -4033,9 +4033,9 @@ sal_Bool SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
 
 void SvTreeListBox::EnableList( bool _bEnable )
 {
-    // call base class method
+    
     Window::Enable( _bEnable != false );
-    // then paint immediately
+    
     Paint( Rectangle( Point(), GetSizePixel() ) );
 }
 
@@ -4050,7 +4050,7 @@ void SvTreeListBox::EnableList( bool _bEnable )
         ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            // need to be done here to get the vclxwindow later on in the accessbile
+            
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
             xAccessible = pImp->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
         }

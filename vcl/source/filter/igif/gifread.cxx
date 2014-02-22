@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,12 +77,12 @@ bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     const Size aSize( nWidth, nHeight );
 
 #ifdef __LP64__
-    // Don't bother allocating a bitmap of a size that would fail on a
-    // 32-bit system. We have at least one unit tests that is expected
-    // to fail (loading a 65535*65535 size GIF
-    // svtools/qa/cppunit/data/gif/fail/CVE-2008-5937-1.gif), but
-    // which doesn't fail on 64-bit Mac OS X at least. Why the loading
-    // fails on 64-bit Linux, no idea.
+    
+    
+    
+    
+    
+    
     if (nWidth >= 64000 && nHeight >= 64000)
     {
         bStatus = false;
@@ -188,7 +188,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
             rColor.SetBlue( *pTmp++ );
         }
 
-        // if possible accommodate some standard colours
+        
         if( nCount < 256UL )
         {
             (*pPal)[ 255UL ] = Color( COL_WHITE );
@@ -209,16 +209,16 @@ bool GIFReader::ReadExtension()
     bool    bRet = false;
     bool    bOverreadDataBlocks = false;
 
-    // Extension-Label
+    
     rIStm.ReadUChar( cFunction );
     if( NO_PENDING( rIStm ) )
     {
-        // Block length
+        
         rIStm.ReadUChar( cSize );
 
         switch( cFunction )
         {
-            // 'Graphic Control Extension'
+            
             case( 0xf9 ) :
             {
                 sal_uInt8 cFlags;
@@ -238,27 +238,27 @@ bool GIFReader::ReadExtension()
             }
             break;
 
-            // Application extension
+            
             case ( 0xff ) :
             {
                 if ( NO_PENDING( rIStm ) )
                 {
-                    // by default overread this extension
+                    
                     bOverreadDataBlocks = true;
 
-                    // Appl. extension has length 11
+                    
                     if ( cSize == 0x0b )
                     {
                         OString aAppId = read_uInt8s_ToOString(rIStm, 8);
                         OString aAppCode = read_uInt8s_ToOString(rIStm, 3);
                         rIStm.ReadUChar( cSize );
 
-                        // NetScape-Extension
+                        
                         if( aAppId == "NETSCAPE" && aAppCode == "2.0" && cSize == 3 )
                         {
                             rIStm.ReadUChar( cByte );
 
-                            // Loop-Extension
+                            
                             if ( cByte == 0x01 )
                             {
                                 rIStm.ReadUChar( cByte );
@@ -271,9 +271,9 @@ bool GIFReader::ReadExtension()
                                 bRet = NO_PENDING( rIStm );
                                 bOverreadDataBlocks = false;
 
-                                // Netscape interpretes the loop count
-                                // as pure number of _repeats_;
-                                // here it is the total number of loops
+                                
+                                
+                                
                                 if( nLoops )
                                     nLoops++;
                             }
@@ -284,7 +284,7 @@ bool GIFReader::ReadExtension()
                         {
                             rIStm.ReadUChar( cByte );
 
-                            // Loop extension
+                            
                             if ( cByte == 0x01 )
                             {
                                 rIStm.ReadUInt32( nLogWidth100 ).ReadUInt32( nLogHeight100 );
@@ -302,13 +302,13 @@ bool GIFReader::ReadExtension()
             }
             break;
 
-            // overread everything else
+            
             default:
                 bOverreadDataBlocks = true;
             break;
         }
 
-        // overread sub-blocks
+        
         if ( bOverreadDataBlocks )
         {
             bRet = true;
@@ -354,7 +354,7 @@ bool GIFReader::ReadLocalHeader()
         aMemStm.ReadUInt16( nImageHeight );
         aMemStm.ReadUChar( nFlags );
 
-        // if interlaced, first define startvalue
+        
         bInterlaced = ( ( nFlags & 0x40 ) == 0x40 );
         nLastInterCount = 7;
         nLastImageY = 0;
@@ -367,9 +367,9 @@ bool GIFReader::ReadLocalHeader()
         else
             pPal = &aGPalette;
 
-        // if we could read everything, we will create the local image;
-        // if the global colour table is valid for the image, we will
-        // consider the BackGroudColorIndex.
+        
+        
+        
         if( NO_PENDING( rIStm ) )
         {
             CreateBitmaps( nImageWidth, nImageHeight, pPal, bGlobalPalette && ( pPal == &aGPalette ) );
@@ -431,14 +431,14 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
             {
                 long nT1;
 
-                // lines will be copied if interlaced
+                
                 if( nLastInterCount )
                 {
                     long nMinY = std::min( (long) nLastImageY + 1, (long) nImageHeight - 1 );
                     long nMaxY = std::min( (long) nLastImageY + nLastInterCount, (long) nImageHeight - 1 );
 
-                    // copy last line read, if lines do not coincide
-                    // ( happens at the end of the image )
+                    
+                    
                     if( ( nMinY > nLastImageY ) && ( nLastImageY < ( nImageHeight - 1 ) ) )
                     {
                         HPBYTE  pScanline8 = pAcc8->GetScanline( nYAcc );
@@ -495,7 +495,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
                 nYAcc = nImageY;
             }
 
-            // line starts from the beginning
+            
             nImageX = 0;
         }
 
@@ -563,8 +563,8 @@ void GIFReader::CreateNewBitmaps()
 
 const Graphic& GIFReader::GetIntermediateGraphic()
 {
-    // only create intermediate graphic, if data is available
-    // but graphic still not completely read
+    
+    
     if ( bImGraphicReady && !aAnimation.Count() )
     {
         Bitmap  aBmp;
@@ -597,12 +597,12 @@ bool GIFReader::ProcessGIF()
     if ( !bStatus )
         eActAction = ABORT_READING;
 
-    // set stream to right position
+    
     rIStm.Seek( nLastPos );
 
     switch( eActAction )
     {
-        // read next marker
+        
         case( MARKER_READING ):
         {
             sal_uInt8 cByte;
@@ -627,7 +627,7 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // read ScreenDescriptor
+        
         case( GLOBAL_HEADER_READING ):
         {
             if( ( bRead = ReadGlobalHeader() ) )
@@ -639,7 +639,7 @@ bool GIFReader::ProcessGIF()
         break;
 
 
-        // read extension
+        
         case( EXTENSION_READING ):
         {
             if( ( bRead = ReadExtension() ) )
@@ -648,7 +648,7 @@ bool GIFReader::ProcessGIF()
         break;
 
 
-        // read Image-Descriptor
+        
         case( LOCAL_HEADER_READING ):
         {
             if( ( bRead = ReadLocalHeader() ) )
@@ -660,7 +660,7 @@ bool GIFReader::ProcessGIF()
         break;
 
 
-        // read first data block
+        
         case( FIRST_BLOCK_READING ):
         {
             sal_uInt8 cDataSize;
@@ -683,14 +683,14 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // read next data block
+        
         case( NEXT_BLOCK_READING ):
         {
             sal_uInt16  nLastX = nImageX;
             sal_uInt16  nLastY = nImageY;
             sal_uLong   nRet = ReadNextBlock();
 
-            // Return: 0:Pending / 1:OK; / 2:OK and last block: / 3:EOI / 4:HardAbort
+            
             if( nRet )
             {
                 bRead = true;
@@ -732,7 +732,7 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // an error occured
+        
         case( ABORT_READING ):
         {
             bEnd = true;
@@ -744,9 +744,9 @@ bool GIFReader::ProcessGIF()
         break;
     }
 
-    // set stream to right position,
-    // if data could be read put it a the old
-    // position otherwise at the actual one
+    
+    
+    
     if( bRead || bEnd )
         nLastPos = rIStm.Tell();
 

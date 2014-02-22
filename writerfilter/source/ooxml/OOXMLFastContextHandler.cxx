@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -212,7 +212,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
         }
             break;
         case OOXML_Fallback:
-            // If Choice is already taken, then let's ignore the Fallback.
+            
             return m_bTookChoice;
             break;
         default:
@@ -222,7 +222,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
     return false;
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+
 void SAL_CALL OOXMLFastContextHandler::startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
@@ -1230,7 +1230,7 @@ void OOXMLFastContextHandler::resolveFooter
     mpParserState->getDocument()->resolveFooter(*mpStream, type, rId);
 }
 
-// Add the data pointed to by the reference as another property.
+
 void OOXMLFastContextHandler::resolveData(const OUString & rId)
 {
     OOXMLDocument * objDocument = getDocument();
@@ -1809,7 +1809,7 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
 {
     mbForwardEventsSaved = isForwardEvents();
 
-    // If this is the note we're looking for or this is the footnote separator one.
+    
     if (mnMyXNoteId == getXNoteId() || static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)
         setForwardEvents(true);
     else
@@ -2040,7 +2040,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
     mrShapeContext.set( getDocument( )->getShapeContext( ) );
     if ( !mrShapeContext.is( ) )
     {
-        // Define the shape context for the whole document
+        
         mrShapeContext = css::xml::sax::FastShapeContextHandler::create(
             getComponentContext());
         getDocument()->setShapeContext( mrShapeContext );
@@ -2110,7 +2110,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
             bool bIsPicture = Element == ( NS_picture | OOXML_pic );
 
-            // Notify the dmapper that the shape is ready to use
+            
             if ( !bIsPicture )
             {
                 mpStream->startShape( xShape );
@@ -2132,7 +2132,7 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
 
     OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
 
-    // Ending the shape should be the last thing to do
+    
     bool bIsPicture = Element == ( NS_picture | OOXML_pic );
     if ( !bIsPicture && m_bShapeStarted)
         mpStream->endShape( );
@@ -2156,7 +2156,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
     bool bGroupShape = Element == Token_t(NS_vml | OOXML_group);
-    // drawingML version also counts as a group shape.
+    
     bGroupShape |= mrShapeContext->getStartToken() == Token_t(NS_wpg | OOXML_wgp);
     sal_uInt32 nNamespace = Element & 0xffff0000;
 
@@ -2167,7 +2167,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
         case NS_office:
             if (!bGroupShape)
                 xContextHandler.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
-        // no break;
+        
         default:
             if (!xContextHandler.is())
             {
@@ -2195,10 +2195,10 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
             break;
     }
 
-    // VML import of shape text is already handled by
-    // OOXMLFastContextHandlerWrapper::lcl_createFastChildContext(), here we
-    // handle the WPS import of shape text, as there the parent context is a
-    // Shape one, so a different situation.
+    
+    
+    
+    
     if (Element == static_cast<sal_Int32>(NS_wps | OOXML_txbx))
         sendShape(Element);
 
@@ -2363,10 +2363,10 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 
     OOXMLFastContextHandlerShape* pShapeCtx = (OOXMLFastContextHandlerShape*)mpParent;
 
-    // We have methods to _add_ individual tokens or whole namespaces to be
-    // processed by writerfilter (instead of oox), but we have no method to
-    // filter out a single token. Just hardwire the wrap token here till we
-    // need a more generic solution.
+    
+    
+    
+    
     bool bIsWrap = Element == static_cast<sal_Int32>(NS_vml_wordprocessingDrawing | OOXML_wrap);
     if ( bInNamespaces && ((pShapeCtx->isShapeSent() && bIsWrap) || !bIsWrap) )
         xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
@@ -2574,9 +2574,9 @@ void OOXMLFastContextHandlerMath::process()
     if (!ref.is())
         return;
     uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
-// gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
-// so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
-// to RTLD_GLOBAL, so most probably a gcc bug.
+
+
+
     oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( dynamic_cast< SfxBaseModel* >(component.get()));
     assert( import != NULL );
     import->readFormulaOoxml( buffer );

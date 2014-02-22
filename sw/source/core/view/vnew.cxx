@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/printer.hxx>
@@ -40,23 +40,23 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 {
     mbDocSizeChgd = sal_False;
 
-    // We play it save: Remove old font information whenever the printer
-    // resolution or the zoom factor changes. For that, Init() and Reformat()
-    // are the most secure places.
+    
+    
+    
      pFntCache->Flush( );
 
-    // ViewOptions are created dynamically
+    
 
     if( !mpOpt )
     {
         mpOpt = new SwViewOption;
 
-        // ApplyViewOptions() does not need to be called
+        
         if( pNewOpt )
         {
             *mpOpt = *pNewOpt;
-            // Zoom factor needs to be set because there is no call to ApplyViewOptions() during
-            // CTOR for performance reasons.
+            
+            
             if( GetWin() && 100 != mpOpt->GetZoom() )
             {
                 MapMode aMode( mpWin->GetMapMode() );
@@ -70,34 +70,34 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 
     SwDocShell* pDShell = mpDoc->GetDocShell();
     mpDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
-    // JP 02.02.99: Bug 61335 - set readonly flag at ViewOptions before creating layout. Otherwise,
-    //                          one would have to reformat again.
+    
+    
 
     if( pDShell && pDShell->IsReadOnly() )
         mpOpt->SetReadonly( sal_True );
 
     SAL_INFO( "sw.core", "View::Init - before InitPrt" );
-    // --> FME 2007-11-06 #i82967#
+    
     OutputDevice* pPDFOut = 0;
 
     if ( mpOut && mpOut->GetPDFWriter() )
         pPDFOut = mpOut;
-    // <--
+    
 
-    // --> FME 2005-01-21 #i41075#
-    // Only setup the printer if we need one:
+    
+    
     const bool bBrowseMode = mpOpt->getBrowseMode();
     if( pPDFOut )
         InitPrt( pPDFOut );
-    // <--
+    
 
-    // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
-    // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+    
+    
     if ( !bBrowseMode )
     {
         mpDoc->CheckDefaultPageFmt();
     }
-    // <--
+    
 
     SAL_INFO( "sw.core", "View::Init - after InitPrt" );
     if( GetWin() )
@@ -108,38 +108,38 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         GetWin()->SetLineColor();
     }
 
-    // Create a new layout, if there is no one available
+    
     if( !mpLayout )
     {
-        // Here's the code which disables the usage of "multiple" layouts at the moment
-        // If the problems with controls and groups objects are solved,
-        // this code can be removed...
+        
+        
+        
         SwViewShell *pCurrShell = GetDoc()->GetCurrentViewShell();
         if( pCurrShell )
             mpLayout = pCurrShell->mpLayout;
-        // end of "disable multiple layouts"
+        
         if( !mpLayout )
         {
-            // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
+            
             mpLayout = SwRootFrmPtr(new SwRootFrm( mpDoc->GetDfltFrmFmt(), this ));
             mpLayout->Init( mpDoc->GetDfltFrmFmt() );
         }
     }
     SizeChgNotify();
 
-    // --> #i31958#
-    // XForms mode: initialize XForms mode, based on design mode (draw view)
-    //   MakeDrawView() requires layout
+    
+    
+    
     if( GetDoc()->isXForms() )
     {
         if( ! HasDrawView() )
             MakeDrawView();
         mpOpt->SetFormView( ! GetDrawView()->IsDesignMode() );
     }
-    // <-- #i31958#
+    
 }
 
-/// CTor for the first Shell.
+
 SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
                         long nFlags )
@@ -158,17 +158,17 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
     mbTiledRendering(false),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0), // #i74769#
+    mpTargetPaintWindow(0), 
+    mpBufferedOut(0), 
     mpDoc( &rDocument ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
-    mpPrePostOutDev(0), // #i72754#
+    mpPrePostOutDev(0), 
     maPrePostMapMode()
 {
-    // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
+    
+    
     mbInConstructor = true;
 
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
@@ -176,19 +176,19 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
     mbPaintWorks = mbEnableSmooth = sal_True;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
-    // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
-    // if it's already been modified.
+    
+    
     const bool bIsDocModified( mpDoc->IsModified() );
     mpDoc->acquire();
     pOutput = mpOut;
-    Init( pNewOpt );    // may change the Outdev (InitPrt())
+    Init( pNewOpt );    
     mpOut = pOutput;
 
-    // OD 28.03.2003 #108470# - initialize print preview layout after layout
-    // is created in <SwViewShell::Init(..)> - called above.
+    
+    
     if ( mbPreview )
     {
-        // OD 12.12.2002 #103492# - init page preview layout
+        
         mpImp->InitPagePreviewLayout();
     }
 
@@ -197,26 +197,26 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
     ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
-    // In Init a standard FrmFmt is created.
-    // --> OD 2005-02-11 #i38810#
+    
+    
     if (   !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
         && !bIsDocModified )
-    // <--
+    
     {
         mpDoc->ResetModified();
     }
 
-    // extend format cache.
+    
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
-    // OD 2004-06-01 #i26791#
+    
     mbInConstructor = false;
 }
 
-/// CTor for further Shells on a document.
+
 SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
     Ring( &rShell ),
@@ -234,24 +234,24 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
     mbTiledRendering(false),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0), // #i74769#
+    mpTargetPaintWindow(0), 
+    mpBufferedOut(0), 
     mpDoc( rShell.GetDoc() ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
-    mpPrePostOutDev(0), // #i72754#
+    mpPrePostOutDev(0), 
     maPrePostMapMode()
 {
-    // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
+    
+    
     mbInConstructor = true;
 
     mbPaintWorks = mbEnableSmooth = sal_True;
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
     mbEndActionByVirDev = sal_False;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
-    // OD 12.12.2002 #103492#
+    
     if( nFlags & VSHELLFLAG_SHARELAYOUT )
         mpLayout = rShell.mpLayout;
 
@@ -261,29 +261,29 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     sal_Bool bModified = mpDoc->IsModified();
 
     pOutput = mpOut;
-    Init( rShell.GetViewOptions() ); // might change Outdev (InitPrt())
+    Init( rShell.GetViewOptions() ); 
     mpOut = pOutput;
 
-    // OD 12.12.2002 #103492#
+    
     if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
     ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
-    // In Init a standard FrmFmt is created.
+    
     if( !bModified && !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
     {
         mpDoc->ResetModified();
     }
 
-    // extend format cache.
+    
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
-    // OD 2004-06-01 #i26791#
+    
     mbInConstructor = false;
 
 }
@@ -294,9 +294,9 @@ SwViewShell::~SwViewShell()
         SET_CURR_SHELL( this );
         mbPaintWorks = sal_False;
 
-        // FME 2004-06-21 #i9684# Stopping the animated graphics is not
-        // necessary during printing or pdf export, because the animation
-        // has not been started in this case.
+        
+        
+        
         if( mpDoc && GetWin() )
         {
             SwNodes& rNds = mpDoc->GetNodes();
@@ -325,8 +325,8 @@ SwViewShell::~SwViewShell()
             GetDoc()->StopNumRuleAnimations( mpOut );
         }
 
-        delete mpImp; // Delete first, so that the LayoutViews are destroyed.
-        mpImp = 0;   // Set to zero, because ~SwFrm relies on it.
+        delete mpImp; 
+        mpImp = 0;   
 
         if ( mpDoc )
         {
@@ -338,11 +338,11 @@ SwViewShell::~SwViewShell()
 
         delete mpOpt;
 
-        // resize format cache.
+        
         if ( SwTxtFrm::GetTxtCache()->GetCurMax() > 250 )
             SwTxtFrm::GetTxtCache()->DecreaseMax( 100 );
 
-        // Remove from PaintQueue if necessary
+        
         SwPaintQueue::Remove( this );
 
         OSL_ENSURE( !mnStartAction, "EndAction() pending." );

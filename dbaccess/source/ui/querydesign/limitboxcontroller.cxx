@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "limitboxcontroller.hxx"
@@ -105,7 +105,7 @@ LimitBoxController::~LimitBoxController()
 {
 }
 
-/// XInterface
+
 uno::Any SAL_CALL LimitBoxController::queryInterface( const uno::Type& aType )
 throw (uno::RuntimeException)
 {
@@ -127,7 +127,7 @@ void SAL_CALL LimitBoxController::release() throw ()
 }
 
 
-/// XServiceInfo
+
 IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LimitBoxController, "org.libreoffice.comp.dbu.LimitBoxController")
 IMPLEMENT_SERVICE_INFO_SUPPORTS(LimitBoxController)
 IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LimitBoxController, "com.sun.star.frame.ToolboxController")
@@ -138,7 +138,7 @@ uno::Reference< uno::XInterface >
     return static_cast< XServiceInfo* >(new LimitBoxController( comphelper::getComponentContext(_rxORB) ));
 }
 
-/// XComponent
+
 void SAL_CALL LimitBoxController::dispose()
 throw (uno::RuntimeException)
 {
@@ -149,7 +149,7 @@ throw (uno::RuntimeException)
     m_pLimitBox = 0;
 }
 
-/// XStatusListener
+
 void SAL_CALL LimitBoxController::statusChanged(
     const frame::FeatureStateEvent& rEvent )
 throw ( uno::RuntimeException )
@@ -174,7 +174,7 @@ throw ( uno::RuntimeException )
     }
 }
 
-/// XToolbarController
+
 void SAL_CALL LimitBoxController::execute( sal_Int16 /*KeyModifier*/ )
 throw (uno::RuntimeException)
 {
@@ -233,7 +233,7 @@ void LimitBoxController::dispatchCommand(
     }
 }
 
-} ///dbaui namespace
+} 
 
 extern "C" void SAL_CALL createRegistryInfo_LimitBoxController()
 {

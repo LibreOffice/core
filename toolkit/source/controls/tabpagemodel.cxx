@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/controls/tabpagemodel.hxx>
@@ -102,13 +102,13 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     }
     return *pHelper;
 }
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-////----- XInitialization -------------------------------------------------------------------
+
 void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
             throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
 {
@@ -237,7 +237,7 @@ static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize 
     ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
     return aTmp;
 }
-// ::com::sun::star::awt::XWindowListener
+
 void SAL_CALL UnoControlTabPage::windowResized( const ::com::sun::star::awt::WindowEvent& e )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -245,7 +245,7 @@ throw (::com::sun::star::uno::RuntimeException)
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
     if ( pOutDev && !mbSizeModified )
     {
-        // Currentley we are simply using MAP_APPFONT
+        
         ::Size aAppFontSize( e.Width, e.Height );
 
         Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
@@ -260,12 +260,12 @@ throw (::com::sun::star::uno::RuntimeException)
 
         aAppFontSize = ImplMapPixelToAppFont( pOutDev, aAppFontSize );
 
-        // Remember that changes have been done by listener. No need to
-        // update the position because of property change event.
+        
+        
         mbSizeModified = true;
         Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        // Properties in a sequence must be sorted!
+        
         aProps[0] = "Height";
         aProps[1] = "Width";
         aValues[0] <<= aAppFontSize.Height();
@@ -283,12 +283,12 @@ throw (::com::sun::star::uno::RuntimeException)
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
     if ( pOutDev && !mbPosModified )
     {
-        // Currentley we are simply using MAP_APPFONT
+        
         ::Size aTmp( e.X, e.Y );
         aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
 
-        // Remember that changes have been done by listener. No need to
-        // update the position because of property change event.
+        
+        
         mbPosModified = true;
         Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );

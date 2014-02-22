@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -94,7 +94,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
-// Lingu-Dispatcher
+
 
 void SwView::ExecLingu(SfxRequest &rReq)
 {
@@ -110,9 +110,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
             break;
         case SID_CHINESE_CONVERSION:
         {
-            //open ChineseTranslationDialog
+            
             Reference< XComponentContext > xContext(
-                ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                ::cppu::defaultBootstrap_InitialComponentContext() ); 
             if(xContext.is())
             {
                 Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
@@ -125,7 +125,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
                     {
-                        //  initialize dialog
+                        
                         Reference< awt::XWindow > xDialogParentWindow(0);
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
@@ -135,11 +135,11 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         pArray[0] <<= makeAny(aParam);
                         xInit->initialize( aSeq );
 
-                        //execute dialog
+                        
                         sal_Int16 nDialogRet = xDialog->execute();
                         if( RET_OK == nDialogRet )
                         {
-                            //get some parameters from the dialog
+                            
                             sal_Bool bToSimplified = sal_True;
                             sal_Bool bUseVariants = sal_True;
                             sal_Bool bCommonTerms = sal_True;
@@ -157,7 +157,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                                 }
                             }
 
-                            //execute translation
+                            
                             sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
                             sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
                             sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
@@ -167,19 +167,19 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             Font aTargetFont = GetEditWin().GetDefaultFont( DEFAULTFONT_CJK_TEXT,
                                                     nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
-                            // disallow formatting, updating the view, ... while
-                            // converting the document. (saves time)
-                            // Also remember the current view and cursor position for later
+                            
+                            
+                            
                             m_pWrtShell->StartAction();
 
-                            // remember cursor position data for later restoration of the cursor
+                            
                             const SwPosition *pPoint = m_pWrtShell->GetCrsr()->GetPoint();
                             sal_Bool bRestoreCursor = pPoint->nNode.GetNode().IsTxtNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
                             sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
 
-                            // since this conversion is not interactive the whole converted
-                            // document should be undone in a single undo step.
+                            
+                            
                             m_pWrtShell->StartUndo( UNDO_OVERWRITE );
 
                             StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False );
@@ -189,16 +189,16 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             if (bRestoreCursor)
                             {
                                 SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
-                                // check for unexpected error case
+                                
                                 OSL_ENSURE(pTxtNode && pTxtNode->GetTxt().getLength() >= nPointIndex,
                                     "text missing: corrupted node?" );
                                 if (!pTxtNode || pTxtNode->GetTxt().getLength() < nPointIndex)
                                     nPointIndex = 0;
-                                // restore cursor to its original position
+                                
                                 m_pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTxtNode, nPointIndex );
                             }
 
-                            // enable all, restore view and cursor position
+                            
                             m_pWrtShell->EndAction();
                         }
                     }
@@ -218,7 +218,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
     }
 }
 
-// start language specific text conversion
+
 
 void SwView::StartTextConversion(
         LanguageType nSourceLang,
@@ -227,7 +227,7 @@ void SwView::StartTextConversion(
         sal_Int32 nOptions,
         sal_Bool bIsInteractive )
 {
-    // do not do text conversion if it is active elsewhere
+    
     if (GetWrtShell().HasConvIter())
     {
         return;
@@ -262,7 +262,7 @@ void SwView::StartTextConversion(
     SpellKontext(sal_False);
 }
 
-// spellcheck and text conversion related stuff
+
 
 void SwView::SpellStart( SvxSpellArea eWhich,
         bool bStartDone, bool bEndDone,
@@ -322,9 +322,9 @@ void SwView::SpellStart( SvxSpellArea eWhich,
     m_pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
 }
 
-// Error message while Spelling
 
-// The passed pointer nlang is itself the value
+
+
 void SwView::SpellError(LanguageType eLang)
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -382,7 +382,7 @@ void SwView::SpellError(LanguageType eLang)
 
 }
 
-// Finish spelling and restore cursor
+
 
 void SwView::SpellEnd( SwConversionArgs *pConvArgs )
 {
@@ -412,11 +412,11 @@ void SwView::HyphStart( SvxSpellArea eWhich )
     }
 }
 
-// Interactive separation
+
 
 void SwView::HyphenateDocument()
 {
-    // do not hyphenate if interactive hyphenation is active elsewhere
+    
     if (GetWrtShell().HasHyphIter())
     {
         MessBox( 0, WB_OK, OUString( SW_RES( STR_HYPH_TITLE ) ),
@@ -436,7 +436,7 @@ void SwView::HyphenateDocument()
 
     if (m_pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
     {
-        // Hyphenation in a Draw object
+        
         HyphenateDrawText();
     }
     else
@@ -448,7 +448,7 @@ void SwView::HyphenateDocument()
         Reference< XLinguProperties >  xProp( ::GetLinguPropertySet() );
 
 
-        m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
+        m_pWrtShell->StartUndo(UNDO_INSATTR);         
 
         sal_Bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
         sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
@@ -457,9 +457,9 @@ void SwView::HyphenateDocument()
         sal_Bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
         bool bStop = false;
         if( !bOther && !(m_pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY) && !bSelection )
-        // turned on no special area
+        
         {
-            // I want also in special areas hyphenation
+            
             QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
             if( aBox.Execute() == RET_YES )
             {
@@ -470,7 +470,7 @@ void SwView::HyphenateDocument()
                 }
             }
             else
-                bStop = true; // No hyphenation
+                bStop = true; 
         }
 
         if( !bStop )
@@ -485,8 +485,8 @@ void SwView::HyphenateDocument()
 
 bool SwView::IsValidSelectionForThesaurus() const
 {
-    // must not be a multi-selection, and if it is a selection it needs
-    // to be within a single paragraph
+    
+    
 
     const bool bMultiSel = m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
     const sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
@@ -513,10 +513,10 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
 
         m_pWrtShell->SelWrd();
 
-        // make sure the selection build later from the data below does not
-        // include "in word" character to the left and right in order to
-        // preserve those. Therefore count those "in words" in order to modify
-        // the selection accordingly.
+        
+        
+        
+        
         const sal_Unicode* pChar = rLookUpText.getStr();
         sal_Int32 nLeft = 0;
         while (pChar && *pChar++ == CH_TXTATR_INWORD)
@@ -526,7 +526,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
         while (pChar && *pChar-- == CH_TXTATR_INWORD)
             ++nRight;
 
-        // adjust existing selection
+        
         SwPaM *pCrsr = m_pWrtShell->GetCrsr();
         pCrsr->GetPoint()->nContent -= nRight;
         pCrsr->GetMark()->nContent += nLeft;
@@ -540,7 +540,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
     m_pWrtShell->SetInsMode( bOldIns );
 }
 
-// Start thesaurus
+
 
 void SwView::StartThesaurus()
 {
@@ -550,7 +550,7 @@ void SwView::StartThesaurus()
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, OUString(), m_pEditWin,
          RID_SVXERRCTX, &DIALOG_MGR() );
 
-    // Determine language
+    
     LanguageType eLang = m_pWrtShell->GetCurLang();
     if( LANGUAGE_SYSTEM == eLang )
        eLang = GetAppLanguage();
@@ -565,7 +565,7 @@ void SwView::StartThesaurus()
     sal_Bool bOldIdle = pVOpt->IsIdle();
     pVOpt->SetIdle( sal_False );
 
-    // get initial LookUp text
+    
     const sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
     OUString aTmp = GetThesaurusLookUpText( bSelection );
 
@@ -576,10 +576,10 @@ void SwView::StartThesaurus()
     else
     {
         boost::scoped_ptr<AbstractThesaurusDialog> pDlg;
-        // create dialog
-        {   //Scope for SwWait-Object
+        
+        {   
             SwWait aWait( *GetDocShell(), true );
-            // load library with dialog only on demand ...
+            
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             pDlg.reset(pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang ));
         }
@@ -591,9 +591,9 @@ void SwView::StartThesaurus()
     pVOpt->SetIdle( bOldIdle );
 }
 
-// Offer online suggestions
 
-//!! Start of extra code for context menu modifying extensions
+
+
 struct ExecuteInfo
 {
     uno::Reference< frame::XDispatch >  xDispatch;
@@ -612,9 +612,9 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecu
     const sal_uInt32 nRef = Application::ReleaseSolarMutex();
     try
     {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     }
     catch (const Exception&)
@@ -625,7 +625,7 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecu
     delete pExecuteInfo;
     return 0;
 }
-//!! End of extra code for context menu modifying extensions
+
 
 sal_Bool SwView::ExecSpellPopup(const Point& rPt)
 {
@@ -643,9 +643,9 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             m_pWrtShell->Push();
             SwRect aToFill;
 
-            // decide which variant of the context menu to use...
-            // if neither spell checking nor grammar checking provides suggestions use the
-            // default context menu.
+            
+            
+            
             bool bUseGrammarContext = false;
             Reference< XSpellAlternatives >  xAlt( m_pWrtShell->GetCorrection(&rPt, aToFill) );
             ProofreadingResult aGrammarCheckRes;
@@ -659,23 +659,23 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 OUString aMessageText;
                 if (nErrorInResult >= 0)
                     aMessageText = aGrammarCheckRes.aErrors[ nErrorInResult ].aShortComment;
-                // we like to use the grammar checking context menu if we either get
-                // some suggestions or at least a comment about the error found...
+                
+                
                 bUseGrammarContext = bCorrectionRes &&
                         (aSuggestions.getLength() > 0 || !aMessageText.isEmpty());
             }
 
-            // open respective context menu for spell check or grammar errors with correction suggestions...
+            
             if ((!bUseGrammarContext && xAlt.is()) ||
                 (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aErrors.getLength() > 0))
             {
-                // get paragraph text
+                
                 OUString aParaText;
                 SwPosition aPoint( *m_pWrtShell->GetCrsr()->GetPoint() );
                 const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >(
                                             &aPoint.nNode.GetNode() );
                 if (pNode)
-                    aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
+                    aParaText = pNode->GetTxt();    
                 else
                 {
                     OSL_FAIL("text node expected but not found" );
@@ -705,8 +705,8 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
 
-                    //! happy hacking for context menu modifying extensions of this
-                    //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
+                    
+                    
                     if ( pMenu )
                     {
                         sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(m_pEditWin, aPixPos);
@@ -738,7 +738,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
 
                                 if (xDispatch.is())
                                 {
-                                    // Execute dispatch asynchronously
+                                    
                                     ExecuteInfo* pExecuteInfo   = new ExecuteInfo;
                                     pExecuteInfo->xDispatch     = xDispatch;
                                     pExecuteInfo->aTargetURL    = aURL;
@@ -778,8 +778,8 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
     m_pWrtShell->Push();
 
 
-    // get word that was clicked on
-    // This data structure maps a smart tag type string to the property bag
+    
+    
     SwRect aToFill;
     Sequence< OUString > aSmartTagTypes;
     Sequence< Reference< container::XStringKeyMap > > aStringKeyMaps;
@@ -835,7 +835,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
             }
         }
 
-        // Select the current one
+        
         OUString sResultKey = OUString( ODF_FORMDROPDOWN_RESULT  );
         IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find( sResultKey );
         if ( pResult != pParameters->end() )

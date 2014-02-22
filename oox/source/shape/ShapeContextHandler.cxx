@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -127,9 +127,9 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext
         ShapePtr pMasterShape;
 
         uno::Reference<drawing::XShape> xShape;
-        // No element happens in case of pretty-printed XML, bodyPr is the case when we are called again after <wps:txbx>.
+        
         if (!nElement || nElement == WPS_TOKEN(bodyPr))
-            // Assume that this is just a continuation of the previous shape.
+            
             xShape = mxSavedShape;
 
         switch (getBaseToken(nStartElement))
@@ -256,7 +256,7 @@ ShapeContextHandler::getContextHandler(sal_Int32 nElement)
     return xResult;
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+
 void SAL_CALL ShapeContextHandler::startFastElement
 (::sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
@@ -275,7 +275,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
     if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) ||
         Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == OOX_TOKEN(dmlPicture, pic))
     {
-        // Parse the theme relation, if available; the diagram won't have colors without it.
+        
         if (!msRelationFragmentPath.isEmpty())
         {
             FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
@@ -293,8 +293,8 @@ void SAL_CALL ShapeContextHandler::startFastElement
         createFastChildContext(Element, Attribs);
     }
 
-    // Entering VML block (startFastElement() is called for the outermost tag),
-    // handle possible recursion.
+    
+    
     if ( getContextHandler() == getDrawingShapeContext() )
         mpDrawing->getShapes().pushMark();
 
@@ -325,8 +325,8 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
 
     if (xContextHandler.is())
         xContextHandler->endFastElement(Element);
-    // In case a textbox is sent, and later we get additional properties for
-    // the textbox, then the wps context is not cleared, so do that here.
+    
+    
     if (Element == (NMSP_wps | XML_wsp))
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
@@ -388,7 +388,7 @@ void SAL_CALL ShapeContextHandler::characters(const OUString & aChars)
         xContextHandler->characters(aChars);
 }
 
-// ::com::sun::star::xml::sax::XFastShapeContextHandler:
+
 uno::Reference< drawing::XShape > SAL_CALL
 ShapeContextHandler::getShape() throw (uno::RuntimeException)
 {
@@ -402,8 +402,8 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             mpDrawing->finalizeFragmentImport();
             if( boost::shared_ptr< vml::ShapeBase > pShape = mpDrawing->getShapes().takeLastShape() )
                 xResult = pShape->convertAndInsert( xShapes );
-            // Only now remove the recursion mark, because getShape() is called in writerfilter
-            // after endFastElement().
+            
+            
             mpDrawing->getShapes().popMark();
         }
         else if (mxDiagramShapeContext.is())
@@ -416,7 +416,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             }
             else
             {
-                // Prerendered diagram output is available, then use that, and throw away the original result.
+                
                 for (std::vector<OUString>::const_iterator aIt = mpShape->getExtDrawings().begin(); aIt != mpShape->getExtDrawings().end(); ++aIt)
                 {
                     DiagramGraphicDataContext* pDiagramGraphicDataContext = dynamic_cast<DiagramGraphicDataContext*>(mxDiagramShapeContext.get());
@@ -458,7 +458,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             {
                 basegfx::B2DHomMatrix aMatrix;
                 oox::drawingml::ShapePtr xShapePtr( pChartGraphicDataContext->getShape());
-                // See SwXTextDocument::createInstance(), ODF import uses the same hack.
+                
                 xShapePtr->setServiceName("com.sun.star.drawing.temporaryForXMLImportOLE2Shape");
                 xShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, xShapePtr->getFillProperties() );
                 xResult = xShapePtr->getXShape();

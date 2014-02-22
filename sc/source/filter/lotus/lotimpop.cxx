@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "lotimpop.hxx"
@@ -70,7 +70,7 @@ ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding 
     pIn( &aStream ),
     aConv( *pIn, eQ, false )
 {
-    // good point to start locking of import lotus
+    
     aLotImpSemaphore.acquire();
 
     pLotusRoot = new LOTUS_ROOT( pDoc, eQ);
@@ -82,7 +82,7 @@ ImportLotus::~ImportLotus()
     delete pLotusRoot;
     pLotusRoot = NULL;
 
-    // no need 4 pLotusRoot anymore
+    
     aLotImpSemaphore.release();
 }
 
@@ -104,11 +104,11 @@ void ImportLotus::Bof( void )
     if( nFileSub == 0x0004 )
     {
         if( nFileCode == 0x1000 )
-        {// <= WK3
+        {
             pLotusRoot->eFirstType = pLotusRoot->eActType = Lotus_WK3;
         }
         else if( nFileCode == 0x1002 )
-        {// WK4
+        {
             pLotusRoot->eFirstType = pLotusRoot->eActType = Lotus_WK4;
         }
     }
@@ -149,7 +149,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
         {
             Read( nCol );
             Read( nSpaces );
-            // ACHTUNG: Korrekturfaktor nach 'Augenmass' ermittelt!
+            
             pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), ( sal_uInt16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
             nCnt--;
@@ -324,11 +324,11 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
         Read( nFlags );
         Skip( 1 );
 
-        if( nFlags & 0x02 )     // Fixed / Strech to fit fonts
-        {   // fixed
-            // Height in Lotus in 1/32 Points
-            nHeight *= 20;  // -> 32 * TWIPS
-            nHeight /= 32;  // -> TWIPS
+        if( nFlags & 0x02 )     
+        {   
+            
+            nHeight *= 20;  
+            nHeight /= 32;  
 
             pD->SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), pD->GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab) ) | CR_MANUALSIZE );
 
@@ -363,7 +363,7 @@ void ImportLotus::Font_Face( void )
     Read( nNum );
 
     if( nNum >= LotusFontBuffer::nSize )
-        return;     // nonsense
+        return;     
 
     Read( aName );
 
@@ -425,21 +425,21 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
             pLotusRoot->pAttrTable->SetAttr(
                 nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), static_cast<SCROW> (nRow), aAttr );
 
-        // hier und NICHT in class LotAttrTable, weil nur Attributiert wird,
-        // wenn die anderen Attribute gesetzt sind
-        //  -> bei Center-Attribute wird generell zentriert gesetzt
+        
+        
+        
         if( aAttr.IsCentered() )
             {
             if( bCenter )
                 {
                 if( pD->HasData( nColCnt, static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab) ) )
-                    {// neue Center nach vorheriger Center
+                    {
                     pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
                     nCenterStart = nColCnt;
                     }
                 }
             else
-                {// ganz neue Center
+                {
                 bCenter = sal_True;
                 nCenterStart = nColCnt;
                 }
@@ -448,7 +448,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
         else
             {
             if( bCenter )
-                {// evtl. alte Center bemachen
+                {
                 pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
                 bCenter = false;
                 }
@@ -461,7 +461,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
         }
 
     if( bCenter )
-        // evtl. alte Center bemachen
+        
         pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

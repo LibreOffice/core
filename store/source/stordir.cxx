@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -128,11 +128,11 @@ storeError OStoreDirectory_Impl::create (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Evaluate iteration path.
+    
     m_nPath = aPage.path();
     m_nPath = rtl_crc32 (m_nPath, "/", 1);
 
-    // Save page manager, and descriptor.
+    
     m_xManager = xManager;
     m_aDescr   = xNode->m_aDescr;
 
@@ -151,17 +151,17 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
     if (!rFindData.m_nReserved)
         return eErrCode;
 
-    // Acquire exclusive access.
+    
     osl::MutexGuard aGuard (*m_xManager);
 
-    // Check TextConverter.
+    
     if (m_hTextCvt == NULL)
         m_hTextCvt = rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_UTF8);
 
-    // Setup iteration key.
+    
     OStorePageKey aKey (rFindData.m_nReserved, m_nPath);
 
-    // Iterate.
+    
     for (;;)
     {
         OStorePageLink aLink;
@@ -171,14 +171,14 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
 
         if (!(rFindData.m_nAttrib & STORE_ATTRIB_ISLINK))
         {
-            // Load page.
+            
             OStoreDirectoryPageObject aPage;
             eErrCode = m_xManager->loadObjectAt (aPage, aLink.location());
             if (eErrCode == store_E_None)
             {
                 inode_holder_type xNode (aPage.get());
 
-                // Setup FindData.
+                
                 sal_Char *p = xNode->m_aNameBlock.m_pData;
                 sal_Size  n = rtl_str_getLength (p);
                 sal_Size  k = rFindData.m_nLength;
@@ -196,7 +196,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
                 rFindData.m_nAttrib |= aPage.attrib();
                 rFindData.m_nSize    = aPage.dataLength();
 
-                // Leave.
+                
                 rFindData.m_nReserved = store::ntohl(aKey.m_nLow);
                 return store_E_None;
             }
@@ -207,7 +207,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
         aKey.m_nLow = store::htonl(store::ntohl(aKey.m_nLow) - 1);
     }
 
-    // Finished.
+    
     memset (&rFindData, 0, sizeof (storeFindData));
     return store_E_NoMoreFiles;
 }

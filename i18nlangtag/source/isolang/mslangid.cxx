@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -24,8 +24,8 @@
 
 #include "i18nlangtag/mslangid.hxx"
 
-// Only very limited few functions that are guaranteed to not be called from
-// LanguageTag may use LanguageTag ...
+
+
 #include "i18nlangtag/languagetag.hxx"
 
 
@@ -36,38 +36,38 @@ LanguageType MsLangId::nConfiguredWesternFallback  = LANGUAGE_SYSTEM;
 LanguageType MsLangId::nConfiguredAsianFallback    = LANGUAGE_SYSTEM;
 LanguageType MsLangId::nConfiguredComplexFallback  = LANGUAGE_SYSTEM;
 
-// static
+
 void MsLangId::LanguageTagAccess::setConfiguredSystemLanguage( LanguageType nLang )
 {
     nConfiguredSystemLanguage = nLang;
 }
 
 
-// static
+
 void MsLangId::setConfiguredSystemUILanguage( LanguageType nLang )
 {
     nConfiguredSystemUILanguage = nLang;
 }
 
-// static
+
 void MsLangId::setConfiguredWesternFallback( LanguageType nLang )
 {
     nConfiguredWesternFallback = nLang;
 }
 
-// static
+
 void MsLangId::setConfiguredAsianFallback( LanguageType nLang )
 {
     nConfiguredAsianFallback = nLang;
 }
 
-// static
+
 void MsLangId::setConfiguredComplexFallback( LanguageType nLang )
 {
     nConfiguredComplexFallback = nLang;
 }
 
-// static
+
 inline LanguageType MsLangId::simplifySystemLanguages( LanguageType nLang )
 {
     switch (nLang)
@@ -78,12 +78,12 @@ inline LanguageType MsLangId::simplifySystemLanguages( LanguageType nLang )
             nLang = LANGUAGE_SYSTEM;
             break;
         default:
-            ;   // nothing
+            ;   
     }
     return nLang;
 }
 
-// static
+
 LanguageType MsLangId::getRealLanguage( LanguageType nLang )
 {
     switch (simplifySystemLanguages( nLang))
@@ -102,8 +102,8 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
             break;
         default:
             /* TODO: would this be useful here? */
-            //nLang = MsLangId::getReplacementForObsoleteLanguage( nLang);
-            ;   // nothing
+            
+            ;   
     }
     if (nLang == LANGUAGE_DONTKNOW)
         nLang = LANGUAGE_ENGLISH_US;
@@ -111,7 +111,7 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
 }
 
 
-// static
+
 LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType )
 {
     if (nLang == LANGUAGE_NONE)
@@ -146,24 +146,24 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 }
 
 
-// static
+
 ::com::sun::star::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
         LanguageType nLang, bool bResolveSystem )
 {
     ::com::sun::star::lang::Locale aLocale;
     if (!bResolveSystem && simplifySystemLanguages( nLang) == LANGUAGE_SYSTEM)
-        ;   // nothing => empty locale
+        ;   
     else
     {
-        // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
-        // but not LANGUAGE_SYSTEM or others.
+        
+        
         LanguageType nOrigLang = nLang;
         if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
             nLang = MsLangId::getRealLanguage( nLang);
         convertLanguageToLocaleImpl( nLang, aLocale, true);
         if (bResolveSystem && aLocale.Language.isEmpty() && simplifySystemLanguages( nOrigLang) == LANGUAGE_SYSTEM)
         {
-            // None found but resolve requested, last resort is "en-US".
+            
             aLocale.Language = "en";
             aLocale.Country  = "US";
             aLocale.Variant  = OUString();
@@ -173,11 +173,11 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 }
 
 
-// static
+
 LanguageType MsLangId::Conversion::convertLocaleToLanguage(
         const ::com::sun::star::lang::Locale& rLocale )
 {
-    // empty language => LANGUAGE_SYSTEM
+    
     if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
@@ -185,18 +185,18 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
 }
 
 
-// static
+
 ::com::sun::star::lang::Locale MsLangId::getFallbackLocale(
             const ::com::sun::star::lang::Locale & rLocale )
 {
-    // empty language => LANGUAGE_SYSTEM
+    
     if (rLocale.Language.isEmpty())
         return Conversion::lookupFallbackLocale( Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, true));
     else
         return Conversion::lookupFallbackLocale( rLocale);
 }
 
-// static
+
 bool MsLangId::isRightToLeft( LanguageType nLang )
 {
     switch( nLang & LANGUAGE_MASK_PRIMARY )
@@ -232,28 +232,28 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
     return false;
 }
 
-// static
+
 bool MsLangId::isRightToLeftMath( LanguageType nLang )
 {
-    //http://www.w3.org/TR/arabic-math/
+    
     if (nLang == LANGUAGE_FARSI || nLang == LANGUAGE_ARABIC_MOROCCO)
         return false;
     return isRightToLeft(nLang);
 }
 
-// static
+
 bool MsLangId::isSimplifiedChinese( LanguageType nLang )
 {
     return isChinese(nLang) && !isTraditionalChinese(nLang);
 }
 
-// static
+
 bool MsLangId::isSimplifiedChinese( const ::com::sun::star::lang::Locale & rLocale )
 {
     return rLocale.Language == "zh" && !isTraditionalChinese(rLocale);
 }
 
-// static
+
 bool MsLangId::isTraditionalChinese( LanguageType nLang )
 {
     bool bRet = false;
@@ -269,26 +269,26 @@ bool MsLangId::isTraditionalChinese( LanguageType nLang )
     return bRet;
 }
 
-// static
+
 bool MsLangId::isTraditionalChinese( const ::com::sun::star::lang::Locale & rLocale )
 {
     return rLocale.Language == "zh" && (rLocale.Country == "TW" || rLocale.Country == "HK" || rLocale.Country == "MO");
 }
 
-//static
+
 bool MsLangId::isChinese( LanguageType nLang )
 {
     return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_CHINESE) ||
         MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_YUE_CHINESE_HONGKONG);
 }
 
-//static
+
 bool MsLangId::isKorean( LanguageType nLang )
 {
     return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_KOREAN);
 }
 
-// static
+
 bool MsLangId::isCJK( LanguageType nLang )
 {
     switch (nLang & LANGUAGE_MASK_PRIMARY)
@@ -304,20 +304,20 @@ bool MsLangId::isCJK( LanguageType nLang )
     return false;
 }
 
-// static
+
 bool MsLangId::isFamilyNameFirst( LanguageType nLang )
 {
     return isCJK(nLang) || nLang == LANGUAGE_HUNGARIAN;
 }
 
-// static
+
 bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
 {
     return isCJK(nLang);
 }
 
 
-// static
+
 bool MsLangId::needsSequenceChecking( LanguageType nLang )
 {
     switch (nLang & LANGUAGE_MASK_PRIMARY)
@@ -334,13 +334,13 @@ bool MsLangId::needsSequenceChecking( LanguageType nLang )
 }
 
 
-// static
+
 sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 {
     sal_Int16 nScript;
     switch( nLang )
     {
-        // CTL
+        
         case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
         case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
         case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
@@ -354,7 +354,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 
-        // "Western"
+        
         case LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA:
         case LANGUAGE_MONGOLIAN_CYRILLIC_LSO:
         case LANGUAGE_USER_KURDISH_SYRIA:
@@ -362,7 +362,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
             nScript = ::com::sun::star::i18n::ScriptType::LATIN;
             break;
 
-// currently not knowing scripttype - defaulted to LATIN:
+
 /*
 #define LANGUAGE_ARMENIAN                   0x042B
 #define LANGUAGE_INDONESIAN                 0x0421
@@ -375,7 +375,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         default:
             switch ( nLang & LANGUAGE_MASK_PRIMARY )
             {
-                // CJK catcher
+                
                 case LANGUAGE_CHINESE              & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_YUE_CHINESE_HONGKONG & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_JAPANESE             & LANGUAGE_MASK_PRIMARY:
@@ -383,7 +383,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                     nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
                     break;
 
-                    // CTL catcher
+                    
                 case LANGUAGE_AMHARIC_ETHIOPIA    & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_ASSAMESE            & LANGUAGE_MASK_PRIMARY:
@@ -411,7 +411,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                 case LANGUAGE_TAMIL               & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_TELUGU              & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_THAI                & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_TIBETAN             & LANGUAGE_MASK_PRIMARY:  // also LANGUAGE_DZONGKHA
+                case LANGUAGE_TIBETAN             & LANGUAGE_MASK_PRIMARY:  
                 case LANGUAGE_UIGHUR_CHINA        & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_URDU_INDIA          & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_USER_BODO_INDIA     & LANGUAGE_MASK_PRIMARY:
@@ -423,8 +423,8 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                     nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
                     break;
 
-                // Western (actually not necessarily Latin but also Cyrillic,
-                // for example)
+                
+                
                 default:
                     nScript = ::com::sun::star::i18n::ScriptType::LATIN;
             }
@@ -434,7 +434,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 }
 
 
-// static
+
 bool MsLangId::isNonLatinWestern( LanguageType nLang )
 {
     switch (nLang)
@@ -472,13 +472,13 @@ bool MsLangId::isNonLatinWestern( LanguageType nLang )
 }
 
 
-// static
+
 LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bool /*bUserInterfaceSelection*/ )
 {
     switch (nLang)
     {
         default:
-            break;  // nothing
+            break;  
         case LANGUAGE_OBSOLETE_USER_LATIN:
             nLang = LANGUAGE_USER_LATIN_VATICAN;
             break;
@@ -537,16 +537,16 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
             nLang = LANGUAGE_KURDISH_ARABIC_IRAQ;
             break;
 
-        // The following are not strictly obsolete but should be mapped to a
-        // replacement locale when encountered.
+        
+        
 
-        // no_NO is an alias for nb_NO
+        
         case LANGUAGE_NORWEGIAN:
             nLang = LANGUAGE_NORWEGIAN_BOKMAL;
             break;
 
-        // #i94435# A Spanish variant that differs only in collation details we
-        // do not support.
+        
+        
         case LANGUAGE_SPANISH_DATED:
             nLang = LANGUAGE_SPANISH_MODERN;
             break;

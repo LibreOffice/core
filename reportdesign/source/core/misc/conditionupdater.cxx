@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "conditionupdater.hxx"
 #include "reportformula.hxx"
@@ -23,10 +23,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::Reference;
@@ -36,20 +36,20 @@ namespace rptui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
-    //= ConditionUpdater
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ConditionUpdater::ConditionUpdater()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ConditionUpdater::~ConditionUpdater()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void ConditionUpdater::notifyPropertyChange( const PropertyChangeEvent& _rEvent )
     {
         if ( !impl_lateInit_nothrow() )
@@ -65,7 +65,7 @@ namespace rptui
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool ConditionUpdater::impl_lateInit_nothrow()
     {
         if ( !m_aConditionalExpressions.empty() )
@@ -75,7 +75,7 @@ namespace rptui
         return true;
     }
 
-    //--------------------------------------------------------------------
+    
     void ConditionUpdater::impl_adjustFormatConditions_nothrow( const Reference< XReportControlModel >& _rxRptControlModel,
         const OUString& _rOldDataSource, const OUString& _rNewDataSource )
     {
@@ -103,7 +103,7 @@ namespace rptui
                     if ( !loop->second->matchExpression( sFormulaExpression, sOldUnprefixed, sLHS, sRHS ) )
                         continue;
 
-                    // the expression matches -> translate it to the new data source of the report control model
+                    
                     sFormulaExpression = loop->second->assembleExpression( sNewUnprefixed, sLHS, sRHS );
                     aFormula = ReportFormula( ReportFormula::Expression, sFormulaExpression );
                     xFormatCondition->setFormula( aFormula.getCompleteFormula() );
@@ -117,8 +117,8 @@ namespace rptui
         }
     }
 
-//........................................................................
-} // namespace rptui
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

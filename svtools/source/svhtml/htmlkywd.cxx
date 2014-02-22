@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
-// Table has still to be sorted
+
 struct HTML_TokenEntry
 {
     union
@@ -37,59 +37,59 @@ struct HTML_TokenEntry
     int nToken;
 };
 
-// Flag: RTF token table has already been sorted
+
 static bool bSortKeyWords = false;
 
 static HTML_TokenEntry aHTMLTokenTab[] = {
-    {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_base},            HTML_BASE}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, 
+    {{OOO_STRING_SVTOOLS_HTML_base},            HTML_BASE}, 
     {{OOO_STRING_SVTOOLS_HTML_comment},     HTML_COMMENT},
     {{OOO_STRING_SVTOOLS_HTML_doctype},      HTML_DOCTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_embed},       HTML_EMBED},    // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_embed},       HTML_EMBED},    
     {{OOO_STRING_SVTOOLS_HTML_horzrule},        HTML_HORZRULE},
     {{OOO_STRING_SVTOOLS_HTML_image},          HTML_IMAGE},
     {{OOO_STRING_SVTOOLS_HTML_input},          HTML_INPUT},
     {{OOO_STRING_SVTOOLS_HTML_linebreak},      HTML_LINEBREAK},
-    {{OOO_STRING_SVTOOLS_HTML_link},            HTML_LINK}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_meta},            HTML_META}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_link},            HTML_LINK}, 
+    {{OOO_STRING_SVTOOLS_HTML_meta},            HTML_META}, 
     {{OOO_STRING_SVTOOLS_HTML_option},        HTML_OPTION},
-    {{OOO_STRING_SVTOOLS_HTML_param},       HTML_PARAM},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_spacer},      HTML_SPACER},   // Netscape 3.0b5
+    {{OOO_STRING_SVTOOLS_HTML_param},       HTML_PARAM},    
+    {{OOO_STRING_SVTOOLS_HTML_spacer},      HTML_SPACER},   
 
-    {{OOO_STRING_SVTOOLS_HTML_abbreviation},    HTML_ABBREVIATION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_acronym},     HTML_ACRONYM_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_abbreviation},    HTML_ABBREVIATION_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_acronym},     HTML_ACRONYM_ON},   
     {{OOO_STRING_SVTOOLS_HTML_address},      HTML_ADDRESS_ON},
     {{OOO_STRING_SVTOOLS_HTML_anchor},        HTML_ANCHOR_ON},
-    {{OOO_STRING_SVTOOLS_HTML_applet},      HTML_APPLET_ON},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_author},      HTML_AUTHOR_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_banner},      HTML_BANNER_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_basefont},        HTML_BASEFONT_ON},  // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_bigprint},        HTML_BIGPRINT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_blink},       HTML_BLINK_ON}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_applet},      HTML_APPLET_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_author},      HTML_AUTHOR_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_banner},      HTML_BANNER_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_basefont},        HTML_BASEFONT_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_bigprint},        HTML_BIGPRINT_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_blink},       HTML_BLINK_ON}, 
     {{OOO_STRING_SVTOOLS_HTML_blockquote},    HTML_BLOCKQUOTE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HTML_BLOCKQUOTE30_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HTML_BLOCKQUOTE30_ON},  
     {{OOO_STRING_SVTOOLS_HTML_body},            HTML_BODY_ON},
     {{OOO_STRING_SVTOOLS_HTML_bold},            HTML_BOLD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_caption},     HTML_CAPTION_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_center},      HTML_CENTER_ON},    // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_caption},     HTML_CAPTION_ON},   
+    {{OOO_STRING_SVTOOLS_HTML_center},      HTML_CENTER_ON},    
     {{OOO_STRING_SVTOOLS_HTML_citiation},      HTML_CITIATION_ON},
-    {{OOO_STRING_SVTOOLS_HTML_col},             HTML_COL_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_colgroup},        HTML_COLGROUP_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_col},             HTML_COL_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_colgroup},        HTML_COLGROUP_ON}, 
     {{OOO_STRING_SVTOOLS_HTML_code},            HTML_CODE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_credit},      HTML_CREDIT_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_credit},      HTML_CREDIT_ON},    
     {{OOO_STRING_SVTOOLS_HTML_dd},            HTML_DD_ON},
     {{OOO_STRING_SVTOOLS_HTML_deflist},      HTML_DEFLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_deletedtext}, HTML_DELETEDTEXT_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_deletedtext}, HTML_DELETEDTEXT_ON},   
     {{OOO_STRING_SVTOOLS_HTML_dirlist},      HTML_DIRLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_division},        HTML_DIVISION_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_division},        HTML_DIVISION_ON},  
     {{OOO_STRING_SVTOOLS_HTML_dt},            HTML_DT_ON},
     {{OOO_STRING_SVTOOLS_HTML_emphasis},        HTML_EMPHASIS_ON},
-    {{OOO_STRING_SVTOOLS_HTML_figure},      HTML_FIGURE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_font},            HTML_FONT_ON}, // Netscpe
-    {{OOO_STRING_SVTOOLS_HTML_footnote},        HTML_FOOTNOTE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_figure},      HTML_FIGURE_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_font},            HTML_FONT_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_footnote},        HTML_FOOTNOTE_ON},  
     {{OOO_STRING_SVTOOLS_HTML_form},            HTML_FORM_ON},
-    {{OOO_STRING_SVTOOLS_HTML_frame},       HTML_FRAME_ON}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_frameset},        HTML_FRAMESET_ON},  // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_frame},       HTML_FRAME_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_frameset},        HTML_FRAMESET_ON},  
     {{OOO_STRING_SVTOOLS_HTML_head},            HTML_HEAD_ON},
     {{OOO_STRING_SVTOOLS_HTML_head1},          HTML_HEAD1_ON},
     {{OOO_STRING_SVTOOLS_HTML_head2},          HTML_HEAD2_ON},
@@ -98,48 +98,48 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_head5},          HTML_HEAD5_ON},
     {{OOO_STRING_SVTOOLS_HTML_head6},          HTML_HEAD6_ON},
     {{OOO_STRING_SVTOOLS_HTML_html},            HTML_HTML_ON},
-    {{OOO_STRING_SVTOOLS_HTML_iframe},      HTML_IFRAME_ON},    // IE 3.0b2
-    {{OOO_STRING_SVTOOLS_HTML_insertedtext},    HTML_INSERTEDTEXT_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_iframe},      HTML_IFRAME_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_insertedtext},    HTML_INSERTEDTEXT_ON},  
     {{OOO_STRING_SVTOOLS_HTML_italic},        HTML_ITALIC_ON},
     {{OOO_STRING_SVTOOLS_HTML_keyboard},        HTML_KEYBOARD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_language},        HTML_LANGUAGE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_language},        HTML_LANGUAGE_ON},  
     {{OOO_STRING_SVTOOLS_HTML_li},            HTML_LI_ON},
-    {{OOO_STRING_SVTOOLS_HTML_listheader},  HTML_LISTHEADER_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_map},         HTML_MAP_ON},   // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_listheader},  HTML_LISTHEADER_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_map},         HTML_MAP_ON},   
     {{OOO_STRING_SVTOOLS_HTML_menulist},        HTML_MENULIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_multicol},        HTML_MULTICOL_ON},  // Netscape 3.0b5
-    {{OOO_STRING_SVTOOLS_HTML_nobr},            HTML_NOBR_ON},  // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_noembed},     HTML_NOEMBED_ON},   // Netscape 2.0 ???
-    {{OOO_STRING_SVTOOLS_HTML_noframe},     HTML_NOFRAMES_ON},  // Netscape 2.0 ???
-    {{OOO_STRING_SVTOOLS_HTML_noframes},        HTML_NOFRAMES_ON},  // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_noscript},        HTML_NOSCRIPT_ON},  // Netscape 3.0
-    {{OOO_STRING_SVTOOLS_HTML_note},            HTML_NOTE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_multicol},        HTML_MULTICOL_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_nobr},            HTML_NOBR_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_noembed},     HTML_NOEMBED_ON},   
+    {{OOO_STRING_SVTOOLS_HTML_noframe},     HTML_NOFRAMES_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_noframes},        HTML_NOFRAMES_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_noscript},        HTML_NOSCRIPT_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_note},            HTML_NOTE_ON},  
     {{OOO_STRING_SVTOOLS_HTML_object},     HTML_OBJECT_ON},
     {{OOO_STRING_SVTOOLS_HTML_orderlist},      HTML_ORDERLIST_ON},
     {{OOO_STRING_SVTOOLS_HTML_parabreak},      HTML_PARABREAK_ON},
-    {{OOO_STRING_SVTOOLS_HTML_person},      HTML_PERSON_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_plaintext},   HTML_PLAINTEXT_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_person},      HTML_PERSON_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_plaintext},   HTML_PLAINTEXT_ON}, 
     {{OOO_STRING_SVTOOLS_HTML_preformtxt},    HTML_PREFORMTXT_ON},
     {{OOO_STRING_SVTOOLS_HTML_sample},        HTML_SAMPLE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_script},        HTML_SCRIPT_ON}, // HTML 3.2
+    {{OOO_STRING_SVTOOLS_HTML_script},        HTML_SCRIPT_ON}, 
     {{OOO_STRING_SVTOOLS_HTML_select},        HTML_SELECT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_shortquote},  HTML_SHORTQUOTE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_smallprint},  HTML_SMALLPRINT_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_span},            HTML_SPAN_ON},  // Style Sheets
-    {{OOO_STRING_SVTOOLS_HTML_strikethrough},HTML_STRIKETHROUGH_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_shortquote},  HTML_SHORTQUOTE_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_smallprint},  HTML_SMALLPRINT_ON},    
+    {{OOO_STRING_SVTOOLS_HTML_span},            HTML_SPAN_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_strikethrough},HTML_STRIKETHROUGH_ON},    
     {{OOO_STRING_SVTOOLS_HTML_strong},        HTML_STRONG_ON},
-    {{OOO_STRING_SVTOOLS_HTML_style},       HTML_STYLE_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_subscript},   HTML_SUBSCRIPT_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_superscript}, HTML_SUPERSCRIPT_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_table},       HTML_TABLE_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tabledata},   HTML_TABLEDATA_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tableheader}, HTML_TABLEHEADER_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tablerow},        HTML_TABLEROW_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tbody},          HTML_TBODY_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_style},       HTML_STYLE_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_subscript},   HTML_SUBSCRIPT_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_superscript}, HTML_SUPERSCRIPT_ON},   
+    {{OOO_STRING_SVTOOLS_HTML_table},       HTML_TABLE_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_tabledata},   HTML_TABLEDATA_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_tableheader}, HTML_TABLEHEADER_ON},   
+    {{OOO_STRING_SVTOOLS_HTML_tablerow},        HTML_TABLEROW_ON},  
+    {{OOO_STRING_SVTOOLS_HTML_tbody},          HTML_TBODY_ON}, 
     {{OOO_STRING_SVTOOLS_HTML_teletype},        HTML_TELETYPE_ON},
     {{OOO_STRING_SVTOOLS_HTML_textarea},        HTML_TEXTAREA_ON},
-    {{OOO_STRING_SVTOOLS_HTML_tfoot},          HTML_TFOOT_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_thead},          HTML_THEAD_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_tfoot},          HTML_TFOOT_ON}, 
+    {{OOO_STRING_SVTOOLS_HTML_thead},          HTML_THEAD_ON}, 
     {{OOO_STRING_SVTOOLS_HTML_title},          HTML_TITLE_ON},
     {{OOO_STRING_SVTOOLS_HTML_underline},      HTML_UNDERLINE_ON},
     {{OOO_STRING_SVTOOLS_HTML_unorderlist},  HTML_UNORDERLIST_ON},
@@ -228,7 +228,7 @@ struct HTML_CharEntry
     sal_Unicode cChar;
 };
 
-// Flag: RTF token table has already been sorted
+
 static bool bSortCharKeyWords = false;
 
 static HTML_CharEntry aHTMLCharNameTab[] = {
@@ -302,7 +302,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_thorn},     254},
     {{OOO_STRING_SVTOOLS_HTML_S_yuml},      255},
 
-// special characters
+
     {{OOO_STRING_SVTOOLS_HTML_S_acute},     180},
     {{OOO_STRING_SVTOOLS_HTML_S_brvbar},    166},
     {{OOO_STRING_SVTOOLS_HTML_S_cedil},      184},
@@ -336,12 +336,12 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_uml},        168},
     {{OOO_STRING_SVTOOLS_HTML_S_yen},        165},
 
-// special characters, which will be converted to tokens !!!
+
     {{OOO_STRING_SVTOOLS_HTML_S_nbsp},      1},
     {{OOO_STRING_SVTOOLS_HTML_S_shy},       2},
 
 
-// HTML4
+
     {{OOO_STRING_SVTOOLS_HTML_S_OElig},     338},
     {{OOO_STRING_SVTOOLS_HTML_S_oelig},     339},
     {{OOO_STRING_SVTOOLS_HTML_S_Scaron},        352},
@@ -522,7 +522,7 @@ static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond
     return nRet;
 }
 
-} // extern "C"
+} 
 
 sal_Unicode GetHTMLCharName( const OUString& rName )
 {
@@ -550,12 +550,12 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
     return cRet;
 }
 
-// Flag: Options table has already been sorted
+
 static bool bSortOptionKeyWords = false;
 
 static HTML_TokenEntry aHTMLOptionTab[] = {
 
-// Attributes without value
+
     {{OOO_STRING_SVTOOLS_HTML_O_checked},   HTML_O_CHECKED},
     {{OOO_STRING_SVTOOLS_HTML_O_compact},   HTML_O_COMPACT},
     {{OOO_STRING_SVTOOLS_HTML_O_declare},   HTML_O_DECLARE},
@@ -563,29 +563,29 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_ismap},     HTML_O_ISMAP},
     {{OOO_STRING_SVTOOLS_HTML_O_mayscript}, HTML_O_MAYSCRIPT},
     {{OOO_STRING_SVTOOLS_HTML_O_multiple},  HTML_O_MULTIPLE},
-    {{OOO_STRING_SVTOOLS_HTML_O_nohref},        HTML_O_NOHREF}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_noresize},  HTML_O_NORESIZE}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_noshade},   HTML_O_NOSHADE}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_nohref},        HTML_O_NOHREF}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_noresize},  HTML_O_NORESIZE}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_noshade},   HTML_O_NOSHADE}, 
     {{OOO_STRING_SVTOOLS_HTML_O_nowrap},        HTML_O_NOWRAP},
     {{OOO_STRING_SVTOOLS_HTML_O_sdfixed},   HTML_O_SDFIXED},
     {{OOO_STRING_SVTOOLS_HTML_O_selected},      HTML_O_SELECTED},
 
-// Attributes with a string value
+
     {{OOO_STRING_SVTOOLS_HTML_O_accept},        HTML_O_ACCEPT},
     {{OOO_STRING_SVTOOLS_HTML_O_accesskey}, HTML_O_ACCESSKEY},
     {{OOO_STRING_SVTOOLS_HTML_O_alt},       HTML_O_ALT},
     {{OOO_STRING_SVTOOLS_HTML_O_axis},      HTML_O_AXIS},
-    {{OOO_STRING_SVTOOLS_HTML_O_char},      HTML_O_CHAR}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_char},      HTML_O_CHAR}, 
     {{OOO_STRING_SVTOOLS_HTML_O_class},     HTML_O_CLASS},
-    {{OOO_STRING_SVTOOLS_HTML_O_code},      HTML_O_CODE}, // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_O_code},      HTML_O_CODE}, 
     {{OOO_STRING_SVTOOLS_HTML_O_codetype},  HTML_O_CODETYPE},
     {{OOO_STRING_SVTOOLS_HTML_O_content},   HTML_O_CONTENT},
-    {{OOO_STRING_SVTOOLS_HTML_O_coords},        HTML_O_COORDS}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_coords},        HTML_O_COORDS}, 
     {{OOO_STRING_SVTOOLS_HTML_O_enctype},   HTML_O_ENCTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_face},      HTML_O_FACE}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_frameborder}, HTML_O_FRAMEBORDER}, // IExplorer 3.0
+    {{OOO_STRING_SVTOOLS_HTML_O_face},      HTML_O_FACE}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_frameborder}, HTML_O_FRAMEBORDER}, 
     {{OOO_STRING_SVTOOLS_HTML_O_httpequiv}, HTML_O_HTTPEQUIV},
-    {{OOO_STRING_SVTOOLS_HTML_O_language},  HTML_O_LANGUAGE}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_language},  HTML_O_LANGUAGE}, 
     {{OOO_STRING_SVTOOLS_HTML_O_name},      HTML_O_NAME},
     {{OOO_STRING_SVTOOLS_HTML_O_prompt},        HTML_O_PROMPT},
     {{OOO_STRING_SVTOOLS_HTML_O_shape},     HTML_O_SHAPE},
@@ -593,76 +593,76 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_style},     HTML_O_STYLE},
     {{OOO_STRING_SVTOOLS_HTML_O_title},     HTML_O_TITLE},
     {{OOO_STRING_SVTOOLS_HTML_O_value},     HTML_O_VALUE},
-    {{OOO_STRING_SVTOOLS_HTML_O_SDval},     HTML_O_SDVAL}, // StarDiv NumberValue
-    {{OOO_STRING_SVTOOLS_HTML_O_SDnum},     HTML_O_SDNUM}, // StarDiv NumberFormat
+    {{OOO_STRING_SVTOOLS_HTML_O_SDval},     HTML_O_SDVAL}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDnum},     HTML_O_SDNUM}, 
     {{OOO_STRING_SVTOOLS_HTML_O_sdlibrary}, HTML_O_SDLIBRARY},
     {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HTML_O_SDMODULE},
 
-// Attributes with a SGML identifier value
+
     {{OOO_STRING_SVTOOLS_HTML_O_id},            HTML_O_ID},
-    {{OOO_STRING_SVTOOLS_HTML_O_target},        HTML_O_TARGET}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_target},        HTML_O_TARGET}, 
     {{OOO_STRING_SVTOOLS_HTML_O_to},            HTML_O_TO},
 
-// Attributes with an URI value
+
     {{OOO_STRING_SVTOOLS_HTML_O_action},        HTML_O_ACTION},
     {{OOO_STRING_SVTOOLS_HTML_O_archive},       HTML_O_ARCHIVE},
     {{OOO_STRING_SVTOOLS_HTML_O_background},    HTML_O_BACKGROUND},
     {{OOO_STRING_SVTOOLS_HTML_O_classid},   HTML_O_CLASSID},
-    {{OOO_STRING_SVTOOLS_HTML_O_codebase},  HTML_O_CODEBASE}, // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_O_codebase},  HTML_O_CODEBASE}, 
     {{OOO_STRING_SVTOOLS_HTML_O_data},      HTML_O_DATA},
     {{OOO_STRING_SVTOOLS_HTML_O_href},      HTML_O_HREF},
     {{OOO_STRING_SVTOOLS_HTML_O_script},        HTML_O_SCRIPT},
     {{OOO_STRING_SVTOOLS_HTML_O_src},       HTML_O_SRC},
-    {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HTML_O_USEMAP}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HTML_O_USEMAP}, 
 
-// Attributes with a color value (all Netscape versions)
+
     {{OOO_STRING_SVTOOLS_HTML_O_alink},     HTML_O_ALINK},
     {{OOO_STRING_SVTOOLS_HTML_O_bgcolor},   HTML_O_BGCOLOR},
-    {{OOO_STRING_SVTOOLS_HTML_O_bordercolor}, HTML_O_BORDERCOLOR}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_bordercolorlight}, HTML_O_BORDERCOLORLIGHT}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_bordercolordark}, HTML_O_BORDERCOLORDARK}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_bordercolor}, HTML_O_BORDERCOLOR}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_bordercolorlight}, HTML_O_BORDERCOLORLIGHT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_bordercolordark}, HTML_O_BORDERCOLORDARK}, 
     {{OOO_STRING_SVTOOLS_HTML_O_color},     HTML_O_COLOR},
     {{OOO_STRING_SVTOOLS_HTML_O_link},      HTML_O_LINK},
     {{OOO_STRING_SVTOOLS_HTML_O_text},      HTML_O_TEXT},
     {{OOO_STRING_SVTOOLS_HTML_O_vlink},     HTML_O_VLINK},
 
-// Attributes with a numerical value
+
     {{OOO_STRING_SVTOOLS_HTML_O_border},        HTML_O_BORDER},
-    {{OOO_STRING_SVTOOLS_HTML_O_cellspacing},HTML_O_CELLSPACING}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_cellpadding},HTML_O_CELLPADDING}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_charoff},   HTML_O_CHAROFF}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_cellspacing},HTML_O_CELLSPACING}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_cellpadding},HTML_O_CELLPADDING}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_charoff},   HTML_O_CHAROFF}, 
     {{OOO_STRING_SVTOOLS_HTML_O_colspan},   HTML_O_COLSPAN},
-    {{OOO_STRING_SVTOOLS_HTML_O_framespacing}, HTML_O_FRAMESPACING}, // IExplorer 3.0
-    {{OOO_STRING_SVTOOLS_HTML_O_gutter},        HTML_O_GUTTER}, // Netscape 3.0b5
+    {{OOO_STRING_SVTOOLS_HTML_O_framespacing}, HTML_O_FRAMESPACING}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_gutter},        HTML_O_GUTTER}, 
     {{OOO_STRING_SVTOOLS_HTML_O_height},        HTML_O_HEIGHT},
-    {{OOO_STRING_SVTOOLS_HTML_O_hspace},        HTML_O_HSPACE}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_O_hspace},        HTML_O_HSPACE}, 
     {{OOO_STRING_SVTOOLS_HTML_O_left},      HTML_O_LEFT},
-    {{OOO_STRING_SVTOOLS_HTML_O_loop},      HTML_O_LOOP}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_marginheight},HTML_O_MARGINHEIGHT}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_marginwidth},HTML_O_MARGINWIDTH}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_loop},      HTML_O_LOOP}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_marginheight},HTML_O_MARGINHEIGHT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_marginwidth},HTML_O_MARGINWIDTH}, 
     {{OOO_STRING_SVTOOLS_HTML_O_maxlength}, HTML_O_MAXLENGTH},
     {{OOO_STRING_SVTOOLS_HTML_O_rowspan},   HTML_O_ROWSPAN},
-    {{OOO_STRING_SVTOOLS_HTML_O_scrollamount}, HTML_O_SCROLLAMOUNT}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_scrolldelay}, HTML_O_SCROLLDELAY}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_span},      HTML_O_SPAN}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_scrollamount}, HTML_O_SCROLLAMOUNT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_scrolldelay}, HTML_O_SCROLLDELAY}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_span},      HTML_O_SPAN}, 
     {{OOO_STRING_SVTOOLS_HTML_O_tabindex},  HTML_O_TABINDEX},
-    {{OOO_STRING_SVTOOLS_HTML_O_vspace},        HTML_O_VSPACE}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_O_vspace},        HTML_O_VSPACE}, 
     {{OOO_STRING_SVTOOLS_HTML_O_width},     HTML_O_WIDTH},
     {{OOO_STRING_SVTOOLS_HTML_O_zindex},        HTML_O_ZINDEX},
 
-// Attributes with enum values
-    {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HTML_O_BEHAVIOR}, // IExplorer 2.0
+
+    {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HTML_O_BEHAVIOR}, 
     {{OOO_STRING_SVTOOLS_HTML_O_clear},     HTML_O_CLEAR},
-    {{OOO_STRING_SVTOOLS_HTML_O_dir},       HTML_O_DIR}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_direction},     HTML_O_DIRECTION}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_dir},       HTML_O_DIR}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_direction},     HTML_O_DIRECTION}, 
     {{OOO_STRING_SVTOOLS_HTML_O_format},        HTML_O_FORMAT},
-    {{OOO_STRING_SVTOOLS_HTML_O_frame},     HTML_O_FRAME}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_frame},     HTML_O_FRAME}, 
     {{OOO_STRING_SVTOOLS_HTML_O_lang},      HTML_O_LANG},
     {{OOO_STRING_SVTOOLS_HTML_O_method},        HTML_O_METHOD},
     {{OOO_STRING_SVTOOLS_HTML_O_rel},       HTML_O_REL},
     {{OOO_STRING_SVTOOLS_HTML_O_rev},       HTML_O_REV},
-    {{OOO_STRING_SVTOOLS_HTML_O_rules},     HTML_O_RULES}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_scrolling}, HTML_O_SCROLLING}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_rules},     HTML_O_RULES}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_scrolling}, HTML_O_SCROLLING}, 
     {{OOO_STRING_SVTOOLS_HTML_O_sdreadonly},    HTML_O_SDREADONLY},
     {{OOO_STRING_SVTOOLS_HTML_O_subtype},   HTML_O_SUBTYPE},
     {{OOO_STRING_SVTOOLS_HTML_O_type},      HTML_O_TYPE},
@@ -670,41 +670,41 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_valuetype}, HTML_O_VALUETYPE},
     {{OOO_STRING_SVTOOLS_HTML_O_wrap},      HTML_O_WRAP},
 
-// Attributes with script code value
-    {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HTML_O_ONBLUR}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onchange},  HTML_O_ONCHANGE}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onclick},   HTML_O_ONCLICK}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onfocus},   HTML_O_ONFOCUS}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onload},    HTML_O_ONLOAD}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onmouseover}, HTML_O_ONMOUSEOVER}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onreset},   HTML_O_ONRESET}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onselect},  HTML_O_ONSELECT}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onsubmit},  HTML_O_ONSUBMIT}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onunload},  HTML_O_ONUNLOAD}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onabort},   HTML_O_ONABORT}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onerror},   HTML_O_ONERROR}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onmouseout},    HTML_O_ONMOUSEOUT}, // JavaScript
 
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonblur},      HTML_O_SDONBLUR}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonchange},    HTML_O_SDONCHANGE}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonclick},         HTML_O_SDONCLICK}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonfocus},         HTML_O_SDONFOCUS}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonload},      HTML_O_SDONLOAD}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseover},     HTML_O_SDONMOUSEOVER}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonreset},     HTML_O_SDONRESET}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonselect},        HTML_O_SDONSELECT}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonsubmit},        HTML_O_SDONSUBMIT}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonunload},        HTML_O_SDONUNLOAD}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonabort},     HTML_O_SDONABORT}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonerror},         HTML_O_SDONERROR}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseout},  HTML_O_SDONMOUSEOUT}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HTML_O_ONBLUR}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onchange},  HTML_O_ONCHANGE}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onclick},   HTML_O_ONCLICK}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onfocus},   HTML_O_ONFOCUS}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onload},    HTML_O_ONLOAD}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onmouseover}, HTML_O_ONMOUSEOVER}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onreset},   HTML_O_ONRESET}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onselect},  HTML_O_ONSELECT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onsubmit},  HTML_O_ONSUBMIT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onunload},  HTML_O_ONUNLOAD}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onabort},   HTML_O_ONABORT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onerror},   HTML_O_ONERROR}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_onmouseout},    HTML_O_ONMOUSEOUT}, 
 
-// Attributes with context sensitive values
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonblur},      HTML_O_SDONBLUR}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonchange},    HTML_O_SDONCHANGE}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonclick},         HTML_O_SDONCLICK}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonfocus},         HTML_O_SDONFOCUS}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonload},      HTML_O_SDONLOAD}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseover},     HTML_O_SDONMOUSEOVER}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonreset},     HTML_O_SDONRESET}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonselect},        HTML_O_SDONSELECT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonsubmit},        HTML_O_SDONSUBMIT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonunload},        HTML_O_SDONUNLOAD}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonabort},     HTML_O_SDONABORT}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonerror},         HTML_O_SDONERROR}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseout},  HTML_O_SDONMOUSEOUT}, 
+
+
     {{OOO_STRING_SVTOOLS_HTML_O_align},     HTML_O_ALIGN},
-    {{OOO_STRING_SVTOOLS_HTML_O_cols},      HTML_O_COLS}, // Netscape 2.0 vs HTML 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_rows},      HTML_O_ROWS}, // Netscape 2.0 vs HTML 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_cols},      HTML_O_COLS}, 
+    {{OOO_STRING_SVTOOLS_HTML_O_rows},      HTML_O_ROWS}, 
     {{OOO_STRING_SVTOOLS_HTML_O_size},      HTML_O_SIZE},
-    {{OOO_STRING_SVTOOLS_HTML_O_start},     HTML_O_START}, // Netscape 2.0 vs IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_start},     HTML_O_START}, 
 };
 
 int GetHTMLOption( const OUString& rName )
@@ -744,14 +744,14 @@ struct HTML_ColorEntry
     sal_uInt32 nColor;
 };
 
-// Flag: color table has already been sorted
+
 static bool bSortColorKeyWords = false;
 
 #define HTML_NO_COLOR 0xffffffffUL
 
-// Color names are not exported (source:
-// "http://www.uio.no/~mnbjerke/colors_w.html")
-// "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
+
+
+
 static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "aliceblue" }, 0x00f0f8ffUL },
     { { "antiquewhite" }, 0x00faebd7UL },
@@ -921,7 +921,7 @@ static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecon
     return nRet;
 }
 
-} // extern "C"
+} 
 
 sal_uInt32 GetHTMLColor( const OUString& rName )
 {

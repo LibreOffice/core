@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "EnhancedCustomShapeFontWork.hxx"
@@ -56,24 +56,24 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-struct FWCharacterData                  // representing a single character
+struct FWCharacterData                  
 {
     std::vector< PolyPolygon >          vOutlines;
     Rectangle                           aBoundRect;
 };
-struct FWParagraphData                  // representing a single paragraph
+struct FWParagraphData                  
 {
     OUString                       aString;
     std::vector< FWCharacterData >      vCharacters;
     Rectangle                           aBoundRect;
     sal_Int16                           nFrameDirection;
 };
-struct FWTextArea                       // representing multiple concluding paragraphs
+struct FWTextArea                       
 {
     std::vector< FWParagraphData >      vParagraphs;
     Rectangle                           aBoundRect;
 };
-struct FWData                           // representing the whole text
+struct FWData                           
 {
     std::vector< FWTextArea >           vTextAreas;
     double                              fHorizontalTextScaling;
@@ -97,7 +97,7 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
     {
         rFWData.bSingleLineMode = bSingleLineMode;
 
-        // setting the strings
+        
         OutlinerParaObject* pParaObj = ((SdrObjCustomShape*)pCustomShape)->GetOutlinerParaObject();
         if ( pParaObj )
         {
@@ -115,7 +115,7 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
                     FWParagraphData aParagraphData;
                     aParagraphData.aString = rTextObj.GetText( j );
 
-                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
+                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  
                     aParagraphData.nFrameDirection = ((SvxFrameDirectionItem&)rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
@@ -162,7 +162,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     aFont.SetFamily( rFontItem.GetFamily() );
     aFont.SetStyleName( rFontItem.GetStyleName() );
     aFont.SetOrientation( 0 );
-    // initializing virtual device
+    
 
     VirtualDevice aVirDev( 1 );
     aVirDev.SetMapMode( MAP_100TH_MM );
@@ -175,7 +175,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
     while( aTextAreaIter != aTextAreaIEnd )
     {
-        // calculating the width of the corresponding 2d text area
+        
         double fWidth = GetLength( rOutline2d.GetObject( i++ ) );
         if ( !bSingleLineMode )
         {
@@ -221,7 +221,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
         const OUString& rText = aParagraphIter->aString;
         if ( !rText.isEmpty() )
         {
-            // generating vcl/font
+            
             sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
             Reference< i18n::XBreakIterator > xBI( EnhancedCustomShapeFontWork::GetBreakIterator() );
             if ( xBI.is() )
@@ -257,7 +257,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             SvxWeightItem& rWeightItem = (SvxWeightItem&)pCustomShape->GetMergedItem( EE_CHAR_WEIGHT );
             aFont.SetWeight( rWeightItem.GetWeight() );
 
-            // initializing virtual device
+            
             VirtualDevice aVirDev( 1 );
             aVirDev.SetMapMode( MAP_100TH_MM );
             aVirDev.SetFont( aFont );
@@ -270,10 +270,10 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             sal_Int32* pDXArry = NULL;
             sal_Int32 nWidth = 0;
 
-            // VERTICAL
+            
             if ( bIsVertical )
             {
-                // vertical _> each single character needs to be rotated by 90
+                
                 sal_Int32 i;
                 sal_Int32 nHeight = 0;
                 Rectangle aSingleCharacterUnion;
@@ -294,7 +294,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                         {
                             while ( aOutlineIter != aOutlineIEnd )
                             {
-                                // rotating
+                                
                                 aOutlineIter->Rotate( Point( nTextWidth / 2, rFWData.nSingleLineHeight / 2 ), 900 );
                                 aCharacterData.aBoundRect.Union( aOutlineIter->GetBoundRect() );
                                 ++aOutlineIter;
@@ -331,7 +331,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             else
             {
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
-                {   // applying character spacing
+                {   
                     pDXArry = new sal_Int32[ rText.getLength() ];
                     aVirDev.GetTextArray( rText, pDXArry);
                     FontMetric aFontMetric( aVirDev.GetFontMetric() );
@@ -346,7 +346,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             }
             delete[] pDXArry;
 
-            // veritcal alignment
+            
             std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
             std::vector< FWCharacterData >::iterator aCharacterIEnd ( aParagraphIter->vCharacters.end() );
             while ( aCharacterIter != aCharacterIEnd )
@@ -361,14 +361,14 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     if ( nVerticalOffset )
                         rPolyPoly.Move( 0, nVerticalOffset );
 
-                    // retrieving the boundrect for the paragraph
+                    
                     Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
                     aParagraphIter->aBoundRect.Union( aBoundRect );
                 }
                 ++aCharacterIter;
             }
         }
-        // updating the boundrect for the text area by merging the current paragraph boundrect
+        
         if ( aParagraphIter->aBoundRect.IsEmpty() )
         {
             if ( rTextArea.aBoundRect.IsEmpty() )
@@ -499,8 +499,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
                 }
                 break;
                 default:
-                case SDRTEXTHORZADJUST_BLOCK : break;   // don't know
-                case SDRTEXTHORZADJUST_LEFT : break;    // already left aligned -> nothing to do
+                case SDRTEXTHORZADJUST_BLOCK : break;   
+                case SDRTEXTHORZADJUST_LEFT : break;    
             }
         }
         ++aTextAreaIter;
@@ -729,7 +729,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                             sal_uInt16 i, nPolyCount = rPolyPoly.Count();
                             for ( i = 0; i < nPolyCount; i++ )
                             {
-                                // #i35928#
+                                
                                 basegfx::B2DPolygon aCandidate(rPolyPoly[ i ].getB2DPolygon());
 
                                 if(aCandidate.areControlPointsUsed())
@@ -737,7 +737,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                                     aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
                                 }
 
-                                // create local polygon copy to work on
+                                
                                  Polygon aLocalPoly(aCandidate);
 
                                 InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, aLocalPoly );
@@ -761,7 +761,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                                     rPoint.Y() = (sal_Int32)( fy1 + fHeight* fY );
                                 }
 
-                                // write back polygon
+                                
                                 rPolyPoly[ i ] = aLocalPoly;
                             }
                             ++aOutlineIter;
@@ -811,9 +811,9 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
         pRet = new SdrPathObj( OBJ_POLY, aPolyPoly );
 
         SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
-        aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
-        aSet.Put(SdrShadowItem(sal_False)); // #i37011# NO shadow for FontWork geometry
-        pRet->SetMergedItemSet( aSet );             // * otherwise we would crash, because the outliner tries to create a Paraobject, but there is no model
+        aSet.ClearItem( SDRATTR_TEXTDIRECTION );    
+        aSet.Put(SdrShadowItem(sal_False)); 
+        pRet->SetMergedItemSet( aSet );             
     }
     return pRet;
 }

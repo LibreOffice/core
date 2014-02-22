@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ogl_textlayout.hxx"
@@ -38,12 +38,12 @@ namespace oglcanvas
         mpFont.reset();
     }
 
-    // XTextLayout
+    
     uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
     }
 
@@ -51,7 +51,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -59,7 +59,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -90,8 +90,8 @@ namespace oglcanvas
         ENSURE_OR_THROW( mpFont.get(),
                          "TextLayout::queryTextBounds(): invalid font" );
 
-        // fake text bounds by either taking the advancement values,
-        // or assuming square glyph boxes (width similar to height)
+        
+        
         const rendering::FontRequest& rFontRequest( mpFont->getFontRequest() );
         const double nFontSize( ::std::max( rFontRequest.CellSize,
                                             rFontRequest.ReferenceAdvancement ) );
@@ -113,7 +113,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -122,7 +122,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -130,7 +130,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::TextHit();
     }
 
@@ -139,7 +139,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::Caret();
     }
 
@@ -149,7 +149,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0;
     }
 
@@ -158,7 +158,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -167,7 +167,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -175,7 +175,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -206,7 +206,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
 
         return true;
     }

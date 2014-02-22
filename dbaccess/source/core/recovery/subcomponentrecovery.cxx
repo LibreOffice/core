@@ -77,7 +77,7 @@ namespace dbaccess
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
-    // helper
+    
     namespace
     {
         static const OUString& lcl_getComponentStorageBaseName( const SubComponentType i_eType )
@@ -178,7 +178,7 @@ namespace dbaccess
         }
     }
 
-    // SettingsExportContext
+    
     class DBACCESS_DLLPRIVATE SettingsExportContext : public ::xmloff::XMLSettingsExportContext
     {
     public:
@@ -250,7 +250,7 @@ namespace dbaccess
         return m_rContext;
     }
 
-    // SettingsDocumentHandler
+    
     typedef ::cppu::WeakImplHelper1 <   XDocumentHandler
                                     >   SettingsDocumentHandler_Base;
     class DBACCESS_DLLPRIVATE SettingsDocumentHandler : public SettingsDocumentHandler_Base
@@ -266,7 +266,7 @@ namespace dbaccess
         }
 
     public:
-        // XDocumentHandler
+        
         virtual void SAL_CALL startDocument(  ) throw (SAXException, RuntimeException);
         virtual void SAL_CALL endDocument(  ) throw (SAXException, RuntimeException);
         virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
@@ -304,10 +304,10 @@ namespace dbaccess
             else
             {
                 OSL_FAIL( "SettingsDocumentHandler::startElement: invalid settings file!" );
-                // Yes, that's not correct. Somebody could, in theory, give us a document which starts with "foo:settings",
-                // where "foo" is mapped to the proper namespace URL.
-                // However, there's no need to bother with this. The "recovery" sub storage we're recovering from is
-                // not part of ODF, so we can impose any format restrictions on it ...
+                
+                
+                
+                
             }
         }
         else
@@ -342,7 +342,7 @@ namespace dbaccess
 
     void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException)
     {
-        // ignore them - that's why they're called "ignorable"
+        
         (void)aWhitespaces;
     }
 
@@ -358,7 +358,7 @@ namespace dbaccess
         (void)i_Locator;
     }
 
-    // SubComponentRecovery
+    
     const OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
     {
         static const OUString s_sFormsStorageName( "forms" );
@@ -392,15 +392,15 @@ namespace dbaccess
         MapCompTypeToCompDescs& io_mapCompDescs )
     {
         if ( m_eType == UNKNOWN )
-            // quite fatal, but has already been reported (as assertion) before
+            
             return;
 
-        // open the sub storage for the given kind of components
+        
         const OUString& rStorageName( getComponentsStorageName( m_eType ) );
         const Reference< XStorage > xComponentsStorage( i_rRecoveryStorage->openStorageElement(
             rStorageName, ElementModes::READWRITE ), UNO_QUERY_THROW );
 
-        // find a free sub storage name, and create Yet Another Sub Storage
+        
         const OUString& rBaseName( lcl_getComponentStorageBaseName( m_eType ) );
         const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage.get(), rBaseName, true );
         const Reference< XStorage > xObjectStor( xComponentsStorage->openStorageElement(
@@ -418,16 +418,16 @@ namespace dbaccess
             break;
 
         default:
-            // TODO
+            
             OSL_FAIL( "SubComponentRecoverys::saveToRecoveryStorage: unimplemented case!" );
             break;
         }
 
-        // commit the storage(s)
+        
         tools::stor::commitStorageIfWriteable( xObjectStor );
         tools::stor::commitStorageIfWriteable( xComponentsStorage );
 
-        // remember the relationship from the component name to the storage name
+        
         MapStringToCompDesc& rMapCompDescs = io_mapCompDescs[ m_eType ];
         OSL_ENSURE( rMapCompDescs.find( sStorName ) == rMapCompDescs.end(),
             "SubComponentRecoverys::saveToRecoveryStorage: object name already used!" );
@@ -436,12 +436,12 @@ namespace dbaccess
 
     void SubComponentRecovery::impl_identifyComponent_throw()
     {
-        // ask the controller
+        
         Pair< sal_Int32, OUString > aComponentIdentity = m_xDocumentUI->identifySubComponent( m_xComponent );
         m_eType = lcl_databaseObjectToSubComponentType( aComponentIdentity.First );
         m_aCompDesc.sName = aComponentIdentity.Second;
 
-        // what the controller didn't give us is the information whether this is in edit mode or not ...
+        
         Reference< XModuleManager2 > xModuleManager( ModuleManager::create(m_rContext) );
         const OUString sModuleIdentifier = xModuleManager->identify( m_xComponent );
 
@@ -458,11 +458,11 @@ namespace dbaccess
         case REPORT:
             if ( sModuleIdentifier == "com.sun.star.report.ReportDefinition" )
             {
-                // it's an SRB report designer
+                
                 m_aCompDesc.bForEditing = true;
                 break;
             }
-            // fall through
+            
 
         case FORM:
             m_aCompDesc.bForEditing = !lcl_determineReadOnly( m_xComponent );
@@ -490,13 +490,13 @@ namespace dbaccess
         ENSURE_OR_THROW( m_eType == QUERY, "illegal sub component type" );
         ENSURE_OR_THROW( i_rObjectStorage.is(), "illegal storage" );
 
-        // retrieve the current query design (which might differ from what we can retrieve as ActiveCommand property, since
-        // the latter is updated only upon successful save of the design)
+        
+        
         Reference< XPropertySet > xDesignerProps( m_xComponent, UNO_QUERY_THROW );
         Sequence< PropertyValue > aCurrentQueryDesign;
         OSL_VERIFY( xDesignerProps->getPropertyValue( "CurrentQueryDesign" ) >>= aCurrentQueryDesign );
 
-        // write the query design
+        
         StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, lcl_getSettingsStreamName() );
         SettingsExportContext aSettingsExportContext( m_rContext, aDesignOutput );
 
@@ -518,7 +518,7 @@ namespace dbaccess
         ENSURE_OR_THROW( ( m_eType == FORM ) || ( m_eType == REPORT ), "illegal sub component type" );
         ENSURE_OR_THROW( i_rObjectStorage.is(), "illegal storage" );
 
-        // store the document into the storage
+        
         Reference< XStorageBasedDocument > xStorageDocument( m_xComponent, UNO_QUERY_THROW );
         xStorageDocument->storeToStorage( i_rObjectStorage, Sequence< PropertyValue >() );
     }
@@ -532,7 +532,7 @@ namespace dbaccess
         ::comphelper::NamedValueCollection aLoadArgs;
         aLoadArgs.put( "RecoveryStorage", i_rRecoveryStorage );
 
-        // load/create the sub component hidden. We'll show it when the main app window is shown.
+        
         aLoadArgs.put( "Hidden", true );
 
         if ( !i_rComponentName.isEmpty() )
@@ -577,7 +577,7 @@ namespace dbaccess
     {
         Reference< XComponent > xSubComponent;
 
-        // first read the settings query design settings from the storage
+        
         StorageXMLInputStream aDesignInput( m_rContext, i_rRecoveryStorage, lcl_getSettingsStreamName() );
 
         ::rtl::Reference< SettingsDocumentHandler > pDocHandler( new SettingsDocumentHandler );
@@ -590,7 +590,7 @@ namespace dbaccess
         OSL_VERIFY( aCurrentQueryDesign >>= aQueryDesignLayout );
 #endif
 
-        // then load the query designer
+        
         ::comphelper::NamedValueCollection aLoadArgs;
         aLoadArgs.put( "CurrentQueryDesign", aCurrentQueryDesign );
         aLoadArgs.put( "Hidden", true );
@@ -645,6 +645,6 @@ namespace dbaccess
         return xSubComponent;
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

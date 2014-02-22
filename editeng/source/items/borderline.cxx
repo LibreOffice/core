@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/color/bcolor.hxx>
@@ -26,7 +26,7 @@
 
 using namespace ::com::sun::star::table::BorderLineStyle;
 
-// class SvxBorderLine  --------------------------------------------------
+
 
 namespace {
 
@@ -49,7 +49,7 @@ namespace {
 
         return Color( color );
     }
-} // Anonymous namespace
+} 
 
 namespace editeng {
 
@@ -61,7 +61,7 @@ Color SvxBorderLine::darkColor( Color aMain )
 Color SvxBorderLine::lightColor( Color aMain )
 {
 
-    // Divide Luminance by 2
+    
     basegfx::BColor color = aMain.getBColor( );
     basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
     hsl.setZ( hsl.getZ() * 0.5 );
@@ -73,19 +73,19 @@ Color SvxBorderLine::lightColor( Color aMain )
 
 Color SvxBorderLine::threeDLightColor( Color aMain )
 {
-    // These values have been defined in an empirical way
+    
     return lcl_compute3DColor( aMain, 3, 40, 83 );
 }
 
 Color SvxBorderLine::threeDDarkColor( Color aMain )
 {
-    // These values have been defined in an empirical way
+    
     return lcl_compute3DColor( aMain, -85, -43, -1 );
 }
 
 Color SvxBorderLine::threeDMediumColor( Color aMain )
 {
-    // These values have been defined in an empirical way
+    
     return lcl_compute3DColor( aMain, -42, -0, 42 );
 }
 
@@ -114,11 +114,11 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
 {
     switch (nWordLineStyle)
     {
-        // First the single lines
+        
         case  1:
-        case  2: // thick line
-        case  5: // hairline
-        // and the unsupported special cases which we map to a single line
+        case  2: 
+        case  5: 
+        
         case  8:
         case  9:
         case 20:
@@ -129,28 +129,28 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
             return DASHED;
         case 22:
             return FINE_DASHED;
-        // then the shading beams which we represent by a double line
+        
         case 23:
             return DOUBLE;
-        // then the double lines, for which we have good matches
+        
         case  3:
-        case 10: // Don't have triple so use double
-        case 21: // Don't have double wave: use double instead
+        case 10: 
+        case 21: 
             return DOUBLE;
         case 11:
             return THINTHICK_SMALLGAP;
         case 12:
-        case 13: // Don't have thin thick thin, so use thick thin
+        case 13: 
             return THICKTHIN_SMALLGAP;
         case 14:
             return THINTHICK_MEDIUMGAP;
         case 15:
-        case 16: // Don't have thin thick thin, so use thick thin
+        case 16: 
             return THICKTHIN_MEDIUMGAP;
         case 17:
             return THINTHICK_LARGEGAP;
         case 18:
-        case 19: // Don't have thin thick thin, so use thick thin
+        case 19: 
             return THICKTHIN_LARGEGAP;
         case 24:
             return EMBOSSED;
@@ -182,13 +182,13 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
 {
     switch (eStyle)
     {
-        // Single lines
+        
         case SOLID:
             switch (nWordLineStyle)
             {
                 case 2:
-                    return (fWidth * 2.0); // thick
-                case 5: // fdo#55526: map 0 hairline width to > 0
+                    return (fWidth * 2.0); 
+                case 5: 
                     return (fWidth > 1.0) ? fWidth : 1.0;
                 default:
                     return fWidth;
@@ -199,11 +199,11 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
         case DASHED:
             return fWidth;
 
-        // Display a minimum effective border width of 1pt
+        
         case FINE_DASHED:
             return (fWidth > 0 && fWidth < 20) ? 20 : fWidth;
 
-        // Double lines
+        
         case DOUBLE:
             return fWidth * 3.0;
 
@@ -232,7 +232,7 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
             return (fWidth * 2.0) + INSET_line2;
 
         default:
-            assert(false); // should only be called for known border style
+            assert(false); 
             return 0;
     }
 }
@@ -242,14 +242,14 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
 {
     switch (eStyle)
     {
-        // Single lines
+        
         case SOLID:
         case DOTTED:
         case DASHED:
         case FINE_DASHED:
             return fWidth;
 
-        // Double lines
+        
         case DOUBLE:
             return fWidth / 3.0;
 
@@ -278,7 +278,7 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
             return (fWidth - INSET_line2) / 2.0;
 
         default:
-            assert(false); // should only be called for known border style
+            assert(false); 
             return 0;
     }
 }
@@ -293,12 +293,12 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
 
     switch ( nStyle )
     {
-        // No line: no width
+        
         case NONE:
             aImpl = BorderWidthImpl( 0, 0.0 );
             break;
 
-        // Single lines
+        
         case SOLID:
         case DOTTED:
         case DASHED:
@@ -306,13 +306,13 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
             aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0 );
             break;
 
-        // Double lines
+        
 
         case DOUBLE:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
-                    // fdo#46112 fdo#38542 fdo#43249:
-                    // non-constant witdths must sum to 1
+                    
+                    
                     1.0/3.0, 1.0/3.0, 1.0/3.0 );
             break;
 
@@ -348,7 +348,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
                     THICKTHIN_LARGEGAP_line2, 1.0 );
             break;
 
-        // Engraved / Embossed
+        
         /*
          *  Word compat: the lines widths are exactly following this rule, shouldbe:
          *      0.75pt up to 3pt and then 3pt
@@ -361,7 +361,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
                     0.25, 0.25, 0.5 );
             break;
 
-        // Inset / Outset
+        
         /*
          * Word compat: the gap width should be measured relatively to the biggest width for the
          *      row or column.
@@ -382,14 +382,14 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
     return aImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
 {
     *this = r;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
 {
@@ -407,7 +407,7 @@ SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 {
@@ -447,7 +447,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
             nWidth = aWidthImpl.GuessWidth( nOut, nIn, nDist );
         }
 
-        // If anything matched, then set it
+        
         if ( nWidth > 0 )
         {
             nStyle = nTestStyle;
@@ -456,7 +456,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
         }
         else
         {
-            // fdo#38542: not a known double, default to something custom...
+            
             SetBorderLineStyle(nStyle);
             m_nWidth = nOut + nIn + nDist;
             if (nOut + nIn + nDist)
@@ -474,9 +474,9 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
         SetBorderLineStyle(nStyle);
         if (nOut == 0 && nIn > 0)
         {
-            // If only inner width is given swap inner and outer widths for
-            // single line styles, otherwise GuessWidth() marks this as invalid
-            // and returns a 0 width.
+            
+            
+            
             switch (nStyle)
             {
                 case SOLID:
@@ -486,7 +486,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
                     ::std::swap( nOut, nIn);
                     break;
                 default:
-                    ;   // nothing
+                    ;   
             }
         }
         m_nWidth = m_aWidthImpl.GuessWidth( nOut, nIn, nDist );
@@ -514,7 +514,7 @@ sal_uInt16 SvxBorderLine::GetDistance() const
     return (sal_uInt16)Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
@@ -611,7 +611,7 @@ Color SvxBorderLine::GetColorGap( ) const
     return aResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       SfxMapUnit eDestUnit,
@@ -685,6 +685,6 @@ bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight )
     return !(rLeft == rRight);
 }
 
-} // namespace editeng
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

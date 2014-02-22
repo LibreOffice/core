@@ -60,7 +60,7 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace comphelper;
 
-// -----------------------------------------------------------------------------
+
 OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentContext >& context)
 :ReportEngineBase(m_aMutex)
 ,ReportEnginePropertySet(context,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
@@ -68,33 +68,33 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
 ,m_nMaxRows(0)
 {
 }
-// -----------------------------------------------------------------------------
+
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OReportEngineJFree::~OReportEngineJFree()
 {
 }
-//--------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2(OReportEngineJFree,ReportEngineBase,ReportEnginePropertySet)
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::dispose() throw(uno::RuntimeException)
 {
     ReportEnginePropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
     m_xActiveConnection.clear();
 }
-// -----------------------------------------------------------------------------
+
 OUString OReportEngineJFree::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.OReportEngineJFree");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OReportEngineJFree::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -102,23 +102,23 @@ uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  
 
     return aServices;
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OReportEngineJFree::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OReportEngineJFree(xContext));
 }
 
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OReportEngineJFree::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OReportEngineJFree::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
-// -----------------------------------------------------------------------------
+
 // XReportEngine
     // Attributes
 uno::Reference< report::XReportDefinition > SAL_CALL OReportEngineJFree::getReportDefinition() throw (uno::RuntimeException)
@@ -126,7 +126,7 @@ uno::Reference< report::XReportDefinition > SAL_CALL OReportEngineJFree::getRepo
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xReport;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::setReportDefinition( const uno::Reference< report::XReportDefinition >& _report ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( !_report.is() )
@@ -142,18 +142,18 @@ void SAL_CALL OReportEngineJFree::setReportDefinition( const uno::Reference< rep
     }
     l.notify();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< task::XStatusIndicator > SAL_CALL OReportEngineJFree::getStatusIndicator() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_StatusIndicator;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task::XStatusIndicator >& _statusindicator ) throw (uno::RuntimeException)
 {
     set(PROPERTY_STATUSINDICATOR,_statusindicator,m_StatusIndicator);
 }
-// -----------------------------------------------------------------------------
+
 OUString OReportEngineJFree::getNewOutputName()
 {
     OUString sOutputName;
@@ -264,18 +264,18 @@ OUString OReportEngineJFree::getNewOutputName()
     }
     return sOutputName;
 }
-// -----------------------------------------------------------------------------
+
 // Methods
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentModel( ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
     return createDocumentAlive(NULL,true);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
     return createDocumentAlive(_frame,false);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
@@ -322,7 +322,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
     }
     return xModel;
 }
-// -----------------------------------------------------------------------------
+
 util::URL SAL_CALL OReportEngineJFree::createDocument( ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
     util::URL aRet;
@@ -334,7 +334,7 @@ util::URL SAL_CALL OReportEngineJFree::createDocument( ) throw (lang::DisposedEx
     }
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::interrupt(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException)
 {
     {
@@ -342,60 +342,60 @@ void SAL_CALL OReportEngineJFree::interrupt(  ) throw (lang::DisposedException, 
         ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
     }
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OReportEngineJFree::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     return ReportEnginePropertySet::getPropertySetInfo();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::setPropertyValue( aPropertyName, aValue );
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OReportEngineJFree::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return ReportEnginePropertySet::getPropertyValue( PropertyName);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sdbc::XConnection > SAL_CALL OReportEngineJFree::getActiveConnection() throw (uno::RuntimeException)
 {
     return m_xActiveConnection;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::setActiveConnection( const uno::Reference< sdbc::XConnection >& _activeconnection ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( !_activeconnection.is() )
         throw lang::IllegalArgumentException();
     set(PROPERTY_ACTIVECONNECTION,_activeconnection,m_xActiveConnection);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL OReportEngineJFree::getMaxRows() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_nMaxRows;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 _MaxRows ) throw (uno::RuntimeException)
 {
     set(PROPERTY_MAXROWS,_MaxRows,m_nMaxRows);

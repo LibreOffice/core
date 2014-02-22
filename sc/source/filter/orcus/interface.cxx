@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "orcusinterface.hxx"
@@ -70,18 +70,18 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
     SCTAB nTab = maDoc.getSheetIndex(aTabName);
     if (nTab < 0)
-        // Sheet by that name not found.
+        
         return NULL;
 
-    // See if we already have an orcus sheet instance by that index.
+    
     boost::ptr_vector<ScOrcusSheet>::iterator it =
         std::find_if(maSheets.begin(), maSheets.end(), FindSheetByIndex(nTab));
 
     if (it != maSheets.end())
-        // We already have one. Return it.
+        
         return &(*it);
 
-    // Create a new orcus sheet instance for this.
+    
     maSheets.push_back(new ScOrcusSheet(maDoc, nTab, *this));
     return &maSheets.back();
 }
@@ -108,7 +108,7 @@ void ScOrcusFactory::finalize()
     for (; it != itEnd; ++it)
     {
         if (it->mnIndex >= maStrings.size())
-            // String index out-of-bound!  Something is up.
+            
             continue;
 
         maDoc.setStringCell(it->maPos, maStrings[it->mnIndex]);
@@ -137,7 +137,7 @@ size_t ScOrcusFactory::appendString(const OUString& rStr)
 
 size_t ScOrcusFactory::addString(const OUString& rStr)
 {
-    // Add only if the string is not yet present in the string pool.
+    
     StringHashType::iterator it = maStringHash.find(rStr);
     if (it != maStringHash.end())
         return it->second;
@@ -153,11 +153,11 @@ void ScOrcusFactory::pushStringCell(const ScAddress& rPos, size_t nStrIndex)
 void ScOrcusFactory::incrementProgress()
 {
     if (!mxStatusIndicator.is())
-        // Status indicator object not set.
+        
         return;
 
-    // For now, we'll hard-code the progress range to be 100, and stops at 99
-    // in all cases.
+    
+    
 
     if (!mnProgress)
         mxStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), 100);
@@ -196,10 +196,10 @@ void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t 
 
 void ScOrcusSheet::set_string(os::row_t row, os::col_t col, size_t sindex)
 {
-    // We need to defer string cells since the shared string pool is not yet
-    // populated at the time this method is called.  Orcus imports string
-    // table after the cells get imported.  We won't need to do this once we
-    // implement true shared strings in Calc core.
+    
+    
+    
+    
 
     mrFactory.pushStringCell(ScAddress(col, row, mnTab), sindex);
     cellInserted();
@@ -299,12 +299,12 @@ void ScOrcusSheet::set_shared_formula(
     OUString aFormula(p_formula, n_formula, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGram = getCalcGrammarFromOrcus(grammar);
 
-    // Compile the formula expression into tokens.
+    
     ScCompiler aComp(&mrDoc.getDoc(), aPos);
     aComp.SetGrammar(eGram);
     ScTokenArray* pArray = aComp.CompileString(aFormula);
     if (!pArray)
-        // Tokenization failed.
+        
         return;
 
     maFormulaGroups.set(sindex, pArray);
@@ -313,7 +313,7 @@ void ScOrcusSheet::set_shared_formula(
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
 
-    // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
+    
     pCell->SetDirty(true);
 }
 
@@ -336,7 +336,7 @@ void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sinde
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
 
-    // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
+    
     pCell->SetDirty(true);
 }
 
@@ -396,7 +396,7 @@ size_t ScOrcusSharedStrings::commit_segments()
 
 void ScOrcusStyles::set_font_count(size_t /*n*/)
 {
-    // needed at all?
+    
 }
 
 void ScOrcusStyles::set_font_bold(bool /*b*/)
@@ -425,11 +425,11 @@ size_t ScOrcusStyles::commit_font()
 }
 
 
-// fill
+
 
 void ScOrcusStyles::set_fill_count(size_t /*n*/)
 {
-    // needed at all?
+    
 }
 
 void ScOrcusStyles::set_fill_pattern_type(const char* /*s*/, size_t /*n*/)
@@ -450,16 +450,16 @@ size_t ScOrcusStyles::commit_fill()
 }
 
 
-// border
+
 
 void ScOrcusStyles::set_border_count(size_t /*n*/)
 {
-    // needed at all?
+    
 }
 
 void ScOrcusStyles::set_border_style(orcus::spreadsheet::border_direction_t /*dir*/, const char* /*s*/, size_t /*n*/)
 {
-    // implement later
+    
 }
 
 size_t ScOrcusStyles::commit_border()
@@ -468,7 +468,7 @@ size_t ScOrcusStyles::commit_border()
 }
 
 
-// cell protection
+
 void ScOrcusStyles::set_cell_hidden(bool /*b*/)
 {
 }
@@ -491,11 +491,11 @@ size_t ScOrcusStyles::commit_number_format()
     return 0;
 }
 
-// cell style xf
+
 
 void ScOrcusStyles::set_cell_style_xf_count(size_t /*n*/)
 {
-    // needed at all?
+    
 }
 
 size_t ScOrcusStyles::commit_cell_style_xf()
@@ -504,11 +504,11 @@ size_t ScOrcusStyles::commit_cell_style_xf()
 }
 
 
-// cell xf
+
 
 void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
 {
-    // needed at all?
+    
 }
 
 size_t ScOrcusStyles::commit_cell_xf()
@@ -517,11 +517,11 @@ size_t ScOrcusStyles::commit_cell_xf()
 }
 
 
-// xf (cell format) - used both by cell xf and cell style xf.
+
 
 void ScOrcusStyles::set_xf_number_format(size_t /*index*/)
 {
-    // no number format interfaces implemented yet
+    
 }
 
 void ScOrcusStyles::set_xf_font(size_t /*index*/)
@@ -545,12 +545,12 @@ void ScOrcusStyles::set_xf_style_xf(size_t /*index*/)
 }
 
 
-// cell style entry
-// not needed for now for gnumeric
+
+
 
 void ScOrcusStyles::set_cell_style_count(size_t /*n*/)
 {
-    // needed at all?
+    
 }
 
 void ScOrcusStyles::set_cell_style_name(const char* /*s*/, size_t /*n*/)
@@ -563,7 +563,7 @@ void ScOrcusStyles::set_cell_style_xf(size_t /*index*/)
 
 void ScOrcusStyles::set_cell_style_builtin(size_t /*index*/)
 {
-    // not needed for gnumeric
+    
 }
 
 size_t ScOrcusStyles::commit_cell_style()

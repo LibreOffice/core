@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RelativePositionHelper.hxx"
@@ -36,7 +36,7 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
         sal_Int32 nShiftHalfWidths  = 0;
         sal_Int32 nShiftHalfHeights = 0;
 
-        // normalize to top-left
+        
         switch( rPosition.Anchor )
         {
             case drawing::Alignment_TOP_LEFT:
@@ -73,7 +73,7 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
                 break;
         }
 
-        // transform
+        
         switch( aNewAnchor )
         {
             case drawing::Alignment_TOP_LEFT:
@@ -129,7 +129,7 @@ awt::Point RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
     double fXDelta = 0.0;
     double fYDelta = 0.0;
 
-    // adapt x-value
+    
     switch( aAnchor )
     {
         case drawing::Alignment_TOP:
@@ -146,11 +146,11 @@ awt::Point RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
         case drawing::Alignment_LEFT:
         case drawing::Alignment_BOTTOM_LEFT:
         default:
-            // nothing to do
+            
             break;
     }
 
-    // adapt y-value
+    
     switch( aAnchor )
     {
         case drawing::Alignment_LEFT:
@@ -167,7 +167,7 @@ awt::Point RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
         case drawing::Alignment_TOP:
         case drawing::Alignment_TOP_RIGHT:
         default:
-            // nothing to do
+            
             break;
     }
 
@@ -188,13 +188,13 @@ awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
     double fXDelta = 0.0;
     double fYDelta = 0.0;
 
-    // adapt x-value
+    
     switch( aAnchor )
     {
         case drawing::Alignment_TOP:
         case drawing::Alignment_CENTER:
         case drawing::Alignment_BOTTOM:
-            // nothing to do
+            
             break;
         case drawing::Alignment_TOP_RIGHT:
         case drawing::Alignment_RIGHT:
@@ -209,13 +209,13 @@ awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
             break;
     }
 
-    // adapt y-value
+    
     switch( aAnchor )
     {
         case drawing::Alignment_LEFT:
         case drawing::Alignment_CENTER:
         case drawing::Alignment_RIGHT:
-            // nothing to do
+            
             break;
         case drawing::Alignment_BOTTOM_LEFT:
         case drawing::Alignment_BOTTOM:
@@ -227,11 +227,11 @@ awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
         case drawing::Alignment_TOP_RIGHT:
             fYDelta += aUnrotatedObjectSize.Height/2;
         default:
-            // nothing to do
+            
             break;
     }
 
-    //take rotation into account:
+    
     aResult.X += static_cast< sal_Int32 >(
         ::rtl::math::round(    fXDelta * rtl::math::cos( fAnglePi ) + fYDelta * rtl::math::sin( fAnglePi ) ) );
     aResult.Y += static_cast< sal_Int32 >(
@@ -251,14 +251,14 @@ bool RelativePositionHelper::centerGrow(
     const double fPosCheckThreshold = 0.02;
     const double fSizeCheckThreshold = 0.1;
 
-    // grow/shrink, back to relaative
+    
     aSize.Primary += fAmountX;
     aSize.Secondary += fAmountY;
 
     double fShiftAmountX = fAmountX / 2.0;
     double fShiftAmountY = fAmountY / 2.0;
 
-    // shift X
+    
     switch( rInOutPosition.Anchor )
     {
         case drawing::Alignment_TOP_LEFT:
@@ -269,7 +269,7 @@ bool RelativePositionHelper::centerGrow(
         case drawing::Alignment_TOP:
         case drawing::Alignment_CENTER:
         case drawing::Alignment_BOTTOM:
-            // nothing
+            
             break;
         case drawing::Alignment_TOP_RIGHT:
         case drawing::Alignment_RIGHT:
@@ -280,7 +280,7 @@ bool RelativePositionHelper::centerGrow(
             break;
     }
 
-    // shift Y
+    
     switch( rInOutPosition.Anchor )
     {
         case drawing::Alignment_TOP:
@@ -291,7 +291,7 @@ bool RelativePositionHelper::centerGrow(
         case drawing::Alignment_CENTER:
         case drawing::Alignment_LEFT:
         case drawing::Alignment_RIGHT:
-            // nothing
+            
             break;
         case drawing::Alignment_BOTTOM:
         case drawing::Alignment_BOTTOM_LEFT:
@@ -302,7 +302,7 @@ bool RelativePositionHelper::centerGrow(
             break;
     }
 
-    // anchor must not be changed
+    
     OSL_ASSERT( rInOutPosition.Anchor == aPos.Anchor );
 
     if( rInOutPosition.Primary == aPos.Primary &&
@@ -311,22 +311,22 @@ bool RelativePositionHelper::centerGrow(
         rInOutSize.Secondary == aSize.Secondary )
         return false;
 
-    // check
+    
     if( bCheck )
     {
-        // Note: this somewhat complicated check allows the output being
-        // out-of-bounds if the input was also out-of-bounds, and the change is
-        // for "advantage".  E.g., you have a chart that laps out on the left
-        // side. If you shrink it, this should be possible, also if it still
-        // laps out on the left side afterwards. But you shouldn't be able to
-        // grow it then.
+        
+        
+        
+        
+        
+        
 
         chart2::RelativePosition aUpperLeft(
             RelativePositionHelper::getReanchoredPosition( aPos, aSize, drawing::Alignment_TOP_LEFT ));
         chart2::RelativePosition aLowerRight(
             RelativePositionHelper::getReanchoredPosition( aPos, aSize, drawing::Alignment_BOTTOM_RIGHT ));
 
-        // Do not grow, if this leads to corners being off-screen
+        
         if( fAmountX > 0.0 &&
             ( (aUpperLeft.Primary < fPosCheckThreshold) ||
               (aLowerRight.Primary > (1.0 - fPosCheckThreshold)) ))
@@ -336,7 +336,7 @@ bool RelativePositionHelper::centerGrow(
               (aLowerRight.Secondary > (1.0 - fPosCheckThreshold)) ))
             return false;
 
-        // Do not shrink, if this leads to a size too small
+        
         if( fAmountX < 0.0 &&
             ( aSize.Primary < fSizeCheckThreshold ))
             return false;
@@ -381,6 +381,6 @@ bool RelativePositionHelper::moveObject(
     return true;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

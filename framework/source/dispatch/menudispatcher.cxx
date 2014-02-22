@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/menudispatcher.hxx>
@@ -65,14 +65,14 @@ static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno
                                                                 const   css::util::URL&                                         aURL            );
 static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                 const   css::util::URL&                                         aURL            );
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
                                   const   uno::Reference< XFrame >&             xOwner      )
-        //  Init baseclasses first
+        
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        // Init member
+        
         ,   m_xOwnerWeak            ( xOwner                         )
         ,   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
@@ -80,65 +80,65 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
         ,   m_bActivateListener     ( sal_False                      )
         ,   m_pMenuManager          ( NULL                           )
 {
-    // Safe impossible cases
-    // We need valid information about our owner for work.
+    
+    
     SAL_WARN_IF( !impldbg_checkParameter_MenuDispatcher( xContext, xOwner ), "fwk", "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!" );
 
     m_bActivateListener = sal_True;
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 MenuDispatcher::~MenuDispatcher()
 {
-    // Warn programmer if he forgot to dispose this instance.
-    // We must release all our references ...
-    // and a dtor isn't the best place to do that!
+    
+    
+    
 }
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
+
+
+
 void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /*aURL*/            ,
                                             const   Sequence< PropertyValue >&  /*seqProperties*/   ) throw( RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
+
+
+
 void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStatusListener >&   xControl,
                                                     const   URL&                            aURL    ) throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter
+    
+    
     SAL_WARN_IF( !impldbg_checkParameter_addStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::addStatusListener(): Invalid parameter detected." );
-    // Add listener to container.
+    
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
+
+
+
 void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< XStatusListener >&   xControl,
                                                         const   URL&                            aURL    ) throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter
+    
+    
     SAL_WARN_IF( !impldbg_checkParameter_removeStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::removeStatusListener(): Invalid parameter detected." );
-    // Add listener to container.
+    
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
 
-//*****************************************************************************************************************
-//   XFrameActionListener
-//*****************************************************************************************************************
+
+
+
 
 void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException )
 {
@@ -175,14 +175,14 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
     }
 }
 
-//*****************************************************************************************************************
-//   XEventListener
-//*****************************************************************************************************************
+
+
+
 void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
+    
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
     if( m_bAlreadyDisposed == sal_False )
@@ -205,18 +205,18 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
             }
         }
 
-        // Forget our factory.
+        
         m_xContext = uno::Reference< XComponentContext >();
 
-        // Remove our menu from system window if it is still there!
+        
         if ( m_pMenuManager )
             impl_setMenuBar( NULL );
     }
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
@@ -234,9 +234,9 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
     }
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource )
 {
     uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
@@ -245,7 +245,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
         uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
         Window* pWindow = NULL;
 
-        // Use SolarMutex for threadsafe code too!
+        
         SolarMutexGuard aSolarGuard;
         {
             pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
@@ -255,18 +255,18 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 
         if ( pWindow )
         {
-            // Ready for multithreading
+            
             ResetableGuard aGuard( m_aLock );
 
             SystemWindow* pSysWindow = (SystemWindow *)pWindow;
 
             if ( m_pMenuManager )
             {
-                // remove old menu from our system window if it was set before
+                
                 if ( m_pMenuManager->GetMenu() == (Menu *)pSysWindow->GetMenuBar() )
                     pSysWindow->SetMenuBar( NULL );
 
-                // remove listener before we destruct ourself, so we cannot be called back afterwards
+                
                 m_pMenuManager->RemoveListener();
 
                 (static_cast< ::com::sun::star::uno::XInterface* >((OWeakObject*)m_pMenuManager))->release();
@@ -285,14 +285,14 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                     if ( xController.is() )
                         xModel = uno::Reference< XModel >( xController->getModel(), UNO_QUERY );
 
-                    // retrieve addon popup menus and add them to our menu bar
+                    
                     AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
 
-                    // retrieve addon help menu items and add them to our help menu
+                    
                     AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar );
                 }
 
-                // set new menu on our system window and create new menu manager
+                
                 if ( bMenuFromResource )
                 {
                     m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, sal_True, sal_False );
@@ -318,15 +318,15 @@ static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference<
     return xContext.is() && xOwner.is();
 }
 
-//*****************************************************************************************************************
-// We need a valid URL. What is meaning with "register for nothing"?!
-// xControl must correct to - nobody can advised otherwise!
+
+
+
 static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
                                                           const   URL&                                 aURL    )
 {
-    // Set default return value.
+    
     sal_Bool bOK = sal_True;
-    // Check parameter.
+    
     if  (
             ( &xControl                 ==  NULL    )   ||
             ( &aURL                     ==  NULL    )   ||
@@ -335,19 +335,19 @@ static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference
     {
         bOK = sal_False ;
     }
-    // Return result of check.
+    
     return bOK ;
 }
 
-//*****************************************************************************************************************
-// The same goes for these case! We have added valid listener for correct URL only.
-// We can't remove invalid listener for nothing!
+
+
+
 static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
                                                               const   URL&                                 aURL    )
 {
-    // Set default return value.
+    
     sal_Bool bOK = sal_True;
-    // Check parameter.
+    
     if  (
             ( &xControl                 ==  NULL    )   ||
             ( &aURL                     ==  NULL    )   ||
@@ -356,10 +356,10 @@ static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Refer
     {
         bOK = sal_False ;
     }
-    // Return result of check.
+    
     return bOK ;
 }
 
-}       //  namespace framework
+}       
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

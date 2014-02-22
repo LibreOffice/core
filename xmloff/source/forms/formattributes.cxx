@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formattributes.hxx"
@@ -31,7 +31,7 @@ namespace xmloff
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //= OAttributeMetaData
+    
     const sal_Char* OAttributeMetaData::getCommonControlAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -39,7 +39,7 @@ namespace xmloff
             case CCA_NAME:              return "name";
             case CCA_SERVICE_NAME:      return "control-implementation";
             case CCA_BUTTON_TYPE:       return "button-type";
-// disabled(AddAttributeIdLegacy)   case CCA_CONTROL_ID:        return "id";
+
             case CCA_CURRENT_SELECTED:  return "current-selected";
             case CCA_CURRENT_VALUE:     return "current-value";
             case CCA_DISABLED:          return "disabled";
@@ -55,7 +55,7 @@ namespace xmloff
             case CCA_SIZE:              return "size";
             case CCA_TAB_INDEX:         return "tab-index";
             case CCA_TARGET_FRAME:      return "target-frame";
-            case CCA_TARGET_LOCATION:   return "href";      // the only special thing here: TargetLocation is represented by an xlink:href attribute
+            case CCA_TARGET_LOCATION:   return "href";      
             case CCA_TAB_STOP:          return "tab-stop";
             case CCA_TITLE:             return "title";
             case CCA_VALUE:             return "value";
@@ -84,7 +84,7 @@ namespace xmloff
         {
             case faName:                return "name";
             case faServiceName:         return "service-name";
-            case faAction:              return "href";      // the only special thing here: Action is represented by an xlink:href attribute
+            case faAction:              return "href";      
             case faEnctype:             return "enctype";
             case faMethod:              return "method";
             case faTargetFrame:         return "target-frame";
@@ -139,7 +139,7 @@ namespace xmloff
 
     sal_uInt16 OAttributeMetaData::getDatabaseAttributeNamespace(sal_Int32 /*_nId*/)
     {
-        // nothing special here
+        
         return XML_NAMESPACE_FORM;
     }
 
@@ -158,7 +158,7 @@ namespace xmloff
 
     sal_uInt16 OAttributeMetaData::getBindingAttributeNamespace(sal_Int32)
     {
-        // nothing special here
+        
         return XML_NAMESPACE_FORM;
     }
 
@@ -213,11 +213,11 @@ namespace xmloff
 
     sal_uInt16 OAttributeMetaData::getOfficeFormsAttributeNamespace(OfficeFormsAttributes /* _eAttrib */)
     {
-        // nothing special here
+        
         return XML_NAMESPACE_FORM;
     }
 
-    //= OAttribute2Property
+    
     OAttribute2Property::OAttribute2Property()
     {
     }
@@ -280,7 +280,7 @@ namespace xmloff
         SvXMLUnitConverter::convertEnum(aDefault, _nAttributeDefault, _pValueMap);
         AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName,
             _pType ? *_pType : ::getCppuType( static_cast< sal_Int32* >(NULL) ),
-                // this assumes that the setPropertyValue for enums can handle int32's ....
+                
             aDefault.makeStringAndClear());
         aAssignment.pEnumMap = _pValueMap;
     }
@@ -299,10 +299,10 @@ namespace xmloff
         aAssignment.sPropertyName = _rPropertyName;
         aAssignment.aPropertyType = _rType;
 
-        // redundance, the accessor is stored in aAssignment.sAttributeName, too
+        
         return m_aKnownProperties[sAttributeName] = aAssignment;
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

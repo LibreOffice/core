@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -60,15 +60,15 @@ ScAnnontationObj::ScAnnontationObj()
 
 uno::Reference< sheet::XSheetAnnotation> ScAnnontationObj::getAnnotation(table::CellAddress& xCellAddress)
 {
-    // get the sheet
+    
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(xCellAddress.Sheet), UNO_QUERY_THROW);
 
-    // get the cell
+    
     uno::Reference< table::XCell > xCell( xSheet->getCellByPosition(xCellAddress.Column, xCellAddress.Row), UNO_QUERY_THROW);
 
-    // get the annotation from cell
+    
     uno::Reference< sheet::XSheetAnnotationAnchor > xAnnotationAnchor(xCell, UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetAnnotation > xSheetAnnotation( xAnnotationAnchor->getAnnotation(), UNO_QUERY_THROW);
 
@@ -80,14 +80,14 @@ uno::Reference< sheet::XSheetAnnotation> ScAnnontationObj::getAnnotation(table::
 uno::Reference< uno::XInterface > ScAnnontationObj::init()
 {
 
-    // get the test file
+    
     OUString aFileURL;
     createFileURL(OUString("ScAnnotationObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());
 
-    // tested annotation is in sheet 0 cell C2
+    
     table::CellAddress xCellAddress;
     xCellAddress.Sheet = 0;
     xCellAddress.Row = 1;

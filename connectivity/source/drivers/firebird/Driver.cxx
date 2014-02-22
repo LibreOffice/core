@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Connection.hxx"
@@ -56,7 +56,7 @@ namespace connectivity
     }
 }
 
-// Static const member variables
+
 const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
 const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
 const OUString FirebirdDriver::our_sFirebirdMsgVar("FIREBIRD_MSG");
@@ -70,19 +70,19 @@ FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::su
     m_firebirdTMPDirectory.EnableKillingFile();
     m_firebirdLockDirectory.EnableKillingFile();
 
-    // ::utl::TempFile uses a unique temporary directory (subdirectory of
-    // /tmp or other user specific tmp directory) per instance in which
-    // we can create directories for firebird at will.
+    
+    
+    
 
-    // Overrides firebird's default of /tmp or c:\temp
+    
     osl_setEnvironment(our_sFirebirdTmpVar.pData, m_firebirdTMPDirectory.GetFileName().pData);
 
-    // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
+    
     osl_setEnvironment(our_sFirebirdLockVar.pData, m_firebirdLockDirectory.GetFileName().pData);
 
 #ifndef SYSTEM_FIREBIRD
-    // Overrides firebird's hardcoded default of /usr/local/firebird on *nix,
-    // however on Windows it seems to use the current directory as a default.
+    
+    
     OUString sMsgURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/firebird");
     ::rtl::Bootstrap::expandMacros(sMsgURL);
     OUString sMsgPath;
@@ -113,7 +113,7 @@ void FirebirdDriver::disposing()
     ODriver_BASE::disposing();
 }
 
-//----- static ServiceInfo ---------------------------------------------------
+
 rtl::OUString FirebirdDriver::getImplementationName_Static() throw(RuntimeException)
 {
     return rtl::OUString("com.sun.star.comp.sdbc.firebird.Driver");
@@ -144,7 +144,7 @@ Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-// ----  XDriver -------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     const OUString& url, const Sequence< PropertyValue >& info )
     throw(SQLException, RuntimeException)
@@ -194,8 +194,8 @@ Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
 
 sal_Int32 SAL_CALL FirebirdDriver::getMajorVersion(  ) throw(RuntimeException)
 {
-    // The major and minor version are sdbc driver specific. Must begin with 1.0
-    // as per http://api.libreoffice.org/docs/common/ref/com/sun/star/sdbc/XDriver.html
+    
+    
     return 1;
 }
 
@@ -204,7 +204,7 @@ sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0;
 }
 
-//----- XDataDefinitionSupplier
+
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByConnection(
                                     const uno::Reference< XConnection >& rConnection)
     throw(SQLException, RuntimeException)
@@ -236,7 +236,7 @@ namespace connectivity
 
                 if (!rBHelper.bDisposed && !rBHelper.bInDispose)
                 {
-                    // remember the parent
+                    
                     Reference< XInterface > xParent;
                     {
                         MutexGuard aGuard( rBHelper.rMutex );
@@ -244,13 +244,13 @@ namespace connectivity
                         _xInterface = NULL;
                     }
 
-                    // First dispose
+                    
                     _pObject->dispose();
 
-                    // only the alive ref holds the object
+                    
                     OSL_ASSERT( _refCount == 1 );
 
-                    // release the parent in the ~
+                    
                     if (xParent.is())
                     {
                         MutexGuard aGuard( rBHelper.rMutex );
@@ -270,7 +270,7 @@ namespace connectivity
         }
 
     }
-} // namespace connectivity
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

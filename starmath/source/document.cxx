@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::uno;
 #define SmDocShell
 #include "smslots.hxx"
 
-////////////////////////////////////////////////////////////
+
 
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
@@ -125,7 +125,7 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
         case HINT_FORMATCHANGED:
             SetFormulaArranged(false);
 
-            nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+            nModifyCount++;     
 
             Repaint();
             break;
@@ -173,9 +173,9 @@ void SmDocShell::SetText(const OUString& rBuffer)
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
             if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
             {
-                // have SwOleClient::FormatChanged() to align the modified formula properly
-                // even if the vis area does not change (e.g. when formula text changes from
-                // "{a over b + c} over d" to "d over {a over b + c}"
+                
+                
+                
                 SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
 
                 Repaint();
@@ -188,7 +188,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
             EnableSetModified( bIsEnabled );
         SetModified(true);
 
-        // launch accessible event if necessary
+        
         SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : 0;
         if (pAcc)
         {
@@ -213,10 +213,10 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     SetFormulaArranged( false );
     SetModified( true );
 
-    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+    nModifyCount++;     
 
-    // don't use SmGetActiveView since the view shell might not be active (0 pointer)
-    // if for example the Basic Macro dialog currently has the focus. Thus:
+    
+    
     SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
     while (pFrm)
     {
@@ -252,7 +252,7 @@ void SmDocShell::Parse()
         delete pTree;
     ReplaceBadChars();
     pTree = aInterpreter.Parse(aText);
-    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+    nModifyCount++;     
     SetFormulaArranged( false );
     InvalidateCursor();
     aUsedSymbols = aInterpreter.GetUsedSymbols();
@@ -266,8 +266,8 @@ void SmDocShell::ArrangeFormula()
     if (IsFormulaArranged())
         return;
 
-    // Only for the duration of the existence of this object the correct settings
-    // at the printer are guaranteed!
+    
+    
     SmPrinterAccess  aPrtAcc(*this);
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
@@ -278,7 +278,7 @@ void SmDocShell::ArrangeFormula()
 #endif
     }
 
-    // if necessary get another OutputDevice for which we format
+    
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();
@@ -296,8 +296,8 @@ void SmDocShell::ArrangeFormula()
     const SmFormat &rFormat = GetFormat();
     pTree->Prepare(rFormat, *this);
 
-    // format/draw formulas always from left to right,
-    // and numbers should not be converted
+    
+    
     sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
     pOutDev->SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     sal_Int16 nDigitLang = pOutDev->GetDigitLanguage();
@@ -310,7 +310,7 @@ void SmDocShell::ArrangeFormula()
 
     SetFormulaArranged(true);
 
-    // invalidate accessible text
+    
     aAccText = OUString();
 }
 
@@ -318,7 +318,7 @@ void SmDocShell::ArrangeFormula()
 void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
 {
         //
-        // set fonts to be used
+        
         //
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
@@ -330,13 +330,13 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
             sal_uInt16      nFontInfoId;
             } aTable[3] =
         {
-            // info to get western font to be used
+            
             {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
                 DEFAULTFONT_FIXED,      EE_CHAR_FONTINFO },
-            // info to get CJK font to be used
+            
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
-            // info to get CTL font to be used
+            
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
@@ -357,7 +357,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
                         rFntDta.nFontInfoId ) );
         }
 
-        // set font heights
+        
         SvxFontHeightItem aFontHeigt(
                         Application::GetDefaultDevice()->LogicToPixel(
                         Size( 0, 11 ), MapMode( MAP_POINT ) ).Height(), 100,
@@ -376,9 +376,9 @@ EditEngine& SmDocShell::GetEditEngine()
 
     if (!pEditEngine)
     {
-        //!
-        //! see also SmEditWindow::DataChanged !
-        //!
+        
+        
+        
 
         pEditEngineItemPool = EditEngine::CreatePool();
 
@@ -402,8 +402,8 @@ EditEngine& SmDocShell::GetEditEngine()
 
         pEditEngine->EraseVirtualDevice();
 
-        // set initial text if the document already has some...
-        // (may be the case when reloading a doc)
+        
+        
         OUString aTxt( GetText() );
         if (!aTxt.isEmpty())
             pEditEngine->SetText( aTxt );
@@ -436,18 +436,18 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     if (!IsFormulaArranged())
         ArrangeFormula();
 
-    // Problem: What happens to WYSIWYG? While we're active inplace, we don't have a reference
-    // device and aren't aligned to that either. So now there can be a difference between the
-    // VisArea (i.e. the size within the client) and the current size.
-    // Idea: The difference could be adapted with SmNod::SetSize (no long-term solution)
+    
+    
+    
+    
 
     rPosition.X() += aFormat.GetDistance( DIS_LEFTSPACE );
     rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE  );
 
-    //! in case of high contrast-mode (accessibility option!)
-    //! the draw mode needs to be set to default, because when imbedding
-    //! Math for example in Calc in "a over b" the fraction bar may not
-    //! be visible else. More generally: the FillColor may have been changed.
+    
+    
+    
+    
     sal_uLong nOldDrawMode = DRAWMODE_DEFAULT;
     bool bRestoreDrawMode = false;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
@@ -458,20 +458,20 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
         bRestoreDrawMode = true;
     }
 
-    // format/draw formulas always from left to right
-    // and numbers should not be converted
+    
+    
     sal_uLong nLayoutMode = rDev.GetLayoutMode();
     rDev.SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     sal_Int16 nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 
-    //Set selection if any
+    
     if(pCursor && bDrawSelection){
         pCursor->AnnotateSelection();
         SmSelectionDrawingVisitor(rDev, pTree, rPosition);
     }
 
-    //Drawing using visitor
+    
     SmDrawingVisitor(rDev, rPosition, pTree);
 
     //
@@ -523,7 +523,7 @@ SmCursor& SmDocShell::GetCursor(){
     return *pCursor;
 }
 
-////////////////////////////////////////
+
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {
@@ -532,12 +532,12 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
         pPrinter->Push( PUSH_MAPMODE );
         if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
-            // if it is an embedded object (without it's own printer)
-            // we change the MapMode temporarily.
-            //!If it is a document with it's own printer the MapMode should
-            //!be set correct (once) elsewhere(!), in order to avoid numerous
-            //!superfluous pushing and poping of the MapMode when using
-            //!this class.
+            
+            
+            
+            
+            
+            
 
             const MapUnit eOld = pPrinter->GetMapMode().GetMapUnit();
             if ( MAP_100TH_MM != eOld )
@@ -557,12 +557,12 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
         pRefDev->Push( PUSH_MAPMODE );
         if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
-            // if it is an embedded object (without it's own printer)
-            // we change the MapMode temporarily.
-            //!If it is a document with it's own printer the MapMode should
-            //!be set correct (once) elsewhere(!), in order to avoid numerous
-            //!superfluous pushing and poping of the MapMode when using
-            //!this class.
+            
+            
+            
+            
+            
+            
 
             const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
             if ( MAP_100TH_MM != eOld )
@@ -587,7 +587,7 @@ SmPrinterAccess::~SmPrinterAccess()
         pRefDev->Pop();
 }
 
-////////////////////////////////////////
+
 
 Printer* SmDocShell::GetPrt()
 {
@@ -595,9 +595,9 @@ Printer* SmDocShell::GetPrt()
 
     if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
-        // Normally the server provides the printer. But if it doesn't provide one (e.g. because
-        // there is no connection) it still can be the case that we know the printer because it
-        // has been passed on by the server in OnDocumentPrinterChanged and being kept temporarily.
+        
+        
+        
         Printer *pPrt = GetDocumentPrinter();
         if ( !pPrt && pTmpPrinter )
             pPrt = pTmpPrinter;
@@ -644,7 +644,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
     SAL_INFO( "starmath", "SmDocShell::SetPrinter" );
 
     delete pPrinter;
-    pPrinter = pNew;    //Transfer ownership
+    pPrinter = pNew;    
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(false);
     Repaint();
@@ -771,7 +771,7 @@ sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
                 SvStorageRef aStorage = new SotStorage( pStream, false );
                 if ( aStorage->IsStream(OUString("Equation Native")) )
                 {
-                    // is this a MathType Storage?
+                    
                     MathType aEquation( aText );
                     if ( true == (bSuccess = (1 == aEquation.Parse( aStorage )) ))
                         Parse();
@@ -825,7 +825,7 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
             )
            )
         {
-            // is this a fabulous math package ?
+            
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLImportWrapper aEquation(xModel);
             sal_uLong nError = aEquation.Import(rMedium);
@@ -844,13 +844,13 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-//------------------------------------------------------------------
+
 
 sal_Bool SmDocShell::Save()
 {
     SAL_INFO( "starmath", "SmDocShell::Save" );
 
-    //! apply latest changes if necessary
+    
     UpdateText();
 
     if ( SfxObjectShell::Save() )
@@ -916,7 +916,7 @@ sal_Bool SmDocShell::SaveAs( SfxMedium& rMedium )
 
     bool bRet = false;
 
-    //! apply latest changes if necessary
+    
     UpdateText();
 
     if ( SfxObjectShell::SaveAs( rMedium ) )
@@ -1049,7 +1049,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_FONT:
         {
-            // get device used to retrieve the FontList
+            
             OutputDevice *pDev = GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
@@ -1258,10 +1258,10 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_GAPHIC_SM:
-            //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
-            //! If nModifyCount gets changed then the call below will implicitly notify
-            //! SmGraphicController::StateChanged and there the window gets invalidated.
-            //! Thus all the 'nModifyCount++' before invalidating this slot.
+            
+            
+            
+            
             rSet.Put(SfxInt16Item(SID_GAPHIC_SM, nModifyCount));
             break;
 
@@ -1365,9 +1365,9 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
     if ( bIsEnabled )
         EnableSetModified( false );
 
-    //TODO/LATER: it's unclear how this interacts with the SFX code
-    // If outplace editing, then dont resize the OutplaceWindow. But the
-    // ObjectShell has to resize. Bug 56470
+    
+    
+    
     bool bUnLockFrame;
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !IsInPlaceActive() && GetFrame() )
     {

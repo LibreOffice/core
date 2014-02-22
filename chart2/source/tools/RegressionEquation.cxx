@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RegressionEquation.hxx"
@@ -112,9 +112,9 @@ private:
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
-        //::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, OUString( '\n' ));
+        
 
-        // override other defaults
+        
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 
@@ -173,7 +173,7 @@ struct StaticRegressionEquationInfo : public rtl::StaticAggregate< uno::Referenc
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -195,14 +195,14 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
 RegressionEquation::~RegressionEquation()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new RegressionEquation( *this ));
 }
 
-// ____ OPropertySet ____
+
 uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -218,14 +218,14 @@ uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticRegressionEquationInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticRegressionEquationInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -254,21 +254,21 @@ void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< ut
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL RegressionEquation::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL RegressionEquation::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void RegressionEquation::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -279,7 +279,7 @@ void RegressionEquation::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ____ XTitle ____
+
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
     throw (uno::RuntimeException)
 {
@@ -313,13 +313,13 @@ uno::Sequence< OUString > RegressionEquation::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( RegressionEquation, lcl_aImplementationName );
 
 using impl::RegressionEquation_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

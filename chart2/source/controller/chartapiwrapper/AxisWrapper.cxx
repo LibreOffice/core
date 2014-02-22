@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AxisWrapper.hxx"
@@ -69,7 +69,7 @@ enum
     PROP_AXIS_MAX,
     PROP_AXIS_MIN,
     PROP_AXIS_STEPMAIN,
-    PROP_AXIS_STEPHELP, //deprecated property use 'StepHelpCount' instead
+    PROP_AXIS_STEPHELP, 
     PROP_AXIS_STEPHELP_COUNT,
     PROP_AXIS_AUTO_MAX,
     PROP_AXIS_AUTO_MIN,
@@ -106,7 +106,7 @@ enum
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-    //Properties for scaling:
+    
     rOutProperties.push_back(
         Property( "Max",
                   PROP_AXIS_MAX,
@@ -135,7 +135,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    //deprecated property use 'StepHelpCount' instead
+    
     rOutProperties.push_back(
         Property( "StepHelp",
                   PROP_AXIS_STEPHELP,
@@ -147,42 +147,42 @@ void lcl_AddPropertiesToVector(
         Property( "AutoMax",
                   PROP_AXIS_AUTO_MAX,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AutoMin",
                   PROP_AXIS_AUTO_MIN,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AutoStepMain",
                   PROP_AXIS_AUTO_STEPMAIN,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AutoStepHelp",
                   PROP_AXIS_AUTO_STEPHELP,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AxisType",
                   PROP_AXIS_TYPE,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), //type com::sun::star::chart::ChartAxisType
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), 
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "TimeIncrement",
                   PROP_AXIS_TIME_INCREMENT,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
@@ -196,17 +196,17 @@ void lcl_AddPropertiesToVector(
         Property( "Logarithmic",
                   PROP_AXIS_LOGARITHMIC,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ReverseDirection",
                   PROP_AXIS_REVERSEDIRECTION,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //todo: this property is missing in the API
+    
     rOutProperties.push_back(
         Property( "Visible",
                   PROP_AXIS_VISIBLE,
@@ -237,10 +237,10 @@ void lcl_AddPropertiesToVector(
         Property( "AutoOrigin",
                   PROP_AXIS_AUTO_ORIGIN,
                   ::getBooleanCppuType(),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //Properties for interval marks:
+    
     rOutProperties.push_back(
         Property( "Marks",
                   PROP_AXIS_MARKS,
@@ -261,7 +261,7 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //Properties for labels:
+    
     rOutProperties.push_back(
         Property( "DisplayLabels",
                   PROP_AXIS_DISPLAY_LABELS,
@@ -324,22 +324,22 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // Properties related to bar charts:
+    
     rOutProperties.push_back(
         Property( "Overlap",
                   PROP_AXIS_OVERLAP,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "GapWidth",
                   PROP_AXIS_GAP_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //Properties for display units:
+    
     rOutProperties.push_back(
         Property( "DisplayUnits",
                   PROP_AXIS_DISPLAY_UNITS,
@@ -347,7 +347,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //Properties for labels:
+    
     rOutProperties.push_back(
         Property( "BuiltInUnit",
                   PROP_AXIS_BUILTINUNIT,
@@ -385,7 +385,7 @@ struct StaticAxisWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -404,7 +404,7 @@ AxisWrapper::~AxisWrapper()
 {
 }
 
-// ____ chart::XAxis ____
+
 Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getAxisTitle() throw (uno::RuntimeException)
 {
     if( !m_xAxisTitle.is() )
@@ -481,7 +481,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMinorGrid() throw (uno
     return m_xMinorGrid;
 }
 
-// ____ XShape ____
+
 awt::Point SAL_CALL AxisWrapper::getPosition()
     throw (uno::RuntimeException)
 {
@@ -509,14 +509,14 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
     OSL_FAIL( "trying to set size of Axis" );
 }
 
-// ____ XShapeDescriptor (base of XShape) ____
+
 OUString SAL_CALL AxisWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return OUString("com.sun.star.chart.ChartAxis");
 }
 
-// ____ XNumberFormatsSupplier ____
+
 uno::Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getNumberFormatSettings()
     throw (uno::RuntimeException)
 {
@@ -554,7 +554,7 @@ void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDim
     }
 }
 
-// ____ XComponent ____
+
 void SAL_CALL AxisWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -582,7 +582,7 @@ void SAL_CALL AxisWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-//ReferenceSizePropertyProvider
+
 void AxisWrapper::updateReferenceSize()
 {
     Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
@@ -632,7 +632,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
     return xAxis;
 }
 
-// WrappedPropertySet
+
 Reference< beans::XPropertySet > AxisWrapper::getInnerPropertySet()
 {
     return Reference< beans::XPropertySet >( this->getAxis(), uno::UNO_QUERY );
@@ -693,10 +693,10 @@ Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( AxisWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

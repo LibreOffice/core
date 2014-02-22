@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "commontimenodecontext.hxx"
@@ -51,7 +51,7 @@ using ::com::sun::star::beans::NamedValue;
 
 namespace oox { namespace ppt {
 
-// BEGIN CUT&PASTE from sd/source/filter/ppt/pptanimations.hxx
+
 struct convert_subtype
 {
     sal_Int32 mnID;
@@ -59,7 +59,7 @@ struct convert_subtype
 };
 static const convert_subtype gConvertArray[] =
 {
-    // fly in
+    
     {   1, "from-top" },
     {   2, "from-right" },
     {   3, "from-top-right" },
@@ -301,19 +301,19 @@ static const preset_maping gPresetMaping[] =
     { 0,0,0 }
 };
 
-// from sd/source/filter/ppt/pptinanimations.cxx
+
 static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType )
 {
     const sal_Char* pStr = 0;
 
     if( (nPresetClass == EffectPresetClass::ENTRANCE) || (nPresetClass == EffectPresetClass::EXIT) )
     {
-        // skip wheel effect
+        
         if( nPresetId != 21 )
         {
             if( nPresetId == 5 )
             {
-                // checkerboard
+                
                 switch( nPresetSubType )
                 {
                 case  5: pStr = "downward"; break;
@@ -322,13 +322,13 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             }
             else if( nPresetId == 17 )
             {
-                // stretch
+                
                 if( nPresetSubType == 10 )
                     pStr = "across";
             }
             else if( nPresetId == 18 )
             {
-                // strips
+                
                 switch( nPresetSubType )
                 {
                 case 3: pStr = "right-to-top"; break;
@@ -361,7 +361,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         return OUString::number( nPresetSubType );
 }
 
-// END
+
 
     CommonTimeNodeContext::CommonTimeNodeContext(
             FragmentHandler2& rParent,
@@ -372,7 +372,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             , mbIterate( false )
     {
         AttributeList attribs( xAttribs );
-        sal_Int32 nInt; // some temporary int value for float conversions
+        sal_Int32 nInt; 
 
         NodePropertyMap & aProps = pNode->getNodeProperties();
         TimeNode::UserDataMap & aUserData = pNode->getUserData();
@@ -390,7 +390,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         }
         aProps[ NP_AUTOREVERSE ] = makeAny( attribs.getBool( XML_autoRev, false ) );
 
-        // TODO
+        
         if( attribs.hasAttribute( XML_bldLvl ) )
         {
             attribs.getInteger( XML_bldLvl, 0 );
@@ -400,7 +400,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             double dPercent = ::oox::drawingml::GetPositiveFixedPercentage( xAttribs->getOptionalValue( XML_decel ) );
             aProps[ NP_DECELERATE ] <<= dPercent;
         }
-        // TODO
+        
         if( attribs.hasAttribute( XML_display ) )
         {
             aProps[ NP_DISPLAY ] <<= attribs.getBool( XML_display, true );
@@ -409,12 +409,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         {
             aProps[ NP_DURATION ] = GetTime( xAttribs->getOptionalValue( XML_dur) );
         }
-        // TODO
+        
         if( attribs.hasAttribute( XML_evtFilter ) )
         {
             xAttribs->getOptionalValue( XML_evtFilter );
         }
-        // ST_TLTimeNodeFillType
+        
         if( attribs.hasAttribute( XML_fill ) )
         {
             nInt = xAttribs->getOptionalValueToken( XML_fill, 0 );
@@ -446,17 +446,17 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         {
             attribs.getUnsigned( XML_grpId, 0 );
         }
-        // ST_TLTimeNodeID
+        
         if( attribs.hasAttribute( XML_id ) )
         {
             sal_uInt32 nId = attribs.getUnsigned( XML_id, 0 );
             pNode->setId( nId );
         }
-        // ST_TLTimeNodeMasterRelation
+        
         nInt = xAttribs->getOptionalValueToken( XML_masterRel, 0 );
         if( nInt )
         {
-            // TODO
+            
             switch(nInt)
             {
             case XML_sameClick:
@@ -466,12 +466,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             }
         }
 
-        // TODO
+        
         if( attribs.hasAttribute( XML_nodePh ) )
         {
             attribs.getBool( XML_nodePh, false );
         }
-        // ST_TLTimeNodeType
+        
         nInt = xAttribs->getOptionalValueToken( XML_nodeType, 0 );
         if( nInt != 0 )
         {
@@ -506,12 +506,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             aUserData[ "node-type" ] <<= nEnum;
         }
 
-        // ST_TLTimeNodePresetClassType
+        
         nInt = xAttribs->getOptionalValueToken( XML_presetClass, 0 );
         if( nInt != 0 )
         {
             sal_Int16 nEffectPresetClass = 0;
-            // TODO put that in a function
+            
             switch( nInt )
             {
             case XML_entr:
@@ -527,7 +527,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                 nEffectPresetClass = EffectPresetClass::MOTIONPATH;
                 break;
             case XML_verb:
-                // TODO check that the value below is correct
+                
                 nEffectPresetClass = EffectPresetClass::OLEACTION;
                 break;
             case XML_mediacall:
@@ -559,18 +559,18 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             aProps[ NP_REPEATCOUNT ] = GetTime( xAttribs->getOptionalValue( XML_repeatCount ) );
         }
         /* see pptinanimation */
-//          aProps[ NP_REPEATCOUNT ] <<= (fCount < ((float)3.40282346638528860e+38)) ? makeAny( (double)fCount ) : makeAny( Timing_INDEFINITE );
+
         if( attribs.hasAttribute( XML_repeatDur ) )
         {
             aProps[ NP_REPEATDURATION ] = GetTime( xAttribs->getOptionalValue( XML_repeatDur ) );
         }
-        // TODO repeatDur is otherwise the same as dur. What shall we do? -- Hub
+        
 
-        // ST_TLTimeNodeRestartType
+        
         nInt = xAttribs->getOptionalValueToken( XML_restart, 0 );
         if( nInt != 0 )
         {
-            // TODO put that in a function
+            
             sal_Int16 nEnum;
             switch( nInt )
             {
@@ -589,11 +589,11 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             }
             aProps[ NP_RESTART ] <<= (sal_Int16)nEnum;
         }
-        // ST_Percentage TODO
+        
         xAttribs->getOptionalValue( XML_spd /*"10000" */ );
-        // ST_TLTimeNodeSyncType TODO
+        
         xAttribs->getOptionalValue( XML_syncBehavior );
-        // TODO (string)
+        
         xAttribs->getOptionalValue( XML_tmFilter );
     }
 
@@ -633,7 +633,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             sal_Int32 nVal = rAttribs.getToken( XML_type, XML_el );
             if( nVal != 0 )
             {
-                // TODO put that in a function
+                
                 sal_Int16 nEnum;
                 switch( nVal )
                 {
@@ -647,15 +647,15 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                     nEnum = TextAnimationType::BY_WORD;
                     break;
                 default:
-                    // default is BY_WORD. See Ppt97Animation::GetTextAnimationType()
-                    // in sd/source/filter/ppt/ppt97animations.cxx:297
+                    
+                    
                     nEnum = TextAnimationType::BY_WORD;
                     break;
                 }
                 mpNode->getNodeProperties()[ NP_ITERATETYPE ] <<= nEnum;
             }
-            // in case of exception we ignore the whole tag.
-            // TODO what to do with this
+            
+            
             /*bool bBackwards =*/ rAttribs.getBool( XML_backwards, false );
             mbIterate = true;
             return this;
@@ -664,7 +664,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             if( mbIterate )
             {
                 double fTime = rAttribs.getUnsigned( XML_val, 0 );
-                // time in ms. property is in % TODO
+                
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fTime;
             }
             return this;

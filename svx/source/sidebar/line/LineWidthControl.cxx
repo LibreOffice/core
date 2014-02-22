@@ -103,18 +103,18 @@ void LineWidthControl::Paint(const Rectangle& rect)
 
 void LineWidthControl::Initialize()
 {
-    maVSWidth.SetStyle( maVSWidth.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );// WB_NAMEFIELD | WB_ITEMBORDER |WB_DOUBLEBORDER | WB_NONEFIELD |
+    maVSWidth.SetStyle( maVSWidth.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );
     //for high contrast wj
     if(GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         maVSWidth.SetColor(GetSettings().GetStyleSettings().GetMenuColor());
-    //  maBorder.SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
+    
         maFTWidth.SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
     }
     else
     {
         maVSWidth.SetColor(COL_WHITE);
-    //  maBorder.SetBackground(Wallpaper(COL_WHITE));
+    
         maFTWidth.SetBackground(Wallpaper(COL_WHITE));
     }
 
@@ -360,6 +360,6 @@ long LineWidthControl::GetTmpCustomWidth()
 
 
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+

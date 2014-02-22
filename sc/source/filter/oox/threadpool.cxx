@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "threadpool.hxx"
@@ -46,11 +46,11 @@ public:
             if( mpPool->mbTerminate )
                 break;
 
-            aGuard.clear(); // unlock
+            aGuard.clear(); 
 
             maNewWork.wait();
 
-            aGuard.reset(); // lock
+            aGuard.reset(); 
 
             pRet = mpPool->popWork();
         }
@@ -59,14 +59,14 @@ public:
     }
 
     //
-    // Why a condition per worker thread - you may ask.
+    
     //
-    // Unfortunately the Windows synchronisation API that we wrap
-    // is horribly inadequate cf.
-    //    http://www.cs.wustl.edu/~schmidt/win32-cv-1.html
-    // The existing osl::Condition API should only ever be used
-    // between one producer and one consumer thread to avoid the
-    // lost wakeup problem.
+    
+    
+    
+    
+    
+    
     //
     void signalNewWork()
     {
@@ -92,8 +92,8 @@ ThreadPool::~ThreadPool()
     waitUntilWorkersDone();
 }
 
-/// wait until all the workers have completed and
-/// terminate all threads
+
+
 void ThreadPool::waitUntilWorkersDone()
 {
     waitUntilEmpty();
@@ -109,7 +109,7 @@ void ThreadPool::waitUntilWorkersDone()
                 == maWorkers.end());
         xWorker->signalNewWork();
         aGuard.clear();
-        { // unlocked
+        { 
             xWorker->join();
             xWorker.clear();
         }
@@ -121,7 +121,7 @@ void ThreadPool::pushTask( ThreadTask *pTask )
 {
     osl::MutexGuard aGuard( maGuard );
     maTasks.insert( maTasks.begin(), pTask );
-    // horrible beyond belief:
+    
     for( size_t i = 0; i < maWorkers.size(); i++ )
         maWorkers[ i ]->signalNewWork();
     maTasksEmpty.reset();
@@ -145,7 +145,7 @@ void ThreadPool::waitUntilEmpty()
     osl::ResettableMutexGuard aGuard( maGuard );
 
     if( maWorkers.empty() )
-    { // no threads at all -> execute the work in-line
+    { 
         ThreadTask *pTask;
         while ( ( pTask = popWork() ) )
         {

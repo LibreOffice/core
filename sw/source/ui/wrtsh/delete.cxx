@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <wrtsh.hxx>
 #include <crsskip.hxx>
 #include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx>
-// #134369#
+
 #include <view.hxx>
 #include <drawbase.hxx>
 
@@ -44,7 +44,7 @@ inline void SwWrtShell::CloseMark( bool bOkFlag )
     EndAllAction();
 }
 
-// #i23725#
+
 bool SwWrtShell::TryRemoveIndent()
 {
     bool bResult = false;
@@ -88,7 +88,7 @@ long SwWrtShell::DelLine()
 {
     SwActContext aActContext(this);
     ResetCursorStack();
-        // remember the old cursor
+        
     Push();
     ClearMark();
     SwCrsrShell::LeftMargin();
@@ -126,17 +126,17 @@ long SwWrtShell::DelToEndOfLine()
 
 long SwWrtShell::DelLeft()
 {
-    // If it's a Fly, throw it away
+    
     int nSelType = GetSelectionType();
     const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW;
     if( nCmp & nSelType )
     {
-        // #108205# Remember object's position.
+        
         Point aTmpPt = GetObjRect().TopLeft();
 
         DelSelectedObj();
 
-        // #108205# Set cursor to remembered position.
+        
         SetCrsr(&aTmpPt);
 
         LeaveSelFrmMode();
@@ -152,13 +152,13 @@ long SwWrtShell::DelLeft()
         return 1L;
     }
 
-    // If a selection exists, erase this
+    
     if ( IsSelection() )
     {
         if( !IsBlockMode() || HasSelection() )
         {
-            //OS: Once again Basic: SwActContext must be leaved
-            //before EnterStdMode!
+            
+            
             {
                 SwActContext aActContext(this);
                 ResetCursorStack();
@@ -179,25 +179,25 @@ long SwWrtShell::DelLeft()
             EnterStdMode();
     }
 
-    // JP 29.06.95: never erase a table standing in front of it.
+    
     bool bSwap = false;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
 
     if( SwCrsrShell::IsSttPara())
     {
-        // #i4032# Don't actually call a 'delete' if we
-        // changed the table cell, compare DelRight().
+        
+        
         const SwStartNode * pSNdOld = pWasInTblNd ?
                                       GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                       0;
 
-        // If the cursor is at the beginning of a paragraph, try to step
-        // backwards. On failure we are done.
+        
+        
         if( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
             return 0;
 
-        // If the cursor entered or left a table (or both) we are done. No step
-        // back.
+        
+        
         const SwTableNode* pIsInTblNd = SwCrsrShell::IsCrsrInTbl();
         if( pIsInTblNd != pWasInTblNd )
             return 0;
@@ -206,8 +206,8 @@ long SwWrtShell::DelLeft()
                                      GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                      0;
 
-        // #i4032# Don't actually call a 'delete' if we
-        // changed the table cell, compare DelRight().
+        
+        
         if ( pSNdOld != pSNdNew )
             return 0;
 
@@ -230,8 +230,8 @@ long SwWrtShell::DelLeft()
 
 long SwWrtShell::DelRight()
 {
-        // Will be or'ed, if a tableselection exists;
-        // will here be implemented on nsSelectionType::SEL_TBL
+        
+        
     long nRet = 0;
     int nSelection = GetSelectionType();
     if(nSelection & nsSelectionType::SEL_TBL_CELLS)
@@ -247,13 +247,13 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_TXT:
     case nsSelectionType::SEL_TBL:
     case nsSelectionType::SEL_NUM:
-            //  If a selection exists, erase it.
+            
         if( IsSelection() )
         {
             if( !IsBlockMode() || HasSelection() )
             {
-                //OS: And once again Basic: SwActContext must be
-                //leaved before EnterStdMode !
+                
+                
                 {
                     SwActContext aActContext(this);
                     ResetCursorStack();
@@ -280,7 +280,7 @@ long SwWrtShell::DelRight()
         if( nsSelectionType::SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
             SwCrsrShell::IsEndPara() )
         {
-            // save cursor
+            
             SwCrsrShell::Push();
 
             bool bDelFull = false;
@@ -290,7 +290,7 @@ long SwWrtShell::DelRight()
                 bDelFull = pCurrTblNd && pCurrTblNd != pWasInTblNd;
             }
 
-            // restore cursor
+            
             SwCrsrShell::Pop( sal_False );
 
             if( bDelFull )
@@ -302,18 +302,18 @@ long SwWrtShell::DelRight()
         }
 
         {
-            // #108049# Save the startnode of the current cell
+            
             const SwStartNode * pSNdOld;
             pSNdOld = GetSwCrsr()->GetNode()->
                 FindTableBoxStartNode();
 
             if ( SwCrsrShell::IsEndPara() )
             {
-                // #i41424# Introduced a couple of
-                // Push()-Pop() pairs here. The reason for this is that a
-                // Right()-Left() combination does not make sure, that
-                // the cursor will be in its initial state, because there
-                // may be a numbering in front of the next paragraph.
+                
+                
+                
+                
+                
                 SwCrsrShell::Push();
 
                 if ( SwCrsrShell::Right(1, CRSR_SKIP_CHARS) )
@@ -336,7 +336,7 @@ long SwWrtShell::DelRight()
                     }
                 }
 
-                // restore cursor
+                
                 SwCrsrShell::Pop( sal_False );
             }
         }
@@ -354,21 +354,21 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_DRW_TXT:
     case nsSelectionType::SEL_DRW_FORM:
         {
-            // #108205# Remember object's position.
+            
             Point aTmpPt = GetObjRect().TopLeft();
 
             DelSelectedObj();
 
-            // #108205# Set cursor to remembered position.
+            
             SetCrsr(&aTmpPt);
 
             LeaveSelFrmMode();
             UnSelectFrm();
-            // #134369#
+            
             OSL_ENSURE( !IsFrmSelected(),
                     "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
-            // #134369#
-            // leave draw mode, if necessary.
+            
+            
             {
                 if (GetView().GetDrawFuncPtr())
                 {
@@ -382,8 +382,8 @@ long SwWrtShell::DelRight()
             }
         }
 
-        // #134369#
-        // <IsFrmSelected()> can't be true - see above.
+        
+        
         {
             nSelection = GetSelectionType();
             if ( nsSelectionType::SEL_FRM & nSelection ||
@@ -437,9 +437,9 @@ long SwWrtShell::DelToStartOfPara()
     return nRet;
 }
 
-// All erase operations should work with Find instead with
-// Nxt-/PrvDelim, because the latter works with Wrap Around
-// -- that's probably not wished.
+
+
+
 
 long SwWrtShell::DelToStartOfSentence()
 {
@@ -457,8 +457,8 @@ long SwWrtShell::DelToEndOfSentence()
         return 0;
     OpenMark();
     long nRet(0);
-    // fdo#60967: special case that is documented in help: delete
-    // paragraph following table if cursor is at end of last cell in table
+    
+    
     if (IsEndOfTable())
     {
         Push();
@@ -467,7 +467,7 @@ long SwWrtShell::DelToEndOfSentence()
         {
             SetMark();
             SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
-            if (!IsEndOfDoc()) // do not delete last paragraph in body text
+            if (!IsEndOfDoc()) 
             {
                 nRet = DelFullPara() ? 1 : 0;
             }
@@ -491,9 +491,9 @@ long SwWrtShell::DelNxtWord()
     EnterStdMode();
     SetMark();
     if(IsEndWrd() && !IsSttWrd())
-        _NxtWrdForDelete(); // #i92468#
+        _NxtWrdForDelete(); 
     if(IsSttWrd() || IsEndPara())
-        _NxtWrdForDelete(); // #i92468#
+        _NxtWrdForDelete(); 
     else
         _EndWrd();
 
@@ -515,13 +515,13 @@ long SwWrtShell::DelPrvWord()
     EnterStdMode();
     SetMark();
     if ( !IsSttWrd() ||
-         !_PrvWrdForDelete() ) // #i92468#
+         !_PrvWrdForDelete() ) 
     {
         if( IsEndWrd() )
         {
-            if ( _PrvWrdForDelete() ) // #i92468#
+            if ( _PrvWrdForDelete() ) 
             {
-                // skip over all spaces
+                
                 short n = 0;
                 while( ' ' == GetChar( sal_False, n ))
                     --n;
@@ -531,7 +531,7 @@ long SwWrtShell::DelPrvWord()
             }
         }
         else if( IsSttPara())
-            _PrvWrdForDelete(); // #i92468#
+            _PrvWrdForDelete(); 
         else
             _SttWrd();
     }

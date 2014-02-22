@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterScrollBar.hxx"
@@ -43,7 +43,7 @@ const static double gnScrollBarGap (10);
 
 namespace sdext { namespace presenter {
 
-//===== PresenterScrollBar::MousePressRepeater ================================
+
 
 class PresenterScrollBar::MousePressRepeater
     : public ::boost::enable_shared_from_this<MousePressRepeater>
@@ -64,7 +64,7 @@ private:
     PresenterScrollBar::Area meMouseArea;
 };
 
-//===== PresenterScrollBar ====================================================
+
 
 boost::weak_ptr<PresenterBitmapContainer> PresenterScrollBar::mpSharedBitmaps;
 
@@ -121,7 +121,7 @@ PresenterScrollBar::PresenterScrollBar (
                 sal_False,
                 sal_False);
 
-        // Make the background transparent.  The slide show paints its own background.
+        
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);
         if (xPeer.is())
         {
@@ -338,7 +338,7 @@ void PresenterScrollBar::Paint (
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -364,7 +364,7 @@ void SAL_CALL PresenterScrollBar::windowHidden (const css::lang::EventObject& rE
     (void)rEvent;
 }
 
-//----- XPaintListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -383,7 +383,7 @@ void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEven
     }
 }
 
-//----- XMouseListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -428,7 +428,7 @@ void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEven
     mpMousePressRepeater->Stop();
 }
 
-//----- XMouseMotionListener --------------------------------------------------
+
 
 void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -465,7 +465,7 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
     }
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
@@ -474,7 +474,7 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
         mxWindow = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 
 geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) const
 {
@@ -636,7 +636,7 @@ bool PresenterScrollBar::IsDisabled (const Area eArea) const
     return ! maEnabledState[eArea];
 }
 
-//===== PresenterVerticalScrollBar ============================================
+
 
 PresenterVerticalScrollBar::PresenterVerticalScrollBar (
     const Reference<XComponentContext>& rxComponentContext,
@@ -732,7 +732,7 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
     {
         maBox[Thumb] = maBox[Pager];
 
-        // Set up the enabled/disabled states.
+        
         maEnabledState[PrevButton] = false;
         maEnabledState[PagerUp] = false;
         maEnabledState[NextButton] = false;
@@ -748,7 +748,7 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
             aWindowBox.Width,
                 (nThumbPosition+nThumbSize) / mnTotalSize * nPagerHeight);
 
-        // Set up the enabled/disabled states.
+        
         maEnabledState[PrevButton] = nThumbPosition>0;
         maEnabledState[PagerUp] = nThumbPosition>0;
         maEnabledState[NextButton] = nThumbPosition+nThumbSize < mnTotalSize;
@@ -805,7 +805,7 @@ void PresenterVerticalScrollBar::PaintComposite(
     aBox.X2 += aWindowBox.X;
     aBox.Y2 += aWindowBox.Y;
 
-    // Get bitmaps and sizes.
+    
 
     PresenterUIPainter::PaintVerticalBitmapComposite(
         mxCanvas,
@@ -818,7 +818,7 @@ void PresenterVerticalScrollBar::PaintComposite(
         GetBitmap(eArea, rpEndBitmaps));
 }
 
-//===== PresenterScrollBar::MousePressRepeater ================================
+
 
 PresenterScrollBar::MousePressRepeater::MousePressRepeater (
     const ::rtl::Reference<PresenterScrollBar>& rpScrollBar)
@@ -840,10 +840,10 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
 
     if (mnMousePressRepeaterTaskId == PresenterTimer::NotAValidTaskId)
     {
-        // Execute key press operation at least this one time.
+        
         Execute();
 
-        // Schedule repeated executions.
+        
         mnMousePressRepeaterTaskId = PresenterTimer::ScheduleRepeatedTask (
             ::boost::bind(&PresenterScrollBar::MousePressRepeater::Callback, shared_from_this(), _1),
             500000000,
@@ -851,7 +851,7 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
     }
     else
     {
-        // There is already an active repeating task.
+        
     }
 }
 
@@ -915,6 +915,6 @@ void PresenterScrollBar::MousePressRepeater::Execute (void)
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

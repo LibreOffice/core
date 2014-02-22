@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -38,7 +38,7 @@ ScDefaultsOptions::~ScDefaultsOptions()
 void ScDefaultsOptions::SetDefaults()
 {
     nInitTabCount  = 1;
-    aInitTabPrefix = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
+    aInitTabPrefix = ScGlobal::GetRscString(STR_TABLE_DEF); 
 }
 
 ScDefaultsOptions& ScDefaultsOptions::operator=( const ScDefaultsOptions& rCpy )
@@ -104,8 +104,8 @@ Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Sheet/SheetCount", // SCDEFAULTSOPT_TAB_COUNT
-        "Sheet/SheetPrefix" // SCDEFAULTSOPT_TAB_PREFIX
+        "Sheet/SheetCount", 
+        "Sheet/SheetPrefix" 
     };
     Sequence<OUString> aNames(SCDEFAULTSOPT_COUNT);
     OUString* pNames = aNames.getArray();

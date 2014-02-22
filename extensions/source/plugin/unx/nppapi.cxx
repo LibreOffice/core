@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -246,7 +246,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
                 sal_uInt32 nRanges      = pMessage->GetUINT32();
                 sal_uInt32* pArray      = (sal_uInt32*)pMessage->GetBytes();
-                // build ranges table
+                
                 NPByteRange* pFirst = new NPByteRange;
                 NPByteRange* pRun   = pFirst;
                 for( sal_uInt32 n = 0; n < nRanges; n++ )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itemiter.hxx>
@@ -35,7 +35,7 @@
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-// OD 26.06.2003 #108784#
+
 #include <dcontact.hxx>
 #include <ndole.hxx>
 
@@ -46,7 +46,7 @@ SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
 
 SwUndoFlyBase::~SwUndoFlyBase()
 {
-    if( bDelFmt )       // delete during an Undo?
+    if( bDelFmt )       
         delete pFrmFmt;
 }
 
@@ -54,11 +54,11 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
 
-    // add again into array
+    
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.push_back( pFrmFmt );
 
-    // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
+    
     if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
     {
         SwDrawContact* pDrawContact =
@@ -66,8 +66,8 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         if ( pDrawContact )
         {
             pDrawContact->InsertMasterIntoDrawPage();
-            // #i40845# - follow-up of #i35635#
-            // move object to visible layer
+            
+            
             pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
         }
     }
@@ -90,22 +90,22 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         aAnchor.SetAnchor( &aNewPos );
     }
 
-    pFrmFmt->SetFmtAttr( aAnchor );     // reset anchor
+    pFrmFmt->SetFmtAttr( aAnchor );     
 
     if( RES_DRAWFRMFMT != pFrmFmt->Which() )
     {
-        // get Content and reset ContentAttribute
+        
         SwNodeIndex aIdx( pDoc->GetNodes() );
         RestoreSection( pDoc, &aIdx, SwFlyStartNode );
         pFrmFmt->SetFmtAttr( SwFmtCntnt( aIdx.GetNode().GetStartNode() ));
     }
 
-    // Set InCntntAttribute not until there is content!
-    // Otherwise the layout would format the Fly beforehand but would not find
-    // content; this happened with graphics from the internet.
+    
+    
+    
     if (FLY_AS_CHAR == nRndId)
     {
-        // there must be at least the attribute in a TextNode
+        
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
         OSL_ENSURE( pCNd->IsTxtNode(), "no Text Node at position." );
         SwFmtFlyCnt aFmt( pFrmFmt );
@@ -147,10 +147,10 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
-    bDelFmt = sal_True;                 // delete Format in DTOR
-    pFrmFmt->DelFrms();                 // destroy Frms
+    bDelFmt = sal_True;                 
+    pFrmFmt->DelFrms();                 
 
-    // all Uno objects should now log themselves off
+    
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFrmFmt );
         pFrmFmt->ModifyNotification( &aMsgHint, &aMsgHint );
@@ -158,14 +158,14 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     if ( RES_DRAWFRMFMT != pFrmFmt->Which() )
     {
-        // if there is content than save it
+        
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
         OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
 
         SaveSection( pDoc, *rCntnt.GetCntntIdx() );
         ((SwFmtCntnt&)rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
     }
-    // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
+    
     else if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
     {
         SwDrawContact* pDrawContact =
@@ -178,7 +178,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     const SwPosition* pPos = rAnchor.GetCntntAnchor();
-    // The positions in Nodes array got shifted.
+    
     nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
     if (FLY_AS_CHAR == nRndId)
     {
@@ -188,10 +188,10 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         OSL_ENSURE( pTxtNd, "Kein Textnode gefunden" );
         SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
             pTxtNd->GetTxtAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
-        // attribute is still in TextNode, delete
+        
         if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFrmFmt )
         {
-            // Pointer to 0, do not delete
+            
             ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
             SwIndex aIdx( pPos->nContent );
             pTxtNd->EraseText( aIdx, 1 );
@@ -211,10 +211,10 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         nNdPgPos = rAnchor.GetPageNum();
     }
 
-    pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // delete anchor
+    pFrmFmt->ResetFmtAttr( RES_ANCHOR );        
 
 
-    // delete from array
+    
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));
 }
@@ -257,7 +257,7 @@ void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc(rContext.GetDoc());
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // no content
+    if( rCntnt.GetCntntIdx() )  
     {
         bool bRemoveIdx = true;
         if( mnCrsrSaveIndexPara > 0 )
@@ -292,7 +292,7 @@ void SwUndoInsLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    // get anchor and reset it
+    
     SwFmtAnchor aAnchor( pFrmFmt->GetAnchor() );
     if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
         (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
@@ -331,16 +331,16 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
     (void) pFlyFmt;
 }
 
-// #111827#
+
 OUString SwUndoInsLayFmt::GetComment() const
 {
     OUString aResult;
 
-    // HACK: disable caching:
-    // the SfxUndoManager calls GetComment() too early: the pFrmFmt does not
-    // have a SwDrawContact yet, so it will fall back to SwUndo::GetComment(),
-    // which sets pComment to a wrong value.
-//    if (! pComment)
+    
+    
+    
+    
+
     if (true)
     {
         /*
@@ -383,7 +383,7 @@ lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
         }
         else if (pNoTxtNode && pNoTxtNode->IsOLENode())
         {
-            // surprisingly not UNDO_DELOLE, which does not seem to work
+            
             return UNDO_DELETE;
         }
     }
@@ -432,7 +432,7 @@ void SwUndoDelLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc(rContext.GetDoc());
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // no content
+    if( rCntnt.GetCntntIdx() )  
     {
         RemoveIdxFromSection(rDoc, rCntnt.GetCntntIdx()->GetIndex());
     }
@@ -443,7 +443,7 @@ void SwUndoDelLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoDelLayFmt::RedoForRollback()
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // no content
+    if( rCntnt.GetCntntIdx() )  
         RemoveIdxFromSection( *pFrmFmt->GetDoc(),
                                 rCntnt.GetCntntIdx()->GetIndex() );
 
@@ -494,7 +494,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
                     ((SwStartNode*)pNd)->GetStartNodeType() )
                 : !pNd->IsTxtNode() )
         {
-            pNd = 0;    // invalid position
+            pNd = 0;    
         }
         else
         {
@@ -504,7 +504,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
             {
                 if (nCntnt > static_cast<SwTxtNode*>(pNd)->GetTxt().getLength())
                 {
-                    pNd = 0;    // invalid position
+                    pNd = 0;    
                 }
                 else
                 {
@@ -519,7 +519,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
 
         if( !pNd )
         {
-            // invalid position - assign first page
+            
             rAnchor.SetType( FLY_AT_PAGE );
             rAnchor.SetPageNum( 1 );
         }
@@ -532,7 +532,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    // Is the new Format still existent?
+    
     if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmt*)pOldFmt ) )
     {
         if( bAnchorChgd )
@@ -561,10 +561,10 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
             const SwFmtAnchor& rOldAnch = pFrmFmt->GetAnchor();
             if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
             {
-                // With InCntnts it's tricky: the text attribute needs to be
-                // deleted. Unfortunately, this not only destroys the Frms but
-                // also the format. To prevent that, first detach the
-                // connection between attribute and format.
+                
+                
+                
+                
                 const SwPosition *pPos = rOldAnch.GetCntntAnchor();
                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                 OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
@@ -577,12 +577,12 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
                             "Wrong TxtFlyCnt-Hint." );
                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-                // Connection is now detached, therefore the attribute can be
-                // deleted
+                
+                
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
 
-            // reposition anchor
+            
             SwFmtAnchor aNewAnchor( (RndStdIds) nOldAnchorTyp );
             GetAnchor( aNewAnchor, nOldNode, nOldCntnt );
             pFrmFmt->SetFmtAttr( aNewAnchor );
@@ -605,7 +605,7 @@ void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    // Is the new Format still existent?
+    
     if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmt*)pNewFmt ) )
     {
 
@@ -628,10 +628,10 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 {
     if( pItem && pItem != GetDfltAttr( nWhich ) )
     {
-        // Special treatment for this anchor
+        
         if( RES_ANCHOR == nWhich )
         {
-            // only keep the first change
+            
             OSL_ENSURE( !bAnchorChgd, "multiple changes of an anchor are not allowed!" );
 
             bAnchorChgd = sal_True;

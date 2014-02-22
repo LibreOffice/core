@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartDataWrapper.hxx"
@@ -103,7 +103,7 @@ uno::Sequence< uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const uno::Se
     return aRet;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -407,14 +407,14 @@ ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > sp
 
 ChartDataWrapper::~ChartDataWrapper()
 {
-    // @todo: implement XComponent and call this in dispose().  In the DTOR the
-    // ref-count is 0, thus creating a stack reference to this calls the DTOR at
-    // the end of the block recursively
-//     uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-//     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
+    
+    
+    
+
+
 }
 
-// ____ XChartDataArray (read)____
+
 Sequence< Sequence< double > > SAL_CALL ChartDataWrapper::getData()
     throw (uno::RuntimeException)
 {
@@ -440,7 +440,7 @@ Sequence< OUString > SAL_CALL ChartDataWrapper::getColumnDescriptions()
     return Sequence< OUString > ();
 }
 
-// ____ XComplexDescriptionAccess (read) ____
+
 Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexRowDescriptions() throw (uno::RuntimeException)
 {
     initDataAccess();
@@ -456,7 +456,7 @@ Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDesc
     return Sequence< Sequence< OUString > >();
 }
 
-// ____ XAnyDescriptionAccess (read) ____
+
 Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyRowDescriptions() throw (uno::RuntimeException)
 {
     initDataAccess();
@@ -472,7 +472,7 @@ Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescript
     return Sequence< Sequence< uno::Any > >();
 }
 
-// ____ XDateCategories (read) ____
+
 Sequence< double > SAL_CALL ChartDataWrapper::getDateCategories() throw (uno::RuntimeException)
 {
     initDataAccess();
@@ -482,7 +482,7 @@ Sequence< double > SAL_CALL ChartDataWrapper::getDateCategories() throw (uno::Ru
     return Sequence< double >();
 }
 
-// ____ XChartDataArray (write)____
+
 void SAL_CALL ChartDataWrapper::setData( const Sequence< Sequence< double > >& rData )
     throw (uno::RuntimeException)
 {
@@ -502,7 +502,7 @@ void SAL_CALL ChartDataWrapper::setColumnDescriptions( const Sequence< OUString 
     applyData( aOperator );
 }
 
-// ____ XComplexDescriptionAccess (write) ____
+
 void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& rRowDescriptions ) throw (uno::RuntimeException)
 {
     lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
@@ -514,7 +514,7 @@ void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Se
     applyData( aOperator );
 }
 
-// ____ XAnyDescriptionAccess (write) ____
+
 void SAL_CALL ChartDataWrapper::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& rRowDescriptions ) throw (uno::RuntimeException)
 {
     lcl_AnyRowDescriptionsOperator aOperator( rRowDescriptions );
@@ -526,7 +526,7 @@ void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequen
     applyData( aOperator );
 }
 
-// ____ XDateCategories (write) ____
+
 void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException)
 {
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
@@ -536,7 +536,7 @@ void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDa
     DiagramHelper::switchToDateCategories( xChartDoc );
 }
 
-// ____ XChartData (base of XChartDataArray) ____
+
 void SAL_CALL ChartDataWrapper::addChartDataChangeEventListener(
     const uno::Reference<
         ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
@@ -567,7 +567,7 @@ sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
         || ::rtl::math::isInf( nNumber );
 }
 
-// ____ XComponent ____
+
 void SAL_CALL ChartDataWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -589,7 +589,7 @@ void SAL_CALL ChartDataWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ____ XEventListener ____
+
 void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
@@ -620,7 +620,7 @@ void ChartDataWrapper::fireChartDataChangeEvent(
 
 void ChartDataWrapper::switchToInternalDataProvider()
 {
-    //create an internal data provider that is connected to the model
+    
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( xChartDoc.is() )
         xChartDoc->createInternalDataProvider( true /*bCloneExistingData*/ );
@@ -636,7 +636,7 @@ void ChartDataWrapper::initDataAccess()
         m_xDataAccess = Reference< XAnyDescriptionAccess >( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     else
     {
-        //create a separate "internal data provider" that is not connected to the model
+        
         m_xDataAccess = Reference< XAnyDescriptionAccess >( ChartModelHelper::createInternalDataProvider(
             xChartDoc, false /*bConnectToModel*/ ), uno::UNO_QUERY_THROW );
     }
@@ -644,12 +644,12 @@ void ChartDataWrapper::initDataAccess()
 
 void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 {
-    //bool bSetValues, bool bSetRowDescriptions, bool bSetColumnDescriptions
+    
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( !xChartDoc.is() )
         return;
 
-    // remember some diagram properties to reset later
+    
     sal_Bool bStacked = sal_False;
     sal_Bool bPercent = sal_False;
     sal_Bool bDeep = sal_False;
@@ -663,7 +663,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         xDiaProp->getPropertyValue("Deep") >>= bDeep;
     }
 
-    //detect arguments for the new data source
+    
     OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
@@ -681,10 +681,10 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
-    // /-- locked controllers
+    
     ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
 
-    // create and attach new data source
+    
     switchToInternalDataProvider();
     rDataOperator.apply(m_xDataAccess);
     uno::Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
@@ -697,7 +697,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     if( xDia.is() )
         xDia->setDiagramData( xSource, aArguments );
 
-    //correct stacking mode
+    
     if( bStacked || bPercent || bDeep )
     {
         StackMode eStackMode = StackMode_Y_STACKED;
@@ -708,12 +708,12 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         DiagramHelper::setStackMode( xDia, eStackMode );
     }
 
-    // notify listeners
+    
     ::com::sun::star::chart::ChartDataChangeEvent aEvent(
         static_cast< ::cppu::OWeakObject* >( this ),
         ::com::sun::star::chart::ChartDataChangeType_ALL, 0, 0, 0, 0 );
     fireChartDataChangeEvent( aEvent );
-    // \-- locked controllers
+    
 }
 
 uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
@@ -725,10 +725,10 @@ uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ChartDataWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

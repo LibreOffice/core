@@ -96,7 +96,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
     ApplyShadow(pFrameStyle);
     ApplyBackGround(pFrameStyle);
     ApplyWatermark(pFrameStyle);
-//  ApplyBackColor(pFrameStyle);
+
     ApplyProtect(pFrameStyle);
     ApplyTextDir(pFrameStyle);
     ApplyPosType(pFrameStyle);
@@ -647,7 +647,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             if(pContainer && pContainer->IsPage())//in page
             {
                 //eAnchor = enumXFAnchorPage;
-                eAnchor = enumXFAnchorChar;// to character
+                eAnchor = enumXFAnchorChar;
             }
             else if(pContainer && pContainer->IsFrame()) //in frame
             {

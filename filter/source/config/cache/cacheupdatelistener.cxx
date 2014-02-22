@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,11 +49,11 @@ CacheUpdateListener::~CacheUpdateListener()
 
 void CacheUpdateListener::startListening()
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
     aLock.clear();
-    // <- SAFE
+    
 
     if (!xNotifier.is())
         return;
@@ -66,11 +66,11 @@ void CacheUpdateListener::startListening()
 
 void CacheUpdateListener::stopListening()
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
     aLock.clear();
-    // <- SAFE
+    
 
     if (!xNotifier.is())
         return;
@@ -84,17 +84,17 @@ void CacheUpdateListener::stopListening()
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    // disposed ?
+    
     if ( ! m_xConfig.is())
         return;
 
     FilterCache::EItemType                             eType = m_eConfigType;
 
     aLock.clear();
-    // <- SAFE
+    
 
     OUStringList lChangedItems;
     sal_Int32    c = aEvent.Changes.getLength();
@@ -161,15 +161,15 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         }
         catch(const css::container::NoSuchElementException&)
             {
-                // can be ignored! Because we must be aware that
-                // sItem was removed from the configuration and we forced an update of the cache.
-                // But we know, that the cache is up-to-date know and has thrown this exception afterwards .-)
+                
+                
+                
             }
-        // NO FLUSH! Otherwise we start a never ending story here .-)
+        
         bNotifyRefresh = sal_True;
     }
 
-    // notify sfx cache about the changed filter cache .-)
+    
     if (bNotifyRefresh)
     {
         css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -184,15 +184,15 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
     aLock.clear();
-    // <- SAFE
+    
 }
 
-    } // namespace config
-} // namespace filter
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

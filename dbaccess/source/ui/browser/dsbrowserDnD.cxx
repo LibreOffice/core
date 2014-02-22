@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbexchange.hxx"
@@ -78,7 +78,7 @@ namespace dbaui
             else
                 pData = new ODataClipboard(aDSName, _nCommandType, aName, getNumberFormatter(), getORB());
 
-            // the owner ship goes to ODataClipboards
+            
             return pData;
         }
         catch(const SQLException& )
@@ -93,12 +93,12 @@ namespace dbaui
     }
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
-        // check if we're a table or query container
+        
         SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
 
-        if ( pHitEntry ) // no drop if no entry was hit ....
+        if ( pHitEntry ) 
         {
-            // it must be a container
+            
             EntryType eEntryType = getEntryType( pHitEntry );
             SharedConnection xConnection;
             if ( eEntryType == etTableContainer && ensureConnection( pHitEntry, xConnection ) && xConnection.is() )
@@ -106,7 +106,7 @@ namespace dbaui
                 Reference<XChild> xChild(xConnection,UNO_QUERY);
                 Reference<XStorable> xStore;
                 xStore = Reference<XStorable>( xChild.is() ? getDataSourceOrModel(xChild->getParent()) : Reference<XInterface>(),UNO_QUERY );
-                // check for the concrete type
+                
                 if ( xStore.is() && !xStore->isReadonly() && ::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,sal_True)) != _rFlavors.end())
                     return DND_ACTION_COPY;
             }
@@ -121,13 +121,13 @@ namespace dbaui
         if (!isContainer(eEntryType))
         {
             OSL_FAIL("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
-                // queryDrop shoud not have allowed us to reach this situation ....
+                
             return DND_ACTION_NONE;
         }
-        // a TransferableDataHelper for accessing the dropped data
+        
         TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
-        // reset the data of the previous async drop (if any)
+        
         if ( m_nAsyncDrop )
             Application::RemoveUserEvent(m_nAsyncDrop);
 
@@ -140,14 +140,14 @@ namespace dbaui
         m_aAsyncDrop.pDroppedAt     = NULL;
         m_aAsyncDrop.aUrl           = OUString();
 
-        // loop through the available formats and see what we can do ...
-        // first we have to check if it is our own format, if not we have to copy the stream :-(
+        
+        
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
         {
             m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
             m_aAsyncDrop.pDroppedAt     = pHitEntry;
 
-            // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+            
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
             return DND_ACTION_COPY;
         }
@@ -161,7 +161,7 @@ namespace dbaui
             {
                 m_aAsyncDrop.pDroppedAt = pHitEntry;
 
-                // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+                
                 m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
                 return DND_ACTION_COPY;
             }
@@ -172,14 +172,14 @@ namespace dbaui
 
     sal_Bool SbaTableQueryBrowser::requestDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     {
-        // get the affected list entry
-        // ensure that the entry which the user clicked at is selected
+        
+        
         SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
         if (!pHitEntry)
-            // no drag of no entry was hit ....
+            
             return sal_False;
 
-        // it must be a query/table
+        
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isObject(eEntryType))
             return DND_ACTION_NONE;
@@ -238,7 +238,7 @@ namespace dbaui
     {
         if (m_pTreeModel)
         {
-            // clear the user data of the tree model
+            
             SvTreeListEntry* pEntryLoop = m_pTreeModel->First();
             while (pEntryLoop)
             {
@@ -253,7 +253,7 @@ namespace dbaui
                     if ( pData->xConnection.is() )
                     {
                         OSL_ENSURE( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
-                        // connections are to be stored *only* at the data source entries
+                        
                         impl_releaseConnection( pData->xConnection );
                     }
 
@@ -264,6 +264,6 @@ namespace dbaui
         }
         m_pCurrentlyDisplayed = NULL;
     }
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

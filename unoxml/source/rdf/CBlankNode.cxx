@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CNodes.hxx"
@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 
-/// anonymous implementation namespace
+/
 namespace {
 
 class CBlankNode:
@@ -41,20 +41,20 @@ public:
     explicit CBlankNode(css::uno::Reference< css::uno::XComponentContext > const & context);
     virtual ~CBlankNode() {}
 
-    // ::com::sun::star::lang::XServiceInfo:
+    
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XInitialization:
+    
     virtual void SAL_CALL initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception);
 
-    // ::com::sun::star::rdf::XNode:
+    
     virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException);
 
 private:
-    CBlankNode(const CBlankNode &); // not defined
-    CBlankNode& operator=(const CBlankNode &); // not defined
+    CBlankNode(const CBlankNode &); 
+    CBlankNode& operator=(const CBlankNode &); 
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -65,7 +65,7 @@ CBlankNode::CBlankNode(css::uno::Reference< css::uno::XComponentContext > const 
     m_xContext(context), m_NodeID()
 {}
 
-// com.sun.star.uno.XServiceInfo:
+
 OUString SAL_CALL CBlankNode::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_CBlankNode::_getImplementationName();
@@ -81,7 +81,7 @@ css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames() t
     return comp_CBlankNode::_getSupportedServiceNames();
 }
 
-// ::com::sun::star::lang::XInitialization:
+
 void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception)
 {
     if (aArguments.getLength() != 1) {
@@ -97,7 +97,7 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
                 "argument must be string"), *this, 0);
     }
 
-    //FIXME: what is legal?
+    
     if (!arg.isEmpty()) {
         m_NodeID = arg;
     } else {
@@ -107,17 +107,17 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
     }
 }
 
-// ::com::sun::star::rdf::XNode:
+
 OUString SAL_CALL CBlankNode::getStringValue() throw (css::uno::RuntimeException)
 {
     return m_NodeID;
 }
 
-} // closing anonymous implementation namespace
+} 
 
 
 
-// component helper namespace
+
 namespace comp_CBlankNode {
 
 OUString SAL_CALL _getImplementationName() {
@@ -138,6 +138,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
     return static_cast< ::cppu::OWeakObject * >(new CBlankNode(context));
 }
 
-} // closing component helper namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

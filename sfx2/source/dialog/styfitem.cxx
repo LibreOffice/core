@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/styfitem.hxx>
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
 
-// -----------------------------------------------------------------------
+
 
 class SfxStyleFamilyItem_Impl
 {
@@ -29,9 +29,9 @@ class SfxStyleFamilyItem_Impl
     Image   aImage;
 };
 
-// -----------------------------------------------------------------------
 
-// Implementierung des Resource-Konstruktors
+
+
 
 SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 
@@ -80,9 +80,9 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
         aImage = Image(aBitmap);
 }
 
-// -----------------------------------------------------------------------
 
-// Destructor; releases the internal data
+
+
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
 {
@@ -91,9 +91,9 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
     aFilterList.clear();
 }
 
-// -----------------------------------------------------------------------
 
-// Implementation of the resource constructor
+
+
 
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( false ) )
@@ -112,9 +112,9 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     updateImages( rResId );
 }
 
-// -----------------------------------------------------------------------
 
-// Destructor; releases the internal data
+
+
 
 SfxStyleFamilies::~SfxStyleFamilies()
 {
@@ -124,7 +124,7 @@ SfxStyleFamilies::~SfxStyleFamilies()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
 {
@@ -133,21 +133,21 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
     {
         ::svt::OLocalResourceAccess aLocalRes( _rId );
 
-        // check if the image list is present
+        
         ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );
         aImageListId.SetRT( RSC_IMAGELIST );
 
         if ( aLocalRes.IsAvailableRes( aImageListId ) )
-        {   // there is such a list
+        {   
             ImageList aImages( aImageListId );
 
-            // number of styles items/images
+            
             sal_uInt16 nCount = aImages.GetImageCount( );
             DBG_ASSERT( aEntryList.size() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
             if ( nCount > aEntryList.size() )
                 nCount = aEntryList.size();
 
-            // set the images on the items
+            
             for ( size_t i = 0; i < nCount; ++i )
             {
                 SfxStyleFamilyItem* pItem = aEntryList[ i ];

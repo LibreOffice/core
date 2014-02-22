@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ImageControl.hxx"
@@ -61,10 +61,10 @@
 #define ID_OPEN_GRAPHICS            1
 #define ID_CLEAR_GRAPHICS           2
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -81,9 +81,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::frame;
 
-//==============================================================================
-//= OImageControlModel
-//==============================================================================
+
+
+
 namespace
 {
     enum ImageStoreType
@@ -96,7 +96,7 @@ namespace
 
     ImageStoreType lcl_getImageStoreType( const sal_Int32 _nFieldType )
     {
-        // binary/longvarchar types could be used to store images in binary representation
+        
         if  (   ( _nFieldType == DataType::BINARY )
             ||  ( _nFieldType == DataType::VARBINARY )
             ||  ( _nFieldType == DataType::LONGVARBINARY )
@@ -108,7 +108,7 @@ namespace
             )
             return ImageStoreBinary;
 
-        // char types could be used to store links to images
+        
         if  (   ( _nFieldType == DataType::CHAR )
             ||  ( _nFieldType == DataType::VARCHAR )
             )
@@ -118,17 +118,17 @@ namespace
     }
 }
 
-//==============================================================================
-// OImageControlModel
-//==============================================================================
 
-//------------------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OImageControlModel::_getTypes()
 {
     return concatSequences(
@@ -137,10 +137,10 @@ Sequence<Type> OImageControlModel::_getTypes()
     );
 }
 
-//------------------------------------------------------------------
+
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
-                    // use the old control name for compytibility reasons
+                    
     ,m_pImageProducer( NULL )
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( sal_False )
@@ -153,10 +153,10 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
     implConstruct();
 }
 
-//------------------------------------------------------------------
+
 OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
-                // use the old control name for compytibility reasons
+                
     ,m_pImageProducer( NULL )
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( _pOriginal->m_bReadOnly )
@@ -167,14 +167,14 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
 
     osl_atomic_increment( &m_refCount );
     {
-        // simulate a propertyChanged event for the ImageURL
+        
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_handleNewImageURL_lck( eOther );
     }
     osl_atomic_decrement( &m_refCount );
 }
 
-//------------------------------------------------------------------
+
 void OImageControlModel::implConstruct()
 {
     m_pImageProducer = new ImageProducer;
@@ -182,7 +182,7 @@ void OImageControlModel::implConstruct()
     m_pImageProducer->SetDoneHdl( LINK( this, OImageControlModel, OnImageImportDone ) );
 }
 
-//------------------------------------------------------------------
+
 OImageControlModel::~OImageControlModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -193,12 +193,12 @@ OImageControlModel::~OImageControlModel()
 
 }
 
-// XCloneable
-//------------------------------------------------------------------------------
+
+
 IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -209,15 +209,15 @@ StringSequence  OImageControlModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    // Order matters: we want to "override" the XImageProducer interface of the aggregate without
-    // own XImageProducer interface, thus we need to query OImageControlModel_Base first
+    
+    
     Any aReturn = OImageControlModel_Base::queryInterface( _rType );
 
-    // BUT: _don't_ let it feel responsible for the XTypeProvider interface
-    // (as this is implemented by our base class in the proper way)
+    
+    
     if  (   _rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) )
         ||  !aReturn.hasValue()
         )
@@ -226,13 +226,13 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
     return ImageStoreInvalid != lcl_getImageStoreType( _nColumnType );
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
@@ -251,7 +251,7 @@ void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -266,8 +266,8 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
             impl_handleNewImageURL_lck( eOther );
             {
                 ControlModelLock aLock( *this );
-                    // that's a fake ... onValuePropertyChange expects to receive the only lock to our instance,
-                    // but we're already called with our mutex locked ...
+                    
+                    
                 onValuePropertyChange( aLock );
             }
             break;
@@ -286,8 +286,8 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
 
             if ( m_bExternalGraphic )
             {
-                // if that's an external graphic, i.e. one which has not been loaded by ourselves in response to a
-                // new image URL, then also adjust our ImageURL.
+                
+                
                 OUString sNewImageURL;
                 if ( m_xGraphicObject.is() )
                 {
@@ -295,10 +295,10 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
                     sNewImageURL = sNewImageURL + m_xGraphicObject->getUniqueID();
                 }
                 m_sImageURL = sNewImageURL;
-                // TODO: speaking strictly, this would need to be notified, since ImageURL is a bound property. However,
-                // this method here is called with a locked mutex, so we cannot simply call listeners ...
-                // I think the missing notification (and thus clients which potentially cannot observe the change)
-                // is less severe than the potential deadlock ...
+                
+                
+                
+                
             }
         }
         break;
@@ -309,7 +309,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
                                 throw( IllegalArgumentException )
 {
@@ -332,7 +332,7 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OBoundControlModel )
@@ -343,42 +343,42 @@ void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps 
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [out] */ o_rAggregateProperties ) const
 {
     OBoundControlModel::describeAggregateProperties( o_rAggregateProperties );
-    // remove ImageULR and Graphic properties, we "overload" them. This is because our aggregate synchronizes those
-    // two, but we have an own sychronization mechanism.
+    
+    
     RemoveProperty( o_rAggregateProperties, PROPERTY_IMAGE_URL );
     RemoveProperty( o_rAggregateProperties, PROPERTY_GRAPHIC );
 }
 
-//------------------------------------------------------------------------------
+
 OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return OUString(FRM_COMPONENT_IMAGECONTROL);  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_IMAGECONTROL);  
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    // Base class
+    
     OBoundControlModel::write(_rxOutStream);
-    // Version
+    
     _rxOutStream->writeShort(0x0003);
-    // Name
+    
     _rxOutStream->writeBoolean(m_bReadOnly);
     writeHelpTextCompatibly(_rxOutStream);
-    // from version 0x0003 : common properties
+    
     writeCommonProperties(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
 
-    // Version
+    
     sal_uInt16 nVersion = _rxInStream->readShort();
     switch (nVersion)
     {
@@ -400,18 +400,18 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             defaultCommonProperties();
             break;
     }
-    // Display default values after read
+    
     if ( !getControlSource().isEmpty() )
-    {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
-        ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
+    {   
+        ::osl::MutexGuard aGuard(m_aMutex); 
         resetNoBroadcast();
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
-    // create a stream for the image specified by the URL
+    
     boost::scoped_ptr< SvStream > pImageStream;
     Reference< XInputStream > xImageStream;
 
@@ -426,7 +426,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
 
         if ( !bSetNull )
         {
-            // get the size of the stream
+            
             pImageStream->Seek(STREAM_SEEK_TO_END);
             sal_Int32 nSize = (sal_Int32)pImageStream->Tell();
             if (pImageStream->GetBufferSize() < 8192)
@@ -450,7 +450,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator )
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
@@ -479,8 +479,8 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
         break;
     }
 
-    // if we're here, then the above code was unable to update our field/control from the given URL
-    // => fall back to NULL/VOID
+    
+    
     if ( m_xColumnUpdate.is() )
         m_xColumnUpdate->updateNull();
     else
@@ -489,13 +489,13 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     if ( _bPostReset )
     {
-        // since this is a "commit after reset", we can simply update the column
-        // with null - this is our "default" which we were just reset to
+        
+        
         if ( m_xColumnUpdate.is() )
             m_xColumnUpdate->updateNull();
     }
@@ -508,7 +508,7 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     bool lcl_isValidDocumentURL( const OUString& _rDocURL )
@@ -517,7 +517,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     OBoundControlModel::onConnectedDbColumn( _rxForm );
@@ -547,7 +547,7 @@ void OImageControlModel::onConnectedDbColumn( const Reference< XInterface >& _rx
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::onDisconnectedDbColumn()
 {
     OBoundControlModel::onDisconnectedDbColumn();
@@ -555,7 +555,7 @@ void OImageControlModel::onDisconnectedDbColumn()
     m_sDocumentURL = OUString();
 }
 
-//------------------------------------------------------------------------------
+
 Any OImageControlModel::translateDbColumnToControlValue()
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
@@ -581,13 +581,13 @@ Any OImageControlModel::translateDbColumnToControlValue()
     return Any();
 }
 
-//------------------------------------------------------------------------------
+
 Any OImageControlModel::getControlValue( ) const
 {
     return makeAny( m_sImageURL );
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::doSetControlValue( const Any& _rValue )
 {
     DBG_ASSERT( GetImageProducer() && m_xImageProducer.is(), "OImageControlModel::doSetControlValue: no image producer!" );
@@ -599,7 +599,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     {
     case ImageStoreBinary:
     {
-        // give the image producer the stream
+        
         Reference< XInputStream > xInStream;
         _rValue >>= xInStream;
         GetImageProducer()->setImage( xInStream );
@@ -620,61 +620,61 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
         OSL_FAIL( "OImageControlModel::doSetControlValue: invalid field type!" );
         break;
 
-    }   // switch ( lcl_getImageStoreType( getFieldType() ) )
+    }   
 
     if ( bStartProduction )
     {
-        // start production
+        
         Reference< XImageProducer > xProducer = m_xImageProducer;
         {
-            // release our mutex once (it's acquired in the calling method!), as starting the image production may
-            // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
-            // VCLXImageControl, does this locking)
+            
+            
+            
             MutexRelease aRelease(m_aMutex);
             xProducer->startProduction();
         }
     }
 }
 
-// OComponentHelper
-//------------------------------------------------------------------
+
+
 void SAL_CALL OImageControlModel::disposing()
 {
     OBoundControlModel::disposing();
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::resetNoBroadcast()
 {
-    if ( hasField() )          // only reset when we are connected to a column
+    if ( hasField() )          
         OBoundControlModel::resetNoBroadcast( );
 }
 
-//--------------------------------------------------------------------
+
 Reference< XImageProducer > SAL_CALL OImageControlModel::getImageProducer() throw ( RuntimeException)
 {
     return this;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
 {
     GetImageProducer()->addConsumer( _rxConsumer );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
 {
     GetImageProducer()->removeConsumer( _rxConsumer );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException)
 {
     GetImageProducer()->startProduction();
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 {
     const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : NULL );
@@ -691,17 +691,17 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
     return 1L;
 }
 
-//==================================================================
-// OImageControlControl
-//==================================================================
 
-//------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OImageControlControl::_getTypes()
 {
     return concatSequences(
@@ -710,14 +710,14 @@ Sequence<Type> OImageControlControl::_getTypes()
     );
 }
 
-//------------------------------------------------------------------------------
+
 OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
     ,m_aModifyListeners( m_aMutex )
 {
     increment(m_refCount);
     {
-        // Add as Focus- and MouseListener
+        
         Reference< XWindow > xComp;
         query_aggregation( m_xAggregate, xComp );
         if ( xComp.is() )
@@ -726,7 +726,7 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControl::queryAggregation( _rType );
@@ -740,7 +740,7 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (R
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence  OImageControlControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -751,19 +751,19 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::addModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException)
 {
     m_aModifyListeners.addInterface( _Listener );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::removeModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException)
 {
     m_aModifyListeners.removeInterface( _Listener );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::disposing()
 {
     EventObject aEvent( *this );
@@ -772,13 +772,13 @@ void SAL_CALL OImageControlControl::disposing()
     OBoundControl::disposing();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::disposing( const EventObject& _Event ) throw(RuntimeException)
 {
     OBoundControl::disposing( _Event );
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlControl::implClearGraphics( sal_Bool _bForce )
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
@@ -790,18 +790,18 @@ void OImageControlControl::implClearGraphics( sal_Bool _bForce )
             xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sOldImageURL;
 
             if ( sOldImageURL.isEmpty() )
-                // the ImageURL is already empty, so simply setting a new empty one would not suffice
-                // (since it would be ignored)
+                
+                
                 xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( "private:emptyImage" ) ) );
-                    // (the concrete URL we're passing here doens't matter. It's important that
-                    // the model cannot resolve it to a a valid resource describing an image stream
+                    
+                    
         }
 
         xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString() ) );
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool OImageControlControl::implInsertGraphics()
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
@@ -809,7 +809,7 @@ bool OImageControlControl::implInsertGraphics()
         return false;
 
     OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
-    // build some arguments for the upcoming dialog
+    
     try
     {
         ::sfx2::FileDialogHelper aDialog( TemplateDescription::FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC );
@@ -823,10 +823,10 @@ bool OImageControlControl::implInsertGraphics()
             xSet->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= xBoundField;
         sal_Bool bHasField = xBoundField.is();
 
-        // if the control is bound to a DB field, then it's not possible to decide whether or not to link
+        
         xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, !bHasField );
 
-        // if the control is bound to a DB field, then linking of the image depends on the type of the field
+        
         sal_Bool bImageIsLinked = sal_True;
         if ( bHasField )
         {
@@ -838,15 +838,15 @@ bool OImageControlControl::implInsertGraphics()
 
         if ( ERRCODE_NONE == aDialog.Execute() )
         {
-            // reset the url property in case it already has the value we're about to set - in this case
-            // our propertyChanged would not get called without this.
+            
+            
             implClearGraphics( sal_False );
             sal_Bool bIsLink = sal_False;
             xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
-            // Force bIsLink to be sal_True if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
-            // in this case, and disabled the respective control, there might be picker implementations which do not
-            // respect this, and return IsLink=FALSE here. In this case, "normalize" the flag.
-            // #i112659#
+            
+            
+            
+            
             bIsLink |= bHasField;
             if ( !bIsLink )
             {
@@ -867,7 +867,7 @@ bool OImageControlControl::implInsertGraphics()
     return false;
 }
 
-//------------------------------------------------------------------------------
+
 bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 {
     bool bIsEmpty = true;
@@ -887,8 +887,8 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
     return bIsEmpty;
 }
 
-// MouseListener
-//------------------------------------------------------------------------------
+
+
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -897,7 +897,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
         return;
 
     bool bModified = false;
-    // is this a request for a context menu?
+    
     if ( e.PopupTrigger )
     {
         Reference< XPopupMenu > xMenu( awt::PopupMenu::create( m_xContext ) );
@@ -911,14 +911,14 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             xMenu->insertItem( ID_OPEN_GRAPHICS, FRM_RES_STRING( RID_STR_OPEN_GRAPHICS ), 0, 0 );
             xMenu->insertItem( ID_CLEAR_GRAPHICS, FRM_RES_STRING( RID_STR_CLEAR_GRAPHICS ), 0, 1 );
 
-            // check if the ImageURL is empty
+            
             if ( impl_isEmptyGraphics_nothrow() )
                 xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
 
             awt::Rectangle aRect( e.X, e.Y, 0, 0 );
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )
-            {   // context menu triggered by keyboard
-                // position it in the center of the control
+            {   
+                
                 Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
                 OSL_ENSURE( xWindow.is(), "OImageControlControl::mousePressed: me not a window? How this?" );
                 if ( xWindow.is() )
@@ -947,8 +947,8 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     }
     else
     {
-        //////////////////////////////////////////////////////////////////////
-        // Double click
+        
+        
         if (e.ClickCount == 2)
         {
 
@@ -956,14 +956,14 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if (!xSet.is())
                 return;
 
-            // If the Control is not bound, do not display a dialog (because the to-be-sent URL would be invalid anyway)
+            
             Reference<XPropertySet> xBoundField;
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
                 ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
             if (!xBoundField.is())
             {
-                // but only if our IMAGE_URL property is handled as if it is transient, which is equivalent to
-                // an empty control source
+                
+                
                 if ( !hasProperty(PROPERTY_CONTROLSOURCE, xSet) || !::comphelper::getString(xSet->getPropertyValue(PROPERTY_CONTROLSOURCE)).isEmpty() )
                     return;
             }
@@ -985,23 +985,23 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
 }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

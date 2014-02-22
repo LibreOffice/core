@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formenums.hxx"
@@ -71,10 +71,10 @@ namespace xmloff
         const SvXMLEnumMapEntry*& rReturn = s_pEnumMap[_eProperty];
         if (!rReturn)
         {
-            // the map for this property is not initialized yet
+            
              switch (_eProperty)
             {
-                // FormSubmitEncoding
+                
                 case epSubmitEncoding:
                 {
                     static const SvXMLEnumMapEntry aSubmitEncodingMap[] =
@@ -87,7 +87,7 @@ namespace xmloff
                     rReturn = aSubmitEncodingMap;
                 }
                 break;
-                // FormSubmitMethod
+                
                 case epSubmitMethod:
                 {
                     static const SvXMLEnumMapEntry aSubmitMethodMap[] =
@@ -99,7 +99,7 @@ namespace xmloff
                     rReturn = aSubmitMethodMap;
                 }
                 break;
-                // CommandType
+                
                 case epCommandType:
                 {
                     static const SvXMLEnumMapEntry aCommandTypeMap[] =
@@ -112,7 +112,7 @@ namespace xmloff
                     rReturn = aCommandTypeMap;
                 }
                 break;
-                // NavigationBarMode
+                
                 case epNavigationType:
                 {
                     static const SvXMLEnumMapEntry aNavigationTypeMap[] =
@@ -125,7 +125,7 @@ namespace xmloff
                     rReturn = aNavigationTypeMap;
                 };
                 break;
-                // TabulatorCycle
+                
                 case epTabCyle:
                 {
                     static const SvXMLEnumMapEntry aTabulytorCycleMap[] =
@@ -138,7 +138,7 @@ namespace xmloff
                     rReturn = aTabulytorCycleMap;
                 };
                 break;
-                // FormButtonType
+                
                 case epButtonType:
                 {
                     static const SvXMLEnumMapEntry aFormButtonTypeMap[] =
@@ -152,7 +152,7 @@ namespace xmloff
                     rReturn = aFormButtonTypeMap;
                 };
                 break;
-                // ListSourceType
+                
                 case epListSourceType:
                 {
                     static const SvXMLEnumMapEntry aListSourceTypeMap[] =
@@ -168,7 +168,7 @@ namespace xmloff
                     rReturn = aListSourceTypeMap;
                 };
                 break;
-                // check state of a checkbox
+                
                 case epCheckState:
                 {
                     static const SvXMLEnumMapEntry aCheckStateMap[] =
@@ -313,7 +313,7 @@ namespace xmloff
                     static const SvXMLEnumMapEntry aScaleModeMap[] =
                     {
                         { XML_BACKGROUND_NO_REPEAT, ImageScaleMode::NONE },
-                        { XML_REPEAT,               ImageScaleMode::NONE },  // repeating the image is not supported
+                        { XML_REPEAT,               ImageScaleMode::NONE },  
                         { XML_STRETCH,              ImageScaleMode::ANISOTROPIC },
                         { XML_SCALE,                ImageScaleMode::ISOTROPIC },
                         { XML_TOKEN_INVALID,        ImageScaleMode::NONE }
@@ -330,6 +330,6 @@ namespace xmloff
         return rReturn;
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

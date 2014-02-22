@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -34,7 +34,7 @@ public:
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testAddNewFromTitles);
-    //CPPUNIT_TEST_EXCEPTION(testRemoveByName, uno::RuntimeException);
+    
     CPPUNIT_TEST(testOutputList);
     CPPUNIT_TEST_SUITE_END();
 
@@ -63,7 +63,7 @@ uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
     OUString aNamedRangesPropertyString("NamedRanges");
     uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
 
-    //set value from xnamedranges.hxx
+    
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
     xSheet = uno::Reference< sheet::XSpreadsheet >(xIndexAccess->getByIndex(nSheet),UNO_QUERY_THROW);

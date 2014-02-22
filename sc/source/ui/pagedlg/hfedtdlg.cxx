@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <svl/eitem.hxx>
@@ -32,10 +32,10 @@
 #include "globstr.hrc"
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
-//------------------------------------------------------------------
 
-//  macros from docsh4.cxx
-//! use SIDs?
+
+
+
 
 #define IS_SHARE_HEADER(set) \
     ((SfxBoolItem&) \
@@ -47,7 +47,7 @@
         ((SvxSetItem&)(set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
-//==================================================================
+
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,
@@ -185,7 +185,7 @@ ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
     }
     else
     {
-        //  #69193a# respect "shared" setting
+        
 
         sal_Bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
         if ( bShareHeader )
@@ -201,11 +201,11 @@ ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 {
-    // kann ja nur ne ScHFEditPage sein...
+    
 
     ((ScHFEditPage&)rPage).SetNumType(eNumType);
 }

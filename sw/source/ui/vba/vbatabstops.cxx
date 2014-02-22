@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbatabstops.hxx"
 #include "vbatabstop.hxx"
@@ -99,7 +99,7 @@ public:
     {
         return sal_True;
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return new TabStopsEnumWrapper( this );
@@ -149,12 +149,12 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
             }
             default:
             {
-                //left
+                
             }
         }
     }
 
-    sal_Unicode cLeader = ' '; // default is space
+    sal_Unicode cLeader = ' '; 
     if( Leader.hasValue() )
     {
         sal_Int32 wdLeader = word::WdTabLeader::wdTabLeaderSpaces;
@@ -168,7 +168,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
             }
             case word::WdTabLeader::wdTabLeaderMiddleDot:
             {
-                cLeader = 183; // U+00B7 MIDDLE DOT
+                cLeader = 183; 
                 break;
             }
             case word::WdTabLeader::wdTabLeaderDots:
@@ -185,12 +185,12 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
             }
             default:
             {
-                //left
+                
             }
         }
     }
 
-    sal_Char cDecimal = '.'; // default value
+    sal_Char cDecimal = '.'; 
 
     style::TabStop aTab;
     aTab.Position = nPosition;
@@ -231,7 +231,7 @@ void SAL_CALL SwVbaTabStops::ClearAll() throw (uno::RuntimeException)
     lcl_setTabStops( mxParaProps, aSeq );
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaTabStops::getElementType() throw (uno::RuntimeException)
 {

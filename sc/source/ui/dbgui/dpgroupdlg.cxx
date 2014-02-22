@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-// ============================================================================
+
 
 namespace {
 
@@ -58,9 +58,9 @@ static const sal_uInt16 nDatePartResIds[] =
     STR_DPFIELD_GROUP_BY_YEARS
 };
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton& rRbAuto, RadioButton& rRbMan, Edit& rEdValue ) :
     mrRbAuto( rRbAuto ),
@@ -103,19 +103,19 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
 {
     if( pButton == &mrRbAuto )
     {
-        // disable edit field on clicking "automatic" radio button
+        
         mrEdValue.Disable();
     }
     else if( pButton == &mrRbMan )
     {
-        // enable and set focus to edit field on clicking "manual" radio button
+        
         mrEdValue.Enable();
         mrEdValue.GrabFocus();
     }
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
         RadioButton& rRbAuto, RadioButton& rRbMan, ScDoubleField& rEdValue ) :
@@ -134,7 +134,7 @@ void ScDPNumGroupEditHelper::ImplSetValue( double fValue )
     mrEdValue.SetValue( fValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(
         RadioButton& rRbAuto, RadioButton& rRbMan, DateField& rEdValue, const Date& rNullDate ) :
@@ -157,8 +157,8 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
     mrEdValue.SetDate( aDate );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPNUMGROUP ) ),
@@ -202,8 +202,8 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
-    // get values and silently auto-correct them, if they are not valid
-    // TODO: error messages in OK event?
+    
+    
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
     if( !maEdBy.GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
@@ -214,7 +214,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     return aInfo;
 }
 
-// ============================================================================
+
 
 ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate ) :
@@ -299,8 +299,8 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
-    // get values and silently auto-correct them, if they are not valid
-    // TODO: error messages in OK event?
+    
+    
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
     sal_Int64 nNumDays = maEdNumDays.GetValue();
@@ -313,11 +313,11 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 
 sal_Int32 ScDPDateGroupDlg::GetDatePart() const
 {
-    // return DAYS for special "number of days" mode
+    
     if( maRbNumDays.IsChecked() )
         return com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;
 
-    // return listbox contents for "units" mode
+    
     sal_Int32 nDatePart = 0;
     for( sal_uLong nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
         if( maLbUnits.IsChecked( static_cast< sal_uInt16 >( nIdx ) ) )
@@ -330,7 +330,7 @@ IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
     if( pButton == &maRbNumDays )
     {
         maLbUnits.Disable();
-        // enable and set focus to edit field on clicking "num of days" radio button
+        
         maEdNumDays.Enable();
         maEdNumDays.GrabFocus();
         maBtnOk.Enable();
@@ -338,10 +338,10 @@ IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
     else if( pButton == &maRbUnits )
     {
         maEdNumDays.Disable();
-        // enable and set focus to listbox on clicking "units" radio button
+        
         maLbUnits.Enable();
         maLbUnits.GrabFocus();
-        // disable OK button if no date part selected
+        
         CheckHdl( &maLbUnits );
     }
     return 0;
@@ -349,12 +349,12 @@ IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
 
 IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )
 {
-    // enable/disable OK button on modifying check list box
+    
     if( pListBox == &maLbUnits )
         maBtnOk.Enable( maLbUnits.GetCheckedEntryCount() > 0 );
     return 0;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

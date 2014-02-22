@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -79,27 +79,27 @@ CBenValue::ReadValueData(BenDataPtr pReadBuffer, unsigned long Offset,
     pLtcBenContainer pContainer = GetContainer();
     BenByteDataPtr pBuffer = (BenByteDataPtr) pReadBuffer;
 
-    /// pReadBuffer -- pointer to buffer of read result, allocated outside this function
-    /// Offset          -- read buffer's start offset address, relative value in the whole value stream
-    /// Amt             -- read buffer's size
-    /// pAmtRead    -- return the actual read size
+    
+    
+    
+    
 
-    /// SegOffset     -- current segment's start address offset, relative value in the whole value stream
+    
 
     while ((pCurrSeg = GetNextValueSegment(pCurrSeg)) != NULL)
     {
-        if (Amt == 0)               /// whole buffer is full now, so return
+        if (Amt == 0)               
             return BenErr_OK;
 
-        if (SegOffset <= Offset && Offset < SegOffset + pCurrSeg->GetSize()) /// begin at current segment
+        if (SegOffset <= Offset && Offset < SegOffset + pCurrSeg->GetSize()) 
         {
-            unsigned long OffsetIntoSeg = Offset - SegOffset;  /// relative value in this value segment stream
+            unsigned long OffsetIntoSeg = Offset - SegOffset;  
 
             unsigned long AmtThisSeg = UtMin(Amt, pCurrSeg->GetSize() -
-                OffsetIntoSeg);           /// size read in this segment, it's minimal value between Amt &
-                                          /// remain part from OffsetIntoSeg to the end of this segment
+                OffsetIntoSeg);           
+                                          
 
-            unsigned long AmtReadThisSeg; /// actual read size in this segment
+            unsigned long AmtReadThisSeg; 
             if (pCurrSeg->IsImmediate())
             {
                 UtHugeMemcpy(pBuffer, pCurrSeg->GetImmediateData() +
@@ -132,6 +132,6 @@ CBenValue::ReadValueData(BenDataPtr pReadBuffer, unsigned long Offset,
     return BenErr_OK;
 }
 
-}//end namespace OpenStormBento
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

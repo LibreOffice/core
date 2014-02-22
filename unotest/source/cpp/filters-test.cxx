@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <unotest/filters-test.hxx>
@@ -21,7 +21,7 @@ void decode(const OUString& rIn, const OUString &rOut)
     rtlCipher cipher = rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
     CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher != 0);
 
-    //mcrypt --bare -a arcfour -o hex -k 435645 -s 3
+    
     const sal_uInt8 aKey[3] = {'C', 'V', 'E'};
 
     rtlCipherError result = rtl_cipher_init(cipher, rtl_Cipher_DirectionDecode, aKey, SAL_N_ELEMENTS(aKey), 0, 0);
@@ -78,7 +78,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
 
             if ((nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()))
             {
-                //ignore .files
+                
                 if (sURL[nLastSlash+1] == '.')
                     continue;
 
@@ -102,8 +102,8 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
                 sURL = sTmpFile;
             }
 
-            //output name early, so in the case of a hang, the name of
-            //the hanging input file is visible
+            
+            
             fprintf(stderr, "%s,", aRes.getStr());
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes;

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -64,7 +64,7 @@
 LwpTab::LwpTab()
 {
     m_nX = 0;
-    m_nAlignChar = 0;       //be careful,not quite sure it's 8-bit,perhaps 16-bit.
+    m_nAlignChar = 0;       
     m_nType = 0;
     m_nLeader = 0;
     m_nRelativeType = 0;
@@ -87,7 +87,7 @@ LwpTabRack::LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm):LwpObject(obj
 
 void LwpTabRack::Read()
 {
-//  LwpObjectID     m_NextID;
+
     m_NextID.ReadIndexed(m_pObjStrm);
 
     m_nNumTabs = m_pObjStrm->QuickReaduInt16();
@@ -106,7 +106,7 @@ LwpTab* LwpTabRack::Lookup(sal_uInt16 nIndex)
     {
         return &m_aTabs[nIndex];
     }
-    //return NULL;
+    
     /* It's not in this tabrack, so get it out of our next. */
     if (!GetNext())
         return NULL;        /* ouch */

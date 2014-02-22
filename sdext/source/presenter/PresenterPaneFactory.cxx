@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterPaneFactory.hxx"
@@ -55,7 +55,7 @@ const OUString PresenterPaneFactory::msHelpPaneURL(
 const OUString PresenterPaneFactory::msOverlayPaneURL(
     "private:resource/pane/Presenter/Overlay");
 
-//===== PresenterPaneFactory ==================================================
+
 
 Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
     const Reference<uno::XComponentContext>& rxContext,
@@ -85,7 +85,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
     Reference<XConfigurationController> xCC;
     try
     {
-        // Get the configuration controller.
+        
         Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         xCC = Reference<XConfigurationController>(xCM->getConfigurationController());
         mxConfigurationControllerWeak = xCC;
@@ -123,7 +123,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
         xCC->removeResourceFactoryForReference(this);
     mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
 
-    // Dispose the panes in the cache.
+    
     if (mpResourceCache.get() != NULL)
     {
         ResourceContainer::const_iterator iPane (mpResourceCache->begin());
@@ -138,7 +138,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
     }
 }
 
-//----- XPaneFactory ----------------------------------------------------------
+
 
 Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
@@ -155,11 +155,11 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
 
     if (mpResourceCache.get() != NULL)
     {
-        // Has the requested resource already been created?
+        
         ResourceContainer::const_iterator iResource (mpResourceCache->find(sPaneURL));
         if (iResource != mpResourceCache->end())
         {
-            // Yes.  Mark it as active.
+            
             rtl::Reference<PresenterPaneContainer> pPaneContainer(
                 mpPresenterController->GetPaneContainer());
             PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
@@ -176,7 +176,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
         }
     }
 
-    // No.  Create a new one.
+    
     Reference<XResource> xResource = CreatePane(rxPaneId, OUString());
     return xResource;
 }
@@ -189,7 +189,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     if ( ! rxResource.is())
         throw lang::IllegalArgumentException();
 
-    // Mark the pane as inactive.
+    
     rtl::Reference<PresenterPaneContainer> pPaneContainer(
         mpPresenterController->GetPaneContainer());
     const OUString sPaneURL (rxResource->getResourceId()->getResourceURL());
@@ -203,12 +203,12 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
 
         if (mpResourceCache.get() != NULL)
         {
-            // Store the pane in the cache.
+            
             (*mpResourceCache)[sPaneURL] = rxResource;
         }
         else
         {
-            // Dispose the pane.
+            
             Reference<lang::XComponent> xPaneComponent (rxResource, UNO_QUERY);
             if (xPaneComponent.is())
                 xPaneComponent->dispose();
@@ -216,7 +216,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,
@@ -263,10 +263,10 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     Reference<lang::XMultiComponentFactory> xFactory (
         xContext->getServiceManager(), UNO_QUERY_THROW);
 
-    // Create a border window and canvas and store it in the pane
-    // container.
+    
+    
 
-    // Create the pane.
+    
     ::rtl::Reference<PresenterPaneBase> xPane;
     if (bIsSpritePane)
     {
@@ -279,7 +279,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
             new PresenterPane(xContext, mpPresenterController));
     }
 
-    // Supply arguments.
+    
     Sequence<Any> aArguments (6);
     aArguments[0] <<= rxPaneId;
     aArguments[1] <<= rxParentPane->getWindow();
@@ -291,7 +291,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     aArguments[5] <<= bIsSpritePane ? false : true;
     xPane->initialize(aArguments);
 
-    // Store pane and canvases and windows in container.
+    
     ::rtl::Reference<PresenterPaneContainer> pContainer (
         mpPresenterController->GetPaneContainer());
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
@@ -313,7 +313,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
             pDescriptor->mbNeedsClipping = true;
         }
 
-        // Get the window of the frame and make that visible.
+        
         Reference<awt::XWindow> xWindow (pDescriptor->mxBorderWindow, UNO_QUERY_THROW);
         xWindow->setVisible(sal_True);
     }
@@ -332,6 +332,6 @@ void PresenterPaneFactory::ThrowIfDisposed (void) const
     }
 }
 
-} } // end of namespace sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

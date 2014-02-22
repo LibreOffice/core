@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -60,8 +60,8 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
     const SwTOXType* pType = 0;
     const OUString rNm = rTOX.GetTOXType()->GetTypeName();
 
-    // kein entsprechender Verzeichnistyp vorhanden -> anlegen
-    // sonst verwenden
+    
+    
     for(sal_uInt16 i=0; i < nCount; ++i)
     {
         const SwTOXType* pSrcType = pDoc->GetTOXType(eType, i);
@@ -71,14 +71,14 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
             break;
         }
     }
-    // kein entsprechender Typ vorhanden -> neu erzeugen
+    
     //
     if(!pType)
     {
         pDoc->InsertTOXType( SwTOXType( eType, rNm ) );
         pType = pDoc->GetTOXType(eType, 0);
     }
-    // Verzeichnistyp umhaengen
+    
     //
     ((SwTOXType*)pType)->Add( &rTOX );
 }

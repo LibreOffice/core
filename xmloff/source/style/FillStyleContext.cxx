@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -41,7 +41,7 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
 
-    // start import
+    
     XMLGradientStyleImport aGradientStyle( GetImport() );
     aGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
@@ -84,7 +84,7 @@ XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPr
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // start import
+    
     XMLHatchStyleImport aHatchStyle( GetImport() );
     aHatchStyle.importXML( xAttrList, maAny, maStrName );
 }
@@ -127,7 +127,7 @@ XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 n
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // start import
+    
     XMLImageStyle aBitmapStyle;
     aBitmapStyle.importXML( xAttrList, maAny, maStrName, rImport );
 }
@@ -204,7 +204,7 @@ XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // start import
+    
     XMLTransGradientStyleImport aTransGradientStyle( GetImport() );
     aTransGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
@@ -247,7 +247,7 @@ XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 n
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // start import
+    
     XMLMarkerStyleImport aMarkerStyle( GetImport() );
     aMarkerStyle.importXML( xAttrList, maAny, maStrName );
 }
@@ -290,7 +290,7 @@ XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx
                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // start import
+    
     XMLDashStyleImport aDashStyle( GetImport() );
     aDashStyle.importXML( xAttrList, maAny, maStrName );
 }

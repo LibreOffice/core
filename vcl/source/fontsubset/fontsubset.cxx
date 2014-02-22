@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 #include <fontsubset.hxx>
 #include <sft.hxx>
 
-// ====================================================================
+
 
 FontSubsetInfo::FontSubsetInfo()
 :   m_nAscent( 0)
@@ -36,14 +36,14 @@ FontSubsetInfo::FontSubsetInfo()
 ,   mpSftTTFont( NULL)
 {}
 
-// --------------------------------------------------------------------
+
 
 FontSubsetInfo::~FontSubsetInfo()
 {}
 
-// --------------------------------------------------------------------
 
-// prepare subsetting for fonts where the input font file is mapped
+
+
 bool FontSubsetInfo::LoadFont(
     FontSubsetInfo::FontType eInFontType,
     const unsigned char* pInFontBytes, int nInByteLength)
@@ -55,9 +55,9 @@ bool FontSubsetInfo::LoadFont(
     return (mnInByteLength > 0);
 }
 
-// --------------------------------------------------------------------
 
-// prepare subsetting for fonts that are known to the SFT-parser
+
+
 bool FontSubsetInfo::LoadFont( vcl::_TrueTypeFont* pSftTTFont )
 {
     DBG_ASSERT( (mpInFontBytes == NULL), "Subset from SFT and from mapped font-file requested");
@@ -66,7 +66,7 @@ bool FontSubsetInfo::LoadFont( vcl::_TrueTypeFont* pSftTTFont )
     return (mpSftTTFont == NULL);
 }
 
-// --------------------------------------------------------------------
+
 
 bool FontSubsetInfo::CreateFontSubset(
     int nReqFontTypeMask,
@@ -74,7 +74,7 @@ bool FontSubsetInfo::CreateFontSubset(
     const sal_GlyphId* pReqGlyphIds, const sal_uInt8* pReqEncodedIds, int nReqGlyphCount,
     sal_Int32* pOutGlyphWidths)
 {
-    // prepare request details needed by all underlying subsetters
+    
     mnReqFontTypeMask = nReqFontTypeMask;
     mpOutFile       = pOutFile;
     mpReqFontName   = pReqFontName;
@@ -82,12 +82,12 @@ bool FontSubsetInfo::CreateFontSubset(
     mpReqEncodedIds = pReqEncodedIds;
     mnReqGlyphCount = nReqGlyphCount;
 
-    // TODO: move the glyphid/encid/notdef reshuffling from the callers to here
+    
 
-    // dispatch to underlying subsetters
+    
     bool bOK = false;
 
-    // TODO: better match available input-type to possible subset-types
+    
     switch( meInFontType) {
     case SFNT_TTF:
     case SFNT_CFF:
@@ -102,9 +102,9 @@ bool FontSubsetInfo::CreateFontSubset(
     case ANY_TYPE1:
         bOK = CreateFontSubsetFromType1( pOutGlyphWidths);
         break;
-        // fall trough
+        
     case NO_FONT:
-        // fall trough
+        
     default:
         OSL_FAIL( "unhandled type in CreateFontSubset()");
         break;
@@ -113,12 +113,12 @@ bool FontSubsetInfo::CreateFontSubset(
     return bOK;
 }
 
-// --------------------------------------------------------------------
 
-// TODO: move function to sft.cxx to replace dummy implementation
+
+
 bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
 {
-    // handle SFNT_CFF fonts
+    
     int nCffLength = 0;
     const sal_uInt8* pCffBytes = NULL;
     if( GetSfntTable( mpSftTTFont, O_CFF, &pCffBytes, &nCffLength))
@@ -128,13 +128,13 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
         return bOK;
     }
 
-    // handle SFNT_TTF fonts
-    // by forwarding the subset request to AG's sft subsetter
-#if 1 // TODO: remove conversion tp 16bit glyphids when sft-subsetter has been updated
+    
+    
+#if 1 
     sal_uInt16 aShortGlyphIds[256];
     for( int i = 0; i < mnReqGlyphCount; ++i)
         aShortGlyphIds[i] = (sal_uInt16)mpReqGlyphIds[i];
-    // remove const_cast when sft-subsetter is const-correct
+    
     sal_uInt8* pEncArray = const_cast<sal_uInt8*>( mpReqEncodedIds );
 #endif
     int nSFTErr = vcl::SF_BADARG;
@@ -151,16 +151,16 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     }
     else if( (mnReqFontTypeMask & SFNT_TTF) != 0 )
     {
-        // TODO: use CreateTTFromTTGlyphs()
-        // TODO: move functionality from callers here
+        
+        
     }
 
     return (nSFTErr != vcl::SF_OK);
 }
 
-// --------------------------------------------------------------------
 
-// TODO: replace dummy implementation
+
+
 bool FontSubsetInfo::CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths)
 {
     (void)pOutGlyphWidths;
@@ -168,6 +168,6 @@ bool FontSubsetInfo::CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths)
     return false;
 }
 
-// ====================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

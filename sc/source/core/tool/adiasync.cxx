@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/objsh.hxx>
@@ -41,7 +41,7 @@ ScAddInAsync::ScAddInAsync() :
     pDocs( NULL ),
     mpFuncData( NULL ),
     nHandle( 0 )
-{   // nur fuer aSeekObj !
+{   
 }
 
 ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* pDoc) :
@@ -59,12 +59,12 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* 
 
 ScAddInAsync::~ScAddInAsync()
 {
-    // aSeekObj does not have that, handle 0 does not exist otherwise
+    
     if ( nHandle )
     {
-        // in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
+        
         mpFuncData->Unadvice( (double)nHandle );
-        if ( meType == PTR_STRING && pStr )      // include type comparison because of union
+        if ( meType == PTR_STRING && pStr )      
             delete pStr;
         delete pDocs;
     }
@@ -89,7 +89,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 
     if ( !p->HasListeners() )
     {
-        // not in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
+        
         theAddInAsyncTbl.erase( p );
         delete p;
         return ;
@@ -128,7 +128,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
     if ( !theAddInAsyncTbl.empty() )
     {
         for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
-        {   // backwards because of pointer-movement in array
+        {   
             ScAddInAsync* pAsync = *iter1;
             ScAddInDocs* p = pAsync->pDocs;
             ScAddInDocs::iterator iter2 = p->find( pDocumentP );
@@ -136,7 +136,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
             {
                 p->erase( iter2 );
                 if ( p->empty() )
-                {   // this AddIn is not used anymore
+                {   
                     theAddInAsyncTbl.erase( --(iter1.base()) );
                     delete pAsync;
                 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -60,7 +60,7 @@ namespace
 }
 
 //
-//  class ResData
+
 //
 
 ResData::ResData( const OString &rGId )
@@ -93,7 +93,7 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
 }
 
 //
-// class MergeEntrys
+
 //
 
 bool MergeEntrys::GetText( OString &rReturn,
@@ -136,7 +136,7 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
 }
 
 //
-// class MergeDataHashMap
+
 //
 
 std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, MergeData* pMergeData)
@@ -144,12 +144,12 @@ std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OStrin
     std::pair<iterator,bool> aTemp = m_aHashMap.insert(HashMap_t::value_type( rKey, pMergeData ));
     if( m_aHashMap.size() == 1 )
     {
-        // When first insert, set an iterator to the first element
+        
         aFirstInOrder = aTemp.first;
     }
     else
     {
-        // Define insertion order by setting an iterator to the next element.
+        
         aLastInsertion->second->m_aNextData = aTemp.first;
     }
     aLastInsertion = aTemp.first;
@@ -160,14 +160,14 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
 {
     iterator aHint = m_aHashMap.end();
 
-    // Add a hint
+    
     if( bFirstSearch && !m_aHashMap.empty() )
     {
         aHint = aFirstInOrder;
     }
     else if( aLastFound == aLastInsertion )
     {
-        // Next to the last element is the first element
+        
         aHint = aFirstInOrder;
     }
     else if( aLastFound != m_aHashMap.end() && aLastFound != aLastInsertion )
@@ -175,7 +175,7 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
         aHint = aLastFound->second->m_aNextData;
     }
 
-    // If hint works than no need for search
+    
     if( aHint != m_aHashMap.end() && aHint->first == rKey )
     {
         aLastFound = aHint;
@@ -190,7 +190,7 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
 }
 
 //
-// class MergeData
+
 //
 
 MergeData::MergeData(
@@ -221,7 +221,7 @@ bool MergeData::operator==( ResData *pData )
 }
 
 //
-// class MergeDataFile
+
 //
 
 MergeDataFile::MergeDataFile(
@@ -254,7 +254,7 @@ MergeDataFile::MergeDataFile(
         }
 
         OString sLang;
-        //Get language id from path
+        
         {
             const OString sTransSource("translations/source/");
             const sal_Int32 nStart =
@@ -379,7 +379,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
 
 MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
 {
-    // search for requested MergeEntrys
+    
     MergeData *pData = GetMergeData( pResData );
     if ( pData )
         return pData->GetMergeEntries();
@@ -388,7 +388,7 @@ MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
 
 MergeEntrys *MergeDataFile::GetMergeEntrysCaseSensitive( ResData *pResData )
 {
-    // search for requested MergeEntrys
+    
     MergeData *pData = GetMergeData( pResData , true );
     if ( pData )
         return pData->GetMergeEntries();
@@ -404,7 +404,7 @@ void MergeDataFile::InsertEntry(
 {
     MergeData *pData = 0;
 
-    // search for MergeData
+    
     OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);
 
     if( !bFirstLang )
@@ -422,7 +422,7 @@ void MergeDataFile::InsertEntry(
     }
 
 
-    // insert the cur string
+    
     MergeEntrys *pMergeEntrys = pData->GetMergeEntries();
     if( nLANG =="qtz" )
     {
@@ -452,7 +452,7 @@ OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,
     sKey += lcl_NormalizeFilename(rFilename);
     OSL_TRACE("created key: %s", sKey.getStr());
     if(bCaseSensitive)
-        return sKey;         // officecfg case sensitive identifier
+        return sKey;         
     return sKey.toAsciiUpperCase();
 }
 

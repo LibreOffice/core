@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -71,7 +71,7 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         if( rAttribs.hasAttribute( XML_idx ) )
             mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
         break;
-    // nvSpPr CT_ShapeNonVisual end
+    
 
     case XML_grpSpPr:
         return new ShapePropertiesContext( *this, *mpGroupShapePtr );
@@ -81,20 +81,20 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
     case XML_style:
         return new ShapeStyleContext( getParser() );
 */
-    case XML_cxnSp:         // connector shape
+    case XML_cxnSp:         
         {
             ShapePtr pShape(new Shape("com.sun.star.drawing.ConnectorShape"));
             pShape->setLockedCanvas(mpGroupShapePtr->getLockedCanvas());
             return new ConnectorShapeContext( *this, mpGroupShapePtr, pShape );
         }
-    case XML_grpSp:         // group shape
+    case XML_grpSp:         
         return new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) );
-    case XML_sp:            // shape
+    case XML_sp:            
     case XML_wsp:
         return new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) );
-    case XML_pic:           // CT_Picture
+    case XML_pic:           
         return new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) );
-    case XML_graphicFrame:  // CT_GraphicalObjectFrame
+    case XML_graphicFrame:  
         return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true );
     case XML_cNvGrpSpPr:
         break;

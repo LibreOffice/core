@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -77,30 +77,30 @@ extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
     std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     std::_tstring sOfficeHostnamePath = GetMsiProperty(handle, TEXT("OFFICEDIRHOSTNAME"));
 
-    // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
+    
 
-    // unsetting all properties
+    
 
     UnsetMsiProperty( handle, TEXT("DIRECTORY_NOT_EMPTY") );
 
-    // 1. Searching for file setup.ini
+    
 
     std::_tstring sSetupIniPath = sInstallPath + sOfficeHostnamePath + TEXT("\\program\\setup.ini");
 
     WIN32_FIND_DATA data;
     HANDLE hdl = FindFirstFile(sSetupIniPath.c_str(), &data);
 
-    // std::_tstring mystr = "Searching for " + sSetupIniPath;
-    // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
+    
+    
 
     if ( IsValidHandle(hdl) )
     {
-        // setup.ini found -> directory cannot be used for installation.
+        
         SetMsiProperty( handle, TEXT("DIRECTORY_NOT_EMPTY"), TEXT("1") );
         SetMsiErrorCode( MSI_ERROR_DIRECTORY_NOT_EMPTY );
-        // std::_tstring notEmptyStr = "Directory is not empty. Please choose another installation directory.";
-        // std::_tstring notEmptyTitle = "Directory not empty";
-        // MessageBox(NULL, notEmptyStr.c_str(), notEmptyTitle.c_str(), MB_OK);
+        
+        
+        
     }
 
     return ERROR_SUCCESS;

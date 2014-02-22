@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/main.h>
@@ -37,7 +37,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <unotools/streamhelper.hxx>
 
-// Will be in comphelper if CWS MAV09 is integrated
+
 #include <comphelper/storagehelper.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -235,7 +235,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     maHintText.SetText( OUString("Hint: Copy crypto files from xmlsecurity/tools/cryptoken/nss and sample files from xmlsecurity/tools/examples to <temp>/nss.\nThis location will be used from the demo as the default location.") );
     maHintText.Show();
 
-    // Help the user with some default values
+    
     OUString aTempDirURL;
     ::osl::File::getTempDirURL( aTempDirURL );
     INetURLObject aURLObj( aTempDirURL );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
             mnActDeltaX     ( 0L ),
             mnActDeltaY     ( 0L )
 {
-    // we need a parent
+    
     DBG_ASSERT( pParent, "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );
 
     const Size      aSize( pParent->GetOutputSizePixel() );
@@ -54,10 +54,10 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
     const bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
     const bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
 
-    // calculate maximum speed distance
+    
     mnMaxWidth = (sal_uLong) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
 
-    // create wheel window
+    
     SetTitleType( FLOATWIN_TITLE_NONE );
     ImplCreateImageList();
     ResMgr* pResMgr = ImplGetResMgr();
@@ -66,7 +66,7 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
         aBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLMSK, *pResMgr ) );
     ImplSetRegion( aBmp );
 
-    // set wheel mode
+    
     if( bHorz && bVert )
         ImplSetWheelMode( WHEELMODE_VH );
     else if( bHorz )
@@ -74,7 +74,7 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
     else
         ImplSetWheelMode( WHEELMODE_V );
 
-    // init timer
+    
     mpTimer = new Timer;
     mpTimer->SetTimeoutHdl( LINK( this, ImplWheelWindow, ImplScrollHdl ) );
     mpTimer->SetTimeout( mnTimeout );
@@ -170,7 +170,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
     {
         sal_uLong nCurTime;
 
-        // calc current time
+        
         if( mnMaxWidth )
         {
             const double fExp = ( (double) mnActDist / mnMaxWidth ) * log10( (double) MAX_TIME / MIN_TIME );

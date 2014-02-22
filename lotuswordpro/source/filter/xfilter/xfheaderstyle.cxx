@@ -164,7 +164,7 @@ void    XFHeaderStyle::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( A2OUSTR("style:properties") );
 
-    // background image
+    
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 

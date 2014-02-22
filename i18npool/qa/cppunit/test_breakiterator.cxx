@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <cppuhelper/compbase1.hxx>
@@ -76,7 +76,7 @@ void TestBreakIterator::testLineBreaking()
     i18n::LineBreakUserOptions aUserOptions;
     lang::Locale aLocale;
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=31271
+    
     {
         OUString aTest("(some text here)");
 
@@ -84,19 +84,19 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "US";
 
         {
-            //Here we want the line break to leave text here) on the next line
+            
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some tex"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the word", aResult.breakIndex == 6);
         }
 
         {
-            //Here we want the line break to leave "here)" on the next line
+            
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some text here"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the word", aResult.breakIndex == 11);
         }
     }
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=49849
+    
     {
         const sal_Unicode HEBREW1[] = { 0x05DE, 0x05D9, 0x05DC, 0x05D9, 0x5DD };
         OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
@@ -106,13 +106,13 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "IL";
 
         {
-            //Here we want the line break to happen at the whitespace
+            
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-1, aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the word", aResult.breakIndex == aWord.getLength()+1);
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=17155
+    
     {
         OUString aTest("foo /bar/baz");
 
@@ -120,14 +120,14 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "US";
 
         {
-            //Here we want the line break to leave /bar/ba clumped together on the next line
+            
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("foo /bar/ba"), aLocale, 0,
                 aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the first slash", aResult.breakIndex == 4);
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=19716
+    
     {
         OUString aTest("aaa]aaa");
 
@@ -135,7 +135,7 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "US";
 
         {
-            //Here we want the line break to move the whole lot to the next line
+            
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
                 aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the line, not at ]", aResult.breakIndex == 0);
@@ -143,7 +143,7 @@ void TestBreakIterator::testLineBreaking()
     }
 }
 
-//See https://bugs.libreoffice.org/show_bug.cgi?id=49629
+
 void TestBreakIterator::testWordBoundaries()
 {
     lang::Locale aLocale;
@@ -152,7 +152,7 @@ void TestBreakIterator::testWordBoundaries()
 
     i18n::Boundary aBounds;
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=11993
+    
     {
         OUString aTest("abcd ef  ghi??? KLM");
 
@@ -164,11 +164,11 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(!m_xBreak->isEndWord(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD));
 
-        //next word
+        
         aBounds = m_xBreak->getWordBoundary(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 12);
 
-        //previous word
+        
         aBounds = m_xBreak->getWordBoundary(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 5 && aBounds.endPos == 7);
 
@@ -183,7 +183,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(aBounds.startPos == 16 && aBounds.endPos == 19);
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=21907
+    
     {
         OUString aTest("b a?");
 
@@ -200,7 +200,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 3, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES));
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=14904
+    
     {
         const sal_Unicode TEST[] =
         {
@@ -237,16 +237,16 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(aBounds.startPos == 88 && aBounds.endPos == 92);
     }
 
-    //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
+    
     sal_Unicode aBreakTests[] = { ' ', 1, 2, 3, 4, 5, 6, 7, 0x91, 0x92, 0x200B, 0xE8FF, 0xF8FF };
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
-        //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
+        
         for (size_t i = 0; i < SAL_N_ELEMENTS(aBreakTests); ++i)
         {
 #if (U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM <= 2)
-            //Note the breakiterator test is known to fail on older icu
-            //versions (4.2.1) for the 200B (ZWSP) Zero Width Space testcase.
+            
+            
             if (aBreakTests[i] == 0x200B)
                 continue;
 #endif
@@ -276,7 +276,7 @@ void TestBreakIterator::testWordBoundaries()
     sal_Unicode aJoinTests[] = { 'X', 0x200C, 0x200D, 0x2060, 0xFEFF, 0xFFF9, 0xFFFA, 0xFFFB };
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
-        //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
+        
         for (size_t i = 0; i < SAL_N_ELEMENTS(aJoinTests); ++i)
         {
             OUString aTest = "Word" + OUString(aJoinTests[i]) + "Word";
@@ -302,7 +302,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=13494
+    
     {
         const OUString aBase("xxAAxxBBxxCCxx");
         const sal_Unicode aTests[] =
@@ -382,7 +382,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=13451
+    
     {
         aLocale.Language = "ca";
         aLocale.Country = "ES";
@@ -403,7 +403,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=85411
+    
     for (int j = 0; j < 2; ++j)
     {
         switch (j)
@@ -441,7 +441,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
 
-    //https://issues.apache.org/ooo/show_bug.cgi?id=21290
+    
     for (int j = 0; j < 2; ++j)
     {
         switch (j)
@@ -482,7 +482,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=58513
+    
     {
         aLocale.Language = "fi";
         aLocale.Country = "FI";
@@ -522,7 +522,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=107843
+    
     {
         aLocale.Language = "en";
         aLocale.Country = "US";
@@ -540,7 +540,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 9);
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
+    
     {
         aLocale.Language = "en";
         aLocale.Country = "US";
@@ -562,10 +562,10 @@ void TestBreakIterator::testWordBoundaries()
     }
 }
 
-//See https://bugs.libreoffice.org/show_bug.cgi?id=40292
-//See https://issues.apache.org/ooo/show_bug.cgi?id=80412
-//See https://issues.apache.org/ooo/show_bug.cgi?id=111152
-//See https://issues.apache.org/ooo/show_bug.cgi?id=50172
+
+
+
+
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
@@ -710,9 +710,9 @@ void TestBreakIterator::testGraphemeIteration()
     }
 }
 
-//A test to ensure that certain ranges and codepoints that are categorized as
-//weak remain as weak, so that existing docs that depend on this don't silently
-//change font for those weak chars
+
+
+
 void TestBreakIterator::testWeak()
 {
     lang::Locale aLocale;
@@ -724,16 +724,16 @@ void TestBreakIterator::testWeak()
         {
             0x0001, 0x0002,
             0x0020, 0x00A0,
-            0x2150, 0x215F, //Number Forms, fractions
-            0x2160, 0x2180, //Number Forms, roman numerals
-            0x2200, 0x22FF, //Mathematical Operators
-            0x27C0, 0x27EF, //Miscellaneous Mathematical Symbols-A
-            0x2980, 0x29FF, //Miscellaneous Mathematical Symbols-B
-            0x2A00, 0x2AFF, //Supplemental Mathematical Operators
-            0x2100, 0x214F, //Letterlike Symbols
-            0x2308, 0x230B, //Miscellaneous technical
-            0x25A0, 0x25FF, //Geometric Shapes
-            0x2B30, 0x2B4C  //Miscellaneous Symbols and Arrows
+            0x2150, 0x215F, 
+            0x2160, 0x2180, 
+            0x2200, 0x22FF, 
+            0x27C0, 0x27EF, 
+            0x2980, 0x29FF, 
+            0x2A00, 0x2AFF, 
+            0x2100, 0x214F, 
+            0x2308, 0x230B, 
+            0x25A0, 0x25FF, 
+            0x2B30, 0x2B4C  
         };
         OUString aWeaks(WEAKS, SAL_N_ELEMENTS(WEAKS));
 
@@ -750,10 +750,10 @@ void TestBreakIterator::testWeak()
     }
 }
 
-//A test to ensure that certain ranges and codepoints that are categorized as
-//asian remain as asian, so that existing docs that depend on this don't silently
-//change font for those asian chars.
-//See https://bugs.libreoffice.org/show_bug.cgi?id=38095
+
+
+
+
 void TestBreakIterator::testAsian()
 {
     lang::Locale aLocale;
@@ -763,15 +763,15 @@ void TestBreakIterator::testAsian()
     {
         const sal_Unicode ASIANS[] =
         {
-            //some typical CJK chars
+            
             0x4E00, 0x62FF,
-            //The full HalfWidth and FullWidth block has historically been
-            //designated as taking the CJK font :-(
-            //HalfWidth and FullWidth forms of ASCII 0-9, categorized under
-            //UAX24 as "Common" i.e. by that logic WEAK
+            
+            
+            
+            
             0xFF10, 0xFF19,
-            //HalfWidth and FullWidth forms of ASCII A-z, categorized under
-            //UAX25 as "Latin", i.e. by that logic LATIN
+            
+            
             0xFF21, 0xFF5A
         };
         OUString aAsians(ASIANS, SAL_N_ELEMENTS(ASIANS));
@@ -789,7 +789,7 @@ void TestBreakIterator::testAsian()
     }
 }
 
-//A test to ensure that our Lao word boundary detection is useful
+
 void TestBreakIterator::testLao()
 {
     lang::Locale aLocale;
@@ -810,14 +810,14 @@ void TestBreakIterator::testLao()
 
 }
 
-//A test to ensure that our thai word boundary detection is useful
+
 void TestBreakIterator::testThai()
 {
     lang::Locale aLocale;
     aLocale.Language = "th";
     aLocale.Country = "TH";
 
-    //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
+    
     {
         const sal_Unicode THAI[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
         OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
@@ -827,8 +827,8 @@ void TestBreakIterator::testThai()
             aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=29548
-    //make sure forwards and back are consistent
+    
+    
     {
         const sal_Unicode THAI[] =
         {
@@ -880,11 +880,11 @@ void TestBreakIterator::testNorthernThai()
 #endif
 
 #if (U_ICU_VERSION_MAJOR_NUM > 4)
-// Not sure if any version earlier than 49 did have Khmer word boundary
-// dictionaries, 4.6 does not.
 
-//A test to ensure that our khmer word boundary detection is useful
-//https://bugs.libreoffice.org/show_bug.cgi?id=52020
+
+
+
+
 void TestBreakIterator::testKhmer()
 {
     lang::Locale aLocale;

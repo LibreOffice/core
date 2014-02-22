@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlithlp.hxx"
@@ -76,7 +76,7 @@ const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
         { XML_THICK,    SVX_XML_BORDER_WIDTH_THICK      },
         { XML_TOKEN_INVALID, 0 }
 };
-// mapping tables to map external xml input to internal box line widths
+
 
 
 const sal_uInt16 aBorderWidths[] =
@@ -132,7 +132,7 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
         }
         else
         {
-            // missformed
+            
             return false;
         }
     }
@@ -154,7 +154,7 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     sal_uInt16 nNamedWidth,
                                     bool bHasColor, const Color& rColor )
 {
-    // first of all, delete an empty line
+    
     if( (bHasStyle && API_LINE_NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
@@ -168,11 +168,11 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
         return bRet;
     }
 
-    // if there is no line and no style and no with, there will never be a line
+    
     if( !rpLine && !(bHasStyle && bHasWidth) )
         return false;
 
-    // We now do know that there will be a line
+    
     if( !rpLine )
         rpLine = new SvxBorderLine;
 
@@ -186,11 +186,11 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
        bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
-       // fdo#38542: for double borders, do not override the width
-       // set via style:border-line-width{,-left,-right,-top,-bottom}
+       
+       
        if (!bDouble || !rpLine->GetWidth())
        {
-           // The width has to be changed
+           
            if (bHasWidth && USHRT_MAX != nNamedWidth)
            {
                if (bDouble)
@@ -210,7 +210,7 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
        sw_frmitems_setXMLBorderStyle( *rpLine, nStyle );
    }
 
-    // set color
+    
     if( bHasColor )
         rpLine->SetColor( rColor );
 

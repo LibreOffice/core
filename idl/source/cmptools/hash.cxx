@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// C and C++ includes
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 
-// program-sensitive includes
+
 #include <hash.hxx>
 #include <tools/debug.hxx>
 
@@ -31,8 +31,8 @@ SvStringHashEntry::~SvStringHashEntry() { };
 
 SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
 {
-    nMax = nMaxEntries;     // set max entries
-    nFill = 0;              // no entries
+    nMax = nMaxEntries;     
+    nFill = 0;              
     lTry = 0;
     lAsk = 0;
 }
@@ -54,13 +54,13 @@ sal_Bool SvHashTable::Test_Insert( const OString& rElement, sal_Bool bInsert,
     nHash =  HashFunc( rElement );
     nIndex = nHash % nMax;
 
-    nLoop = 0;                                      // divide to range
+    nLoop = 0;                                      
     while( (nMax != nLoop) && IsEntry( nIndex ) )
-    {                     // is place occupied
+    {                     
         if( equals( rElement, nIndex ) )
         {
             if( pInsertPos )
-                *pInsertPos = nIndex;               // place of Element
+                *pInsertPos = nIndex;               
             return sal_True;
         }
         nLoop++;
@@ -74,7 +74,7 @@ sal_Bool SvHashTable::Test_Insert( const OString& rElement, sal_Bool bInsert,
         if( nMax != nLoop )
         {
             nFill++;
-            *pInsertPos = nIndex;                       // return free place
+            *pInsertPos = nIndex;                       
             return sal_True;
         }
     }
@@ -86,7 +86,7 @@ SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
 {
     pEntries = new SvStringHashEntry[ nMaxEntries ];
 
-    // set RefCount to one
+    
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + nMaxEntries;
@@ -100,7 +100,7 @@ SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
 SvStringHashTable::~SvStringHashTable()
 {
 #ifdef DBG_UTIL
-    // set RefCount to one
+    
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + GetMax();
@@ -116,7 +116,7 @@ SvStringHashTable::~SvStringHashTable()
 
 sal_uInt32 SvStringHashTable::HashFunc( const OString& rElement ) const
 {
-    sal_uInt32          nHash = 0;  // hash value
+    sal_uInt32          nHash = 0;  
     const char *    pStr = rElement.getStr();
 
     int nShift = 0;
@@ -195,7 +195,7 @@ void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
         if( IsEntry( n ) )
             pList->push_back( Get( n ) );
     }
-    // hash order, sort now
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

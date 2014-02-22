@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/bootstrapfixture.hxx>
@@ -28,14 +28,14 @@ class Test : public test::BootstrapFixture
 public:
     virtual void setUp()
     {
-        // so that comphelper::getProcessServiceFactory() works, m_xContext is
-        // set up, etc.
+        
+        
         test::BootstrapFixture::setUp();
 
         if ( !m_xProvider.is() )
             m_xProvider = deployment::UpdateInformationProvider::create( m_xContext );
 
-        // repositories that we will be checking
+        
         m_aRepositoryList.realloc( 1 );
         m_aRepositoryList[0] = getURLFromSrc( "/extensions/qa/update/simple.xml" );
     }
@@ -48,10 +48,10 @@ public:
     }
 
 protected:
-    // test the getUpdateInformationEnumeration() method
+    
     void testGetUpdateInformationEnumeration()
     {
-        OUString aInstallSetID( "TODO" ); // unused when we do not have a 'feed'
+        OUString aInstallSetID( "TODO" ); 
 
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
             m_xProvider->getUpdateInformationEnumeration( m_aRepositoryList, aInstallSetID );
@@ -83,18 +83,18 @@ protected:
 #endif
             CPPUNIT_ASSERT( xChildNodes->getLength() == 13 );
 
-            //uno::Reference< dom::XElement > xChildId( xChildNodes->item( 0 ), uno::UNO_QUERY );
-            //CPPUNIT_ASSERT( xChildId.is() );
-            //CPPUNIT_ASSERT( xChildId->getNodeValue() == "LibreOffice_3.4" );
-            //fprintf( stderr, "Attribute == %s\n", OUStringToOString( aEntry.UpdateDocument->getAttribute( OUString( "test" ) ), RTL_TEXTENCODING_UTF8 ).getStr() );
-            //fprintf( stderr, "Value == %s\n", OUStringToOString( xChildId->getNodeValue(), RTL_TEXTENCODING_UTF8 ).getStr() );
-            // TODO check more deeply
+            
+            
+            
+            
+            
+            
         }
         else
             CPPUNIT_FAIL( "Wrong type of the entry." );
     }
 
-    // test the checkForUpdates() method - update is available
+    
     void testCheckUpdateAvailable()
     {
         UpdateInfo aInfo;
@@ -108,13 +108,13 @@ protected:
                     OUString( "InstallSetID" ) ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
-            CPPUNIT_ASSERT( aInfo.Sources[0].URL == "http://www.libreoffice.org/download/" );
+            CPPUNIT_ASSERT( aInfo.Sources[0].URL == "http:
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );
     }
 
-    // test the checkForUpdates() method - we are up-to-date
+    
     void testCheckUpToDate()
     {
         UpdateInfo aInfo;
@@ -145,7 +145,7 @@ private:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testupdate::Test);
-} // namespace testupdate
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

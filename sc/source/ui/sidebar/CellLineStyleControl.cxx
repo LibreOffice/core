@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <CellLineStyleControl.hxx>
@@ -46,7 +46,7 @@ CellLineStyleControl::CellLineStyleControl(Window* pParent, CellAppearanceProper
 
 void CellLineStyleControl::Initialize()
 {
-    //maPushButtonMoreOptions.SetIcoPosX(2);
+    
     Link aLink = LINK(this, CellLineStyleControl, PBClickHdl);
     maPushButtonMoreOptions.SetClickHdl(aLink);
 
@@ -115,7 +115,7 @@ IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
         sal_uInt16 n2 = 0;
         sal_uInt16 n3 = 0;
 
-        //FIXME: fully for new border line possibilities
+        
 
         switch(iPos)
         {
@@ -196,41 +196,41 @@ void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal
     SetAllNoSel();
     mbVSfocus = true;
 
-    //FIXME: fully for new border line possibilities
+    
 
-    if(out == DEF_LINE_WIDTH_0 && in == 0 && dis == 0)  //1
+    if(out == DEF_LINE_WIDTH_0 && in == 0 && dis == 0)  
     {
         maCellLineStyleValueSet.SetSelItem(1);
     }
-    else if(out == DEF_LINE_WIDTH_2 && in == 0 && dis == 0) //2
+    else if(out == DEF_LINE_WIDTH_2 && in == 0 && dis == 0) 
     {
         maCellLineStyleValueSet.SetSelItem(2);
     }
-    else if(out == DEF_LINE_WIDTH_3 && in == 0 && dis == 0) //3
+    else if(out == DEF_LINE_WIDTH_3 && in == 0 && dis == 0) 
     {
         maCellLineStyleValueSet.SetSelItem(3);
     }
-    else if(out == DEF_LINE_WIDTH_4 && in == 0 && dis == 0) //4
+    else if(out == DEF_LINE_WIDTH_4 && in == 0 && dis == 0) 
     {
         maCellLineStyleValueSet.SetSelItem(4);
     }
-    else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_1) //5
+    else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_1) 
     {
         maCellLineStyleValueSet.SetSelItem(5);
     }
-    else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) //6
+    else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) 
     {
         maCellLineStyleValueSet.SetSelItem(6);
     }
-    else if(out == DEF_LINE_WIDTH_1 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_1) //7
+    else if(out == DEF_LINE_WIDTH_1 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_1) 
     {
         maCellLineStyleValueSet.SetSelItem(7);
     }
-    else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) //8
+    else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) 
     {
         maCellLineStyleValueSet.SetSelItem(8);
     }
-    else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_2) //9
+    else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_2) 
     {
         maCellLineStyleValueSet.SetSelItem(9);
     }
@@ -244,8 +244,8 @@ void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal
     maCellLineStyleValueSet.StartSelection();
 }
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

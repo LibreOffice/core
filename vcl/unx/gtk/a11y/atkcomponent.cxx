@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -302,13 +302,13 @@ component_wrapper_get_layer (AtkComponent   *component)
 static gint
 component_wrapper_get_mdi_zorder (AtkComponent   *)
 {
-    // only needed for ATK_LAYER_MDI (not used) or ATK_LAYER_WINDOW (inherited from GAIL)
+    
     return G_MININT;
 }
 
 /*****************************************************************************/
 
-// This code is mostly stolen from libgail ..
+
 
 static guint
 component_wrapper_add_focus_handler (AtkComponent    *component,
@@ -349,7 +349,7 @@ component_wrapper_remove_focus_handler (AtkComponent  *component,
 
 /*****************************************************************************/
 
-} // extern "C"
+} 
 
 void
 componentIfaceInit (AtkComponentIface *iface)

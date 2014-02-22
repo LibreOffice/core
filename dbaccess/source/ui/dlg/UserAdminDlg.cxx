@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "adminpages.hxx"
@@ -45,7 +45,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
 
-    // OUserAdminDlg
+    
     OUserAdminDlg::OUserAdminDlg(Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XComponentContext >& _rxORB
@@ -61,13 +61,13 @@ namespace dbaui
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);
         SetInputSet(_pItems);
-        // propagate this set as our new input set and reset the example set
+        
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
         AddTabPage("settings", OUserAdmin::Create, 0);
 
-        // remove the reset button - it's meaning is much too ambiguous in this dialog
+        
         RemoveResetButton();
     }
 
@@ -115,7 +115,7 @@ namespace dbaui
     }
     void OUserAdminDlg::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
-        // register ourself as modified listener
+        
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
@@ -171,6 +171,6 @@ namespace dbaui
     {
         return PrepareLeaveCurrentPage();
     }
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

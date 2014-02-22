@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/alloc.h>
@@ -28,7 +28,7 @@
 namespace rtl_alloc
 {
 
-    // small memory check routine, which return false, if there is a problem
+    
 
     bool checkMemory(char* _pMemory, sal_uInt32 _nSize, char _n)
     {
@@ -46,7 +46,7 @@ namespace rtl_alloc
 
 class Memory : public CppUnit::TestFixture
 {
-    // for normal alloc functions
+    
     char       *m_pMemory;
     sal_uInt32  m_nSizeOfMemory;
 
@@ -57,7 +57,7 @@ public:
     {
     }
 
-    // initialise your test code values here.
+    
     void setUp()
     {
         m_pMemory = (char*) rtl_allocateMemory( m_nSizeOfMemory );
@@ -90,11 +90,11 @@ public:
     CPPUNIT_TEST(rtl_allocateMemory_001);
     CPPUNIT_TEST(rtl_reallocateMemory_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class test
+}; 
 
 class TestZeroMemory : public CppUnit::TestFixture
 {
-    // for zero functions
+    
     char       *m_pZeroMemory;
     sal_uInt32  m_nSizeOfZeroMemory;
 
@@ -105,7 +105,7 @@ public:
     {
     }
 
-    // initialise your test code values here.
+    
     void setUp()
     {
         m_pZeroMemory = (char*) rtl_allocateZeroMemory( m_nSizeOfZeroMemory );
@@ -114,11 +114,11 @@ public:
     void tearDown()
     {
         rtl_freeZeroMemory(m_pZeroMemory, m_nSizeOfZeroMemory);
-        // LLA: no check possible, may GPF if there is something wrong.
-        // CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", pZeroMemory != NULL);
+        
+        
     }
 
-    // insert your test code here.
+    
 
     void rtl_allocateZeroMemory_001()
     {
@@ -134,10 +134,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::Memory);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::TestZeroMemory);
-} // namespace rtl_alloc
+} 
 
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -53,7 +53,7 @@ void SequenceResultSet::checkClosed()
     throw ( com::sun::star::sdbc::SQLException,
             com::sun::star::uno::RuntimeException )
 {
-    // we never close :o)
+    
 }
 
 
@@ -88,7 +88,7 @@ SequenceResultSet::~SequenceResultSet()
 void SequenceResultSet::close(  )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    // a noop
+    
 }
 
 Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
@@ -96,12 +96,12 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
 {
     if( ! m_meta.is() )
     {
-        // Oh no, not again
+        
         throw ::com::sun::star::sdbc::SQLException(
             "pq_sequenceresultset: no meta supported ", *this,
-        // I did not find "IM001" in a specific standard,
-        // but it seems to be used by other systems (such as ODBC)
-        // and some parts of LibreOffice special-case it.
+        
+        
+        
             OUString( "IM001" ), 1, Any() );
     }
     return m_meta;
@@ -112,7 +112,7 @@ sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     const OUString& columnName )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    // no need to guard, as all members are readonly !
+    
     for( int i = 0 ;i < m_fieldCount ; i ++ )
     {
         if( columnName == m_columnNames[i] )
@@ -122,7 +122,7 @@ sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     }
     ::dbtools::throwInvalidColumnException( columnName, *this );
     assert(false);
-    return 0; // Never reached
+    return 0; 
 }
 }
 

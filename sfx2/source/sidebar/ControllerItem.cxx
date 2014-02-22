@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <sfx2/sidebar/ControllerItem.hxx>
 
@@ -145,18 +145,18 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
         return false;
     else if ( ! SvtCommandOptions().HasEntries(SvtCommandOptions::CMDOPTION_DISABLED))
     {
-        // There are no disabled commands.
+        
         return true;
     }
     else if (msCommandName.getLength() == 0)
     {
-        // We were not given a command name at construction and can
-        // not check the state now.  Assume the best and return true.
+        
+        
         return true;
     }
     else if (SvtCommandOptions().Lookup(SvtCommandOptions::CMDOPTION_DISABLED, msCommandName))
     {
-        // The command is part of a list of disabled commands.
+        
         return false;
     }
     else
@@ -240,6 +240,6 @@ void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nInde
 }
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

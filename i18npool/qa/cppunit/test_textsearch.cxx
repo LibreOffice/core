@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/compbase1.hxx>
@@ -52,7 +52,7 @@ private:
     uno::Reference<util::XTextSearch> m_xSearch;
 };
 
-// Sanity check our ICU first ...
+
 void TestTextSearch::testICU()
 {
     UErrorCode nErr = U_ZERO_ERROR;
@@ -103,7 +103,7 @@ void TestTextSearch::testSearches()
     sal_Int32 fStartRes = 10, fEndRes = 18 ;
     sal_Int32 bStartRes = 18, bEndRes = 10 ;
 
-    // set options
+    
     util::SearchOptions aOptions;
     aOptions.algorithmType = util::SearchAlgorithms_REGEXP ;
     aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
@@ -112,13 +112,13 @@ void TestTextSearch::testSearches()
 
     util::SearchResult aRes;
 
-    // search forward
+    
     aRes = m_xSearch->searchForward( str, startPos, endPos );
     CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
     CPPUNIT_ASSERT( aRes.startOffset[0] == fStartRes );
     CPPUNIT_ASSERT( aRes.endOffset[0] == fEndRes );
 
-    // search backwards
+    
     aRes = m_xSearch->searchBackward( str, endPos, startPos );
     CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
     CPPUNIT_ASSERT( aRes.startOffset[0] == bStartRes );

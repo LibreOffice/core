@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -104,7 +104,7 @@ void Element::emitStructure( int nLevel)
 
 void ListElement::visitedBy( ElementTreeVisitor& visitor, const std::list< Element* >::const_iterator& )
 {
-    // this is only an inner node
+    
     applyToChildren(visitor);
 }
 
@@ -154,7 +154,7 @@ void PolyPolyElement::updateGeometry()
     w = aRange.getWidth();
     h = aRange.getHeight();
 
-    // fdo#32330 - non-closed paths will not show up filled in LibO
+    
     if( Action & (PATH_FILL | PATH_EOFILL) )
         PolyPoly.setClosed(true);
 }
@@ -200,7 +200,7 @@ bool ParagraphElement::isSingleLined( PDFIProcessor& rProc ) const
     TextElement* pText = NULL, *pLastText = NULL;
     while( it != Children.end() )
     {
-        // a paragraph containing subparagraphs cannot be single lined
+        
         if( dynamic_cast< ParagraphElement* >(*it) != NULL )
             return false;
 
@@ -222,7 +222,7 @@ bool ParagraphElement::isSingleLined( PDFIProcessor& rProc ) const
         ++it;
     }
 
-    // a paragraph without a single text is not considered single lined
+    
     return pLastText != NULL;
 }
 
@@ -279,13 +279,13 @@ void PageElement::visitedBy( ElementTreeVisitor&                          rVisit
 
 void PageElement::updateParagraphGeometry( Element* pEle )
 {
-    // update geometry of children
+    
     for( std::list< Element* >::iterator it = pEle->Children.begin();
          it != pEle->Children.end(); ++it )
     {
         updateParagraphGeometry( *it );
     }
-    // if this is a paragraph itself, then update according to children geometry
+    
     if( dynamic_cast<ParagraphElement*>(pEle) )
     {
         for( std::list< Element* >::iterator it = pEle->Children.begin();
@@ -310,7 +310,7 @@ void PageElement::updateParagraphGeometry( Element* pEle )
 bool PageElement::resolveHyperlink( std::list<Element*>::iterator link_it, std::list<Element*>& rElements )
 {
     HyperlinkElement* pLink = dynamic_cast<HyperlinkElement*>(*link_it);
-    if( ! pLink ) // sanity check
+    if( ! pLink ) 
         return false;
 
     for( std::list<Element*>::iterator it = rElements.begin(); it != rElements.end(); ++it )
@@ -323,11 +323,11 @@ bool PageElement::resolveHyperlink( std::list<Element*>::iterator link_it, std::
             {
                 if( pLink->Children.empty() )
                 {
-                    // insert the hyperlink before the frame
+                    
                     rElements.splice( it, Hyperlinks.Children, link_it );
                     pLink->Parent = (*it)->Parent;
                 }
-                // move text element into hyperlink
+                
                 std::list<Element*>::iterator next = it;
                 ++next;
                 Element::setParent( it, pLink );
@@ -335,7 +335,7 @@ bool PageElement::resolveHyperlink( std::list<Element*>::iterator link_it, std::
                 --it;
                 continue;
             }
-            // a link can contain multiple text elements or a single frame
+            
             if( ! pLink->Children.empty() )
                 continue;
             if( dynamic_cast<ParagraphElement*>(*it)  )
@@ -347,10 +347,10 @@ bool PageElement::resolveHyperlink( std::list<Element*>::iterator link_it, std::
             FrameElement* pFrame = dynamic_cast<FrameElement*>(*it);
             if( pFrame )
             {
-                // insert the hyperlink before the frame
+                
                 rElements.splice( it, Hyperlinks.Children, link_it );
                 pLink->Parent = (*it)->Parent;
-                // move frame into hyperlink
+                
                 Element::setParent( it, pLink );
                 break;
             }
@@ -378,8 +378,8 @@ void PageElement::resolveFontStyles( PDFIProcessor& rProc )
 
 void PageElement::resolveUnderlines( PDFIProcessor& rProc )
 {
-    // FIXME: currently the algorithm used is quadratic
-    // this could be solved by some sorting beforehand
+    
+    
 
     std::list< Element* >::iterator poly_it = Children.begin();
     while( poly_it != Children.end() )
@@ -427,7 +427,7 @@ void PageElement::resolveUnderlines( PDFIProcessor& rProc )
             Element* pEle = *it;
             if( pEle->y <= u_y && pEle->y + pEle->h*1.1 >= u_y )
             {
-                // first: is the element underlined completely ?
+                
                 if( pEle->x + pEle->w*0.1 >= l_x &&
                     pEle->x + pEle->w*0.9 <= r_x )
                 {
@@ -438,7 +438,7 @@ void PageElement::resolveUnderlines( PDFIProcessor& rProc )
                         if( ! rTextGC.isRotatedOrSkewed() )
                         {
                             bRemovePoly = true;
-                            // retrieve ID for modified font
+                            
                             FontAttributes aAttr = rProc.getFont( pText->FontId );
                             aAttr.isUnderline = true;
                             pText->FontId = rProc.getFontId( aAttr );
@@ -447,8 +447,8 @@ void PageElement::resolveUnderlines( PDFIProcessor& rProc )
                     else if( dynamic_cast< HyperlinkElement* >(pEle) )
                         bRemovePoly = true;
                 }
-                // second: hyperlinks may be larger than their underline
-                // since they are just arbitrary rectangles in the action definition
+                
+                
                 else if( dynamic_cast< HyperlinkElement* >(pEle) != NULL &&
                          l_x >= pEle->x && r_x <= pEle->x+pEle->w )
                 {

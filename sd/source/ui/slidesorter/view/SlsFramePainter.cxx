@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,7 +68,7 @@ void FramePainter::PaintFrame (
     if ( ! mbIsValid)
         return;
 
-    // Paint the shadow.
+    
     maTopLeft.PaintCorner(rDevice, aBox.TopLeft());
     maTopRight.PaintCorner(rDevice, aBox.TopRight());
     maBottomLeft.PaintCorner(rDevice, aBox.BottomLeft());
@@ -87,7 +87,7 @@ void FramePainter::AdaptColor (
     const Color aNewColor,
     const bool bEraseCenter)
 {
-    // Get the source color.
+    
     if (maCenter.maBitmap.IsEmpty())
         return;
     BitmapReadAccess* pReadAccess = maCenter.maBitmap.GetBitmap().AcquireReadAccess();
@@ -96,11 +96,11 @@ void FramePainter::AdaptColor (
     const Color aSourceColor = pReadAccess->GetColor(0,0);
     maCenter.maBitmap.GetBitmap().ReleaseAccess(pReadAccess);
 
-    // Erase the center bitmap.
+    
     if (bEraseCenter)
         maCenter.maBitmap.SetEmpty();
 
-    // Replace the color in all bitmaps.
+    
     maTopLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
     maTop.maBitmap.Replace(aSourceColor, aNewColor, 0);
     maTopRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
@@ -115,7 +115,7 @@ void FramePainter::AdaptColor (
 
 
 
-//===== FramePainter::OffsetBitmap ============================================
+
 
 FramePainter::OffsetBitmap::OffsetBitmap (
     const BitmapEx& rBitmap,
@@ -144,8 +144,8 @@ FramePainter::OffsetBitmap::OffsetBitmap (
         nHorizontalPosition<0 ? -nO : nHorizontalPosition>0 ? -nO : 0,
         nVerticalPosition<0 ? -nO : nVerticalPosition>0 ? -nO : 0);
 
-    // Enlarge the side bitmaps so that painting the frame requires less
-    // paint calls.
+    
+    
     const sal_Int32 nSideBitmapSize (64);
     if (nHorizontalPosition == 0 && nVerticalPosition == 0)
     {
@@ -188,7 +188,7 @@ void FramePainter::OffsetBitmap::PaintSide (
     const Size aBitmapSize (maBitmap.GetSizePixel());
     if (rAnchor1.Y() == rAnchor2.Y())
     {
-        // Side is horizontal.
+        
         const sal_Int32 nY (rAnchor1.Y() + maOffset.Y());
         const sal_Int32 nLeft (
             rAnchor1.X()
@@ -208,7 +208,7 @@ void FramePainter::OffsetBitmap::PaintSide (
     }
     else if (rAnchor1.X() == rAnchor2.X())
     {
-        // Side is vertical.
+        
         const sal_Int32 nX (rAnchor1.X() + maOffset.X());
         const sal_Int32 nTop (
             rAnchor1.Y()
@@ -228,7 +228,7 @@ void FramePainter::OffsetBitmap::PaintSide (
     }
     else
     {
-        // Diagonal sides indicatee an error.
+        
         OSL_ASSERT(false);
     }
 }
@@ -253,6 +253,6 @@ void FramePainter::OffsetBitmap::PaintCenter (
 
 
 
-} } } // end of namespace sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

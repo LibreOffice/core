@@ -54,14 +54,14 @@ int SAL_CALL main (int argc, char **argv)
             xLockBytes, aFilename.pData, store_AccessReadWrite);
         if (eErrCode != store_E_None)
         {
-            // Check reason.
+            
             if (eErrCode != store_E_NotExists)
             {
                 fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
                 return eErrCode;
             }
 
-            // Create.
+            
             eErrCode = FileLockBytes_createInstance (
                 xLockBytes, aFilename.pData, store_AccessReadCreate);
             if (eErrCode != store_E_None)
@@ -126,7 +126,7 @@ int SAL_CALL main (int argc, char **argv)
                 }
                 if (verify != magic)
                 {
-                    // Failure.
+                    
                     fprintf (stderr, "Expected %ld read %ld\n", (unsigned long)(magic), (unsigned long)(verify));
                 }
             }
@@ -176,7 +176,7 @@ int SAL_CALL main (int argc, char **argv)
             sal_uInt32 magic = 256 * 4;
             if (memcmp (&verify[index], &magic, sizeof(magic)))
             {
-                // Failure.
+                
                 fprintf (stderr, "t_file: Unexpected value at 0x00000000\n");
             }
             index += 4;
@@ -184,7 +184,7 @@ int SAL_CALL main (int argc, char **argv)
         if (memcmp (
             &verify[index], &buffer[index], TEST_PAGESIZE - index))
         {
-            // Failure.
+            
             fprintf (stderr, "t_file: Unexpected block at 0x%08x\n", (unsigned)(offset));
         }
     }
@@ -202,7 +202,7 @@ int SAL_CALL main (int argc, char **argv)
         }
 
         PageData * page = xPage.get();
-        (void)page; // UNUSED
+        (void)page; 
     }
 
     xLockBytes.clear();

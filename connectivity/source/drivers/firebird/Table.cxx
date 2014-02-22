@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "Columns.hxx"
@@ -71,7 +71,7 @@ void Table::construct()
     OTableHelper::construct();
     if (!isNew())
     {
-        // TODO: get privileges when in non-embedded mode.
+        
         m_nPrivileges = Privilege::DROP         |
                         Privilege::REFERENCE    |
                         Privilege::ALTER        |
@@ -88,7 +88,7 @@ void Table::construct()
                          ::getCppuType(&m_nPrivileges));
     }
 }
-//----- OTableHelper ---------------------------------------------------------
+
 OCollection* Table::createColumns(const TStringVector& rNames)
 {
     return new Columns(*this,
@@ -110,7 +110,7 @@ OCollection* Table::createIndexes(const TStringVector& rNames)
                        rNames);
 }
 
-//----- XAlterTable -----------------------------------------------------------
+
 void SAL_CALL Table::alterColumnByName(const OUString& rColName,
                                        const uno::Reference< XPropertySet >& rDescriptor)
     throw(SQLException, NoSuchElementException, RuntimeException)
@@ -120,21 +120,21 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     uno::Reference< XPropertySet > xColumn(m_pColumns->getByName(rColName), UNO_QUERY);
 
-    // sdbcx::Descriptor
+    
     const bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
-    // sdbcx::ColumnDescriptor
+    
     const bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
     const bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
     const bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
     const bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
     const bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
     const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
-    // TODO: remainder -- these are all "optional" so have to detect presence and change.
+    
 
     bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
                                      != rDescriptor->getPropertyValue("DefaultValue");
 
-    // TODO: quote identifiers as needed.
+    
     if (bNameChanged)
     {
         OUString sNewTableName;
@@ -147,14 +147,14 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged)
     {
-        // If bPrecisionChanged this will only succeed if we have increased the
-        // precision, otherwise an exception is thrown -- however the base
-        // gui then offers to delete and recreate the column.
+        
+        
+        
         OUString sSql(getAlterTableColumn(rColName) + "TYPE " +
                 ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
         getConnection()->createStatement()->execute(sSql);
-        // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
-        // possibly we have to wrap things in Util::evaluateStatusVector.
+        
+        
     }
 
     if (bIsNullableChanged)
@@ -166,8 +166,8 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         {
 
             OUString sSql;
-            // Dirty hack: can't change null directly in sql, we have to fiddle
-            // the system tables manually.
+            
+            
             if (nNullabble == ColumnValue::NULLABLE)
             {
                 sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = NULL "
@@ -176,8 +176,8 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
             }
             else if (nNullabble == ColumnValue::NO_NULLS)
             {
-                // And if we are making NOT NULL then we have to make sure we have
-                // no nulls left in the column.
+                
+                
                 OUString sFillNulls("UPDATE \"" + getName() + "\" SET \""
                                     + rColName + "\" = 0 "
                                     "WHERE \"" + rColName + "\" IS NULL");
@@ -197,7 +197,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsAutoIncrementChanged)
     {
-        // TODO: changeType
+        
     }
 
     if (bDefaultChanged)
@@ -218,15 +218,15 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     m_pColumns->refresh();
 }
 
-// ----- XRename --------------------------------------------------------------
+
 void SAL_CALL Table::rename(const OUString& rName)
     throw(SQLException, ElementExistException, RuntimeException)
 {
     (void) rName;
-    throw RuntimeException(); // Firebird doesn't support this.
+    throw RuntimeException(); 
 }
 
-// ----- XInterface -----------------------------------------------------------
+
 Any SAL_CALL Table::queryInterface(const Type& rType)
     throw(RuntimeException)
 {
@@ -236,7 +236,7 @@ Any SAL_CALL Table::queryInterface(const Type& rType)
     return OTableHelper::queryInterface(rType);
 }
 
-// ----- XTypeProvider --------------------------------------------------------
+
 uno::Sequence< Type > SAL_CALL Table::getTypes()
     throw(RuntimeException)
 {

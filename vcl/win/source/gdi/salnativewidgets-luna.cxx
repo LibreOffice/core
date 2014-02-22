@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,22 +14,22 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// General info:
-//   http://msdn.microsoft.com/en-us/library/windows/desktop/hh270423%28v=vs.85%29.aspx
-//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb773178%28v=vs.85%29.aspx
+
+
+
 //
-// Useful tool to explore the themes & their rendering:
-//   http://privat.rejbrand.se/UxExplore.exe
-// (found at http://stackoverflow.com/questions/4009701/windows-visual-themes-gallery-of-parts-and-states/4009712#4009712)
+
+
+
 //
-// Theme subclasses:
-//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb773218%28v=vs.85%29.aspx
+
+
 //
-// Drawing in non-client area (general DWM-related info):
-//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
+
+
 
 #include "rtl/ustring.h"
 
@@ -190,14 +190,14 @@ void SalData::initNWF( void )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // the menu bar and the top docking area should have a common background (gradient)
+    
     pSVData->maNWFData.mbMenuBarDockingAreaCommonBG = true;
 }
 
 
-// *********************************************************
-// * Release theming handles
-// ********************************************************
+
+
+
 void SalData::deInitNWF( void )
 {
     ThemeMap::iterator iter = aThemeMap.begin();
@@ -215,7 +215,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
 {
     if( GetSalData()->mbThemeChanged )
     {
-        // throw away invalid theme handles
+        
         GetSalData()->deInitNWF();
         GetSalData()->mbThemeChanged = FALSE;
     }
@@ -223,7 +223,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
     ThemeMap::iterator iter;
     if( (iter = aThemeMap.find( name )) != aThemeMap.end() )
         return iter->second;
-    // theme not found -> add it to map
+    
     HTHEME hTheme = vsAPI.OpenThemeData( hWnd, name );
     if( hTheme != NULL )
         aThemeMap[name] = hTheme;
@@ -250,13 +250,13 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
         case CTRL_SCROLLBAR:
             if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
-                return FALSE;   // no background painting needed
+                return FALSE;   
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Scrollbar");
             break;
         case CTRL_COMBOBOX:
             if( nPart == HAS_BACKGROUND_TEXTURE )
-                return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
+                return FALSE;   
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             else if( nPart == PART_BUTTON_DOWN )
@@ -277,14 +277,14 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case CTRL_EDITBOX:
         case CTRL_MULTILINE_EDITBOX:
             if( nPart == HAS_BACKGROUND_TEXTURE )
-                return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
-                //return TRUE;
+                return FALSE;   
+                
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             break;
         case CTRL_LISTBOX:
             if( nPart == HAS_BACKGROUND_TEXTURE )
-                return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
+                return FALSE;   
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW )
                 hTheme = getThemeHandle( mhWnd, L"Listview");
             else if( nPart == PART_BUTTON_DOWN )
@@ -300,7 +300,7 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_BUTTON )
                 hTheme = getThemeHandle( mhWnd, L"Toolbar");
             else
-                // use rebar theme for grip and background
+                
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
             break;
         case CTRL_MENUBAR:
@@ -380,15 +380,15 @@ sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, 
 Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
-    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); // TS_TRUE returns optimal size
+    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); 
     if( hr == S_OK )
         return Rectangle( 0, 0, aSz.cx, aSz.cy );
     else
         return Rectangle();
 }
 
-// Helper functions
-// ----
+
+
 
 void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, const Rectangle& rRect,
                                  int* pLunaPart, int *pLunaState, RECT *pRect )
@@ -448,7 +448,7 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
     pRect->bottom = rRect.Bottom()+1;
 }
 
-/// Draw an own toolbar style on Windows Vista or later, looks better there
+
 static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 {
     if ( rc.top == 0 && bHorizontal )
@@ -459,7 +459,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         long gradient_bottom = rc.bottom - 1;
         GRADIENT_RECT g_rect[1] = { { 0, 1 } };
 
-        // very slow gradient at the top (if we have space for that)
+        
         if ( gradient_bottom - rc.top > GRADIENT_HEIGHT )
         {
             gradient_break = gradient_bottom - GRADIENT_HEIGHT;
@@ -471,14 +471,14 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
             GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
         }
 
-        // gradient at the bottom
+        
         TRIVERTEX vert[2] = {
             { rc.left, gradient_break,   0xfa00, 0xfa00, 0xfa00, 0xff00 },
             { rc.right, gradient_bottom, 0xf000, 0xf000, 0xf000, 0xff00 }
         };
         GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
-        // and a darker horizontal line under that
+        
         HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xa0, 0xa0, 0xa0 ) );
         SelectObject( hDC, hpen );
 
@@ -493,9 +493,9 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         FillRect( hDC, &rc, hbrush );
         DeleteObject( hbrush );
 
-        // darker line to distinguish the toolbar and viewshell
-        // it is drawn only for the horizontal toolbars; it did not look well
-        // when done for the vertical ones too
+        
+        
+        
         if ( bHorizontal )
         {
             long from_x, from_y, to_x, to_y;
@@ -522,17 +522,17 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             const ImplControlValue& aValue,
                             OUString aCaption )
 {
-    // a listbox dropdown is actually a combobox dropdown
+    
     if( nType == CTRL_LISTBOX )
         if( nPart == PART_BUTTON_DOWN )
             nType = CTRL_COMBOBOX;
 
-    // draw entire combobox as a large edit box
+    
     if( nType == CTRL_COMBOBOX )
         if( nPart == PART_ENTIRE_CONTROL )
             nType = CTRL_EDITBOX;
 
-    // draw entire spinbox as a large edit box
+    
     if( nType == CTRL_SPINBOX )
         if( nPart == PART_ENTIRE_CONTROL )
             nType = CTRL_EDITBOX;
@@ -615,7 +615,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             vsAPI.GetThemePartSize(hTheme, hDC, iPart, iState, NULL, TS_DRAW, &sz);
 
             hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
-            // paint gripper on thumb if enough space
+            
             if( ( (nPart == PART_THUMB_VERT) && (rc.bottom-rc.top > 12) ) ||
                 ( (nPart == PART_THUMB_HORZ) && (rc.right-rc.left > 12) ) )
             {
@@ -668,9 +668,9 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     }
     if( nType == CTRL_SPINBOX )
     {
-        // decrease spinbutton rects a little
-        //rc.right--;
-        //rc.bottom--;
+        
+        
+        
         if( nPart == PART_ALL_BUTTONS )
         {
             if( aValue.getType() == CTRL_SPINBUTTONS )
@@ -769,8 +769,8 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = PBS_HOT;
         else if( nState & CTRL_STATE_DEFAULT )
             iState = PBS_DEFAULTED;
-        //else if( nState & CTRL_STATE_FOCUSED )
-        //    iState = PBS_DEFAULTED;    // may need to draw focus rect
+        
+        
         else
             iState = PBS_NORMAL;
 
@@ -791,8 +791,8 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else
             iState = bChecked ? RBS_CHECKEDNORMAL : RBS_UNCHECKEDNORMAL;
 
-        //if( nState & CTRL_STATE_FOCUSED )
-        //    iState |= PBS_DEFAULTED;    // may need to draw focus rect
+        
+        
 
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
@@ -815,12 +815,12 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDNORMAL :
                     ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDNORMAL : CBS_MIXEDNORMAL );
 
-        //if( nState & CTRL_STATE_FOCUSED )
-        //    iState |= PBS_DEFAULTED;    // may need to draw focus rect
+        
+        
 
-        //SIZE sz;
-        //THEMESIZE eSize = TS_DRAW; // TS_MIN, TS_TRUE, TS_DRAW
-        //vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, &rc, eSize, &sz);
+        
+        
+        
 
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
@@ -844,7 +844,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     {
         if( nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW )
         {
-            iPart = LVP_EMPTYTEXT; // ??? no idea which part to choose here
+            iPart = LVP_EMPTYTEXT; 
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }
     }
@@ -885,7 +885,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else if( nState & CTRL_STATE_SELECTED )
         {
             iState = TILES_SELECTED;
-            // increase the selected tab
+            
             rc.left-=2;
             if( pValue && !pValue->isBothAligned() )
             {
@@ -900,7 +900,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else if( nState & CTRL_STATE_ROLLOVER )
             iState = TILES_HOT;
         else if( nState & CTRL_STATE_FOCUSED )
-            iState = TILES_FOCUSED;    // may need to draw focus rect
+            iState = TILES_FOCUSED;    
         else
             iState = TILES_NORMAL;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -913,9 +913,9 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iPart = TP_BUTTON;
             sal_Bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
             if( !(nState & CTRL_STATE_ENABLED) )
-                //iState = TS_DISABLED;
-                // disabled buttons are typically not painted at all but we need visual
-                // feedback when travelling by keyboard over disabled entries
+                
+                
+                
                 iState = TS_HOT;
             else if( nState & CTRL_STATE_PRESSED )
                 iState = TS_PRESSED;
@@ -927,10 +927,10 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
         else if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
-            // the vertical gripper is not supported in most themes and it makes no
-            // sense to only support horizontal gripper
-            //iPart = (nPart == PART_THUMB_HORZ) ? RP_GRIPPERVERT : RP_GRIPPER;
-            //return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+            
+            
+            
+            
         }
         else if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
         {
@@ -938,10 +938,10 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 const ToolbarValue *pValue = static_cast<const ToolbarValue*>(&aValue);
                 if( pValue->mbIsTopDockingArea )
-                    rc.top = 0; // extend potential gradient to cover menu bar as well
+                    rc.top = 0; 
             }
 
-            // make it more compatible with Aero
+            
             if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
             {
                 impl_drawAeroToolbar( hDC, rc, nPart == PART_DRAW_BACKGROUND_HORZ );
@@ -959,9 +959,9 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             if( aValue.getType() == CTRL_MENUBAR )
             {
                 const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
-                rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+                rc.bottom += pValue->maTopDockingAreaHeight;    
 
-                // make it more compatible with Aero
+                
                 if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
                 {
                     impl_drawAeroToolbar( hDC, rc, true );
@@ -1109,7 +1109,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     {
                         const MenupopupValue& rMVal( static_cast<const MenupopupValue&>(aValue) );
                         aBGRect.top    = rMVal.maItemRect.Top();
-                        aBGRect.bottom = rMVal.maItemRect.Bottom()+1; // see below in drawNativeControl
+                        aBGRect.bottom = rMVal.maItemRect.Bottom()+1; 
                         if( Application::GetSettings().GetLayoutRTL() )
                         {
                             aBGRect.right = rMVal.maItemRect.Right()+1;
@@ -1131,18 +1131,18 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     return ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption );
                 }
                 else
-                    return true; // unchecked: do nothing
+                    return true; 
             }
             else if( nPart == PART_MENU_SEPARATOR )
             {
-                // adjust for gutter position
+                
                 if( Application::GetSettings().GetLayoutRTL() )
                     rc.right -= aValue.getNumericVal()+1;
                 else
                     rc.left += aValue.getNumericVal()+1;
                 Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPSEPARATOR, 0, Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
-                // center the separator inside the passed rectangle
+                
                 long nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
                 rc.top += nDY;
                 rc.bottom = rc.top+aRect.GetHeight()-1;
@@ -1217,7 +1217,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_BUTTON )
                 hTheme = getThemeHandle( mhWnd, L"Toolbar");
             else
-                // use rebar for grip and background
+                
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
             break;
         case CTRL_MENUBAR:
@@ -1266,19 +1266,19 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     rc.top    = buttonRect.Top();
     rc.bottom = buttonRect.Bottom()+1;
 
-    // set default text alignment
+    
     int ta = SetTextAlign( getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP );
 
-    OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
+    OUString aCaptionStr( aCaption.replace('~', '&') ); 
     bOk = ImplDrawNativeControl(getHDC(), hTheme, rc,
                             nType, nPart, nState, aValue,
                             aCaptionStr );
 
-    // restore alignment
+    
     SetTextAlign( getHDC(), ta );
 
 
-    //GdiFlush();
+    
 
     return bOk;
 }
@@ -1313,8 +1313,8 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
             /*
-            // the vertical gripper is not supported in most themes and it makes no
-            // sense to only support horizontal gripper
+            
+            
 
             HTHEME hTheme = getThemeHandle( mhWnd, L"Rebar");
             if( hTheme )
@@ -1385,11 +1385,11 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         HTHEME hTheme = getThemeHandle( mhWnd, L"Edit");
         if( hTheme )
         {
-            // get border size
+            
             Rectangle aBoxRect( rControlRegion );
             Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
                                                EBWBS_HOT, aBoxRect ) );
-            // ad app font height
+            
             NONCLIENTMETRICSW aNonClientMetrics;
             aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
             if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
@@ -1508,16 +1508,16 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     ImplSVData* pSVData = ImplGetSVData();
 
-    // don't draw frame around each and every toolbar
+    
     pSVData->maNWFData.mbDockingAreaAvoidTBFrames = true;
 
-    // check if vista or newer runs
-    // in Aero theme (and similar ?) the menu text color does not change
-    // for selected items; also on WinXP and earlier menus are not themed
-    // FIXME get the color directly from the theme, not from the settings
+    
+    
+    
+    
     if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
     {
-        // in aero menuitem highlight text is drawn in the same color as normal
+        
         aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
         aStyleSettings.SetMenuBarRolloverTextColor( aStyleSettings.GetMenuTextColor() );
         pSVData->maNWFData.mnMenuFormatBorderX = 2;

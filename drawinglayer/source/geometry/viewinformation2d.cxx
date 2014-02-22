@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -25,11 +25,11 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -38,47 +38,47 @@ namespace drawinglayer
         class ImpViewInformation2D
         {
         private:
-            // ViewInformation2D implementation can change refcount, so we have only
-            // two memory regions for pairs of ViewInformation2D/ImpViewInformation2D
+            
+            
             friend class ::drawinglayer::geometry::ViewInformation2D;
 
         protected:
-            // the object transformation
+            
             basegfx::B2DHomMatrix                       maObjectTransformation;
 
-            // the view transformation
+            
             basegfx::B2DHomMatrix                       maViewTransformation;
 
-            // the ObjectToView and it's inverse, both on demand from ObjectTransformation
-            // and ViewTransformation
+            
+            
             basegfx::B2DHomMatrix                       maObjectToViewTransformation;
             basegfx::B2DHomMatrix                       maInverseObjectToViewTransformation;
 
-            // the visible range and the on-demand one in ViewCoordinates
+            
             basegfx::B2DRange                           maViewport;
             basegfx::B2DRange                           maDiscreteViewport;
 
-            // the DrawPage which is target of visualisation. This is needed e.g. for
-            // the view-dependent decomposition of PageNumber TextFields.
-            // This parameter is buffered here, but mainly resides in mxExtendedInformation,
-            // so it will be interpreted, but held there. It will also not be added
-            // to mxExtendedInformation in impFillViewInformationFromContent (it's there already)
+            
+            
+            
+            
+            
             uno::Reference< drawing::XDrawPage >        mxVisualizedPage;
 
-            // the point in time
+            
             double                                      mfViewTime;
 
-            // bitfield
+            
             bool                                        mbReducedDisplayQuality : 1;
 
-            // the complete PropertyValue representation (if already created)
+            
             uno::Sequence< beans::PropertyValue >       mxViewInformation;
 
-            // the extra PropertyValues; not represented by ViewTransformation,
-            // Viewport, VisualizedPage or ViewTime
+            
+            
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
-            // the local UNO API strings
+            
             const OUString& getNamePropertyObjectTransformation()
             {
                 static OUString s_sNameProperty("ObjectTransformation");
@@ -122,7 +122,7 @@ namespace drawinglayer
                     const sal_Int32 nCount(rViewParameters.getLength());
                     sal_Int32 nExtendedInsert(0);
 
-                    // prepare extended information for filtering. Maximum size is nCount
+                    
                     mxExtendedInformation.realloc(nCount);
 
                     for(sal_Int32 a(0); a < nCount; a++)
@@ -131,10 +131,10 @@ namespace drawinglayer
 
                         if(rProp.Name == getNamePropertyReducedDisplayQuality())
                         {
-                            // extra information; add to filtered information
+                            
                             mxExtendedInformation[nExtendedInsert++] = rProp;
 
-                            // for performance reasons, also cache content locally
+                            
                             sal_Bool bSalBool(false);
                             rProp.Value >>= bSalBool;
                             mbReducedDisplayQuality = bSalBool;
@@ -167,12 +167,12 @@ namespace drawinglayer
                         }
                         else
                         {
-                            // extra information; add to filtered information
+                            
                             mxExtendedInformation[nExtendedInsert++] = rProp;
                         }
                     }
 
-                    // extra information size is now known; realloc to final size
+                    
                     mxExtendedInformation.realloc(nExtendedInsert);
                 }
             }
@@ -395,10 +395,10 @@ namespace drawinglayer
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
         };
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -511,7 +511,7 @@ namespace drawinglayer
         {
             return mpViewInformation2D->getExtendedInformationSequence();
         }
-    } // end of namespace geometry
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

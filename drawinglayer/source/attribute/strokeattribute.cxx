@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <rtl/instance.hxx>
 #include <numeric>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -30,9 +30,9 @@ namespace drawinglayer
         class ImpStrokeAttribute
         {
         public:
-            // data definitions
-            ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
-            double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
+            
+            ::std::vector< double >                     maDotDashArray;         
+            double                                      mfFullDotDashLen;       
 
             ImpStrokeAttribute(
                 const ::std::vector< double >& rDotDashArray,
@@ -48,13 +48,13 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const
             {
                 if(0.0 == mfFullDotDashLen && maDotDashArray.size())
                 {
-                    // calculate length on demand
+                    
                     const double fAccumulated(::std::accumulate(maDotDashArray.begin(), maDotDashArray.end(), 0.0));
                     const_cast< ImpStrokeAttribute* >(this)->mfFullDotDashLen = fAccumulated;
                 }
@@ -122,7 +122,7 @@ namespace drawinglayer
         {
             return mpStrokeAttribute->getFullDotDashLen();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

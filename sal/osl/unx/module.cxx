@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -41,8 +41,8 @@ extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 static bool getModulePathFromAddress(void * address, rtl_String ** path) {
     bool result = false;
-    // We do want to have this functionality also in the
-    // DISABLE_DYNLOADING case, I think?
+    
+    
 #if defined(AIX)
     int size = 4 * 1024;
     char *buf, *filename=NULL;
@@ -51,7 +51,7 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
     if ((buf = (char*)malloc(size)) == NULL)
         return false;
 
-    //figure out how big a buffer we need
+    
     while (loadquery(L_GETINFO, buf, size) == -1 && errno == ENOMEM)
     {
         size += 4 * 1024;
@@ -197,7 +197,7 @@ oslModule osl_loadModuleRelativeAscii(
     }
 }
 
-#endif // !DISABLE_DYNLOADING
+#endif 
 
 /*****************************************************************************/
 /* osl_getModuleHandle */
@@ -233,7 +233,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
     }
 }
 
-#endif // !DISABLE_DYNLOADING
+#endif 
 
 /*****************************************************************************/
 /* osl_getSymbol */
@@ -253,8 +253,8 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 {
     void *fcnAddr = NULL;
 
-    // We do want to use dlsym() also in the DISABLE_DYNLOADING case
-    // just to look up symbols in the static executable, I think.
+    
+    
     if (pSymbol)
     {
         fcnAddr = dlsym(Module, pSymbol);

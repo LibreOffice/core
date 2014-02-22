@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -87,7 +87,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeE
         throw DisposedException();
 }
 
-// XInitialization
+
 void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -102,7 +102,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
         Reference< XFrame > xFrame( m_xWeakFrame );
         if ( xFrame.is() && m_xConfigSource.is() )
         {
-            // Create VCL based toolbar which will be filled with settings data
+            
             StatusBar*        pStatusBar( 0 );
             StatusBarManager* pStatusBarManager( 0 );
             {
@@ -125,7 +125,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() && pStatusBar && pStatusBarManager )
                 {
-                    // Fill statusbar with container contents
+                    
                     pStatusBarManager->FillStatusBar( m_xConfigData );
                 }
             }
@@ -136,7 +136,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
     }
 }
 
-// XUIElementSettings
+
 void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -180,6 +180,6 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( Ru
     return Reference< XInterface >();
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

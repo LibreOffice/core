@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
@@ -150,7 +150,7 @@ void SAL_CALL
 XResultSet_impl::disposing( const lang::EventObject& )
     throw( uno::RuntimeException )
 {
-    // To do, but what
+    
 }
 
 
@@ -344,7 +344,7 @@ XResultSet_impl::OneMore(
                 return true;
             }
         }
-        else  // error fetching anything
+        else  
         {
             throw sdbc::SQLException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
         }
@@ -385,7 +385,7 @@ XResultSet_impl::isAfterLast(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    return m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size());   // Cannot happen, if m_aFolder.isOpen()
+    return m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size());   
 }
 
 
@@ -464,7 +464,7 @@ XResultSet_impl::getRow(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    // Test, whether behind last row
+    
     if( -1 == m_nRow || m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return 0;
     else
@@ -522,7 +522,7 @@ XResultSet_impl::previous(
            uno::RuntimeException)
 {
     if( m_nRow > sal::static_int_cast<sal_Int32>(m_aItems.size()) )
-        m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size());  // Correct Handling of afterLast
+        m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size());  
     if( 0 <= m_nRow ) -- m_nRow;
 
     return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
@@ -535,7 +535,7 @@ XResultSet_impl::refreshRow(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    // get the row from the filesystem
+    
     return;
 }
 
@@ -578,7 +578,7 @@ XResultSet_impl::getStatement(
 }
 
 
-// XCloseable
+
 
 void SAL_CALL
 XResultSet_impl::close(
@@ -644,10 +644,10 @@ XResultSet_impl::queryContent(
 }
 
 
-// XDynamicResultSet
 
 
-// virtual
+
+
 uno::Reference< sdbc::XResultSet > SAL_CALL
 XResultSet_impl::getStaticResultSet()
     throw( ucb::ListenerAlreadySetException,
@@ -661,8 +661,8 @@ XResultSet_impl::getStaticResultSet()
     return uno::Reference< sdbc::XResultSet >( this );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL
 XResultSet_impl::setListener(
     const uno::Reference< ucb::XDynamicResultSetListener >& Listener )
@@ -676,22 +676,22 @@ XResultSet_impl::setListener(
 
     m_xListener = Listener;
 
-    //////////////////////////////////////////////////////////////////////
-    // Create "welcome event" and send it to listener.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
-    // Note: We only have the implementation for a static result set at the
-    //       moment (src590). The dynamic result sets passed to the listener
-    //       are a fake. This implementation will never call "notify" at the
-    //       listener to propagate any changes!!!
+    
+    
+    
+    
 
     uno::Any aInfo;
     aInfo <<= ucb::WelcomeDynamicResultSetStruct( this, /* "old" */
                                                   this /* "new" */ );
 
     uno::Sequence< ucb::ListAction > aActions( 1 );
-    aActions.getArray()[ 0 ] = ucb::ListAction( 0, // Position; not used
-                                                0, // Count; not used
+    aActions.getArray()[ 0 ] = ucb::ListAction( 0, 
+                                                0, 
                                                 ucb::ListActionType::WELCOME,
                                                 aInfo );
     aGuard.clear();
@@ -701,8 +701,8 @@ XResultSet_impl::setListener(
             static_cast< cppu::OWeakObject * >( this ), aActions ) );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL
 XResultSet_impl::connectToCache(
     const uno::Reference< ucb::XDynamicResultSet > & xCache )
@@ -741,18 +741,18 @@ XResultSet_impl::connectToCache(
     throw ucb::ServiceNotFoundException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int16 SAL_CALL
 XResultSet_impl::getCapabilities()
   throw( uno::RuntimeException )
 {
-    // Never set ucb::ContentResultSetCapability::SORTED
-    //  - Underlying content cannot provide sorted data...
+    
+    
     return 0;
 }
 
-// XResultSetMetaDataSupplier
+
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
 XResultSet_impl::getMetaData(
     void )
@@ -764,7 +764,7 @@ XResultSet_impl::getMetaData(
         if ( m_sProperty.getConstArray()[ n ].Name.compareToAscii( "Title" )
              == 0 )
         {
-            // @@@ #82177# - Determine correct value!
+            
             sal_Bool bCaseSensitiveChildren = sal_False;
 
             std::vector< ::ucbhelper::ResultSetColumnData >
@@ -787,7 +787,7 @@ XResultSet_impl::getMetaData(
 
 
 
-// XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 XResultSet_impl::getPropertySetInfo()
     throw( uno::RuntimeException)

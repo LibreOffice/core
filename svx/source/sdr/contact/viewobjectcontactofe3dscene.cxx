@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,17 +29,17 @@
 #include <svx/sdr/contact/viewobjectcontactofe3d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
-    // Helper method to recursively travel the DrawHierarchy for 3D objects contained in
-    // the 2D Scene. This will chreate all VOCs for the currenbt OC which are needed
-    // for ActionChanged() functionality
+    
+    
+    
     void impInternalSubHierarchyTraveller(const sdr::contact::ViewObjectContact& rVOC)
     {
         const sdr::contact::ViewContact& rVC = rVOC.GetViewContact();
@@ -51,9 +51,9 @@ namespace
             impInternalSubHierarchyTraveller(rCandidate);
         }
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -70,30 +70,30 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfE3dScene::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
-            // handle ghosted, else the whole 3d group will be encapsulated to a ghosted primitive set (see below)
+            
             const bool bHandleGhostedDisplay(GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
             const bool bIsActiveVC(bHandleGhostedDisplay && GetObjectContact().getActiveViewContact() == &GetViewContact());
 
             if(bIsActiveVC)
             {
-                // switch off ghosted, display contents normal
+                
                 const_cast< DisplayInfo& >(rDisplayInfo).ClearGhostedDrawMode();
             }
 
-            // create 2d primitive with content, use layer visibility test
-            // this uses no ghosted mode, so scenes in scenes and entering them will not
-            // support ghosted for now. This is no problem currently but would need to be
-            // added when sub-groups in 3d will be added one day.
+            
+            
+            
+            
             const ViewContactOfE3dScene& rViewContact = dynamic_cast< ViewContactOfE3dScene& >(GetViewContact());
             const SetOfByte& rVisibleLayers = rDisplayInfo.GetProcessLayers();
             drawinglayer::primitive2d::Primitive2DSequence xRetval(rViewContact.createScenePrimitive2DSequence(&rVisibleLayers));
 
             if(xRetval.hasElements())
             {
-                // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
+                
                 xRetval = rViewContact.embedToObjectSpecificInformation(xRetval);
 
-                // handle GluePoint
+                
                 if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
                 {
                     const drawinglayer::primitive2d::Primitive2DSequence xGlue(GetViewContact().createGluePointPrimitive2DSequence());
@@ -104,7 +104,7 @@ namespace sdr
                     }
                 }
 
-                // handle ghosted
+                
                 if(isPrimitiveGhosted(rDisplayInfo))
                 {
                     const ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
@@ -123,7 +123,7 @@ namespace sdr
 
             if(bIsActiveVC)
             {
-                // set back, display ghosted again
+                
                 const_cast< DisplayInfo& >(rDisplayInfo).SetGhostedDrawMode();
             }
 
@@ -132,15 +132,15 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {
-            // To get the VOCs for the contained 3D objects created to get the correct
-            // Draw hierarchy and ActionChanged() working properly, travel the DrawHierarchy
-            // using a local tooling method
+            
+            
+            
             impInternalSubHierarchyTraveller(*this);
 
-            // call parent
+            
             return ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo);
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

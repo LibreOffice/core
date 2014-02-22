@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ImagePreparer.hxx"
@@ -68,7 +68,7 @@ void ImagePreparer::Timeout()
     sal_uInt32 aSlides = xController->getSlideCount();
     SAL_INFO( "sdremote", "ImagePreparer " << xController->isRunning() <<
               " sending slide " << mnSendingSlide << " of " << aSlides );
-    if ( xController->isRunning() && // not stopped/disposed of.
+    if ( xController->isRunning() && 
          mnSendingSlide < aSlides )
     {
         sendPreview( mnSendingSlide );
@@ -94,7 +94,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
     OString aEncodedShortString = OUStringToOString(
         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 
-    // Start the writing
+    
     OStringBuffer aBuffer;
 
     aBuffer.append( "slide_preview\n" );
@@ -137,7 +137,7 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
     aFilterData[1].Value <<= aHeight;
 
     aFilterData[2].Name = "ColorMode";
-    aFilterData[2].Value <<= sal_Int32(0); // 0: Color, 1: B&W
+    aFilterData[2].Value <<= sal_Int32(0); 
 
     uno::Sequence< beans::PropertyValue > aProps(3);
 
@@ -152,7 +152,7 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
     xFilter->filter( aProps );
 
-    // FIXME: error handling.
+    
 
     File aFile( aFileURL );
     aFile.open(0);
@@ -176,16 +176,16 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
     if ( aNotes.isEmpty() )
         return;
 
-//     OUStringBuffer aStrBuffer;
-//     ::sax::Converter::encodeBase64( aStrBuffer, aTemp );
+
+
 //
-//     OString aNotes = OUStringToOString(
-//         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+
+
 
     if ( !xController->isRunning() )
         return;
 
-    // Start the writing
+    
     OStringBuffer aBuffer;
 
     aBuffer.append( "slide_notes\n" );
@@ -203,7 +203,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
 sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUrl );
 
-// Code copied from sdremote/source/presenter/PresenterNotesView.cxx
+
 OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
 {
     OUStringBuffer aRet;
@@ -232,7 +232,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     if (xIndexAccess.is())
     {
 
-        // Iterate over all shapes and find the one that holds the text.
+        
         sal_Int32 nCount (xIndexAccess->getCount());
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
@@ -270,7 +270,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
             }
         }
     }
-    // Replace all newlines with <br\> tags
+    
     for ( sal_Int32 i = 0; i < aRet.getLength(); i++ )
     {
         if ( aRet[i] == '\n' )
@@ -346,7 +346,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUr
         com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
 
 
-        // put in the REAL file name, and copy all PropertyValues
+        
         const OUString sOutputStream ( "OutputStream" );
         const OUString sStream ( "StreamForOutput" );
         sal_Bool bHasOutputStream = sal_False;
@@ -375,7 +375,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUr
             aArgs[nEnd-1].Value <<= uno::Reference < io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
         }
 
-        // add stream as well, for OOX export and maybe others
+        
         if ( !bHasStream )
         {
             aArgs.realloc ( ++nEnd );

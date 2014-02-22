@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined _MSC_VER
@@ -68,7 +68,7 @@ LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM
 
 bool isWindowsVistaOrHigher()
 {
-    // POST: return true if we are at least on Windows Vista
+    
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -76,9 +76,9 @@ bool isWindowsVistaOrHigher()
     return  osvi.dwMajorVersion >= 6;
 }
 
-// ----------------
-// - Player -
-// ----------------
+
+
+
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     Player_BASE(m_aMutex),
@@ -155,9 +155,9 @@ bool Player::create( const OUString& rURL )
 
     if( SUCCEEDED( hR = CoCreateInstance( CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**) &mpGB ) ) )
     {
-        // Don't use the overlay mixer on Windows Vista
-        // It disables the desktop composition as soon as RenderFile is called
-        // also causes some other problems: video rendering is not reliable
+        
+        
+        
         if( !isWindowsVistaOrHigher() && SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
         {
             mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
@@ -172,11 +172,11 @@ bool Player::create( const OUString& rURL )
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, (void**) &mpMS ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaPosition, (void**) &mpMP ) ) )
         {
-            // Video interfaces
+            
             mpGB->QueryInterface( IID_IVideoWindow, (void**) &mpVW );
             mpGB->QueryInterface( IID_IBasicVideo, (void**) &mpBV );
 
-            // Audio interface
+            
             mpGB->QueryInterface( IID_IBasicAudio, (void**) &mpBA );
 
             if( mpBA )
@@ -275,7 +275,7 @@ void SAL_CALL Player::start(  )
                 {
                     ::ShowWindow((HWND) mnFrameWnd, SW_HIDE);
                     ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
-                    // mpVW->put_Owner( (OAHWND) mnFrameWnd );
+                    
                     setNotifyWnd( mnFrameWnd );
                 }
             }
@@ -496,7 +496,7 @@ uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace win
-} // namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

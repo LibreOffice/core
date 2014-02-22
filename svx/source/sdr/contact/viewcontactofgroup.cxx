@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/contact/viewcontactofgroup.hxx>
@@ -28,14 +28,14 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace contact
     {
-        // Create a Object-Specific ViewObjectContact, set ViewContact and
-        // ObjectContact. Always needs to return something.
+        
+        
         ViewObjectContact& ViewContactOfGroup::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
             ViewObjectContact* pRetval = new ViewObjectContactOfGroup(rObjectContact, *this);
@@ -60,7 +60,7 @@ namespace sdr
 
             if(nObjectCount)
             {
-                // collect all sub-primitives
+                
                 for(sal_uInt32 a(0); a < nObjectCount; a++)
                 {
                     const ViewContact& rCandidate(GetViewContact(a));
@@ -71,11 +71,11 @@ namespace sdr
             }
             else
             {
-                // append an invisible outline for the cases where no visible content exists
+                
                 Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                // Hack for calc, transform position of object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
+                
+                
+                
                 aCurrentBoundRect += GetSdrObjGroup().GetGridOffset();
                 const basegfx::B2DRange aCurrentRange(
                     aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
@@ -90,7 +90,7 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

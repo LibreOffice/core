@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/eitem.hxx>
@@ -48,7 +48,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 #define NUMKEY_UNDEFINED SAL_MAX_UINT32
 
-// static ----------------------------------------------------------------
+
 
 static sal_uInt16 pRanges[] =
 {
@@ -106,13 +106,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumberPreview(Window *pP
 void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
                                          const Color* pColor )
 {
-    // detect and strip out '*' related placeholders
+    
     aPrevStr = rPrevStr;
     mnPos = aPrevStr.indexOf( 0x1B );
     if ( mnPos != -1 )
     {
         mnChar = aPrevStr[ mnPos + 1 ];
-        // delete placeholder and char to repeat
+        
         aPrevStr = aPrevStr.replaceAt( mnPos, 2, "" );
     }
     svtools::ColorConfig aColorConfig;
@@ -161,7 +161,7 @@ void SvxNumberPreview::Paint( const Rectangle& )
     DrawText( aPosText, aTmpStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberPreview::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -187,7 +187,7 @@ void SvxNumberPreview::InitSettings( sal_Bool bForeground, sal_Bool bBackground 
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberPreview::StateChanged( StateChangedType nType )
 {
@@ -199,7 +199,7 @@ void SvxNumberPreview::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -209,7 +209,7 @@ void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
         InitSettings( sal_True, sal_True );
 }
 
-// class SvxNumberFormatTabPage ------------------------------------------
+
 
 #define REMOVE_DONTKNOW() \
     if ( !m_pFtLanguage->IsEnabled() )                                     \
@@ -262,7 +262,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     m_pWndPreview->set_height_request(GetTextHeight()*3);
 
     Init_Impl();
-    SetExchangeSupport(); // this page needs ExchangeSupport
+    SetExchangeSupport(); 
     nFixedCategory=-1;
 }
 
@@ -281,7 +281,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pIbRemove->Enable(false );
     m_pIbInfo->Enable(false );
 
-    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // string for user defined
+    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    
 
     m_pEdComment->Hide();
 
@@ -315,12 +315,12 @@ void SvxNumberFormatTabPage::Init_Impl()
     aResetWinTimer.SetTimeoutHdl(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
     aResetWinTimer.SetTimeout( 10);
 
-    // initialize language ListBox
+    
 
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
-    // Don't list ambiguous locales where we won't be able to convert the
-    // LanguageType back to an identical Language_Country name and therefore
-    // couldn't load the i18n LocaleData. Show DebugMsg in non-PRODUCT version.
+    
+    
+    
     ::com::sun::star::uno::Sequence< sal_uInt16 > xLang =
         LocaleDataWrapper::getInstalledLanguageTypes();
     sal_Int32 nCount = xLang.getLength();
@@ -457,13 +457,13 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        sal_Bool bInit = sal_False;     // set to sal_True for debug test
+        sal_Bool bInit = sal_False;     
         m_pCbSourceFormat->Check( bInit );
         m_pCbSourceFormat->Enable( bInit );
         m_pCbSourceFormat->Show( bInit );
     }
 
-    // pNumItem must have been set from outside!
+    
     DBG_ASSERT( pNumItem, "No NumberInfo, no NumberFormatter, good bye.CRASH. :-(" );
 
     eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
@@ -480,7 +480,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
             aValString = pNumItem->GetValueString();
             break;
         case SVX_VALUE_TYPE_NUMBER:
-            //  #50441# string may be set in addition to the value
+            
             aValString = pNumItem->GetValueString();
             nValDouble = pNumItem->GetValueDouble();
             break;
@@ -490,11 +490,11 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     }
 
     if ( pNumFmtShell )
-         delete pNumFmtShell;   // delete old shell if applicable (== reset)
+         delete pNumFmtShell;   
 
-    nInitFormat = ( pValFmtAttr )               // memorize init key
-                    ? pValFmtAttr->GetValue()   // (for FillItemSet())
-                    : ULONG_MAX;                // == DONT_KNOW
+    nInitFormat = ( pValFmtAttr )               
+                    ? pValFmtAttr->GetValue()   
+                    : ULONG_MAX;                
 
 
     if ( eValType == SVX_VALUE_TYPE_STRING )
@@ -516,7 +516,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     SfxObjectShell* pDocSh  = SfxObjectShell::Current();
     if ( pDocSh )
     {
-        // is this a calc document
+        
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )
             bUseStarFormat = xSI->supportsService("com.sun.star.sheet.SpreadsheetDocument");
@@ -548,12 +548,12 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     if(SFX_ITEM_SET == eState)
          pAutoEntryAttr = (const SfxBoolItem*)
                       GetItem( rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
-    // no_NO is an alias for nb_NO and normally isn't listed, we need it for
-    // backwards compatibility, but only if the format passed is of
-    // LanguageType no_NO.
+    
+    
+    
     if ( eLangType == LANGUAGE_NORWEGIAN )
     {
-        m_pLbLanguage->RemoveLanguage( eLangType );    // in case we're already called
+        m_pLbLanguage->RemoveLanguage( eLangType );    
         m_pLbLanguage->InsertLanguage( eLangType );
     }
     m_pLbLanguage->SelectLanguage( eLangType );
@@ -561,24 +561,24 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
     UpdateFormatListBox_Impl(sal_False,sal_True);
 
-//! This spoils everything because it rematches currency formats based on
-//! the selected m_pLbCurrency entry instead of the current format.
-//! Besides that everything seems to be initialized by now, so why call it?
-//  SelFormatHdl_Impl( m_pLbCategory );
+
+
+
+
 
     if ( pValFmtAttr )
     {
-        EditHdl_Impl(m_pEdFormat); // UpdateOptions_Impl() als Seiteneffekt
+        EditHdl_Impl(m_pEdFormat); 
     }
-    else    // DONT_KNOW
+    else    
     {
-        // everything disabled except direct input or changing the category
+        
         Obstructing();
     }
 
     if ( m_pCbSourceFormat->IsChecked() )
     {
-        // everything disabled except SourceFormat checkbox
+        
         EnableBySourceFormat_Impl();
     }
 }
@@ -621,7 +621,7 @@ void SvxNumberFormatTabPage::Obstructing()
     m_pLbCategory->SelectEntryPos( 0 );
     m_pEdFormat->SetText( OUString() );
     m_pFtComment->SetText( OUString() );
-    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));  // string for user defined
+    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));  
 
     m_pEdFormat->GrabFocus();
 }
@@ -651,7 +651,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_pBtnThousand->Enable( bEnable );
     m_pFtOptions->Enable( bEnable );
     m_pFormatCodeFrame->Enable( bEnable );
-    m_pLbFormat->Invalidate(); // #i43322#
+    m_pLbFormat->Invalidate(); 
 }
 
 
@@ -694,27 +694,27 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         sal_uInt16          nWhich       = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
         SfxItemState    eItemState   = rMyItemSet.GetItemState( nWhich, false );
 
-        // OK chosen - Is format code input entered already taken over?
-        // If not, simulate Add. Upon syntax error ignore input and prevent Put.
+        
+        
         OUString    aFormat = m_pEdFormat->GetText();
         sal_uInt32 nCurKey = pNumFmtShell->GetCurNumFmtKey();
 
         if ( m_pIbAdd->IsEnabled() || pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
-        {   // #79599# It is not sufficient to just add the format code (or
-            // delete it in case of bOneAreaFlag and resulting category change).
-            // Upon switching tab pages we need all settings to be consistent
-            // in case this page will be redisplayed later.
+        {   
+            
+            
+            
             bDataChanged = (ClickHdl_Impl(m_pIbAdd) != 0);
             nCurKey = pNumFmtShell->GetCurNumFmtKey();
         }
         else if(nCurKey == NUMKEY_UNDEFINED)
-        {   // something went wrong, e.g. in Writer #70281#
+        {   
             pNumFmtShell->FindEntry(aFormat, &nCurKey);
         }
 
-        //---------------------------------------------------------------
-        // Chosen format:
-        // --------------
+        
+        
+        
         if ( bDataChanged )
         {
             bDataChanged = ( nInitFormat != nCurKey );
@@ -729,9 +729,9 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             }
         }
 
-        // --------------------------------------------------------------
-        // List of changed user defined formats:
-        // -------------------------------------
+        
+        
+        
         const size_t nDelCount = pNumFmtShell->GetUpdateDataCount();
 
         if ( nDelCount > 0 )
@@ -758,9 +758,9 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             delete [] pDelArr;
         }
 
-        //---------------------------------------------------------------
-        // Whether source format is to be taken or not:
-        // --------------------------------------------
+        
+        
+        
         if ( m_pCbSourceFormat->IsEnabled() )
         {
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
@@ -774,8 +774,8 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                     _eItemState != SFX_ITEM_SET);
         }
 
-        // FillItemSet is only called on OK, here we can notify the
-        // NumberFormatShell that all new user defined formats are valid.
+        
+        
         pNumFmtShell->ValidateNewEntries();
         if(m_pLbLanguage->IsVisible() &&
                 LISTBOX_ENTRY_NOTFOUND != m_pLbLanguage->GetEntryPos(sAutomaticEntry))
@@ -993,7 +993,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
 
 void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     (
-        sal_uInt16 bCat,        // Category or country/language ListBox?
+        sal_uInt16 bCat,        
         sal_Bool   bUpdateEdit
     )
 {
@@ -1024,7 +1024,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         pNumFmtShell->LanguageChanged( m_pLbLanguage->GetSelectLanguage(),
                                        nFmtLbSelPos,aEntryList );
 
-    REMOVE_DONTKNOW() // possibly UI-Enable
+    REMOVE_DONTKNOW() 
 
 
     if ( (!aEntryList.empty()) && (nFmtLbSelPos != SELPOS_NONE) )
@@ -1104,7 +1104,7 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
         SelFormatHdl_Impl( pLb );
 
         if ( fnOkHdl.IsSet() )
-        {   // temporary solution, should be offered by SfxTabPage
+        {   
             fnOkHdl.Call( NULL );
         }
         else
@@ -1135,20 +1135,20 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 {
     if (pLb == m_pCbSourceFormat)
     {
-        EnableBySourceFormat_Impl();    // enable/disable everything else
+        EnableBySourceFormat_Impl();    
         if ( m_pCbSourceFormat->IsChecked() )
-            return 0;   // just disabled everything else
+            return 0;   
 
-        // Reinit options enable/disable for current selection.
+        
 
-        // Current category may be UserDefined with no format entries defined.
-        // And yes, m_pLbFormat is a SvxFontListBox with sal_uLong list positions,
-        // implementation returns a LIST_APPEND if empty, comparison with
-        // sal_uInt16 LISTBOX_ENTRY_NOTFOUND wouldn't match.
+        
+        
+        
+        
         if ( m_pLbFormat->GetSelectEntryPos() == LIST_APPEND )
-            pLb = m_pLbCategory; // continue with the current category selected
+            pLb = m_pLbCategory; 
         else
-            pLb = m_pLbFormat;   // continue with the current format selected
+            pLb = m_pLbFormat;   
     }
 
     short       nTmpCatPos;
@@ -1170,8 +1170,8 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         pNumFmtShell->SetCurrencySymbol(nCurrencyPos);
     }
 
-    //--------------------------------------------------------------------
-    // Format-ListBox ----------------------------------------------------
+    
+    
     if (pLb == m_pLbFormat)
     {
         sal_uInt16  nSelPos = (sal_uInt16) m_pLbFormat->GetSelectEntryPos();
@@ -1197,7 +1197,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
             ChangePreviewText( nSelPos );
         }
 
-        REMOVE_DONTKNOW() // possibly UI-Enable
+        REMOVE_DONTKNOW() 
 
         if ( pNumFmtShell->FindEntry( aFormat) )
         {
@@ -1220,8 +1220,8 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         return 0;
     }
 
-    //--------------------------------------------------------------------
-    // category-ListBox -------------------------------------------------
+    
+    
     if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
     {
         UpdateFormatListBox_Impl( sal_True, sal_True );
@@ -1231,8 +1231,8 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         return 0;
     }
 
-    //--------------------------------------------------------------------
-    // language/country-ListBox ----------------------------------------------
+    
+    
     if (pLb == m_pLbLanguage)
     {
         UpdateFormatListBox_Impl( sal_False, sal_True );
@@ -1261,13 +1261,13 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
     sal_Bool        bAdded = sal_False;
     sal_Bool        bDeleted = sal_False;
     sal_uLong       nReturn = 0;
-    const sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
-    const sal_uLong nReturnAdded    = 0x2;  // temp: format added
-    const sal_uLong nReturnOneArea  = 0x4;  // temp: one area but category changed => ignored
+    const sal_uLong nReturnChanged  = 0x1;  
+    const sal_uLong nReturnAdded    = 0x2;  
+    const sal_uLong nReturnOneArea  = 0x4;  
 
     if (pIB == m_pIbAdd)
-    {   // Also called from FillItemSet() if a temporary currency format has
-        // to be added, not only if the Add button is enabled.
+    {   
+        
         OUString               aFormat = m_pEdFormat->GetText();
         std::vector<OUString> aEntryList;
         std::vector<OUString> a2EntryList;
@@ -1290,9 +1290,9 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
             m_pFtComment->SetText(m_pEdComment->GetText());
         }
 
-        if ( !nErrPos ) // Syntax ok?
+        if ( !nErrPos ) 
         {
-            // May be sorted under a different locale if LCID was parsed.
+            
             if (bAdded)
                 m_pLbLanguage->SelectLanguage( pNumFmtShell->GetCurLanguage() );
 
@@ -1317,8 +1317,8 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
             {
                 if ( bAdded && (nFmtLbSelPos != SELPOS_NONE) )
                 {
-                    // everything alright
-                    if(bOneAreaFlag)                  //@@ ???
+                    
+                    if(bOneAreaFlag)                  
                         SetCategory(0);
                     else
                         SetCategory(nCatLbSelPos );
@@ -1337,13 +1337,13 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
                     m_pLbFormat->SelectEntryPos( (sal_uInt16)nFmtLbSelPos );
                     m_pEdFormat->SetText( aFormat );
 
-                    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // String for user defined
+                    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    
 
                     ChangePreviewText( (sal_uInt16)nFmtLbSelPos );
                 }
             }
         }
-        else // syntax error
+        else 
         {
             m_pEdFormat->GrabFocus();
             m_pEdFormat->SetSelection( Selection( nErrPos == -1 ? SELECTION_MAX : nErrPos, SELECTION_MAX ) );
@@ -1378,7 +1378,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
 
             if ( nFmtLbSelPos != SELPOS_NONE )
             {
-                if(bOneAreaFlag)                  //@@ ???
+                if(bOneAreaFlag)                  
                         SetCategory(0);
                     else
                         SetCategory(nCatLbSelPos );
@@ -1389,7 +1389,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
             }
             else
             {
-                // set to "all/standard"
+                
                 SetCategory(0);
                 SelFormatHdl_Impl(m_pLbCategory);
             }
@@ -1576,7 +1576,7 @@ IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Edit *, pEd)
             sal_uInt16  nSelPos = (sal_uInt16) m_pLbFormat->GetSelectEntryPos();
             pNumFmtShell->SetComment4Entry(nSelPos,
                                         m_pEdComment->GetText());
-            m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // String for user defined
+            m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    
         }
     }
     return 0;

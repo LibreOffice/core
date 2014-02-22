@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -117,7 +117,7 @@ void XclImpOutlineBuffer::MakeScOutline()
         SCSIZE nPos = itr->first;
         if (nPos >= mnEndPos)
         {
-            // Don't go beyond the max allowed position.
+            
             OSL_ENSURE(aOutlineStack.empty(), "XclImpOutlineBuffer::MakeScOutline: outline stack not empty but expected to be.");
             break;
         }
@@ -135,7 +135,7 @@ void XclImpOutlineBuffer::MakeScOutline()
             {
                 if (aOutlineStack.empty())
                 {
-                    // Something is wrong.
+                    
                     return;
                 }
                 SCSIZE nFirstPos = aOutlineStack.back();
@@ -156,7 +156,7 @@ void XclImpOutlineBuffer::MakeScOutline()
 void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal, bool bCollapsed )
 {
     if (nF > nL)
-        // invalid range
+        
         return;
 
     maLevels.insert_back(nF, nL+1, nVal);
@@ -183,9 +183,9 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
 
     rIn >> nCref;
     rIn >> nProtected;
-    rIn.Ignore( 1 );                // Hide
+    rIn.Ignore( 1 );                
     rIn >> nName >> nComment;
-    rIn.Ignore( 1 );       // statt nUser!
+    rIn.Ignore( 1 );       
 
     if( nName )
         pName = new OUString( rIn.ReadUniString( nName ) );
@@ -240,7 +240,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
         return;
 
     r.SetScenario( nNewTab, true );
-    // do not show scenario frames
+    
     r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
     boost::ptr_vector<ExcScenarioCell>::const_iterator iter;
@@ -258,8 +258,8 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
     if( bLast )
         r.SetActiveScenario( nNewTab, true );
 
-    // modify what the Active tab is set to if the new
-    // scenario tab occurs before the active tab.
+    
+    
     ScExtDocSettings& rDocSett = rRoot.GetExtDocOptions().GetDocSettings();
     if( (static_cast< SCCOL >( nTab ) < rDocSett.mnDisplTab) && (rDocSett.mnDisplTab < MAXTAB) )
         ++rDocSett.mnDisplTab;

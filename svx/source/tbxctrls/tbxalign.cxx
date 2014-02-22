@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/aeitem.hxx>
@@ -78,38 +78,38 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
     return NULL;
 }
 
-//========================================================================
-// XSubToolbarController
-//========================================================================
+
+
+
 
 ::sal_Bool SAL_CALL SvxTbxCtlAlign::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
 {
-    // We control a sub-toolbar therefor, we have to return true.
+    
     return sal_True;
 }
 
 OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
 {
-    // Provide the controlled sub-toolbar name, so we are notified whenever
-    // this toolbar executes a function.
+    
+    
     SolarMutexGuard aGuard;
     return m_aSubTbName;
 }
 
 void SAL_CALL SvxTbxCtlAlign::functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // remember the new command
+    
     m_aCommand = aCommand;
 
-    // Our sub-toolbar wants to execute a function.
-    // We have to change the image of our toolbar button to reflect the new function.
+    
+    
     updateImage();
 }
 
 void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::RuntimeException)
 {
-    // We should update the button image of our parent (toolbar). Use the stored
-    // command to set the correct current image.
+    
+    
     SolarMutexGuard aGuard;
     if ( !m_aCommand.isEmpty() )
     {

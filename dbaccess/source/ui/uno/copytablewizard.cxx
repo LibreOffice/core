@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbu_reghelper.hxx"
@@ -138,7 +138,7 @@ namespace dbaui
 
     typedef ::utl::SharedUNOComponent< XConnection >    SharedConnection;
 
-    // CopyTableWizard
+    
     typedef ::svt::OGenericUnoDialog        CopyTableWizard_DialogBase;
     typedef ::cppu::ImplInheritanceHelper1  <   CopyTableWizard_DialogBase
                                             ,   XCopyTableWizard
@@ -148,16 +148,16 @@ namespace dbaui
             ,public ::comphelper::OPropertyArrayUsageHelper< CopyTableWizard >
     {
     public:
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // XServiceInfo - static methods
+        
         static Sequence< OUString >  getSupportedServiceNames_Static(void) throw( RuntimeException );
         static OUString              getImplementationName_Static(void) throw( RuntimeException );
         static Reference< XInterface >      Create( const Reference< XMultiServiceFactory >& );
 
-        // XCopyTableWizard
+        
         virtual ::sal_Int16 SAL_CALL getOperation() throw (RuntimeException);
         virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException);
         virtual OUString SAL_CALL getDestinationTableName() throw (RuntimeException);
@@ -169,18 +169,18 @@ namespace dbaui
         virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
         virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
 
-        // XCopyTableWizard::XExecutableDialog
+        
         virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException);
         virtual ::sal_Int16 SAL_CALL execute(  ) throw (RuntimeException);
 
-        // XInitialization
+        
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
-        // XPropertySet
+        
         virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(RuntimeException);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-        // OPropertyArrayUsageHelper
+        
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     public:
@@ -191,15 +191,15 @@ namespace dbaui
         CopyTableWizard( const Reference< XComponentContext >& _rxORB );
         ~CopyTableWizard();
 
-        // OGenericUnoDialog overridables
+        
         virtual Dialog* createDialog( Window* _pParent );
         virtual void executedDialog( sal_Int16 _nExecutionResult );
 
     private:
-        /// ensures our current attribute values are reflected in the dialog
+        
         void    impl_attributesToDialog_nothrow( OCopyTableWizard& _rDialog ) const;
 
-        /// ensures the current dialog settings are reflected in our attributes
+        
         void    impl_dialogToAttributes_nothrow( const OCopyTableWizard& _rDialog );
 
         /** returns our typed dialog
@@ -335,13 +335,13 @@ namespace dbaui
 private:
         Reference<XComponentContext>    m_xContext;
 
-        // attributes
+        
         sal_Int16                       m_nOperation;
         OUString                        m_sDestinationTable;
         Optional< OUString >            m_aPrimaryKeyName;
         sal_Bool                        m_bUseHeaderLineAsColumnNames;
 
-        // source
+        
         SharedConnection                m_xSourceConnection;
         sal_Int32                       m_nCommandType;
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -352,17 +352,17 @@ private:
         Sequence< Any >                 m_aSourceSelection;
         sal_Bool                        m_bSourceSelectionBookmarks;
 
-        // destination
+        
         SharedConnection                m_xDestConnection;
 
-        // other
+        
         Reference< XInteractionHandler > m_xInteractionHandler;
         ::cppu::OInterfaceContainerHelper
                                         m_aCopyTableListeners;
         sal_Int16                       m_nOverrideExecutionResult;
     };
 
-// MethodGuard
+
 class CopyTableAccessGuard
 {
 public:
@@ -406,17 +406,17 @@ CopyTableWizard::~CopyTableWizard()
 {
     acquire();
 
-    // protect some members whose dtor might potentially throw
+    
     try { m_xSourceConnection.clear();  }
     catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
     try { m_xDestConnection.clear();  }
     catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
-    // TODO: shouldn't we have explicit disposal support? If a listener is registered
-    // at our instance, and perhaps holds this our instance by a hard ref, then we'll never
-    // be destroyed.
-    // However, adding XComponent support to the GenericUNODialog probably requires
-    // some thinking - would it break existing clients which do not call a dispose, then?
+    
+    
+    
+    
+    
 }
 
 Reference< XInterface > CopyTableWizard::Create( const Reference< XMultiServiceFactory >& _rxFactory )
@@ -575,11 +575,11 @@ const OCopyTableWizard& CopyTableWizard::impl_getDialog_throw() const
 
 void CopyTableWizard::impl_attributesToDialog_nothrow( OCopyTableWizard& _rDialog ) const
 {
-    // primary key column
+    
     _rDialog.setCreatePrimaryKey( m_aPrimaryKeyName.IsPresent, m_aPrimaryKeyName.Value );
     _rDialog.setUseHeaderLine(m_bUseHeaderLineAsColumnNames);
 
-    // everything else was passed at construction time already
+    
 }
 
 void CopyTableWizard::impl_dialogToAttributes_nothrow( const OCopyTableWizard& _rDialog )
@@ -611,13 +611,13 @@ namespace
     {
         Reference< XInteractionHandler > xHandler( _rFallback );
 
-        // try to obtain the document model
+        
         Reference< XModel > xDocumentModel;
         Reference< XDocumentDataSource > xDocDataSource( _rxDataSource, UNO_QUERY );
         if ( xDocDataSource.is() )
             xDocumentModel.set( xDocDataSource->getDatabaseDocument(), UNO_QUERY_THROW );
 
-        // see whether the document model can provide a handler
+        
         if ( xDocumentModel.is() )
         {
             ::comphelper::NamedValueCollection aModelArgs( xDocumentModel->getArgs() );
@@ -637,7 +637,7 @@ namespace
     */
     Reference< XInteractionHandler > lcl_getInteractionHandler_throw( const Reference< XConnection >& _rxConnection, const Reference< XInteractionHandler >& _rFallback )
     {
-        // try whether there is a data source which the connection belongs to
+        
         Reference< XDataSource > xDataSource;
         Reference< XChild > xAsChild( _rxConnection, UNO_QUERY );
         if ( xAsChild.is() )
@@ -657,10 +657,10 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
     Reference< XPropertySet > xDescriptor;
     _rAllArgs[ _nArgPos ] >>= xDescriptor;
 
-    // the descriptor must be non-NULL, of course
+    
     bool bIsValid = xDescriptor.is();
 
-    // it must support the proper service
+    
     if ( bIsValid )
     {
         Reference< XServiceInfo > xSI( xDescriptor, UNO_QUERY );
@@ -668,7 +668,7 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
                     &&  xSI->supportsService( "com.sun.star.sdb.DataAccessDescriptor" ) );
     }
 
-    // it must be able to provide a connection
+    
     if ( bIsValid )
     {
         _out_rxConnection = impl_extractConnection_throw( xDescriptor, _out_rxDocInteractionHandler );
@@ -743,7 +743,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ||  !xPSI->hasPropertyByName( PROPERTY_COMMAND_TYPE )
         )
         throw IllegalArgumentException("Expecting a table or query specification.",
-                                       // TODO: resource
+                                       
                                        *const_cast< CopyTableWizard* >( this ), 1);
 
     OUString sCommand;
@@ -784,11 +784,11 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
     else
     {
-        // our source connection is an SDBC level connection only, not a SDBCX level one
-        // Which means it cannot provide the to-be-copied object as component.
+        
+        
 
         if ( _out_rCommandType == CommandType::QUERY )
-            // we cannot copy a query if the connection cannot provide it ...
+            
             throw IllegalArgumentException(
                 OUString(ModuleRes( STR_CTW_ERROR_NO_QUERY )),
                 *const_cast< CopyTableWizard* >( this ),
@@ -806,7 +806,7 @@ void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPrope
 {
     Reference< XPropertySetInfo > xPSI( i_rDescriptor->getPropertySetInfo(), UNO_SET_THROW );
 
-    // extract relevant settings
+    
     if ( xPSI->hasPropertyByName( PROPERTY_RESULT_SET ) )
         m_xSourceResultSet.set( i_rDescriptor->getPropertyValue( PROPERTY_RESULT_SET ), UNO_QUERY );
 
@@ -816,12 +816,12 @@ void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPrope
     if ( xPSI->hasPropertyByName( PROPERTY_BOOKMARK_SELECTION ) )
         OSL_VERIFY( i_rDescriptor->getPropertyValue( PROPERTY_BOOKMARK_SELECTION ) >>= m_bSourceSelectionBookmarks );
 
-    // sanity checks
+    
     const bool bHasResultSet = m_xSourceResultSet.is();
     const bool bHasSelection = ( m_aSourceSelection.getLength() != 0 );
     if ( bHasSelection && !bHasResultSet )
         throw IllegalArgumentException("A result set is needed when specifying a selection to copy.",
-                                       // TODO: resource
+                                       
                                        *this, 1);
 
     if ( bHasSelection && m_bSourceSelectionBookmarks )
@@ -852,7 +852,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     {
     Reference< XPropertySetInfo > xPSI( _rxDataSourceDescriptor->getPropertySetInfo(), UNO_SET_THROW );
 
-    // if there's an ActiveConnection, use it
+    
     if ( xPSI->hasPropertyByName( PROPERTY_ACTIVE_CONNECTION ) )
     {
         Reference< XConnection > xPure;
@@ -866,14 +866,14 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
         break;
     }
 
-    // there could be a DataSourceName or a DatabaseLocation, describing the css.sdb.DataSource
+    
     OUString sDataSource, sDatabaseLocation;
     if ( xPSI->hasPropertyByName( PROPERTY_DATASOURCENAME ) )
         OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sDataSource );
     if ( xPSI->hasPropertyByName( PROPERTY_DATABASE_LOCATION ) )
         OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATABASE_LOCATION ) >>= sDatabaseLocation );
 
-    // need a DatabaseContext for loading the data source
+    
     Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create( m_xContext );
     Reference< XDataSource > xDataSource;
     if ( !sDataSource.isEmpty() )
@@ -883,7 +883,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 
     if ( xDataSource.is() )
     {
-        // first, try connecting with completion
+        
         xInteractionHandler = lcl_getInteractionHandler_throw( xDataSource, m_xInteractionHandler );
         OSL_POSTCOND( xInteractionHandler.is(), "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
         if ( xInteractionHandler.is() )
@@ -893,7 +893,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
                 xConnection.reset( xInteractiveConnection->connectWithCompletion( xInteractionHandler ), SharedConnection::TakeOwnership );
         }
 
-        // interactively connecting was not successful or possible -> connect without interaction
+        
         if ( !xConnection.is() )
         {
             xConnection.reset( xDataSource->getConnection( OUString(), OUString() ), SharedConnection::TakeOwnership );
@@ -903,7 +903,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     if ( xConnection.is() )
         break;
 
-    // finally, there could be a ConnectionResource/ConnectionInfo
+    
     OUString sConnectionResource;
     Sequence< PropertyValue > aConnectionInfo;
     if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_RESOURCE ) )
@@ -916,7 +916,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
         xDriverManager.set( ConnectionPool::create( m_xContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
     if ( !xDriverManager.is() )
-        // no connection pool installed
+        
         xDriverManager.set( DriverManager::create( m_xContext ), UNO_QUERY_THROW );
 
     if ( aConnectionInfo.getLength() )
@@ -950,13 +950,13 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
         OUString sQueryCommand( m_pSourceObject->getSelectStatement() );
         xStatement.set( m_pSourceObject->getPreparedSelectStatement(), UNO_SET_THROW );
 
-        // check whether we have to fill in parameter values
-        // create and fill a composer
+        
+        
 
         Reference< XMultiServiceFactory > xFactory( m_xSourceConnection, UNO_QUERY );
         ::utl::SharedUNOComponent< XSingleSelectQueryComposer > xComposer;
         if ( xFactory.is() )
-            // note: connections below the sdb-level are allowed to not support the XMultiServiceFactory interface
+            
             xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
 
         if ( xComposer.is() )
@@ -965,13 +965,13 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 
             Reference< XParameters > xStatementParams( xStatement, UNO_QUERY );
             OSL_ENSURE( xStatementParams.is(), "CopyTableWizard::impl_createSourceStatement_throw: no access to the statement's parameters!" );
-                // the statement should be a css.sdbc.PreparedStatement (this is what
-                // we created), and a prepared statement is required to support XParameters
+                
+                
             if ( xStatementParams.is() )
             {
                 OSL_ENSURE( m_xInteractionHandler.is(),
                    "CopyTableWizard::impl_createSourceStatement_throw: no interaction handler for the parameters request!" );
-                // we should always have an interaction handler - as last fallback, we create an own one in ::initialize
+                
 
                 if ( m_xInteractionHandler.is() )
                     ::dbtools::askForParameters( xComposer, xStatementParams, m_xSourceConnection, m_xInteractionHandler );
@@ -981,7 +981,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     break;
 
     default:
-        // this should not have survived initialization phase
+        
         throw RuntimeException("No case matched, this should not have survived the initialization phase", *const_cast< CopyTableWizard* >( this ));
     }
 
@@ -1046,14 +1046,14 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             sal_Int16 nListenerChoice = xListener->copyRowError( _rEvent );
             switch ( nListenerChoice )
             {
-            case CopyTableContinuation::Proceed:            return true;    // continue copying
-            case CopyTableContinuation::CallNextHandler:    continue;       // continue the loop, ask next listener
-            case CopyTableContinuation::Cancel:             return false;   // cancel copying
-            case CopyTableContinuation::AskUser:            break;          // stop asking the listeners, ask the user
+            case CopyTableContinuation::Proceed:            return true;    
+            case CopyTableContinuation::CallNextHandler:    continue;       
+            case CopyTableContinuation::Cancel:             return false;   
+            case CopyTableContinuation::AskUser:            break;          
 
             default:
                 SAL_WARN("dbaccess.ui", "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
-                // ask next listener
+                
                 continue;
             }
         }
@@ -1063,7 +1063,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // no listener felt responsible for the error, or a listener told to ask the user
+    
 
     try
     {
@@ -1076,7 +1076,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             aError.NextException = _rEvent.Error;
         else
         {
-            // a non-SQL exception happened
+            
             Exception aException;
             OSL_VERIFY( _rEvent.Error >>= aException );
             SQLContext aContext;
@@ -1098,7 +1098,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             m_xInteractionHandler->handle( xRequest.get() );
 
         if ( xYes->wasSelected() )
-            // continue copying
+            
             return true;
     }
     catch( const Exception& )
@@ -1106,7 +1106,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // cancel copying
+    
     return false;
 }
 
@@ -1129,15 +1129,15 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     Reference< XResultSetMetaDataSupplier > xSuppResMeta( _rxSourceResultSet, UNO_QUERY_THROW );
     Reference< XResultSetMetaData> xMeta( xSuppResMeta->getMetaData() );
 
-    // we need a vector which all types
+    
     sal_Int32 nCount = xMeta->getColumnCount();
     ::std::vector< sal_Int32 > aSourceColTypes;
     aSourceColTypes.reserve( nCount + 1 );
-    aSourceColTypes.push_back( -1 ); // just to avoid a everytime i-1 call
+    aSourceColTypes.push_back( -1 ); 
 
     ::std::vector< sal_Int32 > aSourcePrec;
     aSourcePrec.reserve( nCount + 1 );
-    aSourcePrec.push_back( -1 ); // just to avoid a everytime i-1 call
+    aSourcePrec.push_back( -1 ); 
 
     for ( sal_Int32 k=1; k <= nCount; ++k )
     {
@@ -1145,7 +1145,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         aSourcePrec.push_back( xMeta->getPrecision( k ) );
     }
 
-    // now create, fill and execute the prepared statement
+    
     Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnMapping ), UNO_SET_THROW );
     Reference< XParameters > xStatementParams( xStatement, UNO_QUERY_THROW );
 
@@ -1160,7 +1160,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     aCopyEvent.Source = *this;
     aCopyEvent.SourceData = _rxSourceResultSet;
 
-    do // loop as long as there are more rows or the selection ends
+    do 
     {
         bContinue = false;
         if ( bSelectedRecordsOnly )
@@ -1196,7 +1196,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         aCopyEvent.Error.clear();
         try
         {
-            // notify listeners
+            
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copyingRow, aCopyEvent );
 
             sal_Int32 nDestColumn( 0 );
@@ -1209,7 +1209,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 if ( nDestColumn == COLUMN_POSITION_NOT_FOUND )
                 {
                     ++nSourceColumn;
-                    // otherwise we don't get the correct value when only the 2nd source column was selected
+                    
                     continue;
                 }
 
@@ -1221,7 +1221,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 }
 
                 if ( ( nSourceColumn < 1 ) || ( nSourceColumn >= (sal_Int32)aSourceColTypes.size() ) )
-                {   // ( we have to check here against 1 because the parameters are 1 based)
+                {   
                     ::dbtools::throwSQLException("Internal error: invalid column type index.",
                                                  ::dbtools::SQL_INVALID_DESCRIPTOR_INDEX, *this);
                 }
@@ -1273,7 +1273,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                             aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                             break;
                         }
-                        // run through
+                        
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1316,7 +1316,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             }
             xStatement->executeUpdate();
 
-            // notify listeners
+            
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copiedRow, aCopyEvent );
         }
         catch( const Exception& )
@@ -1357,7 +1357,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 if( CopyTableOperation::CopyDefinitionOnly == rWizard.getOperation() )
                     break;
             }
-            // run through
+            
 
             case CopyTableOperation::AppendData:
             {
@@ -1386,7 +1386,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     bool bDone = false;
                     if ( bIsSameConnection && bIsTable )
                     {
-                        // try whether the server supports copying via SQL
+                        
                         try
                         {
                             m_xDestConnection->createStatement()->executeUpdate( impl_getServerSideCopyStatement_throw(xTable) );
@@ -1394,7 +1394,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                         }
                         catch( const Exception& )
                         {
-                            // this is allowed.
+                            
                         }
                     }
 
@@ -1423,7 +1423,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
     {
         aError = ::cppu::getCaughtException();
 
-        // silence the error of the user cancelling the parameter's dialog
+        
         SQLException aSQLError;
         if ( ( aError >>= aSQLError ) && ( aSQLError.ErrorCode == ::dbtools::ParameterInteractionCancelled ) )
         {
@@ -1453,7 +1453,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
     const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_QUERY_THROW );
     const OUString sQuote = xDestMetaData->getIdentifierQuoteString();
     OUStringBuffer sColumns;
-    // 1st check if the columns matching
+    
     const OCopyTableWizard& rWizard             = impl_getDialog_throw();
     ODatabaseExport::TPositions aColumnMapping  = rWizard.GetColumnPositions();
     ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
@@ -1489,7 +1489,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
     try
     {
         if ( nArgCount == 3 )
-        {   // ->createWithInteractionHandler
+        {   
             if ( !( _rArguments[2] >>= m_xInteractionHandler ) )
                 throw IllegalArgumentException(
                     OUString(ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER )),
@@ -1539,7 +1539,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
 Dialog* CopyTableWizard::createDialog( Window* _pParent )
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
-        // this should have been prevented in ::execute already
+        
 
     OCopyTableWizard* pWizard = new OCopyTableWizard(
         _pParent,
@@ -1564,12 +1564,12 @@ void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
     if ( _nExecutionResult == RET_OK )
         impl_doCopy_nothrow();
 
-    // do this after impl_doCopy_nothrow: The attributes may change during copying, for instance
-    // if the user entered an unqualified table name
+    
+    
     impl_dialogToAttributes_nothrow( impl_getDialog_throw() );
 }
 
-} // namespace dbaui
+} 
 
 extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard()
 {

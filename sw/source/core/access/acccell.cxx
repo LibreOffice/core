@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -81,15 +81,15 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
-    // SELECTABLE
+    
     const SwViewShell *pVSh = GetMap()->GetShell();
     OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
-    //Add resizable state to table cell.
+    
     rStateSet.AddState( AccessibleStateType::RESIZABLE );
 
-    // SELECTED
+    
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
@@ -133,8 +133,8 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     }
     if( bNew )
     {
-        // remember that object as the one that has the caret. This is
-        // necessary to notify that object if the cursor leaves it.
+        
+        
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -175,13 +175,13 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                             xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
                 else
-                    bChanged = sal_True; // If the context is not know we
-                                         // don't know whether the selection
-                                         // changed or not.
+                    bChanged = sal_True; 
+                                         
+                                         
             }
             else
             {
-                // This is a box with sub rows.
+                
                 bChanged |= _InvalidateChildrenCursorPos( pLower );
             }
         }
@@ -284,7 +284,7 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
-// XAccessibleInterface
+
 
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException )
@@ -315,7 +315,7 @@ uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     }
 }
 
-// XTypeProvider
+
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
     throw(uno::RuntimeException)
 {
@@ -341,7 +341,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
     return theSwAccessibleCellImplementationId::get().getSeq();
 }
 
-// XAccessibleValue
+
 
 SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 {
@@ -352,7 +352,7 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
     return pCellFrm->GetTabBox()->GetFrmFmt();
 }
 
-//Implement TableCell currentValue
+
 uno::Any SwAccessibleCell::getCurrentValue( )
     throw( uno::RuntimeException )
 {
@@ -463,7 +463,7 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
     return crBack;
 }
 
-//=====  XAccessibleSelection  ============================================
+
 void SwAccessibleCell::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )

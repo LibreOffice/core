@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svgfilter.hxx"
@@ -147,7 +147,7 @@ void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
 void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
                                        const Rectangle* pObjBoundRect, const Gradient* pFillGradient )
 {
-    // Fill
+    
     if( pObjBoundRect && pFillGradient )
     {
         OUString aGradientId;
@@ -163,7 +163,7 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
     else
         AddColorAttr( aXMLAttrFill, aXMLAttrFillOpacity, rFillColor );
 
-    // Stroke
+    
     AddColorAttr( aXMLAttrStroke, aXMLAttrStrokeOpacity, rLineColor );
 }
 
@@ -183,7 +183,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         aPoly.Rotate( aObjRectCenter, nAngle );
         Rectangle aRect( aPoly.GetBoundRect() );
 
-        // adjust start/end colors with intensities
+        
         aStartColor.SetRed( (sal_uInt8)( (long) aStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 );
         aStartColor.SetGreen( (sal_uInt8)( (long) aStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 );
         aStartColor.SetBlue( (sal_uInt8)( (long) aStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 );
@@ -216,7 +216,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
                 apGradient.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, sal_True, sal_True ) );
 
-                // write stop values
+                
                 double fBorder = static_cast< double >( rGradient.GetBorder() ) *
                                 ( ( rGradient.GetStyle() == GradientStyle_AXIAL ) ? 0.005 : 0.01 );
 
@@ -264,7 +264,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
                 apGradient.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemRadialGradient, sal_True, sal_True ) );
 
-                // write stop values
+                
                 ImplGetColorStr( aEndColor, aColorStr );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::number( 0.0 ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
@@ -297,14 +297,14 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 
         maCurFont = rFont;
 
-        // Font Family
+        
         setFontFamily();
 
-        // Font Size
+        
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
                                OUString::number( rFont.GetHeight() ) + "px" );
 
-        // Font Style
+        
         if( rFont.GetItalic() != ITALIC_NONE )
         {
             if( rFont.GetItalic() == ITALIC_OBLIQUE )
@@ -317,7 +317,7 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, aFontStyle );
 
-        // Font Weight
+        
         switch( rFont.GetWeight() )
         {
             case WEIGHT_THIN:           nFontWeight = 100; break;
@@ -591,8 +591,8 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             }
             break;
 
-            // If we reach the end of the current line, paragraph or text shape
-            // without finding any text we stop searching
+            
+            
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
@@ -708,8 +708,8 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
                     bConfigured = true;
             }
             break;
-            // If we reach the end of the paragraph without finding any text
-            // we stop searching
+            
+            
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
@@ -742,20 +742,20 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
         FontWeight eParFontWeight                   = maParentFont.GetWeight();
 
 
-        // Font Family
+        
         if( rsCurFontName != rsParFontName )
         {
             implSetFontFamily();
         }
 
-        // Font Size
+        
         if( nCurFontSize != nParFontSize )
         {
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
                                    OUString::number( nCurFontSize ) +  "px" );
         }
 
-        // Font Style
+        
         if( eCurFontItalic != eParFontItalic )
         {
             OUString sFontStyle;
@@ -773,7 +773,7 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, sFontStyle );
         }
 
-        // Font Weight
+        
         if( eCurFontWeight != eParFontWeight )
         {
             sal_Int32 nFontWeight;
@@ -1069,20 +1069,20 @@ sal_Bool SVGTextWriter::nextTextPortion()
                         const OUString* pNames = aServices.getConstArray();
                         sal_Int32 nCount = aServices.getLength();
 
-                        OUString sFieldName;    // service name postfix of current field
+                        OUString sFieldName;    
 
-                        // search for TextField service name
+                        
                         while( nCount-- )
                         {
                             if ( pNames->matchIgnoreAsciiCase( sServicePrefix ) )
                             {
-                                // TextField found => postfix is field type!
+                                
                                 sFieldName = pNames->copy( sServicePrefix.getLength() );
                                 break;
                             }
                             else if( 0 == pNames->compareTo( sPresentationServicePrefix, sPresentationServicePrefix.getLength() ) )
                             {
-                                // TextField found => postfix is field type!
+                                
                                 sFieldName = pNames->copy( sPresentationServicePrefix.getLength() );
                                 break;
                             }
@@ -1177,7 +1177,7 @@ void SVGTextWriter::endTextShape()
         mpTextShapeElem = NULL;
     }
     mbIsTextShapeStarted = sal_False;
-    // these need to be invoked after the <text> element has been closed
+    
     implExportHyperlinkIds();
     implWriteBulletChars();
     implWriteEmbeddedBitmaps();
@@ -1245,7 +1245,7 @@ void SVGTextWriter::startTextPosition( sal_Bool bExportX, sal_Bool bExportY )
     if( bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( maTextPos.Y() ) );
 
-    // if text is rotated, set transform matrix at new tspan element
+    
     const Font& rFont = mpVDev->GetFont();
     if( rFont.GetOrientation() )
     {
@@ -1296,20 +1296,20 @@ void SVGTextWriter::implWriteBulletChars()
     OUString sId, sPosition, sScaling, sRefId;
     for( ; it != end; ++it )
     {
-        // <g id="?" > (used by animations)
+        
         {
-            // As id we use the id of the text portion placeholder wrapped
-            // by bullet-char(*)
+            
+            
             sId = "bullet-char(" + it->first+ ")";
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChar" );
             SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
-            // <g transform="translate(x,y)" >
+            
             {
                 const BulletListItemInfo& rInfo = it->second;
 
-                // Add positioning attribute through a translation
+                
                 sPosition = "translate(" +
                             OUString::number( rInfo.aPos.X() ) +
                             "," + OUString::number( rInfo.aPos.Y() ) + ")";
@@ -1319,14 +1319,14 @@ void SVGTextWriter::implWriteBulletChars()
 
                 SvXMLElementExport aPositioningElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
-                // <use transform="scale(font-size)" xlink:ref="/" >
+                
                 {
-                    // Add size attribute through a scaling
+                    
                     sScaling = "scale(" + OUString::number( rInfo.nFontSize ) +
                                "," + OUString::number( rInfo.nFontSize )+ ")";
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
 
-                    // Add ref attribute
+                    
                     sRefId = "#bullet-char-template(" +
                              OUString::number( ( rInfo.cBulletChar ) ) +
                              ")";
@@ -1334,19 +1334,19 @@ void SVGTextWriter::implWriteBulletChars()
 
                     SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", sal_True, sal_True );
                 }
-            } // close aPositioningElem
-        } // close aBulletCharElem
+            } 
+        } 
     }
 
 
-    // clear the map
+    
     maBulletListItemMap.clear();
 }
 
 template< typename MetaBitmapActionType >
 void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction )
 {
-    // text position element
+    
     const Point& rPos = pAction->GetPoint();
     implMap( rPos, maTextPos );
     startTextPosition();
@@ -1357,7 +1357,7 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction 
         mbIsListLevelStyleImage = sal_False;
     }
 
-    // bitmap placeholder element
+    
     sal_uLong nId = SVGActionWriter::GetChecksum( pAction );
     OUString sId = "bitmap-placeholder("  + msShapeId + "." +
                    OUString::number( nId ) + ")";
@@ -1410,9 +1410,9 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 break;
             }
 
-            // <g id="?" > (used by animations)
+            
             {
-                // embedded bitmap id
+                
                 nId = SVGActionWriter::GetChecksum( pAction );
                 sId = "embedded-bitmap(";
                 sId += msShapeId;
@@ -1424,9 +1424,9 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
 
                 SvXMLElementExport aEmbBitmapElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
-                // <use x="?" y="?" xlink:ref="?" >
+                
                 {
-                    // referenced bitmap template
+                    
                     sRefId = "#bitmap(";
                     sRefId += OUString::number( nChecksum );
                     sRefId += ")";
@@ -1442,7 +1442,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
 
                     SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", sal_True, sal_True );
                 }
-            } // close aEmbBitmapElem
+            } 
         }
     }
 }
@@ -1499,7 +1499,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
         }
     }
 
-    assert(mpVDev); //invalid virtual device
+    assert(mpVDev); 
 
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -1511,7 +1511,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
     }
     else
     {
-        // to be implemented
+        
     }
 
 }
@@ -1545,8 +1545,8 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     }
     else if( maTextPos.Y() != aPos.Y() )
     {
-        // In case the text position moved backward we could have a line break
-        // so we end the current line and start a new one.
+        
+        
         if( mbLineBreak || ( ( maTextPos.X() + mnTextWidth ) > aPos.X() ) )
         {
             mbLineBreak = sal_False;
@@ -1554,13 +1554,13 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
             maTextPos.setY( aPos.Y() );
             startTextPosition();
         }
-        else // superscript, subscript, list item numbering
+        else 
         {
             maTextPos.setY( aPos.Y() );
             startTextPosition( sal_False /* do not export x attribute */ );
         }
     }
-    // we are dealing with a bullet, so set up this for the next text portion
+    
     if( mbIsNewListItem )
     {
         mbIsNewListItem = sal_False;
@@ -1568,10 +1568,10 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
 
         if( meNumberingType == NumberingType::CHAR_SPECIAL )
         {
-            // Create an id for the current text portion
+            
             implRegisterInterface( mrCurrentTextParagraph );
 
-            // Add the needed info to the BulletListItemMap
+            
             OUString sId = implGetValidIDFromInterface( mrCurrentTextParagraph );
             if( !sId.isEmpty() )
             {
@@ -1582,7 +1582,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
                 aBulletListItemInfo.aPos = maTextPos;
                 aBulletListItemInfo.cBulletChar = mcBulletChar;
 
-                // Make this text portion a bullet placeholder
+                
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletPlaceholder" );
                 SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
@@ -1604,13 +1604,13 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
-    assert(mpContext); //invalid context object
+    assert(mpContext); 
 
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
     OUString sTextContent = rText;
 
-    // <a> tag for link should be the innermost tag, inside <tspan>
+    
     if( !mbIsPlacehlolderShape && mbIsURLField && !msUrl.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "UrlField" );
@@ -1804,7 +1804,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
 
     if( pLineColor )
     {
-        // !!! mrExport.AddAttribute( XML_NAMESPACE_NONE, ... )
+        
         OSL_FAIL( "SVGActionWriter::ImplWriteLine: Line color not implemented" );
     }
 
@@ -1867,10 +1867,10 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
         sal_Int32 nStrokeWidth = bApplyMapping ? ImplMap( rAttrs.GetWidth() ) : rAttrs.GetWidth();
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth,
                                OUString::number( nStrokeWidth ) );
-    // support for LineJoint
+    
     switch(rAttrs.GetLineJoin())
     {
-        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+        default: 
         case basegfx::B2DLINEJOIN_MITER:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
@@ -1888,14 +1888,14 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
         }
     }
 
-    // support for LineCap
+    
     switch(rAttrs.GetLineCap())
     {
         default: /* com::sun::star::drawing::LineCap_BUTT */
         {
-            // butt is Svg default, so no need to write until the exporter might write styles.
-            // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
+            
+            
+            
             break;
         }
         case com::sun::star::drawing::LineCap_ROUND:
@@ -1924,11 +1924,11 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
     else
         aPolyPoly = rPolyPoly;
 
-    // add path data attribute
+    
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrD, GetPathString( aPolyPoly, bLineOnly ) );
 
     {
-        // write polyline/polygon element
+        
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemPath, sal_True, sal_True );
     }
 }
@@ -1956,15 +1956,15 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth, OUString::number( nStrokeWidth ) );
     }
 
-    // support for LineJoin
+    
     switch(rShape.maLineJoin)
     {
-        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+        default: 
         case basegfx::B2DLINEJOIN_MITER:
         {
-            // miter is Svg default, so no need to write until the exporter might write styles.
-            // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
+            
+            
+            
             break;
         }
         case basegfx::B2DLINEJOIN_BEVEL:
@@ -1979,14 +1979,14 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
         }
     }
 
-    // support for LineCap
+    
     switch(rShape.maLineCap)
     {
         default: /* com::sun::star::drawing::LineCap_BUTT */
         {
-            // butt is Svg default, so no need to write until the exporter might write styles.
-            // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
+            
+            
+            
             break;
         }
         case com::sun::star::drawing::LineCap_ROUND:
@@ -2053,8 +2053,8 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
             {
                 SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, aXMLElemPattern, sal_True, sal_True );
 
-                // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
-                // So we need to adjust the pattern coordinate.
+                
+                
                 OUString aTransform = "translate(" +
                                       OUString::number( -aRect.Left() ) +
                                       "," + OUString::number( -aRect.Top() ) +
@@ -2125,9 +2125,9 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                 const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
                 Polygon aPoly( 2 );
-                // Setting x value of a gradient vector to rotation center to
-                // place a gradient vector in a target polygon.
-                // This would help editing it in SVG editors like inkscape.
+                
+                
+                
                 aPoly[ 0 ].X() = aPoly[ 1 ].X() = aCenter.X();
                 aPoly[ 0 ].Y() = aRect.Top();
                 aPoly[ 1 ].Y() = aRect.Bottom();
@@ -2151,7 +2151,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                 const sal_uInt16 nSteps = rGradient.GetSteps();
                 if( rGradient.GetStyle() == GradientStyle_LINEAR )
                 {
-                    // Emulate non-smooth gradient
+                    
                     if( 0 < nSteps && nSteps < 100 )
                     {
                         double fOffsetStep = ( 1.0 - fBorderOffset ) / (double)nSteps;
@@ -2171,11 +2171,11 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                 else
                 {
                     fBorderOffset /= 2;
-                    // Emulate non-smooth gradient
+                    
                     if( 0 < nSteps && nSteps < 100 )
                     {
                         double fOffsetStep = ( 0.5 - fBorderOffset ) / (double)nSteps;
-                        // Upper half
+                        
                         for( sal_uInt16 i = 0; i < nSteps; i++ )
                         {
                             Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / (double) nSteps );
@@ -2183,7 +2183,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                             aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / (double) nSteps );
                             ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
                         }
-                        // Lower half
+                        
                         for( sal_uInt16 i = 0; i < nSteps; i++ )
                         {
                             Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / (double) nSteps );
@@ -2287,7 +2287,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
             const PolyPolygon aPolyPolygon( PolyPolygon( Rectangle( rDestPt, rDestSize ) ) );
             Gradient aGradient( rGradient );
 
-            // swap gradient stops to adopt SVG mask
+            
             Color aTmpColor( aGradient.GetStartColor() );
             sal_uInt16 nTmpIntensity( aGradient.GetStartIntensity() );
             aGradient.SetStartColor( aGradient.GetEndColor() );
@@ -2423,7 +2423,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         aPos = rPos;
 
     boost::shared_array<sal_Int32> xTmpArray(new sal_Int32[nLen]);
-    // get text sizes
+    
     if( pDXArray )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
@@ -2435,7 +2435,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     }
     sal_Int32* pDX = xTmpArray.get();
 
-    // if text is rotated, set transform matrix at new g element
+    
     if( rFont.GetOrientation() )
     {
         Point   aRot( aPos );
@@ -2455,7 +2455,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
-    // for each line of text there should be at least one group element
+    
     SvXMLElementExport aSVGGElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_False );
 
     sal_Bool bIsPlaceholderField = sal_False;
@@ -2464,7 +2464,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     {
         OUString sTextContent = rText;
         bIsPlaceholderField = sTextContent.match( sPlaceholderTag );
-        // for a placeholder text field we export only one <text> svg element
+        
         if( bIsPlaceholderField )
         {
             OUString sCleanTextContent;
@@ -2478,7 +2478,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPos.Y() ) );
             {
                 SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
-                // At least for the single slide case we need really to  export placeholder text
+                
                 mrExport.GetDocHandler()->characters( sCleanTextContent );
             }
         }
@@ -2504,7 +2504,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                 sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
 
-                // write single glyphs at absolute text positions
+                
                 for( sal_Bool bCont = sal_True; bCont; )
                 {
                     sal_Int32 nCount = 1;
@@ -2531,7 +2531,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
                         if( bCont )
                         {
-                            // #118796# do NOT access pDXArray, it may be zero (!)
+                            
                             sal_Int32 nDXWidth = pDX[ nCurPos - 1 ];
                             if ( bApplyMapping )
                                 nDXWidth = ImplMap( nDXWidth );
@@ -2645,8 +2645,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                         const Reference< XShape >* pxShape,
                                         const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
-    // need a counter fo rthe actions written per shape to avoid double ID
-    // generation
+    
+    
     sal_Int32 nEntryCount(0);
 
     if( mnInnerMtfCount )
@@ -2665,7 +2665,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     if( ( pElementId != NULL ) && ( *pElementId == sPlaceholderTag ) )
     {
         mbIsPlacehlolderShape = true;
-        // since we utilize pElementId in an improper way we reset it to NULL before to go on
+        
         pElementId = NULL;
     }
 
@@ -2996,7 +2996,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
-                    // write open shape in every case
+                    
                     if( mapCurShape.get() )
                     {
                         ImplWriteShape( *mapCurShape );
@@ -3034,7 +3034,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                             if( bGradient )
                             {
-                                // step through following actions until the first Gradient/GradientEx action is found
+                                
                                 while( !mapCurShape->mapShapeGradient.get() && bSkip && ( ++nCurAction < nCount ) )
                                 {
                                     pAction = rMtf.GetAction( nCurAction );
@@ -3062,7 +3062,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             bSkip = sal_False;
                     }
 
-                    // skip rest of comment
+                    
                     while( bSkip && ( ++nCurAction < nCount ) )
                     {
                         pAction = rMtf.GetAction( nCurAction );
@@ -3087,8 +3087,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     aStroke.getStartArrow( aStartArrow );
                     aStroke.getEndArrow( aEndArrow );
 
-                    // Currently no support for strokes with start/end arrow(s)
-                    // added that support
+                    
+                    
                     Polygon aPoly;
 
                     aStroke.getPath(aPoly);
@@ -3098,8 +3098,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if(1 != mapCurShape->maShapePolyPoly.Count()
                             || !mapCurShape->maShapePolyPoly[0].IsEqual(aPoly))
                         {
-                            // this path action is not covering the same path than the already existing
-                            // fill polypolygon, so write out the fill polygon
+                            
+                            
                             ImplWriteShape( *mapCurShape );
                             mapCurShape.reset();
                         }
@@ -3123,7 +3123,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
                     aStroke.getDashArray( mapCurShape->maDashArray );
 
-                    // added support for LineJoin
+                    
                     switch(aStroke.getJoinType())
                     {
                         default: /* SvtGraphicStroke::joinMiter,  SvtGraphicStroke::joinNone */
@@ -3143,7 +3143,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                     }
 
-                    // added support for LineCap
+                    
                     switch(aStroke.getCapType())
                     {
                         default: /* SvtGraphicStroke::capButt */
@@ -3193,14 +3193,14 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         mapCurShape.reset();
                     }
 
-                    // write open shape in every case
+                    
                     if( mapCurShape.get() )
                     {
                         ImplWriteShape( *mapCurShape );
                         mapCurShape.reset();
                     }
 
-                    // skip rest of comment
+                    
                     sal_Bool bSkip = true;
 
                     while( bSkip && ( ++nCurAction < nCount ) )
@@ -3227,25 +3227,25 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                         maTextWriter.createParagraphEnumeration();
                         {
-                            // nTextFound == -1 => no text found
-                            // nTextFound ==  0 => no text found and end of text shape reached
-                            // nTextFound ==  1 => text found!
+                            
+                            
+                            
                             sal_Int32 nTextFound = -1;
                             while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
                             {
                                 nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
                             }
-                            // We found some text in the current text shape.
+                            
                             if( nTextFound > 0 )
                             {
                                 maTextWriter.setTextProperties( rMtf, nCurAction );
                                 maTextWriter.startTextShape();
                             }
-                            // We reached the end of the current text shape
-                            // without finding any text. So we need to go back
-                            // by one action in order to handle the
-                            // XTEXT_PAINTSHAPE_END action because on the next
-                            // loop the nCurAction is incremented by one.
+                            
+                            
+                            
+                            
+                            
                             else
                             {
                                 --nCurAction;
@@ -3262,26 +3262,26 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
                                ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_END") )  ))
                         {
-                            // nTextFound == -1 => no text found and end of paragraph reached
-                            // nTextFound ==  0 => no text found and end of text shape reached
-                            // nTextFound ==  1 => text found!
+                            
+                            
+                            
                             sal_Int32 nTextFound = -1;
                             while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
                             {
                                 nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
                             }
-                            // We found a paragraph with some text in the
-                            // current text shape.
+                            
+                            
                             if( nTextFound > 0 )
                             {
                                 maTextWriter.setTextProperties( rMtf, nCurAction );
                                 maTextWriter.startTextParagraph();
                             }
-                            // We reached the end of the current text shape
-                            // without finding any text. So we need to go back
-                            // by one action in order to handle the
-                            // XTEXT_PAINTSHAPE_END action because on the next
-                            // loop the nCurAction is incremented by one.
+                            
+                            
+                            
+                            
+                            
                             else
                             {
                                 --nCurAction;
@@ -3295,25 +3295,25 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
                                ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCase("XTEXT_EOP") ) ) )
                         {
-                            // nTextFound == -2 => no text found and end of line reached
-                            // nTextFound == -1 => no text found and end of paragraph reached
-                            // nTextFound ==  1 => text found!
+                            
+                            
+                            
                             sal_Int32 nTextFound = -2;
                             while( ( nTextFound < -1 ) && ( nCurAction < nCount ) )
                             {
                                 nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
                             }
-                            // We found a line with some text in the current
-                            // paragraph.
+                            
+                            
                             if( nTextFound > 0 )
                             {
                                 maTextWriter.startTextPosition();
                             }
-                            // We reached the end of the current paragraph
-                            // without finding any text. So we need to go back
-                            // by one action in order to handle the XTEXT_EOP
-                            // action because on the next loop the nCurAction is
-                            // incremented by one.
+                            
+                            
+                            
+                            
+                            
                             else
                             {
                                 --nCurAction;
@@ -3343,7 +3343,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
 
-                    // Bitmaps embedded into text shapes are collected and exported elsewhere.
+                    
                     if( maTextWriter.isTextShapeStarted() )
                     {
                         maTextWriter.writeBitmapPlaceholder( pA );
@@ -3390,7 +3390,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
 
-                    // Bitmaps embedded into text shapes are collected and exported elsewhere.
+                    
                     if( maTextWriter.isTextShapeStarted() )
                     {
                         maTextWriter.writeBitmapPlaceholder( pA );
@@ -3547,7 +3547,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case( META_WALLPAPER_ACTION ):
             case( META_TEXTLINE_ACTION ):
             {
-                // !!! >>> we don't want to support these actions
+                
             }
             break;
 
@@ -3600,7 +3600,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     ImplWriteActions( rMtf, nWriteFlags, pElementId, pXShape, pTextEmbeddedBitmapMtf );
     maTextWriter.endTextParagraph();
 
-    // draw open shape that doesn't have a border
+    
     if( mapCurShape.get() )
     {
         ImplWriteShape( *mapCurShape );
@@ -3611,9 +3611,9 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     mpVDev->Pop();
 }
 
-// -------------
-// - SVGWriter -
-// -------------
+
+
+
 
 SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentContext >& rxCtx )
     : mxContext(rxCtx)
@@ -3622,13 +3622,13 @@ SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentCont
         args[0]>>=maFilterData;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGWriter::~SVGWriter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
                                 const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException )

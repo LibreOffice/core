@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -37,7 +37,7 @@ void YYWarning( const char * );
 
 namespace {
 
-MergeDataFile * pMergeDataFile = 0; //TODO
+MergeDataFile * pMergeDataFile = 0; 
 
 namespace global {
 
@@ -109,7 +109,7 @@ int Parse( int nTyp, const char *pTokenText ){
 void Close(){
     global::exporter->pParseQueue->Close();
     global::exporter.reset();
-        // avoid nontrivial Export dtor being executed during exit
+        
 }
 
 int WorkOnTokenSet( int nTyp, char *pTokenText )
@@ -119,13 +119,13 @@ int WorkOnTokenSet( int nTyp, char *pTokenText )
     return 1;
 }
 
-} // extern
+} 
 
 extern "C" {
 
 int SetError()
 {
-    // set error at global instance of class Export
+    
     global::exporter->SetError();
     return 1;
 }
@@ -135,7 +135,7 @@ extern "C" {
 
 int GetError()
 {
-    // get error at global instance of class Export
+    
     if (global::exporter->GetError())
         return 1;
     return sal_False;
@@ -143,7 +143,7 @@ int GetError()
 }
 
 //
-// class ResData
+
 //
 
 bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
@@ -173,7 +173,7 @@ bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
 }
 
 //
-// class Export
+
 //
 
 namespace
@@ -242,7 +242,7 @@ Export::Export(
 
 void Export::Init()
 {
-    // resets the internal status, used before parseing another file
+    
     bDefine = false;
     bNextMustBeDefineEOL = false;
     nLevel = 0;
@@ -297,15 +297,15 @@ int Export::Execute( int nToken, const char * pToken )
     }
     if ((( nToken < FILTER_LEVEL ) || ( bReadOver )) &&
         (!(( bNextMustBeDefineEOL ) && ( sOrig == "\n" )))) {
-        // this tokens are not mandatory for parsing, so ignore them ...
+        
         if ( bMergeMode )
-            WriteToMerged( sOrig , false ); // ... or write them directly to dest.
+            WriteToMerged( sOrig , false ); 
         return 0;
     }
 
     ResData *pResData = NULL;
     if ( nLevel ) {
-        // res. exists at cur. level
+        
         pResData = ( (nLevel-1) < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
     }
     else if (( nToken != RESOURCE ) &&
@@ -317,7 +317,7 @@ int Export::Execute( int nToken, const char * pToken )
             ( nToken != CONDITION ) &&
             ( nToken != PRAGMA ))
     {
-        // no res. exists at cur. level so return
+        
         if ( bMergeMode )
             WriteToMerged( sOrig , false );
         return 0;
@@ -325,16 +325,16 @@ int Export::Execute( int nToken, const char * pToken )
 
     if ( bDefine ) {
         if (( nToken != EMPTYLINE ) && ( nToken != LEVELDOWN ) && ( nToken != LEVELUP )) {
-            // cur. res. defined in macro
+            
             if ( bNextMustBeDefineEOL ) {
                 if ( nToken != RSCDEFINELEND ) {
-                    // end of macro found, so destroy res.
+                    
                     bDefine = false;
                     Execute( LEVELDOWN, "" );
                     bNextMustBeDefineEOL = false;
                 }
                 else {
-                    // next line also in macro definition
+                    
                     bNextMustBeDefineEOL = false;
                     if ( bMergeMode )
                         WriteToMerged( sOrig , false );
@@ -377,19 +377,19 @@ int Export::Execute( int nToken, const char * pToken )
                 WriteToMerged( sOrig , false );
             return 0;
         case RSCDEFINE:
-            bDefine = true; // res. defined in macro
+            bDefine = true; 
 
         case RESOURCE:
         case RESOURCEEXPR: {
             if ( nToken != RSCDEFINE )
                 bNextMustBeDefineEOL = false;
-            // this is the beginning of a new res.
+            
             nLevel++;
             if ( nLevel > 1 ) {
                 aResStack[ nLevel - 2 ]->bChild = true;
             }
 
-            // create new instance for this res. and fill mandatory fields
+            
 
             pResData = new ResData( FullId() , sFilename );
             aResStack.push_back( pResData );
@@ -403,7 +403,7 @@ int Export::Execute( int nToken, const char * pToken )
             OString sCondition;
             if ( sId.indexOf( '#' ) != -1 )
             {
-                // between ResTyp, Id and paranthes is a precomp. condition
+                
                 sCondition = "#";
                 sal_Int32 n = 0;
                 sId = sId.getToken(0, '#', n);
@@ -415,19 +415,19 @@ int Export::Execute( int nToken, const char * pToken )
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
             if (!sCondition.isEmpty())
             {
-                Execute( CONDITION, "");  // execute the precomp. condition
+                Execute( CONDITION, "");  
             }
         }
         break;
         case SMALRESOURCE: {
-            // this is the beginning of a new res.
+            
             bNextMustBeDefineEOL = false;
             nLevel++;
             if ( nLevel > 1 ) {
                 aResStack[ nLevel - 2 ]->bChild = true;
             }
 
-            // create new instance for this res. and fill mandatory fields
+            
 
             pResData = new ResData( FullId() , sFilename );
             aResStack.push_back( pResData );
@@ -441,7 +441,7 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case LEVELUP: {
-            // push
+            
             if ( nList )
             {
                 nListLevel++;
@@ -462,7 +462,7 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case LEVELDOWN: {
-            // pop
+            
             if ( !nList || !nListLevel ) {
                 if ( nLevel ) {
                     if ( bDefine && (nLevel == 1 )) {
@@ -492,7 +492,7 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case ASSIGNMENT:
         {
-            // interpret different types of assignement
+            
             sal_Int32 n = 0;
             OString sKey = sToken.getToken(0, '=', n).
                 replaceAll(" ", OString()).
@@ -566,7 +566,7 @@ int Export::Execute( int nToken, const char * pToken )
         case TEXT:
         case _LISTTEXT:
         case LISTTEXT: {
-            // this is an entry for a List
+            
             if ( nList )
             {
                 SetChildWithText();
@@ -580,7 +580,7 @@ int Export::Execute( int nToken, const char * pToken )
             {
                 CutComment( sToken );
 
-                // this is a text line!!!
+                
                 OString t(sToken.getToken(0, '='));
                 OString sKey(
                     t.getToken(0, '[').replaceAll(" ", OString()).
@@ -656,7 +656,7 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         }
     if ( bWriteToMerged ) {
-        // the current token must be written to dest. without merging
+        
 
         if( bDefine && sOrig.getLength() > 2 ){
             for( sal_uInt16 n = 0 ; n < sOrig.getLength() ; n++ ){
@@ -677,7 +677,7 @@ int Export::Execute( int nToken, const char * pToken )
 
 void Export::CutComment( OString &rText )
 {
-    if (rText.indexOf("//") != -1) {
+    if (rText.indexOf("
         OString sWork(rText.replaceAll("\\\"", "XX"));
         bool bInner = false;
         for (sal_Int32 i = 0; i < sWork.getLength() - 1; ++i) {
@@ -698,7 +698,7 @@ bool Export::WriteData( ResData *pResData, bool bCreateNew )
         return true;
     }
 
-       // mandatory to export: en-US
+       
 
      if (( !pResData->sText[ SOURCE_LANGUAGE ].isEmpty())
         ||
@@ -760,13 +760,13 @@ bool Export::WriteData( ResData *pResData, bool bCreateNew )
 
 OString Export::GetPairedListID(const OString& rText)
 {
-// < "STRING" ; IDENTIFIER ; > ;
+
     return rText.getToken(1, ';').toAsciiUpperCase().replace('\t', ' ').trim();
 }
 
 OString Export::GetPairedListString(const OString& rText)
 {
-// < "STRING" ; IDENTIFIER ; > ;
+
     OString sString(rText.getToken(0, ';').replace('\t', ' '));
     sString = sString.trim();
     OString s1(sString.copy(sString.indexOf('"') + 1));
@@ -799,7 +799,7 @@ bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
         OString sLID;
         OString sText(rExportList[ i ]);
 
-        // Strip PairList Line String
+        
         if (nTyp == LIST_PAIRED)
         {
             sLID = GetPairedListID( sText );
@@ -995,8 +995,8 @@ void Export::WriteToMerged(const OString &rText , bool bSDFContent)
 
 void Export::ConvertMergeContent( OString &rText )
 {
-    rText = rText.replaceAll("\\\'","\'"); // Temporary: until PO files contain escaped single quotes
-                                            // (Maybe next PO update solve this)
+    rText = rText.replaceAll("\\\'","\'"); 
+                                            
     rText =
         helper::escapeAll(
             rText.replaceAll("","\\0x7F"),
@@ -1081,14 +1081,14 @@ void Export::MergeRest( ResData *pResData )
             ResData2Output( pEntry, STRING_TYP_TITLE, OString("Title") );
     }
 
-    // Merge Lists
+    
     if ( nList )
     {
         OString sOldId = pResData->sId;
         OString sOldGId = pResData->sGId;
         OString sOldTyp = pResData->sResTyp;
 
-        // Set pResData so we can find the corresponding string
+        
         if (!pResData->sGId.isEmpty())
             pResData->sGId = pResData->sGId + OString('.');
         pResData->sGId = pResData->sGId + pResData->sId;
@@ -1138,7 +1138,7 @@ void Export::MergeRest( ResData *pResData )
                     }
                 }
 
-                // Set matching identifier
+                
                 if ( nList == LIST_PAIRED )
                 {
                     pResData->sId = GetPairedListID ( sLine );
@@ -1218,10 +1218,10 @@ void ParserQueue::Push( const QueueEntry& aEntry )
             bStart = true;
         else if ( aEntry.nTyp != IGNOREDTOKENS ){
             if( nLen > 1 && ( aEntry.sLine[nLen-1] == '\\') ){
-                // Next is Macro
+                
                 bCurrentIsM = true;
              }else{
-                // Next is no Macro
+                
                 bCurrentIsM = false;
              }
         }
@@ -1230,28 +1230,28 @@ void ParserQueue::Push( const QueueEntry& aEntry )
         aQueueNext->push( aEntry );
         if( nLen > 1 && aEntry.sLine[nLen-1] != '\n' ){
             if( nLen > 1 && ( aEntry.sLine[nLen-1] == '\\') ){
-                // Next is Macro
+                
                 bNextIsM = true;
             }
             else{
-                // Next is no Macro
+                
                 bNextIsM = false;
             }
         }else if( nLen > 2 && aEntry.sLine[nLen-1] == '\n' ){
             if( aEntry.nTyp != IGNOREDTOKENS ){
                 if( nLen > 2 && ( aEntry.sLine[nLen-2] == '\\') ){
-                    // Next is Macro
+                    
                     bNextIsM = true;
                 }
                 else{
-                    // Next is no Macro
+                    
                     bNextIsM = false;
                 }
             }
-            // Pop current
+            
             Pop( *aQueueCur );
             bLastWasM = bCurrentIsM;
-            // next -> current
+            
             bCurrentIsM = bNextIsM;
             std::queue<QueueEntry>* aQref = aQueueCur;
             aQueueCur = aQueueNext;
@@ -1260,10 +1260,10 @@ void ParserQueue::Push( const QueueEntry& aEntry )
         }
 
         else{
-            // Pop current
+            
             Pop( *aQueueCur );
             bLastWasM = bCurrentIsM;
-            // next -> current
+            
             bCurrentIsM = bNextIsM;
             std::queue<QueueEntry>* aQref = aQueueCur;
             aQueueCur = aQueueNext;
@@ -1273,9 +1273,9 @@ void ParserQueue::Push( const QueueEntry& aEntry )
 }
 
 void ParserQueue::Close(){
-    // Pop current
+    
     Pop( *aQueueCur );
-    // next -> current
+    
     bLastWasM = bCurrentIsM;
     bCurrentIsM = bNextIsM;
     std::queue<QueueEntry>* aQref = aQueueCur;

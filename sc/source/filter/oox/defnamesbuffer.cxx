@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "defnamesbuffer.hxx"
@@ -41,14 +41,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -63,7 +63,7 @@ const sal_uInt16 BIFF_REFFLAG_ROW1REL       = 0x0002;
 const sal_uInt16 BIFF_REFFLAG_COL2REL       = 0x0004;
 const sal_uInt16 BIFF_REFFLAG_ROW2REL       = 0x0008;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_Char* const spcOoxPrefix = "_xlnm.";
 
@@ -130,7 +130,7 @@ sal_Unicode lclGetBuiltinIdFromBaseName( const OUString& rModelName )
 
 OUString lclGetUpcaseModelName( const OUString& rModelName )
 {
-    // TODO: i18n?
+    
     return rModelName.toAsciiUpperCase();
 }
 
@@ -138,13 +138,13 @@ void lclConvertRefFlags( sal_Int32& ornFlags, sal_Int32& ornAbsPos, sal_Int32& o
 {
     if( getFlag( ornFlags, nApiRelFlag ) && !bRel )
     {
-        // convert relative to absolute
+        
         setFlag( ornFlags, nApiRelFlag, false );
         ornAbsPos = nBasePos + ornRelPos;
     }
     else if( !getFlag( ornFlags, nApiRelFlag ) && bRel )
     {
-        // convert absolute to relative
+        
         setFlag( ornFlags, nApiRelFlag, true );
         ornRelPos = ornAbsPos - nBasePos;
     }
@@ -181,9 +181,9 @@ Any lclConvertReference( const Any& rRefAny, const CellAddress& rBaseAddr, sal_u
     return Any();
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 DefinedNameModel::DefinedNameModel() :
     mnSheet( -1 ),
@@ -195,7 +195,7 @@ DefinedNameModel::DefinedNameModel() :
 {
 }
 
-// ============================================================================
+
 
 DefinedNameBase::DefinedNameBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -256,7 +256,7 @@ ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffI
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }
 
-// ============================================================================
+
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
@@ -292,22 +292,22 @@ void DefinedName::importDefinedName( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
     rStrm >> nFlags;
-    rStrm.skip( 1 );    // keyboard shortcut
+    rStrm.skip( 1 );    
     rStrm >> maModel.mnSheet >> maModel.maName;
     mnCalcSheet = (maModel.mnSheet >= 0) ? getWorksheets().getCalcSheetIndex( maModel.mnSheet ) : -1;
 
-    // macro function/command, hidden flag
+    
     maModel.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 9 );
     maModel.mbMacro       = getFlag( nFlags, BIFF12_DEFNAME_MACRO );
     maModel.mbFunction    = getFlag( nFlags, BIFF12_DEFNAME_FUNC );
     maModel.mbVBName      = getFlag( nFlags, BIFF12_DEFNAME_VBNAME );
     maModel.mbHidden      = getFlag( nFlags, BIFF12_DEFNAME_HIDDEN );
 
-    // get built-in name index from name
+    
     if( getFlag( nFlags, BIFF12_DEFNAME_BUILTIN ) )
         mcBuiltinId = lclGetBuiltinIdFromBaseName( maModel.maName );
 
-    // store token array data
+    
     sal_Int64 nRecPos = rStrm.tell();
     sal_Int32 nFmlaSize = rStrm.readInt32();
     rStrm.skip( nFmlaSize );
@@ -323,21 +323,21 @@ void DefinedName::importDefinedName( SequenceInputStream& rStrm )
 
 void DefinedName::createNameObject( sal_Int32 nIndex )
 {
-    // do not create names for (macro) functions or VBA procedures
-    // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
+    
+    
     if( /*maModel.mbHidden ||*/ maModel.mbFunction || maModel.mbVBName )
         return;
 
-    // skip BIFF names without stream position (e.g. BIFF3-BIFF4 internal 3D references)
+    
     if( (getFilterType() == FILTER_BIFF) && !mxBiffStrm.get() )
         return;
 
-    // convert original name to final Calc name (TODO: filter invalid characters from model name)
+    
     maCalcName = isBuiltinName() ? lclGetPrefixedName( mcBuiltinId ) : maModel.maName;
 
-    // #163146# do not rename sheet-local names by default, this breaks VBA scripts
+    
 
-    // special flags for this name
+    
     sal_Int32 nNameFlags = 0;
     using namespace ::com::sun::star::sheet::NamedRangeFlag;
     if( !isGlobalName() ) switch( mcBuiltinId )
@@ -347,7 +347,7 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
         case BIFF_DEFNAME_PRINTTITLES:  nNameFlags = COLUMN_HEADER | ROW_HEADER;    break;
     }
 
-    // create the name and insert it into the document, maCalcName will be changed to the resulting name
+    
     if (maModel.mnSheet >= 0)
         mpScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet );
     else
@@ -358,7 +358,7 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
 ApiTokenSequence
 DefinedName::getTokens()
 {
-    // convert and set formula of the defined name
+    
     ApiTokenSequence aTokens;
     switch( getFilterType() )
     {
@@ -393,11 +393,11 @@ DefinedName::getTokens()
 
 void DefinedName::convertFormula()
 {
-    // macro function or vba procedure
+    
     if(!mpScRangeData)
         return;
 
-    // convert and set formula of the defined name
+    
     if ( getFilterType() == FILTER_OOXML )
     {
         ApiTokenSequence aTokens = getTokens();
@@ -409,7 +409,7 @@ void DefinedName::convertFormula()
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
     (void)ScTokenConversion::ConvertToTokenSequence( this->getScDocument(), aFTokenSeq, *pTokenArray );
-    // set built-in names (print ranges, repeated titles, filter ranges)
+    
     if( !isGlobalName() ) switch( mcBuiltinId )
     {
         case BIFF_DEFNAME_PRINTAREA:
@@ -462,7 +462,7 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
 }
 
-// ============================================================================
+
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -483,18 +483,18 @@ void DefinedNamesBuffer::importDefinedName( SequenceInputStream& rStrm )
 
 void DefinedNamesBuffer::finalizeImport()
 {
-    // first insert all names without formula definition into the document, and insert them into the maps
+    
     int index = 0;
     for( DefNameVector::iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); aIt != aEnd; ++aIt )
     {
         DefinedNameRef xDefName = *aIt;
         xDefName->createNameObject( ++index );
-        // map by sheet index and original model name
+        
         maModelNameMap[ SheetNameKey( xDefName->getLocalCalcSheet(), xDefName->getUpcaseModelName() ) ] = xDefName;
-        // map by sheet index and built-in identifier
+        
         if( !xDefName->isGlobalName() && xDefName->isBuiltinName() )
             maBuiltinMap[ BuiltinKey( xDefName->getLocalCalcSheet(), xDefName->getBuiltinId() ) ] = xDefName;
-        // map by API formula token identifier
+        
         sal_Int32 nTokenIndex = xDefName->getTokenIndex();
         if( nTokenIndex >= 0 )
             maTokenIdMap[ nTokenIndex ] = xDefName;
@@ -519,7 +519,7 @@ DefinedNameRef DefinedNamesBuffer::getByModelName( const OUString& rModelName, s
 {
     OUString aUpcaseName = lclGetUpcaseModelName( rModelName );
     DefinedNameRef xDefName = maModelNameMap.get( SheetNameKey( nCalcSheet, aUpcaseName ) );
-    // lookup global name, if no local name exists
+    
     if( !xDefName && (nCalcSheet >= 0) )
         xDefName = maModelNameMap.get( SheetNameKey( -1, aUpcaseName ) );
     return xDefName;
@@ -537,9 +537,9 @@ DefinedNameRef DefinedNamesBuffer::createDefinedName()
     return xDefName;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

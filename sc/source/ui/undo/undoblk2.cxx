@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -67,7 +67,7 @@ ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 
 OUString ScUndoWidthOrHeight::GetComment() const
 {
-    // [ "optimal " ] "Column width" | "row height"
+    
     return ( bWidth ?
         ( ( eMode == SC_SIZE_OPTIMAL )?
         ScGlobal::GetRscString( STR_UNDO_OPTCOLWIDTH ) :
@@ -90,18 +90,18 @@ void ScUndoWidthOrHeight::Undo()
     if (eMode==SC_SIZE_OPTIMAL)
     {
         if ( SetViewMarkData( aMarkData ) )
-            nPaintStart = 0;        // paint all, because of changed selection
+            nPaintStart = 0;        
     }
 
-    //! outlines from all tables?
-    if (pUndoTab)                                           // Outlines are included when saving ?
+    
+    if (pUndoTab)                                           
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
     SCTAB nTabCount = pDoc->GetTableCount();
     ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
-        if (bWidth) // Width
+        if (bWidth) 
         {
             pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
                     static_cast<SCCOL>(nEnd), MAXROW, *itr, IDF_NONE,
@@ -110,7 +110,7 @@ void ScUndoWidthOrHeight::Undo()
             pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, *itr,
                     MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_TOP );
         }
-        else        // Height
+        else        
         {
             pUndoDoc->CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, IDF_NONE, false, pDoc );
             pDoc->UpdatePageBreaks( *itr );
@@ -141,7 +141,7 @@ void ScUndoWidthOrHeight::Redo()
     if (eMode==SC_SIZE_OPTIMAL)
     {
         if ( SetViewMarkData( aMarkData ) )
-            bPaintAll = sal_True;       // paint all, because of changed selection
+            bPaintAll = sal_True;       
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -151,11 +151,11 @@ void ScUndoWidthOrHeight::Redo()
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
 
-        // SetWidthOrHeight changes current sheet!
+        
         pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, false, true, &aMarkData );
     }
 
-    // paint grid if selection was changed directly at the MarkData
+    
     if (bPaintAll)
         pDocShell->PostPaint( 0, 0, nStartTab, MAXCOL, MAXROW, nEndTab, PAINT_GRID );
 

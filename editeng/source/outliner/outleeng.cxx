@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/intitem.hxx>
@@ -172,7 +172,7 @@ void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const OUS
 
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
-    EditEngine::FieldClicked( rField, nPara, nPos );    // If URL
+    EditEngine::FieldClicked( rField, nPara, nPos );    
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 
@@ -197,9 +197,9 @@ void OutlinerEditEng::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         EditEngine::SetParaAttribs( nPara, rSet );
 
         pOwner->ImplCheckNumBulletItem( nPara );
-        // #i100014#
-        // It is not a good idea to substract 1 from a count and cast the result
-        // to sal_uInt16 without check, if the count is 0.
+        
+        
+        
         pOwner->ImplCheckParagraphs( nPara, pOwner->pParaList->GetParagraphCount() );
 
         if ( !IsInUndo() && IsUndoEnabled() )

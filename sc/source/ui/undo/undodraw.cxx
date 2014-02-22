@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdundo.hxx>
@@ -38,7 +38,7 @@ ScUndoDraw::~ScUndoDraw()
 
 void ScUndoDraw::ForgetDrawUndo()
 {
-    pDrawUndo = NULL;   // do not delete (DrawUndo has to be remembered from outside)
+    pDrawUndo = NULL;   
 }
 
 OUString ScUndoDraw::GetComment() const
@@ -81,7 +81,7 @@ bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 
 void ScUndoDraw::UpdateSubShell()
 {
-    // #i26822# remove the draw shell if the selected object has been removed
+    
     ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
     if (pViewShell)
         pViewShell->UpdateDrawShell();

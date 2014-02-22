@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
-//============================ RASWriter ==================================
+
 
 class RASWriter {
 
@@ -46,7 +46,7 @@ private:
     sal_Bool                ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteBody();
-    void                ImplPutByte( sal_uInt8 );   // RLE decoding
+    void                ImplPutByte( sal_uInt8 );   
 
 public:
     RASWriter(SvStream &rStream);
@@ -55,7 +55,7 @@ public:
     sal_Bool WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-//=================== Methoden von RASWriter ==============================
+
 
 RASWriter::RASWriter(SvStream &rStream)
     : m_rOStm(rStream)
@@ -65,13 +65,13 @@ RASWriter::RASWriter(SvStream &rStream)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 RASWriter::~RASWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplCallback( sal_uLong nYPos )
 {
@@ -79,7 +79,7 @@ void RASWriter::ImplCallback( sal_uLong nYPos )
         xStatusIndicator->setValue( (sal_uInt16)( ( 100 * nYPos ) / mnHeight ) );
 }
 
-//  ------------------------------------------------------------------------
+
 
 sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
@@ -103,7 +103,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
 
     mnDepth = aBmp.GetBitCount();
 
-    // export code below only handles three discrete cases
+    
     mnDepth = mnDepth <= 1 ? 1 : mnDepth <= 8 ? 8 : 24;
 
     mpAcc = aBmp.AcquireReadAccess();
@@ -132,7 +132,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool RASWriter::ImplWriteHeader()
 {
@@ -164,7 +164,7 @@ sal_Bool RASWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplWritePalette()
 {
@@ -175,7 +175,7 @@ void RASWriter::ImplWritePalette()
     for ( i = 0; i < mnColors; m_rOStm.WriteUChar( mpAcc->GetPaletteColor( i++ ).GetBlue() ) ) ;
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplWriteBody()
 {
@@ -185,27 +185,27 @@ void RASWriter::ImplWriteBody()
     {
         for ( y = 0; y < mnHeight; y++ )
         {
-            ImplCallback( y );                              // processing output
+            ImplCallback( y );                              
             for ( x = 0; x < mnWidth; x++ )
             {
                 BitmapColor aColor( mpAcc->GetPixel( y, x ) );
-                ImplPutByte( aColor.GetBlue() );            // Format ist BGR
+                ImplPutByte( aColor.GetBlue() );            
                 ImplPutByte( aColor.GetGreen() );
                 ImplPutByte( aColor.GetRed() );
             }
-            if ( x & 1 ) ImplPutByte( 0 );      // WORD ALIGNMENT ???
+            if ( x & 1 ) ImplPutByte( 0 );      
         }
     }
     else if ( mnDepth == 8 )
     {
         for ( y = 0; y < mnHeight; y++ )
         {
-            ImplCallback( y );                              // processing output
+            ImplCallback( y );                              
             for ( x = 0; x < mnWidth; x++ )
             {
                 ImplPutByte ( mpAcc->GetPixelIndex( y, x ) );
             }
-            if ( x & 1 ) ImplPutByte( 0 );      // WORD ALIGNMENT ???
+            if ( x & 1 ) ImplPutByte( 0 );      
         }
     }
     else if ( mnDepth == 1 )
@@ -214,7 +214,7 @@ void RASWriter::ImplWriteBody()
 
         for ( y = 0; y < mnHeight; y++ )
         {
-            ImplCallback( y );                              // processing output
+            ImplCallback( y );                              
             for ( x = 0; x < mnWidth; x++ )
             {
                 nDat = ( ( nDat << 1 ) | ( mpAcc->GetPixelIndex( y, x ) & 1 ) );
@@ -222,15 +222,15 @@ void RASWriter::ImplWriteBody()
                     ImplPutByte( nDat );
             }
             if ( x & 7 )
-                ImplPutByte( sal::static_int_cast< sal_uInt8 >(nDat << ( ( ( x & 7 ) ^ 7 ) + 1)) );// write remaining bits
+                ImplPutByte( sal::static_int_cast< sal_uInt8 >(nDat << ( ( ( x & 7 ) ^ 7 ) + 1)) );
             if (!( ( x - 1 ) & 0x8 ) )
-                ImplPutByte( 0 );               // WORD ALIGNMENT ???
+                ImplPutByte( 0 );               
         }
     }
-    ImplPutByte( mnRepVal + 1 );    // end of RLE decoding
+    ImplPutByte( mnRepVal + 1 );    
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 {
@@ -263,15 +263,15 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
     }
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
-// - exported function -
-// ---------------------
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport eraGraphicExport
 #endif

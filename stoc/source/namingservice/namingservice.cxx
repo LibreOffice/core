@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -81,7 +81,7 @@ typedef boost::unordered_map
     equalOWString_Impl
 > HashMap_OWString_Interface;
 
-//==================================================================================================
+
 class NamingService_Impl
     : public WeakImplHelper2 < XServiceInfo, XNamingService >
 {
@@ -91,7 +91,7 @@ public:
     NamingService_Impl();
     ~NamingService_Impl();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
     throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -109,41 +109,41 @@ public:
     virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException);
 };
 
-//==================================================================================================
+
 static Reference<XInterface> SAL_CALL NamingService_Impl_create(
     SAL_UNUSED_PARAMETER const Reference<XComponentContext> & )
 {
     return *new NamingService_Impl();
 }
 
-//==================================================================================================
+
 NamingService_Impl::NamingService_Impl() {}
 
-//==================================================================================================
+
 NamingService_Impl::~NamingService_Impl() {}
 
-// XServiceInfo
+
 OUString NamingService_Impl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return ns_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool NamingService_Impl::supportsService( const OUString & rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return ns_getSupportedServiceNames();
 }
 
-// XServiceInfo
+
 Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException)
 {
     Guard< Mutex > aGuard( aMutex );
@@ -154,14 +154,14 @@ Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString&
     return xRet;
 }
 
-// XServiceInfo
+
 void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object ) throw(Exception, RuntimeException)
 {
     Guard< Mutex > aGuard( aMutex );
     aMap[ Name ] = Object;
 }
 
-// XServiceInfo
+
 void NamingService_Impl::revokeObject( const OUString& Name ) throw(Exception, RuntimeException)
 {
     Guard< Mutex > aGuard( aMutex );

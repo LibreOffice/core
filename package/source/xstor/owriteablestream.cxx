@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -49,7 +49,7 @@
 #include "oseekinstream.hxx"
 #include "xstorage.hxx"
 
-// since the copying uses 32000 blocks usually, it makes sense to have a smaller size
+
 #define MAX_STORCACHE_SIZE 30000
 
 using namespace ::com::sun::star;
@@ -88,10 +88,10 @@ void StaticAddLog( const OUString& aMessage )
     }
     catch( const uno::Exception& )
     {
-        // No log
+        
     }
 }
-} // namespace package
+} 
 
 namespace
 {
@@ -111,7 +111,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
         ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( OSL_LOG_PREFIX "Can't set encryption");
         SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
-        throw io::IOException(); // TODO
+        throw io::IOException(); 
     }
 }
 
@@ -130,7 +130,7 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
         ::package::StaticAddLog( OSL_LOG_PREFIX "Can't get encryption property" );
 
         SAL_WARN( "package.xstor", "Can't get encryption related properties!" );
-        throw io::IOException(); // TODO
+        throw io::IOException(); 
     }
 }
 
@@ -237,7 +237,7 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xCont
     }
 
     if ( aTempURL.isEmpty() )
-        throw uno::RuntimeException(); // TODO: can not create tempfile
+        throw uno::RuntimeException(); 
 
     return aTempURL;
 }
@@ -249,7 +249,7 @@ uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XCo
         uno::UNO_QUERY_THROW);
 }
 
-} // anonymous namespace
+} 
 
 OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< packages::XDataSinkEncrSupport >& xPackageStream,
@@ -335,7 +335,7 @@ void OWriteStream_Impl::AddLog( const OUString& aMessage )
         }
         catch( const uno::Exception& )
         {
-            // No log
+            
         }
     }
 
@@ -354,7 +354,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
         SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!\n" );
         uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY );
         if ( !xTunnel.is() )
-            throw uno::RuntimeException(); // TODO
+            throw uno::RuntimeException(); 
 
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
@@ -375,7 +375,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
 
     GetStreamProperties();
 
-    // the following value can not be cached since it can change after root commit
+    
     sal_Bool bWasEncr = sal_False;
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
     if ( xPropSet.is() )
@@ -399,21 +399,21 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
         }
     }
 
-    // since a new key set to the package stream it should not be removed except the case when
-    // the stream becomes nonencrypted
+    
+    
     uno::Sequence< beans::NamedValue > aKey;
     if ( bToBeEncr )
         GetEncryptionKeyProperty_Impl( xPropSet ) >>= aKey;
 
-    // If the properties must be investigated the stream is either
-    // was never changed or was changed, the parent was commited
-    // and the stream was closed.
-    // That means that if it is intended to use common storage key
-    // it is already has no encryption but is marked to be stored
-    // encrypted and the key is empty.
+    
+    
+    
+    
+    
+    
     if ( !bWasEncr && bToBeEncr && !aKey.getLength() )
     {
-        // the stream is intended to use common storage password
+        
         m_bUseCommonEncryption = sal_True;
         return sal_False;
     }
@@ -429,11 +429,11 @@ void OWriteStream_Impl::SetDecrypted()
 
     GetStreamProperties();
 
-    // let the stream be modified
+    
     FillTempGetFileName();
     m_bHasDataToFlush = sal_True;
 
-    // remove encryption
+    
     m_bForceEncrypted = sal_False;
     m_bHasCachedEncryptionData = sal_False;
     m_aEncryptionData.clear();
@@ -456,18 +456,18 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
 
     GetStreamProperties();
 
-    // let the stream be modified
+    
     FillTempGetFileName();
     m_bHasDataToFlush = sal_True;
 
-    // introduce encryption info
+    
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
         if ( m_aProps[nInd].Name == "Encrypted" )
             m_aProps[nInd].Value <<= sal_True;
     }
 
-    m_bUseCommonEncryption = sal_False; // very important to set it to false
+    m_bUseCommonEncryption = sal_False; 
 
     m_bHasCachedEncryptionData = sal_True;
     m_aEncryptionData = aEncryptionData;
@@ -521,13 +521,13 @@ OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XIn
                 uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
                 if ( xTempOutStream.is() )
                 {
-                    // the current position of the original stream should be still OK, copy further
+                    
                     ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
                     xTempOutStream->closeOutput();
                     xTempOutStream = uno::Reference< io::XOutputStream >();
                 }
                 else
-                    throw io::IOException(); // TODO:
+                    throw io::IOException(); 
             }
         }
         catch( const packages::WrongPasswordException& rWrongPasswordException )
@@ -558,13 +558,13 @@ OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XIn
 
 OUString OWriteStream_Impl::FillTempGetFileName()
 {
-    // should try to create cache first, if the amount of contents is too big, the temp file should be taken
+    
     if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() )
     {
         uno::Reference< io::XInputStream > xOrigStream = m_xPackageStream->getDataStream();
         if ( !xOrigStream.is() )
         {
-            // in case of new inserted package stream it is possible that input stream still was not set
+            
             uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
             SAL_WARN_IF( !xCacheStream.is(), "package.xstor", "If the stream can not be created an exception must be thrown!" );
             m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
@@ -604,16 +604,16 @@ OUString OWriteStream_Impl::FillTempGetFileName()
                         uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
                         if ( xTempOutStream.is() )
                         {
-                            // copy stream contents to the file
+                            
                             xTempOutStream->writeBytes( aData );
 
-                            // the current position of the original stream should be still OK, copy further
+                            
                             ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
                             xTempOutStream->closeOutput();
                             xTempOutStream = uno::Reference< io::XOutputStream >();
                         }
                         else
-                            throw io::IOException(); // TODO:
+                            throw io::IOException(); 
                     }
                 }
                 catch( const packages::WrongPasswordException& )
@@ -646,7 +646,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
 
         if ( !m_aTempURL.isEmpty() )
         {
-            // the temporary file is not used if the cache is used
+            
             uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
             try
@@ -664,11 +664,11 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
     if ( m_xCacheStream.is() )
         xTempStream = m_xCacheStream;
 
-    // the method must always return a stream
-    // in case the stream can not be open
-    // an exception should be thrown
+    
+    
+    
     if ( !xTempStream.is() )
-        throw io::IOException(); //TODO:
+        throw io::IOException(); 
 
     return xTempStream;
 }
@@ -684,7 +684,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 
         if ( !m_aTempURL.isEmpty() )
         {
-            // the temporary file is not used if the cache is used
+            
             uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
             try
@@ -702,11 +702,11 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
     if ( m_xCacheStream.is() )
         xInputStream = m_xCacheStream->getInputStream();
 
-    // the method must always return a stream
-    // in case the stream can not be open
-    // an exception should be thrown
+    
+    
+    
     if ( !xInputStream.is() )
-        throw io::IOException(); // TODO:
+        throw io::IOException(); 
 
     return xInputStream;
 }
@@ -716,9 +716,9 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    // this call can be made only during parent storage commit
-    // the  parent storage is responsible for the correct handling
-    // of deleted and renamed contents
+    
+    
+    
 
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
@@ -727,21 +727,21 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
     OSL_ENSURE( m_aTempURL.isEmpty() && !m_xCacheStream.is(), "The temporary must not exist!\n" );
 
-    // use new file as current persistent representation
-    // the new file will be removed after it's stream is closed
+    
+    
     m_xPackageStream->setDataStream( xInStream );
 
-    // copy properties to the package stream
+    
     uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
-    // The storage-package communication has a problem
-    // the storage caches properties, thus if the package changes one of them itself
-    // the storage does not know about it
+    
+    
+    
 
-    // Depending from MediaType value the package can change the compressed property itself
-    // Thus if Compressed property is provided it must be set as the latest one
+    
+    
     sal_Bool bCompressedIsSet = sal_False;
     sal_Bool bCompressed = sal_False;
     OUString aComprPropName( "Compressed" );
@@ -763,7 +763,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         else
             throw lang::IllegalArgumentException();
 
-        // if there are cached properties update them
+        
         if ( aProps[nInd].Name.equals( aMedTypePropName ) || aProps[nInd].Name.equals( aComprPropName ) )
             for ( sal_Int32 nMemInd = 0; nMemInd < m_aProps.getLength(); nMemInd++ )
             {
@@ -783,15 +783,15 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
-        // set to be encrypted but do not use encryption key
+        
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( "Encrypted", uno::makeAny( sal_True ) );
     }
 
-    // the stream should be free soon, after package is stored
+    
     m_bHasDataToFlush = sal_False;
-    m_bFlushed = sal_True; // will allow to use transaction on stream level if will need it
+    m_bFlushed = sal_True; 
     m_bHasInsertedStreamOptimization = sal_True;
 }
 
@@ -846,17 +846,17 @@ void OWriteStream_Impl::Commit()
                                                         m_xPackage->createInstanceWithArguments( aSeq ),
                                                         uno::UNO_QUERY_THROW );
 
-        // TODO/NEW: Let the temporary file be removed after commit
+        
         xNewPackageStream->setDataStream( xInStream );
         m_aTempURL = OUString();
     }
-    else // if ( m_bHasInsertedStreamOptimization )
+    else 
     {
-        // if the optimization is used the stream can be accessed directly
+        
         xNewPackageStream = m_xPackageStream;
     }
 
-    // copy properties to the package stream
+    
     uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY );
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
@@ -880,7 +880,7 @@ void OWriteStream_Impl::Commit()
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
-        // set to be encrypted but do not use encryption key
+        
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( "Encrypted",
@@ -895,21 +895,21 @@ void OWriteStream_Impl::Commit()
                                         uno::makeAny( m_aEncryptionData.getAsConstNamedValueList() ) );
     }
 
-    // the stream should be free soon, after package is stored
+    
     m_xPackageStream = xNewPackageStream;
     m_bHasDataToFlush = sal_False;
-    m_bFlushed = sal_True; // will allow to use transaction on stream level if will need it
+    m_bFlushed = sal_True; 
 }
 
 void OWriteStream_Impl::Revert()
 {
-    // can be called only from parent storage
-    // means complete reload of the stream
+    
+    
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
     if ( !m_bHasDataToFlush )
-        return; // nothing to do
+        return; 
 
     OSL_ENSURE( !m_aTempURL.isEmpty() || m_xCacheStream.is(), "The temporary must exist!\n" );
 
@@ -935,18 +935,18 @@ void OWriteStream_Impl::Revert()
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        // currently the relations storage is changed only on commit
+        
         m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
         m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
         if ( m_xOrigRelInfoStream.is() )
         {
-            // the original stream is still here, that means that it was not parsed
+            
             m_aOrigRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
             m_nRelInfoStatus = RELINFO_NO_INIT;
         }
         else
         {
-            // the original stream was aready parsed
+            
             if ( !m_bOrigRelInfoBroken )
                 m_nRelInfoStatus = RELINFO_READ;
             else
@@ -992,7 +992,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
             aValue <<= m_aOrigRelInfo;
         else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
             aValue <<= m_aNewRelInfo;
-        else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
+        else 
             throw io::IOException( "Wrong relinfo stream!",
                                     uno::Reference< uno::XInterface >() );
 
@@ -1026,16 +1026,16 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
     {
         try
         {
-            // Init from original stream
+            
             if ( m_xOrigRelInfoStream.is() )
                 m_aOrigRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xOrigRelInfoStream,
                                         "_rels/*.rels",
                                         m_xContext );
 
-            // in case of success the stream must be thrown away, that means that the OrigRelInfo is initialized
-            // the reason for this is that the original stream might not be seekable ( at the same time the new
-            // provided stream must be seekable ), so it must be read only once
+            
+            
+            
             m_xOrigRelInfoStream = uno::Reference< io::XInputStream >();
             m_nRelInfoStatus = RELINFO_READ;
         }
@@ -1050,7 +1050,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
     }
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
     {
-        // Init from the new stream
+        
         try
         {
             if ( m_xNewRelInfoStream.is() )
@@ -1079,8 +1079,8 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
         nPropNum = 4;
     uno::Sequence< beans::PropertyValue > aResult( nPropNum );
 
-    // The "Compressed" property must be set after "MediaType" property,
-    // since the setting of the last one can change the value of the first one
+    
+    
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
     {
@@ -1097,7 +1097,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
         aResult[1].Name = "Size";
     }
 
-    // TODO: may be also raw stream should be marked
+    
 
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
     if ( xPropSet.is() )
@@ -1143,7 +1143,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     {
         uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, aEncryptionData, sal_False );
         if ( !xOwnStream.is() )
-            throw io::IOException(); // TODO
+            throw io::IOException(); 
 
         OStorage_Impl::completeStorageStreamCopy_Impl( xOwnStream, xDestStream, m_nStorageType, GetAllRelationshipsIfAny() );
     }
@@ -1164,7 +1164,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRel
         return m_aOrigRelInfo;
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
         return m_aNewRelInfo;
-    else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
+    else 
             throw io::IOException( "Wrong relinfo stream!",
                                     uno::Reference< uno::XInterface >() );
 }
@@ -1181,7 +1181,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     {
         uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, sal_False );
         if ( !xOwnStream.is() )
-            throw io::IOException(); // TODO
+            throw io::IOException(); 
 
         OStorage_Impl::completeStorageStreamCopy_Impl( xOwnStream, xDestStream, m_nStorageType, GetAllRelationshipsIfAny() );
     }
@@ -1194,7 +1194,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_pAntiImpl )
-        throw io::IOException(); // TODO:
+        throw io::IOException(); 
 
     if ( !IsEncrypted() )
         throw packages::NoEncryptionException();
@@ -1210,7 +1210,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         if ( !::package::PackageEncryptionDatasEqual( m_aEncryptionData, aEncryptionData ) )
             throw packages::WrongPasswordException();
 
-        // the correct key must be set already
+        
         xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
     }
     else
@@ -1220,7 +1220,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         try {
             xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
 
-            m_bUseCommonEncryption = sal_False; // very important to set it to false
+            m_bUseCommonEncryption = sal_False; 
             m_bHasCachedEncryptionData = sal_True;
             m_aEncryptionData = aEncryptionData;
         }
@@ -1238,7 +1238,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 
             SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
-            throw io::IOException(); // TODO:
+            throw io::IOException(); 
         }
     }
 
@@ -1254,7 +1254,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_pAntiImpl )
-        throw io::IOException(); // TODO:
+        throw io::IOException(); 
 
     uno::Reference< io::XStream > xResultStream;
 
@@ -1283,21 +1283,21 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 
 uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStreamMode, sal_Bool bHierarchyAccess )
 {
-    // private method, no mutex is used
+    
     GetStreamProperties();
 
-    // TODO/LATER: this info might be read later, on demand in future
+    
     ReadRelInfoIfNecessary();
 
     if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::READ )
     {
         uno::Reference< io::XInputStream > xInStream;
         if ( m_xCacheStream.is() || !m_aTempURL.isEmpty() )
-            xInStream = GetTempFileAsInputStream(); //TODO:
+            xInStream = GetTempFileAsInputStream(); 
         else
             xInStream = m_xPackageStream->getDataStream();
 
-        // The stream does not exist in the storage
+        
         if ( !xInStream.is() )
             throw io::IOException();
 
@@ -1314,13 +1314,13 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     {
         if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() && !( m_xPackageStream->getDataStream().is() ) )
         {
-            // The stream does not exist in the storage
+            
             throw io::IOException();
         }
 
         uno::Reference< io::XInputStream > xInStream;
 
-        xInStream = GetTempFileAsInputStream(); //TODO:
+        xInStream = GetTempFileAsInputStream(); 
 
         if ( !xInStream.is() )
             throw io::IOException();
@@ -1337,7 +1337,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     else if ( ( nStreamMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE )
     {
         if ( !m_aInputStreamsList.empty() )
-            throw io::IOException(); // TODO:
+            throw io::IOException(); 
 
         uno::Reference< io::XStream > xStream;
         if ( ( nStreamMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE )
@@ -1352,7 +1352,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
 
             m_bHasDataToFlush = sal_True;
 
-            // this call is triggered by the parent and it will recognize the change of the state
+            
             if ( m_pParent )
                 m_pParent->m_bIsModified = sal_True;
 
@@ -1364,17 +1364,17 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         {
             if ( m_aTempURL.isEmpty() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
             {
-                // The stream does not exist in the storage
+                
                 m_bHasDataToFlush = sal_True;
 
-                // this call is triggered by the parent and it will recognize the change of the state
+                
                 if ( m_pParent )
                     m_pParent->m_bIsModified = sal_True;
                 xStream = GetTempFileAsStream();
             }
 
-            // if the stream exists the temporary file is created on demand
-            // xStream = GetTempFileAsStream();
+            
+            
         }
 
         if ( !xStream.is() )
@@ -1391,7 +1391,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         return xWriteStream;
     }
 
-    throw lang::IllegalArgumentException(); // TODO
+    throw lang::IllegalArgumentException(); 
 }
 
 uno::Reference< io::XInputStream > OWriteStream_Impl::GetPlainRawInStream()
@@ -1400,9 +1400,9 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetPlainRawInStream()
 
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
-    // this method is used only internally, this stream object should not go outside of this implementation
-    // if ( m_pAntiImpl )
-    //  throw io::IOException(); // TODO:
+    
+    
+    
 
     return m_xPackageStream->getPlainRawStream();
 }
@@ -1414,7 +1414,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_pAntiImpl )
-        throw io::IOException(); // TODO:
+        throw io::IOException(); 
 
     SAL_WARN_IF( !IsEncrypted(), "package.xstor", "Impossible to get raw representation for nonencrypted stream!" );
     if ( !IsEncrypted() )
@@ -1452,7 +1452,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 
     uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY );
     if ( !xTempSeek.is() )
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(); 
 
     uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
     if ( !xTempOut.is() )
@@ -1468,7 +1468,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     if ( !xInStream.is() )
         throw io::IOException();
 
-    // TODO: remember last state of m_bUseCommonEncryption
+    
     if ( !xTargetStream.is() )
         xTargetStream = uno::Reference< io::XStream > (
             static_cast< ::cppu::OWeakObject* >(
@@ -1487,7 +1487,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     uno::Reference< io::XInputStream > xDataToCopy;
     if ( IsEncrypted() )
     {
-        // an encrypted stream must contain input stream
+        
         ::comphelper::SequenceAsHashMap aGlobalEncryptionData;
         try
         {
@@ -1507,7 +1507,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     {
         xDataToCopy = m_xPackageStream->getDataStream();
 
-        // in case of new inserted package stream it is possible that input stream still was not set
+        
         GetStreamProperties();
 
         CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonEncryption, xTargetStream );
@@ -1529,8 +1529,8 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
     if ( m_bHasCachedEncryptionData )
     {
-        // TODO: introduce last commited cashed password information and use it here
-        // that means "use common pass" also should be remembered on flash
+        
+        
         uno::Sequence< beans::NamedValue > aKey = aEncryptionData.getAsConstNamedValueList();
 
         uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY );
@@ -1547,7 +1547,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         if ( !SequencesEqual( aKey, aPackKey ) )
             throw packages::WrongPasswordException();
 
-        // the correct key must be set already
+        
         xDataToCopy = m_xPackageStream->getDataStream();
     }
     else
@@ -1576,7 +1576,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
     }
 
-    // in case of new inserted package stream it is possible that input stream still was not set
+    
     GetStreamProperties();
 
     CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonEncryption, xTargetStream );
@@ -1584,7 +1584,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
 void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const OUString& aOrigStreamName, const OUString& aNewStreamName )
 {
-    // at this point of time the old stream must be already cleaned
+    
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!\n" );
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -1596,7 +1596,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
             throw uno::RuntimeException();
 
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
-            throw io::IOException(); // TODO:
+            throw io::IOException(); 
 
         OUString aOrigRelStreamName = aOrigStreamName;
         aOrigRelStreamName += ".rels";
@@ -1626,7 +1626,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
                     ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xContext );
 
-                    // set the mediatype
+                    
                     uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                     xPropSet->setPropertyValue(
                         "MediaType",
@@ -1651,7 +1651,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
                 xSeek->seek( 0 );
 
-                // set the mediatype
+                
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                 xPropSet->setPropertyValue("MediaType",
                     uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
@@ -1660,13 +1660,13 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                     m_nRelInfoStatus = RELINFO_NO_INIT;
                 else
                 {
-                    // the information is already parsed and the stream is stored, no need in temporary stream any more
+                    
                     m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
                     m_nRelInfoStatus = RELINFO_READ;
                 }
             }
 
-            // the original stream makes no sence after this step
+            
             m_xOrigRelInfoStream = m_xNewRelInfoStream;
             m_aOrigRelInfo = m_aNewRelInfo;
             m_bOrigRelInfoBroken = sal_False;
@@ -1675,14 +1675,14 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         }
         else
         {
-            // the stream is not changed but it might be renamed
+            
             if ( bRenamed && xRelStorage->hasByName( aOrigRelStreamName ) )
                 xRelStorage->renameElement( aOrigRelStreamName, aNewRelStreamName );
         }
     }
 }
 
-// OWriteStream implementation
+
 
 OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted )
 : m_pImpl( pImpl )
@@ -1695,7 +1695,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted )
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
 
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
-        throw uno::RuntimeException(); // just a disaster
+        throw uno::RuntimeException(); 
 
     m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
 }
@@ -1711,7 +1711,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
 
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
-        throw uno::RuntimeException(); // just a disaster
+        throw uno::RuntimeException(); 
 
     m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
 
@@ -1752,7 +1752,7 @@ OWriteStream::~OWriteStream()
 void OWriteStream::DeInit()
 {
     if ( !m_pImpl )
-        return; // do nothing
+        return; 
 
     if ( m_xSeekable.is() )
         m_nInitPosition = m_xSeekable->getPosition();
@@ -1802,11 +1802,11 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
 
     uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY );
     if ( !xDestProps.is() )
-        throw uno::RuntimeException(); //TODO
+        throw uno::RuntimeException(); 
 
     uno::Reference< io::XOutputStream > xDestOutStream = xDest->getOutputStream();
     if ( !xDestOutStream.is() )
-        throw io::IOException(); // TODO
+        throw io::IOException(); 
 
     sal_Int64 nCurPos = m_xSeekable->getPosition();
     m_xSeekable->seek( 0 );
@@ -1822,8 +1822,8 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         bThrown = sal_True;
     }
 
-    // position-related section below is critical
-    // if it fails the stream will become invalid
+    
+    
     try {
         m_xSeekable->seek( nCurPos );
     }
@@ -1832,7 +1832,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
-        // TODO: set the stoream in invalid state or dispose
+        
         SAL_WARN( "package.xstor", "The stream become invalid during copiing!" );
         throw uno::RuntimeException();
     }
@@ -1840,8 +1840,8 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     if ( bThrown )
         throw eThrown;
 
-    // now the properties can be copied
-    // the order of the properties setting is not important for StorageStream API
+    
+    
     OUString aPropName ("Compressed");
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -1877,7 +1877,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
 {
     uno::Any aReturn;
 
-    // common interfaces
+    
     aReturn <<= ::cppu::queryInterface
                 (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
@@ -1981,7 +1981,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
-                else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
+                else 
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2026,7 +2026,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
-                else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
+                else 
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2158,11 +2158,11 @@ void SAL_CALL OWriteStream::closeInput(  )
     if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         throw io::NotConnectedException();
 
-    // the input part of the stream stays open for internal purposes ( to allow reading during copiing )
-    // since it can not be reopened until output part is closed, it will be closed with output part.
+    
+    
     m_bInStreamDisconnected = sal_True;
-    // m_xInStream->closeInput();
-    // m_xInStream = uno::Reference< io::XInputStream >();
+    
+    
 
     if ( !m_xOutStream.is() )
         dispose();
@@ -2212,8 +2212,8 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
-    // the write method makes initialization itself, since it depends from the aData length
-    // NO CheckInitOnDemand()!
+    
+    
 
     if ( !m_pImpl )
     {
@@ -2228,18 +2228,18 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
         if ( m_pImpl->m_xCacheStream.is() )
         {
-            // check whether the cache should be turned off
+            
             sal_Int64 nPos = m_xSeekable->getPosition();
             if ( nPos + aData.getLength() > MAX_STORCACHE_SIZE )
             {
-                // disconnect the cache and copy the data to the temporary file
+                
                 m_xSeekable->seek( 0 );
 
-                // it is enough to copy the cached stream, the cache should already contain everything
+                
                 if ( !m_pImpl->GetFilledTempFileIfNo( m_xInStream ).isEmpty() )
                 {
                     DeInit();
-                    // the last position is known and it is differs from the current stream position
+                    
                     m_nInitPosition = nPos;
                 }
             }
@@ -2277,10 +2277,10 @@ void SAL_CALL OWriteStream::flush()
                 io::IOException,
                 uno::RuntimeException )
 {
-    // In case stream is flushed it's current version becomes visible
-    // to the parent storage. Usually parent storage flushes the stream
-    // during own commit but a user can explicitly flush the stream
-    // so the changes will be available through cloning functionality.
+    
+    
+    
+    
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2302,15 +2302,15 @@ void SAL_CALL OWriteStream::flush()
 
 void OWriteStream::CloseOutput_Impl()
 {
-    // all the checks must be done in calling method
+    
 
     m_xOutStream->closeOutput();
     m_xOutStream = uno::Reference< io::XOutputStream >();
 
     if ( !m_bInitOnDemand )
     {
-        // after the stream is disposed it can be commited
-        // so transport correct size property
+        
+        
         if ( !m_xSeekable.is() )
             throw uno::RuntimeException();
 
@@ -2443,7 +2443,7 @@ void SAL_CALL OWriteStream::truncate()
 void SAL_CALL OWriteStream::dispose()
         throw ( uno::RuntimeException )
 {
-    // should be an internal method since it can be called only from parent storage
+    
     {
         ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2476,7 +2476,7 @@ void SAL_CALL OWriteStream::dispose()
                 }
                 else
                 {
-                    // throw away all the changes
+                    
                     m_pImpl->Revert();
                 }
             }
@@ -2496,9 +2496,9 @@ void SAL_CALL OWriteStream::dispose()
         m_pImpl = NULL;
     }
 
-    // the listener might try to get rid of parent storage, and the storage would delete this object;
-    // for now the listener is just notified at the end of the method to workaround the problem
-    // in future a more elegant way should be found
+    
+    
+    
 
        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
@@ -2707,7 +2707,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    // TODO/LATER: in future the unification of the ID could be checked
+    
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
@@ -2739,7 +2739,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
     sal_Int32 nEntriesNum = 0;
 
-    // TODO/LATER: in future the unification of the ID could be checked
+    
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
@@ -2793,7 +2793,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
 
     sal_Int32 nIDInd = -1;
 
-    // TODO/LATER: in future the unification of the ID could be checked
+    
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
@@ -2829,7 +2829,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
         aSeq[nIDInd].realloc( nIndTarget );
     }
     else
-        throw container::ElementExistException(); // TODO
+        throw container::ElementExistException(); 
 
     m_pImpl->m_aNewRelInfo = aSeq;
     m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
@@ -2867,7 +2867,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
                     m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
                     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 
-                    // TODO/LATER: in future the unification of the ID could be checked
+                    
                     return;
                 }
 
@@ -2923,7 +2923,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 
                 if ( nIndSourceSame == -1 )
                 {
-                    // no such element in the provided sequence
+                    
                     aResultSeq[nResultInd++] = aSeq[nIndTarget1];
                 }
 
@@ -2945,10 +2945,10 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
             else if ( nResInd2 < aResultSeq[nResultInd].getLength() )
                 aResultSeq[nResultInd][nResInd2++] = aEntries[nIndSource1][nIndSource2];
             else
-                throw io::IOException(); // TODO: illegal relation ( no ID )
+                throw io::IOException(); 
 
         if ( !bHasID )
-            throw io::IOException(); // TODO: illegal relations
+            throw io::IOException(); 
 
         nResultInd++;
     }
@@ -2984,7 +2984,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OWriteStream::getPropertySetI
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
-    //TODO:
+    
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
@@ -3008,7 +3008,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     OUString aMediaTypeString( "MediaType" );
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equals( aMediaTypeString ) )
     {
-        // if the "Compressed" property is not set explicitly, the MediaType can change the default value
+        
         sal_Bool bCompressedValueFromType = sal_True;
         OUString aType;
         aValue >>= aType;
@@ -3029,7 +3029,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     }
     else if ( aPropertyName.equals( aCompressedString ) )
     {
-        // if the "Compressed" property is not set explicitly, the MediaType can change the default value
+        
         m_pImpl->m_bCompressedSetExplicit = sal_True;
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
@@ -3045,7 +3045,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
         {
             if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
             {
-                // the data stream is provided to the packagestream directly
+                
                 m_pImpl->m_bUseCommonEncryption = bUseCommonEncryption;
             }
             else if ( bUseCommonEncryption )
@@ -3060,7 +3060,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
                 m_pImpl->m_bUseCommonEncryption = sal_False;
         }
         else
-            throw lang::IllegalArgumentException(); //TODO
+            throw lang::IllegalArgumentException(); 
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equals( aMediaTypeString ) )
     {
@@ -3078,10 +3078,10 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
             uno::Reference< io::XSeekable > xSeek( xInRelStream, uno::UNO_QUERY );
             if ( !xSeek.is() )
             {
-                // currently this is an internal property that is used for optimization
-                // and the stream must support XSeekable interface
-                // TODO/LATER: in future it can be changed if property is used from outside
-                throw lang::IllegalArgumentException(); // TODO
+                
+                
+                
+                throw lang::IllegalArgumentException(); 
             }
 
             m_pImpl->m_xNewRelInfoStream = xInRelStream;
@@ -3089,7 +3089,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
             m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
         }
         else
-            throw lang::IllegalArgumentException(); // TODO
+            throw lang::IllegalArgumentException(); 
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfo" )
     {
@@ -3097,19 +3097,19 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
         {
         }
         else
-            throw lang::IllegalArgumentException(); // TODO
+            throw lang::IllegalArgumentException(); 
     }
     else if ( aPropertyName == "Size" )
-        throw beans::PropertyVetoException(); // TODO
+        throw beans::PropertyVetoException(); 
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
            && ( aPropertyName == "IsEncrypted" || aPropertyName == "Encrypted" ) )
-        throw beans::PropertyVetoException(); // TODO
+        throw beans::PropertyVetoException(); 
     else if ( aPropertyName == "RelId" )
     {
         aValue >>= m_pImpl->m_nRelId;
     }
     else
-        throw beans::UnknownPropertyException(); // TODO
+        throw beans::UnknownPropertyException(); 
 
     m_pImpl->m_bHasDataToFlush = sal_True;
     ModifyParentUnlockMutex_Impl( aGuard );
@@ -3165,7 +3165,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         return uno::makeAny( m_xSeekable->getLength() );
     }
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(); 
 }
 
 void SAL_CALL OWriteStream::addPropertyChangeListener(
@@ -3183,7 +3183,7 @@ void SAL_CALL OWriteStream::addPropertyChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 void SAL_CALL OWriteStream::removePropertyChangeListener(
@@ -3201,7 +3201,7 @@ void SAL_CALL OWriteStream::removePropertyChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 void SAL_CALL OWriteStream::addVetoableChangeListener(
@@ -3219,7 +3219,7 @@ void SAL_CALL OWriteStream::addVetoableChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 void SAL_CALL OWriteStream::removeVetoableChangeListener(
@@ -3237,10 +3237,10 @@ void SAL_CALL OWriteStream::removeVetoableChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
-//  XTransactedObject
+
 
 void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
 /*
@@ -3250,7 +3250,7 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
     4 - reverted
 */
 {
-    // no need to lock mutex here for the checking of m_pImpl, and m_pData is alive until the object is destructed
+    
     if ( !m_pImpl )
     {
         ::package::StaticAddLog( "Disposed!" );
@@ -3316,7 +3316,7 @@ void SAL_CALL OWriteStream::commit()
 
         m_pImpl->Commit();
 
-        // when the storage is commited the parent is modified
+        
         ModifyParentUnlockMutex_Impl( aGuard );
     }
     catch( const io::IOException& rIOException )
@@ -3358,7 +3358,7 @@ void SAL_CALL OWriteStream::revert()
 {
     SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::revert" );
 
-    // the method removes all the changes done after last commit
+    
 
     if ( !m_pImpl )
     {
@@ -3416,7 +3416,7 @@ void SAL_CALL OWriteStream::revert()
     BroadcastTransaction( STOR_MESS_REVERTED );
 }
 
-//  XTransactionBroadcaster
+
 
 void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
         throw ( uno::RuntimeException )

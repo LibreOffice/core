@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -27,11 +27,11 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -46,7 +46,7 @@ namespace sdr
                 const sal_uInt16 nOriginalAA(rDestinationDevice.GetAntialiasing());
                 const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
 
-                // create processor
+                
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     rDestinationDevice,
                     getCurrentViewInformation2D());
@@ -84,7 +84,7 @@ namespace sdr
                     delete pProcessor;
                 }
 
-                // restore AA settings
+                
                 rDestinationDevice.SetAntialiasing(nOriginalAA);
             }
         }
@@ -128,8 +128,8 @@ namespace sdr
             maViewInformation2D(),
             mfDiscreteOne(0.0)
         {
-            // set Property 'ReducedDisplayQuality' to true to allow simpler interaction
-            // visualisations
+            
+            
             static bool bUseReducedDisplayQualityForDrag(true);
 
             if(bUseReducedDisplayQualityForDrag)
@@ -156,8 +156,8 @@ namespace sdr
                 {
                     const Size aOutputSizePixel(getOutputDevice().GetOutputSizePixel());
 
-                    // only set when we *have* a output size, else let aViewRange
-                    // stay on empty
+                    
+                    
                     if(aOutputSizePixel.Width() && aOutputSizePixel.Height())
                     {
                         aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
@@ -183,44 +183,44 @@ namespace sdr
 
         void OverlayManager::impApplyRemoveActions(OverlayObject& rTarget)
         {
-            // handle evtl. animation
+            
             if(rTarget.allowsAnimation())
             {
-                // remove from event chain
+                
                 RemoveEvent(&rTarget);
             }
 
-            // make invisible
+            
             invalidateRange(rTarget.getBaseRange());
 
-            // clear manager
+            
             rTarget.mpOverlayManager = 0;
         }
 
         void OverlayManager::impApplyAddActions(OverlayObject& rTarget)
         {
-            // set manager
+            
             rTarget.mpOverlayManager = this;
 
-            // make visible
+            
             invalidateRange(rTarget.getBaseRange());
 
-            // handle evtl. animation
+            
             if(rTarget.allowsAnimation())
             {
-                // Trigger at current time to get alive. This will do the
-                // object-specific next time calculation and hand over adding
-                // again to the scheduler to the animated object, too. This works for
-                // a paused or non-paused animator.
+                
+                
+                
+                
                 rTarget.Trigger(GetTime());
             }
         }
 
         OverlayManager::~OverlayManager()
         {
-            // The OverlayManager is not the owner of the OverlayObjects
-            // and thus will not delete them, but remove them. Profit here
-            // from knowing that all will be removed
+            
+            
+            
             const sal_uInt32 nSize(maOverlayObjects.size());
 
             if(nSize)
@@ -232,7 +232,7 @@ namespace sdr
                     impApplyRemoveActions(rCandidate);
                 }
 
-                // erase vector
+                
                 maOverlayObjects.clear();
             }
         }
@@ -241,11 +241,11 @@ namespace sdr
         {
             if(!rRegion.IsEmpty() && maOverlayObjects.size())
             {
-                // check for changed MapModes. That may influence the
-                // logical size of pixel based OverlayObjects (like BitmapHandles)
-                //ImpCheckMapModeChange();
+                
+                
+                
 
-                // paint members
+                
                 const Rectangle aRegionBoundRect(rRegion.GetBoundRect());
                 const basegfx::B2DRange aRegionRange(
                     aRegionBoundRect.Left(), aRegionBoundRect.Top(),
@@ -258,28 +258,28 @@ namespace sdr
 
         void OverlayManager::flush()
         {
-            // default has nothing to do
+            
         }
 
-        // #i68597# part of content gets copied, react on it
+        
         void OverlayManager::copyArea(const Point& /*rDestPt*/, const Point& /*rSrcPt*/, const Size& /*rSrcSize*/)
         {
-            // unbuffered versions do nothing here
+            
         }
 
         void OverlayManager::restoreBackground(const Region& /*rRegion*/) const
         {
-            // unbuffered versions do nothing here
+            
         }
 
         void OverlayManager::add(OverlayObject& rOverlayObject)
         {
             OSL_ENSURE(0 == rOverlayObject.mpOverlayManager, "OverlayObject is added twice to an OverlayManager (!)");
 
-            // add to the end of chain to preserve display order in paint
+            
             maOverlayObjects.push_back(&rOverlayObject);
 
-            // execute add actions
+            
             impApplyAddActions(rOverlayObject);
         }
 
@@ -287,10 +287,10 @@ namespace sdr
         {
             OSL_ENSURE(rOverlayObject.mpOverlayManager == this, "OverlayObject is removed from wrong OverlayManager (!)");
 
-            // execute remove actions
+            
             impApplyRemoveActions(rOverlayObject);
 
-            // remove from vector
+            
             const OverlayObjectVector::iterator aFindResult = ::std::find(maOverlayObjects.begin(), maOverlayObjects.end(), &rOverlayObject);
             const bool bFound(aFindResult != maOverlayObjects.end());
             OSL_ENSURE(bFound, "OverlayObject NOT found at OverlayManager (!)");
@@ -307,7 +307,7 @@ namespace sdr
             {
                 if(getDrawinglayerOpt().IsAntiAliasing())
                 {
-                    // assume AA needs one pixel more and invalidate one pixel more
+                    
                     const double fDiscreteOne(getDiscreteOne());
                     const Rectangle aInvalidateRectangle(
                         (sal_Int32)floor(rRange.getMinX() - fDiscreteOne),
@@ -315,24 +315,24 @@ namespace sdr
                         (sal_Int32)ceil(rRange.getMaxX() + fDiscreteOne),
                         (sal_Int32)ceil(rRange.getMaxY() + fDiscreteOne));
 
-                    // simply invalidate
+                    
                     ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
                 }
                 else
                 {
-                    // #i77674# transform to rectangle. Use floor/ceil to get all covered
-                    // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
+                    
+                    
                     const Rectangle aInvalidateRectangle(
                         (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
                         (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
 
-                    // simply invalidate
+                    
                     ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
                 }
             }
         }
 
-        // stripe support ColA
+        
         void OverlayManager::setStripeColorA(Color aNew)
         {
             if(aNew != maStripeColorA)
@@ -342,7 +342,7 @@ namespace sdr
             }
         }
 
-        // stripe support ColB
+        
         void OverlayManager::setStripeColorB(Color aNew)
         {
             if(aNew != maStripeColorB)
@@ -352,7 +352,7 @@ namespace sdr
             }
         }
 
-        // stripe support StripeLengthPixel
+        
         void OverlayManager::setStripeLengthPixel(sal_uInt32 nNew)
         {
             if(nNew != mnStripeLengthPixel)
@@ -375,7 +375,7 @@ namespace sdr
             return nCount;
         }
 
-    } // end of namespace overlay
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

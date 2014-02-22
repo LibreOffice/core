@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/prnsetup.hxx>
@@ -22,7 +22,7 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/print.hxx>
 
-// =======================================================================
+
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
                             ListBox* pBox, PushButton* pPropBtn )
@@ -42,7 +42,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     pPropBtn->Show( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
 {
@@ -50,7 +50,7 @@ void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
         pBox->Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                                   Printer* pPrinter, Printer* pTempPrinter )
@@ -89,7 +89,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
     return pTempPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
 {
@@ -109,7 +109,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
     return pTempPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 {
@@ -121,7 +121,7 @@ void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddStr)
 {
@@ -131,26 +131,26 @@ static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddSt
     return aStr + rAddStr;
 }
 
-// -----------------------------------------------------------------------
+
 
 static OUString ImplPrnDlgAddResString(const OUString& rStr, sal_uInt16 nResId)
 {
     return ImplPrnDlgAddString(rStr, SVT_RESSTR(nResId));
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
     OUString aStr;
     sal_uLong nStatus = rInfo.GetStatus();
 
-    // Default-Printer
+    
     if ( !rInfo.GetPrinterName().isEmpty() &&
          (rInfo.GetPrinterName() == Printer::GetDefaultPrinterName()) )
         aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_DEFPRINTER );
 
-    // Status
+    
     if ( nStatus & QUEUE_STATUS_READY )
         aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_READY );
     if ( nStatus & QUEUE_STATUS_PAUSED )
@@ -202,7 +202,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     if ( nStatus & QUEUE_STATUS_POWER_SAVE )
         aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
-    // Anzahl Jobs
+    
     sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
@@ -214,7 +214,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     return aStr;
 }
 
-// =======================================================================
+
 
 PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
     : ModalDialog(pParent, "PrinterSetupDialog",
@@ -229,7 +229,7 @@ PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
     get(m_pFiLocation, "location");
     get(m_pFiComment, "comment");
 
-    // show options button only if link is set
+    
     m_pBtnOptions->Hide();
 
     mpPrinter       = NULL;
@@ -241,7 +241,7 @@ PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
     m_pLbName->SetSelectHdl( LINK( this, PrinterSetupDialog, ImplChangePrinterHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
@@ -249,7 +249,7 @@ PrinterSetupDialog::~PrinterSetupDialog()
     delete mpTempPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
 {
@@ -277,7 +277,7 @@ void PrinterSetupDialog::ImplSetInfo()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
 {
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
 {
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
 {
@@ -319,7 +319,7 @@ bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
     return ModalDialog::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -338,7 +338,7 @@ void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
     ModalDialog::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 short PrinterSetupDialog::Execute()
 {
@@ -354,10 +354,10 @@ short PrinterSetupDialog::Execute()
     ImplSetInfo();
     maStatusTimer.Start();
 
-    // start dialog
+    
     short nRet = ModalDialog::Execute();
 
-    // update data if the dialog was terminated with OK
+    
     if ( nRet == sal_True )
     {
         if ( mpTempPrinter )

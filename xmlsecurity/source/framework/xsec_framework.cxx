@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -45,7 +45,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
 {
     void * pRet = 0;
 
-    //Decryptor
+    
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(DecryptorImpl_getImplementationName()) )
     {
@@ -61,7 +61,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
         }
     }
 
-    //Encryptor
+    
     if ( pServiceManager && implName.equals(EncryptorImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -76,7 +76,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
         }
     }
 
-    //SignatureCreator
+    
     if ( pServiceManager && implName.equals(SignatureCreatorImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -91,7 +91,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
         }
     }
 
-    //SignatureVerifier
+    
     if ( pServiceManager && implName.equals(SignatureVerifierImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -106,7 +106,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
         }
     }
 
-    //SAXEventKeeper
+    
     if ( pServiceManager && implName.equals(SAXEventKeeperImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -121,7 +121,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
         }
     }
 
-    //XMLSignatureTemplate
+    
     if ( pServiceManager && implName.equals( XMLSignatureTemplateImpl::impl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory = XMLSignatureTemplateImpl::impl_createFactory(
@@ -134,7 +134,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
         }
     }
 
-    //XMLEncryptionTemplate
+    
     if ( pServiceManager && implName.equals( XMLEncryptionTemplateImpl::impl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory = XMLEncryptionTemplateImpl::impl_createFactory(

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,21 +48,21 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::awt::XWindow;
 
-    //==================================================================================================================
-    //= ToolPanelFactory
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     ToolPanelFactory::ToolPanelFactory( const Reference< XComponentContext >& i_rContext )
         :m_xContext( i_rContext )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ToolPanelFactory::~ToolPanelFactory()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -73,7 +73,7 @@ namespace sd { namespace colortoolpanel
         const OUString sColor( i_rResourceURL.copy( i_rResourceURL.lastIndexOf( '/' ) + 1 ) );
         const sal_Int32 nPanelColor = static_cast< sal_Int32 >( sColor.toUInt32( 16 ) );
 
-        // retrieve the parent window
+        
         Reference< XWindow > xParentWindow;
         const PropertyValue* pArg = i_rArgs.getConstArray();
         const PropertyValue* pArgEnd = i_rArgs.getConstArray() + i_rArgs.getLength();
@@ -95,7 +95,7 @@ namespace sd { namespace colortoolpanel
             );
         }
 
-        /// create the panel
+        /
         Reference< XUIElement > xUIElement( new PanelUIElement( m_xContext, xParentWindow, i_rResourceURL, nPanelColor ) );
         return xUIElement;
     }
@@ -127,14 +127,14 @@ namespace sd { namespace colortoolpanel
         return aServiceNames;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL ToolPanelFactory::Create( const Reference< XComponentContext >& i_rContext ) throw (RuntimeException)
     {
         return *( new ToolPanelFactory( i_rContext ) );
     }
 
-//......................................................................................................................
-} } // namespace sd::colortoolpanel
-//......................................................................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

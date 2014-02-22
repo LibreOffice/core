@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/configurationhelper.hxx>
@@ -28,7 +28,7 @@
 
 namespace comphelper{
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                             const OUString&                                    sPackage,
                                                                                   sal_Int32                                           eMode   )
@@ -39,12 +39,12 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     ::comphelper::SequenceAsVector< css::uno::Any > lParams;
     css::beans::PropertyValue                       aParam ;
 
-    // set root path
+    
     aParam.Name    = "nodepath";
     aParam.Value <<= sPackage;
     lParams.push_back(css::uno::makeAny(aParam));
 
-    // enable all locales mode
+    
     if ((eMode & ConfigurationHelper::E_ALL_LOCALES)==ConfigurationHelper::E_ALL_LOCALES)
     {
         aParam.Name    = "locale";
@@ -52,13 +52,13 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
         lParams.push_back(css::uno::makeAny(aParam));
     }
 
-    // enable lazy writing
+    
     bool bLazy = ((eMode & ConfigurationHelper::E_LAZY_WRITE)==ConfigurationHelper::E_LAZY_WRITE);
     aParam.Name    = "lazywrite";
     aParam.Value   = css::uno::makeAny(bLazy);
     lParams.push_back(css::uno::makeAny(aParam));
 
-    // open it
+    
     css::uno::Reference< css::uno::XInterface > xCFG;
 
     bool bReadOnly = ((eMode & ConfigurationHelper::E_READONLY)==ConfigurationHelper::E_READONLY);
@@ -74,7 +74,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     return xCFG;
 }
 
-//-----------------------------------------------
+
 css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
                                                    const OUString&                            sRelPath,
                                                    const OUString&                            sKey    )
@@ -97,7 +97,7 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
     return xProps->getPropertyValue(sKey);
 }
 
-//-----------------------------------------------
+
 void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
                                            const OUString&                            sRelPath,
                                            const OUString&                            sKey    ,
@@ -121,7 +121,7 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
     xProps->setPropertyValue(sKey, aValue);
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface > xCFG         ,
                                                                                        const OUString&                            sRelPathToSet,
                                                                                        const OUString&                            sSetNode     )
@@ -155,7 +155,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
     return xNode;
 }
 
-//-----------------------------------------------
+
 css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                                  const OUString&                                       sPackage,
                                                  const OUString&                                       sRelPath,
@@ -166,7 +166,7 @@ css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css:
     return ConfigurationHelper::readRelativeKey(xCFG, sRelPath, sKey);
 }
 
-//-----------------------------------------------
+
 void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                          const OUString&                                       sPackage,
                                          const OUString&                                       sRelPath,
@@ -179,13 +179,13 @@ void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XC
     ConfigurationHelper::flush(xCFG);
 }
 
-//-----------------------------------------------
+
 void ConfigurationHelper::flush(const css::uno::Reference< css::uno::XInterface >& xCFG)
 {
     css::uno::Reference< css::util::XChangesBatch > xBatch(xCFG, css::uno::UNO_QUERY_THROW);
     xBatch->commitChanges();
 }
 
-} // namespace comphelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 /*
  * Since the settings on the second Tab Page (Options) effects
@@ -68,9 +68,9 @@ using namespace com::sun::star;
  * This still needs to be changed!
  */
 
-//========================================================================
-//========================================================================
-// Sort Criteria Tab page
+
+
+
 
 ScTabPageSortFields::ScTabPageSortFields(Window* pParent,
                                           const SfxItemSet& rArgSet)
@@ -116,13 +116,13 @@ void ScTabPageSortFields::SetPosPixel(const Point& rAllocPos)
     maSortKeyCtrl.setScrollRange();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTabPageSortFields::~ScTabPageSortFields()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortFields::Init()
 {
@@ -136,7 +136,7 @@ void ScTabPageSortFields::Init()
     nFirstCol = 0;
     nFirstRow = 0;
 
-    // Create three sort key dialogs by default
+    
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
     {
         maSortKeyCtrl.AddSortKey(i+1);
@@ -144,7 +144,7 @@ void ScTabPageSortFields::Init()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
@@ -152,7 +152,7 @@ SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
     return ( new ScTabPageSortFields( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -162,10 +162,10 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     if ( maSortKeyItems[0].m_pLbSort->GetEntryCount() == 0 )
         FillFieldLists(0);
 
-    // ListBox selection:
+    
     if ( aSortData.maKeyState[0].bDoSort )
     {
-        // Make sure that the all sort keys are reset
+        
         for ( sal_uInt16 i=nSortKeyCount; i<aSortData.GetSortKeyCount(); i++ )
         {
             maSortKeyCtrl.AddSortKey(i+1);
@@ -187,12 +187,12 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
             }
             else
             {
-                maSortKeyItems[i].m_pLbSort->SelectEntryPos( 0 ); // Select none
+                maSortKeyItems[i].m_pLbSort->SelectEntryPos( 0 ); 
                 maSortKeyItems[i].m_pBtnUp->Check();
             }
         }
 
-        // Enable or disable field depending on preceding Listbox selection
+        
         maSortKeyItems[0].EnableField();
         for ( sal_uInt16 i=1; i<nSortKeyCount; i++ )
             if ( maSortKeyItems[i - 1].m_pLbSort->GetSelectEntryPos() == 0 )
@@ -231,12 +231,12 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         pDlg->SetHeaders( bHasHeader );
     }
 
-    // Make sure that there is always a last undefined sort key
+    
     if ( maSortKeyItems[nSortKeyCount - 1].m_pLbSort->GetSelectEntryPos() > 0 )
         SetLastSortKey( nSortKeyCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -270,9 +270,9 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
             aNewSortData.maKeyState[i].bDoSort = (nSortPos[i] > 0);
 
-        // If the "OK" was selected on the Options page while the sort
-        // direction was changed, then the first field (i.e. nFieldArr[0])
-        // of the respective direction is chosen as the sorting criterion:
+        
+        
+        
         if ( bSortByRows != pDlg->GetByRows() )
         {
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
@@ -289,7 +289,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
             aNewSortData.maKeyState[i].bAscending = maSortKeyItems[i].m_pBtnUp->IsChecked();
 
-        // bHasHeader is in ScTabPageSortOptions::FillItemSet, where it belongs
+        
     }
     else
     {
@@ -302,12 +302,12 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
-// for data exchange without dialogue detour:
+
+
 void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 {
-    // Refresh local copy with shared data
+    
     aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
     if ( pDlg )
     {
@@ -328,7 +328,7 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -347,7 +347,7 @@ int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
     return SfxTabPage::LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 {
@@ -417,7 +417,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
@@ -438,11 +438,11 @@ sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 
 void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 {
-    // Extend local SortParam copy
+    
     const ScSortKeyState atempKeyState = { false, 0, true };
     aSortData.maKeyState.push_back( atempKeyState );
 
-    // Add Sort Key Item
+    
     ++nSortKeyCount;
     maSortKeyCtrl.AddSortKey( nSortKeyCount );
     maSortKeyItems[nItem].m_pLbSort->SetSelectHdl(
@@ -450,21 +450,21 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
     FillFieldLists( nItem );
 
-    // Set Status
+    
     maSortKeyItems[nItem].m_pBtnUp->Check();
     maSortKeyItems[nItem].m_pLbSort->SelectEntryPos( 0 );
 }
 
-// -----------------------------------------------------------------------
-// Handler:
-//---------
+
+
+
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {
     OUString aSelEntry = pLb->GetSelectEntry();
     ScSortKeyItems::iterator pIter;
 
-    // If last listbox is enabled add one item
+    
     if ( maSortKeyItems.back().m_pLbSort == pLb )
         if ( aSelEntry != aStrUndefined )
         {
@@ -472,13 +472,13 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
             return 0;
         }
 
-    // Find selected listbox
+    
     for ( pIter = maSortKeyItems.begin(); pIter != maSortKeyItems.end(); ++pIter )
     {
         if ( pIter->m_pLbSort == pLb ) break;
     }
 
-    // If not selecting the last Listbox, modify the succeeding ones
+    
     ++pIter;
     if ( std::distance(maSortKeyItems.begin(), pIter) < nSortKeyCount )
     {
@@ -501,9 +501,9 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
     return 0;
 }
 
-//========================================================================
-// Sort option Tab Page:
-//========================================================================
+
+
+
 
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )
@@ -542,7 +542,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
     m_pLbSortUser->SetAccessibleName(m_pBtnSortUser->GetText());
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTabPageSortOptions::~ScTabPageSortOptions()
 {
@@ -552,17 +552,17 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
         delete (OUString*)m_pLbOutPos->GetEntryData( i );
 
     delete pColRes;
-    delete pColWrap;        //! not if from document
+    delete pColWrap;        
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::Init()
 {
-    //  CollatorResource has user-visible names for sort algorithms
+    
     pColRes = new CollatorResource();
 
-    //! use CollatorWrapper from document?
+    
     pColWrap = new CollatorWrapper( comphelper::getProcessComponentContext() );
 
     const ScSortItem&   rSortItem = (const ScSortItem&)
@@ -606,7 +606,7 @@ void ScTabPageSortOptions::Init()
         m_pLbOutPos->SelectEntryPos( 0 );
         m_pEdOutPos->SetText( EMPTY_OUSTRING );
 
-        // Check whether the field that is passed on is a database field:
+        
 
         ScAddress aScAddress( aSortData.nCol1, aSortData.nRow1, nCurTab );
         OUString theArea =
@@ -634,13 +634,13 @@ void ScTabPageSortOptions::Init()
 
     FillUserSortListBox();
 
-    //  get available languages
+    
 
     m_pLbLanguage->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false );
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTabPageSortOptions::Create(
                                             Window*             pParent,
@@ -649,7 +649,7 @@ SfxTabPage* ScTabPageSortOptions::Create(
     return ( new ScTabPageSortOptions( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -686,7 +686,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
     m_pLbLanguage->SelectLanguage( eLang );
-    FillAlgorHdl(m_pLbLanguage);               // get algorithms, select default
+    FillAlgorHdl(m_pLbLanguage);               
     if ( !aSortData.aCollatorAlgorithm.isEmpty() )
         m_pLbAlgorithm->SelectEntry( pColRes->GetTranslation( aSortData.aCollatorAlgorithm ) );
 
@@ -718,11 +718,11 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
-    // Create local copy of ScParam
+    
     ScSortParam aNewSortData = aSortData;
 
     if (pDlg)
@@ -746,11 +746,11 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
                                    ? m_pLbSortUser->GetSelectEntryPos()
                                    : 0;
 
-    // get locale
+    
     LanguageType eLang = m_pLbLanguage->GetSelectLanguage();
     aNewSortData.aCollatorLocale = LanguageTag::convertToLocale( eLang, false);
 
-    // get algorithm
+    
     OUString sAlg;
     if ( eLang != LANGUAGE_SYSTEM )
     {
@@ -767,12 +767,12 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
-// for data exchange without dialogue detour:
+
+
 void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 {
-    // Refresh local copy with shared data
+    
     aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
     if ( pDlg )
     {
@@ -793,7 +793,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -810,8 +810,8 @@ int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
         if ( pViewData )
         {
-            //  visible table is default for input without table
-            //  must be changed to GetRefTabNo when sorting has RefInput!
+            
+            
             thePos.SetTab( pViewData->GetTabNo() );
         }
 
@@ -847,7 +847,7 @@ int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
     return bPosInputOk ? SfxTabPage::LEAVE_PAGE : SfxTabPage::KEEP_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::FillUserSortListBox()
 {
@@ -863,8 +863,8 @@ void ScTabPageSortOptions::FillUserSortListBox()
     }
 }
 
-// -----------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
 {
@@ -895,7 +895,7 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 {
@@ -912,7 +912,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 {
@@ -927,7 +927,7 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
@@ -957,7 +957,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
 {
@@ -967,11 +967,11 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
     LanguageType eLang = m_pLbLanguage->GetSelectLanguage();
     if ( eLang == LANGUAGE_SYSTEM )
     {
-        //  for LANGUAGE_SYSTEM no algorithm can be selected because
-        //  it wouldn't necessarily exist for other languages
-        //  -> leave list box empty if LANGUAGE_SYSTEM is selected
-        m_pFtAlgorithm->Enable( false );           // nothing to select
-        m_pLbAlgorithm->Enable( false );           // nothing to select
+        
+        
+        
+        m_pFtAlgorithm->Enable( false );           
+        m_pLbAlgorithm->Enable( false );           
     }
     else
     {
@@ -986,9 +986,9 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
             OUString sUser = pColRes->GetTranslation( sAlg );
             m_pLbAlgorithm->InsertEntry( sUser, LISTBOX_APPEND );
         }
-        m_pLbAlgorithm->SelectEntryPos( 0 );       // first entry is default
-        m_pFtAlgorithm->Enable( nCount > 1 );      // enable only if there is a choice
-        m_pLbAlgorithm->Enable( nCount > 1 );      // enable only if there is a choice
+        m_pLbAlgorithm->SelectEntryPos( 0 );       
+        m_pFtAlgorithm->Enable( nCount > 1 );      
+        m_pLbAlgorithm->Enable( nCount > 1 );      
     }
 
     m_pLbAlgorithm->SetUpdateMode( true );

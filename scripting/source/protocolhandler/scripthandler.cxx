@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scripthandler.hxx"
@@ -77,8 +77,8 @@ void SAL_CALL ScriptProtocolHandler::initialize(
         return ;
     }
 
-    // first argument contains a reference to the frame (may be empty or the desktop,
-    // but usually it's a "real" frame)
+    
+    
     if ( aArguments.getLength() && !( aArguments[ 0 ] >>= m_xFrame ) )
     {
         OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
@@ -97,7 +97,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     (void)nSearchFlags;
 
     Reference< XDispatch > xDispatcher;
-    // get scheme of url
+    
 
     Reference< uri::XUriReferenceFactory > xFac = uri::UriReferenceFactory::create( m_xContext );
     Reference<  uri::XUriReference > uriRef(
@@ -145,11 +145,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         try
         {
             bool bIsDocumentScript = ( aURL.Complete.indexOf( "document" ) !=-1 );
-                // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
+                
 
             if ( bIsDocumentScript )
             {
-                // obtain the component for our security check
+                
                 Reference< XEmbeddedScripts > xDocumentScripts;
                 if ( getScriptInvocation() )
                     xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
@@ -159,7 +159,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                     return;
             }
 
-            // Creates a ScriptProvider ( if one is not created already )
+            
             createScriptProvider();
 
             Reference< provider::XScript > xFunc =
@@ -177,9 +177,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                int argCount = 0;
                for ( int index = 0; index < lArgs.getLength(); index++ )
                {
-                   // Sometimes we get a propertyval with name = "Referer"
-                   // this is not an argument to be passed to script, so
-                   // ignore.
+                   
+                   
+                   
                    if ( lArgs[ index ].Name.compareToAscii("Referer") != 0  ||
                         lArgs[ index ].Name.isEmpty() )
                    {
@@ -189,7 +189,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                }
             }
 
-            // attempt to protect the document against the script tampering with its Undo Context
+            
             ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
             if ( bIsDocumentScript )
                 pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
@@ -209,22 +209,22 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         aFirstCaughtException = ::cppu::getCaughtException();
 
                     if ( se.errorType != provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT )
-                        // the only condition which allows us to retry is if there is no method with the
-                        // given name/signature
+                        
+                        
                         ::cppu::throwException( aFirstCaughtException );
 
                     if ( inArgs.getLength() == 0 )
-                        // no chance to retry if we can't strip more in-args
+                        
                         ::cppu::throwException( aFirstCaughtException );
 
-                    // strip one argument, then retry
+                    
                     inArgs.realloc( inArgs.getLength() - 1 );
                 }
             }
         }
-        // Office doesn't handle exceptions rethrown here very well, it cores,
-        // all we can is log them and then set fail for the dispatch event!
-        // (if there is a listener of course)
+        
+        
+        
         catch ( const Exception & e )
         {
             aException = ::cppu::getCaughtException();
@@ -263,8 +263,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
     if ( xListener.is() )
     {
-        // always call dispatchFinished(), because we didn't load a document but
-        // executed a macro instead!
+        
+        
         ::com::sun::star::frame::DispatchResultEvent aEvent;
 
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
@@ -307,7 +307,7 @@ throw ( RuntimeException )
     (void)xControl;
     (void)aURL;
 
-    // implement if status is supported
+    
 }
 
 void SAL_CALL ScriptProtocolHandler::removeStatusListener(
@@ -326,8 +326,8 @@ ScriptProtocolHandler::getScriptInvocation()
         Reference< XController > xController = m_xFrame->getController();
         if ( xController .is() )
         {
-            // try to obtain an XScriptInvocationContext interface, preferred from the
-            // mode, then from the controller
+            
+            
             if ( !m_xScriptInvocation.set( xController->getModel(), UNO_QUERY ) )
                 m_xScriptInvocation.set( xController, UNO_QUERY );
         }
@@ -342,8 +342,8 @@ void ScriptProtocolHandler::createScriptProvider()
 
     try
     {
-        // first, ask the component supporting the XScriptInvocationContext interface
-        // (if there is one) for a script provider
+        
+        
         if ( getScriptInvocation() )
         {
             Reference< XScriptProviderSupplier > xSPS( m_xScriptInvocation, UNO_QUERY );
@@ -351,7 +351,7 @@ void ScriptProtocolHandler::createScriptProvider()
                 m_xScriptProvider = xSPS->getScriptProvider();
         }
 
-        // second, ask the model in our frame
+        
         if ( !m_xScriptProvider.is() && m_xFrame.is() )
         {
             Reference< XController > xController = m_xFrame->getController();
@@ -364,7 +364,7 @@ void ScriptProtocolHandler::createScriptProvider()
         }
 
 
-        // as a fallback, ask the controller
+        
         if ( !m_xScriptProvider.is() && m_xFrame.is() )
         {
             Reference< XScriptProviderSupplier > xSPS( m_xFrame->getController(), UNO_QUERY );
@@ -372,7 +372,7 @@ void ScriptProtocolHandler::createScriptProvider()
                 m_xScriptProvider = xSPS->getScriptProvider();
         }
 
-        // if nothing of this is successful, use the master script provider
+        
         if ( !m_xScriptProvider.is() )
         {
             Reference< provider::XScriptProviderFactory > xFac =
@@ -464,7 +464,7 @@ const Reference< XMultiServiceFactory >& xServiceManager )
     return xReturn;
 }
 
-} // namespace scripting_protocolhandler
+} 
 
 extern "C"
 {
@@ -474,7 +474,7 @@ extern "C"
     {
         (void)pRegistryKey;
 
-        // Set default return value for this operation - if it failed.
+        
         void * pReturn = NULL ;
 
         if (
@@ -482,7 +482,7 @@ extern "C"
             ( pServiceManager != NULL )
         )
         {
-            // Define variables which are used in following macros.
+            
             ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XSingleServiceFactory > xFactory ;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -495,7 +495,7 @@ extern "C"
                 xFactory = ::scripting_protocolhandler::ScriptProtocolHandler::impl_createFactory( xServiceManager );
             }
 
-            // Factory is valid - service was found.
+            
             if ( xFactory.is() )
             {
                 xFactory->acquire();
@@ -503,10 +503,10 @@ extern "C"
             }
         }
 
-        // Return with result of this operation.
+        
         return pReturn ;
     }
-} // extern "C"
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

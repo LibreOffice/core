@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -86,7 +86,7 @@ SW_DLLPUBLIC OUString MakeSender()
             sRet += rUserOpt.GetCity();
         else if (sToken == "STATEPROV")
             sRet += rUserOpt.GetState();
-        else if (!sToken.isEmpty()) //spaces
+        else if (!sToken.isEmpty()) 
             sRet += sToken;
     }
     return sRet;
@@ -98,8 +98,8 @@ SwEnvItem::SwEnvItem() :
     aAddrText       = aEmptyOUStr;
     bSend           = sal_True;
     aSendText       = MakeSender();
-    lSendFromLeft   = 566; // 1 cm
-    lSendFromTop    = 566; // 1 cm
+    lSendFromLeft   = 566; 
+    lSendFromTop    = 566; 
     Size aEnvSz     = SvxPaperInfo::GetPaperSize(PAPER_ENV_C65);
     lWidth          = aEnvSz.Width();
     lHeight         = aEnvSz.Height();
@@ -188,47 +188,47 @@ SwEnvCfgItem::SwEnvCfgItem() :
             {
                 switch(nProp)
                 {
-                    case  0: pValues[nProp] >>= aEnvItem.aAddrText; break;// "Inscription/Addressee",
-                    case  1: pValues[nProp] >>= aEnvItem.aSendText; break;// "Inscription/Sender",
-                    case  2: aEnvItem.bSend = *(sal_Bool*)pValues[nProp].getValue(); break;// "Inscription/UseSender",
+                    case  0: pValues[nProp] >>= aEnvItem.aAddrText; break;
+                    case  1: pValues[nProp] >>= aEnvItem.aSendText; break;
+                    case  2: aEnvItem.bSend = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case  3:
-                        pValues[nProp] >>= aEnvItem.lAddrFromLeft;// "Format/AddresseeFromLeft",
+                        pValues[nProp] >>= aEnvItem.lAddrFromLeft;
                         aEnvItem.lAddrFromLeft = MM100_TO_TWIP(aEnvItem.lAddrFromLeft);
                     break;
                     case  4:
-                        pValues[nProp] >>= aEnvItem.lAddrFromTop;  // "Format/AddresseeFromTop",
+                        pValues[nProp] >>= aEnvItem.lAddrFromTop;  
                         aEnvItem.lAddrFromTop = MM100_TO_TWIP(aEnvItem.lAddrFromTop);
                     break;
                     case  5:
-                        pValues[nProp] >>= aEnvItem.lSendFromLeft; // "Format/SenderFromLeft",
+                        pValues[nProp] >>= aEnvItem.lSendFromLeft; 
                         aEnvItem.lSendFromLeft = MM100_TO_TWIP(aEnvItem.lSendFromLeft);
                     break;
                     case  6:
-                        pValues[nProp] >>= aEnvItem.lSendFromTop;// "Format/SenderFromTop",
+                        pValues[nProp] >>= aEnvItem.lSendFromTop;
                         aEnvItem.lSendFromTop = MM100_TO_TWIP(aEnvItem.lSendFromTop);
                     break;
                     case  7:
-                        pValues[nProp] >>= aEnvItem.lWidth; // "Format/Width",
+                        pValues[nProp] >>= aEnvItem.lWidth; 
                         aEnvItem.lWidth = MM100_TO_TWIP(aEnvItem.lWidth);
                     break;
                     case  8:
-                        pValues[nProp] >>= aEnvItem.lHeight; // "Format/Height",
+                        pValues[nProp] >>= aEnvItem.lHeight; 
                         aEnvItem.lHeight = MM100_TO_TWIP(aEnvItem.lHeight);
                     break;
                     case  9:
                     {
                         sal_Int32 nTemp = 0;
-                        pValues[nProp] >>= nTemp; aEnvItem.eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
+                        pValues[nProp] >>= nTemp; aEnvItem.eAlign = (SwEnvAlign)nTemp; break;
                     }
-                    case 10: aEnvItem.bPrintFromAbove = *(sal_Bool*)pValues[nProp].getValue(); break;// "Print/FromAbove",
+                    case 10: aEnvItem.bPrintFromAbove = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 11:
                         pValues[nProp] >>= aEnvItem.lShiftRight;
-                        aEnvItem.lShiftRight = MM100_TO_TWIP(aEnvItem.lShiftRight);// "Print/Right",
+                        aEnvItem.lShiftRight = MM100_TO_TWIP(aEnvItem.lShiftRight);
                     break;
                     case 12:
                         pValues[nProp] >>= aEnvItem.lShiftDown;
                         aEnvItem.lShiftDown = MM100_TO_TWIP(aEnvItem.lShiftDown);
-                    break;// "Print/Down"
+                    break;
                 }
             }
         }
@@ -250,19 +250,19 @@ void    SwEnvCfgItem::Commit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= aEnvItem.aAddrText; break;// "Inscription/Addressee",
-            case  1: pValues[nProp] <<= aEnvItem.aSendText; break;// "Inscription/Sender",
-            case  2: pValues[nProp].setValue(&aEnvItem.bSend, rType);break;// "Inscription/UseSender",
-            case  3: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
-            case  4: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lAddrFromTop))  ; break;// "Format/AddresseeFromTop",
-            case  5: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lSendFromLeft)) ; break;// "Format/SenderFromLeft",
-            case  6: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lSendFromTop))  ; break;// "Format/SenderFromTop",
-            case  7: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lWidth))  ; break;// "Format/Width",
-            case  8: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lHeight)) ; break;// "Format/Height",
-            case  9: pValues[nProp] <<= sal_Int32(aEnvItem.eAlign); break;// "Print/Alignment",
-            case 10: pValues[nProp].setValue(&aEnvItem.bPrintFromAbove, rType); break;// "Print/FromAbove",
-            case 11: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lShiftRight));break; // "Print/Right",
-            case 12: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lShiftDown)); break;// "Print/Down"
+            case  0: pValues[nProp] <<= aEnvItem.aAddrText; break;
+            case  1: pValues[nProp] <<= aEnvItem.aSendText; break;
+            case  2: pValues[nProp].setValue(&aEnvItem.bSend, rType);break;
+            case  3: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lAddrFromLeft)) ; break;
+            case  4: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lAddrFromTop))  ; break;
+            case  5: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lSendFromLeft)) ; break;
+            case  6: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lSendFromTop))  ; break;
+            case  7: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lWidth))  ; break;
+            case  8: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lHeight)) ; break;
+            case  9: pValues[nProp] <<= sal_Int32(aEnvItem.eAlign); break;
+            case 10: pValues[nProp].setValue(&aEnvItem.bPrintFromAbove, rType); break;
+            case 11: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lShiftRight));break; 
+            case 12: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lShiftDown)); break;
         }
     }
     PutProperties(aNames, aValues);
@@ -274,19 +274,19 @@ Sequence<OUString> SwEnvCfgItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Inscription/Addressee",    //  0
-        "Inscription/Sender",       //  1
-        "Inscription/UseSender",    //  2
-        "Format/AddresseeFromLeft", //  3
-        "Format/AddresseeFromTop",  //  4
-        "Format/SenderFromLeft",    //  5
-        "Format/SenderFromTop",     //  6
-        "Format/Width",             //  7
-        "Format/Height",            //  8
-        "Print/Alignment",          //  9
-        "Print/FromAbove",          // 10
-        "Print/Right",              // 11
-        "Print/Down"                // 12
+        "Inscription/Addressee",    
+        "Inscription/Sender",       
+        "Inscription/UseSender",    
+        "Format/AddresseeFromLeft", 
+        "Format/AddresseeFromTop",  
+        "Format/SenderFromLeft",    
+        "Format/SenderFromTop",     
+        "Format/Width",             
+        "Format/Height",            
+        "Print/Alignment",          
+        "Print/FromAbove",          
+        "Print/Right",              
+        "Print/Down"                
     };
     const int nCount = 13;
     Sequence<OUString> aNames(nCount);

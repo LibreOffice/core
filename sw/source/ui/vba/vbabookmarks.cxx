@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbabookmarks.hxx"
 #include "vbabookmark.hxx"
@@ -45,7 +45,7 @@ public:
 
 };
 
-// Bookmarks use case-insensitive name lookup in MS Word.
+
 typedef ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess > BookmarkCollectionHelper_BASE;
 class BookmarkCollectionHelper : public BookmarkCollectionHelper_BASE
 {
@@ -58,10 +58,10 @@ public:
     {
         mxNameAccess.set( mxIndexAccess, uno::UNO_QUERY_THROW );
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  mxIndexAccess->getElementType(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return mxIndexAccess->hasElements(); }
-    // XNameAcess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -94,7 +94,7 @@ public:
         }
         return sal_False;
     }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return mxIndexAccess->getCount();
@@ -110,7 +110,7 @@ SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParen
     mxBookmarksSupplier.set( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
 }
-// XEnumerationAccess
+
 uno::Type
 SwVbaBookmarks::getElementType() throw (uno::RuntimeException)
 {
@@ -159,11 +159,11 @@ SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange ) throw (uno:
     }
     else
     {
-        // FIXME: insert the bookmark into current view cursor
+        
         xTextRange.set( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );
     }
 
-    // remove the exist bookmark
+    
     OUString aName = rName;
     if( m_xNameAccess->hasByName( aName ) )
         removeBookmarkByName( aName );
@@ -182,7 +182,7 @@ SwVbaBookmarks::getDefaultSorting() throw (css::uno::RuntimeException)
 void SAL_CALL
 SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ ) throw (css::uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 sal_Bool SAL_CALL
@@ -194,7 +194,7 @@ SwVbaBookmarks::getShowHidden() throw (css::uno::RuntimeException)
 void SAL_CALL
 SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ ) throw (css::uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 sal_Bool SAL_CALL

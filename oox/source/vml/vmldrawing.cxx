@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/vml/vmldrawing.hxx"
@@ -37,7 +37,7 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -49,14 +49,14 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
 /** Returns the textual representation of a numeric VML shape identifier. */
 OUString lclGetShapeId( sal_Int32 nShapeId )
 {
-    // identifier consists of a literal NUL character, a lowercase 's', and the id
+    
     sal_Unicode aStr[2] = { '\0', 's' };
     return OUString( aStr, 2 ) + OUString::number( nShapeId );
 }
@@ -64,13 +64,13 @@ OUString lclGetShapeId( sal_Int32 nShapeId )
 /** Returns the numeric VML shape identifier from its textual representation. */
 sal_Int32 lclGetShapeId( const OUString& rShapeId )
 {
-    // identifier consists of a literal NUL character, a lowercase 's', and the id
+    
     return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? rShapeId.copy( 2 ).toInt32() : -1;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 OleObjectInfo::OleObjectInfo( bool bDmlShape ) :
     mbAutoLoad( false ),
@@ -83,7 +83,7 @@ void OleObjectInfo::setShapeId( sal_Int32 nShapeId )
     maShapeId = lclGetShapeId( nShapeId );
 }
 
-// ============================================================================
+
 
 ControlInfo::ControlInfo()
 {
@@ -94,7 +94,7 @@ void ControlInfo::setShapeId( sal_Int32 nShapeId )
     maShapeId = lclGetShapeId( nShapeId );
 }
 
-// ============================================================================
+
 
 Drawing::Drawing( XmlFilterBase& rFilter, const Reference< XDrawPage >& rxDrawPage, DrawingType eType ) :
     mrFilter( rFilter ),
@@ -122,7 +122,7 @@ void Drawing::registerBlockId( sal_Int32 nBlockId )
     OSL_ENSURE( nBlockId > 0, "Drawing::registerBlockId - invalid block index" );
     if( nBlockId > 0 )
     {
-        // lower_bound() returns iterator pointing to element equal to nBlockId, if existing
+        
         BlockIdVector::iterator aIt = ::std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
         if( (aIt == maBlockIds.end()) || (nBlockId != *aIt) )
             maBlockIds.insert( aIt, nBlockId );
@@ -180,19 +180,19 @@ sal_Int32 Drawing::getLocalShapeIndex( const OUString& rShapeId ) const
             Shape identifier 4096 -> local shape index 2048.
      */
 
-    // get block id from shape id and find its index in the list of used blocks
+    
     sal_Int32 nBlockId = (nShapeId - 1) / 1024;
     BlockIdVector::iterator aIt = ::std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
     sal_Int32 nIndex = static_cast< sal_Int32 >( aIt - maBlockIds.begin() );
 
-    // block id not found in set -> register it now (value of nIndex remains valid)
+    
     if( (aIt == maBlockIds.end()) || (*aIt != nBlockId) )
         maBlockIds.insert( aIt, nBlockId );
 
-    // get one-based offset of shape id in its block
+    
     sal_Int32 nBlockOffset = (nShapeId - 1) % 1024 + 1;
 
-    // calculate the local shape index
+    
     return 1024 * nIndex + nBlockOffset;
 }
 
@@ -218,7 +218,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         xShape.set( xModelFactory->createInstance( rService ), UNO_QUERY_THROW );
         if ( !rService.equalsAscii( "com.sun.star.text.TextFrame" ) )
         {
-            // insert shape into passed shape collection (maybe drawpage or group shape)
+            
             rxShapes->add( xShape );
             xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
         }
@@ -248,13 +248,13 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
     Reference< XShape > xShape;
     try
     {
-        // create control model and insert it into the form of the draw page
+        
         Reference< XControlModel > xCtrlModel( getControlForm().convertAndInsert( rControl, rnCtrlIndex ), UNO_SET_THROW );
 
-        // create the control shape
+        
         xShape = createAndInsertXShape( "com.sun.star.drawing.ControlShape", rxShapes, rShapeRect );
 
-        // set the control model at the shape
+        
         Reference< XControlShape >( xShape, UNO_QUERY_THROW )->setControl( xCtrlModel );
     }
     catch (Exception const& e)
@@ -290,9 +290,9 @@ void Drawing::notifyXShapeInserted( const Reference< XShape >& /*rxShape*/,
 {
 }
 
-// ============================================================================
 
-} // namespace vml
-} // namespave oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

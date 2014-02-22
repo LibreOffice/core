@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rtattributehandler.hxx"
@@ -35,71 +35,71 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/scripttypeitem.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
-    //====================================================================
-    //= ReferenceBase
-    //====================================================================
-    //--------------------------------------------------------------------
+
+    
+    
+    
+    
     oslInterlockedCount SAL_CALL ReferenceBase::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL ReferenceBase::release()
     {
         return osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     ReferenceBase::~ReferenceBase()
     {
     }
 
-    //====================================================================
-    //= AttributeHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     AttributeHandler::AttributeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :m_nAttribute( _nAttributeId )
         ,m_nWhich    ( _nWhichId     )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeHandler::~AttributeHandler()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL AttributeHandler::acquire()
     {
         return ReferenceBase::acquire();
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL AttributeHandler::release()
     {
         return ReferenceBase::release();
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeId AttributeHandler::getAttributeId( ) const
     {
         return getAttribute();
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState AttributeHandler::implGetCheckState( const SfxPoolItem& /*_rItem*/ ) const
     {
         OSL_FAIL( "AttributeHandler::implGetCheckState: not to be called!" );
         return eIndetermined;
     }
 
-    //--------------------------------------------------------------------
+    
     void AttributeHandler::putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, ScriptType _nForScriptType ) const
     {
         SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
@@ -107,7 +107,7 @@ namespace frm
         _rAttribs.Put( aSetItem.GetItemSet(), false );
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState AttributeHandler::getCheckState( const SfxItemSet& _rAttribs ) const
     {
         AttributeCheckState eSimpleState( eIndetermined );
@@ -117,7 +117,7 @@ namespace frm
         return eSimpleState;
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeState AttributeHandler::getState( const SfxItemSet& _rAttribs ) const
     {
         AttributeState aState( eIndetermined );
@@ -125,10 +125,10 @@ namespace frm
         return aState;
     }
 
-    //====================================================================
-    //= AttributeHandlerFactory
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     namespace
     {
         static WhichId lcl_implGetWhich( const SfxItemPool& _rPool, AttributeId _nAttributeId )
@@ -148,7 +148,7 @@ namespace frm
             return nWhich;
         }
     }
-    //--------------------------------------------------------------------
+    
     ::rtl::Reference< IAttributeHandler > AttributeHandlerFactory::getHandlerFor( AttributeId _nAttributeId, const SfxItemPool& _rEditEnginePool )
     {
         ::rtl::Reference< IAttributeHandler > pReturn;
@@ -199,10 +199,10 @@ namespace frm
         return pReturn;
     }
 
-    //====================================================================
-    //= ParaAlignmentHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ParaAlignmentHandler::ParaAlignmentHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_JUST )
         ,m_eAdjust( SVX_ADJUST_CENTER )
@@ -219,7 +219,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState ParaAlignmentHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxAdjustItem ), "ParaAlignmentHandler::implGetCheckState: invalid pool item!" );
@@ -227,7 +227,7 @@ namespace frm
         return ( eAdjust == m_eAdjust ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+    
     void ParaAlignmentHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "ParaAlignmentHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
@@ -235,10 +235,10 @@ namespace frm
         _rNewAttribs.Put( SvxAdjustItem( m_eAdjust, getWhich() ) );
     }
 
-    //====================================================================
-    //= LineSpacingHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     LineSpacingHandler::LineSpacingHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_SBL )
         ,m_nLineSpace( 100 )
@@ -254,7 +254,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState LineSpacingHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxLineSpacingItem ), "LineSpacingHandler::implGetCheckState: invalid pool item!" );
@@ -262,7 +262,7 @@ namespace frm
         return ( nLineSpace == m_nLineSpace ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+    
     void LineSpacingHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "LineSpacingHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
@@ -278,10 +278,10 @@ namespace frm
         _rNewAttribs.Put( aLineSpacing );
     }
 
-    //====================================================================
-    //= EscapementHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     EscapementHandler::EscapementHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_CHAR_ESCAPEMENT )
         ,m_eEscapement( SVX_ESCAPEMENT_OFF )
@@ -296,7 +296,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState EscapementHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxEscapementItem ), "EscapementHandler::getState: invalid pool item!" );
@@ -304,21 +304,21 @@ namespace frm
         return ( eEscapement == m_eEscapement ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+    
     void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "EscapementHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
-            // well, in theory we could allow an SvxEscapementItem here, but this is not needed
+            
         (void)_pAdditionalArg;
 
         bool bIsChecked = getCheckState( _rCurrentAttribs ) == eChecked;
         _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SVX_ESCAPEMENT_OFF : m_eEscapement, getWhich() ) );
     }
 
-    //====================================================================
-    //= SlotHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     SlotHandler::SlotHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
         ,m_bScriptDependent( false )
@@ -328,7 +328,7 @@ namespace frm
                          ||  ( SID_ATTR_CHAR_FONT == _nAttributeId );
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeState SlotHandler::getState( const SfxItemSet& _rAttribs ) const
     {
         AttributeState aState( eIndetermined );
@@ -340,7 +340,7 @@ namespace frm
         return aState;
     }
 
-    //--------------------------------------------------------------------
+    
     void SlotHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
     {
         if ( _pAdditionalArg )
@@ -358,10 +358,10 @@ namespace frm
             OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
     }
 
-    //====================================================================
-    //= FontSizeHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FontSizeHandler::FontSizeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
     {
@@ -370,7 +370,7 @@ namespace frm
             "FontSizeHandler::FontSizeHandler: invalid attribute id!" );
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeState FontSizeHandler::getState( const SfxItemSet& _rAttribs ) const
     {
         AttributeState aState( eIndetermined );
@@ -380,7 +380,7 @@ namespace frm
         OSL_ENSURE( pFontHeightItem || !pItem, "FontSizeHandler::getState: invalid item!" );
         if ( pFontHeightItem )
         {
-            // by definition, the item should have the unit twip
+            
             sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
             {
@@ -399,7 +399,7 @@ namespace frm
         return aState;
     }
 
-    //--------------------------------------------------------------------
+    
     void FontSizeHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
     {
         const SvxFontHeightItem* pFontHeightItem = PTR_CAST( SvxFontHeightItem, _pAdditionalArg );
@@ -407,7 +407,7 @@ namespace frm
 
         if ( pFontHeightItem )
         {
-            // corect measurement units
+            
             SfxMapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
             sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
@@ -429,10 +429,10 @@ namespace frm
         }
     }
 
-    //====================================================================
-    //= ParagraphDirectionHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
         ,m_eParagraphDirection( FRMDIR_HORI_LEFT_TOP )
@@ -453,7 +453,7 @@ namespace frm
             m_eOppositeDefaultAdjustment = SVX_ADJUST_RIGHT;
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState ParagraphDirectionHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxFrameDirectionItem ), "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
@@ -461,13 +461,13 @@ namespace frm
         return ( eDirection == m_eParagraphDirection ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+    
     void ParagraphDirectionHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* /*_pAdditionalArg*/, ScriptType /*_nForScriptType*/ ) const
     {
         _rNewAttribs.Put( SvxFrameDirectionItem( m_eParagraphDirection, getWhich() ) );
 
-        // if the current adjustment of the was the default adjustment for the *previous* text direction,
-        // then we toggle the adjustment, too
+        
+        
         SvxAdjust eCurrentAdjustment = SVX_ADJUST_LEFT;
         const SfxPoolItem* pCurrentAdjustment = NULL;
         if ( SFX_ITEM_ON == _rCurrentAttribs.GetItemState( EE_PARA_JUST, true, &pCurrentAdjustment ) )
@@ -477,16 +477,16 @@ namespace frm
             _rNewAttribs.Put( SvxAdjustItem( m_eDefaultAdjustment, EE_PARA_JUST ) );
     }
 
-    //====================================================================
-    //= BooleanHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     BooleanHandler::BooleanHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeCheckState BooleanHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SfxBoolItem ), "BooleanHandler::implGetCheckState: invalid item!" );
@@ -496,7 +496,7 @@ namespace frm
         return eIndetermined;
     }
 
-    //--------------------------------------------------------------------
+    
     void BooleanHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( _pAdditionalArg && _pAdditionalArg->ISA( SfxBoolItem ), "BooleanHandler::executeAttribute: invalid argument!" );
@@ -509,8 +509,8 @@ namespace frm
         }
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "mtvelements.hxx"
@@ -38,7 +38,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
         std::pair<TablesType::iterator,bool> r =
             maTables.insert(TablesType::value_type(nTab, ColumnsType()));
         if (!r.second)
-            // insertion failed.
+            
             return NULL;
 
         itTab = r.first;
@@ -48,7 +48,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
 
     ColumnsType::iterator it = rCols.find(nCol);
     if (it != rCols.end())
-        // Block position for this column has already been fetched.
+        
         return &it->second;
 
     std::pair<ColumnsType::iterator,bool> r =
@@ -56,7 +56,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
             ColumnsType::value_type(nCol, ColumnBlockPosition()));
 
     if (!r.second)
-        // insertion failed.
+        
         return NULL;
 
     it = r.first;
@@ -78,17 +78,17 @@ ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t
     switch (itPos->type)
     {
         case sc::element_type_numeric:
-            // Numeric cell
+            
             return ScRefCellValue(sc::numeric_block::at(*itPos->data, nOffset));
         case sc::element_type_string:
-            // String cell
+            
             return ScRefCellValue(&sc::string_block::at(*itPos->data, nOffset));
         case sc::element_type_edittext:
-            // Edit cell
+            
             return ScRefCellValue(sc::edittext_block::at(*itPos->data, nOffset));
         break;
         case sc::element_type_formula:
-            // Formula cell
+            
             return ScRefCellValue(sc::formula_block::at(*itPos->data, nOffset));
         default:
             ;

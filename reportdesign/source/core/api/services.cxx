@@ -39,7 +39,7 @@ using namespace ::com::sun::star::registry;
 
 //***************************************************************************************
 //
-// registry functions
+
 namespace
 {
 
@@ -75,6 +75,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL rpt_component_getFactory(
         implName, serviceManager, registryKey, entries);
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

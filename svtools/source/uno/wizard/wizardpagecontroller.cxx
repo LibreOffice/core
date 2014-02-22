@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,10 +27,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
+
 namespace svt { namespace uno
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -50,10 +50,10 @@ namespace svt { namespace uno
 
     using namespace ::com::sun::star;
 
-    //==================================================================================================================
-    //= WizardPageController
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     WizardPageController::WizardPageController( WizardShell& i_rParent, const Reference< XWizardController >& i_rController,
             const sal_Int16 i_nPageId )
         :m_xController( i_rController )
@@ -81,7 +81,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     WizardPageController::~WizardPageController()
     {
         try
@@ -95,7 +95,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TabPage* WizardPageController::getTabPage() const
     {
         ENSURE_OR_RETURN( m_xWizardPage.is(), "WizardPageController::getTabPage: no external wizard page!", NULL );
@@ -105,8 +105,8 @@ namespace svt { namespace uno
             Window* pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
             if ( pPageWindow == NULL )
             {
-                // windows created via the XContainerWindowProvider might be controls, not real windows, so resolve
-                // that one indirection
+                
+                
                 const Reference< XControl > xPageControl( m_xWizardPage->getWindow(), UNO_QUERY_THROW );
                 xPageWindow.set( xPageControl->getPeer(), UNO_QUERY_THROW );
                 pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
@@ -122,7 +122,7 @@ namespace svt { namespace uno
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void WizardPageController::initializePage()
     {
         if ( !m_xWizardPage.is() )
@@ -138,7 +138,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool WizardPageController::commitPage( WizardTypes::CommitPageReason i_eReason )
     {
         if ( !m_xWizardPage.is() )
@@ -156,7 +156,7 @@ namespace svt { namespace uno
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool WizardPageController::canAdvance() const
     {
         if ( !m_xWizardPage.is() )
@@ -174,8 +174,8 @@ namespace svt { namespace uno
         return true;
     }
 
-//......................................................................................................................
-} } // namespace svt::uno
-//......................................................................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "docxtablestyleexport.hxx"
@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 using namespace oox;
 
-/// Methods in this class handle values in a table style.
+
 struct DocxTableStyleExport::Impl
 {
     SwDoc* m_pDoc;
@@ -32,44 +32,44 @@ struct DocxTableStyleExport::Impl
 
     void TableStyle(uno::Sequence<beans::PropertyValue>& rStyle);
 
-    /// Handles a boolean value.
+    
     void handleBoolean(OUString aValue, sal_Int32 nToken);
 
-    /// Export of w:pPr.
+    
     void tableStylePPr(uno::Sequence<beans::PropertyValue>& rPPr);
-    /// Export of w:tblStylePr.
+    
     void tableStyleTblStylePr(uno::Sequence<beans::PropertyValue>& rTblStylePr);
-    /// Export of w:rPr.
+    
     void tableStyleRPr(uno::Sequence<beans::PropertyValue>& rRPr);
-    /// Export of w:rFonts.
+    
     void tableStyleRRFonts(uno::Sequence<beans::PropertyValue>& rRFonts);
-    /// Export of w:lang.
+    
     void tableStyleRLang(uno::Sequence<beans::PropertyValue>& rLang);
-    /// Export of w:ind in a pPr.
+    
     void tableStylePInd(uno::Sequence<beans::PropertyValue>& rInd);
-    /// Export of w:spacing.
+    
     void tableStylePSpacing(uno::Sequence<beans::PropertyValue>& rSpacing);
-    /// Export of w:tblPr.
+    
     void tableStyleTblPr(uno::Sequence<beans::PropertyValue>& rTblPr);
-    /// Export of w:tcPr.
+    
     void tableStyleTcPr(uno::Sequence<beans::PropertyValue>& rTcPr);
-    /// Export of w:tcBorders (and w:tblBorders).
+    
     void tableStyleTcBorders(uno::Sequence<beans::PropertyValue>& rTcBorders, sal_Int32 nToken = XML_tcBorders);
-    /// Export of w:tblInd.
+    
     void tableStyleTblInd(uno::Sequence<beans::PropertyValue>& rTblInd);
-    /// Export of w:tblCellMar (and w:tcMar).
+    
     void tableStyleTblCellMar(uno::Sequence<beans::PropertyValue>& rTblCellMar, sal_Int32 nType = XML_tblCellMar);
-    /// Export of a given table cell border type.
+    
     void tableStyleTcBorder(sal_Int32 nToken, const uno::Sequence<beans::PropertyValue>& rTcBorder);
-    /// Export of w:shd.
+    
     void tableStyleShd(uno::Sequence<beans::PropertyValue>& rShd);
-    /// Export of w:color.
+    
     void tableStyleRColor(uno::Sequence<beans::PropertyValue>& rColor);
 };
 
 void DocxTableStyleExport::TableStyles()
 {
-    // Do we have table styles from InteropGrabBag available?
+    
     uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
@@ -281,12 +281,12 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::Propert
         else if (rSpacing[i].Name == "beforeLines")
             pAttributeList->add(FSNS(XML_w, XML_beforeLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rSpacing[i].Name == "ParaTopMarginBeforeAutoSpacing")
-            // Auto spacing will be available in grab bag only if it was set to true
+            
             pAttributeList->add(FSNS(XML_w, XML_beforeAutospacing), "1");
         else if (rSpacing[i].Name == "afterLines")
             pAttributeList->add(FSNS(XML_w, XML_afterLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rSpacing[i].Name == "ParaBottomMarginAfterAutoSpacing")
-            // Auto spacing will be available in grab bag only if it was set to true
+            
             pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), "1");
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
@@ -379,7 +379,7 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
             else
             {
                 aSpacingSequence = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >() ;
-                bSequenceFlag = true ; // set the uno::Sequence flag.
+                bSequenceFlag = true ; 
             }
         }
     }
@@ -548,7 +548,7 @@ void DocxTableStyleExport::Impl::tableStyleTblStylePr(uno::Sequence<beans::Prope
         tableStyleTblPr(aTblPr);
     else
     {
-        // Even if we have an empty container, write it out, as Word does.
+        
         m_pSerializer->singleElementNS(XML_w, XML_tblPr, FSEND);
     }
     tableStyleTcPr(aTcPr);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -90,8 +90,8 @@ sal_Bool XMLStyleExport::exportStyle(
             xPropSet->getPropertySetInfo();
     Any aAny;
 
-    // Don't export styles that aren't existing really. This may be the
-    // case for StarOffice Writer's pool styles.
+    
+    
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
@@ -99,10 +99,10 @@ sal_Bool XMLStyleExport::exportStyle(
             return sal_False;
     }
 
-    // <style:style ...>
+    
     GetExport().CheckAttrList();
 
-    // style:name="..."
+    
     OUString sName;
 
     if(pPrefix)
@@ -117,7 +117,7 @@ sal_Bool XMLStyleExport::exportStyle(
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
                                    sName);
 
-    // style:family="..."
+    
     if( !rXMLFamily.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, rXMLFamily);
 
@@ -129,7 +129,7 @@ sal_Bool XMLStyleExport::exportStyle(
             GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
     }
 
-    // style:parent-style-name="..."
+    
     OUString sParentString(rStyle->getParentStyle());
     OUString sParent;
 
@@ -146,7 +146,7 @@ sal_Bool XMLStyleExport::exportStyle(
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
                                     GetExport().EncodeStyleName( sParent ) );
 
-    // style:next-style-name="..." (paragraph styles only)
+    
     if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
     {
         aAny = xPropSet->getPropertyValue( sFollowStyle );
@@ -159,7 +159,7 @@ sal_Bool XMLStyleExport::exportStyle(
         }
     }
 
-    // style:auto-update="..." (SW only)
+    
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
         aAny = xPropSet->getPropertyValue( sIsAutoUpdate );
@@ -168,7 +168,7 @@ sal_Bool XMLStyleExport::exportStyle(
                                       XML_TRUE );
     }
 
-    // style:default-outline-level"..."
+    
     sal_Int32 nOutlineLevel = 0;
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
     {
@@ -201,7 +201,7 @@ sal_Bool XMLStyleExport::exportStyle(
         }
     }
 
-    // style:list-style-name="..." (SW paragarph styles only)
+    
     if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
         Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
@@ -226,7 +226,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 }
                 else
                 {
-                    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+                    
                     bool bSuppressListStyle( false );
                     {
                         if ( !GetExport().writeOutlineStyleAsNormalListStyle() )
@@ -301,22 +301,22 @@ sal_Bool XMLStyleExport::exportStyle(
         }
     }
 
-    // style:pool-id="..." is not required any longer since we use
-    // english style names only
+    
+    
     exportStyleAttributes( rStyle );
 
-    // TODO: style:help-file-name="..." and style:help-id="..." can neither
-    // be modified by UI nor by API and that for, have not to be exported
-    // currently.
+    
+    
+    
 
     {
-        // <style:style>
+        
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_STYLE,
                                   sal_True, sal_True );
 
         rPropMapper->SetStyleName( sName );
 
-        // <style:properties>
+        
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->Filter( xPropSet, true );
         rPropMapper->exportXML( GetExport(), xPropStates,
@@ -326,7 +326,7 @@ sal_Bool XMLStyleExport::exportStyle(
 
         exportStyleContent( rStyle );
 
-        // <script:events>, if they are supported by this style
+        
         Reference<XEventsSupplier> xEventsSupp(rStyle, UNO_QUERY);
         GetExport().GetEventExport().Export(xEventsSupp);
     }
@@ -341,19 +341,19 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
-    // <style:default-style ...>
+    
     GetExport().CheckAttrList();
 
     {
-        // style:family="..."
+        
         if( !rXMLFamily.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY,
                                       rXMLFamily );
-        // <style:style>
+        
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_DEFAULT_STYLE,
                                   sal_True, sal_True );
-        // <style:properties>
+        
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport(), xPropStates,
@@ -381,7 +381,7 @@ void XMLStyleExport::exportStyleFamily(
     DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );
     if( !xFamiliesSupp.is() )
-        return; // family not available in current model
+        return; 
 
     Reference< XNameAccess > xStyleCont;
 
@@ -392,9 +392,9 @@ void XMLStyleExport::exportStyleFamily(
     if( !xStyleCont.is() )
         return;
 
-       // If next styles are supported and used styles should be exported only,
-    // the next style may be unused but has to be exported, too. In this case
-    // the names of all exported styles are remembered.
+       
+    
+    
     boost::scoped_ptr<std::set<OUString> > pExportedStyles(0);
     sal_Bool bFirstStyle = sal_True;
 
@@ -410,10 +410,10 @@ void XMLStyleExport::exportStyleFamily(
         }
         catch(const lang::IndexOutOfBoundsException&)
         {
-            // due to bugs in prior versions it is possible that
-            // a binary file is missing some critical styles.
-            // The only possible way to deal with this is to
-            // not export them here and remain silent.
+            
+            
+            
+            
             continue;
         }
 
@@ -426,8 +426,8 @@ void XMLStyleExport::exportStyleFamily(
                                               xStyleCont,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {
-                    // If this is the first style, find out whether next styles
-                    // are supported.
+                    
+                    
                     Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
                     Reference< XPropertySetInfo > xPropSetInfo =
                         xPropSet->getPropertySetInfo();
@@ -439,13 +439,13 @@ void XMLStyleExport::exportStyleFamily(
 
                 if( pExportedStyles && bExported )
                 {
-                    // If next styles are supported, remember this style's name.
+                    
                     pExportedStyles->insert( xStyle->getName() );
                 }
             }
 
-            // if an auto style pool is given, remember this style's name as a
-            // style name that must not be used by automatic styles.
+            
+            
             if( pAutoStylePool )
                 pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
         }
@@ -453,8 +453,8 @@ void XMLStyleExport::exportStyleFamily(
 
     if( pExportedStyles )
     {
-        // if next styles are supported, export all next styles that are
-        // unused and that for, haven't been exported in the first loop.
+        
+        
         pIter = aSeq.getConstArray();
         for(;pIter != pEnd;++pIter)
         {
@@ -467,7 +467,7 @@ void XMLStyleExport::exportStyleFamily(
                 Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
                 Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-                // styles that aren't existing really are ignored.
+                
                 if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
                 {
                     Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );
@@ -487,8 +487,8 @@ void XMLStyleExport::exportStyleFamily(
                 OUString sNextName;
                 xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
                 OUString sTmp( sNextName );
-                // if the next style hasn't been exported by now, export it now
-                // and remember its name.
+                
+                
                 if( xStyle->getName() != sNextName &&
                     0 == pExportedStyles->count( sTmp ) )
                 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,10 +26,10 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
-// Define the default value for the maximal cache size that is used for
-// previews that are currently not visible.  The visible previews are all
-// held in memory at all times.  This default is used only when the
-// configuration does not have a value.
+
+
+
+
 static const sal_Int32 MAXIMAL_CACHE_SIZE = 4L*1024L*1024L;
 
 using namespace ::com::sun::star::uno;
@@ -75,8 +75,8 @@ private:
     Size maBitmapSize;
     bool mbIsUpToDate;
     sal_Int32 mnLastAccessTime;
-    // When this flag is set then the bitmap is not modified by a cache
-    // compactor.
+    
+    
     bool mbIsPrecious;
 };
 class CacheEntry;
@@ -116,10 +116,10 @@ typedef ::std::vector<
     };
 
 
-} // end of anonymous namespace
+} 
 
 
-//=====  BitmapCache  =========================================================
+
 
 BitmapCache::BitmapCache (const sal_Int32 nMaximalNormalCacheSize)
     : maMutex(),
@@ -217,8 +217,8 @@ Bitmap BitmapCache::GetBitmap (const CacheKey& rKey)
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry == mpBitmapContainer->end())
     {
-        // Create an empty bitmap for the given key that acts as placeholder
-        // until we are given the real one.  Mark it as not being up to date.
+        
+        
         SetBitmap(rKey, Bitmap(), false);
         iEntry = mpBitmapContainer->find(rKey);
         iEntry->second.SetUpToDate(false);
@@ -227,7 +227,7 @@ Bitmap BitmapCache::GetBitmap (const CacheKey& rKey)
     {
         iEntry->second.SetAccessTime(mnCurrentAccessTime++);
 
-        // Maybe we have to decompress the preview.
+        
         if ( ! iEntry->second.HasPreview() && iEntry->second.HasReplacement())
         {
             UpdateCacheSize(iEntry->second, REMOVE);
@@ -282,8 +282,8 @@ bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
     {
         iEntry->second.SetUpToDate(false);
 
-        // When there is a preview then we release the replacement.  The
-        // preview itself is kept until a new one is created.
+        
+        
         if (iEntry->second.HasPreview())
         {
             UpdateCacheSize(iEntry->second, REMOVE);
@@ -448,11 +448,11 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Create a copy of the bitmap container.
+    
     SortableBitmapContainer aSortedContainer;
     aSortedContainer.reserve(mpBitmapContainer->size());
 
-    // Copy the relevant entries.
+    
     CacheBitmapContainer::iterator iEntry;
     for (iEntry=mpBitmapContainer->begin(); iEntry!=mpBitmapContainer->end(); ++iEntry)
     {
@@ -466,10 +466,10 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             iEntry->first,iEntry->second));
     }
 
-    // Sort the remaining entries.
+    
     ::std::sort(aSortedContainer.begin(), aSortedContainer.end(), AccessTimeComparator());
 
-    // Return a list with the keys of the sorted entries.
+    
     ::std::auto_ptr<CacheIndex> pIndex(new CacheIndex());
     SortableBitmapContainer::iterator iIndexEntry;
     pIndex->reserve(aSortedContainer.size());
@@ -530,7 +530,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
 
 
 
-//===== CacheEntry ============================================================
+
 
 BitmapCache::CacheEntry::CacheEntry(
     sal_Int32 nLastAccessTime,
@@ -667,6 +667,6 @@ inline bool BitmapCache::CacheEntry::HasLosslessReplacement (void) const
 }
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

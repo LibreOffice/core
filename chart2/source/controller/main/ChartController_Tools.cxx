@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartController.hxx"
@@ -52,24 +52,24 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <svx/ActionDescriptionProvider.hxx>
-// for TransferableDataHelper/TransferableHelper
+
 #include <svtools/transfer.hxx>
-// for SotStorageStreamRef
+
 #include <sot/storage.hxx>
-// for Graphic
+
 #include <vcl/graph.hxx>
-// for SvxDrawingLayerImport/SvxUnoDrawingModel
+
 #include <svx/unomodel.hxx>
-// for SdrModel
+
 #include <svx/svdmodel.hxx>
-// for OInputStreamWrapper
+
 #include <unotools/streamwrap.hxx>
-// for SolarMutex
+
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-// for OutlinerView
+
 #include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
@@ -157,7 +157,7 @@ bool lcl_deleteDataCurve(
     return bResult;
 }
 
-} // anonymous namespace
+} 
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider()
@@ -182,8 +182,8 @@ void ChartController::impl_adaptDataSeriesAutoResize()
 
 void ChartController::executeDispatch_NewArrangement()
 {
-    // remove manual positions at titles, legend and the diagram, remove manual
-    // size at the diagram
+    
+    
 
     try
     {
@@ -191,22 +191,22 @@ void ChartController::executeDispatch_NewArrangement()
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
         if( xDiagram.is())
         {
-            // using assignment for broken gcc 3.3
+            
             UndoGuard aUndoGuard = UndoGuard(
                 SCH_RESSTR( STR_ACTION_REARRANGE_CHART ),
                 m_xUndoManager );
             ControllerLockGuardUNO aCtlLockGuard( xModel );
 
-            // diagram
+            
             Reference< beans::XPropertyState > xState( xDiagram, uno::UNO_QUERY_THROW );
             xState->setPropertyToDefault( "RelativeSize");
             xState->setPropertyToDefault( "RelativePosition");
             xState->setPropertyToDefault( "PosSizeExcludeAxes");
 
-            // 3d rotation
+            
             ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );
 
-            // legend
+            
             Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );
             if( xLegendState.is())
             {
@@ -215,7 +215,7 @@ void ChartController::executeDispatch_NewArrangement()
                 xLegendState->setPropertyToDefault( "AnchorPosition");
             }
 
-            // titles
+            
             for( sal_Int32 eType = TitleHelper::TITLE_BEGIN;
                  eType < TitleHelper::NORMAL_TITLE_END;
                  ++eType )
@@ -227,7 +227,7 @@ void ChartController::executeDispatch_NewArrangement()
                     xTitleState->setPropertyToDefault( "RelativePosition");
             }
 
-            // regression curve equations
+            
             ::std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
                 RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
             ::std::for_each( aRegressionCurves.begin(), aRegressionCurves.end(),
@@ -245,7 +245,7 @@ void ChartController::executeDispatch_NewArrangement()
 void ChartController::executeDispatch_ScaleText()
 {
     SolarMutexGuard aSolarGuard;
-    // using assignment for broken gcc 3.3
+    
     UndoGuard aUndoGuard = UndoGuard(
         SCH_RESSTR( STR_ACTION_SCALE_TEXT ),
         m_xUndoManager );
@@ -265,11 +265,11 @@ void ChartController::executeDispatch_Paste()
     if( m_pChartWindow )
     {
         Graphic aGraphic;
-        // paste location: center of window
+        
         Point aPos;
         aPos = m_pChartWindow->PixelToLogic( Rectangle( aPos, m_pChartWindow->GetSizePixel()).Center());
 
-        // handle different formats
+        
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( m_pChartWindow ));
         if( aDataHelper.GetTransferable().is())
         {
@@ -289,21 +289,21 @@ void ChartController::executeDispatch_Paste()
             }
             else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
             {
-                // graphic exchange format (graphic manager bitmap format?)
+                
                 SotStorageStreamRef xStm;
                 if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ))
                     ReadGraphic( *xStm, aGraphic );
             }
             else if( aDataHelper.HasFormat( FORMAT_GDIMETAFILE ))
             {
-                // meta file
+                
                 GDIMetaFile aMetafile;
                 if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMetafile ))
                     aGraphic = Graphic( aMetafile );
             }
             else if( aDataHelper.HasFormat( FORMAT_BITMAP ))
             {
-                // bitmap (non-graphic-manager)
+                
                 BitmapEx aBmpEx;
                 if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ))
                     aGraphic = Graphic( aBmpEx );
@@ -316,7 +316,7 @@ void ChartController::executeDispatch_Paste()
                     if( m_pDrawViewWrapper )
                     {
                         OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-                        if( pOutlinerView )//in case of edit mode insert into edited string
+                        if( pOutlinerView )
                             pOutlinerView->InsertText( aString );
                         else
                         {
@@ -336,14 +336,14 @@ void ChartController::executeDispatch_Paste()
     }
 }
 
-// note: aPosition is ignored for now. The object is always pasted centered to
-// the page
+
+
 void ChartController::impl_PasteGraphic(
     uno::Reference< graphic::XGraphic > & xGraphic,
     const ::Point & /* aPosition */ )
 {
-    // note: the XPropertySet of the model is the old API. Also the property
-    // "AdditionalShapes" that is used there.
+    
+    
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY );
     DrawModelWrapper * pDrawModelWrapper( this->GetDrawModelWrapper());
     if( ! (xGraphic.is() && xModelProp.is()))
@@ -358,13 +358,13 @@ void ChartController::impl_PasteGraphic(
         if( xPage.is())
         {
             xPage->add( xGraphicShape );
-            //need to change the model state manually
+            
             {
                 uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
                 if( xModifiable.is() )
                     xModifiable->setModified( true );
             }
-            //select new shape
+            
             m_aSelection.setSelection( xGraphicShape );
             m_aSelection.applySelection( m_pDrawViewWrapper );
         }
@@ -372,7 +372,7 @@ void ChartController::impl_PasteGraphic(
         uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
 
         awt::Size aGraphicSize( 1000, 1000 );
-        // first try size in 100th mm, then pixel size
+        
         if( ! ( xGraphicProp->getPropertyValue( "Size100thMM") >>= aGraphicSize ) &&
             ( ( xGraphicProp->getPropertyValue( "SizePixel") >>= aGraphicSize ) && m_pChartWindow ))
         {
@@ -410,7 +410,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                         pNewObj->SetModel( &pDrawModelWrapper->getSdrModel() );
                         pNewObj->SetPage( pDestPage );
 
-                        // set position
+                        
                         Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
                         if ( xShape.is() )
                         {
@@ -430,7 +430,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                 xModifiable->setModified( true );
             }
 
-            // select last inserted shape
+            
             m_aSelection.setSelection( xSelShape );
             m_aSelection.applySelection( m_pDrawViewWrapper );
 
@@ -609,14 +609,14 @@ bool ChartController::executeDispatch_Delete()
 {
     bool bReturn = false;
 
-    // remove the selected object
+    
     OUString aCID( m_aSelection.getSelectedCID() );
     if( !aCID.isEmpty() )
     {
         if( !isObjectDeleteable( uno::Any( aCID ) ) )
             return false;
 
-        //remove chart object
+        
         uno::Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
         if( !xChartDoc.is() )
             return false;
@@ -626,7 +626,7 @@ bool ChartController::executeDispatch_Delete()
         {
             case OBJECTTYPE_TITLE:
             {
-                // using assignment for broken gcc 3.3
+                
                 UndoGuard aUndoGuard = UndoGuard(
                     ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_TITLE )),
@@ -645,7 +645,7 @@ bool ChartController::executeDispatch_Delete()
                     uno::Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
                     if( xLegendProp.is())
                     {
-                        // using assignment for broken gcc 3.3
+                        
                         UndoGuard aUndoGuard = UndoGuard(
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_LEGEND )),
@@ -692,7 +692,7 @@ bool ChartController::executeDispatch_Delete()
                         ObjectIdentifier::getFullParentParticle( aCID ), getModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
-                    // using assignment for broken gcc 3.3
+                    
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_AVERAGE_LINE )),
@@ -718,7 +718,7 @@ bool ChartController::executeDispatch_Delete()
                 if( xEqProp.is())
                 {
                     uno::Reference< frame::XModel > xModel( getModel() );
-                    // using assignment for broken gcc 3.3
+                    
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
@@ -752,7 +752,7 @@ bool ChartController::executeDispatch_Delete()
                         nId = STR_OBJECT_ERROR_BARS_Z;
 
                     uno::Reference< frame::XModel > xModel( getModel() );
-                    // using assignment for broken gcc 3.3
+                    
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( nId )),
@@ -826,7 +826,7 @@ bool ChartController::executeDispatch_Delete()
     }
     else
     {
-        //remove additional shape
+        
         impl_ClearSelection();
         {
             SolarMutexGuard aSolarGuard;
@@ -963,6 +963,6 @@ void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
         aUndoGuard.commit();
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -71,10 +71,10 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
         {
             pList = (BiNode *)0;
         }
-        if( NULL != (pTmp = pMiddle->Left()) )  // rechten Zeiger auf Null
+        if( NULL != (pTmp = pMiddle->Left()) )  
             pTmp->pRight = (BiNode *)0;
 
-        // linken Zeiger auf Null
+        
         BiNode * pRightNode = pMiddle->Right();
         if (pRightNode)
             pRightNode->pLeft = (BiNode *)0;
@@ -90,7 +90,7 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
 BiNode * BiNode::ChangeBTreeDLList()
 {
     BiNode * pList;
-    BiNode * pLL_RN;    // linke Liste rechter Knoten
+    BiNode * pLL_RN;    
 
     if( Right() )
     {
@@ -173,9 +173,9 @@ COMPARE NameNode::Compare( const void * pCompare ) const
         return EQUAL;
 }
 
-// search for a parent node.
-// return a pointer to the parent node if found.
-// otherwise return 0.
+
+
+
 NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
 {
     int nCmp = Compare( pSearch );
@@ -201,9 +201,9 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
     return (NameNode *)NULL;
 }
 
-// search for a node.
-// return a pointer to the node if found.
-// otherwise return 0.
+
+
+
 NameNode* NameNode::Search( const NameNode * pSearch ) const
 {
     int nCmp = Compare( pSearch );
@@ -224,9 +224,9 @@ NameNode* NameNode::Search( const NameNode * pSearch ) const
     return NULL;
 }
 
-// search for a node.
-// return a pointer to the node if found.
-// otherwise return 0.
+
+
+
 NameNode* NameNode::Search( const void * pSearch ) const
 {
     int nCmp = Compare( pSearch );
@@ -247,9 +247,9 @@ NameNode* NameNode::Search( const void * pSearch ) const
     return NULL;
 }
 
-// Ein Knoten wird in den Baum eingefuegt
-// Gibt es einen Knoten mit dem gleichen Namen, dann return false
-// sonst return true. Der Knoten wird auf jeden Fall eingefuegt.
+
+
+
 
 bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth )
 {
@@ -277,9 +277,9 @@ bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth )
     return bRet;
 }
 
-// insert a node in the tree.
-// if the node with the same name is in, return false and no insert.
-// if not return true.
+
+
+
 bool NameNode::Insert( NameNode * pTN )
 {
     sal_uInt32  nDepth = 0;
@@ -340,7 +340,7 @@ COMPARE IdNode::Compare( const NameNode * pSearch ) const
         return EQUAL;
 }
 
-// pSearch ist ein Zeiger auf sal_uInt32
+
 COMPARE IdNode::Compare( const void * pSearch ) const
 {
     if( GetId() < *((const sal_uInt32 *)pSearch) )
@@ -373,7 +373,7 @@ COMPARE StringNode::Compare( const NameNode * pSearch ) const
         return EQUAL;
 }
 
-// pSearch ist ein Zeiger auf const char *
+
 COMPARE StringNode::Compare( const void * pSearch ) const
 {
     int nCmp = strcmp( m_aName.getStr(), (const char *)pSearch );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -199,93 +199,93 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
                                 const OUString& aMediaType,
                                 sal_Int8 * & pHeader )
 {
-    // I think it's safe to restrict vector and salt length to 2 bytes !
+    
     sal_Int16 nIVLength = static_cast < sal_Int16 > ( rData->m_aInitVector.getLength() );
     sal_Int16 nSaltLength = static_cast < sal_Int16 > ( rData->m_aSalt.getLength() );
     sal_Int16 nDigestLength = static_cast < sal_Int16 > ( rData->m_aDigest.getLength() );
     sal_Int16 nMediaTypeLength = static_cast < sal_Int16 > ( aMediaType.getLength() * sizeof( sal_Unicode ) );
 
-    // First the header
+    
     *(pHeader++) = ( n_ConstHeader >> 0 ) & 0xFF;
     *(pHeader++) = ( n_ConstHeader >> 8 ) & 0xFF;
     *(pHeader++) = ( n_ConstHeader >> 16 ) & 0xFF;
     *(pHeader++) = ( n_ConstHeader >> 24 ) & 0xFF;
 
-    // Then the version
+    
     *(pHeader++) = ( n_ConstCurrentVersion >> 0 ) & 0xFF;
     *(pHeader++) = ( n_ConstCurrentVersion >> 8 ) & 0xFF;
 
-    // Then the iteration Count
+    
     sal_Int32 nIterationCount = rData->m_nIterationCount;
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 24 ) & 0xFF);
 
-    // FIXME64: need to handle larger sizes
-    // Then the size:
+    
+    
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 24 ) & 0xFF);
 
-    // Then the encryption algorithm
+    
     sal_Int32 nEncAlgID = rData->m_nEncAlg;
     *(pHeader++) = static_cast< sal_Int8 >(( nEncAlgID >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nEncAlgID >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nEncAlgID >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nEncAlgID >> 24 ) & 0xFF);
 
-    // Then the checksum algorithm
+    
     sal_Int32 nChecksumAlgID = rData->m_nCheckAlg;
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 24 ) & 0xFF);
 
-    // Then the derived key size
+    
     sal_Int32 nDerivedKeySize = rData->m_nDerivedKeySize;
     *(pHeader++) = static_cast< sal_Int8 >(( nDerivedKeySize >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nDerivedKeySize >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nDerivedKeySize >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nDerivedKeySize >> 24 ) & 0xFF);
 
-    // Then the start key generation algorithm
+    
     sal_Int32 nKeyAlgID = rData->m_nStartKeyGenID;
     *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 24 ) & 0xFF);
 
-    // Then the salt length
+    
     *(pHeader++) = static_cast< sal_Int8 >(( nSaltLength >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSaltLength >> 8 ) & 0xFF);
 
-    // Then the IV length
+    
     *(pHeader++) = static_cast< sal_Int8 >(( nIVLength >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIVLength >> 8 ) & 0xFF);
 
-    // Then the digest length
+    
     *(pHeader++) = static_cast< sal_Int8 >(( nDigestLength >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nDigestLength >> 8 ) & 0xFF);
 
-    // Then the mediatype length
+    
     *(pHeader++) = static_cast< sal_Int8 >(( nMediaTypeLength >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nMediaTypeLength >> 8 ) & 0xFF);
 
-    // Then the salt content
+    
     memcpy ( pHeader, rData->m_aSalt.getConstArray(), nSaltLength );
     pHeader += nSaltLength;
 
-    // Then the IV content
+    
     memcpy ( pHeader, rData->m_aInitVector.getConstArray(), nIVLength );
     pHeader += nIVLength;
 
-    // Then the digest content
+    
     memcpy ( pHeader, rData->m_aDigest.getConstArray(), nDigestLength );
     pHeader += nDigestLength;
 
-    // Then the mediatype itself
+    
     memcpy ( pHeader, aMediaType.getStr(), nMediaTypeLength );
     pHeader += nMediaTypeLength;
 }
@@ -395,8 +395,8 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         throw ZipIOException("The stream must be seekable!\n",
                             uno::Reference< XInterface >() );
 
-    // if we have a digest, then this file is an encrypted one and we should
-    // check if we can decrypt it or not
+    
+    
     OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
     if ( rData->m_aDigest.getLength() )
     {
@@ -404,11 +404,11 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         if ( nSize > n_ConstDigestLength + 32 )
             nSize = n_ConstDigestLength + 32;
 
-        // skip header
+        
         xSeek->seek( n_ConstHeaderSize + rData->m_aInitVector.getLength() +
                                 rData->m_aSalt.getLength() + rData->m_aDigest.getLength() );
 
-        // Only want to read enough to verify the digest
+        
         Sequence < sal_Int8 > aReadBuffer ( nSize );
 
         xStream->readBytes( aReadBuffer, nSize );
@@ -421,7 +421,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
 }
 
 #if 0
-// for debugging purposes
+
 void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
 {
     if ( aSequence.getLength() )
@@ -453,8 +453,8 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentC
     }
     catch( uno::Exception& )
     {
-        // decryption with padding will throw the exception in finalizing if the buffer represent only part of the stream
-        // it is no problem, actually this is why we read 32 additional bytes ( two of maximal possible encryption blocks )
+        
+        
     }
 
     if ( aDecryptBuffer2.getLength() )
@@ -473,14 +473,14 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentC
     xDigestContext->updateDigest( aDecryptBuffer );
     aDigestSeq = xDigestContext->finalizeDigestAndDispose();
 
-    // If we don't have a digest, then we have to assume that the password is correct
+    
     if (  rData->m_aDigest.getLength() != 0  &&
           ( aDigestSeq.getLength() != rData->m_aDigest.getLength() ||
             0 != memcmp ( aDigestSeq.getConstArray(),
                                      rData->m_aDigest.getConstArray(),
                                     aDigestSeq.getLength() ) ) )
     {
-        // We should probably tell the user that the password they entered was wrong
+        
     }
     else
         bRet = sal_True;
@@ -498,7 +498,7 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< 
         xSeek->seek( rEntry.nOffset );
         sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 
-        // Only want to read enough to verify the digest
+        
         if ( nSize > n_ConstDigestDecrypt )
             nSize = n_ConstDigestDecrypt;
 
@@ -541,13 +541,13 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntr
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    // We want to return a rawStream if we either don't have a key or if the
-    // key is wrong
+    
+    
 
     sal_Bool bNeedRawStream = rEntry.nMethod == STORED;
 
-    // if we have a digest, then this file is an encrypted one and we should
-    // check if we can decrypt it or not
+    
+    
     if ( bIsEncrypted && rData.is() && rData->m_aDigest.getLength() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
@@ -572,19 +572,19 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    // An exception must be thrown in case stream is encrypted and
-    // there is no key or the key is wrong
+    
+    
     sal_Bool bNeedRawStream = sal_False;
     if ( bIsEncrypted )
     {
-        // in case no digest is provided there is no way
-        // to detect password correctness
+        
+        
         if ( !rData.is() )
             throw ZipException("Encrypted stream without encryption data!\n",
                                 uno::Reference< XInterface >() );
 
-        // if we have a digest, then this file is an encrypted one and we should
-        // check if we can decrypt it or not
+        
+        
         OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
         if ( rData->m_aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
                 throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
@@ -659,13 +659,13 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nExtraLen;
     rEntry.nOffset = aGrabber.getPosition() + nPathLen + nExtraLen;
 
-    // FIXME64: need to read 64bit LOC
+    
 
     sal_Bool bBroken = sal_False;
 
     try
     {
-        // read always in UTF8, some tools seem not to set UTF8 bit
+        
         uno::Sequence < sal_Int8 > aNameBuffer( nPathLen );
         sal_Int32 nRead = aGrabber.readBytes( aNameBuffer, nPathLen );
         if ( nRead < aNameBuffer.getLength() )
@@ -675,22 +675,22 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
                                                           aNameBuffer.getLength(),
                                                           RTL_TEXTENCODING_UTF8 );
 
-        if ( rEntry.nPathLen == -1 ) // the file was created
+        if ( rEntry.nPathLen == -1 ) 
         {
             rEntry.nPathLen = nPathLen;
             rEntry.sPath = sLOCPath;
         }
 
-        // check basic local file header / entry consistency, just
-        // plain ignore bits 1 & 2 of the flag field - they are either
-        // purely informative, or even fully undefined (depending on
-        // nMethod)
-        // Do *not* compare nMethod / nHow, older versions with
-        // encrypted streams write mismatching DEFLATE/STORE pairs
-        // there.
-        // Do *not* compare timestamps, since MSO 2010 can produce documents
-        // with timestamp difference in the central directory entry and local
-        // file header.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         bBroken = rEntry.nVersion != nVersion
                         || rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
@@ -710,7 +710,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
 sal_Int32 ZipFile::findEND( )
     throw(IOException, ZipException, RuntimeException)
 {
-    // this method is called in constructor only, no need for mutex
+    
     sal_Int32 nLength, nPos, nEnd;
     Sequence < sal_Int8 > aBuffer;
     try
@@ -752,7 +752,7 @@ sal_Int32 ZipFile::findEND( )
 sal_Int32 ZipFile::readCEN()
     throw(IOException, ZipException, RuntimeException)
 {
-    // this method is called in constructor only, no need for mutex
+    
     sal_Int32 nCenLen, nCenPos = -1, nCenOff, nEndPos, nLocPos;
     sal_uInt16 nCount, nTotal;
 
@@ -824,7 +824,7 @@ sal_Int32 ZipFile::readCEN()
             aMemGrabber.skipBytes ( 8 );
             aMemGrabber >> nOffset;
 
-            // FIXME64: need to read the 64bit header instead
+            
             if ( nSize == 0xffffffff ||
                  nOffset == 0xffffffff ||
                  nCompressedSize == 0xffffffff ) {
@@ -847,7 +847,7 @@ sal_Int32 ZipFile::readCEN()
             if ( aEntry.nExtraLen < 0 )
                 throw ZipException("unexpected extra header info length", uno::Reference < XInterface > () );
 
-            // read always in UTF8, some tools seem not to set UTF8 bit
+            
             aEntry.sPath = OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
                                                    aEntry.nPathLen,
                                                    RTL_TEXTENCODING_UTF8 );
@@ -864,8 +864,8 @@ sal_Int32 ZipFile::readCEN()
     }
     catch ( IllegalArgumentException & )
     {
-        // seek can throw this...
-        nCenPos = -1; // make sure we return -1 to indicate an error
+        
+        nCenPos = -1; 
     }
     return nCenPos;
 }
@@ -893,8 +893,8 @@ sal_Int32 ZipFile::recover()
             sal_Int32 nBufSize = aBuffer.getLength();
 
             sal_Int64 nPos = 0;
-            // the buffer should contain at least one header,
-            // or if it is end of the file, at least the postheader with sizes and hash
+            
+            
             while( nPos < nBufSize - 30
                 || ( nBufSize < nToRead && nPos < nBufSize - 16 ) )
 
@@ -921,7 +921,7 @@ sal_Int32 ZipFile::recover()
                             aMemGrabber >> aEntry.nPathLen;
                             aMemGrabber >> aEntry.nExtraLen;
 
-                            // FIXME64: need to read the 64bit header instead
+                            
                             if ( nSize == 0xffffffff ||
                                  nCompressedSize == 0xffffffff ) {
                                 throw ZipException("PK64 zip file entry", uno::Reference < XInterface > () );
@@ -938,7 +938,7 @@ sal_Int32 ZipFile::recover()
                             if ( aEntry.nPathLen >= 0 && aEntry.nExtraLen >= 0
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {
-                                // read always in UTF8, some tools seem not to set UTF8 bit
+                                
                                 if( nPos + 30 + aEntry.nPathLen <= nBufSize )
                                     aEntry.sPath = OUString ( (sal_Char *) &pBuffer[nPos + 30],
                                                               aEntry.nPathLen,
@@ -981,7 +981,7 @@ sal_Int32 ZipFile::recover()
                     aMemGrabber >> nCompressedSize32;
                     aMemGrabber >> nSize32;
 
-                    // FIXME64: work to be done here ...
+                    
                     nCompressedSize = nCompressedSize32;
                     nSize = nSize32;
 
@@ -989,13 +989,13 @@ sal_Int32 ZipFile::recover()
                     {
                         ZipEntry aTmp = (*aIter).second;
 
-                        // this is a broken package, accept this block not only for DEFLATED streams
+                        
                         if( (*aIter).second.nFlag & 8 )
                         {
                             sal_Int64 nStreamOffset = nGenPos + nPos - nCompressedSize;
                             if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
                             {
-                                // only DEFLATED blocks need to be checked
+                                
                                 sal_Bool bAcceptBlock = ( (*aIter).second.nMethod == STORED && nCompressedSize == nSize );
 
                                 if ( !bAcceptBlock )
@@ -1014,7 +1014,7 @@ sal_Int32 ZipFile::recover()
                                 }
                             }
 #if 0
-// for now ignore clearly broken streams
+
                             else if( !(*aIter).second.nCompressedSize )
                             {
                                 (*aIter).second.nCrc = nCRC32;

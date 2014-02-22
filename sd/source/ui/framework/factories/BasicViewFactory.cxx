@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -81,7 +81,7 @@ Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
 
 
 
-//===== ViewDescriptor ========================================================
+
 
 class BasicViewFactory::ViewDescriptor
 {
@@ -99,7 +99,7 @@ public:
 
 
 
-//===== BasicViewFactory::ViewShellContainer ==================================
+
 
 class BasicViewFactory::ViewShellContainer
     : public ::std::vector<boost::shared_ptr<ViewDescriptor> >
@@ -119,7 +119,7 @@ public:
 
 
 
-//===== ViewFactory ===========================================================
+
 
 BasicViewFactory::BasicViewFactory (
     const Reference<XComponentContext>& rxContext)
@@ -147,25 +147,25 @@ BasicViewFactory::~BasicViewFactory (void)
 
 void SAL_CALL BasicViewFactory::disposing (void)
 {
-    // Disconnect from the frame view.
+    
     if (mpFrameView != NULL)
     {
         mpFrameView->Disconnect();
         mpFrameView = NULL;
     }
 
-    // Relase the view cache.
+    
     ViewShellContainer::const_iterator iView;
     for (iView=mpViewCache->begin(); iView!=mpViewCache->end(); ++iView)
     {
         ReleaseView(*iView, true);
     }
 
-    // Release the view shell container.  At this point no one other than us
-    // should hold references to the view shells (at the moment this is a
-    // trivial requirement, because no one other then us holds a shared
-    // pointer).
-    //    ViewShellContainer::const_iterator iView;
+    
+    
+    
+    
+    
     for (iView=mpViewShellContainer->begin(); iView!=mpViewShellContainer->end(); ++iView)
     {
         OSL_ASSERT((*iView)->mpViewShell.unique());
@@ -184,35 +184,35 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     const bool bIsCenterPane (
         rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT));
 
-    // Get the pane for the anchor URL.
+    
     Reference<XPane> xPane;
     if (mxConfigurationController.is())
         xPane = Reference<XPane>(mxConfigurationController->getResource(rxViewId->getAnchor()),
             UNO_QUERY);
 
-    // For main views use the frame view of the last main view.
+    
     ::sd::FrameView* pFrameView = NULL;
     if (xPane.is() && bIsCenterPane)
     {
         pFrameView = mpFrameView;
     }
 
-    // Get Window pointer for XWindow of the pane.
+    
     ::Window* pWindow = NULL;
     if (xPane.is())
         pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
 
-    // Get the view frame.
+    
     SfxViewFrame* pFrame = NULL;
     if (mpBase != NULL)
         pFrame = mpBase->GetViewFrame();
 
     if (pFrame != NULL && mpBase!=NULL && pWindow!=NULL)
     {
-        // Try to get the view from the cache.
+        
         ::boost::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
 
-        // When the requested view is not in the cache then create a new view.
+        
         if (pDescriptor.get() == NULL)
         {
             pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
@@ -255,9 +255,9 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
             if ((*iViewShell)->mxViewId->isBoundToURL(
                 FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
             {
-                // Obtain a pointer to and connect to the frame view of the
-                // view.  The next view, that is created, will be
-                // initialized with this frame view.
+                
+                
+                
                 if (mpFrameView == NULL)
                 {
                     mpFrameView = pViewShell->GetFrameView();
@@ -265,8 +265,8 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                         mpFrameView->Connect();
                 }
 
-                // With the view in the center pane the sub controller is
-                // released, too.
+                
+                
                 mpBase->GetDrawController().SetSubController(
                     Reference<drawing::XDrawSubController>());
 
@@ -297,17 +297,17 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         Reference<XConfigurationController> xCC;
         try
         {
-            // Get the XController from the first argument.
+            
             Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
 
-            // Tunnel through the controller to obtain a ViewShellBase.
+            
             Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
             ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
                 xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
             if (pController != NULL)
                 mpBase = pController->GetViewShellBase();
 
-            // Register the factory for its supported views.
+            
             Reference<XControllerManager> xCM (xController,UNO_QUERY_THROW);
             mxConfigurationController = xCM->getConfigurationController();
             if ( ! mxConfigurationController.is())
@@ -362,7 +362,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             rxViewId,
             xWindow);
 
-        // register ViewShellWrapper on pane window
+        
         if (xWindow.is())
         {
             xWindow->addWindowListener(pDescriptor->mpWrapper);
@@ -491,7 +491,7 @@ void BasicViewFactory::ReleaseView (
 
     if ( ! bIsCacheable)
     {
-        // Shut down the current view shell.
+        
         rpDescriptor->mpViewShell->Shutdown ();
         mpBase->GetDocShell()->Disconnect(rpDescriptor->mpViewShell.get());
         mpBase->GetViewShellManager()->DeactivateViewShell(rpDescriptor->mpViewShell.get());
@@ -517,7 +517,7 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
         {
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
 
-            // The slide sorter and the task panel are cacheable and relocatable.
+            
             maCacheableResources.push_back(pHelper->CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftDrawPaneURL));
             maCacheableResources.push_back(pHelper->CreateResourceId(
@@ -547,7 +547,7 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
 {
     ::boost::shared_ptr<ViewDescriptor> pDescriptor;
 
-    // Search for the requested view in the cache.
+    
     ViewCache::iterator iEntry;
     for (iEntry=mpViewCache->begin(); iEntry!=mpViewCache->end(); ++iEntry)
     {
@@ -559,8 +559,8 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
         }
     }
 
-    // When the view has been found then relocate it to the given pane and
-    // remove it from the cache.
+    
+    
     if (pDescriptor.get() != NULL)
     {
         bool bRelocationSuccessfull (false);
@@ -589,9 +589,9 @@ void BasicViewFactory::ActivateCenterView (
 {
     mpBase->GetDocShell()->Connect(rpDescriptor->mpViewShell.get());
 
-    // During the creation of the new sub-shell, resize requests were not
-    // forwarded to it because it was not yet registered.  Therefore, we
-    // have to request a resize now.
+    
+    
+    
     rpDescriptor->mpViewShell->UIFeatureChanged();
     if (mpBase->GetDocShell()->IsInPlaceActive())
         mpBase->GetViewFrame()->Resize(sal_True);
@@ -600,6 +600,6 @@ void BasicViewFactory::ActivateCenterView (
         rpDescriptor->mpViewShell->CreateSubController());
 }
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

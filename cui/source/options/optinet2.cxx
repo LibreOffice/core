@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -52,7 +52,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
 
-// for security TP
+
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 #ifdef UNX
@@ -92,11 +92,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-// static ----------------------------------------------------------------
+
 
 #include <sal/config.h>
 
-// -----------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNoSpaceEdit(Window *pParent, VclBuilder::stringmap &)
 {
@@ -115,14 +115,14 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
                  ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
-            // Erase, Copy, Paste, Select All und Undo soll funktionieren
+            
             bValid = true;
     }
     if (bValid)
         Edit::KeyInput(rKEvent);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNoSpaceEdit::Modify()
 {
@@ -133,7 +133,7 @@ void SvxNoSpaceEdit::Modify()
         OUString aValue = GetText();
 
         if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
-            // the maximum value of a port number is USHRT_MAX
+            
             ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
     }
 }
@@ -505,13 +505,13 @@ void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
     m_pNoProxyDescFT->Enable(bEnable);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 {
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
 
-    // Restore original system values
+    
     if( nPos == 1 )
     {
         ReadConfigDefaults_Impl();
@@ -521,7 +521,7 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
@@ -534,15 +534,15 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 
 
 
-//#98647#----------------------------------------------
+
 void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
-{   // try to show tips just like as on toolbars
+{   
     sal_uInt16 nPos=LISTBOX_ENTRY_NOTFOUND;
     sal_uInt16 nTop = GetTopEntry();
-    sal_uInt16 nCount = GetDisplayLineCount(); // Attention: Not GetLineCount()
+    sal_uInt16 nCount = GetDisplayLineCount(); 
     Point aPt = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
     Rectangle aItemRect;
-    if( nCount > 0 ) // if there're some entries, find it.
+    if( nCount > 0 ) 
          for( nPos = nTop ; nPos <= nTop+nCount-1 ; nPos++ ) {
             aItemRect = GetBoundingRectangle(nPos);
             if( aPt.Y() < aItemRect.Top() || aPt.Y() > aItemRect.Bottom() )
@@ -550,13 +550,13 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
             else
                 break;
         }
-     else // if not, nothing happens.
+     else 
          return;
      OUString aHelpText;
-     if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
+     if( nPos <= nTop+nCount-1 ) 
          aHelpText = GetEntry(nPos);
     if( aHelpText.getLength() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
-        aHelpText = ""; // if the entry is quite short, clear the helping tip content.
+        aHelpText = ""; 
     aItemRect = Rectangle(Point(0,0),GetSizePixel());
     aPt = Point(OutputToScreenPixel( aItemRect.TopLeft() ));
     aItemRect.Left()   = aPt.X();
@@ -585,8 +585,8 @@ SvxSecurityTabPage::SvxSecurityTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pSecurityOptionsPB, "options");
     get(m_pSavePasswordsCB, "savepassword");
 
-    //fdo#65595, we need height-for-width support here, but for now we can
-    //bodge it
+    
+    
     Size aPrefSize(m_pSavePasswordsCB->get_preferred_size());
     Size aSize(m_pSavePasswordsCB->CalcMinimumSize(56*approximate_char_width()));
     if (aPrefSize.Width() > aSize.Width())
@@ -803,17 +803,17 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
 
 void SvxSecurityTabPage::InitControls()
 {
-    // Hide all controls which belong to the macro security button in case the macro
-    // security settings managed by the macro security dialog opened via the button
-    // are all readonly or if the macros are disabled in general.
-    // @@@ Better would be to query the dialog whether it is 'useful' or not. Exposing
-    //     macro security dialog implementations here, which is bad.
+    
+    
+    
+    
+    
     if (    mpSecOptions->IsMacroDisabled()
          || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL )
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
     {
-        //Hide these
+        
         m_pMacroSecFrame->Hide();
     }
 
@@ -827,7 +827,7 @@ void SvxSecurityTabPage::InitControls()
     m_pMasterPasswordFT->Enable( false );
     m_pShowConnectionsPB->Enable( false );
 
-    // initialize the password saving checkbox
+    
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
@@ -935,15 +935,15 @@ sal_Bool MozPluginTabPage::FillItemSet( SfxItemSet& )
     sal_Bool hasInstall = isInstalled();
     sal_Bool hasChecked = m_pWBasicCodeCB->IsChecked();
     if(hasInstall && (!hasChecked)){
-        //try to uninstall
+        
         uninstallPlugin();
     }
     else if((!hasInstall) && hasChecked){
-        //try to install
+        
         installPlugin();
     }
     else{
-        // do nothing
+        
     }
     return sal_True;
 }
@@ -979,7 +979,7 @@ inline bool getDllURL(OString * path)
 sal_Bool MozPluginTabPage::isInstalled()
 {
 #ifdef UNIX
-    // get the real file referred by .so lnk file
+    
     char lnkReferFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
     OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
@@ -991,11 +991,11 @@ sal_Bool MozPluginTabPage::isInstalled()
         return false;
     if (0 >= readlink(lnkFilePath.getStr(), lnkReferFilePath, NPP_PATH_MAX))
         return false;
-    // If the link is relative, then we regard it as non-standard
+    
     if (lnkReferFilePath[0] != '/')
         return false;
 
-    // get the real file path
+    
     char realFilePath[NPP_PATH_MAX] = {0};
     OString tempString;
     if (!getDllURL(&tempString)) {
@@ -1009,7 +1009,7 @@ sal_Bool MozPluginTabPage::isInstalled()
     return true;
 #endif
 #ifdef WNT
-    // get the value from registry
+    
         sal_Bool ret = true;
     OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
@@ -1028,12 +1028,12 @@ sal_Bool MozPluginTabPage::isInstalled()
 sal_Bool MozPluginTabPage::installPlugin()
 {
 #ifdef UNIX
-    // get the real file referred by .so lnk file
+    
     char* pHome = getpwuid(getuid())->pw_dir;
     OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
     remove(lnkFilePath.getStr());
 
-    // create the dirs if necessary
+    
     struct stat buf;
     char tmpDir[NPP_PATH_MAX] = {0};
     sprintf(tmpDir, "%s/.mozilla", pHome);
@@ -1044,7 +1044,7 @@ sal_Bool MozPluginTabPage::installPlugin()
         mkdir(tmpDir, 0755);
     }
 
-    // get the real file path
+    
     char realFilePath[NPP_PATH_MAX] = {0};
     OString tempString;
     if (!getDllURL(&tempString)) {
@@ -1053,7 +1053,7 @@ sal_Bool MozPluginTabPage::installPlugin()
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX - 1);
     strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
-    // create the link
+    
     if (0 != symlink(realFilePath, lnkFilePath.getStr()))
         return false;
     return true;
@@ -1075,7 +1075,7 @@ sal_Bool MozPluginTabPage::installPlugin()
 sal_Bool MozPluginTabPage::uninstallPlugin()
 {
 #ifdef UNIX
-    // get the real file referred by .so lnk file
+    
     char* pHome = getpwuid(getuid())->pw_dir;
     OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
 
@@ -1102,9 +1102,9 @@ sal_Bool MozPluginTabPage::uninstallPlugin()
 class MailerProgramCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
-    // variables
+    
     OUString sProgram;
-    // readonly states
+    
     sal_Bool bROProgram;
 
     const Sequence<OUString> GetPropertyNames();
@@ -1290,6 +1290,6 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

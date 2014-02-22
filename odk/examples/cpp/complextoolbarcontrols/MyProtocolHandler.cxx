@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -106,8 +106,8 @@ void SAL_CALL MyProtocolHandler::initialize( const Sequence< Any >& aArguments )
     Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
     {
-        // the first Argument is always the Frame, as a ProtocolHandler needs to have access
-        // to the context in which it is invoked.
+        
+        
         aArguments[0] >>= xFrame;
         mxFrame = xFrame;
     }
@@ -126,7 +126,7 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
         Reference < XTextViewCursorSupplier > xCursor( xCtrl, UNO_QUERY );
         Reference < XSpreadsheetView > xView( xCtrl, UNO_QUERY );
         if ( !xCursor.is() && !xView.is() )
-            // without an appropriate corresponding document the handler doesn't function
+            
             return xRet;
 
 		if ( aURL.Path == "ImageButtonCmd" ||
@@ -184,7 +184,7 @@ Reference< XInterface > SAL_CALL MyProtocolHandler_createInstance( const Referen
     return (cppu::OWeakObject*) new MyProtocolHandler( rSMgr );
 }
 
-// XServiceInfo
+
 ::rtl::OUString SAL_CALL MyProtocolHandler::getImplementationName(  )
     throw (RuntimeException)
 {
@@ -218,8 +218,8 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
     {
 		if ( aURL.Path == "ImageButtonCmd" )
         {
-            // open the LibreOffice web page
-            ::rtl::OUString sURL("http://www.libreoffice.org");
+            
+            ::rtl::OUString sURL("http:
             Reference< XSystemShellExecute > xSystemShellExecute(
                 SystemShellExecute::create(mxContext) );
             try
@@ -233,13 +233,13 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         }
         else if ( aURL.Path == "ComboboxCmd" )
         {
-            // remove the text if it's in our list
+            
             Sequence< NamedValue > aRemoveArgs( 1 );
             aRemoveArgs[0].Name  = rtl::OUString( "Text" );
             aRemoveArgs[0].Value <<= maComboBoxText;
             SendCommand( aURL, ::rtl::OUString( "RemoveEntryText" ), aRemoveArgs, sal_True );
 
-            // add the new text to the start of the list
+            
             Sequence< NamedValue > aInsertArgs( 2 );
             aInsertArgs[0].Name = rtl::OUString( "Pos" );
             aInsertArgs[0].Value <<= sal_Int32( 0 );
@@ -249,7 +249,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         }
         else if ( aURL.Path == "InsertEntry" )
         {
-            // Retrieve the text argument from the sequence property value
+            
             rtl::OUString aText;
             for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
             {
@@ -260,13 +260,13 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                 }
             }
 
-            // create new URL to address the combox box
+            
             URL aCmdURL;
             aCmdURL.Path = "ComboboxCmd";
             aCmdURL.Protocol = "vnd.demo.complextoolbarcontrols.demoaddon:";
             aCmdURL.Complete = aCmdURL.Path + aCmdURL.Protocol;
 
-            // set the selected item as text into the combobox
+            
             Sequence< NamedValue > aArgs( 1 );
             aArgs[0].Name = "Text";
             aArgs[0].Value <<= aText;
@@ -274,7 +274,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         }
         else if ( aURL.Path == "DropdownButtonCmd" )
         {
-            // Retrieve the text argument from the sequence property value
+            
             rtl::OUString aText;
             for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
             {
@@ -285,21 +285,21 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                 }
             }
 
-            // just enable this command
+            
 
-            // set enable flag according to selection
+            
             if ( aText == "Button Disabled" )
                 mbButtonEnabled = sal_False;
             else
                 mbButtonEnabled = sal_True;
 
-            // create new URL to address the image button
+            
             URL aCmdURL;
             aCmdURL.Path = "Command1";
             aCmdURL.Protocol = "vnd.demo.complextoolbarcontrols.demoaddon:";
             aCmdURL.Complete = aCmdURL.Path + aCmdURL.Protocol;
 
-            // create and initialize FeatureStateEvent with IsEnabled
+            
             ::com::sun::star::frame::FeatureStateEvent aEvent;
             aEvent.FeatureURL = aCmdURL;
             aEvent.Source = (::com::sun::star::frame::XDispatch*) this;
@@ -307,7 +307,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             aEvent.Requery = sal_False;
             aEvent.State <<= Any();
 
-            // Notify listener about new state
+            
             Reference < XDispatch > xDispatch = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             aListenerHelper.Notify( mxFrame, aEvent.FeatureURL.Path, aEvent );
         }
@@ -316,7 +316,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         }
         else if ( aURL.Path == "DropdownboxCmd" )
         {
-            // Retrieve the text argument from the sequence property value
+            
             rtl::OUString aText;
             for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
             {
@@ -338,7 +338,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
     {
         if ( aURL.Path == "ImageButtonCmd" )
         {
-            // just enable this command
+            
             ::com::sun::star::frame::FeatureStateEvent aEvent;
             aEvent.FeatureURL = aURL;
             aEvent.Source = (::com::sun::star::frame::XDispatch*) this;
@@ -349,7 +349,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
         }
         else if ( aURL.Path == "ComboboxCmd" )
         {
-            // just enable this command
+            
             ::com::sun::star::frame::FeatureStateEvent aEvent;
             aEvent.FeatureURL = aURL;
             aEvent.Source = (::com::sun::star::frame::XDispatch*) this;
@@ -360,12 +360,12 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
         }
         else if ( aURL.Path == "ToggleDropdownButtonCmd" )
         {
-            // A toggle dropdown box is normally used for a group of commands
-            // where the user can select the last issued command easily.
-            // E.g. a typical command group would be "Insert shape"
+            
+            
+            
             Sequence< NamedValue > aArgs( 1 );
 
-            // send command to set context menu content
+            
             Sequence< rtl::OUString > aContextMenu( 3 );
             aContextMenu[0] = "Command 1";
             aContextMenu[1] = "Command 2";
@@ -375,19 +375,19 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aArgs[0].Value <<= aContextMenu;
             SendCommandTo( xControl, aURL, rtl::OUString( "SetList" ), aArgs, sal_True );
 
-            // send command to check item on pos=0
+            
             aArgs[0].Name = rtl::OUString( "Pos" );
             aArgs[0].Value <<= sal_Int32( 0 );
             SendCommandTo( xControl, aURL, ::rtl::OUString( "CheckItemPos" ), aArgs, sal_True );
         }
         else if ( aURL.Path == "DropdownButtonCmd" )
         {
-            // A dropdown box is normally used for a group of dependent modes, where
-            // the user can only select one. The modes cannot be combined.
-            // E.g. a typical group would be left,right,center,block.
+            
+            
+            
             Sequence< NamedValue > aArgs( 1 );
 
-            // send command to set context menu content
+            
             Sequence< rtl::OUString > aContextMenu( 2 );
             aContextMenu[0] = "Button Enabled";
             aContextMenu[1] = "Button Disabled";
@@ -396,20 +396,20 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aArgs[0].Value <<= aContextMenu;
             SendCommandTo( xControl, aURL, rtl::OUString( "SetList" ), aArgs, sal_True );
 
-            // set position according to enable/disable state of button
+            
             sal_Int32 nPos( mbButtonEnabled ? 0 : 1 );
 
-            // send command to check item on pos=0
+            
             aArgs[0].Name = "Pos";
             aArgs[0].Value <<= nPos;
             SendCommandTo( xControl, aURL, ::rtl::OUString( "CheckItemPos" ), aArgs, sal_True );
         }
         else if ( aURL.Path == "SpinfieldCmd" )
         {
-            // A spin button
+            
             Sequence< NamedValue > aArgs( 5 );
 
-            // send command to initialize spin button
+            
             aArgs[0].Name = "Value";
             aArgs[0].Value <<= double( 0.0 );
             aArgs[1].Name = "UpperLimit";
@@ -425,11 +425,11 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
         }
         else if ( aURL.Path == "DropdownboxCmd" )
         {
-            // A dropdown box is normally used for a group of commands
-            // where the user can select one of a defined set.
+            
+            
             Sequence< NamedValue > aArgs( 1 );
 
-            // send command to set context menu content
+            
             Sequence< rtl::OUString > aList( 10 );
             aList[0] = "White";
             aList[1] = "Black";
@@ -462,8 +462,8 @@ void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event ) throw (Run
     {
         if ( Event.aURL.Path == "ComboboxCmd" )
         {
-            // We get notifications whenever the text inside the combobox has been changed.
-            // We store the new text into a member.
+            
+            
             if ( Event.Event == "TextChanged" )
             {
                 rtl::OUString aNewText;

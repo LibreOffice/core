@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "document.hxx"
@@ -41,14 +41,14 @@
 
 #include "globstr.hrc"
 #include "sc.hrc"
-//------------------------------------------------------------------------
+
 
 TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 
 #define TWO_CM      1134
 #define HFDIST_CM   142
 
-//========================================================================
+
 
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             ScStyleSheetPool&   rPoolP,
@@ -60,7 +60,7 @@ ScStyleSheet::ScStyleSheet( const OUString&     rName,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
     : SfxStyleSheet ( rStyle )
@@ -68,20 +68,20 @@ ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleSheet::~ScStyleSheet()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::HasFollowSupport() const
 {
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::HasParentSupport () const
 {
@@ -93,14 +93,14 @@ bool ScStyleSheet::HasParentSupport () const
     case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = false;  break;
     default:
         {
-            // added to avoid warnings
+            
         }
     }
 
     return bHasParentSupport;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::SetParent( const OUString& rParentName )
 {
@@ -123,9 +123,9 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
             SfxItemSet& rParentSet = pStyle->GetItemSet();
             GetItemSet().SetParent( &rParentSet );
 
-            // #i113491# Drag&Drop in the stylist's hierarchical view doesn't execute a slot,
-            // so the repaint has to come from here (after modifying the ItemSet).
-            // RepaintRange checks the document's IsVisible flag and locked repaints.
+            
+            
+            
             ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
             if (pDoc)
                 pDoc->RepaintRange( ScRange( 0,0,0, MAXCOL,MAXROW,MAXTAB ) );
@@ -135,7 +135,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemSet& ScStyleSheet::GetItemSet()
 {
@@ -145,9 +145,9 @@ SfxItemSet& ScStyleSheet::GetItemSet()
         {
             case SFX_STYLE_FAMILY_PAGE:
                 {
-                    // Seitenvorlagen sollen nicht ableitbar sein,
-                    // deshalb werden an dieser Stelle geeignete
-                    // Werte eingestellt. (==Standard-Seitenvorlage)
+                    
+                    
+                    
 
                     SfxItemPool& rItemPool = GetPool().GetPool();
                     pSet = new SfxItemSet( rItemPool,
@@ -158,15 +158,15 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                            ATTR_USERDEF, ATTR_USERDEF,
                                            0 );
 
-                    //  Wenn gerade geladen wird, wird auch der Set hinterher aus der Datei
-                    //  gefuellt, es brauchen also keine Defaults gesetzt zu werden.
-                    //  GetPrinter wuerde dann auch einen neuen Printer anlegen, weil der
-                    //  gespeicherte Printer noch nicht geladen ist!
+                    
+                    
+                    
+                    
 
                     ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
                     if ( pDoc )
                     {
-                        // Setzen von sinnvollen Default-Werten:
+                        
                         SvxPageItem     aPageItem( ATTR_PAGE );
                         SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
@@ -175,21 +175,21 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                             rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
 
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
-                        SvxSizeItem     aHFSizeItem( // 0,5 cm + Abstand
+                        SvxSizeItem     aHFSizeItem( 
                                             ATTR_PAGE_SIZE,
                                             Size( 0, (long)( 500 / HMM_PER_TWIPS ) + HFDIST_CM ) );
 
-                        SvxULSpaceItem  aHFDistItem ( HFDIST_CM,// nUp
-                                                      HFDIST_CM,// nLow
+                        SvxULSpaceItem  aHFDistItem ( HFDIST_CM,
+                                                      HFDIST_CM,
                                                       ATTR_ULSPACE );
 
-                        SvxLRSpaceItem  aLRSpaceItem( TWO_CM,   // nLeft
-                                                      TWO_CM,   // nRight
-                                                      TWO_CM,   // nTLeft
-                                                      0,        // nFirstLineOffset
+                        SvxLRSpaceItem  aLRSpaceItem( TWO_CM,   
+                                                      TWO_CM,   
+                                                      TWO_CM,   
+                                                      0,        
                                                       ATTR_LRSPACE );
-                        SvxULSpaceItem  aULSpaceItem( TWO_CM,   // nUp
-                                                      TWO_CM,   // nLow
+                        SvxULSpaceItem  aULSpaceItem( TWO_CM,   
+                                                      TWO_CM,   
                                                       ATTR_ULSPACE );
                         SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
@@ -202,17 +202,17 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         rHFSet.Put( aBoxInfoItem );
                         rHFSet.Put( aHFSizeItem );
                         rHFSet.Put( aHFDistItem );
-                        rHFSet.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); // Rand auf Null setzen
+                        rHFSet.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); 
 
                         pSet->Put( aHFSetItem, ATTR_PAGE_HEADERSET );
                         pSet->Put( aHFSetItem, ATTR_PAGE_FOOTERSET );
-                        pSet->Put( aBoxInfoItem ); // PoolDefault wg. Formatvorlagen
-                                                   // nicht ueberschreiben!
+                        pSet->Put( aBoxInfoItem ); 
+                                                   
 
-                        //  Writing direction: not as pool default because the default for cells
-                        //  must remain FRMDIR_ENVIRONMENT, and each page style's setting is
-                        //  supposed to be saved in the file format.
-                        //  The page default depends on the system language.
+                        
+                        
+                        
+                        
                         SvxFrameDirection eDirection = ScGlobal::IsSystemRTL() ?
                                         FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
                         pSet->Put( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ), ATTR_WRITINGDIR );
@@ -252,14 +252,14 @@ SfxItemSet& ScStyleSheet::GetItemSet()
     return *pSet;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
-        // Always query the document to let it decide if a rescan is necessary,
-        // and store the state.
+        
+        
         ScDocument* pDoc = ((ScStyleSheetPool*)pPool)->GetDocument();
         if ( pDoc && pDoc->IsStyleSheetUsed( *this, true ) )
             eUsage = USED;
@@ -271,7 +271,7 @@ bool ScStyleSheet::IsUsed() const
         return true;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -280,10 +280,10 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
             GetItemSet().SetParent( NULL );
 }
 
-//------------------------------------------------------------------------
 
-//  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
-//  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
+
+
+
 
 const OUString& ScStyleSheet::GetName() const
 {
@@ -315,13 +315,13 @@ const OUString& ScStyleSheet::GetFollow() const
         return rBase;
 }
 
-//  Verhindern, dass ein Style "Standard" angelegt wird, wenn das nicht der
-//  Standard-Name ist, weil sonst beim Speichern zwei Styles denselben Namen haetten
-//  (Beim Laden wird der Style direkt per Make mit dem Namen erzeugt, so dass diese
-//  Abfrage dann nicht gilt)
-//! Wenn irgendwann aus dem Laden SetName aufgerufen wird, muss fuer das Laden ein
-//! Flag gesetzt und abgefragt werden.
-//! Die ganze Abfrage muss raus, wenn fuer eine neue Datei-Version die Namens-Umsetzung wegfaellt.
+
+
+
+
+
+
+
 
 bool ScStyleSheet::SetName( const OUString& rNew )
 {

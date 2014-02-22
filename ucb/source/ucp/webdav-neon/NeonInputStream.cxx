@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -45,7 +45,7 @@ NeonInputStream::~NeonInputStream( void )
 {
 }
 
-// Allows the caller to add some data to the "end" of the stream
+
 void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 {
     mInputBuffer.realloc( sal::static_int_cast<sal_Int32>(mLen) + inLen );
@@ -62,7 +62,7 @@ Any NeonInputStream::queryInterface( const Type &type )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( type );
 }
 
-// "Reads" the specified number of bytes from the stream
+
 sal_Int32 SAL_CALL NeonInputStream::readBytes(
   ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw( ::com::sun::star::io::NotConnectedException,
@@ -70,20 +70,20 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException )
 {
-    // Work out how much we're actually going to write
+    
     sal_Int32 theBytes2Read = nBytesToRead;
     sal_Int32 theBytesLeft  = sal::static_int_cast<sal_Int32>(mLen - mPos);
     if ( theBytes2Read > theBytesLeft )
         theBytes2Read = theBytesLeft;
 
-    // Realloc buffer.
+    
     aData.realloc( theBytes2Read );
 
-    // Write the data
+    
     memcpy(
         aData.getArray(), mInputBuffer.getConstArray() + mPos, theBytes2Read );
 
-    // Update our stream position for next time
+    
     mPos += theBytes2Read;
 
     return theBytes2Read;
@@ -96,11 +96,11 @@ sal_Int32 SAL_CALL NeonInputStream::readSomeBytes(
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException )
 {
-    // Warning: What should this be doing ?
+    
     return readBytes( aData, nMaxBytesToRead );
 }
 
-// Moves the current stream position forward
+
 void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::BufferSizeExceededException,
@@ -112,7 +112,7 @@ void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
         mPos = mLen;
 }
 
-// Returns the number of unread bytes currently remaining on the stream
+
 sal_Int32 SAL_CALL NeonInputStream::available(  )
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::IOException,

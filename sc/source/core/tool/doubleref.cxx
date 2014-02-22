@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "doubleref.hxx"
@@ -44,14 +44,14 @@ void lcl_uppercase(OUString& rStr)
 bool lcl_createStarQuery(
     svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
-    // A valid StarQuery must be at least 4 columns wide. To be precise it
-    // should be exactly 4 columns ...
-    // Additionally, if this wasn't checked, a formula pointing to a valid 1-3
-    // column Excel style query range immediately left to itself would result
-    // in a circular reference when the field name or operator or value (first
-    // to third query range column) is obtained (#i58354#). Furthermore, if the
-    // range wasn't sufficiently specified data changes wouldn't flag formula
-    // cells for recalculation.
+    
+    
+    
+    
+    
+    
+    
+    
 
     if (pQueryRef->getColSize() < 4)
         return false;
@@ -72,7 +72,7 @@ bool lcl_createStarQuery(
 
         if (nIndex > 0)
         {
-            // For all entries after the first one, check the and/or connector in the first column.
+            
             aCellStr = pQueryRef->getString(0, nRow);
             lcl_uppercase(aCellStr);
             if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
@@ -89,9 +89,9 @@ bool lcl_createStarQuery(
 
         if ((nIndex < 1) || bValid)
         {
-            // field name in the 2nd column.
+            
             aCellStr = pQueryRef->getString(1, nRow);
-            SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
+            SCCOL nField = pDBRef->findFieldColumn(aCellStr); 
             if (ValidCol(nField))
             {
                 rEntry.nField = nField;
@@ -103,7 +103,7 @@ bool lcl_createStarQuery(
 
         if (bValid)
         {
-            // equality, non-equality operator in the 3rd column.
+            
             aCellStr = pQueryRef->getString(2, nRow);
             lcl_uppercase(aCellStr);
             const sal_Unicode* p = aCellStr.getStr();
@@ -130,7 +130,7 @@ bool lcl_createStarQuery(
 
         if (bValid)
         {
-            // Finally, the right-hand-side value in the 4th column.
+            
             rEntry.GetQueryItem().maString =
                 rPool.intern(pQueryRef->getString(3, nRow));
             rEntry.bDoQuery = true;
@@ -163,8 +163,8 @@ bool lcl_createExcelQuery(
 
     if (bValid)
     {
-        // Count the number of visible cells (excluding the header row).  Each
-        // visible cell corresponds with a single query.
+        
+        
         SCSIZE nVisible = pQueryRef->getVisibleDataCellCount();
         if ( nVisible > SCSIZE_MAX / sizeof(void*) )
         {
@@ -215,22 +215,22 @@ bool lcl_fillQueryEntries(
     for (SCSIZE i = 0; i < nCount; ++i)
         pParam->GetEntry(i).Clear();
 
-    // Standard QueryTabelle
+    
     bool bValid = lcl_createStarQuery(rPool, pParam, pDBRef, pQueryRef);
-    // Excel QueryTabelle
+    
     if (!bValid)
         bValid = lcl_createExcelQuery(rPool, pParam, pDBRef, pQueryRef);
 
     nCount = pParam->GetEntryCount();
     if (bValid)
     {
-        //  bQueryByString muss gesetzt sein
+        
         for (SCSIZE i = 0; i < nCount; ++i)
             pParam->GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
     }
     else
     {
-        //  nix
+        
         for (SCSIZE i = 0; i < nCount; ++i)
             pParam->GetEntry(i).Clear();
     }
@@ -309,9 +309,9 @@ OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
     OUString aStr;
     const ScAddress& s = maRange.aStart;
-    // #i109200# this is used in formula calculation, use GetInputString, not GetString
-    // (consistent with ScDBInternalRange::getCellString)
-    // GetStringForFormula is not used here, to allow querying for date values.
+    
+    
+    
     getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
     return aStr;
 }
@@ -328,7 +328,7 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nIndex) const
 
     SCCOL nDBCol1 = s.Col();
 
-    // Don't handle out-of-bound condition here.  We'll do that later.
+    
     return nIndex + nDBCol1 - 1;
 }
 
@@ -368,7 +368,7 @@ ScDBQueryParamBase* ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQu
 {
     auto_ptr<ScDBQueryParamInternal> pParam(new ScDBQueryParamInternal);
 
-    // Set the database range first.
+    
     const ScAddress& s = maRange.aStart;
     const ScAddress& e = maRange.aEnd;
     pParam->nCol1 = s.Col();
@@ -379,7 +379,7 @@ ScDBQueryParamBase* ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQu
 
     fillQueryOptions(pParam.get());
 
-    // Now construct the query entries from the query range.
+    
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
         return NULL;
 
@@ -465,7 +465,7 @@ ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQu
     pParam->mpMatrix = mpMatrix;
     fillQueryOptions(pParam.get());
 
-    // Now construct the query entries from the query range.
+    
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
         return NULL;
 

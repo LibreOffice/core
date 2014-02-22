@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "alloc_cache.hxx"
@@ -121,15 +121,15 @@ rtl_cache_hash_rescale (
         old_table = cache->m_hash_table;
         old_size  = cache->m_hash_size;
 
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_cache_hash_rescale(" << cache->m_name << "): nbuf: "
-        //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
-        //      << " (ave: "
-        //      << ((cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
-        //          >> cache->m_hash_shift)
-        //      << "), frees: " << cache->m_slab_stats.m_free << " [old_size: "
-        //      << old_size << ", new_size: " << new_size << ']');
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         cache->m_hash_table = new_table;
         cache->m_hash_size  = new_size;
@@ -203,7 +203,7 @@ rtl_cache_hash_remove (
         ppHead = &(bufctl->m_next);
     }
 
-    assert(bufctl != 0); // bad free
+    assert(bufctl != 0); 
 
     if (lookups > 1)
     {
@@ -255,9 +255,9 @@ void
 rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = static_cast< rtl_cache_slab_type * >(obj);
-    assert(QUEUE_STARTED_NAMED(slab, slab_)); // assure removed from queue(s)
-    assert(slab->m_ntypes == 0); // assure no longer referenced
-    (void) slab; // avoid warnings
+    assert(QUEUE_STARTED_NAMED(slab, slab_)); 
+    assert(slab->m_ntypes == 0); 
+    (void) slab; 
 }
 
 
@@ -567,9 +567,9 @@ rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = static_cast< rtl_cache_magazine_type * >(
         obj);
-    assert(mag->m_mag_next == 0); // assure removed from queue(s)
-    assert(mag->m_mag_used == 0); // assure no longer referenced
-    (void) mag; // avoid warnings
+    assert(mag->m_mag_next == 0); 
+    assert(mag->m_mag_used == 0); 
+    (void) mag; 
 }
 
 
@@ -917,7 +917,7 @@ rtl_cache_deactivate (
     QUEUE_REMOVE_NAMED(cache, cache_);
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
-    assert(active); // orphaned cache
+    assert(active); 
     (void)active;
 
     /* cleanup magazine layer */
@@ -956,28 +956,28 @@ rtl_cache_deactivate (
         }
     }
 
-    // SAL_INFO(
-    //  "sal.rtl",
-    //  "rtl_cache_deactivate(" << cache->m_name << "): [slab]: allocs: "
-    //      << cache->m_slab_stats.m_alloc << ", frees: "
-    //      << cache->m_slab_stats.m_free << "; total: "
-    //      << cache->m_slab_stats.m_mem_total << ", used: "
-    //      << cache->m_slab_stats.m_mem_alloc << "; [cpu]: allocs: "
-    //      << cache->m_cpu_stats.m_alloc << ", frees: "
-    //      << cache->m_cpu_stats.m_free << "; [total]: allocs: "
-    //      << (cache->m_slab_stats.m_alloc + cache->m_cpu_stats.m_alloc)
-    //      << ", frees: "
-    //      << (cache->m_slab_stats.m_free + cache->m_cpu_stats.m_free));
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /* cleanup slab layer */
     if (cache->m_slab_stats.m_alloc > cache->m_slab_stats.m_free)
     {
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_cache_deactivate(" << cache->m_name << "): cleaning up "
-        //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
-        //      << " leaked buffer(s) [" << cache->m_slab_stats.m_mem_alloc
-        //      << " bytes] [" << cache->m_slab_stats.m_mem_total << " total]");
+        
+        
+        
+        
+        
+        
 
         if (cache->m_features & RTL_CACHE_FEATURE_HASH)
         {
@@ -1041,7 +1041,7 @@ rtl_cache_deactivate (
     }
 }
 
-} //namespace
+} 
 
 /* ================================================================= *
  *
@@ -1465,16 +1465,16 @@ rtl_cache_wsupdate (
     {
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
 
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_cache_wsupdate(" << cache->m_name
-        //      << ") [depot: count, curr_min, prev_min] full: "
-        //      << cache->m_depot_full.m_mag_count << ", "
-        //      << cache->m_depot_full.m_curr_min << ", "
-        //      << cache->m_depot_full.m_prev_min << "; empty: "
-        //      << cache->m_depot_empty.m_mag_count << ", "
-        //      << cache->m_depot_empty.m_curr_min << ", "
-        //      << cache->m_depot_empty.m_prev_min);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         rtl_cache_depot_wsupdate (cache, &(cache->m_depot_full));
         rtl_cache_depot_wsupdate (cache, &(cache->m_depot_empty));
@@ -1619,7 +1619,7 @@ rtl_cache_init()
     }
 
     rtl_cache_wsupdate_init();
-    // SAL_INFO("sal.rtl", "rtl_cache_init completed");
+    
 }
 
 /* ================================================================= */
@@ -1661,24 +1661,24 @@ rtl_cache_fini()
         head = &(g_cache_list.m_cache_head);
         for (cache = head->m_cache_next; cache != head; cache = cache->m_cache_next)
         {
-            // SAL_INFO(
-            //  "sal.rtl",
-            //  "rtl_cache_fini(" << cache->m_name << ") [slab]: allocs: "
-            //      << cache->m_slab_stats.m_alloc << ", frees: "
-            //      << cache->m_slab_stats.m_free << "; total: "
-            //      << cache->m_slab_stats.m_mem_total << ", used: "
-            //      << cache->m_slab_stats.m_mem_alloc << "; [cpu]: allocs: "
-            //      << cache->m_cpu_stats.m_alloc << ", frees: "
-            //      << cache->m_cpu_stats.m_free  << "; [total]: allocs: "
-            //      << (cache->m_slab_stats.m_alloc
-            //          + cache->m_cpu_stats.m_alloc)
-            //      << ", frees: "
-            //      << (cache->m_slab_stats.m_free
-            //          + cache->m_cpu_stats.m_free));
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
-    // SAL_INFO("sal.rtl", "rtl_cache_fini completed");
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

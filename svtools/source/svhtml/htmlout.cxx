@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -58,57 +58,57 @@ static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
 {
     const sal_Char* pStr = 0;
 
-    // Note: We currently handle special cases for ISO-8859-2 here simply because
-    // the code was already submitted.  But we should also handle other code pages
-    // as well as the code becomes available.
+    
+    
+    
 
     if( eDestEnc == RTL_TEXTENCODING_ISO_8859_2 || eDestEnc == RTL_TEXTENCODING_MS_1250 )
     {
-        // Don't handle the following characters for Easter European (ISO-8859-2).
+        
         switch ( c )
         {
-        case 164: // curren
-        case 184: // ccedil
-        case 193: // Aacute
-        case 194: // Acirc
-        case 196: // Auml
-        case 199: // Ccedil
-        case 201: // Eacute
-        case 203: // Euml
-        case 205: // Iacute
-        case 206: // Icirc
-        case 211: // Oacute
-        case 212: // Ocirc
-        case 214: // Ouml
-        case 215: // times
-        case 218: // Uacute
-        case 220: // Uuml
-        case 221: // Yacute
-        case 225: // aacute
-        case 226: // acirc
-        case 228: // auml
-        case 233: // eacute
-        case 235: // euml
-        case 237: // iacute
-        case 238: // icirc
-        case 243: // oacute
-        case 244: // ocirc
-        case 246: // ouml
-        case 247: // divide
-        case 250: // uacute
-        case 252: // uuml
-        case 253: // yacute
-        case 352: // Scaron
-        case 353: // scaron
+        case 164: 
+        case 184: 
+        case 193: 
+        case 194: 
+        case 196: 
+        case 199: 
+        case 201: 
+        case 203: 
+        case 205: 
+        case 206: 
+        case 211: 
+        case 212: 
+        case 214: 
+        case 215: 
+        case 218: 
+        case 220: 
+        case 221: 
+        case 225: 
+        case 226: 
+        case 228: 
+        case 233: 
+        case 235: 
+        case 237: 
+        case 238: 
+        case 243: 
+        case 244: 
+        case 246: 
+        case 247: 
+        case 250: 
+        case 252: 
+        case 253: 
+        case 352: 
+        case 353: 
             return pStr;
         }
     }
 
-    // TODO: handle more special cases for other code pages.
+    
 
     switch( c )
     {
-//      case '\x0a':   return HTMLOutFuncs::Out_Tag( rStream, OOO_STRING_SVTOOLS_HTML_linebreak );
+
 
     case '<':       pStr = OOO_STRING_SVTOOLS_HTML_C_lt;        break;
     case '>':       pStr = OOO_STRING_SVTOOLS_HTML_C_gt;        break;
@@ -222,9 +222,9 @@ static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
     case 710:       pStr = OOO_STRING_SVTOOLS_HTML_S_circ;  break;
     case 732:       pStr = OOO_STRING_SVTOOLS_HTML_S_tilde; break;
 
-    // Greek chars are handled later,
-    // since they should *not* be transformed to entities
-    // when generating Greek text (== using Greek encoding)
+    
+    
+    
 
     case 8194:      pStr = OOO_STRING_SVTOOLS_HTML_S_ensp;  break;
     case 8195:      pStr = OOO_STRING_SVTOOLS_HTML_S_emsp;  break;
@@ -320,8 +320,8 @@ static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
     case 9830:      pStr = OOO_STRING_SVTOOLS_HTML_S_diams; break;
     }
 
-    // Greek chars: if we do not produce a Greek encoding,
-    // transform them into entities
+    
+    
     if( !pStr &&
         ( eDestEnc != RTL_TEXTENCODING_ISO_8859_7 ) &&
         ( eDestEnc != RTL_TEXTENCODING_MS_1253 ) )
@@ -396,20 +396,20 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
     const sal_Char *pStr = 0;
     switch( c )
     {
-    case 0xA0:      // is a hard blank
+    case 0xA0:      
         pStr = OOO_STRING_SVTOOLS_HTML_S_nbsp;
         break;
-    case 0x2011:    // is a hard hyphen
+    case 0x2011:    
         pStr = "#8209";
         break;
-    case 0xAD:      // is a soft hyphen
+    case 0xAD:      
         pStr = OOO_STRING_SVTOOLS_HTML_S_shy;
         break;
     default:
-        // There may be an entity for the character.
-        // The new HTML4 entities above 255 are not used for UTF-8,
-        // because Netscape 4 does support UTF-8 but does not support
-        // these entities.
+        
+        
+        
+        
         if( c < 128 || RTL_TEXTENCODING_UTF8 != rContext.m_eDestEnc )
             pStr = lcl_svhtml_GetEntityForChar( c, rContext.m_eDestEnc );
         break;
@@ -450,9 +450,9 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
         }
         else
         {
-            // If the character could not be converted to the destination
-            // character set, the UNICODE character is exported as character
-            // entity.
+            
+            
+            
             nLen = rtl_convertUnicodeToText(
                                 rContext.m_hConv, rContext.m_hContext, &c, 0,
                                 cBuffer, TXTCONV_BUFFER_SIZE,
@@ -553,14 +553,14 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
 
 SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen,
                                    rtl_TextEncoding )
-{                                                  // in einen Stream aus
+{                                                  
     sal_Char aNToABuf[] = "0000000000000000";
 
     DBG_ASSERT( nLen < sizeof(aNToABuf), "zu viele Stellen" );
     if( nLen>=sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 
-    // set pointer to end of buffer
+    
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
@@ -789,7 +789,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = osl_getThreadTextEncoding();
 
-    // script is not indented!
+    
     OStringBuffer sOut;
     sOut.append('<')
         .append(OOO_STRING_SVTOOLS_HTML_script);
@@ -867,8 +867,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
         if( !rSource.isEmpty() )
         {
-            // we write the module in ANSI-charset, but with
-            // the system new line.
+            
+            
             const OString sSource(OUStringToOString(rSource, eDestEnc));
             rStrm.WriteCharPtr( sSource.getStr() ).WriteCharPtr( SAL_NEWLINE_STRING );
         }
@@ -876,9 +876,9 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
         if( JAVASCRIPT != eScriptType )
         {
-            // MIB/MM: if it is not StarBasic, a // could be wrong.
-            // As the comment is removed during reading, it is not helping us....
-            rStrm.WriteCharPtr( STARBASIC == eScriptType ? "' -->" : "// -->" )
+            
+            
+            rStrm.WriteCharPtr( STARBASIC == eScriptType ? "' -->" : "
                  .WriteCharPtr( SAL_NEWLINE_STRING );
         }
     }
@@ -933,7 +933,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
 
     if ( bValue )
     {
-        // printf / scanf is not precise enough
+        
         OUString aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
         OString sTmp(OUStringToOString(aValStr, eDestEnc));
@@ -949,7 +949,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             append("=\"").
             append(static_cast<sal_Int32>(
                 Application::GetSettings().GetLanguageTag().getLanguageType())).
-            append(';'); // Language for Format 0
+            append(';'); 
         if ( nFormat )
         {
             OString aNumStr;

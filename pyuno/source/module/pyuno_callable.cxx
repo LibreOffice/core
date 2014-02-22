@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "pyuno_impl.hxx"
 
@@ -90,20 +90,20 @@ PyObject* PyUNO_callable_call(
         }
 
         {
-            PyThreadDetach antiguard; //pyhton free zone
+            PyThreadDetach antiguard; 
 
-            // do some logging if desired ...
+            
             if( isLog( cargo, LogLevel::CALL ) )
             {
                 logCall( cargo, "try     py->uno[0x", me->members->xInvocation.get(),
                          me->members->methodName, aParams );
             }
 
-            // do the call
+            
             ret_value = me->members->xInvocation->invoke (
                 me->members->methodName, aParams, aOutParamIndex, aOutParam);
 
-            // log the reply, if desired
+            
             if( isLog( cargo, LogLevel::CALL ) )
             {
                 logReply( cargo, "success py->uno[0x", me->members->xInvocation.get(),
@@ -118,7 +118,7 @@ PyObject* PyUNO_callable_call(
             PyRef return_list( PyTuple_New (1+aOutParam.getLength()), SAL_NO_ACQUIRE );
             PyTuple_SetItem (return_list.get(), 0, temp.getAcquired());
 
-            // initialize with defaults in case of exceptions
+            
             int i;
             for( i = 1 ; i < 1+aOutParam.getLength() ; i ++ )
             {
@@ -244,7 +244,7 @@ PyRef PyUNO_callable_new (
 
     self = PyObject_New (PyUNO_callable, &PyUNO_callable_Type);
     if (self == NULL)
-        return NULL; //NULL == Error!
+        return NULL; 
 
     self->members = new PyUNO_callable_Internals;
     self->members->xInvocation = my_inv;

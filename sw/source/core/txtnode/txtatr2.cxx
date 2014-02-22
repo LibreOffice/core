@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -92,9 +92,9 @@ SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
             const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
     : SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
 {
-    SetDontExpand( true );  // never expand this attribute
-    // lock the expand flag: simple guarantee that nesting will not be
-    // invalidated by expand operations
+    SetDontExpand( true );  
+    
+    
     SetLockExpandFlag( true );
     SetDontExpandStartAttr( true );
     SetNesting( true );
@@ -146,8 +146,8 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             OSL_ENSURE( false, "<SwTxtINetFmt::GetCharFmt()> - missing character format at hyperlink attribute");
         }
 
-        // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
-        //      correct charstyle.
+        
+        
         bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if ( bResetMod )
@@ -189,7 +189,7 @@ void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-    // erfrage vom Modify Informationen
+    
 bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
@@ -263,8 +263,8 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
                              ? static_cast<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
                              : rFmt.GetCharFmtId();
 
-        // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
-        //              correct charstyle.
+        
+        
         const bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
@@ -307,7 +307,7 @@ SwTxtMeta::CreateTxtMeta(
     bool const i_bIsCopy)
 {
     if (i_bIsCopy)
-    {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
+    {   
         OSL_ENSURE(i_pTargetTxtNode, "cannot copy Meta without target node");
         i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTxtNode);
     }

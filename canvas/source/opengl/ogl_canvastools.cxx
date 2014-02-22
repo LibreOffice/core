@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #define GL_GLEXT_PROTOTYPES
@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    /// triangulates polygon before
+    
     void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
@@ -102,12 +102,12 @@ namespace oglcanvas
                   rColor.Blue,
                   rColor.Alpha);
 
-        // GL 1.2:
-        // glBlendEquation( GLenum mode );
-        // glBlendColor( GLclampf red, GLclampf green,GLclampf blue, GLclampf alpha );
-        // glConvolutionFilter1D
-        // glConvolutionFilter2D
-        // glSeparableFilter2D
+        
+        
+        
+        
+        
+        
     }
 
     void renderOSD( const std::vector<double>& rNumbers, double scale )

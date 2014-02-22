@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -50,12 +50,12 @@ namespace drawinglayer
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
-                    // get reference
+                    
                     const primitive3d::Primitive3DReference xReference(rSource[a]);
 
                     if(xReference.is())
                     {
-                        // try to cast to BasePrimitive3D implementation
+                        
                         const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
 
                         if(pBasePrimitive)
@@ -64,7 +64,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            // unknown implementation, use UNO API call instead and process recursively
+                            
                             const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
                             process(xReference->getDecomposition(rViewParameters));
                         }
@@ -72,7 +72,7 @@ namespace drawinglayer
                 }
             }
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,7 +37,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 
 
-// define ----------------------------------------------------------------
+
 
 #define DEFAULTPATH__ADDIN          0
 #define DEFAULTPATH__AUTOCORRECT    1
@@ -62,7 +62,7 @@ using namespace com::sun::star::uno;
 #define DEFAULTPATH__WORK           20
 #define DEFAULTPATH__USERDICTIONARY 21
 
-// class SvtDefaultOptions_Impl ------------------------------------------
+
 
 class SvtDefaultOptions_Impl : public utl::ConfigItem
 {
@@ -97,7 +97,7 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 };
 
-// global ----------------------------------------------------------------
+
 
 static SvtDefaultOptions_Impl*  pOptions = NULL;
 static sal_Int32                nRefCount = 0;
@@ -135,33 +135,33 @@ static PathToDefaultMapping_Impl const PathMap_Impl[] =
     { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath }
 };
 
-// functions -------------------------------------------------------------
+
 
 Sequence< OUString > GetDefaultPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Addin",            // PATH_ADDIN
-        "AutoCorrect",      // PATH_AUTOCORRECT
-        "AutoText",         // PATH_AUTOTEXT
-        "Backup",           // PATH_BACKUP
-        "Basic",            // PATH_BASIC
-        "Bitmap",           // PATH_BITMAP
-        "Config",           // PATH_CONFIG
-        "Dictionary",       // PATH_DICTIONARY
-        "Favorite",         // PATH_FAVORITES
-        "Filter",           // PATH_FILTER
-        "Gallery",          // PATH_GALLERY
-        "Graphic",          // PATH_GRAPHIC
-        "Help",             // PATH_HELP
-        "Linguistic",       // PATH_LINGUISTIC
-        "Module",           // PATH_MODULE
-        "Palette",          // PATH_PALETTE
-        "Plugin",           // PATH_PLUGIN
-        "Temp",             // PATH_TEMP
-        "Template",         // PATH_TEMPLATE
-        "UserConfig",       // PATH_USERCONFIG
-        "Work"              // PATH_WORK
+        "Addin",            
+        "AutoCorrect",      
+        "AutoText",         
+        "Backup",           
+        "Basic",            
+        "Bitmap",           
+        "Config",           
+        "Dictionary",       
+        "Favorite",         
+        "Filter",           
+        "Gallery",          
+        "Graphic",          
+        "Help",             
+        "Linguistic",       
+        "Module",           
+        "Palette",          
+        "Plugin",           
+        "Temp",             
+        "Template",         
+        "UserConfig",       
+        "Work"              
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -175,15 +175,15 @@ Sequence< OUString > GetDefaultPropertyNames()
 
 void SvtDefaultOptions_Impl::Notify( const Sequence< OUString >&  )
 {
-    // no notification, will never be changed
+    
 }
 
 void SvtDefaultOptions_Impl::Commit()
 {
-    // will never be changed
+    
 }
 
-// class SvtDefaultOptions_Impl ------------------------------------------
+
 
 OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 {
@@ -214,7 +214,7 @@ OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Path/Default" )
 {
@@ -236,7 +236,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                 {
                     case ::com::sun::star::uno::TypeClass_STRING :
                     {
-                        // multi paths
+                        
                         if ( pValues[nProp] >>= aTempStr )
                             aFullPath = aPathOpt.SubstituteVariable( aTempStr );
                         else
@@ -248,7 +248,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
 
                     case ::com::sun::star::uno::TypeClass_SEQUENCE :
                     {
-                        // single paths
+                        
                         aFullPath = OUString();
                         Sequence < OUString > aList;
                         if ( pValues[nProp] >>= aList )
@@ -308,12 +308,12 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
     }
 }
 
-// class SvtDefaultOptions -----------------------------------------------
+
 namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
 
 SvtDefaultOptions::SvtDefaultOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !pOptions )
     {
@@ -324,11 +324,11 @@ SvtDefaultOptions::SvtDefaultOptions()
     pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtDefaultOptions::~SvtDefaultOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !--nRefCount )
     {
@@ -338,7 +338,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {

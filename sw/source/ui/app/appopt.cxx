@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cmdid.h>
@@ -75,26 +75,26 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 {
     bool bTextDialog = (nId == SID_SW_EDITOPTIONS);
 
-    // the options for the Web- and Textdialog are put together here
+    
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
         SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
-        // no MakeUsrPref, because only options from textdoks can be used here
+        
         SwView* pAppView = GetView();
         if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
             pAppView = 0;
         if(pAppView)
         {
-        // if Text then no WebView and vice versa
+        
             bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
             }
             else
-                pAppView = 0; // with View, there's nothing to win here
+                pAppView = 0; 
         }
 
-    // Options/Edit
+    
     SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
                                     SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
@@ -198,7 +198,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
             pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, (sal_uInt16)pPref->GetDefTab()));
     }
 
-    // Options for GridTabPage
+    
     SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS);
 
     aGridItem.SetUseGridSnap( aViewOpt.IsSnap());
@@ -214,7 +214,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 
     pRet->Put(aGridItem);
 
-    // Options for PrintTabPage
+    
     const SwPrintData* pOpt = pAppView ?
                         &pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
                         0;
@@ -225,7 +225,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt );
     pRet->Put(aAddPrinterItem);
 
-    // Options for Web background
+    
     if(!bTextDialog)
     {
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
@@ -244,7 +244,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         pAppView = 0;
     if(pAppView)
     {
-        // the text dialog mustn't apply data to the web view and vice versa
+        
         bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
         if(bWebView == bTextDialog)
             pAppView = 0;
@@ -258,7 +258,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
                                  : NULL;
 
 
-    // Interpret the page Documentview
+    
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_DOCDISP, false, &pItem ))
     {
         const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
@@ -284,7 +284,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
-    // Elements - interpret Item
+    
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ELEM, false, &pItem ) )
     {
         const SwElemItem* pElemItem = (const SwElemItem*)pItem;
@@ -337,7 +337,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
-    // Background only in WebDialog
+    
     if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND))
     {
         const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSet.Get(
@@ -345,7 +345,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         aViewOpt.SetRetoucheColor( rBrushItem.GetColor() );
     }
 
-    // Interpret page Grid Settings
+    
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS, false, &pItem ))
     {
         const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
@@ -372,7 +372,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
-    // Interpret Writer Printer Options
+    
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, false, &pItem ))
     {
         SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
@@ -400,7 +400,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         const bool bAlignFormulas = rWrtSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
         pPref->SetAlignMathObjectsToBaseline( bAlignFormulas );
 
-        // don't align formulas in documents that are currently loading
+        
         if (bAlignFormulas && !rWrtSh.GetDoc()->IsInReading())
             rWrtSh.AlignAllFormulasToBaseline();
     }
@@ -411,7 +411,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 
 
-        // set elements for the current view and shell
+        
     ApplyUsrPref( aViewOpt, pAppView, bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
 }
 
@@ -483,7 +483,7 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             SwView* pCurrView = GetView();
             if(pCurrView)
             {
-                // if text then not WebView and vice versa
+                
                 bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )

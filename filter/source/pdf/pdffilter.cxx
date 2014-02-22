@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pdffilter.hxx"
@@ -25,7 +25,7 @@
 #include <svl/outstrm.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
-// - PDFFilter -
+
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )
 {
@@ -87,11 +87,11 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  "FirstPageOnLeft", false );
         aCfgItem.ReadBool(  "IsAddStream", false );
 //
-// the encryption is not available when exporting directly, since the encryption is off by default and the selection
-// (encrypt or not) is not persistent; it's available through macro though,
-// provided the correct property values are set, see help
+
+
+
 //
-// now, the relative link stuff
+
         aCfgItem.ReadBool( "ExportLinksRelativeFsys", false );
         aCfgItem.ReadInt32("PDFViewSelection", 0 );
         aCfgItem.ReadBool( "ConvertOOoTargetToPDFTarget", false );
@@ -129,7 +129,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 class FocusWindowWaitCursor
 {
     Window*         m_pFocusWindow;
@@ -172,13 +172,13 @@ sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescripto
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PDFFilter::cancel( ) throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
     throw (IllegalArgumentException, RuntimeException)
@@ -186,7 +186,7 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
     mxSrcDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw (Exception, RuntimeException)
@@ -212,7 +212,7 @@ Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMul
     return (cppu::OWeakObject*) new PDFFilter( comphelper::getComponentContext(rSMgr) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SAL_CALL PDFFilter::getImplementationName()
     throw (RuntimeException)
@@ -220,7 +220,7 @@ OUString SAL_CALL PDFFilter::getImplementationName()
     return PDFFilter_getImplementationName();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
     return cppu::supportsService( this, rServiceName );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException)
 {

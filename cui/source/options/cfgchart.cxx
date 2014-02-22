@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -40,7 +40,7 @@ SvxChartColorTable::SvxChartColorTable(const SvxChartColorTable & _rSource)
 {
 }
 
-// accessors
+
 size_t SvxChartColorTable::size() const
 {
     return m_aColorEntries.size();
@@ -65,11 +65,11 @@ ColorData SvxChartColorTable::getColorData( size_t _nIndex ) const
         return COL_BLACK;
     }
 
-    // GetColor should be const but unfortunately isn't
+    
     return const_cast< XColorEntry & >( m_aColorEntries[ _nIndex ] ).GetColor().GetRGBColor();
 }
 
-// mutators
+
 void SvxChartColorTable::clear()
 {
     m_aColorEntries.clear();
@@ -150,10 +150,10 @@ OUString SvxChartColorTable::getDefaultName( size_t _nIndex )
     return aName;
 }
 
-// comparison
+
 bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 {
-    // note: XColorEntry has no operator ==
+    
     bool bEqual = ( this->m_aColorEntries.size() == _rOther.m_aColorEntries.size() );
 
     if( bEqual )
@@ -171,9 +171,9 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
     return bEqual;
 }
 
-// ====================
-// class SvxChartOptions
-// ====================
+
+
+
 
 SvxChartOptions::SvxChartOptions() :
     ::utl::ConfigItem( OUString("Office.Chart") ),
@@ -202,7 +202,7 @@ void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& aCol )
 
 sal_Bool SvxChartOptions::RetrieveOptions()
 {
-    // get sequence containing all properties
+    
 
     uno::Sequence< OUString > aNames = GetPropertyNames();
     uno::Sequence< uno::Any > aProperties( aNames.getLength());
@@ -210,7 +210,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
 
     if( aProperties.getLength() == aNames.getLength())
     {
-        // 1. default colors for series
+        
         maDefColors.clear();
         uno::Sequence< sal_Int64 > aColorSeq;
         aProperties[ 0 ] >>= aColorSeq;
@@ -218,7 +218,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
         sal_Int32 nCount = aColorSeq.getLength();
         Color aCol;
 
-        // create strings for entry names
+        
         OUString aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
         OUString aPrefix, aPostfix, aName;
         sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
@@ -231,7 +231,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
         else
             aPrefix = aResName;
 
-        // set color values
+        
         for( sal_Int32 i=0; i < nCount; i++ )
         {
             aCol.SetColor( (static_cast< ColorData >(aColorSeq[ i ] )));
@@ -252,8 +252,8 @@ void SvxChartOptions::Commit()
 
     if( aValues.getLength() >= 1 )
     {
-        // 1. default colors for series
-        // convert list to sequence
+        
+        
         const size_t nCount = maDefColors.size();
         uno::Sequence< sal_Int64 > aColors( nCount );
         for( size_t i=0; i < nCount; i++ )
@@ -272,9 +272,9 @@ void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 
-// --------------------
-// class SvxChartColorTableItem
-// --------------------
+
+
+
 
 SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxChartColorTable& aTable ) :
     SfxPoolItem( nWhich_ ),

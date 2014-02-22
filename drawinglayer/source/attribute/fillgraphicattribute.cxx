@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <vcl/graph.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -29,15 +29,15 @@ namespace drawinglayer
         class ImpFillGraphicAttribute
         {
         public:
-            // data definitions
+            
             Graphic                                 maGraphic;
             basegfx::B2DRange                       maGraphicRange;
 
-            // bitfield
+            
             bool                                    mbTiling : 1;
 
-            // tiling definitions, offsets in X/Y in percent for each 2nd row.
-            // If both are set, Y is ignored (X has precedence)
+            
+            
             double                                  mfOffsetX;
             double                                  mfOffsetY;
 
@@ -64,7 +64,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const Graphic& getGraphic() const { return maGraphic; }
             const basegfx::B2DRange& getGraphicRange() const { return maGraphicRange; }
             bool getTiling() const { return mbTiling; }
@@ -150,7 +150,7 @@ namespace drawinglayer
             return mpFillGraphicAttribute->getOffsetY();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

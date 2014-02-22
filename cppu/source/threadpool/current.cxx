@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,7 +84,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 1, aParameters, 1, pExceptions );
             typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
             typelib_typedescription_release( (typelib_TypeDescription*)pMethod );
-            // another static ref:
+            
             ++reinterpret_cast< typelib_TypeDescription * >( pTD )->
                 nStaticRefCount;
             s_type_XCurrentContext = pTD;
@@ -93,9 +93,9 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
     return s_type_XCurrentContext;
 }
 
-//##################################################################################################
 
-//==================================================================================================
+
+
 class ThreadKey
 {
     bool     _bInit;
@@ -108,13 +108,13 @@ public:
     inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(());
     inline ~ThreadKey() SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(())
     : _bInit( false )
     , _pCallback( pCallback )
 {
 }
-//__________________________________________________________________________________________________
+
 inline ThreadKey::~ThreadKey() SAL_THROW(())
 {
     if (_bInit)
@@ -122,7 +122,7 @@ inline ThreadKey::~ThreadKey() SAL_THROW(())
         ::osl_destroyThreadKey( _hThreadKey );
     }
 }
-//__________________________________________________________________________________________________
+
 inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
 {
     if (! _bInit)
@@ -137,7 +137,7 @@ inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
     return _hThreadKey;
 }
 
-//==================================================================================================
+
 extern "C" void SAL_CALL delete_IdContainer( void * p )
 {
     if (p)
@@ -158,7 +158,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
         delete pId;
     }
 }
-//==================================================================================================
+
 IdContainer * getIdContainer() SAL_THROW(())
 {
     static ThreadKey s_key( delete_IdContainer );
@@ -178,7 +178,7 @@ IdContainer * getIdContainer() SAL_THROW(())
 
 }
 
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
@@ -187,7 +187,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     IdContainer * pId = getIdContainer();
     OSL_ASSERT( pId );
 
-    // free old one
+    
     if (pId->pCurrentContext)
     {
         (*pId->pCurrentContextEnv->releaseInterface)(
@@ -226,7 +226,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     }
     return sal_True;
 }
-//##################################################################################################
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
@@ -236,7 +236,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
 
     Environment target_env;
 
-    // release inout parameter
+    
     if (*ppCurrentContext)
     {
         target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
@@ -252,7 +252,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
         *ppCurrentContext = 0;
     }
 
-    // case: null-ref
+    
     if (0 == pId->pCurrentContext)
         return sal_True;
 

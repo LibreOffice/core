@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ogl_spritecanvas.hxx"
@@ -47,7 +47,7 @@ namespace oglcanvas
 
     void SpriteCanvas::initialize()
     {
-        // Only call initialize when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
@@ -75,7 +75,7 @@ namespace oglcanvas
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
 
-        // setup helper
+        
         maDeviceHelper.init( *pParentWindow,
                              *this,
                              aRect );
@@ -89,7 +89,7 @@ namespace oglcanvas
 
         mxComponentContext.clear();
 
-        // forward to parent
+        
         SpriteCanvasBaseT::disposeThis();
     }
 
@@ -97,9 +97,9 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
@@ -107,9 +107,9 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
@@ -188,7 +188,7 @@ namespace oglcanvas
         SPRITECANVAS_SERVICE_NAME );
 }
 
-// The C shared lib entry points
+
 COMPHELPER_SERVICEDECL_EXPORTS1(oglcanvas, oglcanvas::oglSpriteCanvasDecl);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "extlstcontext.hxx"
@@ -122,7 +122,7 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
         {
             OUString aId = rAttribs.getString( XML_id, OUString() );
 
-            // an ext entrie does not need to have an existing corresponding entry
+            
             ExtLst::const_iterator aExt = getExtLst().find( aId );
             if(aExt == getExtLst().end())
                 return NULL;
@@ -156,7 +156,7 @@ ContextHandlerRef ExtLstGlobalContext::onCreateContext( sal_Int32 nElement, cons
     return this;
 }
 
-} //namespace oox
-} //namespace xls
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

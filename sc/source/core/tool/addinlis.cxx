@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,11 +38,11 @@ ScAddInListener* ScAddInListener::CreateListener(
 {
     ScAddInListener* pNew = new ScAddInListener( xVR, pDoc );
 
-    pNew->acquire(); // for aAllListeners
+    pNew->acquire(); 
     aAllListeners.push_back( pNew );
 
     if ( xVR.is() )
-        xVR->addResultListener( pNew ); // after at least 1 ref exists!
+        xVR->addResultListener( pNew ); 
 
     return pNew;
 }
@@ -75,7 +75,7 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
     return pLst;
 }
 
-//! move to some container object?
+
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
     ::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin();
@@ -91,10 +91,10 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
                 if ( (*iter)->xVolRes.is() )
                     (*iter)->xVolRes->removeResultListener( *iter );
 
-                (*iter)->release(); // Ref for aAllListeners - pLst may be deleted here
+                (*iter)->release(); 
 
-                // this AddIn is no longer used
-                // dont delete, just remove the ref for the list
+                
+                
 
                 iter = aAllListeners.erase( iter );
                 continue;
@@ -104,16 +104,16 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
     }
 }
 
-// XResultListener
+
 
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard; //! or generate a UserEvent
+    SolarMutexGuard aGuard; 
 
-    aResult = aEvent.Value; // store result
+    aResult = aEvent.Value; 
 
-    // notify document of changes
+    
 
     Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
 
@@ -125,12 +125,12 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
     }
 }
 
-// XEventListener
+
 
 void SAL_CALL ScAddInListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    // hold a ref so this is not deleted at removeResultListener
+    
     uno::Reference<sheet::XResultListener> xRef( this );
 
     if ( xVolRes.is() )

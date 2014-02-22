@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <callablestatement.hxx>
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< Type > OCallableStatement::getTypes() throw (RuntimeException)
 {
     SAL_INFO("dbaccess", "OCallableStatement::getTypes" );
@@ -59,10 +59,10 @@ Sequence< sal_Int8 > OCallableStatement::getImplementationId() throw (RuntimeExc
     return pId->getImplementationId();
 }
 
-// com::sun::star::uno::XInterface
+
 Any OCallableStatement::queryInterface( const Type & rType ) throw (RuntimeException)
 {
-    //SAL_INFO("dbaccess", "OCallableStatement::queryInterface" );
+    
     Any aIface = OPreparedStatement::queryInterface( rType );
     if (!aIface.hasValue())
         aIface = ::cppu::queryInterface(
@@ -82,7 +82,7 @@ void OCallableStatement::release() throw ()
     OPreparedStatement::release();
 }
 
-// XServiceInfo
+
 OUString OCallableStatement::getImplementationName(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OCallableStatement::getImplementationName" );
@@ -98,7 +98,7 @@ Sequence< OUString > OCallableStatement::getSupportedServiceNames(  ) throw (Run
     return aSNS;
 }
 
-// XOutParameters
+
 void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCallableStatement::registerOutParameter" );
@@ -118,7 +118,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY)->registerNumericOutParameter( parameterIndex, sqlType, scale );
 }
 
-// XRow
+
 sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCallableStatement::wasNull" );

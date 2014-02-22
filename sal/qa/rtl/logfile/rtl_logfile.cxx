@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -28,7 +28,7 @@
 #include <rtl/logfile.hxx>
 
 #include <osl/file.hxx>
-#if ( defined WNT )                     // Windows
+#if ( defined WNT )                     
 #include <tchar.h>
 #endif
 
@@ -51,15 +51,15 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
     printf("%s\n", (char *)aString.getStr( ) );
 }
 
-/** get the absolute source file URL "file:///.../sal/qa/rtl/logfile/"
+/** get the absolute source file URL "file:
   */
 
 inline ::rtl::OUString getTempPath( void )
 {
 #ifdef UNX
-    rtl::OUString suDirURL( "file:///tmp/" );
+    rtl::OUString suDirURL( "file:
 #else /* Windows */
-    rtl::OUString suDirURL( "file:///c:/temp/" );
+    rtl::OUString suDirURL( "file:
 #endif
     return suDirURL;
 }
@@ -82,7 +82,7 @@ bool t_fileExist(rtl::OUString const& _sFilename)
 */
 inline ::rtl::OUString getCurrentPID(  )
 {
-        //~ Get current PID and turn it into OUString;
+        
         int nPID = 0;
 #ifdef WNT
         nPID = GetCurrentProcessId();
@@ -93,7 +93,7 @@ inline ::rtl::OUString getCurrentPID(  )
 }
 
 
-// -----------------------------------------------------------------------------
+
 /*
  * LLA:
  * check if logfile is create
@@ -106,7 +106,7 @@ namespace rtl_logfile
     {
     public:
 
-        //directly call rtl_logfile_trace
+        
         void logfile_001()
         {
 #ifdef SOLARIS
@@ -136,19 +136,19 @@ namespace rtl_logfile
                 sal_Char       buffer_read[400];
                 sal_uInt64      nCount_read;
                 nError1 = aTestFile.read( buffer_read, 400, nCount_read );
-                //printf("buffer is %s\n", buffer_read );
+                
                 CPPUNIT_ASSERT_MESSAGE("write right logs", strstr( buffer_read, "trace 1 2 3") != NULL );
                 aTestFile.sync();
                 aTestFile.close();
-                /*// delete logfile on the disk
+                /*
 
                 nError1 = osl::File::remove( suFilePath );
                 printError( nError1 );
                 CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError1 ) || ( nError1 == ::osl::FileBase::E_NOENT ) );
                 */
         }
-        //Profiling output should only be generated for a special product version of OpenOffice
-        // which is compiled with a defined preprocessor symbol 'TIMELOG'. Now, the symbol not defined
+        
+        
         void logfile_002()
             {
 #ifdef SOLARIS
@@ -164,7 +164,7 @@ namespace rtl_logfile
                 RTL_LOGFILE_TRACE1( "trace %d" , 1 );
                 RTL_LOGFILE_TRACE2( "trace %d %d" , 1,2 );
                 RTL_LOGFILE_TRACE3( "trace %d %d %d" , 1 , 2 ,3 );
-// TODO: assertion test!
+
         }
 
         void logfile_003()
@@ -183,7 +183,7 @@ namespace rtl_logfile
                 RTL_LOGFILE_CONTEXT_TRACE1 ( foo , "trace %d" , 1 );
                 RTL_LOGFILE_CONTEXT_TRACE2 ( foo , "trace %d %d" , 1 , 2 );
                 RTL_LOGFILE_CONTEXT_TRACE3 ( foo , "trace %d %d %d" , 1 , 2 , 3);
-// TODO: assertion test!
+
             }
 
 
@@ -194,15 +194,15 @@ namespace rtl_logfile
         CPPUNIT_TEST_SUITE_END( );
     };
 
-} // namespace rtl_logfile
+} 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION( rtl_logfile::logfile);
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-//~ do some clean up work after all test completed.
+
 class GlobalObject
 {
 public:
@@ -215,7 +215,7 @@ public:
                 suFilePath +=  rtl::OUString("logfile1_") + getCurrentPID( );
                 suFilePath +=  rtl::OUString(".log");
 
-                //if ( ifFileExist( suFilePath )  == sal_True )
+                
                 ::osl::FileBase::RC nError1;
                 nError1 = osl::File::remove( suFilePath );
 #ifdef WNT

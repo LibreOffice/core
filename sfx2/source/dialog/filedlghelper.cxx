@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/filedlghelper.hxx>
@@ -153,9 +153,9 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 OUString EncodeSpaces_Impl( const OUString& rSource );
 OUString DecodeSpaces_Impl( const OUString& rSource );
 
-// FileDialogHelper_Impl
 
-// XFilePickerListener Methods
+
+
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -186,7 +186,7 @@ void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeExceptio
     mpAntiImpl->DialogSizeChanged();
 }
 
-// XDialogClosedListener Methods
+
 void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEvent ) throw ( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -194,7 +194,7 @@ void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEv
     postExecute( _rEvent.DialogResult );
 }
 
-// handle XFilePickerListener events
+
 void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& )
 {
     if ( mbHasVersions )
@@ -212,10 +212,10 @@ void FileDialogHelper_Impl::handleDirectoryChanged( const FilePickerEvent& )
 
 OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEvent )
 {
-    //!!! todo: cache the help strings (here or TRA)
+    
 
     OString sHelpId;
-    // mapping from element id -> help id
+    
     switch ( aEvent.ElementId )
     {
         case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
@@ -284,7 +284,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
             updateFilterOptionsBox();
             enablePasswordBox( sal_False );
             updateSelectionBox();
-            // only use it for export and with our own dialog
+            
             if ( mbExport && !mbSystemPicker )
                 updateExportButton();
             break;
@@ -301,7 +301,7 @@ void FileDialogHelper_Impl::handleDialogSizeChanged()
         TimeOutHdl_Impl( NULL );
 }
 
-// XEventListener Methods
+
 void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& ) throw ( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -312,7 +312,7 @@ void FileDialogHelper_Impl::dispose()
 {
     if ( mxFileDlg.is() )
     {
-        // remove the event listener
+        
         uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
         if ( xNotifier.is() )
             xNotifier->removeFilePickerListener( this );
@@ -462,10 +462,10 @@ void FileDialogHelper_Impl::updateExportButton()
         OUString sEllipses( "..."  );
         OUString sOldLabel( xCtrlAccess->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
 
-        // initialize button label; we need the label with the mnemonic char
+        
         if ( maButtonLabel.isEmpty() || maButtonLabel.indexOf( MNEMONIC_CHAR ) == -1 )
         {
-            // cut the ellipses, if necessary
+            
             sal_Int32 nIndex = sOldLabel.indexOf( sEllipses );
             if ( -1 == nIndex )
                 nIndex = sOldLabel.getLength();
@@ -473,7 +473,7 @@ void FileDialogHelper_Impl::updateExportButton()
         }
 
         OUString sLabel = maButtonLabel;
-        // filter with options -> append ellipses on export button label
+        
         if ( CheckFilterOptionsCapability( getCurentSfxFilter() ) )
             sLabel += "...";
 
@@ -496,7 +496,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
     if ( !mbHasSelectionBox )
         return;
 
-    // Does the selection box exist?
+    
     sal_Bool bSelectionBoxFound = sal_False;
     uno::Reference< XControlInformation > xCtrlInfo( mxFileDlg, UNO_QUERY );
     if ( xCtrlInfo.is() )
@@ -537,7 +537,7 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 
     if( bInit )
     {
-        // in case of inintialization previous state is not interesting
+        
         if( mbIsPwdEnabled )
         {
             uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
@@ -553,7 +553,7 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
     }
     else if( bWasEnabled && !mbIsPwdEnabled )
     {
-        // remember user settings until checkbox is enabled
+        
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
         sal_Bool bPassWord = sal_False;
@@ -568,7 +568,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
     {
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-        // check, whether or not we have to display a preview
+        
         if ( xCtrlAccess.is() )
         {
             try
@@ -580,8 +580,8 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
                 {
                     mbShowPreview = bShowPreview;
 
-                    // setShowState has currently no effect for the
-                    // OpenOffice FilePicker (see svtools/source/filepicker/iodlg.cxx)
+                    
+                    
                     uno::Reference< XFilePreview > xFilePreview( mxFileDlg, UNO_QUERY );
                     if ( xFilePreview.is() )
                         xFilePreview->setShowState( mbShowPreview );
@@ -684,18 +684,18 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
 
         if ( ERRCODE_NONE == getGraphic( aURL, maGraphic ) )
         {
-            // changed the code slightly;
-            // before: the bitmap was scaled and
-            // surrounded a white frame
-            // now: the bitmap will only be scaled
-            // and the filepicker implementation
-            // is responsible for placing it at its
-            // proper position and painting a frame
+            
+            
+            
+            
+            
+            
+            
 
             Bitmap aBmp = maGraphic.GetBitmap();
             if ( !aBmp.IsEmpty() )
             {
-                // scale the bitmap to the correct size
+                
                 sal_Int32 nOutWidth  = xFilePicker->getAvailableWidth();
                 sal_Int32 nOutHeight = xFilePicker->getAvailableHeight();
                 sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
@@ -709,10 +709,10 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
                 else
                     aBmp.Scale( nYRatio, nYRatio );
 
-                // Convert to true color, to allow CopyPixel
+                
                 aBmp.Convert( BMP_CONVERSION_24BIT );
 
-                // and copy it into the Any
+                
                 SvMemoryStream aData;
 
                 WriteDIB(aBmp, aData, false, true);
@@ -729,7 +729,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
     try
     {
         SolarMutexReleaser aReleaseForCallback;
-        // clear the preview window
+        
         xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
     }
     catch( const IllegalArgumentException& )
@@ -748,7 +748,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
     if ( !mpGraphicFilter )
         return ERRCODE_IO_NOTSUPPORTED;
 
-    // select graphic filter from dialog filter selection
+    
     OUString aCurFilter( getFilter() );
 
     sal_uInt16 nFilter = !aCurFilter.isEmpty() && mpGraphicFilter->GetImportFormatCount()
@@ -766,7 +766,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
     ErrCode nRet = ERRCODE_NONE;
 
     sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
-    // non-local?
+    
     if ( INET_PROT_FILE != aURLObj.GetProtocol() )
     {
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ );
@@ -844,12 +844,12 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
         case FILESAVE_AUTOEXTENSION:
             return SAVE;
         default:
-            assert(false); // invalid dialog type
+            assert(false); 
     }
     return UNDEFINED;
 }
 
-// FileDialogHelper_Impl
+
 
 FileDialogHelper_Impl::FileDialogHelper_Impl(
     FileDialogHelper* _pAntiImpl,
@@ -874,8 +874,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
-    // create the file open dialog
-    // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
+    
+    
 
     mpPreferredParentWindow = _pPreferredParentWindow;
     mpAntiImpl              = _pAntiImpl;
@@ -899,7 +899,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbHasSelectionBox       = false;
     mbSelectionFltrEnabled  = false;
 
-    // default settings
+    
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
     if (OPEN == lcl_OpenOrSave(m_nDialogType))
         m_nMustFlags = SFX_FILTER_IMPORT;
@@ -911,7 +911,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mpGraphicFilter = NULL;
     mnPostUserEventId = 0;
 
-    // create the picker component
+    
     mxFileDlg = mxFileDlg.query( xFactory->createInstance( aService ) );
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
 
@@ -986,7 +986,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
                 mbHasPreview = true;
 
-                // aPreviewTimer
+                
                 maPreviewTimer.SetTimeout( 500 );
                 maPreviewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
@@ -1003,7 +1003,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILEOPEN_LINK_PREVIEW:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
                 mbHasPreview = true;
-                // aPreviewTimer
+                
                 maPreviewTimer.SetTimeout( 500 );
                 maPreviewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
@@ -1021,11 +1021,11 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
         Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 3 : 4 );
 
-        // This is a hack. We currently know that the internal file picker implementation
-        // supports the extended arguments as specified below.
-        // TODO:
-        // a) adjust the service description so that it includes the TemplateDescription and ParentWindow args
-        // b) adjust the implementation of the system file picker to that it recognizes it
+        
+        
+        
+        
+        
         if ( mbSystemPicker )
         {
             aInitArguments[0] <<= nTemplateDescription;
@@ -1068,16 +1068,16 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     }
 
 
-    // set multiselection mode
+    
     if ( nFlags & SFXWB_MULTISELECTION )
         mxFileDlg->setMultiSelectionMode( sal_True );
 
-    if (mbAddGraphicFilter) // generate graphic filter only on demand
+    if (mbAddGraphicFilter) 
     {
         addGraphicFilter();
     }
 
-    // Export dialog
+    
     if ( mbExport )
     {
         mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ).toString() );
@@ -1088,13 +1088,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         catch( const Exception & ) { }
     }
 
-    // Save a copy dialog
+    
     if ( mbIsSaveACopyDlg )
     {
         mxFileDlg->setTitle( SfxResId( STR_PB_SAVEACOPY ).toString() );
     }
 
-    // the "insert file" dialog needs another title
+    
     if ( mbInsert )
     {
         mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ).toString() );
@@ -1110,13 +1110,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         }
     }
 
-    // add the event listener
+    
     xNotifier->addFilePickerListener( this );
 }
 
 FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
-    // Remove user event if we haven't received it yet
+    
     if ( mnPostUserEventId )
         Application::RemoveUserEvent( mnPostUserEventId );
     mnPostUserEventId = 0;
@@ -1170,11 +1170,11 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     if ( !_pControlId || !_pHelpId )
         return;
 
-    // forward these ids to the file picker
+    
     try
     {
         const OUString sHelpIdPrefix( INET_HID_SCHEME  );
-        // the ids for the single controls
+        
         uno::Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
         if ( xControlAccess.is() )
         {
@@ -1215,15 +1215,15 @@ void FileDialogHelper_Impl::preExecute()
     implInitializeFileName( );
 
 #if !(defined(MACOSX) && defined(MACOSX)) && !defined(WNT)
-    // allow for dialog implementations which need to be executed before they return valid values for
-    // current filter and such
+    
+    
 
-    // On Vista (at least SP1) it's the same as on MacOSX, the modal dialog won't let message pass
-    // through before it returns from execution
+    
+    
     mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
 #else
-    // However, the Mac OS X implementation's pickers run modally in execute and so the event doesn't
-    // get through in time... so we call the methods directly
+    
+    
     enablePasswordBox( sal_True );
     updateFilterOptionsBox( );
     updateSelectionBox( );
@@ -1243,8 +1243,8 @@ void FileDialogHelper_Impl::implInitializeFileName( )
         INetURLObject aObj( maPath );
         aObj.Append( maFileName );
 
-        // in case we're operating as save dialog, and "auto extension" is checked,
-        // cut the extension from the name
+        
+        
         if ( mbIsSaveDlg && mbHasAutoExt )
         {
             try
@@ -1259,7 +1259,7 @@ void FileDialogHelper_Impl::implInitializeFileName( )
                     )
                 {
                     if ( bAutoExtChecked )
-                    {   // cut the extension
+                    {   
                         aObj.removeExtension( );
                         mxFileDlg->setDefaultName( aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
                     }
@@ -1279,9 +1279,9 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
-//On MacOSX the native file picker has to run in the primordial thread because of drawing issues
-//On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
-//primordial thread as the ucb gnome-vfs2 provider was initialized in.
+
+
+
 
     {
         try
@@ -1351,7 +1351,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
         sExtension = comphelper::string::remove(sExtension, '.');
     }
 
-    // a) the new way (optional!)
+    
     uno::Reference< XFilePicker2 > xPickNew(xPicker, UNO_QUERY);
     if (xPickNew.is())
     {
@@ -1361,7 +1361,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
             rpURLList.push_back(lFiles[i]);
     }
 
-    // b) the olde way ... non optional.
+    
     else
     {
         uno::Reference< XFilePicker > xPickOld(xPicker, UNO_QUERY_THROW);
@@ -1395,23 +1395,23 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         OUString&       rFilter )
 {
-    // rFilter is a pure output parameter, it shouldn't be used for anything else
-    // changing this would surely break code
-    // rpSet is in/out parameter, usually just a media-descriptor that can be changed by dialog
+    
+    
+    
 
     uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-    // retrieves parameters from rpSet
-    // for now only Password is used
+    
+    
     if ( rpSet )
     {
-        // check password checkbox if the document had password before
+        
         if( mbHasPassword )
         {
             SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, false );
             mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
 
-            // in case the document has password to modify, the dialog should be shown
+            
             SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, false );
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
@@ -1422,7 +1422,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         else
             mbSelectionEnabled = false;
 
-        // the password will be set in case user decide so
+        
         rpSet->ClearItem( SID_PASSWORDINTERACTION );
         rpSet->ClearItem( SID_PASSWORD );
         rpSet->ClearItem( SID_ENCRYPTIONDATA );
@@ -1445,11 +1445,11 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
 
     if ( ExecutableDialogResults::CANCEL != implDoExecute() )
     {
-        // create an itemset if there is no
+        
         if( !rpSet )
             rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
-        // the item should remain only if it was set by the dialog
+        
         rpSet->ClearItem( SID_SELECTION );
 
         if( mbExport && mbHasSelectionBox )
@@ -1468,7 +1468,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         }
 
 
-        // set the read-only flag. When inserting a file, this flag is always set
+        
         if ( mbInsert )
             rpSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
@@ -1496,23 +1496,23 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                                                     ControlActions::GET_SELECTED_ITEM_INDEX );
                 sal_Int32 nVersion = 0;
                 if ( ( aValue >>= nVersion ) && nVersion > 0 )
-                    // open a special version; 0 == current version
+                    
                     rpSet->Put( SfxInt16Item( SID_VERSION, (short)nVersion ) );
             }
             catch( const IllegalArgumentException& ){}
         }
 
-        // set the filter
+        
         getRealFilter( rFilter );
 
         const SfxFilter* pCurrentFilter = getCurentSfxFilter();
 
-        // fill the rpURLList
+        
         implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
         if ( rpURLList.empty() )
             return ERRCODE_ABORT;
 
-        // check, whether or not we have to display a password box
+        
         if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
         {
             try
@@ -1521,7 +1521,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 sal_Bool bPassWord = sal_False;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
-                    // ask for a password
+                    
                     OUString aDocName(rpURLList[0]);
                     ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, rpSet);
                     if (errCode != ERRCODE_NONE)
@@ -1596,9 +1596,9 @@ void FileDialogHelper_Impl::getRealFilter( OUString& _rFilter ) const
 void FileDialogHelper_Impl::verifyPath()
 {
 #ifdef UNX
-    // lp#905355, fdo#43895
-    // Check that the file has read only permission and is in /tmp -- this is
-    //  the case if we have opened the file from the web with firefox only.
+    
+    
+    
     if (maFileName.isEmpty()) {
         return;
     }
@@ -1655,7 +1655,7 @@ void FileDialogHelper_Impl::verifyPath()
 void FileDialogHelper_Impl::displayFolder( const OUString& _rPath )
 {
     if ( _rPath.isEmpty() )
-        // nothing to do
+        
         return;
 
     maPath = _rPath;
@@ -1737,7 +1737,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     if (mbDeleteMatcher)
         delete mpMatcher;
 
-    // we still need a matcher to convert UI names to filter names
+    
     if ( rFactory.isEmpty() )
     {
         SfxApplication *pSfxApp = SFX_APP();
@@ -1760,11 +1760,11 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     m_nMustFlags |= nMust;
     m_nDontFlags |= nDont;
 
-    // create the list of filters
+    
     OUStringBuffer sQuery(256);
     sQuery.append("getSortedFilterList()");
     sQuery.append(":module=");
-    sQuery.append(rFactory); // use long name here !
+    sQuery.append(rFactory); 
     sQuery.append(":iflags=");
     sQuery.append(OUString::number(m_nMustFlags));
     sQuery.append(":eflags=");
@@ -1782,7 +1782,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
 
     TSortedFilterList         aIter   (xResult);
 
-    // append the filters
+    
     OUString sFirstFilter;
     if (OPEN == lcl_OpenOrSave(m_nDialogType))
         ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter, *this );
@@ -1791,7 +1791,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     else
         ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter, *this, rFactory );
 
-    // set our initial selected filter (if we do not already have one)
+    
     if ( maSelectFilter.isEmpty() )
         maSelectFilter = sFirstFilter;
 }
@@ -1824,11 +1824,11 @@ void FileDialogHelper_Impl::addGraphicFilter()
     if ( ! xFltMgr.is() )
         return;
 
-    // create the list of filters
+    
     mpGraphicFilter = new GraphicFilter;
     sal_uInt16 i, j, nCount = mpGraphicFilter->GetImportFormatCount();
 
-    // compute the extension string for all known import filters
+    
     OUString aExtensions;
 
     for ( i = 0; i < nCount; i++ )
@@ -1868,7 +1868,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         SAL_WARN( "sfx.dialog", "Could not append Filter" );
     }
 
-    // Now add the filter
+    
     for ( i = 0; i < nCount; i++ )
     {
         OUString aName = mpGraphicFilter->GetImportFormatName( i );
@@ -1910,11 +1910,11 @@ static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, co
     sal_Int32     nFirstChar        = 0;
     sal_Int32     i                 = nFirstChar;
 
-    // Determine token position and length
+    
     pStr += i;
     while ( i < nLen )
     {
-        // Increase token count if match
+        
         if ( *pStr == cTok )
         {
             ++nTok;
@@ -2041,7 +2041,7 @@ namespace
         if ( sPath.isEmpty() )
             sPath = _rFallback.getToken( _nFallbackToken, ' ' );
 
-        // check if the path points to a valid (accessible) directory
+        
         sal_Bool bValid = sal_False;
         if ( !sPath.isEmpty() )
         {
@@ -2089,12 +2089,12 @@ void FileDialogHelper_Impl::loadConfig()
         {
             try
             {
-                // respect the last "insert as link" state
+                
                 sal_Bool bLink = (sal_Bool) aUserData.getToken( 0, ' ' ).toInt32();
                 aValue <<= bLink;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
 
-                // respect the last "show preview" state
+                
                 sal_Bool bShowPreview = (sal_Bool) aUserData.getToken( 1, ' ' ).toInt32();
                 aValue <<= bShowPreview;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
@@ -2109,7 +2109,7 @@ void FileDialogHelper_Impl::loadConfig()
                     setFilter( aFilter );
                 }
 
-                // set the member so we know that we have to show the preview
+                
                 mbShowPreview = bShowPreview;
             }
             catch( const IllegalArgumentException& ){}
@@ -2166,7 +2166,7 @@ void FileDialogHelper_Impl::loadConfig()
 
 void FileDialogHelper_Impl::setDefaultValues()
 {
-    // when no filter is set, we set the curentFilter to <all>
+    
     if ( maCurFilter.isEmpty() && !maSelectFilter.isEmpty() )
     {
         uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
@@ -2178,7 +2178,7 @@ void FileDialogHelper_Impl::setDefaultValues()
         {}
     }
 
-    // when no path is set, we use the standard 'work' folder
+    
     if ( maPath.isEmpty() )
     {
         OUString aWorkFolder = SvtPathOptions().GetWorkPath();
@@ -2242,7 +2242,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
         LoadLastUsedFilter( *pConfigId );
 }
 
-// FileDialogHelper
+
 
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
@@ -2255,7 +2255,7 @@ FileDialogHelper::FileDialogHelper(
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
 
-    // create the list of filters
+    
     mpImp->addFilters(
             SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
@@ -2274,7 +2274,7 @@ FileDialogHelper::FileDialogHelper(
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir, rBlackList );
     mxImp = mpImp;
 
-    // create the list of filters
+    
     mpImp->addFilters(
             SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
@@ -2302,7 +2302,7 @@ FileDialogHelper::FileDialogHelper(
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir, rBlackList );
     mxImp = mpImp;
 
-    // the wildcard here is expected in form "*.extension"
+    
     OUString aWildcard;
     if ( aExtName.indexOf( (sal_Unicode)'*' ) != 0 )
     {
@@ -2349,7 +2349,7 @@ IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker)
     return 0L;
 }
 
-// rDirPath has to be a directory
+
 ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
                                    SfxItemSet *&   rpSet,
                                    OUString&       rFilter,
@@ -2445,14 +2445,14 @@ Sequence < OUString > FileDialogHelper::GetMPath() const
 
 Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 {
-    // a) the new way (optional!)
+    
     uno::Sequence< OUString > aResultSeq;
     uno::Reference< XFilePicker2 > xPickNew(mpImp->mxFileDlg, UNO_QUERY);
     if (xPickNew.is())
     {
         aResultSeq = xPickNew->getSelectedFiles();
     }
-    // b) the olde way ... non optional.
+    
     else
     {
         uno::Reference< XFilePicker > xPickOld(mpImp->mxFileDlg, UNO_QUERY_THROW);
@@ -2521,9 +2521,9 @@ void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
     if ( _rPath.isEmpty() )
         return;
 
-    // if the given path isn't a folder, we cut off the last part
-    // and take it as filename and the rest of the path should be
-    // the folder
+    
+    
+    
 
     INetURLObject aObj( _rPath );
 
@@ -2544,7 +2544,7 @@ void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
         OUString sFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( sFolder.isEmpty() )
         {
-            // _rPath is not a valid path -> fallback to home directory
+            
             osl::Security aSecurity;
             aSecurity.getHomeDir( sFolder );
         }
@@ -2581,7 +2581,7 @@ uno::Reference < XFilePicker > FileDialogHelper::GetFilePicker() const
     return mpImp->mxFileDlg;
 }
 
-// XFilePickerListener Methods
+
 void SAL_CALL FileDialogHelper::FileSelectionChanged( const FilePickerEvent& aEvent )
 {
     mpImp->handleFileSelectionChanged( aEvent );
@@ -2642,8 +2642,8 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
 ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
 {
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
-    // TODO: need a save way to distinguish MS filters from other filters
-    // for now MS-filters are the only alien filters that support encryption
+    
+    
     sal_Bool bMSType = !pCurrentFilter->IsOwnFormat();
     ::comphelper::DocPasswordRequestType eType = bMSType ?
         ::comphelper::DocPasswordRequestType_MS :
@@ -2657,10 +2657,10 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
     {
         if ( pPasswordRequest->getPassword().getLength() )
         {
-            // TODO/LATER: The filters should show the password dialog themself in future
+            
             if ( bMSType )
             {
-                // Check if filter supports OOXML encryption
+                
                 if ( lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName() ) )
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
@@ -2697,7 +2697,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
 
         if ( bMSType )
         {
-            // the empty password has 0 as Hash
+            
             sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), OUString( "com.sun.star.text.TextDocument"  ).equals( pCurrentFilter->GetServiceName() ) );
             if ( nHash )
                 pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
@@ -2728,6 +2728,6 @@ OUString DecodeSpaces_Impl( const OUString& rSource )
     return sRet;
 }
 
-}   // end of namespace sfx2
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

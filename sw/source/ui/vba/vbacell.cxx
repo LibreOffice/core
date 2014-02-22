@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacell.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -77,13 +77,13 @@ void SAL_CALL SwVbaCell::setHeightRule( ::sal_Int32 _heightrule ) throw (css::un
 
 void SAL_CALL SwVbaCell::SetWidth( float width, sal_Int32 /*rulestyle*/ ) throw (css::uno::RuntimeException)
 {
-    // FIXME: handle the argument: rulestyle
+    
     setWidth( static_cast<sal_Int32>(width) );
 }
 
 void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException)
 {
-    // FIXME: handle the argument: heightrule
+    
     setHeightRule( heightrule );
     setHeight( uno::makeAny( height ) );
 }

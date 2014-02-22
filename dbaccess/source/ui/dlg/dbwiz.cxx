@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbwiz.hxx"
@@ -53,7 +53,7 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_PAGE_DBASE           2
 #define ADDITIONAL_PAGE_FLAT            3
 #define ADDITIONAL_PAGE_LDAP            4
-//5 was ADDITIONAL_PAGE_ADABAS
+
 #define ADDITIONAL_PAGE_MYSQL_JDBC      6
 #define ADDITIONAL_PAGE_MYSQL_ODBC      7
 #define ADDITIONAL_PAGE_ORACLE_JDBC     8
@@ -62,7 +62,7 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_USERDEFINED         11
 #define ADDITIONAL_PAGE_MYSQL_NATIVE   12
 
-// ODbTypeWizDialog
+
 ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
@@ -93,7 +93,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
     m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
-    // no local resources needed anymore
+    
 
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
     m_pCollection = pCollectionItem->getCollection();
@@ -235,7 +235,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     TabPage* pPage = NULL;
     switch(_nState)
     {
-        case START_PAGE: // start state
+        case START_PAGE: 
         {
             pPage = new OGeneralPageDialog(this,*m_pOutSet);
             OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage );
@@ -283,7 +283,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             break;
     }
 
-    // register ourself as modified listener
+    
     if ( pPage )
     {
         static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory( m_pImpl->getORB() );
@@ -312,12 +312,12 @@ void ODbTypeWizDialog::setTitle(const OUString& _sTitle)
 void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
 {
     enableButtons( WZB_FINISH, _bEnable );
-    // TODO:
-    // this is hacky. At the moment, this method is used in only one case.
-    // As soon as it is to be used more wide-spread, we should find a proper concept
-    // for enabling both the Next and Finish buttons, depending on the current page state.
-    // Plus, the concept must also care for the case where those pages are embedded into
-    // anormal tab dialog.
+    
+    
+    
+    
+    
+    
 }
 
 sal_Bool ODbTypeWizDialog::saveDatasource()
@@ -345,6 +345,6 @@ sal_Bool ODbTypeWizDialog::onFinish()
     return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish() : sal_False;
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/implbase1.hxx>
@@ -51,13 +51,13 @@ class PopupMenuToolbarController : public svt::ToolboxController
 public:
     virtual ~PopupMenuToolbarController();
 
-    // XComponent
+    
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
-    // XToolbarController
+    
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException);
-    // XStatusListener
+    
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
 
 protected:
@@ -159,7 +159,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException )
 {
-    // TODO move to base class
+    
 
     svt::ToolboxController::statusChanged( rEvent );
     enable( rEvent.IsEnabled );
@@ -248,7 +248,7 @@ class WizardsToolbarController : public PopupMenuToolbarController
 public:
     WizardsToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
@@ -299,7 +299,7 @@ class OpenToolbarController : public PopupMenuToolbarController
 public:
     OpenToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
@@ -342,7 +342,7 @@ class NewToolbarController : public PopupMenuToolbarController
 public:
     NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
@@ -408,8 +408,8 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
         rEvent.State >>= aState;
         try
         {
-            // set the image even if the state is not a string
-            // this will set the image of the default module
+            
+            
             setItemImage( aState );
         }
         catch (const css::ucb::CommandFailedException&)
@@ -430,7 +430,7 @@ throw ( css::uno::RuntimeException )
     OUString aTarget( "_default" );
     if ( m_xPopupMenu.is() )
     {
-        // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
+        
         MenuConfiguration::Attributes* pMenuAttributes( 0 );
         VCLXPopupMenu*  pTkPopupMenu =
             ( VCLXPopupMenu * ) VCLXMenu::GetImplementation( m_xPopupMenu );
@@ -507,8 +507,8 @@ static sal_Bool Impl_ExistURLInMenu(
                 bValidFallback = sal_True;
             }
 
-            // match even if the menu command is more detailed
-            // (maybe an additional query) #i28667#
+            
+            
             if ( aCmd.match( sURL ) )
             {
                 sURL = aCmd;
@@ -559,7 +559,7 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
             aMenuImage :
             SvFileInformationManager::GetImage( aURLObj, bBig );
 
-    // if everything failed, just use the image associated with the toolbar item command
+    
     if ( !aImage )
         return;
 

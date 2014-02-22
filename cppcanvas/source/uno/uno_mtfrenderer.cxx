@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "uno_mtfrenderer.hxx"
@@ -16,7 +16,7 @@ using namespace ::com::sun::star;
 
 void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/) throw (uno::RuntimeException)
 {
-        // printf ("MtfRenderer::setMetafile unimplemented, use fast property set or implement me\n");
+        
 }
 
 void MtfRenderer::draw (double fScaleX, double fScaleY) throw (uno::RuntimeException)
@@ -52,7 +52,7 @@ namespace sdecl = comphelper::service_decl;
     "com.sun.star.comp.rendering.MtfRenderer",
     "com.sun.star.rendering.MtfRenderer" );
 
-// The C shared lib entry points
+
 COMPHELPER_SERVICEDECL_EXPORTS1(mtfrenderer, MtfRendererDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "optiongrouplayouter.hxx"
@@ -31,10 +31,10 @@
 #include "groupboxwiz.hxx"
 #include "dbptools.hxx"
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
 #define BUTTON_HEIGHT       300
 #define HEIGHT              450
@@ -50,16 +50,16 @@ namespace dbp
     using namespace ::com::sun::star::text;
     using namespace ::com::sun::star::view;
 
-    //=====================================================================
-    //= OOptionGroupLayouter
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XComponentContext >& _rxContext)
         :mxContext(_rxContext)
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void OOptionGroupLayouter::doLayout(const OControlWizardContext& _rContext, const OOptionGroupSettings& _rSettings)
     {
         Reference< XShapes > xPageShapes(_rContext.xDrawPage, UNO_QUERY);
@@ -76,14 +76,14 @@ namespace dbp
             return;
         }
 
-        // no. of buttons to create
+        
         sal_Int32 nRadioButtons = _rSettings.aLabels.size();
 
         sal_Int32 nTopSpace = 0;
 
-        // the shape of the groupbox
+        
         ::com::sun::star::awt::Size aControlShapeSize = _rContext.xObjectShape->getSize();
-        // maybe need to adjust the size if the control shapes
+        
         sal_Int32 nMinShapeHeight = BUTTON_HEIGHT*(nRadioButtons+1) + BUTTON_HEIGHT + BUTTON_HEIGHT/4;
         if (aControlShapeSize.Height < nMinShapeHeight)
             aControlShapeSize.Height = nMinShapeHeight;
@@ -91,12 +91,12 @@ namespace dbp
             aControlShapeSize.Width = MIN_WIDTH;
         _rContext.xObjectShape->setSize(aControlShapeSize);
 
-        // if we're working on a writer document, we need to anchor the shape
+        
         implAnchorShape(Reference< XPropertySet >(_rContext.xObjectShape, UNO_QUERY));
 
-        // shape collection (for grouping the shapes)
+        
         Reference< XShapes > xButtonCollection( ShapeCollection::create(mxContext) );
-        // first member : the shape of the control
+        
         xButtonCollection->add(_rContext.xObjectShape.get());
 
         sal_Int32 nTempHeight = (aControlShapeSize.Height - BUTTON_HEIGHT/4) / (nRadioButtons + 1);
@@ -122,52 +122,52 @@ namespace dbp
                     xDocFactory->createInstance("com.sun.star.form.component.RadioButton"),
                 UNO_QUERY);
 
-            // the label
+            
             xRadioModel->setPropertyValue("Label", makeAny(OUString(*aLabelIter)));
-            // the value
+            
             xRadioModel->setPropertyValue("RefValue", makeAny(OUString(*aValueIter)));
 
-            // default selection
+            
             if (_rSettings.sDefaultField == *aLabelIter)
                 xRadioModel->setPropertyValue("DefaultState", makeAny(sal_Int16(1)));
 
-            // the connection to the database field
+            
             if (!_rSettings.sDBField.isEmpty())
                 xRadioModel->setPropertyValue("DataField", makeAny(OUString(_rSettings.sDBField)));
 
-            // the name for the model
+            
             xRadioModel->setPropertyValue("Name", makeAny(sElementsName));
 
-            // create a shape for the radio button
+            
             Reference< XControlShape > xRadioShape(
                     xDocFactory->createInstance("com.sun.star.drawing.ControlShape"),
                 UNO_QUERY);
             Reference< XPropertySet > xShapeProperties(xRadioShape, UNO_QUERY);
 
-            // if we're working on a writer document, we need to anchor the shape
+            
             implAnchorShape(xShapeProperties);
 
-            // position it
+            
             xRadioShape->setSize(aButtonSize);
             xRadioShape->setPosition(aButtonPosition);
-            // knitting with the model
+            
             xRadioShape->setControl(Reference< XControlModel >(xRadioModel, UNO_QUERY));
 
-            // the name of the shape
+            
             if (xShapeProperties.is())
                 xShapeProperties->setPropertyValue("Name", makeAny(sElementsName));
 
-            // add to the page
+            
             xPageShapes->add(xRadioShape.get());
-            // add to the collection (for the later grouping)
+            
             xButtonCollection->add(xRadioShape.get());
 
-            // set the GroupBox as "LabelControl" for the RadioButton
-            // (_after_ having inserted the model into the page!)
+            
+            
             xRadioModel->setPropertyValue("LabelControl", makeAny(_rContext.xObjectModel));
         }
 
-        // group the shapes
+        
         try
         {
             Reference< XShapeGrouper > xGrouper(_rContext.xDrawPage, UNO_QUERY);
@@ -185,7 +185,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void OOptionGroupLayouter::implAnchorShape(const Reference< XPropertySet >& _rxShapeProps)
     {
         static const OUString s_sAnchorPropertyName("AnchorType");
@@ -196,8 +196,8 @@ namespace dbp
             _rxShapeProps->setPropertyValue(s_sAnchorPropertyName, makeAny(TextContentAnchorType_AT_PAGE));
     }
 
-//.........................................................................
-}   // namespace dbp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

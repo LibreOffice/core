@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sdbdatacolumn.hxx"
 
-//..............................................................................
+
 namespace svxform
 {
-//..............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -32,9 +32,9 @@ namespace svxform
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::container;
 
-    //==========================================================================
-    //= DataColumn - a class wrapping an object implementing a sdb::DataColumn service
-    //==========================================================================
+    
+    
+    
     DataColumn::DataColumn(const Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace)
     {
         m_xPropertySet = _rxIFace;
@@ -49,7 +49,7 @@ namespace svxform
         }
     }
 
-    // Reference< XPropertySet>
+    
     Reference< XPropertySetInfo> DataColumn::getPropertySetInfo() const throw( RuntimeException )
     {
         return m_xPropertySet->getPropertySetInfo();
@@ -85,7 +85,7 @@ namespace svxform
         m_xPropertySet->removeVetoableChangeListener(PropertyName, aListener);
     }
 
-    // XColumn
+    
     sal_Bool DataColumn::wasNull() throw( SQLException, RuntimeException )
     {
         return m_xColumn->wasNull();
@@ -186,7 +186,7 @@ namespace svxform
         return m_xColumn->getArray();
     }
 
-    // XColumnUpdate
+    
     void DataColumn::updateNull() throw( SQLException, RuntimeException )
     {
         m_xColumnUpdate->updateNull();
@@ -272,8 +272,8 @@ namespace svxform
         m_xColumnUpdate->updateNumericObject(x, scale);
     }
 
-    //..............................................................................
-}   // namespace svxform
-//..............................................................................
+    
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

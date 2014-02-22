@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,9 +54,9 @@ static OUString sSubDirName( "cache" );
 static OUString sDescriptionXmlFile( "/description.xml" );
 static OUString sExtensionRootSubDirName( "/uno_packages" );
 
-// =============================================================================
-// component operations
-// =============================================================================
+
+
+
 
 OUString OO3ExtensionMigration_getImplementationName()
 {
@@ -73,7 +73,7 @@ OUString OO3ExtensionMigration_getImplementationName()
     return *pImplName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
 {
@@ -91,16 +91,16 @@ Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
     return *pNames;
 }
 
-// =============================================================================
-// ExtensionMigration
-// =============================================================================
+
+
+
 
 OO3ExtensionMigration::OO3ExtensionMigration(Reference< XComponentContext > const & ctx) :
 m_ctx(ctx)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 OO3ExtensionMigration::~OO3ExtensionMigration()
 {
@@ -136,7 +136,7 @@ void OO3ExtensionMigration::scanUserExtensions( const OUString& sSourceDir, TStr
             if (( aItem.getFileStatus(fs) == osl::FileBase::E_None ) &&
                 ( fs.getFileType() == osl::FileStatus::Directory   ))
             {
-                //Check next folder as the "real" extension folder is below a temp folder!
+                
                 OUString sExtensionFolderURL = fs.getFileURL();
 
                 osl::Directory     aExtensionRootDir( sExtensionFolderURL );
@@ -170,10 +170,10 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
     ScanResult     aResult = SCANRESULT_NOTFOUND;
     osl::Directory aDir(sExtFolder);
 
-    // get sub dirs
+    
     if (aDir.open() == osl::FileBase::E_None)
     {
-        // work through directory contents...
+        
         osl::DirectoryItem item;
         osl::FileStatus fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
         TStringVector aDirectories;
@@ -233,7 +233,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
                     uno::Reference< xml::xpath::XXPathAPI > xPath = xml::xpath::XPathAPI::create(m_ctx);
 
                     xPath->registerNS("desc", xRoot->getNamespaceURI());
-                    xPath->registerNS("xlink", "http://www.w3.org/1999/xlink");
+                    xPath->registerNS("xlink", "http:
 
                     try
                     {
@@ -256,7 +256,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
 
         if ( !aExtIdentifier.isEmpty() )
         {
-            // scan extension identifier and try to match with our black list entries
+            
             for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
             {
                 utl::SearchParam param(m_aBlackList[i], utl::SearchParam::SRCH_REGEXP);
@@ -278,10 +278,10 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
 
     if ( aExtIdentifier.isEmpty() )
     {
-        // Fallback:
-        // Try to use the folder name to match our black list
-        // as some extensions don't provide an identifier in the
-        // description.xml!
+        
+        
+        
+        
         for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
         {
             utl::SearchParam param(m_aBlackList[i], utl::SearchParam::SRCH_REGEXP);
@@ -322,16 +322,16 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 }
 
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString OO3ExtensionMigration::getImplementationName() throw (RuntimeException)
 {
     return OO3ExtensionMigration_getImplementationName();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException)
@@ -339,16 +339,16 @@ sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames() throw (RuntimeException)
 {
     return OO3ExtensionMigration_getSupportedServiceNames();
 }
 
-// -----------------------------------------------------------------------------
-// XInitialization
-// -----------------------------------------------------------------------------
+
+
+
 
 void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
@@ -387,7 +387,7 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     ::utl::Bootstrap::PathStatus aStatus = ::utl::Bootstrap::locateUserInstallation( m_sTargetDir );
     if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
     {
-        // copy all extensions
+        
         OUString sSourceDir( m_sSourceDir );
         sSourceDir += sExtensionSubDir;
         sSourceDir += sSubDirName;
@@ -408,9 +408,9 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     return Any();
 }
 
-// -----------------------------------------------------------------------------
-// TmpRepositoryCommandEnv
-// -----------------------------------------------------------------------------
+
+
+
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 {
@@ -419,22 +419,22 @@ TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv()
 {
 }
-// XCommandEnvironment
-//______________________________________________________________________________
+
+
 uno::Reference< task::XInteractionHandler > TmpRepositoryCommandEnv::getInteractionHandler()
 throw ( uno::RuntimeException )
 {
     return this;
 }
 
-//______________________________________________________________________________
+
 uno::Reference< ucb::XProgressHandler > TmpRepositoryCommandEnv::getProgressHandler()
 throw ( uno::RuntimeException )
 {
     return this;
 }
 
-// XInteractionHandler
+
 void TmpRepositoryCommandEnv::handle(
     uno::Reference< task::XInteractionRequest> const & xRequest )
     throw ( uno::RuntimeException )
@@ -443,7 +443,7 @@ void TmpRepositoryCommandEnv::handle(
 
     bool approve = true;
 
-    // select:
+    
     uno::Sequence< Reference< task::XInteractionContinuation > > conts(
         xRequest->getContinuations() );
     Reference< task::XInteractionContinuation > const * pConts =
@@ -456,14 +456,14 @@ void TmpRepositoryCommandEnv::handle(
                 pConts[ pos ], uno::UNO_QUERY );
             if (xInteractionApprove.is()) {
                 xInteractionApprove->select();
-                // don't query again for ongoing continuations:
+                
                 approve = false;
             }
         }
     }
 }
 
-// XProgressHandler
+
 void TmpRepositoryCommandEnv::push( uno::Any const & /*Status*/ )
 throw (uno::RuntimeException)
 {
@@ -479,9 +479,9 @@ void TmpRepositoryCommandEnv::pop() throw (uno::RuntimeException)
 {
 }
 
-// =============================================================================
-// component operations
-// =============================================================================
+
+
+
 
 Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
     Reference< XComponentContext > const & ctx )
@@ -491,8 +491,8 @@ Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
         ctx) );
 }
 
-// -----------------------------------------------------------------------------
 
-}   // namespace migration
+
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

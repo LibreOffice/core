@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -60,9 +60,9 @@
 #include <vcl/svapp.hxx>
 #include "viewutil.hxx"
 
-// STATIC DATA -----------------------------------------------------------
 
-//==================================================================
+
+
 
 #define SC_PREVIEW_SHADOWSIZE   2
 
@@ -122,7 +122,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     nHeaderHeight ( 0 ),
     nFooterHeight ( 0 )
 {
-    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
+    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); 
     SetBackground();
 
     SetHelpId( HID_SC_WIN_PREVIEW );
@@ -131,7 +131,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
 
     for (SCCOL i=0; i<=MAXCOL; i++)
-        nRight[i] = 0;                  // initialized with actual positions when markers are drawn
+        nRight[i] = 0;                  
 }
 
 
@@ -141,28 +141,28 @@ ScPreview::~ScPreview()
     delete pLocationData;
 }
 
-void ScPreview::UpdateDrawView()        // nTab must be right
+void ScPreview::UpdateDrawView()        
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();     // is not 0
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();     
 
-    // #114135#
+    
     if ( pModel )
     {
         SdrPage* pPage = pModel->GetPage(nTab);
         if ( pDrawView && ( !pDrawView->GetSdrPageView() || pDrawView->GetSdrPageView()->GetPage() != pPage ) )
         {
-            //  die angezeigte Page der DrawView umzustellen (s.u.) funktioniert nicht ?!?
+            
             delete pDrawView;
             pDrawView = NULL;
         }
 
-        if ( !pDrawView )                                   // New Drawing?
+        if ( !pDrawView )                                   
         {
             pDrawView = new FmFormView( pModel, this );
 
-            // The DrawView takes over the Design-Mode from the Model
-            // (Settings "In opening Draftmode"), therefore to restore here
+            
+            
             pDrawView->SetDesignMode( true );
             pDrawView->SetPrintPreview( true );
             pDrawView->ShowSdrPage(pPage);
@@ -170,7 +170,7 @@ void ScPreview::UpdateDrawView()        // nTab must be right
     }
     else if ( pDrawView )
     {
-        delete pDrawView;           // for this Chart is not needed
+        delete pDrawView;           
         pDrawView = NULL;
     }
 }
@@ -184,7 +184,7 @@ void ScPreview::TestLastPage()
         {
             nPageNo = nTotalPages - 1;
             nTab = static_cast<SCTAB>(nPages.size()) -1;
-            while (nTab > 0 && !nPages[nTab])       // not the last empty Table
+            while (nTab > 0 && !nPages[nTab])       
                 --nTab;
             OSL_ENSURE(0 < static_cast<SCTAB>(nPages.size()),"are all tables empty?");
             nTabPage = nPages[nTab] - 1;
@@ -195,7 +195,7 @@ void ScPreview::TestLastPage()
             ScDocument* pDoc = pDocShell->GetDocument();
             nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
         }
-        else        // empty Document
+        else        
         {
             nTab = 0;
             nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
@@ -226,12 +226,12 @@ void ScPreview::CalcPages()
         nTabsTested = 0;
     }
 
-    // update all pending row heights with a single progress bar,
-    // instead of a separate progress for each sheet from ScPrintFunc
+    
+    
     pDocShell->UpdatePendingRowHeights( nTabCount-1, true );
 
-    //  PrintOptions is passed to PrintFunc for SkipEmpty flag,
-    //  but always all sheets are used (there is no selected sheet)
+    
+    
     ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
 
     while (nStart > static_cast<SCTAB>(nPages.size()))
@@ -259,7 +259,7 @@ void ScPreview::CalcPages()
         long nThisTab = aPrintFunc.GetTotalPages();
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
-        nFirstAttr[i] = aPrintFunc.GetFirstPageNo();    // to keep or from template
+        nFirstAttr[i] = aPrintFunc.GetFirstPageNo();    
 
         if (nPageNo>=nThisStart && nPageNo<nTotalPages)
         {
@@ -287,10 +287,10 @@ void ScPreview::CalcPages()
 }
 
 
-void ScPreview::RecalcPages()                   // only nPageNo is changed
+void ScPreview::RecalcPages()                   
 {
     if (!bValid)
-        return;                         // then CalcPages is called
+        return;                         
 
     SCTAB nOldTab = nTab;
 
@@ -321,7 +321,7 @@ void ScPreview::RecalcPages()                   // only nPageNo is changed
         nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
     }
 
-    TestLastPage();         // to test, if after last page
+    TestLastPage();         
 
     if ( nTab != nOldTab )
         bStateValid = false;
@@ -336,7 +336,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     {
         CalcPages();
         RecalcPages();
-        UpdateDrawView();       // Spreedsheet eventually changes
+        UpdateDrawView();       
     }
 
     Fraction aPreviewZoom( nZoom, 100 );
@@ -392,7 +392,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         pPrintFunc->SetDrawView( pDrawView );
 
-        // MultiSelection for the one Page must produce something inconvenient
+        
         Range aPageRange( nPageNo+1, nPageNo+1 );
         MultiSelection aPage( aPageRange );
         aPage.SetTotalRange( Range(0,RANGE_MAX) );
@@ -403,7 +403,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         SetMapMode(aMMMode);
 
-        //init nLeftMargin ... in the ScPrintFunc::InitParam!!!
+        
         nLeftMargin = pPrintFunc->GetLeftMargin();
         nRightMargin = pPrintFunc->GetRightMargin();
         nTopMargin = pPrintFunc->GetTopMargin();
@@ -414,7 +414,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         bFooterOn = pPrintFunc->GetFooter().bEnable;
         mnScale = pPrintFunc->GetZoom();
 
-        if ( bDoPrint && bPageMargin && pLocationData )     // don't make use of pLocationData while filling it
+        if ( bDoPrint && bPageMargin && pLocationData )     
         {
             Rectangle aPixRect;
             Rectangle aRectCellPosition;
@@ -445,7 +445,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             }
         }
 
-        if (nPrinted)   // if not, draw everything grey
+        if (nPrinted)   
         {
             aLocalPageSize = pPrintFunc->GetPageSize();
             aLocalPageSize.Width()  = (long) (aLocalPageSize.Width()  * HMM_PER_TWIPS );
@@ -519,7 +519,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             if (bBottom)
             {
                 if (bRight)
-                    DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
+                    DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    
                 else
                     DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
             }
@@ -529,7 +529,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         {
             Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
-            //  draw border
+            
 
             if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
             {
@@ -542,7 +542,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 DrawRect( PixelToLogic( aPixel ) );
             }
 
-            //  draw shadow
+            
 
             SetLineColor();
             SetFillColor( aBorderColor );
@@ -566,11 +566,11 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
 void ScPreview::Paint( const Rectangle& /* rRect */ )
 {
-    bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
+    bool bWasInPaint = bInPaint;        
     bInPaint = true;
 
     if (bPageMargin)
-        GetLocationData();              // fill location data for column positions
+        GetLocationData();              
     DoPrint( NULL );
     pViewShell->UpdateScrollBars();
 
@@ -595,8 +595,8 @@ void ScPreview::Command( const CommandEvent& rCEvt )
 
 void ScPreview::KeyInput( const KeyEvent& rKEvt )
 {
-    //  The + and - keys can't be configured as accelerator entries, so they must be handled directly
-    //  (in ScPreview, not ScPreviewShell -> only if the preview window has the focus)
+    
+    
 
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
@@ -658,7 +658,7 @@ OUString ScPreview::GetPosString()
     if (!bValid)
     {
         CalcPages();
-        UpdateDrawView();       // The table eventually changes
+        UpdateDrawView();       
     }
 
     OUString aString = ScGlobal::GetRscString( STR_PAGE ) +
@@ -681,14 +681,14 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
     {
         nZoom = nNewZoom;
 
-        //  apply new MapMode and call UpdateScrollBars to update aOffset
+        
 
         Fraction aPreviewZoom( nZoom, 100 );
         Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
         MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
         SetMapMode( aMMMode );
 
-        bInSetZoom = true;              // don't scroll during SetYOffset in UpdateScrollBars
+        bInSetZoom = true;              
         pViewShell->UpdateNeededScrollBars(true);
         bInSetZoom = false;
 
@@ -704,7 +704,7 @@ void ScPreview::SetPageNo( long nPage )
 {
     nPageNo = nPage;
     RecalcPages();
-    UpdateDrawView();       // The table eventually changes
+    UpdateDrawView();       
     InvalidateLocationData( SC_HINT_DATACHANGED );
     Invalidate();
 }
@@ -722,12 +722,12 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
         CalcPages();
         if (nTabP >= static_cast<SCTAB>(nPages.size()) )
             OSL_FAIL("nPages out ouf bounds, FIX IT");
-        UpdateDrawView();       // The table eventually changes
+        UpdateDrawView();       
 
         for (SCTAB i=0; i<nTabP; i++)
             nPage += nPages[i];
 
-        // An empty Table on the previous Page
+        
 
         if ( nPages[nTabP]==0 && nPage > 0 )
             --nPage;
@@ -761,9 +761,9 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     double nWinScaleY = ScGlobal::nScreenPPTY;
     Size aWinSize = GetOutputSizePixel();
 
-    //  desired margin is 0.25cm in default MapMode (like Writer),
-    //  but some additional margin is introduced by integer scale values
-    //  -> add only 0.10cm, so there is some margin in all cases.
+    
+    
+    
     Size aMarginSize( LogicToPixel( Size( 100, 100 ), MAP_100TH_MM ) );
     aWinSize.Width()  -= 2 * aMarginSize.Width();
     aWinSize.Height() -= 2 * aMarginSize.Height();
@@ -846,19 +846,19 @@ void ScPreview::SetYOffset( long nY )
 
 void ScPreview::DoInvalidate()
 {
-    //  If the whole GetState of the shell is called
-    //  The Invalidate must come behind asynchronously
+    
+    
 
    if (bInGetState)
         Application::PostUserEvent( STATIC_LINK( this, ScPreview, InvalidateHdl ) );
     else
-        StaticInvalidate();     // Immediately
+        StaticInvalidate();     
 }
 
 void ScPreview::StaticInvalidate()
 {
-    //  static method, because it's called asynchronously
-    //  -> must use current viewframe
+    
+    
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (!pViewFrm)
@@ -880,7 +880,7 @@ void ScPreview::StaticInvalidate()
 
 IMPL_STATIC_LINK( ScPreview, InvalidateHdl, void*, EMPTYARG )
 {
-    (void)pThis;    // avoid warning
+    (void)pThis;    
 
     StaticInvalidate();
     return 0;
@@ -900,15 +900,15 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
         if ( rDCEvt.GetType() == DATACHANGED_FONTS )
             pDocShell->UpdateFontList();
 
-        // #i114518# Paint of form controls may modify the window's settings.
-        // Ignore the event if it is called from within Paint.
+        
+        
         if ( !bInPaint )
         {
             if ( rDCEvt.GetType() == DATACHANGED_SETTINGS &&
                   (rDCEvt.GetFlags() & SETTINGS_STYLE) )
             {
-                //  scroll bar size may have changed
-                pViewShell->InvalidateBorder();     // calls OuterResizePixel
+                
+                pViewShell->InvalidateBorder();     
             }
             Invalidate();
             InvalidateLocationData( SC_HINT_DATACHANGED );
@@ -1486,8 +1486,8 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
     return xAcc;
 }
 
-// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
-// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
+
+
 void ScPreview::SwitchView()
 {
     ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(false).get());

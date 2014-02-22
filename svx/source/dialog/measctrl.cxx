@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/dialoghelper.hxx>
@@ -31,7 +31,7 @@ SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent, WinBits nStyle)
 {
     SetMapMode( MAP_100TH_MM );
 
-    // Scale: 1:2
+    
     MapMode aMapMode = GetMapMode();
     aMapMode.SetScaleX( Fraction( 1, 2 ) );
     aMapMode.SetScaleY( Fraction( 1, 2 ) );
@@ -77,11 +77,11 @@ Size SvxXMeasurePreview::GetOptimalSize() const
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
-    // No one is deleting the MeasureObj? This is not only an error but also
-    // a memory leak (!). Main problem is that this object is still listening to
-    // a StyleSheet of the model which was set. Thus, if You want to keep the obnject,
-    // set the modfel to 0L, if object is not needed (seems to be the case here),
-    // delete it.
+    
+    
+    
+    
+    
     delete pMeasureObj;
 
     delete pModel;
@@ -153,7 +153,7 @@ void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxXMeasurePreview::DataChanged( const DataChangedEvent& rDCEvt )
 {

@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -76,7 +76,7 @@ public:
               const Reference< ::com::sun::star::io::XActiveDataSource > & source );
     virtual ~FileSink();
 
-    // ::com::sun::star::io::XOutputStream
+    
     virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw();
     virtual void SAL_CALL flush() throw();
     virtual void SAL_CALL closeOutput() throw();
@@ -138,7 +138,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         aURL.SetSmartURL( url );
 
         OUString aUrl = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-        // the mimetype cannot be specified
+        
         plugin->provideNewStream( OUString(),
                                   Reference< XActiveDataSource >(),
                                   aUrl,

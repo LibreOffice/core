@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CandleStickChartType.hxx"
@@ -94,7 +94,7 @@ struct StaticCandleStickChartTypeDefaults_Initializer
 private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        // must match default in CTOR!
+        
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_JAPANESE, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW, true );
@@ -145,7 +145,7 @@ struct StaticCandleStickChartTypeInfo : public rtl::StaticAggregate< uno::Refere
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -206,14 +206,14 @@ CandleStickChartType::~CandleStickChartType()
     }
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new CandleStickChartType( *this ));
 }
 
-// ____ XChartType ____
+
 OUString SAL_CALL CandleStickChartType::getChartType()
     throw (uno::RuntimeException)
 {
@@ -273,7 +273,7 @@ OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
     return OUString("values-last");
 }
 
-// ____ OPropertySet ____
+
 uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -284,13 +284,13 @@ uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL CandleStickChartType::getInfoHelper()
 {
     return *StaticCandleStickChartTypeInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -335,10 +335,10 @@ uno::Sequence< OUString > CandleStickChartType::getSupportedServiceNames_Static(
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( CandleStickChartType,
                              OUString("com.sun.star.comp.chart.CandleStickChartType") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

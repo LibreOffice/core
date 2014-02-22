@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl_time_handler.hxx"
@@ -37,7 +37,7 @@ namespace xmloff
     using ::com::sun::star::util::Duration;
     using ::com::sun::star::util::Time;
 
-    //= VCLTimeHandler
+    
     VCLTimeHandler::VCLTimeHandler()
     {
     }
@@ -53,7 +53,7 @@ namespace xmloff
         Time aTime;
         OSL_VERIFY( i_propertyValue >>= aTime );
 
-        Duration aDuration; // default-inited to 0
+        Duration aDuration; 
         aDuration.Hours = aTime.Hours;
         aDuration.Minutes = aTime.Minutes;
         aDuration.Seconds = aTime.Seconds;
@@ -76,14 +76,14 @@ namespace xmloff
         }
         else
         {
-            // compatibility format, before we wrote those values in XML-schema compatible form
+            
             sal_Int64 nVCLTime(0);
             if (!::sax::Converter::convertNumber64(nVCLTime, i_attributeValue))
             {
                 OSL_ENSURE( false, "VCLTimeHandler::getPropertyValues: unknown time format (no XML-schema time, no legacy integer)!" );
                 return false;
             }
-            // legacy integer was in centiseconds
+            
             nVCLTime *= ::Time::nanoPerCenti;
             aTime = ::Time(nVCLTime).GetUNOTime();
         }
@@ -101,6 +101,6 @@ namespace xmloff
         return true;
     }
 
-} // namespace xmloff
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

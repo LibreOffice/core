@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "doc.hxx"
@@ -23,10 +23,10 @@
 #include <fmtornt.hxx>
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-// OD 2004-01-19 #110582#
+
 #include <dflyobj.hxx>
 
-//from FlyCnt.cxx
+
 void DeepCalc( const SwFrm *pFrm );
 
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
@@ -34,7 +34,7 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 {
     bInCnt = bInvalidLayout = bInvalidCntnt = sal_True;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
-    // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
+    
     Point aRelPos;
     if( pAnch && pAnch->IsVertical() )
         aRelPos.setX(pAnch->IsReverse() ? nRel : -nRel);
@@ -52,25 +52,25 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
     }
 }
 
-// #i28701#
+
 TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
                                  const Point& rRelAttr,
                                  const Point& rRelPos )
 {
-    // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
+    
     OSL_ENSURE( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
     SwFlyNotify *pNotify = NULL;
-    // No notify at a locked fly frame, if a fly frame is locked, there's
-    // already a SwFlyNotify object on the stack (MakeAll).
+    
+    
     if( !IsLocked() )
         pNotify = new SwFlyNotify( this );
     aRef = rPoint;
     SetCurrRelPos( rRelAttr );
     SWRECTFN( GetAnchorFrm() )
     (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
-    // #i68520#
+    
     InvalidateObjRectWithSpaces();
     if( pNotify )
     {
@@ -122,12 +122,12 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
 }
 
-/// Here the content gets formatted initially.
+
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 {
     if ( !Frm().Height() )
     {
-        Lock(); //don't format the anchor on the crook.
+        Lock(); 
         SwCntntFrm *pCntnt = ContainsCntnt();
         while ( pCntnt )
         {   pCntnt->Calc();
@@ -150,8 +150,8 @@ void SwFlyInCntFrm::MakeObjPos()
         mbValidPos = sal_True;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-        //Update the current values in the format if needed, during this we of
-        //course must not send any Modify.
+        
+        
         const bool bVert = GetAnchorFrm()->IsVertical();
         const bool bRev = GetAnchorFrm()->IsReverse();
         SwTwips nOld = rVert.GetPos();
@@ -169,7 +169,7 @@ void SwFlyInCntFrm::MakeObjPos()
     }
 }
 
-// #115759#
+
 void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
@@ -191,7 +191,7 @@ const Point SwFlyInCntFrm::GetRelPos() const
     return GetCurrRelPos();
 }
 
-/// @see SwRowFrm::RegistFlys()
+
 void SwFlyInCntFrm::RegistFlys()
 {
     SwPageFrm *pPage = FindPageFrm();
@@ -201,7 +201,7 @@ void SwFlyInCntFrm::RegistFlys()
 
 void SwFlyInCntFrm::MakeAll()
 {
-    // OD 2004-01-19 #110582#
+    
     if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
@@ -210,9 +210,9 @@ void SwFlyInCntFrm::MakeAll()
     if ( !GetAnchorFrm() || IsLocked() || IsColLocked() || !FindPageFrm() )
         return;
 
-    Lock(); // The curtain falls
+    Lock(); 
 
-        //does the notification in the DTor
+        
     const SwFlyNotify aNotify( this );
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -222,7 +222,7 @@ void SwFlyInCntFrm::MakeAll()
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
-        //Only stop, if the flag is set!!
+        
         if ( !mbValidSize )
         {
             mbValidPrtArea = sal_False;
@@ -239,8 +239,8 @@ void SwFlyInCntFrm::MakeAll()
             MakeObjPos();
         }
 
-        // re-activate clipping of as-character anchored Writer fly frames
-        // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
+        
+        
         if ( mbValidPos && mbValidSize &&
              GetFmt()->getIDocumentSettingAccess()->get( IDocumentSettingAccess::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,10 +28,10 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/tencinfo.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -46,10 +46,10 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
-    //= LogHandlerHelper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     LogHandlerHelper::LogHandlerHelper( const Reference< XComponentContext >& _rxContext, ::osl::Mutex& _rMutex, ::cppu::OBroadcastHelper& _rBHelper )
         :m_eEncoding( RTL_TEXTENCODING_UTF8 )
         ,m_nLevel( LogLevel::SEVERE )
@@ -61,7 +61,7 @@ namespace logging
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void LogHandlerHelper::initFromSettings( const ::comphelper::NamedValueCollection& _rSettings )
     {
         OUString sEncoding;
@@ -75,7 +75,7 @@ namespace logging
         _rSettings.get_ensureType( "Level", m_nLevel );
     }
 
-    //--------------------------------------------------------------------
+    
     void LogHandlerHelper::enterMethod()
     {
         m_rMutex.acquire();
@@ -86,7 +86,7 @@ namespace logging
         if ( m_rBHelper.bDisposed )
             throw DisposedException("component already disposed", NULL );
 
-        // fallback settings, in case they weren't passed at construction time
+        
         if ( !getFormatter().is() )
         {
             try
@@ -101,7 +101,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool LogHandlerHelper::getEncoding( OUString& _out_rEncoding ) const
     {
         const char* pMimeCharset = rtl_getMimeCharsetFromTextEncoding( m_eEncoding );
@@ -114,7 +114,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool LogHandlerHelper::setEncoding( const OUString& _rEncoding )
     {
         OString sAsciiEncoding( OUStringToOString( _rEncoding, RTL_TEXTENCODING_ASCII_US ) );
@@ -127,11 +127,11 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, OString& _out_rEntry ) const
     {
         if ( _rRecord.Level < getLevel() )
-            // not to be published due to low level
+            
             return false;
 
         try
@@ -148,7 +148,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool LogHandlerHelper::getEncodedHead( OString& _out_rHead ) const
     {
         try
@@ -165,7 +165,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool LogHandlerHelper::getEncodedTail( OString& _out_rTail ) const
     {
         try
@@ -182,8 +182,8 @@ namespace logging
         return false;
     }
 
-//........................................................................
-} // namespace logging
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

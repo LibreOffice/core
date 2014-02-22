@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -55,14 +55,14 @@ using com::sun::star::container::XNameContainer;
 
 TYPEINIT1(FmFormPage, SdrPage);
 
-//------------------------------------------------------------------
+
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
            ,m_pImpl( new FmFormPageImpl( *this ) )
 {
 }
 
-//------------------------------------------------------------------
+
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
            ,m_pImpl(new FmFormPageImpl( *this ) )
@@ -71,19 +71,19 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
     m_sPageName = rPage.m_sPageName;
 }
 
-//------------------------------------------------------------------
+
 FmFormPage::~FmFormPage()
 {
     delete m_pImpl;
 }
 
-//------------------------------------------------------------------
+
 void FmFormPage::SetModel(SdrModel* pNewModel)
 {
     /* #35055# */
-    // we want to call the super's "SetModel" method even if the model is the
-    // same, in case code somewhere in the system depends on it.  But our code
-    // doesn't, so get the old model to do a check.
+    
+    
+    
     SdrModel *pOldModel = GetModel();
 
     SdrPage::SetModel( pNewModel );
@@ -96,8 +96,8 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
             Reference< css::form::XForms > xForms( m_pImpl->getForms( false ) );
             if ( xForms.is() )
             {
-                // we want to keep the current collection, just reset the model
-                // with which it's associated.
+                
+                
                 FmFormModel* pDrawModel = (FmFormModel*) GetModel();
                 SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
                 if ( pObjShell )
@@ -111,14 +111,14 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
     }
 }
 
-//------------------------------------------------------------------
+
 SdrPage* FmFormPage::Clone() const
 {
     return new FmFormPage(*this);
-    // hier fehlt noch ein kopieren der Objekte
+    
 }
 
-//------------------------------------------------------------------
+
 void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
                               const SdrInsertReason* pReason)
 {
@@ -127,7 +127,7 @@ void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
         ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
 }
 
-//------------------------------------------------------------------
+
 const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
     const SdrPage& rMasterPage( *this );
@@ -139,7 +139,7 @@ const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate 
     return pFormPage->m_pImpl->getForms( _bForceCreate );
 }
 
-//------------------------------------------------------------------
+
 sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
@@ -171,7 +171,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
             OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
             INetURLObject aUrl(aText);
 
-            // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
+            
             INetProtocol aProtocol = aUrl.GetProtocol();
             static const INetProtocol s_aQuickHelpSupported[] =
                 {   INET_PROT_FTP, INET_PROT_HTTP, INET_PROT_FILE, INET_PROT_MAILTO, INET_PROT_NEWS,
@@ -188,7 +188,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     }
     if ( !aHelpText.isEmpty() )
     {
-        // Hilfe anzeigen
+        
         Rectangle aItemRect = pObj->GetCurrentBoundRect();
         aItemRect = pWindow->LogicToPixel( aItemRect );
         Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
@@ -205,7 +205,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     return sal_True;
 }
 
-//------------------------------------------------------------------
+
 SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -172,7 +172,7 @@ void LwpPara::Read()
         m_nOrdinal = m_pObjStrm->QuickReaduInt32();
         if(LwpFileHeader::m_nFileRevision<0x000B)
         {
-            // TODO: to process
+            
             assert(false);
             /*pCForked3NotifyList Notify = new CForked3NotifyList(this);
             Notify->GetExtraList()->QuickRead(pFile);
@@ -205,7 +205,7 @@ void LwpPara::Read()
         m_Hint.Read(m_pObjStrm);
         if (IsBadHintsInFile())
         {
-            // This hint is no good, so throw it away -- SDC 9/28/95
+            
             m_Hint.Reset();
         }
     }
@@ -215,7 +215,7 @@ void LwpPara::Read()
     {
         if(LwpFileHeader::m_nFileRevision<0x000B)
         {
-            // TODO: to process
+            
             assert(false);
             /*PropList = new CParaPropListProperty(this);
             PropList->GetList()->QuickRead(pFile);
@@ -227,17 +227,17 @@ void LwpPara::Read()
         }
         m_nLevel = m_pObjStrm->QuickReaduInt16();
 
-        // test
+        
         if (m_nLevel > 9)
         {
             m_nLevel = 9;
         }
-        // test ends
+        
     }
     else
         m_nLevel = 0x0001;
 
-    m_Fribs.SetPara(this);//add by  2/1, for silver bullet
+    m_Fribs.SetPara(this);
     m_Fribs.ReadPara(m_pObjStrm);
 
     m_pProps = LwpParaProperty::ReadPropertyList(m_pObjStrm,this);
@@ -265,11 +265,11 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         return;
     }
 
-    //Add the break before para
+    
     if (m_pBreaks && m_nOrdinal!=0)
         AddBreakBefore(pCont);
 
-    //Create an XFPara for this VO_PARA
+    
     XFParagraph *pPara = new XFParagraph;
     pPara->SetStyleName(m_StyleName);
 
@@ -278,7 +278,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         XFSection* pSection = CreateXFSection();
         if (pStory)
             pStory->AddXFContent(pSection);
-        //pSection->Add(pPara);
+        
         m_pXFContainer = pSection;
     }
 
@@ -311,9 +311,9 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
 sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
 {
     sal_Bool bSuccess = sal_False;
-    //get story
+    
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj());
-    //if pagelayout is modified, register the pagelayout
+    
     if(pStory && pStory->IsPMModified())
     {
         sal_Bool bNewSection = pStory->IsNeedSection();
@@ -324,7 +324,7 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
         }
 
         bSuccess = sal_True;
-        //register master page style
+        
         XFParaStyle* pOverStyle = new XFParaStyle();
         *pOverStyle = *pBaseStyle;
         pOverStyle->SetStyleName( A2OUSTR(""));
@@ -340,16 +340,16 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
  * @short   register paragraph style
  */
 void LwpPara::RegisterStyle()
-{ //1 reg autostyle
-//  m_Fribs.SetPara(this);
-//  m_Fribs.RegisterStyle();
+{ 
 
-  //2 reg para style
+
+
+  
     if (!m_pFoundry)
         return;
     XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
     if (pBaseStyle == NULL) return;
-    m_StyleName = pBaseStyle->GetStyleName();//such intf to be added
+    m_StyleName = pBaseStyle->GetStyleName();
     m_ParentStyleName = m_StyleName;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
@@ -419,7 +419,7 @@ void LwpPara::RegisterStyle()
                 }
             }
                 break;
-        // 01/25/2005
+        
         case PP_LOCAL_BORDER:
         {
             OverrideParaBorder(pProps, pOverStyle);
@@ -433,19 +433,19 @@ void LwpPara::RegisterStyle()
         case PP_LOCAL_BULLET:
         {
             pBulletProps = pProps;
-//          OverrideParaBullet(pProps);
+
             break;
         }
         case PP_LOCAL_NUMBERING:
         {
             pNumberingProps = pProps;
-//          OverrideParaNumbering(pProps);
+
             break;
         }
-        //end
+        
         case PP_LOCAL_TABRACK:
         {
-            //, 01/28/05
+            
             /*LwpTabOverride* pTabOverride=pParaStyle->GetTabOverride();
             if(!pTabOverride)
             {
@@ -468,7 +468,7 @@ void LwpPara::RegisterStyle()
                 OverrideBackground(&aBackground,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
             }
 */
-            // modified by , 06/03/2005
+            
             LwpBackgroundOverride* pBGOver = static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground();
             if (pBGOver)
             {
@@ -491,7 +491,7 @@ void LwpPara::RegisterStyle()
                     }
                 }
             }
-            // end modified
+            
                     break;
         }
                 default:
@@ -512,7 +512,7 @@ void LwpPara::RegisterStyle()
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
 
     }
-    else //use named style
+    else 
     {
         if (m_pIndentOverride)
             {
@@ -542,19 +542,19 @@ void LwpPara::RegisterStyle()
         }
     }
 
-    // override bullet and numbering
+    
     OverrideParaBullet(pBulletProps);
     OverrideParaNumbering(pNumberingProps);
 
-    //add by
-    //register bullet style
+    
+    
     LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
     if (pBulletStyleMgr)
     {
-        // if has bullet or numbering
+        
         if (m_bHasBullet)
         {
-            //if it's normal bullet
+            
             if (m_pSilverBullet)
             {
                 if (m_pSilverBullet->HasName())
@@ -566,7 +566,7 @@ void LwpPara::RegisterStyle()
                     m_aBulletStyleName = pBulletStyleMgr->RegisterBulletStyle(this, m_pBullOver, m_pIndentOverride);
                 }
 
-                // test codes
+                
                 if (m_pSilverBullet->IsBulletOrdered())
                 {
                     OUString aPreBullStyleName;
@@ -589,7 +589,7 @@ void LwpPara::RegisterStyle()
 
                     while(true)
                     {
-                        /*// When we hit the hint paragraph, we can stop and check the hint.
+                        /*
                         if (qNumberHint && (qPara == qNumberHint->GetPara()) &&
                             qNumberHint->Lookup(qSilverBullet, Level, Position, &Offset))
                         {
@@ -610,7 +610,7 @@ void LwpPara::RegisterStyle()
                             /* If lesser, stop when we hit an outline style whose level is
                                 * higher than our current level.
                                 */
-                            // restart based on Outline level?
+                            
                             if (pNumbering && bLesser && (bHeading ? pNumbering->IsHeading() : sal_True))
                             {
                                 if (nFoundLevel != 0xffff)
@@ -641,7 +641,7 @@ void LwpPara::RegisterStyle()
                             && qSpecificStyle == qPara->GetParaStyle(LTRUE))
                                 break;
 
-                            // See if we crossed a section boundary
+                            
                             if (ResetSection)
                             {
                                 CurrPos.SetPara(qPara);
@@ -650,7 +650,7 @@ void LwpPara::RegisterStyle()
                             }*/
                         }
 
-                        // Don't bump the number if this bullet is skipped
+                        
                         if (m_pBullOver->IsSkip())
                             ;
                         else if ( pParaSilverBullet
@@ -728,7 +728,7 @@ void LwpPara::RegisterStyle()
                     {
                         if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_pParaNumbering->GetPosition()))
                         {
-                            //m_bBullContinue = sal_True;
+                            
                         }
                         else
                         {
@@ -737,11 +737,11 @@ void LwpPara::RegisterStyle()
                     }
 
                 }
-                // end of test codes
+                
             }
         }
     }
-    //end add
+    
 
     if (noSpacing && GetPrevious())
     {
@@ -758,22 +758,22 @@ void LwpPara::RegisterStyle()
         }
     }
 
-    //register tab style
+    
     if(m_Fribs.HasFrib(FRIB_TAG_TAB))
     {
         XFParaStyle* pParaStyle = new XFParaStyle;
         *pParaStyle = *GetXFParaStyle();
-        //pOverStyle->SetStyleName(A2OUSTR(""));
+        
         this->RegisterTabStyle(pParaStyle);
         if (!m_ParentStyleName.isEmpty())
                     pParaStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
     }
 
-    //register master page;
+    
     RegisterMasterPage(GetXFParaStyle());
 
-    // reg auto style,lay here for pagebreak need overrided para style
+    
     m_Fribs.SetPara(this);
     m_Fribs.RegisterStyle();
 
@@ -787,9 +787,9 @@ void LwpPara::RegisterStyle()
                     pStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
     }
-    // maybe useful for futer version
-    // deleted because Leader of Table is not supported in this version
-    //AddTabStyleForTOC();
+    
+    
+    
 }
 
 void LwpPara::RegisterNewSectionStyle(LwpPageLayout *pLayout)
@@ -825,7 +825,7 @@ void LwpPara::RegisterTabStyle(XFParaStyle* pXFParaStyle)
 {
     LwpTabOverride aFinaOverride;
     LwpTabOverride* pBase = NULL;
-    //get the tabrack from the current layout
+    
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj());
     LwpMiddleLayout* pLayout = pStory ? pStory->GetTabLayout() : NULL;
     if(pLayout)
@@ -837,14 +837,14 @@ void LwpPara::RegisterTabStyle(XFParaStyle* pXFParaStyle)
         }
     }
 
-    //get the tabrack from the base parastyle
+    
     LwpParaStyle* pParaStyle =  GetParaStyle();
     pBase = pParaStyle->GetTabOverride();
     if(pBase)
     {
         pBase->Override(&aFinaOverride);
     }
-    //get the tabrack from the local property
+    
     pBase = GetLocalTabOverride();
     if(pBase)
     {
@@ -938,8 +938,8 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     if (m_pSilverBullet->HasName())
     {
         nLevel = m_pParaNumbering->GetPosition();
-        m_nLevel = nLevel;//add by ,for get para level
-//      m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
+        m_nLevel = nLevel;
+
     }
 
     return ( pBulletStyleMgr->AddBulletList(pCont, bOrdered, m_aBulletStyleName,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,10 +28,10 @@
 
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -46,9 +46,9 @@ namespace comphelper
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
-    //= EventLogger_Impl - declaration
-    //====================================================================
+    
+    
+    
     class EventLogger_Impl
     {
     private:
@@ -73,10 +73,10 @@ namespace comphelper
         void    impl_createLogger_nothrow();
     };
 
-    //====================================================================
-    //= EventLogger_Impl - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     void EventLogger_Impl::impl_createLogger_nothrow()
     {
         try
@@ -94,21 +94,21 @@ namespace comphelper
         }
     }
 
-    //====================================================================
-    //= EventLogger
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pAsciiLoggerName )
         :m_pImpl( new EventLogger_Impl( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     EventLogger::~EventLogger()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     bool EventLogger::isLoggable( const sal_Int32 _nLogLevel ) const
     {
         if ( !m_pImpl->isValid() )
@@ -127,7 +127,7 @@ namespace comphelper
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         void    lcl_replaceParameter( OUString& _inout_Message, const OUString& _rPlaceHolder, const OUString& _rReplacement )
@@ -141,14 +141,14 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool EventLogger::impl_log( const sal_Int32 _nLogLevel,
         const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage,
         const OptionalString& _rArgument1, const OptionalString& _rArgument2,
         const OptionalString& _rArgument3, const OptionalString& _rArgument4,
         const OptionalString& _rArgument5, const OptionalString& _rArgument6 ) const
     {
-        // (if OUString had an indexOfAscii, we could save those ugly statics ...)
+        
         static OUString sPH1( "$1$" );
         static OUString sPH2( "$2$" );
         static OUString sPH3( "$3$" );
@@ -202,16 +202,16 @@ namespace comphelper
         return false;
     }
 
-    //====================================================================
-    //= ResourceBasedEventLogger_Data
-    //====================================================================
+    
+    
+    
     struct ResourceBasedEventLogger_Data
     {
-        /// the base name of the resource bundle
+        
         OUString                 sBundleBaseName;
-        /// did we already attempt to load the bundle?
+        
         bool                            bBundleLoaded;
-        /// the lazily loaded bundle
+        
         Reference< XResourceBundle >    xBundle;
 
         ResourceBasedEventLogger_Data()
@@ -222,13 +222,13 @@ namespace comphelper
         }
     };
 
-    //--------------------------------------------------------------------
+    
     bool    lcl_loadBundle_nothrow( Reference< XComponentContext > const & _rContext, ResourceBasedEventLogger_Data& _rLoggerData )
     {
         if ( _rLoggerData.bBundleLoaded )
             return _rLoggerData.xBundle.is();
 
-        // no matter what happens below, don't attempt creation ever again
+        
         _rLoggerData.bBundleLoaded = true;
 
         try
@@ -247,7 +247,7 @@ namespace comphelper
         return _rLoggerData.xBundle.is();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString lcl_loadString_nothrow( const Reference< XResourceBundle >& _rxBundle, const sal_Int32 _nMessageResID )
     {
         OSL_PRECOND( _rxBundle.is(), "lcl_loadString_nothrow: this will crash!" );
@@ -267,10 +267,10 @@ namespace comphelper
         return sMessage;
     }
 
-    //====================================================================
-    //= ResourceBasedEventLogger
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pResourceBundleBaseName,
         const sal_Char* _pAsciiLoggerName )
         :EventLogger( _rxContext, _pAsciiLoggerName )
@@ -279,7 +279,7 @@ namespace comphelper
         m_pData->sBundleBaseName = OUString::createFromAscii( _pResourceBundleBaseName );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString ResourceBasedEventLogger::impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const
     {
         OUString sMessage;
@@ -298,8 +298,8 @@ namespace comphelper
         return sMessage;
     }
 
-//........................................................................
-} // namespace comphelper
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

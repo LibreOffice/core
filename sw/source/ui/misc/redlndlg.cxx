@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <redline.hxx>
@@ -39,11 +39,11 @@
 #include <redlndlg.hrc>
 #include <shells.hrc>
 
-// -> #111827#
+
 #include <comcore.hrc>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
-// <- #111827#
+
 
 #include <vector>
 #include <svx/svxdlg.hxx>
@@ -78,7 +78,7 @@ sal_Bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 {
     sal_Bool bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, doc switch!
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  
         ((SwModelessRedlineAcceptDlg*)GetWindow())->Activate();
 
     return bRet;
@@ -97,17 +97,17 @@ void SwModelessRedlineAcceptDlg::Activate()
 {
     SwView *pView = ::GetActiveView();
 
-    if (!pView) // can happen when switching to another app, when a Listbox in dialog
-        return; // had the focus previously (actually THs Bug)
+    if (!pView) 
+        return; 
 
     SwDocShell *pDocSh = pView->GetDocShell();
 
     if (pChildWin->GetOldDocShell() != pDocSh)
-    {   // doc-switch
+    {   
         SwWait aWait( *pDocSh, false );
         SwWrtShell* pSh = pView->GetWrtShellPtr();
 
-        pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
+        pChildWin->SetOldDocShell(pDocSh);  
 
         sal_Bool bMod = pSh->IsModified();
         SfxBoolItem aShow(FN_REDLINE_SHOW, true);
@@ -181,7 +181,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
         pActLB->InsertEntry(sFmtCollSet);
         pActLB->InsertEntry(sAutoFormat);
         pTPView->ShowUndo(sal_True);
-        pTPView->DisableUndo();     // no UNDO events yet
+        pTPView->DisableUndo();     
     }
 
     pActLB->SelectEntryPos(0);
@@ -206,11 +206,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
     pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
     pTable->SetCommandHdl(LINK(this, SwRedlineAcceptDlg, CommandHdl));
 
-    // avoid flickering of buttons:
+    
     aDeselectTimer.SetTimeout(100);
     aDeselectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
 
-    // avoid multiple selection of the same texts:
+    
     aSelectTimer.SetTimeout(100);
     aSelectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, GotoHdl));
 }
@@ -234,15 +234,15 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
         aRedlineParents.erase(aRedlineParents.begin() + nStart, aRedlineParents.end());
     }
 
-    // insert parents
+    
     InsertParents(nStart);
     InitAuthors();
 
     pTable->SetUpdateMode(sal_True);
-    // #i69618# this moves the list box to the right position, visually
+    
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     if( pSelEntry )
-        pTable->MakeVisible( pSelEntry, sal_True ); //#i70937#, force the scroll
+        pTable->MakeVisible( pSelEntry, sal_True ); 
 }
 
 void SwRedlineAcceptDlg::InitAuthors()
@@ -262,7 +262,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     bool bIsNotFormated = false;
     sal_uInt16 i;
 
-    // determine authors
+    
     for ( i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -293,8 +293,8 @@ void SwRedlineAcceptDlg::InitAuthors()
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     while (pSelEntry)
     {
-        // find the selected redline
-        // (fdo#57874: ignore, if the redline is already gone)
+        
+        
         sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
         if( nPos != USHRT_MAX )
         {
@@ -340,7 +340,7 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
         case nsRedlineType_t::REDLINE_FORMAT:   return sFormated;
         case nsRedlineType_t::REDLINE_TABLE:    return sTableChgd;
         case nsRedlineType_t::REDLINE_FMTCOLL:  return sFmtCollSet;
-        default:;//prevent warning
+        default:;
     }
 
     return OUString();
@@ -351,24 +351,24 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
  --------------------------------------------------------------------*/
 void SwRedlineAcceptDlg::Activate()
 {
-    // prevent update if flag is set (#102547#)
+    
     if( bInhibitActivate )
         return;
 
     SwView *pView = ::GetActiveView();
 
-    if (!pView) // can happen when switching to another app, when a Listbox in the dialog
-        return; // had the focus previously (actually THs Bug)
+    if (!pView) 
+        return; 
 
     SwWait aWait( *pView->GetDocShell(), false );
 
     aUsedSeqNo.clear();
 
-    // did something change?
+    
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nCount = pSh->GetRedlineCount();
 
-    // check the number of pointers
+    
     SwRedlineDataParent *pParent = 0;
     sal_uInt16 i;
 
@@ -378,7 +378,7 @@ void SwRedlineAcceptDlg::Activate()
 
         if (i >= aRedlineParents.size())
         {
-            // new entries have been appended
+            
             Init(i);
             return;
         }
@@ -386,7 +386,7 @@ void SwRedlineAcceptDlg::Activate()
         pParent = &aRedlineParents[i];
         if (&rRedln.GetRedlineData() != pParent->pData)
         {
-            // Redline-Parents were inserted, changed or deleted
+            
             if ((i = CalcDiff(i, sal_False)) == USHRT_MAX)
                 return;
             continue;
@@ -397,7 +397,7 @@ void SwRedlineAcceptDlg::Activate()
 
         if (!pRedlineData && pBackupData)
         {
-            // Redline-Children were deleted
+            
             if ((i = CalcDiff(i, sal_True)) == USHRT_MAX)
                 return;
             continue;
@@ -408,7 +408,7 @@ void SwRedlineAcceptDlg::Activate()
             {
                 if (pRedlineData != pBackupData->pChild)
                 {
-                    // Redline-Children were inserted, changed or deleted
+                    
                     if ((i = CalcDiff(i, sal_True)) == USHRT_MAX)
                         return;
                     continue;
@@ -421,12 +421,12 @@ void SwRedlineAcceptDlg::Activate()
 
     if (nCount != aRedlineParents.size())
     {
-        // Redlines were deleted at the end
+        
         Init(nCount);
         return;
     }
 
-    // check comment
+    
     for (i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -436,7 +436,7 @@ void SwRedlineAcceptDlg::Activate()
         {
             if (pParent->pTLBParent)
             {
-                // update only comment
+                
                 OUString sComment(rRedln.GetComment());
                 pTable->SetEntryText(sComment.replace('\n', ' '), pParent->pTLBParent, 3);
             }
@@ -462,9 +462,9 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     SwRedlineDataParent *pParent = &aRedlineParents[nStart];
     const SwRangeRedline& rRedln = pSh->GetRedline(nStart);
 
-    if (bChild)     // should actually never happen, but just in case...
+    if (bChild)     
     {
-        // throw away all entry's children and initialise newly
+        
         SwRedlineDataChild* pBackupData = (SwRedlineDataChild*)pParent->pNext;
         SwRedlineDataChild* pNext;
 
@@ -485,28 +485,28 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
         }
         pParent->pNext = 0;
 
-        // insert new children
+        
         InsertChildren(pParent, rRedln, nAutoFmt);
 
         pTable->SetUpdateMode(sal_True);
         return nStart;
     }
 
-    // have entries been deleted?
+    
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
     sal_uInt16 i;
     for ( i = nStart + 1; i < aRedlineParents.size(); i++)
     {
         if (aRedlineParents[i].pData == pRedlineData)
         {
-            // remove entries from nStart to i-1
+            
             RemoveParents(nStart, i - 1);
             pTable->SetUpdateMode(sal_True);
             return nStart - 1;
         }
     }
 
-    // entries been inserted?
+    
     sal_uInt16 nCount = pSh->GetRedlineCount();
     pRedlineData = aRedlineParents[nStart].pData;
 
@@ -514,7 +514,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     {
         if (&pSh->GetRedline(i).GetRedlineData() == pRedlineData)
         {
-            // insert entries from nStart to i-1
+            
             InsertParents(nStart, i - 1);
             pTable->SetUpdateMode(sal_True);
             return nStart - 1;
@@ -522,7 +522,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     }
 
     pTable->SetUpdateMode(sal_True);
-    Init(nStart);   // adjust all entries until the end
+    Init(nStart);   
     return USHRT_MAX;
 }
 
@@ -543,7 +543,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
         {
             std::pair<SwRedlineDataParentSortArr::const_iterator,bool> const ret
                 = aUsedSeqNo.insert(pParent);
-            if (ret.second) // already there
+            if (ret.second) 
             {
                 if (pParent->pTLBParent)
                 {
@@ -617,14 +617,14 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     SvLBoxEntryArr aLBoxArr;
 
-    // because of Bug of TLB that ALWAYS calls the SelectHandler at Remove:
+    
     pTable->SetSelectHdl(aOldSelectHdl);
     pTable->SetDeselectHdl(aOldDeselectHdl);
     bool bChildrenRemoved = false;
     pTable->SelectAll(sal_False);
 
-    // set the cursor after the last entry because otherwise performance problem in TLB.
-    // TLB would otherwise reset the cursor at every Remove (expensive)
+    
+    
     sal_uInt16 nPos = std::min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.size());
     SvTreeListEntry *pCurEntry = NULL;
     while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
@@ -671,14 +671,14 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         }
     }
 
-    // clear TLB from behind
+    
     long nIdx = (long)aLBoxArr.size() - 1L;
     while (nIdx >= 0)
         pTable->RemoveEntry(aLBoxArr[ static_cast< sal_uInt16 >(nIdx--) ]);
 
     pTable->SetSelectHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
     pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
-    // unfortunately by Remove it was selected from the TLB always again ...
+    
     pTable->SelectAll(sal_False);
 
     aRedlineParents.erase( aRedlineParents.begin() + nStart, aRedlineParents.begin() + nEnd + 1);
@@ -692,10 +692,10 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     OUString sParent;
     sal_uInt16 nCount = pSh->GetRedlineCount();
-    nEnd = std::min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); // also treats nEnd=USHRT_MAX (until the end)
+    nEnd = std::min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); 
 
     if (nEnd == USHRT_MAX)
-        return;     // no redlines in the document
+        return;     
 
     RedlinData *pData;
     SvTreeListEntry *pParent;
@@ -755,12 +755,12 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     typedef std::vector<SvTreeListEntry*> ListBoxEntries_t;
     ListBoxEntries_t aRedlines;
 
-    // don't activate
+    
     OSL_ENSURE( bInhibitActivate == false,
                 "recursive call of CallAcceptReject?");
     bInhibitActivate = true;
 
-    // collect redlines-to-be-accepted/rejected in aRedlines vector
+    
     while( pEntry )
     {
         if( !pTable->GetParent( pEntry ) )
@@ -784,7 +784,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
     pSh->StartAction();
 
-    // #111827#
+    
     if (aRedlines.size() > 1)
     {
         OUString aTmpStr;
@@ -802,11 +802,11 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
                        &aRewriter);
     }
 
-    // accept/reject the redlines in aRedlines. The absolute
-    // position may change during the process (e.g. when two redlines
-    // are merged in result of another one being deleted), so the
-    // position must be resolved late and checked before using it.
-    // (cf #102547#)
+    
+    
+    
+    
+    
     ListBoxEntries_t::iterator aEnd = aRedlines.end();
     for( ListBoxEntries_t::iterator aIter = aRedlines.begin();
          aIter != aEnd;
@@ -817,7 +817,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
             (pSh->*FnAccRej)( nPosition );
     }
 
-    // #111827#
+    
     if (aRedlines.size() > 1)
     {
         pSh->EndUndo();
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl)
 {
-    // avoid flickering of buttons:
+    
     aDeselectTimer.Start();
 
     return 0;
@@ -926,10 +926,10 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
     bool bIsNotFormated = false;
     bool bSel = false;
 
-    //#98883# don't select redlines while the dialog is not focussed
-    //#107938# But not only ask pTable if it has the focus. To move
-    //         the selection to the selected redline any child of pParentDlg
-    //         may the focus.
+    
+    
+    
+    
     SvTreeListEntry* pSelEntry = 0;
 
     if (pParentDlg->HasChildPathFocus())
@@ -951,13 +951,13 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
                 if (pTable->IsSelected(pActEntry))
                 {
                     pSelEntry = pActEntry = pTable->NextSelected(pSelEntry);
-                    continue;   // don't select twice
+                    continue;   
                 }
             }
             else
                 bSel = true;
 
-            // #98864# find the selected redline (ignore, if the redline is already gone)
+            
             sal_uInt16 nPos = GetRedlinePos(*pActEntry);
             if( nPos != USHRT_MAX )
             {
@@ -1008,7 +1008,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
 
                 sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
 
-                // disable commenting for protected areas
+                
                 if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, sal_True)) != 0)
                 {
                     if( pSh->IsCrsrPtAtEnd() )
@@ -1020,8 +1020,8 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
             aPopup.EnableItem( MN_EDIT_COMMENT, pEntry && pRed &&
                                             !pTable->GetParent(pEntry) &&
                                             !pTable->NextSelected(pEntry)
-//JP 27.9.2001: make no sense if we handle readonly sections
-//                                          && pRed->HasReadonlySel()
+
+
                                             );
 
             aPopup.EnableItem( MN_SUB_SORT, pTable->First() != 0 );
@@ -1098,7 +1098,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                         case nsRedlineType_t::REDLINE_TABLE:
                             nResId = STR_REDLINE_TABLECHG;
                             break;
-                        default:;//prevent warning
+                        default:;
                         }
                         OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
                         if( nResId )
@@ -1112,7 +1112,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                             OUString sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
 
-                            // insert / change comment
+                            
                             pSh->SetRedlineComment(sMsg);
                             pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
                         }
@@ -1132,11 +1132,11 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                 {
                     bSortDir = sal_True;
                     if (nRet - MN_SORT_ACTION == 4 && pTable->GetSortedCol() == 0xffff)
-                        break;  // we already have it
+                        break;  
 
                     nSortMode = nRet - MN_SORT_ACTION;
                     if (nSortMode == 4)
-                        nSortMode = 0xffff; // unsorted / sorted by position
+                        nSortMode = 0xffff; 
 
                     if (pTable->GetSortedCol() == nSortMode)
                         bSortDir = !pTable->GetSortDirection();
@@ -1144,7 +1144,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                     SwWait aWait( *::GetActiveView()->GetDocShell(), false );
                     pTable->SortByCol(nSortMode, bSortDir);
                     if (nSortMode == 0xffff)
-                        Init();             // newly fill everything
+                        Init();             
                 }
                 break;
             }
@@ -1161,8 +1161,8 @@ void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
     {
         sal_Int32 nPos = rExtraData.indexOf("AcceptChgDat:");
 
-        // try to read the alignment string "ALIGN:(...)"; if none existing,
-        // it's an old version
+        
+        
         if (nPos != -1)
         {
             sal_Int32 n1 = rExtraData.indexOf('(', nPos);
@@ -1171,7 +1171,7 @@ void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
                 sal_Int32 n2 = rExtraData.indexOf(')', n1);
                 if (n2 != -1)
                 {
-                    // cut out the alignment string
+                    
                     OUString aStr = rExtraData.copy(nPos, n2 - nPos + 1);
                     aStr = aStr.copy(n1 - nPos + 1);
 

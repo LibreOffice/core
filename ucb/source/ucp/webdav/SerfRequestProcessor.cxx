@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SerfRequestProcessor.hxx"
@@ -74,7 +74,7 @@ void SerfRequestProcessor::prepareProcessor()
     mbHandleSerfResponseCalled = false;
 }
 
-// PROPFIND - allprop & named
+
 bool SerfRequestProcessor::processPropFind( const Depth inDepth,
                                             const std::vector< OUString > & inPropNames,
                                             std::vector< DAVResource > & ioResources,
@@ -90,7 +90,7 @@ bool SerfRequestProcessor::processPropFind( const Depth inDepth,
     return outSerfStatus == APR_SUCCESS;
 }
 
-// PROPFIND - property names
+
 bool SerfRequestProcessor::processPropFind( const Depth inDepth,
                                             std::vector< DAVResourceInfo > & ioResInfo,
                                             apr_status_t& outSerfStatus )
@@ -104,7 +104,7 @@ bool SerfRequestProcessor::processPropFind( const Depth inDepth,
     return outSerfStatus == APR_SUCCESS;
 }
 
-// PROPPATCH
+
 bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue > & inProperties,
                                              apr_status_t& outSerfStatus )
 {
@@ -116,7 +116,7 @@ bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue >
     return outSerfStatus == APR_SUCCESS;
 }
 
-// GET
+
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                        apr_status_t& outSerfStatus )
 {
@@ -128,7 +128,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
     return outSerfStatus == APR_SUCCESS;
 }
 
-// GET inclusive header fields
+
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                        const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
@@ -144,7 +144,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
     return outSerfStatus == APR_SUCCESS;
 }
 
-// GET
+
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                        apr_status_t& outSerfStatus )
 {
@@ -156,7 +156,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com
     return outSerfStatus == APR_SUCCESS;
 }
 
-// GET inclusive header fields
+
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                        const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
@@ -172,7 +172,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com
     return outSerfStatus == APR_SUCCESS;
 }
 
-// HEAD
+
 bool SerfRequestProcessor::processHead( const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource,
                                         apr_status_t& outSerfStatus )
@@ -186,7 +186,7 @@ bool SerfRequestProcessor::processHead( const std::vector< OUString > & inHeader
     return outSerfStatus == APR_SUCCESS;
 }
 
-// PUT
+
 bool SerfRequestProcessor::processPut( const char* inData,
                                        apr_size_t inDataLen,
                                        apr_status_t& outSerfStatus )
@@ -200,7 +200,7 @@ bool SerfRequestProcessor::processPut( const char* inData,
     return outSerfStatus == APR_SUCCESS;
 }
 
-// POST
+
 bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const OUString & inContentType,
@@ -224,7 +224,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
     return outSerfStatus == APR_SUCCESS;
 }
 
-// POST
+
 bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const OUString & inContentType,
@@ -248,7 +248,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
     return outSerfStatus == APR_SUCCESS;
 }
 
-// DELETE
+
 bool SerfRequestProcessor::processDelete( apr_status_t& outSerfStatus )
 {
     mpProcImpl = createDeleteReqProcImpl( mPathStr,
@@ -258,7 +258,7 @@ bool SerfRequestProcessor::processDelete( apr_status_t& outSerfStatus )
     return outSerfStatus == APR_SUCCESS;
 }
 
-// MKCOL
+
 bool SerfRequestProcessor::processMkCol( apr_status_t& outSerfStatus )
 {
     mpProcImpl = createMkColReqProcImpl( mPathStr,
@@ -268,7 +268,7 @@ bool SerfRequestProcessor::processMkCol( apr_status_t& outSerfStatus )
     return outSerfStatus == APR_SUCCESS;
 }
 
-// COPY
+
 bool SerfRequestProcessor::processCopy( const OUString & inDestinationPath,
                                         const bool inOverwrite,
                                         apr_status_t& outSerfStatus )
@@ -284,7 +284,7 @@ bool SerfRequestProcessor::processCopy( const OUString & inDestinationPath,
     return outSerfStatus == APR_SUCCESS;
 }
 
-// MOVE
+
 bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
                                         const bool inOverwrite,
                                         apr_status_t& outSerfStatus )
@@ -304,18 +304,18 @@ apr_status_t SerfRequestProcessor::runProcessor()
 {
     prepareProcessor();
 
-    // activate chunked encoding, if requested
+    
     if ( mbUseChunkedEncoding )
     {
         mpProcImpl->activateChunkedEncoding();
     }
 
-    // create serf request
+    
     serf_connection_request_create( mrSerfSession.getSerfConnection(),
                                     Serf_SetupRequest,
                                     this );
 
-    // perform serf request
+    
     mbProcessingDone = false;
     apr_status_t status = APR_SUCCESS;
     serf_context_t* pSerfContext = mrSerfSession.getSerfContext();
@@ -355,7 +355,7 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
     {
     case APR_EGENERAL:
     case SERF_ERROR_AUTHN_FAILED:
-        // general error; <mnHTTPStatusCode> provides more information
+        
         {
             switch ( mnHTTPStatusCode )
             {
@@ -410,8 +410,8 @@ apr_status_t SerfRequestProcessor::provideSerfCredentials( char ** outUsername,
                                                            const char *inRealm,
                                                            apr_pool_t *inAprPool )
 {
-    // as each successful provided credentials are tried twice - see below - the
-    // number of real attempts is half of the value of <mnSuccessfulCredentialAttempts>
+    
+    
     if ( (mnSuccessfulCredentialAttempts / 2) >= 5 ||
          mbInputOfCredentialsAborted )
     {
@@ -419,10 +419,10 @@ apr_status_t SerfRequestProcessor::provideSerfCredentials( char ** outUsername,
         return SERF_ERROR_AUTHN_FAILED;
     }
 
-    // because serf keeps credentials only for a connection in case of digest authentication
-    // we give each successful provided credentials a second try in order to workaround the
-    // situation that the connection for which the credentials have been provided has been closed
-    // before the provided credentials could be applied for the request.
+    
+    
+    
+    
     apr_status_t status = mrSerfSession.provideSerfCredentials( (mnSuccessfulCredentialAttempts % 2) == 1,
                                                                 outUsername,
                                                                 outPassword,
@@ -454,7 +454,7 @@ apr_status_t SerfRequestProcessor::setupSerfRequest( serf_request_t * inSerfRequ
     mbSetupSerfRequestCalled = true;
     *outSerfRequestBucket = mpProcImpl->createSerfRequestBucket( inSerfRequest );
 
-    // apply callbacks for accepting response and handling response
+    
     *outSerfResponseAcceptor = Serf_AcceptResponse;
     *outSerfResponseAcceptorBaton = this;
     *outSerfResponseHandler = Serf_HandleResponse;
@@ -479,7 +479,7 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
 {
     mbHandleSerfResponseCalled = true;
 
-    // some general response handling and error handling
+    
     {
         if ( !inSerfResponseBucket )
         {
@@ -492,10 +492,10 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
         apr_status_t status = serf_bucket_response_status( inSerfResponseBucket, &sl );
         if ( status )
         {
-            mbProcessingDone = false; // allow another try in order to get a response
+            mbProcessingDone = false; 
             return status;
         }
-        // TODO - check, if response status code handling is correct
+        
         mnHTTPStatusCode = ( sl.version != 0 && sl.code >= 0 )
                            ? static_cast< sal_uInt16 >( sl.code )
                            : SC_NONE;
@@ -511,7 +511,7 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
                  mnHTTPStatusCode == 303 ||
                  mnHTTPStatusCode == 307 )
             {
-                // new location for certain redirections
+                
                 serf_bucket_t *headers = serf_bucket_response_get_headers( inSerfResponseBucket );
                 const char* location = serf_bucket_headers_get( headers, "Location" );
                 if ( location )
@@ -524,8 +524,8 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
             else if ( mrSerfSession.isHeadRequestInProgress() &&
                       ( mnHTTPStatusCode == 401 || mnHTTPStatusCode == 407 ) )
             {
-                // keep going as authentication is not required on HEAD request.
-                // the response already contains header fields.
+                
+                
             }
             else
             {
@@ -535,7 +535,7 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
         }
     }
 
-    // request specific processing of the response bucket
+    
     apr_status_t status = APR_SUCCESS;
     mbProcessingDone = mpProcImpl->processSerfResponseBucket( inSerfRequest,
                                                               inSerfResponseBucket,
@@ -545,6 +545,6 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
     return status;
 }
 
-} // namespace http_dav_ucp
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

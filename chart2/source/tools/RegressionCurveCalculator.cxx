@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RegressionCurveCalculator.hxx"
@@ -52,7 +52,7 @@ RegressionCurveCalculator::~RegressionCurveCalculator()
 bool RegressionCurveCalculator::isLinearScaling(
     const Reference< chart2::XScaling > & xScaling )
 {
-    // no scaling means linear
+    
     if( !xScaling.is())
         return true;
     static OUString aLinScalingServiceName( "com.sun.star.chart2.LinearScaling" );
@@ -106,7 +106,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     if( nPointCount < 2 )
         throw lang::IllegalArgumentException();
 
-    // determine if scaling and inverse scaling for x-values work
+    
     bool bDoXScaling( xScalingX.is());
     uno::Reference< chart2::XScaling > xInverseScaling;
     if( bDoXScaling )
@@ -153,7 +153,7 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     sal_Int32 nNumberFormatKey )
     throw (uno::RuntimeException)
 {
-    // create and prepare a number formatter
+    
     if( !xNumFmtSupplier.is())
         return getRepresentation();
     Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
@@ -163,6 +163,6 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     return ImplGetRepresentation( xNumFormatter, nNumberFormatKey );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

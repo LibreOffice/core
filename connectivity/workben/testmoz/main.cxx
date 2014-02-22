@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <connectivity/sqlparse.hxx>
@@ -130,21 +130,21 @@ void printXResultSets( Reference<XResultSet> &xRes )
 
 static const char * const components[] =
 {
-    SAL_MODULENAME( "ucb1" )    // KSO, ABI
+    SAL_MODULENAME( "ucb1" )    
     , SAL_MODULENAME( "ucpfile1" )
     , SAL_MODULENAME( "cfgmgr2" )
     , "sax.uno" SAL_DLLEXTENSION
     , "stocservices.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
-    , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
+    , SAL_MODULENAME( "mcnttype" )          
     , "i18npool.uno" SAL_DLLEXTENSION
-        // Reading of files in specific encodings like UTF-8 using
-        // createUnoService( "com.sun.star.io.TextInputStream" ) and such
+        
+        
     , "textinstream.uno" SAL_DLLEXTENSION
     , "textoutstream.uno" SAL_DLLEXTENSION
     , "introspection.uno" SAL_DLLEXTENSION
     , "corereflection.uno" SAL_DLLEXTENSION
-        // RemoteUno
+        
     , "connector.uno" SAL_DLLEXTENSION
     , "bridgefac.uno" SAL_DLLEXTENSION
     , "remotebridge.uno" SAL_DLLEXTENSION
@@ -154,7 +154,7 @@ static const char * const components[] =
     , "sdbc2" SAL_DLLEXTENSION
     , "dbpool2" SAL_DLLEXTENSION
 #ifdef SAL_UNX
-    , SVLIBRARY( "dtransX11" )        // OBR
+    , SVLIBRARY( "dtransX11" )        
 #endif
 #ifdef SAL_W32
     , SAL_MODULENAME( "sysdtrans" )
@@ -232,7 +232,7 @@ Reference< XMultiServiceFactory > InitializeFac( void )
                     xComp->dispose();
             }
 
-            // now try it again readonly
+            
             printf("Opening Registry readonly\n");
             xSMgr = createRegistryServiceFactory( types, services, sal_True );
         }
@@ -245,12 +245,12 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
     printf("set global factory.\n");
 
-    //////////////////////////////////////////////////////////////////////
-    // set global factory
+    
+    
     setProcessServiceFactory( xSMgr );
 
 
-//  Create unconfigured Ucb:
+
     Reference< XUniversalContentBroker > xUcb
         ( xSMgr->createInstance("com.sun.star.ucb.UniversalContentBroker"), UNO_QUERY_THROW );
 
@@ -263,7 +263,7 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
 int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
 {
-               // Test some metadata
+               
                 Reference< XDatabaseMetaData > xDmd = pConnection->getMetaData();
                 if ( xDmd.is() ) {
                     printf(": got DatabaseMetaData \n");
@@ -277,9 +277,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     printf("Testing getColumns() : START\n");
                     {
                         Reference<XResultSet> xRes = xDmd->getColumns(
-                                makeAny(OUString("")), // Catalog
-                                OUString("%"),          // Schema
-                                OUString("%"),          // TabName
+                                makeAny(OUString("")), 
+                                OUString("%"),          
+                                OUString("%"),          
                                 OUString("%")
                                 );
                         printXResultSets( xRes );
@@ -296,9 +296,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 printf("Testing getTables() : START\n");
                     {
                         Reference<XResultSet> xRes = xDmd->getTables(
-                                makeAny(OUString("")), // Catalog
-                                OUString("%"),          // Schema
-                                OUString("%"),          // TabName
+                                makeAny(OUString("")), 
+                                OUString("%"),          
+                                OUString("%"),          
                                 Sequence<OUString>()
                                 );
                         printXResultSets( xRes );
@@ -316,7 +316,7 @@ int TestRowUpdate(Reference<XResultSet> &xRes);
 
 Reference<XResultSet> TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection,sal_Int32 choice)
 {
-     // Try a query
+     
      printf("Testing createStatement() & executeQuery() : START\n");
      Reference<XStatement> xStmt = pConnection->createStatement();
      Reference<XResultSet> xRes;
@@ -324,7 +324,7 @@ Reference<XResultSet> TestQuery(Reference< ::com::sun::star::sdbc::XConnection> 
      {
           printf(": got statement\n");
           printf(":   excuteQuery() : START \n");
-//          SELECT "First Name", "Display Name", "E-mail" FROM "addr" "addr"
+
           char sql[256]="SELECT  \"First Name\", \"Display Name\", \"E-mail\" FROM \"addr\"";
           if (choice!=-1)
           {
@@ -379,11 +379,11 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     switch (choice)
     {
         case -1:
-        case 1: //mozilla
-            url = "sdbc:address:mozilla://";
+        case 1: 
+            url = "sdbc:address:mozilla:
             break;
         case 2:
-            url = "sdbc:address:ldap://";
+            url = "sdbc:address:ldap:
             char hostname[40],basedn[40];
             scanf("%s %s",hostname,basedn);
             aValue.realloc(2);
@@ -396,8 +396,8 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         case 4:
             break;
         case 5:
-            //Default LDAP AB
-            url = "sdbc:address:ldap://";
+            
+            url = "sdbc:address:ldap:
             aValue.realloc(2);
             aValue[0].Name = "HostName";
             aValue[0].Value <<= OUString("sun-ds");

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 
 using namespace std;
 
-// GDI-Array
+
 
 #define EMR_HEADER                      1
 #define EMR_POLYBEZIER                  2
@@ -126,7 +126,7 @@ using namespace std;
 #define EMR_POLYTEXTOUTA                96
 #define EMR_POLYTEXTOUTW                97
 
-// WINDOWS VERSION >= 0x400
+
 #define EMR_SETICMMODE                  98
 #define EMR_CREATECOLORSPACE            99
 #define EMR_SETCOLORSPACE              100
@@ -135,7 +135,7 @@ using namespace std;
 #define EMR_GLSBOUNDEDRECORD           103
 #define EMR_PIXELFORMAT                104
 
-// WINDOWS VERSION >= 0x500
+
 #define EMR_DRAWESCAPE                 105
 #define EMR_EXTESCAPE                  106
 #define EMR_STARTDOC                   107
@@ -155,12 +155,12 @@ using namespace std;
 
 
 #ifdef OSL_BIGENDIAN
-// currently unused
+
 static float GetSwapFloat( SvStream& rSt )
 {
     float   fTmp;
     sal_Int8* pPtr = (sal_Int8*)&fTmp;
-    rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];    // little endian <-> big endian switch
+    rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];    
     return fTmp;
 }
 #endif
@@ -242,7 +242,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
         pOut->PassEMFPlusHeaderInfo();
 
 #if OSL_DEBUG_LEVEL > 1
-        // debug code - write the stream to debug file /tmp/emf-stream.emf
+        
         int pos = pWMF->Tell();
         pWMF->Seek(0);
         SvFileStream file( OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
@@ -266,8 +266,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
     bHaveDC = false;
 
     OSL_ASSERT(length >= 4);
-    // reduce by 32bit length itself, skip in SeekRel if
-    // impossibly unavailable
+    
+    
     sal_uInt32 nRemainder = length >= 4 ? length-4 : length;
 
     const size_t nRequiredHeaderSize = 12;
@@ -281,17 +281,17 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
         SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
 
-        // GetDC
+        
         if( type == 16388 ) {
             bHaveDC = true;
             SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
         }
 
-        // Get the length of the remaining data of this record based
-        // on the alleged size
+        
+        
         sal_uInt32 nRemainingRecordData = size >= nRequiredHeaderSize ?
             size-nRequiredHeaderSize : 0;
-        // clip to available size
+        
         nRemainingRecordData = std::min(nRemainingRecordData, nRemainder);
         pWMF->SeekRel(nRemainingRecordData);
         nRemainder -= nRemainingRecordData;
@@ -360,10 +360,10 @@ void EnhWMFReader::ReadAndDrawPolyLine()
     sal_uInt32  nPoints;
     sal_Int32   i, nPoly(0), nGesPoints(0);
     pWMF->SeekRel( 0x10 );
-    // Number of Polygons:
+    
     pWMF->ReadInt32( nPoly ).ReadInt32( nGesPoints );
 
-    // taking the amount of points of each polygon, retrieving the total number of points
+    
     if ( pWMF->good() &&
          ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) &&
          ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() )
@@ -375,7 +375,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
             pWMF->ReadUInt32( nPoints );
             pnPoints[ i ] = (sal_uInt16)nPoints;
         }
-        // Get polygon points:
+        
         for ( i = 0; ( i < nPoly ) && pWMF->good(); i++ )
         {
             Polygon aPolygon = ReadPolygon<T>(0, pnPoints[i]);
@@ -385,7 +385,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
     }
 }
 
-// these are referenced from inside the templates
+
 
 SvStream& operator>>(SvStream& rStream, sal_Int16 &n)
 {
@@ -406,14 +406,14 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
 {
     sal_uInt32 nPoly(0), nGesPoints(0), nReadPoints(0);
     pWMF->SeekRel( 0x10 );
-    // Number of polygons
+    
     pWMF->ReadUInt32( nPoly ).ReadUInt32( nGesPoints );
     if ( pWMF->good() &&
-        ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && //check against numeric overflowing
+        ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && 
         ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) &&
         ( (  nPoly * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() ) ))
     {
-        // Get number of points in each polygon
+        
         sal_uInt16 * pnPoints = new sal_uInt16[ nPoly ];
         for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
         {
@@ -423,7 +423,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         }
         if ( pWMF->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - pWMF->Tell() ) )
         {
-            // Get polygon points
+            
             PolyPolygon aPolyPoly(nPoly, nPoly);
             for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
             {
@@ -467,7 +467,7 @@ bool EnhWMFReader::ReadEnhWMF()
     {
         pWMF->ReadUInt32( nRecType ).ReadUInt32( nRecSize );
 
-        if ( !pWMF->good() || ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameters are always divisible by 4
+        if ( !pWMF->good() || ( nRecSize < 8 ) || ( nRecSize & 3 ) )     
         {
             bStatus = false;
             break;
@@ -506,12 +506,12 @@ bool EnhWMFReader::ReadEnhWMF()
 
                 SAL_INFO ("vcl.emf", "\t\tbegin " << (char)(id & 0xff) << (char)((id & 0xff00) >> 8) << (char)((id & 0xff0000) >> 16) << (char)((id & 0xff000000) >> 24) << " id: 0x" << std::hex << id << std::dec);
 
-                // EMF+ comment (FIXME: BE?)
+                
                 if( id == 0x2B464D45 && nRecSize >= 12 )
                     ReadEMFPlusComment( length, bHaveDC );
-                // GDIC comment, doesn't do anything useful yet
+                
                 else if( id == 0x43494447 && nRecSize >= 12 ) {
-                    // TODO: ReadGDIComment()
+                    
                 } else {
                     SAL_INFO ("vcl.emf", "\t\tunknown id: 0x" << std::hex << id << std::dec);
                 }
@@ -548,7 +548,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_SETWINDOWEXTEX :
-                {                                                       // #75383#
+                {                                                       
                     pWMF->ReadUInt32( nW ).ReadUInt32( nH );
                     pOut->SetWinExt( Size( nW, nH ), true);
                 }
@@ -590,7 +590,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_EOF :
-                    nRecordCount = 0;           // #76846#
+                    nRecordCount = 0;           
                 break;
 
                 case EMR_SETPIXELV :
@@ -717,7 +717,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         LineInfo    aLineInfo;
                         sal_uInt32      nStyle;
                         Size        aSize;
-                        // #fdo39428 Remove SvStream operator>>(long&)
+                        
                         sal_Int32 nTmpW(0), nTmpH(0);
 
                         pWMF->ReadUInt32( nStyle ).ReadInt32( nTmpW ).ReadInt32( nTmpH );
@@ -918,8 +918,8 @@ bool EnhWMFReader::ReadEnhWMF()
                     pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
                     const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
 
-                    // #i73608# OutputDevice deviates from WMF
-                    // semantics. start==end means full ellipse here.
+                    
+                    
                     if( nStartX == nEndX && nStartY == nEndY )
                         pOut->DrawEllipse( aRect );
                     else
@@ -1040,7 +1040,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             aTmp.Seek( 0 );
                             ReadDIB(aBitmap, aTmp, true);
 
-                            // test if it is sensible to crop
+                            
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
                                 ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
                                     ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
@@ -1055,7 +1055,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 }
                 break;
 
-                case EMR_BITBLT :   // PASSTHROUGH INTENDED
+                case EMR_BITBLT :   
                 case EMR_STRETCHBLT :
                 {
                     sal_Int32   xDest, yDest, cxDest, cyDest, xSrc, ySrc, cxSrc, cySrc;
@@ -1078,8 +1078,8 @@ bool EnhWMFReader::ReadEnhWMF()
                     Bitmap      aBitmap;
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
-                    cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
-                    cyDest = abs( (int)cyDest );        // and also 122889
+                    cxDest = abs( (int)cxDest );        
+                    cyDest = abs( (int)cyDest );        
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
                         bStatus = false;
@@ -1104,7 +1104,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             aTmp.Seek( 0 );
                             ReadDIB(aBitmap, aTmp, true);
 
-                            // test if it is sensible to crop
+                            
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
                                 ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
                                     ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
@@ -1144,8 +1144,8 @@ bool EnhWMFReader::ReadEnhWMF()
                     Bitmap      aBitmap;
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
-                    cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
-                    cyDest = abs( (int)cyDest );        // and also 122889
+                    cxDest = abs( (int)cxDest );        
+                    cyDest = abs( (int)cyDest );        
 
                     if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
                        || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
@@ -1174,7 +1174,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             aTmp.Seek( 0 );
                             ReadDIB(aBitmap, aTmp, true);
 
-                            // test if it is sensible to crop
+                            
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
                                 ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
                                     ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
@@ -1219,18 +1219,18 @@ bool EnhWMFReader::ReadEnhWMF()
                         }
                         aLogFont.alfFaceName = OUString( lfFaceName );
 
-                        // #i123216# Not used in the test case of #121382# (always identity in XForm), also
-                        // no hints in ms docu if FontSize should be scaled with WT. Using with the example
-                        // from #i123216# creates errors, so removing.
+                        
+                        
+                        
                         //
-                        // // #i121382# Need to apply WorldTransform to FontHeight/Width; this should be completely
-                        // // changed to basegfx::B2DHomMatrix instead of 'struct XForm', but not now due to time
-                        // // constraints and dangers
-                        // const XForm& rXF = pOut->GetWorldTransform();
-                        // const basegfx::B2DHomMatrix aWT(rXF.eM11, rXF.eM21, rXF.eDx, rXF.eM12, rXF.eM22, rXF.eDy);
-                        // const basegfx::B2DVector aTransVec(aWT * basegfx::B2DVector(aLogFont.lfWidth, aLogFont.lfHeight));
-                        // aLogFont.lfWidth = aTransVec.getX();
-                        // aLogFont.lfHeight = aTransVec.getY();
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
                         pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
                     }
@@ -1470,7 +1470,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SETTEXTJUSTIFICATION :     SAL_INFO("vcl.emf", "not implemented '" << "SetTextJustification" << "'");      break;
 
                 case EMR_GDICOMMENT :
-                case EMR_HEADER :               // has already been read at ReadHeader()
+                case EMR_HEADER :               
                 break;
 
                 default :                           SAL_INFO("vcl.emf", "Unknown Meta Action");                                     break;
@@ -1494,26 +1494,26 @@ bool EnhWMFReader::ReadHeader()
     sal_uInt32      nHeaderSize, nPalEntries;
     sal_Int32       nLeft, nTop, nRight, nBottom;
 
-    // Spare me the METAFILEHEADER here
-    // Reading the METAHEADER - EMR_HEADER ([MS-EMF] section 2.3.4.2 EMR_HEADER Record Types)
+    
+    
     pWMF->ReadUInt32( nType ).ReadUInt32( nHeaderSize );
-    if ( nType != 1 ) { // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
+    if ( nType != 1 ) { 
         SAL_WARN("vcl.emf", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
         return false;
     }
 
-    // Start reading the EMR_HEADER Header object
+    
 
-    // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
-    Rectangle rclBounds;    // rectangle in logical units
+    
+    Rectangle rclBounds;    
     pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
     rclBounds.Left() = nLeft;
     rclBounds.Top() = nTop;
     rclBounds.Right() = nRight;
     rclBounds.Bottom() = nBottom;
 
-    // picture frame size (RectL object)
-    Rectangle rclFrame;     // rectangle in device units 1/100th mm
+    
+    Rectangle rclFrame;     
     pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
     rclFrame.Left() = nLeft;
     rclFrame.Top() = nTop;
@@ -1522,23 +1522,23 @@ bool EnhWMFReader::ReadHeader()
 
     pWMF->ReadUInt32( nSignature );
 
-    // nSignature MUST be the ASCII characters "FME", see [WS-EMF] 2.2.9 Header Object
-    // and 2.1.14 FormatSignature Enumeration
+    
+    
     if ( nSignature != 0x464d4520 ) {
         SAL_WARN("vcl.emf", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
         return false;
     }
 
-    pWMF->ReadUInt32( nVersion );  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
-                        // Microsoft note that not even Windows checks this...
+    pWMF->ReadUInt32( nVersion );  
+                        
     if ( nVersion != 0x00010000 ) {
         SAL_WARN("vcl.emf", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
     }
 
-    pWMF->ReadUInt32( nEndPos );                                   // size of metafile
+    pWMF->ReadUInt32( nEndPos );                                   
     nEndPos += nStartPos;
 
-    sal_uInt32 nStrmPos = pWMF->Tell();                 // checking if nEndPos is valid
+    sal_uInt32 nStrmPos = pWMF->Tell();                 
     pWMF->Seek( STREAM_SEEK_TO_END );
     sal_uInt32 nActualFileSize = pWMF->Tell();
 
@@ -1558,14 +1558,14 @@ bool EnhWMFReader::ReadHeader()
         return false;
     }
 
-    // the number of "handles", or graphics objects used in the metafile
+    
 
     sal_uInt16 nHandlesCount;
     pWMF->ReadUInt16( nHandlesCount );
 
-    // the next 2 bytes are reserved, but according to [MS-EMF] section 2.2.9
-    // it MUST be 0x000 and MUST be ignored... the thing is, having such a specific
-    // value is actually pretty useful in checking if there is possible corruption
+    
+    
+    
 
     sal_uInt16 nReserved;
     pWMF->ReadUInt16( nReserved );
@@ -1575,10 +1575,10 @@ bool EnhWMFReader::ReadHeader()
                             "corruption?");
     }
 
-    // The next 4 bytes specifies the number of characters in the metafile description.
-    // The 4 bytes after that specific the offset from this record that contains the
-    // metafile description... zero means no description string.
-    // For now, we ignore it.
+    
+    
+    
+    
 
     pWMF->SeekRel( 0x8 );
 

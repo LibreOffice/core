@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "imp_share.hxx"
@@ -79,7 +79,7 @@ ControlElement::ControlElement(
 {
     if (_pParent)
     {
-        // inherit position
+        
         _nBasePosX = static_cast< ControlElement * >( _pParent )->_nBasePosX;
         _nBasePosY = static_cast< ControlElement * >( _pParent )->_nBasePosY;
     }
@@ -246,7 +246,7 @@ bool StyleElement::importBorderStyle(
         }
 
         _hasValue |= 0x4;
-        importBorderStyle(xProps); // write values
+        importBorderStyle(xProps); 
     }
     return false;
 }
@@ -314,25 +314,25 @@ bool StyleElement::importFontStyle(
     OUString aValue;
     bool bFontImport;
 
-    // dialog:font-name CDATA #IMPLIED
+    
     bFontImport = getStringAttr( &_descr.Name, "font-name", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
-    // dialog:font-height %numeric; #IMPLIED
+    
     if (getStringAttr( &aValue, "font-height", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Height = (sal_Int16)toInt32( aValue );
         bFontImport = true;
     }
-    // dialog:font-width %numeric; #IMPLIED
+    
     if (getStringAttr(&aValue, "font-width", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Width = (sal_Int16)toInt32( aValue );
         bFontImport = true;
     }
-    // dialog:font-stylename CDATA #IMPLIED
+    
     bFontImport |= getStringAttr( &_descr.StyleName, "font-stylename", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
-    // dialog:font-family "(decorative|modern|roman|script|swiss|system)" #IMPLIED
+    
     if (getStringAttr(&aValue, "font-family", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "decorative" )
@@ -366,7 +366,7 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // dialog:font-charset "(ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol)" #IMPLIED
+    
     if (getStringAttr(&aValue, "font-charset", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "ansi" )
@@ -416,7 +416,7 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // dialog:font-pitch "(fixed|variable)" #IMPLIED
+    
     if (getStringAttr( &aValue, "font-pitch", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "fixed" )
@@ -434,20 +434,20 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // dialog:font-charwidth CDATA #IMPLIED
+    
     if (getStringAttr( &aValue, "font-charwidth", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.CharacterWidth = aValue.toFloat();
         bFontImport = true;
     }
-    // dialog:font-weight CDATA #IMPLIED
+    
     if (getStringAttr( &aValue, "font-weight", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Weight = aValue.toFloat();
         bFontImport = true;
     }
 
-    // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
+    
     if (getStringAttr( &aValue, "font-slant", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "oblique" )
@@ -473,7 +473,7 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // dialog:font-underline "(single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave)" #IMPLIED
+    
     if (getStringAttr( &aValue, "font-underline", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "single" )
@@ -551,7 +551,7 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // dialog:font-strikeout "(single|double|bold|slash|x)" #IMPLIED
+    
     if (getStringAttr( &aValue, "font-strikeout", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "single" )
@@ -581,18 +581,18 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // dialog:font-orientation CDATA #IMPLIED
+    
     if (getStringAttr( &aValue, "font-orientation", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Orientation = aValue.toFloat();
         bFontImport = true;
     }
-    // dialog:font-kerning %boolean; #IMPLIED
+    
     bFontImport |= getBoolAttr( &_descr.Kerning, "font-kerning", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
-    // dialog:font-wordlinemode %boolean; #IMPLIED
+    
     bFontImport |= getBoolAttr( &_descr.WordLineMode,"font-wordlinemode", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
-    // dialog:font-type "(raster|device|scalable)" #IMPLIED
+    
     if (getStringAttr( &aValue, "font-type", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "raster" )
@@ -614,8 +614,8 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // additional properties which are not part of the FontDescriptor struct
-    // dialog:font-relief (none|embossed|engraved) #IMPLIED
+    
+    
     if (getStringAttr( &aValue, "font-relief", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
@@ -636,7 +636,7 @@ bool StyleElement::importFontStyle(
         }
         bFontImport = true;
     }
-    // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
+    
     if (getStringAttr(&aValue, "font-emphasismark", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
@@ -812,7 +812,7 @@ bool ImportContext::importAlignProperty(
         }
         else if ( aAlign == "none" )
         {
-            nAlign = 0; // default
+            nAlign = 0; 
         }
         else
         {
@@ -920,7 +920,7 @@ bool ImportContext::importDataAwareProperty(
     Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );
     if ( xFac.is() && ( !sLinkedCell.isEmpty() ||  !sCellRange.isEmpty() ) )
     {
-        // Set up Celllink
+        
         if ( !sLinkedCell.isEmpty() )
         {
             Reference< form::binding::XBindableValue > xBindable( getControlModel(), uno::UNO_QUERY );
@@ -942,7 +942,7 @@ bool ImportContext::importDataAwareProperty(
                 bRes = true;
             }
         }
-        // Set up CelllRange
+        
         if ( !sCellRange.isEmpty() )
         {
             Reference< form::binding::XListEntrySink  > xListEntrySink( getControlModel(), uno::UNO_QUERY );
@@ -1371,8 +1371,8 @@ struct StringTriple
 };
 static StringTriple const s_aEventTranslations[] =
 {
-    // from xmloff/source/forms/formevents.cxx
-    // 28.09.2001 tbe added on-adjustmentvaluechange
+    
+    
     { "com.sun.star.form.XApproveActionListener", "approveAction", "on-approveaction" },
     { "com.sun.star.awt.XActionListener", "actionPerformed", "on-performaction" },
     { "com.sun.star.form.XChangeListener", "changed", "on-change" },
@@ -1430,7 +1430,7 @@ void ImportContext::importEvents(
                 OUString aLocalName( pEventElement->getLocalName() );
                 Reference< xml::input::XAttributes > xAttributes( pEventElement->getAttributes() );
 
-                // nowadays script events
+                
                 if (_pImport->XMLNS_SCRIPT_UID == nUid)
                 {
                     if (!getStringAttr( &descr.ScriptType, "language"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
@@ -1443,22 +1443,22 @@ void ImportContext::importEvents(
                         OUString aLocation;
                         if (getStringAttr( &aLocation, "location", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                         {
-                            // prepend location
+                            
                             descr.ScriptCode = aLocation + ":" + descr.ScriptCode;
                         }
                     }
                     else if ( descr.ScriptType == "Script" )
                     {
-                        // Check if there is a protocol, if not assume
-                        // this is an early scripting framework url ( without
-                        // the protocol ) and fix it up!!
+                        
+                        
+                        
                         if ( descr.ScriptCode.indexOf( ':' ) == -1 )
                         {
                             descr.ScriptCode = "vnd.sun.start.script:" + descr.ScriptCode;
                         }
                     }
 
-                    // script:event element
+                    
                     if ( aLocalName == "event" )
                     {
                         OUString aEventName;
@@ -1467,7 +1467,7 @@ void ImportContext::importEvents(
                             throw xml::sax::SAXException( "missing event-name attribute!", Reference< XInterface >(), Any() );
                         }
 
-                        // lookup in table
+                        
                         OString str( OUStringToOString( aEventName, RTL_TEXTENCODING_ASCII_US ) );
                         StringTriple const * p = g_pEventTranslations;
                         while (p->first)
@@ -1490,7 +1490,7 @@ void ImportContext::importEvents(
                             throw xml::sax::SAXException( "no matching event-name found!", Reference< XInterface >(), Any() );
                         }
                     }
-                    else // script:listener-event element
+                    else 
                     {
                         SAL_WARN_IF( aLocalName != "listener-event", "xmlscript.xmldlg", "aLocalName != listener-event" );
 
@@ -1499,11 +1499,11 @@ void ImportContext::importEvents(
                         {
                             throw xml::sax::SAXException("missing listener-type or listener-method attribute(s)!", Reference< XInterface >(), Any() );
                         }
-                        // optional listener param
+                        
                         getStringAttr( &descr.AddListenerParam,  "listener-param", xAttributes, _pImport->XMLNS_SCRIPT_UID );
                     }
                 }
-                else // deprecated dlg:event element
+                else 
                 {
                     SAL_WARN_IF( _pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != "event", "xmlscript.xmldlg", "_pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != \"event\"" );
 
@@ -1627,13 +1627,13 @@ void ElementBase::ignorableWhitespace(
     OUString const & /*rWhitespaces*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // not used
+    
 }
 
 void ElementBase::characters( OUString const & /*rChars*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // not used, all characters ignored
+    
 }
 
 void ElementBase::endElement()
@@ -1690,7 +1690,7 @@ ElementBase::~ElementBase()
 #endif
 }
 
-// XRoot
+
 
 void DialogImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
@@ -1703,21 +1703,21 @@ void DialogImport::startDocument(
 void DialogImport::endDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // ignored
+    
 }
 
 void DialogImport::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // ignored for now: xxx todo
+    
 }
 
 void DialogImport::setDocumentLocator(
     Reference< xml::sax::XLocator > const & /*xLocator*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // ignored for now: xxx todo
+    
 }
 
 Reference< xml::input::XElement > DialogImport::startRootElement(
@@ -1729,7 +1729,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
     {
         throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
-    // window
+    
     else if ( rLocalName == "window" )
     {
         return new WindowElement( rLocalName, xAttributes, 0, this );
@@ -1792,7 +1792,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
-    // single set of styles and stylenames apply to all containees
+    
     :: boost::shared_ptr< ::std::vector< OUString > > pStyleNames( new ::std::vector< OUString > );
     :: boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new ::std::vector< css::uno::Reference< css::xml::input::XElement > > );
      return ::xmlscript::createDocumentHandler(

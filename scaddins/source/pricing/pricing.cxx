@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// pricing functions add in
+
 //
-// all of the UNO add-in technical details have been copied from
-// ../datefunc/datefunc.cxx
+
+
 
 #include "pricing.hxx"
 #include "black_scholes.hxx"
@@ -83,9 +83,9 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 {
 }
 
-#define UNIQUE              sal_False   // function name does not exist in Calc
+#define UNIQUE              sal_False   
 
-#define STDPAR              sal_False   // all parameters are described
+#define STDPAR              sal_False   
 
 #define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
     { "get" #FuncName, PRICING_FUNCNAME_##FuncName, PRICING_FUNCDESC_##FuncName, PRICING_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
@@ -169,7 +169,7 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
     FreeResource();
 }
 
-// entry points for service registration / instantiation
+
 uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
@@ -204,9 +204,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}   
 
-//  "normal" service implementation
+
 ScaPricingAddIn::ScaPricingAddIn() :
     pDefLocales( NULL ),
     pResMgr( NULL ),
@@ -221,7 +221,7 @@ ScaPricingAddIn::~ScaPricingAddIn()
     if( pDefLocales )
         delete[] pDefLocales;
 
-    // pResMgr already deleted (_all_ resource managers are deleted _before_ this dtor is called)
+    
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -251,7 +251,7 @@ ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException )
 {
     if( !pResMgr )
     {
-        InitData();     // try to get resource manager
+        InitData();     
         if( !pResMgr )
             throw uno::RuntimeException();
     }
@@ -313,14 +313,14 @@ uno::Sequence< OUString > ScaPricingAddIn::getSupportedServiceNames_Static()
     return aRet;
 }
 
-// XServiceName
+
 OUString SAL_CALL ScaPricingAddIn::getServiceName() throw( uno::RuntimeException )
 {
-    // name of specific AddIn service
+    
     return OUString( MY_SERVICE );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL ScaPricingAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -336,11 +336,11 @@ uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames() t
     return getSupportedServiceNames_Static();
 }
 
-// XLocalizable
+
 void SAL_CALL ScaPricingAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
 {
     aFuncLoc = eLocale;
-    InitData();     // change of locale invalidates resources!
+    InitData();     
 }
 
 lang::Locale SAL_CALL ScaPricingAddIn::getLocale() throw( uno::RuntimeException )
@@ -348,12 +348,12 @@ lang::Locale SAL_CALL ScaPricingAddIn::getLocale() throw( uno::RuntimeException 
     return aFuncLoc;
 }
 
-// function descriptions start here
-// XAddIn
+
+
 OUString SAL_CALL ScaPricingAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
-    //  not used by calc
-    //  (but should be implemented for other uses of the AddIn service)
+    
+    
     return OUString();
 }
 
@@ -440,7 +440,7 @@ OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
             case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
             case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
             case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
-            default:    // to prevent compiler warnings
+            default:    
                 break;
         }
     }
@@ -456,7 +456,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayCategoryName(
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
-// XCompatibilityNames
+
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
@@ -476,8 +476,8 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
     return aRet;
 }
 
-// actual function implementation starts here
-// auxillary input handling functions
+
+
 namespace {
 
 bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
@@ -496,7 +496,7 @@ bool getinput_putcall(bs::types::PutCall& pc, const uno::Any& anyval) {
     if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
     } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
-        str="c";        // call as default
+        str="c";        
     } else {
         return false;
     }
@@ -507,7 +507,7 @@ bool getinput_strike(double& strike, const uno::Any& anyval) {
     if(anyval.getValueTypeClass() == uno::TypeClass_DOUBLE) {
         anyval >>= strike;
     } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
-        strike=-1.0;        // -1 as default (means not set)
+        strike=-1.0;        
     } else {
         return false;
     }
@@ -582,9 +582,9 @@ bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
     return true;
 }
 
-} // namespace for auxillary functions
+} 
 
-// OPT_BARRIER(...)
+
 double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
@@ -595,7 +595,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
     bs::types::BarrierKIO kio;
     bs::types::BarrierActive bcont;
     bs::types::Greeks greek;
-    // read and check input values
+    
     if( spot<=0.0 || vol<=0.0 || T<0.0 || strike<0.0 ||
                 !getinput_putcall(pc,put_call) ||
                 !getinput_inout(kio,in_out) ||
@@ -610,7 +610,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-// OPT_TOUCH(...)
+
 double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
@@ -621,7 +621,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
     bs::types::BarrierKIO kio;
     bs::types::BarrierActive bcont;
     bs::types::Greeks greek;
-    // read and check input values
+    
     if( spot<=0.0 || vol<=0.0 || T<0.0 ||
                 !getinput_fordom(fd,for_dom) ||
                 !getinput_inout(kio,in_out) ||
@@ -636,12 +636,12 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-// OPT_PRB_HIT(...)
+
 double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    // read and check input values
+    
     if( spot<=0.0 || vol<=0.0 || T<0.0 ) {
         throw lang::IllegalArgumentException();
     }
@@ -651,7 +651,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-// OPT_PROB_INMONEY(...)
+
 double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
@@ -660,7 +660,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
     bs::types::PutCall pc=bs::types::Call;
     double  K;
 
-    // read and check input values
+    
     if( spot<=0.0 || vol<=0.0 || T<0.0 ||
             !getinput_putcall(pc,put_call) ||
             !getinput_strike(K,strikeval) ) {

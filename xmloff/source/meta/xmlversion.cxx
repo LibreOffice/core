@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
-// #110897#
+
 XMLVersionListExport::XMLVersionListExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
@@ -70,7 +70,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
                              _GetNamespaceMap().GetNameByIndex ( nPos ) );
 
     {
-        // the following object will write all collected attributes in its dtor
+        
         SvXMLElementExport aRoot( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_LIST, sal_True, sal_True );
 
         for ( sal_Int32 n=0; n<maVersions.getLength(); n++ )
@@ -91,7 +91,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 
             AddAttribute( XML_NAMESPACE_DC, xmloff::token::XML_DATE_TIME, aDateStr );
 
-            // the following object will write all collected attributes in its dtor
+            
             SvXMLElementExport aEntry( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_ENTRY, sal_True, sal_True );
         }
     }
@@ -233,7 +233,7 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
         aTimeStr = rString.copy( nPos + 1 );
     }
     else
-        aDateStr = rString;         // no separator: only date part
+        aDateStr = rString;         
 
     sal_Int32 nYear  = 0;
     sal_Int32 nMonth = 1;
@@ -272,7 +272,7 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
         }
     }
 
-    if ( bSuccess && !aTimeStr.isEmpty() )         // time is optional
+    if ( bSuccess && !aTimeStr.isEmpty() )         
     {
         pStr = aTimeStr.getStr();
         sal_Int32 nTimeTokens = 1;
@@ -321,21 +321,21 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
     throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    // no storage, no version list!
+    
     if ( xRoot.is() )
     {
-        // get the services needed for writing the xml data
+        
         Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
 
         Reference< XWriter > xWriter = Writer::create(xContext);
 
-        // check whether there's already a sub storage with the version info
-        // and delete it
+        
+        
         OUString sVerName( XMLN_VERSIONSLIST  );
 
         try {
-            // open (create) the sub storage with the version info
+            
             uno::Reference< io::XStream > xVerStream = xRoot->openStreamElement(
                                             sVerName,
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
@@ -344,7 +344,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
             if ( !xOut.is() )
-                throw uno::RuntimeException(); // the stream was successfully opened for writing already
+                throw uno::RuntimeException(); 
 
             Reference< io::XActiveDataSource > xSrc( xWriter, uno::UNO_QUERY );
             xSrc->setOutputStream(xOut);
@@ -355,11 +355,11 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             aExp.exportDoc( ::xmloff::token::XML_VERSION );
 
-            xVerStream = uno::Reference< io::XStream >(); // use refcounting for now to dispose
+            xVerStream = uno::Reference< io::XStream >(); 
         }
         catch( uno::Exception& )
         {
-            // TODO: error handling
+            
         }
     }
 }
@@ -402,14 +402,14 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( !aParserInput.aInputStream.is() )
                 throw uno::RuntimeException();
 
-            // get filter
+            
             Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xContext, aVersions );
 
-            // connect parser and filter
+            
             Reference< XParser > xParser = xml::sax::Parser::create(xContext);
             xParser->setDocumentHandler( xFilter );
 
-            // parse
+            
             try
             {
                 xParser->parseStream( aParserInput );
@@ -421,7 +421,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
     }
     catch( uno::Exception& )
     {
-        // TODO: error handling
+        
     }
 
     return aVersions;

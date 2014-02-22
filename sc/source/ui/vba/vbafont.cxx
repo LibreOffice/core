@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -69,10 +69,10 @@ static uno::Reference< beans::XPropertySet > lcl_TextProperties( uno::Reference<
 void SAL_CALL
 ScVbaFont::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    // #FIXEME create some sort of generic get/set code where
-    // you can pass a functor
-    // get/set - Super/sub script code is exactly the same
-    // except for the call applied at each cell position
+    
+    
+    
+    
         uno::Reference< table::XCell> xCell( mxFont, uno::UNO_QUERY );
         uno::Reference< table::XCellRange > xCellRange( mxFont, uno::UNO_QUERY );
     if ( !xCell.is() )
@@ -231,12 +231,12 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExcep
 {
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
-    // #FIXME  xlColorIndexAutomatic & xlColorIndexNone are not really
-    // handled properly here
+    
+    
 
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) )
         {
-        nIndex = 1;  // check defualt ( assume black )
+        nIndex = 1;  
                 ScVbaFont_BASE::setColorIndex( uno::makeAny( nIndex ) );
         }
         else
@@ -253,12 +253,12 @@ ScVbaFont::getColorIndex() throw ( uno::RuntimeException )
     return ScVbaFont_BASE::getColorIndex();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
+
 void  SAL_CALL
 ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException )
 {
-//XXX #TODO# #FIXME#
-    //mxFont->setPropertyValue("CharSize", ( uno::Any )fValue );
+
+    
     throw uno::RuntimeException(
         OUString("setStandardFontSize not supported"), uno::Reference< uno::XInterface >() );
 }
@@ -267,17 +267,17 @@ ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::Runtime
 uno::Any SAL_CALL
 ScVbaFont::getStandardFontSize() throw ( uno::RuntimeException )
 {
-//XXX #TODO# #FIXME#
+
     throw uno::RuntimeException(
         OUString("getStandardFontSize not supported"), uno::Reference< uno::XInterface >() );
-    // return uno::Any();
+    
 }
 
 
 void  SAL_CALL
 ScVbaFont::setStandardFont( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException )
 {
-//XXX #TODO# #FIXME#
+
     throw uno::RuntimeException(
         OUString("setStandardFont not supported"), uno::Reference< uno::XInterface >() );
 }
@@ -286,10 +286,10 @@ ScVbaFont::setStandardFont( const uno::Any& /*aValue*/ ) throw( uno::RuntimeExce
 uno::Any SAL_CALL
 ScVbaFont::getStandardFont() throw ( uno::RuntimeException )
 {
-//XXX #TODO# #FIXME#
+
     throw uno::RuntimeException(
         OUString("getStandardFont not supported"), uno::Reference< uno::XInterface >() );
-    // return uno::Any();
+    
 }
 
 void SAL_CALL
@@ -355,17 +355,17 @@ ScVbaFont::getBold() throw ( uno::RuntimeException )
 void SAL_CALL
 ScVbaFont::setUnderline( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    // default
+    
     sal_Int32 nValue = excel::XlUnderlineStyle::xlUnderlineStyleNone;
     aValue >>= nValue;
     switch ( nValue )
     {
-// NOTE:: #TODO #FIMXE
-// xlUnderlineStyleDoubleAccounting & xlUnderlineStyleSingleAccounting
-// don't seem to be supported in Openoffice.
-// The import filter converts them to single or double underlines as appropriate
-// So, here at the moment we are similarly silently converting
-// xlUnderlineStyleSingleAccounting to xlUnderlineStyleSingle.
+
+
+
+
+
+
 
         case excel::XlUnderlineStyle::xlUnderlineStyleNone:
             nValue = awt::FontUnderline::NONE;
@@ -452,7 +452,7 @@ ScVbaFont::getName() throw ( uno::RuntimeException )
 uno::Any
 ScVbaFont::getColor() throw (uno::RuntimeException)
 {
-    // #TODO #FIXME - behave like getXXX above ( wrt. GetDataSet )
+    
     uno::Any aAny;
     aAny = OORGBToXLRGB( mxFont->getPropertyValue("CharColor") );
     return aAny;

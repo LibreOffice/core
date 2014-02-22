@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -44,7 +44,7 @@
 namespace
 {
 
-// A Follow on the same page as its master is nasty.
+
 inline bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
     OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||
@@ -117,7 +117,7 @@ bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 
     SWAP_IF_SWAPPED( pFrm )
     SWRECTFN( pFrm )
-    // nOrigin is an absolut value, rLine referes to the swapped situation.
+    
 
     SwTwips nTmpY;
     if ( pFrm->IsVertical() )
@@ -127,42 +127,42 @@ bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 
     SwTwips nLineHeight = (*fnRect->fnYDiff)( nTmpY , nOrigin );
 
-    // 7455 und 6114: Calculate extra space for bottom border.
+    
     nLineHeight += (pFrm->*fnRect->fnGetBottomMargin)();
 
     if( nRstHeight )
         bFit = nRstHeight >= nLineHeight;
     else
     {
-        // The Frm has a height to fit on the page.
+        
         SwTwips nHeight =
             (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetPrtBottom)(), nOrigin );
-        // If everything is inside the existing frame the result is true;
+        
         bFit = nHeight >= nLineHeight;
 
-        // --> OD #i103292#
+        
         if ( !bFit )
         {
             if ( rLine.GetNext() &&
                  pFrm->IsInTab() && !pFrm->GetFollow() && !pFrm->GetIndNext() )
             {
-                // add additional space taken as lower space as last content in a table
-                // for all text lines except the last one.
+                
+                
                 nHeight += pFrm->CalcAddLowerSpaceAsLastInTableCell();
                 bFit = nHeight >= nLineHeight;
             }
         }
-        // <--
+        
         if( !bFit )
         {
-            // The LineHeight exceeds the current Frm height.
-            // Call a test Grow to detect if the Frame could
-            // grow the requested area.
+            
+            
+            
             nHeight += pFrm->GrowTst( LONG_MAX );
 
-            // The Grow() returns the height by which the Upper of the TxtFrm
-            // would let the TxtFrm grow.
-            // The TxtFrm itself can grow as much as it wants.
+            
+            
+            
             bFit = nHeight >= nLineHeight;
         }
     }
@@ -180,8 +180,8 @@ bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
 {
     SWAP_IF_SWAPPED( pFrm )
 
-    // bKeep is stronger than IsBreakNow()
-    // Is there enough space ?
+    
+    
     if( bKeep || IsInside( rLine ) )
         bBreak = false;
     else
@@ -193,7 +193,7 @@ bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
          * Special case: with DummyPortions there is LineNr == 1, though we
          * want to split.
          */
-        // 6010: include DropLines
+        
 
         bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
         bBreak = true;
@@ -216,16 +216,16 @@ bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
     return bBreak;
 }
 
-// OD 2004-02-27 #106629# - no longer inline
+
 void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
 {
-    // OD, FME 2004-02-27 #106629# - consider bottom margin
+    
     SWRECTFN( pFrm )
 
     nRstHeight = (pFrm->*fnRect->fnGetBottomMargin)();
 
     if ( bVert )
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     {
            if ( pFrm->IsVertLR() )
               nRstHeight = (*fnRect->fnYDiff)( pFrm->SwitchHorizontalToVertical( rLine.Y() ) , nOrigin );
@@ -248,17 +248,17 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 
     if( bKeep )
     {
-        // 5652: If pararagraph should not be split but is larger than
-        // the page, then bKeep is overruled.
+        
+        
         if( bChkKeep && !pFrm->GetPrev() && !pFrm->IsInFtn() &&
             pFrm->IsMoveable() &&
             ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
             bKeep = false;
-        // Even if Keep is set, Orphans has to be respected.
-        // e.g. if there are chained frames where a Follow in the last frame
-        // receives a Keep, because it is not (forward) movable -
-        // nevertheless the paragraph can request lines from the Master
-        // because of the Orphan rule.
+        
+        
+        
+        
+        
         if( pFrm->IsFollow() )
             nWidLines = pFrm->GetTxtNode()->GetSwAttrSet().GetWidows().GetValue();
     }
@@ -279,8 +279,8 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 
         if ( pFrm->IsInTab() )
         {
-            // For compatibility reasons, we disable Keep/Widows/Orphans
-            // inside splittable row frames:
+            
+            
             if ( pFrm->GetNextCellLeaf( MAKEPAGE_NONE ) || pFrm->IsInFollowFlowRow() )
             {
                 const SwFrm* pTmpFrm = pFrm->GetUpper();
@@ -293,8 +293,8 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 
         if( pFrm->IsInFtn() && !pFrm->GetIndPrev() )
         {
-            // Inside of footnotes there are good reasons to turn off the Keep attribute
-            // as well as Widows/Orphans.
+            
+            
             SwFtnFrm *pFtn = pFrm->FindFtnFrm();
             const bool bFt = !pFtn->GetAttr()->GetFtn().IsEndNote();
             if( !pFtn->GetPrev() &&
@@ -328,8 +328,8 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     bool bHasToFit )
 {
-    // OD 2004-02-25 #i16128# - Why member <pFrm> _*and*_ parameter <pFrame>??
-    // Thus, assertion on situation, that these are different to figure out why.
+    
+    
     OSL_ENSURE( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
 
     SWAP_IF_SWAPPED( pFrm )
@@ -339,13 +339,13 @@ bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     if( bHasToFit )
         nOrphLines = 0;
     rLine.Bottom();
-    // OD 2004-02-25 #i16128# - method renamed
+    
     if( !IsBreakNowWidAndOrp( rLine ) )
         bRet = false;
     if( !FindWidows( pFrame, rLine ) )
     {
         bool bBack = false;
-        // OD 2004-02-25 #i16128# - method renamed
+        
         while( IsBreakNowWidAndOrp( rLine ) )
         {
             if( rLine.PrevLine() )
@@ -353,10 +353,10 @@ bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
             else
                 break;
         }
-        // Usually Orphans are not taken into account for HasToFit.
-        // But if Dummy-Lines are concerned and the Orphans rule is violated
-        // we make an exception: We leave behind one Dummyline and take
-        // the whole text to the next page/column.
+        
+        
+        
+        
         if( rLine.GetLineNr() <= nOldOrphans &&
             rLine.GetInfo().GetParaPortion()->IsDummy() &&
             ( ( bHasToFit && bRet ) || IsBreakNow( rLine ) ) )
@@ -392,18 +392,18 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 
     rLine.Bottom();
 
-    // Wir koennen noch was abzwacken
+    
     SwTxtFrm *pMaster = pFrame->FindMaster();
     OSL_ENSURE(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
     if( !pMaster )
         return false;
 
-    // 5156: If the first line of the Follow does not fit, the master
-    // probably is full of Dummies. In this case a PREP_WIDOWS would be fatal.
+    
+    
     if( pMaster->GetOfst() == pFrame->GetOfst() )
         return false;
 
-    // Remaining height of the master
+    
     SWRECTFN( pFrame )
 
     const SwTwips nDocPrtTop = (pFrame->*fnRect->fnGetPrtTop)();
@@ -420,19 +420,19 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 
     const SwTwips nChg = (*fnRect->fnYDiff)( nTmpY, nDocPrtTop + nOldHeight );
 
-    // below the Widows-treshold...
+    
     if( rLine.GetLineNr() >= nWidLines )
     {
-        // 8575: Follow to Master I
-        // If the Follow *grows*, there is the chance for the Master to
-        // receive lines, that it was forced to hand over to the Follow lately:
-        // Prepare(Need); check that below nChg!
-        // (0W, 2O, 2M, 2F) + 1F = 3M, 2F
+        
+        
+        
+        
+        
         if( rLine.GetLineNr() > nWidLines && pFrame->IsJustWidow() )
         {
-            // If the Master is locked, it has probably just donated a line
-            // to us, we don't return that just because we turned it into
-            // multiple lines (e.g. via frames).
+            
+            
+            
             if( !pMaster->IsLocked() && pMaster->GetUpper() )
             {
                 const SwTwips nTmpRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
@@ -451,10 +451,10 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
         return false;
     }
 
-    // 8575: Follow to Master II
-    // If the Follow *shrinks*, maybe the Master can absorb the whole Orphan.
-    // (0W, 2O, 2M, 1F) - 1F = 3M, 0F     -> PREP_ADJUST_FRM
-    // (0W, 2O, 3M, 2F) - 1F = 2M, 2F     -> PREP_WIDOWS
+    
+    
+    
+    
 
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
@@ -470,26 +470,26 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
         }
     }
 
-    // Master to Follow
-    // Wenn der Follow nach seiner Formatierung weniger Zeilen enthaelt
-    // als Widows, so besteht noch die Chance, einige Zeilen des Masters
-    // abzuzwacken. Wenn dadurch die Orphans-Regel des Masters in Kraft
-    // tritt muss im CalcPrep() des Master-Frame der Frame so vergroessert
-    // werden, dass er nicht mehr auf seine urspruengliche Seite passt.
-    // Wenn er noch ein paar Zeilen entbehren kann, dann muss im CalcPrep()
-    // ein Shrink() erfolgen, der Follow mit dem Widows rutscht dann auf
-    // die Seite des Masters, haelt sich aber zusammen, so dass er (endlich)
-    // auf die naechste Seite rutscht. - So die Theorie!
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
-    // Wir fordern nur noch ein Zeile zur Zeit an, weil eine Zeile des Masters
-    // bei uns durchaus mehrere Zeilen ergeben koennten.
-    // Dafuer behaelt CalcFollow solange die Kontrolle, bis der Follow alle
-    // notwendigen Zeilen bekommen hat.
-    MSHORT nNeed = 1; // frueher: nWidLines - rLine.GetLineNr();
+    
+    
+    
+    
+    MSHORT nNeed = 1; 
 
-    // Special case: Master cannot give lines to follow
-    // #i91421#
+    
+    
     if ( !pMaster->GetIndPrev() )
     {
         sal_uLong nLines = pMaster->GetThisLines();
@@ -513,14 +513,14 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 
 bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool bTst )
 {
-    // Here it does not matter, if pFrm is swapped or not.
-    // IsInside() takes care for itself
+    
+    
 
-    // We expect that rLine is set to the last line
+    
     OSL_ENSURE( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
     MSHORT nLineCnt = rLine.GetLineNr();
 
-    // First satisfy the Orphans-rule and the wish for initials ...
+    
     const MSHORT nMinLines = std::max( GetOrphansLines(), rLine.GetDropLines() );
     if ( nLineCnt < nMinLines )
         return false;
@@ -535,29 +535,29 @@ bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool b
         nLineSum += rLine.GetLineHeight();
     }
 
-    // We do not fit
+    
     if( !IsInside( rLine ) )
         return false;
 
-    // Check the Widows-rule
+    
     if( !nWidLines && !pFrm->IsFollow() )
     {
-        // Usually we only have to check for Widows if we are a Follow.
-        // On WouldFit the rule has to be checked for the Master too,
-        // because we are just in the middle of calculating the break.
-        // In Ctor of WidowsAndOrphans the nWidLines are only calced for
-        // Follows from the AttrSet - so we catch up now:
+        
+        
+        
+        
+        
         const SwAttrSet& rSet = pFrm->GetTxtNode()->GetSwAttrSet();
         nWidLines = rSet.GetWidows().GetValue();
     }
 
-    // After Orphans/Initials, do enough lines remain for Widows?
-    // #111937#: If we are currently doing a test formatting, we may not
-    // consider the widows rule for two reasons:
-    // 1. The columns may have different widths.
-    //    Widow lines would have wrong width.
-    // 2. Test formatting is only done up to the given space.
-    //    we do not have any lines for widows at all.
+    
+    
+    
+    
+    
+    
+    
     if( bTst || nLineCnt - nMinLines >= GetWidowsLines() )
     {
         if( rMaxHeight >= nLineSum )

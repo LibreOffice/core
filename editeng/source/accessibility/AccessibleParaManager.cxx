@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,26 +14,26 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------------------------
+
 //
-// Global header
+
 //
-//------------------------------------------------------------------------
+
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
-//------------------------------------------------------------------------
+
 //
-// Project-local header
+
 //
-//------------------------------------------------------------------------
+
 
 #include <editeng/unoedhlp.hxx>
 #include <editeng/unopracc.hxx>
@@ -59,7 +59,7 @@ namespace accessibility
 
     AccessibleParaManager::~AccessibleParaManager()
     {
-        // owner is responsible for possible child defuncs
+        
     }
 
     void AccessibleParaManager::SetAdditionalChildStates( const VectorOfStates& rChildStates )
@@ -118,7 +118,7 @@ namespace accessibility
         {
             ShutdownPara( GetChild( nPara ) );
 
-            // clear reference and rect
+            
             maChildren[ nPara ] = WeakChild();
         }
     }
@@ -151,7 +151,7 @@ namespace accessibility
 
         if( 0 <= nChild && maChildren.size() > static_cast<size_t>(nChild) )
         {
-            // retrieve hard reference from weak one
+            
             return IsReferencable( GetChild( nChild ).first.get() );
         }
         else
@@ -185,13 +185,13 @@ namespace accessibility
 
         if( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex) )
         {
-            // retrieve hard reference from weak one
+            
             WeakPara::HardRefType aChild( GetChild( nParagraphIndex ).first.get() );
 
             if( !IsReferencable( nParagraphIndex ) )
             {
-                // there is no hard reference available, create object then
-                // #i27138#
+                
+                
                 AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd, this );
                 uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
 
@@ -268,7 +268,7 @@ namespace accessibility
         if( mnFocusedChild == nParagraphIndex )
             rChild.SetState( AccessibleStateType::FOCUSED );
 
-        // add states passed from outside
+        
         for( VectorOfStates::const_iterator aIt = maChildStates.begin(), aEnd = maChildStates.end(); aIt != aEnd; ++aIt )
             rChild.SetState( *aIt );
     }
@@ -301,7 +301,7 @@ namespace accessibility
                                                            nStateId ) );
     }
 
-    // not generic yet, no arguments...
+    
     class AccessibleParaManager_DisposeChildren : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
@@ -320,7 +320,7 @@ namespace accessibility
                          WeakChildAdapter< AccessibleParaManager_DisposeChildren > (aFunctor) );
     }
 
-    // not generic yet, too many method arguments...
+    
     class StateChangeEvent : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
@@ -379,7 +379,7 @@ namespace accessibility
         {
             AccessibleParaManager::ShutdownPara( rPara );
 
-            // clear reference
+            
             return AccessibleParaManager::WeakChild();
         }
     };
@@ -415,6 +415,6 @@ namespace accessibility
 
 }
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

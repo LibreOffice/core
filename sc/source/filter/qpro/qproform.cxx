@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
     if( nRelBit & 0x2000 )
     {
         SCROW nRelRow = (~nTmp + 1);
-        nRelRow = (sal_Int16)(nTmp << 3); // This looks weird... Mistake?
+        nRelRow = (sal_Int16)(nTmp << 3); 
         nRelRow /= 8;
         rSRD.SetRelRow(nRelRow);
     }
@@ -298,25 +298,25 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 }
                 break;
 
-            case FT_Cref : // Single cell reference
+            case FT_Cref : 
                 maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 ReadSRD( aSRD, nPage, nCol, nRelBits );
                 aStack << aPool.Store( aSRD );
                 break;
 
-            case FT_Range: // Block reference
+            case FT_Range: 
                 maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 ReadSRD( aCRD.Ref1, nPage, nCol, nRelBits );
                 maIn.ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 ReadSRD( aCRD.Ref2, nPage, nCol, nRelBits );
-                // Sheet name of second corner is not displayed if identical
+                
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.Tab() == aCRD.Ref2.Tab() &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
                     aCRD.Ref2.SetFlag3D( false);
                 aStack << aPool.Store( aCRD );
                 break;
 
-            case FT_FuncVar:{ // Sum of a sequence of numbers
+            case FT_FuncVar:{ 
                 sal_uInt8 nArgs;
                 i++;
                 nArgs = nFmla[ i ];
@@ -324,7 +324,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 }
                 break;
 
-            case FT_Op: // operators
+            case FT_Op: 
                 aStack >> nPush;
                 aPool << aStack << eOc << nPush;
                 aPool >> aStack;
@@ -363,8 +363,8 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 aPool >> aStack;
                 break;
 
-            case FT_NOP:    // indicates invalid opcode.
-            case FT_Return: // indicates end of formula
+            case FT_NOP:    
+            case FT_Return: 
                 break;
         }
         i++;
@@ -386,7 +386,7 @@ static const struct
     { ocPush, FT_ConstInt },
     { ocPush, FT_ConstString },
     { ocPush, FT_NOP },
-    { ocNegSub, FT_Neg },                       // 0x08
+    { ocNegSub, FT_Neg },                       
     { ocAdd, FT_Op },
     { ocSub, FT_Op },
     { ocMul, FT_Op },
@@ -394,23 +394,23 @@ static const struct
     { ocPow, FT_Op },
     { ocEqual, FT_Op },
     { ocNotEqual, FT_Op },
-    { ocLessEqual, FT_Op },                     // 0x10
+    { ocLessEqual, FT_Op },                     
     { ocGreaterEqual, FT_Op },
     { ocLess, FT_Op },
     { ocGreater, FT_Op },
     { ocAnd, FT_Op },
     { ocOr, FT_Op },
     { ocNot, FT_FuncFix1 },
-    { ocPush, FT_NOP },     // Unary plus
-    { ocAddress, FT_FuncFix4 }, // Address of
-    { ocNoName, FT_NotImpl }, // Halt function
-    { ocNoName, FT_DLL }, // DLL function
-    { ocNoName, FT_NOP }, // Extended operands
-    { ocNoName, FT_NOP }, // Extended operands
-    { ocNoName, FT_NOP }, // Reserved
-    { ocNoName, FT_NOP }, // Reserved
-    { ocNotAvail, FT_FuncFix0 }, // NA
-    { ocNoName, FT_FuncFix0 }, // Error         // 0x20
+    { ocPush, FT_NOP },     
+    { ocAddress, FT_FuncFix4 }, 
+    { ocNoName, FT_NotImpl }, 
+    { ocNoName, FT_DLL }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNotAvail, FT_FuncFix0 }, 
+    { ocNoName, FT_FuncFix0 }, 
     { ocAbs, FT_FuncFix1 },
     { ocInt, FT_FuncFix1 },
     { ocSqrt, FT_FuncFix1 },
@@ -426,7 +426,7 @@ static const struct
     { ocArcCos, FT_FuncFix1 },
     { ocExp, FT_FuncFix1 },
     { ocMod, FT_FuncFix2 },
-    { ocChose, FT_FuncVar },                    // 0x30
+    { ocChose, FT_FuncVar },                    
     { ocIsNA, FT_FuncFix1 },
     { ocIsError, FT_FuncFix1 },
     { ocFalse, FT_FuncFix0 },
@@ -434,15 +434,15 @@ static const struct
     { ocRandom, FT_FuncFix0 },
     { ocGetDate, FT_FuncFix3 },
     { ocGetActTime, FT_FuncFix0 },
-    { ocNoName, FT_NotImpl },    // QPro Pmt
-    { ocNoName, FT_NotImpl },    // QPro Pv
-    { ocNoName, FT_NotImpl },    // QPro Fv
+    { ocNoName, FT_NotImpl },    
+    { ocNoName, FT_NotImpl },    
+    { ocNoName, FT_NotImpl },    
     { ocIf, FT_FuncFix3 },
     { ocGetDay, FT_FuncFix1 },
     { ocGetMonth, FT_FuncFix1 },
     { ocGetYear, FT_FuncFix1 },
     { ocRound, FT_FuncFix2 },
-    { ocGetTime, FT_FuncFix3 },                  // 0x40
+    { ocGetTime, FT_FuncFix3 },                  
     { ocGetHour, FT_FuncFix1 },
     { ocGetMin, FT_FuncFix1 },
     { ocGetSec, FT_FuncFix1 },
@@ -458,7 +458,7 @@ static const struct
     { ocGetDateValue, FT_FuncFix1 },
     { ocGetTimeValue, FT_FuncFix1 },
     { ocNoName, FT_NotImpl },
-    { ocSum, FT_FuncVar },                     // 0x50
+    { ocSum, FT_FuncVar },                     
     { ocAverage, FT_FuncVar },
     { ocCount, FT_FuncVar },
     { ocMin, FT_FuncVar },
@@ -474,7 +474,7 @@ static const struct
     { ocDBCount, FT_FuncFix3 },
     { ocDBMin, FT_FuncFix3 },
     { ocDBMax, FT_FuncFix3 },
-    { ocDBVar, FT_FuncFix3 },                 // 0x60
+    { ocDBVar, FT_FuncFix3 },                 
     { ocDBStdDev, FT_FuncFix3 },
     { ocNoName, FT_NotImpl },
     { ocColumns, FT_FuncFix1 },
@@ -490,11 +490,11 @@ static const struct
     { ocTrim, FT_FuncFix1 },
     { ocClean, FT_FuncFix1 },
     { ocNoName, FT_NotImpl },
-    { ocNoName, FT_NotImpl },               // 0x70
+    { ocNoName, FT_NotImpl },               
     { ocExact, FT_FuncFix2 },
-    { ocNoName, FT_NotImpl }, // Call()
+    { ocNoName, FT_NotImpl }, 
     { ocIndirect, FT_FuncFix1 },
-    { ocZGZ, FT_FuncFix3 }, // Interest
+    { ocZGZ, FT_FuncFix3 }, 
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NotImpl },
     { ocLIA, FT_FuncFix3 },
@@ -504,9 +504,9 @@ static const struct
     { ocVarP, FT_FuncVar },
     { ocDBStdDevP, FT_FuncVar },
     { ocDBVarP, FT_FuncVar },
-    { ocBW, FT_FuncFix3 },  // QPro Pval
-    { ocRMZ, FT_FuncFix5 }, // QPro Paymt
-    { ocZW, FT_FuncFix3 },  // QPro Fval   // 0x80
+    { ocBW, FT_FuncFix3 },  
+    { ocRMZ, FT_FuncFix5 }, 
+    { ocZW, FT_FuncFix3 },  
     { ocZZR, FT_FuncFix5 },
     { ocZins, FT_FuncFix5 },
     { ocZinsZ, FT_FuncFix4 },
@@ -522,24 +522,24 @@ static const struct
     { ocNoName, FT_NotImpl },
     { ocGetActDate, FT_FuncFix0 },
     { ocNPV, FT_FuncFix2 },
-    { ocNoName, FT_NotImpl },                // 0x90
+    { ocNoName, FT_NotImpl },                
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NOP },
-    { ocNoName, FT_NOP }, // 147
-    { ocNoName, FT_NOP }, // 148
-    { ocNoName, FT_NOP }, // 149
-    { ocNoName, FT_NOP }, // 150
-    { ocNoName, FT_NOP }, // 151
-    { ocNoName, FT_NOP }, // 152
-    { ocNoName, FT_NOP }, // 153
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
     { ocTable, FT_FuncFix1 },
-    { ocNoName, FT_NOP }, // 155 - opcodes do not represent any function.
-    { ocNoName, FT_NOP }, // 156
+    { ocNoName, FT_NOP }, 
+    { ocNoName, FT_NOP }, 
     { ocIndex,  FT_FuncFix4 },
     { ocNoName, FT_NotImpl },
-    { ocNoName, FT_NotImpl }, // Gives the property of the particular object
-    { ocNoName, FT_NotImpl },  // Dynamic Data Exchange Link // 0x100
-    { ocNoName, FT_NotImpl }   // gives properties of DOS menus
+    { ocNoName, FT_NotImpl }, 
+    { ocNoName, FT_NotImpl },  
+    { ocNoName, FT_NotImpl }   
 };
 
 const int nIndexCount = sizeof( aFuncMap ) / sizeof( aFuncMap[ 0 ] );

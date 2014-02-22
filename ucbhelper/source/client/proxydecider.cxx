@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,15 +52,15 @@ using namespace ucbhelper;
 #define FTP_PROXY_NAME_KEY   "ooInetFTPProxyName"
 #define FTP_PROXY_PORT_KEY   "ooInetFTPProxyPort"
 
-//=========================================================================
+
 namespace ucbhelper
 {
 
-//=========================================================================
+
 namespace proxydecider_impl
 {
 
-// A simple case ignoring wildcard matcher.
+
 class WildCard
 {
 private:
@@ -75,10 +75,10 @@ public:
     bool Matches( const OUString & rStr ) const;
 };
 
-//=========================================================================
+
 typedef std::pair< WildCard, WildCard > NoProxyListEntry;
 
-//=========================================================================
+
 
 class HostnameCache
 {
@@ -119,7 +119,7 @@ public:
     }
 };
 
-//=========================================================================
+
 class InternetProxyDecider_Impl :
     public cppu::WeakImplHelper1< util::XChangesListener >
 {
@@ -148,11 +148,11 @@ public:
                                           const OUString & rHost,
                                           sal_Int32 nPort ) const;
 
-    // XChangesListener
+    
     virtual void SAL_CALL changesOccurred( const util::ChangesEvent& Event )
         throw( uno::RuntimeException );
 
-    // XEventListener ( base of XChangesLisetenr )
+    
     virtual void SAL_CALL disposing( const lang::EventObject& Source )
         throw( uno::RuntimeException );
 
@@ -160,13 +160,13 @@ private:
     void setNoProxyList( const OUString & rNoProxyList );
 };
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// WildCard Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 bool WildCard::Matches( const OUString& rString ) const
 {
@@ -200,7 +200,7 @@ bool WildCard::Matches( const OUString& rString ) const
                 else
                     break;
 
-                // Note: fall-thru's are intended!
+                
 
             case '*':
                 while ( *pWild == '*' )
@@ -236,7 +236,7 @@ bool WildCard::Matches( const OUString& rString ) const
     return ( *pStr == '\0' ) && ( *pWild == '\0' );
 }
 
-//=========================================================================
+
 bool getConfigStringValue(
     const uno::Reference< container::XNameAccess > & xNameAccess,
     const char * key,
@@ -263,7 +263,7 @@ bool getConfigStringValue(
     return true;
 }
 
-//=========================================================================
+
 bool getConfigInt32Value(
     const uno::Reference< container::XNameAccess > & xNameAccess,
     const char * key,
@@ -291,24 +291,24 @@ bool getConfigInt32Value(
     return true;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// InternetProxyDecider_Impl Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     const uno::Reference< uno::XComponentContext >& rxContext )
     : m_nProxyType( 0 ),
-      m_aHostnames( 256 ) // cache size
+      m_aHostnames( 256 ) 
 {
     try
     {
-        //////////////////////////////////////////////////////////////
-        // Read proxy configuration from config db.
-        //////////////////////////////////////////////////////////////
+        
+        
+        
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
                 configuration::theDefaultProvider::get( rxContext );
@@ -334,17 +334,17 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
             if ( xNameAccess.is() )
             {
-                // *** Proxy type ***
+                
                 getConfigInt32Value(
                     xNameAccess, PROXY_TYPE_KEY, m_nProxyType );
 
-                // *** No proxy list ***
+                
                 OUString aNoProxyList;
                 getConfigStringValue(
                     xNameAccess, NO_PROXY_LIST_KEY, aNoProxyList );
                 setNoProxyList( aNoProxyList );
 
-                // *** HTTP ***
+                
                 getConfigStringValue(
                     xNameAccess, HTTP_PROXY_NAME_KEY, m_aHttpProxy.aName );
 
@@ -352,9 +352,9 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 getConfigInt32Value(
                     xNameAccess, HTTP_PROXY_PORT_KEY, m_aHttpProxy.nPort );
                 if ( m_aHttpProxy.nPort == -1 )
-                    m_aHttpProxy.nPort = 80; // standard HTTP port.
+                    m_aHttpProxy.nPort = 80; 
 
-                // *** HTTPS ***
+                
                 getConfigStringValue(
                     xNameAccess, HTTPS_PROXY_NAME_KEY, m_aHttpsProxy.aName );
 
@@ -362,9 +362,9 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 getConfigInt32Value(
                     xNameAccess, HTTPS_PROXY_PORT_KEY, m_aHttpsProxy.nPort );
                 if ( m_aHttpsProxy.nPort == -1 )
-                    m_aHttpsProxy.nPort = 443; // standard HTTPS port.
+                    m_aHttpsProxy.nPort = 443; 
 
-                // *** FTP ***
+                
                 getConfigStringValue(
                     xNameAccess, FTP_PROXY_NAME_KEY, m_aFtpProxy.aName );
 
@@ -373,7 +373,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                     xNameAccess, FTP_PROXY_PORT_KEY, m_aFtpProxy.nPort );
             }
 
-            // Register as listener for config changes.
+            
 
             m_xNotifier = uno::Reference< util::XChangesNotifier >(
                                                 xInterface, uno::UNO_QUERY );
@@ -387,18 +387,18 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     }
     catch ( uno::Exception const & )
     {
-        // createInstance, createInstanceWithArguments
+        
         OSL_FAIL( "InternetProxyDecider - Exception!" );
     }
 }
 
-//=========================================================================
-// virtual
+
+
 InternetProxyDecider_Impl::~InternetProxyDecider_Impl()
 {
 }
 
-//=========================================================================
+
 void InternetProxyDecider_Impl::dispose()
 {
     uno::Reference< util::XChangesNotifier > xNotifier;
@@ -414,12 +414,12 @@ void InternetProxyDecider_Impl::dispose()
         }
     }
 
-    // Do this unguarded!
+    
     if ( xNotifier.is() )
         xNotifier->removeChangesListener( this );
 }
 
-//=========================================================================
+
 bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
                                                 sal_Int32 nPort,
                                                 bool bUseFullyQualified ) const
@@ -429,14 +429,14 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     if ( ( rHost.indexOf( ':' ) != -1 ) &&
          ( rHost[ 0 ] != '[' ) )
     {
-        // host is given as numeric IPv6 address
+        
         aBuffer.appendAscii( "[" );
         aBuffer.append( rHost );
         aBuffer.appendAscii( "]" );
     }
     else
     {
-        // host is given either as numeric IPv4 address or non-numeric hostname
+        
         aBuffer.append( rHost );
     }
 
@@ -467,7 +467,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     return true;
 }
 
-//=========================================================================
+
 const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,
@@ -477,30 +477,30 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
 
     if ( m_nProxyType == 0 )
     {
-        // Never use proxy.
+        
         return m_aEmptyProxy;
     }
 
     if ( !rHost.isEmpty() && !m_aNoProxyList.empty() )
     {
-        //////////////////////////////////////////////////////////////////
-        // First, try direct hostname match - #110515#
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         if ( !shouldUseProxy( rHost, nPort, false ) )
             return m_aEmptyProxy;
 
-        //////////////////////////////////////////////////////////////////
-        // Second, try match against full qualified hostname - #104401#
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         OUString aHost;
 
         if ( ( rHost[ 0 ] == '[' ) &&
              ( rHost.getLength() > 1 ) )
         {
-            // host is given as numeric IPv6 address. name resolution
-            // functions need hostname without square brackets.
+            
+            
             aHost = rHost.copy( 1, rHost.getLength() - 2 );
         }
         else
@@ -511,13 +511,13 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         OUString aFullyQualifiedHost;
         if ( !m_aHostnames.get( aHost, aFullyQualifiedHost ) )
         {
-            // This might be quite expensive (DNS lookup).
+            
             const osl::SocketAddr aAddr( aHost, nPort );
             aFullyQualifiedHost = aAddr.getHostname().toAsciiLowerCase();
             m_aHostnames.put( aHost, aFullyQualifiedHost );
         }
 
-        // Error resolving name? -> fallback.
+        
         if ( aFullyQualifiedHost.isEmpty() )
             aFullyQualifiedHost = aHost;
 
@@ -527,15 +527,15 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
                 return m_aEmptyProxy;
         }
 
-        //////////////////////////////////////////////////////////////////
-        // Third, try match of fully qualified entries in no-proxy list
-        // against full qualified hostname
+        
+        
+        
         //
-        // Example:
-        // list: staroffice-doc -> full: xyz.germany.sun.com
-        // in:   staroffice-doc.germany.sun.com -> full: xyz.germany.sun.com
+        
+        
+        
         //
-        //////////////////////////////////////////////////////////////////
+        
 
         if ( !shouldUseProxy( aFullyQualifiedHost, nPort, true ) )
             return m_aEmptyProxy;
@@ -553,14 +553,14 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
     }
     else if ( !m_aHttpProxy.aName.isEmpty() )
     {
-        // All other protocols use the HTTP proxy.
+        
         return m_aHttpProxy;
     }
     return m_aEmptyProxy;
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                         const util::ChangesEvent& Event )
     throw( uno::RuntimeException )
@@ -614,7 +614,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     }
 
                     if ( m_aHttpProxy.nPort == -1 )
-                        m_aHttpProxy.nPort = 80; // standard HTTP port.
+                        m_aHttpProxy.nPort = 80; 
                 }
                 else if ( aKey == HTTPS_PROXY_NAME_KEY )
                 {
@@ -633,7 +633,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     }
 
                     if ( m_aHttpsProxy.nPort == -1 )
-                        m_aHttpsProxy.nPort = 443; // standard HTTPS port.
+                        m_aHttpsProxy.nPort = 443; 
                 }
                 else if ( aKey == FTP_PROXY_NAME_KEY )
                 {
@@ -656,8 +656,8 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
     }
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL InternetProxyDecider_Impl::disposing(const lang::EventObject&)
     throw( uno::RuntimeException )
 {
@@ -670,7 +670,7 @@ void SAL_CALL InternetProxyDecider_Impl::disposing(const lang::EventObject&)
     }
 }
 
-//=========================================================================
+
 void InternetProxyDecider_Impl::setNoProxyList(
                                         const OUString & rNoProxyList )
 {
@@ -680,8 +680,8 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
     if ( !rNoProxyList.isEmpty() )
     {
-        // List of connection endpoints hostname[:port],
-        // separated by semicolon. Wilcards allowed.
+        
+        
 
         sal_Int32 nPos = 0;
         sal_Int32 nEnd = rNoProxyList.indexOf( ';' );
@@ -699,7 +699,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 OUString aServer;
                 OUString aPort;
 
-                // numerical IPv6 address?
+                
                 bool bIPv6Address = false;
                 sal_Int32 nClosedBracketPos = aToken.indexOf( ']' );
                 if ( nClosedBracketPos == -1 )
@@ -710,11 +710,11 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 sal_Int32 nColonPos = aToken.indexOf( ':', nClosedBracketPos );
                 if ( nColonPos == -1 )
                 {
-                    // No port given, server pattern equals current token
+                    
                     aPort = "*";
                     if ( aToken.indexOf( '*' ) == -1 )
                     {
-                        // pattern describes exactly one server
+                        
                         aServer = aToken;
                     }
 
@@ -722,12 +722,12 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 }
                 else
                 {
-                    // Port given, extract server pattern
+                    
                     sal_Int32 nAsteriskPos = aToken.indexOf( '*' );
                     aPort = aToken.copy( nColonPos + 1 );
                     if ( nAsteriskPos < nColonPos )
                     {
-                        // pattern describes exactly one server
+                        
                         aServer = aToken.copy( 0, nColonPos );
                     }
                 }
@@ -735,16 +735,16 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 OUStringBuffer aFullyQualifiedHost;
                 if ( !aServer.isEmpty() )
                 {
-                    // Remember fully qualified server name if current list
-                    // entry specifies exactly one non-fully qualified server
-                    // name.
+                    
+                    
+                    
 
-                    // remove square brackets from host name in case it's
-                    // a numerical IPv6 address.
+                    
+                    
                     if ( bIPv6Address )
                         aServer = aServer.copy( 1, aServer.getLength() - 2 );
 
-                    // This might be quite expensive (DNS lookup).
+                    
                     const osl::SocketAddr aAddr( aServer, 0 );
                     OUString aTmp = aAddr.getHostname().toAsciiLowerCase();
                     if ( aTmp != aServer.toAsciiLowerCase() )
@@ -781,15 +781,15 @@ void InternetProxyDecider_Impl::setNoProxyList(
     }
 }
 
-} // namespace proxydecider_impl
+} 
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// InternetProxyDecider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 InternetProxyDecider::InternetProxyDecider(
     const uno::Reference< uno::XComponentContext>& rxContext )
@@ -798,17 +798,17 @@ InternetProxyDecider::InternetProxyDecider(
     m_pImpl->acquire();
 }
 
-//=========================================================================
+
 InternetProxyDecider::~InternetProxyDecider()
 {
-    // Break circular reference between config listener and notifier.
+    
     m_pImpl->dispose();
 
-    // Let him go...
+    
     m_pImpl->release();
 }
 
-//=========================================================================
+
 bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
                                            const OUString & rHost,
                                            sal_Int32 nPort ) const
@@ -819,7 +819,7 @@ bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
     return !rData.aName.isEmpty();
 }
 
-//=========================================================================
+
 const InternetProxyServer & InternetProxyDecider::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,
@@ -828,6 +828,6 @@ const InternetProxyServer & InternetProxyDecider::getProxy(
     return m_pImpl->getProxy( rProtocol, rHost, nPort );
 }
 
-} // namespace ucbhelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

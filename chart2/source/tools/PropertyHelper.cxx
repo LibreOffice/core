@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PropertyHelper.hxx"
@@ -123,12 +123,12 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
         ::std::vector< OUString >::const_iterator aIt(
             ::std::find_if( aNames.begin(), aNames.end(), lcl_EqualsElement( rValue, xNameAccess )));
 
-        // element not found in container
+        
         if( aIt == aNames.end())
         {
             OUString aUniqueName;
 
-            // check if preferred name is already used
+            
             if( !rPreferredName.isEmpty())
             {
                 aIt = ::std::find( aNames.begin(), aNames.end(), rPreferredName );
@@ -138,7 +138,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
 
             if( aUniqueName.isEmpty())
             {
-                // create a unique id using the prefix plus a number
+                
                 ::std::vector< sal_Int32 > aNumbers;
                 ::std::vector< OUString >::iterator aNonConstIt(
                     ::std::partition( aNames.begin(), aNames.end(), lcl_StringMatches( rPrefix )));
@@ -160,7 +160,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
             return aUniqueName;
         }
         else
-            // element found => return name
+            
             return *aIt;
     }
     catch( const uno::Exception & ex )
@@ -171,7 +171,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
     return rPreferredName;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -295,8 +295,8 @@ void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMa
     setPropertyValueDefault( rOutMap, key, uno::Any());
 }
 
-} // namespace PropertyHelper
+} 
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

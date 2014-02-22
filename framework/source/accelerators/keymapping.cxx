@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accelerators/keymapping.hxx>
@@ -27,8 +27,8 @@
 namespace framework
 {
 
-//_______________________________________________
-// helper
+
+
 
 KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
 {
@@ -137,10 +137,10 @@ KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
     {css::awt::Key::BRACKETLEFT   , "KEY_BRACKETLEFT" },
     {css::awt::Key::BRACKETRIGHT  , "KEY_BRACKETRIGHT" },
     {css::awt::Key::SEMICOLON     , "KEY_SEMICOLON" },
-    {0                            , ""               } // mark the end of this array!
+    {0                            , ""               } 
 };
 
-//-----------------------------------------------
+
 KeyMapping::KeyMapping()
 {
     sal_Int32 i = 0;
@@ -156,12 +156,12 @@ KeyMapping::KeyMapping()
     }
 }
 
-//-----------------------------------------------
+
 KeyMapping::~KeyMapping()
 {
 }
 
-//-----------------------------------------------
+
 sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     throw(css::lang::IllegalArgumentException)
 {
@@ -169,8 +169,8 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     if (pIt != m_lIdentifierHash.end())
         return pIt->second;
 
-    // Its not well known identifier - but may be a pure key code formated as string ...
-    // Check and convert it!
+    
+    
     sal_uInt16 nCode = 0;
     if (!KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(sIdentifier, nCode))
         throw css::lang::IllegalArgumentException(
@@ -181,18 +181,18 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     return (sal_uInt16)nCode;
 }
 
-//-----------------------------------------------
+
 OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
 {
     Code2IdentifierHash::const_iterator pIt = m_lCodeHash.find(nCode);
     if (pIt != m_lCodeHash.end())
         return pIt->second;
 
-    // If we have no well known identifier - use the pure code value!
+    
     return OUString::number(nCode);
 }
 
-//-----------------------------------------------
+
 sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
                                                                     sal_uInt16&      rCode      )
 {
@@ -203,12 +203,12 @@ sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sI
         return sal_True;
     }
 
-    // 0 is normaly an error of the called method toInt32() ...
-    // But we must be aware, that the identifier is "0"!
+    
+    
     rCode = 0;
     return sIdentifier == "0";
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

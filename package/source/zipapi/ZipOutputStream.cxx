@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
@@ -127,8 +127,8 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
-                        // Different compression strategies make the merit of this
-                        // test somewhat dubious
+                        
+                        
                         pEntry->nCompressedSize = aDeflater.getTotalOut();
                     }
                     if (pEntry->nCrc != aCRC.getValue())
@@ -247,7 +247,7 @@ void ZipOutputStream::doDeflate()
         uno::Sequence< sal_Int8 > aTmpBuffer( m_aDeflateBuffer.getConstArray(), nLength );
         if ( bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
         {
-            // Need to update our digest before encryption...
+            
             sal_Int32 nDiff = n_ConstDigestLength - mnDigested;
             if ( nDiff )
             {
@@ -257,12 +257,12 @@ void ZipOutputStream::doDeflate()
                 mnDigested = mnDigested + static_cast< sal_Int16 >( nEat );
             }
 
-            // FIXME64: uno::Sequence not 64bit safe.
+            
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
             aChucker.WriteBytes( aEncryptionBuffer );
 
-            // the sizes as well as checksum for encrypted streams is calculated here
+            
             pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
             pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
             aCRC.update( aEncryptionBuffer );
@@ -275,13 +275,13 @@ void ZipOutputStream::doDeflate()
 
     if ( aDeflater.finished() && bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
     {
-        // FIXME64: sequence not 64bit safe.
+        
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
         if ( aEncryptionBuffer.getLength() )
         {
             aChucker.WriteBytes( aEncryptionBuffer );
 
-            // the sizes as well as checksum for encrypted streams is calculated hier
+            
             pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
             pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
             aCRC.update( aEncryptionBuffer );
@@ -327,7 +327,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     aChucker << rEntry.nVersion;
     if (rEntry.nFlag & (1 << 4) )
     {
-        // If it's an encrypted entry, we pretend its stored plain text
+        
         ZipEntry *pEntry = const_cast < ZipEntry * > ( &rEntry );
         pEntry->nFlag &= ~(1 <<4 );
         aChucker << rEntry.nFlag;
@@ -354,9 +354,9 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
 
     if( bWrite64Header )
     {
-        // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently loose people's data - which they are
-        // unlikely to appreciate so fail instead:
+        
+        
+        
         throw IOException( "File contains streams that are too large.",
                            uno::Reference< XInterface >() );
     }
@@ -376,9 +376,9 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
 
     if( bWrite64Header )
     {
-        // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently loose people's data - which they are
-        // unlikely to appreciate so fail instead:
+        
+        
+        
         throw IOException( "File contains streams that are too large.",
                            uno::Reference< XInterface >() );
     }
@@ -398,7 +398,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
 
     if (rEntry.nFlag & (1 << 4) )
     {
-        // If it's an encrypted entry, we pretend its stored plain text
+        
         sal_Int16 nTmpFlag = rEntry.nFlag;
         nTmpFlag &= ~(1 <<4 );
         aChucker << nTmpFlag;
@@ -430,9 +430,9 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
 
     if( bWrite64Header )
     {
-        // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently loose people's data - which they are
-        // unlikely to appreciate so fail instead:
+        
+        
+        
         throw IOException( "File contains streams that are too large.",
                            uno::Reference< XInterface >() );
     }
@@ -449,14 +449,14 @@ sal_uInt32 ZipOutputStream::getCurrentDosTime( )
     osl_getSystemTime ( &aTimeValue );
     osl_getDateTimeFromTimeValue( &aTimeValue, &aDateTime);
 
-    // at year 2108, there is an overflow
-    // -> some decision needs to be made
-    // how to handle the ZIP file format (just overflow?)
+    
+    
+    
 
-    // if the current system time is before 1980,
-    // then the time traveller will have to make a decision
-    // how to handle the ZIP file format before it is invented
-    // (just underflow?)
+    
+    
+    
+    
 
     assert(aDateTime.Year > 1980 && aDateTime.Year < 2108);
 

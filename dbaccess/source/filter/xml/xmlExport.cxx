@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlExport.hxx"
@@ -134,8 +134,8 @@ namespace dbaxml
 
     OUString lcl_implGetPropertyXMLType(const Type& _rType)
     {
-        // possible types we can write (either because we recognize them directly or because we convert _rValue
-        // into one of these types)
+        
+        
         static const OUString s_sTypeBoolean ("boolean");
         static const OUString s_sTypeShort   ("short");
         static const OUString s_sTypeInteger ("int");
@@ -143,7 +143,7 @@ namespace dbaxml
         static const OUString s_sTypeDouble  ("double");
         static const OUString s_sTypeString  ("string");
 
-        // handle the type description
+        
         switch (_rType.getTypeClass())
         {
             case TypeClass_STRING:
@@ -184,7 +184,7 @@ namespace dbaxml
                 const ::std::vector< XMLPropertyState > * /*pProperties*/ ,
                 sal_uInt32 /*nIdx*/ ) const
         {
-            // nothing to do here
+            
         }
     };
 ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16 nExportFlag)
@@ -299,7 +299,7 @@ void ODBExport::exportDataSource()
 
         static OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
         static OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));
-        // loop through the properties, and export only those which are not defaulted
+        
         TSettingsMap aSettingsMap;
         Sequence< Property > aProperties = xSettingsInfo->getProperties();
         const Property* pProperties = aProperties.getConstArray();
@@ -314,7 +314,7 @@ void ODBExport::exportDataSource()
                     aValue >>= sValue;
                 break;
                 case TypeClass_DOUBLE:
-                    // let the unit converter format is as string
+                    
                     sValue = OUString::number( getDouble( aValue ) );
                     break;
                 case TypeClass_BOOLEAN:
@@ -323,7 +323,7 @@ void ODBExport::exportDataSource()
                 case TypeClass_BYTE:
                 case TypeClass_SHORT:
                 case TypeClass_LONG:
-                    // let the unit converter format is as string
+                    
                     sValue = OUString::number( getINT32( aValue ) );
                     break;
                 default:
@@ -387,13 +387,13 @@ void ODBExport::exportDataSource()
             }
 
             if ( bIsXMLDefault )
-                // the property has the value which is specified as default in the XML schema -> no need to write it
+                
                 continue;
 
             if ( eToken == XML_TOKEN_INVALID )
             {
-                // for properties which are not REMOVABLE, we care for their state, and
-                // only export them if they're not DEFAULTed
+                
+                
                 if ( ( pProperties->Attributes & PropertyAttribute::REMOVABLE ) == 0 )
                 {
                     PropertyState ePropertyState = xSettingsState->getPropertyState( pProperties->Name );
@@ -401,7 +401,7 @@ void ODBExport::exportDataSource()
                         continue;
                 }
 
-                // special handlings
+                
                 if ( pProperties->Name == PROPERTY_BOOLEANCOMPARISONMODE )
                 {
                     sal_Int32 nValue = 0;
@@ -633,7 +633,7 @@ void ODBExport::exportConnectionData()
                         PropertyMap aProperties[] =
                         {
                             PropertyMap( "LocalSocket", XML_LOCAL_SOCKET )
-                            //PropertyMap( "NamedPipe", 0 /* TODO */ )
+                            
                         };
 
                         for (   size_t i=0;
@@ -679,7 +679,7 @@ template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     while (i.hasMoreElements())
     {
         SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
-        // (no whitespace inside the tag)
+        
         Characters(implConvertAny(i.nextElement()));
     }
 }
@@ -721,12 +721,12 @@ void ODBExport::exportDataSourceSettings()
         if ( !bIsSequence )
         {
             SvXMLElementExport aDataValue( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False );
-            // (no whitespace inside the tag)
+            
             Characters( implConvertAny( aIter->Value ) );
         }
         else
         {
-            // the not-that-simple case, we need to iterate through the sequence elements
+            
             switch (aSimpleType.getTypeClass())
             {
                 case TypeClass_STRING:
@@ -1162,7 +1162,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     {
         const TExportPropMapperPair pExportHelper[] = {
              TExportPropMapperPair(m_xExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_TABLE ))
-            // ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
+            
             ,TExportPropMapperPair(m_xRowExportHelper,TEnumMapperPair(&m_aRowAutoStyleNames,XML_STYLE_FAMILY_TABLE_ROW))
         };
 
@@ -1207,7 +1207,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         m_aCurrentPropertyStates.clear();
     }
     else
-    { // here I know I have a column
+    { 
         TExportPropMapperPair pExportHelper[] = {
              TExportPropMapperPair(m_xColumnExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_COLUMN ))
             ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
@@ -1267,7 +1267,7 @@ void ODBExport::_ExportMasterStyles()
 
 void ODBExport::_ExportAutoStyles()
 {
-    // there are no styles that require their own autostyles
+    
     if ( getExportFlags() & EXPORT_CONTENT )
     {
         collectComponentStyles();
@@ -1374,14 +1374,14 @@ OUString ODBExport::implConvertAny(const Any& _rValue)
     switch (_rValue.getValueTypeClass())
     {
         case TypeClass_STRING:
-        {   // extract the string
+        {   
             OUString sCurrentValue;
             _rValue >>= sCurrentValue;
             aBuffer.append(sCurrentValue);
         }
         break;
         case TypeClass_DOUBLE:
-            // let the unit converter format is as string
+            
             ::sax::Converter::convertDouble(aBuffer, getDouble(_rValue));
             break;
         case TypeClass_BOOLEAN:
@@ -1390,7 +1390,7 @@ OUString ODBExport::implConvertAny(const Any& _rValue)
         case TypeClass_BYTE:
         case TypeClass_SHORT:
         case TypeClass_LONG:
-            // let the unit converter format is as string
+            
             ::sax::Converter::convertNumber(aBuffer, getINT32(_rValue));
             break;
         default:
@@ -1444,7 +1444,7 @@ void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc 
 
 void ODBExport::_ExportFontDecls()
 {
-    GetFontAutoStylePool(); // make sure the pool is created
+    GetFontAutoStylePool(); 
     collectComponentStyles();
     SvXMLExport::_ExportFontDecls();
 }
@@ -1459,6 +1459,6 @@ void ODBExport::collectComponentStyles()
     exportTables(sal_False);
 }
 
-}// dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

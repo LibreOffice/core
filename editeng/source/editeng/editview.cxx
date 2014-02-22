@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,7 +74,7 @@ using namespace com::sun::star::beans;
 
 
 
-// static
+
 LanguageType EditView::CheckLanguage(
         const OUString &rText,
         Reference< linguistic2::XSpellChecker1 > xSpell,
@@ -82,50 +82,50 @@ LanguageType EditView::CheckLanguage(
         bool bIsParaText )
 {
     LanguageType nLang = LANGUAGE_NONE;
-    if (bIsParaText)    // check longer texts with language-guessing...
+    if (bIsParaText)    
     {
         if (!xLangGuess.is())
             return nLang;
 
         LanguageTag aGuessTag( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
 
-        // If the result from language guessing does not provide a 'Country'
-        // part, try to get it by looking up the locale setting of the office,
-        // "Tools/Options - Language Settings - Languages: Locale setting", if
-        // the language matches.
+        
+        
+        
+        
         if ( aGuessTag.getCountry().isEmpty() )
         {
             const LanguageTag& rAppLocaleTag = Application::GetSettings().GetLanguageTag();
             if (rAppLocaleTag.getLanguage() == aGuessTag.getLanguage())
                 nLang = rAppLocaleTag.getLanguageType();
         }
-        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
-            nLang = aGuessTag.makeFallback().getLanguageType();     // best known locale match
+        if (nLang == LANGUAGE_NONE) 
+            nLang = aGuessTag.makeFallback().getLanguageType();     
         if (nLang == LANGUAGE_SYSTEM)
             nLang = Application::GetSettings().GetLanguageTag().getLanguageType();
         if (nLang == LANGUAGE_DONTKNOW)
             nLang = LANGUAGE_NONE;
     }
-    else    // check single word
+    else    
     {
             if (!xSpell.is())
             return nLang;
 
         //
-        // build list of languages to check
+        
         //
         LanguageType aLangList[4];
         const AllSettings& rSettings  = Application::GetSettings();
         SvtLinguOptions aLinguOpt;
         SvtLinguConfig().GetOptions( aLinguOpt );
-        // The default document language from "Tools/Options - Language Settings - Languages: Western"
+        
         aLangList[0] = MsLangId::resolveSystemLanguageByScriptType( aLinguOpt.nDefaultLanguage,
                 ::com::sun::star::i18n::ScriptType::LATIN);
-        // The one from "Tools/Options - Language Settings - Languages: User interface"
+        
         aLangList[1] = rSettings.GetUILanguageTag().getLanguageType();
-        // The one from "Tools/Options - Language Settings - Languages: Locale setting"
+        
         aLangList[2] = rSettings.GetLanguageTag().getLanguageType();
-        // en-US
+        
         aLangList[3] = LANGUAGE_ENGLISH_US;
 #ifdef DEBUG
         lang::Locale a0( LanguageTag::convertToLocale( aLangList[0] ) );
@@ -154,9 +154,9 @@ LanguageType EditView::CheckLanguage(
 }
 
 
-// ----------------------------------------------------------------------
-// class EditView
-// ----------------------------------------------------------------------
+
+
+
 EditView::EditView( EditEngine* pEng, Window* pWindow )
 {
     pImpEditView = new ImpEditView( this, pEng, pWindow );
@@ -205,8 +205,8 @@ bool EditView::IsReadOnly() const
 
 void EditView::SetSelection( const ESelection& rESel )
 {
-    // If someone has just left an empty attribute, and then the outliner
-    // manipulates the selection:
+    
+    
     if ( !pImpEditView->GetEditSelection().HasRange() )
     {
         ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
@@ -214,10 +214,10 @@ void EditView::SetSelection( const ESelection& rESel )
     }
     EditSelection aNewSelection( PIMPEE->ConvertSelection( rESel.nStartPara, rESel.nStartPos, rESel.nEndPara, rESel.nEndPos ) );
 
-    // If the selection is manipulated after a KeyInput:
+    
     PIMPE->CheckIdleFormatter();
 
-    // Selection may not start/end at an invisible paragraph:
+    
     const ParaPortion* pPortion = PIMPE->FindParaPortion( aNewSelection.Min().GetNode() );
     if ( !pPortion->IsVisible() )
     {
@@ -299,7 +299,7 @@ void EditView::SetVisArea( const Rectangle& rRect )
 
 const Rectangle& EditView::GetVisArea() const
 {
-    // Change return value to Rectangle in next incompatible build !!!
+    
     static Rectangle aRect;
     aRect = pImpEditView->GetVisDocArea();
     return aRect;
@@ -309,7 +309,7 @@ void EditView::SetOutputArea( const Rectangle& rRect )
 {
     pImpEditView->SetOutputArea( rRect );
 
-    // the rest here only if it is an API call:
+    
     pImpEditView->CalcAnchorPoint();
     if ( PIMPEE->GetStatus().AutoPageSize() )
         pImpEditView->RecalcOutputArea();
@@ -390,7 +390,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
-        // The control word is more important:
+        
         if ( !pImpEditView->DoAutoScroll() )
             bGotoCursor = false;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
@@ -595,7 +595,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     EditSelection aTextSel( PIMPE->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
     PIMPE->UndoActionEnd( EDITUNDO_INSERT );
 
-    aTextSel.Min() = aTextSel.Max();    // Selection not retained.
+    aTextSel.Min() = aTextSel.Max();    
     pImpEditView->SetEditSelection( aTextSel );
     PIMPE->FormatAndUpdate( this );
 }
@@ -608,7 +608,7 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
         PIMPE->InsertText(xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial);
     PIMPE->UndoActionEnd( EDITUNDO_INSERT );
 
-    aTextSel.Min() = aTextSel.Max();    // Selection not retained.
+    aTextSel.Min() = aTextSel.Max();    
     pImpEditView->SetEditSelection( aTextSel );
     PIMPE->FormatAndUpdate( this );
 }
@@ -635,7 +635,7 @@ SfxStyleSheet* EditView::GetStyleSheet()
     {
         SfxStyleSheet* pTmpStyle = PIMPE->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
-            return NULL;    // Not unique.
+            return NULL;    
         pStyle = pTmpStyle;
     }
     return pStyle;
@@ -753,37 +753,37 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     {
         PopupMenu aPopupMenu( EditResId( RID_MENU_SPELL ) );
         PopupMenu *pAutoMenu = aPopupMenu.GetPopupMenu( MN_AUTOCORR );
-        PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );  // add word to user-dictionaries
-        pInsertMenu->SetMenuFlags( MENU_FLAG_NOAUTOMNEMONICS );         //! necessary to retrieve the correct dictionary names later
+        PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );  
+        pInsertMenu->SetMenuFlags( MENU_FLAG_NOAUTOMNEMONICS );         
 
         EditPaM aPaM2( aPaM );
         aPaM2.SetIndex( aPaM2.GetIndex()+1 );
 
-        // Are there any replace suggestions?
+        
         OUString aSelected( GetSelected() );
         //
-        // restrict the maximal number of suggestions displayed
-        // in the context menu.
-        // Note: That could of course be done by clipping the
-        // resulting sequence but the current third party
-        // implementations result differs greatly if the number of
-        // suggestions to be retuned gets changed. Statistically
-        // it gets much better if told to return e.g. only 7 strings
-        // than returning e.g. 16 suggestions and using only the
-        // first 7. Thus we hand down the value to use to that
-        // implementation here by providing an additional parameter.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
         rVal.Name = OUString( UPN_MAX_NUMBER_OF_SUGGESTIONS );
         rVal.Value <<= (sal_Int16) 7;
         //
-        // Are there any replace suggestions?
+        
         Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
 
         Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EE_DLL().GetGlobalData()->GetLanguageGuesser() );
 
-        // check if text might belong to a different language...
+        
         LanguageType nGuessLangWord = LANGUAGE_NONE;
         LanguageType nGuessLangPara = LANGUAGE_NONE;
         if (xSpellAlt.is() && xLangGuesser.is())
@@ -804,7 +804,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         }
         if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
         {
-            // make sure LANGUAGE_NONE gets not used as menu entry
+            
             if (nGuessLangWord == LANGUAGE_NONE)
                 nGuessLangWord = nGuessLangPara;
             if (nGuessLangPara == LANGUAGE_NONE)
@@ -823,14 +823,14 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aPopupMenu.SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
         }
 
-        // ## Create mnemonics here
+        
         if ( Application::IsAutoMnemonicEnabled() )
         {
             aPopupMenu.CreateAutoMnemonics();
             aPopupMenu.SetMenuFlags( aPopupMenu.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
         }
 
-        // Replace suggestions...
+        
         Sequence< OUString > aAlt;
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
@@ -847,7 +847,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aPopupMenu.InsertSeparator(OString(), nWords);
         }
         else
-            aPopupMenu.RemoveItem( MN_AUTOCORR );   // delete?
+            aPopupMenu.RemoveItem( MN_AUTOCORR );   
 
         SvtLinguConfig aCfg;
 
@@ -856,9 +856,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         if (xDicList.is())
         {
             const Reference< linguistic2::XDictionary >  *pDic = NULL;
-            // add the default positive dictionary to dic-list (if not already done).
-            // This is to ensure that there is at least one dictionary to which
-            // words could be added.
+            
+            
+            
             uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
             if (xDic.is())
                 xDic->setActive( sal_True );
@@ -880,8 +880,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                     && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
                     && (!xStor.is() || !xStor->isReadonly()) )
                 {
-                    // the extra 1 is because of the (possible) external
-                    // linguistic entry above
+                    
+                    
                     sal_uInt16 nPos = MN_DICTSTART + i;
                     pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
                     aDicNameSingle = xDicTmp->getName();
@@ -956,12 +956,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             if ( !pCallBack )
             {
-                // Set Cursor before word...
+                
                 EditPaM aCursor = pImpEditView->GetEditSelection().Min();
                 pImpEditView->DrawSelection();
                 pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
                 pImpEditView->DrawSelection();
-                // Crashes when no SfxApp
+                
                 PIMPEE->Spell( this, sal_False );
             }
             else
@@ -984,7 +984,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
             if (xDic.is())
                 xDic->add( aSelected, sal_False, OUString() );
-            // save modified user-dictionary if it is persistent
+            
             Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
             if (xSavDic.is())
                 xSavDic->store();
@@ -1008,7 +1008,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage( aPaM2 ) );
             InsertText( aWord );
         }
-        else if ( nId >= MN_ALTSTART )  // Replace
+        else if ( nId >= MN_ALTSTART )  
         {
             DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
             OUString aWord = pAlt[nId - MN_ALTSTART];
@@ -1067,8 +1067,8 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
 {
     EditSelection aSel( pImpEditView->GetEditSelection() );
     aSel.Adjust( pImpEditView->pEditEngine->GetEditDoc() );
-    // Only when cursor is in font of field, no selection,
-    // or only selecting field
+    
+    
     if ( ( aSel.Min().GetNode() == aSel.Max().GetNode() ) &&
          ( ( aSel.Max().GetIndex() == aSel.Min().GetIndex() ) ||
            ( aSel.Max().GetIndex() == aSel.Min().GetIndex()+1 ) ) )
@@ -1263,7 +1263,7 @@ OUString EditView::GetSurroundingText() const
     {
         OUString aStr = PIMPE->GetSelected(aSel);
 
-        // Stop reconversion if the selected text includes a line break.
+        
         if ( aStr.indexOf( 0x0A ) == -1 )
           return aStr;
         else
@@ -1288,7 +1288,7 @@ Selection EditView::GetSurroundingTextSelection() const
         aSel.Adjust( PIMPE->GetEditDoc() );
         OUString aStr = PIMPE->GetSelected(aSel);
 
-        // Stop reconversion if the selected text includes a line break.
+        
         if ( aStr.indexOf( 0x0A ) == -1 )
             return Selection( 0, aSelection.nEndPos - aSelection.nStartPos );
         else

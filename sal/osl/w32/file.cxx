@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,9 +50,9 @@
 #undef min
 #endif
 
-//##################################################################
-// File handle implementation
-//##################################################################
+
+
+
 struct FileHandle_Impl
 {
     CRITICAL_SECTION m_mutex;
@@ -360,7 +360,7 @@ oslFileError FileHandle_Impl::readFileAt (
 
     if (0 == (m_state & STATE_SEEKABLE))
     {
-        // not seekable (pipe)
+        
         DWORD dwDone = 0;
         if (!::ReadFile(m_hFile, pBuffer, nBytesRequested, &dwDone, 0))
             return oslTranslateFileError( GetLastError() );
@@ -369,7 +369,7 @@ oslFileError FileHandle_Impl::readFileAt (
     }
     else if (0 == m_buffer)
     {
-        // not buffered
+        
         return readAt (nOffset, pBuffer, nBytesRequested, pBytesRead);
     }
     else
@@ -382,7 +382,7 @@ oslFileError FileHandle_Impl::readFileAt (
 
             if (bufptr != m_bufptr)
             {
-                // flush current buffer
+                
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
@@ -390,7 +390,7 @@ oslFileError FileHandle_Impl::readFileAt (
 
                 if (nBytesRequested >= m_bufsiz)
                 {
-                    // buffer too small, read through from file
+                    
                     sal_uInt64 uDone = 0;
                     result = readAt (nOffset, &(buffer[*pBytesRead]), nBytesRequested, &uDone);
                     if (result != osl_File_E_None)
@@ -400,7 +400,7 @@ oslFileError FileHandle_Impl::readFileAt (
                     return osl_File_E_None;
                 }
 
-                // update buffer (pointer)
+                
                 sal_uInt64 uDone = 0;
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
@@ -409,7 +409,7 @@ oslFileError FileHandle_Impl::readFileAt (
             }
             if (bufpos >= m_buflen)
             {
-                // end of file
+                
                 return osl_File_E_None;
             }
 
@@ -434,7 +434,7 @@ oslFileError FileHandle_Impl::writeFileAt (
 
     if (0 == (m_state & STATE_SEEKABLE))
     {
-        // not seekable (pipe)
+        
         DWORD dwDone = 0;
         if (!::WriteFile(m_hFile, pBuffer, nBytesToWrite, &dwDone, 0))
             return oslTranslateFileError( GetLastError() );
@@ -443,7 +443,7 @@ oslFileError FileHandle_Impl::writeFileAt (
     }
     else if (0 == m_buffer)
     {
-        // not buffered
+        
         return writeAt(nOffset, pBuffer, nBytesToWrite, pBytesWritten);
     }
     else
@@ -455,7 +455,7 @@ oslFileError FileHandle_Impl::writeFileAt (
             SIZE_T   const bufpos = (nOffset % m_bufsiz);
             if (bufptr != m_bufptr)
             {
-                // flush current buffer
+                
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
@@ -463,7 +463,7 @@ oslFileError FileHandle_Impl::writeFileAt (
 
                 if (nBytesToWrite >= m_bufsiz)
                 {
-                    // buffer too small, write through to file
+                    
                     sal_uInt64 uDone = 0;
                     result = writeAt (nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
                     if (result != osl_File_E_None)
@@ -475,7 +475,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                     return osl_File_E_None;
                 }
 
-                // update buffer (pointer)
+                
                 sal_uInt64 uDone = 0;
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
@@ -651,9 +651,9 @@ oslFileError FileHandle_Impl::syncFile()
     return (result);
 }
 
-//##################################################################
-// File I/O functions
-//##################################################################
+
+
+
 
 extern "C" oslFileHandle
 SAL_CALL osl_createFileHandleFromOSHandle (
@@ -661,14 +661,14 @@ SAL_CALL osl_createFileHandleFromOSHandle (
     sal_uInt32 uFlags)
 {
     if ( !IsValidHandle(hFile) )
-        return 0; // EINVAL
+        return 0; 
 
     FileHandle_Impl * pImpl = new FileHandle_Impl(hFile);
     if (pImpl == 0)
     {
-        // cleanup and fail
+        
         (void) ::CloseHandle(hFile);
-        return 0; // ENOMEM
+        return 0; 
     }
 
     /* check for regular file */
@@ -694,7 +694,7 @@ SAL_CALL osl_createFileHandleFromOSHandle (
     return (oslFileHandle)(pImpl);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_openFile(
     rtl_uString *   strPath,
@@ -725,7 +725,7 @@ SAL_CALL osl_openFile(
         reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )),
         dwAccess, dwShare, NULL, dwCreation, dwAttributes, NULL );
 
-    // @@@ ERROR HANDLING @@@
+    
     if ( !IsValidHandle( hFile ) )
         result = oslTranslateFileError( GetLastError() );
 
@@ -735,7 +735,7 @@ SAL_CALL osl_openFile(
     return (result);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
@@ -755,7 +755,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_getFileOSHandle(
     oslFileHandle  Handle,
@@ -771,7 +771,7 @@ SAL_CALL osl_getFileOSHandle(
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_closeFile(oslFileHandle Handle)
 {
@@ -798,7 +798,7 @@ SAL_CALL osl_closeFile(oslFileHandle Handle)
     return (result);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_mapFile(
     oslFileHandle Handle,
@@ -844,7 +844,7 @@ SAL_CALL osl_mapFile(
 
     if (uFlags & osl_File_MapFlag_RandomAccess)
     {
-        // Determine memory pagesize.
+        
         SYSTEM_INFO info;
         ::GetSystemInfo( &info );
         DWORD const dwPageSize = info.dwPageSize;
@@ -871,7 +871,7 @@ SAL_CALL osl_mapFile(
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
 {
@@ -884,14 +884,14 @@ SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_unmapMappedFile(oslFileHandle /* Handle */, void* pAddr, sal_uInt64 uLength)
 {
     return osl_unmapFile( pAddr, uLength );
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_readLine(
     oslFileHandle   Handle,
@@ -902,7 +902,7 @@ SAL_CALL osl_readLine(
         return osl_File_E_INVAL;
     sal_uInt64 uBytesRead = 0;
 
-    // read at current filepos; filepos += uBytesRead;
+    
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->readLineAt (
         pImpl->m_filepos, ppSequence, &uBytesRead);
@@ -911,7 +911,7 @@ SAL_CALL osl_readLine(
     return (result);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_readFile(
     oslFileHandle Handle,
@@ -923,7 +923,7 @@ SAL_CALL osl_readFile(
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pBuffer) || (0 == pBytesRead))
         return osl_File_E_INVAL;
 
-    // read at current filepos; filepos += *pBytesRead;
+    
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->readFileAt (
         pImpl->m_filepos, pBuffer, uBytesRequested, pBytesRead);
@@ -932,7 +932,7 @@ SAL_CALL osl_readFile(
     return (result);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_writeFile(
     oslFileHandle Handle,
@@ -945,7 +945,7 @@ SAL_CALL osl_writeFile(
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pBuffer) || (0 == pBytesWritten))
         return osl_File_E_INVAL;
 
-    // write at current filepos; filepos += *pBytesWritten;
+    
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->writeFileAt (
         pImpl->m_filepos, pBuffer, uBytesToWrite, pBytesWritten);
@@ -954,7 +954,7 @@ SAL_CALL osl_writeFile(
     return (result);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_readFileAt(
     oslFileHandle Handle,
@@ -975,12 +975,12 @@ SAL_CALL osl_readFileAt(
         return osl_File_E_OVERFLOW;
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
-    // read at specified fileptr
+    
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     return pImpl->readFileAt (nOffset, pBuffer, uBytesRequested, pBytesRead);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_writeFileAt(
     oslFileHandle Handle,
@@ -1001,12 +1001,12 @@ SAL_CALL osl_writeFileAt(
         return osl_File_E_OVERFLOW;
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
-    // write at specified fileptr
+    
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     return pImpl->writeFileAt (nOffset, pBuffer, uBytesToWrite, pBytesWritten);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_isEndOfFile (oslFileHandle Handle, sal_Bool *pIsEOF)
 {
@@ -1020,7 +1020,7 @@ SAL_CALL osl_isEndOfFile (oslFileHandle Handle, sal_Bool *pIsEOF)
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
 {
@@ -1033,7 +1033,7 @@ SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset)
 {
@@ -1077,7 +1077,7 @@ SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset
     return pImpl->setPos (nPos + nOffset);
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_getFileSize (oslFileHandle Handle, sal_uInt64 *pSize)
 {
@@ -1091,7 +1091,7 @@ SAL_CALL osl_getFileSize (oslFileHandle Handle, sal_uInt64 *pSize)
     return osl_File_E_None;
 }
 
-//#############################################
+
 oslFileError
 SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
 {
@@ -1115,11 +1115,11 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
     return pImpl->setSize (uSize);
 }
 
-//##################################################################
-// File handling functions
-//##################################################################
 
-//#############################################
+
+
+
+
 oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 {
     rtl_uString *strSysPath = NULL;
@@ -1137,7 +1137,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
     return error;
 }
 
-//#############################################
+
 oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
     rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;
@@ -1165,7 +1165,7 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPa
     return error;
 }
 
-//#############################################
+
 oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
     rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;

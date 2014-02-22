@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excelvbahelper.hxx"
@@ -43,7 +43,7 @@ namespace ooo {
 namespace vba {
 namespace excel {
 
-// ============================================================================
+
 
 uno::Reference< sheet::XUnnamedDatabaseRanges >
 GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
@@ -56,8 +56,8 @@ GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
     return xUnnamedDBRanges;
 }
 
-// returns the XDatabaseRange for the autofilter on sheet (nSheet)
-// also populates sName with the name of range
+
+
 uno::Reference< sheet::XDatabaseRange >
 GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( uno::RuntimeException )
 {
@@ -136,7 +136,7 @@ public:
     {
         if ( bInitialWarningState )
         {
-            // don't allow dtor to throw
+            
             try
             {
                 setReplaceCellsWarning( true );
@@ -167,7 +167,7 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
     {
         pViewShell->CopyToClip(NULL,false,false,true);
 
-        // mark the copied transfer object so it is used in ScVbaRange::Insert
+        
         ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
         if (pClipObj)
             pClipObj->SetUseInApi( true );
@@ -182,7 +182,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     {
         pViewShell->CutToClip( NULL, true );
 
-        // mark the copied transfer object so it is used in ScVbaRange::Insert
+        
         ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
         if (pClipObj)
             pClipObj->SetUseInApi( true );
@@ -203,7 +203,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
         if ( pView && pWin )
         {
             if ( bAsLink && bOtherDoc )
-                pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
+                pTabViewShell->PasteFromSystem(0);
             else
             {
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
@@ -263,11 +263,11 @@ getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) thro
     uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
     OUString sCodeName;
     xProps->getPropertyValue("CodeName") >>= sCodeName;
-    // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
-    // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
-    // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
-    // the document in the future could fix this, especially IF the switching of the vba mode takes care to
-    // create the special document module objects if they don't exist.
+    
+    
+    
+    
+    
     return getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) );
 }
 
@@ -325,8 +325,8 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
                 uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
-                // set up the module info for the workbook and sheets in the nealy created
-                // spreadsheet
+                
+                
                 ScDocument* pDoc = pShell->GetDocument();
                 OUString sCodeName = pDoc->GetCodeName();
                 if ( sCodeName.isEmpty() )
@@ -383,8 +383,8 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
     return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
 }
 
-// ============================================================================
 
-} // namespace excel
-} // namespace vba
-} // namespace ooo
+
+} 
+} 
+} 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "FrameOOoTContext.hxx"
@@ -122,7 +122,7 @@ XMLTransformerContext *XMLFrameOOoTransformerContext::CreateChildContext(
         case XML_ETACTION_COPY:
         case XML_ETACTION_COPY_TEXT:
         case XML_ETACTION_RENAME_ELEM:
-            // the ones in the list have to be persistent
+            
 
             pContext = XMLPersElemContentTContext::CreateChildContext(
                            nPrefix, rLocalName, rQName, rAttrList );
@@ -133,7 +133,7 @@ XMLTransformerContext *XMLFrameOOoTransformerContext::CreateChildContext(
         }
     }
 
-    // default is copying
+    
     if( !pContext )
         pContext = XMLTransformerContext::CreateChildContext(
                     nPrefix, rLocalName, rQName, rAttrList );
@@ -155,8 +155,8 @@ void XMLFrameOOoTransformerContext::Characters( const OUString& rChars )
 
 sal_Bool XMLFrameOOoTransformerContext::IsPersistent() const
 {
-    // this context stores some of its child elements, but is not persistent
-    // itself.
+    
+    
     return sal_False;
 }
 

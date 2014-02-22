@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swrect.hxx"
@@ -58,10 +58,10 @@ SwRect& SwRect::Union( const SwRect& rRect )
 
 SwRect& SwRect::Intersection( const SwRect& rRect )
 {
-    // any similarity between me and given element?
+    
     if ( IsOver( rRect ) )
     {
-        // get smaller right and lower, and greater left and upper edge
+        
         if ( Left() < rRect.Left() )
             Left( rRect.Left() );
         if ( Top() < rRect.Top() )
@@ -74,7 +74,7 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
             Bottom( n );
     }
     else
-        // Def.: if intersection is empty, set only SSize to 0
+        
         SSize(0, 0);
 
     return *this;
@@ -82,7 +82,7 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
 
 SwRect& SwRect::_Intersection( const SwRect& rRect )
 {
-    // get smaller right and lower, and greater left and upper edge
+    
     if ( Left() < rRect.Left() )
         Left( rRect.Left() );
     if ( Top() < rRect.Top() )
@@ -117,7 +117,7 @@ sal_Bool SwRect::IsInside( const Point& rPoint ) const
            (Bottom()>= rPoint.Y());
 }
 
-// mouse moving of table borders
+
 sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 {
     bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
@@ -149,7 +149,7 @@ void SwRect::Justify()
     }
 }
 
-// Similar to the inline methods, but we need the function pointers
+
 void SwRect::_Width( const long nNew ) { m_Size.setWidth(nNew); }
 void SwRect::_Height( const long nNew ) { m_Size.setHeight(nNew); }
 void SwRect::_Left( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }

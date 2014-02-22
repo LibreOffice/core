@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -13,8 +13,8 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
-// Just verify that all the generated headers can be included (i.e., that all
-// the identifiers are valid and do not clash:
+
+
 #include "officecfg/officecfg_qa_allheaders.hxx"
 
 namespace {

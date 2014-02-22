@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/basmgr.hxx>
@@ -56,15 +56,15 @@
 
 using ::basic::BasicManagerRepository;
 
-//===================================================================
+
 sal_Bool SfxApplication::QueryExit_Impl()
 {
     sal_Bool bQuit = sal_True;
 
-    // Does some instance, that can not be shut down, still require the app?
+    
     if ( !bQuit )
     {
-        // Not really exit, only minimize
+        
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
         OSL_TRACE( "QueryExit => sal_False (in use)" );
@@ -74,7 +74,7 @@ sal_Bool SfxApplication::QueryExit_Impl()
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxApplication::Deinitialize()
 {
@@ -87,14 +87,14 @@ void SfxApplication::Deinitialize()
     SaveBasicAndDialogContainer();
 #endif
 
-    pAppData_Impl->bDowning = sal_True; // due to Timer from DecAliveCount and QueryExit
+    pAppData_Impl->bDowning = sal_True; 
 
     DELETEZ( pAppData_Impl->pTemplates );
 
-    // By definition there shouldn't be any open view frames when we reach
-    // this method. Therefore this call makes no sense and is the source of
-    // some stack traces, which we don't understand.
-    // For more information see:
+    
+    
+    
+    
     pAppData_Impl->bDowning = sal_False;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
@@ -105,29 +105,29 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->bDowning = sal_True;
     pAppData_Impl->pAppDispat->DoDeactivate_Impl( sal_True, NULL );
 
-    // call derived application-exit
+    
     Exit();
 
-    // Release Controller and others
-    // then the remaining components should alse disapear ( Beamer! )
+    
+    
 
 #ifndef DISABLE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();
     pAppData_Impl->pBasicManager->reset( NULL );
-        // this will also delete pBasMgr
+        
 #endif
 
     DBG_ASSERT( pAppData_Impl->pViewFrame == 0, "active foreign ViewFrame" );
 
     delete[] pAppData_Impl->pInterfaces, pAppData_Impl->pInterfaces = 0;
 
-    // free administration managers
+    
     DELETEZ(pAppData_Impl->pAppDispat);
     SfxResId::DeleteResMgr();
     SvtResId::DeleteResMgr();
     DELETEZ(pAppData_Impl->pOfaResMgr);
 
-    // from here no SvObjects have to exists
+    
     DELETEZ(pAppData_Impl->pMatcher);
 
     DELETEX(SfxSlotPool, pAppData_Impl->pSlotPool);
@@ -140,8 +140,8 @@ void SfxApplication::Deinitialize()
     DELETEX(SfxViewShellArr_Impl, pAppData_Impl->pViewShells);
     DELETEX(SfxObjectShellArr_Impl, pAppData_Impl->pObjShells);
 
-    //TODO/CLEANTUP
-    //ReleaseArgs could be used instead!
+    
+    
     pAppData_Impl->pPool = NULL;
     NoChaos::ReleaseItemPool();
 

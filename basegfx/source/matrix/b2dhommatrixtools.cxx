@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-///////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -31,27 +31,27 @@ namespace basegfx
         {
             if( fTools::equalZero( fmod( fRadiant, F_PI2 ) ) )
             {
-                // determine quadrant
+                
                 const sal_Int32 nQuad(
                     (4 + fround( 4/F_2PI*fmod( fRadiant, F_2PI ) )) % 4 );
                 switch( nQuad )
                 {
-                    case 0: // -2pi,0,2pi
+                    case 0: 
                         o_rSin = 0.0;
                         o_rCos = 1.0;
                         break;
 
-                    case 1: // -3/2pi,1/2pi
+                    case 1: 
                         o_rSin = 1.0;
                         o_rCos = 0.0;
                         break;
 
-                    case 2: // -pi,pi
+                    case 2: 
                         o_rSin = 0.0;
                         o_rCos = -1.0;
                         break;
 
-                    case 3: // -1/2pi,3/2pi
+                    case 3: 
                         o_rSin = -1.0;
                         o_rCos = 0.0;
                         break;
@@ -62,8 +62,8 @@ namespace basegfx
             }
             else
             {
-                // TODO(P1): Maybe use glibc's sincos here (though
-                // that's kinda non-portable...)
+                
+                
                 o_rSin = sin(fRadiant);
                 o_rCos = cos(fRadiant);
             }
@@ -153,23 +153,23 @@ namespace basegfx
 
             if(fTools::equal(fScaleX, fOne) && fTools::equal(fScaleY, fOne))
             {
-                /// no scale, take shortcut
+                
                 return createShearXRotateTranslateB2DHomMatrix(fShearX, fRadiant, fTranslateX, fTranslateY);
             }
             else
             {
-                /// scale used
+                
                 if(fTools::equalZero(fShearX))
                 {
-                    /// no shear
+                    
                     if(fTools::equalZero(fRadiant))
                     {
-                        /// no rotate, take shortcut
+                        
                         return createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, fTranslateX, fTranslateY);
                     }
                     else
                     {
-                        /// rotate and scale used, no shear
+                        
                         double fSin(0.0);
                         double fCos(1.0);
 
@@ -188,10 +188,10 @@ namespace basegfx
                 }
                 else
                 {
-                    /// scale and shear used
+                    
                     if(fTools::equalZero(fRadiant))
                     {
-                        /// scale and shear, but no rotate
+                        
                         B2DHomMatrix aRetval(
                             /* Row 0, Column 0 */ fScaleX,
                             /* Row 0, Column 1 */ fScaleY * fShearX,
@@ -204,7 +204,7 @@ namespace basegfx
                     }
                     else
                     {
-                        /// scale, shear and rotate used
+                        
                         double fSin(0.0);
                         double fCos(1.0);
 
@@ -231,15 +231,15 @@ namespace basegfx
         {
             if(fTools::equalZero(fShearX))
             {
-                /// no shear
+                
                 if(fTools::equalZero(fRadiant))
                 {
-                    /// no shear, no rotate, take shortcut
+                    
                     return createTranslateB2DHomMatrix(fTranslateX, fTranslateY);
                 }
                 else
                 {
-                    /// no shear, but rotate used
+                    
                     double fSin(0.0);
                     double fCos(1.0);
 
@@ -258,10 +258,10 @@ namespace basegfx
             }
             else
             {
-                /// shear used
+                
                 if(fTools::equalZero(fRadiant))
                 {
-                    /// no rotate, but shear used
+                    
                     B2DHomMatrix aRetval(
                         /* Row 0, Column 0 */ 1.0,
                         /* Row 0, Column 1 */ fShearX,
@@ -274,7 +274,7 @@ namespace basegfx
                 }
                 else
                 {
-                    /// shear and rotate used
+                    
                     double fSin(0.0);
                     double fCos(1.0);
 
@@ -301,15 +301,15 @@ namespace basegfx
 
             if(fTools::equal(fScaleX, fOne) && fTools::equal(fScaleY, fOne))
             {
-                /// no scale, take shortcut
+                
                 return createTranslateB2DHomMatrix(fTranslateX, fTranslateY);
             }
             else
             {
-                /// scale used
+                
                 if(fTools::equalZero(fTranslateX) && fTools::equalZero(fTranslateY))
                 {
-                    /// no translate, but scale.
+                    
                     B2DHomMatrix aRetval;
 
                     aRetval.set(0, 0, fScaleX);
@@ -319,7 +319,7 @@ namespace basegfx
                 }
                 else
                 {
-                    /// translate and scale
+                    
                     B2DHomMatrix aRetval(
                         /* Row 0, Column 0 */ fScaleX,
                         /* Row 0, Column 1 */ 0.0,
@@ -358,7 +358,7 @@ namespace basegfx
             return aRetval;
         }
 
-        /// special for the case to map from source range to target range
+        
         B2DHomMatrix createSourceRangeTargetRangeTransform(
             const B2DRange& rSourceRange,
             const B2DRange& rTargetRange)
@@ -398,7 +398,7 @@ namespace basegfx
             return aRetval;
         }
 
-    } // end of namespace tools
-} // end of namespace basegfx
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

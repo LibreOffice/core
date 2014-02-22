@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,7 +38,7 @@ public:
 };
 
 
-// Default ctor for getReflection
+
 SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj()
 {
     pImpl = new SvNumFmtSuppl_Impl(NULL);
@@ -66,21 +66,21 @@ SvNumberFormatter* SvNumberFormatsSupplierObj::GetNumberFormatter() const
 
 void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
 {
-    // The old Numberformatter has been retired, do not access it anymore!
+    
     pImpl->pFormatter = pNew;
 }
 
 void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32)
 {
-    // Base implementation; does nothing
+    
 }
 
 void SvNumberFormatsSupplierObj::SettingsChanged()
 {
-    // Base implementation; does nothing
+    
 }
 
-// XNumberFormatsSupplier
+
 
 uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsSupplierObj::getNumberFormatSettings()
                                         throw(uno::RuntimeException)
@@ -98,7 +98,7 @@ uno::Reference<util::XNumberFormats> SAL_CALL SvNumberFormatsSupplierObj::getNum
     return new SvNumberFormatsObj( *this, pImpl->aMutex );
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL SvNumberFormatsSupplierObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -117,13 +117,13 @@ namespace
     class theSvNumberFormatsSupplierObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvNumberFormatsSupplierObjUnoTunnelId > {};
 }
 
-// static
+
 const uno::Sequence<sal_Int8>& SvNumberFormatsSupplierObj::getUnoTunnelId()
 {
     return theSvNumberFormatsSupplierObjUnoTunnelId::get().getSeq();
 }
 
-// static
+
 SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
                                 const uno::Reference<util::XNumberFormatsSupplier> xObj )
 {

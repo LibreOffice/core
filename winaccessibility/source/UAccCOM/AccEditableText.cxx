@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**
@@ -54,7 +54,7 @@ STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK XInterface#
+    
     if(!pRXEdtTxt.is())
     {
         return E_FAIL;
@@ -182,7 +182,7 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if (text == NULL)
         return E_INVALIDARG;
     if( !pRXEdtTxt.is() )
@@ -211,7 +211,7 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if (attributes == NULL)
         return E_INVALIDARG;
     if( !pRXEdtTxt.is() )
@@ -271,15 +271,15 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
             ouName.compareTo(L"ParaBottomMargin") == 0 ||
             ouName.compareTo(L"CharFontPitch") == 0)
     {
-        // Convert to int.
-        // NOTE: CharFontPitch is not implemented in java file.
+        
+        
         sal_Int32 nValue = ouValue.toInt32();
         rAny.setValue(&nValue, getCppuType((sal_Int32 *)0));
     }
     else if(ouName.compareTo(L"CharShadowed") == 0 ||
             ouName.compareTo(L"CharContoured") == 0)
     {
-        // Convert to boolean.
+        
         boolean nValue = (boolean)ouValue.toBoolean();
         rAny.setValue(&nValue, getCppuType((sal_Bool *)sal_False));
     }
@@ -288,32 +288,32 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
             ouName.compareTo(L"CharUnderline") == 0 ||
             ouName.compareTo(L"CharFontPitch") == 0)
     {
-        // Convert to short.
+        
         short nValue = (short)ouValue.toInt32();
         rAny.setValue(&nValue, getCppuType((short *)0));
     }
     else if(ouName.compareTo(L"CharHeight") == 0 ||
             ouName.compareTo(L"CharWeight") == 0)
     {
-        // Convert to float.
+        
         float fValue = ouValue.toFloat();
         rAny.setValue(&fValue, getCppuType((float *)0));
     }
     else if(ouName.compareTo(L"CharFontName") == 0)
     {
-        // Convert to string.
+        
         rAny.setValue(&ouValue, getCppuType((::rtl::OUString *)0));
     }
     else if(ouName.compareTo(L"CharPosture") == 0)
     {
-        // Convert to FontSlant.
+        
         ::com::sun::star::awt::FontSlant fontSlant = (::com::sun::star::awt::FontSlant)ouValue.toInt32();
         rAny.setValue(&fontSlant, getCppuType((::com::sun::star::awt::FontSlant*)0));
     }
     else if(ouName.compareTo(L"ParaTabStops") == 0)
     {
         //
-        // Convert to the Sequence with TabStop element.
+        
         vector< ::com::sun::star::style::TabStop > vecTabStop;
         ::com::sun::star::style::TabStop tabStop;
         ::rtl::OUString ouSubValue;
@@ -322,87 +322,87 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
 
         do
         {
-            // Position.
+            
             pos = ouValue.indexOf(L"Position=", pos);
             if(pos != -1)
             {
-                posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "Position=".
+                posComma = ouValue.indexOf(',', pos + 9); 
                 if(posComma != -1)
                 {
                     ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
                     tabStop.Position = ouSubValue.toInt32();
                     pos = posComma + 1;
 
-                    // TabAlign.
+                    
                     pos = ouValue.indexOf(L"TabAlign=", pos);
                     if(pos != -1)
                     {
-                        posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "TabAlign=".
+                        posComma = ouValue.indexOf(',', pos + 9); 
                         if(posComma != -1)
                         {
                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
                             tabStop.Alignment = (::com::sun::star::style::TabAlign)ouSubValue.toInt32();
                             pos = posComma + 1;
 
-                            // DecimalChar.
+                            
                             pos = ouValue.indexOf(L"DecimalChar=", pos);
                             if(pos != -1)
                             {
-                                posComma = ouValue.indexOf(',', pos + 11); // 11 = length of "TabAlign=".
+                                posComma = ouValue.indexOf(',', pos + 11); 
                                 if(posComma != -1)
                                 {
                                     ouSubValue = ouValue.copy(pos + 11, posComma - pos - 11);
                                     tabStop.DecimalChar = (sal_Unicode)ouSubValue.toChar();
                                     pos = posComma + 1;
 
-                                    // FillChar.
+                                    
                                     pos = ouValue.indexOf(L"FillChar=", pos);
                                     if(pos != -1)
                                     {
-                                        posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "TabAlign=".
+                                        posComma = ouValue.indexOf(',', pos + 9); 
                                         if(posComma != -1)
                                         {
                                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
                                             tabStop.DecimalChar = (sal_Unicode)ouSubValue.toChar();
                                             pos = posComma + 1;
 
-                                            // Complete TabStop element.
+                                            
                                             vecTabStop.push_back(tabStop);
                                         }
                                         else
-                                            break;  // No match comma.
+                                            break;  
                                     }
                                     else
-                                        break;  // No match FillChar.
+                                        break;  
                                 }
                                 else
-                                    break;  // No match comma.
+                                    break;  
                             }
                             else
-                                break;  // No match DecimalChar.
+                                break;  
                         }
                         else
-                            break;  // No match comma.
+                            break;  
                     }
                     else
-                        break;  // No match TabAlign.
+                        break;  
                 }
                 else
-                    break;  // No match comma.
+                    break;  
             }
             else
-                break;  // No match Position.
+                break;  
         }
         while(pos < ouValue.getLength());
 
         //
-        // Dump into Sequence.
+        
         int iSeqLen = (vecTabStop.size() == 0) ? 1 : vecTabStop.size();
         Sequence< ::com::sun::star::style::TabStop > seqTabStop(iSeqLen);
 
         if(vecTabStop.size() != 0)
         {
-            // Dump every element.
+            
             for(int i = 0; i < iSeqLen; i ++)
             {
                 seqTabStop[i] = vecTabStop[i];
@@ -410,19 +410,19 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         }
         else
         {
-            // Create default value.
+            
             seqTabStop[0].Position = 0;
             seqTabStop[0].Alignment = ::com::sun::star::style::TabAlign_DEFAULT;
             seqTabStop[0].DecimalChar = '.';
             seqTabStop[0].FillChar = ' ';
         }
 
-        // Assign to Any object.
+        
         rAny.setValue(&seqTabStop, getCppuType((Sequence< ::com::sun::star::style::TabStop >*)0));
     }
     else if(ouName.compareTo(L"ParaLineSpacing") == 0)
     {
-        // Parse value string.
+        
         ::com::sun::star::style::LineSpacing lineSpacing;
         ::rtl::OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
@@ -430,7 +430,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         pos = ouValue.indexOf(L"Mode=", pos);
         if(pos != -1)
         {
-            posComma = ouValue.indexOf(',', pos + 5); // 5 = length of "Mode=".
+            posComma = ouValue.indexOf(',', pos + 5); 
             if(posComma != -1)
             {
                 ouSubValue = ouValue.copy(pos + 5, posComma - pos - 5);
@@ -445,27 +445,27 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                 }
                 else
                 {
-                    lineSpacing.Height = (sal_Int16)100;    // Default height.
+                    lineSpacing.Height = (sal_Int16)100;    
                 }
             }
             else
             {
-                lineSpacing.Height = (sal_Int16)100;    // Default height.
+                lineSpacing.Height = (sal_Int16)100;    
             }
         }
         else
         {
-            // Default Mode and Height.
+            
             lineSpacing.Mode = (sal_Int16)0;
-            lineSpacing.Height = (sal_Int16)100;    // Default height.
+            lineSpacing.Height = (sal_Int16)100;    
         }
 
-        // Convert to Any object.
+        
         rAny.setValue(&lineSpacing, getCppuType((::com::sun::star::style::LineSpacing* )0));
     }
     else
     {
-        // Do nothing.
+        
         sal_Int32 nDefault = 0;
         rAny.setValue(&nDefault, getCppuType((sal_Int32 *)0));
     }
@@ -478,12 +478,12 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
  */
 STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);
-    //special query.
+    
     if(pUNOInterface == NULL)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();

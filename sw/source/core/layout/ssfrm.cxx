@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ftnfrm.hxx>
@@ -46,7 +46,7 @@
 #include <hints.hxx>
 #include <switerator.hxx>
 
-    // No inline cause we need the function pointers
+    
 long SwFrm::GetTopMargin() const
     { return Prt().Top(); }
 long SwFrm::GetBottomMargin() const
@@ -204,7 +204,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
 
 const sal_uInt16 nMinVertCellHeight = 1135;
 
-/// checks the layout direction and invalidates the lower frames rekursivly, if necessary.
+
 void SwFrm::CheckDirChange()
 {
     bool bOldVert = GetVerticalFlag();
@@ -213,14 +213,14 @@ void SwFrm::CheckDirChange()
     SetInvalidVert( sal_True );
     SetInvalidR2L( sal_True );
     bool bChg = bOldR2L != IsRightToLeft();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     sal_Bool bOldVertL2R = IsVertLR();
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
     {
         InvalidateAll();
         if( IsLayoutFrm() )
         {
-            // set minimum row height for vertical cells in horizontal table:
+            
             if ( IsCellFrm() && GetUpper() )
             {
                 if ( IsVertical() != GetUpper()->IsVertical() &&
@@ -245,8 +245,8 @@ void SwFrm::CheckDirChange()
             {
                 if( IsPageFrm() )
                 {
-                    // If we're a page frame and we change our layout direction,
-                    // we have to look for columns and rearrange them.
+                    
+                    
                     pBody = ((SwPageFrm*)this)->FindBodyCont();
                     if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm())
                         pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
@@ -270,8 +270,8 @@ void SwFrm::CheckDirChange()
         else if( IsTxtFrm() )
             ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
 
-        // #i31698# - notify anchored objects also for page frames.
-        // Remove code above for special handling of page frames
+        
+        
         if ( GetDrawObjs() )
         {
             const SwSortedObjs *pObjs = GetDrawObjs();
@@ -283,13 +283,13 @@ void SwFrm::CheckDirChange()
                     static_cast<SwFlyFrm*>(pAnchoredObj)->CheckDirChange();
                 else
                 {
-                    // OD 2004-04-06 #i26791# - direct object
-                    // positioning no longer needed. Instead
-                    // invalidate
+                    
+                    
+                    
                     pAnchoredObj->InvalidateObjPos();
                 }
-                // #i31698# - update layout direction of
-                // anchored object
+                
+                
                 {
                     ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrmContainingAnchPos() );
                     pAnchoredObj->UpdateLayoutDir();
@@ -299,13 +299,13 @@ void SwFrm::CheckDirChange()
     }
 }
 
-/// returns the position for anchors based on frame direction
-// OD 2004-03-10 #i11860# - consider lower space and line spacing of
-// previous frame according to new option 'Use former object positioning'
+
+
+
 Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
         aAnchor.X() += Frm().Width();
 
@@ -318,9 +318,9 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
         else
             aAnchor.X() += nBaseOfstForFly;
 
-        // OD 2004-03-10 #i11860# - if option 'Use former object positioning'
-        // is OFF, consider the lower space and the line spacing of the
-        // previous frame and the spacing considered for the page grid
+        
+        
+        
         const SwTxtFrm* pThisTxtFrm = static_cast<const SwTxtFrm*>(this);
         const SwTwips nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
                 pThisTxtFrm->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
@@ -339,8 +339,8 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 
 void SwFrm::Destroy()
 {
-    // accessible objects for fly and cell frames have been already disposed
-    // by the destructors of the derived classes.
+    
+    
     if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
     {
         SwRootFrm *pRootFrm = getRootFrm();
@@ -382,13 +382,13 @@ void SwFrm::Destroy()
 
 SwFrm::~SwFrm()
 {
-    if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
+    if (!IsRootFrm()) 
     {
         Destroy();
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    // JP 15.10.2001: for detection of access to deleted frames
+    
     mpDrawObjs = (SwSortedObjs*)0x33333333;
 #endif
 }
@@ -426,7 +426,7 @@ SwCntntFrm::~SwCntntFrm()
     if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
-        //Unregister from root if I'm still in turbo there.
+        
         SwRootFrm *pRoot = getRootFrm();
         if( pRoot && pRoot->GetTurbo() == this )
         {
@@ -470,11 +470,11 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
     SwIterator<SwCntntFrm,SwCntntNode> aIter( rNode );
     for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
     {
-        // #i27138#
-        // notify accessibility paragraphs objects about changed
-        // CONTENT_FLOWS_FROM/_TO relation.
-        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
-        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        
+        
+        
+        
+        
         if ( pFrm->IsTxtFrm() )
         {
             SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
@@ -491,13 +491,13 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
             SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
             pMaster->SetFollow( pFrm->GetFollow() );
         }
-        pFrm->SetFollow( 0 );//So it doesn't get funny ideas.
-                                //Otherwise it could be possible that a follow
-                                //gets destroyed before its master. Following
-                                //the now invalid pointer will then lead to an
-                                //illegal memory access. The chain can be
-                                //crushed here because we'll destroy all of it
-                                //anyway.
+        pFrm->SetFollow( 0 );
+                                
+                                
+                                
+                                
+                                
+                                
 
         if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
             !pFrm->GetIndPrev() )
@@ -533,16 +533,16 @@ void SwLayoutFrm::Destroy()
     {
         while ( pFrm )
         {
-            //First delete the Objs of the Frm because they can't unregister
-            //from the page after remove.
-            //We don't want to create an endless loop only because one couldn't
-            //unregister.
+            
+            
+            
+            
 
             sal_uInt32 nCnt;
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
             {
                 nCnt = pFrm->GetDrawObjs()->Count();
-                // #i28701#
+                
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                     delete pAnchoredObj;
@@ -568,13 +568,13 @@ void SwLayoutFrm::Destroy()
             delete pFrm;
             pFrm = pLower;
         }
-        //Delete the Flys, the last one also deletes the array.
+        
         sal_uInt32 nCnt;
         while ( GetDrawObjs() && GetDrawObjs()->Count() )
         {
             nCnt = GetDrawObjs()->Count();
 
-            // #i28701#
+            
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
                 delete pAnchoredObj;
@@ -609,7 +609,7 @@ void SwLayoutFrm::Destroy()
 
 SwLayoutFrm::~SwLayoutFrm()
 {
-    if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
+    if (!IsRootFrm()) 
     {
         Destroy();
     }
@@ -622,11 +622,11 @@ SwLayoutFrm::~SwLayoutFrm()
 |*/
 const SwRect SwFrm::PaintArea() const
 {
-    // NEW TABLES
-    // Cell frames may not leave their upper:
+    
+    
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
     const sal_Bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
@@ -653,7 +653,7 @@ const SwRect SwFrm::PaintArea() const
         }
         OSL_ENSURE( pTmp, "PaintArea lost in time and space" );
         if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() ||
-            pTmp->IsCellFrm() || pTmp->IsRowFrm() || //nobody leaves a table!
+            pTmp->IsCellFrm() || pTmp->IsRowFrm() || 
             pTmp->IsRootFrm() )
         {
             if( bLeft || nLeft < nTmpLeft )
@@ -665,17 +665,17 @@ const SwRect SwFrm::PaintArea() const
             bLeft = false;
             bRight = false;
         }
-        else if( pTmp->IsColumnFrm() )  // nobody enters neightbour columns
+        else if( pTmp->IsColumnFrm() )  
         {
             sal_Bool bR2L = pTmp->IsRightToLeft();
-            // the first column has _no_ influence to the left range
+            
             if( bR2L ? pTmp->GetNext() : pTmp->GetPrev() )
             {
                 if( bLeft || nLeft < nTmpLeft )
                     nLeft = nTmpLeft;
                 bLeft = false;
             }
-             // the last column has _no_ influence to the right range
+             
             if( bR2L ? pTmp->GetPrev() : pTmp->GetNext() )
             {
                 if( bRight || nTmpRight < nRight )
@@ -685,12 +685,12 @@ const SwRect SwFrm::PaintArea() const
         }
         else if( bVert && pTmp->IsBodyFrm() )
         {
-            // Header and footer frames have always horizontal direction and
-            // limit the body frame.
-            // A previous frame of a body frame must be a header,
-            // the next frame of a body frame may be a footnotecontainer or
-            // a footer. The footnotecontainer has the same direction like
-            // the body frame.
+            
+            
+            
+            
+            
+            
             if( pTmp->GetPrev() && ( bLeft || nLeft < nTmpLeft ) )
             {
                 nLeft = nTmpLeft;
@@ -718,7 +718,7 @@ const SwRect SwFrm::PaintArea() const
 const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
 {
     sal_Bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nLeft = (Frm().*fnRect->fnGetLeft)();
     long nWidth = (Frm().*fnRect->fnGetWidth)();

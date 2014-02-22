@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/fltrcfg.hxx>
@@ -46,9 +46,9 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
     XclExpRoot( rExpData )
 {
-    // nur Teil der Root-Daten gebraucht
+    
     pExcRoot = &GetOldRoot();
-    pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
+    pExcRoot->pER = this;   
     pExcRoot->eDateiTyp = Biff5;
     pExcDoc = new ExcDocument( *this );
 }
@@ -83,12 +83,12 @@ FltError ExportBiff5::Write()
             pDocShell->SetError( nErr, OUString( OSL_LOG_PREFIX ) );
     }
 
-    pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
-    pExcDoc->Write( aOut );     // wechstreamen
+    pExcDoc->ReadDoc();         
+    pExcDoc->Write( aOut );     
 
     if( pDocShell && xRootStrg.Is() )
     {
-        // #i88642# update doc info (revision etc)
+        
         pDocShell->UpdateDocInfoForSave();
 
         using namespace ::com::sun::star;

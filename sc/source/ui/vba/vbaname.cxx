@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <vbahelper/helperdecl.hxx>
 
@@ -125,8 +125,8 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
     }
     ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
 
-    // We should be able to do the below by just setting calling SetCode on pNamedRange
-    // right?
+    
+    
     if ( pNamedRange && pNamedRange->pDocShell )
     {
 
@@ -134,7 +134,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
         ScRangeData* pOldData = pNamedRange->GetRangeData_Impl();
         if (pOldData)
         {
-            // Shorter way of doing this ?
+            
             ScCompiler aComp( pDoc, pOldData->GetPos() );
             aComp.SetGrammar( eGrammar );
             boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));

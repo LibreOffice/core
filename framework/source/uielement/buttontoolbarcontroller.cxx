@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -71,7 +71,7 @@ ButtonToolbarController::~ButtonToolbarController()
 {
 }
 
-        // XInterface
+        
 uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rType )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -99,7 +99,7 @@ void SAL_CALL ButtonToolbarController::release() throw ()
     cppu::OWeakObject::release();
 }
 
-// XInitialization
+
 void SAL_CALL ButtonToolbarController::initialize(
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
@@ -139,7 +139,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     }
 }
 
-// XComponent
+
 void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
@@ -161,17 +161,17 @@ void SAL_CALL ButtonToolbarController::addEventListener(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    // do nothing
+    
 }
 
 void SAL_CALL ButtonToolbarController::removeEventListener(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    // do nothing
+    
 }
 
-// XUpdatable
+
 void SAL_CALL ButtonToolbarController::update()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -180,7 +180,7 @@ throw (::com::sun::star::uno::RuntimeException)
         throw DisposedException();
 }
 
-// XEventListener
+
 void SAL_CALL ButtonToolbarController::disposing(
     const com::sun::star::lang::EventObject& Source )
 throw ( ::com::sun::star::uno::RuntimeException )
@@ -200,12 +200,12 @@ throw ( ::com::sun::star::uno::RuntimeException )
 void SAL_CALL ButtonToolbarController::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& )
 throw ( ::com::sun::star::uno::RuntimeException )
 {
-    // do nothing
+    
     if ( m_bDisposed )
         throw DisposedException();
 }
 
-// XToolbarController
+
 void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -251,7 +251,7 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             Sequence<PropertyValue>   aArgs( 1 );
 
-            // Provide key modifier information to dispatch function
+            
             aArgs[0].Name   = "KeyModifier";
             aArgs[0].Value  <<= KeyModifier;
 
@@ -278,7 +278,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::doubleClick()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    // do nothing
+    
     if ( m_bDisposed )
         throw DisposedException();
 }
@@ -302,6 +302,6 @@ throw (::com::sun::star::uno::RuntimeException)
     return uno::Reference< awt::XWindow >();
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

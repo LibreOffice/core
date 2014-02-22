@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
         {
             if ( ( nMatchIndex % 2 ) == 0 )
             {
-                // search forwards
+                
                 sal_Unicode nSC = maGroupChars[ nMatchIndex ];
                 sal_Unicode nEC = maGroupChars[ nMatchIndex+1 ];
 
@@ -66,7 +66,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         {
                             nLevel--;
                             if ( !nLevel )
-                                break;  // while nCur...
+                                break;  
                         }
                         nCur++;
                     }
@@ -77,7 +77,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         nCur = 0;
                     }
                 }
-                if ( nLevel == 0 )  // found
+                if ( nLevel == 0 )  
                 {
                     aSel.GetStart() = rCursor;
                     aSel.GetEnd() = TextPaM( nPara, nCur+1 );
@@ -85,7 +85,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
             }
             else
             {
-                // search backwards
+                
                 sal_Unicode nEC = maGroupChars[ nMatchIndex ];
                 sal_Unicode nSC = maGroupChars[ nMatchIndex-1 ];
 
@@ -102,7 +102,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                             {
                                 nLevel--;
                                 if ( !nLevel )
-                                    break;  // while nCur...
+                                    break;  
                             }
                             else if ( aStr[nCur] == nEC )
                                 nLevel++;
@@ -116,17 +116,17 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         if ( nPara )
                         {
                             nPara--;
-                            nCur = GetTextLen( nPara )-1;   // no matter if negativ, as if Len()
+                            nCur = GetTextLen( nPara )-1;   
                         }
                         else
                             break;
                     }
                 }
 
-                if ( nLevel == 0 )  // found
+                if ( nLevel == 0 )  
                 {
                     aSel.GetStart() = rCursor;
-                    aSel.GetStart().GetIndex()++;   // behind the char
+                    aSel.GetStart().GetIndex()++;   
                     aSel.GetEnd() = TextPaM( nPara, nCur );
                 }
             }
@@ -162,7 +162,7 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
     aOptions.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     utl::TextSearch aSearcher( rSearchOptions );
 
-    // iterate over the paragraphs
+    
     for ( sal_uLong nNode = nStartNode;
             bForward ?  ( nNode <= nEndNode) : ( nNode >= nEndNode );
             bForward ? nNode++ : nNode-- )
@@ -196,8 +196,8 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
             rSel.GetStart().GetIndex() = nStartPos;
             rSel.GetEnd().GetPara() = nNode;
             rSel.GetEnd().GetIndex() = nEndPos;
-            // Select over the paragraph?
-            // FIXME  This should be max long...
+            
+            
             if( nEndPos == -1)
             {
                 if ( (rSel.GetEnd().GetPara()+1) < GetParagraphCount() )
@@ -215,7 +215,7 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
             break;
         }
 
-        if ( !bForward && !nNode )  // if searching backwards, if nEndNode == 0:
+        if ( !bForward && !nNode )  
             break;
     }
 
@@ -223,9 +223,9 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
 }
 
 
-// -------------------------------------------------------------------------
-// class ExtTextView
-// -------------------------------------------------------------------------
+
+
+
 ExtTextView::ExtTextView( ExtTextEngine* pEng, Window* pWindow )
     : TextView( pEng, pWindow )
 {
@@ -259,8 +259,8 @@ bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, bool bForwa
     if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
     {
         bFound = true;
-        // First add the beginning of the word to the selection,
-        // so that the whole word is in the visible region.
+        
+        
         SetSelection( aSel.GetStart() );
         ShowCursor( true, false );
     }
@@ -285,7 +285,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, bool
         {
             InsertText( rSearchOptions.replaceString );
             nFound = 1;
-            Search( rSearchOptions, bForward ); // right away to the next
+            Search( rSearchOptions, bForward ); 
         }
         else
         {
@@ -295,11 +295,11 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, bool
     }
     else
     {
-        // the writer replaces all, from beginning to end
+        
 
         ExtTextEngine* pTextEngine = (ExtTextEngine*)GetTextEngine();
 
-        // HideSelection();
+        
         TextSelection aSel;
 
         bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
@@ -347,20 +347,20 @@ bool ExtTextView::ImpIndentBlock( bool bRight )
     sal_uLong nEndPara = aSel.GetEnd().GetPara();
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
-        nEndPara--; // do not indent
+        nEndPara--; 
     }
 
     for ( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         if ( bRight )
         {
-            // add tabs
+            
             GetTextEngine()->ImpInsertText( TextPaM( nPara, 0 ), '\t' );
             bDone = true;
         }
         else
         {
-            // remove Tabs/Blanks
+            
             OUString aText = GetTextEngine()->GetText( nPara );
             if ( !aText.isEmpty() && (
                     ( aText[ 0 ] == '\t' ) ||

@@ -128,8 +128,8 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
         m_pKeyColumnNames->insert(pKeyColumNames->begin(),pKeyColumNames->end());
     }
 
-    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
-    // without extra variable to be set
+    
+    
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
@@ -139,7 +139,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
     OUString sQuery = xSourceComposer->getQuery();
     xAnalyzer->setElementaryQuery(xSourceComposer->getElementaryQuery());
-    // check for joins
+    
     OUString aErrorMsg;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<OSQLParseNode> pStatementNode( m_aSqlParser.parseTree( aErrorMsg, sQuery ) );
@@ -174,7 +174,7 @@ void OptimisticSet::makeNewStatement( )
     ::comphelper::disposeComponent(xAnalyzer);
 }
 
-// ::com::sun::star::sdbcx::XDeleteRows
+
 Sequence< sal_Int32 > SAL_CALL OptimisticSet::deleteRows( const Sequence< Any >& /*rows*/ ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
     Sequence< sal_Int32 > aRet;
@@ -186,7 +186,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     SAL_INFO("dbaccess", "OptimisticSet::updateRow" );
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
-    // list all cloumns that should be set
+    
     static OUString s_sPara(" = ?");
     OUString aQuote  = getIdentifierQuoteString();
 
@@ -195,7 +195,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
-    // here we build the condition part for the update statement
+    
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter)
@@ -265,7 +265,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     ::std::map< OUString,bool > aResultSetChanged;
     OUString aQuote  = getIdentifierQuoteString();
 
-    // here we build the condition part for the update statement
+    
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter)
@@ -325,7 +325,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
                 {
                     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery));
                     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-                    // and then the values of the where condition
+                    
                     SelectColumnsMetaData::iterator aKeyCol = m_pKeyColumnNames->begin();
                     SelectColumnsMetaData::iterator aKeysEnd = m_pKeyColumnNames->end();
                     sal_Int32 i = 1;
@@ -361,14 +361,14 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
-    // here we build the condition part for the update statement
+    
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter)
     {
         if ( m_aJoinedKeyColumns.find(aIter->second.nPosition) == m_aJoinedKeyColumns.end() && m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
-            // only delete rows which aren't the key in the join
+            
             const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
             lcl_fillKeyCondition(aIter->second.sTableName,sQuotedColumnName,(_rDeleteRow->get())[aIter->second.nPosition],aKeyConditions);
         }
@@ -394,7 +394,7 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& 
 {
     SAL_INFO("dbaccess", "OptimisticSet::executeDelete" );
 
-    // now create and execute the prepared statement
+    
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
@@ -604,7 +604,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     TSQLStatements aKeyConditions;
     ::std::map< OUString,bool > aResultSetChanged;
     OUString aQuote  = getIdentifierQuoteString();
-    // here we build the condition part for the update statement
+    
     SelectColumnsMetaData::const_iterator aColIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aColEnd = m_pColumnNames->end();
     for(;aColIter != aColEnd;++aColIter)
@@ -639,7 +639,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
                 {
                     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery));
                     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-                    // and then the values of the where condition
+                    
                     SelectColumnsMetaData::iterator aKeyIter = m_pKeyColumnNames->begin();
                     SelectColumnsMetaData::iterator aKeyEnd = m_pKeyColumnNames->end();
                     sal_Int32 i = 1;

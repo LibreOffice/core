@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VPolarCoordinateSystem.hxx"
@@ -38,7 +38,7 @@ VPolarCoordinateSystem::~VPolarCoordinateSystem()
 {
 }
 
-//better performance for big data
+
 uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
@@ -48,13 +48,13 @@ uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution
     {
         if( this->getPropertySwapXAndYAxis() )
         {
-            aResolution[0]/=2;//radius
-            aResolution[1]*=4;//outer circle resolution
+            aResolution[0]/=2;
+            aResolution[1]*=4;
         }
         else
         {
-            aResolution[0]*=4;//outer circle resolution
-            aResolution[1]/=2;//radius
+            aResolution[0]*=4;
+            aResolution[1]/=2;
         }
     }
 
@@ -71,7 +71,7 @@ void VPolarCoordinateSystem::createVAxisList(
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     sal_Int32 nDimensionIndex = 0;
 
-    //create angle axis (dimension index 0)
+    
     for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
         sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
@@ -179,6 +179,6 @@ void VPolarCoordinateSystem::createGridShapes()
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

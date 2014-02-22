@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <touch/touch.h>
@@ -95,22 +95,22 @@ void SwViewShell::ToggleHeaderFooterEdit()
         SetShowHeaderFooterSeparator( Footer, false );
     }
 
-    // Avoid corner case
+    
     if ( !IsShowHeaderFooterSeparator( Header ) &&
          !IsShowHeaderFooterSeparator( Footer ) )
     {
         mbHeaderFooterEdit = false;
     }
 
-    // Repaint everything
+    
     GetWin()->Invalidate();
 }
 
 static void
 lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
 {
-    // Direct paint has been performed: the background of transparent child
-    // windows has been painted, so need to paint the child windows now.
+    
+    
     if (rShell.GetWin())
     {
         Window& rWindow = *(rShell.GetWin());
@@ -119,17 +119,17 @@ lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
     }
 }
 
-// #i72754# 2nd set of Pre/PostPaints
-// This time it uses the lock counter (mPrePostPaintRegions empty/non-empty) to allow only one activation
-// and deactivation and mpPrePostOutDev to remember the OutDev from the BeginDrawLayers
-// call. That way, all places where paint take place can be handled the same way, even
-// when calling other paint methods. This is the case at the places where SW paints
-// buffered into VDevs to avoid flicker. Tis is in general problematic and should be
-// solved once using the BufferedOutput functionality of the DrawView.
+
+
+
+
+
+
+
 
 void SwViewShell::PrePaint()
 {
-    // forward PrePaint event from VCL Window to DrawingLayer
+    
     if(HasDrawView())
     {
         Imp()->GetDrawView()->PrePaint();
@@ -141,30 +141,30 @@ void SwViewShell::DLPrePaint2(const Region& rRegion)
     if(mPrePostPaintRegions.empty())
     {
         mPrePostPaintRegions.push( rRegion );
-        // #i75172# ensure DrawView to use DrawingLayer bufferings
+        
         if ( !HasDrawView() )
             MakeDrawView();
 
-        // Prefer window; if tot available, get mpOut (e.g. printer)
+        
         mpPrePostOutDev = (GetWin() && !mbTiledRendering)? GetWin(): GetOut();
 
-        // #i74769# use SdrPaintWindow now direct
+        
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
         OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
-        // #i74769# if prerender, save OutDev and redirect to PreRenderDevice
+        
         if(mpTargetPaintWindow->GetPreRenderDevice())
         {
             mpBufferedOut = mpOut;
             mpOut = &(mpTargetPaintWindow->GetTargetOutputDevice());
         }
 
-        // remember original paint MapMode for wrapped FlyFrame paints
+        
         maPrePostMapMode = mpOut->GetMapMode();
     }
     else
     {
-        // region needs to be updated to the given one
+        
         if( mPrePostPaintRegions.top() != rRegion )
             Imp()->GetDrawView()->UpdateDrawLayersRegion(mpPrePostOutDev, rRegion);
         mPrePostPaintRegions.push( rRegion );
@@ -183,25 +183,25 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
             Imp()->GetDrawView()->UpdateDrawLayersRegion(mpPrePostOutDev, mPrePostPaintRegions.top());
         return;
     }
-    mPrePostPaintRegions.pop(); // clear
+    mPrePostPaintRegions.pop(); 
     if(0 != mpTargetPaintWindow)
     {
-        // #i74769# restore buffered OutDev
+        
         if(mpTargetPaintWindow->GetPreRenderDevice())
         {
             mpOut = mpBufferedOut;
         }
 
-        // #i74769# use SdrPaintWindow now direct
+        
         Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer);
         mpTargetPaintWindow = 0;
     }
 }
-// end of Pre/PostPaints
+
 
 void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 {
-    // Nothing to do for the printer?
+    
     if ( !GetWin() || IsPreview() )
     {
         mbPaintWorks = sal_True;
@@ -210,7 +210,7 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     }
 
     mbInEndAction = sal_True;
-    //will this put the EndAction of the last shell in the sequence?
+    
 
     SwViewShell::mbLstAct = sal_True;
     SwViewShell *pSh = (SwViewShell*)this->GetNext();
@@ -249,8 +249,8 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     if ( bIsShellForCheckViewLayout )
         GetLayout()->CheckViewLayout( GetViewOptions(), &maVisArea );
 
-    //If we don't call Paints, we wait for the Paint of the system.
-    //Then the clipping is set correctly; e.g. shifting of a Draw object
+    
+    
     if ( Imp()->GetRegion()     ||
          maInvalidRect.HasArea() ||
          bExtraData )
@@ -273,11 +273,11 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 
             SwRegionRects *pRegion = Imp()->GetRegion();
 
-            //JP 27.11.97: what hid the selection, must also Show it,
-            //             else we get Paint errors!
-            // e.g. additional mode, page half visible vertically, in the
-            // middle a selection and with an other cursor jump to left
-            // right border. Without ShowCrsr the selection disappears.
+            
+            
+            
+            
+            
             bool bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->HideCrsrs();
@@ -288,7 +288,7 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 
                 Imp()->pRegion = NULL;
 
-                //First Invert then Compress, never the other way round!
+                
                 pRegion->Invert();
 
                 pRegion->Compress();
@@ -302,7 +302,7 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                     bool bPaint = true;
                     if ( IsEndActionByVirDev() )
                     {
-                        //create virtual device and set.
+                        
                         if ( !pVout )
                             pVout = new VirtualDevice( *GetOut() );
                         MapMode aMapMode( GetOut()->GetMapMode() );
@@ -332,11 +332,11 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                         {
                             bPaint = false;
 
-                            // --> OD 2007-07-26 #i79947#
-                            // #i72754# start Pre/PostPaint encapsulation before mpOut is changed to the buffering VDev
+                            
+                            
                             const Region aRepaintRegion(aRect.SVRect());
                             DLPrePaint2(aRepaintRegion);
-                            // <--
+                            
 
                             OutputDevice  *pOld = GetOut();
                             pVout->SetLineColor( pOld->GetLineColor() );
@@ -354,29 +354,29 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                                               aRect.Pos(), aRect.SSize(), *pVout );
                             mpOut = pOld;
 
-                            // #i72754# end Pre/PostPaint encapsulation when mpOut is back and content is painted
+                            
                             DLPostPaint2(true);
                         }
                     }
                     if ( bPaint )
                     {
-                        // #i75172# begin DrawingLayer paint
-                        // need to do begin/end DrawingLayer preparation for each single rectangle of the
-                        // repaint region. I already tried to prepare only once for the whole Region. This
-                        // seems to work (and does technically) but fails with transparent objects. Since the
-                        // region given to BeginDarwLayers() defines the clip region for DrawingLayer paint,
-                        // transparent objects in the single rectangles will indeed be painted multiple times.
+                        
+                        
+                        
+                        
+                        
+                        
                         DLPrePaint2(Region(aRect.SVRect()));
 
                         if ( bPaintsFromSystem )
                             PaintDesktop( aRect );
                         pCurrentLayout->Paint( aRect );
 
-                        // #i75172# end DrawingLayer paint
+                        
                         DLPostPaint2(true);
                     }
 
-                    lcl_PaintTransparentFormControls(*this, aRect); // i#107365
+                    lcl_PaintTransparentFormControls(*this, aRect); 
                 }
 
                 delete pVout;
@@ -399,10 +399,10 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     SwViewShell::mbLstAct = sal_False;
     Imp()->EndAction();
 
-    //We artificially end the action here to enable the automatic scrollbars
-    //to adjust themselves correctly
-    //EndAction sends a Notify, and that must call Start-/EndAction to
-    //adjust the scrollbars correctly
+    
+    
+    
+    
     --mnStartAction;
     UISizeNotify();
     ++mnStartAction;
@@ -420,7 +420,7 @@ void SwViewShell::ImplStartAction()
 void SwViewShell::ImplLockPaint()
 {
     if ( GetWin() && GetWin()->IsVisible() )
-        GetWin()->EnablePaint( false ); //Also cut off the controls.
+        GetWin()->EnablePaint( false ); 
     Imp()->LockPaint();
 }
 
@@ -431,7 +431,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
     {
         if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() )
         {
-            //Refresh with virtual device to avoid flickering.
+            
             VirtualDevice *pVout = new VirtualDevice( *mpOut );
             pVout->SetMapMode( mpOut->GetMapMode() );
             Size aSize( VisArea().SSize() );
@@ -446,7 +446,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
                 pVout->SetLineColor( mpOut->GetLineColor() );
                 pVout->SetFillColor( mpOut->GetFillColor() );
 
-                // #i72754# start Pre/PostPaint encapsulation before mpOut is changed to the buffering VDev
+                
                 const Region aRepaintRegion(VisArea().SVRect());
                 DLPrePaint2(aRepaintRegion);
 
@@ -457,10 +457,10 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
                 mpOut->DrawOutDev( VisArea().Pos(), aSize,
                                   VisArea().Pos(), aSize, *pVout );
 
-                // #i72754# end Pre/PostPaint encapsulation when mpOut is back and content is painted
+                
                 DLPostPaint2(true);
 
-                lcl_PaintTransparentFormControls(*this, VisArea()); // fdo#63949
+                lcl_PaintTransparentFormControls(*this, VisArea()); 
             }
             else
             {
@@ -540,7 +540,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                //MA: 04. Nov. 94, no one needs this, does one?
+                
                 OSL_ENSURE( !this, "Is MakeVisible still needed for printers?" );
             }
 
@@ -570,8 +570,8 @@ Point SwViewShell::GetPagePos( sal_uInt16 nPageNum ) const
 
 sal_uInt16 SwViewShell::GetNumPages()
 {
-    //It is possible that no layout exists when the method from
-    //root-Ctor is called.
+    
+    
     return GetLayout() ? GetLayout()->GetPageNum() : 0;
 }
 
@@ -608,7 +608,7 @@ void SwViewShell::UpdateFlds(sal_Bool bCloseDB)
 void SwViewShell::UpdateAllCharts()
 {
     SET_CURR_SHELL( this );
-    // Start-/EndAction handled in the SwDoc-Method!
+    
     GetDoc()->UpdateAllCharts();
 }
 
@@ -636,7 +636,7 @@ void SwViewShell::LayoutIdle()
         ( Imp()->HasDrawView() && Imp()->GetDrawView()->IsDragObj() ) )
         return;
 
-    //No idle when printing is going on.
+    
     SwViewShell *pSh = this;
     do
     {   if ( !pSh->GetWin() )
@@ -648,7 +648,7 @@ void SwViewShell::LayoutIdle()
     SET_CURR_SHELL( this );
 
 #ifdef DBG_UTIL
-    // If Test5 has been set, the IdleFormatter is disabled.
+    
     if( mpOpt->IsTest5() )
         return;
 #endif
@@ -656,12 +656,12 @@ void SwViewShell::LayoutIdle()
     {
         DBG_PROFSTART( LayoutIdle );
 
-        //Prepare and recover cache, so that it will not get fouled.
+        
         SwSaveSetLRUOfst aSave( *SwTxtFrm::GetTxtCache(),
                              SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
-        // #125243# there are lots of stacktraces indicating that Imp() returns NULL
-        // this SwViewShell seems to be invalid - but it's not clear why
-        // this return is only a workaround!
+        
+        
+        
         OSL_ENSURE(Imp(), "SwViewShell already deleted?");
         if(!Imp())
             return;
@@ -765,7 +765,7 @@ void SwViewShell::SetUseVirDev( bool bNewVirtual )
     if ( pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        // this sets the flag at the document and calls PrtDataChanged
+        
         IDocumentDeviceAccess* pIDDA = getIDocumentDeviceAccess();
         pIDDA->setReferenceDeviceType( bNewVirtual, true );
     }
@@ -820,7 +820,7 @@ void SwViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
     }
 }
 
-// #i28701#
+
 void SwViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -844,7 +844,7 @@ void SwViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
     }
 }
 
-// #i45491#
+
 void SwViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -861,9 +861,9 @@ void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
 
-    // we go for safe: get rid of the old font information,
-    // when the printer resolution or zoom factor changes.
-    // Init() and Reformat() are the safest locations.
+    
+    
+    
 #ifdef FNTMET
     aFntMetList.Flush();
 #else
@@ -892,11 +892,11 @@ void SwViewShell::CalcLayout()
     SET_CURR_SHELL( this );
     SwWait aWait( *GetDoc()->GetDocShell(), true );
 
-    //prepare and recover cache, so that it will not get fouled.
+    
     SwSaveSetLRUOfst aSaveLRU( *SwTxtFrm::GetTxtCache(),
                                   SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
 
-    //switch on Progress when none is running yet.
+    
     const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == 0;
     if ( bEndProgress )
     {
@@ -914,8 +914,8 @@ void SwViewShell::CalcLayout()
     aAction.Action();
     GetDoc()->UnlockExpFlds();
 
-    //the SetNewFldLst() on the Doc was cut off and must be fetched again
-    //(see flowfrm.cxx, txtfld.cxx)
+    
+    
     if ( aAction.IsExpFlds() )
     {
         aAction.Reset();
@@ -986,13 +986,13 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 #if OSL_DEBUG_LEVEL > 1
     if ( mbInEndAction )
     {
-        //Is someone rescheduling again?
+        
         OSL_ENSURE( !this, "Scrolling during EndAction." );
     }
 #endif
 
-    //First get the old visible page, so we don't have to look
-    //for it afterwards.
+    
+    
     const SwFrm *pOldPage = Imp()->GetFirstVisPage();
 
     const SwRect aPrevArea( VisArea() );
@@ -1000,9 +1000,9 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     maVisArea = rRect;
     SetFirstVisPageInvalid();
 
-    //When there a PaintRegion still exists and the VisArea has changed,
-    //the PaintRegion is at least by now obsolete. The PaintRegion can
-    //have been created by RootFrm::Paint.
+    
+    
+    
     if ( !mbInEndAction &&
          Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
         Imp()->DelRegion();
@@ -1017,16 +1017,16 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         GetWin()->Invalidate();
     else
     {
-        //Calculate amount to be scrolled.
+        
         const long nXDiff = aPrevArea.Left() - VisArea().Left();
         const long nYDiff = aPrevArea.Top()  - VisArea().Top();
 
         if( !nXDiff && !GetViewOptions()->getBrowseMode() &&
             (!Imp()->HasDrawView() || !Imp()->GetDrawView()->IsGridVisible() ) )
         {
-            // If possible, don't scroll the application background
-            // (PaintDesktop).  Also limit the left and right side of
-            // the scroll range to the pages.
+            
+            
+            
             const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
             if ( pPage->Frm().Top() > pOldPage->Frm().Top() )
                 pPage = (SwPageFrm*)pOldPage;
@@ -1047,7 +1047,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                     aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
                 }
 
-                // OD 12.02.2003 #i9719#, #105645# - consider new border and shadow width
+                
                 if ( aPageRect.IsOver( aBoth ) )
                 {
                     SwTwips nPageLeft = 0;
@@ -1064,9 +1064,9 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                         nMinLeft = nPageLeft;
                     if( nPageRight > nMaxRight )
                         nMaxRight = nPageRight;
-                    //match with the draw objects
-                    //take nOfst into account as the objects have been
-                    //selected and have handles attached.
+                    
+                    
+                    
                     if ( pPage->GetSortedObjs() )
                     {
                         const long nOfst = GetOut()->PixelToLogic(
@@ -1075,11 +1075,11 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                               i < pPage->GetSortedObjs()->Count(); ++i )
                         {
                             SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                            // ignore objects that are not actually placed on the page
+                            
                             if (pObj->IsFormatPossible())
                             {
                                 const Rectangle &rBound = pObj->GetObjRect().SVRect();
-                                // OD 03.03.2003 #107927# - use correct datatype
+                                
                                 const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
                                 if ( nL < nMinLeft )
                                     nMinLeft = nL;
@@ -1105,7 +1105,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             else
                 GetWin()->Invalidate( aRect );
         }
-        else if ( !mnLockPaint ) //will be released in Unlock
+        else if ( !mnLockPaint ) 
         {
             if( VisArea().IsOver( aPrevArea ) )
             {
@@ -1132,7 +1132,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     }
     GetWin()->Update();
 
-    if ( pPostItMgr ) // #i88070#
+    if ( pPostItMgr ) 
     {
         pPostItMgr->Rescale();
         pPostItMgr->CalcRects();
@@ -1149,7 +1149,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 {
 #if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
-    // #i98766# - disable smooth scrolling for Mac
+    
 
     const sal_uLong nColCnt = mpOut->GetColorCount();
     long lMult = 1, lMax = LONG_MAX;
@@ -1169,7 +1169,7 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
         lMult = 12;
     }
 
-    // #i75172# isolated static conditions
+    
     const bool bOnlyYScroll(!lXDiff && std::abs(lYDiff) != 0 && std::abs(lYDiff) < lMax);
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
     const bool bSmoothScrollAllowed(bOnlyYScroll && mbEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
@@ -1180,7 +1180,7 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
 
         const SwRect aOldVis( VisArea() );
 
-        //create virtual device and set.
+        
         const Size aPixSz = GetWin()->PixelToLogic(Size(1,1));
         VirtualDevice *pVout = new VirtualDevice( *GetWin() );
         pVout->SetLineColor( GetWin()->GetLineColor() );
@@ -1194,7 +1194,7 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
         {
             mnLockPaint++;
 
-            //First Paint everything in the virtual device.
+            
             SwRect aRect( VisArea() );
             aRect.Height( aSize.Height() );
             if ( pRect )
@@ -1217,33 +1217,33 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
             mpOut = pVout;
 
             {
-                // #i75172# To get a clean repaint, a new ObjectContact is needed here. Without, the
-                // repaint would not be correct since it would use the wrong DrawPage visible region.
-                // This repaint IS about painting something currently outside the visible part (!).
-                // For that purpose, AddWindowToPaintView is used which creates a new SdrPageViewWindow
-                // and all the necessary stuff. It's not cheap, but necessary here. Alone because repaint
-                // target really is NOT the current window.
-                // Also will automatically NOT use PreRendering and overlay (since target is VirtualDevice)
+                
+                
+                
+                
+                
+                
+                
                 if(!HasDrawView())
                     MakeDrawView();
                 SdrView* pDrawView = GetDrawView();
                 pDrawView->AddWindowToPaintView(pVout);
 
-                // clear mpWin during DLPrePaint2 to get paint preparation for mpOut, but set it again
-                // immediately afterwards. There are many decisions in SW which imply that Printing
-                // is used when mpWin == 0 (wrong but widely used).
+                
+                
+                
                 Window* pOldWin = mpWin;
                 mpWin = 0;
                 DLPrePaint2(Region(aRect.SVRect()));
                 mpWin = pOldWin;
 
-                // SW paint stuff
+                
                 PaintDesktop( aRect );
                 SwViewShell::mbLstAct = sal_True;
                 GetLayout()->Paint( aRect );
                 SwViewShell::mbLstAct = sal_False;
 
-                // end paint and destroy ObjectContact again
+                
                 DLPostPaint2(true);
                 pDrawView->DeleteWindowFromPaintView(pVout);
             }
@@ -1251,12 +1251,12 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
             mpOut = pOld;
             maVisArea = aOldVis;
 
-            //Now shift in parts and copy the new Pixel from the virtual device.
+            
 
-            // ??????????????????????
-            // or is it better to get the scrollfactor from the User
-            // as option?
-            // ??????????????????????
+            
+            
+            
+            
             long lMaDelta = aPixSz.Height();
             if ( std::abs(lYDiff) > ( maVisArea.Height() / 3 ) )
                 lMaDelta *= 6;
@@ -1326,33 +1326,33 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
 
                     if(!Imp()->bStopSmooth)
                     {
-                            // start paint on logic base
+                            
                             const Rectangle aTargetLogic(Imp()->aSmoothRect.SVRect());
                             DLPrePaint2(Region(aTargetLogic));
 
-                            // get target rectangle in discrete pixels
+                            
                             OutputDevice& rTargetDevice = mpTargetPaintWindow->GetTargetOutputDevice();
                             const Rectangle aTargetPixel(rTargetDevice.LogicToPixel(aTargetLogic));
 
-                            // get source top-left in discrete pixels
+                            
                             const Point aSourceTopLeft(pVout->LogicToPixel(aTargetLogic.TopLeft()));
 
-                            // switch off MapModes
+                            
                             const bool bMapModeWasEnabledDest(rTargetDevice.IsMapModeEnabled());
                             const bool bMapModeWasEnabledSource(pVout->IsMapModeEnabled());
                             rTargetDevice.EnableMapMode(false);
                             pVout->EnableMapMode(false);
 
                             rTargetDevice.DrawOutDev(
-                                aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
-                                aSourceTopLeft, aTargetPixel.GetSize(), // source
+                                aTargetPixel.TopLeft(), aTargetPixel.GetSize(), 
+                                aSourceTopLeft, aTargetPixel.GetSize(), 
                                 *pVout);
 
-                            // restore MapModes
+                            
                             rTargetDevice.EnableMapMode(bMapModeWasEnabledDest);
                             pVout->EnableMapMode(bMapModeWasEnabledSource);
 
-                            // end paint on logoc base
+                            
                             DLPostPaint2(true);
                     }
                     else
@@ -1382,12 +1382,12 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
 void SwViewShell::PaintDesktop( const SwRect &rRect )
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
-        return;                     //for the printer we don't do anything here.
+        return;                     
 
-    //Catch exceptions, so that it doesn't look so surprising.
-    //Can e.g. happen during Idle.
-    //Unfortunately we must at any rate Paint the rectangles next to the pages,
-    //as these are not painted at VisPortChgd.
+    
+    
+    
+    
     bool bBorderOnly = false;
     const SwRootFrm *pRoot = GetLayout();
     if ( rRect.Top() > pRoot->Frm().Bottom() )
@@ -1403,7 +1403,7 @@ void SwViewShell::PaintDesktop( const SwRect &rRect )
 
     SwRegionRects aRegion( rRect );
 
-    //mod #i6193: remove sidebar area to avoid flickering
+    
     const SwPostItMgr* pPostItMgr = GetPostItMgr();
     const SwTwips nSidebarWidth = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ?
                                   pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() :
@@ -1460,10 +1460,10 @@ void SwViewShell::PaintDesktop( const SwRect &rRect )
         _PaintDesktop( aRegion );
 }
 
-// PaintDesktop is split in two, this part is also used by PreviewPage
+
 void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
-    // OD 2004-04-23 #116347#
+    
     GetOut()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
     GetOut()->SetLineColor();
 
@@ -1471,37 +1471,37 @@ void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     {
         const Rectangle aRectangle(rRegion[i].SVRect());
 
-        // #i93170#
-        // Here we have a real Problem. On the one hand we have the buffering for paint
-        // and overlay which needs an embracing pair of DLPrePaint2/DLPostPaint2 calls,
-        // on the other hand the MapMode is not set correctly when this code is executed.
-        // This is done in the users of this method, for each SWpage before painting it.
-        // Since the MapMode is not correct here, the call to DLPostPaint2 will paint
-        // existing FormControls due to the current MapMode.
+        
+        
+        
+        
+        
+        
+        
         //
-        // There are basically three solutions for this:
+        
         //
-        // (1) Set the MapMode correct, move the background painting to the users of
-        //     this code
+        
+        
         //
-        // (2) Do no DLPrePaint2/DLPostPaint2 here; no SdrObjects are allowed to lie in
-        //     the desktop region. Disadvantage: the desktop will not be part of the
-        //     buffers, e.g. overlay. Thus, as soon as overlay will be used over the
-        //     desktop, it will not work.
+        
+        
+        
+        
         //
-        // (3) expand DLPostPaint2 with a flag to signal if FormControl paints shall
-        //     be done or not
+        
+        
         //
-        // Currently, (3) will be the best possible solution. It will keep overlay and
-        // buffering intact and work without MapMode for single pages. In the medium
-        // to long run, (1) will need to be used and the bool bPaintFormLayer needs
-        // to be removed again
+        
+        
+        
+        
 
-        // #i68597# inform Drawinglayer about display change
+        
         DLPrePaint2(Region(aRectangle));
 
-        // #i75172# needed to move line/Fill color setters into loop since DLPrePaint2
-        // may exchange GetOut(), that's it's purpose. This happens e.g. at print preview.
+        
+        
         GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
         GetOut()->SetLineColor();
         GetOut()->DrawRect(aRectangle);
@@ -1531,19 +1531,19 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
 
     if ( bRet )
     {
-        //Unfortunately Start/EndAction won't help here, as the Paint originated
-        //from GUI and so Clipping has been set against getting through.
-        //Ergo: do it all yourself (see ImplEndAction())
+        
+        
+        
         if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea())
              Imp()->DelRegion();
 
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( sal_False );
-        // We increment the action counter to avoid a recursive call of actions
-        // e.g. from a SwFEShell::RequestObjectResize(..) in bug 95829.
-        // A recursive call of actions is no good idea because the inner action
-        // can't format frames which are locked by the outer action. This may
-        // cause and endless loop.
+        
+        
+        
+        
+        
         ++mnStartAction;
         aAction.Action();
         --mnStartAction;
@@ -1551,7 +1551,7 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         SwRegionRects *pRegion = Imp()->GetRegion();
         if ( pRegion && aAction.IsBrowseActionStop() )
         {
-            //only of interest when something has changed in the visible range
+            
             sal_Bool bStop = sal_True;
             for ( sal_uInt16 i = 0; i < pRegion->size(); ++i )
             {
@@ -1568,7 +1568,7 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
 
         if ( pRegion )
         {
-            //First Invert then Compress, never the other way round!
+            
             pRegion->Invert();
             pRegion->Compress();
             bRet = sal_False;
@@ -1593,9 +1593,9 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
 
                     if ( rRect != VisArea() )
                     {
-                        //rRect == VisArea is the special case for new or
-                        //Shift-Ctrl-R, when it shouldn't be necessary to
-                        //hold the rRect again in Document coordinates.
+                        
+                        
+                        
                         if ( maInvalidRect.IsEmpty() )
                             maInvalidRect = rRect;
                         else
@@ -1634,19 +1634,19 @@ void SwViewShell::Paint(const Rectangle &rRect)
 
     if ( SwRootFrm::IsInPaint() )
     {
-        //During the publication of a page at printing the Paint is buffered.
+        
         SwPaintQueue::Add( this, SwRect( rRect ) );
         return;
     }
 
-    //With !nStartAction I try to protect me against erroneous code at other places.
-    //Hopefully it will not lead to problems!?
+    
+    
     if ( mbPaintWorks && !mnStartAction )
     {
         if( GetWin() && GetWin()->IsVisible() )
         {
             SwRect aRect( rRect );
-            if ( mbPaintInProgress ) //Guard against double Paints!
+            if ( mbPaintInProgress ) 
             {
                 GetWin()->Invalidate( rRect );
                 return;
@@ -1656,17 +1656,17 @@ void SwViewShell::Paint(const Rectangle &rRect)
             SET_CURR_SHELL( this );
             SwRootFrm::SetNoVirDev( sal_True );
 
-            //We don't want to Clip to and fro, we trust that all are limited
-            //to the rectangle and only need to calculate the clipping once.
-            //The ClipRect is removed here once and not recovered, as externally
-            //no one needs it anymore anyway.
-            //Not when we paint a Metafile.
+            
+            
+            
+            
+            
             if( !GetOut()->GetConnectMetaFile() && GetOut()->IsClipRegion())
                 GetOut()->SetClipRegion();
 
             if ( IsPreview() )
             {
-                //When useful, process or destroy the old InvalidRect.
+                
                 if ( aRect.IsInside( maInvalidRect ) )
                     ResetInvalidRect();
                 SwViewShell::mbLstAct = sal_True;
@@ -1675,28 +1675,28 @@ void SwViewShell::Paint(const Rectangle &rRect)
             }
             else
             {
-                //When one of the visible pages still has anything entered for
-                //Repaint, Repaint must be triggered.
+                
+                
                 if ( !CheckInvalidForPaint( aRect ) )
                 {
-                    // --> OD 2009-08-12 #i101192#
-                    // start Pre/PostPaint encapsulation to avoid screen blinking
+                    
+                    
                     const Region aRepaintRegion(aRect.SVRect());
                     DLPrePaint2(aRepaintRegion);
 
-                    // <--
+                    
                     PaintDesktop( aRect );
 
-                    //When useful, process or destroy the old InvalidRect.
+                    
                     if ( aRect.IsInside( maInvalidRect ) )
                         ResetInvalidRect();
                     SwViewShell::mbLstAct = sal_True;
                     GetLayout()->Paint( aRect );
                     SwViewShell::mbLstAct = sal_False;
-                    // --> OD 2009-08-12 #i101192#
-                    // end Pre/PostPaint encapsulation
+                    
+                    
                     DLPostPaint2(true);
-                    // <--
+                    
                 }
             }
             SwRootFrm::SetNoVirDev( sal_False );
@@ -1722,16 +1722,16 @@ void SwViewShell::Paint(const Rectangle &rRect)
                 Imp()->AddPaintRect(*aRectIter);
             }
 
-            //RegionHandle hHdl( aRegion.BeginEnumRects() );
-            //Rectangle aRect;
-            //while ( aRegion.GetEnumRects( hHdl, aRect ) )
-            //  Imp()->AddPaintRect( aRect );
-            //aRegion.EndEnumRects( hHdl );
+            
+            
+            
+            
+            
         }
         else if ( SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) &&
                   GetOut() == GetWin() )
         {
-            // #i68597#
+            
             const Region aDLRegion(rRect);
             DLPrePaint2(aDLRegion);
 
@@ -1740,7 +1740,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
             mpOut->SetLineColor();
             mpOut->DrawRect( rRect );
             mpOut->Pop();
-            // #i68597#
+            
             DLPostPaint2(true);
         }
     }
@@ -1748,37 +1748,37 @@ void SwViewShell::Paint(const Rectangle &rRect)
 
 void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, long tileWidth, long tileHeight)
 {
-    // SwViewShell's output device setup
-    // TODO clean up SwViewShell's approach to output devices (the many of
-    // them - mpBufferedOut, mpOut, mpWin, ..., and get rid of
-    // mbTiledRendering)
+    
+    
+    
+    
     OutputDevice *pSaveOut = mpOut;
     mbTiledRendering = true;
     mpOut = &rDevice;
 
-    // resizes the virtual device so to contain the entrie context
+    
     rDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
 
-    // setup the output device to draw the tile
+    
     MapMode aMapMode(rDevice.GetMapMode());
     aMapMode.SetMapUnit(MAP_TWIP);
     aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
 
-    // Scaling. Must convert from pixels to twips. We know
-    // that VirtualDevises use a DPI of 96.
+    
+    
     Fraction scaleX = Fraction(contextWidth, 96) * Fraction(1440L) / Fraction(tileWidth);
     Fraction scaleY = Fraction(contextHeight, 96) * Fraction(1440L) / Fraction(tileHeight);
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
 
-    // scroll the requested area into view if necessary
+    
     MakeVisible(SwRect(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
 
-    // draw - works in logic coordinates
+    
     Paint(Rectangle(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
 
-    // SwViewShell's output device tear down
+    
     mpOut = pSaveOut;
     mbTiledRendering = false;
 }
@@ -1795,35 +1795,35 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     MLORip tileRipPosY = tileRipPosition.y;
     MLORip tileRipWidth = rileRipSize.width;
     MLORip tileRipHeight = rileRipSize.height;
-    // tilePosX/Y and tileWidth/Height tell the part of the document,
-    // in twip units, to render
+    
+    
     int tilePosX = tileRipPosX;
     int tilePosY = tileRipPosY;
     long tileWidth  = tileRipWidth;
     long tileHeight = tileRipHeight;
-    // Currently we expect that only one document is open, so we are using the
-    // current shell.  Should it turn out that we need to have more documents
-    // open, we need to add a documentHandle that would hold the right
-    // document shell in the iOS / Android impl, and we would get it as a
-    // parameter.
+    
+    
+    
+    
+    
 
     SwWrtShell *pViewShell;
 
-    // FIXME: make sure this is not called before we have a document...
+    
     while (!(pViewShell = GetActiveWrtShell()))
     {
         sleep(1);
     }
 
-    // Creation, use and destruction of a VirtualDevice needs to be
-    // protected by the SolarMutex, it seems.
+    
+    
     Application::AcquireSolarMutex(1);
     if (pViewShell)
     {
         SystemGraphicsData aData;
         aData.rCGContext = (CGContextRef) context;
         VirtualDevice aDevice(&aData, (sal_uInt16)0);
-        // paint to it
+        
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
     }
     Application::ReleaseSolarMutex();
@@ -1840,7 +1840,7 @@ MLODpxSize touch_lo_get_content_size()
 {
 #ifdef IOS
     SwWrtShell *pViewShell;
-    // FIXME: make sure this is not called before we have a document...
+    
     while (!(pViewShell = GetActiveWrtShell()))
     {
         sleep(1);
@@ -1864,7 +1864,7 @@ extern "C"
 MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
 {
 #ifdef IOS
-    //MLODpxSize contentSize = touch_lo_get_content_size();
+    
     MLORip x = MLORipByDpx(mloDpxPoint.x /*- (contentSize.width/2.0f)*/);
     MLORip y = MLORipByDpx(mloDpxPoint.y);
     return MLORipPointByRips(x,y);
@@ -1877,7 +1877,7 @@ MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
 extern "C"
 MLODpxPoint MLODpxPointByRipPoint(MLORipPoint mloRipPoint)
 {
-    //MLODpxSize contentSize = touch_lo_get_content_size();
+    
     MLODpx x = MLODpxByRip(mloRipPoint.x)/* + (contentSize.width/2.0f)*/;
     MLODpx y = MLODpxByRip(mloRipPoint.y);
     return MLODpxPointByDpxes(x,y);
@@ -1922,10 +1922,10 @@ void SwViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
 
     OSL_ENSURE( GetLayout(), "Layout not ready" );
 
-    // When the Layout doesn't have a height yet, nothing is formatted.
-    // That leads to problems with Invalidate, e.g. when setting up an new View
-    // the content is inserted and formatted (regardless of empty VisArea).
-    // Therefore the pages must be roused for formatting.
+    
+    
+    
+    
     if( !GetLayout()->Frm().Height() )
     {
         SwFrm* pPage = GetLayout()->Lower();
@@ -1953,11 +1953,11 @@ void SwViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
         pPg = (SwPageFrm*)pPg->GetNext();
     } while ( pPg );
 
-    // When the size ratios in browse mode change,
-    // the Position and PrtArea of the Cntnt and Tab frames must be Invalidated.
+    
+    
     sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_POS;
-    // In case of browse mode change the CntntFrms need a size-Invalidate
-    // because of printer/screen formatting
+    
+    
     if( bBrowseChgd )
         nInv |= INV_SIZE | INV_DIRECTION;
 
@@ -2024,9 +2024,9 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     ImplApplyViewOptions( rOpt );
 
-    // With one layout per view it is not longer necessary
-    // to sync these "layout related" view options
-    // But as long as we have to disable "multiple layout"
+    
+    
+    
     pSh = (SwViewShell*)this->GetNext();
     while ( pSh != this )
     {
@@ -2042,7 +2042,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
             pSh->ImplApplyViewOptions( aOpt );
         pSh = (SwViewShell*)pSh->GetNext();
     }
-    // End of disabled multiple window
+    
 
     pSh = this;
     do
@@ -2090,13 +2090,13 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         bReformat = GetDoc()->ContainsHiddenChars();
     }
 
-    // bReformat becomes sal_True, if ...
-    // - fieldnames apply or not ...
-    // ( - SwEndPortion must _no_ longer be generated. )
-    // - Of course, the screen is something completely different than the printer ...
+    
+    
+    
+    
     bReformat = bReformat || mpOpt->IsFldName() != rOpt.IsFldName();
 
-    // The map mode is changed, minima/maxima will be attended by UI
+    
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
     {
         MapMode aMode( pMyWin->GetMapMode() );
@@ -2104,8 +2104,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         aMode.SetScaleX( aNewFactor );
         aMode.SetScaleY( aNewFactor );
         pMyWin->SetMapMode( aMode );
-        // if not a reference device (printer) is used for formatting,
-        // but the screen, new formatting is needed for zoomfactor changes.
+        
+        
         if( mpOpt->getBrowseMode() )
             bReformat = sal_True;
     }
@@ -2145,21 +2145,21 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-            // set handle size to 9 pixels, always
+            
             pDView->SetMarkHdlSizePixel(9);
     }
 
     bool bOnlineSpellChgd = mpOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();
 
-    *mpOpt = rOpt;   // First the options are taken.
+    *mpOpt = rOpt;   
     mpOpt->SetUIOptions(rOpt);
 
     mpDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
 
     if( bBrowseModeChanged )
     {
-        // #i44963# Good occasion to check if page sizes in
-        // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+        
+        
         mpDoc->CheckDefaultPageFmt();
         CheckBrowseView( sal_True );
     }
@@ -2167,8 +2167,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     pMyWin->Invalidate();
     if ( bReformat )
     {
-        // Nothing helps, we need to send all CntntFrms a
-        // Prepare, we format anew:
+        
+        
         StartAction();
         Reformat();
         EndAction();
@@ -2192,8 +2192,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 void SwViewShell::SetUIOptions( const SwViewOption &rOpt )
 {
     mpOpt->SetUIOptions(rOpt);
-    //the API-Flag of the view options is set but never reset
-    //it is required to set scroll bars in readonly documents
+    
+    
     if(rOpt.IsStarOneSetting())
         mpOpt->SetStarOneSetting(sal_True);
 
@@ -2202,13 +2202,13 @@ void SwViewShell::SetUIOptions( const SwViewOption &rOpt )
 
 void SwViewShell::SetReadonlyOption(sal_Bool bSet)
 {
-    //JP 01.02.99: at readonly flag query properly
-    //              and if need be format; Bug 61335
+    
+    
 
-    // Are we switching from readonly to edit?
+    
     if( bSet != mpOpt->IsReadonly() )
     {
-        // so that the flags can be queried properly.
+        
         mpOpt->SetReadonly( sal_False );
 
         sal_Bool bReformat = mpOpt->IsFldName();
@@ -2284,7 +2284,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwViewShell::Crea
 {
     uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
-    // We require a layout and an XModel to be accessible.
+    
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
@@ -2300,7 +2300,7 @@ SwViewShell::CreateAccessiblePreview()
     OSL_ENSURE( IsPreview(),
                 "Can't create accessible preview for non-preview SwViewShell" );
 
-    // We require a layout and an XModel to be accessible.
+    
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
@@ -2379,8 +2379,8 @@ void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibili
         mpAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
         mpAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
 
-        // Formular view
-        // Always set this option, not only if document is read-only:
+        
+        
         mpOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
 }
@@ -2420,14 +2420,14 @@ const Size SwViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages )
     return aSize;
 }
 
-// #i12836# enhanced pdf export
+
 sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
 {
     OSL_ENSURE( GetLayout(), "GetPageNumAndSetOffsetForPDF assumes presence of layout" );
 
     sal_Int32 nRet = -1;
 
-    // #i40059# Position out of bounds:
+    
     SwRect aRect( rRect );
     aRect.Pos().X() = std::max( aRect.Left(), GetLayout()->Frm().Left() );
 
@@ -2450,7 +2450,7 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
     return nRet;
 }
 
-// --> PB 2007-05-30 #146850#
+
 const BitmapEx& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
 {
     BitmapEx** ppRet;
@@ -2512,7 +2512,7 @@ IDocumentUndoRedo      & SwViewShell::GetIDocumentUndoRedo()
 IDocumentUndoRedo const& SwViewShell::GetIDocumentUndoRedo() const
 { return mpDoc->GetIDocumentUndoRedo(); }
 
-// --> OD 2007-11-14 #i83479#
+
 const IDocumentListItems* SwViewShell::getIDocumentListItemsAccess() const
 {
     return mpDoc;

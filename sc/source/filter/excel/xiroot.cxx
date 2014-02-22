@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xiroot.hxx"
@@ -37,7 +37,7 @@
 #include "excimp8.hxx"
 #include "documentimport.hxx"
 
-// Global data ================================================================
+
 
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
@@ -52,7 +52,7 @@ XclImpRootData::~XclImpRootData()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
@@ -75,7 +75,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
         mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
         mrImpData.mxValidMgr.reset( new XclImpValidationManager( GetRoot() ) );
-        // TODO still in old RootData (deleted by RootData)
+        
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
         mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
@@ -112,7 +112,7 @@ void XclImpRoot::InitializeTable( SCTAB nScTab )
     GetXFRangeBuffer().Initialize();
     GetPageSettings().Initialize();
     GetTabViewSettings().Initialize();
-    // delete the automatically generated codename
+    
     GetDoc().SetCodeName( nScTab, OUString() );
 }
 
@@ -136,7 +136,7 @@ XclImpFormulaCompiler& XclImpRoot::GetFormulaCompiler() const
 
 ExcelToSc& XclImpRoot::GetOldFmlaConverter() const
 {
-    // TODO still in old RootData
+    
     return *GetOldRoot().pFmlaConverter;
 }
 
@@ -173,13 +173,13 @@ XclImpXFRangeBuffer& XclImpRoot::GetXFRangeBuffer() const
 
 _ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
 {
-    // TODO still in old RootData
+    
     return *GetOldRoot().pPrintRanges;
 }
 
 _ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
 {
-    // TODO still in old RootData
+    
     return *GetOldRoot().pPrintTitles;
 }
 
@@ -224,7 +224,7 @@ XclImpValidationManager& XclImpRoot::GetValidationManager() const
 
 XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
 {
-    // TODO still in old RootData
+    
     OSL_ENSURE( GetOldRoot().pAutoFilterBuffer, "XclImpRoot::GetFilterManager - invalid call, wrong BIFF" );
     return *GetOldRoot().pAutoFilterBuffer;
 }
@@ -302,6 +302,6 @@ ScDocumentImport& XclImpRoot::GetDocImport()
     return *mrImpData.mxDocImport;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

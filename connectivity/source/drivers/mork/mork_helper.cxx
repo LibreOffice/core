@@ -7,7 +7,7 @@ using namespace connectivity::mork;
 bool openAddressBook(const std::string& path)
 {
     MorkParser mork;
-    // Open and parse mork file
+    
     if (!mork.open(path))
     {
         return false;
@@ -17,7 +17,7 @@ bool openAddressBook(const std::string& path)
     MorkTableMap *Tables = mork.getTables( defaultScope );
     if ( Tables )
     {
-        // Iterate all tables
+        
         for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
         {
             if ( 0 == tableIter->first ) continue;

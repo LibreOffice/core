@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/dialogs.hrc>
@@ -42,9 +42,9 @@
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 
-///////////////////////////////////////////////////////////////////////
-// preview control for presentation layout
-///////////////////////////////////////////////////////////////////////
+
+
+
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -88,9 +88,9 @@ public:
 
 }
 
-///////////////////////////////////////////////////////////////////////
-// tab page for slide & header'n'notes
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 namespace sd
 {
@@ -173,7 +173,7 @@ public:
 
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 using namespace ::sd;
 
@@ -201,7 +201,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     }
     else
     {
-        // handout
+        
         pSlide = pDoc->GetSdPage( 0, PK_STANDARD );
         pNotes = pDoc->GetSdPage( 0, PK_NOTES );
         mpCurrentPage = NULL;
@@ -216,7 +216,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
     Size aCtrlSiz = mpTabCtrl->GetOutputSizePixel();
-    // set size on TabControl only if smaller than TabPage
+    
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
     {
         mpTabCtrl->SetOutputSizePixel( aSiz );
@@ -251,7 +251,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     mpNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderFooterDialog::~HeaderFooterDialog()
 {
@@ -259,7 +259,7 @@ HeaderFooterDialog::~HeaderFooterDialog()
     delete mpNotesHandoutsTabPage;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -272,14 +272,14 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, DeactivatePageHdl)
 {
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
 {
@@ -287,7 +287,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
 {
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
 {
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 short HeaderFooterDialog::Execute()
 {
@@ -313,7 +313,7 @@ short HeaderFooterDialog::Execute()
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::ApplyToAll()
 {
@@ -322,7 +322,7 @@ void HeaderFooterDialog::ApplyToAll()
     EndDialog(1);
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::Apply()
 {
@@ -331,14 +331,14 @@ void HeaderFooterDialog::Apply()
     EndDialog(1);
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::Cancel()
 {
     EndDialog();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 {
@@ -349,15 +349,15 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     HeaderFooterSettings aNewSettings;
     bool bNewNotOnTitle;
 
-    // change slide settings first ...
+    
 
     mpSlideTabPage->getData( aNewSettings, bNewNotOnTitle );
 
-    // only if we pressed apply or apply all on the slide tab page or if the slide settings
-    // have been changed
+    
+    
     if( bForceSlides || !(aNewSettings == maSlideSettings) )
     {
-        // apply to all slides
+        
         if( bToAll )
         {
             int nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
@@ -370,7 +370,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         }
         else
         {
-            // apply only to the current slide
+            
             DBG_ASSERT( mpCurrentPage && mpCurrentPage->GetPageKind() == PK_STANDARD, "no current page to apply to!" );
             if( mpCurrentPage && (mpCurrentPage->GetPageKind() == PK_STANDARD) )
             {
@@ -379,10 +379,10 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         }
     }
 
-    // if we don't want to have header&footer on the first slide
+    
     if( bNewNotOnTitle )
     {
-        // just hide them, plain simple UI feature
+        
         HeaderFooterSettings aTempSettings = mpDoc->GetSdPage( 0, PK_STANDARD )->getHeaderFooterSettings();
 
         aTempSettings.mbFooterVisible = false;
@@ -392,15 +392,15 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         change( pUndoGroup, mpDoc->GetSdPage( 0, PK_STANDARD ), aTempSettings );
     }
 
-    // now notes settings
+    
 
     mpNotesHandoutsTabPage->getData( aNewSettings, bNewNotOnTitle );
 
-    // only if we pressed apply or apply all on the notes tab page or if the notes settings
-    // have been changed
+    
+    
     if( !bForceSlides || !(aNewSettings == maNotesHandoutSettings) )
     {
-        // first set to all notes pages
+        
         int nPageCount = mpDoc->GetSdPageCount( PK_NOTES );
         int nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
@@ -410,15 +410,15 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
             change( pUndoGroup, pPage, aNewSettings );
         }
 
-        // and last but not least to the handout page
+        
         change( pUndoGroup, mpDoc->GetMasterSdPage( 0, PK_HANDOUT ), aNewSettings );
     }
 
-    // give the undo group to the undo manager
+    
     mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )
 {
@@ -426,7 +426,7 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
     pPage->setHeaderFooterSettings( rNewSettings );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
@@ -489,13 +489,13 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
 
     FillFormatList(SVXDATEFORMAT_A);
 }
-// -----------------------------------------------------------------------
+
 
 HeaderFooterTabPage::~HeaderFooterTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 {
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::FillFormatList( int eFormat )
 {
@@ -532,7 +532,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNotOnTitle )
 {
@@ -568,7 +568,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
     update();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle )
 {
@@ -591,7 +591,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rNotOnTitle = mpCBNotOnTitle->IsChecked();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::update()
 {
@@ -612,7 +612,7 @@ void HeaderFooterTabPage::update()
     mpCTPreview->update( aSettings );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
 {
@@ -621,13 +621,13 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet )
 {
     if( mbHandoutMode )
     {
-        // if set, set it on all notes master pages
+        
         if( bSet )
         {
             sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
@@ -638,13 +638,13 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             }
         }
 
-        // and set it, or just get it from the handout master page
+        
         GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( 0, PK_HANDOUT ) );
     }
     else
     {
-        // get the language from the first master page
-        // or set it to all master pages
+        
+        
         sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
         sal_uInt16 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
@@ -654,7 +654,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage )
 {
@@ -731,7 +731,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
     : Control(pParent)
@@ -739,7 +739,7 @@ PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makePresLayoutPreview( ::Window *pParent, VclBuilder::stringmap & )
 {
@@ -755,7 +755,7 @@ Size PresLayoutPreview::GetOptimalSize() const
     return LogicToPixel(Size(80, 80), MAP_APPFONT);
 }
 
-// -----------------------------------------------------------------------
+
 
 void PresLayoutPreview::init( SdPage *pMaster )
 {
@@ -769,27 +769,27 @@ void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
 {
-    // get object transformation
+    
     basegfx::B2DHomMatrix aObjectTransform;
     basegfx::B2DPolyPolygon aObjectPolyPolygon;
     pObj->TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon);
 
-    // build complete transformation by adding view transformation from
-    // logic page coordinates to local pixel coordinates
+    
+    
     const double fScaleX((double)maOutRect.getWidth() / (double)maPageSize.Width());
     const double fScaleY((double)maOutRect.getHeight() / (double)maPageSize.Height());
     aObjectTransform.scale(fScaleX, fScaleY);
     aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
-    // create geometry using unit range and object transform
+    
     basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createUnitPolygon());
     aGeometry.transform(aObjectTransform);
 
-    // apply line pattern if wanted
+    
     if(bDotted)
     {
         ::std::vector<double> aPattern;
@@ -802,11 +802,11 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
         aGeometry = aDashed;
     }
 
-    // determine line color
+    
     svtools::ColorConfig aColorConfig;
     svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( bVisible ? svtools::FONTCOLOR : svtools::OBJECTBOUNDARIES ) );
 
-    // paint at OutDev
+    
     aOut.SetLineColor(Color(aColor.nColor));
     aOut.SetFillColor();
 
@@ -816,7 +816,7 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void PresLayoutPreview::Paint( const Rectangle& )
 {
@@ -824,7 +824,7 @@ void PresLayoutPreview::Paint( const Rectangle& )
 
     maOutRect = Rectangle( Point(0,0), GetOutputSize() );
 
-    // calculate page size with correct aspect ratio
+    
     int nWidth, nHeight;
     if( maPageSize.Width() > maPageSize.Height() )
     {
@@ -842,15 +842,15 @@ void PresLayoutPreview::Paint( const Rectangle& )
     maOutRect.Top() += (maOutRect.GetHeight() - nHeight) >> 1;
     maOutRect.Bottom() = maOutRect.Top() + nHeight - 1;
 
-    // draw decoration frame
+    
     DecorationView aDecoView( this );
     maOutRect = aDecoView.DrawFrame( maOutRect, FRAME_HIGHLIGHT_IN );
 
-    // draw page background
+    
     SetFillColor( Color(COL_WHITE) );
     DrawRect( maOutRect );
 
-    // paint presentation objects from masterpage
+    
     SdrTextObj* pMasterTitle = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_TITLE );
     SdrTextObj* pMasterOutline = (SdrTextObj*)mpMaster->GetPresObj( mpMaster->GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
     SdrTextObj* pHeader = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_HEADER );

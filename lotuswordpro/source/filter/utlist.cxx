@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -91,9 +91,9 @@ CUtList::~CUtList()
     pTerminating->SetNext(pTerminating);
 }
 
-// If pCurr is NULL, returns first item in list.  Otherwise, returns item
-// in list after pCurr or NULL if no more items in list.  Terminating item
-// is never returned
+
+
+
 pCUtListElmt
 CUtList::GetNextOrNULL(pCUtListElmt pCurr)
 {
@@ -126,6 +126,6 @@ CUtOwningList::~CUtOwningList()
 {
     Destroy();
 }
-}//end namespace OpenStormBento
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

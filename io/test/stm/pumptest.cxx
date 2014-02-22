@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -67,7 +67,7 @@ public:
     OPumpTest( const Reference< XMultiServiceFactory >  & rFactory );
     ~OPumpTest();
 
-public: // implementation names
+public: 
     static Sequence< OUString >     getSupportedServiceNames_Static(void) throw();
     static OUString                 getImplementationName_Static() throw();
 
@@ -179,7 +179,7 @@ sal_Int32 OPumpTest::test(
 
         if( 5 == hTestHandle )
         {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -223,7 +223,7 @@ Sequence< OUString > OPumpTest::getWarnings(void)                       throw  (
 
 void OPumpTest::testSimple( const Reference < XInterface > &r )
 {
-    // jbu todo: add sensible test
+    
 
 }
 
@@ -245,23 +245,23 @@ public:
     virtual void SAL_CALL disposing( const EventObject &obj  ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_bDisposed = sal_True;
-//         printf( "disposing called\n");
+
     }
 
     virtual void SAL_CALL started(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_bStarted = sal_True;
-//         printf( "started called\n");
+
     }
     virtual void SAL_CALL closed(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_bClosed = sal_True;
-//         printf( "closed called\n");
+
     }
     virtual void SAL_CALL terminated(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_bTerminated = sal_True;
-//         printf( "terminated called\n");
+
     }
     virtual void SAL_CALL error( const ::com::sun::star::uno::Any& aException )
         throw (::com::sun::star::uno::RuntimeException)
@@ -269,7 +269,7 @@ public:
         m_bError = sal_True;
         Exception e;
         aException >>= e;
-//         printf( "error called %s\n", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+
     }
 };
 
@@ -370,10 +370,10 @@ void OPumpTest::testTerminate( const Reference< XInterface > &r )
     mywait();
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
     ERROR_ASSERT( t.m_pTestListener->m_bTerminated , "should be terminiated already" );
-    // terminte leads to an error, that is no surprise, in fact
-    // one can't tell whether the error occurs because of the terminate
-    // call or for some other reason !
-//     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    
+    
+    
+
     ERROR_ASSERT( t.m_pTestListener->m_bClosed, "should be closed already" );
 }
 

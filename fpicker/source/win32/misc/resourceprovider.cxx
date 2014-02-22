@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -29,23 +29,23 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-//------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------
+
+
+
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
 
-//------------------------------------------------------------
-// we have to translate control ids to resource ids
-//------------------------------------------------------------
+
+
+
 
 struct _Entry
 {
@@ -71,9 +71,9 @@ _Entry CtrlIdToResIdTable[] = {
 
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
 {
@@ -91,17 +91,17 @@ sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
     return aResId;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 class CResourceProvider_Impl
 {
 public:
 
-    //-------------------------------------
+    
     //
-    //-------------------------------------
+    
 
     CResourceProvider_Impl( )
     {
@@ -110,18 +110,18 @@ public:
             "fps_office", Application::GetSettings().GetUILanguageTag());
     }
 
-    //-------------------------------------
+    
     //
-    //-------------------------------------
+    
 
     ~CResourceProvider_Impl( )
     {
         delete m_ResMgr;
     }
 
-    //-------------------------------------
+    
     //
-    //-------------------------------------
+    
 
     OUString getResString( sal_Int16 aId )
     {
@@ -131,7 +131,7 @@ public:
         {
             OSL_ASSERT( m_ResMgr );
 
-            // translate the control id to a resource id
+            
             sal_Int16 aResId = CtrlIdToResId( aId );
 
             if ( aResId > -1 )
@@ -148,27 +148,27 @@ public:
     SimpleResMgr* m_ResMgr;
 };
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CResourceProvider::CResourceProvider( ) :
     m_pImpl( new CResourceProvider_Impl() )
 {
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CResourceProvider::~CResourceProvider( )
 {
     delete m_pImpl;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 OUString CResourceProvider::getResString( sal_Int16 aId )
 {

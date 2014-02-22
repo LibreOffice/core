@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -27,7 +27,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// form controls use other property name as the remaining OOo API
+
 #define VBAFONTBASE_PROPNAME( ascii_normal, ascii_control ) \
     mbFormControl ? OUString( ascii_control ) : OUString( ascii_normal )
 
@@ -51,7 +51,7 @@ VbaFontBase::~VbaFontBase()
 void SAL_CALL
 VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    // not supported in form controls
+    
     if( mbFormControl )
         return;
 
@@ -73,7 +73,7 @@ uno::Any SAL_CALL
 VbaFontBase::getSuperscript() throw ( uno::RuntimeException )
 {
     short nValue = NORMAL;
-    // not supported in form controls
+    
     if( !mbFormControl )
        mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
     return uno::makeAny( ( nValue == SUPERSCRIPT ) );
@@ -82,7 +82,7 @@ VbaFontBase::getSuperscript() throw ( uno::RuntimeException )
 void SAL_CALL
 VbaFontBase::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    // not supported in form controls
+    
     if( mbFormControl )
         return;
 
@@ -106,7 +106,7 @@ uno::Any SAL_CALL
 VbaFontBase::getSubscript() throw ( uno::RuntimeException )
 {
     short nValue = NORMAL;
-    // not supported in form controls
+    
     if( !mbFormControl )
        mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
     return uno::makeAny( ( nValue == SUBSCRIPT ) );
@@ -115,7 +115,7 @@ VbaFontBase::getSubscript() throw ( uno::RuntimeException )
 void SAL_CALL
 VbaFontBase::setSize( const uno::Any& aValue ) throw( uno::RuntimeException )
 {
-    // form controls need a sal_Int16 containing points, other APIs need a float
+    
     uno::Any aVal( aValue );
     if( mbFormControl )
     {
@@ -138,11 +138,11 @@ VbaFontBase::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExc
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
 
-    --nIndex; // OOo indices are zero bases
+    --nIndex; 
 
-    // setColor expects colors in XL RGB values
-    // #FIXME this is daft we convert OO RGB val to XL RGB val and
-    // then back again to OO RGB value
+    
+    
+    
     setColor( OORGBToXLRGB(mxPalette->getByIndex( nIndex )) );
 }
 
@@ -161,7 +161,7 @@ VbaFontBase::getColorIndex() throw ( uno::RuntimeException )
         mxPalette->getByIndex( count ) >>= nPaletteColor;
         if ( nPaletteColor == nColor )
         {
-            nIndex = count + 1; // 1 based
+            nIndex = count + 1; 
             break;
         }
     }

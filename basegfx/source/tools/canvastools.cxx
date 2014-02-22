@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -64,7 +64,7 @@ namespace basegfx
                 uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
                 geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
 
-                // fill sequences and imply clodes polygon on this implementation layer
+                
                 for(sal_uInt32 a(0); a < nPointCount; a++)
                 {
                     const basegfx::B2DPoint aStart(rPoly.getB2DPoint(a));
@@ -87,7 +87,7 @@ namespace basegfx
                 uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
                 geometry::RealPoint2D* pOutput = outputSequence.getArray();
 
-                // fill sequence from polygon
+                
                 sal_uInt32 i;
                 for( i=0; i<nNumPoints; ++i )
                 {
@@ -100,8 +100,6 @@ namespace basegfx
                 return outputSequence;
             }
         }
-
-        //---------------------------------------------------------------------------------------
 
         uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
         {
@@ -119,8 +117,6 @@ namespace basegfx
             return outputSequence;
         }
 
-        //---------------------------------------------------------------------------------------
-
         uno::Sequence< uno::Sequence< geometry::RealPoint2D > > pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly  )
         {
             const sal_uInt32 nNumPolies( rPolyPoly.count() );
@@ -136,8 +132,6 @@ namespace basegfx
 
             return outputSequence;
         }
-
-        //---------------------------------------------------------------------------------------
 
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                                 const ::basegfx::B2DPolygon&                        rPoly    )
@@ -169,8 +163,6 @@ namespace basegfx
 
             return xRes;
         }
-
-        //---------------------------------------------------------------------------------------
 
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                                     const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
@@ -204,8 +196,6 @@ namespace basegfx
             return xRes;
         }
 
-        //---------------------------------------------------------------------------------------
-
         ::basegfx::B2DPolygon polygonFromPoint2DSequence( const uno::Sequence< geometry::RealPoint2D >& points )
         {
             const sal_Int32 nCurrSize( points.getLength() );
@@ -217,8 +207,6 @@ namespace basegfx
 
             return aPoly;
         }
-
-        //---------------------------------------------------------------------------------------
 
         ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
         {
@@ -232,8 +220,6 @@ namespace basegfx
             return aRes;
         }
 
-        //---------------------------------------------------------------------------------------
-
         ::basegfx::B2DPolygon polygonFromBezier2DSequence( const uno::Sequence< geometry::RealBezierSegment2D >& curves )
         {
             const sal_Int32 nSize(curves.getLength());
@@ -241,9 +227,9 @@ namespace basegfx
 
             if(nSize)
             {
-                // prepare start with providing a start point. Use the first point from
-                // the sequence for this
-                const geometry::RealBezierSegment2D& rFirstSegment(curves[0]); // #i79917# first segment, not last
+                
+                
+                const geometry::RealBezierSegment2D& rFirstSegment(curves[0]); 
                 aRetval.append(basegfx::B2DPoint(rFirstSegment.Px, rFirstSegment.Py));
 
                 for(sal_Int32 a(0); a < nSize; a++)
@@ -251,22 +237,20 @@ namespace basegfx
                     const geometry::RealBezierSegment2D& rCurrSegment(curves[a]);
                     const geometry::RealBezierSegment2D& rNextSegment(curves[(a + 1) % nSize]);
 
-                    // append curved edge with the control points and the next point
+                    
                     aRetval.appendBezierSegment(
                         basegfx::B2DPoint(rCurrSegment.C1x, rCurrSegment.C1y),
-                        basegfx::B2DPoint(rCurrSegment.C2x, rCurrSegment.C2y), // #i79917# Argh! An x for an y!!
+                        basegfx::B2DPoint(rCurrSegment.C2x, rCurrSegment.C2y), 
                         basegfx::B2DPoint(rNextSegment.Px, rNextSegment.Py));
                 }
 
-                // rescue the control point and remove the now double-added point
+                
                 aRetval.setPrevControlPoint(0, aRetval.getPrevControlPoint(aRetval.count() - 1));
                 aRetval.remove(aRetval.count() - 1);
             }
 
             return aRetval;
         }
-
-        //---------------------------------------------------------------------------------------
 
         ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >& curves )
         {
@@ -280,8 +264,6 @@ namespace basegfx
             return aRes;
         }
 
-        //---------------------------------------------------------------------------------------
-
         ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
             ::basegfx::unotools::UnoPolyPolygon* pPolyImpl =
@@ -293,8 +275,8 @@ namespace basegfx
             }
             else
             {
-                // not a known implementation object - try data source
-                // interfaces
+                
+                
                 const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
 
                 uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
@@ -315,8 +297,8 @@ namespace basegfx
                         xPoly,
                         uno::UNO_QUERY );
 
-                    // no implementation class and no data provider
-                    // found - contract violation.
+                    
+                    
                     if( !xLinePoly.is() )
                     {
                         throw lang::IllegalArgumentException(
@@ -336,12 +318,10 @@ namespace basegfx
             }
         }
 
-        //---------------------------------------------------------------------------------------
-
         ::basegfx::B2DHomMatrix& homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&        output,
                                                             const geometry::AffineMatrix2D& input )
         {
-            // ensure last row is [0,0,1] (and optimized away)
+            
             output.identity();
 
             output.set(0,0, input.m00);
@@ -411,12 +391,10 @@ namespace basegfx
             return output;
         }
 
-        //---------------------------------------------------------------------------------------
-
         ::basegfx::B2DHomMatrix& homMatrixFromMatrix( ::basegfx::B2DHomMatrix&  output,
                                                       const geometry::Matrix2D& input )
         {
-            // ensure last row is [0,0,1] (and optimized away)
+            
             output.identity();
 
             output.set(0,0, input.m00);
@@ -426,8 +404,6 @@ namespace basegfx
 
             return output;
         }
-
-        //---------------------------------------------------------------------------------------
 
         geometry::RealSize2D size2DFromB2DSize( const ::basegfx::B2DVector& rVec )
         {
@@ -533,8 +509,8 @@ namespace basegfx
                                         ceil(rRange.getMaxY()) );
         }
 
-    } // namespace bgfxtools
+    } 
 
-} // namespace canvas
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

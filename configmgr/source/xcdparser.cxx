@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -82,7 +82,7 @@ bool XcdParser::startElement(
                         break;
                     }
                     if (attrNsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                            //TODO: _OOR
+                            
                         attrLn.equals("file"))
                     {
                         attrFile = reader.getAttributeValue(false);
@@ -119,7 +119,7 @@ bool XcdParser::startElement(
             return true;
         }
         state_ = STATE_COMPONENTS;
-        // fall through
+        
     case STATE_COMPONENTS:
         if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals("component-schema"))
@@ -138,8 +138,8 @@ bool XcdParser::startElement(
                 reader, nsId, name, existingDependencies);
         }
         break;
-    default: // STATE_DEPENDENCY
-        assert(false); // this cannot happen
+    default: 
+        assert(false); 
         break;
     }
     throw css::uno::RuntimeException(
@@ -162,7 +162,7 @@ void XcdParser::endElement(xmlreader::XmlReader const & reader) {
         case STATE_COMPONENTS:
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
     }

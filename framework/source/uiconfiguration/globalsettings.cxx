@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "uiconfiguration/globalsettings.hxx"
@@ -34,16 +34,16 @@
 #include <rtl/instance.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace ::com::sun::star;
 
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+
+
+
 
 static const char GLOBALSETTINGS_ROOT_ACCESS[]              = "/org.openoffice.Office.UI.GlobalSettings/Toolbars";
 
@@ -55,11 +55,11 @@ static const char GLOBALSETTINGS_PROPERTY_STATESENABLED[]   = "StatesEnabled";
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  Configuration access class for WindowState supplier implementation
-//*****************************************************************************************************************
 
-class GlobalSettings_Access : private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
+
+
+
+class GlobalSettings_Access : private ThreadHelpBase                         ,  
                               public ::cppu::WeakImplHelper2<
                                   ::com::sun::star::lang::XComponent,
                                   ::com::sun::star::lang::XEventListener>
@@ -68,15 +68,15 @@ class GlobalSettings_Access : private ThreadHelpBase                         ,  
         GlobalSettings_Access( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~GlobalSettings_Access();
 
-        // XComponent
+        
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-        // settings access
+        
         sal_Bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
         sal_Bool GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
 
@@ -95,7 +95,7 @@ class GlobalSettings_Access : private ThreadHelpBase                         ,  
 };
 
 
-//*****************************************************************************************************************
+
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     ThreadHelpBase(),
@@ -114,11 +114,11 @@ GlobalSettings_Access::~GlobalSettings_Access()
 {
 }
 
-// XComponent
+
 void SAL_CALL GlobalSettings_Access::dispose()
 throw ( css::uno::RuntimeException )
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     m_xConfigAccess.clear();
@@ -135,16 +135,16 @@ throw (css::uno::RuntimeException)
 {
 }
 
-// XEventListener
+
 void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
 throw (css::uno::RuntimeException)
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
     m_xConfigAccess.clear();
 }
 
-// settings access
+
 sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElementType )
 {
     ResetableGuard aLock( m_aLock );
@@ -272,9 +272,9 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
     return sal_False;
 }
 
-//*****************************************************************************************************************
-//  global class
-//*****************************************************************************************************************
+
+
+
 
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
 static GlobalSettings_Access* pStaticSettings = 0;
@@ -296,7 +296,7 @@ GlobalSettings::~GlobalSettings()
 {
 }
 
-// settings access
+
 sal_Bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
@@ -317,6 +317,6 @@ sal_Bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eSt
         return sal_False;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/alloca.h>
@@ -45,7 +45,7 @@ namespace cppu
 */
 ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(());
 
-//--------------------------------------------------------------------------------------------------
+
 static inline void checkInterface( Type const & rType )
     SAL_THROW( (RuntimeException) )
 {
@@ -56,17 +56,17 @@ static inline void checkInterface( Type const & rType )
         throw RuntimeException( msg, Reference< XInterface >() );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW(())
 {
     return (*((OUString const *)&pStr) == "com.sun.star.uno.XInterface");
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW(())
 {
     return (((char *)that) + nOffset);
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline bool __td_equals(
     typelib_TypeDescriptionReference const * pTDR1,
     typelib_TypeDescriptionReference const * pTDR2 )
@@ -75,17 +75,17 @@ static inline bool __td_equals(
     return ((pTDR1 == pTDR2) ||
             ((OUString const *)&pTDR1->pTypeName)->equals( *(OUString const *)&pTDR2->pTypeName ));
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline type_entry * __getTypeEntries( class_data * cd )
     SAL_THROW( (RuntimeException) )
 {
     type_entry * pEntries = cd->m_typeEntries;
-    if (! cd->m_storedTypeRefs) // not inited?
+    if (! cd->m_storedTypeRefs) 
     {
         MutexGuard guard( getImplHelperInitMutex() );
-        if (! cd->m_storedTypeRefs) // not inited?
+        if (! cd->m_storedTypeRefs) 
         {
-            // get all types
+            
             for ( sal_Int32 n = cd->m_nTypes; n--; )
             {
                 type_entry * pEntry = &pEntries[ n ];
@@ -98,7 +98,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
                     SAL_WARN( "cppuhelper", msg );
                     throw RuntimeException( msg, Reference< XInterface >() );
                 }
-                // ref is statically held by getCppuType()
+                
                 pEntry->m_type.typeRef = rType.getTypeLibType();
             }
             cd->m_storedTypeRefs = sal_True;
@@ -106,7 +106,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
     }
     return pEntries;
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void __fillTypes( Type * types, class_data * cd )
     SAL_THROW( (RuntimeException) )
 {
@@ -116,25 +116,25 @@ static inline void __fillTypes( Type * types, class_data * cd )
         types[ n ] = pEntries[ n ].m_type.typeRef;
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 namespace {
 
 bool recursivelyFindType(
     typelib_TypeDescriptionReference const * demandedType,
     typelib_InterfaceTypeDescription const * type, sal_IntPtr * offset)
 {
-    // This code assumes that the vtables of a multiple-inheritance class (the
-    // offset amount by which to adjust the this pointer) follow one another in
-    // the object layout, and that they contain slots for the inherited classes
-    // in a specific order.  In theory, that need not hold for any given
-    // platform; in practice, it seems to work well on all supported platforms:
+    
+    
+    
+    
+    
  next:
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
         if (i > 0) {
             *offset += sizeof (void *);
         }
         typelib_InterfaceTypeDescription const * base = type->ppBaseTypes[i];
-        // ignore XInterface:
+        
         if (base->nBaseTypes > 0) {
             if (__td_equals(
                     reinterpret_cast<
@@ -143,8 +143,8 @@ bool recursivelyFindType(
             {
                 return true;
             }
-            // Profiling showed that it is important to speed up the common case
-            // of only one base:
+            
+            
             if (type->nBaseTypes == 1) {
                 type = base;
                 goto next;
@@ -167,7 +167,7 @@ static inline void * __queryDeepNoXInterface(
     sal_Int32 nTypes = cd->m_nTypes;
     sal_Int32 n;
 
-    // try top interfaces without getting td
+    
     for ( n = 0; n < nTypes; ++n )
     {
         if (__td_equals( pEntries[ n ].m_type.typeRef, pDemandedTDR ))
@@ -175,14 +175,14 @@ static inline void * __queryDeepNoXInterface(
             return makeInterface( pEntries[ n ].m_offset, that );
         }
     }
-    // query deep getting td
+    
     for ( n = 0; n < nTypes; ++n )
     {
         typelib_TypeDescription * pTD = 0;
         TYPELIB_DANGER_GET( &pTD, pEntries[ n ].m_type.typeRef );
         if (pTD)
         {
-            // exclude top (already tested) and bottom (XInterface) interface
+            
             OSL_ENSURE(
                 reinterpret_cast< typelib_InterfaceTypeDescription * >(pTD)->
                     nBaseTypes > 0,
@@ -208,8 +208,8 @@ static inline void * __queryDeepNoXInterface(
     return 0;
 }
 
-// ImplHelper
-//==================================================================================================
+
+
 Any SAL_CALL ImplHelper_query(
     Type const & rType, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
@@ -218,10 +218,10 @@ Any SAL_CALL ImplHelper_query(
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     void * p;
-    // shortcut for XInterface
+    
     if (isXInterface( pTDR->pTypeName ))
     {
-        // take first one
+        
         p = makeInterface( cd->m_typeEntries[ 0 ].m_offset, that );
     }
     else
@@ -234,7 +234,7 @@ Any SAL_CALL ImplHelper_query(
     }
     return Any( &p, pTDR );
 }
-//==================================================================================================
+
 Any SAL_CALL ImplHelper_queryNoXInterface(
     Type const & rType, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
@@ -252,7 +252,7 @@ Any SAL_CALL ImplHelper_queryNoXInterface(
         return Any();
     }
 }
-//==================================================================================================
+
 Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId( class_data * cd )
     SAL_THROW( (RuntimeException) )
 {
@@ -273,7 +273,7 @@ Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId( class_data * cd )
     ::rtl_byte_sequence_constructFromArray( &seq, cd->m_id, 16 );
     return Sequence< sal_Int8 >( seq, SAL_NO_ACQUIRE );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL ImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -283,7 +283,7 @@ Sequence< Type > SAL_CALL ImplHelper_getTypes(
     __fillTypes( pTypes, cd );
     return types;
 }
-//==================================================================================================
+
 Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
     class_data * cd, Sequence< Type > const & rAddTypes )
     SAL_THROW( (RuntimeException) )
@@ -293,7 +293,7 @@ Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
     Sequence< Type > types( nImplTypes + nAddTypes );
     Type * pTypes = types.getArray();
     __fillTypes( pTypes, cd );
-    // append base types
+    
     Type const * pAddTypes = rAddTypes.getConstArray();
     while (nAddTypes--)
     {
@@ -302,8 +302,8 @@ Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
     return types;
 }
 
-// WeakImplHelper
-//==================================================================================================
+
+
 Any SAL_CALL WeakImplHelper_query(
     Type const & rType, class_data * cd, void * that, OWeakObject * pBase )
     SAL_THROW( (RuntimeException) )
@@ -311,7 +311,7 @@ Any SAL_CALL WeakImplHelper_query(
     checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
-    // shortcut XInterface to OWeakObject
+    
     if (! isXInterface( pTDR->pTypeName ))
     {
         void * p = __queryDeepNoXInterface( pTDR, cd, that );
@@ -322,7 +322,7 @@ Any SAL_CALL WeakImplHelper_query(
     }
     return pBase->OWeakObject::queryInterface( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -335,8 +335,8 @@ Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
     return types;
 }
 
-// WeakAggImplHelper
-//==================================================================================================
+
+
 Any SAL_CALL WeakAggImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, OWeakAggObject * pBase )
     SAL_THROW( (RuntimeException) )
@@ -344,7 +344,7 @@ Any SAL_CALL WeakAggImplHelper_queryAgg(
     checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
-    // shortcut XInterface to OWeakAggObject
+    
     if (! isXInterface( pTDR->pTypeName ))
     {
         void * p = __queryDeepNoXInterface( pTDR, cd, that );
@@ -355,7 +355,7 @@ Any SAL_CALL WeakAggImplHelper_queryAgg(
     }
     return pBase->OWeakAggObject::queryAggregation( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -369,8 +369,8 @@ Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
     return types;
 }
 
-// WeakComponentImplHelper
-//==================================================================================================
+
+
 Any SAL_CALL WeakComponentImplHelper_query(
     Type const & rType, class_data * cd, void * that, WeakComponentImplHelperBase * pBase )
     SAL_THROW( (RuntimeException) )
@@ -378,7 +378,7 @@ Any SAL_CALL WeakComponentImplHelper_query(
     checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
-    // shortcut XInterface to WeakComponentImplHelperBase
+    
     if (! isXInterface( pTDR->pTypeName ))
     {
         void * p = __queryDeepNoXInterface( pTDR, cd, that );
@@ -389,7 +389,7 @@ Any SAL_CALL WeakComponentImplHelper_query(
     }
     return pBase->WeakComponentImplHelperBase::queryInterface( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )
@@ -403,8 +403,8 @@ Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
     return types;
 }
 
-// WeakAggComponentImplHelper
-//==================================================================================================
+
+
 Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, WeakAggComponentImplHelperBase * pBase )
     SAL_THROW( (RuntimeException) )
@@ -412,7 +412,7 @@ Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
-    // shortcut XInterface to WeakAggComponentImplHelperBase
+    
     if (! isXInterface( pTDR->pTypeName ))
     {
         void * p = __queryDeepNoXInterface( pTDR, cd, that );
@@ -423,7 +423,7 @@ Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     }
     return pBase->WeakAggComponentImplHelperBase::queryAggregation( rType );
 }
-//==================================================================================================
+
 Sequence< Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (RuntimeException) )

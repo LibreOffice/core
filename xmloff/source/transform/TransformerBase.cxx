@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ref.hxx>
@@ -67,7 +67,7 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
     }
     return bResult;
 }
-} // anonymous namespace
+} 
 
 XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
     const OUString& rLocalName, const OUString& rQName )
@@ -172,7 +172,7 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
         }
     }
 
-    // default is copying
+    
     return new XMLTransformerContext( *this, rQName );
 }
 
@@ -229,8 +229,8 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     bool bRect = rName == "presentation:show-shape";
     (void)bRect;
 
-    // Process namespace attributes. This must happen before creating the
-    // context, because namespace decaration apply to the element name itself.
+    
+    
     XMLMutableAttributeList *pMutableAttrList = 0;
     Reference< XAttributeList > xAttrList( rAttrList );
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -251,17 +251,17 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
             OUString aPrefix( ( rAttrName.getLength() == 5 )
                                  ? OUString()
                                  : rAttrName.copy( 6 ) );
-            // Add namespace, but only if it is known.
+            
             sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
-            // If namespace is unknown, try to match a name with similar
-            // TC Id an version
+            
+            
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
                 OUString aTestName( rAttrValue );
                 if( SvXMLNamespaceMap::NormalizeOasisURN( aTestName ) )
                     nKey = m_pNamespaceMap->AddIfKnown( aPrefix, aTestName );
             }
-            // If that namespace is not known, too, add it as unknown
+            
             if( XML_NAMESPACE_UNKNOWN == nKey  )
                 nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
 
@@ -279,13 +279,13 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
         }
     }
 
-    // Get element's namespace and local name.
+    
     OUString aLocalName;
     sal_uInt16 nPrefix =
         m_pNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
 
-    // If there are contexts already, call a CreateChildContext at the topmost
-    // context. Otherwise, create a default context.
+    
+    
     ::rtl::Reference < XMLTransformerContext > xContext;
     if( !m_pContexts->empty() )
     {
@@ -303,14 +303,14 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     if( !xContext.is() )
         xContext = new XMLTransformerContext( *this, rName );
 
-    // Remember old namespace map.
+    
     if( pRewindMap )
         xContext->SetRewindMap( pRewindMap );
 
-    // Push context on stack.
+    
     m_pContexts->push_back( xContext );
 
-    // Call a startElement at the new context.
+    
     xContext->StartElement( xAttrList );
 }
 
@@ -323,7 +323,7 @@ rName
 {
     if( !m_pContexts->empty() )
     {
-        // Get topmost context
+        
         ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts->back();
 
 #if OSL_DEBUG_LEVEL > 0
@@ -331,19 +331,19 @@ rName
                 "XMLTransformerBase::endElement: popped context has wrong lname" );
 #endif
 
-        // Call a EndElement at the current context.
+        
         xContext->EndElement();
 
-        // and remove it from the stack.
+        
         m_pContexts->pop_back();
 
-        // Get a namespace map to rewind.
+        
         SvXMLNamespaceMap *pRewindMap = xContext->GetRewindMap();
 
-        // Delete the current context.
+        
         xContext = 0;
 
-        // Rewind a namespace map.
+        
         if( pRewindMap )
         {
             delete m_pNamespaceMap;
@@ -380,7 +380,7 @@ void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator 
     m_xLocator = rLocator;
 }
 
-// XExtendedDocumentHandler
+
 void SAL_CALL XMLTransformerBase::startCDATA( void ) throw(SAXException, RuntimeException)
 {
     if( m_xExtHandler.is() )
@@ -414,7 +414,7 @@ void SAL_CALL XMLTransformerBase::unknown( const OUString& rString )
         m_xExtHandler->unknown( rString );
 }
 
-// XInitialize
+
 void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments )
     throw(Exception, RuntimeException)
 {
@@ -423,21 +423,21 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
-        // use isAssignableFrom instead of comparing the types to
-        // allow XExtendedDocumentHandler instead of XDocumentHandler (used in
-        // writeOasis2OOoLibraryElement in sfx2).
-        // The Any shift operator can't be used to query the type because it
-        // uses queryInterface, and the model also has a XPropertySet interface.
+        
+        
+        
+        
+        
 
-        // document handler
+        
         if( ::getCppuType( (const Reference< XDocumentHandler >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
             m_xHandler.set( *pAny, UNO_QUERY );
 
-        // property set to transport data across
+        
         if( ::getCppuType( (const Reference< XPropertySet >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
             m_xPropSet.set( *pAny, UNO_QUERY );
 
-        // xmodel
+        
         if( ::getCppuType( (const Reference< ::com::sun::star::frame::XModel >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
             mxModel.set( *pAny, UNO_QUERY );
     }
@@ -464,10 +464,10 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         {
             m_aExtPathPrefix = "../";
 
-            // If there is a rel path within a package, then append
-            // additional '../'. If the rel path contains an ':', then it is
-            // an absolute URI (or invalid URI, because zip files don't
-            // permit ':'), and it will be ignored.
+            
+            
+            
+            
             if( !sRelPath.isEmpty() )
             {
                 sal_Int32 nColPos = sRelPath.indexOf( ':' );
@@ -587,13 +587,13 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         {
                             sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue);
 
-                            // convert twips value to inch
+                            
                             sal_Int32 nMeasure;
                             if (::sax::Converter::convertMeasure(nMeasure,
                                     aAttrValue, util::MeasureUnit::MM_100TH))
                             {
 
-                                // #i13778#,#i36248# apply correct twip-to-1/100mm
+                                
                                 nMeasure = (sal_Int32)( nMeasure >= 0
                                                         ? ((nMeasure*127+36)/72)
                                                         : ((nMeasure*127-36)/72) );
@@ -750,13 +750,13 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         {
                             sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue);
 
-                            // convert inch value to twips and export as faked inch
+                            
                             sal_Int32 nMeasure;
                             if (::sax::Converter::convertMeasure(nMeasure,
                                     aAttrValue, util::MeasureUnit::MM_100TH))
                             {
 
-                                // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
+                                
                                 nMeasure = (sal_Int32)( nMeasure >= 0
                                                         ? ((nMeasure*72+63)/127)
                                                         : ((nMeasure*72-63)/127) );
@@ -844,11 +844,11 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         pMutableAttrList->SetValueByIndex( i, aBuffer.makeStringAndClear() );
                     }
                     break;
-                // #i50322# - special handling for the
-                // transparency of writer background graphics.
+                
+                
                 case XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY:
                     {
-                        // determine, if it's the transparency of a document style
+                        
                         XMLTransformerContext* pFirstContext = (*m_pContexts)[0].get();
                         OUString aFirstContextLocalName;
                         /* sal_uInt16 nFirstContextPrefix = */
@@ -857,10 +857,10 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         bool bIsDocumentStyle(
                             ::xmloff::token::IsXMLToken( aFirstContextLocalName,
                                                          XML_DOCUMENT_STYLES ) );
-                        // no conversion of transparency value for document
-                        // styles, because former OpenOffice.org version writes
-                        // writes always a transparency value of 100% and doesn't
-                        // read the value. Thus, it's intepreted as 0%
+                        
+                        
+                        
+                        
                         if ( !bIsDocumentStyle )
                         {
                             OUString aAttrValue( rAttrValue );
@@ -1056,18 +1056,18 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
 
                 switch( nType )
                 {
-                case UnicodeType::UPPERCASE_LETTER:     // Lu
-                case UnicodeType::LOWERCASE_LETTER:     // Ll
-                case UnicodeType::TITLECASE_LETTER:     // Lt
-                case UnicodeType::OTHER_LETTER:         // Lo
-                case UnicodeType::LETTER_NUMBER:        // Nl
+                case UnicodeType::UPPERCASE_LETTER:     
+                case UnicodeType::LOWERCASE_LETTER:     
+                case UnicodeType::TITLECASE_LETTER:     
+                case UnicodeType::OTHER_LETTER:         
+                case UnicodeType::LETTER_NUMBER:        
                     bValidChar = sal_True;
                     break;
-                case UnicodeType::NON_SPACING_MARK:     // Ms
-                case UnicodeType::ENCLOSING_MARK:       // Me
-                case UnicodeType::COMBINING_SPACING_MARK:   //Mc
-                case UnicodeType::MODIFIER_LETTER:      // Lm
-                case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                case UnicodeType::NON_SPACING_MARK:     
+                case UnicodeType::ENCLOSING_MARK:       
+                case UnicodeType::COMBINING_SPACING_MARK:   
+                case UnicodeType::MODIFIER_LETTER:      
+                case UnicodeType::DECIMAL_DIGIT_NUMBER: 
                     bValidChar = i > 0;
                     break;
                 }
@@ -1146,7 +1146,7 @@ sal_Bool XMLTransformerBase::DecodeStyleName( OUString& rName )
             }
             else
             {
-                // error
+                
                 bEncoded = sal_False;
                 break;
             }
@@ -1172,7 +1172,7 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rValue.getLength();
 
-    // skip white space
+    
     while( nPos < nLen && ' ' == rValue[nPos] )
         nPos++;
 
@@ -1182,12 +1182,12 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
         nPos++;
     }
 
-    // get number
+    
     while( nPos < nLen &&
            '0' <= rValue[nPos] &&
            '9' >= rValue[nPos] )
     {
-        // TODO: check overflow!
+        
         nVal *= 10;
         nVal += (rValue[nPos] - '0');
         nPos++;
@@ -1201,14 +1201,14 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
                '0' <= rValue[nPos] &&
                '9' >= rValue[nPos] )
         {
-            // TODO: check overflow!
+            
             nDiv *= 10;
             nVal += ( static_cast<double>(rValue[nPos] - '0') / nDiv );
             nPos++;
         }
     }
 
-    // skip white space
+    
     while( nPos < nLen && ' ' == rValue[nPos] )
         nPos++;
 
@@ -1259,8 +1259,8 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
         switch( rURI[0] )
         {
         case '#':
-            // no rel path, but
-            // for package URIs, the '#' has to be removed
+            
+            
             if( bSupportPackage )
             {
                 rURI = rURI.copy( 1 );
@@ -1268,10 +1268,10 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
             }
             break;
         case '/':
-            // no rel path; nothing to do
+            
             break;
         case '.':
-            // a rel path; to keep URI simple, remove './', if there
+            
             bRel = sal_True;
             if( rURI.getLength() > 1 && '/' == rURI[1] )
             {
@@ -1280,7 +1280,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
             }
             break;
         default:
-            // check for a RFC2396 schema
+            
             {
                 bRel = sal_True;
                 sal_Int32 nPos = 1;
@@ -1290,16 +1290,16 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
                     switch( rURI[nPos] )
                     {
                     case '/':
-                        // a relative path segement
-                        nPos = nLen;    // leave loop
+                        
+                        nPos = nLen;    
                         break;
                     case ':':
-                        // a schema
+                        
                         bRel = sal_False;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;    
                         break;
                     default:
-                        // we don't care about any other characters
+                        
                         break;
                     }
                     ++nPos;
@@ -1329,13 +1329,13 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
         switch( rURI[0] )
         {
         case '/':
-            // no rel path; nothing to to
+            
             break;
         case '.':
-            // a rel path
+            
             if( rURI.startsWith( m_aExtPathPrefix ) )
             {
-                // an external URI; remove '../'
+                
                 rURI = rURI.copy( m_aExtPathPrefix.getLength() );
                 bRet = sal_True;
             }
@@ -1345,7 +1345,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
             }
             break;
         default:
-            // check for a RFC2396 schema
+            
             {
                 bPackage = sal_True;
                 sal_Int32 nPos = 1;
@@ -1355,16 +1355,16 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
                     switch( rURI[nPos] )
                     {
                     case '/':
-                        // a relative path segement within the package
-                        nPos = nLen;    // leave loop
+                        
+                        nPos = nLen;    
                         break;
                     case ':':
-                        // a schema
+                        
                         bPackage = sal_False;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;    
                         break;
                     default:
-                        // we don't care about any other characters
+                        
                         break;
                     }
                     ++nPos;
@@ -1397,7 +1397,7 @@ sal_Bool XMLTransformerBase::RenameAttributeValue(
              lcl_ConvertAttr( rOutAttributeValue, nParam3) );
 }
 
-// static
+
 bool XMLTransformerBase::ConvertRNGDateTimeToISO( OUString& rDateTime )
 {
     if( !rDateTime.isEmpty() &&

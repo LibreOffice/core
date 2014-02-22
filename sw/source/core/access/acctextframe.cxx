@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -70,8 +70,8 @@ SwAccessibleTextFrame::~SwAccessibleTextFrame()
 void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // #i73249# - suppress handling of RES_NAME_CHANGED
-    // in case that attribute Title is used as the accessible name.
+    
+    
     if ( nWhich != RES_NAME_CHANGED ||
          msTitle.isEmpty() )
     {
@@ -81,7 +81,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
     switch( nWhich )
     {
-        // #i73249#
+        
         case RES_TITLE_CHANGED:
         {
             const OUString& sOldTitle(
@@ -106,7 +106,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
                 break;
             }
         }
-        // intentionally no break here
+        
         case RES_DESCRIPTION_CHANGED:
         {
             if ( pFlyFrm )
@@ -137,7 +137,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     }
 }
 
-//=====  XInterface  ==========================================================
+
 
 com::sun::star::uno::Any SAL_CALL
     SwAccessibleTextFrame::queryInterface (const com::sun::star::uno::Type & rType)
@@ -169,17 +169,17 @@ void SAL_CALL
 }
 
 //
-//=====  XAccessibleSelection  ============================================
+
 //
 
-//--------------------------------------------------------------------------------
+
 void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )> - missing implementation" );
 }
 
-//----------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
@@ -206,21 +206,21 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nC
     return sal_False;
 }
 
-//---------------------------------------------------------------------
+
 void SAL_CALL SwAccessibleTextFrame::clearAccessibleSelection(  )
     throw ( uno::RuntimeException )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::clearAccessibleSelection(  )> - missing implementation" );
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL SwAccessibleTextFrame::selectAllAccessibleChildren(  )
     throw ( uno::RuntimeException )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAllAccessibleChildren(  )> - missing implementation" );
 }
 
-//----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
     throw ( uno::RuntimeException )
 {
@@ -232,7 +232,7 @@ sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
     return nCount;
 }
 
-//--------------------------------------------------------------------------------------
+
 uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
@@ -251,14 +251,14 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibl
     return uno::Reference<XAccessible>();
 }
 
-//----------------------------------------------------------------------------------
+
 void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAllAccessibleChildren( sal_Int32 )> - missing implementation" );
 }
 
-// #i73249#
+
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {
@@ -318,7 +318,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
     return theSwAccessibleTextFrameImplementationId::get().getSeq();
 }
 
-// XAccessibleRelationSet
+
 
 SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
 {
@@ -347,7 +347,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    // get the frame, and insert prev/next relations into helper
+    
 
     AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
 

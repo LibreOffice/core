@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <mmgreetingspage.hxx>
@@ -128,7 +128,7 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
 
 void    SwGreetingsHandler::UpdatePreview()
 {
-    //the base class does nothing
+    
 }
 
 IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
@@ -155,7 +155,7 @@ IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl)
 
 void SwMailMergeGreetingsPage::UpdatePreview()
 {
-    //find out which type of greeting should be selected:
+    
     bool bFemale = false;
     bool bNoValue = !m_pFemaleColumnLB->IsEnabled();
     if( !bNoValue )
@@ -168,7 +168,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 xColAccess.is() &&
                 xColAccess->hasByName(sFemaleColumn))
         {
-            //get the content and exchange it in the address string
+            
             Any aCol = xColAccess->getByName(sFemaleColumn);
             Reference< sdb::XColumn > xColumn;
             aCol >>= xColumn;
@@ -178,10 +178,10 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 {
                     OUString sFemaleColumnValue = xColumn->getString();
                     bFemale = sFemaleColumnValue == sFemaleValue;
-                    //bNoValue = !sFemaleColumnValue.getLength();
+                    
                     if( !bNoValue )
                     {
-                        //no last name value marks the greeting also als neutral
+                        
                         SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
                         OUString sLastNameColumn = rConfig.GetAssignedColumn(MM_PART_LASTNAME);
                         if ( xColAccess->hasByName(sLastNameColumn) )
@@ -324,7 +324,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
 
-    //try to find the gender setting
+    
     m_aFemaleColumnLB.Clear();
     Reference< sdbcx::XColumnsSupplier > xColsSupp = rConfig.GetColumnsSupplier();
     if(xColsSupp.is())
@@ -396,7 +396,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
 
 IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
 {
-    //if no pButton is given, the first set has to be pre-set
+    
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     if(!pButton)
     {
@@ -494,7 +494,7 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     lcl_FillGreetingsBox(m_aMaleLB, rConfig, SwMailMergeConfigItem::MALE);
     lcl_FillGreetingsBox(m_aNeutralCB, rConfig, SwMailMergeConfigItem::NEUTRAL);
 
-    //try to find the gender setting
+    
     m_aFemaleColumnLB.Clear();
     Reference< sdbcx::XColumnsSupplier > xColsSupp = rConfig.GetColumnsSupplier();
     if(xColsSupp.is())

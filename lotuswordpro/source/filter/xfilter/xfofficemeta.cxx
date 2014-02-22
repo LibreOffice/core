@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -92,42 +92,42 @@ void    XFOfficeMeta::ToXml(IXFStream *pStream)
     pAttrList->Clear();
     pStream->StartElement( A2OUSTR("office:meta") );
 
-    //generator:
+    
     pStream->StartElement( A2OUSTR("meta:generator") );
     pStream->Characters( m_strGenerator );
     pStream->EndElement( A2OUSTR("meta:generator") );
 
-    //title
+    
     pStream->StartElement( A2OUSTR("dc:title") );
     pStream->Characters( m_strTitle );
     pStream->EndElement( A2OUSTR("dc:title") );
 
-    //keywords
+    
     pStream->StartElement( A2OUSTR("meta:keywords") );
     pStream->StartElement( A2OUSTR("meta:keyword") );
     pStream->Characters( m_strKeywords );
     pStream->EndElement( A2OUSTR("meta:keyword") );
     pStream->EndElement( A2OUSTR("meta:keywords") );
 
-    //creation time
+    
     pStream->StartElement( A2OUSTR("meta:creation-date") );
     pStream->Characters( m_strCrtime);
     pStream->EndElement( A2OUSTR("meta:creation-date") );
 
-    //last revision time
+    
     pStream->StartElement( A2OUSTR("dc:date") );
     pStream->Characters( m_strLstime);
     pStream->EndElement( A2OUSTR("dc:date") );
-    //total edit time
+    
     pStream->StartElement( A2OUSTR("meta:editing-duration") );
     pStream->Characters( m_strEdtime);
     pStream->EndElement( A2OUSTR("meta:editing-duration") );
 
-    //description
+    
     pStream->StartElement( A2OUSTR("dc:description") );
     pStream->Characters( m_strDsr );
     pStream->EndElement( A2OUSTR("dc:description") );
-    //creator
+    
     pStream->StartElement( A2OUSTR("meta:initial-creator") );
     pStream->Characters( m_strCreator );
     pStream->EndElement( A2OUSTR("meta:initial-creator") );

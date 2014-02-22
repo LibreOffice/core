@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,9 +45,9 @@ void CacheItem::update(const CacheItem& rUpdateItem)
     {
         iterator pItThis = this->find(pItUpdate->first);
         if (pItThis == this->end())
-            (*this)[pItUpdate->first] = pItUpdate->second; // add new prop
+            (*this)[pItUpdate->first] = pItUpdate->second; 
         else
-            pItThis->second = pItUpdate->second; // change value of existing prop
+            pItThis->second = pItUpdate->second; 
     }
 }
 
@@ -58,7 +58,7 @@ void CacheItem::validateUINames(const OUString& sActLocale)
     if (sActLocale.isEmpty())
         return;
 
-    // 1) check UINames first
+    
     const_iterator pUINames = find(PROPNAME_UINAMES);
     const_iterator pUIName  = find(PROPNAME_UINAME );
 
@@ -72,12 +72,12 @@ void CacheItem::validateUINames(const OUString& sActLocale)
 
     if (!sUIName.isEmpty())
     {
-        // 1a) set UIName inside list of UINames for current locale
+        
         lUINames[sActLocale] <<= sUIName;
     }
     else if (lUINames.size()>0)
     {
-        // 1b) or get it from this list, if it not exist!
+        
         lUINames[sActLocale] >>= sUIName;
     }
 
@@ -131,7 +131,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
     css::uno::TypeClass aTypeClass = aT1.getTypeClass();
     switch(aTypeClass)
     {
-        //---------------------------------------
+        
         case css::uno::TypeClass_BOOLEAN :
         case css::uno::TypeClass_BYTE :
         case css::uno::TypeClass_SHORT :
@@ -148,7 +148,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
             return bIs;
         }
 
-        //---------------------------------------
+        
         case css::uno::TypeClass_STRING :
         {
             OUString v1;
@@ -166,7 +166,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         }
         break;
 
-        //---------------------------------------
+        
         case css::uno::TypeClass_ANY :
         {
             css::uno::Any v1;
@@ -184,7 +184,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         }
         break;
 
-        //---------------------------------------
+        
         case css::uno::TypeClass_STRUCT :
         {
             css::beans::PropertyValue p1;
@@ -221,7 +221,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         }
         break;
 
-        //---------------------------------------
+        
         case css::uno::TypeClass_SEQUENCE :
         {
             css::uno::Sequence< OUString > uno_s1;
@@ -330,7 +330,7 @@ sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
                         pIt != lProps.end()  ;
                       ++pIt                  )
     {
-        // i) one required property does not exist at this item => return false
+        
         const_iterator pItThis = this->find(pIt->first);
         if (pItThis == this->end())
         {
@@ -338,7 +338,7 @@ sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
             return sal_False;
         }
 
-        // ii) one item does not have the right value => return false
+        
         if (!isSubSet(pIt->second, pItThis->second))
         {
             _FILTER_CONFIG_LOG_1_("CacheItem::haveProps() ... item \"%s\" has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
@@ -346,9 +346,9 @@ sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
         }
     }
 
-    // this method was not breaked before =>
-    // the given property set seems to match with our
-    // own properties in its minimum => return TRUE
+    
+    
+    
     _FILTER_CONFIG_LOG_("CacheItem::haveProps() ... => return TRUE\n")
     return sal_True;
 }
@@ -361,10 +361,10 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
                         pIt != lProps.end()  ;
                       ++pIt                  )
     {
-        // i) one item does not exists in general
-        //    => continue with next one, because
-        //    "excluding" means ... "dont have it".
-        //    And "not exists" match to "dont have it".
+        
+        
+        
+        
         const_iterator pItThis = this->find(pIt->first);
         if (pItThis == this->end())
         {
@@ -372,9 +372,9 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
             continue;
         }
 
-        // ii) one item have the right value => return false
-        //     because this item has the requested property ...
-        //     But we checked for "dont have it" here.
+        
+        
+        
         if (isSubSet(pIt->second, pItThis->second))
         {
             _FILTER_CONFIG_LOG_1_("CacheItem::dontHaveProps() ... item \"%s\" has same value => return FALSE!\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
@@ -382,9 +382,9 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         }
     }
 
-    // this method was not breaked before =>
-    // That means: this item has no matching property
-    // of the given set. It "dont have" it ... => return true.
+    
+    
+    
     _FILTER_CONFIG_LOG_("CacheItem::dontHaveProps() ... => return TRUE\n")
     return sal_True;
 }
@@ -392,7 +392,7 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
 FlatDetectionInfo::FlatDetectionInfo() :
     bMatchByExtension(false), bMatchByPattern(false), bPreselectedByDocumentService(false) {}
 
-    } // namespace config
-} // namespace filter
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleDocumentViewBase.hxx"
@@ -56,7 +56,7 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
+
 AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     ::sd::Window* pSdWindow,
     ::sd::ViewShell* pViewShell,
@@ -76,7 +76,7 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     if (mxController.is())
         mxModel = mxController->getModel();
 
-    // Fill the shape tree info.
+    
     maShapeTreeInfo.SetModelBroadcaster (
         uno::Reference<document::XEventBroadcaster>(
             mxModel, uno::UNO_QUERY));
@@ -94,8 +94,8 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
 
 AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
 {
-    // At this place we should be disposed.  You may want to add a
-    // corresponding assertion into the destructor of a derived class.
+    
+    
 }
 
 
@@ -103,41 +103,41 @@ AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
 
 void AccessibleDocumentViewBase::Init (void)
 {
-    // Finish the initialization of the shape tree info container.
+    
     maShapeTreeInfo.SetDocumentWindow (this);
 
-    // Register as window listener to stay up to date with its size and
-    // position.
+    
+    
     mxWindow->addWindowListener (this);
-    // Register as focus listener to
+    
     mxWindow->addFocusListener (this);
 
-    // Determine the list of shapes on the current page.
+    
     uno::Reference<drawing::XShapes> xShapeList;
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
         xShapeList = uno::Reference<drawing::XShapes> (
             xView->getCurrentPage(), uno::UNO_QUERY);
 
-    // Register this object as dispose event listener at the model.
+    
     if (mxModel.is())
         mxModel->addEventListener (
             static_cast<awt::XWindowListener*>(this));
 
-    // Register as property change listener at the controller.
+    
     uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
     if (xSet.is())
         xSet->addPropertyChangeListener (
             "",
             static_cast<beans::XPropertyChangeListener*>(this));
 
-    // Register this object as dispose event listener at the controller.
+    
     if (mxController.is())
         mxController->addEventListener (
             static_cast<awt::XWindowListener*>(this));
 
-    // Register at VCL Window to be informed of activated and deactivated
-    // OLE objects.
+    
+    
     Window* pWindow = maShapeTreeInfo.GetWindow();
     if (pWindow != NULL)
     {
@@ -173,13 +173,13 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
     if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
     {
         VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-        //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_OBJECT_DYING:
             {
-                // Window is dying.  Unregister from VCL Window.
-                // This is also attempted in the disposing() method.
+                
+                
                 Window* pWindow = maShapeTreeInfo.GetWindow();
                 Window* pDyingWindow = static_cast<Window*>(
                     pWindowEvent->GetWindow());
@@ -193,7 +193,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
 
             case VCLEVENT_WINDOW_SHOW:
             {
-                // A new window has been created.  Is it an OLE object?
+                
                 Window* pChildWindow = static_cast<Window*>(
                     pWindowEvent->GetData());
                 if (pChildWindow!=NULL
@@ -207,8 +207,8 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
 
             case VCLEVENT_WINDOW_HIDE:
             {
-                // A window has been destroyed.  Has that been an OLE
-                // object?
+                
+                
                 Window* pChildWindow = static_cast<Window*>(
                     pWindowEvent->GetData());
                 if (pChildWindow!=NULL
@@ -228,17 +228,17 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
 
 
 
-//=====  IAccessibleViewForwarderListener  ====================================
+
 
 void AccessibleDocumentViewBase::ViewForwarderChanged(ChangeType, const IAccessibleViewForwarder* )
 {
-    // Empty
+    
 }
 
 
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 Reference<XAccessible> SAL_CALL
        AccessibleDocumentViewBase::getAccessibleParent (void)
@@ -283,7 +283,7 @@ Reference<XAccessible> SAL_CALL
 
 
 
-//=====  XAccessibleComponent  ================================================
+
 
 /** Iterate over all children and test whether the specified point lies
     within one of their bounding boxes.  Return the first child for which
@@ -322,8 +322,8 @@ uno::Reference<XAccessible > SAL_CALL
         }
     }
 
-    // Have not found a child under the given point.  Returning empty
-    // reference to indicate this.
+    
+    
     return xChildAtPosition;
 }
 
@@ -336,7 +336,7 @@ awt::Rectangle SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // Transform visible area into screen coordinates.
+    
     ::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
     ::Point aPixelTopLeft (
@@ -347,8 +347,8 @@ awt::Rectangle SAL_CALL
             aVisibleArea.BottomRight())
         - aPixelTopLeft);
 
-    // Prepare to subtract the parent position to transform into relative
-    // coordinates.
+    
+    
     awt::Point aParentPosition;
     Reference<XAccessible> xParent = getAccessibleParent ();
     if (xParent.is())
@@ -400,7 +400,7 @@ awt::Size SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // Transform visible area into screen coordinates.
+    
     ::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
     ::Point aPixelTopLeft (
@@ -417,7 +417,7 @@ awt::Size SAL_CALL
 
 
 
-//=====  XInterface  ==========================================================
+
 
 uno::Any SAL_CALL
     AccessibleDocumentViewBase::queryInterface (const uno::Type & rType)
@@ -462,7 +462,7 @@ void SAL_CALL
 
 
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName (void)
@@ -486,7 +486,7 @@ OUString SAL_CALL
 
 
 
-//=====  XTypeProvider  =======================================================
+
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
     AccessibleDocumentViewBase::getTypes (void)
@@ -494,13 +494,13 @@ OUString SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // Get list of types from the context base implementation, ...
+    
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
-    // ... get list of types from component base implementation, ...
+    
     uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
 
 
-    // ...and add the additional type for the component, ...
+    
     const uno::Type aLangEventListenerType =
          ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
     const uno::Type aPropertyChangeListenerType =
@@ -512,7 +512,7 @@ OUString SAL_CALL
     const uno::Type aEventBroadcaster =
          ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
 
-    // ... and merge them all into one list.
+    
     sal_Int32 nTypeCount (aTypeList.getLength()),
         nComponentTypeCount (aComponentTypeList.getLength()),
         i;
@@ -536,7 +536,7 @@ OUString SAL_CALL
 
 void AccessibleDocumentViewBase::impl_dispose()
 {
-    // Unregister from VCL Window.
+    
     Window* pWindow = maShapeTreeInfo.GetWindow();
     if (maWindowLink.IsSet())
     {
@@ -549,7 +549,7 @@ void AccessibleDocumentViewBase::impl_dispose()
         DBG_ASSERT (pWindow, "AccessibleDocumentViewBase::disposing");
     }
 
-    // Unregister from window.
+    
     if (mxWindow.is())
     {
         mxWindow->removeWindowListener (this);
@@ -557,12 +557,12 @@ void AccessibleDocumentViewBase::impl_dispose()
         mxWindow = NULL;
     }
 
-    // Unregister form the model.
+    
     if (mxModel.is())
         mxModel->removeEventListener (
             static_cast<awt::XWindowListener*>(this));
 
-    // Unregister from the controller.
+    
     if (mxController.is())
     {
         uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
@@ -573,12 +573,12 @@ void AccessibleDocumentViewBase::impl_dispose()
             static_cast<awt::XWindowListener*>(this));
     }
 
-    // Propagate change of controller down the shape tree.
+    
     maShapeTreeInfo.SetControllerBroadcaster (NULL);
 
-    // Reset the model reference.
+    
     mxModel = NULL;
-    // Reset the model reference.
+    
     mxController = NULL;
 
     maShapeTreeInfo.SetDocumentWindow (NULL);
@@ -587,7 +587,7 @@ void AccessibleDocumentViewBase::impl_dispose()
 
 
 
-//=====  XEventListener  ======================================================
+
 
 void SAL_CALL
     AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
@@ -595,12 +595,12 @@ void SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // Register this object as dispose event and document::XEventListener
-    // listener at the model.
+    
+    
 
     if ( ! rEventObject.Source.is())
     {
-        // Paranoia. Can this really happen?
+        
     }
     else if (rEventObject.Source == mxModel || rEventObject.Source == mxController)
     {
@@ -608,18 +608,18 @@ void SAL_CALL
     }
 }
 
-//=====  XPropertyChangeListener  =============================================
+
 
 void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // Empty
+    
 }
 
 
 
 
-//=====  XWindowListener  =====================================================
+
 
 void SAL_CALL
     AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& )
@@ -681,7 +681,7 @@ void SAL_CALL
 
 
 
-//=====  XFocusListener  ==================================================
+
 
 void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::FocusEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
@@ -702,9 +702,9 @@ void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEv
 
 
 
-//=====  protected internal  ==================================================
 
-// This method is called from the component helper base class while disposing.
+
+
 void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 {
     impl_dispose();
@@ -715,7 +715,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 
 
 
-/// Create a name for this view.
+
 OUString
     AccessibleDocumentViewBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -756,7 +756,7 @@ OUString
 
 void AccessibleDocumentViewBase::Activated (void)
 {
-    // Empty.  Overwrite to do something useful.
+    
 }
 
 
@@ -764,7 +764,7 @@ void AccessibleDocumentViewBase::Activated (void)
 
 void AccessibleDocumentViewBase::Deactivated (void)
 {
-    // Empty.  Overwrite to do something useful.
+    
 }
 
 
@@ -773,7 +773,7 @@ void AccessibleDocumentViewBase::Deactivated (void)
 void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     const Reference <XAccessible>& xOLEObject)
 {
-    // Send child event about removed accessible OLE object if necessary.
+    
     if (mxAccessibleOLEObject != xOLEObject)
         if (mxAccessibleOLEObject.is())
             CommitChange (
@@ -781,14 +781,14 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
                 uno::Any(),
                 uno::makeAny (mxAccessibleOLEObject));
 
-    // Assume that the accessible OLE Object disposes itself correctly.
+    
 
     {
         ::osl::MutexGuard aGuard (maMutex);
         mxAccessibleOLEObject = xOLEObject;
     }
 
-    // Send child event about new accessible OLE object if necessary.
+    
     if (mxAccessibleOLEObject.is())
         CommitChange (
             AccessibleEventId::CHILD,
@@ -799,16 +799,16 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
 
 
 
-//=====  methods from AccessibleSelectionBase ==================================================
 
-// return the member maMutex;
+
+
 ::osl::Mutex&
     AccessibleDocumentViewBase::implGetMutex()
 {
     return( maMutex );
 }
 
-// return ourself as context in default case
+
 uno::Reference< XAccessibleContext >
     AccessibleDocumentViewBase::implGetAccessibleContext()
     throw (uno::RuntimeException)
@@ -816,7 +816,7 @@ uno::Reference< XAccessibleContext >
     return( this );
 }
 
-// return sal_False in default case
+
 bool
     AccessibleDocumentViewBase::implIsSelected( sal_Int32 )
     throw (uno::RuntimeException)
@@ -824,7 +824,7 @@ bool
     return( false );
 }
 
-// return nothing in default case
+
 void
     AccessibleDocumentViewBase::implSelect( sal_Int32, sal_Bool )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -845,8 +845,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         ::sd::DrawViewShell* pDrViewSh = (::sd::DrawViewShell*) mpViewShell;
         OUString sDisplay;
         OUString sName = "page-name:";
-        // MT IA2: Not used...
-        // SdPage*  pCurrPge = pDrViewSh->getCurrentPage();
+        
+        
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();
         sDisplay = pDrViewSh->getCurrentPage()->GetName();
         sDisplay = sDisplay.replaceFirst( "\\", "\\\\" );
@@ -922,7 +922,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                         strNote = strNote.replaceFirst( ",", "\\," );
                         strNote = strNote.replaceFirst( ":", "\\:" );
                         sValue += strNote;
-                        sValue += ";";//to divide each paragraph
+                        sValue += ";";
                     }
                 }
             }
@@ -979,6 +979,6 @@ sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
     ::osl::MutexGuard aGuard (maMutex);
     return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "UndoManager.hxx"
@@ -56,7 +56,7 @@ namespace chart
 
     namespace impl
     {
-        //= UndoManager_Impl
+        
         class UndoManager_Impl : public ::framework::IUndoManagerImplementation
         {
         public:
@@ -76,21 +76,21 @@ namespace chart
             {
             }
 
-            // IUndoManagerImplementation
+            
             virtual ::osl::Mutex&               getMutex();
             virtual ::svl::IUndoManager&        getImplUndoManager();
             virtual Reference< XUndoManager >   getThis();
 
-            // attribute access
+            
             ::cppu::OWeakObject&                getParent() { return m_rParent; }
             ::framework::UndoManagerHelper&     getUndoHelper() { return m_aUndoHelper; }
 
-            // public interface
+            
 
-            /// is called when the owner of the UndoManager is being disposed
+            
             void    disposing();
 
-            /// checks whether we're already disposed, throws a DisposedException if so
+            
             void    checkDisposed_lck();
 
         private:
@@ -133,7 +133,7 @@ namespace chart
                 throw DisposedException( OUString(), getThis() );
         }
 
-        //= UndoManagerMethodGuard
+        
         /** guard for public UNO methods of the UndoManager
 
             The only purpose of this guard is to check for the instance being disposed already. Everything else,
@@ -147,17 +147,17 @@ namespace chart
             UndoManagerMethodGuard( UndoManager_Impl& i_impl )
             {
                 ::osl::MutexGuard aGuard( i_impl.getMutex() );
-                // throw if the instance is already disposed
+                
                 i_impl.checkDisposed_lck();
             }
             virtual ~UndoManagerMethodGuard()
             {
             }
 
-            // IMutexGuard
+            
             virtual ::framework::IMutex& getGuardedMutex();
 
-            // IGuard
+            
             virtual void clear();
             virtual void reset();
         };
@@ -178,16 +178,16 @@ namespace chart
 
         void UndoManagerMethodGuard::clear()
         {
-            // nothing to do. This interface implementation is a dummy.
+            
         }
 
         void UndoManagerMethodGuard::reset()
         {
-            // nothing to do. This interface implementation is a dummy.
+            
         }
     }
 
-    //= UndoManager
+    
     using impl::UndoManagerMethodGuard;
 
     UndoManager::UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
@@ -363,6 +363,6 @@ namespace chart
         m_pImpl->getUndoHelper().removeModifyListener( i_listener );
     }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -95,7 +95,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
 
     aOutput.nextColumn();
 
-    // Write column/row labels
+    
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         if (mGroupedBy == BY_COLUMN)
@@ -111,7 +111,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.resetColumn();
     aOutput.push();
 
-    // Write calculation labels
+    
     for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
     {
         OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));

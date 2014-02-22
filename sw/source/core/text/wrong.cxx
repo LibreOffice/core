@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swtypes.hxx"
@@ -48,7 +48,7 @@ SwWrongArea::SwWrongArea( const rtl::OUString& rType,
 
 SwWrongList::SwWrongList( WrongListType eType ) :
     meType       (eType),
-    nBeginInvalid(COMPLETE_STRING),  // everything correct... (the invalid area starts beyond the string)
+    nBeginInvalid(COMPLETE_STRING),  
     nEndInvalid  (COMPLETE_STRING)
 {
     maList.reserve( 5 );
@@ -192,8 +192,8 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
 
     if( nMax > 0 )
     {
-        // For smart tag lists, we may not use a binary search. We return the
-        // position of the first smart tag which coveres nValue
+        
+        
         if ( !maList[0].maType.isEmpty() || maList[0].mpSubList )
         {
             for (std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end()); aIter != aEnd; ++aIter)
@@ -239,9 +239,9 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
         }
     }
 
-    // nMin now points to an index i into the wrong list which
-    // 1. nValue is inside [ Area[i].pos, Area[i].pos + Area[i].len ] (inclusive!!!)
-    // 2. nValue < Area[i].pos
+    
+    
+    
 
     return nMin;
 }
@@ -283,7 +283,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
             if ( nWrPos <= nPos )
             {
                 sal_Int32 nWrLen = Len( nLst - 1 );
-                // calculate new length of word
+                
                 nWrLen = ( nEnd > nWrPos + nWrLen ) ?
                         nPos - nWrPos :
                         nWrLen + nDiff;
@@ -317,8 +317,8 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
             if( nEndInvalid >= nPos )
                 nEndInvalid += nDiff;
         }
-        // If the pointer is in the middle of a wrong word,
-        // invalidation must happen from the beginning of that word.
+        
+        
         if( i < Count() )
         {
             const sal_Int32 nWrPos = Pos( i );
@@ -339,7 +339,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
     }
 }
 
-// TODO: Complete documentation
+
 /** Remove given range of entries
 
    For a given range [nPos, nPos + nLen[ and an index nIndex, this function
@@ -358,7 +358,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
                              sal_Int32 nLen, MSHORT nIndex, sal_Int32 nCursorPos )
 {
-    // length of word must be greater than 0 and cursor position must be outside the word
+    
     bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
 
     sal_Int32 nWrPos = 0;
@@ -525,24 +525,24 @@ void SwWrongList::InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt1
     }
     std::vector<SwWrongArea>::iterator i = maList.begin();
     if ( nWhere >= maList.size() )
-        i = maList.end(); // robust
+        i = maList.end(); 
     else
         i += nWhere;
     maList.insert(i, SwWrongArea( OUString(), 0, nNewPos, nNewLen, pSubList ) );
 }
 
-// New functions: Necessary because SwWrongList has been changed to use std::vector
+
 void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
 {
     std::vector<SwWrongArea>::iterator i = maList.begin();
     if ( nWhere >= maList.size() )
-        i = maList.end(); // robust
+        i = maList.end(); 
     else
         i += nWhere;
-    maList.insert(i, startPos, endPos); // insert [startPos, endPos[ before i
+    maList.insert(i, startPos, endPos); 
 
-    // ownership of the sublist is passed to maList, therefore we have to set the
-    // pSubList-Pointers to 0
+    
+    
     while ( startPos != endPos )
     {
         (*startPos).mpSubList = 0;
@@ -558,7 +558,7 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 
     std::vector<SwWrongArea>::iterator i2 = i1;
     if ( nIdx + nLen >= static_cast<sal_uInt16>(maList.size()) )
-        i2 = maList.end(); // robust
+        i2 = maList.end(); 
     else
         i2 += nLen;
 
@@ -632,7 +632,7 @@ void SwWrongList::Insert( const OUString& rType,
 
         if ( nNewPos < nSTPos )
         {
-            // insert at current position
+            
             break;
         }
         else if ( nNewPos == nSTPos )
@@ -641,7 +641,7 @@ void SwWrongList::Insert( const OUString& rType,
             {
                 if ( nNewLen < (*aIter).mnLen )
                 {
-                    // insert at current position
+                    
                     break;
                 }
                 ++aIter;

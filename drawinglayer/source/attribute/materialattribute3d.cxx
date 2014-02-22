@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -30,11 +30,11 @@ namespace drawinglayer
         class ImpMaterialAttribute3D
         {
         public:
-            // materialAttribute3D definitions
-            basegfx::BColor                         maColor;                // object color
-            basegfx::BColor                         maSpecular;             // material specular color
-            basegfx::BColor                         maEmission;             // material emissive color
-            sal_uInt16                              mnSpecularIntensity;    // material specular intensity [0..128]
+            
+            basegfx::BColor                         maColor;                
+            basegfx::BColor                         maSpecular;             
+            basegfx::BColor                         maEmission;             
+            sal_uInt16                              mnSpecularIntensity;    
 
             ImpMaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity)
             :   maColor(rColor),
@@ -60,7 +60,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const basegfx::BColor& getColor() const { return maColor; }
             const basegfx::BColor& getSpecular() const { return maSpecular; }
             const basegfx::BColor& getEmission() const { return maEmission; }
@@ -141,7 +141,7 @@ namespace drawinglayer
         {
             return mpMaterialAttribute3D->getSpecularIntensity();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

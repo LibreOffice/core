@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dcontact.hxx"
@@ -38,10 +38,10 @@
 #include "porlay.hxx"
 #include "inftxt.hxx"
 
-// OD 2004-05-24 #i28701#
+
 #include <sortedobjs.hxx>
 
-// class SwFlyPortion => we expect a frame-locale SwRect!
+
 
 void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 {
@@ -50,7 +50,7 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
-    // tabs must be expanded (Bug 8537)
+    
     if( rInf.GetLastTab() )
         ((SwLinePortion*)rInf.GetLastTab())->FormatEOL( rInf );
 
@@ -62,12 +62,12 @@ bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         Width(1);
     }
 
-    // resetting
+    
     rInf.SetFly( 0 );
     rInf.Width( rInf.RealWidth() );
     rInf.GetParaPortion()->SetFly( true );
 
-    // trailing blank:
+    
     if( rInf.GetIdx() < rInf.GetTxt().getLength() &&  1 < rInf.GetIdx()
         && !rInf.GetRest()
         && ' ' == rInf.GetChar( rInf.GetIdx() )
@@ -98,12 +98,12 @@ bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 
     if( bFull )
     {
-        // 3924: if the line is full, and the character-bound frame is at
-        //       the beginning of a line
-        // 5157: if it is not possible to side step into a Fly
-        // "Begin of line" criteria ( ! rInf.X() ) has to be extended.
-        // KerningPortions at beginning of line, e.g., for grid layout
-        // must be considered.
+        
+        
+        
+        
+        
+        
         const SwLinePortion* pLastPor = rInf.GetLast();
         const sal_uInt16 nLeft = ( pLastPor &&
                                     ( pLastPor->IsKernPortion() ||
@@ -114,7 +114,7 @@ bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         if( nLeft == rInf.X() && ! rInf.GetFly() )
         {
             Width( rInf.Width() );
-            bFull = false; // so that notes can still be placed in this line
+            bFull = false; 
         }
         else
         {
@@ -134,7 +134,7 @@ bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-//TODO: improve documentation
+
 /** move character-bound objects inside the given area
  *
  * This allows moving those objects from Master to Follow, or vice versa.
@@ -150,9 +150,9 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
     {
         for ( sal_uInt32 i = 0; GetDrawObjs() && i < pObjs->Count(); ++i )
         {
-            // OD 2004-03-29 #i26791#
-            // #i28701# - consider changed type of
-            // <SwSortedList> entries
+            
+            
+            
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
             if (rAnch.GetAnchorId() == FLY_AS_CHAR)
@@ -207,16 +207,16 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         if( !((SwDrawContact*)pContact)->GetAnchorFrm() )
         {
-            // OD 2004-04-01 #i26791# - no direct positioning of the drawing
-            // object is needed.
+            
+            
             SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pContact);
             pDrawContact->ConnectToLayout();
         }
     }
     else
     {
-        // baseline output
-        // 7922: re-paint everything at a CompletePaint call
+        
+        
         SwRect aRepaintRect( rInf.GetPaintRect() );
 
         if ( rInf.GetTxtFrm()->IsRightToLeft() )
@@ -234,7 +234,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( !GetFlyFrm()->IsCompletePaint() )
                 aRect._Intersection( aRepaintRect );
 
-            // GetFlyFrm() may change the layout mode at the output device.
+            
             {
                 SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
                 GetFlyFrm()->Paint( aRect );
@@ -242,8 +242,8 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             ((SwTxtPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
                     rInf.GetOut()->GetLayoutMode() );
 
-            // As the OutputDevice might be anything, the font must be re-selected.
-            // Being in const method should not be a problem.
+            
+            
             ((SwTxtPaintInfo&)rInf).SelectFont();
 
             OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
@@ -254,8 +254,8 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-// use the dimensions of pFly->OutRect()
-// OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
+
+
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwFlyInCntFrm *pFly, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
@@ -273,7 +273,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     SetWhichPor( POR_FLYCNT );
 }
 
-// OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
+
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwDrawContact *pDrawContact, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
@@ -287,10 +287,10 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     OSL_ENSURE( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );
     if( !pDrawContact->GetAnchorFrm() )
     {
-        // OD 2004-04-01 #i26791# - no direct positioning needed any more
+        
         pDrawContact->ConnectToLayout();
-        // #i40333# - follow-up of #i35635#
-        // move object to visible layer
+        
+        
         pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
     }
     nLineLength = 1;
@@ -301,31 +301,31 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     SetWhichPor( POR_FLYCNT );
 }
 
-// after setting the RefPoints, the ascent needs to be recalculated because it is dependent on RelPos.
-// OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
-/// @param rBase CAUTION:needs to be an absolute value
+
+
+
 void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                                long nLnAscent, long nLnDescent,
                                long nFlyAsc, long nFlyDesc,
                                objectpositioning::AsCharFlags nFlags )
 {
-    // OD 28.10.2003 #113049# - use new class to position object
-    // determine drawing object
+    
+    
     SdrObject* pSdrObj = 0L;
     if( bDraw )
     {
-        // OD 20.06.2003 #108784# - determine drawing object ('master' or 'virtual')
-        // by frame.
+        
+        
         pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm );
         if ( !pSdrObj )
         {
             OSL_FAIL( "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
-        // #i65798#
-        // call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
-        // the <DrawFrmFmt> and at the <SwAnchoredDrawObject> instance are
-        // correctly set.
+        
+        
+        
+        
         if ( pSdrObj )
         {
             GetDrawContact()->GetAnchoredObj( pSdrObj )->MakeObjPos();
@@ -339,15 +339,15 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
     if (!pSdrObj)
         return;
 
-    // position object
+    
     objectpositioning::SwAsCharAnchoredObjectPosition aObjPositioning(
                                     *pSdrObj,
                                     rBase, nFlags,
                                     nLnAscent, nLnDescent, nFlyAsc, nFlyDesc );
 
-    // OD 2004-04-13 #i26791# - scope of local variable <aObjPosInProgress>
+    
     {
-        // OD 2004-04-13 #i26791#
+        
         SwObjPositioningInProgress aObjPosInProgress( *pSdrObj );
         aObjPositioning.CalcPosition();
     }
@@ -361,8 +361,8 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         SvLSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     if( Height() )
     {
-        // GetRelPosY returns the relative position to baseline (if 0, the
-        // upper border of the FlyCnt if on the baseline of a line)
+        
+        
         SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {
@@ -386,10 +386,10 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
 sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
     const Point &rPoint, SwPosition *pPos, SwCrsrMoveState* pCMS ) const
 {
-    // Da die FlyCnt nicht an der Seite haengen, wird ihr
-    // GetCrsrOfst() nicht gerufen. Um die Layoutseite
-    // von unnoetiger Verwaltung zu entlasten, ruft der Absatz
-    // das GetCrsrOfst des FlyFrm, wenn es erforderlich ist.
+    
+    
+    
+    
     Point aPoint( rPoint );
     if( !pPos || bDraw || !( GetFlyFrm()->GetCrsrOfst( pPos, aPoint, pCMS ) ) )
         return SwLinePortion::GetCrsrOfst( nOfst );
@@ -399,7 +399,7 @@ sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
 
 sal_Int32 SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
-    // OSL_ENSURE( !this, "SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()" );
+    
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 

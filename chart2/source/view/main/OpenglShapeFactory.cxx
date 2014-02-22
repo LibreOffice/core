@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/unoshape.hxx>
@@ -116,7 +116,7 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
     uno::Reference< drawing::XShapes > xRet( getChartShape( xDrawPage ) );
     if( !xRet.is()  )
     {
-        //create the root shape
+        
         SAL_WARN("chart2.opengl", "getOrCreateChartRootShape");
 
         uno::Reference< drawing::XShape > xTarget (m_xShapeFactory->createInstance(
@@ -137,7 +137,7 @@ void OpenglShapeFactory::setPageSize( uno::Reference < drawing::XShapes > xChart
     xShape->setSize(rSize);
 }
 
-//  methods for 3D shape creation
+
 
 uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCube(
@@ -378,7 +378,7 @@ uno::Reference< drawing::XShape > OpenglShapeFactory::createRectangle(
     dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle(rSize, rPosition,
             rPropNames, rPropValues);
 
-    // TODO : Honor stack position.
+    
     xTarget->add(pRectangle);
     return pRectangle;
 }
@@ -436,8 +436,8 @@ void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape
     pChart->clear();
 }
 
-} //namespace dummy
+} 
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

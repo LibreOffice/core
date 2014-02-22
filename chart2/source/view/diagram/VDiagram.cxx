@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VDiagram.hxx"
@@ -36,9 +36,9 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-// header for class SvxShape
+
 #include <svx/unoshape.hxx>
-// header for class E3dScene
+
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
@@ -128,12 +128,12 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
     m_aCurrentSizeWithoutAxes = rAvailableSize;
     if( m_aPreferredAspectRatio.DirectionX > 0 && m_aPreferredAspectRatio.DirectionY > 0)
     {
-        //do not change aspect ratio
+        
         awt::Size  aAspectRatio( static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME),
                                  static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME ));
         m_aCurrentSizeWithoutAxes = awt::Size( AbstractShapeFactory::calculateNewSizeRespectingAspectRatio(
                         rAvailableSize, aAspectRatio ) );
-        //center diagram position
+        
         m_aCurrentPosWithoutAxes = awt::Point( AbstractShapeFactory::calculateTopLeftPositionToCenterObject(
             rPos, rAvailableSize, m_aCurrentSizeWithoutAxes ) );
 
@@ -154,13 +154,13 @@ void VDiagram::createShapes_2d()
     if (!m_pShapeFactory || !m_xTarget.is() || !m_xShapeFactory.is())
         return;
 
-    //create group shape
+    
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xTarget);
     m_xOuterGroupShape = uno::Reference<drawing::XShape>( xOuterGroup_Shapes, uno::UNO_QUERY );
 
     uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
 
-    //create independent group shape as container for datapoints and such things
+    
     {
         uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
         m_xCoordinateRegionShape = uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
@@ -168,7 +168,7 @@ void VDiagram::createShapes_2d()
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
-    //add back wall
+    
     {
         AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
         m_xWall2D = pShapeFactory->createRectangle(
@@ -188,14 +188,14 @@ void VDiagram::createShapes_2d()
                 }
                 if( !bAddFloorAndWall )
                 {
-                    //we always need this object as dummy object for correct scene dimensions
-                    //but it should not be visible in this case:
+                    
+                    
                     AbstractShapeFactory::makeShapeInvisible( m_xWall2D );
                 }
                 else
                 {
-                    //CID for selection handling
-                    OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
+                    
+                    OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );
                     xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::makeAny( aWallCID ) );
                 }
             }
@@ -207,7 +207,7 @@ void VDiagram::createShapes_2d()
 
     }
 
-    //position and size for diagram
+    
     adjustPosAndSize_2d( m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes );
 }
 
@@ -312,7 +312,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
             double fScaleY = m_aPreferredAspectRatio.DirectionY;
             double fScaleZ = m_aPreferredAspectRatio.DirectionZ;
 
-            //normalize scale factors
+            
             {
                 double fMax = std::max( std::max( fScaleX, fScaleY) , fScaleZ );
                 fScaleX/=fMax;
@@ -322,7 +322,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 
             if( fScaleX<0 || fScaleY<0 || fScaleZ<0 )
             {
-                //calculate automatic 3D aspect ratio that fits good into the given 2D area
+                
                 double fW = rAvailableSize.Width;
                 double fH = rAvailableSize.Height;
 
@@ -333,35 +333,35 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 
                 if(m_bRightAngledAxes)
                 {
-                    //base equations:
-                    //fH*zoomfactor == sx*fScaleZ + fScaleY;
-                    //fW*zoomfactor == sy*fScaleZ + fScaleX;
+                    
+                    
+                    
 
                     if( fScaleX>0 && fScaleZ>0 )
                     {
-                        //calculate fScaleY:
+                        
                         if( !::basegfx::fTools::equalZero(fW) )
                         {
                             fScaleY = (fH/fW)*(sy*fScaleZ+fScaleX)-(sx*fScaleZ);
                             lcl_ensureScaleValue( fScaleY );
                         }
                         else
-                            fScaleY = 1.0;//looking from top or bottom the height is irrelevant
+                            fScaleY = 1.0;
                     }
                     else if( fScaleY>0 && fScaleZ>0 )
                     {
-                        //calculate fScaleX:
+                        
                         if( !::basegfx::fTools::equalZero(fH) )
                         {
                             fScaleX = (fW/fH)*(sx*fScaleZ+fScaleY)-(sy*fScaleZ);
                             lcl_ensureScaleValue(fScaleX);
                         }
                         else
-                            fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
+                            fScaleX = 1.0;
                     }
                     else
                     {
-                        //todo
+                        
                         OSL_FAIL("not implemented yet");
 
                         if( fScaleX<0 )
@@ -374,13 +374,13 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 }
                 else
                 {
-                    //base equations:
-                    //fH*zoomfactor == cz*fScaleY + sz*fScaleX;
-                    //fW*zoomfactor == cz*fScaleX + sz*fScaleY;
-                    //==>  fScaleY*(fH*sz-fW*cz) == fScaleX*(fW*sz-fH*cz);
+                    
+                    
+                    
+                    
                     if( fScaleX>0 && fScaleZ>0 )
                     {
-                        //calculate fScaleY:
+                        
                         double fDivide = fH*sz-fW*cz;
                         if( !::basegfx::fTools::equalZero(fDivide) )
                         {
@@ -388,12 +388,12 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                             lcl_ensureScaleValue(fScaleY);
                         }
                         else
-                            fScaleY = 1.0;//looking from top or bottom the height is irrelevant
+                            fScaleY = 1.0;
 
                     }
                     else if( fScaleY>0 && fScaleZ>0 )
                     {
-                        //calculate fScaleX:
+                        
                         double fDivide = fW*sz-fH*cz;
                         if( !::basegfx::fTools::equalZero(fDivide) )
                         {
@@ -401,11 +401,11 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                             lcl_ensureScaleValue(fScaleX);
                         }
                         else
-                            fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
+                            fScaleX = 1.0;
                     }
                     else
                     {
-                        //todo
+                        
                         OSL_FAIL("not implemented yet");
 
                         if( fScaleX<0 )
@@ -418,7 +418,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 }
             }
 
-            //normalize scale factors
+            
             {
                 double fMax = std::max( std::max( fScaleX, fScaleY) , fScaleZ );
                 fScaleX/=fMax;
@@ -426,7 +426,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 fScaleZ/=fMax;
             }
 
-            // identity matrix
+            
             ::basegfx::B3DHomMatrix aResult;
             aResult.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
                             -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
@@ -436,9 +436,9 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                             FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
                             FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
 
-            // To get the 3D aspect ratio's effect on the 2D scene size, the scene's 2D size needs to be adapted to
-            // 3D content changes here. The tooling class remembers the current 3D transformation stack
-            // and in it's destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
+            
+            
+            
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
 
             m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
@@ -455,12 +455,12 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 {
     adjustAspectRatio3d( rAvailableSize );
 
-    //do not change aspect ratio of 3D scene with 2D bound rect
+    
     m_aCurrentSizeWithoutAxes = AbstractShapeFactory::calculateNewSizeRespectingAspectRatio(
                     rAvailableSize, m_xOuterGroupShape->getSize() );
     m_xOuterGroupShape->setSize( m_aCurrentSizeWithoutAxes );
 
-    //center diagram position
+    
     m_aCurrentPosWithoutAxes= AbstractShapeFactory::calculateTopLeftPositionToCenterObject(
          rPos, rAvailableSize, m_aCurrentSizeWithoutAxes );
     m_xOuterGroupShape->setPosition(m_aCurrentPosWithoutAxes);
@@ -474,14 +474,14 @@ void VDiagram::createShapes_3d()
     if (!m_pShapeFactory || !m_xTarget.is() || !m_xShapeFactory.is())
         return;
 
-    //create shape
+    
     m_xOuterGroupShape = uno::Reference< drawing::XShape >(
             m_pShapeFactory->createGroup3D( m_xTarget, "PlotAreaExcludingAxes" ), uno::UNO_QUERY);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
-    //create additional group to manipulate the aspect ratio of the whole diagram:
+    
     xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, OUString() );
 
     m_xAspectRatio3D = uno::Reference< beans::XPropertySet >( xOuterGroup_Shapes, uno::UNO_QUERY );
@@ -491,13 +491,13 @@ void VDiagram::createShapes_3d()
     const bool bDoubleSided = false;
     const bool bFlatNormals = true;
 
-    //add walls
+    
     {
         uno::Reference< beans::XPropertySet > xWallProp( NULL );
         if( m_xDiagram.is() )
             xWallProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getWall());
 
-        OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
+        OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );
         if( !bAddFloorAndWall )
             aWallCID = OUString();
         uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
@@ -505,7 +505,7 @@ void VDiagram::createShapes_3d()
         CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
 
-        //add left wall
+        
         {
             short nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 3 : 1;
             double xPos = 0.0;
@@ -528,12 +528,12 @@ void VDiagram::createShapes_3d()
                     , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
-                //we always need this object as dummy object for correct scene dimensions
-                //but it should not be visible in this case:
+                
+                
                 AbstractShapeFactory::makeShapeInvisible( xShape );
             }
         }
-        //add back wall
+        
         {
             short nRotatedTexture = 0;
             double zPos = 0.0;
@@ -556,8 +556,8 @@ void VDiagram::createShapes_3d()
                     , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
-                //we always need this object as dummy object for correct scene dimensions
-                //but it should not be visible in this case:
+                
+                
                 AbstractShapeFactory::makeShapeInvisible( xShape );
             }
         }
@@ -568,17 +568,17 @@ void VDiagram::createShapes_3d()
         uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xDestProp( m_xOuterGroupShape, uno::UNO_QUERY_THROW );
 
-        //perspective
+        
         {
-            //ignore distance and focal length from file format and model completely
-            //use vrp only to indicate the distance of the camera and thus influence the perspective
+            
+            
             xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::makeAny(
                                         static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
             xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE));
         }
 
-        //light
+        
         {
             xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE));
@@ -589,11 +589,11 @@ void VDiagram::createShapes_3d()
             lcl_setLightSources( xSourceProp, xDestProp );
         }
 
-        //rotation
+        
         {
-            //set diagrams rotation is set exclusively via the transformation matrix
-            //don't set a camera at all!
-            //the camera's rotation is incorporated into this matrix
+            
+            
+            
 
             ::basegfx::B3DHomMatrix aEffectiveTranformation;
             aEffectiveTranformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);
@@ -603,7 +603,7 @@ void VDiagram::createShapes_3d()
             else
                 aEffectiveTranformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
 
-            //#i98497# 3D charts are rendered with wrong size
+            
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
             xDestProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
                     uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
@@ -614,7 +614,7 @@ void VDiagram::createShapes_3d()
         ASSERT_EXCEPTION( ex );
     }
 
-    //add floor plate
+    
     {
         uno::Reference< beans::XPropertySet > xFloorProp( NULL );
         if( m_xDiagram.is() )
@@ -632,18 +632,18 @@ void VDiagram::createShapes_3d()
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
         {
-            //we always need this object as dummy object for correct scene dimensions
-            //but it should not be visible in this case:
+            
+            
             AbstractShapeFactory::makeShapeInvisible( xShape );
         }
         else
         {
-            OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) );//@todo read CID from model
+            OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) );
             AbstractShapeFactory::setShapeName( xShape, aFloorCID );
         }
     }
 
-    //create an additional scene for the smaller inner coordinate region:
+    
     {
         uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
         m_xCoordinateRegionShape = uno::Reference< drawing::XShape >( xShapes, uno::UNO_QUERY );
@@ -754,6 +754,6 @@ void VDiagram::reduceToMimimumSize()
     return adjustPosAndSize( aNewPos, aNewSize );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

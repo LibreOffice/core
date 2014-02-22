@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ctype.h>
@@ -62,11 +62,11 @@ using namespace ::com::sun::star::util;
 using std::vector;
 using std::lower_bound;
 
-// -------------------------------------------------------------------------
+
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fillColumns" );
-    m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
+    m_bNeedToReadLine = true; 
     m_pFileStream->Seek(0);
     m_aCurrentLine = QuotedTokenizedString();
     bool bRead = true;
@@ -85,7 +85,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     }
     setRowPos(rowNum++, rowPos);
 
-    // read first row
+    
     QuotedTokenizedString aFirstLine;
     if(bRead)
     {
@@ -96,7 +96,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     if ( !bHasHeaderLine || !aHeaderLine.Len())
     {
-        // use first non-empty row as headerline because we need the number of columns
+        
         while(bRead && m_aCurrentLine.Len() == 0)
         {
             bRead = readLine(&rowPos.second, &rowPos.first, false);
@@ -105,7 +105,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         }
         aHeaderLine = m_aCurrentLine;
     }
-    // column count
+    
     const sal_Int32 nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
 
     if(!m_aColumns.is())
@@ -116,7 +116,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
-    // reserve some space
+    
     m_aColumns->get().reserve(nFieldCount+1);
     m_aTypes.assign(nFieldCount+1,DataType::SQLNULL);
     m_aPrecisions.assign(nFieldCount+1,-1);
@@ -124,7 +124,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     const sal_Bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     CharClass aCharClass( pConnection->getDriver()->getComponentContext(), LanguageTag( _aLocale));
-    // read description
+    
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     ::comphelper::UStringMixEqual aCase(bCase);
@@ -136,8 +136,8 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     do
     {
-        sal_Int32 nStartPosHeaderLine = 0; // use for efficient way to get the tokens
-        sal_Int32 nStartPosFirstLine = 0; // use for efficient way to get the tokens
+        sal_Int32 nStartPosHeaderLine = 0; 
+        sal_Int32 nStartPosFirstLine = 0; 
         sal_Int32 nStartPosFirstLine2 = 0;
         for( sal_Int32 i = 0; i < nFieldCount; i++ )
         {
@@ -170,7 +170,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     for( sal_Int32 i = 0; i < nFieldCount; i++ )
     {
-        // check if the columname already exists
+        
         OUString aAlias(aColumnNames[i]);
         OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
@@ -208,7 +208,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
 
         if ( bNumeric )
         {
-            // first without fielddelimiter
+            
             OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
             if (aField.isEmpty() ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
@@ -245,7 +245,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                             ++nSpaceCount;
                             continue;
                         }
-                        // just digits, decimal- and thousands-delimiter?
+                        
                         if ( ( !cDecimalDelimiter  || c != cDecimalDelimiter )  &&
                              ( !cThousandDelimiter || c != cThousandDelimiter ) &&
                             !aCharClass.isDigit(aField2,j)                      &&
@@ -256,24 +256,24 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                         }
                         if (cDecimalDelimiter && c == cDecimalDelimiter)
                         {
-                            io_nPrecisions = 15; // we have an decimal value
+                            io_nPrecisions = 15; 
                             io_nScales = 2;
                             ++nDecimalDelCount;
-                        } // if (cDecimalDelimiter && c == cDecimalDelimiter)
+                        } 
                         if ( c == '.' )
                             ++nDot;
                     }
 
-                    if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
+                    if (nDecimalDelCount > 1 || nDot > 1 ) 
                         bNumeric = sal_False;
                     if (bNumeric && cThousandDelimiter)
                     {
-                        // Is the delimiter correct?
+                        
                         const OUString aValue = aField2.getToken(0,cDecimalDelimiter);
                         for( sal_Int32 j = aValue.getLength() - 4; j >= 0; j -= 4)
                         {
                             const sal_Unicode c = aValue[j];
-                            // just digits, decimal- and thousands-delimiter?
+                            
                             if (c == cThousandDelimiter && j)
                                 continue;
                             else
@@ -284,7 +284,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                         }
                     }
 
-                    // now also check for a date field
+                    
                     if (!bNumeric)
                     {
                         try
@@ -378,7 +378,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                     break;
                 default:
                     io_nType = DataType::VARCHAR;
-                    io_nPrecisions = 0; // nyi: Data can be longer!
+                    io_nPrecisions = 0; 
                     io_nScales = 0;
                     {
                         static const OUString s_sVARCHAR("VARCHAR");
@@ -406,7 +406,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
         }
     }
 }
-// -------------------------------------------------------------------------
+
 OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
                     const OUString& _Name,
                     const OUString& _Type,
@@ -427,7 +427,7 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::OFlatTable" );
 
 }
-// -----------------------------------------------------------------------------
+
 void OFlatTable::construct()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::construct" );
@@ -459,7 +459,7 @@ void OFlatTable::construct()
         sal_Int32 nSize = m_pFileStream->Tell();
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-        // Buffersize is dependent on the file-size
+        
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
                                     nSize > 100000  ? 16384 :
                                     nSize > 10000   ? 4096  : 1024);
@@ -469,7 +469,7 @@ void OFlatTable::construct()
         refreshColumns();
     }
 }
-// -------------------------------------------------------------------------
+
 OUString OFlatTable::getEntry()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getEntry" );
@@ -491,10 +491,10 @@ OUString OFlatTable::getEntry()
             OUString sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
             aURL.SetSmartURL( sUrl );
 
-            // cut the extension
+            
             sExt = aURL.getExtension();
 
-            // name and extension have to coincide
+            
             if ( m_pConnection->matchesExtension( sExt ) )
             {
                 if ( !sExt.isEmpty() )
@@ -507,7 +507,7 @@ OUString OFlatTable::getEntry()
                 }
             }
         }
-        xDir->beforeFirst(); // move back to before first record
+        xDir->beforeFirst(); 
     }
     catch(const Exception&)
     {
@@ -515,7 +515,7 @@ OUString OFlatTable::getEntry()
     }
     return sURL;
 }
-// -------------------------------------------------------------------------
+
 void OFlatTable::refreshColumns()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::refreshColumns" );
@@ -533,7 +533,7 @@ void OFlatTable::refreshColumns()
         m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
 }
 
-// -------------------------------------------------------------------------
+
 void SAL_CALL OFlatTable::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::disposing" );
@@ -541,7 +541,7 @@ void SAL_CALL OFlatTable::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
@@ -564,7 +564,7 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)      ||
@@ -578,7 +578,7 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -594,8 +594,8 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getSomething" );
@@ -603,7 +603,7 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OFlatTable_BASE::getSomething(rId);
 }
-//------------------------------------------------------------------
+
 sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fetchRow" );
@@ -623,13 +623,13 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
             m_bNeedToReadLine = false;
             result = sal_True;
         }
-        // else let run through so that we set _rRow to all NULL
+        
     }
 
     const OFlatConnection * const pConnection = getFlatConnection();
     const sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
-    // Fields:
+    
     sal_Int32 nStartPos = 0;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
@@ -646,7 +646,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
         }
         else
         {
-            // lengths depending on data-type:
+            
             sal_Int32   nLen;
             sal_Int32 nType = 0;
             if(bIsTable)
@@ -701,23 +701,23 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
                                    "FalscherTyp");
 
                         OUStringBuffer aBuf(aStr.getLength());
-                        // convert to Standard-Notation (DecimalPOINT without thousands-comma):
+                        
                         for (sal_Int32 j = 0; j < aStr.getLength(); ++j)
                         {
                             const sal_Unicode cChar = aStr[j];
                             if (cDecimalDelimiter && cChar == cDecimalDelimiter)
                                 aBuf.append('.');
-                            else if ( cChar == '.' ) // special case, if decimal separator isn't '.' we have to put the string after it
+                            else if ( cChar == '.' ) 
                                 continue;
                             else if (cThousandDelimiter && cChar == cThousandDelimiter)
                             {
-                                // leave out
+                                
                             }
                             else
                                 aBuf.append(cChar);
-                        } // for (j = 0; j < aStr.getLength(); ++j)
+                        } 
                         aStrConverted = aBuf.makeStringAndClear();
-                    } // if ( DataType::INTEGER != nType )
+                    } 
                     else
                     {
                         if ( cThousandDelimiter )
@@ -727,7 +727,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
                     }
                     const double nVal = ::rtl::math::stringToDouble(aStrConverted,'.',',',NULL,NULL);
 
-                    // #99178# OJ
+                    
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
                         *(_rRow->get())[i] = OUString::number(nVal);
                     else
@@ -736,24 +736,24 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
 
                 default:
                 {
-                    // Copy Value as String in Row-Variable
+                    
                     *(_rRow->get())[i] = ORowSetValue(aStr);
                 }
                 break;
-            } // switch(nType)
+            } 
             (_rRow->get())[i]->setTypeKind(nType);
         }
     }
     return result;
 }
 
-// -----------------------------------------------------------------------------
+
 void OFlatTable::refreshHeader()
 {
     SAL_INFO( "connectivity.drivers", "flat lionel@mamane.lu OFlatTable::refreshHeader" );
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     template< typename Tp, typename Te> struct RangeBefore
@@ -765,18 +765,18 @@ namespace
         }
     };
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
-    // ----------------------------------------------------------
+    
 
     switch(eCursorPosition)
     {
         case IResultSetHelper::FIRST:
             m_nRowPos = 0;
-            // run through
+            
         case IResultSetHelper::NEXT:
             {
                 assert(m_nRowPos >= 0);
@@ -793,9 +793,9 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 {
                     assert(m_aRowPosToFilePos.size() == static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos));
                     const TRowPositionInFile &lastRowPos(m_aRowPosToFilePos.back());
-                    // Our ResultSet is allowed to disagree with us only
-                    // on the position of the first line
-                    // (because of the special case of the header...)
+                    
+                    
+                    
                     assert(m_nRowPos == 1 || nCurPos == lastRowPos.second);
 
                     m_nFilePos = lastRowPos.second;
@@ -834,9 +834,9 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
         case IResultSetHelper::LAST:
             if (m_nMaxRowCount == 0)
             {
-                while(seekRow(IResultSetHelper::NEXT, 1, nCurPos)) ; // run through after last row
+                while(seekRow(IResultSetHelper::NEXT, 1, nCurPos)) ; 
             }
-            // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
+            
             return seekRow(IResultSetHelper::ABSOLUTE, m_nMaxRowCount, nCurPos);
             break;
         case IResultSetHelper::RELATIVE:
@@ -844,7 +844,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 const sal_Int32 nNewRowPos = m_nRowPos + nOffset;
                 if (nNewRowPos < 0)
                     return sal_False;
-                // ABSOLUTE will take care of case nNewRowPos > nMaxRowCount
+                
                 return seekRow(IResultSetHelper::ABSOLUTE, nNewRowPos, nCurPos);
             }
         case IResultSetHelper::ABSOLUTE:
@@ -856,7 +856,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                         if (!seekRow(IResultSetHelper::LAST, 0, nCurPos))
                             return sal_False;
                     }
-                    // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
+                    
                     nOffset = m_nMaxRowCount + nOffset;
                 }
                 if(nOffset < 0)
@@ -904,7 +904,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                                                                                  RangeBefore< TRowPositionInFile, sal_Int32 >());
 
                 if(aFind == m_aRowPosToFilePos.end() || aFind->first != nOffset)
-                    //invalid bookmark
+                    
                     return sal_False;
 
                 m_bNeedToReadLine = true;
@@ -918,7 +918,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos, const bool nonEmpty)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::readLine" );
@@ -932,7 +932,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
         if (m_pFileStream->IsEof())
             return false;
 
-        QuotedTokenizedString sLine = m_aCurrentLine; // check if the string continues on next line
+        QuotedTokenizedString sLine = m_aCurrentLine; 
         while( (comphelper::string::getTokenCount(sLine.GetString(), m_cStringDelimiter) % 2) != 1 )
         {
             m_pFileStream->ReadByteStringLine(sLine,nEncoding);
@@ -953,7 +953,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     return true;
 }
 
-// -----------------------------------------------------------------------------
+
 void OFlatTable::setRowPos(const vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos)
 {
     assert(m_aRowPosToFilePos.size() >= rowNum);

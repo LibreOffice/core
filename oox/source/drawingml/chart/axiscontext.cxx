@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/axiscontext.hxx"
@@ -28,12 +28,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::ContextHandler2Helper;
 
-// ============================================================================
+
 
 AxisDispUnitsContext::AxisDispUnitsContext( ContextHandler2Helper& rParent, AxisDispUnitsModel& rModel ) :
     ContextBase< AxisDispUnitsModel >( rParent, rModel )
@@ -79,7 +79,7 @@ ContextHandlerRef AxisDispUnitsContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-// ============================================================================
+
 
 AxisContextBase::AxisContextBase( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     ContextBase< AxisModel >( rParent, rModel )
@@ -113,19 +113,19 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                     mrModel.mofCrossesAt = rAttribs.getDouble( XML_val, 0.0 );
                     return 0;
                 case C_TOKEN( delete ):
-                    // default is 'false', not 'true' as specified
+                    
                     mrModel.mbDeleted = rAttribs.getBool( XML_val, false );
                     return 0;
                 case C_TOKEN( majorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
                 case C_TOKEN( majorTickMark ):
-                    // default is 'out', not 'cross' as specified
+                    
                     mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, XML_out );
                     return 0;
                 case C_TOKEN( minorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
                 case C_TOKEN( minorTickMark ):
-                    // default is 'none', not 'cross' as specified
+                    
                     mrModel.mnMinorTickMark = rAttribs.getToken( XML_val, XML_none );
                     return 0;
                 case C_TOKEN( numFmt ):
@@ -166,7 +166,7 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
     return 0;
 }
 
-// ============================================================================
+
 
 CatAxisContext::CatAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
@@ -182,7 +182,7 @@ ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const Att
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( auto ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbAuto = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( axPos ):
@@ -195,7 +195,7 @@ ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const Att
             mrModel.mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
             return 0;
         case C_TOKEN( noMultiLvlLbl ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbNoMultiLevel = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( tickLblSkip ):
@@ -208,7 +208,7 @@ ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const Att
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-// ============================================================================
+
 
 DateAxisContext::DateAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
@@ -224,7 +224,7 @@ ContextHandlerRef DateAxisContext::onCreateContext( sal_Int32 nElement, const At
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( auto ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbAuto = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( baseTimeUnit ):
@@ -249,7 +249,7 @@ ContextHandlerRef DateAxisContext::onCreateContext( sal_Int32 nElement, const At
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-// ============================================================================
+
 
 SerAxisContext::SerAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
@@ -274,7 +274,7 @@ ContextHandlerRef SerAxisContext::onCreateContext( sal_Int32 nElement, const Att
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-// ============================================================================
+
 
 ValAxisContext::ValAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
@@ -304,10 +304,10 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

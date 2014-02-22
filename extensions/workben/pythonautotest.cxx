@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -274,7 +274,7 @@ protected:
 
 void TestListener::cmdLine()
 {
-    // Condition is set by running listener
+    
     m_aDebugCondition.wait();
     m_aDebugCondition.reset();
     (*m_pDebuggingRef)->doContinue();
@@ -302,7 +302,7 @@ void checkInvokation( const XInvokationRef &xInvoke )
 {
     UsrAny anyList;
 
-    // check exporting an object as an invokation
+    
     OSL_ASSERT( xInvoke->hasProperty( L"list" ) );
     anyList = xInvoke->getValue( L"list" );
 
@@ -326,7 +326,7 @@ void checkInvokation( const XInvokationRef &xInvoke )
     OSL_ASSERT( nOldSize + 1 == any.getINT32() );
 }
 
-// just for testing !
+
 class PythonCodeLibrary :
         public XLibraryAccess,
         public OWeakObject
@@ -396,7 +396,7 @@ BOOL PythonCodeLibrary::queryInterface( Uik aUik, XInterfaceRef & rOut )
  */
 int SAL_CALL main (int argc, char **argv)
 {
-    // necessary startup code
+    
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();
     registerUsrServices( xSMgr );
     setProcessServiceManager( xSMgr );
@@ -418,7 +418,7 @@ int SAL_CALL main (int argc, char **argv)
     xEngine->setRoot( rRoot );
 
 
-    // execute a simple script
+    
     xEngine->run(   L"nIntTest = 5\n"
                     L"list = [2,3,4]\n" , XInterfaceRef(), Sequence<UsrAny> () );
 
@@ -427,7 +427,7 @@ int SAL_CALL main (int argc, char **argv)
     * Xinvokation - Test
     *
     *****/
-    // get/set an int !
+    
     {
         OSL_ASSERT( xInvoke->hasProperty( L"nIntTest" ) );
         UsrAny any = xInvoke->getValue( L"nIntTest" );
@@ -435,7 +435,7 @@ int SAL_CALL main (int argc, char **argv)
         OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
         OSL_ASSERT( any.getINT32() == 5 );
 
-        // simple test: set an int !
+        
         xInvoke->setValue( L"nIntTest" , UsrAny( (INT32) 10 ) );
         any = xInvoke->getValue( L"nIntTest" );
 
@@ -443,7 +443,7 @@ int SAL_CALL main (int argc, char **argv)
         OSL_ASSERT( any.getINT32() == 10 );
     }
 
-    //  call a python method !
+    
     {
         xEngine->run( L"def foo():\n"
                       L"    return 'this is foo'\n" , XInterfaceRef() , Sequence<UsrAny> () );
@@ -456,11 +456,11 @@ int SAL_CALL main (int argc, char **argv)
     }
 
 
-    // check exception handling !
+    
     {
         try {
             xInvoke->invoke( L"foo" , Sequence<UsrAny>(1) , Sequence<INT16>(), Sequence<UsrAny> () );
-            // wrong number of arguments
+            
             OSL_ASSERT( 0 );
         }
         catch ( IllegalArgumentException& e ) {
@@ -468,11 +468,11 @@ int SAL_CALL main (int argc, char **argv)
         catch ( InvocationTargetException& e ) {
         }
         catch ( CannotConvertException& e ) {
-            // empty any cannot be converted
+            
         }
     }
 
-    // check InOut-Parameter
+    
     checkInvokation( xInvoke );
 
     /*******
@@ -484,7 +484,7 @@ int SAL_CALL main (int argc, char **argv)
         XIntrospectionAccessRef xIntrospection = xInvoke->getIntrospection();
         OSL_ASSERT( xIntrospection.is() );
 
-        // no further test, simply call them
+        
         xIntrospection->getMethods(0);
         xIntrospection->getProperties(0);
 
@@ -511,27 +511,27 @@ int SAL_CALL main (int argc, char **argv)
     * XDebuggingTest
     *
     ******/
-    // stop/doContinue + runAsync listener
+    
     {
-        // test hangs, if something is wrong
+        
 
         TestListener *pListener = new TestListener( &xDebug );
         XEngineListenerRef ref( (XEngineListener * ) pListener , USR_QUERY );
 
-        // single listener check !
+        
         xEngine->runAsync( L"pass\n"
                             , XInterfaceRef() , Sequence<UsrAny> () , ref );
         pListener->cmdLine();
     }
 
-    // ListenerAdministration check !
+    
     {
-        // test hangs, if something is wrong
+        
 
         TestListener *pListener = new TestListener( &xDebug );
         XEngineListenerRef ref( (XEngineListener * ) pListener , USR_QUERY );
 
-        // engine listener check !
+        
         xEngine->addEngineListener( ref );
         xEngine->runAsync( L"pass\n"
                             , XInterfaceRef() , Sequence<UsrAny> () , XEngineListenerRef() );
@@ -540,7 +540,7 @@ int SAL_CALL main (int argc, char **argv)
 
     }
 
-    // check the import mechanism
+    
     {
         XLibraryAccessRef xLibrary( ( XLibraryAccess * ) new PythonCodeLibrary , USR_QUERY );
         xEngine->setLibraryAccess( xLibrary );
@@ -552,9 +552,9 @@ int SAL_CALL main (int argc, char **argv)
         OSL_ASSERT( any.getINT32() == 42 );
     }
 
-    // check other imports
+    
     {
-        // Check, if the libraries are available at run time
+        
         xEngine->run(   L"import math\n"
                         L"dMathTest = math.exp(0)\n"  , XInterfaceRef() , Sequence<UsrAny> () );
 
@@ -565,7 +565,7 @@ int SAL_CALL main (int argc, char **argv)
         OSL_ASSERT( any.getDouble() == 1. );
     }
 
-    // Test connection to root object !
+    
     {
         xEngine->run(   L"x = stardiv.root.TestValue\n"
                         L"y = stardiv.inout(5)\n"
@@ -581,7 +581,7 @@ int SAL_CALL main (int argc, char **argv)
         OSL_ASSERT( any.getINT32() == 15 );
     }
 
-    // Test exactName interface
+    
     {
         UsrAny any = xInvoke->getValue( L"__builtins__" );
         OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_INTERFACE );
@@ -597,7 +597,7 @@ int SAL_CALL main (int argc, char **argv)
     }
 
 
-    // Test exactName interface of the engine itself
+    
     {
         XExactNameRef rName( xInvoke , USR_QUERY );
         OSL_ASSERT( rName.is() );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -69,7 +69,7 @@ sal_uLong ScRTFExport::Write()
     rStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
 
-    // Data
+    
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
         if ( nTab > aRange.aStart.Tab() )
@@ -133,7 +133,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
             case SVX_VER_JUSTIFY_TOP:       pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;   break;
             case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
             case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
-            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
+            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  
             default:                        pChar = NULL;           break;
         }
         if ( pChar )
@@ -141,7 +141,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteCharPtr( OString::number(pCellX[nCol+1]).getStr() );
         if ( (nCol & 0x0F) == 0x0F )
-            rStrm.WriteCharPtr( SAL_NEWLINE_STRING ); // Do not let lines get too long
+            rStrm.WriteCharPtr( SAL_NEWLINE_STRING ); 
     }
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteCharPtr( SAL_NEWLINE_STRING );
 
@@ -150,7 +150,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     {
         WriteCell( nTab, nRow, nCol );
         if ( rStrm.Tell() - nStrmPos > 255 )
-        {   // Do not let lines get too long
+        {   
             rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
             nStrmPos = rStrm.Tell();
         }
@@ -186,7 +186,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
             {
                 EditEngine& rEngine = GetEditEngine();
                 rEngine.SetText(*pObj);
-                aContent = rEngine.GetText(LINEEND_LF); // LineFeed in between paragraphs!
+                aContent = rEngine.GetText(LINEEND_LF); 
             }
         }
         break;
@@ -224,17 +224,17 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     rStrm.WriteCharPtr( pChar );
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
-    {   // bold
+    {   
         bResetAttr = sal_True;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
-    {   // italic
+    {   
         bResetAttr = sal_True;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
-    {   // underline
+    {   
         bResetAttr = sal_True;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
     }

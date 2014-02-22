@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -111,7 +111,7 @@ public:
     sal_Int32 mnCurrentRow;
     sal_Int32 mnCurrentColumn;
 
-    // default cell style name for the current row
+    
     OUString msDefaultCellStyleName;
 
     MergeInfoVector maMergeInfos;
@@ -160,7 +160,7 @@ private:
     OUString msTemplateStyleName;
 };
 
-// class XMLProxyContext
+
 
 XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, sal_uInt16 nPrfx, const OUString& rLName )
 : SvXMLImportContext( rImport, nPrfx, rLName )
@@ -176,7 +176,7 @@ SvXMLImportContext * XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, co
         return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
-// class XMLTableImport
+
 
 XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrImport( rImport )
@@ -265,7 +265,7 @@ void XMLTableImport::finishStyles()
     }
 }
 
-// class XMLTableImport
+
 
 XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, sal_uInt16 nPrfx, const OUString& rLName,  Reference< XColumnRowRange >& xColumnRowRange )
 : SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
@@ -290,7 +290,7 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, co
 
         sal_Int32 nRepeated = 1;
 
-        // read attributes for the table-column
+        
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
         {
@@ -322,7 +322,7 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, co
                  IsXMLToken(aLocalName, XML_ID)   )
             {
                 (void) sValue;
-//FIXME: TODO
+
             }
         }
 
@@ -385,7 +385,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
     {
         mnCurrentRow++;
         if( mnCurrentRow == 0 )
-            InitColumns();      // first init columns
+            InitColumns();      
 
         mnCurrentColumn = -1;
 
@@ -400,7 +400,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
 
         OUString sStyleName;
 
-        // read attributes for the table-row
+        
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
         {
@@ -424,7 +424,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
                  IsXMLToken(aLocalName, XML_ID)   )
             {
                 (void) sValue;
-//FIXME: TODO
+
             }
         }
 
@@ -533,14 +533,14 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
 {
     OUString sStyleName( msDefaultCellStyleName );
 
-    // if there is still no style name, try default style name from column
+    
     if( (sStyleName.isEmpty()) && (mnCurrentColumn < sal::static_int_cast<sal_Int32>(maColumnInfos.size())) )
         sStyleName = maColumnInfos[mnCurrentColumn]->msDefaultCellStyleName;
 
     return sStyleName;
 }
 
-// XMLCellImportContext
+
 
 XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, sal_uInt16 nPrfx, const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext( rImport, nPrfx, rLName )
@@ -552,7 +552,7 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
 {
     OUString sStyleName;
 
-    // read attributes for the table-cell
+    
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
@@ -584,12 +584,12 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
              IsXMLToken(aLocalName, XML_ID)   )
         {
             (void) sValue;
-//FIXME: TODO
+
         }
-//FIXME: RDFa (table:table-cell)
+
     }
 
-    // if there is no style name at the cell, try default style name from row
+    
     if( sStyleName.isEmpty() )
         sStyleName = sDefaultCellStyleName;
 
@@ -618,7 +618,7 @@ XMLCellImportContext::~XMLCellImportContext()
 
 SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
-    // create text cursor on demand
+    
     if( !mxCursor.is() )
     {
         Reference< XText > xText( mxCell, UNO_QUERY );
@@ -630,8 +630,8 @@ SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefi
             if( mxCursor.is() )
                 xTxtImport->SetCursor( mxCursor );
 
-            // remember old list item and block (#91964#) and reset them
-            // for the text frame
+            
+            
             xTxtImport->PushListContext();
             mbListContextPushed = true;
         }
@@ -639,7 +639,7 @@ SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefi
 
     SvXMLImportContext * pContext = 0;
 
-    // if we have a text cursor, lets  try to import some text
+    
     if( mxCursor.is() )
     {
         pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
@@ -655,26 +655,26 @@ void XMLCellImportContext::EndElement()
 {
     if(mxCursor.is())
     {
-        // delete addition newline
+        
         const OUString aEmpty;
         mxCursor->gotoEnd( sal_False );
         mxCursor->goLeft( 1, sal_True );
         mxCursor->setString( aEmpty );
 
-        // reset cursor
+        
         GetImport().GetTextImport()->ResetCursor();
     }
 
     if(mxOldCursor.is())
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
 
-    // reinstall old list item (if necessary) #91964#
+    
     if (mbListContextPushed) {
         GetImport().GetTextImport()->PopListContext();
     }
 }
 
-// class XMLTableTemplateContext
+
 
 XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
 : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_TABLE_TEMPLATE_ID, sal_False )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "refundo.hxx"
@@ -38,14 +38,14 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
     pDBCollection = pOldDBColl ? new ScDBCollection(*pOldDBColl) : NULL;
 
-    ScRangeName* pOldRanges = ((ScDocument*)pDoc)->GetRangeName();          //! const
+    ScRangeName* pOldRanges = ((ScDocument*)pDoc)->GetRangeName();          
     pRangeName = pOldRanges ? new ScRangeName(*pOldRanges) : NULL;
 
-    pPrintRanges = pDoc->CreatePrintRangeSaver();       // recreated
+    pPrintRanges = pDoc->CreatePrintRangeSaver();       
 
-    // when handling Pivot solely keep the range?
+    
 
-    ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
+    ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        
     pDPCollection = pOldDP ? new ScDPCollection(*pOldDP) : NULL;
 
     ScDetOpList* pOldDetOp = pDoc->GetDetOpList();
@@ -56,7 +56,7 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     pChartListenerCollection = pOldChartListenerCollection ?
         new ScChartListenerCollection( *pOldChartListenerCollection ) : NULL;
 
-    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     // returns NULL if empty
+    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     
 
     const_cast<ScDocument*>(pDoc)->BeginUnoRefUndo();
 }
@@ -83,7 +83,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     }
     if (pRangeName)
     {
-        ScRangeName* pNewRanges = ((ScDocument*)pDoc)->GetRangeName();      //! const
+        ScRangeName* pNewRanges = ((ScDocument*)pDoc)->GetRangeName();      
         if ( pNewRanges && *pRangeName == *pNewRanges )
             DELETEZ(pRangeName);
     }
@@ -98,7 +98,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
 
     if (pDPCollection)
     {
-        ScDPCollection* pNewDP = ((ScDocument*)pDoc)->GetDPCollection();    //! const
+        ScDPCollection* pNewDP = ((ScDocument*)pDoc)->GetDPCollection();    
         if ( pNewDP && pDPCollection->RefsEqual(*pNewDP) )
             DELETEZ(pDPCollection);
     }
@@ -155,7 +155,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
     if (pDetOpList)
         pDoc->SetDetOpList( new ScDetOpList(*pDetOpList) );
 
-    // bUndoRefFirst is bSetChartRangeLists
+    
     if ( pChartListenerCollection )
         pDoc->SetChartListenerCollection( new ScChartListenerCollection(
             *pChartListenerCollection ), bUndoRefFirst );
@@ -163,7 +163,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
     if (pDBCollection || pRangeName)
     {
         sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
-        pDoc->SetAutoCalc( false ); // Avoid multiple calculations
+        pDoc->SetAutoCalc( false ); 
         pDoc->CompileAll();
         pDoc->SetDirty();
         pDoc->SetAutoCalc( bOldAutoCalc );

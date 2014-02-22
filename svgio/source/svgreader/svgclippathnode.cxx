@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgclippathnode.hxx>
@@ -25,7 +25,7 @@
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -53,13 +53,13 @@ namespace svgio
 
         void SvgClipPathNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -103,14 +103,14 @@ namespace svgio
         {
             drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-            // decompose children
+            
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
             if(aNewTarget.hasElements())
             {
                 if(getTransform())
                 {
-                    // create embedding group element with transformation
+                    
                     const drawinglayer::primitive2d::Primitive2DReference xRef(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             *getTransform(),
@@ -120,7 +120,7 @@ namespace svgio
                 }
                 else
                 {
-                    // append to current target
+                    
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
                 }
             }
@@ -134,12 +134,12 @@ namespace svgio
                 drawinglayer::primitive2d::Primitive2DSequence aClipTarget;
                 basegfx::B2DPolyPolygon aClipPolyPolygon;
 
-                // get clipPath definition as primitives
+                
                 decomposeSvgNode(aClipTarget, true);
 
                 if(aClipTarget.hasElements())
                 {
-                    // extract filled plygons as base for a mask PolyPolygon
+                    
                     drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
 
                     aExtractor.process(aClipTarget);
@@ -149,7 +149,7 @@ namespace svgio
 
                     if(nSize > 1)
                     {
-                        // merge to single clipPolyPolygon
+                        
                         aClipPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rResult);
                     }
                     else
@@ -162,7 +162,7 @@ namespace svgio
                 {
                     if(objectBoundingBox == getClipPathUnits())
                     {
-                        // clip is object-relative, transform using content transformation
+                        
                         const basegfx::B2DRange aContentRange(
                             drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
                                 rContent,
@@ -174,10 +174,10 @@ namespace svgio
                                 aContentRange.getMinimum()));
                     }
 
-                    // redefine target. Use MaskPrimitive2D with created clip
-                    // geometry. Using the automatically set mbIsClipPathContent at
-                    // SvgStyleAttributes the clip definition is without fill, stroke,
-                    // and strokeWidth and forced to black
+                    
+                    
+                    
+                    
                     const drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
                         new drawinglayer::primitive2d::MaskPrimitive2D(
                             aClipPolyPolygon,
@@ -187,17 +187,17 @@ namespace svgio
                 }
                 else
                 {
-                    // An empty clipping path will completely clip away the element that had
+                    
                     // the ‘clip-path’ property applied. (Svg spec)
                     rContent.realloc(0);
                 }
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

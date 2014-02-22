@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataPoint.hxx"
@@ -82,7 +82,7 @@ struct StaticDataPointInfo : public rtl::StaticAggregate< uno::Reference< beans:
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -105,10 +105,10 @@ DataPoint::DataPoint( const DataPoint & rOther ) :
 {
     SetNewValuesExplicitlyEvenIfTheyEqualDefault();
 
-    // m_xParentProperties has to be set from outside, like in the method
-    // DataSeries::createClone
+    
+    
 
-    // add as listener to XPropertySet properties
+    
     Reference< beans::XPropertySet > xPropertySet;
     uno::Any aValue;
 
@@ -129,7 +129,7 @@ DataPoint::~DataPoint()
 {
     try
     {
-        // remove listener from XPropertySet properties
+        
         Reference< beans::XPropertySet > xPropertySet;
         uno::Any aValue;
 
@@ -149,14 +149,14 @@ DataPoint::~DataPoint()
     }
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL DataPoint::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new DataPoint( *this ));
 }
 
-// ____ XChild ____
+
 Reference< uno::XInterface > SAL_CALL DataPoint::getParent()
     throw (uno::RuntimeException)
 {
@@ -171,11 +171,11 @@ void SAL_CALL DataPoint::setParent(
     m_xParentProperties = Reference< beans::XPropertySet >( Parent, uno::UNO_QUERY );
 }
 
-// ____ OPropertySet ____
+
 uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    // the value set at the data series is the default
+    
     uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties.get(), uno::UNO_QUERY );
     if( !xFast.is())
     {
@@ -220,14 +220,14 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
     return *StaticDataPointInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL DataPoint::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticDataPointInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL DataPoint::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -256,21 +256,21 @@ void SAL_CALL DataPoint::removeModifyListener( const uno::Reference< util::XModi
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL DataPoint::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL DataPoint::disposing( const lang::EventObject& )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void DataPoint::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -290,14 +290,14 @@ Sequence< OUString > DataPoint::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// needed by MSC compiler
+
 using impl::DataPoint_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( DataPoint, DataPoint_Base, ::property::OPropertySet )
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( DataPoint, OUString("com.sun.star.comp.chart.DataPoint") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

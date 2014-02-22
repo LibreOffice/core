@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <GL/glew.h>
@@ -136,20 +136,20 @@ OString loadShader(const OUString& rFilename)
 
 GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName)
 {
-    // Create the shaders
+    
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
 
-    // Compile Vertex Shader
+    
     OString aVertexShaderSource = loadShader(rVertexShaderName);
     char const * VertexSourcePointer = aVertexShaderSource.getStr();
     glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
     glCompileShader(VertexShaderID);
 
-    // Check Vertex Shader
+    
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
     if ( !Result )
     {
@@ -167,13 +167,13 @@ GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString
         return 0;
     }
 
-    // Compile Fragment Shader
+    
     OString aFragmentShaderSource = loadShader(rFragmentShaderName);
     char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
     glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
     glCompileShader(FragmentShaderID);
 
-    // Check Fragment Shader
+    
     glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
     if ( !Result )
     {
@@ -192,13 +192,13 @@ GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString
         return 0;
     }
 
-    // Link the program
+    
     GLint ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
     glLinkProgram(ProgramID);
 
-    // Check the program
+    
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
     if ( !Result )
     {
@@ -248,7 +248,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
             bGlewInit = true;
     }
 
-    // These guys don't just check support but setup the vtables.
+    
     if (glewIsSupported("framebuffer_object") != GLEW_OK)
     {
         SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
@@ -259,9 +259,9 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    // Enable depth test
+    
     glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
+    
     glDepthFunc(GL_LESS);
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_LINE_SMOOTH);
@@ -275,11 +275,11 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Init the Projection matrix
+    
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -1.f, 1.f);
-    m_View       = glm::lookAt(glm::vec3(0,0,1), // Camera is at (4,3,-3), in World Space
-                               glm::vec3(0,0,0), // and looks at the origin
-                               glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+    m_View       = glm::lookAt(glm::vec3(0,0,1), 
+                               glm::vec3(0,0,0), 
+                               glm::vec3(0,1,0)  
                                );
     m_MVP = m_Projection * m_View * m_Model;
     glGenBuffers(1, &m_VertexBuffer);
@@ -376,9 +376,9 @@ BitmapEx OpenGLRender::GetAsBitmap()
 
     BitmapEx aBmp(aBitmap, aAlpha);
 
-#if DEBUG_PNG // debug PNG writing
+#if DEBUG_PNG 
     static int nIdx = 0;
-    OUString aName = OUString( "file:///home/moggi/Documents/work/" ) + OUString::number( nIdx++ ) + ".png";
+    OUString aName = OUString( "file:
     try {
         vcl::PNGWriter aWriter( aBmp );
         SvFileStream sOutput( aName, STREAM_WRITE );
@@ -425,32 +425,32 @@ int OpenGLRender::RenderLine2FBO(int)
     for (size_t i = 0; i < listNum; i++)
     {
         Line2DPointList &pointList = m_Line2DShapePointList.front();
-        //fill vertex buffer
+        
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
         CHECK_GL_ERROR();
-        // Use our shader
+        
         glUseProgram(m_CommonProID);
         CHECK_GL_ERROR();
 
         glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
         CHECK_GL_ERROR();
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
-        //CHECK_GL_ERROR();
+        
 
-        // 1rst attribute buffer : vertices
+        
         CHECK_GL_ERROR();
         glVertexAttribPointer(
             m_2DVertexID,
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            3,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
         glEnableVertexAttribArray(m_2DVertexID);
-        glDrawArrays(GL_LINE_STRIP, 0, pointList.size()/3); // 12*3 indices starting at 0 -> 12 triangles
+        glDrawArrays(GL_LINE_STRIP, 0, pointList.size()/3); 
         CHECK_GL_ERROR();
         glUseProgram(0);
         glDisableVertexAttribArray(m_2DVertexID);
@@ -498,18 +498,18 @@ void OpenGLRender::prepareToRender()
     glViewport(0, 0, m_iWidth, m_iHeight);
     if (!m_FboID)
     {
-        // create a texture object
+        
         CreateTextureObj(m_iWidth, m_iHeight);
-        //create render buffer object
+        
         CreateRenderObj(m_iWidth, m_iHeight);
-        //create fbo
+        
         CreateFrameBufferObj();
         if (mbArbMultisampleSupported)
         {
             CreateMultiSampleFrameBufObj();
         }
     }
-    //bind fbo
+    
     if (mbArbMultisampleSupported)
     {
         glBindFramebuffer(GL_FRAMEBUFFER,m_frameBufferMS);
@@ -519,7 +519,7 @@ void OpenGLRender::prepareToRender()
         glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
     }
 
-    // Clear the screen
+    
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_fZStep = 0;
@@ -617,16 +617,16 @@ int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
 int OpenGLRender::CreateFrameBufferObj()
 {
     GLenum status;
-    // create a framebuffer object, you need to delete them when program exits.
+    
     glGenFramebuffers(1, &m_FboID);
     CHECK_GL_FRAME_BUFFER_STATUS();
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
     glBindTexture(GL_TEXTURE_2D, m_TextureObj);
-    // attach a texture to FBO color attachement point
+    
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj, 0);
     CHECK_GL_FRAME_BUFFER_STATUS();
     glBindTexture(GL_TEXTURE_2D, 0);
-    // attach a renderbuffer to depth attachment point
+    
     glBindRenderbuffer(GL_RENDERBUFFER, m_RboID);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID);
     CHECK_GL_FRAME_BUFFER_STATUS();
@@ -705,10 +705,10 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
     , m_SymbolColorID(0)
     , m_SymbolShapeID(0)
 {
-    //TODO: moggi: use STL
+    
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
 
-    //TODO: moggi: use STL
+    
     for (size_t i = 0; i < sizeof(m_BackgroundColor) / sizeof(float); i++)
     {
         m_BackgroundColor[i] = 1.0;
@@ -722,7 +722,7 @@ OpenGLRender::~OpenGLRender()
     Release();
 }
 
-// TODO: moggi: that screws up FBO if called after buffers have been created!!!!
+
 void OpenGLRender::SetSize(int width, int height)
 {
     m_iWidth = width;
@@ -802,39 +802,39 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
 {
     HWND hWnd = NULL;
-    //create a temp windwo to check whether support multi-sample, if support, get the format
+    
     if (InitTempWindow(&hWnd, m_iWidth, m_iHeight, pfd) < 0)
     {
         SAL_WARN("chart2.opengl", "Can't create temp window to test");
         return false;
     }
 
-    // See If The String Exists In WGL!
+    
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
         mbArbMultisampleSupported = false;
         SAL_WARN("chart2.opengl", "Device doesn't support multi sample");
         return false;
     }
-    // Get Our Pixel Format
+    
     PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     if (!wglChoosePixelFormatARB)
     {
         mbArbMultisampleSupported = false;
         return false;
     }
-    // Get Our Current Device Context
+    
     HDC hDC = GetDC(hWnd);
 
     int pixelFormat;
     int valid;
     UINT    numFormats;
     float   fAttributes[] = {0,0};
-    // These Attributes Are The Bits We Want To Test For In Our Sample
-    // Everything Is Pretty Standard, The Only One We Want To
-    // Really Focus On Is The SAMPLE BUFFERS ARB And WGL SAMPLES
-    // These Two Are Going To Do The Main Testing For Whether Or Not
-    // We Support Multisampling On This Hardware.
+    
+    
+    
+    
+    
     int iAttributes[] =
     {
         WGL_DRAW_TO_WINDOW_ARB,GL_TRUE,
@@ -849,9 +849,9 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
         WGL_SAMPLES_ARB,8,
         0,0
     };
-    // First We Check To See If We Can Get A Pixel Format For 4 Samples
+    
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
-    // If We Returned True, And Our Format Count Is Greater Than 1
+    
     if (valid && numFormats >= 1)
     {
         mbArbMultisampleSupported = true;
@@ -862,7 +862,7 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
         DestroyWindow(hWnd);
         return mbArbMultisampleSupported;
     }
-    // Our Pixel Format With 4 Samples Failed, Test For 2 Samples
+    
     iAttributes[19] = 2;
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     if (valid && numFormats >= 1)
@@ -875,7 +875,7 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
         DestroyWindow(hWnd);
         return mbArbMultisampleSupported;
     }
-    // Return The Valid Format
+    
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(glWin.hRC);
     ReleaseDC(hWnd, glWin.hDC);
@@ -893,7 +893,7 @@ int OpenGLRender::GetMSAAFormat()
     return m_iArbMultisampleFormat;
 }
 
-//TODO: moggi: why the hell do we need another implementation here?
+
 int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd)
 {
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
@@ -940,35 +940,35 @@ bool OpenGLRender::WGLisExtensionSupported(const char *extension)
     const size_t extlen = strlen(extension);
     const char *supported = NULL;
 
-    // Try To Use wglGetExtensionStringARB On Current DC, If Possible
+    
     PROC wglGetExtString = wglGetProcAddress("wglGetExtensionsStringARB");
 
     if (wglGetExtString)
         supported = ((char*(__stdcall*)(HDC))wglGetExtString)(wglGetCurrentDC());
-    // If That Failed, Try Standard Opengl Extensions String
+    
     if (supported == NULL)
         supported = (char*)glGetString(GL_EXTENSIONS);
-    // If That Failed Too, Must Be No Extensions Supported
+    
     if (supported == NULL)
         return 0;
 
-    // Begin Examination At Start Of String, Increment By 1 On False Match
+    
     for (const char* p = supported; ; p++)
     {
-        // Advance p Up To The Next Possible Match
+        
         p = strstr(p, extension);
 
         if (p == NULL)
-            return 0; // No Match
+            return 0; 
 
-        // Make Sure That Match Is At The Start Of The String Or That
-        // The Previous Char Is A Space, Or Else We Could Accidentally
-        // Match "wglFunkywglExtension" With "wglExtension"
+        
+        
+        
 
-        // Also, Make Sure That The Following Character Is Space Or NULL
-        // Or Else "wglExtensionTwo" Might Match "wglExtension"
+        
+        
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
-            return 1; // Match
+            return 1; 
     }
 }
 #endif
@@ -1023,7 +1023,7 @@ int OpenGLRender::Create2DCircle(int detail)
 
 int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float directionY)
 {
-    //check whether to create the circle data
+    
     if (m_Bubble2DCircle.empty())
     {
         Create2DCircle(100);
@@ -1047,15 +1047,15 @@ int OpenGLRender::RenderBubble2FBO(int)
     size_t listNum = m_Bubble2DShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
-        //move the circle to the pos, and scale using the xScale and Y scale
+        
         Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
         PosVecf3 trans = {pointList.x, pointList.y, m_fZStep};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
-        //render to fbo
-        //fill vertex buffer
+        
+        
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         if (m_Bubble2DCircle.empty())
         {
@@ -1068,23 +1068,23 @@ int OpenGLRender::RenderBubble2FBO(int)
         glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
 
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
-        // 1rst attribute buffer : vertices
+        
         glEnableVertexAttribArray(m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
-            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            2,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            m_2DVertexID,                  
+            2,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
         glDrawArrays(GL_TRIANGLE_FAN, 0, m_Bubble2DCircle.size() / 2);
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         m_Bubble2DShapePointList.pop_front();
     }
-    //if use MSAA, we should copy the data to the FBO texture
+    
     GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
     {
@@ -1098,7 +1098,7 @@ int OpenGLRender::RenderBubble2FBO(int)
 
 int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float directionY)
 {
-    //check whether to create the circle data
+    
     float actualX = x / OPENGL_SCALE_VALUE;
     float actualY = y / OPENGL_SCALE_VALUE;
     float actualSizeX = directionX / OPENGL_SCALE_VALUE;
@@ -1128,7 +1128,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
     size_t listNum = m_RectangleShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
-        //move the circle to the pos, and scale using the xScale and Y scale
+        
         RectanglePointList &pointList = m_RectangleShapePointList.front();
         {
             PosVecf3 trans = {0, 0, 0};
@@ -1138,8 +1138,8 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
             m_MVP = m_Projection * m_View * m_Model;
         }
 
-        //render to fbo
-        //fill vertex buffer
+        
+        
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(pointList.points), pointList.points, GL_STATIC_DRAW);
 
@@ -1153,26 +1153,26 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
             glEnableVertexAttribArray(m_BackgroundVertexID);
             glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
             glVertexAttribPointer(
-                    m_BackgroundVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                    3,                  // size
-                    GL_FLOAT,           // type
-                    GL_FALSE,           // normalized?
-                    0,                  // stride
-                    (void*)0            // array buffer offset
+                    m_BackgroundVertexID,                  
+                    3,                  
+                    GL_FLOAT,           
+                    GL_FALSE,           
+                    0,                  
+                    (void*)0            
                     );
 
-            // 2nd attribute buffer : color
+            
             glEnableVertexAttribArray(m_BackgroundColorID);
             glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
             glVertexAttribPointer(
-                    m_BackgroundColorID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                    4,                  // size
-                    GL_FLOAT,           // type
-                    GL_FALSE,           // normalized?
-                    0,                  // stride
-                    (void*)0            // array buffer offset
+                    m_BackgroundColorID,                  
+                    4,                  
+                    GL_FLOAT,           
+                    GL_FALSE,           
+                    0,                  
+                    (void*)0            
                     );
-            //TODO: moggi: get rid of GL_QUADS
+            
             glDrawArrays(GL_QUADS, 0, 4);
             glDisableVertexAttribArray(m_BackgroundVertexID);
             glDisableVertexAttribArray(m_BackgroundColorID);
@@ -1194,28 +1194,28 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 
             glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
             glBufferData(GL_ARRAY_BUFFER, sizeof(m_BackgroundColor), m_BackgroundColor, GL_STATIC_DRAW);
-            // 1rst attribute buffer : vertices
+            
             glEnableVertexAttribArray(m_BackgroundVertexID);
             glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
             glVertexAttribPointer(
-                    m_BackgroundVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                    3,                  // size
-                    GL_FLOAT,           // type
-                    GL_FALSE,           // normalized?
-                    0,                  // stride
-                    (void*)0            // array buffer offset
+                    m_BackgroundVertexID,                  
+                    3,                  
+                    GL_FLOAT,           
+                    GL_FALSE,           
+                    0,                  
+                    (void*)0            
                     );
 
-            // 2nd attribute buffer : color
+            
             glEnableVertexAttribArray(m_BackgroundColorID);
             glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
             glVertexAttribPointer(
-                    m_BackgroundColorID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                    4,                  // size
-                    GL_FLOAT,           // type
-                    GL_FALSE,           // normalized?
-                    0,                  // stride
-                    (void*)0            // array buffer offset
+                    m_BackgroundColorID,                  
+                    4,                  
+                    GL_FLOAT,           
+                    GL_FALSE,           
+                    0,                  
+                    (void*)0            
                     );
             glDrawArrays(GL_LINE_LOOP, 0, 4);
             glDisableVertexAttribArray(m_BackgroundVertexID);
@@ -1237,9 +1237,9 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
 {
-#if DEBUG_PNG // debug PNG writing
+#if DEBUG_PNG 
     static int nIdx = 0;
-    OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
+    OUString aName = OUString( "file:
     try {
         vcl::PNGWriter aWriter( rBitmapEx );
         SvFileStream sOutput( aName, STREAM_WRITE );
@@ -1294,10 +1294,10 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     aTextInfo.bmpWidth = bmpWidth;
     aTextInfo.bmpHeight = bmpHeight;
 
-    //if has ratotion, we must re caculate the central pos
+    
     if (!rtl::math::approxEqual(0, rotation))
     {
-        // handle rotation
+        
     }
 
     CHECK_GL_ERROR();
@@ -1341,36 +1341,36 @@ int OpenGLRender::RenderTextShape()
 
         CHECK_GL_ERROR();
         glUniformMatrix4fv(m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
-        // 1rst attribute buffer : vertices
+        
         glEnableVertexAttribArray(m_TextVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
             m_TextVertexID,
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            3,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
-        //tex coord
+        
         CHECK_GL_ERROR();
         glEnableVertexAttribArray(m_TextTexCoordID);
         glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
         glVertexAttribPointer(
             m_TextTexCoordID,
-            2,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            2,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
-        //texture
+        
         CHECK_GL_ERROR();
         glBindTexture(GL_TEXTURE_2D, textInfo.texture);
         CHECK_GL_ERROR();
         glUniform1i(m_TextTexID, 0);
         CHECK_GL_ERROR();
-        //TODO: moggi: get rid fo GL_QUADS
+        
         glDrawArrays(GL_QUADS, 0, 4);
         CHECK_GL_ERROR();
         glDisableVertexAttribArray(m_TextTexCoordID);
@@ -1410,7 +1410,7 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 
 namespace {
 
-// only 2D
+
 bool checkCCW(const Area2DPointList& rPoints)
 {
     if(rPoints.size() < 3)
@@ -1447,32 +1447,32 @@ int OpenGLRender::RenderArea2DShape()
     for (size_t i = 0; i < listNum; ++i)
     {
         Area2DPointList &pointList = m_Area2DShapePointList.front();
-        bool bIsCCW = checkCCW(pointList); // is it counter clockwise (CCW) or clockwise (CW)
+        bool bIsCCW = checkCCW(pointList); 
         if(!bIsCCW)
             glFrontFace(GL_CW);
-        //fill vertex buffer
+        
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
-        // Use our shader
+        
         glUseProgram(m_CommonProID);
 
         glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
 
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
 
-        // 1rst attribute buffer : vertices
+        
         glEnableVertexAttribArray(m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
-            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            m_2DVertexID,                  
+            3,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
-        // TODO: moggi: remove deprecated GL_POLYGON
-        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
+        
+        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); 
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         if(!bIsCCW)
@@ -1533,16 +1533,16 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
 {
     double nAngleStep = 1;
     PieSegment2DPointList aPointList;
-    // TODO: moggi: GL_TRIANGLE_FAN seems not to work
-    bool bInnerRadiusNotZero = true; //!rtl::math::approxEqual(0.0, fInnerRadius);
+    
+    bool bInnerRadiusNotZero = true; 
     size_t nVectorSize = 3*(nAngleWidth/nAngleStep);
     if(bInnerRadiusNotZero)
         nVectorSize *= 2;
 
     nAngleStart += 90;
     aPointList.reserve(nVectorSize);
-    // if inner radius = 0 generate a normal pie segment (triangle fan)
-    // if inner radius != 0 generate a pie segment - inner pie (triangle strip)
+    
+    
     if(!bInnerRadiusNotZero)
     {
         aPointList.push_back(0);
@@ -1580,28 +1580,28 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
     for (int i = 0; i < listNum; i++)
     {
         PieSegment2DPointList &pointList = m_PieSegment2DShapePointList.back();
-        //fill vertex buffer
+        
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0] , GL_STATIC_DRAW);
-        // Use our shader
+        
         glUseProgram(m_CommonProID);
 
         glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
 
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
 
-        // 1rst attribute buffer : vertices
+        
         glEnableVertexAttribArray(m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
-            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            m_2DVertexID,                  
+            3,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, pointList.size() / 3); 
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         m_PieSegment2DShapePointList.pop_back();
@@ -1627,13 +1627,13 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
     m_MVP = m_Projection * m_View * m_Model;
 
     float aPos[3] = { x/OPENGL_SCALE_VALUE, y/OPENGL_SCALE_VALUE, m_fZStep };
-    //fill vertex buffer
+    
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
     CHECK_GL_ERROR();
     glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float), aPos, GL_STATIC_DRAW);
     CHECK_GL_ERROR();
 
-    // Use our shader
+    
     glUseProgram(m_SymbolProID);
     CHECK_GL_ERROR();
 
@@ -1644,16 +1644,16 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
     glUniformMatrix4fv(m_SymbolMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
 
     CHECK_GL_ERROR();
-    // 1rst attribute buffer : vertices
+    
     glEnableVertexAttribArray(m_SymbolVertexID);
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
     glVertexAttribPointer(
-            m_SymbolVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
+            m_SymbolVertexID,                  
+            3,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0            
             );
 
     glDrawArrays(GL_POINTS, 0, 1);

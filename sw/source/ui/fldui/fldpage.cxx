@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/lstbox.hxx>
@@ -71,15 +71,15 @@ void SwFldPage::Init()
 
     m_bFldEdit = 0 == GetTabDialog();
 
-    // newly initialise FieldManager. important for
-    // Dok-Switch (fldtdlg:ReInitTabPage)
+    
+    
     m_pCurFld = m_aMgr.GetCurFld();
 
     if( bNewMode != m_bFldDlgHtmlMode )
     {
         m_bFldDlgHtmlMode = bNewMode;
 
-        // initialise Rangelistbox
+        
         if( m_bFldDlgHtmlMode && m_bFirstHTMLInit )
         {
             m_bFirstHTMLInit = sal_False;
@@ -135,10 +135,10 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
-    if (!IsFldEdit())   // insert new field
+    if (!IsFldEdit())   
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
-        //#i26566# provide parent for SwWrtShell::StartInputFldDlg
+        
         aData.pParent = &GetTabDialog()->GetOKButton();
         bRet = m_aMgr.InsertFld( aData );
 
@@ -179,7 +179,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         }
 
     }
-    else    // change field
+    else    
     {
         SwField *const pTmpFld = m_pCurFld->CopyField();
 
@@ -248,9 +248,9 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
 
         case TYP_INPUTFLD:
             {
-                // User- or SetField ?
+                
                 if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
-                !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
+                !(pTmpFld->GetSubType() & INP_TXT)) 
                 {
                     SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
                     pFld->SetPromptText(sPar2);
@@ -331,7 +331,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
         pDlg->InsertHdl();
 
         if (pBtn)
-            pBtn->GrabFocus();  // because of InputField-Dlg
+            pBtn->GrabFocus();  
     }
     else
     {

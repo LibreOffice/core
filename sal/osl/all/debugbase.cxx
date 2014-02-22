@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 #include "boost/bind.hpp"
 #include <vector>
 
-// define own ones, independent of OSL_DEBUG_LEVEL:
+
 #define DEBUGBASE_ENSURE_(c, f, l, m) \
     do \
     {  \
@@ -68,16 +68,16 @@ inline bool isSubStr( char const* pStr, rtl::OString const& subStr )
 
 struct DebugBaseMutex : rtl::Static<osl::Mutex, DebugBaseMutex> {};
 
-} // anon namespace
+} 
 
 extern "C" {
 
-// These functions presumably should not be extern "C", but changing
-// that would break binary compatibility.
+
+
 #ifdef __clang__
 #pragma clang diagnostic push
-// Guard against slightly older clang versions that don't have
-// -Wreturn-type-c-linkage...
+
+
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
@@ -97,7 +97,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
     OStringVec const& rVec = StaticDebugBaseAddressFilter::get();
     if (rVec.empty())
         return false;
-    // check for "all":
+    
     rtl::OString const& rFirst = rVec[0];
     if (rtl_str_compare_WithLength( rFirst.getStr(), rFirst.getLength(),
                                     RTL_CONSTASCII_STRINGPARAM("all") ) == 0)
@@ -162,6 +162,6 @@ void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
     }
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

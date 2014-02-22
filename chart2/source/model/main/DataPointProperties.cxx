@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataPointProperties.hxx"
@@ -45,16 +45,16 @@ namespace chart
 void DataPointProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-    // DataPointProperties
+    
 
-    // Common
-    // ------
+    
+    
     rOutProperties.push_back(
         Property( "Color",
                   PROP_DATAPOINT_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+                  | beans::PropertyAttribute::MAYBEVOID         
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
@@ -64,7 +64,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // Fill Properties
+    
     rOutProperties.push_back(
         Property( "FillStyle",
                   PROP_DATAPOINT_FILL_STYLE,
@@ -118,13 +118,13 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    // border for filled objects
+    
     rOutProperties.push_back(
         Property( "BorderColor",
                   PROP_DATAPOINT_BORDER_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+                  | beans::PropertyAttribute::MAYBEVOID         
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "BorderStyle",
@@ -151,7 +151,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    // Line Properties
+    
     rOutProperties.push_back(
         Property( "LineStyle",
                   LinePropertiesHelper::PROP_LINE_STYLE,
@@ -177,8 +177,8 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    // FillProperties
-    // bitmap properties
+    
+    
     rOutProperties.push_back(
         Property( "FillBitmapOffsetX",
                   FillProperties::PROP_FILL_BITMAP_OFFSETX,
@@ -242,7 +242,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // others
+    
     rOutProperties.push_back(
         Property( "Symbol",
                   PROP_DATAPOINT_SYMBOL_PROP,
@@ -283,7 +283,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    //additional 'PercentageNumberFormat'
+    
     rOutProperties.push_back(
         Property( "PercentageNumberFormat",
                   PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
@@ -312,18 +312,18 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // statistics
+    
     rOutProperties.push_back(
         Property( "ErrorBarX",
                   PROP_DATAPOINT_ERROR_BAR_X,
-                  // XPropertySet supporting service ErrorBar
+                  
                   ::getCppuType( reinterpret_cast< const uno::Reference< beans::XPropertySet > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "ErrorBarY",
                   PROP_DATAPOINT_ERROR_BAR_Y,
-                  // XPropertySet supporting service ErrorBar
+                  
                   ::getCppuType( reinterpret_cast< const uno::Reference< beans::XPropertySet > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -344,10 +344,10 @@ void DataPointProperties::AddPropertiesToVector(
 void DataPointProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_COLOR, 0x0099ccff ); // blue 8
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_COLOR, 0x0099ccff ); 
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_TRANSPARENCY, 0 );
 
-    //fill
+    
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_STYLE, drawing::FillStyle_SOLID );
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME );
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_GRADIENT_NAME );
@@ -355,20 +355,20 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_BITMAP_NAME );
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_BACKGROUND, false );
 
-    //border
-    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_COLOR, 0x000000 ); // black
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_STYLE, drawing::LineStyle_SOLID ); // drawing::LineStyle_NONE
+    
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_COLOR, 0x000000 ); 
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_STYLE, drawing::LineStyle_SOLID ); 
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_WIDTH, 0 );
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_DASH_NAME );
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_BORDER_TRANSPARENCY, 0 );
 
-    //line
+    
     PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_SOLID );
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, LinePropertiesHelper::PROP_LINE_WIDTH, 0 );
     PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_DASH, drawing::LineDash());
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_DASH_NAME );
 
-    //fill bitmap
+    
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETX, 0 );
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETY, 0 );
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX, 0 );
@@ -380,13 +380,13 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_BITMAP_SIZEY, 0 );
     PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_MODE, drawing::BitmapMode_REPEAT );
 
-    //others
+    
     chart2::Symbol aSymbProp;
     aSymbProp.Style = chart2::SymbolStyle_NONE;
     aSymbProp.StandardSymbol = 0;
-    aSymbProp.Size = awt::Size( 250, 250 ); // ca. 7pt x 7pt (7pt=246.94)
-    aSymbProp.BorderColor = 0x000000;       // Black
-    aSymbProp.FillColor = 0xee4000;         // OrangeRed2
+    aSymbProp.Size = awt::Size( 250, 250 ); 
+    aSymbProp.BorderColor = 0x000000;       
+    aSymbProp.FillColor = 0xee4000;         
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_SYMBOL_PROP, aSymbProp );
 
     PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_OFFSET, 0.0 );
@@ -395,15 +395,15 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault(
         rOutMap, PROP_DATAPOINT_LABEL,
         chart2::DataPointLabel(
-            sal_False, // ShowNumber
-            sal_False, // ShowNumberInPercent
-            sal_False, // ShowCategoryName
-            sal_False  // ShowLegendSymbol
+            sal_False, 
+            sal_False, 
+            sal_False, 
+            sal_False  
             ));
 
     PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
 
-    //@todo maybe choose a different one here -> should be dynamically that of the attached axis
+    
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_Y, uno::Reference< beans::XPropertySet >());
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
@@ -411,6 +411,6 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_TEXT_ROTATION, 0.0 );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

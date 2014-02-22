@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@ CachedDynamicResultSet::~CachedDynamicResultSet()
     impl_deinit();
 }
 
-//virtual
+
 void SAL_CALL CachedDynamicResultSet
     ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
@@ -59,7 +59,7 @@ void SAL_CALL CachedDynamicResultSet
     m_xMyResultOne = xCache;
 }
 
-//virtual
+
 void SAL_CALL CachedDynamicResultSet
     ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
@@ -73,16 +73,16 @@ void SAL_CALL CachedDynamicResultSet
     m_xMyResultTwo = xCache;
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
+
+
+
 XINTERFACE_COMMON_IMPL( CachedDynamicResultSet )
 
 Any SAL_CALL CachedDynamicResultSet
     ::queryInterface( const Type&  rType )
     throw ( RuntimeException )
 {
-    //list all interfaces inclusive baseclasses of interfaces
+    
 
     Any aRet = DynamicResultSetWrapper::queryInterface( rType );
     if( aRet.hasValue() )
@@ -95,10 +95,10 @@ Any SAL_CALL CachedDynamicResultSet
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//--------------------------------------------------------------------------
-// XTypeProvider methods.
-//--------------------------------------------------------------------------
-//list all interfaces exclusive baseclasses
+
+
+
+
 XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
                     , XTypeProvider
                     , XServiceInfo
@@ -106,18 +106,18 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
                     , XSourceInitialization
                     );
 
-//--------------------------------------------------------------------------
-// XServiceInfo methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
                             OUString( "com.sun.star.comp.ucb.CachedDynamicResultSet" ),
                             OUString( CACHED_DRS_SERVICE_NAME ) );
 
-//--------------------------------------------------------------------------
-// own methds. ( inherited )
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 void SAL_CALL CachedDynamicResultSet
     ::impl_disposing( const EventObject& Source )
     throw( RuntimeException )
@@ -126,11 +126,11 @@ void SAL_CALL CachedDynamicResultSet
     m_xContentIdentifierMapping.clear();
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// class CachedDynamicResultSetFactory
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
+
+
+
 
 CachedDynamicResultSetFactory::CachedDynamicResultSetFactory(
         const Reference< XComponentContext > & xContext )
@@ -142,43 +142,43 @@ CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
 {
 }
 
-//--------------------------------------------------------------------------
-// CachedDynamicResultSetFactory XInterface methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XINTERFACE_IMPL_3( CachedDynamicResultSetFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XCachedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
-// CachedDynamicResultSetFactory XTypeProvider methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XCachedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
-// CachedDynamicResultSetFactory XServiceInfo methods.
-//--------------------------------------------------------------------------
+
+
+
 
 XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetFactory,
                          OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
                          OUString( CACHED_DRS_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
-// Service factory implementation.
-//--------------------------------------------------------------------------
+
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
-// CachedDynamicResultSetFactory XCachedDynamicResultSetFactory methods.
-//--------------------------------------------------------------------------
 
-//virtual
+
+
+
+
 Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory
     ::createCachedDynamicResultSet(
           const Reference< XDynamicResultSet > & SourceStub

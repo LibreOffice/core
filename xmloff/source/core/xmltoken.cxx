@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -25,7 +25,7 @@
 
 namespace xmloff { namespace token {
 
-    // keep the tokens (and their length)
+    
     namespace
     {
         struct XMLTokenEntry
@@ -53,114 +53,114 @@ namespace xmloff { namespace token {
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL, XML_TOKEN_START },
 #else
-        { 0, NULL, NULL },                            // XML_TOKEN_START
+        { 0, NULL, NULL },                            
 #endif
 
-        // common XML
+        
         TOKEN( "CDATA",                 XML_CDATA ),
         TOKEN( " ",                     XML_WS ),
         TOKEN( "xml",                   XML_XML ),
         TOKEN( "xmlns",                 XML_XMLNS ),
         TOKEN( "version=\"1.0\" encoding=\"UTF-8\"",      XML_XML_PI ),
         TOKEN( "<!DOCTYPE ",            XML_XML_DOCTYPE_PREFIX ),
-        TOKEN( " PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">",      XML_XML_DOCTYPE_SUFFIX ),
+        TOKEN( " PUBLIC \"-
 
-        // namespace prefixes and names
-        TOKEN( "http://www.w3.org/XML/1998/namespace",      XML_N_XML ),
+        
+        TOKEN( "http:
         TOKEN( "office",                XML_NP_OFFICE ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:office:1.0",      XML_N_OFFICE ),
-        TOKEN( "http://sun.com/xmlns/staroffice/office",      XML_N_OFFICE_OLD ),
+        TOKEN( "http:
         TOKEN( "meta",                  XML_NP_META ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:meta:1.0",      XML_N_META ),
-        TOKEN( "http://sun.com/xmlns/staroffice/meta",      XML_N_META_OLD ),
+        TOKEN( "http:
         TOKEN( "style",                 XML_NP_STYLE ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:style:1.0",      XML_N_STYLE ),
-        TOKEN( "http://sun.com/xmlns/staroffice/style",      XML_N_STYLE_OLD ),
+        TOKEN( "http:
         TOKEN( "number",                XML_NP_NUMBER ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0",      XML_N_NUMBER ),
-        TOKEN( "http://sun.com/xmlns/staroffice/number",      XML_N_NUMBER_OLD ),
+        TOKEN( "http:
         TOKEN( "text",                  XML_NP_TEXT ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:text:1.0",      XML_N_TEXT ),
-        TOKEN( "http://sun.com/xmlns/staroffice/text",      XML_N_TEXT_OLD ),
+        TOKEN( "http:
         TOKEN( "table",                 XML_NP_TABLE ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:table:1.0",      XML_N_TABLE ),
-        TOKEN( "http://sun.com/xmlns/staroffice/table",      XML_N_TABLE_OLD ),
+        TOKEN( "http:
         TOKEN( "draw",                  XML_NP_DRAW ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",      XML_N_DRAW ),
         TOKEN( "dr3d",                  XML_NP_DR3D ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0",      XML_N_DR3D ),
-        TOKEN( "http://sun.com/xmlns/staroffice/draw",      XML_N_DRAW_OLD ),
+        TOKEN( "http:
         TOKEN( "presentation",             XML_NP_PRESENTATION ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0",      XML_N_PRESENTATION ),
-        TOKEN( "http://sun.com/xmlns/staroffice/presentation",      XML_N_PRESENTATION_OLD ),
+        TOKEN( "http:
         TOKEN( "chart",                     XML_NP_CHART ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:chart:1.0",      XML_N_CHART ),
         TOKEN( "config",                    XML_NP_CONFIG ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:config:1.0",      XML_N_CONFIG ),
-        TOKEN( "http://sun.com/xmlns/staroffice/chart",      XML_N_CHART_OLD ),
+        TOKEN( "http:
         TOKEN( "fo",                        XML_NP_FO ),
-        TOKEN( "http://www.w3.org/1999/XSL/Format/",      XML_N_FO_OLD ),
-        TOKEN( "http://www.w3.org/1999/XSL/Format",      XML_N_FO ),
+        TOKEN( "http:
+        TOKEN( "http:
         TOKEN( "xlink",                     XML_NP_XLINK ),
-        TOKEN( "http://www.w3.org/1999/xlink",      XML_N_XLINK ),
-        TOKEN( "http://www.w3.org/1999/xlink/namespace",      XML_N_XLINK_OLD ),
+        TOKEN( "http:
+        TOKEN( "http:
         TOKEN( "dc",                        XML_NP_DC ),
-        TOKEN( "http://purl.org/dc/elements/1.1/",      XML_N_DC ),
+        TOKEN( "http:
         TOKEN( "svg",                       XML_NP_SVG ),
-        TOKEN( "http://www.w3.org/2000/svg",      XML_N_SVG ),
+        TOKEN( "http:
         TOKEN( "form",                      XML_NP_FORM ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:form:1.0",      XML_N_FORM ),
         TOKEN( "script",                    XML_NP_SCRIPT ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:script:1.0",      XML_N_SCRIPT ),
         TOKEN( "xforms",                                    XML_NP_XFORMS_1_0 ),
-        TOKEN( "http://www.w3.org/2002/xforms",             XML_N_XFORMS_1_0 ),
+        TOKEN( "http:
         TOKEN( "xsd",                                       XML_NP_XSD ),
-        TOKEN( "http://www.w3.org/2001/XMLSchema",          XML_N_XSD ),
+        TOKEN( "http:
         TOKEN( "xsi",                                       XML_NP_XSI ),
-        TOKEN( "http://www.w3.org/2001/XMLSchema-instance", XML_N_XSI ),
+        TOKEN( "http:
 
         TOKEN( "block-list",                XML_NP_BLOCK_LIST ),
-        TOKEN( "http://openoffice.org/2001/block-list",      XML_N_BLOCK_LIST ),
+        TOKEN( "http:
 
         TOKEN( "math",                      XML_NP_MATH ),
-        TOKEN( "http://www.w3.org/1998/Math/MathML",      XML_N_MATH ),
+        TOKEN( "http:
 
         TOKEN( "VL",                        XML_NP_VERSIONS_LIST ),
-        TOKEN( "http://openoffice.org/2001/versions-list",      XML_N_VERSIONS_LIST ),
+        TOKEN( "http:
 
-        // erAck: 2008-04-09T20:12+0200  OpenFormula aka ODFF
+        
         TOKEN( "of",                    XML_NP_OF ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:of:1.2",  XML_N_OF ),
 
-        // ODF 1.2 metadata: RDFa and GRDDL
+        
         TOKEN( "xhtml",                                 XML_NP_XHTML ),
-        TOKEN( "http://www.w3.org/1999/xhtml",          XML_N_XHTML ),
+        TOKEN( "http:
         TOKEN( "grddl",                                 XML_NP_GRDDL ),
-        TOKEN( "http://www.w3.org/2003/g/data-view#",   XML_N_GRDDL ),
+        TOKEN( "http:
 
-        // ODF Enhanced namespaces
+        
         TOKEN( "officeooo", XML_NP_OFFICE_EXT ),
-        TOKEN( "http://openoffice.org/2009/office", XML_N_OFFICE_EXT ),
+        TOKEN( "http:
 
-        // jonp: 2008-09-24 Excel Interop
+        
         TOKEN( "formx",                           XML_NP_FORMX ),
         TOKEN( "urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0", XML_N_FORMX ),
         TOKEN( "tableooo", XML_NP_TABLE_EXT ),
-        TOKEN( "http://openoffice.org/2009/table", XML_N_TABLE_EXT ),
+        TOKEN( "http:
 
         TOKEN( "drawooo", XML_NP_DRAW_EXT ),
-        TOKEN( "http://openoffice.org/2010/draw", XML_N_DRAW_EXT ),
+        TOKEN( "http:
 
         TOKEN( "css3t",                        XML_NP_CSS3TEXT ),
-        TOKEN( "http://www.w3.org/TR/css3-text/", XML_N_CSS3TEXT ),
+        TOKEN( "http:
 
-        // extension namespace for calc extensions
+        
         TOKEN( "calcext",                         XML_NP_CALC_EXT ),
         TOKEN( "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0", XML_N_CALC_EXT ),
         TOKEN( "loext",                           XML_NP_LO_EXT ),
         TOKEN( "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0", XML_N_LO_EXT ),
 
-        // units
+        
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),
         TOKEN( "km",                              XML_UNIT_KM ),
@@ -171,7 +171,7 @@ namespace xmloff { namespace token {
         TOKEN( "mi",                              XML_UNIT_MILES ),
         TOKEN( "in",                              XML_UNIT_INCH ),
 
-        // any other
+        
         TOKEN( "1",                               XML_1 ),
         TOKEN( "10",                              XML_10 ),
         TOKEN( "2",                               XML_2 ),
@@ -2154,7 +2154,7 @@ namespace xmloff { namespace token {
         TOKEN( "layout-grid-print",               XML_LAYOUT_GRID_PRINT ),
         TOKEN( "layout-grid-display",             XML_LAYOUT_GRID_DISPLAY ),
 
-        //text grid enhancement for better CJK support
+        
         TOKEN( "default-page-layout",             XML_DEFAULT_PAGE_LAYOUT ),
         TOKEN( "layout-grid-standard-mode",       XML_LAYOUT_GRID_STANDARD_MODE ),
         TOKEN( "layout-grid-base-width",          XML_LAYOUT_GRID_BASE_WIDTH ),
@@ -2169,10 +2169,10 @@ namespace xmloff { namespace token {
 
         TOKEN( "marked-invalid",                  XML_MARKED_INVALID ),
 
-        // Regression curve & properties
+        
         TOKEN( "regression-curve",                XML_REGRESSION_CURVE ),
         TOKEN( "regression-type",                 XML_REGRESSION_TYPE ),
-        // Extended regression curve properties - ODF 1.2 extended
+        
         TOKEN( "regression-name",                 XML_REGRESSION_CURVE_NAME ),
         TOKEN( "regression-extrapolate-forward",  XML_REGRESSION_EXTRAPOLATE_FORWARD ),
         TOKEN( "regression-extrapolate-backward", XML_REGRESSION_EXTRAPOLATE_BACKWARD ),
@@ -2207,7 +2207,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "use-outline-level",                 XML_USE_OUTLINE_LEVEL ),
 
-        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        
         TOKEN( "close-front",                      XML_CLOSE_FRONT ),
         TOKEN( "close-back",                       XML_CLOSE_BACK ),
 
@@ -2221,7 +2221,7 @@ namespace xmloff { namespace token {
         TOKEN( "unsorted",                         XML_UNSORTED ),
         TOKEN( "font-independent-line-spacing",        XML_FONT_INDEPENDENT_LINE_SPACING ),
 
-        // Wrong! Do not write, use XML_SORT_ASCENDING instead. Only read. fdo#72548
+        
         TOKEN( "sorted-ascending",                 XML_SORTED_ASCENDING ),
 
         TOKEN( "database",                         XML_DATABASE ),
@@ -2295,7 +2295,7 @@ namespace xmloff { namespace token {
         TOKEN( "is-ascending",                     XML_IS_ASCENDING ),
         TOKEN( "schema-name",                      XML_SCHEMA_NAME ),
         TOKEN( "db",                               XML_NP_DB ),
-        TOKEN( "http://openoffice.org/2004/database",      XML_N_DB ),
+        TOKEN( "http:
         TOKEN( "apply-filter",                     XML_APPLY_FILTER ),
         TOKEN( "apply-order",                      XML_APPLY_ORDER ),
         TOKEN( "automatic-print-range",            XML_AUTOMATIC_PRINT_RANGE ),
@@ -2324,9 +2324,9 @@ namespace xmloff { namespace token {
 
         TOKEN( "selected-page",                        XML_SELECTED_PAGE ),
 
-        // DVO, OD 01.10.2003 #i18732#
+        
         TOKEN( "flow-with-text",        XML_FLOW_WITH_TEXT ),
-        TOKEN( "with-tab",              XML_WITH_TAB ), // #i21237#
+        TOKEN( "with-tab",              XML_WITH_TAB ), 
 
         TOKEN( "custom-shape" ,                     XML_CUSTOM_SHAPE ),
         TOKEN( "engine" ,                               XML_ENGINE ),
@@ -2437,26 +2437,26 @@ namespace xmloff { namespace token {
         TOKEN( "repeat-content",                    XML_REPEAT_CONTENT ),
         TOKEN( "shrink-to-fit",                     XML_SHRINK_TO_FIT ),
 
-        // OD 2004-05-05 #i28701#
+        
         TOKEN( "wrap-influence-on-position",           XML_WRAP_INFLUENCE_ON_POSITION ),
-        // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
+        
         TOKEN( "once-successive",                       XML_ONCE_SUCCESSIVE ),
         TOKEN( "once-concurrent",                       XML_ONCE_CONCURRENT ),
 
-        // Names for OOo format only
-        TOKEN( "http://openoffice.org/2000/office",     XML_N_OFFICE_OOO ),
-        TOKEN( "http://openoffice.org/2000/meta",       XML_N_META_OOO ),
-        TOKEN( "http://openoffice.org/2000/style",      XML_N_STYLE_OOO ),
-        TOKEN( "http://openoffice.org/2000/datastyle",  XML_N_NUMBER_OOO ),
-        TOKEN( "http://openoffice.org/2000/text",       XML_N_TEXT_OOO ),
-        TOKEN( "http://openoffice.org/2000/table",      XML_N_TABLE_OOO ),
-        TOKEN( "http://openoffice.org/2000/drawing",    XML_N_DRAW_OOO ),
-        TOKEN( "http://openoffice.org/2000/dr3d",       XML_N_DR3D_OOO ),
-        TOKEN( "http://openoffice.org/2000/presentation",XML_N_PRESENTATION_OOO ),
-        TOKEN( "http://openoffice.org/2000/chart",      XML_N_CHART_OOO ),
-        TOKEN( "http://openoffice.org/2001/config",     XML_N_CONFIG_OOO ),
-        TOKEN( "http://openoffice.org/2000/form",       XML_N_FORM_OOO ),
-        TOKEN( "http://openoffice.org/2000/script",     XML_N_SCRIPT_OOO ),
+        
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
+        TOKEN( "http:
 
         TOKEN( "global",                     XML_GLOBAL ),
 
@@ -2501,7 +2501,7 @@ namespace xmloff { namespace token {
         TOKEN( "start-indent",                     XML_START_INDENT ),
         TOKEN( "end-indent",                       XML_END_INDENT ),
 
-        // chart Oasis format additions
+        
         TOKEN( "interval-minor-divisor",           XML_INTERVAL_MINOR_DIVISOR ),
         TOKEN( "date-string",                      XML_DATE_STRING ),
 
@@ -2548,13 +2548,13 @@ namespace xmloff { namespace token {
         TOKEN( "count-in-text-boxes",              XML_COUNT_IN_TEXT_BOXES ),
 
         TOKEN( "ooo",                              XML_NP_OOO ),
-        TOKEN( "http://openoffice.org/2004/office",      XML_N_OOO ),
+        TOKEN( "http:
         TOKEN( "ooow",                             XML_NP_OOOW ),
-        TOKEN( "http://openoffice.org/2004/writer",      XML_N_OOOW ),
+        TOKEN( "http:
         TOKEN( "oooc",                             XML_NP_OOOC ),
-        TOKEN( "http://openoffice.org/2004/calc",      XML_N_OOOC ),
+        TOKEN( "http:
         TOKEN( "dom",                              XML_NP_DOM ),
-        TOKEN( "http://www.w3.org/2001/xml-events",      XML_N_DOM ),
+        TOKEN( "http:
 
         TOKEN( "event-listeners",      XML_EVENT_LISTENERS ),
         TOKEN( "event-listener",      XML_EVENT_LISTENER ),
@@ -2594,8 +2594,8 @@ namespace xmloff { namespace token {
         TOKEN( "step-end",                     XML_STEP_END ),
         TOKEN( "step-center-x",                XML_STEP_CENTER_X ),
         TOKEN( "step-center-y",                XML_STEP_CENTER_Y ),
-        // the gnm: values should only used for reading Gnumeric ods file
-        // these values should never be written
+        
+        
         TOKEN( "gnm:step-start",               XML_GNM_STEP_START ),
         TOKEN( "gnm:step-end",                 XML_GNM_STEP_END ),
         TOKEN( "gnm:step-center-x",            XML_GNM_STEP_CENTER_X ),
@@ -2627,7 +2627,7 @@ namespace xmloff { namespace token {
         TOKEN( "hourglass",                    XML_HOURGLASS ),
         TOKEN( "symbol-name",                  XML_SYMBOL_NAME ),
         TOKEN( "symbol-type",                  XML_SYMBOL_TYPE ),
-        TOKEN( "image-opacity",                XML_IMAGE_OPACITY ), // #i25616#
+        TOKEN( "image-opacity",                XML_IMAGE_OPACITY ), 
 
         TOKEN( "default-outline-level",        XML_DEFAULT_OUTLINE_LEVEL ),
         TOKEN( "show-details",                 XML_SHOW_DETAILS ),
@@ -2636,7 +2636,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "X",                            XML_uX ),
         TOKEN( "dlg",                                    XML_NP_DLG ),
-        TOKEN( "http://openoffice.org/2000/dialog",      XML_N_DLG ),
+        TOKEN( "http:
         TOKEN( "script-data",                  XML_SCRIPT_DATA ),
         TOKEN( "libraries",                    XML_LIBRARIES ),
         TOKEN( "source-code",                  XML_SOURCE_CODE ),
@@ -2648,7 +2648,7 @@ namespace xmloff { namespace token {
         TOKEN( "screen",                       XML_SCREEN ),
         TOKEN( "printer",                      XML_PRINTER ),
 
-        // XForms token
+        
         TOKEN( "model",                            XML_MODEL ),
         TOKEN( "schema",                           XML_SCHEMA ),
         TOKEN( "bind",                             XML_BIND ),
@@ -2672,7 +2672,7 @@ namespace xmloff { namespace token {
         TOKEN( "mediatype",                        XML_MEDIATYPE ),
         TOKEN( "includenamespaceprefixes",         XML_INCLUDENAMESPACEPREFIXES ),
 
-        // XForms/XSD Schema tokens
+        
         TOKEN( "base",                             XML_BASE ),
         TOKEN( "targetNamespace",                  XML_TARGETNAMESPACE ),
         TOKEN( "simpleType",                       XML_SIMPLETYPE ),
@@ -2736,7 +2736,7 @@ namespace xmloff { namespace token {
         TOKEN( "attributeName",             XML_ATTRIBUTENAME ),
 
         TOKEN( "smil",                      XML_NP_SMIL ),
-        TOKEN( "http://www.w3.org/2001/SMIL20/", XML_N_SMIL ),
+        TOKEN( "http:
 
         TOKEN( "anim",                      XML_NP_ANIMATION ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0",  XML_N_ANIMATION ),
@@ -2959,18 +2959,18 @@ namespace xmloff { namespace token {
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0",      XML_N_SVG_COMPAT ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0",      XML_N_FO_COMPAT ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0",      XML_N_SMIL_COMPAT ),
-        TOKEN( "http://www.w3.org/2001/SMIL20", XML_N_SMIL_OLD ),
+        TOKEN( "http:
         TOKEN( "xforms-submission",            XML_XFORMS_SUBMISSION ),
         TOKEN( "xforms-list-source",            XML_XFORMS_LIST_SOURCE ),
 
-        TOKEN( "http://www.w3.org/",    XML_URI_W3_PREFIX ),
+        TOKEN( "http:
         TOKEN( "/xforms",               XML_URI_XFORMS_SUFFIX ),
         /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
            are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD. (#i49139#)
         */
         TOKEN( "horizontal-on-even",        XML_HORIZONTAL_ON_EVEN ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:report:1.0",        XML_N_RPT_OASIS ),
-        TOKEN( "http://openoffice.org/2005/report",       XML_N_RPT ),
+        TOKEN( "http:
         TOKEN( "group",       XML_GROUP ),
         TOKEN( "groups",       XML_GROUPS        ),
         TOKEN( "report-header",       XML_REPORT_HEADER ),
@@ -3046,9 +3046,9 @@ namespace xmloff { namespace token {
         TOKEN( "even-columns",          XML_EVEN_COLUMNS    ),
         TOKEN( "odd-columns",           XML_ODD_COLUMNS     ),
         TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
-        // Password error from 1.4 to 2.0 Beta (#i45874#)
+        
         TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),
-        // OpenDocument <text:numbered-paragraph> element not supported on OpenDocument import (#i52127#)
+        
         TOKEN( "numbered-paragraph", XML_NUMBERED_PARAGRAPH),
         TOKEN( "master-detail-fields",  XML_MASTER_DETAIL_FIELDS),
         TOKEN( "master-detail-field",   XML_MASTER_DETAIL_FIELD),
@@ -3086,7 +3086,7 @@ namespace xmloff { namespace token {
         TOKEN( "automatic-content",     XML_AUTOMATIC_CONTENT ),
         TOKEN( "display-r-square",      XML_DISPLAY_R_SQUARE ),
         TOKEN( "display-equation",      XML_DISPLAY_EQUATION ),
-        // db odf 12
+        
         TOKEN( "table-representations", XML_TABLE_REPRESENTATIONS ),
         TOKEN( "table-representation",  XML_TABLE_REPRESENTATION ),
         TOKEN( "schema-definition",     XML_SCHEMA_DEFINITION ),
@@ -3107,7 +3107,7 @@ namespace xmloff { namespace token {
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
         TOKEN( "default-row-style-name", XML_DEFAULT_ROW_STYLE_NAME),
         TOKEN( "angle-offset",          XML_ANGLE_OFFSET ),
-        // Core implementation for direct cross-references (#i81002#)
+        
         TOKEN( "number-no-superior", XML_NUMBER_NO_SUPERIOR ),
         TOKEN( "number-all-superior", XML_NUMBER_ALL_SUPERIOR ),
         TOKEN( "list-level-position-and-space-mode", XML_LIST_LEVEL_POSITION_AND_SPACE_MODE ),
@@ -3120,7 +3120,7 @@ namespace xmloff { namespace token {
         TOKEN( "nothing",                            XML_NOTHING ),
         TOKEN( "list-tab-stop-position",             XML_LIST_TAB_STOP_POSITION ),
 
-        // bm: chart error bar extensions (ODF 1.2)
+        
         TOKEN( "standard-error",        XML_STANDARD_ERROR ),
         TOKEN( "cell-range" ,           XML_CELL_RANGE ),
         TOKEN( "error-lower-range",     XML_ERROR_LOWER_RANGE ),
@@ -3129,16 +3129,16 @@ namespace xmloff { namespace token {
         TOKEN( "continue-list",         XML_CONTINUE_LIST ),
         TOKEN( "style-override",        XML_STYLE_OVERRIDE ),
 
-        // XForms: Changes to model should optionally set document's modified state. (#i90243#)
+        
         TOKEN( "xforms-settings",       XML_XFORM_MODEL_SETTINGS ),
 
-        // ODF 1.2 metadata
+        
         TOKEN( "meta-field",            XML_META_FIELD ),
         TOKEN( "about",                 XML_ABOUT ),
         TOKEN( "datatype",              XML_DATATYPE ),
         TOKEN( "transformation",        XML_TRANSFORMATION ),
 
-        // ODF 1.2 numbered-paragraph
+        
         TOKEN( "list-id",               XML_LIST_ID ),
 
         TOKEN( "treat-empty-cells",     XML_TREAT_EMPTY_CELLS ),
@@ -3146,7 +3146,7 @@ namespace xmloff { namespace token {
         TOKEN( "use-zero",              XML_USE_ZERO ),
         TOKEN( "ignore",                XML_IGNORE ),
 
-        // enhanced fields
+        
         TOKEN( "fieldmark",             XML_FIELDMARK ),
         TOKEN( "fieldmark-start",       XML_FIELDMARK_START ),
         TOKEN( "fieldmark-end",         XML_FIELDMARK_END ),
@@ -3183,7 +3183,7 @@ namespace xmloff { namespace token {
         TOKEN( "does-not-end-with",     XML_DOES_NOT_END_WITH ),
 
         TOKEN( "chartooo", XML_NP_CHART_EXT ),
-        TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
+        TOKEN( "http:
         TOKEN( "coordinate-region",    XML_COORDINATE_REGION ),
 
         TOKEN( "diagonal-bl-tr-widths", XML_DIAGONAL_BL_TR_WIDTHS ),
@@ -3198,7 +3198,7 @@ namespace xmloff { namespace token {
         TOKEN( "high",                  XML_HIGH),
         TOKEN( "wide",                  XML_WIDE),
 
-        TOKEN( "axis-type",             XML_AXIS_TYPE ), //#i25706#
+        TOKEN( "axis-type",             XML_AXIS_TYPE ), 
         TOKEN( "date-scale",            XML_DATE_SCALE ),
         TOKEN( "base-time-unit",        XML_BASE_TIME_UNIT ),
         TOKEN( "major-interval-value",  XML_MAJOR_INTERVAL_VALUE ),
@@ -3211,7 +3211,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "margin", XML_MARGIN),
 
-        // regina, ODF1.2 additional symbols in charts
+        
         TOKEN( "star",                         XML_STAR ),
         TOKEN( "asterisk",                     XML_ASTERISK ),
         TOKEN( "horizontal-bar",               XML_HORIZONTAL_BAR ),
@@ -3219,7 +3219,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "std-weight", XML_ERROR_STANDARD_WEIGHT ),
 
-        // erAck: 2013-07-02  BCP 47 language tags
+        
         TOKEN( "rfc-language-tag",          XML_RFC_LANGUAGE_TAG ),
         TOKEN( "rfc-language-tag-asian",    XML_RFC_LANGUAGE_TAG_ASIAN ),
         TOKEN( "rfc-language-tag-complex",  XML_RFC_LANGUAGE_TAG_COMPLEX ),
@@ -3237,16 +3237,16 @@ namespace xmloff { namespace token {
 #endif
     };
 
-    // get OUString representation of token
+    
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
     {
 #if OSL_DEBUG_LEVEL > 0
         static bool s_bChecked = false;
         if (!s_bChecked)
         {
-            // check the consistency of the token list. Below, we use the
-            // ordinal value of the token as index into the token list, so we
-            // should make sure that every entry is at the proper position
+            
+            
+            
             const XMLTokenEntry* pEntry = aTokenList;
             const XMLTokenEntry* pEntryEnd =
                 pEntry + SAL_N_ELEMENTS(aTokenList);
@@ -3254,10 +3254,10 @@ namespace xmloff { namespace token {
             while (pEntry < pEntryEnd)
             {
                 assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
-                    // "xmloff::GetXMLToken: inconsistency in the token list!"
+                    
                 ++pEntry, ++nPos;
             }
-            s_bChecked = true; // it's all static, checking once is enough
+            s_bChecked = true; 
         }
 #endif
         DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
@@ -3271,7 +3271,7 @@ namespace xmloff { namespace token {
         return *pToken->pOUString;
     }
 
-    // does rString represent eToken?
+    
     sal_Bool IsXMLToken(
         const OUString& rString,
         enum XMLTokenEnum eToken )

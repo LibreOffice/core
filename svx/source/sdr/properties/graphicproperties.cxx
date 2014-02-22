@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/graphicproperties.hxx>
@@ -25,29 +25,29 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& GraphicProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return *(new SfxItemSet(rPool,
 
-                // range from SdrAttrObj
+                
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // range from SdrGrafObj
+                
                 SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
 
-                // range from SdrTextObj
+                
                 EE_ITEMS_START, EE_ITEMS_END,
 
-                // end
+                
                 0, 0));
         }
 
@@ -74,18 +74,18 @@ namespace sdr
         {
             SdrGrafObj& rObj = (SdrGrafObj&)GetSdrObject();
 
-            // local changes
+            
             rObj.SetXPolyDirty();
 
-            // #i29367# Update GraphicAttr, too. This was formerly
-            // triggered by SdrGrafObj::Notify, which is no longer
-            // called nowadays. BTW: strictly speaking, the whole
-            // ImpSetAttrToGrafInfostuff could
-            // be dumped, when SdrGrafObj::aGrafInfo is removed and
-            // always created on the fly for repaint.
+            
+            
+            
+            
+            
+            
             rObj.ImpSetAttrToGrafInfo();
 
-            // call parent
+            
             RectangleProperties::ItemSetChanged(rSet);
         }
 
@@ -93,22 +93,22 @@ namespace sdr
         {
             SdrGrafObj& rObj = (SdrGrafObj&)GetSdrObject();
 
-            // local changes
+            
             rObj.SetXPolyDirty();
 
-            // call parent
+            
             RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
-            // local changes
+            
             rObj.ImpSetAttrToGrafInfo();
         }
 
         void GraphicProperties::ForceDefaultAttributes()
         {
-            // call parent
+            
             RectangleProperties::ForceDefaultAttributes();
 
-            // force ItemSet
+            
             GetObjectItemSet();
 
             mpItemSet->Put( SdrGrafLuminanceItem( 0 ) );
@@ -122,7 +122,7 @@ namespace sdr
             mpItemSet->Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
             mpItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

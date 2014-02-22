@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstddef>
@@ -43,7 +43,7 @@ wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
         if (c == L'\0') {
             break;
         } else if (c == L'"') {
-            // Double any preceding backslashes as required by Windows:
+            
             for (std::size_t i = 0; i < n; ++i) {
                 *buffer++ = L'\\';
             }
@@ -58,8 +58,8 @@ wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
             n = 0;
         }
     }
-    // The command line will continue with a double quote, so double any
-    // preceding backslashes as required by Windows:
+    
+    
     for (std::size_t i = 0; i < n; ++i) {
         *buffer++ = L'\\';
     }
@@ -88,7 +88,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         }
     }
     wchar_t bootstrap[MY_LENGTH(L"vnd.sun.star.pathname:") + MAX_PATH] =
-        L"vnd.sun.star.pathname:"; //TODO: overflow
+        L"vnd.sun.star.pathname:"; 
     wchar_t * bootstrapEnd = tools::buildPath(
         bootstrap + MY_LENGTH(L"vnd.sun.star.pathname:"), path, pathEnd,
         MY_STRING(L"fundamental.ini"));
@@ -147,16 +147,16 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         exit(EXIT_FAILURE);
     }
     std::size_t clSize = MY_LENGTH(L"\"") + 4 * (pythonexeEnd - pythonexe) +
-        MY_LENGTH(L"\"\0"); //TODO: overflow
-        // 4 * len: each char preceded by backslash, each trailing backslash
-        // doubled
+        MY_LENGTH(L"\"\0"); 
+        
+        
     for (int i = 1; i < argc; ++i) {
 #ifdef __MINGW32__
         clSize += MY_LENGTH(L" \"") + 4 * strlen(argv[i]) +
 #else
         clSize += MY_LENGTH(L" \"") + 4 * wcslen(argv[i]) +
 #endif
-            MY_LENGTH(L"\""); //TODO: overflow
+            MY_LENGTH(L"\""); 
     }
     wchar_t * cl = new wchar_t[clSize];
     if (cl == NULL) {
@@ -194,7 +194,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     }
     std::size_t len = (urepathEnd - urepath) + MY_LENGTH(L";") +
         (pathEnd - path) + (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1;
-        //TODO: overflow
+        
     wchar_t * value = new wchar_t[len];
     _snwprintf(
         value, len, L"%s;%s%s%s", urepath, path, n == 0 ? L"" : L";", orig);
@@ -223,7 +223,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath4End - pythonpath4) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
+        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; 
     value = new wchar_t[len];
     _snwprintf(
         value, len, L"%s;%s;%s;%s%s%s", path, pythonpath2, pythonpath4,
@@ -231,7 +231,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
 #else
     len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
+        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; 
     value = new wchar_t[len];
     _snwprintf(
         value, len, L"%s;%s;%s%s%s", path, pythonpath2, pythonpath3,

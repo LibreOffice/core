@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
@@ -22,7 +22,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -31,11 +31,11 @@ namespace drawinglayer
         class ImpSdr3DLightAttribute
         {
         public:
-            // 3D light attribute definitions
+            
             basegfx::BColor                         maColor;
             basegfx::B3DVector                      maDirection;
 
-            // bitfield
+            
             bool                                    mbSpecular : 1;
 
             ImpSdr3DLightAttribute(
@@ -55,7 +55,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const basegfx::BColor& getColor() const { return maColor; }
             const basegfx::B3DVector& getDirection() const { return maDirection; }
             bool getSpecular() const { return mbSpecular; }
@@ -118,7 +118,7 @@ namespace drawinglayer
             return mpSdr3DLightAttribute->getSpecular();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

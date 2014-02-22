@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/security.hxx>
@@ -69,9 +69,9 @@ public:
     }
 };
 
-//=============================================================================
-// class ScShareDocumentDlg
-//=============================================================================
+
+
+
 
 ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     : ModalDialog(pParent, "ShareDocumentDialog", "modules/scalc/ui/sharedocumentdlg.ui")
@@ -165,7 +165,7 @@ void ScShareDocumentDlg::UpdateView()
                             aUser = OUString(m_aStrUnknownUser) + " " + OUString::number( nUnknownUser++ );
                         }
 
-                        // parse the edit time string of the format "DD.MM.YYYY hh:mm"
+                        
                         OUString aDateTimeStr = pUsersData[i][SHARED_EDITTIME_ID];
                         sal_Int32 nIndex = 0;
                         OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
@@ -203,7 +203,7 @@ void ScShareDocumentDlg::UpdateView()
     }
     else
     {
-        // get OOO user name
+        
         SvtUserOptions aUserOpt;
         OUString aUser = aUserOpt.GetFirstName();
         if ( !aUser.isEmpty() )
@@ -213,7 +213,7 @@ void ScShareDocumentDlg::UpdateView()
         aUser += aUserOpt.GetLastName();
         if ( aUser.isEmpty() )
         {
-            // get sys user name
+            
             OUString aUserName;
             ::osl::Security aSecurity;
             aSecurity.getUserName( aUserName );
@@ -221,7 +221,7 @@ void ScShareDocumentDlg::UpdateView()
         }
         if ( aUser.isEmpty() )
         {
-            // unknown user name
+            
             aUser = m_aStrUnknownUser;
         }
         aUser += " ";

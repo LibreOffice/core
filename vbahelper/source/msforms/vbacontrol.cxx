@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -72,12 +72,12 @@ ScVbaControl::getWindowPeer() throw (uno::RuntimeException)
     uno::Reference< css::awt::XWindowPeer >  xWinPeer;
     if ( !xControlShape.is() )
     {
-        // would seem to be a Userform control
+        
         uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY_THROW );
         xWinPeer =  xControl->getPeer();
     return xWinPeer;
     }
-    // form control
+    
     xControlModel.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
 
     uno::Reference< view::XControlAccess > xControlAccess( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -93,7 +93,7 @@ ScVbaControl::getWindowPeer() throw (uno::RuntimeException)
     return xWinPeer;
 }
 
-//ScVbaControlListener
+
 class ScVbaControlListener: public cppu::WeakImplHelper1< lang::XEventListener >
 {
 private:
@@ -122,20 +122,20 @@ ScVbaControlListener::disposing( const lang::EventObject& ) throw( uno::RuntimeE
     }
 }
 
-//ScVbaControl
+
 
 ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ControlImpl_BASE( xParent, xContext ),  bIsDialog(false), m_xControl( xControl ), m_xModel( xModel )
 {
-    //add listener
+    
     m_xEventListener.set( new ScVbaControlListener( this ) );
     setGeometryHelper( pGeomHelper );
     uno::Reference< lang::XComponent > xComponent( m_xControl, uno::UNO_QUERY_THROW );
     xComponent->addEventListener( m_xEventListener );
 
-    //init m_xProps
+    
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
     uno::Reference< awt::XControl> xUserFormControl( m_xControl, uno::UNO_QUERY ) ;
-    if ( xControlShape.is() ) // form control
+    if ( xControlShape.is() ) 
     {
         m_xProps.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
         OUString sDefaultControl;
@@ -143,7 +143,7 @@ ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, c
         uno::Reference< lang::XMultiComponentFactory > xMFac( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
         m_xEmptyFormControl.set( xMFac->createInstanceWithContext( sDefaultControl, mxContext ), uno::UNO_QUERY_THROW );
     }
-    else if ( xUserFormControl.is() ) // userform control
+    else if ( xUserFormControl.is() ) 
     {
         m_xProps.set( xUserFormControl->getModel(), uno::UNO_QUERY_THROW );
         bIsDialog = true;
@@ -173,7 +173,7 @@ void ScVbaControl::removeResouce() throw( uno::RuntimeException )
     m_xProps = NULL;
 }
 
-//In design model has different behavior
+
 sal_Bool SAL_CALL ScVbaControl::getEnabled() throw (uno::RuntimeException)
 {
     uno::Any aValue = m_xProps->getPropertyValue ( "Enabled" );
@@ -291,9 +291,9 @@ void SAL_CALL ScVbaControl::Move( double Left, double Top, const uno::Any& Width
 OUString SAL_CALL
 ScVbaControl::getControlSource() throw (uno::RuntimeException)
 {
-// #FIXME I *hate* having these upstream differences
-// but this is necessary until I manage to upstream other
-// dependent parts
+
+
+
     OUString sControlSource;
     uno::Reference< form::binding::XBindableValue > xBindable( m_xProps, uno::UNO_QUERY );
     if ( xBindable.is() )
@@ -319,9 +319,9 @@ void SAL_CALL
 ScVbaControl::setControlSource( const OUString& _controlsource ) throw (uno::RuntimeException)
 {
     OUString sEmpty;
-    // afaik this is only relevant for Excel documents ( and we need to set up a
-    // reference tab in case no Sheet is specified in "_controlsource"
-    // Can't use the active sheet either, code may of course access
+    
+    
+    
     uno::Reference< drawing::XDrawPagesSupplier > xSupplier( m_xModel, uno::UNO_QUERY_THROW );
  uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
     sal_Int32 nLen = xIndex->getCount();
@@ -333,7 +333,7 @@ ScVbaControl::setControlSource( const OUString& _controlsource ) throw (uno::Run
         {
             uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-            // get the www-standard container
+            
             uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
             sal_Int32 nCntrls = xFormControls->getCount();
             for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
@@ -446,16 +446,16 @@ struct PointerStyles
    PointerStyle loPointStyle;
 };
 
-// 1 -> 1 map of styles ( some dubious choices in there though )
+
 PointerStyles styles[] = {
-  /// assuming pointer default is Arrow
+  
   { msforms::fmMousePointer::fmMousePointerDefault, POINTER_ARROW },
   { msforms::fmMousePointer::fmMousePointerArrow, POINTER_ARROW },
   { msforms::fmMousePointer::fmMousePointerCross, POINTER_CROSS },
   { msforms::fmMousePointer::fmMousePointerIBeam, POINTER_TEXT },
-  { msforms::fmMousePointer::fmMousePointerSizeNESW,  POINTER_AUTOSCROLL_NSWE   }, // #TODO not correct, need to check, need to find the right one
+  { msforms::fmMousePointer::fmMousePointerSizeNESW,  POINTER_AUTOSCROLL_NSWE   }, 
   { msforms::fmMousePointer::fmMousePointerSizeNS,  POINTER_AUTOSCROLL_NS  },
-  { msforms::fmMousePointer::fmMousePointerSizeNWSE,  POINTER_AUTOSCROLL_NSWE  }, // #TODO not correct, need to check, need to find the right one
+  { msforms::fmMousePointer::fmMousePointerSizeNWSE,  POINTER_AUTOSCROLL_NSWE  }, 
   { msforms::fmMousePointer::fmMousePointerSizeWE,  POINTER_AUTOSCROLL_WE },
   { msforms::fmMousePointer::fmMousePointerUpArrow, POINTER_WINDOW_NSIZE  },
   { msforms::fmMousePointer::fmMousePointerHourGlass, POINTER_WAIT  },
@@ -463,7 +463,7 @@ PointerStyles styles[] = {
   { msforms::fmMousePointer::fmMousePointerAppStarting, POINTER_WAIT },
   { msforms::fmMousePointer::fmMousePointerHelp, POINTER_HELP },
   { msforms::fmMousePointer::fmMousePointerSizeAll, POINTER_CROSS },
-  { msforms::fmMousePointer::fmMousePointerCustom, POINTER_ARROW }, // not supported I guess
+  { msforms::fmMousePointer::fmMousePointerCustom, POINTER_ARROW }, 
 
 };
 
@@ -498,7 +498,7 @@ static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
 ::sal_Int32 SAL_CALL
 ScVbaControl::getMousePointer() throw (::com::sun::star::uno::RuntimeException)
 {
-    PointerStyle eType = POINTER_ARROW; // default ?
+    PointerStyle eType = POINTER_ARROW; 
     Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
@@ -528,7 +528,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt ) throw (
     uno::Reference< beans::XPropertySet > xProps( xScriptListener, uno::UNO_QUERY_THROW );
     xProps->setPropertyValue( "Model" , uno::makeAny( m_xModel ) );
 
-    // handling for sheet control
+    
     uno::Reference< msforms::XControl > xThisControl( this );
     try
     {
@@ -542,24 +542,24 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt ) throw (
         {
             evt.Source = xControlShape;
             aEvt.Source = m_xEmptyFormControl;
-            // Set up proper scriptcode
+            
             uno::Reference< lang::XMultiServiceFactory > xDocFac(  m_xModel, uno::UNO_QUERY_THROW );
             uno::Reference< document::XCodeNameQuery > xNameQuery(  xDocFac->createInstance( "ooo.vba.VBACodeNameProvider" ), uno::UNO_QUERY_THROW );
             uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
             evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
-            // handle if we passed in our own arguments
+            
             if ( !rEvt.Arguments.getLength() )
                 evt.Arguments[ 0 ] = uno::makeAny( aEvt );
             xScriptListener->firing( evt );
         }
         else
         {
-            if ( xControl.is() ) // normal control ( from dialog/userform )
+            if ( xControl.is() ) 
             {
-                // #FIXME We should probably store a reference to the
-                // parent dialog/userform here ( other wise the name of
-                // dialog could be changed and we won't be aware of it.
-                // ( OTOH this is probably an unlikely scenario )
+                
+                
+                
+                
                 evt.Source = xThisControl;
                 aEvt.Source = xControl;
                 evt.ScriptCode = m_sLibraryAndCodeName;
@@ -599,7 +599,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
 {
 }
 
-//ScVbaControlFactory
+
 
 /*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createShapeControl(
         const uno::Reference< uno::XComponentContext >& xContext,
@@ -610,7 +610,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
     sal_Int32 nClassId = -1;
     const static OUString sClassId( "ClassId" );
     xProps->getPropertyValue( sClassId ) >>= nClassId;
-    uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
+    uno::Reference< XHelperInterface > xVbaParent; 
     uno::Reference< drawing::XShape > xShape( xControlShape, uno::UNO_QUERY_THROW );
     ::std::auto_ptr< ConcreteXShapeGeometryAttributes > xGeoHelper( new ConcreteXShapeGeometryAttributes( xContext, xShape ) );
     switch( nClassId )
@@ -656,7 +656,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
     uno::Reference< beans::XPropertySet > xProps( xControl->getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< lang::XServiceInfo > xServiceInfo( xProps, uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xVBAControl;
-    uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
+    uno::Reference< XHelperInterface > xVbaParent; 
     ::std::auto_ptr< UserFormGeometryHelper > xGeoHelper( new UserFormGeometryHelper( xContext, xControl, fOffsetX, fOffsetY ) );
 
     if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
@@ -694,7 +694,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.custom.awt.UnoControlSystemAXContainerModel" ) )
         xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
-    // #FIXME implement a page control
+    
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoPageModel" ) )
         xVBAControl.set( new ScVbaControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoFrameModel" ) )
@@ -755,7 +755,7 @@ sal_Bool ScVbaControl::getAutoSize() throw (uno::RuntimeException)
     return bIsResizeEnabled;
 }
 
-// currently no implementation for this
+
 void ScVbaControl::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );

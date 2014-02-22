@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedIgnoreProperty.hxx"
@@ -99,30 +99,30 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( 
     rList.push_back( new WrappedIgnoreProperty( "FillColor", uno::makeAny( sal_Int32(-1) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillTransparence", uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradientName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradient", uno::makeAny( awt::Gradient() ) ) );
+
     rList.push_back( new WrappedIgnoreProperty( "FillGradientName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillGradient", uno::makeAny( awt::Gradient() ) ) );
+
     rList.push_back( new WrappedIgnoreProperty( "FillHatchName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillHatch", uno::makeAny( drawing::Hatch() ) ) );
+
     rList.push_back( new WrappedIgnoreProperty( "FillBackground", uno::makeAny( sal_Bool(sal_False) ) ) );
 }
 
 void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
 {
-//     rList.push_back( new WrappedIgnoreProperty( "FillBitmapName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillBitmap", uno::makeAny( uno::Reference< awt::XBitmap > (0) ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillBitmapURL", uno::makeAny( OUString() ) ) );
+
+
+
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetX", uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetY", uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetX", uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetY", uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapRectanglePoint", uno::makeAny( drawing::RectanglePoint_LEFT_TOP ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapLogicalSize", uno::makeAny( sal_Bool(sal_False) ) ) );//todo correct default?
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeX", uno::makeAny( sal_Int32(10) ) ) );//todo which default?
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeY", uno::makeAny( sal_Int32(10) ) ) );//todo which default?
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapLogicalSize", uno::makeAny( sal_Bool(sal_False) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeX", uno::makeAny( sal_Int32(10) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeY", uno::makeAny( sal_Int32(10) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapMode", uno::makeAny( drawing::BitmapMode_REPEAT ) ) );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

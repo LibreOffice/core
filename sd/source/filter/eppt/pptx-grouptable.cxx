@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "grouptable.hxx"
@@ -31,7 +31,7 @@ GroupTable::GroupTable() :
     ImplResizeGroupTable( 32 );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 GroupTable::~GroupTable()
 {
@@ -39,7 +39,7 @@ GroupTable::~GroupTable()
     delete[] mpGroupEntry;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
 {
@@ -55,7 +55,7 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
     }
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
 {
@@ -76,7 +76,7 @@ sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::s
     return bRet;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 GroupTable::GetGroupsClosed()
 {
@@ -85,7 +85,7 @@ sal_uInt32 GroupTable::GetGroupsClosed()
     return nRet;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void GroupTable::ClearGroupTable()
 {
@@ -93,7 +93,7 @@ void GroupTable::ClearGroupTable()
     mnCurrentGroupEntry = 0;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 {
@@ -101,7 +101,7 @@ void GroupTable::ResetGroupTable( sal_uInt32 nCount )
     mpGroupEntry[ mnCurrentGroupEntry++ ] = new GroupEntry( nCount );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool GroupTable::GetNextGroupEntry()
 {
@@ -120,6 +120,6 @@ sal_Bool GroupTable::GetNextGroupEntry()
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

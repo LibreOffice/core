@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,9 +61,9 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
-// -------------------
-// - PresentationViewShell -
-// -------------------
+
+
+
 
 SFX_IMPL_INTERFACE( PresentationViewShell, DrawViewShell, SdResId( STR_PRESVIEWSHELL ) )
 {
@@ -101,8 +101,8 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
 {
     DrawViewShell::Init(true);
 
-    // Use the frame view that comes form the view shell that initiated our
-    // creation.
+    
+    
     if (pFrameView != NULL)
     {
         GetFrameView()->Disconnect();
@@ -159,13 +159,13 @@ void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* )
 
 void PresentationViewShell::Resize (void)
 {
-    ViewShell::Resize(); // do not call DrawViewShell here!
+    ViewShell::Resize(); 
 
     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideshow.is() )
         xSlideshow->resize(maViewSize);
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

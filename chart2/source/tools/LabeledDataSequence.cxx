@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "LabeledDataSequence.hxx"
@@ -64,7 +64,7 @@ LabeledDataSequence::~LabeledDataSequence()
     }
 }
 
-// ____ XLabeledDataSequence ____
+
 uno::Reference< chart2::data::XDataSequence > SAL_CALL LabeledDataSequence::getValues()
     throw (uno::RuntimeException)
 {
@@ -101,7 +101,7 @@ void SAL_CALL LabeledDataSequence::setLabel(
     }
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
     throw (uno::RuntimeException)
 {
@@ -120,7 +120,7 @@ uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
         new LabeledDataSequence( xNewValues, xNewLabel ) );
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL LabeledDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -156,10 +156,10 @@ Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LabeledDataSequence,
                              OUString("com.sun.star.comp.chart2.LabeledDataSequence") )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

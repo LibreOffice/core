@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/progressbarwrapper.hxx>
@@ -46,7 +46,7 @@ ProgressBarWrapper::~ProgressBarWrapper()
 {
 }
 
-// public interfaces
+
 void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rStatusBar, sal_Bool bOwnsInstance )
 {
     ResetableGuard aGuard( m_aLock );
@@ -56,7 +56,7 @@ void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rSt
 
     if ( m_bOwnsInstance )
     {
-        // dispose XWindow reference our our status bar
+        
         uno::Reference< lang::XComponent > xComponent( m_xStatusBar, uno::UNO_QUERY );
         try
         {
@@ -83,7 +83,7 @@ uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
     return m_xStatusBar;
 }
 
-// wrapped methods of ::com::sun::star::task::XStatusIndicator
+
 void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
 throw (uno::RuntimeException)
 {
@@ -244,21 +244,21 @@ throw (uno::RuntimeException)
     setValue( 0 );
 }
 
-// XInitialization
+
 void SAL_CALL ProgressBarWrapper::initialize( const uno::Sequence< uno::Any >& )
 throw (uno::Exception, uno::RuntimeException)
 {
-    // dummy - do nothing
+    
 }
 
-// XUpdatable
+
 void SAL_CALL ProgressBarWrapper::update()
 throw (uno::RuntimeException)
 {
-    // dummy - do nothing
+    
 }
 
-// XComponent
+
 void SAL_CALL ProgressBarWrapper::dispose()
 throw (uno::RuntimeException)
 {
@@ -296,12 +296,12 @@ throw (uno::RuntimeException)
     }
 }
 
-// XUIElement
+
 uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface()
 throw (uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Ready for multithreading
+    
     ResetableGuard aLock( m_aLock );
 
     if ( m_bDisposed )
@@ -326,6 +326,6 @@ throw (uno::RuntimeException)
     }
 }
 
-}       //  namespace framework
+}       
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

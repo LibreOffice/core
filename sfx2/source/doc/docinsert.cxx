@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// implemented in 'sfx2/source/appl/appopen.cxx'
+
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, SfxMedium* pFile );
 
 namespace sfx2 {
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
     Reference < XFilePickerControlAccess > xCtrlAccess( xFP, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {
-        // always create a new itemset
+        
         m_pItemSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
         short nDlgType = m_pFileDlg->GetDialogType();
@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD == nDlgType
             || TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS == nDlgType );
 
-        // check, whether or not we have to display a password box
+        
         if ( bHasPassword && m_pFileDlg->IsPasswordEnabled() )
         {
             try
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                 sal_Bool bPassWord = sal_False;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
-                    // ask for the password
+                    
                     SfxPasswordDialog aPasswordDlg( NULL );
                     aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
                     short nRet = aPasswordDlg.Execute();
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
         }
 
 
-        // set the read-only flag. When inserting a file, this flag is always set
+        
         if ( SFXWB_INSERT == ( m_nDlgFlags & SFXWB_INSERT ) )
             m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                                                     ControlActions::GET_SELECTED_ITEM_INDEX );
                 sal_Int32 nVersion = 0;
                 if ( ( aValue >>= nVersion ) && nVersion > 0 )
-                    // open a special version; 0 == current version
+                    
                     m_pItemSet->Put( SfxInt16Item( SID_VERSION, (short)nVersion ) );
             }
             catch( const IllegalArgumentException& ){}
@@ -270,6 +270,6 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
     return 0;
 }
 
-} // namespace sfx2
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

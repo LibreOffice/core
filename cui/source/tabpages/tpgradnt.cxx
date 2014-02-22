@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/wrkwin.hxx>
@@ -93,20 +93,20 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pLbGradients->SetAccessibleName(GetText());
 
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
-    // as long as NOT supported by the item
+    
 
     m_pMtrColorTo->SetValue( 100 );
     m_pMtrColorFrom->SetValue( 100 );
 
-    // setting the output device
+    
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXGradientItem );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-    // overload the handler
+    
     m_pLbGradients->SetSelectHdl(
         LINK( this, SvxGradientTabPage, ChangeGradientHdl_Impl ) );
     m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
@@ -131,13 +131,13 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pBtnSave->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
-    // #i76307# always paint the preview in LTR, because this is what the document does
+    
     m_pCtlPreview->EnableRTL( false );
 
     setPreviewsToSamePlace(pParent, this);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGradientTabPage::Construct()
 {
@@ -147,45 +147,45 @@ void SvxGradientTabPage::Construct()
     m_pLbGradients->Fill( pGradientList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 {
     sal_uInt16 nPos;
     sal_uInt16 nCount;
 
-    if( nDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) 
     {
         *pbAreaTP = sal_False;
 
         if( pColorList.is() )
         {
-            // ColorList
+            
             if( *pnColorListState & CT_CHANGED ||
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
                     pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
-                // LbColorFrom
+                
                 nPos = m_pLbColorFrom->GetSelectEntryPos();
                 m_pLbColorFrom->Clear();
                 m_pLbColorFrom->Fill( pColorList );
                 nCount = m_pLbColorFrom->GetEntryCount();
                 if( nCount == 0 )
-                    ; // this case should not occur
+                    ; 
                 else if( nCount <= nPos )
                     m_pLbColorFrom->SelectEntryPos( 0 );
                 else
                     m_pLbColorFrom->SelectEntryPos( nPos );
 
-                // LbColorTo
+                
                 nPos = m_pLbColorTo->GetSelectEntryPos();
                 m_pLbColorTo->Clear();
                 m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
                 nCount = m_pLbColorTo->GetEntryCount();
                 if( nCount == 0 )
-                    ; // this case should not occur
+                    ; 
                 else if( nCount <= nPos )
                     m_pLbColorTo->SelectEntryPos( 0 );
                 else
@@ -194,8 +194,8 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
                 ModifiedHdl_Impl( this );
             }
 
-            // determining (and possibly cutting) the name and
-            // displaying it in the GroupBox
+            
+            
             OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString         += ": ";
             INetURLObject   aURL( pGradientList->GetPath() );
@@ -215,7 +215,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             {
                 m_pLbGradients->SelectEntryPos( *pPos );
             }
-            // colors could have been deleted
+            
             ChangeGradientHdl_Impl( this );
 
             *pPageType = PT_GRADIENT;
@@ -224,7 +224,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -237,15 +237,15 @@ int SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxGradientTabPage::CheckChanges_Impl()
 {
-    // is used here in order to NOT lose changes
+    
     XGradient aTmpGradient( m_pLbColorFrom->GetSelectEntryColor(),
                           m_pLbColorTo->GetSelectEntryColor(),
                           (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                          static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                          static_cast<long>(m_pMtrAngle->GetValue() * 10), 
                           (sal_uInt16) m_pMtrCenterX->GetValue(),
                           (sal_uInt16) m_pMtrCenterY->GetValue(),
                           (sal_uInt16) m_pMtrBorder->GetValue(),
@@ -304,13 +304,13 @@ long SvxGradientTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == sal_False )
     {
-        // CheckChanges(); <-- duplicate inquiry ?
+        
 
         XGradient*  pXGradient = NULL;
         OUString      aString;
@@ -322,12 +322,12 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 
         }
         else
-        // gradient was passed (unidentified)
+        
         {
             pXGradient = new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
                         m_pLbColorTo->GetSelectEntryColor(),
                         (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                        static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                        static_cast<long>(m_pMtrAngle->GetValue() * 10), 
                         (sal_uInt16) m_pMtrCenterX->GetValue(),
                         (sal_uInt16) m_pMtrCenterY->GetValue(),
                         (sal_uInt16) m_pMtrBorder->GetValue(),
@@ -343,14 +343,14 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGradientTabPage::Reset( const SfxItemSet& )
 {
-    // m_pLbGradients->SelectEntryPos( 0 );
+    
     ChangeGradientHdl_Impl( this );
 
-    // determine state of the buttons
+    
     if( pGradientList->Count() )
     {
         m_pBtnModify->Enable();
@@ -365,7 +365,7 @@ void SvxGradientTabPage::Reset( const SfxItemSet& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxGradientTabPage::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
@@ -373,7 +373,7 @@ SfxTabPage* SvxGradientTabPage::Create( Window* pWindow,
     return new SvxGradientTabPage( pWindow, rOutAttrs );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 {
@@ -382,18 +382,18 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
     XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                           m_pLbColorTo->GetSelectEntryColor(),
                           eXGS,
-                          static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                          static_cast<long>(m_pMtrAngle->GetValue() * 10), 
                           (sal_uInt16) m_pMtrCenterX->GetValue(),
                           (sal_uInt16) m_pMtrCenterY->GetValue(),
                           (sal_uInt16) m_pMtrBorder->GetValue(),
                           (sal_uInt16) m_pMtrColorFrom->GetValue(),
                           (sal_uInt16) m_pMtrColorTo->GetValue() );
 
-    // enable/disable controls
+    
     if( pControl == m_pLbGradientType || pControl == this )
         SetControlState_Impl( eXGS );
 
-    // displaying in XOutDev
+    
     rXFSet.Put( XFillGradientItem( OUString(), aXGradient ) );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -402,7 +402,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 {
@@ -467,7 +467,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
         XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                               m_pLbColorTo->GetSelectEntryColor(),
                               (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                              static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                              static_cast<long>(m_pMtrAngle->GetValue() * 10), 
                               (sal_uInt16) m_pMtrCenterX->GetValue(),
                               (sal_uInt16) m_pMtrCenterY->GetValue(),
                               (sal_uInt16) m_pMtrBorder->GetValue(),
@@ -482,10 +482,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
         m_pLbGradients->SelectEntryPos( m_pLbGradients->GetEntryCount() - 1 );
 
 #ifdef WNT
-        // hack: #31355# W.P.
+        
         Rectangle aRect( m_pLbGradients->GetPosPixel(), m_pLbGradients->GetSizePixel() );
-        if( sal_True ) {                // ??? overlapped with pDlg
-                                    // and srolling
+        if( sal_True ) {                
+                                    
             Invalidate( aRect );
         }
 #endif
@@ -495,7 +495,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
         ChangeGradientHdl_Impl( this );
     }
 
-    // determine button state
+    
     if( pGradientList->Count() )
     {
         m_pBtnModify->Enable();
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 {
@@ -544,7 +544,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
                 XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                                       m_pLbColorTo->GetSelectEntryColor(),
                                       (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                                      static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                                      static_cast<long>(m_pMtrAngle->GetValue() * 10), 
                                       (sal_uInt16) m_pMtrCenterX->GetValue(),
                                       (sal_uInt16) m_pMtrCenterY->GetValue(),
                                       (sal_uInt16) m_pMtrBorder->GetValue(),
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 {
@@ -598,7 +598,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
             *pnGradientListState |= CT_MODIFIED;
         }
     }
-    // determine button state
+    
     if( !pGradientList->Count() )
     {
         m_pBtnModify->Disable();
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 {
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            // save list
+            
             XGradientListRef pGrdList = XPropertyList::CreatePropertyList(
                 XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsGradientList();
             pGrdList->SetName( aURL.getName() );
@@ -660,8 +660,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 
                 pGradientList->SetName( aURL.getName() );
 
-                // determining (possibly cutting) the name
-                // and displaying it in the GroupBox
+                
+                
                 OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                 aString += ": ";
 
@@ -687,7 +687,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
         }
     }
 
-    // determine button state
+    
     if( pGradientList->Count() )
     {
         m_pBtnModify->Enable();
@@ -703,7 +703,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 {
@@ -737,8 +737,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 
         if( pGradientList->Save() )
         {
-            // determining (possibly cutting) the name
-            // and displaying it in the GroupBox
+            
+            
             OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString  += ": ";
 
@@ -764,7 +764,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 {
@@ -799,8 +799,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 
         m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_uInt16 >( eXGS ) );
-        // if the entry is not in the listbox,
-        // colors are added temporarily
+        
+        
         m_pLbColorFrom->SetNoSelection();
         m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );
 
@@ -819,17 +819,17 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
             m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
         }
 
-        m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
+        m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); 
         m_pMtrBorder->SetValue( pGradient->GetBorder() );
         m_pMtrCenterX->SetValue( pGradient->GetXOffset() );
         m_pMtrCenterY->SetValue( pGradient->GetYOffset() );
         m_pMtrColorFrom->SetValue( pGradient->GetStartIntens() );
         m_pMtrColorTo->SetValue( pGradient->GetEndIntens() );
 
-        // disable/enable controls
+        
         SetControlState_Impl( eXGS );
 
-        // fill ItemSet and pass it on to aCtlPreview
+        
         rXFSet.Put( XFillGradientItem( OUString(), *pGradient ) );
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
 {

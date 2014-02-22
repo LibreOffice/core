@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -120,7 +120,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 
     do
     {
-        // Retrieve the layer manager from the model.
+        
         SdXImpressDocument* pModel = GetModel();
         if (pModel == NULL)
             break;
@@ -129,14 +129,14 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
         if (pSdModel == NULL)
             break;
 
-        // From the model get the current SdrLayer object via the layer admin.
+        
         SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
         SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer(), true);
         if (pLayer == NULL)
             break;
 
-        // Get the corresponding XLayer object from the implementation
-        // object of the layer manager.
+        
+        
         Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
         SdLayerManager* pManager = SdLayerManager::getImplementation (xManager);
         if (pManager != NULL)
@@ -152,7 +152,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 
 void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) throw ()
 {
-    // Get the SdrLayer object corresponding to the given reference.
+    
     if ( ! rxLayer.is())
         return;
 
@@ -164,7 +164,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) t
     if (pSdrLayer == NULL)
         return;
 
-    // Set the new active layer and make the change visible.
+    
     mrView.SetActiveLayer (pSdrLayer->GetName());
     mrDrawViewShell.ResetActualLayer ();
 }
@@ -172,7 +172,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) t
 
 
 
-// XSelectionSupplier
+
 
 
 sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
@@ -251,7 +251,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
         if(pPV)
         {
-            // first deselect all
+            
             mrView.UnmarkAllObj( pPV );
 
             ::std::vector<SdrObject*>::iterator aIter( aObjects.begin() );
@@ -271,7 +271,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     return bOk;
 }
 
-//----------------------------------------------------------------------
+
 
 Any SAL_CALL SdUnoDrawView::getSelection()
     throw(RuntimeException)
@@ -464,7 +464,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
 
 
 
-// XDrawView
+
 
 
 void SAL_CALL SdUnoDrawView::setCurrentPage (
@@ -476,8 +476,8 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
 
     if(pSdrPage)
     {
-        // End editing of text.  Otherwise the edited text object would
-        // still be visible on the new page.
+        
+        
         mrDrawViewShell.GetView()->SdrEndTextEdit();
 
         setMasterPageMode( pSdrPage->IsMasterPage() );
@@ -486,7 +486,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     }
 }
 
-//----------------------------------------------------------------------
+
 
 Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     throw(RuntimeException)
@@ -607,7 +607,7 @@ Any SdUnoDrawView::getDrawViewMode() const
     return aRet;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.SdUnoDrawView") ;
@@ -625,6 +625,6 @@ Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw 
     return aSeq;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

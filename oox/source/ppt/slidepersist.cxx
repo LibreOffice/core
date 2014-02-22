@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/timenode.hxx"
@@ -71,7 +71,7 @@ SlidePersist::~SlidePersist()
 
 sal_Int16 SlidePersist::getLayoutFromValueToken()
 {
-    sal_Int16 nLayout = 20;     // 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
+    sal_Int16 nLayout = 20;     
     switch( mnLayoutValueToken )
     {
         case XML_blank:             nLayout = 20; break;
@@ -176,7 +176,7 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet, const XmlFilterB
     ::oox::drawingml::TextParagraphPropertiesPtr pTextParagraphPropertiesPtr( pTextListStylePtr->getListStyle()[ nLevel ] );
     if( pTextParagraphPropertiesPtr == 0 )
     {
-        // no properties. return
+        
         return;
     }
 
@@ -208,39 +208,39 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                 const OUString sStandard( "standard" );
                 const OUString sSubtitle( "subtitle" );
 
-                for( int i = 0; i < 4; i++ )    // todo: aggregation of bodystyle (subtitle)
+                for( int i = 0; i < 4; i++ )    
                 {
                     switch( i )
                     {
-                        case 0 :    // title style
+                        case 0 :    
                         {
                             pTextListStylePtr = maTitleTextStylePtr;
                             aStyle = sTitle;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 1 :    // body style
+                        case 1 :    
                         {
                             pTextListStylePtr = maBodyTextStylePtr;
                             aStyle = sOutline;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 3 :    // notes style
+                        case 3 :    
                         {
                             pTextListStylePtr = maNotesTextStylePtr;
                             aStyle = sTitle;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 4 :    // standard style
+                        case 4 :    
                         {
                             pTextListStylePtr = maOtherTextStylePtr;
                             aStyle = sStandard;
                             aFamily = "graphics";
                             break;
                         }
-                        case 5 :    // subtitle
+                        case 5 :    
                         {
                             pTextListStylePtr = maBodyTextStylePtr;
                             aStyle = sSubtitle;

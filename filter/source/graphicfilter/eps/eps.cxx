@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/solar.h>
@@ -43,20 +43,20 @@
 
 using namespace ::com::sun::star::uno;
 
-#define POSTSCRIPT_BOUNDINGSEARCH   0x1000  // we only try to get the BoundingBox
-                                            // in the first 4096 bytes
+#define POSTSCRIPT_BOUNDINGSEARCH   0x1000  
+                                            
 
 #define EPS_PREVIEW_TIFF    1
 #define EPS_PREVIEW_EPSI    2
 
-#define PS_LINESIZE         70      // maximum number of characters a line in the output
+#define PS_LINESIZE         70      
 
-#define PS_NONE             0       // formatting mode: action which is inserted behind the output
+#define PS_NONE             0       
 #define PS_SPACE            1
 #define PS_RET              2
 #define PS_WRAP             4
 
-// -----------------------------Feld-Typen-------------------------------
+
 
 struct ChrSet
 {
@@ -91,21 +91,21 @@ struct StackMember
 struct PSLZWCTreeNode
 {
 
-    PSLZWCTreeNode*     pBrother;       // next node who has the same father
-    PSLZWCTreeNode*     pFirstChild;    // first son
-    sal_uInt16          nCode;          // The code for the string of pixel values, which arises if... <missing comment>
-    sal_uInt16          nValue;         // the pixel value
+    PSLZWCTreeNode*     pBrother;       
+    PSLZWCTreeNode*     pFirstChild;    
+    sal_uInt16          nCode;          
+    sal_uInt16          nValue;         
 };
 
 class PSWriter
 {
 private:
     sal_Bool            mbStatus;
-    sal_uLong           mnLevelWarning;     // number of embedded eps files which was not exported
-    sal_uLong           mnLastPercent;      // the number with which pCallback was called the last time
-    sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
+    sal_uLong           mnLevelWarning;     
+    sal_uLong           mnLastPercent;      
+    sal_uInt32          mnLatestPush;       
 
-    long                mnLevel;            // dialog options
+    long                mnLevel;            
     sal_Bool            mbGrayScale;
     sal_Bool            mbCompression;
     sal_Int32           mnPreview;
@@ -113,19 +113,19 @@ private:
 
     SvStream*           mpPS;
     const GDIMetaFile*  pMTF;
-    GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
+    GDIMetaFile*        pAMTF;              
     VirtualDevice       aVDev;
 
-    double              nBoundingX1;        // this represents the bounding box
+    double              nBoundingX1;        
     double              nBoundingY1;
     double              nBoundingX2;
     double              nBoundingY2;
                                             //
     StackMember*        pGDIStack;
-    sal_uLong           mnCursorPos;        // current cursor position in output
-    Color               aColor;             // current color which is used for output
+    sal_uLong           mnCursorPos;        
+    Color               aColor;             
     sal_Bool            bLineColor;
-    Color               aLineColor;         // current GDIMetafile color settings
+    Color               aLineColor;         
     sal_Bool            bFillColor;         //
     Color               aFillColor;         //
     Color               aTextColor;         //
@@ -144,11 +144,11 @@ private:
     Font                maFont;
     Font                maLastFont;
     sal_uInt8           nChrSet;
-    ChrSet*             pChrSetList;        // list of character sets
-    sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
+    ChrSet*             pChrSetList;        
+    sal_uInt8           nNextChrSetId;      
 
-    PSLZWCTreeNode*     pTable;             // LZW compression data
-    PSLZWCTreeNode*     pPrefix;            // the compression is as same as the TIFF compression
+    PSLZWCTreeNode*     pTable;             
+    PSLZWCTreeNode*     pPrefix;            
     sal_uInt16          nDataSize;
     sal_uInt16          nClearCode;
     sal_uInt16          nEOICode;
@@ -163,29 +163,29 @@ private:
     void                ImplWriteEpilog();
     void                ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev );
 
-                        // this method makes LF's, space inserting and word wrapping as used in all nMode
-                        // parameters
+                        
+                        
     inline void         ImplExecMode( sal_uLong nMode );
 
-                        // writes char[] + LF to stream
+                        
     inline void         ImplWriteLine( const char*, sal_uLong nMode = PS_RET );
 
-                        // writes ( nNumb / 10^nCount ) in ASCII format to stream
+                        
     void                ImplWriteF( sal_Int32 nNumb, sal_uLong nCount = 3, sal_uLong nMode = PS_SPACE );
 
-                        // writes a double in ASCII format to stream
+                        
     void                ImplWriteDouble( double, sal_uLong nMode = PS_SPACE );
 
-                        // writes a long in ASCII format to stream
+                        
     void                ImplWriteLong( sal_Int32 nNumb, sal_uLong nMode = PS_SPACE );
 
-                        // writes a byte in ASCII format to stream
+                        
     void                ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode = PS_SPACE );
 
-                        // writes a byte in ASCII (hex) format to stream
+                        
     void                ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode = PS_WRAP );
 
-                        // writes nNumb as number from 0.000 till 1.000 in ASCII format to stream
+                        
     void                ImplWriteB1( sal_uInt8 nNumb, sal_uLong nMode = PS_SPACE );
 
     inline void         ImplWritePoint( const Point&, sal_uInt32 nMode = PS_SPACE );
@@ -228,7 +228,7 @@ private:
     void                ImplGetMapMode( const MapMode& );
     sal_Bool            ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
     sal_uInt8*          ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize );
-                        // LZW methods
+                        
     void                StartCompression();
     void                Compress( sal_uInt8 nSrc );
     void                EndCompression();
@@ -240,9 +240,9 @@ public:
     ~PSWriter();
 };
 
-//========================== Methoden von PSWriter ==========================
 
-//---------------------------------------------------------------------------------
+
+
 
 PSWriter::PSWriter()
     : mbStatus(sal_False)
@@ -305,11 +305,11 @@ PSWriter::~PSWriter()
     delete pAMTF;
 }
 
-//---------------------------------------------------------------------------------
+
 
 sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
-    sal_uInt32 nStreamPosition = 0, nPSPosition = 0; // -Wall warning, unset, check
+    sal_uInt32 nStreamPosition = 0, nPSPosition = 0; 
 
     mbStatus = sal_True;
     mnPreview = 0;
@@ -330,17 +330,17 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     mpPS = &rTargetStream;
     mpPS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // default values for the dialog options
+    
     mnLevel = 2;
     mbGrayScale = sal_False;
-#ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
+#ifdef UNX 
     mbCompression = sal_False;
 #else
     mbCompression = sal_True;
 #endif
-    mnTextMode = 0;         // default0 : export glyph outlines
+    mnTextMode = 0;         
 
-    // try to get the dialog selection
+    
     if ( pFilterConfigItem )
     {
         ResMgr*     pResMgr;
@@ -349,7 +349,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
         if( pResMgr )
         {
-#ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
+#ifdef UNX 
             mnPreview = pFilterConfigItem->ReadInt32( "Preview", 0 );
 #else
             mnPreview = pFilterConfigItem->ReadInt32( "Preview", 1 );
@@ -358,7 +358,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
             if ( mnLevel != 1 )
                 mnLevel = 2;
             mbGrayScale = pFilterConfigItem->ReadInt32( "ColorFormat", 1 ) == 2;
-#ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
+#ifdef UNX 
             mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 0 ) != 0;
 #else
             mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 1 ) == 1;
@@ -370,7 +370,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
         }
     }
 
-    // compression is not available for Level 1
+    
     if ( mnLevel == 1 )
     {
         mbGrayScale = sal_True;
@@ -399,7 +399,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
             rTargetStream.Seek( STREAM_SEEK_TO_END );
             nPSPosition = rTargetStream.Tell();
             rTargetStream.Seek( nStreamPosition + 20 );
-            rTargetStream.WriteUInt32( nPSPosition - 30 );  // size of tiff gfx
+            rTargetStream.WriteUInt32( nPSPosition - 30 );  
             rTargetStream.Seek( nPSPosition );
         }
         else
@@ -409,7 +409,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
         }
     }
 
-    // global default value setting
+    
     ChrSet*         pCS;
     StackMember*    pGS;
 
@@ -442,7 +442,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     bTextFillColor = sal_True;
     aTextFillColor = Color( COL_BLACK );
     fLineWidth = 1;
-    fMiterLimit = 15; // use same limit as most graphic systems and basegfx
+    fMiterLimit = 15; 
     eLineCap = SvtGraphicStroke::capButt;
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = Color( COL_WHITE );
@@ -501,12 +501,12 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     return mbStatus;
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteProlog( const Graphic* pPreview )
 {
     ImplWriteLine( "%!PS-Adobe-3.0 EPSF-3.0 " );
-    mpPS->WriteCharPtr( "%%BoundingBox: " );                         // BoundingBox
+    mpPS->WriteCharPtr( "%%BoundingBox: " );                         
     ImplWriteLong( 0 );
     ImplWriteLong( 0 );
     Size aSizePoint = Application::GetDefaultDevice()->LogicToLogic( pMTF->GetPrefSize(),
@@ -520,12 +520,12 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );
 
-// defaults
 
-    mpPS->WriteCharPtr( "%%LanguageLevel: " );                       // Language level
+
+    mpPS->WriteCharPtr( "%%LanguageLevel: " );                       
     ImplWriteLong( mnLevel, PS_RET );
     if ( !mbGrayScale && mnLevel == 1 )
-        ImplWriteLine( "%%Extensions: CMYK" );          // CMYK extension is to set in color mode in level 1
+        ImplWriteLine( "%%Extensions: CMYK" );          
     ImplWriteLine( "%%EndComments" );
     if ( pPreview && aSizePoint.Width() && aSizePoint.Height() )
     {
@@ -536,7 +536,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
         BitmapReadAccess* pAcc = aTmpBitmap.AcquireReadAccess();
         if ( pAcc )
         {
-            mpPS->WriteCharPtr( "%%BeginPreview: " );                    // BoundingBox
+            mpPS->WriteCharPtr( "%%BeginPreview: " );                    
             ImplWriteLong( aSizeBitmap.Width() );
             ImplWriteLong( aSizeBitmap.Height() );
             mpPS->WriteCharPtr( "1 " );
@@ -584,12 +584,12 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "%%BeginProlog" );
     ImplWriteLine( "%%BeginResource: procset SDRes-Prolog 1.0 0" );
 
-//  BEGIN EPSF
+
     ImplWriteLine( "/b4_inc_state save def\n/dict_count countdictstack def\n/op_count count 1 sub def\nuserdict begin" );
     ImplWriteLine( "0 setgray 0 setlinecap 1 setlinewidth 0 setlinejoin 10 setmiterlimit[] 0 setdash newpath" );
     ImplWriteLine( "/languagelevel where {pop languagelevel 1 ne {false setstrokeadjust false setoverprint} if} if" );
 
-    ImplWriteLine( "/bdef {bind def} bind def" );       // the new operator bdef is created
+    ImplWriteLine( "/bdef {bind def} bind def" );       
     if ( mbGrayScale )
         ImplWriteLine( "/c {setgray} bdef" );
     else
@@ -610,18 +610,18 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "/gs {gsave} bdef" );
     ImplWriteLine( "/gr {grestore} bdef" );
 
-    ImplWriteLine( "/f {findfont dup length dict begin" );  // Setfont
+    ImplWriteLine( "/f {findfont dup length dict begin" );  
     ImplWriteLine( "{1 index /FID ne {def} {pop pop} ifelse} forall /Encoding ISOLatin1Encoding def" );
     ImplWriteLine( "currentdict end /NFont exch definefont pop /NFont findfont} bdef" );
 
     ImplWriteLine( "/p {closepath} bdef" );
     ImplWriteLine( "/sf {scalefont setfont} bdef" );
 
-    ImplWriteLine( "/ef {eofill}bdef"           );      // close path and fill
-    ImplWriteLine( "/pc {closepath stroke}bdef" );      // close path and draw
-    ImplWriteLine( "/ps {stroke}bdef" );                // draw current path
-    ImplWriteLine( "/pum {matrix currentmatrix}bdef" ); // pushes the current matrix
-    ImplWriteLine( "/pom {setmatrix}bdef" );            // pops the matrix
+    ImplWriteLine( "/ef {eofill}bdef"           );      
+    ImplWriteLine( "/pc {closepath stroke}bdef" );      
+    ImplWriteLine( "/ps {stroke}bdef" );                
+    ImplWriteLine( "/pum {matrix currentmatrix}bdef" ); 
+    ImplWriteLine( "/pom {setmatrix}bdef" );            
     ImplWriteLine( "/bs {/aString exch def /nXOfs exch def /nWidth exch def currentpoint nXOfs 0 rmoveto pum nWidth aString stringwidth pop div 1 scale aString show pom moveto} bdef" );
     ImplWriteLine( "%%EndResource" );
     ImplWriteLine( "%%EndProlog" );
@@ -638,7 +638,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "/tm matrix currentmatrix def" );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteEpilog()
 {
@@ -652,9 +652,9 @@ void PSWriter::ImplWriteEpilog()
     ImplWriteLine( "%%EOF" );
 }
 
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
+
+
+
 
 void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 {
@@ -760,7 +760,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if(basegfx::B2DLINEJOIN_NONE == rLineInfo.GetLineJoin()
                     && rLineInfo.GetWidth() > 1)
                 {
-                    // emulate B2DLINEJOIN_NONE by creating single edges
+                    
                     const sal_uInt16 nPoints(aPoly.GetSize());
                     const bool bCurve(aPoly.HasFlags());
 
@@ -919,7 +919,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             }
             break;
 
-            // Unsupported Actions
+            
             case META_MASK_ACTION:
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
@@ -969,7 +969,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         if ( aWallpaper.IsGradient() )
                         {
 
-                        // gradient action
+                        
 
                         }
                         Bitmap aMask( aBitmapEx.GetMask() );
@@ -978,13 +978,13 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     else
                         ImplBmp( &aBitmap, NULL, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );
 
-                        // wallpaper Style
+                        
 
                 }
                 else if ( aWallpaper.IsGradient() )
                 {
 
-                // gradient action
+                
 
                 }
                 else
@@ -1146,7 +1146,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     aTextFillColor = pGS->aTextFillCol;
                     aBackgroundColor = pGS->aBackgroundCol;
                     maFont = pGS->aFont;
-                    maLastFont = Font();                // set maLastFont != maFont -> so that
+                    maLastFont = Font();                
                     delete pGS;
                     sal_uInt32 nCurrentPos = mpPS->Tell();
                     if ( nCurrentPos - 3 == mnLatestPush )
@@ -1170,7 +1170,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 sal_uInt8*  pSource = (sal_uInt8*) aGfxLink.GetData();
                 sal_uLong   nSize = aGfxLink.GetDataSize();
                 sal_uLong   nParseThis = POSTSCRIPT_BOUNDINGSEARCH;
-                if ( nSize < 64 )                       // assuming eps is larger than 64 bytes
+                if ( nSize < 64 )                       
                     pSource = NULL;
                 if ( nParseThis > nSize )
                     nParseThis = nSize;
@@ -1224,7 +1224,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TRANSPARENT_ACTION:
             {
-//              ImplLine( ( (const MetaTransparentAction*) pMA )->GetPolyPolygon() );
+
             }
             break;
 
@@ -1310,7 +1310,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                             PolyPolygon aStartArrow;
                             PolyPolygon aEndArrow;
-//                          double fTransparency( aStroke.getTransparency() );
+
                             double fStrokeWidth( aStroke.getStrokeWidth() );
                             SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
                             SvtGraphicStroke::DashArray l_aDashArray;
@@ -1320,7 +1320,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             aStroke.getDashArray( l_aDashArray );
 
                             bSkipSequence = sal_True;
-                            if ( l_aDashArray.size() > 11 ) // ps dasharray limit is 11
+                            if ( l_aDashArray.size() > 11 ) 
                                 bSkipSequence = sal_False;
                             if ( aStartArrow.Count() || aEndArrow.Count() )
                                 bSkipSequence = sal_False;
@@ -1463,7 +1463,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
 
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
 {
@@ -1471,7 +1471,7 @@ inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
     ImplWriteDouble( rPoint.Y(), nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplMoveTo( const Point& rPoint, sal_uInt32 nMode )
 {
@@ -1480,7 +1480,7 @@ void PSWriter::ImplMoveTo( const Point& rPoint, sal_uInt32 nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
 {
@@ -1489,7 +1489,7 @@ void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode )
 {
@@ -1500,7 +1500,7 @@ void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode )
 {
@@ -1510,7 +1510,7 @@ void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMo
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplScale( const double& fX, const double& fY, sal_uInt32 nMode )
 {
@@ -1520,7 +1520,7 @@ void PSWriter::ImplScale( const double& fX, const double& fY, sal_uInt32 nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplRect( const Rectangle & rRect )
 {
@@ -1545,7 +1545,7 @@ void PSWriter::ImplRect( const Rectangle & rRect )
     mnCursorPos = 0;
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplRectFill( const Rectangle & rRect )
 {
@@ -1565,7 +1565,7 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
     ImplExecMode( PS_RET );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplAddPath( const Polygon & rPolygon )
 {
@@ -1590,7 +1590,7 @@ void PSWriter::ImplAddPath( const Polygon & rPolygon )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
 {
@@ -1608,7 +1608,7 @@ void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
     ImplWriteLine( "eoclip newpath" );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
@@ -1619,7 +1619,7 @@ void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& 
     ImplWriteActions( aTmpMtf, rVDev );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutline )
 {
@@ -1656,7 +1656,7 @@ void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutlin
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplPolyLine( const Polygon & rPoly )
 {
@@ -1685,7 +1685,7 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
                 }
             }
 
-            // #104645# explicitly close path if polygon is closed
+            
             if( rPoly[ 0 ] == rPoly[ nPointCount-1 ] )
                 ImplClosePathDraw( PS_RET );
             else
@@ -1694,7 +1694,7 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplSetClipRegion( Region& rClipRegion )
 {
@@ -1727,44 +1727,44 @@ void PSWriter::ImplSetClipRegion( Region& rClipRegion )
             ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
         }
 
-        //Rectangle     aRect;
-        //RegionHandle  hRegionHandle = rClipRegion.BeginEnumRects();
+        
+        
         //
-        //while ( rClipRegion.GetEnumRects( hRegionHandle, aRect ) )
-        //{
-        //  double nX1 = aRect.Left();
-        //  double nY1 = aRect.Top();
-        //  double nX2 = aRect.Right();
-        //  double nY2 = aRect.Bottom();
-        //  ImplWriteDouble( nX1 );
-        //  ImplWriteDouble( nY1 );
-        //  ImplWriteByte( 'm' );
-        //  ImplWriteDouble( nX2 );
-        //  ImplWriteDouble( nY1 );
-        //  ImplWriteByte( 'l' );
-        //  ImplWriteDouble( nX2 );
-        //  ImplWriteDouble( nY2 );
-        //  ImplWriteByte( 'l' );
-        //  ImplWriteDouble( nX1 );
-        //  ImplWriteDouble( nY2 );
-        //  ImplWriteByte( 'l' );
-        //  ImplWriteDouble( nX1 );
-        //  ImplWriteDouble( nY1 );
-        //  ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
-        //};
-        //rClipRegion.EndEnumRects( hRegionHandle );
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         ImplWriteLine( "eoclip newpath" );
     }
 }
 
-//---------------------------------------------------------------------------------
-// possible gfx formats:
+
+
 //
-// level 1: grayscale   8 bit
-//          color      24 bit
+
+
 //
-// level 2: grayscale   8 bit
-//          color       1(pal), 4(pal), 8(pal), 24 Bit
+
+
 //
 
 void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoint, double nXWidth, double nYHeightOrg )
@@ -1851,26 +1851,26 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                 ImplWriteByte( 'p', PS_SPACE | PS_WRAP );
             }
 
-            //RegionHandle  hRegionHandle = aRegion.BeginEnumRects();
+            
             //
-            //while ( aRegion.GetEnumRects( hRegionHandle, aRect ) )
-            //{
-            //  aRect.Move( 0, - ( nHeightOrg - nHeightLeft ) );
-            //  ImplWriteLong( aRect.Left() );
-            //  ImplWriteLong( aRect.Top() );
-            //  ImplWriteByte( 'm' );
-            //  ImplWriteLong( aRect.Right() + 1 );
-            //  ImplWriteLong( aRect.Top() );
-            //  ImplWriteByte( 'l' );
-            //  ImplWriteLong( aRect.Right() + 1 );
-            //  ImplWriteLong( aRect.Bottom() + 1 );
-            //  ImplWriteByte( 'l' );
-            //  ImplWriteLong( aRect.Left() );
-            //  ImplWriteLong( aRect.Bottom() + 1 );
-            //  ImplWriteByte( 'l' );
-            //  ImplWriteByte( 'p', PS_SPACE | PS_WRAP );
-            //};
-            //aRegion.EndEnumRects( hRegionHandle );
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             ImplWriteLine( "eoclip newpath" );
             ImplWriteLine( "pom" );
         }
@@ -1881,7 +1881,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
 
         ImplTranslate( aSourcePos.X(), aSourcePos.Y() + nYHeight );
         ImplScale( nXWidth, nYHeight );
-        if ( mnLevel == 1 )                 // level 1 is always grayscale !!!
+        if ( mnLevel == 1 )                 
         {
             ImplWriteLong( nWidth );
             ImplWriteLong( nHeight );
@@ -1905,7 +1905,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
             }
             mpPS->WriteUChar( (sal_uInt8)10 );
         }
-        else    // Level 2
+        else    
         {
             if ( mbGrayScale )
             {
@@ -1956,7 +1956,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
             }
             else
             {
-                // have we to write a palette ?
+                
 
                 if ( pAcc->HasPalette() )
                 {
@@ -2017,7 +2017,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                         }
                     }
                 }
-                else // 24 bit color
+                else 
                 {
                     ImplWriteLine( "/DeviceRGB setcolorspace" );
                     ImplWriteLine( "<<" );
@@ -2071,7 +2071,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     }
                 }
             }
-            ImplWriteLine( ">" );       // in Level 2 the dictionary needs to be closed (eod)
+            ImplWriteLine( ">" );       
         }
         if ( bDoTrans )
             ImplWriteLine( "gr" );
@@ -2088,7 +2088,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteCharacter( sal_Char nChar )
 {
@@ -2102,7 +2102,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
     ImplWriteByte( (sal_uInt8)nChar, PS_NONE );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
 {
@@ -2134,13 +2134,13 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, co
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
 {
     if ( rUniString.isEmpty() )
         return;
-    if ( mnTextMode == 0 )  // using glpyh outlines
+    if ( mnTextMode == 0 )  
     {
         Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0 );
@@ -2165,7 +2165,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
         std::vector<PolyPolygon> aPolyPolyVec;
         if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, true, nWidth, pDXArry ) )
         {
-            // always adjust text position to match baseline alignment
+            
             ImplWriteLine( "pum" );
             ImplWriteDouble( aPos.X() );
             ImplWriteDouble( aPos.Y() );
@@ -2182,10 +2182,10 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
         }
         bLineColor = bOldLineColor;
     }
-    else if ( ( mnTextMode == 1 ) || ( mnTextMode == 2 ) )  // normal text output
+    else if ( ( mnTextMode == 1 ) || ( mnTextMode == 2 ) )  
     {
-        if ( mnTextMode == 2 )  // forcing output one complete text packet, by
-            pDXArry = NULL;     // ignoring the kerning array
+        if ( mnTextMode == 2 )  
+            pDXArry = NULL;     
         ImplSetAttrForText( rPos );
         OString aStr(OUStringToOString(rUniString,
             maFont.GetCharSet()));
@@ -2195,7 +2195,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::ImplSetAttrForText( const Point& rPoint )
 {
@@ -2208,7 +2208,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 
     if ( maLastFont != maFont )
     {
-        if ( maFont.GetPitch() == PITCH_FIXED )         // a little bit font selection
+        if ( maFont.GetPitch() == PITCH_FIXED )         
             ImplDefineFont( "Courier", "Oblique" );
         else if ( maFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             ImplWriteLine( "/Symbol findfont" );
@@ -2223,10 +2223,10 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
         mpPS->WriteCharPtr( "sf " );
     }
     if ( eTextAlign != ALIGN_BASELINE )
-    {                                                       // PostScript kennt kein FontAlignment
-        if ( eTextAlign == ALIGN_TOP )                      // -> so I assume that
-            aPoint.Y() += ( aSize.Height() * 4 / 5 );       // the area under the baseline
-        else if ( eTextAlign == ALIGN_BOTTOM )              // is about 20% of the font size
+    {                                                       
+        if ( eTextAlign == ALIGN_TOP )                      
+            aPoint.Y() += ( aSize.Height() * 4 / 5 );       
+        else if ( eTextAlign == ALIGN_BOTTOM )              
             aPoint.Y() -= ( aSize.Height() / 5 );
     }
     ImplMoveTo( aPoint );
@@ -2238,11 +2238,11 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 {
-    mpPS->WriteUChar( (sal_uInt8)'/' );             //convert the font pOriginalName using ISOLatin1Encoding
+    mpPS->WriteUChar( (sal_uInt8)'/' );             
     mpPS->WriteCharPtr( pOriginalName );
     switch ( maFont.GetWeight() )
     {
@@ -2262,9 +2262,9 @@ void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
     ImplWriteLine( " f" );
 }
 
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
+
+
+
 
 void PSWriter::ImplClosePathDraw( sal_uLong nMode )
 {
@@ -2280,7 +2280,7 @@ void PSWriter::ImplPathDraw()
     ImplExecMode( PS_RET );
 }
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplWriteLineColor( sal_uLong nMode )
 {
@@ -2315,13 +2315,13 @@ inline void PSWriter::ImplWriteTextFillColor( sal_uLong nMode )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteColor( sal_uLong nMode )
 {
     if ( mbGrayScale )
     {
-        // writes the Color (grayscale) as a Number from 0.000 up to 1.000
+        
 
         ImplWriteF( 1000 * ( (sal_uInt8)aColor.GetRed() * 77 + (sal_uInt8)aColor.GetGreen() * 151 +
             (sal_uInt8)aColor.GetBlue() * 28 + 1 ) / 65536, 3, nMode );
@@ -2332,11 +2332,11 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
         ImplWriteB1 ( (sal_uInt8)aColor.GetGreen() );
         ImplWriteB1 ( (sal_uInt8)aColor.GetBlue() );
     }
-    mpPS->WriteCharPtr( "c" );                               // ( c is defined as setrgbcolor or setgray )
+    mpPS->WriteCharPtr( "c" );                               
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 double PSWriter::ImplGetScaling( const MapMode& rMapMode )
 {
@@ -2384,7 +2384,7 @@ double PSWriter::ImplGetScaling( const MapMode& rMapMode )
     return nMul;
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
@@ -2396,7 +2396,7 @@ void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
     ImplScale( fScaleX, fScaleY );
 }
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplExecMode( sal_uLong nMode )
 {
@@ -2421,7 +2421,7 @@ inline void PSWriter::ImplExecMode( sal_uLong nMode )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
 {
@@ -2434,7 +2434,7 @@ inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
                                     SvtGraphicStroke::CapType eLCap,
@@ -2479,7 +2479,7 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
@@ -2492,10 +2492,10 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
     switch(rLineInfo.GetLineJoin())
     {
-        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
-            // do NOT use SvtGraphicStroke::joinNone here
-            // since it will be written as numerical value directly
-            // and is NOT a valid EPS value
+        default: 
+            
+            
+            
             break;
         case basegfx::B2DLINEJOIN_MITER:
             aJoinType = SvtGraphicStroke::joinMiter;
@@ -2529,7 +2529,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, l_aDashArray );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
@@ -2539,7 +2539,7 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
     ImplExecMode(nMode);
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
 {
@@ -2583,9 +2583,9 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
 
-// writes the number to stream: nNumber / ( 10^nCount )
+
+
 
 void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode )
 {
@@ -2625,7 +2625,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
@@ -2634,7 +2634,7 @@ void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
@@ -2651,9 +2651,9 @@ void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
 
-// writes the sal_uInt8 nNumb as a Number from 0.000 up to 1.000
+
+
 
 void PSWriter::ImplWriteB1( sal_uInt8 nNumb, sal_uLong nMode )
 {
@@ -2661,7 +2661,7 @@ void PSWriter::ImplWriteB1( sal_uInt8 nNumb, sal_uLong nMode )
 }
 
 
-// ------------------------------------------------------------------------
+
 
 inline void PSWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
 {
@@ -2677,7 +2677,7 @@ inline void PSWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
         ImplWriteHexByte( (sal_uInt8)( dwShift >> 24 ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::StartCompression()
 {
@@ -2689,7 +2689,7 @@ void PSWriter::StartCompression()
     nTableSize = nEOICode + 1;
     nCodeSize = nDataSize + 1;
 
-    nOffset = 32;                       // number of free unused in dwShift
+    nOffset = 32;                       
     dwShift = 0;
 
     pTable = new PSLZWCTreeNode[ 4096 ];
@@ -2703,7 +2703,7 @@ void PSWriter::StartCompression()
     WriteBits( nClearCode, nCodeSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::Compress( sal_uInt8 nCompThis )
 {
@@ -2757,7 +2757,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::EndCompression()
 {
@@ -2768,7 +2768,7 @@ void PSWriter::EndCompression()
     delete[] pTable;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
 {
@@ -2787,14 +2787,14 @@ sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_
     return NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize )
 {
     sal_Bool    bRetValue = sal_False;
     sal_uLong   nBytesRead;
 
-    if ( nSize < 256 )      // we assume that the file is greater than 256 bytes
+    if ( nSize < 256 )      
         return sal_False;
 
     if ( nSize < POSTSCRIPT_BOUNDINGSEARCH )
@@ -2805,7 +2805,7 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
     sal_uInt8* pDest = ImplSearchEntry( pSource, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
     if ( pDest )
     {
-        int     nSecurityCount = 100;   // only 100 bytes following the bounding box will be checked
+        int     nSecurityCount = 100;   
         nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
         pDest += 14;
         for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
@@ -2833,7 +2833,7 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
                         break;
                     default :
                         if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                            nSecurityCount = 1;     // error parsing the bounding box values
+                            nSecurityCount = 1;     
                         else if ( bValid )
                         {
                             if ( bDivision )
@@ -2857,11 +2857,11 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
     return bRetValue;
 }
 
-//================== GraphicExport - die exportierte Funktion ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport epsGraphicExport
 #endif

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/slidetransition.hxx"
@@ -87,7 +87,7 @@ namespace oox { namespace ppt {
         }
         catch( Exception& )
         {
-            // should not happen
+            
             OSL_FAIL( "exception raised" );
         }
     }
@@ -104,7 +104,7 @@ namespace oox { namespace ppt {
         }
         catch( Exception& )
         {
-            // should not happen
+            
             OSL_FAIL( "exception raised" );
         }
     }
@@ -129,7 +129,7 @@ namespace oox { namespace ppt {
             mnAnimationSpeed = AnimationSpeed_SLOW;
             break;
         default:
-            // should not happen. just ignore
+            
             break;
         }
     }
@@ -286,14 +286,14 @@ namespace oox { namespace ppt {
             mnTransitionType = TransitionType::SLIDEWIPE;
             mnTransitionSubType = ooxToOdpEightDirections( param1 );
             break;
-        case PPT_TOKEN( pull ): // uncover
+        case PPT_TOKEN( pull ): 
             mnTransitionType = TransitionType::SLIDEWIPE;
             mnTransitionSubType = ooxToOdpEightDirections( param1 );
             mbTransitionDirectionNormal = false;
             break;
         case PPT_TOKEN( cut ):
-            // The binfilter seems to ignore this transition.
-            // Fade to black instead if thrBlk is true.
+            
+            
             if( param1 )
             {
                 mnTransitionType = TransitionType::FADE;
@@ -326,7 +326,7 @@ namespace oox { namespace ppt {
             mnTransitionSubType = ooxToOdpDirection( param1 );
             if( param2 == XML_in )
             {
-                // reverse
+                
                 mbTransitionDirectionNormal = false;
             }
             break;
@@ -383,7 +383,7 @@ namespace oox { namespace ppt {
             mnTransitionSubType = TransitionSubType::DEFAULT;
             break;
         case PPT_TOKEN( newsflash ):
-            // this is what the PPT binary filter does.... not sure I agree.
+            
             mnTransitionType = TransitionType::FOURBOXWIPE;
             mnTransitionSubType = TransitionSubType::CORNERSOUT;
             break;

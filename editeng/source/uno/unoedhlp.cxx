@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/unoedhlp.hxx>
@@ -22,7 +22,7 @@
 #include <editeng/editeng.hxx>
 #include <svl/itemset.hxx>
 
-//------------------------------------------------------------------------
+
 
 TYPEINIT1( SvxEditSourceHint, TextHint );
 
@@ -55,7 +55,7 @@ sal_Int32 SvxEditSourceHint::GetEndValue() const
     return mnEnd;
 }
 TYPEINIT1( SvxEditSourceHintEndPara , SvxEditSourceHint );
-//------------------------------------------------------------------------
+
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
@@ -110,11 +110,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell )
 {
-    // IA2 CWS introduced bInCell, but also did many other changes here.
-    // Need to verify implementation with AT (IA2 and ATK)
-    // Old implementation at the end of the method for reference...
+    
+    
+    
 
-    //added dummy attributes for the default text
+    
     std::vector<EECharAttrib> aCharAttribs, aTempCharAttribs;
     rEE.GetCharAttribs( nPara, aTempCharAttribs );
 
@@ -142,7 +142,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
             aCharAttribs.push_back(aEEAttr);
         }
     }
-    // find closest index in front of nIndex
+    
     sal_Int32 nCurrIndex;
     sal_Int32 nClosestStartIndex_s = 0, nClosestStartIndex_e = 0;
     for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
@@ -163,7 +163,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
     }
     sal_Int32 nClosestStartIndex = nClosestStartIndex_s > nClosestStartIndex_e ? nClosestStartIndex_s : nClosestStartIndex_e;
 
-    // find closest index behind of nIndex
+    
     sal_Int32 nClosestEndIndex_s, nClosestEndIndex_e;
     nClosestEndIndex_s = nClosestEndIndex_e = rEE.GetTextLen(nPara);
     for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
@@ -192,7 +192,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
         EPosition aStartPos( nPara, nStartIndex ), aEndPos( nPara, nEndIndex );
         sal_Int32 nParaCount = rEE.GetParagraphCount();
         sal_Int32 nCrrntParaLen = rEE.GetTextLen(nPara);
-        //need to find closest index in front of nIndex in the previous paragraphs
+        
         if ( aStartPos.nIndex == 0 )
         {
             SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, 0, 1, GETATTRIBS_CHARATTRIBS );
@@ -216,7 +216,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
                 }
             }
         }
-        //need find closest index behind nIndex in the following paragrphs
+        
         if ( aEndPos.nIndex == nCrrntParaLen )
         {
             SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, nCrrntParaLen-1, nCrrntParaLen, GETATTRIBS_CHARATTRIBS );

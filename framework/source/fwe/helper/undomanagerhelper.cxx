@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,10 +34,10 @@
 #include <queue>
 #include <boost/function.hpp>
 
-//......................................................................................................................
+
 namespace framework
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -65,9 +65,9 @@ namespace framework
     using ::com::sun::star::util::XModifyListener;
     using ::svl::IUndoManager;
 
-    //==================================================================================================================
-    //= UndoActionWrapper
-    //==================================================================================================================
+    
+    
+    
     class UndoActionWrapper : public SfxUndoAction
     {
     public:
@@ -85,7 +85,7 @@ namespace framework
         const Reference< XUndoAction >  m_xUndoAction;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     UndoActionWrapper::UndoActionWrapper( Reference< XUndoAction > const& i_undoAction )
         :SfxUndoAction()
         ,m_xUndoAction( i_undoAction )
@@ -93,7 +93,7 @@ namespace framework
         ENSURE_OR_THROW( m_xUndoAction.is(), "illegal undo action" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     UndoActionWrapper::~UndoActionWrapper()
     {
         try
@@ -108,7 +108,7 @@ namespace framework
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString UndoActionWrapper::GetComment() const
     {
         OUString sComment;
@@ -123,27 +123,27 @@ namespace framework
         return sComment;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoActionWrapper::Undo()
     {
         m_xUndoAction->undo();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoActionWrapper::Redo()
     {
         m_xUndoAction->redo();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UndoActionWrapper::CanRepeat(SfxRepeatTarget&) const
     {
         return false;
     }
 
-    //==================================================================================================================
-    //= UndoManagerRequest
-    //==================================================================================================================
+    
+    
+    
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
@@ -195,11 +195,11 @@ namespace framework
         ::osl::Condition            m_finishCondition;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
 
-    //==================================================================================================================
-    //= UndoManagerHelper_Impl
-    //==================================================================================================================
+    
+    
+    
     class UndoManagerHelper_Impl : public SfxUndoListener
     {
     private:
@@ -241,19 +241,19 @@ namespace framework
         {
         }
 
-        //..............................................................................................................
+        
         IUndoManager& getUndoManager() const
         {
             return m_rUndoManagerImplementation.getImplUndoManager();
         }
 
-        //..............................................................................................................
+        
         Reference< XUndoManager > getXUndoManager() const
         {
             return m_rUndoManagerImplementation.getThis();
         }
 
-        // SfxUndoListener
+        
         virtual void actionUndone( const OUString& i_actionComment );
         virtual void actionRedone( const OUString& i_actionComment );
         virtual void undoActionAdded( const OUString& i_actionComment );
@@ -266,7 +266,7 @@ namespace framework
         virtual void listActionCancelled();
         virtual void undoManagerDying();
 
-        // public operations
+        
         void disposing();
 
         void enterUndoContext( const OUString& i_title, const bool i_hidden, IMutexGuard& i_instanceLock );
@@ -316,10 +316,10 @@ namespace framework
         void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) );
 
     private:
-        /// adds a function to be called to the request processor's queue
+        
         void impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock );
 
-        /// impl-versions of the XUndoManager API.
+        
         void impl_enterUndoContext( const OUString& i_title, const bool i_hidden );
         void impl_leaveUndoContext();
         void impl_addUndoAction( const Reference< XUndoAction >& i_action );
@@ -329,7 +329,7 @@ namespace framework
         void impl_reset();
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::disposing()
     {
         EventObject aEvent;
@@ -344,7 +344,7 @@ namespace framework
         m_disposed = true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     UndoManagerEvent UndoManagerHelper_Impl::buildEvent( OUString const& i_title ) const
     {
         UndoManagerEvent aEvent;
@@ -354,41 +354,41 @@ namespace framework
         return aEvent;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_notifyModified()
     {
         const EventObject aEvent( getXUndoManager() );
         m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::notify( OUString const& i_title,
         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
     {
         const UndoManagerEvent aEvent( buildEvent( i_title ) );
 
-        // TODO: this notification method here is used by UndoManagerHelper_Impl, to multiplex the notifications we
-        // receive from the IUndoManager. Those notitications are sent with a locked SolarMutex, which means
-        // we're doing the multiplexing here with a locked SM, too. Which is Bad (TM).
-        // Fixing this properly would require outsourcing all the notifications into an own thread - which might lead
-        // to problems of its own, since clients might expect synchronous notifications.
+        
+        
+        
+        
+        
 
         m_aUndoListeners.notifyEach( i_notificationMethod, aEvent );
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) )
     {
         const EventObject aEvent( getXUndoManager() );
 
-        // TODO: the same comment as in the other notify, regarding SM locking applies here ...
+        
 
         m_aUndoListeners.notifyEach( i_notificationMethod, aEvent );
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::enterUndoContext( const OUString& i_title, const bool i_hidden, IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -402,7 +402,7 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::leaveUndoContext( IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -414,7 +414,7 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::addUndoAction( const Reference< XUndoAction >& i_action, IMutexGuard& i_instanceLock )
     {
         if ( !i_action.is() )
@@ -434,7 +434,7 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::clear( IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -446,7 +446,7 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::clearRedo( IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -458,7 +458,7 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::reset( IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -470,10 +470,10 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::lock()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::MutexGuard aGuard( getMutex() );
 
         if ( ++m_nLockCount == 1 )
@@ -481,13 +481,13 @@ namespace framework
             IUndoManager& rUndoManager = getUndoManager();
             rUndoManager.EnableUndo( false );
         }
-        // <--- SYNCHRONIZED
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::unlock()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::MutexGuard aGuard( getMutex() );
 
         if ( m_nLockCount == 0 )
@@ -498,13 +498,13 @@ namespace framework
             IUndoManager& rUndoManager = getUndoManager();
             rUndoManager.EnableUndo( true );
         }
-        // <--- SYNCHRONIZED
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock )
     {
-        // create the request, and add it to our queue
+        
         ::rtl::Reference< UndoManagerRequest > pRequest( new UndoManagerRequest( i_request ) );
         {
             ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
@@ -515,7 +515,7 @@ namespace framework
 
         if ( m_bProcessingEvents )
         {
-            // another thread is processing the event queue currently => it will also process the event which we just added
+            
             pRequest->wait();
             return;
         }
@@ -528,9 +528,9 @@ namespace framework
                 ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
                 if ( m_aEventQueue.empty() )
                 {
-                    // reset the flag before releasing the queue mutex, otherwise it's possible that another thread
-                    // could add an event after we release the mutex, but before we reset the flag. If then this other
-                    // thread checks the flag before be reset it, this thread's event would starve.
+                    
+                    
+                    
                     m_bProcessingEvents = false;
                     return;
                 }
@@ -545,8 +545,8 @@ namespace framework
             catch( ... )
             {
                 {
-                    // no chance to process further requests, if the current one failed
-                    // => discard them
+                    
+                    
                     ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
                     while ( !m_aEventQueue.empty() )
                     {
@@ -556,22 +556,22 @@ namespace framework
                     }
                     m_bProcessingEvents = false;
                 }
-                // re-throw the error
+                
                 throw;
             }
         }
         while ( true );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_enterUndoContext( const OUString& i_title, const bool i_hidden )
     {
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( !rUndoManager.IsUndoEnabled() )
-            // ignore this request if the manager is locked
+            
             return;
 
         if ( i_hidden && ( rUndoManager.GetUndoActionCount( IUndoManager::CurrentLevel ) == 0 ) )
@@ -589,21 +589,21 @@ namespace framework
 
         const UndoManagerEvent aEvent( buildEvent( i_title ) );
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         m_aUndoListeners.notifyEach( i_hidden ? &XUndoManagerListener::enteredHiddenContext : &XUndoManagerListener::enteredContext, aEvent );
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_leaveUndoContext()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( !rUndoManager.IsUndoEnabled() )
-            // ignore this request if the manager is locked
+            
             return;
 
         if ( !rUndoManager.IsInListAction() )
@@ -627,7 +627,7 @@ namespace framework
         }
         const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0 );
 
-        // prepare notification
+        
         void ( SAL_CALL XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = NULL;
 
         UndoManagerEvent aContextEvent( buildEvent( OUString() ) );
@@ -647,7 +647,7 @@ namespace framework
         }
 
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         if ( bHadRedoActions && !bHasRedoActions )
             m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aClearedEvent );
@@ -655,14 +655,14 @@ namespace framework
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_doUndoRedo( IMutexGuard& i_externalLock, const bool i_undo )
     {
         ::osl::Guard< ::framework::IMutex > aExternalGuard( i_externalLock.getGuardedMutex() );
-            // note that this assumes that the mutex has been released in the thread which added the
-            // Undo/Redo request, so we can successfully acquire it
+            
+            
 
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
@@ -676,7 +676,7 @@ namespace framework
             throw EmptyUndoStackException("stack is empty", getXUndoManager() );
 
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         try
         {
@@ -689,29 +689,29 @@ namespace framework
         catch( const UndoFailedException& ) { /* allowed to leave here */ throw; }
         catch( const Exception& )
         {
-            // not allowed to leave
+            
             const Any aError( ::cppu::getCaughtException() );
             throw UndoFailedException( OUString(), getXUndoManager(), aError );
         }
 
-        // note that in opposite to all of the other methods, we do *not* have our mutex locked when calling
-        // into the IUndoManager implementation. This ensures that an actual XUndoAction::undo/redo is also
-        // called without our mutex being locked.
-        // As a consequence, we do not set m_bAPIActionRunning here. Instead, our actionUndone/actionRedone methods
-        // *always* multiplex the event to our XUndoManagerListeners, not only when m_bAPIActionRunning is FALSE (This
-        // again is different from all other SfxUndoListener methods).
-        // So, we do not need to do this notification here ourself.
+        
+        
+        
+        
+        
+        
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_addUndoAction( const Reference< XUndoAction >& i_action )
     {
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( !rUndoManager.IsUndoEnabled() )
-            // ignore the request if the manager is locked
+            
             return;
 
         const UndoManagerEvent aEventAdd( buildEvent( i_action->getTitle() ) );
@@ -725,7 +725,7 @@ namespace framework
         const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::CurrentLevel ) > 0 );
 
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::undoActionAdded, aEventAdd );
         if ( bHadRedoActions && !bHasRedoActions )
@@ -733,10 +733,10 @@ namespace framework
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_clear()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
@@ -750,16 +750,16 @@ namespace framework
 
         const EventObject aEvent( getXUndoManager() );
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::allActionsCleared, aEvent );
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_clearRedo()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
@@ -773,16 +773,16 @@ namespace framework
 
         const EventObject aEvent( getXUndoManager() );
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aEvent );
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::impl_reset()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         IUndoManager& rUndoManager = getUndoManager();
@@ -793,35 +793,35 @@ namespace framework
 
         const EventObject aEvent( getXUndoManager() );
         aGuard.clear();
-        // <--- SYNCHRONIZED
+        
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::resetAll, aEvent );
         impl_notifyModified();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::actionUndone( const OUString& i_actionComment )
     {
         UndoManagerEvent aEvent;
         aEvent.Source = getXUndoManager();
         aEvent.UndoActionTitle = i_actionComment;
-        aEvent.UndoContextDepth = 0;    // Undo can happen on level 0 only
+        aEvent.UndoContextDepth = 0;    
         m_aUndoListeners.notifyEach( &XUndoManagerListener::actionUndone, aEvent );
         impl_notifyModified();
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::actionRedone( const OUString& i_actionComment )
     {
         UndoManagerEvent aEvent;
         aEvent.Source = getXUndoManager();
         aEvent.UndoActionTitle = i_actionComment;
-        aEvent.UndoContextDepth = 0;    // Redo can happen on level 0 only
+        aEvent.UndoContextDepth = 0;    
         m_aUndoListeners.notifyEach( &XUndoManagerListener::actionRedone, aEvent );
         impl_notifyModified();
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::undoActionAdded( const OUString& i_actionComment )
     {
         if ( m_bAPIActionRunning )
@@ -830,7 +830,7 @@ namespace framework
         notify( i_actionComment, &XUndoManagerListener::undoActionAdded );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::cleared()
     {
         if ( m_bAPIActionRunning )
@@ -839,7 +839,7 @@ namespace framework
         notify( &XUndoManagerListener::allActionsCleared );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::clearedRedo()
     {
         if ( m_bAPIActionRunning )
@@ -848,7 +848,7 @@ namespace framework
         notify( &XUndoManagerListener::redoActionsCleared );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::resetAll()
     {
         if ( m_bAPIActionRunning )
@@ -857,7 +857,7 @@ namespace framework
         notify( &XUndoManagerListener::resetAll );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::listActionEntered( const OUString& i_comment )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -870,7 +870,7 @@ namespace framework
         notify( i_comment, &XUndoManagerListener::enteredContext );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::listActionLeft( const OUString& i_comment )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -885,7 +885,7 @@ namespace framework
         notify( i_comment, &XUndoManagerListener::leftContext );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::listActionLeftAndMerged()
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -900,7 +900,7 @@ namespace framework
         notify( &XUndoManagerListener::leftHiddenContext );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::listActionCancelled()
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -915,51 +915,51 @@ namespace framework
         notify( &XUndoManagerListener::cancelledContext );
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+     
     void UndoManagerHelper_Impl::undoManagerDying()
     {
-        // TODO: do we need to care? Or is this the responsibility of our owner?
+        
     }
 
-    //==================================================================================================================
-    //= UndoManagerHelper
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     UndoManagerHelper::UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl )
         :m_pImpl( new UndoManagerHelper_Impl( i_undoManagerImpl ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     UndoManagerHelper::~UndoManagerHelper()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::disposing()
     {
         m_pImpl->disposing();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::enterUndoContext( const OUString& i_title, IMutexGuard& i_instanceLock )
     {
         m_pImpl->enterUndoContext( i_title, false, i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::enterHiddenUndoContext( IMutexGuard& i_instanceLock )
     {
         m_pImpl->enterUndoContext( OUString(), true, i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::leaveUndoContext( IMutexGuard& i_instanceLock )
     {
         m_pImpl->leaveUndoContext( i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::undo( IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -973,7 +973,7 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper_Impl::redo( IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
@@ -987,55 +987,55 @@ namespace framework
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::addUndoAction( const Reference< XUndoAction >& i_action, IMutexGuard& i_instanceLock )
     {
         m_pImpl->addUndoAction( i_action, i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::undo( IMutexGuard& i_instanceLock )
     {
         m_pImpl->undo( i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::redo( IMutexGuard& i_instanceLock )
     {
         m_pImpl->redo( i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool UndoManagerHelper::isUndoPossible() const
     {
-        // SYNCHRONIZED --->
+        
         ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
         IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
             return sal_False;
         return rUndoManager.GetUndoActionCount( IUndoManager::TopLevel ) > 0;
-        // <--- SYNCHRONIZED
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool UndoManagerHelper::isRedoPossible() const
     {
-        // SYNCHRONIZED --->
+        
         ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
         const IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
             return sal_False;
         return rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0;
-        // <--- SYNCHRONIZED
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     namespace
     {
-        //..............................................................................................................
+        
         OUString lcl_getCurrentActionTitle( UndoManagerHelper_Impl& i_impl, const bool i_undo )
         {
-            // SYNCHRONIZED --->
+            
             ::osl::MutexGuard aGuard( i_impl.getMutex() );
 
             const IUndoManager& rUndoManager = i_impl.getUndoManager();
@@ -1051,13 +1051,13 @@ namespace framework
             return  i_undo
                 ?   rUndoManager.GetUndoActionComment( 0, IUndoManager::TopLevel )
                 :   rUndoManager.GetRedoActionComment( 0, IUndoManager::TopLevel );
-            // <--- SYNCHRONIZED
+            
         }
 
-        //..............................................................................................................
+        
         Sequence< OUString > lcl_getAllActionTitles( UndoManagerHelper_Impl& i_impl, const bool i_undo )
         {
-            // SYNCHRONIZED --->
+            
             ::osl::MutexGuard aGuard( i_impl.getMutex() );
 
             const IUndoManager& rUndoManager = i_impl.getUndoManager();
@@ -1073,105 +1073,105 @@ namespace framework
                             :   rUndoManager.GetRedoActionComment( i, IUndoManager::TopLevel );
             }
             return aTitles;
-            // <--- SYNCHRONIZED
+            
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString UndoManagerHelper::getCurrentUndoActionTitle() const
     {
         return lcl_getCurrentActionTitle( *m_pImpl, true );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString UndoManagerHelper::getCurrentRedoActionTitle() const
     {
         return lcl_getCurrentActionTitle( *m_pImpl, false );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Sequence< OUString > UndoManagerHelper::getAllUndoActionTitles() const
     {
         return lcl_getAllActionTitles( *m_pImpl, true );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Sequence< OUString > UndoManagerHelper::getAllRedoActionTitles() const
     {
         return lcl_getAllActionTitles( *m_pImpl, false );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::clear( IMutexGuard& i_instanceLock )
     {
         m_pImpl->clear( i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::clearRedo( IMutexGuard& i_instanceLock )
     {
         m_pImpl->clearRedo( i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::reset( IMutexGuard& i_instanceLock )
     {
         m_pImpl->reset( i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::lock()
     {
         m_pImpl->lock();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::unlock()
     {
         m_pImpl->unlock();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool UndoManagerHelper::isLocked()
     {
-        // SYNCHRONIZED --->
+        
         ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
 
         IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         return !rUndoManager.IsUndoEnabled();
-        // <--- SYNCHRONIZED
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         if ( i_listener.is() )
             m_pImpl->addUndoManagerListener( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         if ( i_listener.is() )
             m_pImpl->removeUndoManagerListener( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::addModifyListener( const Reference< XModifyListener >& i_listener )
     {
         if ( i_listener.is() )
             m_pImpl->addModifyListener( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UndoManagerHelper::removeModifyListener( const Reference< XModifyListener >& i_listener )
     {
         if ( i_listener.is() )
             m_pImpl->removeModifyListener( i_listener );
     }
 
-//......................................................................................................................
-} // namespace framework
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

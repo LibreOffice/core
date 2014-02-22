@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@
 #elif defined SAL_W32
 #define WIN32_LEAN_AND_MEAN
 #ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
+#pragma warning(push,1) 
 #endif
 #include <windows.h>
 #ifdef _MSC_VER
@@ -113,7 +113,7 @@ extern "C" void SAL_CALL freeExec(
 #if defined SAL_UNX
     munmap(static_cast< char * >(address), size);
 #elif defined SAL_W32
-    (void) size; // unused
+    (void) size; 
     VirtualFree(address, 0, MEM_RELEASE);
 #endif
 }
@@ -130,8 +130,8 @@ public:
     void unguard() { m_guarded = false; }
 
 private:
-    GuardedBlocks(GuardedBlocks &); // not implemented
-    void operator =(GuardedBlocks); // not implemented
+    GuardedBlocks(GuardedBlocks &); 
+    void operator =(GuardedBlocks); 
 
     VtableFactory const & m_factory;
     bool m_guarded;
@@ -180,7 +180,7 @@ sal_Int32 VtableFactory::BaseOffset::calculate(
 VtableFactory::VtableFactory(): m_arena(
     rtl_arena_create(
         "bridges::cpp_uno::shared::VtableFactory",
-        sizeof (void *), // to satisfy alignment requirements
+        sizeof (void *), 
         0, reinterpret_cast< rtl_arena_type * >(-1), allocExec, freeExec, 0))
 {
     if (m_arena == 0) {
@@ -285,7 +285,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
            block.exec = 0;
         }
 
-        //All good
+        
         if (block.start && block.exec && block.fd != -1)
             break;
 
@@ -296,7 +296,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     umask(nOrigMode);
     if (!block.start || !block.exec || block.fd == -1)
     {
-       //Fall back to non-doublemmaped allocation
+       
        block.fd = -1;
        block.start = block.exec = rtl_arena_alloc(m_arena, &block.size);
     }
@@ -304,7 +304,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 }
 
 void VtableFactory::freeBlock(Block const & block) const {
-    //if the double-map failed we were allocated on the arena
+    
     if (block.fd == -1 && block.start == block.exec && block.start != NULL)
         rtl_arena_free(m_arena, block.start, block.size);
     else
@@ -359,8 +359,8 @@ void VtableFactory::createVtables(
             }
             flushCode(codeBegin, code);
 #ifdef USE_DOUBLE_MMAP
-        //Finished generating block, swap writable pointer with executable
-        //pointer
+        
+        
             ::std::swap(block.start, block.exec);
 #endif
             blocks.push_back(block);

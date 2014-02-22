@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,14 +22,14 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "mtrindlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
                                     OString         sDialogName,
@@ -66,7 +66,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
 
-//------------------------------------------------------------------------
+
 
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
@@ -77,7 +77,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
     sal_uInt16  nDecs   = m_pEdValue->GetDecimalDigits();
     double  nFactor = 0.0;
 
-    // static long ImpPower10( sal_uInt16 nDecs )
+    
     {
         nFactor = 1.0;
 
@@ -87,13 +87,13 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 
     return nVal / nFactor;
 */
-    // erstmal Nachkommastellen abschneiden - nich so doll...
+    
 
     return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( eUnit ) ) );
 }
 
-//------------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
 {
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
 {

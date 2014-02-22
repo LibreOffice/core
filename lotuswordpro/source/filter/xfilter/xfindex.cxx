@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -95,7 +95,7 @@ XFIndex::~XFIndex()
 void    XFIndex::AddTemplate(OUString level, OUString style, XFIndexTemplate* templ)
 {
     templ->SetLevel( level );
-    if(m_eType != enumXFIndexTOC) // TOC's styles are applied to template entries separately
+    if(m_eType != enumXFIndexTOC) 
     {
         templ->SetStyleName( style );
     }
@@ -177,7 +177,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("text:name"), m_strTitle );
     pStrm->StartElement( strIndexName );
 
-    //text:table-of-content-source:
+    
     pAttrList->Clear();
 
     if(m_eType == enumXFIndexTOC )
@@ -191,14 +191,14 @@ void    XFIndex::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:alphabetical-separators"), A2OUSTR("true") );
 
     pStrm->StartElement( strSourceName );
-    //title template:
+    
     pAttrList->Clear();
 
     pStrm->StartElement( A2OUSTR("text:index-title-template") );
     pStrm->Characters( m_strTitle );
     pStrm->EndElement( A2OUSTR("text:index-title-template") );
 
-    //entry templates:
+    
     std::vector<XFIndexTemplate *>::iterator it;
     for (it = m_aTemplates.begin(); it != m_aTemplates.end(); ++it)
     {
@@ -206,14 +206,14 @@ void    XFIndex::ToXml(IXFStream *pStrm)
         (*it)->ToXml(pStrm);
     }
 
-    // by
+    
     if(m_eType == enumXFIndexTOC )
     {
         for(sal_uInt16 i=1; i <= MAX_TOC_LEVEL; i++)
         {
             if (m_aTOCSource[i].empty())
             {
-                // unnecessary to output this level
+                
                 continue;
             }
 
@@ -235,10 +235,10 @@ void    XFIndex::ToXml(IXFStream *pStrm)
 
     pStrm->EndElement( strSourceName );
 
-    //index-body:
+    
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("text:index-body") );
-    //index-title:
+    
     if(!m_strTitle.isEmpty())
     {
         pAttrList->AddAttribute( A2OUSTR("text:name"), m_strTitle + A2OUSTR("_Head") );
@@ -310,10 +310,10 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
             default:
                 break;
             }
-            //delimiter:
+            
             if( m_eTabType == enumXFTabChar )
                 pAttrList->AddAttribute( A2OUSTR("style:char"), m_strTabDelimiter );
-            //leader char:
+            
             if( !m_strTabLeader.isEmpty() )
                 pAttrList->AddAttribute( A2OUSTR("style:leader-char"), m_strTabLeader );
 

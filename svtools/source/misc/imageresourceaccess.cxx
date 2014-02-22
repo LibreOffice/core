@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,10 +31,10 @@
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/processfactory.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star::io;
@@ -43,9 +43,9 @@ namespace svt
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::graphic;
 
-    //====================================================================
-    //= StreamSupplier
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakImplHelper2 <   XStream
                                     ,   XSeekable
                                     >   StreamSupplier_Base;
@@ -60,17 +60,17 @@ namespace svt
         StreamSupplier( const Reference< XInputStream >& _rxInput, const Reference< XOutputStream >& _rxOutput );
 
     protected:
-        // XStream
+        
         virtual Reference< XInputStream > SAL_CALL getInputStream(  ) throw (RuntimeException);
         virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) throw (RuntimeException);
 
-        // XSeekable
+        
         virtual void SAL_CALL seek( ::sal_Int64 location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     };
 
-    //--------------------------------------------------------------------
+    
     StreamSupplier::StreamSupplier( const Reference< XInputStream >& _rxInput, const Reference< XOutputStream >& _rxOutput )
         :m_xInput( _rxInput )
         ,m_xOutput( _rxOutput )
@@ -81,19 +81,19 @@ namespace svt
         OSL_ENSURE( m_xSeekable.is(), "StreamSupplier::StreamSupplier: at least one of both must be seekable!" );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInputStream > SAL_CALL StreamSupplier::getInputStream(  ) throw (RuntimeException)
     {
         return m_xInput;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XOutputStream > SAL_CALL StreamSupplier::getOutputStream(  ) throw (RuntimeException)
     {
         return m_xOutput;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL StreamSupplier::seek( ::sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException)
     {
         if ( !m_xSeekable.is() )
@@ -102,7 +102,7 @@ namespace svt
         m_xSeekable->seek( location );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int64 SAL_CALL StreamSupplier::getPosition(  ) throw (IOException, RuntimeException)
     {
         if ( !m_xSeekable.is() )
@@ -111,7 +111,7 @@ namespace svt
         return m_xSeekable->getPosition();
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int64 SAL_CALL StreamSupplier::getLength(  ) throw (IOException, RuntimeException)
     {
         if ( !m_xSeekable.is() )
@@ -120,33 +120,33 @@ namespace svt
         return m_xSeekable->getLength();
     }
 
-    //====================================================================
-    //= GraphicAccess
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {
         if  (  _rURL.startsWith( "private:resource/" )
             || _rURL.startsWith( "private:graphicrepository/" )
             || _rURL.startsWith( "private:standardimage/" )
             || _rURL.startsWith( "vnd.sun.star.GraphicObject:" )
-            || _rURL.startsWith( "vnd.sun.star.extension://" )
+            || _rURL.startsWith( "vnd.sun.star.extension:
             )
             return true;
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
         SvStream* pReturn = NULL;
 
         try
         {
-            // get a GraphicProvider
+            
             Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(_rxContext);
 
-            // let it create a graphic from the given URL
+            
             Sequence< PropertyValue > aMediaProperties( 1 );
             aMediaProperties[0].Name = "URL";
             aMediaProperties[0].Value <<= _rImageResourceURL;
@@ -155,7 +155,7 @@ namespace svt
             if ( !xGraphic.is() )
                 return pReturn;
 
-            // copy the graphic to a in-memory buffer
+            
             SvMemoryStream* pMemBuffer = new SvMemoryStream;
             Reference< XStream > xBufferAccess = new StreamSupplier(
                 new OSeekableInputStreamWrapper( *pMemBuffer ),
@@ -180,14 +180,14 @@ namespace svt
         return pReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
-        return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), true );   // take ownership
+        return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), true );   
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

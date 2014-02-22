@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/htmlmode.hxx>
@@ -40,7 +40,7 @@
 #include <editeng/acorrcfg.hxx>
 
 #ifdef DBG_UTIL
-bool SwViewOption::s_bTest9 = false;        //DrawingLayerNotLoading
+bool SwViewOption::s_bTest9 = false;        
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aObjectBoundColor(COL_LIGHTGRAY);
@@ -63,7 +63,7 @@ Color SwViewOption::aShadowColor(COL_GRAY);
 Color SwViewOption::aHeaderFooterMarkColor(COL_BLUE);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
-sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
+sal_uInt16 SwViewOption::nPixelTwips = 0;   
 
 static const char aPostItStr[] = "  ";
 
@@ -84,7 +84,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
 #ifdef DBG_UTIL
-            // correspond to the statements in ui/config/cfgvw.src
+            
             && m_bTest1 == rOpt.IsTest1()
             && m_bTest2 == rOpt.IsTest2()
             && m_bTest3 == rOpt.IsTest3()
@@ -137,7 +137,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
     {
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
-        // to make it look nice, we subtract two pixels everywhere
+        
         sal_uInt16 nPix = GetPixelTwips() * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
@@ -169,8 +169,8 @@ SwViewOption::SwViewOption() :
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
 {
-    // Initialisation is a little simpler now
-    // all Bits to 0
+    
+    
     nCoreOptions =
         VIEWOPT_1_HARDBLANK |
         VIEWOPT_1_SOFTHYPH |
@@ -192,9 +192,9 @@ SwViewOption::SwViewOption() :
         VIEWOPT_2_ANY_RULER;
 
     if(MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
-        aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
+        aSnapSize.Width() = aSnapSize.Height() = 720;   
     else
-        aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
+        aSnapSize.Width() = aSnapSize.Height() = 567;   
     nDivisionX = nDivisionY = 1;
 
     bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
@@ -202,7 +202,7 @@ SwViewOption::SwViewOption() :
     bIdle = true;
 
 #ifdef DBG_UTIL
-    // correspond to the statements in ui/config/cfgvw.src
+    
     m_bTest1 = m_bTest2 = m_bTest3 = m_bTest4 =
              m_bTest5 = m_bTest6 = m_bTest7 = m_bTest8 = m_bTest10 = false;
 #endif
@@ -212,7 +212,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
     bReadonly = sal_False;
     bSelectionInReadonly = sal_False;
-    // #114856# Formular view
+    
     mbFormView       = rVOpt.mbFormView;
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
@@ -253,7 +253,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
-    // #114856# Formular view
+    
     mbFormView       = rVOpt.mbFormView   ;
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
@@ -331,7 +331,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
                 nRet |= HTMLMODE_FULL_STYLES;
             break;
             case HTML_CFG_NS40:
-                // no special features for this browser
+                
             break;
             case HTML_CFG_WRITER:
                 nRet |= HTMLMODE_FULL_STYLES;
@@ -510,7 +510,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bS
         nAppearanceFlags &= ~nFlag;
     if(bSaveInConfig)
     {
-        //create an editable svtools::ColorConfig and store the change
+        
         svtools::EditableColorConfig aEditableConfig;
         struct FlagToConfig_Impl
         {

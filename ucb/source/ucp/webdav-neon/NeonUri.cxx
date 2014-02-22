@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -40,8 +40,8 @@
 
 using namespace webdav_ucp;
 
-// FIXME: not sure whether initializing a ne_uri statically is supposed to work
-// the string fields of ne_uri are char*, not const char*
+
+
 
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wwrite-strings"
@@ -70,7 +70,7 @@ const ne_uri g_sUriDefaultsFTP   = { (char *) "ftp",
                                      NULL,
                                      NULL,
                                      NULL };
-} // namespace
+} 
 
 NeonUri::NeonUri( const ne_uri * inUri )
     throw ( DAVException )
@@ -95,7 +95,7 @@ NeonUri::NeonUri( const OUString & inUri )
     if ( inUri.isEmpty() )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
-    // #i77023#
+    
     OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
 
     OString theInputUri(
@@ -116,7 +116,7 @@ NeonUri::NeonUri( const OUString & inUri )
 
 void NeonUri::init( const OString & rUri, const ne_uri * pUri )
 {
-    // Complete URI.
+    
     const ne_uri * pUriDefs
         = rUri.matchIgnoreAsciiCase( "ftp:" ) ?
               &g_sUriDefaultsFTP :
@@ -156,14 +156,14 @@ NeonUri::~NeonUri( )
 void NeonUri::calculateURI ()
 {
     OUStringBuffer aBuf( mScheme );
-    aBuf.appendAscii( "://" );
+    aBuf.appendAscii( ":
     if ( !mUserInfo.isEmpty() )
     {
-        //TODO! differentiate between empty and missing userinfo
+        
         aBuf.append( mUserInfo );
         aBuf.appendAscii( "@" );
     }
-    // Is host a numeric IPv6 address?
+    
     if ( ( mHostName.indexOf( ':' ) != -1 ) &&
          ( mHostName[ 0 ] != '[' ) )
     {
@@ -176,7 +176,7 @@ void NeonUri::calculateURI ()
         aBuf.append( mHostName );
     }
 
-    // append port, but only, if not default port.
+    
     bool bAppendPort = true;
     switch ( mPort )
     {
@@ -208,7 +208,7 @@ OUString NeonUri::GetPathBaseName () const
     sal_Int32 nTrail = 0;
     if (nPos == mPath.getLength () - 1)
     {
-        // Trailing slash found. Skip.
+        
         nTrail = 1;
         nPos = mPath.lastIndexOf ('/', nPos);
     }
@@ -217,7 +217,7 @@ OUString NeonUri::GetPathBaseName () const
         OUString aTemp(
             mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail) );
 
-        // query, fragment present?
+        
         nPos = aTemp.indexOf( '?' );
         if ( nPos == -1 )
             nPos = aTemp.indexOf( '#' );
@@ -250,7 +250,7 @@ void NeonUri::AppendPath (const OUString& rPath)
     calculateURI ();
 };
 
-// static
+
 OUString NeonUri::escapeSegment( const OUString& segment )
 {
     return rtl::Uri::encode( segment,
@@ -259,7 +259,7 @@ OUString NeonUri::escapeSegment( const OUString& segment )
                              RTL_TEXTENCODING_UTF8 );
 }
 
-// static
+
 OUString NeonUri::unescape( const OUString& segment )
 {
     return rtl::Uri::decode( segment,
@@ -267,13 +267,13 @@ OUString NeonUri::unescape( const OUString& segment )
                              RTL_TEXTENCODING_UTF8 );
 }
 
-// static
+
 OUString NeonUri::makeConnectionEndPointString(
                                 const OUString & rHostName, int nPort )
 {
     OUStringBuffer aBuf;
 
-    // Is host a numeric IPv6 address?
+    
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
          ( rHostName[ 0 ] != '[' ) )
     {

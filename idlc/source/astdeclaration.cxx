@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <idlc/astdeclaration.hxx>
@@ -103,30 +103,30 @@ void AstDeclaration::setName(const OString& name)
     sal_Int32 nIndex = name.lastIndexOf( ':' );
     m_localName = name.copy( nIndex+1 );
 
-// Huh ? There is always at least one token
 
-//  sal_Int32 count = name.getTokenCount(':');
 
-//  if ( count > 0 )
-//  {
-//      m_localName = name.getToken(count-1, ':');
-//      m_scopedName = name;
-//  } else if ( m_pScope )
-//  {
-//      m_localName = name;
-//      AstDeclaration* pDecl = scopeAsDecl(m_pScope);
-//      if (pDecl)
-//      {
-//          m_scopedName = pDecl->getScopedName();
-//          if (m_scopedName.getLength() > 0)
-//              m_scopedName += sGlobal;
-//          m_scopedName += m_localName;
-//      }
-//  } else
-//  {
-//      m_localName = name;
-//      m_scopedName = name;
-//  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     m_fullName = convertName(m_scopedName);
 }
 
@@ -142,7 +142,7 @@ bool AstDeclaration::isType() const {
         return true;
 
     default:
-        OSL_ASSERT(m_nodeType != NT_struct); // see AstStruct::isType
+        OSL_ASSERT(m_nodeType != NT_struct); 
         return false;
     }
 }

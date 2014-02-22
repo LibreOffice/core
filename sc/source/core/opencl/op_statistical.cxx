@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "op_statistical.hxx"
@@ -4305,8 +4305,8 @@ void OpGeoMean::GenSlidingWindowFunction(
             ss << "            current_sum += shm_buf[0];\n";
             ss << "            current_count += count_buf[0];\n";
             ss << "        }\n";
-             //  ss << "if(writePos == 14 && lidx ==0)\n";
-            //ss <<"printf(\"\\n********************sum is  is %f, count is%d\",current_sum,current_count);\n";
+             
+            
             ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    }\n";
         }else
@@ -4324,7 +4324,7 @@ void OpGeoMean::GenSlidingWindowFunction(
             {
                 vSubArguments[i]->GenDeclRef(ss);
                 ss <<";\n";
-                //ss <<"printf(\"\\n********************tmp0 is %f\",tmp0);\n";
+                
             }
             ss << "        if(!isNan(tmp0))\n";
             ss << "       {\n";
@@ -6894,7 +6894,7 @@ void OpBinomdist::GenSlidingWindowFunction(
     size_t i = vSubArguments.size();
     size_t nItems = 0;
     ss <<"\n    ";
-    //while (i-- > 1)
+    
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -7768,7 +7768,7 @@ void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
 void OpB::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    //decls.insert(fBigInvDecl);decls.insert(fLogDblMaxDecl);
+    
     decls.insert(GetBinomDistPMFDecl);decls.insert(MinDecl);
     decls.insert(fMachEpsDecl);decls.insert(fMaxGammaArgumentDecl);
     decls.insert(GetBetaDistDecl);decls.insert(GetBetaDistPDFDecl);
@@ -8515,7 +8515,7 @@ void OpBetainv::GenSlidingWindowFunction(
     size_t i = vSubArguments.size();
     size_t nItems = 0;
     ss <<"\n    ";
-    //while (i-- > 1)
+    
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();

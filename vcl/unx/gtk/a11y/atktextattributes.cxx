@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,9 +64,9 @@ static AtkTextAttribute atk_text_attribute_tab_stops = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_writing_mode = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_vertical_align = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_misspelled = ATK_TEXT_ATTR_INVALID;
-// #i92232#
+
 static AtkTextAttribute atk_text_attribute_tracked_change = ATK_TEXT_ATTR_INVALID;
-// #i92233#
+
 static AtkTextAttribute atk_text_attribute_mm_to_pixel_ratio = ATK_TEXT_ATTR_INVALID;
 
 /*****************************************************************************/
@@ -97,7 +97,7 @@ enum ExportedAttribute
     TEXT_ATTRIBUTE_STRIKETHROUGH,
     TEXT_ATTRIBUTE_UNDERLINE,
     TEXT_ATTRIBUTE_WEIGHT,
-    // #i92233#
+    
     TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO,
     TEXT_ATTRIBUTE_JUSTIFICATION,
     TEXT_ATTRIBUTE_BOTTOM_MARGIN,
@@ -114,37 +114,37 @@ enum ExportedAttribute
 
 static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
 {
-    "CharBackColor",        // TEXT_ATTRIBUTE_BACKGROUND_COLOR
-    "CharCaseMap",          // TEXT_ATTRIBUTE_CASEMAP
-    "CharColor",            // TEXT_ATTRIBUTE_FOREGROUND_COLOR
-    "CharContoured",        // TEXT_ATTRIBUTE_CONTOURED
-    "CharEscapement",       // TEXT_ATTRIBUTE_CHAR_ESCAPEMENT
-    "CharFlash",            // TEXT_ATTRIBUTE_BLINKING
-    "CharFontName",         // TEXT_ATTRIBUTE_FONT_NAME
-    "CharHeight",           // TEXT_ATTRIBUTE_HEIGHT
-    "CharHidden",           // TEXT_ATTRIBUTE_HIDDEN
-    "CharKerning",          // TEXT_ATTRIBUTE_KERNING
-    "CharLocale",           // TEXT_ATTRIBUTE_LOCALE
-    "CharPosture",          // TEXT_ATTRIBUTE_POSTURE
-    "CharRelief",           // TEXT_ATTRIBUTE_RELIEF
-    "CharRotation",         // TEXT_ATTRIBUTE_ROTATION
-    "CharScaleWidth",       // TEXT_ATTRIBUTE_SCALE
-    "CharShadowed",         // TEXT_ATTRIBUTE_SHADOWED
-    "CharStrikeout",        // TEXT_ATTRIBUTE_STRIKETHROUGH
-    "CharUnderline",        // TEXT_ATTRIBUTE_UNDERLINE
-    "CharWeight",           // TEXT_ATTRIBUTE_WEIGHT
-    // #i92233#
-    "MMToPixelRatio",       // TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO
-    "ParaAdjust",           // TEXT_ATTRIBUTE_JUSTIFICATION
-    "ParaBottomMargin",     // TEXT_ATTRIBUTE_BOTTOM_MARGIN
-    "ParaFirstLineIndent",  // TEXT_ATTRIBUTE_FIRST_LINE_INDENT
-    "ParaLeftMargin",       // TEXT_ATTRIBUTE_LEFT_MARGIN
-    "ParaLineSpacing",      // TEXT_ATTRIBUTE_LINE_SPACING
-    "ParaRightMargin",      // TEXT_ATTRIBUTE_RIGHT_MARGIN
-    "ParaStyleName",        // TEXT_ATTRIBUTE_STYLE_NAME
-    "ParaTabStops",         // TEXT_ATTRIBUTE_TAB_STOPS
-    "ParaTopMargin",        // TEXT_ATTRIBUTE_TOP_MARGIN
-    "WritingMode"           // TEXT_ATTRIBUTE_WRITING_MODE
+    "CharBackColor",        
+    "CharCaseMap",          
+    "CharColor",            
+    "CharContoured",        
+    "CharEscapement",       
+    "CharFlash",            
+    "CharFontName",         
+    "CharHeight",           
+    "CharHidden",           
+    "CharKerning",          
+    "CharLocale",           
+    "CharPosture",          
+    "CharRelief",           
+    "CharRotation",         
+    "CharScaleWidth",       
+    "CharShadowed",         
+    "CharStrikeout",        
+    "CharUnderline",        
+    "CharWeight",           
+    
+    "MMToPixelRatio",       
+    "ParaAdjust",           
+    "ParaBottomMargin",     
+    "ParaFirstLineIndent",  
+    "ParaLeftMargin",       
+    "ParaLineSpacing",      
+    "ParaRightMargin",      
+    "ParaStyleName",        
+    "ParaTabStops",         
+    "ParaTopMargin",        
+    "WritingMode"           
 };
 
 
@@ -176,7 +176,7 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 static inline
 double toPoint(sal_Int16 n)
 {
-    // 100th mm -> pt
+    
     return (double) (n * 72) / 2540;
 }
 
@@ -236,7 +236,7 @@ get_color_value(const uno::Sequence< beans::PropertyValue >& rAttributeList,
                 ExportedAttribute attr,
                 AtkText * text)
 {
-    sal_Int32 nColor = -1; // AUTOMATIC
+    sal_Int32 nColor = -1; 
     sal_Int32 nIndex = pIndexArray[attr];
 
     if( nIndex != -1 )
@@ -440,13 +440,13 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 const gchar * font_strikethrough[] = {
-    "none",   // FontStrikeout::NONE
-    "single", // FontStrikeout::SINGLE
-    "double", // FontStrikeout::DOUBLE
-    NULL,     // FontStrikeout::DONTKNOW
-    "bold",   // FontStrikeout::BOLD
-    "with /", // FontStrikeout::SLASH
-    "with X"  // FontStrikeout::X
+    "none",   
+    "single", 
+    "double", 
+    NULL,     
+    "bold",   
+    "with /", 
+    "with X"  
 };
 
 const sal_Int16 n_strikeout_constants = sizeof(font_strikethrough) / sizeof(gchar*);
@@ -556,9 +556,9 @@ SetString( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-// @see http://developer.gnome.org/doc/API/2.0/atk/AtkText.html#AtkTextAttribute
 
-// CMM = 100th of mm
+
+
 static gchar*
 CMM2UnitString(const uno::Any& rAny)
 {
@@ -571,7 +571,7 @@ CMM2UnitString(const uno::Any& rAny)
 static bool
 UnitString2CMM( uno::Any& rAny, const gchar * value )
 {
-    float fValue = 0.0; // pb: dont use double here because of warning on linux
+    float fValue = 0.0; 
 
     if( 1 != sscanf( value, "%gmm", &fValue ) )
         return false;
@@ -693,7 +693,7 @@ Kerning2Stretch(const uno::Any& rAny)
     sal_Int16 n = rAny.get<sal_Int16>();
     int i = 4;
 
-    // No good idea for a mapping - just return the basic info
+    
     if( n < 0 )
         i=2;
     else if( n > 0 )
@@ -745,7 +745,7 @@ String2Locale( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-// @see http://www.w3.org/TR/2002/WD-css3-fonts-20020802/#font-effect-prop
+
 static const gchar * relief[] = { "none", "emboss", "engrave" };
 static const gchar * outline  = "outline";
 
@@ -771,7 +771,7 @@ get_font_effect(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
 /*****************************************************************************/
 
-// @see http://www.w3.org/TR/REC-CSS2/text.html#lining-striking-props
+
 
 
 enum
@@ -793,7 +793,7 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
     gchar * value_list[4] = { NULL, NULL, NULL, NULL };
     gint count = 0;
 
-    // no property value found
+    
     if( ( nBlinkIndex == -1 ) && (nUnderlineIndex == -1 ) && (nStrikeoutIndex == -1))
         return NULL;
 
@@ -824,7 +824,7 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
 /*****************************************************************************/
 
-// @see http://www.w3.org/TR/REC-CSS2/text.html#propdef-text-shadow
+
 
 static const gchar * shadow_values[] = { "none", "black" };
 
@@ -863,7 +863,7 @@ WritingMode2Direction( const uno::Any& rAny )
     return NULL;
 }
 
-// @see http://www.w3.org/TR/2001/WD-css3-text-20010517/#PrimaryTextAdvanceDirection
+
 
 const gchar * writing_modes[] = { "lr-tb", "rl-tb", "tb-rl", "tb-lr", "none" };
 static gchar *
@@ -881,14 +881,14 @@ WritingMode2String( const uno::Any& rAny )
 
 const char * baseline_values[] = { "baseline", "sub", "super" };
 
-// @see http://www.w3.org/TR/REC-CSS2/visudet.html#propdef-vertical-align
+
 static gchar *
 Escapement2VerticalAlign( const uno::Any& rAny )
 {
     sal_Int16 n = rAny.get<sal_Int16>();
     gchar * ret = NULL;
 
-    // Values are in %, 101% means "automatic"
+    
     if( n == 0 )
         ret = g_strdup(baseline_values[0]);
     else if( n == 101 )
@@ -903,7 +903,7 @@ Escapement2VerticalAlign( const uno::Any& rAny )
 
 /*****************************************************************************/
 
-// @see http://www.w3.org/TR/REC-CSS2/visudet.html#propdef-line-height
+
 static gchar *
 LineSpacing2LineHeight( const uno::Any& rAny )
 {
@@ -923,7 +923,7 @@ LineSpacing2LineHeight( const uno::Any& rAny )
 
 /*****************************************************************************/
 
-// @see http://www.w3.org/People/howcome/t/970224HTMLERB-CSS/WD-tabs-970117.html
+
 static gchar *
 TabStopList2String( const uno::Any& rAny, bool default_tabs )
 {
@@ -1082,7 +1082,7 @@ attribute_set_new_from_property_values(
 
     sal_Int32 aIndexList[TEXT_ATTRIBUTE_LAST] = { -1 };
 
-    // Initialize index array with -1
+    
     for( sal_Int32 attr = 0; attr < TEXT_ATTRIBUTE_LAST; ++attr )
         aIndexList[attr] = -1;
 
@@ -1212,7 +1212,7 @@ attribute_set_new_from_property_values(
     attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_tab_stops,
         get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TAB_STOPS], TabStops2String));
 
-    // #i92233#
+    
     if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_mm_to_pixel_ratio )
         atk_text_attribute_mm_to_pixel_ratio = atk_text_attribute_register("mm-to-pixel-ratio");
 
@@ -1234,7 +1234,7 @@ AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_se
     return attribute_set;
 }
 
-// #i92232#
+
 AtkAttributeSet* attribute_set_prepend_tracked_change_insertion( AtkAttributeSet* attribute_set )
 {
     if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
@@ -1287,34 +1287,34 @@ struct AtkTextAttrMapping
 
 const AtkTextAttrMapping g_TextAttrMap[] =
 {
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_INVALID = 0
-    { "ParaLeftMargin", UnitString2CMM },       // ATK_TEXT_ATTR_LEFT_MARGIN
-    { "ParaRightMargin", UnitString2CMM },      // ATK_TEXT_ATTR_RIGHT_MARGIN
-    { "ParaFirstLineIndent", UnitString2CMM },  // ATK_TEXT_ATTR_INDENT
-    { "CharHidden", String2Bool },              // ATK_TEXT_ATTR_INVISIBLE
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_EDITABLE
-    { "ParaTopMargin", UnitString2CMM },        // ATK_TEXT_ATTR_PIXELS_ABOVE_LINES
-    { "ParaBottomMargin", UnitString2CMM },     // ATK_TEXT_ATTR_PIXELS_BELOW_LINES
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_BG_FULL_HEIGHT
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_RISE
-    { "CharUnderline", String2Underline },      // ATK_TEXT_ATTR_UNDERLINE
-    { "CharStrikeout", String2Strikeout },      // ATK_TEXT_ATTR_STRIKETHROUGH
-    { "CharHeight", String2Float },             // ATK_TEXT_ATTR_SIZE
-    { "CharScaleWidth", String2Scale },         // ATK_TEXT_ATTR_SCALE
-    { "CharWeight", String2Weight },            // ATK_TEXT_ATTR_WEIGHT
-    { "CharLocale", String2Locale },            // ATK_TEXT_ATTR_LANGUAGE
-    { "CharFontName",  SetString },             // ATK_TEXT_ATTR_FAMILY_NAME
-    { "CharBackColor", String2Color },          // ATK_TEXT_ATTR_BG_COLOR
-    { "CharColor", String2Color },              // ATK_TEXT_ATTR_FG_COLOR
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_BG_STIPPLE
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_FG_STIPPLE
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_WRAP_MODE
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_DIRECTION
-    { "ParaAdjust", Justification2Adjust },     // ATK_TEXT_ATTR_JUSTIFICATION
-    { "", InvalidValue },                       // ATK_TEXT_ATTR_STRETCH
-    { "CharCaseMap", String2CaseMap },          // ATK_TEXT_ATTR_VARIANT
-    { "CharPosture", Style2FontSlant }          // ATK_TEXT_ATTR_STYLE
+    { "", InvalidValue },                       
+    { "ParaLeftMargin", UnitString2CMM },       
+    { "ParaRightMargin", UnitString2CMM },      
+    { "ParaFirstLineIndent", UnitString2CMM },  
+    { "CharHidden", String2Bool },              
+    { "", InvalidValue },                       
+    { "ParaTopMargin", UnitString2CMM },        
+    { "ParaBottomMargin", UnitString2CMM },     
+    { "", InvalidValue },                       
+    { "", InvalidValue },                       
+    { "", InvalidValue },                       
+    { "CharUnderline", String2Underline },      
+    { "CharStrikeout", String2Strikeout },      
+    { "CharHeight", String2Float },             
+    { "CharScaleWidth", String2Scale },         
+    { "CharWeight", String2Weight },            
+    { "CharLocale", String2Locale },            
+    { "CharFontName",  SetString },             
+    { "CharBackColor", String2Color },          
+    { "CharColor", String2Color },              
+    { "", InvalidValue },                       
+    { "", InvalidValue },                       
+    { "", InvalidValue },                       
+    { "", InvalidValue },                       
+    { "ParaAdjust", Justification2Adjust },     
+    { "", InvalidValue },                       
+    { "CharCaseMap", String2CaseMap },          
+    { "CharPosture", Style2FontSlant }          
 };
 
 static const sal_Int32 g_TextAttrMapSize = sizeof( g_TextAttrMap ) / sizeof( AtkTextAttrMapping );
@@ -1326,7 +1326,7 @@ attribute_set_map_to_property_values(
     AtkAttributeSet* attribute_set,
     uno::Sequence< beans::PropertyValue >& rValueList )
 {
-    // Ensure enough space ..
+    
     uno::Sequence< beans::PropertyValue > aAttributeList (g_TextAttrMapSize);
 
     sal_Int32 nIndex = 0;
@@ -1349,7 +1349,7 @@ attribute_set_map_to_property_values(
         }
         else
         {
-            // Unsupported text attribute
+            
             return false;
         }
     }

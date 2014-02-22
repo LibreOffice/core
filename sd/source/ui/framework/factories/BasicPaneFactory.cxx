@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -112,7 +112,7 @@ Sequence<OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void)
 
 
 
-//===== PaneFactory ===========================================================
+
 
 BasicPaneFactory::BasicPaneFactory (
     const Reference<XComponentContext>& rxContext)
@@ -171,11 +171,11 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
     {
         try
         {
-            // Get the XController from the first argument.
+            
             Reference<frame::XController> xController (aArguments[0], UNO_QUERY_THROW);
             mxControllerWeak = xController;
 
-            // Tunnel through the controller to obtain access to the ViewShellBase.
+            
             try
             {
                 Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
@@ -192,8 +192,8 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
             Reference<XConfigurationController> xCC (xCM->getConfigurationController());
             mxConfigurationControllerWeak = xCC;
 
-            // Add pane factories for the two left panes (one for Impress and one for
-            // Draw) and the center pane.
+            
+            
             if (xController.is() && xCC.is())
             {
                 PaneDescriptor aDescriptor;
@@ -221,7 +221,7 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
                 xCC->addResourceFactory(aDescriptor.msPaneURL, this);
             }
 
-            // Register as configuration change listener.
+            
             if (xCC.is())
             {
                 xCC->addConfigurationChangeListener(
@@ -246,7 +246,7 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
 
 
 
-//===== XPaneFactory ==========================================================
+
 
 Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
@@ -256,8 +256,8 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
 
     Reference<XResource> xPane;
 
-    // Based on the ResourceURL of the given ResourceId look up the
-    // corresponding factory descriptor.
+    
+    
     PaneContainer::iterator iDescriptor (
         ::std::find_if (
             mpPaneContainer->begin(),
@@ -268,13 +268,13 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     {
         if (iDescriptor->mxPane.is())
         {
-            // The pane has already been created and is still active (has
-            // not yet been released).  This should not happen.
+            
+            
             xPane = iDescriptor->mxPane;
         }
         else
         {
-            // Create a new pane.
+            
             switch (iDescriptor->mePaneId)
             {
                 case CenterPaneId:
@@ -294,7 +294,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
             }
             iDescriptor->mxPane = xPane;
 
-            // Listen for the pane being disposed.
+            
             Reference<lang::XComponent> xComponent (xPane, UNO_QUERY);
             if (xComponent.is())
                 xComponent->addEventListener(this);
@@ -303,8 +303,8 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     }
     else
     {
-        // The requested pane can not be created by any of the factories
-        // managed by the called BasicPaneFactory object.
+        
+        
         throw lang::IllegalArgumentException("BasicPaneFactory::createPane() called for unknown resource id",
             NULL,
             0);
@@ -323,8 +323,8 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 {
     ThrowIfDisposed();
 
-    // Based on the given XPane reference look up the corresponding factory
-    // descriptor.
+    
+    
     PaneContainer::iterator iDescriptor (
         ::std::find_if(
             mpPaneContainer->begin(),
@@ -333,11 +333,11 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 
     if (iDescriptor != mpPaneContainer->end())
     {
-        // The given pane was created by one of the factories.  Child
-        // windows are just hidden and will be reused when requested later.
-        // Other windows are disposed and their reference is reset so that
-        // on the next createPane() call for the same pane type the pane is
-        // created anew.
+        
+        
+        
+        
+        
         ChildWindowPane* pChildWindowPane = dynamic_cast<ChildWindowPane*>(rxPane.get());
         if (pChildWindowPane != NULL)
         {
@@ -350,8 +350,8 @@ void SAL_CALL BasicPaneFactory::releaseResource (
             Reference<XComponent> xComponent (rxPane, UNO_QUERY);
             if (xComponent.is())
             {
-                // We are disposing the pane and do not have to be informed of
-                // that.
+                
+                
                 xComponent->removeEventListener(this);
                 xComponent->dispose();
             }
@@ -359,9 +359,9 @@ void SAL_CALL BasicPaneFactory::releaseResource (
     }
     else
     {
-        // The given XPane reference is either empty or the pane was not
-        // created by any of the factories managed by the called
-        // BasicPaneFactory object.
+        
+        
+        
         throw lang::IllegalArgumentException("BasicPaneFactory::releasePane() called for pane that that was not created by same factory.",
             NULL,
             0);
@@ -371,19 +371,19 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 
 
 
-//===== XConfigurationChangeListener ==========================================
+
 
 void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& /* rEvent */ )
     throw (RuntimeException)
 {
-	// FIXME: nothing to do
+	
 }
 
 
 
 
-//===== lang::XEventListener ==================================================
+
 
 void SAL_CALL BasicPaneFactory::disposing (
     const lang::EventObject& rEventObject)
@@ -395,8 +395,8 @@ void SAL_CALL BasicPaneFactory::disposing (
     }
     else
     {
-        // Has one of the panes been disposed?  If so, then release the
-        // reference to that pane, but not the pane descriptor.
+        
+        
         Reference<XResource> xPane (rEventObject.Source, UNO_QUERY);
         PaneContainer::iterator iDescriptor (
             ::std::find_if (
@@ -413,7 +413,7 @@ void SAL_CALL BasicPaneFactory::disposing (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     const Reference<XResourceId>& rxPaneId)
@@ -455,7 +455,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
 
     if (mpViewShellBase != NULL)
     {
-        // Create the corresponding shell and determine the id of the child window.
+        
         sal_uInt16 nChildWindowId = 0;
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SfxShell> pShell;
@@ -476,8 +476,8 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
                 break;
         }
 
-        // With shell and child window id create the ChildWindowPane
-        // wrapper.
+        
+        
         if (pShell.get() != NULL)
         {
             xPane = new ChildWindowPane(
@@ -502,6 +502,6 @@ void BasicPaneFactory::ThrowIfDisposed (void) const
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

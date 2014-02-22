@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AppTitleWindow.hxx"
@@ -64,7 +64,7 @@ void OTitleWindow::setChildWindow(Window* _pChild)
 #define SPACE_BORDER    1
 void OTitleWindow::Resize()
 {
-    // parent window dimension
+    
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -129,7 +129,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 {
     AllSettings aAllSettings = GetSettings();
     StyleSettings aStyle = aAllSettings.GetStyleSettings();
-    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
+    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());
     aAllSettings.SetStyleSettings(aStyle);
     SetSettings(aAllSettings);
 
@@ -162,6 +162,6 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     }
 }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

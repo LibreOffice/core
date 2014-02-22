@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -78,7 +78,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     get(m_pBtnSave,"BTN_SAVE");
     get(m_pCtlPreview,"CTL_PREVIEW");
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
     rXLSet.Put( aXLStyle );
@@ -87,7 +87,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet.Put( XLineStartWidthItem( m_pCtlPreview->GetOutputSize().Height()  / 2 ) );
     rXLSet.Put( XLineEndWidthItem( m_pCtlPreview->GetOutputSize().Height() / 2 ) );
 
-    // #i34740#
+    
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxLineEndDefTabPage, ClickAddHdl_Impl ) );
@@ -107,13 +107,13 @@ void SvxLineEndDefTabPage::Resize()
     SfxTabPage::Resize();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndDefTabPage::Construct()
 {
@@ -141,13 +141,13 @@ void SvxLineEndDefTabPage::Construct()
         m_pBtnAdd->Disable();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( nDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) 
     {
-        // ActivatePage() is called before the dialog receives PageCreated() !!!
+        
         if( pLineEndList.is() )
         {
             if( *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
@@ -159,13 +159,13 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 
             aURL.Append( pLineEndList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-            *pPageType = 0; // 3
+            *pPageType = 0; 
             *pPosLineEndLb = LISTBOX_ENTRY_NOTFOUND;
         }
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -177,7 +177,7 @@ int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndDefTabPage::CheckChanges_Impl()
 {
@@ -203,11 +203,11 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
         *pPosLineEndLb = nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( nDlgType == 0 ) // line dialog
+    if( nDlgType == 0 ) 
     {
         if( *pPageType == 3 )
         {
@@ -223,13 +223,13 @@ sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
 {
     m_pLbLineEnds->SelectEntryPos( 0 );
 
-    // Update lineend
+    
     if( pLineEndList->Count() > 0 )
     {
         int nPos = m_pLbLineEnds->GetSelectEntryPos();
@@ -241,13 +241,13 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
         rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
-        // #i34740#
+        
         m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
         m_pCtlPreview->Invalidate();
     }
 
-    // determine button state
+    
     if( pLineEndList->Count() )
     {
         m_pBtnModify->Enable();
@@ -262,14 +262,14 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow, const SfxItemSet& rSet )
 {
     return( new SvxLineEndDefTabPage( pWindow, rSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 {
@@ -284,19 +284,19 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
         rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
-        // #i34740#
+        
         m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
         m_pCtlPreview->Invalidate();
 
-        // Is not set before, in order to only take the new style,
-        // if there is an entry selected in the ListBox
+        
+        
         *pPageType = 3;
     }
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 {
@@ -304,7 +304,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
 {
@@ -318,12 +318,12 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         long nCount = pLineEndList->Count();
         sal_Bool bDifferent = sal_True;
 
-        // check whether the name is existing already
+        
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
                 bDifferent = sal_False;
 
-        // if yes, repeat and demand a new name
+        
         if ( !bDifferent )
         {
             MessageDialog aWarningBox( GetParentDialog()
@@ -356,14 +356,14 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             delete( pDlg );
         }
 
-        // if not existing, enter the entry
+        
         if( bDifferent )
         {
             const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd( nPos );
 
             if(pOldEntry)
             {
-                // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                
                 XLineEndEntry* pEntry = new XLineEndEntry(pOldEntry->GetLineEnd(), aName);
                 delete pLineEndList->Replace(pEntry, nPos);
 
@@ -372,7 +372,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
                 m_pLbLineEnds->Modify( *pEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
                 m_pLbLineEnds->SelectEntryPos( nPos );
 
-                // Flag fuer modifiziert setzen
+                
                 *pnLineEndListState |= CT_MODIFIED;
 
                 *pPageType = 3;
@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 {
@@ -409,16 +409,16 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( true, false );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
-                    return( 0L ); // cancel, additional safety, which
-                            // has no use for group objects though.
+                    return( 0L ); 
+                            
             }
-            else return( 0L ); // cancel
+            else return( 0L ); 
         }
 
         basegfx::B2DPolyPolygon aNewPolyPolygon(((SdrPathObj*)pNewObj)->GetPathPoly());
         basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
-        // normalize
+        
         aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix( -aNewRange.getMinX(), -aNewRange.getMinY()));
 
         SdrObject::Free( pConvPolyObj );
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 long nLineEndCount = pLineEndList->Count();
                 pLineEndList->Insert( pEntry, nLineEndCount );
 
-                // add to the ListBox
+                
                 m_pLbLineEnds->Append( *pEntry, pLineEndList->GetUiBitmap( nLineEndCount ) );
                 m_pLbLineEnds->SelectEntryPos( m_pLbLineEnds->GetEntryCount() - 1 );
 
@@ -492,7 +492,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
     else
         m_pBtnAdd->Disable();
 
-    // determine button state
+    
     if ( pLineEndList->Count() )
     {
         m_pBtnModify->Enable();
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 {
@@ -521,14 +521,14 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
             m_pLbLineEnds->SelectEntryPos( 0 );
 
             SelectLineEndHdl_Impl( this );
-            *pPageType = 0; // LineEnd shall not be taken over
+            *pPageType = 0; 
 
             *pnLineEndListState |= CT_MODIFIED;
 
             ChangePreviewHdl_Impl( this );
         }
     }
-    // determine button state
+    
     if( !pLineEndList->Count() )
     {
         m_pBtnModify->Disable();
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 {
@@ -592,7 +592,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
         }
     }
 
-    // determine button state
+    
     if ( pLineEndList->Count() )
     {
         m_pBtnModify->Enable();
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 {

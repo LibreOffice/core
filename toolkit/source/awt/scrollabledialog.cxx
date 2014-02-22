@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/scrollabledialog.hxx>
@@ -24,12 +24,12 @@
 namespace toolkit
 {
 
-// Using  WB_AUTOHSCROLL, WB_AUTOVSCROLL here sucks big time, there is a
-// problem in the toolkit class where there are some clashing IDs
-// ( ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL has the same value
-// as ::com::sun::star::awt::WindowAttribute::NODECORATION and they are used
-// in the same bitmap :-( WB_VSCROLL & WB_HSCROLL apparently are only for
-// child classes ( whole thing is a mess if you ask me )
+
+
+
+
+
+
 template< class T>
 ScrollableWrapper<T>::ScrollableWrapper( Window* pParent, WinBits nStyle ) : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) ), maHScrollBar( this, WB_HSCROLL | WB_DRAG), maVScrollBar( this, WB_VSCROLL | WB_DRAG ), mbHasHoriBar( false ), mbHasVertBar( false ), maScrollVis( None )
 {
@@ -87,7 +87,7 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
 
     Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
     T::Scroll(nXScroll, nYScroll, aScrollableArea );
-    // Manually scroll all children ( except the scrollbars )
+    
     for ( int index = 0; index < T::GetChildCount(); ++index )
     {
         Window* pChild = T::GetChild( index );
@@ -100,8 +100,8 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
     }
 }
 
-//Can't use IMPL_LINK with the template
-//IMPL_LINK( ScrollableWrapper, ScrollBarHdl, ScrollBar*, pSB )
+
+
 
 template< class T>
 long ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, void* pCaller)
@@ -126,7 +126,7 @@ void ScrollableWrapper<T>::SetScrollTop( long nTop )
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
     maHScrollBar.SetThumbPos( 0 );
-    // new pos is 0,0
+    
     mnScrollPos = aOld;
 }
 template< class T>
@@ -135,7 +135,7 @@ void ScrollableWrapper<T>::SetScrollLeft( long nLeft )
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
     maVScrollBar.SetThumbPos( 0 );
-    // new pos is 0,0
+    
     mnScrollPos = aOld;
 }
 template< class T>
@@ -181,5 +181,5 @@ template class ScrollableWrapper< Dialog >;
 template class ScrollableWrapper< GroupBox >;
 #endif
 
-} // toolkit
+} 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

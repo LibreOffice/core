@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/anytostring.hxx"
@@ -65,8 +65,8 @@ PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter
     TextParagraphPropertiesVector::iterator aParagraphDefaultIter( rParagraphDefaulsVector.begin() );
     while( aParagraphDefaultIter != rParagraphDefaulsVector.end() )
     {
-        // ppt is having zero bottom margin per default, whereas OOo is 0,5cm,
-        // so this attribute needs to be set always
+        
+        
         (*aParagraphDefaultIter++)->getParaBottomMargin() = TextSpacing( 0 );
     }
 }
@@ -142,7 +142,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
     Reference< frame::XModel > xModel( rFilter.getModel() );
     Reference< drawing::XDrawPage > xSlide;
 
-    // importing slide pages and its corresponding notes page
+    
     Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
     Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
 
@@ -162,17 +162,17 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
 
             FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
-            // importing the corresponding masterpage/layout
+            
             OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideLayout" ) );
             OUString aCommentFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "comments" ) );
             if ( !aLayoutFragmentPath.isEmpty() )
             {
-                // importing layout
+                
                 RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
                 OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideMaster" ) );
                 if( !aMasterFragmentPath.isEmpty() )
                 {
-                    // check if the corresponding masterpage+layout has already been imported
+                    
                     std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
                     std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
                     while( aIter != rMasterPages.end() )
@@ -186,7 +186,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                     }
 
                     if ( !pMasterPersistPtr.get() )
-                    {   // masterpersist not found, we have to load it
+                    {   
                         Reference< drawing::XDrawPage > xMasterPage;
                         Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
                         Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
@@ -203,7 +203,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                         rFilter.setActualSlidePersist( pMasterPersistPtr );
                         FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
 
-                        // set the correct theme
+                        
                         OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
                         if( !aThemeFragmentPath.isEmpty() )
                         {
@@ -238,7 +238,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                 }
             }
 
-            // importing slide page
+            
             if (pMasterPersistPtr.get()) {
                 pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
                 pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
@@ -254,7 +254,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
 
             if(bImportNotesPage) {
 
-                // now importing the notes page
+                
                 OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesSlide" ) );
                 if( !aNotesFragmentPath.isEmpty() )
                 {
@@ -279,7 +279,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
 
             if( !mbCommentAuthorsRead && !aCommentFragmentPath.isEmpty() )
             {
-                // Comments are present and commentAuthors.xml has still not been read
+                
                 mbCommentAuthorsRead = true;
                 OUString aCommentAuthorsFragmentPath = "ppt/commentAuthors.xml";
                 Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
@@ -320,18 +320,18 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                 pCommentsPersistPtr->getCommentsList().cmLst.clear();
                 importSlide( xCommentsFragmentHandler, pCommentsPersistPtr );
 
-                //set comment chars for last comment on slide
+                
                 SlideFragmentHandler* comment_handler =
                     dynamic_cast<SlideFragmentHandler*>(xCommentsFragmentHandler.get());
-                // some comments have no text -> set empty string as text to avoid
-                // crash (back() on empty vector is undefined) and losing other
-                // comment data that might be there (author, position, timestamp etc.)
+                
+                
+                
                 pCommentsPersistPtr->getCommentsList().cmLst.back().setText(
                         comment_handler->getCharVector().empty() ? "" :
                         comment_handler->getCharVector().back() );
                 pCommentsPersistPtr->getCommentAuthors().setValues(maAuthorList);
 
-                //insert all comments from commentsList
+                
                 for(int i=0; i<pCommentsPersistPtr->getCommentsList().getSize(); i++)
                 {
                     try {
@@ -370,11 +370,11 @@ void PresentationFragmentHandler::finalizeImport()
 
     sal_Int32 nPageCount = maSlidesVector.size();
 
-    // we will take the FilterData property "PageRange" if available, otherwise full range is used
+    
     comphelper::SequenceAsHashMap& rFilterData = rFilter.getFilterData();
 
-    // writing back the original PageCount of this document, it can be accessed from the XModel
-    // via getArgs after the import.
+    
+    
     rFilterData["OriginalPageCount"] = makeAny(nPageCount);
     sal_Bool bImportNotesPages = rFilterData.getUnpackedValueOrDefault("ImportNotesPages", sal_True);
     OUString aPageRange = rFilterData.getUnpackedValueOrDefault("PageRange", OUString());
@@ -392,7 +392,7 @@ void PresentationFragmentHandler::finalizeImport()
     StringRangeEnumerator::Iterator aEnd  = aRangeEnumerator.end();
     if(aIter!=aEnd) {
 
-        // todo: localized progress bar text
+        
         const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
         if ( rxStatusIndicator.is() )
             rxStatusIndicator->start( OUString(), 10000 );
@@ -419,13 +419,13 @@ void PresentationFragmentHandler::finalizeImport()
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
-        // todo error handling;
+        
         if ( rxStatusIndicator.is() )
             rxStatusIndicator->end();
     }
 }
 
-// CT_Presentation
+
 ::oox::core::ContextHandlerRef PresentationFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )

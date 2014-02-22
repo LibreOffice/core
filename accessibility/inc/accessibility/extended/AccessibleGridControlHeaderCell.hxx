@@ -44,7 +44,7 @@ namespace accessibility
         /** Grabs the focus to the GridControl. */
         virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException );
 
-        // XInterface -------------------------------------------------------------
+        // XInterface
 
         /** Queries for a new interface. */
         ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -56,14 +56,14 @@ namespace accessibility
 
         /** Releases the object (calls release() on base class). */
         virtual void SAL_CALL release() throw ();
-        // XAccessible ------------------------------------------------------------
+        // XAccessible
 
         /** @return  The XAccessibleContext interface of this object. */
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext()
             throw ( ::com::sun::star::uno::RuntimeException );
-        //-------------------------------------------------------------------------
+
         inline sal_Bool isRowBarCell() const
         {
             return getType() == ::svt::table::TCTYPE_ROWHEADERCELL;

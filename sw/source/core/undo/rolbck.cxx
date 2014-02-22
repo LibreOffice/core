@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rolbck.hxx>
@@ -75,7 +75,7 @@ SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
             break;
         case RES_BOXATR_FORMULA:
         {
-            // save formulas always in plain text
+            
             SwTblBoxFormula& rNew = static_cast<SwTblBoxFormula&>(*m_pAttr);
             if ( rNew.IsIntrnlName() )
             {
@@ -198,12 +198,12 @@ SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     , m_bFormatIgnoreStart(pTxtHt->IsFormatIgnoreStart())
     , m_bFormatIgnoreEnd  (pTxtHt->IsFormatIgnoreEnd  ())
 {
-    // Caution: the following attributes generate no format attributes:
-    //  - NoLineBreak, NoHypen, Inserted, Deleted
-    // These cases must be handled separately !!!
+    
+    
+    
 
-    // a little bit complicated but works: first assign a copy of the
-    // default value and afterwards the values from text attribute
+    
+    
     sal_uInt16 nWhich = pTxtHt->Which();
     if ( RES_TXTATR_CHARFMT == nWhich )
     {
@@ -226,9 +226,9 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 
     if ( RES_TXTATR_CHARFMT == m_pAttr->Which() )
     {
-        // ask the Doc if the CharFmt still exists
+        
         if ( !pDoc->GetCharFmts()->Contains( (static_cast<SwFmtCharFmt&>(*m_pAttr)).GetCharFmt() ) )
-            return; // do not set, format does not exist
+            return; 
     }
 
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
@@ -239,7 +239,7 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
         SwTxtAttr *const pAttr = pTxtNd->InsertItem(*m_pAttr, m_nStart, m_nEnd,
                         nsSetAttrMode::SETATTR_NOTXTATRCHR |
                         nsSetAttrMode::SETATTR_NOHINTADJUST );
-        // shouldn't be possible to hit any error/merging path from here
+        
         assert(pAttr);
         if (m_bFormatIgnoreStart)
         {
@@ -257,7 +257,7 @@ SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
     , m_pFldType( 0 )
     , m_pFld( new SwFmtFld( *pTxtFld->GetFmtFld().GetField() ) )
 {
-    // only copy if not Sys-FieldType
+    
     SwDoc* pDoc = pTxtFld->GetTxtNode().GetDoc();
 
     m_nFldWhich = m_pFld->GetField()->GetTyp()->Which();
@@ -268,7 +268,7 @@ SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
         !pDoc->GetSysFldType( m_nFldWhich ))
     {
         m_pFldType.reset( m_pFld->GetField()->GetTyp()->Copy() );
-        m_pFld->GetField()->ChgTyp( m_pFldType.get() ); // change field type
+        m_pFld->GetField()->ChgTyp( m_pFldType.get() ); 
     }
     m_nNodeIndex = nNodePos;
     m_nPos = *pTxtFld->GetStart();
@@ -295,11 +295,11 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
     }
     else
     {
-        // register type with the document
+        
         pNewFldType = pDoc->InsertFldType( *m_pFldType );
     }
 
-    m_pFld->GetField()->ChgTyp( pNewFldType ); // change field type
+    m_pFld->GetField()->ChgTyp( pNewFldType ); 
 
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
     OSL_ENSURE( pTxtNd, "SwHistorySetTxtFld: no TextNode" );
@@ -329,7 +329,7 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
 
     SwFmtRefMark aRefMark( m_RefName );
 
-    // if a reference mark without an end already exists here: must not insert!
+    
     if ( m_nStart != m_nEnd ||
          !pTxtNd->GetTxtAttrForCharAt( m_nStart, RES_TXTATR_REFMARK ) )
     {
@@ -357,7 +357,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
     if ( !pTxtNd )
         return;
 
-    // search for respective TOX type
+    
     sal_uInt16 nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
     SwTOXType* pToxType = 0;
     for ( sal_uInt16 n = 0; n < nCnt; ++n )
@@ -368,7 +368,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
         pToxType = 0;
     }
 
-    if ( !pToxType )  // TOX type not found, create new
+    if ( !pToxType )  
     {
         pToxType = const_cast<SwTOXType*>(
                 pDoc->InsertTOXType( SwTOXType( m_eTOXTypes, m_TOXName )));
@@ -422,13 +422,13 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePo
     OSL_ENSURE( pTxtFtn->GetStartNode(),
             "SwHistorySetFootnote: Footnote without Section" );
 
-    // keep the old NodePos (because who knows what later will be saved/deleted
-    // in SaveSection)
+    
+    
     SwDoc* pDoc = const_cast<SwDoc*>(pTxtFtn->GetTxtNode().GetDoc());
     SwNode* pSaveNd = pDoc->GetNodes()[ m_nNodeIndex ];
 
-    // keep pointer to StartNode of FtnSection and reset its attribute for now
-    // (as a result, its/all Frms will be deleted automatically)
+    
+    
     SwNodeIndex aSttIdx( *pTxtFtn->GetStartNode() );
     pTxtFtn->SetStartNode( 0, sal_False );
 
@@ -466,7 +466,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 
     if ( m_pUndo.get() )
     {
-        // set the footnote in the TextNode
+        
         SwFmtFtn aTemp( m_bEndNote );
         SwFmtFtn& rNew = const_cast<SwFmtFtn&>(
                 static_cast<const SwFmtFtn&>(pDoc->GetAttrPool().Put(aTemp)) );
@@ -476,13 +476,13 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
         }
         SwTxtFtn* pTxtFtn = new SwTxtFtn( rNew, m_nStart );
 
-        // create the section of the Footnote
+        
         SwNodeIndex aIdx( *pTxtNd );
         m_pUndo->RestoreSection( pDoc, &aIdx, SwFootnoteStartNode );
         pTxtFtn->SetStartNode( &aIdx );
         if ( m_pUndo->GetHistory() )
         {
-            // create frames only now
+            
             m_pUndo->GetHistory()->Rollback( pDoc );
         }
 
@@ -517,8 +517,8 @@ void SwHistoryChangeFmtColl::SetInDoc( SwDoc* pDoc, bool )
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
     OSL_ENSURE( pCntntNd, "SwHistoryChangeFmtColl: no ContentNode" );
 
-    // before setting the format, check if it is still available in the
-    // document. if it has been deleted, there is no undo!
+    
+    
     if ( pCntntNd && m_nNodeType == pCntntNd->GetNodeType() )
     {
         if ( ND_TEXTNODE == m_nNodeType )
@@ -609,7 +609,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             "<SwHistoryBookmark::SetInDoc(..)>"
             " - wrong node for a mark");
 
-        // #111660# don't crash when nNode1 doesn't point to content node.
+        
         if(pCntntNd)
             pPam.reset(new SwPaM(*pCntntNd, m_nCntnt));
     }
@@ -714,9 +714,9 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
 
                 case RES_BOXATR_FORMULA:
                     {
-                        // When a formula is set, never save the value. It
-                        // possibly must be recalculated!
-                        // Save formulas always in plain text
+                        
+                        
+                        
                         m_OldSet.ClearItem( RES_BOXATR_VALUE );
 
                         SwTblBoxFormula& rNew =
@@ -798,7 +798,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
         {
             case RES_TXTATR_REFMARK:
             case RES_TXTATR_TOXMARK:
-                if (m_nStart != m_nEnd) break; // else: fall through!
+                if (m_nStart != m_nEnd) break; 
             case RES_TXTATR_FIELD:
             case RES_TXTATR_ANNOTATION:
             case RES_TXTATR_FLYCNT:
@@ -810,10 +810,10 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
                     "\nnot such a good idea");
                 break;
         }
-#endif // DBG_UTIL
+#endif 
 
-        // Character attribute cannot be inserted into the hints array
-        // anymore. Therefore we have to treat them as one RES_TXTATR_AUTOFMT:
+        
+        
         if (isCHRATR(nWhich))
         {
             bAutoStyle = true;
@@ -847,7 +847,7 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
         std::vector<sal_uInt16>::iterator it;
         if ( USHRT_MAX == m_nEnd && USHRT_MAX == m_nStart )
         {
-            // no area: use ContentNode
+            
             for ( it = m_Array.begin(); it != m_Array.end(); ++it )
             {
                 pCntntNd->ResetAttr( *it );
@@ -855,7 +855,7 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
         }
         else
         {
-            // area: use TextNode
+            
             for ( it = m_Array.begin(); it != m_Array.end(); ++it )
             {
                 static_cast<SwTxtNode*>(pCntntNd)->
@@ -881,7 +881,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     sal_uInt16 nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
-    if ( USHRT_MAX != nPos )    // Format does still exist
+    if ( USHRT_MAX != nPos )    
     {
         SwFmtAnchor aTmp( m_rFmt.GetAnchor() );
 
@@ -898,7 +898,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         }
         aTmp.SetAnchor( &aPos );
 
-        // so the Layout does not get confused
+        
         if ( !pCNd || !pCNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_False ) )
         {
             m_rFmt.DelFrms();
@@ -948,7 +948,7 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-// -> #i27615#
+
 SwHistoryChangeCharFmt::SwHistoryChangeCharFmt(const SfxItemSet & rSet,
                                      const OUString & sFmt)
     : SwHistoryHint(HSTRY_CHGCHARFMT)
@@ -965,7 +965,7 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
         pCharFmt->SetFmtAttr(m_OldSet);
     }
 }
-// <- #i27615#
+
 
 
 SwHistory::SwHistory( sal_uInt16 nInitSz )
@@ -991,7 +991,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
         || (nWhich == RES_TXTATR_ANNOTATION) )
         return;
 
-    // no default attribute?
+    
     SwHistoryHint * pHt;
     if ( pOldValue && pOldValue != GetDfltAttr( pOldValue->Which() ) )
     {
@@ -1004,7 +1004,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
     m_SwpHstry.push_back( pHt );
 }
 
-// FIXME: refactor the following "Add" methods (DRY)?
+
 void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
@@ -1116,7 +1116,7 @@ void SwHistory::Add( const SwTxtFtn& rFtn )
     m_SwpHstry.push_back( pHt );
 }
 
-// #i27615#
+
 void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 {
     SwHistoryHint * pHt = new SwHistoryChangeCharFmt(rSet, rFmt.GetName());
@@ -1184,8 +1184,8 @@ sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
     sal_uInt16 nOld = Count() - m_nEndDiff;
     m_nEndDiff = Count() - nNewTmpEnd;
 
-    // for every SwHistoryFlyCnt, call the Redo of its UndoObject.
-    // this saves the formats of the flys!
+    
+    
     for ( sal_uInt16 n = nOld; n < nNewTmpEnd; n++ )
     {
         if ( HSTRY_FLYCNT == (*this)[ n ]->Which() )
@@ -1226,18 +1226,18 @@ void SwHistory::CopyAttr(
     if( !pHts  )
         return;
 
-    // copy all attributes of the TextNode in the area from nStart to nEnd
+    
     SwTxtAttr* pHt;
     const sal_Int32 * pEndIdx;
     for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
     {
-        // nAttrStt must even be set when !pEndIdx
+        
         pHt = pHts->GetTextHint(n);
         const sal_Int32 nAttrStt = *pHt->GetStart();
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 
-        // never copy Flys and Ftn !!
+        
         bool bNextAttr = false;
         switch( pHt->Which() )
         {
@@ -1256,7 +1256,7 @@ void SwHistory::CopyAttr(
         if( bNextAttr )
             continue;
 
-        // save all attributes that are somehow in this area
+        
         if ( nStart <= nAttrStt )
         {
             if ( nEnd > nAttrStt )
@@ -1271,7 +1271,7 @@ void SwHistory::CopyAttr(
     }
 }
 
-// Class to register the history at a Node, Format, HintsArray, ...
+
 SwRegHistory::SwRegHistory( SwHistory* pHst )
     : SwClient( 0 )
     , m_pHistory( pHst )
@@ -1299,9 +1299,9 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
 
 void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // #i114861#
-    // Do not handle a "noop" modify
-    // - e.g. <SwTxtNode::NumRuleChgd()> uses such a "noop" modify
+    
+    
+    
     if ( m_pHistory && ( pOld || pNew ) &&
          pOld != pNew )
     {
@@ -1361,11 +1361,11 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
 
     const bool bInserted = pTxtNode->SetAttr( rSet, nStart, nEnd, nFlags );
 
-    // Caution: The array can be deleted when inserting an attribute!
-    // This can happen when the value that should be added first deletes
-    // an existing attribute but does not need to be added itself because
-    // the paragraph attributes are identical
-    // ( -> bForgetAttr in SwpHints::Insert )
+    
+    
+    
+    
+    
     if ( pTxtNode->GetpSwpHints() && m_pHistory )
     {
         pTxtNode->GetpSwpHints()->DeRegister();
@@ -1375,7 +1375,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     {
         SwHistoryHint* pNewHstr = new SwHistoryResetAttrSet( rSet,
                                     pTxtNode->GetIndex(), nStart, nEnd );
-        // the NodeIndex might be moved!
+        
 
         m_pHistory->m_SwpHstry.push_back( pNewHstr );
     }

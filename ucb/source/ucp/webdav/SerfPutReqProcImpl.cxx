@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -44,7 +44,7 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
 {
     serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
 
-    // create body bucket
+    
     serf_bucket_t* body_bkt = 0;
     if ( mpData != 0 && mnDataLen > 0 )
     {
@@ -55,19 +55,19 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
         }
     }
 
-    // create serf request
+    
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "PUT",
                                                                  getPathStr(),
                                                                  body_bkt,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
-    // set request header fields
+    
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    // general header fields provided by caller
+    
     setRequestHeaders( hdrs_bkt );
 
-    // request specific header fields
+    
     if ( body_bkt != 0 )
     {
         if ( useChunkedEncoding() )
@@ -79,9 +79,9 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     }
 
 
-    // set request header fields
+    
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    // general header fields provided by caller
+    
     setRequestHeaders( hdrs_bkt );
 
     return req_bkt;
@@ -90,14 +90,14 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
 void SerfPutReqProcImpl::processChunkOfResponseData( const char* /*data*/,
                                                      apr_size_t /*len*/ )
 {
-    // nothing to do;
+    
 }
 
 void SerfPutReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
 {
-    // nothing to do;
+    
 }
 
-} // namespace http_dav_ucp
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

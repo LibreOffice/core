@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -96,8 +96,8 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
         aResult = mpSdOutliner->GetNextSpellSentence();
     }
 
-    // Close the spell check dialog when there are no more sentences to
-    // check.
+    
+    
     if (aResult.empty())
     {
         SfxBoolItem aItem (SID_SPELL_DIALOG, false);
@@ -132,11 +132,11 @@ void SpellDialogChildWindow::ApplyChangedSentence (
 
 void SpellDialogChildWindow::GetFocus (void)
 {
-    // In order to detect a cursor movement we could compare the
-    // currently selected text shape with the one that was selected
-    // when LoseFocus() was called the last time.
-    // For the time being we instead rely on the DetectChange() method
-    // in the SdOutliner class.
+    
+    
+    
+    
+    
 }
 
 
@@ -156,8 +156,8 @@ void SpellDialogChildWindow::ProvideOutliner (void)
     if (pViewShellBase != NULL)
     {
         ViewShell* pViewShell = pViewShellBase->GetMainViewShell().get();
-        // If there already exists an outliner that has been created
-        // for another view shell then destroy it first.
+        
+        
         if (mpSdOutliner != NULL)
             if ((pViewShell->ISA(DrawViewShell) && ! mbOwnOutliner)
                 || (pViewShell->ISA(OutlineViewShell) && mbOwnOutliner))
@@ -168,13 +168,13 @@ void SpellDialogChildWindow::ProvideOutliner (void)
                 mpSdOutliner = NULL;
             }
 
-        // Now create/get an outliner if none is present.
+        
         if (mpSdOutliner == NULL)
         {
             if (pViewShell->ISA(DrawViewShell))
             {
-                // We need an outliner for the spell check so we have
-                // to create one.
+                
+                
                 mbOwnOutliner = true;
                 mpSdOutliner = new Outliner (
                     pViewShell->GetDoc(),
@@ -182,13 +182,13 @@ void SpellDialogChildWindow::ProvideOutliner (void)
             }
             else if (pViewShell->ISA(OutlineViewShell))
             {
-                // An outline view is already visible. The SdOutliner
-                // will use it instead of creating its own.
+                
+                
                 mbOwnOutliner = false;
                 mpSdOutliner = pViewShell->GetDoc()->GetOutliner();
             }
 
-            // Initialize spelling.
+            
             if (mpSdOutliner != NULL)
             {
                 mpSdOutliner->PrepareSpelling();
@@ -200,6 +200,6 @@ void SpellDialogChildWindow::ProvideOutliner (void)
 
 
 
-} // end of namespace ::sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -39,9 +39,9 @@
 
 using namespace ::com::sun::star;
 
-// static ----------------------------------------------------------------
 
-// class SwJavaEditDialog ------------------------------------------------
+
+
 
 
 
@@ -66,7 +66,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     get(m_pPrevBtn, "previous");
     get(m_pNextBtn, "next");
 
-    // install handler
+    
     m_pPrevBtn->SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
     m_pNextBtn->SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
     m_pOKBtn->SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
@@ -142,7 +142,7 @@ void SwJavaEditDialog::CheckTravel()
 
     if(!bNew)
     {
-        // Traveling only when more than one field
+        
         pSh->StartAction();
         pSh->CreateCrsr();
 

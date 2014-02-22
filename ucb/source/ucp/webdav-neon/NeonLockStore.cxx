@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -57,13 +57,13 @@ private:
     virtual void execute();
 };
 
-} // namespace webdav_ucp
+} 
 
 void TickerThread::execute()
 {
     OSL_TRACE( "TickerThread: start." );
 
-    // we have to go through the loop more often to be able to finish ~quickly
+    
     const int nNth = 25;
 
     int nCount = nNth;
@@ -94,9 +94,9 @@ NeonLockStore::~NeonLockStore()
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
     stopTicker(aGuard);
-    aGuard.reset(); // actually no threads should even try to access members now
+    aGuard.reset(); 
 
-    // release active locks, if any.
+    
     OSL_ENSURE( m_aLockInfoMap.empty(),
                 "NeonLockStore::~NeonLockStore - Releasing active locks!" );
 
@@ -133,8 +133,8 @@ void NeonLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
 
     if (m_pTickerThread.is())
     {
-        m_pTickerThread->finish(); // needs mutex
-        // the TickerThread may run refreshLocks() at most once after this
+        m_pTickerThread->finish(); 
+        
         pTickerThread = m_pTickerThread;
         m_pTickerThread.clear();
     }
@@ -142,7 +142,7 @@ void NeonLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
     rGuard.clear();
 
     if (pTickerThread.is())
-        pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
+        pTickerThread->join(); 
 }
 
 void NeonLockStore::registerSession( HttpSession * pHttpSession )
@@ -213,13 +213,13 @@ void NeonLockStore::refreshLocks()
         LockInfo & rInfo = (*it).second;
         if ( rInfo.nLastChanceToSendRefreshRequest != -1 )
         {
-            // 30 seconds or less remaining until lock expires?
+            
             TimeValue t1;
             osl_getSystemTime( &t1 );
             if ( rInfo.nLastChanceToSendRefreshRequest - 30
                      <= sal_Int32( t1.Seconds ) )
             {
-                // refresh the lock.
+                
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
                 if ( rInfo.xSession->LOCK(
                          (*it).first,
@@ -230,7 +230,7 @@ void NeonLockStore::refreshLocks()
                 }
                 else
                 {
-                    // refresh failed. stop auto-refresh.
+                    
                     rInfo.nLastChanceToSendRefreshRequest = -1;
                 }
             }

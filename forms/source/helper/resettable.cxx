@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,17 +14,17 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "resettable.hxx"
 
 #include <cppuhelper/weak.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -40,22 +40,22 @@ namespace frm
     using ::com::sun::star::form::XResetListener;
     using ::com::sun::star::lang::EventObject;
 
-    //====================================================================
-    //= ResetHelper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     void ResetHelper::addResetListener( const Reference< XResetListener >& _listener )
     {
         m_aResetListeners.addInterface( _listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void ResetHelper::removeResetListener( const Reference< XResetListener >& _listener )
     {
         m_aResetListeners.removeInterface( _listener );
     }
 
-    //--------------------------------------------------------------------
+    
     bool ResetHelper::approveReset()
     {
         ::cppu::OInterfaceIteratorHelper aIter( m_aResetListeners );
@@ -68,22 +68,22 @@ namespace frm
         return bContinue;
     }
 
-    //--------------------------------------------------------------------
+    
     void ResetHelper::notifyResetted()
     {
         EventObject aResetEvent( m_rParent );
         m_aResetListeners.notifyEach( &XResetListener::resetted, aResetEvent );
     }
 
-    //--------------------------------------------------------------------
+    
     void ResetHelper::disposing()
     {
         EventObject aEvent( m_rParent );
         m_aResetListeners.disposeAndClear( aEvent );
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

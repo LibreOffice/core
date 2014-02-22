@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <breakiteratorImpl.hxx>
@@ -39,7 +39,7 @@ BreakIteratorImpl::BreakIteratorImpl()
 
 BreakIteratorImpl::~BreakIteratorImpl()
 {
-    // Clear lookuptable
+    
     for (size_t l = 0; l < lookupTable.size(); l++)
         delete lookupTable[l];
     lookupTable.clear();
@@ -114,7 +114,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
                 result.startPos = result.endPos = len;
             else {
                 result = LBI->getWordBoundary(Text, nStartPos, rLocale, rWordType, sal_True);
-                // i88041: avoid startPos goes back to nStartPos when switching between Latin and CJK scripts
+                
                 if (result.startPos < nStartPos) result.startPos = nStartPos;
             }
         }
@@ -140,8 +140,8 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
 
     sal_Int32 nPos = skipSpace(Text, nStartPos, len, rWordType, sal_False);
 
-    // if some spaces are skiped, and the script type is Asian with no CJK rLocale, we have to return
-    // (nStartPos, -1) for caller to send correct rLocale for loading correct dictionary.
+    
+    
     result.startPos = nPos;
     if (nPos != nStartPos && nPos > 0 && !isCJK(rLocale) && getScriptClass(Text.iterateCodePoints(&nPos, -1)) == ScriptType::ASIAN) {
         result.endPos = -1;
@@ -260,16 +260,16 @@ static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nSt
             nStartPos = nStartPos + inc < 0 ? -1 : nLen;
         } else {
             ch = Text.iterateCodePoints(&nStartPos, inc);
-            // Fix for #i80436#.
-            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
-            // suspicious as if it cures a symptom.. anyway, had to add
-            // nStartPos < Text.getLength() to silence the (correct) assertion
-            // in rtl_uString_iterateCodePoints() if Text was one character
-            // (codepoint) only, made up of a surrogate pair.
-            //if (inc > 0 && nStartPos < Text.getLength())
-            //    ch = Text.iterateCodePoints(&nStartPos, 0);
-            // With surrogates, nStartPos may actually point behind string
-            // now, even if inc is only +1
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             if (inc > 0)
                 ch = (nStartPos < nLen ? Text.iterateCodePoints(&nStartPos, 0) : 0);
         }
@@ -371,7 +371,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sa
 
     sal_Int32 nPos=nStartPos;
     while(nStartPos > 0 && CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nPos, -1))) { nStartPos=nPos; }
-    return nStartPos; // begin of char block is inclusive
+    return nStartPos; 
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
@@ -379,13 +379,13 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_
 {
     sal_Int32 strLen = Text.getLength();
 
-    if (CharType == CharType::ANY_CHAR) return strLen; // end of char block is exclusive
+    if (CharType == CharType::ANY_CHAR) return strLen; 
     if (nStartPos < 0 || nStartPos >= strLen) return -1;
     if (CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) return -1;
 
     sal_uInt32 ch=0;
     while(iterateCodePoints(Text, nStartPos, 1, ch) < strLen && CharType == (sal_Int16)u_charType(ch)) {}
-    return nStartPos; // end of char block is exclusive
+    return nStartPos; 
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
@@ -473,23 +473,23 @@ static const UBlock2Script scriptList[] =
 
 #define scriptListCount SAL_N_ELEMENTS(scriptList)
 
-//always sets rScriptType
+
 //
-//returns true for characters historically explicitly assigned to
-//latin/weak/asian
+
+
 //
-//returns false for characters that historically implicitly assigned to
-//weak as unknown
+
+
 bool getCompatibilityScriptClassByBlock(sal_uInt32 currentChar, sal_Int16 &rScriptType)
 {
     bool bKnown = true;
-    //handle specific characters always as weak:
-    //  0x01 - this breaks a word
-    //  0x02 - this can be inside a word
-    //  0x20 & 0xA0 - Bug 102975, declare western space and non-break space as WEAK char.
+    
+    
+    
+    
     if( 0x01 == currentChar || 0x02 == currentChar || 0x20 == currentChar || 0xA0 == currentChar)
         rScriptType = ScriptType::WEAK;
-    // workaround for Coptic
+    
     else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
         rScriptType = ScriptType::LATIN;
     else
@@ -536,7 +536,7 @@ static inline sal_Bool operator == (const Locale& l1, const Locale& l2) {
 
 sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
 {
-    // to share service between same Language but different Country code, like zh_CN and zh_TW
+    
     for (size_t l = 0; l < lookupTable.size(); l++) {
         lookupTableItem *listItem = lookupTable[l];
         if (aLocaleName == listItem->aLocale.Language) {
@@ -580,23 +580,23 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
         OUStringBuffer aBuf(l+c+v+3);
 
         if ((l > 0 && c > 0 && v > 0 &&
-                    // load service with name <base>_<lang>_<country>_<varian>
+                    
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                             rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear())) ||
                 (l > 0 && c > 0 &&
-                 // load service with name <base>_<lang>_<country>
+                 
                  createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                          rLocale.Country).makeStringAndClear())) ||
                 (l > 0 && c > 0 && rLocale.Language.equalsAscii("zh") &&
                  (rLocale.Country.equalsAscii("HK") ||
                   rLocale.Country.equalsAscii("MO") ) &&
-                 // if the country code is HK or MO, one more step to try TW.
+                 
                  createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).appendAscii(
                          "TW").makeStringAndClear())) ||
                 (l > 0 &&
-                 // load service with name <base>_<lang>
+                 
                  createLocaleSpecificBreakIterator(rLocale.Language)) ||
-                // load default service with name <base>_Unicode
+                
                 createLocaleSpecificBreakIterator(OUString("Unicode"))) {
             lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
             return xBI;

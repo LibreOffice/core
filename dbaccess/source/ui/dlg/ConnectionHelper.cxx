@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dsnItem.hxx"
@@ -68,7 +68,7 @@
 #ifdef _ADO_DATALINK_BROWSE_
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
-#endif //_ADO_DATALINK_BROWSE_
+#endif 
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <comphelper/processfactory.hxx>
@@ -98,7 +98,7 @@ namespace dbaui
         , m_aPB_CreateDB(this, ResId(PB_CREATEDB, *_rId.GetResMgr()))
         , m_pCollection(NULL)
     {
-        // extract the datasource type collection from the item set
+        
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
@@ -115,7 +115,7 @@ namespace dbaui
 
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
@@ -131,7 +131,7 @@ namespace dbaui
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
 
-        // forward the values to the controls
+        
         if ( bValid )
         {
             OUString sUrl = pUrlItem->GetValue();
@@ -174,7 +174,7 @@ namespace dbaui
                         if (!sOldPath.isEmpty())
                             xFolderPicker->setDisplayDirectory(sOldPath);
                         if (0 == xFolderPicker->execute())
-                            // cancelled by the user
+                            
                             return 0L;
 
                         sOldPath = xFolderPicker->getDirectory();
@@ -194,7 +194,7 @@ namespace dbaui
                     OUString sSelectedDirectory = xFolderPicker->getDirectory();
                     INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
 
-                    // for UI purpose, we don't want to have the path encoded
+                    
                     sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8  );
 
                     setURLNoPrefix( sSelectedDirectory );
@@ -245,7 +245,7 @@ namespace dbaui
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
             {
-                // collect all ODBC data source names
+                
                 OUString sCurrDatasource = getURLNoPrefix();
                 OUString sDataSource;
                 if ( getSelectedDataSource(sDataSource,sCurrDatasource) && !sDataSource.isEmpty() )
@@ -286,7 +286,7 @@ namespace dbaui
                 Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
                 Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);
 
-                // collect all Mozilla Profiles
+                
                 ::com::sun::star::uno::Sequence< OUString > list;
 
                 xMozillaBootstrap->getProfileList( profileType, list );
@@ -298,7 +298,7 @@ namespace dbaui
                 for (sal_Int32 index=0; index < count; index++)
                     aProfiles.insert(pArray[index]);
 
-                // execute the select dialog
+                
                 ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
                 OUString sOldProfile=getURLNoPrefix();
 
@@ -371,7 +371,7 @@ namespace dbaui
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the two parts: prefix and file URL
+                
                 OUString sTypePrefix, sFileURLEncoded;
                 if ( _bPrefix )
                 {
@@ -383,15 +383,15 @@ namespace dbaui
                     sFileURLEncoded = sURL;
                 }
 
-                // substitute any variables
+                
                 sFileURLEncoded = SvtPathOptions().SubstituteVariable( sFileURLEncoded );
 
-                // decode the URL
+                
                 sURL = sTypePrefix;
                 if ( !sFileURLEncoded.isEmpty() )
                 {
                     OFileNotation aFileNotation(sFileURLEncoded);
-                    // set this decoded URL as text
+                    
                     sURL += aFileNotation.get(OFileNotation::N_SYSTEM);
                 }
             }
@@ -407,7 +407,7 @@ namespace dbaui
 
     OUString OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
     {
-        // get the pure text
+        
         OUString sURL = _bPrefix ? m_aConnectionURL.GetText() : OUString(m_aConnectionURL.GetTextNoPrefix());
 
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
@@ -416,7 +416,7 @@ namespace dbaui
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the two parts: prefix and file URL
+                
                 OUString sTypePrefix, sFileURLDecoded;
                 if ( _bPrefix )
                 {
@@ -435,7 +435,7 @@ namespace dbaui
                     sURL += aFileNotation.get( OFileNotation::N_URL );
                 }
 
-                // encode the URL
+                
                 INetURLObject aFileURL( sFileURLDecoded, INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8 );
                 sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
             }
@@ -481,7 +481,7 @@ namespace dbaui
                     do
                     {
                         if ( !createDirectoryDeep(_rURL) )
-                        {   // could not create the directory
+                        {   
                             sQuery = ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY);
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
@@ -509,7 +509,7 @@ namespace dbaui
                     return RET_OK;
 
                 default:
-                    // cancelled
+                    
                     SetRoadmapStateValue(sal_False);
                     callModifiedHdl();
                     return RET_CANCEL;
@@ -517,7 +517,7 @@ namespace dbaui
         }
 /*        else
         {
-            // TODO: error msg
+            
             return RET_CANCEL;
         } */
         SetRoadmapStateValue(sal_True);
@@ -556,16 +556,16 @@ namespace dbaui
             {
                 case EVENT_GETFOCUS:
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {   // a descendant of the URL edit field got the focus
+                    {   
                         m_aConnectionURL.SaveValueNoPrefix();
                     }
                     break;
 
                 case EVENT_LOSEFOCUS:
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {   // a descendant of the URL edit field lost the focus
+                    {   
                         if (!commitURL())
-                            return true;  // handled
+                            return true;  
                     }
                     break;
             }
@@ -576,30 +576,30 @@ namespace dbaui
 
     sal_Bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
     {
-        // get an URL object analyzing the URL for us ...
+        
         INetURLObject aParser;
         aParser.SetURL(_rPathURL);
 
         INetProtocol eProtocol = aParser.GetProtocol();
 
-        ::std::vector< OUString > aToBeCreated;  // the to-be-created levels
+        ::std::vector< OUString > aToBeCreated;  
 
-        // search a level which exists
+        
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
         while ( eParentExists == PATH_NOT_EXIST && aParser.getSegmentCount())
         {
-            aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
-            aParser.removeSegment();                    // cut the local name
+            aToBeCreated.push_back(aParser.getName());  
+            aParser.removeSegment();                    
             eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), sal_False);
         }
 
         if (!aParser.getSegmentCount())
             return sal_False;
 
-        // create all the missing levels
+        
         try
         {
-            // the parent content
+            
             Reference< XCommandEnvironment > xEmptyEnv;
             ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv, comphelper::getProcessComponentContext());
 
@@ -607,7 +607,7 @@ namespace dbaui
             if ( INET_PROT_FILE == eProtocol )
             {
                 sContentType = "application/vnd.sun.staroffice.fsys-folder";
-                // the file UCP currently does not support the ContentType property
+                
             }
             else
             {
@@ -615,14 +615,14 @@ namespace dbaui
                 aContentType >>= sContentType;
             }
 
-            // the properties which need to be set on the new content
+            
             Sequence< OUString > aNewDirectoryProperties(1);
             aNewDirectoryProperties[0] = "Title";
 
-            // the values to be set
+            
             Sequence< Any > aNewDirectoryAttributes(1);
 
-            // loop
+            
             for (   ::std::vector< OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
@@ -664,9 +664,9 @@ namespace dbaui
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
             if ( ( sURL != sOldPath ) && !sURL.isEmpty() )
-            {   // the text changed since entering the control
+            {   
 
-                // the path may be in system notation ....
+                
                 OFileNotation aTransformer(sURL);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 
@@ -722,6 +722,6 @@ namespace dbaui
         }
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

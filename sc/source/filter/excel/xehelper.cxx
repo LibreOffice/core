@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -51,7 +51,7 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::i18n::XBreakIterator;
 
-// Export progress bar ========================================================
+
 
 XclExpProgressBar::XclExpProgressBar( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -74,7 +74,7 @@ void XclExpProgressBar::Initialize()
     const XclExpTabInfo& rTabInfo = GetTabInfo();
     SCTAB nScTabCount = rTabInfo.GetScTabCount();
 
-    // *** segment: creation of ROW records *** -------------------------------
+    
 
     sal_Int32 nSegRowCreate = mxProgress->AddSegment( 2000 );
     mpSubRowCreate = &mxProgress->GetSegmentProgressBar( nSegRowCreate );
@@ -92,10 +92,10 @@ void XclExpProgressBar::Initialize()
         }
     }
 
-    // *** segment: writing all ROW records *** -------------------------------
+    
 
     mnSegRowFinal = mxProgress->AddSegment( 1000 );
-    // sub progress bar and segment are created later in ActivateFinalRowsSegment()
+    
 }
 
 void XclExpProgressBar::IncRowRecordCount()
@@ -136,7 +136,7 @@ void XclExpProgressBar::Progress()
         mpSubProgress->Progress();
 }
 
-// Calc->Excel cell address/range conversion ==================================
+
 
 namespace {
 
@@ -147,20 +147,20 @@ inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
     rXclPos.mnRow = static_cast< sal_uInt32 >( nScRow );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclExpAddressConverter::XclExpAddressConverter( const XclExpRoot& rRoot ) :
     XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetXclMaxPos() )
 {
 }
 
-// cell address ---------------------------------------------------------------
+
 
 bool XclExpAddressConverter::CheckAddress( const ScAddress& rScPos, bool bWarn )
 {
-    // ScAddress::operator<=() doesn't do what we want here
+    
     bool bValidCol = (0 <= rScPos.Col()) && (rScPos.Col() <= maMaxPos.Col());
     bool bValidRow = (0 <= rScPos.Row()) && (rScPos.Row() <= maMaxPos.Row());
     bool bValidTab = (0 <= rScPos.Tab()) && (rScPos.Tab() <= maMaxPos.Tab());
@@ -173,7 +173,7 @@ bool XclExpAddressConverter::CheckAddress( const ScAddress& rScPos, bool bWarn )
     }
     if( !bValid && bWarn )
     {
-        mbTabTrunc |= (rScPos.Tab() > maMaxPos.Tab());  // do not warn for deleted refs
+        mbTabTrunc |= (rScPos.Tab() > maMaxPos.Tab());  
         mrTracer.TraceInvalidAddress( rScPos, maMaxPos );
     }
     return bValid;
@@ -196,7 +196,7 @@ XclAddress XclExpAddressConverter::CreateValidAddress( const ScAddress& rScPos, 
     return aXclPos;
 }
 
-// cell range -----------------------------------------------------------------
+
 
 bool XclExpAddressConverter::CheckRange( const ScRange& rScRange, bool bWarn )
 {
@@ -207,11 +207,11 @@ bool XclExpAddressConverter::ValidateRange( ScRange& rScRange, bool bWarn )
 {
     rScRange.Justify();
 
-    // check start position
+    
     bool bValidStart = CheckAddress( rScRange.aStart, bWarn );
     if( bValidStart )
     {
-        // check & correct end position
+        
         ScAddress& rScEnd = rScRange.aEnd;
         if( !CheckAddress( rScEnd, bWarn ) )
         {
@@ -227,13 +227,13 @@ bool XclExpAddressConverter::ValidateRange( ScRange& rScRange, bool bWarn )
 bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
         const ScRange& rScRange, bool bWarn )
 {
-    // check start position
+    
     bool bValidStart = CheckAddress( rScRange.aStart, bWarn );
     if( bValidStart )
     {
         lclFillAddress( rXclRange.maFirst, rScRange.aStart.Col(), rScRange.aStart.Row() );
 
-        // check & correct end position
+        
         SCCOL nScCol2 = rScRange.aEnd.Col();
         SCROW nScRow2 = rScRange.aEnd.Row();
         if( !CheckAddress( rScRange.aEnd, bWarn ) )
@@ -246,7 +246,7 @@ bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
     return bValidStart;
 }
 
-// cell range list ------------------------------------------------------------
+
 
 void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWarn )
 {
@@ -273,20 +273,20 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
     }
 }
 
-// EditEngine->String conversion ==============================================
+
 
 namespace {
 
 OUString lclGetUrlRepresentation( const SvxURLField& rUrlField )
 {
     const OUString& aRepr = rUrlField.GetRepresentation();
-    // no representation -> use URL
+    
     return aRepr.isEmpty() ? rUrlField.GetURL() : aRepr;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclExpHyperlinkHelper::XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
     XclExpRoot( rRoot ),
@@ -303,9 +303,9 @@ OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 {
     OUString aUrlRepr;
 
-    if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
+    if( GetBiff() == EXC_BIFF8 )    
     {
-        // there was/is already a HLINK record
+        
         mbMultipleUrls = static_cast< bool >(mxLinkRec);
 
         mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
@@ -313,11 +313,11 @@ OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
         if( const OUString* pRepr = mxLinkRec->GetRepr() )
             aUrlRepr = *pRepr;
 
-        // add URL to note text
+        
         maUrlList = ScGlobal::addToken( maUrlList, rUrlField.GetURL(), '\n' );
     }
 
-    // no hyperlink representation from Excel HLINK record -> use it from text field
+    
     return aUrlRepr.isEmpty() ? lclGetUrlRepresentation(rUrlField) : aUrlRepr;
 }
 
@@ -333,7 +333,7 @@ XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
     return XclExpHyperlinkRef();
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -360,46 +360,46 @@ XclExpStringRef lclCreateFormattedString(
         because this function only uses Append() functions that require this. */
     XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
 
-    // script type handling
+    
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-    // #i63255# get script type for leading weak characters
+    
     sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rText );
 
-    // font buffer and cell item set
+    
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
 
-    // process all script portions
+    
     OUString aOUText( rText );
     sal_Int32 nPortionPos = 0;
     sal_Int32 nTextLen = aOUText.getLength();
     while( nPortionPos < nTextLen )
     {
-        // get script type and end position of next script portion
+        
         sal_Int16 nScript = xBreakIt->getScriptType( aOUText, nPortionPos );
         sal_Int32 nPortionEnd = xBreakIt->endOfScript( aOUText, nPortionPos, nScript );
 
-        // reuse previous script for following weak portions
+        
         if( nScript == ApiScriptType::WEAK )
             nScript = nLastScript;
 
-        // construct font from current text portion
+        
         SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, rItemSet, nScript ) );
 
-        // Excel start position of this portion
+        
         sal_Int32 nXclPortionStart = xString->Len();
-        // add portion text to Excel string
+        
         XclExpStringHelper::AppendString( *xString, rRoot, aOUText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
         if( nXclPortionStart < xString->Len() )
         {
-            // insert font into buffer
+            
             sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
-            // insert font index into format run vector
+            
             xString->AppendFormat( nXclPortionStart, nFontIdx );
         }
 
-        // go to next script portion
+        
         nLastScript = nScript;
         nPortionPos = nPortionEnd;
     }
@@ -429,17 +429,17 @@ XclExpStringRef lclCreateFormattedString(
         because this function only uses Append() functions that require this. */
     XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
 
-    // font buffer and helper item set for edit engine -> Calc item conversion
+    
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
     SfxItemSet aItemSet( *rRoot.GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
-    // script type handling
+    
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-    // #i63255# get script type for leading weak characters
+    
     sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rEE.GetText() );
 
-    // process all paragraphs
+    
     sal_Int32 nParaCount = rEE.GetParagraphCount();
     for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
     {
@@ -449,7 +449,7 @@ XclExpStringRef lclCreateFormattedString(
         std::vector<sal_Int32> aPosList;
         rEE.GetPortions( nPara, aPosList );
 
-        // process all portions in the paragraph
+        
         for( std::vector<sal_Int32>::const_iterator it(aPosList.begin()); it != aPosList.end(); ++it )
         {
             aSel.nEndPos =  *it;
@@ -459,21 +459,21 @@ XclExpStringRef lclCreateFormattedString(
             SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
             ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
 
-            // get escapement value
+            
             short nEsc = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT ).GetEsc();
 
-            // process text fields
+            
             bool bIsHyperlink = false;
             if( aSel.nStartPos + 1 == aSel.nEndPos )
             {
-                // test if the character is a text field
+                
                 const SfxPoolItem* pItem;
                 if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
                     if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
                     {
-                        // convert URL field to string representation
+                        
                         aXclPortionText = pLinkHelper ?
                             pLinkHelper->ProcessUrlField( *pUrlField ) :
                             lclGetUrlRepresentation( *pUrlField );
@@ -487,9 +487,9 @@ XclExpStringRef lclCreateFormattedString(
                 }
             }
 
-            // Excel start position of this portion
+            
             sal_Int32 nXclPortionStart = xString->Len();
-            // add portion text to Excel string
+            
             XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
             if( (nXclPortionStart < xString->Len()) || (aParaText.isEmpty()) )
             {
@@ -501,22 +501,22 @@ XclExpStringRef lclCreateFormattedString(
                 SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, aItemSet, nScript ) );
                 nLastScript = nScript;
 
-                // add escapement
+                
                 aFont.SetEscapement( nEsc );
-                // modify automatic font color for hyperlinks
+                
                 if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
                     aFont.SetColor( Color( COL_LIGHTBLUE ) );
 
-                // insert font into buffer
+                
                 sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
-                // insert font index into format run vector
+                
                 xString->AppendFormat( nXclPortionStart, nFontIdx );
             }
 
             aSel.nStartPos = aSel.nEndPos;
         }
 
-        // add trailing newline (important for correct character index calculation)
+        
         if( nPara + 1 < nParaCount )
             XclExpStringHelper::AppendChar( *xString, rRoot, '\n' );
     }
@@ -524,9 +524,9 @@ XclExpStringRef lclCreateFormattedString(
     return xString;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -576,18 +576,18 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
 {
     XclExpStringRef xString;
 
-    // formatted cell
+    
     ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
     sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( true );
 
-    // default items
+    
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
     SfxItemSet* pEEItemSet = new SfxItemSet( rEE.GetEmptyItemSet() );
     ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-    rEE.SetDefaults( pEEItemSet );      // edit engine takes ownership
+    rEE.SetDefaults( pEEItemSet );      
 
-    // create the string
+    
     rEE.SetText(rEditText);
     xString = lclCreateFormattedString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
@@ -605,11 +605,11 @@ XclExpStringRef XclExpStringHelper::CreateString(
         EditEngine& rEE = rRoot.GetDrawEditEngine();
         sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
         rEE.SetUpdateMode( true );
-        // create the string
+        
         rEE.SetText( pParaObj->GetTextObject() );
         xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
         rEE.SetUpdateMode( bOldUpdateMode );
-        // limit formats - TODO: BIFF dependent
+        
         if( !xString->IsEmpty() )
         {
             xString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
@@ -619,7 +619,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     else
     {
         OSL_FAIL( "XclExpStringHelper::CreateString - textbox without para object" );
-        // create BIFF dependent empty Excel string
+        
         xString = CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
     }
     return xString;
@@ -636,7 +636,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     rEE.SetText( rEditObj );
     xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
-    // limit formats - TODO: BIFF dependent
+    
     if( !xString->IsEmpty() )
     {
         xString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
@@ -661,7 +661,7 @@ sal_Int16 XclExpStringHelper::GetLeadingScriptType( const XclExpRoot& rRoot, con
     return (nScript == ApiScriptType::WEAK) ? rRoot.GetDefApiScript() : nScript;
 }
 
-// Header/footer conversion ===================================================
+
 
 XclExpHFConverter::XclExpHFConverter( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -690,17 +690,17 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     sal_Int32 nHeight = 0;
     SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
-    // edit engine
+    
     sal_Bool bOldUpdateMode = mrEE.GetUpdateMode();
     mrEE.SetUpdateMode( true );
     mrEE.SetText( *pTextObj );
 
-    // font information
+    
     XclFontData aFontData, aNewData;
     if( const XclExpFont* pFirstFont = GetFontBuffer().GetFont( EXC_FONT_APP ) )
     {
         aFontData = pFirstFont->GetFontData();
-        (aFontData.mnHeight += 10) /= 20;   // using pt here, not twips
+        (aFontData.mnHeight += 10) /= 20;   
     }
     else
         aFontData.mnHeight = 10;
@@ -728,7 +728,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
             if( aSel.nStartPos < aSel.nEndPos )
             {
 
-// --- font attributes ---
+
 
                 Font aFont;
                 aItemSet.ClearItem();
@@ -736,7 +736,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
                 ScPatternAttr::GetFont( aFont, aItemSet, SC_AUTOCOL_RAW );
 
-                // font name and style
+                
                 aNewData.maName = XclTools::GetXclFontName( aFont.GetName() );
                 aNewData.mnWeight = (aFont.GetWeight() > WEIGHT_NORMAL) ? EXC_FONTWGHT_BOLD : EXC_FONTWGHT_NORMAL;
                 aNewData.mbItalic = (aFont.GetItalic() != ITALIC_NONE);
@@ -759,18 +759,18 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     aParaText += "\"";
                 }
 
-                // height
-                // is calculated wrong in ScPatternAttr::GetFromEditItemSet, because already in twips and not 100thmm
-                // -> get it directly from edit engine item set
+                
+                
+                
                 aNewData.mnHeight = ulimit_cast< sal_uInt16 >( GETITEM( aEditSet, SvxFontHeightItem, EE_CHAR_FONTHEIGHT ).GetHeight() );
                 (aNewData.mnHeight += 10) /= 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
                     aParaText += "&" + OUString::number( aNewData.mnHeight );
-                // update maximum paragraph height, convert to twips
+                
                 nParaHeight = ::std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
 
-                // underline
+                
                 aNewData.mnUnderline = EXC_FONTUNDERL_NONE;
                 switch( aFont.GetUnderline() )
                 {
@@ -786,19 +786,19 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     (nTmpUnderl == EXC_FONTUNDERL_SINGLE)? aParaText += "&U" : aParaText += "&E";
                 }
 
-                // strikeout
+                
                 aNewData.mbStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
                 if( aFontData.mbStrikeout != aNewData.mbStrikeout )
                     aParaText += "&S";
 
-                // super/sub script
+                
                 const SvxEscapementItem& rEscapeItem = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
                 aNewData.SetScEscapement( rEscapeItem.GetEsc() );
                 if( aFontData.mnEscapem != aNewData.mnEscapem )
                 {
                     switch(aNewData.mnEscapem)
                     {
-                        // close the previous super/sub script.
+                        
                         case EXC_FONTESC_NONE:  (aFontData.mnEscapem == EXC_FONTESC_SUPER) ? aParaText += "&X" : aParaText += "&Y"; break;
                         case EXC_FONTESC_SUPER: aParaText += "&X";  break;
                         case EXC_FONTESC_SUB:   aParaText += "&Y";  break;
@@ -808,10 +808,10 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
                 aFontData = aNewData;
 
-// --- text content or text fields ---
+
 
                 const SfxPoolItem* pItem;
-                if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
+                if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     
                     (aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET) )
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
@@ -826,7 +826,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                             aParaText += "&T";
                         else if( pFieldData->ISA( SvxTableField ) )
                             aParaText += "&A";
-                        else if( pFieldData->ISA( SvxFileField ) )  // title -> file name
+                        else if( pFieldData->ISA( SvxFileField ) )  
                             aParaText += "&F";
                         else if( const SvxExtFileField* pFileField = PTR_CAST( SvxExtFileField, pFieldData ) )
                         {
@@ -852,7 +852,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 {
                     OUString aPortionText( mrEE.GetText( aSel ) );
                     aPortionText = aPortionText.replaceAll( "&", "&&" );
-                    // #i17440# space between font height and numbers in text
+                    
                     if( bFontHtChanged && aParaText.getLength() && !aPortionText.isEmpty() )
                     {
                         sal_Unicode cLast = aParaText[ aParaText.getLength() - 1 ];
@@ -869,7 +869,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
         aText = ScGlobal::addToken( aText, aParaText, '\n' );
         if( nParaHeight == 0 )
-            nParaHeight = aFontData.mnHeight * 20;  // points -> twips
+            nParaHeight = aFontData.mnHeight * 20;  
         nHeight += nParaHeight;
     }
 
@@ -882,7 +882,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     }
 }
 
-// URL conversion =============================================================
+
 
 namespace {
 
@@ -900,30 +900,30 @@ OUString lclEncodeDosUrl(
 
         if ( aOldUrl.getLength() > 2 && aOldUrl.copy(0,2) == "\\\\" )
         {
-            // UNC
+            
             aBuf.append(EXC_URL_DOSDRIVE).append('@');
             aOldUrl = aOldUrl.copy(2);
         }
         else if ( aOldUrl.getLength() > 2 && aOldUrl.copy(1,2) == ":\\" )
         {
-            // drive letter
+            
             sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase[0];
             sal_Unicode cDrive = aOldUrl[0];
             if (cThisDrive == cDrive)
-                // This document and the referenced document are under the same drive.
+                
                 aBuf.append(EXC_URL_DRIVEROOT);
             else
                 aBuf.append(EXC_URL_DOSDRIVE).append(cDrive);
             aOldUrl = aOldUrl.copy(3);
         }
 
-        // directories
+        
         sal_Int32 nPos = -1;
         while((nPos = aOldUrl.indexOf('\\')) != -1)
         {
             if ( aOldUrl.copy(0,2) == ".." )
-                // parent dir (NOTE: the MS-XLS spec doesn't mention this, and
-                // Excel seems confused by this token).
+                
+                
                 aBuf.append(EXC_URL_PARENTDIR);
             else
                 aBuf.append(aOldUrl.copy(0,nPos)).append(EXC_URL_SUBDIR);
@@ -931,13 +931,13 @@ OUString lclEncodeDosUrl(
             aOldUrl = aOldUrl.copy(nPos + 1);
         }
 
-        // file name
-        if (pTableName)    // enclose file name in brackets if table name follows
+        
+        if (pTableName)    
             aBuf.append('[').append(aOldUrl).append(']');
         else
             aBuf.append(aOldUrl);
     }
-    else    // empty URL -> self reference
+    else    
     {
         switch( eBiff )
         {
@@ -953,16 +953,16 @@ OUString lclEncodeDosUrl(
         }
     }
 
-    // table name
+    
     if (pTableName)
         aBuf.append(*pTableName);
 
     return aBuf.makeStringAndClear();
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName )
 {
@@ -978,7 +978,7 @@ OUString XclExpUrlHelper::EncodeDde( const OUString& rApplic, const OUString& rT
     return aBuf.makeStringAndClear();
 }
 
-// Cached Value Lists =========================================================
+
 
 XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix )
     : mrMatrix( rMatrix )
@@ -1017,10 +1017,10 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
     GetDimensions( nCols, nRows );
 
     if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
-        // in BIFF2-BIFF7: 256 columns represented by 0 columns
+        
         rStrm << static_cast< sal_uInt8 >( nCols ) << static_cast< sal_uInt16 >( nRows );
     else
-        // in BIFF8: columns and rows decreaed by 1
+        
         rStrm << static_cast< sal_uInt8 >( nCols - 1 ) << static_cast< sal_uInt16 >( nRows - 1 );
 
     for( SCSIZE nRow = 0; nRow < nRows; ++nRow )
@@ -1064,6 +1064,6 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
     }
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

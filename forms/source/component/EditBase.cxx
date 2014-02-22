@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "EditBase.hxx"
@@ -31,7 +31,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star;
@@ -56,7 +56,7 @@ namespace
     const sal_uInt16 DEFAULT_DATE    =  0x0010;
 }
 
-//------------------------------------------------------------------
+
 OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& rUnoControlModelName,
         const OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
@@ -66,7 +66,7 @@ OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory
 {
 }
 
-//------------------------------------------------------------------
+
 OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
      :OBoundControlModel( _pOriginal, _rxFactory )
      ,m_nLastReadVersion(0)
@@ -78,31 +78,31 @@ OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Referenc
     m_aDefaultText = _pOriginal->m_aDefaultText;
 }
 
-//------------------------------------------------------------------
+
 OEditBaseModel::~OEditBaseModel( )
 {
 }
 
-// XPersist
-//------------------------------------------------------------------------------
+
+
 void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::write(_rxOutStream);
 
-    // Version
+    
     sal_uInt16 nVersionId = 0x0006;
     DBG_ASSERT((getPersistenceFlags() & ~PF_SPECIAL_FLAGS) == 0,
         "OEditBaseModel::write : invalid special version flags !");
-        // please don't use other flags, older versions can't interpret them !
+        
 
     nVersionId |= getPersistenceFlags();
     _rxOutStream->writeShort(nVersionId);
 
-    // Name
-    _rxOutStream->writeShort(0);    // obsolete
+    
+    _rxOutStream->writeShort(0);    
     _rxOutStream << m_aDefaultText;
 
-    // Masking for any
+    
     sal_uInt16 nAnyMask = 0;
     if (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= DEFAULT_LONG;
@@ -113,7 +113,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     else if (m_aDefault.getValueType() == ::getCppuType((const util::Date*)0))
         nAnyMask |= DEFAULT_DATE;
 
-    if (m_bFilterProposal)  // Don't save a value, because it's boolean
+    if (m_bFilterProposal)  
         nAnyMask |= FILTERPROPOSAL;
 
     _rxOutStream->writeBoolean(m_bEmptyIsNull);
@@ -136,42 +136,42 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
         _rxOutStream->writeLong(::Date(aDate).GetDate());
     }
 
-    // since version 5 we write the help text
+    
     writeHelpTextCompatibly(_rxOutStream);
-    // (that's potentially bad : at the time I added the above line we had two derived classes : OEditModel and
-    // OFormattedModel. The first one does not have an own version handling, so it can't write the help text itself,
-    // the second one does it's own writing (reading) after calling our method, so normally we shouldn't write any
-    // additional members as this is not compatible to older office versions.
-    // We decided to place the writing of the help text here as it seems the less worse alternative. There is no delivered
-    // office version including formatted controls (and thus the OFormattedModel), and the OFormattedModel::read seems
-    // robust against this change (as it will read a wrong and unknown file version and thus set it's members to defaults).
+    
+    
+    
+    
+    
+    
+    
 
     if ((nVersionId & PF_HANDLE_COMMON_PROPS) != 0)
         writeCommonEditProperties(_rxOutStream);
 
-    // !!! properties common to all OEditBaseModel derived classes should be written in writeCommonEditProperties !!!
+    
 }
 
-//------------------------------------------------------------------------------
+
 sal_uInt16 OEditBaseModel::getPersistenceFlags() const
 {
     return PF_HANDLE_COMMON_PROPS;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // Version's own version number
+    
     sal_uInt16 nVersion = _rxInStream->readShort();
     m_nLastReadVersion = nVersion;
 
     sal_Bool bHandleCommonProps = (nVersion & PF_HANDLE_COMMON_PROPS) != 0;
     nVersion = nVersion & ~PF_SPECIAL_FLAGS;
 
-    // obsolete
+    
     _rxInStream->readShort();
 
     _rxInStream >> m_aDefaultText;
@@ -210,20 +210,20 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
     if (bHandleCommonProps)
         readCommonEditProperties(_rxInStream);
 
-    // After reading, display default values
+    
     if ( !getControlSource().isEmpty() )
-        // (not if we don't have a control source - the "State" property acts like it is persistent, then)
+        
         resetNoBroadcast();
 };
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::defaultCommonEditProperties()
 {
     OBoundControlModel::defaultCommonProperties();
-    // no own common properties at the moment
+    
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream>& _rxInStream)
 {
     sal_Int32 nLen = _rxInStream->readLong();
@@ -232,34 +232,34 @@ void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream
     DBG_ASSERT(xMark.is(), "OBoundControlModel::readCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
-    // read properties common to all OBoundControlModels
+    
     OBoundControlModel::readCommonProperties(_rxInStream);
 
-    // read properties common to all OEditBaseModels
+    
 
-    // skip the remaining bytes
+    
     xMark->jumpToMark(nMark);
     _rxInStream->skipBytes(nLen);
     xMark->deleteMark(nMark);
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::writeCommonEditProperties(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OEditBaseModel::writeCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
-    // a placeholder where we will write the overall length (later in this method)
+    
     sal_Int32 nLen = 0;
     _rxOutStream->writeLong(nLen);
 
-    // write properties common to all OBoundControlModels
+    
     OBoundControlModel::writeCommonProperties(_rxOutStream);
 
-    // write properties common to all OEditBaseModels
+    
 
-    // close the block - write the correct length at the beginning
+    
     nLen = xMark->offsetToMark(nMark) - sizeof(nLen);
     xMark->jumpToMark(nMark);
     _rxOutStream->writeLong(nLen);
@@ -267,7 +267,7 @@ void OEditBaseModel::writeCommonEditProperties(const Reference<XObjectOutputStre
     xMark->deleteMark(nMark);
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -291,7 +291,7 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException )
 {
@@ -326,7 +326,7 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -339,7 +339,7 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
             DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             m_bFilterProposal = getBOOL(rValue);
             break;
-        // Changing the default values causes a reset
+        
         case PROPERTY_ID_DEFAULT_TEXT:
             DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aDefaultText;
@@ -356,8 +356,8 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
     }
 }
 
-// XPropertyState
-//------------------------------------------------------------------------------
+
+
 Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -375,8 +375,8 @@ Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     }
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

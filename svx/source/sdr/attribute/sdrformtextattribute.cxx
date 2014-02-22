@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
@@ -45,8 +45,8 @@
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
-// helper to get line, stroke and transparence attributes from SfxItemSet
+
+
 
 namespace
 {
@@ -70,9 +70,9 @@ namespace
             {
                 return basegfx::B2DLINEJOIN_ROUND;
             }
-            default : // com::sun::star::drawing::LineJoint_NONE
+            default : 
             {
-                return basegfx::B2DLINEJOIN_NONE; // XLINEJOINT_NONE
+                return basegfx::B2DLINEJOIN_NONE; 
             }
         }
     }
@@ -138,9 +138,9 @@ namespace
 
         return drawinglayer::attribute::StrokeAttribute(aDotDashArray, fFullDotDashLen);
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -149,28 +149,28 @@ namespace drawinglayer
         class ImpSdrFormTextAttribute
         {
         public:
-            // refcounter
+            
             sal_uInt32                              mnRefCount;
 
-            // FormText (FontWork) Attributes
-            sal_Int32                               mnFormTextDistance;     // distance from line in upright direction
-            sal_Int32                               mnFormTextStart;        // shift from polygon start
-            sal_Int32                               mnFormTextShdwXVal;     // shadow distance or 10th degrees
-            sal_Int32                               mnFormTextShdwYVal;     // shadow distance or scaling
-            sal_uInt16                              mnFormTextShdwTransp;   // shadow transparence
-            XFormTextStyle                          meFormTextStyle;        // on/off and char orientation
-            XFormTextAdjust                         meFormTextAdjust;       // adjustment (left/right/center) and scale
-            XFormTextShadow                         meFormTextShadow;       // shadow mode
-            Color                                   maFormTextShdwColor;    // shadow color
+            
+            sal_Int32                               mnFormTextDistance;     
+            sal_Int32                               mnFormTextStart;        
+            sal_Int32                               mnFormTextShdwXVal;     
+            sal_Int32                               mnFormTextShdwYVal;     
+            sal_uInt16                              mnFormTextShdwTransp;   
+            XFormTextStyle                          meFormTextStyle;        
+            XFormTextAdjust                         meFormTextAdjust;       
+            XFormTextShadow                         meFormTextShadow;       
+            Color                                   maFormTextShdwColor;    
 
-            // outline attributes; used when getFormTextOutline() is true and (for
-            // shadow) when getFormTextShadow() != XFTSHADOW_NONE
+            
+            
             SdrFormTextOutlineAttribute             maOutline;
             SdrFormTextOutlineAttribute             maShadowOutline;
 
-            // bitfield
-            bool                                    mbFormTextMirror : 1;   // change orientation
-            bool                                    mbFormTextOutline : 1;  // show contour of objects
+            
+            bool                                    mbFormTextMirror : 1;   
+            bool                                    mbFormTextOutline : 1;  
 
             explicit ImpSdrFormTextAttribute(const SfxItemSet& rSet)
             :   mnRefCount(0),
@@ -192,7 +192,7 @@ namespace drawinglayer
                 {
                     const StrokeAttribute aStrokeAttribute(impGetStrokeAttribute(rSet));
 
-                    // also need to prepare attributes for outlines
+                    
                     {
                         const LineAttribute aLineAttribute(impGetLineAttribute(false, rSet));
                         const sal_uInt8 nTransparence(impGetStrokeTransparence(false, rSet));
@@ -203,7 +203,7 @@ namespace drawinglayer
 
                     if(XFTSHADOW_NONE != getFormTextShadow())
                     {
-                        // also need to prepare attributes for shadow outlines
+                        
                         const LineAttribute aLineAttribute(impGetLineAttribute(true, rSet));
                         const sal_uInt8 nTransparence(impGetStrokeTransparence(true, rSet));
 
@@ -231,7 +231,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             sal_Int32 getFormTextDistance() const { return mnFormTextDistance; }
             sal_Int32 getFormTextStart() const { return mnFormTextStart; }
             sal_Int32 getFormTextShdwXVal() const { return mnFormTextShdwXVal; }
@@ -246,7 +246,7 @@ namespace drawinglayer
             bool getFormTextMirror() const { return mbFormTextMirror; }
             bool getFormTextOutline() const { return mbFormTextOutline; }
 
-            // compare operator
+            
             bool operator==(const ImpSdrFormTextAttribute& rCandidate) const
             {
                 return (getFormTextDistance() == rCandidate.getFormTextDistance()
@@ -272,7 +272,7 @@ namespace drawinglayer
                 {
                     pDefault = new ImpSdrFormTextAttribute();
 
-                    // never delete; start with RefCount 1, not 0
+                    
                     pDefault->mnRefCount++;
                 }
 
@@ -408,7 +408,7 @@ namespace drawinglayer
         {
             return mpSdrFormTextAttribute->getFormTextOutline();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

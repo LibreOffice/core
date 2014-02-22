@@ -41,7 +41,7 @@ namespace drawinglayer
         {
             rEntries.clear();
 
-            // make sure steps is not too high/low
+            
             const basegfx::BColor aStart(getFillGradient().getStartColor());
             const basegfx::BColor aEnd(getFillGradient().getEndColor());
             const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
@@ -110,24 +110,24 @@ namespace drawinglayer
             const basegfx::BColor& rOutmostColor,
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
-            // prepare return value
+            
             Primitive2DSequence aRetval(rEntries.size() + 1);
 
-            // create solid fill with outmost color
+            
             aRetval[0] = Primitive2DReference(
                 new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())),
                     rOutmostColor));
 
-            // create solid fill steps
+            
             for(sal_uInt32 a(0); a < rEntries.size(); a++)
             {
-                // create part polygon
+                
                 basegfx::B2DPolygon aNewPoly(rUnitPolygon);
 
                 aNewPoly.transform(rEntries[a].maB2DHomMatrix);
 
-                // create solid fill
+                
                 aRetval[a + 1] = Primitive2DReference(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(aNewPoly),
@@ -142,16 +142,16 @@ namespace drawinglayer
             const basegfx::BColor& rOutmostColor,
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
-            // prepare return value
+            
             Primitive2DSequence aRetval(rEntries.size() + 1);
 
-            // get outmost range from object
+            
             basegfx::B2DRange aOutmostRange(getObjectRange());
             basegfx::B2DPolyPolygon aCombinedPolyPoly;
 
             if(rEntries.size())
             {
-                // extend aOutmostRange with first polygon
+                
                 basegfx::B2DPolygon aFirstPoly(rUnitPolygon);
 
                 aFirstPoly.transform(rEntries[0].maB2DHomMatrix);
@@ -159,7 +159,7 @@ namespace drawinglayer
                 aOutmostRange.expand(aFirstPoly.getB2DRange());
             }
 
-            // add outmost range to combined polypolygon (in 1st place), create first primitive
+            
             aCombinedPolyPoly.insert(0, basegfx::tools::createPolygonFromRect(aOutmostRange));
             aRetval[0] = Primitive2DReference(
                 new PolyPolygonColorPrimitive2D(
@@ -168,28 +168,28 @@ namespace drawinglayer
 
             if(rEntries.size())
             {
-                // reuse first polygon, it's the second one
+                
                 aCombinedPolyPoly.remove(0);
 
                 for(sal_uInt32 a(0); a < rEntries.size() - 1; a++)
                 {
-                    // create next inner polygon, combinbe with last one
+                    
                     basegfx::B2DPolygon aNextPoly(rUnitPolygon);
 
                     aNextPoly.transform(rEntries[a + 1].maB2DHomMatrix);
                     aCombinedPolyPoly.append(aNextPoly);
 
-                    // create primitive with correct color
+                    
                     aRetval[a + 1] = Primitive2DReference(
                         new PolyPolygonColorPrimitive2D(
                             aCombinedPolyPoly,
                             rEntries[a].maBColor));
 
-                    // reuse inner polygon, it's the 2nd one
+                    
                     aCombinedPolyPoly.remove(0);
                 }
 
-                // add last inner polygon with last color
+                
                 aRetval[rEntries.size()] = Primitive2DReference(
                     new PolyPolygonColorPrimitive2D(
                         aCombinedPolyPoly,
@@ -201,7 +201,7 @@ namespace drawinglayer
 
         Primitive2DSequence FillGradientPrimitive2D::createFill(bool bOverlapping) const
         {
-            // prepare shape of the Unit Polygon
+            
             basegfx::B2DPolygon aUnitPolygon;
 
             switch(getFillGradient().getStyle())
@@ -212,15 +212,15 @@ namespace drawinglayer
                     aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 1.0);
                     break;
                 }
-                default: // GRADIENTSTYLE_LINEAR, attribute::GRADIENTSTYLE_AXIAL, attribute::GRADIENTSTYLE_SQUARE, attribute::GRADIENTSTYLE_RECT
+                default: 
                 {
                     aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1.0, -1.0, 1.0, 1.0));
                     break;
                 }
             }
 
-            // get the transform matrices and colors (where colors
-            // will have one more entry that matrices)
+            
+            
             std::vector< drawinglayer::texture::B2DHomMatrixAndBColor > aEntries;
             basegfx::BColor aOutmostColor;
 
@@ -238,16 +238,16 @@ namespace drawinglayer
 
         Primitive2DSequence FillGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // default creates overlapping fill which works with AntiAliasing and without.
-            // The non-overlapping version does not create single filled polygons, but
-            // PolyPolygons where each one describes a 'ring' for the gradient such
-            // that the rings will not overlap. This is useful fir the old XOR-paint
-            // 'trick' of VCL which is recorded in Metafiles; so this version may be
-            // used from the MetafilePrimitive2D in it's decomposition.
+            
+            
+            
+            
+            
+            
 
             if(!getFillGradient().isDefault())
             {
-                static bool bOverlapping(true); // allow to test non-overlapping in the debugger
+                static bool bOverlapping(true); 
 
                 return createFill(bOverlapping);
             }
@@ -281,14 +281,14 @@ namespace drawinglayer
 
         basegfx::B2DRange FillGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // return ObjectRange
+            
             return getObjectRange();
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(FillGradientPrimitive2D, PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

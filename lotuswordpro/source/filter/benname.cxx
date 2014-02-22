@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -56,7 +56,7 @@
 #include "first.hxx"
 namespace OpenStormBento
 {
-// changed to remove warning
+
 CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
   BenObjectID ObjectID, pCBenObject pPrevObject, const char * sName,
   pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
@@ -80,6 +80,6 @@ bool CBenPropertyName::IsPropertyName()
 
 bool CBenTypeName::IsTypeName()
 { return true; }
-} // end namespace OpenStormBento
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/ATable.hxx"
@@ -45,18 +45,18 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
     : OTable_TYPEDEF(_pTables,_bCase)
     ,m_pCatalog(_pCatalog)
 {
     construct();
     m_aTable = WpADOTable(_pTable);
-    //  m_aTable.putref_ParentCatalog(_pCatalog->getCatalog());
+    
     fillPropertyValues();
 
 }
-// -----------------------------------------------------------------------------
+
 OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog)
     : OTable_TYPEDEF(_pTables,_bCase)
     ,m_pCatalog(_pCatalog)
@@ -66,13 +66,13 @@ OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCa
     m_aTable.putref_ParentCatalog(_pCatalog->getCatalog());
 
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoTable::disposing(void)
 {
     OTable_TYPEDEF::disposing();
     m_aTable.clear();
 }
-// -------------------------------------------------------------------------
+
 void OAdoTable::refreshColumns()
 {
     TStringVector aVector;
@@ -89,7 +89,7 @@ void OAdoTable::refreshColumns()
     else
         m_pColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pCatalog->getConnection());
 }
-// -------------------------------------------------------------------------
+
 void OAdoTable::refreshKeys()
 {
     TStringVector aVector;
@@ -106,7 +106,7 @@ void OAdoTable::refreshKeys()
     else
         m_pKeys = new OKeys(*this,m_aMutex,aVector,aKeys,isCaseSensitive(),m_pCatalog->getConnection());
 }
-// -------------------------------------------------------------------------
+
 void OAdoTable::refreshIndexes()
 {
     TStringVector aVector;
@@ -123,7 +123,7 @@ void OAdoTable::refreshIndexes()
     else
         m_pIndexes = new OIndexes(*this,m_aMutex,aVector,aIndexes,isCaseSensitive(),m_pCatalog->getConnection());
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -139,16 +139,16 @@ Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }
-// -------------------------------------------------------------------------
-// XRename
+
+
 void SAL_CALL OAdoTable::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -159,13 +159,13 @@ void SAL_CALL OAdoTable::rename( const OUString& newName ) throw(SQLException, E
 
     OTable_TYPEDEF::rename(newName);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData> OAdoTable::getMetaData() const
 {
     return m_pCatalog->getConnection()->getMetaData();
 }
-// -------------------------------------------------------------------------
-// XAlterTable
+
+
 void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -185,7 +185,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Refer
     m_pColumns->refresh();
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -196,7 +196,7 @@ void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< X
     if(xOld.is())
         alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }
-// -------------------------------------------------------------------------
+
 void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aTable.IsValid())
@@ -228,17 +228,17 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
     }
     OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OAdoTable::acquire() throw()
 {
     OTable_TYPEDEF::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoTable::release() throw()
 {
     OTable_TYPEDEF::release();
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OAdoTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
       return m_aTable.get_Name();

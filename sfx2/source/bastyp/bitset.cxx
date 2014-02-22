@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -25,27 +25,27 @@
 #include <limits.h>
 #include <algorithm>
 
-//====================================================================
-// add nOffset to each bit-value in the set
+
+
 
 BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
 {
-    // create a work-copy, return it if nothing to shift
+    
     BitSet aSet(*this);
     if ( nOffset == 0 )
         return aSet;
 
-    // compute the shiftment in long-words and bits
+    
     sal_uInt16 nBlockDiff = nOffset / 32;
     sal_uIntPtr nBitValDiff = nOffset % 32;
 
-    // compute the new number of bits
+    
     for ( sal_uInt16 nBlock = 0; nBlock < nBlockDiff; ++nBlock )
         aSet.nCount = aSet.nCount - CountBits( *(aSet.pBitmap+nBlock) );
     aSet.nCount = aSet.nCount -
         CountBits( *(aSet.pBitmap+nBlockDiff) >> (32-nBitValDiff) );
 
-    // shift complete long-words
+    
     sal_uInt16 nTarget, nSource;
     for ( nTarget = 0, nSource = nBlockDiff;
           (nSource+1) < aSet.nBlocks;
@@ -54,14 +54,14 @@ BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
             ( *(aSet.pBitmap+nSource) << nBitValDiff ) |
             ( *(aSet.pBitmap+nSource+1) >> (32-nBitValDiff) );
 
-    // shift the remainder (if in total minor 32 bits, only this)
+    
     *(aSet.pBitmap+nTarget) = *(aSet.pBitmap+nSource) << nBitValDiff;
 
-    // determine the last used block
+    
     while ( *(aSet.pBitmap+nTarget) == 0 )
         --nTarget;
 
-    // shorten the block-array
+    
     if ( nTarget < aSet.nBlocks )
     {
         sal_uIntPtr* pNewMap = new sal_uIntPtr[nTarget];
@@ -74,18 +74,18 @@ BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
     return aSet;
 }
 
-//--------------------------------------------------------------------
 
-// substracts nOffset from each bit-value in the set
+
+
 
 BitSet BitSet::operator>>( sal_uInt16 ) const
 {
     return BitSet();
 }
 
-//--------------------------------------------------------------------
 
-// internal code for operator= and copy-ctor
+
+
 
 void BitSet::CopyFrom( const BitSet& rSet )
 {
@@ -100,9 +100,9 @@ void BitSet::CopyFrom( const BitSet& rSet )
         pBitmap = 0;
 }
 
-//--------------------------------------------------------------------
 
-// creates an empty bitset
+
+
 
 BitSet::BitSet()
 {
@@ -111,27 +111,27 @@ BitSet::BitSet()
     pBitmap = 0;
 }
 
-//--------------------------------------------------------------------
 
-// creates a copy of bitset rOrig
+
+
 
 BitSet::BitSet( const BitSet& rOrig )
 {
     CopyFrom(rOrig);
 }
 
-//--------------------------------------------------------------------
 
-// frees the storage
+
+
 
 BitSet::~BitSet()
 {
     delete [] pBitmap;
 }
 
-//--------------------------------------------------------------------
 
-// assignment from another bitset
+
+
 
 BitSet& BitSet::operator=( const BitSet& rOrig )
 {
@@ -143,9 +143,9 @@ BitSet& BitSet::operator=( const BitSet& rOrig )
     return *this;
 }
 
-//--------------------------------------------------------------------
 
-// assignment from a single bit
+
+
 
 BitSet& BitSet::operator=( sal_uInt16 nBit )
 {
@@ -163,9 +163,9 @@ BitSet& BitSet::operator=( sal_uInt16 nBit )
     return *this;
 }
 
-//--------------------------------------------------------------------
 
-// creates the asymetric difference with another bitset
+
+
 
 BitSet& BitSet::operator-=(sal_uInt16 nBit)
 {
@@ -184,15 +184,15 @@ BitSet& BitSet::operator-=(sal_uInt16 nBit)
     return *this;
 }
 
-//--------------------------------------------------------------------
 
-// unites with the bits of rSet
+
+
 
 BitSet& BitSet::operator|=( const BitSet& rSet )
 {
     sal_uInt16 nMax = std::min(nBlocks, rSet.nBlocks);
 
-    // expand the bitmap
+    
     if ( nBlocks < rSet.nBlocks )
     {
         sal_uIntPtr *pNewMap = new sal_uIntPtr[rSet.nBlocks];
@@ -207,10 +207,10 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
         nBlocks = rSet.nBlocks;
     }
 
-    // add the bits blocks by block
+    
     for ( sal_uInt16 nBlock = 0; nBlock < nMax; ++nBlock )
     {
-        // compute numberof additional bits
+        
         sal_uIntPtr nDiff = ~*(pBitmap+nBlock) & *(rSet.pBitmap+nBlock);
         nCount = nCount + CountBits(nDiff);
 
@@ -220,9 +220,9 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
     return *this;
 }
 
-//--------------------------------------------------------------------
 
-// unites with a single bit
+
+
 
 BitSet& BitSet::operator|=( sal_uInt16 nBit )
 {
@@ -252,9 +252,9 @@ BitSet& BitSet::operator|=( sal_uInt16 nBit )
     return *this;
 }
 
-//--------------------------------------------------------------------
 
-// determines if the bit is set (may be the only one)
+
+
 
 sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
 {
@@ -266,9 +266,9 @@ sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
     return ( nBitVal & *(pBitmap+nBlock) ) == nBitVal;
 }
 
-//--------------------------------------------------------------------
 
-// determines if the bitsets are equal
+
+
 
 sal_Bool BitSet::operator==( const BitSet& rSet ) const
 {
@@ -283,9 +283,9 @@ sal_Bool BitSet::operator==( const BitSet& rSet ) const
     return sal_True;
 }
 
-//--------------------------------------------------------------------
 
-// counts the number of 1-bits in the parameter
+
+
 
 sal_uInt16 BitSet::CountBits( sal_uIntPtr nBits )
 {
@@ -299,7 +299,7 @@ sal_uInt16 BitSet::CountBits( sal_uIntPtr nBits )
     return nCount;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {

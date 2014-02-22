@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <utility>
@@ -35,11 +35,11 @@ namespace
 {
     Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsigned int height, unsigned int depth)
     {
-        // The X protocol request CreatePixmap puts an upper bound
-        // of 16 bit to the size.
+        
+        
         //
-        // see, e.g. moz#424333, fdo#48961
-        // we've a duplicate of this in vcl :-(
+        
+        
         if (width > SAL_MAX_INT16 || height > SAL_MAX_INT16)
         {
             SAL_WARN("canvas", "overlarge pixmap: " << width << " x " << height);
@@ -55,7 +55,7 @@ namespace cairo
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
 
-    // TODO(F3): svp headless case!
+    
 
     bool IsCairoWorking( OutputDevice* pOutDev )
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "QueryViewSwitch.hxx"
@@ -62,7 +62,7 @@ void OQueryViewSwitch::Construct()
 
 void OQueryViewSwitch::initialize()
 {
-    // initially be in SQL mode
+    
     m_pTextView->Show();
     m_pDesignView->initialize();
 }
@@ -72,7 +72,7 @@ void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
     m_pTextView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
     m_pDesignView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 
-    // just for completeness: there is no space left, we occupied it all ...
+    
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
@@ -178,16 +178,16 @@ void OQueryViewSwitch::impl_forceSQLView()
 {
     OAddTableDlg* pAddTabDialog( getAddTableDialog() );
 
-    // hide the "Add Table" dialog
+    
     m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
     if ( m_bAddTableDialogWasVisible )
         pAddTabDialog->Hide();
 
-    // tell the views they're in/active
+    
     m_pDesignView->stopTimer();
     m_pTextView->getSqlEdit()->startTimer();
 
-    // set the most recent statement at the text view
+    
     m_pTextView->clear();
     m_pTextView->setStatement(static_cast<OQueryController&>(m_pDesignView->getController()).getStatement());
 }
@@ -200,18 +200,18 @@ void OQueryViewSwitch::forceInitialView()
         impl_forceSQLView();
     else
     {
-        // tell the text view it's inactive now
+        
         m_pTextView->getSqlEdit()->stopTimer();
 
-        // update the "Add Table" dialog
+        
         OAddTableDlg* pAddTabDialog( getAddTableDialog() );
         if ( pAddTabDialog )
             pAddTabDialog->Update();
 
-        // initialize the design view
+        
         m_pDesignView->initByFieldDescriptions( rQueryController.getFieldInformation() );
 
-        // tell the design view it's active now
+        
         m_pDesignView->startTimer();
     }
 
@@ -229,18 +229,18 @@ bool OQueryViewSwitch::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
     }
     else
     {
-        // tell the text view it's inactive now
+        
         m_pTextView->getSqlEdit()->stopTimer();
 
-        // update the "Add Table" dialog
+        
         OAddTableDlg* pAddTabDialog( getAddTableDialog() );
         if ( pAddTabDialog )
             pAddTabDialog->Update();
 
-        // initialize the design view
+        
         bRet = m_pDesignView->initByParseIterator( _pErrorInfo );
 
-        // tell the design view it's active now
+        
         m_pDesignView->startTimer();
     }
 

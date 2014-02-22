@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cow_wrapper_clients.hxx"
@@ -103,7 +103,7 @@ bool cow_wrapper_client2::operator<( const cow_wrapper_client2& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-// ---------------------------------------------------------------------------
+
 
 cow_wrapper_client3::cow_wrapper_client3() : maImpl()
 {
@@ -170,7 +170,7 @@ bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-// ---------------------------------------------------------------------------
+
 
 namespace { struct theDefaultClient4 : public rtl::Static< o3tl::cow_wrapper< int >,
                                                             theDefaultClient4 > {}; }
@@ -219,6 +219,6 @@ bool cow_wrapper_client4::operator<( const cow_wrapper_client4& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-} // namespace o3tltests
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

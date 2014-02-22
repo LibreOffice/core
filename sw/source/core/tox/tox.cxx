@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,36 +51,36 @@ struct PatternIni
 };
 const PatternIni aPatternIni[] =
 {
-    {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX},    //Header - no pattern
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},   //AUTH_TYPE_ARTICLE,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_BOOK,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_BOOKLET,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_CONFERENCE,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_INBOOK,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_INCOLLECTION,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_INPROCEEDINGS,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_JOURNAL,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_MANUAL,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_MASTERSTHESIS,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_MISC,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_PHDTHESIS,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_PROCEEDINGS,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_TECHREPORT,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_UNPUBLISHED,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_EMAIL,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, AUTH_FIELD_URL, USHRT_MAX},//AUTH_TYPE_WWW,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_CUSTOM1,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_CUSTOM2,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_CUSTOM3,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_CUSTOM4,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_TYPE_CUSTOM5,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_YEAR,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_URL,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM1,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM2,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM3,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM4,
-    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM5,
+    {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX},    
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},   
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, AUTH_FIELD_URL, USHRT_MAX},
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
+    {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     
     {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX}
 };
 
@@ -112,12 +112,12 @@ static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
         if( i > 0 )
             aRet.push_back( aTextToken );
 
-         // -> #i21237#
+         
         SwFormToken aToken(TOKEN_AUTHORITY);
 
         aToken.nAuthorityField = nVals[i];
         aRet.push_back(aToken);
-        // <- #i21237#
+        
     }
 
     return aRet;
@@ -125,14 +125,14 @@ static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
 
 }
 
-TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
+TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    
 
 /*--------------------------------------------------------------------
      TOX dtor and ctor
  --------------------------------------------------------------------*/
 
 
-/// pool default constructor
+
 SwTOXMark::SwTOXMark()
     : SfxPoolItem( RES_TXTATR_TOXMARK )
     , SwModify( 0 )
@@ -167,7 +167,7 @@ SwTOXMark::SwTOXMark( const SwTOXMark& rCopy )
     bAutoGenerated( rCopy.bAutoGenerated),
     bMainEntry(rCopy.bMainEntry)
 {
-    // Copy AlternativString
+    
     aAltText = rCopy.aAltText;
 }
 
@@ -198,7 +198,7 @@ void SwTOXMark::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew)
 {
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached uno object
+    {   
         SetXTOXMark(::com::sun::star::uno::Reference<
                         ::com::sun::star::text::XDocumentIndexMark>(0));
     }
@@ -207,7 +207,7 @@ void SwTOXMark::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew)
 void SwTOXMark::InvalidateTOXMark()
 {
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-        &static_cast<SwModify&>(*this) ); // cast to base class!
+        &static_cast<SwModify&>(*this) ); 
     NotifyClients(&aMsgHint, &aMsgHint);
 }
 
@@ -265,19 +265,19 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
     Edit forms
   --------------------------------------------------------------------*/
 
-SwForm::SwForm( TOXTypes eTyp ) // #i21237#
+SwForm::SwForm( TOXTypes eTyp ) 
     : eType( eTyp ), nFormMaxLevel( SwForm::GetFormMaxLevel( eTyp )),
-//  nFirstTabPos( lNumIndent ),
+
     bCommaSeparated(sal_False)
 {
-    //bHasFirstTabPos =
+    
     bGenerateTabPos = sal_False;
     bIsRelTabPos = sal_True;
 
-    // The table of contents has a certain number of headlines + headings
-    // The user has 10 levels + headings
-    // Keyword has 3 levels + headings+ separator
-    // Indexes of tables, object illustrations and authorities consist of a heading and one level
+    
+    
+    
+    
 
     sal_uInt16 nPoolId;
     switch( eType )
@@ -315,7 +315,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         SwFormToken aToken(TOKEN_TAB_STOP);
         aToken.nTabStopPosition = 0;
 
-        // #i36870# right aligned tab for all
+        
         aToken.cTabFillChar = '.';
         aToken.eTabAlign = SVX_TAB_ADJUST_END;
 
@@ -349,7 +349,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         }
     }
     else
-        for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    // Number 0 is the title
+        for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    
         {
             if(TOX_AUTHORITIES == eType)
                 SetPattern(i, lcl_GetAuthPattern(i));
@@ -378,8 +378,8 @@ SwForm& SwForm::operator=(const SwForm& rForm)
 {
     eType = rForm.eType;
     nFormMaxLevel = rForm.nFormMaxLevel;
-//  nFirstTabPos = rForm.nFirstTabPos;
-//  bHasFirstTabPos = rForm.bHasFirstTabPos;
+
+
     bGenerateTabPos = rForm.bGenerateTabPos;
     bIsRelTabPos = rForm.bIsRelTabPos;
     bCommaSeparated = rForm.bCommaSeparated;
@@ -407,14 +407,14 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
     return nRet;
 }
 
-// #i21237#
+
 bool operator == (const SwFormToken & rToken, FormTokenType eType)
 {
     return rToken.eTokenType == eType;
 }
 
-//-----------------------------------------------------------------------------
-void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237#
+
+void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) 
 {
     for(sal_uInt16 nLevel = 1; nLevel < GetFormMax(); nLevel++)
     {
@@ -424,7 +424,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
         if( !pColl )
         {
             sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName
-                ( sTemplateName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ); // #i21237#
+                ( sTemplateName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ); 
             if( USHRT_MAX != nId )
                 pColl = rDoc.GetTxtCollFromPool( nId );
         }
@@ -435,7 +435,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
             0 != ( pTabStops = &pColl->GetTabStops(sal_False) ) &&
             0 != ( nTabCount = pTabStops->Count() ) )
         {
-            // #i21237#
+            
             SwFormTokens aCurrentPattern = GetPattern(nLevel);
             SwFormTokens::iterator aIt = aCurrentPattern.begin();
 
@@ -445,9 +445,9 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
             {
                 const SvxTabStop& rTab = (*pTabStops)[nTab];
 
-                // #i29178#
-                // For Word import, we do not want to replace existing tokens,
-                // we insert new tabstop tokens without a tabstop character:
+                
+                
+                
                 if ( bInsertNewTapStops )
                 {
                     if ( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() )
@@ -478,12 +478,12 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                         ++aIt;
                     }
                     else
-                        break; // no more tokens to replace
+                        break; 
                 }
             }
 
             if(bChanged)
-                SetPattern(nLevel, aCurrentPattern); // #i21237#
+                SetPattern(nLevel, aCurrentPattern); 
         }
     }
 }
@@ -542,7 +542,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     SwTOXType* pType = (SwTOXType*)rSource.GetTOXType();
     if( pDoc && USHRT_MAX == pDoc->GetTOXTypes().GetPos( pType ))
     {
-        // type not in pDoc, so create it now
+        
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
         bool bFound = false;
         for( sal_uInt16 n = rTypes.size(); n; )
@@ -580,7 +580,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
         aStyleNames[i] = rSource.aStyleNames[i];
 
-    // its the same data type!
+    
     aData.nOptions =  rSource.aData.nOptions;
 
     if( !pDoc || pDoc->IsCopyIsMove() )
@@ -597,8 +597,8 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 
 SwTOXBase::~SwTOXBase()
 {
-//    if( GetTOXType()->GetType() == TOX_USER  )
-//        delete aData.pTemplateName;
+
+
 }
 
 void SwTOXBase::SetTitle(const OUString& rTitle)
@@ -656,7 +656,7 @@ OUString SwFormToken::GetString() const
             sToken = SwForm::GetFormTab();
         break;
         case TOKEN_TEXT:
-            // Return a Token only if Text is not empty!
+            
             if( sText.isEmpty() )
             {
                 return OUString();
@@ -686,7 +686,7 @@ OUString SwFormToken::GetString() const
 
     OUString sData = " " + sCharStyleName + "," + OUString::number( nPoolId ) + ",";
 
-    // TabStopPosition and TabAlign or ChapterInfoFormat
+    
     switch (eTokenType)
     {
         case TOKEN_TAB_STOP:
@@ -697,7 +697,7 @@ OUString SwFormToken::GetString() const
             break;
         case TOKEN_CHAPTER_INFO:
         case TOKEN_ENTRY_NO:
-            // add also maximum permitted level
+            
             sData += OUString::number( nChapterFormat ) + ","
                   +  OUString::number( nOutlineLevel );
             break;
@@ -722,7 +722,7 @@ OUString SwFormToken::GetString() const
     return sToken.copy(0, sToken.getLength()-1) + sData + sToken.copy(sToken.getLength()-1);
 }
 
-// -> #i21237#
+
 SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 {
     sal_Int32 nCurPatternPos = 0;
@@ -730,7 +730,7 @@ SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 
     while (nCurPatternPos < rPattern.getLength())
     {
-        // FIXME: nCurPatternLen added but set to 0?
+        
         nCurPatternPos = nCurPatternPos + nCurPatternLen;
 
         SwFormToken aToken = BuildToken(rPattern, nCurPatternPos);
@@ -746,10 +746,10 @@ SwFormToken SwFormTokensHelper::BuildToken( const OUString & sPattern,
     sal_Int32 nTokenLen = 0;
     FormTokenType eTokenType = GetTokenType(sToken, &nTokenLen);
 
-    // at this point sPattern contains the
-    // character style name, the PoolId, tab stop position, tab stop alignment, chapter info format
-    // the form is: CharStyleName, PoolId[, TabStopPosition|ChapterInfoFormat[, TabStopAlignment[, TabFillChar]]]
-    // in text tokens the form differs from the others: CharStyleName, PoolId[,\0xffinserted text\0xff]
+    
+    
+    
+    
     SwFormToken eRet( eTokenType );
     const OUString sAuthFieldEnum = sToken.copy( 2, 2 );
     sToken = sToken.copy( nTokenLen, sToken.getLength() - nTokenLen - 1);
@@ -761,16 +761,16 @@ SwFormToken SwFormTokensHelper::BuildToken( const OUString & sPattern,
 
     switch( eTokenType )
     {
-//i53420
+
     case TOKEN_CHAPTER_INFO:
-//i53420
+
     case TOKEN_ENTRY_NO:
         sTmp = sToken.getToken( 2, ',' );
         if( !sTmp.isEmpty() )
             eRet.nChapterFormat = static_cast<sal_uInt16>(sTmp.toInt32());
         sTmp = sToken.getToken( 3, ',' );
         if( !sTmp.isEmpty() )
-            eRet.nOutlineLevel = static_cast<sal_uInt16>(sTmp.toInt32()); //the maximum outline level to examine
+            eRet.nOutlineLevel = static_cast<sal_uInt16>(sTmp.toInt32()); 
         break;
 
     case TOKEN_TEXT:
@@ -818,20 +818,20 @@ SwFormToken SwFormTokensHelper::BuildToken( const OUString & sPattern,
 OUString SwFormTokensHelper::SearchNextToken( const OUString & sPattern,
                                               sal_Int32 nStt ) const
 {
-    //it's not so easy - it doesn't work if the text part contains a '>'
+    
 
     sal_Int32 nEnd = sPattern.indexOf( '>', nStt );
     if( nEnd<0 )
     {
-        // FIXME: why is nEnd updated?
-        //        should "aResult = sPattern.copy( nStt, nEnd - nStt );"
-        //        or something like that be returned?
+        
+        
+        
         nEnd = sPattern.getLength();
     }
     else
     {
-        // apparently the TOX_STYLE_DELIMITER act as a bracketing for
-        // TOKEN_TEXT tokens so that the user can have '>' inside the text...
+        
+        
         const sal_Int32 nTextSeparatorFirst = sPattern.indexOf( TOX_STYLE_DELIMITER, nStt );
         if (    nTextSeparatorFirst >= 0
             &&  nTextSeparatorFirst + 1 < sPattern.getLength()
@@ -839,10 +839,10 @@ OUString SwFormTokensHelper::SearchNextToken( const OUString & sPattern,
         {
             const sal_Int32 nTextSeparatorSecond = sPattern.indexOf( TOX_STYLE_DELIMITER,
                                                                      nTextSeparatorFirst + 1 );
-            // Since nEnd>=0 we don't need to check if nTextSeparatorSecond<0!
+            
             if( nEnd < nTextSeparatorSecond )
                 nEnd = sPattern.indexOf( '>', nTextSeparatorSecond );
-            // FIXME: No check to verify that nEnd is still >=0?
+            
             assert(nEnd >= 0);
         }
 
@@ -890,7 +890,7 @@ FormTokenType SwFormTokensHelper::GetTokenType(const OUString & sToken,
     return TOKEN_END;
 }
 
-// <- #i21237#
+
 
 void SwForm::SetPattern(sal_uInt16 nLevel, const SwFormTokens& rTokens)
 {

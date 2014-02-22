@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -124,10 +124,10 @@ void LwpTocSuperLayout::RegisterStyle()
 {
     LwpSuperTableLayout::RegisterStyle();
 
-    // Get font info of default text style and set into tab style
+    
     XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(*m_pFoundry->GetDefaultTextStyle()));
     XFTextStyle*pTextStyle = new XFTextStyle;
-    pTextStyle->SetFont(pBaseStyle->GetFont()); // who delete this font?????
+    pTextStyle->SetFont(pBaseStyle->GetFont()); 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_TabStyleName = pXFStyleManager->AddStyle(pTextStyle)->GetStyleName();
 
@@ -144,7 +144,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
     pToc->SetProtected(sal_False);
     pToc->SetIndexType(enumXFIndexTOC);
 
-    // add TOC template
+    
     for (sal_uInt16 i = 1; i<= MAX_LEVELS; i++)
     {
         LwpTocLevelData * pLevel = GetSearchLevelPtr(i);
@@ -152,7 +152,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
 
         if(!pLevel)
         {
-            // add an blank template so that SODC won't add default style to this level
+            
             pToc->AddTemplate(Int32ToOUString(i),  OUString(), pTemplate);
             continue;
         }
@@ -160,7 +160,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
         sal_Bool bInserted = sal_False;
         do
         {
-            // One level has 1 template
+            
             if (!bInserted)
             {
                 pTemplate->SetLevel(Int32ToOUString(i));
@@ -180,8 +180,8 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                         char cSep = ' ';
                         switch(nLeaderType)
                         {
-                        default: // go through
-                        case NONE: // no leaders
+                        default: 
+                        case NONE: 
                             cSep = ' ';
                             break;
                         case LEADERDOTS:
@@ -202,8 +202,8 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                         char sSep[8];
                         switch(nLeaderType)
                         {
-                        default: // go through
-                        case NONE: // no leaders
+                        default: 
+                        case NONE: 
                             strcpy(sSep, "  ");
                             break;
                         case SEPARATORCOMMA:
@@ -215,7 +215,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                         }
                         pTemplate->AddTextEntry(A2OUSTR(sSep), m_TabStyleName);
                     }
-                    //"TOC Page Number Text Style" style always exists in Word Pro file
+                    
                     pTemplate->AddEntry(enumXFIndexTemplatePage, A2OUSTR("TOC Page Number Text Style"));
                 }
 
@@ -223,20 +223,20 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                 bInserted = sal_True;
             }
 
-            // 1 style in WordPro may be mapped to several styles in SODC
+            
             LwpDocument * pDocument = m_pFoundry->GetDocument()->GetRootDocument();
             AddSourceStyle(pToc, pLevel,  pDocument->GetFoundry());
 
-            // one level may have several corresponding Styles
-            pLevel = GetNextSearchLevelPtr(i, pLevel);  // find next LwpTocLevelData which is same index
+            
+            pLevel = GetNextSearchLevelPtr(i, pLevel);  
         }while (pLevel != NULL);
     }
 
     m_pCont = pCont;
-    // add TOC content
+    
     LwpSuperTableLayout::XFConvert(pToc);
 
-    // if current TOC is located in a cell, we must add a frame between upper level container and TOC
+    
     if ( !GetContainerLayout()->IsCell() )
     {
         pCont->Add(pToc);
@@ -264,22 +264,22 @@ void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nSt
 
         m_pFrame->Parse(pXFFrame, static_cast<sal_uInt16>(nStart));
 
-        //parse table, and add table to frame or TOC
+        
         LwpTableLayout * pTableLayout = GetTableLayout();
         if (pTableLayout)
         {
             XFContentContainer * pTableContainer = pXFFrame;
-            // if *this is a TOCSuperTableLayout and it's located in a cell
-            // add the frame to upper level and add TOCSuperTableLayout into the frame
+            
+            
             if ( GetContainerLayout()->IsCell() )
             {
-                pTableContainer = pCont; // TOC contain table directly
+                pTableContainer = pCont; 
                 pXFFrame->Add(pCont);
                 m_pCont->Add(pXFFrame);
             }
             else
             {
-                //add frame to the container
+                
                 pCont ->Add(pXFFrame);
             }
             pTableLayout->XFConvert(pTableContainer);
@@ -379,7 +379,7 @@ sal_uInt16 LwpTocSuperLayout::GetSeparatorType(sal_uInt16 index)
  */
 LwpTocLevelData * LwpTocSuperLayout::GetSearchLevelPtr(sal_uInt16 index)
 {
-    LwpObjectID * pID = m_SearchItems.GetHead(); // not necessary to check pID NULL or not
+    LwpObjectID * pID = m_SearchItems.GetHead(); 
     LwpTocLevelData * pObj = dynamic_cast<LwpTocLevelData *>(pID->obj());
 
     while(pObj)
@@ -389,7 +389,7 @@ LwpTocLevelData * LwpTocSuperLayout::GetSearchLevelPtr(sal_uInt16 index)
             return pObj;
         }
 
-        pID = pObj->GetNext(); // not necessary to check pID NULL or not
+        pID = pObj->GetNext(); 
         pObj = dynamic_cast<LwpTocLevelData *>(pID->obj());
     }
 
@@ -413,7 +413,7 @@ LwpTocLevelData * LwpTocSuperLayout::GetNextSearchLevelPtr(sal_uInt16 index, Lwp
             return pObj;
         }
 
-        pID = pObj->GetNext(); // not necessary to check pID NULL or not
+        pID = pObj->GetNext(); 
         pObj = dynamic_cast<LwpTocLevelData *>(pID->obj());
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "errobject.hxx"
@@ -40,7 +40,7 @@ class ErrObject : public ErrObjectImpl_BASE
 public:
     ErrObject();
     ~ErrObject();
-    // Attributes
+    
     virtual ::sal_Int32 SAL_CALL getNumber() throw (uno::RuntimeException);
     virtual void SAL_CALL setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getHelpContext() throw (uno::RuntimeException);
@@ -52,13 +52,13 @@ public:
     virtual OUString SAL_CALL getSource() throw (uno::RuntimeException);
     virtual void SAL_CALL setSource( const OUString& _source ) throw (uno::RuntimeException);
 
-    // Methods
+    
     virtual void SAL_CALL Clear(  ) throw (uno::RuntimeException);
     virtual void SAL_CALL Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext ) throw (uno::RuntimeException);
-    // XDefaultProperty
+    
     virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException);
 
-    // Helper method
+    
     void setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description,
         const uno::Any& HelpFile, const uno::Any& HelpContext ) throw (uno::RuntimeException);
 };
@@ -133,7 +133,7 @@ ErrObject::setSource( const OUString& _source ) throw (uno::RuntimeException)
     m_sSource = _source;
 }
 
-// Methods
+
 void SAL_CALL
 ErrObject::Clear(  ) throw (uno::RuntimeException)
 {
@@ -152,7 +152,7 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
         GetSbData()->pInst->ErrorVB( m_nNumber, m_sDescription );
 }
 
-// XDefaultProperty
+
 OUString SAL_CALL
 ErrObject::getDefaultPropertyName(  ) throw (uno::RuntimeException)
 {
@@ -172,7 +172,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
     HelpContext >>= m_nHelpContext;
 }
 
-// SbxErrObject
+
 SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
     : SbUnoObject( rName, rUnoObj )
     , m_pErrObject( NULL )

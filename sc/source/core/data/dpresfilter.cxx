@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "dpresfilter.hxx"
@@ -96,7 +96,7 @@ ScDPResultTree::~ScDPResultTree()
 void ScDPResultTree::add(
     const std::vector<ScDPResultFilter>& rFilters, long /*nCol*/, long /*nRow*/, double fVal)
 {
-    // TODO: I'll work on the col / row to value node mapping later.
+    
 
     const OUString* pDimName = NULL;
     const OUString* pMemName = NULL;
@@ -112,18 +112,18 @@ void ScDPResultTree::add(
         if (maPrimaryDimName.isEmpty())
             maPrimaryDimName = filter.maDimName;
 
-        // See if this dimension exists.
+        
         DimensionsType& rDims = pMemNode->maChildDimensions;
         OUString aUpperName = ScGlobal::pCharClass->uppercase(filter.maDimName);
         DimensionsType::iterator itDim = rDims.find(aUpperName);
         if (itDim == rDims.end())
         {
-            // New dimenison.  Insert it.
+            
             std::pair<DimensionsType::iterator, bool> r =
                 rDims.insert(DimensionsType::value_type(aUpperName, new DimensionNode(pMemNode)));
 
             if (!r.second)
-                // Insertion failed!
+                
                 return;
 
             itDim = r.first;
@@ -131,20 +131,20 @@ void ScDPResultTree::add(
 
         pDimName = &itDim->first;
 
-        // Now, see if this dimension member exists.
+        
         DimensionNode* pDim = itDim->second;
         MembersType& rMembers = pDim->maChildMembers;
         aUpperName = ScGlobal::pCharClass->uppercase(filter.maValue);
         MembersType::iterator itMem = rMembers.find(aUpperName);
         if (itMem == rMembers.end())
         {
-            // New member.  Insert it.
+            
             std::pair<MembersType::iterator, bool> r =
                 rMembers.insert(
                     MembersType::value_type(aUpperName, new MemberNode(pDim)));
 
             if (!r.second)
-                // Insertion failed!
+                
                 return;
 
             itMem = r.first;
@@ -163,12 +163,12 @@ void ScDPResultTree::add(
         LeafValuesType::iterator it = maLeafValues.find(aNames);
         if (it == maLeafValues.end())
         {
-            // This name pair doesn't exist.  Associate a new value for it.
+            
             maLeafValues.insert(LeafValuesType::value_type(aNames, fVal));
         }
         else
         {
-            // This name pair already exists. Set the value to NaN.
+            
             rtl::math::setNan(&it->second);
         }
     }
@@ -207,7 +207,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
             ScGlobal::pCharClass->uppercase(p->FieldName));
 
         if (itDim == pMember->maChildDimensions.end())
-            // Specified dimension not found.
+            
             return NULL;
 
         const DimensionNode* pDim = itDim->second;
@@ -215,7 +215,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
             ScGlobal::pCharClass->uppercase(p->MatchValue));
 
         if (itMem == pDim->maChildMembers.end())
-            // Specified member not found.
+            
             return NULL;
 
         pMember = itMem->second;
@@ -232,10 +232,10 @@ double ScDPResultTree::getLeafResult(const com::sun::star::sheet::DataPilotField
 
     LeafValuesType::const_iterator it = maLeafValues.find(aPair);
     if (it != maLeafValues.end())
-        // Found!
+        
         return it->second;
 
-    // Not found.  Return an NaN.
+    
     double fNan;
     rtl::math::setNan(&fNan);
     return fNan;

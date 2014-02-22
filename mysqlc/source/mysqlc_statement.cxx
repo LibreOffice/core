@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <stdio.h>
 #include "mysqlc_connection.hxx"
@@ -37,7 +37,7 @@
 #include <osl/thread.h>
 
 using namespace connectivity::mysqlc;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -75,7 +75,7 @@ OCommonStatement::~OCommonStatement()
 void OCommonStatement::disposeResultSet()
 {
     OSL_TRACE("OCommonStatement::disposeResultSet");
-    // free the cursor if alive
+    
     delete cppStatement;
     cppStatement = NULL;
 }
@@ -137,7 +137,7 @@ void SAL_CALL OCommonStatement::cancel()
     OSL_TRACE("OCommonStatement::cancel");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    // cancel the current sql statement
+    
 }
 /* }}} */
 
@@ -165,7 +165,7 @@ void SAL_CALL OStatement::clearBatch()
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("OStatement::clearBatch");
-    // if you support batches clear it here
+    
 }
 /* }}} */
 
@@ -221,7 +221,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    // just return(our connection here
+    
     return ((Reference< XConnection >)m_pConnection);
 }
 /* }}} */
@@ -327,8 +327,8 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    // if your driver supports more than only one resultset
-    // and has one more at this moment return(true
+    
+    
     return (sal_False);
 }
 /* }}} */
@@ -364,8 +364,8 @@ void SAL_CALL OCommonStatement::clearWarnings()
 ::cppu::IPropertyArrayHelper* OCommonStatement::createArrayHelper( ) const
 {
     OSL_TRACE("OCommonStatement::createArrayHelper");
-    // this properties are define by the service statement
-    // they must in alphabetic order
+    
+    
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
@@ -402,7 +402,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
 {
     OSL_TRACE("OCommonStatement::convertFastPropertyValue");
     sal_Bool bConverted = sal_False;
-    // here we have to try to convert
+    
     return bConverted;
 }
 /* }}} */
@@ -413,7 +413,7 @@ void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const
     throw (Exception)
 {
     OSL_TRACE("OCommonStatement::setFastPropertyValue_NoBroadcast");
-    // set the value to what ever is necessary
+    
     switch (nHandle) {
         case PROPERTY_ID_QUERYTIMEOUT:
         case PROPERTY_ID_MAXFIELDSIZE:

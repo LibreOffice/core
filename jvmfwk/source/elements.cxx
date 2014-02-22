@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "elements.hxx"
@@ -33,10 +33,10 @@
 #include "boost/optional.hpp"
 #include <string.h>
 
-// For backwards compatibility, the nFeatures and nRequirements flag words are
-// read/written as potentially signed hexadecimal numbers (though that has no
-// practical relevance given that each has only one flag with value 0x01
-// defined).
+
+
+
+
 
 using namespace osl;
 namespace jfw
@@ -45,7 +45,7 @@ namespace jfw
 OString getElement(OString const & docPath,
                         xmlChar const * pathExpression, bool bThrowIfEmpty)
 {
-    //Prepare the xml document and context
+    
     OSL_ASSERT(!docPath.isEmpty());
      jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
     if (doc == NULL)
@@ -109,66 +109,66 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
         *bNeedsSave = false;
         return;
     }
-    //We will modify this document
+    
     *bNeedsSave = true;
-    // Now we create the child elements ------------------
-    //Get xsi:nil namespace
+    
+    
     xmlNs* nsXsi = xmlSearchNsByHref(
         document, root,(xmlChar*)  NS_SCHEMA_INSTANCE);
 
-    //<enabled xsi:nil="true"
+    
     xmlNode  * nodeEn = xmlNewTextChild(
         root,NULL, (xmlChar*) "enabled", (xmlChar*) "");
     if (nodeEn == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeEn,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-    //add a new line
+    
     xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<userClassPath xsi:nil="true">
+    
     xmlNode  * nodeUs = xmlNewTextChild(
         root,NULL, (xmlChar*) "userClassPath", (xmlChar*) "");
     if (nodeUs == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeUs,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-    //add a new line
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<vmParameters xsi:nil="true">
+    
     xmlNode  * nodeVm = xmlNewTextChild(
         root,NULL, (xmlChar*) "vmParameters", (xmlChar*) "");
     if (nodeVm == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeVm,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-    //add a new line
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<jreLocations xsi:nil="true">
+    
     xmlNode  * nodeJre = xmlNewTextChild(
         root,NULL, (xmlChar*) "jreLocations", (xmlChar*) "");
     if (nodeJre == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJre,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-    //add a new line
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<javaInfo xsi:nil="true">
+    
     xmlNode  * nodeJava = xmlNewTextChild(
         root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
     if (nodeJava == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-    //add a new line
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 }
 
 
-//====================================================================
+
 VersionInfo::VersionInfo(): arVersions(NULL)
 {
 }
@@ -204,13 +204,13 @@ sal_Int32 VersionInfo::getExcludeVersionSize()
 {
     return vecExcludeVersions.size();
 }
-//==================================================================
+
 
 NodeJava::NodeJava(Layer layer):
     m_layer(layer)
 {
-    //This class reads and write to files which should only be done in
-    //application mode
+    
+    
     if (getMode() == JFW_MODE_DIRECT)
         throw FrameworkException(
             JFW_E_DIRECT_MODE,
@@ -224,9 +224,9 @@ void NodeJava::load()
                              "(elements.cxx).");
     if (SHARED == m_layer)
     {
-        //we do not support yet to write into the shared installation
+        
 
-        //check if shared settings exist at all.
+        
         OUString sURL(BootParams::getSharedData());
         jfw::FileStatus s = sURL.isEmpty()
             ? FILE_DOES_NOT_EXIST : checkFileURL(sURL);
@@ -235,7 +235,7 @@ void NodeJava::load()
                 JFW_E_ERROR,
                 "[Java framework] Invalid file for shared Java settings.");
         else if (s == FILE_DOES_NOT_EXIST)
-            //Writing shared data is not supported yet.
+            
             return;
     }
     else if (USER == m_layer)
@@ -252,9 +252,9 @@ void NodeJava::load()
     }
 
 
-    //Read the user elements
+    
     OString sSettingsPath = getSettingsPath();
-    //There must not be a share settings file
+    
     CXmlDocPtr docUser(xmlParseFile(sSettingsPath.getStr()));
     if (docUser == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -269,7 +269,7 @@ void NodeJava::load()
     {
         if (xmlStrcmp(cur->name, (xmlChar*) "enabled") == 0)
         {
-            //only overwrite share settings if xsi:nil="false"
+            
             sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
@@ -432,7 +432,7 @@ void NodeJava::write() const
         return;
     }
 
-    //Read the user elements
+    
     OString sSettingsPath = getSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
     if (docUser == NULL)
@@ -443,13 +443,13 @@ void NodeJava::write() const
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     xmlNode * root = xmlDocGetRootElement(docUser);
-    //Get xsi:nil namespace
+    
     xmlNs* nsXsi = xmlSearchNsByHref(docUser,
                              root,
                              (xmlChar*)  NS_SCHEMA_INSTANCE);
 
-    //set the <enabled> element
-    //The element must exist
+    
+    
     if (m_enabled)
     {
         OString sExpression= OString(
@@ -471,8 +471,8 @@ void NodeJava::write() const
             xmlNodeSetContent(nodeEnabled,(xmlChar*) "false");
     }
 
-    //set the <userClassPath> element
-    //The element must exist
+    
+    
     if (m_userClassPath)
     {
         OString sExpression= OString(
@@ -487,7 +487,7 @@ void NodeJava::write() const
         xmlNodeSetContent(nodeEnabled,(xmlChar*) CXmlCharPtr(*m_userClassPath));
     }
 
-    //set <javaInfo> element
+    
     if (m_javaInfo)
     {
         OString sExpression= OString(
@@ -500,7 +500,7 @@ void NodeJava::write() const
             docUser, pathObj->nodesetval->nodeTab[0]);
     }
 
-    //set <vmParameters> element
+    
     if (m_vmParameters)
     {
         OString sExpression= OString(
@@ -510,11 +510,11 @@ void NodeJava::write() const
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
         xmlNode* vmParameters = pathObj->nodesetval->nodeTab[0];
-        //set xsi:nil = false;
+        
         xmlSetNsProp(vmParameters, nsXsi,(xmlChar*) "nil",
                      (xmlChar*) "false");
 
-        //remove option elements
+        
         xmlNode* cur = vmParameters->children;
         while (cur != NULL)
         {
@@ -523,7 +523,7 @@ void NodeJava::write() const
             xmlUnlinkNode(lastNode);
             xmlFreeNode(lastNode);
         }
-        //add a new line after <vmParameters>
+        
         if (m_vmParameters->size() > 0)
         {
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -535,13 +535,13 @@ void NodeJava::write() const
         {
             xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
                             CXmlCharPtr(*i));
-            //add a new line
+            
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(vmParameters, nodeCrLf);
         }
     }
 
-    //set <jreLocations> element
+    
     if (m_JRELocations)
     {
         OString sExpression= OString(
@@ -551,11 +551,11 @@ void NodeJava::write() const
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
         xmlNode* jreLocationsNode = pathObj->nodesetval->nodeTab[0];
-        //set xsi:nil = false;
+        
         xmlSetNsProp(jreLocationsNode, nsXsi,(xmlChar*) "nil",
                      (xmlChar*) "false");
 
-        //remove option elements
+        
         xmlNode* cur = jreLocationsNode->children;
         while (cur != NULL)
         {
@@ -564,7 +564,7 @@ void NodeJava::write() const
             xmlUnlinkNode(lastNode);
             xmlFreeNode(lastNode);
         }
-        //add a new line after <vmParameters>
+        
         if (m_JRELocations->size() > 0)
         {
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -576,7 +576,7 @@ void NodeJava::write() const
         {
             xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
                             CXmlCharPtr(*i));
-            //add a new line
+            
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(jreLocationsNode, nodeCrLf);
         }
@@ -657,7 +657,7 @@ void NodeJava::setJRELocations(rtl_uString  * * arLocations, sal_Int32 size)
         {
             const OUString & sLocation = static_cast<rtl_uString*>(arLocations[i]);
 
-            //only add the path if not already present
+            
             std::vector<OUString>::const_iterator it =
                 std::find(m_JRELocations->begin(), m_JRELocations->end(),
                           sLocation);
@@ -673,7 +673,7 @@ void NodeJava::addJRELocation(rtl_uString * sLocation)
     if (!m_JRELocations)
         m_JRELocations = boost::optional<std::vector<OUString> >(
             std::vector<OUString> ());
-     //only add the path if not already present
+     
     std::vector<OUString>::const_iterator it =
         std::find(m_JRELocations->begin(), m_JRELocations->end(),
                   OUString(sLocation));
@@ -711,7 +711,7 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL) const
 {
     jfw::FileStatus ret = FILE_DOES_NOT_EXIST;
 
-    //check the file time
+    
     ::osl::DirectoryItem item;
     File::RC rc = ::osl::DirectoryItem::get(sURL, item);
     if (File::E_None == rc)
@@ -749,27 +749,27 @@ bool NodeJava::createSettingsDocument() const
     {
         return false;
     }
-    //make sure there is a user directory
+    
     OString sExcMsg("[Java framework] Error in function createSettingsDocument "
                          "(elements.cxx).");
-    // check if javasettings.xml already exist
+    
     if (FILE_OK == checkSettingsFileStatus(sURL))
         return true;
 
-    //make sure that the directories are created in case they do not exist
+    
     FileBase::RC rcFile = Directory::createPath(getDirFromFile(sURL));
     if (rcFile != FileBase::E_EXIST && rcFile != FileBase::E_None)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    //javasettings.xml does not exist yet
+    
     CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
     if (! doc)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    //Create a comment
+    
     xmlNewDocComment(
         doc, (xmlChar *) "This is a generated file. Do not alter this file!");
 
-    //Create the root element and name spaces
+    
     xmlNodePtr root =   xmlNewDocNode(
         doc, NULL, (xmlChar *) "java", (xmlChar *) "\n");
 
@@ -782,7 +782,7 @@ bool NodeJava::createSettingsDocument() const
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlDocSetRootElement(doc,  root);
 
-    //Create a comment
+    
     xmlNodePtr com = xmlNewComment(
         (xmlChar *) "This is a generated file. Do not alter this file!");
     if (com == NULL)
@@ -797,7 +797,7 @@ bool NodeJava::createSettingsDocument() const
     return true;
 }
 
-//=====================================================================
+
 CNodeJavaInfo::CNodeJavaInfo() :
     m_bEmptyNode(false), bNil(true), bAutoSelect(true),
     nFeatures(0), nRequirements(0)
@@ -816,7 +816,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
     OSL_ASSERT(pJavaInfo && pDoc);
     if (pJavaInfo->children == NULL)
         return;
-    //Get the xsi:nil attribute;
+    
     CXmlCharPtr sNil;
     sNil = xmlGetNsProp(
         pJavaInfo, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
@@ -832,7 +832,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
     if (bNil == true)
         return;
 
-    //Get javaInfo@manuallySelected attribute
+    
     CXmlCharPtr sAutoSelect;
     sAutoSelect = xmlGetProp(
         pJavaInfo, (xmlChar*) "autoSelect");
@@ -889,13 +889,13 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
             OUString sRequire = xmlRequire;
             nRequirements = sRequire.toInt64(16);
 #ifdef MACOSX
-            //javaldx is not used anymore in the mac build. In case the Java
-            //corresponding to the saved settings does not exist anymore the
-            //javavm services will look for an existing Java after creation of
-            //the JVM failed. See stoc/source/javavm/javavm.cxx. Only if
-            //nRequirements does not have the flag JFW_REQUIRE_NEEDRESTART the
-            //jvm of the new selected JRE will be started. Old settings (before
-            //OOo 3.3) still contain the flag which can be safely ignored.
+            
+            
+            
+            
+            
+            
+            
             nRequirements &= ~JFW_REQUIRE_NEEDRESTART;
 #endif
         }
@@ -916,7 +916,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 
     if (sVendor.isEmpty())
         m_bEmptyNode = true;
-    //Get the javainfo attributes
+    
     CXmlCharPtr sVendorUpdate;
     sVendorUpdate = xmlGetProp(pJavaInfo,
                                (xmlChar*) "vendorUpdate");
@@ -931,21 +931,21 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 {
     OSL_ASSERT(pJavaInfoNode && pDoc);
-    //write the attribute vendorSettings
+    
 
-    //javaInfo@vendorUpdate
-    //creates the attribute if necessary
+    
+    
     OString sUpdated = getElementUpdated();
 
     xmlSetProp(pJavaInfoNode, (xmlChar*)"vendorUpdate",
                (xmlChar*) sUpdated.getStr());
 
-    //javaInfo@autoSelect
+    
     xmlSetProp(pJavaInfoNode, (xmlChar*)"autoSelect",
                (xmlChar*) (bAutoSelect == true ? "true" : "false"));
 
-    //Set xsi:nil in javaInfo element to false
-    //the xmlNs pointer must not be destroyed
+    
+    
     xmlNs* nsXsi = xmlSearchNsByHref((xmlDoc*) pDoc,
                              pJavaInfoNode,
                              (xmlChar*)  NS_SCHEMA_INSTANCE);
@@ -955,7 +955,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
                  (xmlChar*) "nil",
                  (xmlChar*) "false");
 
-    //Delete the children of JavaInfo
+    
     xmlNode* cur = pJavaInfoNode->children;
     while (cur != NULL)
     {
@@ -965,64 +965,64 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
         xmlFreeNode(lastNode);
     }
 
-    //If the JavaInfo was set with an empty value,
-    //then we are done.
+    
+    
     if (m_bEmptyNode)
         return;
 
-    //add a new line after <javaInfo>
+    
     xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
-    //Create the vendor element
+    
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "vendor",
                     CXmlCharPtr(sVendor));
-    //add a new line for better readability
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
-    //Create the location element
+    
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "location",
                     CXmlCharPtr(sLocation));
-    //add a new line for better readability
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
-    //Create the version element
+    
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "version",
                     CXmlCharPtr(sVersion));
-    //add a new line for better readability
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
-    //Create the features element
+    
     OUString sFeatures = OUString::number(
         nFeatures, 16);
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "features",
                     CXmlCharPtr(sFeatures));
-    //add a new line for better readability
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
 
-    //Create the requirements element
+    
     OUString sRequirements = OUString::number(
          nRequirements, 16);
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "requirements",
                     CXmlCharPtr(sRequirements));
-    //add a new line for better readability
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
 
-    //Create the features element
+    
     rtl::ByteSequence data = encodeBase16(arVendorData);
     xmlNode* dataNode = xmlNewChild(pJavaInfoNode, NULL,
                                     (xmlChar*) "vendorData",
                                     (xmlChar*) "");
     xmlNodeSetContentLen(dataNode,
                          (xmlChar*) data.getArray(), data.getLength());
-    //add a new line for better readability
+    
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 }
@@ -1048,7 +1048,7 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     return pInfo;
 }
 
-//================================================================================
+
 MergedSettings::MergedSettings():
     m_bEnabled(false),
     m_sClassPath(),

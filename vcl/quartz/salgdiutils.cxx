@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 #include "osx/salframe.h"
 #include "osx/saldata.hxx"
 
-// ----------------------------------------------------------------------
+
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
@@ -54,7 +54,7 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     mnRealDPIX  = nDPIX;
     mnRealDPIY  = nDPIY;
 
-    // a previously set clip path is now invalid
+    
     if( mxClipPath )
     {
         CGPathRelease( mxClipPath );
@@ -77,16 +77,16 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     mbPrinter   = false;
     mbVirDev    = true;
 
-    // set graphics properties
+    
     mxLayer = xLayer;
     mrContext = xContext;
     mnBitmapDepth = nBitmapDepth;
 
-    // return early if the virdev is being destroyed
+    
     if( !xContext )
         return;
 
-    // get new graphics properties
+    
     if( !mxLayer )
     {
         mnWidth = CGBitmapContextGetWidth( mrContext );
@@ -99,12 +99,12 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
         mnHeight = static_cast<int>(aSize.height);
     }
 
-    // prepare graphics for drawing
+    
     const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
     CGContextSetFillColorSpace( mrContext, aCGColorSpace );
     CGContextSetStrokeColorSpace( mrContext, aCGColorSpace );
 
-    // re-enable XorEmulation for the new context
+    
     if( mpXorEmulation )
     {
         mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
@@ -112,12 +112,12 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
             mrContext = mpXorEmulation->GetMaskContext();
     }
 
-    // initialize stack of CGContext states
+    
     CGContextSaveGState( mrContext );
     SetState();
 }
 
-// ----------------------------------------------------------------------
+
 
 void AquaSalGraphics::InvalidateContext()
 {
@@ -125,7 +125,7 @@ void AquaSalGraphics::InvalidateContext()
     mrContext = 0;
 }
 
-// ----------------------------------------------------------------------
+
 
 void AquaSalGraphics::UnsetState()
 {
@@ -146,15 +146,15 @@ void AquaSalGraphics::SetState()
     CGContextRestoreGState( mrContext );
     CGContextSaveGState( mrContext );
 
-    // setup clipping
+    
     if( mxClipPath )
     {
-        CGContextBeginPath( mrContext );            // discard any existing path
-        CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
-        CGContextClip( mrContext );                 // use it for clipping
+        CGContextBeginPath( mrContext );            
+        CGContextAddPath( mrContext, mxClipPath );  
+        CGContextClip( mrContext );                 
     }
 
-    // set RGB colorspace and line and fill colors
+    
     CGContextSetFillColor( mrContext, maFillColor.AsArray() );
     CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
     CGContextSetShouldAntialias( mrContext, false );
@@ -162,7 +162,7 @@ void AquaSalGraphics::SetState()
         CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
 }
 
-// ----------------------------------------------------------------------
+
 
 bool AquaSalGraphics::CheckContext()
 {
@@ -174,12 +174,12 @@ bool AquaSalGraphics::CheckContext()
         CGContextRef rReleaseContext = 0;
         CGLayerRef   rReleaseLayer = NULL;
 
-        // check if a new drawing context is needed (e.g. after a resize)
+        
         if( (unsigned(mnWidth) != nWidth) || (unsigned(mnHeight) != nHeight) )
         {
             mnWidth = nWidth;
             mnHeight = nHeight;
-            // prepare to release the corresponding resources
+            
             rReleaseContext = mrContext;
             rReleaseLayer   = mxLayer;
             mrContext = NULL;
@@ -197,7 +197,7 @@ bool AquaSalGraphics::CheckContext()
 
             if( mrContext )
             {
-                // copy original layer to resized layer
+                
                 if( rReleaseLayer )
                     CGContextDrawLayerAtPoint( mrContext, CGPointZero, rReleaseLayer );
 
@@ -208,7 +208,7 @@ bool AquaSalGraphics::CheckContext()
                 CGContextSaveGState( mrContext );
                 SetState();
 
-                // re-enable XOR emulation for the new context
+                
                 if( mpXorEmulation )
                     mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
             }
@@ -235,13 +235,13 @@ CGContextRef AquaSalGraphics::GetContext()
 
 void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
 {
-    if( ! mbWindow ) // view only on Window graphics
+    if( ! mbWindow ) 
         return;
 
     if( mpFrame )
     {
-        // update a little more around the designated rectangle
-        // this helps with antialiased rendering
+        
+        
         const Rectangle aVclRect(Point(static_cast<long int>(lX-1),
                     static_cast<long int>(lY-1) ),
                  Size(  static_cast<long int>(lWidth+2),
@@ -264,7 +264,7 @@ CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtA
     return CGpoints;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalGraphics::UpdateWindow( NSRect& )
 {
@@ -286,13 +286,13 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
 
         ApplyXorContext();
         CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
-        if( rClip ) // cleanup clipping
+        if( rClip ) 
             CGContextRestoreGState( rCGContext );
     }
     else
         DBG_ASSERT( mpFrame->mbInitShow, "UpdateWindow called on uneligible graphics" );
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

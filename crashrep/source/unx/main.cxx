@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <cstdio>
 #include <stdlib.h>
@@ -129,8 +129,8 @@ static string xml_encode( const string &rString )
     string temp = rString;
     string::size_type pos = 0;
 
-    // First replace all occurrences of '&' because it may occur in further
-    // encoded chardters too
+    
+    
 
     for( pos = 0; (pos = temp.find( '&', pos )) != string::npos; pos += 4 )
         temp.replace( pos, 1, "&amp;" );
@@ -170,14 +170,14 @@ bool write_report( const boost::unordered_map< string, string >& rSettings )
 
     fprintf( fp,
        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-       "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
-       "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
-       "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.1\" feedback=\"%s\" email=\"%s\">\n"
+       "<!DOCTYPE errormail:errormail PUBLIC \"-
+       "<errormail:errormail xmlns:errormail=\"http:
+       "<reportmail:mail xmlns:reportmail=\"http:
        "<reportmail:title>%s</reportmail:title>\n"
        "<reportmail:attachment name=\"description.txt\" media-type=\"text/plain\" class=\"UserComment\"/>\n"
        "<reportmail:attachment name=\"stack.txt\" media-type=\"text/plain\" class=\"pstack output\"/>\n"
        "</reportmail:mail>\n"
-       "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" exceptiontype=\"%d\" product=\"%s\" procpath=\"%s\"/>\n"
+       "<officeinfo:officeinfo xmlns:officeinfo=\"http:
        ,
        pszUserType ? xml_encode( pszUserType ).c_str() : "",
        xml_encode(rSettings.find( "CONTACT" )->second).c_str(),
@@ -197,7 +197,7 @@ bool write_report( const boost::unordered_map< string, string >& rSettings )
     uname( &info );
 
     fprintf( fp,
-       "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
+       "<systeminfo:systeminfo xmlns:systeminfo=\"http:
        "<systeminfo:System name=\"%s\" version=\"%s\" build=\"%s\" locale=\"%s\"/>\n"
        ,
        xml_encode( info.sysname ).c_str(),
@@ -247,7 +247,7 @@ bool write_description( const boost::unordered_map< string, string >& rSettings 
 }
 
 #if 0
-// unused
+
 static void printSettings( const boost::unordered_map<string,string>& rSettings )
 {
     printf( "Settings:\n" );
@@ -329,7 +329,7 @@ bool SendHTTPRequest(
 
                 if ( pszProxyServer )
                     sprintf( buffer,
-                    "POST http://%s:%u/soap/servlet/rpcrouter HTTP/1.0\r\n"
+                    "POST http:
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
                         "Content-Length: %d\r\n"
                         "SOAPAction: \"\"\r\n\r\n",
@@ -405,13 +405,13 @@ static void WriteSOAPRequest( FILE *fp )
 {
     fprintf( fp,
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
-        "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\"\n"
-        "xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\"\n"
-        "xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"\n"
+        "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http:
+        "xmlns:SOAP-ENC=\"http:
+        "xmlns:xsi=\"http:
+        "xmlns:xsd=\"http:
         "xmlns:rds=\"urn:ReportDataService\"\n"
-        "xmlns:apache=\"http://xml.apache.org/xml-soap\"\n"
-        "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n"
+        "xmlns:apache=\"http:
+        "SOAP-ENV:encodingStyle=\"http:
         "<SOAP-ENV:Body>\n"
         );
 
@@ -555,7 +555,7 @@ string crash_get_details( const boost::unordered_map< string, string >& rSetting
 }
 
 
-// ensure validity of program relative paths
+
 static void setup_program_dir( const char* progname )
 {
     char    szCanonicProgPath[PATH_MAX];
@@ -566,7 +566,7 @@ static void setup_program_dir( const char* progname )
         string aDir = szCanonicProgPath;
 
         size_t pos = aDir.rfind( '/' );
-        // FIXME: search PATH if necessary
+        
         assert( pos != string::npos );
 
         g_strProgramDir = aDir.substr( 0, pos + 1 );
@@ -579,7 +579,7 @@ static void setup_program_dir( const char* progname )
     }
 }
 
-//*************************************************************************
+
 
 static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
 {
@@ -650,7 +650,7 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
     return pid;
 }
 
-//*************************************************************************
+
 
 static bool read_line( FILE *fp, string& rLine )
 {
@@ -889,7 +889,7 @@ static bool write_crash_data()
 }
 
 #if 0
-// unused
+
 static bool write_settings( const boost::unordered_map< string, string >& rSettings )
 {
     bool success = false;
@@ -1020,7 +1020,7 @@ int main( int argc, char** argv )
 
     setup_program_dir( argv[0] );
 
-    // Don't start if report server is not given
+    
 
     if ( setup_version() )
     {

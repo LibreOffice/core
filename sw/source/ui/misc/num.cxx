@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -56,10 +56,10 @@
 
 static sal_Bool bLastRelative = sal_False;
 
-//See cui/uiconfig/ui/numberingpositionpage.ui for effectively a duplicate
-//dialog to this one, except with a different preview window impl.
-//TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
-//merged
+
+
+
+
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlinePositionPage",
@@ -148,7 +148,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     m_pRelativeCB->SetClickHdl(LINK(this, SwNumPositionTabPage, RelativeHdl));
     m_pStandardPB->SetClickHdl(LINK(this, SwNumPositionTabPage, StandardHdl));
 
-    // insert levels
+    
     for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         m_pLevelLB->InsertEntry(OUString::number(i));
     OUString sEntry("1 - ");
@@ -281,7 +281,7 @@ void SwNumPositionTabPage::InitControls()
 
     if(bSameAdjust)
     {
-        sal_uInt16 nPos = 1; // centered
+        sal_uInt16 nPos = 1; 
         if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
             nPos = 0;
         else if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
@@ -297,7 +297,7 @@ void SwNumPositionTabPage::InitControls()
 
     if ( bSameLabelFollowedBy )
     {
-        sal_uInt16 nPos = 0; // LISTTAB
+        sal_uInt16 nPos = 0; 
         if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::SPACE )
         {
             nPos = 1;
@@ -672,7 +672,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
             }
             else if (pFld == m_pIndentMF)
             {
-                // now AbsLSpace also has to be modified by FirstLineOffset
+                
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 long nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(sal_uInt16(nAbsLSpace + nDiff));
@@ -732,7 +732,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
 
 IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
 {
-    // determine value to be set at the chosen list levels
+    
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
     {
         const sal_uInt16 nPos = m_pLabelFollowedByLB->GetSelectEntryPos();
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
         }
     }
 
-    // set value at the chosen list levels
+    
     bool bSameListtabPos = true;
     sal_uInt16 nFirstLvl = USHRT_MAX;
     sal_uInt16 nMask = 1;
@@ -771,8 +771,8 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
         nMask <<= 1;
     }
 
-    // enable/disable metric field for list tab stop position depending on
-    // selected item following the list label.
+    
+    
     m_pListtabFT->Enable( eLabelFollowedBy == SvxNumberFormat::LISTTAB );
     m_pListtabMF->Enable( eLabelFollowedBy == SvxNumberFormat::LISTTAB );
     if ( bSameListtabPos && eLabelFollowedBy == SvxNumberFormat::LISTTAB )
@@ -793,10 +793,10 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
 
 IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
 {
-    // determine value to be set at the chosen list levels
+    
     const long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
 
-    // set value at the chosen list levels
+    
     sal_uInt16 nMask = 1;
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
     {
@@ -816,10 +816,10 @@ IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
 
 IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
 {
-    // determine value to be set at the chosen list levels
+    
     const long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
 
-    // set value at the chosen list levels
+    
     sal_uInt16 nMask = 1;
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
     {
@@ -840,10 +840,10 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
 
 IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
 {
-    // determine value to be set at the chosen list levels
+    
     const long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
 
-    // set value at the chosen list levels
+    
     sal_uInt16 nMask = 1;
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
     {
@@ -937,7 +937,7 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 
 void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 {
-    // set styles' names and metric
+    
     OUString sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
@@ -960,7 +960,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-        // collect char styles
+        
         ListBox rCharFmtLB(this);
         rCharFmtLB.Clear();
         rCharFmtLB.InsertEntry( SwViewShell::GetShellRes()->aStrNone );

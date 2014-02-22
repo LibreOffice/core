@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <chrlohdl.hxx>
@@ -34,15 +34,15 @@ using namespace ::xmloff::token;
  * LanguageTagODF but we have that nasty UNO API requirement here.
  * => make LanguageTagODF (unpublished) API? */
 
-// For runtime performance, instead of converting back and forth between
-// com::sun::star::Locale and LanguageTag to decide if script or tag are
-// needed, this code takes advantage of knowledge about the internal
-// representation of BCP 47 language tags in a Locale if present as done in a
-// LanguageTag.
+
+
+
+
+
 
 XMLCharLanguageHdl::~XMLCharLanguageHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
@@ -117,9 +117,9 @@ bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rVal
         LanguageTag aLanguageTag( aLocale);
         OUString aScript, aCountry;
         aLanguageTag.getIsoLanguageScriptCountry( rStrExpValue, aScript, aCountry);
-        // Do not write *:language='none' for a non-ISO language with
-        // *:rfc-language-tag that is written if Variant is not empty. If there
-        // is no match do not write this attribute at all.
+        
+        
+        
         if (rStrExpValue.isEmpty())
             return false;
     }
@@ -132,7 +132,7 @@ bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rVal
 
 XMLCharScriptHdl::~XMLCharScriptHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharScriptHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
@@ -147,7 +147,7 @@ bool XMLCharScriptHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com
         if (bEmptyVariant1 && bEmptyVariant2)
             bRet = true;
         else if ((bEmptyVariant1 && !bEmptyVariant2) || (!bEmptyVariant1 && bEmptyVariant2))
-            ;   // stays false
+            ;   
         else
         {
             OUString aScript1, aScript2;
@@ -173,15 +173,15 @@ bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 
     if( !IsXMLToken( rStrImpValue, XML_NONE ) )
     {
-        // Import the script only if we don't have a full BCP 47 language tag
-        // in Variant yet.
+        
+        
         if (aLocale.Variant.isEmpty())
         {
             if (aLocale.Language.isEmpty())
             {
                 SAL_INFO( "xmloff.style", "XMLCharScriptHdl::importXML - script but no language yet");
-                // Temporarily store in Variant and hope the best (we will get
-                // a language later, yes?)
+                
+                
                 aLocale.Variant = "-" + rStrImpValue;
             }
             else
@@ -199,10 +199,10 @@ bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         }
         else
         {
-            // Assume that if there already is a script or anything else BCP 47
-            // it was read by XMLCharRfcLanguageTagHdl() and takes precedence.
-            // On the other hand, an *:rfc-language-tag without script and a
-            // *:script ?!?
+            
+            
+            
+            
 #if OSL_DEBUG_LEVEL > 0 || defined(DBG_UTIL)
             LanguageTag aLanguageTag( aLocale);
             if (!aLanguageTag.hasScript())
@@ -224,7 +224,7 @@ bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     if(!(rValue >>= aLocale))
         return false;
 
-    // Do not write script='none' for default script.
+    
 
     if (aLocale.Variant.isEmpty())
         return false;
@@ -238,9 +238,9 @@ bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
     OUString aLanguage, aCountry;
     aLanguageTag.getIsoLanguageScriptCountry( aLanguage, rStrExpValue, aCountry);
-    // For non-ISO language it does not make sense to write *:script if
-    // *:language is not written either, does it? It's all in
-    // *:rfc-language-tag
+    
+    
+    
     if (aLanguage.isEmpty() || rStrExpValue.isEmpty())
         return false;
 
@@ -249,7 +249,7 @@ bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
 XMLCharCountryHdl::~XMLCharCountryHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
@@ -275,14 +275,14 @@ bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
             aLocale.Country = rStrImpValue;
             if (aLocale.Variant.getLength() >= 7 && aLocale.Language == I18NLANGTAG_QLT)
             {
-                // already assembled language tag, at least ll-Ssss and not
-                // ll-CC or lll-CC
-                sal_Int32 i = aLocale.Variant.indexOf('-');     // separator to script
+                
+                
+                sal_Int32 i = aLocale.Variant.indexOf('-');     
                 if (2 <= i && i < aLocale.Variant.getLength())
                 {
                     i = aLocale.Variant.indexOf( '-', i+1);
-                    if (i < 0)                                  // no other separator
-                        aLocale.Variant += "-" + rStrImpValue;  // append country
+                    if (i < 0)                                  
+                        aLocale.Variant += "-" + rStrImpValue;  
                 }
             }
         }
@@ -305,9 +305,9 @@ bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
         LanguageTag aLanguageTag( aLocale);
         OUString aLanguage, aScript;
         aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, rStrExpValue);
-        // Do not write *:country='none' for a non-ISO country with
-        // *:rfc-language-tag that is written if Variant is not empty. If there
-        // is no match do not write this attribute at all.
+        
+        
+        
         if (rStrExpValue.isEmpty())
             return false;
     }
@@ -320,7 +320,7 @@ bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
 
 XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharRfcLanguageTagHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
@@ -355,7 +355,7 @@ bool XMLCharRfcLanguageTagHdl::exportXML( OUString& rStrExpValue, const uno::Any
     if(!(rValue >>= aLocale))
         return false;
 
-    // Do not write rfc-language-tag='none' if BCP 47 is not needed.
+    
     if (aLocale.Variant.isEmpty())
         return false;
 

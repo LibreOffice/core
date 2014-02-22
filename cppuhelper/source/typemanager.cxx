@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -532,7 +532,7 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
                     goto found;
                 }
             }
-            assert(false); // this cannot happen                         //TODO!
+            assert(false); 
         found:;
         }
         s[i] = manager_->resolve(type);
@@ -1071,7 +1071,7 @@ ConstantDescription::ConstantDescription(
         value_ <<= member.value.doubleValue;
         break;
     default:
-        for (;;) { std::abort(); } // this cannot happen
+        for (;;) { std::abort(); } 
     }
 }
 
@@ -1776,7 +1776,7 @@ void Enumeration::findNextMatch() {
         for (;;) {
             assert(!positions_.empty());
             rtl::OUString name;
-            if (positions_.top().cursor.is()) { // root or module
+            if (positions_.top().cursor.is()) { 
                 rtl::Reference< unoidl::Entity > ent(
                     positions_.top().cursor->getNext(&name));
                 if (!ent.is()) {
@@ -1834,13 +1834,13 @@ void Enumeration::findNextMatch() {
                     tc = css::uno::TypeClass_SINGLETON;
                     break;
                 default:
-                    for (;;) { std::abort(); } // this cannot happen
+                    for (;;) { std::abort(); } 
                 }
                 if (matches(tc)) {
                     current_ = name;
                     break;
                 }
-            } else { // constant group
+            } else { 
                 if (positions_.top().constantGroupIndex
                     == positions_.top().constantGroup->getMembers().end())
                 {
@@ -1874,7 +1874,7 @@ void cppuhelper::TypeManager::init(rtl::OUString const & rdbUris) {
 }
 
 css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
-    //TODO: caching? (here or in unoidl::Manager?)
+    
     struct Simple {
         char const * name; sal_Int32 length;
         css::uno::TypeClass typeClass;
@@ -1957,7 +1957,7 @@ cppuhelper::TypeManager::resolve(rtl::OUString const & name) {
 
 cppuhelper::TypeManager::~TypeManager() throw () {}
 
-void cppuhelper::TypeManager::disposing() {} //TODO
+void cppuhelper::TypeManager::disposing() {} 
 
 rtl::OUString cppuhelper::TypeManager::getImplementationName()
     throw (css::uno::RuntimeException)
@@ -1978,7 +1978,7 @@ cppuhelper::TypeManager::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< rtl::OUString > names(1);
-    names[0] = "com.sun.star.reflection.TypeDescriptionManager"; //TODO
+    names[0] = "com.sun.star.reflection.TypeDescriptionManager"; 
     return names;
 }
 
@@ -2044,8 +2044,8 @@ void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
              " argument"),
             static_cast< cppu::OWeakObject * >(this), 0);
     }
-    //TODO: check for ElementExistException
-    //TODO: check for consistency with existing data
+    
+    
     readRdbFile(uri, false);
 }
 
@@ -2061,7 +2061,7 @@ void cppuhelper::TypeManager::remove(css::uno::Any const & aElement)
              " argument"),
             static_cast< cppu::OWeakObject * >(this), 0);
     }
-    //TODO: remove requests are silently ignored for now
+    
 }
 
 css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
@@ -2084,8 +2084,8 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
             static_cast< cppu::OWeakObject * >(this));
     }
     if (!cursor.is()) {
-        //TODO: css::reflection::InvalidTypeNameException if moduleName names a
-        // non-module
+        
+        
         throw css::reflection::NoSuchTypeNameException(
             moduleName, static_cast< cppu::OWeakObject * >(this));
     }
@@ -2123,7 +2123,7 @@ void cppuhelper::TypeManager::readRdbDirectory(
             SAL_INFO("cppuhelper", "Ignored optional " << uri);
             return;
         }
-        // fall through
+        
     default:
         throw css::uno::DeploymentException(
             "Cannot open directory " + uri,
@@ -2185,7 +2185,7 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
     std::vector< rtl::OUString > args;
     sal_Int32 i = separator;
     do {
-        ++i; // skip '<' or ','
+        ++i; 
         sal_Int32 j = i;
         for (sal_Int32 level = 0; j != name.getLength(); ++j) {
             sal_Unicode c = name[j];
@@ -2330,7 +2330,7 @@ css::uno::Any cppuhelper::TypeManager::getNamed(
                     static_cast< unoidl::ServiceBasedSingletonEntity * >(
                         entity.get())));
     default:
-        for (;;) { std::abort(); } // this cannot happen
+        for (;;) { std::abort(); } 
     }
 }
 

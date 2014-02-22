@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,7 +42,7 @@ namespace tdoc_ucp
         InteractionSupplyPassword( ucbhelper::InteractionRequest * pRequest )
         : InteractionContinuation( pRequest ) {}
 
-        // XInterface
+        
         virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
             throw ( uno::RuntimeException );
         virtual void SAL_CALL acquire()
@@ -50,17 +50,17 @@ namespace tdoc_ucp
         virtual void SAL_CALL release()
             throw ();
 
-        // XTypeProvider
+        
         virtual uno::Sequence< uno::Type > SAL_CALL getTypes()
             throw ( uno::RuntimeException );
         virtual uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
             throw ( uno::RuntimeException );
 
-        // XInteractionContinuation
+        
         virtual void SAL_CALL select()
             throw ( uno::RuntimeException );
 
-        // XInteractionPassword
+        
         virtual void SAL_CALL setPassword( const OUString & aPasswd )
             throw ( uno::RuntimeException );
         virtual OUString SAL_CALL getPassword()
@@ -70,39 +70,39 @@ namespace tdoc_ucp
         osl::Mutex m_aMutex;
         OUString m_aPassword;
     };
-} // namespace tdoc_ucp
+} 
 
-//=========================================================================
-//=========================================================================
-//
-// InteractionSupplyPassword Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-//
-// XInterface methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
+
+//
+
+//
+
+
+
 void SAL_CALL InteractionSupplyPassword::acquire()
     throw()
 {
     OWeakObject::acquire();
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL InteractionSupplyPassword::release()
     throw()
 {
     OWeakObject::release();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Any SAL_CALL
 InteractionSupplyPassword::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
@@ -116,13 +116,13 @@ InteractionSupplyPassword::queryInterface( const uno::Type & rType )
             ? aRet : InteractionContinuation::queryInterface( rType );
 }
 
-//=========================================================================
-//
-// XTypeProvider methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< sal_Int8 > SAL_CALL
 InteractionSupplyPassword::getImplementationId()
     throw( uno::RuntimeException )
@@ -140,8 +140,8 @@ InteractionSupplyPassword::getImplementationId()
     return (*pId).getImplementationId();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
     throw( uno::RuntimeException )
 {
@@ -162,26 +162,26 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
-// XInteractionContinuation methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL InteractionSupplyPassword::select()
     throw( uno::RuntimeException )
 {
     recordSelection();
 }
 
-//=========================================================================
-//
-// XInteractionPassword methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL
 InteractionSupplyPassword::setPassword( const OUString& aPasswd )
     throw ( uno::RuntimeException )
@@ -190,7 +190,7 @@ InteractionSupplyPassword::setPassword( const OUString& aPasswd )
     m_aPassword = aPasswd;
 }
 
-// virtual
+
 OUString SAL_CALL InteractionSupplyPassword::getPassword()
     throw ( uno::RuntimeException )
 {
@@ -198,29 +198,29 @@ OUString SAL_CALL InteractionSupplyPassword::getPassword()
     return m_aPassword;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// DocumentPasswordRequest Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 DocumentPasswordRequest::DocumentPasswordRequest(
     task::PasswordRequestMode eMode,
     const OUString & rDocumentName )
 {
-    // Fill request...
+    
     task::DocumentPasswordRequest aRequest;
-//    aRequest.Message        = // OUString
-//    aRequest.Context        = // XInterface
+
+
     aRequest.Classification = task::InteractionClassification_ERROR;
     aRequest.Mode           = eMode;
     aRequest.Name           = rDocumentName;
 
     setRequest( uno::makeAny( aRequest ) );
 
-    // Fill continuations...
+    
     uno::Sequence<
         uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
     aContinuations[ 0 ] = new ucbhelper::InteractionAbort( this );

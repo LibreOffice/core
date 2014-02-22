@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,9 +38,9 @@ using namespace ::com::sun::star::view;
 
 namespace toolkit
 {
-//  ----------------------------------------------------
-//  class UnoTreeModel
-//  ----------------------------------------------------
+
+
+
 UnoTreeModel::UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
@@ -116,7 +116,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 
-// XMultiPropertySet
+
 Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(RuntimeException)
 {
     static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -134,19 +134,19 @@ public:
     UnoTreeControl();
     OUString GetComponentServiceName();
 
-    // css::lang::XComponent
+    
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException);
 
-    // css::awt::XControl
+    
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException);
 
-    // css::view::XSelectionSupplier
+    
     virtual ::sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException);
 
-    // css::view::XMultiSelectionSupplier
+    
     virtual ::sal_Bool SAL_CALL addSelection( const css::uno::Any& Selection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     virtual void SAL_CALL removeSelection( const css::uno::Any& Selection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     virtual void SAL_CALL clearSelection(  ) throw (css::uno::RuntimeException);
@@ -154,7 +154,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createReverseSelectionEnumeration(  ) throw (css::uno::RuntimeException);
 
-    // css::awt::XTreeControl
+    
     virtual OUString SAL_CALL getDefaultExpandedGraphicURL() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) throw (css::uno::RuntimeException);
     virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() throw (css::uno::RuntimeException);
@@ -177,7 +177,7 @@ public:
     virtual void SAL_CALL addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException);
 
-    // css::lang::XServiceInfo
+    
     DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, szServiceName_TreeControl )
 
     using UnoControl::getPeer;
@@ -200,60 +200,60 @@ OUString UnoTreeControl::GetComponentServiceName()
     return OUString("Tree");
 }
 
-// -------------------------------------------------------------------
-// ::com::sun::star::view::XSelectionSupplier
-// -------------------------------------------------------------------
+
+
+
 
 sal_Bool SAL_CALL UnoTreeControl::select( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->select( rSelection );
 }
 
-// -------------------------------------------------------------------
+
 
 Any SAL_CALL UnoTreeControl::getSelection() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getSelection();
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException)
 {
     maSelectionListeners.addInterface( xListener );
     if( getPeer().is() && (maSelectionListeners.getLength() == 1) )
     {
-        // maSelectionListeners acts as a proxy,
-        // add it to the peer if this is the first listener added to that proxy
+        
+        
         Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
         Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->addSelectionChangeListener(&maSelectionListeners);
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException)
 {
     if( getPeer().is() && (maSelectionListeners.getLength() == 1) )
     {
-        // maSelectionListeners acts as a proxy,
-        // remove it from the peer if this is the last listener removed from that proxy
+        
+        
         Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
         Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeSelectionChangeListener(&maSelectionListeners);
     }
     maSelectionListeners.removeInterface( xListener );
 }
 
-// -------------------------------------------------------------------
-// ::com::sun::star::view::XMultiSelectionSupplier
-// -------------------------------------------------------------------
+
+
+
 
 sal_Bool SAL_CALL UnoTreeControl::addSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->addSelection(rSelection);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::removeSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -261,7 +261,7 @@ void SAL_CALL UnoTreeControl::removeSelection( const Any& rSelection ) throw (Il
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeSelection(rSelection);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::clearSelection() throw (RuntimeException)
 {
@@ -269,37 +269,37 @@ void SAL_CALL UnoTreeControl::clearSelection() throw (RuntimeException)
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->clearSelection();
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL UnoTreeControl::getSelectionCount() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getSelectionCount();
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XEnumeration > SAL_CALL UnoTreeControl::createSelectionEnumeration() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->createSelectionEnumeration();
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XEnumeration > SAL_CALL UnoTreeControl::createReverseSelectionEnumeration() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->createReverseSelectionEnumeration();
 }
 
-// --------------------------------------------------------------------
-// XTreeControl
-// --------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL UnoTreeControl::getDefaultExpandedGraphicURL() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getDefaultExpandedGraphicURL();
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::setDefaultExpandedGraphicURL( const OUString& _defaultexpansiongraphicurl ) throw (RuntimeException)
 {
@@ -307,14 +307,14 @@ void SAL_CALL UnoTreeControl::setDefaultExpandedGraphicURL( const OUString& _def
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->setDefaultExpandedGraphicURL(_defaultexpansiongraphicurl);
 }
 
-// -------------------------------------------------------------------
+
 
 OUString SAL_CALL UnoTreeControl::getDefaultCollapsedGraphicURL() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getDefaultCollapsedGraphicURL();
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) throw (RuntimeException)
 {
@@ -322,21 +322,21 @@ void SAL_CALL UnoTreeControl::setDefaultCollapsedGraphicURL( const OUString& _de
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->setDefaultCollapsedGraphicURL(_defaultcollapsedgraphicurl);
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL UnoTreeControl::isNodeExpanded( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeExpanded(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL UnoTreeControl::isNodeCollapsed( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeCollapsed(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::makeNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
@@ -344,14 +344,14 @@ void SAL_CALL UnoTreeControl::makeNodeVisible( const Reference< XTreeNode >& xNo
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->makeNodeVisible(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL UnoTreeControl::isNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeVisible(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::expandNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
@@ -359,7 +359,7 @@ void SAL_CALL UnoTreeControl::expandNode( const Reference< XTreeNode >& xNode ) 
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->expandNode(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::collapseNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
@@ -367,70 +367,70 @@ void SAL_CALL UnoTreeControl::collapseNode( const Reference< XTreeNode >& xNode 
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->collapseNode(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::addTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener ) throw (RuntimeException)
 {
     maTreeExpansionListeners.addInterface( xListener );
     if( getPeer().is() && (maTreeExpansionListeners.getLength() == 1) )
     {
-        // maSelectionListeners acts as a proxy,
-        // add it to the peer if this is the first listener added to that proxy
+        
+        
         Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
         Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->addTreeExpansionListener(&maTreeExpansionListeners);
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::removeTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener ) throw (RuntimeException)
 {
     if( getPeer().is() && (maTreeExpansionListeners.getLength() == 1) )
     {
-        // maSelectionListeners acts as a proxy,
-        // remove it from the peer if this is the last listener removed from that proxy
+        
+        
         Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
         Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeTreeExpansionListener(&maTreeExpansionListeners);
     }
     maTreeExpansionListeners.removeInterface( xListener );
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XTreeNode > SAL_CALL UnoTreeControl::getNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getNodeForLocation(x,y);
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XTreeNode > SAL_CALL UnoTreeControl::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getClosestNodeForLocation(x,y);
 }
 
-// -------------------------------------------------------------------
+
 
 awt::Rectangle SAL_CALL UnoTreeControl::getNodeRect( const Reference< XTreeNode >& Node ) throw (IllegalArgumentException, RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getNodeRect( Node );
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL UnoTreeControl::isEditing(  ) throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isEditing();
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL UnoTreeControl::stopEditing() throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->stopEditing();
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::cancelEditing() throw (RuntimeException)
 {
@@ -438,7 +438,7 @@ void SAL_CALL UnoTreeControl::cancelEditing() throw (RuntimeException)
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->cancelEditing();
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::startEditingAtNode( const Reference< XTreeNode >& xNode ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -446,37 +446,37 @@ void SAL_CALL UnoTreeControl::startEditingAtNode( const Reference< XTreeNode >& 
     Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->startEditingAtNode(xNode);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::addTreeEditListener( const Reference< XTreeEditListener >& xListener ) throw (RuntimeException)
 {
     maTreeEditListeners.addInterface( xListener );
     if( getPeer().is() && (maTreeEditListeners.getLength() == 1) )
     {
-        // maSelectionListeners acts as a proxy,
-        // add it to the peer if this is the first listener added to that proxy
+        
+        
         Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
         Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->addTreeEditListener(&maTreeEditListeners);
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL UnoTreeControl::removeTreeEditListener( const Reference< XTreeEditListener >& xListener ) throw (RuntimeException)
 {
     if( getPeer().is() && (maTreeEditListeners.getLength() == 1) )
     {
-        // maSelectionListeners acts as a proxy,
-        // remove it from the peer if this is the last listener removed from that proxy
+        
+        
         Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
         Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeTreeEditListener(&maTreeEditListeners);
     }
     maTreeEditListeners.removeInterface( xListener );
 }
 
-// -------------------------------------------------------------------
-// XComponent
-// -------------------------------------------------------------------
+
+
+
 
 void SAL_CALL UnoTreeControl::dispose(  ) throw(RuntimeException)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -27,11 +27,11 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SV_IMPL_PTRARR( XResultListenerArr_Impl, XResultListenerPtr );
 
-//------------------------------------------------------------------------
+
 
 ScAddInResult::ScAddInResult(const String& rStr) :
     aArg( rStr ),
@@ -70,7 +70,7 @@ ScAddInResult::~ScAddInResult()
 {
 }
 
-// XVolatileResult
+
 
 void SAL_CALL ScAddInResult::addResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -79,9 +79,9 @@ void SAL_CALL ScAddInResult::addResultListener( const ::com::sun::star::uno::Ref
 
     if ( aListeners.Count() == 1 )
     {
-        acquire();                      // one Ref for all listeners
+        acquire();                      
 
-        NewValue(); //! Test
+        NewValue(); 
     }
 }
 
@@ -99,9 +99,9 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
 
             if ( aListeners.Count() == 0 )
             {
-                nTickCount = 0; //! Test
+                nTickCount = 0; 
 
-                release();                  // release listener Ref
+                release();                  
             }
 
             break;
@@ -111,7 +111,7 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
     release();
 }
 
-//------------------------------------------------------------------------
+
 
 
 

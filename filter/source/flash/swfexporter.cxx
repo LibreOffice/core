@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -58,7 +58,7 @@ using com::sun::star::document::XFilter;
 using com::sun::star::frame::XModel;
 using com::sun::star::lang::XServiceInfo;
 
-// -----------------------------------------------------------------------------
+
 
 PageInfo::PageInfo()
         : meFadeEffect( FadeEffect_NONE )
@@ -73,7 +73,7 @@ PageInfo::PageInfo()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PageInfo::~PageInfo()
 {
@@ -86,7 +86,7 @@ PageInfo::~PageInfo()
 }
 
 #ifdef THEFUTURE
-// -----------------------------------------------------------------------------
+
 
 void PageInfo::addShape( ShapeInfo* pShapeInfo )
 {
@@ -94,7 +94,7 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 }
 #endif
 
-// -----------------------------------------------------------------------------
+
 
 FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
     : mxContext(rxContext)
@@ -108,7 +108,7 @@ FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sa
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 FlashExporter::~FlashExporter()
 {
@@ -123,7 +123,7 @@ void FlashExporter::Flush()
     maPagesMap.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 const sal_uInt16 cBackgroundDepth = 2;
 const sal_uInt16 cBackgroundObjectsDepth = 3;
@@ -161,7 +161,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
     catch( const Exception& )
     {
         OSL_ASSERT( false );
-        return false; // no writer, no cookies
+        return false; 
     }
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
@@ -195,8 +195,8 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         exportDrawPageContents( xDrawPage, false, false );
         mpWriter->endSprite();
 
-        // AS: If the background is different than the previous slide,
-        //  we have to remove the old one and place the new one.
+        
+        
         if (nPage)
         {
             if (maPagesMap[nPage].mnBackgroundID != maPagesMap[nPage-1].mnBackgroundID)
@@ -211,7 +211,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
                 mpWriter->placeShape( maPagesMap[nPage].mnObjectsID, cBackgroundObjectsDepth, 0, 0 );
             }
 
-            // AS: Remove the Foreground of the previous slide.
+            
             mpWriter->removeShape(cPageObjectsDepth);
         }
         else
@@ -379,16 +379,16 @@ sal_Bool FlashExporter::exportSound( Reference< XOutputStream > &xOutputStream, 
 
     return sal_True;
 }
-#endif // defined AUGUSTUS
+#endif 
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 nPlaceDepth;
-// AS: A Slide can have a private background or use its masterpage's background.
-//  We use the checksums on the metafiles to tell if backgrounds are the same and
-//  should be reused.  The return value indicates which slide's background to use.
-//  If the return value != nPage, then there is no background (if == -1) or the
-//  background has already been exported.
+
+
+
+
+
 sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< XDrawPage >& xPage)
 {
     sal_uInt16 rBackgroundID;
@@ -412,13 +412,13 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
     sal_uInt32 masterchecksum = aMtfMaster.GetChecksum();
     sal_uInt32 privatechecksum = aMtfPrivate.GetChecksum();
 
-    // AS: If the slide has its own background
+    
     if (privatechecksum)
     {
         ChecksumCache::iterator it = gPrivateCache.find(privatechecksum);
 
-        // AS: and we've previously encountered this background, just return
-        //  the previous index.
+        
+        
         if (gPrivateCache.end() != it)
         {
             maPagesMap[nPage].mnBackgroundID =
@@ -427,7 +427,7 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
         }
         else
         {
-            // AS: Otherwise, cache this checksum.
+            
             gPrivateCache[privatechecksum] = nPage;
 
             rBackgroundID = mpWriter->defineShape( aMtfPrivate );
@@ -437,8 +437,8 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
         }
     }
 
-    // AS: Ok, no private background.  Use the master page's.
-    // AS: Have we already exported this master page?
+    
+    
     ChecksumCache::iterator it = gMasterCache.find(masterchecksum);
 
     if (gMasterCache.end() != it)
@@ -446,7 +446,7 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
         maPagesMap[nPage].mnBackgroundID =
             maPagesMap[it->second].mnBackgroundID;
 
-        return it->second;                // AS: Yes, so don't export it again.
+        return it->second;                
     }
 
     gMasterCache[masterchecksum] = nPage;
@@ -471,7 +471,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
         maPagesMap[nPage].mnObjectsID =
             maPagesMap[it->second].mnObjectsID;
 
-        return it->second;                // AS: Yes, so don't export it again.
+        return it->second;                
     }
 
     gObjectCache[shapesum] = nPage;
@@ -485,7 +485,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
     return nPage;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** export's the definition of the shapes inside this drawing page and adds the
     shape infos to the current PageInfo */
@@ -495,7 +495,7 @@ void FlashExporter::exportDrawPageContents( Reference< XDrawPage >& xPage, bool 
     exportShapes(xShapes, bStream, bMaster);
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** export's the definition of the shapes inside this XShapes container and adds the
     shape infos to the current PageInfo */
@@ -516,8 +516,8 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
         {
             Reference< XShapes > xShapes2( xShape, UNO_QUERY );
             if( xShapes2.is() && xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
-                // export the contents of group shapes, but we only ever stream at the top
-                // recursive level anyway, so pass false for streaming.
+                
+                
                 exportShapes( xShapes2, false, bMaster);
             else
                 exportShape( xShape, bMaster);
@@ -528,7 +528,7 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** export this shape definition and adds it's info to the current PageInfo */
 void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
@@ -541,14 +541,14 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
     {
         try
         {
-            // skip empty presentation objects
+            
             sal_Bool bEmpty = sal_False;
             xPropSet->getPropertyValue( "IsEmptyPresentationObject" ) >>= bEmpty;
             if( bEmpty )
                 return;
 
-            // don't export presentation placeholders on masterpage
-            // they can be non empty when user edits the default texts
+            
+            
             if( bMaster )
             {
                 OUString aShapeType( xShape->getShapeType() );
@@ -563,7 +563,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
         }
         catch( const Exception& )
         {
-            // TODO: If we are exporting a draw, this property is not available
+            
         }
     }
 
@@ -601,10 +601,10 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 
             getMetaFile( xComponent, aMtf );
 
-            // AS: If it's an OLE object, then export a JPEG if the user requested.
-            //  In this case, we use the bounding rect info generated in the first getMetaFile
-            //  call, and then clear the metafile and add a BMP action.  This may be turned into
-            //  a JPEG, depending on what gives the best compression.
+            
+            
+            
+            
             if (bIsOleObject && mbExportOLEAsJPEG)
                 getMetaFile( xComponent, aMtf, false, true );
 
@@ -629,7 +629,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 
             pShapeInfo->mnID = nID;
 
-//          pPageInfo->addShape( pShapeInfo );
+
 
             mpWriter->placeShape( pShapeInfo->mnID, _uInt16(nPlaceDepth++), pShapeInfo->mnX, pShapeInfo->mnY );
 
@@ -641,7 +641,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground /* = false */, bool bExportAsJPEG /* = false */)
 {
@@ -666,9 +666,9 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     Sequence< PropertyValue > aDescriptor( bOnlyBackground ? 4 : 3 );
     aDescriptor[0].Name = "FilterName";
 
-    // AS: If we've been asked to export as an image, then use the BMP filter.
-    //  Otherwise, use SVM.  This is useful for things that don't convert well as
-    //  metafiles, like the occasional OLE object.
+    
+    
+    
     aDescriptor[0].Value <<= bExportAsJPEG ? OUString("PNG") : OUString("SVM");
 
     aDescriptor[1].Name = "URL";
@@ -720,9 +720,9 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
 
         if(usesClipActions(rMtf))
         {
-            // #i121267# It is necessary to prepare the metafile since the export does *not* support
-            // clip regions. This tooling method clips the geometry content of the metafile internally
-            // against it's own clip regions, so that the export is safe to ignore clip regions
+            
+            
+            
             clipMetafileContentAgainstOwnRegions(rMtf);
         }
     }

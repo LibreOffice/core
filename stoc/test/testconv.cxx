@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,10 +47,10 @@ const double MAX_DOUBLE     = DBL_MAX;
 const double MIN_FLOAT      = -FLT_MAX;
 const double MAX_FLOAT      = FLT_MAX;
 
-//==================================================================================================
+
 static void printValue( const Any & rVal )
 {
-    // print value
+    
     OString aStr( OUStringToOString( rVal.getValueType().getTypeName(), RTL_TEXTENCODING_ISO_8859_1 ) );
     printf( "(%s)", aStr.getStr() );
 
@@ -159,7 +159,7 @@ static void printValue( const Any & rVal )
 
 static Reference< XTypeConverter > s_xConverter;
 
-//==================================================================================================
+
 static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bExpectSuccess )
 {
     sal_Bool bCanConvert = sal_False;
@@ -188,7 +188,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( "]\n" );
         aRet = s_xConverter->convertTo( rVal, rDestType );
 #if OSL_DEBUG_LEVEL > 1
-        // for debugging, to trace again
+        
         try
         {
             aRet = s_xConverter->convertTo( rVal, rDestType );
@@ -207,17 +207,17 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printValue( aRet );
         printf( " was successful, but was not expected to be!\n" );
 #if OSL_DEBUG_LEVEL > 1
-        // for debugging, to trace again
+        
         aRet = s_xConverter->convertTo( rVal, rDestType );
 #endif
         return sal_False;
     }
 
 #ifdef __RECONVERSION_OUTPUT__
-//= re-conversion output =
+
     if (bCanConvert)
     {
-        // re convert to original type
+        
         sal_Bool bReConvert = sal_False;
         Any aRet2;
 
@@ -261,7 +261,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
 }
 
 
-//==================================================================================================
+
 typedef struct _ConvBlock
 {
     Any         _value;
@@ -287,104 +287,104 @@ typedef struct _ConvBlock
 } ConvBlock;
 
 
-//==================================================================================================
+
 static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
 {
     Any aVal;
 
     sal_uInt32 nElems = 0;
 
-    // ==BYTE==
+    
     aVal <<= OUString("0xff");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("255");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)0xffu;
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("0x80");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("128");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)( 0x80u );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("0x7f");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= OUString("127");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)( 0x7f );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("5");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0 );
     aVal <<= OUString("+5");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("-5");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int8)( -5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("256");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==UINT16==
+                                         
+    
     aVal <<= OUString("65535");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("0xffff");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0xffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("32768");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0x8000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("32767");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("0x7fff");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0x7fff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("256");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("0x100");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0x100 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_uInt16)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= (sal_uInt16)( -5 ); // is 0xfffb
+                                         
+    aVal <<= (sal_uInt16)( -5 ); 
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==INT16==
+                                         
+    
     aVal <<= (sal_Int16)( -1 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int16)( -0x8000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int16)( 0x7fff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int16)( 0x100 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int16)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int16)( -5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==UINT32==
+                                         
+    
     aVal <<= OUString("+4294967295");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("4294967295");
@@ -393,182 +393,182 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( 0xffffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("-2147483648");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("-0x80000000");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_uInt32)( 0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("2147483647");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("0x7fffffff");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( 0x7fffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("65536");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("0x10000");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( 0x10000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_uInt32)( 0x8000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_uInt32)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("0xfffffffb");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= (sal_uInt32)( -5 ); // is 0xfffffffb
+    aVal <<= (sal_uInt32)( -5 ); 
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==INT32==
-    aVal <<= (sal_Int32)( 0xffffffff ); // is -1
+                                         
+    
+    aVal <<= (sal_Int32)( 0xffffffff ); 
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int32)( 0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int32)( 0x7fffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int32)( 0x10000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int32)( -0x8001 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int32)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (sal_Int32)( -5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==FLOAT==
+                                         
+    
     aVal <<= OUString("-3.4e+38");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (float)( MIN_FLOAT );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("+3.4e+38");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (float)( MAX_FLOAT );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("9e-20");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (float)( 9e-20 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("+.7071067811865");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (float)( .7071067811865 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("3.14159265359");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (float)( 3.14159265359 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (float)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==DOUBLE==
+                                         
+    
     aVal <<= OUString("-1.7976931348623155e+308");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MIN_DOUBLE );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("1.7976931348623155e+308");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MAX_DOUBLE );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( MIN_FLOAT );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( MAX_FLOAT );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( -((double)0x80000000) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( -((double)0x80000001) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( 0x7fffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( 0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( 0xffffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("0x100000000");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( SAL_CONST_INT64(0x100000000) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= (double)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==CHAR==
+                                         
+    
     sal_Unicode c = 'A';
     aVal.setValue( &c, ::getCharCppuType() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("A");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==BOOL==
+                                         
+    
     aVal <<= OUString("0");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("1");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("False");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("true");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
 
     sal_Bool bTmp = sal_True;
     aVal.setValue( &bTmp, getBooleanCppuType() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==ZERO STRINGS==
+                                         
+    
     aVal <<= OUString();
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("-");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("-0");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==TYPECLASS ENUM==
+                                         
+    
     aVal <<= OUString("eNuM");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal <<= OUString("DOUBLE");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     int e = 1;
     aVal.setValue( &e, ::getCppuType( (const TypeClass *)0 ) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     aVal.setValue( &e, ::getCppuType( (const FieldAccessMode *)0 ) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==SEQ of INT==
+                                         
+    
     Sequence< sal_Int32 > aINT32Seq( 3 ), aINT32Seq2( 3 );
     sal_Int32 * pINT32Seq = aINT32Seq.getArray();
     pINT32Seq[0]     = -32768;
@@ -576,32 +576,32 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pINT32Seq[2]     = 32767;
     aVal <<= aINT32Seq;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     pINT32Seq = aINT32Seq2.getArray();
     pINT32Seq[0]     = -32768;
     pINT32Seq[1]     = -32769;
     pINT32Seq[2]     = 32767;
     aVal <<= aINT32Seq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==SEQ of ANY==
+                                         
+    
     Sequence< Any > aAnySeq( 2 ), aAnySeq2( 2 );
     Any * pAnySeq    = aAnySeq.getArray();
     pAnySeq[0]       = makeAny( aINT32Seq );
     pAnySeq[1]       = makeAny( OUString("lala") );
     aVal <<= aAnySeq;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     pAnySeq = aAnySeq2.getArray();
     pAnySeq[0]       <<= (sal_Int32)4711;
     pAnySeq[1]       <<= OUString("0815");
     aVal <<= aAnySeq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
+                                         
     return nElems;
 }
 
-//==================================================================================================
+
 static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
 {
     printf( "test_Conversion(): start...\n" );
@@ -632,7 +632,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
         convertTo( ::getCppuType( (const Sequence< sal_Int16 > *)0 ), rVal, rBlock._toSeqINT16 );
         convertTo( ::getCppuType( (const Sequence< Any > *)0 ), rVal, rBlock._toSeqAny );
 
-        convertTo( ::getVoidCppuType(), rVal, sal_True ); // anything converts to void
+        convertTo( ::getVoidCppuType(), rVal, sal_True ); 
     }
     s_xConverter.clear();
 

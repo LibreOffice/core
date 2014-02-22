@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -93,65 +93,65 @@ enum XMLUserDefinedTransformerAction
 #define ENTRY0( n, l, a ) \
     ENTRY3( n, l, a, 0, 0, 0 )
 
-// BM: a macro to put two tokens into one sal_Int32 for the action
-// XML_ATACTION_RENAME_ATTRIBUTE
+
+
 #define RENAME_ENTRY( f, s ) \
     (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
 
 static XMLTransformerActionInit aActionTable[] =
 {
-    // add office:class from <office:document> and <office:document-content>
+    
     ENTRY0( OFFICE, DOCUMENT, XML_ETACTION_DOCUMENT ),
     ENTRY0( OFFICE, DOCUMENT_CONTENT, XML_ETACTION_DOCUMENT ),
     ENTRY1Q( OOO, AUTO_TEXT_EVENTS, XML_ETACTION_RENAME_ELEM,
                           XML_NAMESPACE_OFFICE, XML_AUTO_TEXT_EVENTS),
 
-    // add <meta:keywords>
+    
     ENTRY0( OFFICE, META, XML_ETACTION_META ),
 
-    // rename <office:scripts> to <office:script>
+    
     ENTRY1Q( OFFICE, SCRIPTS, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OFFICE, XML_SCRIPT ),
 
-    // rename <office:script> to <office:script-data> and process attributes
+    
     ENTRY2QN( OFFICE, SCRIPT, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_OFFICE, XML_SCRIPT_DATA,
                         OASIS_SCRIPT_ACTIONS ),
 
-    // rename <ooo:libraries> to <script:libraries>
+    
     ENTRY1Q( OOO, LIBRARIES, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_SCRIPT, XML_LIBRARIES ),
 
-    // rename <ooo:library-linked> to <script:library-linked> and process attributes
+    
     ENTRY2QN( OOO, LIBRARY_LINKED, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_SCRIPT, XML_LIBRARY_LINKED,
                         OASIS_SCRIPT_ACTIONS ),
 
-    // rename <ooo:library-embedded> to <script:library-embedded> and process attributes
+    
     ENTRY2QN( OOO, LIBRARY_EMBEDDED, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_SCRIPT, XML_LIBRARY_EMBEDDED,
                         OASIS_SCRIPT_ACTIONS ),
 
-    // rename <ooo:module> to <script:module> and process attributes
+    
     ENTRY2QN( OOO, MODULE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_SCRIPT, XML_MODULE,
                         OASIS_SCRIPT_ACTIONS ),
 
-    // rename <ooo:source-code> to <script:source-code>
+    
     ENTRY1Q( OOO, SOURCE_CODE, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_SCRIPT, XML_SOURCE_CODE ),
 
     ENTRY0( OFFICE, BODY, XML_ETACTION_BODY ),
 
-    // rename <office:font-face-decls> to <office:font-decl>,
-    // rename <style:font-face> to <style:font-decl>, process attrs
+    
+    
     ENTRY1Q( OFFICE, FONT_FACE_DECLS, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OFFICE, XML_FONT_DECLS ),
     ENTRY2QN( STYLE, FONT_FACE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_STYLE, XML_FONT_DECL,
                            OASIS_FONT_FACE_ACTIONS ),
 
-    // remove genre element
+    
     ENTRY0( OFFICE, TEXT, XML_ETACTION_COPY_CONTENT ),
     ENTRY0( OFFICE, DRAWING, XML_ETACTION_COPY_CONTENT ),
     ENTRY0( OFFICE, PRESENTATION, XML_ETACTION_COPY_CONTENT ),
@@ -159,14 +159,14 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY0( OFFICE, CHART, XML_ETACTION_COPY_CONTENT ),
     ENTRY0( OFFICE, IMAGE, XML_ETACTION_COPY_CONTENT ),
 
-    // rename <style:page-layout> to <style:page-master>
-    // ENTRY1Q( STYLE, PAGE_LAYOUT, RENAME_ELEM,
-    //                      XML_NAMESPACE_STYLE, XML_PAGE_MASTER ),
+    
+    
+    
     ENTRY1( STYLE, MASTER_PAGE, XML_ETACTION_PROC_ATTRS,
                         OASIS_MASTER_PAGE_ACTIONS ),
 
-    // merge <style:*-properties> into <style:properties> and do other
-    // styles processing
+    
+    
     ENTRY1( STYLE, STYLE, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_END ),
     ENTRY1( STYLE, DEFAULT_STYLE, XML_ETACTION_STYLE,
@@ -190,7 +190,7 @@ static XMLTransformerActionInit aActionTable[] =
                  XML_FAMILY_TYPE_DATA ),
     ENTRY1( TEXT, LIST_STYLE, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_LIST ),
-//  ENTRY0( TEXT, OUTLINE_STYLE, STYLE ),
+
 
     ENTRY1( STYLE, HEADER_STYLE, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_HEADER_FOOTER ),
@@ -218,47 +218,47 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, STROKE_DASH, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_STROKE_DASH ),
 
-    // process <text:h/p>: process style-name attributes,
-    // rename <text:h>'s text:outline-level to text:level,
+    
+    
     ENTRY1( TEXT, H, XML_ETACTION_PROC_ATTRS, OASIS_PARA_ACTIONS ),
     ENTRY1( TEXT, P, XML_ETACTION_PROC_ATTRS, OASIS_PARA_ACTIONS ),
 
-    // process <test:list>'s text:style-name attributes
-    // rename <text:list> to <text:ordered-list> or <text:unordered-list>
-    // TODO: All list currenty are renamed to <text:ordered-list>
+    
+    
+    
     ENTRY2QN( TEXT, LIST, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
             XML_NAMESPACE_TEXT, XML_ORDERED_LIST,
             OASIS_LIST_STYLE_REF_ACTIONS ),
 
-    // rename <text:note*> to <text:footnote*> or <text:endnote*>
+    
     ENTRY1( TEXT, NOTES_CONFIGURATION, XML_ETACTION_NOTES,
                                                     XML_NOTES_CONFIGURATION),
     ENTRY1( TEXT, NOTE, XML_ETACTION_NOTES, XML_NOTE ),
 
-    // rename <text:footnote> and <text:endnote> to <text:note>
+    
     ENTRY1( TEXT, NOTE_REF, XML_ETACTION_NOTES, XML_NOTE_REF ),
 
-    // rename <text:tab> to <text:tab-stop>
+    
     ENTRY1Q( TEXT, TAB, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TEXT, XML_TAB_STOP ),
 
-    // replace <table:table tabke:is-sub-table> with <table:sub-table>
+    
     ENTRY0( TABLE, TABLE, XML_ETACTION_TABLE ),
 
-    // merge frame element
+    
     ENTRY0( DRAW, FRAME, XML_ETACTION_FRAME ),
 
-    // process events
+    
     ENTRY1Q( OFFICE, EVENT_LISTENERS, XML_ETACTION_RENAME_ELEM,
                       XML_NAMESPACE_OFFICE, XML_EVENTS ),
     ENTRY0( SCRIPT, EVENT_LISTENER, XML_ETACTION_EVENT ),
     ENTRY0( SCRIPT, EVENT, XML_ETACTION_EVENT ),
     ENTRY0( PRESENTATION, EVENT_LISTENER, XML_ETACTION_EVENT ),
 
-    // process Basic dialogs
+    
     ENTRY0( DLG, STYLE, XML_ETACTION_DLG ),
 
-    // process length attributes
+    
     ENTRY1( DRAW, RECT, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, LINE, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, POLYLINE, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
@@ -272,7 +272,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, CONTROL, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, PAGE_THUMBNAIL, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, G, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
-//  ENTRY1( DRAW, FRAME, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
+
     ENTRY1( DRAW, TEXT_BOX, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( PRESENTATION, PLACEHOLDER, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTOUR_POLYGON, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
@@ -325,7 +325,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( STYLE, COLUMNS, XML_ETACTION_PROC_ATTRS, OASIS_COLUMNS_ACTIONS ),
     ENTRY1( STYLE, COLUMN, XML_ETACTION_PROC_ATTRS, OASIS_COLUMNS_ACTIONS ),
 
-    // process *:style-name attributes
+    
     ENTRY1( STYLE, MAP, XML_ETACTION_PROC_ATTRS, OASIS_MAP_STYLE_REF_ACTIONS ),
     ENTRY1( TEXT, SPAN, XML_ETACTION_PROC_ATTRS, OASIS_TEXT_STYLE_REF_ACTIONS ),
     ENTRY1( TEXT, A, XML_ETACTION_PROC_ATTRS, OASIS_TEXT_STYLE_REF_ACTIONS ),
@@ -376,7 +376,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
 
-    // rename office:value-* to *:value-*
+    
     ENTRY1( TEXT, VARIABLE_DECL, XML_ETACTION_PROC_ATTRS,
             OASIS_TEXT_VALUE_TYPE_ACTIONS ), /* generated entry */
     ENTRY1( TEXT, VARIABLE_SET, XML_ETACTION_PROC_ATTRS,
@@ -388,17 +388,17 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TEXT, EXPRESSION, XML_ETACTION_PROC_ATTRS,
             OASIS_TEXT_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TEXT, USER_DEFINED, XML_ETACTION_PROC_ATTRS,
-            OASIS_DATETIME_ACTIONS ), // Add OASIS_TEXT_VALUE_TYPE_ACTIONS if attrs are added to text:user-defined
+            OASIS_DATETIME_ACTIONS ), 
     ENTRY1( TABLE, TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OASIS_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, COVERED_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OASIS_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, CHANGE_TRACK_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OASIS_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
-//  ENTRY1( FORM, PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OASIS_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
-//  ENTRY1( FORM, LIST_PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OASIS_VALUE_TYPE_ACTIONS), /* generated entry */
+
+
+
+
 
     ENTRY1( OFFICE, ANNOTATION, XML_ETACTION_MOVE_ELEMS_TO_ATTRS,
             OASIS_ANNOTATION_ACTIONS ), /* generated entry */
@@ -433,7 +433,7 @@ static XMLTransformerActionInit aActionTable[] =
                     XML_LIST_PROPERTY ),
     ENTRY1( FORM, LIST_VALUE, XML_ETACTION_FORM_PROPERTY, XML_LIST_VALUE ),
 
-    // process xlink:href
+    
     ENTRY1( META, TEMPLATE, XML_ETACTION_PROC_ATTRS,
         OASIS_XLINK_ACTIONS ), /* generated entry */
     ENTRY1( META, AUTO_RELOAD, XML_ETACTION_PROC_ATTRS,
@@ -454,78 +454,78 @@ static XMLTransformerActionInit aActionTable[] =
         OASIS_XLINK_ACTIONS ), /* generated entry */
     ENTRY1( FORM, FORM, XML_ETACTION_PROC_ATTRS,
         OASIS_FORM_ACTIONS ), /* generated entry */
-//  ENTRY1( SVG, FONT_FACE_URI, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
-//  ENTRY1( SVG, DEFINITION_SRC, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
+
+
+
+
     ENTRY2QN( CHART, SYMBOL_IMAGE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
               XML_NAMESPACE_STYLE, XML_SYMBOL_IMAGE,
               OASIS_BACKGROUND_IMAGE_ACTIONS ),
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
-//  events don't have real URIs
-//  ENTRY1( PRESENTATION, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
-//  ENTRY1( SCRIPT, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
 
-    // add namespace prefix to name
+
+
+
+
+
+
+    
     ENTRY1( CONFIG, CONFIG_ITEM_SET, XML_ETACTION_PROC_ATTRS,
         OASIS_CONFIG_ITEM_SET_ACTIONS ),
 
-    // add namespace prefix to formula and condition
-    //  text:condition
+    
+    
     ENTRY1( TEXT, SECTION, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:formula
+    
     ENTRY1( TEXT, SEQUENCE, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, DATABASE_NEXT, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY2QN( TEXT, DATABASE_ROW_SELECT, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
         XML_NAMESPACE_TEXT, XML_DATABASE_SELECT,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, CONDITIONAL_TEXT, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, HIDDEN_TEXT, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, HIDDEN_PARAGRAPH, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  text:formula
+    
     ENTRY1( TEXT, TABLE_FORMULA, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
 
-    //  process table::content-validation
+    
     ENTRY1( TABLE, CONTENT_VALIDATION, XML_ETACTION_PROC_ATTRS,
         OASIS_CONTENT_VALIDATION_ACTIONS ),
 
-    // rename <table:dependencies> to <table:dependences>
+    
     ENTRY1Q( TABLE, DEPENDENCIES, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TABLE, XML_DEPENDENCES ),
     ENTRY1Q( TABLE, DEPENDENCY, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TABLE, XML_DEPENDENCE ),
 
-    // process table::conversion-mode
+    
     ENTRY1( TABLE, CONVERSION_MODE, XML_ETACTION_PROC_ATTRS,
             OASIS_DDE_CONV_MODE_ACTIONS ),
 
-    // process table::data-pilot-member
+    
     ENTRY1( TABLE, DATA_PILOT_MEMBER, XML_ETACTION_PROC_ATTRS,
             OASIS_DATAPILOT_MEMBER_ACTIONS ),
 
-    // process table::data-pilot-level
+    
     ENTRY1( TABLE, DATA_PILOT_LEVEL, XML_ETACTION_PROC_ATTRS,
             OASIS_DATAPILOT_LEVEL_ACTIONS ),
 
-    // process table::source-service
+    
     ENTRY1( TABLE, SOURCE_SERVICE, XML_ETACTION_PROC_ATTRS,
             OASIS_SOURCE_SERVICE_ACTIONS ),
 
-    // entries for date time change (#i36576#)
+    
     ENTRY1( TEXT, DATE, XML_ETACTION_PROC_ATTRS, OASIS_DATETIME_ACTIONS ),
     ENTRY1( TEXT, CREATION_DATE, XML_ETACTION_PROC_ATTRS,
                     OASIS_DATETIME_ACTIONS ),
@@ -541,13 +541,13 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( PRESENTATION, SETTINGS, XML_ETACTION_PROC_ATTRS,
                     OASIS_DATETIME_ACTIONS ),
 
-    // fix <text:alphabatical-index-mark text:main-etry>
+    
     ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK, XML_ETACTION_PROC_ATTRS,
             OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
     ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS,
             OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
 
-    // fix id strings in old animation elements
+    
     ENTRY1( PRESENTATION, DIM, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
     ENTRY1( PRESENTATION, PLAY, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
     ENTRY1( PRESENTATION, SHOW_TEXT, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
@@ -558,7 +558,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
 
-// XML_ETACTION_STYLE
+
 static XMLTransformerActionInit aStyleActionTable[] =
 {
     ENTRY0( STYLE, FAMILY, XML_ATACTION_STYLE_FAMILY ),
@@ -576,7 +576,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
                  XML_FAMILY_TYPE_MASTER_PAGE ),
     ENTRY0( STYLE, DEFAULT_OUTLINE_LEVEL, XML_ATACTION_REMOVE ),
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
-                 XML_FAMILY_TYPE_TEXT ),    // list level styles
+                 XML_FAMILY_TYPE_TEXT ),    
     ENTRY1( DRAW, NAME, XML_ATACTION_DECODE_STYLE_NAME,
                  XML_FAMILY_TYPE_END ),
     ENTRY1( DRAW, DISPLAY_NAME, XML_ATACTION_STYLE_DISPLAY_NAME,
@@ -592,7 +592,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FRAME_ELEM_ACTIONS
+
 static XMLTransformerActionInit aFrameActionTable[] =
 {
     ENTRY0( DRAW, TEXT_BOX, XML_ETACTION_COPY ),
@@ -605,7 +605,7 @@ static XMLTransformerActionInit aFrameActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_EVENT_ELEM_ACTIONS
+
 static XMLTransformerActionInit aEventActionTable[] =
 {
     ENTRY0( XLINK, HREF, XML_ATACTION_HREF ),
@@ -616,13 +616,13 @@ static XMLTransformerActionInit aEventActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_EVENT_ELEM_ACTIONS
+
 static XMLTransformerActionInit aDlgActionTable[] =
 {
     ENTRY0( DLG, BORDER, XML_ATACTION_DLG_BORDER )
 };
 
-// action table for OASIS_MASTER_PAGE_ACTIONS
+
 static XMLTransformerActionInit aMasterPageActionTable[] =
 {
     ENTRY1( STYLE, NAME, XML_ATACTION_DECODE_STYLE_NAME,
@@ -636,7 +636,7 @@ static XMLTransformerActionInit aMasterPageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_TEXT_STYLE_REF_ACTIONS
+
 static XMLTransformerActionInit aTextStyleRefActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -647,7 +647,7 @@ static XMLTransformerActionInit aTextStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_PARA_STYLE_REF_ACTIONS
+
 static XMLTransformerActionInit aParaStyleRefActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -655,7 +655,7 @@ static XMLTransformerActionInit aParaStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_LIST_STYLE_REF_ACTIONS
+
 static XMLTransformerActionInit aListStyleRefActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -663,7 +663,7 @@ static XMLTransformerActionInit aListStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_MASTER_PAGE_REF_ACTIONS
+
 static XMLTransformerActionInit aMasterPageRefActionTable[] =
 {
     ENTRY1( DRAW, MASTER_PAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -671,7 +671,7 @@ static XMLTransformerActionInit aMasterPageRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_MAP_STYLE_REF_ACTIONS
+
 static XMLTransformerActionInit aMapStyleRefActionTable[] =
 {
     ENTRY1( STYLE, APPLY_STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -679,7 +679,7 @@ static XMLTransformerActionInit aMapStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_TABLE_STYLE_REF_ACTIONS (#i40011#, #i40015#)
+
 static XMLTransformerActionInit aTableStyleRefActionTable[] =
 {
     ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -696,7 +696,7 @@ static XMLTransformerActionInit aFontFaceActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_PARA_ACTIONS
+
 static XMLTransformerActionInit aParaActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -708,8 +708,8 @@ static XMLTransformerActionInit aParaActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// !!ATTENTION!! If you change something here, please also change
-// aConnectorActionTable if apropriate
+
+
 static XMLTransformerActionInit aShapeActionTable[] =
 {
     ENTRY1( DRAW, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -747,8 +747,8 @@ static XMLTransformerActionInit aShapeActionTable[] =
                     XML_NAMESPACE_FORM, XML_ID ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_True ),
 
-    // BM: needed by chart:legend.  The legend needs also the draw actions.  As
-    // there is no merge mechanism, all actions have to be in the same table
+    
+    
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
             RENAME_ENTRY( XML_START, XML_LEFT ),
             RENAME_ENTRY( XML_END, XML_RIGHT )),
@@ -758,7 +758,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_ANIMATION_ACTIONS
+
 static XMLTransformerActionInit aAnimationActionTable[] =
 {
     ENTRY0( DRAW, SHAPE_ID, XML_ATACTION_DECODE_ID ),
@@ -768,7 +768,7 @@ static XMLTransformerActionInit aAnimationActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_CONNECTOR_ACTIONS
+
 static XMLTransformerActionInit aConnectorActionTable[] =
 {
     ENTRY1( DRAW, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -799,7 +799,7 @@ static XMLTransformerActionInit aConnectorActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_INDEX_ENTRY_TAB_STOP_ACTIONS
+
 static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_IN2INCH ),
@@ -808,7 +808,7 @@ static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_TAB_STOP_ACTIONS
+
 static XMLTransformerActionInit aTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_IN2INCH ),
@@ -822,7 +822,7 @@ static XMLTransformerActionInit aTabStopActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_LINENUMBERING_ACTIONS
+
 static XMLTransformerActionInit aLineNumberingActionTable[] =
 {
     ENTRY0( TEXT, OFFSET, XML_ATACTION_IN2INCH ),
@@ -841,7 +841,7 @@ static XMLTransformerActionInit aFootnoteSepActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_NOTES_ACTIONS (processed by special context)
+
 static XMLTransformerActionInit aNotesActionTable[] =
 {
     ENTRY0( TEXT, NOTE_CLASS, XML_ATACTION_STYLE_FAMILY ),
@@ -856,7 +856,7 @@ static XMLTransformerActionInit aNotesActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DROP_CAP_ACTIONS
+
 static XMLTransformerActionInit aDropCapActionTable[] =
 {
     ENTRY0( STYLE, DISTANCE, XML_ATACTION_IN2INCH ),
@@ -878,7 +878,7 @@ static XMLTransformerActionInit aColumnsActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_TEXT_VALUE_TYPE_ACTIONS
+
 static XMLTransformerActionInit aTextValueTypeActionTable[] =
 {
     ENTRY1Q( OFFICE, VALUE_TYPE, XML_ATACTION_RENAME,
@@ -899,7 +899,7 @@ static XMLTransformerActionInit aTextValueTypeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_TABLE_VALUE_TYPE_ACTIONS
+
 static XMLTransformerActionInit aTableValueTypeActionTable[] =
 {
     ENTRY1Q( OFFICE, VALUE_TYPE, XML_ATACTION_RENAME,
@@ -924,7 +924,7 @@ static XMLTransformerActionInit aTableValueTypeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_ANNOTATION_ACTIONS
+
 static XMLTransformerActionInit aAnnotationActionTable[] =
 {
     ENTRY1Q( DC, CREATOR, XML_ATACTION_MOVE_FROM_ELEM,
@@ -937,7 +937,7 @@ static XMLTransformerActionInit aAnnotationActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_CHANGE_INFO_ACTIONS
+
 static XMLTransformerActionInit aChangeInfoActionTable[] =
 {
     ENTRY1Q( DC, CREATOR, XML_ATACTION_MOVE_FROM_ELEM,
@@ -947,7 +947,7 @@ static XMLTransformerActionInit aChangeInfoActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_BACKGROUND_IMAGE_ACTIONS
+
 static XMLTransformerActionInit aBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, OPACITY, XML_ATACTION_RENAME_NEG_PERCENT,
@@ -956,7 +956,7 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DDE_CONNECTION_DECL
+
 static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
 {
     ENTRY1Q( OFFICE, NAME, XML_ATACTION_RENAME,
@@ -964,7 +964,7 @@ static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FORM_CONTROL_ACTIONS
+
 static XMLTransformerActionInit aFormControlActionTable[] =
 {
     ENTRY0( FORM, NAME, XML_ATACTION_MOVE_TO_ELEM ),
@@ -977,7 +977,7 @@ static XMLTransformerActionInit aFormControlActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FORM_COLUMN_ACTIONS
+
 static XMLTransformerActionInit aFormColumnActionTable[] =
 {
     ENTRY1Q( FORM, TEXT_STYLE_NAME, XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF,
@@ -989,7 +989,7 @@ static XMLTransformerActionInit aFormColumnActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FORM_PROP_ACTIONS
+
 static XMLTransformerActionInit aFormPropActionTable[] =
 {
     ENTRY1Q( OFFICE, VALUE_TYPE, XML_ATACTION_RENAME,
@@ -1003,7 +1003,7 @@ static XMLTransformerActionInit aFormPropActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_XLINK_ACTIONS
+
 static XMLTransformerActionInit aXLinkActionTable[] =
 {
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_False ),
@@ -1011,7 +1011,7 @@ static XMLTransformerActionInit aXLinkActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_CONFIG_ITEM_SET_ACTIONS
+
 static XMLTransformerActionInit aConfigItemSetActionTable[] =
 {
     ENTRY1( CONFIG, NAME, XML_ATACTION_REMOVE_NAMESPACE_PREFIX,
@@ -1019,7 +1019,7 @@ static XMLTransformerActionInit aConfigItemSetActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FORMULA_ACTIONS
+
 static XMLTransformerActionInit aFormulaActionTable[] =
 {
     ENTRY0( TEXT, CONDITION, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
@@ -1029,7 +1029,7 @@ static XMLTransformerActionInit aFormulaActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_CONTENT_VALIDATION_ACTIONS
+
 static XMLTransformerActionInit aContentValidationActionTable[] =
 {
     ENTRY0( TABLE, CONDITION, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
@@ -1037,7 +1037,7 @@ static XMLTransformerActionInit aContentValidationActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DDE_CONV_MODE_ACTIONS
+
 static XMLTransformerActionInit aDDEConvModeActionTable[] =
 {
     ENTRY1Q( TABLE, KEEP_TEXT, XML_ATACTION_RENAME,
@@ -1045,7 +1045,7 @@ static XMLTransformerActionInit aDDEConvModeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DATAPILOT_MEMBER_ACTIONS
+
 static XMLTransformerActionInit aDataPilotMemberActionTable[] =
 {
     ENTRY1Q( TABLE, SHOW_DETAILS, XML_ATACTION_RENAME,
@@ -1053,7 +1053,7 @@ static XMLTransformerActionInit aDataPilotMemberActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DATAPILOT_LEVEL_ACTIONS
+
 static XMLTransformerActionInit aDataPilotLevelActionTable[] =
 {
     ENTRY1Q( TABLE, SHOW_EMPTY, XML_ATACTION_RENAME,
@@ -1061,7 +1061,7 @@ static XMLTransformerActionInit aDataPilotLevelActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_SOURCE_SERVICE_ACTIONS
+
 static XMLTransformerActionInit aSourceServiceActionTable[] =
 {
     ENTRY1Q( TABLE, USER_NAME, XML_ATACTION_RENAME,
@@ -1069,7 +1069,7 @@ static XMLTransformerActionInit aSourceServiceActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_CHART_ACTIONS
+
 static XMLTransformerActionInit aChartActionTable[] =
 {
     ENTRY0( CHART, CLASS, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
@@ -1080,7 +1080,7 @@ static XMLTransformerActionInit aChartActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FORM_ACTIONS
+
 static XMLTransformerActionInit aFormActionTable[] =
 {
     ENTRY2QN( FORM, CONTROL_IMPLEMENTATION,
@@ -1091,7 +1091,7 @@ static XMLTransformerActionInit aFormActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS
+
 static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
 {
     ENTRY1Q( TEXT, MAIN_ENTRY, XML_ATACTION_RENAME,
@@ -1099,7 +1099,7 @@ static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DRAW_AREA_POLYGON_ACTIONS (to be added to OASIS_SHAPE_ACTIONS)
+
 static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
 {
     ENTRY1Q( DRAW, POINTS, XML_ATACTION_RENAME,
@@ -1107,7 +1107,7 @@ static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_SCRIPT_ACTIONS
+
 static XMLTransformerActionInit aScriptActionTable[] =
 {
     ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_REMOVE_NAMESPACE_PREFIX, XML_NAMESPACE_OOO ),
@@ -1116,7 +1116,7 @@ static XMLTransformerActionInit aScriptActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_DATETIME_ACTIONS
+
 static XMLTransformerActionInit aDateTimeActionTable[] =
 {
     ENTRY0( TEXT,   DATE_VALUE,        XML_ATACTION_RNG2ISO_DATETIME ),
@@ -1205,9 +1205,9 @@ void XMLTableTransformerContext_Impl::StartElement(
                     }
                     pMutableAttrList->RemoveAttributeByIndex( i );
                 }
-                // OD 2005-07-05 #i50521# - no break here for savety reason.
+                
             }
-            // Convert attribute table:style-name for <table:table> (#i40011#, #i40015#)
+            
             else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
                 const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1678,7 +1678,7 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
         break;
     }
 
-    // default is copying
+    
     return new XMLTransformerContext( *this, rQName );
 }
 
@@ -1876,7 +1876,7 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                 m_aActions[OASIS_DATETIME_ACTIONS] =
                     new XMLTransformerActions( aDateTimeActionTable );
                 break;
-            // Bugdoc with table won't load correctly (#i40011#, #i40015#)
+            
             case OASIS_TABLE_STYLE_REF_ACTIONS:
                 m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS] =
                     new XMLTransformerActions( aTableStyleRefActionTable );
@@ -1985,7 +1985,7 @@ const Sequence< sal_Int8 > & Oasis2OOoTransformer::getUnoTunnelId() throw()
     return theOasis2OOoTransformerUnoTunnelId::get().getSeq();
 }
 
-// XUnoTunnel
+
 sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
     throw(RuntimeException)
 {
@@ -2001,7 +2001,7 @@ sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 
     }
 }
 
-// XServiceInfo
+
 OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
     throw(RuntimeException)
 {
@@ -2021,7 +2021,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
     return aSeq;
 }
 
-// Service registration
+
 
 OUString SAL_CALL Oasis2OOoTransformer_getImplementationName() throw()
 {

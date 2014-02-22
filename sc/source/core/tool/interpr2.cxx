@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "interpre.hxx"
@@ -55,15 +55,15 @@ using namespace formula;
 
 #define SCdEpsilon                1.0E-7
 
-// Datum und Zeit
+
 
 double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         bool bStrict, bool bCheckGregorian )
 {
     if ( nYear < 100 && !bStrict )
         nYear = pFormatter->ExpandTwoDigitYear( nYear );
-    // Do not use a default Date ctor here because it asks system time with a
-    // performance penalty.
+    
+    
     sal_Int16 nY, nM, nD;
     if (bStrict)
         nY = nYear, nM = nMonth, nD = nDay;
@@ -93,7 +93,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     }
 }
 
-// Funktionen
+
 
 void ScInterpreter::ScGetActDate()
 {
@@ -140,7 +140,7 @@ void ScInterpreter::ScGetDay()
 void ScInterpreter::ScGetMin()
 {
     double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    fTime -= ::rtl::math::approxFloor(fTime);       
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::Time::secondPerHour;
     PushDouble( (double) (nVal / ::Time::secondPerMinute) );
 }
@@ -148,7 +148,7 @@ void ScInterpreter::ScGetMin()
 void ScInterpreter::ScGetSec()
 {
     double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    fTime -= ::rtl::math::approxFloor(fTime);       
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::Time::secondPerMinute;
     PushDouble( (double) nVal );
 }
@@ -156,7 +156,7 @@ void ScInterpreter::ScGetSec()
 void ScInterpreter::ScGetHour()
 {
     double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    fTime -= ::rtl::math::approxFloor(fTime);       
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / ::Time::secondPerHour;
     PushDouble((double) nVal);
 }
@@ -164,7 +164,7 @@ void ScInterpreter::ScGetHour()
 void ScInterpreter::ScGetDateValue()
 {
     OUString aInputString = GetString().getString();
-    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+    sal_uInt32 nFIndex = 0;                 
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
     {
@@ -226,7 +226,7 @@ void ScInterpreter::ScEasterSunday()
         nYear = (sal_Int16) ::rtl::math::approxFloor( GetDouble() );
         if ( nYear < 100 )
             nYear = pFormatter->ExpandTwoDigitYear( nYear );
-        // don't worry, be happy :)
+        
         int B,C,D,E,F,G,H,I,K,L,M,N,O;
         N = nYear % 19;
         B = int(nYear / 100);
@@ -293,14 +293,14 @@ void ScInterpreter::ScGetDiffDate()
 void ScInterpreter::ScGetDiffDate360()
 {
     /* Implementation follows
-     * http://www.bondmarkets.com/eCommerce/SMD_Fields_030802.pdf
+     * http:
      * Appendix B: Day-Count Bases, there are 7 different ways to calculate the
      * 30-days count. That document also claims that Excel implements the "PSA
      * 30" or "NASD 30" method (funny enough they also state that Excel is the
      * only tool that does so).
      *
      * Note that the definiton given in
-     * http://msdn.microsoft.com/library/en-us/office97/html/SEB7C.asp
+     * http:
      * is _not_ the way how it is actually calculated by Excel (that would not
      * even match any of the 7 methods mentioned above) and would result in the
      * following test cases producing wrong results according to that appendix B:
@@ -332,8 +332,8 @@ void ScInterpreter::ScGetDiffDate360()
         else
         {
             double fSign;
-            // #i84934# only for non-US European algorithm swap dates. Else
-            // follow Excel's meaningless extrapolation for "interoperability".
+            
+            
             if (bFlag && (nDate2 < nDate1))
             {
                 fSign = nDate1;
@@ -384,7 +384,7 @@ void ScInterpreter::ScGetDiffDate360()
     }
 }
 
-// fdo#44456 function DATEDIF as defined in ODF1.2 (Par. 6.10.3)
+
 void ScInterpreter::ScGetDateDif()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
@@ -399,7 +399,7 @@ void ScInterpreter::ScGetDateDif()
             return;
         }
 
-        // Excel doesn't swap dates or return negative numbers, so don't we.
+        
         if (nDate1 > nDate2)
         {
             PushIllegalArgument();
@@ -407,14 +407,14 @@ void ScInterpreter::ScGetDateDif()
         }
 
         long dd = nDate2 - nDate1;
-        // Zero difference or number of days can be returned immediately.
+        
         if (dd == 0 || aInterval.equalsIgnoreAsciiCase( "d" ))
         {
             PushDouble( dd );
             return;
         }
 
-        // split dates in day, month, year for use with formats other than "d"
+        
         sal_uInt16 d1, m1, y1, d2, m2, y2;
         Date aDate1( *( pFormatter->GetNullDate()));
         aDate1 += (long) ::rtl::math::approxFloor( nDate1 );
@@ -429,7 +429,7 @@ void ScInterpreter::ScGetDateDif()
 
         if (  aInterval.equalsIgnoreAsciiCase( "m" ) )
         {
-            // Return number of months.
+            
             int md = m2 - m1 + 12 * (y2 - y1);
             if (d1 > d2)
                 --md;
@@ -437,40 +437,40 @@ void ScInterpreter::ScGetDateDif()
         }
         else if ( aInterval.equalsIgnoreAsciiCase( "y" ) )
         {
-            // Return number of years.
+            
             int yd;
             if ( y2 > y1 )
             {
                 if (m2 > m1 || (m2 == m1 && d2 >= d1))
-                    yd = y2 - y1;       // complete years between dates
+                    yd = y2 - y1;       
                 else
-                    yd = y2 - y1 - 1;   // one incomplete year
+                    yd = y2 - y1 - 1;   
             }
             else
             {
-                // Year is equal as we don't allow reversed arguments, no
-                // complete year between dates.
+                
+                
                 yd = 0;
             }
             PushInt( yd );
         }
         else if ( aInterval.equalsIgnoreAsciiCase( "md" ) )
         {
-            // Return number of days, excluding months and years.
-            // This is actually the remainder of days when subtracting years
-            // and months from the difference of dates. Birthday-like 23 years
-            // and 10 months and 19 days.
+            
+            
+            
+            
 
-            // Algorithm's roll-over behavior extracted from Excel by try and
-            // error..
-            // If day1 <= day2 then simply day2 - day1.
-            // If day1 > day2 then set month1 to month2-1 and year1 to
-            // year2(-1) and subtract dates, e.g. for 2012-01-28,2012-03-01 set
-            // 2012-02-28 and then (2012-03-01)-(2012-02-28) => 2 days (leap
-            // year).
-            // For 2011-01-29,2011-03-01 the non-existent 2011-02-29 rolls over
-            // to 2011-03-01 so the result is 0. Same for day 31 in months with
-            // only 30 days.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
             long nd;
             if (d1 <= d2)
@@ -494,7 +494,7 @@ void ScInterpreter::ScGetDateDif()
         }
         else if ( aInterval.equalsIgnoreAsciiCase( "ym" ) )
         {
-            // Return number of months, excluding years.
+            
             int md = m2 - m1 + 12 * (y2 - y1);
             if (d1 > d2)
                 --md;
@@ -503,37 +503,37 @@ void ScInterpreter::ScGetDateDif()
         }
         else if ( aInterval.equalsIgnoreAsciiCase( "yd" ) )
         {
-            // Return number of days, excluding years.
+            
 
             /* TODO: check what Excel really does, though this seems to be
              * reasonable */
 
-            // Condition corresponds with "y".
+            
             if (m2 > m1 || (m2 == m1 && d2 >= d1))
                 aDate1.SetYear( y2 );
             else
                 aDate1.SetYear( y2 - 1 );
-                // XXX NOTE: Excel for the case 1988-06-22,2012-05-11 returns
-                // 323, whereas the result here is 324. Don't they use the leap
-                // year of 2012?
-                // http://www.cpearson.com/excel/datedif.aspx "DATEDIF And Leap
-                // Years" is not correct and Excel 2010 correctly returns 0 in
-                // both cases mentioned there. Also using year1 as mentioned
-                // produces incorrect results in other cases and different from
-                // Excel 2010. Apparently they fixed some calculations.
+                
+                
+                
+                
+                
+                
+                
+                
             aDate1.Normalize();
             double nd = aDate2 - aDate1;
             PushDouble( nd );
         }
         else
-            PushIllegalArgument();               // unsupported format
+            PushIllegalArgument();               
     }
 }
 
 void ScInterpreter::ScGetTimeValue()
 {
     OUString aInputString = GetString().getString();
-    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+    sal_uInt32 nFIndex = 0;                 
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
     {
@@ -731,7 +731,7 @@ void ScInterpreter::ScNPV()
     if ( MustHaveParamCount( nParamCount, 2, 31 ) )
     {
         double nVal = 0.0;
-        // Wir drehen den Stack um!!
+        
         FormulaToken* pTemp[ 31 ];
         for( short i = 0; i < nParamCount; i++ )
             pTemp[ i ] = pStack[ sp - i - 1 ];
@@ -802,13 +802,13 @@ void ScInterpreter::ScIRR()
         fSchaetzwert = GetDouble();
     else
         fSchaetzwert = 0.1;
-    sal_uInt16 sPos = sp;                       // Stack-Position merken
+    sal_uInt16 sPos = sp;                       
     double fEps = 1.0;
     double x, xNeu, fWert, fZaehler, fNenner, nCount;
     if (fSchaetzwert == -1.0)
-        x = 0.1;                            // default gegen Nulldivisionen
+        x = 0.1;                            
     else
-        x = fSchaetzwert;                   // Startwert
+        x = fSchaetzwert;                   
     switch (GetStackType())
     {
         case svDoubleRef :
@@ -823,8 +823,8 @@ void ScInterpreter::ScIRR()
     sal_uInt16 nItCount = 0;
     ScRange aRange;
     while (fEps > SCdEpsilon && nItCount < nIterationsMax)
-    {                                       // Newton-Verfahren:
-        sp = sPos;                          // Stack zuruecksetzen
+    {                                       
+        sp = sPos;                          
         nCount = 0.0;
         fZaehler = 0.0;
         fNenner = 0.0;
@@ -844,13 +844,13 @@ void ScInterpreter::ScIRR()
             }
             SetError(nErr);
         }
-        xNeu = x - fZaehler / fNenner;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
+        xNeu = x - fZaehler / fNenner;  
         nItCount++;
         fEps = fabs(xNeu - x);
         x = xNeu;
     }
     if (fSchaetzwert == 0.0 && fabs(x) < SCdEpsilon)
-        x = 0.0;                        // auf Null normieren
+        x = 0.0;                        
     if (fEps < SCdEpsilon)
         PushDouble(x);
     else
@@ -858,7 +858,7 @@ void ScInterpreter::ScIRR()
 }
 
 void ScInterpreter::ScMIRR()
-{   // range_of_values ; rate_invest ; rate_reinvest
+{   
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if( MustHaveParamCount( GetByte(), 3 ) )
     {
@@ -884,9 +884,9 @@ void ScInterpreter::ScMIRR()
             bool bLoop = aValIter.GetFirst( fCellValue, nIterError );
             while( bLoop )
             {
-                if( fCellValue > 0.0 )          // reinvestments
+                if( fCellValue > 0.0 )          
                     fNPV_reinvest += fCellValue * fPow_reinvest;
-                else if( fCellValue < 0.0 )     // investments
+                else if( fCellValue < 0.0 )     
                     fNPV_invest += fCellValue * fPow_invest;
                 fPow_reinvest /= fRate1_reinvest;
                 fPow_invest /= fRate1_invest;
@@ -908,7 +908,7 @@ void ScInterpreter::ScMIRR()
 }
 
 void ScInterpreter::ScISPMT()
-{   // rate ; period ; total_periods ; invest
+{   
     if( MustHaveParamCount( GetByte(), 4 ) )
     {
         double fInvest = GetDouble();
@@ -923,7 +923,7 @@ void ScInterpreter::ScISPMT()
     }
 }
 
-// Finanzfunktionen
+
 double ScInterpreter::ScGetBw(double fZins, double fZzr, double fRmz,
                               double fZw, double fF)
 {
@@ -1153,7 +1153,7 @@ void ScInterpreter::ScVDB()
                 {
                     double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFactor);
 
-                    //  Teilperioden am Anfang / Ende beruecksichtigen:
+                    
                     if ( i == nLoopStart+1 )
                         fTerm *= ( DblMin( fEnde, fIntStart + 1.0 ) - fAnfang );
                     else if ( i == nLoopEnd )
@@ -1167,7 +1167,7 @@ void ScInterpreter::ScVDB()
 
                 double fDauer1=fDauer;
 
-                //@Die Frage aller Fragen: "Ist das hier richtig"
+                
                 if(!::rtl::math::approxEqual(fAnfang,::rtl::math::approxFloor(fAnfang)))
                 {
                     if(fFactor>1)
@@ -1221,10 +1221,10 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
         fPayment = (fPv + fFv) / fNper;
     else
     {
-        if (fPaytype > 0.0) // payment in advance
+        if (fPaytype > 0.0) 
             fPayment = (fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
                 (::rtl::math::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
-        else  // payment in arrear
+        else  
             fPayment = (fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
                 ::rtl::math::expm1( fNper * ::rtl::math::log1p(fRate) );
     }
@@ -1319,24 +1319,24 @@ void ScInterpreter::ScZZR()
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                                    double fFv, double fPayType, double & fGuess )
 {
-    // See also #i15090#
-    // Newton-Raphson method: x(i+1) = x(i) - f(x(i)) / f'(x(i))
-    // This solution handles integer and non-integer values of Nper different.
-    // If ODFF will constraint Nper to integer, the distinction of cases can be
-    // removed; only the integer-part is needed then.
+    
+    
+    
+    
+    
     bool bValid = true, bFound = false;
     double fX, fXnew, fTerm, fTermDerivation;
     double fGeoSeries, fGeoSeriesDerivation;
     const sal_uInt16 nIterationsMax = 150;
     sal_uInt16 nCount = 0;
     const double fEpsilonSmall = 1.0E-14;
-    // convert any fPayType situation to fPayType == zero situation
+    
     fFv = fFv - fPayment * fPayType;
     fPv = fPv + fPayment * fPayType;
     if (fNper == ::rtl::math::round( fNper, 0, rtl_math_RoundingMode_Corrected ))
-    { // Nper is an integer value
+    { 
         fX = fGuess;
-        double fPowN, fPowNminus1;  // for (1.0+fX)^Nper and (1.0+fX)^(Nper-1)
+        double fPowN, fPowNminus1;  
         while (!bFound && nCount < nIterationsMax)
         {
             fPowNminus1 = pow( 1.0+fX, fNper-1.0);
@@ -1354,30 +1354,30 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
             fTerm = fFv + fPv *fPowN+ fPayment * fGeoSeries;
             fTermDerivation = fPv * fNper * fPowNminus1 + fPayment * fGeoSeriesDerivation;
             if (fabs(fTerm) < fEpsilonSmall)
-                bFound = true;  // will catch root which is at an extreme
+                bFound = true;  
             else
             {
                 if (rtl::math::approxEqual( fabs(fTermDerivation), 0.0))
-                    fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
+                    fXnew = fX + 1.1 * SCdEpsilon;  
                 else
                     fXnew = fX - fTerm / fTermDerivation;
                 nCount++;
-                // more accuracy not possible in oscillating cases
+                
                 bFound = (fabs(fXnew - fX) < SCdEpsilon);
                 fX = fXnew;
             }
         }
-        // Gnumeric returns roots < -1, Excel gives an error in that cases,
-        // ODFF says nothing about it. Enable the statement, if you want Excel's
-        // behavior.
-        //bValid =(fX >=-1.0);
-        // Update 2013-06-17: Gnumeric (v1.12.2) doesn't return roots <= -1
-        // anymore.
+        
+        
+        
+        
+        
+        
         bValid = (fX > -1.0);
     }
     else
-    { // Nper is not an integer value.
-        fX = (fGuess < -1.0) ? -1.0 : fGuess;   // start with a valid fX
+    { 
+        fX = (fGuess < -1.0) ? -1.0 : fGuess;   
         while (bValid && !bFound && nCount < nIterationsMax)
         {
             if (rtl::math::approxEqual( fabs(fX), 0.0))
@@ -1393,30 +1393,30 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
             fTerm = fFv + fPv *pow(1.0 + fX,fNper)+ fPayment * fGeoSeries;
             fTermDerivation = fPv * fNper * pow( 1.0+fX, fNper-1.0) + fPayment * fGeoSeriesDerivation;
             if (fabs(fTerm) < fEpsilonSmall)
-                bFound = true;  // will catch root which is at an extreme
+                bFound = true;  
             else
             {
                 if (rtl::math::approxEqual( fabs(fTermDerivation), 0.0))
-                    fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
+                    fXnew = fX + 1.1 * SCdEpsilon;  
                 else
                     fXnew = fX - fTerm / fTermDerivation;
                 nCount++;
-                // more accuracy not possible in oscillating cases
+                
                 bFound = (fabs(fXnew - fX) < SCdEpsilon);
                 fX = fXnew;
-                bValid = (fX >= -1.0);  // otherwise pow(1.0+fX,fNper) will fail
+                bValid = (fX >= -1.0);  
             }
         }
     }
-    fGuess = fX;    // return approximate root
+    fGuess = fX;    
     return bValid && bFound;
 }
 
-// In Calc UI it is the function RATE(Nper;Pmt;Pv;Fv;Type;Guess)
+
 void ScInterpreter::ScZins()
 {
     double fPv, fPayment, fNper;
-    // defaults for missing arguments, see ODFF spec
+    
     double fFv = 0, fPayType = 0, fGuess = 0.1, fOrigGuess = 0.1;
     bool bValid = true;
     bool bDefaultGuess = true;
@@ -1436,14 +1436,14 @@ void ScInterpreter::ScZins()
     fPv = GetDouble();
     fPayment = GetDouble();
     fNper = GetDouble();
-    if (fNper <= 0.0) // constraint from ODFF spec
+    if (fNper <= 0.0) 
     {
         PushIllegalArgument();
         return;
     }
-    // other values for fPayType might be meaningful,
-    // ODFF spec is not clear yet, enable statement if you want only 0 and 1
-    //if (fPayType != 0.0) fPayType = 1.0;
+    
+    
+    
     bValid = RateIteration(fNper, fPayment, fPv, fFv, fPayType, fGuess);
     if (!bValid)
     {
@@ -1479,7 +1479,7 @@ void ScInterpreter::ScZins()
 double ScInterpreter::ScGetZinsZ(double fZins, double fZr, double fZzr, double fBw,
                                  double fZw, double fF, double& fRmz)
 {
-    fRmz = ScGetRmz(fZins, fZzr, fBw, fZw, fF);     // fuer kapz auch bei fZr == 1
+    fRmz = ScGetRmz(fZins, fZzr, fBw, fZw, fF);     
     double fZinsZ;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if (fZr == 1.0)
@@ -1667,9 +1667,9 @@ void ScInterpreter::ScMod()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fVal2 = GetDouble(); // Denominator
-        double fVal1 = GetDouble(); // Numerator
-        if (fVal2 == floor(fVal2))  // a pure integral number stored in double
+        double fVal2 = GetDouble(); 
+        double fVal1 = GetDouble(); 
+        if (fVal2 == floor(fVal2))  
         {
             double fResult = fmod(fVal1,fVal2);
             if ( (fResult != 0.0) &&
@@ -1709,9 +1709,9 @@ void ScInterpreter::ScIntersect()
     ScToken* x2 = static_cast<ScToken*>(p2nd.get());
     if (sv1 == svRefList || sv2 == svRefList)
     {
-        // Now this is a bit nasty but it simplifies things, and having
-        // intersections with lists isn't too common, if at all..
-        // Convert a reference to list.
+        
+        
+        
         ScToken* xt[2] = { x1, x2 };
         StackVar sv[2] = { sv1, sv2 };
         for (size_t i=0; i<2; ++i)
@@ -1753,7 +1753,7 @@ void ScInterpreter::ScIntersect()
                 SCROW nRow2 = ::std::min( r12.Row(), r22.Row());
                 SCTAB nTab2 = ::std::min( r12.Tab(), r22.Tab());
                 if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
-                    ;   // nothing
+                    ;   
                 else
                 {
                     ScComplexRefData aRef;
@@ -1812,7 +1812,7 @@ void ScInterpreter::ScIntersect()
                 }
                 break;
                 default:
-                    ;   // nothing, prevent compiler warning
+                    ;   
             }
         }
         SCCOL nCol1 = ::std::max( nC1[0], nC1[1]);
@@ -1871,16 +1871,16 @@ void ScInterpreter::ScUnionFunc()
     ScToken* x2 = static_cast<ScToken*>(p2nd.get());
 
     ScTokenRef xRes;
-    // Append to an existing RefList if there is one.
+    
     if (sv1 == svRefList)
     {
         xRes = x1;
-        sv1 = svUnknown;    // mark as handled
+        sv1 = svUnknown;    
     }
     else if (sv2 == svRefList)
     {
         xRes = x2;
-        sv2 = svUnknown;    // mark as handled
+        sv2 = svUnknown;    
     }
     else
         xRes = new ScRefListToken;
@@ -1915,10 +1915,10 @@ void ScInterpreter::ScUnionFunc()
                 }
                 break;
             default:
-                ;   // nothing, prevent compiler warning
+                ;   
         }
     }
-    ValidateRef( *pRes);    // set #REF! if needed
+    ValidateRef( *pRes);    
     PushTempToken( xRes.get());
 }
 
@@ -1939,19 +1939,19 @@ void ScInterpreter::ScStyle()
     sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
-        OUString aStyle2;                             // Vorlage nach Timer
+        OUString aStyle2;                             
         if (nParamCount >= 3)
             aStyle2 = GetString().getString();
-        long nTimeOut = 0;                          // Timeout
+        long nTimeOut = 0;                          
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
-        OUString aStyle1 = GetString().getString();               // Vorlage fuer sofort
+        OUString aStyle1 = GetString().getString();               
 
         if (nTimeOut < 0)
             nTimeOut = 0;
 
         //
-        //  Request ausfuehren, um Vorlage anzuwenden
+        
         //
 
         if ( !pDok->IsClipOrUndo() )
@@ -1959,7 +1959,7 @@ void ScInterpreter::ScStyle()
             SfxObjectShell* pShell = pDok->GetDocumentShell();
             if (pShell)
             {
-                //! notify object shell directly
+                
 
                 ScRange aRange(aPos);
                 ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
@@ -1996,8 +1996,8 @@ static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
 
 void ScInterpreter::ScDde()
 {
-    //  Applikation, Datei, Bereich
-    //  Application, Topic, Item
+    
+    
 
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
@@ -2012,8 +2012,8 @@ void ScInterpreter::ScDde()
         if (nMode > SC_DDE_TEXT)
             nMode = SC_DDE_DEFAULT;
 
-        //  temporary documents (ScFunctionAccess) have no DocShell
-        //  and no LinkManager -> abort
+        
+        
 
         sfx2::LinkManager* pLinkMgr = pDok->GetLinkManager();
         if (!pLinkMgr)
@@ -2022,23 +2022,23 @@ void ScInterpreter::ScDde()
             return;
         }
 
-            //  Nach dem Laden muss neu interpretiert werden (Verknuepfungen aufbauen)
+            
 
         if ( rArr.IsRecalcModeNormal() )
             rArr.SetExclusiveRecalcModeOnLoad();
 
-            //  solange der Link nicht ausgewertet ist, Idle abklemmen
-            //  (um zirkulaere Referenzen zu vermeiden)
+            
+            
 
         bool bOldEnabled = pDok->IsIdleEnabled();
         pDok->EnableIdle(false);
 
-            //  Link-Objekt holen / anlegen
+            
 
         ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
 
-        //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
-        //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
+        
+        
 
         bool bWasError = ( pMyFormulaCell && pMyFormulaCell->GetRawError() != 0 );
 
@@ -2046,19 +2046,19 @@ void ScInterpreter::ScDde()
         {
             pLink = new ScDdeLink( pDok, aAppl, aTopic, aItem, nMode );
             pLinkMgr->InsertDDELink( pLink, aAppl, aTopic, aItem );
-            if ( pLinkMgr->GetLinks().size() == 1 )                    // erster ?
+            if ( pLinkMgr->GetLinks().size() == 1 )                    
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();
                 if (pBindings)
-                    pBindings->Invalidate( SID_LINKS );             // Link-Manager enablen
+                    pBindings->Invalidate( SID_LINKS );             
             }
 
-                                    //! asynchron auswerten ???
-            pLink->TryUpdate();     //  TryUpdate ruft Update nicht mehrfach auf
+                                    
+            pLink->TryUpdate();     
 
             if (pMyFormulaCell)
             {
-                // StartListening erst nach dem Update, sonst circular reference
+                
                 pMyFormulaCell->StartListening( *pLink );
             }
         }
@@ -2068,14 +2068,14 @@ void ScInterpreter::ScDde()
                 pMyFormulaCell->StartListening( *pLink );
         }
 
-        //  Wenn aus dem Reschedule beim Ausfuehren des Links ein Fehler
-        //  (z.B. zirkulaere Referenz) entstanden ist, der vorher nicht da war,
-        //  das Fehler-Flag zuruecksetzen:
+        
+        
+        
 
         if ( pMyFormulaCell && pMyFormulaCell->GetRawError() && !bWasError )
             pMyFormulaCell->SetErrCode(0);
 
-            //  Wert abfragen
+            
 
         const ScMatrix* pLinkMat = pLink->GetResult();
         if (pLinkMat)
@@ -2085,7 +2085,7 @@ void ScInterpreter::ScDde()
             ScMatrixRef pNewMat = GetNewMat( nC, nR);
             if (pNewMat)
             {
-                pLinkMat->MatCopy(*pNewMat);        // kopieren
+                pLinkMat->MatCopy(*pNewMat);        
                 PushMatrix( pNewMat );
             }
             else
@@ -2100,7 +2100,7 @@ void ScInterpreter::ScDde()
 }
 
 void ScInterpreter::ScBase()
-{   // Value, Base [, MinLen]
+{   
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -2120,7 +2120,7 @@ void ScInterpreter::ScBase()
             else if ( fLen == 0.0 )
                 nMinLen = 1;
             else
-                nMinLen = 0;    // Error
+                nMinLen = 0;    
         }
         else
             nMinLen = 1;
@@ -2130,7 +2130,7 @@ void ScInterpreter::ScBase()
             (ceil( log( fVal ) / log( fBase ) ) + 2.0) :
             2.0);
         if ( fChars >= SAL_MAX_UINT16 )
-            nMinLen = 0;    // Error
+            nMinLen = 0;    
 
         if ( !nGlobalError && nMinLen && 2 <= fBase && fBase <= nDigits && 0 <= fVal )
         {
@@ -2160,33 +2160,33 @@ void ScInterpreter::ScBase()
                 bool bDirt = false;
                 while ( fVal && p > pBuf )
                 {
-//! mit fmod Rundungsfehler ab 2**48
-//                  double fDig = ::rtl::math::approxFloor( fmod( fVal, fBase ) );
-// so ist es etwas besser
+
+
+
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
                     double fMult = fInt * fBase;
 #if OSL_DEBUG_LEVEL > 1
-                    // =BASIS(1e308;36) => GPF mit
-                    // nDig = (size_t) ::rtl::math::approxFloor( fVal - fMult );
-                    // trotz vorheriger Pruefung ob fVal >= fMult
+                    
+                    
+                    
                     double fDebug1 = fVal - fMult;
-                    // fVal    := 7,5975311883090e+290
-                    // fMult   := 7,5975311883090e+290
-                    // fDebug1 := 1,3848924157003e+275  <- RoundOff-Error
-                    // fVal != fMult, aber: ::rtl::math::approxEqual( fVal, fMult ) == TRUE
+                    
+                    
+                    
+                    
                     double fDebug2 = ::rtl::math::approxSub( fVal, fMult );
-                    // und ::rtl::math::approxSub( fVal, fMult ) == 0
+                    
                     double fDebug3 = ( fInt ? fVal / fInt : 0.0 );
-                    // Nach dem strange fDebug1 und fVal < fMult  ist eigentlich
-                    // fDebug2 == fBase, trotzdem wird das mit einem Vergleich
-                    // nicht erkannt, dann schlaegt bDirt zu und alles wird wieder gut..
+                    
+                    
+                    
 
-                    // prevent compiler warnings
+                    
                     (void)fDebug1; (void)fDebug2; (void)fDebug3;
 #endif
                     size_t nDig;
                     if ( fVal < fMult )
-                    {   // da ist was gekippt
+                    {   
                         bDirt = true;
                         nDig = 0;
                     }
@@ -2226,7 +2226,7 @@ void ScInterpreter::ScBase()
 }
 
 void ScInterpreter::ScDecimal()
-{   // Text, Base
+{   
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fBase = ::rtl::math::approxFloor( GetDouble() );
@@ -2237,9 +2237,9 @@ void ScInterpreter::ScDecimal()
             int nBase = (int) fBase;
             const sal_Unicode* p = aStr.getStr();
             while ( *p == ' ' || *p == '\t' )
-                p++;        // strip leading white space
+                p++;        
             if ( nBase == 16 )
-            {   // evtl. hex-prefix strippen
+            {   
                 if ( *p == 'x' || *p == 'X' )
                     p++;
                 else if ( *p == '0' && (*(p+1) == 'x' || *(p+1) == 'X') )
@@ -2262,7 +2262,7 @@ void ScInterpreter::ScDecimal()
                             ( (nBase ==  2 && (*p == 'b' || *p == 'B'))
                             ||(nBase == 16 && (*p == 'h' || *p == 'H')) )
                         )
-                        ;       // 101b und F00Dh sind ok
+                        ;       
                     else
                     {
                         PushIllegalArgument();
@@ -2282,7 +2282,7 @@ void ScInterpreter::ScDecimal()
 }
 
 void ScInterpreter::ScConvert()
-{   // Value, FromUnit, ToUnit
+{   
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         OUString aToUnit = GetString().getString();
@@ -2291,7 +2291,7 @@ void ScInterpreter::ScConvert()
         if ( nGlobalError )
             PushError( nGlobalError);
         else
-        {   // erst die angegebene Reihenfolge suchen, wenn nicht gefunden den Kehrwert
+        {   
             double fConv;
             if ( ScGlobal::GetUnitConverter()->GetValue( fConv, aFromUnit, aToUnit ) )
                 PushDouble( fVal * fConv );
@@ -2304,7 +2304,7 @@ void ScInterpreter::ScConvert()
 }
 
 void ScInterpreter::ScRoman()
-{   // Value [Mode]
+{   
     sal_uInt8 nParamCount = GetByte();
     if( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -2329,7 +2329,7 @@ void ScInterpreter::ScRoman()
 
                 if( (nDigit % 5) == 4 )
                 {
-                    // assert can't happen with nVal<4000 precondition
+                    
                     assert( ((nDigit == 4) ? (nIndex >= 1) : (nIndex >= 2)));
 
                     sal_uInt16 nIndex2 = (nDigit == 4) ? nIndex - 1 : nIndex - 2;
@@ -2351,7 +2351,7 @@ void ScInterpreter::ScRoman()
                 {
                     if( nDigit > 4 )
                     {
-                        // assert can't happen with nVal<4000 precondition
+                        
                         assert( nIndex >= 1 );
                         aRoman += OUString( pChars[ nIndex - 1 ] );
                     }
@@ -2499,7 +2499,7 @@ void ScInterpreter::ScHyperLink()
                 case svMissing:
                 case svEmptyCell:
                     Pop();
-                    // mimic xcl
+                    
                     fVal = 0.0;
                     nResultType = SC_MATVAL_VALUE;
                 break;
@@ -2521,7 +2521,7 @@ void ScInterpreter::ScHyperLink()
                 pResMat->PutDouble( fVal, 0);
             else if (ScMatrix::IsRealStringType( nResultType))
                 pResMat->PutString(aStr, 0);
-            else    // EmptyType, EmptyPathType, mimic xcl
+            else    
                 pResMat->PutDouble( 0.0, 0 );
         }
         else
@@ -2533,8 +2533,8 @@ void ScInterpreter::ScHyperLink()
 }
 
 /** Resources at the website of the European Commission:
-    http://ec.europa.eu/economy_finance/euro/adoption/conversion/
-    http://ec.europa.eu/economy_finance/euro/countries/
+    http:
+    http:
  */
 static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& rnDec )
 {
@@ -2578,7 +2578,7 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
 }
 
 void ScInterpreter::ScEuroConvert()
-{   //Value, FromUnit, ToUnit[, FullPrecision, [TriangulationPrecision]]
+{   
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
@@ -2636,7 +2636,7 @@ void ScInterpreter::ScEuroConvert()
     }
 }
 
-// BAHTTEXT
+
 #define UTF8_TH_0       "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
 #define UTF8_TH_1       "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
 #define UTF8_TH_2       "\340\270\252\340\270\255\340\270\207"
@@ -2660,7 +2660,7 @@ void ScInterpreter::ScEuroConvert()
 #define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
-// local functions
+
 namespace {
 
 inline void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
@@ -2748,7 +2748,7 @@ void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
     }
 }
 
-} // namespace
+} 
 
 void ScInterpreter::ScBahtText()
 {
@@ -2762,21 +2762,21 @@ void ScInterpreter::ScBahtText()
             return;
         }
 
-        // sign
+        
         bool bMinus = fValue < 0.0;
         fValue = fabs( fValue );
 
-        // round to 2 digits after decimal point, fValue contains Satang as integer
+        
         fValue = ::rtl::math::approxFloor( fValue * 100.0 + 0.5 );
 
-        // split Baht and Satang
+        
         double fBaht = 0.0;
         sal_Int32 nSatang = 0;
         lclSplitBlock( fBaht, nSatang, fValue, 100.0 );
 
         OStringBuffer aText;
 
-        // generate text for Baht value
+        
         if( fBaht == 0.0 )
         {
             if( nSatang == 0 )
@@ -2789,7 +2789,7 @@ void ScInterpreter::ScBahtText()
             lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
             if( nBlock > 0 )
                 lclAppendBlock( aBlock, nBlock );
-            // add leading "million", if there will come more blocks
+            
             if( fBaht > 0.0 )
                 aBlock.insert( 0, OString(UTF8_TH_1E6 ) );
 
@@ -2798,7 +2798,7 @@ void ScInterpreter::ScBahtText()
         if (!aText.isEmpty())
             aText.append( UTF8_TH_BAHT );
 
-        // generate text for Satang value
+        
         if( nSatang == 0 )
         {
             aText.append( UTF8_TH_DOT0 );
@@ -2809,7 +2809,7 @@ void ScInterpreter::ScBahtText()
             aText.append( UTF8_TH_SATANG );
         }
 
-        // add the minus sign
+        
         if( bMinus )
             aText.insert( 0, OString( UTF8_TH_MINUS ) );
 
@@ -2830,7 +2830,7 @@ void ScInterpreter::ScGetPivotData()
     bool bOldSyntax = false;
     if (nParamCount == 2)
     {
-        // if the first parameter is a ref, assume old syntax
+        
         StackVar eFirstType = GetStackType(2);
         if (eFirstType == svSingleRef || eFirstType == svDoubleRef)
             bOldSyntax = true;
@@ -2863,7 +2863,7 @@ void ScInterpreter::ScGetPivotData()
     }
     else
     {
-        // Standard syntax: separate name/value pairs
+        
 
         sal_uInt16 nFilterCount = nParamCount / 2 - 1;
         aFilters.resize(nFilterCount);
@@ -2871,7 +2871,7 @@ void ScInterpreter::ScGetPivotData()
         sal_uInt16 i = nFilterCount;
         while (i-- > 0)
         {
-            //! should allow numeric constraint values
+            
             aFilters[i].MatchValue = GetString().getString();
             aFilters[i].FieldName = GetString().getString();
         }
@@ -2893,12 +2893,12 @@ void ScInterpreter::ScGetPivotData()
                 return;
         }
 
-        aDataFieldName = GetString().getString(); // First parameter is data field name.
+        aDataFieldName = GetString().getString(); 
     }
 
-    // NOTE : MS Excel docs claim to use the 'most recent' which is not
-    // exactly the same as what we do in ScDocument::GetDPAtBlock
-    // However we do need to use GetDPABlock
+    
+    
+    
     ScDPObject* pDPObj = pDok->GetDPAtBlock(aBlock);
     if (!pDPObj)
     {
@@ -2916,9 +2916,9 @@ void ScInterpreter::ScGetPivotData()
             return;
         }
 
-        // TODO : For now, we ignore filter functions since we couldn't find a
-        // live example of how they are supposed to be used. We'll support
-        // this again once we come across a real-world example.
+        
+        
+        
     }
 
     double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);

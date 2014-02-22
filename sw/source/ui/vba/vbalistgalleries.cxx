@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbalistgalleries.hxx"
 #include "vbalistgallery.hxx"
@@ -48,7 +48,7 @@ SwVbaListGalleries::SwVbaListGalleries( const uno::Reference< XHelperInterface >
 
 ::sal_Int32 SAL_CALL SwVbaListGalleries::getCount() throw (uno::RuntimeException)
 {
-    // 3 types of list( bullet, numbered and outline )
+    
     return 3;
 }
 
@@ -65,7 +65,7 @@ uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::A
     throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaListGalleries::getElementType() throw (uno::RuntimeException)
 {

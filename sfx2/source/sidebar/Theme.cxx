@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <sfx2/sidebar/Theme.hxx>
 #include "Paint.hxx"
@@ -156,7 +156,7 @@ void Theme::HandleDataChange (void)
 
     if ( ! rTheme.mbIsHighContrastModeSetManually)
     {
-        // Do not modify mbIsHighContrastMode when it was manually set.
+        
         GetCurrentTheme().mbIsHighContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         rTheme.maRawValues[Bool_IsHighContrastModeActive] = Any(GetCurrentTheme().mbIsHighContrastMode);
     }
@@ -192,8 +192,8 @@ void Theme::UpdateTheme (void)
 #define Alternatives(n,hc,sys) (mbIsHighContrastMode ? hc : (bUseSystemColors ? sys : n))
 
         Color aBaseBackgroundColor (rStyle.GetDialogColor());
-        // UX says this should be a little brighter, but that looks off when compared to the other windows.
-        //aBaseBackgroundColor.IncreaseLuminance(7);
+        
+        
         Color aBorderColor (aBaseBackgroundColor);
         aBorderColor.DecreaseLuminance(15);
         Color aSecondColor (aBaseBackgroundColor);
@@ -291,7 +291,7 @@ void Theme::UpdateTheme (void)
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabItemBorder],
             Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 : 0xbfbfbf)));
+        
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DropDownBackground],
@@ -313,12 +313,12 @@ void Theme::UpdateTheme (void)
         setPropertyValue(
             maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight],
             Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x000000 : 0x00ffffff)));
+        
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_HorizontalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 :  0xe4e4e4)));
+        
         setPropertyValue(
             maPropertyIdToNameMap[Paint_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
@@ -348,10 +348,10 @@ void Theme::UpdateTheme (void)
             Any(
                 OUString("private:graphicrepository/sfx2/res/separator.png")));
 
-        // ToolBox
+        
 
         /*
-        // Separator style
+        
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBackground],
             Any(sal_Int32(rStyle.GetMenuColor().GetRGBColor())));
@@ -376,7 +376,7 @@ void Theme::UpdateTheme (void)
 
         */
 
-        // Gradient style
+        
         Color aGradientStop2 (aBaseBackgroundColor);
         aGradientStop2.IncreaseLuminance(17);
         Color aToolBoxBorderColor (aBaseBackgroundColor);
@@ -493,8 +493,8 @@ void SAL_CALL Theme::setPropertyValue (
 
     if (rValue == maRawValues[eItem])
     {
-        // Value is not different from the one in the property
-        // set => nothing to do.
+        
+        
         return;
     }
 
@@ -601,7 +601,7 @@ void SAL_CALL Theme::removePropertyChangeListener(
         {
             pContainer->erase(iListener);
 
-            // Remove the listener container when empty.
+            
             if (pContainer->empty())
                 maChangeListeners.erase(eItem);
         }
@@ -666,7 +666,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
         if (iListener != pContainer->end())
         {
             pContainer->erase(iListener);
-            // Remove container when empty.
+            
             if (pContainer->empty())
                 maVetoableListeners.erase(eItem);
         }
@@ -1019,7 +1019,7 @@ bool Theme::DoVetoableListenersVeto (
     }
     catch(const Exception&)
     {
-        // Ignore any other errors (such as disposed listeners).
+        
     }
     return false;
 }
@@ -1048,7 +1048,7 @@ void Theme::BroadcastPropertyChange (
     }
     catch(const Exception&)
     {
-        // Ignore any errors (such as disposed listeners).
+        
     }
 }
 
@@ -1133,6 +1133,6 @@ void Theme::ProcessNewValue (
     }
 }
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

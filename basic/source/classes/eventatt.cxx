@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
-//==================================================================================================
+
 
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>
@@ -109,7 +109,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
             Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
 
-            // get Arguments for script
+            
             inArgs = aScriptEvent.Arguments;
 
             Reference< provider::XScript > xScript = xScriptProvider->getScript( aScriptEvent.ScriptCode );
@@ -153,18 +153,18 @@ public:
     BasicScriptListener_Impl( StarBASIC* pBasic, const Reference< frame::XModel >& xModel )
         : maBasicRef( pBasic ), m_xModel( xModel ) {}
 
-    // Methods of XAllListener
+    
     virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent)
         throw( RuntimeException );
     virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent)
         throw( InvocationTargetException, RuntimeException );
 
-    // Methods of XEventListener
+    
     virtual void SAL_CALL disposing(const EventObject& Source)
         throw( RuntimeException );
 };
 
-// Methods XAllListener
+
 void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException )
 {
     firing_impl( aScriptEvent, NULL );
@@ -178,12 +178,12 @@ Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
     return aRetAny;
 }
 
-// Methods XEventListener
+
 void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeException )
 {
-    // TODO: ???
-    //SolarMutexGuard aGuard;
-    //xSbxObj.Clear();
+    
+    
+    
 }
 
 
@@ -191,7 +191,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 {
     if( aScriptEvent.ScriptType.equalsAscii( "StarBasic" ) )
     {
-        // Full qualified name?
+        
         OUString aMacro( aScriptEvent.ScriptCode );
         OUString aLibName;
         OUString aLocation;
@@ -218,7 +218,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         StarBASICRef xDocStandardBasic;
         if( pParentParent )
         {
-            // Own basic must be document library
+            
             xAppStandardBasic = (StarBASIC*)pParentParent;
             xDocStandardBasic = (StarBASIC*)pParent;
         }
@@ -227,7 +227,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             OUString aName = p->GetName();
             if( aName.equalsAscii("Standard") )
             {
-                // Own basic is doc standard lib
+                
                 xDocStandardBasic = (StarBASIC*)p;
             }
             xAppStandardBasic = (StarBASIC*)pParent;
@@ -252,7 +252,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             bSearchLib = false;
         }
         SbxVariable* pMethVar = NULL;
-        // Be still tolerant and make default search if no search basic exists
+        
         if( bSearchLib && xLibSearchBasic.Is() )
         {
             StarBASICRef xLibBasic;
@@ -274,7 +274,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                     OUString aName = pBasic->GetName();
                     if( aName == aLibName )
                     {
-                        // Search only in the lib, not automatically in application basic
+                        
                         sal_uInt16 nFlags = pBasic->GetFlags();
                         pBasic->ResetFlag( SBX_GBLSEARCH );
                         pMethVar = pBasic->Find( aMacro, SbxCLASS_DONTCARE );
@@ -285,7 +285,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             }
         }
 
-        // Default: Be tolerant and search everywhere
+        
         if( (!pMethVar || !pMethVar->ISA(SbMethod)) && maBasicRef.Is() )
         {
             pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
@@ -295,7 +295,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         {
             return;
         }
-        // Setup parameters
+        
         SbxArrayRef xArray;
         sal_Int32 nCnt = aScriptEvent.Arguments.getLength();
         if( nCnt )
@@ -310,7 +310,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             }
         }
 
-        // Call method
+        
         SbxVariableRef xValue = pRet ? new SbxVariable : 0;
         if( xArray.Is() )
         {
@@ -323,9 +323,9 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
         pMeth->SetParameters( NULL );
     }
-    else // scripting framework script
+    else 
     {
-        //callBasic via scripting framework
+        
         SFURL_firing_impl( aScriptEvent, pRet, m_xModel );
     }
 }
@@ -351,7 +351,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
             for( sal_Int32 iLib = 0 ; iLib < nLibNameCount ; iLib++ )
             {
                 if ( !xDlgLibContNameAccess->isLibraryLoaded( pLibNames[ iLib ] ) )
-                    // if the library isn't loaded, then the dialog cannot originate from this lib
+                    
                     continue;
 
                 Any aDlgLibAny = xDlgLibContNameAccess->getByName( pLibNames[ iLib ] );
@@ -384,7 +384,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
 css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, StarBASIC*& pFoundBasic )
 {
     css::uno::Reference< css::container::XNameContainer > aDlgLib;
-    // Find dialog library for dialog, direct access is not possible here
+    
     StarBASIC* pStartedBasic = (StarBASIC*)pBasic;
     SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
     SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : NULL;
@@ -425,14 +425,14 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    // We need at least 1 parameter
+    
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Get dialog
+    
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
     if( !(pObj && pObj->ISA(SbUnoObject)) )
     {
@@ -449,7 +449,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         return;
     }
 
-    // Create new uno dialog
+    
     Reference< XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext(
                       "com.sun.star.awt.UnoControlDialogModel", xContext), UNO_QUERY );
     if( !xDialogModel.is() )
@@ -463,10 +463,10 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         return;
     }
 
-    // Import the DialogModel
+    
     Reference< XInputStream > xInput( xISP->createInputStream() );
 
-    // i83963 Force decoration
+    
     uno::Reference< beans::XPropertySet > xDlgModPropSet( xDialogModel, uno::UNO_QUERY );
     if( xDlgModPropSet.is() )
     {
@@ -494,7 +494,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     OSL_TRACE("About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( GetSbData()->pInst->GetBasic() ) ;
     aDlgLib = implFindDialogLibForDialogBasic( aAnyISP, GetSbData()->pInst->GetBasic(), pFoundBasic );
-    // If we found the dialog then it belongs to the Search basic
+    
     if ( !pFoundBasic )
     {
         Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
@@ -532,7 +532,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     }
     Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( GetSbData()->pInst->GetBasic(), xModel );
 
-    // Create a "living" Dialog
+    
     Reference< XControl > xCntrl;
     try
     {
@@ -543,20 +543,20 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
            xDlgProv = css::awt::DialogProvider::createWithModelAndScripting( xContext, uno::Reference< frame::XModel >(), xInput, aDlgLib, xScriptListener );
 
        xCntrl.set( xDlgProv->createDialog(OUString() ), UNO_QUERY_THROW );
-       // Add dialog model to dispose vector
+       
        Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
        GetSbData()->pInst->getComponentVector().push_back( xDlgComponent );
-       // need ThisCompoent from calling script
+       
     }
-    // preserve existing bad behaviour, it's possible... but probably
-    // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes
-    // create dialog fails.  So, in this case let's not throw, just leave basic
-    // detect the unset object.
+    
+    
+    
+    
     catch(const uno::Exception& )
     {
     }
 
-    // Return dialog
+    
     Any aRetVal;
     aRetVal <<= xCntrl;
     SbxVariableRef refVar = rPar.Get(0);
@@ -564,6 +564,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 }
 
 
-//===================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

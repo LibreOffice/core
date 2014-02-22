@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -53,7 +53,7 @@ extern char** pAppArguments;
 
 void* CreateNewShell( void**, XLIB_Window );
 
-// begin Netscape plugin api calls
+
 extern "C" {
 
 static void* l_NPN_MemAlloc( uint32_t nBytes )
@@ -102,7 +102,7 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
     }
     delete [] stream->url;
     delete stream;
-    // returns NPError
+    
     NPError aRet = pConnector->GetNPError( pMes );
     delete pMes;
     return aRet;
@@ -111,7 +111,7 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
 #ifdef OJI
 static JRIEnv* l_NPN_GetJavaEnv()
 {
-    // no java in this program
+    
     SAL_INFO("extensions.plugin", "SNI: NPN_GetJavaEnv");
     return NULL;
 }
@@ -140,7 +140,7 @@ static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
-    // returns NPError
+    
     NPError aRet = pConnector->GetNPError( pMes );
     SAL_WARN_IF(aRet, "extensions.plugin", "geturl returns " << aRet);
     delete pMes;
@@ -160,14 +160,14 @@ static NPError l_NPN_GetURLNotify( NPP instance, const char* url, const char* ta
                   &nInstance, sizeof( nInstance ),
                   POST_STRING(url),
                   POST_STRING(target),
-                  &notifyData, sizeof( void* ), // transmit the actual pointer
-                  // since it is a pointer to private data fed back
-                  // by NPP_URLNotify; this can be thought of as an ID
+                  &notifyData, sizeof( void* ), 
+                  
+                  
                   NULL );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
-    // returns NPError
+    
     NPError aRet = pConnector->GetNPError( pMes );
     delete pMes;
     return aRet;
@@ -175,7 +175,7 @@ static NPError l_NPN_GetURLNotify( NPP instance, const char* url, const char* ta
 
 static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* target,
                          NPStream** stream )
-    // stream is a return value
+    
 {
     sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
@@ -191,7 +191,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
-    // returns a new NPStream and an error
+    
     NPError aRet = pConnector->GetNPError( pMes );
     if( ! aRet )
     {
@@ -223,7 +223,7 @@ static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* t
                   &len, sizeof( len ),
                   buf, len,
                   &file, sizeof( NPBool ),
-                  &notifyData, sizeof( void* ), // send the real pointer
+                  &notifyData, sizeof( void* ), 
                   NULL );
 
     if( ! pMes )
@@ -320,7 +320,7 @@ static const char* l_NPN_UserAgent( NPP instance )
     {
         if( instance )
             return "Mozilla 3.0";
-        else // e.g. flashplayer calls NPN_UserAgent with NULL
+        else 
             nInstance = 0;
     }
 
@@ -390,22 +390,22 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
             SAL_INFO("extensions.plugin", "AppContext requested");
             break;
         case NPNVjavascriptEnabledBool:
-            // no javascript
+            
             *(NPBool*)value = false;
             SAL_INFO("extensions.plugin", "javascript enabled requested");
             break;
         case NPNVasdEnabledBool:
-            // no SmartUpdate
+            
             *(NPBool*)value = false;
             SAL_INFO("extensions.plugin", "smart update enabled requested");
             break;
         case NPNVisOfflineBool:
-            // no offline browsing
+            
             *(NPBool*)value = false;
             SAL_INFO("extensions.plugin", "offline browsing requested");
             break;
         case NPNVSupportsXEmbedBool:
-            // asking xembed
+            
             *(int*)value = int(true);
             SAL_INFO("extensions.plugin", "xembed requested");
             break;
@@ -553,22 +553,22 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 sal_uInt32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
 
-                // some plugin rely on old netscapes behaviour
-                // to first destroy the widget and then destroy
-                // the instance, so mimic that behaviour here
+                
+                
+                
                 if( pInst->pShell )
                     XtDestroyWidget( (Widget)pInst->pShell );
 
                 pInst->pWidget = pInst->pShell = NULL;
 
-                // the other side will call eNPP_DestroyPhase2 after this
+                
                 NPError aReason = NPERR_NO_ERROR;
                 Respond( pMessage->m_nID, (char*)&aReason, sizeof( aReason ), NULL );
             }
             break;
             case eNPP_DestroyPhase2:
             {
-                // now really destroy the instance
+                
                 sal_uInt32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
                 NPP instance        = pInst->instance;
@@ -676,10 +676,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                             << "\"");
 
                 #if ENABLE_GTK
-                // check if XEMBED is to be used
-                // ask for Bool. there seems to be no clear definition whether the
-                // return value should be an int or unsigned char
-                // int can hold both and will be nonzero in case of "true"
+                
+                
+                
+                
                 if( aPluginFuncs.getvalue )
                 {
                     int bNeedsXEmbed = 0;
@@ -736,7 +736,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         XSync( pAppDisplay, False );
                     }
 
-                    // update widget size; alas out parent is not yet really XEMBED conformant
+                    
                     gtk_widget_set_size_request( pInst->pGtkWidget, pWindow->width, pWindow->height );
                     gtk_window_resize( GTK_WINDOW(pInst->pGtkWindow), pWindow->width, pWindow->height );
 
@@ -767,7 +767,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         pInst->pWidget = CreateNewShell( &(pInst->pShell), (XLIB_Window)pWindow->window );
                     }
 
-                    // fill in NPWindow and NPCallbackStruct
+                    
                     pInst->window.window            = (void*)XtWindow( (Widget)pInst->pWidget );
                     pInst->window.x                 = 0;
                     pInst->window.y                 = 0;

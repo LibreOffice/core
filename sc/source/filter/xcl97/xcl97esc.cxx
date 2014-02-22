@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,7 +75,7 @@ using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::script::XEventAttacherManager;
 
-// ============================================================================
+
 
 XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -95,7 +95,7 @@ SvStream* XclEscherExGlobal::ImplQueryPictureStream()
     return mxPicStrm.get();
 }
 
-// ============================================================================
+
 
 XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr, SvStream& rStrm, const XclEscherEx* pParent ) :
     EscherEx( pParent ? pParent->mxGlobal : EscherExGlobalRef( new XclEscherExGlobal( rRoot ) ), &rStrm ),
@@ -142,7 +142,7 @@ sal_uInt32 XclEscherEx::InitNextDffFragment()
 
 void XclEscherEx::UpdateDffFragmentEnd()
 {
-    // update existing fragment key with new stream position
+    
     ReplacePersistOffset( mnNextKey, mpOutStrm->Tell() );
 }
 
@@ -169,9 +169,9 @@ bool XclEscherEx::HasPendingDffData()
 
 XclExpDffAnchorBase* XclEscherEx::CreateDffAnchor( const SdrObject& rSdrObj ) const
 {
-    // the object manager creates the correct anchor type according to context
+    
     XclExpDffAnchorBase* pAnchor = mrObjMgr.CreateDffAnchor();
-    // pass the drawing object, that will calculate the anchor position
+    
     pAnchor->SetSdrObject( rSdrObj );
     return pAnchor;
 }
@@ -192,7 +192,7 @@ bool lcl_IsFontwork( const SdrObject* pObj )
     return bIsFontwork;
 }
 
-} // namespace
+} 
 
 EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape, const Rectangle* pChildAnchor )
 {
@@ -200,9 +200,9 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         nAdditionalText++;
     sal_Bool bInGroup = ( pCurrXclObj != NULL );
     if ( bInGroup )
-    {   // stacked recursive group object
+    {   
         if ( !pCurrAppData->IsStackedGroup() )
-        {   //! UpdateDffFragmentEnd only once
+        {   
             pCurrAppData->SetStackedGroup( true );
             UpdateDffFragmentEnd();
         }
@@ -210,10 +210,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     aStack.push( std::make_pair( pCurrXclObj, pCurrAppData ) );
     pCurrAppData = new XclEscherHostAppData;
     SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
-    //added for exporting OCX control
+    
     sal_Int16 nMsCtlType = 0;
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );  // just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );  
     else
     {
         pCurrXclObj = NULL;
@@ -221,23 +221,23 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
 
         if( nObjType == OBJ_OLE2 )
         {
-            // no OLE objects in embedded drawings (chart shapes)
+            
             if( mbIsRootDff )
             {
-                //! not-const because GetObjRef may load the OLE object
+                
                 Reference < XClassifiedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), UNO_QUERY );
                 if ( xObj.is() )
                 {
                     SvGlobalName aObjClsId( xObj->getClassID() );
                     if ( SotExchange::IsChart( aObjClsId ) )
-                    {   // yes, it's a chart diagram
+                    {   
                         mrObjMgr.AddObj( new XclExpChartObj( mrObjMgr, rxShape, pChildAnchor ) );
-                        pCurrXclObj = NULL;     // no metafile or whatsoever
+                        pCurrXclObj = NULL;     
                     }
-                    else    // metafile and OLE object
+                    else    
                         pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
                 }
-                else    // just a metafile
+                else    
                     pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );
             }
             else
@@ -245,7 +245,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
         else if( nObjType == OBJ_UNO )
         {
-            //added for exporting OCX control
+            
             Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
             Any aAny;
             try
@@ -257,17 +257,17 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             {
                 OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ControlTypeinMSO!");
             }
-            if( nMsCtlType == 2 )  //OCX Form Control
+            if( nMsCtlType == 2 )  
                 pCurrXclObj = CreateOCXCtrlObj( rxShape, pChildAnchor );
-            else  //TBX Form Control
+            else  
                 pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor );
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );   // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );   
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
-            // ignore permanent note shapes
-            // #i12190# do not ignore callouts (do not filter by object type ID)
+            
+            
             pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape );
             ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
         }
@@ -275,7 +275,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     if ( pCurrXclObj )
     {
         if ( !mrObjMgr.AddObj( pCurrXclObj ) )
-        {   // maximum count reached, object got deleted
+        {   
             pCurrXclObj = NULL;
         }
         else
@@ -321,10 +321,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     }
     if(pObj)
     {
-        //add  for exporting OCX control
-        //for OCX control import from MS office file,we need keep the id value as MS office file.
-        //GetOldRoot().pObjRecs->Add( pCurrXclObj ) statement has generated the id value as obj id rule;
-        //but we trick it here.
+        
+        
+        
+        
         sal_uInt16 nObjType = pObj->GetObjIdentifier();
         if( nObjType == OBJ_UNO && pCurrXclObj )
         {
@@ -340,7 +340,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             }
             sal_uInt16 nObjIDinMSO = 0xFFFF;
             aAny >>= nObjIDinMSO;
-            if( nObjIDinMSO != 0xFFFF && nMsCtlType == 2)  //OCX
+            if( nObjIDinMSO != 0xFFFF && nMsCtlType == 2)  
             {
                 pCurrXclObj->SetId(nObjIDinMSO);
             }
@@ -354,13 +354,13 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
 
 void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 {
-    // own escher data created? -> never delete such objects
+    
     bool bOwnEscher = pCurrXclObj && pCurrXclObj->IsOwnEscher();
 
-    // post process the current object - not for objects with own escher data
+    
     if( pCurrXclObj && !bOwnEscher )
     {
-        // escher data of last shape not written? -> delete it from object list
+        
         if( nShapeID == 0 )
         {
             XclObj* pLastObj = mrObjMgr.RemoveLastObj();
@@ -371,7 +371,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 
         if( pCurrXclObj )
         {
-            // set shape type
+            
             if ( pCurrAppData->IsStackedGroup() )
                 pCurrXclObj->SetEscherShapeTypeGroup();
             else
@@ -382,7 +382,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
         }
     }
 
-    // get next object from stack
+    
     DeleteCurrAppData();
     if (aStack.empty())
     {
@@ -413,7 +413,7 @@ void XclEscherEx::EndDocument()
     if( mbIsRootDff )
         Flush( static_cast< XclEscherExGlobal& >( *mxGlobal ).GetPictureStream() );
 
-    // seek back DFF stream to prepare saving the MSODRAWING[GROUP] records
+    
     mpOutStrm->Seek( 0 );
 }
 
@@ -424,7 +424,7 @@ XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, 
     Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
     if( xCtrlModel.is() )
     {
-        // output stream
+        
         if( !mxCtlsStrm.Is() )
             mxCtlsStrm = OpenStream( EXC_STREAM_CTLS );
         if( mxCtlsStrm.Is() )
@@ -432,13 +432,13 @@ XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, 
             OUString aClassName;
             sal_uInt32 nStrmStart = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() );
 
-            // writes from xCtrlModel into mxCtlsStrm, raw class name returned in aClassName
+            
             Reference< XOutputStream > xOut( new utl::OSeekableOutputStreamWrapper( *mxCtlsStrm ) );
             Reference< com::sun::star::frame::XModel > xModel( GetDocShell() ? GetDocShell()->GetModel() : NULL );
             if( xModel.is() && xOut.is() && oox::ole::MSConvertOCXControls::WriteOCXExcelKludgeStream( xModel, xOut, xCtrlModel, xShape->getSize(), aClassName ) )
             {
                 sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() - nStrmStart );
-                // adjust the class name to "Forms.***.1"
+                
                 aClassName = "Forms." + aClassName +  ".1";
                 xOcxCtrl.reset( new XclExpOcxControlObj( mrObjMgr, xShape, pChildAnchor, aClassName, nStrmStart, nStrmSize ) );
             }
@@ -455,7 +455,7 @@ XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, 
 
     if( xTbxCtrl.get() )
     {
-        // find attached macro
+        
         Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
         ConvertTbxMacro( *xTbxCtrl, xCtrlModel );
     }
@@ -470,23 +470,23 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
         Reference< XFormsSupplier > xFormsSupplier( pSdrPage->getUnoPage(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xFormsIA( xFormsSupplier->getForms(), UNO_QUERY_THROW );
 
-        // 1) try to find the index of the processed control in the form
+        
 
-        Reference< XIndexAccess > xFormIA;  // needed in step 2) below
+        Reference< XIndexAccess > xFormIA;  
         sal_Int32 nFoundIdx = -1;
 
-        // search all existing forms in the draw page
+        
         for( sal_Int32 nFormIdx = 0, nFormCount = xFormsIA->getCount();
                 (nFoundIdx < 0) && (nFormIdx < nFormCount); ++nFormIdx )
         {
-            // get the XIndexAccess interface of the form with index nFormIdx
+            
             if( xFormIA.set( xFormsIA->getByIndex( nFormIdx ), UNO_QUERY ) )
             {
-                // search all elements (controls) of the current form by index
+                
                 for( sal_Int32 nCtrlIdx = 0, nCtrlCount = xFormIA->getCount();
                         (nFoundIdx < 0) && (nCtrlIdx < nCtrlCount); ++nCtrlIdx )
                 {
-                    // compare implementation pointers of the control models
+                    
                     Reference< XControlModel > xCurrModel( xFormIA->getByIndex( nCtrlIdx ), UNO_QUERY );
                     if( xCtrlModel.get() == xCurrModel.get() )
                         nFoundIdx = nCtrlIdx;
@@ -494,18 +494,18 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
             }
         }
 
-        // 2) try to find an attached macro
+        
 
         if( xFormIA.is() && (nFoundIdx >= 0) )
         {
             Reference< XEventAttacherManager > xEventMgr( xFormIA, UNO_QUERY_THROW );
-            // loop over all events attached to the found control
+            
             const Sequence< ScriptEventDescriptor > aEventSeq( xEventMgr->getScriptEvents( nFoundIdx ) );
             bool bFound = false;
             for( sal_Int32 nEventIdx = 0, nEventCount = aEventSeq.getLength();
                     !bFound && (nEventIdx < nEventCount); ++nEventIdx )
             {
-                // try to set the event data at the Excel control object, returns true on success
+                
                 bFound = rTbxCtrlObj.SetMacroLink( aEventSeq[ nEventIdx ] );
             }
         }
@@ -520,24 +520,24 @@ void XclEscherEx::DeleteCurrAppData()
     if ( pCurrAppData )
     {
         delete pCurrAppData->GetClientAnchor();
-//      delete pCurrAppData->GetClientData();
+
         delete pCurrAppData->GetClientTextbox();
     delete pCurrAppData->GetInteractionInfo();
         delete pCurrAppData;
     }
 }
 
-// ============================================================================
 
-// --- class XclEscherClientData -------------------------------------
+
+
 
 void XclEscherClientData::WriteData( EscherEx& rEx ) const
-{   // actual data is in the following OBJ record
+{   
     rEx.AddAtom( 0, ESCHER_ClientData );
 }
 
 
-// --- class XclEscherClientTextbox -------------------------------------
+
 
 XclEscherClientTextbox::XclEscherClientTextbox( const XclExpRoot& rRoot,
             const SdrTextObj& rObj, XclObj* pObj )

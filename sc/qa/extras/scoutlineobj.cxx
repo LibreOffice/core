@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -36,7 +36,7 @@ public:
     CPPUNIT_TEST(testShowLevel);
     CPPUNIT_TEST(testUngroup);
     CPPUNIT_TEST(testGroup);
-  //  CPPUNIT_TEST(testAutoOutline);
+  
     CPPUNIT_TEST(testClearOutline);
     CPPUNIT_TEST_SUITE_END();
 private:
@@ -55,14 +55,14 @@ ScOutlineObj::ScOutlineObj()
 
 uno::Reference< uno::XInterface > ScOutlineObj::init()
 {
-    // get the test file
+    
     OUString aFileURL;
     createFileURL(OUString("ScOutlineObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());
 
-    // get the first sheet
+    
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);

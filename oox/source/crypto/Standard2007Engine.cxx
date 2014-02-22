@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -36,7 +36,7 @@ void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 
 static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
 
-} // namespace
+} 
 
 EncryptionStandardHeader::EncryptionStandardHeader()
 {
@@ -73,7 +73,7 @@ StandardEncryptionInfo& Standard2007Engine::getInfo()
 
 bool Standard2007Engine::generateVerifier()
 {
-    // only support key of size 128 bit (16 byte)
+    
     if (mKey.size() != 16)
         return false;
 
@@ -110,7 +110,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     sal_uInt32 passwordByteLength = rPassword.getLength() * 2;
     const sal_uInt8* saltArray = mInfo.verifier.salt;
 
-    // Prepare initial data -> salt + password (in 16-bit chars)
+    
     vector<sal_uInt8> initialData(saltSize + passwordByteLength);
     std::copy(saltArray, saltArray + saltSize, initialData.begin());
 
@@ -121,13 +121,13 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         passwordByteArray + passwordByteLength,
         initialData.begin() + saltSize);
 
-    // use "hash" vector for result of sha1 hashing
+    
     vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
 
-    // calculate SHA1 hash of initialData
+    
     sha1(hash, initialData);
 
-    // data = iterator (4bytes) + hash
+    
     vector<sal_uInt8> data(RTL_DIGEST_LENGTH_SHA1 + 4, 0);
 
     for (sal_Int32 i = 0; i < 50000; ++i)
@@ -141,7 +141,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
 
     sha1(hash, data);
 
-    // derive key
+    
     vector<sal_uInt8> buffer(64, 0x36);
     for( sal_uInt32 i = 0; i < hash.size(); ++i )
         buffer[i] ^= hash[i];
@@ -188,8 +188,8 @@ bool Standard2007Engine::decrypt(
                             BinaryXOutputStream& aOutputStream)
 {
     sal_uInt32 totalSize;
-    aInputStream >> totalSize; // Document unencrypted size - 4 bytes
-    aInputStream.skip( 4 );    // Reserved 4 Bytes
+    aInputStream >> totalSize; 
+    aInputStream.skip( 4 );    
 
     vector<sal_uInt8> iv;
     Decrypt aDecryptor(mKey, iv, Crypto::AES_128_ECB);
@@ -268,7 +268,7 @@ bool Standard2007Engine::encrypt(
     return true;
 }
 
-} // namespace core
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
